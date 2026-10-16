@@ -3,7 +3,7 @@
 
 Let $A_i^s:\C^{D_{i+1}}\to\C^{D_i}$ be the site matrices of a ring,
 with $1\le D_i\le D$ and cyclic subscripts. Choose density matrices
-$\sigma_i$ on the actual bond spaces; they may be singular. The following
+$\sigma_i$ on the bond spaces; they may be singular. The following
 quantitative hypothesis concerns these rectangular matrices themselves.
 It is sufficient for the accuracy-dependent depth claimed in the
 inhomogeneous paragraph of~\cite{Malz2024Preparation}; it is not implied
@@ -39,7 +39,7 @@ by the qualitative convergence condition in that paragraph.
         (B^{\boldsymbol s})^\dagger
         =F_a\circ\cdots\circ F_{b-1}(X).
     \end{align}
-    The empty product on an actual bond pads to $P_a$, whereas the
+    The empty product on a bond space pads to $P_a$, whereas the
     empty product of ambient matrices is $I_D$.
 \end{theorem}
 \begin{proof}\leanok
@@ -90,7 +90,7 @@ the contracted middle bond has dimension $D_{a+1}$.
     It vanishes on inputs outside the outgoing bond corner.
 \end{definition}
 
-\begin{theorem}[Gram matrices and pairs on the actual bonds]
+\begin{theorem}[Gram matrices and pairs on the bond spaces]
     \label{thm:ldp_rectangular_gram_pairs}
     \lean{MPSTensor.exists_norm_gram_transferMatrix_sub_le_of_entries,
         MPSTensor.zeroPad_eq_embeddedBlockState,
@@ -104,7 +104,7 @@ the contracted middle bond has dimension $D_{a+1}$.
         MPSPreparation.mixedMapLM_sqrt_transpose_kronecker_corner,
         MPSPreparation.exists_norm_transferMatrix_zeroPad_sub_cornerReferenceMap_le}
     \leanok
-    Give every map between actual matrix spaces its Hilbert--Schmidt
+    Give every map between the bond matrix spaces its Hilbert--Schmidt
     induced operator norm, namely the $L^2$ operator norm of its
     matrix in the matrix-unit bases. Padding changes transfer-matrix
     errors by at most a constant depending only on $D$.
@@ -116,9 +116,9 @@ the contracted middle bond has dimension $D_{a+1}$.
     Consequently the positive-polar error is bounded by a
     dimension-dependent constant times
     $\|F_{a:b}-\operatorname{Tr}(\cdot)\sigma_a\|^{1/2}$.
-    Moreover $\sqrt{\widehat\sigma_i}=J_i\sqrt{\sigma_i}J_i^\dagger$,
-    so the pair obtained from the padded reference is precisely the
-    padding of the pair on the actual bond.
+    Also $\sqrt{\widehat\sigma_i}=J_i\sqrt{\sigma_i}J_i^\dagger$,
+    so the pair obtained from the padded reference is the
+    padding of the pair on the bond space.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:ldp_rectangular_blocking,thm:ldp_sqrt_holder}

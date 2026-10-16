@@ -1,4 +1,4 @@
-\begin{definition}[The actual correlated two-bond charge insertion]
+\begin{definition}[The correlated two-bond charge insertion]
     \label{def:peps_regular_correlated_charge_column}
     \lean{TNLean.PEPS.regularProjectorChargePairOpenRegionMatrix,
         TNLean.PEPS.regularChargePairOpenRegionMatrix}
@@ -19,7 +19,7 @@
     lines 2505--2558.
 \end{definition}
 
-\begin{theorem}[The correlated weight in actual tree coordinates]
+\begin{theorem}[The correlated weight in tree coordinates]
     \label{thm:peps_regular_correlated_charge_coordinates}
     \lean{TNLean.PEPS.regularProjectorChargePairOpenRegionMatrix_coordinates,
         TNLean.PEPS.regularChargePairOpenRegionMatrix_eq_image,
@@ -27,7 +27,7 @@
     \leanok
     \uses{def:peps_regular_correlated_charge_column,
         thm:peps_regular_region_projector_coordinates}
-    Choose a spanning tree of the induced region and a root. In its actual
+    Choose a spanning tree of the induced region and a root. In its
     coordinates $c=(y,a,r,z)$,
     \[
         B_{\chi,p}(c,\theta)
@@ -38,11 +38,11 @@
     $C_{1,1}$ is the original open-region contraction.
 \end{theorem}
 \begin{proof}\leanok
-    A nonzero product of local projectors supplies compatible vertex
+    A nonzero product of local projectors determines compatible vertex
     translations. Tree synchronization writes them as $q_v=r_v x$.
     Thus $a_e=x\eta_e$, and the common $x$ cancels from the relative
     coordinate. The physical identity follows from $T_vP_v=T_v$ at each
-    site and the literal contraction sum.
+    site and the contraction sum.
 \end{proof}
 
 \begin{definition}[A unitary on two internal reference labels]
@@ -53,7 +53,7 @@
     For distinct internal bonds $e_0,e_1$, split the two references
     $(a_{e_0},a_{e_1})$ from all other tree coordinates. A matrix $Q$ on
     these two group registers acts as $Q\otimes I$ in this decomposition.
-    Transport this operation through the actual physical coordinate
+    Conjugate this operation by the physical coordinate
     permutation to obtain $U_R(Q)$.
 \end{definition}
 
@@ -83,7 +83,7 @@
     $\theta$.
 
     Suppose now that the original sites are regular $G$-isometric and
-    that $\chi$ is an actual irreducible character of the regular
+    that $\chi$ is an irreducible character of the regular
     representation. There is one original-spin unitary $W$, chosen before
     all crossing configurations, such that
     \[
@@ -95,18 +95,18 @@
 \end{theorem}
 \begin{proof}\leanok
     The normalized uniform and charge vectors have equal norm. The identity
-    handles the trivial character; otherwise their orthogonality supplies
+    handles the trivial character; otherwise their orthogonality yields
     a unitary exchange. Both vectors are fixed by simultaneous translation,
     so this exchange commutes with that action. Invariance of matrix entries
     under a permutation implies commutation with its permutation matrix.
-    The actual tree-coordinate transformation then proves commutation with
+    The tree-coordinate transformation then proves commutation with
     every vertex action. Finally, the local isometry assumptions derive
     $T_R^*T_R=c_RP_R$ with $c_R>0$. The resulting supported unitary extends
     to a unitary on the original physical region, with $WT_R=T_RU_R(Q)$.
-    Apply this equality to the actual canonical boundary columns.
+    Apply this equality to the canonical boundary columns.
 \end{proof}
 
-\begin{theorem}[Actual six-spin charge-pair preparation]
+\begin{theorem}[Six-spin charge-pair preparation]
     \label{thm:peps_torus_physical_charge_pair_creation}
     \lean{TNLean.PEPS.IsGIsometric.exists_unitary_torusPhysicalChargePairCreation}
     \leanok
@@ -128,8 +128,8 @@
     identification.
 \end{theorem}
 \begin{proof}\leanok
-    The translated induced block supplies its tree, root and two distinct
-    chords. Transport the original four-leg local isometry to its incident
-    coordinates and apply the preceding preparation theorem. The literal
-    unweighted column is the actual original open-region contraction.
+    The translated induced block has its tree, root and two distinct
+    chords. Pass the original four-leg local isometry to its incident
+    coordinates and apply the preceding preparation theorem. The
+    unweighted column is the original open-region contraction.
 \end{proof}

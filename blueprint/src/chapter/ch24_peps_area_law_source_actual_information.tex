@@ -1,0 +1,134 @@
+\section{Physical collar information from the selected source point}
+\label{sec:source-actual-information}
+
+The preceding source-selected comparison now bounds physical mutual
+information for the original state.  The terminal entropy estimates
+eliminate its selected-point-dependent terms before taking the replica
+limit.  The source target and positive-prefix entropy hypotheses,
+scanner geometry and round-step smallness remain explicit.
+The source is \emph{A two-dimensional area law from a global spectral gap},
+\texttt{08-scanner.tex}, lines 868--911 and 936--941, at revision
+\texttt{adc7f1241b42e322a6451854ab7e4b4c146bf78a}.
+
+\begin{theorem}[The scalar information expression]
+    \label{thm:sharp-information-scalar}
+    \lean{TNLean.PEPS.AreaLaw.Scan.sharpInformationBound,
+        TNLean.PEPS.AreaLaw.Scan.two_information_le_sharpInformationBound}
+    \leanok
+    For scalar data define
+    \[
+        F(S,c,B_{\rm pre},\log z,W,\tau,\delta,A,C)
+        :=\frac{4S+4c-2\log z}{W}
+        +\left(\tau+\frac{\delta}{\tau}\right)
+        \bigl(2(S+c)+B_{\rm pre}\bigr)+A+2c+C.
+    \]
+    Assume $W,\tau>0$, $\delta,S,c,B_{\rm pre}\geq0$, and
+    \[
+        \log d,S'\leq S+c,\qquad
+        G_{\rm pre},g_{\max}\leq B_{\rm pre}.
+    \]
+    If the sharp comparison is
+    \[
+        2S'+G_{\rm pre}-G_{\rm post}
+        \leq\frac{2(2\log d-\log z)}{W}
+        +\tau G_{\rm pre}+2\tau\log d+A
+        +\frac{\delta}{\tau}\max(0,2S'+g_{\max})+r
+    \]
+    and the information bridge gives
+    $2I\leq2S'+G_{\rm pre}-G_{\rm post}+2c+C$, then $2I\leq F+r$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Monotonicity gives
+    $\max(0,2S'+g_{\max})\leq2(S+c)+B_{\rm pre}$.
+    Substitute the displayed estimates into the first, smoothing and defect
+    terms.  The two smoothing terms combine into
+    $\tau\bigl(2(S+c)+B_{\rm pre}\bigr)$.
+    Add the unchanged information correction.
+\end{proof}
+
+\begin{theorem}[The fixed-instance replica limit]
+    \label{thm:sharp-information-replica-limit}
+    \lean{TNLean.PEPS.AreaLaw.Scan.information_le_of_eventually_sharpInformationBound}
+    \leanok
+    Keep all the physical and scalar data fixed.  If
+    $r_k,u_k,l_k\to0$ and eventually
+    \[
+        2I\leq F\left(S,c,B_{\rm pre},\log z,W,\tau,
+        \delta+\frac{r_k}{g/2},A,C\right)
+        +\frac{2u_k}{W}+l_k,
+    \]
+    then $2I\leq F(S,c,B_{\rm pre},\log z,W,\tau,\delta,A,C)$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:sharp-information-scalar}
+    The right-hand side converges by continuity of addition, multiplication
+    and division by the fixed scalars.  Pass the eventual real inequality to
+    the limit.  No convergence of selected stages or parameters is needed,
+    since the scalar right-hand side no longer depends on them.  This is only
+    the replica limit, with the physical size and weight already fixed.
+\end{proof}
+
+\begin{theorem}[Original-state information from one source-selected point]
+    \label{thm:source-actual-information}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_sourceTarget_actual_mutualInformation_bound}
+    \leanok
+    Under the complete hypotheses of the stronger source-selected sharp
+    energy theorem, enlarge its size threshold to include the uniform
+    positive-prefix continuity threshold.  Retain its same truncated vector
+    $\Omega_t$, typical spectral set $E$, mass $z$, selected dimension $d$ and
+    physical label sequence.  Put
+    \begin{align*}
+        S_t         & =S_{\Omega_t}(X),                     & c & =n^{3/5}-\log z, \\
+        B_{\rm sh}  & =C_e(nL^{e_{\rm box}}+n)+n^{-247},    &
+        B_{\rm pre} & =2S_t+2B_{\rm sh}+6nD\log q,                                 \\
+        C_{\rm MI}  & =16\sqrt{d_{\rm tr}(\Omega_t,\Omega)}
+        \log(e\dim\mathcal H_X).
+    \end{align*}
+    For every $1\leq W\leq n^\omega$ satisfying the original round-step
+    smallness with $a=W/K$, and every $0<\tau\leq1/2$, define
+    \[
+        A=(3+1/a)h(\tau)+37(C_0B)a-\frac{\log z}{a}.
+    \]
+    Then the original-state collar information satisfies
+    \[
+        2I_\Omega(X:S_0^c)
+        \leq F(S_t,c,B_{\rm pre},\log z,W,\tau,n^{-1/2000},A,C_{\rm MI}).
+    \]
+    The fixed physical and round-step constants precede $C_e$; $C_e$ precedes
+    the size threshold and the finite physical system.  The state, spectral
+    set and labels precede $W$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:arealaw-source-selected-sharp-energy,
+        thm:source-actual-terminal-pre-entropy,
+        thm:actual-selected-collar-information,
+        thm:sharp-information-scalar,
+        thm:sharp-information-replica-limit,
+        thm:area_law_selected_schmidt_entropy_bounds}
+    Invoke the stronger source energy theorem once.  Transfer the original
+    positive-prefix entropy input to its same vector.  The scanner geometry
+    gives $0\leq G_{\rm pre}\leq B_{\rm pre}$ and
+    $g_{\max}\leq B_{\rm pre}$, using $B_{\rm pre}\geq0$.
+    The same selected spectrum gives
+    $\log d,S'\leq S_t+c$ and $c\geq0$.
+
+    For each sufficiently large replica count, use the very same selected
+    stage and parameter that satisfy the sharp and stronger energy bounds.
+    The parameter stays in the source consumer's interval
+    $[n^{-\nu},2n^{-\nu}]$; it is never selected again.
+    Apply the information bridge and the scalar substitution with
+    defect bound $n^{-1/2000}+r_k/(g/2)$.  The remaining errors are precisely
+    the same upper and lower sharp remainders.  With the physical system,
+    $W$ and $\tau$ fixed, send all three remainders to zero.
+\end{proof}
+
+The final size-power estimate and its geometric application are separate.
+In particular, the source target and positive-prefix inputs are still
+hypotheses; no safe-box entropy theorem, Proposition 9.6 or full area law is
+claimed by this result.

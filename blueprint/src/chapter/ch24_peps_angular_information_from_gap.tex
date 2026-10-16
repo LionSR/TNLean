@@ -1,0 +1,72 @@
+\section{Cell and angular information from the original spectral gap}
+\label{sec:peps_angular_information_from_gap}
+
+\begin{theorem}[Cell information from the original spectral gap]
+    \label{thm:peps_cell_conditional_information_from_gap}
+    \lean{TNLean.PEPS.Approximation.exists_cell_conditionalMutualInformation_le_square}
+    \leanok
+    \uses{def:polynomial_peps_model,def:area_law_ground_entropy}
+    Fix $q\in\mathbb N$ with $q\ge1$, $J\ge0$, $\Delta>0$ and $c>0$.
+    There are $C_1>0$ and $K\ge0$ with the following property.
+    Let $s\ge1$, let $o\in\mathbb R^2$, and put
+    $Q_i=o+si+[0,s)^2$ for $i\in\mathbb Z^2$.
+    Fix $i_0\in\mathbb Z^2$ and a set $A\subseteq\mathbb Z^2$ with $i_0\notin A$.
+    Let $H$ be a Hamiltonian of the square-grid model on
+    $\Lambda_L=\{1,\ldots,L\}^2$, with interaction bound $J$, and let $\Omega$
+    be its unit ground vector with full-system gap $\Delta$.
+    Set $G=\Lambda_L\cap Q_{i_0}$ and
+    $B=\Lambda_L\cap\bigcup_{i\in A}Q_i$.
+    For every $E\subseteq\Lambda_L\setminus(G\cup B)$ satisfying
+    $\operatorname{dist}_\infty(\overline{Q_{i_0}},E)\ge cs$, one has
+    \begin{align}
+        I_\Omega(G:E\mid B) & \le C_1(1+\log s)^K.
+        \notag
+    \end{align}
+    The constants precede the scale, grid origin, conditioning cells,
+    system size, Hamiltonian, ground vector and exterior region.
+    This is the cell estimate of
+    \cite[Lemma~3.2]{OpenAI2026PolynomialPEPS}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_sublinear_collar,
+        thm:peps_square_cell_conditional_information_of_collar}
+    Apply the sublinear collar theorem with range $R=1$, clearance $D_0=13$
+    and template constant $C_{\rm tpl}=24$. The required inequalities are
+    $2R+10=12<13$ and $24\le C_{\rm tpl}$.
+    The conditional square-cell estimate then applies to the same ground
+    vector, cell, conditioning region and exterior.
+\end{proof}
+
+\begin{theorem}[Information under angular separation]
+    \label{thm:peps_angular_information_from_gap}
+    \lean{TNLean.PEPS.Approximation.angularInformationBound}
+    \leanok
+    \uses{def:polynomial_peps_model,def:peps_angular_separation}
+    Fix $q\in\mathbb N$ with $q\ge1$, $J\ge0$ and $\Delta>0$.
+    For every $a>0$, $A_0\ge1$, $m_0\in\mathbb N$ and $p>0$, there are
+    $D,L_0\in\mathbb R$ with the following property.
+    Let $L\ge L_0$ be a natural number, let $H$ be a Hamiltonian of the
+    square-grid model on $\Lambda_L=\{1,\ldots,L\}^2$ with interaction bound $J$,
+    and let $\Omega$ be its unit ground vector with full-system gap $\Delta$.
+    Let $\mathcal V\subseteq\mathbb R^2$ consist of at most $m_0$ marked points,
+    let $X,E\subseteq\Lambda_L$ be disjoint, and let $n\in\mathbb R$ satisfy
+    $D\log L\le n\le A_0L$ and $\operatorname{diam}_\infty X\le A_0n$.
+    Put $d_{\mathcal V}(x)=\min_{v\in\mathcal V}|x-v|_\infty$, with
+    $d_{\varnothing}=+\infty$.
+    If every $x\in X$ and $y\in E$ satisfy
+    \begin{align}
+        |x-y|_\infty & \ge a\max\{D\log L,\min(n,d_{\mathcal V}(x))\},
+        \notag
+    \end{align}
+    then $I_\Omega(X:E)\le L^{-p}$.
+    The constants are chosen before the system size, Hamiltonian, ground
+    vector, marked points, physical regions and scale.
+    This is~\cite[Proposition~3.4]{OpenAI2026PolynomialPEPS}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_sublinear_collar,thm:peps_angular_information_of_collar}
+    The sublinear collar theorem with $R=1$, $D_0=13$ and $C_{\rm tpl}=24$
+    follows from the original model and gap assumptions. Apply the conditional
+    angular information theorem with these fixed parameters.
+    Its constants have precisely the stated order of quantifiers.
+\end{proof}

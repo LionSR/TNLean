@@ -51,7 +51,7 @@ in the September 24, 2026 polynomial-PEPS manuscript.
     $\delta(x)=\min\{n,\operatorname{dist}_{\infty}(x,\mathcal V)\}$.
 \end{definition}
 
-\begin{theorem}[Capped-distance bounds and marked-point witnesses]
+\begin{theorem}[Capped-distance bounds and nearby marked points]
     \label{thm:peps_capped_distance_bounds}
     \lean{TNLean.PEPS.Approximation.le_cappedMarkDistance_iff,
         TNLean.PEPS.Approximation.cappedMarkDistance_le_cap,
@@ -150,7 +150,7 @@ in the September 24, 2026 polynomial-PEPS manuscript.
     thresholds to be expressed through the marked-point distances using
     Theorem~\ref{thm:peps_capped_distance_bounds}. The final layer has
     only the strict upper threshold; every positive-index layer retains
-    this upper threshold, which supplies the asserted mark.
+    this upper threshold, which yields the asserted mark.
 \end{proof}
 
 \begin{theorem}[Cumulative layer identities]
@@ -378,14 +378,14 @@ in the September 24, 2026 polynomial-PEPS manuscript.
     \leanok
     \uses{def:peps_angular_grid,thm:peps_grid_ownership}
     A center in $A\cup B$ lies in one of the two sets, proving the
-    union identity. Enlarging the center set and radius preserves each
-    distance witness. A point of $A^{+r}$ lies in its owner cell, which
+    union identity. Enlarging the center set and radius preserves the
+    distance bound. A point of $A^{+r}$ lies in its owner cell, which
     is selected. If $x\in U_{q,r}(A)$, choose a point $y$ of the same
     cell and a center $z\in A$ with
     $\operatorname{dist}_{\infty}(y,z)\le r$. The cell diameter bound
     gives $\operatorname{dist}_{\infty}(x,z)\le q+r$, proving
-    (\ref{eq:peps_grid_enlargement}). A witness for selecting a cell
-    from $A$ remains a witness when $A\subseteq B$.
+    (\ref{eq:peps_grid_enlargement}). Any point showing that a cell
+    meets $A^{+r}$ also shows that it meets $B^{+r}$ when $A\subseteq B$.
 \end{proof}
 
 \begin{theorem}[Counting newly selected cells]
@@ -405,7 +405,7 @@ in the September 24, 2026 polynomial-PEPS manuscript.
 \begin{proof}
     \leanok
     \uses{def:peps_angular_grid,thm:peps_scaled_grid_count}
-    The point of $A\cup B$ witnessing selection must lie in $B$ if
+    A point of $A\cup B$ within distance $rs$ of the cell must lie in $B$ if
     the cell is not selected from $A$.
     By Theorem~\ref{thm:peps_scaled_grid_count}, the cells selected from
     $B$ have the stated finite bound. Among them retain precisely those
@@ -426,7 +426,7 @@ in the September 24, 2026 polynomial-PEPS manuscript.
     Each $B_j$ is covered by at most $m_0+1$ closed squares of radius $Rs_j$.
     It is therefore covered by at most
     $(m_0+1)(2\lceil R\rceil_++3)^2$ ambient cells of side $s_j$.
-    For $d>0$, the actual cells of side $ds_j$ meeting $B_j^{+rs_j}$ form
+    For $d>0$, the cells of side $ds_j$ meeting $B_j^{+rs_j}$ form
     a finite set with cardinal at most
     \begin{align}
         M=(m_0+1)\left(2\left\lceil\frac{R+r}{d}\right\rceil_++3\right)^2.
@@ -444,7 +444,7 @@ in the September 24, 2026 polynomial-PEPS manuscript.
     For the first or sole layer, choose any $x_0\in X$ if $X$ is nonempty.
     The diameter bound gives $X\subseteq\overline B_\infty(x_0,A_0n)$.
     If $X$ is empty, use the empty cover.
-    In a later layer, $\delta(x)<2s_j\le n$ gives an actual $v\in\mathcal V$
+    In a later layer, $\delta(x)<2s_j\le n$ gives some $v\in\mathcal V$
     with $\operatorname{dist}_{\infty}(x,v)<2s_j$.
 
     A cell meeting a radius-$(R+r)s_j$ square has index within
@@ -572,6 +572,69 @@ in the September 24, 2026 polynomial-PEPS manuscript.
     Apply Theorem~\ref{thm:peps_angular_reset_uniform_width} with $c=a'/3$.
 \end{proof}
 
+\begin{theorem}[Clearance of the closed ambient cell]
+    \label{thm:peps_selected_cell_closure_clearance}
+    \lean{TNLean.PEPS.Approximation.AngularGrid.selected_cell_closure_clearance}
+    \leanok
+    \uses{def:peps_angular_grid}
+    Let $s,r,b\in\mathbb R$, and use the coordinate inequalities of
+    Definition~\ref{def:peps_angular_grid} to define the cells $Q_i$.
+    Let $U$ be the union of the cells meeting $A^{+r}$, and suppose that
+    $Q_i$ is one of these selected cells. If
+    $\operatorname{dist}_\infty(x,y)\ge b$ for every $x\in U$ and $y\in C$,
+    the same inequality holds for every $x\in\overline{Q_i}$ and $y\in C$.
+    This gives the closed-cell separation required in
+    \cite[Lemma~3.2 and Proposition~3.4]{OpenAI2026PolynomialPEPS}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:peps_angular_grid}
+    Fix $y\in C$. Every point of $Q_i$ belongs to $U$, so its distance
+    from $y$ is at least $b$. The set
+    $\{x:\operatorname{dist}_\infty(x,y)\ge b\}$ is closed.
+    It therefore contains $\overline{Q_i}$.
+\end{proof}
+
+\begin{theorem}[Membership in a selected cell]
+    \label{thm:peps_selected_cell_owner}
+    \lean{TNLean.PEPS.Approximation.AngularGrid.mem_selectedRegion_iff_touches_owner}
+    \leanok
+    \uses{def:peps_angular_grid}
+    For a grid of side $s>0$, a point $x$ belongs to $U_{s,r}(A)$
+    if and only if its cell index $\iota(x)$ belongs to $I_{s,r}(A)$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_grid_ownership,def:peps_angular_grid}
+    If $x$ lies in a selected cell $Q_i$, uniqueness of the cell index
+    gives $i=\iota(x)$. Conversely, $x\in Q_{\iota(x)}$, so selection
+    of this cell implies membership in the selected union.
+\end{proof}
+
+\begin{theorem}[Physical and integer sup distances]
+    \label{thm:peps_physical_integer_sup_distance}
+    \lean{TNLean.PEPS.Approximation.dist_sitePosition_eq_supDist}
+    \leanok
+    \uses{def:peps_angular_information_bound}
+    Let $L\in\mathbb N$ and let $x,y\in\{0,\ldots,L-1\}^2$.
+    Their physical positions are $x+(1,1)$ and $y+(1,1)$, and
+    \begin{align}
+        \operatorname{dist}_\infty(x+(1,1),y+(1,1))
+         & =\max\{|x_1-y_1|,|x_2-y_2|\}.
+        \notag
+    \end{align}
+    This identifies the distances in the geometric construction with
+    those in the information reset of
+    \cite[Lemma~3.3]{OpenAI2026PolynomialPEPS}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:peps_angular_information_bound}
+    Subtracting the coordinates cancels the common translation.
+    The maximum of the two absolute coordinate differences is the
+    integer sup distance, viewed as a real number.
+\end{proof}
+
 % Completion markers concern only the geometric and numerical statements above.
-% Conditional cell information, the physical reset and the information
-% induction are separate open obligations; see the accompanying scope note.
+% The physical information estimates and annular induction are proved in
+% the following sections, together with their original-gap conclusions.

@@ -25,10 +25,10 @@ the periods $n$ and $m$.
         \tn[at=(1,2), species=marked, label pos=nw]{A}
     \end{tenkz}
 \end{center}
-Translations act on the vertices and edges. Transporting a tensor along a graph
+Translations act on the vertices and edges. Pulling a tensor back along a graph
 isomorphism $\phi$ relabels its coefficients by
 $\Coeff_{A^\phi}(\sigma)=\Coeff_A(\sigma\circ\phi)$,
-so two tensors generating the same state still do after transport. This is the
+so two tensors generating the same state still do after relabelling by $\phi$. This is the
 setting in which the normal Fundamental Theorem specializes to a single
 site-independent tensor and produces the global phase of
 \cite[Theorem~3]{Molnar2018NormalPEPS}.
@@ -65,13 +65,13 @@ site-independent tensor and produces the global phase of
     the edges incident to $\phi(v)$.
 \end{definition}
 
-\begin{definition}[Transport of a PEPS tensor]%
+\begin{definition}[Graph-isomorphism relabelling of a PEPS tensor]%
     \label{def:peps_tensor_transport}
     \lean{TNLean.PEPS.Tensor.transport}
     \lean{TNLean.PEPS.Tensor.transport_bondDim}
     \leanok
     \uses{def:peps_tensor, def:peps_torus_geometry_translation}
-    Let $\phi:G\simeq G'$ be a graph isomorphism. The transported tensor
+    Let $\phi:G\simeq G'$ be a graph isomorphism. The relabelled tensor
     $A^\phi$ on $G'$ has bond dimension
     $D^\phi_{e'}=D_{\phi^{-1}(e')}$ at every edge $e'$ of $G'$. Its local
     tensor at $w\in G'$ is the local tensor of $A$ at $\phi^{-1}(w)$, with
@@ -79,7 +79,7 @@ site-independent tensor and produces the global phase of
     $\phi$.
 \end{definition}
 
-\begin{theorem}[State coefficient under transport]%
+\begin{theorem}[State coefficient under graph isomorphism]%
     \label{thm:peps_stateCoeff_transport}
     \lean{TNLean.PEPS.stateCoeff_transport}
     \leanok
@@ -96,13 +96,13 @@ site-independent tensor and produces the global phase of
     vertices by $\phi$ gives the coefficient equality.
 \end{proof}
 
-\begin{theorem}[Transport preserves equality of PEPS states]%
+\begin{theorem}[Graph isomorphisms preserve equality of PEPS states]%
     \label{thm:peps_sameState_transport}
     \lean{TNLean.PEPS.SameState.transport}
     \leanok
     \uses{def:peps_same_state, thm:peps_stateCoeff_transport}
     If two PEPS tensors on $G$ have equal state coefficients for every
-    physical configuration, then their transports along any graph
+    physical configuration, then their images $A^\phi$ and $B^\phi$ along any graph
     isomorphism $\phi:G\simeq G'$ have equal state coefficients for every
     physical configuration on $G'$.
 \end{theorem}
@@ -202,7 +202,7 @@ site-independent tensor and produces the global phase of
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_stateCoeff_transport}
-    Transport gives
+    The graph-isomorphism coefficient theorem gives
     $\Coeff_{A^{\tau_{a,b}}}(\sigma)
         =\Coeff_A(\sigma\circ\tau_{a,b})$, and state translation invariance
     identifies the right-hand side with $\Coeff_A(\sigma)$.

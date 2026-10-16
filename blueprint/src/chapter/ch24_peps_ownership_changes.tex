@@ -7,7 +7,7 @@ information bounds as hypotheses, together with their realization as bounded
 changes: allowed monomials of \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS}
 (Section~\ref{sec:peps_pair_effects}) on the registers of the frames, one per
 site and per tag (Definition~\ref{def:peps_frame_registers}). The monomials are
-first constructed on registers in which the raw registers of a region held by
+first constructed on registers in which the site registers of a region held by
 one party are grouped into one register, and then placed on the registers of
 the frames by reorderings of tensor factors and grouping unitaries.
 
@@ -154,7 +154,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
         TNLean.PEPS.EncodedFrame.norm_act_one_kronecker_refVec_sub_le}
     \leanok
     \uses{def:peps_frame}
-    If a raw operator $B$ commutes with the raw part of the encoding of a
+    If a sheet operator $B$ commutes with the sheet part of the encoding of a
     frame on every tag configuration, then $(\id_{\rm tags}\otimes
         B)K_{\mathcal F}=K_{\mathcal F}B$ and
     $\lVert(\id\otimes B)\Omega_{\mathcal F}-\Omega_{\mathcal F}\rVert
@@ -173,11 +173,11 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
         TNLean.PEPS.EncodedFrame.Frame.outerHoles_subset_birthEnv}
     \leanok
     \uses{def:peps_frame}
-    For an encoded frame $\mathcal F$, a party $P_\circ$ and a set $T$ of raw
-    sites, let $\mathcal F'$ be the frame in which the raw registers of $T$
+    For an encoded frame $\mathcal F$, a party $P_\circ$ and a set $T$ of
+    sites, let $\mathcal F'$ be the frame in which the site registers of $T$
     are owned by $Q_\circ$, with every hole, encoding and tag owner kept, and
     \begin{align}
-        E=\{x:\text{the raw owner of }x\neq P_\circ\}\cup H^+(\mathcal F),
+        E=\{x:\text{the site owner of }x\neq P_\circ\}\cup H^+(\mathcal F),
         \qquad U=\Lambda\setminus(T\cup E)
     \end{align}
     (\texttt{05-frames.tex}, equation (birth-partition), lines 400--405).
@@ -220,7 +220,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
         \lVert(\id\otimes B)\Omega_{\mathcal F}-\Omega_{\mathcal F'}\rVert
         \le L^{-30}.
     \end{align}
-    Since $\mathcal F$ and $\mathcal F'$ differ only in raw owners,
+    Since $\mathcal F$ and $\mathcal F'$ differ only in site owners,
     $K_{\mathcal F'}=K_{\mathcal F}$ and $\Omega_{\mathcal
             F'}=\Omega_{\mathcal F}$, so the intertwining identity says that $B$
     commutes with the encoding; the change of owner is the content of the
@@ -238,7 +238,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     with $B$. Hence $\lVert(\id\otimes B)\Omega_{\mathcal F}-\Omega_{\mathcal
             F}\rVert\le\lVert(B-\id)\Omega\rVert\le\lVert\mathcal V\Omega-s\otimes
         s'\rVert\le L^{-30}$, and $\Omega_{\mathcal F'}=\Omega_{\mathcal F}$ in
-    product coordinates, since only raw owners change.
+    product coordinates, since only site owners change.
 \end{proof}
 
 \begin{definition}[Parties used by a monomial]
@@ -418,7 +418,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     splitting data with the reference error of Theorem~\ref{thm:peps_frame_birth}
     such that $B=\id_E\otimes K^\dagger K$ with $K=\bra s(\id_T\otimes V)$, the
     registers of $U$ are owned by $P_\circ$ before and after the birth, and
-    those of $T$ by $P_\circ$ before and by $Q_\circ$ after it. Group the raw
+    those of $T$ by $P_\circ$ before and by $Q_\circ$ after it. Group the site
     registers of $T$ into one register $\mathcal H_T$ and those of $U$ into one
     register $\mathcal H_U$, followed by an arbitrary list of further registers.
     On these registers there is an allowed monomial using only $P_\circ$ and
@@ -527,7 +527,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     The following compositions of exchanges of adjacent tensor factors are
     allowed monomials that use no party and no pair resource, and each sends
     product basis vectors to the indicated product basis vectors: moving the
-    raw registers of the sites satisfying a condition in front of the others,
+    site registers of the sites satisfying a condition in front of the others,
     keeping the order within both parts, and back; reassociating and
     interchanging blocks of registers; splitting the tag registers of a
     concatenated list of holes into those of the two parts, and merging them.
@@ -540,7 +540,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     party or pair resource. Naming a register with an equal owner label moves
     nothing. If a second list of holes is a reordering of the first, with
     pairwise disjoint outer
-    footprints, there are a relabelling of the tags that preserves the raw
+    footprints, there are a relabelling of the tags that preserves the sheet
     part of the encoding and such a composition sending $\ket\tau$ to the
     relabelled $\ket\tau$ (the identification of tag orderings in
     \texttt{05-frames.tex}, lines 84--85).
@@ -556,8 +556,8 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     \uses{thm:peps_register_exchange}
     Each composition is built by induction on the lists. For the partition
     step, let $A,B$ be two site lists and $C$ an arbitrary untouched register
-    list. In concatenations below, site lists and sites denote their raw
-    register lists and individual raw registers. Write $J_{A,C}$ for the
+    list. In concatenations below, site lists and sites denote their site
+    register lists and individual site registers. Write $J_{A,C}$ for the
     isometry separating concatenated
     lists, and let $(A,C)$ denote their concatenation. For the product basis
     vectors $u=\ket{c(x)}$, $a=\ket c_A$, $b=\ket c_B$ and any $y$ in the
@@ -574,7 +574,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     two lists are obtained by retaining sites with the indicated condition,
     which gives the membership and non-repetition assertions. For a
     reordering of the holes, induct on the reordering: an exchange of two
-    adjacent holes is an exchange of their tag registers, and the raw parts of
+    adjacent holes is an exchange of their tag registers, and the sheet parts of
     the encodings of the two holes commute by disjointness of supports.
     Adjoining untouched registers changes none of the original operations,
     so induction on the added list preserves each of the stated properties.
@@ -687,15 +687,15 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     \uses{def:peps_frame_registers,lem:peps_frame_registers_coordinates,
         lem:peps_register_reorderings,lem:peps_front_registers}
     Let $T,E\subseteq\Lambda$ be disjoint and $U=\Lambda\setminus(T\cup E)$,
-    let the raw registers of $T$ be held by one party and those of $U$ by
-    one party, before a change of raw owners that keeps the owners on $E$,
-    and similarly after it. Moving the raw registers of $T$ and of $U$ in
+    let the site registers of $T$ be held by one party and those of $U$ by
+    one party, before a change of site owners that keeps the owners on $E$,
+    and similarly after it. Moving the site registers of $T$ and of $U$ in
     front by exchanges of tensor factors and grouping each block into one
     register by a unitary at its owner is an allowed monomial using only
     these owners and no pair resource; ungrouping has the same properties.
-    Naming the untouched raw registers of $E$ by their equal owner labels
+    Naming the untouched site registers of $E$ by their equal owner labels
     also uses no party or pair resource. If a map acts on the two grouped
-    registers, followed by the tag registers and the raw registers of $E$,
+    registers, followed by the tag registers and the site registers of $E$,
     as $M\otimes\id$, then
     grouping at the owners before, applying it, and ungrouping at the owners
     after acts on the registers of the frame, in product coordinates, as
@@ -721,7 +721,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     \leanok
     \uses{thm:peps_frame_birth,def:peps_frame_registers,
         lem:peps_frame_registers_coordinates,def:peps_monomial_parties}
-    In an encoded frame $\mathcal F$, let $T$ be a set of raw sites owned by
+    In an encoded frame $\mathcal F$, let $T$ be a set of sites owned by
     $P_\circ$ and disjoint from every outer hole footprint, let $E$ and $U$ be
     as in the birth partition, let $\lVert\Omega\rVert=1$, and suppose
     $I_\Omega(T:E)\le L^{-60}$. Then the birth is a bounded change involving
@@ -766,7 +766,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     \lean{TNLean.PEPS.EncodedFrame.sheetSwap,
         TNLean.PEPS.EncodedFrame.sheetSwapOp}
     \leanok
-    For $S\subseteq\Lambda$, $F_S$ is the unitary swapping the two raw sheets
+    For $S\subseteq\Lambda$, $F_S$ is the unitary swapping the two sheets
     at the positions in $S$ (\texttt{05-frames.tex}, lines 476--477).
 \end{definition}
 
@@ -1092,10 +1092,10 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     from the given listing by the identification of tag orderings
     (\texttt{05-frames.tex}, lines 84--85). The exchanged
     frames
-    $\mathcal F_1',\mathcal F_2'$ carry, inside $Y$, the raw ownership
+    $\mathcal F_1',\mathcal F_2'$ carry, inside $Y$, the site ownership
     assignment and the holes, with their tag owners, of the other frame
     (\texttt{05-frames.tex}, lines 461--464). The renaming $\mathcal R$
-    exchanges the sheet names of the raw registers inside $Y$ and of the tags
+    exchanges the sheet names of the site registers inside $Y$ and of the tags
     of the holes inside $Y$; every register keeps its party.
 \end{definition}
 
@@ -1120,7 +1120,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 \end{lemma}
 
 \begin{proof}\leanok
-    On every pair of tags the raw part of each encoding is the product of an
+    On every pair of tags the sheet part of each encoding is the product of an
     operator acting outside $Y$ and an operator acting on $Y$, which is a
     tensor product in the coordinates $\mathcal H_Y\otimes\mathcal
         H_{\Lambda\setminus Y}$. Swapping the sheets at $Y$ exchanges the
@@ -1217,13 +1217,13 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     \uses{def:peps_frame_exchange_data,def:peps_frame_buffer_correction}
     For a party $P_\circ$ put
     \begin{align}
-        Z=\{x:\text{the two old raw owners of }x\text{ are not both }P_\circ\}
+        Z=\{x:\text{the two old site owners of }x\text{ are not both }P_\circ\}
         \cup H^+(\mathcal F_1)\cup H^+(\mathcal F_2),
     \end{align}
     $T=Z\cap Y$, $E=Z\setminus Y$, $U=\Lambda\setminus Z$ and $A=Y\cap U$
     (\texttt{05-frames.tex}, equations (exchange-Z) and (exchange-partition),
     lines 466--473). The implemented map is
-    $C=D_UF_A\mathcal R$, with $D_U$ and $F_A$ acting on raw registers and as
+    $C=D_UF_A\mathcal R$, with $D_U$ and $F_A$ acting on site registers and as
     the identity on all tags.
 \end{definition}
 
@@ -1233,15 +1233,15 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
         TNLean.PEPS.EncodedFrame.TwoSheetExchange.newOwner_eq_of_notMem_exchangeEnv}
     \leanok
     \uses{def:peps_frame_exchange_map}
-    Every register of $U$ is raw and held by $P_\circ$ on both sheets,
+    Every register of $U$ is a site register held by $P_\circ$ on both sheets,
     before and after the exchange (\texttt{05-frames.tex}, lines 500--501).
 \end{lemma}
 
 \begin{proof}\leanok
-    A register of $U$ is outside $Z$, so both its old raw owners are
+    A register of $U$ is outside $Z$, so both its old site owners are
     $P_\circ$ and it lies in no outer hole footprint. The exchanged frames
-    take their raw owners at each site from one of the two old frames, so
-    both new raw owners are $P_\circ$ as well.
+    take their site owners at each site from one of the two old frames, so
+    both new site owners are $P_\circ$ as well.
 \end{proof}
 
 \begin{theorem}[Two-sheet exchange: implemented map]
@@ -1333,7 +1333,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     $W=(V^{\otimes2})^\dagger F_{\mathcal B_T}V^{\otimes2}F_A$ acts on the two
     copies of $\mathcal H_U$ and $\lVert W\rVert\le1$. The registers of $U$ are
     held by $P_\circ$ on both sheets before and after the exchange. On two
-    registers of $P_\circ$, each grouping the raw registers of $U$ on one sheet,
+    registers of $P_\circ$, each grouping the site registers of $U$ on one sheet,
     followed by an arbitrary list of further registers, $W\otimes\id$ is the
     operator of one allowed private contraction at $P_\circ$
     (\texttt{05-frames.tex}, lines 503--515).
@@ -1382,7 +1382,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     of tensor factors from the registers of the two frames to the registers
     of the two exchanged frames, using no party and no pair resource. It
     splits the tags of each frame into those of the holes outside and inside
-    $Y$, moves the raw registers of the sites of $Y$ next to the inside tags,
+    $Y$, moves the site registers of the sites of $Y$ next to the inside tags,
     exchanges these blocks between the sheets, and merges back; every
     register keeps its party (\texttt{05-frames.tex}, lines 485--490).
 \end{lemma}
@@ -1390,7 +1390,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 \begin{proof}\leanok
     Follow a product basis vector through the reorderings. Inside $Y$ the
     configurations and the inside tags of the two sheets change places, and
-    the owners of the moved raw registers are the new owners at those sites,
+    the owners of the moved site registers are the new owners at those sites,
     so the result is the basis vector of the renamed configuration.
 \end{proof}
 
@@ -1406,9 +1406,9 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     \uses{def:peps_frame_registers,lem:peps_frame_registers_coordinates,
         thm:peps_region_configuration}
     Let $T,E\subseteq\Lambda$ and $U=\Lambda\setminus(T\cup E)$, with two
-    arbitrary assignments of raw owners. Retain the sites of $U$ in the
+    arbitrary assignments of site owners. Retain the sites of $U$ in the
     fixed site order; every site in the complementary list belongs to
-    $T\cup E$. Let $\ket c_{U,j}$ be the product basis vector on these raw
+    $T\cup E$. Let $\ket c_{U,j}$ be the product basis vector on these site
     registers on sheet $j$, and let $\iota_U$ be the inverse of the concatenation
     isometry separating their two consecutive lists. Grouping both lists
     gives an isometry $Q_U$ to $\C^{[q]^U\times[q]^U}$ satisfying
@@ -1448,9 +1448,9 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     \leanok
     \uses{lem:peps_register_reorderings,lem:peps_two_frame_registers,
         lem:peps_frame_exchange_correction_monomial}
-    Let $T,E\subseteq\Lambda$ be disjoint and let the raw registers of
+    Let $T,E\subseteq\Lambda$ be disjoint and let the site registers of
     $U=\Lambda\setminus(T\cup E)$ be held by $P_\circ$ on both frames. Moving
-    the raw registers of $U$ of both sheets to the front, applying a
+    the site registers of $U$ of both sheets to the front, applying a
     contraction $W$ of the two copies of $\mathcal H_U$ as one private
     contraction at $P_\circ$, and moving them back is an allowed monomial
     using only $P_\circ$ and no pair resource, whose operator in product
@@ -1465,7 +1465,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     moved registers carry the two configurations on $U$, the contraction
     gives the column of $W$, and moving back gives the basis vectors with
     these configurations replaced. The reconstructed configurations agree
-    with the originals on $T\cup E$, so the remaining raw registers and
+    with the originals on $T\cup E$, so the remaining site registers and
     all tags are unchanged.
 \end{proof}
 
@@ -1503,7 +1503,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
         lem:peps_frame_exchange_correction_monomial,
         lem:peps_frame_exchange_owners,lem:peps_register_reorderings}
     Compose the renaming as reorderings with the corrections on the
-    registers of the exchanged frames, whose raw registers of $U$ are held by
+    registers of the exchanged frames, whose site registers of $U$ are held by
     $P_\circ$ on both sheets. The operators compose to
     $D_UF_A\mathcal R$, since $D_UF_A$ is the identity on the tags and on the
     two copies of $T\cup E$ tensored with one contraction of the two copies
@@ -1511,7 +1511,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     identification of tag orderings via reorderings, whose operator is $G$;
     these exchanges of tag registers move the tag of each hole to the
     position of that hole in the new list, and $G$ is the corresponding
-    relabelling of the tags, which preserves the raw part of each encoding.
+    relabelling of the tags, which preserves the sheet part of each encoding.
     The reference error is that of Theorems~\ref{thm:peps_frame_exchange}
     and~\ref{thm:peps_frame_exchange_any_order}, read through the unitary
     identification of the registers.

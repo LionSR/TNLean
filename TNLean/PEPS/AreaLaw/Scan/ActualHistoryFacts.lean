@@ -426,7 +426,7 @@ Source: `08-scanner.tex`, Lemma 9.1, lines 195–221, with the scales and test g
 lines 32–58 and the move entropies of lines 431–444. -/
 theorem exists_historyFacts_actualScanRound (X : ScannerExponents) (R : ℕ) {q : ℕ}
     (hq : 1 ≤ q) {Ctr CT : ℝ} (hCtr : 0 < Ctr) (hCT : 0 ≤ CT) :
-    ∃ C Cl c C₁ : ℝ, 0 < c ∧ 0 < C₁ ∧ ∀ᶠ N : ℕ in atTop,
+    ∃ C c C₁ : ℝ, 0 ≤ C ∧ 0 < c ∧ 0 < C₁ ∧ ∀ᶠ N : ℕ in atTop,
       ∀ (Λ T : Finset (ℤ × ℤ)) [LinearOrder (AdmissibleSupport Λ R)] (hT : T.Nonempty)
         (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (hm : 0 < S.m) (hM : 0 < S.M)
         (dims : Site Λ ⊕ Bool → ℕ) [∀ v, NeZero (dims v)]
@@ -445,12 +445,13 @@ theorem exists_historyFacts_actualScanRound (X : ScannerExponents) (R : ℕ) {q 
           (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n) →
         (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
           ((2 * X.L N + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z) →
-        HistoryFacts X N C Cl c (fun r ↦ S.actualScanRound hm hM dims E a pre r.val) := by
+        HistoryFacts X N C 4 c (fun r ↦ S.actualScanRound hm hM dims E a pre r.val) := by
   let μ : ℕ := 2 ^ ((1 + 2 * R * (R + 1)) - 1)
   let C₁ : ℝ := 3 * μ + 1
   have hC₁ : 0 < C₁ := by positivity
   let C : ℝ := max (max 10 (10 * μ)) (2 * (1 + (2 * Ctr + 3) ^ 2 * Real.log q))
-  refine ⟨C, 4, 1 / (2 * (C₁ + 1)), C₁, by positivity, hC₁, ?_⟩
+  refine ⟨C, 1 / (2 * (C₁ + 1)), C₁, (by norm_num : (0 : ℝ) ≤ 10).trans
+    ((le_max_left _ _).trans (le_max_left _ _)), by positivity, hC₁, ?_⟩
   have htail := eventually_bad_history_probability_le X.ell_pos X.kappa_pos X.kappa_lt_mu
     X.mu_lt_one_sub_ell hCtr hC₁ hCT μ 200
   have hscales := eventually_split_counting_scale_separation (ell := X.ell) hCtr.le

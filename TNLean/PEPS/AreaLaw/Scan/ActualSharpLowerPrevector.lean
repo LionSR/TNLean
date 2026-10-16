@@ -156,20 +156,10 @@ private theorem sharpLower_suppliedPrevector_properties
       globalReplicaCopiesEquiv β (Fin d) (Fin d) k := by
     simp only [pre, augmentedSumReplicaCopiesEquiv, Equiv.coe_trans,
       Function.comp_assoc, e, Equiv.symm_comp_self, Function.comp_id, β]
-  have hprenonzero : pre ≠ 0 := by
-    intro hz
-    apply hpre.1
-    change WithLp.toLp 2 (replicaPrevector Ωt d k ell ∘
-      globalReplicaCopiesEquiv β (Fin d) (Fin d) k) = 0
-    rw [← hpreEq, hz]
-    rfl
-  have hprenorm : ‖WithLp.toLp 2 pre‖ ≤ 1 := by
-    have hn := (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ e.symm).norm_map
-      (WithLp.toLp 2 pre)
-    have hno : ‖WithLp.toLp 2 (pre ∘ e)‖ ≤ 1 := by
-      rw [hpreEq]
-      exact hpre.2
-    exact hn.symm.trans_le hno
+  have hprenonzero : pre ≠ 0 :=
+    (augmentedReplicaPrevector_ne_zero_iff_global q d k Ωt ell).mpr hpre.1
+  have hprenorm : ‖WithLp.toLp 2 pre‖ ≤ 1 :=
+    (norm_augmentedReplicaPrevector_eq_global q d k Ωt ell).trans_le hpre.2
   have hsym : symProj (copyPerm ((v : Site Λ ⊕ Bool) → Fin (n v)) k) *ᵥ pre = pre :=
     symProj_mulVec_augmentedReplicaPrevector q d k Ωt ell
   have haux := labelProj_globalReplicaCopiesEquiv_auxiliary β (Fin d) (Fin d)
@@ -196,11 +186,6 @@ are precisely the nonzero/norm and little-o conclusions of the accepted physical
 prevector theorem; the auxiliary and symmetry equations are derived here.
 All physical marginal moments concern the same unit state used in the gap.
 The actual energy defect remains explicit at every interpolation.
-
-The gap and original-state
-status moments are hypotheses, together with the supplied sequence's nonzero/norm
-and label-dimension conclusions. Its actual energy defect is retained; common-point
-comparison and final source-scale absorption are not established here.
 Source: `07-comparators.tex`, lines 130--153, 255--281 and 550--651;
 `08-scanner.tex`, lines 400--474, adc7f124. -/
 theorem exists_actualScan_suppliedPrevector_sharp_lower

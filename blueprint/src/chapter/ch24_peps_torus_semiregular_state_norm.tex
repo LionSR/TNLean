@@ -15,7 +15,7 @@
     invariant vectors, and acts as the identity on that subspace.
 \end{proof}
 
-\begin{theorem}[Exact norm of the actual regular torus state]%
+\begin{theorem}[Exact norm of the regular torus state]%
     \label{thm:peps_regular_averaging_torus_norm}
     \lean{TNLean.PEPS.torusBondNetwork_regular_averagingSite_norm,
         TNLean.PEPS.torusBondNetwork_regular_averagingSite_ne_zero}
@@ -23,7 +23,7 @@
     \uses{def:peps_regular_averaging_site, thm:peps_isometric_adjoint,
         thm:peps_regular_torus_closure_overlap}
     Let $G$ be finite, let the torus have positive periods, and let $N$
-    be its number of sites. For the actual torus contraction
+    be its number of sites. For the torus contraction
     $\Psi_{\mathrm{reg}}$ of normalized regular averaging sites with
     identity bond operators,
     \begin{align}
@@ -36,7 +36,7 @@
 \end{theorem}
 \begin{proof}\leanok
     The regular averaging projector is self-adjoint and idempotent,
-    so its actual site Gram kernel has factor one.
+    so its site Gram kernel has factor one.
     In the regular torus Gram contraction with trivial closures, every
     group element is a simultaneous closure intertwiner. The overlap is
     therefore $|G|^N|G|$. The group order is positive, proving nonvanishing.
@@ -51,11 +51,11 @@
         thm:peps_torus_semiregular_isometric_extension,
         lem:peps_torus_physical_bond_regrouping_overlap}
     Every norm-preserving physical map carrying a vector $\psi$ to the
-    actual regrouped regular torus state gives
+    regrouped regular torus state gives
     $\langle\psi,\psi\rangle=|G|^{N+1}$ and $\psi\ne0$.
     In particular, choose positive-dimensional blocks $D_i$ and an
     isometric Fourier intertwiner with the regular representation.
-    The actual fourth-root-weighted block state $\Psi_{U,W}$ then satisfies
+    The fourth-root-weighted block state $\Psi_{U,W}$ then satisfies
     \begin{align}
         \langle\Psi_{U,W},\Psi_{U,W}\rangle
                    & =|G|^{N+1}, \\
@@ -65,7 +65,7 @@
 \end{theorem}
 \begin{proof}\leanok
     Move the norm-preserving map across the overlap and substitute the
-    actual regular-state equality. Physical coordinate regrouping preserves
+    regular-state equality. Physical coordinate regrouping preserves
     overlaps, giving the exact regular norm. Its positivity implies that
     the original vector is nonzero. For the weighted block construction,
     use the already derived ambient physical state isometry.
