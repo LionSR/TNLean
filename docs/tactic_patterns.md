@@ -6325,14 +6325,22 @@ spectral split → block extraction → MPV calculation → strict bounds
   the preceding bound and the last stage's bound.
 - **Seen:** `OriginalCircuit.isExpansionBounded_sequence` and
   `OriginalCircuit.isMonomialBounded_sequence` in
-  `TNLean/PEPS/Approximation/OriginalCircuitSequence.lean`.
-- **Abstraction:** The two short inductions currently use Lean's `Nat.recOn`
-  directly. Before adding a fourth gate-expansion property, derive it from a
-  common occurrence-wise description, as in the existing retained-memory entry.
-- **Notes:** Two occurrences in one file. The gate and lifetime sum identities
-  in the same module use the existing `Finset.sum_range_succ`; their elementary
-  induction follows the recorded decision against abstracting finite-sum proof
-  structure. No new tactic or global simplification rule is introduced.
+  `TNLean/PEPS/Approximation/OriginalCircuitSequence.lean`, and formerly
+  `DyadicProtocol.isExpansionBounded_chain` and
+  `DyadicProtocol.isMonomialBounded_chain` in
+  `TNLean/PEPS/Approximation/DyadicProtocolCompression.lean`: four
+  occurrences across two files.
+- **Abstraction:** Done (2026-10-16). `DyadicProtocol.chain` is now
+  `OriginalCircuit.sequence` of the protocol changes, and every `chain` lemma
+  (counts, participation, participating sets, expansion and monomial bounds)
+  is a one-line instance of the generic `sequence` lemma. Two inductions
+  remain, both in `OriginalCircuitSequence.lean`. Before adding a further
+  gate-expansion property, derive it from a common occurrence-wise
+  description, as in the existing retained-memory entry.
+- **Notes:** The gate and lifetime sum identities in the same module use the
+  existing `Finset.sum_range_succ`; their elementary induction follows the
+  recorded decision against abstracting finite-sum proof structure. No new
+  tactic or global simplification rule is introduced.
 
 ## Rejected
 
