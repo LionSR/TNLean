@@ -765,12 +765,34 @@ no holes, this is the normalization of $\Omega$.
 \end{theorem}
 
 \begin{proof}\leanok
-    The ranks of the events cover the range, so no rank is skipped. When the next event
-    has a larger rank, every event of the current rank is done: after the last resize of
-    a scale all its corners are resized and the guide uniform on its blocks is the guide
-    at the start of the next level; after the last repainting of a level every block of
-    the root square is repainted. Two frames of equal guides with radii agreeing at the
-    true vertices are equal.
+    \uses{thm:peps_dyadic_protocol_schedule_counts,
+        lem:peps_dyadic_direct_repainting, lem:peps_dyadic_unmodified_vertices,
+        thm:peps_dyadic_temporary_holes, lem:peps_dyadic_active_labels,
+        thm:peps_protocol_level_events, thm:peps_protocol_party_map_switch,
+        thm:peps_dyadic_protocol_parties, thm:peps_dyadic_protocol_final_step,
+        thm:peps_guide_frame_norm, thm:peps_guide_frame_supplied_gates}
+    The schedule contains exactly the prescribed events in rank order
+    (Theorem~\ref{thm:peps_dyadic_protocol_schedule_counts}). The ranks cover the
+    range, so no rank is skipped. When the next event has a larger rank, every event
+    of the current rank is done. The completed block guide is the starting guide of
+    the next level by Lemma~\ref{lem:peps_dyadic_active_labels}.
+
+    The true-vertex statements for readings and block guides, and the criterion for
+    a locally constant guide, locate the corners
+    (Theorem~\ref{thm:peps_dyadic_temporary_holes} and
+    Lemmas~\ref{lem:peps_dyadic_direct_repainting}
+    and~\ref{lem:peps_dyadic_unmodified_vertices}). The supplied-patch equalities of
+    Theorem~\ref{thm:peps_guide_frame_supplied_gates} identify frames of equal guides
+    whose radii agree at the true vertices.
+
+    The root guide has no true vertex by
+    Theorem~\ref{thm:peps_protocol_level_events}. Cell centers lie in the open root
+    square by Theorem~\ref{thm:peps_protocol_party_map_switch}, giving the initial
+    raw frame. The party-label identities of
+    Theorems~\ref{thm:peps_dyadic_protocol_parties}
+    and~\ref{thm:peps_dyadic_protocol_final_step} give the final owners.
+    At the unit level, $2h_1\le2\epsilon_0<\tfrac12$, so the unit-frame conclusion of
+    Theorem~\ref{thm:peps_guide_frame_norm} gives empty physical outer squares.
 \end{proof}
 
 \begin{theorem}[The dyadic protocol from its large-scale repaintings]
