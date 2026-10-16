@@ -31,7 +31,7 @@ reduction to this normalization via blockwise similarity (\cite[eq.~\emph{unital
     Then $|J|=|K|$ and there is a bijection $\pi:J\to K$
     such that $A_j$ and $B_{\pi(j)}$ are $m_j$-periodic for the same
     period $m_j$.
-    Moreover, for each $j\in J$ there exist:
+    For each $j\in J$ there also exist:
     \begin{enumerate}
         \item a unit-modulus scalar $\xi_j$ and an invertible matrix $Y_j$
               with $A_j^i=\xi_jY_jB_{\pi(j)}^iY_j^{-1}$ for every physical
@@ -62,7 +62,7 @@ reduction to this normalization via blockwise similarity (\cite[eq.~\emph{unital
     The matrix-product-vector identities are taken at positive lengths, following the convention that the empty word is not a physical chain; this extends to length zero since the empty-word coefficient equals the bond dimension. The scalars $\xi_j$ are made explicit rather than absorbed into $S_{\pi(j)}$ as in \cite[lines~667--671]{DeLasCuevas2017Irreducible}, allowing the statement to speak directly about the given multiplicity matrices.
 \end{remark}
 
-\begin{theorem}[Periodic Fundamental Theorem, periods supplied]%
+\begin{theorem}[Periodic Fundamental Theorem with given periods]%
     \label{thm:periodic_ft_supplied_periods}
     \lean{MPSTensor.fundamentalTheorem_periodic_equalCase_irreducibleForm}
     \leanok
@@ -90,7 +90,7 @@ reduction to this normalization via blockwise similarity (\cite[eq.~\emph{unital
     before. Theorem~\ref{thm:periodic_ft_equal_case_trace_preserving} applies
     to the normalized pair.
 
-    Transport the conclusion back. The bijection, the scalars, the periods and
+    Now transfer the conclusion back to the original tensors. The bijection, the scalars, the periods and
     the blockwise multiplicity gauges concern only the multiplicity data,
     which the normalization leaves untouched, and the repeated-block relations
     compose with the two blockwise similarities. The multiplicity gauge is
@@ -472,7 +472,7 @@ reduction to this normalization via blockwise similarity (\cite[eq.~\emph{unital
         lem:left_canonical_irreducible_same_phase_unitary_gauge}
     Equality of the generated matrix-product vectors is in particular
     proportionality, so
-    Theorem~\ref{thm:periodic_multiplicity_nondecaying_overlap} supplies
+    Theorem~\ref{thm:periodic_multiplicity_nondecaying_overlap} yields
     non-decaying partners and
     Theorem~\ref{thm:periodic_conditional_block_matching} matches the two
     bases, each matched pair carrying a similarity with a unit-modulus scalar

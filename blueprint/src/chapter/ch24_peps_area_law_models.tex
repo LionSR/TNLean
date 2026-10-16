@@ -247,6 +247,70 @@ original open square. We state the two models separately, following
     both cases.
 \end{proof}
 
+\begin{theorem}[Marginal trace norm from the full-system gap]
+    \label{thm:peps_gap_marginal_trace_norm}
+    \lean{FiniteProduct.re_trace_abs_reducedPure_sub_le_sqrt_energy}
+    \leanok
+    \uses{def:area_law_ground_entropy}
+    Let $\mathcal H=\bigotimes_{v\in V}\mathcal H_v$ be a finite tensor product
+    of finite-dimensional complex Hilbert spaces. Let $H$ be an operator on
+    $\mathcal H$ and let $E_0\in\R$. Suppose that $\Omega$ is a unit vector
+    and $\Delta>0$, with
+    \begin{align}
+        H\Omega & = E_0\Omega, \notag                         \\
+        H-E_0I  & \geq\Delta(I-|\Omega\rangle\langle\Omega|).
+        \label{eq:peps_gap_projector_bound}
+    \end{align}
+    For a unit vector $\phi$ and a region $X\subseteq V$, put
+    $\rho_X^\phi=\operatorname{Tr}_{V\setminus X}|\phi\rangle\langle\phi|$
+    and define $\rho_X^\Omega$ in the same way. Then
+    \begin{align}
+        \|\rho_X^\phi-\rho_X^\Omega\|_1
+         & \leq 2\sqrt{\frac{\operatorname{Re}\langle\phi,H\phi\rangle-E_0}{\Delta}}.
+        \label{eq:peps_gap_marginal_distance}
+    \end{align}
+    This is the gap-to-marginal estimate in the
+    \href{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex\#L339-L365}{proof of Proposition 4.1}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{lem:al_amp_pure_trace_distance}
+    Write $e=\operatorname{Re}\langle\phi,H\phi\rangle-E_0$.
+    Taking the expectation of~(\ref{eq:peps_gap_projector_bound}) in $\phi$ gives
+    $1-|\langle\Omega,\phi\rangle|^2\leq e/\Delta$.
+    Contractivity under partial trace and the trace norm formula for two pure
+    states give
+    \begin{align}
+        \|\rho_X^\phi-\rho_X^\Omega\|_1
+         & \leq\bigl\||\phi\rangle\langle\phi|-|\Omega\rangle\langle\Omega|\bigr\|_1
+        =2\sqrt{1-|\langle\Omega,\phi\rangle|^2}
+        \leq2\sqrt{e/\Delta}.
+    \end{align}
+\end{proof}
+
+\begin{theorem}[A sufficient energy bound for marginal approximation]
+    \label{thm:peps_gap_marginal_one_sixteenth}
+    \lean{FiniteProduct.re_trace_abs_reducedPure_sub_le_one_sixteenth_of_energy}
+    \leanok
+    \uses{thm:peps_gap_marginal_trace_norm}
+    Under the hypotheses of Theorem~\ref{thm:peps_gap_marginal_trace_norm}, suppose
+    in addition that
+    \begin{align}
+        \operatorname{Re}\langle\phi,H\phi\rangle-E_0\leq\frac{\Delta}{1024}.
+    \end{align}
+    Then, for every region $X\subseteq V$,
+    \begin{align}
+        \|\rho_X^\phi-\rho_X^\Omega\|_1\leq\frac1{16}.
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_gap_marginal_trace_norm}
+    Since $\Delta>0$, the quotient of the excess energy by $\Delta$ is at
+    most $1/1024$. Theorem~\ref{thm:peps_gap_marginal_trace_norm} bounds the
+    full trace norm by $2\sqrt{1/1024}=1/16$.
+\end{proof}
+
 \begin{theorem}[Uniform finite-domain area law]
     \label{thm:openai_uniform_area_law}
     \uses{def:area_law_domain,def:area_law_hamiltonian,def:area_law_ground_entropy}
@@ -484,6 +548,29 @@ original open square. We state the two models separately, following
     Hamiltonian as a finite-domain interaction family
     in \cite{OpenAI2026PolynomialPEPS,OpenAI2026AreaLaw}.
 \end{definition}
+
+\begin{theorem}[Relabelling the original interaction supports]
+    \label{thm:square_interaction_support_relabel}
+    \lean{TNLean.PEPS.Approximation.squareAreaLawSupport_val_eq_nearestNeighborSupport}
+    \leanok
+    \uses{def:square_area_law_support,def:peps_square_edge_correspondence}
+    Let $\sigma$ be the coordinate bijection from the original square-grid
+    sites to $\Lambda=\{0,\ldots,L-1\}^2$, with any total order on $\Lambda$.
+    Let $e$ send an original site $v$ to $\sigma(v)$ and an original forward
+    edge $(v,w)$ to the edge with endpoints $\sigma(v),\sigma(w)$.
+    For a site or edge label $j$ in $\Lambda$, let $D_j$ be its singleton or
+    two-endpoint support. Then $X_i=D_{e(i)}$ for every original interaction
+    label $i$, where $X_i=\sigma(S_i)$ as in
+    Definition~\ref{def:square_area_law_support}.
+    These are the same interaction supports as in
+    \cite[Section~1]{OpenAI2026PolynomialPEPS}.
+\end{theorem}
+\begin{proof}\leanok
+    For a site label, the image of its singleton is the singleton of its
+    image. For a forward-edge label $(v,w)$, the edge correspondence and
+    graph isomorphism preserve the unordered pair of endpoints, so
+    $D_{e(i)}=\{\sigma(v),\sigma(w)\}=\sigma(\{v,w\})=X_i$.
+\end{proof}
 
 \begin{theorem}[Designated supports are admissible at range one]
     \label{thm:square_area_law_support_admissible}
@@ -927,6 +1014,28 @@ original open square. We state the two models separately, following
     assumed in this definition.
 \end{definition}
 
+\begin{theorem}[Inverse images of ordered two-family partitions]
+    \label{thm:peps_two_family_partition_inverse_image}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.OrderedTwoFamilyPartition.earlierSameFamily_comap,
+        TNLean.PEPS.AreaLaw.Geometry.OrderedTwoFamilyPartition.card_residual_comap_le,
+        TNLean.PEPS.AreaLaw.Geometry.OrderedTwoFamilyPartition.comap}
+    \leanok
+    \uses{def:area_law_two_family_partition}
+    Let $A\subseteq V$ be finite, with an ordered two-family partition
+    whose residual is $D$ and pieces $P_i$. If $W$ is finite and $f:W\to V$, then $f^{-1}(A)$ has
+    the partition with residual $f^{-1}(D)$ and pieces $f^{-1}(P_i)$,
+    retaining the same labels, families and order. Inverse images commute
+    with the union of all earlier pieces in a given family. If $f$ is
+    injective, the residual cardinality does not increase.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Inverse images preserve disjointness and unions. The family and order
+    conditions concern only the retained labels, so they are unchanged.
+    The final cardinality bound follows by restricting the injection $f$
+    to the residual set. Empty inverse-image pieces retain their labels.
+\end{proof}
+
 \begin{theorem}[Exact exponent gaps]
     \label{thm:area_law_exponent_gaps}
     \lean{
@@ -1091,7 +1200,8 @@ The proof of Proposition~9.6 of \cite{OpenAI2026AreaLaw} combines the scanner
 estimates with three steps that use no estimate of the scan: an exact entropy
 identity at each leaf, the transfer from the truncated to the original ground
 state, and the cut and size assertions of the proposition. The results below
-prove these steps; the information inequality itself is not proved here.
+prove these steps. Theorem~\ref{thm:area_law_sublinear_collar} combines
+them with the physical scanner estimates to prove the information inequality.
 
 \begin{definition}[Leaf quantities of the sharp comparisons]
     \label{def:area_law_collar_leaf_quantities}
@@ -1249,6 +1359,7 @@ state.
     \label{rem:peps_companion_area_law}
     \uses{thm:openai_uniform_area_law,cor:rectangles,
         thm:area_law_conditional_collar_two_families,
+        thm:area_law_sublinear_collar,thm:area_law_amplification,
         thm:square_hermitian_term_sum,thm:square_area_law_from_uniform,
         thm:rectangular_equal_side_entropy,thm:openai_square_area_law}
     Theorem~1.1 and Corollary~1.2 of \cite{OpenAI2026AreaLaw} give
@@ -1258,8 +1369,11 @@ state.
     constant $C(q,R,J,\Delta)$ serves every domain, interaction family and cut.
     Theorem~\ref{thm:area_law_conditional_collar_two_families} derives it from
     Propositions~9.6 and~11.2 of \cite{OpenAI2026AreaLaw}.
-    % Status: the uniform area law is not proved; only the derivation from
-    % Propositions 9.6 and 11.2 is. The passage to the square grid is proved.
+    The collar proposition is Theorem~\ref{thm:area_law_sublinear_collar};
+    amplification is Theorem~\ref{thm:area_law_amplification}.
+    % Status: the collar and amplification propositions are proved. The
+    % two-family decomposition of Proposition 11.2 remains an assumption, so
+    % the uniform area law is not proved. The passage to the square grid is proved.
     The site and edge terms of the
     original model need not be Hermitian individually. Replacing each by its
     Hermitian part keeps its support and norm bound and leaves the total
@@ -1293,7 +1407,8 @@ state.
 \begin{remark}[Templates and the sublinear collar bound]
     \label{rem:peps_companion_collar}
     \uses{def:area_law_template,def:area_law_collar_bound,
-        thm:area_law_collar_cut_bounds,thm:area_law_collar_bound_of_information}
+        thm:area_law_collar_cut_bounds,thm:area_law_collar_bound_of_information,
+        thm:area_law_sublinear_collar}
     Definition~\ref{def:area_law_template} states the templates of
     \cite[Definition~9.3]{OpenAI2026AreaLaw} with the printed conditions
     $n\ge C_{\rm tpl}N_0(s_0+1)$, $\operatorname{diam}_\infty T\le n$ and
@@ -1306,22 +1421,23 @@ state.
     threshold, $I_\Omega(X:\Gamma\setminus S_0)\le Cn^{1-\varepsilon}$,
     $|S_0|\le Cn^2$, and each of $X$, $S_0\setminus X$ and $S_0$ has at most $Cn$
     crossing edges.
-    % Status: Proposition 9.6 is assumed.
+    % Status: Proposition 9.6 is proved by thm:area_law_sublinear_collar.
     For $C_{\rm tpl}\ge24$ and $D_0\ge1$, which
     the standing choices of a large $C_{\rm tpl}$ and of $D_0>2R+10$ ensure, the
     size and crossing-edge assertions hold for every separated template
     (Theorem~\ref{thm:area_law_collar_cut_bounds}), so
     Theorem~\ref{thm:area_law_collar_bound_of_information} reduces the
-    proposition to the information inequality alone.
-    % Status: the size and crossing-edge bounds are proved; the information
-    % inequality is not.
+    proposition to the information inequality alone. This inequality,
+    together with the size and crossing-edge bounds, is
+    Theorem~\ref{thm:area_law_sublinear_collar}.
+    % Status: all assertions of Proposition 9.6 are proved.
 \end{remark}
 
 \begin{remark}[Amplification]
     \label{rem:peps_companion_amplification}
     \uses{def:area_law_amplification_bound,thm:area_law_amplification,
         thm:area_law_uniform_collar_threshold,
-        thm:peps_coarse_information_of_collar}
+        thm:peps_coarse_information_of_collar,thm:peps_coarse_information}
     Definition~\ref{def:area_law_amplification_bound} states
     Proposition~10.2 of \cite{OpenAI2026AreaLaw} as printed in the appendix:
     from the three collar bounds with a common constant $C_0$, for every integer
@@ -1338,8 +1454,8 @@ state.
     Its application in \cite[Proposition~3.1]{OpenAI2026PolynomialPEPS}, with
     $A=\Gamma$ and $M=1$, is Theorem~\ref{thm:peps_coarse_information_of_collar},
     which derives it from the sublinear collar bound.
-    % Status: amplification is proved; its application is proved assuming the
-    % sublinear collar bound.
+    Theorem~\ref{thm:peps_coarse_information} supplies the original-gap
+    conclusion using the physical collar theorem.
 \end{remark}
 
 \begin{remark}[Two-family entropy cancellation]
@@ -1372,7 +1488,7 @@ state.
 \begin{remark}[The adaptation to a cell]
     \label{rem:peps_companion_cell}
     \uses{thm:peps_labelled_conditional_entropy,
-        thm:peps_cell_two_family_partition}
+        thm:peps_cell_two_family_partition,thm:peps_cell_conditional_information_from_gap}
     The appendix states that \cite[Lemma~3.2]{OpenAI2026PolynomialPEPS}
     adapts the ordering of Lemma~11.1 of \cite{OpenAI2026AreaLaw} to a cell
     with arbitrary exterior conditioning, and that this adaptation is proved in
@@ -1381,6 +1497,60 @@ state.
     partition of a cell is Theorem~\ref{thm:peps_cell_two_family_partition}.
     Neither obtains a conditional information bound by conditioning a
     mutual-information inequality.
-    % Status: both ingredients are proved; their combination into the full
-    % statement of the lemma is not yet stated.
+    Together these give the cell estimate of
+    Theorem~\ref{thm:peps_cell_conditional_information_from_gap}.
 \end{remark}
+
+\begin{theorem}[Sublinear information across a template collar]
+    \label{thm:area_law_sublinear_collar}
+    \lean{TNLean.PEPS.AreaLaw.sublinearCollarBound_real}
+    \leanok
+    \uses{def:area_law_collar_bound}
+    Fix $q,R\in\mathbb N$ with $q\geq1$, real parameters $J\geq0$
+    and $\Delta>0$, and real template constants $D_0>2R+10$ and
+    $C_{\mathrm{tpl}}\geq24$. There are $C\in\mathbb R$ and
+    $N\in\mathbb N$, chosen before all the following finite data.
+    Let $\Lambda$ be a finite induced square-lattice domain, let $H$ be
+    an admissible Hamiltonian with parameters $(q,R,J)$, and let
+    $\Omega$ be its normalized ground vector at energy $E_0$ with
+    full-system projector gap $\Delta$. Let $A\subseteq\Lambda$ and
+    let $Z$ be the endpoints of its cut edges. For every template $T$
+    with parameters $(C_{\mathrm{tpl}},n,s_0)$ satisfying $n\geq N$,
+    $\operatorname{dist}_\infty(T,Z)>4D_0s_0$, and
+    $L=\lfloor n^{1-1/100000}\rfloor\leq s_0$, put $X=A\cap T$ and
+    $S_0=A\cap T_L$. Then
+    \begin{align}
+        I_\Omega(X:\Lambda\setminus S_0)
+              & \leq Cn^{1-1/100000}, \\
+        |S_0| & \leq Cn^2,
+    \end{align}
+    and each of $X$, $S_0$, and $S_0\setminus X$ has at most $Cn$
+    crossing edges in $\Lambda$.
+    This is~\cite[Proposition~9.6]{OpenAI2026AreaLaw}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:arealaw-physical-box-fixed-exponent,
+        thm:arealaw-box-clearance-comparison,
+        thm:template-final-information,
+        thm:area_law_collar_bound_of_information}
+    Put $d=2R+10$. The physical safe-box bound at the integer clearance
+    $d+1$ supplies $C_b>0$ at exponent $1+e_*$, where
+    $e_*=2\cdot10^{-6}$. The clearance comparison gives
+    \begin{align}
+        F_{\mathrm{box},d}(r)
+         & \leq (4C_b+4\log q+1)r^{1+e_*}
+    \end{align}
+    at every positive integer scale. Apply the conditional template
+    information theorem at clearance $d$, which requires only $d\geq1$.
+    It gives $C_m>0$ and a threshold, before all finite instances, for
+    which $2I_\Omega(X:\Lambda\setminus S_0)\leq C_m n^{1-1/100000}$.
+    The hypothesis $D_0>d$ ensures that every template separated at
+    the prescribed real clearance $D_0$ is also separated at $d$.
+    The estimate therefore applies to the same original vector and
+    the unchanged regions $X$ and $S_0$.
+
+    Divide the information coefficient by two and apply
+    Theorem~\ref{thm:area_law_collar_bound_of_information}. The single
+    constant $\max(C_m/2,10)$ also bounds the three cuts and the
+    collar cardinality, with the same threshold.
+\end{proof}
