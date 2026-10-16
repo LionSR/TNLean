@@ -44,7 +44,7 @@ both sheets about the endpoints of `e`, the lens exchange and the removal of the
 
 Polynomial-PEPS manuscript, `06-geometry.tex`, lines 198–212, 328–339 and 389–430. -/
 theorem isStepChain_lensExchange (hD : IsAngularScale q J Δ a A₀ m₀ 60 D L₀') (hLL : L₀' ≤ L)
-    (hΩ : h.IsGappedGroundState E₀ Ω Δ) (hΩ1 : ‖Ω‖ ≤ 1) (hm₀ : 2 ≤ m₀) (hA₀ : 1 ≤ A₀)
+    (hΩ : h.IsGappedGroundState E₀ Ω Δ) (hm₀ : 2 ≤ m₀) (hA₀ : 1 ≤ A₀)
     (hc : IsProtocolConstants K₀ ε₀ ν a D B₀) (hL : 2 ≤ L) (hk2 : 2 ^ k < 2 * L)
     (P : AdaptivePatchSupply (cellCenterPos L) Ω B₀ C c 60 L) (rank : GuideLabel → ℕ)
     (R : RepaintedSquare k) (hlarge : K₀ * (D * Real.log L) < (2 : ℝ) ^ (R.1.1 : ℕ))
@@ -67,6 +67,7 @@ theorem isStepChain_lensExchange (hD : IsAngularScale q J Δ a A₀ m₀ 60 D L�
         l.map (Function.update A x (treatedFrame P rank R hr ∅ (Bl.nbrLabel e)
           (Bl.auxGuide e (auxWordExchanged Bl.oldLabel Bl.finalLabel (Bl.nbrLabel e)))))) := by
   intro Bl
+  have hΩ1 : ‖Ω‖ ≤ 1 := hΩ.1.le
   classical
   set Ce := Bl.nbrLabel e
   have hC : IsLocalLabel R done Ce := isHomogenizing_nbrLabel R done e
@@ -129,7 +130,7 @@ auxiliary sheet of `e` with the exchanged auxiliary word.
 
 Polynomial-PEPS manuscript, `06-geometry.tex`, lines 183–221, 328–339 and 572–583. -/
 theorem isStepChain_edgeConstruction (hD : IsAngularScale q J Δ a A₀ m₀ 60 D L₀')
-    (hLL : L₀' ≤ L) (hΩ : h.IsGappedGroundState E₀ Ω Δ) (hΩ1 : ‖Ω‖ ≤ 1) (hm₀ : 2 ≤ m₀)
+    (hLL : L₀' ≤ L) (hΩ : h.IsGappedGroundState E₀ Ω Δ) (hm₀ : 2 ≤ m₀)
     (hA₀ : 1 ≤ A₀) (hc : IsProtocolConstants K₀ ε₀ ν a D B₀) (hL : 2 ≤ L) (hk2 : 2 ^ k < 2 * L)
     (P : AdaptivePatchSupply (cellCenterPos L) Ω B₀ C c 60 L) (rank : GuideLabel → ℕ)
     (R : RepaintedSquare k) (hlarge : K₀ * (D * Real.log L) < (2 : ℝ) ^ (R.1.1 : ℕ))
@@ -150,6 +151,7 @@ theorem isStepChain_edgeConstruction (hD : IsAngularScale q J Δ a A₀ m₀ 60 
         l.map (Function.update A x (treatedFrame P rank R hr ∅ (Bl.nbrLabel e)
           (Bl.auxGuide e (auxWordExchanged Bl.oldLabel Bl.finalLabel (Bl.nbrLabel e)))))) := by
   intro Bl
+  have hΩ1 : ‖Ω‖ ≤ 1 := hΩ.1.le
   set Ce := Bl.nbrLabel e
   have hε0 : (0 : ℝ) ≤ (2 * b + 1) * ((L : ℝ) ^ 20)⁻¹ := by positivity
   have haux0 : treatedFrame (q := q) P rank R hr ∅ Ce (Bl.auxGuide e (bandWord Ce [])) = A x :=
@@ -166,7 +168,7 @@ theorem isStepChain_edgeConstruction (hD : IsAngularScale q J Δ a A₀ m₀ 60 
   have c₁ := isStepChain_aux (treatedFrame (q := q) P rank R hr ∅ Ce (Bl.completedGuide E)) hl
     hx A hΩ1 (isStepChain_auxBirths hD hLL hΩ hm₀ hA₀ hc hL hk2 P rank R hlarge done e hr
       (by omega) hK hpt Ce)
-  have c₂ := isStepChain_lensExchange hD hLL hΩ hΩ1 hm₀ hA₀ hc hL hk2 P rank R hlarge done E e hr
+  have c₂ := isStepChain_lensExchange hD hLL hΩ hm₀ hA₀ hc hL hk2 P rank R hlarge done E e hr
     hb hpt hl hx A
   have c₃ := isStepChain_main l (Function.update A x (treatedFrame P rank R hr ∅ Ce
     (Bl.auxGuide e (auxWordExchanged Bl.oldLabel Bl.finalLabel Ce)))) hΩ1
