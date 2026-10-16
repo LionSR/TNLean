@@ -29,11 +29,9 @@ are held by the parties of the labels across the edges.
 
 noncomputable section
 
-open Set
-
 namespace TNLean.PEPS.Approximation
 
-open EncodedFrame PairEffect
+open EncodedFrame
 
 variable {k : ℕ}
 

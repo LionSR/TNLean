@@ -166,7 +166,7 @@
     {
       "id": "docs/paper-gaps/arealaw2d_scanner_inputs.tex",
       "repo": "TNLean",
-      "kind": "convention",
+      "kind": "local-correction",
       "status": "resolved",
       "paper": "area",
       "result": "Proposition 9.2, the scanner estimate",

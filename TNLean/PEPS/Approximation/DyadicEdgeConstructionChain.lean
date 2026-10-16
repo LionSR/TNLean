@@ -37,10 +37,10 @@ variable {k q : ℕ} [NeZero q] {J Δ a A₀ D L₀' : ℝ} {m₀ : ℕ} {L : �
 
 /-- **The lens exchange with its point treatments, conditional on Proposition 3.4.** At the
 constants of the protocol, in the repainting of a square `R` of side `n = 2 ^ j > K₀ t`, let the
-memory carry the main sheet with the starting word along `e ∉ E` and, at the index `x`, the
-auxiliary sheet of `e` with the auxiliary word, both treated at no mark. The point treatments of
-both sheets about the endpoints of `e`, the lens exchange and the removal of the treatments are
-`9` bounded changes of the memory, with the bounds of the small-patch rewrites.
+memory carry the main sheet with the starting word for any edge list `E` and edge `e` and,
+at the index `x`, the auxiliary sheet of `e` with the auxiliary word, both treated at no mark.
+The point treatments of both sheets about the endpoints of `e`, the lens exchange and removal
+of the treatments are `9` bounded changes of the memory, with the small-patch rewrite bounds.
 
 Polynomial-PEPS manuscript, `06-geometry.tex`, lines 198–212, 328–339 and 389–430. -/
 theorem isStepChain_lensExchange (hD : IsAngularScale q J Δ a A₀ m₀ 60 D L₀') (hLL : L₀' ≤ L)

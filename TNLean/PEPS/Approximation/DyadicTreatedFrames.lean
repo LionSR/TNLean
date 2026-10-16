@@ -38,9 +38,11 @@ open EncodedFrame PairEffect
 
 variable {k : ℕ}
 
-/-- **The guide of a treated sheet.** The unmodified guide `g` of the repainting of the block `S`
-of side `2 ^ j`, placed on `S`, homogenized to `L₀` on the open squares of radius `t` about the
-grid corners of `M`, and read after the displacement `(1, 1)`.
+/-- **The guide of a treated sheet.** Place any guide `g` on the block `S` of side `2 ^ j` and
+homogenize it to `L₀` on the open squares of radius `t` about the grid corners of `M`. Apply
+`sampleGuide`: use the eventual value along `(1, 1)` when it exists, and otherwise the
+homogenized guide value at that point. Under the hypotheses of `treatedFrame_spec`, this
+total construction is a displaced reading.
 
 Polynomial-PEPS manuscript, `06-geometry.tex`, lines 69–80 and 328–339. -/
 abbrev treatedGuide (j : ℕ) (S : ℤ × ℤ) (t : ℝ) (M : Finset (ℤ × ℤ)) (L₀ : GuideLabel)
@@ -48,8 +50,10 @@ abbrev treatedGuide (j : ℕ) (S : ℤ × ℤ) (t : ℝ) (M : Finset (ℤ × ℤ
   sampleGuide (homogenize (⋃ Q ∈ M, ball (blockCorner ((2 : ℝ) ^ j) Q) t) L₀
     (shiftGuide (blockCorner ((2 : ℝ) ^ j) S) g))
 
-/-- The true vertices of a treated guide: grid corners of the closed root square and points of
-the rims of the treated squares. -/
+/-- The true vertices among the finite grid-and-rim candidates: grid corners with indices
+in `[0, 2 ^ (k - j) + 1]²` and the rim patterns of radius `t` about the marks. For an
+arbitrary guide this is only the candidate filter; `treatedFrame_spec` identifies all true
+vertices under its hypotheses. -/
 abbrev treatedVertices (k j : ℕ) (t : ℝ) (M : Finset (ℤ × ℤ)) (f : ℝ × ℝ → GuideLabel) :
     Finset (ℝ × ℝ) :=
   treatedTrueVertices ((2 : ℝ) ^ j) t ((2 : ℤ) ^ (k - j)) M f
@@ -64,6 +68,19 @@ def HasFrameChange {ι : Type} [Fintype ι] [DecidableEq ι] {q : ℕ} [NeZero q
     (F F' : Frame pos q Party) (S : Set Party) (r K rs : ℕ) (ε : ℝ) : Prop :=
   ∃ w : OriginalCircuit F.regs F'.regs,
     w.IsBoundedChange S r K ε (F.regRef Ω) (F'.regRef Ω) ∧ w.IsSourceBounded rs
+
+section Bounds
+
+variable {ι : Type} [Fintype ι] [DecidableEq ι] {q : ℕ} [NeZero q] {pos : ι → ℝ × ℝ}
+  {Party : Type} {Ω : EuclideanSpace ℂ (ι → Fin q)} {S : Set Party} {r K rs : ℕ} {ε ε' : ℝ}
+
+/-- A change of one frame remains bounded when its error bound is enlarged. -/
+lemma HasFrameChange.mono_error {F F' : Frame pos q Party}
+    (h : HasFrameChange Ω F F' S r K rs ε) (hε : ε ≤ ε') : HasFrameChange Ω F F' S r K rs ε' :=
+  let ⟨w, hw, hs⟩ := h
+  ⟨w, hw.mono subset_rfl le_rfl le_rfl hε, hs⟩
+
+end Bounds
 
 variable {L q : ℕ} {Ω : StateSpace L q} {B₀ C c : ℝ}
 
@@ -97,6 +114,8 @@ def treatedFrame (P : AdaptivePatchSupply (cellCenterPos L) Ω B₀ C c 60 L)
 variable (P : AdaptivePatchSupply (cellCenterPos L) Ω B₀ C c 60 L) (rank : GuideLabel → ℕ)
   (R : RepaintedSquare k)
 
+/-- For any admissible constant hole radius and arbitrary marks, label and guide, pairwise
+disjoint supplied outer samples identify the treated frame with its encoded guide frame. -/
 theorem treatedFrame_eq {ε₀ t : ℝ} {hr : ∀ _ : ℝ × ℝ, 0 < ε₀ * t ∧ ε₀ * t ≤ B₀ * Real.log L}
     {M : Finset (ℤ × ℤ)} {L₀ : GuideLabel} {g : ℝ × ℝ → GuideLabel}
     (h : ((treatedVertices k R.1.1 t M (treatedGuide R.1.1 R.1.index t M L₀ g) :
@@ -117,8 +136,9 @@ theorem DyadicSquare.inRoot_index (S : DyadicSquare k) :
   simp only [InRoot, DyadicSquare.index]
   omega
 
-/-- **The treated frame is the frame of its sampled guide.** At the constants of the protocol, for
-a square `R` of side `n = 2 ^ j > K₀ t` and an unmodified guide `g` of its repainting, the treated
+/-- **The treated frame is the frame of its sampled guide.** At the constants of the protocol and
+`L ≥ 2`, let `R` be a square of side `n = 2 ^ j > K₀ t` and `g` an unmodified guide of its
+repainting. The treated
 guide is a reading of the homogenized guide, its true vertices are the points of
 `treatedVertices`, the outer squares of their holes are disjoint, and the treated frame is the
 encoded frame of the treated guide.
@@ -184,12 +204,18 @@ theorem fiftyThree_le_protocolPatchBound {ε₀ ν : ℝ} (hε : 0 ≤ ε₀) (h
 
 /-- **A point treatment as a change of a sheet.** Fix `0 < ε₀ ≤ 1/16`. There is a threshold
 `ν' > 0` such that for every mesh ratio `0 < ν ≤ ν'` and constants of the protocol the following
-holds. In the repainting of the square `R` of side `n = 2 ^ j > K₀ t`, `t = D log L`, let `g` be
-an unmodified guide of the repainting, `L₀` the final label or a label of a block next to `R`,
-and `M`, `M'` sets of grid corners that differ at most at one corner `Q₀` of `R`. Then passing
+holds. For `L ≥ 2`, `q ≥ 1` and a unit vector `Ω`, fix an adaptive patch supply with exponent
+`60`, size `L`, parameters `B₀, C, c` and any label rank. For any hierarchy depth and any set
+of already repainted blocks, let `R` be a repaintable square of side `n = 2 ^ j > K₀ t`,
+`t = D log L`, let `g` be an unmodified guide of its repainting, and let `L₀` be the new label
+or a current label of one of the nine blocks centered on `R`,
+and let `M`, `M'` be finite sets of grid corners differing at most at one corner `Q₀` of `R`.
+Then passing
 from the frame of the treated sheet with the marks `M` to that with the marks `M'` is a bounded
-change whose participants the repainting uses, with the bounds of the small-patch rewrites with
-`b = protocolPatchBound ε₀ ν` patches.
+change whose participants the repainting uses. For natural `C′, c′` with `C ≤ C′`, `1 ≤ C′`
+and `c ≤ c′`, its pair-effect and pair-source bounds are `2 * b`, its monomial bound is
+`rewriteGateBound C′ c′ b L`, and its error is `(2 * b + 1) * L⁻²⁰`, where
+`b = protocolPatchBound ε₀ ν`. The two mark sets may be equal.
 
 Polynomial-PEPS manuscript, `06-geometry.tex`, lines 328–339, 481–505, 559–570 and 572–596. -/
 theorem exists_pointTreatment_hasSourceBoundedChange {ε₀ : ℝ} (hε : 0 < ε₀)

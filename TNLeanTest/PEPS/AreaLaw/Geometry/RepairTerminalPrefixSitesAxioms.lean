@@ -3,14 +3,14 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.AreaLaw.Geometry.RepairFinalLatticeCoverage
+import TNLean.PEPS.AreaLaw.Geometry.RepairTerminalPrefixSites
 import Lean.Util.CollectAxioms
 
-/-! # Logical dependencies of conditional final lattice coverage -/
+/-! # Logical dependencies of the terminal-prefix site count -/
 
 run_cmd do
-  let ns := `TNLean.PEPS.AreaLaw.Geometry.RepairMetricHypotheses
-  let decl := Lean.Name.str ns "lattice_mem_final_or_terminal_of_isEmpty"
+  let ns := `TNLean.PEPS.AreaLaw.Geometry
+  let decl := Lean.Name.str ns "card_repairTerminalInteriorSites_prefix_le"
   unless (← Lean.getEnv).contains decl do
     throwError "The intended geometric theorem is absent: {decl}"
   let expected := #[``propext, ``Classical.choice, ``Quot.sound]

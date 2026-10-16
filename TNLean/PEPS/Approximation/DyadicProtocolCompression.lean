@@ -8,6 +8,7 @@ import TNLean.PEPS.Approximation.DistributedPartyNetwork
 import TNLean.PEPS.Approximation.DyadicProtocol
 import TNLean.PEPS.Approximation.GroundStateApproximation
 import TNLean.PEPS.Approximation.OriginalCircuitChain
+import TNLean.PEPS.Approximation.OriginalCircuitSequence
 
 /-!
 # Compression of the dyadic distribution protocol
@@ -96,9 +97,8 @@ variable {L q : ℕ} {P : Type} [Fintype P] (D : DyadicProtocol L q P)
 
 /-- The first `n` changes of a protocol, composed into one chronology.
 Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:25–32`. -/
-def chain : (n : ℕ) → OriginalCircuit (D.layout 0) (D.layout n)
-  | 0 => .id _
-  | n + 1 => .comp (chain n) (D.step n)
+def chain (n : ℕ) : OriginalCircuit (D.layout 0) (D.layout n) :=
+  OriginalCircuit.sequence D.layout D.step n
 
 /-- The composed changes take the initial vector to the actual vector at every stage.
 Source: Polynomial-PEPS manuscript (Sept 24 2026), `07-assembly.tex:29–36`. -/
@@ -106,61 +106,41 @@ theorem eval_chain_trajectory (n : ℕ) : (D.chain n).eval (D.trajectory 0) = D.
   induction n with
   | zero => rfl
   | succ n ih =>
-      change (D.step n).eval ((D.chain n).eval (D.trajectory 0)) = _
-      rw [ih]; rfl
+      rw [chain, OriginalCircuit.eval_sequence_succ, ← chain, ih]
+      rfl
 
 /-- The composed changes have the nonprivate gates of all changes.
 Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:25–32`. -/
 theorem nonprivateCount_chain (n : ℕ) :
-    (D.chain n).nonprivateCount = ∑ t ∈ range n, (D.step t).nonprivateCount := by
-  induction n with
-  | zero => rfl
-  | succ n ih =>
-      rw [sum_range_succ, ← ih]; rfl
+    (D.chain n).nonprivateCount = ∑ t ∈ range n, (D.step t).nonprivateCount :=
+  OriginalCircuit.nonprivateCount_sequence D.layout D.step n
 
 /-- The participation of a party in the composed changes is the sum over the changes.
 Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:31–32`. -/
 theorem participationCount_chain (n : ℕ) (p : P) :
-    (D.chain n).participationCount p = ∑ t ∈ range n, (D.step t).participationCount p := by
-  induction n with
-  | zero =>
-      change Nat.card {g : Empty // _} = 0
-      simp
-  | succ n ih =>
-      rw [sum_range_succ, ← ih]
-      change Nat.card {g : (D.chain n).nonprivateLocations ⊕ (D.step n).nonprivateLocations //
-        p ∈ Sum.elim (D.chain n).participants (D.step n).participants g} = _
-      rw [Nat.card_congr Equiv.subtypeSum, Nat.card_sum]
-      rfl
+    (D.chain n).participationCount p = ∑ t ∈ range n, (D.step t).participationCount p :=
+  OriginalCircuit.participationCount_sequence D.layout D.step n p
 
 /-- Every nonprivate gate of the composed changes is a nonprivate gate of one change.
 Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:25–37`. -/
 theorem exists_participants_chain (n : ℕ) (g : (D.chain n).nonprivateLocations) :
     ∃ t < n, ∃ g' : (D.step t).nonprivateLocations,
-      (D.chain n).participants g = (D.step t).participants g' := by
-  induction n with
-  | zero => exact nomatch g
-  | succ n ih =>
-      rcases g with g | g
-      · obtain ⟨t, ht, g', h⟩ := ih g
-        exact ⟨t, by omega, g', h⟩
-      · exact ⟨n, by omega, g, rfl⟩
+      (D.chain n).participants g = (D.step t).participants g' :=
+  OriginalCircuit.forall_participants_sequence D.layout D.step
+    (fun S ↦ ∃ t < n, ∃ g' : (D.step t).nonprivateLocations, S = (D.step t).participants g')
+    n (fun t ht g' ↦ ⟨t, ht, g', rfl⟩) g
 
 /-- The composed changes inherit the expansion bounds of every change.
 Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:25–32`. -/
 theorem isExpansionBounded_chain {r : ℕ} {S : ℝ} (n : ℕ)
-    (h : ∀ t < n, (D.step t).IsExpansionBounded r S) : (D.chain n).IsExpansionBounded r S := by
-  induction n with
-  | zero => trivial
-  | succ n ih => exact ⟨ih fun t ht ↦ h t (by omega), h n (by omega)⟩
+    (h : ∀ t < n, (D.step t).IsExpansionBounded r S) : (D.chain n).IsExpansionBounded r S :=
+  OriginalCircuit.isExpansionBounded_sequence D.layout D.step r S n h
 
 /-- The composed changes inherit the monomial bounds of every change.
 Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:25–32`. -/
 theorem isMonomialBounded_chain {K : ℕ} (n : ℕ)
-    (h : ∀ t < n, (D.step t).IsMonomialBounded K) : (D.chain n).IsMonomialBounded K := by
-  induction n with
-  | zero => trivial
-  | succ n ih => exact ⟨ih fun t ht ↦ h t (by omega), h n (by omega)⟩
+    (h : ∀ t < n, (D.step t).IsMonomialBounded K) : (D.chain n).IsMonomialBounded K :=
+  OriginalCircuit.isMonomialBounded_sequence D.layout D.step K n h
 
 /-- The protocol, read as one distributed construction of Theorem 5.2: its composed changes, with
 their recorded monomial expansions, between the input and output layouts of the protocol.

@@ -31,11 +31,9 @@ supplies the patch constants.
 
 noncomputable section
 
-open Set
-
 namespace TNLean.PEPS.Approximation
 
-open EncodedFrame PairEffect
+open EncodedFrame
 
 /-- **A larger information scale is admissible.** Proposition 3.4 at the scale `D` and threshold
 `L₀` gives it at every larger scale `D'` and threshold `max L₀ 1`: the hypotheses at `D'` are
