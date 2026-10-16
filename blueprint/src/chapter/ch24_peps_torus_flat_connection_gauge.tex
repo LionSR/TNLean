@@ -16,7 +16,7 @@
     \uses{lem:peps_torus_parallel_section,
         thm:peps_regular_torus_closure_cut_identification}
     Let $G$ be a group and let $a_{x,y},b_{x,y}\in G$ be rightward
-    and upward transports on $\mathbb Z_w\times\mathbb Z_h$, where
+    and upward edge elements on $\mathbb Z_w\times\mathbb Z_h$, where
     $w,h>0$. Suppose the connection is flat:
     $b_{x+1,y}a_{x,y}=a_{x,y+1}b_{x,y}$.
     Write $A_m=a_{m-1,0}\cdots a_{0,0}$ and
@@ -32,7 +32,7 @@
          & =\begin{cases}B_{0,h}&y+1=0,\\1&y+1\ne0.\end{cases}
         \label{eq:peps_flat_vertical_seam}
     \end{align}
-    If $w,h\ge3$ and the transports come from operators $u_e$ on
+    If $w,h\ge3$ and the edge elements come from operators $u_e$ on
     the ordered edges of the torus graph, the same gauge transforms
     $u_e$ into the closure assignment with $g=B_{0,h}^{-1}$ and
     horizontal closure element $A_w$. No trivial-holonomy
@@ -50,7 +50,7 @@
     Taking $m=w,n=h$ in
     (\ref{eq:peps_flat_rectangle_transport}) gives
     $B_{0,h}A_w=A_wB_{0,h}$. Before a coordinate wraps, the
-    transport to its successor adds one factor on the left;
+    step to its successor adds one factor on the left;
     at the wrap it leaves the full cycle holonomy.
     Applying these two cases to $k$ proves
     (\ref{eq:peps_flat_horizontal_seam}) and
@@ -85,7 +85,7 @@
     \end{tenkzequation}
     On an ordered seam edge the native orientation is reversed.
     Thus its ordered horizontal operator is $A_w^{-1}$ and its
-    ordered vertical operator is $B_{0,h}^{-1}$, exactly the
+    ordered vertical operator is $B_{0,h}^{-1}$, the
     claimed closure assignment.
 \end{proof}
 
@@ -102,7 +102,7 @@
     left translation of their incident group labels. Every flat
     inserted-bond network has the same physical state as a network
     with two commuting closure seams. For a single four-leg tensor,
-    this is the actual closure vector $\psi_{g,h}$ of
+    this is the closure vector $\psi_{g,h}$ of
     \cite[Section~5]{Schuch2010PEPS}. Neither injectivity nor
     isometry is needed for this equality.
 \end{theorem}

@@ -1,4 +1,4 @@
-\begin{theorem}[A fixed two-cycle operation on an actual regular block]%
+\begin{theorem}[A fixed two-cycle operation on a regular block]%
     \label{thm:peps_regular_two_cycle_flux_move}
     \lean{TNLean.PEPS.regularTreeCycleAssignment,
         TNLean.PEPS.regularProjectorTwistedRegionMatrix_treeCycleAssignment_coordinates,
@@ -21,7 +21,7 @@
     For cycle operators $\omega_e\in G$, define the bond assignment
     $u_\omega$ to equal $\omega_e$ on the internal bonds outside the tree
     and the identity on every other bond, including crossing bonds.
-    In the actual canonical contraction, tree coordinates give
+    In the canonical contraction, tree coordinates give
     \begin{align}
         M_R(u_\omega)_{(y,a,r,z),\theta}
         =|G|^{-|R|}\sum_{x\in G}
@@ -30,7 +30,7 @@
     The fixed permutation $\Phi$ retaining $y,a,r$ and all other cycle coordinates,
     and replacing $z_{e_1}$ by $z_{e_0}z_{e_1}$, commutes with simultaneous
     conjugation. It is the controlled tweezer operation with one reference label
-    fixed to the identity. Transport it through the actual coordinate bijection
+    fixed to the identity. Conjugate it by the coordinate bijection
     to a unitary $Q$ on the physical space of the half-edge labels. Then
     \begin{align}
         Q M_R(u_\omega)_{\cdot,\theta}
@@ -40,17 +40,17 @@
     In particular, the same $Q$ sends the assignment equal to $g$ on $e_0$
     and the identity elsewhere to the assignment equal to $g$ on $e_0,e_1$
     and the identity elsewhere, uniformly in $g$ and every boundary column.
-    This auxiliary actual contraction identity underlies the flux-moving
+    This auxiliary contraction identity underlies the flux-moving
     operation in \cite[Theorem~6.16]{Schuch2010PEPS}.
-    The six-vertex lattice realization and transport to arbitrary original
+    The six-vertex lattice realization and extension to arbitrary original
     $G$-isometric physical tensors remain separate.
 \end{theorem}
 
 \begin{proof}\leanok
     The bond assignment is the identity on the tree, so uniqueness of the
     root-normalized tree gauge makes that gauge the identity. The residuals
-    are exactly $\omega$, and crossing labels acquire no transport.
-    The actual twisted contraction formula therefore gives the displayed sum.
+    are exactly $\omega$, and crossing labels are unchanged.
+    The twisted contraction formula therefore gives the displayed sum.
     For each common group label $x$, multiplication satisfies
     $(xz_{e_0}x^{-1})(xz_{e_1}x^{-1})=x(z_{e_0}z_{e_1})x^{-1}$.
     Hence the fixed permutation intertwines every summand without changing

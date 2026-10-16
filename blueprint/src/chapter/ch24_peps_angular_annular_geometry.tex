@@ -51,7 +51,7 @@ in the September 24, 2026 polynomial-PEPS manuscript.
     $\delta(x)=\min\{n,\operatorname{dist}_{\infty}(x,\mathcal V)\}$.
 \end{definition}
 
-\begin{theorem}[Capped-distance bounds and marked-point witnesses]
+\begin{theorem}[Capped-distance bounds and nearby marked points]
     \label{thm:peps_capped_distance_bounds}
     \lean{TNLean.PEPS.Approximation.le_cappedMarkDistance_iff,
         TNLean.PEPS.Approximation.cappedMarkDistance_le_cap,
@@ -150,7 +150,7 @@ in the September 24, 2026 polynomial-PEPS manuscript.
     thresholds to be expressed through the marked-point distances using
     Theorem~\ref{thm:peps_capped_distance_bounds}. The final layer has
     only the strict upper threshold; every positive-index layer retains
-    this upper threshold, which supplies the asserted mark.
+    this upper threshold, which yields the asserted mark.
 \end{proof}
 
 \begin{theorem}[Cumulative layer identities]
@@ -378,14 +378,14 @@ in the September 24, 2026 polynomial-PEPS manuscript.
     \leanok
     \uses{def:peps_angular_grid,thm:peps_grid_ownership}
     A center in $A\cup B$ lies in one of the two sets, proving the
-    union identity. Enlarging the center set and radius preserves each
-    distance witness. A point of $A^{+r}$ lies in its owner cell, which
+    union identity. Enlarging the center set and radius preserves the
+    distance bound. A point of $A^{+r}$ lies in its owner cell, which
     is selected. If $x\in U_{q,r}(A)$, choose a point $y$ of the same
     cell and a center $z\in A$ with
     $\operatorname{dist}_{\infty}(y,z)\le r$. The cell diameter bound
     gives $\operatorname{dist}_{\infty}(x,z)\le q+r$, proving
-    (\ref{eq:peps_grid_enlargement}). A witness for selecting a cell
-    from $A$ remains a witness when $A\subseteq B$.
+    (\ref{eq:peps_grid_enlargement}). Any point showing that a cell
+    meets $A^{+r}$ also shows that it meets $B^{+r}$ when $A\subseteq B$.
 \end{proof}
 
 \begin{theorem}[Counting newly selected cells]
@@ -405,7 +405,7 @@ in the September 24, 2026 polynomial-PEPS manuscript.
 \begin{proof}
     \leanok
     \uses{def:peps_angular_grid,thm:peps_scaled_grid_count}
-    The point of $A\cup B$ witnessing selection must lie in $B$ if
+    A point of $A\cup B$ within distance $rs$ of the cell must lie in $B$ if
     the cell is not selected from $A$.
     By Theorem~\ref{thm:peps_scaled_grid_count}, the cells selected from
     $B$ have the stated finite bound. Among them retain precisely those
@@ -426,7 +426,7 @@ in the September 24, 2026 polynomial-PEPS manuscript.
     Each $B_j$ is covered by at most $m_0+1$ closed squares of radius $Rs_j$.
     It is therefore covered by at most
     $(m_0+1)(2\lceil R\rceil_++3)^2$ ambient cells of side $s_j$.
-    For $d>0$, the actual cells of side $ds_j$ meeting $B_j^{+rs_j}$ form
+    For $d>0$, the cells of side $ds_j$ meeting $B_j^{+rs_j}$ form
     a finite set with cardinal at most
     \begin{align}
         M=(m_0+1)\left(2\left\lceil\frac{R+r}{d}\right\rceil_++3\right)^2.
@@ -444,7 +444,7 @@ in the September 24, 2026 polynomial-PEPS manuscript.
     For the first or sole layer, choose any $x_0\in X$ if $X$ is nonempty.
     The diameter bound gives $X\subseteq\overline B_\infty(x_0,A_0n)$.
     If $X$ is empty, use the empty cover.
-    In a later layer, $\delta(x)<2s_j\le n$ gives an actual $v\in\mathcal V$
+    In a later layer, $\delta(x)<2s_j\le n$ gives some $v\in\mathcal V$
     with $\operatorname{dist}_{\infty}(x,v)<2s_j$.
 
     A cell meeting a radius-$(R+r)s_j$ square has index within
