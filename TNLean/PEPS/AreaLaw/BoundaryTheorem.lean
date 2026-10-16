@@ -18,8 +18,10 @@ source: the sublinear collar bound (Proposition 9.6), its amplification
 templates (Proposition 11.2). This module states the three propositions as
 predicates and proves that together they imply `UniformAreaLaw`.
 
-The implication is conditional: none of the three propositions is proved here,
-so this module does not prove Theorem 1.1. Zero boundary is handled by the
+The implication in this module is conditional. The physical sublinear collar
+bound is proved separately by `sublinearCollarBound_real`, and the amplification
+proposition is also proved separately. The two-family decomposition remains an
+assumption, so Theorem 1.1 is not yet proved. Zero boundary is handled by the
 proved factorization theorem, and the positive-boundary case by the proved
 two-family entropy cancellation and the regional dimension bound.
 
@@ -178,8 +180,9 @@ theorem exists_ambientSupDistance_le_of_mem_graphNeighborhood
 Hamiltonian parameters, the sublinear collar bound and the two-family decomposition
 hold for common template constants and the amplification bound holds, then the
 uniform area law holds. This is the source proof of Theorem 1.1
-(`10-geometry.tex` lines 803–857); it does not prove the three propositions, so
-it is not a proof of Theorem 1.1. -/
+(`10-geometry.tex` lines 803–857). The collar and amplification propositions
+are proved separately; the two-family decomposition remains an assumption.
+This conditional implication alone does not prove Theorem 1.1. -/
 theorem uniformAreaLaw_of_collar_amplification_twoFamilies
     (hconst : ∀ q : ℕ, 1 ≤ q → ∀ R : ℕ, ∀ J Δ : ℝ, 0 < J → 0 < Δ →
       ∃ D₀ Ctpl : ℝ, SublinearCollarBound q R J Δ D₀ Ctpl ∧ TwoFamilyDecomposition D₀ Ctpl)

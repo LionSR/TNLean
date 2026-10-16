@@ -71,7 +71,7 @@
     The ordered-cycle dimension formula identifies the eventual
     parent-ground-space dimension with the eventual weighted-cycle sum.
     The preceding theorem identifies that sum, at every positive length, with
-    the loop number. Transport between coefficient and Euclidean coordinates
+    the loop number. Changing between coefficient and Euclidean coordinates
     preserves the dimension of the ground space.
 \end{proof}
 
@@ -135,7 +135,7 @@
     Let $\nu_a=\lVert\varphi_a\rVert_2>0$, where the norm is the
     Hilbert-space norm of the bond vector, or equivalently the Frobenius norm
     of $\Phi_a$. In either coordinate system, the normalized representative is
-    $\widehat C_a=\nu_a^{-1}\widetilde C_a$. The raw coordinate and physical
+    $\widehat C_a=\nu_a^{-1}\widetilde C_a$. The unnormalized coordinate and physical
     tensors are retained separately.
 \end{definition}
 
@@ -320,7 +320,7 @@
         \prod_{n=0}^{N-1}(\Id-h_n^{\mathrm{E}}). \notag
     \end{align}
     The operators $h_n^{\mathrm{E}}$ are orthogonal projections. Beigi sector
-    data supply pairwise commutativity, which Euclidean transport preserves.
+    data yield pairwise commutativity, which the Euclidean coordinate equivalence preserves.
     For all $0\leq m,n<N$, one has
     $h_m^{\mathrm{E}}h_n^{\mathrm{E}}
         =h_n^{\mathrm{E}}h_m^{\mathrm{E}}$. For any commuting orthogonal
@@ -435,7 +435,7 @@
         \sum_s\overline{\Phi_a^{(N)}(s)} \Phi_b^{(N)}(s) =
         0. \notag
     \end{align}
-    Moreover,
+    In addition,
     \begin{align}
         \langle\Psi_a^{(N)},\Psi_b^{(N)}\rangle
          & =
@@ -471,7 +471,7 @@
     These two reverse-implication results cover only normal left-canonical
     and multiplicity-one unit-weight representatives, whereas
     \cite[Theorem~3.10]{Cirac2016MPDO_arXiv} is stated for general
-    canonical-form tensors with repeated copies and raw weights; documented in
+    canonical-form tensors with repeated copies and general weights; documented in
     \cite{gap:cpsv16_nncph_ground_state_scope}.
 \end{theorem}
 
@@ -522,7 +522,7 @@
     terms remain.
 \end{proof}
 
-\begin{lemma}[Gauge-phase transport of mixed-transfer vanishing]
+\begin{lemma}[Gauge-phase invariance of mixed-transfer vanishing]
     \label{lem:mixed_transfer_gauge_phase_zero}
     \lean{MPSTensor.mixedMapLM_eq_zero_of_gaugePhaseEquiv}
     \lean{MPSTensor.mixedMapLM_cast_eq_zero_iff}
@@ -623,7 +623,7 @@
     Each $L_{\ell(j)}$ has an idempotent transfer map. If $j\ne k$, then
     $L_{\ell(j)}$ and $L_{\ell(k)}$ have disjoint sector support, so their
     mixed transfer map vanishes. Lemma~\ref{lem:mixed_transfer_gauge_phase_zero}
-    transports this vanishing through the two virtual changes of basis:
+    carries this vanishing through the two virtual changes of basis:
     \begin{align}
         \mathcal E_{L_{\ell(j)},L_{\ell(k)}}=0
         \quad\Longrightarrow\quad
@@ -653,7 +653,7 @@
         A\text{ has all-chain commuting parent ground spaces spanned by }(A_j)_j.
     \end{align}
     This statement concerns the multiplicity-one, unit-weight direct sum; it
-    does not include repeated copies or arbitrary raw weights.
+    does not include repeated copies or arbitrary nonzero weights.
 \end{theorem}
 
 \begin{proof}

@@ -4,6 +4,7 @@
 \begin{theorem}[A source-small density and the unchanged sharp comparison]
     \label{thm:arealaw-source-selected-sharp-density}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_sourceTarget_selected_actualCharge_sharp_density}
+    \leanok
     Fix the local dimension, interaction radius, interaction and positive
     spectral-gap bounds, a nonnegative target-volume coefficient, a positive
     scanner coefficient $C_1$, and the anchor multiplicity controlled by
@@ -60,6 +61,12 @@
     quantified over $0<\tau\leq1/2$ at this same point.
 \end{theorem}
 \begin{proof}
+    \leanok
+    \uses{thm:arealaw-source-selected-sharp-comparison,
+        thm:arealaw-target-entropy-transfer,
+        thm:area_law_selected_schmidt_entropy_bounds,
+        thm:al_scan_transport_coefficients_log,
+        thm:arealaw-selected-density-power}
     Invoke the source selected-comparison theorem once.  The retained
     containment $X\subseteq\mathrm{truncationSet}(L)$ and its quadratic
     volume bound allow target entropy transfer at the supplied trace

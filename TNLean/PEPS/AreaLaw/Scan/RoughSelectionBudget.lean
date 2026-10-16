@@ -11,8 +11,8 @@ import TNLean.PEPS.AreaLaw.Scan.ActualEndpointRoughBudget
 The actual endpoint estimate and the accepted logarithmic transport error
 give the full normalized numerator of charge selection. The normalization
 then cancels the original replica count and physical density factors exactly.
-The two statements are scalar consequences of those established outputs;
-they do not replace an endpoint estimate by a new physical assumption.
+These scalar consequences preserve the selected point and do not replace an
+endpoint estimate by a new physical assumption.
 
 Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 `08-scanner.tex`, lines 457–490, revision
@@ -83,5 +83,28 @@ theorem selected_density_le_of_normalized_budget
       field_simp [hkr.ne', hnr.ne', hmr.ne', hDr.ne', hKr.ne',
         ha.ne', hC1.ne', hwidth.ne']
     _ ≤ _ := mul_le_mul_of_nonneg_left hbudget hcoeff
+
+/-- The rough endpoint bound gives the density bound at the same selected
+charge point, with total weight equal to the per-band weight times the band count.
+Source: OpenAI area-law manuscript, `08-scanner.tex`, lines 457–490,
+revision adc7f124. -/
+theorem selected_density_of_rough_endpoint
+    {k n m D K d : ℕ} {a W C₁ width Q endpoint Brough rate b : ℝ}
+    (hk : 0 < k) (hn : 0 < n) (hm : 0 < m) (hD : 0 < D) (hK : 0 < K)
+    (ha : 0 < a) (hC : 0 < C₁) (hwidth : 0 < width) (hW : a * (K : ℝ) = W)
+    (c Ci Cb : ℝ)
+    (hendpoint : endpoint / (k : ℝ) ≤ Brough + roughEndpointRemainder d c K Ci k)
+    (hb : b ≤ Cb * Real.log ((k : ℝ) + 2))
+    (hselection : Q ≤ (endpoint + (2 * n * m : ℕ) * ((k : ℝ) * rate + b)) /
+      (((k : ℝ) * a * ((1 / (2 * (C₁ + 1))) / ((n : ℝ) * D))) *
+        ((n * m : ℕ) : ℝ) * width)) :
+    Q / (K * n * D : ℝ) ≤ (2 * (C₁ + 1) / (W * ((n * m : ℕ) : ℝ) * width)) *
+      (Brough + (2 * n * m : ℕ) * rate +
+        roughEndpointRemainder d c K (Ci + (2 * n * m : ℕ) * Cb) k) := by
+  have hbudget := roughSelectionBudget_le_of_endpoint_budget (H := n * m)
+    hk c Ci Cb endpoint Brough rate b hendpoint hb
+  have hdensity := selected_density_le_of_normalized_budget hk hn hm hD hK ha hC hwidth
+    hbudget (by simpa only [Nat.mul_assoc] using hselection)
+  simpa only [hW, Nat.mul_assoc] using hdensity
 
 end TNLean.PEPS.AreaLaw.Scan

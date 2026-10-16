@@ -313,7 +313,7 @@ orthogonal projector is the canonical representative used here.
     whereas the original map $\Gamma_L$ has matrix domain $\MN{D}$.
 \end{definition}
 
-\begin{theorem}[Boundary-map transport under Frobenius vectorization]
+\begin{theorem}[Boundary-map action under Frobenius vectorization]
     \label{thm:ground_space_map_es_frobenius}
     \lean{MPSTensor.groundSpaceMapES_frobeniusEquivEuclidean_apply}
     \leanok
@@ -348,7 +348,7 @@ orthogonal projector is the canonical representative used here.
     \uses{thm:ground_space_map_es_frobenius}
     Frobenius vectorization records a matrix entry $(a,b)$ at the
     column--row coordinate $(b,a)$, so $U(E_{ab})=e_{(b,a)}$.  Substitute
-    this identity into the boundary-map transport theorem.
+    this identity into the Frobenius vectorization identity for the boundary map.
 \end{proof}
 
 \begin{theorem}[Exact range of the Hilbert-space boundary map]
@@ -363,7 +363,7 @@ orthogonal projector is the canonical representative used here.
 \begin{proof}
     \leanok
     \uses{thm:ground_space_map_es_frobenius, def:ground_space_parent}
-    Every virtual vector is $U(X)$ for a unique matrix $X$, and the transport
+    Every virtual vector is $U(X)$ for a unique matrix $X$, and the Frobenius vectorization
     identity sends it to $\iota_L(\Gamma_L(X))$.  These are exactly the
     vectors in $\iota_L(\range\Gamma_L)=G_L^{\mathrm{ES}}(A)$, proving both
     inclusions.
@@ -382,7 +382,7 @@ orthogonal projector is the canonical representative used here.
     \leanok
     \uses{thm:ground_space_map_es_frobenius, thm:ground_space_map_injective_blk}
     Write each virtual vector uniquely as $U(X)$ by Frobenius vectorization.
-    The transport identity reduces equality of their images under
+    The Frobenius vectorization identity reduces equality of their images under
     $\Gamma_L^{\mathrm{ES}}$ to equality of the images of the corresponding
     matrices under $\Gamma_L$.  Block injectivity makes the latter map
     injective.
@@ -708,7 +708,7 @@ conventions.
     \leanok
     \uses{def:primitive_mps, def:fnw_limit_map}
     Let $A$ be a primitive MPS tensor of nonzero bond dimension with fixed-point
-    witness $\rho$. Then, for every integer $n\geq1$,
+    matrix $\rho$. Then, for every integer $n\geq1$,
     \begin{align}
         (E_{\mathrm{FNW},A}-E_\infty^\rho)^n
          & =E_{\mathrm{FNW},A}^n-E_\infty^\rho.
@@ -718,7 +718,7 @@ conventions.
 \begin{proof}
     \leanok
     \uses{thm:fnw_remainder_power}
-    Primitivity supplies $\tr(\rho)\neq0$, left canonicity, and the stationary
+    Primitivity gives $\tr(\rho)\neq0$, left canonicity, and the stationary
     equation $\E_A(\rho)=\rho$. Apply
     Theorem~\ref{thm:fnw_remainder_power}.
 \end{proof}
@@ -1015,7 +1015,7 @@ product.
     \leanok
     \uses{def:primitive_mps, def:fnw_transfer_map, def:fnw_limit_map}
     Let $A$ be a primitive MPS tensor of nonzero bond dimension with fixed-point
-    witness $\rho$, and set
+    matrix $\rho$, and set
     $R_A^\rho=E_{\mathrm{FNW},A}-E_\infty^\rho$.  If $\nu$ is an eigenvalue of
     $R_A^\rho$, then
     \begin{align}
@@ -1096,7 +1096,7 @@ product.
     \leanok
     \uses{def:primitive_mps, def:fnw_weighted_remainder_data}
     Let $A$ be primitive with nonzero bond dimension and positive-definite
-    fixed-point witness $\rho$.  Then
+    fixed-point matrix $\rho$.  Then
     \begin{align}
         r_\rho(A) & <1.
         \label{eq:fnw_weighted_remainder_spectral_radius_lt_one}
@@ -2028,7 +2028,7 @@ block. All virtual matrix families below use the $\rho$-weighted norm from
         \label{eq:fnw_equation_6_5_linear}
     \end{align}
     This is the linear estimate in
-    \cite[Equation~(6.5)]{Fannes1992Finitely}. Positivity of the actual lower
+    \cite[Equation~(6.5)]{Fannes1992Finitely}. Positivity of the lower
     boundary constant is assumed directly.
 \end{theorem}
 
@@ -2387,8 +2387,8 @@ Theorem~\ref{thm:fnw-eventual-projector-prescribed-prefactor}. See
     Rescale the fixed point to unit trace; this changes neither the tensor nor
     the primitivity certificate.  The weighted remainder has spectral radius
     below one, so there is a rate $\lambda$ strictly between that radius and
-    one; the prescribed-rate estimate supplies $c>0$ with $a(m)\leq c\lambda^m$
-    for every $m\geq1$.  Normality supplies a positive injective length.  Apply
+    one; the prescribed-rate estimate yields $c>0$ with $a(m)\leq c\lambda^m$
+    for every $m\geq1$.  Normality yields a positive injective length.  Apply
     the fixed-length geometric estimate.
 \end{proof}
 
@@ -2598,7 +2598,7 @@ Theorem~\ref{thm:fnw-eventual-projector-prescribed-prefactor}. See
     \lean{MPSTensor.IsPrimitiveMPS.groundSpaceGram_sub_fixedPointProj_norm_sq_le_geometric}
     \leanok
     \uses{def:primitive_mps, thm:ground_space_gram_geometric_fixed_point}
-    Let $A$ be a primitive MPS tensor with fixed-point witness $\rho$. Then there
+    Let $A$ be a primitive MPS tensor with fixed-point matrix $\rho$. Then there
     are real constants $C,r$ with $C>0$ and $0<r<1$ such that, for every
     $n\geq1$,
     \begin{align}
@@ -2647,7 +2647,7 @@ Theorem~\ref{thm:fnw-eventual-projector-prescribed-prefactor}. See
     \lean{MPSTensor.IsPrimitiveMPS.groundSpaceGram_tendsto_gramReshuffle_fixedPointProj}
     \leanok
     \uses{def:primitive_mps, thm:ground_space_gram_tendsto_fixed_point}
-    If $A$ is a primitive MPS tensor with fixed-point witness $\rho$, then
+    If $A$ is a primitive MPS tensor with fixed-point matrix $\rho$, then
     \begin{align}
         \mathcal K_n & \longrightarrow\mathscr R(P_\rho)
     \end{align}
@@ -2657,7 +2657,7 @@ Theorem~\ref{thm:fnw-eventual-projector-prescribed-prefactor}. See
 \begin{proof}
     \leanok
     \uses{thm:ground_space_gram_tendsto_fixed_point}
-    The primitive-MPS data supply the nonzero trace, trace preservation,
+    The primitive-MPS hypotheses provide the nonzero trace, trace preservation,
     fixed-point equation, and complementary spectral-radius hypothesis of
     Theorem~\ref{thm:ground_space_gram_tendsto_fixed_point}.
 \end{proof}
@@ -2870,7 +2870,7 @@ quantitative inverse bounds for the limiting metric $\mathscr R(P_\rho)$.
     \leanok
     \uses{def:primitive_mps}
     Let $A$ be a primitive MPS tensor of nonzero bond dimension whose
-    fixed-point witness $\rho$ is positive definite.  Put
+    fixed-point matrix $\rho$ is positive definite.  Put
     \begin{align}
         \mathcal K_\infty & =\mathscr R(P_\rho),     &
         \mathcal I_\infty & =\mathcal K_\infty^{-1}.
@@ -2970,7 +2970,7 @@ quantitative inverse bounds for the limiting metric $\mathscr R(P_\rho)$.
     \lean{MPSTensor.IsPrimitiveMPS.eventually_groundSpaceGram_isUnit_and_inverse_bound}
     \leanok
     \uses{def:primitive_mps, thm:primitive_ground_space_gram_tendsto_fixed_point}
-    Let $A$ be a primitive MPS tensor whose fixed-point witness $\rho$ is
+    Let $A$ be a primitive MPS tensor whose fixed-point matrix $\rho$ is
     positive definite, and put
     $\mathcal K_\infty=\mathscr R(P_\rho)$.  For every $0<a<1$, all
     sufficiently large $n$ satisfy
@@ -3205,7 +3205,7 @@ quantitative inverse bounds for the limiting metric $\mathscr R(P_\rho)$.
 \begin{proof}
     \leanok
     This is the idempotency of the orthogonal projector onto $G_L(A)^\perp$,
-    transported from the Hilbert-space realization of the local coefficient
+    transferred from the Hilbert-space realization of the local coefficient
     space.
 \end{proof}
 
@@ -3515,7 +3515,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \uses{def:ground_space_parent, def:in_left_ground}
     If $\psi\in G_{L+1}(A)$, i.e.\ if
     $\psi(\sigma)=\tr(A^\sigma X)$ for some~$X$, then, for each $j$, the state
-    obtained by fixing the last index to $j$ lies in $G_L(A)$ with witness
+    obtained by fixing the last index to $j$ lies in $G_L(A)$ with boundary matrix
     $A^jX$.
 \end{lemma}
 
@@ -3557,7 +3557,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \uses{def:ground_space_parent, def:in_right_ground}
     If $\psi\in G_{L+1}(A)$ with $\psi(\sigma)=\tr(A^\sigma X)$, then, for each
     $i$, the state obtained by fixing the first index to $i$ lies in $G_L(A)$
-    with witness $XA^i$.
+    with boundary matrix $XA^i$.
 \end{lemma}
 
 \begin{proof}
