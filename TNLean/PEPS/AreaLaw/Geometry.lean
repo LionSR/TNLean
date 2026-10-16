@@ -73,6 +73,7 @@ import TNLean.PEPS.AreaLaw.Geometry.InitialActiveRays
 import TNLean.PEPS.AreaLaw.Geometry.InitialComponentRegions
 import TNLean.PEPS.AreaLaw.Geometry.InitialLatticePartition
 import TNLean.PEPS.AreaLaw.Geometry.InitialMarkFamily
+import TNLean.PEPS.AreaLaw.Geometry.InitialPrimaryErrorSum
 import TNLean.PEPS.AreaLaw.Geometry.InitialRegionBoundaries
 import TNLean.PEPS.AreaLaw.Geometry.InitialRegionInterfaces
 import TNLean.PEPS.AreaLaw.Geometry.InitialRegionInteriors
