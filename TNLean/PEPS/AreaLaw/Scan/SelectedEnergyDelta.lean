@@ -52,6 +52,9 @@ theorem selectedEnergy_le_of_density_le_add
 /-- With the physical system and coefficients fixed, the density remainder
 produces a vanishing energy remainder. Signed remainders are bounded in absolute
 value before the eighth root is taken.
+The scalar statement holds for every real `gap` under totalized division;
+at `gap = 0` the remainder is identically zero. The physical application has
+`0 < gap`; no zero-gap physical quotient is asserted.
 Source: Proposition 9.2, `08-scanner.tex`, lines 492–533 and 395–397. -/
 theorem tendsto_selectedEnergy_remainder
     {ι : Type*} {l : Filter ι} {ρ rem : ι → ℝ}
