@@ -622,3 +622,70 @@ Theorem~\ref{thm:area_law_birth_separation}~\cite{gap:arealaw2d_birth_separation
     constant for both kinds of birth, for every sufficiently large stopping
     scale and lower layer index.
 \end{proof}
+
+% Auxiliary to OpenAI2026AreaLaw, Section 11, 10-geometry.tex,
+% geometry:birth-separation, lines 565--591, and its use, lines 784--789.
+% Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+\begin{theorem}[Birth separation at a common generation]
+    \label{thm:area_law_birth_separation_common_stage}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.repairStage_birth_separation_of_rank_le}
+    \leanok
+    \uses{def:area_law_repair_stage,def:area_law_repair_inclusions,
+        def:area_law_repair_birth_rank,def:area_law_repair_characteristic_length}
+    Consider the actual repair family $\mathcal D_j$ of
+    Definition~\ref{def:area_law_repair_stage}. Write $I_j$ for its
+    identifier set, $*_j$ for its dummy, $B_i^{(j)}$ for a closed birth,
+    and $R_i^{(\infty,j)}$ for the final region, obtained by intersecting
+    all later retained current regions. Let $\tau_j$ be its characteristic
+    length and $\operatorname{rk}_j$ its birth rank.
+
+    Fix $c_1\in\mathbb R$ and assume the following two pointwise bounds.
+    For every initial belt birth of side $u=t_k$, every pair of points
+    in that birth and in the final region of any other nondummy initial
+    identifier of the same label has distance at least $c_1u^{\rho_0}$.
+    For every fresh replacement with removal half-side $u$, every pair
+    of points in that birth and in the final region of any other
+    identifier of the same label present at its birth generation has
+    distance at least $c_1u^{\rho_0}$.
+
+    Let $N\ge0$ and $x,y\in I_N$. Suppose that $x$ has positive rank,
+    that $y\ne x$ and $y\ne *_N$, and that
+    $\operatorname{rk}_N(y)\le\operatorname{rk}_N(x)$ and
+    $\xi_y^{(N)}=\xi_x^{(N)}$. Then every $p\in B_x^{(N)}$ and
+    $q\in R_y^{(\infty,N)}$ satisfy
+    \begin{align}
+        c_1\tau_N(x)^{\rho_0} & \le\|p-q\|_\infty.\notag
+    \end{align}
+    Equal-rank peers are included.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:area_law_repair_birth_rank,
+        def:area_law_repair_characteristic_length,
+        thm:area_law_repair_final_retention}
+    The rank definition gives $\operatorname{rk}_j(i)\le j+1$ for every
+    $i\in I_j$, by induction on $j$: initial ranks are zero or one,
+    old ranks are retained, and new ranks at generation $j+1$ are $j+2$.
+
+    By Theorem~\ref{thm:area_law_repair_final_retention},
+    retention preserves the final region:
+    $R_i^{(\infty,j)}=R_{\iota_{j,j+1}(i)}^{(\infty,j+1)}$.
+
+    Induct on $N$. At $N=0$, positive rank makes $x$ an initial belt
+    identifier. Its characteristic length is its fine-cell side, so
+    the assumed initial bound applies. At $N=j+1$, if $x$ is fresh,
+    its characteristic length is the removal half-side, and the
+    assumed replacement bound applies whether $y$ is old or fresh.
+    If both identifiers are old, their births, labels, ranks and
+    characteristic lengths are retained. The final-region identity
+    permits the induction hypothesis at generation $j$.
+    Finally, if $x$ is old and $y$ is fresh, then
+    $\operatorname{rk}_{j+1}(x)\le j+1<j+2
+        =\operatorname{rk}_{j+1}(y)$,
+    contradicting the assumed rank inequality.
+\end{proof}
+
+If the marks at generation $N$ are empty,
+Theorem~\ref{thm:area_law_repair_final_current_empty} identifies
+$R_y^{(\infty,N)}$ with the current region $R_y^{(N)}$.

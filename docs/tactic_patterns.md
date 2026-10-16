@@ -8266,3 +8266,10 @@ spectral split → block extraction → MPV calculation → strict bounds
   comparison confirms equality of all sixteen lines. The initial-belt proof
   uses the same fan-run bound in a different layer-and-cell sum and does not
   supply a third occurrence of this generation–parent–run block.
+
+### Preservation under iterated retention — candidate (2026-10-16)
+
+- **Pattern:** A quantity preserved by one retention step is preserved by every finite iteration. The proofs of remembered-birth, color, and characteristic-length preservation are each `exact Nat.rec rfl (fun _ ih ↦ ih) n`.
+- **Seen:** `TNLean/PEPS/AreaLaw/Geometry/RepairRankZeroAncestry.lean:78`, `:87`, and `:98`, in `repairStage_birth_oldInclusion`, `repairStage_color_oldInclusion`, and `repairStageCharacteristicLength_oldInclusion` respectively. The source-text scan finds exactly these three occurrences.
+- **Abstraction:** The existing natural-number recursor already expresses the shared induction in one line. No further helper or tactic is proposed.
+- **Notes:** These are three occurrences in one file. They do not meet the promotion threshold of three occurrences across at least two files; the alternative threshold for longer repeated blocks also does not apply.
