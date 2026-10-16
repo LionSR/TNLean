@@ -147,7 +147,7 @@ def main() -> int:
 
     source = (
         "\\documentclass{article}\n"
-        "\\usepackage{tenkz}\n"
+        "\\usepackage{tikz-tensor-networks}\n"
         "\\pagestyle{empty}\n"
         "\\begin{document}\n"
         f"{body}\n"

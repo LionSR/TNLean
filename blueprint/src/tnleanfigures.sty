@@ -4,9 +4,8 @@
 % \input{figures/<name>} and an external note writes \tnfigure{<name>}.
 % This package supplies exactly what a figure file may assume, and nothing
 % that a host document is likely to define differently:
-%   * the tenkz picture language (pinned tenkz.sty when TEXINPUTS reaches
-%     the companion checkout, else the installed tikz-tensor-networks.sty,
-%     which carries the same v0.8.0 code);
+%   * the tenkz picture language, tikz-tensor-networks.sty (the pinned
+%     companion checkout when TEXINPUTS reaches it, else the installed copy);
 %   * macros/diagrams.tex (tikz-cd and its channel style), the same file the
 %     print preamble and the standalone web picture units read;
 %   * the presentational row environment tenkzequation (centered display);
@@ -31,9 +30,7 @@
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{tnleanfigures}[2026/10/10 Shared TNLean tensor-network figures]
 \RequirePackage{amsmath,amssymb}
-\IfFileExists{tenkz.sty}
-  {\RequirePackage{tenkz}}
-  {\RequirePackage{tikz-tensor-networks}}
+\RequirePackage{tikz-tensor-networks}
 \input{macros/diagrams}
 \ProvideDocumentEnvironment{tenkzequation}{}{\begin{center}}{\end{center}}
 % Label macros used inside figure bodies; the blueprint defines the same

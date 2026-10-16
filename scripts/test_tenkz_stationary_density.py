@@ -44,7 +44,7 @@ def check(work: Path) -> None:
     tex = work / "stationary-density.tex"
     tex.write_text(
         "\\documentclass{article}\n\\usepackage{amsmath,amssymb}\n"
-        "\\usepackage{tenkz}\n\\pagestyle{empty}\n\\begin{document}\n"
+        "\\usepackage{tikz-tensor-networks}\n\\pagestyle{empty}\n\\begin{document}\n"
         + "\n".join(bodies) + "\n\\end{document}\n", encoding="utf-8"
     )
     env = os.environ.copy()

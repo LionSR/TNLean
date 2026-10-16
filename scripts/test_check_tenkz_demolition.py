@@ -66,7 +66,7 @@ def main() -> int:
     assert len(prefix_hits) == 1
     assert "retired pipeline reference" in prefix_hits[0]
 
-    native_path = "tex/tenkz/tenkz.sty"
+    native_path = "tex/tenkz/tikz-tensor-networks.sty"
     assert guard.path_failures(native_path) == []
     assert guard.content_failures(
         "docs/example.md", f"native source: {native_path}"

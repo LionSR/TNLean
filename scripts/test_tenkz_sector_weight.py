@@ -34,7 +34,7 @@ def main() -> int:
     wires = re.findall(r"\\tnwire\{([^}]+)\}\{([^}]+)\}", body)
     assert len(wires) == len(EXPECTED) and set(wires) == EXPECTED
     source = (
-        "\\documentclass{article}\n\\usepackage{amsmath,amssymb,tenkz}\n"
+        "\\documentclass{article}\n\\usepackage{amsmath,amssymb,tikz-tensor-networks}\n"
         "\\pagestyle{empty}\n\\begin{document}\n" + body + "\n\\end{document}\n"
     )
     with tempfile.TemporaryDirectory(prefix="tenkz_sector_weight_") as tmp:
