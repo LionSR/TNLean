@@ -678,6 +678,34 @@ original open square. We state the two models separately, following
     Conjugation is linear and $\sum_i A_i^{\mathrm h}=H$.
 \end{proof}
 
+\begin{theorem}[The original nearest-neighbor interaction family]
+    \label{thm:square_nearest_neighbor_terms}
+    \lean{TNLean.PEPS.Approximation.SquareHamiltonian.exists_nearestNeighbor_terms}
+    \leanok
+    \uses{thm:square_interaction_support_relabel,
+        thm:square_area_law_hamiltonian_operator,thm:square_hermitian_term_properties,
+        thm:square_hermitian_term_supported_algebra,thm:square_hermitian_term_sum}
+    Let $H$ be an original square Hamiltonian with interaction bound $J\ge0$.
+    Index the sites and unordered nearest-neighbor edges of $\Lambda$ by
+    $\mathcal I$, and let $D_j$ be the singleton or endpoint pair of $j$.
+    There exist operators $(T_j)_{j\in\mathcal I}$ such that each $T_j$ is
+    supported on $D_j$ and
+    \begin{align*}
+        T_j^*                    & =T_j,              & \|T_j\| & \le J, &
+        \sum_{j\in\mathcal I}T_j & =H_{\mathrm{int}}.
+    \end{align*}
+    The assertion holds for every side length and local dimension, and for
+    every choice of order on the rectangle sites.
+\end{theorem}
+\begin{proof}\leanok
+    Let $e$ be the site and edge correspondence, and put
+    $T_{e(i)}=U A_i^{\mathrm h}U^*$. The support identity gives $D_{e(i)}=X_i$.
+    The Hermitian part preserves the original support and norm bound, and
+    unitary conjugation preserves Hermiticity and the norm. Finally, the
+    bijection $e$ preserves the finite sum, so
+    $\sum_jT_j=U(\sum_i A_i^{\mathrm h})U^*=UHU^*=H_{\mathrm{int}}$.
+\end{proof}
+
 \begin{theorem}[The same ground vector and full-system gap]
     \label{thm:square_area_law_ground_gap}
     \lean{TNLean.PEPS.Approximation.SquareHamiltonian.isGappedGroundState_toAreaLawHamiltonian}

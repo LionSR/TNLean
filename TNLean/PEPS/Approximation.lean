@@ -152,6 +152,7 @@ import TNLean.PEPS.Approximation.DyadicProtocolOwners
 import TNLean.PEPS.Approximation.DyadicProtocolParties
 import TNLean.PEPS.Approximation.DyadicProtocolRetainedNorm
 import TNLean.PEPS.Approximation.DyadicProtocolSchedule
+import TNLean.PEPS.Approximation.DyadicProtocolSegments
 import TNLean.PEPS.Approximation.DyadicProtocolTrajectory
 import TNLean.PEPS.Approximation.DyadicReadingFootprints
 import TNLean.PEPS.Approximation.DyadicRepaintingClearance
@@ -373,6 +374,7 @@ import TNLean.PEPS.Approximation.SheetStackEndpoints
 import TNLean.PEPS.Approximation.SheetStackRawInitial
 import TNLean.PEPS.Approximation.SheetStackReadout
 import TNLean.PEPS.Approximation.SheetStackReadoutCircuit
+import TNLean.PEPS.Approximation.SheetStackSourceBoundedChange
 import TNLean.PEPS.Approximation.SheetSwapBoundaryExpansion
 import TNLean.PEPS.Approximation.SheetSwapConjugateSupport
 import TNLean.PEPS.Approximation.SheetSwapCorrection
@@ -458,6 +460,7 @@ import TNLean.PEPS.Approximation.SquareGridContraction
 import TNLean.PEPS.Approximation.SquareGridSource
 import TNLean.PEPS.Approximation.SquareHamiltonianHermitianTerms
 import TNLean.PEPS.Approximation.SquareInteractionSupport
+import TNLean.PEPS.Approximation.SquareInteractionTerms
 import TNLean.PEPS.Approximation.SquareLatticeConnectivity
 import TNLean.PEPS.Approximation.SupportedPhysicalBufferGaussian
 import TNLean.PEPS.Approximation.SupportedPolarUnitary

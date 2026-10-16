@@ -24,6 +24,18 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Fixed-circuit bounded-change lifts beside spectator sheets — promoted (2026-10-16)
+
+- **Pattern:** Assemble the five `OriginalCircuit.IsBoundedChange` fields for
+  `liftOne` or `liftTwo`: transport the nonprivate count, participants, expansion
+  bound, monomial bound and error estimate through untouched spectator sheets.
+- **Seen:** `hasBoundedChange_liftOne`, `hasBoundedChange_liftTwo`
+  (`SheetStackChange.lean`) and their source-bounded forms
+  (`SheetStackSourceBoundedChange.lean`).
+- **Abstraction:** `TNLean.PEPS.EncodedFrame.isBoundedChange_liftOne` and
+  `isBoundedChange_liftTwo` in `SheetStackChange.lean`, stated for the fixed lifted
+  circuit; all four results now use them.
+
 ### Positive part of a polynomial constant — promoted (2026-10-16)
 
 - **Pattern:** Replace a constant `C` of a polynomial bound `x ≤ C * L ^ k` by `max C 0`, so that
@@ -37,6 +49,28 @@ abstracted — record why, so it is not re-proposed).
 - **Notes:** The sign of `max C 0` is `le_max_right`. Net Lean line delta: +9 (20 added, 11
   removed) across the three changed modules, since the new lemma and its docstring outweigh the
   shortened call sites.
+
+### Euclidean norm and nonvanishing in augmented replica coordinates — promoted (2026-10-16)
+
+- **Pattern:** Reindex a replica prevector from the physical and two auxiliary
+  site coordinates to the scanner coordinates, preserve its Euclidean norm,
+  and transfer nonvanishing or a norm upper bound.
+- **Seen:** Three nonvanishing arguments and three norm arguments across
+  `AugmentedReplicaPrevectorProperties.lean`, `ActualRoughLowerPrevector.lean`,
+  `ActualSharpLowerPrevector.lean`, and `ActualEndpointRoughBudget.lean`, under
+  `PEPS/AreaLaw/Scan/`.
+- **Abstraction:** `norm_augmentedReplicaPrevector_eq_global` and
+  `augmentedReplicaPrevector_ne_zero_iff_global` in
+  `AugmentedReplicaPrevectorProperties.lean`, using Mathlib's
+  `LinearIsometryEquiv.piLpCongrLeft` and the characterization of zero by its
+  norm. The existing larger coordinate theorem and all three comparison
+  consumers use these declarations.
+- **Notes:** Both statements are unconditional in the dimensions and replica
+  count. No ground-state or eigen-equation premise is added. The six existing
+  arguments lose 31 lines; coordinate identities still used by the auxiliary
+  label and eigen-equations are retained. Existing theorem statements are
+  unchanged. The same coordinate isometry preserves the norm for every
+  replica count, so downstream estimates share one mathematical identity.
 
 ### Scanner prevector coordinates and selected density — promoted (2026-10-15)
 
@@ -4498,6 +4532,25 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 ## Candidates
 
+
+
+### Supported terms in rectangle coordinates — candidate (2026-10-15)
+
+- **Pattern:** Transport membership in a supported-operator algebra through the
+  site bijection, replace the resulting embedding by matrix reindexing, and
+  identify the image support.
+- **Seen:** 2 occurrences: `SquareHamiltonian.toAreaLawHamiltonian` in
+  `PEPS/Approximation/SquareAreaLawHamiltonian.lean` and
+  `SquareHamiltonian.exists_nearestNeighbor_terms` in
+  `PEPS/Approximation/SquareInteractionTerms.lean`.
+- **Abstraction:** The existing `embedOp_mem_supportedOperators_image` and
+  `embedOp_rectangle_eq_reindex` perform the two transports. At a third
+  occurrence, consider a lemma giving the reindexed Hermitian term's
+  supported-operator membership directly.
+- **Notes:** The second occurrence also relabels sites and edges. The support
+  identity already handles the arbitrary order on the rectangle sites;
+  no order-preserving assumption should enter a shared lemma.
+
 ### Logarithmic norm derivatives from squared norms — candidate (2026-10-15)
 
 - **Pattern:** Differentiate the squared norm, compose with the real logarithm,
@@ -7910,7 +7963,7 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Consumers:** `Scan/SourceRoughSelection.lean`,
   `Scan/SourceBootstrapEntropy.lean`, `Scan/SourceSelectedSharpComparison.lean`,
   `Scan/SourceSelectedSharpEnergy.lean`, `Scan/SourceSelectedSharpDensity.lean`,
-  `Scan/SourceSelectedDensity.lean`,
+  `Scan/SourceSelectedDensity.lean`, `Scan/SourceSelectedEnergy.lean:224`,
   `Scan/SourceActualInformation.lean`, and `Scan/SourceFinalInformation.lean`.
 - **Notes:** Positivity comes from the existing spectral-window witness; no
   nonzero-dimension hypothesis is added to any theorem.
@@ -7972,7 +8025,29 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Notes:** No multiplication by `1 - p` is allowed before its sign is known.
   The scalar implication instead uses `1 - p ≤ 1` on nonnegative terms.
 
-### Facts about the jointly chosen initial marks — candidate
+### Unpacking the supplied target and its spectral data — rejected (2026-10-16)
+
+- **Pattern:** Introduce the named local definitions, unpack the truncated
+  ground-state and spectral-window witnesses, and pass these same witnesses
+  to the conclusion while continuing with their remaining properties.
+- **Seen:** The common witness block in `Scan/SourceActualInformation.lean:203`,
+  `Scan/SourceSelectedSharpDensity.lean:236`, and
+  `Scan/SourceSelectedSharpEnergy.lean:242`; the rough-density version in
+  `Scan/SourceSelectedDensity.lean:230` has a different tuple of conclusions.
+  `Scan/SourceSelectedEnergy.lean:218` retains the density witnesses directly.
+- **Abstraction:** The mathematical data already come from the shared source
+  comparison theorems. The nonzero-dimension consequence uses the promoted
+  `NeZero.of_pos`. No additional mathematical lemma is proposed for the
+  introductions and conjunction projections themselves.
+- **Notes:** The sharp versions carry the marginal budget and two regional
+  entropy families; the rough version omits these and has a different size
+  bound tuple. An identical short destructuring block is present, but a
+  tactic hiding these dependent witness choices would obscure which state
+  and labels are retained. A shared data interface should be considered only
+  if a subsequent mathematical theorem needs that interface independently;
+  it is not part of the present proof completion.
+
+### Facts about the jointly chosen initial marks — promoted (2026-10-16)
 
 - **Pattern:** Recover the same two residue choices and finite mark set used by
   the initial repair stage, then project a geometric property from their
@@ -7984,12 +8059,31 @@ spectral split → block extraction → MPV calculation → strict bounds
   `RepairMetricHypotheses.repairStage_location_mem_affineMesh`.
   The definitions in `RepairStage` and `RepairBirthRank` also refer to these
   same choices; they are not additional proofs of a geometric property.
-- **Abstraction:** If another proof needs this extraction, prefer a lemma
-  giving the incidence and scale facts of the actual chosen initial family.
-  It must retain the residue choices used by the actual regions; an
-  independently chosen family cannot replace them.
-- **Notes:** The present two proofs use different projections: incidence and
-  scale separation in the first, membership in the selected belts in the
-  second. The mesh argument reuses `fineScaleIndex_mono` and
-  `beltMarks_subset_affineMesh`, and adds no copied floor estimate or new
-  mesh definition.
+- **Abstraction:** The lemma
+  `TNLean.PEPS.AreaLaw.Geometry.initialRepairStage_mark_spec` in
+  `TNLean/PEPS/AreaLaw/Geometry/RepairInitialMarkFacts.lean` records sparse cell
+  counts, finite layer support, incidence, scale minimality, separation, and
+  injectivity for the actual chosen initial family. It retains the residue
+  choices used by the actual regions and introduces no new mark family.
+- **Refactor:** The metric proof uses incidence and separation directly. The
+  mesh proof reconstructs membership in a selected belt from the incident
+  cell supplied by the lemma, then retains the existing mesh argument and
+  induction step. Both theorem statements remain unchanged.
+- **Line comparison:** The metric proof decreases from 9 to 4 nonblank proof
+  lines, and the mesh proof from 24 to 23. The shared lemma has 5 proof lines:
+  the two consumers and the common proof therefore use 32 lines rather than
+  33. These counts exclude statements, documentation, imports, and the other
+  declarations in the modules.
+- **Verification:** The shared lemma and both rewritten consumers have
+  passed ordinary builds and imported named axiom checks with only the
+  three standard axioms. Both rewritten consumers also passed strict
+  source checks and named source checks.
+- **Further use:** The uniform weighted initial-mark estimate
+  `exists_uniform_initialRepairStage_weighted_sum_bound` also uses the same
+  chosen-family facts. Its finite layer partition uses incidence, and its
+  summation estimate uses the sparse cell counts. The roots and residue
+  choices remain those of the actual initial family. The estimate has passed
+  strict checking, ordinary compilation, and its exact named imported axiom
+  check. This third use is separate from the two refactored consumers in the
+  line comparison above. No new tactic, simp attribute, or proof limit is
+  introduced.

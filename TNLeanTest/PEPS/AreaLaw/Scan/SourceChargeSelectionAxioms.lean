@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.PEPS.AreaLaw.Scan.SourceChargeSelection
 import Lean.Util.CollectAxioms
 
-/-! Standard-axiom audit for the physical charge selection at arbitrary total metric weight. -/
+/-! Logical dependencies for the physical charge selection at arbitrary total metric weight. -/
 
 run_cmd do
   let decl :=
