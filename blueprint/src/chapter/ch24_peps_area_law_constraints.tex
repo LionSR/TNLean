@@ -744,6 +744,12 @@ integrability on the closed interval.
     \lean{TNLean.PEPS.AreaLaw.Scan.ScanData,
         TNLean.PEPS.AreaLaw.Scan.ScanData.SXt_le,
         TNLean.PEPS.AreaLaw.Scan.ScanData.SQt_le,
+        TNLean.PEPS.AreaLaw.Scan.ScanData.terminalBound,
+        TNLean.PEPS.AreaLaw.Scan.ScanData.terminalBound_le_of,
+        TNLean.PEPS.AreaLaw.Scan.ScanData.IntegratedChargeBound,
+        TNLean.PEPS.AreaLaw.Scan.ScanData.chargeDefect_le_choiceGainSum,
+        TNLean.PEPS.AreaLaw.Scan.ScanData.chargeDefect_le,
+        TNLean.PEPS.AreaLaw.Scan.ScanData.goodOld_le,
         TNLean.PEPS.AreaLaw.Scan.exists_budgets,
         TNLean.PEPS.AreaLaw.Scan.ScanData.intervalIntegrable_chargeDefect,
         TNLean.PEPS.AreaLaw.Scan.ScanData.integratedChargeBound,
@@ -752,10 +758,11 @@ integrability on the closed interval.
         TNLean.PEPS.AreaLaw.Scan.exists_defectEnergy_le,
         TNLean.PEPS.AreaLaw.Scan.scanner_estimate}
     \leanok
+
     There are constants, independent of $W$ and depending only on the exponents and on the constants of
     the inputs, such that for all sufficiently large $n$ and every scan at scale
     $n$ satisfying the conclusions of Lemmas~9.1, 2.1, 3.1 and
-    Propositions~7.4, 8.1, the comparator bounds
+    Propositions~7.4, 8.1 with the replica counts specified below, the comparator bounds
     $B_{\mathrm{sh}}\le C(nL^e+n)$, $B_{\mathrm{exc}}\le CnD$ and
     $\mathcal B\le CnD(\log n)^{C}$ hold, and there is a remainder $\rho_k\to0$, uniform over the selected
     round and parameter, such that for every $k\ge1$ some charge round and
@@ -766,6 +773,12 @@ integrability on the closed interval.
         \bigl(\delta_n^{1/8}+\epsilon+n^{-100}\bigr)+Cn^{-1000}+\rho_k.
         \label{eq:al_scanner_energy}
     \end{align}
+    The mass identities of the leaf measures, measurability of the charge
+    defect, continuity and differentiability of the logarithmic norm,
+    transport inequalities and initial norm bound are required for every
+    $k\ge0$; the normalized final comparison is required for $k\ge1$.
+    The leaf measures are finite and adjacent endpoint norms agree for every
+    $k\ge0$.
     Let $C_e$ be the original entropy-input constant, and write
     $\widetilde S_X$ and $\widetilde S_Q(j)$ for the target and shell
     entropy values of the truncated state recorded in the same input data.
@@ -786,7 +799,7 @@ integrability on the closed interval.
     therefore at most $n^{-247}$. Adding the original target and shell
     entropy bounds gives the two entropy estimates, uniformly in the scan
     and shell index.
-    Integrate the logarithmic norm derivative over $[0,1]$ in every round,
+    Fix $k\ge1$. Integrate the logarithmic norm derivative over $[0,1]$ in every round,
     retaining the nonnegative charge contribution on
     $[\epsilon/2,\epsilon]$. Interior almost-everywhere measurability
     and the nonnegative upper bound make the charge defect integrable; the
@@ -847,7 +860,9 @@ integrability on the closed interval.
     Theorem~\ref{thm:al_scan_truncation_inputs}, such that for all auxiliary dimensions, every
     total weight $W\ge1$ and all replica vectors: if the actual rounds of the
     scan, with per-band weight $a=W/K$, satisfy the conclusions of
-    Propositions~7.4 and~8.1 for $W$ and $\widetilde\Omega$, then the
+    Propositions~7.4 and~8.1 for $W$ and $\widetilde\Omega$, with the replica
+    counts specified in Theorem~\ref{thm:al_scanner_from_inputs}, finite leaf
+    measures and matching adjacent endpoint norms, then the
     conclusions of Theorem~\ref{thm:al_scanner_from_inputs} hold for these
     rounds.
 
