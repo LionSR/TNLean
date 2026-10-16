@@ -1,4 +1,4 @@
-\begin{definition}[Positive transport through an injective region map]%
+\begin{definition}[Positive pullback through an injective region map]%
     \label{def:peps_injective_region_parent_transport}
     \lean{TNLean.PEPS.injectiveRegionParentTransport}
     \leanok
@@ -19,7 +19,7 @@
     \cite{gap:cpgsv21_injective_parent_reconstruction}.
 \end{definition}
 
-\begin{theorem}[Exact kernel under injective physical transport]%
+\begin{theorem}[Exact kernel under injective physical pullback]%
     \label{thm:peps_injective_region_parent_transport}
     \lean{TNLean.PEPS.injectiveRegionParentTransport_posSemidef,
         TNLean.PEPS.injectiveRegionParentTransport_mulVec_eq_zero_iff,
@@ -28,7 +28,7 @@
     \leanok
     \uses{def:peps_injective_region_parent_transport,
         thm:peps_injective_vertex_reconstruction,def:peps_region_parent_interaction}
-    The transported interaction is positive and satisfies
+    The pulled-back interaction is positive and satisfies
     \[
         \ker\widetilde H_R=F_R(\ker H).
     \]
@@ -48,6 +48,6 @@
     condition is equivalent to $HL_R\psi=0$. The kernel of the second
     summand is the kernel of $I-F_RL_R$. Thus every physical ground
     vector is the image of a virtual ground vector, and conversely.
-    The regional factorization $T_R=F_RB_R$ identifies the transported
+    The regional factorization $T_R=F_RB_R$ identifies the image of the
     virtual bond range with $\mathcal G_R$.
 \end{proof}

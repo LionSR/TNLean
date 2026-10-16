@@ -64,10 +64,11 @@ occurrence and preserves the operator of that list exactly.
     \label{thm:peps_message_gate_bounds_mono}
     \lean{TNLean.PEPS.PairEffect.EffectCircuit.IsMessageGateApproximation.mono}
     \lean{TNLean.PEPS.PairEffect.EffectCircuit.IsMessageResourceBounded.mono_dimension}
+    \lean{TNLean.PEPS.PairEffect.EffectCircuit.IsMessageResourceBounded.mono_coefficient}
     \lean{TNLean.PEPS.PairEffect.EffectCircuit.IsTermwiseBounded.mono_coefficient}
     \leanok
-    Increasing the local approximation budget or the message-dimension
-    bound preserves the corresponding conditions on the same original
+    Increasing the local approximation budget, the message-dimension
+    bound, or the coefficient bound preserves the corresponding conditions on the same original
     lists and operators. Likewise, increasing an individual coefficient
     bound preserves its monomial pair-effect bound.
 \end{theorem}
@@ -153,12 +154,11 @@ occurrence and preserves the operator of that list exactly.
     and intended physical dimensions satisfy
     \begin{align}
         N_L\le C_NL^n,\qquad d_{L,j}\le C_DL^d,
-        \qquad C_N,C_D\ge0,
     \end{align}
     and that gate arity and whole-lifetime participation are at most $b$.
 
     At every fixed integer precision $q$, suppose that there exist
-    constants $r_q,m_q$, $C_K(q),C_C(q),C_M(q)\ge0$, and degrees
+    constants $r_q,m_q$, real constants $C_K(q),C_C(q),C_M(q)$, and degrees
     $u(q),v(q),z(q)$, chosen before $L$, such that every original gate admits
     an allowed message-containing expansion on its original local spaces.
     Each list has at most $C_K(q)L^{u(q)}$ original monomials. Each monomial
@@ -190,8 +190,11 @@ occurrence and preserves the operator of that list exactly.
 \begin{proof}
     \leanok
     \uses{thm:peps_uniform_approximate_operator_network,thm:peps_message_expand_gate_approximation,thm:peps_message_expand_monomial_count,thm:peps_message_expand_termwise_bound,thm:peps_message_gate_bounds_mono,thm:homogeneous_ceiling_bound}
-    Fix $p$ and choose $q=n+\lceil p\rceil+\lceil16(1+C_N)\rceil$ before
-    choosing a size. All expansion constants at this precision are then fixed.
+    Write $C_+=\max\{C,0\}$ for a real constant $C$. Fix $p$ and choose
+    $q=n+\lceil p\rceil+\lceil16(1+(C_N)_+)\rceil$ before choosing a size.
+    All expansion constants at this precision are then fixed. Since
+    $L^k\ge0$, every polynomial bound with constant $C$ also holds with $C_+$,
+    so replace $C_K(q)$, $C_C(q)$ and $C_M(q)$ by their positive parts.
     Expand each bounded message in a finite orthonormal basis of its actual
     transferred register. This preserves its original operator exactly, and
     changes only the monomial list at the same gate occurrence.
@@ -232,10 +235,9 @@ occurrence and preserves the operator of that list exactly.
     Suppose that gate arity and whole-lifetime participation are at most $b$,
     and that the original gate counts and intended physical dimensions satisfy
     \begin{align}
-        N_L\le C_NL^n,\qquad d_{L,j}\le C_DL^d,
-        \qquad C_N,C_D\ge0.
+        N_L\le C_NL^n,\qquad d_{L,j}\le C_DL^d.
     \end{align}
-    Let $r,m$, $C_K,C_C,C_M\ge0$, and degrees $u,v,z$ be fixed independently
+    Let $r,m$, real constants $C_K,C_C,C_M$, and degrees $u,v,z$ be fixed independently
     of size and requested accuracy. At every size, suppose that each original
     gate has an exact allowed message-containing expansion on its original
     local input and output spaces. Each list contains at most $C_KL^u$

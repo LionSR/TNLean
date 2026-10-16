@@ -9,7 +9,7 @@ The source is \emph{A two-dimensional area law from a global spectral gap},
 \texttt{08-scanner.tex}, lines 353--357, 399--533 and 839--941, at revision
 \texttt{adc7f1241b42e322a6451854ab7e4b4c146bf78a}.
 
-\begin{theorem}[The actual target dimension]
+\begin{theorem}[The target dimension]
     \label{thm:physical-information-dimension}
     \lean{TNLean.PEPS.AreaLaw.Scan.log_exp_configuration_card_le_of_card}
     \leanok
@@ -23,7 +23,7 @@ The source is \emph{A two-dimensional area law from a global spectral gap},
 
 \begin{proof}
     \leanok
-    The actual configuration dimension is $q^{|X|}$.  Take its logarithm,
+    The configuration dimension is $q^{|X|}$.  Take its logarithm,
     use $\log q\geq0$ and substitute the cardinality estimate.  No dimension
     of the far region enters the estimate.
 \end{proof}
@@ -43,10 +43,10 @@ The source is \emph{A two-dimensional area law from a global spectral gap},
     following property.
 
     Let the original vector $\Omega$ be a gapped ground state and let the
-    supplied physical scanner have a nonempty ambient target and obey
+    given physical scanner have a nonempty ambient target and obey
     all the source graph, support-anchor,
     template-volume, ambient-depth, layer-cardinality, anchor-multiplicity
-    and boundary-clearance hypotheses.  Retain the literal scales
+    and boundary-clearance hypotheses.  Retain the scales
     \[
         r_0=\lceil C_{\rm tr}(\log n)^2\rceil,\quad
         m=\lfloor n^\mu\rfloor,\quad D=\lceil n^\kappa\rceil,\quad
@@ -54,7 +54,7 @@ The source is \emph{A two-dimensional area law from a global spectral gap},
     \]
     where the final division is natural-number division, together with
     $n\geq N$, $2r_0\leq D$, $1\leq D$ and $4D\leq m$.
-    Put $X=A\cap T$ and let $S_0$ be the actual truncation set at depth $L$.
+    Put $X=A\cap T$ and let $S_0$ be the truncation set at depth $L$.
     Assume the genuine original-state source entropy inputs
     \[
         S_\Omega(X)\leq C_e n^{1+e_{\rm box}},\qquad
@@ -77,23 +77,23 @@ The source is \emph{A two-dimensional area law from a global spectral gap},
         thm:arealaw-target-entropy-transfer,
         thm:arealaw-final-sharp-source,
         def:arealaw-final-sharp-error}
-    Invoke the frozen same-source information theorem once.  Its concrete
-    witness supplies $X\subseteq S_0$, $|S_0|\leq(C_T+1)n^2$ and the actual
-    trace-distance budget.  Therefore the preceding dimension lemma applies
+    Invoke the same-source information theorem once.  Its concrete
+    data give $X\subseteq S_0$, $|S_0|\leq(C_T+1)n^2$ and the
+    trace-distance bound.  Therefore the preceding dimension lemma applies
     with $C_{\rm vol}=C_T+1$.  Quantitative regional entropy continuity gives
     \[
         S_{\Omega_t}(X)\leq C_e n^{1+e_{\rm box}}+n^{-247}
     \]
-    for the same truncated vector.  The same original prefix input supplies
+    for the same truncated vector.  The same original prefix input gives
     the already-derived shell bound with its unchanged $n^{-247}$ error.
 
     Use $W=n^\omega$ and $\tau=n^{-1/4000}$.  The uniform numerical scale
-    theorem gives $0<\tau\leq1/2$ and the actual rounded per-band weight;
-    the transport-smallness theorem puts that same weight in the required
+    theorem gives $0<\tau\leq1/2$ and the rounded per-band weight;
+    the round-step smallness theorem puts that same weight in the required
     interval.  Identify the scalar right-hand side with the complete final
-    error expression, including the selected mass, window, marginal budget
+    error expression, including the selected mass, window, marginal bound
     and original-state continuity correction.  Apply the final source error
-    bound at these actual data.
+    bound at these data.
 
     The same-source theorem has already taken the replica limit at fixed
     physical size, weight and smoothing parameter.  This proof only applies

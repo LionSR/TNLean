@@ -247,11 +247,10 @@ at the gate occurrences may be replaced independently.
     participates in at most $b$ nonprivate gates over its whole lifetime.
     Assume fixed polynomial bounds
     \begin{align}
-        N_L\le C_NL^n,\qquad d_{L,j}\le C_DL^d,
-        \qquad C_N,C_D\ge0.
+        N_L\le C_NL^n,\qquad d_{L,j}\le C_DL^d.
     \end{align}
     At every fixed integer precision $q$, suppose that there exist
-    $r_q$, $C_K(q),C_C(q)\ge0$, and degrees $u(q),v(q)$, chosen before $L$,
+    $r_q$, real constants $C_K(q),C_C(q)$, and degrees $u(q),v(q)$, chosen before $L$,
     such that every index admits allowed monomial lists at the same original
     occurrences. The list at each gate has at most $C_K(q)L^{u(q)}$ monomials;
     each individual coefficient has norm at most $C_C(q)L^{v(q)}$;
@@ -283,16 +282,19 @@ at the gate occurrences may be replaced independently.
 \end{theorem}
 \begin{proof}
     \leanok
-    Enlarge the original count constant to $1+C_N$ and choose
+    Write $C_+=\max\{C,0\}$ for a real constant $C$. Since $L^k\ge0$, every
+    polynomial bound with constant $C$ also holds with $C_+$. Enlarge the
+    original count constant to $1+(C_N)_+$ and choose
     \begin{align}
         t=\lceil p\rceil,
-        \qquad q=n+t+\lceil16(1+C_N)\rceil
+        \qquad q=n+t+\lceil16(1+(C_N)_+)\rceil
     \end{align}
     before choosing a size. Availability at this precision fixes $r_p=r_q$
-    and its polynomial constants. The coefficient sum is bounded by
+    and its polynomial constants; replace $C_K(q)$ and $C_C(q)$ by their
+    positive parts, so that both are nonnegative. The coefficient sum is bounded by
     $C_K(q)C_C(q)L^{u(q)+v(q)}$; a majorant at least one is
     $(1+C_K(q)C_C(q))L^{u(q)+v(q)}$. Likewise,
-    $(1+C_D)L^d$ is a physical-dimension majorant at least one.
+    $(1+(C_D)_+)L^d$ is a physical-dimension majorant at least one.
     Apply the prescribed-precision sampling estimate and the resource bounds
     to the same actual source circuit and sample count. Reexpansion preserves
     the original operator and occurrence identities. Place the exterior scalar

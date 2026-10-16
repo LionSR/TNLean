@@ -117,6 +117,7 @@ import TNLean.PEPS.AreaLaw.Geometry.RepairCurrentRegions
 import TNLean.PEPS.AreaLaw.Geometry.RepairCurrentRetention
 import TNLean.PEPS.AreaLaw.Geometry.RepairDepth
 import TNLean.PEPS.AreaLaw.Geometry.RepairDescendantCounts
+import TNLean.PEPS.AreaLaw.Geometry.RepairDescendantScales
 import TNLean.PEPS.AreaLaw.Geometry.RepairDescendants
 import TNLean.PEPS.AreaLaw.Geometry.RepairDummySites
 import TNLean.PEPS.AreaLaw.Geometry.RepairFanCones
