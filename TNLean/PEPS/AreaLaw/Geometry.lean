@@ -63,6 +63,7 @@ import TNLean.PEPS.AreaLaw.Geometry.FanRunComponents
 import TNLean.PEPS.AreaLaw.Geometry.FanRunConnectedness
 import TNLean.PEPS.AreaLaw.Geometry.FanRunContacts
 import TNLean.PEPS.AreaLaw.Geometry.FanRunDisjointness
+import TNLean.PEPS.AreaLaw.Geometry.FanRunTemplate
 import TNLean.PEPS.AreaLaw.Geometry.FanRuns
 import TNLean.PEPS.AreaLaw.Geometry.FanSideContacts
 import TNLean.PEPS.AreaLaw.Geometry.FineBelts
