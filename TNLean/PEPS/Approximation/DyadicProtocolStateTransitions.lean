@@ -41,11 +41,11 @@ variable {k : ℕ}
 def squareOfIndex {j : ℕ} (hj : j < k) {Q : ℤ × ℤ} (hQ : InRoot ((2 : ℤ) ^ (k - j)) Q) :
     DyadicSquare k :=
   ⟨⟨j, by omega⟩, ⟨Q.1.toNat, by
-    show Q.1.toNat < 2 ^ (k - j)
+    change Q.1.toNat < 2 ^ (k - j)
     obtain ⟨h1, h2, -, -⟩ := hQ
     have : ((2 ^ (k - j) : ℕ) : ℤ) = (2 : ℤ) ^ (k - j) := by push_cast; rfl
     omega⟩, ⟨Q.2.toNat, by
-    show Q.2.toNat < 2 ^ (k - j)
+    change Q.2.toNat < 2 ^ (k - j)
     obtain ⟨-, -, h3, h4⟩ := hQ
     have : ((2 ^ (k - j) : ℕ) : ℤ) = (2 : ℤ) ^ (k - j) := by push_cast; rfl
     omega⟩⟩
@@ -60,10 +60,10 @@ theorem squareOfIndex_index {j : ℕ} (hj : j < k) {Q : ℤ × ℤ}
 def junctionOfIndex {j : ℕ} (hj : j ≤ k) {Q : ℤ × ℤ} (h1 : 0 ≤ Q.1) (h2 : Q.1 ≤ 2 ^ (k - j))
     (h3 : 0 ≤ Q.2) (h4 : Q.2 ≤ 2 ^ (k - j)) : DyadicJunction k :=
   ⟨⟨j, by omega⟩, ⟨Q.1.toNat, by
-    show Q.1.toNat < 2 ^ (k - j) + 1
+    change Q.1.toNat < 2 ^ (k - j) + 1
     have : ((2 ^ (k - j) : ℕ) : ℤ) = (2 : ℤ) ^ (k - j) := by push_cast; rfl
     omega⟩, ⟨Q.2.toNat, by
-    show Q.2.toNat < 2 ^ (k - j) + 1
+    change Q.2.toNat < 2 ^ (k - j) + 1
     have : ((2 ^ (k - j) : ℕ) : ℤ) = (2 : ℤ) ^ (k - j) := by push_cast; rfl
     omega⟩⟩
 
