@@ -84,7 +84,10 @@ theorem IsDisplacedReading.eq_piecewise (hY : IsOpen Y) (hU : IsOpen U) (hYU : f
       rw [e1, e2]
       simp only [shiftGuide, hmem', ite_false]
 
-/-- A reading of a labelling that is `C` on an open set is `C` there. -/
+/-- A reading of a labelling that is `C` on an open set is `C` there.
+
+An elementary consequence of the reading definition used for the common-label corridor in the
+polynomial-PEPS manuscript, `06-geometry.tex`, lines 69–80 and 389–398. -/
 theorem IsDisplacedReading.eq_of_mem_open {H f : ℝ × ℝ → κ} (hU : IsOpen U)
     (hHU : ∀ p ∈ U, H p = C) (hf : IsDisplacedReading f (shiftGuide d H) ((1 : ℝ), (1 : ℝ)))
     {p : ℝ × ℝ} (hp : p - d ∈ U) : f p = C := by
