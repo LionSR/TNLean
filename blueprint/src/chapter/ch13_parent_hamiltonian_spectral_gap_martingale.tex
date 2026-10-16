@@ -5,14 +5,13 @@
     \label{thm:weighted-virtual-inner-product}
     \lean{Matrix.rhoWeighted_inner}
     \leanok
-    Let $\rho\in M_D(\C)$ be positive definite.  The $\rho$-weighted inner
-    product on $M_D(\C)$ is
+    Let $\rho\in M_D(\C)$ be positive definite.  Following
+    \cite[Equation~(5.6)]{Fannes1992Finitely}, the auxiliary $\rho$-weighted
+    inner product on $M_D(\C)$ is
     \begin{align}
         \langle X,Y\rangle_\rho
          & =\tr\!\left(\rho X^\dagger Y\right).
     \end{align}
-    This is the auxiliary inner product in
-    \cite[Equation~(5.6)]{Fannes1992Finitely}.
 \end{theorem}
 
 \begin{theorem}[Weighted norm formula]%
@@ -92,17 +91,17 @@
     \lean{FrustrationFree.NestedGroundProjections.sum_martingaleDifference_eq_id}
     \leanok
     \uses{def:nested-ground-projection-differences}
-    Each $E_n$ is an orthogonal projection, and
+    As in the assertions following the display labelled $E_n$ in
+    \cite{Nachtergaele1996Spectral}, each $E_n$ is an orthogonal projection
+    satisfying
     \begin{align}
-        E_mE_n & =\delta_{m,n}E_m.
+        E_mE_n & =\delta_{m,n}E_m,
     \end{align}
-    With Nachtergaele's endpoint conventions
-    $G_0=\mathbf 1$ and $G_{N+1}=0$, the differences form a complete family:
+    and under Nachtergaele's endpoint conventions
+    $G_0=\mathbf 1$ and $G_{N+1}=0$ the differences form a complete family:
     \begin{align}
         \sum_{n=0}^{N}E_n & =\mathbf 1.
     \end{align}
-    These are the assertions following the display labelled $E_n$ in
-    \cite{Nachtergaele1996Spectral}.
 \end{theorem}
 
 \begin{proof}
@@ -131,12 +130,12 @@
     \lean{FrustrationFree.NestedGroundProjections.sum_martingaleDifference_apply_of_mem_orthogonal}
     \leanok
     \uses{thm:orthogonal-martingale-difference-resolution}
-    Suppose $G_0=\mathbf 1$.  For every $v\perp\operatorname{ran}(G_N)$,
+    Suppose $G_0=\mathbf 1$.  As in the identity \textup{resolutionpsi} in
+    the proof of \cite[Theorem~2.1(i)]{Nachtergaele1996Spectral}, every
+    $v\perp\operatorname{ran}(G_N)$ satisfies
     \begin{align}
         v & =\sum_{n=0}^{N-1}E_nv.
     \end{align}
-    This is the identity \textup{resolutionpsi} in the proof of
-    \cite[Theorem~2.1(i)]{Nachtergaele1996Spectral}.
 \end{theorem}
 
 \begin{proof}
@@ -181,20 +180,21 @@
     \lean{FrustrationFree.NestedGroundProjections.norm_sq_eq_sum_martingaleDifference_of_mem_orthogonal}
     \leanok
     \uses{thm:truncated-martingale-difference-reconstruction, thm:martingale-difference-pythagorean-identity}
-    Suppose $G_0=\mathbf 1$.  For every $v\perp\operatorname{ran}(G_N)$,
+    Suppose $G_0=\mathbf 1$.  As in the identity \textup{resolutionnormpsi}
+    in the proof of \cite[Theorem~2.1(i)]{Nachtergaele1996Spectral}, every
+    $v\perp\operatorname{ran}(G_N)$ satisfies
     \begin{align}
         \lVert v\rVert^2
          & =\sum_{n=0}^{N-1}\lVert E_nv\rVert^2.
     \end{align}
-    This is the identity \textup{resolutionnormpsi} in the proof of
-    \cite[Theorem~2.1(i)]{Nachtergaele1996Spectral}.
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{thm:truncated-martingale-difference-reconstruction, thm:martingale-difference-pythagorean-identity}
-    Substitute the truncated reconstruction
-    $v=\sum_{n=0}^{N-1}E_nv$ into the Pythagorean identity.
+    Substituting the truncated reconstruction
+    $v=\sum_{n=0}^{N-1}E_nv$ into the Pythagorean identity yields the
+    decomposition.
 \end{proof}
 
 % Source: References/cond-mat_9410110/main.tex:1206--1220,
@@ -216,15 +216,15 @@
         E_mQ_nE_n & =0
                   &    & \text{whenever }m<n-l\text{ or }n<m.
     \end{align}
-    If $n<N$, the complete resolution term therefore reduces to
+    If $n<N$, the reduction from \textup{Enpsi} to the first line of
+    \textup{Enpsi2} in \cite[Theorem~2.1(i)]{Nachtergaele1996Spectral}
+    therefore simplifies the complete resolution term to
     \begin{align}
         \left\langle v,
         \sum_{m=0}^{N-1}E_mQ_nE_nv\right\rangle
          & =\left\langle
         \sum_{m=n-l}^{n}E_mv,Q_nE_nv\right\rangle.
     \end{align}
-    This is the reduction from \textup{Enpsi} to the first line of
-    \textup{Enpsi2} in \cite[Theorem~2.1(i)]{Nachtergaele1996Spectral}.
 \end{theorem}
 
 \begin{proof}
@@ -414,8 +414,8 @@
     Injectivity of $U$ identifies kernel membership, and surjectivity
     gives the kernel equality. The equality
     $\langle Uz,Ux\rangle=\langle z,x\rangle$ identifies the orthogonal
-    complements. Apply the respective norm estimate to $x$ and $Ux$
-    and use $\|Ux\|=\|x\|$.
+    complements, and applying the respective norm estimate to $x$ and
+    $Ux$ with $\|Ux\|=\|x\|$ completes the equivalence.
 \end{proof}
 
 % Source: References/cond-mat_9410110/main.tex, condition C3, lines 1083--1094;
@@ -543,9 +543,9 @@
     \leanok
     The condition $L>0$ makes the active starts in the two finite sums exactly
     the starts before $p$.  Concatenation gives a bijection between the
-    corresponding start sets in the two volumes.  Apply
+    corresponding start sets in the two volumes, so applying
     Theorem~\ref{thm:local-term-right-spectator-conjugacy} to each summand and
-    then sum over this bijection.
+    summing over this bijection yields the direct-sum decompositions.
 \end{proof}
 
 \begin{theorem}[Fixed-volume C3 ground projections with right spectators]
@@ -605,9 +605,9 @@
         MPSTensor.openIntervalGroundProjectionES_comp_martingaleDifference_at_endpoint}
     \leanok
     \uses{def:fixed-volume-prefix-ground-projections}
-    Suppose that $0<l$ and $l+1\leq N$.  Take interaction length $L=l+1$ and
-    define $E_n=G_n^{(N)}-G_{n+1}^{(N)}$.  Then the two boundary ranges in the
-    fixed $N$-site space are explicit:
+    Suppose that $0<l$ and $l+1\leq N$, with interaction length $L=l+1$ and
+    martingale difference $E_n=G_n^{(N)}-G_{n+1}^{(N)}$.  Then the two
+    boundary ranges in the fixed $N$-site space are explicit:
     \begin{align}
         n<l & \Longrightarrow E_n=0.
         \label{eq:martingale_diff_below_l}
@@ -650,12 +650,12 @@ linear maps on the same ambient space to compare their orthogonal projectors.
     \lean{MPSTensor.prefixRestrictₗ, MPSTensor.prefixRestrictₗ_apply}
     \leanok
     \uses{def:tail_restrict_parent}
-    For $K,L\in\N$ and a fixed suffix configuration $\tau\colon\Fin L\to\Fin d$, the
+    As the left-sided analogue of the suffix restriction of
+    Definition~\ref{def:tail_restrict_parent}, for $K,L\in\N$ and a fixed
+    suffix configuration $\tau\colon\Fin L\to\Fin d$, the
     \emph{prefix restriction} is the $\C$-linear map
     $P_\tau\colon\C^{\Fin d^{K+L}}\to\C^{\Fin d^K}$ defined by
     $(P_\tau\psi)(\sigma)=\psi(\sigma,\tau)$ for $\sigma\colon\Fin K\to\Fin d$.
-    This is the left-sided analogue of the suffix restriction of
-    Definition~\ref{def:tail_restrict_parent}.
 \end{definition}
 
 \begin{lemma}[Prefix restriction of a ground-space vector]\label{lem:prefix_restrict_ground_space_map}
@@ -672,9 +672,9 @@ linear maps on the same ambient space to compare their orthogonal projectors.
 \begin{proof}
     \leanok
     \uses{lem:eval_word_append}
-    Expand $\Gamma_{K+L}(X)(\sigma,\tau)=\tr(A^{\sigma,\tau}X)$,
-    factor $A^{\sigma,\tau}=A^\sigma A^\tau$ by
-    Lemma~\ref{lem:eval_word_append}, and reassociate:
+    Expanding $\Gamma_{K+L}(X)(\sigma,\tau)=\tr(A^{\sigma,\tau}X)$,
+    factoring $A^{\sigma,\tau}=A^\sigma A^\tau$ by
+    Lemma~\ref{lem:eval_word_append}, and reassociating give
     $\tr((A^\sigma A^\tau)X)=\tr(A^\sigma(A^\tau X))
         =\Gamma_K(A^\tau X)(\sigma)$.
 \end{proof}
@@ -732,10 +732,10 @@ linear maps on the same ambient space to compare their orthogonal projectors.
 
 \begin{proof}
     \leanok
-    Unfold the definition of $\Gamma^{\mathrm{tail}}_{K,L}$ on the pair
-    $(u,\tau)=\Fin.\!append\;u\;\tau$, use the decomposition
+    Unfolding $\Gamma^{\mathrm{tail}}_{K,L}$ on the pair
+    $(u,\tau)=\Fin.\!append\;u\;\tau$ with
     $(\Fin.\!append\;u\;\tau)\circ\Fin.\!natAdd\;K=\tau$ and
-    $(\Fin.\!append\;u\;\tau)\circ\Fin.\!castAdd\;L=u$, and apply
+    $(\Fin.\!append\;u\;\tau)\circ\Fin.\!castAdd\;L=u$ gives
     $\Gamma_L(Y_u)(\tau)=\tr(A^\tau Y_u)$.
 \end{proof}
 
@@ -754,8 +754,8 @@ linear maps on the same ambient space to compare their orthogonal projectors.
 \begin{proof}
     \leanok
     \uses{thm:tail_boundary_map_append}
-    This is Theorem~\ref{thm:tail_boundary_map_append} applied pointwise:
-    for each $\tau$, $(R^{\mathrm{tail}}_u\psi)(\tau)=\psi(u,\tau)$.
+    Applying Theorem~\ref{thm:tail_boundary_map_append} pointwise gives
+    $(R^{\mathrm{tail}}_u\psi)(\tau)=\psi(u,\tau)$ for each $\tau$.
 \end{proof}
 
 \begin{theorem}[Tail boundary map factorization]\label{thm:tail_boundary_map_factorization}
@@ -773,13 +773,13 @@ linear maps on the same ambient space to compare their orthogonal projectors.
 \begin{proof}
     \leanok
     \uses{lem:eval_word_append}
-    Write a configuration $\sigma\in\Fin d^{K+L}$ as $\sigma=(u,\tau)$ with
-    $u\in\Fin d^K$ and $\tau\in\Fin d^L$.  Substitute $Y_u=X A^u$ into the
-    definition of $\Gamma^{\mathrm{tail}}_{K,L}$, apply the three-factor
-    trace cycle $\tr(A^\tau(X A^u))=\tr(A^u(A^\tau X))$, reassociate
-    $\tr(A^u(A^\tau X))=\tr((A^u A^\tau)X)$, factor $A^u A^\tau=A^{u,\tau}$
-    by multiplicativity of word evaluation (Lemma~\ref{lem:eval_word_append}),
-    and identify the result with $\Gamma_{K+L}(X)(u,\tau)=\tr(A^{u,\tau}X)$.
+    For a configuration $\sigma=(u,\tau)\in\Fin d^{K+L}$ with
+    $u\in\Fin d^K$ and $\tau\in\Fin d^L$, substituting $Y_u=X A^u$ into the
+    definition of $\Gamma^{\mathrm{tail}}_{K,L}$, cycling the three-factor
+    trace via $\tr(A^\tau(X A^u))=\tr(A^u(A^\tau X))$, reassociating
+    $\tr(A^u(A^\tau X))=\tr((A^u A^\tau)X)$, and factoring $A^u A^\tau=A^{u,\tau}$
+    by multiplicativity of word evaluation (Lemma~\ref{lem:eval_word_append})
+    yield $\Gamma_{K+L}(X)(u,\tau)=\tr(A^{u,\tau}X)$.
 \end{proof}
 
 \begin{theorem}[Tail boundary map range]\label{thm:tail_boundary_map_range_eq}
@@ -822,9 +822,9 @@ linear maps on the same ambient space to compare their orthogonal projectors.
 
 \begin{proof}
     \leanok
-    Unfold the definition of $\Gamma^{\mathrm{left}}_{K,L}$ on the pair
-    $(u,\tau)$, use $(\Fin.\!append\;u\;\tau)\circ\Fin.\!castAdd\;L=u$ and
-    $(\Fin.\!append\;u\;\tau)\circ\Fin.\!natAdd\;K=\tau$, and apply
+    Unfolding $\Gamma^{\mathrm{left}}_{K,L}$ on the pair
+    $(u,\tau)$ with $(\Fin.\!append\;u\;\tau)\circ\Fin.\!castAdd\;L=u$ and
+    $(\Fin.\!append\;u\;\tau)\circ\Fin.\!natAdd\;K=\tau$ gives
     $\Gamma_K(Z_\tau)(u)=\tr(A^u Z_\tau)$.
 \end{proof}
 
@@ -843,8 +843,8 @@ linear maps on the same ambient space to compare their orthogonal projectors.
 \begin{proof}
     \leanok
     \uses{thm:left_boundary_map_append}
-    Pointwise application of Theorem~\ref{thm:left_boundary_map_append}:
-    for each $\sigma$, $(P_\tau\psi)(\sigma)=\psi(\sigma,\tau)$.
+    Applying Theorem~\ref{thm:left_boundary_map_append} pointwise gives
+    $(P_\tau\psi)(\sigma)=\psi(\sigma,\tau)$ for each $\sigma$.
 \end{proof}
 
 \begin{theorem}[Left boundary map factorization]\label{thm:left_boundary_map_factorization}
@@ -862,10 +862,10 @@ linear maps on the same ambient space to compare their orthogonal projectors.
 \begin{proof}
     \leanok
     \uses{lem:eval_word_append}
-    Substitute $Z_\tau=A^\tau X$ into the definition of
-    $\Gamma^{\mathrm{left}}_{K,L}$, giving
-    $\tr(A^u(A^\tau X))=\tr((A^u A^\tau)X)$.  Factor $A^u A^\tau=A^{u,\tau}$ by
-    Lemma~\ref{lem:eval_word_append} and identify the result with
+    Substituting $Z_\tau=A^\tau X$ into the definition of
+    $\Gamma^{\mathrm{left}}_{K,L}$ gives
+    $\tr(A^u(A^\tau X))=\tr((A^u A^\tau)X)$, and factoring
+    $A^u A^\tau=A^{u,\tau}$ by Lemma~\ref{lem:eval_word_append} recovers
     $\Gamma_{K+L}(X)(u,\tau)$.
 \end{proof}
 
@@ -1006,10 +1006,10 @@ linear maps on the same ambient space to compare their orthogonal projectors.
 \begin{proof}
     \leanok
     \uses{def:spectator_boundary_maps_es, thm:tail_boundary_map_range_es_transport, thm:left_boundary_map_range_es_transport, thm:tail_boundary_map_factorization, thm:left_boundary_map_factorization}
-    Map the algebraic range descriptions through the Euclidean
-    identification.  The two factorization identities follow by evaluating a
-    virtual matrix \(X\) fiberwise and applying the corresponding algebraic
-    tail or left factorization.
+    Mapping the algebraic range descriptions through the Euclidean
+    identification gives the two ranges, and evaluating a virtual matrix \(X\)
+    fiberwise with the corresponding algebraic tail or left factorization
+    gives the two factorization identities.
 \end{proof}
 
 \begin{theorem}[Injectivity of the left spectator boundary map]
@@ -1024,8 +1024,9 @@ linear maps on the same ambient space to compare their orthogonal projectors.
 \begin{proof}
     \leanok
     \uses{def:ground_space_map_es, def:spectator_boundary_maps_es, thm:ground_space_map_es_frobenius, def:prefix_restrict}
-    Recover every spectator fiber by restricting to its fixed suffix and use
-    injectivity of the length-$K$ ground-space map.
+    Restricting to each fixed suffix recovers the corresponding spectator
+    fiber, and injectivity of the length-$K$ ground-space map then forces each
+    fiber to vanish.
 \end{proof}
 
 \begin{theorem}[Direct-sum spectator Gram operators]%
@@ -1044,8 +1045,8 @@ linear maps on the same ambient space to compare their orthogonal projectors.
 \end{theorem}
 \begin{proof}
     \leanok
-    Reindex the physical inner product by prefix--suffix configurations and
-    evaluate each fiber.  This gives the direct-sum Gram identities.  Composing
+    Reindexing the physical inner product by prefix--suffix configurations and
+    evaluating each fiber gives the direct-sum Gram identities, and composing
     fiberwise with the local inverse Gram on either side gives the stated
     inverse formulas.
 \end{proof}
@@ -1065,9 +1066,9 @@ linear maps on the same ambient space to compare their orthogonal projectors.
 \end{theorem}
 \begin{proof}
     \leanok
-    Square both sides of the pointwise estimate
-    $\lVert Gx_s\rVert\leq\lVert G\rVert\lVert x_s\rVert$, sum over $s\in S$,
-    and use the Euclidean direct-sum norm identity.
+    Squaring both sides of the pointwise estimate
+    $\lVert Gx_s\rVert\leq\lVert G\rVert\lVert x_s\rVert$, summing over $s\in S$,
+    and applying the Euclidean direct-sum norm identity yield the bound.
 \end{proof}
 
 \begin{theorem}[Exact C3 projector residual identity]%
@@ -1088,9 +1089,10 @@ linear maps on the same ambient space to compare their orthogonal projectors.
 \begin{proof}
     \leanok
     \uses{thm:spectator_boundary_hilbert_factorization}
-    Apply the common-factorization projector identity to the two spectator
-    boundary maps, the full boundary map, and their tail and left virtual maps.
-    These range equalities identify the three physical ranges.
+    Applying the common-factorization projector identity to the two spectator
+    boundary maps, the full boundary map, and their tail and left virtual maps
+    gives the residual formula, and their range equalities identify the three
+    physical ranges.
 \end{proof}
 
 \begin{theorem}[Arbitrary-increment mixed Gram of the overlapping spectator boundary maps]%
@@ -1119,15 +1121,15 @@ linear maps on the same ambient space to compare their orthogonal projectors.
     fixed by
     $\tr(A^{\tau,j}X_u)=\tr(A^\tau(A^jX_u))$ and
     $\tr(A^{u,\tau}Z_j)=\tr(A^\tau(Z_jA^u))$.
-    The one-site identity is the specialization $q=1$.  This identity expresses
-    the algebraic form of condition (C3$'$) in
-    \cite[Equation~(2.5)]{Nachtergaele1996Spectral}.
+    As the algebraic form of condition (C3$'$) in
+    \cite[Equation~(2.5)]{Nachtergaele1996Spectral}, the one-site identity is
+    the specialization $q=1$.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{def:tail_boundary_map, def:left_boundary_map, def:ground_space_gram, lem:eval_word_append, thm:ground_space_map_es_frobenius}
-    Split a physical configuration into a prefix $u$, an overlap word $\tau$
-    of length $l$, and an increment configuration $j$ of length $q$.  The
+    Splitting a physical configuration into a prefix $u$, an overlap word $\tau$
+    of length $l$, and an increment configuration $j$ of length $q$, the
     adjoint relation turns the mixed Gram into the physical inner product of
     the two boundary vectors.  For each $(u,\tau,j)$, word multiplicativity
     and trace cyclicity give
@@ -1171,9 +1173,10 @@ linear maps on the same ambient space to compare their orthogonal projectors.
 \begin{proof}
     \leanok
     \uses{thm:spectator_boundary_mixed_gram, thm:fixed_point_gram_metric_exact}
-    Substitute the exact mixed-Gram formula and the right-multiplication action
-    of $\mathcal K_\infty$, then distribute subtraction through the two finite
-    sums and the second argument of the inner product.
+    Substituting the exact mixed-Gram formula and the right-multiplication
+    action of $\mathcal K_\infty$, and distributing subtraction through the two
+    finite sums and the second argument of the inner product, yields the
+    centered identity.
 \end{proof}
 
 \begin{theorem}[Limiting metric inverse and virtual-map adjoints]%
@@ -1204,8 +1207,8 @@ linear maps on the same ambient space to compare their orthogonal projectors.
 \begin{proof}
     \leanok
     \uses{thm:fixed_point_gram_metric_exact, thm:fixed_point_gram_metric_is_unit}
-    For the tail adjoint, test against an arbitrary matrix $Y$ and use the
-    Hilbert--Schmidt trace pairing fiberwise:
+    Testing against an arbitrary matrix $Y$ with the Hilbert--Schmidt trace
+    pairing fiberwise gives, for the tail adjoint,
     \begin{align}
         \sum_u\langle U(YA^u),U(X_u)\rangle
         =\left\langle U(Y),
@@ -1281,10 +1284,10 @@ linear maps on the same ambient space to compare their orthogonal projectors.
 \begin{proof}
     \leanok
     \uses{thm:c3_spectator_projector_residual, thm:spectator_boundary_direct_sum_gram, thm:spectator_boundary_mixed_gram_centered, thm:fixed_point_gram_metric_exact, thm:limiting_metric_inverse_virtual_adjoints}
-    Add and subtract the product in which all three finite Gram factors are
-    replaced by their limiting values, and telescope the resulting product
-    from left to right.  Substitute the direct-sum Gram and inverse-Gram
-    formulas into the exact projector factorization.
+    Adding and subtracting the product in which all three finite Gram factors
+    are replaced by their limiting values telescopes the product from left to
+    right, and substituting the direct-sum Gram and inverse-Gram formulas into
+    the exact projector factorization gives the physical residual decomposition.
 
     It remains to identify the leading limiting product.  In Frobenius
     coordinates the limiting metric and its inverse act by
@@ -1329,8 +1332,9 @@ linear maps on the same ambient space to compare their orthogonal projectors.
 \begin{proof}
     \leanok
     Cauchy--Schwarz bounds the left-hand side by
-    $\lVert x\rVert\lVert y\rVert$. Apply the weighted arithmetic--geometric
-    mean inequality to $\lVert y\rVert$ and $\lVert x\rVert$.
+    $\lVert x\rVert\lVert y\rVert$, and applying the weighted
+    arithmetic--geometric mean inequality to $\lVert y\rVert$ and
+    $\lVert x\rVert$ gives the inequality.
 \end{proof}
 
 \begin{lemma}[C3 projection-composition estimate]
@@ -1353,9 +1357,9 @@ linear maps on the same ambient space to compare their orthogonal projectors.
 
 \begin{proof}
     \leanok
-    Idempotency gives $QPv=QP(Pv)$. Apply the operator-norm estimate for
-    $QP$ to $Pv$ and square the resulting nonnegative inequality. The
-    hypothesis itself implies $\epsilon\geq0$.
+    Idempotency gives $QPv=QP(Pv)$, and applying the operator-norm estimate
+    for $QP$ to $Pv$ and squaring the resulting nonnegative inequality (with
+    $\epsilon\geq0$ from the hypothesis) gives the bound.
 \end{proof}
 
 \begin{theorem}[Moving-window double counting]
@@ -1382,18 +1386,19 @@ linear maps on the same ambient space to compare their orthogonal projectors.
 
 \begin{proof}
     \leanok
-    Write $k=n-m$. Each pair in the double sum has $0\leq k\leq l$.
+    With $k=n-m$, each pair in the double sum has $0\leq k\leq l$.
     For fixed $k$, the map $n\mapsto n-k$ is injective and has image in
     $\{0,\ldots,N-1\}$. Nonnegativity bounds its contribution by
     $\sum_{m=0}^{N-1}a_m$. Summing over the $l+1$ values of $k$ proves
-    (\ref{eq:moving_window_sum_le}). This is the counting step in the proof of
-    Nachtergaele's Theorem~2.1(i), between Equation~(Enpsi2) and the following
-    summed estimate: for $a_m=\lVert E_m\psi\rVert^2$, each term occurs in at
-    most $l+1$ consecutive windows
-    \cite[Proof of Theorem~2.1(i)]{Nachtergaele1996Spectral}. For
-    (\ref{eq:moving_window_sum_Ico_le}), replace $a_m$ by the sequence that
-    vanishes below $\max\{0,n_0-l\}$ and agrees with $a_m$ above it. Every
-    window with $n\geq n_0$ is unchanged, and the previous bound applied to
+    (\ref{eq:moving_window_sum_le}), which is the counting step in the proof
+    of Nachtergaele's Theorem~2.1(i)
+    \cite[Proof of Theorem~2.1(i)]{Nachtergaele1996Spectral} between
+    Equation~(Enpsi2) and the following summed estimate: for
+    $a_m=\lVert E_m\psi\rVert^2$, each term occurs in at most $l+1$
+    consecutive windows. For
+    (\ref{eq:moving_window_sum_Ico_le}), replacing $a_m$ by the sequence that
+    vanishes below $\max\{0,n_0-l\}$ and agrees with $a_m$ above it leaves every
+    window with $n\geq n_0$ unchanged, and the previous bound applied to
     the replacement sequence gives the claim.
 \end{proof}
 
@@ -1454,12 +1459,13 @@ linear maps on the same ambient space to compare their orthogonal projectors.
     $l\leq n_0$ and the omitted local terms are nonnegative. Thus a
     source-derived application chooses $n_0$ above both $l$ and the C2--C3
     onset. If $n_0<l$, the displayed C1 inequality is instead an independent
-    stronger assumption. The coefficient of the martingale mass above the
-    threshold is exactly the one in Theorem~2.1(i) of
-    \cite{Nachtergaele1996Spectral}. The correction is an explicit upper bound
+    stronger assumption. As in Theorem~2.1(i) of
+    \cite{Nachtergaele1996Spectral}, the coefficient of the martingale mass
+    above the threshold is $(\gamma_{l+1}/d_{l+1})(1-\epsilon_l\sqrt{l+1})^2$,
+    while the correction provides an explicit upper bound
     for the contribution of the at most $l$ martingale differences immediately
-    below the threshold; it uses multiplicity $l+1$ uniformly. At $n_0=0$ the
-    correction is an empty sum.
+    below the threshold using multiplicity $l+1$ uniformly (an empty sum at
+    $n_0=0$).
 \end{theorem}
 
 \begin{proof}
@@ -1470,15 +1476,16 @@ linear maps on the same ambient space to compare their orthogonal projectors.
         lem:nachtergaele_weighted_inner_product,
         lem:nachtergaele_c3_projection_composition,
         thm:moving_window_sum_le}
-    Write $P=\sum_{n=n_0}^{N-1}\lVert E_nv\rVert^2$ and
-    $S=\sum_{m=\max\{0,n_0-l\}}^{n_0-1}\lVert E_mv\rVert^2$. The martingale
+    With $P=\sum_{n=n_0}^{N-1}\lVert E_nv\rVert^2$ and
+    $S=\sum_{m=\max\{0,n_0-l\}}^{n_0-1}\lVert E_mv\rVert^2$, the martingale
     resolution $v=\sum_{n=0}^{N-1}E_nv$ and outside-window cancellation
     reduce the identity labelled \textup{Enpsi} at index $n$ to the active
     window $m\in[n-l,n]$; this uses only $n<N$, so it is available for every
-    $n\geq n_0$. Apply the weighted inner-product estimate with positive
-    parameters $c_1,c_2$, then C2 and C3, and sum over $n_0\leq n<N$. The
-    martingale differences are mutually orthogonal, so each window norm
-    square splits into its summands, and
+    $n\geq n_0$. Applying the weighted inner-product estimate with positive
+    parameters $c_1,c_2$, followed by C2 and C3, and summing over
+    $n_0\leq n<N$, the mutual orthogonality of the
+    martingale differences splits each window norm
+    square into its summands, and
     (\ref{eq:moving_window_sum_Ico_le}) bounds the resulting double sum by
     $(l+1)(S+P)$. With C1 this gives
     \begin{align}
@@ -1487,18 +1494,18 @@ linear maps on the same ambient space to compare their orthogonal projectors.
         \frac{d_{l+1}}{c_1\gamma_{l+1}}\re\langle Hv,v\rangle
         +(l+1)c_2S.
     \end{align}
-    For $\epsilon_l>0$, take $c_1=1-\epsilon_l\sqrt{l+1}$ and
-    $c_2=\epsilon_l/\sqrt{l+1}$, so that
-    $\epsilon_l^2/c_2=(l+1)c_2=\epsilon_l\sqrt{l+1}$ and the left factor is
+    For $\epsilon_l>0$, choosing $c_1=1-\epsilon_l\sqrt{l+1}$ and
+    $c_2=\epsilon_l/\sqrt{l+1}$ gives
+    $\epsilon_l^2/c_2=(l+1)c_2=\epsilon_l\sqrt{l+1}$ and makes the left factor
     $1-\epsilon_l\sqrt{l+1}$. Multiplying by
     $c_1\gamma_{l+1}/d_{l+1}$ gives
     (\ref{eq:nachtergaele_c1_c3_threshold_energy_estimate}). If
-    $\epsilon_l=0$, then $c_2=0$ is not an admissible weighted parameter. In
-    that case C3 instead gives $Q_nE_n=0$, so the second inner product in
-    \textup{Enpsi} vanishes; applying only the first weighted estimate with
+    $\epsilon_l=0$, then $c_2=0$ is not an admissible weighted parameter; as
+    documented in \cite{gap:cpgsv21_martingale_overlap},
+    C3 instead gives $Q_nE_n=0$ so that the second inner product in
+    \textup{Enpsi} vanishes, and applying only the first weighted estimate with
     $c_1=1$ yields $P\leq(d_{l+1}/\gamma_{l+1})\re\langle Hv,v\rangle$,
-    which is the same formula because the correction term vanishes. This
-    repair is documented in \cite{gap:cpgsv21_martingale_overlap}.
+    which matches the general formula because the correction term vanishes.
 \end{proof}
 
 % Source: References/cond-mat_9410110/main.tex, the definition of E_n at
@@ -1541,26 +1548,25 @@ linear maps on the same ambient space to compare their orthogonal projectors.
     $0\leq\sum_{n=l}^{N-1}\re\langle H_nx,x\rangle
         \leq d_{l+1}\re\langle Hx,x\rangle$ at $M=N$, and its non-negativity
     clause $0\leq\sum_{n=l}^{n_0-1}\re\langle H_nx,x\rangle$ at $M=n_0$.
-    Assume in addition that $E_nv=0$ for every $n<n_0$. Then
+    Assume in addition that $E_nv=0$ for every $n<n_0$. Then, as in the
+    conclusion of Theorem~2.1(i) of \cite{Nachtergaele1996Spectral} with each
+    of C1, C2, and C3 imposed on its source range,
     \begin{align}
         \frac{\gamma_{l+1}}{d_{l+1}}
         \left(1-\epsilon_l\sqrt{l+1}\right)^2\lVert v\rVert^2
          & \leq\re\langle Hv,v\rangle.
         \label{eq:nachtergaele_c1_c3_below_threshold_energy_estimate}
     \end{align}
-    This is the conclusion of Theorem~2.1(i) of
-    \cite{Nachtergaele1996Spectral} with each of C1, C2, and C3 imposed on the
-    range at which the source imposes it. The added
-    vanishing hypothesis is the minimal repair of that theorem: the two
+    As recorded in \cite{gap:nachtergaele96_theorem_2_1_lower_endpoint}, the
+    added vanishing hypothesis is the minimal repair of that theorem: the two
     below-threshold quantities in
     (\ref{eq:nachtergaele_c1_c3_threshold_energy_estimate}) enter
     (\ref{eq:nachtergaele_c1_c3_below_threshold_energy_estimate}) with
     non-negative weights, so both have to vanish, and the vanishing of the
-    omitted martingale mass forces the vanishing of the window correction.
-    Without the added hypothesis the statement is false, by
-    Theorem~\ref{thm:nachtergaele_threshold_conditions_insufficient}. The
-    source defect and the repair are recorded in
-    \cite{gap:nachtergaele96_theorem_2_1_lower_endpoint}.
+    omitted martingale mass forces the vanishing of the window correction;
+    without the added hypothesis,
+    Theorem~\ref{thm:nachtergaele_threshold_conditions_insufficient} shows
+    that the statement is false.
 \end{theorem}
 
 \begin{proof}
@@ -1630,8 +1636,8 @@ linear maps on the same ambient space to compare their orthogonal projectors.
 
 \begin{proof}
     \leanok
-    Fix an orthonormal basis $e_0,\ldots,e_{k+1}$ and let every operator be
-    diagonal in it. The first $N=k+1$ basis vectors carry the single
+    Fix an orthonormal basis $e_0,\ldots,e_{k+1}$ in which every operator is
+    diagonal. The first $N=k+1$ basis vectors carry the single
     excitations of a chain of $N$ sites and the last carries its ground state.
     Let $G_n$ have weight $1$ at $e_i$ when $n\leq i$ and weight $0$
     otherwise, so that $G_0=\mathbf 1$, $G_{N+1}=0$ because no basis vector
@@ -1642,9 +1648,9 @@ linear maps on the same ambient space to compare their orthogonal projectors.
     weight $c_i$ at $e_i$ when $i<M$ and weight $0$ otherwise, let $H_n$ have
     weight $c_n$ at $e_n$ and weight $0$
     elsewhere, and let $Q_n=\mathbf 1-E_n$, which is nonzero because the space
-    has dimension at least two. All operators are diagonal, so the required
-    commutations hold, and $Q_nE_n=0$ gives condition C3 with $\epsilon_0=0$.
-    Summing $H_n$ over the C1 range $0\leq n<M$ gives $H_{\Lambda_M}$ exactly,
+    has dimension at least two. Diagonal structure ensures the required
+    commutations, and $Q_nE_n=0$ gives condition C3 with $\epsilon_0=0$.
+    Summing $H_n$ over the C1 range $0\leq n<M$ gives $H_{\Lambda_M}$ exactly
     at every $M$, and the weights $c_i$ are nonnegative, so condition C1 holds
     at every volume with the single constant $d_1=1$ and with equality in its
     upper bound. Since $c_i\neq0$ for $i\leq k$, the kernel of
@@ -1655,10 +1661,10 @@ linear maps on the same ambient space to compare their orthogonal projectors.
     so
     $\lVert(\mathbf 1-Q_n)x\rVert^2=\lVert E_nx\rVert^2$ equals
     $\re\langle H_nx,x\rangle$, which is condition C2 with $\gamma_1=1$.
-    Take $v=e_0$. Then $v\perp\operatorname{ran}(G_N)$, the line through
-    $e_{k+1}$, and $\re\langle H_{\Lambda_N}v,v\rangle=c_0=\tfrac12$, while
-    $\lVert v\rVert^2=1$, which
-    is (\ref{eq:nachtergaele_threshold_conditions_insufficient}). The whole
+    For $v=e_0$, the vector $v$ is orthogonal to $\operatorname{ran}(G_N)$, the line through
+    $e_{k+1}$, and $\re\langle H_{\Lambda_N}v,v\rangle=c_0=\tfrac12$ while
+    $\lVert v\rVert^2=1$, giving
+    (\ref{eq:nachtergaele_threshold_conditions_insufficient}). The whole
     martingale mass of $v$ sits at the index $n=0$, which C1 covers while C2
     and C3 exclude it, and it is at that index that C2 fails.
 \end{proof}
@@ -1710,28 +1716,26 @@ linear maps on the same ambient space to compare their orthogonal projectors.
     \end{align}
     This full-range statement is stronger than the unrestricted source
     theorem in general. It assumes C1, C2, and C3 for every $0\leq n<N$,
-    whereas the source imposes lower thresholds on these conditions. Those
+    whereas the source imposes lower thresholds on these conditions. By
+    Theorem~\ref{thm:nachtergaele_threshold_conditions_insufficient}, those
     thresholds cannot simply be dropped: without separate control of the
     initial volumes the source hypotheses imply neither the assumptions above
-    nor the conclusion, by
-    Theorem~\ref{thm:nachtergaele_threshold_conditions_insufficient}. The
-    coefficient is exactly the one in Theorem~2.1(i) of
-    \cite{Nachtergaele1996Spectral}: $\gamma_{l+1}/d_{l+1}$ times
-    $(1-\epsilon_l\sqrt{l+1})^2$. This is
-    Theorem~\ref{thm:nachtergaele_c1_c3_threshold_energy_estimate} at
-    threshold $n_0=0$, where nothing lies below the threshold.
+    nor the conclusion. Specializing
+    Theorem~\ref{thm:nachtergaele_c1_c3_threshold_energy_estimate} to
+    threshold $n_0=0$, where nothing lies below the threshold, recovers the
+    exact coefficient $(\gamma_{l+1}/d_{l+1})(1-\epsilon_l\sqrt{l+1})^2$ of
+    Theorem~2.1(i) in \cite{Nachtergaele1996Spectral}.
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{thm:nachtergaele_c1_c3_threshold_energy_estimate,
         thm:martingale-difference-final-complement-norm-decomposition}
-    Apply
-    Theorem~\ref{thm:nachtergaele_c1_c3_threshold_energy_estimate} with
-    $n_0=0$ and the given window length $l$. Its window correction is a sum
-    over an empty range, hence zero, and its martingale mass over
-    $0\leq n<N$ is $\lVert v\rVert^2$ by the Pythagorean decomposition of a
-    vector orthogonal to $\operatorname{ran}(G_N)$. What remains is
+    In Theorem~\ref{thm:nachtergaele_c1_c3_threshold_energy_estimate} with
+    $n_0=0$ and the given window length $l$, the window correction is a sum
+    over an empty range, hence zero, and the martingale mass over
+    $0\leq n<N$ equals $\lVert v\rVert^2$ by the Pythagorean decomposition of a
+    vector orthogonal to $\operatorname{ran}(G_N)$, which leaves
     (\ref{eq:nachtergaele_c1_c3_full_range_energy_estimate}).
 \end{proof}
 
@@ -1754,9 +1758,10 @@ linear maps on the same ambient space to compare their orthogonal projectors.
     \begin{align}
         \kappa\lVert v\rVert^2
          & \leq\re\langle Hv,v\rangle
-        \leq\lVert Hv\rVert\lVert v\rVert.
+        \leq\lVert Hv\rVert\lVert v\rVert,
     \end{align}
-    The claim is immediate for $v=0$; otherwise cancel $\lVert v\rVert$.
+    which is immediate for $v=0$ and yields the bound after dividing by
+    $\lVert v\rVert$ when $v\neq0$.
 \end{proof}
 
 \begin{theorem}[Norm gap from the full-range C1--C3 estimate]
@@ -1781,23 +1786,21 @@ linear maps on the same ambient space to compare their orthogonal projectors.
     \uses{thm:nachtergaele_c1_c3_full_range_energy_estimate,
         thm:energy_form_to_norm_bound,
         lem:quadratic_form_to_norm_bound}
-    Denote the coefficient in
-    (\ref{eq:nachtergaele_c1_c3_full_range_norm_gap}) by $\kappa$.
-    For an
-    arbitrary $x$, remove its orthogonal projection onto $\ker H$ and call the
-    remainder $w$. Then $Hx=Hw$ and
+    Let $\kappa$ denote the coefficient in
+    (\ref{eq:nachtergaele_c1_c3_full_range_norm_gap}), and for an
+    arbitrary $x$ let $w$ be the remainder after subtracting its orthogonal
+    projection onto $\ker H$. Then $Hx=Hw$ and
     $\re\langle Hx,x\rangle=\re\langle Hw,w\rangle$. The energy estimate and
     Theorem~\ref{thm:energy_form_to_norm_bound} give
-    $\kappa\lVert w\rVert\leq\lVert Hx\rVert$. Hence Cauchy--Schwarz gives
+    $\kappa\lVert w\rVert\leq\lVert Hx\rVert$, so Cauchy--Schwarz yields
     \begin{align}
         \kappa\,\re\langle Hx,x\rangle
          & \leq \kappa\lVert Hx\rVert\lVert w\rVert
         \leq \lVert Hx\rVert^2.
     \end{align}
-    Thus the hypothesis of
-    Lemma~\ref{lem:quadratic_form_to_norm_bound} holds globally. The
-    finite-dimensional quadratic-form criterion then yields the stated norm
-    bound.
+    This global quadratic-form bound satisfies the hypothesis of
+    Lemma~\ref{lem:quadratic_form_to_norm_bound}, whose finite-dimensional
+    criterion yields the stated norm bound.
 \end{proof}
 
 \begin{theorem}[Martingale criterion for a finite family of projections]
@@ -1871,12 +1874,13 @@ linear maps on the same ambient space to compare their orthogonal projectors.
 
 \begin{proof}
     \leanok
-    Remove the component of $v$ in the common intersection $W$; both
-    excitation projections are unchanged. If $\eta\le1$, apply
+    Removing the component of $v$ in the common intersection $W$ leaves both
+    excitation projections unchanged. For $\eta\le1$, applying
     (\ref{eq:ph_reduced_friedrichs_overlap}) to the reduced ground-space
-    components $q_Uv$ and $q_Vv$, and combine the resulting principal-angle
+    components $q_Uv$ and $q_Vv$ and combining the resulting principal-angle
     estimate with the orthogonal decompositions
-    $v=q_Uv+h_Uv=q_Vv+h_Vv$. If $\eta>1$, the same conclusion follows from
+    $v=q_Uv+h_Uv=q_Vv+h_Vv$ yields the stated anticommutator bound. For
+    $\eta>1$, the same conclusion follows from
     the universal overlap bound with coefficient $1$ and the non-negativity
     of the two diagonal excitation forms.
 \end{proof}
@@ -1913,9 +1917,9 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
          & =\sum_{i\in I_{L,N}}h_{i,\mathrm{ES}}(A,L).
         \label{eq:open_parent_hamiltonian_es}
     \end{align}
-    Thus no summand crosses the two endpoints of the interval. For
-    $L=l+1$, the starting sites are $0,\ldots,N-l-1$, in agreement with
-    \cite[Equation~(3.12)]{Nachtergaele1996Spectral}.
+    Thus no summand crosses the two endpoints of the interval; for
+    $L=l+1$ in \cite[Equation~(3.12)]{Nachtergaele1996Spectral}, the starting
+    sites are $0,\ldots,N-l-1$.
 \end{definition}
 
 \begin{theorem}[Full-window compatible interaction]
@@ -1974,9 +1978,9 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
         \lVert v\rVert
          & \leq\lVert H^{\mathrm{open}}_{L,L}(A)v\rVert.
     \end{align}
-    Thus $\gamma_{l+1}=1$ at the full-window volume $N=L=l+1$ in
-    \cite[Theorem~2.1(i)]{Nachtergaele1996Spectral}. This neither asserts that
-    the excited subspace is nonzero nor gives a gap for any $N>L$.
+    In \cite[Theorem~2.1(i)]{Nachtergaele1996Spectral}, this gives
+    $\gamma_{l+1}=1$ at the full-window volume $N=L=l+1$, without asserting
+    that the excited subspace is nonzero or giving a gap for any $N>L$.
 \end{theorem}
 
 \begin{proof}
@@ -2094,15 +2098,15 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
         \label{eq:open_parent_hamiltonian_es_c1}
     \end{align}
     Thus condition C1 of
-    \cite{Nachtergaele1996Spectral} holds with $d_l=l-L+1$.
-    This is the source value $pl-r+1$ in the present convention $p=1$ and
+    \cite{Nachtergaele1996Spectral} holds with $d_l=l-L+1$, matching
+    the source value $pl-r+1$ in the present convention $p=1$ and
     interaction range $r=L$.
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{lem:transported_es_positive}
-    Fix a starting site $i\in I_{L,N}$. The suffix Hamiltonian indexed by $n$
+    For a fixed starting site $i\in I_{L,N}$, the suffix Hamiltonian indexed by $n$
     contains its local term exactly when
     \begin{align}
         i+L\leq n\leq i+l.
@@ -2113,7 +2117,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
         \sum_{i\in I_{L,N}}c_i h_{i,\mathrm{ES}}(A,L),
     \end{align}
     where $0\leq c_i\leq l-L+1$. Positivity of each local term turns the
-    coefficient bound into the upper operator inequality. Positivity of their
+    coefficient bound into the upper operator inequality, and positivity of their
     sum gives the lower inequality.
 \end{proof}
 
@@ -2143,9 +2147,9 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
         thm:open_suffix_parent_hamiltonian_range_shift,
         lem:fixed-volume-hamiltonians-positive}
     The shift identity (\ref{eq:open_suffix_parent_hamiltonian_range_shift}) rewrites the
-    sum over the interval $L\leq n\leq N$.  Apply
-    Theorem~\ref{thm:open_parent_hamiltonian_es_c1} with suffix length $L$.
-    Each interaction then occurs once, since $L-L+1=1$.  Positivity of the
+    sum over the interval $L\leq n\leq N$, and applying
+    Theorem~\ref{thm:open_parent_hamiltonian_es_c1} with suffix length $L$
+    counts each interaction once because $L-L+1=1$.  Positivity of the
     suffix Hamiltonians gives the lower bound.
 \end{proof}
 
@@ -2400,15 +2404,14 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
     \leanok
     \uses{def:open_parent_hamiltonian_es, def:ground_space_parent,
         rem:cyclic_window_operators}
-    Let $L\le N$. If $H^{\mathrm{open}}_{N,L}(A)v=0$, then for every
-    nonwrapping start $s$ with $s+L\le N$ and every complementary
-    configuration $\tau$,
+    Let $L\le N$. As in the frustration-free extraction of
+    \cite[Equation~(3.12)]{Nachtergaele1996Spectral}, if
+    $H^{\mathrm{open}}_{N,L}(A)v=0$, then for every nonwrapping start $s$
+    with $s+L\le N$ and every complementary configuration $\tau$,
     \begin{align}
         \Res^\tau_{s,L}v & \in G_L(A).
         \notag
     \end{align}
-    This is the frustration-free extraction in
-    \cite[Equation~(3.12)]{Nachtergaele1996Spectral}.
 \end{theorem}
 
 \begin{proof}
@@ -2453,24 +2456,26 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
     \lean{MPSTensor.ker_openParentHamiltonianES_eq_groundSpaceES_of_isNBlkInjective}
     \leanok
     \uses{def:open_parent_hamiltonian_es, def:ground_space_es, def:l_blk_injective}
-    Assume $D\geq1$, $L_0>0$, and $N\geq L_0+1$. If $A$ is
+    Assume $D\geq1$, $L_0>0$, and $N\geq L_0+1$. As the canonical MPS
+    instance of the ground-state property in
+    \cite[Equation~(3.13)]{Nachtergaele1996Spectral}, if $A$ is
     $L_0$-block-injective, then
     \begin{align}
         \ker H^{\mathrm{open}}_{N,L_0+1}(A)
          & =G_N^{\mathrm{ES}}(A).
         \label{eq:open_parent_hamiltonian_kernel_ground_space}
     \end{align}
-    This is the canonical MPS instance of the ground-state property in
-    \cite[Equation~(3.13)]{Nachtergaele1996Spectral}. The right-hand side is
-    the open boundary-condition space and may therefore be degenerate.
+    The right-hand side is the open boundary-condition space and may
+    therefore be degenerate.
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{thm:open_ground_space_le_hamiltonian_kernel, thm:open_hamiltonian_kernel_le_ground_space}
-    Combine the mutual inclusions
+    Combining the mutual inclusions of
     Theorem~\ref{thm:open_ground_space_le_hamiltonian_kernel} and
-    Theorem~\ref{thm:open_hamiltonian_kernel_le_ground_space}.
+    Theorem~\ref{thm:open_hamiltonian_kernel_le_ground_space} gives the
+    equality.
 \end{proof}
 
 \begin{theorem}[Open-boundary states span the local ground space]
@@ -2478,15 +2483,15 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
     \lean{MPSTensor.groundSpaceMap_vecMulVec, MPSTensor.groundSpace_eq_span_openState}
     \leanok
     \uses{def:ground_space_parent, def:ground_space_map, def:open_state}
-    For every tensor $A$ and every $L$, the local ground space $G_{L}(A)$ is
-    spanned by the open-boundary states
+    For every tensor $A$ and every $L$, let $(l|$ and $|r)$ denote the
+    boundary vectors on both sides of \cite[line~1174]{Cirac2021Matrix},
+    written with the bilinear pairing. Then the local ground space
+    $G_{L}(A)$ is spanned by the open-boundary states
     \begin{align}
         \sigma\longmapsto(l|A^{\sigma}|r),
         \qquad ((l|,|r))\in\C^{D}\times\C^{D}.
         \notag
     \end{align}
-    Here $(l|$ and $|r)$ are the boundary vectors on both sides of
-    \cite[line~1174]{Cirac2021Matrix}, written with the bilinear pairing.
 \end{theorem}
 
 \begin{proof}
@@ -2509,16 +2514,16 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
         \dim\ker H^{\mathrm{open}}_{N,L_{0}+1}(A) & =D^{2}.
         \notag
     \end{align}
-    The local support spaces of a pure generalized valence-bond-solid state with
-    auxiliary algebra $\MN{k}$ have dimension $k^{2}$ on long intervals, and
-    they are the kernels of the open-interval Hamiltonian
-    \cite[lines~1505--1510 and 1545--1558]{Nachtergaele1996Spectral}; the
-    growth argument on an open chain is
-    \cite[lines~1211--1233]{PerezGarcia2007Matrix}. The review states that
-    the open-boundary degeneracy is at least the square of the dimension of
-    the irreducible projective representation carried by the boundary
-    \cite[line~1174]{Cirac2021Matrix}. That dimension is at most $D$, so the
-    exact count $D^{2}$ is sharper than the review's lower bound.
+    In \cite[lines~1505--1510 and 1545--1558]{Nachtergaele1996Spectral}, the
+    local support spaces of a pure generalized valence-bond-solid state with
+    auxiliary algebra $\MN{k}$ have dimension $k^{2}$ on long intervals and
+    coincide with the kernels of the open-interval Hamiltonian, while the
+    growth argument on an open chain appears in
+    \cite[lines~1211--1233]{PerezGarcia2007Matrix}. Whereas
+    \cite[line~1174]{Cirac2021Matrix} states that the open-boundary degeneracy
+    is at least the square of the dimension of the irreducible projective
+    representation carried by the boundary, that dimension is at most $D$, so
+    the exact count $D^{2}$ is sharper than the review's lower bound.
 \end{theorem}
 
 \begin{proof}
@@ -2574,7 +2579,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
     \leanok
     \uses{lem:ground_space_in_tail_ground}
     Every fixed-prefix suffix restriction of a whole-chain ground-space vector
-    is a ground-space vector on the suffix.  This is exactly membership in
+    is a ground-space vector on the suffix, which is exactly membership in
     $\mathcal V_{K,l+1}(A)$.
 \end{proof}
 
@@ -2622,10 +2627,10 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 \begin{proof}
     \leanok
     \uses{def:open_chain_martingale_difference_es, lem:reverse_c3_projector_composition}
-    Distribute the tail projector over
-    $E_n=G_{\Lambda_n}-G_{\Lambda_{n+1}}$.  The second product is
-    $G_{\Lambda_{n+1}}$ by
-    Lemma~\ref{lem:reverse_c3_projector_composition}, which gives the displayed
+    Distributing the tail projector over
+    $E_n=G_{\Lambda_n}-G_{\Lambda_{n+1}}$ and simplifying the second product
+    to $G_{\Lambda_{n+1}}$ by
+    Lemma~\ref{lem:reverse_c3_projector_composition} gives the displayed
     identity.
 \end{proof}
 
@@ -2694,13 +2699,13 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
          & \leq \sum_{i,j}\left\lvert
         \mathcal E_A^K(\mathbf 1)_{ij}\right\rvert^2.
     \end{align}
-    For $K\geq1$, decompose the transfer power into its fixed-point projection
-    and the $K$-th power of the complementary map.  The complementary powers
-    are geometrically bounded by
-    Theorem~\ref{thm:geometric_bound_of_spectral_radius_lt_one}, while the
-    entrywise mass is controlled by the $L^2$ operator norm with the virtual
-    dimension factor from
-    Theorem~\ref{thm:sum_entry_norm_sq_le_card_mul_l2_operator_norm_sq}.
+    For $K\geq1$, decomposing the transfer power into its fixed-point projection
+    and the $K$-th power of the complementary map bounds the complementary
+    powers geometrically by
+    Theorem~\ref{thm:geometric_bound_of_spectral_radius_lt_one}, while
+    Theorem~\ref{thm:sum_entry_norm_sq_le_card_mul_l2_operator_norm_sq}
+    controls the entrywise mass by the $L^2$ operator norm with the virtual
+    dimension factor.
     The case $K=0$ is bounded directly.  This first gives a uniform bound for
     $\lVert J_K\rVert^4$ and hence a strictly positive uniform bound for
     $\lVert J_K\rVert$.  No FNW or Nachtergaele contraction estimate enters.
@@ -2721,9 +2726,10 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 \begin{proof}
     \leanok
     \uses{def:eval_word}
-    Induct on $Q$.  Split a word of length $Q+1$ into its first letter and
-    its remaining suffix, apply the induction hypothesis to the suffix sum,
-    and then use left-canonicity for the outer one-site sum.
+    Proceeding by induction on $Q$, splitting a word of length $Q+1$ into its
+    first letter and its remaining suffix, applying the induction hypothesis
+    to the suffix sum, and invoking left-canonicity for the outer one-site sum
+    yield the identity.
 \end{proof}
 
 \begin{theorem}[Whole-increment left virtual norm]
@@ -2743,9 +2749,10 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 \begin{proof}
     \leanok
     \uses{thm:word_left_canonical_normalization}
-    Expand the squared norm as a sum over $j\in\Omega_Q$.  The identity from
-    Theorem~\ref{thm:word_left_canonical_normalization} reduces the sum to the
-    Hilbert--Schmidt norm of $X$.  The operator-norm bound follows immediately.
+    Expanding the squared norm as a sum over $j\in\Omega_Q$ and applying
+    Theorem~\ref{thm:word_left_canonical_normalization} reduce the sum to the
+    Hilbert--Schmidt norm of $X$, from which the operator-norm bound follows
+    immediately.
 \end{proof}
 
 \begin{definition}[Physical reassociation]
@@ -2776,9 +2783,9 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 \begin{proof}
     \leanok
     \uses{def:whole_increment_physical_reassociation, def:ground_space_map_es}
-    Evaluate both sides at a physical word.  Reassociation changes only the
-    parenthesization of its coordinate set, so both coefficients are the trace
-    pairing with the same word product.
+    Evaluating both sides at a physical word shows that reassociation changes
+    only the parenthesization of its coordinate set, so both coefficients are
+    the trace pairing with the same word product.
 \end{proof}
 
 \begin{definition}[Reassociated tail boundary map]
@@ -2866,8 +2873,9 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 \begin{proof}
     \leanok
     \uses{def:reassociated_tail_boundary_map, thm:spectator_boundary_hilbert_factorization, thm:whole_increment_ground_space_reassociation}
-    Substitute the definition of the reassociated tail map, use the ordinary
-    tail factorization, and then reassociate the full boundary map.
+    Substituting the definition of the reassociated tail map, applying the
+    ordinary tail factorization, and reassociating the full boundary map
+    establish the identity.
 \end{proof}
 
 \begin{theorem}[Whole-increment inverse-Gram projector residual]
@@ -2887,9 +2895,9 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 \begin{proof}
     \leanok
     \uses{thm:reassociated_tail_boundary_factorization, thm:spectator_boundary_hilbert_factorization}
-    Apply the common-factorization range-projector identity to $T$, $S$, and
-    $C$, using the two displayed factorizations.  No canonicality or norm
-    estimate is used.
+    Applying the common-factorization range-projector identity to $T$, $S$, and
+    $C$ with the two displayed factorizations yields the residual formula
+    without any canonicality or norm estimate.
 \end{proof}
 
 \begin{theorem}[Whole-increment mixed Gram after reassociation]
@@ -2911,9 +2919,9 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 \begin{proof}
     \leanok
     \uses{def:reassociated_tail_boundary_map, def:whole_increment_physical_reassociation, thm:spectator_boundary_mixed_gram}
-    Expand the reassociated tail map.  Its adjoint introduces
-    $\mathscr A_{K,L,Q}^{-1}$, so the coordinate formula of
-    Theorem~\ref{thm:spectator_boundary_mixed_gram} applies.
+    Expanding the reassociated tail map introduces $\mathscr A_{K,L,Q}^{-1}$ in
+    its adjoint, so the coordinate formula of
+    Theorem~\ref{thm:spectator_boundary_mixed_gram} applies directly.
 \end{proof}
 
 \begin{theorem}[Centered whole-increment mixed Gram]
@@ -2938,8 +2946,9 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 \begin{proof}
     \leanok
     \uses{thm:whole_increment_mixed_gram, thm:fixed_point_gram_metric_exact}
-    Substitute the reassociated mixed-Gram formula and the action of the
-    limiting metric, then distribute subtraction over the finite sums.
+    Substituting the reassociated mixed-Gram formula and the action of the
+    limiting metric, and distributing subtraction over the finite sums, yield
+    the centered identity.
 \end{proof}
 
 \begin{definition}[Whole-increment left overlap factor]
@@ -2973,7 +2982,8 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 \begin{proof}
     \leanok
     \uses{def:whole_increment_left_overlap_factor}
-    Unfold the direct-sum factor and the Frobenius coordinate identification.
+    Unfolding the direct-sum factor and the Frobenius coordinate identification
+    gives $A^jX_u$.
 \end{proof}
 
 \begin{theorem}[Fiber formula for the whole-increment right factor]
@@ -2987,7 +2997,8 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 \begin{proof}
     \leanok
     \uses{def:whole_increment_right_overlap_factor}
-    Unfold the direct-sum factor and the Frobenius coordinate identification.
+    Unfolding the direct-sum factor and the Frobenius coordinate identification
+    gives $Z_jA^u$.
 \end{proof}
 
 \begin{theorem}[Norm bounds for the whole-increment overlap factors]
@@ -3006,9 +3017,9 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 \begin{proof}
     \leanok
     \uses{def:whole_increment_left_overlap_factor, def:whole_increment_right_overlap_factor}
-    Expand the squared direct-sum norms fiberwise and apply the operator-norm
-    bound to each fiber.  Summing gives the two inequalities without a factor
-    depending on the number of spectator words.
+    Expanding the squared direct-sum norms fiberwise and applying the
+    operator-norm bound to each fiber give the two inequalities upon summation,
+    without any factor depending on the number of spectator words.
 \end{proof}
 
 \begin{definition}[Whole-increment centered residual]
@@ -3044,8 +3055,9 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 \begin{proof}
     \leanok
     \uses{def:whole_increment_centered_residual, thm:whole_increment_left_overlap_factor_apply, thm:whole_increment_right_overlap_factor_apply, thm:whole_increment_mixed_gram_centered}
-    Test both sides against arbitrary boundary families, use the two fiber
-    formulas, and apply the centered mixed-Gram identity.
+    Testing both sides against arbitrary boundary families with the two fiber
+    formulas and the centered mixed-Gram identity establishes the
+    factorization.
 \end{proof}
 
 \begin{theorem}[Whole-increment centered residual bound]
@@ -3065,8 +3077,8 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 \begin{proof}
     \leanok
     \uses{thm:whole_increment_centered_factorization, thm:whole_increment_overlap_factor_norms, thm:boundary_fiberwise_map_norm}
-    Apply submultiplicativity to the three factors and use the operator norm of
-    a fiberwise direct sum.
+    Submultiplicativity across the three factors and the operator norm of a
+    fiberwise direct sum yield the inequality.
 \end{proof}
 
 \begin{theorem}[Left-canonical whole-increment centered residual bound]
@@ -3085,9 +3097,9 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 \begin{proof}
     \leanok
     \uses{thm:whole_increment_centered_residual_bound, thm:whole_increment_left_virtual_norm}
-    Substitute $\lVert J_Q^{\mathrm{left}}\rVert\leq1$ from
+    Substituting $\lVert J_Q^{\mathrm{left}}\rVert\leq1$ from
     Theorem~\ref{thm:whole_increment_left_virtual_norm} into
-    Theorem~\ref{thm:whole_increment_centered_residual_bound}.
+    Theorem~\ref{thm:whole_increment_centered_residual_bound} gives the bound.
 \end{proof}
 
 \begin{theorem}[Primitive whole-increment centered residual bound]
@@ -3103,8 +3115,9 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 \begin{proof}
     \leanok
     \uses{def:primitive_mps, thm:whole_increment_centered_residual_bound_left_canonical}
-    Use the left-canonical normalization contained in the primitive-MPS
-    hypotheses together with positive definiteness of $\rho$.
+    The left-canonical normalization contained in the primitive-MPS
+    hypotheses together with positive definiteness of $\rho$ satisfies the
+    left-canonical centered residual hypotheses.
 \end{proof}
 
 \begin{definition}[Common overlap factors and centered residual]
@@ -3199,16 +3212,17 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 \begin{proof}
     \leanok
     \uses{thm:c3_projector_gram_error_telescope, thm:whole_increment_left_overlap_factor_apply, thm:whole_increment_right_overlap_factor_apply, thm:whole_increment_overlap_factor_norms, thm:boundary_fiberwise_map_norm, thm:primitive_ground_space_gram_geometric_fixed_point, thm:primitive_tail_virtual_map_norm_uniform}
-    Evaluate the two factors on each common direct-sum fiber.  The direct-sum
-    norm identity gives the two bounds without a factor counting spectator
-    configurations.  Substitute these fiber formulas into the centered
-    residual identity from
-    Theorem~\ref{thm:c3_projector_gram_error_telescope} to obtain the exact
-    factorization.  Submultiplicativity and
-    Theorem~\ref{thm:boundary_fiberwise_map_norm} give the product bound.
-    Under primitivity, combine the uniform bound for
-    $J^{\mathrm{tail}}_K$ with the squared geometric Gram estimate and absorb
-    the fixed norm of $J^{\mathrm{left}}_1$ into the constant.
+    Evaluating the two factors on each common direct-sum fiber and applying the
+    direct-sum norm identity give the two bounds without a factor counting
+    spectator configurations.  Substituting these fiber formulas into the
+    centered residual identity from
+    Theorem~\ref{thm:c3_projector_gram_error_telescope} yields the exact
+    factorization, and submultiplicativity together with
+    Theorem~\ref{thm:boundary_fiberwise_map_norm} gives the product bound.
+    Under primitivity, combining the uniform bound for
+    $J^{\mathrm{tail}}_K$ with the squared geometric Gram estimate and
+    absorbing the fixed norm of $J^{\mathrm{left}}_1$ into the constant give
+    the geometric bound.
 \end{proof}
 
 \begin{theorem}[Fiberwise subtraction]
@@ -3224,7 +3238,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 
 \begin{proof}
     \leanok
-    Evaluate both sides on each fiber indexed by $s\in S$.
+    Evaluating both sides on each fiber indexed by $s\in S$ gives the equality.
 \end{proof}
 
 \begin{theorem}[Invertibility of the finite ground-space Gram]
@@ -3265,9 +3279,9 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 \begin{proof}
     \leanok
     \uses{thm:ground_space_gram_is_unit_of_injective, thm:fixed_point_gram_metric_is_unit, thm:inverse_gram_identities}
-    Both Gram endomorphisms are invertible.  Apply the identity
+    Since both Gram endomorphisms are invertible, the resolvent identity
     $A^{-1}-B^{-1}=B^{-1}(B-A)A^{-1}$ with
-    $A=\mathcal K_n$ and $B=\mathcal K_\infty$.
+    $A=\mathcal K_n$ and $B=\mathcal K_\infty$ yields the formula.
 \end{proof}
 
 \begin{theorem}[Left finite-Gram cancellation]
@@ -3405,19 +3419,19 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
     \leanok
     \uses{thm:boundary_fiberwise_map_sub, thm:inverse_gram_limiting_resolvent, thm:left_finite_gram_cancellation, thm:spectator_boundary_direct_sum_gram}
     The direct-sum inverse-Gram formula identifies the initial factor with the
-    pseudoinverse factor of $T$.  Theorem~\ref{thm:left_finite_gram_cancellation}
+    pseudoinverse factor of $T$, and Theorem~\ref{thm:left_finite_gram_cancellation}
     replaces the final product in $Q_1$ and $Q_2$ by $C^\dagger$.
-    For $Q_2$, apply the resolvent identity
+    In $Q_2$, the resolvent identity gives
     \begin{align}
         S_{K+l+1}-S_\infty
          & =S_\infty(\mathcal K_\infty-\mathcal K_{K+l+1})S_{K+l+1}.
     \end{align}
-    Fiberwise subtraction gives the displayed Gram differences.  The
+    Fiberwise subtraction gives the displayed Gram differences, while the
     factorization of $Q_3$ leaves the left pseudoinverse adjacent to
     $L^\dagger$.
 \end{proof}
 
-% These raw bounds are reconstructed from the inverse-Gram projector formulas.
+% These bounds are reconstructed from the inverse-Gram projector formulas.
 % They do not assert the rational coefficient in Nachtergaele's equation (6.1).
 \begin{theorem}[Preliminary norm bounds for the C3 corrections]
     \label{thm:c3_correction_bounds}
@@ -3455,12 +3469,12 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 \begin{proof}
     \leanok
     \uses{thm:c3_correction_factorizations, thm:tail_spectator_pseudoinverse_bound, thm:left_spectator_pseudoinverse_bound, thm:boundary_fiberwise_map_norm, thm:inverse_gram_identities}
-    Apply submultiplicativity to the factorizations in
-    Theorem~\ref{thm:c3_correction_factorizations}.  The two spectator
-    pseudoinverse estimates control the exterior factors, and
-    Theorem~\ref{thm:boundary_fiberwise_map_norm} controls every fiberwise Gram
-    factor without a term depending on $|\Omega_K|$.  The square-root
-    pseudoinverse identity controls $S_{K+l+1}C^\dagger$.
+    Applying submultiplicativity to the factorizations in
+    Theorem~\ref{thm:c3_correction_factorizations}, bounding the exterior
+    factors with the two spectator pseudoinverse estimates, and bounding every
+    fiberwise Gram factor by Theorem~\ref{thm:boundary_fiberwise_map_norm}
+    without a term depending on $|\Omega_K|$, while using the square-root
+    pseudoinverse identity on $S_{K+l+1}C^\dagger$, yield the three inequalities.
 \end{proof}
 
 \begin{theorem}[Uniform decay of the individual-block projector error]
@@ -3470,15 +3484,15 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
     \uses{def:primitive_mps, def:reassociated_tail_boundary_map,
         def:spectator_boundary_maps_es, def:ground_space_es}
     Let $A$ be a normalized primitive tensor with nonzero bond dimension and a
-    positive-definite fixed point.
-    For every $\varepsilon>0$, all sufficiently large $L$ and every $K\geq0$, $Q>0$ satisfy
+    positive-definite fixed point. As in the uniform decay of the
+    individual-block errors in \cite[Section~6]{Nachtergaele1996Spectral}, for
+    every $\varepsilon>0$, all sufficiently large $L$ and every $K\geq0$,
+    $Q>0$ satisfy
     \begin{align}
         \left\lVert P_{\mathcal H_K\otimes G_{L+Q}(A)}
         P_{G_{K+L}(A)\otimes\mathcal H_Q}-P_{G_{K+L+Q}(A)}\right\rVert
          & \leq\varepsilon
     \end{align}
-    This is the uniform decay of the individual-block
-    errors used in \cite[Section~6]{Nachtergaele1996Spectral}.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -3513,10 +3527,10 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
     \leanok
     \uses{thm:primitive_whole_increment_defect_decay, thm:normal_from_primitive_posdef,
         thm:wordspan_blk_inj_succ}
-    Primitivity gives a positive injective length. Choose $p$ above it
-    and large enough for the uniform decay estimate with tolerance $7/16$.
-    Block injectivity propagates to $p$. Set the suffix length equal to $p$
-    in that estimate, leaving the prefix length unrestricted.
+    Primitivity provides a positive injective length; for $p$ above that
+    length and large enough for the uniform decay estimate with tolerance
+    $7/16$, block injectivity propagates to $p$, and setting the suffix length
+    equal to $p$ in that estimate leaves the prefix length unrestricted.
 \end{proof}
 
 \begin{theorem}[Three-block whole-increment defect at the coefficient $7/16$]
@@ -3538,8 +3552,8 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 \begin{proof}
     \leanok
     \uses{thm:uniform_whole_increment_defect_seven_sixteenths}
-    Apply the prefix-uniform theorem at $K=p$.  The three consecutive regions
-    then each contain exactly $p$ sites of the input tensor.
+    Specializing the prefix-uniform theorem at $K=p$ gives three consecutive
+    regions that each contain $p$ sites of the input tensor.
 \end{proof}
 
 \begin{theorem}[Uniform open-chain projector-defect threshold]
@@ -3567,12 +3581,11 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
     \leanok
     \uses{thm:primitive-prescribed-projector-defect,
         thm:nachtergaele_open_chain_projector_defect}
-    Apply Theorem~\ref{thm:primitive-prescribed-projector-defect} with
-    $a=1$ and choose one of its sufficiently large lengths $l$.
-    Since $\sqrt{l+1}>0$, the inequality
-    $\epsilon_l\sqrt{l+1}<1$ gives
-    $\epsilon_l<1/\sqrt{l+1}$. The open-chain projector-defect
-    identity gives the anticommutator statement.
+    Specializing Theorem~\ref{thm:primitive-prescribed-projector-defect} to
+    $a=1$ provides a sufficiently large length $l$; since $\sqrt{l+1}>0$, the
+    inequality $\epsilon_l\sqrt{l+1}<1$ gives $\epsilon_l<1/\sqrt{l+1}$, and
+    the open-chain projector-defect identity gives the anticommutator
+    statement.
 \end{proof}
 
 % Source: References/cond-mat_9410110/main.tex, condition C3, lines 1083--1094.
@@ -3582,9 +3595,10 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
     \leanok
     \uses{thm:nachtergaele_c3_blocked_length, thm:exact_c3_martingale_difference_identity}
     Let $A$ be a primitive MPS tensor with nonzero bond dimension and a
-    positive-definite fixed point.  There are $l>1$ and
-    $\epsilon_l\geq0$, with $A$ $l$-block injective, such that for every
-    $K>0$, after setting $n=K+l$ and $n_l=l+1$,
+    positive-definite fixed point.  With the length $l>1$ and coefficient
+    $\epsilon_l\geq0$ of Theorem~\ref{thm:nachtergaele_c3_blocked_length}, the
+    tensor $A$ is $l$-block injective, and for every $K>0$, after setting
+    $n=K+l$ and $n_l=l+1$,
     \begin{align}
         \left\lVert
         G_{\Lambda_{n+1}\setminus\Lambda_{n-l}}E_n
@@ -3598,8 +3612,6 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
          & <\frac{1}{\sqrt{l+1}}.
         \label{eq:literal_open_chain_martingale_c3_threshold}
     \end{align}
-    The length $l$ and coefficient $\epsilon_l$ are exactly those chosen
-    by Theorem~\ref{thm:nachtergaele_c3_blocked_length}.
 \end{theorem}
 
 \begin{proof}
@@ -3613,9 +3625,9 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
         \right\rVert
          & \leq\epsilon_l
     \end{align}
-    for every $K>0$.  Rewrite its norm by
-    Theorem~\ref{thm:exact_c3_martingale_difference_identity}; the existing
-    strict threshold on $\epsilon_l$ is unchanged.
+    for every $K>0$, and rewriting its norm by
+    Theorem~\ref{thm:exact_c3_martingale_difference_identity} leaves the
+    existing strict threshold on $\epsilon_l$ unchanged.
 \end{proof}
 
 % Source: References/cond-mat_9410110/main.tex, condition C3, lines 1083--1094;
@@ -3633,9 +3645,10 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
         thm:fixed-volume-c3-boundary-indices,
         thm:literal_open_chain_martingale_c3}
     Let $A$ be a primitive MPS tensor with nonzero bond dimension and a
-    positive-definite fixed point.  There are $l>1$ and
-    $\epsilon_l\geq0$, with $A$ $l$-block injective, such that for every
-    final volume $N$ and every $n<N$,
+    positive-definite fixed point.  With the overlap length $l>1$ and
+    coefficient $\epsilon_l\geq0$ of
+    Theorem~\ref{thm:literal_open_chain_martingale_c3}, the tensor $A$ is
+    $l$-block injective, and for every final volume $N$ and every $n<N$,
     \begin{align}
         \left\lVert
         G_{\Lambda_{n+1}\setminus\Lambda_{n-l}}^{(N)}E_n^{(N)}
@@ -3646,8 +3659,6 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
          & <\frac{1}{\sqrt{l+1}}.
         \label{eq:literal_fixed_volume_martingale_c3_threshold}
     \end{align}
-    This is the same overlap length and the same coefficient as in
-    Theorem~\ref{thm:literal_open_chain_martingale_c3}.
     More generally, for any tensor of positive bond dimension that is
     $l$-block injective with $l>1$, a uniform physical open-chain bound
     $\epsilon\ge0$ gives the same bound in every final volume, without
@@ -3705,13 +3716,13 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
         \left\lVert H^{\mathrm{open}}_{N,l+1}(A)v\right\rVert.
         \label{eq:open_parent_hamiltonian_fixed_c3_gap}
     \end{align}
-    This intermediate MPS specialization assumes C3 on the full range
-    $0\leq n<N$, rather than only above the lower threshold in the source
-    statement. It applies the full-range estimate with
-    $d_{l+1}=\gamma_{l+1}=1$ and retains the coefficient of Theorem~2.1(i) in
-    \cite{Nachtergaele1996Spectral}. It is not a formulation of the
-    unrestricted source theorem.
-    Theorem~\ref{thm:primitive_open_parent_hamiltonian_gap} gives the
+    By applying the full-range estimate with $d_{l+1}=\gamma_{l+1}=1$ and
+    retaining the coefficient of Theorem~2.1(i) in
+    \cite{Nachtergaele1996Spectral}, this intermediate MPS specialization
+    assumes C3 on the full range $0\leq n<N$, rather than only above the lower
+    threshold in the source statement, and is not a formulation of the
+    unrestricted source theorem;
+    Theorem~\ref{thm:primitive_open_parent_hamiltonian_gap} derives the
     full-range C3 hypothesis from the physical open-chain estimates.
 \end{theorem}
 
@@ -3725,8 +3736,8 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
         thm:open_suffix_parent_hamiltonian_c2_full_range,
         lem:open_parent_hamiltonian_es_positive,
         thm:open_parent_hamiltonian_kernel_ground_space}
-    Use the fixed-volume prefix ground-space projections and their differences
-    $E_n^{(N)}$. Theorem~\ref{thm:fixed-volume-c3-boundary-indices} gives
+    For the fixed-volume prefix ground-space projections and their differences
+    $E_n^{(N)}$, Theorem~\ref{thm:fixed-volume-c3-boundary-indices} gives
     $G_0^{(N)}=I$, while
     Theorem~\ref{thm:fixed-volume-c3-projector-conjugacy} identifies
     $\operatorname{ran}G_N^{(N)}$ with the kernel of the open Hamiltonian.
@@ -3738,7 +3749,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
     (\ref{eq:open_parent_hamiltonian_fixed_c3}) is C3.  Positivity of the open
     Hamiltonian and
     $\ker H^{\mathrm{open}}_{N,l+1}(A)=G_N^{\mathrm{ES}}(A)$ identify the
-    final orthogonal complement.  Substitution into
+    final orthogonal complement, so substitution into
     (\ref{eq:nachtergaele_c1_c3_full_range_norm_gap}) yields
     (\ref{eq:open_parent_hamiltonian_fixed_c3_gap}).
 \end{proof}
@@ -3774,10 +3785,10 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
         thm:open_parent_hamiltonian_fixed_c3_gap}
     Theorem~\ref{thm:literal_fixed_volume_martingale_c3} gives $l>1$,
     $\epsilon_l$, $l$-block injectivity, and the C3 estimate for every final
-    volume $N$ and every $n<N$.  Apply
+    volume $N$ and every $n<N$.  Applying
     Theorem~\ref{thm:open_parent_hamiltonian_fixed_c3_gap} for each
-    $N\geq l+1$.  The value of $\epsilon_l$ is unchanged, so the coefficient
-    is exactly the specialization
+    $N\geq l+1$ leaves $\epsilon_l$ unchanged, so the coefficient
+    is the specialization
     \begin{align}
         \frac{\gamma_{l+1}}{d_{l+1}}
         \left(1-\epsilon_l\sqrt{l+1}\right)^2
@@ -3839,7 +3850,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 \begin{proof}
     \leanok
     \uses{lem:blocked_to_cyclic_ground_projector_comparison, lem:parent_hamiltonian_cyclic_overlap_anticommutator_gap}
-    Choose $p$ so that the three-block projector defect is at most $7/16$.
+    For $p$ chosen so that the three-block projector defect is at most $7/16$,
     Lemma~\ref{lem:blocked_to_cyclic_ground_projector_comparison} gives the same
     coefficient for every overlapping cyclic pair.  For range two each row has
     at most two such pairs, so the martingale estimate gives
@@ -3895,7 +3906,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 
 \begin{proof}
     \leanok
-    Put $w=v-P_{\ker H}v$. Then $w\perp\ker H$, $Hw=Hv$, and symmetry gives
+    For $w=v-P_{\ker H}v$, one has $w\perp\ker H$ and $Hw=Hv$, and symmetry gives
     $\langle Hv,v\rangle=\langle Hv,w\rangle$. Hence
     \begin{align}
         \gamma\operatorname{Re}\langle Hv,v\rangle
@@ -3920,14 +3931,14 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 
 \begin{proof}
     \leanok
-    Write $v_s$ for the active vector at spectator value $s$. Both quadratic
-    forms split into finite sums over $s$, and the active inequality gives
+    Writing $v_s$ for the active vector at spectator value $s$ splits both quadratic
+    forms into finite sums over $s$, so the active inequality gives
     \begin{align}
         \gamma\sum_s\operatorname{Re}\langle Gv_s,v_s\rangle
-         & \leq \sum_s\operatorname{Re}\langle Gv_s,Gv_s\rangle.
+         & \leq \sum_s\operatorname{Re}\langle Gv_s,Gv_s\rangle,
     \end{align}
-    The final statement follows from
-    Lemma~\ref{lem:norm_gap_to_squared_quadratic_form}.
+    and Lemma~\ref{lem:norm_gap_to_squared_quadratic_form} then implies the
+    final statement.
 \end{proof}
 
 \begin{theorem}[Cyclic window double counting]
@@ -4035,8 +4046,9 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
         \operatorname{Re}\langle h_i v,h_{i+k}v\rangle.
         \label{eq:cyclic_knabe_offset_partition}
     \end{align}
-    The last sum in (\ref{eq:cyclic_knabe_offset_partition}) is nonnegative by
-    (\ref{eq:cyclic_knabe_commuting_nonnegative}), which proves the lower bound.
+    By (\ref{eq:cyclic_knabe_commuting_nonnegative}), the last sum in
+    (\ref{eq:cyclic_knabe_offset_partition}) is nonnegative, which proves the
+    lower bound.
 \end{proof}
 
 \begin{theorem}[Finite-range cyclic Knabe inequality]
@@ -4069,14 +4081,14 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 \begin{proof}
     \leanok
     \uses{thm:cyclic_knabe_double_counting, thm:cyclic_knabe_cross_estimates}
-    Put $c=m-R+1$. Summing the window gaps and applying
+    With $c=m-R+1$, summing the window gaps and applying
     Theorem~\ref{thm:cyclic_knabe_double_counting} gives
     \begin{align}
         m\gamma\operatorname{Re}\langle Hv,v\rangle
          & \leq\sum_s\operatorname{Re}\langle A_sv,A_sv\rangle.
     \end{align}
-    Decompose $m-q=c+(R-1-q)$ and expand
-    (\ref{eq:cyclic_knabe_window_square_form}): the weights $q\leq R-2$
+    Decomposing $m-q=c+(R-1-q)$ and expanding
+    (\ref{eq:cyclic_knabe_window_square_form}) shows that the weights $q\leq R-2$
     carry the coefficient $c$ plus the positive part $R-1-q$, while for
     $q\geq R$ the coefficient $R-1-q$ is nonpositive and the cross term is
     nonnegative, so those summands are bounded by $c\,C_q(v)$. For the
@@ -4121,17 +4133,17 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
         \frac{m\gamma-1}{m-1}\operatorname{Re}\langle Hv,v\rangle
          & \leq\operatorname{Re}\langle Hv,Hv\rangle.
     \end{align}
-    Equivalently, the open-window threshold is $\gamma>1/m$. This is Knabe's
-    nearest-neighbor threshold~\cite{Knabe1988Energy}, quoted in
+    As in~\cite{Knabe1988Energy}, quoted in
     \cite[lines~1483--1489]{PerezGarcia2007Matrix} and
-    \cite[lines~2194--2197]{Cirac2021Matrix}.
+    \cite[lines~2194--2197]{Cirac2021Matrix}, the equivalent open-window
+    nearest-neighbor threshold is $\gamma>1/m$.
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{thm:finite_range_cyclic_knabe}
-    Substitute $R=2$ into the coefficient of
-    Theorem~\ref{thm:finite_range_cyclic_knabe}.
+    Substituting $R=2$ into the coefficient of
+    Theorem~\ref{thm:finite_range_cyclic_knabe} yields the inequality.
 \end{proof}
 
 % Source scope: Papers/quant-ph_0608197/MPSarchive.tex:1460--1500 gives
@@ -4171,8 +4183,8 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 \begin{proof}
     \leanok
     \uses{def:cyclic_parent_local_coordinates, def:parent_hamiltonian_es}
-    Reindex the standard sum over $\{0,\ldots,N-1\}$ by its canonical
-    bijection with $\mathbb Z/N\mathbb Z$.  Each summand is unchanged.
+    Reindexing the standard sum over $\{0,\ldots,N-1\}$ by its canonical
+    bijection with $\mathbb Z/N\mathbb Z$ leaves each summand unchanged.
 \end{proof}
 
 \begin{theorem}[Oriented separation of cyclic interactions]
@@ -4198,8 +4210,8 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
     \leanok
     \uses{def:cyclic_parent_local_coordinates, rem:cyclic_window_operators,
         lem:cyclic_window_nonoverlap_positive}
-    Measure every site from the first window's initial site in the forward
-    cyclic order.  Membership in both windows would give an offset smaller
+    Measuring every site from the first window's initial site in the forward
+    cyclic order, membership in both windows would give an offset smaller
     than $R$ and also an offset of the form $e+b$ with $b<R$.  The inequalities
     $R\leq e$ and $e+R\leq N$ exclude this possibility.  Local interactions on
     disjoint cyclic windows commute, which gives
@@ -4291,10 +4303,10 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
     \uses{thm:cyclic_active_block_local_conjugacy,
         def:open_parent_hamiltonian_es}
     The starts $q=0,\ldots,m-1$ are precisely the nonwrapping range-$R$
-    starts in an interval of length $W=m+R-1$.  Apply
+    starts in an interval of length $W=m+R-1$.  Applying
     Theorem~\ref{thm:cyclic_active_block_local_conjugacy} to every summand and
-    reindex the sum by these nonwrapping starts.  Fiberwise extension commutes
-    with finite sums, giving
+    reindexing the sum by these nonwrapping starts, together with the fact that
+    fiberwise extension commutes with finite sums, gives
     (\ref{eq:cyclic_knabe_block_open_hamiltonian}).
 \end{proof}
 
@@ -4328,13 +4340,12 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
          & \leq\left\lVert H_{N,R}^{\mathrm{ES}}(A)v\right\rVert.
         \label{eq:parent_hamiltonian_finite_range_knabe_gap}
     \end{align}
-    The coefficient in
-    (\ref{eq:parent_hamiltonian_finite_range_knabe_delta}) is the TNLean
-    finite-range derivation documented in
-    \path{docs/paper-gaps/knabe88_finite_range_coefficient.tex}.  It is not a
-    theorem of the
-    MPS sources cited for the gap definition and the nearest-neighbor Knabe
-    principle.
+    As documented in
+    \path{docs/paper-gaps/knabe88_finite_range_coefficient.tex}, the
+    finite-range coefficient in
+    (\ref{eq:parent_hamiltonian_finite_range_knabe_delta}) is not a theorem of
+    the MPS sources cited for the gap definition and the nearest-neighbor
+    Knabe principle.
 \end{theorem}
 
 \begin{proof}
@@ -4351,13 +4362,13 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
     Theorem~\ref{thm:cyclic_knabe_block_open_parent_hamiltonian} gives it for
     every cyclic sum $A_s$.  The oriented-separation theorem verifies the
     commutation hypothesis in
-    Theorem~\ref{thm:finite_range_cyclic_knabe}.  That theorem gives
+    Theorem~\ref{thm:finite_range_cyclic_knabe}.  Together with the total-sum
+    identity (\ref{eq:cyclic_parent_local_sum}), that theorem gives
     \begin{align}
         \delta H_{N,R}^{\mathrm{ES}}(A)
          & \leq\left(H_{N,R}^{\mathrm{ES}}(A)\right)^2
     \end{align}
-    as a quadratic form, using the total-sum identity
-    (\ref{eq:cyclic_parent_local_sum}).  The inequality
+    as a quadratic form.  The inequality
     $(R-1)^2<m\gamma$ makes $\delta$ positive, and the finite-dimensional
     spectral criterion yields
     (\ref{eq:parent_hamiltonian_finite_range_knabe_gap}).
@@ -4405,12 +4416,11 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
          & \leq\left\lVert H_{N,l+1}^{\mathrm{ES}}(A)v\right\rVert.
         \label{eq:primitive_finite_range_knabe_gap}
     \end{align}
-    The existence of a uniform MPS parent-Hamiltonian gap and the
-    nearest-neighbor Knabe principle are stated in
-    \cite[lines~1460--1500]{PerezGarcia2007Matrix} and
-    \cite[lines~2184--2188,2194--2197]{Cirac2021Matrix}.  Those passages do
-    not state the arbitrary finite-range coefficient
-    (\ref{eq:primitive_finite_range_knabe_delta}).
+    Although \cite[lines~1460--1500]{PerezGarcia2007Matrix} and
+    \cite[lines~2184--2188,2194--2197]{Cirac2021Matrix} state the existence of
+    a uniform MPS parent-Hamiltonian gap and the nearest-neighbor Knabe
+    principle, those passages do not state the arbitrary finite-range
+    coefficient (\ref{eq:primitive_finite_range_knabe_delta}).
 \end{theorem}
 
 \begin{proof}
@@ -4420,14 +4430,14 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
         thm:parent_hamiltonian_gap_from_open_knabe_block}
     Theorem~\ref{thm:primitive_open_parent_hamiltonian_gap} gives $l$,
     $\epsilon_l$, and the norm gap $\gamma_{\mathrm{open}}$ on every open
-    volume at least $l+1$.  Since $\gamma_{\mathrm{open}}>0$, choose
+    volume at least $l+1$.  Since $\gamma_{\mathrm{open}}>0$, one may choose
     $m\geq l+1$ with $l^2<m\gamma_{\mathrm{open}}$.  At the active volume
     $W=m+l$, block injectivity identifies the open ground space with the kernel
     of the open Hamiltonian, so
-    (\ref{eq:primitive_open_parent_hamiltonian_gap}) is exactly the hypothesis
-    (\ref{eq:open_knabe_block_norm_gap}) with $R=l+1$.  Apply
-    Theorem~\ref{thm:parent_hamiltonian_gap_from_open_knabe_block}.  Substituting
-    $R-1=l$ and $m-R+1=m-l$ gives
+    (\ref{eq:primitive_open_parent_hamiltonian_gap}) is the hypothesis
+    (\ref{eq:open_knabe_block_norm_gap}) with $R=l+1$.  Applying
+    Theorem~\ref{thm:parent_hamiltonian_gap_from_open_knabe_block} and
+    substituting $R-1=l$ and $m-R+1=m-l$ gives
     (\ref{eq:primitive_finite_range_knabe_delta}) and
     (\ref{eq:primitive_finite_range_knabe_gap}).
 \end{proof}
@@ -4450,10 +4460,10 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
         \langle\Gamma_n^{\mathrm{ES}}(A)E_{ab},\Gamma_n^{\mathrm{ES}}(B)E_{ce}\rangle
          & =\bigl[(F_{BA}^{\mathrm{rect}})^n(E_{ca})\bigr]_{eb}.
     \end{align}
-    Thus $\Gamma_n^{\mathrm{ES}}(A)^*\Gamma_n^{\mathrm{ES}}(B)$ is the rectangular reshuffling of
-    $(F_{BA}^{\mathrm{rect}})^n$. This is the boundary-coordinate form of
-    equations~\textup{ip} and~\textup{P12} in the proof of the lemma
-    \textup{disjoint} in \cite{Nachtergaele1996Spectral}.
+    As in equations~\textup{ip} and~\textup{P12} in the proof of the lemma
+    \textup{disjoint} in \cite{Nachtergaele1996Spectral},
+    $\Gamma_n^{\mathrm{ES}}(A)^*\Gamma_n^{\mathrm{ES}}(B)$ is the rectangular
+    reshuffling of $(F_{BA}^{\mathrm{rect}})^n$.
 \end{theorem}
 
 \begin{proof}
@@ -4485,9 +4495,9 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
     Theorem~\ref{thm:mixed_boundary_gram_identity} gives convergence of every entry of the mixed
     Gram operator. Its domain and codomain have fixed finite dimensions,
     so entrywise convergence implies convergence in operator norm.
-    A spectral radius less than one gives decay of the powers of
-    $F_{BA}^{\mathrm{rect}}$, as in equation~\textup{limP12} in the proof of the
-    lemma \textup{disjoint} in \cite{Nachtergaele1996Spectral}.
+    As in equation~\textup{limP12} in the proof of the lemma \textup{disjoint}
+    in \cite{Nachtergaele1996Spectral}, a spectral radius less than one gives
+    decay of the powers of $F_{BA}^{\mathrm{rect}}$.
 \end{proof}
 
 \begin{theorem}[Ground-space overlap from mixed Gram bounds]
@@ -4511,14 +4521,14 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 
 \begin{proof}
     \leanok
-    Write $x=\Gamma_n^{\mathrm{ES}}(A)u$ and $y=\Gamma_n^{\mathrm{ES}}(B)v$. The left inverse
+    For $x=\Gamma_n^{\mathrm{ES}}(A)u$ and $y=\Gamma_n^{\mathrm{ES}}(B)v$, the left inverse
     $\mathcal K_n(A)^{-1}\Gamma_n^{\mathrm{ES}}(A)^*$ has norm
     $\sqrt{\lVert \mathcal K_n(A)^{-1}\rVert}$, so
-    $\lVert u\rVert\leq\sqrt{\lVert \mathcal K_n(A)^{-1}\rVert}\lVert x\rVert$;
-    the analogous estimate holds for $v$. Apply these bounds to
-    $|\langle u,\Gamma_n^{\mathrm{ES}}(A)^*\Gamma_n^{\mathrm{ES}}(B)v\rangle|$.
-    This makes explicit the normalization step using
-    equation~\textup{C1C2} in \cite{Nachtergaele1996Spectral}.
+    $\lVert u\rVert\leq\sqrt{\lVert \mathcal K_n(A)^{-1}\rVert}\lVert x\rVert$,
+    and the analogous estimate holds for $v$. As in the normalization step using
+    equation~\textup{C1C2} in \cite{Nachtergaele1996Spectral}, applying these
+    bounds to $|\langle u,\Gamma_n^{\mathrm{ES}}(A)^*\Gamma_n^{\mathrm{ES}}(B)v\rangle|$
+    yields the inequality.
 \end{proof}
 
 \begin{theorem}[Uniform decay of block ground-space overlaps]
@@ -4532,14 +4542,12 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
     fixed matrices $\rho$ and $\sigma$. Suppose their complementary
     transfer maps have spectral radius less than one, and that
     $\rho_{\spec}(F_{BA}^{\mathrm{rect}})<1$.
-    For every $\varepsilon>0$, there is $n_0$ such that for every
-    $n\geq n_0$, $x\in G_n(A)$, and $y\in G_n(B)$,
+    As in the proof of the lemma \textup{disjoint} in
+    \cite{Nachtergaele1996Spectral}, for every $\varepsilon>0$ there is $n_0$
+    such that for every $n\geq n_0$, $x\in G_n(A)$, and $y\in G_n(B)$,
     \begin{align}
         |\langle x,y\rangle| & \leq\varepsilon\lVert x\rVert\lVert y\rVert.
     \end{align}
-    This is the bound on inner products of ground-space vectors obtained
-    from the spectral-radius estimate in the proof of the lemma \textup{disjoint}
-    in \cite{Nachtergaele1996Spectral}.
 \end{theorem}
 
 \begin{proof}
@@ -4566,8 +4574,8 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
         \sqrt{\lVert \mathcal K_\infty(A)^{-1}\rVert}\cdot0\cdot
         \sqrt{\lVert \mathcal K_\infty(B)^{-1}\rVert}=0.
     \end{align}
-    Choose $n_0$ with $c(n)\leq\varepsilon$ for $n\geq n_0$; then
-    Theorem~\ref{thm:ground_space_overlap_mixed_gram} gives the bound,
+    For $n_0$ chosen with $c(n)\leq\varepsilon$ for $n\geq n_0$,
+    Theorem~\ref{thm:ground_space_overlap_mixed_gram} gives the bound
     uniformly in $x$ and $y$.
 \end{proof}
 
@@ -4580,21 +4588,21 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
     Let $A$ and $B$ be trace-preserving tensors with positive-definite
     fixed matrices and complementary transfer spectral radii less than one.
     Suppose that, if their bond dimensions agree, they are not gauge-phase
-    equivalent. Then, for every $\varepsilon>0$ and all sufficiently large $n$,
-    every $x\in G_n(A)$ and $y\in G_n(B)$ satisfy
+    equivalent. As in the normalized tensor form of
+    equation~\textup{limitepsilonm} in \cite{Nachtergaele1996Spectral}, for
+    every $\varepsilon>0$ and all sufficiently large $n$, every $x\in G_n(A)$
+    and $y\in G_n(B)$ satisfy
     \begin{align}
         |\langle x,y\rangle| & \leq\varepsilon\lVert x\rVert\lVert y\rVert.
     \end{align}
-    This is the normalized tensor form of equation~\textup{limitepsilonm}
-    in \cite{Nachtergaele1996Spectral}.
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{thm:block_ground_space_overlap_decay, thm:transfer_operator_gap_irr_tp,
         thm:transfer_operator_gap_rect_irr_tp, lem:irreducible_map_from_primitive}
-    The positive-definite fixed matrices and complementary gaps imply
-    irreducibility by Lemma~\ref{lem:irreducible_map_from_primitive}.
+    By Lemma~\ref{lem:irreducible_map_from_primitive}, the positive-definite
+    fixed matrices and complementary gaps imply irreducibility.
     For equal bond dimensions, inequivalence and
     Theorem~\ref{thm:transfer_operator_gap_irr_tp} give
     $\rho_{\spec}(F_{BA}^{\mathrm{rect}})=\rho_{\spec}(F_{BA})<1$.
@@ -4602,9 +4610,10 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
     $F_{BA}^{\mathrm{rect}}$ would force equality of the bond dimensions, so
     Theorem~\ref{thm:transfer_operator_gap_rect_irr_tp} gives
     \begin{align}
-        \rho_{\spec}(F_{BA}^{\mathrm{rect}}) & <1.
+        \rho_{\spec}(F_{BA}^{\mathrm{rect}}) & <1,
     \end{align}
-    Apply Theorem~\ref{thm:block_ground_space_overlap_decay}.
+    and Theorem~\ref{thm:block_ground_space_overlap_decay} then yields the
+    overlap decay.
 \end{proof}
 
 \section{Overlap with a sum of subspaces}
@@ -4616,18 +4625,18 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
     Let $v_1,\ldots,v_m$ lie in a complex inner product space, and let
     $B\in M_m(\R)$ have zero diagonal. Suppose that
     $|\langle v_i,v_j\rangle|\leq B_{ij}\lVert v_i\rVert\lVert v_j\rVert$
-    whenever $i\neq j$. With the Euclidean operator norm on $B$,
+    whenever $i\neq j$. As in the lower Gram estimate in the proof of
+    \cite[Lemma~9]{Nachtergaele1996Spectral}, with the Euclidean operator norm
+    on $B$,
     \begin{align}
         (1-\lVert B\rVert)\sum_i\lVert v_i\rVert^2
          & \leq\left\lVert\sum_i v_i\right\rVert^2.
     \end{align}
-    This is the lower Gram estimate in the proof of
-    \cite[Lemma~9]{Nachtergaele1996Spectral}.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    Put $w_i=\lVert v_i\rVert$. Expanding the squared norm gives
+    For $w_i=\lVert v_i\rVert$, expanding the squared norm gives
     \begin{align}
         \sum_i\lVert v_i\rVert^2
         -\left\lVert\sum_i v_i\right\rVert^2
@@ -4650,28 +4659,27 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
     for $i\neq j$, $u\in V_i$, and $v\in V_j$. Suppose also that
     $|\langle x,u\rangle|\leq a_i\lVert x\rVert\lVert u\rVert$
     for every $i$, $x\in U$, and $u\in V_i$.
-    Then every $x\in U$ and $y\in V_1+\cdots+V_m$ satisfy
+    Following \cite[Lemma~9]{Nachtergaele1996Spectral}, every $x\in U$ and
+    $y\in V_1+\cdots+V_m$ satisfy the inner-product bound
     \begin{align}
         |\langle x,y\rangle|
          & \leq\frac{\lVert a\rVert}{\sqrt{1-\lVert B\rVert}}
         \lVert x\rVert\lVert y\rVert.
     \end{align}
-    This is \cite[Lemma~9]{Nachtergaele1996Spectral}, expressed as a bound
-    on inner products.
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{thm:subspace_overlap_lower_gram}
-    Write $y=\sum_i v_i$ with $v_i\in V_i$. The triangle inequality and
+    For $y=\sum_i v_i$ with $v_i\in V_i$, the triangle inequality and
     Cauchy--Schwarz give
     \begin{align}
         |\langle x,y\rangle|
          & \leq\lVert x\rVert\sum_i a_i\lVert v_i\rVert
         \leq\lVert x\rVert\lVert a\rVert
-        \left(\sum_i\lVert v_i\rVert^2\right)^{1/2}.
+        \left(\sum_i\lVert v_i\rVert^2\right)^{1/2},
     \end{align}
-    Apply Theorem~\ref{thm:subspace_overlap_lower_gram} to the final factor.
+    and Theorem~\ref{thm:subspace_overlap_lower_gram} bounds the final factor.
 \end{proof}
 
 \begin{theorem}[Uniform overlap bound]
@@ -4688,9 +4696,9 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
         \eta & =\frac{\varepsilon\sqrt m}
         {\sqrt{1-\varepsilon(m-1)}}.
     \end{align}
-    Then $\eta\leq1$, and every $x\in U$ and $y\in V_1+\cdots+V_m$ satisfy
+    As in the uniform bound of \cite[Lemma~9]{Nachtergaele1996Spectral},
+    $\eta\leq1$ and every $x\in U$ and $y\in V_1+\cdots+V_m$ satisfy
     $|\langle x,y\rangle|\leq\eta\lVert x\rVert\lVert y\rVert$.
-    This is the uniform bound in \cite[Lemma~9]{Nachtergaele1996Spectral}.
 \end{theorem}
 
 \begin{proof}
@@ -4703,8 +4711,8 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
             -\sum_i\lVert v_i\rVert^2\right]
         \leq\varepsilon(m-1)\sum_i\lVert v_i\rVert^2.
     \end{align}
-    Take $a_i=\varepsilon$ and $B_{ij}=\varepsilon(1-\delta_{ij})$. For
-    $w\in\R^m$ write $|w|$ for the vector with entries $|w_i|$. Since $B$ is
+    With $a_i=\varepsilon$ and $B_{ij}=\varepsilon(1-\delta_{ij})$, for
+    $w\in\R^m$ let $|w|$ denote the vector with entries $|w_i|$. Since $B$ is
     symmetric with nonnegative entries, the same computation applied to $|w|$
     gives
     \begin{align}
@@ -4740,20 +4748,19 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
     Suppose that, for $i\ne j$, each of
     $|\langle v_i,v_j\rangle|$, $|\langle w_i,w_j\rangle|$, and
     $|\langle v_i,w_j\rangle|$ is bounded by $B_{ij}$ times the product
-    of the corresponding vector norms. Put $\delta=\beta/(1-\beta)$. Then
+    of the corresponding vector norms. As in the proof of
+    \cite[Lemma~6.1]{Nachtergaele1996Spectral}, for $\delta=\beta/(1-\beta)$,
     \begin{align}
         \sum_{i\ne j}|\langle v_i,w_j\rangle|
          & \leq\delta\left\lVert\sum_i v_i\right\rVert
         \left\lVert\sum_i w_i\right\rVert.
     \end{align}
-    This is the pairing estimate in the proof of
-    \cite[Lemma~6.1]{Nachtergaele1996Spectral}.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:subspace_overlap_lower_gram}
-    Write $a_i=\lVert v_i\rVert$ and $b_i=\lVert w_i\rVert$.
-    The left-hand side is at most $\langle a,Bb\rangle\leq\beta\lVert a\rVert\lVert b\rVert$.
+    For $a_i=\lVert v_i\rVert$ and $b_i=\lVert w_i\rVert$, the left-hand side is
+    at most $\langle a,Bb\rangle\leq\beta\lVert a\rVert\lVert b\rVert$.
     The lower Gram estimate gives
     $\lVert a\rVert\leq\lVert\sum_i v_i\rVert/\sqrt{1-\beta}$,
     and likewise for $b$.
@@ -4770,13 +4777,12 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
     for $i\ne j$, $u\in V_i$, and $v\in V_j$.
     Write $P_i$ for the orthogonal projector onto $V_i$, $P$ for the
     projector onto $\sum_i V_i$, $X=\sum_i P_i$, and
-    $\delta=\beta/(1-\beta)$. Then
+    $\delta=\beta/(1-\beta)$. As in the finite-dimensional projector estimate
+    underlying \cite[Lemma~6.1(i)]{Nachtergaele1996Spectral},
     \begin{align}
         \lVert X-P\rVert & \leq\frac{\delta}{1-\delta}, &
         \lVert X\rVert   & \leq\frac{1}{1-\delta}.
     \end{align}
-    This is the finite-dimensional projector estimate underlying
-    \cite[Lemma~6.1(i)]{Nachtergaele1996Spectral}.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -4787,9 +4793,10 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
     \end{align}
     The pairing estimate bounds its modulus by
     $\delta\lVert Xz\rVert\lVert u\rVert$.
-    Since $XP=X$, it follows that $\lVert X-P\rVert\leq\delta\lVert X\rVert$.
-    Combine this with $\lVert X\rVert\leq\lVert X-P\rVert+1$ and $\delta<1$.
-    For the second bound, use $\lVert P\rVert\leq1$ and the first bound:
+    Since $XP=X$, it follows that $\lVert X-P\rVert\leq\delta\lVert X\rVert$,
+    which combines with $\lVert X\rVert\leq\lVert X-P\rVert+1$ and $\delta<1$ to
+    yield the first bound.
+    Together with $\lVert P\rVert\leq1$, this first bound gives the second:
     \begin{align}
         \lVert X\rVert & \leq\lVert X-P\rVert+\lVert P\rVert
         \leq\frac{\delta}{1-\delta}+1 \notag                 \\
@@ -4818,9 +4825,10 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 \begin{proof}
     \leanok
     \uses{thm:ph_off_diagonal_pairing}
-    Pair the operator on the left with unit vectors $z,x$.
-    Its matrix coefficient is $\sum_{i\ne j}\langle P_i z,Q_j x\rangle$.
-    Apply the off-diagonal pairing estimate and take the supremum over $z,x$.
+    Pairing the operator on the left with unit vectors $z,x$ produces the
+    matrix coefficient $\sum_{i\ne j}\langle P_i z,Q_j x\rangle$.
+    Applying the off-diagonal pairing estimate and taking the supremum over
+    $z,x$ yields the bound.
 \end{proof}
 
 \begin{theorem}[Comparison of joint projectors]
@@ -4832,20 +4840,19 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
     assume $\beta<1/2$. Let $W_i\subseteq U_i$, and let $R_i$ be the
     orthogonal projector onto $W_i$.
     Let $P,Q,R$ project onto $\sum_i U_i$, $\sum_i V_i$, and $\sum_i W_i$,
-    respectively. Then
+    respectively. As in the abstract projector comparison used in
+    \cite[Lemma~6.1(ii)]{Nachtergaele1996Spectral},
     \begin{align}
         \lVert R-PQ\rVert & \leq\frac{4\delta}{(1-\delta)^2}
         +\sum_i\lVert R_i-P_iQ_i\rVert.
     \end{align}
-    This is the abstract projector comparison used in
-    \cite[Lemma~6.1(ii)]{Nachtergaele1996Spectral}.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:ph_sum_block_projectors, thm:ph_off_diagonal_projectors}
-    Put $X_W=\sum_i R_i$, $Z=\sum_i P_iQ_i$,
-    $a=\delta/(1-\delta)$, and $q=1/(1-\delta)$.
-    The triangle inequality, applied through $X_W$, $Z$, and $X_U X_V$, gives
+    With $X_W=\sum_i R_i$, $Z=\sum_i P_iQ_i$,
+    $a=\delta/(1-\delta)$, and $q=1/(1-\delta)$,
+    the triangle inequality applied through $X_W$, $Z$, and $X_U X_V$ gives
     \begin{align}
         \lVert R-PQ\rVert
          & \leq a+\sum_i\lVert R_i-P_iQ_i\rVert+aq+(aq+a) \\
@@ -4870,16 +4877,16 @@ Definition~\ref{def:ground_space_es}.
     dimensions. Suppose $\varepsilon\geq0$ and
     $|\langle a,b\rangle|\leq\varepsilon\lVert a\rVert\lVert b\rVert$
     for every $a\in G_L(A)$ and $b\in G_L(B)$.
-    Let $x,y$ be vectors on three successive intervals of lengths $K,L,Q$.
+    Let $x,y$ be vectors on three successive intervals of lengths $K,L,Q$,
+    with no positivity assumption on $K,L,Q$ required.
     For each prefix configuration $u$ and suffix configuration $v$, define
     $x_{u,v}(w)=x(u,w,v)$ and $y_{u,v}(w)=y(u,w,v)$.
-    If $x_{u,v}\in G_L(A)$ and $y_{u,v}\in G_L(B)$ for all $u,v$, then
+    As in the finite-sum estimate used to extend the overlap bounds in
+    \cite[Lemma~6.1(ii)]{Nachtergaele1996Spectral}, if $x_{u,v}\in G_L(A)$ and
+    $y_{u,v}\in G_L(B)$ for all $u,v$, then
     \begin{align}
         |\langle x,y\rangle| & \leq\varepsilon\lVert x\rVert\lVert y\rVert.
     \end{align}
-    No positivity assumption on $K,L,Q$ is required.
-    This is the finite-sum estimate used to extend the overlap bounds in
-    \cite[Lemma~6.1(ii)]{Nachtergaele1996Spectral}.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -4948,24 +4955,23 @@ Definition~\ref{def:ground_space_es}.
         W_i & =G_{K+L+Q}(A_i).
     \end{align}
     Let $P_i,Q_i,R_i$ be the orthogonal projectors onto these spaces, and let
-    $P,Q,R$ project onto their respective sums. With
+    $P,Q,R$ project onto their respective sums. As in the physical interval
+    comparison in the proof of \cite[Lemma~6.1(ii)]{Nachtergaele1996Spectral}
+    before inserting the individual block error bounds, with
     $\delta=\beta/(1-\beta)$,
     \begin{align}
         \lVert R-PQ\rVert & \leq\frac{4\delta}{(1-\delta)^2}
         +\sum_i\lVert R_i-P_iQ_i\rVert.
     \end{align}
-    This is the physical interval comparison in the proof of
-    \cite[Lemma~6.1(ii)]{Nachtergaele1996Spectral}, before inserting the
-    individual block error bounds.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:ph_extended_boundary_overlap, thm:ph_joint_projector_comparison,
         thm:spectator_boundary_hilbert_factorization, thm:range_ground_space_map_es}
-    The boundary-map factorization gives $W_i\subseteq U_i$.
-    The extended-boundary overlap estimate gives all three bounds for
+    The boundary-map factorization gives $W_i\subseteq U_i$, and
+    the extended-boundary overlap estimate gives all three bounds for
     $U_i\times U_j$, $V_i\times V_j$, and $U_i\times V_j$ with the same
-    matrix $B$. Apply the joint-projector comparison.
+    matrix $B$, so the joint-projector comparison yields the inequality.
 \end{proof}
 
 \begin{theorem}[Uniform decay of the joint projector error]
@@ -4990,11 +4996,11 @@ Definition~\ref{def:ground_space_es}.
 \begin{proof}
     \leanok
     \uses{thm:ph_block_interval_projectors}
-    Put $r=|I|$ and let $C$ have zero diagonal and all off-diagonal entries
+    Let $r=|I|$ and let $C$ have zero diagonal and all off-diagonal entries
     equal to one. As $\varepsilon\downarrow0$, the quantities
     $\beta=\lVert\varepsilon C\rVert$, $\delta=\beta/(1-\beta)$, and
-    $4\delta/(1-\delta)^2$ tend to zero. Choose $\varepsilon>0$ so that
-    $\beta<1/2$ and the last quantity is less than $\eta/(r+1)$.
+    $4\delta/(1-\delta)^2$ tend to zero, so there is $\varepsilon>0$ with
+    $\beta<1/2$ and the last quantity less than $\eta/(r+1)$.
     For all sufficiently large $L$, the overlap bound holds with
     $B=\varepsilon C$, and every individual projector error is at most
     $\eta/(r+1)$. Since $P_i$, $Q_i$, and $R_i$ are self-adjoint,
@@ -5017,16 +5023,15 @@ Definition~\ref{def:ground_space_es}.
     Let $(A_i)_{i\in I}$ be a finite family of normalized primitive tensors
     with positive bond dimensions and positive-definite fixed points.
     Suppose that, if the bond dimensions of two distinct members agree, they
-    are not related by a gauge transformation and a phase. Use the interval projectors of
-    Theorem~\ref{thm:ph_block_interval_projectors}.
-    For every $\eta>0$, all sufficiently large $L$, and every $K\geq0$
-    and $Q>0$,
+    are not related by a gauge transformation and a phase. With the interval
+    projectors of Theorem~\ref{thm:ph_block_interval_projectors}, as in the
+    uniform decay consequence of
+    \cite[Lemma~6.1(ii)]{Nachtergaele1996Spectral} for a positive right outer
+    interval, for every $\eta>0$, all sufficiently large $L$, and every
+    $K\geq0$ and $Q>0$,
     \begin{align}
         \lVert R-PQ\rVert & \leq\eta.
     \end{align}
-    This is the uniform decay consequence of
-    \cite[Lemma~6.1(ii)]{Nachtergaele1996Spectral} for a positive right
-    outer interval.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -5047,12 +5052,12 @@ Definition~\ref{def:ground_space_es}.
         \lVert Q_iP_i-R_i\rVert & \le\varepsilon.
         \notag
     \end{align}
-    The family is finite, so both bounds hold at the common threshold
+    Because the family is finite, both bounds hold at the common threshold
     \begin{align}
-        L & \ge L_1\vee L_2.
+        L & \ge L_1\vee L_2,
         \notag
     \end{align}
-    Apply Theorem~\ref{thm:ph_block_interval_defect_decay}.
+    so Theorem~\ref{thm:ph_block_interval_defect_decay} yields the decay.
 \end{proof}
 
 \begin{theorem}[Interval spaces of a block-diagonal tensor]
@@ -5134,7 +5139,7 @@ Definition~\ref{def:ground_space_es}.
     \uses{thm:ph_primitive_block_interval_defect_decay,
         thm:ph_block_interval_projectors,
         thm:block_sum_local_ground_space, thm:ph_block_sum_interval_spaces}
-    For each block put
+    For each block, define
     \begin{align}
         U_j & =G_{K+L}(A_j)\otimes\mathcal H_Q,                                &
         V_j & =\mathscr A_{K,L,Q}\bigl(\mathcal H_K\otimes G_{L+Q}(A_j)\bigr), &
@@ -5237,10 +5242,10 @@ tensors.
 \begin{proof}
     \leanok
     \uses{lem:eval_word_gauge, lem:trace_gauge_boundary}
-    If $B^i=XA^iX^{-1}$, then $B^\sigma=XA^\sigma X^{-1}$ for every length-$L$
-    configuration $\sigma$ by Lemma~\ref{lem:eval_word_gauge}, so by
-    Lemma~\ref{lem:trace_gauge_boundary} the boundary parametrization of $B$
-    at $Y$ agrees with that of $A$ at $X^{-1}YX$.  This gives
+    By Lemma~\ref{lem:eval_word_gauge}, $B^i=XA^iX^{-1}$ implies
+    $B^\sigma=XA^\sigma X^{-1}$ for every length-$L$ configuration $\sigma$, so
+    Lemma~\ref{lem:trace_gauge_boundary} identifies the boundary
+    parametrization of $B$ at $Y$ with that of $A$ at $X^{-1}YX$.  This gives
     $G_L(B)\subseteq G_L(A)$, and the symmetric argument applied to
     $A^i=X^{-1}B^iX$ gives the reverse inclusion.
 \end{proof}
@@ -5294,11 +5299,10 @@ tensors.
     \leanok
     \uses{def:normal, def:paper_primitive, def:has_inv_proj,
         def:irreducible_tensor}
-    Let $A$ be a normal tensor.  Then $A$ is primitive in the sense of
-    Definition~\ref{def:paper_primitive}, and $A$ has no nontrivial invariant
-    projection, so $A$ is irreducible in the sense of
-    Definition~\ref{def:irreducible_tensor}.  No normalization is imposed on
-    $A$.
+    Let $A$ be a normal tensor, with no normalization imposed on $A$.  Under
+    Definition~\ref{def:paper_primitive} and
+    Definition~\ref{def:irreducible_tensor}, $A$ is primitive and has no
+    nontrivial invariant projection, so $A$ is irreducible.
 \end{theorem}
 
 \begin{proof}
@@ -5338,10 +5342,10 @@ tensors.
     for all $L$ and $N$, where $h_L$ is the canonical parent interaction and
     $\mathcal G_{N,L}$ the periodic chain ground space.
 
-    This is the normalization taken without loss of generality in
+    Following the normalization taken without loss of generality in
     \cite[equations~(3.1)--(3.2b), lines~1394--1435]{Nachtergaele1996Spectral}
     and at the start of the proof of
-    \cite[Theorem~4, lines~765--770]{PerezGarcia2007Matrix}.  The gauge here is
+    \cite[Theorem~4, lines~765--770]{PerezGarcia2007Matrix}, the gauge here is
     built from the Perron eigenvector of the adjoint transfer map, giving the
     trace-preserving orientation.  That orientation is what conditions~1 and~2
     of \cite[Theorem~4, lines~752--758]{PerezGarcia2007Matrix},
@@ -5370,26 +5374,25 @@ tensors.
     that the Perron--Frobenius eigenvector requires.
     Theorem~\ref{thm:tp_data_irreducible} therefore returns a
     positive definite $\sigma$ and an eigenvalue $r>0$ of the adjoint transfer
-    map.  Set $\zeta=r^{-1/2}$ and $B^i=\zeta\,\sigma^{1/2}A^i\sigma^{-1/2}$;
-    then $\sum_i(B^i)^\dagger B^i=\Id$, and $\zeta A$ and $B$ are gauge
-    equivalent.  Rescaling preserves normality by
+    map.  With $\zeta=r^{-1/2}$ and $B^i=\zeta\,\sigma^{1/2}A^i\sigma^{-1/2}$,
+    one has $\sum_i(B^i)^\dagger B^i=\Id$, and $\zeta A$ and $B$ are gauge
+    equivalent.  Because rescaling preserves normality by
     Theorem~\ref{thm:normality_rescaling_invariance} and gauging preserves it
-    by Theorem~\ref{thm:gauge_invariance_normal}, so $B$ is normal.  Since $B$
+    by Theorem~\ref{thm:gauge_invariance_normal}, $B$ is normal.  Since $B$
     is trace preserving,
     Theorem~\ref{thm:normalized_normal_strongly_irreducible} makes $B$
     strongly irreducible, and
     Theorem~\ref{thm:primitive_from_strongly_irred} then returns a positive
-    definite $\rho$ with $(B,\rho)$ primitive.  Gauge equivalence
-    leaves the matrix product vectors unchanged by
-    Theorem~\ref{thm:gauge_invariance}, and multiplying every matrix by
-    $\zeta$ multiplies every length-$N$ word by $\zeta^{N}$ by
-    Lemma~\ref{lem:eval_word_smul}, hence every length-$N$ coefficient of $B$
-    is $\zeta^{N}$ times that of $A$.  By
-    Theorem~\ref{thm:local_ground_space_rescaling} together with gauge
-    invariance of the local ground space, $G_L(A)=G_L(\zeta A)=G_L(B)$.  The
-    parent interaction then agrees by
-    Theorem~\ref{thm:parent_hamiltonian_from_ground_space} and the periodic
-    chain ground space by Lemma~\ref{lem:parent_spanning_of_local_space_eq}.
+    definite $\rho$ with $(B,\rho)$ primitive.  By
+    Theorem~\ref{thm:gauge_invariance} and Lemma~\ref{lem:eval_word_smul},
+    gauge equivalence leaves the matrix product vectors unchanged and
+    multiplying every matrix by $\zeta$ multiplies every length-$N$ word by
+    $\zeta^{N}$, hence every length-$N$ coefficient of $B$ is $\zeta^{N}$ times
+    that of $A$.  By Theorem~\ref{thm:local_ground_space_rescaling} together
+    with gauge invariance of the local ground space, $G_L(A)=G_L(\zeta A)=G_L(B)$;
+    Theorem~\ref{thm:parent_hamiltonian_from_ground_space} and
+    Lemma~\ref{lem:parent_spanning_of_local_space_eq} then identify the parent
+    interaction and the periodic chain ground space.
 \end{proof}
 
 \begin{theorem}[Uniform finite-range gap for normal MPS parent Hamiltonians]
@@ -5397,27 +5400,25 @@ tensors.
     \lean{MPSTensor.exists_parentHamiltonianES_gap_of_isNormal}
     \leanok
     \uses{def:normal, def:l_blk_injective, def:parent_hamiltonian_es}
-    Let $D>0$ and let $A$ be a normal tensor.  There exist $l>1$,
-    $\epsilon_l\geq0$, an integer $m\geq l+1$, and $\delta>0$ such that $A$ is
-    $l$-block injective, $\epsilon_l<1/\sqrt{l+1}$,
+    Let $D>0$ and let $A$ be a normal tensor, with no normalization imposed on
+    $A$.  There exist $l>1$, $\epsilon_l\geq0$, an integer $m\geq l+1$, and
+    $\delta>0$ such that $A$ is $l$-block injective,
+    $\epsilon_l<1/\sqrt{l+1}$, and the arbitrary finite-range coefficient
+    (\ref{eq:normal_finite_range_knabe_delta}) derived in
+    \path{docs/paper-gaps/knabe88_finite_range_coefficient.tex},
     \begin{align}
         \delta
          & =\frac{m\left(1-\epsilon_l\sqrt{l+1}\right)^2-l^2}{m-l},
         \label{eq:normal_finite_range_knabe_delta}
     \end{align}
-    and, for every $N\geq2m$ and every
-    $v\in(\ker H_{N,l+1}^{\mathrm{ES}}(A))^\perp$,
+    realizes the uniform gap of matrix product state parent Hamiltonians
+    asserted at \cite[lines~2183--2187]{Cirac2021Matrix}: for every
+    $N\geq2m$ and every $v\in(\ker H_{N,l+1}^{\mathrm{ES}}(A))^\perp$,
     \begin{align}
         \delta\lVert v\rVert
          & \leq\left\lVert H_{N,l+1}^{\mathrm{ES}}(A)v\right\rVert.
         \label{eq:normal_finite_range_knabe_gap}
     \end{align}
-    No normalization is imposed on $A$.  The uniform gap of matrix product
-    state parent Hamiltonians is asserted at
-    \cite[lines~2183--2187]{Cirac2021Matrix}; the arbitrary finite-range
-    coefficient (\ref{eq:normal_finite_range_knabe_delta}) is the derivation
-    recorded in
-    \path{docs/paper-gaps/knabe88_finite_range_coefficient.tex}.
 \end{theorem}
 
 \begin{proof}
@@ -5427,16 +5428,15 @@ tensors.
         thm:parent_hamiltonian_from_ground_space,
         thm:normality_rescaling_invariance,
         lem:gauge_invariance_block_injective}
-    Replace $A$ by the normalized primitive representative $B$ of
-    Theorem~\ref{thm:normalized_primitive_gauge} and apply
-    Theorem~\ref{thm:primitive_parent_hamiltonian_finite_range_knabe_gap} to
-    $B$.  Since $G_L(A)=G_L(B)$ for every $L$,
+    Applying Theorem~\ref{thm:primitive_parent_hamiltonian_finite_range_knabe_gap}
+    to the normalized primitive representative $B$ of
+    Theorem~\ref{thm:normalized_primitive_gauge} yields the bound for $B$.
+    Since $G_L(A)=G_L(B)$ for every $L$,
     Theorem~\ref{thm:parent_hamiltonian_from_ground_space} makes the two
-    parent Hamiltonians equal, so both the kernel and the norm bound transfer
-    verbatim.  Block injectivity of $B$ at length $l$ passes to $\zeta A$ by
-    Lemma~\ref{lem:gauge_invariance_block_injective} applied to the inverse
-    gauge, and from $\zeta A$ to $A$ by
-    Theorem~\ref{thm:normality_rescaling_invariance}.
+    parent Hamiltonians equal, so both the kernel and the norm bound pass to
+    $A$.  By Lemma~\ref{lem:gauge_invariance_block_injective} applied to the
+    inverse gauge and Theorem~\ref{thm:normality_rescaling_invariance}, block
+    injectivity of $B$ at length $l$ passes first to $\zeta A$ and then to $A$.
 \end{proof}
 
 \begin{lemma}[Positive gap transfer under Loewner domination]
@@ -5489,11 +5489,12 @@ tensors.
     \end{align}
     equivalently $(\sum_{i\in I}w_iP_i)v=0$ exactly when $P_iv=0$ for
     every $i\in I$.  For the empty family both sums are zero and all three
-    kernels are the full space.  This is the analytic kernel step of the
-    blocked-sum comparison in Lemma~\texttt{block-obc} of
-    Rozmán--Molnár--Schuch\footnote{arXiv:2607.19078v1.}, in which the
+    kernels are the full space.  In the blocked-sum comparison of
+    Lemma~\texttt{block-obc} of
+    Rozmán--Molnár--Schuch\footnote{arXiv:2607.19078v1.}, where the
     blocked parent Hamiltonian is a weighted sum $\sum_i\gamma_ih_i$ of
-    positive local terms with $\gamma_i>0$.
+    positive local terms with $\gamma_i>0$, this identity provides the
+    analytic kernel step.
 \end{theorem}
 
 \begin{proof}
@@ -5522,15 +5523,14 @@ tensors.
     Let $(P_i)_{i\in I}$ be a finite family of positive operators on an
     inner product space, with real weights $(w_i)_{i\in I}$.  If
     $w_i\geq0$ for every $i$, then $\sum_{i\in I}w_iP_i$ is positive.  If
-    $w_i\leq1$ for every $i$, then
+    $w_i\leq1$ for every $i$, as in the comparison step of the blocked-sum
+    argument in the source cited in Theorem~\ref{thm:weighted_sum_kernel}
+    where the coefficients satisfy $0<\gamma_i\leq1$, then
     \begin{align}
         \sum_{i\in I}w_iP_i
          & \leq\sum_{i\in I}P_i
     \end{align}
-    in Loewner order.  This is the comparison step of the blocked-sum
-    argument in the source cited in
-    Theorem~\ref{thm:weighted_sum_kernel}, where the coefficients satisfy
-    $0<\gamma_i\leq1$.
+    in Loewner order.
 \end{theorem}
 
 \begin{proof}
@@ -5589,11 +5589,11 @@ tensors.
 \begin{proof}
     \leanok
     The restriction of $H_{N,L}^{\mathrm{ES}}(A)$ to its kernel complement
-    is injective. Its inverse on its image is bounded, since the domain is
+    is injective, and its inverse on its image is bounded because the domain is
     finite dimensional. Thus $\lVert v\rVert\leq C_N\lVert
-        H_{N,L}^{\mathrm{ES}}(A)v\rVert$ for some $C_N>0$; take
-    $\delta_N=C_N^{-1}$. If the kernel complement is zero, any positive
-    constant suffices.
+        H_{N,L}^{\mathrm{ES}}(A)v\rVert$ for some $C_N>0$, so
+    $\delta_N=C_N^{-1}$ gives the desired bound; if the kernel complement is
+    zero, any positive constant suffices.
 \end{proof}
 
 \begin{theorem}[Extension of an eventual uniform gap]
@@ -5612,10 +5612,12 @@ tensors.
 \begin{proof}
     \leanok
     \uses{thm:parent_hamiltonian_fixed_length_gap}
-    Take the minimum of $\delta$ and the finitely many positive constants
-    $\delta_N$ given by Theorem~\ref{thm:parent_hamiltonian_fixed_length_gap}
-    for $N<M$. Equivalently, induct on $M$, replacing $\delta$ by
-    $\min\{\delta,\delta_{M-1}\}$ at each step.
+    Taking $\gamma$ to be the minimum of $\delta$ and the finitely many
+    positive constants $\delta_N$ given by
+    Theorem~\ref{thm:parent_hamiltonian_fixed_length_gap} for $N<M$ (or
+    equivalently inducting on $M$ and replacing $\delta$ by
+    $\min\{\delta,\delta_{M-1}\}$ at each step) extends the bound to every
+    $N$.
 \end{proof}
 
 \begin{theorem}[Uniform gap for normal MPS parent Hamiltonians]
@@ -5623,16 +5625,16 @@ tensors.
     \lean{MPSTensor.exists_parentHamiltonianES_uniform_gap_of_isNormal}
     \leanok
     \uses{def:normal, def:l_blk_injective, def:parent_hamiltonian_es}
-    Let $D>0$ and let $A$ be a normal tensor. There exist $l>1$ and
-    $\gamma>0$ such that $A$ is $l$-block injective and, for every
-    $N$ and every $v\in(\ker H_{N,l+1}^{\mathrm{ES}}(A))^\perp$,
+    Let $D>0$ and let $A$ be a normal tensor. For the normal-tensor case of
+    the uniform gap assertion in \cite[lines~2183--2187]{Cirac2021Matrix},
+    there exist a suitable interaction range $l+1$ with $l>1$ and a constant
+    $\gamma>0$ such that $A$ is $l$-block injective and, for every $N$ and
+    every $v\in(\ker H_{N,l+1}^{\mathrm{ES}}(A))^\perp$,
     \begin{align}
         \gamma\lVert v\rVert
          & \leq \lVert H_{N,l+1}^{\mathrm{ES}}(A)v\rVert.
         \notag
     \end{align}
-    This proves the normal-tensor case of the uniform gap assertion in
-    \cite[lines~2183--2187]{Cirac2021Matrix}, at a suitable interaction range.
 \end{theorem}
 
 \begin{proof}
@@ -5641,9 +5643,9 @@ tensors.
         thm:parent_hamiltonian_eventual_gap}
     Theorem~\ref{thm:normal_parent_hamiltonian_finite_range_knabe_gap}
     gives $l>1$, $m\geq l+1$, and $\delta>0$ with the required norm
-    inequality for $N\geq2m$.
-    Apply Theorem~\ref{thm:parent_hamiltonian_eventual_gap} with
-    $L=l+1$ and $M=2m$.
+    inequality for $N\geq2m$, and
+    Theorem~\ref{thm:parent_hamiltonian_eventual_gap} applied with
+    $L=l+1$ and $M=2m$ extends it to every $N$.
 \end{proof}
 
 \begin{theorem}[Gap bound from a cyclic anticommutator estimate]
@@ -5716,8 +5718,8 @@ tensors.
     \label{lem:grouped_open_ground_projection_locality}
     \lean{MPSTensor.grouped_martingaleDifference_commute,MPSTensor.grouped_martingaleDifference_zero,MPSTensor.groupedIntervalGroundProjectionES_comp_martingaleDifference_one}
     \leanok
-    Set $E_n=G_n-G_{n+1}$. For $0\leq m,n<M$ with $m<n-1$ or $m>n$,
-    one has
+    With $E_n=G_n-G_{n+1}$, every pair $0\leq m,n<M$ with $m<n-1$ or $m>n$
+    satisfies
     \begin{align}
         [E_m,Q_n] & =0.
     \end{align}
@@ -5781,15 +5783,16 @@ tensors.
         lem:open_parent_hamiltonian_es_positive,
         thm:fixed-volume-c3-boundary-indices,
         thm:fixed-volume-c3-projector-conjugacy}
-    Apply the full-range martingale estimate to the grouped filtration,
-    with window width one. Each local window Hamiltonian is the projection
-    $I-Q_n$, so Theorem~\ref{thm:grouped_open_suffix_c2} gives condition C2
-    with constant one. The nonzero local window terms are distinct summands
-    of $H_N$, so Theorem~\ref{thm:grouped_open_parent_c1} gives condition C1
-    with constant one. Lemma~\ref{lem:open_parent_hamiltonian_es_positive}
-    gives positivity of $H_N$. The locality lemma gives the
-    commutation condition. The assumed norm bound gives C3, and the terminal
-    projection is the projection onto $\ker H_N$.
+    Applying the full-range martingale estimate to the grouped filtration with
+    window width one, where each local window Hamiltonian is the projection
+    $I-Q_n$, yields the result: Theorem~\ref{thm:grouped_open_suffix_c2} gives
+    condition C2 with constant one, Theorem~\ref{thm:grouped_open_parent_c1}
+    gives condition C1 with constant one because the nonzero local window terms
+    are distinct summands of $H_N$, and
+    Lemma~\ref{lem:open_parent_hamiltonian_es_positive} gives positivity of
+    $H_N$. The locality lemma provides the commutation condition, the assumed
+    norm bound provides C3, and the terminal projection is the projection onto
+    $\ker H_N$.
 \end{proof}
 
 \begin{theorem}[Energy counting for grouped open windows]
@@ -5831,8 +5834,8 @@ tensors.
 \begin{proof}
     \leanok
     \uses{thm:open_suffix_parent_hamiltonian_c2_full_range}
-    Apply the full-range local gap bound with $l=2p-1$ and index
-    $p(n+1)-1<N$.
+    Applying the full-range local gap bound with $l=2p-1$ and index
+    $p(n+1)-1<N$ yields the inequality.
 \end{proof}
 
 \begin{theorem}[Prefix ground spaces with free right sites]
@@ -5852,10 +5855,10 @@ tensors.
         thm:fixed-volume-c3-projector-conjugacy,
         lem:right-spectator-kernel-projection,
         thm:left_boundary_map_range_eq}
-    Decompose a vector $v$ on $n+r$ sites according to the last $r$
-    physical coordinates, writing $v_s$ for the vector on $n$ sites
-    obtained by fixing these coordinates to $s\in\{0,\ldots,d-1\}^r$.
-    The prefix Hamiltonian acts on each component $v_s$ by the length-$n$
+    Decomposing a vector $v$ on $n+r$ sites according to the last $r$
+    physical coordinates, with $v_s$ denoting the vector on $n$ sites
+    obtained by fixing these coordinates to $s\in\{0,\ldots,d-1\}^r$, shows
+    that the prefix Hamiltonian acts on each component $v_s$ by the length-$n$
     open Hamiltonian, whose kernel is $G_n(A)$. Hence
     $v\in G_n(A)\otimes(\C^d)^{\otimes r}$ if and only if, for every
     $s\in\{0,\ldots,d-1\}^r$,
@@ -5879,10 +5882,10 @@ tensors.
     \leanok
     \uses{thm:fixed-volume-c3-projector-conjugacy,
         thm:spectator_boundary_hilbert_factorization}
-    Write $\sigma$ for the reassociation isometry from the physical space
-    on $K+(L+Q)$ sites to that on $(K+L)+Q$ sites. It preserves the ordered
-    physical coordinates, so for every family $(S_n)_n$ of subspaces of the
-    $n$-site physical spaces,
+    Let $\sigma$ denote the reassociation isometry from the physical space
+    on $K+(L+Q)$ sites to that on $(K+L)+Q$ sites. Because $\sigma$ preserves
+    the ordered physical coordinates, every family $(S_n)_n$ of subspaces of
+    the $n$-site physical spaces satisfies
     \begin{align}
         \sigma\bigl(S_{K+(L+Q)}\bigr) & = S_{(K+L)+Q}.
     \end{align}
@@ -5903,8 +5906,8 @@ tensors.
     the range-$R$ interaction sum on $[n-W,n)$ and the single parent
     interaction on the same interval have the same kernel. In particular,
     for $W=L+Q$ and a chain of length $K+L+Q$, the kernel of the terminal
-    range-$R$ interaction sum is $(\C^d)^{\otimes K}\otimes G_{L+Q}(A)$,
-    the boundary space of condition (C3$'$) in
+    range-$R$ interaction sum coincides with the boundary space
+    $(\C^d)^{\otimes K}\otimes G_{L+Q}(A)$ of condition (C3$'$) in
     \cite{Nachtergaele1996Spectral}.
 \end{theorem}
 \begin{proof}
@@ -5927,13 +5930,13 @@ tensors.
     on $K+L$ and $K+L+Q$ sites have their boundary-condition spaces as kernels.
     On $K+L+Q$ sites, let $P$ project onto the ground space of the first
     $K+L$ sites, let $T$ project onto the ground space of the last $L+Q$
-    sites, and let $F$ project onto the whole-chain ground space. Then
+    sites, and let $F$ project onto the whole-chain ground space. Then the
+    grouped projection product matches the three-interval projector error of
+    \cite[condition C3$'$]{Nachtergaele1996Spectral}:
     \begin{align}
         \|T(P-F)\|=\|F-PT\|.
         \notag
     \end{align}
-    The right-hand side is the three-interval projector error in
-    \cite[condition C3$'$]{Nachtergaele1996Spectral}.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -5962,12 +5965,11 @@ tensors.
 \begin{proof}
     \leanok
     \uses{thm:parent_hamiltonian_gap_from_open_knabe_block}
-    Choose $n$ with $(R-1)^2<n\gamma$ and then choose $M\geq n+2R$
-    for which the open-chain bound holds. Set $m=pM-R+1$. Then
-    $m\geq\max\{n,R\}$ and the active open volume is $m+R-1=pM$.
-    The finite-range Knabe comparison gives the positive constant
-    $\delta=(m\gamma-(R-1)^2)/(m-R+1)$ and the asserted bound for every
-    $N\geq2m$.
+    Choosing $n$ with $(R-1)^2<n\gamma$ and $M\geq n+2R$ for which the
+    open-chain bound holds, and setting $m=pM-R+1$, gives $m\geq\max\{n,R\}$
+    and active open volume $m+R-1=pM$. The finite-range Knabe comparison then
+    yields the positive constant $\delta=(m\gamma-(R-1)^2)/(m-R+1)$ and the
+    asserted bound for every $N\geq2m$.
 \end{proof}
 
 \begin{theorem}[Spectator extension of a grouped projection difference]
@@ -6045,10 +6047,10 @@ tensors.
         thm:ph_active_grouped_projector_error,thm:grouped_spectator_norm}
     The products at indices zero and one vanish, so by
     Theorem~\ref{thm:grouped_c3_from_second_index} it suffices to treat
-    $n\geq2$. For such $n$, put $K=p(n-1)$. The active interval has
-    length $p(n+1)$, and its preceding prefix has length $pn$. The kernel
-    hypothesis and the active projector identity give the desired bound on
-    this interval. Adjoining the remaining $pM-p(n+1)$ sites does not
+    $n\geq2$. For such $n$, setting $K=p(n-1)$ gives an active interval of
+    length $p(n+1)$ whose preceding prefix has length $pn$. The kernel
+    hypothesis and the active projector identity yield the desired bound on
+    this interval, and adjoining the remaining $pM-p(n+1)$ sites does not
     increase the operator norm.
 \end{proof}
 
@@ -6062,7 +6064,9 @@ tensors.
     and positive-definite invariant matrices. Assume that no two distinct
     blocks are related by a virtual similarity and a phase. Let
     $B=\bigoplus_{j=0}^{r-1}\mu_jA_j$, with every $\mu_j\neq0$.
-    For every $R_*\in\mathbb N$, there are $p\geq\max\{1,R_*\}$ and
+    By the grouped martingale estimate of
+    \cite[Theorem~2.1(ii) and Section~6]{Nachtergaele1996Spectral},
+    for every $R_*\in\mathbb N$ there are $p\geq\max\{1,R_*\}$ and
     $\gamma>0$ such that
     \begin{align}
         \gamma\|v\|\leq
@@ -6070,19 +6074,17 @@ tensors.
     \end{align}
     for every $M\geq2$ and every
     $v\perp\ker H^{\mathrm{open}}_{pM,2p}(B)$.
-    This follows from the grouped martingale estimate of
-    \cite[Theorem~2.1(ii) and Section~6]{Nachtergaele1996Spectral}.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:ph_primitive_blocks_open_kernel,
         thm:ph_block_diagonal_projector_decay,
         thm:grouped_c3_from_projector_defect,thm:grouped_open_parent_gap}
-    Choose $p$ above $R_*$ and the open-kernel threshold, and sufficiently
+    Choosing $p$ above $R_*$ and the open-kernel threshold, and sufficiently
     large that the three-interval projector error is at most $1/2$ for
-    every pair of outer lengths at least $p$. The grouped C3 estimate
-    then holds with $\epsilon=1/2<1/\sqrt2$. The grouped open-chain
-    bound gives $\gamma=(1-\sqrt2/2)^2>0$ at every length $pM$, $M\geq2$.
+    every pair of outer lengths at least $p$, ensures that the grouped C3
+    estimate holds with $\epsilon=1/2<1/\sqrt2$. The grouped open-chain
+    bound then gives $\gamma=(1-\sqrt2/2)^2>0$ at every length $pM$, $M\geq2$.
 \end{proof}
 
 \begin{theorem}[Open-chain gaps at every length for primitive block sums]
@@ -6091,16 +6093,16 @@ tensors.
         exists_ge_openParentHamiltonianES_toTensorFromBlocks_gap_all_of_isPrimitiveMPS}
     \leanok
     Under the hypotheses of
-    Theorem~\ref{thm:primitive_block_sum_open_gap_subsequence}, for every
+    Theorem~\ref{thm:primitive_block_sum_open_gap_subsequence}, as in the
+    open-chain form of \cite[Theorem~1.2]{Nachtergaele1996Spectral}, for every
     $R_*\in\mathbb N$ there are $p\geq\max\{1,R_*\}$ and $\delta>0$ such that
     \begin{align}
         \delta\|v\|\leq
         \|H^{\mathrm{open}}_{N,2p}(B)v\|\notag
     \end{align}
     for every chain length $N$ and every
-    $v\perp\ker H^{\mathrm{open}}_{N,2p}(B)$. For $N<2p$ the Hamiltonian is
-    zero and the assertion is vacuous. This is the open-chain form of
-    \cite[Theorem~1.2]{Nachtergaele1996Spectral}.
+    $v\perp\ker H^{\mathrm{open}}_{N,2p}(B)$ (for $N<2p$ the Hamiltonian is
+    zero and the assertion is vacuous).
 \end{theorem}
 \begin{proof}
     \leanok
@@ -6111,10 +6113,10 @@ tensors.
         thm:ph_terminal_interval_kernel,
         thm:open_interval_gap_transport,
         thm:open_parent_overlapping_interval_gap}
-    Choose $p$ as in
+    Fix $p$ as in
     Theorem~\ref{thm:primitive_block_sum_open_gap_subsequence}, above the
     open-kernel threshold and so large that the three-interval projector
-    error is at most $1/2$. Write $N=pM+q$ with $0\leq q<p$ and $M\geq3$.
+    error is at most $1/2$, and write $N=pM+q$ with $0\leq q<p$ and $M\geq3$.
     If $q=0$ the grouped bound applies. Otherwise, the prefix of length
     $pM$ carries the grouped gap $\gamma$, and the terminal interval of
     length $2p+q$ carries a gap $\eta>0$, the minimum of the finitely many
@@ -6152,10 +6154,10 @@ tensors.
     \leanok
     \uses{thm:primitive_block_sum_open_gap_subsequence,
         thm:periodic_gap_from_divisible_open}
-    Choose $p\geq\max\{1,R_*\}$ by
-    Theorem~\ref{thm:primitive_block_sum_open_gap_subsequence} and set $R=2p$.
-    The uniform open-chain gap on lengths $pM$, $M\geq2$, gives a positive
-    periodic gap at every sufficiently large length by
+    Choosing $p\geq\max\{1,R_*\}$ by
+    Theorem~\ref{thm:primitive_block_sum_open_gap_subsequence} and setting
+    $R=2p$, the uniform open-chain gap on lengths $pM$, $M\geq2$, yields a
+    positive periodic gap at every sufficiently large length by
     Theorem~\ref{thm:periodic_gap_from_divisible_open}.
 \end{proof}
 
@@ -6183,11 +6185,12 @@ tensors.
 \end{theorem}
 \begin{proof}
     \leanok
-    Expand the inner product in the product orthonormal basis and sum first
-    over the additional coordinates. Positivity follows term by term;
-    the order assertion follows by applying positivity to $U-T$.
-    The scalar identity follows on each coordinate. Unitary conjugation
-    preserves and reflects positivity, hence also operator order.
+    Expanding the inner product in the product orthonormal basis and summing
+    first over the additional coordinates establishes the inner-product
+    identity. Positivity follows term by term, and applying positivity to
+    $U-T$ gives the order assertion. The scalar identity holds on each
+    coordinate, and unitary conjugation preserves and reflects positivity and
+    hence operator order.
 \end{proof}
 
 \begin{lemma}[Comparison on a finite interval]
@@ -6274,10 +6277,10 @@ tensors.
     \uses{lem:parent-finite-interval-comparison,
         thm:periodic-parent-range-comparison,
         lem:positive-comparison-kernel-gap}
-    By Lemma~\ref{lem:parent-finite-interval-comparison}, choose
+    Lemma~\ref{lem:parent-finite-interval-comparison} provides
     $\kappa,C>0$ such that
-    $\kappa h_W\leq K_{R,W}\leq Ch_W$. Summing all cyclic translates
-    (Theorem~\ref{thm:periodic-parent-range-comparison}) gives
+    $\kappa h_W\leq K_{R,W}\leq Ch_W$, and summing all cyclic translates by
+    Theorem~\ref{thm:periodic-parent-range-comparison} gives
     \begin{align}
         \kappa H_{W,N}\leq (W-R+1)H_{R,N}\leq C H_{W,N}
         \notag
@@ -6323,10 +6326,10 @@ tensors.
     \uses{lem:full-interval-parent-interaction,
         thm:cyclic_active_block_local_conjugacy,
         thm:cyclic_knabe_block_open_parent_hamiltonian}
-    Extend each local inequality by the identity on the complementary sites
-    and conjugate by the cyclic identification of the chosen interval.
-    Both operations preserve operator order. Summing over all cyclic
-    origins gives the asserted bounds: each range-$R$ interaction occurs
+    Extending each local inequality by the identity on the complementary sites
+    and conjugating by the cyclic identification of the chosen interval
+    preserves operator order. Summing over all cyclic origins then gives the
+    asserted bounds, since each range-$R$ interaction occurs
     exactly $m$ times, once for each of its possible positions in the
     open interval.
 \end{proof}
@@ -6349,10 +6352,10 @@ tensors.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:primitive_block_sum_parent_gap,thm:ph_primitive_blocks_open_kernel,thm:parent-gap-fixed-range-transfer}
-    Choose $R_0$ so that every open parent Hamiltonian of range at least
-    $R_0$ has the expected local ground space. Fix $R\geq R_0$, and choose
-    a uniformly gapped range $W\geq2R$. On $W$ sites, the range-$R$
-    Hamiltonian and the orthogonal projection onto the complement of the local
+    Let $R_0$ be large enough that every open parent Hamiltonian of range at
+    least $R_0$ has the expected local ground space. For any fixed $R\geq R_0$
+    and any uniformly gapped range $W\geq2R$, the range-$R$ Hamiltonian on $W$
+    sites and the orthogonal projection onto the complement of the local
     MPS space have the same kernel. Finite dimensionality gives two-sided
     positive order bounds. Summing their cyclic translates gives two-sided
     bounds between the periodic Hamiltonians of ranges $R$ and $W$.
@@ -6368,23 +6371,23 @@ tensors.
     are nonzero, and the normalized primitive tensors $A_j$ are pairwise
     inequivalent under similarity and phase. Assume positive physical and bond
     dimensions, positive definite recorded invariant densities, and a common
-    block-injectivity length $L_0\geq1$. For every
-    $R\geq3(r-1)(L_0+1)+1$, there exist $\gamma_R>0$ and $N_R$ such that
+    block-injectivity length $L_0\geq1$. Removing the restriction to the
+    range constructed by the overlap argument recorded
+    in~\cite{gap:cpgsv21_block_parent_interaction_range}, for every
+    $R\geq3(r-1)(L_0+1)+1$ there exist $\gamma_R>0$ and $N_R$ such that
     \begin{align}
         \gamma_R\|v\|\leq\|H_{R,N}(B)v\|
         \notag
     \end{align}
-    for every $N\geq N_R$ and every $v\perp\ker H_{R,N}(B)$. This removes
-    the restriction to the range constructed by the overlap argument, as
-    recorded in~\cite{gap:cpgsv21_block_parent_interaction_range}.
+    for every $N\geq N_R$ and every $v\perp\ker H_{R,N}(B)$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:primitive_block_sum_parent_gap,thm:parent-gap-fixed-range-transfer,
         thm:ph_primitive_blocks_sharp_open_kernel}
     The common block-injectivity hypothesis identifies the kernel of the
     open-chain range-$R$ Hamiltonian on every interval of length at least
-    $R$ with the local MPS space. Choose a uniformly gapped range
-    $W\geq2R$. The two-sided comparison on the interval of length $W$
+    $R$ with the local MPS space. For a uniformly gapped range
+    $W\geq2R$, the two-sided comparison on the interval of length $W$
     and its cyclic translates transfers the gap from range $W$ to range
     $R$.
 \end{proof}
@@ -6440,15 +6443,16 @@ tensors.
     fixed point $\rho$. Suppose $\lambda>0$ and every eigenvalue
     $\nu\neq1$ of its observable transfer map satisfies $|\nu|<\lambda$.
     Then the spectral radius of the transfer remainder in the $\rho$-weighted
-    norm is less than $\lambda$. If $\tr\rho=1$, there is a constant
-    $C_\lambda>0$ such that, for every integer $n\geq1$,
+    norm is less than $\lambda$. Following the eigenvalue prescription of
+    \cite[Section~6, equation~(6.1)]{Nachtergaele1996Spectral}, if
+    $\tr\rho=1$, there is a constant $C_\lambda>0$ such that, for every
+    integer $n\geq1$,
     \begin{align}
         a(n)\leq C_\lambda\lambda^n.
     \end{align}
-    This establishes the eigenvalue prescription following
-    \cite[Section~6, equation~(6.1)]{Nachtergaele1996Spectral}. % The dimension-only constant in the source projector estimate remains separate.
+    % The dimension-only constant in the source projector estimate remains separate.
 \end{theorem}
-\begin{proof}\leanok
+\\begin{proof}\leanok
     \uses{thm:fnw-transfer-eigenvalue-from-remainder,thm:fnw_remainder_eigenvalue_gap,thm:fnw_mixing_quantity_geometric}
     A nonzero remainder eigenvalue is a transfer eigenvalue, and primitivity
     excludes the eigenvalue $1$. The zero eigenvalue also has modulus less than
@@ -6472,8 +6476,8 @@ tensors.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:fnw-transfer-eigenvalue-rate,thm:fnw_mixing_quantity_geometric}
-    Choose an intermediate rate $\mu$ strictly between the remainder spectral
-    radius and $\lambda$. The mixing estimate gives $a(n)\leq C_\mu\mu^n$.
+    For an intermediate rate $\mu$ strictly between the remainder spectral
+    radius and $\lambda$, the mixing estimate gives $a(n)\leq C_\mu\mu^n$.
     Since $(\mu/\lambda)^n$ tends to zero, eventually
     $C_\mu(\mu/\lambda)^n\leq c$.
 \end{proof}
@@ -6486,7 +6490,11 @@ tensors.
         def:reassociated_tail_boundary_map, def:spectator_boundary_maps_es,
         def:ground_space_es}
     Under the preceding hypotheses, suppose additionally that $\lambda<1$.
-    For every $c>0$, there exists an onset $M$ such that, for every overlap
+    In the version of \cite[Section~6, equation~(6.1)]{Nachtergaele1996Spectral}
+    with the additional onset stated
+    explicitly~\cite{gap:cpgsv21_martingale_overlap}, for every $c>0$ there
+    exists an onset $M$ (depending on the state, rate, and prefactor, and not
+    asserted to be the injectivity threshold) such that, for every overlap
     $m\geq M$, every prefix length $r\geq0$, and every suffix length $\ell\geq1$,
     we have $c\lambda^m<1$ and
     \begin{align}
@@ -6494,18 +6502,14 @@ tensors.
         -G_{r+m+\ell}\right\|
         \leq \frac{c\lambda^m(1+c\lambda^m)}{1-c\lambda^m}.
     \end{align}
-    The onset depends on the state, rate, and prefactor; it is not asserted to
-    be the injectivity threshold. This is the version of
-    \cite[Section~6, equation~(6.1)]{Nachtergaele1996Spectral} with the additional
-    onset stated explicitly~\cite{gap:cpgsv21_martingale_overlap}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:fnw-eventual-prescribed-prefactor,thm:fnw_projector_defect_geometric,
         thm:normal_from_primitive_posdef}
-    Increase the onset until the overlap exceeds an injectivity length and
-    $c\lambda^m<1$. The preceding mixing estimate then satisfies the hypotheses
-    of the fixed-overlap FNW projector estimate, uniformly in the two exterior
-    lengths.
+    Once the onset is large enough that the overlap exceeds an injectivity
+    length and $c\lambda^m<1$, the preceding mixing estimate satisfies the
+    hypotheses of the fixed-overlap FNW projector estimate, uniformly in the
+    two exterior lengths.
 \end{proof}
 
 \subsection{The dimension-only prefactor at a prescribed rate}
@@ -6558,7 +6562,7 @@ tensors.
     \uses{def:weighted-matrix-unit-path-vectors}
     Distinct vertex paths $(b,c,e)$ give distinct physical basis vectors
     $|ab,bc,ce,ef\rangle$, which gives the first identity. For the second,
-    multiply four consecutive letters:
+    multiplying four consecutive letters yields
     \begin{align}
         A^{ab}A^{b'c}A^{c'e}A^{e'f}
          & =\delta_{bb'}\delta_{cc'}\delta_{ee'}\,T_{abcef}\,E_{af}, \notag \\
@@ -6586,7 +6590,7 @@ tensors.
 \end{theorem}
 \begin{proof}\leanok
     \uses{def:tail_boundary_map, def:left_boundary_map}
-    Factor the matrix product at the boundary of the interval:
+    Factoring the matrix product at the boundary of the interval gives
     \begin{align}
         \varphi(u)\,\Gamma_{K+L}(X)(u,\tau)
          & =\tr\bigl(A^\tau\,\varphi(u)XA^u\bigr)
@@ -6661,9 +6665,9 @@ tensors.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:weighted-matrix-unit-path-contractions}
-    Expand its self-inner product and its inner product with an arbitrary
-    boundary vector. The latter equals the indicated scalar sum multiplied
-    by the boundary matrix entry at $(f,a)$.
+    Expanding the self-inner product of the path vector and its inner product
+    with an arbitrary boundary vector shows that the latter equals the
+    indicated scalar sum multiplied by the boundary matrix entry at $(f,a)$.
 \end{proof}
 
 \begin{theorem}[A matrix coefficient bound for a projection defect]
@@ -6680,9 +6684,10 @@ tensors.
     \end{align}
 \end{theorem}
 \begin{proof}\leanok
-    Since $P_Vx=x$, $P_Wx=0$ and $P_Uy=y$, the inner product on the left
-    equals $\langle y,(P_UP_V-P_W)x\rangle$. Apply Cauchy--Schwarz and the
-    operator norm bound. The two operator norms agree by taking adjoints.
+    Since $P_Vx=x$, $P_Wx=0$, and $P_Uy=y$, the inner product on the left
+    equals $\langle y,(P_UP_V-P_W)x\rangle$, so Cauchy--Schwarz and the
+    operator norm bound give the inequality; taking adjoints shows that the
+    two operator norms agree.
 \end{proof}
 
 \begin{theorem}[The dimension-four coefficient at overlap two]
@@ -6703,18 +6708,17 @@ tensors.
     \label{thm:fnw_dimension_markov_matrix}
     \lean{MPSTensor.FNWDimensionConstant.hadamardU, MPSTensor.FNWDimensionConstant.hadamardV, MPSTensor.FNWDimensionConstant.hadamardW, MPSTensor.FNWDimensionConstant.uniformMatrix, MPSTensor.FNWDimensionConstant.markovMatrix, MPSTensor.FNWDimensionConstant.squareMatrix, MPSTensor.FNWDimensionConstant.remainderMatrix, MPSTensor.FNWDimensionConstant.markovMatrix_pos, MPSTensor.FNWDimensionConstant.markovMatrix_sum_identities, MPSTensor.FNWDimensionConstant.markovMatrix_pow_two, MPSTensor.FNWDimensionConstant.markovMatrix_pow_three, MPSTensor.FNWDimensionConstant.remainderMatrix_nilpotent}
     \leanok
-    Let $e=(1,1,1,1)^{\mathsf T}$ and let
-    $u=(1,1,-1,-1)^{\mathsf T}$, $v=(1,-1,1,-1)^{\mathsf T}$,
-    $w=(1,-1,-1,1)^{\mathsf T}$. Put $Q=ee^{\mathsf T}/4$ and
-    $P=Q+(uv^{\mathsf T}+vw^{\mathsf T})/16$.
-    Then $P$ is strictly positive and doubly stochastic, and
+    To examine the prescribed-rate coefficient in
+    \cite[Section~6, equation~(6.1)]{Nachtergaele1996Spectral}, let
+    $e=(1,1,1,1)^{\mathsf T}$ and let $u=(1,1,-1,-1)^{\mathsf T}$,
+    $v=(1,-1,1,-1)^{\mathsf T}$, $w=(1,-1,-1,1)^{\mathsf T}$. With
+    $Q=ee^{\mathsf T}/4$ and $P=Q+(uv^{\mathsf T}+vw^{\mathsf T})/16$,
+    the matrix $P$ is strictly positive and doubly stochastic, and
     \begin{align}
         P^2     & =Q+uw^{\mathsf T}/64, & P^3            & =Q,   \\
         Pu      & =0,                   & w^{\mathsf T}P & =0,   \\
         (P-Q)^3 & =0,                   & (P-Q)^2        & \ne0.
     \end{align}
-    This is an explicit construction for examining the prescribed-rate coefficient
-    in \cite[Section~6, equation~(6.1)]{Nachtergaele1996Spectral}.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -6747,9 +6751,9 @@ tensors.
     \uses{thm:fnw_dimension_markov_matrix}
     The real identities are those of
     Theorem~\ref{thm:fnw_dimension_markov_matrix}, read in $\R$.
-    For the path sums, apply the identities for $P^2$ and $P^3$, and use
-    $u_b^2=w_e^2=1$.
-    The assertions concerning square roots follow from positivity.
+    Applying the identities for $P^2$ and $P^3$ together with $u_b^2=w_e^2=1$
+    yields the path sums, and positivity gives the assertions concerning
+    square roots.
 \end{proof}
 
 \begin{theorem}[A dimension-four physical projection defect]
@@ -6814,22 +6818,21 @@ tensors.
 \end{theorem}
 \begin{proof}
     \leanok
-    Multiply the matrix units in $\sum_{i,j}A_{ij}XA_{ij}^{\dagger}$.
-    Only the diagonal entries of $X$ contribute.
+    Multiplying the matrix units in $\sum_{i,j}A_{ij}XA_{ij}^{\dagger}$ shows
+    that only the diagonal entries of $X$ contribute.
 \end{proof}
 
 \begin{theorem}[The positive Markov matrix-unit channel]
     \label{thm:fnw_dimension_markov_channel}
     \lean{MPSTensor.FNWDimensionConstant.markovTensor, MPSTensor.FNWDimensionConstant.markovTensor_isInjective, MPSTensor.FNWDimensionConstant.markovTensor_isTP, MPSTensor.FNWDimensionConstant.markovTensor_transferMap_one, MPSTensor.FNWDimensionConstant.markovTensor_transferMap_cube}
     \leanok
-    For the four-dimensional matrix $P$ above, let
+    For the four-dimensional matrix $P$ used to examine
+    \cite[Section~6, equation~(6.1)]{Nachtergaele1996Spectral}, let
     $A_{ij}=\sqrt{P_{ij}}E_{ij}$. Then $A$ is injective at length one, its transfer
     map $\mathcal E_A$ is unital and trace preserving, and every matrix $X$ satisfies
     \begin{align}
         \mathcal E_A^3(X) & =\frac{\operatorname{tr}(X)}4 I.
     \end{align}
-    These are the channel properties of the explicit construction used to examine
-    \cite[Section~6, equation~(6.1)]{Nachtergaele1996Spectral}.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -6877,14 +6880,14 @@ tensors.
         \left\|G_{[1,3]}G_{[0,2]}-G_{[0,3]}\right\|
                     & >\frac{16\lambda^2(1+16\lambda^2)}{1-16\lambda^2}.\notag
     \end{align}
-    Thus the dimension-only coefficient and the prescribed-rate assertion
-    following Nachtergaele's bound cannot hold simultaneously at this fixed
-    overlap length; see \cite{gap:cpgsv21_martingale_overlap}.
+    As recorded in \cite{gap:cpgsv21_martingale_overlap}, the dimension-only
+    coefficient and the prescribed-rate assertion following Nachtergaele's
+    bound therefore cannot hold simultaneously at this fixed overlap length.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:fnw-dimension-four-physical-defect,thm:fnw-dimension-four-coefficient,thm:fnw-dimension-markov-primitive}
-    Take the weighted matrix-unit tensor associated with the transition
-    matrix above and the stationary density $I/4$. Its transfer map becomes
+    For the weighted matrix-unit tensor associated with the transition
+    matrix above and the stationary density $I/4$, the transfer map becomes
     completely depolarizing after three steps, so every nonunit eigenvalue
     of the observable transfer map is zero. The rate $1/1000$ is therefore
     admissible. The physical projection defect is at least $1/16$, whereas
@@ -6917,11 +6920,11 @@ tensors.
     \label{thm:block-word-span-separation}
     \lean{MPSTensor.not_gaugePhaseEquiv_of_wordTupleSpanTop}
     \leanok
-    Let $A^0,\ldots,A^{r-1}$ be tensors with positive bond dimensions. Suppose that
-    their simultaneous word evaluations at length $S$ span the product of their
-    matrix algebras. Then no two distinct blocks are gauge-phase equivalent.
-    This is a consequence of the simultaneous block-injectivity condition in
-    \cite[Section IV.C]{Cirac2021Matrix}.
+    Let $A^0,\ldots,A^{r-1}$ be tensors with positive bond dimensions. As a
+    consequence of the simultaneous block-injectivity condition in
+    \cite[Section IV.C]{Cirac2021Matrix}, if their simultaneous word
+    evaluations at length $S$ span the product of their matrix algebras, then
+    no two distinct blocks are gauge-phase equivalent.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -6947,21 +6950,20 @@ tensors.
     \leanok
     \uses{def:blockwise_product_word_span}
     Let $A^0,\ldots,A^{r-1}$ have positive bond dimensions and a common
-    physical dimension. Suppose that their simultaneous length-$S$ word
-    tuples span the product matrix algebra, where $S>0$. Then their word
+    physical dimension. As in the propagation of block injectivity in
+    \cite[Section~IV.C]{Cirac2021Matrix}, if their simultaneous length-$S$
+    word tuples span the product matrix algebra with $S>0$, then their word
     tuples span the same algebra at every length $n\geq S$.
-    This is the propagation of block injectivity used in
-    \cite[Section~IV.C]{Cirac2021Matrix}.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:block_injective_of_word_tuple_span,
         thm:normalized_primitive_gauge,thm:word_tuple_span_gauge_invariance,
         thm:block_word_span_independent_rescaling,thm:ph_tp_word_span_propagation}
-    Each block is $S$-block injective and hence normal. Rescale and conjugate
-    each block into normalized primitive form. Both operations preserve
-    the simultaneous span at $S$. Trace preservation propagates that span
-    to $n\geq S$. Inverse conjugation and rescaling return the full span
+    Each block is $S$-block injective and hence normal. Rescaling and
+    conjugating each block into normalized primitive form preserves
+    the simultaneous span at $S$, trace preservation propagates that span
+    to $n\geq S$, and inverse conjugation and rescaling return the full span
     to the original family at length $n$.
 \end{proof}
 
@@ -6973,17 +6975,17 @@ tensors.
     Let $A^0,\ldots,A^{r-1}$ have positive physical and bond dimensions.
     Suppose that their simultaneous length-$S$ word tuples span the product
     matrix algebra, where $S>0$. Set $B=\bigoplus_j\mu_jA^j$, with
-    every $\mu_j\neq0$. For every $S+1\leq R\leq N$,
+    every $\mu_j\neq0$. By the inversion and regrowth argument in
+    \cite[Section~IV.C, lines~2114--2129]{Cirac2021Matrix}, every
+    $S+1\leq R\leq N$ satisfies
     $\ker H^{\mathrm{open}}_{N,R}(B)=G_N^{\mathrm{ES}}(B)$.
-    This sufficient range follows from the inversion and regrowth argument in
-    \cite[Section~IV.C, lines~2114--2129]{Cirac2021Matrix}.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:block_word_span_primitive_normalization,
         thm:ph_tp_word_span_propagation,thm:ph_tp_block_open_ground_space,
         thm:ph_block_replacement_parent_equality}
-    Normalize the blocks while preserving their simultaneous span at $S$
+    Normalizing the blocks preserves their simultaneous span at $S$
     and every component local space. Trace preservation gives the span
     at all lengths at least $S$, so the open-chain intersection theorem
     gives the kernel identity for the normalized block sum. The original
@@ -7000,17 +7002,16 @@ tensors.
     physical dimension $d\geq1$. Suppose that their simultaneous
     length-$S$ word tuples span the product matrix algebra, where $S>0$.
     Let $B=\bigoplus_j\mu_jA^j$, with every $\mu_j\ne0$.
-    For every interaction range $R\geq S+1$, there exists $\delta>0$
+    With no normalization or inequivalence assumption required on the
+    original blocks, the finite-interval conclusion of
+    \cite[Theorem~1.2 and Section~6]{Nachtergaele1996Spectral} holds at
+    every interaction range $R\geq S+1$: there exists $\delta>0$
     such that
     \begin{align}
         \delta\|v\|\leq\|H^{\mathrm{open}}_{N,R}(B)v\|
         \notag
     \end{align}
     for every $N\geq R$ and every $v\perp G_N(B)$.
-    No normalization or inequivalence assumption on the original blocks
-    is required. This is the finite-interval conclusion of
-    \cite[Theorem~1.2 and Section~6]{Nachtergaele1996Spectral} at the
-    sufficient interaction ranges given by block injectivity.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:block_word_span_primitive_normalization,
@@ -7019,9 +7020,9 @@ tensors.
         thm:primitive_block_sum_open_gap_all_lengths,
         lem:parent-finite-interval-comparison,
         lem:open_parent_range_comparison}
-    Independently normalize the blocks into primitive form while preserving
-    their simultaneous span at $S$ and all component local ground spaces.
-    Simultaneous injectivity separates these normalized blocks. The
+    Independent normalization of the blocks into primitive form preserves
+    their simultaneous span at $S$ and all component local ground spaces, and
+    simultaneous injectivity separates these normalized blocks. The
     all-length primitive theorem gives a uniform gap at some range $2p$
     with $p\geq R$. At range $R$, the open kernel is $G_N$ for every
     $N\geq R$. On the interval of length $2p$, finite-dimensional
@@ -7049,8 +7050,8 @@ tensors.
     \uses{thm:block_open_gap_all_lengths_simultaneous_injectivity,
         thm:cpsv_bnt_sharp_span_ambient_cap}
     The dimension-bound blocking theorem gives a positive simultaneous
-    injectivity length $S$ with $S+1\leq3D_*^5$. Apply the open-chain gap
-    theorem at $R\geq S+1$.
+    injectivity length $S$ with $S+1\leq3D_*^5$, so the open-chain gap
+    theorem applies at every $R\geq S+1$.
 \end{proof}
 
 \begin{theorem}[Open parent gaps for canonical tensors]
@@ -7085,9 +7086,9 @@ tensors.
         thm:block_open_kernel_simultaneous_injectivity,
         thm:canonical_bounded_range_ground_space}
     The canonical reconstruction preserves every positive-length local
-    ground space. This identifies the open parent Hamiltonians and their
-    boundary-condition spaces with those of the distinct representatives.
-    Apply the block open-chain gap and kernel theorems. For the dimension
+    ground space, identifying the open parent Hamiltonians and their
+    boundary-condition spaces with those of the distinct representatives, to
+    which the block open-chain gap and kernel theorems apply; for the dimension
     bound, the blocking estimate gives $S>0$ with $S+1\leq3D^5$.
 \end{proof}
 
@@ -7147,10 +7148,11 @@ tensors.
     \uses{lem:open_local_interaction_sum_properties,
         thm:canonical_open_gap_all_lengths}
     Finite-dimensional positivity and the prescribed local kernel give
-    $\kappa h_R(A)\leq h\leq C h_R(A)$. Sum the translated comparisons.
-    The two positive operators bound one another by positive constants,
-    so their kernels coincide. The lower bound transfers the canonical
-    gap to the common kernel complement.
+    $\kappa h_R(A)\leq h\leq C h_R(A)$, and summing the translated
+    comparisons yields the two-sided operator bounds. Because the two positive
+    operators bound one another by positive constants, their kernels coincide,
+    and the lower bound transfers the canonical gap to the common kernel
+    complement.
 \end{proof}
 
 \begin{theorem}[Compact comparison for open parent interactions]
@@ -7181,7 +7183,8 @@ tensors.
     has a finite positive upper comparison constant. The preceding proof
     transfers the given gap with the common lower constant; the upper
     constants identify the kernels and do not affect the resulting gap.
-    For a fixed canonical tensor, apply its all-length open gap theorem.
+    For a fixed canonical tensor, the all-length open gap theorem provides the
+    required canonical gap.
 \end{proof}
 
 \begin{theorem}[Compact gaps on bounded open intervals]
@@ -7280,8 +7283,8 @@ tensors.
     The active starts are $0,\ldots,N-R$. Padding by $2m$ zeros prevents
     a cyclic window of $m$ starts from meeting two separated parts of this
     interval. Its active starts therefore form one interval $[a,b)$, or
-    none. In the first case, put $W=b-a+R-1$ and $n=b+R-1$.
-    The local terms sum to the interval Hamiltonian on $[a,n)$.
+    none. In the first case, with $W=b-a+R-1$ and $n=b+R-1$, the local terms
+    sum to the interval Hamiltonian on $[a,n)$.
     Its norm gap is preserved under extension by free sites. Positivity
     converts this norm gap into $A_s^2\geq\gamma A_s$; the zero case is immediate.
 \end{proof}
@@ -7293,22 +7296,21 @@ tensors.
     \uses{def:open_parent_hamiltonian_es}
     Let $1\leq R\leq m$, and suppose that every range-$R$ open parent
     Hamiltonian on $R\leq W\leq m+R-1$ sites has norm gap at least
-    $\gamma$ on its kernel complement. If $m\gamma>(R-1)^2$, then
+    $\gamma$ on its kernel complement. By the cyclic finite-range inequality
+    derived in \cite{gap:knabe88_finite_range_coefficient} (rather than the
+    printed periodic nearest-neighbor criterion), if $m\gamma>(R-1)^2$, then
     \begin{align}
         \delta & =\frac{m\gamma-(R-1)^2}{m-R+1}>0,
         \label{eq:open_finite_range_knabe_delta}
     \end{align}
     and $\delta\|v\|\leq\|H^{\mathrm{open}}_{N,R}(A)v\|$ for every
     $N\geq R$ and $v\perp\ker H^{\mathrm{open}}_{N,R}(A)$.
-    This is a consequence of the cyclic finite-range inequality, as derived
-    in \cite{gap:knabe88_finite_range_coefficient}; it is not the printed
-    periodic nearest-neighbor criterion.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:open_knabe_padding_properties,thm:open_knabe_clipped_windows,
         thm:finite_range_cyclic_knabe,lem:quadratic_form_to_norm_bound}
-    For each physical volume $N$, take period $P=N+2m$.
-    The padded projections have sum $H^{\mathrm{open}}_{N,R}(A)$ and
+    For each physical volume $N$, with period $P=N+2m$,
+    the padded projections have sum $H^{\mathrm{open}}_{N,R}(A)$ and
     satisfy the separated commutation hypothesis. Every cyclic window
     satisfies $A_s^2\geq\gamma A_s$. The cyclic inequality therefore gives
     $(H^{\mathrm{open}}_{N,R}(A))^2\geq\delta H^{\mathrm{open}}_{N,R}(A)$
@@ -7326,14 +7328,13 @@ tensors.
     algebra at every parameter, where $S>0$, and put
     $B_x=\bigoplus_j\mu_j(x)A_x^j$, with every weight nonzero.
     Fix $R\geq S+1$ and a finite upper volume $M$.
-    If at $x_0$ the open Hamiltonians on every $R\leq N\leq M$ have
-    norm gap at least $\gamma>0$ on $G_N(B_{x_0})^\perp$, then every
-    $\delta<\gamma$ is a common lower bound on $G_N(B_x)^\perp$ for
-    those volumes and all $x$ in some neighborhood of $x_0$.
-    The same assertion holds for one fixed $N\geq R$.
-    No continuity of the weights is required.
-    This is the finite-volume continuity step of
-    \cite[Appendix~A, lines~2575--2578]{Schuch2011Phases}.
+    As in the finite-volume continuity step of
+    \cite[Appendix~A, lines~2575--2578]{Schuch2011Phases}, with no continuity
+    of the weights required, if at $x_0$ the open Hamiltonians on every
+    $R\leq N\leq M$ have norm gap at least $\gamma>0$ on $G_N(B_{x_0})^\perp$,
+    then every $\delta<\gamma$ is a common lower bound on $G_N(B_x)^\perp$ for
+    those volumes and all $x$ in some neighborhood of $x_0$ (and the same
+    assertion holds for one fixed $N\geq R$).
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:block_ground_space_continuity,thm:block_word_span_propagation,
@@ -7342,7 +7343,8 @@ tensors.
     Hamiltonian is a finite sum of translates of $I-P_{G_R}$, hence
     continuous. Its ground space contains $G_N$.
     The operator and projection perturbation estimate preserves each strict
-    lower bound at fixed $N$. Intersect the finitely many resulting neighborhoods.
+    lower bound at fixed $N$, and intersecting the finitely many resulting
+    neighborhoods completes the proof.
 \end{proof}
 
 \begin{theorem}[Local persistence of an all-length open gap]
@@ -7359,7 +7361,7 @@ tensors.
 \begin{proof}\leanok
     \uses{thm:open_gap_bounded_volume_continuity,thm:open_finite_range_knabe_gap,
         thm:block_open_kernel_simultaneous_injectivity}
-    Choose $m\geq R$ with $m\gamma/2>(R-1)^2$. Continuity preserves
+    For $m\geq R$ chosen with $m\gamma/2>(R-1)^2$, continuity preserves
     the bound $\gamma/2$ on every $R\leq W\leq m+R-1$ in one
     neighborhood. Simultaneous injectivity identifies each kernel with
     $G_W(B_x)$. The finite-size criterion gives the same positive
@@ -7374,12 +7376,12 @@ tensors.
     positive physical and bond dimensions. Suppose their length-$S$ word
     tuples span the product matrix algebra for every $x$, with $S>0$.
     Put $B_x=\bigoplus_j\mu_j(x)A_x^j$, with every weight nonzero.
-    For each fixed $R\geq S+1$, there is $\delta>0$ such that
+    Following the compactness argument of \cite[Appendix~A]{Schuch2011Phases}
+    at the stated sufficient range, with no continuity of the weights required,
+    for each fixed $R\geq S+1$ there is $\delta>0$ such that
     $\delta\|v\|\leq\|H^{\mathrm{open}}_{N,R}(B_x)v\|$ for every
     $x\in K$, every $N\geq R$, and every
     $v\perp\ker H^{\mathrm{open}}_{N,R}(B_x)$.
-    No continuity of the weights is required. The compactness argument
-    follows \cite[Appendix~A]{Schuch2011Phases} at the stated sufficient range.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:block_open_gap_all_lengths_simultaneous_injectivity,
@@ -7407,8 +7409,8 @@ tensors.
         thm:compact_block_open_gap}
     The dimension-bound span theorem gives, at each parameter, a positive
     simultaneous injectivity length $L_x$ with $L_x+1\leq3D_*^5$.
-    Propagation gives the common length $S=3D_*^5-1>0$.
-    Apply the compact open-gap theorem at $R\geq S+1$.
+    Propagation gives the common length $S=3D_*^5-1>0$, so the compact
+    open-gap theorem applies at every $R\geq S+1$.
 \end{proof}
 
 \begin{theorem}[Compact uniform open gaps for positive parent interactions]
@@ -7445,15 +7447,14 @@ tensors.
     Let $A^0,\ldots,A^{r-1}$ have positive physical and bond dimensions.
     Suppose that their simultaneous length-$S$ word tuples span the product
     matrix algebra, where $S>0$. Set $B=\bigoplus_j\mu_jA^j$, with
-    every $\mu_j\neq0$, and fix $R\geq S+1$. There are $p>0$, with
-    $R\leq2p$, and $\delta>0$ such that
+    every $\mu_j\neq0$. Combining the block-injective local spaces of
+    \cite[Section~IV.C]{Cirac2021Matrix} with the martingale estimate of
+    \cite[Theorem~2.1(ii) and Section~6]{Nachtergaele1996Spectral}, for any
+    fixed $R\geq S+1$ there are $p>0$, with $R\leq2p$, and $\delta>0$ such that
     \begin{align}
         \delta\|v\|\leq\|H^{\mathrm{open}}_{pM,R}(B)v\|\notag
     \end{align}
     for every $M\geq2$ and every $v\perp G_{pM}^{\mathrm{ES}}(B)$.
-    This combines the block-injective local spaces of
-    \cite[Section~IV.C]{Cirac2021Matrix} with the martingale estimate of
-    \cite[Theorem~2.1(ii) and Section~6]{Nachtergaele1996Spectral}.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -7463,10 +7464,10 @@ tensors.
         thm:block_open_kernel_simultaneous_injectivity,
         lem:parent-finite-interval-comparison,lem:open_parent_range_comparison,
         thm:ph_block_replacement_parent_equality}
-    Normalize the blocks while preserving all local spaces and the span at
-    $S$. The simultaneous span separates the blocks. Choose $p\geq R$
-    and a uniform open-chain gap $\gamma>0$ at range $2p$ on every length
-    $pM$, $M\geq2$. The range-$R$ and range-$2p$ open kernels both equal
+    Normalizing the blocks preserves all local spaces and the span at $S$,
+    and the simultaneous span separates the blocks. Choosing $p\geq R$ and a
+    uniform open-chain gap $\gamma>0$ at range $2p$ on every length $pM$,
+    $M\geq2$, gives range-$R$ and range-$2p$ open kernels that both equal
     $G_{pM}^{\mathrm{ES}}$. On the interval of length $2p$, finite-dimensional
     comparison gives $\kappa h_{2p}\leq H^{\mathrm{open}}_{2p,R}$ with
     $\kappa>0$. Open-range comparison transfers the gap to
@@ -7482,23 +7483,23 @@ tensors.
     Let $A^0,\ldots,A^{r-1}$ have positive physical and bond dimensions.
     Suppose that their simultaneous length-$S$ word tuples span the product
     matrix algebra, where $S>0$. Set $B=\bigoplus_j\mu_jA^j$, with
-    every $\mu_j\neq0$, and fix $R\geq S+1$. There are $m\geq R$ and
-    $\gamma>0$ such that $(R-1)^2<m\gamma$ and
+    every $\mu_j\neq0$. For any fixed $R\geq S+1$, there are $m\geq R$ and
+    $\gamma>0$ satisfying the strict finite-range threshold $(R-1)^2<m\gamma$
+    of Theorem~\ref{thm:parent_hamiltonian_gap_from_open_knabe_block} (with
+    the coefficient discussed in
+    \path{docs/paper-gaps/knabe88_finite_range_coefficient.tex}) such that
     \begin{align}
         \gamma\|v\|\leq\|H^{\mathrm{open}}_{m+R-1,R}(B)v\|\notag
     \end{align}
     for every $v\perp G_{m+R-1}^{\mathrm{ES}}(B)$.
-    The strict inequality is the finite-range threshold of
-    Theorem~\ref{thm:parent_hamiltonian_gap_from_open_knabe_block}; the
-    coefficient is discussed in \path{docs/paper-gaps/knabe88_finite_range_coefficient.tex}.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:block_open_gap_subsequence_simultaneous_injectivity}
-    Choose $p>0$ and $\delta>0$ giving the open-chain gap on all lengths
-    $pM$, $M\geq2$. Choose $n\in\mathbb N$ with $(R-1)^2<n\delta$.
-    Set $M=n+2R+2$ and $m=pM+1-R$. Then $m\geq R$, $n\leq m$,
-    and $m+R-1=pM$. Thus $\gamma=\delta$ has both the required gap and
+    Let $p>0$ and $\delta>0$ give the open-chain gap on all lengths
+    $pM$, $M\geq2$, and choose $n\in\mathbb N$ with $(R-1)^2<n\delta$.
+    With $M=n+2R+2$ and $m=pM+1-R$, one has $m\geq R$, $n\leq m$,
+    and $m+R-1=pM$, so $\gamma=\delta$ has both the required gap and
     $(R-1)^2<m\gamma$.
 \end{proof}
 
@@ -7509,16 +7510,16 @@ tensors.
     Let $A^0,\ldots,A^{r-1}$ have positive physical and bond dimensions.
     Suppose their word tuples of a given positive length $S$ span the full
     product matrix algebra. Let $B=\bigoplus_{j=0}^{r-1}\mu_jA^j$, where every
-    $\mu_j$ is nonzero. For each interaction range $R\geq S+1$, there is a
-    constant $\gamma_R>0$ such that
+    $\mu_j$ is nonzero. Realizing the block-injective gap assertion of
+    \cite[Section~IV.C]{Cirac2021Matrix} at the simultaneous injectivity range,
+    for each interaction range $R\geq S+1$ there is a constant $\gamma_R>0$
+    such that
     \begin{align}
         \gamma_R\lVert v\rVert\leq\lVert H_{R,N}v\rVert
     \end{align}
     for every chain length $N\in\mathbb N$ and every
     $v\perp\ker H_{R,N}$, where $H_{R,N}$ is the canonical periodic parent
     Hamiltonian of $B$.
-    This is the block-injective gap assertion of
-    \cite[Section~IV.C]{Cirac2021Matrix} at the simultaneous injectivity range.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -7527,9 +7528,9 @@ tensors.
         thm:parent-gap-fixed-range-transfer, thm:parent_hamiltonian_eventual_gap,
         thm:ph_tp_word_span_propagation, thm:ph_tp_block_open_ground_space,
         thm:ph_block_replacement_parent_equality}
-    Normalize the blocks while retaining simultaneous injectivity at $S$ and
-    all local ground spaces. Simultaneous injectivity forces distinct blocks
-    to be inequivalent. The grouped martingale estimate and finite-range
+    Normalizing the blocks retains simultaneous injectivity at $S$ and
+    all local ground spaces, and simultaneous injectivity forces distinct
+    blocks to be inequivalent. The grouped martingale estimate and finite-range
     periodic comparison provide a gapped interaction range $W\geq2R$.
     Let $B'$ be the weighted sum of the normalized blocks. Trace preservation
     propagates simultaneous injectivity from $S$ to every larger length, so,
@@ -7561,7 +7562,7 @@ tensors.
 \begin{proof}\leanok
     \uses{thm:ph_canonical_representative_local_spaces,
         thm:block_sum_local_ground_space}
-    For every positive length $R$, the local spaces satisfy
+    The local ground spaces satisfy
     \begin{align}
         G_R(A)=\bigvee_jG_R(B_j)=G_R(B).\notag
     \end{align}
@@ -7586,7 +7587,7 @@ tensors.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:canonical-parent-hamiltonian-representatives,thm:block-parent-uniform-gap-simultaneous-injectivity}
-    Set $B=\bigoplus_jB_j$. Its blocks satisfy the hypotheses of the uniform
+    For $B=\bigoplus_jB_j$, its blocks satisfy the hypotheses of the uniform
     gap at the simultaneous injectivity range, so $H_{R,N}(B)$ has a positive
     uniform gap. Since $H_{R,N}(A)=H_{R,N}(B)$ for every $N$, the same
     constant works for $A$, without changing the range or the chain length.
@@ -7597,25 +7598,22 @@ tensors.
     \lean{MPSTensor.IsCPSVCanonicalForm.exists_bnt_uniform_gap_of_wordTupleSpanTop}
     \leanok
     Let $A$ be a tensor in canonical form with positive physical dimension.
-    One may choose a basis of normal
-    tensors $B_0,\ldots,B_{g-1}$ such that the following holds for every positive
-    integer $S$: if the simultaneous length-$S$ word tuples span the product
-    of the block matrix algebras, then, for every $R\geq S+1$, there exists
+    Including canonical forms with repeated blocks as in
+    \cite[Section~IV.C]{Cirac2021Matrix}, one may choose a basis of normal
+    tensors $B_0,\ldots,B_{g-1}$ once, before $S$ and $R$, such that for every
+    positive integer $S$ whose simultaneous length-$S$ word tuples span the
+    product of the block matrix algebras and every $R\geq S+1$, there exists
     $\gamma>0$ such that, for every chain length $N$ and every vector
     $v\perp\ker H_{R,N}(A)$,
     \begin{align}
         \gamma\|v\|\leq\|H_{R,N}(A)v\|.\notag
     \end{align}
-    The representatives are chosen once, before $S$ and $R$.
-    This includes canonical forms with repeated blocks, as in
-    \cite[Section~IV.C]{Cirac2021Matrix}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:canonical-decomposition-gap-simultaneous-injectivity}
-    Fix one canonical decomposition of $A$ and take its distinct normal
-    representatives, which form a basis of normal tensors for $A$. The
-    preceding theorem applies to this fixed choice for every $S$ and every
-    $R\geq S+1$.
+    Fixing one canonical decomposition of $A$ and taking its distinct normal
+    representatives yields a basis of normal tensors for $A$ to which the
+    preceding theorem applies for every $S$ and every $R\geq S+1$.
 \end{proof}
 
 \begin{theorem}[A dimension bound for canonical parent gaps]
@@ -7625,27 +7623,26 @@ tensors.
     \leanok
     Let $A$ be a tensor in canonical form with positive physical dimension
     and positive bond dimension $D$. For every $R\geq3D^5$, there is
-    $\gamma>0$ such that
+    $\gamma>0$ (depending on $A$ and $R$, but not on $N$) such that
     \begin{align}
         \gamma\|v\|\leq\|H_{R,N}(A)v\|\notag
     \end{align}
     for every $N\in\mathbb N$ and every $v\perp\ker H_{R,N}(A)$.
-    The constant may depend on $A$ and $R$, but not on $N$.
-    This sufficient range combines the blocking estimate of
+    Combining the blocking estimate of
     \cite[lines~317--345]{Cirac2016MPDO_arXiv} with the gap assertion of
-    \cite[Section~IV.C]{Cirac2021Matrix}. It need not be optimal; the
-    sharper sufficient condition $R\geq S+1$ is recorded in
-    \cite{gap:cpgsv21_block_parent_interaction_range}. The unrestricted
-    assertion fails at some shorter ranges; see
-    \cite{gap:cpgsv21_short_range_parent_gap}.
+    \cite[Section~IV.C]{Cirac2021Matrix}, this sufficient range need not be
+    optimal: the sharper sufficient condition $R\geq S+1$ is recorded in
+    \cite{gap:cpgsv21_block_parent_interaction_range}, while
+    \cite{gap:cpgsv21_short_range_parent_gap} shows that the unrestricted
+    assertion fails at some shorter ranges.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:canonical_bounded_range_ground_space,
         thm:canonical-decomposition-gap-simultaneous-injectivity}
-    Choose a canonical decomposition. The dimension estimate gives a
+    For any canonical decomposition of $A$, the dimension estimate gives a
     simultaneous injectivity length $S>0$ for its distinct normal
-    representatives, with $S+1\leq3D^5\leq R$. The canonical gap at that
+    representatives with $S+1\leq3D^5\leq R$, and the canonical gap at that
     simultaneous injectivity length gives the assertion.
 \end{proof}
 
@@ -7663,8 +7660,9 @@ tensors.
 \end{theorem}
 \begin{proof}\leanok
     \uses{lem:positive-kernel-projection-comparison}
-    Apply the finite-dimensional comparison with the projection onto the
-    orthogonal complement of the kernel of $h$. This projection is $h_R$.
+    Applying the finite-dimensional comparison with the projection onto the
+    orthogonal complement of the kernel of $h$, which is $h_R$, gives the two
+    bounds.
 \end{proof}
 
 \begin{definition}[Periodic sum of a fixed interaction]
@@ -7774,14 +7772,14 @@ tensors.
 \begin{proof}
     \leanok
     \uses{thm:positive-parent-interaction-periodic-comparison,lem:positive-comparison-kernel-gap}
-    Finite-dimensional positivity gives constants $\kappa,C>0$ such that
+    Following the projector reduction of \cite[Section~IV.C]{Cirac2021Matrix},
+    finite-dimensional positivity gives constants $\kappa,C>0$ such that
     $\kappa h_R\leq h\leq C h_R$, where $h_R=I-P_{G_R(A)}$ is the canonical
     parent projection.
     Cyclic extension and summation give the same inequalities for the periodic
     Hamiltonians, with constants independent of $N$. The two inequalities imply
-    equality of the kernels. Restriction to their common orthogonal complement
-    therefore transfers a canonical gap $\gamma$ to the gap $\kappa\gamma$.
-    This is the projector reduction of \cite[Section~IV.C]{Cirac2021Matrix}.
+    equality of the kernels, and restriction to their common orthogonal
+    complement transfers a canonical gap $\gamma$ to the gap $\kappa\gamma$.
 \end{proof}
 
 \begin{theorem}[Positive parent interactions for every canonical decomposition]
@@ -7802,10 +7800,10 @@ tensors.
 \begin{proof}
     \leanok
     \uses{thm:canonical-decomposition-gap-simultaneous-injectivity,thm:positive-parent-interaction-uniform-gap}
-    Apply the canonical projector gap of
+    Applying the canonical projector gap of
     Theorem~\ref{thm:canonical-decomposition-gap-simultaneous-injectivity} at
-    range $R$, then the comparison theorem for the fixed interaction $h$. The
-    constants depend on $h$ but not on $N$.
+    range $R$ and then the comparison theorem for the fixed interaction $h$
+    yields the bound, with constants depending on $h$ but not on $N$.
 \end{proof}
 
 \begin{theorem}[Positive parent interactions at the simultaneous injectivity range]
@@ -7827,8 +7825,9 @@ tensors.
 \begin{proof}
     \leanok
     \uses{thm:canonical-gap-simultaneous-injectivity,thm:positive-parent-interaction-uniform-gap}
-    Apply the canonical projector gap at range $R$, then the comparison theorem
-    for the fixed interaction $h$. The constants depend on $h$ but not on $N$.
+    Applying the canonical projector gap at range $R$ and then the comparison
+    theorem for the fixed interaction $h$ yields the bound, with constants
+    depending on $h$ but not on $N$.
 \end{proof}
 
 \begin{theorem}[A dimension bound for fixed positive parent interactions]
@@ -7838,16 +7837,15 @@ tensors.
     \leanok
     Let $A$ be a tensor in canonical form with positive physical dimension
     and positive bond dimension $D$. Let $R\geq3D^5$ and let $h$ be any
-    fixed positive operator on $R$ sites with $\ker h=G_R(A)$. Then there
-    is $\gamma>0$ such that
+    fixed positive operator on $R$ sites with $\ker h=G_R(A)$. Combining the
+    positive-interaction comparison of \cite[Section~IV.C]{Cirac2021Matrix}
+    with the sufficient dimension bound of
+    \cite[lines~317--345]{Cirac2016MPDO_arXiv}, there is $\gamma>0$
+    (depending on $A$, $R$, and $h$, but not on $N$) such that
     \begin{align}
         \gamma\|v\|\leq\|H_N(h)v\|\notag
     \end{align}
     for every $N\in\mathbb N$ and every $v\perp\ker H_N(h)$.
-    The constant may depend on $A$, $R$, and $h$, but not on $N$.
-    This is the positive-interaction comparison of
-    \cite[Section~IV.C]{Cirac2021Matrix} at the sufficient dimension
-    bound of \cite[lines~317--345]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 \begin{proof}
     \leanok
