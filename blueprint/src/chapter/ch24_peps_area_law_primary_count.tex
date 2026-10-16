@@ -92,3 +92,49 @@ $o'=o+t(a,b)$. The count below is the primary count in
     Combine $|\mathcal P_k|\le4|I_k|$ with
     $|I_k|\le8(2C_0+1)^2|\partial_\Lambda A|$.
 \end{proof}
+
+% Source: 10-geometry.tex, geometry:primary-scale, lines 709--729;
+% primary error sum, lines 791--795.
+% Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+\begin{theorem}[The primary error sum over finitely many layers]
+    \label{thm:area_law_initial_primary_error_sum}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.exists_uniform_primaryPitchIndices_error_sum_bound}
+    \leanok
+    \uses{def:area_law_primary_pitch_indices,def:area_law_fine_belt_scales,
+        def:area_law_hamiltonian}
+    For every $C_P>0$, there is $M>0$ with the following property.
+    Fix any origin $o\in\mathbb R^2$, finite domain
+    $\Lambda\subset\mathbb Z^2$, cut $A\subseteq\Lambda$, width
+    $C_0\in\mathbb N$, integer sequences $(a_k)$ and $(b_k)$, and
+    finite set $F\subset\mathbb N$. Let $\mathcal P_k$ be the primary
+    pitch indices with fine scale $\ell_k$, pitch scale $p_k$,
+    boundary endpoint set of $A$, and shifts $a_k,b_k$. Set
+    $n_k=\lceil C_P(2^k)^{1+2\delta_0}\rceil\in\mathbb N$.
+    Then
+    \begin{align}
+        \sum_{k\in F}|\mathcal P_k|\bigl(n_k^{100}\bigr)^{-1}
+         & \le M(2C_0+1)^2|\partial_\Lambda A|.\notag
+    \end{align}
+    The coefficient $M$ is chosen before all geometric data, the
+    integer sequences, and $F$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:area_law_primary_boundary_count,
+        thm:area_law_fine_belt_scales,thm:area_law_polynomial_finite_sums}
+    The scale order gives $k\le p_k$, so the primary count is at most
+    $32(2C_0+1)^2b$, where $b=|\partial_\Lambda A|$.
+    Since $2^k\ge1$ and $1+2\delta_0\ge1$, the ceiling satisfies
+    $n_k\ge C_P(2^k)^{1+2\delta_0}\ge C_P2^k>0$.
+    The inequality $100\ge\delta_0/2$ and $k\ge0$ give
+    \begin{align}
+        \bigl(n_k^{100}\bigr)^{-1}
+         & \le\bigl(C_P^{100}\bigr)^{-1}2^{-100k}
+        \le\bigl(C_P^{100}\bigr)^{-1}2^{-\delta_0 k/2}.\notag
+    \end{align}
+    Apply the uniform finite-sum estimate at exponent zero, obtaining
+    $B_0>0$ before $F$. Multiplication by the nonnegative count bound
+    and summation give the conclusion with
+    $M=32\bigl(C_P^{100}\bigr)^{-1}B_0>0$.
+\end{proof}
