@@ -29,6 +29,7 @@ square cylinder data at the same radii.
     \label{thm:peps_square_patch_of_nested_cylinders}
     \lean{TNLean.PEPS.EncodedFrame.exists_squarePatch_of_mem_iSup_dependentRegionCylinder}
     \leanok
+    \uses{def:peps_frame_square_patch, def:peps_regional_cylinder}
     Let $0<u$ and let $u\le r_1\le\cdots\le r_m\le2u$. For each $j$ let $S_j$ be
     a subspace of the Hilbert space of the sample $D_j$ of the square of radius
     $r_j$ about $z$. If a vector $v$ lies in the sum of the cylinder spaces
@@ -44,7 +45,13 @@ square cylinder data at the same radii.
 
 \begin{proof}
     \leanok
-    \uses{def:peps_frame_square_patch, def:peps_adaptive_patch_constraint}
+    \uses{def:peps_nested_cylinder_images,
+        thm:peps_nested_cylinder_projector_sum,
+        thm:peps_cylinder_projector,
+        def:peps_hole_encoder,
+        thm:peps_coordinate_reset_gram,
+        def:peps_coordinate_projector,
+        def:peps_patch_canonical_marginal}
     Orthogonalize the nested cylinder spaces: the $j$-th innovation space is
     the part of $S_j\otimes\mathcal H_{D_j^c}$ orthogonal to the earlier
     cylinders, and an orthonormal basis of it supplies the vectors $v_{j\ell}$.
