@@ -115,21 +115,6 @@ theorem levelFrame_eq {j : ℕ} {done : Set (ℤ × ℤ)} {ρ : ℝ × ℝ → �
         (levelVertices k j done) (suppliedPatch P ρ hρ) h :=
   dite_eq_left h
 
-/-- Two encoded frames of one guide with the same owners and the same patches at the hole
-centers are equal. -/
-theorem guideFrame_congr_patch {ι κ Party : Type*} [Fintype ι] [DecidableEq ι] {pos : ι → ℝ × ℝ}
-    {g : ℝ × ℝ → κ} {own : κ → Party} {ph : κ} {rank : κ → ℕ} {V : Finset (ℝ × ℝ)}
-    {patch patch' : ℝ × ℝ → SquarePatch pos q}
-    {hV : (V : Set (ℝ × ℝ)).Pairwise fun z z' => Disjoint (patch z).outer (patch z').outer}
-    {hV' : (V : Set (ℝ × ℝ)).Pairwise fun z z' => Disjoint (patch' z).outer (patch' z').outer}
-    (h : ∀ z ∈ V, patch z = patch' z) :
-    guideFrame pos q g own ph rank V patch hV = guideFrame pos q g own ph rank V patch' hV' := by
-  have hh : (V.toList.map fun z => (⟨patch z, own (tagHolder rank g ph z)⟩ : Hole pos q Party)) =
-      V.toList.map fun z => ⟨patch' z, own (tagHolder rank g ph z)⟩ :=
-    List.map_congr_left fun z hz => by rw [h z (Finset.mem_toList.1 hz)]
-  unfold guideFrame
-  congr 1
-
 /-- **The frame depends on the radii only at the true vertices.** -/
 theorem levelFrame_congr {j : ℕ} {done : Set (ℤ × ℤ)} {ρ ρ' : ℝ × ℝ → ℝ}
     (hρ : ∀ z, 0 < ρ z ∧ ρ z ≤ B₀ * Real.log L) (hρ' : ∀ z, 0 < ρ' z ∧ ρ' z ≤ B₀ * Real.log L)
