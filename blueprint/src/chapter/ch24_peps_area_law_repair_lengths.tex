@@ -172,3 +172,139 @@ with arbitrary ties within each class.
     identifier has length $d(S)$, which is a power of two with an
     integer exponent and hence positive.
 \end{proof}
+
+% Source: 10-geometry.tex, nonterminal replacements, lines 398--409;
+% belt and replacement scales, lines 732--740; threshold choice, lines 761--771.
+% Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+
+\begin{theorem}[A uniform lower bound on nonprimary birth lengths]
+    \label{thm:area_law_repair_positive_rank_length_lower_bound}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.exists_uniform_repairStage_positive_rank_length_lower_bound}
+    \leanok
+    \uses{def:area_law_repair_characteristic_length,
+        def:area_law_repair_birth_rank}
+    For every $U\in\mathbb R$ there is $K\in\mathbb N$ with the
+    following property. Fix an origin $o\in\mathbb R^2$, a finite
+    domain $\Lambda\subset\mathbb Z^2$, a cut $A\subseteq\Lambda$,
+    integers $C_0\ge2$ and $k_0\ge50{,}000{,}000$ with $k_0\ge K$,
+    and a stopping scale $S_*\ge U$. For every generation
+    $N\in\mathbb N$ and every actual identifier $i\in I_N$ of
+    positive birth rank, the remembered length satisfies
+    $\tau_N(i)\ge U$. The threshold $K$ depends only on $U$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:area_law_fine_belt_scales,
+        def:area_law_repair_characteristic_length,
+        def:area_law_repair_birth_rank,def:area_law_repair_successor_regions}
+    Since $\zeta>0$, the integers $\lfloor\zeta k\rfloor$ tend to
+    infinity, and hence $t_k=2^{\lfloor\zeta k\rfloor}$ tends to
+    infinity. Choose $K$ so that $t_k\ge U$ whenever $k\ge K$.
+    Induct on $N$. Initially, positive birth rank excludes the dummy
+    and primary identifiers. Every remaining identifier is a belt
+    in a layer $k\ge k_0\ge K$, with length $t_k\ge U$.
+    An old identifier keeps its rank and length, so the induction
+    hypothesis applies. A fresh replacement is created only by a
+    nonterminal parent of scale $S$, for which $d(S)\ge S_*$.
+    Its remembered length is therefore $d(S)\ge S_*\ge U$.
+\end{proof}
+
+% Auxiliary to 10-geometry.tex, lines 709--750, with creation at
+% lines 393--417 and the birth classes at lines 565--568.
+% Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+\begin{theorem}[Templates for the remembered birth regions]
+    \label{thm:area_law_repair_birth_templates}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.exists_uniform_repairStage_birth_templates}
+    \leanok
+    \uses{def:area_law_repair_characteristic_length,
+        def:area_law_repair_birth_rank,def:area_law_template,
+        def:area_law_hamiltonian}
+    Fix $C_{\rm tpl}\ge1$. There are constants $C_P\ge1$ and $C_B>0$
+    such that, for every $D_0\in\mathbb R$, there is a threshold
+    $T_0\ge1$ with the following property. For every $S_*\ge T_0$ and
+    every integer $C_0\ge2$ satisfying $4D_0<C_0$, there is an integer
+    $K\ge0$ such that the following holds for every origin
+    $o\in\mathbb R^2$, finite domain $\Lambda\subset\mathbb Z^2$,
+    cut $A\subseteq\Lambda$, and integer
+    $k_0\ge\max\{K,50{,}000{,}000\}$.
+
+    Let $N\ge0$ be an integer, let $i\in I_N$ be distinct from the
+    dummy $*_N$, and
+    let $\mathcal B$ be its remembered closed birth region in the actual
+    repair family. Suppose that $\mathcal B$ contains a lattice point.
+    Put $u=\tau_N(i)$, and let $q$ be its birth rank: a primary has
+    rank $0$, an initial belt region has rank $1$, and a replacement
+    created at stage $j+1$ has rank $j+2$. Define the scanner scale by
+    \begin{align}
+        n & =
+        \begin{cases}
+            \bigl\lceil C_Pu^{1+2\delta_0}\bigr\rceil, & q=0, \\
+            \lceil C_Bu\rceil,                         & q>0.
+        \end{cases}
+    \end{align}
+    There are a positive integer $s_0$ and a template $T$ with constant
+    $C_{\rm tpl}$ and parameters $n,s_0$ such that
+    \begin{align}
+        s_0 & =
+        \begin{cases}
+            u,  & q\le1, \\
+            2u, & q\ge2,
+        \end{cases}                      \\
+        T   & =\mathcal B\cap\mathbb Z^2.
+    \end{align}
+    Writing $Z$ for the endpoints of the crossing edges of $A$ in
+    $\Lambda$, every $y\in T$ and $z\in Z$ satisfy both bounds
+    \begin{align}
+        4D_0s_0  & <\|y-z\|_\infty, \\
+        2n^\beta & <\|y-z\|_\infty.
+    \end{align}
+    These are the scanner-scale and endpoint assignments of
+    \cite[Section~11]{OpenAI2026AreaLaw}, expressed for every generation.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:area_law_primary_scanner_constant,
+        def:area_law_primary_birth_template,
+        thm:area_law_primary_fragment_union,
+        thm:area_law_dyadic_layer_distance,
+        thm:area_law_primary_birth_template_points,
+        thm:area_law_primary_birth_template_clearance,
+        thm:area_law_primary_scale_limits,
+        thm:area_law_belt_replacement_templates,
+        thm:area_law_belt_birth_template_clearance,
+        thm:area_law_descendant_birth_template_clearance,
+        def:area_law_repair_characteristic_length}
+    Choose $C_P$ from the uniform primary template construction and
+    $C_B$ from the common belt and replacement template construction.
+    Retain both the belt and replacement conclusions for this same
+    $C_B$. Choose the stopping threshold in the uniform descendant
+    clearance estimate and enlarge it to at least one. After $S_*$
+    and $C_0$ are fixed, choose $K$ to dominate the descendant, initial
+    belt and primary scale thresholds.
+
+    Induct on $N$, keeping the template, exact sample and both
+    clearance bounds together. At stage zero use the same selected
+    shifts as the actual initial family. For a primary, the lattice
+    point in its birth gives a nonempty fragment-index set, so the
+    primary construction supplies the template and its exact sample.
+    Its first clearance follows from $4D_0<C_0$ and endpoint distance
+    at least $C_0r_k$. The primary scale limit gives
+    $n^\beta\le r_k/4$, hence $2n^\beta<C_0r_k$ since $C_0\ge2$.
+    For an initial belt, use the retained belt conclusion for $C_B$;
+    its primitive size is $t_k$, and the initial-belt clearance
+    estimate gives both endpoint bounds.
+
+    An old non-dummy identifier comes from a non-dummy identifier of
+    the preceding stage. Its birth, rank and characteristic length
+    are unchanged, so the entire induction witness applies. A fresh
+    replacement records its actual parent, has rank $N+2$, and has
+    characteristic length equal to that parent's removal half-side
+    $u$. The retained replacement conclusion for the same $C_B$
+    supplies a template with primitive size $2u$, scanner scale
+    $\lceil C_Bu\rceil$, and the exact ambient birth sample. Apply the
+    descendant clearance estimate to this template and recorded
+    parent; its primitive and scanner bounds follow from these
+    equalities. This gives both endpoint bounds. The given lattice
+    point supplies nonemptiness in each construction.
+\end{proof}
