@@ -370,6 +370,8 @@ no holes, this is the normalization of $\Omega$.
         TNLean.PEPS.EncodedFrame.hasBoundedChange_refl,
         TNLean.PEPS.EncodedFrame.HasBoundedChange.perm_left,
         TNLean.PEPS.EncodedFrame.HasBoundedChange.perm_right,
+        TNLean.PEPS.EncodedFrame.isBoundedChange_liftOne,
+        TNLean.PEPS.EncodedFrame.isBoundedChange_liftTwo,
         TNLean.PEPS.EncodedFrame.hasBoundedChange_liftOne,
         TNLean.PEPS.EncodedFrame.hasBoundedChange_liftTwo,
         TNLean.PEPS.EncodedFrame.hasBoundedChange_activate,
@@ -702,8 +704,8 @@ no holes, this is the normalization of $\Omega$.
     frame owned by the root party (\texttt{06-geometry.tex}, lines 69--125).
 \end{definition}
 
-\begin{lemma}[Properties of the main frame between repaintings]
-    \label{lem:peps_protocol_level_frame_facts}
+\begin{theorem}[Properties of the main frame between repaintings]
+    \label{thm:peps_protocol_level_frame_facts}
     \lean{TNLean.PEPS.Approximation.IsDisplacedReading.eq_sampleGuide,
         TNLean.PEPS.Approximation.IsRayConstant.isDisplacedReading_sampleGuide,
         TNLean.PEPS.EncodedFrame.hasSourceBoundedChange_main,
@@ -730,7 +732,7 @@ no holes, this is the normalization of $\Omega$.
     $4r<2^j$, the outer physical samples of the holes are pairwise disjoint.
     Repainting one block changes the true vertices only at its four corners
     (\texttt{06-geometry.tex}, lines 69--125 and 507--511).
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:peps_protocol_event_segments, lem:peps_level_true_vertices,
@@ -811,7 +813,7 @@ no holes, this is the normalization of $\Omega$.
         thm:peps_dyadic_direct_repainting_constants, lem:peps_protocol_junction_resize_parties,
         thm:peps_protocol_event_segments, thm:peps_protocol_constants,
         thm:peps_dyadic_guide_owners, def:peps_dyadic_chamber_sampling,
-        lem:peps_dyadic_incident_change, lem:peps_protocol_level_frame_facts}
+        lem:peps_dyadic_incident_change, thm:peps_protocol_level_frame_facts}
     The hole radii are positive, and at most $\epsilon_0D\log L\le K_0D\log L\le B_0\log L$
     since $\epsilon_0<1\le K_0$ and $K_0D\le B_0$. Between repaintings no site and no tag
     carries the placeholder, so the frame may be read through any party map that agrees
@@ -911,6 +913,8 @@ no holes, this is the normalization of $\Omega$.
         TNLean.PEPS.Approximation.auxState_succ,
         TNLean.PEPS.Approximation.largeSquare,
         TNLean.PEPS.Approximation.protocolState,
+        TNLean.PEPS.Approximation.IsProtocolConstants.t_pos,
+        TNLean.PEPS.Approximation.IsProtocolConstants.hole_le,
         TNLean.PEPS.Approximation.exists_isDistributionProtocol_of_largeRepaintings}
     \leanok
     \uses{def:peps_dyadic_protocol, def:peps_adaptive_patch_constraint,
@@ -967,7 +971,8 @@ no holes, this is the normalization of $\Omega$.
         TNLean.PEPS.Approximation.treatedFrame,
         TNLean.PEPS.Approximation.treatedFrame_eq,
         TNLean.PEPS.Approximation.DyadicSquare.inRoot_index,
-        TNLean.PEPS.Approximation.treatedFrame_spec}
+        TNLean.PEPS.Approximation.treatedFrame_spec,
+        TNLean.PEPS.Approximation.IsProtocolConstants.treatedRadius_bounds}
     \leanok
     \uses{def:peps_protocol_level_frame, lem:peps_treated_true_vertices,
         lem:peps_dyadic_readings_exist}
@@ -1009,9 +1014,11 @@ no holes, this is the normalization of $\Omega$.
 
 \begin{proof}\leanok
     Adding or removing one mark changes the treated guide only on the open square
-    of radius $t$ about that corner. The supplied patches of the true vertices
-    there are rewritten by one small-patch rewrite, whose gates are local to the
-    parties of the repainting.
+    of radius $t$ about that corner. The supplied patches of radius $\epsilon_0t$ at
+    the true vertices there are rewritten by one small-patch rewrite through patches
+    of radius $\nu t/2\le B_0\log L$; the footprint ratio of these patches is at most
+    $(4+8\epsilon_0+2\nu)/\nu$, so the rewrite uses at most $b$ patches, and $b\ge53$ once
+    $\nu<1/3$. Its gates are local to the parties of the repainting.
 \end{proof}
 
 \begin{theorem}[Births and deaths along an edge as changes of a treated sheet]
@@ -1020,7 +1027,6 @@ no holes, this is the normalization of $\Omega$.
         TNLean.PEPS.Approximation.readings_isTrueVertex_iff_of_far,
         TNLean.PEPS.Approximation.guideFrame_eq_changeOwner,
         TNLean.PEPS.Approximation.guideFrame_eq_changeOwner_of_ne,
-        TNLean.PEPS.Approximation.IsDisplacedReading.sub_mem_closure_ne,
         TNLean.PEPS.Approximation.IsDisplacedReading.values_of_ne,
         TNLean.PEPS.Approximation.BandOperation.treated_mem,
         TNLean.PEPS.Approximation.BandOperation.treated_ne_subset,
@@ -1040,7 +1046,7 @@ no holes, this is the normalization of $\Omega$.
     label and of $Q$ lie in $S$, then passing from the frame of the guide before,
     treated about the endpoints of $e$ with the surrounding label, to that of the
     guide after is a bounded change with participants in $S$, at most one pair
-    source and error $L^{-30}$ (\texttt{06-geometry.tex}, lines 183--221, 328--387
+    source and error $L^{-30}$, for any monomial bound $K\ge1$ and pair-source bound at least one; for a death the bound on pair effects must also be at least one, since a death uses one pair effect (\texttt{06-geometry.tex}, lines 183--221, 328--387
     and 440--445).
 \end{theorem}
 
@@ -1063,7 +1069,7 @@ no holes, this is the normalization of $\Omega$.
         TNLean.PEPS.Approximation.centralBirth_hasFrameChange}
     \leanok
     \uses{thm:peps_protocol_band_step_changes, thm:peps_bulk_steps_treated_frames,
-        thm:peps_dyadic_no_changed_vertex}
+        thm:peps_dyadic_no_changed_vertex, def:peps_protocol_treated_frame}
     Assume the angular information bound at the scale $t=D\log L$, as provided by
     Proposition~3.4. At the constants of the protocol, in the repainting of a
     square of side $n=2^j>K_0t$ with old label $A$ and final label $B$, passing
@@ -1097,6 +1103,9 @@ no holes, this is the normalization of $\Omega$.
         lem:peps_dyadic_incident_change, lem:peps_dyadic_schedule_guides,
         lem:peps_dyadic_frozen_hole_count, lem:peps_guide_frame_tags,
         thm:peps_guide_frame_rewrite, thm:peps_protocol_bounded_changes}
+    A bounded change of two frames with bounded pair sources is a change of the
+    registers of both that is a bounded change of the products of their reference
+    vectors whose monomials carry at most a prescribed number of pair sources.
     Assume the angular information bound at the scale $t=D\log L$, as provided by
     Proposition~3.4. At the constants of the protocol, in the repainting of a
     square of side $n=2^j>K_0t$, let $e$ be an edge with the label $C_e$ across
@@ -1223,8 +1232,7 @@ no holes, this is the normalization of $\Omega$.
         TNLean.PEPS.Approximation.isStepChain_centralBirth,
         TNLean.PEPS.Approximation.isStepChain_bandOperation}
     \leanok
-    \uses{thm:peps_protocol_point_treatment_change, thm:peps_protocol_band_step_changes,
-        thm:peps_protocol_central_birth_change, lem:peps_protocol_change_chains}
+    \uses{def:peps_protocol_treated_frame, def:peps_dyadic_protocol_parties}
     Assume the angular information bound at the scale $t=D\log L$, as provided by
     Proposition~3.4. At the constants of the protocol, in the repainting of a square
     $R$ of side $n=2^j>K_0t$ whose point treatments are bounded changes with the
@@ -1237,6 +1245,8 @@ no holes, this is the normalization of $\Omega$.
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{thm:peps_protocol_point_treatment_change, thm:peps_protocol_band_step_changes,
+        thm:peps_protocol_central_birth_change, lem:peps_protocol_change_chains}
     Add the marks one at a time, operate, and remove the marks. Adding or removing one
     mark is a point treatment, and the bulk step is a birth or death of
     Theorem~\ref{thm:peps_protocol_band_step_changes} or the central birth, whose
@@ -1257,8 +1267,7 @@ no holes, this is the normalization of $\Omega$.
         TNLean.PEPS.Approximation.isStepChain_lensExchange,
         TNLean.PEPS.Approximation.isStepChain_edgeConstruction}
     \leanok
-    \uses{thm:peps_protocol_sheet_operation_chains, thm:peps_protocol_lens_exchange_change,
-        thm:peps_protocol_treated_frame_ends, lem:peps_protocol_change_chains}
+    \uses{def:peps_protocol_treated_frame, thm:peps_protocol_sheet_operation_chains}
     Assume the angular information bound at the scale $t=D\log L$, as provided by
     Proposition~3.4. In the setting of
     Theorem~\ref{thm:peps_protocol_sheet_operation_chains}, let the memory carry the
@@ -1273,6 +1282,8 @@ no holes, this is the normalization of $\Omega$.
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{thm:peps_protocol_sheet_operation_chains, thm:peps_protocol_lens_exchange_change,
+        thm:peps_protocol_treated_frame_ends, lem:peps_protocol_change_chains}
     The initialization is the identity change, since the fresh auxiliary sheet is the
     raw copy. The three auxiliary births are $15$ changes of the auxiliary sheet. The
     main sheet passes to the starting word without change. The lens exchange, with the

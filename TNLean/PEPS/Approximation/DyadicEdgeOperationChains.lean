@@ -30,49 +30,6 @@ namespace TNLean.PEPS.Approximation
 
 open EncodedFrame PairEffect
 
-/-! ### The label introduced by each operation -/
-
-section InsertsOne
-
-variable {ι : Type*} (A B C : ι)
-
-theorem auxBirthB_insertsOne : (auxBirthB B C).InsertsOne B := by
-  refine ⟨Or.inl rfl, fun x h => ?_⟩
-  simp only [auxBirthB, auxWordOne, bandWord] at h ⊢
-  split_ifs at h ⊢ <;> simp_all
-
-theorem auxBirthA_insertsOne : (auxBirthA A B C).InsertsOne A := by
-  refine ⟨Or.inl rfl, fun x h => ?_⟩
-  simp only [auxBirthA, auxWordOne, auxWordTwo, bandWord] at h ⊢
-  split_ifs at h ⊢ <;> first | (exfalso; linarith) | simp_all
-
-theorem auxBirthC_insertsOne : (auxBirthC A B C).InsertsOne C := by
-  refine ⟨Or.inl rfl, fun x h => ?_⟩
-  simp only [auxBirthC, auxWordTwo, auxWord, bandWord] at h ⊢
-  split_ifs at h ⊢ <;> first | (exfalso; linarith) | simp_all
-
-theorem mainDeathC_insertsOne : (mainDeathC A B C).InsertsOne C := by
-  refine ⟨Or.inr rfl, fun x h => ?_⟩
-  simp only [mainDeathC, mainWordOne, mainWordTwo, bandWord] at h ⊢
-  split_ifs at h ⊢ <;> first | (exfalso; linarith) | simp_all
-
-theorem mainDeathA_insertsOne : (mainDeathA A B C).InsertsOne A := by
-  refine ⟨Or.inr rfl, fun x h => ?_⟩
-  simp only [mainDeathA, mainWordTwo, mainWordThree, bandWord] at h ⊢
-  split_ifs at h ⊢ <;> simp_all
-
-theorem mainBirthC_insertsOne : (mainBirthC B C).InsertsOne C := by
-  refine ⟨Or.inl rfl, fun x h => ?_⟩
-  simp only [mainBirthC, mainWordThree, mainWordFour, bandWord] at h ⊢
-  split_ifs at h ⊢ <;> simp_all
-
-theorem mainDeathB_insertsOne : (mainDeathB B C).InsertsOne B := by
-  refine ⟨Or.inr rfl, fun x h => ?_⟩
-  simp only [mainDeathB, mainWordFour, mainWordFive, bandWord] at h ⊢
-  split_ifs at h ⊢ <;> first | (exfalso; linarith) | simp_all
-
-end InsertsOne
-
 /-! ### The chains of one sheet along an edge -/
 
 variable {k q : ℕ} [NeZero q] {J Δ a A₀ D L₀' : ℝ} {m₀ : ℕ} {L : ℕ}

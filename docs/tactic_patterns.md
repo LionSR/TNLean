@@ -24,6 +24,15 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Labels introduced by the edge operations — promoted (2026-10-16)
+
+- **Pattern:** the case analysis showing that one of the seven births and deaths of an
+  edge construction introduces a single label.
+- **Seen:** the aggregate `edgeOperations_insertsOne` and the per-operation chains of
+  `DyadicEdgeOperationChains.lean`.
+- **Abstraction:** the seven lemmas `auxBirthB_insertsOne`, …, `mainDeathB_insertsOne` in
+  `Approximation/DyadicTrueVertices.lean`; the aggregate is derived from them.
+
 ### Owner change of a sampled guide frame — promoted (2026-10-16)
 
 - **Pattern:** the frame of a reading equals the frame of another reading with
@@ -4506,6 +4515,17 @@ three-plaquette output measurement, and the routed reunion measurement.
   `isReordering_comp_iff`; apply `IsReordering.comp` as a term instead.
 
 ## Candidates
+
+### Treated birth and death preamble — candidate (2026-10-16)
+
+- **Pattern:** the common setup of a treated birth or death: the scales `n`, `t`, the block
+  corner, two `treatedFrame_spec` extractions, `homogenize_endpointBlocks`, the readings and
+  true-vertex sets, and `BandOperation.treated_frame_facts`.
+- **Seen:** `bandBirth_hasFrameChange` and `bandDeath_hasFrameChange`
+  (`Approximation/DyadicBandStepChanges.lean`); the owner change is already shared through
+  `guideFrame_eq_changeOwner_of_ne`.
+- **Abstraction:** a lemma returning the readings, vertex sets and facts for the surrounding
+  guide, if a third occurrence appears.
 
 
 

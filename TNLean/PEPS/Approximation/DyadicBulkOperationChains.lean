@@ -72,7 +72,7 @@ theorem isStepChain_centralBirth (hD : IsAngularScale q J Δ a A₀ m₀ 60 D L�
         (repaintBaseline R done).guide)
       (treatedFrame P rank R hr ∅ (repaintBaseline R done).oldLabel
         (repaintBaseline R done).centralGuide) := by
-  have hb := centralBirth_hasFrameChange hD hLL hΩ hm₀ hA₀ hc hL hk2 P rank R hlarge done hr
+  have hb := centralBirth_hasFrameChange hD hLL hΩ hm₀ hA₀ hc hL hk2 P rank R hlarge done
     (S := {p | EventUses (.inl R.1) p}) (IsLocalLabel.eventUses (isHomogenizing_oldLabel R done))
     (IsLocalLabel.eventUses (isHomogenizing_finalLabel R done)) (r := 2 * b) (rs := 2 * b) hK
     (by omega)
@@ -120,9 +120,9 @@ theorem isStepChain_bandOperation (hD : IsAngularScale q J Δ a A₀ m₀ 60 D L
       (2 * b) K (2 * b) ((L : ℝ) ^ (-30 : ℤ)) := by
     rcases hop.surrounding_eq with hs | hs
     · exact bandBirth_hasFrameChange hD hLL hΩ hm₀ hA₀ hc hL hk2 P rank R hlarge done hop hs e
-        hgb hga hr hlab.eventUses hQ.eventUses hK (by omega)
+        hgb hga hlab.eventUses hQ.eventUses hK (by omega)
     · exact bandDeath_hasFrameChange hD hLL hΩ hm₀ hA₀ hc hL hk2 P rank R hlarge done hop hs e
-        hgb hga hr hlab.eventUses hQ.eventUses (by omega) hK (by omega)
+        hgb hga hlab.eventUses hQ.eventUses (by omega) hK (by omega)
   rw [← e.toFinset_endpointList] at hbulk
   have h := isStepChain_sheetOperation P rank R hpt hgb hga hlab (e.endpointList R.1.index)
     (fun Q hQ => e.isBlockCornerOf_of_mem_endpointList hQ)
