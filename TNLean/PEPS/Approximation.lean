@@ -290,6 +290,7 @@ import TNLean.PEPS.Approximation.OriginalCircuitSequence
 import TNLean.PEPS.Approximation.OriginalCircuitSourceBound
 import TNLean.PEPS.Approximation.OriginalCoefficientMajorant
 import TNLean.PEPS.Approximation.OriginalGateSamplePhysicalSum
+import TNLean.PEPS.Approximation.OriginalNestedPatchEntropy
 import TNLean.PEPS.Approximation.OriginalProducerResources
 import TNLean.PEPS.Approximation.OutputPartitionCoordinates
 import TNLean.PEPS.Approximation.OwnerMemoryTransport
