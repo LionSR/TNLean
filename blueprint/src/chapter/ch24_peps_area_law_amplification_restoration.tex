@@ -21,14 +21,14 @@ reference state. Neither uses the clocks or the spectral estimates.
     $S_0=A\cap T_L$. For every $C$ there is $N$ such that for all $n\ge N$,
     every integer $r\le Cn^{(1-\varepsilon)/\alpha}$ and every $\Lambda$, $A$,
     $T$ with $\operatorname{dist}_\infty(T,Z)>L+n^\beta$ satisfy
-    $N_{2r}^\Lambda(S_0)\subseteq A$. This is the last assertion of
-    Proposition~10.2 of \cite{OpenAI2026AreaLaw}, given its radius bound.
+    $N_{2r}^\Lambda(S_0)\subseteq A$, establishing the last assertion of
+    Proposition~10.2 of \cite{OpenAI2026AreaLaw} from its radius bound.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:area_law_uniform_collar_threshold,
         thm:area_law_graph_neighborhood_cut_clearance}
-    Choose $N$ so that $L+2r<n^\beta$ for every admissible radius. Then
+    For $N$ chosen so that $L+2r<n^\beta$ for every admissible radius, one has
     $L+2r<L+n^\beta<\operatorname{dist}_\infty(T,Z)$, so a walk of length at
     most $2r$ from $S_0$ cannot cross the cut, and
     $N_{2r}^\Lambda(S_0)\subseteq A$.
@@ -45,14 +45,14 @@ reference state. Neither uses the clocks or the spectral estimates.
     $r\le C_Mn^{(1-\varepsilon)/\alpha}$ satisfies $I_\Omega(X':J)\le C_Mn^{-M}$
     for every $X'\subseteq X$ and every
     $J\subseteq\Lambda\setminus N_{2r}^\Lambda(S_0)$. Then the amplification
-    bound holds. This reduces Proposition~10.2 of \cite{OpenAI2026AreaLaw} to its
+    bound holds, reducing Proposition~10.2 of \cite{OpenAI2026AreaLaw} to its
     radius and output bounds.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:area_law_amplification_cut_clearance}
-    Take the larger of the two thresholds. The cut-clearance clause follows from
-    the preceding theorem applied to the radius given by the hypothesis.
+    Above the larger of the two thresholds, the preceding theorem applied to the
+    radius from the hypothesis yields the cut-clearance clause.
 \end{proof}
 
 \begin{theorem}[Truncated products on a good realization]
@@ -70,17 +70,16 @@ reference state. Neither uses the clocks or the spectral estimates.
         \qquad
         M_0\|D_{\rm ret}-L'\|\le\varepsilon.
     \end{align*}
-    Then $\|L'\zeta\|\le1+3\varepsilon$. If in addition $M_0\ge1$ and
+    With $g$ denoting the ground component of the
+    restoring vector in the proof of Proposition~10.2 of \cite{OpenAI2026AreaLaw}, the two estimates preceding the polar decomposition hold: $\|L'\zeta\|\le1+3\varepsilon$, and if in addition $M_0\ge1$ and
     $D_{\rm ret}^\dagger w=w$ for a vector with $\|w\|\le1$, then
-    $\|(L')^\dagger w-w\|\le\varepsilon$. With $g$ the ground component of the
-    restoring vector, these are the two estimates that precede the polar
-    decomposition in the proof of Proposition~10.2 of \cite{OpenAI2026AreaLaw}.
+    $\|(L')^\dagger w-w\|\le\varepsilon$.
 \end{theorem}
 \begin{proof}
     \leanok
-    Write
-    $L'\zeta=g+D(\zeta-g)-(D-D_{\rm ret})\zeta-(D_{\rm ret}-L')\zeta$ and use
-    $\|(D_{\rm ret}-L')\zeta\|\le\|D_{\rm ret}-L'\|M_0\le\varepsilon$. For the
+    Decomposing
+    $L'\zeta=g+D(\zeta-g)-(D-D_{\rm ret})\zeta-(D_{\rm ret}-L')\zeta$ and using
+    $\|(D_{\rm ret}-L')\zeta\|\le\|D_{\rm ret}-L'\|M_0\le\varepsilon$ gives the first bound. For the
     adjoint, $(L')^\dagger w-w=(L'-D_{\rm ret})^\dagger w$, and the adjoint has
     the same operator norm, at most $\varepsilon/M_0\le\varepsilon$.
 \end{proof}
@@ -99,17 +98,17 @@ reference state. Neither uses the clocks or the spectral estimates.
         \|(R'\otimes I)\phi-\eta\|^2 & \le2a+2b+b^2,
     \end{align*}
     and there is a unitary $U$ on $\mathcal H$ with
-    $\|(U\otimes I)\phi-\eta\|\le a+\sqrt{2a+2b+b^2}$. No invertibility of
-    $R'$ is assumed. These are the direct and unitary errors in the proof of
-    Proposition~10.2 of \cite{OpenAI2026AreaLaw}.
+    $\|(U\otimes I)\phi-\eta\|\le a+\sqrt{2a+2b+b^2}$, bounding the direct and unitary errors in the proof of
+    Proposition~10.2 of \cite{OpenAI2026AreaLaw} without assuming invertibility of
+    $R'$.
 \end{theorem}
 \begin{proof}
     \leanok
     The real part of $\langle\eta,(R'\otimes I)\phi\rangle$ equals that of
-    $\langle(R'\otimes I)^\dagger\eta,\phi\rangle$, which is at least $1-a$.
-    Expanding the square gives the first bound. Take $U$ to be a unitary polar
-    factor of $R'$, so that $R'=UH_+$ with $H_+\ge0$. Since $I+H_+\otimes I$
-    does not decrease norms, the distance from $(U\otimes I)\phi$ to $\eta$ is at
+    $\langle(R'\otimes I)^\dagger\eta,\phi\rangle$, which is at least $1-a$,
+    so expanding the square gives the first bound. For a unitary polar
+    factor $U$ of $R'$ with $R'=UH_+$ and $H_+\ge0$, $I+H_+\otimes I$
+    does not decrease norms, so the distance from $(U\otimes I)\phi$ to $\eta$ is at
     most the sum of the direct and adjoint errors.
 \end{proof}
 
@@ -136,6 +135,6 @@ reference state. Neither uses the clocks or the spectral estimates.
     \leanok
     \uses{thm:area_law_amplification_before_polar,
         thm:area_law_amplification_unitary_error}
-    The first truncation estimate gives $\|(L'R_0\otimes I)\phi\|\le1+3\varepsilon$.
-    Apply the preceding theorem with $b=3\varepsilon$.
+    The first truncation estimate gives $\|(L'R_0\otimes I)\phi\|\le1+3\varepsilon$,
+    so the preceding theorem with $b=3\varepsilon$ yields $U$.
 \end{proof}

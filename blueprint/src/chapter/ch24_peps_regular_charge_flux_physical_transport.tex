@@ -17,8 +17,8 @@
     2569--2581. No expansion of diagonal matrices into group matrices is used.
 \end{theorem}
 \begin{proof}\leanok
-    Sum the independent head labels in the inserted contraction.
-    The regular permutation matrix enforces head $=u_e$ times tail, while
+    Summing the independent head labels in the inserted contraction,
+    the regular permutation matrix enforces head $=u_e$ times tail while
     the diagonal factor retains the weight at that tail label.
 \end{proof}
 
@@ -68,8 +68,8 @@
 \begin{proof}\leanok
     The original compatibility equations determine every surviving incident
     configuration and every vertex translation from the root translation $x$.
-    The existing bijection of surviving terms retains its scalar weight.
-    Constant weight one recovers the unweighted formula.
+    The existing bijection of surviving terms retains its scalar weight, and
+    constant weight one recovers the unweighted formula.
 \end{proof}
 
 \begin{definition}[Weighted open contraction]
@@ -99,8 +99,8 @@
     for every scalar weight and every boundary column.
 \end{theorem}
 \begin{proof}\leanok
-    Interchange the finite sums and use $A_vP_v=A_v$ at each vertex.
-    Numbering group labels by their finite coordinate bijection yields the
+    Interchanging the finite sums and using $A_vP_v=A_v$ at each vertex gives the identity,
+    and numbering group labels by their finite coordinate bijection yields the
     original unweighted open contraction when $F=1$.
 \end{proof}
 
@@ -126,8 +126,8 @@
     of the local regular invariant projectors.
 \end{theorem}
 \begin{proof}\leanok
-    Conjugate the commutation relation by $E$, then average all independent
-    vertex translations. This average is the product projector.
+    Conjugating the commutation relation by $E$ and averaging over all independent
+    vertex translations gives commutation with the product projector.
 \end{proof}
 
 \begin{definition}[Reference-cycle multiplication and the charge parameter]
@@ -164,8 +164,8 @@
     parameter $pK_{u,e,b}^{-1}$, retaining $u$, $\chi$ and $\theta$.
 \end{theorem}
 \begin{proof}\leanok
-    On each surviving term, $z_b=x\rho_bx^{-1}$. Substitute this equality
-    into $a_e\mapsto z_ba_e$ and cancel adjacent group inverses.
+    On each surviving term, $z_b=x\rho_bx^{-1}$; substituting this equality
+    into $a_e\mapsto z_ba_e$ and canceling adjacent group inverses shifts the parameter.
     Reference registers translate on the left, while cycle registers are
     conjugated by the root translation, so the controlled multiplication
     is translation-equivariant.
@@ -194,7 +194,7 @@
 \end{theorem}
 \begin{proof}\leanok
     Local $G$-isometry gives the derived product Gram identity $A_R^\dagger A_R=cP$.
-    The native permutation is unitary and commutes with $P$, so it has a
-    unitary original-spin implementation. Apply that implementation to the
-    proved weighted columns and recover the original coefficients.
+    Because the native permutation is unitary and commutes with $P$, it has a
+    unitary original-spin implementation, and applying that implementation to the
+    weighted columns recovers the original coefficients.
 \end{proof}

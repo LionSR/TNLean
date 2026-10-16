@@ -79,10 +79,10 @@ their physical derivation remains separate.
         E_n/\tau_n           & =C_E n^{-\nu/4},     \\
         C(\tau_n+E_n/\tau_n) & =C(1+C_E)n^{-\nu/4}.
     \end{align}
-    Both $\tau_n$ and the last expression tend to zero. Choose
+    Both $\tau_n$ and the last expression tend to zero, so choosing
     one threshold for the bounds $\tau_n<1/2$ and
-    $C(1+C_E)n^{-\nu/4}<1$, and enlarge it to at least one.
-    Positivity of $n$ gives $\tau_n>0$ and the asserted inequalities.
+    $C(1+C_E)n^{-\nu/4}<1$ and enlarging it to at least one
+    gives $\tau_n>0$ and the asserted inequalities by positivity of $n$.
 \end{proof}
 
 
@@ -116,33 +116,32 @@ their physical derivation remains separate.
         4S'-2C\bigl(\tau\log d_*+h(\tau)/a\bigr)
         -C\frac{d(k)}{\tau}\max\{0,2S'\}-r_l(k) & \le F(k).
     \end{align}
-    Then
+    Before the shell and mismatch terms are estimated in
+    \cite[Proposition~9.5]{OpenAI2026AreaLaw}, these rough comparisons
+    imply
     \begin{align}
-        S\le7\eta-\log z+4B_{\rm sh}/z+4B_{\rm exc}+2Ch(\tau)/a.
+        S\le7\eta-\log z+4B_{\rm sh}/z+4B_{\rm exc}+2Ch(\tau)/a,
     \end{align}
-    This is a conditional consequence of the rough comparisons,
-    before the shell and mismatch terms are estimated in
-    \cite[Proposition~9.5]{OpenAI2026AreaLaw}. It retains the same
-    physical state and selected spectrum; the physical derivation of
-    the comparisons is a separate result.
+    retaining the same physical state and selected spectrum while leaving
+    the physical derivation of the comparisons separate.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:area_law_bootstrap_replica_absorption,thm:area_law_selected_schmidt_entropy_bounds}
     The selected auxiliary density has nonnegative entropy, so
-    $\max\{0,2S'\}=2S'$. Apply the fixed-scale replica absorption
+    $\max\{0,2S'\}=2S'$. Applying the fixed-scale replica absorption
     theorem to $S'$, with coefficient $2C$ and additive terms
     \begin{align}
         B_u & =2\log d_*-2S'-\log z+4B_{\rm sh}/z+4B_{\rm exc}, \\
-        B_l & =2C\tau(\log d_*-S')+2Ch(\tau)/a.
+        B_l & =2C\tau(\log d_*-S')+2Ch(\tau)/a,
     \end{align}
-    This gives
+    gives
     \begin{align}
         (3+2C\tau)S'\le(2+2C\tau)\log d_*+R,\qquad
         R=-\log z+4B_{\rm sh}/z+4B_{\rm exc}+2Ch(\tau)/a.
     \end{align}
-    Only now use the selected-spectrum bounds
-    $|S'-S|\le\eta$ and $|\log d_*-S|\le\eta$.
-    They imply $\eta\ge0$ and
+    The selected-spectrum bounds
+    $|S'-S|\le\eta$ and $|\log d_*-S|\le\eta$
+    then imply $\eta\ge0$ and
     $S\le R+(5+4C\tau)\eta$. The smallness condition and
     $E_{\rm def}\ge0$ give $2C\tau\le1$, hence the displayed bound.
 \end{proof}
