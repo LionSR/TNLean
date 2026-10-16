@@ -158,8 +158,8 @@ $D_x$, while the right contracted leg is $b\in\Fin{D_x^0}$.
 \begin{proof}
     \leanok
     \uses{thm:mpo_joint_full_frame_support,thm:mpo_supported_parent_projection}
-    Apply the supported-parent projection result to the derived inclusion
-    $S\subseteq\operatorname{ran}U$.
+    The supported-parent projection result applies directly to the
+    derived inclusion $S\subseteq\operatorname{ran}U$.
 \end{proof}
 
 \begin{theorem}[Exact compression in a supported isometric frame]
@@ -190,9 +190,9 @@ $D_x$, while the right contracted leg is $b\in\Fin{D_x^0}$.
     \uses{thm:mpo_supported_parent_projection,thm:mpo_rectangular_compression_gap}
     The identities $U^*U=I$ and $S\subseteq\operatorname{ran}U$
     give $U(U^*S)=S$. Orthogonal projection onto an isometric image
-    satisfies $P_{U(U^*S)}=UP_{U^*S}U^*$. Multiply by $U^*$ and
-    $U$ to obtain the compressed projector. Taking its complement
-    gives the interaction and its kernel. The established commutator
+    satisfies $P_{U(U^*S)}=UP_{U^*S}U^*$, so multiplying by $U^*$ and
+    $U$ yields the compressed projector. Taking its complement
+    gives the interaction and its kernel, and the established commutator
     permits gap restriction through the isometry.
 \end{proof}
 
@@ -218,7 +218,6 @@ $D_x$, while the right contracted leg is $b\in\Fin{D_x^0}$.
     \uses{thm:mpo_joint_boundary_polar,thm:mpo_joint_full_frame_support,
         thm:mpo_supported_parent_compression}
     The joint polar identities give
-    $U^*U=(U_L^*U_L)\otimes(U_R^*U_R)=I$.
-    Apply supported isometric compression to
-    $S\subseteq\operatorname{ran}U$.
+    $U^*U=(U_L^*U_L)\otimes(U_R^*U_R)=I$, so supported isometric
+    compression applies to $S\subseteq\operatorname{ran}U$.
 \end{proof}

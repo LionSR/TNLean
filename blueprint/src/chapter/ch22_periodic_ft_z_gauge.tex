@@ -82,11 +82,10 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    Write the $\Z_m$-gauge relation as
-    $ZA^i=YB^iY^{-1}$ with $Z^m=\Id$ and $[A^i,Z]=0$.
-    For a blocked letter, commute one factor of $Z$ past each physical letter in
-    the associated length-$m$ word. The total prefactor becomes $Z^m=\Id$,
-    so the entire blocked word is related by the same ordinary gauge $Y$.
+    In the $\Z_m$-gauge relation $ZA^i=YB^iY^{-1}$ with $Z^m=\Id$ and
+    $[A^i,Z]=0$, commuting one factor of $Z$ past each physical letter of a
+    length-$m$ blocked word collects the prefactor $Z^m=\Id$, leaving the
+    entire blocked word conjugated by the ordinary gauge $Y$.
 \end{proof}
 
 \begin{corollary}[Blocking a $\Z_m$-gauge preserves the MPV family]
@@ -99,6 +98,7 @@
 \end{corollary}
 
 \begin{proof}\leanok
-    Apply Theorem~\ref{thm:z_gauge_blockTensor_gauge_equiv} and then the gauge
-    invariance of MPV families.
+    Theorem~\ref{thm:z_gauge_blockTensor_gauge_equiv} makes $A^{[m]}$ and
+    $B^{[m]}$ gauge equivalent, and gauge invariance of MPV families then
+    identifies their state vectors at every length.
 \end{proof}

@@ -537,11 +537,10 @@ and trace scalars $m_\alpha$ of
 \begin{proof}
     \leanok
     \uses{def:asymex_rescaling}
-    Expand the trace as the sum of the $L$th powers of the diagonal
-    entries. Each summand acquires the factor
-    $(s_\alpha s_\beta/s_\gamma)^L$, which factors out of the finite
-    sum. For positive real scales, the ratio
-    $s_\alpha s_\beta/s_\gamma$ is positive, so multiplication by it
+    Expanding the trace as the sum of the $L$th powers of the diagonal
+    entries multiplies each summand by $(s_\alpha s_\beta/s_\gamma)^L$,
+    which factors out of the finite sum. For positive real scales, the
+    ratio $s_\alpha s_\beta/s_\gamma$ is positive, so multiplication by it
     preserves positivity.
 \end{proof}
 
@@ -875,10 +874,10 @@ Bell density $\sigma$ in~(\ref{eq:asymex_T_density}).
     \uses{lem:asymex_dimer_flag_sector, thm:normality_rescaling_invariance,
         thm:mpdo_twisted_dimer_vertical_cf}
     By Lemma~\ref{lem:asymex_dimer_flag_sector}, $M_f=\frac58\widehat M_f$.
-    The rescaled flag sector $\widehat M_f$ is normal by
-    Theorem~\ref{thm:mpdo_twisted_dimer_vertical_cf}, and normality is
-    invariant under the nonzero rescaling by $\frac58$
-    (Theorem~\ref{thm:normality_rescaling_invariance}).
+    Theorem~\ref{thm:mpdo_twisted_dimer_vertical_cf} shows that the rescaled
+    flag sector $\widehat M_f$ is normal, and
+    Theorem~\ref{thm:normality_rescaling_invariance} shows that normality is
+    invariant under the nonzero rescaling by $\frac58$.
 \end{proof}
 
 \begin{lemma}[Sign rule of the stacked product]
