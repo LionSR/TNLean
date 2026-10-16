@@ -424,8 +424,8 @@ rectangle** (area-law manuscript,
 `R`, term norm bound `J ≥ 0` and gap `Δ > 0` there are an integer `C_pad ≥ 1` and a constant
 `C_buf ≥ 0` with the following property, for every natural safety parameter `D₀ > 2R + 10`.
 Let `Ω` be a gapped ground vector of a finite-range Hamiltonian on a finite domain, `A` a cut,
-`Q` a safe rectangle, `r ≥ 1`, and `Q₀` a rectangle of size at most `r` with `Q₀^{+C_pad r} ⊆ Q`. Then for
-`X = A ∩ Q₀` and `T = (A ∩ Q₀^{+C_pad r}) \ X`,
+`Q` a safe rectangle, `r ≥ 1`, and `Q₀` a rectangle of size at most `r` with `Q₀^{+C_pad r} ⊆ Q`.
+Then for `X = A ∩ Q₀` and `T = (A ∩ Q₀^{+C_pad r}) \ X`,
 `S(X | T) = S(X ∪ T) - S(T) ≤ S(X)/2 + C_buf r`. -/
 theorem exists_condEntropy_le_initialBuffer (q R : ℕ) (hq : 1 ≤ q) {J Δ : ℝ} (hJ : 0 ≤ J)
     (hΔ : 0 < Δ) :
