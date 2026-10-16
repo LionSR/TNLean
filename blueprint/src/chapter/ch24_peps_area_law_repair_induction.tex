@@ -231,6 +231,49 @@ $v+[-r,r]^2$ is the closed ball of radius $r$ about $v$.
     $\{-1,0,1\}^2$, and therefore remains in $o+\mathbb Z^2$.
 \end{proof}
 
+% Source: 10-geometry.tex, positive boundary and its endpoints, lines 102--105;
+% simultaneous repair, lines 393--417; lattice coverage, lines 545--561.
+% Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+\begin{theorem}[Current regions and earlier terminal interiors cover the lattice]
+    \label{thm:area_law_repair_lattice_cover_before}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.RepairMetricHypotheses.lattice_mem_current_or_terminal_before}
+    \leanok
+    \uses{def:area_law_repair_stage,def:area_law_dyadic_origin,
+        def:area_law_repair_terminal_children,lem:area_law_repair_metric_invariants}
+    Take the actual repair family at $o=(\sqrt2,\sqrt3)$.
+    Assume the hypotheses of Lemma~\ref{lem:area_law_repair_metric_invariants},
+    and suppose $S_*\ge1$ and $b=|\partial_\Lambda A|>0$.
+    For every generation $j\in\mathbb N$,
+    \begin{align}
+        \mathbb Z^2
+         & \subseteq\Bigl(\bigcup_{i\in I_j}R_i^{(j)}\Bigr)
+        \cup\Bigl(\bigcup_{0\le t<j}E_{\mathrm{term}}(\mathcal D_t)\Bigr).\notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:area_law_repair_stage,thm:area_law_initial_lattice_partition,
+        thm:area_law_repair_marks_integer_mesh,lem:area_law_repair_metric_invariants,
+        thm:area_law_repair_next_lattice_cover}
+    Since $b>0$, the endpoint set $Z$ is nonempty.
+    Theorem~\ref{thm:area_law_initial_lattice_partition} applies to the
+    residues already used in $\mathcal D_0$, so every integer lattice
+    point belongs to an initial current region. This proves the case
+    $j=0$, when there are no earlier terminal interiors.
+
+    Induct on $j$. By Lemma~\ref{lem:area_law_repair_metric_invariants},
+    every parent scale is at least $S_*\ge1$, and
+    Theorem~\ref{thm:area_law_repair_marks_integer_mesh} places every
+    parent on $o+\mathbb Z^2$. A point in a current region of
+    $\mathcal D_j$ therefore belongs to a current region of
+    $\mathcal D_{j+1}$ or to $E_{\mathrm{term}}(\mathcal D_j)$ by
+    Theorem~\ref{thm:area_law_repair_next_lattice_cover}.
+    A point already in $E_{\mathrm{term}}(\mathcal D_t)$ with $t<j$
+    still has $t<j+1$, while the new terminal contribution has index
+    $j<j+1$. These alternatives complete the induction.
+\end{proof}
+
 \subsection{The induction step}
 \label{sec:area_law_repair_induction_step}
 

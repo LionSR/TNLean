@@ -278,6 +278,46 @@ maximum-norm distances, and colors are represented by $0$ and $1$.
     regions nor child marks.
 \end{definition}
 
+% Source: 10-geometry.tex, simultaneous removals, terminal interiors and
+% replacements, lines 393--417; supporting-line exclusion, lines 545--561.
+% Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+\begin{theorem}[Lattice coverage after one repair]
+    \label{thm:area_law_repair_next_lattice_cover}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.exists_mem_repairNextCurrentRegion_or_terminalInterior}
+    \leanok
+    \uses{def:area_law_repair_successor_regions,
+        def:area_law_repair_terminal_children,def:area_law_affine_mesh,
+        def:area_law_dyadic_origin}
+    Consider one simultaneous repair at generation $j\in\mathbb N$,
+    with old regions $(R_i)_{i\in I}$, parent set $K$, arbitrary binary
+    labels and assignments, and stopping scale $S_*\in\mathbb R$.
+    Set $o=(\sqrt2,\sqrt3)$, and suppose that every parent $p\in K$
+    satisfies $v_p\in\mathcal M(o,1)$ and $S_p\ge1$.
+    Every integer lattice point covered by an old region belongs to a
+    next current region or to a terminal-square interior:
+    \begin{align}
+        \Bigl(\bigcup_{i\in I}R_i\Bigr)\cap\mathbb Z^2
+         & \subseteq\Bigl(\bigcup_{x\in I'}R'_x\Bigr)\cup E_{\mathrm{term}}.\notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:area_law_repair_successor_regions,
+        def:area_law_repair_terminal_children,def:area_law_repair_birth,
+        thm:area_law_repair_replacement_lattice_cover}
+    Let $z\in\mathbb Z^2$ belong to an old region $R_i$.
+    If $z$ lies outside every removal square, it belongs to the retained
+    region $R'_i=R_i\setminus Q_K$.
+    Otherwise choose $p\in K$ with $z\in Q(v_p,S_p)$.
+    By Theorem~\ref{thm:area_law_repair_replacement_lattice_cover},
+    $z\in U(v_p,S_p,H)$ for some run $H$ of the assignment at $p$.
+    If $S_*\le d(S_p)$, this is a next current region.
+    If $d(S_p)<S_*$, the containment
+    $B(v_p,S_p,H)\subseteq Q(v_p,S_p)$ and monotonicity of the interior
+    give $z\in\operatorname{int}Q(v_p,S_p)\subseteq E_{\mathrm{term}}$.
+\end{proof}
+
 % Source: 10-geometry.tex, initial choices, lines 212--233 and 325--363;
 % replacement instructions, lines 393--417; geometry:repair-induction,
 % lines 471--514; current regions and remembered births, lines 558--561.
@@ -579,6 +619,44 @@ maximum-norm distances, and colors are represented by $0$ and $1$.
         \label{eq:area_law_repair_terminal_interiors}
     \end{align}
 \end{definition}
+
+% Source: 10-geometry.tex, positive boundary, lines 102--105;
+% simultaneous repair, lines 393--417; lattice coverage, lines 545--561.
+% Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+\begin{theorem}[Final regions cover the lattice outside terminal interiors]
+    \label{thm:area_law_repair_final_lattice_cover_empty}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.RepairMetricHypotheses.lattice_mem_final_or_terminal_of_isEmpty}
+    \leanok
+    \uses{def:area_law_repair_stage,def:area_law_repair_inclusions,
+        def:area_law_dyadic_origin,def:area_law_repair_terminal_interiors,
+        lem:area_law_repair_metric_invariants}
+    Take the actual repair family at $o=(\sqrt2,\sqrt3)$.
+    Assume the hypotheses of Lemma~\ref{lem:area_law_repair_metric_invariants},
+    and suppose $S_*\ge1$ and $b=|\partial_\Lambda A|>0$.
+    Let $N\in\mathbb N$ satisfy $K_N=\varnothing$.
+    For $i\in I_N$, write $R_i^{(\infty,N)}$ for the intersection of its
+    retained current regions over all later generations. Then
+    \begin{align}
+        \mathbb Z^2
+         & \subseteq\Bigl(\bigcup_{i\in I_N}R_i^{(\infty,N)}\Bigr)
+        \cup\mathcal E_{\mathrm{term}}.\notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:area_law_repair_lattice_cover_before,
+        thm:area_law_repair_final_current_empty,
+        def:area_law_repair_terminal_interiors}
+    By Theorem~\ref{thm:area_law_repair_lattice_cover_before}, every
+    integer lattice point belongs to a current region at generation $N$
+    or to $E_{\mathrm{term}}(\mathcal D_t)$ for some $t<N$.
+    Since $K_N=\varnothing$,
+    Theorem~\ref{thm:area_law_repair_final_current_empty} gives
+    $R_i^{(\infty,N)}=R_i^{(N)}$ for every $i\in I_N$.
+    Every earlier terminal contribution belongs to the defining union
+    $\mathcal E_{\mathrm{term}}$, proving the inclusion.
+\end{proof}
 
 % Source: 10-geometry.tex, geometry:bad-sites, lines 694--707.
 % Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.

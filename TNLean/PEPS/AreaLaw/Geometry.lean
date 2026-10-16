@@ -31,6 +31,7 @@ import TNLean.PEPS.AreaLaw.Geometry.CellCounting
 import TNLean.PEPS.AreaLaw.Geometry.CellFanCycle
 import TNLean.PEPS.AreaLaw.Geometry.CellFanRadialIncidence
 import TNLean.PEPS.AreaLaw.Geometry.CellFanRays
+import TNLean.PEPS.AreaLaw.Geometry.CellFanRunCount
 import TNLean.PEPS.AreaLaw.Geometry.CellFanSectors
 import TNLean.PEPS.AreaLaw.Geometry.CellFanSlopes
 import TNLean.PEPS.AreaLaw.Geometry.CellFans
@@ -118,6 +119,7 @@ import TNLean.PEPS.AreaLaw.Geometry.RepairDescendantCounts
 import TNLean.PEPS.AreaLaw.Geometry.RepairDescendants
 import TNLean.PEPS.AreaLaw.Geometry.RepairDummySites
 import TNLean.PEPS.AreaLaw.Geometry.RepairFanCones
+import TNLean.PEPS.AreaLaw.Geometry.RepairFinalLatticeCoverage
 import TNLean.PEPS.AreaLaw.Geometry.RepairFinalRegion
 import TNLean.PEPS.AreaLaw.Geometry.RepairFinalRegionStabilization
 import TNLean.PEPS.AreaLaw.Geometry.RepairFinalRegionTransport
@@ -126,6 +128,7 @@ import TNLean.PEPS.AreaLaw.Geometry.RepairInclusionComposition
 import TNLean.PEPS.AreaLaw.Geometry.RepairInduction
 import TNLean.PEPS.AreaLaw.Geometry.RepairInductionMetric
 import TNLean.PEPS.AreaLaw.Geometry.RepairInductionStatement
+import TNLean.PEPS.AreaLaw.Geometry.RepairLatticeCoverage
 import TNLean.PEPS.AreaLaw.Geometry.RepairMarkMesh
 import TNLean.PEPS.AreaLaw.Geometry.RepairNextRegionDisjointness
 import TNLean.PEPS.AreaLaw.Geometry.RepairRegionDisjointness
