@@ -778,44 +778,6 @@ maximum-norm distances, and colors are represented by $0$ and $1$.
     \end{align}
 \end{definition}
 
-% Source: 10-geometry.tex, positive boundary, lines 102--105;
-% simultaneous repair, lines 393--417; lattice coverage, lines 545--561.
-% Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
-\begin{theorem}[Final regions cover the lattice outside terminal interiors]
-    \label{thm:area_law_repair_final_lattice_cover_empty}
-    \lean{TNLean.PEPS.AreaLaw.Geometry.RepairMetricHypotheses.lattice_mem_final_or_terminal_of_isEmpty}
-    \leanok
-    \uses{def:area_law_repair_stage,def:area_law_repair_inclusions,
-        def:area_law_dyadic_origin,def:area_law_repair_terminal_interiors,
-        lem:area_law_repair_metric_invariants}
-    Take the recursive repair family at $o=(\sqrt2,\sqrt3)$.
-    Assume the hypotheses of Lemma~\ref{lem:area_law_repair_metric_invariants},
-    and suppose $S_*\ge1$ and $b=|\partial_\Lambda A|>0$.
-    Let $N\in\mathbb N$ satisfy $K_N=\varnothing$.
-    For $i\in I_N$, write $R_i^{(\infty,N)}$ for the intersection of its
-    retained current regions over all later generations. Then
-    \begin{align}
-        \mathbb Z^2
-         & \subseteq\Bigl(\bigcup_{i\in I_N}R_i^{(\infty,N)}\Bigr)
-        \cup\mathcal E_{\mathrm{term}}.\notag
-    \end{align}
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    \uses{thm:area_law_repair_lattice_cover_before,
-        thm:area_law_repair_final_current_empty,
-        def:area_law_repair_terminal_interiors}
-    By Theorem~\ref{thm:area_law_repair_lattice_cover_before}, every
-    integer lattice point belongs to a current region at generation $N$
-    or to $E_{\mathrm{term}}(\mathcal D_t)$ for some $t<N$.
-    Since $K_N=\varnothing$,
-    Theorem~\ref{thm:area_law_repair_final_current_empty} gives
-    $R_i^{(\infty,N)}=R_i^{(N)}$ for every $i\in I_N$.
-    Every earlier terminal contribution belongs to the defining union
-    $\mathcal E_{\mathrm{term}}$, proving the inclusion.
-\end{proof}
-
 % Source: 10-geometry.tex, geometry:bad-sites, lines 694--707.
 % Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 \begin{theorem}[Sites in one terminal square]

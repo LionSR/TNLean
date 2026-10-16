@@ -154,6 +154,57 @@
     $P\cap\mathbb Z^2$ are finite.
 \end{proof}
 
+% Auxiliary to Definition 9.3 (scanner:template) and 10-geometry.tex,
+% lines 299--318 and 732--740.
+% Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+\begin{theorem}[A template for the integer points of a fan run]
+    \label{thm:area_law_fan_run_template}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.CellFanRun.exists_template}
+    \leanok
+    \uses{def:area_law_template,def:area_law_dyadic_cells,def:area_law_cell_fan,
+        def:area_law_fan_runs}
+    Let $C_{\mathrm{tpl}},C_B\in\mathbb R$ satisfy
+    $C_{\mathrm{tpl}}\ge1$ and $C_B\ge16C_{\mathrm{tpl}}$.
+    Fix any origin $o\in\mathbb R^2$, scale $\ell\in\mathbb N$, and
+    cell index $z\in\mathbb Z^2$. Take any midpoint subdivisions and
+    any assignment of two colors to the fan triangles of the closed
+    dyadic square of side $u=2^\ell$. Let $R$ be one of its runs.
+    If $T_R\cap\mathbb Z^2$ is nonempty, then there is a template $T$
+    with parameters $s_0=2^\ell$ and $n=\lceil C_Bu\rceil$, consisting
+    of at most eight polygonal pieces, such that, for every
+    $x\in\mathbb Z^2$, $x\in T$ if and only if $x\in T_R$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:area_law_template,def:area_law_fan_runs,
+        thm:area_law_cell_fan_count,thm:area_law_cell_fan_cover,
+        thm:area_law_fan_run_cover,
+        thm:area_law_polygon_integer_points_finite,
+        thm:area_law_dyadic_cell_distance}
+    Take precisely the triangles $P_e$ whose indices belong to $R$,
+    and let $m$ be their number. The lattice-point witness lies in
+    one such triangle, so $m\ge1$. By
+    Theorem~\ref{thm:area_law_cell_fan_count}, $m\le8$.
+    For each piece take the exact finite sample $P_e\cap\mathbb Z^2$,
+    using Theorem~\ref{thm:area_law_polygon_integer_points_finite}.
+    Their union is exactly $T_R\cap\mathbb Z^2$, including all shared
+    edges. Individual samples may be empty.
+
+    Every piece lies in the same closed square by
+    Theorem~\ref{thm:area_law_cell_fan_cover}. Applying
+    Theorem~\ref{thm:area_law_dyadic_cell_distance} with equal cell
+    indices and radius zero bounds its maximum-norm diameter, and
+    that of the total sample, by $u$.
+    Since $u\ge1$,
+    \begin{align}
+        C_{\mathrm{tpl}}m(s_0+1) & \le8C_{\mathrm{tpl}}(u+1)
+        \le16C_{\mathrm{tpl}}u\le C_Bu\le n.\notag
+    \end{align}
+    Also $C_B\ge16$, so $u\le n$ and both scale parameters are positive.
+    These bounds give the scale and diameter conditions of the template.
+\end{proof}
+
 \begin{theorem}[Rounded affine row profiles]
     \label{thm:area_law_affine_row_profiles}
     \leanok
