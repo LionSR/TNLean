@@ -33,6 +33,7 @@ lower layer index $k_0$ is increased after them.
 \end{theorem}
 \begin{proof}
     \leanok
+    \uses{def:area_law_fine_belt_scales,thm:area_law_exponent_gaps}
     The first claim is $\lfloor\zeta k\rfloor\le\zeta k$. For a fixed $M$
     and an exponent $a<1$, we have $Mr^a=Mr^{-(1-a)}r<r$ once
     $r^{-(1-a)}<1/(\max\{M,0\}+1)$. Apply this with $a=\zeta\rho_0$,
@@ -60,6 +61,7 @@ lower layer index $k_0$ is increased after them.
 \end{theorem}
 \begin{proof}
     \leanok
+    \uses{thm:area_law_descendant_clearance_scales}
     Since $C_0\ge2$, the endpoint distance is at least $r$. If $D_0\ge0$,
     then $4D_0s_0\le4D_0\cdot2t_k<r$; otherwise $4D_0s_0\le0<r$. Also
     $n\le\lceil C_Bt_k\rceil$, because the ceiling is monotone when
@@ -83,6 +85,10 @@ lower layer index $k_0$ is increased after them.
 \end{theorem}
 \begin{proof}
     \leanok
+    \uses{thm:area_law_initial_repair_mark_facts,
+        thm:area_law_belt_marks_closed_cell,
+        thm:area_law_fine_cell_containment,
+        thm:area_law_dyadic_layer_distance}
     The initial mark facts supply the layer $k$ and the belt cell whose
     mark is $v$ and whose fine side is $S_v$. The mark lies in the closed
     belt cell, which lies in $\overline{D_k}$. The layer distance estimate
@@ -106,6 +112,9 @@ lower layer index $k_0$ is increased after them.
 \end{theorem}
 \begin{proof}
     \leanok
+    \uses{thm:area_law_initial_mark_endpoint_distance,
+        def:area_law_uniform_repair_conclusion,
+        thm:area_law_repair_descendant_scales,thm:area_law_repair_margins}
     The scale $S_m$ is the $j$-th iterate of $d$ at $t_k$. For $S\ge1$ we
     have $1\le d(S)\le S^{\rho_0}\le S$, so $d(S_m)\le t_k$. The birth
     region lies within $2d(t_k)$ of the ancestor mark, and the triangle
@@ -136,6 +145,10 @@ lower layer index $k_0$ is increased after them.
 \end{theorem}
 \begin{proof}
     \leanok
+    \uses{thm:area_law_fan_run_cover,thm:area_law_fine_cell_containment,
+        thm:area_law_dyadic_layer_distance,
+        thm:area_law_descendant_clearance_scales,
+        thm:area_law_template_clearance_of_endpoint_distance}
     The birth region of a belt tile is one of the runs covering its closed
     belt cell, which lies in $\overline{D_k}$; the layer distance estimate
     gives $C_0r\ge(C_0-1)r$. Take the threshold of
@@ -170,6 +183,11 @@ lower layer index $k_0$ is increased after them.
 \end{theorem}
 \begin{proof}
     \leanok
+    \uses{thm:area_law_uniform_repair_induction,
+        thm:area_law_descendant_clearance_scales,
+        thm:area_law_descendant_birth_endpoint_distance,
+        thm:area_law_repair_margins,
+        thm:area_law_template_clearance_of_endpoint_distance}
     Take the thresholds of the uniform repair induction for $S_*$ and of
     Theorem~\ref{thm:area_law_descendant_clearance_scales} for $k_0$. By
     Theorem~\ref{thm:area_law_descendant_birth_endpoint_distance} and
