@@ -1,4 +1,4 @@
-\begin{theorem}[Representative and literal reduction from first-site contractions]
+\begin{theorem}[Representative and canonical-form reduction from first-site contractions]
     \label{thm:representative_one_sub_mp_zero}
     \lean{MPSTensor.FirstSiteActionAgree.of_sameMPVPos}
     \lean{MPSTensor.insertedTensor_toTensorFromBlocks}
@@ -32,8 +32,8 @@
     $Q_1H^{(N)}=Q_1H^{(N)}Q_1$ and
     $Q_1H^{(N)}=H^{(N)}Q_1$ at every positive length.
 
-    The corresponding literal-CF assertion also holds. Let $A$ be in
-    literal CPSV canonical form. If the first-site actions of $Y,Z\in\MN{d}$
+    The corresponding assertion for CPSV canonical form also holds. Let $A$ be in
+    CPSV canonical form. If the first-site actions of $Y,Z\in\MN{d}$
     agree on every positive-length matrix product vector of $A$, then
     \begin{align}
         YA & =ZA
@@ -69,9 +69,9 @@
     representative-grouped Lemma~L to identify first $Y_L(Q)A_j$ with
     $Y_C(Q)A_j$ and then with $Y_R(Q)A_j$. Transitivity gives the stated
     equality for every representative, and the same direct-sum and copy-gauge
-    argument gives the literal equality on $\widetilde M$.
+    argument gives the equality on $\widetilde M$.
 
-    For literal CPSV canonical form, first-site agreement is a marked-trace
+    For CPSV canonical form, first-site agreement is a marked-trace
     identity on the original tensor. Theorem~\ref{thm:cpsv_original_coordinate_marked_lemma_l}
     needs only the identities with a nonempty unmarked tail; it identifies the
     two linear marks and gives
@@ -289,7 +289,7 @@ the proof of Lemma~L,
     \leanok
     \uses{thm:postblocked_representative_grouped_insert_eq}
     Apply the representative-grouped Lemma~L first to the actions $Y_L,Y_R$
-    and then to $Y_L,Y_C$. The BNT canonical-form hypotheses supply the
+    and then to $Y_L,Y_C$. The BNT canonical-form hypotheses give the
     required common block-injectivity length. Transitivity gives the stated
     equality on every minimal representative; the repeated copies have
     already been combined through $\sum_q\mu_{j,q}^{N}$.

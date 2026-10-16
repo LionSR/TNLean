@@ -200,7 +200,7 @@
     ${\cal A}_1{\cal A}_2=0$, a contradiction.
     Theorem~\ref{thm:mpdo_active_neighboring_support_strongly_connected} does
     not construct $P_1$ or $P_2$: an arbitrary reachability cut
-    $I_*=S\sqcup C$ supplies only ${\cal A}_S{\cal A}_C=0$. The common final
+    $I_*=S\sqcup C$ yields only ${\cal A}_S{\cal A}_C=0$. The common final
     step is the same one-sided obstruction: two nonzero matrix spaces cannot
     sum to $\MN{D}$ while their ordered products vanish.}
     \label{fig:mpdo_local_orthogonality}
@@ -273,7 +273,7 @@
 
 \begin{proof}
     \leanok
-    Triangle closure supplies a positive closed walk of length three through
+    Triangle closure gives a positive closed walk of length three through
     each active sector. Combine these walks with the length-two returns and
     apply Theorem~\ref{thm:matrix_primitive_of_two_three_returns}.
 \end{proof}
@@ -339,13 +339,13 @@
 \begin{proof}
     \uses{def:mpdo_normalized_four_site_tail, def:mpdo_zero_weight_reparameterized_inverse_map_factorization, thm:mpdo_four_site_sal_eta_structure, thm:mpdo_normalized_four_site_tail_entry_ne_zero, thm:mpdo_three_site_closure_reduced, thm:mpdo_inverse_map_active_sector_witnesses, thm:mpdo_active_sector_three_step_return_and_primitivity}
     \leanok
-    Theorem~\ref{thm:mpdo_four_site_sal_eta_structure} supplies the four-site
+    Theorem~\ref{thm:mpdo_four_site_sal_eta_structure} gives the four-site
     Hayashi decomposition, and
-    Theorem~\ref{thm:mpdo_normalized_four_site_tail_entry_ne_zero} supplies
+    Theorem~\ref{thm:mpdo_normalized_four_site_tail_entry_ne_zero} yields
     nonzero outer indices for the normalized four-site tail. Its reduced block
     state gives the required three-site closure; form the zero-weight
     reparameterized inverse-map factorization. Then
-    Theorem~\ref{thm:mpdo_inverse_map_active_sector_witnesses} supplies one
+    Theorem~\ref{thm:mpdo_inverse_map_active_sector_witnesses} provides one
     rephased factorization with positive neighboring operators, full active
     span, nonzero active virtual matrices, and the three-edge return condition.
     Apply
@@ -389,7 +389,7 @@
     left tensors on the zero-weight sectors. Apply
     Theorem~\ref{thm:mpdo_active_sector_three_step_return_and_primitivity} to
     obtain primitivity of its active trace matrix.
-    Lemma~\ref{lem:mpo_source_zcl_normalized_idempotent} supplies normalized
+    Lemma~\ref{lem:mpo_source_zcl_normalized_idempotent} gives normalized
     idempotence of the physical-trace transfer, from which the same active trace
     matrix satisfies the square--cube identity and the positive-power trace
     identities.
@@ -414,7 +414,7 @@
     trace with that of $\mathcal T_{\cal K}$, which therefore cannot vanish.
 \end{proof}
 
-\begin{theorem}[SAL and literal idempotence imply source zero correlation length]
+\begin{theorem}[SAL and unscaled idempotence imply source zero correlation length]
     \label{thm:mpdo_sal_literal_idempotence_source_zcl}
     \lean{MPOTensor.IsSAL.isSourceZCL_of_physTraceTransfer_sq}
     \leanok
@@ -432,13 +432,13 @@
     Theorem~\ref{thm:mpo_source_zcl_of_physical_trace_idempotent}.
 \end{proof}
 
-\begin{theorem}[Literal-ZCL specialization of the active trace relations]%
+\begin{theorem}[Unscaled-ZCL specialization of the active trace relations]%
     \label{thm:mpdo_active_trace_matrix_literal_zcl_relations}
     \lean{MPOTensor.%
         exists_activeTraceMatrix_relations_of_isSAL_of_literal_ZCL}
     \leanok
     \uses{def:injective, def:is_sal, def:mpo_physical_trace_transfer, def:mpdo_physical_sector_factorization, def:mpdo_active_sector_trace_matrix}
-    Let ${\cal K}$ be injective and satisfy SAL and the literal identity
+    Let ${\cal K}$ be injective and satisfy SAL and the unscaled identity
     \begin{align}
         \mathcal T_{\cal K}^2 & =\mathcal T_{\cal K}. \notag
     \end{align}
@@ -689,7 +689,7 @@
     pure-state analogue is the normalized-MPV self-overlap lemma of
     \cite[lines~1080--1100]{Cirac2016MPDO_arXiv}. It is not a statement
     of that source. Until a trace normalization is established, the
-    right-hand side is the raw squared Hilbert--Schmidt norm of the MPO
+    right-hand side is the unnormalized squared Hilbert--Schmidt norm of the MPO
     family, not a normalized-state purity.
 \end{theorem}
 
@@ -849,7 +849,7 @@
     to $\eta_{k,h}$.
 \end{proof}
 
-\begin{theorem}[Literal zero correlation length stabilizes the active
+\begin{theorem}[Unscaled zero correlation length stabilizes the active
         trace matrix]
     \label{thm:mpdo_active_trace_matrix_literal_zcl_powers}
     \lean{MPOTensor.%
@@ -860,7 +860,7 @@
     Let ${\cal K}$ be an MPO tensor with a physical-sector factorization
     and sector weights $p_k$. Suppose that every neighboring operator
     is positive semidefinite, that the physical-trace transfer is
-    literally idempotent,
+    idempotent,
     \begin{align}
         \mathcal T_{\cal K}^2 & =\mathcal T_{\cal K},
         \notag
@@ -881,7 +881,7 @@
     These are matrix-algebra components of the Case-I argument under
     the assumptions of
     \cite[Appendix~C.2, lines~1374--1381]{Cirac2016MPDO_arXiv}, for the
-    factorization supplied by
+    factorization given by
     \cite[Appendix~C.2, Lemma~C.4, lines~1406--1471]{Cirac2016MPDO_arXiv}
     and the zero-correlation-length step of
     \cite[Appendix~C.2, Lemma~C.5, lines~1473--1499]{Cirac2016MPDO_arXiv}.
@@ -901,7 +901,7 @@
     \end{align}
     The left tensor vanishes on every zero-weight sector, so the
     rectangular product $LQ$ is the full physical-trace transfer, and
-    literal zero correlation length makes $LQ$ idempotent.
+    unscaled zero correlation length makes $LQ$ idempotent.
     Associativity then gives
     \begin{align}
         (QL)^2 & =Q(LQ)L=Q(LQ)(LQ)L=(QL)^3.
@@ -1199,7 +1199,7 @@
     and, for every $k\in I_*$, some virtual matrix $A_{k;x,y}$ is nonzero.
     Suppose also that every nonzero $\eta_{k,h}$ with $k,h\in I_*$ admits
     $j\in I_*$ such that $\eta_{h,j}\ne0$ and $\eta_{j,k}\ne0$, that the
-    physical-trace transfer is literally idempotent,
+    physical-trace transfer is idempotent,
     \begin{align}
         \mathcal T_{\cal K}^2 & =\mathcal T_{\cal K},
         \notag
@@ -1223,7 +1223,7 @@
     normal self-overlap limit
     (\cite[lines~1080--1100]{Cirac2016MPDO_arXiv}) give
     $\tr((S^*)^N)\to1$. The relation $(T^*)^2=(T^*)^3$ and primitivity
-    supply a positive Perron eigenvector with eigenvalue $1$. Conjugating
+    yield a positive Perron eigenvector with eigenvalue $1$. Conjugating
     by its diagonal gives a row-stochastic primitive matrix $P$. The
     matching squared diagonal conjugate $\widehat S$ of $S^*$ is
     entrywise non-negative and bounded by $P\odot P$. On the nontrivial
@@ -1249,7 +1249,7 @@
     and, for every $k\in I_*$, some virtual matrix $A_{k;x,y}$ is nonzero.
     Suppose also that every nonzero $\eta_{k,h}$ with $k,h\in I_*$ admits
     $j\in I_*$ such that $\eta_{h,j}\ne0$ and $\eta_{j,k}\ne0$, that the
-    physical-trace transfer is literally idempotent,
+    physical-trace transfer is idempotent,
     \begin{align}
         \mathcal T_{\cal K}^2 & =\mathcal T_{\cal K},
         \notag
@@ -1317,7 +1317,7 @@
     \uses{def:mpdo, def:injective, def:is_sal, def:mpo_physical_trace_transfer, def:nt_cpsv}
     Let ${\cal K}$ be an injective MPO tensor. Suppose
     that ${\cal K}$ satisfies saturation of the area law, that its physical-trace
-    transfer is literally idempotent,
+    transfer is idempotent,
     \begin{align}
         \mathcal T_{\cal K}^2 & =\mathcal T_{\cal K},
         \notag
@@ -1371,7 +1371,7 @@
     \end{align}
     The reparameterization makes the right tensor of an inactive source sector
     zero, while its left tensor is already zero. Thus this is a statement about
-    the chosen reparameterized and rephased factorization, not about the raw
+    the chosen reparameterized and rephased factorization, not about the unmodified
     inverse-map factorization.
 \end{theorem}
 
@@ -1394,7 +1394,7 @@
     \leanok
     \uses{def:mpdo, def:injective, def:is_sal, def:mpo_physical_trace_transfer, def:nt_cpsv}
     Let ${\cal K}$ be an injective MPO tensor satisfying saturation of the area law.
-    Suppose that its physical-trace transfer is literally idempotent and that
+    Suppose that its physical-trace transfer is idempotent and that
     its underlying tensor is normal. Then one can choose a single coherently
     rephased, zero-weight-reparameterized inverse-map factorization with
     nonnegative weights $(p_k)_k$ satisfying $\sum_kp_k=1$, positive
@@ -1415,7 +1415,7 @@
         \notag
     \end{align}
     The incident-vanishing clause belongs to this chosen reparameterized and
-    rephased factorization, not to the raw inverse-map factors. This is the
+    rephased factorization, not to the unmodified inverse-map factors. This is the
     normal Case-I construction from
     \cite[Appendix~C.2, Case~I, Lemmas~C.4--C.5,
         lines~1374--1505]{Cirac2016MPDO_arXiv}; the incident-vanishing clause is the
@@ -1425,7 +1425,7 @@
 \begin{proof}
     \leanok
     \uses{thm:cpsv_normal_bond_dim_pos, def:mpdo_normalized_four_site_tail, def:mpdo_zero_weight_reparameterized_inverse_map_factorization, thm:mpdo_four_site_sal_eta_structure, thm:mpdo_normalized_four_site_tail_entry_ne_zero, thm:mpdo_three_site_closure_reduced, thm:mpdo_inverse_map_active_sector_witnesses, thm:mpdo_casei_rank_one_coefficients, thm:mpdo_rephased_zero_weight_incident_vanish}
-    Normality makes the bond dimension positive. Saturation of the area law supplies
+    Normality makes the bond dimension positive. Saturation of the area law provides
     the four-site Hayashi decomposition, while the normalized four-site tail
     gives nonzero outer indices and the required three-site closure. Choose the
     coherently rephased zero-weight-reparameterized inverse-map factorization.
@@ -1440,7 +1440,7 @@
     \leanok
     \uses{def:mpdo, def:injective, def:is_sal, def:mpo_physical_trace_transfer, def:nt_cpsv}
     Let ${\cal K}$ be an injective normal MPO tensor satisfying saturation of
-    the area law and literal physical-trace idempotence,
+    the area law and unscaled physical-trace idempotence,
     \begin{align}
         \mathcal T_{\cal K}^2 & =\mathcal T_{\cal K}.
         \notag
@@ -1458,7 +1458,7 @@
     $p_k=0$,
     then $a_k=b_k=0$. This realizes the all-index coefficient statement of
     \cite[Appendix~C.2, Lemma~C.5, lines~1473--1499]{Cirac2016MPDO_arXiv}
-    for literal zero correlation length by extending the active-sector
+    for unscaled zero correlation length by extending the active-sector
     coefficients to inactive sectors by zero.
 \end{theorem}
 
