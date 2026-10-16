@@ -184,7 +184,7 @@
     \end{align}
 \end{proof}
 
-\begin{lemma}[Fixed contraction families of the transported composites]
+\begin{lemma}[Fixed contraction families of the vertical-sector composites]
     \label{lem:mpdo_transported_vertical_sector_fixed_generators}
     \lean{MPOTensor.transportedVerticalSectorS_comp_T_fixed_contractBondMatrix_trace_smul}
     \lean{MPOTensor.transportedVerticalSectorT_comp_S_fixed_contractBondMatrix_trace_smul}
@@ -198,7 +198,7 @@
         \notag
     \end{align}
     Under the hypotheses of
-    Theorem~\ref{thm:mpdo_transported_vertical_sector_maps}, the transported
+    Theorem~\ref{thm:mpdo_transported_vertical_sector_maps}, the vertical-sector
     composites satisfy
     \begin{align}
         (\widetilde S\circ\widetilde T)(V_1(X))
@@ -428,14 +428,14 @@
     for every $X$.
 \end{proof}
 
-\begin{theorem}[Trace preservation of the transported vertical-sector maps]
+\begin{theorem}[Trace preservation of the vertical-sector maps]
     \label{thm:mpdo_transported_vertical_sector_composites_trace_preserving}
     \lean{MPOTensor.transportedVerticalSector_composites_tracePreserving}
     \leanok
     Suppose that every one-site and two-site multiplicity space is nonzero
     and every corresponding diagonal weight is positive. Let
     $\widetilde M^{(1)}$ and $\widetilde M^{(2)}$ be the vertical tensors of
-    $M$ and its two-site blocking, and let $B_1$ and $B_2$ be their assembled
+    $M$ and its two-site blocking, and let $B_1$ and $B_2$ be their direct-sum
     one-site and two-site canonical forms. Assume that both canonical forms
     are bases of normal tensors and that, for every vertical letter $\ell$,
     \begin{align}
@@ -456,7 +456,7 @@
         S(\mathcal M^{(2)}(Z)) & =\mathcal M^{(1)}(Z).
         \notag
     \end{align}
-    Then each transported map and both square composites preserve the
+    Then each vertical-sector map and both square composites preserve the
     appropriate total sector trace. For the individual maps,
     \begin{align}
         \sum_\beta\tr(\widetilde T(X)_\beta)
@@ -488,7 +488,7 @@
 
 \begin{proof}\leanok
     \uses{thm:positive_direct_sum_map_trace_preserving_from_fixed_product_span, thm:direct_sum_trace_preservation_sandwich, lem:mpdo_transported_vertical_sector_fixed_generators, thm:mpdo_vertical_bond_contractions_generate_sector_algebra, thm:mpdo_transported_vertical_sector_trace_loss}
-    Each transported map is positive and trace nonincreasing, and hence so are
+    Each vertical-sector map is positive and trace nonincreasing, and hence so are
     the square composites $\widetilde S\widetilde T$ and
     $\widetilde T\widetilde S$. The fixed-generator lemma and the
     product-spanning theorem give the hypotheses of
@@ -516,7 +516,7 @@
     \leanok
     \uses{def:mpdo_vertical_coordinate_map_transport}
     If the physical refinement map $T$ is completely positive, then the
-    transported map $T_{\mathrm v}$ in vertical canonical coordinates is
+    refinement map $T_{\mathrm v}$ in vertical canonical coordinates is
     completely positive.
 \end{lemma}
 
@@ -537,7 +537,7 @@
     \leanok
     \uses{def:mpdo_vertical_coordinate_map_transport}
     If the physical coarse-graining map $S$ is completely positive, then the
-    transported map $S_{\mathrm v}$ in vertical canonical coordinates is
+    coarse-graining map $S_{\mathrm v}$ in vertical canonical coordinates is
     completely positive.
 \end{lemma}
 
@@ -584,7 +584,7 @@
     coordinates.
 \end{proof}
 
-\begin{lemma}[Full-matrix factorization of transported refinement]
+\begin{lemma}[Full-matrix factorization of vertical-sector refinement]
     \label{lem:mpdo_transported_vertical_sector_t_extension}
     \lean{MPOTensor.directSumMapExtension_transportedVerticalSectorT}
     \leanok
@@ -592,7 +592,7 @@
     Write $\widehat R_1$ for normalized state preparation,
     $\widehat{\widetilde R}_2$ for controlled partial trace, and $W_i$ for
     retained-coordinate reindexing. The full-matrix extension of the
-    transported refinement map is
+    vertical-sector refinement map is
     \begin{align}
         \widehat{\widetilde T}
          & =\widehat{\widetilde R}_2\circ W_2^{-1}\circ
@@ -608,7 +608,7 @@
     $\widetilde T=\widetilde R_2T_{\mathrm v}R_1$.
 \end{proof}
 
-\begin{lemma}[Full-matrix factorization of transported coarse-graining]
+\begin{lemma}[Full-matrix factorization of vertical-sector coarse-graining]
     \label{lem:mpdo_transported_vertical_sector_s_extension}
     \lean{MPOTensor.directSumMapExtension_transportedVerticalSectorS}
     \leanok
@@ -616,7 +616,7 @@
     Write $\widehat R_2$ for normalized state preparation,
     $\widehat{\widetilde R}_1$ for controlled partial trace, and $W_i$ for
     retained-coordinate reindexing. The full-matrix extension of the
-    transported coarse-graining map is
+    vertical-sector coarse-graining map is
     \begin{align}
         \widehat{\widetilde S}
          & =\widehat{\widetilde R}_1\circ W_1^{-1}\circ
@@ -632,7 +632,7 @@
     $\widetilde S=\widetilde R_1S_{\mathrm v}R_2$.
 \end{proof}
 
-\begin{theorem}[Complete positivity and adjoint Schwarz for the transported maps]
+\begin{theorem}[Complete positivity and adjoint Schwarz for the vertical-sector maps]
     \label{thm:mpdo_transported_vertical_sector_composites_schwarz}
     \lean{MPOTensor.transportedVerticalSectorT_isKrausDirectSumMap,
         MPOTensor.transportedVerticalSectorS_isKrausDirectSumMap,
@@ -656,7 +656,7 @@
     Let $\iota_i$ and $\pi_i$ be block-diagonal inclusion and diagonal-block
     extraction, respectively, and let $W_i$ denote the canonical reindexing
     from the weighted vertical-sector coordinates to the retained physical
-    coordinates. The full-matrix extension of the transported refinement map
+    coordinates. The full-matrix extension of the vertical-sector refinement map
     has the factorization (\ref{eq:rfp_refinement_extension}). Here
     $\widehat R_1$ is normalized state preparation,
     $\widehat{\widetilde R}_2$ is controlled partial trace, and
@@ -684,14 +684,14 @@
     the Kadison--Schwarz inequality applies in each simple summand.
 \end{proof}
 
-\begin{theorem}[Transported vertical-sector composites are identities]
+\begin{theorem}[Vertical-sector composites are identities]
     \label{thm:mpdo_transported_vertical_sector_composites_identity}
     \lean{MPOTensor.transportedVerticalSector_composites_eq_id}
     \leanok
     \uses{thm:mpdo_transported_vertical_sector_composites_trace_preserving, thm:mpdo_transported_vertical_sector_composites_schwarz, lem:mpdo_transported_vertical_sector_fixed_generators, thm:mpdo_vertical_bond_contractions_generate_sector_algebra, thm:mpdo_fixed_contractions_trace_adjoint_schwarz_identity}
     Under the hypotheses of
     Theorem~\ref{thm:mpdo_transported_vertical_sector_composites_trace_preserving},
-    the transported maps satisfy
+    the vertical-sector maps satisfy
     \begin{align}
         \widetilde S\circ\widetilde T
          & =\id_{\mathcal A_1},
@@ -707,7 +707,7 @@
 
 \begin{proof}\leanok
     For each square composite $F$, positivity follows from positivity of the
-    two transported maps.
+    two vertical-sector maps.
     Theorem~\ref{thm:mpdo_transported_vertical_sector_composites_trace_preserving}
     and
     Theorem~\ref{thm:mpdo_transported_vertical_sector_composites_schwarz}

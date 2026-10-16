@@ -1,0 +1,62 @@
+\section{An explicit logarithmic patch radius}
+\label{sec:peps_patch_radius_choice}
+
+The constants in the logarithmic radius can be chosen before the system size.
+The following estimates are the scalar inequalities in the
+\href{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex\#L534-L563}{explicit radius choice}
+and the \href{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex\#L595-L603}{cylinder count}.
+
+\begin{definition}[The radius exponent]
+    \label{def:peps_patch_radius_exponent}
+    \lean{TNLean.PEPS.regularizedPatchRadiusExponent}
+    \leanok
+    For real constants $C_0,B_0,p,\kappa$, set
+    \begin{align}
+        R_0=\frac43\left[C_0\left(B_0+\frac1{\log2}\right)
+            +1+\frac{2p}{\kappa}\right].
+        \label{eq:peps_patch_radius_exponent}
+    \end{align}
+\end{definition}
+
+\begin{theorem}[Radius and remainder bounds]
+    \label{thm:peps_patch_radius_bounds}
+    \lean{TNLean.PEPS.regularizedPatchRadiusExponent_bounds}
+    \leanok
+    Suppose that $C_0,B_0,p\ge0$, $\kappa>0$, $L\ge2$, and
+    $u\le B_0\log L$. With $R_0$ as in
+    (\ref{eq:peps_patch_radius_exponent}) and $R=R_0\log L$, one has $R_0>0$ and
+    \begin{align}
+        C_0(1+u) & \le R,       \\
+        \frac{\kappa}{2}\left[C_0(1+u)+\log2-\frac{3R}{4}\right]
+                 & \le-p\log L.
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:peps_patch_radius_exponent}
+    Put $A=C_0(B_0+1/\log2)$. Since $\log L\ge\log2>0$,
+    $1\le\log L/\log2$ and $C_0(1+u)\le A\log L$.
+    The positivity of $A+1+2p/\kappa$ gives $R_0>0$, and $R_0\ge A$
+    gives $C_0(1+u)\le R$. For the remainder bound, substitute
+    (\ref{eq:peps_patch_radius_exponent}) into
+    \begin{align}
+        \frac{\kappa}{2}\left[C_0(1+u)+\log2-\frac{3R}{4}\right]
+         & \le\frac{\kappa}{2}\left[(A+1)\log L-\frac{3R}{4}\right]
+        =-p\log L.
+    \end{align}
+\end{proof}
+
+\begin{theorem}[Absorbing the logarithmic cylinder count]
+    \label{thm:peps_patch_count_polynomial}
+    \lean{TNLean.PEPS.mul_rpow_le_succ_rpow_of_le_log}
+    \leanok
+    Let $B_0\ge0$, $L\ge2$, $\alpha\in\R$, and $m\in\N$.
+    If $m\le(B_0/2)\log L+1$, then
+    $mL^\alpha\le(1+B_0/2)L^{\alpha+1}$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    The inequalities $\log L\le L$ and $1\le L$ give
+    $(B_0/2)\log L+1\le(1+B_0/2)L$.
+    Multiply by $L^\alpha\ge0$ and use $L^{\alpha+1}=L^\alpha L$.
+\end{proof}

@@ -174,17 +174,14 @@ theorem transportScanRound_chargeDefect (hD : D.IsAdmissible) (ht : 0 ≤ t)
   by_cases hg : good h
   · simp only [hg, ↓reduceIte]
     congr 1
-    have hcont (i : ι) : Continuous fun θ : SiteConfig n → ℂ =>
-        D.splitEta E i ⟨h, none⟩ ((EuclideanSpace.equiv _ ℂ).symm θ) := by
-      unfold TransportData.splitEta
-      exact continuous_finsetSum _ fun g _ => continuous_splitBandEta _ _
     rw [D.oldFourierCoherentIntegral_sum n t k (pre k) p h Finset.univ _
-      (fun i _ => hcont i)]
+      (fun i _ => D.continuous_splitEta n E i _)]
     apply Finset.sum_congr rfl
     intro i _
     by_cases hi : (⟨h, none⟩ : Σ h, Option (C h)) ∈ D.splitLeaves E i
     · simp only [hi, ↓reduceIte]
-      exact integral_transportScanRound_old D n E good t pre hD ht k hcomm p h (hcont i)
+      exact integral_transportScanRound_old D n E good t pre hD ht k hcomm p h
+        (D.continuous_splitEta n E i _)
     · simp only [hi, ↓reduceIte]
       simp [D.splitEta_eq_zero_of_not_mem_splitLeaves E hi,
         TransportData.oldFourierCoherentIntegral, realCoherentIntegral]

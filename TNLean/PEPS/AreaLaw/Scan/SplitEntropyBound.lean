@@ -31,7 +31,7 @@ variable {V : Type*} [Fintype V] [DecidableEq V]
   (n : V → ℕ) [∀ v, NeZero (n v)]
 
 /-- The entropy of a subsystem is bounded using any containing support. -/
-private theorem entropy_le_logDim_of_subset (θ : EuclideanSpace ℂ (SiteConfig n))
+theorem entropy_le_logDim_of_subset (θ : EuclideanSpace ℂ (SiteConfig n))
     (hθ : ‖θ‖ = 1) {R B : Finset V} (hRB : R ⊆ B) :
     FiniteProduct.entropy (fun v => Fin (n v)) θ R ≤ logDim n B := by
   have hρ := FiniteProduct.reducedPure_posSemidef (fun v => Fin (n v)) θ R

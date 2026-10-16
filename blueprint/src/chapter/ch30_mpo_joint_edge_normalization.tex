@@ -31,7 +31,7 @@ all block labels jointly.
     Their ranges are the respective one-sided core supports.
 \end{definition}
 
-\begin{definition}[Actual cropped edge coefficients]
+\begin{definition}[Cropped edge coefficients]
     \label{def:mpo_joint_cropped_edges}
     \lean{MPSTensor.MPOSymmetry.jointMixedFirstEdgeBoundaryMap,
         MPSTensor.MPOSymmetry.jointMixedLastEdgeBoundaryMap}
@@ -64,13 +64,13 @@ all block labels jointly.
     Multiplication by the first coordinate inclusion gives both identities.
 \end{proof}
 
-\begin{theorem}[Actual coefficients factor through one-sided cores]
+\begin{theorem}[Cropped edge coefficients factor through one-sided cores]
     \label{thm:mpo_joint_edge_factors}
     \lean{MPSTensor.MPOSymmetry.jointMixedFirstEdgeBoundaryMap_eq_columns_core,
         MPSTensor.MPOSymmetry.jointMixedLastEdgeBoundaryMap_eq_columns_core}
     \leanok
     \uses{def:mpo_joint_cropped_edges,def:mpo_joint_edge_cores,def:mpo_joint_boundary_columns}
-    With $E_x=D_x$, the actual maps satisfy
+    With $E_x=D_x$, the cropped edge maps satisfy
     \begin{align}
         B_L(X) & =(L\otimes I_{d_0})\Phi_{L,D}((V_x^*X_x)_x),
         \label{eq:mpo_joint_first_core_factor}
