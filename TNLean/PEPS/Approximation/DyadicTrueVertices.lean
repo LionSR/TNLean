@@ -14,6 +14,7 @@ true vertex carries an encoded hole and a tag, held by one of its incident label
 placeholder. This file proves that the bulk operations of a large-scale repainting create and
 destroy no true vertex and keep the incident labels, hence the tags, of every existing one:
 
+* `auxBirthB_insertsOne`, …, `mainDeathB_insertsOne` : the label each operation introduces;
 * the incident labels of a guide at a point, and their invariance under a change of the guide
   away from the point;
 * for an elementary birth or death after the point treatment, the closure of the remaining
