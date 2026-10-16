@@ -459,6 +459,33 @@ original open square. We state the two models separately, following
     for fixed $q\ge2$, $J,\Delta>0$ before all $L\ge2$, Hamiltonians, and ground vectors.
 \end{definition}
 
+\begin{lemma}[Minimizing phase]
+    \label{lem:polynomial_peps_minimizing_phase}
+    \lean{
+        TNLean.PEPS.Approximation.exists_phase_isMinOn,
+        TNLean.PEPS.Approximation.exists_phase_le_iff_iInf_le,
+        TNLean.PEPS.Approximation.hasPEPSApproximation_iff_iInf
+    }
+    \leanok
+    For vectors $u,v$ in a complex normed space, the function
+    $\theta\mapsto\|u-e^{i\theta}v\|$ attains its minimum over $\mathbb R$.
+    Consequently a bound $\varepsilon$ holds at some phase if and only if
+    \begin{align}
+        \min_{\theta\in\mathbb R}\|u-e^{i\theta}v\| & \le\varepsilon,
+    \end{align}
+    and (\ref{eq:polynomial_peps_vector_error}) holds for some $\theta$ if and only
+    if it holds with the minimum over $\theta$, as in the printed target error.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{def:polynomial_peps_model}
+    The function is continuous and $2\pi$-periodic, so its range is the image
+    of the compact interval $[0,2\pi]$ and contains its least element. A bound
+    at one phase bounds the infimum, and a bound on the infimum holds at a
+    minimizing phase.
+\end{proof}
+
 \begin{definition}[Original interaction labels]
     \label{def:square_interaction_labels}
     \lean{TNLean.PEPS.Approximation.SquareInteraction}

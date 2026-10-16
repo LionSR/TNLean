@@ -99,8 +99,8 @@ def HasPEPSApproximation (C c : ℝ) (L q : ℕ) (Ω : StateSpace L q) : Prop :=
 
 /-- The uniform polynomial-PEPS target, with constants chosen before the grid
 size, Hamiltonian, and ground vector. Source: polynomial-PEPS Theorem 1.1 (`thm:main`).
-The existential phase formulation is to be related to the printed minimum
-by the phase-minimizer theorem; no proof of the target is asserted here. -/
+The existential phase is equivalent to the printed minimum over phases by
+`hasPEPSApproximation_iff_iInf`; no proof of the target is asserted here. -/
 def PolynomialPEPSApproximation : Prop :=
   ∀ q : ℕ, 2 ≤ q → ∀ J Δ : ℝ, 0 < J → 0 < Δ →
     ∃ C c : ℝ, 0 < C ∧ 0 < c ∧
