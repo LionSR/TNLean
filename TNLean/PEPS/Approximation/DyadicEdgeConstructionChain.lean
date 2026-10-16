@@ -50,7 +50,7 @@ theorem isStepChain_lensExchange (hD : IsAngularScale q J Δ a A₀ m₀ 60 D L�
     (R : RepaintedSquare k) (hlarge : K₀ * (D * Real.log L) < (2 : ℝ) ^ (R.1.1 : ℕ))
     (done : Set (ℤ × ℤ)) (E : List SquareEdge) (e : SquareEdge)
     (hr : ∀ _ : ℝ × ℝ, 0 < ε₀ * (D * Real.log L) ∧ ε₀ * (D * Real.log L) ≤ B₀ * Real.log L)
-    {b K : ℕ} (hb : 2 ≤ b) (hK : 1 ≤ K)
+    {b K : ℕ} (hb : 2 ≤ b)
     (hpt : IsPointTreatable P rank R hr done {p | EventUses (.inl R.1) p} (2 * b) K (2 * b)
       ((2 * b + 1) * ((L : ℝ) ^ 20)⁻¹))
     {l : List X} (hl : l.Nodup) {x : X} (hx : x ∈ l) (A : X → Frame (cellCenterPos L) q
@@ -100,7 +100,7 @@ theorem isStepChain_lensExchange (hD : IsAngularScale q J Δ a A₀ m₀ 60 D L�
   have hlen : ms.length = 2 := by cases e <;> rfl
   -- the lens exchange on the treated sheets
   have hpair := (edgeExchange_hasPairChange hD hLL hΩ hm₀ hA₀ hc hL hk2 P rank R hlarge done E e
-    hr (S := {p | EventUses (.inl R.1) p}) hC.eventUses (r := 2 * b) (rs := 2 * b) hK).mono_error
+    (S := {p | EventUses (.inl R.1) p}) hC.eventUses (r := 2 * b) (K := K) (rs := 2 * b)).mono_error
     (four_mul_zpow_neg_thirty_le (by omega) hb)
   rw [← e.toFinset_endpointList] at hpair
   have h₃ : HasSourceBoundedChange Ω
@@ -167,7 +167,7 @@ theorem isStepChain_edgeConstruction (hD : IsAngularScale q J Δ a A₀ m₀ 60 
     hx A hΩ1 (isStepChain_auxBirths hD hLL hΩ hm₀ hA₀ hc hL hk2 P rank R hlarge done e hr
       (by omega) hK hpt Ce)
   have c₂ := isStepChain_lensExchange hD hLL hΩ hΩ1 hm₀ hA₀ hc hL hk2 P rank R hlarge done E e hr
-    hb hK hpt hl hx A
+    hb hpt hl hx A
   have c₃ := isStepChain_main l (Function.update A x (treatedFrame P rank R hr ∅ Ce
     (Bl.auxGuide e (auxWordExchanged Bl.oldLabel Bl.finalLabel Ce)))) hΩ1
     (isStepChain_mainSteps hD hLL hΩ hm₀ hA₀ hc hL hk2 P rank R hlarge done E e hr (by omega) hK

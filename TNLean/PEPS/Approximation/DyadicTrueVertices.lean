@@ -279,6 +279,54 @@ structure BandOperation.InsertsOne (op : BandOperation ι) (Q : ι) : Prop where
   changed_mem : ∀ x, op.before x ≠ op.after x →
     op.before x ∈ ({op.label, Q} : Set ι) ∧ op.after x ∈ ({op.label, Q} : Set ι)
 
+section InsertsOne
+
+variable (A B C : ι)
+
+/-- The first auxiliary birth introduces `B`. -/
+theorem auxBirthB_insertsOne : (auxBirthB B C).InsertsOne B := by
+  refine ⟨Or.inl rfl, fun x h => ?_⟩
+  simp only [auxBirthB, auxWordOne, bandWord] at h ⊢
+  split_ifs at h ⊢ <;> simp_all
+
+/-- The second auxiliary birth introduces `A`. -/
+theorem auxBirthA_insertsOne : (auxBirthA A B C).InsertsOne A := by
+  refine ⟨Or.inl rfl, fun x h => ?_⟩
+  simp only [auxBirthA, auxWordOne, auxWordTwo, bandWord] at h ⊢
+  split_ifs at h ⊢ <;> first | (exfalso; linarith) | simp_all
+
+/-- The third auxiliary birth introduces `C`. -/
+theorem auxBirthC_insertsOne : (auxBirthC A B C).InsertsOne C := by
+  refine ⟨Or.inl rfl, fun x h => ?_⟩
+  simp only [auxBirthC, auxWordTwo, auxWord, bandWord] at h ⊢
+  split_ifs at h ⊢ <;> first | (exfalso; linarith) | simp_all
+
+/-- The first main death removes `C`. -/
+theorem mainDeathC_insertsOne : (mainDeathC A B C).InsertsOne C := by
+  refine ⟨Or.inr rfl, fun x h => ?_⟩
+  simp only [mainDeathC, mainWordOne, mainWordTwo, bandWord] at h ⊢
+  split_ifs at h ⊢ <;> first | (exfalso; linarith) | simp_all
+
+/-- The second main death removes `A`. -/
+theorem mainDeathA_insertsOne : (mainDeathA A B C).InsertsOne A := by
+  refine ⟨Or.inr rfl, fun x h => ?_⟩
+  simp only [mainDeathA, mainWordTwo, mainWordThree, bandWord] at h ⊢
+  split_ifs at h ⊢ <;> simp_all
+
+/-- The main birth introduces `C`. -/
+theorem mainBirthC_insertsOne : (mainBirthC B C).InsertsOne C := by
+  refine ⟨Or.inl rfl, fun x h => ?_⟩
+  simp only [mainBirthC, mainWordThree, mainWordFour, bandWord] at h ⊢
+  split_ifs at h ⊢ <;> simp_all
+
+/-- The last main death removes `B`. -/
+theorem mainDeathB_insertsOne : (mainDeathB B C).InsertsOne B := by
+  refine ⟨Or.inr rfl, fun x h => ?_⟩
+  simp only [mainDeathB, mainWordFour, mainWordFive, bandWord] at h ⊢
+  split_ifs at h ⊢ <;> first | (exfalso; linarith) | simp_all
+
+end InsertsOne
+
 /-- Each of the seven births and deaths of an edge construction introduces a single label.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:185–221, 378–379`. -/
@@ -287,27 +335,10 @@ theorem edgeOperations_insertsOne (A B C : ι) :
   intro op hop
   simp only [edgeOperations, List.mem_cons, List.not_mem_nil, or_false] at hop
   rcases hop with rfl | rfl | rfl | rfl | rfl | rfl | rfl
-  · refine ⟨B, Or.inl rfl, fun x h => ?_⟩
-    simp only [auxBirthB, auxWordOne, bandWord] at h ⊢
-    split_ifs at h ⊢ <;> simp_all
-  · refine ⟨A, Or.inl rfl, fun x h => ?_⟩
-    simp only [auxBirthA, auxWordOne, auxWordTwo, bandWord] at h ⊢
-    split_ifs at h ⊢ <;> first | (exfalso; linarith) | simp_all
-  · refine ⟨C, Or.inl rfl, fun x h => ?_⟩
-    simp only [auxBirthC, auxWordTwo, auxWord, bandWord] at h ⊢
-    split_ifs at h ⊢ <;> first | (exfalso; linarith) | simp_all
-  · refine ⟨C, Or.inr rfl, fun x h => ?_⟩
-    simp only [mainDeathC, mainWordOne, mainWordTwo, bandWord] at h ⊢
-    split_ifs at h ⊢ <;> first | (exfalso; linarith) | simp_all
-  · refine ⟨A, Or.inr rfl, fun x h => ?_⟩
-    simp only [mainDeathA, mainWordTwo, mainWordThree, bandWord] at h ⊢
-    split_ifs at h ⊢ <;> simp_all
-  · refine ⟨C, Or.inl rfl, fun x h => ?_⟩
-    simp only [mainBirthC, mainWordThree, mainWordFour, bandWord] at h ⊢
-    split_ifs at h ⊢ <;> simp_all
-  · refine ⟨B, Or.inr rfl, fun x h => ?_⟩
-    simp only [mainDeathB, mainWordFour, mainWordFive, bandWord] at h ⊢
-    split_ifs at h ⊢ <;> first | (exfalso; linarith) | simp_all
+  exacts [⟨_, auxBirthB_insertsOne B C⟩, ⟨_, auxBirthA_insertsOne A B C⟩,
+    ⟨_, auxBirthC_insertsOne A B C⟩, ⟨_, mainDeathC_insertsOne A B C⟩,
+    ⟨_, mainDeathA_insertsOne A B C⟩, ⟨_, mainBirthC_insertsOne B C⟩,
+    ⟨_, mainDeathB_insertsOne B C⟩]
 
 /-- The open neighborhood of radius `a₀ t` of the closure of the remaining changed region of a
 treated birth or death: on it the treated surrounding guide is `P∘`, by the logarithmic floor. -/
