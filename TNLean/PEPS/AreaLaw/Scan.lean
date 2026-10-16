@@ -166,6 +166,7 @@ import TNLean.PEPS.AreaLaw.Scan.SourceActualInformation
 import TNLean.PEPS.AreaLaw.Scan.SourceActualTerminalEntropy
 import TNLean.PEPS.AreaLaw.Scan.SourceBootstrapEntropy
 import TNLean.PEPS.AreaLaw.Scan.SourceChargeSelection
+import TNLean.PEPS.AreaLaw.Scan.SourceComparators
 import TNLean.PEPS.AreaLaw.Scan.SourceDensityScale
 import TNLean.PEPS.AreaLaw.Scan.SourceEndpointRoughBudget
 import TNLean.PEPS.AreaLaw.Scan.SourceFinalInformation
