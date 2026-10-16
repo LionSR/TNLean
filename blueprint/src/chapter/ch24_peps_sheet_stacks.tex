@@ -1228,8 +1228,7 @@ no holes, this is the normalization of $\Omega$.
 
 \begin{theorem}[The central birth as a change of the main sheet]
     \label{thm:peps_protocol_central_birth_change}
-    \lean{TNLean.PEPS.Approximation.RepaintingBaseline.central_treated_mem,
-        TNLean.PEPS.Approximation.RepaintingBaseline.central_treated_ne_subset,
+    \lean{TNLean.PEPS.Approximation.RepaintingBaseline.central_treated_ne_subset,
         TNLean.PEPS.Approximation.centralBirth_hasFrameChange_of,
         TNLean.PEPS.Approximation.centralBirth_hasFrameChange}
     \leanok
@@ -1241,7 +1240,8 @@ no holes, this is the normalization of $\Omega$.
     from the frame of the starting guide to that of the guide after the central
     birth of $B$, both treated with $A$ about the four corners of the square, is a
     bounded change with participants in any set containing the parties of $A$ and
-    $B$, at most one pair source and error $L^{-30}$
+    $B$, at most one pair source and error $L^{-30}$, for any monomial bound
+    $K\ge1$ and pair-source bound at least one
     (\texttt{06-geometry.tex}, lines 155--160, 328--387 and 440--445).
 \end{theorem}
 
@@ -1279,7 +1279,8 @@ no holes, this is the normalization of $\Omega$.
     with the auxiliary word to the frames of the main sheet with the first main
     word and of the auxiliary sheet with the exchanged auxiliary word is a bounded
     change of the two sheets. Its participants lie in any set containing the
-    party of $C_e$; it has no pair source and error $4L^{-30}$
+    party of $C_e$; it has no pair source and error $4L^{-30}$, for any
+    natural-number monomial bound $K$
     (\texttt{06-geometry.tex}, lines 183--221, 389--430 and 440--445).
 \end{theorem}
 

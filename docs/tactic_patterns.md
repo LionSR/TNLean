@@ -24,6 +24,20 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### The two labels near a treated central birth — promoted (2026-10-16)
+
+- **Pattern:** use the central separation floor to show that the surrounding
+  guide is the old label near the changed region, then split according to
+  whether the point is changed to bound the central guide by two labels.
+- **Seen:** two proof copies, in `RepaintingBaseline.isTrueVertex_central_treated`
+  (`DyadicTrueVertices.lean`) and `RepaintingBaseline.central_treated_mem`
+  (`DyadicCentralBirthChange.lean`).
+- **Abstraction:** the existing `RepaintingBaseline.central_treated_mem` is
+  placed in `DyadicTrueVertices.lean`; the true-vertex theorem uses its two
+  conclusions, and the central-birth frame proof keeps the same call.
+- **Notes:** this reuses an existing public lemma without changing its signature
+  or proof. Two copies were verified; no third occurrence is claimed.
+
 ### Owner change of a sampled guide frame — promoted (2026-10-16)
 
 - **Pattern:** the frame of a reading equals the frame of another reading with

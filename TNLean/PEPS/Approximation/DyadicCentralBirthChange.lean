@@ -37,34 +37,6 @@ open EncodedFrame PairEffect
 
 /-! ### The central birth -/
 
-/-- **Values near the central change.** Near the closure of the remaining changed region of the
-treated central birth, the treated starting guide is the old label and the treated central guide
-takes only the old and the final label. -/
-theorem RepaintingBaseline.central_treated_mem {ι : Type*} (R : RepaintingBaseline ι) {t : ℝ}
-    (htn : t ≤ R.n) {p : ℝ × ℝ}
-    (hp : p ∈ thickening (angularConstant * t)
-      {p | homogenize (cornerTreated R.n t) R.oldLabel R.guide p ≠
-        homogenize (cornerTreated R.n t) R.oldLabel R.centralGuide p}) :
-    homogenize (cornerTreated R.n t) R.oldLabel R.guide p = R.oldLabel ∧
-      homogenize (cornerTreated R.n t) R.oldLabel R.centralGuide p ∈
-        ({R.oldLabel, R.finalLabel} : Set ι) := by
-  have hfb : homogenize (cornerTreated R.n t) R.oldLabel R.guide p = R.oldLabel := by
-    obtain ⟨y, hy, hpy⟩ := mem_thickening_iff.1 hp
-    by_contra hne
-    have h := R.floor_central htn (subset_closure hy) hne
-    rw [dist_comm] at h
-    linarith [angularConstant_mul_le_mul_max t (min R.n (cornerMarkDist R.n y))]
-  refine ⟨hfb, ?_⟩
-  by_cases hpS : homogenize (cornerTreated R.n t) R.oldLabel R.guide p ≠
-      homogenize (cornerTreated R.n t) R.oldLabel R.centralGuide p
-  · have hpU : p ∉ cornerTreated R.n t := fun h => hpS (by simp only [homogenize_of_mem h])
-    have hc : p ∈ centralRegion R.n := by
-      by_contra hc
-      exact hpS (by simp only [homogenize_of_notMem hpU, R.centralGuide_of_notMem hc])
-    simp only [homogenize_of_notMem hpU, R.centralGuide_of_mem hc]
-    exact Or.inr rfl
-  · exact Or.inl ((not_not.1 hpS).symm.trans hfb)
-
 /-- The changed region of the treated central birth lies in the closed square. -/
 theorem RepaintingBaseline.central_treated_ne_subset {ι : Type*} (R : RepaintingBaseline ι)
     (t : ℝ) :
