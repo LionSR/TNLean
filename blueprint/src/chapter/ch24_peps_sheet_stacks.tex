@@ -734,7 +734,6 @@ no holes, this is the normalization of $\Omega$.
         TNLean.PEPS.Approximation.isDisplacedReading_levelGuide,
         TNLean.PEPS.Approximation.mem_levelVertices,
         TNLean.PEPS.Approximation.levelFrame_eq,
-        TNLean.PEPS.Approximation.guideFrame_congr_patch,
         TNLean.PEPS.Approximation.levelFrame_congr,
         TNLean.PEPS.Approximation.pairwise_disjoint_levelHoles,
         TNLean.PEPS.Approximation.isTrueVertex_levelGuide_insert_iff}
@@ -765,12 +764,9 @@ no holes, this is the normalization of $\Omega$.
     bounds.
 
     The finite vertex set in Definition~\ref{def:peps_protocol_level_frame}
-    is exactly the set of true vertices of the level guide. For arbitrary finite physical
-    sites, two guide frames with the same site positions, local dimension, guide,
-    owners, placeholder, label rank and finite set of hole centers are equal if their
-    patches agree at those centers and each family has disjoint outer physical
-    samples. Consequently, two globally admissible radius
-    functions give the same level frame whenever they agree at all true vertices.
+    is exactly the set of true vertices of the level guide. Two globally admissible
+    radius functions give the same level frame whenever they agree at all true
+    vertices.
     If, moreover, $\rho(z)\le r$ for every point and $4r<2^j$, the outer physical
     samples of the holes are pairwise disjoint. Repainting one block changes the
     true vertices only at its four corners (\texttt{06-geometry.tex}, lines 69--125
@@ -779,6 +775,7 @@ no holes, this is the normalization of $\Omega$.
 
 \begin{proof}\leanok
     \uses{def:peps_protocol_level_frame, def:peps_guide_frame,
+        thm:peps_guide_frame_patch_congruence,
         lem:peps_dyadic_readings_exist, thm:peps_protocol_event_segments,
         lem:peps_level_true_vertices, lem:peps_dyadic_choice_K0,
         thm:peps_guide_frame_norm, thm:peps_guide_frame_supplied_gates,
@@ -792,9 +789,11 @@ no holes, this is the normalization of $\Omega$.
     permutations place the selected auxiliary sheet next to the main sheet.
 
     The true vertices are the finite grid-corner set of
-    Lemma~\ref{lem:peps_level_true_vertices}. Equal patches give the same guide frame
-    by its definition; equal radii give equal supplied patches and preserve the
-    disjointness condition, including the raw-frame case. Distinct grid corners are
+    Lemma~\ref{lem:peps_level_true_vertices}.
+    Theorem~\ref{thm:peps_guide_frame_patch_congruence}
+    identifies frames with equal patches at their centers. Equal radii give equal
+    supplied patches and preserve the disjointness condition, including the
+    raw-frame case. Distinct grid corners are
     at distance at least $2^j$, whereas each outer sample lies within distance $2r$
     of its center, so $4r<2^j$ gives disjointness. Away from the four corners of a
     repainted block, a true vertex inside the block would contradict the grid-corner
