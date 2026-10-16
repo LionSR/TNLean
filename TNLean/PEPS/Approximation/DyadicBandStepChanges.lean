@@ -36,14 +36,6 @@ namespace TNLean.PEPS.Approximation
 
 open EncodedFrame PairEffect
 
-/-- A point where the readings of two moved labellings differ lies, moved back, in the closure of
-the set where the labellings differ. -/
-theorem IsDisplacedReading.sub_mem_closure_ne {κ : Type*} {Hb Ha fb fa : ℝ × ℝ → κ}
-    {d v : ℝ × ℝ} (hfb : IsDisplacedReading fb (shiftGuide d Hb) v)
-    (hfa : IsDisplacedReading fa (shiftGuide d Ha) v) {p : ℝ × ℝ} (hp : fb p ≠ fa p) :
-    p - d ∈ closure {x | Hb x ≠ Ha x} :=
-  sub_mem_closure (hfb.ne_subset_closure hfa hp)
-
 /-- **Values of readings near a change.** If on the open `δ`-neighborhood of the set where two
 labellings differ the first is `A` and the second takes only `A` and `B`, then at every point where
 their readings, moved by `d`, differ, the first reading is `A` and the second `B`. -/
