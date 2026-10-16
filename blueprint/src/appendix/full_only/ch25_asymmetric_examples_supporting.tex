@@ -295,11 +295,11 @@ Reordering the four bond bits separates the two middle bits, which form
 the inner bond, from the two outer bits; the intermediate
 physical-index sum acts on the inner bond. The Bell vectors together with
 the two remaining coordinate vectors form the adapted basis used
-throughout. Each weighted copy of a target contributes its weight raised
-to the number of sites $N$, and weights are summed when they multiply the
-same target as in Theorem~\ref{thm:asym_unblocked_coefficients}. The lemmas
-below provide the adapted-basis decompositions and normality criteria used for
-those examples.
+throughout. As in Theorem~\ref{thm:asym_unblocked_coefficients}, each weighted copy of a
+target contributes its weight raised to the number of sites $N$, and weights
+that multiply the same target sum together. The lemmas
+below establish the adapted-basis decompositions and normality criteria used
+for those examples.
 
 \begin{definition}[The idempotents of an adapted basis]
     \label{def:asymex_basis_proj}
@@ -352,11 +352,11 @@ those examples.
     \end{align}
     where $\widehat\Pi_s=2\Pi_s$ and the right-hand side
     of~(\ref{eq:asymex_stacked_pair_letters}) is in stacked bond
-    coordinates. Then $B^a=\sum_s\mu_s(\Pi_s\otimes C_s^a)$ in those
-    coordinates, the hypothesis of
-    Proposition~\ref{prop:asym_projector_weighted_sum}.
-    Here $\mu_s$ denotes a scalar fusion weight, not a vertical
-    multiplicity matrix.
+    coordinates. Then in those coordinates, as required by
+    Proposition~\ref{prop:asym_projector_weighted_sum}, the source letters
+    decompose as $B^a=\sum_s\mu_s(\Pi_s\otimes C_s^a)$, where $\mu_s$
+    denotes a scalar fusion weight rather than a vertical multiplicity
+    matrix.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -364,10 +364,9 @@ those examples.
     Using the idempotents of Theorem~\ref{thm:asymex_basis_proj}, the
     $s$-th summand is
     $\mu_sc_C(\widehat\Pi_s\otimes\widehat C_s^a)/2$.
-    Multiplication by $n$ and
-    substitution of~(\ref{eq:asymex_stacked_pair_scalar})
-    and~(\ref{eq:asymex_stacked_pair_letters}) give $nB^a$.
-    Cancel the nonzero scalar $n$.
+    Multiplying by $n$, substituting~(\ref{eq:asymex_stacked_pair_scalar})
+    and~(\ref{eq:asymex_stacked_pair_letters}), and cancelling the nonzero
+    scalar $n$ yields the identity for $B^a$.
 \end{proof}
 
 \begin{theorem}[Normality from scaled matrix units]
@@ -598,9 +597,9 @@ zeros.
 \begin{proof}
     \leanok
     The identities $X^2=\Id_2$ and $PXP=0$ imply
-    $PX^rP=b(r)P$ and $\tr(PX^r)=b(r)$. Rotate the word to
-    start at a zero, using cyclicity of the trace. Successive
-    contractions give
+    $PX^rP=b(r)P$ and $\tr(PX^r)=b(r)$. By cyclicity of the trace,
+    rotating the word to start at a zero leaves $a_N(x)$ unchanged, and
+    successive contractions give
     \begin{align}
         a_N(x)
          & =\tr(PX^{r_1}PX^{r_2}\cdots PX^{r_m}) \notag       \\
@@ -657,7 +656,7 @@ $\ket{V^{(N)}(A)}$ is always nonzero in the specified computational basis.
 \begin{proof}
     \leanok
     \uses{thm:asymex_explicit_gauge}
-    Use the integer change of coordinates
+    The integer change of coordinates
     \begin{align}
         G=\begin{pmatrix}
               0  & -1 & 1  & 0  & 0  \\
@@ -665,10 +664,10 @@ $\ket{V^{(N)}(A)}$ is always nonzero in the specified computational basis.
               -1 & 0  & 0  & 1  & 1  \\
               1  & 0  & 0  & 0  & -1 \\
               0  & 1  & -1 & 0  & 1
-          \end{pmatrix}.
+          \end{pmatrix}
         \label{eq:asymex_parity_gauge}
     \end{align}
-    Its inverse is
+    has inverse
     \begin{align}
         G^{-1}=\begin{pmatrix}
                    1 & 0 & 0 & 1 & 1 \\

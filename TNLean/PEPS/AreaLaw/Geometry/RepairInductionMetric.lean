@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Geometry.RepairDescendants
 import TNLean.PEPS.AreaLaw.Geometry.RepairDepth
+import TNLean.PEPS.AreaLaw.Geometry.RepairInitialMarkFacts
 
 /-!
 # Metric invariants of the uniform repair induction
@@ -443,14 +444,9 @@ theorem initialRepairStage_scale_separated (o : ℝ × ℝ) (Λ : Finset (ℤ ×
           ((initialRepairStage o Λ A C k₀ hC h₀).scale q) / 4 ≤
         dist ((initialRepairStage o Λ A C k₀ hC h₀).location p)
           ((initialRepairStage o Λ A C k₀ hC h₀).location q) := by
-  let h := (Classical.choose_spec exists_uniform_separated_initial_marks).2
-    o Λ A C k₀ hC h₀
-  let hb := Classical.choose_spec h
-  let hab := Classical.choose_spec hb
-  let hM := hab.2.2
-  have hspec := Classical.choose_spec (Classical.choose_spec hM).2.2
-  refine ⟨fun p ↦ ?_, fun p q hpq ↦ hspec.2.2 p q hpq⟩
-  obtain ⟨_, k, _, hk, _, _, hS⟩ := hspec.1 p
+  have hspec := initialRepairStage_mark_spec o Λ A C k₀ hC h₀
+  refine ⟨fun p ↦ ?_, hspec.2.2.2.2.1⟩
+  obtain ⟨_, k, _, hk, _, _, hS⟩ := hspec.2.2.1 p
   exact ⟨k, hk, hS⟩
 
 /-- For every `0 < a₀ ≤ 1/4` there is a threshold `T` such that every

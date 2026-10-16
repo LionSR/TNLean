@@ -1,14 +1,14 @@
-\subsection{Sharp lower bounds for the actual scanner roots}
+\subsection{Sharp lower bounds for the scanner roots}
 
-The lower comparison uses the original physical gap in the normalized
-inverse-root vector of each actual fill or charge.
-The terminal partitions include every completed history through a fixed
-horizon and every pre-charge history before that horizon.
-Their near and middle regions are denoted by $Q_{jg}$ and $Y_{jg}$;
-the far region is $(Q_{jg}\cup Y_{jg})^c$.
-The actual history tree and its conditional choices are retained.
+The sharp lower comparison evaluates the physical spectral gap in the
+normalized inverse-root vector of each fill or charge while preserving
+the history tree and its conditional choices.
+Its terminal partitions consist of the completed histories through a
+fixed horizon together with the pre-charge histories before that horizon;
+writing $Q_{jg}$ and $Y_{jg}$ for the near and middle regions of terminal
+$j$ in band $g$ gives the far region $(Q_{jg}\cup Y_{jg})^c$.
 
-\begin{theorem}[Actual-root sharp lower estimate]
+\begin{theorem}[Scanner-root sharp lower estimate]
     \label{thm:actual_scan_sharp_lower_norm}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_actualScan_sharp_lower_norm}
     \leanok
@@ -22,7 +22,7 @@ The actual history tree and its conditional choices are retained.
     interpolation parameter, with the following property.
     Let the scanner be indexed by the ordered admissible interaction
     supports at range $R$, with offset scale $m>0$ and charge capacity $M>0$.
-    Let $\widetilde H$ be the sum of the actual truncated energy terms,
+    Let $\widetilde H$ be the sum of the truncated energy terms,
     formed from a fixed reference state, and suppose that a unit vector
     $\widetilde\Omega$ satisfies
     \begin{align}
@@ -45,7 +45,7 @@ The actual history tree and its conditional choices are retained.
     distribution, with zero weights contributing zero.
     Entropies and moments refer to the same original state
     $\widetilde\Omega$.
-    Fix $k>0$ and one supplied nonzero prevector of norm at most one,
+    Fix $k>0$ and a nonzero prevector of norm at most one,
     fixed by simultaneous copy symmetry and both auxiliary label
     projectors $\ell_C,\ell_R$, and assume
     \begin{align}
@@ -61,9 +61,9 @@ The actual history tree and its conditional choices are retained.
                  & b_k                                            & =\tfrac12(k+2)^{-C_f}.
     \end{align}
     At every fill or charge interpolation before the horizon, let
-    $N_k$ be its actual squared filtered norm, let $\mu_k$ be its
-    actual mean energy and let $w_j$ be its terminal weights after the
-    literal inclusion into the common terminal family.
+    $N_k$ be its squared filtered norm, $\mu_k$ its
+    mean energy, and $w_j$ its terminal weights under the
+    inclusion into the common terminal family.
     Its filtered vector has norm one, $N_k>0$, and
     $\delta_k=(\mu_k-e_0)/\gamma\geq0$.
     For every $0<\tau\leq\tfrac12$, put
@@ -89,40 +89,37 @@ The actual history tree and its conditional choices are retained.
     \uses{thm:al_scan_band_nesting,thm:al_augmented_root_compression,
         thm:al_scan_actual_round_global_energy,thm:al_scan_nested_band_metrics,
         thm:al_scan_actual_fill_admission,thm:al_scan_actual_charge_admissible}
-    Apply the original-coordinate regional sharp lower norm theorem at
-    metric parameter $t=a/2$ and inverse exponent $s=1/4$.
-    The physical terminal partitions give disjoint near and middle
-    regions and the required nesting across bands.
-    Choose an isometric coordinate matrix for simultaneous symmetry and
-    transport it through the fixed augmented-site equivalence.
-    The actual-root compression identity identifies the ordered product
-    of compressed band means, its inverse-quarter-power norm and its
-    normalized filtered vector exactly:
+    Because the physical terminal partitions have disjoint near and middle
+    regions that nest across bands, the regional sharp lower norm theorem in
+    original coordinates applies at metric parameter $t=a/2$ and inverse
+    exponent $s=1/4$, where the conditions $20t\leq r_{\rm mom},1$ become
+    $10a\leq r_{\rm mom},1$.
+    Passing an isometric coordinate matrix $Z$ for the simultaneous symmetric
+    subspace through the augmented-site coordinate bijection, the root
+    compression identity expresses the ordered product $M_k$ of compressed
+    band means, its inverse-quarter-power norm and its normalized filtered
+    vector as
     \begin{align}
         w_k & =M_k^{-1/4}Z^*\mathrm{pre}_k,
             & N_k                           & =\|w_k\|^2,
             & v_k                           & =Z\frac{w_k}{\|w_k\|}.
     \end{align}
-    The actual fill and charge energy identities therefore identify the
-    regional defect with $(\mu_k-e_0)/\gamma$ in that same vector,
-    since $\mu_k=\operatorname{Re}\langle v_k,\widetilde H_kv_k\rangle$.
-    Mapping the actual tree through its terminal inclusion preserves its
-    weighted entropy sum.
-    Substituting $2t=a$ and $2s=1/2$ gives the displayed estimate and
-    the conditions $20t\leq r_{\rm mom},1$ become $10a\leq r_{\rm mom},1$.
-    This is the finite-copy application of
-    \cite[Section~8, lower-pin and tree-log-lower estimates]{OpenAI2026AreaLaw};
-    it does not derive the physical gap, the marginal moment bounds or
-    the subsequent geometric budgets.
+    Consequently, the fill and charge energy identities equate the regional
+    defect in $v_k$ to $(\mu_k-e_0)/\gamma$ with
+    $\mu_k=\operatorname{Re}\langle v_k,\widetilde H_kv_k\rangle$, while
+    embedding the history tree into the common terminal family preserves the
+    weighted entropy sum $\sum_jw_jg_{jg}$; substituting $2t=a$ and $2s=1/2$
+    then gives the finite-copy lower bound of
+    \cite[Section~8, lower-pin and tree-log-lower estimates]{OpenAI2026AreaLaw}.
 \end{proof}
 
 \begin{definition}[Lower label defect and replica remainder]
     \label{def:actual_sharp_lower_remainder}
     \lean{TNLean.PEPS.AreaLaw.Scan.sharpLowerLabelDefect,TNLean.PEPS.AreaLaw.Scan.sharpLowerRemainder}
     \leanok
-    For one supplied label sequence $\ell_k$ and a real entropy parameter
-    $S'$, define $\varepsilon_k$ for every $k\in\mathbb N$.
-    For fixed $a>0$ and $c,C_f\in\mathbb R$, define $R_k^-$ for $k>0$ by
+    For a label sequence $\ell_k$ and a real entropy parameter
+    $S'$, and for fixed $a>0$ and $c,C_f\in\mathbb R$, define
+    $\varepsilon_k$ ($k\in\mathbb N$) and $R_k^-$ ($k>0$) by
     \begin{align}
         \varepsilon_k
               & =2\bigl|\log\dim\ell_k-kS'\bigr|, \\
@@ -133,12 +130,12 @@ The actual history tree and its conditional choices are retained.
     \end{align}
 \end{definition}
 
-\begin{theorem}[The same sequence supplies its lower label defect]
+\begin{theorem}[Lower label-defect inequality]
     \label{thm:actual_sharp_lower_label_defect}
     \lean{TNLean.PEPS.AreaLaw.Scan.sharpLowerLabelDefect_label_bound}
     \leanok
     \uses{def:actual_sharp_lower_remainder}
-    For every supplied label sequence and every $k$,
+    For every label sequence $\ell_k$ and every $k$,
     $\varepsilon_k\geq0$ and
     \begin{align}
         2kS'-\varepsilon_k\leq2\log\dim\ell_k.
@@ -152,31 +149,28 @@ The actual history tree and its conditional choices are retained.
         |\log\dim\ell_k-kS'|$ and multiply by two.
 \end{proof}
 
-\begin{theorem}[Vanishing lower remainder for the supplied labels]
+\begin{theorem}[Vanishing lower remainder]
     \label{thm:actual_sharp_lower_remainder_limit}
     \lean{TNLean.PEPS.AreaLaw.Scan.tendsto_sharpLowerRemainder_of_label_dimension}
     \leanok
     \uses{def:actual_sharp_lower_remainder}
     Fix $a>0$ and $c,C_f\in\mathbb R$.
-    If the supplied sequence satisfies
+    If a label sequence $\ell_k$ satisfies
     $\log\dim\ell_k-kS'=o(k)$, then $R_k^-\to0$ as $k\to\infty$
-    through positive integers.
-    In the physical application, this is the label-dimension conclusion
-    of the same Schmidt--Bell prevector selection.
+    through positive integers; in the physical application, this
+    asymptotic holds for the Schmidt--Bell label sequence.
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{def:actual_sharp_lower_remainder}
-    The label premise gives $\varepsilon_k/k\to0$.
-    Both $\log(k+1)/k$ and $\log(k+2)/k$ tend to zero, and
-    $\log(\tfrac12(k+2)^{-C_f})=-C_f\log(k+2)-\log2$.
-    Divide the numerator by $k$, use continuity of absolute value and
-    then divide by the fixed $a$.
-    No new label sequence is selected.
+    Because $\log\dim\ell_k-kS'=o(k)$, we have $\varepsilon_k/k\to0$.
+    Since $\log(k+1)/k$ and $\log(k+2)/k$ also tend to zero and
+    $\log(\tfrac12(k+2)^{-C_f})=-C_f\log(k+2)-\log2$, dividing the
+    numerator of $R_k^-$ by $k$ and by the fixed $a>0$ gives $R_k^-\to0$.
 \end{proof}
 
-\begin{theorem}[Actual sharp lower rate for the supplied prevector]
+\begin{theorem}[Sharp lower rate for the physical prevector]
     \label{thm:actual_scan_supplied_prevector_sharp_lower}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_actualScan_suppliedPrevector_sharp_lower}
     \leanok
@@ -185,20 +179,17 @@ The actual history tree and its conditional choices are retained.
     Under the scanner and gap conditions of
     Theorem~\ref{thm:actual_scan_sharp_lower_norm}, use the horizon $nm$,
     fix $K_{\rm mom}\geq0$, $a>0$, $10a\leq r_{\rm mom}$ and $10a\leq1$,
-    and take the literal augmented replica prevector of a supplied
-    sequence $\ell_k$.
+    and take the augmented replica prevector of a label sequence $\ell_k$
+    whose original-coordinate vectors are nonzero and have norm at most
+    one for every $k>0$, with $\log\dim\ell_k-kS'=o(k)$ (as holds for the
+    physical Schmidt--Bell prevector).
     Assume the marginal moment estimate of that theorem for all five
     regions of Definition~\ref{def:al_scan_status_marginals} at every
-    completed status through $nm$ and every pre-charge status before $nm$.
-    Suppose its original-coordinate vectors are nonzero and have norm at
-    most one for every $k>0$, and
-    $\log\dim\ell_k-kS'=o(k)$.
-    These are conclusions already supplied by the physical prevector
-    construction.
-    The five original status marginal bounds imply all the lower
-    near, middle and far marginal bounds.
-    There exist $c,C_f\geq0$, fixed before $k$, scan time and interpolation
-    parameter, such that $R_k^-\to0$ and every actual fill or charge obeys
+    completed status through $nm$ and every pre-charge status before $nm$;
+    these five bounds imply all the near, middle and far marginal bounds.
+    Then there exist $c,C_f\geq0$, fixed before $k$, scan time and
+    interpolation parameter, such that $R_k^-\to0$ and every fill or
+    charge obeys
     \begin{align}
         \frac a2\sum_g\left[
             L_g-\frac{\delta_k}{\tau}\max\{0,2S'+g_{\max}\}-R_k^-
@@ -206,9 +197,9 @@ The actual history tree and its conditional choices are retained.
         \leq\frac{-\log N_k}{k}
         \qquad(0<\tau\leq\tfrac12).
     \end{align}
-    Here $N_k$, $\delta_k$, $L_g$ and the terminal weights are those
-    of the same actual interpolation in the previous theorem.
-    Its filtered vector has norm one, $N_k>0$ and $\delta_k\geq0$.
+    Here $N_k>0$, $\delta_k\geq0$, $L_g$, the unit filtered vector and the
+    terminal weights are those of the same interpolation in the previous
+    theorem.
 \end{theorem}
 
 \begin{proof}
@@ -217,14 +208,14 @@ The actual history tree and its conditional choices are retained.
         thm:actual_sharp_lower_remainder_limit,thm:al_augmented_prevector_norm,
         thm:al_augmented_prevector_symmetry,
         def:al_scan_auxiliary_coordinates}
-    The fixed augmented coordinate equivalence preserves nonvanishing and
-    norm. The literal replica prevector has simultaneous symmetry and
-    the supplied label on both auxiliary factors; the auxiliary
-    coordinate identity gives the two original singleton equations.
-    Use $\varepsilon_k$ in Theorem~\ref{thm:actual_scan_sharp_lower_norm} and divide by
-    the positive copy count.
-    The error per band is exactly $R_k^-$ after factoring out $ak$.
-    The label-dimension premise gives its limit by
-    Theorem~\ref{thm:actual_sharp_lower_remainder_limit}.
-    The actual energy defect is retained and is not assumed small.
+    Because the augmented coordinate bijection preserves nonvanishing and
+    the Euclidean norm while the replica prevector is invariant under
+    simultaneous copy permutations and carries the label $\ell_k$ on both
+    auxiliary factors (giving the two auxiliary singleton projections),
+    Theorem~\ref{thm:actual_scan_sharp_lower_norm} applies with
+    $\varepsilon_k=2|\log\dim\ell_k-kS'|$.
+    Dividing its conclusion by $k>0$ and factoring $ak$ out of the
+    per-band error term yields the displayed lower bound with remainder
+    $R_k^-$, and Theorem~\ref{thm:actual_sharp_lower_remainder_limit}
+    gives $R_k^-\to0$ without requiring $\delta_k$ to be small.
 \end{proof}

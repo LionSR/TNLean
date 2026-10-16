@@ -97,7 +97,7 @@ any fixed interpolation interval contained in $(0,1)$.
     Let $\Lambda,T\subset\mathbb Z^2$ be finite, with $T\ne\varnothing$,
     and let $H$ be a range-$R$ Hamiltonian of interaction
     bound $J$, with unit ground vector $\Omega$ and projector gap
-    $\Delta$. Use the actual induced graph, anchors belonging to their
+    $\Delta$. Use the induced lattice graph, anchors belonging to their
     interaction supports, and depth $d(x)=\operatorname{dist}_\infty(x,T)$.
     For the scan on $A\subseteq\Lambda$, assume $n\geq N$ and the scales
     \begin{align}
@@ -182,7 +182,7 @@ any fixed interpolation interval contained in $(0,1)$.
     The remainders $R_k^{\rm Bell}$ and $R_k^{\rm end}$ tend to zero. For every fixed
     $0<p_0<p_1<1$ and all sufficiently large $k$, there is a charge
     round $s_k<nm$ and $p_k\in[p_0,p_1]$ with the following properties.
-    Let $\mathcal Q_k$ be the actual entropy defect at this charge, and
+    Let $\mathcal Q_k$ be the entropy defect at this charge, and
     let $\mathcal M_k$ be its root metric at $p_k$. Define
     \begin{align}
         N_k^2 & =\|\mathcal M_k^{-1/4}\mathrm{pre}_k\|^2,\notag \\
@@ -225,27 +225,30 @@ any fixed interpolation interval contained in $(0,1)$.
         thm:arealaw-generic-charge-energy,thm:arealaw-generic-selected-energy,
         lem:al_scanner_scale_facts,thm:area_law_band_count_growth,
         thm:arealaw-rough-endpoint-remainder-limit}
-    Choose $C_{\rm tr}$ from truncation before fixing $q$. After $q$,
-    $C_1$, $m_*$ and $P$ are fixed, choose the target-budget constant,
-    then the energy coefficient and size threshold for the given exponents.
-    The target-window theorem gives
-    $\widetilde\Omega,E,z$; the common-label theorem gives
-    $\lambda_k$, its projected mass and its dimension asymptotic.
-    Entropy continuity transfers every original prefix bound to the same
-    truncated vector with the additive error $n^{-247}$.
+    Choose $C_{\rm tr}$ from the truncation estimate before fixing $q$. After
+    $q,C_1,m_*,P$ are fixed, choose the target-cut constant $C_{\rm target}$
+    and the step-weight and entropy constants $c_t,C_{\rm ent},e_{\rm ent}$,
+    and then choose the energy coefficients $C,C_l$ and size threshold $N$ for
+    the given scanner exponents. At scale
+    $n\geq N$, the target-window theorem gives $\widetilde\Omega,E,z$, the
+    common-label theorem gives $\lambda_k$ together with its projected-mass
+    bound and dimension asymptotic, and entropy continuity transfers each
+    original prefix bound to $\widetilde\Omega$ up to the additive error
+    $n^{-247}$.
 
-    Apply the rough upper estimate and the initial-to-final norm estimate
-    to this sequence. After fixing the finite physical instance, weight
-    and interval, intersect these two events with $k>0$.
-    The augmented-coordinate theorem preserves the nonzero symmetric
-    prevector and its mean-energy eigen-equation, so the charge selector
-    supplies one point with both the entropy-defect and normalized energy
-    inequalities. Apply Theorem~\ref{thm:arealaw-density-from-rough-endpoint},
-    with the accumulated logarithmic transport error, to obtain the first
-    inequality of~(\ref{eq:arealaw-charge-selection}). At this same selected
-    point, the generic coefficient bound replaces the transport-error term
-    in the normalized energy inequality by $\operatorname{cap}_k$.
-    The rough upper estimate supplies the last two conclusions at this charge.
+    Applying the rough upper estimate and the initial-to-final norm estimate to
+    this sequence and intersecting their eventual replica ranges with $k>0$
+    controls the scan norms for the fixed physical instance, weight, and
+    interval. Because the coordinate isometry preserves the nonzero symmetric
+    prevector and its mean-energy eigen-equation, the charge-selection theorem
+    produces one point $(s_k,p_k)$ satisfying both the entropy-defect and
+    normalized energy bounds. Combining that entropy-defect bound with the
+    accumulated logarithmic step-error bound in
+    Theorem~\ref{thm:arealaw-density-from-rough-endpoint} gives the first
+    inequality of~(\ref{eq:arealaw-charge-selection}), while the coefficient
+    estimate bounds the step-error term in the normalized energy inequality by
+    $\operatorname{cap}_k$ and the rough upper estimate gives $N_k^2>0$ and the
+    final norm bound at $(s_k,p_k)$.
 \end{proof}
 
 \begin{theorem}[Moment radii from marginal smallness]
@@ -285,7 +288,7 @@ any fixed interpolation interval contained in $(0,1)$.
     For every $C_e\geq0$, there are $C_\delta>0$, $C_{l,\delta}\geq0$
     and $N\geq2$, all chosen before the finite physical instance and $W$.
 
-    Use the original gapped Hamiltonian, nonempty target, actual distance
+    Use the original gapped Hamiltonian, nonempty target, ambient distance
     function, anchor multiplicity, layer-cardinality bound, cut clearance,
     and rounded scales of Theorem~\ref{thm:arealaw-source-charge-selection}.
     Suppose $n\geq N$, and put $X=A\cap T$. For every integer $0\leq j\leq L$,
@@ -313,15 +316,15 @@ any fixed interpolation interval contained in $(0,1)$.
         \label{eq:arealaw-source-density}
     \end{align}
     There is a nonnegative sequence $\rho_k\to0$ such that, for all
-    sufficiently large $k$, the same actual selected charge $s_k<nm$ and
+    sufficiently large $k$, the same selected charge $s_k<nm$ and
     parameter $p_k\in[\varepsilon/2,\varepsilon]$ satisfy
     \begin{align}
         \frac{\mathcal Q_k}{KnD} & \leq\delta_n+\rho_k.\notag
     \end{align}
     At this same point all four conclusions of
     (\ref{eq:arealaw-charge-selection}) hold, with
-    $p_0=\varepsilon/2$ and $p_1=\varepsilon$. In particular, the actual
-    energy cap retains its literal density and truncation term, and the
+    $p_0=\varepsilon/2$ and $p_1=\varepsilon$. In particular, the
+    energy cap retains its unexpanded density and truncation terms, and the
     filtered prevector has positive norm. Every remainder tends to zero
     with the finite instance and $W$ fixed. The exponent conditions do not
     require $\delta_n\to0$. The case $C_e=0$ is included.
@@ -334,30 +337,32 @@ any fixed interpolation interval contained in $(0,1)$.
         thm:al_scan_radius_dimension_smallness,thm:al_scan_transport_coefficients_log,
         thm:arealaw-target-entropy-transfer,thm:arealaw-source-rough-budget-power,
         thm:arealaw-selected-density-delta}
-    Keep the same $C_{\rm tr}$ chosen before $q$, and enlarge the size
-    threshold so that the rounded scales are admissible,
-    $r_0\geq1$, $\log n\geq1$, and truncation changes each relevant entropy
-    by at most $n^{-247}$. The radius bound gives the transport smallness
-    required for the common state and label sequence. Since $\kappa\leq e_{\rm in}$,
-    the ceiling estimate gives $D\leq2n^{e_{\rm in}}$. The target entropy,
-    selected-mass estimate and logarithmic dimension bound therefore yield
-    the asserted rough-budget bound.
+    Retaining $C_{\rm tr}$ from before $q$, enlarge the size threshold so that
+    the rounded scales are admissible, $r_0\geq1$, $\log n\geq1$, and
+    truncation changes each relevant regional entropy by at most $n^{-247}$.
+    From $ar_0^2\leq c$ we obtain the step-weight smallness condition
+    $a\ell_{\dim}\leq c_t$ needed for the common state and label sequence, and
+    from $\kappa\leq e_{\rm in}$ the ceiling estimate gives
+    $D\leq2n^{e_{\rm in}}$. Together with the target entropy, selected-mass,
+    and logarithmic dimension bounds, this inequality yields the stated upper
+    bound on $B_{\rm rough}$.
 
-    Write $G=C_{\rm ent}\ell_{\dim}^{e_{\rm ent}}$ and choose uniform
-    $C_t\geq1$, $C_{l,\delta}\geq0$ with
-    $G\leq C_t(\log n)^{C_{l,\delta}}$. If $C_s\geq1$ is the rounded-scale
-    constant, take
+    Next set $G=C_{\rm ent}\ell_{\dim}^{e_{\rm ent}}$ and choose uniform
+    constants $C_t\geq1$ and $C_{l,\delta}\geq0$ with
+    $G\leq C_t(\log n)^{C_{l,\delta}}$. With $C_s\geq1$ denoting the
+    rounded-scale constant, define
     \begin{align}
         C_\delta & =4(C_1+1)(6C_e+13+6\log q+2C_t)C_s,\notag   \\
         \gamma   & =\frac{2(C_1+1)}{Wnm(\varepsilon/2)},\notag \\
         \rho_k   & =|\gamma R_k^{\rm end}|.\notag
     \end{align}
-    The identity $aK=W$ gives $T_{\rm ent}=GW a^{1/4}$. Apply the scalar
-    density estimate to the rough budget at the point already selected by
-    Theorem~\ref{thm:arealaw-source-charge-selection}. Its remaining term
-    is $\gamma R_k^{\rm end}\leq\rho_k$. The coefficient $\gamma$ is fixed
-    before $k\to\infty$, so $\rho_k\to0$. The energy and norm conclusions
-    at that point are unchanged.
+    Since $aK=W$, we have $T_{\rm ent}=GW a^{1/4}$, so applying the scalar
+    density estimate to $B_{\rm rough}$ at the point selected by
+    Theorem~\ref{thm:arealaw-source-charge-selection} bounds the principal part
+    by $\delta_n$ and the remainder by $\gamma R_k^{\rm end}\leq\rho_k$.
+    Because $\gamma$ is fixed before $k\to\infty$, $R_k^{\rm end}\to0$ implies
+    $\rho_k\to0$, while the energy and norm bounds at the selected point remain
+    unchanged.
 \end{proof}
 
 % Auxiliary density-to-energy consequence for Proposition 9.2.
@@ -404,7 +409,7 @@ any fixed interpolation interval contained in $(0,1)$.
         +C_\delta n^{-1000}+\rho_{E,k}.
         \label{eq:arealaw-source-energy}
     \end{align}
-    Here the defect is the actual normalized mean energy minus $e$, divided
+    Here the defect is the normalized mean energy minus $e$, divided
     by $g/2$. At the same point, the original density bound, original energy
     bound, positive filtered norm and rough upper norm estimate remain valid.
     Every replica remainder is uniform in the selected round and parameter
@@ -417,8 +422,8 @@ any fixed interpolation interval contained in $(0,1)$.
     \leanok
     \uses{thm:arealaw-source-selected-density,thm:arealaw-selected-energy-density,
         thm:arealaw-selected-energy-vanishing-remainder}
-    Keep the truncation constant supplied by
-    Theorem~\ref{thm:arealaw-source-selected-density}, before fixing $q$.
+    Retain the truncation constant from
+    Theorem~\ref{thm:arealaw-source-selected-density}, chosen before fixing $q$.
     Write $C_{\delta,0},C_{l,\delta,0}$ for the density coefficients and
     $g_*=g/2$. Choose
     \begin{align}
@@ -484,7 +489,7 @@ any fixed interpolation interval contained in $(0,1)$.
 
     Fix $W\geq1$, put $a=W/K$, and assume $ar_0^2\leq1/2$.
     At each charge round $s<nm$ and real parameter $p$, let $\mathcal M_k$
-    be its actual metric with band exponent $a/2$, using $p$ projected
+    be its root metric with band exponent $a/2$, using $p$ projected
     onto $[0,1]$. Write
     \begin{align}
         N_k^2 & =\|\mathcal M_k^{-1/4}\mathrm{pre}_k\|^2,\notag \\
@@ -521,7 +526,7 @@ any fixed interpolation interval contained in $(0,1)$.
         -S_{\widetilde\Omega}(Y_{jb}),\notag                         \\
         G_*      & =\max\bigl(\{0\}\cup\{G^-_{jb}:j,b\}\bigr).\notag
     \end{align}
-    Let $w_j$ be the weights of the actual charge tree at $(s,p)$.
+    Let $w_j$ be the weights of the charge tree at $(s,p)$.
     There are $c_U,c_L,C_{f,L}\geq0$, fixed before $k,s,p,\tau$, such that
     $R_k^+=[\log4+(d^2+c_UK)\log(k+2)]/k\to0$ and the remainder
     $R_k^-$ of Definition~\ref{def:actual_sharp_lower_remainder}, with
@@ -542,7 +547,7 @@ any fixed interpolation interval contained in $(0,1)$.
          & \leq-\frac{\log N_k^2}{k}.
         \label{eq:arealaw-supplied-sharp-bounds}
     \end{align}
-    The supplied state, spectral set and labels are unchanged in all three
+    The prescribed state, spectral set, and labels are unchanged in all three
     estimates. This is the uniform comparison step used in
     \cite[Proposition~9.2, lines~386--395]{OpenAI2026AreaLaw}.
 \end{theorem}
@@ -551,18 +556,18 @@ any fixed interpolation interval contained in $(0,1)$.
     \uses{thm:al_scan_supplied_status_moments,thm:actual_supplied_rough_lower_weight,
         thm:arealaw-sharp-smallness,thm:al_actual_sharp_upper,
         thm:actual_scan_supplied_prevector_sharp_lower}
-    Choose $C_B$ from the common moment estimate for the prescribed
-    truncated ground vector. Since $C_r>0$ and $n\geq2$, one has $r_0\geq1$;
-    hence $ar_0^2\leq1/2$ implies $0<a\leq1/2$.
-    Apply the rough lower comparison to the supplied label sequence.
-    Its coordinate isometries preserve the same prevector and physical energy.
+    Choose $C_B$ from the common moment estimate for the prescribed truncated
+    ground vector. Because $C_r>0$ and $n\geq2$ imply $r_0\geq1$, the condition
+    $ar_0^2\leq1/2$ forces $0<a\leq1/2$, so the rough lower comparison applies
+    to the prescribed label sequence while the coordinate isometries preserve
+    both the prevector and its physical energy.
 
-    Under the additional sharp smallness condition,
+    Under the additional smallness condition
+    $a\sqrt{\mathcal B}\leq\min\{c_0,1\}/10$,
     Theorem~\ref{thm:arealaw-sharp-smallness} gives
-    $10a\leq c_0/\sqrt{\mathcal B}$ and $10a\leq1$.
-    The common moment estimate therefore supplies both sharp comparisons
-    with quadratic coefficient $C_0\mathcal B$. Apply them to the same
-    spectral set and labels, and intersect their eventual replica bounds.
-    Their constants and remainders are independent of the charge round
-    and interpolation parameter.
+    $10a\leq c_0/\sqrt{\mathcal B}$ and $10a\leq1$. With these radii, the common
+    moment estimate yields both sharp comparisons with quadratic coefficient
+    $C_0\mathcal B$; applying them to the same spectral set and labels and
+    intersecting their eventual replica ranges gives constants and remainders
+    independent of the charge round and interpolation parameter.
 \end{proof}

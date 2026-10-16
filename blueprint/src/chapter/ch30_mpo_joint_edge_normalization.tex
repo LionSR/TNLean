@@ -84,7 +84,8 @@ all block labels jointly.
 \begin{proof}
     \leanok
     \uses{thm:mpo_joint_shared_letter_inclusion,def:mpo_joint_boundary_columns}
-    Substitute the virtual inclusion identities and expand the trace:
+    Substituting the virtual inclusion identities and expanding the trace
+    gives
     \begin{align}
         B_L(X)_{i,j}
          & =\sum_{x,a,b}L_{i;(x,a,b)}
@@ -110,9 +111,9 @@ all block labels jointly.
 \end{theorem}
 \begin{proof}
     \leanok
-    Given $Y_x\in\C^{D_x^0\times D_x}$, choose $X_x=V_xY_x$.
-    Given $Z_x\in\C^{D_x\times D_x^0}$, choose $X_x=Z_xV_x^*$.
-    Both claims follow from $V_x^*V_x=I$.
+    For $Y_x\in\C^{D_x^0\times D_x}$ and $Z_x\in\C^{D_x\times D_x^0}$,
+    setting $X_x=V_xY_x$ and $X_x=Z_xV_x^*$ respectively gives both
+    claims via $V_x^*V_x=I$.
 \end{proof}
 
 \begin{definition}[Compression into joint polar coordinates]
@@ -149,12 +150,12 @@ all block labels jointly.
 \begin{proof}
     \leanok
     \uses{thm:mpo_joint_boundary_polar,thm:mpo_joint_edge_factors}
-    Since $L=U_LP_L$ and $U_L^*U_L=I$, one has $U_L^*L=P_L$;
-    likewise $U_R^*R=P_R$. Apply these identities to
+    Since $L=U_LP_L$ and $U_L^*U_L=I$, one has $U_L^*L=P_L$, and
+    likewise $U_R^*R=P_R$; applying these identities to
     (\ref{eq:mpo_joint_first_core_factor}) and
-    (\ref{eq:mpo_joint_last_core_factor}). Positive definiteness makes
-    the two weights invertible, so multiplying by their inverses gives
-    the normalized coefficients.
+    (\ref{eq:mpo_joint_last_core_factor}) gives the first two equations.
+    Positive definiteness makes the two weights invertible, so
+    multiplying by their inverses gives the normalized coefficients.
 \end{proof}
 
 \begin{theorem}[Exact normalized edge supports]
@@ -272,7 +273,7 @@ No sum of edge operators is asserted here.
 \begin{proof}
     \leanok
     \uses{def:mpo_rectangular_compression}
-    Use $U^*U=I$ and the commutation hypothesis to obtain
+    Combining $U^*U=I$ with the commutation hypothesis gives
     $UK=UU^*HU=HU$ and $KU^*=U^*HUU^*=U^*H$.
     Injectivity of $U$ gives $\ker K=U^{-1}(\ker H)$.
     The second intertwining identity sends $\ker H$ into $\ker K$,
@@ -296,8 +297,8 @@ No sum of edge operators is asserted here.
 \begin{proof}
     \leanok
     \uses{thm:mpo_rectangular_compression_intertwines}
-    For $v\perp\ker K$, apply the given estimate to $Uv$ and use
-    $HUv=UKv$. Since $U$ preserves norms,
+    For $v\perp\ker K$, applying the given estimate to $Uv$ and using
+    $HUv=UKv$ gives, since $U$ preserves norms,
     $\delta\lVert v\rVert=\delta\lVert Uv\rVert
         \le\lVert HUv\rVert=\lVert Kv\rVert$.
 \end{proof}

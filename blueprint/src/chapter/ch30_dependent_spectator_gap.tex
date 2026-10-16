@@ -43,8 +43,8 @@
 \end{theorem}
 \begin{proof}
     \leanok
-    Expand each inner product as the sum of its scalar coordinates and
-    group the coordinates with the same label $q$.
+    Expanding each inner product as the sum of its scalar coordinates and
+    grouping the coordinates with the same label $q$ gives both identities.
 \end{proof}
 
 \begin{theorem}[Extension identities]
@@ -96,8 +96,8 @@
     \leanok
     \uses{thm:mpo_sigma_fiber_kernel, thm:mpo_sigma_fiber_inner_norm,
         thm:mpo_single_sigma_fiber_identities}
-    If $v\perp\ker F_\Sigma$, test against $\iota_qu$ for $u\in\ker F_q$,
-    obtaining $0=\langle\iota_qu,v\rangle=\langle u,v_q\rangle$.
+    If $v\perp\ker F_\Sigma$, testing against $\iota_qu$ for $u\in\ker F_q$
+    gives $0=\langle\iota_qu,v\rangle=\langle u,v_q\rangle$.
     Conversely, for $w\in\ker F_\Sigma$, each summand in
     $\langle w,v\rangle=\sum_q\langle w_q,v_q\rangle$ vanishes.
 \end{proof}
@@ -116,8 +116,8 @@
 \begin{proof}
     \leanok
     \uses{thm:mpo_sigma_fiber_orthogonal, thm:mpo_sigma_fiber_inner_norm}
-    Sum the inequalities $\delta^2\|v_q\|^2\leq\|F_qv_q\|^2$ and take
-    nonnegative square roots.
+    Summing the inequalities $\delta^2\|v_q\|^2\leq\|F_qv_q\|^2$ and
+    taking nonnegative square roots gives the bound.
 \end{proof}
 
 \begin{theorem}[Norm gaps in a finite direct sum]
@@ -140,9 +140,10 @@
     \leanok
     \uses{thm:mpo_sigma_fiber_gap_forward, thm:mpo_sigma_fiber_orthogonal,
         thm:mpo_single_sigma_fiber_identities}
-    The reverse implication is Theorem~\ref{thm:mpo_sigma_fiber_gap_forward}.
-    For the forward implication, apply the bound to $\iota_qu$, using
-    $\|\iota_qu\|=\|u\|$ and $\|F_\Sigma\iota_qu\|=\|F_qu\|$.
+    Theorem~\ref{thm:mpo_sigma_fiber_gap_forward} gives the reverse
+    implication, while applying the bound to $\iota_qu$ with
+    $\|\iota_qu\|=\|u\|$ and $\|F_\Sigma\iota_qu\|=\|F_qu\|$ gives the
+    forward implication.
 \end{proof}
 
 \begin{definition}[Operators with dependent spectator coordinates]
@@ -202,13 +203,13 @@
 \begin{proof}
     \leanok
     \uses{thm:mpo_dependent_spectator_kernel}
-    For the forward implication, extend any $u\in\ker G_q$ by zero outside
-    the coordinate $(q,s)$.  The resulting vector $\widetilde u$ belongs to
-    $\ker H_S$ and satisfies
+    For the forward implication, extending any $u\in\ker G_q$ by zero
+    outside the coordinate $(q,s)$ produces a vector
+    $\widetilde u\in\ker H_S$ satisfying
     $\langle\widetilde u,v\rangle=\langle u,v_{q,s}\rangle$.
-    For the reverse implication, sum
+    Conversely, for $u\in\ker H_S$, every summand in
     $\langle u,v\rangle=\sum_{q\in Q}\sum_{s\in S_q}
-        \langle u_{q,s},v_{q,s}\rangle=0$ for $u\in\ker H_S$.
+        \langle u_{q,s},v_{q,s}\rangle=0$ vanishes.
 \end{proof}
 
 \begin{theorem}[Squared norm decomposition]
@@ -224,8 +225,8 @@
 \end{theorem}
 \begin{proof}
     \leanok
-    Expand $\|v\|^2=\sum_{q,i,s}|v(q,i,s)|^2$ and exchange the finite sums
-    over $i\in I_q$ and $s\in S_q$.
+    Expanding $\|v\|^2=\sum_{q,i,s}|v(q,i,s)|^2$ and exchanging the
+    finite sums over $i\in I_q$ and $s\in S_q$ gives the identity.
 \end{proof}
 
 \begin{theorem}[Extension of a common norm gap]
@@ -273,11 +274,10 @@
 \begin{proof}
     \leanok
     \uses{thm:mpo_dependent_spectator_gap_forward, thm:mpo_dependent_spectator_orthogonal}
-    The reverse implication is
-    Theorem~\ref{thm:mpo_dependent_spectator_gap_forward}.
-    For the forward implication, fix $q\in Q$ and choose $s\in S_q$.
-    Extend $u\in(\ker G_q)^\perp$ by zero outside $(q,s)$ to obtain
-    $v\in(\ker H_S)^\perp$.  Then $\|v\|=\|u\|$ and
+    Theorem~\ref{thm:mpo_dependent_spectator_gap_forward} gives the
+    reverse implication. For the forward implication, fixing $q\in Q$ and
+    $s\in S_q$ and extending $u\in(\ker G_q)^\perp$ by zero outside
+    $(q,s)$ produces $v\in(\ker H_S)^\perp$ with $\|v\|=\|u\|$ and
     $\|H_Sv\|=\|G_qu\|$.
 \end{proof}
 
@@ -339,9 +339,9 @@
     \uses{thm:mpo_dependent_spectator_replacement}
     Each $S_{x,y}$ is nonempty because $D_x^0,D_y^0>0$.
     The inequalities $D_x^0+D_x^1\geq D_x^0>0$ and
-    $D_y^0+D_y^1\geq D_y^0>0$ imply that $T_{x,y}$ is nonempty.
-    Apply Theorem~\ref{thm:mpo_dependent_spectator_replacement} with label set
-    $\{0,\ldots,r-1\}^2$.
+    $D_y^0+D_y^1\geq D_y^0>0$ imply that $T_{x,y}$ is nonempty, so
+    Theorem~\ref{thm:mpo_dependent_spectator_replacement} applies with
+    label set $\{0,\ldots,r-1\}^2$.
 \end{proof}
 
 % This is only the change of spectator multiplicities. Identifying actual

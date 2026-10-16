@@ -6406,6 +6406,30 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Notes:** bounds should be supplied before simplifying dependent matrix
   indices; exhaustive enumeration of all bond-coordinate pairs is unnecessary.
 
+### Uniform expansion bounds under chronological composition — candidate (2026-10-15)
+
+- **Pattern:** Induct on the number of stages while retaining the bounds on
+  every stage below the current index; composition forms the conjunction of
+  the preceding bound and the last stage's bound.
+- **Seen:** `OriginalCircuit.isExpansionBounded_sequence` and
+  `OriginalCircuit.isMonomialBounded_sequence` in
+  `TNLean/PEPS/Approximation/OriginalCircuitSequence.lean`, and formerly
+  `DyadicProtocol.isExpansionBounded_chain` and
+  `DyadicProtocol.isMonomialBounded_chain` in
+  `TNLean/PEPS/Approximation/DyadicProtocolCompression.lean`: four
+  occurrences across two files.
+- **Abstraction:** Done (2026-10-16). `DyadicProtocol.chain` is now
+  `OriginalCircuit.sequence` of the protocol changes, and every `chain` lemma
+  (counts, participation, participating sets, expansion and monomial bounds)
+  is a one-line instance of the generic `sequence` lemma. Two inductions
+  remain, both in `OriginalCircuitSequence.lean`. Before adding a further
+  gate-expansion property, derive it from a common occurrence-wise
+  description, as in the existing retained-memory entry.
+- **Notes:** The gate and lifetime sum identities in the same module use the
+  existing `Finset.sum_range_succ`; their elementary induction follows the
+  recorded decision against abstracting finite-sum proof structure. No new
+  tactic or global simplification rule is introduced.
+
 ## Rejected
 
 ### Axiom allow-list fixtures — rejected (2026-10-12)
@@ -8135,7 +8159,7 @@ spectral split → block extraction → MPV calculation → strict bounds
   if a subsequent mathematical theorem needs that interface independently;
   it is not part of the present proof completion.
 
-### Facts about the jointly chosen initial marks — candidate
+### Facts about the jointly chosen initial marks — promoted (2026-10-16)
 
 - **Pattern:** Recover the same two residue choices and finite mark set used by
   the initial repair stage, then project a geometric property from their
@@ -8147,12 +8171,67 @@ spectral split → block extraction → MPV calculation → strict bounds
   `RepairMetricHypotheses.repairStage_location_mem_affineMesh`.
   The definitions in `RepairStage` and `RepairBirthRank` also refer to these
   same choices; they are not additional proofs of a geometric property.
-- **Abstraction:** If another proof needs this extraction, prefer a lemma
-  giving the incidence and scale facts of the actual chosen initial family.
-  It must retain the residue choices used by the actual regions; an
-  independently chosen family cannot replace them.
-- **Notes:** The present two proofs use different projections: incidence and
-  scale separation in the first, membership in the selected belts in the
-  second. The mesh argument reuses `fineScaleIndex_mono` and
-  `beltMarks_subset_affineMesh`, and adds no copied floor estimate or new
-  mesh definition.
+- **Abstraction:** The lemma
+  `TNLean.PEPS.AreaLaw.Geometry.initialRepairStage_mark_spec` in
+  `TNLean/PEPS/AreaLaw/Geometry/RepairInitialMarkFacts.lean` records sparse cell
+  counts, finite layer support, incidence, scale minimality, separation, and
+  injectivity for the actual chosen initial family. It retains the residue
+  choices used by the actual regions and introduces no new mark family.
+- **Refactor:** The metric proof uses incidence and separation directly. The
+  mesh proof reconstructs membership in a selected belt from the incident
+  cell supplied by the lemma, then retains the existing mesh argument and
+  induction step. Both theorem statements remain unchanged.
+- **Line comparison:** The metric proof decreases from 9 to 4 nonblank proof
+  lines, and the mesh proof from 24 to 23. The shared lemma has 5 proof lines:
+  the two consumers and the common proof therefore use 32 lines rather than
+  33. These counts exclude statements, documentation, imports, and the other
+  declarations in the modules.
+- **Verification:** The shared lemma and both rewritten consumers have
+  passed ordinary builds and imported named axiom checks with only the
+  three standard axioms. Both rewritten consumers also passed strict
+  source checks and named source checks.
+- **Further use:** The uniform weighted initial-mark estimate
+  `exists_uniform_initialRepairStage_weighted_sum_bound` also uses the same
+  chosen-family facts. Its finite layer partition uses incidence, and its
+  summation estimate uses the sparse cell counts. The roots and residue
+  choices remain those of the actual initial family. The estimate has passed
+  strict checking, ordinary compilation, and its exact named imported axiom
+  check. This third use is separate from the two refactored consumers in the
+  line comparison above. No new tactic, simp attribute, or proof limit is
+  introduced.
+
+- **Initial belt count:** `exists_uniform_initial_belt_card_bound` in
+  `TNLean/PEPS/AreaLaw/Geometry/InitialBeltCount.lean` also uses the sparse
+  cell counts and finite layer support from the shared specification. The
+  original selected cells and their actual run identifiers are retained.
+  This is a fourth direct use, with strict, ordinary, and exact-name imported
+  standard-three verification complete. The finite-prefix mark-count proof
+  calls the weighted estimate; it is not another direct extraction of the
+  chosen-family facts.
+
+### Summing sparse selected layers with a uniform dyadic budget — candidate
+
+- **Pattern:** Choose the polynomial dyadic budget before the geometric data,
+  bound each summand by a nonnegative geometric coefficient times the fixed
+  polynomial-decay term, sum over the actual finite supported layers, factor
+  the coefficient, and apply the numerical budget.
+- **Occurrences:**
+  `exists_uniform_initialRepairStage_weighted_sum_bound` in
+  `TNLean/PEPS/AreaLaw/Geometry/RepairInitialWeightedCount.lean` and
+  `exists_uniform_initial_belt_card_bound` in
+  `TNLean/PEPS/AreaLaw/Geometry/InitialBeltCount.lean`.
+- **Existing abstraction:** `exists_uniform_polynomial_dyadic_sum_bound`
+  already supplies the numerical estimate. Both applications retain the
+  same jointly chosen initial cells; their finite layer sets come from actual
+  carriers or selected-cell support.
+- **Possible next abstraction:** If a third proof repeats the summation step,
+  first consider a lemma in `PolynomialBudget` for a finite sum with a
+  pointwise polynomial-dyadic upper bound and a nonnegative common
+  coefficient. Its budget must still precede the coefficient and all
+  geometric data. No new tactic is needed.
+- **Notes:** The initial-mark application permits signed weights and handles
+  their layer partition before this summation step. Finiteness must be proved
+  before using either finite-support sums or `Nat.card`. The belt count
+  concerns the literal belt summand, and supplies no count of all initial
+  primary identifiers. These are two occurrences across two files; no third
+  occurrence has yet been recorded.

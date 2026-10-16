@@ -924,6 +924,15 @@ pair sources with the same constant.
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{thm:peps_guide_frame_patch_congruence,
+        thm:peps_frame_small_rewrite_polynomial, lem:peps_party_gate_source_bound,
+        thm:peps_original_finite_expansion_bound, def:peps_party_monomial,
+        thm:peps_guide_frame_rewrite, lem:peps_register_reorderings,
+        lem:peps_circuit_source_bound_monomials, def:peps_original_circuit,
+        thm:peps_guide_frame_rewrite_events, lem:peps_treated_true_vertices,
+        thm:peps_guide_frame_resize_treatment_gates,
+        thm:peps_dyadic_sampled_ratio, lem:peps_dyadic_floor,
+        thm:peps_guide_frame_reading_gates, def:peps_dyadic_block_guide}
     Each monomial of the expansion of
     Theorem~\ref{thm:peps_frame_small_rewrite_polynomial} has at most
     $2m\le 2b$ normalized pair sources, one for each patch vertex with open

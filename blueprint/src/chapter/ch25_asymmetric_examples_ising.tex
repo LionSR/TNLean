@@ -568,11 +568,11 @@ product tensor.
          & =O_N(A_\sigma)\,O_N(A_\psi)
         =O_N(A_\sigma).
     \end{align}
-    These are the operator analogues, for the tensors of
-    Definition~\ref{def:asymex_ising_tensors}, of the fusion rules
-    $1\times\sigma=\sigma\times1=\sigma$ and
-    $\psi\times\sigma=\sigma\times\psi=\sigma$
-    of~\cite[Appendix~D.2]{Bultinck2017Anyons}.
+    For the tensors of Definition~\ref{def:asymex_ising_tensors}, these
+    relations realize the fusion rules $1\times\sigma=\sigma\times1=\sigma$
+    and $\psi\times\sigma=\sigma\times\psi=\sigma$
+    of~\cite[Appendix~D.2]{Bultinck2017Anyons} as periodic operator
+    identities.
 \end{corollary}
 
 \begin{proof}
@@ -612,7 +612,7 @@ product tensor.
     \leanok
     \uses{thm:asymex_ising_sector_vanishing, thm:mpo_direct_sum_additive,
         thm:mpdo_mpo_scalar_scaling}
-    Apply Lemma~\ref{lem:asymex_ising_fusion_similarity} with
+    Lemma~\ref{lem:asymex_ising_fusion_similarity} applies with
     $X=Y=\widehat A_\sigma$, $c=2$, $z=10$, and $H=G^{\mathsf T}$, where the
     matrix $G$ of size $16$ has fourteen rows of the form $\sqrt2e_i$ and
     the two rows $e_2\pm e_7$. These two rows carry the F-move of
@@ -914,10 +914,10 @@ $[F^{\psi\sigma\psi}_\sigma]=-1$.
     projection for block $s$, set $V_s=G^{-1}\iota_s$ and $W_s=p_sG$.
     Then $W_sV_t=p_s\iota_t$, and
     (\ref{eq:asymex_ising_local_blocks}) gives the compression identity.
-    Block diagonality gives triangularity, as in
-    Theorem~\ref{thm:asymex_explicit_gauge}.
-    The dimension count is clause (vii) of
-    Theorem~\ref{thm:asym_multiblock}.
+    Block diagonality gives triangularity as in
+    Theorem~\ref{thm:asymex_explicit_gauge}, and clause~(vii) of
+    Theorem~\ref{thm:asym_multiblock} gives the zero-block dimension
+    $24-(4+4)=16$.
 \end{proof}
 
 \begin{theorem}[The extension splits]%
@@ -1144,10 +1144,9 @@ chain length that the surrounding prose calls $N$.
 \begin{proof}
     \leanok
     \uses{def:asymex_ising_coefficients}
-    Consider the $3^4$ choices of $a,b,c,d$. In each case, expand
-    the finite sums and substitute the fusion multiplicities.
-    The resulting expressions agree as polynomials in
-    $w_1^L,w_\psi^L,w_\sigma^L$.
+    For each of the $3^4$ choices of $a,b,c,d$, expanding the finite sums
+    and substituting the fusion multiplicities reduces both sides to
+    identical polynomials in $w_1^L,w_\psi^L,w_\sigma^L$.
 \end{proof}
 
 \subsection{Action on a fusion-tree product state}%
@@ -1271,10 +1270,10 @@ not from a length-independent normalization.
     This follows by permuting the diagonal matrices of
     Theorem~\ref{thm:asymex_ising_action_diagonal}.
     Block diagonality gives triangularity and identifies the four
-    target tensors, as in Theorem~\ref{thm:asymex_explicit_gauge}.
-    Coordinate projections and inclusions give the reduction pairs.
-    The dimension count is clause (vii) of
-    Theorem~\ref{thm:asym_multiblock}.
+    target tensors as in Theorem~\ref{thm:asymex_explicit_gauge},
+    coordinate projections and inclusions form the reduction pairs, and
+    clause~(vii) of Theorem~\ref{thm:asym_multiblock} gives the
+    zero-block dimension $10-4=6$.
 \end{proof}
 
 \begin{theorem}[The extension of the action tensor splits]%

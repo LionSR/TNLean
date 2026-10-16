@@ -39,18 +39,17 @@ theorem repairStage_location_mem_affineMesh {a₀ : ℝ}
     (𝔇 j).location p ∈ affineMesh o 1 := by
   induction j with
   | zero =>
-    let hchoice := (Classical.choose_spec exists_uniform_separated_initial_marks).2
-      o Λ A C k₀ hC h₀
-    let hb := Classical.choose_spec hchoice
-    let hab := Classical.choose_spec hb
-    let hM := hab.2.2
-    obtain ⟨k, hk, hp⟩ := ((Classical.choose_spec hM).1 p.val).mp p.property
+    classical
+    obtain ⟨_, k, z, hk, hz, hp, _⟩ :=
+      (initialRepairStage_mark_spec o Λ A C k₀ hC h₀).2.2.1 p
     have hf : fineScaleIndex 2 = 1 := by
       norm_num [fineScaleIndex, Exponents.zeta, Exponents.geometryDelta, Nat.floor_eq_iff']
     have hm := fineScaleIndex_mono (show 2 ≤ k by omega)
     change p.val ∈ affineMesh o 1
+    change p.val ∈ beltCellMarks o (fineScaleIndex k) z at hp
     simpa only [show (2 : ℝ) ^ 2 / 4 = 1 by norm_num] using
-      beltMarks_subset_affineMesh o 2 (fineScaleIndex k) _ (by omega) hp
+      beltMarks_subset_affineMesh o 2 (fineScaleIndex k) _ (by omega)
+        (Finset.mem_biUnion.mpr ⟨z, hz, hp⟩)
   | succ j ih =>
     obtain ⟨z, hz⟩ := ih p.2.1.val
     obtain ⟨n, hn⟩ := exists_natCast_repairHalfSide

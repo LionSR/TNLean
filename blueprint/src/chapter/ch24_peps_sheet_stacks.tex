@@ -334,8 +334,7 @@ no holes, this is the normalization of $\Omega$.
 
 \begin{definition}[Bounded changes of the sheets]
     \label{def:peps_bounded_change}
-    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.isExpansionBounded_mono,
-        TNLean.PEPS.PairEffect.OriginalCircuit.norm_eval_le_norm,
+    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.norm_eval_le_norm,
         TNLean.PEPS.PairEffect.OriginalCircuit.IsBoundedChange,
         TNLean.PEPS.EncodedFrame.HasBoundedChange}
     \leanok
@@ -743,7 +742,6 @@ no holes, this is the normalization of $\Omega$.
         TNLean.PEPS.Approximation.isDisplacedReading_levelGuide,
         TNLean.PEPS.Approximation.mem_levelVertices,
         TNLean.PEPS.Approximation.levelFrame_eq,
-        TNLean.PEPS.Approximation.guideFrame_congr_patch,
         TNLean.PEPS.Approximation.guideFrame_congr_guide,
         TNLean.PEPS.Approximation.levelFrame_eq_of_levelGuide_eq,
         TNLean.PEPS.Approximation.levelFrame_congr,
@@ -793,6 +791,7 @@ no holes, this is the normalization of $\Omega$.
 
 \begin{proof}\leanok
     \uses{def:peps_protocol_level_frame, def:peps_guide_frame,
+        thm:peps_guide_frame_patch_congruence,
         lem:peps_dyadic_readings_exist, thm:peps_protocol_event_segments,
         lem:peps_level_true_vertices, lem:peps_dyadic_choice_K0,
         thm:peps_guide_frame_norm, thm:peps_guide_frame_supplied_gates,
@@ -807,9 +806,10 @@ no holes, this is the normalization of $\Omega$.
 
     The true vertices are the finite grid-corner set of
     Lemma~\ref{lem:peps_level_true_vertices}. Equal guides have the same true-vertex
-    set. Equal guides, hole-center sets and patches give the same guide frame by its
-    definition; equal radii give equal supplied patches and preserve the disjointness
-    condition, including the raw-frame case. Distinct grid corners are
+    set. After identifying the equal guides and hole-center sets,
+    Theorem~\ref{thm:peps_guide_frame_patch_congruence} identifies the guide frames
+    with equal patches there. Equal radii give equal supplied patches and preserve
+    the disjointness condition, including the raw-frame case. Distinct grid corners are
     at distance at least $2^j$, whereas each outer sample lies within distance $2r$
     of its center, so $4r<2^j$ gives disjointness. Away from the four corners of a
     repainted block, a true vertex inside the block would contradict the grid-corner

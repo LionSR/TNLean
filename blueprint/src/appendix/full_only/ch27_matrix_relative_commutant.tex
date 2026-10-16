@@ -49,11 +49,11 @@ $\alpha$ is surjective.
     Sending a matrix to the endomorphism $v\mapsto Av$ is an isomorphism of
     $K$-algebras $M_n(K)\to\End_{K}(K^n)$, and the identity map of $K^n$ is
     semilinear along it, since it carries the matrix action to the
-    endomorphism action.  A nonzero vector space over a division ring is a
-    simple module over its own endomorphism ring, and simplicity transfers
-    along that semilinear bijection.  Schumacher and Werner call $K^n$ the
-    defining representation of $M_n(K)$ at
-    \cite[lines~2112--2114]{SchumacherWerner2004QCA}.
+    endomorphism action.  Because a nonzero vector space over a division
+    ring is a simple module over its own endomorphism ring, simplicity
+    transfers along that semilinear bijection to the module $K^n$, which
+    Schumacher and Werner~\cite[lines~2112--2114]{SchumacherWerner2004QCA}
+    call the defining representation of $M_n(K)$.
 \end{proof}
 
 \begin{lemma}[Uniqueness of the simple module over a simple Artinian ring]
@@ -67,12 +67,11 @@ $\alpha$ is surjective.
 \begin{proof}\leanok
     A simple Artinian ring is semisimple, so a simple module over it is
     isomorphic to a simple left ideal: $M\cong I$ and $N\cong J$ with
-    $I,J\subseteq R$ simple left ideals.  The regular module of a simple
-    Artinian ring is isotypic, so $I\cong J$, and composing gives
-    $M\cong N$.  This is the general form of the property of $\MN{d}$ that
-    all its irreducible representations are unitarily equivalent to the
-    defining one, quoted at
-    \cite[lines~2112--2114]{SchumacherWerner2004QCA}.
+    $I,J\subseteq R$ simple left ideals.  In the matrix case quoted at
+    \cite[lines~2112--2114]{SchumacherWerner2004QCA}, where all irreducible
+    representations of $\MN{d}$ are unitarily equivalent to the defining
+    one, the regular module of a simple Artinian ring is isotypic, so
+    $I\cong J$ and composing gives $M\cong N$.
 \end{proof}
 
 \begin{theorem}[Equal matrix sizes from a scalar relative commutant]
@@ -101,10 +100,11 @@ $\alpha$ is surjective.
     $\C^p$ is a simple $\MN{p}$-module by
     Lemma~\ref{lem:matalg_defining_module_simple}, so
     Lemma~\ref{lem:matalg_simple_module_unique} gives an $\MN{p}$-linear
-    isomorphism $\C^q\cong\C^p$.  Reading it as an isomorphism of complex
-    vector spaces and comparing dimensions gives $q=p$.  This is the
-    single-summand, multiplicity-one case of the representation argument at
-    \cite[lines~2101--2116]{SchumacherWerner2004QCA}.
+    isomorphism $\C^q\cong\C^p$.  In this single-summand, multiplicity-one
+    case of the representation argument at
+    \cite[lines~2101--2116]{SchumacherWerner2004QCA}, reading the
+    isomorphism as a complex-linear bijection and comparing dimensions gives
+    $q=p$.
 \end{proof}
 
 \begin{theorem}[Scalar relative commutant forces surjectivity]
@@ -131,12 +131,11 @@ $\alpha$ is surjective.
     \label{thm:matalg_surjective_star}
     \lean{Matrix.StarAlgHom.surjective_of_centralizer_range_eq_bot}
     \leanok
-    Let $p,q\geq1$ and let $\Phi:\MN{p}\to\MN{q}$ be a homomorphism of
-    complex matrix algebras with $\Phi(A^\dagger)=\Phi(A)^\dagger$ and
-    $\Phi(\Id_p)=\Id_q$.  If
-    $\Phi(\MN{p})^{\prime}\cap\MN{q}=\C\Id_q$, then $\Phi$ is onto.  This
-    is the form matching the unital star homomorphisms of
-    \cite[lines~2101--2105]{SchumacherWerner2004QCA}.
+    Let $p,q\geq1$ and, as in the unital star homomorphisms of
+    \cite[lines~2101--2105]{SchumacherWerner2004QCA}, let
+    $\Phi:\MN{p}\to\MN{q}$ be a homomorphism of complex matrix algebras with
+    $\Phi(A^\dagger)=\Phi(A)^\dagger$ and $\Phi(\Id_p)=\Id_q$.  If
+    $\Phi(\MN{p})^{\prime}\cap\MN{q}=\C\Id_q$, then $\Phi$ is onto.
 \end{theorem}
 
 \begin{proof}\leanok
