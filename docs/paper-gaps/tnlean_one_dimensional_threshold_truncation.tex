@@ -17,8 +17,9 @@ Proposition~7.1 of the one-dimensional note~\cite{TNLean2026OneDimensional}
 lines~33--44) is the classical sequential truncation of Verstraete and
 Cirac. Let $\Omega$ be a unit vector on the chain $\Lambda=\{1,\ldots,L\}$
 and let $D$ be an arbitrary positive integer. For $1\le k\le L-1$ let
-$\Pi_k$ be the projection of $\mathcal H_{[1,k]}$ onto the span of the $D$
-eigenvectors of $\rho_{[1,k]}$ with the largest eigenvalues, let
+$\Pi_k$ be the projection of $\mathcal H_{[1,k]}$ onto the span of the
+$\min\{D,\dim\mathcal H_{[1,k]}\}$ eigenvectors of $\rho_{[1,k]}$ with the
+largest eigenvalues (the identity when $D\ge\dim\mathcal H_{[1,k]}$), let
 $\epsilon_k=\langle\Omega,(\mathbb 1-\Pi_k\otimes\mathbb 1)\Omega\rangle$ be
 the discarded mass, and put
 \[
