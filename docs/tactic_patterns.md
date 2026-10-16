@@ -24,6 +24,22 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Treated-to-level frame equality — promoted (2026-10-16)
+
+- **Pattern:** Identify true vertices from a guide equality, replace the constant
+  treated radius by the equal level radius, transport disjointness, and change
+  the reference party map.
+- **Seen:** The starting and completed guide proofs in
+  `TNLean/PEPS/Approximation/DyadicTreatedFrameBoundary.lean`.
+- **Abstraction:** The private `treatedFrame_eq_levelFrame_of_guide_eq` takes
+  the baseline stage, the output stage, an unmodified guide and its equality
+  with the level guide. Both endpoint proofs use it.
+- **Notes:** This local extraction shares two proofs without a global tactic
+  or attribute. All existing endpoint hypotheses and directions are retained.
+  Affine perturbation avoidance also reuses `eventually_add_ne`, which uses
+  public Mathlib neighborhood lemmas; the similarly named chamber-sampling
+  helper is private to its module.
+
 ### Owner change of a sampled guide frame — promoted (2026-10-16)
 
 - **Pattern:** the frame of a reading equals the frame of another reading with

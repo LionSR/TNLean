@@ -40,14 +40,11 @@ open EncodedFrame PairEffect
 
 /-- Moving a real number by a small positive amount avoids any given value. -/
 theorem eventually_add_ne (x c : ℝ) : ∀ᶠ ε in 𝓝[>] (0 : ℝ), x + ε ≠ c := by
-  rcases le_or_gt (c - x) 0 with h | h
-  · filter_upwards [self_mem_nhdsWithin] with ε hε
-    have : (0 : ℝ) < ε := hε
-    intro he
+  by_cases h : c - x = 0
+  · filter_upwards [self_mem_nhdsWithin] with ε (hε : (0 : ℝ) < ε) he
     linarith
-  · filter_upwards [nhdsWithin_le_nhds (Iio_mem_nhds h)] with ε hε
-    have : ε < c - x := hε
-    intro he
+  · filter_upwards [eventually_ne_nhdsWithin h.symm] with ε hε he
+    apply hε
     linarith
 
 /-- **The diagonal displacement leaves the boundary of a square.** Every point moved by a small
@@ -71,17 +68,11 @@ theorem eventually_mem_openSquare_or_notMem_closedSquare (n : ℝ) (p : ℝ × �
 
 /-- An affine function of nonzero slope avoids any given value for small positive arguments. -/
 theorem eventually_affine_ne (a m c : ℝ) (hm : m ≠ 0) : ∀ᶠ ε in 𝓝[>] (0 : ℝ), a + m * ε ≠ c := by
-  rcases le_or_gt ((c - a) / m) 0 with h | h
-  · filter_upwards [self_mem_nhdsWithin] with ε hε
-    have : (0 : ℝ) < ε := hε
-    intro he
-    have : ε = (c - a) / m := by field_simp; linarith
-    linarith
-  · filter_upwards [nhdsWithin_le_nhds (Iio_mem_nhds h)] with ε hε
-    have : ε < (c - a) / m := hε
-    intro he
-    have : ε = (c - a) / m := by field_simp; linarith
-    linarith
+  filter_upwards [eventually_add_ne 0 ((c - a) / m)] with ε hε he
+  apply hε
+  simp only [zero_add]
+  apply (eq_div_iff hm).2
+  linarith
 
 /-- Along the diagonal the normal coordinate of an edge avoids zero and the band width. -/
 private theorem eventually_nor_ne (n a b σ : ℝ) (hσ : σ = 1 ∨ σ = -1) :
@@ -155,18 +146,7 @@ theorem treatedFrame_congr {ε₀ t : ℝ}
     {L₀ L₀' : GuideLabel} {g g' : ℝ × ℝ → GuideLabel}
     (h : treatedGuide R.1.1 R.1.index t M L₀ g = treatedGuide R.1.1 R.1.index t M L₀' g') :
     treatedFrame (q := q) P rank R hr M L₀ g = treatedFrame P rank R hr M L₀' g' := by
-  change (fun f : ℝ × ℝ → GuideLabel =>
-      if h : ((treatedVertices k R.1.1 t M f : Finset (ℝ × ℝ)) : Set (ℝ × ℝ)).Pairwise
-          fun z z' => Disjoint (suppliedPatch P _ hr z).outer (suppliedPatch P _ hr z').outer then
-        guideFrame (cellCenterPos L) q f (labelParty R) guidePlaceholder rank
-          (treatedVertices k R.1.1 t M f) (suppliedPatch P _ hr) h
-      else Frame.raw fun _ => .inl R.1) (treatedGuide R.1.1 R.1.index t M L₀ g) =
-    (fun f : ℝ × ℝ → GuideLabel =>
-      if h : ((treatedVertices k R.1.1 t M f : Finset (ℝ × ℝ)) : Set (ℝ × ℝ)).Pairwise
-          fun z z' => Disjoint (suppliedPatch P _ hr z).outer (suppliedPatch P _ hr z').outer then
-        guideFrame (cellCenterPos L) q f (labelParty R) guidePlaceholder rank
-          (treatedVertices k R.1.1 t M f) (suppliedPatch P _ hr) h
-      else Frame.raw fun _ => .inl R.1) (treatedGuide R.1.1 R.1.index t M L₀' g')
+  unfold treatedFrame
   rw [h]
 
 /-- Without marks, the treated guide is the sampled guide placed on the square. -/
@@ -193,6 +173,46 @@ abbrev repaintBaseline (R : RepaintedSquare k) (done : Set (ℤ × ℤ)) :
   blockBaseline (n := (2 : ℝ) ^ (R.1.1 : ℕ)) (by positivity)
     (protocolLevelLabels k R.1.1 done) R.1.index (newParty Sum.inl R.1.1 R.1.index)
 
+/-- Transfer a treated guide's frame to a level frame once their guides agree. -/
+private theorem treatedFrame_eq_levelFrame_of_guide_eq {K₀ ε₀ ν a D : ℝ}
+    (hc : IsProtocolConstants K₀ ε₀ ν a D B₀) (hL : 2 ≤ L) (hkL : L ≤ 2 ^ k)
+    (hlarge : K₀ * (D * Real.log L) < (2 : ℝ) ^ (R.1.1 : ℕ)) (R₀ : RepaintedSquare k)
+    (done stage : Set (ℤ × ℤ)) {g : ℝ × ℝ → GuideLabel}
+    (hum : (repaintBaseline R done).IsUnmodifiedGuide g) (L₀ : GuideLabel)
+    (hg : treatedGuide R.1.1 R.1.index (D * Real.log L) ∅ L₀ g =
+      levelGuide k R.1.1 stage) :
+    treatedFrame (q := q) P rank R (hc.treatedRadius_bounds hL) ∅ L₀ g =
+      levelFrame P rank R₀ R.1.1 stage
+        (fun _ => holeRadius ε₀ ((2 : ℝ) ^ (R.1.1 : ℕ)) (D * Real.log L))
+        (hc.holeRadius_bounds hL (n := (2 : ℝ) ^ (R.1.1 : ℕ)) (by positivity)) := by
+  set n : ℝ := (2 : ℝ) ^ (R.1.1 : ℕ) with hn_def
+  set t := D * Real.log L with ht_def
+  have hr := hc.treatedRadius_bounds hL
+  have hρ := hc.holeRadius_bounds hL (n := n) (by positivity)
+  have hℓ : 0 < Real.log L := Real.log_pos (by exact_mod_cast hL)
+  have ht : 0 < t := mul_pos hc.D_pos hℓ
+  have htn : t ≤ n := by nlinarith [hc.twenty_le_K₀]
+  obtain ⟨-, hmem, hd, hF⟩ := treatedFrame_spec (q := q) P rank R hc hL hlarge done hum ∅ L₀
+  have hV : treatedVertices k R.1.1 t ∅ (treatedGuide R.1.1 R.1.index t ∅ L₀ g) =
+      levelVertices k R.1.1 stage :=
+    Finset.ext fun z => by rw [hmem, mem_levelVertices, hg]
+  have hpatch : ∀ z, suppliedPatch P (fun _ => ε₀ * t) hr z =
+      suppliedPatch P (fun _ => holeRadius ε₀ n t) hρ z := fun z =>
+    suppliedPatch_congr P hr hρ (holeRadius_of_le htn).symm
+  have hd' : ((levelVertices k R.1.1 stage : Finset (ℝ × ℝ)) : Set (ℝ × ℝ)).Pairwise
+      fun z z' => Disjoint (suppliedPatch P (fun _ => holeRadius ε₀ n t) hρ z).outer
+        (suppliedPatch P (fun _ => holeRadius ε₀ n t) hρ z').outer := by
+    intro z hz z' hz' hne
+    rw [← hpatch, ← hpatch]
+    exact hd (by rw [Finset.mem_coe, hV]; exact hz) (by rw [Finset.mem_coe, hV]; exact hz') hne
+  rw [hF, levelFrame_eq P rank R₀ hd']
+  calc _ = guideFrame (cellCenterPos L) q (levelGuide k R.1.1 stage) (labelParty R)
+        guidePlaceholder rank (levelVertices k R.1.1 stage)
+        (suppliedPatch P (fun _ => holeRadius ε₀ n t) hρ) hd' :=
+        guideFrame_congr_guide hg hV fun z _ => hpatch z
+    _ = _ := guideFrame_levelLabels_labelParty_eq hkL R.2 (isDisplacedReading_levelGuide _ _) R
+        R₀ rank (fun z hz => mem_levelVertices.1 hz) _ hd'
+
 /-- **The main frame before the repainting.** At the constants of the protocol, for a square `R`
 of side `n = 2 ^ j > K₀ t`, the main frame of level `j` at the stage `done`, with holes of radius
 `h_n = ε₀ t`, is the frame of the starting guide of the repainting of `R`, treated at no mark.
@@ -206,44 +226,17 @@ theorem levelFrame_eq_treatedFrame_guide {K₀ ε₀ ν a D : ℝ}
         (fun _ => holeRadius ε₀ ((2 : ℝ) ^ (R.1.1 : ℕ)) (D * Real.log L))
         (hc.holeRadius_bounds hL (n := (2 : ℝ) ^ (R.1.1 : ℕ)) (by positivity)) =
       treatedFrame P rank R (hc.treatedRadius_bounds hL) ∅ L₀ (repaintBaseline R done).guide := by
-  have hr := hc.treatedRadius_bounds hL
-  have hρ := hc.holeRadius_bounds hL (n := (2 : ℝ) ^ (R.1.1 : ℕ)) (by positivity)
-  set t := D * Real.log L with ht_def
-  have hℓ : 0 < Real.log L := Real.log_pos (by exact_mod_cast hL)
-  have ht : 0 < t := mul_pos hc.D_pos hℓ
-  have htn : t ≤ (2 : ℝ) ^ (R.1.1 : ℕ) := by nlinarith [hc.twenty_le_K₀]
-  have hg : treatedGuide R.1.1 R.1.index t ∅ L₀ (repaintBaseline R done).guide =
+  set n : ℝ := (2 : ℝ) ^ (R.1.1 : ℕ) with hn_def
+  have hg : treatedGuide R.1.1 R.1.index (D * Real.log L) ∅ L₀ (repaintBaseline R done).guide =
       levelGuide k R.1.1 done := by
     rw [treatedGuide_empty]
     congr 1
     funext p
-    have hguide : ∀ x, (repaintBaseline R done).guide x = blockGuide ((2 : ℝ) ^ (R.1.1 : ℕ))
-        (protocolLevelLabels k R.1.1 done) (x + blockCorner ((2 : ℝ) ^ (R.1.1 : ℕ)) R.1.index) :=
-      fun _ => rfl
+    have hguide : ∀ x, (repaintBaseline R done).guide x = blockGuide n
+        (protocolLevelLabels k R.1.1 done) (x + blockCorner n R.1.index) := fun _ => rfl
     rw [shiftGuide, hguide, sub_add_cancel]
-  obtain ⟨-, hmem, hd, hF⟩ := treatedFrame_spec (q := q) P rank R hc hL hlarge done (Or.inl rfl)
-    ∅ L₀
-  have hV : treatedVertices k R.1.1 t ∅ (treatedGuide R.1.1 R.1.index t ∅ L₀
-      (repaintBaseline R done).guide) = levelVertices k R.1.1 done :=
-    Finset.ext fun z => by rw [hmem, mem_levelVertices, hg]
-  have hpatch : ∀ z, suppliedPatch P (fun _ => ε₀ * t) hr z =
-      suppliedPatch P (fun _ => holeRadius ε₀ ((2 : ℝ) ^ (R.1.1 : ℕ)) t) hρ z := fun z =>
-    suppliedPatch_congr P hr hρ (holeRadius_of_le htn).symm
-  have hd' : ((levelVertices k R.1.1 done : Finset (ℝ × ℝ)) : Set (ℝ × ℝ)).Pairwise
-      fun z z' => Disjoint
-        (suppliedPatch P (fun _ => holeRadius ε₀ ((2 : ℝ) ^ (R.1.1 : ℕ)) t) hρ z).outer
-        (suppliedPatch P (fun _ => holeRadius ε₀ ((2 : ℝ) ^ (R.1.1 : ℕ)) t) hρ z').outer := by
-    intro z hz z' hz' hne
-    rw [← hpatch, ← hpatch]
-    exact hd (by rw [Finset.mem_coe, hV]; exact hz) (by rw [Finset.mem_coe, hV]; exact hz') hne
-  rw [hF, levelFrame_eq P rank R₀ hd']
-  symm
-  calc _ = guideFrame (cellCenterPos L) q (levelGuide k R.1.1 done) (labelParty R)
-        guidePlaceholder rank (levelVertices k R.1.1 done)
-        (suppliedPatch P (fun _ => holeRadius ε₀ ((2 : ℝ) ^ (R.1.1 : ℕ)) t) hρ) hd' :=
-        guideFrame_congr_guide hg hV fun z _ => hpatch z
-    _ = _ := guideFrame_levelLabels_labelParty_eq hkL R.2 (isDisplacedReading_levelGuide _ _) R
-        R₀ rank (fun z hz => mem_levelVertices.1 hz) _ hd'
+  exact (treatedFrame_eq_levelFrame_of_guide_eq P rank R hc hL hkL hlarge R₀ done done
+    (Or.inl rfl) L₀ hg).symm
 
 /-- **The completed guide is read as the level guide with the square repainted.** Once all four
 edges of `R` are completed, the guide of the main sheet, placed on `R`, has the same reading as
@@ -297,36 +290,9 @@ theorem treatedFrame_completedGuide_eq_levelFrame {K₀ ε₀ ν a D : ℝ}
       levelFrame P rank R₀ R.1.1 (insert R.1.index done)
         (fun _ => holeRadius ε₀ ((2 : ℝ) ^ (R.1.1 : ℕ)) (D * Real.log L))
         (hc.holeRadius_bounds hL (n := (2 : ℝ) ^ (R.1.1 : ℕ)) (by positivity)) := by
-  have hr := hc.treatedRadius_bounds hL
-  have hρ := hc.holeRadius_bounds hL (n := (2 : ℝ) ^ (R.1.1 : ℕ)) (by positivity)
-  set t := D * Real.log L with ht_def
-  have hℓ : 0 < Real.log L := Real.log_pos (by exact_mod_cast hL)
-  have ht : 0 < t := mul_pos hc.D_pos hℓ
-  have htn : t ≤ (2 : ℝ) ^ (R.1.1 : ℕ) := by nlinarith [hc.twenty_le_K₀]
-  have hg := treatedGuide_completedGuide R done hE t L₀
-  obtain ⟨-, hmem, hd, hF⟩ := treatedFrame_spec (q := q) P rank R hc hL hlarge done
-    (Or.inr (Or.inr (Or.inl ⟨E, rfl⟩))) ∅ L₀
-  have hV : treatedVertices k R.1.1 t ∅ (treatedGuide R.1.1 R.1.index t ∅ L₀
-      ((repaintBaseline R done).completedGuide E)) =
-        levelVertices k R.1.1 (insert R.1.index done) :=
-    Finset.ext fun z => by rw [hmem, mem_levelVertices, hg]
-  have hpatch : ∀ z, suppliedPatch P (fun _ => ε₀ * t) hr z =
-      suppliedPatch P (fun _ => holeRadius ε₀ ((2 : ℝ) ^ (R.1.1 : ℕ)) t) hρ z := fun z =>
-    suppliedPatch_congr P hr hρ (holeRadius_of_le htn).symm
-  have hd' : ((levelVertices k R.1.1 (insert R.1.index done) : Finset (ℝ × ℝ)) :
-      Set (ℝ × ℝ)).Pairwise fun z z' => Disjoint
-        (suppliedPatch P (fun _ => holeRadius ε₀ ((2 : ℝ) ^ (R.1.1 : ℕ)) t) hρ z).outer
-        (suppliedPatch P (fun _ => holeRadius ε₀ ((2 : ℝ) ^ (R.1.1 : ℕ)) t) hρ z').outer := by
-    intro z hz z' hz' hne
-    rw [← hpatch, ← hpatch]
-    exact hd (by rw [Finset.mem_coe, hV]; exact hz) (by rw [Finset.mem_coe, hV]; exact hz') hne
-  rw [hF, levelFrame_eq P rank R₀ hd']
-  calc _ = guideFrame (cellCenterPos L) q (levelGuide k R.1.1 (insert R.1.index done))
-        (labelParty R) guidePlaceholder rank (levelVertices k R.1.1 (insert R.1.index done))
-        (suppliedPatch P (fun _ => holeRadius ε₀ ((2 : ℝ) ^ (R.1.1 : ℕ)) t) hρ) hd' :=
-        guideFrame_congr_guide hg hV fun z _ => hpatch z
-    _ = _ := guideFrame_levelLabels_labelParty_eq hkL R.2 (isDisplacedReading_levelGuide _ _) R
-        R₀ rank (fun z hz => mem_levelVertices.1 hz) _ hd'
+  exact treatedFrame_eq_levelFrame_of_guide_eq P rank R hc hL hkL hlarge R₀ done
+    (insert R.1.index done) (Or.inr (Or.inr (Or.inl ⟨E, rfl⟩))) L₀
+    (treatedGuide_completedGuide R done hE (D * Real.log L) L₀)
 
 /-- **The start of an edge construction.** At the constants of the protocol, the frame of the
 guide left by the central birth and the edges of `E`, treated at no mark, is the frame of the main

@@ -1297,56 +1297,202 @@ no holes, this is the normalization of $\Omega$.
     guides after the exchange.
 \end{proof}
 
+\begin{theorem}[Avoiding a value by a small perturbation]
+    \label{thm:peps_protocol_affine_avoidance}
+    \lean{TNLean.PEPS.Approximation.eventually_add_ne,
+        TNLean.PEPS.Approximation.eventually_affine_ne}
+    \leanok
+    For real $x,c$, one has $x+\eta\ne c$ for all sufficiently small
+    $\eta>0$. For real $a,m,c$, one likewise has $a+m\eta\ne c$ for all
+    sufficiently small $\eta>0$ whenever $m\ne0$.
+\end{theorem}
+
+\begin{proof}\leanok
+    If $c=x$, positivity of $\eta$ gives $x+\eta\ne c$. Otherwise a
+    neighborhood of $0$ avoids $c-x$. The affine assertion follows by applying
+    the additive assertion with $x=0$ and target $(c-a)/m$, since
+    $a+m\eta=c$ would imply $\eta=(c-a)/m$.
+\end{proof}
+
+\begin{theorem}[Diagonal avoidance of square boundaries]
+    \label{thm:peps_protocol_square_boundary_avoidance}
+    \lean{TNLean.PEPS.Approximation.eventually_mem_openSquare_or_notMem_closedSquare}
+    \leanok
+    \uses{def:peps_dyadic_schedule}
+    For any real $n$ and point $p\in\mathbb R^2$, the displaced point
+    $p+\eta(1,1)$ is in $(0,n)^2$ or outside $[0,n]^2$ for all sufficiently
+    small $\eta>0$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_protocol_affine_avoidance, def:peps_dyadic_schedule}
+    Each coordinate of $p+\eta(1,1)$ eventually avoids $0$ and $n$ by
+    Theorem~\ref{thm:peps_protocol_affine_avoidance}. If the displaced point
+    belongs to $[0,n]^2$, its four non-strict coordinate bounds are therefore
+    strict.
+\end{proof}
+
+\begin{theorem}[Diagonal avoidance of band interfaces]
+    \label{thm:peps_protocol_band_interface_avoidance}
+    \lean{TNLean.PEPS.Approximation.RepaintingBaseline.eventually_notMem_edgeInterface}
+    \leanok
+    \uses{def:peps_dyadic_schedule, def:peps_dyadic_edge_band}
+    For any repainting baseline, edge and point $p\in\mathbb R^2$, the
+    displaced point $p+\eta(1,1)$ is off that edge's interface for all
+    sufficiently small $\eta>0$
+    (\texttt{06-geometry.tex}, lines 69--80 and 161--168).
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_protocol_affine_avoidance, def:peps_dyadic_edge_band,
+        def:peps_dyadic_schedule}
+    Write the normal and tangential coordinates along the diagonal as
+    $a+\sigma\eta$ and $b+\eta$, where $\sigma\in\{-1,1\}$. The differences
+    from $0$, $(b+\eta)/1000$ and $(n-b-\eta)/1000$ have the respective
+    nonzero slopes $\sigma$, $\sigma-1/1000$ and $\sigma+1/1000$.
+    Theorem~\ref{thm:peps_protocol_affine_avoidance} gives, for all sufficiently
+    small $\eta>0$,
+    \begin{align}
+        a+\sigma\eta & \ne 0, \notag\\
+        a+\sigma\eta & \ne \frac{\min(b+\eta,n-b-\eta)}{1000}. \notag
+    \end{align}
+    On the band its width is positive, so these inequalities exclude the
+    interface coordinates $0$ and $1$.
+\end{proof}
+
+\begin{theorem}[Reading guides that agree along a displacement]
+    \label{thm:peps_protocol_reading_congruence}
+    \lean{TNLean.PEPS.Approximation.IsDisplacedReading.congr_eventually}
+    \leanok
+    \uses{lem:peps_dyadic_sampled_guides}
+    In any real module, let $g$ read a labelling $G$ along a displacement $v$.
+    If for every $p$ the equality $G(p+\eta v)=G'(p+\eta v)$ holds for all
+    sufficiently small $\eta>0$, then $g$ also reads $G'$ along $v$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:peps_dyadic_sampled_guides}
+    Intersect the two eventual conditions to obtain
+    $g(p)=G(p+\eta v)=G'(p+\eta v)$ for all sufficiently small $\eta>0$.
+\end{proof}
+
+\begin{theorem}[Coordinates within the indexed block]
+    \label{thm:peps_protocol_block_coordinates}
+    \lean{TNLean.PEPS.Approximation.sub_blockCorner_mem_closedSquare}
+    \leanok
+    \uses{def:peps_dyadic_block_guide, def:peps_dyadic_schedule}
+    If $n>0$ and $x\in\mathbb R^2$ has block index $S\in\mathbb Z^2$ at
+    scale $n$, then $x-nS\in[0,n]^2$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:peps_dyadic_block_guide, def:peps_dyadic_schedule}
+    In each coordinate, $S_i=\lfloor x_i/n\rfloor$ gives
+    $nS_i\le x_i<n(S_i+1)$, hence $0\le x_i-nS_i\le n$.
+\end{proof}
+
+\begin{definition}[The baseline of a protocol repainting]
+    \label{def:peps_protocol_repaint_baseline}
+    \lean{TNLean.PEPS.Approximation.repaintBaseline}
+    \leanok
+    \uses{def:peps_dyadic_protocol_parties, def:peps_dyadic_block_guide,
+        def:peps_dyadic_schedule, thm:peps_dyadic_repainting_valid_labels,
+        def:peps_dyadic_used_parties}
+    Let $R$ be a non-root repaintable square of level $j$ in a hierarchy of
+    depth $k$, with index $S$ and side $n=2^j$. For any stage
+    $\mathcal D\subseteq\mathbb Z^2$, its repainting baseline is the block
+    baseline at $S$ with the level labels at $\mathcal D$ and the fresh label
+    of $R$. Its starting guide at $x$ is the level block guide evaluated at
+    $x+nS$ (\texttt{06-geometry.tex}, lines 82--125 and 142--160).
+\end{definition}
+
+\begin{theorem}[The guides of an unmarked repainting]
+    \label{thm:peps_protocol_unmarked_guides}
+    \lean{TNLean.PEPS.Approximation.treatedGuide_completedGuide,
+        TNLean.PEPS.Approximation.treatedGuide_empty}
+    \leanok
+    \uses{def:peps_protocol_repaint_baseline, def:peps_protocol_treated_frame,
+        def:peps_protocol_level_frame, def:peps_dyadic_block_guide,
+        def:peps_dyadic_schedule}
+    For any natural $i$, index $T\in\mathbb Z^2$, real $t$, homogenizing
+    label and guide, treating at no mark gives the sampled translate of the
+    guide to the block with corner $2^iT$. Sampling has the fallback specified
+    in Definition~\ref{def:peps_protocol_level_frame}.
+    For the baseline of $R$ at $\mathcal D$, every real $t$ and homogenizing
+    label, and any list $E$ containing every edge, the completed guide placed
+    on $R$ and treated at no mark is the level guide at
+    $\mathcal D\cup\{S\}$. The list may have repetitions and need not have
+    a prescribed order. No protocol-constant assumption is required
+    (\texttt{06-geometry.tex}, lines 69--80 and 215--221).
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:peps_protocol_treated_frame, def:peps_protocol_level_frame,
+        def:peps_protocol_repaint_baseline, def:peps_dyadic_block_guide,
+        lem:peps_dyadic_floor, thm:peps_protocol_reading_congruence,
+        thm:peps_protocol_square_boundary_avoidance,
+        thm:peps_protocol_block_coordinates, lem:peps_dyadic_schedule_guides,
+        lem:peps_dyadic_active_labels, thm:peps_dyadic_repainting_valid_labels,
+        thm:peps_protocol_level_frame_facts}
+    With no marks the homogenized region is empty, giving the first identity.
+    After all edges are completed, the guide carries the fresh label inside
+    the open square and its original label outside the closed square.
+    Theorem~\ref{thm:peps_protocol_square_boundary_avoidance} places each
+    displaced point in one of these two regions. In the first case its block
+    index is $S$. In the second, Theorem~\ref{thm:peps_protocol_block_coordinates}
+    excludes index $S$, and inserting $S$ leaves the block label unchanged.
+    Thus the displaced readings agree with the level guide at
+    $\mathcal D\cup\{S\}$.
+\end{proof}
+
+\begin{theorem}[Treated frames of equal treated guides]
+    \label{thm:peps_protocol_treated_frame_congruence}
+    \lean{TNLean.PEPS.Approximation.treatedFrame_congr,
+        TNLean.PEPS.Approximation.treatedFrame_empty_congr}
+    \leanok
+    \uses{def:peps_protocol_treated_frame, def:peps_adaptive_patch_constraint,
+        def:peps_dyadic_protocol_parties}
+    Fix an adaptive patch supply, a label rank and a non-root square $R$ as
+    in Definition~\ref{def:peps_protocol_treated_frame}. For any real
+    $\epsilon_0,t$ with $0<\epsilon_0t\le B_0\log L$, equal treated guides
+    with the same finite set of marks give equal treated frames, even when
+    their original guides and homogenizing labels differ. In particular,
+    without marks the frame is independent of the homogenizing label.
+    No protocol-constant assumption is required.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:peps_protocol_treated_frame, thm:peps_protocol_unmarked_guides}
+    The frame construction depends on the original guide and homogenizing
+    label only through the treated guide. With no marks, that guide is the
+    sampled translate by Theorem~\ref{thm:peps_protocol_unmarked_guides},
+    independent of the homogenizing label.
+\end{proof}
+
 \begin{theorem}[The treated frames at the ends of a large repainting]
     \label{thm:peps_protocol_treated_frame_ends}
-    \lean{TNLean.PEPS.Approximation.eventually_add_ne,
-        TNLean.PEPS.Approximation.eventually_mem_openSquare_or_notMem_closedSquare,
-        TNLean.PEPS.Approximation.eventually_affine_ne,
-        TNLean.PEPS.Approximation.RepaintingBaseline.eventually_notMem_edgeInterface,
-        TNLean.PEPS.Approximation.IsDisplacedReading.congr_eventually,
-        TNLean.PEPS.Approximation.sub_blockCorner_mem_closedSquare,
-        TNLean.PEPS.Approximation.treatedFrame_congr,
-        TNLean.PEPS.Approximation.treatedGuide_empty,
-        TNLean.PEPS.Approximation.treatedFrame_empty_congr,
-        TNLean.PEPS.Approximation.repaintBaseline,
-        TNLean.PEPS.Approximation.levelFrame_eq_treatedFrame_guide,
-        TNLean.PEPS.Approximation.treatedGuide_completedGuide,
+    \lean{TNLean.PEPS.Approximation.levelFrame_eq_treatedFrame_guide,
         TNLean.PEPS.Approximation.treatedFrame_completedGuide_eq_levelFrame,
         TNLean.PEPS.Approximation.treatedFrame_edgeStart,
         TNLean.PEPS.Approximation.treatedFrame_auxStart_eq_raw}
     \leanok
-    \uses{def:peps_protocol_treated_frame, def:peps_protocol_level_frame,
-        def:peps_adaptive_patch_constraint, def:peps_dyadic_protocol_parties,
-        def:peps_dyadic_block_guide, def:peps_dyadic_schedule,
-        def:peps_dyadic_edge_band, lem:peps_dyadic_sampled_guides,
-        thm:peps_dyadic_repainting_valid_labels, def:peps_dyadic_used_parties,
-        thm:peps_protocol_constants, def:peps_frame}
-    For the frame identities, fix an adaptive patch supply and a label rank as in
+    \uses{def:peps_protocol_repaint_baseline, def:peps_protocol_treated_frame,
+        def:peps_protocol_level_frame, def:peps_adaptive_patch_constraint,
+        def:peps_dyadic_protocol_parties, def:peps_dyadic_schedule,
+        def:peps_dyadic_edge_band, thm:peps_protocol_constants, def:peps_frame,
+        def:peps_dyadic_normal_words}
+    Fix an adaptive patch supply and a label rank as in
     Definition~\ref{def:peps_protocol_treated_frame}. Let $R$ be a non-root
-    repaintable square of level $j$ in a hierarchy of depth $k$, with index $S$
-    and side $n=2^j$.
-    A stage $\mathcal D$ is any subset of $\mathbb Z^2$. The baseline of $R$ at
-    $\mathcal D$ is the block baseline of the level labels at $\mathcal D$, at index $S$,
-    with the fresh label of $R$.
+    repaintable square of level $j$ in a hierarchy of depth $k$, with index
+    $S$, side $n=2^j$ and baseline at any stage
+    $\mathcal D\subseteq\mathbb Z^2$.
 
-    The following guide identities require no protocol-constant assumptions.
-    For any natural $i$, index $T\in\mathbb Z^2$, real $t$, homogenizing label and
-    guide, treating at no mark gives the sampled translate of the guide to the block
-    with corner $2^iT$. For every real $t$ and homogenizing label, and any list $E$
-    containing every edge,
-    the completed guide of $R$, placed on $R$ and treated at no mark, is the
-    level guide at $\mathcal D\cup\{S\}$. The list may have repetitions and
-    need not have a prescribed order.
-
-    For any real $\epsilon_0,t$ with $0<\epsilon_0t\le B_0\log L$, equal
-    treated guides with the same finite set of marks give equal treated frames,
-    even when their original guides and homogenizing labels differ. In
-    particular, without marks the frame is independent of the homogenizing
-    label. With the same radius condition, for any edge $e$ let $C_e$ be the
-    neighboring label of the baseline of $R$ at $\mathcal D$. The uniform
-    auxiliary guide at $C_e$, treated at no mark, has no hole and every site
-    owned by the party of $C_e$, so its frame is that party's raw copy. These
-    frame identities also require no protocol-constant assumptions.
+    For any real $\epsilon_0,t$ with $0<\epsilon_0t\le B_0\log L$ and any
+    edge $e$, let $C_e$ be the neighboring label of the baseline. The uniform
+    auxiliary guide at $C_e$, treated at no mark with any homogenizing label,
+    has no hole and every site owned by the party of $C_e$, so its frame is
+    that party's raw copy. This identity requires no protocol-constant
+    assumptions.
 
     Now assume the protocol constants, $2\le L$, $t=D\log L$ and
     $n>K_0t$. For any edge list $E$ and edge $e\notin E$, the unmarked frame
@@ -1354,59 +1500,46 @@ no holes, this is the normalization of $\Omega$.
     of the main guide with the starting word along $e$; the two frames may use
     different homogenizing labels. For the following two level-frame
     identifications assume in addition $L\le2^k$. For every non-root reference
-    square $R_0$ in the same hierarchy, the main frame of level $j$ at $\mathcal D$,
-    computed using the party map of $R_0$ and holes of radius
+    square $R_0$ in the same hierarchy, the main frame of level $j$ at
+    $\mathcal D$, computed using the party map of $R_0$ and holes of radius
     $h_n=\epsilon_0t$, is the unmarked frame of the starting guide of $R$.
-    For any list $F$ containing every edge, the unmarked frame of its completed guide is
-    the main frame at $\mathcal D\cup\{S\}$ with the same radius and party
-    map. No condition $S\notin\mathcal D$ is required
+    For any list $F$ containing every edge, the unmarked frame of its completed
+    guide is the main frame at $\mathcal D\cup\{S\}$ with the same radius
+    and party map. No condition $S\notin\mathcal D$ is required
     (\texttt{06-geometry.tex}, lines 62--125, 142--221 and 328--339).
-
-    The auxiliary boundary and reading statements have their own unrestricted
-    domains. For real $x,c$, one has $x+\eta\ne c$ for all sufficiently small
-    $\eta>0$; for real $a,m,c$ the same holds for $a+m\eta\ne c$ if $m\ne0$.
-    For any real $n$ and point $p$, the displaced point
-    $p+\eta(1,1)$ is eventually in $(0,n)^2$ or outside $[0,n]^2$.
-    For any repainting baseline, edge and point $p$, the displaced point
-    $p+\eta(1,1)$ is eventually off that edge's interface. If $n>0$ and a point
-    has block index $S$ at scale $n$, then
-    subtracting the block corner $nS$ puts it in $[0,n]^2$.
-    Finally, in any real module, a reading $g$ of $G$ along a displacement $v$
-    is also a reading of $G'$ when, for every $p$, the equality
-    $G(p+\eta v)=G'(p+\eta v)$ holds for all sufficiently small $\eta>0$.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:peps_protocol_party_map_switch, thm:peps_protocol_level_frame_facts,
-        lem:peps_dyadic_schedule_guides, lem:peps_dyadic_active_labels,
-        thm:peps_guide_frame_supplied_gates, lem:peps_dyadic_floor,
-        lem:peps_dyadic_sampled_guides, lem:peps_dyadic_incident_change,
-        def:peps_protocol_treated_frame, thm:peps_protocol_level_events,
-        thm:peps_protocol_constants, def:peps_dyadic_block_guide,
-        def:peps_dyadic_edge_band, def:peps_dyadic_schedule,
-        def:peps_dyadic_normal_words, thm:peps_dyadic_repainting_valid_labels,
-        def:peps_guide_frame, def:peps_frame,
-        def:peps_dyadic_used_parties, def:peps_protocol_level_frame}
-    Without marks the treated guide is the reading of the guide placed on $R$. The
-    starting guide placed on $R$ is the block guide of the level. The completed guide
-    agrees with the block guide of the level with $R$ repainted off the boundary of
-    $R$, and the main guide with the starting word agrees with the completed guide off
-    the two interface curves of the band of the edge. A point moved by a small positive
-    multiple of $(1,1)$ leaves the boundary of a square. For an edge, write its
-    normal and tangential coordinates as $a+\sigma\eta$ and $b+\eta$, where
-    $\sigma\in\{-1,1\}$. The differences from $0$, $(b+\eta)/1000$ and
-    $(n-b-\eta)/1000$ have the respective nonzero slopes $\sigma$,
-    $\sigma-1/1000$ and $\sigma+1/1000$. The affine avoidance statement gives,
-    for all sufficiently small $\eta>0$,
-    \begin{align}
-        a+\sigma\eta & \ne 0,\qquad
-        a+\sigma\eta\ne\frac{\min(b+\eta,n-b-\eta)}{1000}. \notag
-    \end{align}
-    Thus the displaced point leaves the interface curves. So the readings agree,
-    and with them the true vertices, the
-    owners and the tags. The party map may be read through any repainting, since the
-    readings carry no placeholder at the sites. The uniform auxiliary guide has no true
-    vertex.
+    \uses{thm:peps_protocol_unmarked_guides, def:peps_protocol_repaint_baseline,
+        thm:peps_protocol_treated_frame_congruence,
+        thm:peps_protocol_reading_congruence,
+        thm:peps_protocol_band_interface_avoidance,
+        thm:peps_protocol_party_map_switch, thm:peps_protocol_level_frame_facts,
+        lem:peps_dyadic_schedule_guides, thm:peps_guide_frame_supplied_gates,
+        lem:peps_dyadic_floor, lem:peps_dyadic_sampled_guides,
+        lem:peps_dyadic_incident_change, def:peps_protocol_treated_frame,
+        thm:peps_protocol_level_events, thm:peps_protocol_constants,
+        def:peps_dyadic_block_guide, def:peps_dyadic_edge_band,
+        def:peps_dyadic_schedule, def:peps_dyadic_normal_words,
+        def:peps_guide_frame, def:peps_frame, def:peps_protocol_level_frame}
+    By Theorem~\ref{thm:peps_protocol_unmarked_guides}, the unmarked starting
+    guide is the sample of the translated baseline.
+    Definition~\ref{def:peps_protocol_repaint_baseline}
+    identifies that translation with the level block guide, whose sample is
+    the level guide. The completed-guide equality is
+    Theorem~\ref{thm:peps_protocol_unmarked_guides}. The true vertices therefore
+    agree. Since $t\le n$, their hole radii agree by
+    $\epsilon_0\min(n,t)=\epsilon_0t$; thus their supplied patches and outer
+    disjointness agree as well. The frames agree after changing the reference
+    party map by Theorem~\ref{thm:peps_protocol_party_map_switch}.
+
+    The completed guide and the main guide with the starting word agree off
+    the two interface curves of the edge band.
+    Theorem~\ref{thm:peps_protocol_band_interface_avoidance} and
+    Theorem~\ref{thm:peps_protocol_reading_congruence} identify their sampled
+    readings, and Theorem~\ref{thm:peps_protocol_treated_frame_congruence}
+    identifies their frames. The uniform auxiliary guide has no true vertex;
+    its guide frame is consequently the raw frame owned by the party of $C_e$.
 \end{proof}
 
 \begin{definition}[A chain of a prescribed number of steps]
@@ -1432,6 +1565,7 @@ no holes, this is the normalization of $\Omega$.
         TNLean.PEPS.Approximation.IsStepChain.cast_length,
         TNLean.PEPS.Approximation.IsStepChain.treat,
         TNLean.PEPS.Approximation.IsStepChain.untreat,
+        TNLean.PEPS.Approximation.IsStepChain.treat_operate,
         TNLean.PEPS.Approximation.IsStepChain.treatOperate,
         TNLean.PEPS.Approximation.isStepChain_main,
         TNLean.PEPS.Approximation.hasSourceBoundedChange_aux_of_eq,
