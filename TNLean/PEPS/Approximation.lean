@@ -266,6 +266,7 @@ import TNLean.PEPS.Approximation.MessageGateExpansion
 import TNLean.PEPS.Approximation.MessageGateLists
 import TNLean.PEPS.Approximation.MessageMonomial
 import TNLean.PEPS.Approximation.MonomialFixesOutside
+import TNLean.PEPS.Approximation.NestedCylinderSquarePatch
 import TNLean.PEPS.Approximation.NetworkScalarAbsorption
 import TNLean.PEPS.Approximation.NoneResidualGate
 import TNLean.PEPS.Approximation.NoneResidualOperations
@@ -476,6 +477,7 @@ import TNLean.PEPS.Approximation.SquareHamiltonianHermitianTerms
 import TNLean.PEPS.Approximation.SquareInteractionSupport
 import TNLean.PEPS.Approximation.SquareInteractionTerms
 import TNLean.PEPS.Approximation.SquareLatticeConnectivity
+import TNLean.PEPS.Approximation.SquarePatchIntegerCoordinates
 import TNLean.PEPS.Approximation.SupportedPhysicalBufferGaussian
 import TNLean.PEPS.Approximation.SupportedPolarUnitary
 import TNLean.PEPS.Approximation.SwappedSquareHamiltonianBoundary

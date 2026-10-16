@@ -1,0 +1,56 @@
+\section{Square patches from nested cylinders}
+\label{sec:peps_adaptive_patch_bridge}
+The statements below supply the last step of the proof of
+Proposition~4.1 of \cite{OpenAI2026PolynomialPEPS}, \texttt{03-patches.tex},
+lines 563--603: a vector in the sum of nested cylinder spaces is turned into
+square cylinder data at the same radii.
+
+\begin{lemma}[Square samples in integer coordinates]
+    \label{lem:peps_square_sample_integer_coordinates}
+    \lean{TNLean.PEPS.Approximation.squareSample_integerCoordinates,
+        TNLean.PEPS.Approximation.integerCoordinates_add_one_eq_latticePos}
+    \leanok
+    For a finite set $\Lambda\subseteq\Z^2$ with its sites at their integer
+    positions, the sample of the closed sup-norm square of center $c$ and
+    radius $r$ is the set of sites $x\in\Lambda$ with
+    $|x_1-c_1|\le r$ and $|x_2-c_2|\le r$, for every center and radius.
+    Translating the integer positions of the open $L\times L$ square, which
+    start at zero, by $(1,1)$ gives the lattice positions of
+    \cite{OpenAI2026PolynomialPEPS}, \texttt{00-introduction.tex}, lines 21--25.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{def:peps_frame_square_patch, def:peps_adaptive_patch_constraint}
+    The sup-norm distance is the larger of the two coordinate distances.
+\end{proof}
+
+\begin{lemma}[Square patches from nested cylinders]
+    \label{lem:peps_square_patch_of_nested_cylinders}
+    \lean{TNLean.PEPS.EncodedFrame.exists_squarePatch_of_mem_iSup_dependentRegionCylinder}
+    \leanok
+    Let $0<u$ and let $u\le r_1\le\cdots\le r_m\le2u$. For each $j$ let $S_j$ be
+    a subspace of the Hilbert space of the sample $D_j$ of the square of radius
+    $r_j$ about $z$. If a vector $v$ lies in the sum of the cylinder spaces
+    $S_j\otimes\mathcal H_{D_j^c}$, then for every vector $\Omega$ there are
+    square cylinder data at $(z,u)$ with the radii $r_1,\ldots,r_m$, with
+    $\sum_jd_j\le\sum_j\dim S_j$, and with
+    \[
+        \lVert(\id-\Pi)\Omega\rVert\le\lVert\Omega-v\rVert ,
+    \]
+    where $\Pi$ is the sum of the cylinder projectors. No assumption is made on
+    repeated radii, zero subspaces or an empty family.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{def:peps_frame_square_patch, def:peps_adaptive_patch_constraint}
+    Orthogonalize the nested cylinder spaces: the $j$-th innovation space is
+    the part of $S_j\otimes\mathcal H_{D_j^c}$ orthogonal to the earlier
+    cylinders, and an orthonormal basis of it supplies the vectors $v_{j\ell}$.
+    The innovation dimensions add up to at most $\sum_j\dim S_j$. The
+    resulting cylinder projectors have orthogonal ranges, their sum $\Pi$ is
+    the orthogonal projection onto the sum of the cylinder spaces, and $v$ lies
+    in its range, so $\lVert(\id-\Pi)\Omega\rVert\le\lVert\Omega-v\rVert$
+    (\texttt{03-patches.tex}, lines 563--603).
+\end{proof}
