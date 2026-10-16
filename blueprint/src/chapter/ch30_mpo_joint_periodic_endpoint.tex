@@ -169,8 +169,8 @@ overlaps of the original endpoint blocks.
     \leanok
     \uses{thm:mpo_joint_phase_boundary,thm:mpo_joint_phase_reducing,
         thm:mpo_joint_canonical_corner}
-    Subtract the outer boundary actions from the identity to obtain
-    the complementary actions. Their products give
+    Subtracting the outer boundary actions from the identity gives
+    the complementary actions, whose products yield
     (\ref{eq:mpo_joint_outer_boundary}). The binary diagonal phase
     indicators imply $\sum_{a,b}T_{ab}=I$ and the vanishing of distinct
     products. Every $T_{ab}$ preserves $S$, so their images sum to $S$;
@@ -203,8 +203,8 @@ overlaps of the original endpoint blocks.
     The inclusion $G\subseteq S$ reverses the complementary projection
     order. For commuting orthogonal projections $P,Q$,
     $I-PQ\le(I-P)+(I-Q)$ because $(I-P)(I-Q)\ge0$.
-    Apply this twice to $\Pi_G=R_0C_1\Pi_S$. The fixed inner phases give
-    $\Pi_S\le C_0,R_1$, which proves
+    Applying this inequality twice to $\Pi_G=R_0C_1\Pi_S$ bounds $k$ from above,
+    while the fixed inner phases give $\Pi_S\le C_0,R_1$ and hence
     (\ref{eq:mpo_joint_inner_penalties}).
 \end{proof}
 
@@ -259,10 +259,10 @@ overlaps of the original endpoint blocks.
     \uses{thm:mpo_joint_local_comparison}
     Each diagonal summand contributes one precisely when its condition
     fails. An inactive configuration has $n(\sigma)\ge1$, proving
-    $I-Q_N\le E_N$. Sum the first-column and second-row inequalities
-    in (\ref{eq:mpo_joint_inner_penalties}). The cyclic shift permutes
-    $\Fin{N}$, so each column and each row appears exactly once.
-    This yields $E_N\le2H'_N$. At $N=2$ the two directed translates
+    $I-Q_N\le E_N$. In (\ref{eq:mpo_joint_inner_penalties}), the cyclic
+    shift permutes $\Fin{N}$, so summing the first-column and second-row
+    inequalities counts each column and each row exactly once and yields
+    $E_N\le2H'_N$. At $N=2$ the two directed translates
     remain distinct summands in $H'_N$.
 \end{proof}
 
@@ -295,7 +295,7 @@ overlaps of the original endpoint blocks.
     \leanok
     \uses{thm:mpo_joint_phase_reducing,thm:mpo_joint_cyclic_penalty,
         thm:mpo_joint_local_comparison}
-    Translate and sum (\ref{eq:mpo_joint_local_comparison}). Cyclic
+    Translating and summing (\ref{eq:mpo_joint_local_comparison}) with cyclic
     reindexing turns the two outer penalties into $E_N$. Every site phase
     reduces every translated interaction, so $E_N$ commutes with $H'_N$.
     Its kernel projection $Q_N$ therefore commutes as well.
@@ -340,9 +340,8 @@ overlaps of the original endpoint blocks.
     and one positive gap $\delta$ for $K_N$. Since
     $A_x^\mu(0)P_x=A_x^\mu(0)$, compression by $V_x^*$ and $V_x$
     preserves every positive-length word trace and gives $B_x$.
-    Write $v=x+y$, where
-    $x=Q_Nv$ and $y=(I-Q_N)v$. These components are orthogonal, and
-    $x\perp\ker K_N$ because $Q_N$ fixes the common kernel.
+    Decomposing $v=x+y$ with $x=Q_Nv$ and $y=(I-Q_N)v$ yields orthogonal
+    components, where $x\perp\ker K_N$ because $Q_N$ fixes the common kernel.
     Using (\ref{eq:mpo_joint_periodic_active}) and
     (\ref{eq:mpo_joint_cyclic_penalty}),
     \begin{align}

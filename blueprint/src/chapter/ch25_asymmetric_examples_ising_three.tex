@@ -49,9 +49,9 @@ contraction described in~\cite{gap:tnlean_ising_three_object_twist_scope}.
     \leanok
     \uses{thm:asymex_ising_sigma_fusion, thm:asymex_ising_sigma_square}
     The periodic operator of a direct sum is the sum of the periodic
-    operators of its summands. Apply the fusion rules
+    operators of its summands. Applying the fusion rules
     $1\otimes\sigma=\sigma$, $\psi\otimes\sigma=\sigma$, and
-    $\sigma\otimes\sigma=1\oplus\psi$ to obtain
+    $\sigma\otimes\sigma=1\oplus\psi$ to those summands yields
     (\ref{eq:asymex_ising_three_product}). Every pair-alphabet word is
     the word of a pair of physical configurations, so taking that matrix
     element gives (\ref{eq:asymex_ising_three_trace}).
@@ -77,9 +77,9 @@ contraction described in~\cite{gap:tnlean_ising_three_object_twist_scope}.
     \uses{thm:asymex_ising_normal, thm:asymex_ising_three_trace,
         thm:asym_multiblock}
     Each target is a nonzero scalar multiple of a normal tensor of
-    positive auxiliary dimension. Apply Theorem~\ref{thm:asym_multiblock}
-    to (\ref{eq:asymex_ising_three_trace}), and subtract the sum of the
-    four target dimensions from forty.
+    positive auxiliary dimension; applying Theorem~\ref{thm:asym_multiblock}
+    to (\ref{eq:asymex_ising_three_trace}) and subtracting the sum of the
+    four target dimensions from forty leaves $z=26$ zero diagonal blocks.
 \end{proof}
 
 \begin{theorem}[A split four-channel Ising compression]%
@@ -106,13 +106,14 @@ contraction described in~\cite{gap:tnlean_ising_three_object_twist_scope}.
     \leanok
     \uses{thm:asymex_ising_compression, thm:asymex_ising_sigma_square,
         prop:asym_split_intertwiners}
-    Group the first two summands of $\Theta_3$. The stacked product is the
-    direct sum of the twenty-four-dimensional two-object product and
-    $\sqrt2$ times the sixteen-dimensional $\sigma$ square.
-    Take the direct sum of their gauges. The first inverse is its transpose;
-    the second inverse is half its transpose. Their letter identities give
-    the four stated blocks and respectively sixteen and ten zero coordinates.
-    Rearranging the auxiliary coordinates yields the block-diagonal form.
-    The remainder therefore vanishes, and multiplication by the block
-    inclusion and projection gives the two intertwining identities.
+    Grouping the first two summands of $\Theta_3$ writes the stacked
+    product as the direct sum of the twenty-four-dimensional two-object
+    product and $\sqrt2$ times the sixteen-dimensional $\sigma$ square.
+    In the direct sum of their gauges, the first inverse is its transpose
+    and the second inverse is half its transpose; their letter identities
+    give the four stated blocks together with sixteen and ten zero
+    coordinates. Rearranging the auxiliary coordinates yields the
+    block-diagonal form, so the remainder vanishes and multiplication by
+    the block inclusion and projection gives the two intertwining
+    identities.
 \end{proof}

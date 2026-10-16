@@ -143,11 +143,11 @@ decomposes the stacked tensor $T_aT_b$ into copies of the blocks $T_c$.
 
 \begin{proof}
     \uses{thm:asym_mpo_product, thm:asym_multiplicity_reductions}
-    Apply Theorem~\ref{thm:asym_mpo_product} with the target family
+    Applying Theorem~\ref{thm:asym_mpo_product} to the target family
     consisting of $N_{ab}^c$ copies of $T_c$ for each $c$, all with weight
-    $1$. Its compression pairs, indexed by $(c,\mu)$, are mutually
-    biorthogonal reductions with a nilpotent remainder; this is
-    Theorem~\ref{thm:asym_multiplicity_reductions} for the stacked product.
+    $1$, as in Theorem~\ref{thm:asym_multiplicity_reductions} for the
+    stacked product, yields compression pairs indexed by $(c,\mu)$ that form
+    mutually biorthogonal reductions with a nilpotent remainder.
 \end{proof}
 
 For a group-like algebra, with labels in a group $G$ and
@@ -214,11 +214,11 @@ normal tensors this is Corollary~\ref{cor:asym_fusion_tensors_group}.
     %   (Corollary cor:asym_action_tensors).
     \uses{def:mpoalg_action_tensors, cor:asym_action_tensors,
         thm:mpo_symmetric_nimrep, cor:asym_fusion_action_multiplicity}
-    Under the hypotheses of Theorem~\ref{thm:mpo_symmetric_nimrep}, every
-    pair $(a,x)$ admits a family of action tensors; for integer
-    coefficients this is the action clause of
-    Corollary~\ref{cor:asym_fusion_action_multiplicity}. This is the existence of
-    action tensors in \cite[Section~3]{GarreRubio2023MPOSym}.
+    Under the hypotheses of Theorem~\ref{thm:mpo_symmetric_nimrep}, the
+    action clause of Corollary~\ref{cor:asym_fusion_action_multiplicity}
+    shows that every pair $(a,x)$ admits a family of action tensors as in
+    \cite[Section~3]{GarreRubio2023MPOSym}, reducing $T_a\cdot A_x$ onto the
+    blocks $A_y$ with multiplicities $M_{a,x}^y$.
     % Source anchor: arXiv:2203.12563, lines 459--460 and 1065--1091.
 \end{theorem}
 
@@ -301,10 +301,10 @@ zipper condition (Remark~\ref{rem:mpoalg_nonunique}).
     $\widetilde W_{ab}^{c,\mu}=\sum_\nu W_{ab}^{c,\nu}
         \bigl((Y_{ab}^c)^{-1}\bigr)_{\nu\mu}$ on the support of the
     decomposition, so the ambiguity is $\bigoplus_c\GL_{N_{ab}^c}(\C)$ with
-    no word dressing. This is the uniqueness of fusion tensors under the zipper
-    condition in \cite{Bultinck2017Anyons}, and the basis change of
-    \cite[Section~4]{Molnar2022MPOAlgebrasI}; it is
-    Corollary~\ref{cor:asym_zipper_fusion_uniqueness}.
+    no word dressing. By Corollary~\ref{cor:asym_zipper_fusion_uniqueness},
+    this recovers the uniqueness of zipper fusion tensors up to basis change
+    in each multiplicity space \cite{Bultinck2017Anyons},
+    \cite[Section~4]{Molnar2022MPOAlgebrasI}.
     % Source anchor: arXiv:1511.08090, AnyonsPEPS.tex lines 181--200;
     %   arXiv:2204.05940, mpo.tex line 1725;
     %   arXiv:2203.12563, lines 416--424.
@@ -355,10 +355,10 @@ zipper condition (Remark~\ref{rem:mpoalg_nonunique}).
 
 \begin{proof}
     \uses{def:normal, thm:asym_zipper_uniqueness}
-    This is the argument of Theorem~\ref{thm:asym_zipper_uniqueness}.
-    Multiply (\ref{eq:mpoalg_zipper_decomposition}) by
+    Following Theorem~\ref{thm:asym_zipper_uniqueness}, multiplying
+    (\ref{eq:mpoalg_zipper_decomposition}) by
     $\widetilde V_{ab}^{c,\mu}$ on the left and $W_{ab}^{e,\nu}$ on the right
-    and use biorthogonality of both families:
+    and using biorthogonality of both families gives
     $T_c^{\mathbf w}\,\widetilde V_{ab}^{c,\mu}W_{ab}^{e,\nu}
         =\widetilde V_{ab}^{c,\mu}W_{ab}^{e,\nu}\,T_e^{\mathbf w}$ for every
     nonempty word. For normal blocks, the words of a fixed injective length
@@ -380,9 +380,10 @@ zipper condition (Remark~\ref{rem:mpoalg_nonunique}).
     vanishing remainder, $(T_a\cdot A_x)^w=\sum_{y,i}W_{ax}^{y,i}A_y^w
         V_{ax}^{y,i}$ for every nonempty word, are related by a unique
     $X_{ax}^y\in\GL_{M_{a,x}^y}(\C)$ for each $y$, in the sense of
-    Theorem~\ref{thm:mpoalg_zipper_fusion_uniqueness}. This is the gauge
-    freedom of the action tensors in \cite[Section~3.1]{GarreRubio2023MPOSym},
-    and it is Corollary~\ref{cor:asym_zipper_action_uniqueness}.
+    Theorem~\ref{thm:mpoalg_zipper_fusion_uniqueness}. By
+    Corollary~\ref{cor:asym_zipper_action_uniqueness}, this gives the
+    $\bigoplus_y\GL_{M_{a,x}^y}(\C)$ gauge freedom of the action tensors in
+    \cite[Section~3.1]{GarreRubio2023MPOSym}.
     % Source anchor: arXiv:2203.12563, lines 595--602.
 \end{theorem}
 
@@ -485,10 +486,10 @@ with the corresponding composite embeddings.
     associator. In particular, if $(V,W)$ reduces $T_aT_b$ onto $T_c$ and
     $(V',W')$ reduces $T_cT_d$ onto $T_e$, both with residual bound $K$, then
     $(V'(V\otimes\Id),(W\otimes\Id)W')$ reduces $T_aT_bT_d$ onto $T_e$ with
-    residual bound $3K$. The reduction property, without the residual bound,
-    is Lemma~\ref{thm:mpug_reduction_composition}, and for the two fusion
-    trees of a triple product it is
-    Lemma~\ref{thm:mpug_fusion_trees_reductions}.
+    residual bound $3K$. Lemma~\ref{thm:mpug_reduction_composition}
+    establishes the composite reduction property without the residual bound,
+    and Lemma~\ref{thm:mpug_fusion_trees_reductions} specializes it to the
+    two fusion trees of a triple product.
     % Source anchor: arXiv:1706.07329, cornerproblem.tex lines 3147--3152
     %   (Definition 8) and 3946--3970 (Lemma VNW=0); arXiv:2203.12563, lines
     %   1026--1060; arXiv:2502.20257, main.tex lines 1506--1535.
@@ -563,11 +564,11 @@ with the corresponding composite embeddings.
     \cite{FrancoRubio2025MPUGauging}. It exists and is nonzero by
     Corollary~\ref{cor:mpoalg_single_target_uniqueness} applied to the two
     composite reductions of Theorem~\ref{thm:mpoalg_composite_reduction}, and
-    it is unique because $T_{ghk}^{\mathbf w}\neq0$ for some long word. This is
-    the three-cocycle of \cite[Section~4.4]{GarreRubio2023MPOSym}, and it is
-    the anomaly three-cochain of
-    Definition~\ref{def:mpug_anomaly_three_cochain}, characterized by
-    Theorem~\ref{thm:mpug_anomaly_three_cochain_spec}.
+    it is unique because $T_{ghk}^{\mathbf w}\neq0$ for some long word. In
+    Definition~\ref{def:mpug_anomaly_three_cochain} and
+    Theorem~\ref{thm:mpug_anomaly_three_cochain_spec}, this scalar ratio is
+    the anomaly three-cochain comparing the left and right fusion trees of a
+    triple product \cite[Section~4.4]{GarreRubio2023MPOSym}.
     % Source anchor: arXiv:2502.20257, main.tex lines 1507--1537 (defining
     %   display: right fusion trees, g(hk) = omega(g,h,k) (gh)k), eq:omegagauge
     %   at lines 1542--1543; the orientation of def:mpug_anomaly_three_cochain.
@@ -664,7 +665,7 @@ with the corresponding composite embeddings.
         \label{eq:mpoalg_pentagon_group}
     \end{align}
     which is the pentagon equation for a group-like algebra
-    \cite[Section~4]{GarreRubio2023MPOSym}. This is
+    \cite[Section~4]{GarreRubio2023MPOSym} established in
     Theorem~\ref{thm:mpug_anomaly_three_cocycle}.
     % Source anchor: arXiv:2203.12563, lines 677--679.
 \end{theorem}
@@ -706,12 +707,12 @@ with the corresponding composite embeddings.
         \beta_{g,h}W_{g,h})$, so that $V_{g,h}B^{\mathbf w}=\beta_{g,h}\,
         V'_{g,h}B^{\mathbf w}$ for the new compression $V'_{g,h}$, with $\beta\colon G^2\to\C^\times$ replaces
     $\omega$ by $\beta\mathbin{\triangleright}\omega$ of
-    Definition~\ref{def:mpug_fusion_gauge}. Consequently the class of
-    $\omega$ under the relation of
-    Definition~\ref{def:mpug_cohomologous_to} does not depend on the choice
-    of fusion tensors, and depends only on the family $(T_g)_{g\in G}$.
-    This is the coboundary freedom of \cite[Section~4]{GarreRubio2023MPOSym},
-    and it is Theorem~\ref{thm:mpug_anomaly_three_cocycle_gauge}.
+    Definition~\ref{def:mpug_fusion_gauge}. By
+    Theorem~\ref{thm:mpug_anomaly_three_cocycle_gauge}, the coboundary
+    freedom of \cite[Section~4]{GarreRubio2023MPOSym} therefore leaves the
+    class of $\omega$ under Definition~\ref{def:mpug_cohomologous_to}
+    independent of the choice of fusion tensors, so that it depends only on
+    the family $(T_g)_{g\in G}$.
     % Source anchor: arXiv:2203.12563, lines 680--682 and 720--726.
 \end{theorem}
 
@@ -788,16 +789,15 @@ with the corresponding composite embeddings.
     so that $O_g^{(N)}\ket{V^{(N)}(A_x)}=\ket{V^{(N)}(A_{g\cdot x})}$, with
     action tensors $(V_{g,x},W_{g,x})$ reducing $T_g\cdot A_x$ onto
     $A_{g\cdot x}$. The tensor $T_gT_h\cdot A_x$ has two composite reductions
-    onto $A_{gh\cdot x}$, and the \emph{$L$-symbol} $L^x_{g,h}\in\C^\times$ is
-    defined by
+    onto $A_{gh\cdot x}$, and the \emph{$L$-symbol} $L^x_{g,h}\in\C^\times$
+    \cite[Section~4.4]{GarreRubio2023MPOSym} is defined by
     \begin{align}
         V_{g,h\cdot x}(\Id\otimes V_{h,x})(T_gT_h\cdot A_x)^w
          & =L^x_{g,h}\,V_{gh,x}(V_{g,h}\otimes\Id)
         (T_gT_h\cdot A_x)^w
         \label{eq:mpoalg_l_symbol}
     \end{align}
-    for all sufficiently long words $w$. This is the $L$-symbol of
-    \cite[Section~4.4]{GarreRubio2023MPOSym}.
+    for all sufficiently long words $w$.
     % Source anchor: arXiv:2502.20257, main.tex lines 1874--1889 (eq:defL:
     %   right trees, (gh)x = L^x_{g,h} g(hx)) and eq:Lsymbgauge;
     % Source anchor: arXiv:2203.12563, lines 1091--1129 (periodic boundary),
@@ -810,9 +810,10 @@ with the corresponding composite embeddings.
     % Planned Lean: TNLean/MPS/Symmetry/MPOSymmetry/Associator.lean,
     %   MPOTensor.GroupFusionAlgebra.lSymbol_isCompatible.
     \uses{def:mpoalg_l_symbols, def:mpug_l_symbols, def:mpug_l_gauge}
-    The $L$-symbols of Definition~\ref{def:mpoalg_l_symbols} are compatible
-    with the associator in the sense of
-    (\ref{eq:mpug_l_compatibility}),
+    The $L$-symbols of Definition~\ref{def:mpoalg_l_symbols} satisfy the
+    coupled pentagon equation for a group-like algebra
+    \cite[Section~4]{GarreRubio2023MPOSym}, namely the compatibility
+    relation (\ref{eq:mpug_l_compatibility}),
     \begin{align}
         L^x_{g,hk}\,L^x_{h,k}
          & =\omega(g,h,k)\,L^{k\cdot x}_{g,h}\,L^x_{gh,k},
@@ -823,8 +824,6 @@ with the corresponding composite embeddings.
     $((\gamma^x_g)^{-1}V_{g,x},\gamma^x_gW_{g,x})$ changes $(\omega,L)$ to
     $(\beta\mathbin{\triangleright}\omega,(\beta,\gamma)\mathbin{\triangleright}L)$
     of Definitions~\ref{def:mpug_fusion_gauge} and~\ref{def:mpug_l_gauge}.
-    This is the coupled pentagon equation for a group-like algebra
-    \cite[Section~4]{GarreRubio2023MPOSym}.
     % Source anchor: arXiv:2203.12563, lines 716--726 (pentagongroups and
     %   gdgroup).
 \end{theorem}

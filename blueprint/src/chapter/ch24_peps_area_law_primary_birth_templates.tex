@@ -5,8 +5,9 @@ Retain the primary birth regions $R_j$, their fragments $F_{j,z}$ and
 index sets $J_j$ from Definition~\ref{def:area_law_primary_regions}, at a
 layer $k$ with $r=2^k$, the fine side $t_k$ and the belt pitch $s_k$ of
 Definition~\ref{def:area_law_fine_belt_scales}. A primary is present
-exactly when $J_j$ is nonempty. Its scanner scale and its template are
-assigned in \cite[Section~11]{OpenAI2026AreaLaw}.
+exactly when $J_j$ is nonempty, in which case
+\cite[Section~11]{OpenAI2026AreaLaw} assigns its scanner scale and birth
+template as follows.
 
 % Source: 10-geometry.tex, lines 709--729 (geometry:primary-scale and
 % geometry:primary-limits) and lines 756--774 (order of the constants).
@@ -56,10 +57,10 @@ assigned in \cite[Section~11]{OpenAI2026AreaLaw}.
     The endpoints of each nonempty fragment have the form $o_i+m$ with
     integers $m$, and the lower endpoint is strictly below the upper one.
     Their difference is therefore at least one, so each piece contains a
-    lattice point and the template is nonempty. The region $R_j$ is the
-    union of its fragments, so the lattice points of the pieces are
-    exactly those of $R_j$. The piece and template diameters are the
-    fragment and primary diameter bounds.
+    lattice point and the template is nonempty. Since $R_j$ is the
+    union of its fragments $F_{j,z}$, the lattice points of the pieces are
+    exactly those of $R_j$, and the piece and template diameters follow from
+    the diameter bounds for $F_{j,z}$ and $R_j$.
 
     Put $m=p_k-k$. Since $p_k\le(1+\delta_0)k$, we have
     $2^m\le r^{\delta_0}$. As $2^m\ge1$,
@@ -135,8 +136,10 @@ assigned in \cite[Section~11]{OpenAI2026AreaLaw}.
 \begin{proof}\leanok
     \uses{def:area_law_primary_birth_template,thm:area_law_exponent_gaps}
     Put $e=1+2\delta_0$ and $C=\max\{C_P,0\}+1$, so $n_k\le Cr^e$.
-    If $a<b$, then $Cr^a=Cr^{-(b-a)}r^b$, and $r^{-(b-a)}\to0$ as
-    $k\to\infty$. The exponent gaps give $e(1-\ell)<1$ and $e\beta<\zeta$.
-    Moreover $t_k\ge r^\zeta/2$ and $t_k\le r$. These prove the three
-    limits. Finally $n_k\ge C_P\,r\to\infty$ when $C_P>0$.
+    Whenever $a<b$, the ratio $Cr^a/r^b=Cr^{-(b-a)}$ tends to $0$ as
+    $k\to\infty$. Because the exponent gaps give $e(1-\ell)<1$ and
+    $e\beta<\zeta$, and the fine side satisfies $r^\zeta/2\le t_k\le r$,
+    this decay yields the three upper bounds on $\lfloor n_k^{1-\ell}\rfloor$
+    and $n_k^\beta$. When $C_P>0$, the lower bound $n_k\ge C_P\,r$ tends to
+    infinity with $k$.
 \end{proof}

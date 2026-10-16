@@ -37,7 +37,10 @@ open EncodedFrame PairEffect
 
 /-! ### The central birth -/
 
-/-- The changed region of the treated central birth lies in the closed square. -/
+/-- The changed region of the treated central birth lies in the closed square.
+
+A formalization lemma for the central-birth support and point-treatment discussion in the
+polynomial-PEPS manuscript, `06-geometry.tex`, lines 155–160 and 357–360. -/
 theorem RepaintingBaseline.central_treated_ne_subset {ι : Type*} (R : RepaintingBaseline ι)
     (t : ℝ) :
     {p | homogenize (cornerTreated R.n t) R.oldLabel R.guide p ≠

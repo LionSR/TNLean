@@ -13,13 +13,12 @@ homomorphism to $\Z$: the two possible images of $\tau$ over $\C$,
 $\varphi=(1+\sqrt5)/2$ and $-1/\varphi$, are both irrational. This
 arithmetic fact is the form in which the anomaly of the Fibonacci
 fusion rules~\cite[Section~III.A.6]{Cirac2021Matrix} enters the
-argument below. The general notions used here, fusion algebras with a
+argument below. Chapter~\ref{ch:mpo_symmetry_basics} defines fusion algebras with a
 unit, symmetric families of matrix product states, and their
-nonnegative integer representations, are those of
-Chapter~\ref{ch:mpo_symmetry_basics}; the multiplicities with which the
+nonnegative integer representations; by
+Theorem~\ref{thm:mpo_symmetric_nimrep}, the multiplicities with which the
 normal blocks of an invariant state reappear under the symmetry
-operators form such a representation
-(Theorem~\ref{thm:mpo_symmetric_nimrep}). In the
+operators form such a representation. In the
 Fibonacci case the same source exhibits an invariant pair of states
 carrying the regular action: two blocks $x_1,x_\tau$ with
 $\tau\cdot x_1=x_\tau$ and $\tau\cdot x_\tau=x_1+x_\tau$.
@@ -39,21 +38,19 @@ bond dimension whose periodic vectors satisfy
 $O_1\ket{V^{(N)}(A)}=\ket{V^{(N)}(A)}$ and
 $O_\tau\ket{V^{(N)}(A)}=m\ket{V^{(N)}(A)}$ for a length-independent scalar
 $m$ at every $N>0$. Then $m\in\N$ must satisfy $m^2=m+1$, which has no integer
-solutions. This is the Fibonacci case of
-Corollary~\ref{cor:mpo_symmetric_no_go}, a specialization of the statement
+solutions. In the Fibonacci case of
+Corollary~\ref{cor:mpo_symmetric_no_go}, which specializes the statement
 of~\cite{GarreRubio2023MPOSym} to one normal tensor with a
-length-independent scalar action; the source does not give the proof
-for this tensor. The specialization does not classify families with
-more than one block or exclude direct sums of the regular
-representation. It is a non-invertible analogue of the obstruction to
-an invariant single-block state from a non-trivial three-cocycle
-discussed in the same source.
+length-independent scalar action (without a proof for this tensor in the
+source), this contradiction provides a non-invertible analogue of the
+three-cocycle obstruction to an invariant single-block state, without
+classifying multi-block families or excluding direct sums of the regular
+representation.
 
-The explicit regular action is recorded in
-Theorem~\ref{thm:asymex_fib_anomaly_nim_rep}, and the single-block
-obstruction with the hypotheses just stated is
-Theorem~\ref{thm:asymex_fib_anomaly_no_go}. Neither result classifies all
-invariant families with several blocks.
+Theorem~\ref{thm:asymex_fib_anomaly_nim_rep} records the explicit regular
+action on two blocks, and Theorem~\ref{thm:asymex_fib_anomaly_no_go}
+establishes the single-block obstruction under the hypotheses just stated.
+Neither result classifies all invariant families with several blocks.
 
 \begin{definition}[The Fibonacci fusion matrices]%
     \label{def:asymex_fib_anomaly_nim}
@@ -154,12 +151,12 @@ invariant families with several blocks.
 \begin{proof}
     \leanok
     \uses{thm:asymex_fib_fusion}
-    The case $a=b=1$ is the admissibility projector composed with itself.
-    The cases $\{a,b\}=\{1,\tau\}$ are the two unit laws, obtained by
+    The case $a=b=1$ is the admissibility projector composed with itself,
+    the cases $\{a,b\}=\{1,\tau\}$ are the two unit laws obtained by
     block-triangular compression over $\Z[\sigma]$ and embedding into the
-    complex matrices by Theorem~\ref{thm:asymex_golden_ring}.
-    The case $a=b=\tau$ is Theorem~\ref{thm:asymex_fib_fusion}.
-    These four identities give the coefficients of
+    complex matrices via Theorem~\ref{thm:asymex_golden_ring}, and
+    Theorem~\ref{thm:asymex_fib_fusion} settles the case $a=b=\tau$.
+    Together, these four identities determine all coefficients in
     Eq.~\ref{eq:asymex_fib_anomaly_fusion_algebra}.
 \end{proof}
 
@@ -308,9 +305,10 @@ two-label physical space from earlier in this section, with unnormalized
 periodic contractions; as noted after Theorem~\ref{thm:asymex_fib_state_action},
 the identities do not extend to length zero.
 
-The no-go rests on the integrality of a length-independent scalar action
-on a normal tensor, Theorem~\ref{thm:asymex_fib_anomaly_integral_action}
-of Chapter~\ref{ch:mpo_symmetry_basics}.
+By Theorem~\ref{thm:asymex_fib_anomaly_integral_action} of
+Chapter~\ref{ch:mpo_symmetry_basics}, any length-independent scalar action on a
+normal tensor takes nonnegative integer values, which drives the single-block
+no-go below.
 
 \begin{theorem}[A nonzero length-independent eigenvalue is impossible]%
     \label{thm:asymex_fib_anomaly_eigenvalue_zero}
