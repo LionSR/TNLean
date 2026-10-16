@@ -38,6 +38,7 @@ import TNLean.PEPS.AreaLaw.Geometry.CellFans
 import TNLean.PEPS.AreaLaw.Geometry.CellSides
 import TNLean.PEPS.AreaLaw.Geometry.ClosedSquare
 import TNLean.PEPS.AreaLaw.Geometry.ConcentricFans
+import TNLean.PEPS.AreaLaw.Geometry.DescendantCutClearance
 import TNLean.PEPS.AreaLaw.Geometry.DistanceLayers
 import TNLean.PEPS.AreaLaw.Geometry.DummyContacts
 import TNLean.PEPS.AreaLaw.Geometry.DummyCorners
