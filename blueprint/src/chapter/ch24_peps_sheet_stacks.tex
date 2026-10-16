@@ -1009,3 +1009,161 @@ no holes, this is the normalization of $\Omega$.
     A reordering of the tags without gates then gives the frames of the treated
     guides after the exchange.
 \end{proof}
+
+\begin{theorem}[The treated frames at the ends of a large repainting]
+    \label{thm:peps_protocol_treated_frame_ends}
+    \lean{TNLean.PEPS.Approximation.eventually_add_ne,
+        TNLean.PEPS.Approximation.eventually_mem_openSquare_or_notMem_closedSquare,
+        TNLean.PEPS.Approximation.eventually_affine_ne,
+        TNLean.PEPS.Approximation.RepaintingBaseline.eventually_notMem_edgeInterface,
+        TNLean.PEPS.Approximation.IsDisplacedReading.congr_eventually,
+        TNLean.PEPS.Approximation.sub_blockCorner_mem_closedSquare,
+        TNLean.PEPS.Approximation.treatedFrame_congr,
+        TNLean.PEPS.Approximation.treatedGuide_empty,
+        TNLean.PEPS.Approximation.treatedFrame_empty_congr,
+        TNLean.PEPS.Approximation.repaintBaseline,
+        TNLean.PEPS.Approximation.levelFrame_eq_treatedFrame_guide,
+        TNLean.PEPS.Approximation.treatedGuide_completedGuide,
+        TNLean.PEPS.Approximation.treatedFrame_completedGuide_eq_levelFrame,
+        TNLean.PEPS.Approximation.treatedFrame_edgeStart,
+        TNLean.PEPS.Approximation.treatedFrame_auxStart_eq_raw}
+    \leanok
+    \uses{def:peps_protocol_treated_frame, def:peps_protocol_level_frame,
+        thm:peps_protocol_party_map_switch, thm:peps_protocol_main_frame_schedule}
+    At the constants of the protocol, let $R$ be a square of side $n=2^j>K_0t$,
+    $t=D\log L$, at a stage of its level. Without marks, the frame of a treated sheet
+    depends only on its guide, not on the homogenizing label. The main frame of the
+    level, with holes of radius $h_n=\epsilon_0t$, is the frame of the starting guide of
+    the repainting of $R$, and the frame of the guide with all four edges completed is
+    the main frame of the level with $R$ repainted as well. The frame of the guide left
+    by the central birth and some edges is the frame of the main guide with the
+    starting word along the next edge. Finally, the fresh auxiliary sheet of an edge
+    $e$ has no hole and every site owned by the party of $C_e$, so it is the raw copy
+    held by that party (\texttt{06-geometry.tex}, lines 62--125, 142--221 and
+    328--339).
+\end{theorem}
+
+\begin{proof}\leanok
+    Without marks the treated guide is the reading of the guide placed on $R$. The
+    starting guide placed on $R$ is the block guide of the level. The completed guide
+    agrees with the block guide of the level with $R$ repainted off the boundary of
+    $R$, and the main guide with the starting word agrees with the completed guide off
+    the two interface curves of the band of the edge. A point moved by a small positive
+    multiple of $(1,1)$ leaves the boundary of a square and the interface curves at
+    once: the normal coordinate and the band width move along the diagonal at
+    different rates. So the readings agree, and with them the true vertices, the
+    owners and the tags. The party map may be read through any repainting, since the
+    readings carry no placeholder at the sites. The uniform auxiliary guide has no true
+    vertex.
+\end{proof}
+
+\begin{lemma}[Chains of changes]
+    \label{lem:peps_protocol_change_chains}
+    \lean{TNLean.PEPS.Approximation.IsStepChain,
+        TNLean.PEPS.Approximation.IsStepChain.refl,
+        TNLean.PEPS.Approximation.IsStepChain.single,
+        TNLean.PEPS.Approximation.IsStepChain.trans,
+        TNLean.PEPS.Approximation.IsStepChain.map,
+        TNLean.PEPS.Approximation.IsStepChain.cast_length,
+        TNLean.PEPS.Approximation.IsStepChain.treat,
+        TNLean.PEPS.Approximation.IsStepChain.untreat,
+        TNLean.PEPS.Approximation.IsStepChain.treatOperate,
+        TNLean.PEPS.Approximation.isStepChain_main,
+        TNLean.PEPS.Approximation.hasSourceBoundedChange_aux_of_eq,
+        TNLean.PEPS.Approximation.isStepChain_aux,
+        TNLean.PEPS.Approximation.hasSourceBoundedChange_of_hasPairChange}
+    \leanok
+    \uses{thm:peps_protocol_level_events, thm:peps_protocol_lens_exchange_change}
+    Chains of $m$ and $n$ steps compose to a chain of $m+n$ steps. If adding one mark
+    of a list to any set of marks is a step, there is a chain of as many steps as marks
+    from no mark to all of them, and likewise for removing the marks. With a bulk step
+    between, these give a chain of $2m+1$ steps. A chain of bounded changes of the main
+    sheet, or of one auxiliary sheet, is a chain of bounded changes of the memory, and
+    so is a bounded change of the main and one auxiliary sheet
+    (\texttt{06-geometry.tex}, lines 328--339 and 572--583).
+\end{lemma}
+
+\begin{proof}\leanok
+    Concatenate the sequences of states. The memory changes are the lifts of one or
+    two sheets of the sheet stack, after a reordering of the sheets.
+\end{proof}
+
+\begin{theorem}[Bulk operations of one sheet with their point treatments]
+    \label{thm:peps_protocol_sheet_operation_chains}
+    \lean{TNLean.PEPS.Approximation.cornerList,
+        TNLean.PEPS.Approximation.SquareEdge.endpointList,
+        TNLean.PEPS.Approximation.toFinset_cornerList,
+        TNLean.PEPS.Approximation.SquareEdge.toFinset_endpointList,
+        TNLean.PEPS.Approximation.isBlockCornerOf_of_mem_cornerList,
+        TNLean.PEPS.Approximation.SquareEdge.isBlockCornerOf_of_mem_endpointList,
+        TNLean.PEPS.Approximation.zpow_neg_thirty_le,
+        TNLean.PEPS.Approximation.four_mul_zpow_neg_thirty_le,
+        TNLean.PEPS.Approximation.HasFrameChange.mono_error,
+        TNLean.PEPS.Approximation.HasPairChange.mono_error,
+        TNLean.PEPS.Approximation.IsPointTreatable,
+        TNLean.PEPS.Approximation.isHomogenizing_oldLabel,
+        TNLean.PEPS.Approximation.isHomogenizing_finalLabel,
+        TNLean.PEPS.Approximation.isHomogenizing_nbrLabel,
+        TNLean.PEPS.Approximation.isStepChain_sheetOperation,
+        TNLean.PEPS.Approximation.IsLocalLabel,
+        TNLean.PEPS.Approximation.IsLocalLabel.eventUses,
+        TNLean.PEPS.Approximation.isStepChain_centralBirth,
+        TNLean.PEPS.Approximation.isStepChain_bandOperation}
+    \leanok
+    \uses{thm:peps_protocol_point_treatment_change, thm:peps_protocol_band_step_changes,
+        thm:peps_protocol_central_birth_change, lem:peps_protocol_change_chains}
+    Assume the angular information bound at the scale $t=D\log L$, as provided by
+    Proposition~3.4. At the constants of the protocol, in the repainting of a square
+    $R$ of side $n=2^j>K_0t$ whose point treatments are bounded changes with the
+    bounds of the small-patch rewrites, the following hold. The four point treatments
+    with the old label, the central birth and the removal of the treatments are $9$
+    such changes, from the frame of the starting guide to that of the guide after the
+    central birth. An elementary birth or death along an edge, inserting or removing a
+    local label with a local surrounding label, with its two point treatments, is $5$
+    such changes (\texttt{06-geometry.tex}, lines 155--221 and 328--339).
+\end{theorem}
+
+\begin{proof}\leanok
+    Add the marks one at a time, operate, and remove the marks. Adding or removing one
+    mark is a point treatment, and the bulk step is a birth or death of
+    Theorem~\ref{thm:peps_protocol_band_step_changes} or the central birth, whose
+    error $L^{-30}$ is at most that of a small-patch rewrite.
+\end{proof}
+
+\begin{theorem}[The edge construction as changes of the memory]
+    \label{thm:peps_protocol_edge_construction_chain}
+    \lean{TNLean.PEPS.Approximation.auxBirthB_insertsOne,
+        TNLean.PEPS.Approximation.auxBirthA_insertsOne,
+        TNLean.PEPS.Approximation.auxBirthC_insertsOne,
+        TNLean.PEPS.Approximation.mainDeathC_insertsOne,
+        TNLean.PEPS.Approximation.mainDeathA_insertsOne,
+        TNLean.PEPS.Approximation.mainBirthC_insertsOne,
+        TNLean.PEPS.Approximation.mainDeathB_insertsOne,
+        TNLean.PEPS.Approximation.isStepChain_auxBirths,
+        TNLean.PEPS.Approximation.isStepChain_mainSteps,
+        TNLean.PEPS.Approximation.isStepChain_lensExchange,
+        TNLean.PEPS.Approximation.isStepChain_edgeConstruction}
+    \leanok
+    \uses{thm:peps_protocol_sheet_operation_chains, thm:peps_protocol_lens_exchange_change,
+        thm:peps_protocol_treated_frame_ends, lem:peps_protocol_change_chains}
+    Assume the angular information bound at the scale $t=D\log L$, as provided by
+    Proposition~3.4. In the setting of
+    Theorem~\ref{thm:peps_protocol_sheet_operation_chains}, let the memory carry the
+    main sheet with the central birth and some edges done, treated at no mark, and the
+    raw copy held by the party of the label $C_e$ across an edge $e$ not yet done. The
+    initialization of the auxiliary sheet of $e$, its three births, the lens exchange
+    and the four operations of the main sheet, with their point treatments, are $45$
+    bounded changes of the memory with the bounds of the small-patch rewrites. They
+    complete $e$ on the main sheet and leave the auxiliary sheet of $e$ with the
+    exchanged auxiliary word (\texttt{06-geometry.tex}, lines 183--221, 328--339 and
+    389--430).
+\end{theorem}
+
+\begin{proof}\leanok
+    The initialization is the identity change, since the fresh auxiliary sheet is the
+    raw copy. The three auxiliary births are $15$ changes of the auxiliary sheet. The
+    main sheet passes to the starting word without change. The lens exchange, with the
+    point treatments of both sheets about the endpoints of $e$, is $9$ changes, and the
+    four operations of the main sheet are $20$ changes. Each birth and death introduces
+    one of the labels $A$, $B$, $C_e$, which are local labels of the repainting.
+\end{proof}
