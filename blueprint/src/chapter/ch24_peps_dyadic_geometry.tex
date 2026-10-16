@@ -1192,15 +1192,23 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     displacement of two guides uniform on the $n$-blocks that differ only on one block,
     the two-owner conditions for footprints of radius $2u=\nu n$ assumed in
     Theorem~\ref{thm:peps_guide_frame_rewrite_events} hold, and the direct repainting of
-    the block is one gate as there, with this $b$ and no further geometric condition
-    (lines 507--527 and 574--583).
+    the block is one gate as there, with this $b$ and at most $2b$ pair sources in
+    each monomial. The remaining hypotheses of that theorem on the input vector,
+    true-vertex sets, disjoint holes and patch data are retained; no further geometric
+    condition is imposed (lines 507--527 and 574--583).
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{thm:peps_dyadic_sampled_ratio,
+        lem:peps_dyadic_footprint_uniform,
+        thm:peps_protocol_constants,
+        thm:peps_frame_small_rewrite_gate_sources}
     Take $\nu'$ the ratio of Theorem~\ref{thm:peps_dyadic_sampled_ratio} for the direct
     repaintings; the two-owner condition survives shrinking the footprint. The
     separation $3u+4r<n$, the patch count and $18\le b$ are those of
     Theorem~\ref{thm:peps_protocol_constants}.
+    The source-bounded rewrite gives the same circuit with at most $2b$ pair sources
+    in each monomial.
 \end{proof}
 
 \begin{lemma}[Trivial holes at the last level]
