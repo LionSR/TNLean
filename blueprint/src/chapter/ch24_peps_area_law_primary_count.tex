@@ -96,13 +96,12 @@ $o'=o+t(a,b)$. The count below is the primary count in
 % Source: 10-geometry.tex, geometry:primary-scale, lines 709--729;
 % primary error sum, lines 791--795.
 % Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
-% The strict source proof, final review, ordinary build, and imported audit passed.
-% The entire reader and proper writer intervals have been released.
 \begin{theorem}[The primary error sum over finitely many layers]
     \label{thm:area_law_initial_primary_error_sum}
     \lean{TNLean.PEPS.AreaLaw.Geometry.exists_uniform_primaryPitchIndices_error_sum_bound}
     \leanok
-    \uses{def:area_law_primary_pitch_indices,def:area_law_fine_belt_scales}
+    \uses{def:area_law_primary_pitch_indices,def:area_law_fine_belt_scales,
+        def:area_law_hamiltonian}
     For every $C_P>0$, there is $M>0$ with the following property.
     Fix any origin $o\in\mathbb R^2$, finite domain
     $\Lambda\subset\mathbb Z^2$, cut $A\subseteq\Lambda$, width
