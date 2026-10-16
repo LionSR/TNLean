@@ -2,7 +2,7 @@
 \label{sec:ldp_sector_encoders}
 
 Fix two explicitly labelled sector families with the same number of labels.
-The constructions below retain their complex relative phases and transport
+The constructions below retain their complex relative phases and map
 one logical encoding to the other. They do not identify the coefficients of
 separately selected periodic vectors. This is an operator-norm refinement
 motivated by the discussion of~\cite{Malz2024Preparation}, rather than a
@@ -22,7 +22,7 @@ definition of the non-normal phase relation in that discussion.
     \end{align}
     The inverse square root is zero on the kernel, so $F_{A,N}$ is the
     polar partial isometry also when the columns are dependent. The
-    columns of $V_{A,N}$ are the actual unnormalized periodic vectors,
+    columns of $V_{A,N}$ are the unnormalized periodic vectors,
     with their given phases. The endpoint $F_{A,N}$ depends only on the
     family and $N$, not on an accuracy or a block partition.
 \end{definition}
@@ -138,7 +138,7 @@ definition of the non-normal phase relation in that discussion.
     \uses{thm:ldp_sqrt_lipschitz, thm:ldpolar_decomposition, thm:ldpolar_injective}
     The square-root Lipschitz bound at $I$ gives the first inequality.
     Since $V=F(V^\dagger V)^{1/2}$ and $\|F\|\le1$, it follows that
-    $\|F-V\|\le\eta$. Moreover,
+    $\|F-V\|\le\eta$. In addition,
     $(V-W)^\dagger(V-W)=(V^\dagger V-I)-(W^\dagger V-I)-(W^\dagger V-I)^\dagger$,
     so $\|V-W\|^2\le\eta+2\zeta$. Add these two distances.
 \end{proof}
@@ -232,7 +232,7 @@ There is no factor depending on $k$.
 
 The finite-length estimates here are inputs to the uniform all-accuracy
 conversion theorem in Section~\ref{sec:ldp_coherent_groundspace_conversion}.
-Its proof supplies Gram and complex cross estimates for a common partition
+Its proof gives Gram and complex cross estimates for a common partition
 and an exact whole-encoder construction when the chosen block scale exceeds
 the ring length. Parent kernels are identified only at the valid interaction
 range of Theorem~\ref{thm:ldp_sector_encoder_parent_kernel}; see also

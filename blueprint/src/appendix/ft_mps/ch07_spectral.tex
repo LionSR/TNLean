@@ -95,7 +95,7 @@ statement, so it needs no separate expansion.
 \section{Peripheral intertwiners and gauge rigidity}
 \label{sec:app_spectral_rigidity}
 
-Transporting a modulus-one mixed-transfer eigenvector through separate unital
+Moving a modulus-one mixed-transfer eigenvector through separate unital
 gauges produces Kraus-level intertwiners that force equal bond dimension once
 invertible, establishing the gauge rigidity of
 Theorem~\ref{thm:modulus_one_gauge_irr_tp} and
@@ -130,7 +130,7 @@ Theorem~\ref{thm:transfer_operator_gap_rect_irr_tp}.
 \end{lemma}
 
 \begin{proof}\leanok
-    Embed the gauged families and transported eigenvector into the block
+    Embed the gauged families and transformed eigenvector into the block
     matrices
     \begin{align}
         C^i
@@ -186,7 +186,7 @@ Theorem~\ref{thm:transfer_operator_gap_rect_irr_tp}.
          & =S_B(X')^{-1}S_A^{-1}.
         \label{eq:spectral_gauged_intertwining_composed_gauge}
     \end{align}
-    Transporting the assumed relation through $S_A$ and $S_B$ gives
+    Carrying the assumed relation through $S_A$ and $S_B$ gives
     $A^iX=\mu XB^i$. Multiplication by $X^{-1}$ therefore yields
     \begin{align}
         B^i
@@ -198,13 +198,13 @@ Theorem~\ref{thm:transfer_operator_gap_rect_irr_tp}.
 \end{proof}
 
 Combining these two lemmas proves Theorem~\ref{thm:modulus_one_gauge_irr_tp}:
-Lemma~\ref{thm:gauged_intertwining_core} supplies the intertwining relations
+Lemma~\ref{thm:gauged_intertwining_core} gives the intertwining relations
 (\ref{eq:spectral_gauged_intertwining}) for the separately gauged, unital
 families. The Kadison--Schwarz equality used inside its own proof makes
 $X'X'^\dagger$ and $X'^\dagger X'$ nonzero positive semidefinite fixed points
 of the gauged transfer maps; under irreducibility,
 Theorem~\ref{thm:transfer_psd_fp_pd_irred} upgrades these to positive definite
-matrices, so the transported intertwiner $X'$ is invertible.
+matrices, so the transformed intertwiner $X'$ is invertible.
 Lemma~\ref{thm:gauged_intertwining_gauge_phase} then converts the invertible
 intertwiner, together with the two gauge matrices, into a single invertible
 matrix realizing the gauge-phase relation
@@ -311,7 +311,7 @@ primitive self-overlap limit of Theorem~\ref{thm:primitive_overlap}. The
 hypothesis $\rho_{\spec}(N)<1$ is exactly the complementary transfer-map gap
 that the complementary spectral-radius theorem for primitive maps
 (the corresponding theorem in the companion quantum-channel volume~\cite[``Complementary transfer-map gap for primitive maps'']{QICLean2026Blueprint})
-supplies: for a primitive $E$ all eigenvalues bounded by $1$ in modulus and
+gives: for a primitive $E$ all eigenvalues bounded by $1$ in modulus and
 no trace-zero fixed point, every eigenvalue of $N=E-P$ has modulus strictly
 less than $1$, and since $\MN{D}$ is finite-dimensional this bounds the
 spectral radius $\rho_{\spec}(N)$ itself.
@@ -331,7 +331,7 @@ spectral radius $\rho_{\spec}(N)$ itself.
 \begin{proof}\leanok
     \uses{thm:psd_fp_exists}
     The channel fixed-point existence theorem
-    (Theorem~\ref{thm:psd_fp_exists}) supplies a nonzero positive
+    (Theorem~\ref{thm:psd_fp_exists}) gives a nonzero positive
     semidefinite fixed point $\rho$. Apply
     Theorem~\cite[``Complementary gap at a prescribed fixed point'']{QICLean2026Blueprint} to
     $\E_A$ and $\rho$.
@@ -352,7 +352,7 @@ under the channel.
 
 
 Combining these lemmas proves Theorem~\cite[``Cyclic decomposition for irreducible finite Kraus maps'']{QICLean2026Blueprint}:
-Lemma~\cite[``Normalized peripheral unitary'']{QICLean2026Blueprint} supplies a unitary generator of
+Lemma~\cite[``Normalized peripheral unitary'']{QICLean2026Blueprint} gives a unitary generator of
 exact order $m$ for a primitive $m$-th peripheral root, and
 Lemma~\cite[``Cyclic projections from a peripheral unitary'']{QICLean2026Blueprint} builds the $m$
 Fourier projections out of its powers, using
@@ -390,9 +390,9 @@ $m\mid D$.
 
 This periodicity-removal chain --- unitary normalization, Fourier
 projections, cyclic Kraus shift (Lemma~\ref{lem:kraus_cyclic_shift}), the
-blocked cyclic corners of this section, and restricted primitivity --- is
-exactly the machinery behind the period-removing blocking theorems of
-Chapter~\ref{ch:canonical}: \cite[Theorem~6.6]{Wolf2012Quantum} supplies the
+blocked cyclic corners of this section, and restricted primitivity ---
+underlies the period-removing blocking theorems of
+Chapter~\ref{ch:canonical}: \cite[Theorem~6.6]{Wolf2012Quantum} gives the
 cyclic peripheral spectrum of the adjoint transfer map, and
 Theorem~\ref{thm:cyclic_sector_decomp_after_blocking} (Section~\ref{sec:cyclic_sectors})
 and Theorem~\ref{thm:cyclic_sector_decomp_after_blocking_isometry} apply it
