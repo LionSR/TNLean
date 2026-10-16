@@ -1,0 +1,190 @@
+\section{The scanner estimate with four norm comparisons}
+\label{sec:al_scanner_source}
+
+The scanner estimate of \cite[Proposition~9.2]{OpenAI2026AreaLaw} selects
+one charge round and one interpolation parameter at which both the density
+and energy bounds and all four norm comparisons hold. The coefficients in
+the output shell and density bounds may be enlarged after the input entropy
+coefficient is fixed, as recorded in~\cite{gap:arealaw2d_scanner_inputs}.
+
+% Source: 08-scanner.tex, prop:scanner, lines 349--397; scales and geometry,
+% lines 21--59; 07-comparators.tex, prop:comparators, lines 125--214.
+% Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+\begin{definition}[Statement of the scanner estimate]
+    \label{def:al_scanner_source_statement}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.ScannerHypotheses,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.typicalWindow,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.scanPrevector,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.ScannerStatement}
+    \leanok
+    \uses{thm:al_scan_truncation_inputs,thm:arealaw-supplied-target-norm-bounds}
+    Fix exponents $0<\ell<1$, $0<\kappa<\mu<1-\ell$, $0<e<1$ with
+    $\kappa\le e$, and $\nu>0$; an interaction range $R$, a term bound $J$,
+    a gap $\Delta$ and a target-size coefficient $C_T$. Put
+    $g=\Delta/\max\{1,J(\|f_{1,\Delta/2}\|_1+1)\}$. At scale $n$, put
+    \begin{align}
+        L & =\lfloor n^{1-\ell}\rfloor,
+          & m                           & =\lfloor n^\mu\rfloor,
+          & K                           & =\lfloor L/(8m)\rfloor,\notag \\
+        D & =\lceil n^\kappa\rceil,
+          & \epsilon                    & =n^{-\nu},
+          & a                           & =W/K.\notag
+    \end{align}
+    The source hypotheses at scale $n$ are the following. The unit vector
+    $\Omega$ is a ground vector, with gap $\Delta$, of a local Hamiltonian
+    on $\Lambda$ with range $R$ and term bound $J$. The scan uses the
+    induced lattice graph, its depth is the ambient sup-norm distance to
+    $T$, and every designated support contains its anchor. The collar scan has $n$
+    slots per depth row, the displayed scales, truncation radius
+    $r_0=\lceil C_{\rm tr}(\log n)^2\rceil$ and charge-list constant $C_1$.
+    Its finite target $T$ obeys $|T|\le C_Tn^2$ and
+    $|T_j\setminus T_{j-1}|\le n$ for $1\le j\le L$. The ambient distance
+    from $T$ to every endpoint of a boundary edge of $A$ exceeds
+    $2L+10r_0$. The target $X=A\cap T$ is nonempty. With
+    $Q_j=A\cap(T_j\setminus T)$, the original vector satisfies
+    \begin{align}
+        S_\Omega(X)   & \le C_en^{1+e},\notag \\
+        S_\Omega(Q_j) & \le C_e(nL^e+n)\notag
+    \end{align}
+    for every integer $0\le j\le L$.
+
+    The scanner statement asserts that there is $C_{\rm tr}>0$ such that,
+    for every integer $q\ge2$ and every real $C_e$, there are constants
+    $C_1>0$, $c_a>0$, $C>0$, $C_\delta>0$, $C_b,C_{l,b},C_l,C_{l,\delta}$
+    and a size threshold with the following property. For every larger $n$ and every
+    finite physical system satisfying the source hypotheses, the truncated
+    Hamiltonian has a unit ground vector $\widetilde\Omega$ of energy
+    $0\le e_t\le n^{-1000}$ and gap $g/2$. For this same vector,
+    \begin{align}
+        D_{\rm tr}(\widetilde\Omega\widetilde\Omega^*,\Omega\Omega^*)
+         & \le\sqrt{2\min\{n^{-1000},g/4\}/g}.
+        \label{eq:al_scanner_source_trace_distance}
+    \end{align}
+    where $D_{\rm tr}(\rho,\sigma)=\frac12\|\rho-\sigma\|_1$.
+    Its target typical set $E$ at
+    width $n^{3/5}$ is nonempty. Write $d_*=|E|$ and let $z$ be its mass;
+    then $0<1-n^{-100}\le z\le1$, in particular $z>0$, for this same
+    $\widetilde\Omega$ and $E$.
+    There is one label sequence $\lambda_k$ such that
+    $\mathrm{pre}_k=\pi_R^{\lambda_k}
+        (\widetilde\Omega\otimes\mathrm{Bell}_{CR})^{\otimes k}$
+    is nonzero and has Euclidean norm at most one for $k>0$, with both
+    auxiliary dimensions equal to $d_*$.
+    These choices precede the total weight $W$.
+
+    For every $W\ge1$ with $ar_0^2\le c_a$, there are comparator parameters
+    \begin{align}
+        B_{\rm sh}     & \le C_b(nL^e+n),\notag             \\
+        B_{\rm exc}    & \le C_bnD,\notag                   \\
+        1\le\mathcal B & \le C_bnD(\log n)^{C_{l,b}}.\notag
+    \end{align}
+    Every completed and pre-charge status cut has labelled budget at most
+    $\mathcal B$. At each physical region, the marginal moment estimate
+    for $\widetilde\Omega$ uses that region's own labelled cut budget. For all sufficiently large replica counts $k$, the final charge
+    at interpolation parameter $1$ satisfies
+    \begin{align}
+        -\frac{\log N_{\rm end,k}^2}{k}
+         & \le2\log d_*-\log z
+        +W(B_{\rm sh}/z+B_{\rm exc})+\rho_{\rm end,k},\notag
+    \end{align}
+    where $\rho_{\rm end,k}\to0$.
+
+    Set
+    \begin{align}
+        \delta_n & =C_\delta\epsilon^{-1}
+        \left(n^{e-\mu}+a^{1/4}(\log n)^{C_{l,\delta}}\right).\notag
+    \end{align}
+    There is $\rho_k\to0$ such that, for every sufficiently large $k$, one
+    charge round and one $p_k\in[\epsilon/2,\epsilon]$ satisfy
+    \begin{align}
+        \frac{\mathcal Q_k(p_k)}{KnD} & \le\delta_n+\rho_k,\notag        \\
+        E_{{\rm def},k}               & \le Cn^\ell D^2W^2(\log n)^{C_l}
+        \left(\delta_n^{1/8}+\epsilon+n^{-100}\right)
+        +Cn^{-1000}+\rho_k.
+        \label{eq:al_scanner_source_energy}
+    \end{align}
+    Here $v_k$ is the normalized filtered vector at this charge and
+    parameter, and
+    $E_{{\rm def},k}=(\langle v_k,\overline{\widetilde H}_k v_k\rangle-e_t)/(g/2)$.
+    The filtered norm is positive and $E_{{\rm def},k}\ge0$.
+
+    Use the normalized Schmidt truncation $\psi$, its auxiliary entropy
+    $S^\prime$, and the terminal-region functions and charge-tree weights
+    of Theorem~\ref{thm:arealaw-supplied-target-norm-bounds}, for these same
+    physical data. At the selected point, the rough upper comparison is
+    \begin{align}
+        -\frac{\log N_k^2}{k} & \le2\log d_*-\log z
+        +W(B_{\rm sh}/z+B_{\rm exc})+R_k^{\rm RU},\notag
+    \end{align}
+    and the rough lower comparison is
+    (\ref{eq:arealaw-supplied-rough-lower}), for every $0<\tau\le1/2$.
+    With $C_0=512\mathrm e(2/g)$ and
+    $c_0=[32\sqrt{1+2/g}]^{-1}$, the additional condition
+    $a\sqrt{\mathcal B}\le\min\{c_0,1\}/10$ gives both sharp comparisons
+    (\ref{eq:arealaw-supplied-sharp-bounds}). Their state, typical set,
+    labels, charge and interpolation parameter are the same. The norm
+    remainders tend to zero with the finite system and $W$ fixed and are
+    uniform in the selected charge and parameter.
+
+    The input coefficient $C_e$ is unchanged. The output shell coefficient
+    may dominate $\max\{C_e,1\}+1$, and the density coefficient
+    $C_\delta$ may be positive when $C_e=0$. The assertion with both output
+    coefficients numerically identical to $C_e$ is not claimed;
+    see~\cite{gap:arealaw2d_scanner_inputs}.
+\end{definition}
+
+\begin{theorem}[The scanner estimate]
+    \label{thm:al_scanner_source}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.scannerStatement}
+    \leanok
+    \uses{def:al_scanner_source_statement}
+    The scanner statement in Definition~\ref{def:al_scanner_source_statement}
+    holds for $J\ge0$, $\Delta>0$ and $C_T\ge0$. It gives the conclusion of
+    \cite[Proposition~9.2]{OpenAI2026AreaLaw} with all four norm comparisons
+    and the coefficient convention in~\cite{gap:arealaw2d_scanner_inputs}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:arealaw-source-selected-energy,thm:arealaw-supplied-target-norm-bounds,
+        thm:al_scan_common_status_budget,thm:al_positive_prefix_entropy_transfer,
+        thm:al_scan_actual_rough_upper,thm:al_augmented_prevector_norm,thm:al_lattice_counts}
+    Choose the truncation coefficient from
+    Theorem~\ref{thm:arealaw-source-selected-energy}, before fixing $q$.
+    The anchor of a support of range $R$ has multiplicity at most
+    $\mu_*=2^{1+2R(R+1)-1}$, so take $C_1=3\mu_*+1$.
+    Apply that theorem with entropy coefficient $\max\{C_e,1\}$.
+    It supplies one truncated vector, typical set and label sequence and,
+    for each admissible $W$, one selected charge and parameter with the
+    density, energy and rough upper bounds. Retain its trace-distance
+    estimate between this same truncated vector and the original vector;
+    this is the estimate used in \texttt{08-scanner.tex}, lines~400--403.
+    The existing augmented-to-global norm identity transfers the bound
+    $\|\mathrm{pre}_k\|\le1$ for the same labels and every $k>0$, as in
+    \texttt{07-comparators.tex}, lines~130--140.
+    Retain its typical-window estimate $0<1-n^{-100}\le z\le1$ for
+    that same vector and set, as in \texttt{08-scanner.tex}, lines~411--414.
+
+    Apply Theorem~\ref{thm:arealaw-supplied-target-norm-bounds} to those
+    same data. Its rough lower bound is uniform over charge rounds and
+    parameters. The common cut estimate and the norm estimate give
+    coefficients $C_{B,\rm cut}$ and $C_{B,\rm norm}$. Take
+    \begin{align}
+        C_b        & =\max\{C_{B,\rm cut},C_{B,\rm norm},
+        \max\{C_e,1\}+1,1+3\log q\},\notag                \\
+        \mathcal B & =C_bnD(\log n)^{12}.\notag
+    \end{align}
+    Enlarging the marginal parameter preserves the sharp upper and lower
+    estimates and strengthens their smallness antecedent.
+
+    Entropy continuity on each whole-row positive-depth prefix gives
+    $B_{\rm sh}=\max\{C_e,1\}(nL^e+n)+n^{-247}$; take
+    $B_{\rm exc}=1+3nD\log q$. Since $n\ge2$ and $D\ge1$, these obey the
+    required bounds. The uniform rough upper estimate at the final charge
+    gives the last-round assertion with its own vanishing remainder.
+    Intersect the eventual selected-point and sharp-comparison estimates,
+    retaining the point already chosen by the energy theorem. The sum of
+    its nonnegative density and energy remainders serves both selected
+    inequalities. This leaves every physical state, label and selected
+    point unchanged.
+\end{proof}

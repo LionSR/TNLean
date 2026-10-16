@@ -135,6 +135,7 @@ import TNLean.PEPS.Approximation.DyadicLargeRepaintingGates
 import TNLean.PEPS.Approximation.DyadicLevelSchedule
 import TNLean.PEPS.Approximation.DyadicLevelTrueVertices
 import TNLean.PEPS.Approximation.DyadicLifetimeIncidence
+import TNLean.PEPS.Approximation.DyadicOwnerSwitch
 import TNLean.PEPS.Approximation.DyadicPatchRewriteGates
 import TNLean.PEPS.Approximation.DyadicPointTreatment
 import TNLean.PEPS.Approximation.DyadicPointTreatmentReadingStep
@@ -457,6 +458,7 @@ import TNLean.PEPS.Approximation.SquareGridContraction
 import TNLean.PEPS.Approximation.SquareGridSource
 import TNLean.PEPS.Approximation.SquareHamiltonianHermitianTerms
 import TNLean.PEPS.Approximation.SquareInteractionSupport
+import TNLean.PEPS.Approximation.SquareInteractionTerms
 import TNLean.PEPS.Approximation.SquareLatticeConnectivity
 import TNLean.PEPS.Approximation.SupportedPhysicalBufferGaussian
 import TNLean.PEPS.Approximation.SupportedPolarUnitary

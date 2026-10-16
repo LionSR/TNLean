@@ -105,6 +105,37 @@ theorem labelProj_auxiliary_mulVec_augmentedReplicaPrevector
       Equiv.self_comp_symm, Function.comp_id] using
       congrArg (fun v ↦ v ∘ augmentedSumReplicaCopiesEquiv (V := V) q d k) hfixed.2
 
+/-- Reindexing the physical and auxiliary sites preserves the Euclidean norm
+of the replica prevector.
+Source: OpenAI area-law manuscript, `07-comparators.tex`, lines 130–153,
+`comparator:prevector`, revision adc7f124. -/
+theorem norm_augmentedReplicaPrevector_eq_global
+    {V : Type} [Fintype V] [DecidableEq V] (q d k : ℕ)
+    (Ω : (V → Fin q) → ℂ) (ell : IrrepLabel (Equiv.Perm (Fin k))) :
+    ‖WithLp.toLp 2
+      (replicaPrevector Ω d k ell ∘ augmentedSumReplicaCopiesEquiv q d k)‖ =
+      ‖WithLp.toLp 2 (replicaPrevector Ω d k ell ∘
+        globalReplicaCopiesEquiv (fun _ : V ↦ Fin q) (Fin d) (Fin d) k)‖ := by
+  exact (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
+    (augmentedReplicaConfigurationEquiv (V := V) q d k)).norm_map
+      (WithLp.toLp 2 (replicaPrevector Ω d k ell ∘
+        globalReplicaCopiesEquiv (fun _ : V ↦ Fin q) (Fin d) (Fin d) k))
+
+/-- The replica prevector is nonzero in the augmented site coordinates exactly
+when it is nonzero in the original physical and auxiliary coordinates.
+Source: OpenAI area-law manuscript, `07-comparators.tex`, lines 130–153,
+`comparator:prevector`, revision adc7f124. -/
+theorem augmentedReplicaPrevector_ne_zero_iff_global
+    {V : Type} [Fintype V] [DecidableEq V] (q d k : ℕ)
+    (Ω : (V → Fin q) → ℂ) (ell : IrrepLabel (Equiv.Perm (Fin k))) :
+    replicaPrevector Ω d k ell ∘ augmentedSumReplicaCopiesEquiv q d k ≠ 0 ↔
+      WithLp.toLp 2 (replicaPrevector Ω d k ell ∘
+        globalReplicaCopiesEquiv (fun _ : V ↦ Fin q) (Fin d) (Fin d) k) ≠ 0 := by
+  simpa only [ne_eq, norm_eq_zero, WithLp.toLp_eq_zero] using
+    (iff_of_eq (congrArg (fun r : ℝ ↦ r ≠ 0)
+      (norm_augmentedReplicaPrevector_eq_global q d k Ω ell)))
+
+
 /-- Nonvanishing, copy symmetry and the mean-energy eigen-equation are preserved
 in the augmented scanner coordinates.
 Source: OpenAI area-law manuscript, `07-comparators.tex`, lines 130–153 and
@@ -132,10 +163,7 @@ theorem augmented_prevector_properties_of_global
     simp only [pre, augmentedSumReplicaCopiesEquiv, Equiv.coe_trans,
       Function.comp_assoc, ecoord, Equiv.symm_comp_self, Function.comp_id]
   refine ⟨?_, ?_, ?_⟩
-  · intro hz
-    apply hne
-    rw [← hpreEq, hz]
-    rfl
+  · exact (augmentedReplicaPrevector_ne_zero_iff_global q d k Ω ell).mpr hne
   · have hfixed : symProj (copyPerm ((v : V ⊕ Bool) → Fin (dims v)) k) *ᵥ pre = pre :=
       symProj_mulVec_augmentedReplicaPrevector q d k Ω ell
     rw [← hfixed]

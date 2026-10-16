@@ -24,6 +24,42 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Positive part of a polynomial constant — promoted (2026-10-16)
+
+- **Pattern:** Replace a constant `C` of a polynomial bound `x ≤ C * L ^ k` by `max C 0`, so that
+  a theorem needs no sign hypothesis on `C`, and transport the given bound along
+  `C * L ^ k ≤ max C 0 * L ^ k` for `0 ≤ L`.
+- **Seen:** the compression theorems and the dyadic protocol, in
+  `UniformApproximateSampledNetwork.lean`, `UniformMessageGateCompression.lean` and
+  `DyadicProtocolCompression.lean` under `TNLean/PEPS/Approximation/`.
+- **Abstraction:** `TNLean.PEPS.Approximation.mul_pow_le_max_zero_mul_pow` in
+  `UniformApproximateSampledNetwork.lean`.
+- **Notes:** The sign of `max C 0` is `le_max_right`. Net Lean line delta: +9 (20 added, 11
+  removed) across the three changed modules, since the new lemma and its docstring outweigh the
+  shortened call sites.
+
+### Euclidean norm and nonvanishing in augmented replica coordinates — promoted (2026-10-16)
+
+- **Pattern:** Reindex a replica prevector from the physical and two auxiliary
+  site coordinates to the scanner coordinates, preserve its Euclidean norm,
+  and transfer nonvanishing or a norm upper bound.
+- **Seen:** Three nonvanishing arguments and three norm arguments across
+  `AugmentedReplicaPrevectorProperties.lean`, `ActualRoughLowerPrevector.lean`,
+  `ActualSharpLowerPrevector.lean`, and `ActualEndpointRoughBudget.lean`, under
+  `PEPS/AreaLaw/Scan/`.
+- **Abstraction:** `norm_augmentedReplicaPrevector_eq_global` and
+  `augmentedReplicaPrevector_ne_zero_iff_global` in
+  `AugmentedReplicaPrevectorProperties.lean`, using Mathlib's
+  `LinearIsometryEquiv.piLpCongrLeft` and the characterization of zero by its
+  norm. The existing larger coordinate theorem and all three comparison
+  consumers use these declarations.
+- **Notes:** Both statements are unconditional in the dimensions and replica
+  count. No ground-state or eigen-equation premise is added. The six existing
+  arguments lose 31 lines; coordinate identities still used by the auxiliary
+  label and eigen-equations are retained. Existing theorem statements are
+  unchanged. The same coordinate isometry preserves the norm for every
+  replica count, so downstream estimates share one mathematical identity.
+
 ### Scanner prevector coordinates and selected density — promoted (2026-10-15)
 
 - **Pattern:** Transfer nonvanishing, copy symmetry and a mean-energy
@@ -4484,6 +4520,23 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 ## Candidates
 
+### Supported terms in rectangle coordinates — candidate (2026-10-15)
+
+- **Pattern:** Transport membership in a supported-operator algebra through the
+  site bijection, replace the resulting embedding by matrix reindexing, and
+  identify the image support.
+- **Seen:** 2 occurrences: `SquareHamiltonian.toAreaLawHamiltonian` in
+  `PEPS/Approximation/SquareAreaLawHamiltonian.lean` and
+  `SquareHamiltonian.exists_nearestNeighbor_terms` in
+  `PEPS/Approximation/SquareInteractionTerms.lean`.
+- **Abstraction:** The existing `embedOp_mem_supportedOperators_image` and
+  `embedOp_rectangle_eq_reindex` perform the two transports. At a third
+  occurrence, consider a lemma giving the reindexed Hermitian term's
+  supported-operator membership directly.
+- **Notes:** The second occurrence also relabels sites and edges. The support
+  identity already handles the arbitrary order on the rectangle sites;
+  no order-preserving assumption should enter a shared lemma.
+
 ### Logarithmic norm derivatives from squared norms — candidate (2026-10-15)
 
 - **Pattern:** Differentiate the squared norm, compose with the real logarithm,
@@ -7896,7 +7949,7 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Consumers:** `Scan/SourceRoughSelection.lean`,
   `Scan/SourceBootstrapEntropy.lean`, `Scan/SourceSelectedSharpComparison.lean`,
   `Scan/SourceSelectedSharpEnergy.lean`, `Scan/SourceSelectedSharpDensity.lean`,
-  `Scan/SourceSelectedDensity.lean`,
+  `Scan/SourceSelectedDensity.lean`, `Scan/SourceSelectedEnergy.lean:224`,
   `Scan/SourceActualInformation.lean`, and `Scan/SourceFinalInformation.lean`.
 - **Notes:** Positivity comes from the existing spectral-window witness; no
   nonzero-dimension hypothesis is added to any theorem.
@@ -7957,6 +8010,28 @@ spectral split → block extraction → MPV calculation → strict bounds
   selected-point estimates. No additional tactic is proposed.
 - **Notes:** No multiplication by `1 - p` is allowed before its sign is known.
   The scalar implication instead uses `1 - p ≤ 1` on nonnegative terms.
+
+### Unpacking the supplied target and its spectral data — rejected (2026-10-16)
+
+- **Pattern:** Introduce the named local definitions, unpack the truncated
+  ground-state and spectral-window witnesses, and pass these same witnesses
+  to the conclusion while continuing with their remaining properties.
+- **Seen:** The common witness block in `Scan/SourceActualInformation.lean:203`,
+  `Scan/SourceSelectedSharpDensity.lean:236`, and
+  `Scan/SourceSelectedSharpEnergy.lean:242`; the rough-density version in
+  `Scan/SourceSelectedDensity.lean:230` has a different tuple of conclusions.
+  `Scan/SourceSelectedEnergy.lean:218` retains the density witnesses directly.
+- **Abstraction:** The mathematical data already come from the shared source
+  comparison theorems. The nonzero-dimension consequence uses the promoted
+  `NeZero.of_pos`. No additional mathematical lemma is proposed for the
+  introductions and conjunction projections themselves.
+- **Notes:** The sharp versions carry the marginal budget and two regional
+  entropy families; the rough version omits these and has a different size
+  bound tuple. An identical short destructuring block is present, but a
+  tactic hiding these dependent witness choices would obscure which state
+  and labels are retained. A shared data interface should be considered only
+  if a subsequent mathematical theorem needs that interface independently;
+  it is not part of the present proof completion.
 
 ### Facts about the jointly chosen initial marks — promoted (2026-10-16)
 

@@ -101,19 +101,10 @@ theorem exists_actualScan_suppliedPrevector_rough_lower_of_weight
       globalReplicaCopiesEquiv β (Fin d) (Fin d) k := by
     simp only [pre, augmentedSumReplicaCopiesEquiv, Equiv.coe_trans,
       Function.comp_assoc, e, Equiv.symm_comp_self, Function.comp_id, β]
-  have hprenonzero : pre k ≠ 0 := by
-    intro hz
-    apply (hpre k hk).1
-    change WithLp.toLp 2 (replicaPrevector Ωt d k (ell k) ∘
-      globalReplicaCopiesEquiv β (Fin d) (Fin d) k) = 0
-    rw [← hpreEq, hz]
-    rfl
-  have hprenorm : ‖WithLp.toLp 2 (pre k)‖ ≤ 1 := by
-    have hn := (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ e.symm).norm_map
-      (WithLp.toLp 2 (pre k))
-    have hno : ‖WithLp.toLp 2 (pre k ∘ e)‖ ≤ 1 := by
-      simpa only [hpreEq] using (hpre k hk).2
-    exact hn.symm.trans_le hno
+  have hprenonzero : pre k ≠ 0 :=
+    (augmentedReplicaPrevector_ne_zero_iff_global q d k Ωt (ell k)).mpr (hpre k hk).1
+  have hprenorm : ‖WithLp.toLp 2 (pre k)‖ ≤ 1 :=
+    (norm_augmentedReplicaPrevector_eq_global q d k Ωt (ell k)).trans_le (hpre k hk).2
   have hsym : symProj (copyPerm ((v : Site Λ ⊕ Bool) → Fin (n v)) k) *ᵥ pre k = pre k :=
     symProj_mulVec_augmentedReplicaPrevector q d k Ωt (ell k)
   let ι₀ := addedSiteSpace (addedSiteSpace β (Fin d)) (Fin d)

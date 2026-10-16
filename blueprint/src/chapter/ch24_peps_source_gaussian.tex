@@ -115,7 +115,7 @@ The construction follows \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
     \uses{thm:peps_local_schmidt_sources,def:peps_source_gaussian_law}
     For $k>0$, let $\widehat X_{e,\alpha\beta}$ be the average of the
     Gaussian product operators in Equation~(5.6) of the manuscript,
-    transported by $E_{e,\alpha},F_{e,\alpha}$ on the ket side and
+    mapped by $E_{e,\alpha},F_{e,\alpha}$ on the ket side and
     $E_{e,\beta},F_{e,\beta}$ on the bra side. Thus
     \begin{align}
         \widehat X_{e,\alpha\beta}
@@ -149,7 +149,7 @@ The construction follows \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
     More generally, these assertions hold for any nonnegative weights and
     endpoint matrices representing the source vectors as in
     (\ref{eq:peps_local_schmidt_source}).
-    The ambient correction is the four-frame transport of the
+    The ambient correction is the four-frame image of the
     centered correction in Schmidt coordinates.
 \end{theorem}
 
@@ -158,7 +158,7 @@ The construction follows \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
     Theorem~\ref{thm:peps_source_gaussian_selection}. The exact source
     representation identifies the mean with $X_{e,\alpha\beta}$.
     Subtraction gives the centered identity; linearity of the four-frame
-    transport gives the final assertion. The required representatives are
+    map gives the final assertion. The required representatives are
     given by Theorem~\ref{thm:peps_local_schmidt_sources}.
 \end{proof}
 
@@ -218,7 +218,7 @@ The construction follows \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
     position. The empty selected set gives a single summand.
 \end{proof}
 
-\begin{theorem}[Transported sources in prepared words]
+\begin{theorem}[Frame-mapped sources in prepared words]
     \label{thm:peps_prepared_source_frames}
     \lean{TNLean.PEPS.PairEffect.Word.sourceContraction_preparedDensityCoefficient_selected_frames}
     \leanok
@@ -229,9 +229,9 @@ The construction follows \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
     and on each source halfspace. Ket and bra endpoint bases may differ.
     Fix arbitrary source vectors $\eta_i,\zeta_i$ and a selected set $S$.
     For $i\in S$, let $M_i$ have independent row indices $K_i^2$ and
-    column indices $(K'_i)^2$, and transport it by arbitrary endpoint
+    column indices $(K'_i)^2$, and map it by arbitrary endpoint
     families $u_i,v_i$ and $u'_i,v'_i$.
-    Contracting these transported matrices against the prepared
+    Contracting these mapped matrices against the prepared
     density coefficient, with $|\eta_i\rangle\langle\zeta_i|$ elsewhere,
     equals
     \begin{align}
@@ -246,7 +246,7 @@ The construction follows \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
 \end{theorem}
 
 \begin{proof}\leanok
-    Expand each transported matrix as the sum of its entries times the
+    Expand each mapped matrix as the sum of its entries times the
     corresponding rank-one endpoint matrices. Apply
     Theorem~\ref{thm:peps_selected_multilinear_expansion}, and identify
     each rank-one source contraction with the prepared ket and
@@ -298,7 +298,7 @@ The construction follows \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
 
 \begin{proof}\leanok
     Express the corrected term as its partial-branch source
-    contraction. The ambient correction is the transport of its Schmidt
+    contraction. The ambient correction is the four-frame image of its Schmidt
     correction. Apply Theorem~\ref{thm:peps_prepared_source_frames} at the
     selected retained slots, and use their original-position identification.
 \end{proof}

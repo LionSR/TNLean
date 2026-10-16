@@ -47,7 +47,7 @@ These are the original occurrences and local sample links in
 \begin{proof}
     \leanok
     \uses{def:peps_source_gate_root}
-    Each selected element is a witness to the recorded nonemptiness of $C_g$.
+    By definition of $G$, each participant set $C_g$ is nonempty and $r_g$ is chosen from $C_g$.
 \end{proof}
 
 \begin{theorem}[Incident labels after reindexing a full choice]
@@ -59,8 +59,8 @@ These are the original occurrences and local sample links in
     choices to $\prod_{g\in G}\Xi_g$. For any original label function
     $\eta\in\prod_{g\in G}\Xi_g$ and any $p\in P$, extracting the
     incident labels of $e^{-1}\eta$ gives precisely
-    $\eta|_{\{g:p\in C_g\}}$. This includes empty incident sets and
-    empty branch sets whenever $\eta$ is supplied. It is the gate-label
+    $\eta|_{\{g:p\in C_g\}}$. This holds for empty incident sets and,
+    when $\eta$ is given, empty branch sets. It is the gate-label
     identification in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
     % Source: 04-compression.tex, lines 351--381 and 565--579.
 \end{theorem}
@@ -78,13 +78,13 @@ These are the original occurrences and local sample links in
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.restrict_reindexedSourceSampleAssignment_eq}
     \leanok
     \uses{def:peps_source_sample_assignment_indices,def:peps_local_source_sample_indices}
-    Let $k\in\N$ and supply $j:\mathcal S\to[k]$. The corresponding
+    Let $k\in\N$ and let $j:\mathcal S\to[k]$. The corresponding
     assignment on the full ordered list is $\widetilde j=j\circ\tau$.
     If $\iota_p:[n_p]\to[N]$ reads the original positions of the
     incident slots, then
     $\widetilde j\circ\iota_p=(j|_{\mathcal S_p})\circ\kappa_p$.
-    No finiteness assumption on $P$ is required. This includes $k=0$
-    and empty incident lists whenever $j$ is supplied, and identifies
+    No finiteness assumption on $P$ is required. This holds for $k=0$
+    and empty incident lists for any given $j$, and identifies
     the local sample values in
     \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
     % Source: 04-compression.tex, lines 342--417 and 568--579.
@@ -250,15 +250,16 @@ $z^K_g=(z_g)_1$ and $z^B_g=(z_g)_2$. The matrix indices $I,J$ are arbitrary.
     \leanok
     \uses{def:compression_operator_operator,def:compression_operator_density_coefficient}
     Let $P,G$ be finite, and let $C_g\subseteq P$ be arbitrary participant
-    sets with supplied roots $r_g\in C_g$. Let $K_g,B_g$ be finite label
+    sets with chosen roots $r_g\in C_g$. Let $K_g,B_g$ be finite label
     sets, $k\in\N$, $a_g:K_g\to\C$, $b_g:B_g\to\C$,
     $w_g\in\C$ and $\gamma\in\C$.
     Let $O_p,I_p$ be arbitrary matrix index sets, without finiteness
     assumptions. Put $\mathcal S=\bigsqcup_g\mathcal E(C_g)$ and let
     $\mathcal S_p$ consist of its positions incident to $p$.
-    Supply matrices
+    Let
     $T_p:\prod_{g:p\in C_g}K_g\times\prod_{g:p\in C_g}B_g
-        \times[k]^{\mathcal S_p}\to\C^{O_p\times I_p}$.
+        \times[k]^{\mathcal S_p}\to\C^{O_p\times I_p}$
+    be a family of matrices.
     Write $\mathcal C(C,r,K\times B,k,c,T)$ for the distributed
     contraction with ordered gate-pair labels, roots $r_g$, common
     sample positions, coefficient
@@ -294,7 +295,7 @@ $z^K_g=(z_g)_1$ and $z^B_g=(z_g)_2$. The matrix indices $I,J$ are arbitrary.
     obtain (\ref{eq:peps_density_pair_univ_double_sum}).
 \end{proof}
 
-\section{The actual sampled physical density as a distributed contraction}
+\section{The sampled physical density as a distributed contraction}
 \label{sec:peps_actual_sampled_distributed_contraction}
 
 Let $P$ be finite, let $d:P\to\N$, and let an ordered list record every
@@ -303,13 +304,13 @@ with space $\C^{d_p}$ at $p$. Let $c$ be an arbitrary private output
 list and $\mathcal W:a\to h_dc$ a chronological circuit with recorded
 product input $\psi$.
 At every original source $e$, retain the original endpoint dimensions
-$u_e,v_e$ and $r_e=\min(u_e,v_e)$. Supply arbitrary real coefficient
+$u_e,v_e$ and $r_e=\min(u_e,v_e)$. Fix arbitrary real coefficient
 families and complex endpoint matrices of sizes $u_e\times r_e$ and
 $v_e\times r_e$, with their original branch indices, sample number
 $k\in\N$ and original ordered-pair arrays $\omega$.
-At each all-party grouped owner, supply finite-index orthonormal bases
-of the actual selected source memory and private output memory.
-Also supply finite-index orthonormal bases of the original input
+At each all-party grouped owner, choose finite-index orthonormal bases
+of the selected source memory and private output memory, together with
+finite-index orthonormal bases of the original input
 memory and original private output memory. Use the original labelled
 physical basis and the physical/private output bases constructed from
 these data, as in Definition~\ref{def:peps_incident_sampled_physical_factor}.

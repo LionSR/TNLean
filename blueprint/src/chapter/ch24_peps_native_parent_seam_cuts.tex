@@ -28,11 +28,11 @@ boundary tensors on the original lattice.
     the original tensor coordinates with the independent endpoint coordinates.
     Thus contracting identity bonds gives exactly the original PEPS vector,
     and a diagonal endpoint assignment restricts to its original crossing labels.
-    Write $\mathcal S_{A,C}$ for the range of the actual cut contraction
+    Write $\mathcal S_{A,C}$ for the range of the cut contraction
     against one arbitrary joint boundary on the two incidences of each $e\in C$.
 \end{definition}
 
-\begin{theorem}[Actual parent constraints supply regional cut boundaries]%
+\begin{theorem}[Parent constraints yield regional cut boundaries]%
     \label{thm:peps_native_parent_regional_cut}
     \lean{TNLean.PEPS.regionParentGroundSpace_le_iInf_cutSpace,
         TNLean.PEPS.exists_cutBoundary_of_mem_regionParentKernel,
@@ -61,7 +61,7 @@ boundary tensors on the original lattice.
     coordinates. Close both endpoints of each additional cut bond by an
     identity matrix. The endpoint sum is exactly the original graph sum;
     its exterior factor is $\prod_{e\cap R_i=\varnothing}D_e$, which is
-    nonzero and can be divided out. The resulting vector lies in the literal
+    nonzero and can be divided out. The resulting vector lies in the
     lifted regional range. Coverage forces every physical site slice into
     its tensor image. Independent local linear retractions then absorb the
     omitted physical factors into the same joint virtual boundary.
@@ -88,7 +88,7 @@ boundary tensors on the original lattice.
     \end{align}
     Here $b_p$ is the product of the matrices $U_e(p_e)$ and $c_p$ is
     the product trace-dual coefficient. One family of local inverses
-    supplies $\xi$ and all its regional cut conditions simultaneously.
+    yields $\xi$ and all its regional cut conditions simultaneously.
 \end{theorem}
 \begin{proof}\leanok
     Semi-regularity gives a nonzero invariant vector on each bond, so every
@@ -137,7 +137,7 @@ boundary tensors on the original lattice.
     Translate the tree gauge to the chosen origin $(c,r)$; it sends all
     labels outside $C_{c,r}$ to the identity. Applying the product of
     the local averages therefore turns each supported bond product into
-    an actual cut contraction. The coherent sum lies in the same cut
+    a cut contraction. The coherent sum lies in the same cut
     range. Finally the original site maps recover the physical vector.
 \end{proof}
 
@@ -177,9 +177,9 @@ boundary tensors on the original lattice.
     Zero extension is injective and preserves $G$-injectivity.
     Each cut contraction commutes with the product of the physical
     extensions and restrictions. Vertex-covering parent constraints
-    supply an actual cut representation of every ambient kernel vector;
+    yield a cut representation of every ambient kernel vector;
     hence it lies in the product extension range. The product left
     inverse gives recovery and uniqueness. Apply
     Theorem~\ref{thm:peps_native_parent_seam_boundary} to $B$ and restrict
-    its boundary witnesses to the original independent physical spaces.
+    its boundary tensors to the original independent physical spaces.
 \end{proof}

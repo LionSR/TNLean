@@ -1,4 +1,4 @@
-\begin{lemma}[Common exterior operators and native boundary transport]%
+\begin{lemma}[Common exterior operators and native boundary action]%
     \label{lem:peps_regular_bond_extension_transport}
     \lean{TNLean.PEPS.regularTwistedSite_regularRegionBondExtension_eq_outside,
         TNLean.PEPS.openRegionWeight_regularTreeCycleBondExtension}
@@ -13,7 +13,7 @@
         A_R(\omega;u;\theta)
         =A_R(\omega;1;\mathcal B_u\theta),
     \end{align}
-    where $\mathcal B_u$ is the native boundary transport for the identity
+    where $\mathcal B_u$ is the native boundary action for the identity
     vertex gauge. It depends on $u$ but not on $\omega$. Here a graph on $R$
     specifies which internal bonds carry the cycle assignment; a spanning-tree
     hypothesis is unnecessary for these identities. These are the shared
@@ -25,8 +25,8 @@
     An edge incident to an exterior vertex cannot be wholly internal to $R$,
     so its operator is the common exterior one. A crossing edge is likewise
     not internal. The identity vertex gauge therefore retains each prescribed
-    internal operator and transfers the common crossing operators into exactly
-    the same boundary transport for every internal assignment. The actual
+    internal operator and transfers the common crossing operators into
+    the same boundary action for every internal assignment. The
     gauge-contraction identity gives the displayed open-region equality.
 \end{proof}
 
@@ -53,7 +53,7 @@
         \widehat W\Psi(u_g,b)=\Psi(u'_g,b)
     \end{align}
     for every $g\in G$ and every common family $b$ of complementary site
-    coefficients. Here both vectors are the actual finite graph contractions,
+    coefficients. Here both vectors are the finite graph contractions,
     using the inserted original sites in $R$ and $b$ outside $R$.
 
     There is also such a fixed identity-extended unitary with the following
@@ -77,11 +77,11 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    Extend the regional unitary by the complementary identity and transport
+    Extend the regional unitary by the complementary identity and pass
     it through the physical configuration partition. Kronecker products
     and reindexing preserve unitarity. For fixed complementary spins, its
-    action is exactly the regional matrix action.
-    The actual cut formula gives
+    action is the regional matrix action.
+    The cut formula gives
     \begin{align}
         \Psi(\sigma,\tau)
         =\sum_{\theta}\Psi_R(\sigma,\theta)
@@ -91,8 +91,8 @@
     factor is arbitrary and common, so the sum gives the global equality.
     For the bond-operator formulation, the identity vertex gauge moves
     each crossing operator into its label at the region endpoint. This
-    boundary transport is the same for the one- and two-insertion families;
-    their internal operators are exactly the prescribed tree and cycle
+    boundary action is the same for the one- and two-insertion families;
+    their internal operators are the prescribed tree and cycle
     assignments. Their complementary sites also agree, because the changed
     bonds are wholly inside $R$. The same cut argument proves the equality
     for every common exterior and crossing assignment.

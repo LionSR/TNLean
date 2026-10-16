@@ -44,14 +44,15 @@ label sequence give the literal selected density, its actual energy cap and the
 rough upper comparison for every positive total metric weight. The vector and
 labels precede the weight; the outer constants and threshold precede all finite
 physical data. Any open interpolation interval inside `(0, 1)` may be used.
+The truncation coefficient is chosen before the local dimension; the remaining
+constants may depend on that dimension.
 Source: `08-scanner.tex`, Proposition 9.2, lines 349--397 and 399--533. -/
 theorem exists_sourceTarget_selected_actualCharge_density_energy
-    {q : ℕ} [NeZero q] (hq : 1 ≤ q) (R : ℕ)
-    {J Δ C_T C₁ : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < Δ)
-    (hC_T : 0 ≤ C_T) (hC₁ : 0 < C₁) (multiplicity : ℕ)
-    (hmultiplicity : 3 * (multiplicity : ℝ) ≤ C₁) (P : ℝ) :
-    ∃ Ctr Ctarget ct Cent eent _Cen _een : ℝ,
-      0 < Ctr ∧ 0 < Ctarget ∧ 0 < ct ∧
+    (R : ℕ) {J Δ C_T : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < Δ) (hC_T : 0 ≤ C_T) :
+    ∃ Ctr : ℝ, 0 < Ctr ∧
+      ∀ (q : ℕ) [NeZero q] (_hq : 1 ≤ q) (C₁ : ℝ) (_hC₁ : 0 < C₁)
+        (multiplicity : ℕ) (_hmultiplicity : 3 * (multiplicity : ℝ) ≤ C₁) (P : ℝ),
+      ∃ Ctarget ct Cent eent _Cen _een : ℝ, 0 < Ctarget ∧ 0 < ct ∧
       ∀ F : ScannerExponents, ∃ C Cl : ℝ, 1 ≤ C ∧ 0 ≤ Cl ∧
         ∃ N : ℕ, 2 ≤ N ∧
         ∀ (Λ T : Finset (ℤ × ℤ)) [LinearOrder (AdmissibleSupport Λ R)]
@@ -176,14 +177,16 @@ theorem exists_sourceTarget_selected_actualCharge_density_energy
   classical
   obtain ⟨ct, Cent, eent, Cen, een, hct, hselector⟩ :=
     actualCharges_selection_energy_domainGraph
-  obtain ⟨Ctr, Ctarget, hCtr, hCtarget, Nt, hNt, htarget⟩ :=
-    exists_truncated_target_typical_window hq R hJ hΔ hC_T
+  obtain ⟨Ctr, hCtr, htarget⟩ :=
+    exists_truncated_target_typical_window_uniform_in_q R hJ hΔ hC_T
+  refine ⟨Ctr, hCtr, fun q _ hq C₁ hC₁ multiplicity hmultiplicity P ↦ ?_⟩
+  obtain ⟨Ctarget, hCtarget, Nt, hNt, htarget⟩ := htarget q hq
   have hg : 0 < Δ / positiveNormalization 1 (Δ / 2) J :=
     div_pos hΔ (positiveNormalization_pos 1 (Δ / 2) J)
   obtain ⟨Ne, hprefix⟩ := eventually_atTop.mp
     (eventually_regionalEntropy_positiveDepthPrefix_le q hq
       (Δ / positiveNormalization 1 (Δ / 2) J) (C_T + 1) hg)
-  refine ⟨Ctr, Ctarget, ct, Cent, eent, Cen, een, hCtr, hCtarget, hct, ?_⟩
+  refine ⟨Ctarget, ct, Cent, eent, Cen, een, hCtarget, hct, ?_⟩
   intro F
   obtain ⟨C, Cl, hC, hCl, Nc, hc⟩ :=
     F.exists_actualCharge_energy_coefficients q hCtr hC₁ hC_T multiplicity P Cen een

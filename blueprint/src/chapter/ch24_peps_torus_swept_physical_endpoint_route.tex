@@ -13,7 +13,7 @@
          & p(1,1),p(2,1),p(2,2),p(3,2),p(4,2),p(4,1),p(4,0), \\
          & p(3,0),p(2,0),p(1,0),p(0,0),p(0,-1),p(0,-2).
     \end{align}
-    Each successive pair is joined by an actual unit bond of the native
+    Each successive pair is joined by a unit bond of the native
     torus graph. Their ordered traversal defines a twelve-step walk $\rho_v$.
     This chosen route passes above, to the right of, and below the $A_1$
     plaquette before continuing towards $B_2$.
@@ -21,7 +21,7 @@
     \cite[fluxon-braiding passage]{Schuch2010PEPS}, lines 2340--2423.
 \end{definition}
 
-\begin{theorem}[Actual endpoints, partner avoidance, and final adjacency]
+\begin{theorem}[Endpoints, partner avoidance, and final adjacency]
     \label{thm:peps_torus_swept_physical_endpoint_route}
     \lean{TNLean.PEPS.torusSweptPhysicalBRoute_length,
         TNLean.PEPS.torusSweptPhysicalBRoute_start,
@@ -31,12 +31,12 @@
     \leanok
     \uses{def:peps_torus_swept_physical_endpoint_route,
         thm:peps_torus_swept_patch_endpoint_geometry}
-    The actual walk $\rho_v$ has length twelve. It starts at
+    The walk $\rho_v$ has length twelve. It starts at
     $B_1=p(1,1)$ and ends at $p(0,-2)$, immediately left of
     $B_2=p(1,-2)$. Its final base and $B_2$ are adjacent in the native graph.
     None of its thirteen bases equals $A_2=p(-1,1)$, $A_1=p(3,1)$, or $B_2$.
     These assertions hold at every translated position, including either
-    periodic seam; no adjacency or endpoint-avoidance premise is supplied.
+    periodic seam; no extra adjacency or endpoint-avoidance hypothesis is needed.
 \end{theorem}
 \begin{proof}\leanok
     Evaluate the first and last coordinates and count the twelve successive
@@ -53,7 +53,7 @@
     \leanok
     \uses{def:peps_torus_swept_physical_endpoint_route,
         def:peps_torus_swept_patch_endpoint_geometry}
-    Let $F_v$ be the union of the twenty-site four-endpoint witness $R_v$
+    Let $F_v$ be the union of the twenty-site four-endpoint region $R_v$
     and the four physical corners of each of the thirteen route plaquettes.
     All its vertices have offsets
     $-1\leq i\leq5$ and $-2\leq j\leq3$ from $v$.
@@ -61,7 +61,7 @@
     successive elementary movement step.
 \end{definition}
 
-\begin{theorem}[Thirty distinct sites contain the full actual route]
+\begin{theorem}[Thirty distinct sites contain the full route]
     \label{thm:peps_torus_swept_physical_route_footprint}
     \lean{TNLean.PEPS.card_sweptPhysicalRouteFootprintCoordinates,
         TNLean.PEPS.torusSweptPhysicalRouteCoordinate_injective,
@@ -75,10 +75,10 @@
     The integer-coordinate footprint has thirty sites. Its translated native
     realization is injective on the entire seven-column, six-row envelope,
     and hence $|F_v|=30$. Every corner of every route plaquette belongs to
-    $F_v$, as does every vertex of the actual walk $\rho_v$.
+    $F_v$, as does every vertex of the walk $\rho_v$.
     Thus the elementary movement footprints fit into one fixed finite region.
 
-    This result supplies geometry only. It does not assert the composition
+    This result establishes the lattice geometry only. It does not assert the composition
     of the physical movement operators, the resulting bond assignment,
     a winding-number calculation, or the prescribed physical braid.
 \end{theorem}

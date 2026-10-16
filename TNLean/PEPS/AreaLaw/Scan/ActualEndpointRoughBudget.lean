@@ -142,17 +142,8 @@ theorem eventually_actualScan_suppliedPrevector_endpoint_budget
         (congrArg (fun s : ℕ ↦ (S.actualFillData hm hM s).rootPath n (a / 2) k 0) hlast)
   obtain ⟨hN, hfinal⟩ := (hupperK (S.n * S.m - 1) (by omega) 1).2
   rw [hendpoint] at hN hfinal
-  have hprenorm : ‖WithLp.toLp 2 (pre k)‖ ≤ 1 := by
-    let e := augmentedReplicaConfigurationEquiv (V := Site Λ) q d k
-    have hpreEq : pre k ∘ e = replicaPrevector Ωt d k (ell k) ∘
-        globalReplicaCopiesEquiv β (Fin d) (Fin d) k := by
-      simp only [pre, augmentedSumReplicaCopiesEquiv, Equiv.coe_trans,
-        Function.comp_assoc, e, Equiv.symm_comp_self, Function.comp_id, β]
-    have he := (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ e.symm).norm_map
-      (WithLp.toLp 2 (pre k))
-    have hno : ‖WithLp.toLp 2 (pre k ∘ e)‖ ≤ 1 := by
-      simpa only [hpreEq] using hpre k hk
-    exact he.symm.trans_le hno
+  have hprenorm : ‖WithLp.toLp 2 (pre k)‖ ≤ 1 :=
+    (norm_augmentedReplicaPrevector_eq_global q d k Ωt (ell k)).trans_le (hpre k hk)
   have hinitialK := hinitial k (pre k) hprenorm
   have hinitialDiv := div_le_div_of_nonneg_right hinitialK (Nat.cast_nonneg k)
   refine ⟨hN, ?_⟩

@@ -409,6 +409,45 @@ no holes, this is the normalization of $\Omega$.
     effect, each with a single monomial of coefficient one.
 \end{proof}
 
+\begin{theorem}[Switching the party map between repaintings]
+    \label{thm:peps_protocol_party_map_switch}
+    \lean{TNLean.PEPS.Approximation.labelParty_eq_of_ne_guidePlaceholder,
+        TNLean.PEPS.Approximation.guideFrame_labelParty_eq,
+        TNLean.PEPS.Approximation.exists_isBoundedChange_labelParty_switch,
+        TNLean.PEPS.Approximation.openRoot,
+        TNLean.PEPS.Approximation.blockGuide_protocolLevelLabels_ne_guidePlaceholder,
+        TNLean.PEPS.Approximation.IsDisplacedReading.ne_guidePlaceholder,
+        TNLean.PEPS.Approximation.cellCenterPos_mem_openRoot,
+        TNLean.PEPS.Approximation.guideFrame_levelLabels_labelParty_eq,
+        TNLean.PEPS.Approximation.exists_isBoundedChange_levelLabels_labelParty_switch}
+    \leanok
+    \uses{def:peps_dyadic_protocol_parties}
+    Read the labels of a guide as parties through the party map of a repainting: a
+    block label by its block party and the placeholder label by the fresh placeholder
+    party of that repainting. Suppose the guide takes only the placeholder and the
+    labels of squares of the hierarchy, no site carries the placeholder, and every
+    hole is centered at a true vertex. Then the encoded frame of the guide is the same
+    for the party maps of any two repaintings, and passing from one to the other is
+    the identity change, a bounded change for every set of participants and all
+    bounds. At the start and at the end of each repainting of a level $2^{j'}$ with
+    $j'<k$, every reading of the block guide of the level carries a block label at
+    every point of the open root square $(0,2^k)^2$, which contains the sites
+    $(i+1/2,j+1/2)$, $0\le i,j<L$, when $L\le2^k$. So at these transition times the
+    party map may be switched, and the fresh placeholder party of a repainting owns no
+    site and no tag of the frame before and after that repainting
+    (\texttt{06-geometry.tex}, lines 82--100, 119--125 and 627--630).
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:peps_guide_frame_tags, lem:peps_dyadic_tags, thm:peps_dyadic_guide_owners,
+        lem:peps_dyadic_sampled_guides, thm:peps_bounded_change_closure}
+    A label of a square of the hierarchy is held by its block party for every
+    repainting. The tag holder at a true vertex is an incident label other than the
+    placeholder. A point of the root square lies in a block of the root square at
+    every level, and a reading at a point of the open root square is the label of the
+    guide at a nearby point of the open root square.
+\end{proof}
+
 \begin{theorem}[The operations of the protocol as bounded changes]
     \label{thm:peps_protocol_bounded_changes}
     \lean{TNLean.PEPS.Approximation.DyadicSquare.index,
