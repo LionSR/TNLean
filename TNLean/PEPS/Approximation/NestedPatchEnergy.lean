@@ -13,7 +13,7 @@ import TNLean.PEPS.AreaLaw.RegularizedPatchMinimizerFilter
 # Energy of minimizing nested patch filters
 
 For the prescribed nested squares and equal weights, the normalized output at
-any feasible minimum has excitation energy at most $36q^2J\kappa^2$.
+any feasible minimum has excitation energy at most `36 * q ^ 2 * J * κ ^ 2`.
 The filters act on the original ground vector. Their spectral relations follow
 from minimality, and each nearest-neighbor interaction crosses at most one
 selected boundary. The geometric boundary sum gives the numerical constant.
@@ -32,7 +32,7 @@ namespace TNLean.PEPS.Approximation
 
 open Classical in
 /-- The actual normalized regularized output of every feasible patch minimum
-has excitation energy at most $36q^2J\kappa^2$ for the original square Hamiltonian.
+has excitation energy at most `36 * q ^ 2 * J * κ ^ 2` for the original square Hamiltonian.
 The interaction terms need only have a Hermitian total. Their Hermitian parts
 preserve the original sum, supports and norm bound.
 

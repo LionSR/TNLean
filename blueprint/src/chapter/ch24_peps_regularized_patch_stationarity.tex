@@ -749,13 +749,24 @@ Its marginals are those of the same final normalized vector defined in
         thm:peps_nested_patch_quadratic_sum}
     The weights are positive, so $\phi$ is a unit vector, and they are at
     most one. Write $H_{\mathrm{int}}$ as a sum of Hermitian site and edge
-    terms $T_i$ with $\|T_i\|\le J$. The filters are invertible, so
+    terms $T_i$, supported on single sites or edges $D_i$, with
+    $\|T_i\|\le J$. The filters are invertible, so
     $\phi$ is the normalized image of the gapped ground vector $U\Omega$
-    under the ordered filter product. Each edge crosses at most one selected
-    patch, so the energy increment of every term is controlled by the
-    logarithmic ratio estimate of
-    Theorem~\ref{thm:peps_patch_minimum_filter_log_ratio} at a single
-    index $j$. Summing over terms gives at most
+    under the ordered filter product. Each site term crosses no patch, and
+    each edge crosses at most one selected patch. For a term $T_i$ crossing
+    $K_j$, let $d_{ij}=q^{|D_i\cap K_j|}$ be the dimension of its support
+    inside $K_j$. The logarithmic ratio estimate of
+    Theorem~\ref{thm:peps_patch_minimum_filter_log_ratio} at that single
+    index, together with $a_j\le1$, gives
+    \begin{align}
+        \operatorname{Re}\langle\phi,H_{\mathrm{int}}\phi\rangle-E_0
+         & \le\sum_{j=0}^{m-1}a_j^2
+        \sum_{T_i\text{ crossing }K_j}d_{ij}^2J.
+        \label{eq:peps_nested_patch_single_crossing_energy}
+    \end{align}
+    A crossing edge has exactly one endpoint in $K_j$, so $d_{ij}=q$ and the
+    inner sum equals $q^2J|\partial_\Lambda K_j|$. Hence the right side of
+    (\ref{eq:peps_nested_patch_single_crossing_energy}) equals
     $q^2J\sum_ja_j^2|\partial_\Lambda K_j|$, and the quadratic boundary sum
     bounds this by $36q^2J\kappa^2$.
 \end{proof}
