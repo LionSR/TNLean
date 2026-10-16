@@ -342,7 +342,6 @@ by the strict inequalities.
 
 % Source: 10-geometry.tex, geometry:initial-stars, lines 332--349, and
 % geometry:repair-induction, lines 471--543.
-% Conditional entry; see docs/paper-gaps/arealaw2d_repair_induction_initial_stars.tex.
 \begin{theorem}[Uniform repair induction from the initial isolated stars]
     \label{thm:area_law_uniform_repair_induction_conditional}
     \lean{TNLean.PEPS.AreaLaw.Geometry.uniformRepairInductionStatement_of_initialIsolatedStars}
@@ -372,12 +371,12 @@ by the strict inequalities.
 \end{proof}
 
 % Source: 10-geometry.tex, geometry:repair-induction, lines 471--485.
-\begin{lemma}[Uniform repair induction]
-    \label{lem:area_law_uniform_repair_induction}
+\begin{theorem}[Uniform repair induction]
+    \label{thm:area_law_uniform_repair_induction}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.uniformRepairInductionStatement_holds}
+    \leanok
     \uses{def:area_law_uniform_repair_conclusion,
-        thm:area_law_uniform_repair_induction_conditional,
-        lem:area_law_repair_metric_invariants,
-        lem:area_law_repair_metric_choice}
+        thm:area_law_initial_stars}
     For a sufficiently small fixed choice of $a_0$ and the corresponding
     threshold $S_*$, every active mark $(v,S)$ at every generation has a
     terminal-square-free isolated star $v+[-a_0S,a_0S]^2$ with the
@@ -390,23 +389,16 @@ by the strict inequalities.
     descendant birth region of a mark $(v,S)$ lies within sup distance
     $2d(S)$ of $v$. Each branch terminates after finitely many
     generations.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}
+    \leanok
     \uses{thm:area_law_uniform_repair_induction_conditional,
-        lem:area_law_repair_metric_invariants,
-        lem:area_law_repair_metric_choice}
-    This is Theorem~\ref{thm:area_law_uniform_repair_induction_conditional}
-    combined with the initial isolated-star lemma. The metric assertions are
-    Lemma~\ref{lem:area_law_repair_metric_invariants}. The squares of
-    radius $6d(S)$ about a parent lie in its star and avoid all other
-    removal squares, so each modification sees only its parent's radial
-    boundaries. After normalizing the removal square to $[-1,1]^2$, the
-    new boundaries lie on the eight radial rays and the four supporting
-    lines of the square, and the possible new marks are the nine points of
-    $\{-1,0,1\}^2$. This finite configuration gives the isolated stars of
-    the children with the same constant, and the label reversal gives the
-    contact assertion.
+        thm:area_law_initial_stars}
+    Theorem~\ref{thm:area_law_initial_stars} supplies the initial isolated
+    stars, and
+    Theorem~\ref{thm:area_law_uniform_repair_induction_conditional} turns
+    them into the assertions at every generation.
 \end{proof}
 
 % Source: 10-geometry.tex, child marks, lines 404--409 and 506--514;

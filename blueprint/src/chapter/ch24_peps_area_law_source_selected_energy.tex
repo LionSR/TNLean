@@ -1,0 +1,123 @@
+\section{Stronger density and the paper energy rate at one charge point}
+\label{sec:arealaw-source-selected-energy}
+
+\begin{lemma}[Eight-nu density margins]
+    \label{lem:arealaw-eight-nu-density-margins}
+    \lean{TNLean.PEPS.AreaLaw.Scan.final_eightNuDensity_margins}
+    At the final source exponents, the exact slacks for density rate
+    $8\nu=1/125$, with interval exponent still equal to $\nu$, are
+    \begin{align}
+        -8\nu-(e-\mu+\nu) & =\frac{120499}{500000},\nonumber \\
+        -8\nu-\left(\frac{\omega-(1-\ell-\mu)}4+\nu\right)
+                          & =\frac{35697}{200000}.
+    \end{align}
+\end{lemma}
+\begin{proof}
+    Substitute the exact rational final exponents.
+\end{proof}
+
+\begin{theorem}[Principal density at the stronger rate]
+    \label{thm:arealaw-principal-density-eight-nu}
+    \lean{TNLean.PEPS.AreaLaw.Scan.exists_final_principalDensity_le_eightNu}
+    For every fixed $C\geq0$ and real $C_l$, there is a threshold before
+    $n$ and $W$ such that the literal floor and natural-division scales
+    obey $K\geq1$ and, uniformly over $1\leq W\leq n^\omega$,
+    \begin{align}
+        C\frac{n^e/m+(W/K)^{1/4}(\log n)^{C_l}}{n^{-\nu}}
+         & \leq n^{-8\nu}.
+    \end{align}
+\end{theorem}
+\begin{proof}
+    Apply the arbitrary-rate rounded-scale theorem with rate $8\nu$ and
+    the two strict margins above.  No scanner, entropy or selection input
+    is used in this numerical statement.
+\end{proof}
+
+\begin{theorem}[Unchanged interval and stronger selected density]
+    \label{thm:arealaw-selected-density-eight-nu}
+    \lean{TNLean.PEPS.AreaLaw.Scan.exists_final_selectedDensity_le_eightNu}
+    Under the same explicit target-mass, target-entropy, selected-dimension,
+    shell-entropy and logarithmic-cap hypotheses as the modular selected
+    density theorem, retain its raw selected budget and interval denominator
+    $\varepsilon=n^{-\nu}$.  With all fixed coefficients before the size
+    threshold, eventually in replica number the unchanged selected point
+    satisfies density at most $\eta=n^{-8\nu}$ and every proposition
+    already attached to that point.
+\end{theorem}
+\begin{proof}
+    Apply the preceding numerical bound at twice the required coefficient.
+    This leaves $\eta/2$ for the principal term.  For each fixed physical
+    system and weight, its scaled replica remainder is eventually at most
+    $\eta/2$.  Keep the same selected point and attached propositions.
+    The interval width is not replaced by $\eta$.
+\end{proof}
+
+\begin{theorem}[Paper-rate actual energy and sharp comparison]
+    \label{thm:arealaw-source-selected-sharp-energy}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_sourceTarget_selected_actualCharge_sharp_energy}
+    Use the same original gapped-ground-state, graph, anchor, depth,
+    whole-row geometry, target-volume, clearance and literal scale premises
+    as the concrete source-density theorem.  Fix $C_1>0$ and its anchor
+    multiplicity before all thresholds.  Fix $P\geq\nu$.
+    The positive source constants, real transport coefficients and
+    exponents, and cap constants $C\geq1$, $C_l\geq0$ precede the
+    nonnegative entropy coefficient $C_e$, which precedes the enlarged
+    size threshold.  The original target and prefix bounds are
+    \begin{align}
+        S(\Omega_X) & \leq C_en^{1+e_{\mathrm{box}}},                        &
+        S(\Omega_{\{0<\mathrm{depth}\leq j\}\cap A})
+                    & \leq C_e(nL^{e_{\mathrm{box}}}+n)\quad(0\leq j\leq L).
+    \end{align}
+    Then one truncated state, one target window and one physical label
+    sequence precede every weight $1\leq W\leq n^\omega$.
+    Retain $2r_0\leq D$, $4D\leq m$ and
+    $a\,\mathrm{transportLogDimBound}(q,r_0)\leq c_t$ for $a=W/K$.
+    For each fixed admissible instance and weight, eventually there is an
+    actual charge point $(s,p)$ for the same supplied prevector with
+    \begin{align}
+        p                         & \in[n^{-\nu},2n^{-\nu}],     &
+        0\leq\frac{Q_k(s,p)}{KnD} & \leq n^{-8\nu},\nonumber       \\
+        0\leq\delta_k(s,p)
+                                  & :=\frac{\mu_k(s,p)-e_0}{g/2}
+        \leq n^{-1/2000}+\frac{\mathrm{rem}_k}{g/2}.
+        \label{eq:arealaw-source-selected-energy-power}
+    \end{align}
+    The original cap-based energy inequality is also retained.
+    In the full actual sharp comparison, the factor multiplying
+    $\max\{0,2S'+g_{\max}\}/\tau$ is replaced by this derived energy
+    upper bound, for every $0<\tau\leq1/2$ at the same point.
+    All other entropy, mass, moment and replica-remainder terms remain
+    literal, including the loss $37K_{\mathrm{mom}}a$.
+\end{theorem}
+\begin{proof}
+    Invoke the raw source selected-comparison theorem once and transfer
+    the original target entropy to its same truncated state.  The same
+    spectral window supplies the selected-dimension estimate.  Apply the
+    eight-nu density closure directly to the raw endpoint/selection budget,
+    keeping its chosen interval and selected point.
+
+    The actual charge-defect nonnegativity theorem supplies $Q_k\geq0$.
+    Its eighth root is at most $n^{-\nu}$.  Since $P\geq\nu$ and
+    $p\leq2n^{-\nu}$, the energy bracket is at most $4n^{-\nu}$.
+    The literal ceiling gives $D\leq2n^\kappa$, while $W\leq n^\omega$.
+    The cap is therefore at most
+    $16C n^{-111/125000}(\log n)^{C_l}$.
+    The positive margin $97/250000$ absorbs these fixed coefficients
+    and logarithms, as well as the fixed gap normalization.
+    The same source ground energy obeys $e_0\leq n^{-1000}$ and is
+    absorbed separately.  The replica remainder remains divided by the
+    same gap, with no size-dependent rate claimed.  Monotonicity in the
+    nonnegative sharp-comparison factor proves its stated strengthening.
+\end{proof}
+
+The manuscript writes its averaging interval as $[\epsilon/2,\epsilon]$
+and finally takes $\epsilon=n^{-\nu}$.  This theorem uses the valid
+alternative $[n^{-\nu},2n^{-\nu}]$, corresponding to rescaling that
+averaging parameter by two.  The factor $p\leq2n^{-\nu}$ is retained
+explicitly in the cap, and the threshold ensures $2n^{-\nu}<1$.
+The geometric and entropy hypotheses and selected interval are unchanged.
+The energy corollary fixes $P\geq\nu$ and uses a stronger consequence
+of the existing strict density margins.  The replica
+threshold still follows the physical instance and weight.  The entropy
+bounds needed to close the remaining comparison, safe-box telescope and
+final area law are not asserted here.

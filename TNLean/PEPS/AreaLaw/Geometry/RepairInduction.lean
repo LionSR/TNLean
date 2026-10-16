@@ -5,11 +5,13 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Geometry.RepairStageStars
 import TNLean.PEPS.AreaLaw.Geometry.RepairInductionStatement
+import TNLean.PEPS.AreaLaw.Geometry.InitialStars
 
 /-!
-# The uniform repair induction from the initial isolated stars
+# The uniform repair induction
 
 The statement of the initial isolated-star lemma implies the statement of the
+uniform repair induction; with the initial isolated stars this proves the
 uniform repair induction. Take the isolation constant `a₀` to be the smaller of
 the initial constant and `1/4`, and the stopping scale and the lower layer
 index so large that the scale margins and the initial scale bound hold. The
@@ -31,13 +33,6 @@ namespace TNLean.PEPS.AreaLaw.Geometry
 
 /-- **Uniform repair induction**, from the conclusion of the initial
 isolated-star lemma.
-
-**Scope restriction (conditional on Lemma 11.3):** the source lemma is
-unconditional; here the conclusion of Lemma 11.3 for the initial stage,
-`InitialIsolatedStarsStatement`, is an explicit hypothesis and no other
-hypothesis is added. Documented in
-`docs/paper-gaps/arealaw2d_repair_induction_initial_stars.tex`; removed once
-Lemma 11.3 is proved and applied here.
 Source: area-law Section 11, `geometry:repair-induction`, lines 471–543. -/
 theorem uniformRepairInductionStatement_of_initialIsolatedStars
     (hinit : InitialIsolatedStarsStatement) : UniformRepairInductionStatement := by
@@ -71,5 +66,16 @@ theorem uniformRepairInductionStatement_of_initialIsolatedStars
       dist_descendant_le := hM.dist_descendant_le
       birth_descendant_subset := hM.birth_descendant_subset
       terminates := hM.terminates }
+
+/-- **Uniform repair induction** (Lemma 11.4). For a sufficiently small fixed
+isolation constant and every sufficiently large stopping scale, for every
+width and every sufficiently large lower layer index, the actual repair stages
+have isolated stars with that constant at every generation, avoid earlier
+terminal squares, have disjoint removal squares and same-label contacts only
+at marks of the next generation, keep descendants within `2 d(S)`, and
+terminate along every branch.
+Source: area-law Section 11, `geometry:repair-induction`, lines 471–543. -/
+theorem uniformRepairInductionStatement_holds : UniformRepairInductionStatement :=
+  uniformRepairInductionStatement_of_initialIsolatedStars initialIsolatedStarsStatement_holds
 
 end TNLean.PEPS.AreaLaw.Geometry
