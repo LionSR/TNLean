@@ -1087,3 +1087,83 @@ no holes, this is the normalization of $\Omega$.
     Concatenate the sequences of states. The memory changes are the lifts of one or
     two sheets of the sheet stack, after a reordering of the sheets.
 \end{proof}
+
+\begin{theorem}[Bulk operations of one sheet with their point treatments]
+    \label{thm:peps_protocol_sheet_operation_chains}
+    \lean{TNLean.PEPS.Approximation.cornerList,
+        TNLean.PEPS.Approximation.SquareEdge.endpointList,
+        TNLean.PEPS.Approximation.toFinset_cornerList,
+        TNLean.PEPS.Approximation.SquareEdge.toFinset_endpointList,
+        TNLean.PEPS.Approximation.isBlockCornerOf_of_mem_cornerList,
+        TNLean.PEPS.Approximation.SquareEdge.isBlockCornerOf_of_mem_endpointList,
+        TNLean.PEPS.Approximation.zpow_neg_thirty_le,
+        TNLean.PEPS.Approximation.four_mul_zpow_neg_thirty_le,
+        TNLean.PEPS.Approximation.HasFrameChange.mono_error,
+        TNLean.PEPS.Approximation.HasPairChange.mono_error,
+        TNLean.PEPS.Approximation.IsPointTreatable,
+        TNLean.PEPS.Approximation.isHomogenizing_oldLabel,
+        TNLean.PEPS.Approximation.isHomogenizing_finalLabel,
+        TNLean.PEPS.Approximation.isHomogenizing_nbrLabel,
+        TNLean.PEPS.Approximation.isStepChain_sheetOperation,
+        TNLean.PEPS.Approximation.IsLocalLabel,
+        TNLean.PEPS.Approximation.IsLocalLabel.eventUses,
+        TNLean.PEPS.Approximation.isStepChain_centralBirth,
+        TNLean.PEPS.Approximation.isStepChain_bandOperation}
+    \leanok
+    \uses{thm:peps_protocol_point_treatment_change, thm:peps_protocol_band_step_changes,
+        thm:peps_protocol_central_birth_change, lem:peps_protocol_change_chains}
+    Assume the angular information bound at the scale $t=D\log L$, as provided by
+    Proposition~3.4. At the constants of the protocol, in the repainting of a square
+    $R$ of side $n=2^j>K_0t$ whose point treatments are bounded changes with the
+    bounds of the small-patch rewrites, the following hold. The four point treatments
+    with the old label, the central birth and the removal of the treatments are $9$
+    such changes, from the frame of the starting guide to that of the guide after the
+    central birth. An elementary birth or death along an edge, inserting or removing a
+    local label with a local surrounding label, with its two point treatments, is $5$
+    such changes (\texttt{06-geometry.tex}, lines 155--221 and 328--339).
+\end{theorem}
+
+\begin{proof}\leanok
+    Add the marks one at a time, operate, and remove the marks. Adding or removing one
+    mark is a point treatment, and the bulk step is a birth or death of
+    Theorem~\ref{thm:peps_protocol_band_step_changes} or the central birth, whose
+    error $L^{-30}$ is at most that of a small-patch rewrite.
+\end{proof}
+
+\begin{theorem}[The edge construction as changes of the memory]
+    \label{thm:peps_protocol_edge_construction_chain}
+    \lean{TNLean.PEPS.Approximation.auxBirthB_insertsOne,
+        TNLean.PEPS.Approximation.auxBirthA_insertsOne,
+        TNLean.PEPS.Approximation.auxBirthC_insertsOne,
+        TNLean.PEPS.Approximation.mainDeathC_insertsOne,
+        TNLean.PEPS.Approximation.mainDeathA_insertsOne,
+        TNLean.PEPS.Approximation.mainBirthC_insertsOne,
+        TNLean.PEPS.Approximation.mainDeathB_insertsOne,
+        TNLean.PEPS.Approximation.isStepChain_auxBirths,
+        TNLean.PEPS.Approximation.isStepChain_mainSteps,
+        TNLean.PEPS.Approximation.isStepChain_lensExchange,
+        TNLean.PEPS.Approximation.isStepChain_edgeConstruction}
+    \leanok
+    \uses{thm:peps_protocol_sheet_operation_chains, thm:peps_protocol_lens_exchange_change,
+        thm:peps_protocol_treated_frame_ends, lem:peps_protocol_change_chains}
+    Assume the angular information bound at the scale $t=D\log L$, as provided by
+    Proposition~3.4. In the setting of
+    Theorem~\ref{thm:peps_protocol_sheet_operation_chains}, let the memory carry the
+    main sheet with the central birth and some edges done, treated at no mark, and the
+    raw copy held by the party of the label $C_e$ across an edge $e$ not yet done. The
+    initialization of the auxiliary sheet of $e$, its three births, the lens exchange
+    and the four operations of the main sheet, with their point treatments, are $45$
+    bounded changes of the memory with the bounds of the small-patch rewrites. They
+    complete $e$ on the main sheet and leave the auxiliary sheet of $e$ with the
+    exchanged auxiliary word (\texttt{06-geometry.tex}, lines 183--221, 328--339 and
+    389--430).
+\end{theorem}
+
+\begin{proof}\leanok
+    The initialization is the identity change, since the fresh auxiliary sheet is the
+    raw copy. The three auxiliary births are $15$ changes of the auxiliary sheet. The
+    main sheet passes to the starting word without change. The lens exchange, with the
+    point treatments of both sheets about the endpoints of $e$, is $9$ changes, and the
+    four operations of the main sheet are $20$ changes. Each birth and death introduces
+    one of the labels $A$, $B$, $C_e$, which are local labels of the repainting.
+\end{proof}
