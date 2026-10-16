@@ -81,3 +81,66 @@
     $|\partial_\Lambda A_j|$ such summands. Substitute these identities
     and factor out $q^2J$.
 \end{proof}
+
+\begin{theorem}[A square-grid maximizing family with controlled energy]
+    \label{thm:square_zero_floor_maximizer_energy}
+    \lean{TNLean.PEPS.Approximation.SquareHamiltonian.exists_zero_floor_maximizer_energy_fidelity}
+    % Completion marks await hosted proof and declaration checks.
+    \uses{def:polynomial_peps_model,def:area_law_nearest_neighbor_support,
+        def:square_area_law_hamiltonian}
+    Let $L,q,m\ge0$ be integers and $J\ge0$. Let $H$ be an original
+    square-grid Hamiltonian with interaction bound $J$, and let $\Omega$
+    be a unit vector with $H\Omega=E_0\Omega$ and
+    $H-E_0I\ge\Delta(I-|\Omega\rangle\langle\Omega|)$, where
+    $E_0,\Delta\in\mathbb R$. Write $\Lambda$ for its integer square
+    domain, $U$ for the canonical configuration isometry,
+    $\widetilde H=UHU^*$ and $\widetilde\Omega=U\Omega$.
+
+    Supply nested regions $D_0\subseteq\cdots\subseteq D_{m-1}\subseteq\Lambda$
+    such that each unordered nearest-neighbor edge belongs to
+    $\partial_\Lambda D_j$ for at most one $j$, and weights $0<a_j\le1$.
+    A feasible regional filter has the form
+    $K_j=V_j\operatorname{diag}(p_{j,r}^{a_j/2})V_j^*$, where $V_j$ is
+    unitary, $p_{j,r}\ge0$ and $\sum_r p_{j,r}=1$. Extend each filter
+    by the identity outside $D_j$ and put
+    $\psi(K)=K_{m-1}\cdots K_0\widetilde\Omega$.
+    There is one feasible family $K$ such that every feasible family $K'$
+    satisfies $\|\psi(K')\|\le\|\psi(K)\|$, and, with
+    $\psi=\psi(K)$, $\phi=\psi/\|\psi\|$ and
+    $B=q^2J\sum_{j=0}^{m-1}a_j^2|\partial_\Lambda D_j|$,
+    \begin{align}
+        0 &< \|\psi\|, & \|\phi\| &=1, \notag\\
+        |\operatorname{Re}\langle\phi,\widetilde H\phi\rangle-E_0|
+          &\le B, \notag\\
+        \Delta\bigl(1-|\langle\widetilde\Omega,\phi\rangle|^2\bigr)
+          &\le B. \label{eq:square_zero_floor_energy}
+    \end{align}
+    This is the square-grid specialization of the maximizing-family
+    estimate in~\cite{QICLean2026ZeroFloorEnergy}, corresponding to the
+    companion source of~\cite{OpenAI2026PolynomialPEPS}. The spectral
+    feasible families used here and their comparison with the source's
+    filter coordinates are discussed in~\cite{gap:oai26_zero_floor_energy_scope};
+    the nonnegative-budget restriction is recorded
+    in~\cite{gap:polypeps_square_zero_floor_optimizer_scope}.
+\end{theorem}
+\begin{proof}
+    % Completion marks await hosted proof and declaration checks.
+    \uses{thm:square_nearest_neighbor_terms,thm:square_area_law_ground_gap,
+        thm:area_law_crossing_support_count,thm:area_law_nearest_neighbor_budget}
+    Replace the original terms by their Hermitian parts and transport them
+    by $U$. The resulting site and unordered-edge terms have the same bound
+    $J$ and sum to $\widetilde H$. On-site supports are never split, and
+    the edge hypothesis says that each two-site support is split at most
+    once. The sharp zero-floor maximizing-family estimate
+    of~\cite{QICLean2026ZeroFloorEnergy} gives one feasible global maximizer,
+    nonzero output, unit normalization and absolute energy error at most
+    $\sum_j a_j^2\sum_{i\in C(D_j)}d_{ij}^2J$.
+    By~(\ref{eq:area_law_exact_crossing_sum}), this sum equals $B$.
+    Evaluate the transported projector gap on this same unit vector:
+    \begin{align}
+        \Delta\bigl(1-|\langle\widetilde\Omega,\phi\rangle|^2\bigr)
+        &\le\operatorname{Re}\langle\phi,\widetilde H\phi\rangle-E_0
+        \le|\operatorname{Re}\langle\phi,\widetilde H\phi\rangle-E_0|
+        \le B. \notag
+    \end{align}
+\end{proof}
