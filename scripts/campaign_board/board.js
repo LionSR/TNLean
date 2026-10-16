@@ -14,6 +14,7 @@
     error: ["Error in the paper", "A printed claim fails as stated. It needs a correction and possibly a new argument."],
     "missing-step": ["Missing step", "The paper omits a nontrivial step. The claim may hold, but the argument is incomplete."],
     narrower: ["Lean narrower than the paper", "Lean currently proves a restricted version. The paper's argument appears sound, and the remaining work is formalization."],
+    "local-correction": ["Local correction", "A constant, a typo, or a small step is adjusted locally. The paper's argument stands."],
     convention: ["Convention", "A degenerate case, such as a zero dimension or an empty set, is read as the authors intend."]
   };
   const GAP_STATUS = { open: ["Open", "st-draft"], "resolved-pending": ["Resolved in an open PR", "st-review"], resolved: ["Resolved", "st-done"] };
@@ -271,7 +272,7 @@
       ? `No open errors or missing steps among the classified notes. ${plural(pending.length, "new note")} still to be classified.`
       : "No open errors or missing steps in either paper.";
   // Gap entries as the page shows them: open ones first, then by kind.
-  const GAP_ORDER = { error: 0, "missing-step": 1, narrower: 2, convention: 3 };
+  const GAP_ORDER = { error: 0, "missing-step": 1, narrower: 2, "local-correction": 3, convention: 4 };
   const gapsInOrder = () => [...G.entries].sort((a, b) => (isOpenGap(b) - isOpenGap(a)) || GAP_ORDER[a.kind] - GAP_ORDER[b.kind]);
   // Citations are numbered in reading order: the proof stages, then the gap entries.
   (function numberCitations() {
