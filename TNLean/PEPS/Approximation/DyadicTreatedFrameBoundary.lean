@@ -341,8 +341,9 @@ theorem treatedFrame_edgeStart {K₀ ε₀ ν a D : ℝ} (hc : IsProtocolConstan
     treatedFrame (q := q) P rank R (hc.treatedRadius_bounds hL) ∅ L₀
         ((repaintBaseline R done).completedGuide E) =
       treatedFrame P rank R (hc.treatedRadius_bounds hL) ∅ L₀'
-        ((repaintBaseline R done).mainGuide E e (edgeStartWord (repaintBaseline R done).oldLabel (repaintBaseline R done).finalLabel
-          ((repaintBaseline R done).nbrLabel e))) := by
+        ((repaintBaseline R done).mainGuide E e
+          (edgeStartWord (repaintBaseline R done).oldLabel (repaintBaseline R done).finalLabel
+            ((repaintBaseline R done).nbrLabel e))) := by
   have hr := hc.treatedRadius_bounds hL
   classical
   set d := blockCorner ((2 : ℝ) ^ (R.1.1 : ℕ)) R.1.index
