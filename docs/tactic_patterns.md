@@ -6318,6 +6318,30 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Notes:** bounds should be supplied before simplifying dependent matrix
   indices; exhaustive enumeration of all bond-coordinate pairs is unnecessary.
 
+### Uniform expansion bounds under chronological composition — candidate (2026-10-15)
+
+- **Pattern:** Induct on the number of stages while retaining the bounds on
+  every stage below the current index; composition forms the conjunction of
+  the preceding bound and the last stage's bound.
+- **Seen:** `OriginalCircuit.isExpansionBounded_sequence` and
+  `OriginalCircuit.isMonomialBounded_sequence` in
+  `TNLean/PEPS/Approximation/OriginalCircuitSequence.lean`, and formerly
+  `DyadicProtocol.isExpansionBounded_chain` and
+  `DyadicProtocol.isMonomialBounded_chain` in
+  `TNLean/PEPS/Approximation/DyadicProtocolCompression.lean`: four
+  occurrences across two files.
+- **Abstraction:** Done (2026-10-16). `DyadicProtocol.chain` is now
+  `OriginalCircuit.sequence` of the protocol changes, and every `chain` lemma
+  (counts, participation, participating sets, expansion and monomial bounds)
+  is a one-line instance of the generic `sequence` lemma. Two inductions
+  remain, both in `OriginalCircuitSequence.lean`. Before adding a further
+  gate-expansion property, derive it from a common occurrence-wise
+  description, as in the existing retained-memory entry.
+- **Notes:** The gate and lifetime sum identities in the same module use the
+  existing `Finset.sum_range_succ`; their elementary induction follows the
+  recorded decision against abstracting finite-sum proof structure. No new
+  tactic or global simplification rule is introduced.
+
 ## Rejected
 
 ### Axiom allow-list fixtures — rejected (2026-10-12)
