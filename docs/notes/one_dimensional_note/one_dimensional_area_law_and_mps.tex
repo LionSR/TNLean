@@ -1085,8 +1085,8 @@ dimensions and which uses none of this sequential truncation.
 \begin{proposition}[Sequential truncation]\label{prop:VC}
 Let $\Om$ be a unit vector on $\cH_\Lam$, $\Lam=\{1,\dots,L\}$. For
 $1\le k\le L-1$ let $\Pi_k$ be the projection of $\cH_{[1,k]}$ onto the
-span of the $D$ eigenvectors of $\rho_{[1,k]}$ with largest eigenvalues,
-let $\epsilon_k=\langle\Om,(\id-\Pi_k\otimes\id)\Om\rangle$ be the discarded
+span of the $\min\{D,\dim\cH_{[1,k]}\}$ eigenvectors of $\rho_{[1,k]}$ with
+largest eigenvalues (so $\Pi_k=\id$ when $D\ge\dim\cH_{[1,k]}$), let $\epsilon_k=\langle\Om,(\id-\Pi_k\otimes\id)\Om\rangle$ be the discarded
 mass, and put
 \[
  \Phi=(\Pi_1\otimes\id)(\Pi_2\otimes\id)\cdots(\Pi_{L-1}\otimes\id)\,\Om .
