@@ -168,6 +168,14 @@ def main() -> None:
 '''
     target = directory / "digest.html"
     target.write_text(page)
+    # The same page as an Artifact body: the publish step wraps it in its own skeleton.
+    artifact = ('<title>One-Dimensional Collar-Free Route</title>\n'
+                '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+Math&display=swap">\n'
+                '<script>window.MathJax = {tex: {inlineMath: [["\\\\(","\\\\)"]], displayMath: [["\\\\[","\\\\]"]]}};</script>\n'
+                '<script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml-full.js"></script>\n'
+                '<style>\n' + css + '\nbody { margin: 0; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }\n.wrap { padding-inline: 0; }\n</style>\n'
+                '<div class="wrap">\n' + "".join(out) + '\n</div>\n')
+    (directory / "artifact_page.html").write_text(artifact)
     print(f"{target}: {target.stat().st_size // 1024} KiB, {len(cite_no)} references")
 
 

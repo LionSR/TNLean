@@ -1,11 +1,11 @@
-% alt: a chain of sixteen sites with the four sites left of the cut enclosed as B, the next two as the collar D, and the half-line beyond cut into the dyadic intervals X_1 (one site), X_2 (two sites), X_3 (four sites) and X_4 (the remaining three), drawn in two alternating colours for the two families.
-% Section 6 (The long route, for comparison), paragraph Two families: the half-line to the right of the cut is cut into dyadic intervals X_i = [2^i, 2^{i+1}) with alternating family labels, so that each X_i is separated from the other side of the cut and from every earlier interval of its own family by the gap X_{i-1}, of comparable length 2^{i-1}; the dots are the sites and the upward legs the physical indices C^q, every leg is open (nothing is contracted); the left enclosure is the other side of the cut B, the next one is the collar D with |D| = O(1), then X_1, X_2, X_3, X_4 (X_4 truncated by the edge of the picture), family 0 (X_1, X_3) in the selected ink and family 1 (X_2, X_4) in the secondary ink.
-\begin{tenkz}[lattice={1x16}, frame=plane, physical=up, bonds=none]
-  \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{}
+% alt: a chain of twenty-three sites with the four sites left of the cut enclosed as B, the next two sites as the removed set D, and the half-line beyond it cut into the dyadic intervals X_1 (two sites), X_2 (four sites), X_3 (eight sites) and the beginning of X_4 (an open bracket over three sites, continuing past the edge of the picture), drawn in two alternating colours for the two families.
+% Section 6 (The long route, for comparison), paragraph Two families: the half-line {0, 1, 2, ...} to the right of the cut is cut into dyadic intervals X_i = [2^i, 2^{i+1}), so |X_1| = 2, |X_2| = 4, |X_3| = 8 and the lengths double, with alternating family labels, so that each X_i with i >= 2 is separated from the other side of the cut and from every earlier interval of its own family by the gap X_{i-1}, of comparable length 2^{i-1}, while X_1 is separated from the other side of the cut by D; the dots are the sites and the upward legs the physical indices C^q, every leg is open (nothing is contracted); the left enclosure is the other side of the cut B, the next one is the removed set D = [0,2) with |D| = 2 = O(1), then X_1, X_2, X_3, X_4 (X_4 truncated by the edge of the picture), family 0 (X_1, X_3) in the selected ink and family 1 (X_2, X_4) in the secondary ink.
+\begin{tenkz}[lattice={1x23}, frame=plane, physical=up, bonds=none]
+  \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{}
   \tnmark[form=enclosure, species=complement, label pos=s]{(1,1) .. (1,4)}{$B$}
   \tnmark[form=enclosure, species=collar, label pos=n]{(1,5) .. (1,6)}{$D$}
-  \tnmark[form=enclosure, species=selected, label pos=s]{(1,7) .. (1,7)}{$X_1$}
-  \tnmark[form=enclosure, species=secondary, label pos=n]{(1,8) .. (1,9)}{$X_2$}
-  \tnmark[form=enclosure, species=selected, label pos=s]{(1,10) .. (1,13)}{$X_3$}
-  \tnmark[form=enclosure, species=secondary, label pos=n]{(1,14) .. (1,16)}{$X_4$}
+  \tnmark[form=enclosure, species=selected, label pos=s]{(1,7) .. (1,8)}{$X_1$}
+  \tnmark[form=enclosure, species=secondary, label pos=n]{(1,9) .. (1,12)}{$X_2$}
+  \tnmark[form=enclosure, species=selected, label pos=s]{(1,13) .. (1,20)}{$X_3$}
+  \tnmark[form=bracket, species=secondary, label pos=n]{(1,21) .. (1,23)}{$X_4\;\cdots$}
 \end{tenkz}

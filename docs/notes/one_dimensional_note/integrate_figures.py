@@ -94,7 +94,7 @@ def figure(name: str, inline: bool, caption: str) -> str:
 
 
 def main() -> None:
-    inserted, missing = [], []
+    inserted, missing, refreshed = [], [], []
     for name, inline, part, anchor, override in PLAN:
         src = HERE / ("diagrams/inline" if inline else "diagrams") / f"{name}.tex"
         if not src.with_suffix(".svg").exists():
@@ -103,8 +103,17 @@ def main() -> None:
         text = (HERE / part).read_text()
         if f"\\label{{fig:{name}}}" in text:
             # already placed: refresh the figure copy from the (possibly revised) source
+            # and the caption from presentation.json
             (HERE / "diagrams" / "fig").mkdir(exist_ok=True)
             (HERE / f"diagrams/fig/{name}.tex").write_text(body_for_figure(src, inline) + "\n")
+            key = f"diagrams/{name}.svg"
+            caption = (override or CAPTIONS.get(key, "")).replace("\\(", "$").replace("\\)", "$")
+            end = text.index(f"}}\\label{{fig:{name}}}")
+            start = text.rindex("\\caption{", 0, end)
+            text2 = text[:start] + "\\caption{" + caption + text[end:]
+            if text2 != text:
+                (HERE / part).write_text(text2)
+                refreshed.append(name)
             continue
         key = f"diagrams/{name}.svg"
         caption = override or CAPTIONS.get(key, "")
@@ -121,6 +130,7 @@ def main() -> None:
     parts = ["part0_preamble.tex", "part1_arealaw.tex", "part2a_mps_information.tex", "part2b_mps_protocol.tex", "bib.tex"]
     (HERE / "one_dimensional_area_law_and_mps.tex").write_text("".join((HERE / p).read_text() for p in parts))
     print("inserted:", ", ".join(inserted) or "none")
+    print("captions refreshed:", ", ".join(refreshed) or "none")
     print("missing svg:", ", ".join(missing) or "none")
 
 

@@ -59,7 +59,7 @@ most $D$.
 \begin{adjustbox}{max width=\linewidth}
 \input{diagrams/fig/truncation-sequence.tex}
 \end{adjustbox}
-\caption{Sequential truncation. The projector onto the top $D$ Schmidt vectors of the prefix $[1,k]$ is applied for $k=L-1$ first and $k=1$ last; across every cut the result has Schmidt rank at most $D$.}\label{fig:truncation-sequence}
+\caption{Sequential truncation, drawn for $L=5$. The projector $P_k=\Pi_k\otimes 1$ onto the top $D$ Schmidt vectors of the prefix $[1,k]$ is applied for $k=L-1$ first and $k=1$ last; the output of $P_k$ lies in $\mathrm{ran}\,\Pi_k\otimes\mathcal H_{[k+1,L]}$, so across every cut the result has Schmidt rank at most $D$.}\label{fig:truncation-sequence}
 \end{figure*}
 
 \begin{theorem}[Theorem~\ref{thm:B}, two-line route]\label{thm:Bshort}
@@ -277,7 +277,7 @@ $4C\abs S^2\norm A\e^{vt}\sum_{d>\ell}\e^{-\mu d}$.
 \begin{adjustbox}{max width=\linewidth}
 \input{diagrams/fig/chain-reset.tex}
 \end{adjustbox}
-\caption{The reset geometry on the chain: the cores $R_0\subset R$ and $C_0\subset C$, the buffer $Q$ between $R$ and $C$, the margins of width $w$, and the support $S$ of the unitary, which stays clear of both cores.}\label{fig:chain-reset}
+\caption{The reset geometry, drawn in one replica of $\Psi=\Omega\otimes\Omega$: the cores $R_0\subset R$ and $C_0\subset C$, the buffer $Q=\Lambda\setminus(R\cup C)$, the margins of width $w$, the set $Z_R$ near the cut edges of $R$, and the support $S=N_\ell(Q\cup Z_R)$ of the unitary, which stays clear of both cores.}\label{fig:chain-reset}
 \end{figure*}
 
 \begin{lemma}[Information reset]\label{lem:reset}
@@ -404,7 +404,7 @@ $I_\Om(R_0:C_0)\le CL^{1-r_*/2}=CL^{-p-4}\le L^{-p}$ for large $L$.
 \begin{adjustbox}{max width=\linewidth}
 \input{diagrams/fig/replica-swap.tex}
 \end{adjustbox}
-\caption{The swap $F_R$ exchanges the two copies of $\Omega$ on $R$ only. In $\Phi=F_R\Psi$ the core $R_0$ of the first copy comes from the second copy, so its marginal with $C_0$ is a product.}\label{fig:replica-swap}
+\caption{The swap $F_R$ exchanges the two copies of $\Omega$ on $R$ only (the first copy is drawn mirrored so that the two $R$ legs are adjacent). In $\Phi=F_R\Psi$ the core $R_0$ of the first copy comes from the second copy while $C_0$ does not, so the first copy's marginal on $R_0C_0$ is $\rho_{R_0}\otimes\rho_{C_0}$.}\label{fig:replica-swap}
 \end{figure*}
 
 \begin{figure*}[t]

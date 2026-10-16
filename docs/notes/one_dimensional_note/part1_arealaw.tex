@@ -52,7 +52,7 @@ norm at most $\norm{h_Y}$.) Put
 \begin{adjustbox}{max width=\linewidth}
 \input{diagrams/fig/chain-cuts.tex}
 \end{adjustbox}
-\caption{An interval $X$ of the chain, the two windows of $2R$ sites around its cut edges, and one interaction support $Y$ split by $X$. Every split support lies in a window, which is why their number is bounded by $N_R$.}\label{fig:chain-cuts}
+\caption{An interval $X$ of the chain (drawn for $R=2$), the two windows of $2R$ sites centred on its cut edges, and two interaction supports $Y'$ and $Y$ split by $X$, one in each window. Every split support lies in a window, which is why their number is bounded by $N_R$.}\label{fig:chain-cuts}
 \end{figure*}
 
 \begin{lemma}[Reductions]\label{lem:reductions}
@@ -337,7 +337,7 @@ so
 \begin{adjustbox}{max width=\linewidth}
 \input{diagrams/fig/chain-shells.tex}
 \end{adjustbox}
-\caption{The interval $X$ and the nested shells $X_1\subset X_2$ of the chain, each $D=R$ sites wider on both sides; the flanks $T_j=X_j\setminus X$ carry the buffer.}\label{fig:chain-shells}
+\caption{The interval $X$ and the nested shells $X_1=X^{+D}\subset X_2=X^{+2D}$, drawn with $D=R=2$; the braces mark the flanks $T_j=X_j\setminus X$, each a union of at most two intervals of length at most $jD$, which carry the buffer.}\label{fig:chain-shells}
 \end{figure*}
 
 \begin{lemma}[Single splitting]\label{lem:singlesplit}
@@ -477,7 +477,7 @@ restricted to $i\le j$.
 \begin{adjustbox}{max width=\linewidth}
 \input{diagrams/fig/qc-single-split.tex}
 \end{adjustbox}
-\caption{Why the energy is small. An interaction split by $X_j$ is conjugated by exactly one filter: the outer ones are stripped by the trace identity at the optimum, the inner ones commute with it because they live on disjoint sites.}\label{fig:qc-single-split}
+\caption{Why the energy is small. An interaction $h_Y$ split by $X_j$ is conjugated by exactly one filter: the outer filters, whose regions contain $Y$, are stripped by the stripping identity at the optimum, and the inner ones commute with $h_Y$ because they live on disjoint sites.}\label{fig:qc-single-split}
 \end{figure*}
 
 \paragraph{Upper bound on the optimum.}
@@ -566,7 +566,7 @@ $\rho_{w_i,T_j}$ is $\rho_{T_j}$):
 \begin{adjustbox}{max width=\linewidth}
 \input{diagrams/fig/pinning.tex}
 \end{adjustbox}
-\caption{Schmidt pinning. Pinning the Schmidt vector $u_i$ of $X$ turns the filtered vector into $\sqrt{p_i}\,u_i$ tensored with the flank filters applied to the partner $w_i$, which lower-bounds the optimum by $-S(X)-\sum_ja_jS(T_j)$ in the exponent after averaging.}\label{fig:pinning}
+\caption{Schmidt pinning. With the trial filters $|u_i\rangle\langle u_i|\otimes M_j$ (the projector is drawn once, by idempotence; the flanks are grouped into one leg each), the filtered vector becomes $\sqrt{p_i}\,u_i$ tensored with the flank filters applied to the partner $w_i$, which lower-bounds the optimum by $-S(X)-\sum_ja_jS(T_j)$ in the exponent after averaging over $i$.}\label{fig:pinning}
 \end{figure*}
 
 \paragraph{Conclusion.}
@@ -616,7 +616,7 @@ $C_0(q,R)=8C_1(q,R)\,R\log q+1+16N_Rq^{2(R+1)}$.
 \begin{adjustbox}{max width=\linewidth}
 \input{diagrams/fig/closing.tex}
 \end{adjustbox}
-\caption{The closing step. The interval $X$ with its constant-width buffers $T$; the discount bounds $S(X|T)$ from above, Araki–Lieb from below, and $|T|=2mD$ is a constant.}\label{fig:closing}
+\caption{The closing step. The interval $X$ with its constant-width buffers $T$; the discount bounds $S(X|T)$ from above, Araki–Lieb from below, and $T$ has at most $2mD$ sites.}\label{fig:closing}
 \end{figure*}
 
 \begin{remark}[What the constant depends on]
@@ -714,7 +714,7 @@ $F(r)\le Cr^{e_0}$ with $e_0=\log_M\lambda<1$.
 \begin{adjustbox}{max width=\linewidth}
 \input{diagrams/fig/recursion.tex}
 \end{adjustbox}
-\caption{Entropy bounds for an interval of length $r$ on log–log axes: the volume bound has slope one, the long route gives slope $e_0<1$, and the area law is the constant line reached directly in the previous stage.}\label{fig:recursion}
+\caption{Entropy bounds for an interval of length $r$ on log–log axes (drawn with $M=4$): the volume bound $r\log q$, parallel to the diameter $r$, has slope one; the long route gives slope $e_0<1$; the area law is the constant line reached directly in the previous stage.}\label{fig:recursion}
 \end{figure}
 
 \begin{figure*}[t]
@@ -722,7 +722,7 @@ $F(r)\le Cr^{e_0}$ with $e_0=\log_M\lambda<1$.
 \begin{adjustbox}{max width=\linewidth}
 \input{diagrams/fig/chain-amplify.tex}
 \end{adjustbox}
-\caption{Amplification on the chain: the interval $X$, its graph neighbourhood $N_{2r}(X)$ on which the restoring unitary acts, and the far set $J$ it never touches, so that $I(X:J)\le n^{-M}$.}\label{fig:chain-amplify}
+\caption{Amplification on the chain: the interval $X$ of length $n$, its graph neighbourhood $N_{2r}(X)$ with $r=O(n^{e_0/\alpha})=o(n)$, on which the local unitary of the amplification argument acts, and the far set $J$ it never touches, so that $I(X:J)\le n^{-M}$.}\label{fig:chain-amplify}
 \end{figure*}
 
 \begin{figure*}[t]
@@ -730,6 +730,6 @@ $F(r)\le Cr^{e_0}$ with $e_0=\log_M\lambda<1$.
 \begin{adjustbox}{max width=\linewidth}
 \input{diagrams/fig/chain-families.tex}
 \end{adjustbox}
-\caption{Two families on a half-line: beyond the cut and the removed sites $D$, dyadic intervals $X_1,X_2,X_3,\dots$ with alternating labels. Each is separated from $B$ and from earlier same-family intervals by the previous interval.}\label{fig:chain-families}
+\caption{Two families on a half-line: beyond the cut and the removed sites $D$, the dyadic intervals $X_i=[2^i,2^{i+1})$ of lengths $2,4,8,\dots$ with alternating family labels, continuing to the end of the chain. Each is separated from $B$ and from all earlier same-family intervals by the previous interval, of half its length.}\label{fig:chain-families}
 \end{figure*}
 
