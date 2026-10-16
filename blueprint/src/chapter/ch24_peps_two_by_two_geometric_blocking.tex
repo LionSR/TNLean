@@ -21,7 +21,7 @@
     \end{align}
     The eight separate boundary labels are indexed by
     $\{0,1,2,3\}\times\{0,1\}$. For tensors
-    $a_i:X^4\times P\to\mathbb C$, their actual blocked tensor is
+    $a_i:X^4\times P\to\mathbb C$, their blocked tensor is
     \begin{align}
         B(\alpha,\sigma)=\sum_{x\in X^4}\prod_{i=0}^3
         a_i(\lambda_i(\alpha,x),\sigma_i).
@@ -33,7 +33,7 @@
     \cite[Observation~6.6]{Schuch2010PEPS}.
 \end{definition}
 
-\begin{definition}[The actual periodic bond bijection]%
+\begin{definition}[The periodic bond bijection]%
     \label{def:peps_two_by_two_bond_bijection}
     \lean{TNLean.PEPS.twoByTwoTiledBondEquiv,
         TNLean.PEPS.twoByTwoSiteLegs_periodic}
@@ -60,7 +60,7 @@
     \leanok
     \uses{def:peps_two_by_two_bond_bijection}
     Place arbitrary, possibly different tensors $a_z$ on the fine torus,
-    and let $B_v$ be their actual four-site contractions. With identity
+    and let $B_v$ be their four-site contractions. With identity
     operators on every bond, the original fine state satisfies
     $\Psi_a(\sigma)=\Psi_B(\tau)$, where
     $\tau_{v,i}=\sigma_{(v,i)}$. Both sides sum over all their bonds.
@@ -116,7 +116,7 @@
     to $B_v$ defines its coarse graph tensor, with physical alphabet $P^4$.
 \end{definition}
 
-\begin{theorem}[Equality with the actual coarse graph contraction]%
+\begin{theorem}[Equality with the coarse graph contraction]%
     \label{thm:peps_two_by_two_graph_contraction}
     \lean{TNLean.PEPS.graphBondNetwork_torusIncidentFamily,
         TNLean.PEPS.torusBondNetwork_eq_twoByTwoGraphSite}
@@ -124,7 +124,7 @@
     \uses{def:peps_two_by_two_graph_site,thm:peps_two_by_two_geometric_blocking}
     For $w,h\geq3$, the bond-indexed contraction equals the incident-edge
     graph contraction, for arbitrary site-dependent tensors and physical
-    alphabets. In particular $W\Psi_a$ is the actual graph state of the
+    alphabets. In particular $W\Psi_a$ is the graph state of the
     paired four-site tensors.
 \end{theorem}
 

@@ -1,10 +1,10 @@
-\begin{theorem}[The actual contragredient regular charge]
+\begin{theorem}[Contragredient regular charge]
     \label{thm:peps_regular_contragredient_charge}
     \lean{TNLean.PEPS.regularChargeLabels_inv_mem}
     \leanok
     \uses{thm:peps_regular_charge_labels, thm:peps_irreducible_dual}
-    For every actual regular charge character
-    $\chi$, the function $\chi^\vee(g)=\chi(g^{-1})$ is also an actual
+    For every regular charge character
+    $\chi$, the function $\chi^\vee(g)=\chi(g^{-1})$ is also a
     regular charge character. For unitary characters this is $\overline\chi$.
     This is the contragredient charge in
     \cite[charge-pair creation]{Schuch2010PEPS}, lines 2514--2518.
@@ -12,15 +12,15 @@
 \begin{proof}\leanok
     The contragredient representation is irreducible, and its character
     is $g\mapsto\chi(g^{-1})$. Every irreducible character occurs in
-    the actual regular representation.
+    the regular representation.
 \end{proof}
 
-\begin{definition}[The contragredient label of an actual regular charge]
+\begin{definition}[Contragredient label of a regular charge]
     \label{def:peps_regular_dual_charge_label}
     \lean{TNLean.PEPS.regularDualChargeLabel}
     \leanok
     \uses{thm:peps_regular_contragredient_charge}
-    Label $\chi^\vee$ by its function $g\mapsto\chi(g^{-1})$ in the actual
+    Label $\chi^\vee$ by its function $g\mapsto\chi(g^{-1})$ in the
     finite family of regular irreducible characters.
 \end{definition}
 
@@ -44,12 +44,12 @@
     The first slice has outcome $\chi$, and the second has outcome
     $\chi^\vee$; every other outcome annihilates the corresponding column.
 
-    This is an auxiliary shared-bond slice statement. The regional assertion is derived separately by literal contraction
+    This is an auxiliary shared-bond slice statement. The regional assertion is derived separately by contraction
     slicing along the two internal bonds; no regional factorization is
     assumed in this slice statement.
 \end{theorem}
 \begin{proof}\leanok
     Character cyclicity identifies the second slice with the translated
     dual character. Apply the already derived complete original-spin
-    charge measurement to each literal shared-bond column.
+    charge measurement to each shared-bond column.
 \end{proof}

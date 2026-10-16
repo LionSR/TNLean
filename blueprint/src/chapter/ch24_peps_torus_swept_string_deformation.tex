@@ -17,7 +17,7 @@
     % Source label: eq:anyons:fluxon-braiding-lazy.
 \end{definition}
 
-\begin{definition}[Literal initial and swept string assignments]%
+\begin{definition}[Initial and swept string assignments]%
     \label{def:peps_torus_swept_string_assignment}
     \lean{TNLean.PEPS.torusSweptStringInitialRight,
         TNLean.PEPS.torusSweptStringInitialUp,
@@ -26,7 +26,7 @@
     \leanok
     \uses{def:peps_torus_swept_string_patch,def:peps_regular_swept_patch}
     For any group $G$ and $g,h\in G$, prescribe the initial rightward
-    and upward transports by
+    and upward bond values by
     \begin{align}
         D_{\rightarrow}(p) & =
         \begin{cases}
@@ -40,18 +40,18 @@
         \end{cases}
         \label{eq:peps_swept_string_initial}
     \end{align}
-    Assign each native right or up edge the prescribed transport if
+    Assign each native right or up edge the prescribed bond value if
     its forward direction agrees with the ordered orientation, and its
     inverse otherwise. Denote this ordered assignment by $u^{(0)}$,
     and put $u^{(j)}=(u^{(0)})^{S_j,g}$ for $j=1,2$.
     The second string continues below the displayed patch to retain
     its distant partner. A displayed rightward or downward matrix
-    labelled $s$ has transport $s^{-1}$ in the corresponding direction.
+    labelled $s$ has bond value $s^{-1}$ in the corresponding direction.
     This is a finite realization of the virtual figure in
     \cite[Section~6.6]{Schuch2010PEPS}, lines 2361--2386.
 \end{definition}
 
-\begin{theorem}[Native transport tables, including both seams]%
+\begin{theorem}[Native directed bond tables, including both seams]%
     \label{thm:peps_torus_swept_string_transport}
     \lean{TNLean.PEPS.torusSweptStringInitialOperators_right_transport,
         TNLean.PEPS.torusSweptStringInitialOperators_up_transport,
@@ -62,12 +62,12 @@
     \leanok
     \uses{def:peps_torus_swept_string_assignment,
         thm:peps_regular_swept_patch_transport}
-    The actual initial rightward and upward transports are exactly
-    (\ref{eq:peps_swept_string_initial}). Each swept directed transport
+    The initial rightward and upward bond values are
+    (\ref{eq:peps_swept_string_initial}). Each swept directed bond value
     is given by (\ref{eq:peps_swept_directed_cases}), with $R=S_j$ and
-    the corresponding initial transport.
+    the corresponding initial bond value.
     Write $\bar z$ for the least nonnegative representative of a cyclic
-    coordinate $z$. If $T$ is this swept rightward transport, its ordered
+    coordinate $z$. If $T$ is this swept rightward bond value, its ordered
     edge coefficient is $T$ when $\overline{p_x}<\overline{p_x+1}$ and
     $T^{-1}$ otherwise. The analogous upward coefficient uses
     $\overline{p_y}<\overline{p_y+1}$.
@@ -80,7 +80,7 @@
     Every native edge is uniquely a right or up edge. Its ordered
     orientation agrees with the forward direction precisely when the
     stated comparison of representatives holds. The two inverse
-    corrections cancel in its initial directed transport.
+    corrections cancel in its initial directed bond value.
     Apply the four directed gauge cases, then invert again when
     recovering the ordered edge coefficient.
 \end{proof}
@@ -90,7 +90,7 @@
     \lean{TNLean.PEPS.torusSweptStringOperators_second_eq_sweep}
     \leanok
     \uses{def:peps_torus_swept_string_assignment}
-    The literal assignments satisfy $u^{(2)}=(u^{(1)})^{B,g}$.
+    The bond assignments satisfy $u^{(2)}=(u^{(1)})^{B,g}$.
     Thus no vertex in $S_1$ receives the gauge $g^{-1}$ twice.
 \end{theorem}
 
@@ -101,7 +101,7 @@
     the ordered endpoint formula proves the asserted equality.
 \end{proof}
 
-\begin{theorem}[Actual closed coefficient equality of the three presentations]%
+\begin{theorem}[Closed coefficient equality of the three presentations]%
     \label{thm:peps_torus_swept_string_state}
     \lean{TNLean.PEPS.stateCoeff_torusSweptStringOperators,
         TNLean.PEPS.stateCoeff_torusSweptStringOperators_first_eq_second}
@@ -109,7 +109,7 @@
     \uses{def:peps_torus_swept_string_assignment,
         thm:peps_regular_swept_patch_state}
     Suppose $G$ is finite and the incident site coefficients are
-    invariant under simultaneous left translation. The actual closed
+    invariant under simultaneous left translation. The closed
     coefficient vectors obey
     $\Psi_a(u^{(0)})=\Psi_a(u^{(1)})=\Psi_a(u^{(2)})$.
     The changed crossing bonds are included in each contraction;

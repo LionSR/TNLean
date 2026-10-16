@@ -8,7 +8,7 @@
     For the locally oriented plaquette at $v=(x,y)$, enumerate its crossing
     bonds by a side $i\in\{N,E,S,W\}$ and a place $b\in\{0,1\}$ in that side.
     The places follow clockwise boundary order. This is a bijective
-    enumeration of the actual crossing edges. It gives an equivalence
+    enumeration of the crossing edges. It gives an equivalence
     $\mathcal E_v$ from native boundary configurations to four binary pairs.
     These are the boundary registers of the blocking construction in
     \cite[Section~7, ``Kitaev's code state'']{Schuch2010PEPS}.
@@ -20,7 +20,7 @@
         TNLean.PEPS.kitaevNativeBoundaryEquiv_apply}
     \leanok
     \uses{def:peps_kitaev_native_boundary_registers}
-    Write $R_{a,b}$ for the actual right edge from $(a,b)$ and $U_{a,b}$
+    Write $R_{a,b}$ for the right edge from $(a,b)$ and $U_{a,b}$
     for its up edge; these denote unordered native bonds even at a seam.
     The enumeration is
     \begin{align}
@@ -56,7 +56,7 @@
         def:peps_kitaev_checkerboard_maps}
     Let $C$ be the four pair CNOTs. Their native boundary action is
     $C_v=\mathcal E_v^{-1}C\mathcal E_v$.
-    Let $\mathsf A_v$ be the actual open tensor map, with the four original
+    Let $\mathsf A_v$ be the open tensor map, with the four original
     native spins as its rows and all native crossing assignments as its columns.
     Let $\mathsf K_v$ be the color-difference tensor with the same physical
     rows, and let $E_v$ include the four colors into the native boundary
@@ -76,7 +76,7 @@
         thm:peps_kitaev_checkerboard_map_identity}
     Reading the output of $C_v$ gives the four pair CNOTs. Its native
     permutation matrix $\mathsf C_v$ is unitary on the whole boundary space,
-    and $E_v^\dagger E_v=1$. The actual native tensor map obeys
+    and $E_v^\dagger E_v=1$. The native tensor map obeys
     \begin{align}
         \mathsf A_v\mathsf C_v=\mathsf K_v E_v^\dagger.
     \end{align}

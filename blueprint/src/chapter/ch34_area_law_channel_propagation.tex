@@ -644,9 +644,9 @@ $d_G$, so an unreachable vertex belongs to no finite ball about $x$.
     (\ref{eq:al_propagation_uniform_row}).
 \end{proof}
 
-\subsection{Kernel bounds for actual channel families}
+\subsection{Kernel bounds for root-channel families}
 
-\begin{theorem}[Kernel domination of actual channel increments]
+\begin{theorem}[Kernel domination of root-channel increments]
     \label{thm:al_actual_channel_kernel_domination}
     \uses{def:al_graph_event_kernel,def:al_local_root_channel,
         def:qc_site_oscillation,def:qc_local_circuit}
@@ -686,7 +686,7 @@ $d_G$, so an unreachable vertex belongs to no finite ball about $x$.
     (\ref{eq:al_propagation_family_increment}).
 \end{proof}
 
-\begin{theorem}[Uniform weighted rows and actual channel increments]
+\begin{theorem}[Uniform weighted rows and root-channel increments]
     \label{thm:al_actual_channel_uniform_bounds}
     \uses{def:al_graph_event_kernel,def:al_local_root_channel,
         def:qc_site_oscillation,def:qc_local_circuit}
@@ -735,12 +735,12 @@ $d_G$, so an unreachable vertex belongs to no finite ball about $x$.
         thm:al_actual_channel_kernel_domination}
     Apply Theorem~\ref{thm:al_graph_kernel_uniform_row} with
     $D=2(2+8\sqrt C\exp(c/2))$ and $b=c/2$.
-    These parameters satisfy $D\ge0$ and $b>0$, so it supplies a
+    These parameters satisfy $D\ge0$ and $b>0$, so it yields a
     constant $R$ before any finite sets, graph, or channels are chosen.
     For each subsequent admissible choice, its row bound gives
     (\ref{eq:al_propagation_actual_row}), since
     $(c/2)/(2\,2^\alpha)=c/(4\,2^\alpha)$.
-    Theorem~\ref{thm:al_actual_channel_kernel_domination} supplies
+    Theorem~\ref{thm:al_actual_channel_kernel_domination} yields
     (\ref{eq:al_propagation_actual_increment}) for every $y,B$ under
     the stated support, cutoff, and localization hypotheses.
 \end{proof}
@@ -749,7 +749,7 @@ $d_G$, so an unreachable vertex belongs to no finite ball about $x$.
 % Source: 09-amplification.tex, lines 139--160; 03-quasilocal.tex,
 % lines 220--246; 01-preliminaries.tex, lines 82--103, at the source
 % revision recorded at the start of this leaf.
-\subsection{Actual constraints on a finite lattice domain}
+\subsection{Positive constraints on a finite lattice domain}
 
 \begin{theorem}[Anchor fibers after retaining labels]
     \label{thm:al_retained_anchor_fibers}
@@ -898,7 +898,7 @@ Hence $\mathsf A^{(N,P_{\rm all})}_{yz}=\mathsf A^{(N)}_{yz}$, and
 $\sum_{X\in F_{P_{\rm all}}}u_X
     =\sum_{X\in\mathcal F_{\Lambda,R}}u_X$ for every family of real
 numbers $u_X$. The full-family weighted row and channel-increment
-bounds therefore follow with the identical witnesses $C,c,v$.
+bounds therefore follow with the same constants $C,c,v$.
 For the identically false predicate, the kernel and increment sum
 are zero and the cutoff condition is vacuous.
 
