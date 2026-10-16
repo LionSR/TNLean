@@ -46,7 +46,7 @@
     edge $e$, write
     $\phi_{h_e}:\MN{D_A(e)}
         \to\MN{D_{\widetilde B}(e)}$ for the matrix-algebra
-    transport induced by $h_e:D_A(e)=D_{\widetilde B}(e)$. Then, for every
+    isomorphism induced by $h_e:D_A(e)=D_{\widetilde B}(e)$. Then, for every
     matrix $X\in\MN{D_A(e)}$ and every physical configuration $\sigma$,
     $C_A(e,X;\sigma)
         =C_{\widetilde B}(e,\phi_{h_e}(X);\sigma)$.
@@ -63,7 +63,7 @@
     absorbed into the second tensor family, there are gauges $Z_e$ and
     $\widetilde B=B^Z$ such that $D_{\widetilde B}=D_A$ and, for every edge
     $e$, write $\phi_{h_e}:\MN{D_A(e)}\to\MN{D_{\widetilde B}(e)}$ for the
-    matrix-algebra transport induced by the corresponding equality
+    matrix-algebra isomorphism induced by the corresponding equality
     $h_e:D_A(e)=D_{\widetilde B}(e)$. Then, for every matrix
     $X\in\MN{D_A(e)}$ and every physical configuration $\sigma$,
     $C_A(e,X;\sigma)
@@ -129,10 +129,10 @@
     \uses{thm:peps_exists_edgeGaugeFamily, thm:peps_edge_gauge_absorption, def:peps_postAbsorptionEdgeInsertionEquality}
     Block the PEPS around each edge into a three-site injective chain and compare
     the matched matrix insertions: this assigns to every edge an invertible bond
-    matrix $X_e$ realizing the insertion-algebra transport as conjugation. Absorb
+    matrix $X_e$ realizing the insertion-algebra isomorphism as conjugation. Absorb
     the transpose of $X_e$ into the second tensor family on that edge. The
     open-edge gauge action then conjugates each inserted matrix by the transpose
-    of the absorbed gauge, while the insertion-algebra transport conjugates by
+    of the absorbed gauge, while the insertion-algebra isomorphism conjugates by
     $X_e$; the two conjugations agree because the absorbed gauge is the transpose
     of $X_e$, giving the post-absorption insertion equality.
 \end{proof}
@@ -149,7 +149,7 @@
     steps in that argument are recorded separately as
     Theorems~\ref{thm:peps_virtualInsertionPhysicalRealization} and
     \ref{thm:peps_physical_to_virtual_insertion}.
-    After Theorem~\ref{thm:peps_postAbsorptionEdgeInsertionEquality} supplies
+    Once Theorem~\ref{thm:peps_postAbsorptionEdgeInsertionEquality} establishes
     the factorized local gauge hypothesis, injectivity on the star neighborhood
     provides a left inverse that isolates the local edge gauges. Thus there are
     incident-edge matrices $X_e$ such that
@@ -167,7 +167,7 @@
     \end{align}
 \end{theorem}
 \begin{proof}\leanok
-    The factorized local gauge datum already supplies the incident-edge
+    The factorized local gauge datum already provides the incident-edge
     invertible matrices and the factorized local coefficient identity.
 \end{proof}
 
@@ -213,7 +213,7 @@
 \begin{proof}\leanok
     Absorbing the edge gauges into the second tensor family gives the
     post-absorption insertion equality. On each vertex with an incident edge,
-    the one-vertex-versus-complement comparison supplies a nonzero scalar
+    the one-vertex-versus-complement comparison yields a nonzero scalar
     relating the first tensor to the absorbed second tensor. Because the state
     is nonzero, these per-vertex scalars multiply to one, so on the connected
     graph a spanning-tree construction realizes their reciprocals as the
@@ -551,7 +551,7 @@
     Putting $X=\Id_{D_b}$ on every shared bond contracts all bonds diagonally and,
     by the insertion equality, equates the two fully contracted states. Writing
     each contracted state as a bipartite operator with the linearly independent
-    Schmidt families supplied by injectivity, the operator-Schmidt uniqueness of
+    Schmidt families given by injectivity, the operator-Schmidt uniqueness of
     \cite[Section~3]{Molnar2018NormalPEPS} produces an invertible gauge $g$ on the
     shared-bond configurations with
     \begin{align}

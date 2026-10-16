@@ -1,4 +1,4 @@
-\section{The transport root in the original site coordinates}
+\section{The root operator in the original site coordinates}
 
 Retain the augmented site bijection $a:I\to J$ and its replica
 configuration bijection $e_k:\mathcal X_I^k\to\mathcal X_J^k$.
@@ -26,7 +26,7 @@ All replica metrics use the dimension of the full one-copy system.
 \begin{proof}
     \leanok
     \uses{thm:al_augmented_replica_metric_coordinates}
-    Conjugation by $\mathcal U_k$ transports each of the three replica metrics
+    Conjugation by $\mathcal U_k$ maps each of the three replica metrics
     from $I$ to $J$. Since unitary conjugation commutes with matrix inversion
     and multiplication, the identity follows after squaring.
 \end{proof}
@@ -35,7 +35,7 @@ All replica metrics use the dimension of the full one-copy system.
     \label{thm:al_augmented_root_compression}
     \lean{TNLean.PEPS.AreaLaw.Scan.rootPath_augmented_compressed_bandProduct}
     \leanok
-    Let $q,d>0$ and $t\ge0$, and let $D$ be admissible transport data on $J$
+    Let $q,d>0$ and $t\ge0$, and let $D$ be admissible band-tree data on $J$
     with $K$ bands: its history and conditional weights are positive, its
     initial regions partition $J$, and every move transfers a subset of the
     middle region to one side. Assume that the band metrics commute on the
@@ -48,7 +48,7 @@ All replica metrics use the dimension of the full one-copy system.
     where $\Pi_k$ is the symmetric projection.
     Let $v\in\C^{\mathcal X_J^k}$ satisfy $\Pi_kv=v$.
 
-    Let $T$ be the transport tree at the parameter $p$ clamped
+    Let $T$ be the evaluation tree at the parameter $p$ clamped
     to $[0,1]$. For each terminal label $j$ and band $g$, pull
     back the partition $(P_{j,g},Y_{j,g},F_{j,g})$ along $a$,
     and let $A^I_{j,g}$ be its band matrix in the coordinates $I$.
@@ -60,7 +60,7 @@ All replica metrics use the dimension of the full one-copy system.
         \label{eq:al_augmented_compressed_product}
     \end{align}
     The product in (\ref{eq:al_augmented_compressed_product}) is taken in the
-    band order $g=0,\ldots,K-1$. Write $L(p)$ for the transport root on $J$.
+    band order $g=0,\ldots,K-1$. Write $L(p)$ for the root operator on $J$.
     Then $M$ is positive definite, and for every $r\in\R$,
     \begin{align}
         L(p)Z              & =ZM,\nonumber      \\

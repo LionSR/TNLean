@@ -23,7 +23,7 @@
         TNLean.PEPS.regularChargeMatrix_inner}
     \leanok
     \uses{def:peps_regular_charge_coordinates}
-    The accessible matrix is the literal matrix-unit sum
+    The accessible matrix is the matrix-unit sum
     \[
         A_\chi(p;x,y)
         =\sum_{g\in G}\chi(pg)|xg\rangle\langle yg|.
@@ -44,7 +44,7 @@
     vanishes. When they agree, sum the surviving entries.
 \end{proof}
 
-\begin{theorem}[Orthogonality and norm of the actual accessible charge matrices]
+\begin{theorem}[Orthogonality and norm of the accessible charge matrices]
     \label{thm:peps_regular_charge_coordinates_orthogonality}
     \lean{TNLean.PEPS.regularChargeMatrix_orthogonal,
         TNLean.PEPS.regularChargeMatrix_normSq}
@@ -103,7 +103,7 @@
         A_\chi(p;zx,wy)_{r,s}
         =A_\chi(p;x,y)_{z^{-1}r,w^{-1}s}.
     \]
-    Thus the two unknown translations act by their actual row and column
+    Thus the two unknown translations act by their row and column
     permutations. If $\chi$ is a unitary irreducible character, then every
     matrix $A_\chi(p;x,y)$ is nonzero. These are auxiliary identities from
     the accessible charge coordinates of

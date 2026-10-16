@@ -115,12 +115,12 @@
     Substitute this identity into~(\ref{eq:peps_staircase_unscaled_coefficients}).
 \end{proof}
 
-\begin{theorem}[A horizontal witness derived from equal normal states]%
+\begin{theorem}[Horizontal reference data from equal normal states]%
     \label{thm:peps_horizontal_arc_window_witness}
     \lean{TNLean.PEPS.exists_staircaseWindowEdgeCoeffIdentityWitness}
     \leanok
     Under the displayed horizontal staircase hypotheses, the highlighted
-    edge has a coefficient-identity witness whose region is the left end
+    edge has reference coefficient-identity data whose region is the left end
     window and contains the first stored endpoint of the edge.
 \end{theorem}
 \begin{proof}
@@ -129,7 +129,7 @@
         def:peps_window_edge_coeff_identity_witness_of_hypotheses,
         thm:peps_regionInjectivityUnionClosure_of_overlap}
     The unscaled conjugating gauge and the normal-window injectivity
-    give the witness. The non-wrapping right-edge endpoint formula
+    give the required reference data. The non-wrapping right-edge endpoint formula
     identifies its first endpoint with the vertex in the left window.
 \end{proof}
 
@@ -160,8 +160,8 @@
         thm:peps_absorbed_family_reference_witnesses,
         thm:peps_window_absorbed_scalar}
     First identify the bond dimensions. Place the horizontal staircase
-    at $(1,0)$ and use coordinate exchange to obtain a vertical witness.
-    Translating these two witnesses gives the covariant gauge family
+    at $(1,0)$ and use coordinate exchange to obtain vertical reference data.
+    Translating these two sets of reference data gives the covariant gauge family
     with equal absorbed edge coefficients. The corner-region scalar
     comparison then proves~(\ref{eq:peps_arc_window_local_gauge}) and
     (\ref{eq:peps_arc_window_volume_phase}).

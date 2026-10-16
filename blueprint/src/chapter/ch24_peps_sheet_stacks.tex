@@ -689,7 +689,8 @@ no holes, this is the normalization of $\Omega$.
     \leanok
     \uses{def:peps_guide_frame, def:peps_dyadic_protocol_parties,
         def:peps_adaptive_patch_constraint, lem:peps_level_true_vertices,
-        def:peps_dyadic_block_guide}
+        def:peps_dyadic_block_guide, thm:peps_dyadic_repainting_valid_labels,
+        thm:peps_guide_frame_supplied_gates, def:peps_frame}
     For a labelling $G$ of the plane, its sampled guide at $p$ is the eventual
     value of $G(p+\varepsilon(1,1))$ as $\varepsilon\to0^+$, when such a value exists,
     and is $G(p)$ otherwise. Fix a hierarchy $k$, a level $0\le j\le k$, a set of
@@ -709,45 +710,85 @@ no holes, this is the normalization of $\Omega$.
     \lean{TNLean.PEPS.Approximation.IsDisplacedReading.eq_sampleGuide,
         TNLean.PEPS.Approximation.IsRayConstant.isDisplacedReading_sampleGuide,
         TNLean.PEPS.EncodedFrame.hasSourceBoundedChange_main,
+        TNLean.PEPS.EncodedFrame.perm_map_update_cons,
+        TNLean.PEPS.EncodedFrame.perm_map_cons,
         TNLean.PEPS.EncodedFrame.hasSourceBoundedChange_aux,
         TNLean.PEPS.EncodedFrame.hasSourceBoundedChange_mainAux,
+        TNLean.PEPS.Approximation.isDisplacedReading_levelGuide,
         TNLean.PEPS.Approximation.mem_levelVertices,
         TNLean.PEPS.Approximation.levelFrame_eq,
+        TNLean.PEPS.Approximation.guideFrame_congr_patch,
+        TNLean.PEPS.Approximation.guideFrame_congr_guide,
+        TNLean.PEPS.Approximation.levelFrame_eq_of_levelGuide_eq,
         TNLean.PEPS.Approximation.levelFrame_congr,
         TNLean.PEPS.Approximation.pairwise_disjoint_levelHoles,
         TNLean.PEPS.Approximation.isTrueVertex_levelGuide_insert_iff}
     \leanok
-    \uses{def:peps_protocol_level_frame, thm:peps_protocol_event_segments}
-    Every reading of a labelling after $(1,1)$ equals its sampled guide, and if the
-    labelling is eventually constant along every ray from every point, the sampled
-    guide is such a reading; this holds for block guides. Suppose the reference
-    vector $\Omega$ and a spectator vector $\xi$ have norm at most one. A circuit
-    implementing a bounded change with at most $r_s$ pair sources per monomial lifts
-    to a change of the whole memory with the same bounds, for a change of the main
-    frame, of one auxiliary frame, or of the main frame together with one auxiliary
-    frame, the auxiliary frames being indexed by a duplicate-free list. The true
-    vertices of the level guide are exactly its grid corners in the closed root square
-    that are true vertices. Two admissible radius functions give the same level frame
-    whenever they agree at all true vertices. If $\rho(z)\le r$ for every point and
-    $4r<2^j$, the outer physical samples of the holes are pairwise disjoint.
-    Repainting one block changes the true vertices only at its four corners
-    (\texttt{06-geometry.tex}, lines 69--125 and 507--511).
+    \uses{def:peps_protocol_level_frame, def:peps_sheet_stack,
+        thm:peps_protocol_event_segments, def:peps_circuit_source_bound,
+        lem:peps_dyadic_sampled_guides, lem:peps_dyadic_readings_exist}
+    Every reading of a labelling $G$ after $(1,1)$ equals its sampled guide.
+    If $G$ is eventually constant along every ray from every point, the sampled
+    guide is such a reading; this hypothesis holds for block guides.
+
+    For finite physical sites and local dimension $q\ge1$, suppose the reference
+    vector $\Omega$ and the additional spectator vector $\xi$ both have norm at most
+    one. A circuit implementing a bounded change, with participant set $S$, at most
+    $r$ pair effects, monomial and coefficient-sum bound $K$, error $\varepsilon$ and
+    at most $r_s$ pair sources per monomial, lifts to a change of the whole memory
+    with the same bounds and the same $\xi$. This applies to a change of the main
+    frame with any fixed list of spectator frames, or to a change of one auxiliary
+    frame, or of the main frame together with one auxiliary frame. In the latter two
+    cases the memory has the auxiliary frames indexed by a duplicate-free list, and
+    the changed index belongs to that list.
+
+    For any auxiliary index list containing $x$, the main frame followed by that
+    auxiliary list is a permutation of the frame indexed by $x$, the main frame
+    and the auxiliary list with that occurrence removed. If the index list has no
+    duplicates, updating its $x$-frame and moving the updated frame to the front
+    gives the analogous permutation. These permutation identities require no norm
+    bounds.
+
+    The finite vertex set in Definition~\ref{def:peps_protocol_level_frame}
+    contains every true vertex of the level guide. For arbitrary finite physical
+    sites, two guide frames with the same site positions, local dimension, owners,
+    placeholder and label rank are equal if their guides and finite sets of hole
+    centers are equal, their patches agree at those centers, and each family has
+    disjoint outer physical samples. At possibly different levels and with different
+    sets of already repainted blocks, equal sampled guides give equal level frames
+    whenever the two globally admissible radius functions agree at all true vertices.
+    In particular, for a fixed level and guide the frame depends on the radii only
+    at its true vertices.
+    If, moreover, $\rho(z)\le r$ for every point and $4r<2^j$, the outer physical
+    samples of the holes are pairwise disjoint. Repainting one block changes the
+    true vertices only at its four corners (\texttt{06-geometry.tex}, lines 69--125
+    and 507--511).
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:peps_protocol_event_segments, lem:peps_level_true_vertices,
-        lem:peps_dyadic_choice_K0, thm:peps_guide_frame_norm,
-        thm:peps_guide_frame_supplied_gates, def:peps_dyadic_block_guide,
-        lem:peps_dyadic_direct_repainting, lem:peps_dyadic_incident_change,
-        lem:peps_dyadic_sampled_guides, thm:peps_dyadic_temporary_holes,
-        lem:peps_dyadic_readings_exist}
-    Readings agree with the sampled guide by uniqueness of eventual limits. The lifts
-    of the memory are the lifts of one or two sheets of the sheet stack, after a
-    reordering of the sheets. Distinct grid corners of the level are at distance at
-    least $2^j$, so outer squares of radius $2r<2^j/2$ about them are disjoint, and
-    supplied patches with equal radii agree. Repainting a block changes the labels only
-    on that closed block, so incident labels, and true vertices, change only at its
-    corners.
+    \uses{def:peps_protocol_level_frame, def:peps_guide_frame,
+        lem:peps_dyadic_readings_exist, thm:peps_protocol_event_segments,
+        lem:peps_level_true_vertices, lem:peps_dyadic_choice_K0,
+        thm:peps_guide_frame_norm, thm:peps_guide_frame_supplied_gates,
+        def:peps_dyadic_block_guide, lem:peps_dyadic_direct_repainting,
+        lem:peps_dyadic_incident_change, lem:peps_dyadic_sampled_guides,
+        thm:peps_dyadic_temporary_holes, lem:peps_dyadic_active_labels,
+        def:peps_dyadic_incident_labels, thm:peps_dyadic_repainting_valid_labels}
+    Two eventual readings have the same value at each point. Ray constancy gives
+    such a reading, and block guides are ray-constant. The one-sheet and two-sheet
+    lifts of Theorem~\ref{thm:peps_protocol_event_segments} retain the source bound;
+    permutations place the selected auxiliary sheet next to the main sheet.
+
+    The true vertices are the finite grid-corner set of
+    Lemma~\ref{lem:peps_level_true_vertices}. Equal guides have the same true-vertex
+    set. Equal guides, hole-center sets and patches give the same guide frame by its
+    definition; equal radii give equal supplied patches and preserve the disjointness
+    condition, including the raw-frame case. Distinct grid corners are
+    at distance at least $2^j$, whereas each outer sample lies within distance $2r$
+    of its center, so $4r<2^j$ gives disjointness. Away from the four corners of a
+    repainted block, a true vertex inside the block would contradict the grid-corner
+    criterion. Outside the closed block, the two block guides agree locally, their
+    readings agree locally, and their incident labels and true-vertex status agree.
 \end{proof}
 
 \begin{theorem}[Direct repaintings and resizes as changes of the protocol]
@@ -759,6 +800,8 @@ no holes, this is the normalization of $\Omega$.
         TNLean.PEPS.Approximation.levelVertices_self,
         TNLean.PEPS.Approximation.resizeRadius,
         TNLean.PEPS.Approximation.DyadicJunction.rootNbr,
+        TNLean.PEPS.Approximation.DyadicJunction.rootNbr_mem,
+        TNLean.PEPS.Approximation.DyadicJunction.inRoot_rootNbr,
         TNLean.PEPS.Approximation.resizeParty,
         TNLean.PEPS.Approximation.eventUses_resizeParty,
         TNLean.PEPS.Approximation.exists_resize_hasSourceBoundedChange}
@@ -766,7 +809,8 @@ no holes, this is the normalization of $\Omega$.
     \uses{def:peps_protocol_level_frame, thm:peps_protocol_constants,
         def:peps_dyadic_protocol_parties, thm:peps_protocol_event_segments,
         def:peps_dyadic_hierarchy, def:peps_adaptive_patch_constraint,
-        thm:peps_dyadic_direct_repainting_constants}
+        thm:peps_dyadic_direct_repainting_constants, def:peps_circuit_source_bound,
+        def:peps_sheet_stack}
     The common hypotheses for an individual event below are a hierarchy $k$, integers
     $L,q$ with $2\le L\le2^k$ and $q\ge1$, a unit vector $\Omega$, protocol constants
     $K_0,\epsilon_0,\nu,a,D,B_0$ as in Theorem~\ref{thm:peps_protocol_constants}, and an
@@ -775,8 +819,11 @@ no holes, this is the normalization of $\Omega$.
     party map and fixed list of auxiliary spectator frames, and integers $C',c'\ge0$
     with $C\le C'$, $1\le C'$ and $c\le c'$. Write $t=D\log L$, $h_n=\epsilon_0\min(n,t)$,
     and let $b$ be the protocol patch bound of
-    Theorem~\ref{thm:peps_protocol_constants}. Every hole radius $h_n$ is positive and
-    at most $B_0\log L$. Define
+    Theorem~\ref{thm:peps_protocol_constants}. For every real $n>0$, the hole
+    radius $h_n$ is positive and at most $B_0\log L$. For any set $A$, the radius
+    function equal to $h_n$ on $A$ and $h_{2n}$ elsewhere has the same bounds.
+    These admissibility bounds follow from the protocol constants and $L\ge2$,
+    without patch or state assumptions. Define
     \begin{align}
         K_{\mathrm{rw}} & =(C'+1)^{3b}
         \bigl(16b^2(C'+1)^{6b}+1\bigr)^{2b}
@@ -803,17 +850,23 @@ no holes, this is the normalization of $\Omega$.
     of $J$. This change has the stated bounds with the same spectators and uses only
     participants used by the resize. No direct-repainting ratio condition is required
     for this resize assertion. If the two radii agree, or the corner is not a true
-    vertex, the frame is unchanged. The root-level guide has no true vertex
+    vertex, the frame is unchanged. The root-level guide has no true vertex.
+    If $Q_J$ is the junction index, its chosen offset $\delta_J$ belongs
+    to $\{-1,0,1\}^2$, and $\delta_J+Q_J-(1,1)$ indexes a block inside the root
+    square. Assigning the placeholder to that block's party makes every party of
+    the translated nine-block window a participant used by the resize
     (\texttt{06-geometry.tex}, lines 91--133, 491, 507--541, 564--567 and 572--596).
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:peps_protocol_party_map_switch, thm:peps_guide_frame_owner_agreement,
-        thm:peps_protocol_bounded_changes, thm:peps_guide_frame_supplied_gates,
-        thm:peps_dyadic_direct_repainting_constants, lem:peps_protocol_junction_resize_parties,
+        thm:peps_protocol_level_frame_facts, thm:peps_protocol_bounded_changes,
+        thm:peps_guide_frame_supplied_gates, lem:peps_protocol_junction_resize_parties,
         thm:peps_protocol_event_segments, thm:peps_protocol_constants,
         thm:peps_dyadic_guide_owners, def:peps_dyadic_chamber_sampling,
-        lem:peps_dyadic_incident_change, thm:peps_protocol_level_frame_facts}
+        lem:peps_dyadic_incident_change, def:peps_dyadic_block_guide,
+        thm:peps_dyadic_repainting_valid_labels, thm:peps_dyadic_protocol_parties,
+        lem:peps_dyadic_floor, thm:peps_dyadic_block_ratio}
     The hole radii are positive, and at most $\epsilon_0D\log L\le K_0D\log L\le B_0\log L$
     since $\epsilon_0<1\le K_0$ and $K_0D\le B_0$. Between repaintings no site and no tag
     carries the placeholder, so the frame may be read through any party map that agrees
@@ -825,6 +878,15 @@ no holes, this is the normalization of $\Omega$.
     $\epsilon_0 s$, so the outer physical samples are disjoint since $4\epsilon_0<1$.
     The threshold $\nu'$ comes from the supplied small-patch rewrites of a resize and
     does not depend on the hierarchy.
+
+    The protocol separations and supplied-patch estimates give the hypotheses of
+    Theorem~\ref{thm:peps_protocol_bounded_changes} for a direct repainting, with
+    its stated circuit and pair-source bounds. The main-sheet lift of
+    Theorem~\ref{thm:peps_protocol_level_frame_facts} preserves these bounds
+    beside the spectator sheets. For a resize, apply the supplied resize step of
+    Theorem~\ref{thm:peps_guide_frame_supplied_gates}, then the same main-sheet lift.
+    If the corner is absent or the radii agree, frame congruence gives an unchanged
+    frame and the identity change of Theorem~\ref{thm:peps_protocol_event_segments}.
 \end{proof}
 
 \begin{theorem}[The main frame along the schedule]
@@ -832,13 +894,14 @@ no holes, this is the normalization of $\Omega$.
     \lean{TNLean.PEPS.Approximation.ProtocolEvent.two_le_rank,
         TNLean.PEPS.Approximation.ProtocolEvent.rank_le,
         TNLean.PEPS.Approximation.exists_isScheduled_rank,
+        TNLean.PEPS.Approximation.isScheduled_getElem,
+        TNLean.PEPS.Approximation.take_succ_eventSchedule,
         TNLean.PEPS.Approximation.mem_take_of_rank_lt,
         TNLean.PEPS.Approximation.rank_le_of_mem_take,
         TNLean.PEPS.Approximation.rank_getElem_succ_le,
         TNLean.PEPS.Approximation.exists_index_of_isTrueVertex_levelGuide,
         TNLean.PEPS.Approximation.resizedCorners,
         TNLean.PEPS.Approximation.repaintedBlocks,
-        TNLean.PEPS.Approximation.levelFrame_eq_of_levelGuide_eq,
         TNLean.PEPS.Approximation.levelGuide_eq_univ,
         TNLean.PEPS.Approximation.levelGuide_succ_univ,
         TNLean.PEPS.Approximation.eventMain,
@@ -846,8 +909,6 @@ no holes, this is the normalization of $\Omega$.
         TNLean.PEPS.Approximation.mainState,
         TNLean.PEPS.Approximation.mainState_of_lt,
         TNLean.PEPS.Approximation.mainState_of_le,
-        TNLean.PEPS.Approximation.take_succ_eventSchedule,
-        TNLean.PEPS.Approximation.isScheduled_getElem,
         TNLean.PEPS.Approximation.levelGuide_eq_of_mem_open,
         TNLean.PEPS.Approximation.eventMain_inr_succ,
         TNLean.PEPS.Approximation.eventMain_inl_succ,
@@ -855,8 +916,15 @@ no holes, this is the normalization of $\Omega$.
         TNLean.PEPS.Approximation.finalMain_owner,
         TNLean.PEPS.Approximation.finalMain_holes}
     \leanok
-    \uses{def:peps_protocol_level_frame, def:peps_dyadic_protocol_schedule}
-    Let $k\ge1$ and $L\le2^k$. Every rank from $2$ to $2k+1$ is the rank of an event, consecutive events
+    \uses{def:peps_protocol_level_frame, def:peps_dyadic_protocol_schedule,
+        def:peps_adaptive_patch_constraint, def:peps_frame}
+    Let $k\ge1$, $L\le2^k$ and $q\ge1$. Fix an adaptive supplied-patch family for
+    $\Omega$ with parameters $B_0,C,c$, test exponent $60$ and system size $L$,
+    a label rank and a reference repainting party map. Let $\epsilon_0,t>0$ with
+    $\epsilon_0t\le B_0\log L$, and put $h_n=\epsilon_0\min(n,t)$.
+    Every event in the schedule is scheduled, and passing from a prefix of length
+    $i$ to one of length $i+1$ appends the event at index $i$, when that index is
+    in range. Every rank from $2$ to $2k+1$ is the rank of an event, consecutive events
     have equal or consecutive ranks, and the events before a given one are those of
     smaller rank and some of its own. Before each event let the main frame be: for a
     resize at a junction of scale $j$, the frame of the guide uniform on the
@@ -864,8 +932,12 @@ no holes, this is the normalization of $\Omega$.
     $h_{2^{j-1}}$ and the others radius $h_{2^j}$; for a repainting of a square of level
     $2^j$, the frame of the guide of that level with the squares already repainted at
     that level, all holes of radius $h_{2^j}$; after the last event, the frame of the
-    unit squares. The true vertices of these guides are grid corners of the closed root
-    square. Then a resize leaves the frame before the next event with its own corner
+    unit squares. Thus before the end of the schedule the main frame is the frame
+    of its current event, and at every index at or beyond the end it is the final
+    frame. If a block guide has a constant label on an open neighborhood of a point,
+    its sampled guide has that label at the point. The true vertices of these guides
+    are grid corners of the closed root square. Then a resize leaves the frame
+    before the next event with its own corner
     resized, a repainting leaves the frame before the next event with its own square
     repainted, the first frame is the raw copy at the root party, and in the last frame
     every site is held by its unit-square party and every hole has an empty outer
@@ -880,7 +952,11 @@ no holes, this is the normalization of $\Omega$.
         thm:peps_protocol_level_events, thm:peps_protocol_party_map_switch,
         thm:peps_dyadic_protocol_parties, thm:peps_dyadic_protocol_final_step,
         thm:peps_guide_frame_norm, thm:peps_guide_frame_supplied_gates,
-        lem:peps_dyadic_sampled_guides}
+        lem:peps_dyadic_sampled_guides, thm:peps_protocol_level_frame_facts,
+        def:peps_protocol_level_frame, def:peps_dyadic_block_guide,
+        thm:peps_dyadic_repainting_valid_labels, def:peps_guide_frame,
+        def:peps_dyadic_protocol_schedule, def:peps_dyadic_used_parties,
+        lem:peps_adaptive_patch_supply, lem:peps_level_true_vertices}
     The schedule contains exactly the prescribed events in rank order
     (Theorem~\ref{thm:peps_dyadic_protocol_schedule_counts}). The ranks cover the
     range, so no rank is skipped. When the next event has a larger rank, every event
@@ -891,9 +967,12 @@ no holes, this is the normalization of $\Omega$.
     a locally constant guide, locate the corners
     (Theorem~\ref{thm:peps_dyadic_temporary_holes} and
     Lemmas~\ref{lem:peps_dyadic_direct_repainting}
-    and~\ref{lem:peps_dyadic_unmodified_vertices}). The supplied-patch equalities of
-    Theorem~\ref{thm:peps_guide_frame_supplied_gates} identify frames of equal guides
-    whose radii agree at the true vertices.
+    and~\ref{lem:peps_dyadic_unmodified_vertices}). A sufficiently small positive
+    displacement stays in an open neighborhood by
+    Lemma~\ref{lem:peps_dyadic_sampled_guides}, so reading a locally constant guide
+    preserves its label. The equal-frame result of
+    Theorem~\ref{thm:peps_protocol_level_frame_facts} identifies frames of equal
+    sampled guides whose radii agree at the true vertices.
 
     The root guide has no true vertex by
     Theorem~\ref{thm:peps_protocol_level_events}. Cell centers lie in the open root
@@ -909,6 +988,7 @@ no holes, this is the normalization of $\Omega$.
     \label{thm:peps_protocol_from_large_repaintings}
     \lean{TNLean.PEPS.Approximation.auxIndices,
         TNLean.PEPS.Approximation.exists_large_of_mem_auxIndices,
+        TNLean.PEPS.Approximation.mem_eventSchedule_of_mem_auxIndices,
         TNLean.PEPS.Approximation.auxState,
         TNLean.PEPS.Approximation.auxState_succ,
         TNLean.PEPS.Approximation.largeSquare,
@@ -928,7 +1008,8 @@ no holes, this is the normalization of $\Omega$.
     $\lVert\Omega\rVert=1$ and patches supplied by the adaptive patch constraint
     with constants $B_0,C,c$ at accuracy $L^{-60}$, the following holds. Put
     $t=D\log L$ and let $b$ be the patch bound of
-    Theorem~\ref{thm:peps_protocol_constants}. Let $C',c',k'\in\N$ with
+    Theorem~\ref{thm:peps_protocol_constants}. The protocol constants and $L\ge2$
+    give $t>0$ and $\epsilon_0t\le B_0\log L$. Let $C',c',k'\in\N$ with
     $C\le C'$, $1\le C'$ and $c\le c'$, and set
     \begin{align}
         K & =(C'+1)^{3b}\bigl(16b^2(C'+1)^{6b}+1\bigr)^{2b}
@@ -937,7 +1018,9 @@ no holes, this is the normalization of $\Omega$.
     \end{align}
     Let the memory before each event be the main frame followed by one frame for
     each auxiliary sheet of the schedule, frozen if its repainting is done and
-    an idle raw copy held by its future owner otherwise. Suppose that each
+    an idle raw copy held by its future owner otherwise. Each auxiliary index
+    belongs to a scheduled large-scale repainting, and an event other than a
+    large-scale repainting freezes no auxiliary sheet. Suppose that each
     repainting of a square of side larger than $K_0t$ passes the memory from its
     state before to its state after through $189$ bounded changes, each with at
     most $2b$ pair effects and $2b$ pair sources in each monomial, at most $K$
@@ -950,17 +1033,26 @@ no holes, this is the normalization of $\Omega$.
     $64\cdot189$, $k'$ and $2b$, all of whose changes have at most $2b$ pair
     sources in each monomial. This is not
     Proposition~\ref{prop:peps_dyadic_protocol}: the large-scale repaintings are
-    assumed here (\texttt{06-geometry.tex}, lines 82--241, 507--541 and 572--681).
+    assumed here, together with the frozen-frame bounds
+    (\texttt{06-geometry.tex}, lines 82--241, 507--541 and 572--681).
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:peps_protocol_main_frame_schedule, thm:peps_protocol_level_events,
         thm:peps_protocol_event_segments, thm:peps_dyadic_protocol_schedule_counts,
-        def:peps_dyadic_protocol_schedule, def:peps_frame}
+        def:peps_dyadic_protocol_schedule, def:peps_frame, thm:peps_protocol_constants}
+    The positivity of $D$ and $\log L$ gives $t>0$, while
+    $\epsilon_0D\le K_0D\le B_0$ gives the radius bound.
+    The schedule identifies the auxiliary initializations and the events containing
+    them. By Theorem~\ref{thm:peps_protocol_main_frame_schedule}, its indexed events
+    are scheduled and its main frames have the stated transitions and endpoints.
     Resizes and direct repaintings change only the main frame, by one small-patch
-    rewrite, and freeze no auxiliary sheet. The changes of the events are joined along
-    the schedule, starting from the raw copies and ending with the frame of the unit
-    squares and the frozen frames.
+    rewrite from Theorem~\ref{thm:peps_protocol_level_events}, and freeze no auxiliary
+    sheet. A large-scale repainting has $189$ changes by
+    Theorem~\ref{thm:peps_dyadic_protocol_schedule_counts}, so its supplied segment
+    has the required length. The changes are joined by
+    Theorem~\ref{thm:peps_protocol_event_segments}, starting from the raw copies and
+    ending with the frame of the unit squares and the frozen frames.
 \end{proof}
 
 \begin{definition}[The frame of a treated sheet]
