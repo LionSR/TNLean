@@ -119,9 +119,16 @@ The parameters $q,R,J,\Delta$ enter through four explicit quantities:
     \item the padding scale $Z$ and padding constant $\Cpad$ of the initial
           safe-box estimate (Section~\ref{sec:box}), which carry the dependence
           on $J/\Delta$ and on $q^{O(R^2)}$;
-    \item the normalized gap $g=\Delta/c_s$ with
-          $c_s=\max\{1,J(\|f_{1,\Delta/2}\|_1+1)\}$, where $f_{1,\Delta/2}$ is
-          the quasi-local filter kernel;
+    \item two normalized gaps, one for each filter degree $p$ used in the
+          proof. For a filter kernel $f_{p,\Delta/2}$ of degree $p$ put
+          $c_p=\max\{1,J(\|f_{p,\Delta/2}\|_1+1)\}$. The normalization and
+          the gap depend on $p$ (\src{03-quasilocal.tex}, lines~216--218).
+          The scanner chain of Propositions~9.2--9.6 uses $p=1$ and the gap
+          $g_1=\Delta/c_1$. The amplification step, Proposition~10.2, uses
+          $p_{\rm a}=10^6$, so that $\alpha=p_{\rm a}/(p_{\rm a}+1)>1-10^{-6}$
+          (\src{09-amplification.tex}, line~17), and the gap
+          $g_{\rm a}=\Delta/c_{p_{\rm a}}$. The two kernels are different
+          functions, so $g_1$ and $g_{\rm a}$ are separate inputs of $C$;
     \item the anchor multiplicity $\mu=2^{2R(R+1)}$ and the log-dimension
           $\log q$;
     \item the quasi-local filter constants of Proposition~10.2.
@@ -241,8 +248,8 @@ $20C_e+62+24\log q+16\sqrt{C_{\rm tr}}(1+C_{\rm dim})$
 (\leanid{TNLean.PEPS.AreaLaw.Scan.exists_finalSharp_error_le}). The constants
 packaged as existentials along this branch are explicit in substance: the
 scale-fact constant is $32$, the transport cap is
-$1+(2C_r+3)^2\log q$, and the marginal constants are $C_0=512e(2/g)$ and
-$c_0=[32\sqrt{1+2/g}]^{-1}$. The thresholds are rows~1--31 of
+$1+(2C_r+3)^2\log q$, and the marginal constants are $C_0=512e(2/g_1)$ and
+$c_0=[32\sqrt{1+2/g_1}]^{-1}$. The thresholds are rows~1--31 of
 Table~\ref{tab:sites}. The relation between the safe-box estimate and the
 collar bound is recorded in \src{docs/paper-gaps/arealaw2d_safe_box_collar_scope.tex}.
 
@@ -254,9 +261,9 @@ Proposition~10.2 (\src{09-amplification.tex}, lines~261--576;
 formulas packaged as existentials, except for one threshold. With $K=4(M+2)$
 and the filter constants $c$, $v$ and $C_g$ of the lattice constraint words,
 \begin{align*}
-    C'  & =\frac{g/2+2v+12}{c},\qquad
+    C'  & =\frac{g_{\rm a}/2+2v+12}{c},\qquad
     B=4+\frac{4\,m!}{(c/2)^m},\quad m=\lceil 2/\alpha\rceil,                       \\
-    B_r & =\frac6g\Bigl(C_0+1+\frac{2K}{1-\eps}\Bigr)+\frac{K}{1-\eps},\qquad
+    B_r & =\frac6{g_{\rm a}}\Bigl(C_0+1+\frac{2K}{1-\eps}\Bigr)+\frac{K}{1-\eps},\qquad
     C_{\rm rad}=(C'B_r)^{1/\alpha}+1,                                               \\
     C_2 & =\max\bigl\{C_{\rm rad},\,24(1+C_0\log q)\bigr\},\qquad
     N_2=\max\bigl\{2,\lceil C_gC_0B\rceil,N_t\bigr\}.
@@ -265,7 +272,8 @@ The quasi-local filter constants are named definitions in QICLean
 (\leanid{kernelDecayConst}$(\delta)=2\delta e/\pi$ and \leanid{kernelDecayRate}).
 The typical-projector threshold $N_t$ (row~34) is kind (a): it compares a
 stretched exponential $Ce^{-cn^{1/10}}$ with $n^{-2K}$. The constants $c$, $v$,
-$C_g$ and $c_s$ involve the $L^1$ norm of the filter kernel and a few series of
+$C_g$ and $c_{p_{\rm a}}$ involve the $L^1$ norm of the degree-$p_{\rm a}$
+filter kernel and a few series of
 the form $\sum_n(1+n)^2e^{-cn^\alpha}$ (row~43), which are definite numbers with
 explicit upper bounds.
 
@@ -372,7 +380,7 @@ $x\ge1$, $A\ge0$, $b>0$ and $u<v$.
     \item[(P10)] \emph{Series and integral values}:
           $1+\sum_k(k+1)^p2^{-\delta_0k/2}$, $\sum_d(d+1)^{-2}=\pi^2/6$,
           $\sum_n(1+n)^2e^{-cn^\alpha}$, and the filter norm
-          $\|f_{1,\Delta/2}\|_1$. Each has an explicit upper bound: split at
+          $\|f_{1,\Delta/2}\|_1$ and $\|f_{p_{\rm a},\Delta/2}\|_1$. Each has an explicit upper bound: split at
           the (P5) or (P6) threshold, bound the head termwise and the tail by
           a geometric series.
 \end{itemize}
@@ -407,7 +415,7 @@ Declaration (file:line)                                          & Elementary in
 \leanid{eventually_regionalEntropy_positiveDepthPrefix_le}
 (\src{Scan/PositivePrefixEntropyTransfer.lean}:44),
 \leanid{eventually_source_actualTerminal_preEntropy_bounds}
-(\src{Scan/SourceActualTerminalEntropy.lean}:37)                 & continuity cost with $C=\max(4,C_{\rm vol})$ and $A=\sqrt{2/g}$                   & P8    \\
+(\src{Scan/SourceActualTerminalEntropy.lean}:37)                 & continuity cost with $C=\max(4,C_{\rm vol})$ and $A=\sqrt{2/g_1}$                   & P8    \\
 \leanid{eventually_status_scale_separation},
 \leanid{eventually_one_le_source_bandCount}
 (\src{Scan/StatusScaleSeparation.lean}:51, 76)                   & $\lceil C_r(\log n)^2\rceil\le n^\kappa$, $8\le n^{\mu-\kappa}$, $8\le n^{1-\ell-\mu}$ & P1, P4 \\
