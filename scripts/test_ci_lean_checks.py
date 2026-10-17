@@ -807,10 +807,16 @@ class EarlyCommandTest(unittest.TestCase):
             self.assertIsNone(code)
             self.assertLess(time.monotonic() - start, 8)
             pid = int(pid_file.read_text())
-            try:
-                state = Path(f'/proc/{pid}/stat').read_text().split(') ')[1][0]
-            except FileNotFoundError:
-                state = 'gone'
+            # SIGKILL delivery is asynchronous; wait for this child to exit.
+            deadline = time.monotonic() + 2
+            while True:
+                try:
+                    state = Path(f'/proc/{pid}/stat').read_text().split(') ')[1][0]
+                except FileNotFoundError:
+                    state = 'gone'
+                if state in ('Z', 'gone') or time.monotonic() >= deadline:
+                    break
+                time.sleep(0.01)
             self.assertIn(state, ('Z', 'gone'))
 
     def test_success_callback_only_after_real_success_and_keeps_deadline(self):
