@@ -27,7 +27,6 @@ The interface omits the following clauses of the proposition:
   copy at its designated party, rather than arbitrary normalized product initialization;
 * factorization of every intermediate reference vector into main and auxiliary encoded frames,
   with every factor of norm at most one;
-* the repainting-event scale and grid address for each additional party;
 * pre-expansion pair-source and message bounds for each monomial, beyond pair-effect counts;
 * accuracy at every prescribed inverse power of `L`, rather than one contraction per change
   with error `C L⁻²⁰`.
