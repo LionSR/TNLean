@@ -3,12 +3,14 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.PEPS.Approximation.AdaptivePatchSupply
 import TNLean.PEPS.Approximation.ApproximateCircuitError
 import TNLean.PEPS.Approximation.Basic
 import TNLean.PEPS.Approximation.DistributedConstruction
 import TNLean.PEPS.Approximation.DyadicActiveLabelParties
 import TNLean.PEPS.Approximation.DyadicRoutingPEPS
 import TNLean.PEPS.Approximation.ProtocolDensityError
+import TNLean.PEPS.Approximation.SheetStackEndpoints
 
 /-!
 # The consequences of Proposition 7.1 used in §8
@@ -212,6 +214,12 @@ structure DyadicProtocol (L q : ℕ) (P : Type) [Fintype P] where
   square to whose repainting they belong”). The construction of the protocol records here the
   square of the scheduled repainting event of each change. -/
   repaintingSquare : ℕ → Option (ℕ × ℕ × ℕ)
+  /-- The encoded frames of each stage: the main encoded frame, followed by the auxiliary encoded
+  frames.
+
+  Source: Polynomial-PEPS manuscript (Sept 24 2026), Proposition 7.1, items 1 and 4,
+  `06-geometry.tex:21–23` and `06-geometry.tex:38–40`. -/
+  frames : ℕ → List (EncodedFrame.Frame (cellCenterPos L) q P)
 
 namespace DyadicProtocol
 
@@ -363,6 +371,22 @@ structure IsDistributionProtocol (Ω : StateSpace L q) (C : ℝ) (b k r : ℕ) :
       S.1 ≤ D.placement.scale p + 1 ∧ D.placement.scale p ≤ S.1 + 1 ∧
         Nat.dist (D.placement.anchor p).1 (dyadicAnchor S.1 S.2.1) ≤ b * 2 ^ S.1 ∧
         Nat.dist (D.placement.anchor p).2 (dyadicAnchor S.1 S.2.2) ≤ b * 2 ^ S.1
+  /-- Item 1: initialization is a pure product across parties of the copies of `Ω`. The initial
+  encoded frames are the main frame followed by the auxiliary frames; each is a copy of `Ω` with
+  no hole, held entirely by one party, its designated party; and the whole initial memory of each
+  party is the memory of the copies it holds, with initial vector the product of their reference
+  vectors. The party holding the first frame holds the main copy.
+
+  Source: Polynomial-PEPS manuscript (Sept 24 2026), Proposition 7.1, item 1,
+  `06-geometry.tex:21–23`: “Initialization is a pure product across parties. One party initially
+  holds the main copy of `Ω`; all auxiliary copies are initialized privately at their designated
+  parties”; and the initialization in the proof, `06-geometry.tex:658–660`. -/
+  initialCopies : D.frames 0 ≠ [] ∧ ∃ holder : EncodedFrame.Frame (cellCenterPos L) q P → P,
+    (∀ F ∈ D.frames 0, F.holes = [] ∧ ∀ x, F.owner x = holder F) ∧ ∀ [DecidableEq P],
+      (D.initialSpace = fun p =>
+          EncodedFrame.framesSpace ((D.frames 0).filter fun F => holder F = p)) ∧
+        ∀ [NeZero q], HEq D.initialVector
+          fun p => EncodedFrame.framesVec Ω ((D.frames 0).filter fun F => holder F = p)
   /-- Item 2: at most `C L³` changes. -/
   changes_le : (D.changes : ℝ) ≤ C * (L : ℝ) ^ 3
   /-- Item 2: each change has a fixed number of nonprivate gates. -/
@@ -385,6 +409,29 @@ structure IsDistributionProtocol (Ω : StateSpace L q) (C : ℝ) (b k r : ℕ) :
           b * 2 ^ D.placement.scale p ∧
         Nat.dist (D.placement.anchor p).2 (D.placement.anchor p').2 ≤
           b * 2 ^ D.placement.scale p
+  /-- Item 4: the reference vector of every intermediate stage is the product of the reference
+  vectors `K_F Ω` of the encoded frames of that stage, of the protocol's own `Ω`: the main encoded
+  frame and the auxiliary encoded frames. All its factors have norm at most one. Which factor is
+  the main frame is recorded at the initial stage, by `initialCopies`, and before the readout, by
+  `mainFrame_owner`; at the stages in between, the order of the factors is not recorded. The initial stage is the product initialization of `initialCopies`. The last stage is
+  the readout of the physical registers and the discarded ones, recorded in `reference_changes`;
+  the readout change, which only rearranges registers, has no counterpart in the source, which
+  is why that stage is excluded here.
+
+  Source: Polynomial-PEPS manuscript (Sept 24 2026), Proposition 7.1, item 4,
+  `06-geometry.tex:38–40`: “There is a designated reference vector at every stage, formed from
+  the main encoded frame and the auxiliary encoded frames. All its factors have norm at most
+  one.” -/
+  reference_frames : ∀ [NeZero q], ∀ t, 0 < t → t < D.changes →
+    (∀ F ∈ D.frames t, ‖F.refVec Ω‖ ≤ 1) ∧
+      ∃ h : D.layout t = EncodedFrame.stackRegs (D.frames t) [],
+        D.reference t = Layout.memCongr h.symm (EncodedFrame.framesVec Ω (D.frames t))
+  /-- Item 4: before the readout, the raw registers of the main encoded frame are held by the
+  parties of the genuine sites, so they become the physical outputs.
+
+  Source: Polynomial-PEPS manuscript (Sept 24 2026), Proposition 7.1, item 4,
+  `06-geometry.tex:46–49`, and the end of the proof, `06-geometry.tex:668–681`. -/
+  mainFrame_owner : ∃ M Fs, D.frames (D.changes - 1) = M :: Fs ∧ ∀ v, M.owner v = D.site v
   /-- Item 4: each change keeps the reference vector within `C L⁻²⁰`. -/
   reference_step : ∀ t < D.changes,
     ‖(D.step t).eval (D.reference t) - D.reference (t + 1)‖ ≤ C / (L : ℝ) ^ 20

@@ -101,7 +101,7 @@ and its proof, lines 572–681; Theorem 5.2, item 3, `04-compression.tex`, lines
 theorem exists_isDistributionProtocol_of_hasSourceBoundedChange {L k : ℕ} (hL : 2 ≤ L)
     (hkL : L ≤ 2 ^ k) (hk2 : 2 ^ k < 2 * L) (large : DyadicSquare k → Bool)
     {Ω : StateSpace L q} (hΩ : ‖Ω‖ = 1)
-    (st : ℕ → List (Frame (cellCenterPos L) q (ProtocolParty k)))
+    (st : ℕ → List (Frame (cellCenterPos L) q (ProtocolParty k))) (hne : st 0 ≠ [])
     (holder : Frame (cellCenterPos L) q (ProtocolParty k) → ProtocolParty k)
     (hraw : ∀ F ∈ st 0, F.holes = []) (hown : ∀ F ∈ st 0, ∀ x, F.owner x = holder F)
     {kK : ℕ} {C : ℝ}
@@ -133,7 +133,8 @@ theorem exists_isDistributionProtocol_of_hasSourceBoundedChange {L k : ℕ} (hL 
       have h2 : st' (t + 1) = st n := by simp only [st', min_eq_right (by omega : n ≤ t + 1)]
       rw [h1, h2]
       exact hasSourceBoundedChange_refl _ _ _ _ _ _ (le_max_right _ _)
-  refine exists_isDistributionProtocol_of_frames hL hkL hk2 large hΩ st' holder
+  refine exists_isDistributionProtocol_of_frames hL hkL hk2 large hΩ st' (by simpa [st'] using hne)
+    holder
     (by simpa [st'] using hraw) (by simpa [st'] using hown) (fun t => (hall t).choose)
     (fun t ht => ?_) (fun t ht => ?_) M Fs (by rw [hst' n le_rfl]; exact hfin) hMown hM hε
     hholes hC hK (max_le hεC (by positivity))
