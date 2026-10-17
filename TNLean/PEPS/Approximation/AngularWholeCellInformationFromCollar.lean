@@ -39,7 +39,7 @@ Source: polynomial-PEPS manuscript, Lemma 3.2 and Proposition 3.4,
 `02-information.tex`, lines 163–311 and 692–732. The sublinear collar bound is
 an explicit premise of this intermediate implication. -/
 theorem exists_mutualInformation_selectedRegion_le_square_of_sublinearCollarBound
-    {q : ℕ} {J Δ D₀ Ctpl : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < Δ)
+    {q : ℕ} {J Δ D₀ Ctpl : ℝ} (hΔ : 0 < Δ)
     (hcol : AreaLaw.SublinearCollarBound q 1 J Δ D₀ Ctpl)
     {c : ℝ} (hc : 0 < c) :
     ∃ C₁ K : ℝ, 0 < C₁ ∧ 0 ≤ K ∧
@@ -60,7 +60,7 @@ theorem exists_mutualInformation_selectedRegion_le_square_of_sublinearCollarBoun
                 b₀ + (S.card : ℝ) * (C₁ * (1 + Real.log s) ^ K)
  := by
   obtain ⟨C₁, K, hC₁, hK, hcell⟩ :=
-    exists_cell_conditionalMutualInformation_le_square_of_sublinearCollarBound hJ hΔ hcol hc
+    exists_cell_conditionalMutualInformation_le_square_of_sublinearCollarBound hΔ hcol hc
   refine ⟨C₁, K, hC₁, hK, fun s hs o r Aold A hA S hS L h E₀ Ω hΩ E b₀
     hclear hold ↦ ?_⟩
   exact mutualInformation_selectedRegion_le_of_cell_bound Ω E

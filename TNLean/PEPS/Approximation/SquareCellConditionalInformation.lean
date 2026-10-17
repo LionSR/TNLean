@@ -41,7 +41,7 @@ placement with the integer-domain placement.
 Source: polynomial-PEPS Lemma 3.2 (`lem:cell-cmi`), `02-information.tex`,
 lines 163–178, and its application in Proposition 3.4, lines 688–737. -/
 theorem exists_cell_conditionalMutualInformation_le_square_of_sublinearCollarBound
-    {q : ℕ} {J Δ D₀ Ctpl : ℝ} (_hJ : 0 ≤ J) (hΔ : 0 < Δ)
+    {q : ℕ} {J Δ D₀ Ctpl : ℝ} (hΔ : 0 < Δ)
     (hcol : AreaLaw.SublinearCollarBound q 1 J Δ D₀ Ctpl) {c : ℝ} (hc : 0 < c) :
     ∃ C₁ K : ℝ, 0 < C₁ ∧ 0 ≤ K ∧
       ∀ s : ℝ, 1 ≤ s → ∀ (o : ℝ × ℝ) (m₀ : ℤ × ℤ) (A : Set (ℤ × ℤ)),

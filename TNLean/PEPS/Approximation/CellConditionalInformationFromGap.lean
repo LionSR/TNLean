@@ -50,6 +50,6 @@ theorem exists_cell_conditionalMutualInformation_le_square
   have hcol : AreaLaw.SublinearCollarBound q 1 J Δ 13 24 :=
     AreaLaw.sublinearCollarBound_real q 1 hq hJ hΔ (by norm_num) (by norm_num)
   exact exists_cell_conditionalMutualInformation_le_square_of_sublinearCollarBound
-    hJ hΔ hcol hc
+    hΔ hcol hc
 
 end TNLean.PEPS.Approximation

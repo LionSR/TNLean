@@ -84,7 +84,8 @@
 
 \begin{theorem}[A square-grid maximizing family with controlled energy]
     \label{thm:square_zero_floor_maximizer_energy}
-    % Pending verification: \lean{TNLean.PEPS.Approximation.SquareHamiltonian.exists_zero_floor_maximizer_energy_fidelity}
+    \lean{TNLean.PEPS.Approximation.SquareHamiltonian.exists_zero_floor_maximizer_energy_fidelity}
+    \leanok
     \uses{def:polynomial_peps_model,def:area_law_nearest_neighbor_support,
         def:square_area_law_hamiltonian}
     Let $L,q,m\ge0$ be integers and $J\in\mathbb R$. Let $H$ be an original
@@ -124,7 +125,7 @@
     the scope of the physical specialization is recorded
     in~\cite{gap:polypeps_square_zero_floor_optimizer_scope}.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:square_nearest_neighbor_terms,thm:square_area_law_ground_gap,
         thm:area_law_crossing_support_count,thm:area_law_nearest_neighbor_budget}
     Replace the original terms by their Hermitian parts and transport them

@@ -66,7 +66,7 @@ theorem coarse_mutualInformation_le_square {q : ℕ} (hq : 1 ≤ q)
             FiniteProduct.mutualInformation (fun _ : Vertex L ↦ Fin q) Ω X E ≤ C := by
   have hcol : SublinearCollarBound q 1 J Δ 13 24 :=
     sublinearCollarBound_real q 1 hq hJ hΔ (by norm_num) (by norm_num)
-  exact coarse_mutualInformation_le_square_of_sublinearCollarBound hJ hΔ hcol N₀ A₀
+  exact coarse_mutualInformation_le_square_of_sublinearCollarBound hΔ hcol N₀ A₀
 
 /-- Coarse information after an arbitrary common real translation of the
 ambient lattice and physical coordinates. All constants are chosen before

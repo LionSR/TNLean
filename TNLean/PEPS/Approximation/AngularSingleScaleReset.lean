@@ -70,7 +70,7 @@ theorem exists_angular_single_scale_reset_of_sublinearCollarBound
   let c := (a / 2 - 3 * a' - d) / d
   have hc : 0 < c := div_pos (angular_clearance_pos ha' ha'a hda) hd
   obtain ⟨C₁, K, hC₁, hK, hcell⟩ :=
-    exists_mutualInformation_selectedRegion_le_square_of_sublinearCollarBound hJ hΔ hcol hc
+    exists_mutualInformation_selectedRegion_le_square_of_sublinearCollarBound hΔ hcol hc
   obtain ⟨Cp, Lr, hCp, hreset⟩ := exists_angular_information_reset q hq J hJ hΔ hp
   obtain ⟨D, Lw, hD, hLw, hwidth⟩ :=
     exists_angular_reset_width_lt_of_cell_information a' d Cp C₁ N K p
