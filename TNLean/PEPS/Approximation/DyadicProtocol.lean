@@ -112,6 +112,15 @@ namespace TNLean.PEPS.Approximation
 
 open Finset TNLean.PEPS.PairEffect
 
+/-- The aligned squares of the padded dyadic hierarchy of `[0, N] ^ 2`, each given by its scale
+`j` and its block address `(x, y)`: the square
+`[2 ^ j x, 2 ^ j (x + 1)] × [2 ^ j y, 2 ^ j (y + 1)]` lies in `[0, N] ^ 2`. When `N` is a power
+of two, the root square is the one with `2 ^ j = N`.
+
+Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:64–65`. -/
+def HierarchySquare (N : ℕ) : Type :=
+  {S : ℕ × ℕ × ℕ // 2 ^ S.1 * (S.2.1 + 1) ≤ N ∧ 2 ^ S.1 * (S.2.2 + 1) ≤ N}
+
 /-- **The data of a dyadic distribution protocol.** A protocol on the square of side `L` with
 local dimension `q`, on the finite party type `P`, consists of the following.
 
@@ -190,15 +199,21 @@ structure DyadicProtocol (L q : ℕ) (P : Type) [Fintype P] where
   /-- The final layout: the physical registers, then the private registers. -/
   layout_changes :
     layout changes = familyPhysicalOutputLayout physicalDimension physicalOrder privateOutput
+  /-- The party assigned to each square of the padded hierarchy, including the root square.
 
-/-- The aligned squares of the padded dyadic hierarchy of `[0, N] ^ 2`, each given by its scale
-`j` and its block address `(x, y)`: the square
-`[2 ^ j x, 2 ^ j (x + 1)] × [2 ^ j y, 2 ^ j (y + 1)]` lies in `[0, N] ^ 2`. When `N` is a power
-of two, the root square is the one with `2 ^ j = N`.
+  Source: Polynomial-PEPS manuscript (Sept 24 2026), Proposition 7.1, item 1,
+  `06-geometry.tex:19–20`, and the hierarchy, `06-geometry.tex:64–67`. -/
+  squareParty : HierarchySquare (paddedSide L) → P
+  /-- The square whose repainting the change `t` belongs to, as its scale and block address, or
+  `none` when the change belongs to no repainting. A party outside the range of `squareParty` is
+  an additional party, which belongs to the repainting of a square.
 
-Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:64–65`. -/
-def HierarchySquare (N : ℕ) : Type :=
-  {S : ℕ × ℕ × ℕ // 2 ^ S.1 * (S.2.1 + 1) ≤ N ∧ 2 ^ S.1 * (S.2.2 + 1) ≤ N}
+  Source: Polynomial-PEPS manuscript (Sept 24 2026), Proposition 7.1, items 1 and 3,
+  `06-geometry.tex:19–22` (“at most a fixed number of additional parties for each repainting of a
+  square”) and `06-geometry.tex:35–37` (“additional parties have the scale and address of the
+  square to whose repainting they belong”). The construction of the protocol records here the
+  square of the scheduled repainting event of each change. -/
+  repaintingSquare : ℕ → Option (ℕ × ℕ × ℕ)
 
 namespace DyadicProtocol
 
@@ -304,13 +319,27 @@ structure IsDistributionProtocol (Ω : StateSpace L q) (C : ℝ) (b k r : ℕ) :
   /-- Item 1: a fixed number of parties for each square. -/
   blockBounded : D.placement.BlockBounded b
   /-- Item 1: a different party is assigned to each square of the padded hierarchy, including
-  the root square, at the scale and address of that square.
+  the root square.
 
   Source: Polynomial-PEPS manuscript (Sept 24 2026), Proposition 7.1, item 1,
   `06-geometry.tex:18–20`, and the hierarchy, `06-geometry.tex:64–67`: “A different party is
   assigned to each dyadic square.” -/
-  squareParty : ∃ f : HierarchySquare (paddedSide L) → P, Function.Injective f ∧
-    ∀ S, (D.placement.scale (f S), D.placement.blockX (f S), D.placement.blockY (f S)) = S.1
+  squareParty_injective : Function.Injective D.squareParty
+  /-- Item 1: the party of a square of the hierarchy is placed at the scale and address of that
+  square. Source: `06-geometry.tex:19–20, 64–67`. -/
+  placement_squareParty : ∀ S, (D.placement.scale (D.squareParty S),
+    D.placement.blockX (D.squareParty S), D.placement.blockY (D.squareParty S)) = S.1
+  /-- Item 3: every additional party, that is every party outside the range of `squareParty`,
+  belongs to the repainting of a square `S` of the hierarchy other than the root square: it has
+  the scale and address of `S`, and it participates only in changes of the repainting of `S`.
+
+  Source: Polynomial-PEPS manuscript (Sept 24 2026), Proposition 7.1, item 1,
+  `06-geometry.tex:19–22`, and item 3, `06-geometry.tex:35–37`: “additional parties have the
+  scale and address of the square to whose repainting they belong”. -/
+  additionalParty : ∀ p, p ∉ Set.range D.squareParty → ∃ S : HierarchySquare (paddedSide L),
+    2 ^ S.1.1 < paddedSide L ∧
+      (D.placement.scale p, D.placement.blockX p, D.placement.blockY p) = S.1 ∧
+      ∀ t < D.changes, ∀ g, p ∈ (D.step t).participants g → D.repaintingSquare t = some S.1
   /-- Item 2: at most `C L³` changes. -/
   changes_le : (D.changes : ℝ) ≤ C * (L : ℝ) ^ 3
   /-- Item 2: each change has a fixed number of nonprivate gates. -/

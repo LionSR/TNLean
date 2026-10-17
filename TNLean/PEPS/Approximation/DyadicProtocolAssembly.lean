@@ -162,32 +162,59 @@ theorem memCongr_stackVec {ι : Type} [Fintype ι] [DecidableEq ι] {q : ℕ} [N
   subst h
   rfl
 
-/-- **A party for every square of the hierarchy.** When `L ≤ 2 ^ k < 2 L`, the block parties
-give an injective assignment of a party to every aligned square of the padded square
-`[0, N] ^ 2`, `N = 2 ^ k`, including the root square, at the scale and address of that square.
+/-- A square of the padded hierarchy of `[0, 2 ^ k] ^ 2` is a square of the hierarchy of depth
+`k`: its scale is at most `k` and its block indices are below `2 ^ (k - j)`.
 
-Polynomial-PEPS manuscript, `06-geometry.tex`, lines 18–20 and 64–67. -/
-theorem protocolPlacement_squareParty {L k : ℕ} (hkL : L ≤ 2 ^ k) (hk2 : 2 ^ k < 2 * L) :
-    ∃ f : HierarchySquare (paddedSide L) → ProtocolParty k, Function.Injective f ∧
-      ∀ S, ((protocolPlacement k).scale (f S), (protocolPlacement k).blockX (f S),
-        (protocolPlacement k).blockY (f S)) = S.1 := by
-  have hN : paddedSide L = 2 ^ k :=
-    le_antisymm (paddedSide_le_of_le_pow hkL) (pow_le_paddedSide hk2)
-  have mk : ∀ S : HierarchySquare (paddedSide L), ∃ T : DyadicSquare k, T.toTriple = S.1 := by
-    rintro ⟨⟨j, x, y⟩, hx, hy⟩
-    simp only [hN] at hx hy
-    have hj : j ≤ k := by
-      have : 2 ^ j ≤ 2 ^ k := (Nat.le_mul_of_pos_right _ (by omega)).trans hx
-      exact (Nat.pow_le_pow_iff_right (by norm_num)).1 this
-    have hsplit : (2 : ℕ) ^ k = 2 ^ j * 2 ^ (k - j) := by rw [← pow_add, Nat.add_sub_cancel' hj]
-    rw [hsplit] at hx hy
-    have hx' := Nat.le_of_mul_le_mul_left hx (by positivity)
-    have hy' := Nat.le_of_mul_le_mul_left hy (by positivity)
-    exact ⟨⟨⟨j, by omega⟩, ⟨x, show x < 2 ^ (k - j) by omega⟩,
-      ⟨y, show y < 2 ^ (k - j) by omega⟩⟩, rfl⟩
-  choose g hg using mk
-  exact ⟨fun S => .inl (g S), fun S S' h => Subtype.ext (by
-    rw [← hg S, ← hg S', Sum.inl_injective h]), fun S => hg S⟩
+Polynomial-PEPS manuscript, `06-geometry.tex`, lines 64–65. -/
+theorem HierarchySquare.lt_of_eq_pow {N k : ℕ} (hN : N = 2 ^ k) (S : HierarchySquare N) :
+    S.1.1 < k + 1 ∧ S.1.2.1 < 2 ^ (k - S.1.1) ∧ S.1.2.2 < 2 ^ (k - S.1.1) := by
+  obtain ⟨⟨j, x, y⟩, hx, hy⟩ := S
+  subst hN
+  dsimp only at hx hy ⊢
+  have hj : j ≤ k := by
+    have : 2 ^ j ≤ 2 ^ k := (Nat.le_mul_of_pos_right _ (by omega)).trans hx
+    exact (Nat.pow_le_pow_iff_right (by norm_num)).1 this
+  have hsplit : (2 : ℕ) ^ k = 2 ^ j * 2 ^ (k - j) := by rw [← pow_add, Nat.add_sub_cancel' hj]
+  rw [hsplit] at hx hy
+  have hx' := Nat.le_of_mul_le_mul_left hx (by positivity)
+  have hy' := Nat.le_of_mul_le_mul_left hy (by positivity)
+  omega
+
+/-- **The party of each square of the hierarchy.** When the padded side is `2 ^ k`, each aligned
+square of the padded square, including the root square, is assigned its block party.
+
+Polynomial-PEPS manuscript, `06-geometry.tex`, lines 19–20 and 64–67. -/
+def protocolSquareParty {L k : ℕ} (hN : paddedSide L = 2 ^ k)
+    (S : HierarchySquare (paddedSide L)) : ProtocolParty k :=
+  .inl ⟨⟨S.1.1, (S.lt_of_eq_pow hN).1⟩, ⟨S.1.2.1, (S.lt_of_eq_pow hN).2.1⟩,
+    ⟨S.1.2.2, (S.lt_of_eq_pow hN).2.2⟩⟩
+
+theorem toTriple_protocolSquareParty {L k : ℕ} (hN : paddedSide L = 2 ^ k)
+    (S : HierarchySquare (paddedSide L)) :
+    (protocolSquareParty hN S).square.toTriple = S.1 := rfl
+
+/-- Distinct squares of the hierarchy have distinct block parties.
+
+Polynomial-PEPS manuscript, `06-geometry.tex`, line 67: “A different party is assigned to each
+dyadic square.” -/
+theorem protocolSquareParty_injective {L k : ℕ} (hN : paddedSide L = 2 ^ k) :
+    Function.Injective (protocolSquareParty hN) := fun S S' h => Subtype.ext (by
+  rw [← toTriple_protocolSquareParty hN S, ← toTriple_protocolSquareParty hN S', h])
+
+/-- **Additional parties.** When `L ≤ 2 ^ k < 2 L`, every party other than a block party of
+`protocolSquareParty` is the placeholder of a non-root square `S`, placed at `S` and used only by
+the repainting of `S`.
+
+Polynomial-PEPS manuscript, `06-geometry.tex`, lines 19–22, 35–37, and 91–95. -/
+theorem exists_eq_inr_of_notMem_range_protocolSquareParty {L k : ℕ} (hN : paddedSide L = 2 ^ k)
+    (p : ProtocolParty k) (hp : p ∉ Set.range (protocolSquareParty hN)) :
+    ∃ R : RepaintedSquare k, p = .inr R := by
+  rcases p with T | R
+  · refine (hp ⟨⟨T.toTriple, ?_⟩, ?_⟩).elim
+    · rw [hN]; exact (protocolPlacement_inGrid k) (.inl T)
+    · exact congrArg Sum.inl (DyadicSquare.toTriple_injective k
+        (toTriple_protocolSquareParty hN _))
+  · exact ⟨R, rfl⟩
 
 /-- **A protocol from a bounded trajectory of sheets.** Let `L ≥ 2` and `L ≤ 2 ^ k < 2 L`, let
 `‖Ω‖ = 1`, and let `st t` be lists of encoded frames on the parties of the hierarchy of
@@ -251,6 +278,8 @@ theorem exists_isDistributionProtocol_of_frames {L q k : ℕ} [NeZero q] (hL : 2
     (congrArg (stackRegs · []) hfin).symm rfl
   have he0 : e.nonprivateCount = 0 := by
     simp only [e, OriginalCircuit.nonprivateCount_castLayouts, nonprivateCount_readoutCircuit]
+  have hN : paddedSide L = 2 ^ k :=
+    le_antisymm (paddedSide_le_of_le_pow hkL) (pow_le_paddedSide hk2)
   let D : DyadicProtocol L q (ProtocolParty k) :=
     { placement := protocolPlacement k
       initialSpace := fun p => framesSpace ((st 0).filter fun F => holder F = p)
@@ -282,7 +311,10 @@ theorem exists_isDistributionProtocol_of_frames {L q k : ℕ} [NeZero q] (hL : 2
         · exact finiteDimensional_of_mem_stackRegs [M] r
             (List.mem_append_left _ (List.mem_append_left _ hr))
         · exact finiteDimensional_of_mem_stackRegs Fs r hr
-      layout_changes := chainLayout_succ_of_lt (Nat.lt_succ_self n) }
+      layout_changes := chainLayout_succ_of_lt (Nat.lt_succ_self n)
+      squareParty := protocolSquareParty hN
+      repaintingSquare := fun t => if h : 0 < t ∧ t - 1 < n then
+        Sum.elim (fun S => some S.toTriple) (fun _ => none) (sch[t - 1]'h.2).1 else none }
   -- the event of each change of the protocol
   let ev : ℕ → ProtocolEvent k := fun t =>
     if h : 0 < t ∧ t - 1 < n then (sch[t - 1]'h.2).1 else .inl (rootSquare k)
@@ -310,6 +342,27 @@ theorem exists_isDistributionProtocol_of_frames {L q k : ℕ} [NeZero q] (hL : 2
       isExpansionBounded_of_nonprivateCount_eq_zero _ _ _ rfl,
       isMonomialBounded_of_nonprivateCount_eq_zero _ _ rfl,
       isSourceBounded_of_nonprivateCount_eq_zero rfl _⟩)
+  -- an additional party is the placeholder of a non-root square, used only by its repainting
+  have hadd : ∀ p, p ∉ Set.range D.squareParty → ∃ S : HierarchySquare (paddedSide L),
+      2 ^ S.1.1 < paddedSide L ∧
+        (D.placement.scale p, D.placement.blockX p, D.placement.blockY p) = S.1 ∧
+        ∀ t < D.changes, ∀ g, p ∈ (D.step t).participants g → D.repaintingSquare t = some S.1 := by
+    intro p hp
+    obtain ⟨R, rfl⟩ := exists_eq_inr_of_notMem_range_protocolSquareParty hN p hp
+    refine ⟨⟨R.1.toTriple, by rw [hN]; exact (protocolPlacement_inGrid k) (.inr R)⟩, ?_, rfl,
+      fun t _ g hg => ?_⟩
+    · change 2 ^ (R.1.1 : ℕ) < paddedSide L
+      rw [hN]
+      exact Nat.pow_lt_pow_right (by norm_num) R.2
+    · have hu : ev t = .inl R.1 := (hQ t).2.2.1 g (mem_coe.2 hg)
+      have ht : 0 < t ∧ t - 1 < n := by
+        by_contra h
+        have h' : ¬(0 < t ∧ t ≤ n) := fun h' => h ⟨h'.1, by omega⟩
+        exact (isEmpty_nonprivateLocations_of_nonprivateCount_eq_zero _ ((hQ t).2.1 h')).false g
+      simp only [ev, ht, and_self, dite_true] at hu
+      change (if h : 0 < t ∧ t - 1 < n then _ else none) = _
+      rw [dif_pos ht, hu]
+      rfl
   have hL1 : (1 : ℝ) ≤ L := by exact_mod_cast (by omega : 1 ≤ L)
   have hL0 : (0 : ℝ) < L := by linarith
   have hC0 : 0 ≤ C := by linarith
@@ -333,7 +386,7 @@ theorem exists_isDistributionProtocol_of_frames {L q k : ℕ} [NeZero q] (hL : 2
         ((card_nonprivateLocations _).trans_le (hQ i).1)
     rw [Subsingleton.elim g g']
   refine ⟨D, ⟨?_, ?_, fun j r s => (protocolPlacement_blockBounded k j r s).trans (by norm_num),
-    protocolPlacement_squareParty hkL hk2,
+    protocolSquareParty_injective hN, fun _ => rfl, hadd,
     ?_, fun t _ => (hQ t).1.trans (by norm_num), fun t _ g => ?_,
     fun t _ => isMonomialBounded_mono _ (hQ t).2.2.2.2.1 (Nat.le_floor (by exact_mod_cast hK)),
     fun t _ => isExpansionBounded_mono _ (hQ t).2.2.2.1 le_rfl hK, fun p => ?_,
