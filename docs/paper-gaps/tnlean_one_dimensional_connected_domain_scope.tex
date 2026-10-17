@@ -1,0 +1,72 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+\input{command}
+\title{Connected Domains in the One-Dimensional Area Law}
+\author{}
+\date{October 16, 2026}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+\section{The source statement}
+
+Theorem~A of the one-dimensional note~\cite{TNLean2026OneDimensional} is
+stated for every finite set $\Lambda\subset\mathbb Z$ with its induced path
+graph: for an admissible Hamiltonian $H=\sum_X h_X$ on $\Lambda$, one Hermitian
+term of norm at most $J$ per nonempty support $X\subseteq\Lambda$ of graph
+diameter at most $R$, and a unit ground vector $\Omega$ with
+$H-E_0\ge\Delta(1-|\Omega\rangle\langle\Omega|)$, every $A\subseteq\Lambda$
+satisfies $S_\Omega(A)\le C_{\mathrm{AL}}\,|\partial_\Lambda A|$ with
+$C_{\mathrm{AL}}\le C_0(q,R)(1+J/\Delta)$. The edge boundary
+$\partial_\Lambda A$ counts the edges $\{x,x+1\}\subseteq\Lambda$ with exactly
+one endpoint in $A$.
+
+The note's first reduction (Section~2) disposes of disconnected domains in a
+sentence: the Hamiltonian is a sum over the components of $\Lambda$, each
+component is an interval of consecutive integers, the unique gapped ground
+vector is a product of the component ground vectors, and both the entropy and
+the edge boundary add over components. The theorem is then proved for
+connected $\Lambda$, that is, for a chain of $L$ consecutive sites.
+
+\section{What is proved and the restriction}
+
+The formalization states the model on the chain of $L$ sites, with sites
+$\{0,\ldots,L-1\}$, supports of range $R$ the nonempty sets of sites of
+diameter at most $R$, and the Hamiltonian, gapped ground vector, regional
+entropies and boundary edges as in the note.\footnote{Declarations:
+\leanid{TNLean.MPS.AreaLaw.IsChainSupport},
+\leanid{TNLean.MPS.AreaLaw.ChainHamiltonian},
+\leanid{TNLean.MPS.AreaLaw.boundaryEdges}.} Theorem~A is proved on this
+chain for every subset $A$, with the explicit constant
+$C_0(q,R)(1+J/\Delta)$.\footnote{Declarations:
+\leanid{TNLean.MPS.AreaLaw.regionEntropy_interval_le},
+\leanid{TNLean.MPS.AreaLaw.regionEntropy_le_mul_card_boundaryEdges},
+\leanid{TNLean.MPS.AreaLaw.chainAreaLaw}.} Theorem~B of the note is stated on
+the chain of $L$ sites in the note itself, so it carries no restriction.
+
+The restriction is to connected domains. For a disconnected
+$\Lambda\subset\mathbb Z$ the interval bound still holds verbatim on every
+interval of positions, since the proof uses only the crossing count and the
+buffered discount; but the subset bound $S_\Omega(A)\le C|\partial_\Lambda A|$
+needs the product structure of the ground vector over components (a region
+inside one component contributes no boundary edge at a gap of $\Lambda$, so
+its entropy must vanish for the bound to hold), and that product structure is
+not formalized.
+
+\section{Elimination plan}
+
+Formalize the component reduction: for a Hamiltonian that is a sum of terms
+supported in disjoint blocks of sites, a unit gapped ground vector of the sum
+is a tensor product of gapped ground vectors of the blocks (the ground energy
+adds, and uniqueness of the global ground vector forces the product form), and
+the regional entropy of a product vector adds over the blocks. Theorem~A for an
+arbitrary finite $\Lambda\subset\mathbb Z$ then follows from the chain version
+applied to each component. Until then the restriction is recorded on the
+module docstring of \texttt{TNLean/MPS/AreaLaw/AreaLaw.lean} and in the blueprint
+statement of Theorem~A.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}

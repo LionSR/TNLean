@@ -55,7 +55,10 @@ $C > 0$ be a scale coefficient and let $b, k, r \in \mathbb N$ be fixed degree
 and exponent bounds. The retained properties are:
 \begin{enumerate}
 \item there are at most $C L^2$ parties in total, and at most $b$ parties are
-  attached to any square of the padded hierarchy;
+  attached to any square of the padded hierarchy; a different party is
+  assigned to each aligned square of the padded hierarchy, including the root
+  square, at the scale and address of that square (\path{06-geometry.tex},
+  lines~18--20 and~64--67);
 \item there are at most $C L^3$ changes, each change contains at most $b$
   nonprivate gates acting on at most $b$ parties each, and each party
   participates in at most $b$ changes over its lifetime;
@@ -89,11 +92,8 @@ gates.\footnote{The protocol predicate is
 
 \section{Omitted clauses}
 
-Four clauses of Proposition~7.1 are omitted from the formal predicate:
+Three clauses of Proposition~7.1 are omitted from the formal predicate:
 \begin{enumerate}
-\item Every square of the hierarchy, including the root, carries at least one
-  party (\path{06-geometry.tex}, lines~64--67). The formal placement bounds the
-  number of parties per square from above only.
 \item One party holds the main copy of $\Omega$, and every auxiliary copy is
   initialized privately at its designated party (\path{06-geometry.tex},
   lines~22--23). The formal initialization is an arbitrary tensor product of
@@ -108,7 +108,7 @@ Four clauses of Proposition~7.1 are omitted from the formal predicate:
 \item Each additional party takes the dyadic scale and grid address of its
   repainting event (\path{06-geometry.tex}, lines~36--37).
 \end{enumerate}
-None of these four clauses is needed for the Section~8 assembly: the gate-density
+None of these three clauses is needed for the Section~8 assembly: the gate-density
 bound, the routing separation hypothesis, and the lifetime gate count depend
 only on the retained bounds, while the message and replacement-slot bounds used
 in compression follow from the message expansion and the nonprivate gate count
@@ -153,8 +153,7 @@ Two further clauses of Proposition~7.1 hold for the formal predicate.
 
 \section{Elimination}
 
-Formalize the full statement of Proposition~7.1 including the map from
-hierarchy squares to parties, the registers of the main and auxiliary copies of
+Formalize the full statement of Proposition~7.1 including the registers of the main and auxiliary copies of
 $\Omega$, the frame factorization and unit-norm bounds of the intermediate
 reference vectors $r_t$, and the assignment of repainting scales and addresses. Proving Proposition~7.1 in that stronger form then implies the
 present existence hypothesis by projection onto the retained fields.

@@ -1,0 +1,34 @@
+% alt: A log-log schematic of entropy bounds for an interval of length r: the horizontal axis is r with ticks 2, 4, ..., 64, and three straight lines rise from the left, the grey volume bound r log q of slope 1, the blue long-route bound C r^{e_0} of slope e_0 drawn at one half with two dots at r and Mr marking one step of the recursion F(Mr) <= lambda F(r) + CM, and the dashed area law of slope 0; each line is labelled at its right end.
+% Section 6 (The long route, for comparison), sub-volume exponent, the recursion F(Mr) <= (1 - p_0/4) M F(r) + CM = lambda F(r) + CM and its consequence F(r) <= C r^{e_0} with e_0 = log_M lambda < 1 (part1_arealaw.tex): F(r) is the supremum of S(X) over intervals X of length at most r; on log-log axes every power of r is a straight line; the grey line is the trivial volume bound r log q (slope 1), the blue line is the long-route bound C r^{e_0} (slope e_0, drawn at 1/2) with the two dots at r = 4 and Mr = 16 showing one step of the recursion with M = 4, and the dashed line is the area law S(X) <= constant (slope 0); the vertical scale is schematic; no tensor is drawn and no leg is contracted.
+\begin{tikzpicture}[x=1cm, y=1cm, line width=0.3pt,
+    lab/.style={font=\small, inner sep=1pt},
+    name/.style={font=\scriptsize, text=black!55, inner sep=1pt},
+    bound/.style={line width=0.6pt}]
+  % geometry: k = log_2 r - 1 runs from 0 (r = 2) to 5 (r = 64), one octave is
+  % \dx on the horizontal axis and \dy on the vertical (logarithmic) axis
+  \def\dx{1.0}\def\dy{0.6}
+  \def\xmax{5.0}\def\ymax{4.1}
+  % hairline range frames
+  \draw[black!55] (0, 0) -- (\xmax, 0);
+  \draw[black!55] (-0.3, 0.1) -- (-0.3, \ymax);
+  \foreach \k/\r in {0/2, 1/4, 2/8, 3/16, 4/32, 5/64} {
+    \draw[black!55] (\k*\dx, 0) -- (\k*\dx, -0.06);
+    \node[lab, anchor=north] at (\k*\dx, -0.08) {\(\r\)};
+  }
+  \node[lab, anchor=north] at (2.5*\dx, -0.42) {interval length \(r\), log scale};
+  \node[lab, anchor=south west] at (-0.3, \ymax) {entropy bound, log scale};
+  % the three bounds: slope 1, slope e_0 = 1/2, slope 0
+  \draw[bound, black!55] (0, 0.8) -- (5*\dx, {0.8 + 5*\dy});
+  \node[lab, anchor=west, text=black!55] at (5*\dx + 0.08, {0.8 + 5*\dy}) {volume, \(r\log q\)};
+  \draw[bound, blue!65!black] (0, 0.55) -- (5*\dx, {0.55 + 2.5*\dy});
+  \node[lab, anchor=west, text=blue!65!black] at (5*\dx + 0.08, {0.55 + 2.5*\dy}) {long route, \(r^{e_0}\)};
+  \draw[bound, dashed, black!75] (0, 0.25) -- (5*\dx, 0.25);
+  \node[lab, anchor=west, text=black!75] at (5*\dx + 0.08, 0.25) {area law, constant};
+  % one step of the recursion on the blue line, from r = 4 to Mr = 16 (M = 4)
+  \fill[blue!65!black] (1*\dx, {0.55 + 0.5*\dy}) circle (1.2pt);
+  \fill[blue!65!black] (3*\dx, {0.55 + 1.5*\dy}) circle (1.2pt);
+  \node[name, anchor=north west, text=blue!65!black] at (1*\dx + 0.05, {0.55 + 0.5*\dy - 0.04}) {\(F(r)\)};
+  \node[name, anchor=south east, text=blue!65!black] at (3*\dx - 0.05, {0.55 + 1.5*\dy + 0.04}) {\(F(Mr)\)};
+  \node[name, anchor=north west, align=left, text=blue!65!black] at (2.2*\dx, 1.1)
+    {\(F(Mr)\le\lambda F(r)+CM\)\\ slope \(e_0=\log_M\lambda<1\)};
+\end{tikzpicture}

@@ -48,8 +48,6 @@ its constants chosen before the size, the Hamiltonian, and the ground vector, is
 `LargeSizeDyadicProtocolConsequences` are weaker than Proposition 7.1. They omit the following
 clauses of the source:
 
-* a party for every square of the hierarchy, including the root (`06-geometry.tex:64–67`); the
-  placement fields bound the parties of each square from above only;
 * the main copy of `Ω` held by one party and the auxiliary copies initialized privately at their
   designated parties (`06-geometry.tex:22–23`);
 * the factorization of each reference vector into the main and auxiliary encoded frames, with
@@ -198,6 +196,15 @@ structure DyadicProtocol (L q : ℕ) (P : Type) [Fintype P] where
   layout_changes :
     layout changes = familyPhysicalOutputLayout physicalDimension physicalOrder privateOutput
 
+/-- The aligned squares of the padded dyadic hierarchy of `[0, N] ^ 2`, each given by its scale
+`j` and its block address `(x, y)`: the square
+`[2 ^ j x, 2 ^ j (x + 1)] × [2 ^ j y, 2 ^ j (y + 1)]` lies in `[0, N] ^ 2`. When `N` is a power
+of two, the root square is the one with `2 ^ j = N`.
+
+Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:64–65`. -/
+def HierarchySquare (N : ℕ) : Type :=
+  {S : ℕ × ℕ × ℕ // 2 ^ S.1 * (S.2.1 + 1) ≤ N ∧ 2 ^ S.1 * (S.2.2 + 1) ≤ N}
+
 namespace DyadicProtocol
 
 variable {L q : ℕ} {P : Type} [Fintype P] (D : DyadicProtocol L q P)
@@ -293,8 +300,8 @@ pair-source bound of Theorem 5.2, item 3. Each nonprivate gate `G` equals its re
 power of `L` (`06-geometry.tex:29–30`); the monomials have no messages, since messages are
 expanded before a gate is recorded (`04-compression.tex:42–45`). The predicate
 is weaker than the conclusion of Proposition 7.1: it omits the clauses listed in the scope
-restriction of the module docstring, among them a party for every square of the hierarchy, the
-registers of the copies of `Ω`, and the frame factorization of the references.
+restriction of the module docstring, among them the registers of the copies of `Ω` and the frame
+factorization of the references.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), Proposition 7.1 `prop:protocol`,
 `06-geometry.tex:17–52`; the expansions are those of Theorem 5.2, item 3,
@@ -306,6 +313,14 @@ structure IsDistributionProtocol (Ω : StateSpace L q) (C : ℝ) (b k r : ℕ) :
   card_le : (Fintype.card P : ℝ) ≤ C * (L : ℝ) ^ 2
   /-- Item 1: a fixed number of parties for each square. -/
   blockBounded : D.placement.BlockBounded b
+  /-- Item 1: a different party is assigned to each square of the padded hierarchy, including
+  the root square, at the scale and address of that square.
+
+  Source: Polynomial-PEPS manuscript (Sept 24 2026), Proposition 7.1, item 1,
+  `06-geometry.tex:18–20`, and the hierarchy, `06-geometry.tex:64–67`: “A different party is
+  assigned to each dyadic square.” -/
+  squareParty : ∃ f : HierarchySquare (paddedSide L) → P, Function.Injective f ∧
+    ∀ S, (D.placement.scale (f S), D.placement.blockX (f S), D.placement.blockY (f S)) = S.1
   /-- Item 2: at most `C L³` changes. -/
   changes_le : (D.changes : ℝ) ≤ C * (L : ℝ) ^ 3
   /-- Item 2: each change has a fixed number of nonprivate gates. -/

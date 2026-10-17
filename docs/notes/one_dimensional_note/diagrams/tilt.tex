@@ -1,0 +1,25 @@
+% alt: The tilted vector Theta = F Omega / sqrt(M(u)) and its conjugate, with the legs outside X traced, equal the reduced state sigma on X.
+% Section 3, proof of Lemma lem:tail (part1_arealaw.tex): Theta = F Omega / sqrt(M(u)) with F = rho_X^{-u/2} on the interval X, and sigma = Tr_{Lambda minus X} |Theta><Theta| = rho_X^{1-u} / M(u).
+% Ink-to-index: the wide box Omega (and its conjugate) is the ground state on Lambda with two legs, the left one the interval X, the right one Lambda minus X; the small boxes F and conj F act on the X leg only; the loop labelled Lambda minus X joining the right legs of Omega and conj Omega is the partial trace over Lambda minus X; the open legs labelled X at the top and bottom are the row and column indices of sigma on H_X.
+\[
+  \frac{1}{M(u)}\;
+  \begin{tenkz}[rows={wire,wire,wire,wire}, cols=3, bonds=none]
+    \tn[at=(2,1), skin=box, name=f, ports={90:physical:$X$, 270:physical}]{F}
+    \tn[at=(3,1), skin=box, wide=2, name=k, ports={90@1:physical, 90@2:physical}]{\Omega}
+    \tn[at=(4,1), skin=box, wide=2, name=b, ports={270@1:physical, 270@2:physical}]{\overline{\Omega}}
+    \tn[at=(5,1), skin=box, name=g, ports={90:physical, 270:physical:$X$}]{\overline{F}}
+    \tnwire{k.90@1}{f.270}
+    \tnwire{b.270@1}{g.90}
+    \tn[at=(2,2), skin=none, name=j1, ports={270:physical, 0:physical}]{}
+    \tn[at=(2,3), skin=none, name=j2, ports={180:physical, 270:physical}]{}
+    \tn[at=(5,3), skin=none, name=j3, ports={90:physical, 180:physical}]{}
+    \tn[at=(5,2), skin=none, name=j4, ports={0:physical, 90:physical}]{}
+    \tnwire{k.90@2}{j1.270} \tnwire{j1.0}{j2.180} \tnwire[name=tr]{j2.270}{j3.90}
+    \tnwire{j3.180}{j4.0} \tnwire{j4.90}{b.270@2}
+    \tnmark[form=label, label pos=0]{on tr 0.5}{$\Lambda\setminus X$}
+  \end{tenkz}
+  \;=\;
+  \begin{tenkz}[cols=1]
+    \tn[skin=box, ports={90:physical:$X$, 270:physical:$X$}]{\sigma}
+  \end{tenkz}
+\]

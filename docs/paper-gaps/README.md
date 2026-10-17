@@ -1192,6 +1192,39 @@ the September 24, 2026 two-dimensional area-law manuscript are read in the
 ordinary nondegenerate sense, with noncollinear triangle vertices and nonzero
 orthogonal rectangle sides, as a convention built into the permitted polygons.
 
+### One-dimensional area law: connected domains
+
+[tnlean_one_dimensional_connected_domain_scope.tex](tnlean_one_dimensional_connected_domain_scope.tex)
+records that Theorem A of the repository's one-dimensional note is formalized
+on the chain of `L` consecutive sites, the connected case to which the note
+reduces the theorem in a sentence; the component reduction for a disconnected
+finite subset of the integers (the ground vector of a sum over components is a
+product, and entropy and edge boundary add over components) is not formalized.
+
+### One-dimensional matrix product state approximation: threshold truncation
+
+[tnlean_one_dimensional_threshold_truncation.tex](tnlean_one_dimensional_threshold_truncation.tex)
+(scope restriction, open) records that Proposition 7.1 of the repository's
+one-dimensional note, the sequential truncation onto the `D` largest Schmidt
+weights at every cut for an arbitrary bond dimension `D`, is formalized only
+in the threshold form that Theorem B uses: the projectors onto the eigenvalues
+at least `exp(-(S_k + w))` at a common slack `w`, with cut ranks at most
+`max 1 (exp(S_k + w))` and error the sum of the square roots of the surprisal
+tails; the form with an arbitrary `D` is not formalized.
+
+### One-dimensional area law: the constants of the buffered discount
+
+[tnlean_one_dimensional_discount_constants.tex](tnlean_one_dimensional_discount_constants.tex)
+(local correction, open) records that the buffered discount of Lemma 4.2 of the
+repository's one-dimensional note is formalized with the energy threshold
+`Δ/2` in place of the printed `Δ/4` (the formal energy estimate is twice the
+printed one at the same shell threshold), with the overlap losses `m log 2`
+in place of the printed `2 C_E/Δ`, and with the tail term `4096 e ϑ B_R / m`
+kept explicit in the discount constant instead of absorbed through the printed
+fourth entry of the shell count, which is omitted; the interval constant and
+the area-law constant of Theorem A change accordingly, all at the level of
+absolute constants.
+
 ## Polynomial PEPS: zero-floor maximizing filters
 
 - [`polypeps_square_zero_floor_optimizer_scope.tex`](polypeps_square_zero_floor_optimizer_scope.tex)

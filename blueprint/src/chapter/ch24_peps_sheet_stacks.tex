@@ -3440,7 +3440,8 @@ no holes, this is the normalization of $\Omega$.
 
 \begin{theorem}[The dyadic distribution protocol from the patch bound]
     \label{thm:peps_protocol_from_angular_and_patch_bounds}
-    \lean{TNLean.PEPS.Approximation.largeSizeDyadicProtocolConsequences_of_adaptivePatchConstraint}
+    \lean{TNLean.PEPS.Approximation.largeSizeDyadicProtocolConsequences_of_adaptivePatchConstraint,
+        TNLean.PEPS.Approximation.protocolPlacement_squareParty}
     \leanok
     \uses{def:peps_adaptive_patch_constraint,
         def:peps_dyadic_protocol}
@@ -3484,7 +3485,11 @@ no holes, this is the normalization of $\Omega$.
     the fixed bounds $C,b,\kappa,r,L_0$ from these constants, before $L$
     and the Hamiltonian. For $L\ge\max(2,L_0)$ take the dyadic depth
     $d=\lceil\log_2L\rceil$ and padded side $N=2^d$, so that $L\le N<2L$.
-    The large repaintings pass the memory from one state to the next by
+    Every aligned square of $[0,N]^2$ of side $2^j$, including the root
+    square, then has $j\le d$ and block indices below $2^{d-j}$, so it is a
+    square of the hierarchy of depth $d$ and its block party is a different
+    party for each square, at the scale and address of that square. The
+    large repaintings pass the memory from one state to the next by
     Theorem~\ref{thm:peps_protocol_large_repainting_segment}, with the
     frozen frames and owners of Definition~\ref{def:peps_protocol_frozen_frames}.
     Theorem~\ref{thm:peps_protocol_frozen_frame_bounds} and the schedule
