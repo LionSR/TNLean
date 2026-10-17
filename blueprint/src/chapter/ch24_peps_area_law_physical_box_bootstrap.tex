@@ -62,9 +62,9 @@ changing the physical size.  No sharp marginal-moment estimate is used.
     \leanok
     The energy-error integral is nonnegative, so replacing the
     round-energy coefficient by its absolute value can only increase the
-    numerator. Substitute the given coefficient cap and divide by
-    the positive normalized gap $g/2$. The point and its prevector
-    remain fixed.
+    numerator. Substituting the given coefficient cap and dividing by
+    the positive normalized gap $g/2$ gives the bound, with the point and
+    its prevector remaining fixed.
 \end{proof}
 
 
@@ -102,16 +102,16 @@ changing the physical size.  No sharp marginal-moment estimate is used.
         thm:actual_scan_supplied_prevector_rough_lower,
         thm:arealaw-generic-charge-energy,
         thm:arealaw-generic-selected-energy}
-    Construct the truncated ground vector and its typical spectral
-    window once, then choose one global Schmidt--Bell label sequence.
-    Transfer the original positive-prefix entropy bounds to this vector.
-    Its rough upper estimate, endpoint estimate and rough lower estimate
-    hold with remainders tending to zero. Apply the charge
-    selection theorem on $[p_0,p_1]$ and use the endpoint estimate to
-    bound its density. At this same selected point, combine the generic
-    coefficient bound with the round-energy inequality. Restrict the
-    two rough comparisons to this point without choosing a second
-    vector, label sequence or interpolation parameter.
+    Constructing the truncated ground vector and its typical spectral
+    window once and choosing one global Schmidt--Bell label sequence
+    carries the original positive-prefix entropy bounds to this vector,
+    so its rough upper estimate, endpoint estimate and rough lower estimate
+    hold with remainders tending to zero. The charge
+    selection theorem on $[p_0,p_1]$ together with the endpoint estimate
+    bounds its density, and at this same selected point the generic
+    coefficient bound combines with the round-energy inequality while
+    restricting the two rough comparisons to this point without choosing a
+    second vector, label sequence or interpolation parameter.
 \end{proof}
 
 
@@ -168,10 +168,10 @@ changing the physical size.  No sharp marginal-moment estimate is used.
     \uses{thm:area_law_bootstrap_principal_energy}
     From $0\leq\rho\leq\delta$ and $\epsilon\leq p\leq2\epsilon$,
     the expression in parentheses in the cap is at most
-    $2(\delta^{1/8}+\epsilon+n^{-100})$. Apply the principal energy
-    estimate with coefficient $2C/\gamma$. The eigenvalue term is at
+    $2(\delta^{1/8}+\epsilon+n^{-100})$, so the principal energy
+    estimate applies with coefficient $2C/\gamma$. The eigenvalue term is at
     most $\gamma^{-1}n^{-\nu/2}$ because
-    $n^{-1000}\leq n^{-\nu/2}$ for $n\geq2$. Adding the two bounds
+    $n^{-1000}\leq n^{-\nu/2}$ for $n\geq2$, and adding the two bounds
     gives the stated coefficient $1+\gamma^{-1}$.
 \end{proof}
 
@@ -229,15 +229,15 @@ changing the physical size.  No sharp marginal-moment estimate is used.
         thm:arealaw-target-entropy-transfer,
         thm:area_law_selected_schmidt_entropy_bounds,
         thm:area_law_rough_typical_entropy_absorption}
-    Derive the round-step and rounded admissibility conditions and use
-    the physical rough source once.  The principal-density and energy
+    With the round-step and rounded admissibility conditions verified, the
+    physical rough source applies once, and the principal-density and energy
     estimates hold at its unchanged selected points.
-    At fixed $n$, put $\tau=n^{-\nu/4}$ and apply the two rough comparisons
-    with the coefficient-three lower bound.  The relative loss is
-    $6(\tau+E_{\rm def}/\tau)$; the three replica remainders vanish.
-    Substitute the typical auxiliary entropy only after this limit,
-    then use continuity in the reverse direction to restore $\Omega$.
-    The restored additive bound gives the stated improved power.
+    At fixed $n$, setting $\tau=n^{-\nu/4}$ and applying the two rough
+    comparisons with the coefficient-three lower bound gives a relative loss
+    of $6(\tau+E_{\rm def}/\tau)$ with vanishing replica remainders.
+    Substituting the typical auxiliary entropy after this limit and using
+    continuity in the reverse direction to restore $\Omega$, the restored
+    additive bound gives the stated improved power.
 \end{proof}
 
 \begin{theorem}[Weak-rectangle source entropy]
@@ -261,8 +261,8 @@ changing the physical size.  No sharp marginal-moment estimate is used.
     The weak-rectangle dyadic shell estimate bounds each positive prefix
     by $C_{\rm box}(24+64/(2^e-1))sL^e$. Since $e\geq b>0$,
     its coefficient is at most $C_{\rm box}(24+64/(2^b-1))$.
-    Use $s\leq n$ and enlarge this coefficient by $C_{\rm box}$ to
-    obtain the common target and prefix coefficient.
+    Since $s\leq n$, enlarging this coefficient by $C_{\rm box}$ gives
+    the common target and prefix coefficient.
 \end{proof}
 
 
@@ -278,8 +278,8 @@ changing the physical size.  No sharp marginal-moment estimate is used.
 \begin{proof}
     \leanok
     If the rectangle size is positive, its entropy is one member of
-    the family defining the box supremum at that size. Apply the
-    assumed power bound there. At size zero the rectangle contains
+    the family defining the box supremum at that size, so the
+    assumed power bound applies there. At size zero the rectangle contains
     no sites, so its entropy is zero, as is its positive power.
 \end{proof}
 
@@ -294,12 +294,12 @@ changing the physical size.  No sharp marginal-moment estimate is used.
 \end{theorem}
 \begin{proof}
     \leanok
-    At sizes at least $N$, apply the assumed estimate and use
-    $s^p\leq r^p$ for $s\leq r$. At smaller sizes, the volume bound
-    gives entropy at most $N^2\log q$. Since $r^p\geq1$ for
+    At sizes at least $N$, the assumed estimate and $s^p\leq r^p$ for
+    $s\leq r$ bound the entropy by $Cr^p$, while at smaller sizes the volume
+    bound gives entropy at most $N^2\log q$. Since $r^p\geq1$ for
     $r\geq1$ and $p\geq0$, both bounds are at most
-    $(C+N^2\log q+1)r^p$. Take the supremum over the same physical
-    family.
+    $(C+N^2\log q+1)r^p$, and taking the supremum over the same physical
+    family completes the proof.
 \end{proof}
 
 
@@ -340,12 +340,11 @@ changing the physical size.  No sharp marginal-moment estimate is used.
         \leq \sum_i Cs^p
         \leq 4Cs^p.
     \end{align}
-    Apply Theorem~\ref{thm:arealaw-box-supremum-small-sizes} with
-    coefficient $4C$, exponent $p$, and cutoff $N=2$. The volume
-    estimate gives the correction $N^2\log q=4\log q$ for smaller
-    sizes. Taking the supremum over the same physical family gives
-    the asserted coefficient $4C+4\log q+1$ at every positive integer
-    scale.
+    Theorem~\ref{thm:arealaw-box-supremum-small-sizes} with
+    coefficient $4C$, exponent $p$, and cutoff $N=2$ incorporates the volume
+    correction $N^2\log q=4\log q$ for smaller sizes, and taking the
+    supremum over the same physical family gives the asserted coefficient
+    $4C+4\log q+1$ at every positive integer scale.
 \end{proof}
 
 \begin{theorem}[Uniform physical one-step improvement]
@@ -370,15 +369,15 @@ changing the physical size.  No sharp marginal-moment estimate is used.
         thm:arealaw-box-supremum-powers,
         thm:arealaw-box-supremum-small-sizes,
         thm:rectangle_bootstrap_scanner_geometry}
-    Apply the source improvement to the rectangle scanner with
+    Applying the source improvement to the rectangle scanner with
     $n=\lceil24s\rceil=24s$, target-volume coefficient one and the derived
-    anchor multiplicity.  Rounded sublinear growth gives the weak
-    clearance $2L+10r_0\leq D_0s$ and the shell safety bound.
-    The preceding shell coefficient is fixed using $b=e_*$.
+    anchor multiplicity, rounded sublinear growth gives the weak
+    clearance $2L+10r_0\leq D_0s$ and the shell safety bound,
+    with the preceding shell coefficient fixed using $b=e_*$.
     Since the improved exponent is between zero and two, conversion from
-    $n$ to $s$ costs at most $24^2$ uniformly in the current exponent.
-    Extend over bounded sizes by the volume entropy estimate and take
-    the supremum only after obtaining the original-state bound.
+    $n$ to $s$ costs at most $24^2$ uniformly in the current exponent,
+    and extending over bounded sizes by the volume entropy estimate before
+    taking the supremum yields the original-state bound.
 \end{proof}
 
 \begin{theorem}[Physical safe-box bound at the fixed exponent]
@@ -398,9 +397,9 @@ changing the physical size.  No sharp marginal-moment estimate is used.
         thm:area_law_box_entropy_bounds,
         thm:area_law_finite_exponent_improvement,
         thm:arealaw-physical-box-step}
-    Obtain the genuine initial exponent $0<e_0<1$ uniformly in the safety
-    parameter.  Apply the established finite exponent iteration to the
-    family indexed by $D_0>2R+10$, using the quadratic volume estimate
+    Once the genuine initial exponent $0<e_0<1$ is obtained uniformly in the
+    safety parameter, the established finite exponent iteration applies to
+    the family indexed by $D_0>2R+10$, using the quadratic volume estimate
     and the preceding physical one-step theorem.  The latter is invoked
     only when a current exponent above $e_*$ occurs.  No fixed-exponent
     box estimate is an input of this argument.
@@ -468,7 +467,7 @@ real safety parameters.
     $d$-safe: for every $t\in Q$ and $z\in Z$,
     $d\operatorname{size}(Q)\leq D_0\operatorname{size}(Q)
         <\|t-z\|_\infty$.
-    Set $s=\operatorname{size}(Q)\geq1$. The bound by the safe-box
+    For $s=\operatorname{size}(Q)\geq1$, the bound by the safe-box
     supremum for the same $H,\Omega,A,Q$ and
     (\ref{eq:arealaw-physical-real-box-constant}) give
     $S_\Omega(A\cap Q)\leq F_{\mathrm{box},d}(s)

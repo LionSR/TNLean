@@ -270,6 +270,38 @@ normalized pair sources and effects, and finite-dimensional transfers, as in
     coordinate choices $t$.
 \end{definition}
 
+% Source: 04-compression.tex, allowed monomials and message expansion,
+% lines 32--43; Theorem 5.2, lines 143--149.
+% Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+
+\begin{theorem}[Expansion of a gate without messages]
+    \label{thm:peps_message_gate_segment_expansion}
+    \lean{TNLean.PEPS.PairEffect.MessageGate.expand_map_segment}
+    \leanok
+    \uses{def:peps_party_monomial,def:peps_message_monomial,
+        def:peps_message_gate_expand}
+    Let $A=((c_j,M_j))_{j=0}^{K-1}$ be a finite ordered list of
+    party monomials with common input and output memories and complex
+    coefficients. Regard each $M_j$ as a single segment containing no
+    messages. Expanding the resulting weighted list gives exactly
+    the original list:
+    \begin{align}
+        \widetilde A & =A.\notag
+    \end{align}
+    This identity imposes no allowedness condition on the monomials.
+    It preserves the order, repeated occurrences and zero coefficients,
+    and includes the empty list.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:peps_message_monomial,def:peps_message_gate_expand}
+    A segment $M_j$ expands to the singleton list $((1,M_j))$.
+    Its original coefficient therefore gives the singleton
+    $((c_j\cdot1,M_j))=((c_j,M_j))$. Concatenating these singletons
+    in the original order recovers $A$.
+\end{proof}
+
 \begin{theorem}[Operator and effect count under message expansion]
     \label{thm:peps_message_gate_eval}
     \lean{TNLean.PEPS.PairEffect.MessageGate.eval_expand,

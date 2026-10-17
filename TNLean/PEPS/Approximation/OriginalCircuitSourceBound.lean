@@ -89,8 +89,10 @@ theorem isSourceBounded_of_nonprivateCount_eq_zero {a b : Layout P} {w : Origina
 
 theorem isSourceBounded_castLayouts {a b a' b' : Layout P} (c : OriginalCircuit a b)
     (ha : a = a') (hb : b = b') {r : ℕ} (hc : c.IsSourceBounded r) :
-    (c.castLayouts ha hb).IsSourceBounded r :=
-  castLayouts_rec c ha hb (motive := fun w ↦ w.IsSourceBounded r) hc
+    (c.castLayouts ha hb).IsSourceBounded r := by
+  cases ha
+  cases hb
+  exact hc
 
 theorem isSourceBounded_frameList {a b : Layout P} (c : OriginalCircuit a b) {r : ℕ}
     (hc : c.IsSourceBounded r) : (rs : Layout P) → (frameList rs c).IsSourceBounded r

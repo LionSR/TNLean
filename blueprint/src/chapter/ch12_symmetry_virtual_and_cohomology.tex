@@ -62,9 +62,9 @@ gauge transformations form a projective representation on the bond space.
 \end{lemma}
 
 \begin{proof}\leanok\uses{def:twisted_tensor}
-    Expand both sides of (\ref{eq:symmetry_twist_composition}) using
-    (\ref{eq:symmetry_twisted_tensor}) and $U(gh)=U(g)\,U(h)$, then swap
-    the order of summation.
+    Expanding both sides of (\ref{eq:symmetry_twist_composition}) via
+    (\ref{eq:symmetry_twisted_tensor}) and $U(gh)=U(g)\,U(h)$ and swapping
+    the summation order yields the identity.
 \end{proof}
 
 \begin{lemma}[Identity twist]\label{lem:twisted_tensor_one}
@@ -111,9 +111,9 @@ gauge transformations form a projective representation on the bond space.
 \begin{proof}\leanok
     \uses{thm:block_tensor_rotate_physical}
     The twisted tensor $\widetilde A_g$ is the physical rotation of $A$ by
-    $U(g)$, and $U^{[L]}(g)=U(g)^{\otimes L}$.  Hence
-    (\ref{eq:symmetry_twist_block_comm}) is the case $W=U(g)$, $C=A$ of
-    Theorem~\ref{thm:block_tensor_rotate_physical}.
+    $U(g)$, and $U^{[L]}(g)=U(g)^{\otimes L}$; specializing
+    Theorem~\ref{thm:block_tensor_rotate_physical} to $W=U(g)$ and $C=A$
+    therefore gives (\ref{eq:symmetry_twist_block_comm}).
 \end{proof}
 
 \begin{theorem}[MPV-family symmetry is preserved by blocking]
@@ -223,8 +223,8 @@ gauge transformations form a projective representation on the bond space.
             \tn[skin=ring]{X(g)^{-1}}
         \end{tenkz}.
     \end{tenkzequation}
-    Apply Lemma~\ref{lem:gauge_equiv_twisted} to obtain $X(g)$, then
-    set $\varphi(g)=1$ in (\ref{eq:symmetry_virtual_equation}).
+    Lemma~\ref{lem:gauge_equiv_twisted} provides $X(g)$, and setting
+    $\varphi(g)=1$ yields (\ref{eq:symmetry_virtual_equation}).
 \end{proof}
 
 \begin{lemma}[Gauge uniqueness up to scalar]\label{lem:gauge_unique_up_to_scalar}
@@ -251,9 +251,10 @@ gauge transformations form a projective representation on the bond space.
     \lean{MPSTensor.gauge_phase_unique}
     \leanok
     \uses{def:injective}
-    Let $A$ be an injective tensor with $D\ge1$.  If $X,Y\in\GL_{D}(\C)$ and
-    $c\in\C$ satisfy $X^{-1}A^iX=c\,Y^{-1}A^iY$ for all $i$, then $c=1$ and
-    $X=u\,Y$ for some $u\in\C^{\times}$ \cite[Section~III.A]{Cirac2021Matrix}.
+    As in \cite[Section~III.A]{Cirac2021Matrix}, let $A$ be an injective
+    tensor with $D\ge1$.  If $X,Y\in\GL_{D}(\C)$ and $c\in\C$ satisfy
+    $X^{-1}A^iX=c\,Y^{-1}A^iY$ for all $i$, then $c=1$ and $X=u\,Y$ for some
+    $u\in\C^{\times}$.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -261,7 +262,7 @@ gauge transformations form a projective representation on the bond space.
     The matrix $Z=YX^{-1}$ satisfies $ZA^i=c\,A^iZ$ for every $i$, hence
     $ZM=c\,MZ$ for every matrix $M$ by linearity.  Taking $M=\Id$ gives
     $(1-c)Z=0$, so $c=1$ because $Z$ is invertible.  Then $Z$ commutes with
-    $\MN{D}$, so it is a nonzero scalar by Lemma~\ref{lem:center_scalar}.
+    $\MN{D}$, so by Lemma~\ref{lem:center_scalar} it is a nonzero scalar.
 \end{proof}
 
 \begin{lemma}[Gauge phases on words]\label{lem:gauge_phase_words}
@@ -284,9 +285,10 @@ gauge transformations form a projective representation on the bond space.
     \lean{MPSTensor.gauge_phase_unique_of_isNormal}
     \leanok
     \uses{def:normal}
-    Let $A$ be a normal tensor with $D\ge1$.  If $X,Y\in\GL_{D}(\C)$ and $c\in\C$
-    satisfy $X^{-1}A^iX=c\,Y^{-1}A^iY$ for all $i$, then $c=1$ and $X=u\,Y$ for
-    some $u\in\C^{\times}$ \cite[Section~III.A]{Cirac2021Matrix}.
+    As in \cite[Section~III.A]{Cirac2021Matrix}, let $A$ be a normal tensor
+    with $D\ge1$.  If $X,Y\in\GL_{D}(\C)$ and $c\in\C$ satisfy
+    $X^{-1}A^iX=c\,Y^{-1}A^iY$ for all $i$, then $c=1$ and $X=u\,Y$ for some
+    $u\in\C^{\times}$.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -335,12 +337,11 @@ gauge transformations form a projective representation on the bond space.
 \end{lemma}
 
 \begin{proof}\leanok\uses{def:projective_rep}
-    Expand $\rho(g)\,(\rho(h)\rho(k))$ and
-    $(\rho(g)\rho(h))\rho(k)$ using the projective multiplication law
-    (\ref{eq:symmetry_projective_law}) and equate the results via matrix
-    associativity. The hypothesis $D > 0$ allows cancellation of the
-    invertible matrix factor, giving
-    (\ref{eq:symmetry_cocycle_identity}).
+    Expanding $\rho(g)\,(\rho(h)\rho(k))$ and
+    $(\rho(g)\rho(h))\rho(k)$ with the projective multiplication law
+    (\ref{eq:symmetry_projective_law}) and equating the results by matrix
+    associativity relates the scalar factors; since $D > 0$, cancelling the
+    invertible matrix factor gives (\ref{eq:symmetry_cocycle_identity}).
 \end{proof}
 
 \begin{lemma}[Projective representation from chosen virtual covariance]
@@ -349,17 +350,17 @@ gauge transformations form a projective representation on the bond space.
     \leanok
     \uses{def:injective, def:projective_rep, lem:gauge_unique_up_to_scalar,
         lem:twisted_tensor_mul}
-    Let $A$ be injective and let invertible matrices $X_g$ implement the
-    physical twists, $U_g(A)=X_g A X_g^{-1}$. Then $\rho(g)=X_{g^{-1}}$
-    is a projective representation for some scalar factor system $\omega$.
-    Thus chosen unitary matrices give a unitary projective representation
-    \cite[Section~II.F.2]{Schuch2011Phases}.
+    As in \cite[Section~II.F.2]{Schuch2011Phases}, let $A$ be injective and
+    let invertible matrices $X_g$ implement the physical twists,
+    $U_g(A)=X_g A X_g^{-1}$. Then $\rho(g)=X_{g^{-1}}$ is a projective
+    representation for some scalar factor system $\omega$, so chosen unitary
+    matrices give a unitary projective representation.
 \end{lemma}
 
 \begin{proof}\leanok
     The twist composition law makes $X_hX_g$ and $X_{gh}$ implement the same
-    twist. Gauge uniqueness gives a nonzero scalar relating them. Reindex
-    by inversion to obtain the projective multiplication law.
+    twist, so gauge uniqueness gives a nonzero scalar relating them, and
+    reindexing by inversion yields the projective multiplication law.
 \end{proof}
 
 \begin{theorem}[Virtual representation theorem for injective MPS]%
@@ -415,10 +416,10 @@ gauge transformations form a projective representation on the bond space.
 \begin{proof}
     \leanok
     \uses{def:on_site_symmetric, lem:gauge_equiv_twisted, lem:gauge_unique_up_to_scalar, lem:twisted_tensor_mul}
-    Since $A$ is injective and on-site symmetric, each twisted tensor
-    $\widetilde{A}_g$ is gauge equivalent to~$A$
-    (Lemma~\ref{lem:gauge_equiv_twisted}).
-    Choose $X(g) \in \GL_{D}(\C)$ satisfying
+    Since $A$ is injective and on-site symmetric,
+    Lemma~\ref{lem:gauge_equiv_twisted} ensures that each twisted tensor
+    $\widetilde{A}_g$ is gauge equivalent to~$A$, yielding an invertible
+    matrix $X(g) \in \GL_{D}(\C)$ that satisfies
     (\ref{eq:symmetry_virtual_gauge}) for all~$i$.
 
     By functoriality (Lemma~\ref{lem:twisted_tensor_mul}), the product
@@ -546,8 +547,8 @@ second cohomology group $H^2(G,\C^{\times})$ of cocycles modulo coboundaries.
             \tn[skin=ring]{X_2(g^{-1})^{-1}}
         \end{tenkz}
     \end{tenkzequation}
-    describe the same twisted tensor, so they differ by a scalar. Set
-    $\alpha(g):=f(g^{-1})$. Substituting
+    describe the same twisted tensor, so they differ by a scalar. With
+    $\alpha(g):=f(g^{-1})$, substituting
     $\rho_2(g)=\alpha(g)\rho_1(g)$ into the projective law
     (\ref{eq:symmetry_projective_law}) and cancelling the invertible matrix
     $X_1((gh)^{-1})=\rho_1(gh)$ yields
@@ -557,9 +558,8 @@ second cohomology group $H^2(G,\C^{\times})$ of cocycles modulo coboundaries.
         \label{eq:symmetry_gauge_coboundary}
     \end{align}
     Thus $\omega_2$ is the coboundary multiple of $\omega_1$ with cochain
-    $\alpha$. This is precisely the orientation required by
-    (\ref{eq:symmetry_cohomologous}) for the stated relation
-    $\omega_2\sim\omega_1$. Equivalently,
+    $\alpha$, matching the orientation in
+    (\ref{eq:symmetry_cohomologous}) for $\omega_2\sim\omega_1$. Equivalently,
     \begin{align}
         \omega_1(g,h)
          & =\alpha(g)^{-1}\alpha(h)^{-1}\alpha(gh)\omega_2(g,h),
@@ -592,10 +592,10 @@ second cohomology group $H^2(G,\C^{\times})$ of cocycles modulo coboundaries.
 \end{theorem}
 
 \begin{proof}\leanok
-    Associativity gives the scalar identity of
-    Lemma~\ref{lem:cocycle_of_assoc}.  Because the inclusion
+    By Lemma~\ref{lem:cocycle_of_assoc}, associativity gives the scalar
+    cocycle identity in $\C$.  Because the inclusion
     $\C^\times\hookrightarrow\C$ is injective, the same identity holds in
-    $\C^\times$, which is precisely Definition~\ref{def:is_cocycle}.
+    $\C^\times$, satisfying Definition~\ref{def:is_cocycle}.
 \end{proof}
 
 \begin{definition}[Second cohomology group]\label{def:h2_cx}
@@ -638,9 +638,9 @@ establishes non-triviality of the class.
 \end{theorem}
 
 \begin{proof}\leanok\uses{def:comm_phase, def:cohomologous_to}
-    Write
-    $\omega_1(g,h)=\varphi(g)\varphi(h)\varphi(gh)^{-1}\omega_2(g,h)$
-    for a cochain $\varphi$. Substituting into the ratio and using
+    For a cochain $\varphi$ with
+    $\omega_1(g,h)=\varphi(g)\varphi(h)\varphi(gh)^{-1}\omega_2(g,h)$,
+    substituting into the ratio and using
     $gh=hg$ and the commutativity of $\C^{\times}$ gives
     \begin{align}
         \beta_{\omega_1}(g,h)

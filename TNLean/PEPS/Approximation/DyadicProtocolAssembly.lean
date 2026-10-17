@@ -34,7 +34,7 @@ The construction of these frames along the schedule is not done here.
 
 * `card_eventUses_le`: an event of the hierarchy uses at most `19` parties.
 * `exists_isDistributionProtocol_of_frames`: the assembled protocol satisfies the bounds of §8,
-  and every change is source bounded when the changes of the schedule are.
+  including the pair-source bound when the changes of the schedule are source bounded.
 
 ## References
 
@@ -162,6 +162,33 @@ theorem memCongr_stackVec {ι : Type} [Fintype ι] [DecidableEq ι] {q : ℕ} [N
   subst h
   rfl
 
+/-- **A party for every square of the hierarchy.** When `L ≤ 2 ^ k < 2 L`, the block parties
+give an injective assignment of a party to every aligned square of the padded square
+`[0, N] ^ 2`, `N = 2 ^ k`, including the root square, at the scale and address of that square.
+
+Polynomial-PEPS manuscript, `06-geometry.tex`, lines 18–20 and 64–67. -/
+theorem protocolPlacement_squareParty {L k : ℕ} (hkL : L ≤ 2 ^ k) (hk2 : 2 ^ k < 2 * L) :
+    ∃ f : HierarchySquare (paddedSide L) → ProtocolParty k, Function.Injective f ∧
+      ∀ S, ((protocolPlacement k).scale (f S), (protocolPlacement k).blockX (f S),
+        (protocolPlacement k).blockY (f S)) = S.1 := by
+  have hN : paddedSide L = 2 ^ k :=
+    le_antisymm (paddedSide_le_of_le_pow hkL) (pow_le_paddedSide hk2)
+  have mk : ∀ S : HierarchySquare (paddedSide L), ∃ T : DyadicSquare k, T.toTriple = S.1 := by
+    rintro ⟨⟨j, x, y⟩, hx, hy⟩
+    simp only [hN] at hx hy
+    have hj : j ≤ k := by
+      have : 2 ^ j ≤ 2 ^ k := (Nat.le_mul_of_pos_right _ (by omega)).trans hx
+      exact (Nat.pow_le_pow_iff_right (by norm_num)).1 this
+    have hsplit : (2 : ℕ) ^ k = 2 ^ j * 2 ^ (k - j) := by rw [← pow_add, Nat.add_sub_cancel' hj]
+    rw [hsplit] at hx hy
+    have hx' := Nat.le_of_mul_le_mul_left hx (by positivity)
+    have hy' := Nat.le_of_mul_le_mul_left hy (by positivity)
+    exact ⟨⟨⟨j, by omega⟩, ⟨x, show x < 2 ^ (k - j) by omega⟩,
+      ⟨y, show y < 2 ^ (k - j) by omega⟩⟩, rfl⟩
+  choose g hg using mk
+  exact ⟨fun S => .inl (g S), fun S S' h => Subtype.ext (by
+    rw [← hg S, ← hg S', Sum.inl_injective h]), fun S => hg S⟩
+
 /-- **A protocol from a bounded trajectory of sheets.** Let `L ≥ 2` and `L ≤ 2 ^ k < 2 L`, let
 `‖Ω‖ = 1`, and let `st t` be lists of encoded frames on the parties of the hierarchy of
 `[0, 2 ^ k] ^ 2`, read at the cell centers, such that:
@@ -170,7 +197,7 @@ theorem memCongr_stackVec {ι : Type} [Fintype ι] [DecidableEq ι] {q : ℕ} [N
 * for every change `t` of the schedule there is an original circuit `c t` from the registers of
   `st t` to those of `st (t + 1)` that is a bounded change from the reference vector of `st t` to
   that of `st (t + 1)`, with participants used by the event of the change, at most `r` pair
-  effects and at most `rs` pair sources per monomial, at most `K ≤ C L ^ kK` monomials and
+  effects and at most `r` pair sources per monomial, at most `K ≤ C L ^ kK` monomials and
   coefficient sum, and error `ε ≤ C L⁻²⁰`;
 * at the end of the schedule the frames are `M :: Fs`, where the raw owner of every site in the
   main frame `M` is its unit-square party and the holes of `M` are trivial, every hole of the
@@ -178,8 +205,8 @@ theorem memCongr_stackVec {ι : Type} [Fintype ι] [DecidableEq ι] {q : ℕ} [N
   most `C L³` holes.
 
 If `C ≥ 5042`, there is a dyadic protocol with the bounds of
-`DyadicProtocol.IsDistributionProtocol` for `Ω`, the constants `C`, `b = 64 · 189`, `kK` and `r`,
-all of whose changes have at most `rs` pair sources per monomial. Its first change is the private
+`DyadicProtocol.IsDistributionProtocol` for `Ω` and the constants `C`, `b = 64 · 189`, `kK` and
+`r`, including the bound `r` on the pair sources of each monomial. Its first change is the private
 initialization, then come the changes of the schedule, and its last change is the final
 regrouping into the physical registers.
 
@@ -192,11 +219,11 @@ theorem exists_isDistributionProtocol_of_frames {L q k : ℕ} [NeZero q] (hL : 2
     (holder : Frame (cellCenterPos L) q (ProtocolParty k) → ProtocolParty k)
     (hraw : ∀ F ∈ st 0, F.holes = []) (hown : ∀ F ∈ st 0, ∀ x, F.owner x = holder F)
     (c : ∀ t, OriginalCircuit (stackRegs (st t) []) (stackRegs (st (t + 1)) []))
-    {r rs K kK : ℕ} {C ε : ℝ}
+    {r K kK : ℕ} {C ε : ℝ}
     (hc : ∀ t (ht : t < (protocolSchedule k large).length),
       (c t).IsBoundedChange {p | EventUses ((protocolSchedule k large)[t]).1 p} r K ε
         (framesVec Ω (st t)) (framesVec Ω (st (t + 1))))
-    (hsrc : ∀ t < (protocolSchedule k large).length, (c t).IsSourceBounded rs)
+    (hsrc : ∀ t < (protocolSchedule k large).length, (c t).IsSourceBounded r)
     (M : Frame (cellCenterPos L) q (ProtocolParty k))
     (Fs : List (Frame (cellCenterPos L) q (ProtocolParty k)))
     (hfin : st (protocolSchedule k large).length = M :: Fs)
@@ -205,8 +232,7 @@ theorem exists_isDistributionProtocol_of_frames {L q k : ℕ} [NeZero q] (hL : 2
     (hholes : (Fs.map fun F => (F.holes.length : ℝ)).sum ≤ C * (L : ℝ) ^ 3)
     (hC : 5042 ≤ C) (hK : (K : ℝ) ≤ C * (L : ℝ) ^ kK) (hεC : ε ≤ C / (L : ℝ) ^ 20) :
     ∃ D : DyadicProtocol L q (ProtocolParty k),
-      D.IsDistributionProtocol Ω C (64 * 189) kK r ∧
-        ∀ t < D.changes, (D.step t).IsSourceBounded rs := by
+      D.IsDistributionProtocol Ω C (64 * 189) kK r := by
   classical
   set sch := protocolSchedule k large with hsch
   set n := sch.length with hn
@@ -266,7 +292,7 @@ theorem exists_isDistributionProtocol_of_frames {L q k : ℕ} [NeZero q] (hL : 2
     (fun t a b (w : OriginalCircuit a b) => w.nonprivateCount ≤ 1 ∧
       (¬(0 < t ∧ t ≤ n) → w.nonprivateCount = 0) ∧
       (∀ g, (↑(w.participants g) : Set (ProtocolParty k)) ⊆ {p | EventUses (ev t) p}) ∧
-      w.IsExpansionBounded r K ∧ w.IsMonomialBounded K ∧ w.IsSourceBounded rs)
+      w.IsExpansionBounded r K ∧ w.IsMonomialBounded K ∧ w.IsSourceBounded r)
     ⟨h0.trans_le zero_le_one, fun _ => h0, participants_subset_of_nonprivateCount_eq_zero _ h0 _,
       isExpansionBounded_of_nonprivateCount_eq_zero _ _ _ h0,
       isMonomialBounded_of_nonprivateCount_eq_zero _ _ h0,
@@ -306,11 +332,13 @@ theorem exists_isDistributionProtocol_of_frames {L q k : ℕ} [NeZero q] (hL : 2
         ((card_nonprivateLocations _).trans_le (hQ i).1)
     rw [Subsingleton.elim g g']
   refine ⟨D, ⟨?_, ?_, fun j r s => (protocolPlacement_blockBounded k j r s).trans (by norm_num),
+    protocolPlacement_squareParty hkL hk2,
     ?_, fun t _ => (hQ t).1.trans (by norm_num), fun t _ g => ?_,
     fun t _ => isMonomialBounded_mono _ (hQ t).2.2.2.2.1 (Nat.le_floor (by exact_mod_cast hK)),
     fun t _ => isExpansionBounded_mono _ (hQ t).2.2.2.1 le_rfl hK, fun p => ?_,
     fun t _ g p hp p' hp' => EventUses.scale_le ((hQ t).2.2.1 g hp) ((hQ t).2.2.1 g hp'),
-    fun t _ g p hp p' hp' => ?_, fun t _ => ?_, ?_⟩, fun t _ => (hQ t).2.2.2.2.2⟩
+    fun t _ g p hp p' hp' => ?_, fun t _ => ?_, ?_,
+    fun t _ => (hQ t).2.2.2.2.2⟩⟩
   · exact fun p => ⟨((protocolPlacement_inGrid k) p).1.trans (pow_le_paddedSide hk2),
       ((protocolPlacement_inGrid k) p).2.trans (pow_le_paddedSide hk2)⟩
   · have h := three_mul_card_protocolParty_lt hk2

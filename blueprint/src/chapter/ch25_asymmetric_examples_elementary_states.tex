@@ -10,15 +10,17 @@ $N>0$ sites, its unnormalized form on $(\C^2)^{\otimes N}$ is
      & =\ket{0}^{\otimes N}+\ket{1}^{\otimes N}.
     \notag
 \end{align}
-Here $\ket{0},\ket{1}$ form the orthonormal local basis, following the
-product-state and GHZ conventions of Ref.~\cite[Appendix~A]{Cirac2021Matrix}.
-The standard tensor generating this state has bond dimension two and is
-the direct sum $C_0\oplus C_1$ of two scalar sectors, as in
-Ref.~\cite[Appendix~A]{Cirac2021Matrix} and Definition~\ref{def:ghz_tensor}.
-The upper-triangular source tensor $B$ of bond dimension four
-(Definition~\ref{def:asymex_ghz}) satisfies $\ket{V^{(N)}(B)} = \ket{\mathrm{GHZ}_N}$
-for all $N>0$, providing an explicit instance of the multi-block
-compression theorem (Theorem~\ref{thm:asym_multiblock}).
+In the product-state and GHZ conventions of
+Ref.~\cite[Appendix~A]{Cirac2021Matrix}, $\ket{0},\ket{1}$ form the
+orthonormal local basis, and as in
+Ref.~\cite[Appendix~A]{Cirac2021Matrix} and
+Definition~\ref{def:ghz_tensor}, the standard bond-two tensor generating
+this state is the direct sum $C_0\oplus C_1$ of two scalar sectors.
+By the multi-block compression theorem
+(Theorem~\ref{thm:asym_multiblock}), the upper-triangular bond-four
+source tensor $B$ of Definition~\ref{def:asymex_ghz} compresses onto
+those two sectors and satisfies
+$\ket{V^{(N)}(B)} = \ket{\mathrm{GHZ}_N}$ for all $N>0$.
 
 Throughout this section and the next, for a tensor $T=\{T^i\}_{i=0}^1$
 of bond dimension $D$, the periodic trace boundary defines
@@ -73,12 +75,13 @@ $T^w=T^{i_1}\cdots T^{i_{|w|}}$, with $T^\varnothing=\Id_D$.
     \end{align}
 \end{definition}
 
-Under the periodic trace boundary~(\ref{eq:asymex_periodic_amplitude}), $B$
-generates the same state and norm as the standard GHZ tensor at every positive
-length (Theorems~\ref{thm:asymex_ghz_state} and~\ref{thm:asymex_ghz_norm}).
-Theorem~\ref{thm:asymex_ghz_compression} gives the compression onto the two
-scalar sectors, and Theorem~\ref{thm:asymex_ghz_no_intertwiner} shows that no
-nonzero sitewise intertwiner exists for $C_0$.
+Under the periodic trace boundary~(\ref{eq:asymex_periodic_amplitude}),
+Theorems~\ref{thm:asymex_ghz_state} and~\ref{thm:asymex_ghz_norm} show
+that $B$ generates the same state and norm as the standard GHZ tensor at
+every positive length. Theorem~\ref{thm:asymex_ghz_compression} then
+compresses $B$ onto the two scalar sectors, while
+Theorem~\ref{thm:asymex_ghz_no_intertwiner} shows that no nonzero
+sitewise intertwiner exists for $C_0$.
 
 \begin{center}
     % Formula: the periodic trace tr(B^w) of the bond-dimension-four
@@ -191,12 +194,11 @@ their bond dimensions.
     $\tr(\Id_2)=2$, which rules out equality at every length.
 \end{proof}
 
-The amplitude identity rests on the compression of the source onto its
-two scalar sectors. The source has bond dimension four while both
-sectors are scalar, so two of its four diagonal positions are zero
-slots; the compression theorem accounts for them in the dimension count
-and delivers the periodic trace identity behind
-Theorem~\ref{thm:asymex_ghz_state}.
+The amplitude identity of Theorem~\ref{thm:asymex_ghz_state} rests on
+the compression of the source onto its two scalar sectors: because the
+source has bond dimension four while both sectors are scalar, two of its
+four diagonal positions are zero slots that enter the dimension count
+without contributing to positive-length periodic traces.
 
 \begin{theorem}[Compression of the two sectors]
     \label{thm:asymex_ghz_compression}
@@ -222,9 +224,9 @@ Theorem~\ref{thm:asymex_ghz_state}.
     slots, with no change of basis. The three matrix conditions of the
     compression datum, block triangularity and the identification of the
     matched and unmatched diagonal blocks, follow by checking the entries
-    of $B^0$ and $B^1$. The compression pairs and
-    the dimension count are clauses (iv), (v) and (vii) of
-    Theorem~\ref{thm:asym_multiblock}.
+    of $B^0$ and $B^1$. Clauses~(iv), (v), and~(vii) of
+    Theorem~\ref{thm:asym_multiblock} then yield the word-level
+    compression pairs and the dimension count $4=1+1+2$.
 \end{proof}
 
 \begin{theorem}[Periodic traces of the source]
@@ -238,9 +240,10 @@ Theorem~\ref{thm:asymex_ghz_state}.
 \begin{proof}
     \leanok
     \uses{thm:asymex_ghz_compression, prop:asym_compression_trace}
-    This is Proposition~\ref{prop:asym_compression_trace} applied to the
-    compression datum of Theorem~\ref{thm:asymex_ghz_compression}, whose
-    slot set has two members.
+    Applying Proposition~\ref{prop:asym_compression_trace} to the
+    two-slot compression datum of Theorem~\ref{thm:asymex_ghz_compression}
+    equates $\tr(B^w)$ with $\tr(C_0^w)+\tr(C_1^w)$ for every nonempty
+    word $w$.
 \end{proof}
 
 The compression is genuinely a word-level statement. A sitewise
@@ -275,10 +278,10 @@ the sector $C_0$ admits none in either direction.
 \section{A product state from a repeated block}%
 \label{sec:asymex_repeated}
 
-A product state $\ket{\phi}^{\otimes N}$ is the simplest matrix product
-state: it is generated by a tensor of bond dimension one whose entries
-are the local amplitudes of $\ket{\phi}$, as in the product-state
-construction of Ref.~\cite[Appendix~A]{Cirac2021Matrix}. Here
+As in the product-state construction of
+Ref.~\cite[Appendix~A]{Cirac2021Matrix}, a product state
+$\ket{\phi}^{\otimes N}$ is generated by a tensor of bond dimension one
+whose entries are the local amplitudes of $\ket{\phi}$. Here
 $\ket{\phi}=\ket{0}+2\ket{1}$, so the bond-one tensor $A$ has local
 amplitudes $(1,2)$. The direct sum $A\oplus A$ doubles every amplitude,
 and the upper-triangular source $B$ of Definition~\ref{def:asymex_repeated}
@@ -313,13 +316,13 @@ even though the two generate equal periodic vectors at every length.
     \end{align}
 \end{definition}
 
-Again the boundary is the ordinary trace. The multiplicity factor in
-the product state and its norm are given in
-Theorems~\ref{thm:asymex_repeated_state} and~\ref{thm:asymex_repeated_norm}.
+Under the ordinary trace boundary,
+Theorems~\ref{thm:asymex_repeated_state}
+and~\ref{thm:asymex_repeated_norm} evaluate the multiplicity factor in
+the product state and its norm, while
 Theorems~\ref{thm:asymex_repeated_compression}
-and~\ref{thm:asymex_repeated_not_gauge} establish the compression and
-show that it does not arise from a simultaneous similarity to the
-split tensor.
+and~\ref{thm:asymex_repeated_not_gauge} compress $B$ onto the two copies
+of $A$ and rule out any simultaneous similarity to the split tensor.
 
 \begin{center}
     % Formula: the periodic trace tr(B^w) of the bond-dimension-two
@@ -396,9 +399,9 @@ split tensor.
 \begin{proof}
     \leanok
     \uses{thm:asymex_repeated_state}
-    Using the amplitudes $a_0=1$ and $a_1=2$
-    in~(\ref{eq:asymex_repeated_amplitude}), expand the squared norm
-    in the configuration basis and factor the finite sum:
+    Substituting the amplitudes $a_0=1$ and $a_1=2$
+    from~(\ref{eq:asymex_repeated_amplitude}) and factoring the sum over
+    the configuration basis gives
     \begin{align}
         \left\|\ket{V^{(N)}(A)}\right\|^2
          & =\sum_\sigma\prod_{n=0}^{N-1}|a_{\sigma(n)}|^2
@@ -412,15 +415,17 @@ split tensor.
 
 \subsection{Compression and the absence of a gauge}
 
-The source $B$ and target $A\oplus A$ satisfy
-$\ket{V^{(N)}(B)}=\ket{V^{(N)}(A\oplus A)}$ at all lengths $N\geq0$
-by~(\ref{eq:asymex_repeated_state_eq}). However, they are not gauge
-equivalent: $B^i\neq X(A^i\oplus A^i)X^{-1}$ for any invertible $X$
-(Theorem~\ref{thm:asymex_repeated_not_gauge}), even though
-$\tr(B^w)=2\tr(A^w)$ for all nonempty words $w$
-(Theorem~\ref{thm:asymex_repeated_compression}). The compression theorem
-acts only on the two diagonal copies of $A$, yielding the trace identity
-$\tr(B^w)=2\tr(A^w)$ that proves the factor two in~(\ref{eq:asymex_repeated_amplitude}).
+By~(\ref{eq:asymex_repeated_state_eq}), the source $B$ and the split
+target $A\oplus A$ satisfy $\ket{V^{(N)}(B)}=\ket{V^{(N)}(A\oplus A)}$
+at all lengths $N\geq0$. Even though
+Theorem~\ref{thm:asymex_repeated_compression} gives
+$\tr(B^w)=2\tr(A^w)$ for every nonempty word $w$,
+Theorem~\ref{thm:asymex_repeated_not_gauge} shows that $B$ and
+$A\oplus A$ are not gauge equivalent: no invertible $X$ satisfies
+$B^i=X(A^i\oplus A^i)X^{-1}$ for both letters. Instead, the compression
+theorem acts on the two diagonal copies of $A$ to produce the trace
+identity $\tr(B^w)=2\tr(A^w)$ underlying the factor two
+in~(\ref{eq:asymex_repeated_amplitude}).
 
 \begin{theorem}[Compression onto the two copies]
     \label{thm:asymex_repeated_compression}
@@ -442,9 +447,11 @@ $\tr(B^w)=2\tr(A^w)$ that proves the factor two in~(\ref{eq:asymex_repeated_ampl
     \uses{prop:asym_compression_trace}
     Both matrices are upper triangular with both diagonal entries equal to
     the corresponding scalar of $A$, which verifies the three
-    matrix conditions. The compression pairs are clauses (iv) and (v) of
-    Theorem~\ref{thm:asym_multiblock}, and the trace identity is
-    Proposition~\ref{prop:asym_compression_trace} with two equal slots.
+    matrix conditions. Clauses~(iv) and~(v) of
+    Theorem~\ref{thm:asym_multiblock} then yield the coordinate
+    compression pairs, and Proposition~\ref{prop:asym_compression_trace}
+    applied to the two equal slots gives $\tr(B^w)=2\tr(A^w)$ for every
+    nonempty word $w$.
 \end{proof}
 
 \begin{theorem}[No invertible gauge onto the repeated target]
@@ -488,11 +495,11 @@ single boundary matrix $Q$ detects it:
     ordered matrix product, with $A^\varnothing=\Id$.
 \end{definition}
 
-The ordinary trace and the boundary insertion $Q$ are compared in
-Theorem~\ref{thm:asymex_jordan_traces}. If some nonempty word of $A$
-has nonzero trace, the insertion distinguishes the two tensors despite
-their identical periodic traces
-(Theorem~\ref{thm:asymex_jordan_detection}).
+Theorem~\ref{thm:asymex_jordan_traces} compares the ordinary trace with
+the boundary insertion $Q$, and
+Theorem~\ref{thm:asymex_jordan_detection} shows that whenever some
+nonempty word of $A$ has nonzero trace, the insertion $Q$ distinguishes
+$B$ from $C$ despite their identical periodic traces.
 
 \begin{theorem}[Word products and boundary traces]
     \label{thm:asymex_jordan_traces}
@@ -517,8 +524,8 @@ their identical periodic traces
 \begin{proof}
     \leanok
     \uses{def:asymex_jordan}
-    Induct on $w$. The empty word gives the identity matrix.
-    Prepending a letter $i$ changes the upper-right block of $B^w$
+    By induction on $w$, the empty word evaluates to the identity matrix,
+    and prepending a letter $i$ changes the upper-right block of $B^w$
     to $A^i(|w|A^w)+A^iA^w=(|w|+1)A^iA^w$.
     The split product retains zero off-diagonal blocks.
     Taking the sum of the diagonal-block traces proves the periodic

@@ -13,17 +13,17 @@
         =\sum_i d_i\le |G|.
         \label{eq:peps_single_copy_bond_dimension}
     \end{align}
-    In particular, $D_{\mathrm{single}}<|G|$ if and only if some $d_i>1$.
-    These are the dimension formulas in
-    \cite[Section~7]{Schuch2010PEPS}.
+    In particular, the dimension formulas of
+    \cite[Section~7]{Schuch2010PEPS} give $D_{\mathrm{single}}<|G|$ if and
+    only if some $d_i>1$.
 \end{theorem}
 \begin{proof}\leanok
-    Count the orthonormal basis: sector $i$ has $d_i$ row labels and
-    $d_i$ multiplicity labels. The single-copy space has $d_i$ labels
+    In the orthonormal basis, sector $i$ has $d_i$ row labels and
+    $d_i$ multiplicity labels, whereas the single-copy space has $d_i$ labels
     in that sector. Positivity gives $d_i\le d_i^2$, with strict
-    inequality exactly when $d_i>1$. Sum these inequalities; if no
-    sector has dimension greater than one, every $d_i=1$ and the two
-    sums agree.
+    inequality exactly when $d_i>1$. Summing these inequalities over $i$
+    gives the bound, and when no sector has dimension greater than one,
+    every $d_i=1$ so the two sums agree.
 \end{proof}
 
 \begin{theorem}[Bond dimensions of the finite-torus physical equivalence]%
@@ -47,22 +47,22 @@
     $\sigma$ on $H$ satisfies $D_{\mathrm{single}}\le\dim H$.
     The weighted state is nonzero and has squared norm $|G|^{N+1}$,
     where $N$ is the number of torus sites.
-    The reduction is strict if and only if some $d_i>1$. All irreducible
-    representations, their dimensions, and the physical transformation
-    are obtained from the group, with no prior enumeration or Fourier
-    decomposition. This is the dimension statement for the finite-torus
-    realization of \cite[Section~7]{Schuch2010PEPS}.
+    The reduction is strict if and only if some $d_i>1$. As in the
+    finite-torus realization of \cite[Section~7]{Schuch2010PEPS}, all
+    irreducible representations, their dimensions, and the physical
+    transformation are obtained from the group, with no prior enumeration
+    or Fourier decomposition.
 \end{theorem}
 \begin{proof}\leanok
-    Take the data from the physical-equivalence theorem. Their Fourier matrix
+    For the data from the physical-equivalence theorem, the Fourier matrix
     satisfies $Q^\dagger Q=I$, and the regular intertwining identity
-    at the group identity gives $QQ^\dagger=I$. Thus its two coordinate
-    sets have the same cardinality, giving $|G|=\sum_i d_i^2$.
-    Count the single-copy labels and apply the positive dimension
-    inequalities in (\ref{eq:peps_single_copy_bond_dimension}).
-    Finally, the chosen sectors are irreducible and have distinct characters.
-    Their direct sum therefore has dimension at most that of every
-    semi-regular representation, by the distinct irreducible dimension bound.
+    at the group identity gives $QQ^\dagger=I$. Its two coordinate
+    sets therefore have the same cardinality, giving $|G|=\sum_i d_i^2$,
+    while counting the single-copy labels and applying the positive dimension
+    inequalities yields (\ref{eq:peps_single_copy_bond_dimension}).
+    Because the chosen sectors are irreducible with distinct characters,
+    the distinct irreducible dimension bound shows that their direct sum has
+    dimension at most that of every semi-regular representation.
     The same physical isometry transfers the exact regular-state norm and
     nonvanishing to the chosen weighted state.
 \end{proof}

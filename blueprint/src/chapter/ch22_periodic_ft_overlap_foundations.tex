@@ -24,10 +24,10 @@
     \end{align}
     for every sector $v$ and every letter $i$.
 
-    This is the scalar extraction used in
-    \cite[Appendix~A, lines~1072--1080]{DeLasCuevas2017Irreducible}, after the
-    contraction with the maps $F_u$ and $\Omega_u$ has produced the displayed
-    product-tensor identity.
+    In \cite[Appendix~A, lines~1072--1080]{DeLasCuevas2017Irreducible}, once the
+    contraction with the maps $F_u$ and $\Omega_u$ produces the displayed
+    product-tensor identity, this extraction isolates the sector scalars
+    $\kappa_v$.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -69,19 +69,18 @@
     \end{align}
     for every sector $v$ and every letter $i$.
 
-    This is the normalization in
-    \cite[Appendix~A, lines~1072--1080]{DeLasCuevas2017Irreducible}: after
-    Theorem~\ref{thm:periodic_product_tensor_phase_extraction} has extracted
+    As in \cite[Appendix~A, lines~1072--1080]{DeLasCuevas2017Irreducible}, after
+    Theorem~\ref{thm:periodic_product_tensor_phase_extraction} extracts
     scalars independent of the sector coordinates, choosing a common $m$-th
     root of their product leaves a product-one family of sector scalars.
 \end{theorem}
 
 \begin{proof}\leanok
-    Apply Theorem~\ref{thm:periodic_product_tensor_phase_extraction} to obtain
+    Theorem~\ref{thm:periodic_product_tensor_phase_extraction} yields
     scalars $\mu_v$ with $\prod_v\mu_v=z$ and $A_v^i=\mu_vB_v^i$. Since
-    $m>0$, the identities $\xi^m=z$ and $z\ne0$ imply $\xi\ne0$. Put
-    $\kappa_v=\mu_v/\xi$. Then
-    $\prod_v\kappa_v=(\prod_v\mu_v)/\xi^m=z/z=1$, and
+    $m>0$, the identities $\xi^m=z$ and $z\ne0$ imply $\xi\ne0$, so the
+    ratios $\kappa_v=\mu_v/\xi$ satisfy
+    $\prod_v\kappa_v=(\prod_v\mu_v)/\xi^m=z/z=1$ and
     $A_v^i=(\kappa_v\xi)B_v^i$.
 \end{proof}
 
@@ -112,9 +111,9 @@
     dimension. Suppose that $|\xi|=1$ and that
     $A^i=(\kappa\xi)B^i$ for every physical index~$i$. Then $|\kappa|=1$.
 
-    This is the scalar normalization in
-    \cite[Appendix~A, lines~1082--1084]{DeLasCuevas2017Irreducible}, after the
-    sectorwise proportionality relation has been obtained.
+    In \cite[Appendix~A, lines~1082--1084]{DeLasCuevas2017Irreducible}, once
+    the sectorwise proportionality relation is established, left-canonicity
+    forces each sector scalar to have unit modulus.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -161,10 +160,11 @@
     projections on the bond space. If the adjoint transfer map satisfies
     $\E_A^\dagger(P_{k+1})=P_k$ for all $k$, with indices taken modulo $m$,
     then $P_{k+1}A^i=A^iP_k$ for every physical letter $i$.
-    This is the single-site grading behind
-    \cite[eq.~Aoffdiag]{DeLasCuevas2017Irreducible}; the compressed blocks of
-    \cite[eq.~Auprop]{DeLasCuevas2017Irreducible} use the inverse cyclic
-    indexing convention of Definition~\ref{def:cyclic_sector_decomp}.
+    Whereas the compressed blocks of \cite[eq.~Auprop]{DeLasCuevas2017Irreducible}
+    use the source's forward indexing, the inverse cyclic indexing convention
+    of Definition~\ref{def:cyclic_sector_decomp} expresses the single-site
+    grading behind \cite[eq.~Aoffdiag]{DeLasCuevas2017Irreducible} as
+    $P_{k+1}A^i=A^iP_k$.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -190,16 +190,16 @@
     \leanok
     \uses{thm:offdiag_shift_adjoint_cyclic_shift}
     Under the hypotheses of Theorem~\ref{thm:offdiag_shift_adjoint_cyclic_shift},
-    assume in addition that $\sum_{u=0}^{m-1} P_u=\Id$. Then every physical
-    letter decomposes as $A^i=\sum_{u=0}^{m-1}P_{u+1}A^iP_u$.
-    This is \cite[eq.~Aoffdiag]{DeLasCuevas2017Irreducible}, written in the
-    same inverse cyclic indexing convention.
+    assume in addition that $\sum_{u=0}^{m-1} P_u=\Id$. In the inverse
+    cyclic indexing convention above (reparametrizing
+    \cite[eq.~Aoffdiag]{DeLasCuevas2017Irreducible}), every physical letter
+    then decomposes as $A^i=\sum_{u=0}^{m-1}P_{u+1}A^iP_u$.
 \end{theorem}
 
 \begin{proof}\leanok
-    Insert $\sum_u P_u=\Id$ on the right of $A^i$, then use
-    Theorem~\ref{thm:offdiag_shift_adjoint_cyclic_shift} and
-    $P_u^2=P_u$ term by term.
+    Inserting $\sum_u P_u=\Id$ on the right of $A^i$ and applying
+    Theorem~\ref{thm:offdiag_shift_adjoint_cyclic_shift} together with
+    $P_u^2=P_u$ term by term yields $A^i=\sum_{u=0}^{m-1}P_{u+1}A^iP_u$.
 \end{proof}
 
 \begin{theorem}[Word cyclic grading]
@@ -214,9 +214,10 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    Induct on the length of $w$, using
-    Theorem~\ref{thm:offdiag_shift_adjoint_cyclic_shift} for the first letter
-    and the induction hypothesis for the remaining word.
+    By induction on the length of $w$,
+    Theorem~\ref{thm:offdiag_shift_adjoint_cyclic_shift} shifts the projector
+    past the first letter and the induction hypothesis shifts it past the
+    remaining word.
 \end{proof}
 
 \begin{definition}[Corner-transition letters]
@@ -357,7 +358,8 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    Apply the grading at sector $-(k+1)$ and simplify the cyclic index.
+    Evaluating the grading $P_{u+1}A^i=A^iP_u$ at the sector $u=-(k+1)$ and
+    simplifying the cyclic index yields $P_{-k}A^i=A^iP_{-(k+1)}$.
 \end{proof}
 
 \begin{lemma}[Telescoping of a corner product]
@@ -440,16 +442,15 @@
     Let $P_k$ be orthogonal projections satisfying the off-diagonal convention
     $P_kA^i=A^iP_{k+1}$, and let $\varphi_k$ be the multiplicative corner
     isomorphisms with $\varphi_k(\bar A_k^I)=P_k(A^{[m]})^IP_k$. Then for a
-    nonempty blocked word $W$, with flattening $\widehat W$, the
-    corner-transition product is the corner image of the word evaluation,
+    nonempty blocked word $W$ with flattening $\widehat W$, reading
+    \cite[eq.~Fu]{DeLasCuevas2017Irreducible} through $\varphi_k$ identifies
+    the corner-transition product with the corner image of the word evaluation:
     \begin{align}
         F_k^{\widehat W}
          & =
-        \varphi_k(\bar A_k^{\,W}),
+        \varphi_k(\bar A_k^{\,W}).
         \notag
     \end{align}
-    the content of \cite[eq.~Fu]{DeLasCuevas2017Irreducible} read through
-    $\varphi$.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -529,6 +530,7 @@
 
 \begin{proof}\leanok
     \uses{lem:periodic_ambient_corner_inverse, lem:periodic_corner_contraction}
-    Apply the right-inverse contraction with the ambient corner right inverse in
-    place of the abstract right inverse.
+    Substituting the ambient corner right inverse $\hat\Omega_{k+1}$ for the
+    abstract right inverse in the right-inverse contraction yields the
+    displayed identity.
 \end{proof}

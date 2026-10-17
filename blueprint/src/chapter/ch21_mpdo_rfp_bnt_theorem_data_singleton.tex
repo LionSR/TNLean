@@ -202,8 +202,9 @@
     coordinates.
 \end{theorem}
 \begin{proof}\leanok
-    Specialize Theorem~\ref{thm:mpdo_bond_two_singleton_ambient_ghz} to
-    $N=2$ and evaluate the coordinate identification.
+    Specializing Theorem~\ref{thm:mpdo_bond_two_singleton_ambient_ghz} to
+    $N=2$ and evaluating the coordinate identification gives the Bell state
+    outer product.
 \end{proof}
 
 \begin{definition}[Physical similarity of the MPO tensor]%
@@ -282,8 +283,9 @@
 \begin{proof}\leanok
     \uses{def:mpdo_vertical_one_site_actions, thm:mpdo_bond_two_singleton_vertical_identity}
     Left and right multiplication on the physical indices become matrix
-    multiplication on the vertically viewed tensor. Now use
-    Theorem~\ref{thm:mpdo_bond_two_singleton_vertical_identity}.
+    multiplication on the vertically viewed tensor, and
+    Theorem~\ref{thm:mpdo_bond_two_singleton_vertical_identity} identifies
+    that tensor with $A$.
 \end{proof}
 
 \begin{theorem}[One-site physical-similarity identity]%
@@ -300,7 +302,7 @@
     \end{align}
 \end{theorem}
 \begin{proof}\leanok
-    Expand the one-site contraction. The four diagonal physical letters sum to
+    In the one-site contraction, the four diagonal physical letters sum to
     $J$, and the two physical multiplications give conjugation by $X$.
 \end{proof}
 
@@ -320,7 +322,7 @@
     \end{align}
 \end{theorem}
 \begin{proof}\leanok
-    Evaluate the two-site contraction in ordered-pair coordinates. Each ket
+    Evaluating the two-site contraction in ordered-pair coordinates, each ket
     index contributes $X$, each bra index contributes $X^{-1}$, and the
     undeformed contraction is $P$.
 \end{proof}
@@ -337,9 +339,10 @@
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:mpdo_bond_two_singleton_physical_one_site, thm:mpdo_bond_two_singleton_physical_two_site, thm:mpdo_bond_two_singleton_scalar_gram}
-    Positivity of the one- and two-site operators implies Hermiticity. Apply
-    the two exact reindexing identities and then
-    Theorem~\ref{thm:mpdo_bond_two_singleton_scalar_gram}.
+    Positivity of the one- and two-site operators implies Hermiticity, so the
+    two exact reindexing identities and
+    Theorem~\ref{thm:mpdo_bond_two_singleton_scalar_gram} force
+    $X^\dagger X=\omega\Id$.
 \end{proof}
 
 \begin{lemma}[The concrete physical Gram matrix is nonscalar]%

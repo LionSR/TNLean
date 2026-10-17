@@ -1,0 +1,28 @@
+\(\displaystyle \Phi\;=\;
+  \begin{tenkz}[rows={wire,wire,wire,wire,wire}, cols=5, bonds=none]
+    \tn[at=(5,1), skin=box, wide=5, name=o,
+        ports={90@1:physical, 90@2:physical, 90@3:physical, 90@4:physical, 90@5:physical}]{\Omega}
+    \tn[at=(4,1), skin=box, wide=4, name=p4,
+        ports={270@1:physical, 270@2:physical, 270@3:physical, 270@4:physical,
+               90@1:physical, 90@2:physical, 90@3:physical, 90@4:physical}]{P_4}
+    \tn[at=(3,1), skin=box, wide=3, name=p3,
+        ports={270@1:physical, 270@2:physical, 270@3:physical,
+               90@1:physical, 90@2:physical, 90@3:physical}]{P_3}
+    \tn[at=(2,1), skin=box, wide=2, name=p2,
+        ports={270@1:physical, 270@2:physical, 90@1:physical, 90@2:physical}]{P_2}
+    \tn[at=(1,1), skin=box, name=p1,
+        ports={270:physical, 90:physical:$1$}]{P_1}
+    \tn[at=(1,2), skin=none, name=t2, ports={270:physical, 90:physical:$2$}]{}
+    \tn[at=(1,3), skin=none, name=t3, ports={270:physical, 90:physical:$3$}]{}
+    \tn[at=(1,4), skin=none, name=t4, ports={270:physical, 90:physical:$4$}]{}
+    \tn[at=(1,5), skin=none, name=t5, ports={270:physical, 90:physical:$5$}]{}
+    \tnwire{o.90@1}{p4.270@1} \tnwire{o.90@2}{p4.270@2}
+    \tnwire{o.90@3}{p4.270@3} \tnwire{o.90@4}{p4.270@4}
+    \tnwire{p4.90@1}{p3.270@1} \tnwire{p4.90@2}{p3.270@2} \tnwire{p4.90@3}{p3.270@3}
+    \tnwire{p3.90@1}{p2.270@1} \tnwire{p3.90@2}{p2.270@2}
+    \tnwire{p2.90@1}{p1.270}
+    \tnwire{p2.90@2}{t2.270}
+    \tnwire{p3.90@3}{t3.270}
+    \tnwire{p4.90@4}{t4.270}
+    \tnwire{o.90@5}{t5.270}
+  \end{tenkz}\)

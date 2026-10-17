@@ -4,10 +4,10 @@
 Fix the ordered pair slots of Definition~\ref{def:peps_source_slots},
 with halfspaces $U_e,V_e$, and write $\mathcal S$ for their joint
 register space. All tensor products below use this order and the
-standard associativity identifications. The slot set and all finite
-index sets may be empty. These are the source-coordinate identities
-used in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
-\texttt{04-compression.tex}, lines 279--355.
+standard associativity identifications. In these source-coordinate identities from
+\cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}
+(\texttt{04-compression.tex}, lines 279--355),
+the slot set and all finite index sets may be empty.
 
 % This section proves exact preparation, matrix, and density identities.
 % It does not assert that the Schmidt decomposition has yet been
@@ -113,9 +113,9 @@ used in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
 
 \begin{proof}\leanok
     \uses{thm:peps_source_preparation_sums}
-    Compose (\ref{eq:peps_source_preparation_sum}) with $T$ and take
-    matrices in the prescribed bases. Both operations are linear.
-    For the basis specialization, use
+    Composing (\ref{eq:peps_source_preparation_sum}) with $T$ and taking
+    matrices in the prescribed bases preserves the linear expansion,
+    and the basis specialization follows from
     $\eta_e=\sum_{r,s}\eta_e(r,s)u_{e,r}\otimes v_{e,s}$
     in each slot.
 \end{proof}
@@ -167,8 +167,8 @@ used in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
 
 \begin{proof}\leanok
     \uses{thm:peps_prepared_matrix_coordinates}
-    Expand the two prepared matrices using
-    (\ref{eq:peps_prepared_matrix_sum}). The adjoint conjugates each
+    Expanding the two prepared matrices via
+    (\ref{eq:peps_prepared_matrix_sum}) shows that the adjoint conjugates each
     scalar coefficient on the bra side. Distributing both finite sums
     yields (\ref{eq:peps_prepared_density_components}), since
     \begin{align*}
@@ -211,12 +211,12 @@ used in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
 
 \begin{proof}\leanok
     \uses{thm:peps_prepared_matrix_coordinates}
-    Expand each source in its branch's endpoint bases and distribute
-    the ket and bra sums, conjugating only the bra coefficients. This
-    gives (\ref{eq:peps_prepared_density_basis}). Expand
+    Expanding each source in its branch's endpoint bases and distributing
+    the ket and bra sums (conjugating only the bra coefficients)
+    gives (\ref{eq:peps_prepared_density_basis}), and substituting
+    (\ref{eq:peps_prepared_density_basis}) into
     $G\rho G^\dagger=\sum_{\xi,\zeta}
-        c_\xi\overline{c_\zeta}K_\xi\rho K_\zeta^\dagger$ and substitute
-    (\ref{eq:peps_prepared_density_basis}) to obtain
+        c_\xi\overline{c_\zeta}K_\xi\rho K_\zeta^\dagger$ yields
     (\ref{eq:peps_prepared_gate_density}).
 \end{proof}
 
@@ -230,20 +230,20 @@ used in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
     slot, then $\|K_T(\eta)\|\le1$ in the Euclidean operator norm.
     In particular, if every $u_{e,r}$ and $v_{e,s}$ has norm one,
     then $\|K_T(a)\|\le1$ for every coordinate assignment $a$.
-    The unit-vector families need not span their halfspaces.
-    These are the coefficient contractions in
-    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
-    \texttt{04-compression.tex}, lines 409--427.
+    In these coefficient contractions from
+    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}
+    (\texttt{04-compression.tex}, lines 409--427),
+    the unit-vector families need not span their halfspaces.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{def:peps_source_inventory,def:peps_party_layout}
     The normalization of each source makes its preparation allowed,
-    hence contractive. Composing with $T$ gives
+    hence contractive, so composing with $T$ gives
     $\|TQ_{\eta,\mathcal H_{\rm in}}\|\le1$.
-    Orthonormal coordinate maps are isometries, so the matrix in
-    (\ref{eq:peps_prepared_matrix}) has the same operator norm.
-    For the last assertion, use
+    Because orthonormal coordinate maps are isometries, the matrix in
+    (\ref{eq:peps_prepared_matrix}) has the same operator norm,
+    and the last assertion follows from
     $\|u_{e,r}\otimes v_{e,s}\|=\|u_{e,r}\|\|v_{e,s}\|=1$.
 \end{proof}
 
@@ -280,11 +280,11 @@ used in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
         K_\xi(a)\rho K_\zeta(b)^\dagger.
         \label{eq:peps_actual_gate_density}
     \end{align}
-    The halfspaces, source vectors, and coefficient matrices are
-    obtained from the original compositions. This is the exact
-    source-coordinate density identity preceding the random
-    replacement in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
-    \texttt{04-compression.tex}, lines 233--355.
+    In this exact source-coordinate density identity preceding the random
+    replacement in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}
+    (\texttt{04-compression.tex}, lines 233--355),
+    the halfspaces, source vectors, and coefficient matrices are
+    obtained from the original compositions.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -293,11 +293,11 @@ used in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
     Theorem~\ref{thm:peps_finite_source_gate} constructs the common
     finite source spaces, their normalized vectors, and the exact
     source-free compositions $T_\xi$. Replacing every source half by
-    a standard basis vector gives normalized elementary preparations;
-    Theorem~\ref{thm:peps_prepared_matrix_contraction} therefore proves
+    a standard basis vector gives normalized elementary preparations,
+    so Theorem~\ref{thm:peps_prepared_matrix_contraction} proves
     $\|K_\xi(a)\|\le1$.
     Taking matrices of $F_\xi=T_\xi Q_{\eta_\xi,\mathcal H_{\rm in}}$
-    identifies $M_\xi$ with the prepared branch matrix.
-    Apply Theorem~\ref{thm:peps_prepared_gate_density} to obtain
+    identifies $M_\xi$ with the prepared branch matrix, and
+    Theorem~\ref{thm:peps_prepared_gate_density} then yields
     (\ref{eq:peps_actual_gate_density}) for every $\rho$.
 \end{proof}

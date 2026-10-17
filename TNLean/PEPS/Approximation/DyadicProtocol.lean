@@ -8,6 +8,7 @@ import TNLean.PEPS.Approximation.Basic
 import TNLean.PEPS.Approximation.DistributedConstruction
 import TNLean.PEPS.Approximation.DyadicActiveLabelParties
 import TNLean.PEPS.Approximation.DyadicRoutingPEPS
+import TNLean.PEPS.Approximation.OriginalCircuitSourceBound
 import TNLean.PEPS.Approximation.ProtocolDensityError
 
 /-!
@@ -47,25 +48,27 @@ its constants chosen before the size, the Hamiltonian, and the ground vector, is
 `LargeSizeDyadicProtocolConsequences` are weaker than Proposition 7.1. They omit the following
 clauses of the source:
 
-* a party for every square of the hierarchy, including the root (`06-geometry.tex:64–67`); the
-  placement fields bound the parties of each square from above only;
 * the main copy of `Ω` held by one party and the auxiliary copies initialized privately at their
   designated parties (`06-geometry.tex:22–23`);
 * the factorization of each reference vector into the main and auxiliary encoded frames, with
   every factor of norm at most one (`06-geometry.tex:39–41`); only the initial reference, the
   per-change error, and the final reference are recorded;
 * the scale and address of each additional party, which are those of its repainting event
-  (`06-geometry.tex:36–37`);
-* the bounds on pair sources and messages in each monomial before their expansion (Theorem 5.2,
-  item 3, `04-compression.tex:143–147`); only pair effects are counted;
-* the family of expansions accurate to every fixed inverse power of `L`; the model fixes one
-  instantiated approximation, with reference error `C L⁻²⁰` per change.
+  (`06-geometry.tex:36–37`).
 
 None of these clauses is used by the density estimate of §8.1, the separation hypothesis of
 Lemma 8.2, or the lifetime count. Documented in
 `docs/paper-gaps/polypeps_prop71_consequences_interface.tex`. Elimination: build a richer
 construction certificate carrying the omitted clauses, prove Proposition 7.1 for it, and forget
 it into this interface.
+
+The bound on pair sources and messages in each monomial (Theorem 5.2, item 3,
+`04-compression.tex:143–147`) is the field `IsDistributionProtocol.sourceBounded`; the gates carry
+no messages, which are expanded before a gate is recorded (`04-compression.tex:42–45`). The
+accuracy of the expansions at every fixed inverse power of `L` (`06-geometry.tex:29–30`) holds
+because each gate of the protocol is the selected contraction: a nonprivate gate `G` is by
+definition its recorded expansion `G = ∑ ξ, c ξ • M ξ`, so `‖G - ∑ ξ, c ξ • M ξ‖ = 0 ≤ L⁻ᵃ` for
+every `a`. Section 8 uses these selected contractions throughout (`07-assembly.tex:29–34`).
 
 Three consequences are proved for every protocol satisfying the bounds:
 
@@ -193,6 +196,15 @@ structure DyadicProtocol (L q : ℕ) (P : Type) [Fintype P] where
   layout_changes :
     layout changes = familyPhysicalOutputLayout physicalDimension physicalOrder privateOutput
 
+/-- The aligned squares of the padded dyadic hierarchy of `[0, N] ^ 2`, each given by its scale
+`j` and its block address `(x, y)`: the square
+`[2 ^ j x, 2 ^ j (x + 1)] × [2 ^ j y, 2 ^ j (y + 1)]` lies in `[0, N] ^ 2`. When `N` is a power
+of two, the root square is the one with `2 ^ j = N`.
+
+Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:64–65`. -/
+def HierarchySquare (N : ℕ) : Type :=
+  {S : ℕ × ℕ × ℕ // 2 ^ S.1 * (S.2.1 + 1) ≤ N ∧ 2 ^ S.1 * (S.2.2 + 1) ≤ N}
+
 namespace DyadicProtocol
 
 variable {L q : ℕ} {P : Type} [Fintype P] (D : DyadicProtocol L q P)
@@ -238,17 +250,6 @@ def physicalConfigEquiv : ((p : P) → Fin (D.physicalDimension p)) ≃ Configur
       (Equiv.piCongr (Equiv.ofInjective D.site D.site_injective)
         fun v ↦ finCongr (D.physicalDimension_site v).symm).symm)
 
-/-- The configuration of the square read from the physical configuration of the parties: the
-value at a site is the physical value of its unit-square party.
-
-Source: polynomial-PEPS manuscript, Proposition 7.1, `06-geometry.tex`, lines 48–51. -/
-theorem physicalConfigEquiv_apply_val (σ : (p : P) → Fin (D.physicalDimension p))
-    (v : SquareLatticeVertex L L) : (D.physicalConfigEquiv σ v : ℕ) = σ (D.site v) := by
-  classical
-  simp only [physicalConfigEquiv, Equiv.trans_apply, Equiv.piEquivPiSubtypeProd_apply,
-    Equiv.prodUnique_apply]
-  rfl
-
 /-- The coordinates of the final memory: the configuration of the physical outputs on the
 square, and an orthonormal coordinate of the private registers.
 
@@ -285,18 +286,22 @@ the target vector `Ω`, the protocol satisfies:
    parties, and at most `b` of them are attached to any square;
 2. there are at most `C L³` changes; each change has at most `b` nonprivate gates, each with
    at most `b` parties; every nonprivate gate has at most `C L ^ k` monomials, absolute
-   coefficient sum at most `C L ^ k`, and at most `r` pair effects in each monomial; every party
-   participates in at most `b` nonprivate gates over the whole schedule;
+   coefficient sum at most `C L ^ k`, and at most `r` pair effects and at most `r` pair sources
+   in each monomial; every party participates in at most `b` nonprivate gates over the whole
+   schedule;
 3. two parties of a nonprivate gate have equal or adjacent scales, and addresses at distance at
    most `b` times the side of either square in each coordinate;
 4. each change takes its reference vector within `C L⁻²⁰` of the next one, and the final
    reference vector is `Ω ⊗ Ξ` with `1 - C L⁻⁵⁷ ≤ ‖Ξ‖ ≤ 1`.
 
-These are the consequences of the four items that the assembly of §8 uses. The predicate is
-weaker than the conclusion of Proposition 7.1: it omits the clauses listed in the scope
-restriction of the module docstring, among them a party for every square of the hierarchy, the
-registers of the copies of `Ω`, the frame factorization of the references, and the counts of
-pair sources and messages.
+These are the consequences of the four items that the assembly of §8 uses, together with the
+pair-source bound of Theorem 5.2, item 3. Each nonprivate gate `G` equals its recorded expansion
+`∑ ξ, c ξ • M ξ`, so `‖G - ∑ ξ, c ξ • M ξ‖ = 0` and the expansions are accurate at every inverse
+power of `L` (`06-geometry.tex:29–30`); the monomials have no messages, since messages are
+expanded before a gate is recorded (`04-compression.tex:42–45`). The predicate
+is weaker than the conclusion of Proposition 7.1: it omits the clauses listed in the scope
+restriction of the module docstring, among them the registers of the copies of `Ω` and the frame
+factorization of the references.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), Proposition 7.1 `prop:protocol`,
 `06-geometry.tex:17–52`; the expansions are those of Theorem 5.2, item 3,
@@ -308,6 +313,14 @@ structure IsDistributionProtocol (Ω : StateSpace L q) (C : ℝ) (b k r : ℕ) :
   card_le : (Fintype.card P : ℝ) ≤ C * (L : ℝ) ^ 2
   /-- Item 1: a fixed number of parties for each square. -/
   blockBounded : D.placement.BlockBounded b
+  /-- Item 1: a different party is assigned to each square of the padded hierarchy, including
+  the root square, at the scale and address of that square.
+
+  Source: Polynomial-PEPS manuscript (Sept 24 2026), Proposition 7.1, item 1,
+  `06-geometry.tex:18–20`, and the hierarchy, `06-geometry.tex:64–67`: “A different party is
+  assigned to each dyadic square.” -/
+  squareParty : ∃ f : HierarchySquare (paddedSide L) → P, Function.Injective f ∧
+    ∀ S, (D.placement.scale (f S), D.placement.blockX (f S), D.placement.blockY (f S)) = S.1
   /-- Item 2: at most `C L³` changes. -/
   changes_le : (D.changes : ℝ) ≤ C * (L : ℝ) ^ 3
   /-- Item 2: each change has a fixed number of nonprivate gates. -/
@@ -337,6 +350,9 @@ structure IsDistributionProtocol (Ω : StateSpace L q) (C : ℝ) (b k r : ℕ) :
   reference_changes : ∃ Ξ : EuclideanSpace ℂ (Fin (Module.finrank ℂ (Mem D.privateOutput))),
     ‖Ξ‖ ≤ 1 ∧ 1 - C / (L : ℝ) ^ 57 ≤ ‖Ξ‖ ∧
       D.readout (D.reference D.changes) = Matrix.euclideanTensorVector Ω Ξ
+  /-- Theorem 5.2, item 3: at most `r` pair sources in each monomial of every gate expansion,
+  with the constant `r` that bounds the pair effects (`04-compression.tex:143–147`). -/
+  sourceBounded : ∀ t < D.changes, (D.step t).IsSourceBounded r
 
 namespace IsDistributionProtocol
 

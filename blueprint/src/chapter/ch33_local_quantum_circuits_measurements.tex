@@ -102,14 +102,14 @@ outcomes.
 \end{lemma}
 \begin{proof}
     \leanok
-    For the first statement take $S=\emptyset$ and $v_{m,i}=\mathbb 1$. For
-    the second, $P_m=\mathbb 1$ for the only string $m$, so
-    $V_mU\ket{\pi}=c\ket{\psi}$ with $c\neq0$ by
-    Lemma~\ref{lem:qc_measurement_outcomes}. Take $u_i=v_{m,i}^\dagger$. Then
-    $\bigotimes_iu_i\ket{\psi}=U(c^{-1}\ket{\pi})$, where $c^{-1}\ket{\pi}$
-    is the product vector with the vector of one site multiplied by $c^{-1}$,
-    and the circuit $U$ of depth at most $T$ is padded with empty layers to
-    depth $T$.
+    Taking $S=\emptyset$ and $v_{m,i}=\mathbb 1$ gives the first statement.
+    Conversely, when no site is measured, $P_m=\mathbb 1$ for the unique
+    string $m$, so $V_mU\ket{\pi}=c\ket{\psi}$ with $c\neq0$ by
+    Lemma~\ref{lem:qc_measurement_outcomes}. Setting $u_i=v_{m,i}^\dagger$
+    gives $\bigotimes_iu_i\ket{\psi}=U(c^{-1}\ket{\pi})$, where
+    $c^{-1}\ket{\pi}$ is the product vector obtained by multiplying one site's
+    vector by $c^{-1}$, and padding the circuit $U$ of depth at most $T$ with
+    empty layers brings its depth to $T$.
 \end{proof}
 
 \begin{lemma}[Layers of permutation gates]
@@ -143,11 +143,11 @@ outcomes.
     \leanok
     Enumerating $X$ writes $P_\sigma$ as $Y\otimes\mathbb 1$ with
     $Y_{u,w}=1$ if $w=\sigma(x)|_X$ for some $x$ with $x|_X=u$, and $0$
-    otherwise; permutation matrices are unitary. For the layer, induct over
-    the pairs: $P_{\sigma_a}P_\rho=P_{\rho\sigma_a}$, and $\rho\sigma_a$
-    agrees with $\sigma_a$ on the pair $\{a,a+1\}$, which the earlier pairs
-    do not meet, and with $\sigma_k$ on an earlier pair $\{k,k+1\}$, because
-    $\sigma_a(x)$ agrees with $x$ there. The entry of
+    otherwise; permutation matrices are unitary. By induction over the
+    pairs, $P_{\sigma_a}P_\rho=P_{\rho\sigma_a}$, where $\rho\sigma_a$
+    agrees with $\sigma_a$ on the pair $\{a,a+1\}$ (which the earlier pairs
+    do not meet) and with $\sigma_k$ on each earlier pair $\{k,k+1\}$ (because
+    $\sigma_a(x)$ agrees with $x$ there). Finally, the entry of
     $\bigotimes_iP_{\tau_i}$ at $(x,y)$ is $\prod_i[y_i=\tau_i(x_i)]$, which is
     $1$ if $y=\tau(x)$ and $0$ otherwise.
 \end{proof}
@@ -297,16 +297,16 @@ $d\ge1$.
     Let $U$ be a unitary with
     $\lVert X\rVert_1=\operatorname{tr}(X^\dagger U)$ for $X=\ket u\bra v$.
     Then $\lVert X\rVert_1=\lvert\braket{u|Uv}\rvert\leq\lVert u\rVert\,
-        \lVert v\rVert$. For the second statement choose a phase $c$ with
-    $\braket{\psi|c\varphi}=\lvert\braket{\psi|\varphi}\rvert$ and put
-    $\ket{\varphi'}=c\ket\varphi$, so that
+        \lVert v\rVert$. For the second statement, choosing a phase $c$ with
+    $\braket{\psi|c\varphi}=\lvert\braket{\psi|\varphi}\rvert$ and setting
+    $\ket{\varphi'}=c\ket\varphi$ gives
     $\ket{\varphi'}\bra{\varphi'}=\ket\varphi\bra\varphi$ and
     \begin{align*}
         \ket\psi\bra\psi-\ket\varphi\bra\varphi
         =\ket{\psi-\varphi'}\bra\psi+\ket{\varphi'}\bra{\psi-\varphi'}.
     \end{align*}
     By the triangle inequality the trace norm is at most
-    $2\lVert\psi-\varphi'\rVert$, and
+    $2\lVert\psi-\varphi'\rVert$, where
     $\lVert\psi-\varphi'\rVert^2=2-2\lvert\braket{\psi|\varphi}\rvert$.
 \end{proof}
 
@@ -329,9 +329,9 @@ $d\ge1$.
     $f(M)$ assisted by measurements and classical communication, map
     $\ket{\psi_M}$ to states $\sigma_M$ with
     $\lVert\sigma_M-\ket{\varphi_M}\bra{\varphi_M}\rVert_1\to0$, where $f$
-    is polylogarithmic. The definition is this relation from the sequence of
-    product states, with $k=2$ (measurements, then a circuit) and
-    $\sigma_N=\ket{\psi_N}\bra{\psi_N}$.
+    is polylogarithmic; the definition above specializes this relation to a
+    sequence of initial product states with $k=2$ (measurements followed by a
+    circuit) and $\sigma_N=\ket{\psi_N}\bra{\psi_N}$.
 \end{definition}
 
 \begin{lemma}[Asymptotic preparation from overlap errors]
@@ -349,9 +349,9 @@ $d\ge1$.
 \end{lemma}
 \begin{proof}
     \leanok
-    Choose such a vector $\ket{\psi_N}$ for every large $N$. By
-    Lemma~\ref{lem:qc_pure_state_trace_norm} the trace norm of
-    $\ket{\psi_N}\bra{\psi_N}-\ket{\varphi_N}\bra{\varphi_N}$ is at most
+    Choosing such a vector $\ket{\psi_N}$ for every large $N$,
+    Lemma~\ref{lem:qc_pure_state_trace_norm} bounds the trace norm of
+    $\ket{\psi_N}\bra{\psi_N}-\ket{\varphi_N}\bra{\varphi_N}$ by
     $2\sqrt{2\varepsilon_N}$, which tends to zero.
 \end{proof}
 
@@ -407,45 +407,42 @@ $d\ge1$.
     \leanok
     \uses{def:qc_measurement_preparation, lem:qc_permutation_layers,
         def:qc_ghz_state}
-    Let $M\geq1$, $b\geq1$ and $\alpha\in\mathbb C^b$ nonzero, with the
-    labels $\{0,\dots,b-1\}=\mathbb Z_b$. On the ring of $2M$ sites of
-    dimension $b$, numbered $0,\dots,2M-1$, place the system qudit
-    $n\in\{0,\dots,M-1\}$ at the site $2n$ and its ancilla at the site
-    $2n+1$. The GHZ-type state
+    Generalizing the $\mathrm{QCcc}_2$ construction of
+    \cite[Example~1]{Piroli2021LOCC} to qudits to realize the constant-depth
+    preparation of $\ket{\chi_M}$ stated in the paragraph ``Long-range MPS
+    using measurements'' of \cite{Malz2024Preparation}, let $M\geq1$, $b\geq1$
+    and $\alpha\in\mathbb C^b$ nonzero, with the labels
+    $\{0,\dots,b-1\}=\mathbb Z_b$. On the ring of $2M$ sites of dimension $b$,
+    numbered $0,\dots,2M-1$, place the system qudit $n\in\{0,\dots,M-1\}$ at
+    the site $2n$ and its ancilla at the site $2n+1$. The GHZ-type state
     $\ket{\chi_M}=\sum_{i\in\mathbb Z_b}\alpha_i\ket{i}^{\otimes M}$ of
-    Definition~\ref{def:qc_ghz_state} on the system qudits, with every ancilla in $\ket{0}$, is prepared with
-    measurements in depth $2$. In the protocol below every outcome gives
-    exactly this state. This is the construction of
-    \cite[Example~1]{Piroli2021LOCC}, a preparation by $\mathrm{QCcc}_2$, for
-    qudits, and the preparation of $\ket{\chi_M}$ in constant depth stated in
-    the
-    paragraph ``Long-range MPS using measurements'' of
-    \cite{Malz2024Preparation}.
+    Definition~\ref{def:qc_ghz_state} on the system qudits, with every ancilla
+    in $\ket{0}$, is prepared with measurements in depth $2$, with every
+    measurement outcome yielding this exact state.
 \end{theorem}
 \begin{proof}
     \leanok
     The amplitude of $\ket{\chi_M}$ at $s$ is $\alpha_{s_0}$ if all $s_n$ are
-    equal and $0$ otherwise. Values are taken in $\mathbb Z_b$. Start from the
-    product vector with $\sum_i\alpha_i\ket{i}$ on the system qudit $0$,
-    $\sum_i\ket{i}$ on the other system qudits, and $\ket{0}$ on the ancillas.
-    A first layer of gates $\ket{k}\ket{a}\mapsto\ket{k}\ket{a+k}$ on the
-    system qudit $n$ and its ancilla, and a second layer of gates
-    $\ket{a}\ket{k}\mapsto\ket{a-k}\ket{k}$ on the ancilla $n$ and the system
-    qudit $n+1$, for $n<M-1$, give
+    equal and $0$ otherwise, with values taken in $\mathbb Z_b$. Starting from
+    the nonzero product vector (since $\alpha\neq0$) that places
+    $\sum_i\alpha_i\ket{i}$ on system qudit $0$, $\sum_i\ket{i}$ on the other
+    system qudits, and $\ket{0}$ on the ancillas, a first layer of gates
+    $\ket{k}\ket{a}\mapsto\ket{k}\ket{a+k}$ on system qudit $n$ and its
+    ancilla followed by a second layer of gates
+    $\ket{a}\ket{k}\mapsto\ket{a-k}\ket{k}$ on ancilla $n$ and system qudit
+    $n+1$ for $n<M-1$ produces
     \begin{align*}
         \sum_{k}\alpha_{k_0}\bigotimes_{n=0}^{M-1}\ket{k_n}
         \bigotimes_{n=0}^{M-2}\ket{k_n-k_{n+1}}\otimes\ket{0},
     \end{align*}
-    the last factor being the last ancilla. Measure the ancillas $n<M-1$. The
-    outcome $m$ forces $k_{n+1}=k_n-m_n$, so the system qudits are left in
-    $\sum_i\alpha_i\bigotimes_n\ket{i-p_n}$ with the prefix sums
-    $p_n=m_0+\cdots+m_{n-1}$. The single-site corrections, $X^{p_n}$ on the
-    system qudit $n$ and $X^{-m_n}$ on the ancilla $n$, give $\ket{\chi_M}$
-    with every ancilla in $\ket{0}$. The two layers are layers of permutation
-    gates and the corrections are single-site permutations, and
-    Lemma~\ref{lem:qc_permutation_layers} computes their action
-    configuration by configuration. The product vector is nonzero because
-    $\alpha\neq0$.
+    where the last factor is the last ancilla. Measuring the ancillas $n<M-1$
+    with outcome $m$ forces $k_{n+1}=k_n-m_n$, leaving the system qudits in
+    $\sum_i\alpha_i\bigotimes_n\ket{i-p_n}$ with prefix sums
+    $p_n=m_0+\cdots+m_{n-1}$. Applying the single-site permutation corrections
+    $X^{p_n}$ on system qudit $n$ and $X^{-m_n}$ on ancilla $n$, whose
+    configuration-by-configuration action together with that of the two
+    permutation-gate layers is given by Lemma~\ref{lem:qc_permutation_layers},
+    then yields $\ket{\chi_M}$ with every ancilla in $\ket{0}$.
 \end{proof}
 
 \input{chapter/ch33_local_quantum_circuits_adaptive}

@@ -106,8 +106,8 @@ $N$, the local labels are $\mathbb Z_d$ with $d\ge1$, and $s\ge1$.
 \end{lemma}
 \begin{proof}
     \leanok
-    This is the recursion defining the tree map, with the sum of a matrix
-    product written out.
+    Unfolding the recursion that defines the tree map and writing out the sum
+    of a matrix product gives the claimed expression.
 \end{proof}
 
 \begin{theorem}[The tree of registers implements the isometry of a block]
@@ -233,22 +233,22 @@ $N$, the local labels are $\mathbb Z_d$ with $d\ge1$, and $s\ge1$.
     rounds in depth at most $C(k+1)$. If
     $s2^{k+1}\le2(a\log(N/\varepsilon)+b)$, then
     $k\le\log_2(a\log(N/\varepsilon)+b)$, so the depth is at most
-    $C(\log_2(a\log(N/\varepsilon)+b)+1)=O(\log\log(N/\varepsilon))$. This is
-    the depth of the paragraph ``Tree-RG circuit with measurements''
-    of~\cite{Malz2024Preparation} for normal tensors and the chain lengths
-    divisible by $s2^{k+1}$ for some $k$ in this window, for instance $N=Ms2^K$
-    with $K$ large; the other chain lengths are treated in
+    $C(\log_2(a\log(N/\varepsilon)+b)+1)=O(\log\log(N/\varepsilon))$. For
+    normal tensors, this matches the depth in the paragraph ``Tree-RG circuit with
+    measurements'' of~\cite{Malz2024Preparation} at chain lengths divisible by
+    $s2^{k+1}$ for some $k$ in this window, for instance $N=Ms2^K$ with $K$
+    large; the remaining chain lengths are treated in
     Theorem~\ref{thm:ldp_loglog_depth_every_length}.
 \end{theorem}
 \begin{proof}
     \leanok
-    Bring $A$ into the gauge~(\ref{eq:ldp_normal_gauge}) as in the proof of
-    Theorem~\ref{thm:ldp_depth_upper_bound_divisible}, which multiplies
-    $\ket{\phi_N}$ by a nonzero scalar, let $\xi$ be the correlation length of a
+    Bringing $A$ into the gauge~(\ref{eq:ldp_normal_gauge}) as in the proof of
+    Theorem~\ref{thm:ldp_depth_upper_bound_divisible} multiplies
+    $\ket{\phi_N}$ by a nonzero scalar; let $\xi$ be the correlation length of a
     bound $t<1$ on the moduli of the subleading eigenvalues, and let $s$ be a
-    length at which the blocked tensor in this gauge is injective. Take $a=\xi$
-    and $b=b_0+1$ with $b_0$ from
-    Lemma~\ref{lem:ldp_approximation_error_slope_threshold}. With $N=Mq$ and
+    length at which the blocked tensor in this gauge is injective. With $a=\xi$
+    and $b=b_0+1$ for $b_0$ from
+    Lemma~\ref{lem:ldp_approximation_error_slope_threshold}, and with $N=Mq$ and
     $q=s2^{k+1}$, the approximating state with blocks of $q$ sites is a unit
     vector with error at most $\varepsilon$, prepared in depth at most
     $C(k+1)$ by Theorem~\ref{thm:ldp_register_tree_approximating_state}. If

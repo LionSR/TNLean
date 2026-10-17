@@ -1171,6 +1171,19 @@ Lemmas 2.1 and 2.3 for one scan, taken as the fields of one data package; the
 construction of that package from the scan geometry and the transported states
 remains open.
 
+### Two-dimensional area law: belt and replacement templates
+
+[arealaw2d_belt_replacement_template_scope.tex](arealaw2d_belt_replacement_template_scope.tex)
+records the two premises of the belt and replacement templates of Section 11
+of the September 24, 2026 two-dimensional area-law manuscript (lines 731–740)
+that are absent from the printed passage. The region must contain a lattice
+point, because Definition 9.3 requires a nonempty template, and the stopping
+scale must satisfy `S_* ≥ 1`. The source uses these templates only for regions
+meeting the cut and chooses `S_*` large. The lattice-point premise is
+discharged for every identifier whose current region meets the cut by
+`repairStage_exists_integerPoint_mem_birth_of_oldInclusion`; the note stays
+open until the stopping-scale premise, handled in #9558, is also discharged on main.
+
 ### Two-dimensional area law: nondegenerate template pieces
 
 [arealaw2d_nondegenerate_templates.tex](arealaw2d_nondegenerate_templates.tex)
@@ -1178,3 +1191,46 @@ records that the closed convex rectangles and triangles of Definition 9.3 of
 the September 24, 2026 two-dimensional area-law manuscript are read in the
 ordinary nondegenerate sense, with noncollinear triangle vertices and nonzero
 orthogonal rectangle sides, as a convention built into the permitted polygons.
+
+### One-dimensional area law: connected domains
+
+[tnlean_one_dimensional_connected_domain_scope.tex](tnlean_one_dimensional_connected_domain_scope.tex)
+records that Theorem A of the repository's one-dimensional note is formalized
+on the chain of `L` consecutive sites, the connected case to which the note
+reduces the theorem in a sentence; the component reduction for a disconnected
+finite subset of the integers (the ground vector of a sum over components is a
+product, and entropy and edge boundary add over components) is not formalized.
+
+### One-dimensional matrix product state approximation: threshold truncation
+
+[tnlean_one_dimensional_threshold_truncation.tex](tnlean_one_dimensional_threshold_truncation.tex)
+(scope restriction, open) records that Proposition 7.1 of the repository's
+one-dimensional note, the sequential truncation onto the `D` largest Schmidt
+weights at every cut for an arbitrary bond dimension `D`, is formalized only
+in the threshold form that Theorem B uses: the projectors onto the eigenvalues
+at least `exp(-(S_k + w))` at a common slack `w`, with cut ranks at most
+`max 1 (exp(S_k + w))` and error the sum of the square roots of the surprisal
+tails; the form with an arbitrary `D` is not formalized.
+
+### One-dimensional area law: the constants of the buffered discount
+
+[tnlean_one_dimensional_discount_constants.tex](tnlean_one_dimensional_discount_constants.tex)
+(local correction, open) records that the buffered discount of Lemma 4.2 of the
+repository's one-dimensional note is formalized with the energy threshold
+`Δ/2` in place of the printed `Δ/4` (the formal energy estimate is twice the
+printed one at the same shell threshold), with the overlap losses `m log 2`
+in place of the printed `2 C_E/Δ`, and with the tail term `4096 e ϑ B_R / m`
+kept explicit in the discount constant instead of absorbed through the printed
+fourth entry of the shell count, which is omitted; the interval constant and
+the area-law constant of Theorem A change accordingly, all at the level of
+absolute constants.
+
+## Polynomial PEPS: zero-floor maximizing filters
+
+- [`polypeps_square_zero_floor_optimizer_scope.tex`](polypeps_square_zero_floor_optimizer_scope.tex)
+  records the attributed positive-filter adaptation on the original square,
+  its all-competitor matrix comparison and exact ascending output, and the
+  same family's original-energy and full-system fidelity estimates. The
+  vacuous negative-interaction-bound case is included. Literal imported OAI
+  model types and geometric region/weight construction remain outside the
+  result, so the note stays open.

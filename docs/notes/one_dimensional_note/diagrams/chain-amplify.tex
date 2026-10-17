@@ -1,0 +1,9 @@
+% alt: a chain of sixteen sites with an interval X of four sites in the middle, a wider interval N_{2r}(X) of ten sites around it, and the two far end pieces of the chain, two sites each, labelled J.
+% Section 6 (The long route, for comparison), the amplification step: the amplification proposition converts I(X:far) <= n^{1-eps} into I(X:J) <= n^{-M} for every J beyond graph distance 2r from X; the dots are the sites, the upward legs are the physical indices C^q and every leg is open (nothing is contracted); the red enclosure is the interval X (four sites), the enclosure labelled N_{2r}(X) above is the neighbourhood of X at graph distance at most 2r (drawn with 2r = 3, so the neighbourhood adds three sites on each side of X), and the two dashed enclosures labelled J are a far set J, lying beyond graph distance 2r from X on both sides; the two unenclosed sites next to N_{2r}(X) are also outside the neighbourhood but are not part of the drawn J.
+\begin{tenkz}[lattice={1x16}, frame=plane, physical=up, bonds=none]
+  \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{}
+  \tnmark[form=enclosure, species=selected, label pos=s]{(1,7) .. (1,10)}{$X$}
+  \tnmark[form=enclosure, species=collar, label pos=n]{(1,4) .. (1,13)}{$N_{2r}(X)$}
+  \tnmark[form=enclosure, species=complement, label pos=s]{(1,1) .. (1,2)}{$J$}
+  \tnmark[form=enclosure, species=complement, label pos=s]{(1,15) .. (1,16)}{$J$}
+\end{tenkz}

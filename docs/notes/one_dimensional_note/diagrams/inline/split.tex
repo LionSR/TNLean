@@ -1,0 +1,12 @@
+% alt: An isometry V on the buffer U of Omega gives approximately a product of s on T and B_T with s-prime on B_E and E.
+% Section 8.1, Lemma lem:splitting (part2a_mps_information.tex): T, U, E partition the chain and $\|(\id_{TE}\otimes V)\Omega - s\otimes s'\| \le \sqrt{b}$ with $b = I_\Omega(T:E)$. Left: the wide box is $\Omega$ with its three open legs $\mathcal H_T$ (labelled $T$), $\mathcal H_U$ (middle) and $\mathcal H_E$ (labelled $E$); the box $V$ sits on the $U$ leg (contracted) and has two open output legs $\mathcal B_T$ (left) and $\mathcal B_E$ (right). Right: $s$ has the open legs $\mathcal H_T$ and $\mathcal B_T$, $s'$ the open legs $\mathcal B_E$ and $\mathcal H_E$; nothing is contracted.
+\begin{tenkz}[size=l, rows={wire,wire}, cols=4, bonds=none]
+  \tn[at=(2,1), skin=box, wide=4, name=o, ports={90@1:physical:$T$, 90@2:physical, 90@4:physical:$E$}]{\Omega}
+  \tn[at=(1,2), skin=box, wide=2, name=v, ports={270@1:physical, 90@1:physical, 90@2:physical}]{V}
+  \tnwire{o.90@2}{v.270@1}
+\end{tenkz}
+\approx
+\begin{tenkz}[size=l, rows={wire}, cols=4, bonds=none]
+  \tn[at=(1,1), skin=box, wide=2, ports={90@1:physical:$T$, 90@2:physical}]{s}
+  \tn[at=(1,3), skin=box, wide=2, ports={90@1:physical, 90@2:physical:$E$}]{s'}
+\end{tenkz}

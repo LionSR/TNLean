@@ -31,8 +31,7 @@
 \begin{proof}
     \leanok
     \uses{lem:block_diagonal_boundary_trace_decomposition_from_pgvwc_comparison, lem:block_diagonal_boundary_periodic_components_from_trace_decomposition_boundary}
-    Choose a block-diagonal boundary representation of $\psi$. For that
-    representation,
+    For a block-diagonal boundary representation of $\psi$,
     Lemma~\ref{lem:block_diagonal_boundary_trace_decomposition_from_pgvwc_comparison}
     gives, for every boundary-crossing interval $i$, outside word $\rho$,
     word $\beta$ before the cut, and middle word $w$,
@@ -243,8 +242,11 @@
         \notag
     \end{align}
     span the product algebra $\prod_j\MN{D_j}$. Let
-    $\psi\in\mathcal G_{N,L}(\bigoplus_j\mu_jA_j)$. Then there are
-    block-diagonal boundary conditions $X_j$ such that the displayed
+    $\psi\in\mathcal G_{N,L}(\bigoplus_j\mu_jA_j)$. Deriving the
+    boundary-condition comparison of
+    \cite[Theorem~12, proof lines~1446--1456]{PerezGarcia2007Matrix} at every
+    crossing tail whose length reaches the displayed block-separation bound,
+    there are block-diagonal boundary conditions $X_j$ such that the displayed
     representation holds and, for every $j$, the displayed component lies in
     the corresponding single-block ground space:
     \begin{align}
@@ -256,9 +258,6 @@
          & \in\mathcal G_{N,L}(A_j).
         \notag
     \end{align}
-    This derives the boundary-condition comparison of
-    \cite[Theorem~12, proof lines~1446--1456]{PerezGarcia2007Matrix} at every
-    crossing tail whose length reaches the displayed block-separation bound.
     % The remaining input is the span at the shorter crossing tails, recorded
     % in docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex.
 \end{theorem}
@@ -284,15 +283,15 @@
     \lean{MPSTensor.cyclicTranslateCfg}
     \leanok
     For a periodic configuration $\sigma$ on $N$ sites and $s\in\Z/N\Z$,
-    define $(T_s\sigma)(k)=\sigma(k+s)$.
+    the cyclic translation $T_s\sigma$ is given by $(T_s\sigma)(k)=\sigma(k+s)$.
 \end{definition}
 
 \begin{definition}[Cyclic translation of states]
     \label{def:parent_cyclic_translate_state}
     \lean{MPSTensor.cyclicTranslateState}
     \leanok
-    For a state $\psi$ on a periodic chain, define
-    $(T_s\psi)(\sigma)=\psi(T_s\sigma)$.
+    For a state $\psi$ on a periodic chain, the cyclic translation $T_s\psi$ is
+    given by $(T_s\psi)(\sigma)=\psi(T_s\sigma)$.
 \end{definition}
 
 \begin{theorem}[Cyclic translations compose]
@@ -343,8 +342,8 @@
 
 \begin{proof}
     \leanok
-    This is addition modulo $K+S$, separated according to whether the site
-    lies before or after the cut.
+    Addition modulo $K+S$, separated according to whether the site
+    lies before or after the cut, exchanges $\beta$ and $\alpha$.
 \end{proof}
 
 \begin{lemma}[Comparison across a global cut]
@@ -367,16 +366,16 @@
 
 \begin{proof}
     \leanok
-    Evaluate the translated equality on the word $\beta\alpha$, where
-    $|\beta|=K$. Cyclicity of the trace gives
+    Evaluating the translated equality on the word $\beta\alpha$ with
+    $|\beta|=K$ and using cyclicity of the trace gives
     \begin{align}
         \sum_j\tr(X_jA^j_\alpha A^j_\beta)
          & =
-        \sum_j\tr(A^j_\alpha Y_jA^j_\beta).
+        \sum_j\tr(A^j_\alpha Y_jA^j_\beta),
         \notag
     \end{align}
-    The simultaneous spanning hypothesis separates the blocks and gives the
-    asserted matrix identities.
+    from which the simultaneous spanning hypothesis separates the blocks and
+    gives the asserted matrix identities.
 \end{proof}
 
 \begin{theorem}[A global change of cut gives periodic single-block states]
@@ -418,11 +417,14 @@
 \begin{proof}
     \leanok
     \uses{lem:bnt_block_diagonal_open_boundary_matrices_source_length, thm:pgvwc_product_span_source_length, lem:parent_cyclic_translate_preserves_chain_space, lem:block_boundary_intertwiner_from_global_cut, lem:block_diagonal_boundary_component_right_boundary_matrices}
+    Following the change-of-cut argument of
+    \cite[Theorem~12, proof lines~1276--1289 and
+        1454--1456]{PerezGarcia2007Matrix},
     Lemma~\ref{lem:bnt_block_diagonal_open_boundary_matrices_source_length}
-    gives boundary matrices $X_j$. Translate the periodic state so that the
-    cut moves past the final $L_0$ sites. By
-    Lemma~\ref{lem:parent_cyclic_translate_preserves_chain_space}, the
-    translated state remains in the periodic chain space, so applying
+    gives boundary matrices $X_j$. Translating the periodic state so that the
+    cut moves past the final $L_0$ sites keeps the state in the periodic chain
+    space by Lemma~\ref{lem:parent_cyclic_translate_preserves_chain_space}, so
+    applying
     Lemma~\ref{lem:bnt_block_diagonal_open_boundary_matrices_source_length}
     again yields boundary matrices $Y_j$ for the translated state. For a word
     $\alpha$ of length $L_0$, comparison of the two decompositions against
@@ -450,11 +452,9 @@
     \end{align}
     Thus (\ref{eq:ph_boundary_crossing_scaled}) says that
     $\mu_j^NX_j$ commutes with every word of length $L_0$, and consequently
-    with every one-site matrix. The boundary condition may then be moved
-    across every interval crossing the cut, which places each block component
-    in its periodic chain space. This is the change-of-cut argument of
-    \cite[Theorem~12, proof lines~1276--1289 and
-        1454--1456]{PerezGarcia2007Matrix}.
+    with every one-site matrix, allowing the boundary condition to move
+    across every interval crossing the cut and placing each block component
+    in its periodic chain space.
 \end{proof}
 
 \begin{theorem}[Doubly normalized global-cut boundary closing]
@@ -496,13 +496,13 @@
 
 \begin{proof}\leanok
     \uses{thm:bnt_block_diagonal_open_boundary_matrices_source_length_doubly_normalized, thm:pgvwc_product_span_doubly_normalized, lem:parent_cyclic_translate_preserves_chain_space, lem:block_boundary_intertwiner_from_global_cut}
-    Obtain block-diagonal boundary matrices at the chosen cut. Move the cut
-    past the final $L_0$ sites and compare the two boundary representations.
-    The doubly normalized simultaneous product-span theorem separates the
-    blocks and gives
+    Comparing block-diagonal boundary matrices at the chosen cut with those
+    obtained after moving the cut past the final $L_0$ sites allows the doubly
+    normalized simultaneous product-span theorem to separate the blocks and
+    yield
     \begin{align}
         (\mu_j^NX_j)A^j_\alpha
-         & =A^j_\alpha(\mu_j^NY_j).
+         & =A^j_\alpha(\mu_j^NY_j)
         \notag
     \end{align}
     for every word $\alpha$ of length $L_0$. Injectivity identifies the two
@@ -529,15 +529,14 @@
          & \ge L+L_0.
         \notag
     \end{align}
-    Then
+    As asserted in
+    \cite[Theorem~12, proof lines~1424--1456]{PerezGarcia2007Matrix},
     \begin{align}
         \mathcal G_{N,L}\!\left(\bigoplus_j\mu_jA_j\right)
          & =
-        \sum_j\mathcal G_{N,L}(A_j),
+        \sum_j\mathcal G_{N,L}(A_j).
         \notag
     \end{align}
-    as asserted in
-    \cite[Theorem~12, proof lines~1424--1456]{PerezGarcia2007Matrix}.
     % Repository source coordinates: Papers/quant-ph_0608197/MPSarchive.tex,
     % canonical normalization lines 742--763 and parent theorem lines 1424--1456.
 \end{theorem}
@@ -545,8 +544,9 @@
 \begin{proof}
     \leanok
     \uses{thm:block_diagonal_chain_space_global_cut_independent}
-    This is the equality component of
-    Theorem~\ref{thm:block_diagonal_chain_space_global_cut_independent}.
+    By Theorem~\ref{thm:block_diagonal_chain_space_global_cut_independent},
+    the periodic chain space equals the sum of the single-block periodic chain
+    spaces.
 \end{proof}
 
 \begin{theorem}[Periodic block decomposition and block-space independence]
@@ -571,8 +571,8 @@
     gives the forward inclusion in the displayed equality. Every periodic
     single-block vector is a periodic vector for the block-diagonal tensor,
     which gives the reverse inclusion.
-    For independence, write $\phi_j=\Gamma_N^{A^j}(X_j)$ and suppose that
-    $\sum_j\phi_j=0$. Theorem~\ref{thm:pgvwc_block_space_independence_source_length} and
+    For independence, if $\phi_j=\Gamma_N^{A^j}(X_j)$ satisfy
+    $\sum_j\phi_j=0$, then Theorem~\ref{thm:pgvwc_block_space_independence_source_length} and
     nondegeneracy of the trace pairing give
     \begin{align}
         \sum_j\Gamma_N^{A^j}(X_j)=0
@@ -606,10 +606,11 @@
 
 \begin{proof}\leanok
     \uses{thm:block_diagonal_chain_space_global_cut_independent}
-    Apply
+    Applying
     Theorem~\ref{thm:block_diagonal_chain_space_global_cut_independent}
-    with $\Lambda_j=\Id$. Left canonicity gives the required dual fixed-point
-    identity, while the remaining hypotheses are unchanged.
+    with $\Lambda_j=\Id$ yields the result, since left canonicity gives the
+    required dual fixed-point identity and the remaining hypotheses are
+    unchanged.
 \end{proof}
 
 \begin{theorem}[Doubly normalized periodic block decomposition]
@@ -644,8 +645,10 @@
 
 \begin{proof}\leanok
     \uses{thm:block_diagonal_chain_space_global_cut_independent_doubly_normalized}
-    This is the equality component of
-    Theorem~\ref{thm:block_diagonal_chain_space_global_cut_independent_doubly_normalized}.
+    By
+    Theorem~\ref{thm:block_diagonal_chain_space_global_cut_independent_doubly_normalized},
+    the periodic chain space equals the sum of the single-block periodic chain
+    spaces.
 \end{proof}
 
 \begin{theorem}[Unique decomposition into open-boundary block spaces]
@@ -703,9 +706,9 @@
 \begin{proof}
     \leanok
     \uses{thm:block_diagonal_chain_space_global_cut, lem:block_diagonal_kernel_to_bnt_span_from_chain_splitting}
-    The parent-Hamiltonian kernel is the periodic chain space. Apply the
-    preceding block decomposition and then the assumed single-block
-    containments.
+    Because the parent-Hamiltonian kernel is the periodic chain space, the
+    preceding block decomposition and the assumed single-block
+    containments yield the inclusion.
 \end{proof}
 
 \begin{theorem}[Doubly normalized kernel containment from a global cut]
@@ -737,9 +740,10 @@
     \uses{thm:block_diagonal_chain_space_global_cut_doubly_normalized, lem:block_diagonal_kernel_to_bnt_span_from_chain_splitting}
     Theorem~\ref{thm:block_diagonal_chain_space_global_cut_doubly_normalized}
     identifies the periodic chain space of the block sum with the sum of the
-    single-block chain spaces. Apply the assumed
-    containment to each summand, and use the identification of the
-    parent-Hamiltonian kernel with the periodic chain space.
+    single-block chain spaces; applying the assumed
+    containment to each summand and identifying the
+    parent-Hamiltonian kernel with the periodic chain space yields the
+    inclusion.
 \end{proof}
 
 \begin{lemma}[Matrix identities give periodic single-block states]

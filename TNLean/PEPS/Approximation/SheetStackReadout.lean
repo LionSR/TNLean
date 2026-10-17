@@ -30,7 +30,7 @@ final layout, read on the configurations of the square, is the readout of the pr
 * `EncodedFrame.eval_readoutCircuit_stackVec`: the regrouped reference vector.
 * `EncodedFrame.readout_eval_readoutCircuit_stackVec`, `EncodedFrame.exists_readoutCircuit_norm`:
   the readout `Ω ⊗ Ξ`, with `1 - C L⁻⁵⁷ ≤ ‖Ξ‖ ≤ 1`.
-* `DyadicProtocol.readout_eq_euclideanTensorVector`.
+* `DyadicProtocol.physicalConfigEquiv_apply_val`, `DyadicProtocol.readout_eq_euclideanTensorVector`.
 
 ## References
 
@@ -179,6 +179,15 @@ namespace TNLean.PEPS.Approximation.DyadicProtocol
 open PairEffect
 
 variable {L q : ℕ} {P : Type} [Fintype P] (D : DyadicProtocol L q P)
+
+/-- The configuration of the square read from the physical configuration of the parties: the
+value at a site is the physical value of its unit-square party. -/
+theorem physicalConfigEquiv_apply_val (σ : (p : P) → Fin (D.physicalDimension p))
+    (v : SquareLatticeVertex L L) : (D.physicalConfigEquiv σ v : ℕ) = σ (D.site v) := by
+  classical
+  simp only [physicalConfigEquiv, Equiv.trans_apply, Equiv.piEquivPiSubtypeProd_apply,
+    Equiv.prodUnique_apply]
+  rfl
 
 /-- **The readout of the final memory of a protocol.** If the physical-private readout of the
 final layout of a protocol, with the physical configurations of the parties, is `Ω' ⊗ Ξ`, where

@@ -89,7 +89,7 @@ def native_check(output: Path) -> dict[str, object]:
                                 "=")
         source = (
             "\\documentclass{article}\n\\usepackage{amsmath,amssymb}\n"
-            "\\usepackage{tenkz}\n\\pagestyle{empty}\n"
+            "\\usepackage{tikz-tensor-networks}\n\\pagestyle{empty}\n"
             + wrapper.group(0) + "\n\\begin{document}\n"
             + body + "\n\\end{document}\n"
         )

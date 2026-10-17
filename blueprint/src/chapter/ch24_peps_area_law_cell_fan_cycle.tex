@@ -5,12 +5,12 @@ Let $Q$ be a translated dyadic square with origin in $\mathbb R^2$,
 exponent $\ell\in\mathbb N$, and cell index in $\mathbb Z^2$. Put $t=2^\ell$, and write
 $c$ for its center. Orient its four sides counterclockwise, with indices
 $s\in\{0,1,2,3\}$ and ordered endpoints $A_s,B_s$.
-When every side is divided at its midpoint, index the elementary bases by
+In the perimeter order of the fan construction of
+\cite[Section~11]{OpenAI2026AreaLaw}, when every side is divided at its
+midpoint, the elementary bases are indexed by
 $\mathcal J=\{0,1,2,3\}\times\{0,1\}$, where the second index records
-the first or second half of the side. Write $a_i,b_i$ for the ordered
-endpoints of base $i$ and $P_i=\operatorname{conv}\{c,a_i,b_i\}$.
-This is the perimeter order in the fan construction of
-\cite[Section~11]{OpenAI2026AreaLaw}.
+the first or second half of the side, with ordered endpoints $a_i,b_i$ of
+base $i$ and triangles $P_i=\operatorname{conv}\{c,a_i,b_i\}$.
 
 % Source: 10-geometry.tex, prop:two-families, lines 299--323,
 % and geometry:initial-stars, lines 361--370;
@@ -64,9 +64,9 @@ This is the perimeter order in the fan construction of
     \lean{TNLean.PEPS.AreaLaw.Geometry.cellFanEnd_injective}
     \leanok
     \uses{def:area_law_cell_fan}
-    More generally, choose any optional midpoint subdivision of the
-    four sides of $Q$, and let $\mathcal E$ index its elementary bases.
-    The map $i\mapsto b_i$ from $\mathcal E$ to the square perimeter
+    More generally, for any optional midpoint subdivision of the
+    four sides of $Q$ with elementary bases indexed by $\mathcal E$,
+    the map $i\mapsto b_i$ from $\mathcal E$ to the square perimeter
     is injective.
 \end{theorem}
 \begin{proof}\leanok
@@ -95,7 +95,7 @@ This is the perimeter order in the fan construction of
 \begin{proof}\leanok
     \uses{thm:area_law_cell_fan_successor_endpoints,
         thm:area_law_cell_fan_final_endpoint_injective}
-    Apply the successor endpoint identity at $\tau^{-1}(j)$ to obtain
+    Evaluating the successor endpoint identity at $\tau^{-1}(j)$ gives
     $a_j=b_{\tau^{-1}(j)}$. If $b_i=a_j$, injectivity of final
     endpoints gives $i=\tau^{-1}(j)$, and hence $j=\tau(i)$.
     The reverse implication is the successor endpoint identity.

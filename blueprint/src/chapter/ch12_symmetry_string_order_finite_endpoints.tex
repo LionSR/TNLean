@@ -26,14 +26,14 @@ length is an arbitrary $N\in\N$, not a multiple of the endpoint support.
 \begin{proof}
     \leanok
     \uses{thm:physical_observable_word_span_mul}
-    Consider the increasing spaces
+    The subspaces
     \begin{align}
         S_\ell(\Omega)
          & :=\operatorname{span}_{\C}
-        \{A^\sigma\Omega(A^\tau)^\dagger:|\sigma|=|\tau|=\ell\}.
+        \{A^\sigma\Omega(A^\tau)^\dagger:|\sigma|=|\tau|=\ell\}
         \notag
     \end{align}
-    Stationarity gives $S_\ell\subseteq S_{\ell+1}$. Equality at one step
+    form an increasing chain $S_\ell\subseteq S_{\ell+1}$ by stationarity. Equality at one step
     propagates through the recurrence
     $S_{\ell+1}=\sum_{i,j}A_iS_\ell A_j^\dagger$.
     By Theorem~\ref{thm:physical_observable_word_span_mul}, normality and
@@ -108,9 +108,9 @@ length is an arbitrary $N\in\N$, not a multiple of the endpoint support.
 \begin{proof}
     \leanok
     \uses{thm:physical_endpoint_stationary_span}
-    Apply stationary endpoint realization to $A$ at $\Id$ to obtain
-    $\E_y^{[q]}(\Id)=Y$. Apply it to the adjoint letters at the stationary
-    matrix $\Lambda$ to represent $\Lambda X$. Reversing both physical
+    Stationary endpoint realization applied to $A$ at $\Id$ gives
+    $\E_y^{[q]}(\Id)=Y$, and applied to the adjoint letters at the stationary
+    matrix $\Lambda$ represents $\Lambda X$. Reversing both physical
     words and using trace cyclicity gives
     $\tr[\Lambda\E_x^{[q]}(Z)]=\tr(\Lambda XZ)$ for every $Z$.
     These identities prove (\ref{eq:physical_block_endpoints_exact}) for
@@ -137,9 +137,9 @@ length is an arbitrary $N\in\N$, not a multiple of the endpoint support.
     Exact realization first gives arbitrary block observables for which
     each coefficient is $\tr\Lambda=1$. Matrix units span the block
     observable space, so each nonzero coefficient is nonzero on some tensor
-    product of one-site matrix units. Decompose each factor as $H+iK$ with
-    $H,K$ Hermitian. Multilinearity lets one choose either $H$ or $K$ at each
-    site while retaining a nonzero coefficient. Exact realization of
+    product of one-site matrix units. Decomposing each factor as $H+iK$ with
+    $H,K$ Hermitian and using multilinearity lets one choose either $H$ or $K$
+    at each site while retaining a nonzero coefficient. Exact realization of
     arbitrary virtual boundaries does not require those representatives
     themselves to be Hermitian products.
 \end{proof}
@@ -170,10 +170,10 @@ length is an arbitrary $N\in\N$, not a multiple of the endpoint support.
 \end{theorem}
 \begin{proof}\leanok
     Canonical purity gives irreducibility and peripheral primitivity.
-    Apply primitive-channel word-span fullness to the adjoint family and
-    reverse words to obtain normality. Peripheral rigidity gives a
+    Applying primitive-channel word-span fullness to the adjoint family and
+    reversing words yields normality. Peripheral rigidity gives a
     unitary $V$ and a phase $\mu$. The preceding theorem gives nonzero
     endpoint coefficients $\alpha_y,\beta_x$ for Hermitian product
-    endpoints. The demodulated virtual transfer limit yields
+    endpoints, and the demodulated virtual transfer limit yields
     $|S_N^{[D^2]}|\to|\alpha_y|\,|\beta_x|>0$.
 \end{proof}

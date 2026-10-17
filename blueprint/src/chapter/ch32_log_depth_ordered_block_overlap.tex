@@ -13,8 +13,9 @@ here is a project result.
     $1-\operatorname{Re}\langle x,y\rangle=\lVert x-y\rVert^2/2$.
 \end{theorem}
 \begin{proof}\leanok
-    Expand $\lVert x-y\rVert^2=\lVert x\rVert^2+\lVert y\rVert^2
-        -2\operatorname{Re}\langle x,y\rangle$ and use the unit norms.
+    Expanding $\lVert x-y\rVert^2=\lVert x\rVert^2+\lVert y\rVert^2
+        -2\operatorname{Re}\langle x,y\rangle$ and substituting the unit norms
+    gives the identity.
 \end{proof}
 
 \begin{theorem}[Nonnegative polar compression coefficient]
@@ -23,14 +24,14 @@ here is a project result.
     \leanok
     Let $B$ be a tensor, $P$ its positive polar tensor, and $\sigma\ge0$ a
     matrix on its virtual space. Let $P_\infty$ be the fixed-point tensor
-    associated with $\sigma$, and put
+    associated with $\sigma$, and let
     $\alpha=\Tr\sum_iP^i\sigma(P_\infty^i)^\dagger$.
     Then $\alpha$ is real and nonnegative.
 \end{theorem}
 \begin{proof}\leanok
     \uses{lem:ldp_overlapping_overlaps_second_order}
-    Write $G$ for the positive polar matrix of the physical matrix of $B$.
-    The trace identity in Lemma~\ref{lem:ldp_overlapping_overlaps_second_order}
+    For the positive polar matrix $G$ of the physical matrix of $B$,
+    the trace identity in Lemma~\ref{lem:ldp_overlapping_overlaps_second_order}
     gives $\alpha=\Tr(G((\sqrt\sigma)^{\mathsf T}\otimes\sigma))$.
     Both factors are positive semidefinite, so their trace product is
     real and nonnegative.
@@ -41,7 +42,7 @@ here is a project result.
     \lean{MPSTensor.mixedMapLM_polarPosTensor_fixedPointTensor_trace_geometry}
     \leanok
     In the setting of Theorem~\ref{thm:ldp_polar_compression_nonnegative},
-    suppose $\Tr\sigma=\Tr\E_B(\sigma)=1$. Put
+    suppose $\Tr\sigma=\Tr\E_B(\sigma)=1$. Let
     $\iota(X)=(X^i\sqrt\sigma)_i$, with the norm induced by the coordinate inner product.
     Then $\operatorname{Re}\alpha\le1$ and
     $1-\operatorname{Re}\alpha
@@ -55,15 +56,15 @@ here is a project result.
     The positive polar tensor has the same transfer map as $B$. Thus
     $\lVert\iota(P)\rVert=\lVert\iota(P_\infty)\rVert=1$ and
     $\langle\iota(P_\infty),\iota(P)\rangle=\alpha$.
-    Apply Theorem~\ref{thm:ldp_unit_vector_deficit}; the nonnegativity of the
-    squared distance also gives $\operatorname{Re}\alpha\le1$.
+    Theorem~\ref{thm:ldp_unit_vector_deficit} gives the deficit identity, and
+    the nonnegativity of the squared distance gives $\operatorname{Re}\alpha\le1$.
 \end{proof}
 
 \begin{theorem}[Ordered perturbations with vanishing compression]
     \label{thm:ldp_ordered_idempotent_quadratic}
     \lean{IsIdempotentElem.norm_trace_prod_add_sub_le_of_le}
     \leanok
-    Let $e$ be an idempotent in a normed ring and put $f=1-e$. Let $\tau$
+    Let $e$ be an idempotent in a normed ring and let $f=1-e$. Let $\tau$
     be an additive complex-valued map satisfying $\tau(ab)=\tau(ba)$ and
     $|\tau(a)|\le K\lVert a\rVert$, where $K\ge0$. Suppose that a sequence
     $Z_j$ satisfies $eZ_je=0$ and
@@ -78,7 +79,7 @@ here is a project result.
     All products are ordered with increasing index from left to right.
 \end{theorem}
 \begin{proof}\leanok
-    Put $P_m=\prod_{j=0}^{m-1}(e+Z_j)$ and $W_j=fZ_jf$. For $a=e,f$,
+    With $P_m=\prod_{j=0}^{m-1}(e+Z_j)$ and $W_j=fZ_jf$, for $a=e,f$,
     the blocks $x_m=aP_me$ and $y_m=aP_mf$ satisfy
     $x_{m+1}=x_m+y_mfZ_me$ and
     $y_{m+1}=x_meZ_mf+y_mW_m$.
@@ -95,8 +96,8 @@ here is a project result.
     \end{align}
     Cyclicity gives $\tau(P_M)=\tau(eP_Me)+\tau(fP_Mf)$.
     Since $M\ge2$, the complementary product has norm at most
-    $\lVert f\rVert z^M\le\lVert f\rVert z^2$. Now use
-    $\rho\le1+2z^2$ and $(1+2z^2)^M-1\le2Mz^2e^{2Mz^2}$.
+    $\lVert f\rVert z^M\le\lVert f\rVert z^2$; the inequalities
+    $\rho\le1+2z^2$ and $(1+2z^2)^M-1\le2Mz^2e^{2Mz^2}$ then complete the bound.
 \end{proof}
 
 The restriction $M\ge2$ concerns the absolute trace. Indeed, for
@@ -125,15 +126,15 @@ preparation error is estimated separately by a squared-distance inequality.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:ldp_ordered_idempotent_quadratic}
-    Choose $C\ge4$ large enough in terms of $K$, $\lVert e\rVert$ and
-    $\lVert1-e\rVert$. The smallness condition gives
-    $\delta\le1$ and $|\alpha_j|\ge3/4$. Set
-    $Z_j=\alpha_j^{-1}T_j-e$. Then $eZ_je=0$ and
+    For $C\ge4$ large enough in terms of $K$, $\lVert e\rVert$ and
+    $\lVert1-e\rVert$, the smallness condition gives
+    $\delta\le1$ and $|\alpha_j|\ge3/4$. With
+    $Z_j=\alpha_j^{-1}T_j-e$, one has $eZ_je=0$ and
     $\lVert Z_j\rVert\le2(1+\lVert e\rVert)\delta$.
     Its three complementary blocks are bounded by a fixed multiple of
     $\delta$, so Theorem~\ref{thm:ldp_ordered_idempotent_quadratic} applies.
-    Put $a=\prod_{j=0}^{M-1}\alpha_j$ and
-    $P=\prod_{j=0}^{M-1}(e+Z_j)$. Then $|a|\le1$,
+    With $a=\prod_{j=0}^{M-1}\alpha_j$ and
+    $P=\prod_{j=0}^{M-1}(e+Z_j)$, one has $|a|\le1$,
     $|a-1|\le M\delta^2e^{M\delta^2}$, and
     $\tau(\prod_{j=0}^{M-1}T_j)-1=a(\tau(P)-1)+(a-1)$.
     Enlarging $C$ gives the assertion.
@@ -152,8 +153,8 @@ preparation error is estimated separately by a squared-distance inequality.
     \end{align}
 \end{theorem}
 \begin{proof}\leanok
-    Induct on $M$, separating the last factor in the ordered product and
-    the last summand.
+    Induction on $M$, separating the last factor in the ordered product and
+    the last summand, proves the identity.
 \end{proof}
 
 \begin{theorem}[First-order bound near an idempotent]
@@ -167,10 +168,10 @@ preparation error is estimated separately by a squared-distance inequality.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:ldp_ordered_telescoping_identity}
-    Every power of $e$ has norm at most $c$. Apply
-    (\ref{eq:ldp_ordered_telescoping_identity}) and induct on $M$, using
+    Every power of $e$ has norm at most $c$, so
+    (\ref{eq:ldp_ordered_telescoping_identity}) and induction on $M$, using
     $\lVert\prod_{i=0}^{j-1}X_i\rVert
-        \le c+c((1+c\delta)^j-1)$ in each summand.
+        \le c+c((1+c\delta)^j-1)$ in each summand, give the bound.
 \end{proof}
 
 \begin{theorem}[Normalization comparison]
@@ -187,11 +188,11 @@ preparation error is estimated separately by a squared-distance inequality.
 \end{theorem}
 \begin{proof}\leanok
     For $v=0$, the second assumption gives $b\ge1$.
-    Otherwise put $c=\lVert v\rVert>0$ and
+    Otherwise let $c=\lVert v\rVert>0$ and
     $w=|\langle\psi,\widehat v\rangle|\le1$.
-    Since $cw=|\langle\psi,v\rangle|$,
-    $1-w=1-|\langle\psi,v\rangle|+(c-1)w$.
-    Use $(c-1)w\le|c-1|\le|c^2-1|$.
+    Since $cw=|\langle\psi,v\rangle|$, one has
+    $1-w=1-|\langle\psi,v\rangle|+(c-1)w$, and
+    $(c-1)w\le|c-1|\le|c^2-1|$ completes the estimate.
 \end{proof}
 
 \begin{theorem}[First-order absolute trace for unequal blocks]
@@ -200,7 +201,7 @@ preparation error is estimated separately by a squared-distance inequality.
     \leanok
     Let $A$ be normal in the gauge~(\ref{eq:ldp_normal_gauge}) with
     correlation length $\xi$, and let $0<\gamma<1$.
-    Write $\tau_\ell$ for the mixed transfer matrix of the positive polar
+    Let $\tau_\ell$ be the mixed transfer matrix of the positive polar
     tensor of the $\ell$-site block against the fixed-point tensor.
     There is $C>0$, depending only on the tensor, its normalized fixed
     state and the chosen spectral bound and rate, such that for every
@@ -212,9 +213,9 @@ preparation error is estimated separately by a squared-distance inequality.
     \uses{lem:ldp_positive_part_overlap, thm:ldp_ordered_telescoping_bound}
     Each mixed transfer matrix is within $Ke^{-\gamma\ell/\xi}$ of the
     fixed-point idempotent $e$, whose positive powers have trace one.
-    Since $\ell_j\ge q$, apply
+    Since $\ell_j\ge q$,
     Theorem~\ref{thm:ldp_ordered_telescoping_bound} with
-    $\delta=Ke^{-\gamma q/\xi}$ and then the boundedness of the trace.
+    $\delta=Ke^{-\gamma q/\xi}$ and the boundedness of the trace give the bound.
 \end{proof}
 
 \begin{theorem}[Quadratic absolute trace for unequal blocks]
@@ -242,7 +243,7 @@ preparation error is estimated separately by a squared-distance inequality.
     $1-\alpha_\ell=\lVert\iota(P_\ell)-\iota(P_\infty)\rVert^2/2$.
     Both the mixed-transfer difference and the weighted tensor
     difference are bounded by $Ke^{-\gamma q/\xi}$, uniformly in
-    $\ell\ge q$. Apply
-    Theorem~\ref{thm:ldp_ordered_compression_quadratic} and absorb
-    $K^2$ into $C$.
+    $\ell\ge q$, so
+    Theorem~\ref{thm:ldp_ordered_compression_quadratic} with
+    $K^2$ absorbed into $C$ gives the bound.
 \end{proof}

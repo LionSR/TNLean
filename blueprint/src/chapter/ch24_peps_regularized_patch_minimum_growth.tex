@@ -1,22 +1,21 @@
 \section{Growth of the original patch minimum}
 \label{sec:peps_actual_patch_minimum_growth}
 
-Let $V$ be a finite ordered set with local configuration sets $[n_v]$.
-Fix nested regions $X_0\subseteq\cdots\subseteq X_{m-1}$, positive weights
-$a_j$, and a unit vector $\Omega\in\mathcal H_V$.
-Use the original feasible density tuples and ordered objective of
-Definition~\ref{def:peps_regularized_patch_objective}.
-Write $F_x(r)$ for that norm at shift $e^{-r}$, and set
-$N(r)=\min_{x\in\mathcal D}F_x(r)$ and $\kappa=\sum_j a_j$.
-Let $\rho_j(r,x)$ be the marginal of the same normalized ordered output.
-For a feasible minimizing tuple, define its regulator by
+Let $V$ be a finite ordered set with local configuration sets $[n_v]$, and fix
+nested regions $X_0\subseteq\cdots\subseteq X_{m-1}$, positive weights $a_j$,
+and a unit vector $\Omega\in\mathcal H_V$. In the setting of
+Definition~\ref{def:peps_regularized_patch_objective}, write $F_x(r)$ for the
+ordered objective norm of a feasible density tuple $x\in\mathcal D$ at shift
+$e^{-r}$, and set $N(r)=\min_{x\in\mathcal D}F_x(r)$ and $\kappa=\sum_j a_j$.
+Denoting by $\rho_j(r,x)$ the $X_j$-marginal of the normalized ordered output,
+we associate to each feasible minimizing tuple $x$ the regulator
 \begin{align*}
     T_j(r,x)=e^{-r}\rho_j(r,x)(x_j+e^{-r}I_{X_j})^{-1}.
 \end{align*}
-The following implications are conditional estimates for this original minimum.
-Their regulator or entropy and distance assumptions must be established in a
-physical application of the
-\href{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex\#L453-L481}{minimum-growth argument}.
+The two theorems below bound the growth of $N(r)$ under conditional regulator
+or entropy-and-distance hypotheses, which a physical application of the
+\href{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex\#L453-L481}{minimum-growth argument}
+must verify.
 
 \begin{theorem}[Growth under a regulator trace bound]
     \label{thm:peps_patch_minimum_growth_regulator}
@@ -25,31 +24,30 @@ physical application of the
     \uses{def:peps_regularized_patch_minimum,def:peps_patch_canonical_marginal}
     Let $0\le R_0\le R$.
     Suppose that for every $r\in[R_0,R)$, every feasible tuple $x$ minimizing
-    $F_x(r)$, and every index $j$, one has
+    $F_x(r)$, and every index $j$, the regulator satisfies
     $\operatorname{Re}\tr T_j(r,x)\le\tfrac14$.
-    Then
+    Then, including the cases $R=R_0$ and $m=0$,
     \begin{align*}
         \log N(R)\le\frac{\kappa}{2}\left(R_0+\frac R4\right).
     \end{align*}
-    The assertion includes $R=R_0$ and the empty product.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_actual_patch_minimum_log_derivative,cor:peps_regularized_patch_log_minimum_continuous,thm:peps_regularized_patch_log_minimum,thm:peps_regularized_patch_minimum,cor:peps_regularized_patch_exp_bounds}
-    Write $g(r)=\log N(r)$. At each $r<R$, an attained minimizing tuple
-    supplies a branch $\log F_x$ with the same value as $g$ at $r$ and with
-    $g\le\log F_x$ throughout the interval. Its derivative at $r$ is at most
+    Write $g(r)=\log N(r)$. At each $r\in[R_0,R)$, an attained minimizing tuple
+    $x$ defines a smooth branch $\log F_x$ that touches $g$ at $r$, satisfies
+    $g\le\log F_x$ across the interval, and has derivative at $r$ bounded by
     $\sum_j(a_j/2)(1/4)=\kappa/8$.
-    The comparison principle for a continuous lower envelope therefore gives
+    Applying the comparison principle for a continuous lower envelope to these
+    contacting branches gives
     \begin{align*}
         g(R) & \le g(R_0)+\frac{\kappa}{8}(R-R_0).
     \end{align*}
-    The original norm bound gives $g(R_0)\le\kappa R_0/2$.
-    Since $\kappa R_0\ge0$, it follows that
+    Combining this bound with the initial estimate $g(R_0)\le\kappa R_0/2$ and
+    using $\kappa R_0\ge0$ yields
     \begin{align*}
         g(R) & \le\frac{\kappa R}{8}+\frac{3\kappa R_0}{8}
         \le\frac{\kappa}{2}\left(R_0+\frac R4\right).
     \end{align*}
-    Only a contacting branch at each individual radius is used.
 \end{proof}
 
 \begin{theorem}[Growth from the original marginal entropy and distance]
@@ -59,13 +57,14 @@ physical application of the
     \uses{def:peps_regularized_patch_minimum,def:peps_patch_canonical_marginal}
     Let $C>0$, $u\ge0$, and put $R_0=(16C+\log8)(1+u)$.
     Suppose that $R\ge R_0$ and that the marginal $\sigma_j$ of the original
-    vector $\Omega$ obeys $S(\sigma_j)\le C(1+u)$ for every $j$.
+    vector $\Omega$ satisfies $S(\sigma_j)\le C(1+u)$ for every $j$.
     Suppose also that for every $r\in[R_0,R)$, every feasible tuple $x$
-    minimizing $F_x(r)$, and every $j$,
+    minimizing $F_x(r)$, and every $j$, the full trace norm $\|\cdot\|_1$
+    satisfies
     \begin{align*}
         \|\rho_j(r,x)-\sigma_j\|_1\le\frac1{16}.
     \end{align*}
-    Here $\|\cdot\|_1$ denotes the full trace norm. Then
+    Then
     \begin{align*}
         \log N(R)\le\frac{\kappa}{2}
         \left((16C+\log8)(1+u)+\frac R4\right).
@@ -73,10 +72,10 @@ physical application of the
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_actual_patch_regulator_trace,thm:peps_patch_minimum_growth_regulator}
-    The starting radius $R_0$ is nonnegative.
-    At every $r\in[R_0,R)$, the entropy and full trace-norm assumptions give
-    $\operatorname{Re}\tr T_j(r,x)\le\tfrac14$ for each actual minimizing
-    tuple and every index. The regulator estimate applies to the same
-    original marginal and normalized minimizing output. Theorem~\ref{thm:peps_patch_minimum_growth_regulator}
-    gives the result with this value of $R_0$.
+    Because $R_0\ge0$ and both the entropy bound $S(\sigma_j)\le C(1+u)$ and the
+    trace-norm bound $\|\rho_j(r,x)-\sigma_j\|_1\le\tfrac1{16}$ hold at every
+    $r\in[R_0,R)$, the regulator trace estimate gives
+    $\operatorname{Re}\tr T_j(r,x)\le\tfrac14$ for each minimizing tuple $x$
+    and index $j$. Applying Theorem~\ref{thm:peps_patch_minimum_growth_regulator}
+    with $R_0=(16C+\log8)(1+u)$ then yields the stated bound.
 \end{proof}

@@ -130,9 +130,9 @@ of a torus.
     all $\theta$, including entangled boundary vectors.
 \end{theorem}
 \begin{proof}\leanok
-    Expand the normalized group average separately at every vertex,
-    obtaining the factor $|G|^{-|R|}$ and the sum over $q:R\to G$.
-    Regroup the incidence product by internal and crossing edges.
+    Expanding the normalized group average separately at every vertex
+    yields the factor $|G|^{-|R|}$ and the sum over $q:R\to G$,
+    after which we regroup the incidence product by internal and crossing edges.
     Summation over one internal virtual index gives either
     $(U_{q_h}W)(WU_{q_t^{-1}})$ or
     $(U_{q_t}W)(WU_{q_h^{-1}})$ with the physical indices interchanged.
@@ -192,8 +192,9 @@ of a torus.
     This assertion needs neither unitarity nor semi-regularity of $U$.
 \end{theorem}
 \begin{proof}\leanok
-    Compare~(\ref{eq:peps_oriented_site}) at $W=1$ with
-    (\ref{eq:peps_oriented_incident}) coefficient by coefficient.
+    Comparing~(\ref{eq:peps_oriented_site}) at $W=1$ with
+    (\ref{eq:peps_oriented_incident}) coefficient by coefficient identifies
+    the local map with $\Pi_v$.
     The group average satisfies $\Pi_v\rho_v^o(g)=\Pi_v$ and fixes
     every invariant vector. Hence its restriction to the invariant
     subspace is injective. The invertible coordinate changes $P_v,E_v$
@@ -233,9 +234,9 @@ of a torus.
 \begin{proof}\leanok
     \uses{thm:peps_oriented_open_range,thm:peps_parent_support_product_range}
     Each orientation selects one of the two assumed matrix orders.
-    Choose a preimage under $F$ for every $I_e(q)$ and take their
-    product, with the scalar coefficient in
-    (\ref{eq:peps_oriented_internal_support}). Its image under
+    Choosing a preimage under $F$ for every $I_e(q)$ and taking their
+    product with the scalar coefficient in
+    (\ref{eq:peps_oriented_internal_support}) produces a vector whose image under
     $F^{\otimes E_R}$ is the displayed sum.
     Span closure proves the assertion for every regional vector.
     For a global parent vector, choose a region containing the endpoints
@@ -289,9 +290,9 @@ of a torus.
     by $\tau,\sigma$, and $J_{X,R},J_{Y,R}$ regroup regional coordinates.
 \end{theorem}
 \begin{proof}\leanok
-    Partition the defining product for $M(F)$ into exterior, crossing,
-    and internal edges. Exterior edges give $c_R$; fixing the outside
-    endpoint of a crossing edge gives
+    Partitioning the defining product for $M(F)$ into exterior, crossing,
+    and internal edges yields $c_R$ on the exterior edges, while fixing the outside
+    endpoint of each crossing edge gives
     (\ref{eq:peps_oriented_crossing_block}). The internal factors are
     unchanged. The coordinate bijections identify their product with
     (\ref{eq:peps_oriented_family_block}).

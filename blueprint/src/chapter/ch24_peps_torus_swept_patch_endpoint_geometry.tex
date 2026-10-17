@@ -9,8 +9,10 @@
     Let the horizontal and vertical torus periods be at least seven and six,
     respectively, and fix any translated position $v$. Write
     $p(i,j)=(v_x+i,v_y+j)$, with coordinates taken modulo the periods.
-    Complete the displayed four-column, three-row patch
-    $\{p(i,j):0\leq i\leq3,\ 0\leq j\leq2\}$ by the side sites
+    In an auxiliary completion of the swept-string diagram in
+    \cite[fluxon-braiding passage]{Schuch2010PEPS}, the finite set $R_v$ is
+    formed by adjoining to the displayed four-column, three-row patch
+    $\{p(i,j):0\leq i\leq3,\ 0\leq j\leq2\}$ the side sites
     \[
         p(-1,1),\ p(-1,2),\ p(4,1),\ p(4,2)
     \]
@@ -18,8 +20,6 @@
     \[
         p(1,-1),\ p(2,-1),\ p(1,-2),\ p(2,-2).
     \]
-    Denote this finite set by $R_v$. This is an auxiliary completion of the
-    swept-string diagram in \cite[fluxon-braiding passage]{Schuch2010PEPS}.
     The distant lower partner lies beyond the final string detour; it is not
     placed at the endpoint of the displayed lower bond.
 \end{definition}
@@ -43,8 +43,8 @@
     periods, so equality of their residue classes implies equality of the
     offsets. The same argument applies to unit differences, excluding an
     additional wrap adjacency. Translation preserves both equality and
-    adjacency. Count the twelve patch sites, the four side sites, and the four
-    lower sites.
+    adjacency, and counting the twelve patch sites, the four side sites, and
+    the four lower sites gives $|R_v|=20$.
 \end{proof}
 
 \begin{definition}[Four endpoint loops and partner connectors]
@@ -55,12 +55,12 @@
         TNLean.PEPS.torusSweptPatchConnectorB}
     \leanok
     \uses{def:peps_torus_swept_patch_endpoint_geometry}
-    Take the four plaquette bases, in order, to be
+    The four plaquette bases, in order, are
     \[
         A_2=p(-1,1),\quad A_1=p(3,1),\quad
-        B_1=p(1,1),\quad B_2=p(1,-2).
+        B_1=p(1,1),\quad B_2=p(1,-2),
     \]
-    At each base take the clockwise four-bond plaquette loop.
+    with the clockwise four-bond plaquette loop at each base.
     The $A_2$--$A_1$ connector goes up, then right four times, then down.
     The $B_1$--$B_2$ connector goes down three times.
     For the eventual bond assignments, a group element $s$ written along a
@@ -88,10 +88,12 @@
     string braid, or assert parent-Hamiltonian membership.
 \end{theorem}
 \begin{proof}\leanok
-    List the four corners of each endpoint plaquette and use the exact unit
-    adjacency relation. The two connector lists consist respectively of seven
-    and four vertices of the specified coordinate set. Each successive pair
-    differs by one coordinate unit, and every listed vertex belongs to $R_v$.
+    Listing the four corners of each endpoint plaquette and using the exact
+    unit adjacency relation establishes containment of the four loops.
+    The two connector lists consist respectively of seven
+    and four vertices of the specified coordinate set, where each successive
+    pair differs by one coordinate unit and every listed vertex belongs to
+    $R_v$.
 \end{proof}
 
 \begin{theorem}[Holonomy along the partner connectors]
@@ -114,7 +116,7 @@
     These equalities include the ordered-endpoint inversions at either seam.
 \end{theorem}
 \begin{proof}\leanok
-    Expand the six and three successive traversals. Reversing an upward
+    Expanding the six and three successive traversals, reversing an upward
     traversal replaces its bond value by its inverse, and concatenation
     multiplies the successive step factors in reverse order.
 \end{proof}

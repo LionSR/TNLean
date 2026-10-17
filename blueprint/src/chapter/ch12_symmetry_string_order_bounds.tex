@@ -5,22 +5,22 @@
     \lean{MPSTensor.physicalStringOrderParam_le_geometric}
     \leanok
     \uses{def:physical_string_order_param, def:twisted_transfer_map}
-    Let $A,\Lambda,x,y,u$ be arbitrary and choose a real rate
-    $r>\rho(\E_u)$. There is a constant $C>0$ such that every
-    middle length $N\geq0$ satisfies $|S_N(x,y,u)|\leq Cr^N$.
-    When $r<1$, this gives the exponential decay asserted in
-    \cite[lines~241--243]{PerezGarcia2008StringOrder}.
+    For any $A,\Lambda,x,y,u$ and any real rate
+    $r>\rho(\E_u)$, there is a constant $C>0$ such that every
+    middle length $N\geq0$ satisfies $|S_N(x,y,u)|\leq Cr^N$;
+    as in \cite[lines~241--243]{PerezGarcia2008StringOrder}, this bound
+    gives exponential decay whenever $r<1$.
 \end{theorem}
 \begin{proof}
-    Write $S_N=\ell(\E_u^N(Y))$, where
-    $Y=\E_y(\Id)$ and $\ell(X)=\tr(\Lambda\E_x(X))$.
+    With $Y=\E_y(\Id)$ and $\ell(X)=\tr(\Lambda\E_x(X))$, the correlator
+    takes the form $S_N=\ell(\E_u^N(Y))$.
     Gelfand's formula gives $\|\E_u^N\|\leq Mr^N$ for a constant $M>0$.
     Thus $|S_N|\leq\|\ell\|M\|Y\|r^N$, including $N=0$.
 \end{proof}
 
 Assume $D>0$, $\E_A(\Id)=\Id$, $\Lambda>0$,
-$\tr\Lambda=1$, and $\E_A^*(\Lambda)=\Lambda$. Suppose also that
-$\E_A$ is irreducible and peripheral-primitive. Put
+$\tr\Lambda=1$, and $\E_A^*(\Lambda)=\Lambda$, with
+$\E_A$ irreducible and peripheral-primitive, and let
 $P(X)=\tr(\Lambda X)\Id$.
 
 \begin{theorem}[Canonical geometric remainder]
@@ -41,13 +41,13 @@ $P(X)=\tr(\Lambda X)\Id$.
     \end{align}
 \end{theorem}
 \begin{proof}
-    Apply the complementary-remainder argument to the adjoint Kraus family.
-    It gives $\rho(\E_A-P)<1$. Unitality and stationarity give
+    Applying the complementary-remainder argument to the adjoint Kraus family
+    gives $\rho(\E_A-P)<1$. Unitality and stationarity give
     $(\E_A-P)^N=\E_A^N-P$ at positive lengths, so Gelfand's formula
-    proves the operator estimate. Apply the bounded linear functional
-    $G\mapsto\operatorname{Tr}(FG)$ and use
-    $\operatorname{Tr}(FP)=\tr(\Lambda F(\Id))$ to obtain
-    (\ref{eq:string_geometric_trace}). No diagonalizability is needed.
+    proves the operator estimate. Applying the bounded linear functional
+    $G\mapsto\operatorname{Tr}(FG)$ and using
+    $\operatorname{Tr}(FP)=\tr(\Lambda F(\Id))$ then yields
+    (\ref{eq:string_geometric_trace}) without assuming diagonalizability.
 \end{proof}
 
 \begin{theorem}[Geometric physical endpoint error]
@@ -58,8 +58,10 @@ $P(X)=\tr(\Lambda X)\Id$.
         thm:physical_string_phase_retaining_asymptotics}
     Under the preceding canonical assumptions, let a unitary $V$ and
     $|\mu|=1$ satisfy $\sum_j u_{ij}A_j=\mu V A_iV^\dagger$.
-    There is $0<r<1$ such that, for every pair of fixed physical endpoints
-    $x,y$, some $C_{x,y}>0$ bounds all positive middle lengths by
+    In the quantitative, phase-retaining form of
+    \cite[lines~249--255]{PerezGarcia2008StringOrder}, there is $0<r<1$ such
+    that, for every pair of fixed physical endpoints $x,y$, some $C_{x,y}>0$
+    bounds all positive middle lengths by
     \begin{align}
         \big|\mu^{-N}S_N(x,y,u)-\alpha_y\beta_x\big|
                  & \leq C_{x,y}r^N,                  &
@@ -67,15 +69,13 @@ $P(X)=\tr(\Lambda X)\Id$.
         \beta_x  & =\tr(\Lambda\E_x(V)).
         \label{eq:string_geometric_phase_error}
     \end{align}
-    This is the quantitative, phase-retaining form of
-    \cite[lines~249--255]{PerezGarcia2008StringOrder}.
 \end{theorem}
 \begin{proof}
     The exact identity $\mu^{-N}\E_u^N(Y)=V\E_A^N(V^\dagger Y)$
     expresses the error as
     $\ell((\E_A^N-P)(V^\dagger\E_y(\Id)))$, with
-    $\ell(X)=\tr(\Lambda\E_x(VX))$. Apply
-    Theorem~\ref{thm:canonical_string_geometric_remainder}.
+    $\ell(X)=\tr(\Lambda\E_x(VX))$, so
+    Theorem~\ref{thm:canonical_string_geometric_remainder} yields the bound.
 \end{proof}
 
 \begin{theorem}[Normalized periodic finite-size error]
@@ -104,13 +104,13 @@ $P(X)=\tr(\Lambda X)\Id$.
     No prefactor uniform over growing supports is asserted.
 \end{theorem}
 \begin{proof}
-    Apply (\ref{eq:string_geometric_trace}) to the identity insertion
-    and to $F=\E_O$. Choose a tail on which $|Z_L|\geq1/2$.
+    Applying (\ref{eq:string_geometric_trace}) to the identity insertion
+    and to $F=\E_O$ provides a tail on which $|Z_L|\geq1/2$.
     For $s=\tr(\Lambda\E_O(\Id))$ and
     $a_n=\operatorname{Tr}(\E_O\E_A^n)$, division gives
     $|a_n/Z_{k+n}-s|\leq2(|a_n-s|+|s|\,|Z_{k+n}-1|)$.
     Since $r^{k+n}\leq r^n$, this proves
-    (\ref{eq:periodic_string_geometric_error}). For the full ring, apply
-    Gelfand's bound to $\E_u^L$, take its trace, and divide by the same
-    denominator bounded away from zero.
+    (\ref{eq:periodic_string_geometric_error}). For the full ring, Gelfand's
+    bound applied to $\E_u^L$, followed by taking the trace and dividing by
+    the same denominator bounded away from zero, gives the geometric estimate.
 \end{proof}

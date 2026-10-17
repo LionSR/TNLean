@@ -1,0 +1,24 @@
+\(\displaystyle N=\Biggl\|
+  \begin{tenkz}[rows={wire,wire,wire,wire}, cols=7, bonds=none]
+    \tn[at=(4,1), skin=box, wide=7, name=o,
+        ports={90@1:physical, 90@2:physical, 90@3:physical, 90@4:physical,
+               90@5:physical, 90@6:physical, 90@7:physical}]{\Omega}
+    \tn[at=(3,3), skin=box, wide=3, name=l1,
+        ports={270@1:physical, 270@2:physical, 270@3:physical,
+               90@1:physical, 90@2:physical, 90@3:physical}]{L_1}
+    \tn[at=(2,2), skin=box, wide=5, name=l2,
+        ports={270@1:physical, 270@2:physical, 270@3:physical, 270@4:physical, 270@5:physical,
+               90@1:physical, 90@2:physical, 90@3:physical, 90@4:physical, 90@5:physical}]{L_2}
+    \tn[at=(1,1), skin=box, wide=7, name=l3,
+        ports={270@1:physical, 270@2:physical, 270@3:physical, 270@4:physical,
+               270@5:physical, 270@6:physical, 270@7:physical,
+               90@1:physical:$T_3$, 90@2:physical, 90@3:physical, 90@4:physical:$X$,
+               90@5:physical, 90@6:physical, 90@7:physical:$T_3$}]{L_3}
+    \tnwire{o.90@3}{l1.270@1} \tnwire{o.90@4}{l1.270@2} \tnwire{o.90@5}{l1.270@3}
+    \tnwire{l1.90@1}{l2.270@2} \tnwire{l1.90@2}{l2.270@3} \tnwire{l1.90@3}{l2.270@4}
+    \tnwire{o.90@2}{l2.270@1} \tnwire{o.90@6}{l2.270@5}
+    \tnwire{l2.90@1}{l3.270@2} \tnwire{l2.90@2}{l3.270@3} \tnwire{l2.90@3}{l3.270@4}
+    \tnwire{l2.90@4}{l3.270@5} \tnwire{l2.90@5}{l3.270@6}
+    \tnwire{o.90@1}{l3.270@1} \tnwire{o.90@7}{l3.270@7}
+  \end{tenkz}
+  \Biggr\|\)

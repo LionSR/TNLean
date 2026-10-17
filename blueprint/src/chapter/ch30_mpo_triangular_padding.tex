@@ -5,10 +5,10 @@
 \section{Triangular physical padding}
 \label{sec:glm_triangular_padding}
 
-Adjoining one physical letter expresses operator multiplication and
-operator action as products in the same physical alphabet. This is an
-auxiliary coordinate construction for the fusion and action equations of
-\cite[Section~2]{GarreRubio2023MPOSym}.
+For the fusion and action equations of
+\cite[Section~2]{GarreRubio2023MPOSym}, adjoining one physical letter
+expresses operator multiplication and operator action as products in a
+single physical alphabet.
 
 \begin{definition}[Corner and column padding]
     \leanok
@@ -63,12 +63,11 @@ auxiliary coordinate construction for the fusion and action equations of
 \begin{proof}
     \leanok
     \uses{def:glm_triangular_padding, def:mpdo_operator_product, def:mpug_action_tensor}
-    Split the contracted physical index into $j\in I$ and $j=\bullet$.
-    In the first two products the last-index summand vanishes, and the
-    remaining sums are $\sum_j O^{ij}\otimes P^{jk}$ and
-    $\sum_j O^{ij}\otimes A^j$ in their retained corner or column.
-    With $J(A)$ on the left, only $j=\bullet$ can contribute, but the
-    last row of the right factor is zero.
+    Splitting the contracted physical index into $j\in I$ and $j=\bullet$
+    eliminates the last-index summand in the first two products, leaving
+    $\sum_j O^{ij}\otimes P^{jk}$ and $\sum_j O^{ij}\otimes A^j$ in their
+    retained corner or column. With $J(A)$ on the left, only $j=\bullet$
+    can contribute, and the last row of the right factor is zero.
 \end{proof}
 
 \begin{theorem}[Injectivity under physical padding]
@@ -133,8 +132,9 @@ auxiliary coordinate construction for the fusion and action equations of
 \begin{proof}
     \leanok
     \uses{def:glm_triangular_padding, def:gauge_phase_equiv}
-    Evaluate the scalar-gauge identity at the retained corner for
-    operators, or at the retained last-column entries for states.
+    Evaluating the scalar-gauge identity at the retained corner for
+    operators, or at the retained last-column entries for states, recovers
+    the original relation.
 \end{proof}
 
 \begin{theorem}[Separation of padded operators and states]

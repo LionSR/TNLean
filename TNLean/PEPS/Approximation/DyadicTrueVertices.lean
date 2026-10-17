@@ -14,6 +14,7 @@ true vertex carries an encoded hole and a tag, held by one of its incident label
 placeholder. This file proves that the bulk operations of a large-scale repainting create and
 destroy no true vertex and keep the incident labels, hence the tags, of every existing one:
 
+* `auxBirthB_insertsOne`, …, `mainDeathB_insertsOne` : the label each operation introduces;
 * the incident labels of a guide at a point, and their invariance under a change of the guide
   away from the point;
 * for an elementary birth or death after the point treatment, the closure of the remaining
@@ -279,6 +280,54 @@ structure BandOperation.InsertsOne (op : BandOperation ι) (Q : ι) : Prop where
   changed_mem : ∀ x, op.before x ≠ op.after x →
     op.before x ∈ ({op.label, Q} : Set ι) ∧ op.after x ∈ ({op.label, Q} : Set ι)
 
+section InsertsOne
+
+variable (A B C : ι)
+
+/-- The first auxiliary birth introduces `B`. -/
+theorem auxBirthB_insertsOne : (auxBirthB B C).InsertsOne B := by
+  refine ⟨Or.inl rfl, fun x h => ?_⟩
+  simp only [auxBirthB, auxWordOne, bandWord] at h ⊢
+  split_ifs at h ⊢ <;> simp_all
+
+/-- The second auxiliary birth introduces `A`. -/
+theorem auxBirthA_insertsOne : (auxBirthA A B C).InsertsOne A := by
+  refine ⟨Or.inl rfl, fun x h => ?_⟩
+  simp only [auxBirthA, auxWordOne, auxWordTwo, bandWord] at h ⊢
+  split_ifs at h ⊢ <;> first | (exfalso; linarith) | simp_all
+
+/-- The third auxiliary birth introduces `C`. -/
+theorem auxBirthC_insertsOne : (auxBirthC A B C).InsertsOne C := by
+  refine ⟨Or.inl rfl, fun x h => ?_⟩
+  simp only [auxBirthC, auxWordTwo, auxWord, bandWord] at h ⊢
+  split_ifs at h ⊢ <;> first | (exfalso; linarith) | simp_all
+
+/-- The first main death removes `C`. -/
+theorem mainDeathC_insertsOne : (mainDeathC A B C).InsertsOne C := by
+  refine ⟨Or.inr rfl, fun x h => ?_⟩
+  simp only [mainDeathC, mainWordOne, mainWordTwo, bandWord] at h ⊢
+  split_ifs at h ⊢ <;> first | (exfalso; linarith) | simp_all
+
+/-- The second main death removes `A`. -/
+theorem mainDeathA_insertsOne : (mainDeathA A B C).InsertsOne A := by
+  refine ⟨Or.inr rfl, fun x h => ?_⟩
+  simp only [mainDeathA, mainWordTwo, mainWordThree, bandWord] at h ⊢
+  split_ifs at h ⊢ <;> simp_all
+
+/-- The main birth introduces `C`. -/
+theorem mainBirthC_insertsOne : (mainBirthC B C).InsertsOne C := by
+  refine ⟨Or.inl rfl, fun x h => ?_⟩
+  simp only [mainBirthC, mainWordThree, mainWordFour, bandWord] at h ⊢
+  split_ifs at h ⊢ <;> simp_all
+
+/-- The last main death removes `B`. -/
+theorem mainDeathB_insertsOne : (mainDeathB B C).InsertsOne B := by
+  refine ⟨Or.inr rfl, fun x h => ?_⟩
+  simp only [mainDeathB, mainWordFour, mainWordFive, bandWord] at h ⊢
+  split_ifs at h ⊢ <;> first | (exfalso; linarith) | simp_all
+
+end InsertsOne
+
 /-- Each of the seven births and deaths of an edge construction introduces a single label.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:185–221, 378–379`. -/
@@ -287,27 +336,10 @@ theorem edgeOperations_insertsOne (A B C : ι) :
   intro op hop
   simp only [edgeOperations, List.mem_cons, List.not_mem_nil, or_false] at hop
   rcases hop with rfl | rfl | rfl | rfl | rfl | rfl | rfl
-  · refine ⟨B, Or.inl rfl, fun x h => ?_⟩
-    simp only [auxBirthB, auxWordOne, bandWord] at h ⊢
-    split_ifs at h ⊢ <;> simp_all
-  · refine ⟨A, Or.inl rfl, fun x h => ?_⟩
-    simp only [auxBirthA, auxWordOne, auxWordTwo, bandWord] at h ⊢
-    split_ifs at h ⊢ <;> first | (exfalso; linarith) | simp_all
-  · refine ⟨C, Or.inl rfl, fun x h => ?_⟩
-    simp only [auxBirthC, auxWordTwo, auxWord, bandWord] at h ⊢
-    split_ifs at h ⊢ <;> first | (exfalso; linarith) | simp_all
-  · refine ⟨C, Or.inr rfl, fun x h => ?_⟩
-    simp only [mainDeathC, mainWordOne, mainWordTwo, bandWord] at h ⊢
-    split_ifs at h ⊢ <;> first | (exfalso; linarith) | simp_all
-  · refine ⟨A, Or.inr rfl, fun x h => ?_⟩
-    simp only [mainDeathA, mainWordTwo, mainWordThree, bandWord] at h ⊢
-    split_ifs at h ⊢ <;> simp_all
-  · refine ⟨C, Or.inl rfl, fun x h => ?_⟩
-    simp only [mainBirthC, mainWordThree, mainWordFour, bandWord] at h ⊢
-    split_ifs at h ⊢ <;> simp_all
-  · refine ⟨B, Or.inr rfl, fun x h => ?_⟩
-    simp only [mainDeathB, mainWordFour, mainWordFive, bandWord] at h ⊢
-    split_ifs at h ⊢ <;> first | (exfalso; linarith) | simp_all
+  exacts [⟨_, auxBirthB_insertsOne B C⟩, ⟨_, auxBirthA_insertsOne A B C⟩,
+    ⟨_, auxBirthC_insertsOne A B C⟩, ⟨_, mainDeathC_insertsOne A B C⟩,
+    ⟨_, mainDeathA_insertsOne A B C⟩, ⟨_, mainBirthC_insertsOne B C⟩,
+    ⟨_, mainDeathB_insertsOne B C⟩]
 
 /-- The open neighborhood of radius `a₀ t` of the closure of the remaining changed region of a
 treated birth or death: on it the treated surrounding guide is `P∘`, by the logarithmic floor. -/
@@ -383,6 +415,36 @@ end BandOperations
 
 /-! ### The central birth after the point treatment -/
 
+/-- **Values near the central change.** Near the closure of the remaining changed region of the
+treated central birth, the treated starting guide is the old label and the treated central guide
+takes only the old and the final label.
+
+Polynomial-PEPS manuscript, `06-geometry.tex`, lines 155–160, 357–367 and 375–382. -/
+theorem RepaintingBaseline.central_treated_mem {ι : Type*} (R : RepaintingBaseline ι) {t : ℝ}
+    (htn : t ≤ R.n) {p : ℝ × ℝ}
+    (hp : p ∈ thickening (angularConstant * t)
+      {p | homogenize (cornerTreated R.n t) R.oldLabel R.guide p ≠
+        homogenize (cornerTreated R.n t) R.oldLabel R.centralGuide p}) :
+    homogenize (cornerTreated R.n t) R.oldLabel R.guide p = R.oldLabel ∧
+      homogenize (cornerTreated R.n t) R.oldLabel R.centralGuide p ∈
+        ({R.oldLabel, R.finalLabel} : Set ι) := by
+  have hfb : homogenize (cornerTreated R.n t) R.oldLabel R.guide p = R.oldLabel := by
+    obtain ⟨y, hy, hpy⟩ := mem_thickening_iff.1 hp
+    by_contra hne
+    have h := R.floor_central htn (subset_closure hy) hne
+    rw [dist_comm] at h
+    linarith [angularConstant_mul_le_mul_max t (min R.n (cornerMarkDist R.n y))]
+  refine ⟨hfb, ?_⟩
+  by_cases hpS : homogenize (cornerTreated R.n t) R.oldLabel R.guide p ≠
+      homogenize (cornerTreated R.n t) R.oldLabel R.centralGuide p
+  · have hpU : p ∉ cornerTreated R.n t := fun h => hpS (by simp only [homogenize_of_mem h])
+    have hc : p ∈ centralRegion R.n := by
+      by_contra hc
+      exact hpS (by simp only [homogenize_of_notMem hpU, R.centralGuide_of_notMem hc])
+    simp only [homogenize_of_notMem hpU, R.centralGuide_of_mem hc]
+    exact Or.inr rfl
+  · exact Or.inl ((not_not.1 hpS).symm.trans hfb)
+
 namespace RepaintingBaseline
 
 variable {ι : Type*} (R : RepaintingBaseline ι)
@@ -409,27 +471,11 @@ theorem isTrueVertex_central_treated {t : ℝ} (ht : 0 < t) (htn : t ≤ R.n) (c
   set S := {p | fb p ≠ fa p}
   set U := thickening (angularConstant * t) S
   have hδ : 0 < angularConstant * t := mul_pos angularConstant_pos ht
-  have hfb : ∀ p ∈ U, fb p = R.oldLabel := by
-    intro p hp
-    obtain ⟨y, hy, hpy⟩ := mem_thickening_iff.1 hp
-    by_contra hne
-    have h := R.floor_central htn (subset_closure hy) hne
-    rw [dist_comm] at h
-    linarith [angularConstant_mul_le_mul_max t (min R.n (cornerMarkDist R.n y))]
   have hmem : ∀ p ∈ U, fb p ∈ ({R.oldLabel, R.finalLabel} : Set ι) ∧
       fa p ∈ ({R.oldLabel, R.finalLabel} : Set ι) := by
     intro p hp
-    refine ⟨Or.inl (hfb p hp), ?_⟩
-    by_cases hpS : p ∈ S
-    · have hpU : p ∉ Ut := fun h => hpS (show fb p = fa p by
-        simp only [fb, fa, homogenize_of_mem h])
-      have hc : p ∈ centralRegion R.n := by
-        by_contra hc
-        exact hpS (show fb p = fa p by
-          simp only [fb, fa, homogenize_of_notMem hpU, R.centralGuide_of_notMem hc])
-      simp only [fa, homogenize_of_notMem hpU, R.centralGuide_of_mem hc]
-      exact Or.inr rfl
-    · exact Or.inl ((not_not.1 hpS).symm.trans (hfb p hp))
+    obtain ⟨hfb, hfa⟩ := R.central_treated_mem htn hp
+    exact ⟨Or.inl hfb, hfa⟩
   obtain ⟨hiff, hinc⟩ := isTrueVertex_iff_of_two_labels isOpen_thickening
     (closure_subset_thickening hδ S) (fun p hp => (hmem p hp).1) (fun p hp => (hmem p hp).2) c
   refine ⟨hiff, fun hv => ⟨(hinc hv).2, fun y hy => ?_⟩⟩

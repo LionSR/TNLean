@@ -2,10 +2,10 @@
 \label{sec:peps_dependent_projectors}
 
 Retain the incidence coordinates of Definition~\ref{def:peps_dependent_incidence}.
-Let $G$ be a finite group and let each bond carry a representation
-$U_e:G\to\operatorname{GL}(\C^{X_e})$. The same $U_e$ occurs at both ends of
-that bond, with the dual action at its tail. This is the matching convention
-of \cite[Definition~5.1]{Schuch2010PEPS}.
+Following the matching convention of \cite[Definition~5.1]{Schuch2010PEPS},
+let $G$ be a finite group and let each bond carry a representation
+$U_e:G\to\operatorname{GL}(\C^{X_e})$, with the same $U_e$ occurring at both
+ends of that bond and the dual action at its tail.
 % Source: Papers/1001.3807/paper_v3.tex:1278--1316,
 % eq:2d-ug-sym and eq:2d-linv.
 
@@ -88,15 +88,15 @@ of \cite[Definition~5.1]{Schuch2010PEPS}.
             \sigma_{e,+},\sigma_{e,-}}.
         \label{eq:peps_dependent_projector_expansion}
     \end{align}
-    No semi-regularity or unitarity is required. This is the independent-bond
-    version of the projector contraction in \cite[Theorem~5.9]{Schuch2010PEPS}.
+    No semi-regularity or unitarity is required in this independent-bond
+    version of the projector contraction of \cite[Theorem~5.9]{Schuch2010PEPS}.
     % Source: Papers/1001.3807/paper_v3.tex:1582--1621.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_dependent_incidence_sums, def:peps_dependent_incident_action}
-    Expand each local average, collecting the factor $|G|^{-n}$. Regroup
-    the incident matrix factors by bonds. The independent sum over the two
-    indices of each bond is the displayed three-matrix product, by
+    Expanding each local average collects the factor $|G|^{-n}$, and regrouping
+    the incident matrix factors by bonds turns the independent sum over the two
+    indices of each bond into the displayed three-matrix product by
     (\ref{eq:peps_dependent_incidence_sum}).
 \end{proof}
 
@@ -106,18 +106,18 @@ of \cite[Definition~5.1]{Schuch2010PEPS}.
         TNLean.PEPS.DependentBondNetwork.network_averagingSite_vertexGauge}
     \leanok
     \uses{def:peps_dependent_averaging_site}
-    For any $q:\mathcal V\to G$ and arbitrary matrices $B_e$, set
+    As in the virtual symmetry of \cite[Definition~5.1]{Schuch2010PEPS}, for
+    any $q:\mathcal V\to G$ and arbitrary matrices $B_e$, set
     $B_e^q=U_e(q_{h(e)})B_eU_e(q_{t(e)}^{-1})$. Then
-    $\mathcal N_{A^0}(B^q)=\mathcal N_{A^0}(B)$.
-    In particular the group-label change
+    $\mathcal N_{A^0}(B^q)=\mathcal N_{A^0}(B)$;
+    in particular, the group-label change
     $p_e\mapsto q_{h(e)}p_eq_{t(e)}^{-1}$ preserves the canonical network.
-    This is the virtual symmetry of \cite[Definition~5.1]{Schuch2010PEPS}.
     % Source: eq:2d-ug-sym and eq:2d:move-strings.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_dependent_projector_expansion}
-    In (\ref{eq:peps_dependent_projector_expansion}), change the vertex
-    summation variable from $r$ to $rq$. The inverse at a tail reverses
+    Changing the vertex summation variable from $r$ to $rq$ in
+    (\ref{eq:peps_dependent_projector_expansion}), the inverse at a tail reverses
     the product in precisely the required order.
 \end{proof}
 
@@ -148,9 +148,9 @@ of \cite[Definition~5.1]{Schuch2010PEPS}.
     $\mathcal F\mathcal N_A(B)=\mathcal N_{FA}(B)$.
 \end{theorem}
 \begin{proof}\leanok
-    Expand the product physical map, interchange the finite physical and
-    incidence sums, and distribute the product of the local sums.
-    The factors $M(r_C\beta)w_C(\beta)$, or $w_B(\beta)$, remain unchanged.
+    Expanding the product physical map, interchanging the finite physical and
+    incidence sums, and distributing the product of the local sums leaves
+    the factors $M(r_C\beta)w_C(\beta)$ and $w_B(\beta)$ unchanged.
 \end{proof}
 
 \begin{theorem}[A common inverse preserves every cut boundary]%
@@ -184,14 +184,14 @@ of \cite[Definition~5.1]{Schuch2010PEPS}.
 \begin{proof}\leanok
     \uses{thm:peps_g_injective_left_inverse,
         thm:peps_dependent_physical_contraction}
-    Choose each $L_v$ by the left-inverse characterization of $G$-injectivity.
-    Average the invariance equations to get $T_vP_v=T_v$.
-    The physical-contraction identities yield
+    Each $L_v$ is given by the left-inverse characterization of $G$-injectivity,
+    and averaging the invariance equations gives $T_vP_v=T_v$, so
+    the physical-contraction identities yield
     (\ref{eq:peps_dependent_common_inverse}) with the same $M$.
     If $\psi$ lies in every original cut range, then $\mathcal L\psi$
-    lies in every canonical range. Choose one cut in the nonempty family
-    to conclude $\mathcal T\mathcal L\psi=\psi$.
-    Conversely, $\mathcal T$ carries each canonical range into the
+    lies in every canonical range, and choosing one cut in the nonempty family
+    gives $\mathcal T\mathcal L\psi=\psi$;
+    conversely, $\mathcal T$ carries each canonical range into the
     corresponding original range.
 \end{proof}
 
@@ -221,7 +221,7 @@ of \cite[Definition~5.1]{Schuch2010PEPS}.
 \begin{proof}\leanok
     \uses{thm:peps_dependent_averaging_injective,
         thm:peps_dependent_common_inverse, thm:peps_dependent_physical_contraction}
-    For the first equality apply canonical recovery to the $G$-injective
-    tensors $A^0$. For the second, applying $P_v$ to the physical leg of
-    $I_v$ gives exactly $A_v^0$; commute these local changes through the network.
+    Canonical recovery applied to the $G$-injective
+    tensors $A^0$ gives the first equality; for the second, applying $P_v$ to the physical leg of
+    $I_v$ gives $A_v^0$, and commuting these local changes through the network completes the proof.
 \end{proof}

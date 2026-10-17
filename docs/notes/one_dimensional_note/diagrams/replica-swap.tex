@@ -1,0 +1,26 @@
+% alt: Two copies of the ground vector Omega side by side, each a wide box with three legs rising from it, the left copy's legs labelled C, Q, R and the right copy's R, Q, C so that the two R legs are adjacent in the middle; on the left of the equals sign the swap F_R is a box across the two R legs, on its right the two R legs cross so that each leaves above the other copy.
+% Section 8.2 (Information reset), proof of Lemma lem:reset, paragraph "Overlap": Psi = Omega (x) Omega on two replicas, F_R the unitary exchanging the two replicas at the sites of R, Phi = F_R Psi. Ink-to-index: each box Omega is one replica of the ground vector and its three legs are the physical indices of the sites of R, of Q = Lambda \ (R cup C), and of C (the first replica is drawn mirrored, C, Q, R from left to right, so that the two R legs are adjacent); the box F_R is the swap on the two R legs. Contracted: the two R legs of Psi with the two lower legs of F_R. Open: all six upper legs, the six indices of Phi. In Phi the R index of the first replica comes from the second replica, so the marginal of Phi on R_0 C_0 is a product.
+\[
+  \Phi=F_R\Psi\;=\;
+  \begin{tenkz}[rows={wire,wire}, cols=7, bonds=none]
+    \tn[at=(2,1), skin=box, wide=3, name=o1,
+        ports={90@1:physical:$C$, 90@2:physical:$Q$, 90@3:physical}]{\Omega}
+    \tn[at=(2,5), skin=box, wide=3, name=o2,
+        ports={90@1:physical, 90@2:physical:$Q$, 90@3:physical:$C$}]{\Omega}
+    \tn[at=(1,3), skin=box, wide=3, name=f,
+        ports={270@1:physical, 270@3:physical, 90@1:physical:$R$, 90@3:physical:$R$}]{F_R}
+    \tnwire{o1.90@3}{f.270@1}
+    \tnwire{o2.90@1}{f.270@3}
+  \end{tenkz}
+  \;=\;
+  \begin{tenkz}[rows={wire,wire}, cols=7, bonds=none]
+    \tn[at=(2,1), skin=box, wide=3, name=o1,
+        ports={90@1:physical:$C$, 90@2:physical:$Q$, 90@3:physical}]{\Omega}
+    \tn[at=(2,5), skin=box, wide=3, name=o2,
+        ports={90@1:physical, 90@2:physical:$Q$, 90@3:physical:$C$}]{\Omega}
+    \tn[at=(1,3), skin=none, name=r1, ports={270:physical, 90:physical:$R$}]{}
+    \tn[at=(1,5), skin=none, name=r2, ports={270:physical, 90:physical:$R$}]{}
+    \tnwire[name=a]{o1.90@3}{r2.270}
+    \tnwire[name=b, cross={under at crossing of a and b}]{o2.90@1}{r1.270}
+  \end{tenkz}
+\]
