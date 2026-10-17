@@ -83,12 +83,12 @@ preparation of matrix product states.
     \lean{QuantumCircuit.reindex_kronecker_mem_supportedOperators}
     \leanok
     \uses{def:qc_local_circuit,def:qc_site_pair_coordinates}
-    Let $S,T\subseteq I$. If $A$ on $(\C^d)^{\otimes I}$ is supported on
-    $S$ and $B$ on $(\C^e)^{\otimes I}$ is supported on $T$, then
-    $A\otimes B$, expressed in the paired coordinates $p$, is supported on
-    $S\cup T$ in $(\C^{de})^{\otimes I}$. This identifies the support of the
-    doubled local interactions in \cite{OpenAI2026PolynomialPEPS},
-    \texttt{02-information.tex}, lines 416--424 and 513--524.
+    To identify the support of the doubled local interactions in
+    \cite{OpenAI2026PolynomialPEPS}, \texttt{02-information.tex},
+    lines 416--424 and 513--524, let $S,T\subseteq I$. If $A$ on
+    $(\C^d)^{\otimes I}$ is supported on $S$ and $B$ on $(\C^e)^{\otimes I}$
+    is supported on $T$, then $A\otimes B$, expressed in the paired
+    coordinates $p$, is supported on $S\cup T$ in $(\C^{de})^{\otimes I}$.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -163,21 +163,21 @@ preparation of matrix product states.
         QuantumCircuit.conj_circuitOp_mem_supportedOperators_lightCone,
         QuantumCircuit.BondLayer.conj_op_mem_supportedOperators}
     \leanok
-    Let $U$ be a local circuit of depth $T$ on a bond geometry and let $Z$ act
-    on a set of sites $X$. Then $U^\dagger ZU$ acts on the light cone of
-    radius $T$ of $X$; on the ring, on the sites within ring distance $T$ of
-    $X$. This is the finite light cone of \cite[Theorem~1]{Malz2024Preparation}.
+    As the finite light cone of \cite[Theorem~1]{Malz2024Preparation}, let $U$
+    be a local circuit of depth $T$ on a bond geometry and let $Z$ act on a
+    set of sites $X$. Then $U^\dagger ZU$ acts on the light cone of radius $T$
+    of $X$; on the ring, on the sites within ring distance $T$ of $X$.
 \end{lemma}
 \begin{proof}
     \leanok
-    By induction on the layers it suffices to treat one layer $W$. Split its
-    gates into those whose bond meets $X$, with product $G$, and the others,
-    with product $H$. The gates commute, so $W=HG$. The operator $H$ is unitary
-    and acts on the complement of $X$, so it commutes with $Z$ and
-    $W^\dagger ZW=G^\dagger ZG$. The bonds of $G$ lie in the one-step
-    neighbourhood of $X$, and products and adjoints of operators acting on a
-    set act on it. On the ring, Lemma~\ref{lem:qc_light_cone_geometries}
-    identifies the light cone.
+    By induction on the layers it suffices to treat one layer $W$. Splitting
+    its gates into those whose bond meets $X$, with product $G$, and the
+    remaining gates, with product $H$, gives $W=HG$ since the gates commute.
+    Because $H$ is unitary and acts on the complement of $X$, it commutes with
+    $Z$ and gives $W^\dagger ZW=G^\dagger ZG$. Since the bonds of $G$ lie in
+    the one-step neighbourhood of $X$ and products and adjoints preserve
+    support on that set, $W^\dagger ZW$ acts on the one-step neighbourhood of
+    $X$, which Lemma~\ref{lem:qc_light_cone_geometries} identifies on the ring.
 \end{proof}
 
 \begin{lemma}[No connected correlations beyond the light cone]
@@ -190,18 +190,17 @@ preparation of matrix product states.
         QuantumCircuit.expect_productVector_rectKronecker,
         QuantumCircuit.expect_productVector_mul}
     \leanok
-    Let $\ket{\psi}$ be a unit vector prepared in depth $T$ on a bond
-    geometry, and let $Z$, $Z'$ act on sets of sites whose light cones of
-    radius $T$ are disjoint, for instance on the ring sets at distance larger
-    than $2T$. Then
+    Following the vanishing of connected correlations in the proof of
+    \cite[Theorem~1]{Malz2024Preparation}, let $\ket{\psi}$ be a unit vector
+    prepared in depth $T$ on a bond geometry, and let $Z$, $Z'$ act on sets of
+    sites whose light cones of radius $T$ are disjoint, for instance on the
+    ring sets at distance larger than $2T$. Then
     $\bra{\psi}ZZ'\ket{\psi}=\bra{\psi}Z\ket{\psi}\bra{\psi}Z'\ket{\psi}$.
     Without the normalization, every vector $\ket{\psi}$ prepared in depth $T$
     satisfies
     $\bra{\psi}ZZ'\ket{\psi}\braket{\psi}{\psi}
         =\bra{\psi}Z\ket{\psi}\bra{\psi}Z'\ket{\psi}$.
-    This is the statement in the proof of
-    \cite[Theorem~1]{Malz2024Preparation} that every connected correlation of
-    such operators vanishes. Its two ingredients on product vectors hold for
+    Its two ingredients on product vectors hold for
     any finite set of sites: the expectation of $\bigotimes_im_i$ in
     $\ket\pi=\bigotimes_i\ket{v_i}$ is $\prod_i\bra{v_i}m_i\ket{v_i}$, and
     $\bra{\pi}AB\ket{\pi}\braket{\pi}{\pi}
@@ -419,12 +418,12 @@ preparation of matrix product states.
         QuantumCircuit.exists_isPairProduct_ctrlOp,
         QuantumCircuit.isPairProduct_embedOp_pairSites}
     \leanok
-    For $d\ge1$ and $n\ge2$ there is $K$ such that every unitary on
-    $(\C^d)^{\otimes n}$ is a product of at most $K$ unitaries, each acting on
-    two neighbouring sites of the open chain of $n$ sites. This is the step
-    that the unitaries with constant support ``can be further expressed with
-    a low-depth circuit of local gates''
-    \cite[caption of Fig.~1]{Malz2024Preparation}.
+    Realizing the step that unitaries with constant support ``can be further
+    expressed with a low-depth circuit of local gates''
+    \cite[caption of Fig.~1]{Malz2024Preparation}, for $d\ge1$ and $n\ge2$
+    there is $K$ such that every unitary on $(\C^d)^{\otimes n}$ is a product
+    of at most $K$ unitaries, each acting on two neighbouring sites of the
+    open chain of $n$ sites.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -465,14 +464,14 @@ preparation of matrix product states.
         QuantumCircuit.IsWindowProduct}
     \leanok
     \uses{def:qc_local_circuit}
-    On the open chain of $n$ sites, a \emph{gate on a window of $m$ sites} is
-    a unitary acting on the sites $p$ with $a\le p<a+m$, for some $a$. Near the
-    right end of the chain fewer than $m$ of these sites exist, so such a gate
-    acts on at most $m$ consecutive sites. An operator is a \emph{product of at
-        most $K$ gates on windows of $m$ sites} if it is a product of at most
-    $K$ such gates. These are the gates of the sequential circuit
-    of~\cite[paragraph ``The sequential-RG circuit'']{Malz2024Preparation},
-    each of which acts on the bond register and one further site.
+    Modeling the gates of the sequential circuit of~\cite[paragraph ``The
+        sequential-RG circuit'']{Malz2024Preparation} (each acting on the bond
+    register and one further site), on the open chain of $n$ sites a
+    \emph{gate on a window of $m$ sites} is a unitary acting on the sites $p$
+    with $a\le p<a+m$, for some $a$. Near the right end of the chain fewer
+    than $m$ of these sites exist, so such a gate acts on at most $m$
+    consecutive sites. An operator is a \emph{product of at most $K$ gates on
+        windows of $m$ sites} if it is a product of at most $K$ such gates.
 \end{definition}
 
 \begin{lemma}[Products of gates on windows]
@@ -504,15 +503,16 @@ preparation of matrix product states.
 \end{lemma}
 \begin{proof}
     \leanok
-    The first two items are the support statements of
+    The first two items follow from the support properties of
     Lemma~\ref{lem:qc_placed_operators}: a placed operator acts on the range
     of the placement, and placing composes. For the third item, the sites of
     the window lie in a pair $\{a',a'+1\}$ with $a'=\min(a,n-2)$. For the
-    fourth, enlarge the window of each gate to $\min(m,n)\ge2$ consecutive
-    sites inside the chain. The gate is then a unitary on these sites placed
-    on the chain, hence by
-    Theorem~\ref{thm:qc_bounded_unitary_two_site_gates} a product of at most
-    $K_{\min(m,n)}$ gates on neighbouring sites; take $C=\sum_{l\le m}K_l$.
+    fourth, enlarging the window of each gate to $\min(m,n)\ge2$ consecutive
+    sites inside the chain expresses the gate as a unitary on these sites
+    placed on the chain, hence by
+    Theorem~\ref{thm:qc_bounded_unitary_two_site_gates} as a product of at most
+    $K_{\min(m,n)}$ gates on neighbouring sites, so taking
+    $C=\sum_{l\le m}K_l$ completes the bound.
 \end{proof}
 
 \input{chapter/ch33_local_quantum_circuits_measurements}

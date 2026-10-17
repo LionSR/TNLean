@@ -9,17 +9,20 @@ bond-two matrix product operator, reduces the product of two copies to a
 bond-three tensor $A_0$ padded by a zero block, and states that $A_0$ is
 not injective, cannot be further decomposed into a direct sum of
 injective matrix product operators, and generates the identity on
-periodic chains. This section reads these statements through the
-multi-block asymmetric compression theorem
-(Theorem~\ref{thm:asym_multiblock}). The associator of the fusion
-tensors, $\omega(1,1,1)=-1$ in~\cite[Section~II]{Liu2025Bialgebraic},
-is proved below. The unrestricted scalar relation on the full virtual
-space is corrected to a relation on the physical images, as explained
-in~\cite{gap:lmsvkl25_czy_associator}.
+periodic chains. The multi-block asymmetric compression theorem
+(Theorem~\ref{thm:asym_multiblock}) places these statements on a common
+footing: both the stacked square and $A_0$ compress onto the bond-one
+identity with nilpotent remainder while admitting no sitewise
+intertwiner. In addition, the fusion tensors realize the nontrivial
+associator $\omega(1,1,1)=-1$ of~\cite[Section~II]{Liu2025Bialgebraic},
+where, as explained in~\cite{gap:lmsvkl25_czy_associator}, the
+unrestricted scalar comparison on the full virtual space holds on the
+physical images of nonempty words.
 
-The first physical index is the output and the second the input, as in
-the source. For a word $w$ in the index pairs, $B^w$ denotes the product
-of the matrices of $B$ along $w$, as in Section~\ref{sec:asymex_czx}.
+Following the conventions of the source and of
+Section~\ref{sec:asymex_czx}, the first physical index is the output and
+the second is the input, and for a word $w$ in the index pairs, $B^w$
+denotes the product of the matrices of $B$ along $w$.
 
 \begin{definition}[The CZY tensor and its stacked square]
     \label{def:asymex_czy_tensors}
@@ -70,15 +73,16 @@ unnormalized trace:
     \end{tenkz}
 \end{center}
 
-The periodic
-kernel and the identity $U_N^2=I$ are established in
-Theorems~\ref{thm:asymex_czy_kernel} and~\ref{thm:asymex_czy_square_identity}.
-Theorems~\ref{thm:asymex_czy_compression}
-and~\ref{thm:asymex_czy_printed_reduction} give the compression and the
-printed bond-three reduction; Theorem~\ref{thm:asymex_czy_reduced_nonsplit}
-excludes compressions of the reduced tensor onto the identity with zero
-remainder. Indecomposability of the reduced virtual space and the associator
-of the fusion maps follow in the remainder of the section.
+In Theorems~\ref{thm:asymex_czy_kernel}
+and~\ref{thm:asymex_czy_square_identity}, this cyclic trace yields an
+explicit sign kernel whose periodic square satisfies $U_N^2=I$ at every
+positive length. Theorems~\ref{thm:asymex_czy_compression}
+and~\ref{thm:asymex_czy_printed_reduction} then compress the stacked
+square onto the bond-one identity and relate it by an orthogonal change
+of basis to the bond-three reduction $A_0$, while
+Theorem~\ref{thm:asymex_czy_reduced_nonsplit} rules out any zero-remainder
+compression of $A_0$ onto the identity and leads to the indecomposability
+of its virtual space and the nontrivial associator of its fusion maps.
 
 \begin{theorem}[Periodic kernel of the CZY operator]
     \label{thm:asymex_czy_kernel}
@@ -145,12 +149,12 @@ of the fusion maps follow in the remainder of the section.
     \end{align}
     both letters annihilate $f_0$, have image in $\spn\{f_0,f_1\}$, and
     satisfy $\widetilde A_0^{00}f_1=f_1$ and
-    $\widetilde A_0^{11}f_1=f_1-f_0$. Hence every letter is upper
+    $\widetilde A_0^{11}f_1=f_1-f_0$.    Hence every letter is upper
     triangular with diagonal $(0,\delta^{ij},0,0)$. The row $W$ is the
-    second row of the inverse of the basis matrix and $V=f_1$. The
-    target is normal because its matrix at $(0,0)$ is the scalar $1$.
-    The nilpotency is clause~(vi) of Theorem~\ref{thm:asym_multiblock}
-    with $|S|+z=4$.
+    second row of the inverse of the basis matrix and $V=f_1$. Because
+    the target matrix at $(0,0)$ is the scalar $1$, the target is normal,
+    and clause~(vi) of Theorem~\ref{thm:asym_multiblock} with $|S|+z=4$
+    shows that every product of four remainder letters vanishes.
 \end{proof}
 
 In a picture, the compression pair closes the bond of the stacked square
@@ -263,9 +267,12 @@ on every ring of $N\geq1$ sites, to the identity:
     From $\widetilde A_0^{00}X=X$ the vector $X$ is a multiple of $e_1$,
     and $\widetilde A_0^{11}e_1=-e_2$ forces the multiple to vanish. For
     rows, $Y\widetilde A_0^{00}=Y$ gives $Y=y_1u^{\mathsf T}$, and
-    $Y\widetilde A_0^{11}=Y$ then gives $y_1=0$. A vanishing remainder
-    would make $V$ a sitewise intertwiner with $WV=1$; the last assertion
-    is Corollary~\ref{cor:asym_anomaly_not_star}.
+    $Y\widetilde A_0^{11}=Y$ then gives $y_1=0$. Since a vanishing
+    remainder would make $V$ a sitewise intertwiner with $WV=1$, every
+    multi-block compression has a nonzero remainder, and
+    Corollary~\ref{cor:asym_anomaly_not_star} then shows that the matrix
+    algebra generated by $\widetilde A_0$ is not closed under conjugate
+    transposition.
 \end{proof}
 
 \begin{definition}[The reduced tensor]
@@ -338,9 +345,10 @@ on every ring of $N\geq1$ sites, to the identity:
     \leanok
     \uses{thm:asymex_explicit_gauge}
     The matrices $A_0^{00}$ and $A_0^{11}$ are upper triangular with
-    diagonal $(0,1,0)$, and the mixed matrices vanish, so the diagonal is
-    $(0,\delta^{ij},0)$. The operator identity follows as in
-    Theorem~\ref{thm:asymex_czy_square_identity}.
+    diagonal $(0,1,0)$ while the mixed matrices vanish, so the diagonal is
+    $(0,\delta^{ij},0)$, and the argument of
+    Theorem~\ref{thm:asymex_czy_square_identity} then equates the periodic
+    operator of $A_0$ with the identity at every positive length.
 \end{proof}
 
 \begin{theorem}[The reduced tensor does not split]
@@ -356,8 +364,9 @@ on every ring of $N\geq1$ sites, to the identity:
     Hence every multi-block compression of $A_0$ onto $\delta$ has a
     nonzero remainder, the algebra generated by the matrices of $A_0$ is
     not closed under conjugate transposition, and in particular it is a
-    proper subalgebra of the $3\times3$ matrices. In particular $A_0$ is
-    not injective, as stated in~\cite[Section~II]{Liu2025Bialgebraic}.
+    proper subalgebra of the $3\times3$ matrices; as stated
+    in~\cite[Section~II]{Liu2025Bialgebraic}, $A_0$ is therefore not
+    injective.
 \end{theorem}
 
 \begin{proof}
@@ -365,9 +374,11 @@ on every ring of $N\geq1$ sites, to the identity:
     For $X=(a,b,c)^{\mathsf T}$, $A_0^{00}X=X$ gives $c=0$ and $a=-b$,
     and $A_0^{11}X=X$ then gives $b=0$. For $Y=(p,q,r)$,
     $YA_0^{00}=Y$ gives $p=0$ and $r=-q$, and $YA_0^{11}=Y$ gives $q=0$.
-    The remaining assertions follow as in
-    Theorem~\ref{thm:asymex_czy_no_intertwiner}; the full matrix algebra is
-    closed under conjugate transposition.
+    The argument of Theorem~\ref{thm:asymex_czy_no_intertwiner} then shows
+    that every compression remainder is nonzero and that the generated
+    algebra fails to be closed under conjugate transposition; since the
+    full $3\times3$ matrix algebra is closed under conjugate
+    transposition, $A_0$ is not injective.
 \end{proof}
 
 
@@ -382,9 +393,9 @@ on every ring of $N\geq1$ sites, to the identity:
     $aI+bE_{13}$. The only idempotents in this commutant are $0$ and $I$.
     Consequently, if $\mathbb C^3=V\oplus W$ and both summands are invariant
     under the letters of $A_0$, then $V=0$ or $W=0$.
-    In particular, no simultaneous bond similarity decomposes $A_0$ into
-    a direct sum of injective matrix product operators, as asserted
-    in~\cite[Section~II]{Liu2025Bialgebraic}.
+    In particular, as asserted in~\cite[Section~II]{Liu2025Bialgebraic},
+    no simultaneous bond similarity decomposes $A_0$ into a direct sum of
+    injective matrix product operators.
 \end{theorem}
 
 \begin{proof}
@@ -396,9 +407,10 @@ on every ring of $N\geq1$ sites, to the identity:
     For an invariant decomposition $V\oplus W$, the projection onto $V$
     along $W$ commutes with every letter and is idempotent. Its range is
     therefore zero or the whole space.
-    Any nontrivial direct sum of injective blocks would give such an
-    invariant decomposition; a single injective block is excluded by
-    Theorem~\ref{thm:asymex_czy_reduced_nonsplit}.
+    Any direct sum of two or more blocks would yield a nontrivial
+    invariant decomposition, while
+    Theorem~\ref{thm:asymex_czy_reduced_nonsplit} excludes a single
+    injective block.
 \end{proof}
 
 \begin{theorem}[A one-sided fusion identity]
@@ -422,7 +434,8 @@ on every ring of $N\geq1$ sites, to the identity:
 
 \begin{proof}
     \leanok
-    Direct multiplication of integer matrices.
+    Direct multiplication of the integer matrices on both sides verifies
+    the identity for each index pair $(i,k)$.
 \end{proof}
 
 The identity of Theorem~\ref{thm:asymex_czy_fusion} moves $Y_{0,0}$ from the
@@ -486,16 +499,17 @@ west of two stacked copies of $A_0$ to the east of one copy:
     The printed maps satisfy
     $Y_{a,b}\sum_j A_a^{ij}\otimes A_b^{jk}=A_{a+b}^{ik}Y_{a,b}$
     for $(a,b)=(0,1),(1,0),(1,1)$.
-    At the nontrivial triple,
-    $Y_{0,1}(Y_{1,1}\otimes I_2)=-Y_{1,0}(I_2\otimes Y_{1,1})$,
-    with the normalization of~\cite[Section~II]{Liu2025Bialgebraic}.
+    At the nontrivial triple, in the normalization
+    of~\cite[Section~II]{Liu2025Bialgebraic}, these maps satisfy
+    $Y_{0,1}(Y_{1,1}\otimes I_2)=-Y_{1,0}(I_2\otimes Y_{1,1})$.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    Substitute the displayed matrices and the letters of $A_0,A_1$.
-    Each equality is a finite matrix identity; the common factor
-    $1/\sqrt2$ cancels from the triple comparison.
+    Substituting the displayed matrices and the letters of $A_0,A_1$
+    reduces each fusion relation to a finite matrix identity, while
+    canceling the common factor $1/\sqrt2$ establishes the sign at the
+    nontrivial triple.
 \end{proof}
 
 \begin{theorem}[Associativity on the physical images]
@@ -515,21 +529,22 @@ west of two stacked copies of $A_0$ to the east of one copy:
     $T^{ik}=\sum_{j,l}A_a^{ij}\otimes A_b^{jl}\otimes A_c^{lk}$,
     $L=F_{a+b,c}(F_{a,b}\otimes I_c)$ and
     $R=F_{a,b+c}(I_a\otimes F_{b,c})$, identifying both bond orders.
-    Then $LT^{ik}=(-1)^{abc}RT^{ik}$ for every physical pair $(i,k)$.
-    More generally, $LT^{p_1}\cdots T^{p_n}=(-1)^{abc}RT^{p_1}\cdots T^{p_n}$
-    for every nonempty physical word.
-    This is the corrected relation on the physical images
-    of~\cite{gap:lmsvkl25_czy_associator}.
-    On the full virtual space the printed neutral fusions admit no
-    scalar comparison: the entry in row one and column $(3,3,1)$ is two
-    on the left and zero on the right.
+    Then $LT^{ik}=(-1)^{abc}RT^{ik}$ for every physical pair $(i,k)$,
+    and more generally, as recorded in~\cite{gap:lmsvkl25_czy_associator},
+    $LT^{p_1}\cdots T^{p_n}=(-1)^{abc}RT^{p_1}\cdots T^{p_n}$ on the
+    physical image of every nonempty word.
+    On the full virtual space, by contrast, the printed neutral fusions
+    admit no scalar comparison: the entry in row one and column $(3,3,1)$
+    is two on the left and zero on the right.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    For the chosen normalization all matrices are integral. Direct
-    multiplication proves the identity for the eight group triples and
-    the four physical pairs. Multiplication on the right by the
-    remaining letters gives the nonempty-word identity.
-    The specified entry proves the full-space obstruction.
+    Under the chosen normalization all matrices have integer entries, so
+    direct multiplication verifies the single-letter relation for the
+    eight group triples and the four physical pairs. Multiplying on the
+    right by the remaining letters extends the relation to every nonempty
+    word, whereas evaluating row one and column $(3,3,1)$ at the neutral
+    triple exhibits an entry equal to two on the left and zero on the
+    right.
 \end{proof}

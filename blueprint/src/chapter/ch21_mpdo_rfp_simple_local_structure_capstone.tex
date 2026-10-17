@@ -98,11 +98,11 @@
 
 \begin{proof}\leanok
     \uses{thm:mpdo_one_site_closure_two_site_blocking, thm:mpdo_two_site_closure_two_site_blocking}
-    Identify the two-site physical space of $K$ with the one-site physical
-    space of $K^{[2]}$, and identify the four-site physical space of $K$ with
-    the two-site physical space of $K^{[2]}$. These identifications merely
-    permute orthonormal coordinates, so conjugating $S_{24}$ and $T_{24}$ by
-    them preserves complete positivity and trace preservation. The two
+    Identifying the two-site physical space of $K$ with the one-site physical
+    space of $K^{[2]}$, and the four-site physical space of $K$ with
+    the two-site physical space of $K^{[2]}$, merely
+    permutes orthonormal coordinates, so conjugating $S_{24}$ and $T_{24}$ by
+    these identifications preserves complete positivity and trace preservation. The two
     assumed closure identities then become precisely the two defining
     renormalization identities for $K^{[2]}$.
 \end{proof}
@@ -126,13 +126,13 @@
 \begin{proof}
     \leanok
     \uses{thm:mpdo_block_two_rfp_of_two_four_maps}
-    Apply $T$ twice to the first physical site, first passing from two sites to
-    three and then from three sites to four. This gives a trace-preserving
+    Applying $T$ twice to the first physical site, first passing from two sites to
+    three and then from three sites to four, gives a trace-preserving
     completely positive map from the two-site closure to the four-site closure.
     Applying $S$ twice to the first two physical sites in the reverse direction
-    gives the coarse-graining map. The canonical identifications of two
-    neighboring sites with one blocked site are permutations of orthonormal
-    coordinates and preserve both complete positivity and trace preservation.
+    gives the coarse-graining map. Identifying two
+    neighboring sites with one blocked site permutes orthonormal
+    coordinates and preserves both complete positivity and trace preservation.
 \end{proof}
 
 \begin{theorem}[Renormalization maps and normalization obstruction for the
@@ -296,18 +296,17 @@
          & =\delta_{(i,j,k),(i',j',k')}
         \frac14(QL)_{i,j}(QL)_{j,k}. \notag
     \end{align}
-    The normalized four-site tail is $LQ$. For this tail, the inverse-map
-    construction recovers the closed sector tensors $L$ and $Q$ exactly. Its
+    For the normalized four-site tail $LQ$, the inverse-map
+    construction of \cite[Appendix~C.2, lines~1413--1455]{Cirac2016MPDO_arXiv}
+    recovers the closed sector tensors $L$ and $Q$ exactly. Its
     neighboring operators therefore coincide with those obtained directly
-    from $L$ and $Q$, while $Q(1-LQ)L\ne0$. The inverse-map construction is
-    the one in
-    \cite[Appendix~C.2, lines~1413--1455]{Cirac2016MPDO_arXiv}.
+    from $L$ and $Q$, while $Q(1-LQ)L\ne0$.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    Write $S_i=L_{\mathord\bullet i}Q_{i\mathord\bullet}$ for the four physical
-    slices, and let $f_i(a,b)$ be their dual coefficients, so that
+    Writing $S_i=L_{\mathord\bullet i}Q_{i\mathord\bullet}$ for the four physical
+    slices and letting $f_i(a,b)$ be their dual coefficients gives
     \begin{align}
         \sum_{i=0}^{3}f_i(a,b)S_i & =E_{ab}. \notag
     \end{align}
@@ -335,7 +334,9 @@
     \lean{MPOTensor.exists_physicalSectorFactorization_rank_one_coefficients_of_isSAL_of_literal_ZCL}
     \leanok
     \uses{def:mpdo, def:injective, def:is_sal, def:mpo_physical_trace_transfer, def:nt_cpsv, def:mpdo_physical_sector_factorization}
-    Let $\mathcal K$ be an injective normal matrix product density operator
+    Following the structural corollary of
+    \cite[Appendix~C.2, lines~1503--1506]{Cirac2016MPDO_arXiv}, let $\mathcal K$
+    be an injective normal matrix product density operator
     tensor satisfying saturation of the area law and unscaled zero correlation length,
     \begin{align}
         \mathcal T_{\mathcal K}^2 & =\mathcal T_{\mathcal K}.
@@ -364,19 +365,18 @@
         \notag
     \end{align}
     The orientation of $U$ is the physical-sector-factorization convention
-    displayed above. No additional closure property of the sector tensors is
-    asserted. This is the structural corollary at
-    \cite[Appendix~C.2, lines~1503--1506]{Cirac2016MPDO_arXiv}.
+    displayed above, with no additional closure property of the sector tensors
+    asserted.
 \end{corollary}
 
 \begin{proof}
     \leanok
     \uses{thm:mpdo_casei_all_sector_rank_one_coefficients_of_is_sal}
-    Apply Theorem~\ref{thm:mpdo_casei_all_sector_rank_one_coefficients_of_is_sal}.
-    This gives the physical isometry, the
-    direct-sum physical-slice formula, and positive neighboring operators.
     Theorem~\ref{thm:mpdo_casei_all_sector_rank_one_coefficients_of_is_sal}
-    gives the real-part identity
+    gives the physical isometry, the
+    direct-sum physical-slice formula, and positive neighboring operators, while
+    Theorem~\ref{thm:mpdo_casei_all_sector_rank_one_coefficients_of_is_sal}
+    also yields the real-part identity
     $\operatorname{Re}\tr(\eta_{k,h})=a_kb_h$. Positivity makes each
     neighboring operator Hermitian, so its trace is real and the displayed
     complex trace identity follows.
@@ -412,8 +412,9 @@
         MPOTensor.isBNTLayerOrthogonal_iff_physicalSlice_mul_eq_zero,
         MPOTensor.isBNTLayerOrthogonal_iff_physicalSlice_mul_apply_eq_zero}
     \leanok
-    For a family $\{\mathcal K_x\}_{x=0}^{g-1}$, write
-    $\mathcal K_x[\beta,\alpha]\in M_d(\C)$ for the physical matrix obtained
+    Following \cite[Appendix~C.2, lines~1634--1639]{Cirac2016MPDO_arXiv},
+    for a family $\{\mathcal K_x\}_{x=0}^{g-1}$ let
+    $\mathcal K_x[\beta,\alpha]\in M_d(\C)$ denote the physical matrix obtained
     by fixing the two virtual indices. The layers are orthogonal when, for
     $x\ne y$,
     \begin{align}
@@ -426,12 +427,10 @@
     \begin{align}
         \sum_{k=0}^{d-1}
         (\mathcal K_y)^{ik}_{\beta_y\alpha_y}
-        (\mathcal K_x)^{kj}_{\beta_x\alpha_x} & =0.
+        (\mathcal K_x)^{kj}_{\beta_x\alpha_x} & =0,
         \notag
     \end{align}
-    The factor order is $\mathcal K_y\mathcal K_x$ without adjoints.
-    This is the orthogonality relation in
-    \cite[Appendix~C.2, lines~1634--1639]{Cirac2016MPDO_arXiv}.
+    where the factor order is $\mathcal K_y\mathcal K_x$ without adjoints.
 \end{definition}
 
 \begin{center}
@@ -572,11 +571,11 @@
         l_{k,\mu}\otimes r_{k,\nu}.
         \label{eq:mpdo_active_sector_product_adjoint_closure}
     \end{align}
-    Since $k$ is active, choose $\alpha,u,v$ for which
-    $r_{k,\alpha}(u,v)\ne0$, and put
-    $z=\overline{r_{k,\alpha}(u,v)}$. Evaluating
+    Since $k$ is active, there exist $\alpha,u,v$ for which
+    $r_{k,\alpha}(u,v)\ne0$; setting
+    $z=\overline{r_{k,\alpha}(u,v)}$, evaluating
     (\ref{eq:mpdo_active_sector_product_adjoint_closure}) at the corresponding
-    matrix entry and dividing by $z$ yields
+    matrix entry, and dividing by $z$ yields
     \begin{align}
         l_{k,\beta}^*
          & =
@@ -616,10 +615,10 @@
         \notag
     \end{align}
     be a physical-sector factorization whose neighboring operators are
-    positive semidefinite.  In every active sector choose isometries onto the
-    joint column supports of the left and right factor families, and retain
-    no coordinates in an inactive sector.  Their direct sum, mapped
-    back by $U^*$, is an isometry
+    positive semidefinite.  Choosing isometries onto the
+    joint column supports of the left and right factor families in every active sector and retaining
+    no coordinates in an inactive sector, their direct sum mapped
+    back by $U^*$ forms an isometry
     \begin{align}
         V:\C^e\longrightarrow\C^d
         \notag
@@ -646,9 +645,9 @@
 
 \begin{proof}
     \leanok
-    Take the tensor product of the two support isometries in each active
-    sector and their dependent direct sum over all sectors, using an empty
-    coordinate space in every inactive sector.  Block multiplication gives
+    Taking the tensor product of the two support isometries in each active
+    sector and their dependent direct sum over all sectors (with an empty
+    coordinate space in every inactive sector), block multiplication gives
     orthonormal columns and the displayed compressed factorization.  The
     range projection absorbs every physical slice.  Conversely, every
     projection that absorbs all physical slices also absorbs the direct sum
@@ -719,8 +718,8 @@
 
 \begin{proof}
     \leanok
-    Remove the empty inactive fibers from the dependent direct sum and
-    enumerate the remaining sector subtype by a finite ordinal.  The
+    Removing the empty inactive fibers from the dependent direct sum and
+    enumerating the remaining sector subtype by a finite ordinal, the
     compressed right factor of $k$ and compressed left factor of $h$ give
     \begin{align}
         \sum_\alpha
@@ -803,11 +802,11 @@
     The isometric embedding theorem gives
     \begin{align}
         \Pi_{\mathcal K_V}
-         & =V\Pi_{\mathcal K}V^*=VV^*.
+         & =V\Pi_{\mathcal K}V^*=VV^*,
         \notag
     \end{align}
-    It also preserves injectivity. Restrict the assumed factorization to its
-    canonical active physical support. The preceding theorem preserves
+    and preserves injectivity. Restricting the assumed factorization to its
+    canonical active physical support, the preceding theorem preserves
     positivity, the identities $\tr(\eta_{k,h})=a_kb_h$, and the normalized
     sum $\sum_k a_kb_k=1$ on that restriction. Its isometric inclusion $W$
     satisfies $WW^*=\Pi_{\mathcal K_V}=VV^*$.
@@ -894,9 +893,9 @@
 
 \begin{proof}
     \leanok
-    One-site spanning makes every absorbed representative injective. The
-    positive neighboring operators make every representative an MPDO. Apply
-    Theorem~\ref{thm:mpdo_bnt_layer_orthogonal_supports}.
+    One-site spanning makes every absorbed representative injective, and the
+    positive neighboring operators make every representative an MPDO, so
+    Theorem~\ref{thm:mpdo_bnt_layer_orthogonal_supports} gives the projections.
 \end{proof}
 
 % **Scope restriction (active physical support compression):** the proof first
@@ -937,11 +936,11 @@
 
 \begin{proof}
     \leanok
-    Restrict $K$ to its canonical joint physical support $Q$ by
+    Restricting $K$ to its canonical joint physical support $Q$ via
     Theorems~\ref{thm:mpdo_active_physical_sector_restriction}
-    and~\ref{thm:mpdo_active_physical_sector_neighboring_positivity}.
-    The positive neighboring operators on the restriction give a positive
-    commuting bond supported on $Q\otimes Q$, with the displayed periodic
+    and~\ref{thm:mpdo_active_physical_sector_neighboring_positivity},
+    the positive neighboring operators on the restriction yield a positive
+    commuting bond supported on $Q\otimes Q$ with the displayed periodic
     product.  Minimality of the joint column support and the two-sided
     absorption by $P$ give
     \begin{align}
@@ -1015,13 +1014,13 @@
 
     Theorem~\ref{thm:mpdo_ambient_sector_factorization_supported_bond} gives
     a supported positive commuting bond $B_x$ with periodic product
-    $\rho^{(N)}(A_x)$.  Replace it at this chain length by
+    $\rho^{(N)}(A_x)$.  Replacing it at this chain length by
     \begin{align}
         \widetilde B_{x,N}
-         & =\left(\frac{q_x(N)}{n_x}\right)^{1/N}B_x.
+         & =\left(\frac{q_x(N)}{n_x}\right)^{1/N}B_x
         \notag
     \end{align}
-    Then its multiplicity-weighted periodic product is exactly
+    makes its multiplicity-weighted periodic product equal to
     $q_x(N)\rho^{(N)}(A_x)$.  The GSNNCH data may depend on $N$, so this
     construction proves the claimed form without copy independence.
 \end{proof}
@@ -1057,7 +1056,8 @@
     contradicting $A\ne0$.
 \end{proof}
 
-If the projections also satisfy $\sum_jP_j=\Id$, then expanding this
+As in \cite[Appendix~C.2, lines~1745--1751]{Cirac2016MPDO_arXiv},
+if the projections also satisfy $\sum_jP_j=\Id$, then expanding this
 identity on both physical indices and using the sector projector relations
 leaves only the diagonal term:
 \begin{align}
@@ -1097,8 +1097,6 @@ leaves only the diagonal term:
 \end{center}
 Equivalently, each local tensor is supported on its own sector:
 $\mathcal K_i=P_i\mathcal K_i=\mathcal K_iP_i$.
-This is the calculation in
-\cite[Appendix~C.2, lines~1745--1751]{Cirac2016MPDO_arXiv}.
 
 % This node records normality of the representatives, biCF, exact assembly,
 % and nonnilpotence separately from the analytic and entropy conditions of the
@@ -1149,8 +1147,8 @@ This is the calculation in
          & =\operatorname{id}_{\mathbb C}. \notag
     \end{align}
     Their disjoint physical supports exclude equivalence by a virtual gauge
-    and a phase. Write $\mathbf A(i)=(A_0^i,A_1^i)$. For every
-    $Y=(Y_0,Y_1)\in\mathbb C\oplus\mathbb C$, the two letters $0$ and $8$
+    and a phase. Writing $\mathbf A(i)=(A_0^i,A_1^i)$, for every
+    $Y=(Y_0,Y_1)\in\mathbb C\oplus\mathbb C$ the two letters $0$ and $8$
     give
     \begin{align}
         Y & =\frac{Y_0}{1/\sqrt2}\,\mathbf A(0)
@@ -1394,14 +1392,14 @@ This is the calculation in
         MPOTensor.CPSVExample410Operator.purifierTerm,
         MPOTensor.CPSVExample410Operator.M}
     \leanok
-    Identify the local four-dimensional spin with two qubits and write
-    $U=\sigma_x\otimes\sigma_x$.  Starting from one Bell pair on every bond,
-    apply independently at each site the channel
+    Identifying the local four-dimensional spin with two qubits and writing
+    $U=\sigma_x\otimes\sigma_x$, the corrected tensor starts from one Bell pair on every bond and
+    applies independently at each site the channel
     \begin{align}
         \mathcal E(X) & =\tfrac14 UXU^*+\tfrac34X. \notag
     \end{align}
-    Equivalently, use the local purification with Kraus amplitudes
-    $\sqrt3/2$ for the identity and $1/2$ for the correlated flip.  This is
+    Equivalently, the local purification uses Kraus amplitudes
+    $\sqrt3/2$ for the identity and $1/2$ for the correlated flip,
     distinct from the repeated-left expression printed in the source.
 \end{definition}
 
@@ -1494,9 +1492,9 @@ This is the calculation in
         CPSVExample410CorrelatedFlip.windowWeightTwo,
         CPSVExample410CorrelatedFlip.windowWeightThree}
     \leanok
-    Place one maximally entangled qubit pair on each bond of the four-spin
-    ring and apply, independently at every spin, the corrected correlated
-    flip with flip probability one quarter.  A joint flip configuration
+    Placing one maximally entangled qubit pair on each bond of the four-spin
+    ring and applying the corrected correlated
+    flip with flip probability one quarter independently at every spin, a joint flip configuration
     $s\in\{0,1\}^4$ has probability
     \begin{align}
         P(s) & =\prod_{n=1}^4\left(\tfrac14\right)^{s_n}
@@ -1504,7 +1502,7 @@ This is the calculation in
         \notag
     \end{align}
     and its bond pattern $t\in\{0,1\}^4$ is $t_n=s_n\oplus s_{n+1}$, with
-    spin five identified with spin one.  Write $q$ for the pushforward of
+    spin five identified with spin one.  Let $q$ denote the pushforward of
     $P$ to bond patterns.  The weight family of a window of $k$ consecutive
     spins, $1\le k\le 3$, assigns to each configuration of its $k-1$
     interior bond labels and its two boundary qubits one quarter of the
@@ -1822,8 +1820,8 @@ This is the calculation in
         MPOTensor.CPSVExample411Ambient.embedConfig}
     \leanok
     \uses{def:cpsv_example411_binary_support_model}
-    Identify the ambient one-site basis with
-    $\{|a,b\rangle:a,b\in\{0,1\}\}$.  Define
+    Identifying the ambient one-site basis with
+    $\{|a,b\rangle:a,b\in\{0,1\}\}$, define
     \begin{align}
         \iota(k) & =|k,k\rangle,
                  & V_{i,k}       & =\delta_{i,\iota(k)},
@@ -1831,7 +1829,7 @@ This is the calculation in
         \notag
     \end{align}
     Then $\iota$ is injective and $V^*V=I_2$.  For a binary configuration
-    $\sigma$, write $\iota\sigma$ for its sitewise image in the ambient basis.
+    $\sigma$, let $\iota\sigma$ denote its sitewise image in the ambient basis.
 \end{definition}
 
 \begin{theorem}[Exact ambient support and periodic-operator congruence]
@@ -2074,7 +2072,7 @@ This is the calculation in
     \leanok
     \uses{def:block_entropy, thm:cpsv_example411_length_four_effective_spectra}
     The effective binary tensor generates positive semidefinite periodic
-    operators.  On the ring of length four, write $S_L=S(\rho_L)$.  With
+    operators.  On the ring of length four, let $S_L=S(\rho_L)$.  With
     $h(x)=-x\log x$, where $\log$ is the natural logarithm,
     \begin{align}
         S_1 & =\log 2,\notag                      \\
@@ -2199,13 +2197,12 @@ This is the calculation in
     \leanok
     \uses{def:cpsv_example412_site_sign}
     For a binary configuration
-    $\boldsymbol\sigma=(\sigma_0,\ldots,\sigma_{N-1})$, define
+    $\boldsymbol\sigma=(\sigma_0,\ldots,\sigma_{N-1})$, define the diagonal
+    entry of $\sigma_z^{\otimes N}$ at $\boldsymbol\sigma$ by
     \begin{align}
         z(\boldsymbol\sigma)=\prod_{k=0}^{N-1}z_{\sigma_k}.
         \notag
     \end{align}
-    This is the diagonal entry of $\sigma_z^{\otimes N}$ at
-    $\boldsymbol\sigma$.
 \end{definition}
 
 \begin{theorem}[Exact positive-length operator and positivity]
@@ -2264,13 +2261,13 @@ This is the calculation in
     \leanok
     \uses{def:cpsv_example412_configuration_sign, thm:cpsv_example412_literal_formula}
     For the state in
-    \cite[Example~4.12, lines~932--938]{Cirac2016MPDO_arXiv}, at $N=4$
-    regard the sites as
-    $A=\{0\}$, $B=\{1,3\}$, and $C=\{2\}$.  Encode the two binary labels
-    $(b_1,b_3)$ as one four-dimensional label $b$, and write
-    $z_a\in\{1,-1\}$ for the eigenvalue of $\sigma_z$ at $a$.  In the basis
-    $(a,b,c)\leftrightarrow(a,b_1,c,b_3)$, let $\rho_{ABC}$ be the normalized
-    four-site state and set
+    \cite[Example~4.12, lines~932--938]{Cirac2016MPDO_arXiv} at $N=4$,
+    partitioning the sites as
+    $A=\{0\}$, $B=\{1,3\}$, and $C=\{2\}$, encoding the two binary labels
+    $(b_1,b_3)$ as one four-dimensional label $b$, and writing
+    $z_a\in\{1,-1\}$ for the eigenvalue of $\sigma_z$ at $a$, let $\rho_{ABC}$
+    be the normalized four-site state in the basis
+    $(a,b,c)\leftrightarrow(a,b_1,c,b_3)$ and set
     \begin{align}
         w(a,b,c) & =\frac{1+z_a z_{b_1}z_c z_{b_3}}{16}.
         \notag
@@ -2344,10 +2341,10 @@ This is the calculation in
     $B=\bigoplus_q B_q^L\otimes B_q^R$ in which the two overlapping actions
     have the forms $R_q\otimes I_{B_q^R}$ and
     $I_{B_q^L}\otimes S_q$. Compression of the original positive operators
-    shows that every $R_q$ and $S_q$ is positive semidefinite. Normalize the
-    two factors in each summand and take
-    $p_q=\operatorname{tr}(R_q)\operatorname{tr}(S_q)$. The factorization and
-    the trace-one hypothesis imply $\sum_q p_q=1$; zero factors give
+    shows that every $R_q$ and $S_q$ is positive semidefinite. Normalizing the
+    two factors in each summand and setting
+    $p_q=\operatorname{tr}(R_q)\operatorname{tr}(S_q)$, the factorization and
+    the trace-one hypothesis imply $\sum_q p_q=1$, while zero factors give
     zero-weight summands. Thus the transformed state is the direct sum
     $\bigoplus_q p_q\,\widehat R_q\otimes\widehat S_q$, which is the quantum
     Markov form of \cite[Theorem~6]{Hayden2004Structure}.
@@ -2367,8 +2364,8 @@ This is the calculation in
     \uses{def:mpdo_source_gsnnch}
     Let $\rho$ be a positive semidefinite trace-one operator on four
     $d$-dimensional sites, and suppose that $\rho$ has the sector
-    decomposition of Definition~4.8. Regroup the sites as
-    $A=\{0\}$, $B=\{1,3\}$, and $C=\{2\}$. Then the resulting tripartite
+    decomposition of Definition~4.8. Regrouping the sites as
+    $A=\{0\}$, $B=\{1,3\}$, and $C=\{2\}$, the resulting tripartite
     state admits a quantum Markov decomposition on $B$. Consequently,
     \begin{align}
         S(ABC)+S(B)=S(AB)+S(BC).
@@ -2377,8 +2374,8 @@ This is the calculation in
 \end{theorem}
 \begin{proof}\leanok
     \uses{def:mpdo_source_gsnnch, thm:positive_commuting_overlapping_product_markov}
-    Write $B_j^{(x)}$ for the four translated bonds in sector $x$, $n_x$
-    for its multiplicity, and $c>0$ for the common normalization. Set
+    Writing $B_j^{(x)}$ for the four translated bonds in sector $x$, $n_x$
+    for its multiplicity, and $c>0$ for the common normalization, set
     \begin{align}
         L & =c\sum_x n_x B_3^{(x)}B_0^{(x)},
           & R                                & =\sum_x B_1^{(x)}B_2^{(x)}.
@@ -2644,8 +2641,8 @@ This is the calculation in
 \end{theorem}
 \begin{proof}\leanok
     \uses{lem:mpdo_sal_phys_trace_transfer_nonzero}
-    Use one physical sector, with the full physical space as its left factor
-    and a one-dimensional right factor. Its neighboring operator is the
+    Taking one physical sector with the full physical space as its left factor
+    and a one-dimensional right factor, its neighboring operator is the
     one-site periodic operator, so positivity follows from the MPDO condition
     included in SAL. The physical-trace transfer is a nonzero scalar. Unscaled
     idempotence therefore makes it equal to one, and the neighboring trace is
@@ -2678,15 +2675,15 @@ This is the calculation in
 \end{theorem}
 
 \begin{proof}\leanok
-    Take
+    Setting
     \begin{align}
         L & =\begin{pmatrix}1&1&1&1\\1&2&-7&4\end{pmatrix}, &
         R & =\begin{pmatrix}
                  1/4 & -3/100 \\1/4&-1/100\\1/4&1/100\\1/4&3/100
              \end{pmatrix},
     \end{align}
-    and let the four diagonal physical slices be the outer products of the
-    corresponding columns of $L$ and rows of $R$. Then
+    and letting the four diagonal physical slices be the outer products of the
+    corresponding columns of $L$ and rows of $R$ gives
     $LR=\operatorname{diag}(1,0)$, whereas $RL$ has rank two. The scalar
     slice and two simple-spectrum slices force every summand in any
     physical-sector factorization to have one-dimensional left and right
@@ -2700,8 +2697,8 @@ This is the calculation in
          & =\begin{pmatrix}85/8&-9/40\\-9/40&4697/5000\end{pmatrix}>0.
         \notag
     \end{align}
-    Pair this positive-definite gap with a positive-definite Perron
-    eigenmatrix $\rho$ of $\mathcal E_K$. The trace-adjoint identity gives
+    Pairing this positive-definite gap with a positive-definite Perron
+    eigenmatrix $\rho$ of $\mathcal E_K$, the trace-adjoint identity gives
     \begin{align}
         0
          & <\tr\bigl((H-\mathcal E_K^*(H))\rho\bigr)
@@ -2742,9 +2739,9 @@ This is the calculation in
 \begin{proof}\leanok
     \uses{thm:mpdo_sal_zcl_bnt_sector_structure_counterexample,
         thm:mpdo_isometric_physical_embedding}
-    Embed the four-letter obstruction tensor into four coordinates of a
-    five-dimensional physical space and place a bond-one product block on the
-    remaining coordinate. The coordinate projections are complementary. The
+    Embedding the four-letter obstruction tensor into four coordinates of a
+    five-dimensional physical space and placing a bond-one product block on the
+    remaining coordinate yields complementary coordinate projections. The
     terminal block has coefficient one, while the first block retains the
     coefficient $\mu$. Their unequal bond dimensions separate the two BNT
     representatives.
@@ -2821,7 +2818,7 @@ This is the calculation in
         thm:mpdo_local_orthogonal_sum_sal,
         lem:mpdo_sal_phys_trace_transfer_nonzero,
         thm:mpdo_source_zcl_strict_positive_length_normalization}
-    Use the prepared obstruction and terminal blocks. The obstruction slices
+    For the prepared obstruction and terminal blocks, the obstruction slices
     span $M_2(\mathbb C)$ and vanish on the terminal coordinate, whereas the
     terminal block equals one on that coordinate. Hence the pairs of one-site
     slices span $M_2(\mathbb C)\times\mathbb C$ in one letter. Both
@@ -2925,9 +2922,9 @@ This is the calculation in
 \begin{proof}\leanok
     \uses{thm:mpdo_neighboring_trace_obstruction_ambient_properties,
         thm:mpdo_neighboring_trace_obstruction_absorbed_no_factorization}
-    Choose the tensor and its two representatives from
-    Theorem~\ref{thm:mpdo_neighboring_trace_obstruction_ambient_properties}.
-    The first representative satisfies the gauge relation required by
+    For the tensor and its two representatives from
+    Theorem~\ref{thm:mpdo_neighboring_trace_obstruction_ambient_properties},
+    the first representative satisfies the gauge relation required by
     Theorem~\ref{thm:mpdo_neighboring_trace_obstruction_absorbed_no_factorization},
     which excludes every normalized rank-one neighboring-trace factorization
     of its absorbed tensor. All remaining hypotheses are the properties listed

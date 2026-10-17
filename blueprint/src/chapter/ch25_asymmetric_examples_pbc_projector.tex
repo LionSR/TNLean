@@ -158,16 +158,15 @@ $\omega:G^3\to\C^\times$; neither normalization nor unit modulus is needed.
 \begin{proof}
     \leanok
     \uses{thm:asymex_pbc_projected_zipper, thm:asymex_group_cocycle_fusion}
-    Choose $a\ne b$, take $j=b$ and $i=ghb$, and compare the entry from
-    the incoming pair $(ha,b)$ to the fused outgoing label $b$.
-    The corresponding entry of $B^{ij}W$ is
+    For $a\ne b$, $j=b$, and $i=ghb$, the entry of $B^{ij}W$ from the
+    incoming pair $(ha,b)$ to the fused outgoing label $b$ is
     \begin{align}
-        \omega(g,hb,(hb)^{-1}ha)\omega(h,b,1)\omega(g,h,b) & \ne0.
+        \omega(g,hb,(hb)^{-1}ha)\omega(h,b,1)\omega(g,h,b) & \ne0,
         \label{eq:asymex_pbc_failure_entry}
     \end{align}
-    The entry of $WT^{ij}$ is zero because $ha\ne hb$.
-    If $B^{ij}=WT^{ij}V$, multiplying by $W$ and using $VW=1$ would
-    contradict this failure of the right zipper.
+    whereas the corresponding entry of $WT^{ij}$ vanishes because $ha\ne hb$.
+    If $B^{ij}=WT^{ij}V$, multiplying by $W$ on the right and using $VW=1$
+    would contradict $B^{ij}W\ne WT^{ij}$.
 \end{proof}
 
 For example, take $G=\Z_2$, $g=h=e$, and $\omega=1$. At physical

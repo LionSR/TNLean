@@ -1,0 +1,145 @@
+\section{Birth templates and scanner scales of primaries}
+\label{sec:area_law_primary_birth_templates}
+
+Retain the primary birth regions $R_j$, their fragments $F_{j,z}$ and
+index sets $J_j$ from Definition~\ref{def:area_law_primary_regions}, at a
+layer $k$ with $r=2^k$, the fine side $t_k$ and the belt pitch $s_k$ of
+Definition~\ref{def:area_law_fine_belt_scales}. A primary is present
+exactly when $J_j$ is nonempty, in which case
+\cite[Section~11]{OpenAI2026AreaLaw} assigns its scanner scale and birth
+template as follows.
+
+% Source: 10-geometry.tex, lines 709--729 (geometry:primary-scale and
+% geometry:primary-limits) and lines 756--774 (order of the constants).
+
+\begin{definition}[Primary scanner scale and birth template]
+    \label{def:area_law_primary_birth_template}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.primaryScannerScale,
+        TNLean.PEPS.AreaLaw.Geometry.primaryBirthTemplate}
+    \leanok
+    \uses{def:area_law_primary_regions,def:area_law_fine_belt_scales,
+        def:area_law_template}
+    For a constant $C_P$, the scanner scale of a primary in layer $k$ is
+    \begin{align}
+        n_k & =\bigl\lceil C_P r^{1+2\delta_0}\bigr\rceil.
+    \end{align}
+    Let $J_j$ be nonempty, and let $n$ be a positive integer with
+    $C_{\rm tpl}|J_j|(r+1)\le n$ and $2^p\le n$. The birth template of
+    the primary is the template with parameters $n$ and $s_0=r$ whose
+    pieces are the closed rectangles $F_{j,z}$, $z\in J_j$, and whose points
+    are the lattice points of these rectangles.
+\end{definition}
+
+\begin{theorem}[Points and pieces of a primary birth template]
+    \label{thm:area_law_primary_birth_template_points}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.primaryBirthTemplate_points,
+        TNLean.PEPS.AreaLaw.Geometry.primaryBirthTemplate_pieceCount,
+        TNLean.PEPS.AreaLaw.Geometry.card_primaryFragmentIndices_le_rpow,
+        TNLean.PEPS.AreaLaw.Geometry.card_primaryBirthTemplate_pieces_le}
+    \leanok
+    The birth template $T$ of a primary satisfies
+    \begin{align}
+        T & =R_j\cap\mathbb Z^2.
+    \end{align}
+    It has $N_0=|J_j|$ pieces, each of sup-norm diameter at most $r$, and
+    its sup-norm diameter is at most $2^p$. At the belt pitch $p=p_k$,
+    \begin{align}
+        N_0 & \le 9r^{2\delta_0}.
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:area_law_primary_birth_template,
+        thm:area_law_primary_fragment_union,
+        thm:area_law_primary_fragment_rectangles,
+        thm:area_law_primary_diameter_separation,
+        thm:area_law_primary_fragment_count,
+        thm:area_law_fine_belt_scales}
+    The endpoints of each nonempty fragment have the form $o_i+m$ with
+    integers $m$, and the lower endpoint is strictly below the upper one.
+    Their difference is therefore at least one, so each piece contains a
+    lattice point and the template is nonempty. Since $R_j$ is the
+    union of its fragments $F_{j,z}$, the lattice points of the pieces are
+    exactly those of $R_j$, and the piece and template diameters follow from
+    the diameter bounds for $F_{j,z}$ and $R_j$.
+
+    Put $m=p_k-k$. Since $p_k\le(1+\delta_0)k$, we have
+    $2^m\le r^{\delta_0}$. As $2^m\ge1$,
+    \begin{align}
+        N_0 & \le(2^m+2)^2\le9\cdot4^m\le9r^{2\delta_0}.
+    \end{align}
+\end{proof}
+
+\begin{theorem}[Choice of the primary scale constant]
+    \label{thm:area_law_primary_scanner_constant}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.primaryBirthTemplate_scale,
+        TNLean.PEPS.AreaLaw.Geometry.two_pow_pitchScaleIndex_le_primaryScannerScale,
+        TNLean.PEPS.AreaLaw.Geometry.exists_primaryScannerConstant}
+    \leanok
+    For every $C_{\rm tpl}$ the constant $C_P=\max\{18C_{\rm tpl},1\}$
+    gives, for every primary of every layer at the belt pitch $p_k$,
+    \begin{align}
+        n_k                          & \ge C_{\rm tpl}N_0(r+1), &
+        \operatorname{diam}_\infty T & \le s_k\le n_k.
+    \end{align}
+    Hence the birth template is a template of
+    Definition~\ref{def:area_law_template} with parameters $n_k$ and
+    $s_0=r$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_primary_birth_template_points,
+        def:area_law_primary_birth_template}
+    If $C_{\rm tpl}\le0$, the first bound is trivial. Otherwise, since
+    $r\ge1$,
+    \begin{align}
+        C_{\rm tpl}N_0(r+1)
+         & \le C_{\rm tpl}\cdot9r^{2\delta_0}\cdot2r
+        =18C_{\rm tpl}r^{1+2\delta_0}\le n_k.
+    \end{align}
+    Also $s_k=2^{p_k}\le r^{1+\delta_0}\le r^{1+2\delta_0}\le n_k$
+    because $C_P\ge1$.
+\end{proof}
+
+\begin{theorem}[Cut clearance of a primary birth template]
+    \label{thm:area_law_primary_birth_template_clearance}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.primaryBirthTemplate_isSeparated}
+    \leanok
+    If $4D_0<C_0$, then every primary birth template satisfies
+    \begin{align}
+        \operatorname{dist}_\infty(T,Z) & >4D_0s_0.
+    \end{align}
+    The choice $C_0>100(D_0+1)$ of \cite[Section~11]{OpenAI2026AreaLaw}
+    ensures $4D_0<C_0$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_primary_birth_template_points,
+        thm:area_law_dyadic_layer_distance}
+    Every point of $T$ lies in $R_j\subseteq\overline{D_k}$. The layer
+    distance estimate gives endpoint distance at least
+    $C_0r>4D_0r=4D_0s_0$.
+\end{proof}
+
+\begin{theorem}[Primary scale limits]
+    \label{thm:area_law_primary_scale_limits}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.eventually_primaryScaleLimits,
+        TNLean.PEPS.AreaLaw.Geometry.le_primaryScannerScale}
+    \leanok
+    Fix $C_P$ and $\varepsilon>0$. For all sufficiently large $k$,
+    \begin{align}
+        \bigl\lfloor n_k^{1-\ell}\bigr\rfloor & \le\varepsilon r,   &
+        n_k^\beta                             & \le\varepsilon t_k, &
+        n_k^\beta                             & \le\varepsilon r.
+    \end{align}
+    If $C_P>0$, then for every $n_*$ also $n_k\ge n_*$ for all
+    sufficiently large $k$. The scale depends only on the layer, so these
+    thresholds are uniform over primaries.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:area_law_primary_birth_template,thm:area_law_exponent_gaps}
+    Put $e=1+2\delta_0$ and $C=\max\{C_P,0\}+1$, so $n_k\le Cr^e$.
+    Whenever $a<b$, the ratio $Cr^a/r^b=Cr^{-(b-a)}$ tends to $0$ as
+    $k\to\infty$. Because the exponent gaps give $e(1-\ell)<1$ and
+    $e\beta<\zeta$, and the fine side satisfies $r^\zeta/2\le t_k\le r$,
+    this decay yields the three upper bounds on $\lfloor n_k^{1-\ell}\rfloor$
+    and $n_k^\beta$. When $C_P>0$, the lower bound $n_k\ge C_P\,r$ tends to
+    infinity with $k$.
+\end{proof}

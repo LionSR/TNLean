@@ -41,8 +41,8 @@
 \end{theorem}
 \begin{proof}
     \leanok
-    Expand each matrix product and separate a product bond into its two
-    coordinates. The Kronecker identity fixes the spectator coordinate.
+    Expanding each matrix product and separating a product bond into its two
+    coordinates lets the Kronecker identity fix the spectator coordinate.
     For the sequential tree, its bond associator sends
     $((\alpha,\beta),\xi)$ to $(\alpha,(\beta,\xi))$, giving the same
     incoming coordinates as the fusion-then-action tree.
@@ -80,12 +80,12 @@
     \leanok
     \uses{thm:mpdo_complete_zipper_printed_fmove}
     The fixed-final forward comparison is $P\otimes I_{n_d}$, so its
-    $(q,t)$ slice gives the first identity. From
-    $S_{\rm R}(P\otimes I)=S_{\rm L}$ and $PQ=I$, obtain
+    $(q,t)$ slice gives the first identity. Combining
+    $S_{\rm R}(P\otimes I)=S_{\rm L}$ with $PQ=I$ yields
     $S_{\rm L}(Q\otimes I)=S_{\rm R}$. The fixed-final part of full
     left-tree biorthogonality gives $H_{\rm L}S_{\rm L}=I$; hence
     $H_{\rm L}S_{\rm R}=Q\otimes I$. Taking its $(t,q)$ slice gives
-    the second identity. Taking traces and dividing by $n_d$ gives the
+    the second identity, and taking traces and dividing by $n_d$ gives the
     two coefficient formulas in (\ref{eq:glm_fusion_comparison_traces}).
 \end{proof}
 
@@ -113,16 +113,15 @@
          & =\sum_{v<\chi_f}\widehat W_{bc}^{f,\lambda}[(\beta,\gamma),v]
         \widehat W_{af}^{d,\sigma}[(\alpha,v),z].\notag
     \end{align}
-    The source-oriented matrix has left-tree rows, right-tree columns,
-    and entries
+    Following the analysis direction of
+    \cite[Section~2]{GarreRubio2023MPOSym}, the source-oriented matrix has
+    left-tree rows, right-tree columns, and entries
     \begin{align}
         F_{abc}^{d}[(e,\mu,\nu),(f,\lambda,\sigma)]
          & =\chi_d^{-1}\operatorname{tr}
         (H_{\rm L}^{e,\mu,\nu}S_{\rm R}^{f,\lambda,\sigma}).
         \label{eq:glm_boundary_fusion_f_matrix}
     \end{align}
-    This is the analysis direction of
-    \cite[Section~2]{GarreRubio2023MPOSym}.
 \end{definition}
 
 \begin{theorem}[Identification of the source fusion matrix]
@@ -144,11 +143,11 @@
 \begin{proof}
     \leanok
     \uses{thm:glm_fusion_comparison_traces}
-    Use the inverse trace formula in
-    (\ref{eq:glm_fusion_comparison_traces}). The constructed family's
-    left analysis and right synthesis are exactly the two contractions
+    By the inverse trace formula in
+    (\ref{eq:glm_fusion_comparison_traces}), the constructed family's
+    left analysis and right synthesis are the two contractions
     in (\ref{eq:glm_boundary_fusion_f_matrix}), including their bond
-    flattening. Their normalized traces agree.
+    flattening, so their normalized traces agree.
 \end{proof}
 
 \begin{theorem}[Identification of the auxiliary action comparison]
@@ -179,9 +178,9 @@
     The forward trace formula is the contraction of auxiliary right
     analysis with left synthesis. On these operator/state labels,
     (\ref{eq:glm_action_tree_entries}) identifies those maps with
-    $H_{\rm seq}$ and $S_{\rm fus}$. Reindex the common incoming bond
-    $((\alpha,\beta),\xi)$ by its flattened coordinate. The trace is
-    unchanged and becomes the defining normalized trace of $L$ in
+    $H_{\rm seq}$ and $S_{\rm fus}$. Reindexing the common incoming bond
+    $((\alpha,\beta),\xi)$ by its flattened coordinate leaves the trace
+    unchanged and recovers the defining normalized trace of $L$ in
     Definition~\ref{def:glm_boundary_action_l_matrix}.
 \end{proof}
 

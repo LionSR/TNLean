@@ -8,7 +8,9 @@
         TNLean.PEPS.regularActualTwoChordPermutation_eq_of_ne}
     \leanok
     \uses{thm:peps_actual_cycle_physical_permutation}
-    In a chosen finite region with a spanning tree and root, a cycle
+    Following SCP10, lines 1765--1920 and Theorem~6.16, lines 2271--2305
+    (with the chosen tree and cycle permutation kept explicit), in a chosen
+    finite region with a spanning tree and root, a cycle
     permutation commuting with simultaneous conjugation has one original-spin
     unitary for the regular virtual action and $G$-isometric site maps. It acts on
     the coordinates derived from every input. Its adjoint implements the
@@ -16,13 +18,11 @@
     exterior retained. Both statements hold on all outgoing boundary columns
     and on the closed contraction. A controlled two-chord permutation,
     or its inverse, retains every ordered bond other than its selected second chord.
-    This auxiliary statement uses SCP10, lines 1765--1920 and Theorem~6.16,
-    lines 2271--2305; the chosen tree and cycle permutation remain explicit.
 \end{theorem}
 \begin{proof}\leanok
-    Recover the input from its derived gauge and residuals. Apply the uniform
-    operation, and use its adjoint for the inverse action.
-    Endpoint reconstruction gives the directed bond elements. The controlled
+    Recovering the input from its derived gauge and residuals, the uniform
+    operation implements the forward action and its adjoint implements the inverse action.
+    Endpoint reconstruction gives the directed bond elements, while the controlled
     permutation changes only the second residual.
 \end{proof}
 
@@ -32,15 +32,16 @@
         TNLean.PEPS.regularActualTwoChord_reverseTransport}
     \leanok
     \uses{thm:peps_tree_gauge_transport,thm:peps_actual_bidirectional_cycle_operation}
-    Let a five-edge spanning path have successive vertices $v_0,\ldots,v_5$,
-    with remaining chords $v_0v_5$ and $v_1v_4$ having the same ordered orientation.
-    Write $D_{ij}$ for the original directed bond element from $v_i$ to $v_j$.
+    As in the auxiliary calculations underlying SCP10, Theorem~6.16,
+    lines 2271--2305, let a five-edge spanning path have successive vertices
+    $v_0,\ldots,v_5$, with remaining chords $v_0v_5$ and $v_1v_4$ having the
+    same ordered orientation, and write $D_{ij}$ for the original directed bond
+    element from $v_i$ to $v_j$.
     If the loop $v_1v_2v_3v_4v_1$ is vacant, the forward operation replaces
     $D_{14}$ by $D_{45}^{-1}D_{05}D_{01}^{-1}$.
     If the loop $v_0v_1v_4v_5v_0$ is vacant, the inverse operation replaces
     $D_{14}$ by $D_{34}D_{23}D_{12}$.
     No gauge, residual, coefficient or state equality is assumed.
-    These auxiliary calculations underlie SCP10, Theorem~6.16, lines 2271--2305.
 \end{theorem}
 \begin{proof}\leanok
     Vacancy determines the residual relation after normalization by the
@@ -62,8 +63,8 @@
         TNLean.PEPS.IsGIsometric.exists_unitary_torusActualRouteFluxUpdate}
     \leanok
     \uses{thm:peps_actual_two_chord_transport}
-    On a finite torus with both periods at least four, choose any position and
-    axis. The translated six-site tile provides its spanning path, root
+    On a finite torus with both periods at least four, for any chosen position and
+    axis, the translated six-site tile provides its spanning path, root
     and two chords. One original-spin unitary is chosen before every
     bond assignment, direction, boundary configuration and target-vacancy proof.
     Its forward action and adjoint action implement the cycle permutation
@@ -89,13 +90,13 @@
     \cite{gap:rmp_peps_quantum_double_g_isometry}.
 \end{theorem}
 \begin{proof}\leanok
-    Map the fixed six-vertex path to the induced tile, in either axis.
-    The two parallel chords have the same sorting comparison at a seam.
-    Apply the shared two-chord calculation, identify its vacancy loop with the
-    target plaquette, and retain every unselected coefficient.
-    The directed middle bond element determines its sorted coefficient.
-    Apply the original-spin cycle unitary and its adjoint to the derived input
-    coordinates; the resulting assignment is therefore the stated update.
+    Mapping the fixed six-vertex path to the induced tile in either axis gives
+    two parallel chords with the same sorting comparison at a seam.
+    Applying the shared two-chord calculation, identifying its vacancy loop with the
+    target plaquette, and retaining every unselected coefficient determines the
+    sorted coefficient from the directed middle bond element.
+    Applying the original-spin cycle unitary and its adjoint to the derived input
+    coordinates then yields the stated update.
 \end{proof}
 
 \begin{theorem}[Four numbered vacant-target physical moves]
@@ -106,7 +107,7 @@
     \leanok
     \uses{thm:peps_actual_route_flux_operation}
     For the finite-torus route of width at least eight and height at least seven,
-    number right, up, left and down by $0,1,2,3$. At every source position and
+    numbering right, up, left and down by $0,1,2,3$, at every source position and
     direction there is a fixed six-spin operation implementing the
     update above whenever the clockwise target holonomy is the identity.
     The selected global operator is unitary and is the identity extension of
@@ -117,8 +118,8 @@
     \cite{gap:rmp_peps_quantum_double_g_isometry}.
 \end{theorem}
 \begin{proof}\leanok
-    For leftward and downward motion, take the tile to the left or below the
-    source and use the adjoint operation. Reverse the vacancy loop and
-    substitute the three-bond update. Unitarity is preserved by
+    For leftward and downward motion, taking the tile to the left or below the
+    source and applying the adjoint operation reverses the vacancy loop and
+    substitutes the three-bond update. Unitarity is preserved by
     adjoints and by identity extension outside the six sites.
 \end{proof}

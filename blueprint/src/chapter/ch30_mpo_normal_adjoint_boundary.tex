@@ -88,15 +88,14 @@ structure considered in \cite[Section~5]{GarreRubio2023MPOSym}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:mps_equality_reduction_exists}
-    Apply the normal-target reduction theorem to the equal periodic
-    families $T_a^\sharp$ and $T_{a^\vee}$.
-    It gives $V_aW_a=I_{\chi_{a^\vee}}$, hence
-    $\chi_{a^\vee}\leq\chi_a$. Applying the same theorem at $a^\vee$
-    gives $\chi_{(a^\vee)^\vee}\leq\chi_{a^\vee}$.
-    Involutivity proves the reverse inequality.
-    This uses the equality case of
-    \cite[Proposition~20]{Molnar2018SemiInjective}; normality is required
-    for the target in each application.
+    The equality case of \cite[Proposition~20]{Molnar2018SemiInjective},
+    applied to the equal periodic families $T_a^\sharp$ and $T_{a^\vee}$ with
+    normal target $T_{a^\vee}$, gives $V_aW_a=I_{\chi_{a^\vee}}$ and hence
+    $\chi_{a^\vee}\leq\chi_a$. Applying the same reduction at $a^\vee$ with
+    normal target $T_{(a^\vee)^\vee}$ gives
+    $\chi_{(a^\vee)^\vee}\leq\chi_{a^\vee}$, and involutivity
+    $(a^\vee)^\vee=a$ establishes the reverse inequality
+    $\chi_a\leq\chi_{a^\vee}$.
 \end{proof}
 
 \begin{theorem}[Exact dual gauges and arbitrary-boundary adjoints]
@@ -128,13 +127,12 @@ structure considered in \cite[Section~5]{GarreRubio2023MPOSym}.
         thm:glm_boundary_physical_adjoint,thm:glm_boundary_similarity}
     A normal-target reduction gives $V_aW_a=I$ and
     $V_a(T_a^\sharp)^{ij}W_a=T_{a^\vee}^{ij}$.
-    Equality of the two dimensions makes the right inverse two-sided,
-    so $W_aV_a=I$. Multiplying the letter identity by $W_a$ and $V_a$
-    proves (\ref{eq:glm_dual_letters}). Combine
+    Equality of the two bond dimensions makes the right inverse two-sided
+    ($W_aV_a=I$), so multiplying the letter identity by $W_a$ and $V_a$
+    proves (\ref{eq:glm_dual_letters}), and combining
     (\ref{eq:glm_boundary_physical_adjoint}) with
-    Theorem~\ref{thm:glm_boundary_similarity} to obtain
-    (\ref{eq:glm_dual_boundary}). The two-sided identities also cover
-    $N=0$, although the periodic hypothesis only concerns $N>0$.
+    Theorem~\ref{thm:glm_boundary_similarity} yields
+    (\ref{eq:glm_dual_boundary}) for every $N\geq0$, including $N=0$.
 \end{proof}
 
 In the following diagrams, a west virtual leg is a matrix row and an
@@ -323,10 +321,9 @@ arbitrary $X\in\MN{\chi}$.
     The summand selector $J_aJ_a^\dagger$ commutes with every letter of
     $T$ and extracts $O^N_{T_a}$. Cutting at each cyclic window, including
     wrapping windows, therefore gives commutation with every translated
-    local parent term. Theorem~\ref{thm:glm_boundary_parent_blocks}
-    gives this commutation criterion for the block sum.
-    Applying it with the derived adjoint closure proves
-    (\ref{eq:glm_normal_adjoint_parent}).
+    local parent term. Applying the block-sum commutation criterion of
+    Theorem~\ref{thm:glm_boundary_parent_blocks} with this derived adjoint
+    closure therefore establishes (\ref{eq:glm_normal_adjoint_parent}).
 \end{proof}
 
 These results give a sufficient physical $*$-family criterion for

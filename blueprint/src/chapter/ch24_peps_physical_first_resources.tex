@@ -67,10 +67,9 @@ physical operator with a contraction of local tensors.
 \begin{proof}
     \leanok
     \uses{thm:peps_physical_first_source_count,thm:peps_source_sampling_polynomial}
-    The source count is at most $C_{\rm src}L^n$. Apply the explicit
+    Since the source count is at most $C_{\rm src}L^n$ (with the maximum with one covering the case of no sources), the explicit
     sample-count estimate with this bound
-    and~(\ref{eq:peps_physical_first_sample_resource_bounds}).
-    The maximum with one covers the case of no sources.
+    and~(\ref{eq:peps_physical_first_sample_resource_bounds}) yields the stated inequality.
 \end{proof}
 
 \begin{theorem}[Polynomial branch counts after the physical exchange]
@@ -94,8 +93,8 @@ physical operator with a contraction of local tensors.
 \begin{proof}
     \leanok
     \uses{thm:peps_effect_replacement_polynomial}
-    The replacement has at most $K m^r$ branches, where $m$ is the chosen
-    stack length. Substitute its polynomial bound. The physical output
+    The replacement has at most $K m^r$ branches for the chosen
+    stack length $m$; substituting the polynomial bound for $m$ gives the estimate, since the physical output
     exchange changes neither branch labels nor coefficient sums.
 \end{proof}
 
@@ -147,7 +146,7 @@ physical operator with a contraction of local tensors.
     The gate correspondence preserves arity and lifetime participation.
     Discarding some gate occurrences can only reduce the latter count.
     Each participating gate contributes at most $b-1$ star links and $b-1$
-    sample links at a party. Sum over its at most $b$ original occurrences.
+    sample links at a party, and summing over its at most $b$ original occurrences gives $2b(b-1)$.
 \end{proof}
 
 \begin{theorem}[Polynomial virtual dimensions of the source alphabets]
@@ -175,11 +174,11 @@ physical operator with a contraction of local tensors.
     \leanok
     \uses{thm:compression_operator_alphabet_card,
         def:compression_distributed_links}
-    At a star link the cardinality is the square of the branch
-    count, hence at most $C_M^2L^{2u}$. At a sample link it is
-    $k\leq C_kL^v$. Since $L\geq1$, increase either exponent to
-    $\max(2u,v)$ and bound its nonnegative coefficient by $C_M^2+C_k$.
+    For the star and sample alphabets of
+    \cite[Proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
+    a star link has cardinality equal to the square of the branch
+    count, hence at most $C_M^2L^{2u}$, while a sample link has cardinality
+    $k\leq C_kL^v$. Since $L\geq1$, increasing either exponent to
+    $\max(2u,v)$ and bounding its nonnegative coefficient by $C_M^2+C_k$ gives the stated polynomial bound.
     % Source: 04-compression.tex, lines 565--588.
-    These are the star and sample alphabets in
-    \cite[Proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
 \end{proof}

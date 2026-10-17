@@ -1,12 +1,12 @@
 \subsection{Fixed points with time reversal and reflection}
 \label{sec:spt_mixed_fixed_points}
 
-The two conjugation actions in the classification have different origins.
-Write $t,r:G\to\mathbb Z_2$ for the time-reversal and reflection parities,
-respectively, and let $C_p$ mean complex conjugation at odd parity and the
-identity at even parity. Scalar phases transform with $\beta=t$, while
-virtual matrices transform with $\alpha=t+r$
+The two conjugation actions in the classification have different origins
 \cite[Section~III.A, local TeX lines~1120--1130]{Cirac2021Matrix}.
+With $t,r:G\to\mathbb Z_2$ denoting the time-reversal and reflection parities
+and $C_p$ denoting complex conjugation at odd parity and the identity at even
+parity, scalar phases transform with $\beta=t$, whereas virtual matrices
+transform with $\alpha=t+r$.
 
 \begin{definition}[Mixed symmetry of tensor letters]
     \label{def:spt_mixed_tensor_symmetry}
@@ -18,8 +18,8 @@ virtual matrices transform with $\alpha=t+r$
         MPSTensor.mixedTensorAction,
         MPSTensor.IsMixedSymmetric}
     \leanok
-    Define $T_{t,r}(M)=C_t(M)$ for $r=0$, and
-    $T_{t,r}(M)=C_t(M)^{\mathsf T}$ for $r=1$. The mixed physical action is
+    With $T_{t,r}(M)=C_t(M)$ for $r=0$ and
+    $T_{t,r}(M)=C_t(M)^{\mathsf T}$ for $r=1$, the mixed physical action is
     \begin{align}
         S_g(A)^i & =\sum_j U(g)_{ij}T_{t(g),r(g)}(A^j).
         \label{eq:spt_mixed_tensor_action}
@@ -153,9 +153,9 @@ virtual matrices transform with $\alpha=t+r$
     representative is required.
 \end{theorem}
 \begin{proof}\leanok
-    Set $L_g(x,y)=\omega(g,y)$ when $x=gy$, and zero otherwise. These are
-    permutation matrices with unit-modulus weights, hence unitary. The
-    two-cocycle equation at $(g,h,y)$ gives
+    The matrices $L_g$ with entries $L_g(x,y)=\omega(g,y)$ when $x=gy$ and
+    zero otherwise are permutation matrices with unit-modulus weights, hence
+    unitary, and the two-cocycle equation at $(g,h,y)$ gives
     $L_gC_{t(g)+r(g)}(L_h)=\omega(g,h)L_{gh}$ entrywise.
 \end{proof}
 
@@ -192,10 +192,10 @@ virtual matrices transform with $\alpha=t+r$
     $U(gh)=U(g)C_{t(g)}(U(h))$. The tensor has the mixed symmetry
     $S_g(A)^i=\phi(g)X_g^\dagger A^iX_g$. Its periodic $N$-site vector
     transforms by $\phi(g)^N$, with the conjugation and site reversal
-    of (\ref{eq:spt_mixed_tensor_action}). Every other unitary virtual action
-    implementing this same symmetry and character has the same class
-    $[\omega]\in H^2_{t+r}(G,\mathrm U(1))$
-    \cite[Section~III.A, local TeX lines~1147--1157]{Cirac2021Matrix}.
+    of (\ref{eq:spt_mixed_tensor_action}). As in
+    \cite[Section~III.A, local TeX lines~1147--1157]{Cirac2021Matrix},
+    every other unitary virtual action implementing this same symmetry and
+    character has the same class $[\omega]\in H^2_{t+r}(G,\mathrm U(1))$.
 \end{theorem}
 \begin{proof}\leanok
     The coefficient of $E_{xy}$ in $X_g^\dagger E_{ab}X_g$ is

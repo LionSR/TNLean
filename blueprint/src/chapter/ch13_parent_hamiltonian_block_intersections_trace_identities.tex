@@ -15,9 +15,9 @@
     \uses{def:pair_trace_separation_words}
     Full pair span gives coefficients satisfying
     $(X,0) = \sum_{|w|=S}c_w(A^k_w,A^j_w)$.
-    Define $M_\ell=\sum_{|w|=S}c_wA^\ell_w$ for every block $\ell$. Then $M$
-    lies in the simultaneous word-tuple span, and its $k$- and $j$-components
-    are $X$ and $0$, respectively.
+    Setting $M_\ell=\sum_{|w|=S}c_wA^\ell_w$ for every block $\ell$ places $M$
+    in the simultaneous word-tuple span with $k$- and $j$-components
+    $X$ and $0$.
 \end{proof}
 
 \begin{lemma}[Blockwise matrix equality from trace pairings]
@@ -68,9 +68,9 @@
 \begin{proof}
     \leanok
     \uses{lem:block_matrices_equal_from_trace_pairings, def:ground_space_parent, def:ground_space_map}
-    Write $\psi=\sum_j\phi_j$ with $\phi_j\in G_{m+2}(A^j)$. For each $j$,
-    choose $E_j$ whose image under the length-$m+2$ ground-space map for
-    $A^j$ is $\phi_j$. Comparing the coefficient of the word $awb$ in the
+    Writing $\psi=\sum_j\phi_j$ with $\phi_j\in G_{m+2}(A^j)$ and choosing
+    $E_j$ whose image under the length-$m+2$ ground-space map for
+    $A^j$ is $\phi_j$, comparing the coefficient of the word $awb$ in the
     two expressions for $\psi$ gives
     \begin{align}
         \sum_j\tr\!\left(A^j_b C^j_a A^j_w\right)
@@ -107,7 +107,7 @@
 \begin{proof}
     \leanok
     \uses{lem:block_matrices_equal_from_trace_pairings}
-    For fixed $a,b$, set $\Delta_j=A^j_bC^j_a-D^j_bA^j_a$. The assumed trace
+    For fixed $a,b$ and $\Delta_j=A^j_bC^j_a-D^j_bA^j_a$, the assumed trace
     equality says that
     $\sum_j \tr\!\left(\Delta_jA^j_w\right) = 0$
     for every word $w$ of length $m$. Since the tuples
@@ -143,15 +143,15 @@
 \begin{proof}
     \leanok
     \uses{lem:block_matrices_equal_from_trace_pairings}
-    Fix $\beta$ and $\rho$, and set
-    $\Delta_j=A^j_\beta C^j_\rho-D^j_\beta A^j_\rho$. The trace equality
-    says that
+    For fixed $\beta$ and $\rho$, setting
+    $\Delta_j=A^j_\beta C^j_\rho-D^j_\beta A^j_\rho$ turns the trace equality
+    into
     $\sum_j\tr(\Delta_jA^j_w) = 0$
     for every word $w$ of length $m$. The same nondegenerate product
     trace-pairing argument as in
     Lemma~\ref{lem:blockwise_boundary_compatibility_from_traces} gives
-    $\Delta_j=0$ for every $j$. The specialization
-    $D^j_\beta=X_jA^j_\beta$ is immediate.
+    $\Delta_j=0$ for every $j$, and the specialization
+    $D^j_\beta=X_jA^j_\beta$ follows immediately.
 \end{proof}
 
 \begin{lemma}[Fixed complementary-word compatibility from traces]
@@ -177,9 +177,9 @@
 \begin{proof}
     \leanok
     \uses{lem:block_matrices_equal_from_trace_pairings}
-    Fix $\beta$ and set
-    $\Delta_j=A^j_\beta C^j_\rho-(X_jA^j_\beta)A^j_\rho$. The trace equality
-    gives
+    For fixed $\beta$, setting
+    $\Delta_j=A^j_\beta C^j_\rho-(X_jA^j_\beta)A^j_\rho$ turns the trace
+    equality into
     $\sum_j\tr(\Delta_jA^j_w) = 0$
     for every word $w$ of length $m$. The common word-span property and the
     product trace pairing imply $\Delta_j=0$ for every $j$.
@@ -237,7 +237,7 @@
 
 \begin{proof}
     \leanok
-    Multiply $D_b$ by the normalization:
+    Multiplying $D_b$ by the normalization gives
     \begin{align}
         D_b
          & =
@@ -281,7 +281,10 @@
     \end{align}
     If each block satisfies
     $\sum_a A^j_aA^{j\,\dagger}_a = \Id$,
-    then, for every block $j$, there is a matrix
+    then the calculation in
+    \cite[Theorem~12, proof lines~1446--1451]{PerezGarcia2007Matrix}, with
+    the adjoint on $A^j_\rho$ required by the displayed normalization, yields
+    for every block $j$ a matrix
     $E^j = \sum_\rho C^j_\rho\left(A^j_\rho\right)^\dagger$
     such that, for every wrapped word $\beta$ and complementary word $\rho$,
     \begin{align}
@@ -290,9 +293,6 @@
         A^j_\beta C^j_\rho & = A^j_\beta E^jA^j_\rho.
         \notag
     \end{align}
-    This is the calculation in
-    \cite[Theorem~12, proof lines~1446--1451]{PerezGarcia2007Matrix}, with
-    the adjoint on $A^j_\rho$ required by the displayed normalization.
 \end{lemma}
 
 \begin{proof}
@@ -347,8 +347,8 @@
 \begin{proof}
     \leanok
     \uses{lem:normalized_boundary_matrix_identities}
-    Apply Lemma~\ref{lem:normalized_boundary_matrix_identities} with
-    $D_\beta=X A_\beta$. It gives
+    Applying Lemma~\ref{lem:normalized_boundary_matrix_identities} with
+    $D_\beta=X A_\beta$ gives
     $A_\beta C_\rho = A_\beta E A_\rho$
     for $E=\sum_\gamma C_\gamma A_\gamma^\dagger$. With $E_\rho=EA_\rho$,
     the compatibility hypothesis gives
@@ -459,7 +459,7 @@
 \begin{proof}
     \leanok
     \uses{lem:left_boundary_component_mem_ground_space}
-    Fix $j$. By the assumed boundary identity and cyclicity of the trace,
+    For each $j$, the assumed boundary identity and cyclicity of the trace give
     \begin{align}
         \tr\!\left(A^j_{\sigma_{n+2}} C^j_{\sigma_1}
         A^j_{\sigma_2}\cdots A^j_{\sigma_{n+1}}\right)

@@ -19,15 +19,15 @@ class TenkzMissing(FileNotFoundError):
 
 
 def tenkz_root() -> Path:
-    """Return the tenkz repository root (contains ``tex/tenkz/tenkz.sty``)."""
+    """Return the tenkz repository root (contains ``tex/tenkz/tikz-tensor-networks.sty``)."""
     env = os.environ.get("TENKZ_ROOT")
     if env:
         root = Path(env).expanduser().resolve()
-        if (root / "tex/tenkz/tenkz.sty").is_file():
+        if (root / "tex/tenkz/tikz-tensor-networks.sty").is_file():
             return root
-        raise TenkzMissing(f"TENKZ_ROOT={root} has no tex/tenkz/tenkz.sty")
+        raise TenkzMissing(f"TENKZ_ROOT={root} has no tex/tenkz/tikz-tensor-networks.sty")
     deps = REPO / ".deps" / "tenkz"
-    if (deps / "tex/tenkz/tenkz.sty").is_file():
+    if (deps / "tex/tenkz/tikz-tensor-networks.sty").is_file():
         return deps
     raise TenkzMissing(
         "tenkz is not checked out; run python3 scripts/fetch_tenkz.py"

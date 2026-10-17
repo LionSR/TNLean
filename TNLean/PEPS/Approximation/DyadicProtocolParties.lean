@@ -97,6 +97,17 @@ theorem DyadicSquare.ofTriple_toTriple {k : ℕ} (S : DyadicSquare k) :
 Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex, lines 82–84`. -/
 abbrev RepaintedSquare (k : ℕ) : Type := {S : DyadicSquare k // (S.1 : ℕ) < k}
 
+/-- The side of a non-root dyadic square is at most `L` when the root side is less than
+`2 * L`. -/
+theorem RepaintedSquare.side_le {k L : ℕ} (R : RepaintedSquare k)
+    (hk2 : 2 ^ k < 2 * L) : (2 : ℝ) ^ (R.1.1 : ℕ) ≤ (L : ℝ) := by
+  have hk : (R.1.1 : ℕ) + 1 ≤ k := R.2
+  have h1 : (2 : ℝ) ^ (R.1.1 : ℕ) * 2 ≤ 2 ^ k := by
+    rw [← pow_succ]
+    exact pow_le_pow_right₀ (by norm_num) hk
+  have h2 : (2 : ℝ) ^ k < 2 * L := by exact_mod_cast hk2
+  linarith
+
 /-- The parties of the protocol: a block party for every square of the hierarchy, and the
 placeholder party of the repainting of every non-root square.
 

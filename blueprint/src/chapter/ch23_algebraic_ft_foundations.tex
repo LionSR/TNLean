@@ -244,12 +244,12 @@ begin with a varying-bond open chain. Both fixed-length constructions are define
 \begin{proof}
     \leanok
     \uses{thm:chain_coeff_sum_cyclic, thm:pi_fin_sum_zero_extension, def:varying_bond_obc_coeff, def:varying_bond_obc_zero_pad}
-    Expand the left-hand side by~(\ref{eq:chain_coeff_sum_cyclic}). Extend the
+    Expanding the left-hand side by~(\ref{eq:chain_coeff_sum_cyclic}) and extending the
     dependent sum in~(\ref{eq:varying_bond_obc_coeff}) to the common dimension
-    $D$ by Theorem~\ref{thm:pi_fin_sum_zero_extension}. Every extended path
-    outside the rectangular bond ranges has a zero matrix entry. For the
+    $D$ via Theorem~\ref{thm:pi_fin_sum_zero_extension} isolates the rectangular bond ranges: every extended path
+    outside those ranges has a zero matrix entry. For the
     remaining paths, the one-dimensional endpoint spaces identify the last
-    virtual coordinate with the first, and the products agree term by term.
+    virtual coordinate with the first, so the products agree term by term.
 \end{proof}
 
 \begin{theorem}[Padded coefficient with a zero virtual dimension]
@@ -265,8 +265,7 @@ begin with a varying-bond open chain. Both fixed-length constructions are define
 \begin{proof}
     \leanok
     \uses{thm:varying_bond_obc_zero_pad_coeff, thm:varying_bond_obc_zero_bond}
-    Apply positive-length coefficient preservation and then the vanishing of
-    the open-chain contraction.
+    Positive-length coefficient preservation equates the padded coefficient to the open-chain contraction, which vanishes whenever a virtual dimension is zero.
 \end{proof}
 \begin{definition}[Cyclic block tensor at fixed length]
     \label{def:chain_cyclic_block_tensor}
@@ -344,13 +343,12 @@ begin with a varying-bond open chain. Both fixed-length constructions are define
         OBCChainTensor.exists_pgvwc07_site_independent_tensor}
     \leanok
     \uses{def:varying_bond_obc_ti, def:varying_bond_obc_zero_pad, def:chain_cyclic_block_tensor}
-    This is the cyclic-block construction in
-    \cite[Theorem~3]{PerezGarcia2007Matrix}, conditional on its open-chain
-    input. Let $N\geq1$. Suppose a translation-invariant state on the $N$-site
+    Let $N\geq1$, and suppose a translation-invariant state on the $N$-site
     ring has a varying-bond open-chain representation whose virtual dimensions are
-    at most $D$. Then it has a site-independent trace-MPS representation of
+    at most $D$. Conditional on this open-chain input, the cyclic-block construction in
+    \cite[Theorem~3]{PerezGarcia2007Matrix} produces a site-independent trace-MPS representation of
     bond dimension $ND$ with the same length-$N$ coefficients.
-    The constructed tensor depends on $N$, and the equality is asserted only
+    The constructed tensor depends on $N$, and the equality holds only
     at this ring length.
 \end{theorem}
 
@@ -462,11 +460,10 @@ criteria follow \cite[Theorems~7 and~8]{PerezGarcia2007Matrix}.
         \sum_{k=0}^{n-1}\lambda_k x^{n-k} & = 1,
         \label{eq:chain_combination_polynomial}
     \end{align}
-    and define $\mu_j=\sum_{k=0}^{j}\lambda_k x^{j+1-k}$. Then the
+    and define $\mu_j=\sum_{k=0}^{j}\lambda_k x^{j+1-k}$. Indexing from zero in the first auxiliary result before the proof
+    of \cite[Theorem~7]{PerezGarcia2007Matrix}, the
     combination $Y=\sum_{k=0}^{n-1}\mu_k Y_k$ is nonzero and satisfies
-    $T(Y)=\tfrac1x S(Y)$. This is the first auxiliary result before the proof
-    of \cite[Theorem~7]{PerezGarcia2007Matrix}, written with indices starting
-    at zero.
+    $T(Y)=\tfrac1x S(Y)$.
 \end{lemma}
 
 \begin{proof}
@@ -647,7 +644,8 @@ on a finite ring by an $N$th-root phase
     \uses{def:mps_tensor}
     Let $A=(A_i)_i$ be a tensor of bond dimension $D$ and let $L\ge0$. For
     $\alpha,\beta\in\Fin{D}$ the \emph{left cut vector} and the \emph{right
-        cut vector} of length $L$ are the vectors
+        cut vector} of length $L$, introduced in the proof of the proposition on
+    condition C1 in \cite{PerezGarcia2007Matrix}, are the vectors
     \begin{align}
         \lvert\Phi_{\alpha,\beta}\rangle
          & =\sum_{i_1,\ldots,i_L}\langle\alpha|A_{i_1}\cdots A_{i_L}|\beta\rangle
@@ -670,8 +668,6 @@ on a finite ring by an $N$th-root phase
     by the matrix of that site,
     $\Phi_{\alpha,\beta}(i_1\cdots i_k\,i)
         =\sum_\gamma\Phi_{\alpha,\gamma}(i_1\cdots i_k)\,(A_i)_{\gamma\beta}$.
-    These are the vectors introduced in the proof of the proposition on
-    condition C1 in \cite{PerezGarcia2007Matrix}.
 \end{definition}
 
 \begin{lemma}[Linear independence of the cut vectors]
@@ -710,7 +706,10 @@ on a finite ring by an $N$th-root phase
     Let $B$ and $C$ be tensors of bond dimension $D$ whose coefficients agree
     on every word of length $k+m$, and suppose that the left cut vectors of
     $B$ of length $k$ and the right cut vectors of $B$ of length $m$ are
-    linearly independent. Then there is an invertible matrix $W$ on the
+    linearly independent. Comparing the two bipartite decompositions
+    (\ref{eq:pgvwc07_cut_resolution}) directly recovers the square case of the freedom theorem for open-boundary
+    representations \cite[Theorem~2]{PerezGarcia2007Matrix} invoked in the
+    proof of \cite[Theorem~7]{PerezGarcia2007Matrix}: there is an invertible matrix $W$ on the
     doubled bond space with
     \begin{align}
         \Phi^{C}_{a}
@@ -726,11 +725,6 @@ on a finite ring by an $N$th-root phase
         W(C_i\otimes\Id) & =(B_i\otimes\Id)W' \qquad\text{for every }i.
         \label{eq:pgvwc07_cut_chain_relation}
     \end{align}
-    This is the square case of the freedom theorem for open-boundary
-    representations \cite[Theorem~2]{PerezGarcia2007Matrix} invoked in the
-    proof of \cite[Theorem~7]{PerezGarcia2007Matrix}, obtained here by a
-    direct comparison of the two bipartite decompositions
-    (\ref{eq:pgvwc07_cut_resolution}).
 \end{lemma}
 
 \begin{proof}
@@ -760,16 +754,14 @@ on a finite ring by an $N$th-root phase
     Let $B$ be a tensor of bond dimension $D\ge1$ with
     $\sum_iB_iB_i^\dagger=\Id$ that is $L_0$-block injective, let
     $N\ge2L_0+D^4$, and let $C$ be a tensor of bond dimension $D$ with the
-    same length-$N$ coefficients as $B$. Then there are a nonzero matrix
+    same length-$N$ coefficients as $B$. Correcting the intertwiner count in the proof of
+    \cite[Theorem~7]{PerezGarcia2007Matrix} before the unitarity argument to the $D^4+1$ cuts of the window
+    \cite{gap:pgvwc07_intertwiner_chain_off_by_one} yields a nonzero matrix
     $R\in\MN{D}$ and a scalar $x\neq0$ such that
     \begin{align}
         RC_i & =\tfrac1x\,B_iR \qquad\text{for every }i.
         \label{eq:pgvwc07_fixed_length_intertwiner}
     \end{align}
-    This is the intertwiner obtained in the proof of
-    \cite[Theorem~7]{PerezGarcia2007Matrix} before the unitarity argument,
-    with the intertwiner count corrected to the $D^4+1$ cuts of the window
-    \cite{gap:pgvwc07_intertwiner_chain_off_by_one}.
 \end{theorem}
 
 \begin{proof}
@@ -843,7 +835,8 @@ on a finite ring by an $N$th-root phase
     \lean{MPSTensor.PGVWC07CanonicalFormData, MPSTensor.IsPGVWC07CanonicalForm}
     \leanok
     \uses{def:mps_tensor}
-    A tensor $A$ of bond dimension $D$ is a \emph{translation-invariant
+    Following the consecutive block form of \cite[Theorem~4]{PerezGarcia2007Matrix},
+    a tensor $A$ of bond dimension $D$ is a \emph{translation-invariant
         canonical representation} when its bond indices split into finitely
     many blocks of positive size, and there are weights $1\ge\lambda_j>0$ and
     tensors $A^j$ on the blocks with
@@ -856,9 +849,7 @@ on a finite ring by an $N$th-root phase
     $\sum_iA_i^j(A_i^j)^\dagger=\Id$, there is a diagonal positive definite
     $\Lambda^j$ with $\sum_i(A_i^j)^\dagger\Lambda^jA_i^j=\Lambda^j$, and
     the identity is the only fixed point of
-    $X\mapsto\sum_iA_i^jX(A_i^j)^\dagger$ up to scalars. This is the block
-    form of \cite[Theorem~4]{PerezGarcia2007Matrix}, which lists the blocks
-    consecutively.
+    $X\mapsto\sum_iA_i^jX(A_i^j)^\dagger$ up to scalars.
 \end{definition}
 
 \begin{lemma}[Canonical representations from the existence theorem]
@@ -896,11 +887,10 @@ on a finite ring by an $N$th-root phase
         \label{eq:pgvwc07_ti_canonical_representation_sum}
     \end{align}
     If $A$ has two distinct blocks, then $A$ is not $L$-block injective for
-    any $L$. Consequently, if $D\ge1$ and $A$ is $L$-block injective for
+    any $L$. Consequently, as in the first assertion of the proposition on condition C1 in
+    \cite{PerezGarcia2007Matrix}, if $D\ge1$ and $A$ is $L$-block injective for
     some $L$, then $A$ has a single block, and
-    $\sum_iA_iA_i^\dagger=\lambda^2\,\Id$ with $0<\lambda\le1$. This is the
-    first assertion of the proposition on condition C1 in
-    \cite{PerezGarcia2007Matrix}.
+    $\sum_iA_iA_i^\dagger=\lambda^2\,\Id$ with $0<\lambda\le1$.
 \end{lemma}
 
 \begin{proof}

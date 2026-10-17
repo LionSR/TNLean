@@ -86,13 +86,12 @@ of Definitions~\ref{def:cpsv_canonical_form} and~\ref{def:cpsv_cfii}.
     \uses{def:mps_transfer_idempotence, def:normal, def:injective}
     Assume $D > 0$. Let $A$ be a normal renormalization fixed point such that
     $\sum_i (A^i)^\dagger A^i = \Id$.
-    Then $A$ is injective.
-    This is the left-canonical injectivity step in
-    \cite[Appendix~B]{Cirac2016MPDO_arXiv}.
+    As in the left-canonical step of \cite[Appendix~B]{Cirac2016MPDO_arXiv},
+    $A$ is injective.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:rfp_nt_injective}
-    Follows from Theorem~\ref{thm:rfp_nt_injective}.
+    Theorem~\ref{thm:rfp_nt_injective} applies directly.
 \end{proof}
 
 \begin{theorem}[Unitary diagonal fixed point for a left-canonical normal RFP]%
@@ -102,20 +101,20 @@ of Definitions~\ref{def:cpsv_canonical_form} and~\ref{def:cpsv_cfii}.
     \uses{def:mps_transfer_idempotence, def:normal, def:transfer_map}
     Assume $D > 0$. Let $A$ be a normal renormalization fixed point such that
     $\sum_i (A^i)^\dagger A^i = \Id$.
-    Then there exist a unitary $U$ and a diagonal positive definite matrix
-    $\Lambda$ such that, for $B^i := U^\dagger A^i U$,
-    $\sum_i (B^i)^\dagger B^i = \Id$ and $\E_B(\Lambda) = \Lambda$.
-    This is the diagonal fixed-point reduction in
-    \cite[Appendix~B]{Cirac2016MPDO_arXiv}.
+    As in the diagonal fixed-point reduction of
+    \cite[Appendix~B]{Cirac2016MPDO_arXiv}, there exist a unitary $U$ and a
+    diagonal positive definite matrix $\Lambda$ such that, for
+    $B^i := U^\dagger A^i U$, $\sum_i (B^i)^\dagger B^i = \Id$ and
+    $\E_B(\Lambda) = \Lambda$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:rfp_nt_structural_of_left_canonical, thm:injective_irreducible, thm:form_II}
-    By Theorem~\ref{thm:rfp_nt_structural_of_left_canonical}, $A$ is
-    injective. By Theorem~\ref{thm:injective_irreducible}, its transfer map
-    $\E_A$ is irreducible. Applying canonical form~II (Theorem~\ref{thm:form_II})
-    yields a unitary matrix $U$ preserving the left-canonical condition and a
-    diagonal positive-definite matrix $\Lambda$ satisfying
-    $\E_B(\Lambda) = \Lambda$ for $B^i = U^\dagger A^i U$.
+    Theorem~\ref{thm:rfp_nt_structural_of_left_canonical} shows that $A$ is
+    injective, and Theorem~\ref{thm:injective_irreducible} implies that its
+    transfer map $\E_A$ is irreducible. Canonical form~II
+    (Theorem~\ref{thm:form_II}) then yields a unitary matrix $U$ preserving the
+    left-canonical condition and a diagonal positive-definite matrix $\Lambda$
+    satisfying $\E_B(\Lambda) = \Lambda$ for $B^i = U^\dagger A^i U$.
 \end{proof}
 
 \begin{theorem}[Rank-one classification for RFP transfer maps]%
@@ -133,9 +132,9 @@ of Definitions~\ref{def:cpsv_canonical_form} and~\ref{def:cpsv_cfii}.
     Exponential convergence of primitive channels
     (Theorem~\ref{thm:exponential_convergence_primitive}) gives
     $\lVert \E_A^n(X) - P_\rho(X)\rVert \le C(1-\delta)^n\lVert X\rVert$.
-    Transfer map idempotence implies $\E_A^n = \E_A$ for all $n \ge 1$, so
+    Transfer-map idempotence implies $\E_A^n = \E_A$ for all $n \ge 1$, so
     $\lVert \E_A(X) - P_\rho(X)\rVert \le C(1-\delta)^n\lVert X\rVert$ for all
-    $n\ge 1$. Taking $n \to \infty$ yields $\E_A = P_\rho$.
+    $n\ge 1$. Letting $n \to \infty$ yields $\E_A = P_\rho$.
 \end{proof}
 
 \begin{theorem}[Diagonal Kraus form for a normal fixed point]%
@@ -159,7 +158,7 @@ of Definitions~\ref{def:cpsv_canonical_form} and~\ref{def:cpsv_cfii}.
     $B$ and its positive diagonal fixed point as $\rho$. The rank-one
     classification gives
     $\E_B(Y)=P_\rho(Y)=\frac{\tr(Y)}{\tr(\rho)}\rho$.
-    Set
+    Setting
     \begin{align}
         \Lambda_\alpha
          & =\sqrt{\frac{D\rho_{\alpha,\alpha}}{\tr(\rho)}},
@@ -168,10 +167,10 @@ of Definitions~\ref{def:cpsv_canonical_form} and~\ref{def:cpsv_cfii}.
          & =D^{-1/2}e_{\alpha,\beta},
         \notag                                              \\
         K_{\alpha,\beta}
-         & =\Lambda E_{\alpha,\beta}.
+         & =\Lambda E_{\alpha,\beta},
         \notag
     \end{align}
-    Direct multiplication of matrix units yields
+    direct multiplication of matrix units yields
     \begin{align}
         \sum_{\alpha,\beta}K_{\alpha,\beta}Y
         K_{\alpha,\beta}^{\dagger}
@@ -214,9 +213,10 @@ of Definitions~\ref{def:cpsv_canonical_form} and~\ref{def:cpsv_cfii}.
     \lean{MPSTensor.rfp_nt_structural_full_unit_pair}
     \leanok
     \uses{thm:rfp_nt_structural_full}
-    A normal left-canonical renormalization fixed-point tensor $A$ admits a
-    decomposition $A^i=X\Lambda U^iX^{-1}$, where
-    $\Lambda$ is diagonal positive and
+    Under the unit pair-index convention of
+    \cite[Section~3]{Cirac2016MPDO_arXiv}, a normal left-canonical
+    renormalization fixed-point tensor $A$ admits a decomposition
+    $A^i=X\Lambda U^iX^{-1}$, where $\Lambda$ is diagonal positive and
     \begin{align}
         \sum_i \overline{(U^i)_{\alpha,\beta}}
         (U^i)_{\alpha',\beta'}
@@ -224,16 +224,14 @@ of Definitions~\ref{def:cpsv_canonical_form} and~\ref{def:cpsv_cfii}.
         \delta_{\alpha,\alpha'}\delta_{\beta,\beta'}.
         \notag
     \end{align}
-    This is the unit pair-index convention of
-    \cite[Section~3]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:isometry_canonical_form_of_rfp_nt}
-    Apply Theorem~\ref{thm:isometry_canonical_form_of_rfp_nt}, which gives
-    $A^i = X\sqrt{\Lambda}\,U^i X^{-1}$ with $U$ already a unit pair-index
-    isometry. Set $\widetilde\Lambda_\alpha = \sqrt{\Lambda_\alpha}$, so that
+    Theorem~\ref{thm:isometry_canonical_form_of_rfp_nt} gives
+    $A^i = X\sqrt{\Lambda}\,U^i X^{-1}$ with $U$ a unit pair-index isometry;
+    setting $\widetilde\Lambda_\alpha = \sqrt{\Lambda_\alpha}$ yields
     $A^i = X\widetilde\Lambda\,U^i X^{-1}$ with $\widetilde\Lambda$ diagonal
-    positive; the decomposition and the pair-index condition are immediate.
+    positive.
 \end{proof}
 
 \begin{definition}[Square-root fixed-point form]%
@@ -267,9 +265,10 @@ of Definitions~\ref{def:cpsv_canonical_form} and~\ref{def:cpsv_cfii}.
         \sqrt{\lambda_\alpha}.
         \notag
     \end{align}
-    Thus $\rho=\diag(\lambda_\alpha)$ is the trace-one diagonal fixed point.
-    This records the $j=j'$ part of the joint isometry condition
-    \cite[Appendix~B, lines~1278, 1281--1283, 1300]{Cirac2016MPDO_arXiv}.
+    In the $j=j'$ sector of
+    \cite[Appendix~B, lines~1278, 1281--1283, 1300]{Cirac2016MPDO_arXiv},
+    $\rho=\diag(\lambda_\alpha)$ is therefore the trace-one diagonal fixed
+    point.
 \end{definition}
 
 \begin{lemma}[Gauge invariance of the square-root fixed-point form]%
@@ -280,14 +279,14 @@ of Definitions~\ref{def:cpsv_canonical_form} and~\ref{def:cpsv_cfii}.
     If $A \sim_{\mathrm{gauge}} B$ (so $B^i = Y A^i Y^{-1}$ for invertible $Y$), then $A$ has the square-root fixed-point form if and only if $B$ does.
 \end{lemma}
 \begin{proof}\leanok
-    Write $A^i=X\sqrt\rho\,U^iX^{-1}$ and
-    $B^i=Y A^iY^{-1}$. Then
+    Writing $A^i=X\sqrt\rho\,U^iX^{-1}$ and
+    $B^i=Y A^iY^{-1}$ gives
     \begin{align}
-        B^i & =(YX)\sqrt\rho\,U^i(YX)^{-1}.
+        B^i & =(YX)\sqrt\rho\,U^i(YX)^{-1},
         \notag
     \end{align}
-    Thus the diagonal weight and pair-index isometry are unchanged. Applying
-    the same argument to the inverse gauge proves the converse.
+    leaving the diagonal weight and pair-index isometry unchanged; the inverse
+    gauge proves the converse.
 \end{proof}
 
 \begin{theorem}[Trace-normalized square-root form for a normal fixed point]%
@@ -296,17 +295,17 @@ of Definitions~\ref{def:cpsv_canonical_form} and~\ref{def:cpsv_cfii}.
     \leanok
     \uses{def:is_isometry_canonical_form, thm:rfp_nt_structural_full_sq_sum}
     Every normal left-canonical renormalization fixed-point tensor has the
-    square-root fixed-point form (Definition~\ref{def:is_isometry_canonical_form}):
-    setting $\lambda_\alpha=\rho_{\alpha,\alpha}/\tr\rho$ and
+    square-root fixed-point form (Definition~\ref{def:is_isometry_canonical_form}),
+    establishing the normal-tensor characterization of
+    \cite[Appendix~B, lines~1278--1300]{Cirac2016MPDO_arXiv} with the
+    square-root weight correction: setting
+    $\lambda_\alpha=\rho_{\alpha,\alpha}/\tr\rho$ and
     $\rho_0=\diag(\lambda_\alpha)$, there exist an invertible matrix $X$ and
     a unit pair-index isometry $U$ such that
     \begin{align}
         A^i & =X\sqrt{\rho_0}\,U^iX^{-1}.
         \notag
     \end{align}
-    This is the normal-tensor characterization of
-    \cite[Appendix~B, lines~1278--1300]{Cirac2016MPDO_arXiv}, incorporating the
-    square-root weight correction.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:rfp_nt_structural_full_sq_sum}
@@ -351,11 +350,11 @@ of Definitions~\ref{def:cpsv_canonical_form} and~\ref{def:cpsv_cfii}.
             \tn[label pos=s, ports={90:physical:$i$}]{U} & \tn[skin=ring]{X^{-1}}
         \end{tenkz}
     \end{center}
-    \caption{The square-root form of a normal renormalization fixed point:
-        $\rho=\diag(\lambda_\alpha)$ and
-        $A^i=X\sqrt\rho\,U^iX^{-1}$. The pair-index isometry is the one in
-        lines~1281--1283, and the square root follows from the reference tensor
-        at line~1300 \cite[Appendix~B]{Cirac2016MPDO_arXiv}.}
+    \caption{The square-root form of a normal renormalization fixed point
+        \cite[Appendix~B]{Cirac2016MPDO_arXiv}: $\rho=\diag(\lambda_\alpha)$ and
+        $A^i=X\sqrt\rho\,U^iX^{-1}$, where $U$ satisfies the pair-index
+        isometry of lines~1281--1283 and the square-root weight matches the
+        reference tensor at line~1300.}
     \label{fig:rfp_isometry_canonical_form}
 \end{figure}
 % The source expression carries a bare $\Lambda$; the square root is the
@@ -401,10 +400,9 @@ of Definitions~\ref{def:cpsv_canonical_form} and~\ref{def:cpsv_cfii}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{lem:unit_pair_isometry_transfer}
-    Write $A^i = X\sqrt\rho\,U^i X^{-1}$. Substituting into the transfer map
-    and pulling the index-independent factors $X\sqrt\rho$ and
-    $\sqrt\rho\,X^\dagger$ outside the sum, the unit pair-index isometry
-    identity (Lemma~\ref{lem:unit_pair_isometry_transfer}) gives the rank-one form
+    Writing $A^i = X\sqrt\rho\,U^i X^{-1}$ and pulling the index-independent
+    factors $X\sqrt\rho$ and $\sqrt\rho\,X^\dagger$ outside the transfer sum,
+    Lemma~\ref{lem:unit_pair_isometry_transfer} gives the rank-one form
     \begin{align}
         \E_A(Y)
          & = \tr\!(X^{-1} Y (X^{-1})^\dagger)\,R,
@@ -413,9 +411,9 @@ of Definitions~\ref{def:cpsv_canonical_form} and~\ref{def:cpsv_cfii}.
          & = X\,\rho\,X^\dagger.
         \notag
     \end{align}
-    Idempotence then reduces to
-    $\tr\!(X^{-1} R (X^{-1})^\dagger) = \tr(\rho) = 1$, the trace
-    normalization, so $\E_A \circ \E_A = \E_A$.
+    Idempotence then reduces to the trace normalization
+    $\tr\!(X^{-1} R (X^{-1})^\dagger) = \tr(\rho) = 1$, so
+    $\E_A \circ \E_A = \E_A$.
 \end{proof}
 
 \begin{theorem}[Normal-tensor fixed-point characterization]%
@@ -423,25 +421,28 @@ of Definitions~\ref{def:cpsv_canonical_form} and~\ref{def:cpsv_cfii}.
     \lean{MPSTensor.IsNormalTensor.isTransferIdempotent_iff_isIsometryCanonicalForm}
     \leanok
     \uses{def:nt_cpsv, def:mps_transfer_idempotence, def:is_isometry_canonical_form, thm:cpsv_normal_bond_dim_pos}
-    Let $A$ be a normal tensor. Then its transfer map satisfies $\E_A^2 = \E_A$ if and only if $A$ has the square-root fixed-point form
+    Let $A$ be a normal tensor. As in the corrected form of
+    \cite[Lemma~B.1, lines~1274--1301]{Cirac2016MPDO_arXiv}, its transfer map
+    satisfies $\E_A^2 = \E_A$ if and only if $A$ has the square-root
+    fixed-point form
     \begin{align}
-        A^i = X\sqrt\rho\, U^i X^{-1}.
+        A^i = X\sqrt\rho\, U^i X^{-1},
         \notag
     \end{align}
-    In particular, the bond dimension of $A$ is positive. This establishes the
-    corrected form of \cite[Lemma~B.1, lines~1274--1301]{Cirac2016MPDO_arXiv}.
+    and in particular the bond dimension of $A$ is positive.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:cpsv_normal_bond_dim_pos, thm:cpsv_normal_tp_gauge, thm:cpsv_normal_eventually_injective, thm:gauge_invariance_normal, lem:rfp_parent_gauge_invariance, lem:isometry_canonical_form_gauge_invariant, thm:isometry_canonical_form_of_rfp_nt, thm:is_rfp_of_isometry_canonical_form}
-    Normality first gives positive bond dimension by
-    Theorem~\ref{thm:cpsv_normal_bond_dim_pos}. For the forward implication,
-    choose the pure trace-preserving Perron gauge from
-    Theorem~\ref{thm:cpsv_normal_tp_gauge}. Idempotence and algebraic
-    normality are invariant under this gauge, so
-    Theorem~\ref{thm:isometry_canonical_form_of_rfp_nt} gives the square-root
-    form for the gauged tensor. Lemma~\ref{lem:isometry_canonical_form_gauge_invariant}
-    gives the form for the original tensor. The reverse implication is
-    Theorem~\ref{thm:is_rfp_of_isometry_canonical_form}.
+    Theorem~\ref{thm:cpsv_normal_bond_dim_pos} first gives positive bond
+    dimension from normality. For the forward implication,
+    Theorem~\ref{thm:cpsv_normal_tp_gauge} places $A$ in trace-preserving
+    Perron gauge while preserving idempotence and normality;
+    Theorem~\ref{thm:isometry_canonical_form_of_rfp_nt} then puts the gauged
+    tensor in square-root form, and
+    Lemma~\ref{lem:isometry_canonical_form_gauge_invariant} transfers that
+    decomposition back to $A$. Conversely,
+    Theorem~\ref{thm:is_rfp_of_isometry_canonical_form} shows that the
+    square-root form implies transfer idempotence.
 \end{proof}
 
 Across all blocks, the repaired trace-normalized decomposition has the following
@@ -528,17 +529,16 @@ representation.
         \end{tenkz}
         % TENKZ-II-RFP-END
     \end{center}
-    \caption{Block and multiplicity indices in the fixed-point decomposition.
-        The independent rails $j$ and $q$ pass through the coefficient
-        network without being fused: $X$ and $X^{-1}$ depend on both,
-        $\sqrt\rho$ and $U$ carry the block label $j$, and $M$ carries
-        the multiplicity label $q$. The upper leg of $U$ is the physical
-        index, as in the source figure
-        \cite[Section~3.4, lines~543--563]{Cirac2016MPDO_arXiv}.}
+    \caption{Block and multiplicity indices in the fixed-point decomposition
+        \cite[Section~3.4, lines~543--563]{Cirac2016MPDO_arXiv}. The independent
+        rails $j$ and $q$ pass through the coefficient network without being
+        fused: $X$ and $X^{-1}$ depend on both, $\sqrt\rho$ and $U$ carry the
+        block label $j$, $M$ carries the multiplicity label $q$, and the upper
+        leg of $U$ is the physical index.}
     \label{fig:rfp_block_multiplicity_routing}
 \end{figure}
-Here $j$ indexes the distinct normal blocks and $q$ their repeated copies.
-The joint isometry condition across distinct blocks is established in
-Theorem~\ref{thm:residual_isometry_of_rfp_direct_sum}.
+Here $j$ indexes the distinct normal blocks and $q$ their repeated copies;
+Theorem~\ref{thm:residual_isometry_of_rfp_direct_sum} establishes the joint
+isometry condition across distinct blocks.
 % Scope restriction: cross-block orthogonality omitted here; see
 % docs/paper-gaps/cpsv16_rfp_isometry_scope.tex.

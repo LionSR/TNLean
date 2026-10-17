@@ -272,12 +272,12 @@ def _assert_generated_blocks(root: Path, filenames: tuple[str, ...] = PAGES) -> 
     events = parsers["ch-mpdo_rfp.html"].events
     prose_boundaries = (
         (
-            "Its two Kronecker factors are the two bare cups:",
-            "This is the identity in",
+            "two Kronecker factors are the two bare cups:",
+            "applying this inverse map to the doubled physical index",
         ),
         (
-            "Applying this inverse map to the doubled physical index",
-            "This is the single-block identity in",
+            "applying this inverse map to the doubled physical index",
+            "Specializing the normalization convention",
         ),
     )
     for preceding, following in prose_boundaries:

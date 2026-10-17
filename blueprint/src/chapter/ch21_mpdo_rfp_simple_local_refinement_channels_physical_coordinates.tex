@@ -40,8 +40,8 @@
 
 \begin{proof}\leanok
     \uses{thm:mpdo_physical_sector_t_closure_identity}
-    Rewrite the sector-coordinate identity through the inverse three-site
-    coordinate identification.
+    Rewriting the sector-coordinate identity through the inverse three-site
+    coordinate identification yields the equation.
 \end{proof}
 
 \begin{definition}[Physical coarse-graining]
@@ -81,8 +81,8 @@
 
 \begin{proof}\leanok
     \uses{thm:mpdo_physical_sector_s_closure_identity}
-    Rewrite the sector-coordinate identity through the inverse two-site
-    coordinate identification.
+    Rewriting the sector-coordinate identity through the inverse two-site
+    coordinate identification yields the equation.
 \end{proof}
 
 \begin{definition}[Localized physical refinement]
@@ -131,8 +131,8 @@
 \begin{proof}\leanok
     \uses{thm:mpdo_physical_t_closure_identity}
     Fixing the last ket and bra indices turns the three-site closure into a
-    two-site closure with the last tensor matrix absorbed into $X$. Apply the
-    two-to-three-site refinement identity to this virtual matrix.
+    two-site closure with the last tensor matrix absorbed into $X$, to which
+    the two-to-three-site refinement identity applies.
 \end{proof}
 
 \begin{definition}[Localized physical coarse-graining]
@@ -159,8 +159,9 @@
 
 \begin{proof}\leanok
     \uses{thm:mpdo_physical_s_map_cptp}
-    Tensor the physical coarse-graining channel with the identity and compose
-    with the two associativity permutations.
+    Tensoring the physical coarse-graining channel with the identity and
+    composing with the two associativity permutations preserves both
+    properties.
 \end{proof}
 
 \begin{theorem}[Localized coarse-graining of physical closures]
@@ -177,8 +178,8 @@
 \begin{proof}\leanok
     \uses{thm:mpdo_physical_s_closure_identity}
     Fixing the last ket and bra indices identifies the four-site closure with
-    a three-site closure having the last tensor matrix absorbed into $X$.
-    Apply the three-to-two-site coarse-graining identity.
+    a three-site closure having the last tensor matrix absorbed into $X$, to
+    which the three-to-two-site coarse-graining identity applies.
 \end{proof}
 
 % **Local fix (cyclic implication labels):** the concluding proof at source
@@ -366,11 +367,12 @@
             {$\widehat{\cal K}^{[2]}$}
         \end{tenkz}
     \end{tenkzequation}
-    \caption{The superscripts in $\widehat{\mathcal T}^2$ and
-        $\widehat{\mathcal S}^2$ denote successive overlapping applications.
-        The enclosures identify the two-site and four-site endpoints with one
-        and two sites of the blocked tensor. This is the channel construction in
-        \cite[Appendix~C.2, lines~1821--1825]{Cirac2016MPDO_arXiv}.}
+    \caption{In the channel construction of
+        \cite[Appendix~C.2, lines~1821--1825]{Cirac2016MPDO_arXiv}, the
+        superscripts in $\widehat{\mathcal T}^2$ and $\widehat{\mathcal S}^2$
+        denote successive overlapping applications, and the enclosures
+        identify the two-site and four-site endpoints with one and two sites of
+        the blocked tensor.}
     \label{fig:mpdo_blocked_rfp_channels}
 \end{figure}
 
@@ -404,9 +406,9 @@
 
 \begin{proof}\leanok
     \uses{thm:mpdo_physical_t_squared_map_cptp, thm:mpdo_physical_t_squared_closure_identity, thm:mpdo_physical_s_squared_map_cptp, thm:mpdo_physical_s_squared_closure_identity, thm:mpdo_one_site_closure_two_site_blocking, thm:mpdo_two_site_closure_two_site_blocking}
-    Decode one blocked index as a pair of physical indices and two blocked
-    indices as four physical indices. The one-site and two-site closures of
-    $\widehat{\mathcal K}^{[2]}$ thereby become respectively
+    Decoding one blocked index as a pair of physical indices and two blocked
+    indices as four physical indices turns the one-site and two-site closures of
+    $\widehat{\mathcal K}^{[2]}$ into
     $\widehat{\mathcal K}_2(X)$ and $\widehat{\mathcal K}_4(X)$.
     Conjugating the two channels by these permutation identifications
     preserves complete positivity and trace, and the two closure identities
@@ -458,13 +460,12 @@
 
 \begin{proof}\leanok
     \uses{thm:mpdo_blocked_sector_coordinate_tensor_is_rfp_via_ts}
-    Conjugate the refinement and coarse-graining channels for
+    Conjugating the refinement and coarse-graining channels for
     $\widehat{\mathcal K}^{[2]}$ by the two-site and four-site tensor
     powers of the physical isometry, as in
-    (\ref{eq:mpdo_physical_isometry_transport}). These unitary congruences
-    preserve complete positivity and trace, while the corresponding closure
-    identities carry the two fixed-point equations back to
-    $\mathcal K^{[2]}$.
+    (\ref{eq:mpdo_physical_isometry_transport}), preserves complete positivity
+    and trace, while the corresponding closure identities carry the two
+    fixed-point equations back to $\mathcal K^{[2]}$.
 \end{proof}
 
 % **False source result; proof-path drift:** Positivity, SAL, and literal ZCL
@@ -485,19 +486,18 @@
         MPSTensor.trace_evalWord_gauge_toTensorFromBlocks_mul}
     \leanok
     Let a tensor be gauge equivalent, by an invertible virtual matrix $G$, to
-    a finite block sum with component tensors $A_s$ and weights $\mu_s$. For
-    an arbitrary virtual boundary $X$ and an arbitrary word $w$, its closure
-    is the sum of the component closures with boundaries given by the diagonal
-    blocks of $G^{-1}XG$:
+    a finite block sum with component tensors $A_s$ and weights $\mu_s$. In
+    the arbitrary-boundary form of the block calculation used in
+    \cite[lines~186--195 and Appendix~C.2, lines~1646--1665 and 1810--1825]
+    {Cirac2016MPDO_arXiv}, for an arbitrary virtual boundary $X$ and an
+    arbitrary word $w$, its closure is the sum of the component closures with
+    boundaries given by the diagonal blocks of $G^{-1}XG$:
     \begin{align}
         \tr\bigl(B^wX\bigr)
-         & =\sum_s \mu_s^{|w|}\tr\bigl(A_s^w(G^{-1}XG)_{ss}\bigr).
+         & =\sum_s \mu_s^{|w|}\tr\bigl(A_s^w(G^{-1}XG)_{ss}\bigr),
         \notag
     \end{align}
-    The conjugated boundary $G^{-1}XG$ is independent of the word length.
-    This is the arbitrary-boundary form of the block calculation used in
-    \cite[lines~186--195 and Appendix~C.2, lines~1646--1665 and 1810--1825]
-    {Cirac2016MPDO_arXiv}.
+    where the conjugated boundary $G^{-1}XG$ is independent of the word length.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -529,11 +529,13 @@
     repeated-copy weights over each basis block are equal, with no equality
     required between different basis blocks, and absorb this common weight
     into its representative $\mathcal K_j$ as in
-    Definition~\ref{def:mpdo_common_sector_weight_absorption}. Then, for every
-    length $N$ and every virtual boundary $X$, the physical closure of the
-    complete tensor is the sum of the absorbed-representative closures, with
-    the boundary of a representative given by the sum of the diagonal copy
-    blocks of $G^{-1}XG$ lying over it:
+    Definition~\ref{def:mpdo_common_sector_weight_absorption}. In the
+    arbitrary-boundary form of the block calculation used in
+    \cite[lines~186--195 and Appendix~C.2, lines~1646--1665 and 1810--1825]
+    {Cirac2016MPDO_arXiv}, for every length $N$ and every virtual boundary $X$,
+    the physical closure of the complete tensor is the sum of the
+    absorbed-representative closures, with the boundary of a representative
+    given by the sum of the diagonal copy blocks of $G^{-1}XG$ lying over it:
     \begin{align}
         B_N(X)
          & =
@@ -544,22 +546,19 @@
     Neither the conjugation $X\mapsto G^{-1}XG$ nor the subsequent sum of
     diagonal copy blocks depends on $N$. In particular, the same
     representative boundary map applies at the two lengths entering the two
-    channel equations of Definition~\ref{def:is_rfp_via_ts}. This is the
-    arbitrary-boundary form of the block calculation used in
-    \cite[lines~186--195 and Appendix~C.2, lines~1646--1665 and 1810--1825]
-    {Cirac2016MPDO_arXiv}.
+    channel equations of Definition~\ref{def:is_rfp_via_ts}.
 \end{theorem}
 
 \begin{proof}\leanok
-    Apply Theorem~\ref{thm:mpdo_canonical_block_sum_arbitrary_boundary} to the
-    block sum indexed by the individual copies. Reindex this finite sum by a
-    representative $j$ and a copy label $q$. For fixed $j$, all copy weights
-    are equal, so their common $N$-th power may be absorbed into the length
-    $N$ word of the representative tensor. The remaining dependence on $q$
-    is linear in the diagonal boundary block. Summing over $q$ therefore
-    replaces these blocks by their sum, which is the stated representative
-    boundary. Neither the conjugation $X\mapsto G^{-1}XG$ nor the subsequent
-    sum of diagonal copy blocks depends on $N$.
+    Applying Theorem~\ref{thm:mpdo_canonical_block_sum_arbitrary_boundary} to
+    the block sum indexed by the individual copies and reindexing this finite
+    sum by a representative $j$ and a copy label $q$ isolates each basis block.
+    For fixed $j$, all copy weights are equal, so their common $N$-th power may
+    be absorbed into the length-$N$ word of the representative tensor. The
+    remaining dependence on $q$ is linear in the diagonal boundary block.
+    Summing over $q$ therefore replaces these blocks by their sum, which is the
+    stated representative boundary. Neither the conjugation $X\mapsto G^{-1}XG$
+    nor the subsequent sum of diagonal copy blocks depends on $N$.
 \end{proof}
 
 \begin{theorem}[Conditional composition of absorbed BNT channels]
@@ -645,11 +644,11 @@
         \end{cases}
         \notag
     \end{align}
-    Apply the representative channel to the surviving summand and sum over
-    $s$. The projective resolution makes both resulting maps trace-preserving
-    and completely positive. The boundary decomposition then identifies their
-    outputs with the length-two and length-four closures of $K$ carrying the
-    original boundary.
+    Applying the representative channel to the surviving summand and summing
+    over $s$ produces two maps that are trace-preserving and completely
+    positive by projective resolution. The boundary decomposition then
+    identifies their outputs with the length-two and length-four closures of
+    $K$ carrying the original boundary.
 \end{proof}
 
 \begin{theorem}[Completion outside the absorbed BNT supports]
@@ -692,12 +691,12 @@
 
     By hypothesis every $\mathcal K_s^{[2]}$ carries trace-preserving
     completely positive maps $\mathcal S_s,\mathcal T_s$ realizing its
-    fixed-point property. Sum these channels after compression by the
-    matching first-site projection,
+    fixed-point property. Summing these channels after compression by the
+    matching first-site projection gives completely positive maps
     $\mathcal S_{\mathrm{act}}(Y)=\sum_s\mathcal S_s(P_{s,4}YP_{s,4})$ and
-    $\mathcal T_{\mathrm{act}}(Z)=\sum_s\mathcal T_s(P_{s,2}ZP_{s,2})$. Each
-    sum is completely positive, and pairwise orthogonality of the $P_s$
-    makes it preserve exactly the trace selected by $Q$,
+    $\mathcal T_{\mathrm{act}}(Z)=\sum_s\mathcal T_s(P_{s,2}ZP_{s,2})$, and
+    pairwise orthogonality of the $P_s$ makes each sum preserve the trace
+    selected by $Q$,
     \begin{align}
         \tr\bigl(\mathcal S_{\mathrm{act}}(Y)\bigr) & =\tr(Q_4Y), &
         \tr\bigl(\mathcal T_{\mathrm{act}}(Z)\bigr) & =\tr(Q_2Z).
@@ -932,7 +931,7 @@
      & =\mathcal S.
     \notag
 \end{align}
-Conjugation by $U^{\otimes n}$ and $(U^\dagger)^{\otimes n}$ carries the
-sector-coordinate channels to the ordinary-coordinate channels. This combines
-Proposition~C.7 with
-\cite[Appendix~C.2, lines~1510--1563 and 1821--1825]{Cirac2016MPDO_arXiv}.
+Combining Proposition~C.7 with
+\cite[Appendix~C.2, lines~1510--1563 and 1821--1825]{Cirac2016MPDO_arXiv},
+conjugation by $U^{\otimes n}$ and $(U^\dagger)^{\otimes n}$ carries the
+sector-coordinate channels to the ordinary-coordinate channels.

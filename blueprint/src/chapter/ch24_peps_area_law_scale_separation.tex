@@ -40,8 +40,9 @@ The following statements give the uniform scale separation used in
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:area_law_scale_index_gaps}
-    Apply the increasing function $n\mapsto2^n$ to the two index
-    inequalities and use $2^{a+b}=2^a2^b$.
+    Applying the increasing function $n\mapsto2^n$ to the two index
+    inequalities of the preceding theorem and using
+    $2^{a+b}=2^a2^b$ yields both bounds.
 \end{proof}
 
 \begin{theorem}[Uniform multiplicative separation]
@@ -49,19 +50,20 @@ The following statements give the uniform scale separation used in
     \lean{TNLean.PEPS.AreaLaw.Geometry.exists_dyadicScale_side_ratios}
     \leanok
     \uses{def:area_law_fine_belt_scales}
-    For every real number $M$, there is a nonnegative integer $K$ such
-    that, for every nonnegative integer $k\ge K$,
+    For every real number $M$, there is a nonnegative integer $K$, depending
+    only on $M$ and the fixed exponents independently of the origin, domain,
+    cut, and neighborhood radius, such
+    that for every nonnegative integer $k\ge K$,
     \begin{align}
         M t_k & \le r_k, \\
         M r_k & \le s_k.
     \end{align}
-    The threshold depends only on $M$ and the fixed exponents,
-    independently of the origin, domain, cut, and neighborhood radius.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:area_law_scale_side_ratios}
-    Choose a nonnegative integer $d$ with $M<2^d$, using the unboundedness
-    of powers of two, and set $K=10^7d$. For every $k\ge K$, the preceding
-    theorem gives $2^dt_k\le r_k$ and $2^dr_k\le s_k$. The cell sides are
-    positive, so replacing $2^d$ by $M$ proves both inequalities.
+    By the unboundedness of powers of two, there is a nonnegative integer $d$
+    with $M<2^d$; for $K=10^7d$ and every $k\ge K$,
+    the preceding theorem gives $2^dt_k\le r_k$ and
+    $2^dr_k\le s_k$. Since the cell sides are positive, replacing $2^d$ by $M$
+    proves both inequalities.
 \end{proof}

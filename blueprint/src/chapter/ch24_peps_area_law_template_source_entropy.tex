@@ -1,13 +1,13 @@
 \section{Original-state scanner entropy from safe boxes}
 \label{sec:template-source-entropy}
 
-The entropy coverings of Lemma 9.4 now give the scanner's original-state
+Following \emph{A two-dimensional area law from a global spectral gap}
+(\texttt{08-scanner.tex}, lines 353--357, 574--590, 641--667, and 828--844,
+at revision \texttt{adc7f1241b42e322a6451854ab7e4b4c146bf78a}), the entropy
+coverings of Lemma 9.4 now give the scanner's original-state
 target and prefix inputs for a separated template.  The safe-box
-estimate is needed only at the single exponent in use.  This does not
-derive the improved exponent of Proposition 9.5.
-The source is \emph{A two-dimensional area law from a global spectral gap},
-\texttt{08-scanner.tex}, lines 353--357, 574--590, 641--667 and 828--844,
-at revision \texttt{adc7f1241b42e322a6451854ab7e4b4c146bf78a}.
+estimate is needed only at the single exponent in use, without yet deriving
+the improved exponent of Proposition 9.5.
 
 \begin{theorem}[One uniform coefficient for template entropy inputs]
     \label{thm:template-source-entropy}
@@ -39,12 +39,12 @@ at revision \texttt{adc7f1241b42e322a6451854ab7e4b4c146bf78a}.
         C_{\rm core}=C_{\rm box}(18+4/(2^e-1)),\qquad
         C_{\rm shell}=C_{\rm box}(2+14/(2^e-1)).
     \]
-    Choose $C_e=\max(0,C_{\rm core},C_{\rm shell},\log q)$ before any
-    instance.  The core bound $C_{\rm core}ns_0^e$ is at most
-    $C_e n^{1+e}$.  The ambient-depth positive prefix equals
-    $A\cap(T_j\setminus T)$, including $j=0$, so the shell
-    estimate applies to the exact scanner region.  A partial last row
-    contributes at most $n\log q\leq C_en$.  The vector never changes.
+    With $C_e=\max(0,C_{\rm core},C_{\rm shell},\log q)$ fixed before any
+    instance and the vector held fixed throughout, the core bound
+    $C_{\rm core}ns_0^e$ is at most $C_e n^{1+e}$, the shell estimate
+    applies to the exact scanner region because the ambient-depth positive
+    prefix equals $A\cap(T_j\setminus T)$ (including $j=0$), and a partial
+    last row contributes at most $n\log q\leq C_en$.
 \end{proof}
 
 \begin{theorem}[Physical entropy inputs conditional on the improved safe-box bound]
@@ -65,11 +65,11 @@ at revision \texttt{adc7f1241b42e322a6451854ab7e4b4c146bf78a}.
 \begin{proof}
     \leanok
     \uses{thm:template-source-entropy}
-    Each safe-rectangle entropy is bounded by the supremum defining
-    $F_{\rm box}$ at its maximal side length.  Apply the preceding
-    theorem at $e=e_*$ and use the exact depth identification.  There is no
-    choice of a new ground vector, no entropy of the truncated vector, and
-    no replica or interpolation parameter in this argument.
+    Without introducing a new ground vector, truncated-vector entropy, or
+    replica or interpolation parameter, each safe-rectangle entropy is bounded
+    by the supremum defining $F_{\rm box}$ at its maximal side length, so the
+    preceding theorem at $e=e_*$ and the exact depth identification yield both
+    displayed entropy bounds.
 \end{proof}
 
 The improved safe-box bound remains an input.  Its physical one-step

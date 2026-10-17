@@ -115,7 +115,8 @@ variable {ι : Type} [Fintype ι] [DecidableEq ι] {q : ℕ} {pos : ι → ℝ �
 for the direct repaintings and let the separations of the protocol hold at `t`. For a level
 `0 < n ≤ K₀ t`, readings `g`, `g'` after a generic displacement of two guides uniform on the
 `n`-blocks that differ only on the block `S`, holes of radius `h_n` and patches of radius
-`u = ν n / 2`, the conclusion of `directRepainting_step` holds with `b = protocolPatchBound ε₀ ν`,
+`u = ν n / 2`, the conclusion of `directRepainting_step_isSourceBounded` holds with
+`b = protocolPatchBound ε₀ ν`,
 without the separation, patch-count and two-owner hypotheses.
 
 Polynomial-PEPS manuscript, `06-geometry.tex`, lines 507–527, 559–570 and 574–583; Lemma 6.3
@@ -162,9 +163,11 @@ theorem directRepainting_step_of_protocolSeparations [NeZero q] {K₀ ε₀ ν B
           ((guideFrame pos q g own ph rank V hole hpV).refVec Ω)) -
         (guideFrame pos q g' own ph rank V' hole hpV').regIso.symm
           ((guideFrame pos q g' own ph rank V' hole hpV').refVec Ω)‖ ≤
-        (2 * protocolPatchBound ε₀ ν + 1) * ((L : ℝ) ^ 20)⁻¹ := by
+        (2 * protocolPatchBound ε₀ ν + 1) * ((L : ℝ) ^ 20)⁻¹ ∧
+      w.IsSourceBounded (2 * protocolPatchBound ε₀ ν) := by
   obtain ⟨hr, hu, -, hsep, hb⟩ := hs.direct n hn
-  exact directRepainting_step hn hr hu hsep hlab hg hg' own ph rank hV hV' hVc hVc' hVV' hole
+  exact directRepainting_step_isSourceBounded hn hr hu hsep hlab hg hg' own ph rank hV hV' hVc
+    hVc' hVV' hole
     patch hhole hpatch (hm.hasTwoOwnerFootprints hv hn hs.t_pos hK lab S hg)
     (hm.hasTwoOwnerFootprints hv hn hs.t_pos hK lab' S hg') hpV hpV' hL hcardHole hcardPatch hb
     (by exact_mod_cast hs.eighteen_le) hΩ hεpatch hεhole htag
@@ -172,7 +175,8 @@ theorem directRepainting_step_of_protocolSeparations [NeZero q] {K₀ ε₀ ν B
 /-- **The direct repainting as one gate at the constants of the protocol.** For constants chosen
 in the source's order with an admissible ratio `ν`, every `L ≥ 2` and `t = D log L`, every direct
 repainting at a level `0 < n ≤ K₀ t`, with holes of radius `h_n` and patches of radius
-`u = ν n / 2`, is one gate as in `directRepainting_step` with `b = protocolPatchBound ε₀ ν`.
+`u = ν n / 2`, is one gate as in `directRepainting_step` with `b = protocolPatchBound ε₀ ν`, with
+at most `2 b` pair sources in each monomial.
 
 Polynomial-PEPS manuscript, `06-geometry.tex`, lines 507–527, 559–570 and 574–583. -/
 theorem IsProtocolConstants.directRepainting_step [NeZero q] {K₀ ε₀ ν a D B₀ : ℝ}
@@ -219,7 +223,8 @@ theorem IsProtocolConstants.directRepainting_step [NeZero q] {K₀ ε₀ ν a D 
           ((guideFrame pos q g own ph rank V hole hpV).refVec Ω)) -
         (guideFrame pos q g' own ph rank V' hole hpV').regIso.symm
           ((guideFrame pos q g' own ph rank V' hole hpV').refVec Ω)‖ ≤
-        (2 * protocolPatchBound ε₀ ν + 1) * ((L : ℝ) ^ 20)⁻¹ := by
+        (2 * protocolPatchBound ε₀ ν + 1) * ((L : ℝ) ^ 20)⁻¹ ∧
+      w.IsSourceBounded (2 * protocolPatchBound ε₀ ν) := by
   have hℓ : 0 < Real.log L := Real.log_pos (by exact_mod_cast hL)
   exact directRepainting_step_of_protocolSeparations hm (hc.protocolSeparations hℓ) hn hK hv
     hlab hg hg' own ph rank hV hV' hVc hVc' hVV' hole patch hhole hpatch hpV hpV'

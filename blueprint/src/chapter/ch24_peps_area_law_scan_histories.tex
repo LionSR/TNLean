@@ -1151,7 +1151,7 @@ The following finite construction follows
 \end{proof}
 
 
-\begin{definition}[Transport data on the recursive charge trees]
+\begin{definition}[Transition data on the recursive charge trees]
     \label{def:al_scan_actual_charge_data}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualChargeData}
     \leanok
@@ -1281,7 +1281,7 @@ The following finite construction follows
         TensorPower.ReplicaTransport.TransportData.choiceEntropySymbol}
     \leanok
     \uses{def:al_scan_actual_charge_data}
-    At history $h$, let $\rho_{h,\varnothing}(p,u)$ be its old transported
+    At history $h$, let $\rho_{h,\varnothing}(p,u)$ be its old leaf
     state, let $\beta(u)$ be the Fourier weight, and let $\mathcal H_\rho$
     denote the coherent-state integral with density $\rho$. Define
     \begin{align}
@@ -1308,7 +1308,7 @@ The following finite construction follows
     \leanok
     \uses{def:al_scan_old_entropy_integral}
     Continuous symbols are integrable, and finite sums and scalar multiples
-    pass through $J_h$. For admissible transport data with positive factor
+    pass through $J_h$. For admissible transition data with positive factor
     dimensions, nonnegative metric parameter, and commuting band metrics,
     $f\le g$ implies $J_h(f)\le J_h(g)$; in particular, nonnegative continuous
     symbols have nonnegative integrals. The conditional entropy symbol $G_h$ is
@@ -1322,7 +1322,7 @@ The following finite construction follows
 \begin{proof}\leanok
     Positive coherent density preserves pointwise order, continuity ensures
     coherent integrability, and the coherent-average trace identity together
-    with transported trace integrability gives Fourier integrability. Linearity
+    with trace integrability gives Fourier integrability. Linearity
     of the integral yields the finite-sum and entropy-gain identities. For a
     nonzero symmetric prevector and $0<p<1$, the symmetric old state has trace
     one, coherent mass one, and Fourier weight integral $1/2$.
@@ -1346,7 +1346,7 @@ The following finite construction follows
         TNLean.PEPS.AreaLaw.Scan.CollarScan.aestronglyMeasurable_Icc_actualChargeEntropyDefect}
     \leanok
     \uses{def:al_scan_old_entropy_integral,def:al_scan_actual_charge_data}
-    For admissible transport data with positive factor dimensions, nonnegative
+    For admissible transition data with positive factor dimensions, nonnegative
     metric parameter, and cross-band commutation, fix a continuous real symbol
     $F$, a history $h$, a replica count $k\ge0$, and a prevector. The function
     $p\mapsto J_h(F)$ is almost everywhere measurable and integrable on both
@@ -1357,11 +1357,11 @@ The following finite construction follows
     integrability.
 \end{theorem}
 \begin{proof}\leanok
-    For a zero prevector, the transported state vanishes and $J_h(F)=0$.
-    Otherwise the Hermitian transported state $\rho$ satisfies
+    For a zero prevector, the old leaf state vanishes and $J_h(F)=0$.
+    Otherwise the Hermitian old leaf state $\rho$ satisfies
     $\operatorname{Re}\operatorname{Tr}(\rho Q_F)
         =\operatorname{Re}\operatorname{Tr}(\rho A_F)=\mathcal H_\rho(F)$,
-    so the parameter measurability and norm bound for transported Hermitian
+    so the parameter measurability and norm bound for Hermitian leaf
     expectations give $|J_h(F)|\le\|Q_F\|/2$ and integrability on $(0,1)$ and
     $[0,1]$. Finite weighted sums preserve this regularity, and the split-entropy
     symbol is continuous in the coherent vector.
@@ -1430,7 +1430,7 @@ The following finite construction follows
     entropy-gain identity, since bad histories have nonnegative choice entropy.
 \end{proof}
 
-\begin{definition}[Deterministic fill transport]
+\begin{definition}[Deterministic fill transition]
     \label{def:al_scan_actual_fill_transport}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.quantumFillMove,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.fillTransportData,
@@ -1488,8 +1488,8 @@ The following finite construction follows
 \end{theorem}
 \begin{proof}\leanok
     \uses{def:al_scan_actual_fill_transport,thm:al_scan_actual_fill_admission}
-    The fill transport is admissible and its band metrics commute.
-    The polynomial transport-root floor gives $C_0\ge0$, independent of
+    The fill transition is admissible and its band metrics commute.
+    The polynomial root-metric floor gives $C_0\ge0$, independent of
     the replica count, with $(k+2)^{-C_0K}I\le M_{0,k}(0)$, where $K$ is the
     number of bands. The filtered-norm estimate then yields the bound with
     $C=C_0K/2$.
@@ -1535,8 +1535,8 @@ The following finite construction follows
     \uses{def:al_scan_actual_fill_transport,thm:al_scan_augmented_supports}
     Under the geometric hypotheses of
     Theorem~\ref{thm:al_scan_support_classification} with
-    $k+1\leq nm$, the physical designated supports satisfy transport
-    compatibility at both terminal statuses of a deterministic fill for
+    $k+1\leq nm$, the physical designated supports are compatible with the
+    terminal partitions at both terminal statuses of a deterministic fill for
     any finite history tree.
 \end{theorem}
 \begin{proof}\leanok
@@ -1650,7 +1650,7 @@ The following finite construction follows
     $1\le\log^4 n$ and $\log q\ge0$ gives the bound.
 \end{proof}
 
-\begin{theorem}[Common logarithmic transport coefficients]
+\begin{theorem}[Common logarithmic step coefficients]
     \label{thm:al_scan_transport_coefficients_log}
     \lean{TNLean.PEPS.AreaLaw.Scan.exists_transport_coefficients_log_bound}
     \leanok
@@ -1701,7 +1701,7 @@ The following finite construction follows
     Multiplying by $a\ge0$ gives the second claim.
 \end{proof}
 
-\begin{theorem}[Transport dimension bounds]
+\begin{theorem}[Moved-subsystem and split-support dimension bounds]
     \label{thm:al_scan_actual_transport_dimension}
     \lean{TNLean.PEPS.AreaLaw.Scan.augmentedMove_subsystem,
         TNLean.PEPS.AreaLaw.Scan.logDim_physical_eq,
@@ -1910,7 +1910,7 @@ The following finite construction follows
         |\widetilde\Omega\rangle\langle\widetilde\Omega|$ and
     $s_X=S_{\widetilde\Omega}(X)$. Let $K_X$ take the value $-\log p_j$
     with probability $p_j$ for the positive eigenvalues $p_j$ of $\rho_X$,
-    and let $\mathcal B_X$ be the cut budget of the designated supports
+    and let $\mathcal B_X$ be the cut parameter of the designated supports
     for $S_0=\{x\in A:d(x)\le L\}$. Then for every real $u$ with
     $|u|\le1/(32\sqrt{(1+\vartheta)\mathcal B_X})$,
     \begin{align}
@@ -1934,7 +1934,7 @@ The following finite construction follows
     (\ref{eq:al_scan_truncated_gap}) gives parameter
     $1/(g/2)=2/g$. Theorem~\ref{thm:area_law_cut_marginal} identifies the
     marginal with $\rho_X$, and Theorem~\ref{thm:al_exact_cut_budget}
-    identifies the support budget with $\mathcal B_X$.
+    identifies the support cut parameter with $\mathcal B_X$.
 \end{proof}
 
 % Source: Proposition 4.5 and Lemma 3.1, used in 08-scanner.tex, lines 400--414.
@@ -1973,10 +1973,10 @@ The following finite construction follows
          & \le\sqrt{2\epsilon_n/g}.
         \label{eq:al_scan_truncated_closeness}
     \end{align}
-    Moreover, both marginal inequalities of
-    Theorem~\ref{thm:al_scan_actual_marginal_tails} hold for $\widetilde\Omega$
-    across every cut $X\subseteq\Lambda$, with $\vartheta=2/g$, designated
-    support budget $\mathcal B_X$, every real $w$, and every real $u$
+    Both marginal inequalities of
+    Theorem~\ref{thm:al_scan_actual_marginal_tails} also hold for $\widetilde\Omega$
+    across every cut $X\subseteq\Lambda$, with $\vartheta=2/g$, designated-support
+    cut parameter $\mathcal B_X$, every real $w$, and every real $u$
     satisfying $|u|\le1/(32\sqrt{(1+2/g)\mathcal B_X})$.
 \end{theorem}
 \begin{proof}\leanok
@@ -2026,7 +2026,7 @@ The following finite construction follows
     Theorem~\ref{thm:al_scan_exists_marginal_tails}. For the target marginal
     of $\widetilde\Omega$, write $p_i$ for its eigenvalues,
     $s_X=S_{\widetilde\Omega}(X)$, $w=n^{3/5}$, and $\delta=n^{-100}$.
-    Its labelled cut budget and typical set satisfy
+    Its labelled cut parameter and typical set satisfy
     \begin{align}
         \mathcal B_X                 & \le C_Bn(\log n)^{12},                 &
         \Pr_p\{|{-\log p_i}-s_X|>w\} & \le\delta,                                                       \\
@@ -2090,7 +2090,7 @@ The following finite construction follows
     choice here follows from Theorem~\ref{thm:al_scan_exists_marginal_tails}.
     Now fix $q$. The lattice crossing estimate with boundary factor $4$
     gives a coefficient $C$, and put $C_B=\max\{1,C\}$. Choose $N\ge2$
-    so that the tail bound with budget $C_Bn(\log n)^{12}$ at width
+    so that the tail bound with cut parameter $C_Bn(\log n)^{12}$ at width
     $n^{3/5}$ is at most $n^{-100}$ for every $n\ge N$; this is possible
     because its exponential rate is a positive constant times
     $n^{1/10}/(\log n)^6$.
@@ -2107,7 +2107,7 @@ The following finite construction follows
 \end{proof}
 
 % Revision 7224037.
-\begin{theorem}[Entropy and energy transport in a scan round]
+\begin{theorem}[Entropy and energy estimates in a scan round]
     \label{thm:al_scan_actual_transport_estimates}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualFill_transport_domainGraph,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.actualCharge_transport_domainGraph}
@@ -2183,7 +2183,7 @@ The following finite construction follows
         \label{eq:al_scan_transport_vector}
     \end{align}
     Using the history weights $w_h$, conditional weights $q_{c\mid h}$,
-    terminal weights $\pi_j(p)$, transported states $\sigma_{j,u}(p)$,
+    terminal weights $\pi_j(p)$, leaf states $\sigma_{j,u}(p)$,
     coherent measures $\mu_\sigma$, and Fourier weight $m_{1/4}$ of
     \cite[Proposition~7.4]{OpenAI2026AreaLaw} for the vector in
     (\ref{eq:al_scan_transport_vector}), let $C_h=A_h^{-1/2}B_hA_h^{-1/2}$
@@ -2261,7 +2261,7 @@ The following finite construction follows
         \mathcal J_i\ne\varnothing
                               & \ \Longrightarrow\ \log(e\dim D_i)\le\ell.
     \end{align}
-    Applying the entropy and energy transport theorem with $a\ell\le c_0$
+    Applying the round entropy and energy theorem with $a\ell\le c_0$
     yields $\beta$ and $\varepsilon$ together with all four conclusions, since
     by linearity of the copy mean,
     \begin{align}
@@ -2305,7 +2305,7 @@ The following finite construction follows
     the constant error terms to the right-hand side yields the inequality.
 \end{proof}
 
-\begin{definition}[Transported measures of a scan round]
+\begin{definition}[Leaf measures of a scan round]
     \label{def:al_scan_literal_measures}
     \lean{TNLean.PEPS.AreaLaw.Scan.transportScanRound,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.actualFillScanRound,
@@ -2322,7 +2322,7 @@ The following finite construction follows
         \label{eq:al_scan_leaf_density}
     \end{align}
     where $dU$ is normalized Haar measure and $\sigma_{k,p,j,u}$ is the
-    transported state of the filtered vector obtained from $\psi_k$.
+    leaf state of the filtered vector obtained from $\psi_k$.
     For $a\ge0$ the density is nonnegative, and the old and new leaf measures are
     $\mu_{k,p,(h,\mathrm{old})}$ and $\mu_{k,p,(h,c,\mathrm{new})}$.
 \end{definition}
@@ -2344,7 +2344,7 @@ The following finite construction follows
         TNLean.PEPS.AreaLaw.Scan.isFiniteMeasure_transportScanRound_new}
     \leanok
     \uses{def:al_scan_literal_measures}
-    For any admissible finite transport data with cross-band commutation—and in
+    For any admissible finite transition data with cross-band commutation—and in
     particular for every fill or charge round—each leaf measure $\mu_{k,p,j}$ is
     finite for every real $p$, replica count $k$, and vector $\psi_k$. If $a\ge0$,
     every continuous real function $f$ on the single-copy vector space satisfies
@@ -2385,9 +2385,9 @@ The following finite construction follows
         TensorPower.ReplicaTransport.TransportData.splitEta_eq_zero_of_not_mem_splitLeaves}
     \leanok
     \uses{def:al_scan_literal_measures,thm:al_scan_literal_integrals}
-    For admissible finite transport data with cross-band commutation—and in
+    For admissible finite transition data with cross-band commutation—and in
     particular for every fill or charge round—with $a\ge0$ and any real $p$,
-    the choice gain equals the transport entropy gain weighted by $w_h$, and
+    the choice gain equals the conditional entropy gain weighted by $w_h$, and
     the charge defect equals the good-history old-state split-entropy defect.
     For $0\le p\le1$, the round's energy sum is
     \begin{align}
@@ -2431,8 +2431,8 @@ The finite-leaf estimates below follow the charge-energy argument in
         \le 2\log\left(\mathrm e\prod_{v\in B}n_v\right).
         \label{eq:al_scan_split_entropy_support}
     \end{align}
-    For any finite transport, the split entropy at each leaf is
-    measurable on the unit sphere, and for admissible transport it is
+    For any finite transition datum, the split entropy at each leaf is
+    measurable on the unit sphere, and for admissible transition data it is
     nonnegative. If the designated supports are compatible with the leaf
     partitions and $\log(\mathrm e\prod_{v\in B_i}n_v)\le\ell$ whenever $B_i$
     has a split leaf (with $\ell\ge0$), then $0\le\eta_{i,j}(\theta)\le2\ell$
@@ -2557,7 +2557,7 @@ The finite-leaf estimates below follow the charge-energy argument in
     \leanok
     \uses{def:al_scan_literal_measures,thm:al_scan_literal_scalars,
         thm:al_scan_old_parameter_integral}
-    Fix admissible finite transport data, a nonnegative metric parameter $t$,
+    Fix admissible finite transition data, a nonnegative metric parameter $t$,
     a replica count $k\in\mathbb N$ with cross-band commutation, and a
     vector $\psi_k$. For any good-history predicate and the
     history weights $w_h$, the round's defect $\mathcal Q_k$ is
@@ -2611,7 +2611,7 @@ The finite-leaf estimates below follow the charge-energy argument in
     of $XU$ and $XU\cup Y$, respectively.
 \end{definition}
 
-\begin{theorem}[One budget for every physical status]
+\begin{theorem}[One cut bound for every physical status]
     \label{thm:al_scan_common_status_budget}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_statusMarginal_cutBudget_le_log}
     \uses{thm:al_scan_nonfar_compact,def:al_scan_status_marginals,
@@ -2628,14 +2628,14 @@ The finite-leaf estimates below follow the charge-energy argument in
     endpoint of a physical cut edge of $A$ has ambient distance greater
     than $2L+10r_0$ from $T$. Then
     $\mathcal B=C_B nD(\log n)^{12}\ge1$ bounds the designated-support
-    budget of every region in Definition~\ref{def:al_scan_status_marginals}
+    cut parameter of every region in Definition~\ref{def:al_scan_status_marginals}
     at every completed status with $k\le nm$ and every pre-charge status
     with $k+1\le nm$.
 \end{theorem}
 \begin{proof}
     The regions $XU,Y,U,UY$ lie in $V^c\subseteq S_0$, while for $V$ we
     apply the lattice estimate to $V^c$ and use complement invariance of the
-    cut-edge count and labelled budget.
+    cut-edge count and labelled cut parameter.
     Since the boundary counts are at most $16nD$ for $XU,V$, $20nD$ for $U,UY$,
     and $40nD$ for $Y$, the lattice logarithmic estimate with coefficient
     $40$ gives a uniform constant $C$ across all statuses; setting
@@ -2652,7 +2652,7 @@ The finite-leaf estimates below follow the charge-energy argument in
     $[32\sqrt{(1+\vartheta)B}]^{-1}$ is nonincreasing in $B$.
     Under the physical ground-state hypotheses of
     Theorem~\ref{thm:al_scan_actual_marginal_tails}, if
-    the designated-support budget of a cut $Q$ is at most $\mathcal B$,
+    the designated-support cut parameter of a cut $Q$ is at most $\mathcal B$,
     then with $C_0=512\mathrm e(2/g)$ and $c_0=[32\sqrt{1+2/g}]^{-1}$,
     every real $u$ satisfying $|u|\le c_0/\sqrt{\mathcal B}$ obeys
     \begin{align}
@@ -2663,7 +2663,7 @@ The finite-leaf estimates below follow the charge-energy argument in
 \end{theorem}
 \begin{proof}
     Writing $\sqrt{(1+\vartheta)B}=\sqrt{1+\vartheta}\sqrt B$, monotonicity of
-    the square root shows that replacing the cut budget by the upper bound
+    the square root shows that replacing the cut parameter by the upper bound
     $\mathcal B$ shrinks the admissible interval for $u$ and increases the
     quadratic term on the right-hand side of the moment bound.
 \end{proof}
@@ -2700,7 +2700,7 @@ The finite-leaf estimates below follow the charge-energy argument in
     \leanok
     \uses{thm:al_scan_common_status_budget,thm:al_scan_common_moment_interval}
     Choose $C_B$ by Theorem~\ref{thm:al_scan_common_status_budget}.
-    Every indicated marginal has cut budget at most $\mathcal B$.
+    Every indicated marginal has cut parameter at most $\mathcal B$.
     Apply Theorem~\ref{thm:al_scan_common_moment_interval} to each such
     cut and the prescribed truncated ground state.
 \end{proof}
@@ -2729,7 +2729,7 @@ The finite-leaf estimates below follow the charge-energy argument in
         -|\Omega\rangle\langle\Omega|\bigr\|_1
                    & \le\sqrt{2\epsilon_n/g}
     \end{align}
-    for some real phase $\theta$. Furthermore, the constants
+    for some real phase $\theta$. In addition, the constants
     $C_0=512\mathrm e(2/g)$ and $c_0=[32\sqrt{1+2/g}]^{-1}$ yield
     (\ref{eq:al_scan_common_moment}) for all five physical status regions across
     every completed status with $k\le nm$, every pre-charge status with
@@ -2737,7 +2737,7 @@ The finite-leaf estimates below follow the charge-energy argument in
 \end{theorem}
 \begin{proof}
     Choose the truncated ground vector once before all cut and history
-    indices, choose the geometric budget coefficient with radius coefficient
+    indices, choose the geometric cut-bound coefficient with radius coefficient
     $C_{\mathrm{tr}}$, and apply the common-interval moment estimate to every
     status marginal cut.
 \end{proof}
@@ -2813,7 +2813,7 @@ The finite-leaf estimates below follow the charge-energy argument in
     Then $K\ge1$, and there exist a pair $(e,\widetilde\Omega)$ and a
     number $1\le\mathcal B\le C_BnD(\log n)^{12}$ satisfying all the
     spectral, energy, phase, and trace-distance conclusions of
-    Theorem~\ref{thm:al_scan_common_status_moments}. Moreover, the constants
+    Theorem~\ref{thm:al_scan_common_status_moments}, and the constants
     $C_0=512\mathrm e(2/g)$ and $c_0=[32\sqrt{1+2/g}]^{-1}$ give
     (\ref{eq:al_scan_common_moment}) for every status region
     $XU,V,Y,U,UY$, every completed status with $k\le nm$, every pre-charge
@@ -2849,8 +2849,8 @@ The finite-leaf estimates below follow the charge-energy argument in
             \mathcal Q, & j\text{ odd}.
         \end{cases}
     \end{align}
-    The transport data $\mathscr D_j$ are the fill transport data at stage
-    $s_j$ when $j$ is even and the charge transport data at stage $s_j$ when
+    The transition data $\mathscr D_j$ are the fill transition data at stage
+    $s_j$ when $j$ is even and the charge transition data at stage $s_j$ when
     $j$ is odd; every round has $K$ bands.
 \end{definition}
 
@@ -2938,7 +2938,7 @@ The finite-leaf estimates below follow the charge-energy argument in
     replica mean energy with $\mathcal E_k(p)$.
 \end{proof}
 
-\begin{theorem}[Common transport errors for all scan rounds]
+\begin{theorem}[Common step errors for all scan rounds]
     \label{thm:al_scan_actual_round_transport}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualRounds_transport_domainGraph,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.actualRoundHistory_length_add_one_le,
@@ -3058,9 +3058,10 @@ The finite-leaf estimates below follow the charge-energy argument in
     constructions establish admissibility, designated-support compatibility,
     cross-band commutation for every $k$, and the moved-subsystem and
     split-support dimension bounds by $\ell$, with common band count $K$,
-    dimensions, and energy terms $E_i$. Applying the finite-family transport
-    theorem to $\{\mathscr D_j\}_{j<2nm}$ and rewriting the replica sum of
-    $E_i$ via~(\ref{eq:al_scan_family_energy}) yields all four conclusions.
+    dimensions, and energy terms $E_i$. Applying the finite-family
+    round-estimate theorem to $\{\mathscr D_j\}_{j<2nm}$ and rewriting the
+    replica sum of $E_i$ via~(\ref{eq:al_scan_family_energy}) yields all four
+    conclusions.
 \end{proof}
 
 \begin{theorem}[Telescoping the round norms]
@@ -3196,7 +3197,7 @@ The finite-leaf estimates below follow the charge-energy argument in
 \end{proof}
 
 % Source: 08-scanner.tex, Lemma 9.1 (lines 195--221) and lines 431--444.
-\begin{theorem}[The history estimates of Lemma 9.1 for the actual rounds]
+\begin{theorem}[The history estimates of Lemma 9.1 for the physical rounds]
     \label{thm:al_scan_actual_history_facts}
     \lean{TNLean.PEPS.AreaLaw.Scan.HistoryFacts,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.actualScanRound,
@@ -3213,8 +3214,8 @@ The finite-leaf estimates below follow the charge-energy argument in
         thm:al_scan_split_count,thm:al_scan_uniform_bad_old,
         thm:al_scan_designated_sampling}
     Fix scanner exponents, an interaction range $R$, a local dimension $q$, and
-    coefficients $C_r>0$ and $C_T\ge0$. There are constants $C$, $c>0$ and
-    $C_1>0$, and the logarithmic power $C_l=4$, chosen before the scale, such
+    coefficients $C_r>0$ and $C_T\ge0$. There exist constants $C$, $c>0$ and
+    $C_1>0$, together with the logarithmic power $C_l=4$, chosen before the scale, such
     that for all sufficiently large $n$ the following holds. Take a physical
     collar scan at the scales \eqref{eq:al_scan_uniform_tail_scales} of
     \cite[Section~9]{OpenAI2026AreaLaw}, with $r_0=\lceil C_r(\log n)^2\rceil$,
@@ -3239,34 +3240,33 @@ The finite-leaf estimates below follow the charge-energy argument in
               $C(\log n)^{C_l}$, and the choice-averaged move entropy is
               nonnegative, measurable and at most $CK(\log n)^{C_l}$.
     \end{enumerate}
-    These are the conclusions of \cite[Lemma~9.1]{OpenAI2026AreaLaw}, and of
-    the move-entropy bounds in the proof of Proposition~9.2, in the form in
-    which that proof uses them. The bad-history tail is stated with the fixed
-    power $200$ used there, rather than for every fixed power as in the lemma.
+    These bounds give the conclusions of \cite[Lemma~9.1]{OpenAI2026AreaLaw}
+    and the move-entropy bounds from the proof of Proposition~9.2, specialized to
+    the fixed bad-history exponent $200$ used there.
 \end{theorem}
 \begin{proof}\leanok
     \uses{def:al_scan_actual_round_family,thm:al_scan_designated_dilution,
         thm:al_scan_split_count,thm:al_scan_uniform_bad_old,
         thm:al_scan_designated_sampling}
-    Separate fill and charge rounds. A term splits at a leaf only when its
-    designated support meets the receiving side and the middle of some band,
+    Consider fill and charge rounds separately. A term splits at a leaf only when its
+    designated support meets both the receiving side and the middle of some band,
     so the split count is at most the number of designated split incidences,
-    which is at most $10KnD\mathfrak m$, where $\mathfrak m=2^{2R(R+1)}$
-    bounds the labels sharing an anchor. The common-parameter mixture of the
-    old and new incidence probabilities is at most $10D/m$. The bad old
-    history probability at each stage is at most the probability of a history
-    that is bad at some completed prefix, which is at most $n^{-200}$ for
-    large $n$. Sampling holds with $c=[2(C_1+1)]^{-1}$ once
-    $C_1\ge3\mathfrak m$ and $2r_0\le D$, which holds for large $n$ since
-    $r_0=O((\log n)^2)$. A valid move of a subsystem $x$ has entropy at most
-    $2\log(e\dim x)$; the moved sets and split supports lie in $r_0$-balls, so
-    every entropy is at most $2(1+(2r_0+1)^2\log q)\le
-        2(1+(2C_r+3)^2\log q)(\log n)^4$ once $\log n\ge1$, and each of the $K$
-    bands contributes one probability average to the choice-averaged entropy.
+    which is bounded by $10KnD\mathfrak m$ with $\mathfrak m=2^{2R(R+1)}$
+    bounding the labels sharing an anchor. The common-parameter mixture of the
+    old and new incidence probabilities is at most $10D/m$. At each stage, the bad old
+    history probability is at most the probability that a history is bad at some
+    completed prefix, which is at most $n^{-200}$ for large $n$. Sampling holds
+    with $c=[2(C_1+1)]^{-1}$ once $C_1\ge3\mathfrak m$ and $2r_0\le D$, both of which
+    hold for large $n$ since $r_0=O((\log n)^2)$. Finally, a valid move of a subsystem
+    $x$ has entropy at most $2\log(e\dim x)$; because the moved sets and split supports
+    lie in $r_0$-balls, every entropy is at most
+    $2(1+(2r_0+1)^2\log q)\le 2(1+(2C_r+3)^2\log q)(\log n)^4$ once $\log n\ge1$,
+    and each of the $K$ bands contributes one probability average to the
+    choice-averaged entropy.
 \end{proof}
 
 % Source: 06-transport.tex, lines 377--433; 08-scanner.tex, lines 32--59, 83--154 and 416--461.
-\begin{theorem}[The transport estimates of Proposition 7.4 for the actual rounds]
+\begin{theorem}[The differential and energy estimates of Proposition 7.4 for the physical rounds]
     \label{thm:al_scan_actual_transport_inputs}
     \lean{TNLean.PEPS.AreaLaw.Scan.ScanTransportInputs,
         TNLean.PEPS.AreaLaw.Scan.ScanTransportInputs.toScanInputs,
@@ -3283,7 +3283,7 @@ The finite-leaf estimates below follow the charge-energy argument in
     \uses{def:al_scan_actual_round_family,def:al_scan_actual_energy_terms,
         def:al_scan_physical_dimension_cap}
     Fix scanner exponents, a local dimension $q\ge1$ and a coefficient
-    $C_r\ge0$. There are $c_0>0$ and thresholds $C_0$ and $C_{l,0}$ such that
+    $C_r\ge0$. There exist $c_0>0$ and thresholds $C_0$ and $C_{l,0}$ such that
     for all scanner constants $C\ge C_0$ and $C_l\ge C_{l,0}$ and all
     sufficiently large $n$ the following holds. Take a physical collar scan
     at the scales \eqref{eq:al_scan_uniform_tail_scales} of
@@ -3299,7 +3299,7 @@ The finite-leaf estimates below follow the charge-energy argument in
     $\overline H_k\mathrm{pre}_k=\widetilde E_0\mathrm{pre}_k$, where
     $\overline H_k$ is the replica mean of the augmented truncated
     Hamiltonian; nothing is assumed at $k=0$. Extend the family to $k=0$ by
-    the unit vector of the one-point zero-copy space. Then the $2nm$ actual
+    the unit vector of the one-point zero-copy space. Then the $2nm$ physical
     rounds of the extended family, with
     interpolation parameter $a/2$ in every band metric, satisfy the following
     for every round and replica count $k$, with sequences
@@ -3323,36 +3323,35 @@ The finite-leaf estimates below follow the charge-energy argument in
               \cite[Proposition~7.4]{OpenAI2026AreaLaw};
         \item the end root of each round is the start root of the next.
     \end{enumerate}
-    Together with the comparator budgets, the initial floor and the terminal
+    Together with the comparator bounds, the initial floor and the terminal
     rough upper comparison of \cite[Proposition~8.1]{OpenAI2026AreaLaw},
-    these are the transport and comparator inputs taken as hypotheses by the
+    these properties provide the differential, energy, and comparator hypotheses for the
     conditional scanner estimate of
-    Theorem~\ref{thm:al_scanner_actual_scan}; the two remainders and the two
-    logarithmic errors are added. That theorem quantifies over every replica
-    family, so it applies to the extended family, and its conclusions at
-    $k\ge1$ concern only the given vectors.
+    Theorem~\ref{thm:al_scanner_actual_scan} after summing the two remainders and
+    the two logarithmic errors. Because that conditional scanner estimate
+    quantifies over every replica family, it applies to the extended family, and its
+    conclusions at $k\ge1$ depend only on the given vectors.
 \end{theorem}
 \begin{proof}\leanok
     \uses{def:al_scan_actual_round_family,thm:al_scan_actual_round_transport,
         thm:al_scan_actual_round_telescope,thm:al_scan_literal_integrals,
         thm:al_scan_literal_scalars,thm:al_scan_literal_parameter_integral,
         thm:al_scan_actual_history_facts}
-    Each actual round is the literal round of its transport datum, so the
-    leaf masses, the measurability of the defect and the identification of
-    the entropy gain and the energy sum come from the literal round. At the
+    Each physical round coincides with the round generated by its transition datum,
+    which directly yields the leaf masses, the measurability of the defect, and the
+    identities for the entropy gain and energy sum. At the
     source scales, $r_0\le D$, $1\le D$, $4D\le m$, $8Km\le L$ and $K\ge1$
     for large $n$, so Theorem~\ref{thm:al_scan_actual_round_transport}
-    applies with $a=W/K>0$. The norm $N(p)^2$ is a positive continuous
-    function of the interpolating root, and the derivative of
-    $-\log N(p)^2$ exists on $(0,1)$. Since $1\le\ell\le A(\log n)^4$ with
+    applies with $a=W/K>0$. The squared norm $N(p)^2$ depends continuously and
+    positively on the interpolating root, and $-\log N(p)^2$ is differentiable on
+    $(0,1)$. Since $1\le\ell\le A(\log n)^4$ with
     $A=1+(2C_r+3)^2\log q$ once $\log n\ge1$, every coefficient
-    $C'\ell^{e'}$ is at most $|C'|A^{\max(e',0)}(\log n)^{4\max(e',0)}$,
-    which is at most $C(\log n)^{C_l}$ for the stated thresholds; the energy
-    sum is nonnegative. At $k=0$ the extended vector is nonzero and, the copy
-    permutation group being trivial, symmetric; the replica mean vanishes, so
-    the energy estimate holds with eigenvalue $0\le\widetilde E_0$. The endpoint
-    agreement is the root identity of
-    Theorem~\ref{thm:al_scan_actual_round_telescope}.
+    $C'\ell^{e'}$ is bounded by $|C'|A^{\max(e',0)}(\log n)^{4\max(e',0)}\le C(\log n)^{C_l}$
+    above the stated thresholds, while the energy sum is nonnegative. At $k=0$ the
+    extended vector is nonzero and symmetric under the trivial copy-permutation group,
+    and the replica mean vanishes, so the energy estimate holds with eigenvalue
+    $0\le\widetilde E_0$. Finally, Theorem~\ref{thm:al_scan_actual_round_telescope}
+    identifies the endpoint roots of consecutive rounds.
 \end{proof}
 
 % Source: 08-scanner.tex, lines 21--59 and 399--414; Lemmas 2.1 and 3.1.
@@ -3371,10 +3370,10 @@ The finite-leaf estimates below follow the charge-energy argument in
         thm:al_scan_status_scale_separation,thm:area_law_regional_entropy_continuity}
     Fix scanner exponents, an interaction range $R$, an interaction bound
     $J\ge0$, a gap $\Delta>0$ and a target-size coefficient $C_T\ge0$, and put
-    $g=\Delta/\max\{1,J(\|f_{1,\Delta/2}\|_1+1)\}$. There is a truncation
-    coefficient $C_r>0$, and for every local dimension $q$ a constant $C_0$,
-    such that the following holds for every choice of the scanner constants
-    with dimension $q$, gap $g$ and common constant $C\ge C_0$, and every
+    $g=\Delta/\max\{1,J(\|f_{1,\Delta/2}\|_1+1)\}$. There exist a truncation
+    coefficient $C_r>0$ and, for every local dimension $q$, a threshold $C_0$
+    such that the following holds for all scanner constants
+    with dimension $q$, gap $g$ and common constant $C\ge C_0$, and all
     sufficiently large $n$. Let $\Omega$ be a gapped ground vector, with gap
     $\Delta$, of a Hamiltonian on $\Lambda$ with range $R$ and bound $J$, and
     take a collar scan at the scales of \cite[Section~9]{OpenAI2026AreaLaw}
@@ -3405,9 +3404,8 @@ The finite-leaf estimates below follow the charge-energy argument in
               $\mathcal B\le CnD(\log n)^{12}$ bounds the cut parameter of
               every completed and pre-charge status region of the scan.
     \end{enumerate}
-    These are the inputs of the proof of \cite[Proposition~9.2]{OpenAI2026AreaLaw}
-    supplied by Proposition~4.5 and Lemmas~2.1 and~3.1, for the same truncated
-    ground vector.
+    Proposition~4.5 and Lemmas~2.1 and~3.1 provide these four properties for the same
+    truncated ground vector in the proof of \cite[Proposition~9.2]{OpenAI2026AreaLaw}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:al_scan_exists_marginal_tails,thm:al_scan_target_typical_window,
@@ -3415,17 +3413,17 @@ The finite-leaf estimates below follow the charge-energy argument in
         thm:al_scan_status_scale_separation,thm:area_law_regional_entropy_continuity}
     Take the truncated ground vector of Proposition~4.5 for the compact
     collar, which satisfies the moment and tail bounds of Lemma~3.1 at every
-    region. Its trace distance is at most
-    $\sqrt{2\min(n^{-1000},g/4)/g}\le\sqrt{2/g}\,n^{-500}$. The target and
-    every shell of depth at most $L$ lie in the compact collar, which has at
-    most $(C_T+1)n^2$ sites, so Lemma~2.1 gives the entropy transfer. The
+    region. Its trace distance from $\Omega$ is at most
+    $\sqrt{2\min(n^{-1000},g/4)/g}\le\sqrt{2/g}\,n^{-500}$. Because the target and
+    every shell of depth at most $L$ lie in the compact collar of at
+    most $(C_T+1)n^2$ sites, Lemma~2.1 yields the entropy continuity bound. The
     target boundary has at most $4n$ edges, so its cut parameter is at most a
     constant times $n(\log n)^{12}$, and the tail bound at width $n^{3/5}$ is
-    at most $n^{-100}$ for large $n$. Every typical eigenvalue lies in
-    $[\mathrm e^{-S-w},\mathrm e^{-S+w}]$, so
-    $|E|\mathrm e^{-S-w}\le z\le|E|\mathrm e^{-S+w}$, which gives the
-    estimate for $\log|E|$. The status budgets are those of
-    Theorem~\ref{thm:al_scan_common_status_budget}.
+    at most $n^{-100}$ for large $n$. Since every typical eigenvalue lies in
+    $[\mathrm e^{-S-w},\mathrm e^{-S+w}]$, the mass $z$ satisfies
+    $|E|\mathrm e^{-S-w}\le z\le|E|\mathrm e^{-S+w}$, which bounds
+    $\log|E|$. Finally, Theorem~\ref{thm:al_scan_common_status_budget} bounds the
+    status cut parameters.
 \end{proof}
 
 \begin{theorem}[Uniform charge energy at the rounded scales]
@@ -3496,7 +3494,7 @@ The finite-leaf estimates below follow the charge-energy argument in
         50\mathfrak m\,2^{1/8}|C_{\mathrm{en}}|
         \ell_q^{e_{\mathrm{en}}+1/8}.
     \end{align}
-    Since $1\le\ell_q\le C_q(\log n)^4$, the logarithmic transport-coefficient
+    Since $1\le\ell_q\le C_q(\log n)^4$, the logarithmic coefficient
     bound controls both prefactors by $C_d(\log n)^{C_l}$, and setting $C=C_sC_d$
     completes the proof.
 \end{proof}
@@ -3504,12 +3502,12 @@ The finite-leaf estimates below follow the charge-energy argument in
 % Source: openai/math, adc7f1241b42e322a6451854ab7e4b4c146bf78a,
 % build/sections/06-transport.tex, lines 321--330, and
 % build/sections/08-scanner.tex, lines 442--479.
-\begin{theorem}[Nonnegative transported entropy gain]
+\begin{theorem}[Nonnegative round entropy gain]
     \label{thm:al_scan_entropy_gain_nonneg}
     \lean{TensorPower.ReplicaTransport.TransportData.entropyGain_nonneg}
     \leanok
     \uses{thm:al_scan_old_entropy_integral}
-    Let $\mathscr D$ be finite admissible transport data with positive factor
+    Let $\mathscr D$ be finite admissible transition data with positive factor
     dimensions and $t\ge0$, whose bands commute on the symmetric
     replica subspace at replica count $k\ge0$. Then for every vector
     $\mathrm{pre}$ and every real $p$,

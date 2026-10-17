@@ -26,15 +26,14 @@ and use $[A,B]=AB-BA$.
     \uses{def:qc_local_circuit}
     \lean{QuantumCircuit.siteOscillation}
     \leanok
-    For $y\in I$, define
+    Following \cite{OpenAI2026AreaLaw}, for $y\in I$, define the on-site
+    unitary supremum
     \begin{align}
         d_y(B) & =\sup\bigl\{\|[\widehat U,B]\|:
-        U\in\mathcal A_{\{y\}},\ U^\dagger U=UU^\dagger=\mathbb 1\bigr\}.
+        U\in\mathcal A_{\{y\}},\ U^\dagger U=UU^\dagger=\mathbb 1\bigr\},
         \label{eq:qc_osc_supremum}
     \end{align}
-    This is the on-site unitary supremum of
-    \cite{OpenAI2026AreaLaw}, with every test unitary acting as
-    the identity on the spectator.
+    where every test unitary acts as the identity on the spectator.
 \end{definition}
 
 \begin{theorem}[Bounds for the oscillation supremum]
@@ -57,15 +56,15 @@ and use $[A,B]=AB-BA$.
 \begin{proof}
     \leanok
     \uses{def:qc_site_oscillation}
-    The identity is an admissible unitary and its commutator is zero.
-    For each admissible $U$, the operator $\widehat U$ is unitary, so
+    The identity is an admissible unitary with zero commutator, and for each
+    admissible $U$ the operator $\widehat U$ is unitary, so
     \begin{align}
         \|[\widehat U,B]\|
          & \le\|\widehat UB\|+\|B\widehat U\|=2\|B\|.
         \label{eq:qc_osc_commutator_bound}
     \end{align}
-    The assertions follow from the upper- and lower-bound properties
-    of the supremum. Reversing a commutator changes only its sign.
+    The upper- and lower-bound properties of the supremum then yield the
+    stated inequalities, since reversing a commutator changes only its sign.
 \end{proof}
 
 \begin{theorem}[Subadditivity and absolute homogeneity]
@@ -96,20 +95,21 @@ and use $[A,B]=AB-BA$.
     \uses{thm:qc_site_oscillation_bounds,thm:qc_site_oscillation_commutant}
     The identities
     $[\widehat U,B+C]=[\widehat U,B]+[\widehat U,C]$ and
-    $[\widehat U,cB]=c[\widehat U,B]$, followed by the norm inequalities
+    $[\widehat U,cB]=c[\widehat U,B]$, combined with the norm inequalities
     and the supremum bound, give~(\ref{eq:qc_osc_subadditivity}) and
     $d_y(cB)\le|c|d_y(B)$.
-    If $c\ne0$, apply the latter inequality to $c^{-1}$ and $cB$ to
-    obtain the reverse bound in~(\ref{eq:qc_osc_homogeneity}).
-    If $c=0$, use $d_y(0)=0$.
-    Take $c=-1$ for negation and write $B-C=B+(-C)$ for subtraction.
-    For the finite sum, distribute the commutator and use
+    When $c\ne0$, applying this scalar bound to $c^{-1}$ and $cB$ yields
+    the reverse inequality in~(\ref{eq:qc_osc_homogeneity}), whereas $c=0$
+    reduces to $d_y(0)=0$.
+    Setting $c=-1$ gives invariance under negation, which together with
+    $B-C=B+(-C)$ yields the subtraction bound.
+    For a finite sum, distributing the commutator gives
     \begin{align}
         \Bigl\|\Bigl[\widehat U,\sum_{k\in F}B_k\Bigr]\Bigr\|
          & \le\sum_{k\in F}\|[\widehat U,B_k]\|
-        \le\sum_{k\in F}d_y(B_k).
+        \le\sum_{k\in F}d_y(B_k),
     \end{align}
-    Taking the supremum over $U$ proves the claim.
+    and taking the supremum over $U$ completes the bound.
 \end{proof}
 
 \begin{theorem}[Vanishing on the physical commutant]
@@ -160,10 +160,10 @@ means using $K=I\setminus Q$.
         \bigl(E_K^{\mathcal K}(B)\bigr)_{(\sigma,a),(\tau,b)}
          & =q^{-|Q|}\mathbf1_{\{\sigma|_Q=\tau|_Q\}}
         \sum_{\rho\in\{0,\ldots,q-1\}^{Q}}
-        B_{(\sigma|_K\sqcup\rho,a),(\tau|_K\sqcup\rho,b)}.
+        B_{(\sigma|_K\sqcup\rho,a),(\tau|_K\sqcup\rho,b)},
         \label{eq:qc_spectator_trace}
     \end{align}
-    Both spectator indices remain unchanged.
+    with both spectator indices left unchanged.
 \end{definition}
 
 \begin{theorem}[Preservation of spectator factors]
@@ -188,11 +188,11 @@ means using $K=I\setminus Q$.
     \leanok
     \uses{def:qc_spectator_expectation,def:qc_site_expectation,
         lem:qc_site_expectation_properties}
-    The $(a,b)$ block of $A\otimes S$ is $S_{ab}A$. Linearity gives
-    $E_K(S_{ab}A)=S_{ab}E_K(A)$, proving~(\ref{eq:qc_spectator_tensor}).
-    The expectation fixes the identity, which yields
-    (\ref{eq:qc_spectator_fixed}). Every physical matrix is supported
-    on $I$, so $E_I(B_{ab})=B_{ab}$ for every block.
+    The $(a,b)$ block of $A\otimes S$ is $S_{ab}A$, so linearity of $E_K$
+    gives $E_K(S_{ab}A)=S_{ab}E_K(A)$, proving~(\ref{eq:qc_spectator_tensor}).
+    Since $E_K$ fixes the physical identity, this identity
+    specializes to~(\ref{eq:qc_spectator_fixed}), and because every physical
+    matrix is supported on $I$, $E_I(B_{ab})=B_{ab}$ on every block.
 \end{proof}
 
 \begin{theorem}[Commutation on the averaged sites]
@@ -207,10 +207,9 @@ means using $K=I\setminus Q$.
     \leanok
     \uses{def:qc_spectator_expectation,def:qc_site_expectation}
     Each block $E_K(B_{ab})$ is supported on $K$ by its partial-trace
-    formula. Operators on disjoint sets of physical sites commute, so
-    $E_K(B_{ab})U=UE_K(B_{ab})$. Matrix multiplication by
-    $\widehat U$ acts separately on each spectator block, giving the
-    claimed equality.
+    formula. Since operators on disjoint sets of physical sites commute,
+    $E_K(B_{ab})U=UE_K(B_{ab})$, and matrix multiplication by $\widehat U$
+    acts separately on each spectator block to give the commutation identity.
 \end{proof}
 
 \begin{definition}[Weyl product on a set of sites]
@@ -250,15 +249,16 @@ means using $K=I\setminus Q$.
 \begin{proof}
     \leanok
     \uses{def:qc_partial_weyl,def:qc_local_circuit}
-    Each tensor factor $M_x$ is unitary. Taking adjoints and multiplying
+    Since each tensor factor $M_x$ is unitary, taking adjoints and multiplying
     factor by factor gives $P_S(p)^\dagger P_S(p)=\mathbb 1$ and
     $P_S(p)P_S(p)^\dagger=\mathbb 1$.
-    The complementary-set identity follows because both products have
-    factor $\mathbb 1$ on $K$ and $W(p_x)$ off $K$.
-    The singleton product has identity factors off $\{y\}$, so it is
-    supported there. For~(\ref{eq:qc_partial_weyl_insert}), the factor
-    at $y$ on the right is $W(p_y)\mathbb 1$. At every other site it is
-    $\mathbb 1\,M_x$. These are the factors on the left.
+    Both $W_K(p)$ and $P_{I\setminus K}(p)$ have factor $\mathbb 1$ on $K$ and
+    $W(p_x)$ off $K$, yielding the complementary-set identity, while the
+    singleton product $P_{\{y\}}(p)$ has identity factors off $\{y\}$ and
+    therefore belongs to $\mathcal A_{\{y\}}$. In~(\ref{eq:qc_partial_weyl_insert}),
+    the right-hand side has factor $W(p_y)\mathbb 1$ at $y$ and
+    $\mathbb 1\,M_x$ at every other site, matching the tensor factors of
+    $P_{S\cup\{y\}}(p)$.
 \end{proof}
 
 \begin{theorem}[Commutator with a product of unitaries]
@@ -274,9 +274,8 @@ means using $K=I\setminus Q$.
 \end{theorem}
 \begin{proof}
     \leanok
-    Expand $[B,UV]=[B,U]V+U[B,V]$. The triangle inequality and
-    invariance of the norm under left or right multiplication by a
-    unitary give
+    Expanding $[B,UV]=[B,U]V+U[B,V]$ and applying the triangle inequality
+    together with unitary invariance of the norm gives
     $\|[B,UV]\|\le\|[B,U]V\|+\|U[B,V]\|
         =\|[B,U]\|+\|[B,V]\|$.
 \end{proof}
@@ -303,9 +302,9 @@ means using $K=I\setminus Q$.
     \leanok
     \uses{def:qc_spectator_expectation,lem:qc_site_expectation_average}
     For every physical $U$, the $(a,b)$ block of
-    $\widehat UB\widehat U^\dagger$ is $UB_{ab}U^\dagger$.
-    Apply the physical Weyl averaging formula to each $B_{ab}$ in
-    (\ref{eq:qc_spectator_blocks}).
+    $\widehat UB\widehat U^\dagger$ is $UB_{ab}U^\dagger$, so applying the
+    physical Weyl averaging formula to each block $B_{ab}$ in
+    (\ref{eq:qc_spectator_blocks}) yields the identity.
 \end{proof}
 
 \begin{theorem}[Contraction with an arbitrary spectator]
@@ -319,10 +318,10 @@ means using $K=I\setminus Q$.
     \leanok
     \uses{thm:qc_spectator_average,thm:qc_partial_weyl_identities}
     By Theorem~\ref{thm:qc_partial_weyl_identities}, every
-    $\widehat{W_K(p)}$ is unitary, so each summand in
+    $\widehat{W_K(p)}$ is unitary, so each of the $q^{2|I|}$ summands in
     (\ref{eq:qc_spectator_average}) has norm $\|B\|$.
-    There are $q^{2|I|}$ labels. The triangle inequality and the
-    normalization $q^{-2|I|}q^{2|I|}=1$ give the result.
+    Applying the triangle inequality with the normalization
+    $q^{-2|I|}q^{2|I|}=1$ gives $\|E_K^{\mathcal K}(B)\|\le\|B\|$.
 \end{proof}
 
 \begin{theorem}[Averaging error from on-site commutator bounds]
@@ -343,35 +342,35 @@ means using $K=I\setminus Q$.
     \leanok
     \uses{thm:qc_spectator_average,def:qc_partial_weyl,
         thm:qc_partial_weyl_identities,thm:qc_unitary_product_commutator}
-    For unitaries $V,W$ on $\mathcal H\otimes\mathcal K$,
-    $[B,VW]=[B,V]W+V[B,W]$ and hence
+    For unitaries $V,W$ on $\mathcal H\otimes\mathcal K$, the identity
+    $[B,VW]=[B,V]W+V[B,W]$ implies
     $\|[B,VW]\|\le\|[B,V]\|+\|[B,W]\|$ by
     Theorem~\ref{thm:qc_unitary_product_commutator}.
-    Starting from $P_{\varnothing}(p)=\mathbb 1$, use the insertion
-    identity~(\ref{eq:qc_partial_weyl_insert}) and the unitary,
-    single-site support properties of
-    Theorem~\ref{thm:qc_partial_weyl_identities}.
-    Induction over the sites outside $K$, with the identity on the
-    spectator throughout, bounds the commutator with
-    $\widehat{W_K(p)}$ by $\sum_{y\notin K}\varepsilon_y$.
-    With $V=\widehat{W_K(p)}$, unitarity gives
+    Starting from $P_{\varnothing}(p)=\mathbb 1$, induction over the sites
+    outside $K$ via the insertion identity~(\ref{eq:qc_partial_weyl_insert})
+    and the single-site unitarity and support properties of
+    Theorem~\ref{thm:qc_partial_weyl_identities} (with the identity on the
+    spectator throughout) bounds the commutator with $\widehat{W_K(p)}$ by
+    $\sum_{y\notin K}\varepsilon_y$.
+    For the unitary $V=\widehat{W_K(p)}$, the identity
     \begin{align}
-        B-VBV^\dagger & =[B,V]V^\dagger,
+        B-VBV^\dagger & =[B,V]V^\dagger
         \label{eq:qc_spectator_difference}
     \end{align}
+    therefore yields
     \begin{align}
         \|B-VBV^\dagger\| & =\|[B,V]\|
         \le\sum_{y\notin K}\varepsilon_y.
         \label{eq:qc_spectator_difference_bound}
     \end{align}
-    Average~(\ref{eq:qc_spectator_difference_bound}) over all Weyl labels
-    using~(\ref{eq:qc_spectator_average}) and
-    $q^{-2|I|}\sum_p B=B$ to obtain~(\ref{eq:qc_spectator_error}).
+    Averaging~(\ref{eq:qc_spectator_difference_bound}) over all Weyl labels
+    via~(\ref{eq:qc_spectator_average}) and $q^{-2|I|}\sum_p B=B$ gives
+    (\ref{eq:qc_spectator_error}).
 \end{proof}
 
-For $q>0$, take $K=I\setminus Q$ and $\varepsilon_y=d_y(B)$ in
-Theorem~\ref{thm:qc_spectator_error}, with
-Theorem~\ref{thm:qc_site_oscillation_bounds}, to obtain the physical-site
+For $q>0$, setting $K=I\setminus Q$ and $\varepsilon_y=d_y(B)$ in
+Theorem~\ref{thm:qc_spectator_error} together with
+Theorem~\ref{thm:qc_site_oscillation_bounds} yields the physical-site
 averaging estimate of \cite{OpenAI2026AreaLaw}:
 \begin{align}
     \|B-E_{I\setminus Q}^{\mathcal K}(B)\|
@@ -379,6 +378,5 @@ averaging estimate of \cite{OpenAI2026AreaLaw}:
     \label{eq:qc_osc_averaging_error}
 \end{align}
 By Theorem~\ref{thm:qc_spectator_commutant}, the averaged operator
-commutes with $U\otimes\mathbb 1_{\mathcal K}$ for every
-$U\in\mathcal A_Q$. These bounds contain no factor depending on
-$\dim\mathcal K$.
+$E_{I\setminus Q}^{\mathcal K}(B)$ commutes with $U\otimes\mathbb 1_{\mathcal K}$
+for every $U\in\mathcal A_Q$, with no factor depending on $\dim\mathcal K$.

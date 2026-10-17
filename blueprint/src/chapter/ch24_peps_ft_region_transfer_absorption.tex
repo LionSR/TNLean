@@ -117,7 +117,7 @@
         \sigma,\tau\bigr),
         \notag
     \end{align}
-    where $\mathcal O_{R,f}$ is the boundary-edge orientation. This is the
+    where $\mathcal O_{R,f}$ is the boundary-edge orientation, giving the
     region-granularity analog of
     Theorem~\ref{thm:peps_edge_gauge_absorption}.
 \end{theorem}
@@ -287,10 +287,10 @@ $\phi_{h_f}(M)$ is inserted on both sides.
 \begin{proof}\leanok
     The interior bond multiplicity $p_A(R)=\prod_{g\notin\partial R}D_A(g)$ is a
     positive integer, and it is shared by $A$ and $B^X$ because the gauge
-    preserves bond dimensions and $D_A=D_B$. Apply
+    preserves bond dimensions and $D_A=D_B$. Applying
     Theorem~\ref{thm:peps_regionInsertedCoeff_eq_smul_edgeInsertedCoeff} with the
-    inserted matrix $\mathcal O_{R,f}(N)$ and with configurations
-    $(\sigma|_R,\sigma|_{V\setminus R})$. On the left-hand side,
+    inserted matrix $\mathcal O_{R,f}(N)$ and configurations
+    $(\sigma|_R,\sigma|_{V\setminus R})$ yields, on the left-hand side,
     \begin{align}
         C_A\bigl(R,f,\mathcal O_{R,f}(N);
         \sigma|_R,\sigma|_{V\setminus R}\bigr)
@@ -352,10 +352,11 @@ $\phi_{h_f}(M)$ is inserted on both sides.
     edge-level identity at the boundary edge.
 \end{theorem}
 \begin{proof}\leanok
-    Read both region coefficients through the region-to-edge identity
-    Theorem~\ref{thm:peps_regionInsertedCoeff_eq_smul_edgeInsertedCoeff}. The
-    interior multiplicities agree because the gauge preserves bond dimensions and
-    $D_A=D_B$, and the orientation $\mathcal O_{R,e}$ commutes with $\phi_{h_e}$.
+    Reading both region coefficients through the region-to-edge identity of
+    Theorem~\ref{thm:peps_regionInsertedCoeff_eq_smul_edgeInsertedCoeff} shows
+    that the interior multiplicities agree because the gauge preserves bond
+    dimensions and $D_A=D_B$, while the orientation $\mathcal O_{R,e}$ commutes
+    with $\phi_{h_e}$.
     Hence the two sides are $p_A(R)$ times the edge coefficients
     \begin{align}
          & E_A(e,\omega_{R,\sigma,\tau},\mathcal O_{R,e}(M)),

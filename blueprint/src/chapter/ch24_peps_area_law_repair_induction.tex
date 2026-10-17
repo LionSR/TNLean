@@ -165,7 +165,7 @@ $v+[-r,r]^2$ is the closed ball of radius $r$ about $v$.
     \lean{TNLean.PEPS.AreaLaw.Geometry.RepairMetricHypotheses.current_pairwise_disjoint}
     \leanok
     \uses{def:area_law_repair_stage,lem:area_law_repair_metric_invariants}
-    Let $\mathcal D_j$ be the actual repair family of
+    Let $\mathcal D_j$ be the repair family of
     \cite[Section~11]{OpenAI2026AreaLaw}, with current
     regions $R_i^{(j)}$ and marks $p\in K_j$ of locations $v_p^{(j)}$
     and scales $S_p^{(j)}$. Assume the metric hypotheses of
@@ -189,12 +189,12 @@ $v+[-r,r]^2$ is the closed ball of radius $r$ about $v$.
     Theorem~\ref{thm:area_law_initial_open_disjoint} to the same
     jointly chosen belt residues that define $\mathcal D_0$.
     Suppose the current regions at generation $j$ are pairwise
-    disjoint. By Lemma~\ref{lem:area_law_repair_metric_invariants},
-    distinct parent removal squares at this generation are disjoint.
-    Each fresh current region satisfies
+    disjoint. Because Lemma~\ref{lem:area_law_repair_metric_invariants}
+    makes distinct parent removal squares $Q(v_p^{(j)},S_p^{(j)})$ disjoint
+    and each fresh current region satisfies
     $U(v_p^{(j)},S_p^{(j)},H)\subseteq
-        B(v_p^{(j)},S_p^{(j)},H)\subseteq Q(v_p^{(j)},S_p^{(j)})$.
-    Theorem~\ref{thm:area_law_repair_next_disjoint} now gives pairwise
+        B(v_p^{(j)},S_p^{(j)},H)\subseteq Q(v_p^{(j)},S_p^{(j)})$,
+    Theorem~\ref{thm:area_law_repair_next_disjoint} gives pairwise
     disjointness at generation $j+1$.
 \end{proof}
 
@@ -207,7 +207,7 @@ $v+[-r,r]^2$ is the closed ball of radius $r$ about $v$.
     \lean{TNLean.PEPS.AreaLaw.Geometry.RepairMetricHypotheses.current_disjoint_earlierTerminalSquares}
     \leanok
     \uses{def:area_law_repair_ancestors,lem:area_law_repair_metric_invariants}
-    Take the actual repair family at any origin $o\in\mathbb R^2$,
+    Consider the repair family at any origin $o\in\mathbb R^2$,
     under the metric hypotheses of
     Lemma~\ref{lem:area_law_repair_metric_invariants}.
     For every generation $j\ge0$ and every identifier $i\in I_j$,
@@ -221,21 +221,19 @@ $v+[-r,r]^2$ is the closed ball of radius $r$ about $v$.
     \uses{def:area_law_repair_ancestors,
         def:area_law_repair_successor_regions,def:area_law_repair_birth,
         lem:area_law_repair_metric_invariants}
-    Induct on $j$. At generation zero, $\mathcal E_0=\varnothing$.
-    An old current region at generation $j+1$ avoids $\mathcal E_j$
-    by induction. Every closed removal square of generation $j$ is
-    subtracted from it, including every terminal square of that generation.
+    Induct on $j$, the case $j=0$ being immediate since $\mathcal E_0=\varnothing$.
+    At generation $j+1$, an old current region avoids $\mathcal E_j$ by the
+    induction hypothesis and has every closed removal square of generation $j$
+    subtracted from it, so it also avoids every terminal square of generation $j$.
 
-    A fresh current region lies in its nonterminal parent's removal
-    square $Q(v_p,S_p)$. By the metric margin,
-    $d(S_p)\le(a_0/1000)S_p\le a_0S_p$, so this square lies in the
-    parent's closed star square. Lemma~\ref{lem:area_law_repair_metric_invariants}
-    makes that star square disjoint from $\mathcal E_j$.
-    The parent $p$ differs from every terminal parent of generation $j$,
-    since $d(S_p)\ge S_*$ whereas a terminal halfside is less than $S_*$.
-    The same lemma makes their closed removal squares disjoint.
-    Thus the fresh region also avoids every contribution to
-    $\mathcal E_{j+1}$, completing the induction.
+    A fresh current region lies in the removal square $Q(v_p,S_p)$ of its
+    nonterminal parent $p$. Because $d(S_p)\le(a_0/1000)S_p\le a_0S_p$, this
+    removal square is contained in the parent's closed star square, which is
+    disjoint from $\mathcal E_j$ by Lemma~\ref{lem:area_law_repair_metric_invariants}.
+    Since $d(S_p)\ge S_*$ while every terminal parent of generation $j$ has
+    half-side strictly below $S_*$, $p$ differs from every terminal parent of
+    generation $j$, and the same lemma makes their closed removal squares
+    disjoint. Thus the fresh region also avoids $\mathcal E_{j+1}$.
 \end{proof}
 
 % Source: 10-geometry.tex, geometry:trim-margins, lines 380--394, and
@@ -266,7 +264,7 @@ $v+[-r,r]^2$ is the closed ball of radius $r$ about $v$.
 % Source: 10-geometry.tex, initial marks, lines 325--330;
 % integral recursion and supporting lines, lines 545--558.
 % Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
-\begin{theorem}[Actual marks on the translated integer mesh]
+\begin{theorem}[Marks on the translated integer mesh]
     \label{thm:area_law_repair_marks_integer_mesh}
     \lean{TNLean.PEPS.AreaLaw.Geometry.RepairMetricHypotheses.repairStage_location_mem_affineMesh}
     \leanok
@@ -284,7 +282,7 @@ $v+[-r,r]^2$ is the closed ball of radius $r$ about $v$.
         thm:area_law_adjacent_fine_meshes,thm:area_law_belt_marks_quarter_mesh,
         lem:area_law_repair_metric_invariants,
         thm:area_law_repair_halfside_integral,def:area_law_repair_children}
-    Each actual initial mark belongs to a selected belt cell in a layer
+    Each initial mark belongs to a selected belt cell in a layer
     $k\ge k_0\ge50{,}000{,}000$. Its fine exponent satisfies
     $\ell_k=\lfloor\zeta k\rfloor\ge1$, so the belt-mark mesh inclusion
     with spacing $2^2/4=1$ places it in $o+\mathbb Z^2$.
@@ -304,7 +302,7 @@ $v+[-r,r]^2$ is the closed ball of radius $r$ about $v$.
     \leanok
     \uses{def:area_law_repair_stage,def:area_law_dyadic_origin,
         def:area_law_repair_terminal_children,lem:area_law_repair_metric_invariants}
-    Take the actual repair family at $o=(\sqrt2,\sqrt3)$.
+    Consider the repair family at $o=(\sqrt2,\sqrt3)$.
     Assume the hypotheses of Lemma~\ref{lem:area_law_repair_metric_invariants},
     and suppose $S_*\ge1$ and $b=|\partial_\Lambda A|>0$.
     For every generation $j\in\mathbb N$,
@@ -465,8 +463,8 @@ by the strict inequalities.
     wedge assignment $\sigma$ in the open square of radius $r\ge3d/2$
     about $v$. Let a labelled family agree, in the open square of
     half-side $d/2$ about a child $c=v+de$, with the old regions minus
-    $v+[-d,d]^2$, keeping their labels, and with the interiors of the
-    transported replacement runs of $\sigma$, with the opposite labels.
+    $v+[-d,d]^2$, keeping their labels, and with the replacement regions
+    $U(v,S,H)$ of the runs $H$ of $\sigma$, with the opposite labels.
     Then $c$ has an isolated star of every radius $\rho<d/2$.
 \end{theorem}
 
@@ -482,9 +480,10 @@ by the strict inequalities.
     point of a remnant or replacement in a child cone of the right kind.
     A parent ray between wedges of different identifiers, and a side of the
     removal square, lie on child rays between child wedges of different
-    identifiers. Labels: across a parent ray they are the parent's labels or
-    their reversals, and across a side they are opposite by construction.
-    Lemma~\ref{lem:area_law_star_local_model} concludes.
+    identifiers. Across a parent ray the labels are those of the parent or
+    their reversals, and across a side of the removal square they are
+    opposite by construction, so Lemma~\ref{lem:area_law_star_local_model}
+    gives an isolated star of every radius $\rho<d/2$.
 \end{proof}
 
 % Source: 10-geometry.tex, geometry:repair-induction, lines 479--514.
@@ -578,10 +577,10 @@ by the strict inequalities.
     \leanok
     \uses{thm:area_law_uniform_repair_induction_conditional,
         thm:area_law_initial_stars}
-    Theorem~\ref{thm:area_law_initial_stars} supplies the initial isolated
+    Theorem~\ref{thm:area_law_initial_stars} gives the initial isolated
     stars, and
-    Theorem~\ref{thm:area_law_uniform_repair_induction_conditional} turns
-    them into the assertions at every generation.
+    Theorem~\ref{thm:area_law_uniform_repair_induction_conditional} extends
+    them to every generation.
 \end{proof}
 
 % Source: 10-geometry.tex, child marks, lines 404--409 and 506--514;
@@ -655,6 +654,46 @@ by the strict inequalities.
     defining recursion for the ancestor map. Its parent and offset
     determine the child, which proves the stated injection and the
     first inequality. Since $F_0(p)=\{p\}$, induction gives the second.
+\end{proof}
+
+% Source: 10-geometry.tex, geometry:descendant-count, lines 670--686.
+% Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+\begin{theorem}[Descendants of one initial mark through finitely many generations]
+    \label{thm:area_law_repair_root_prefix_count}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.exists_repairMarkAncestor_prefix_layer_bound}
+    \leanok
+    \uses{def:area_law_repair_stage,def:area_law_repair_ancestors,
+        lem:area_law_repair_metric_invariants}
+    For every $S_*>1$, there is a constant $K>0$, depending only on
+    $S_*$, with the following property. Consider any repair family
+    satisfying the hypotheses of
+    Lemma~\ref{lem:area_law_repair_metric_invariants}, and let $p\in K_0$.
+    For each generation $j\ge0$, put
+    $F_j(p)=\{q\in K_j:\alpha_{0,j}(q)=p\}$.
+    For every integer $k\ge0$ such that $S_p^{(0)}\le2^k$ and every
+    integer $N\ge0$,
+    \begin{align}
+        \sum_{0\le j<N}|F_j(p)|
+         & \le K(k+1)^K.\notag
+    \end{align}
+    The constant is chosen before the domain, origin, repair parameters,
+    initial mark, integer $k$, and number of generations $N$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:area_law_repair_descendant_count,
+        thm:area_law_repair_descendant_marks,
+        thm:area_law_repair_descendant_scales,
+        lem:area_law_repair_metric_invariants,def:area_law_repair_ancestors}
+    Choose $K$ as the constant of
+    Theorem~\ref{thm:area_law_repair_descendant_count} with $M=1$, and
+    induct on $N$. When $N=0$ the sum is zero, and at a successor step an
+    empty final fiber $F_N(p)$ adds nothing to the sum. When $F_N(p)$ is
+    nonempty, any $q\in F_N(p)$ has scale $d^{N}(S_p^{(0)})\ge S_*$ by
+    the scale recursion and the metric lower bound, so combining
+    $|F_j(p)|\le9^j$ with the scalar geometric-sum bound bounds the sum
+    through generation $N$ by $K(k+1)^K$.
 \end{proof}
 
 % Source: 10-geometry.tex, initial marks, lines 325--363, and

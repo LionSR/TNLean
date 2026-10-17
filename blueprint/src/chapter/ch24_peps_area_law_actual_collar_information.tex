@@ -2,14 +2,13 @@
 \label{sec:actual-collar-information}
 
 This section identifies the entropy expression in the terminal-tree
-sharp comparison with physical collar mutual information.  It also derives
+sharp comparison with physical collar mutual information and derives
 the uniform pre-comparison entropy bounds from the genuine positive-prefix
-input.  No new truncated vector, spectral set, auxiliary label, selected
-stage, parameter, or terminal probability law is chosen.
-
-The source is \emph{A two-dimensional area law from a global spectral gap},
+input (\emph{A two-dimensional area law from a global spectral gap},
 \texttt{08-scanner.tex}, lines 868--877, 900--911 and 936--941, at revision
-\texttt{adc7f1241b42e322a6451854ab7e4b4c146bf78a}.
+\texttt{adc7f1241b42e322a6451854ab7e4b4c146bf78a}), without choosing any new
+truncated vector, spectral set, auxiliary label, selected stage, parameter,
+or terminal probability law.
 
 \begin{theorem}[The collar partition]
     \label{thm:actual-terminal-collar-geometry}
@@ -31,11 +30,11 @@ The source is \emph{A two-dimensional area law from a global spectral gap},
     \leanok
     \uses{thm:al_scan_receiving_regions,
         thm:al_scan_nonfar_compact}
-    Use the accepted receiving-region identities and positive-depth invariant
-    for the status evaluator.  Its far-complement containment in the
-    truncation set yields the claimed outside containment by taking complements.
-    This argument is independent of the terminal horizon and has no entropy
-    premise.
+    Independently of the terminal horizon and without any entropy premise,
+    the accepted receiving-region identities and positive-depth invariant
+    for the status evaluator give the disjoint cover and region unions, while
+    taking complements in its far-complement containment in the truncation set
+    yields the outside containment in $V$.
 \end{proof}
 
 \begin{theorem}[The exact terminal identity and weighted information bound]
@@ -43,7 +42,7 @@ The source is \emph{A two-dimensional area law from a global spectral gap},
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.terminalPartition_collar_entropy_identity,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.two_mutualInformation_le_actualTerminal_average}
     \leanok
-    Write, for the same physical vector,
+    For the same physical vector, let
     \[
         g_{\rm pre}=S(XU)+S(V)-S(Y),\qquad
         g_{\rm post}=S(U)+S(UY)-S(Y).
@@ -65,12 +64,12 @@ The source is \emph{A two-dimensional area law from a global spectral gap},
     \leanok
     \uses{thm:actual-terminal-collar-geometry,
         thm:area_law_collar_leaf_identity}
-    Apply the accepted pure-state collar identity, then its weighted
-    mutual-information monotonicity theorem using $S_0^c\subseteq V$ at every
-    terminal.  Sum over the original bands and divide by $K>0$.
-    Both far-side informations dominate $I(X:S_0^c)$, giving the displayed
-    factor two.  No normalization hypothesis is needed for these accepted
-    identity and monotonicity APIs.
+    Without requiring any normalization hypothesis, the accepted pure-state
+    collar identity gives the terminal equality, and its weighted
+    mutual-information monotonicity theorem with $S_0^c\subseteq V$ at every
+    terminal shows that both far-side informations dominate $I(X:S_0^c)$, so
+    summing over the original bands and dividing by $K>0$ yields the displayed
+    factor of two.
 \end{proof}
 
 \begin{theorem}[The same selected spectrum and original vector]
@@ -80,8 +79,8 @@ The source is \emph{A two-dimensional area law from a global spectral gap},
     Under the preceding collar hypotheses, with $m,M,K>0$, let $\Omega_t$
     be unit, and retain its positive-mass spectral
     window $E$, of width $w$, with mass $z>0$.  Let $S'$ be the selected
-    auxiliary entropy.  At the same charge stage and parameter,
-    use the mapped charge tree to define $G_{\rm pre},G_{\rm post}$.
+    auxiliary entropy, and define $G_{\rm pre},G_{\rm post}$ from the mapped
+    charge tree at the same charge stage and parameter.
     Then
     \[
         2I_{\Omega_t}(X:S_0^c)
@@ -142,7 +141,7 @@ The source is \emph{A two-dimensional area law from a global spectral gap},
     Subadditivity on $X,U$ and $X,UY$, purity on $V$, and $S(Y)\geq0$ give
     the upper pre-entropy bound.  Subadditivity on the disjoint near and far
     regions gives its lower bound.  Nonnegative tree weights summing to one and
-    division by $K>0$ preserve the bound exactly.
+    division by $K>0$ preserve the bound.
 \end{proof}
 
 \begin{theorem}[The original source prefix input]
@@ -170,9 +169,10 @@ The source is \emph{A two-dimensional area law from a global spectral gap},
     \leanok
     \uses{thm:al_positive_prefix_entropy_transfer,
         thm:actual-terminal-pre-entropy}
-    Apply the accepted uniform positive-prefix entropy continuity theorem to
-    the given vectors and every fixed prefix, then the terminal
-    entropy bounds.  No vector or terminal point is selected again.
+    Applying the accepted uniform positive-prefix entropy continuity theorem to
+    the given vectors and every fixed prefix, followed by the terminal
+    entropy bounds, establishes the inequalities without re-selecting any
+    vector or terminal point.
 \end{proof}
 
 The original positive-prefix input remains explicit; the source safe-box

@@ -23,7 +23,7 @@ correlation-length prescription
 \end{theorem}
 
 \begin{proof}\leanok
-    Write $P(X)=\tr(X)\sigma$ and $R=\E_A-P$. Trace preservation and
+    For $P(X)=\tr(X)\sigma$ and $R=\E_A-P$, trace preservation and
     stationarity give $P^2=P$ and $PR=RP=0$. Normality and the spectral
     assumption imply that every eigenvalue of $R$ is zero. Its generalized
     zero-eigenspace is therefore the entire $D^2$-dimensional matrix
@@ -39,10 +39,10 @@ correlation-length prescription
     \uses{def:ldpolar_physical_matrix, def:ldpolar_tensor,
         def:prep_fixed_point_tensor}
     Let $B$ be a tensor with $\E_B(X)=\tr(X)\sigma$ for every $X$.
-    If $\sigma\geq0$, the positive polar tensor of $B$ is exactly
-    $P_\infty(\sigma)$. If $\sigma>0$, then $B$ is injective.
-    This is the exact fixed-point case of the transfer/polar identity in
-    \cite{Malz2024Preparation}.
+    In this exact fixed-point case of the transfer/polar identity in
+    \cite{Malz2024Preparation}, if $\sigma\geq0$, the positive polar
+    tensor of $B$ is exactly $P_\infty(\sigma)$, and if $\sigma>0$, then
+    $B$ is injective.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -81,11 +81,11 @@ correlation-length prescription
         lem:ldp_block_isometry_state_overlap,
         thm:prep_mpv_fixed_point_tensor}
     The local polar decompositions give
-    $A^{[\ell_k]}=V_kP_\infty(\sigma)$. Contracting these identities
-    around the ring yields
-    $\ket{\phi_N(A)}=(\bigotimes_kV_k)\ket{\Omega_\sigma}$, precisely
-    the fixed-point pair construction. This is the exact-factor case of
-    the construction in \cite{Malz2024Preparation}.
+    $A^{[\ell_k]}=V_kP_\infty(\sigma)$. In this exact-factor case of
+    the construction in \cite{Malz2024Preparation}, contracting these
+    identities around the ring yields
+    $\ket{\phi_N(A)}=(\bigotimes_kV_k)\ket{\Omega_\sigma}$, matching
+    the fixed-point pair construction.
 \end{proof}
 
 \begin{theorem}[Exact reconstruction after a nilpotent transient]
@@ -108,9 +108,10 @@ correlation-length prescription
         thm:ldp_exact_fixed_point_polar,
         thm:ldp_exact_block_polar_reconstruction}
     Every block has transfer map $X\mapsto\tr(X)\sigma$ by
-    (\ref{eq:ldp_zero_subleading_transfer}). Its positive polar tensor
-    is therefore $P_\infty(\sigma)$. Apply
-    Theorem~\ref{thm:ldp_exact_block_polar_reconstruction}.
+    (\ref{eq:ldp_zero_subleading_transfer}), so its positive polar tensor
+    is $P_\infty(\sigma)$, and
+    Theorem~\ref{thm:ldp_exact_block_polar_reconstruction} then gives
+    the exact state.
 \end{proof}
 
 \begin{theorem}[Constant-depth exact preparation with zero subleading spectrum]
@@ -123,14 +124,13 @@ correlation-length prescription
     $T=T(d,D)$ with the following property. Let $A$ be a normal
     left-canonical tensor with $\sigma>0$, $\tr\sigma=1$, and
     $\E_A(\sigma)=\sigma$, and suppose every transfer eigenvalue
-    distinct from $1$ is zero. For every
-    $N\geq q_0=D^2+3D+1$, the unnormalized periodic vector
-    $\ket{\phi_N(A)}$ has norm one, and its normalized vector is
+    distinct from $1$ is zero. For this finite-block endpoint of the
+    fixed-point construction in \cite{Malz2024Preparation}, whose
+    relation to the correlation-length prescription is recorded in
+    \cite{gap:mswc24_zero_subleading_spectrum_endpoint}, every
+    $N\geq q_0=D^2+3D+1$ gives an unnormalized periodic vector
+    $\ket{\phi_N(A)}$ of norm one, and its normalized vector is
     prepared exactly by a local circuit of depth $T$.
-    This is a finite-block endpoint of the fixed-point construction in
-    \cite{Malz2024Preparation}; its relation to the correlation-length
-    prescription is recorded in
-    \cite{gap:mswc24_zero_subleading_spectrum_endpoint}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -139,10 +139,10 @@ correlation-length prescription
         thm:ldp_zero_subleading_exact_reconstruction,
         thm:prep_pair_norm, lem:ldp_block_isometry_state_overlap,
         thm:ldp_approximating_state_depth}
-    Write $N=Mq_0+r$ with $M\geq1$ and $0\leq r<q_0$.
-    Choose $M-1$ blocks of length $q_0$ and one block of length
-    $q_0+r$. Thus $q_0\leq\ell_k<2q_0$, so all blocks have at least
-    $D^2$ sites and at least $3D$ sites. Their transfers are exactly
+    Writing $N=Mq_0+r$ with $M\geq1$ and $0\leq r<q_0$, and partitioning
+    into $M-1$ blocks of length $q_0$ and one block of length
+    $q_0+r$, places every block length in $q_0\leq\ell_k<2q_0$, so all blocks have at least
+    $D^2$ sites and at least $3D$ sites. Their transfers are therefore
     $X\mapsto\tr(X)\sigma$, which gives their positive polar factors
     and injectivity. The fixed-point pair has norm one, and the block
     isometries preserve that norm. Exact reconstruction therefore gives

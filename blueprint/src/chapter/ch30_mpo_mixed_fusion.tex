@@ -90,8 +90,8 @@ change of basis.
     for the single target block $A_p$. The two exact action
     decompositions therefore have the same support. Comparing their
     full analysis and synthesis maps gives (\ref{eq:mpo_mix_fusion_l}).
-    Substitute the analysis relation at $p=1$, interchange the two
-    finite sums, and use the synthesis relation at $p=0$:
+    Substituting the analysis relation at $p=1$, interchanging the two
+    finite sums, and using the synthesis relation at $p=0$ gives
     \begin{align}
         \sum_i S_{0,i}XH_{1,i}
          & =\sum_q\left(\sum_i(L_1)_{iq}S_{0,i}\right)XQ_{1,q}
@@ -181,7 +181,7 @@ change of basis.
 \end{theorem}
 \begin{proof}
     \leanok
-    Expand over the direct-sum coordinates. A nonzero factor forces
+    Expanding over the direct-sum coordinates, a nonzero factor forces
     the two incoming sectors and its outgoing sector to agree.
     The product therefore retains precisely the two diagonal products
     in (\ref{eq:mpo_mix_fusion_retract}); a sandwich retains precisely
@@ -214,11 +214,12 @@ change of basis.
 \begin{proof}
     \leanok
     \uses{thm:mpo_mixed_fusion_cross,thm:mpo_mixed_fusion_maps}
-    Write $\rho=(r,s)$ and $\sigma=(k,l)$. When all four physical
-    indices belong to $E_p$, (\ref{eq:mpo_mix_fusion_input}) gives
-    (\ref{eq:mpo_mix_fusion_exact}). For $r,k\in E_p$ and
-    $s,l\in E_q$ with $p\ne q$, take $X=|r\rangle\langle s|$
-    in (\ref{eq:mpo_mix_fusion_cross}). The resulting scalar identity is
+    Writing $\rho=(r,s)$ and $\sigma=(k,l)$,
+    (\ref{eq:mpo_mix_fusion_input}) gives
+    (\ref{eq:mpo_mix_fusion_exact}) when all four physical
+    indices belong to $E_p$. For $r,k\in E_p$ and
+    $s,l\in E_q$ with $p\ne q$, taking $X=|r\rangle\langle s|$
+    in (\ref{eq:mpo_mix_fusion_cross}) gives the scalar identity
     \begin{align}
         \sum_{\substack{u\in E_p                                    \\v\in E_q}}
         (T_a^{(r,s),(u,v)})_{\alpha\beta}
@@ -232,8 +233,8 @@ change of basis.
     The sums here are over standard-basis indices of the indicated
     spaces. Expanding (\ref{eq:mpo_mix_fusion_seq}) and
     (\ref{eq:mpo_mix_fusion_tree}) and commuting scalar factors gives
-    exactly (\ref{eq:mpo_mix_fusion_entry}). Reverse the two ends for
-    $p=1,q=0$. Every remaining sector is zero by the definitions.
+    exactly (\ref{eq:mpo_mix_fusion_entry}). Reversing the two ends covers
+    $p=1,q=0$, every remaining sector is zero by the definitions, and
     Theorem~\ref{thm:mpo_mixed_fusion_maps} gives biorthogonality.
 \end{proof}
 
@@ -305,8 +306,9 @@ change of basis.
     The boundary of the product is $X\otimes Y$. Cyclicity of the
     rectangular trace gives
     $\tr((X\otimes Y)\widetilde W_{ab;c\mu}T_c^w
-        \widetilde V_{ab;c\mu})=\tr(Z_{c\mu}(X,Y)T_c^w)$.
-    Sum over the channels and physical configurations.
+        \widetilde V_{ab;c\mu})=\tr(Z_{c\mu}(X,Y)T_c^w)$,
+    and summing over the channels and physical configurations yields
+    the operator-product decomposition.
 \end{proof}
 
 % TENKZ-MIXED-FUSION-BOUNDARY-BEGIN
@@ -357,7 +359,7 @@ change of basis.
 \begin{proof}
     \leanok
     \uses{thm:mpo_mixed_fusion_boundary,thm:mpo_mixed_fusion_maps}
-    Take identity boundaries. Biorthogonality gives
+    For identity boundaries, biorthogonality gives
     $Z_{c\mu}(\Id,\Id)=\Id_{K_c}$, so the $N_{ab}^c$ copies of
     $T_c$ in (\ref{eq:mpo_mix_fusion_family}) have identical traces.
 \end{proof}

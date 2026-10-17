@@ -97,7 +97,7 @@
     \leanok
     \uses{def:overlapping_two_site_supports, def:three_coordinate_identification}
     Let $\mc H=\C^d$, and let $Q$ be an endomorphism of
-    $\mc H\otimes\mc H$. Under the canonical identifications of two- and
+    $\mc H\otimes\mc H$. Under the coordinate identifications of two- and
     three-site configurations with pairs and right-associated triples, the
     matrices of its two adjacent actions are
     \begin{align}
@@ -135,19 +135,18 @@
     \lean{MPSTensor.localTerm_two_three_one_eq_rightPairLift_parentInteraction}
     \leanok
     \uses{def:overlapping_two_site_supports, def:local_term_parent}
-    Put $q(A)=1-P_{G_2(A)}$ for the canonical two-site parent interaction. On
-    the three-site space
-    $\mc H_A\otimes\mc H_X\otimes\mc H_B$, with sites $0,1,2$ labelled
-    $A,X,B$, the two adjacent translated length-two parent interactions are
-    the two local actions
+    With $q(A)=1-P_{G_2(A)}$ denoting the canonical two-site parent
+    interaction, on the three-site space
+    $\mc H_A\otimes\mc H_X\otimes\mc H_B$ with sites $0,1,2$ labelled
+    $A,X,B$, the two adjacent translated length-two parent interactions
+    coincide with the local actions of
+    \cite[Definition~D.2]{Cirac2016MPDO_arXiv}:
     \begin{align}
         h^{(3)}_0(A,2) & =q(A)_{AX},
         \notag                       \\
         h^{(3)}_1(A,2) & =q(A)_{XB}.
         \notag
     \end{align}
-    This identifies the two translated parent interactions with the local actions
-    in \cite[Definition~D.2]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -371,8 +370,9 @@
     \lean{MPSTensor.IsNNCPHGroundState}
     \leanok
     \uses{def:is_nncph, def:is_frustration_free}
-    This condition records the commutation equation and the zero-energy equation
-    for the nearest-neighbor local terms:
+    The nearest-neighbor commuting ground-state condition consists of the
+    commutation equation and the zero-energy equation for the nearest-neighbor
+    local terms:
     \begin{align}
         h_i h_j        & =h_j h_i,
         \notag                     \\
@@ -410,7 +410,8 @@
     \lean{MPSTensor.HasNNCPHGroundSpace}
     \leanok
     \uses{def:is_nncph_ground_state, def:parent_hamiltonian_ground_space_spanning}
-    For a fixed chain length $N$, this condition is the conjunction of the
+    For a fixed chain length $N$, the nearest-neighbor commuting
+    parent-Hamiltonian ground-space condition is the conjunction of the
     nearest-neighbor commutation equation, the zero-energy equation for the MPS
     vector, and the ground-space spanning equation:
     \begin{align}
@@ -433,10 +434,9 @@
     \lean{MPSTensor.HasNNCPHGroundSpaces}
     \leanok
     \uses{def:has_nncph_ground_space}
-    This is the source quantification in
-    \cite[Theorem~3.10(iii)]{Cirac2016MPDO_arXiv}. For every $N>2$, the
-    fixed-chain condition of Definition~\ref{def:has_nncph_ground_space}
-    holds:
+    In the source quantification of
+    \cite[Theorem~3.10(iii)]{Cirac2016MPDO_arXiv}, the fixed-chain condition
+    of Definition~\ref{def:has_nncph_ground_space} holds for every $N>2$:
     \begin{align}
         h_i h_j       & =h_j h_i,
         \notag                    \\
@@ -479,10 +479,10 @@
     $\ker H_2^{(N)}(B) = \spn\{V^{(N)}(A_j):j=1,\ldots,g\}$,
     and quantifying this condition over all $N>2$ gives the nearest-neighbor
     case of the spanning condition above.
-    Conversely, the all-chain condition is exactly the conjunction of the
+    Conversely, the all-chain condition in
+    Definition~\ref{def:has_nncph_ground_spaces} is the conjunction of the
     all-chain ground-vector equations and the nearest-neighbor instance of the
-    spanning condition above. This is precisely the condition named in
-    Definition~\ref{def:has_nncph_ground_spaces}.
+    spanning condition above.
     Since the displayed zero-energy equation follows from the
     parent-Hamiltonian construction for $N>2$, independently of the
     commutation and spanning equations, this is equivalently
@@ -524,8 +524,8 @@
 
 \begin{proof}
     \leanok
-    Write $R_{i,\eta}\psi$ for the cyclic length-$L$ restriction of $\psi$ at
-    site $i$, with the outside configuration fixed by $\eta$. Membership in
+    For the cyclic length-$L$ restriction $R_{i,\eta}\psi$ of $\psi$ at
+    site $i$ with the outside configuration fixed by $\eta$, membership in
     $G_L^{(N)}(A)$ gives
     $R_{i,\eta}\psi\in G_L(A)=\ker h_L(A)$ for every $i$ and $\eta$. Hence
     $h_L(A)R_{i,\eta}\psi=0$. For a full configuration $\sigma$, taking

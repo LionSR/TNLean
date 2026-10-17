@@ -84,10 +84,10 @@ contraction of local tensors is a separate assertion.
 \begin{proof}
     \leanok
     \uses{thm:peps_approximate_gate_real_accuracy}
-    The bound $\max\{1,M\}\le CL^n$ follows from $C,L\ge1$.
-    Apply Theorem~\ref{thm:peps_approximate_gate_real_accuracy}
-    with this enlarged count,
-    and divide by its positive denominator.
+    The bound $\max\{1,M\}\le CL^n$ follows from $C,L\ge1$, and
+    applying Theorem~\ref{thm:peps_approximate_gate_real_accuracy}
+    with this enlarged count
+    and dividing by its positive denominator gives the bound.
 \end{proof}
 
 \begin{theorem}[Monotonicity in the local approximation tolerance]
@@ -105,9 +105,9 @@ contraction of local tensors is a separate assertion.
 \begin{proof}
     \leanok
     \uses{thm:peps_fixed_power_gate_budget}
-    Only the inequality bounding each local operator difference changes.
-    Apply Theorem~\ref{thm:peps_fixed_power_gate_budget} and transitivity
-    at every original occurrence. All the other local hypotheses are unchanged.
+    Only the inequality bounding each local operator difference changes;
+    applying Theorem~\ref{thm:peps_fixed_power_gate_budget} and transitivity
+    at every original occurrence gives the tolerance, while all the other local hypotheses are unchanged.
 \end{proof}
 
 \begin{theorem}[A positive polynomial coefficient bound]
@@ -129,8 +129,8 @@ contraction of local tensors is a separate assertion.
 \begin{proof}
     \leanok
     \uses{thm:peps_original_coefficient_sum}
-    Choose $B=(1+C_KC_C)L^{u+v}$. This is at least one since $L\geq1$.
-    Each coefficient sum is at most
+    Choosing $B=(1+C_KC_C)L^{u+v}$ gives $B\geq1$ since $L\geq1$, and
+    each coefficient sum is at most
     $K C_CL^v\leq C_KC_CL^{u+v}\leq B$.
 \end{proof}
 
@@ -151,9 +151,9 @@ contraction of local tensors is a separate assertion.
 \begin{proof}
     \uses{thm:peps_physical_first_occurrences,thm:peps_source_only_resources}
     \leanok
-    Take a common bound on the finitely many original gate lists. The
+    Taking a common bound on the finitely many original gate lists, the
     coefficient estimate of Theorem~\ref{thm:peps_physical_first_occurrences}
-    then gives the bound. The final exchange of physical and auxiliary registers
+    gives the bound, and the final exchange of physical and auxiliary registers
     introduces no gate and changes no coefficient.
 \end{proof}
 
@@ -161,7 +161,9 @@ contraction of local tensors is a separate assertion.
     \label{thm:peps_sampled_original_density}
     \lean{TNLean.PEPS.PairEffect.OriginalCircuit.exists_physicalFirst_sourceSample_original_error_le}
     \leanok
-    Let $W$ be a circuit on a finite party set $P$, with initial vector
+    In the density-approximation steps of
+    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
+    let $W$ be a circuit on a finite party set $P$, with initial vector
     $\psi=\bigotimes_{p\in P}\psi_p$, where each $\psi_p$ is normalized
     in the whole initial private memory of party $p$. The final physical
     register at $p$ has dimension $d_p$, and every discarded private
@@ -193,18 +195,16 @@ contraction of local tensors is a separate assertion.
         \label{eq:peps_original_sample_error}
     \end{align}
     Here $\rho_W$ is the physical partial trace of $|W\psi\rangle
-        \langle W\psi|$, in the original party-labelled coordinates.
-    No numerical bound on private-memory dimensions is assumed.
-    These are the density-approximation steps in
-    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
+        \langle W\psi|$, in the original party-labelled coordinates, and
+    no numerical bound on private-memory dimensions is assumed.
     % Source: 04-compression.tex, lines 137--151, 199--229 and 342--381.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:peps_physical_first_exact_sources,thm:peps_actual_source_sampling,
         thm:peps_auxiliary_register_finiteness,thm:peps_original_finite_expansion_bound}
-    Prepare each $\psi_p$ by a local contraction from the scalar space.
-    Their chronological composition prepares $\psi$ and introduces no
+    Preparing each $\psi_p$ by a local contraction from the scalar space,
+    their chronological composition prepares $\psi$ and introduces no
     pair source. The replacement is a contraction, preserves the original
     participating occurrences, and retains coefficient-sum bound $B$.
     A finite bound on its monomial counts follows from the finite original
@@ -213,12 +213,12 @@ contraction of local tensors is a separate assertion.
     individual private-register assumption suffices for all discarded
     registers of $R$.
 
-    Apply Theorem~\ref{thm:peps_actual_source_sampling} to this
-    circuit, preparation, and discarded memory. It gives original-source
+    Applying Theorem~\ref{thm:peps_actual_source_sampling} to this
+    circuit, preparation, and discarded memory gives original-source
     Schmidt data and one sample $\omega$ with
     $\|\widehat\rho_R(\omega)-\rho_R\|_1\le\varepsilon/4$.
     Theorem~\ref{thm:peps_physical_first_exact_sources} gives
-    $\|\rho_R-\rho_W\|_1\le\varepsilon/2$. The trace-norm triangle
+    $\|\rho_R-\rho_W\|_1\le\varepsilon/2$, and the trace-norm triangle
     inequality yields~(\ref{eq:peps_original_sample_error}).
 \end{proof}
 
@@ -327,9 +327,9 @@ contraction of local tensors is a separate assertion.
     estimate of Theorem~\ref{thm:peps_physical_first_sample_polynomial}
     gives $k<C_{\mathrm{sam}}L^{a_{\mathrm{sam}}}$.
     A star alphabet has cardinality equal to the square of its gate's
-    branch count; a sample alphabet has cardinality $k$. Apply the
+    branch count, and a sample alphabet has cardinality $k$, so applying the
     bound of Theorem~\ref{thm:peps_source_alphabet_polynomial}
-    to these two estimates. The use of
+    to these two estimates gives the result; the choice
     $C_{\mathrm{src}}\geq1$ includes circuits without sources.
 \end{proof}
 
@@ -364,9 +364,9 @@ contraction of local tensors is a separate assertion.
 \begin{proof}
     \leanok
     \uses{thm:peps_trace_le_trace_norm}
-    The first bound is the triangle inequality for the trace norm. For the
-    second, apply Theorem~\ref{thm:peps_trace_le_trace_norm} to
-    $\rho-|\Omega\rangle\langle\Omega|$ and use
+    The first bound is the triangle inequality for the trace norm, and the
+    second follows by applying Theorem~\ref{thm:peps_trace_le_trace_norm} to
+    $\rho-|\Omega\rangle\langle\Omega|$ and using
     $\operatorname{Tr}|\Omega\rangle\langle\Omega|=1$.
 \end{proof}
 
@@ -375,9 +375,9 @@ contraction of local tensors is a separate assertion.
     \lean{TNLean.PEPS.PairEffect.DistributedConstruction.rectangularTraceNorm_compression_sub_pure_le}
     \leanok
     \uses{def:peps_distributed_construction_density}
-    This is \cite[Remark~5.3]{OpenAI2026PolynomialPEPS}.
     % Source: 04-compression.tex, lines 602--611.
-    The compression of \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS}
+    As noted in \cite[Remark~5.3]{OpenAI2026PolynomialPEPS},
+    the compression of \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS}
     approximates the physical density $\rho$ of a distributed
     construction, which need not have trace one, and does not normalize it.
     Let $\sigma$ be any operator with $\|\sigma-\rho\|_1\le\kappa$; it need be
@@ -388,7 +388,7 @@ contraction of local tensors is a separate assertion.
         1-\eta\le\operatorname{Re}\operatorname{Tr}\rho & \le1.
     \end{align}
     No bound on private dimensions or on Schmidt ranks of the pair
-    vectors enters. The compression theorem is used only through its error
+    vectors enters, and the compression theorem is used only through its error
     estimate $\|\sigma-\rho\|_1\le\kappa$.
 \end{theorem}
 \begin{proof}
@@ -424,15 +424,18 @@ contraction of local tensors is a separate assertion.
 \begin{proof}
     \leanok
     Each recorded expansion sums to its gate, so evaluation with these
-    operators along the same chronology is the original circuit operator.
-    The input and the retained registers are unchanged.
+    operators along the same chronology is the original circuit operator, while
+    the input and the retained registers are unchanged.
 \end{proof}
 
 \begin{theorem}[Compression of a family of distributed constructions]
     \label{thm:peps_distributed_construction_compression}
     \lean{TNLean.PEPS.PairEffect.DistributedConstruction.exists_uniform_sampled_network}
     \leanok
-    Let $(\mathcal C_i)_{i\in I}$ be a family of distributed constructions,
+    In the case of \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS} without messages
+    (the recorded expansions of a distributed construction consist of allowed
+    monomials and carry no messages; the case with messages is not covered by this statement),
+    let $(\mathcal C_i)_{i\in I}$ be a family of distributed constructions,
     each index carrying a size $L=L_i\ge2$. Suppose that there are constants
     $b,n,d,r,u,v$ and $C_N,C_D,C_K,C_C$, independent of the index, such that
     every member has at most $C_NL^n$ nonprivate gates and physical
@@ -449,23 +452,19 @@ contraction of local tensors is a separate assertion.
     \end{align}
     for the physical density $\rho_L$. Every node meets at most
     $2b(b-1)$ virtual links, and the two endpoints of every link participate
-    in a common nonprivate gate of the original construction. This is the
-    case of \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS} without messages:
-    the recorded expansions of a distributed construction consist of allowed
-    monomials and carry no messages. The case of the theorem with messages is
-    not covered by this statement.
+    in a common nonprivate gate of the original construction.
     % Source: 04-compression.tex, lines 137--175.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:peps_uniform_approximate_operator_network,thm:peps_distributed_construction_gate_maps_density}
-    Read every member with the operators of its own expansions. The recorded
+    Reading every member with the operators of its own expansions, the recorded
     expansions approximate these operators with error zero, hence at every
     inverse-power accuracy, and keep the original monomial counts,
-    coefficients, gate occurrences and participating sets. Apply
-    Theorem~\ref{thm:peps_uniform_approximate_operator_network}, and use
-    Theorem~\ref{thm:peps_distributed_construction_gate_maps_density} to
-    identify the approximated density with $\rho_L$. Each gate occurrence of
+    coefficients, gate occurrences and participating sets. Applying
+    Theorem~\ref{thm:peps_uniform_approximate_operator_network} and using
+    Theorem~\ref{thm:peps_distributed_construction_gate_maps_density}
+    identifies the approximated density with $\rho_L$, while each gate occurrence of
     the reading corresponds to a nonprivate gate of the original
     construction with the same participants.
 \end{proof}
@@ -474,7 +473,8 @@ contraction of local tensors is a separate assertion.
     \label{thm:peps_compression_retained_norm_network}
     \lean{TNLean.PEPS.PairEffect.DistributedConstruction.exists_uniform_sampled_network_sub_pure_le}
     \leanok
-    Under the hypotheses of
+    Combining the case of \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS} without messages with
+    \cite[Remark~5.3]{OpenAI2026PolynomialPEPS}, under the hypotheses of
     Theorem~\ref{thm:peps_distributed_construction_compression}, let
     $\Omega_L$ be a unit vector with
     $\|\rho_L-|\Omega_L\rangle\langle\Omega_L|\|_1\le\eta_L$ for every member.
@@ -484,18 +484,16 @@ contraction of local tensors is a separate assertion.
     Theorem~\ref{thm:peps_distributed_construction_compression} and
     \begin{align}
         \|\sigma_L-|\Omega_L\rangle\langle\Omega_L|\|_1 & \le L^{-p}+\eta_L,                               \\
-        1-\eta_L                                        & \le\operatorname{Re}\operatorname{Tr}\rho_L\le1.
+        1-\eta_L                                        & \le\operatorname{Re}\operatorname{Tr}\rho_L\le1,
     \end{align}
-    The density $\rho_L$ is not normalized, and $\sigma_L$ need be neither
-    positive nor Hermitian. This combines the case of
-    \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS} without messages with
-    \cite[Remark~5.3]{OpenAI2026PolynomialPEPS}.
+    where the density $\rho_L$ is not normalized and $\sigma_L$ need be neither
+    positive nor Hermitian.
     % Source: 04-compression.tex, lines 137--175 and 602--611.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:peps_compression_retained_norm,thm:peps_distributed_construction_compression}
-    Apply Theorem~\ref{thm:peps_compression_retained_norm} to the network of
-    Theorem~\ref{thm:peps_distributed_construction_compression}, with
-    $\kappa=L^{-p}$.
+    Applying Theorem~\ref{thm:peps_compression_retained_norm} to the network of
+    Theorem~\ref{thm:peps_distributed_construction_compression} with
+    $\kappa=L^{-p}$ gives the bounds.
 \end{proof}
