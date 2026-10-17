@@ -77,7 +77,8 @@ and exponent bounds. The retained properties are:
   nonprivate gates acting on at most $b$ parties each, and each party
   participates in at most $b$ changes over its lifetime;
 \item each gate is a sum of at most $C L^k$ monomials with absolute coefficient
-  sum at most $C L^k$ and at most $r$ pair effects per monomial;
+  sum at most $C L^k$, at most $r$ pair effects and at most $r$ pair sources per
+  monomial;
 \item any two parties acted on by a gate have equal or adjacent dyadic scales
   and grid addresses separated by at most $b$ times either endpoint scale;
 \item if $W_t$ denotes the contraction of stage $t$, the reference vectors
@@ -105,7 +106,7 @@ gates.\footnote{The protocol predicate is
 
 \section{Omitted clauses}
 
-Four clauses of Proposition~7.1 are omitted from the formal predicate:
+Two clauses of Proposition~7.1 are omitted from the formal predicate:
 \begin{enumerate}
 \item One party holds the main copy of $\Omega$, and every auxiliary copy is
   initialized privately at its designated party (\path{06-geometry.tex},
@@ -118,14 +119,8 @@ Four clauses of Proposition~7.1 are omitted from the formal predicate:
   (\ref{eq:prop71_terminal_factorization})--(\ref{eq:prop71_junk_norm}) alone
   do not imply that the intermediate reference vectors $r_t$ have norm at most
   one.
-\item Item~3 of Theorem~5.2 (\path{04-compression.tex}, lines~143--147) also
-  bounds the pair sources and the messages of each monomial before expansion.
-  The formal statement counts only pair effects.
-\item The paper provides expansions accurate to any prescribed inverse power of
-  $L$, whereas (\ref{eq:prop71_step_error}) fixes a single contraction $W_t$
-  per change with error $C L^{-20}$.
 \end{enumerate}
-None of these four clauses is needed for the Section~8 assembly: the gate-density
+Neither of these two clauses is needed for the Section~8 assembly: the gate-density
 bound, the routing separation hypothesis, and the lifetime gate count depend
 only on the retained bounds, while the message and replacement-slot bounds used
 in compression follow from the message expansion and the nonprivate gate count
@@ -133,13 +128,48 @@ and arity. The formal statement is therefore a weaker consequence of
 Proposition~7.1 sufficient for Section~8, proved modulo Proposition~4.1, while
 the full Proposition~7.1 remains open.
 
+\section{Clauses carried by the formal statement}
+
+Two further clauses of Proposition~7.1 hold for the formal predicate.
+\begin{enumerate}
+\item Item~3 of Theorem~5.2 (\path{04-compression.tex}, lines~143--147) bounds
+  the pair sources, the pair effects and the polynomial-dimensional messages of
+  each monomial by one constant $r$. The pair-source bound is a field of the
+  formal predicate,\footnote{\leanid{TNLean.PEPS.Approximation.DyadicProtocol.IsDistributionProtocol.sourceBounded}.}
+  with the constant $r$ of the pair effects. The recorded
+  monomials of the formal gates contain no messages: messages are expanded
+  before a gate is recorded (\path{04-compression.tex}, lines~42--45), and the
+  formal monomials are built from local contractions, pair sources and pair
+  effects only.
+\item Item~2 of Proposition~7.1 provides expansions accurate to any fixed inverse power of $L$ in
+  operator norm where an approximation is needed (\path{06-geometry.tex},
+  lines~29--30), with constants that may depend on the accuracy exponent
+  (\path{04-compression.tex}, line~17). The gates $W_t$ of the formal protocol
+  are the selected contractions, as in the instantiation of Section~8
+  (\path{07-assembly.tex}, lines~29--34), and each formal nonprivate gate $G$
+  equals its recorded expansion,\footnote{By the definition of
+    \leanid{TNLean.PEPS.PairEffect.OriginalCircuit.eval} on a nonprivate gate,
+    which evaluates the sum of its recorded monomials.}
+  $G = \sum_{\xi} c_{\xi} M_{\xi}$, so
+  $\lVert G - \sum_{\xi} c_{\xi} M_{\xi}\rVert = 0 \le L^{-a}$ for every
+  $a$. These expansions are therefore exact at every accuracy,
+  with bounds independent of the accuracy exponent. The selected gates are
+  contractions acting on their participating parties, with contractive
+  constituent maps, which are the only conditions the source places on the
+  gates of a change (\path{06-geometry.tex}, lines~25--27;
+  \path{04-compression.tex}, lines~28 and~143--147). The source asserts no
+  smaller reference error and no separate exact gate: the reference error of
+  each change is as in (\ref{eq:prop71_step_error}) (\path{06-geometry.tex},
+  lines~41--42 and~580--583).
+\end{enumerate}
+
 \section{Elimination}
 
 Formalize the full statement of Proposition~7.1 including the registers of the
-main and auxiliary copies of $\Omega$, the frame factorization and unit-norm
-bounds of the intermediate reference vectors $r_t$, and the pre-expansion
-counts of pair sources and messages for arbitrary inverse-power accuracy. Proving Proposition~7.1 in that stronger form then implies the
-present existence hypothesis by projection onto the retained fields.
+main and auxiliary copies of $\Omega$ and the frame factorization and unit-norm
+bounds of the intermediate reference vectors $r_t$. Proving Proposition~7.1 in
+that stronger form then implies the present existence hypothesis by projection
+onto the retained fields.
 
 \bibliographystyle{alpha}
 \bibliography{references}

@@ -34,7 +34,7 @@ The construction of these frames along the schedule is not done here.
 
 * `card_eventUses_le`: an event of the hierarchy uses at most `19` parties.
 * `exists_isDistributionProtocol_of_frames`: the assembled protocol satisfies the bounds of §8,
-  and every change is source bounded when the changes of the schedule are.
+  including the pair-source bound when the changes of the schedule are source bounded.
 
 ## References
 
@@ -265,7 +265,7 @@ theorem exists_eq_inr_of_notMem_range_protocolSquareParty {L k : ℕ} (hN : padd
 * for every change `t` of the schedule there is an original circuit `c t` from the registers of
   `st t` to those of `st (t + 1)` that is a bounded change from the reference vector of `st t` to
   that of `st (t + 1)`, with participants used by the event of the change, at most `r` pair
-  effects and at most `rs` pair sources per monomial, at most `K ≤ C L ^ kK` monomials and
+  effects and at most `r` pair sources per monomial, at most `K ≤ C L ^ kK` monomials and
   coefficient sum, and error `ε ≤ C L⁻²⁰`;
 * at the end of the schedule the frames are `M :: Fs`, where the raw owner of every site in the
   main frame `M` is its unit-square party and the holes of `M` are trivial, every hole of the
@@ -273,8 +273,8 @@ theorem exists_eq_inr_of_notMem_range_protocolSquareParty {L k : ℕ} (hN : padd
   most `C L³` holes.
 
 If `C ≥ 5042`, there is a dyadic protocol with the bounds of
-`DyadicProtocol.IsDistributionProtocol` for `Ω`, the constants `C`, `b = 64 · 189`, `kK` and `r`,
-all of whose changes have at most `rs` pair sources per monomial. Its first change is the private
+`DyadicProtocol.IsDistributionProtocol` for `Ω` and the constants `C`, `b = 64 · 189`, `kK` and
+`r`, including the bound `r` on the pair sources of each monomial. Its first change is the private
 initialization, then come the changes of the schedule, and its last change is the final
 regrouping into the physical registers.
 
@@ -287,11 +287,11 @@ theorem exists_isDistributionProtocol_of_frames {L q k : ℕ} [NeZero q] (hL : 2
     (holder : Frame (cellCenterPos L) q (ProtocolParty k) → ProtocolParty k)
     (hraw : ∀ F ∈ st 0, F.holes = []) (hown : ∀ F ∈ st 0, ∀ x, F.owner x = holder F)
     (c : ∀ t, OriginalCircuit (stackRegs (st t) []) (stackRegs (st (t + 1)) []))
-    {r rs K kK : ℕ} {C ε : ℝ}
+    {r K kK : ℕ} {C ε : ℝ}
     (hc : ∀ t (ht : t < (protocolSchedule k large).length),
       (c t).IsBoundedChange {p | EventUses ((protocolSchedule k large)[t]).1 p} r K ε
         (framesVec Ω (st t)) (framesVec Ω (st (t + 1))))
-    (hsrc : ∀ t < (protocolSchedule k large).length, (c t).IsSourceBounded rs)
+    (hsrc : ∀ t < (protocolSchedule k large).length, (c t).IsSourceBounded r)
     (M : Frame (cellCenterPos L) q (ProtocolParty k))
     (Fs : List (Frame (cellCenterPos L) q (ProtocolParty k)))
     (hfin : st (protocolSchedule k large).length = M :: Fs)
@@ -300,8 +300,7 @@ theorem exists_isDistributionProtocol_of_frames {L q k : ℕ} [NeZero q] (hL : 2
     (hholes : (Fs.map fun F => (F.holes.length : ℝ)).sum ≤ C * (L : ℝ) ^ 3)
     (hC : 5042 ≤ C) (hK : (K : ℝ) ≤ C * (L : ℝ) ^ kK) (hεC : ε ≤ C / (L : ℝ) ^ 20) :
     ∃ D : DyadicProtocol L q (ProtocolParty k),
-      D.IsDistributionProtocol Ω C (64 * 189) kK r ∧
-        ∀ t < D.changes, (D.step t).IsSourceBounded rs := by
+      D.IsDistributionProtocol Ω C (64 * 189) kK r := by
   classical
   set sch := protocolSchedule k large with hsch
   set n := sch.length with hn
@@ -366,7 +365,7 @@ theorem exists_isDistributionProtocol_of_frames {L q k : ℕ} [NeZero q] (hL : 2
     (fun t a b (w : OriginalCircuit a b) => w.nonprivateCount ≤ 1 ∧
       (¬(0 < t ∧ t ≤ n) → w.nonprivateCount = 0) ∧
       (∀ g, (↑(w.participants g) : Set (ProtocolParty k)) ⊆ {p | EventUses (ev t) p}) ∧
-      w.IsExpansionBounded r K ∧ w.IsMonomialBounded K ∧ w.IsSourceBounded rs)
+      w.IsExpansionBounded r K ∧ w.IsMonomialBounded K ∧ w.IsSourceBounded r)
     ⟨h0.trans_le zero_le_one, fun _ => h0, participants_subset_of_nonprivateCount_eq_zero _ h0 _,
       isExpansionBounded_of_nonprivateCount_eq_zero _ _ _ h0,
       isMonomialBounded_of_nonprivateCount_eq_zero _ _ h0,
@@ -484,7 +483,8 @@ theorem exists_isDistributionProtocol_of_frames {L q k : ℕ} [NeZero q] (hL : 2
     fun t _ => isMonomialBounded_mono _ (hQ t).2.2.2.2.1 (Nat.le_floor (by exact_mod_cast hK)),
     fun t _ => isExpansionBounded_mono _ (hQ t).2.2.2.1 le_rfl hK, fun p => ?_,
     fun t _ g p hp p' hp' => EventUses.scale_le ((hQ t).2.2.1 g hp) ((hQ t).2.2.1 g hp'),
-    fun t _ g p hp p' hp' => ?_, fun t _ => ?_, ?_⟩, fun t _ => (hQ t).2.2.2.2.2⟩
+    fun t _ g p hp p' hp' => ?_, fun t _ => ?_, ?_,
+    fun t _ => (hQ t).2.2.2.2.2⟩⟩
   · exact fun p => ⟨((protocolPlacement_inGrid k) p).1.trans (pow_le_paddedSide hk2),
       ((protocolPlacement_inGrid k) p).2.trans (pow_le_paddedSide hk2)⟩
   · have h := three_mul_card_protocolParty_lt hk2
