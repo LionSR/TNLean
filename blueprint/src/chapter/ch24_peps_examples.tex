@@ -287,8 +287,8 @@ finite-dimensional complex space.
 \begin{proof}\leanok
     If $e$ intertwines $\rho$ with $\sigma$ and is invertible, every
     nonzero intertwiner $f$ from an irreducible representation into
-    $\rho$ gives a nonzero intertwiner $ef$ into $\sigma$. Apply the
-    same argument to $e^{-1}$ for the converse.
+    $\rho$ gives a nonzero intertwiner $ef$ into $\sigma$. Applying the
+    same argument to $e^{-1}$ proves the converse.
 \end{proof}
 
 \begin{theorem}[Linear independence of a semi-regular representation]%
@@ -925,7 +925,7 @@ $\mathcal{P}(A^\dagger)\ket{i}=(A^i)^\dagger$ under the identification above
 \begin{proof}\leanok
     By Theorem~\ref{thm:peps_semiregular_trace}, $\Delta=\frac{1}{|G|}\Id$ for
     the left-regular representation, that is, $|G|\,\Delta=\mathbb{1}$.
-    Substitute this in the two left inverses.
+    Substituting this identity into the two left inverses yields the claims.
 \end{proof}
 
 \begin{theorem}[Stability of isometry under concatenation of matrix product tensors]%
@@ -1001,8 +1001,8 @@ $\mathcal{P}(A^\dagger)\ket{i}=(A^i)^\dagger$ under the identification above
     $g^{-1}$ proves self-adjointness. Since $T\Pi_\rho=T$, the restricted
     inner-product identity gives
     $\langle Tx,Ty\rangle=c\langle x,\Pi_\rho y\rangle$, which is equivalent
-    to the adjoint identity. Conversely, apply the identity to invariant
-    vectors, on which $\Pi_\rho$ is the identity.
+    to the adjoint identity. Conversely, applying the identity to invariant
+    vectors, on which $\Pi_\rho$ is the identity, recovers the inner-product relation.
 \end{proof}
 
 \begin{theorem}[Regular representations in relative coordinates]%
@@ -1428,7 +1428,7 @@ operators.
 \end{lemma}
 
 \begin{proof}\leanok
-    Expand each product $P\,O\,Q$ into its entries. The resulting sum runs
+    Expanding each product $P\,O\,Q$ into its entries rewrites the network as a sum
     over the labellings of the bond ends and over new intermediate indices;
     exchanging the roles of the two families, the intermediate indices
     become the labelling of the bond ends and the old labels become the
@@ -1527,11 +1527,11 @@ operators.
     remains a separate step in \cite[Theorem~6.9]{Schuch2010PEPS}.
 \end{theorem}
 \begin{proof}\leanok
-    Split each edge assignment into its incident and exterior parts.
-    Exterior labels do not occur in any tensor of $R$, so their sum
-    gives the stated multiplicity. Apply the existing coefficient
-    identity for the globally indexed region tensors on the two sides.
-    Their exterior multiplicities multiply to the product of all
+    Splitting each edge assignment into its incident and exterior parts separates
+    the exterior labels, which do not occur in any tensor of $R$ and therefore sum
+    to the stated multiplicity. Applying the existing coefficient
+    identity for the globally indexed region tensors on the two sides multiplies
+    their exterior multiplicities to the product of all
     non-crossing bond dimensions; cancelling this nonzero product
     gives (\ref{eq:peps_open_region_cut}). Regular bond dimensions are $|G|>0$.
 \end{proof}
@@ -1547,12 +1547,11 @@ operators.
     \leanok
     \uses{def:peps_open_region_contraction}
     Express every bond in a group basis, and enumerate the $b=n+1$
-    crossing bonds. Let $A$ and $B$ be the open tensors of the
+    crossing bonds. Before the virtual reduction in
+    \cite[Proof of Theorem~6.9]{Schuch2010PEPS}, let $A$ and $B$ be the open tensors of the
     region and its complement, with their columns indexed by $G^b$ in
-    the same crossing-bond order. Let $K$ be the matrix of physical
-    PEPS coefficients on these two systems. These are the cut
-    maps used before the virtual reduction in
-    \cite[Proof of Theorem~6.9]{Schuch2010PEPS}.
+    the same crossing-bond order, and let $K$ be the matrix of physical
+    PEPS coefficients on these two systems.
 \end{definition}
 
 \begin{theorem}[Boundary symmetry and projector insertion at the cut]%
@@ -1589,9 +1588,9 @@ operators.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_open_region_cut}
-    Translate every incident-edge assignment by the same group element.
-    This permutes the internal summation and translates the crossing
-    labels; local invariance leaves the product of site coefficients
+    Translating every incident-edge assignment by the same group element
+    permutes the internal summation and translates the crossing
+    labels, while local invariance leaves the product of site coefficients
     unchanged. Averaging this symmetry gives $AP=A$. The exact cut
     identity gives $K=AB^{\mathsf T}$, and inserting $P$ and then
     $C=P/\sqrt r$ yields the remaining formulas.
@@ -1613,8 +1612,8 @@ operators.
 \end{theorem}
 
 \begin{proof}\leanok
-    Distribute the finite product over the finite sums. A product of
-    zero-one indicators is the indicator of the conjunction of their conditions.
+    Distributing the finite product over the finite sums reduces each summand to a product of
+    zero-one indicators, which is the indicator of the conjunction of their conditions.
 \end{proof}
 
 \begin{definition}[The canonical regular-projector region]%
@@ -1646,9 +1645,9 @@ operators.
         \label{eq:peps_projector_region}
     \end{align}
     Every internal bond is summed once, and no exterior bond label
-    occurs. Encoding group labels in finite coordinates preserves
-    the boundary condition. These are the exposed virtual coordinates
-    of \cite[Observation after Lemma~6.3]{Schuch2010PEPS}.
+    occurs. As in the exposed virtual coordinates
+    of \cite[Observation after Lemma~6.3]{Schuch2010PEPS}, encoding group labels in finite coordinates preserves
+    the boundary condition.
 \end{definition}
 
 \begin{theorem}[Accessibility of a regular region]%
@@ -1691,8 +1690,8 @@ operators.
     $c_v^{-1}A_v^\dagger A_v=P_v$ and $A_vP_v=A_v$.
     The first follows from the local regular Gram kernel; the second
     follows from virtual invariance by averaging the group action.
-    Apply the physical product maps inside the internal-bond
-    contraction. Each local coefficient becomes the corresponding
+    Applying the physical product maps inside the internal-bond
+    contraction turns each local coefficient into the corresponding
     matrix product, giving~(\ref{eq:peps_region_accessibility}).
     Expanding $P_v$ and distributing the finite products gives
     the translation formula~(\ref{eq:peps_projector_region}).
@@ -1721,19 +1720,18 @@ operators.
     give the identity on the physical space of the region. In particular,
     local isometries give an isometry $F_R$.
 
-    Applying $F_R$ to the open-region tensor is the contraction of the
+    For the physical operation on a block in
+    \cite[\S6.1, accessible virtual coordinates]{Schuch2010PEPS}, applying $F_R$ to the open-region tensor is the contraction of the
     transformed site coefficients:
     \begin{align}
         (F_R T_R)(\tau,\mu)=
         \sum_{\eta:\eta|_{\partial R}=\mu}
         \prod_{v\in R}\sum_s F_v(\tau_v,s)A_v(s,\eta|_v).
     \end{align}
-    This is the physical operation on a block used in
-    \cite[\S6.1, accessible virtual coordinates]{Schuch2010PEPS}.
 \end{theorem}
 \begin{proof}\leanok
-    Expand the matrix products and interchange the finite sums over physical
-    and virtual labels. The sum over independent physical labels factors at
+    Expanding the matrix products and interchanging the finite sums over physical
+    and virtual labels factors the sum over independent physical labels at
     each vertex. Composition follows from the same finite distributivity;
     complex conjugation gives the adjoint identity. Applying these identities
     to $F_v^\dagger F_v=\mathbb 1$ proves the isometry assertion.
@@ -1811,9 +1809,9 @@ operators.
     This identity requires no isometry assumption.
 \end{theorem}
 \begin{proof}\leanok
-    Expand both copies of the region tensor. Interchange the finite
-    sums, and distribute the independent physical sums over the
-    vertices. Each factor is the corresponding site Gram kernel.
+    Expanding both copies of the region tensor, interchanging the finite
+    sums, and distributing the independent physical sums over the
+    vertices turns each factor into the corresponding site Gram kernel.
 \end{proof}
 
 \begin{theorem}[Synchronization of group labels in a connected region]%
@@ -1889,8 +1887,8 @@ operators.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_regular_site_gram}
-    Expand the Gram matrix into local pairings. Their averages contribute
-    $|G|^{-V_R}$ and a sum over vertex group labels. Compatibility
+    Expanding the Gram matrix into local pairings contributes
+    $|G|^{-V_R}$ from their averages together with a sum over vertex group labels. Compatibility
     reduces this to one common translation. For each such translation,
     the internal labels contribute $|G|^{I_R}$. The remaining boundary
     translation sum is $|G|P_{\partial R}$.
@@ -1926,8 +1924,8 @@ operators.
     \begin{align}
         (TU)^\dagger(TU) & =cU^\dagger PU=cP=T^\dagger T.
     \end{align}
-    Equal Gram matrices define an isometry between the two ranges.
-    Extend it to a unitary on the finite-dimensional physical space.
+    Equal Gram matrices define an isometry between the two ranges,
+    which extends to a unitary on the finite-dimensional physical space.
 \end{proof}
 
 \begin{definition}[Spanning-tree coordinates for regular half-edge labels]%
@@ -1982,14 +1980,14 @@ operators.
     $|R|-1$ edges, so the domain and codomain of the gradient each have
     $|G|^{|R|-1}$ elements. Its injectivity therefore gives bijectivity.
 
-    Given $\alpha$, recover $r$ from the tree ratios
-    $\alpha_{v,e}\alpha_{u,e}^{-1}$. Then set
+    From $\alpha$, recovering $r$ via the tree ratios
+    $\alpha_{v,e}\alpha_{u,e}^{-1}$ and setting
     $y_e=r_v^{-1}\alpha_{v,e}$ on the boundary,
     $a_e=r_u^{-1}\alpha_{u,e}$ on each internal edge, and
-    $z_e=r_v^{-1}\alpha_{v,e}a_e^{-1}$ outside the tree.
-    Substitution into
-    (\ref{eq:peps_region_boundary_coordinates})--(\ref{eq:peps_region_internal_coordinates})
-    recovers every original label. Conversely, the reconstructed tree
+    $z_e=r_v^{-1}\alpha_{v,e}a_e^{-1}$ outside the tree
+    recovers every original label upon substitution into
+    (\ref{eq:peps_region_boundary_coordinates})--(\ref{eq:peps_region_internal_coordinates}).
+    Conversely, the reconstructed tree
     ratios equal $r_vr_u^{-1}$, so uniqueness recovers $r$, and then
     the same formulas recover $y$, $a$, and $z$.
 \end{proof}
@@ -2015,19 +2013,18 @@ operators.
     No nonempty-boundary assumption is required.
 
     Let $N$ be the number of pairs $(a,r)$, with $r_o=1$, and put
-    $\phi(a,r,z)=N^{-1/2}\mathbf 1_{\{z=1\}}$. Then $\|\phi\|^2=1$,
+    $\phi(a,r,z)=N^{-1/2}\mathbf 1_{\{z=1\}}$. In the coefficient form of the regular blocking construction
+    of \cite[\S6.2--6.3]{Schuch2010PEPS}, $\|\phi\|^2=1$,
     and (\ref{eq:peps_region_projector_coordinates}) factors as
     $\gamma P_{\partial R}(y,\theta)\phi(a,r,z)$, where
     $\gamma=|G|^{1-|R|}\sqrt N>0$.
-    This is the coefficient form of the regular blocking construction
-    in \cite[\S6.2--6.3]{Schuch2010PEPS}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_regular_open_region_projector}
-    Expand the original internal-bond contraction into a sum over bond
-    labels $\eta$ and vertex translations $q$. On each tree edge
-    $e=(u,v)$, compatibility gives
-    $r_ua_e=q_u\eta_e$ and $r_va_e=q_v\eta_e$.
+    Expanding the original internal-bond contraction into a sum over bond
+    labels $\eta$ and vertex translations $q$ gives
+    $r_ua_e=q_u\eta_e$ and $r_va_e=q_v\eta_e$ on each tree edge
+    $e=(u,v)$ by compatibility.
     Thus $q_vq_u^{-1}=r_vr_u^{-1}$. The uniqueness of rooted tree
     gradients gives $q_v=r_vx$, where $x=q_o$; this conclusion already
     follows from compatibility on the tree alone.
@@ -2125,8 +2122,8 @@ operators.
 \begin{proof}\leanok
     \uses{def:peps_regular_region_coordinates,
         def:peps_regular_twisted_region}
-    Invert the tree-gradient bijection at $(u_e)_{e\in T}$ to obtain
-    the normalized $k$. On a tree edge,
+    Inverting the tree-gradient bijection at $(u_e)_{e\in T}$ yields
+    the normalized $k$, so on a tree edge
     $k_t^{-1}u_ek_s=k_t^{-1}(k_tk_s^{-1})k_s=1$.
     The reference identity follows from
     $(k_t^{-1}u_ek_s)(k_s^{-1}\eta_e)=k_t^{-1}u_e\eta_e$.
@@ -2242,13 +2239,13 @@ operators.
     square is compact. The finite coproduct of the compact convex
     squares maps continuously and surjectively onto $X_R$. This is a
     closed quotient map into a Hausdorff space, and local path
-    connectedness therefore passes to $X_R$. Split a native unit
-    path at its midpoint: its first half lies in the initial cell and
+    connectedness therefore passes to $X_R$. Splitting a native unit
+    path at its midpoint places its first half in the initial cell and
     its second half in the final cell.
 
-    Apply covering-space lifting to the two coordinate maps into
-    $\mathbb R/w\mathbb Z$ and $\mathbb R/H\mathbb Z$ separately.
-    Every lift of a native site has integer coordinates. Along an
+    Applying covering-space lifting to the two coordinate maps into
+    $\mathbb R/w\mathbb Z$ and $\mathbb R/H\mathbb Z$ separately
+    assigns integer coordinates to every lift of a native site. Along an
     internal unit path, uniqueness of the lift identifies the lifted
     path with the corresponding affine unit segment. Its endpoints
     thus satisfy the exact integer unit-step equations.
@@ -2402,10 +2399,10 @@ operators.
     \uses{thm:peps_finite_compact_cell_images}
     Local path connectedness follows from the finite compact-cell
     quotient theorem. Suppose $K$ is such a finite candidate and choose
-    a missing cell center in $K$. Translate it to the origin. Simple
+    a missing cell center in $K$, translated to the origin. Simple
     connectedness gives a continuous real lift of the angular map on
-    $P_A$. Subtract this lift from the principal argument and divide
-    by $2\pi$. At cell corners this gives a real potential whose
+    $P_A$; subtracting this lift from the principal argument and dividing
+    by $2\pi$ defines at cell corners a real potential whose
     horizontal increments vanish. Its vertical increment is one
     precisely when the edge crosses the negative real ray from the
     missing center, and is zero otherwise.
@@ -2531,9 +2528,9 @@ operators.
     Moving the ray one cell east removes exactly the vertical edge
     indexed by $q+e$. Conservation writes the difference between the
     vertical flow and its north translate as the east translate of
-    the horizontal flow minus the horizontal flow itself. Apply the
-    additive finite ray sum to this equality. Translation of the
-    finite supports and the east-increment identity telescope the
+    the horizontal flow minus the horizontal flow itself. Applying the
+    additive finite ray sum to this equality, translating the
+    finite supports, and using the east-increment identity telescopes the
     horizontal difference to the single term $H(q+n)$.
 \end{proof}
 
@@ -2556,8 +2553,8 @@ operators.
     \cite[proof of Theorem~6.9]{Schuch2010PEPS}.
 \end{theorem}
 \begin{proof}\leanok
-    Enclose $A$ in a finite integer box. All vertices outside that box
-    can be connected to one exterior corner by integer row and column
+    Enclosing $A$ in a finite integer box allows all vertices outside that box
+    to be connected to one exterior corner by integer row and column
     walks avoiding the box. Every missing-cell component is infinite
     by the preceding no-hole theorem, and hence contains a vertex
     outside the box. Each component therefore meets the same exterior
@@ -2666,9 +2663,9 @@ operators.
     \uses{thm:peps_region_walk_winding}
     A site center in a closed cell differs from its integer center,
     modulo a period vector, by an integer in each interval $[-1/2,1/2]$.
-    Both differences vanish, proving the center assertion. Lift a boundary
-    edge by its horizontal or vertical unit direction. Its exterior
-    endpoint is the sum of its midpoint in the interior closed cell and
+    Both differences vanish, proving the center assertion. Lifting a boundary
+    edge by its horizontal or vertical unit direction places its exterior
+    endpoint at the sum of its midpoint in the interior closed cell and
     a half-unit displacement, so it belongs to the collar. It cannot
     belong to $P$, since projection would put its exterior native center
     in $X_R$. The preceding theorem gives the crossing pair of this step.
@@ -2707,9 +2704,9 @@ operators.
     two cells sharing a side, or four cells sharing a corner, all with
     exterior lattice centers. At a side or corner every touching closed
     cell must be exterior, since the point avoids $X_R$. These rectangles
-    cover the lifted exterior. Subdivide the compact parameter interval
-    so that each subpath lies in one rectangle. Rounded endpoints in
-    that rectangle can be connected through exterior lattice centers
+    cover the lifted exterior. Subdividing the compact parameter interval
+    places each subpath in one rectangle, where rounded endpoints
+    can be connected through exterior lattice centers
     by a horizontal and a vertical step. Concatenating gives an integer
     lattice walk between $a$ and $b$. Projection gives a native
     complement walk. The crossing pair of each unit step is the change
@@ -2808,10 +2805,10 @@ operators.
     coordinate changes in \cite[\S6.2--6.3]{Schuch2010PEPS}.
 \end{theorem}
 \begin{proof}\leanok
-    Expand the original contraction into its internal bond labels
-    $\eta$ and local translations $q$. On the tree put
-    $q'_v=q_vk_v$ and $\eta'_e=k_s^{-1}\eta_e$.
-    The endpoint equations become
+    Expanding the original contraction into its internal bond labels
+    $\eta$ and local translations $q$, and setting
+    $q'_v=q_vk_v$ and $\eta'_e=k_s^{-1}\eta_e$ on the tree,
+    rewrites the endpoint equations as
     $r_sa_e=q'_s\eta'_e$ and $r_ta_e=q'_t\eta'_e$.
     Rooted tree-gradient uniqueness yields $q'_v=r_vx$, with $x=q_o$.
     Thus $q_v=r_vxk_v^{-1}$, and internal references are uniquely fixed
@@ -2857,10 +2854,10 @@ operators.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_regular_twisted_projector_coordinates}
-    Reindex the physical row sum by the reversible spanning-tree
-    coordinates and substitute
-    (\ref{eq:peps_twisted_projector_coordinates}) for each coefficient.
-    The factors indexed by $(a,r)$ are constant, contributing $N$.
+    Reindexing the physical row sum by the reversible spanning-tree
+    coordinates and substituting
+    (\ref{eq:peps_twisted_projector_coordinates}) for each coefficient
+    leaves the factors indexed by $(a,r)$ constant, contributing $N$.
     Summing over the shared boundary and cycle coordinates pairs the
     two indicators, leaving precisely the equalities in
     (\ref{eq:peps_twisted_projector_cross_gram}).
@@ -2899,9 +2896,9 @@ operators.
 
 \begin{proof}\leanok
     \uses{thm:peps_regular_region_tree_gauge}
-    Reindex the sum over incident edge references. On an internal
-    edge multiply the reference by $k_s^{-1}$; on a crossing edge use
-    the map in (\ref{eq:peps_tree_boundary_transport}). Each change
+    Reindexing the sum over incident edge references multiplies the reference
+    by $k_s^{-1}$ on an internal edge and applies
+    the map in (\ref{eq:peps_tree_boundary_transport}) on a crossing edge. Each change
     is a bijection. Its boundary restriction is exactly $\theta\mapsto\theta'$.
     At every region vertex, the resulting twisted half-edge labels are
     $k_v^{-1}$ times the original twisted labels. Local simultaneous
@@ -2935,8 +2932,8 @@ operators.
 \end{theorem}
 
 \begin{proof}\leanok
-    Reindex the common summation variable in the square of the matrix
-    by $F$. Idempotence then follows from that of the original averaging
+    Reindexing the common summation variable in the square of the matrix
+    by $F$ derives idempotence from that of the original averaging
     projector. Taking the adjoint commutes with applying the same
     permutation to both indices. Finally, a basis permutation preserves
     rank, and reindexing the diagonal sum preserves trace.
@@ -3015,12 +3012,12 @@ operators.
 
 \begin{proof}\leanok
     \uses{thm:peps_torus_region_integer_lift_gauge, thm:peps_regular_region_gauge_gram, thm:peps_regular_torus_closure_cut_identification}
-    Express the native four-leg tensor on its four incident graph edges.
-    This preserves local regular isometry. The arithmetic lift gauge
-    has the native closure assignment as its internal gradient, so
-    every internal residual equals the identity. Apply
+    Expressing the native four-leg tensor on its four incident graph edges
+    preserves local regular isometry. Since the arithmetic lift gauge
+    has the native closure assignment as its internal gradient,
+    every internal residual equals the identity, and applying
     Theorem~\ref{thm:peps_regular_region_gauge_gram} to the resulting
-    region matrix, with the boundary map of this explicit gauge.
+    region matrix with the boundary map of this explicit gauge yields the claims.
 \end{proof}
 
 \begin{theorem}[Open-region rank from geometric simple connectedness]%
@@ -3048,12 +3045,12 @@ operators.
 
 \begin{proof}\leanok
     \uses{thm:peps_torus_region_realization, thm:peps_torus_region_integer_lift_gram}
-    Graph connectivity gives a region vertex. Simple connectedness
+    Graph connectivity gives a region vertex, and simple connectedness
     of the cell realization gives an integer lift preserving
     every internal native unit step by
-    Theorem~\ref{thm:peps_torus_region_realization}. Apply the
+    Theorem~\ref{thm:peps_torus_region_realization}. Applying the
     integer-lifted region rank theorem,
-    Theorem~\ref{thm:peps_torus_region_integer_lift_gram}, to this lift.
+    Theorem~\ref{thm:peps_torus_region_integer_lift_gram}, to this lift completes the proof.
 \end{proof}
 
 \begin{theorem}[Vertex gauges of a closed regular PEPS]%
@@ -3075,10 +3072,10 @@ operators.
 \end{theorem}
 
 \begin{proof}\leanok
-    In the original finite sum, replace the reference label of each
-    oriented bond by $k_s^{-1}$ times that label. At its tail, the
-    resulting half-edge label is multiplied by $k_s^{-1}$; at its head,
-    cancellation gives multiplication by $k_t^{-1}$. Thus every site's
+    In the original finite sum, replacing the reference label of each
+    oriented bond by $k_s^{-1}$ times that label multiplies the
+    resulting half-edge label by $k_s^{-1}$ at its tail and, by
+    cancellation, by $k_t^{-1}$ at its head. Thus every site's
     incident labels have undergone one common translation, which leaves
     its coefficient unchanged. The change of summed labels is bijective.
 \end{proof}
@@ -3200,17 +3197,16 @@ operators.
         \right).
         \label{eq:peps_region_deck_winding}
     \end{align}
-    If the closed-cell realization of $R$ is simply connected,
+    As auxiliary interior-walk identities for the path argument
+    in \cite[proof of Theorem~6.9]{Schuch2010PEPS}, if the closed-cell realization of $R$ is simply connected,
     any two induced-region walks with the same endpoints have equal
     seam crossing numbers; no integer lift is assumed in this case.
-    These are auxiliary interior-walk identities for the path argument
-    in \cite[proof of Theorem~6.9]{Schuch2010PEPS}.
 \end{theorem}
 
 \begin{proof}\leanok
-    Use the additive group $\mathbb Z^2$, writing its operation
-    multiplicatively, and take the universal commuting closure elements
-    $g=(0,-1)$ and $h=(1,0)$. Its walk holonomy is $N(p)$ by
+    In the additive group $\mathbb Z^2$, written
+    multiplicatively with the universal commuting closure elements
+    $g=(0,-1)$ and $h=(1,0)$, the walk holonomy is $N(p)$ by
     Theorem~\ref{thm:peps_torus_walk_winding}. The lift gauge is the pair
     of integer deck coordinates. Its native gradient is the
     closure assignment on every internal edge, so its walk holonomy
@@ -3270,8 +3266,8 @@ operators.
 
 \begin{proof}\leanok
     \uses{thm:peps_regular_walk_holonomy, thm:peps_regular_region_tree_gauge}
-    Apply the native walk product to the free generators. Evaluation
-    commutes with each product and inverse, giving the residual holonomy.
+    Applying the native walk product to the free generators and using the fact that evaluation
+    commutes with each product and inverse yields the residual holonomy.
     The tree gauge removes each tree operator and retains exactly the
     prescribed cycle residual on every other edge. Endpoint gauge
     covariance gives the first two identities. Conjugating every
@@ -3308,10 +3304,9 @@ operators.
         \mathbf 1_{\{z=x\omega x^{-1}\}}.
         \label{eq:peps_cycle_controlled_coefficients}
     \end{align}
-    The cycle constraint is retained without any assumption on the
+    In this algebraic coordinate operation associated with
+    \cite[\S6.3]{Schuch2010PEPS}, the cycle constraint is retained without any assumption on the
     relation between $W$ and the crossing maps.
-    This is an algebraic coordinate operation associated with
-    \cite[\S6.3]{Schuch2010PEPS}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_regular_twisted_projector_coordinates}
@@ -3468,17 +3463,16 @@ operators.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_regular_twisted_projector_coordinates}
-    First change the common boundary summation variable by its
-    reversible region boundary map. Substitute the two
-    spanning-tree coefficient formulas. For each complementary
-    translation, the complementary boundary indicator fixes the
-    shared boundary configuration. Its relative labels equal $d_S$,
+    Changing the common boundary summation variable by its
+    reversible region boundary map and substituting the two
+    spanning-tree coefficient formulas fixes the
+    shared boundary configuration for each complementary translation via the complementary boundary indicator. Its relative labels equal $d_S$,
     and the interior translation sum gives
     $\mathbf 1_{\{d_R=d_S\}}$. This proves
     (\ref{eq:peps_controlled_canonical_cut_factor}). There are exactly
     $N_R$ unrestricted region ancillary configurations, while its
-    cycle tuple is fixed, proving normalization. Extract the two
-    square-root normalization factors and use linearity for the
+    cycle tuple is fixed, proving normalization. Extracting the two
+    square-root normalization factors and using linearity yields the
     finite sector sum.
 \end{proof}
 
@@ -3540,9 +3534,9 @@ operators.
     gives identity region cycle residuals. Equality of the given
     loop windings with the native routes gives the complement
     relative-word identities simultaneously for all commuting pairs.
-    Evaluate the fixed walk words to construct $U$, then apply the
-    coherent canonical-cut factorization. Reindexing the shared
-    boundary sum gives the original contraction
+    Evaluating the fixed walk words constructs $U$, and applying the
+    coherent canonical-cut factorization before reindexing the shared
+    boundary sum recovers the original contraction
     (\ref{eq:peps_torus_canonical_cut_contraction}).
 \end{proof}
 
@@ -3630,8 +3624,8 @@ operators.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_fixed_boundary_factor_density, thm:peps_flat_density_renyi_entropy}
-    The fixed ancillary vector has norm one. Apply the fixed-factor density
-    identities and pull them back through the coordinate bijection.
+    Since the fixed ancillary vector has norm one, applying the fixed-factor density
+    identities and pulling them back through the coordinate bijection yields the result.
 \end{proof}
 
 \begin{theorem}[Common reduced density of canonical closure sums]%
@@ -3828,11 +3822,11 @@ operators.
 
 \begin{proof}\leanok
     \uses{thm:peps_cycle_controlled_relative_walks}
-    At cycle coordinates $z$, translate the boundary coordinate $y_f$
+    At cycle coordinates $z$, translating the boundary coordinate $y_f$
     by the inverse of the evaluation of the fixed complementary word
-    associated with $f$. Leave the other coordinates unchanged. This
-    is a permutation of the original half-edge physical basis, hence
-    gives a unitary independent of $g,h$. Matching winding derives the
+    associated with $f$ while leaving the other coordinates unchanged
+    defines a permutation of the original half-edge physical basis, and hence
+    a unitary independent of $g,h$. Matching winding derives the
     relative word identity for each commuting closure pair. Applying
     the exact controlled coefficient formula then cancels the relative
     multipliers, retaining the reference and cycle factors of
@@ -3894,9 +3888,9 @@ operators.
 
 \begin{proof}\leanok
     \uses{thm:peps_regular_physical_unitary_transport}
-    Apply the native reconstruction formulas at the two internal endpoints
-    and the region endpoint of each crossing edge. The vertex coordinate
-    in (\ref{eq:peps_local_translation_coordinates}) cancels its root inverse against the transformed reference
+    Applying the native reconstruction formulas at the two internal endpoints
+    and the region endpoint of each crossing edge causes the vertex coordinate
+    in (\ref{eq:peps_local_translation_coordinates}) to cancel its root inverse against the transformed reference
     or boundary label, giving the independent physical translation.
     Simultaneous conjugation conjugates evaluation of every walk
     word, so the controlled boundary translation commutes with this action.
@@ -3953,7 +3947,7 @@ operators.
 
 \begin{proof}\leanok
     \uses{thm:peps_regular_physical_unitary_transport, thm:peps_regular_twisted_region_accessibility}
-    Expand the half-edge contraction. Summing the physical row
+    Expanding the half-edge contraction and summing the physical row
     against the product local projector replaces each site factor
     $P_v$ by $P_v^2=P_v$. The two reverse accessibility identities give
     $M_u=T_RC_uT_{R^c}^{\mathsf T}$ directly. These equalities persist
@@ -4039,8 +4033,8 @@ operators.
 
 \begin{proof}\leanok
     \uses{thm:peps_torus_controlled_boundary_density, thm:peps_flat_density_renyi_entropy}
-    Derive the incident-coordinate local isometries from the original
-    four-leg isometry. Their physical product map has positive scalar
+    Deriving the incident-coordinate local isometries from the original
+    four-leg isometry gives a physical product map with positive scalar
     Gram $T_R^\dagger T_R=c_RP_R$. The cut image shows that a
     nonzero original coherent cut has a nonzero canonical coherent cut.
     Its fixed normalized density $\rho_R^0$ is supported on $P_R$, so
@@ -4096,10 +4090,10 @@ operators.
     Every cycle residual is the identity by
     Theorem~\ref{thm:peps_torus_region_integer_lift_gauge}. The exact twisted
     coefficient formula therefore reduces to the untwisted coefficient
-    formula at the transformed crossing configuration. Apply the
+    formula at the transformed crossing configuration. Applying the
     normalized factorization of
     Theorem~\ref{thm:peps_regular_region_projector_coordinates} to this
-    configuration. Its constant and ancillary vector depend only on
+    configuration yields a constant and ancillary vector depending only on
     the region, the group, and the chosen tree and root.
 \end{proof}
 
@@ -4119,10 +4113,10 @@ operators.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_regular_region_projector_coordinates, thm:peps_regular_open_region_accessibility}
-    Apply the product of the local inverses to the open tensor.
-    The result is its canonical averaging-projector contraction.
-    Choose a spanning tree and a root. In the coordinates of
-    Theorem~\ref{thm:peps_regular_region_projector_coordinates}, the row
+    Applying the product of the local inverses to the open tensor yields
+    its canonical averaging-projector contraction.
+    Choosing a spanning tree and a root, in the coordinates of
+    Theorem~\ref{thm:peps_regular_region_projector_coordinates} the row
     with identity reference, normalized vertex, and residual cycle labels
     is $|G|^{1-|R|}\Pi_{\partial R}$. This scalar is nonzero, and
     $\Pi_{\partial R}$ fixes every invariant boundary vector. Thus a
@@ -4175,11 +4169,10 @@ operators.
     \uses{thm:peps_regular_blocking_coordinates}
     Let $b\geq1$ and let $G$ act on $G^b$ by simultaneous left
     multiplication. Its invariant functions have dimension $|G|^{b-1}$.
-    Writing $a=(a_0,\ldots,a_{b-1})$, the relative coordinates
-    $(a_0^{-1}a_i)_{i=1}^{b-1}$ label the orbits. The equal-weight orbit
+    In the invariant-boundary calculation used in the proof of
+    \cite[Theorem~6.9]{Schuch2010PEPS}, writing $a=(a_0,\ldots,a_{b-1})$ makes the relative coordinates
+    $(a_0^{-1}a_i)_{i=1}^{b-1}$ label the orbits, and the equal-weight orbit
     vectors form an orthogonal basis, each of squared norm $|G|$.
-    This is the invariant-boundary calculation used in the proof of
-    \cite[Theorem~6.9]{Schuch2010PEPS}.
 \end{theorem}
 \begin{proof}\leanok
     The bijection $a\mapsto(a_0,(a_0^{-1}a_i)_{i>0})$ changes the action to
@@ -4204,9 +4197,9 @@ operators.
         \Psi(a,c)=\sum_{z\in G}\prod_{i=0}^{b-1}\delta_{a_i,zc_i}
         =|G|P_{a,c}.
     \end{align}
-    Its normalized coefficient matrix is $C=P/\sqrt r$, and its reduced
-    density operator is $\rho=P/r$. These are the virtual vectors used
-    in the proof of \cite[Theorem~6.9]{Schuch2010PEPS}.
+    For the virtual vectors used
+    in the proof of \cite[Theorem~6.9]{Schuch2010PEPS}, its normalized coefficient matrix is $C=P/\sqrt r$, and its reduced
+    density operator is $\rho=P/r$.
 \end{definition}
 
 \begin{theorem}[Flat spectrum of the virtual regular boundary]%
@@ -4258,9 +4251,9 @@ operators.
         vonNeumannEntropy_of_mul_self_eq_inv_smul}
     \leanok
     Let $\rho$ be a finite-dimensional positive semidefinite matrix of
-    trace one. If $\rho^2=r^{-1}\rho$ for a positive real number $r$, then
-    $S(\rho)=\log r$. This is the spectral step used in the proof of
-    \cite[Theorem~6.9]{Schuch2010PEPS}.
+    trace one. As in the spectral step of the proof of
+    \cite[Theorem~6.9]{Schuch2010PEPS}, if $\rho^2=r^{-1}\rho$ for a positive real number $r$, then
+    $S(\rho)=\log r$.
 \end{theorem}
 \begin{proof}\leanok
     For each eigenvalue $\lambda$, the identity gives
@@ -4309,14 +4302,13 @@ operators.
         TNLean.PEPS.vonNeumannEntropy_regularBoundaryDensity_eq_mul_log,
         TNLean.PEPS.vonNeumannEntropy_regularBoundaryDensity_eq_boundaryLength}
     \leanok
-    For $b=n+1$ regular boundary legs, the normalized virtual reduced
-    density operator has von Neumann entropy
+    Before identifying the virtual
+    boundary with a physical PEPS region in
+    \cite[Theorem~6.9]{Schuch2010PEPS}, the normalized virtual reduced
+    density operator for $b=n+1$ regular boundary legs has von Neumann entropy
     \begin{align}
         S(\rho)=\log(|G|^n)=n\log|G|=b\log|G|-\log|G|.
     \end{align}
-    This is the spectral calculation in
-    \cite[Theorem~6.9]{Schuch2010PEPS}, before identifying the virtual
-    boundary with a physical PEPS region.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_regular_boundary_density, thm:peps_flat_density_entropy}
@@ -4413,9 +4405,9 @@ operators.
     conjugate is $c_A^{-1}$. Thus
     $\widehat M^\dagger\widehat M=P$, and similarly for $N$.
     Pulling the scalars out of the coefficient matrix gives
-    (\ref{eq:peps_regular_boundary_normalized_matrix}). Apply
+    (\ref{eq:peps_regular_boundary_normalized_matrix}), and applying
     Theorem~\ref{thm:peps_regular_boundary_physical_realization} to the
-    normalized maps.
+    normalized maps yields the entropy.
 \end{proof}
 
 \begin{theorem}[Entropy of a connected untwisted finite cut]%
@@ -4446,11 +4438,11 @@ operators.
     recorded in \cite{gap:rmp_peps_quantum_double_g_isometry}.
 \end{theorem}
 \begin{proof}\leanok
-    Each local isometry gives a positive Gram factor. Apply
+    Each local isometry gives a positive Gram factor. Applying
     Theorem~\ref{thm:peps_connected_regular_region_gram} on both sides
-    of the cut, and normalize the two maps by their positive factors.
-    The resulting coefficient matrix is a positive scalar multiple of
-    the PEPS cut matrix. The regular boundary realization gives
+    of the cut and normalizing the two maps by their positive factors
+    expresses the resulting coefficient matrix as a positive scalar multiple of
+    the PEPS cut matrix, so the regular boundary realization gives
     its norm and reduced entropy.
 \end{proof}
 
@@ -4681,8 +4673,8 @@ operators.
 \end{theorem}
 
 \begin{proof}\leanok
-    Express $A^\dagger A=c\Pi$ in the orthonormal group basis and use
-    the matrix entries of the invariant projector.
+    Expressing $A^\dagger A=c\Pi$ in the orthonormal group basis and substituting
+    the matrix entries of the invariant projector yields the formula.
 \end{proof}
 
 \begin{theorem}[Access to the virtual invariant space]%
@@ -4729,8 +4721,8 @@ operators.
 \end{theorem}
 
 \begin{proof}\leanok
-    Expand both contractions, interchange the finite sums, and sum each
-    physical index independently. A permutation matrix has entry one
+    Expanding both contractions, interchanging the finite sums, and summing each
+    physical index independently yields the product formula, while a permutation matrix has entry one
     exactly when its row is the image of its column.
 \end{proof}
 
@@ -4814,7 +4806,7 @@ operators.
 
 \begin{proof}\leanok
     \uses{thm:peps_torus_regular_site_gram, thm:peps_finite_indicator_sum}
-    Expand the overlap into local Gram kernels. Their product is the
+    Expanding the overlap into local Gram kernels expresses their product as the
     sum over vertex translations with prefactor
     $(\prod_v c_v)|G|^{-N}$. For a compatible translation, the two bond
     families contribute $|G|^{2N}$, leaving the stated prefactor. By
@@ -4963,16 +4955,16 @@ operators.
         F^{\otimes\Lambda}\ket{\mathcal M(A\mid g,h)}
         =\ket{\mathcal M(FA\mid g,h)}.
     \end{align}
-    The identity holds for arbitrary torus bond operators, with no
-    invariance or injectivity hypothesis. It is the physical inverse
-    operation used in \cite[Theorem~5.9]{Schuch2010PEPS}.
+    As the physical inverse
+    operation used in \cite[Theorem~5.9]{Schuch2010PEPS}, the identity holds for arbitrary torus bond operators, with no
+    invariance or injectivity hypothesis.
 \end{theorem}
 
 \begin{proof}\leanok
-    Expand the physical product map and the virtual contraction.
-    Interchange the finite sums and factor the physical sum over sites.
-    Each site coefficient is replaced by $\sum_s F_{q,s}A^s$ while
-    the virtual bond coefficients are unchanged.
+    Expanding the physical product map and the virtual contraction,
+    interchanging the finite sums, and factoring the physical sum over sites
+    replaces each site coefficient by $\sum_s F_{q,s}A^s$ while leaving
+    the virtual bond coefficients unchanged.
 \end{proof}
 
 \begin{theorem}[Physical product maps and Schmidt rank]%
@@ -4991,19 +4983,19 @@ operators.
         C_R(F^{\otimes\Lambda}\psi)
         =F^{\otimes R}C_R(\psi)(F^{\otimes R^c})^{\mathsf T}.
     \end{align}
-    Consequently its rank cannot increase. If physical product maps
+    Consequently its rank cannot increase. In the rank argument
+    used in \cite[Corollary~6.10]{Schuch2010PEPS}, if physical product maps
     send $\psi$ to $\phi$ and $\phi$ back to $\psi$, their Schmidt
-    ranks agree across every partition. Neither product map need be
-    invertible on the full physical space. This is the rank argument
-    used in \cite[Corollary~6.10]{Schuch2010PEPS}.
+    ranks agree across every partition, even when neither product map is
+    invertible on the full physical space.
 \end{theorem}
 
 \begin{proof}\leanok
-    Split a physical configuration into its restrictions to $R$ and
-    $R^c$. The product coefficient factors over these restrictions,
-    and the resulting two physical sums give the two matrix products.
-    Matrix multiplication cannot increase rank. Apply this inequality
-    to the forward and reverse actions.
+    Splitting a physical configuration into its restrictions to $R$ and
+    $R^c$ factors the product coefficient over these restrictions,
+    so the resulting two physical sums give the two matrix products.
+    Since matrix multiplication cannot increase rank, applying this inequality
+    to the forward and reverse actions proves equality.
 \end{proof}
 
 \begin{theorem}[Recovering site coefficients from physical composition]%
@@ -5031,14 +5023,13 @@ operators.
     \uses{def:peps_torus_regular_coordinates}
     Let $q:\mathbb Z_w\times\mathbb Z_h\to X$ be labels in any set $X$, where $w,h>0$.
     Suppose that $q_{x+1,y}=q_{x,y}$ whenever $x+1\ne0$, and
-    $q_{x,y}=q_{x,y+1}$ whenever $y+1\ne0$. Then $q_{x,y}=q_{0,0}$ at every vertex.
-    This is the synchronization away from the closure seams used in
-    \cite[Theorem~5.9]{Schuch2010PEPS}.
+    $q_{x,y}=q_{x,y+1}$ whenever $y+1\ne0$. By the synchronization away from the closure seams used in
+    \cite[Theorem~5.9]{Schuch2010PEPS}, $q_{x,y}=q_{0,0}$ at every vertex.
 \end{theorem}
 \begin{proof}\leanok
-    Induct along the representatives $0,\ldots,w-1$ in the horizontal direction,
-    then along $0,\ldots,h-1$ in the vertical direction. Neither induction crosses
-    a closure seam. The same argument includes a circumference of one.
+    Inducting along the representatives $0,\ldots,w-1$ in the horizontal direction
+    and then along $0,\ldots,h-1$ in the vertical direction avoids crossing
+    any closure seam; the same argument includes a circumference of one.
 \end{proof}
 
 \begin{theorem}[Group-average expansion of the torus projector contraction]%
@@ -5067,15 +5058,14 @@ operators.
         \prod_v H_v(q)_{l_{e(v)},r_v}\,V_v(q)_{t_v,b_{n(v)}},
         \qquad N=wh.
     \end{align}
-    No semi-regularity or unitarity assumption is required for this identity.
-    It is the expansion of the projector contraction in
-    \cite[Theorem~5.9]{Schuch2010PEPS}.
+    As in the expansion of the projector contraction in
+    \cite[Theorem~5.9]{Schuch2010PEPS}, no semi-regularity or unitarity assumption is required for this identity.
 \end{theorem}
 \begin{proof}\leanok
     \uses{lem:peps_torus_bond_network_gauge}
     The bond-end indices are in bijection with the four indices read at the sites.
     For identity sites, the Kronecker deltas leave the product of the bond entries.
-    Expand the group average independently at every vertex. Finite distributivity
+    Expanding the group average independently at every vertex and applying finite distributivity
     gives a sum over vertex labels and the factor $|G|^{-N}$. Absorbing each
     four-leg operator into the neighbouring bonds gives $H_v(q)$ and $V_v(q)$ as in
     (\ref{eq:peps_torus_projector_bond_operators}).
@@ -5226,9 +5216,9 @@ operators.
     \uses{thm:peps_site_coefficients_composition, thm:peps_g_injective_left_inverse, thm:peps_torus_physical_map_contraction}
     The local inverse and virtual invariance give $LT=\Pi$ and
     $T\Pi=T$. By Theorem~\ref{thm:peps_site_coefficients_composition},
-    these are coefficient identities. Apply
+    these are coefficient identities, and applying
     Theorem~\ref{thm:peps_torus_physical_map_contraction} at every
-    physical site in both directions. No inverse on the entire
+    physical site in both directions completes the proof. No inverse on the entire
     physical space is required.
 \end{proof}
 
@@ -5257,8 +5247,8 @@ operators.
     \uses{def:peps_torus_regular_coordinates,
         thm:peps_semiregular_g_injective_closure_independence}
     The native regular representation is semi-regular by its group-basis
-    equivalence with the group-algebra regular representation. Apply
-    Theorem~\ref{thm:peps_semiregular_g_injective_closure_independence}.
+    equivalence with the group-algebra regular representation, so
+    Theorem~\ref{thm:peps_semiregular_g_injective_closure_independence} applies directly.
 \end{proof}
 
 \begin{theorem}[Schmidt ranks of regular $G$-injective closure superpositions]%
@@ -5282,7 +5272,7 @@ operators.
         thm:peps_physical_product_cut_rank}
     The same forward and reverse physical product maps act on every
     summand. By linearity they recover the superpositions
-    (\ref{eq:peps_closure_superposition_pair}) from each other. Theorem~\ref{thm:peps_physical_product_cut_rank}
+    (\ref{eq:peps_closure_superposition_pair}) from each other, and Theorem~\ref{thm:peps_physical_product_cut_rank}
     gives equality of their coefficient-matrix ranks.
 \end{proof}
 
@@ -5311,8 +5301,7 @@ operators.
 
 \begin{proof}\leanok
     \uses{thm:peps_regular_g_injective_closure_inverse, thm:peps_torus_projector_extraction, thm:peps_pair_conjugacy_operator_independence}
-    Choose the same local inverse $L$ for every closure vector.
-    With $N$ the number of vertices, the explicit extraction $E$ gives
+    Choosing the same local inverse $L$ for every closure vector and denoting by $N$ the number of vertices, the explicit map $E$ gives
     \begin{align}
         E L^{\otimes\Lambda}\ket{\mathcal M(A\mid C)}
          & =|G|^{-N}\Omega_C.
@@ -5320,9 +5309,9 @@ operators.
     \end{align}
     Thus $|G|^N E L^{\otimes\Lambda}$ sends any proposed linear
     relation among the physical vectors to a relation among the
-    independent operators $\Omega_C$. Its coefficients vanish by
+    independent operators $\Omega_C$, whose coefficients vanish by
     Theorem~\ref{thm:peps_pair_conjugacy_operator_independence}.
-    Each vector is nonzero, and restriction to the commuting classes
+    Each vector is therefore nonzero, and restriction to the commuting classes
     preserves independence.
 \end{proof}
 
@@ -5336,14 +5325,14 @@ operators.
     Order the endpoints of each bond $e$, writing them as $s(e)<t(e)$.
     For an assignment $u_e\in G$, the inserted regular matrix makes
     the label at $t(e)$ equal to $u_e$ times the label at $s(e)$.
-    Equivalently, replace the coefficient at vertex $v$ by
+    Equivalently, replacing the coefficient at vertex $v$ by
     \begin{align}
         A^u_{v,s}(\eta)=A_{v,s}(\eta^u),\qquad
         \eta^u_e=
-        \begin{cases}u_e\eta_e, & v=t(e), \\ \eta_e,&v=s(e).
+        \begin{cases}u_e\eta_e, & v=t(e), \\ \eta_e,&v=s(e),
         \end{cases}
     \end{align}
-    Contracting the internal bonds with a fixed crossing configuration
+    and contracting the internal bonds with a fixed crossing configuration
     gives the open map $T_R^u$.
 \end{definition}
 
@@ -5369,7 +5358,7 @@ operators.
     \end{align}
     Here the half-edge modification $\eta^u$ is that of
     Definition~\ref{def:peps_regular_twisted_region}. Identity insertions
-    recover $B_R$. This is the finite contraction of the local
+    recover $B_R$ as the finite contraction of the local
     averaging-projector sites with the inserted regular operators.
 \end{definition}
 
@@ -5400,12 +5389,12 @@ operators.
 \begin{proof}\leanok
     \uses{thm:peps_regular_open_region_accessibility,
         thm:peps_region_physical_maps}
-    Apply the physical product map inside the contraction.
-    The local identity $F_vA_v=P_v$ remains valid at the modified
-    virtual label $\eta^u|_{E_v}$ and proves the forward equality.
-    For the reverse equality, use $A_vP_v=A_v$ and hence
-    $A_vF_vA_v=A_v$, again at the modified label. Expanding the local
-    averages gives the finite-sum formula
+    Applying the physical product map inside the contraction preserves
+    the local identity $F_vA_v=P_v$ at the modified
+    virtual label $\eta^u|_{E_v}$, proving the forward equality.
+    In the reverse direction, $A_vP_v=A_v$ gives
+    $A_vF_vA_v=A_v$ at the modified label, and expanding the local
+    averages yields the finite-sum formula
     (\ref{eq:peps_twisted_projector_region}) for $B_R^u$.
 \end{proof}
 
@@ -5430,9 +5419,9 @@ operators.
 
 \begin{proof}\leanok
     \uses{thm:peps_regular_site_gram}
-    Expand both open contractions and sum the physical indices
-    independently. Substitute each original local Gram identity at its
-    two transformed virtual configurations.
+    Expanding both open contractions, summing the physical indices
+    independently, and substituting each original local Gram identity at its
+    two transformed virtual configurations gives the result.
 \end{proof}
 
 \begin{theorem}[Synchronization through common identity bonds]%
@@ -5460,10 +5449,10 @@ operators.
 
 \begin{proof}\leanok
     \uses{thm:peps_regular_twisted_gram_expansion}
-    The tail constraint gives $\eta_e=q_{s(e)}\theta_e$; cancellation
+    The tail constraint gives $\eta_e=q_{s(e)}\theta_e$, while cancellation
     in the head constraint gives $u_eq_{s(e)}=q_{t(e)}w_e$.
-    Along each common identity bond this equates the endpoint translations.
-    Connectedness makes them constant. Boundary identity operators then
+    Along each common identity bond this equates the endpoint translations,
+    so connectedness makes them constant, and the boundary identity operators then
     give the common translation of every crossing label.
 \end{proof}
 
@@ -5483,8 +5472,8 @@ operators.
 \end{theorem}
 
 \begin{proof}\leanok
-    For fixed $x$, the second assignment determines the first. Its crossing
-    labels are fixed; every internal label is free. The boundary conditions
+    For fixed $x$, the second assignment determines the first: its crossing
+    labels are fixed and every internal label is free, while the boundary conditions
     agree exactly when $\mu=x\nu$.
 \end{proof}
 
@@ -5508,8 +5497,8 @@ operators.
 \end{theorem}
 
 \begin{proof}\leanok
-    Every common translation fixes every vector in the range of $P$.
-    Sum this identity with the specified weights and use $P^2=P$.
+    Every common translation fixes every vector in the range of $P$;
+    summing this identity with the specified weights and using $P^2=P$ yields both equalities.
 \end{proof}
 
 \begin{theorem}[Twisted-region cross Gram matrix]%
@@ -5543,8 +5532,8 @@ operators.
 
 \begin{proof}\leanok
     \uses{thm:peps_regular_twisted_boundary_count}
-    Apply the expansion and synchronization lemmas. Counting the free
-    internal labels contributes $|G|^{I_R}$, leaving the prefactor
+    By the expansion and synchronization lemmas, counting the free
+    internal labels contributes $|G|^{I_R}$ and leaves the prefactor
     $\kappa_R/|G|$. On the invariant boundary each remaining translation
     acts identically, giving the projected formula.
 \end{proof}
@@ -5588,10 +5577,10 @@ operators.
         B_\lambda^\dagger B_\lambda=\kappa_\lambda P,\qquad
         \kappa_\lambda=\sum_{s,t}\overline{\lambda_s}\lambda_t k_{s,t}.
     \end{align}
-    Nonvanishing of $K_\lambda$ implies $B_\lambda\ne0$; positivity of
+    Nonvanishing of $K_\lambda$ implies $B_\lambda\ne0$, so positivity of
     its Gram matrix and its nonzero trace imply $\kappa_\lambda>0$.
-    Normalize $A$ and $B_\lambda$ by their positive square-root factors
-    and apply the physical boundary density calculation.
+    Normalizing $A$ and $B_\lambda$ by their positive square-root factors
+    and applying the physical boundary density calculation completes the proof.
 \end{proof}
 
 \begin{theorem}[Common density for PEPS with complementary twists]%
@@ -5629,13 +5618,12 @@ operators.
 \begin{proof}\leanok
     \uses{thm:peps_regular_twisted_region_cross_gram, thm:peps_open_region_cut}
     Identity operators on edges incident to $R$ leave its open
-    map unchanged. The connected-region calculation derives its positive
+    map unchanged, and the connected-region calculation derives its positive
     Gram factor from the local isometries. The twisted-region calculation
     derives each projected complementary mixed Gram matrix as a scalar
     multiple of $P$. Exact contraction across the cut identifies the
     superposition with the matrix state of
-    Theorem~\ref{thm:peps_regular_closure_superposition_density}.
-    Apply that theorem; no Gram identity for a whole region is assumed.
+    Theorem~\ref{thm:peps_regular_closure_superposition_density}, which then yields the common reduced density, rank, and entropy without assuming a Gram identity for a whole region.
 \end{proof}
 
 \begin{definition}[The rectangular grid obtained by cutting the torus seams]%
@@ -5670,10 +5658,10 @@ operators.
 \end{theorem}
 
 \begin{proof}\leanok
-    Inside the rectangle, change the two coordinates consecutively.
-    For the complement, choose one row and one column missed by the
-    rectangle. Every outside vertex can reach their intersection along
-    an outside row or column. A vertex at the lower left corner and
+    Inside the rectangle, consecutive coordinate changes connect any two vertices.
+    For the complement, choosing one row and one column missed by the
+    rectangle lets every outside vertex reach their intersection along
+    an outside row or column, while a vertex at the lower left corner and
     its immediate left neighbour give the crossing bond.
 \end{proof}
 
@@ -5743,15 +5731,14 @@ operators.
 \end{theorem}
 
 \begin{proof}\leanok
-    Enumerate the graph bonds by horizontal and vertical torus bonds.
-    At a horizontal wrap bond, the ordered head is the native tail;
-    replace its summed label by $h$ times the native tail label.
-    The inserted $h^{-1}$ then gives the original native tail, while
+    Enumerating the graph bonds by horizontal and vertical torus bonds,
+    at a horizontal wrap bond the ordered head is the native tail;
+    replacing its summed label by $h$ times the native tail label makes the inserted $h^{-1}$ give the original native tail, while
     the other endpoint gives the native head. At a vertical wrap bond,
     the ordered head is the native head, so the assignment is $g$.
-    All four site labels now coincide with those of the native closure
-    contraction. The change of labels is bijective. Read the resulting
-    identity in the two sets of physical cut coordinates.
+    All four site labels then coincide with those of the native closure
+    contraction under a bijective change of labels, and reading the resulting
+    identity in the two sets of physical cut coordinates gives the cut statements.
 \end{proof}
 
 \begin{theorem}[Regular isometry in incident-edge coordinates]%
@@ -5816,13 +5803,13 @@ operators.
         thm:peps_regular_twisted_cut_entropy,
         thm:peps_regular_torus_incident_isometry}
     The coordinate bounds give connected $R$, a nonempty boundary, and
-    connected $R^c$ after removing all wrap bonds. The closure assignments
+    connected $R^c$ after removing all wrap bonds, and the closure assignments
     are the identity on this complementary grid and on all edges incident
-    to $R$. Rewrite the local regular isometry in incident-edge
-    coordinates, identify the native closure superposition with its
-    twisted graph contraction, and apply
-    Theorem~\ref{thm:peps_regular_twisted_cut_entropy}. Nonvanishing gives
-    the positive normalization; the same region map and constant apply
+    to $R$. Rewriting the local regular isometry in incident-edge
+    coordinates and identifying the native closure superposition with its
+    twisted graph contraction allows
+    Theorem~\ref{thm:peps_regular_twisted_cut_entropy} to apply: nonvanishing gives
+    the positive normalization, and the same region map and constant apply
     to every choice of coefficients.
 \end{proof}
 
@@ -5831,11 +5818,10 @@ operators.
     \lean{TNLean.PEPS.pairConjugacyClass_eq_iff_centralizer}
     \leanok
     \uses{def:peps_pair_conjugacy}
-    Fix $g\in G$. The pairs $(g,h)$ and $(g,k)$ have the same class
+    In the fixed-first-element classification following
+    \cite[Theorem~5.9]{Schuch2010PEPS}, fix $g\in G$. The pairs $(g,h)$ and $(g,k)$ have the same class
     exactly when $h=xkx^{-1}$ for some $x$ in the centralizer
     $Z_G(g)=\{x\in G:xg=gx\}$.
-    This is the fixed-first-element part of the classification following
-    \cite[Theorem~5.9]{Schuch2010PEPS}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -5989,9 +5975,9 @@ around the two non-contractible cycles must be trivial.
     both unit shifts and hence constant, so $f'=fg$; conversely $fg$ is a
     parallel section for every $g$. The two paths from $v$ to $v+(1,1)$ give
     the flatness condition, and going once around a row or a column gives
-    the trivial products. Conversely, for flat $a,b$ with trivial products
-    set $f_{(x,y)}=b_{(x,y-1)}\cdots b_{(x,0)}\,a_{(x-1,0)}\cdots a_{(0,0)}$
-    for the representatives $0\le x<w$, $0\le y<h$. Flatness moves the
+    the trivial products. Conversely, for flat $a,b$ with trivial products,
+    setting $f_{(x,y)}=b_{(x,y-1)}\cdots b_{(x,0)}\,a_{(x-1,0)}\cdots a_{(0,0)}$
+    for the representatives $0\le x<w$, $0\le y<h$, flatness moves the
     product up a column one column to the right, conjugated by the
     horizontal multipliers at its ends, so the product around every column is
     trivial; this and the trivial product around the bottom row give the
@@ -6041,13 +6027,13 @@ around the two non-contractible cycles must be trivial.
 \begin{proof}\leanok
     By Lemma~\ref{lem:peps_torus_site_tensor_contraction} the coefficient
     counts the colorings of the horizontal and vertical bonds whose
-    differences are the given spins. Write such a coloring through the left
-    color $f_v$ and the top color $u_v$ of each site. The top left spin gives
+    differences are the given spins. Writing such a coloring in terms of the left
+    color $f_v$ and the top color $u_v$ of each site, the top left spin gives
     $u_v=s_1(v)f_v$, the top right spin gives $f_{v+(1,0)}=a_vf_v$, the
     bottom left spin of the site above gives $f_{v+(0,1)}=b_vf_v$, and the
-    bottom right spin is then equivalent to $s_2s_1=s_3s_4$ at $v$. So the
+    bottom right spin is then equivalent to $s_2s_1=s_3s_4$ at $v$. Thus the
     colorings are counted by the parallel sections of $a,b$ when the local
-    rule holds, and there are none otherwise. Using the local rule,
+    rule holds, and there are none otherwise. Under the local rule,
     flatness of $a,b$ is the plaquette rule, and
     Lemma~\ref{lem:peps_torus_parallel_section} counts the sections.
 \end{proof}

@@ -78,9 +78,9 @@ arguments.
 
 \begin{proof}\leanok
     \uses{def:bnt, def:same_mpv2_pos}
-    Substitute the positive-length MPV equality into the spanning identity
-    for $A$. Normality and eventual linear independence depend only on the
-    family $(A_j)_{j=1}^{g}$.
+    Substituting the positive-length MPV equality into the spanning identity
+    for $A$ transfers the span condition to $A'$, while normality and eventual
+    linear independence depend only on the family $(A_j)_{j=1}^{g}$.
 \end{proof}
 
 \begin{corollary}[Positive-length geometric proportionality phase]
@@ -89,20 +89,20 @@ arguments.
         exists_unit_phase_power_of_isNormalTensor}
     \leanok
     \uses{def:nt_cpsv, def:mpv_state, def:nonzero_proportional_mpv}
-    Let $A$ and $B$ be normal tensors of positive, possibly different, bond
-    dimensions. Suppose that, for every positive $N$, their matrix product
-    vectors are proportional by a nonzero scalar. Then there is $a\in\C$,
-    with $|a|=1$, such that
+    As the positive-length single-block consequence of
+    \cite[Corollary~A.3 and Theorem~2.10]{Cirac2016MPDO_arXiv}, let $A$ and $B$
+    be normal tensors of positive, possibly different, bond dimensions whose
+    matrix product vectors are proportional by a nonzero scalar at every
+    positive length $N$. Then there is $a\in\C$, with $|a|=1$, such that
     $\ket{V^{(N)}(A)}=a^N\ket{V^{(N)}(B)}$ for every positive $N$.
-    This is the positive-length one-normal-block consequence of
-    \cite[Corollary~A.3 and Theorem~2.10]{Cirac2016MPDO_arXiv}.
 \end{corollary}
 
 \begin{proof}\leanok
     \uses{lem:nonzero_proportional_mpv_basic, thm:normal_proportional_mpv_geometric_phase}
     Positive-length nonzero proportionality implies eventual nonzero
-    proportionality. Apply
-    Theorem~\ref{thm:normal_proportional_mpv_geometric_phase}.
+    proportionality, so
+    Theorem~\ref{thm:normal_proportional_mpv_geometric_phase} yields the
+    unit-modulus phase $a$.
 \end{proof}
 
 \begin{lemma}[Eventual linear independence from finite-index overlap orthonormality]
@@ -137,7 +137,8 @@ Stating the threshold explicitly yields an existential formulation.
 
 \begin{proof}\leanok
     \uses{lem:bnt_finite_index_overlap_orthonormal_li}
-    This is Lemma~\ref{lem:bnt_finite_index_overlap_orthonormal_li}, restated with an
+    Unpacking the eventual quantifier in
+    Lemma~\ref{lem:bnt_finite_index_overlap_orthonormal_li} produces the
     explicit threshold $N_0$.
 \end{proof}
 
@@ -160,10 +161,10 @@ Stating the threshold explicitly yields an existential formulation.
 \end{lemma}
 
 \begin{proof}\leanok
-    Apply the finite-index Gram-matrix criterion to the disjoint union of the two
-    index sets. The within-family hypotheses give the diagonal and
-    off-diagonal limits inside each block, and the mixed overlap hypothesis gives
-    the off-diagonal limits between the two blocks.
+    For the disjoint union of the two index sets, the within-family hypotheses
+    give the diagonal and off-diagonal limits inside each block and the mixed
+    overlap hypothesis gives the off-diagonal limits between the two blocks, so
+    the finite-index Gram-matrix criterion applies to the combined family.
 \end{proof}
 
 Eventual linear independence converts equality of linear combinations of MPV
@@ -181,11 +182,11 @@ used in Chapter~\ref{ch:ft_proof}.
 \end{lemma}
 
 \begin{proof}\leanok
-    Move the two linear combinations to one side. Linear independence forces
-    each coefficient difference to vanish at every sufficiently large length.
+    Subtracting one linear combination from the other expresses zero as a linear
+    combination of the family, and linear independence forces each coefficient
+    difference to vanish at every sufficiently large length.
 \end{proof}
 
-When two BNT families must be compared against each other, the same
-Gram-matrix criterion applies to their disjoint union, provided the mixed
-overlaps also decay. This is the form used in the exact sector matching of
-Section~\ref{sec:sector_bnt_strong_match}.
+For the exact sector matching of Section~\ref{sec:sector_bnt_strong_match},
+comparing two BNT families against each other applies the same Gram-matrix
+criterion to their disjoint union whenever the mixed overlaps also decay.

@@ -8,6 +8,7 @@ import subprocess
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 SPEC = importlib.util.spec_from_file_location(
     "ci_lean_checks", Path(__file__).with_name("ci_lean_checks.py"))
@@ -30,6 +31,85 @@ class ParseImportsTest(unittest.TestCase):
     def test_module_system_keywords(self) -> None:
         text = "module\n\npublic import A\nmeta import B\nimport C D\n"
         self.assertEqual(ci.parse_imports(text), ["A", "B", "C", "D"])
+
+
+class EarlyModulesTest(unittest.TestCase):
+    def setUp(self) -> None:
+        tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(tmp.cleanup)
+        self.root = Path(tmp.name)
+        (self.root / "TNLean").mkdir()
+        self.aggregator = "TNLean/Aggregator.lean"
+        self.other = "TNLean/Other.lean"
+        (self.root / self.aggregator).write_text("import TNLean.Other\n")
+
+    def test_no_changed_sources(self) -> None:
+        self.assertEqual(ci.early_modules(self.root, []), [])
+
+    def test_all_import_only_targets_are_preserved(self) -> None:
+        (self.root / self.other).write_text("import Mathlib\n")
+        self.assertEqual(ci.early_modules(self.root, [self.aggregator, self.other]),
+                         ["TNLean.Aggregator", "TNLean.Other"])
+
+    def test_non_import_commands_and_uncertain_syntax_stay_early(self) -> None:
+        cases = {
+            "definition": "import Mathlib\ndef answer := 42\n",
+            "theorem": "import Mathlib\ntheorem ok : True := by trivial\n",
+            "open": "import Mathlib\nopen Nat\n",
+            "namespace": "import Mathlib\nnamespace N\nend N\n",
+            "option": "import Mathlib\nset_option maxRecDepth 2000\n",
+            "command": "import Mathlib\nrun_cmd pure ()\n",
+            "directive": "import Mathlib\n#check Nat\n",
+            "string": 'import Mathlib\ndef s := "-- /-"\n',
+            "empty": "",
+            "comments_only": "/- import Mathlib -/\n-- def x := 1\n",
+            "unterminated_comment": "import Mathlib\n/- unfinished\n",
+            "unmatched_comment_end": "import Mathlib\n-/\n",
+            "module": "module\nimport Mathlib\n",
+            "prelude": "prelude\nimport Mathlib\n",
+            "public_import": "public import Mathlib\n",
+            "private_import": "private import Mathlib\n",
+            "meta_import": "meta import Mathlib\n",
+            "multiline_import": "import\n  Mathlib\n",
+            "multi_module_import": "import Mathlib TNLean.Other\n",
+        }
+        for name, source in cases.items():
+            with self.subTest(name=name):
+                (self.root / self.other).write_text(source)
+                self.assertEqual(
+                    ci.early_modules(self.root, [self.aggregator, self.other]),
+                    ["TNLean.Other"])
+
+    def test_comments_do_not_make_an_aggregator_substantive(self) -> None:
+        (self.root / self.aggregator).write_text(
+            "/- header /- def hidden := 1 -/ still a comment -/\n\n"
+            "  import TNLean.Other -- theorem hidden : True := by trivial\n"
+            "import /- nested /- comment -/ -/ Mathlib\n")
+        (self.root / self.other).write_text("import Mathlib\ndef answer := 42\n")
+        self.assertEqual(ci.early_modules(self.root, [self.aggregator, self.other]),
+                         ["TNLean.Other"])
+
+    def test_invalid_utf8_even_inside_a_comment_stays_early(self) -> None:
+        (self.root / self.other).write_bytes(b"import Mathlib\n-- invalid \xff\n")
+        self.assertEqual(ci.early_modules(self.root, [self.aggregator, self.other]),
+                         ["TNLean.Other"])
+
+    def test_missing_file_stays_early(self) -> None:
+        self.assertEqual(ci.early_modules(self.root, [self.aggregator, self.other]),
+                         ["TNLean.Other"])
+
+    def test_read_failure_stays_early(self) -> None:
+        original_read = Path.read_text
+
+        def read(path, *args, **kwargs):
+            if path == self.root / self.other:
+                raise PermissionError("unreadable source")
+            return original_read(path, *args, **kwargs)
+
+        with patch.object(Path, "read_text", read):
+            self.assertEqual(
+                ci.early_modules(self.root, [self.aggregator, self.other]),
+                ["TNLean.Other"])
 
 
 class SelectTest(unittest.TestCase):
@@ -69,12 +149,13 @@ class SelectTest(unittest.TestCase):
         git(self.root, "-c", "user.email=t@t", "-c", "user.name=t",
             "commit", "-qm", "change")
 
-    def select(self, base: str | None):
+    def select(self, base: str | None, with_graph: bool = False):
         cwd = Path.cwd()
         try:
             import os
             os.chdir(self.root)
-            return ci.select(Path("."), base)[:3]
+            result = ci.select(Path("."), base)
+            return result if with_graph else result[:3]
         finally:
             os.chdir(cwd)
 
@@ -85,6 +166,68 @@ class SelectTest(unittest.TestCase):
         self.assertEqual(sources, ["TNLean/Core.lean"])
         self.assertEqual(tests, ["TNLeanTest/UsesTest.lean",
                                  "scripts/core_regression.lean"])
+
+    def test_mixed_leaf_and_aggregator_preserve_strict_tests_and_graph(self) -> None:
+        self.change("TNLean/Core.lean", "import Mathlib\ndef answer := 42\n")
+        self.change("TNLean/Uses.lean", "import TNLean.Core\nimport TNLean.Other\n")
+        expected_graph = ci.import_graph(self.root, ci.lean_files(self.root))
+        early, sources, tests, graph = self.select(self.base, with_graph=True)
+        self.assertEqual(early, ["TNLean.Core"])
+        self.assertNotIn("TNLean.Uses", early)
+        self.assertEqual(sources, ["TNLean/Core.lean", "TNLean/Uses.lean"])
+        self.assertEqual(tests, ["TNLeanTest/UsesTest.lean",
+                                "scripts/core_regression.lean"])
+        self.assertEqual(graph, expected_graph)
+        self.assertEqual(graph["TNLean.Uses"], {"TNLean.Core", "TNLean.Other"})
+
+    def test_aggregator_only_keeps_early_strict_and_tests(self) -> None:
+        self.change("TNLean/Uses.lean", "import TNLean.Core\nimport TNLean.Other\n")
+        early, sources, tests = self.select(self.base)
+        self.assertEqual(early, ["TNLean.Uses"])
+        self.assertEqual(sources, ["TNLean/Uses.lean"])
+        self.assertEqual(tests, ["TNLeanTest/UsesTest.lean",
+                                "scripts/core_regression.lean"])
+
+    def test_multiple_substantive_sources_keep_sorted_order(self) -> None:
+        self.change("TNLean/ZProof.lean", "import Mathlib\ndef z := 0\n")
+        self.change("TNLean/Core.lean", "import Mathlib\ndef answer := 42\n")
+        self.change("TNLean/Uses.lean", "import TNLean.Core\nimport TNLean.ZProof\n")
+        self.change("TNLean/All.lean", "import TNLean.Uses\n")
+        early, sources, _ = self.select(self.base)
+        self.assertEqual(early, ["TNLean.Core", "TNLean.ZProof"])
+        self.assertEqual(sources, ["TNLean/All.lean", "TNLean/Core.lean",
+                                  "TNLean/Uses.lean", "TNLean/ZProof.lean"])
+
+    def test_new_proof_and_aggregator_keep_proof_early(self) -> None:
+        self.change("TNLean/New.lean", "import TNLean.Core\ntheorem ok : True := by trivial\n")
+        self.change("TNLean/Uses.lean", "import TNLean.Core\nimport TNLean.New\n")
+        early, sources, tests = self.select(self.base)
+        self.assertEqual(early, ["TNLean.New"])
+        self.assertEqual(sources, ["TNLean/New.lean", "TNLean/Uses.lean"])
+        self.assertEqual(tests, ["TNLeanTest/UsesTest.lean",
+                                "scripts/core_regression.lean"])
+
+    def test_pin_change_with_mixed_sources_keeps_every_test(self) -> None:
+        self.change("TNLeanTest/Axioms.lean", "import TNLean.Core\n#print axioms True.intro\n")
+        self.change("lake-manifest.json", "{}\n")
+        self.change("TNLean/Core.lean", "import Mathlib\ndef answer := 42\n")
+        self.change("TNLean/Uses.lean", "import TNLean.Core\nimport TNLean.Other\n")
+        early, sources, tests = self.select(self.base)
+        self.assertEqual(early, ["TNLean.Core"])
+        self.assertEqual(sources, ["TNLean/Core.lean", "TNLean/Uses.lean"])
+        self.assertEqual(tests, ["TNLeanTest/Axioms.lean",
+                                "TNLeanTest/Support/Fixture.lean",
+                                "TNLeanTest/FixtureTest.lean", "TNLeanTest/Unrelated.lean",
+                                "TNLeanTest/UsesTest.lean", "scripts/core_regression.lean"])
+
+    def test_invalid_utf8_source_is_strict_and_early(self) -> None:
+        (self.root / "TNLean/Core.lean").write_bytes(b"import Mathlib\n-- invalid \xff\n")
+        self.change("TNLean/Uses.lean", "import TNLean.Core\nimport TNLean.Other\n")
+        early, sources, tests = self.select(self.base)
+        self.assertEqual(early, ["TNLean.Core"])
+        self.assertEqual(sources, ["TNLean/Core.lean", "TNLean/Uses.lean"])
+        self.assertEqual(tests, ["TNLeanTest/UsesTest.lean",
+                                "scripts/core_regression.lean"])
 
     def test_imported_test_fixture_runs_first(self) -> None:
         self.change("TNLean/Other.lean", "import Mathlib\n-- edit\n")
@@ -201,6 +344,17 @@ class EarlyBuildTest(unittest.TestCase):
         self.lake("exit 0\n")
         self.assertEqual(ci.early_build(["TNLean.Core"], self.log, 0), 0)
         self.assertIn("building --fail-fast build TNLean.Core", self.log.read_text())
+
+    def test_mixed_targets_do_not_request_aggregator_from_lake(self) -> None:
+        (self.dir / "TNLean").mkdir()
+        (self.dir / "TNLean/Aggregator.lean").write_text(
+            "import TNLean.ZLeaf\nimport TNLean.Unchanged\n")
+        (self.dir / "TNLean/ZLeaf.lean").write_text("import Mathlib\ndef answer := 42\n")
+        targets = ci.early_modules(
+            self.dir, ["TNLean/Aggregator.lean", "TNLean/ZLeaf.lean"])
+        self.lake("exit 0\n")
+        self.assertEqual(ci.early_build(targets, self.log, 0), 0)
+        self.assertEqual(self.log.read_text(), "building --fail-fast build TNLean.ZLeaf\n")
 
     def test_build_failure_fails_the_step(self) -> None:
         self.lake("exit 3\n")

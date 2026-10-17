@@ -60,10 +60,10 @@ so the two incident tensors use the same representation on their shared bond.
         \lambda_{g,h}\in\C\right\}.
         \label{eq:peps_full_four_cut_equality}
     \end{align}
-    This is \cite[Theorem~5.5]{Schuch2010PEPS}. The bond and physical
-    dimensions may differ independently. Each boundary $M$ is one arbitrary
-    tensor on all eight open incidences. Algebraic semi-regularity suffices;
-    the unitary convention of the source is a special case.
+    In this form of \cite[Theorem~5.5]{Schuch2010PEPS}, the bond and physical
+    dimensions may differ independently, each boundary $M$ is an arbitrary
+    tensor on all eight open incidences, and algebraic semi-regularity suffices
+    (containing the unitary convention of the source as a special case).
     % Source ownership: thm:2d:closure, eq:2d:closure-intersection.
     % Proof source labels: eq:2d:closure-inv, eq:2d:close-in-in.
 \end{theorem}
@@ -104,9 +104,9 @@ so the two incident tensors use the same representation on their shared bond.
 \begin{proof}\leanok
     \uses{thm:peps_dependent_physical_contraction,
         thm:peps_dependent_common_inverse}
-    Commute physical maps through the network defining $\zeta_A$ and
-    take spans. Apply (\ref{eq:peps_dependent_cut_transport}) to the four
-    cuts, choosing $(0,0)$ as a member of this nonempty family. Finally,
+    Commuting physical maps through the network defining $\zeta_A$ and
+    taking spans gives the first two identities. Applying (\ref{eq:peps_dependent_cut_transport}) to the four
+    cuts with $(0,0)$ chosen in this nonempty family gives $\mathcal I_A=\mathcal T(\mathcal I_{A^0})$, and
     $T_vP_v=T_v$ identifies the recovered tensors with $A_v$ themselves.
 \end{proof}
 
@@ -135,12 +135,12 @@ so the two incident tensors use the same representation on their shared bond.
 \begin{proof}\leanok
     \uses{thm:peps_labelled_closure_gauge, thm:peps_labelled_closure_support,
         thm:peps_dependent_vertex_gauge, thm:peps_dependent_cut_basis}
-    Move the seams to $(c,r)$ by the group-valued vertex gauge, producing
-    labels $p^{g,h;c,r}$ equal to $1$ off $C_{c,r}$. An explicit boundary is
+    Moving the seams to $(c,r)$ by the group-valued vertex gauge produces
+    labels $p^{g,h;c,r}$ equal to $1$ off $C_{c,r}$. For the explicit boundary
     $M(\eta)=\prod_{e\in C_{c,r}}
-        U_e(p^{g,h;c,r}_e)_{\eta_{e,+},\eta_{e,-}}$.
-    The matrix-boundary contraction and vertex-gauge invariance identify
-    its image with $\zeta_{A^0}(g,h)$. Take spans and intersect the four ranges.
+        U_e(p^{g,h;c,r}_e)_{\eta_{e,+},\eta_{e,-}}$,
+    the matrix-boundary contraction and vertex-gauge invariance identify
+    its image with $\zeta_{A^0}(g,h)$; taking spans and intersecting the four ranges gives the inclusion.
 \end{proof}
 
 \begin{theorem}[Projected flat products are commuting closures]%
@@ -177,10 +177,10 @@ so the two incident tensors use the same representation on their shared bond.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_dependent_uncut_coefficients, thm:peps_labelled_uncut_flat}
-    Choose a plaquette where flatness fails, and use the corresponding cut.
-    If $c_p(\psi)\ne0$, (\ref{eq:peps_dependent_uncut_coefficients}) gives
-    one vertex assignment realizing all four uncut labels simultaneously.
-    Its relative labels satisfy that plaquette equation, a contradiction.
+    On the cut corresponding to a plaquette where flatness fails,
+    $c_p(\psi)\ne0$ and (\ref{eq:peps_dependent_uncut_coefficients}) would give
+    one vertex assignment realizing all four uncut labels simultaneously,
+    whose relative labels would satisfy that plaquette equation.
 \end{proof}
 
 \begin{theorem}[Canonical four-cut equality]%
