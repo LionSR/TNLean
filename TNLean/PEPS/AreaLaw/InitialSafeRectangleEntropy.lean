@@ -9,7 +9,7 @@ import TNLean.PEPS.AreaLaw.InitialBoxEstimate
 # Uniform entropy of physical safe rectangles
 
 One nonnegative constant and one initial exponent work simultaneously for
-every admissible safety parameter and every physical ground-state instance.
+every admissible integer safety parameter and every physical ground-state instance.
 The entropy is that of the actual region inside the rectangle. Its estimate
 is derived from the supremum defining the safe-box entropy.
 
@@ -17,14 +17,17 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 September 24, 2026, Proposition 3.3 (`prop:initial-box`), `02-initial.tex`,
 lines 596–604; safe rectangles, lines 220–228; safe-box entropy, lines 590–594,
 at `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
-This is an auxiliary pointwise consequence at the initial exponent.
+**Scope restriction (integer clearance):** This auxiliary pointwise consequence
+uses integer safety parameters. The comparison with arbitrary real clearance
+is explained in `docs/paper-gaps/arealaw2d_safe_box_collar_scope.tex`; the
+real-clearance physical conclusion is proved in `PhysicalSafeBox.lean`.
 Original formalization from the manuscript; no upstream Lean proof text reused.
 -/
 
 namespace TNLean.PEPS.AreaLaw
 
 /-- A uniform actual-state safe-rectangle bound at the initial exponent.
-The constant and exponent depend only on `q, R, J, Δ` and precede every safety
+The constant and exponent depend only on `q, R, J, Δ` and precede every integer safety
 parameter, domain, Hamiltonian, ground vector, cut and rectangle.
 Source: `02-initial.tex`, lines 590–604 (`prop:initial-box`), at
 `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`. -/
