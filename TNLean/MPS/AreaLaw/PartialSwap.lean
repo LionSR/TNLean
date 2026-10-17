@@ -237,8 +237,7 @@ theorem ChainHamiltonian.partialSwap_boundary_spec
       omega
     simpa only [hc, Nat.cast_zero, zero_mul, hb, Finset.card_empty, mul_zero] using hnorm
   · let x : Fin L := ⟨0, Nat.pos_of_ne_zero hL⟩
-    let X₀ : ChainSupport L R := ⟨{x}, by simp [IsChainSupport]⟩
-    have hJ : 0 ≤ J := (norm_nonneg (h.term X₀)).trans (h.norm_le X₀)
+    have hJ : 0 ≤ J := h.norm_bound_nonneg x
     have hc : (C.card : ℝ) * 2 ≤
         (chainCrossConst R : ℝ) * ((boundaryEdges L D).card : ℝ) := by
       exact_mod_cast hcount

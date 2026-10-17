@@ -24,6 +24,21 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Nonnegative interaction bound at a site — promoted (2026-10-18)
+
+- **Pattern:** At an actual site, use its admissible singleton support and
+  `norm_nonneg` followed by the interaction norm bound to derive `0 ≤ J`.
+- **Seen:** `ChainHamiltonian.sum_norm_terms_containing_le` in
+  `MPS/AreaLaw/InteractionBudget.lean`, the nonempty-chain branch of
+  `ChainHamiltonian.partialSwap_boundary_spec` in
+  `MPS/AreaLaw/PartialSwap.lean`, and the logarithmic-separation proof in
+  `MPS/AreaLaw/LogarithmicSeparation.lean`.
+- **Abstraction:** `ChainHamiltonian.norm_bound_nonneg` in
+  `MPS/AreaLaw/Hamiltonian.lean`; all three arguments use this lemma.
+- **Notes:** An actual site is essential. The empty-chain branch retains
+  the original real interaction bound. No positivity hypothesis on the
+  interaction bound is added to the logarithmic-separation theorem.
+
 ### Labels introduced by the edge operations — promoted (2026-10-16)
 
 - **Pattern:** the case analysis showing that one of the seven births and deaths of an
@@ -4656,18 +4671,6 @@ three-plaquette output measurement, and the routed reunion measurement.
   directly. They, together with the related covariance calculation, should
   use algebraic reindexing when those companion and regional modules are
   next revised. No new spectral theorem or tactic is required.
-
-### Nonnegative interaction bound at a site — candidate (2026-10-18)
-
-- **Pattern:** At an actual site, use its admissible singleton support and
-  `norm_nonneg` followed by the interaction norm bound to derive `0 ≤ J`.
-- **Seen:** Two occurrences: `ChainHamiltonian.sum_norm_terms_containing_le`
-  in `MPS/AreaLaw/InteractionBudget.lean` and the nonempty-chain branch of
-  `ChainHamiltonian.partialSwap_boundary_spec` in `MPS/AreaLaw/PartialSwap.lean`.
-- **Abstraction:** No new lemma is needed at two occurrences; both arguments
-  already use the standard norm inequality and transitivity.
-- **Notes:** An actual site is essential. The empty-chain branch must be
-  treated separately when the conclusion retains the original real `J`.
 
 ### Reversal of time in graph commutator bounds — candidate (2026-10-17)
 

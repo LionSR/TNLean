@@ -9,3 +9,12 @@ info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashC
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms TNLean.MPS.AreaLaw.ChainHamiltonian.sum_norm_terms_containing_le
+
+/--
+info: 'TNLean.MPS.AreaLaw.ChainHamiltonian.norm_bound_nonneg'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+---
+info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms TNLean.MPS.AreaLaw.ChainHamiltonian.norm_bound_nonneg

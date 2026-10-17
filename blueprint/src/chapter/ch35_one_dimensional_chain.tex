@@ -456,7 +456,8 @@ for an arbitrary finite set of sites and are instantiated here directly.
 % Source: TNLean2026OneDimensional, eq:ham; setting before lem:LR.
 \begin{lemma}[Interaction norm budget at a site]
     \label{lem:chain_site_norm_budget}
-    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.sum_norm_terms_containing_le}
+    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.sum_norm_terms_containing_le,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.norm_bound_nonneg}
     \leanok
     \uses{def:chain_model}
     Let $L,q,R$ be natural numbers and $J\in\mathbb R$. On the chain of $L$
@@ -466,6 +467,7 @@ for an arbitrary finite set of sites and are instantiated here directly.
     \begin{align}
         \sum_{X\ni x}\lVert h_X\rVert\le 2^{2R+1}J.
     \end{align}
+    The presence of a site also forces $J\ge0$.
     This is an auxiliary consequence of the Hamiltonian setting
     in Section~1 of~\cite{TNLean2026OneDimensional}; it supplies a
     per-site interaction estimate of the form assumed immediately before
@@ -1018,6 +1020,160 @@ for an arbitrary finite set of sites and are instantiated here directly.
     $m\le(5+32N_Rq^{2(R+1)}+128B_R)(1+\vartheta)$, which follows from
     $\sqrt{(1+\vartheta)B_R}\le(1+\vartheta)B_R$, and $m\ge4$. The subset
     bound is the second part of Lemma~\ref{lem:chain_entropy_inequalities}.
+\end{proof}
+
+\begin{theorem}[Neighborhoods of intervals and their entropy]
+    \label{thm:chain_interval_neighborhood_entropy}
+    \lean{TNLean.MPS.AreaLaw.chainNeighborhood_interval_eq,
+        TNLean.MPS.AreaLaw.regionEntropy_chainNeighborhood_biUnion_intervals_le}
+    \leanok
+    \uses{def:chain_model}
+    Let $I=\{0,\ldots,L-1\}$ be a contiguous chain. Write
+    $[a,z)_I=\{x\in I:a\le x<z\}$ for natural endpoints $a,z$, and
+    for a real $\rho\ge0$ put
+    \begin{align}
+        N_\rho(A)=\{y\in I:\ \exists x\in A,\ |x-y|\le\rho\},
+        \qquad d=\lfloor\rho\rfloor.
+    \end{align}
+    Then the exact interval neighborhood is
+    \begin{align}
+        N_\rho([a,z)_I)=
+        \begin{cases}
+            [\max\{0,a-d\},z+d)_I, & [a,z)_I\ne\varnothing, \\
+            \varnothing,           & [a,z)_I=\varnothing.
+        \end{cases}
+    \end{align}
+    There is no condition $z\le L$ on the original endpoint.
+
+    Let $q$ be any natural number and let $\Omega$ be a normalized
+    vector on the $L$ sites with local dimension $q$.
+    Suppose a real number $c$ bounds the entropy of every interval:
+    \begin{align}
+        S_\Omega([a,z)_I)\le c\qquad(a,z\in\mathbb N).
+    \end{align}
+    For any finite index set $s$ and natural endpoint families $a_i,z_i$,
+    put $T=\bigcup_{i\in s}[a_i,z_i)_I$. Then
+    \begin{align}
+        S_\Omega(N_\rho(T))\le |s|c.
+    \end{align}
+    Empty intervals and empty families are included, and the intervals
+    may overlap or repeat. No nonnegativity assumption on $c$ is added,
+    and no Hamiltonian, gap or positive local dimension is assumed.
+    These are the interval-neighborhood and entropy steps in Part~II
+    of~\cite{TNLean2026OneDimensional}, lines 458--461 and 482--487.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:chain_model,lem:chain_entropy_inequalities}
+    Coordinate distances are integers, so $|x-y|\le\rho$ is equivalent
+    to $|x-y|\le d$. If the interval is nonempty, its first and last
+    sites are $a$ and $\min\{z,L\}-1$. A site lies within distance $d$
+    of it precisely when it belongs to the displayed clipped interval;
+    one may choose the nearer endpoint when the site lies outside, or
+    the site itself when it lies inside. If the interval is empty,
+    its neighborhood is empty by definition. This explains why an
+    empty interval must not be enlarged by its endpoints.
+
+    The entropy of the empty interval is zero, so the interval bound
+    at $[0,0)_I$ gives $c\ge0$.
+    Each interval neighborhood has entropy at most $c$: it is either
+    an interval or the empty set. Moreover,
+    \begin{align}
+        N_\rho\Bigl(\bigcup_{i\in s}[a_i,z_i)_I\Bigr)
+        =\bigcup_{i\in s}N_\rho([a_i,z_i)_I).
+    \end{align}
+    Entropy submodularity and nonnegativity imply
+    $S_\Omega(A\cup B)\le S_\Omega(A)+S_\Omega(B)$ even when $A,B$
+    overlap. Induction on the finite index set therefore bounds the
+    entropy of this union by the sum of its component entropies,
+    which is at most $|s|c$. The empty-family case is $S_\Omega(\varnothing)=0$.
+\end{proof}
+
+\begin{theorem}[Information at logarithmic separation on a contiguous chain]
+    \label{thm:chain_logarithmic_separation}
+    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.mutualInformation_le_of_logarithmic_separation}
+    \leanok
+    \uses{def:chain_model}
+    Fix a natural local dimension $q\ge1$, a natural range $R$, a real
+    interaction bound $J$, a gap $\Delta>0$, an exponent $p>0$, and a
+    natural number $k_0\ge1$.
+    There are $D_p>0$ and a natural number $L_0\ge1$, depending only on
+    these fixed parameters, with the following property.
+    For every $L\ge L_0$, let $H$ be a range-$R$ Hamiltonian with
+    interaction bound $J$ on the contiguous chain $I=\{0,\ldots,L-1\}$,
+    and let $\Omega$ be a normalized ground vector with full-system gap
+    at least $\Delta$.
+    Let $T\subseteq I$ be a union of at most $k_0$ intervals, and let
+    $E\subseteq I$ satisfy
+    \begin{align}
+        D_p\log L\le|x-y|\qquad(x\in T,\ y\in E).
+    \end{align}
+    Then
+    \begin{align}
+        I_\Omega(T:E)\le L^{-p}.
+    \end{align}
+    Empty intervals, empty $T$ or $E$, and overlapping interval
+    representations are allowed. No additional disjointness assumption
+    is imposed. The constants precede the length, Hamiltonian, state,
+    regions and interval representation.
+    This is the contiguous-chain form of the logarithmic-separation
+    lemma in Part~II of~\cite{TNLean2026OneDimensional}, lines 454--488;
+    see~\cite{gap:tnlean_one_dimensional_connected_domain_scope} for the
+    domain distinction.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:chain_information_reset,thm:chain_area_law,
+        lem:chain_entropy_inequalities,thm:chain_interval_neighborhood_entropy}
+    Put $\overline C=\max\{0,C_{\mathrm{int}}(q,R,J,\Delta)\}$ and
+    $b=4k_0\overline C$. Choose $C_p$ and the length threshold from
+    Theorem~\ref{thm:chain_information_reset}, and set
+    \begin{align}
+        D_p=3C_p(2+b)+3.
+    \end{align}
+    Enlarge the threshold so that $\log L\ge1$.
+    These choices use only the fixed parameters.
+    In any such chain there is an actual site, and its singleton term
+    has $0\le\|h_{\{x\}}\|\le J$. Thus $J\ge0$ is derived from the
+    model, rather than imposed as a further hypothesis, and
+    Theorem~\ref{thm:chain_area_law} applies.
+    Put $s=\log L$ and $w=C_p(1+b+s)>0$. Then
+    \begin{align}
+        D_p s-(3w+3)
+        =\bigl(3C_p(1+b)+3\bigr)(s-1)\ge0.
+    \end{align}
+
+    For a real $\rho\ge0$, write
+    \begin{align}
+        N_\rho(T)=\{y\in I:\ \exists x\in T,\ |x-y|\le\rho\}.
+    \end{align}
+    Choose the actual regions
+    \begin{align}
+        D=N_{w+1}(T),\qquad C=I\setminus N_{2w+2}(T),
+        \qquad R_0=T,\quad C_0=E.
+    \end{align}
+    The regions $D,C$ are disjoint, $T\subseteq D$, and $E\subseteq C$.
+    If $y\notin D$, then $|x-y|>w+1>w$ for every $x\in T$.
+    If $y\notin C$, choose $x\in T$ with $|x-y|\le2w+2$.
+    For every $e\in E$, the separation hypothesis and the triangle
+    inequality give
+    \begin{align}
+        |e-y|\ge D_p\log L-(2w+2)\ge w+1>w.
+    \end{align}
+    These are the two strict margins required by the reset theorem.
+
+    The interval area law bounds every interval entropy by
+    $\overline C$. Theorem~\ref{thm:chain_interval_neighborhood_entropy},
+    applied at radius $w+1$, therefore gives $S(D)\le k_0\overline C$.
+    Its empty-component alternative retains empty interval labels,
+    and its union estimate requires no disjointness of the enlarged intervals.
+    The Araki--Lieb inequality now gives
+    \begin{align}
+        I_\Omega(D:C)\le2S(D)\le2k_0\overline C\le b.
+    \end{align}
+    Applying Theorem~\ref{thm:chain_information_reset} to these regions
+    and cores proves the assertion. All pairwise conditions involving
+    an empty set are vacuous, so no nonemptiness condition is needed.
 \end{proof}
 
 \section{Matrix product states and sequential truncation}
