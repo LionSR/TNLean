@@ -61,6 +61,32 @@ for an arbitrary finite set of sites and are instantiated here directly.
     both $A$ and its complement; it is at least one.
 \end{definition}
 
+\begin{lemma}[Distance and spheres on a finite path]
+    \label{lem:chain_path_metric_spheres}
+    \lean{SimpleGraph.pathGraph_edist, SimpleGraph.pathGraph_card_sphere_le_two}
+    \leanok
+    Let $L$ be a natural number, and let $P_L$ be the graph on
+    $\{0,\ldots,L-1\}$ joining consecutive coordinates. For vertices $x,y$ and
+    every natural number $d$,
+    \begin{align}
+        d_{P_L}(x,y)                     & =|x-y|, \\
+        \bigl|\{y:d_{P_L}(x,y)=d\}\bigr| & \le2.
+    \end{align}
+    Thus the sphere growth bound holds with coefficient $2$ and exponent $0$,
+    independently of $L$. This concerns the contiguous chain setting of
+    Section~1 of~\cite{TNLean2026OneDimensional}.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Each edge changes the coordinate by one, so the displacement of a walk is
+    at most its length. Taking the infimum over walks gives one inequality.
+    In the other direction, successive coordinates between $x$ and $y$ stay
+    inside the chain and give a walk of length $|x-y|$. A site at distance $d$
+    from $x$ has coordinate $x-d$ or $x+d$; discarding coordinates outside the
+    chain leaves at most two sites. At $d=0$ the candidates coincide. When
+    $L=0$ there are no vertices, so the assertions are vacuous.
+\end{proof}
+
 \begin{lemma}[Marginal tail bound at a cut]
     \label{lem:chain_marginal_tail}
     \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.surprisalTail_regionState_le}
