@@ -29,6 +29,8 @@ Independently formalized; no upstream Lean proof text reused.
 
 namespace TNLean.PEPS.AreaLaw.Geometry
 
+open Filter
+
 /-- Every prescribed real lower bound holds uniformly for the remembered
 lengths of all positive-rank identifiers once the initial layer and stopping
 scale are sufficiently large. The threshold is chosen before all geometric
@@ -45,11 +47,11 @@ theorem exists_uniform_repairStage_positive_rank_length_lower_bound (U : ℝ) :
         U ≤ repairStageCharacteristicLength o Λ A C k₀ hC h₀ Sstar N i := by
   have hζ : 0 < (Exponents.zeta : ℝ) := by
     norm_num [Exponents.zeta, Exponents.geometryDelta]
-  have hlim : Filter.Tendsto (fun k : ℕ ↦ (2 : ℝ) ^ fineScaleIndex k)
-      Filter.atTop Filter.atTop :=
+  have hlim : Tendsto (fun k : ℕ ↦ (2 : ℝ) ^ fineScaleIndex k)
+      atTop atTop :=
     (tendsto_pow_atTop_atTop_of_one_lt (one_lt_two : (1 : ℝ) < 2)).comp
       (tendsto_nat_floor_mul_atTop (Exponents.zeta : ℝ) hζ)
-  obtain ⟨K, hK⟩ := Filter.eventually_atTop.mp (hlim.eventually_ge_atTop U)
+  obtain ⟨K, hK⟩ := eventually_atTop.mp (hlim.eventually_ge_atTop U)
   refine ⟨K, fun o Λ A C k₀ hC h₀ hk Sstar hSstar N ↦ ?_⟩
   induction N with
   | zero =>

@@ -25,6 +25,8 @@ Source revision: `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 
 namespace TNLean.PEPS.AreaLaw.Geometry
 
+open Filter
+
 /-- Uniform templates for the full ambient lattice samples of actual remembered
 birth regions. The primary and belt coefficients are chosen before the endpoint
 constant and all geometric data. At every generation the primitive size is the
@@ -69,7 +71,7 @@ theorem exists_uniform_repairStage_birth_templates (Ctpl : ℝ) (hCtpl : 1 ≤ C
   have hStop : 1 ≤ Sstar := (le_max_right _ _).trans hSstar
   obtain ⟨KD, hKD⟩ := hDescendant Sstar ((le_max_left _ _).trans hSstar) C D₀ CB
   obtain ⟨KB, hKB⟩ := initialBelt_birthTemplate_cutClearance D₀ CB
-  obtain ⟨KP, hKP⟩ := Filter.eventually_atTop.mp
+  obtain ⟨KP, hKP⟩ := eventually_atTop.mp
     (eventually_primaryScaleLimits CP (show (0 : ℝ) < 1 / 4 by norm_num))
   refine ⟨max KD (max KB KP), ?_⟩
   intro o Λ A k₀ hC h₀ hK N
