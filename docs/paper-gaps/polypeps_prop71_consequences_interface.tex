@@ -58,7 +58,13 @@ and exponent bounds. The retained properties are:
   attached to any square of the padded hierarchy; a different party is
   assigned to each aligned square of the padded hierarchy, including the root
   square, at the scale and address of that square (\path{06-geometry.tex},
-  lines~18--20 and~64--67);
+  lines~18--20 and~64--67); every other party is an additional party with the
+  scale and address of a non-root square of the hierarchy, and it takes part
+  only in changes of the repainting of that square (lines~19--22 and~35--37).
+  Each change records the square of the repainting it belongs to, if any. The
+  source bounds the additional parties of each repainting; the retained bound
+  on the parties at each square implies this, since the additional parties of a
+  repainting are placed at its square;
 \item there are at most $C L^3$ changes, each change contains at most $b$
   nonprivate gates acting on at most $b$ parties each, and each party
   participates in at most $b$ changes over its lifetime;
@@ -91,7 +97,7 @@ gates.\footnote{The protocol predicate is
 
 \section{Omitted clauses}
 
-Five clauses of Proposition~7.1 are omitted from the formal predicate:
+Four clauses of Proposition~7.1 are omitted from the formal predicate:
 \begin{enumerate}
 \item One party holds the main copy of $\Omega$, and every auxiliary copy is
   initialized privately at its designated party (\path{06-geometry.tex},
@@ -104,8 +110,6 @@ Five clauses of Proposition~7.1 are omitted from the formal predicate:
   (\ref{eq:prop71_terminal_factorization})--(\ref{eq:prop71_junk_norm}) alone
   do not imply that the intermediate reference vectors $r_t$ have norm at most
   one.
-\item Each additional party takes the dyadic scale and grid address of its
-  repainting event (\path{06-geometry.tex}, lines~36--37).
 \item Item~3 of Theorem~5.2 (\path{04-compression.tex}, lines~143--147) also
   bounds the pair sources and the messages of each monomial before expansion.
   The formal statement counts only pair effects.
@@ -113,7 +117,7 @@ Five clauses of Proposition~7.1 are omitted from the formal predicate:
   $L$, whereas (\ref{eq:prop71_step_error}) fixes a single contraction $W_t$
   per change with error $C L^{-20}$.
 \end{enumerate}
-None of these five clauses is needed for the Section~8 assembly: the gate-density
+None of these four clauses is needed for the Section~8 assembly: the gate-density
 bound, the routing separation hypothesis, and the lifetime gate count depend
 only on the retained bounds, while the message and replacement-slot bounds used
 in compression follow from the message expansion and the nonprivate gate count
@@ -125,8 +129,7 @@ unproved.
 
 Formalize the full statement of Proposition~7.1 including the registers of the main and auxiliary copies of
 $\Omega$, the frame factorization and unit-norm bounds of the intermediate
-reference vectors $r_t$, the assignment of repainting scales and addresses, and
-the pre-expansion counts of pair sources and messages for arbitrary inverse-power
+reference vectors $r_t$, and the pre-expansion counts of pair sources and messages for arbitrary inverse-power
 accuracy. Proving Proposition~7.1 in that stronger form then implies the
 present existence hypothesis by projection onto the retained fields.
 

@@ -52,8 +52,6 @@ clauses of the source:
 * the factorization of each reference vector into the main and auxiliary encoded frames, with
   every factor of norm at most one (`06-geometry.tex:39–41`); only the initial reference, the
   per-change error, and the final reference are recorded;
-* the scale and address of each additional party, which are those of its repainting event
-  (`06-geometry.tex:36–37`);
 * the bounds on pair sources and messages in each monomial before their expansion (Theorem 5.2,
   item 3, `04-compression.tex:143–147`); only pair effects are counted;
 * the family of expansions accurate to every fixed inverse power of `L`; the model fixes one
