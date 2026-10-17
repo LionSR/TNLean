@@ -158,15 +158,19 @@ import TNLean.PEPS.Approximation.DyadicProtocol
 import TNLean.PEPS.Approximation.DyadicProtocolAssembly
 import TNLean.PEPS.Approximation.DyadicProtocolBoundaryStates
 import TNLean.PEPS.Approximation.DyadicProtocolChanges
+import TNLean.PEPS.Approximation.DyadicProtocolCircuitBounds
 import TNLean.PEPS.Approximation.DyadicProtocolCompression
 import TNLean.PEPS.Approximation.DyadicProtocolConsequences
 import TNLean.PEPS.Approximation.DyadicProtocolConstants
+import TNLean.PEPS.Approximation.DyadicProtocolDensityCoordinates
 import TNLean.PEPS.Approximation.DyadicProtocolFinalReadout
 import TNLean.PEPS.Approximation.DyadicProtocolFromEvents
 import TNLean.PEPS.Approximation.DyadicProtocolFrozenFrames
 import TNLean.PEPS.Approximation.DyadicProtocolInitialStep
+import TNLean.PEPS.Approximation.DyadicProtocolOriginalCircuit
 import TNLean.PEPS.Approximation.DyadicProtocolOwners
 import TNLean.PEPS.Approximation.DyadicProtocolParties
+import TNLean.PEPS.Approximation.DyadicProtocolPhysicalReadout
 import TNLean.PEPS.Approximation.DyadicProtocolRetainedNorm
 import TNLean.PEPS.Approximation.DyadicProtocolSchedule
 import TNLean.PEPS.Approximation.DyadicProtocolSegments
@@ -292,6 +296,7 @@ import TNLean.PEPS.Approximation.OrderedGateLabelPairSum
 import TNLean.PEPS.Approximation.OriginalCircuit
 import TNLean.PEPS.Approximation.OriginalCircuitChain
 import TNLean.PEPS.Approximation.OriginalCircuitGateMaps
+import TNLean.PEPS.Approximation.OriginalCircuitLayoutResources
 import TNLean.PEPS.Approximation.OriginalCircuitLift
 import TNLean.PEPS.Approximation.OriginalCircuitSequence
 import TNLean.PEPS.Approximation.OriginalCircuitSourceBound

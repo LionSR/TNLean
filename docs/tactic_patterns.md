@@ -7524,6 +7524,25 @@ spectral split → block extraction → MPV calculation → strict bounds
   common occurrence-wise description before adding another structural induction.
 
 
+### Original-circuit properties under equal layouts — promoted (2026-10-16)
+
+- **Pattern:** Preserve a circuit property after identifying its input and output
+  register layouts with equal layouts.
+- **Seen:** Seven properties across `OriginalCircuitLift.lean`,
+  `OriginalCircuitLayoutResources.lean`, and `OriginalCircuitSourceBound.lean`:
+  the total and per-party occurrence counts, participating-set containment,
+  arbitrary properties of all participating sets, and the expansion, monomial,
+  and pair-source bounds.
+- **Abstraction:** `OriginalCircuit.castLayouts_rec` in
+  `PEPS/Approximation/OriginalCircuitLift.lean` eliminates the two layout
+  equalities once. Its proposition may depend on both endpoint layouts and
+  the circuit. Each of the seven properties is an application of this lemma.
+- **Notes:** Transport a statement about all occurrences before applying it
+  to a particular occurrence. The evaluation identity also names the memory
+  identifications and remains a separate argument. Word and source-circuit
+  identities concern different dependent types. Complete-protocol bounds
+  continue to reuse the existing sequence lemmas.
+
 ### Evaluation under equal register lists — promoted (2026-10-08)
 
 - **Pattern:** Apply a word whose input and output register lists have been

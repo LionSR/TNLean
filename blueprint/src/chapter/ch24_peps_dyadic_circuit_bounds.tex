@@ -1,0 +1,104 @@
+\section{Gate counts of the complete protocol}
+\label{sec:peps_dyadic_circuit_bounds}
+
+The gate counts concern actual occurrences. Two occurrences remain distinct
+when their local operators agree. The following consequence of the assembly
+bounds is the lifetime count used in the compression argument of
+\cite[Section~8]{OpenAI2026PolynomialPEPS}.
+
+\begin{theorem}[Lifetime participation]
+    \label{thm:peps_dyadic_circuit_lifetime}
+    \leanok
+    \uses{def:peps_dyadic_protocol, def:peps_dyadic_protocol_operator}
+    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.participationCount_castLayouts}
+    \lean{TNLean.PEPS.Approximation.DyadicProtocol.IsDistributionProtocol.participationCount_originalCircuit_le}
+    Suppose a supplied protocol satisfies the assembly bounds of
+    Definition~\ref{def:peps_dyadic_protocol}, with constants $C,b,k,r$.
+    Let $W$ be its complete ordered circuit. Then every party participates in
+    at most $b$ nonprivate occurrences of $W$. This count is unchanged when
+    equal input and output register layouts are identified.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_original_chronology_composition}
+    Equal layout identifications preserve the occurrences. Thus, for each
+    party $p$,
+    \begin{align}
+        n_p(W)=\sum_{t<T}n_p(W_t). \notag
+    \end{align}
+    The right-hand side is the lifetime sum in the assembly bounds and is
+    at most $b$.
+\end{proof}
+
+\begin{theorem}[Total nonprivate gate count]
+    \label{thm:peps_dyadic_circuit_gate_count}
+    \leanok
+    \uses{def:peps_dyadic_protocol, def:peps_dyadic_protocol_operator}
+    \lean{TNLean.PEPS.Approximation.DyadicProtocol.IsDistributionProtocol.nonprivateCount_originalCircuit_le}
+    Suppose a supplied protocol satisfies the assembly bounds of
+    Definition~\ref{def:peps_dyadic_protocol}, with constants $C,b,k,r$.
+    If it has $T$ changes, its complete ordered circuit has at most $bT$
+    nonprivate gate occurrences.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_original_chronology_composition}
+    Writing $N(X)$ for the number of nonprivate occurrences in a circuit $X$,
+    we have
+    \begin{align}
+        N(W) & =\sum_{t<T}N(W_t)\leq\sum_{t<T}b=bT. \notag
+    \end{align}
+\end{proof}
+
+\begin{lemma}[Circuit properties under equal layouts]
+    \label{lem:peps_circuit_layout_participants}
+    \leanok
+    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.castLayouts_rec}
+    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.forall_participants_castLayouts}
+    Identifying the initial and final register layouts of a circuit with equal
+    layouts preserves every property of the circuit. In particular, let $Q$
+    be a property of finite sets of parties, and suppose $Q(S_g)$ holds for
+    the participating set $S_g$ at every nonprivate occurrence. The same
+    assertion holds after the endpoint layouts have been identified.
+\end{lemma}
+\begin{proof}\leanok
+    Substitute the equal endpoint layouts. The circuit and its participating
+    sets are unchanged.
+\end{proof}
+
+\begin{lemma}[A common stage for the participating set]
+    \label{lem:peps_dyadic_circuit_stage_participants}
+    \leanok
+    \uses{def:peps_dyadic_protocol_operator}
+    \lean{TNLean.PEPS.Approximation.DyadicProtocol.exists_stage_participants_originalCircuit}
+    Let $W$ be the complete ordered circuit of a supplied protocol with
+    $T$ changes. For every nonprivate occurrence $g$ of $W$, there are
+    $t<T$ and a nonprivate occurrence $\gamma$ of the change $W_t$ such
+    that $S_g=S_\gamma$. Thus all parties in $S_g$ may be referred to
+    one common stage occurrence.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:peps_original_chronology_composition, lem:peps_circuit_layout_participants}
+    Consider the property that a finite set is the participating set of
+    an occurrence at a stage below $T$. Every occurrence of each used
+    stage has this property. It is preserved by chronological composition
+    and by identifying the equal endpoint layouts.
+\end{proof}
+
+\begin{theorem}[Uniform bounds on the original expansions]
+    \label{thm:peps_dyadic_circuit_expansions}
+    \leanok
+    \uses{def:peps_dyadic_protocol, def:peps_dyadic_protocol_operator}
+    \lean{TNLean.PEPS.Approximation.DyadicProtocol.IsDistributionProtocol.isExpansionBounded_originalCircuit}
+    \lean{TNLean.PEPS.Approximation.DyadicProtocol.IsDistributionProtocol.isMonomialBounded_originalCircuit}
+    Suppose a supplied protocol satisfies the assembly bounds of
+    Definition~\ref{def:peps_dyadic_protocol}, with constants $C,b,k,r$.
+    In its complete ordered circuit, each nonprivate gate has at most
+    $\lfloor C L^k\rfloor$ monomials. Each monomial contains at most
+    $r$ pair effects, and the sum of the absolute values of the coefficients
+    at each gate is at most $C L^k$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_original_chronology_composition}
+    Each change satisfies the two uniform bounds. Chronological composition
+    preserves them, and identifying the equal endpoint register layouts
+    changes no expansion.
+\end{proof}
