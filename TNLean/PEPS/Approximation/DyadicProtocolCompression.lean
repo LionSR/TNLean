@@ -45,6 +45,9 @@ for a construction certificate carrying the omitted clauses and forget it into t
 
 ## Main results
 
+* `TNLean.PEPS.Approximation.DyadicProtocol.IsDistributionProtocol.nonprivateCount_toDistributedConstruction_circuit_le`
+  and its companions: the gate-count, lifetime, monomial, and expansion bounds of the protocol
+  for its composed circuit.
 * `TNLean.PEPS.Approximation.DyadicProtocol.exists_partyNetwork_of_contractedOperator`: a
   compressed density on the parties of a protocol gives an operator party network on dyadic
   anchors with the hypotheses of Lemma 8.2.
@@ -166,6 +169,69 @@ theorem toDistributedConstruction_circuit_induction (hL : 0 < L)
     (Q : ∀ a b : Layout P, OriginalCircuit a b → Prop) (h : Q _ _ (D.chain D.changes)) :
     Q _ _ (D.toDistributedConstruction hL).circuit :=
   OriginalCircuit.castLayouts_induction Q _ _ h
+
+/-- Every nonprivate gate of the protocol circuit has the participating set of a nonprivate gate
+of one change.
+Source: Polynomial-PEPS manuscript (Sept 24 2026), Proposition 7.1, item 2,
+`06-geometry.tex:25–37`. -/
+theorem exists_participants_toDistributedConstruction_circuit (hL : 0 < L)
+    (g : (D.toDistributedConstruction hL).circuit.nonprivateLocations) :
+    ∃ t < D.changes, ∃ g' : (D.step t).nonprivateLocations,
+      (D.toDistributedConstruction hL).circuit.participants g = (D.step t).participants g' :=
+  D.toDistributedConstruction_circuit_induction hL
+    (fun _ _ w ↦ ∀ g : w.nonprivateLocations, ∃ t < D.changes,
+      ∃ g' : (D.step t).nonprivateLocations, w.participants g = (D.step t).participants g')
+    (D.exists_participants_chain D.changes) g
+
+namespace IsDistributionProtocol
+
+variable {D} {Ω : StateSpace L q} {C : ℝ} {b k r : ℕ}
+
+/-- The protocol circuit has at most `T b` nonprivate gates, for `T` changes with at most `b`
+nonprivate gates each; repeated occurrences of one gate are counted separately.
+Source: Polynomial-PEPS manuscript (Sept 24 2026), Proposition 7.1, item 2,
+`06-geometry.tex:25–32`. -/
+theorem nonprivateCount_toDistributedConstruction_circuit_le
+    (h : D.IsDistributionProtocol Ω C b k r) (hL : 0 < L) :
+    (D.toDistributedConstruction hL).circuit.nonprivateCount ≤ D.changes * b := by
+  have hcount : (D.toDistributedConstruction hL).circuit.nonprivateCount =
+      (D.chain D.changes).nonprivateCount :=
+    OriginalCircuit.nonprivateCount_castLayouts _ _ _
+  rw [hcount, DyadicProtocol.nonprivateCount_chain]
+  simpa using Finset.sum_le_card_nsmul _ _ b fun t ht ↦
+    h.nonprivateCount_le t (Finset.mem_range.mp ht)
+
+/-- Every party participates in at most `b` nonprivate gates of the protocol circuit.
+Source: Polynomial-PEPS manuscript (Sept 24 2026), Proposition 7.1, item 2,
+`06-geometry.tex:31–32`. -/
+theorem participationCount_toDistributedConstruction_circuit_le
+    (h : D.IsDistributionProtocol Ω C b k r) (hL : 0 < L) (p : P) :
+    (D.toDistributedConstruction hL).circuit.participationCount p ≤ b :=
+  D.toDistributedConstruction_circuit_induction hL (fun _ _ w ↦ w.participationCount p ≤ b) <| by
+    rw [DyadicProtocol.participationCount_chain]
+    exact h.participation_le p
+
+/-- Every nonprivate gate of the protocol circuit has at most `⌊C L^k⌋` monomials.
+Source: Polynomial-PEPS manuscript (Sept 24 2026), Proposition 7.1, item 2,
+`06-geometry.tex:29–30`. -/
+theorem isMonomialBounded_toDistributedConstruction_circuit
+    (h : D.IsDistributionProtocol Ω C b k r) (hL : 0 < L) :
+    (D.toDistributedConstruction hL).circuit.IsMonomialBounded ⌊C * (L : ℝ) ^ k⌋₊ :=
+  D.toDistributedConstruction_circuit_induction hL (fun _ _ w ↦ w.IsMonomialBounded _)
+    (D.isMonomialBounded_chain _ h.monomialBounded)
+
+/-- In the protocol circuit, every monomial has at most `r` pair effects and every gate has
+absolute coefficient sum at most `C L^k`.
+Source: Polynomial-PEPS manuscript (Sept 24 2026), Proposition 7.1, item 2,
+`06-geometry.tex:29–30`, with the expansions of Theorem 5.2, item 3,
+`04-compression.tex:143–147`. -/
+theorem isExpansionBounded_toDistributedConstruction_circuit
+    (h : D.IsDistributionProtocol Ω C b k r) (hL : 0 < L) :
+    (D.toDistributedConstruction hL).circuit.IsExpansionBounded r (C * (L : ℝ) ^ k) :=
+  D.toDistributedConstruction_circuit_induction hL (fun _ _ w ↦ w.IsExpansionBounded r _)
+    (D.isExpansionBounded_chain _ h.expansionBounded)
+
+end IsDistributionProtocol
 
 /-- The configuration of the square read from the physical outputs of the parties: the site `v`
 carries the physical output of its unit-square party.
@@ -392,16 +458,10 @@ theorem largeSizeDyadicOperatorNetwork_of_largeSizeDyadicProtocolConsequences
   have hN₀ : ∀ i, ((C₀ i).circuit.nonprivateCount : ℝ) ≤ (max C 0 * b) * size i ^ 3 := by
     intro i
     have hD := i.isDistributionProtocol
-    have hcount : (C₀ i).circuit.nonprivateCount =
-        (i.protocol.chain i.protocol.changes).nonprivateCount :=
-      OriginalCircuit.nonprivateCount_castLayouts _ _ _
-    rw [hcount, DyadicProtocol.nonprivateCount_chain]
-    have hsum : ∑ t ∈ range i.protocol.changes, (i.protocol.step t).nonprivateCount ≤
-        i.protocol.changes * b := by
-      simpa using Finset.sum_le_card_nsmul _ _ b fun t ht ↦
-        hD.nonprivateCount_le t (Finset.mem_range.mp ht)
-    calc ((∑ t ∈ range i.protocol.changes, (i.protocol.step t).nonprivateCount : ℕ) : ℝ)
-        ≤ (i.protocol.changes : ℝ) * b := by exact_mod_cast hsum
+    have hcount : (C₀ i).circuit.nonprivateCount ≤ i.protocol.changes * b :=
+      hD.nonprivateCount_toDistributedConstruction_circuit_le _
+    calc ((C₀ i).circuit.nonprivateCount : ℝ)
+        ≤ (i.protocol.changes : ℝ) * b := by exact_mod_cast hcount
       _ ≤ (max C 0 * size i ^ 3) * b := by
           gcongr
           exact hD.changes_le.trans (by gcongr; exact le_max_left _ _)
@@ -415,31 +475,23 @@ theorem largeSizeDyadicOperatorNetwork_of_largeSizeDyadicProtocolConsequences
       rw [i.protocol.physicalDimension_site]
     · rw [i.protocol.physicalDimension_eq_one j hj]
       exact_mod_cast (show 1 ≤ q by omega)
-  have harity₀ : ∀ i g, ((C₀ i).circuit.participants g).card ≤ b := fun i ↦
-    i.protocol.toDistributedConstruction_circuit_induction _
-      (fun _ _ w ↦ ∀ g, (w.participants g).card ≤ b) fun g ↦ by
-        obtain ⟨t, ht, g', hg'⟩ := i.protocol.exists_participants_chain _ g
-        rw [hg']
-        exact i.isDistributionProtocol.card_participants_le t ht g'
+  have harity₀ : ∀ i g, ((C₀ i).circuit.participants g).card ≤ b := fun i g ↦ by
+    obtain ⟨t, ht, g', hg'⟩ := i.protocol.exists_participants_toDistributedConstruction_circuit _ g
+    exact (congrArg Finset.card hg').trans_le
+      (i.isDistributionProtocol.card_participants_le t ht g')
   have hlifetime₀ : ∀ i j, (C₀ i).circuit.participationCount j ≤ b := fun i j ↦
-    i.protocol.toDistributedConstruction_circuit_induction _
-      (fun _ _ w ↦ w.participationCount j ≤ b) <| by
-        rw [DyadicProtocol.participationCount_chain]
-        exact i.isDistributionProtocol.participation_le j
+    i.isDistributionProtocol.participationCount_toDistributedConstruction_circuit_le _ j
   have hpow : ∀ i, C * size i ^ k ≤ max C 0 * size i ^ k := fun i ↦
     mul_pow_le_max_zero_mul_pow C (by linarith [hsize i]) k
   have hmonomial₀ : ∀ i, ∃ K : ℕ, (C₀ i).circuit.IsMonomialBounded K ∧
       (K : ℝ) ≤ max C 0 * size i ^ k := fun i ↦
-    ⟨⌊C * size i ^ k⌋₊, i.protocol.toDistributedConstruction_circuit_induction _
-      (fun _ _ w ↦ w.IsMonomialBounded _)
-      (i.protocol.isMonomialBounded_chain _ i.isDistributionProtocol.monomialBounded),
+    ⟨⌊C * size i ^ k⌋₊,
+      i.isDistributionProtocol.isMonomialBounded_toDistributedConstruction_circuit _,
       (natCast_floor_le_max _).trans (max_le (hpow i)
         (mul_nonneg (le_max_right _ _) (pow_nonneg (by linarith [hsize i]) _)))⟩
   have htermwise₀ : ∀ i, (C₀ i).circuit.IsTermwiseBounded r (max C 0 * size i ^ k) := fun i ↦
-    i.protocol.toDistributedConstruction_circuit_induction _
-      (fun _ _ w ↦ w.IsTermwiseBounded r _)
-      ((i.protocol.isExpansionBounded_chain _
-        i.isDistributionProtocol.expansionBounded).isTermwiseBounded (hpow i))
+    (i.isDistributionProtocol.isExpansionBounded_toDistributedConstruction_circuit
+      (by have := i.two_le; omega)).isTermwiseBounded (hpow i)
   obtain ⟨C_p, α, hCp, hα, hfam⟩ :=
     DistributedConstruction.exists_uniform_sampled_network size hsize (fun i ↦ i.Party) C₀
       b 3 0 r k k (max C 0 * b) q (max C 0) (max C 0)
@@ -461,12 +513,8 @@ theorem largeSizeDyadicOperatorNetwork_of_largeSizeDyadicProtocolConsequences
     D.exists_partyNetwork_of_contractedOperator hL0 hD hC hΩ.1 _ _ _ _ _ _ _ T
       (D.physicalDensity_toDistributedConstruction hL0) herr hdim hinc fun e j l hj hl ↦ by
         obtain ⟨g, hjg, hlg⟩ := hloc e j l hj hl
-        refine D.toDistributedConstruction_circuit_induction hL0
-          (fun _ _ w ↦ ∀ g, j ∈ w.participants g → l ∈ w.participants g →
-            ∃ t < D.changes, ∃ g', j ∈ (D.step t).participants g' ∧
-              l ∈ (D.step t).participants g') (fun g hjg hlg ↦ ?_) g hjg hlg
-        obtain ⟨t, ht, g', hg'⟩ := D.exists_participants_chain _ g
-        exact ⟨t, ht, g', hg' ▸ hjg, hg' ▸ hlg⟩
+        obtain ⟨t, ht, g', hg'⟩ := D.exists_participants_toDistributedConstruction_circuit hL0 g
+        exact ⟨t, ht, g', by rw [← hg']; exact hjg, by rw [← hg']; exact hlg⟩
   refine ⟨P, Λ, hP, inferInstance, inferInstance, inferInstance, N, D.placement, hD.inGrid,
     hD.blockBounded, hdeg, hsep, fun ℓ ↦ (hdimN ℓ).trans_eq (by rw [Real.rpow_natCast]), ?_⟩
   have hx : (2 : ℝ) ≤ L := by exact_mod_cast hL
