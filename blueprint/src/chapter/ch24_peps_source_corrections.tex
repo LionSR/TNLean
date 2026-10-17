@@ -1,8 +1,8 @@
 \section{Source substitutions and corrected density terms}
 
-We follow \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
-\texttt{04-compression.tex}, lines 279--383.
-Let $W:\mathcal H_a\to\mathcal H_b$ be a chronological composition.
+Following \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}
+(\texttt{04-compression.tex}, lines 279--383),
+let $W:\mathcal H_a\to\mathcal H_b$ be a chronological composition.
 Its original source positions form the finite set $\mathcal E$.
 For $e=(g,j)$, write $\Xi_g$ for the local labels of its owning gate,
 $c_{g,\alpha}$ for the gate coefficients, and
@@ -61,7 +61,7 @@ no bound on private dimensions is imposed.
     \lean{TNLean.PEPS.PairEffect.Layout.affectedOwner_mapOwner_eq_none}
     \leanok
     \uses{thm:peps_partial_source_evaluation,thm:peps_source_circuit_incidence}
-    Induct on the chronological composition. At a touched gate, the
+    By induction on the chronological composition, at a touched gate the
     sum is its defining branch sum. At an untouched gate all source
     vectors are original, and every participant has exterior owner;
     its branch sum is therefore its original aggregate operator.
@@ -126,8 +126,8 @@ no bound on private dimensions is imposed.
 \begin{proof}
     \leanok
     \uses{thm:peps_source_preparation,thm:peps_partial_original_source_vector}
-    Rewrite the source-preparation identity along the equality of
-    ordered register lists. The inventory at index $i$ is the original
+    Rewriting the source-preparation identity along the equality of
+    ordered register lists identifies the inventory at index $i$ with the original
     vector selected by $\xi_{g_i}$, which gives
     (\ref{eq:peps_canonical_recovery}).
 \end{proof}
@@ -187,8 +187,8 @@ no bound on private dimensions is imposed.
 \end{theorem}
 \begin{proof}
     \leanok
-    Distribute the products over the finite sums and conjugate the
-    coefficients in the adjoint.
+    Distributing the products over the finite sums and conjugating the
+    coefficients in the adjoint gives the weighted matrix-sum identity.
 \end{proof}
 
 \begin{definition}[Corrected terms at original source positions]
@@ -282,9 +282,9 @@ no bound on private dimensions is imposed.
     \leanok
     \uses{thm:peps_source_substitution_partial,thm:peps_weighted_density_sum,
         thm:peps_canonical_substitution_recovery,thm:peps_source_preparation_sums}
-    Apply (\ref{eq:peps_substitution_partial}) to each basis substitution
-    and distribute the ket and bra sums using
-    (\ref{eq:peps_weighted_density_sum}). If a selected label disagrees
+    Applying (\ref{eq:peps_substitution_partial}) to each basis substitution
+    and distributing the ket and bra sums via
+    (\ref{eq:peps_weighted_density_sum}) expands $F_S(E;\rho)$ over partial branches. If a selected label disagrees
     with the branch label, its source vector is zero. Multilinearity
     of preparation makes the corresponding matrix zero. Otherwise the
     substitution is the prescribed basis preparation, by
@@ -320,8 +320,8 @@ no bound on private dimensions is imposed.
 \end{theorem}
 \begin{proof}
     \leanok
-    Compare the vector at each retained index $i$. Membership in
-    $S_{\mathcal A}$ is precisely $e_i\in S$, and both expressions
+    At each retained index $i$, membership in
+    $S_{\mathcal A}$ is equivalent to $e_i\in S$, and both expressions
     select the same coordinate in that case.
 \end{proof}
 
@@ -399,10 +399,10 @@ index sets.
 \begin{proof}
     \leanok
     \uses{thm:peps_prepared_source_contraction,thm:peps_weighted_density_sum}
-    Expand the product in (\ref{eq:peps_source_contraction}) over subsets
-    and subtract its empty-subset term. Apply
+    Expanding the product in (\ref{eq:peps_source_contraction}) over subsets
+    and subtracting its empty-subset term gives the subset expansion, while
     (\ref{eq:peps_prepared_contraction}) and
-    (\ref{eq:peps_weighted_density_sum}) for the exact-source assertion.
+    (\ref{eq:peps_weighted_density_sum}) yield the exact-source assertion.
 \end{proof}
 
 \begin{theorem}[Expanding only the selected source matrices]
@@ -425,11 +425,11 @@ index sets.
 \end{theorem}
 \begin{proof}
     \leanok
-    Expand each selected matrix in matrix units. Multilinearity of
+    Expanding each selected matrix in matrix units and using multilinearity of
     (\ref{eq:peps_source_contraction}) leaves a sum over only those
-    positions. A selected matrix unit is the rank-one coordinate
-    matrix of its ket and bra basis tensors. Apply
-    (\ref{eq:peps_prepared_contraction}) to each term.
+    positions; since each selected matrix unit is the rank-one coordinate
+    matrix of its ket and bra basis tensors, applying
+    (\ref{eq:peps_prepared_contraction}) to each term yields the selected-source contraction formula.
 \end{proof}
 
 \begin{theorem}[The corrected term in a partial expansion]
@@ -460,9 +460,9 @@ index sets.
     \leanok
     \uses{thm:peps_corrected_partial,thm:peps_selected_retained_coordinates,
         thm:peps_selected_source_contraction}
-    Apply (\ref{eq:peps_selected_contraction}) to each partial ket--bra
-    pair and reindex its selected coordinates along the bijection
-    $S_{\mathcal A}\to S$. The resulting expression is
+    Applying (\ref{eq:peps_selected_contraction}) to each partial ket--bra
+    pair and reindexing its selected coordinates along the bijection
+    $S_{\mathcal A}\to S$ recovers
     (\ref{eq:peps_corrected_partial}).
 \end{proof}
 
@@ -525,11 +525,11 @@ index sets.
     \leanok
     \uses{thm:peps_corrected_source_contraction,thm:peps_corrected_empty,
         thm:peps_prepared_subset_identity,thm:peps_all_source_subsets}
-    Apply (\ref{eq:peps_corrected_contraction}) with every party
-    affected, first to the empty selected set and then to arbitrary
-    $S$. This gives the two recovery identities. Expand the source
-    operators by (\ref{eq:peps_prepared_subsets}) and reindex the
-    nonempty subsets by their original occurrences.
+    Applying (\ref{eq:peps_corrected_contraction}) with every party
+    affected—first to the empty selected set and then to arbitrary
+    $S$—gives the two recovery identities, and expanding the source
+    operators by (\ref{eq:peps_prepared_subsets}) before reindexing the
+    nonempty subsets by their original occurrences gives the global corrected-subset identity.
 \end{proof}
 
 \begin{definition}[Physical output after discarding retained registers]
@@ -571,9 +571,9 @@ index sets.
 \begin{proof}
     \leanok
     \uses{thm:peps_global_corrected_subsets}
-    Apply the linear partial trace to
-    (\ref{eq:peps_global_corrected_subsets}), then use the triangle
-    inequality for trace norm. No discarded-memory dimension factor
+    Applying the linear partial trace to
+    (\ref{eq:peps_global_corrected_subsets}) and the triangle
+    inequality for the trace norm yields both conclusions. No discarded-memory dimension factor
     appears in either assertion.
 \end{proof}
 
@@ -598,10 +598,10 @@ index sets.
     $\mathcal H_S$, obtaining
     $P_\psi:\mathcal H_S\otimes\C\to\mathcal H_S\otimes\mathcal H_a$.
     The source-to-output composition is $T_\xi=V_\xi P_\psi$.
-    Both compositions contain no pair-source preparations. This uses the
-    private input and fixed source spaces of
-    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
-    \texttt{04-compression.tex}, lines 137--139 and 246--267.
+    In the private-input and fixed-source-space setting of
+    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}
+    (\texttt{04-compression.tex}, lines 137--139 and 246--267),
+    both compositions contain no pair-source preparations.
 \end{definition}
 
 \begin{theorem}[Action of the private preparation]
@@ -621,10 +621,9 @@ index sets.
 
 \begin{proof}\leanok
     \uses{def:peps_private_product_input,lem:peps_register_reorderings,thm:peps_owner_composition}
-    A composition extended by untouched registers acts as the identity on
-    their tensor factor. Apply this to the recorded preparation after
-    relabelling owners; by (\ref{eq:peps_owner_composition}) its value at $1$
-    is the relabelled vector $\psi$. Then compose with $V_\xi$.
+    Because a composition extended by untouched registers acts as the identity on
+    their tensor factor, the recorded preparation after
+    relabelling owners evaluates at $1$ to the relabelled vector $\psi$ by (\ref{eq:peps_owner_composition}), and composing with $V_\xi$ gives the second identity.
     The source lists of the recorded preparation and $V_\xi$ are empty;
     extending by untouched registers, relabelling owners, and composing
     preserve that property.

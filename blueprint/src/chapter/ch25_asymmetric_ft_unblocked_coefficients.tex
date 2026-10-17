@@ -109,11 +109,10 @@ unit-modulus phase.
     \leanok
     \uses{thm:irred_decomp,thm:periodic_overlap_dichotomy,
         thm:periodic_basis_eventually_li,thm:asym_tail_weights}
-    Apply Theorem~\ref{thm:irred_decomp}, normalize each nonzero irreducible
-    factor to a periodic tensor, and group factors whose periodic vectors
-    are proportional by a fixed nonzero scalar raised to the length.
-    The irreducible-form framework is described in
-    Ref.~\cite{DeLasCuevas2017Irreducible}. This gives separated periodic
+    By the irreducible decomposition of Theorem~\ref{thm:irred_decomp}
+    \cite{DeLasCuevas2017Irreducible}, normalizing each nonzero irreducible
+    factor to a periodic tensor and grouping factors whose periodic vectors
+    are proportional by a fixed nonzero scalar power yields separated periodic
     representatives $A_j$ of dimensions $d_j$, positive multiplicities
     $r_j$, and nonzero weights $a_{jq}$ such that, for every $N>0$,
     \begin{align}
@@ -122,37 +121,35 @@ unit-modulus phase.
         \ket{V^{(N)}(A_j)}, \label{eq:asym_periodic_expansion}           \\
         \sum_j r_jd_j & \leq D_B.
     \end{align}
-    Grouping preserves the dimension count. Indeed, if periodic tensors
-    $A,A'$ of periods $m,m'$ have such proportional vectors, then
-    $|O_{AA'}(N)|^2=O_{AA}(N)O_{A'A'}(N)$.
-    Different dimensions would force the left side to tend to zero by
-    Theorem~\ref{thm:periodic_overlap_dichotomy}, whereas along common
-    multiples of the periods the right side tends to $mm'>0$.
+    This grouping preserves the dimension count: if periodic tensors
+    $A,A'$ of periods $m,m'$ have proportional periodic vectors, then
+    $|O_{AA'}(N)|^2=O_{AA}(N)O_{A'A'}(N)$, whereas different dimensions would
+    force the left side to tend to zero by
+    Theorem~\ref{thm:periodic_overlap_dichotomy} while the right side tends to
+    $mm'>0$ along common multiples of the periods.
 
-    Normalize the targets to period-one tensors $C_\gamma$ and combine
-    them with the representatives not related to any target by an invertible gauge
-    and a nonzero scalar.
-    The combined family has no repeated blocks. On sufficiently large
-    multiples $pn$ of a common period, it is linearly independent by
-    Theorem~\ref{thm:periodic_basis_eventually_li}.
-    Subtracting~(\ref{eq:asym_unblocked_span}) from
-    (\ref{eq:asym_periodic_expansion}), after absorbing matched terms
-    into the targets, forces every unmatched representative to satisfy
-    $\sum_{q=0}^{r_j-1}(a_{jq}^{p})^n=0$ for all sufficiently large $n$.
-    Theorem~\ref{thm:asym_tail_weights} contradicts $r_j>0$.
-    Thus every representative matches a target.
+    Normalizing the targets $M_\gamma$ to period-one tensors $C_\gamma$ and
+    adjoining those representatives $A_j$ not related to any target by an
+    invertible gauge and a nonzero scalar produces a combined family without
+    repeated blocks. Along sufficiently large multiples $pn$ of a common
+    period, Theorem~\ref{thm:periodic_basis_eventually_li} makes this combined
+    family linearly independent. Subtracting~(\ref{eq:asym_unblocked_span})
+    from (\ref{eq:asym_periodic_expansion}) after absorbing matched terms into
+    the targets then forces every unmatched representative to satisfy
+    $\sum_{q=0}^{r_j-1}(a_{jq}^{p})^n=0$ for all sufficiently large $n$, which
+    contradicts $r_j>0$ by Theorem~\ref{thm:asym_tail_weights}; thus every
+    representative $A_j$ matches some target $M_{\gamma(j)}$ with
+    $\ket{V^{(N)}(M_{\gamma(j)})}=\theta_j^N\ket{V^{(N)}(A_j)}$ for a nonzero
+    scalar $\theta_j$.
 
-    Choose its matching label $\gamma(j)$ and a nonzero $\theta_j$ so that
-    $\ket{V^{(N)}(M_{\gamma(j)})}
-        =\theta_j^N\ket{V^{(N)}(A_j)}$.
-    For each target, collect the weights $a_{jq}/\theta_j$ over its
-    matching representatives. This proves~(\ref{eq:asym_unblocked_expansion}).
-    Since $d_j=D_{\gamma(j)}$, the dimension bound follows.
-    Normalize the normal targets and use their eventual linear independence
-    to compare arbitrary expansion coefficients with these power sums.
-    The nonzero normalization scalars can be cancelled, giving a positive
-    threshold for coefficient uniqueness. Theorem~\ref{thm:asym_tail_weights}, applied to each
-    target, then proves uniqueness against any tail expansion.
+    Collecting the rescaled weights $a_{jq}/\theta_j$ over the representatives
+    matched to each target $\gamma$ gives~(\ref{eq:asym_unblocked_expansion}),
+    and $d_j=D_{\gamma(j)}$ gives the dimension bound. Finally, the eventual
+    linear independence of the normalized targets equates any expansion
+    coefficients $c_\gamma^{(N)}$ with these power sums beyond a positive
+    threshold $N_0$ after cancelling the nonzero normalization scalars, and
+    Theorem~\ref{thm:asym_tail_weights} applied target by target establishes
+    the uniqueness of the nonzero weight multisets.
 \end{proof}
 
 \begin{theorem}[Power-sum structure coefficients for operator closure]
@@ -170,9 +167,10 @@ unit-modulus phase.
     $O_L(M_\alpha)O_L(M_\beta)$ belongs to
     $\spn_{\C}\{O_L(M_\gamma):\gamma\in\Gamma\}$ for every $L>0$.
 
-    There are complex diagonal matrices $\chi_{\alpha,\beta,\gamma}$
-    of sizes $n_\gamma\geq0$, with nonzero diagonal entries, such that
-    for every $L>0$,
+    In the structure-coefficient notation of
+    Ref.~\cite[Section~4.5]{Cirac2016MPDO_arXiv}, there are complex diagonal
+    matrices $\chi_{\alpha,\beta,\gamma}$ of sizes $n_\gamma\geq0$, with
+    nonzero diagonal entries, such that for every $L>0$,
     \begin{align}
         O_L(M_\alpha)O_L(M_\beta)
          & =\sum_{\gamma\in\Gamma}
@@ -187,9 +185,6 @@ unit-modulus phase.
     Any other finite families of nonzero diagonal entries giving such an
     expansion at all sufficiently large lengths agree target by target,
     including multiplicities.
-
-    This uses the structure-coefficient notation of
-    Ref.~\cite[Section~4.5]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 
 \begin{center}
@@ -249,16 +244,14 @@ unit-modulus phase.
 \begin{proof}
     \leanok
     \uses{thm:mpdo_operator_product_mpo,thm:asym_unblocked_coefficients}
-    Form the product tensor $P^{ij}=\sum_s M_\alpha^{is}\otimes M_\beta^{sj}$,
-    of bond dimension $D_\alpha D_\beta$.
-    Theorem~\ref{thm:mpdo_operator_product_mpo} gives
-    $O_L(P)=O_L(M_\alpha)O_L(M_\beta)$.
-    Equality of operators is equivalent, entry by entry, to equality of
-    MPS coefficients on the combined physical alphabet.
-    Apply Theorem~\ref{thm:asym_unblocked_coefficients} to $P$ and take
-    $\chi_{\alpha,\beta,\gamma}$ to have diagonal entries
-    $\{\mu_{\gamma k}\}_{k=0}^{n_\gamma-1}$.
-    The same entrywise equivalence transfers the expansion, eventual
-    coefficient uniqueness, dimension bound, and uniqueness of nonzero
-    entries to operators.
+    For the stacked product tensor
+    $P^{ij}=\sum_s M_\alpha^{is}\otimes M_\beta^{sj}$ of bond dimension
+    $D_\alpha D_\beta$, Theorem~\ref{thm:mpdo_operator_product_mpo} gives
+    $O_L(P)=O_L(M_\alpha)O_L(M_\beta)$. Because operator equality coincides
+    entry by entry with equality of periodic vectors on the paired physical
+    alphabet, Theorem~\ref{thm:asym_unblocked_coefficients} applied to $P$
+    produces nonzero weights $\{\mu_{\gamma k}\}_{k=0}^{n_\gamma-1}$; placing
+    them on the diagonal of $\chi_{\alpha,\beta,\gamma}$ carries the
+    power-sum expansion, eventual coefficient uniqueness, dimension bound, and
+    multiset uniqueness directly to the periodic operators.
 \end{proof}

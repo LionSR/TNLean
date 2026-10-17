@@ -253,9 +253,10 @@ volume~\cite[``Positive map'' and ``Quantum channel'']{QICLean2026Blueprint}.
 \end{theorem}
 
 \begin{proof}\leanok
-    Apply the standard vectorization identity
+    Applying the standard vectorization identity
     $\operatorname{vec}(AXB)=(B^{\mathsf T}\otimes A)\operatorname{vec}(X)$
-    to each summand $A^iX(A^i)^\dagger$ and sum over the physical index.
+    to each summand $A^iX(A^i)^\dagger$ and summing over the physical index
+    gives the matrix representation.
 \end{proof}
 
 \begin{lemma}[Trace adjointness of a transfer map]
@@ -272,7 +273,8 @@ volume~\cite[``Positive map'' and ``Quantum channel'']{QICLean2026Blueprint}.
 \end{lemma}
 
 \begin{proof}\leanok
-    Apply trace adjointness for Kraus maps~\cite[``Trace adjointness of a Kraus map'']{QICLean2026Blueprint} to the Kraus family $\{A^i\}$.
+    Trace adjointness for Kraus maps~\cite[``Trace adjointness of a Kraus map'']{QICLean2026Blueprint}
+    applied to the Kraus family $\{A^i\}$ gives the identity.
 \end{proof}
 
 \begin{lemma}[Transfer map under scalar multiplication]
@@ -288,7 +290,7 @@ volume~\cite[``Positive map'' and ``Quantum channel'']{QICLean2026Blueprint}.
 \end{lemma}
 
 \begin{proof}\leanok
-    Expand the transfer map and pull the scalar $w$ and its conjugate out of
+    Expanding the transfer map pulls the scalar $w$ and its conjugate out of
     each summand.
 \end{proof}
 
@@ -463,19 +465,18 @@ volume~\cite[``Positive map'' and ``Quantum channel'']{QICLean2026Blueprint}.
     \lean{MPSTensor.IsReduction}
     \leanok
     \uses{def:mps_tensor, def:eval_word}
-    Let $A$ and $B$ have the same physical alphabet and respective bond
-    dimensions $D_A$ and $D_B$.  A reduction from $B$ to $A$ is a pair
+    Following \cite[Proposition~20 and the following definition]{Molnar2018SemiInjective},
+    let $A$ and $B$ have the same physical alphabet and respective bond
+    dimensions $D_A$ and $D_B$. A reduction from $B$ to $A$ is a pair
     $V\in\C^{D_A\times D_B}$ and
     $W\in\C^{D_B\times D_A}$ such that
     \begin{align}
         VW              & =1_{D_A},
         \label{eq:mps_rectangular_reduction_retraction} \\
-        VB^{\mathbf a}W & =A^{\mathbf a}.
+        VB^{\mathbf a}W & =A^{\mathbf a}
         \label{eq:mps_rectangular_reduction_word}
     \end{align}
     for every word $\mathbf a$, including the empty word.
-    This is the reduction of
-    \cite[Proposition~20 and the following definition]{Molnar2018SemiInjective}.
 \end{definition}
 
 \begin{theorem}[Basic rectangular reduction identities]
@@ -512,12 +513,11 @@ volume~\cite[``Positive map'' and ``Quantum channel'']{QICLean2026Blueprint}.
     \lean{MPSTensor.NonzeroProportionalMPV₂}
     \leanok
     \uses{def:mpv}
-    Two tensors $A$ and $B$ (of possibly different bond dimensions)
-    generate nonzero proportional MPV families if for every~$N>0$ there is a
-    nonzero scalar $c_N \in \C$ such that
-    $\ket{V^{(N)}(A)} = c_N \ket{V^{(N)}(B)}$.
-    This is the projective reading of the proportionality hypothesis in
-    \cite[Theorem~2.10]{Cirac2016MPDO_arXiv}.
+    In the projective reading of the proportionality hypothesis in
+    \cite[Theorem~2.10]{Cirac2016MPDO_arXiv}, two tensors $A$ and $B$ (of
+    possibly different bond dimensions) generate nonzero proportional MPV
+    families if for every~$N>0$ there is a nonzero scalar $c_N \in \C$ such
+    that $\ket{V^{(N)}(A)} = c_N \ket{V^{(N)}(B)}$.
     % Maintainer note: projective reading documented in
     % docs/paper-gaps/cpsv16_nonzero_proportionality_reading.tex.
 \end{definition}
@@ -573,10 +573,11 @@ volume~\cite[``Positive map'' and ``Quantum channel'']{QICLean2026Blueprint}.
     $a_i=0$ for every $i\in T$.
 \end{lemma}
 \begin{proof}\leanok
-    Substitute $u_i=\alpha_i v_{\phi(i)}$ for $i\notin T$ and collect the
-    resulting coefficients over the fibres of $\phi$. The given equality is
-    then a linear relation in the combined family. Linear independence makes
-    every coefficient vanish, in particular each $a_i$ with $i\in T$.
+    Substituting $u_i=\alpha_i v_{\phi(i)}$ for $i\notin T$ and collecting the
+    resulting coefficients over the fibres of $\phi$ rewrites the given
+    equality as a linear relation in the combined family, and linear
+    independence makes every coefficient vanish, in particular each $a_i$ with
+    $i\in T$.
 \end{proof}
 
 \begin{lemma}[Scaling of word evaluation]\label{lem:eval_word_smul}
@@ -606,9 +607,9 @@ volume~\cite[``Positive map'' and ``Quantum channel'']{QICLean2026Blueprint}.
 
 \begin{proof}\leanok
     \uses{lem:eval_word_smul}
-    Apply Lemma~\ref{lem:eval_word_smul} to the word
-    $w = (i_1, \ldots, i_N)$ of length $N$, then take the trace; the scalar
-    $\zeta^{N}$ pulls out by linearity.
+    Applying Lemma~\ref{lem:eval_word_smul} to the word
+    $w = (i_1, \ldots, i_N)$ of length $N$ and taking the trace pulls out the
+    scalar $\zeta^{N}$ by linearity.
 \end{proof}
 
 \begin{definition}[Gauge-phase equivalence]\label{def:gauge_phase_equiv}
@@ -726,8 +727,8 @@ volume~\cite[``Positive map'' and ``Quantum channel'']{QICLean2026Blueprint}.
 \end{theorem}
 
 \begin{proof}\leanok\uses{lem:eval_word_smul, lem:eval_word_gauge}
-    Combine gauge covariance of word evaluation with scalar scaling,
-    then take traces.
+    Combining gauge covariance of word evaluation with scalar scaling and
+    taking traces gives the relation.
 \end{proof}
 
 \section{Injectivity and normality}
@@ -767,12 +768,12 @@ injective exactly when there is a tensor $A^{-1}$ such that
 \end{align}
 Thus (\ref{eq:mps_injective_inverse}) identifies the two pairs of virtual
 indices when $A^{-1}$ is contracted with $A$ through their common physical
-index. In shorthand,
+index. In the shorthand of
 % Correct equation, not a figure: the source states the unindexed injective
 % identity in prose. I_Injectivity.png illustrates the following, strictly
 % stronger block-injective identity with the additional j,j' index pair.
-$A^{-1}A=\Id$. This is the identity used in
-\cite[Section~2.3, lines~324--331]{Cirac2016MPDO_arXiv}.
+\cite[Section~2.3, lines~324--331]{Cirac2016MPDO_arXiv}, this reads
+$A^{-1}A=\Id$.
 
 \begin{definition}[$L$-block injectivity]\label{def:l_blk_injective}
     \lean{Kraus.IsNBlkInjective}
@@ -841,8 +842,8 @@ $A^{-1}A=\Id$. This is the identity used in
 
 \begin{proof}\leanok
     \uses{lem:gauge_invariance_block_injective}
-    Apply Lemma~\ref{lem:gauge_invariance_block_injective} at a blocking length
-    for which $A$ is block-injective.
+    Applying Lemma~\ref{lem:gauge_invariance_block_injective} at a blocking
+    length for which $A$ is block-injective transfers normality to $B$.
 \end{proof}
 
 \begin{remark}\leanok
@@ -933,9 +934,9 @@ $A^{-1}A=\Id$. This is the identity used in
 
 \begin{proof}\leanok
     \uses{lem:block_diagonal_iff_off_block_zero}
-    Compare the $(i,j)$ block of the identity $XP_j=P_jX$ for $i\ne j$.
-    The right multiplication by $P_j$ keeps that block, while the left
-    multiplication by $P_j$ kills it. Hence every off-block entry is zero,
+    Comparing the $(i,j)$ block of the identity $XP_j=P_jX$ for $i\ne j$,
+    right multiplication by $P_j$ keeps that block while left multiplication
+    by $P_j$ kills it. Hence every off-block entry is zero,
     and Lemma~\ref{lem:block_diagonal_iff_off_block_zero} applies.
 \end{proof}
 
@@ -970,8 +971,9 @@ $A^{-1}A=\Id$. This is the identity used in
 \end{lemma}
 
 \begin{proof}\leanok
-    Induct on the word and multiply block-diagonal matrices block by block;
-    every letter contributes one scalar factor $\mu_k$ on the $k$-th block.
+    By induction on the word, block-by-block multiplication of block-diagonal
+    matrices contributes one scalar factor $\mu_k$ per letter on the $k$-th
+    block.
 \end{proof}
 
 \begin{theorem}[MPV decomposition]\label{thm:mpv_decomposition}
@@ -1055,7 +1057,7 @@ $A^{-1}A=\Id$. This is the identity used in
 
 \begin{proof}\leanok
     \uses{lem:eval_word_append}
-    Induct on the blocked word $w$ and split off the first block word.
+    Splitting off the first block word by induction on $w$,
     Lemma~\ref{lem:eval_word_append} turns concatenation of blocks into
     multiplication of the corresponding evaluations.
 \end{proof}
@@ -1076,8 +1078,8 @@ $A^{-1}A=\Id$. This is the identity used in
 
 \begin{proof}\leanok
     \uses{def:blocked_tensor, def:mpv, lem:eval_word_block}
-    Concatenate the block words and apply the blocked word evaluation
-    lemma (Lemma~\ref{lem:eval_word_block}).
+    Concatenating the block words and applying the blocked word evaluation
+    lemma (Lemma~\ref{lem:eval_word_block}) gives the equality.
 \end{proof}
 
 \begin{theorem}[Blocking preserves same MPV]\label{thm:blocking_same_mpv}

@@ -40,9 +40,10 @@ concern these given tensors; the constants may depend on them.
     physical coordinates preserve operator continuity. Summing the
     finitely many nonwrapping terms gives continuity of the open sum.
     Its exact kernel is the extended boundary range, whose projector
-    is continuous. Apply the operator-and-kernel perturbation estimate
-    and then compactness. In the interior the extended local projection
-    equals the canonical one, so the two open sums coincide.
+    is continuous; the operator-and-kernel perturbation estimate and
+    compactness then yield the local and compact-set gap bounds. In the
+    interior the extended local projection equals the canonical one, so
+    the two open sums coincide.
 \end{proof}
 
 \begin{theorem}[Periodic ground lines and fixed-volume gaps]
@@ -89,10 +90,10 @@ concern these given tensors; the constants may depend on them.
     for $0<\gamma<1$. The endpoint kernel comparisons and the
     canonical interior kernel identify the stated line.
     The map from a scalar to its multiple of the periodic
-    vector is continuous and injective. Its range projector is
-    therefore continuous. Apply the compact finite-dimensional gap
-    theorem to the continuous periodic Hamiltonian and this exact
-    kernel projector.
+    vector is continuous and injective, so its range projector is
+    continuous; the compact finite-dimensional gap
+    theorem applied to the continuous periodic Hamiltonian and this exact
+    kernel projector then yields the uniform fixed-volume gap.
 \end{proof}
 
 \begin{theorem}[Uniform periodic gap on the closed interpolation]
@@ -120,15 +121,15 @@ concern these given tensors; the constants may depend on them.
     with $m\geq2$ local terms and $m+1$ sites whose gap $\eta$ satisfies
     $1<m\eta$. In the interior, injectivity gives such a strict
     canonical open window, and the extended open operator is the same.
-    Choose $1/m<\eta'<\eta$ before applying fixed-window continuity.
-    For nearby interior parameters, Knabe's estimate gives the positive
+    Choosing $1/m<\eta'<\eta$ and applying fixed-window continuity shows
+    that, for nearby interior parameters, Knabe's estimate gives the positive
     periodic bound
     \begin{align}
         \delta_K=\frac{m\eta'-1}{m-1}
     \end{align}
-    at every $N\geq2m$. At either endpoint use its independently
-    derived periodic gap $\delta_E>0$. Thus
-    $\min\{\delta_K,\delta_E\}$ is a common bound on a neighborhood
+    at every $N\geq2m$. Combining this bound with the independently
+    derived periodic gap $\delta_E>0$ at either endpoint makes
+    $\min\{\delta_K,\delta_E\}$ a common bound on a neighborhood
     in the closed interval. A finite subcover gives one positive
     constant and one common lower length threshold. Finally, each of
     the finitely many shorter rings has a positive bound uniform in

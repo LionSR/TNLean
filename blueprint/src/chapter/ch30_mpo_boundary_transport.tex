@@ -40,9 +40,9 @@ $\Gamma_N(Y)$ of the MPS ground space.
 \end{theorem}
 \begin{proof}
     \leanok
-    Expand the product letters over the intermediate physical configuration.
-    For the resulting word matrices $U,V$, use
-    $(X\otimes Y)(U\otimes V)=XU\otimes YV$ and
+    Expanding the product letters over the intermediate physical configuration
+    expresses each side in terms of the resulting word matrices $U,V$, for
+    which $(X\otimes Y)(U\otimes V)=XU\otimes YV$ and
     $\tr(XU\otimes YV)=\tr(XU)\tr(YV)$.
 \end{proof}
 
@@ -118,24 +118,24 @@ For the diagram, write $R=PQ$ and $C=X\otimes Y$.
         MPOTensor.isBoundaryCompatible_iff_exists_linearMap}
     \leanok
     \uses{def:glm_boundary_closedness}
-    Closedness is equivalent to the existence of a linear map
-    $b:\MN{\chi^2}\to\MN{\chi}$ satisfying
+    Closedness is equivalent to the existence of a linear boundary map
+    $b:\MN{\chi^2}\to\MN{\chi}$, as at the start of
+    \cite[Appendix~A]{GarreRubio2023MPOSym}, satisfying
     $O^N_{TT,C}=O^N_{T,b(C)}$ for every $C$ and $N\geq1$.
-    Compatibility is equivalent to the existence of a linear map
-    $b:\MN{\chi D}\to\MN{D}$ satisfying
+    Compatibility is likewise equivalent to the existence of a linear boundary
+    map $b:\MN{\chi D}\to\MN{D}$ satisfying
     $\psi^N_{T\cdot A,C}=\psi^N_{A,b(C)}$ for every $C$ and $N\geq1$.
-    These are the boundary maps at the start of
-    \cite[Appendix~A]{GarreRubio2023MPOSym}.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:glm_boundary_stack}
     Matrix units on a product bond space have the form $E_{ij}\otimes E_{kl}$.
-    Choose an output boundary for each such matrix, simultaneously for all
-    lengths, and extend linearly over this basis. Linearity of the
-    boundary contraction gives the required identities. Conversely, apply
-    the linear map to $X\otimes Y$ in
-    (\ref{eq:glm_boundary_stack}) or (\ref{eq:glm_boundary_action}).
+    Choosing an output boundary for each such matrix simultaneously for all
+    lengths and extending linearly over this basis defines a linear map $b$
+    whose boundary contractions satisfy the stated identities by linearity.
+    Conversely, evaluating $b$ on $X\otimes Y$ in
+    (\ref{eq:glm_boundary_stack}) or (\ref{eq:glm_boundary_action}) recovers
+    closedness or compatibility.
 \end{proof}
 
 \begin{definition}[Exact biorthogonal decomposition]
@@ -143,18 +143,17 @@ For the diagram, write $R=PQ$ and $C=X\otimes Y$.
     \lean{MPSTensor.IsBiorthogonalDecomposition}
     \leanok
     Let $B$ have bond dimension $D$, and let $A_c$ have bond dimension
-    $D_c$ for each member of a finite index set. A biorthogonal decomposition
-    consists of rectangular matrices $V_c:\C^D\to\C^{D_c}$ and
+    $D_c$ for each member of a finite index set. In the local fusion and
+    action equations of \cite[Section~2]{GarreRubio2023MPOSym}, a biorthogonal
+    decomposition consists of rectangular matrices $V_c:\C^D\to\C^{D_c}$ and
     $W_c:\C^{D_c}\to\C^D$ satisfying
     \begin{align}
         V_cW_c & =\Id_{D_c},         & V_cW_b & =0\quad(c\ne b),
         \label{eq:glm_boundary_biorthogonal}                     \\
-        B^i    & =\sum_cW_cA_c^iV_c.
+        B^i    & =\sum_cW_cA_c^iV_c,
         \label{eq:glm_boundary_letter}
     \end{align}
-    The index $c$ may contain a block label and its multiplicity index.
-    These are the local fusion and action equations of
-    \cite[Section~2]{GarreRubio2023MPOSym}.
+    where the index $c$ may combine a block label with its multiplicity index.
 \end{definition}
 
 \begin{theorem}[Boundary evaluation under an exact decomposition]
@@ -189,11 +188,12 @@ For the diagram, write $R=PQ$ and $C=X\otimes Y$.
 \begin{proof}
     \leanok
     \uses{thm:glm_boundary_stack}
-    Induct on the nonempty word. Multiplying two reconstructed products
-    inserts $V_cW_b$; (\ref{eq:glm_boundary_biorthogonal}) removes all unequal
-    intermediate labels. Cyclicity of trace moves $V_c$ to the left of
-    the boundary. Apply (\ref{eq:glm_boundary_stack}) and
-    (\ref{eq:glm_boundary_action}) to obtain the operator and state formulas.
+    By induction on the nonempty word $w$, multiplying two reconstructed
+    products inserts $V_cW_b$, and (\ref{eq:glm_boundary_biorthogonal})
+    removes all unequal intermediate labels. Cyclicity of trace then moves
+    $V_c$ to the left of the boundary, and substituting this trace formula
+    into (\ref{eq:glm_boundary_stack}) and (\ref{eq:glm_boundary_action})
+    yields the operator and state decompositions.
 \end{proof}
 
 \begin{theorem}[Closedness from copies of one target]
@@ -211,8 +211,10 @@ For the diagram, write $R=PQ$ and $C=X\otimes Y$.
 \begin{proof}
     \leanok
     \uses{thm:glm_boundary_decomposition}
-    Combine the sums in (\ref{eq:glm_boundary_fusion_transport}) or
-    (\ref{eq:glm_boundary_action_transport}) by linearity in the boundary.
+    Linearity in the boundary combines the sums on the right-hand sides of
+    (\ref{eq:glm_boundary_fusion_transport}) and
+    (\ref{eq:glm_boundary_action_transport}) into a single term with boundary
+    $Z$.
 \end{proof}
 
 \begin{theorem}[The empty-word condition]
@@ -226,6 +228,7 @@ For the diagram, write $R=PQ$ and $C=X\otimes Y$.
 \begin{proof}
     \leanok
     \uses{thm:glm_boundary_decomposition}
-    For $w=\varnothing$ the equality is the additional hypothesis.
-    For nonempty words use (\ref{eq:glm_boundary_word}).
+    For $w=\varnothing$ the equality reduces to the completeness hypothesis
+    $\sum_cW_cV_c=\Id_D$, while (\ref{eq:glm_boundary_word}) covers every
+    nonempty word.
 \end{proof}

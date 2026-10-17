@@ -1,11 +1,9 @@
 \section{Composition and exact expansions of original circuits}
 \label{sec:peps_original_chronology_bounds}
 
-The application of distributed compression to a dyadic protocol uses the
-actual ordered composition of its changes. The following elementary identities
-retain the original occurrences and local expansions. They are the chronological
-comparisons used in Proposition~7.1 and in the assembly argument of
-\cite{OpenAI2026PolynomialPEPS}; they do not construct the protocol.
+Distributed compression of a dyadic protocol composes its stage changes in
+chronological order while tracking each nonprivate occurrence and its local
+monomial expansion, as in Proposition~7.1 of \cite{OpenAI2026PolynomialPEPS}.
 
 \begin{definition}[Chronological composite]
     \label{def:peps_original_chronology_composite}
@@ -46,11 +44,12 @@ comparisons used in Proposition~7.1 and in the assembly argument of
     Occurrences are retained separately even when their local operators agree.
 \end{theorem}
 \begin{proof}\leanok
-    Induct on the number of stages. Appending the last circuit applies
-    $W_t$ after $W^{[t]}$, which is the evaluation identity. Its occurrences are the disjoint union of the
-    preceding occurrences and those of the last stage, with the same
-    participating sets and monomial lists. Both counting identities and the
-    stated bounds follow.
+    Induct on the number of stages $T$. Appending $W_t$ to $W^{[t]}$ applies
+    $W_t$ after $W^{[t]}$, giving $W^{[t+1]}v=W_t\bigl(W^{[t]}v\bigr)$, and
+    forms the occurrences of $W^{[t+1]}$ as the disjoint union of those of
+    $W^{[t]}$ and $W_t$ with their participating sets and monomial lists
+    unchanged. This disjoint union yields both counting identities and
+    preserves the participating-set properties and monomial bounds.
 \end{proof}
 
 \begin{definition}[Recorded local operators]
@@ -95,8 +94,9 @@ comparisons used in Proposition~7.1 and in the assembly argument of
     bounds $r'\ge r$ and $S'\ge S$ also bound that circuit.
 \end{theorem}
 \begin{proof}\leanok
-    The original lists are unchanged at each occurrence. Their length bound
-    gives the first assertion. For the second, enlarge the pair-effect bound
-    in each monomial and the coefficient-sum bound by transitivity.
-    Composition and spectator identities preserve these assertions.
+    Because each produced occurrence retains its original monomial list, the
+    term-count bound $K$ carries over directly, while transitivity of $\le$ on
+    the pair-effect count and coefficient sum of each monomial extends the
+    bounds from $(r,S)$ to $(r',S')$ across compositions and spectator
+    extensions.
 \end{proof}

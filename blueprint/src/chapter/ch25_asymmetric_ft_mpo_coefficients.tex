@@ -96,10 +96,10 @@ periodic operators.
 \begin{proof}
     \leanok
     \uses{thm:asym_weighted_compression}
-    Treat each pair $(i,j)$ as one letter. The operator identity is the
-    equality of the periodic vectors of $B$ and of $\bigoplus_\gamma
-        \lambda_\gamma M_\gamma$ on the pair alphabet, so
-    Theorem~\ref{thm:asym_weighted_compression} applies.
+    On the pair alphabet $(i,j)$, the operator identity equates the periodic
+    vectors of $B$ with those of $\bigoplus_\gamma \lambda_\gamma M_\gamma$,
+    so Theorem~\ref{thm:asym_weighted_compression} gives the mutually
+    biorthogonal compression pairs and the nilpotent remainder.
 \end{proof}
 
 \begin{corollary}[Fusion tensors of periodic matrix product operator
@@ -127,8 +127,9 @@ periodic operators.
     \leanok
     \uses{cor:asym_single_block}
     The stacked tensor of $T_g$ and $T_h$ generates the same periodic
-    operators as $T_{gh}$, which is normal; apply
-    Corollary~\ref{cor:asym_single_block}.
+    operators as the normal tensor $T_{gh}$, so
+    Corollary~\ref{cor:asym_single_block} produces the fusion tensors $V$
+    and $W$ together with the nilpotency bound $D_gD_h-D_{gh}+1$.
 \end{proof}
 
 \begin{corollary}[Action on matrix product vectors]
@@ -180,9 +181,10 @@ periodic operators.
     \leanok
     \uses{cor:asym_single_block, thm:asym_weighted_compression}
     The periodic vectors of $T\cdot A_x$ are the images of those of $A_x$
-    under the periodic operators of $T$, so the hypotheses of
-    Corollary~\ref{cor:asym_single_block} and of
-    Theorem~\ref{thm:asym_weighted_compression} hold.
+    under the periodic operators of $T$, so
+    Corollary~\ref{cor:asym_single_block} and
+    Theorem~\ref{thm:asym_weighted_compression} give the single-block and
+    weighted multi-block reductions of $T\cdot A_x$.
 \end{proof}
 
 \begin{corollary}[Periodic identities from block reductions]
@@ -204,10 +206,11 @@ periodic operators.
 \begin{proof}
     \leanok
     \uses{prop:asym_compression_trace}
-    Apply Proposition~\ref{prop:asym_compression_trace} on the pair
-    alphabet for the product and on the physical alphabet for
-    $T\cdot A_x$. The definitions of the periodic operator and of
-    $T\cdot A_x$ give the two identities.
+    Proposition~\ref{prop:asym_compression_trace} on the pair alphabet for
+    the stacked product, and on the physical alphabet for $T\cdot A_x$,
+    equates the periodic word traces with the sums over $s\in S$; the
+    definitions of $O_N$ and of $T\cdot A_x$ then give the two periodic
+    identities.
 \end{proof}
 
 \subsection{Fusion and action tensors with multiplicity}%
@@ -238,10 +241,11 @@ of a channel $c$ is then a separate block of the reduction.
 \begin{proof}
     \leanok
     \uses{thm:asym_multiblock}
-    The word traces of $B$ are those of the family in which $C_c$ occurs
-    $N_c$ times, so Theorem~\ref{thm:asym_multiblock} applies to that
-    family. The number of blocks plus the number of zero slots is at most
-    $D$, which bounds the nilpotency order.
+    The word traces of $B$ match those of the family in which each $C_c$
+    appears $N_c$ times, so Theorem~\ref{thm:asym_multiblock} gives the
+    biorthogonal reductions $(V_{c,\mu},W_{c,\mu})$. Since the matched blocks
+    and unmatched zero slots together have at most $D$ steps, every product
+    of at least $D$ remainder matrices vanishes.
 \end{proof}
 
 \begin{corollary}[Fusion and action tensors with multiplicity]
@@ -269,8 +273,9 @@ of a channel $c$ is then a separate block of the reduction.
     \uses{thm:asym_multiplicity_reductions}
     The periodic vectors of the stacked product on the pair alphabet are
     the matrix entries of $O_N(M_a)O_N(M_b)$, and those of $T\cdot A_x$
-    are the entries of $O_N(T)\ket{V^{(N)}(A_x)}$; apply
-    Theorem~\ref{thm:asym_multiplicity_reductions}.
+    are the entries of $O_N(T)\ket{V^{(N)}(A_x)}$, so
+    Theorem~\ref{thm:asym_multiplicity_reductions} yields the fusion and
+    action tensors together with the nilpotency bound $\chi_a\chi_b$.
 \end{proof}
 
 \begin{corollary}[Gauge freedom of a multiplicity-free fusion channel]
@@ -292,6 +297,8 @@ of a channel $c$ is then a separate block of the reduction.
 \begin{proof}
     \leanok
     \uses{thm:mps_reduction_boundary_dressed_uniqueness}
-    Apply Theorem~\ref{thm:mps_reduction_boundary_dressed_uniqueness} on
-    the pair alphabet.
+    Viewing $B$ and $M_c$ as tensors on the pair alphabet,
+    Theorem~\ref{thm:mps_reduction_boundary_dressed_uniqueness} gives a
+    nonzero scalar $z$ satisfying both boundary-dressed relations for all
+    words of length greater than $2K$.
 \end{proof}

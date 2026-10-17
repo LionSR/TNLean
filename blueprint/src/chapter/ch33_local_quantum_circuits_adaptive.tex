@@ -1,16 +1,17 @@
 \section{Adaptive channels on arbitrary inputs}
 
 Finite local measurements and classical feedforward act on mixed states by
-summing unnormalized completely positive operations. The model below is
-motivated by the finite-round extension discussed in~\cite[paragraph
-    ``State transformations with QC and LOCC'']{Piroli2021LOCC}. It allows
-arbitrary intermediate onsite dimensions and counts gates on enlarged
-sites at unit cost. The source instead counts gates on fixed-dimensional
-physical qudits, with onsite ancillas treated separately; no uniform-depth
-simulation between the models is established here. In addition, no decomposition into a fixed number of source \textit{QCcc}
-protocols is established. This block count differs from the number of individual
-site measurements permitted within one block.
-Both boundaries are explained in~\cite{gap:psc21_adaptive_channel_round_scope}.
+summing unnormalized completely positive operations. Motivated by the
+finite-round extension discussed in~\cite[paragraph
+    ``State transformations with QC and LOCC'']{Piroli2021LOCC}, the model
+below allows arbitrary intermediate onsite dimensions and counts gates on
+enlarged sites at unit cost. Whereas the source counts gates on
+fixed-dimensional physical qudits with onsite ancillas treated separately,
+no uniform-depth simulation between the models or decomposition into a
+fixed number of source \textit{QCcc} protocols is established here, and
+this block count differs from the number of individual site measurements
+permitted within one block
+(see~\cite{gap:psc21_adaptive_channel_round_scope}).
 
 \begin{definition}[Onsite instruments with conditional continuation]
     \label{def:qc_onsite_feedforward}
@@ -20,12 +21,12 @@ Both boundaries are explained in~\cite{gap:psc21_adaptive_channel_round_scope}.
     An onsite instrument has local Kraus operators $K_{i,j}$ satisfying
     $\sum_jK_{i,j}^{\dagger}K_{i,j}=I$. For the communicated tuple of outcomes
     $J$, let $K_J=\bigotimes_iK_{i,J(i)}$ and let $\Psi_J$ be the selected
-    continuation. Averaging the outcomes gives the map
+    continuation. Averaging over outcomes gives the map
     \begin{align}
-        \mathcal F(\rho) & =\sum_J\Psi_J(K_J\rho K_J^{\dagger}).
+        \mathcal F(\rho) & =\sum_J\Psi_J(K_J\rho K_J^{\dagger}),
         \label{eq:qc_onsite_feedforward}
     \end{align}
-    Each summand uses an unnormalized post-measurement operator.
+    where each summand acts on the unnormalized post-measurement operator.
 \end{definition}
 
 \begin{theorem}[Trace preservation with classical feedforward]
@@ -44,14 +45,14 @@ Both boundaries are explained in~\cite{gap:psc21_adaptive_channel_round_scope}.
 \end{theorem}
 \begin{proof}
     \leanok
-    Let $B_{J,a}$ be Kraus operators for $\Psi_J$. Then $B_{J,a}K_J$ are
-    Kraus operators for $\mathcal F$, and
+    If $B_{J,a}$ are Kraus operators for $\Psi_J$, then $B_{J,a}K_J$ are
+    Kraus operators for $\mathcal F$ satisfying
     \begin{align}
         \sum_{J,a}(B_{J,a}K_J)^{\dagger}(B_{J,a}K_J)
          & =\sum_JK_J^{\dagger}\Bigl(\sum_aB_{J,a}^{\dagger}B_{J,a}\Bigr)K_J
-        =\sum_JK_J^{\dagger}K_J=I. \notag
+        =\sum_JK_J^{\dagger}K_J=I, \notag
     \end{align}
-    The two composition identities follow by linearity of the finite sum.
+    and the two composition identities follow by linearity of the finite sum.
 \end{proof}
 
 \begin{definition}[Finite adaptive local protocol]
@@ -94,16 +95,16 @@ Both boundaries are explained in~\cite{gap:psc21_adaptive_channel_round_scope}.
 \begin{proof}
     \uses{thm:qc_onsite_feedforward_cptp}
     \leanok
-    Induct on the protocol tree. The onsite and layer cases use their
-    channel properties, and the instrument case uses
-    Theorem~\ref{thm:qc_onsite_feedforward_cptp}. To compose protocols, put
-    the second protocol after each branch of the first. An instrument keeps
-    the same branch depth, a nearest-neighbor layer adds one, and enlarging
-    a depth bound commutes with adding the second depth. An onsite operation
-    followed by a fixed continuation is an instrument whose continuation
-    ignores its outcomes. This also embeds deterministic protocols.
-    The remaining conversion properties follow from the identity channel,
-    the depth bounds, composition, and preservation of positivity and trace.
+    By structural induction on the protocol tree, the onsite and layer cases
+    follow from their channel properties, and the instrument case follows from
+    Theorem~\ref{thm:qc_onsite_feedforward_cptp}. Composing two protocols
+    attaches the second protocol to each branch of the first: an instrument
+    preserves branch depth, a nearest-neighbor layer adds one, and enlarging
+    a depth bound commutes with adding the second depth. Viewing an onsite
+    operation followed by a fixed continuation as an instrument whose
+    continuation ignores its outcomes embeds deterministic protocols, and the
+    remaining conversion properties follow from the identity channel, the
+    depth bounds, composition, and preservation of positivity and trace.
 \end{proof}
 
 \begin{definition}[The average channel of a measurement round]
@@ -135,12 +136,12 @@ Both boundaries are explained in~\cite{gap:psc21_adaptive_channel_round_scope}.
     \leanok
     Unitarity of $U,V_m$, orthogonality of each $P_m$, and
     $\sum_mP_m=I$ give
-    $\sum_m(V_mP_mU)^{\dagger}(V_mP_mU)=I$.
-    Conjugating a rank-one operator gives the stated pure-input formula.
-    For deterministic preparation, every output is $c_m\psi$, including
-    $c_m=0$ for an outcome of probability zero. Thus the average output is
-    $(\sum_m|c_m|^2)\ket\psi\bra\psi$. Trace preservation and normalization
-    give $\sum_m|c_m|^2=1$.
+    $\sum_m(V_mP_mU)^{\dagger}(V_mP_mU)=I$, and conjugating a rank-one
+    operator gives the pure-input formula.
+    When the round deterministically prepares $\psi$, every branch output is
+    $c_m\psi$ (with $c_m=0$ for outcomes of probability zero), so the average
+    output is $(\sum_m|c_m|^2)\ket\psi\bra\psi$, where trace preservation and
+    normalization force $\sum_m|c_m|^2=1$.
 \end{proof}
 
 \begin{theorem}[Measurement rounds are adaptive protocols]
@@ -155,13 +156,13 @@ Both boundaries are explained in~\cite{gap:psc21_adaptive_channel_round_scope}.
 \begin{proof}
     \uses{thm:qc_adaptive_protocol_properties}
     \leanok
-    Use the round's circuit as a deterministic local channel protocol.
-    The following onsite instrument has the computational-basis projectors
-    at measured sites and one identity Kraus operator at each unmeasured
-    site. Its outcome tuples correspond bijectively to the measured
-    configurations $m$, and its product Kraus operators are $P_m$.
-    For outcome $m$, choose the onsite channel of the product correction
-    unitary $V_m$. The resulting Kraus operators are exactly $V_mP_mU$.
-    The instrument and corrections have depth zero, so composition leaves
-    the circuit's depth bound unchanged.
+    Viewing the round's circuit as a deterministic local channel protocol,
+    we follow it with the onsite instrument having the computational-basis
+    projectors at measured sites and one identity Kraus operator at each
+    unmeasured site. Because its outcome tuples correspond bijectively to the
+    measured configurations $m$ with product Kraus operators $P_m$,
+    selecting the onsite channel of the product correction unitary $V_m$ for
+    outcome $m$ produces the Kraus operators $V_mP_mU$. Since the instrument
+    and corrections have depth zero, composition leaves the circuit's depth
+    bound unchanged.
 \end{proof}

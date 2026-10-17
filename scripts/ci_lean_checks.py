@@ -10,6 +10,8 @@ Commands
 --------
 ``early``   Build the changed production modules with ``lake --fail-fast build``
             before the full library build, so a failure surfaces quickly.
+            If any changed source is not confidently import-only, defer
+            import-only aggregators to the mandatory full library build.
 ``strict``  After the full build, elaborate with warnings as errors
 
             * every changed production source file, and
@@ -25,7 +27,7 @@ Commands
 
 Pushes use the previous head as the base. When a dependency pin, the
 toolchain, this script or the workflow changes, ``strict`` checks every test
-file, and the changed production files are still built early and checked.
+file; early selection still applies, and all changed sources remain strict.
 Without a base revision (manual dispatch, an unfetchable base) ``strict``
 checks every test file and ``early`` does nothing; the full build covers it.
 """
@@ -43,6 +45,8 @@ import sys
 import tempfile
 import threading
 from pathlib import Path
+
+from lean_import_syntax import pure_import_modules
 
 LEAN_FLAGS = [
     "-DautoImplicit=false",
@@ -171,6 +175,22 @@ def changed_paths(base: str | None) -> list[str] | None:
     ).stdout.split("\0") if p]
 
 
+def early_modules(root: Path, sources: list[str]) -> list[str]:
+    """Prefer substantive sources; retain every target if all are import-only."""
+    substantive = []
+    for path in sources:
+        try:
+            text = (root / path).read_text(encoding="utf-8")
+        except (OSError, UnicodeError):
+            # An unreadable source is never safe to defer as import-only.
+            substantive.append(path)
+            continue
+        imports, error = pure_import_modules(text)
+        if error is not None or not imports:
+            substantive.append(path)
+    return [module_of(path) for path in substantive or sources]
+
+
 def select(
     root: Path, base: str | None
 ) -> tuple[list[str], list[str], list[str], dict[str, set[str]]]:
@@ -179,12 +199,12 @@ def select(
     graph = import_graph(root, files)
     tests = [f for f in files if is_test(f)]
     changed = changed_paths(base)
-    # Changed production files are built early and checked strictly even when
-    # a pin, toolchain, workflow or script change also requests every test.
+    # All changed production files remain strict sources, including import-only
+    # aggregators deferred from the early shortcut to the full library build.
     changed_lean = [p for p in changed or [] if p.endswith(".lean")]
     existing = set(files)
     sources = sorted(p for p in changed_lean if is_production(p) and p in existing)
-    early = [module_of(p) for p in sources]
+    early = early_modules(root, sources)
     if changed is None or any(p in FULL_RUN_PATHS for p in changed):
         selected_tests = set(tests)
     else:

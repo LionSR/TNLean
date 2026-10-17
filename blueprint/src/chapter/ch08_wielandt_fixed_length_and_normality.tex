@@ -110,18 +110,12 @@ construction appears in Section~\ref{sec:app_wielandt_blocking_support}.
     \lean{MPSTensor.exists_pos_blockTensor_isInjective_le_pow_four_of_isNormal_leftCanonical}
     \leanok
     \uses{def:normal, def:blocked_tensor, thm:wielandt_general, thm:wielandt_proposition_three}
-    Let $A$ be a left-canonical normal MPS tensor with bond dimension $D>0$.
-    Then there is a positive blocking length $L\le D^4$ such that the blocked
-    tensor $A^{[L]}$ is one-site injective.
-
-    This is the blocked-injectivity form of the quantum Wielandt input used in
-    the Fundamental Theorem for translation-invariant tensors. It corresponds
-    to the statement in
-    \cite[Section~II]{Cirac2016MPDO_arXiv} that every normal tensor becomes
-    injective after at most $D^4$ blockings, using the index estimate
-    of~\cite[Theorem~1]{Sanz2010Quantum}. The
-    left-canonical/trace-preserving hypothesis is included because this is the
-    canonical-form context in which the blocked-injectivity input is used.
+    As the blocked-injectivity form of the quantum Wielandt input in
+    \cite[Section~II]{Cirac2016MPDO_arXiv} (with the index estimate
+    of~\cite[Theorem~1]{Sanz2010Quantum} and the left-canonical hypothesis of
+    the canonical-form reduction), let $A$ be a left-canonical normal MPS
+    tensor with bond dimension $D>0$. Then there is a positive blocking length
+    $L\le D^4$ such that the blocked tensor $A^{[L]}$ is one-site injective.
 \end{theorem}
 
 \begin{proof}
@@ -136,9 +130,9 @@ construction appears in Section~\ref{sec:app_wielandt_blocking_support}.
     \end{align}
     Trace preservation gives a nonzero Kraus operator, hence
     $\krausrk(A)\ge1$ and the right-hand side is at most $D^4$.
-    Set $L=\iota(A)$. By definition, $L>0$ and
-    $S_L(A)=\MN{D}$. Lemma~\ref{lem:blocking_transfer} identifies the latter
-    equality with one-site injectivity of $A^{[L]}$.
+    Setting $L=\iota(A)$ gives $L>0$ and $S_L(A)=\MN{D}$ by definition, and
+    Lemma~\ref{lem:blocking_transfer} identifies the latter equality with
+    one-site injectivity of $A^{[L]}$.
 \end{proof}
 
 \begin{theorem}[Exact quantum-Wielandt blocking length]
@@ -154,10 +148,9 @@ construction appears in Section~\ref{sec:app_wielandt_blocking_support}.
 \begin{proof}
     \leanok
     \uses{thm:bounded_injective_blocking_normal_left_canonical, lem:blocking_transfer, thm:wordspan_blk_inj_succ}
-    Choose $L$ with $0<L\le D^4$ and $S_L(A)=\MN{D}$, and write
-    $D^4=L+k$.
-    Induction on $k$, using positive-length propagation at each step, gives
-    $S_{L+k}(A)=\MN{D}$.
+    Bounded injective blocking and blocking transfer provide $L$ with
+    $0<L\le D^4$ and $S_L(A)=\MN{D}$. Writing $D^4=L+k$, induction on $k$ via
+    positive-length propagation at each step gives $S_{L+k}(A)=\MN{D}$.
 \end{proof}
 
 \begin{theorem}[Exact block injectivity at positive multiples]
@@ -172,7 +165,7 @@ construction appears in Section~\ref{sec:app_wielandt_blocking_support}.
 \begin{proof}
     \leanok
     \uses{def:l_blk_injective, thm:word_span_add_exact}
-    Induct on $m$. Theorem~\ref{thm:word_span_add_exact} gives
+    By induction on $m$, Theorem~\ref{thm:word_span_add_exact} gives
     $S_{mN+N}(A)=S_{mN}(A)S_N(A)$, and the product of the full matrix
     algebra with itself is again the full matrix algebra.
 \end{proof}
@@ -191,11 +184,11 @@ construction appears in Section~\ref{sec:app_wielandt_blocking_support}.
 
 \begin{proof}\leanok
     \uses{thm:exact_block_injectivity_positive_multiple}
-    Apply
+    Applying
     Theorem~\ref{thm:bounded_injective_blocking_normal_left_canonical} to each
-    block. The product of the finitely many positive lengths is a common
-    positive multiple, and exact block injectivity persists under positive
-    multiples.
+    block yields a positive block-injectivity length per block; the product of
+    these finitely many positive lengths is a common positive multiple, and
+    exact block injectivity persists under positive multiples.
 \end{proof}
 
 \begin{corollary}[Uniform injective blocking for separated normal-canonical families]%
@@ -204,24 +197,22 @@ construction appears in Section~\ref{sec:app_wielandt_blocking_support}.
         MPSTensor.exists_common_blockTensor_isInjective_two_of_isNormalCanonicalFormBNT}
     \leanok
     \uses{thm:normal_tp_primitive_irred, thm:bounded_injective_blocking_normal_left_canonical}
-    Let $(A_x)_{x\in X}$ be a finite separated normal-canonical family whose
-    blocks have positive virtual bond dimension. Then there is a positive
-    integer $L$ such that every blocked tensor $A_x^{[L]}$ is one-site
-    injective. The same conclusion holds simultaneously for two finite
-    separated normal-canonical families whose blocks have positive virtual bond
-    dimension.
-
-    Here the family $(A_x)_{x\in X}$ is a basis of normal-canonical
-    representatives (Definition~\ref{def:normal_cf_bnt}) with distinct blocks;
-    see \cite{gap:cpsv16_ft_one_copy_scope_restriction}.
+    Let $(A_x)_{x\in X}$ be a finite separated normal-canonical family
+    (a basis of normal-canonical representatives in the sense of
+    Definition~\ref{def:normal_cf_bnt} with distinct blocks; see
+    \cite{gap:cpsv16_ft_one_copy_scope_restriction}) whose blocks have positive
+    virtual bond dimension. Then there is a positive integer $L$ such that
+    every blocked tensor $A_x^{[L]}$ is one-site injective. The same conclusion
+    holds simultaneously for two finite separated normal-canonical families
+    whose blocks have positive virtual bond dimension.
 \end{corollary}
 
 \begin{proof}
     \leanok
-    Apply Theorem~\ref{thm:bounded_injective_blocking_normal_left_canonical}
-    to each block. Taking the product of the finitely many resulting positive
-    blocking lengths gives a common positive multiple, and injectivity persists
-    under positive further blocking.
+    Applying Theorem~\ref{thm:bounded_injective_blocking_normal_left_canonical}
+    to each block and taking the product of the finitely many resulting
+    positive blocking lengths gives a common positive multiple, under which
+    injectivity persists by positive further blocking.
 \end{proof}
 
 \begin{remark}[Rank-one extraction and fixed-length spanning]
@@ -266,7 +257,6 @@ Section~\ref{sec:app_wielandt_blocking_support}.
     where $P$ is the fixed-point projection associated to $\rho$.
     When the choice of $\rho$ is irrelevant, we simply say that $A$
     is a primitive MPS tensor.
-    This condition combines a complementary spectral gap with a nonzero
     This condition combines a complementary spectral gap with a nonzero
     positive semidefinite fixed point. When $\rho>0$, this implies strong
     irreducibility and uniform vector spreading
@@ -338,19 +328,18 @@ transfer-map gap. It is connected to normality through the following results.
     \lean{MPSTensor.isIrreducibleTensor_of_isPrimitiveMPS_of_posDef}
     \leanok
     \uses{def:primitive_mps, def:irreducible_tensor}
-    If $A$ is a primitive MPS tensor with PSD fixed point $\rho$
-    and $\rho$ is positive definite, then $A$ is an irreducible tensor.
-    This is part of~\cite[Proposition~3]{Sanz2010Quantum}
-    (see also \cite[Section~2.3]{Cirac2016MPDO_arXiv}).
+    As part of~\cite[Proposition~3]{Sanz2010Quantum} (see also
+    \cite[Section~2.3]{Cirac2016MPDO_arXiv}), if $A$ is a primitive MPS tensor
+    with positive definite fixed point $\rho$, then $A$ is an irreducible
+    tensor.
 \end{lemma}
 
 \begin{proof}
     \leanok
     \uses{def:has_inv_proj, lem:complement_pow_zero}
-    By contrapositive.
-    Assume $A$ has an invariant projection~$P$
-    ($P\neq0$, $P\neq\Id$, $(\Id-P)A^iP=0$ for all~$i$).
-    Set $\sigma=P\rho P$.
+    Arguing by contrapositive, suppose $A$ has a nontrivial invariant
+    projection~$P$ ($P\neq0$, $P\neq\Id$, $(\Id-P)A^iP=0$ for all~$i$), and
+    set $\sigma=P\rho P$.
     \begin{enumerate}
         \item \emph{Invariance of $\sigma$ under $\E_A^n$:}
               the projection relation
@@ -423,19 +412,16 @@ For Burnside-style arguments it is more natural to work with invariant
 \begin{theorem}[Burnside's theorem for matrix algebras]\label{thm:burnside_matrix}
     \lean{Matrix.burnside_matrix}\leanok
     \uses{def:alg_span, def:irreducible_action}
-    Assume $D>0$.
-    If $A$ acts irreducibly on $\C^D$, then the generated unital subalgebra is
-    the full matrix algebra: $\algspn(A)=\MN{D}$.
-    This is the complex finite-dimensional case of Burnside's theorem
-    (equivalently, Jacobson's density theorem);
-    see~\cite{Jacobson2009BasicAlgebraII}.
+    In the complex finite-dimensional case of Burnside's theorem (equivalently,
+    Jacobson's density theorem~\cite{Jacobson2009BasicAlgebraII}), assume
+    $D>0$. If $A$ acts irreducibly on $\C^D$, then the generated unital
+    subalgebra is the full matrix algebra: $\algspn(A)=\MN{D}$.
 \end{theorem}
 
 \begin{proof}\leanok
-    Identify $\algspn(A)$ with its image under the algebra equivalence
-    $\MN{D}\simeq_{\C}\End_{\C}(\C^D)$.
-    The irreducible-action hypothesis makes $\C^D$ a simple module for this
-    algebra.
+    Under the algebra equivalence $\MN{D}\simeq_{\C}\End_{\C}(\C^D)$, the
+    irreducible-action hypothesis makes $\C^D$ a simple module for
+    $\algspn(A)$.
     Over the algebraically closed field $\C$, Schur's lemma identifies the
     endomorphisms commuting with the action with scalars, and Jacobson density
     then forces the action map to be surjective onto all of
@@ -506,25 +492,23 @@ to the fixed-point projection, without requiring an identity element in $S_1(A)$
     \lean{MPSTensor.isStronglyIrreduciblePaper_of_isPrimitiveMPS_of_posDef}
     \leanok
     \uses{def:primitive_mps}
-    If $A$ is a primitive MPS tensor with positive-definite fixed point~$\rho$,
-    then it satisfies the strengthened condition in
-    Definition~\ref{def:strongly_irreducible_paper}: $\E_A$ is irreducible,
-    the fixed point $\rho$ is positive definite, and the peripheral spectrum
-    of $\E_A$ is $\{1\}$. The source clause is
-    \cite[Proposition~3(c)]{Sanz2010Quantum}; the definition used here records
-    irreducibility separately.
+    Corresponding to \cite[Proposition~3(c)]{Sanz2010Quantum} (with
+    irreducibility recorded explicitly in
+    Definition~\ref{def:strongly_irreducible_paper}), if $A$ is a primitive MPS
+    tensor with positive-definite fixed point~$\rho$, then $\E_A$ is
+    irreducible, the fixed point $\rho$ is positive definite, and the
+    peripheral spectrum of $\E_A$ is $\{1\}$.
 \end{lemma}
 
 \begin{proof}
     \leanok
     \uses{lem:irreducible_map_from_primitive}
     Lemma~\ref{lem:irreducible_map_from_primitive} gives irreducibility of
-    $\E_A$. The complementary-gap hypothesis gives peripheral primitivity
-    directly: the only eigenvalue of modulus one is $1$. Together with the
-    positive-definite fixed point $\rho$, these are exactly the three
+    $\E_A$, and the complementary-gap consequences in
+    Section~\ref{sec:app_wielandt_complementary_gap} give peripheral
+    primitivity directly: the only eigenvalue of modulus one is $1$. Together
+    with the positive-definite fixed point $\rho$, these are the three
     conditions in Definition~\ref{def:strongly_irreducible_paper}.
-    The complementary-gap consequences are proved in
-    Section~\ref{sec:app_wielandt_complementary_gap}.
 \end{proof}
 
 \begin{theorem}[Primitive MPS with positive-definite fixed point is normal]%

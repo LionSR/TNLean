@@ -1,8 +1,8 @@
 \section{Physical Endpoint String Order and Virtual-Boundary Nondecay}
 
-String order parameters probe symmetry-protected topological phases through
-non-local correlators with a unitary string and endpoint operators
-\cite{PerezGarcia2008StringOrder}. For injective canonical matrix product
+Through non-local correlators with a unitary string and endpoint operators
+\cite{PerezGarcia2008StringOrder}, string order parameters probe
+symmetry-protected topological phases. For injective canonical matrix product
 states, this physical behavior provides a diagnostic correspondence with
 virtual-boundary nondecay and virtual local covariance.
 
@@ -135,8 +135,9 @@ virtual-boundary nondecay and virtual local covariance.
         \end{tenkz}
         % TENKZ-PERIODIC-STRING-END
     \end{center}
-    The two return paths differ from the stationary $\Lambda$-cup closure
-    in Definition~\ref{def:string_order_param}. The identity insertion gives
+    Unlike the stationary $\Lambda$-cup closure of
+    Definition~\ref{def:string_order_param}, the two virtual return paths
+    close within their own rows. The identity insertion gives
     the same periodic closure for $Z_L$.
 \end{definition}
 
@@ -177,10 +178,10 @@ virtual-boundary nondecay and virtual local covariance.
     Definition~\ref{def:has_physical_string_order_with} holds.
     The nonscalar requirement is an explicit projective correction to
     \cite[display~SOP, lines~114--121]{PerezGarcia2008StringOrder}, which
-    prints only $u\ne\Id$. A scalar twist $u=-\Id$ with identity endpoints
-    gives $S_N=(-1)^N$ for every normalized unital tensor. The correction
-    and the distinction from the printed source condition are recorded in
-    \cite{gap:pgwsvc08_string_order_virtual_boundary}.
+    prints only $u\ne\Id$. As recorded in
+    \cite{gap:pgwsvc08_string_order_virtual_boundary}, a scalar twist
+    $u=-\Id$ with identity endpoints gives $S_N=(-1)^N$ for every normalized
+    unital tensor.
 \end{definition}
 
 \begin{lemma}[Scalar phases in the physical string correlator]
@@ -216,7 +217,7 @@ virtual-boundary nondecay and virtual local covariance.
         thm:irreducible_twisted_spectral_radius,
         thm:twisted_peripheral_eigendirection_unique,
         lem:physical_eigenbasis_intertwining}
-    This is Lemma~1 of~\cite{PerezGarcia2008StringOrder}.  Let $A$ represent
+    Following Lemma~1 of~\cite{PerezGarcia2008StringOrder}, let $A$ represent
     a pure finitely correlated state in the canonical gauge
     $\E_A(\Id)=\Id$, $\E_A^*(\Lambda)=\Lambda$, with $\Lambda>0$ and
     $\tr(\Lambda)=1$.  For every physical unitary $u$,
@@ -289,10 +290,10 @@ virtual-boundary nondecay and virtual local covariance.
     \end{align}
     This printed assertion is distinct from the explicitly projective
     convention in Definition~\ref{def:has_physical_string_order}.
-    This unmodified assertion is false: Example~\ref{ex:string_order_scalar_phase_tensor}
-    satisfies its string-order condition but has no nonidentity fixed twist.
-    The scalar-phase obstruction and the explicit counterexample are recorded
-    in~\cite{gap:pgwsvc08_string_order_scalar_phase}.
+    As recorded in~\cite{gap:pgwsvc08_string_order_scalar_phase},
+    Example~\ref{ex:string_order_scalar_phase_tensor} refutes this unmodified
+    assertion by satisfying its string-order condition while admitting no
+    nonidentity fixed twist.
 \end{theorem}
 
 \begin{remark}[The failure of phase removal]
@@ -311,20 +312,21 @@ virtual-boundary nondecay and virtual local covariance.
         \notag
     \end{align}
     In the eigenbasis $u=\sum_j e^{i\theta_j}|\widetilde
-        j\rangle\langle\widetilde j|$, shift the string unitary by the
+        j\rangle\langle\widetilde j|$, shifting the string unitary by the
     peripheral phase,
     \begin{align}
         \widetilde u
          & :=e^{-i\theta}u
         =\sum_j e^{i(\theta_j-\theta)}
-        |\widetilde j\rangle\langle\widetilde j|.
+        |\widetilde j\rangle\langle\widetilde j|,
         \notag
     \end{align}
-    Then $\E_{\widetilde u}(V)=V$.  Choosing
+    gives $\E_{\widetilde u}(V)=V$.  Choosing
     $y=x^\dagger\widetilde u$ reduces nonvanishing to the second condition
-    in (\ref{eq:pgwsvc08_theorem1}); if it holds for $n,m$, take
-    $x=|n\rangle\langle m|$. However, $u\ne\Id$ does not imply
-    $\widetilde u\ne\Id$: the original $u$ may itself be a scalar phase.
+    in (\ref{eq:pgwsvc08_theorem1}), which is realized by
+    $x=|n\rangle\langle m|$ whenever the trace condition holds at $n,m$.
+    However, $u\ne\Id$ does not imply $\widetilde u\ne\Id$: the original $u$
+    may itself be a scalar phase.
     Thus this calculation does not establish the printed nonidentity
     conclusion. The projective correction below states the stable
     nontriviality condition explicitly.
@@ -335,10 +337,9 @@ virtual-boundary nondecay and virtual local covariance.
     \lean{MPSTensor.hasPhysicalStringOrder_iff_exists_fixed_letter}
     \leanok
     \uses{def:has_physical_string_order}
-    Let $A$ have the faithful normalized canonical density and the
-    simple-peripheral purity property of
-    Lemma~\ref{lem:pgwsvc08_twisted_spectral_radius}.
-    Then physical string order in the projective sense is equivalent to
+    Under the faithful normalized canonical density and simple-peripheral
+    purity hypotheses of Lemma~\ref{lem:pgwsvc08_twisted_spectral_radius},
+    physical string order in the projective sense is equivalent to
     the existence of a nonscalar unitary $u_0$, a virtual matrix $V$,
     and physical indices $n,m$ such that
     \begin{align}
@@ -358,8 +359,8 @@ virtual-boundary nondecay and virtual local covariance.
     Positive limiting magnitude excludes spectral radius below one;
     peripheral rigidity and the physical endpoint selection rule give
     this equivalence. The trace coefficient also implies $V\ne0$.
-    Set $u_0=\mu^{-1}u$. This is unitary and remains nonscalar, since
-    $u_0=c\Id$ would imply $u=(\mu c)\Id$. Its eigenmatrix is fixed.
+    The rescaled unitary $u_0=\mu^{-1}u$ remains nonscalar, since
+    $u_0=c\Id$ would imply $u=(\mu c)\Id$, and its eigenmatrix is fixed.
     Conversely a fixed eigenmatrix is a peripheral eigenmatrix with
     $\mu=1$, so the same endpoint criterion gives the endpoints.
 \end{proof}
@@ -371,8 +372,8 @@ virtual-boundary nondecay and virtual local covariance.
     \lean{MPSTensor.stationaryBlockDensity_invariant_iff_spectralRadius_eq_one}
     \leanok
     \uses{def:stationary_physical_block_density}
-    This is Theorem~2 of~\cite{PerezGarcia2008StringOrder} for a fixed
-    physical unitary $u$. Suppose $\Lambda>0$, $\tr\Lambda=1$,
+    Following Theorem~2 of~\cite{PerezGarcia2008StringOrder} for a fixed
+    physical unitary $u$, suppose $\Lambda>0$, $\tr\Lambda=1$,
     $\E_A(\Id)=\Id$, and $\E_A^*(\Lambda)=\Lambda$. Assume that
     $\E_A(X)=\lambda X$, $X\ne0$, and $|\lambda|=1$ imply
     $\lambda=1$ and $X\in\C\Id$. Then
@@ -458,9 +459,9 @@ virtual-boundary nondecay and virtual local covariance.
     does not decay to zero.
 
     This virtual-boundary condition asserts the existence of boundary matrices
-    with non-vanishing transfer overlap under the twist $u$. The relationship
-    with physical endpoint operators (Definition~\ref{def:has_physical_string_order})
-    is analyzed in \cite{gap:pgwsvc08_string_order_virtual_boundary}.
+    with non-vanishing transfer overlap under the twist $u$; as analyzed in
+    \cite{gap:pgwsvc08_string_order_virtual_boundary}, it differs from the
+    physical endpoint criterion of Definition~\ref{def:has_physical_string_order}.
 \end{definition}
 
 \begin{definition}[Local physical intertwining]\label{def:condC1}
@@ -638,7 +639,7 @@ virtual-boundary nondecay and virtual local covariance.
 
 \begin{proof}
     \leanok
-    Set $B^i := V\, A^i\, V^\dagger$. The transfer-map covariance relation
+    For $B^i := V\, A^i\, V^\dagger$, the transfer-map covariance relation
     \begin{tenkzequation}
         \tenkzkernel
         % Formula/source: Papers/0802.0447/StringOrder-v10.tex,
@@ -683,9 +684,9 @@ virtual-boundary nondecay and virtual local covariance.
 \begin{proof}
     \leanok
     \uses{lem:unitary_kraus_mixing, lem:twisted_transfer_eq_mixed_transfer, thm:left_canonical_gauge, thm:eigenvalue_bound}
-    By Lemma~\ref{lem:twisted_transfer_eq_mixed_transfer}, the twisted transfer
-    map is the mixed transfer operator $F_{A,B_u}$, as in
-    (\ref{eq:symmetry_twisted_mixed_transfer}).
+    By Lemma~\ref{lem:twisted_transfer_eq_mixed_transfer} and
+    (\ref{eq:symmetry_twisted_mixed_transfer}), the twisted transfer
+    map is the mixed transfer operator $F_{A,B_u}$.
     Because $B_u$ is obtained from $A$ by unitary mixing of the Kraus operators,
     the transfer maps of $A$ and $B_u$ coincide, so the two adjoint channels
     share a common positive definite fixed point.
@@ -744,9 +745,8 @@ virtual-boundary nondecay and virtual local covariance.
     \leanok
     \uses{lem:boundary_string_order_tendsto_zero, thm:twisted_transfer_spectral_radius_le_one, thm:twisted_transfer_modulus_one_gauge_phase}
     If $\rho(\E_u) < 1$, Lemma~\ref{lem:boundary_string_order_tendsto_zero}
-    forces every virtual-boundary sequence to decay to zero, contradicting
-    Definition~\ref{def:has_string_order}.
-    Hence $\rho(\E_u) \ge 1$.
+    contradicts Definition~\ref{def:has_string_order} by forcing every
+    virtual-boundary sequence to decay to zero, so $\rho(\E_u) \ge 1$.
     Theorem~\ref{thm:twisted_transfer_spectral_radius_le_one} shows that every
     eigenvalue has modulus at most $1$, so some peripheral eigenvalue has
     modulus exactly $1$.
@@ -773,8 +773,8 @@ virtual-boundary nondecay and virtual local covariance.
 \begin{proof}
     \leanok
     \uses{thm:psd_fp_unique}
-    Start from an invertible intertwiner $X$ and a nonzero gauge scalar
-    $\zeta$ between $A$ and $B_u$. The positive matrix
+    For an invertible intertwiner $X$ and a nonzero gauge scalar
+    $\zeta$ between $A$ and $B_u$, the positive matrix
     $Q:=XX^\dagger$ satisfies $\E_A(Q)=|\zeta|^2Q$. Since
     $\E_A(\Id)=\Id$, irreducibility forces the two positive eigenvalues to
     agree, so $|\zeta|=1$ and $Q$ is a positive fixed point of $\E_A$.
@@ -801,9 +801,10 @@ virtual-boundary nondecay and virtual local covariance.
 
 \begin{proof}
     \leanok
-    Expand $\E_u(V)$ using (\ref{eq:symmetry_twisted_transfer}), insert the
-    intertwining relation into each local term, and use
-    $V^\dagger V = \Id$ together with $\E_A(\Id)=\Id$.
+    Expanding $\E_u(V)$ via (\ref{eq:symmetry_twisted_transfer}), inserting the
+    intertwining relation into each local term, and using
+    $V^\dagger V = \Id$ together with $\E_A(\Id)=\Id$ yields the eigenvalue
+    relation.
 \end{proof}
 
 \begin{theorem}[Boundary-state invariance of the virtual unitary]%
@@ -853,10 +854,10 @@ virtual-boundary nondecay and virtual local covariance.
 \begin{proof}
     \leanok
     \uses{thm:twisted_transfer_eigen_of_virtual_unitary, def:string_order_boundary_param}
-    Choose the boundary matrices $X = V^\dagger$ and $Y = V$, where $V$ is the
-    unitary from the virtual local-covariance datum.
-    By Theorem~\ref{thm:twisted_transfer_eigen_of_virtual_unitary},
-    one has $\E_u^L(V)=\mu^L V$.
+    With the boundary matrices $X = V^\dagger$ and $Y = V$ from the
+    virtual local-covariance unitary $V$,
+    Theorem~\ref{thm:twisted_transfer_eigen_of_virtual_unitary} gives
+    $\E_u^L(V)=\mu^L V$.
     Therefore
     \begin{align}
         R_L(u;V^\dagger,V)
@@ -885,9 +886,9 @@ virtual-boundary nondecay and virtual local covariance.
 \begin{proof}
     \leanok
     \uses{thm:twisted_transfer_eigen_of_virtual_unitary, thm:twisted_transfer_modulus_one_gauge_phase, thm:virtual_unitary_of_twisted_gauge_phase, thm:boundary_state_invariant_of_virtual_unitary}
-    The forward direction is
-    Theorem~\ref{thm:twisted_transfer_eigen_of_virtual_unitary}.
-    For the reverse direction, start from a unitary peripheral eigenmatrix.
+    Theorem~\ref{thm:twisted_transfer_eigen_of_virtual_unitary} gives the
+    forward direction.
+    Conversely, for a unitary peripheral eigenmatrix,
     Theorem~\ref{thm:twisted_transfer_modulus_one_gauge_phase} gives
     gauge-phase equivalence with the companion tensor; then
     Theorem~\ref{thm:virtual_unitary_of_twisted_gauge_phase} yields a virtual
@@ -962,9 +963,9 @@ virtual-boundary nondecay and virtual local covariance.
 \begin{proof}
     \leanok
     \uses{thm:string_order_implies_twisted_gauge_phase, thm:virtual_unitary_of_twisted_gauge_phase}
-    Virtual-boundary nondecay first gives gauge-phase equivalence with the
-    companion tensor by
-    Theorem~\ref{thm:string_order_implies_twisted_gauge_phase}.
+    By Theorem~\ref{thm:string_order_implies_twisted_gauge_phase},
+    virtual-boundary nondecay first gives gauge-phase equivalence with the
+    companion tensor.
     Theorem~\ref{thm:virtual_unitary_of_twisted_gauge_phase} then normalizes the
     resulting intertwiner to a unitary and produces the phase $\mu$.
 \end{proof}

@@ -58,8 +58,8 @@ coordinates are
     \uses{thm:mpo_joint_mixed_span,def:mpo_joint_boundary_columns}
     For any simultaneously spanning family $B_x$, its one-site
     coefficient map has columns $B_x^i[a,b]$ and is injective by
-    nondegeneracy of the joint trace pairing. Apply this to $C_x$.
-    The columns of $L$ are the columns indexed by
+    nondegeneracy of the joint trace pairing, which applies in particular
+    to $C_x$. The columns of $L$ are the columns indexed by
     $(x,a,V_xb)$, while the columns of $R$ are indexed by
     $(x,V_xc,e)$. Both indexing maps are injective, so these column
     subfamilies remain independent. The polar decomposition of each
@@ -95,9 +95,9 @@ coordinates are
 \begin{proof}
     \leanok
     \uses{def:mpo_joint_boundary_columns,thm:mpo_joint_mixed_compression}
-    Expand matrix multiplication. When the two exterior rows are in
-    the first sector, only the shared $00$ physical alphabet contributes,
-    and its rectangular entries are exactly those of $A_x^0$ and $A_y^0$.
+    Expanding the matrix multiplication, when the two exterior rows lie
+    in the first sector only the shared $00$ physical alphabet contributes,
+    and its rectangular entries are those of $A_x^0$ and $A_y^0$.
 \end{proof}
 
 \begin{theorem}[The original endpoint remains at every interior site]
@@ -124,8 +124,8 @@ coordinates are
 \begin{proof}
     \leanok
     \uses{thm:mpo_joint_mixed_compression,def:mpo_joint_boundary_columns}
-    Substitute $W_x(0)=V_xV_x^*$ between neighboring letters.
-    Every interior compression is
+    Substituting $W_x(0)=V_xV_x^*$ between neighboring letters makes
+    every interior compression
     $V_x^*C_x^{\iota(k)}V_x=(A_x^0)^k$.
     Associativity leaves $C_x^iV_x$ at the first site and
     $V_x^*C_x^j$ at the last; expanding their product gives the formula.

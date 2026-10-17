@@ -29,8 +29,8 @@
     \leanok
     \uses{thm:glm_fusion_comparison_traces,
         def:glm_boundary_fusion_f_matrix}
-    Extract $Q$ by the normalized trace of left analysis followed by right
-    synthesis. On operator labels these are exactly the two original
+    The normalized trace of left analysis followed by right synthesis
+    extracts $Q$. On operator labels these are the two original
     fusion contractions defining $F$. The bond dimension and both virtual
     maps are unchanged, so the expressions agree entry by entry.
 \end{proof}
@@ -76,15 +76,15 @@
     \leanok
     \uses{thm:glm_mixed_entries,thm:glm_auxiliary_action_comparison,
         thm:glm_auxiliary_fusion_comparison}
-    Apply Theorem~\ref{thm:glm_mixed_entries}, whose matrix identity is
+    Applying Theorem~\ref{thm:glm_mixed_entries}, whose matrix identity is
     $EDQ=CB$, to the auxiliary input
-    $(a,b,c,x)$ and final label $y$. Auxiliary state-left channels are
-    empty, so the remaining intermediate fusion label is an operator.
-    Replace each forward comparison by its action matrix, using
+    $(a,b,c,x)$ and final label $y$ restricts the intermediate fusion label
+    to an operator because the auxiliary state-left channels are empty.
+    Replacing each forward comparison by its action matrix, with
     row $(z,j,i)$ and column $(d,\eta,n)$ in the auxiliary coordinates
-    for source row $(z,i,j)$ and column $(d,n,\eta)$. Replace the inverse
-    operator comparison by $F$ using
-    (\ref{eq:glm_auxiliary_fusion_comparison}). This gives
+    corresponding to source row $(z,i,j)$ and column $(d,n,\eta)$, and
+    replacing the inverse operator comparison by $F$ via
+    (\ref{eq:glm_auxiliary_fusion_comparison}) yields
     (\ref{eq:glm_actual_mixed_pentagon}).
 \end{proof}
 
@@ -104,15 +104,16 @@
     \leanok
     \uses{thm:glm_actual_mixed_pentagon,thm:glm_triangular_boundary_exact,
         thm:glm_triangular_boundary_blocking,thm:glm_triangular_boundary_inverse}
-    Pad the physical letters in the upper-left corner and upper-right
-    column. Their disjoint supports give cross-kind scalar-gauge
-    separation, and retained letters preserve individual injectivity.
-    The derived common positive blocking gives a simultaneous inverse.
+    Padding the physical letters in the upper-left corner and upper-right
+    column gives cross-kind scalar-gauge separation by disjoint support,
+    while the retained letters preserve individual injectivity.
+    The derived common positive blocking then gives a simultaneous inverse.
     Exact pairwise reconstruction survives this blocking with the same
-    rectangular maps, so it gives a complete zipper family. Apply
-    Theorem~\ref{thm:glm_actual_mixed_pentagon}. All coefficient contractions are virtual and thus
-    retain their original values. The auxiliary physical dimension is
-    $(d+1)^L$, and no ambient identity-support premise is needed.
+    rectangular maps and therefore defines a complete zipper family to which
+    Theorem~\ref{thm:glm_actual_mixed_pentagon} applies. Because all
+    coefficient contractions are virtual, they retain their original values;
+    the auxiliary physical dimension is $(d+1)^L$, and no ambient
+    identity-support premise is needed.
 \end{proof}
 
 \begin{theorem}[Boundary closedness and compatibility yield coherent maps]
@@ -140,12 +141,13 @@
     \leanok
     \uses{thm:glm_boundary_source_decomposition,
         thm:glm_unblocked_mixed_pentagon}
-    Apply Theorem~\ref{thm:glm_boundary_source_decomposition} to every operator pair
-    and every operator/state pair. It derives the common word span from
-    individual injectivity and scalar-gauge separation. Choose the finite
-    multiplicity families and their analysis/synthesis maps, retain both
-    exact decomposition assertions, and apply
-    Theorem~\ref{thm:glm_unblocked_mixed_pentagon} to these same maps.
+    Theorem~\ref{thm:glm_boundary_source_decomposition} applies to every
+    operator pair and every operator/state pair, deriving the common word
+    span from individual injectivity and scalar-gauge separation. Choosing
+    the finite multiplicity families and their analysis/synthesis maps and
+    retaining both exact decomposition assertions,
+    Theorem~\ref{thm:glm_unblocked_mixed_pentagon} then applies directly to
+    these maps.
 \end{proof}
 
 \paragraph{Source index correction and scope.}

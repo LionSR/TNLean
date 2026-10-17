@@ -28,14 +28,14 @@
 \end{theorem}
 
 For an injective simple tensor, contracting $K^{-1}$ with $K$ through the
-physical index identifies the corresponding virtual legs. In components,
-this is the matrix-unit identity
+physical index identifies the corresponding virtual legs as in
+\cite[Appendix~C.2, lines~1376--1380]{Cirac2016MPDO_arXiv}: in components,
 \begin{align}
     \sum_p(K^{-1})^{\alpha,\beta}_p(K^p)_{\alpha',\beta'}
-     & =\delta_{\alpha,\alpha'}\delta_{\beta,\beta'}.
+     & =\delta_{\alpha,\alpha'}\delta_{\beta,\beta'},
     \label{eq:rfp_inverse_matrix_units}
 \end{align}
-Its two Kronecker factors are the two bare cups:
+whose two Kronecker factors are the two bare cups:
 \begin{tenkzequation}
     % The upper inverse tensor and lower tensor contract through the doubled
     % physical index p.  Their four virtual legs remain open and are
@@ -54,11 +54,11 @@ Its two Kronecker factors are the two bare cups:
         \tn[skin=none]{} \\ \tn[skin=none]{}
     \end{tenkz}
 \end{tenkzequation}
-This is the identity in
-\cite[Appendix~C.2, lines~1376--1380]{Cirac2016MPDO_arXiv}.
 
-Applying this inverse map to the doubled physical index and closing its
-virtual legs against a further copy of $K$ recovers $K$:
+As in the single-block identity of
+\cite[Appendix~C.2, lines~1671--1676]{Cirac2016MPDO_arXiv}, applying this
+inverse map to the doubled physical index and closing its virtual legs against
+a further copy of $K$ recovers $K$:
 \begin{tenkzequation}
     % K K^{-1} K = K (arXiv:1606.00608, eq:Kidentity): the top
     % tensor closes both virtual legs against K^{-1} and keeps its physical
@@ -79,16 +79,18 @@ virtual legs against a further copy of $K$ recovers $K$:
         \tn[skin=box, ports={90:physical:$p$}]{K}
     \end{tenkz}
 \end{tenkzequation}
-This is the single-block identity in
-\cite[Appendix~C.2, lines~1671--1676]{Cirac2016MPDO_arXiv}.
 
 \begin{definition}[Normalized fourth-site virtual tail]
     \label{def:mpdo_normalized_four_site_tail}
     \lean{MPOTensor.normalizedFourSiteTail}
     \leanok
     \uses{def:mpo_family, def:mpo_physical_trace_transfer}
-    Let $\mathcal K$ be an MPO tensor and set
-    $Z_4=\tr[\rho^{(4)}(\mathcal K)]$. Its normalized fourth-site virtual tail is
+    Specializing the normalization convention and three-site marginal of
+    \cite[lines~792--793 and 1343--1348]{Cirac2016MPDO_arXiv} to $N=4$, let
+    $\mathcal K$ be an MPO tensor and set
+    $Z_4=\tr[\rho^{(4)}(\mathcal K)]$. Its normalized fourth-site virtual tail
+    incorporates the contraction of the fourth ket and bra indices into the
+    virtual closing matrix:
     \begin{align}
         R_4
          & :=Z_4^{-1}\mathcal T_{\mathcal K}
@@ -96,10 +98,6 @@ This is the single-block identity in
         \sum_{i_4=0}^{d-1}\mathcal K^{i_4i_4}.
         \label{eq:rfp_normalized_tail}
     \end{align}
-    Thus the contraction of the fourth ket and bra indices is incorporated into
-    the virtual closing matrix. This is the $N=4$ specialization of the
-    normalization convention and three-site marginal in
-    \cite[lines~792--793 and 1343--1348]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
 \begin{theorem}[Three-site marginal closed by the normalized fourth-site tail]
@@ -187,10 +185,10 @@ This is the single-block identity in
     \lean{MPOTensor.exists_normalizedFourSiteTail_entry_ne_zero}
     \leanok
     \uses{def:mpdo_normalized_four_site_tail}
-    If $Z_4\ne0$, there exist virtual indices $\beta$ and $\alpha$ such that
-    $(R_4)_{\beta,\alpha}\ne0$. These are the indices selected before the
-    sector factorization in
-    \cite[Appendix~C.2, lines~1431--1437]{Cirac2016MPDO_arXiv}.
+    As in the index selection preceding the sector factorization in
+    \cite[Appendix~C.2, lines~1431--1437]{Cirac2016MPDO_arXiv}, if $Z_4\ne0$,
+    there exist virtual indices $\beta$ and $\alpha$ such that
+    $(R_4)_{\beta,\alpha}\ne0$.
 \end{theorem}
 
 \begin{proof}
@@ -206,9 +204,10 @@ This is the single-block identity in
     \leanok
     \uses{def:mpdo_injective_inverse_layer}
     Let $\mathcal K$ be an injective simple MPO tensor, and let $R\in\MN{D}$ be
-    the virtual contraction of the sites following a three-site word. For
-    virtual indices
-    $\alpha_1,\beta_1,\alpha_3,\beta_3$, define
+    the virtual contraction of the sites following a three-site word. Following
+    \cite[Appendix~C.2, lines~1415--1438]{Cirac2016MPDO_arXiv}, for virtual
+    indices $\alpha_1,\beta_1,\alpha_3,\beta_3$, define the three-site
+    contraction
     \begin{align}
         C_{\alpha_1,\beta_1,\alpha_3,\beta_3}(p_2;R)
          & :=
@@ -218,8 +217,6 @@ This is the single-block identity in
         \tr\!\left(\mathcal K^{p_1}\mathcal K^{p_2}\mathcal K^{p_3}R\right).
         \label{eq:rfp_inverse_contraction}
     \end{align}
-    This is the contraction used in the proof of
-    \cite[Appendix~C.2, lines~1415--1438]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
 \begin{theorem}[Evaluation of the three-site inverse-map contraction]
@@ -298,14 +295,15 @@ This is the single-block identity in
 
 \begin{proof}\leanok
     \uses{thm:mpdo_injective_inverse_layer_spec}
-    Move the two finite sums through the trace. By the inverse-map identity
+    Moving the two finite sums through the trace and using the inverse-map
+    identity
     \begin{align}
         \sum_p(\mathcal K^{-1})^{\alpha,\beta}_p\,\mathcal K^p
          & =E_{\alpha,\beta},
         \notag
     \end{align}
-    which is the matrix form of (\ref{eq:rfp_inverse_matrix_units}), the double
-    sum collapses to
+    which is the matrix form of (\ref{eq:rfp_inverse_matrix_units}), collapses
+    the double sum to
     \begin{align}
         \tr\!\left(E_{\alpha_1,\beta_1}\mathcal K^{p_2}
         E_{\alpha_3,\beta_3}R\right)
@@ -320,16 +318,16 @@ This is the single-block identity in
     \lean{MPOTensor.IsThreeSiteClosure}
     \leanok
     \uses{def:mpo_tensor}
-    Let $\mathcal K$ be an MPO tensor and let $R\in\MN{D}$. A tripartite
-    operator $\rho$ is the three-site closure of $\mathcal K$ against $R$ if
+    Following the algebraic form of the three-site reduced operator in
+    \cite[Appendix~C.2, lines~1422--1433]{Cirac2016MPDO_arXiv}, let
+    $\mathcal K$ be an MPO tensor and let $R\in\MN{D}$. A tripartite operator
+    $\rho$ is the three-site closure of $\mathcal K$ against $R$ if
     \begin{align}
         \rho_{i_1i_2i_3,j_1j_2j_3}
          & =\tr\!\left(\mathcal K^{i_1j_1}\mathcal K^{i_2j_2}
         \mathcal K^{i_3j_3}R\right).
         \label{eq:rfp_three_site_closure}
     \end{align}
-    This is the algebraic form of the three-site reduced operator in
-    \cite[Appendix~C.2, lines~1422--1433]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
 \begin{definition}[Physical slice and Hayashi inverse factors]
@@ -341,7 +339,9 @@ This is the single-block identity in
     \uses{def:mpdo_injective_inverse_layer, def:mpdo_eta_structure}
     Fix virtual indices $\beta,\alpha$ and set
     $\kappa_{\beta,\alpha}(i,j)=\mathcal K^{ij}_{\beta,\alpha}$.
-    For a Hayashi sector $k$, define the two inverse factors
+    Following the sectorwise inverse-map calculation of
+    \cite[Appendix~C.2, lines~1407--1428]{Cirac2016MPDO_arXiv}, for a Hayashi
+    sector $k$, define the two inverse factors
     \begin{align}
         A^{(k)}_{\alpha_1,\beta_1}(l,l')
          & :=
@@ -356,8 +356,6 @@ This is the single-block identity in
         (\rho_{b_2 C}^{(k)})_{(r,i_3),(r',j_3)}.
         \notag
     \end{align}
-    These are the two factors in the sectorwise inverse-map calculation of
-    \cite[Appendix~C.2, lines~1407--1428]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
 \begin{theorem}[Outer inverse-map contraction of a closure]
@@ -517,15 +515,16 @@ For fixed $k,\alpha_1,\beta_3$, the identity
         R_{\beta_3,\alpha_1}.
         \label{eq:rfp_inverse_outer_contraction_rho}
     \end{align}
-    Apply
+    Applying the linear functional
     \begin{align}
         \sum_{i_1,j_1,i_3,j_3}
          & (\mathcal K^{-1})^{\alpha_1,\beta_1}_{(i_1,j_1)}
         (\mathcal K^{-1})^{\alpha_3,\beta_3}_{(i_3,j_3)}\,(-)
         \notag
     \end{align}
-    to the Hayashi block equality. Substituting (\ref{eq:rfp_inverse_outer_contraction_rho}) and
-    interchanging the finite sums gives
+    to the Hayashi block equality, substituting
+    (\ref{eq:rfp_inverse_outer_contraction_rho}), and interchanging the finite
+    sums gives
     \begin{align}
          & \sum_{i_1,j_1,i_3,j_3}
         (\mathcal K^{-1})^{\alpha_1,\beta_1}_{(i_1,j_1)}
@@ -634,7 +633,12 @@ For fixed $k,\alpha_1,\beta_3$, the identity
     \leanok
     \uses{def:mpdo_hayashi_inverse_factors}
     Fix outer virtual indices $\alpha_1,\beta_3$ and a Hayashi sector $k$.
-    The sector tensors are
+    % The source (arXiv:1606.00608, Appendix C.2, lines 1435--1448) leaves the
+    % distribution of the scalar R^{-1} p_k between l_k and r_k unspecified;
+    % here it is attached to l_k.
+    Following the factorization displayed in
+    \cite[Appendix~C.2, lines~1435--1448]{Cirac2016MPDO_arXiv}, the sector
+    tensors are
     \begin{align}
         (l_k)_{\beta_1}
          & :=R_{\beta_3,\alpha_1}^{-1}\,p_k
@@ -644,11 +648,6 @@ For fixed $k,\alpha_1,\beta_3$, the identity
          & :=B^{(k)}_{\alpha_3,\beta_3}.
         \notag
     \end{align}
-    % The source (arXiv:1606.00608, Appendix C.2, lines 1435--1448) leaves the
-    % distribution of the scalar R^{-1} p_k between l_k and r_k unspecified;
-    % here it is attached to l_k.
-    These are the tensors of the factorization
-    displayed in \cite[Appendix~C.2, lines~1435--1448]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
 \begin{lemma}[Zero-weight left sector tensor]
@@ -675,17 +674,16 @@ For fixed $k,\alpha_1,\beta_3$, the identity
     \uses{def:mpdo_sector_tensors}
     Suppose that $\mathcal K$ is injective, $\rho$ is its three-site closure
     against $R$, a Hayashi decomposition of $\rho$ has been chosen, and the
-    outer indices satisfy $R_{\beta_3,\alpha_1}\ne0$. Then for all virtual
-    indices $\beta_1,\alpha_3$,
+    outer indices satisfy $R_{\beta_3,\alpha_1}\ne0$. As in the factorization
+    displayed at \cite[Appendix~C.2, lines~1435--1448]{Cirac2016MPDO_arXiv},
+    the splitting of the middle site induces a direct sum over the physical
+    indices for all virtual indices $\beta_1,\alpha_3$:
     \begin{align}
         U_B\,\kappa_{\beta_1,\alpha_3}\,U_B^\dagger
          & =\bigoplus_k
         (l_k)_{\beta_1}\otimes(r_k)_{\alpha_3}.
         \label{eq:rfp_sector_factorization}
     \end{align}
-    The direct sum refers to the physical indices and is inherited from the
-    splitting of the middle site. This is the factorization displayed at
-    \cite[Appendix~C.2, lines~1435--1448]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 
 In the middle-site basis selected by $U_B$, the same factorization

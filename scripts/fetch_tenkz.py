@@ -76,7 +76,7 @@ def fetch(git_url: str, rev: str, sha: str) -> Path:
     dirty = git(["status", "--porcelain"], cwd=DEST)
     if dirty:
         raise SystemExit(f"tenkz checkout is dirty after reset to immutable pin {sha}")
-    sty = DEST / "tex" / "tenkz" / "tenkz.sty"
+    sty = DEST / "tex" / "tenkz" / "tikz-tensor-networks.sty"
     if not sty.is_file():
         raise SystemExit(f"checked out tenkz at {have} but {sty} is missing")
     print(f"tenkz {have} at {DEST}")

@@ -4,17 +4,16 @@
     \label{def:physical_blocking_isometry}
     \lean{MPSTensor.HasPhysicalBlockingIsometry}
     \leanok
-    An MPS tensor $A$ is a \emph{renormalization fixed point} if there exists an
-    isometry $V\colon \C^d\to\C^{d^2}$ with coefficients $V_{(i_1,i_2),j}$
-    satisfying $V^\dagger V=\Id$ such that for all physical indices
-    $i_1,i_2\in\{0,\ldots,d-1\}$,
+    Following \cite[Definition~3.2]{Cirac2016MPDO_arXiv}, an MPS tensor $A$ is a
+    \emph{renormalization fixed point} if there exists an isometry
+    $V\colon \C^d\to\C^{d^2}$ with coefficients $V_{(i_1,i_2),j}$ satisfying
+    $V^\dagger V=\Id$ that fuses every two-site product into a single-site
+    letter: for all physical indices $i_1,i_2\in\{0,\ldots,d-1\}$,
     \begin{align}
         A^{i_1}A^{i_2}
          & =\sum_{j=0}^{d-1}V_{(i_1,i_2),j}A^j.
         \label{eq:corr_physical_blocking_isometry}
     \end{align}
-    This expresses the physical two-site blocking relation $AA=A$ of
-    \cite[Definition~3.2]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
 \begin{definition}[Idempotent transfer map]\label{def:mps_transfer_idempotence}
@@ -31,13 +30,13 @@
     \leanok
     \uses{def:mps_transfer_idempotence}
     If $\E_A\circ\E_A=\E_A$, then every nonzero eigenvalue of $\E_A$ equals
-    $1$, the form in which \cite[Section~III.A]{Cirac2021Matrix} states the
-    renormalization fixed-point property.
+    $1$, matching the spectral fixed-point condition of
+    \cite[Section~III.A]{Cirac2021Matrix}.
 \end{theorem}
 
 \begin{proof}\leanok
     If $\E_A(X)=\mu X$ with $X\neq0$, then $\mu^2X=\E_A^2(X)=\E_A(X)=\mu X$,
-    so $\mu^2=\mu$.
+    so $\mu^2=\mu$ and hence $\mu=1$.
 \end{proof}
 
 \begin{theorem}[A physical blocking isometry gives transfer idempotence]
@@ -92,16 +91,15 @@
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:physical_blocking_implies_transfer_idempotence}
-    The backward implication is
-    Theorem~\ref{thm:physical_blocking_implies_transfer_idempotence}. For the
-    forward implication, expanding $\E_A^2=\E_A$ as a Kraus sum gives, for
-    every $X$,
+    Theorem~\ref{thm:physical_blocking_implies_transfer_idempotence} proves the
+    backward implication. Conversely, expanding $\E_A^2=\E_A$ as a Kraus sum
+    gives, for every $X$,
     \begin{align}
         \sum_{i_1,i_2}(A^{i_1}A^{i_2})X(A^{i_1}A^{i_2})^\dagger
          & =\sum_jA^jX(A^j)^\dagger.
         \notag
     \end{align}
-    Rectangular Kraus freedom~\cite[``Rectangular Kraus freedom with general finite index types'']{QICLean2026Blueprint} then gives the isometry $V$
+    Rectangular Kraus freedom~\cite[``Rectangular Kraus freedom with general finite index types'']{QICLean2026Blueprint} then produces the isometry $V$
     relating the two Kraus families.
 \end{proof}
 
@@ -118,8 +116,9 @@
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:kraus_isometry_iff_transfer_idempotence}
-    Follows from Theorem~\ref{thm:kraus_isometry_iff_transfer_idempotence}
-    and Definition~\ref{def:physical_blocking_isometry}.
+    Theorem~\ref{thm:kraus_isometry_iff_transfer_idempotence} and
+    Definition~\ref{def:physical_blocking_isometry} yield the equivalence
+    directly.
 \end{proof}
 
 \begin{definition}[Limit of the renormalization flow]
@@ -138,10 +137,10 @@
     \end{align}
     Here $\widehat{\E}_A$ and $\widehat{\E}_B$ are the transfer matrices, and
     convergence is taken in the standard topology on the finite-dimensional
-    matrix space $\MN{D^2}$. The physical dimension may change under blocking,
-    while the bond dimension $D$ is preserved. Transfer matrices represent the
-    quotient by physical isometries
-    \cite[lines~382--394 and 1205--1209]{Cirac2016MPDO_arXiv}.
+    matrix space $\MN{D^2}$. Because transfer matrices represent tensors modulo
+    physical isometries \cite[lines~382--394 and 1205--1209]{Cirac2016MPDO_arXiv},
+    blocking may change the physical dimension while preserving the bond
+    dimension $D$.
 \end{definition}
 
 \begin{theorem}[A dyadic power limit is idempotent]
@@ -153,9 +152,8 @@
 \end{theorem}
 \begin{proof}\leanok
     Continuity of multiplication gives
-    $E^{2^n}E^{2^n}\to P^2$. On the other hand,
-    $E^{2^n}E^{2^n}=E^{2^{n+1}}\to P$. Uniqueness of limits gives
-    $P^2=P$.
+    $E^{2^n}E^{2^n}\to P^2$, while $E^{2^n}E^{2^n}=E^{2^{n+1}}\to P$, so
+    uniqueness of limits gives $P^2=P$.
 \end{proof}
 
 \begin{theorem}[Limits of the renormalization flow]
@@ -166,16 +164,16 @@
         MPSTensor.appearsAsRenormalizationFlowLimit_iff_hasPhysicalBlockingIsometry}
     \leanok
     \uses{def:appears_as_renormalization_flow_limit, def:physical_blocking_isometry}
-    A tensor class appears as a limit of the two-site renormalization flow if
-    and only if it has a physical blocking isometry. Equivalently, there is an
-    isometry $V\colon\C^d\to\C^{d^2}$ such that
+    As in \cite[Theorem~3.1 and lines~1205--1209]{Cirac2016MPDO_arXiv}, a
+    tensor class appears as a limit of the two-site renormalization flow if
+    and only if it has a physical blocking isometry: an isometry
+    $V\colon\C^d\to\C^{d^2}$ such that
     \begin{align}
         A^{i_1}A^{i_2}
         =\sum_{j=0}^{d-1}V_{(i_1,i_2),j}A^j
         \notag
     \end{align}
-    for every $i_1,i_2$. This is
-    \cite[Theorem~3.1 and lines~1205--1209]{Cirac2016MPDO_arXiv}.
+    for every $i_1,i_2$.
 
     % Local fix (renormalization-flow indices): The printed display sums the
     % free indices i_1,i_2 and has the undefined output index j_1. The equation
@@ -188,12 +186,12 @@
     \uses{thm:dyadic_power_limit_idempotent, thm:physical_blocking_isometry_iff_transfer_idempotence}
     If $\widehat{\E}_B^{\,2^n}\to\widehat{\E}_A$, then
     Theorem~\ref{thm:dyadic_power_limit_idempotent} gives
-    $\widehat{\E}_A^2=\widehat{\E}_A$. Since the transfer-matrix
-    representation is injective, $\E_A^2=\E_A$. Theorem~\ref{thm:physical_blocking_isometry_iff_transfer_idempotence}
-    gives the physical blocking isometry. Conversely, if $A$ has such an
-    isometry, its transfer map is idempotent by
-    Theorem~\ref{thm:physical_blocking_isometry_iff_transfer_idempotence}.
-    Setting $B=A$ makes the dyadic orbit constant:
+    $\widehat{\E}_A^2=\widehat{\E}_A$. Injectivity of the transfer-matrix
+    representation then implies $\E_A^2=\E_A$, and
+    Theorem~\ref{thm:physical_blocking_isometry_iff_transfer_idempotence}
+    produces the physical blocking isometry. Conversely, if $A$ has such an
+    isometry, Theorem~\ref{thm:physical_blocking_isometry_iff_transfer_idempotence}
+    makes $\E_A$ idempotent, so setting $B=A$ gives the constant dyadic orbit
     $\widehat{\E}_A^{\,2^n}=\widehat{\E}_A\to\widehat{\E}_A$.
 \end{proof}
 
@@ -245,14 +243,12 @@
         \label{eq:corr_AA_isometry_adjoint}
     \end{align}
     \caption{The fusion identity of the renormalization fixed-point
-        characterization: two contracted copies of $A$ equal a single copy of
-        $A$ with the isometry $V$ merging the summed index $j$ into the
-        physical pair $(i_1,i_2)$, as stated in
-        (\ref{eq:corr_AA_isometry}); conversely, applying $V^\dagger$
-        to the two physical legs of the contracted pair recovers the single
-        tensor, as stated in
-        (\ref{eq:corr_AA_isometry_adjoint}). The source draws the
-        isometry as $U$
-        \cite[Theorem~3.1, lines~396--412]{Cirac2016MPDO_arXiv}.}
+        characterization \cite[Theorem~3.1, lines~396--412]{Cirac2016MPDO_arXiv}
+        (where the isometry is denoted $U$): two contracted copies of $A$ equal
+        a single copy of $A$ with the isometry $V$ merging the summed index $j$
+        into the physical pair $(i_1,i_2)$, as stated in
+        (\ref{eq:corr_AA_isometry}); conversely, applying $V^\dagger$ to the
+        two physical legs of the contracted pair recovers the single tensor, as
+        stated in (\ref{eq:corr_AA_isometry_adjoint}).}
     \label{fig:rfp_kraus_isometry}
 \end{figure}

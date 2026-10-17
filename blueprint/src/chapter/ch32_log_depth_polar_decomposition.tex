@@ -23,15 +23,15 @@ $\ket{V^{(qM)}(A)}=V^{\otimes M}\ket{V^{(M)}(P)}$ for every $M$
     \label{def:ldpolar_matrix}
     \lean{Matrix.polarPos, Matrix.polarSupport, Matrix.polarIso}
     \leanok
-    Let $M\in\C^{m\times k}$. The \emph{positive part} is
+    Let $M\in\C^{m\times k}$. In the decomposition $B=VP$ of
+    \cite[eq.~(8) and Supplemental Material]{Malz2024Preparation}, the
+    \emph{positive part} is
     $P=(M^\dagger M)^{1/2}$, the \emph{support projector} is
     $\Pi=\chi(M^\dagger M)$ with $\chi(0)=0$ and $\chi(x)=1$ for $x\ne 0$,
     and the \emph{partial isometry} is $V=M\,g(M^\dagger M)$ with
     $g(x)=x^{-1/2}$ for $x>0$ and $g(0)=0$; the functions $\chi$ and $g$ are
     applied to the positive semidefinite matrix $M^\dagger M$ by the
     functional calculus.
-    This is the decomposition $B=VP$ of
-    \cite[eq.~(8) and Supplemental Material]{Malz2024Preparation}.
 \end{definition}
 
 \begin{theorem}[Positive part]
@@ -105,15 +105,16 @@ $\ket{V^{(qM)}(A)}=V^{\otimes M}\ket{V^{(M)}(P)}$ for every $M$
     \label{thm:ldpolar_exists}
     \lean{Matrix.exists_polar_decomposition}
     \leanok
-    Every $M\in\C^{m\times k}$ factors as $M=VP$ with $P\in\MN{k}$ positive
+    As in \cite[Supplemental Material]{Malz2024Preparation}, every
+    $M\in\C^{m\times k}$ factors as $M=VP$ with $P\in\MN{k}$ positive
     semidefinite and $V^\dagger V=\Pi$, where $\Pi$ is a Hermitian
-    idempotent whose range is the range of $P$. This is the decomposition
-    in \cite[Supplemental Material]{Malz2024Preparation}.
+    idempotent whose range is the range of $P$.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:ldpolar_pos, thm:ldpolar_support, thm:ldpolar_decomposition}
-    Take the polar factors of Definition~\ref{def:ldpolar_matrix}.
+    The polar factors of Definition~\ref{def:ldpolar_matrix} satisfy all
+    stated properties.
 \end{proof}
 
 \begin{theorem}[Polar factors of a left product]
@@ -215,9 +216,9 @@ $\ket{V^{(qM)}(A)}=V^{\otimes M}\ket{V^{(M)}(P)}$ for every $M$
 \end{theorem}
 \begin{proof}
     \leanok
-    Expand $(B_W)^i=\sum_jW_{ij}B^j$ in
-    $\sum_i(B_W)^iX((B_W)^i)^\dagger$ and collect
-    $\sum_i\overline{W_{il}}W_{ij}=(W^\dagger W)_{lj}$. The case
+    Expanding $(B_W)^i=\sum_jW_{ij}B^j$ in
+    $\sum_i(B_W)^iX((B_W)^i)^\dagger$ and collecting
+    $\sum_i\overline{W_{il}}W_{ij}=(W^\dagger W)_{lj}$ gives the formula. The case
     $W^\dagger W=\Id$ is the unitary freedom of Kraus representations; the
     weaker hypothesis $B_{W^\dagger W}=B$ covers partial isometries.
 \end{proof}
@@ -234,11 +235,11 @@ $\ket{V^{(qM)}(A)}=V^{\otimes M}\ket{V^{(M)}(P)}$ for every $M$
     Identify $\{0,\dots,D^2-1\}$ with the pairs $(\alpha,\beta)$ of virtual
     indices, and let $V$, $P$ and $\Pi$ be the polar factors of
     $\widehat B$, read as matrices indexed by $\{0,\dots,D^2-1\}$ on the
-    virtual side. The \emph{positive-part tensor} of $B$ has physical
+    virtual side. Following \cite[eqs.~(9) and~(18)]{Malz2024Preparation}, the
+    \emph{positive-part tensor} of $B$ has physical
     dimension $D^2$ and bond dimension $D$, with
     $(P^k)_{\alpha\beta}=P_{k,(\alpha,\beta)}$; its matrices are the rows of
-    $P$. The \emph{isometric factor} is $V\in\C^{n\times D^2}$. This is the
-    tensor $P$ of \cite[eqs.~(9) and~(18)]{Malz2024Preparation}.
+    $P$. The \emph{isometric factor} is $V\in\C^{n\times D^2}$.
 \end{definition}
 
 \begin{lemma}[Physical matrix of the positive-part tensor]
@@ -316,17 +317,16 @@ $\ket{V^{(qM)}(A)}=V^{\otimes M}\ket{V^{(M)}(P)}$ for every $M$
     \lean{MPSTensor.transferMap_polarPosTensor}
     \leanok
     \uses{def:ldpolar_tensor, def:transfer_map}
-    For every tensor $B$ with positive-part tensor $P$, $\E_P=\E_B$. This is
-    the first equality of \cite[eq.~(8)]{Malz2024Preparation}, which is stated
-    there for injective $B$. The Supplemental Material uses the polar
-    decomposition of an arbitrary blocked tensor, with $V^\dagger V=\Pi$; the
-    identities $V^\dagger V=\Pi$ and $\Pi P=P$ give the equality for every
-    tensor.
+    For every tensor $B$ with positive-part tensor $P$, $\E_P=\E_B$. Extending
+    the first equality of \cite[eq.~(8)]{Malz2024Preparation} (stated there for
+    injective $B$), the Supplemental Material uses the polar decomposition of
+    an arbitrary blocked tensor with $V^\dagger V=\Pi$, where the identities
+    $V^\dagger V=\Pi$ and $\Pi P=P$ give $\E_P=\E_B$ for every tensor.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:ldpolar_tensor_decomposition, thm:ldpolar_transfer_rotate}
-    Write $B=P_V$ by Theorem~\ref{thm:ldpolar_tensor_decomposition}. Since
+    By Theorem~\ref{thm:ldpolar_tensor_decomposition}, $B=P_V$; since
     $V^\dagger V=\Pi$ and $P_\Pi=P$, Theorem~\ref{thm:ldpolar_transfer_rotate}
     gives $\E_{P_V}=\E_P$.
 \end{proof}
@@ -353,8 +353,9 @@ $\ket{V^{(qM)}(A)}=V^{\otimes M}\ket{V^{(M)}(P)}$ for every $M$
     \uses{lem:ldpolar_physical_matrix_rotate, thm:ldpolar_left_product}
     The physical matrix of $X_W$ is $W\widehat X$
     (Lemma~\ref{lem:ldpolar_physical_matrix_rotate}), and $X_{W^\dagger W}=X$
-    reads $W^\dagger W\widehat X=\widehat X$. Apply
-    Theorem~\ref{thm:ldpolar_left_product} and reindex. A relabelling by a
+    reads $W^\dagger W\widehat X=\widehat X$, so
+    Theorem~\ref{thm:ldpolar_left_product} and reindexing give the polar factors
+    of $X_W$. A relabelling by a
     bijection is the rotation by its permutation matrix, which is an isometry;
     this gives $P$ and $\Pi$. For $V$ the relabelling is read off directly:
     relabelling the rows of $\widehat X$ leaves $\widehat X^\dagger\widehat X$
@@ -369,15 +370,16 @@ $\ket{V^{(qM)}(A)}=V^{\otimes M}\ket{V^{(M)}(P)}$ for every $M$
         MPSTensor.posDef_polarPosMatrix_of_isInjective}
     \leanok
     \uses{def:ldpolar_tensor, def:injective}
-    If $B$ is injective, then $V^\dagger V=\Id_{D^2}$ and $P$ is positive
-    definite, as in \cite[eq.~(8)]{Malz2024Preparation}.
+    As in \cite[eq.~(8)]{Malz2024Preparation}, if $B$ is injective, then
+    $V^\dagger V=\Id_{D^2}$ and $P$ is positive definite.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:ldpolar_injective_physical, thm:ldpolar_injective,
         thm:ldpolar_tensor_decomposition}
     By Theorem~\ref{thm:ldpolar_injective_physical}, $\widehat B$ is
-    injective; apply Theorem~\ref{thm:ldpolar_injective} and reindex.
+    injective, so Theorem~\ref{thm:ldpolar_injective} and reindexing give the
+    claim.
 \end{proof}
 
 \begin{theorem}[Support projector of a matrix supported on a set of columns]

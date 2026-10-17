@@ -14,14 +14,15 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    Choose the projection family contained in the cyclic sector decomposition.
-    It satisfies
+    The projection family contained in the cyclic sector decomposition
+    satisfies
     \begin{align}
         P_u^\dagger           & =P_u,\qquad P_u^2=P_u, \notag \\
         \sum_uP_u             & =\Id, \notag                  \\
         \E_A^\dagger(P_{u+1}) & =P_u. \notag
     \end{align}
-    Apply Theorem~\ref{thm:offdiag_shift_adjoint_cyclic_shift}.
+    Theorem~\ref{thm:offdiag_shift_adjoint_cyclic_shift} therefore gives
+    $P_{k+1}A^i=A^iP_k$.
 \end{proof}
 
 \begin{theorem}[Cyclic-sector off-diagonal reconstruction]
@@ -43,14 +44,15 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    Choose the projection family contained in the cyclic sector decomposition.
-    It satisfies
+    The projection family contained in the cyclic sector decomposition
+    satisfies
     \begin{align}
         P_u^\dagger           & =P_u,\qquad P_u^2=P_u, \notag \\
         \sum_uP_u             & =\Id, \notag                  \\
         \E_A^\dagger(P_{u+1}) & =P_u. \notag
     \end{align}
-    Apply Theorem~\ref{thm:eq_sum_offdiag_adjoint_cyclic_shift}.
+    Theorem~\ref{thm:eq_sum_offdiag_adjoint_cyclic_shift} therefore gives the
+    off-diagonal sum decomposition.
 \end{proof}
 
 \begin{theorem}[Cyclic sector decomposition of a periodic tensor]
@@ -90,12 +92,12 @@
     matrix-product vectors, have nonzero bond dimensions, and carry the cyclic
     adjoint-transfer decomposition of
     Theorem~\ref{thm:cyclic_sector_decomp_after_blocking_periodic}. In addition,
-    for every blocked physical letter $i$,
+    for every blocked physical letter $i$, the corner isomorphism realizes the
+    corner-letter identity of
+    \cite[Lemma~\emph{bdcf}, eq.~\emph{Cu}]{DeLasCuevas2017Irreducible}:
     \begin{align}
         \varphi_k(C_k^i)=P_k(A^{(m)})^iP_k. \notag
     \end{align}
-    This is the corner-letter identity used in
-    \cite[Lemma~\emph{bdcf}, eq.~\emph{Cu}]{DeLasCuevas2017Irreducible}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -151,11 +153,10 @@
     $\varphi_k(C_k^i)=P_k(A^{(m)})^iP_k$.
     \begin{proof}
         \leanok
-        Apply Theorem~\ref{thm:cyclic_sector_decomp_after_blocking_isometry}
+        Applying Theorem~\ref{thm:cyclic_sector_decomp_after_blocking_isometry}
         to the original tensor $A$ with its period-$m$ peripheral-spectrum
-        hypotheses. The resulting decomposition is the decomposition of
-        $A^{(m)}$, and the isometries $V_k$ in its conclusion are the required
-        support isometries.
+        hypotheses produces the cyclic-sector decomposition of $A^{(m)}$
+        together with the required support isometries $V_k$.
     \end{proof}
 \end{theorem}
 
@@ -171,8 +172,8 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    Choose the projection families $P_u$ and $Q_v$ from the two cyclic sector
-    decompositions. The single-site relations
+    For the projection families $P_u$ and $Q_v$ of the two cyclic sector
+    decompositions, the single-site relations
     $P_{u+1}A^i=A^iP_u$ and $Q_{v+1}B^i=B^iQ_v$ give the following
     trace-sum identity, where $T$ is the one-site rotation of physical words:
     \begin{align}
@@ -238,8 +239,8 @@
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:periodic_overlap_zero_ne_dim}
-    If $D_A\ne D_B$, use Theorem~\ref{thm:periodic_overlap_zero_ne_dim}.
-    Assume $D_A=D_B$ and $A\sim_{\mathrm{gp}}B$, say
+    If $D_A\ne D_B$, Theorem~\ref{thm:periodic_overlap_zero_ne_dim} gives the
+    claim. Suppose instead that $D_A=D_B$ and $A\sim_{\mathrm{gp}}B$, say
     $B^i=\zeta XA^iX^{-1}$ with $X\in\GL_D(\C)$ and
     $\zeta\ne0$. The transfer maps satisfy
     \begin{align}
@@ -274,9 +275,9 @@
     Let $A$ be periodic, and let $B_j$ be its nonzero normalized compressed
     cyclic sectors, with the corner letters and support isometries of
     Theorem~\ref{thm:cyclic_sector_compression_letter_isometry_periodic}.
-    Two distinct sectors of equal virtual dimension are not gauge-phase
-    equivalent. This is the non-repetition conclusion of
-    \cite[Lemma~\emph{bdcf}, lines~404--423]{DeLasCuevas2017Irreducible}.
+    As in the non-repetition conclusion of
+    \cite[Lemma~\emph{bdcf}, lines~404--423]{DeLasCuevas2017Irreducible}, two
+    distinct sectors of equal virtual dimension are not gauge-phase equivalent.
     \uses{thm:cyclic_sector_compression_letter_isometry_periodic}
 \end{lemma}
 \begin{proof}\leanok

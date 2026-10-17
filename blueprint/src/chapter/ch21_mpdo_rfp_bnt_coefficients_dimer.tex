@@ -315,7 +315,8 @@
 \end{lemma}
 \begin{proof}\leanok
     \uses{def:mpdo_twisted_dimer_tensor, def:mpdo_twisted_dimer_controlled_flip}
-    Expand the two Bell projections in the computational basis.
+    Expanding the two Bell projections in the computational basis gives the
+    displayed matrix entries.
 \end{proof}
 
 \begin{lemma}[Local unitary identities]%
@@ -337,8 +338,8 @@
 \end{lemma}
 \begin{proof}\leanok
     \uses{def:mpdo_twisted_dimer_controlled_flip}
-    Evaluate the $8\times8$ matrices entry by entry in the computational
-    basis. This gives $V^\dagger=V$, $V^2=\Id$,
+    Evaluating the $8\times8$ matrices entry by entry in the computational
+    basis gives $V^\dagger=V$, $V^2=\Id$,
     $V(\sigma\otimes\Id)=(\sigma\otimes\Id)V$, and
     $V(\sigma\otimes Z)=(\sigma'\otimes Z)V$.
     Multiplying each intertwining identity on the right by $V^\dagger$
@@ -394,9 +395,9 @@
 \end{theorem}
 \begin{proof}\leanok
     \uses{lem:mpdo_twisted_dimer_controlled_flip, lem:mpdo_twisted_dimer_bond_state_entries, thm:mpdo_twisted_dimer_ismpdo}
-    Take tensor products of the identities in
-    Lemma~\ref{lem:mpdo_twisted_dimer_controlled_flip}. After separating
-    the bond and flag strings, we obtain
+    Taking tensor products of the identities in
+    Lemma~\ref{lem:mpdo_twisted_dimer_controlled_flip} and separating
+    the bond and flag strings gives
     \begin{align}
         S_NE_NU_ND_NU_N^\dagger E_N^\dagger S_N^\dagger
          & =2^{-N}\left(\sigma^{\otimes N}\otimes\Id^{\otimes N}
@@ -437,9 +438,9 @@ the bond and flag factors decouple, yielding the state-level product form.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:cpsv_example412_normalized_rfp_maps, thm:cpsv_example412_literal_formula}
-    Substitute the identity and Pauli $Z$ matrices in the definition of
-    $\omega_N$. Its expression $2^{-N}(\Id^{\otimes N}+Z^{\otimes N})$
-    is the closed operator of $\widehat M$ by
+    Substituting the identity and Pauli $Z$ matrices in the definition of
+    $\omega_N$ identifies $2^{-N}(\Id^{\otimes N}+Z^{\otimes N})$
+    with the closed operator of $\widehat M$ by
     Theorem~\ref{thm:cpsv_example412_literal_formula} and the factor
     $2^{-N}$; the empty case is evaluated directly. Positivity,
     normalization, and the two channel equations
@@ -463,13 +464,14 @@ the bond and flag factors decouple, yielding the state-level product form.
 \end{theorem}
 \begin{proof}\leanok
     \uses{lem:mpdo_twisted_dimer_bond_state_entries, thm:mpdo_twisted_dimer_flag_factor, thm:mpdo_twisted_dimer_unitary_factorization}
-    The Bell projectors are positive rank-one operators. By
-    Lemma~\ref{lem:mpdo_twisted_dimer_bond_state_entries},
+    The Bell projectors are positive rank-one operators, and
+    Lemma~\ref{lem:mpdo_twisted_dimer_bond_state_entries} gives
     $\tr\sigma=C_0[0,0]+C_0[1,1]=1$.
-    Tensor products preserve positivity, and their traces multiply.
-    Unitary changes of coordinates preserve both positivity and trace.
-    Apply these facts to $D_N$ and then use
-    Theorem~\ref{thm:mpdo_twisted_dimer_unitary_factorization}.
+    Since tensor products preserve positivity, their traces multiply, and
+    unitary changes of coordinates preserve both positivity and trace,
+    these properties pass to $D_N$ and, via
+    Theorem~\ref{thm:mpdo_twisted_dimer_unitary_factorization}, to
+    $\rho^{(N)}(M)$.
 \end{proof}
 
 The flag factor is identified using the density-normalized tensor

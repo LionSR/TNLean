@@ -15,18 +15,19 @@ representation of $G$ on a periodic chain whose sites carry the regular
 representation $\C[G]$. Each periodic operator acts as
 $U_g=\bigl(\bigotimes_iL_g\bigr)\prod_iW_g^{i,i+1}$
 (Theorem~\ref{thm:asymex_group_cocycle_kernel}), combining on-site left shifts
-$L_g$ with diagonal two-site phase gates $W_g$ determined by $\omega$; its
-place among matrix product operator symmetries, and the anomaly carried by
-the class of $\omega$, are described in
-Remark~\ref{rem:mposym_group_cocycle}. For cyclic groups,
+$L_g$ with diagonal two-site phase gates $W_g$ determined by $\omega$;
+Remark~\ref{rem:mposym_group_cocycle} situates this family among matrix
+product operator symmetries and explains how the cohomology class of $\omega$
+governs the anomaly. For cyclic groups,
 Garre-Rubio and Schuch~\cite{GarreRubioSchuch2024DomainWall} give one explicit
 cocycle in each cohomology class.
 
-The periodic formula displayed in~\cite{GarreRubio2023MPOSym} writes a left
-shift on both sites of each nearest-neighbor bond, which would apply
-$L_g^2=L_{g^2}$ at every site. The local tensor of that construction and its
-$\Z_2$ example carry a single left shift per site; the operator below follows
-the local tensor~\cite{gap:glm23_pbc_group_mpo_single_shift}.
+Although the periodic formula displayed in~\cite{GarreRubio2023MPOSym} writes a
+left shift on both sites of each nearest-neighbor bond (which would apply
+$L_g^2=L_{g^2}$ at every site), the local tensor of that construction and its
+$\Z_2$ example carry a single left shift per site, and the periodic
+operator~\cite{gap:glm23_pbc_group_mpo_single_shift} below follows the local
+tensor by applying one left shift per site.
 
 \begin{definition}[The tensor of a three-cochain]
     \label{def:asymex_group_cocycle_tensor}
@@ -110,17 +111,16 @@ the output.
     \end{tenkz}
 \end{center}
 
-The boundary is the ordinary trace, with no additional boundary matrix.
-The monomial kernel is given in
-Theorem~\ref{thm:asymex_group_cocycle_kernel}. The cocycle equation implies
-the multiplication law (Theorem~\ref{thm:asymex_group_cocycle_mul}), while
-unit-modulus values imply unitarity
-(Theorem~\ref{thm:asymex_group_cocycle_unitary}). For the chosen fusion
-tensors, the associator is $\omega^{-1}$
-(Theorem~\ref{thm:asymex_group_cocycle_inverse_cocycle}). This does not
-assert that all the tensors are normal: for a nontrivial group and a
-normalized cocycle, the identity tensor is not normal
-(Theorem~\ref{thm:asymex_group_cocycle_identity_not_normal}).
+With the ordinary trace as boundary and no additional boundary matrix,
+Theorem~\ref{thm:asymex_group_cocycle_kernel} evaluates the periodic operator
+as a monomial kernel. From this kernel,
+Theorem~\ref{thm:asymex_group_cocycle_mul} derives the multiplication law from
+the cocycle equation and Theorem~\ref{thm:asymex_group_cocycle_unitary} derives
+unitarity from unit-modulus values. For the chosen fusion tensors,
+Theorem~\ref{thm:asymex_group_cocycle_inverse_cocycle} identifies the
+associator with $\omega^{-1}$, whereas
+Theorem~\ref{thm:asymex_group_cocycle_identity_not_normal} shows that for a
+nontrivial group and a normalized cocycle the identity tensor is not normal.
 
 \begin{theorem}[The periodic operator is monomial]
     \label{thm:asymex_group_cocycle_kernel}
@@ -142,7 +142,7 @@ normalized cocycle, the identity tensor is not normal
 
 \begin{proof}
     \leanok
-    Expand the trace over cyclic bond configurations $b$. The factor
+    In the trace expansion over cyclic bond configurations $b$, the factor
     $\delta_{r,b}$ in~(\ref{eq:asymex_group_cocycle_tensor}) forces
     $b_{i+1}=t_i$, so only $b_i=t_{i-1}$ contributes. Its contribution
     vanishes unless $s_i=gt_i$ at every site, and otherwise equals
@@ -251,9 +251,9 @@ $U_g$ applied after $U_h$.
 \begin{proof}
     \leanok
     A monomial matrix whose nonzero entries have modulus one is unitary.
-    For the adjoint law, $U_g^\dagger=U_g^\dagger U_gU_{g^{-1}}=U_{g^{-1}}$
-    by Theorems~\ref{thm:asymex_group_cocycle_mul}
-    and~\ref{thm:asymex_group_cocycle_one}.
+    By Theorems~\ref{thm:asymex_group_cocycle_mul}
+    and~\ref{thm:asymex_group_cocycle_one}, the adjoint satisfies
+    $U_g^\dagger=U_g^\dagger U_gU_{g^{-1}}=U_{g^{-1}}$.
 \end{proof}
 
 The single-site tensors are not injective: their $|G|^2$ physical matrices
@@ -561,12 +561,12 @@ labelling the cohomology classes.
     \end{align}
     both sides counting the multiples of $n$ in $h+k+l$. An identity
     argument makes the exponent zero, and every power of $\zeta$ has
-    modulus one. The kernel is
-    Theorem~\ref{thm:asymex_group_cocycle_kernel} evaluated on these
-    values, and the operator laws are
-    Theorems~\ref{thm:asymex_group_cocycle_mul},
+    modulus one. Evaluating
+    Theorem~\ref{thm:asymex_group_cocycle_kernel} on these values gives the
+    kernel, and Theorems~\ref{thm:asymex_group_cocycle_mul},
     \ref{thm:asymex_group_cocycle_one}
-    and~\ref{thm:asymex_group_cocycle_unitary}.
+    and~\ref{thm:asymex_group_cocycle_unitary} then establish the operator
+    laws.
 \end{proof}
 
 Garre-Rubio and Schuch~\cite[Section~IV.C]{GarreRubioSchuch2024DomainWall}
@@ -603,9 +603,9 @@ class of $\omega$.
 \begin{proof}
     \leanok
     \uses{thm:mpug_cyclic_invariant_gauge}
-    Since $P_g(\omega)=I_{g,o(g)}(\omega)^{-1}$, this is the gauge invariance
-    of the cyclic invariant in
-    Theorem~\ref{thm:mpug_cyclic_invariant_gauge}.
+    Because $P_g(\omega)=I_{g,o(g)}(\omega)^{-1}$,
+    Theorem~\ref{thm:mpug_cyclic_invariant_gauge} implies that cohomologous
+    three-cochains share the same domain-wall phase.
 \end{proof}
 
 \begin{theorem}[Domain-wall phases of the cyclic cocycles]
@@ -713,8 +713,9 @@ class of $\omega$.
     classes of the $\omega_j$ exhaust it. If $\omega\sim\omega_j$ and
     $\eta\sim\omega_{j'}$ with $P_1(\omega)=P_1(\eta)$, then
     $\zeta^{-j}=P_1(\omega_j)=P_1(\omega_{j'})=\zeta^{-j'}$, so
-    $j\equiv j'\pmod n$ and $\omega\sim\eta$; the converse is
-    Theorem~\ref{thm:asymex_group_cocycle_domain_wall_phase_gauge}.
+    $j\equiv j'\pmod n$ and $\omega\sim\eta$; conversely,
+    Theorem~\ref{thm:asymex_group_cocycle_domain_wall_phase_gauge} shows
+    that cohomologous cocycles have equal domain-wall phases.
 \end{proof}
 
 \subsection{The group \texorpdfstring{$\Z_2\times\Z_2$}{Z2 x Z2}}
@@ -764,10 +765,10 @@ $b=(0,1)$. That source does not apply the periodic construction to it.
 \begin{proof}
     \leanok
     The exponent $a_1b_2c_2$ is trilinear over $\Z_2$, hence an additive
-    three-cocycle, and it vanishes when any argument is zero. The kernel is
+    three-cocycle, and it vanishes when any argument is zero. Evaluating
     Theorem~\ref{thm:asymex_group_cocycle_kernel} with
-    $t_{i+1}^{-1}t_i=t_i-t_{i+1}$, and the operator laws are
+    $t_{i+1}^{-1}t_i=t_i-t_{i+1}$ gives the kernel, and
     Theorems~\ref{thm:asymex_group_cocycle_mul},
     \ref{thm:asymex_group_cocycle_one}
-    and~\ref{thm:asymex_group_cocycle_unitary}.
+    and~\ref{thm:asymex_group_cocycle_unitary} then yield the operator laws.
 \end{proof}

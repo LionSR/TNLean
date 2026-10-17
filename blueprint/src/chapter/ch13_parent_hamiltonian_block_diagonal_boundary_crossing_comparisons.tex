@@ -18,8 +18,8 @@
 \begin{proof}
     \leanok
     \uses{lem:block_diagonal_boundary_condition_sum}
-    Apply Lemma~\ref{lem:block_diagonal_boundary_condition_sum} at length $N$,
-    then use linearity of the cyclic restriction $R_{i,\tau}$.
+    Applying Lemma~\ref{lem:block_diagonal_boundary_condition_sum} at length $N$
+    and using the linearity of the cyclic restriction $R_{i,\tau}$ yields the sum.
 \end{proof}
 
 \begin{lemma}[Local direct-sum constraint from block-diagonal boundary conditions]
@@ -82,17 +82,17 @@
     \leanok
     \uses{def:ground_space_parent, rem:cyclic_window_operators, thm:contiguous_restriction_ground_space_map}
     When the window stays inside the chosen linear interval, the boundary matrix
-    remains outside the window. Write
+    remains outside the window. With
     $A_{\mathrm{left}}=A^j_{\tau_0}\cdots A^j_{\tau_{i-1}}$ and
-    $A_{\mathrm{right}}=A^j_{\tau_{i+L}}\cdots A^j_{\tau_{N-1}}$. Trace
+    $A_{\mathrm{right}}=A^j_{\tau_{i+L}}\cdots A^j_{\tau_{N-1}}$, trace
     cyclicity gives
     \begin{align}
         R_{i,\tau}\!\left(\Gamma_N^{A_j}(\mu_j^NX_j)\right)
          & =
-        \Gamma_L^{A_j}\!\left(A_{\mathrm{right}} \mu_j^NX_j\,A_{\mathrm{left}}\right).
+        \Gamma_L^{A_j}\!\left(A_{\mathrm{right}} \mu_j^NX_j\,A_{\mathrm{left}}\right),
         \notag
     \end{align}
-    Hence the restricted vector lies in $G_L(A_j)$.
+    so the restricted vector lies in $G_L(A_j)$.
     % Crossing-window note, not part of this non-wrapping lemma: after trace
     % rotation, $\mu_j^N X_j$ lies between the two pieces of the interval. The
     % missing block-diagonal periodic-boundary comparison is
@@ -137,10 +137,10 @@
     \begin{align}
         \Gamma_N^{A_j}(\mu_j^NX_j)(\omega)
          & =
-        \tr\!\left(A^j_\beta A^j_\rho A^j_\alpha\,\mu_j^NX_j\right).
+        \tr\!\left(A^j_\beta A^j_\rho A^j_\alpha\,\mu_j^NX_j\right),
         \notag
     \end{align}
-    This is exactly
+    which equals
     $R_{i,\tau}\!\left(\Gamma_N^{A_j}(\mu_j^NX_j)\right)(\sigma)$.
 \end{proof}
 
@@ -184,12 +184,12 @@
 \begin{proof}
     \leanok
     \uses{lem:block_diagonal_boundary_crossing_coefficient_formula}
-    Decompose the local vector in $\bigvee_jG_L(A_j)$ as a sum of vectors
-    $\Gamma_L^{A_j}(C^j_{i,\tau})$. Evaluating at $\sigma$ gives
-    $\sum_j\tr\!\left(A^j_{\alpha\beta}C^j_{i,\tau}\right)$. Trace cyclicity
-    rewrites this as
-    $\sum_j\tr\!\left(A^j_\beta C^j_{i,\tau}A^j_\alpha\right)$. On the other
-    hand, Lemma~\ref{lem:block_diagonal_boundary_crossing_coefficient_formula}
+    Decomposing the local vector in $\bigvee_jG_L(A_j)$ as a sum of vectors
+    $\Gamma_L^{A_j}(C^j_{i,\tau})$ and evaluating at $\sigma$ gives
+    $\sum_j\tr\!\left(A^j_{\alpha\beta}C^j_{i,\tau}\right)$, which trace
+    cyclicity rewrites as
+    $\sum_j\tr\!\left(A^j_\beta C^j_{i,\tau}A^j_\alpha\right)$. Conversely,
+    Lemma~\ref{lem:block_diagonal_boundary_crossing_coefficient_formula}
     gives the second trace expression for the same local coefficient sum.
 \end{proof}
 
@@ -225,13 +225,12 @@
 \begin{proof}
     \leanok
     \uses{lem:block_diagonal_boundary_local_sum_mem, lem:block_diagonal_boundary_crossing_trace_decomposition}
-    Since $d>0$, extend the outside word $\rho$ to a full outside configuration
-    $\tau$ whose entries between the end of the interval and the cut are the
-    word $\rho$. By the nonzero-weight hypothesis,
-    Lemma~\ref{lem:block_diagonal_boundary_local_sum_mem} applies and puts the
-    sum of the corresponding block restrictions in $\bigvee_jG_L(A_j)$.
-    Applying
-    Lemma~\ref{lem:block_diagonal_boundary_crossing_trace_decomposition} gives
+    Since $d>0$, the outside word $\rho$ extends to a full outside configuration
+    $\tau$ whose entries between the end of the interval and the cut equal
+    $\rho$. Under the nonzero-weight hypothesis,
+    Lemma~\ref{lem:block_diagonal_boundary_local_sum_mem} places the
+    sum of the corresponding block restrictions in $\bigvee_jG_L(A_j)$, and
+    Lemma~\ref{lem:block_diagonal_boundary_crossing_trace_decomposition} then gives
     the displayed trace equality after rewriting the opened cyclic word as
     $\beta\rho\alpha$.
 \end{proof}
@@ -269,10 +268,10 @@
 \begin{proof}
     \leanok
     \uses{lem:block_diagonal_boundary_crossing_trace_decomposition_boundary}
-    Apply
+    Applying
     Lemma~\ref{lem:block_diagonal_boundary_crossing_trace_decomposition_boundary}
-    to each boundary-crossing start $i$ and each outside word $\rho$, and choose
-    the resulting matrices $C^j_{i,\rho}$.
+    to each boundary-crossing start $i$ and each outside word $\rho$ yields
+    the matrices $C^j_{i,\rho}$.
 \end{proof}
 
 \begin{theorem}[Fixed boundary-crossing $C^j,D^j$ comparison from the local block-sum constraint]
@@ -366,10 +365,10 @@
         \sum_j\tr\!\left(((\mu_j^NX_j)A^j_\beta)A^j_\rho A^j_\alpha\right).
         \notag
     \end{align}
-    Apply
+    By
     Lemma~\ref{lem:fixed_complementary_word_boundary_compatibility_from_traces}
-    with the stated product-algebra span at length $N-i$. Equality of the
-    traces for all $\alpha$ then gives
+    and the stated product-algebra span at length $N-i$, equality of the
+    traces for all $\alpha$ gives
     $A^j_\beta C^j_{i,\rho}=((\mu_j^NX_j)A^j_\beta)A^j_\rho$ for every block
     $j$.
 \end{proof}
@@ -435,12 +434,13 @@
 \begin{proof}
     \leanok
     \uses{lem:block_diagonal_boundary_crossing_coefficient_formula, def:ground_space_parent, rem:cyclic_window_operators}
-    Write a length-$L$ word in the boundary-crossing interval as
-    $\alpha\beta$, where $\alpha$ is the segment inside
-    $\{i,\ldots,N-1\}$ and $\beta$ is the segment after the interval wraps
-    past the cut, inside $\{0,\ldots,a-1\}$. The full $N$-site word appearing
-    in the restriction is then
-    $\beta\,\tau_a\cdots\tau_{i-1} \alpha$. Trace cyclicity gives
+    Writing a length-$L$ word in the boundary-crossing interval as
+    $\alpha\beta$, with $\alpha$ inside
+    $\{i,\ldots,N-1\}$ and $\beta$ inside $\{0,\ldots,a-1\}$ after wrapping
+    past the cut, makes the full $N$-site word in the restriction equal to
+    $\beta\,\tau_a\cdots\tau_{i-1} \alpha$. Trace cyclicity and
+    (\ref{eq:ph_boundary_crossing_matrix_identity}) applied to the inside
+    product then give
     \begin{align}
         \tr\!\left(A^j_\beta A^j_{\tau_a}\cdots A^j_{\tau_{i-1}}
         A^j_\alpha \mu_j^NX_j\right)
@@ -451,9 +451,8 @@
         \tr\!\left(A^j_\alpha A^j_\beta E\right),
         \notag
     \end{align}
-    applying (\ref{eq:ph_boundary_crossing_matrix_identity}) to the inside product. The last expression is
-    the coefficient of $\Gamma_L^{A_j}(E)$ at the word $\alpha\beta$. Hence the
-    restricted vector lies in $G_L(A_j)$.
+    which is the coefficient of $\Gamma_L^{A_j}(E)$ at the word $\alpha\beta$
+    and hence places the restricted vector in $G_L(A_j)$.
 \end{proof}
 
 \begin{lemma}[Last crossing-window component trace form]
@@ -536,8 +535,8 @@
 \begin{proof}
     \leanok
     \uses{lem:block_diagonal_last_crossing_component_trace_form}
-    Sum Lemma~\ref{lem:block_diagonal_last_crossing_component_trace_form} over
-    the block index.
+    Summing Lemma~\ref{lem:block_diagonal_last_crossing_component_trace_form} over
+    the block index yields the identity.
 \end{proof}
 
 \begin{lemma}[Last crossing-window coefficient comparison]

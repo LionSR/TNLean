@@ -24,6 +24,72 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Labels introduced by the edge operations — promoted (2026-10-16)
+
+- **Pattern:** the case analysis showing that one of the seven births and deaths of an
+  edge construction introduces a single label.
+- **Seen:** the aggregate `edgeOperations_insertsOne` and the per-operation chains of
+  `DyadicEdgeOperationChains.lean`.
+- **Abstraction:** the seven lemmas `auxBirthB_insertsOne`, …, `mainDeathB_insertsOne` in
+  `Approximation/DyadicTrueVertices.lean`; the aggregate is derived from them.
+
+### Sites separated from guide holes — promoted (2026-10-16)
+
+- **Pattern:** recover the patch of a guide hole, turn membership in its outer sample
+  into a weak distance bound, and contradict strict separation of the changed sites.
+- **Seen:** three copies in `centralBirth_hasFrameChange_of`,
+  `bandBirth_hasFrameChange`, and `bandDeath_hasFrameChange`.
+- **Abstraction:** `TNLean.PEPS.Approximation.disjoint_outerHoles_guideFrame` in
+  `DyadicGuideFrames.lean`, reusing `disjoint_footprint_of_forall`; all three callers
+  now supply their separation estimate to this lemma.
+- **Notes:** the lemma permits any site set, guide, owners and finite patch family
+  with pairwise-disjoint outer samples. It uses each patch's own center and scale.
+  The marked-set and true-vertex adapters stay at the callers, including the
+  after-reading to before-reading conversion for band death. No Hamiltonian,
+  supplied-patch or positive local-dimension assumption is added to the lemma.
+
+### Non-root dyadic side bound — promoted (2026-10-16)
+
+- **Pattern:** for `R : RepaintedSquare k` and `hk2 : 2 ^ k < 2 * L`, derive
+  `(2 : ℝ) ^ (R.1.1 : ℕ) ≤ (L : ℝ)` from the non-root level bound.
+- **Promoted helper:** `RepaintedSquare.side_le` in
+  `TNLean/PEPS/Approximation/DyadicProtocolParties.lean`.
+- **Consumers:** `centralBirth_hasFrameChange`, `edgeExchange_hasPairChange`,
+  `bandBirth_hasFrameChange`, and `bandDeath_hasFrameChange`.
+- **Notes:** keep the caller-specific factor `A₀ ≥ 1` outside the helper. The helper
+  needs only the non-root square and the root-size inequality; no protocol constants,
+  Hamiltonian or lower bound on `L` are added.
+
+### The two labels near a treated central birth — promoted (2026-10-16)
+
+- **Pattern:** use the central separation floor to show that the surrounding
+  guide is the old label near the changed region, then split according to
+  whether the point is changed to bound the central guide by two labels.
+- **Seen:** two proof copies, in `RepaintingBaseline.isTrueVertex_central_treated`
+  (`DyadicTrueVertices.lean`) and `RepaintingBaseline.central_treated_mem`
+  (`DyadicCentralBirthChange.lean`).
+- **Abstraction:** the existing `RepaintingBaseline.central_treated_mem` is
+  placed in `DyadicTrueVertices.lean`; the true-vertex theorem uses its two
+  conclusions, and the central-birth frame proof keeps the same call.
+- **Notes:** this reuses an existing public lemma without changing its signature
+  or proof. Two copies were verified; no third occurrence is claimed.
+
+### Owner change of a sampled guide frame — promoted (2026-10-16)
+
+- **Pattern:** the frame of a reading equals the frame of another reading with
+  the owners of the differing sites handed to one label, from equal true
+  vertices, equal incident labels and the label at the differing sites
+  (`06-geometry.tex`, lines 375–387).
+- **Seen:** the band birth and death of `DyadicBandStepChanges.lean` and the
+  central birth of `DyadicCentralBirthChange.lean`.
+- **Abstraction:** `TNLean.PEPS.Approximation.guideFrame_eq_changeOwner_of_ne`
+  (`Approximation/DyadicBulkFrames.lean`); the three call sites use it.
+- **Notes:** the helper itself is generic in the guides and chosen finite centers;
+  it requires equal center sets and incident labels, the exact differing-site set,
+  and one target label there. Its three protocol uses have readings and exact
+  true-vertex sets, but those are not extra hypotheses of the abstraction. The
+  documentation correction changes no proof or call site.
+
 ### Fixed-circuit bounded-change lifts beside spectator sheets — promoted (2026-10-16)
 
 - **Pattern:** Assemble the five `OriginalCircuit.IsBoundedChange` fields for
@@ -4531,6 +4597,37 @@ three-plaquette output measurement, and the routed reunion measurement.
   `isReordering_comp_iff`; apply `IsReordering.comp` as a term instead.
 
 ## Candidates
+
+### Treated-to-level frame equality — candidate (2026-10-16)
+
+- **Pattern:** Identify true vertices from a guide equality, replace the constant
+  treated radius by the equal level radius, transport disjointness, and change
+  the reference party map.
+- **Seen:** Two occurrences in one file: `levelFrame_eq_treatedFrame_guide`
+  and `treatedFrame_completedGuide_eq_levelFrame` in
+  `TNLean/PEPS/Approximation/DyadicTreatedFrameBoundary.lean`.
+- **Abstraction:** The private `treatedFrame_eq_levelFrame_of_guide_eq` takes
+  the baseline stage, the output stage, an unmodified guide and its equality
+  with the level guide. Both endpoint proofs use it.
+- **Notes:** This private, single-file extraction is below the promotion
+  threshold of three occurrences across two files. It shares the two proofs
+  without a global tactic or attribute; all existing endpoint hypotheses
+  and directions are retained.
+  Affine perturbation avoidance also reuses `eventually_add_ne`, which uses
+  public Mathlib neighborhood lemmas; the similarly named chamber-sampling
+  helper is private to its module.
+
+### Treated birth and death preamble — candidate (2026-10-16)
+
+- **Pattern:** the common setup of a treated birth or death: the scales `n`, `t`, the block
+  corner, two `treatedFrame_spec` extractions, `homogenize_endpointBlocks`, the readings and
+  true-vertex sets, and `BandOperation.treated_frame_facts`.
+- **Seen:** `bandBirth_hasFrameChange` and `bandDeath_hasFrameChange`
+  (`Approximation/DyadicBandStepChanges.lean`). In parent PR #9505 both proofs use
+  `guideFrame_eq_changeOwner`, with separate owner case splits; this PR (#9507)
+  consolidates those splits through `guideFrame_eq_changeOwner_of_ne`.
+- **Abstraction:** a lemma returning the readings, vertex sets and facts for the surrounding
+  guide, if a third occurrence appears.
 
 
 

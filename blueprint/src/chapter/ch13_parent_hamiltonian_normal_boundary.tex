@@ -24,10 +24,10 @@ product extends by linearity to all of $\MN{D}$.
 
 \begin{proof}
     \leanok
-    Induct on $K$. For $K = 0$, the empty suffix gives
-    $Z_u = A^u Y_{\emptyset}$. For the successor step, fix the first physical
-    index $i$ and apply the induction hypothesis to the shortened suffix. This
-    gives a matrix $X_i$ satisfying $Z_u A^i = A^u X_i$ for every word $u$ of
+    By induction on $K$, the base case $K = 0$ with the empty suffix gives
+    $Z_u = A^u Y_{\emptyset}$. For the successor step, fixing the first physical
+    index $i$ and applying the induction hypothesis to the shortened suffix
+    yields a matrix $X_i$ satisfying $Z_u A^i = A^u X_i$ for every word $u$ of
     length $L_0$. Extending this letter equation to all length-$L_0$ words and
     decomposing $\Id$ in the spanning family $\{A^u : |u| = L_0\}$ yields a
     common factor $X$.
@@ -52,7 +52,7 @@ product extends by linearity to all of $\MN{D}$.
     For a scalar $c$, one similarly has
     $Z_b(cM_1) = cZ_bM_1 = F_b(cY_1)$. Thus the identity holds for every
     matrix in the span of the length-$K$ word products. Since this span is all
-    of $\MN{D}$, apply it to the identity matrix.
+    of $\MN{D}$, evaluating the identity on $\Id$ gives $Z_b = F_b Y$.
 \end{proof}
 
 \begin{theorem}[Injectivity-length commutation from length-$m$ commutation]
@@ -67,11 +67,11 @@ product extends by linearity to all of $\MN{D}$.
 
 \begin{proof}
     \leanok
-    Write each length-$m$ word as a concatenation $uw$ with $|u| = L_0$ and
-    $|w| = m - L_0$. The hypothesis gives
+    Writing each length-$m$ word as a concatenation $uw$ with $|u| = L_0$ and
+    $|w| = m - L_0$, the hypothesis gives
     $X A^u A^w = A^u A^w X = A^u(A^w X)$.
     Thus the family $Z_u := X A^u$ satisfies the hypothesis of
-    Theorem~\ref{thm:block_word_strip_right_factor}. One obtains
+    Theorem~\ref{thm:block_word_strip_right_factor}, yielding a matrix $R$ with
     $X A^u = A^u R$ for all $|u| = L_0$. Decomposing $\Id$ in the span of the
     length-$L_0$ words shows $R = X$, hence $X A^u = A^u X$.
 \end{proof}
@@ -103,10 +103,11 @@ product extends by linearity to all of $\MN{D}$.
 
 \begin{proof}
     \leanok
-    Proceed by induction on $q$. For $q=0$, the claim is trivial. For the
-    inductive step, let a word of length $(q+1)m$ be given and write it as a
-    length-$m$ prefix followed by a length-$q\,m$ suffix. The prefix commutes
-    with $X$ by hypothesis, and the suffix commutes by the induction hypothesis.
+    We proceed by induction on $q$. For $q=0$, the empty word product is the
+    identity matrix. For the inductive step, any word of length $(q+1)m$
+    decomposes into a length-$m$ prefix followed by a length-$q\,m$ suffix; the
+    prefix commutes with $X$ by hypothesis, and the suffix commutes by the
+    induction hypothesis.
 \end{proof}
 
 \begin{lemma}[Padded complement annihilation]
@@ -132,8 +133,8 @@ product extends by linearity to all of $\MN{D}$.
     statement at every positive multiple $qL_0$. Each length-$qL_0$ word
     factors as a length-$k$ prefix followed by padding, so $Z$ annihilates all
     generators of the full span and hence annihilates the identity. For the
-    left-handed form, factor each length-$qL_0$ word as a prefix followed by a
-    length-$k$ suffix and use the same spanning argument.
+    left-handed form, factoring each length-$qL_0$ word into a prefix followed
+    by a length-$k$ suffix yields $Z = 0$ by the same spanning argument.
 \end{proof}
 
 \begin{lemma}[One-sided boundary matrices are unique]
@@ -169,7 +170,8 @@ product extends by linearity to all of $\MN{D}$.
 
 \begin{proof}
     \leanok
-    Apply Theorem~\ref{thm:block_word_strip_central} with $M = A^i$.
+    Theorem~\ref{thm:block_word_strip_central} specialized to $M = A^i$ gives
+    $X A^i = A^i X$.
 \end{proof}
 
 \begin{theorem}[MPS-line containment from length-$m$ commutation]
@@ -202,8 +204,9 @@ product extends by linearity to all of $\MN{D}$.
 \begin{proof}
     \leanok
     Lemma~\ref{lem:word_commutation_multiple_lengths} amplifies the length-$m$
-    commutation hypothesis to length $L_0\,m \ge L_0$. Then
-    Theorem~\ref{thm:ground_space_map_mpv_of_long_word_commutes} applies.
+    commutation hypothesis to length $L_0\,m \ge L_0$, so
+    Theorem~\ref{thm:ground_space_map_mpv_of_long_word_commutes} places
+    $\Gamma_N(X)$ in $\spn\{V^{(N)}(A)\}$.
 \end{proof}
 
 \begin{theorem}[MPS-line containment from two one-sided equations]
@@ -224,8 +227,9 @@ product extends by linearity to all of $\MN{D}$.
 \begin{proof}
     \leanok
     Lemma~\ref{lem:common_middle_same_witness_commutation} gives commutation
-    with all words of length $|\mu|+2$, a positive length. The positive-length
-    containment theorem then applies.
+    with all words of length $|\mu|+2$, a positive length, so the
+    positive-length containment theorem places $\Gamma_N(X)$ in
+    $\spn\{V^{(N)}(A)\}$.
 \end{proof}
 
 \begin{theorem}[Boundary equality implies containment in the MPS line]
@@ -254,9 +258,10 @@ product extends by linearity to all of $\MN{D}$.
     family $Y_\mu$ satisfying
     \begin{align}
         A^\mu A^bX & = Y_\mu A^b, \notag \\
-        XA^aA^\mu  & = A^aY_\mu. \notag
+        XA^aA^\mu  & = A^aY_\mu, \notag
     \end{align}
-    Theorem~\ref{thm:ground_space_map_mpv_of_common_middle} applies.
+    and Theorem~\ref{thm:ground_space_map_mpv_of_common_middle} places
+    $\Gamma_N(X)$ in $\spn\{V^{(N)}(A)\}$.
 \end{proof}
 
 \begin{theorem}[Closure-property step for periodic chains]
@@ -289,8 +294,8 @@ product extends by linearity to all of $\MN{D}$.
         XA^jA^\mu
          & = A^jY^-_{\tau^-_\eta(\mu)}, \notag \\
         Y^+_{\tau^+_\eta(\mu)}
-         & = Y^-_{\tau^-_\eta(\mu)}. \notag
+         & = Y^-_{\tau^-_\eta(\mu)}, \notag
     \end{align}
-    Theorem~\ref{thm:ground_space_map_mpv_of_wrapped_witness_comparison}
-    finishes.
+    and Theorem~\ref{thm:ground_space_map_mpv_of_wrapped_witness_comparison}
+    places $\Gamma_N(X)$ in $\spn\{V^{(N)}(A)\}$.
 \end{proof}
