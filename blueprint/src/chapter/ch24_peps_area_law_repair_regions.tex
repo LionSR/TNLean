@@ -1162,7 +1162,7 @@ maximum-norm distances, and colors are represented by $0$ and $1$.
     There is a generation $N\in\mathbb N$ for which
     \begin{align}
         K_N & =\varnothing,
-            & |D_N(A)| & \le L|\partial_\Lambda A|.\notag
+            & |D_N(A)|      & \le L|\partial_\Lambda A|.\notag
     \end{align}
     The coefficient $L$ is chosen before $o$, $\Lambda$, $A$, and $a_0$.
 \end{theorem}
@@ -1175,7 +1175,7 @@ maximum-norm distances, and colors are represented by $0$ and $1$.
     Choose $M>0$ from the uniform mark-prefix estimate, and put
     \begin{align}
         D_0 & =2\bigl(2(C_0+1)2^{k_0}+1\bigr)^2,
-            & L & =D_0+(2S_*+1)^2M(2C_0+1)^2.\notag
+            & L                                  & =D_0+(2S_*+1)^2M(2C_0+1)^2.\notag
     \end{align}
     These constants precede the geometric data, and $D_0>0$ gives
     $L>0$. The repair hypotheses supply an empty generation $N$.
@@ -1183,7 +1183,7 @@ maximum-norm distances, and colors are represented by $0$ and $1$.
     applied to this same generation, give, with $b=|\partial_\Lambda A|$,
     \begin{align}
         |D_N(A)|
-         & \le D_0b+(2S_*+1)^2\sum_{0\le j<N}|K_j|\notag \\
+         & \le D_0b+(2S_*+1)^2\sum_{0\le j<N}|K_j|\notag       \\
          & \le\bigl(D_0+(2S_*+1)^2M(2C_0+1)^2\bigr)b=Lb.\notag
     \end{align}
 \end{proof}
@@ -1201,7 +1201,7 @@ maximum-norm distances, and colors are represented by $0$ and $1$.
     a generation $N\in\mathbb N$ for which
     \begin{align}
         K_N & =\varnothing,
-            & |D_N(A)| & \le L|\partial_\Lambda A|.\notag
+            & |D_N(A)|      & \le L|\partial_\Lambda A|.\notag
     \end{align}
     Thus $T$ precedes $S_*$ and $C_0$, $K$ precedes $k_0$, and $L$
     precedes $o$, $\Lambda$, and $A$. These thresholds concern the
@@ -1446,7 +1446,7 @@ maximum-norm distances, and colors are represented by $0$ and $1$.
     for each $i\in I_{A,0}^{(N)}$, define its scale $n_i$ by
     \begin{align}
         I_{A,0}^{(N)}
-         & =\{i\in I_A^{(N)}:\operatorname{rk}_N(i)=0\},\notag \\
+            & =\{i\in I_A^{(N)}:\operatorname{rk}_N(i)=0\},\notag        \\
         n_i & =\left\lceil C_P\tau_N(i)^{1+2\delta_0}\right\rceil.\notag
     \end{align}
     Then the prescribed primary scales satisfy
@@ -1482,8 +1482,8 @@ maximum-norm distances, and colors are represented by $0$ and $1$.
     \begin{align}
         \sum_{i\in I_{A,0}^{(N)}}(n_i^{100})^{-1}
          & \le\sum_{k\in F}|G_k|
-         \left(\left\lceil C_P(2^k)^{1+2\delta_0}\right\rceil^{100}\right)^{-1}
-         \le M(2C_0+1)^2|\partial_\Lambda A|.\notag
+        \left(\left\lceil C_P(2^k)^{1+2\delta_0}\right\rceil^{100}\right)^{-1}
+        \le M(2C_0+1)^2|\partial_\Lambda A|.\notag
     \end{align}
     This uses only finitely many represented layers and counts each
     actual identifier once, even when its current region is disconnected.
@@ -1561,18 +1561,18 @@ maximum-norm distances, and colors are represented by $0$ and $1$.
     actual non-dummy identifiers whose current regions meet $A$.
     For every $i\in I_A^{(N)}$, assign the prescribed natural scale
     \begin{align}
-        n_i&=
+        n_i & =
         \begin{cases}
             \left\lceil C_P\tau_N(i)^{1+2\delta_0}\right\rceil,
-                &\operatorname{rk}_N(i)=0,\\
+             & \operatorname{rk}_N(i)=0, \\
             \left\lceil C_B\tau_N(i)\right\rceil,
-                &\operatorname{rk}_N(i)>0.
+             & \operatorname{rk}_N(i)>0.
         \end{cases}\notag
     \end{align}
     Then
     \begin{align}
         \sum_{i\in I_A^{(N)}}(n_i^{100})^{-1}
-        &\le E(2C_0+1)^2|\partial_\Lambda A|.\notag
+         & \le E(2C_0+1)^2|\partial_\Lambda A|.\notag
     \end{align}
     The coefficient $E$ is independent of $C_B$, all geometric data,
     $a_0$, and $N$. For a replacement, the ceiling uses its remembered
@@ -1593,8 +1593,8 @@ maximum-norm distances, and colors are represented by $0$ and $1$.
     Adding those estimates gives
     \begin{align}
         \sum_{i\in I_A^{(N)}}(n_i^{100})^{-1}
-        &=\sum_{i\in I_{A,0}^{(N)}}(n_i^{100})^{-1}
-          +\sum_{i\in I_{A,+}^{(N)}}(n_i^{100})^{-1}\notag\\
-        &\le(M+L)(2C_0+1)^2|\partial_\Lambda A|.\notag
+         & =\sum_{i\in I_{A,0}^{(N)}}(n_i^{100})^{-1}
+        +\sum_{i\in I_{A,+}^{(N)}}(n_i^{100})^{-1}\notag \\
+         & \le(M+L)(2C_0+1)^2|\partial_\Lambda A|.\notag
     \end{align}
 \end{proof}
