@@ -40,6 +40,19 @@ The protocol route of the note (information reset, births, exchanges, the sweep
 and the compression) is not formalized; Theorem B is proved by the two-line route
 alone.
 
+For the commutator estimate in Part II, Lemma `lem:LR`,
+`QuantumCircuit.norm_heisenberg_commutator_le_graphDistance_finset` proves
+graph propagation from an arbitrary finite support S, with prefactor |S| and
+constants independent of its diameter, the number of sites and the local
+dimension. Its restricted-norm version is
+`QuantumCircuit.heisenbergCommutatorNorm_le_graphDistance_finset`.
+For support diameter R, support cardinality bound v_R and per-site norm budget
+b₀, the explicit constants are C = 2 + 4|b₀| exp(2μR) and
+v = 2v_R|b₀| exp(2μR) + 1, for μ ≥ 0. This is the graph commutator ingredient;
+the chain metric and interaction-budget conversion, the doubled Hamiltonian,
+and localization to a neighborhood of S remain to be proved before the note's
+full lemma can be marked complete.
+
 ## Constants
 
 Every constant is a definition of `(q, R, J, Δ)` and, for the bond dimension,
