@@ -7,6 +7,7 @@ import TNLean.PEPS.AreaLaw.BoundaryTheorem
 import TNLean.PEPS.AreaLaw.Geometry.InitialPrimaryErrorSum
 import TNLean.PEPS.AreaLaw.Geometry.PrimaryBirthSeparation
 import TNLean.PEPS.AreaLaw.Geometry.RepairActualBirthTemplates
+import TNLean.PEPS.AreaLaw.Geometry.RepairBirthLatticePoint
 import TNLean.PEPS.AreaLaw.Geometry.RepairCharacteristicLengthLowerBound
 import TNLean.PEPS.AreaLaw.Geometry.RepairDepth
 import TNLean.PEPS.AreaLaw.Geometry.RepairDummySites
