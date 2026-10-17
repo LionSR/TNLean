@@ -408,10 +408,11 @@ structure IsDistributionProtocol (Ω : StateSpace L q) (C : ℝ) (b k r : ℕ) :
   vectors `K_F Ω` of the encoded frames of that stage, of the protocol's own `Ω`: the main encoded
   frame and the auxiliary encoded frames. All its factors have norm at most one. Which factor is
   the main frame is recorded at the initial stage, by `initialCopies`, and before the readout, by
-  `mainFrame_owner`; at the stages in between, the order of the factors is not recorded. The initial stage is the product initialization of `initialCopies`. The last stage is
-  the readout of the physical registers and the discarded ones, recorded in `reference_changes`;
-  the readout change, which only rearranges registers, has no counterpart in the source, which
-  is why that stage is excluded here.
+  `mainFrame_owner`; at the stages in between, the order of the factors is not recorded. The
+  initial stage is the product initialization of `initialCopies`. The last stage is the readout
+  of the physical registers and the discarded ones, recorded in `reference_changes`; the readout
+  change, which only rearranges registers, has no counterpart in the source, which is why that
+  stage is excluded here.
 
   Source: Polynomial-PEPS manuscript (Sept 24 2026), Proposition 7.1, item 4,
   `06-geometry.tex:38–40`: “There is a designated reference vector at every stage, formed from
