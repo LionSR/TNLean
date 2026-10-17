@@ -62,11 +62,11 @@ Deriving it from properties of a boundary state is a separate question.
 \end{theorem}
 
 \begin{proof}\leanok
-    Expand $H^2$. The diagonal terms sum to $H$ since $P_i^2=P_i$.
-    A disjoint pair consists of commuting orthogonal projections,
-    so its anticommutator is positive. Sum the assumed lower bounds
-    over the remaining unordered pairs. Each projector occurs
-    at most $m$ times, giving the quadratic-form inequality.
+    In the expansion of $H^2$, the diagonal terms sum to $H$ since
+    $P_i^2=P_i$, and each disjoint pair consists of commuting orthogonal
+    projections with positive anticommutator. Summing the assumed lower bounds
+    over the remaining unordered pairs, in which each projector occurs
+    at most $m$ times, gives the quadratic-form inequality.
     The spectral theorem for a positive finite-dimensional operator
     then gives the asserted norm bound on the complement of its kernel.
     The comparison assertion follows from the common kernel and
@@ -87,8 +87,9 @@ Deriving it from properties of a boundary state is a separate question.
 \end{corollary}
 
 \begin{proof}\leanok
-    Apply the preceding estimate to each member of the family.
-    The resulting constant does not depend on the graph or its volume.
+    Applying the preceding estimate to each member of the family yields the
+    lower bound $1-m\varepsilon$, which does not depend on the graph or its
+    volume.
 \end{proof}
 
 \begin{theorem}[Unit gap for commuting canonical parents]%

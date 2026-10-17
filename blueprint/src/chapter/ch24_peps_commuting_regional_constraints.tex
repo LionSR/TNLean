@@ -38,11 +38,11 @@ Associativity gives $L_kT_r=T_rL_k$ for arbitrary $G$.
     \lean{TNLean.PEPS.IsRegularRegionHalfEdgeFlat,
         TNLean.PEPS.regularRegionFlatProjector}
     \leanok
-    A configuration is flat on $R$ if there are $k_v\in G$ such that
-    $k_v^{-1}\alpha_{v,e}=k_w^{-1}\alpha_{w,e}$ on every internal edge
-    $e=(v,w)$. Write $D_R$ for the diagonal projector onto these configurations.
-    This is the trivial internal holonomy condition in regular coordinates
-    \cite[Section~6]{Schuch2010PEPS}.
+    Following the trivial internal holonomy condition in regular coordinates
+    \cite[Section~6]{Schuch2010PEPS}, a configuration is flat on $R$ if there
+    are $k_v\in G$ such that $k_v^{-1}\alpha_{v,e}=k_w^{-1}\alpha_{w,e}$ on
+    every internal edge $e=(v,w)$; write $D_R$ for the diagonal projector onto
+    these configurations.
 \end{definition}
 
 \begin{theorem}[Commutation of regional translations and flat support]%
@@ -72,7 +72,7 @@ Associativity gives $L_kT_r=T_rL_k$ for arbitrary $G$.
     Associativity proves $(k_v\alpha_{v,e})r_e=k_v(\alpha_{v,e}r_e)$.
     Right cancellation preserves each flatness equality under $T_r$.
     If $q$ gives flatness of $\alpha$, then $kq$ gives flatness
-    of $L_k\alpha$; apply the inverse translation for the converse.
+    of $L_k\alpha$, with the inverse translation giving the converse.
     A diagonal indicator commutes with a permutation preserving its support.
     Averaging gives the assertions involving $P_R$ and $B_{R,e}$.
     For $e\ne f$, the right translations act on distinct half-edge
@@ -124,8 +124,9 @@ Associativity gives $L_kT_r=T_rL_k$ for arbitrary $G$.
 \end{theorem}
 
 \begin{proof}\leanok
-    On an internal edge the two labels become $1\eta_e$ and $u_e\eta_e$;
-    the boundary labels do not change. Apply the assumed invariance.
+    On an internal edge the two labels become $1\eta_e$ and $u_e\eta_e$ while
+    the boundary labels do not change, so the assumed invariance gives
+    $f(b(u,\eta))=f(b(u,\eta|_{\partial E_R}))$.
 \end{proof}
 
 \begin{theorem}[Expansion in inserted regional columns]%
@@ -152,9 +153,9 @@ Associativity gives $L_kT_r=T_rL_k$ for arbitrary $G$.
 
 \begin{proof}\leanok
     \uses{thm:peps_regional_reference_normalization}
-    Expand $P_R$ as $|G|^{-|R|}\sum_k U_k$.
-    Each summand fixes $f$, proving (\ref{eq:peps_regional_left_average_fixed}).
-    Reindex its sum over $\beta$ by the bijection $(u,\eta)\mapsto b(u,\eta)$.
+    In the expansion $P_R=|G|^{-|R|}\sum_k U_k$, each summand fixes $f$,
+    proving (\ref{eq:peps_regional_left_average_fixed}). Reindexing the sum
+    over $\beta$ by the bijection $(u,\eta)\mapsto b(u,\eta)$ and applying
     Theorem~\ref{thm:peps_regional_reference_normalization} replaces the
     coefficient by $f(b(u,\eta|_{\partial E_R}))$.
     Grouping reference assignments with the same boundary restriction gives
@@ -187,9 +188,9 @@ Associativity gives $L_kT_r=T_rL_k$ for arbitrary $G$.
 \end{theorem}
 
 \begin{proof}\leanok
-    Change the incident bond variable to $k_v^{-1}\eta_e$ when the tail
-    belongs to $R$, and to $k_w^{-1}u_e\eta_e$ otherwise.
-    This is a bijection and restricts to $\tau_{k,u}$ on the boundary.
+    Changing the incident bond variable to $k_v^{-1}\eta_e$ when the tail
+    belongs to $R$, and to $k_w^{-1}u_e\eta_e$ otherwise, defines a bijection
+    that restricts to $\tau_{k,u}$ on the boundary.
     Internally the transformed head label is
     $(k_w^{-1}u_ek_v)(k_v^{-1}\eta_e)=k_w^{-1}u_e\eta_e$.
     Left invariance of each local regular projector therefore preserves
@@ -220,9 +221,9 @@ Associativity gives $L_kT_r=T_rL_k$ for arbitrary $G$.
 
 \begin{proof}\leanok
     \uses{thm:peps_regional_invariant_expansion,thm:peps_regional_flat_column_transport}
-    Apply the expansion (\ref{eq:peps_regional_supported_orbit_expansion}).
-    If a coefficient is nonzero, flat support provides a vertex gauge
-    removing its internal insertions. By
+    In the expansion (\ref{eq:peps_regional_supported_orbit_expansion}),
+    flat support provides a vertex gauge removing the internal insertions of
+    every summand with a nonzero coefficient. By
     Theorem~\ref{thm:peps_regional_flat_column_transport}, its column is
     $\Gamma_R\ket{\theta'}$ for a transformed boundary label $\theta'$.
     Every summand therefore lies in $\operatorname{range}\Gamma_R$.
@@ -318,9 +319,9 @@ Associativity gives $L_kT_r=T_rL_k$ for arbitrary $G$.
     The matrices $D_R,D_S$ commute for arbitrary $R,S$, as do $A_v,A_w$
     and $A_v,B_e$. Thus $C_iC_j=C_jC_i$ for all constraint indices.
     Any two finite ordered products of these constraints commute.
-    In particular, $Q_RQ_S=Q_SQ_R$ for arbitrary regions $R,S$.
-    This is the regular virtual-coordinate calculation in the proof of
-    \cite[Theorem~6.12]{Schuch2010PEPS}.
+    In particular, as in the regular virtual-coordinate calculation in the
+    proof of \cite[Theorem~6.12]{Schuch2010PEPS}, $Q_RQ_S=Q_SQ_R$ for
+    arbitrary regions $R,S$.
 \end{theorem}
 
 \begin{proof}\leanok

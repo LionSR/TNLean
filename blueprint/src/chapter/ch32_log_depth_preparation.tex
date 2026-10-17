@@ -151,10 +151,10 @@ remaining eigenvalues have modulus strictly less than $1$.
     \label{thm:ldp_sqrt_holder}
     \lean{CFC.norm_sqrt_sub_sqrt_le, CFC.sqrt_sub_sqrt_le_algebraMap}
     \leanok
-    Let $a,b$ be positive elements of a C$^*$-algebra. Then
+    Let $a,b$ be positive elements of a C$^*$-algebra. Then the operator
+    inequality quoted from Bhatia in
+    \cite[Supplemental Material, eq.~(26)]{Piroli2021LOCC} gives
     $\lVert\sqrt a-\sqrt b\rVert\le\lVert a-b\rVert^{1/2}$.
-    This is the operator inequality quoted from Bhatia in
-    \cite[Supplemental Material, eq.~(26)]{Piroli2021LOCC}.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -303,8 +303,8 @@ remaining eigenvalues have modulus strictly less than $1$.
     Theorem~\ref{thm:prep_mpv_fixed_point_tensor}, for $M\ge1$,
     $\ket{\phi_M(VP_\infty)}=V^{\otimes M}\bigotimes_k\ket{\omega}_{R_kL_{k+1}}$.
     When $\mathcal B_q$ is injective, $V$ is an isometry and
-    $\lVert\phi_M(VP_\infty)\rVert=1$, so no normalization is needed.
-    This is \cite[eqs.~(9) and~(10)]{Malz2024Preparation}.
+    $\lVert\phi_M(VP_\infty)\rVert=1$, so no normalization is needed in
+    \cite[eqs.~(9) and~(10)]{Malz2024Preparation}.
 \end{definition}
 
 \begin{theorem}[A unitary implementing the isometry]
@@ -400,9 +400,9 @@ remaining eigenvalues have modulus strictly less than $1$.
     \leanok
     \uses{thm:ldpolar_tensor_injective}
     Since $V$ is an isometry, its columns $V\ket{\gamma,\delta}$ are
-    orthonormal. Place them at the positions $\iota(\gamma,\delta)$ and extend
-    them to an orthonormal basis of $(\C^d)^{\otimes q}$; the matrix with these
-    columns is the unitary $U$. Expanding
+    orthonormal. Placing them at the positions $\iota(\gamma,\delta)$ and
+    extending them to an orthonormal basis of $(\C^d)^{\otimes q}$ produces the
+    unitary matrix $U$ with these columns. Expanding
     $\bigl(\bigotimes_kU_k\bigr)\sum_c\Omega(c)\bigotimes_k\ket{\iota(c_k)}$
     gives $\sum_c\Omega(c)\bigotimes_kV\ket{c_k}
         =V^{\otimes M}\bigotimes_k\ket{\omega}_{R_kL_{k+1}}$, which is
@@ -435,14 +435,14 @@ remaining eigenvalues have modulus strictly less than $1$.
     \uses{thm:seqanc_sweep_matrix_remainder, thm:seqanc_support_propagation}
     The matrix elements of $V$ are
     $\bigl(j^{\mathsf T}(\Id_D\otimes A_1^{i_1})\cdots(\Id_D\otimes A_q^{i_q})G\bigr)_x$
-    with $j=\sum_\gamma\ket{\gamma}\otimes\ket{\gamma}$. Apply
+    with $j=\sum_\gamma\ket{\gamma}\otimes\ket{\gamma}$. Applying
     Theorem~\ref{thm:seqanc_sweep_matrix_remainder} to the row matrix of $j$ and the
-    sites $\Id_D\otimes A_p^i$; this gives isometric sites $Q_1,\dots,Q_q$ and a
+    sites $\Id_D\otimes A_p^i$ gives isometric sites $Q_1,\dots,Q_q$ and a
     remainder $C=RG$ with $V=Q\,C$ in the sense of
     (\ref{eq:seqanc_sweep_matrix_remainder}). By
     (\ref{eq:seqanc_sweep_inner_product}), $V^\dagger V=C^\dagger C$, so $C$ is an
-    isometry because $V$ is. Absorb $C$ into the last site, $X_q^i=Q_q^iC$ and
-    $X_p=Q_p$ for $p<q$; the last site is again isometric,
+    isometry because $V$ is, and absorbing $C$ into the last site via $X_q^i=Q_q^iC$ and
+    $X_p=Q_p$ for $p<q$ keeps the last site isometric,
     $\sum_i C^\dagger(Q_q^i)^\dagger Q_q^iC=C^\dagger C=\Id$.
 \end{proof}
 
@@ -804,8 +804,8 @@ and $\xi$ is read as the correlation length at $\lambda_2'$.
 \begin{proof}
     \leanok
     Since $\log q\geq0$, $q/a\geq\log M+\log q-\log\varepsilon+\log K\geq
-        \log K+\log M-\log\varepsilon$; apply
-    Lemma~\ref{lem:ldp_log_threshold_error} with $x=q/a$.
+        \log K+\log M-\log\varepsilon$, so
+    Lemma~\ref{lem:ldp_log_threshold_error} with $x=q/a$ gives the bound.
 \end{proof}
 
 \begin{theorem}[Powers of a perturbed idempotent without first-order term]
@@ -1247,10 +1247,10 @@ Chapter~\ref{ch:local_quantum_circuits}.
         thm:gauge_invariance_normal, thm:normality_rescaling_invariance,
         thm:is_normal_tensor_of_is_normal_left_canonical, thm:eigenvalue_bound,
         thm:primitive_fixed_point_trace_normalization, thm:transfer_channel}
-    Bring $A$ into the gauge~(\ref{eq:ldp_normal_gauge}) as in the proof of
-    Theorem~\ref{thm:ldp_depth_upper_bound_divisible}, with fixed point $\sigma$,
+    Bringing $A$ into the gauge~(\ref{eq:ldp_normal_gauge}) as in the proof of
+    Theorem~\ref{thm:ldp_depth_upper_bound_divisible} gives a fixed point $\sigma$,
     a bound $t<1$ on the moduli of the eigenvalues other than $1$, and
-    $r=-\log t$; the error is unchanged by
+    $r=-\log t$, while leaving the error unchanged by
     Lemma~\ref{lem:ldp_normalized_state_rescaling}. Let $K$ be the constant of
     Theorem~\ref{thm:ldp_block_approximation_error} at $\gamma=1/2$, so the error
     is at most $KMe^{-rq}$, and let $L_0$ be a length at which the blocked
@@ -1319,10 +1319,10 @@ Chapter~\ref{ch:local_quantum_circuits}.
     $\lVert a-cb\rVert^2=2-2\operatorname{Re}(c\braket{a}{b})
         \ge2\varepsilon(a,b)$, with equality for
     $c=\overline{\braket{a}{b}}/\lvert\braket{a}{b}\rvert$ (any $c$ if
-    $\braket{a}{b}=0$). Choose $c_1$, $c_2$ attaining equality for $(x,y)$ and
-    $(y,z)$. Then
+    $\braket{a}{b}=0$). Choosing $c_1$, $c_2$ to attain equality for $(x,y)$ and
+    $(y,z)$ gives
     $\lVert x-c_1c_2z\rVert\le\lVert x-c_1y\rVert+\lVert y-c_2z\rVert$, and
-    $(s+t)^2\le2(s^2+t^2)$ gives
+    $(s+t)^2\le2(s^2+t^2)$ yields
     $2\varepsilon(x,z)\le\lVert x-c_1c_2z\rVert^2
         \le4\bigl(\varepsilon(x,y)+\varepsilon(y,z)\bigr)$.
 \end{proof}
@@ -1453,8 +1453,9 @@ case of Theorem~\ref{thm:ldp_depth_upper_bound}
 \begin{proof}
     \leanok
     Theorem~\ref{thm:ldp_approximation_error_normal} at $\gamma=\xi/(2a)<1$
-    gives $K$ with error at most $KMe^{-q/a}$; take $b_0=a\max(\log K,0)$ and
-    apply Lemma~\ref{lem:ldp_block_length_threshold_error}. The error against
+    gives $K$ with error at most $KMe^{-q/a}$, so taking $b_0=a\max(\log K,0)$ and
+    applying Lemma~\ref{lem:ldp_block_length_threshold_error} gives the bound
+    for $B$. The error against
     $\phi_N(A)$ equals that against $\phi_N(B)$ by
     Lemma~\ref{lem:ldp_normalized_state_rescaling}.
 \end{proof}
@@ -1651,7 +1652,7 @@ $A$ along $w$.
 \begin{proof}
     \leanok
     \uses{thm:physical_observable_word_span_mul, lem:ldp_observable_transfer_products}
-    Choose coefficients $c^{ab}_w$ with $\sum_wc^{ab}_wA^w=e_{ab}$. The operator
+    For coefficients $c^{ab}_w$ with $\sum_wc^{ab}_wA^w=e_{ab}$, the operator
     with matrix elements $\bra{w'}X\ket{w}=c^{ab}_w\overline{c^{ce}_{w'}}$ gives
     $\E_X(Z)=e_{ab}Ze_{ec}=Z_{be}\,e_{ac}$. These maps span all linear maps on
     $\MN{D}$, and $X\mapsto\E_X$ is linear. If $\Phi$ preserves adjoints and
@@ -1723,8 +1724,8 @@ $A$ along $w$.
     \leanok
     \uses{lem:ldp_observable_transfer_surjective}
     Trace preservation gives $\lambda\Tr R=\Tr R$, so $\Tr R=0$, $P(R)=0$, and
-    $(\E_A-P)^tR=\lambda^tR$. By
-    Lemma~\ref{lem:ldp_observable_transfer_surjective} take
+    $(\E_A-P)^tR=\lambda^tR$.
+    Lemma~\ref{lem:ldp_observable_transfer_surjective} then allows us to take
     $\E_Y(Z)=\Tr(Z)\,R$ and $\E_X(Z)=(Z_{ij}/R_{ij})\,\rho$ for an entry
     $R_{ij}\neq0$.
 \end{proof}
@@ -1763,8 +1764,8 @@ $A$ along $w$.
     Since $\langle Z\rangle_\phi$ is real,
     $(\langle Z\rangle_\phi-\langle Z\rangle_\psi)\braket{\phi}{\psi}
         =\bra{\phi}(Z-\langle Z\rangle_\psi)\ket{\psi}
-        -\bra{\phi}(Z-\langle Z\rangle_\phi)\ket{\psi}$; apply the
-    Cauchy--Schwarz inequality to both terms.
+        -\bra{\phi}(Z-\langle Z\rangle_\phi)\ket{\psi}$, and applying the
+    Cauchy--Schwarz inequality to both terms yields the bound.
 \end{proof}
 
 \begin{lemma}[Hermitian observables for the second eigenvalue]

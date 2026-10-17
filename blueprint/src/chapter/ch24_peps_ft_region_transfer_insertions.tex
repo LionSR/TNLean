@@ -2,12 +2,12 @@
     \label{def:peps_regionTwoBlock}
     \lean{TNLean.PEPS.regionTwoBlock}
     \leanok
-    For a finite region $R\subseteq V$, the blocked tensor of $R$ may be read
+    For a finite region $R\subseteq V$, the blocked tensor of $R$ in the
+    one-block-against-complement step of
+    \cite[Section~3]{Molnar2018NormalPEPS} may be read
     as a two-block tensor with a one-point external boundary and shared bonds
     the edges crossing the boundary of $R$:
     $B_{A,R}(*,\eta,\sigma)=T_{A,R}^{\eta}(\sigma)$.
-    This is the region block used in the one-block-against-complement step of
-    \cite[Section~3]{Molnar2018NormalPEPS}.
 \end{definition}
 
 \begin{definition}[Complement-boundary identification]%
@@ -27,11 +27,11 @@
     \lean{TNLean.PEPS.regionComplementTwoBlock}
     \leanok
     \uses{def:peps_regionComplementBoundaryConfig}
-    For a finite region $R\subseteq V$, the complement block $V\setminus R$ is
+    For a finite region $R\subseteq V$, the complement block $V\setminus R$ in
+    the region/complement comparison of
+    \cite[Section~3]{Molnar2018NormalPEPS} is
     a two-block tensor over the same crossing bonds:
     $B_{A,R^c}(*,\eta,\tau)=T_{A,V\setminus R}^{\eta^c}(\tau)$.
-    This is the complementary block in the region/complement comparison of
-    \cite[Section~3]{Molnar2018NormalPEPS}.
 \end{definition}
 
 \begin{theorem}[Injectivity of the complement-region two-block tensor]%
@@ -114,7 +114,7 @@
         \notag
     \end{align}
     Thus the complement boundary value $\nu$ is fixed away from $f$, while
-    the matrix $M$ couples the two $f$-labels. This is the one-bond insertion
+    the matrix $M$ couples the two $f$-labels to form the one-bond insertion
     in the region/complement coefficient of
     \cite[Section~3]{Molnar2018NormalPEPS}.
 \end{definition}
@@ -298,9 +298,9 @@ physical configuration on $V$ with
         =C_B(R,f,\phi_f(N);\sigma,\tau)$.
 \end{theorem}
 \begin{proof}\leanok
-    Reindex both boundary-configuration sums by the bond-dimension
-    equivalences. The constraint away from $f$ and the two blocked-region
-    weights are preserved, while the inserted matrix entry becomes the
+    Reindexing both boundary-configuration sums by the bond-dimension
+    equivalences preserves the constraint away from $f$ and the two blocked-region
+    weights, while transforming the inserted matrix entry into the
     reindexed entry $\phi_f(N)$.
 \end{proof}
 
@@ -320,8 +320,8 @@ physical configuration on $V$ with
     bond-dimension identification.
 \end{theorem}
 \begin{proof}\leanok
-    Rewrite the two abstract insertion coefficients as region insertion
-    coefficients and use the bond-dimension reindexing formula:
+    Rewriting the two abstract insertion coefficients as region insertion
+    coefficients and applying the bond-dimension reindexing formula gives
     \begin{align}
         C_{B_{A,R},B_{A,R^c}}(f,N;*,*,\sigma,\tau)
          & =C_A(R,f,N;\sigma,\tau)
@@ -347,9 +347,9 @@ physical configuration on $V$ with
     \end{align}
 \end{theorem}
 \begin{proof}\leanok
-    Exchange the two boundary-configuration sums. The condition that the two
-    configurations agree away from $f$ is symmetric, and
-    $(X^T)_{\nu_f,\mu_f}=X_{\mu_f,\nu_f}$.
+    Exchanging the two boundary-configuration sums preserves the symmetric
+    condition that the two configurations agree away from $f$ and replaces
+    $X_{\mu_f,\nu_f}$ with $(X^T)_{\nu_f,\mu_f}$.
 \end{proof}
 
 \begin{theorem}[Complement-side reading of a region insertion]
@@ -369,9 +369,10 @@ physical configuration on $V$ with
     two blocks $R^c$ and $R$ interchanged.
 \end{theorem}
 \begin{proof}\leanok
-    Identify $C_A(R,f,X;\sigma,\tau)$ with the two-block insertion of
-    $(B_{A,R},B_{A,R^c})$, then apply
-    Theorem~\ref{thm:peps_twoBlockInsertedCoeff_swap}.
+    Identifying $C_A(R,f,X;\sigma,\tau)$ with the two-block insertion of
+    $(B_{A,R},B_{A,R^c})$ and applying
+    Theorem~\ref{thm:peps_twoBlockInsertedCoeff_swap} yields the complement-side
+    formula.
 \end{proof}
 
 \begin{theorem}[Incident form gives the transferred endpoint form]
@@ -465,8 +466,8 @@ physical configuration on $V$ with
     through the endpoint of $f$ lying outside $R$.
 \end{theorem}
 \begin{proof}\leanok
-    Reindex the two boundary-configuration sums by the boundary-edge equivalence
-    between $R$ and its complement. The double complement carries the blocked
+    Reindexing the two boundary-configuration sums by the boundary-edge equivalence
+    between $R$ and its complement, the double complement carries the blocked
     weight of $V\setminus(V\setminus R)$ back to the blocked weight of $R$.
     Applying the usual endpoint realization to $V\setminus R$ gives the displayed
     out-of-region endpoint realization.

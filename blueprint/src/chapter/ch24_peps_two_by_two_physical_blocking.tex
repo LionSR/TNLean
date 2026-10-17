@@ -10,9 +10,9 @@
     group, and put $P_\rho=|G|^{-1}\sum_g\rho(g)$. For some $c>0$, the map
     $J=c^{-1/2}T^*$ is an isometric equivalence
     $\operatorname{ran}T\cong\operatorname{ran}P_\rho$, with
-    $JT=\sqrt c\,P_\rho$. No surjectivity onto either ambient coordinate
-    space is required. This is the support identification used in
-    \cite[Observations~6.4 and~6.6]{Schuch2010PEPS}.
+    $JT=\sqrt c\,P_\rho$. This support identification for
+    \cite[Observations~6.4 and~6.6]{Schuch2010PEPS} requires no surjectivity
+    onto either ambient coordinate space.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -29,9 +29,9 @@
         TNLean.PEPS.twoByTwoIncidentBoundaryEquiv}
     \leanok
     \uses{def:peps_two_by_two_graph_site}
-    Identify $G\times G$ with $G\times G^{\{*\}}$ by
-    $(a,b)\mapsto(a,(*\mapsto b))$. Express the paired coarse tensor
-    in these incident bundle coordinates, without changing its coefficients
+    Identifying $G\times G$ with $G\times G^{\{*\}}$ by
+    $(a,b)\mapsto(a,(*\mapsto b))$ expresses the paired coarse tensor
+    in incident bundle coordinates, without changing its coefficients
     or physical alphabet $P^4$. Reading the four incident edges and the two
     labels on each edge identifies this boundary with all eight separate
     fine boundary legs.
@@ -56,8 +56,8 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    Reindex every edge label by the displayed two-label bijection.
-    Each boundary coordinate still has the same group value, so translation
+    Under the displayed two-label bijection on every edge label,
+    each boundary coordinate retains the same group value, so translation
     commutes with the bijection. Reindexing the local virtual sum gives the
     equality of physical maps.
 \end{proof}
@@ -86,8 +86,8 @@
     The transposed inverse regular matrix on an outgoing leg has the same
     entries $\delta_{a,gb}$ as the incoming matrix. The four-leg incident
     bijection therefore intertwines both representations and preserves
-    their coordinate inner products. Apply the canonical support
-    equivalence to the incident-coordinate original tensor.
+    their coordinate inner products, and applying the canonical support
+    equivalence to the incident-coordinate original tensor yields $J$.
 \end{proof}
 
 \begin{theorem}[G-isometry of bundled coarse sites]%
@@ -104,7 +104,7 @@
 
 \begin{proof}\leanok
     The explicit four-site Gram calculation gives G-isometry on all eight
-    separate boundary labels. Transfer it across the boundary
+    separate boundary labels, which transfers across the boundary
     coordinate equivalence.
 \end{proof}
 
@@ -170,18 +170,19 @@
     relative group coordinate on every paired physical half-edge.
     The four-site Gram calculation derives block factors
     $|G|\prod_{i=0}^3c_{v,i}$ from positive fine-site factors.
-    For a common original tensor $A$, the coarse canonical tensor is
-    identified with $A$ by the preceding physical-support equivalence.
-    This is the untwisted periodic specialization of
+    For a common original tensor $A$, the preceding physical-support
+    equivalence identifies the coarse canonical tensor with $A$ in the
+    untwisted periodic specialization of
     \cite[Observations~6.5--6.6]{Schuch2010PEPS}.
 \end{theorem}
 
 \begin{proof}\leanok
-    Apply physical support accessibility and regular bundle separation to
+    Applying physical support accessibility and regular bundle separation to
     the coarse graph tensors, whose G-isometry has been derived
-    from the fine tensors. Compose its support isometry with the restricted
-    physical regrouping $W$. The state equality provides the required
-    state argument, and its support membership was derived separately.
+    from the fine tensors, and composing the resulting support isometry with
+    the restricted physical regrouping $W$ yields $I$. The state equality
+    provides the required state argument, and its support membership was
+    derived separately.
     Each unnormalized surplus equality vector is $\sqrt{|G|}$ times its
     normalized Bell vector, producing the displayed factor on all edges.
 \end{proof}

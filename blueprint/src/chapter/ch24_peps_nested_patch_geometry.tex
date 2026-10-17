@@ -179,8 +179,8 @@ and does not add edges to the induced graph.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_square_crossing_interval}
-    Write $e=\{x,y\}$ with $x\in K(c,r)$ and $y\notin K(c,r)$.
-    If either site belonged to $K(c,s)$, the nearest-neighbour enlargement
+    For $e=\{x,y\}$ with $x\in K(c,r)$ and $y\notin K(c,r)$,
+    if either site belonged to $K(c,s)$, the nearest-neighbour enlargement
     would put $y$ in $K(c,s+1)\subseteq K(c,r)$, a contradiction.
     Conversely, $x\in K(c,r)$ implies $y\in K(c,r+1)$, so both sites
     belong to every $K(c,t)$ with $r+1\le t$.
@@ -206,8 +206,8 @@ and does not add edges to the induced graph.
     \uses{thm:peps_nested_patch_sizes,thm:peps_square_crossing_support}
     Earlier and later radii differ from $r_j$ by at least two, so the
     separated-radius support statements apply. If an edge crossed two
-    patches, order their distinct indices. Crossing the earlier patch places
-    both sites in the later patch, contradicting crossing of the later one.
+    patches with indices $i<k$, crossing $K_i$ would place both sites in
+    $K_k$, contradicting $e\in\partial_\Lambda K_k$.
 \end{proof}
 
 The following finite example uses
@@ -268,7 +268,8 @@ physical sites; they are not the boundaries of the ambient real squares.
     bound $J$, every unit vector $\Omega$ and real $E_0$ with
     $H\Omega=E_0\Omega$ and $H-E_0I\ge\Delta(I-|\Omega\rangle\langle\Omega|)$,
     every centre $c$, every $u\ge0$, and every $0\le j<m$, the nested patch
-    $K_j$ in the integer square of side $L$ satisfies
+    $K_j$ in the integer square of side $L$ satisfies the entropy bound in the
+    \href{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex\#L362-L374}{proof of Proposition 4.1}:
     \begin{align}
         S_{U\Omega}(K_j) & \le C_S(1+u).
         \label{eq:peps_nested_patch_entropy}
@@ -276,17 +277,16 @@ physical sites; they are not the boundaries of the ambient real squares.
     The constant is chosen before $L$, $H$, $\Omega$, $c$ and $u$. The area
     law is a hypothesis here; its derivation from the spectral gap is the
     separate rectangular specialization of the finite-domain area law,
-    which is not yet established. This is the
-    entropy bound in the
-    \href{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex\#L362-L374}{proof of Proposition 4.1}.
+    which is not yet established.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:finite_product_entropy_relabel,thm:square_edge_boundary_card,
         thm:peps_nested_patch_sizes}
-    Let $C_A\ge0$ be the area-law constant and put
-    $C_S=\max\{1,16C_A\}$. Transport $K_j$ to the original grid. The entropy
-    and the edge boundary are unchanged by the site relabelling, so the area
-    law gives $S_{U\Omega}(K_j)\le C_A|\partial_\Lambda K_j|$. The boundary
-    bound $|\partial_\Lambda K_j|\le16u+4\le16(1+u)$ completes the proof.
+    With the area-law constant $C_A\ge0$ and $C_S=\max\{1,16C_A\}$, pulling
+    $K_j$ back to the original grid preserves both the regional entropy
+    and the edge boundary under site relabelling, so the area
+    law gives $S_{U\Omega}(K_j)\le C_A|\partial_\Lambda K_j|$. Combining
+    this with the boundary bound $|\partial_\Lambda K_j|\le16u+4\le16(1+u)$
+    completes the proof.
 \end{proof}

@@ -5,13 +5,13 @@
     \label{def:peps_normal_arc_windows}
     \lean{TNLean.PEPS.NormalTorusArcWindowInjectivityHypotheses}
     \leanok
-    For a family $\mathcal I$ of regions in the $w\times h$ torus, the
-    $L\times K$ cyclic-window hypothesis means that
-    $\mathcal R(s;L,K)\in\mathcal I$ for every starting vertex $s$.
-    Here $\mathcal R(s;a,b)$ is the cyclic rectangle of side lengths $a,b$
-    starting at $s$. For a tensor, $\mathcal I$ is its family of injective
-    regions. This is the window hypothesis in the normal TI PEPS
-    corollary of~\cite{Molnar2018NormalPEPS}.
+    For a family $\mathcal I$ of regions in the $w\times h$ torus (taken for a
+    tensor to be its family of injective regions), the
+    $L\times K$ cyclic-window hypothesis of the normal TI PEPS
+    corollary of~\cite{Molnar2018NormalPEPS} requires that
+    $\mathcal R(s;L,K)\in\mathcal I$ for every starting vertex $s$,
+    where $\mathcal R(s;a,b)$ is the cyclic rectangle of side lengths $a,b$
+    starting at $s$.
 \end{definition}
 
 \begin{definition}[Normal torus tensor at window size $L\times K$]%
@@ -19,14 +19,14 @@
     \lean{TNLean.PEPS.IsNormalTorusArcWindowPEPS}
     \leanok
     \uses{def:peps_normal_arc_windows}
-    A PEPS tensor on the $w\times h$ torus is normal at window size
+    As the hypothesis on each tensor in the normal TI PEPS
+    corollary of~\cite{Molnar2018NormalPEPS},
+    a PEPS tensor on the $w\times h$ torus is normal at window size
     $L\times K$ when its family of injective regions satisfies the
-    $L\times K$ cyclic-window hypothesis. As throughout, its virtual bond
-    spaces are nonzero. Injectivity does not force this:
-    with suitably placed zero-dimensional bonds every relevant local domain
-    is empty, so the regions are injective and every state is zero. This is
-    the hypothesis on each tensor in the normal TI PEPS
-    corollary of~\cite{Molnar2018NormalPEPS}.
+    $L\times K$ cyclic-window hypothesis and, as throughout, its virtual bond
+    spaces are nonzero (injectivity alone does not force this, since
+    suitably placed zero-dimensional bonds make every relevant local domain
+    empty, so the regions are vacuously injective and every state is zero).
 \end{definition}
 
 \begin{theorem}[Unscaled staircase coefficient correspondence]%
@@ -69,7 +69,7 @@
     \leanok
     \uses{thm:peps_staircase_unscaled_coefficients,
         def:peps_staircase_cross_tensor_algebra_isomorphism}
-    Use the canonical assignments in both directions. Their coefficient
+    For the canonical assignments in both directions, their coefficient
     identities follow from the preceding theorem and their algebraic laws
     follow from the staircase algebra isomorphism.
 \end{proof}
@@ -97,22 +97,24 @@
     \label{thm:peps_staircase_unscaled_gauge}
     \lean{TNLean.PEPS.exists_staircaseWindowConjCoeffIdentity}
     \leanok
-    Under the same hypotheses, $D_A(e)=D_B(e)$ and there is an invertible
-    matrix $Z$ on this bond such that for every matrix and physical configuration,
+    Under the same hypotheses, $D_A(e)=D_B(e)$ and, after identifying the
+    matrix coordinates on the two sides by these equal dimensions, there is
+    an invertible matrix $Z$ on this bond such that for every matrix and
+    physical configuration,
     \begin{align}
         C_A(W,e,X;\sigma,\tau)
          & =C_B(W,e,ZXZ^{-1};\sigma,\tau).
         \label{eq:peps_staircase_unscaled_gauge}
     \end{align}
-    Equal dimensions identify the matrix coordinates on the two sides.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{def:peps_staircase_cross_tensor_algebra_isomorphism,
         thm:matrixAlgEquiv_inner_of_fin,
         thm:peps_staircase_unscaled_coefficients}
-    Skolem--Noether gives $F_{AB}(X)=ZXZ^{-1}$.
-    Substitute this identity into~(\ref{eq:peps_staircase_unscaled_coefficients}).
+    By the Skolem--Noether theorem, $F_{AB}(X)=ZXZ^{-1}$, and
+    substituting this identity into~(\ref{eq:peps_staircase_unscaled_coefficients})
+    gives the displayed unscaled gauge relation.
 \end{proof}
 
 \begin{theorem}[Horizontal reference data from equal normal states]%
@@ -140,17 +142,16 @@
     \uses{def:peps_normal_torus_arc_window_tensor}
     Let $A,B$ be translation-invariant PEPS tensors on a $w\times h$ torus
     with the same state, both normal at window size $L\times K$, where
-    $L,K>0$, $2L+1\leq w$ and $2K+1\leq h$. Then their bond dimensions
-    agree and there are a translation-covariant invertible edge gauge family $X$
-    and $\lambda\in\mathbb C$ such that
+    $L,K>0$, $2L+1\leq w$ and $2K+1\leq h$. In the existence and normalization
+    part of the normal translation-invariant PEPS corollary of
+    \cite{Molnar2018NormalPEPS}, their bond dimensions
+    agree and, after identifying equal bond dimensions, there are a
+    translation-covariant invertible edge gauge family $X$
+    and $\lambda\in\mathbb C$ such that at every vertex $v$,
     \begin{align}
         A_v          & =\lambda(X\cdot B)_v,\label{eq:peps_arc_window_local_gauge} \\
         \lambda^{wh} & =1.\label{eq:peps_arc_window_volume_phase}
     \end{align}
-    The first identity holds at every vertex, after identifying equal
-    bond dimensions. This is the existence and normalization part of
-    the normal translation-invariant PEPS corollary of
-    \cite{Molnar2018NormalPEPS}.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -159,10 +160,11 @@
         thm:peps_vertical_arc_window_witness,
         thm:peps_absorbed_family_reference_witnesses,
         thm:peps_window_absorbed_scalar}
-    First identify the bond dimensions. Place the horizontal staircase
-    at $(1,0)$ and use coordinate exchange to obtain vertical reference data.
+    After identifying the equal bond dimensions, placing the horizontal staircase
+    at $(1,0)$ and applying coordinate exchange yields both horizontal and
+    vertical reference data.
     Translating these two sets of reference data gives the covariant gauge family
-    with equal absorbed edge coefficients. The corner-region scalar
+    with equal absorbed edge coefficients, and the corner-region scalar
     comparison then proves~(\ref{eq:peps_arc_window_local_gauge}) and
     (\ref{eq:peps_arc_window_volume_phase}).
 \end{proof}
@@ -175,20 +177,19 @@
     Let $A,B$ be translation-invariant PEPS tensors generating the same
     state on an $n\times m$ torus, both normal at window size $L\times K$,
     where $L,K>0$, $n\geq2L+1$ and $m\geq2K+1$.
-    Then their bond dimensions agree and there are invertible horizontal
-    and vertical gauges $X,Y$ and a scalar $\lambda$ such that
+    By the normal translation-invariant PEPS corollary of
+    \cite{Molnar2018NormalPEPS}, their bond dimensions agree and there are
+    invertible horizontal and vertical gauges $X,Y$, unique up to nonzero
+    scalar factors, and a scalar $\lambda$ such that
     \begin{align}
         A^i          & =\lambda(X\otimes Y)B^i(X^{-1}\otimes Y^{-1}),
         \label{eq:peps_normal_window_ft}                              \\
-        \lambda^{nm} & =1.\notag
+        \lambda^{nm} & =1,\notag
     \end{align}
-    The matrices $X,Y$ are unique up to nonzero scalar factors.
-    This is the normal translation-invariant PEPS corollary of
-    \cite{Molnar2018NormalPEPS}. The displayed relation abbreviates the
-    horizontal and vertical virtual-leg contractions. In the chosen
-    torus edge orientations, the corresponding edge gauge family is
-    translation covariant; seam reversals replace a matrix by its
-    transposed inverse.
+    where the displayed relation abbreviates the horizontal and vertical
+    virtual-leg contractions (and in the chosen torus edge orientations the
+    corresponding edge gauge family is translation covariant, with seam
+    reversals replacing a matrix by its transposed inverse).
 \end{theorem}
 \begin{proof}
     \leanok
