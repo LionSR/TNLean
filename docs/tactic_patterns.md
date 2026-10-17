@@ -8285,3 +8285,10 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Seen:** `TNLean/PEPS/AreaLaw/Geometry/RepairRankZeroAncestry.lean`, in `repairStage_color_oldInclusion` and `repairStageCharacteristicLength_oldInclusion`, and `TNLean/PEPS/AreaLaw/Geometry/RepairBirthLatticePoint.lean`, in `repairStage_birth_oldInclusion`.
 - **Abstraction:** The existing natural-number recursor already expresses the shared induction in one line. No further helper or tactic is proposed.
 - **Notes:** Each occurrence is a one-line induction, so a shared lemma would not shorten the proofs.
+
+### Agreement outside a finite support — candidate (2026-10-17)
+
+- **Pattern:** Identify agreement outside a finite support with agreement off its subtype inclusion when comparing two local lifts.
+- **Seen:** Two proofs, in `Circuit/EntropySupport.lean`, `mem_supportedOperators_of_isSupportedOn`, and `PEPS/AreaLaw/RegionalEntropyBridge.lean`, `localLift_eq_entropyLocalLift`.
+- **Possible abstraction:** A lemma identifying these two agreement conditions if a third use appears. The current two occurrences do not require a new public lemma.
+- **Notes:** Both comparisons reuse the existing local-lift entry formula. The Circuit result imports no PEPS or MPS module.

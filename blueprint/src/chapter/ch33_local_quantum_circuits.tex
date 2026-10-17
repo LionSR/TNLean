@@ -67,6 +67,50 @@ preparation of matrix product states.
     $N$ sites is the case $I=\{1,\dots,N\}$.
 \end{definition}
 
+\begin{theorem}[Matrix entries of a supported operator]
+    \label{thm:area_law_supported_identity}
+    \lean{QuantumCircuit.isSupportedOn_of_mem_supportedOperators,
+        QuantumCircuit.mem_supportedOperators_of_isSupportedOn}
+    \leanok
+    \uses{def:qc_local_circuit}
+    Let $I$ be a finite set, let $q$ be a natural number and let $S\subseteq I$.
+    Write $\mathcal C=\{0,\ldots,q-1\}^I$ for the configurations, and let
+    $A$ be a complex matrix indexed by $\mathcal C$. Then $A$ belongs to the
+    span of the products $\bigotimes_{i\in I}m_i$ with $m_i=\mathbb 1$ for
+    $i\notin S$ if and only if the following two conditions hold:
+    \begin{enumerate}
+        \item For configurations $\sigma,\tau$ with
+              $\sigma|_{S^c}\ne\tau|_{S^c}$, one has $A_{\sigma\tau}=0$.
+        \item For configurations $\sigma,\tau,\sigma',\tau'$ satisfying
+              \begin{align}
+                  \sigma|_S      & =\sigma'|_S,   & \tau|_S & =\tau'|_S, \\
+                  \sigma|_{S^c}  & =\tau|_{S^c},  &
+                  \sigma'|_{S^c} & =\tau'|_{S^c},
+              \end{align}
+              one has $A_{\sigma\tau}=A_{\sigma'\tau'}$.
+    \end{enumerate}
+    The complement is taken in $I$. This criterion expresses the designated
+    support condition in~\cite[Lemma~3.1]{OpenAI2026AreaLaw},
+    \texttt{02-initial.tex}, line~39, for an arbitrary finite tensor product.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:qc_local_circuit}
+    For a product $A=\bigotimes_i m_i$ with $m_i=\mathbb 1$ outside $S$,
+    \begin{align}
+        A_{\sigma\tau}
+         & =\prod_{i\in S}(m_i)_{\sigma_i\tau_i}
+        \prod_{i\notin S}\delta_{\sigma_i\tau_i}.
+    \end{align}
+    This has both stated properties, which are preserved by sums and scalar
+    multiples. Conversely, if there are no configurations, $A$ is the zero
+    matrix. Otherwise fix a configuration on $I$. Restricting $A$ to pairs
+    of configurations with those fixed coordinates outside $S$ defines a
+    matrix $K$ on the configurations of $S$. The two conditions give
+    $A=K\otimes\mathbb 1$ in the coordinates of $S$ and $S^c$. Expanding $K$
+    in matrix units shows that this local lift belongs to the stated span.
+\end{proof}
+
 \begin{definition}[Pairing local coordinates]
     \label{def:qc_site_pair_coordinates}
     \lean{QuantumCircuit.sitePairConfigurationEquiv}
