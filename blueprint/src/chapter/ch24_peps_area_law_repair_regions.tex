@@ -1145,6 +1145,84 @@ maximum-norm distances, and colors are represented by $0$ and $1$.
     $C_{\mathrm{dum}}b$ and $(2S_*+1)^2\sum_{0\le j<N}|K_j|$, respectively.
 \end{proof}
 
+% Source: 10-geometry.tex, geometry:bad-sites, lines 694--707;
+% threshold order, lines 762--776.
+% Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+\begin{theorem}[A uniform exceptional-site bound under the repair hypotheses]
+    \label{thm:area_law_repair_uniform_exceptional_sites}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.exists_uniform_repairStageExceptionalSites_bound}
+    \leanok
+    \uses{def:area_law_repair_exceptional_sites,
+        lem:area_law_repair_metric_invariants}
+    Fix integers $C_0\ge2$ and $k_0\ge50000000$, and a stopping scale
+    $S_*>1$. There is $L>0$ such that the following holds for every
+    origin $o\in\mathbb R^2$, finite domain $\Lambda\subset\mathbb Z^2$,
+    cut $A\subseteq\Lambda$, and isolation constant $a_0$ satisfying
+    the hypotheses of Lemma~\ref{lem:area_law_repair_metric_invariants}.
+    There is a generation $N\in\mathbb N$ for which
+    \begin{align}
+        K_N & =\varnothing,
+            & |D_N(A)| & \le L|\partial_\Lambda A|.\notag
+    \end{align}
+    The coefficient $L$ is chosen before $o$, $\Lambda$, $A$, and $a_0$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:area_law_repair_exceptional_sites_prefix_count,
+        thm:area_law_repair_total_mark_prefix_count,
+        thm:area_law_repair_common_empty_generation}
+    Choose $M>0$ from the uniform mark-prefix estimate, and put
+    \begin{align}
+        D_0 & =2\bigl(2(C_0+1)2^{k_0}+1\bigr)^2,
+            & L & =D_0+(2S_*+1)^2M(2C_0+1)^2.\notag
+    \end{align}
+    These constants precede the geometric data, and $D_0>0$ gives
+    $L>0$. The repair hypotheses supply an empty generation $N$.
+    The exceptional-site prefix bound and the uniform mark count,
+    applied to this same generation, give, with $b=|\partial_\Lambda A|$,
+    \begin{align}
+        |D_N(A)|
+         & \le D_0b+(2S_*+1)^2\sum_{0\le j<N}|K_j|\notag \\
+         & \le\bigl(D_0+(2S_*+1)^2M(2C_0+1)^2\bigr)b=Lb.\notag
+    \end{align}
+\end{proof}
+
+\begin{theorem}[Thresholds for a uniform exceptional-site bound]
+    \label{thm:area_law_repair_uniform_exceptional_thresholds}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.exists_uniform_repairStageExceptionalSites_bound_of_thresholds}
+    \leanok
+    \uses{def:area_law_repair_exceptional_sites}
+    There is $T>1$ such that for every $S_*\ge T$ and every integer
+    $C_0\ge2$, there is an integer $K\ge50000000$ with the following
+    property. For every integer $k_0\ge K$, there is $L>0$ such that
+    every origin $o\in\mathbb R^2$, finite domain
+    $\Lambda\subset\mathbb Z^2$, and cut $A\subseteq\Lambda$ admit
+    a generation $N\in\mathbb N$ for which
+    \begin{align}
+        K_N & =\varnothing,
+            & |D_N(A)| & \le L|\partial_\Lambda A|.\notag
+    \end{align}
+    Thus $T$ precedes $S_*$ and $C_0$, $K$ precedes $k_0$, and $L$
+    precedes $o$, $\Lambda$, and $A$. These thresholds concern the
+    exceptional-site count.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:area_law_repair_metric_choice,
+        thm:area_law_repair_uniform_exceptional_sites}
+    Apply Lemma~\ref{lem:area_law_repair_metric_choice} with
+    $a_0=1/4$. Enlarge its stopping threshold to at least $2$ and,
+    for each permitted $S_*$ and $C_0$, enlarge its lower-layer
+    threshold to at least $50000000$. For each $k_0$ above this
+    threshold, choose $L$ from
+    Theorem~\ref{thm:area_law_repair_uniform_exceptional_sites}.
+    The metric-choice lemma supplies its hypotheses for every
+    origin, domain, and cut. The resulting $L$ is independent of
+    those data, and the theorem supplies the required generation.
+\end{proof}
+
 % Source: 10-geometry.tex, finiteness after restriction to the cut,
 % lines 777--780.
 \begin{lemma}[Finiteness of the retained identifiers]
@@ -1349,6 +1427,68 @@ maximum-norm distances, and colors are represented by $0$ and $1$.
     \end{align}
 \end{proof}
 
+% Source: 10-geometry.tex, geometry:primary-scale, lines 709--729;
+% restriction to the cut and primary error sum, lines 777--795.
+% Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+
+\begin{theorem}[The primary error sum at a finite generation]
+    \label{thm:area_law_repair_retained_primary_error_sum}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.exists_uniform_repairStage_retained_rank_zero_error_sum_bound}
+    \leanok
+    \uses{def:area_law_repair_region_sites,def:area_law_repair_birth_rank,
+        def:area_law_repair_characteristic_length}
+    For each $C_P>0$, there is $M>0$ with the following property.
+    Fix any origin $o\in\mathbb R^2$, finite domain
+    $\Lambda\subset\mathbb Z^2$, cut $A\subseteq\Lambda$, integers
+    $C_0\ge2$ and $k_0\ge50{,}000{,}000$, stopping scale
+    $S_*\in\mathbb R$, and generation $N\in\mathbb N$.
+    In the actual repair family, define $I_{A,0}^{(N)}$ as below and,
+    for each $i\in I_{A,0}^{(N)}$, define its scale $n_i$ by
+    \begin{align}
+        I_{A,0}^{(N)}
+         & =\{i\in I_A^{(N)}:\operatorname{rk}_N(i)=0\},\notag \\
+        n_i & =\left\lceil C_P\tau_N(i)^{1+2\delta_0}\right\rceil.\notag
+    \end{align}
+    Then the prescribed primary scales satisfy
+    \begin{align}
+        \sum_{i\in I_{A,0}^{(N)}}(n_i^{100})^{-1}
+         & \le M(2C_0+1)^2|\partial_\Lambda A|.\notag
+    \end{align}
+    The coefficient $M$ is independent of all the geometric data,
+    $S_*$ and $N$. The empty index set and $N=0$ are included.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:area_law_repair_retained_prefix_count,
+        lem:area_law_repair_rank_zero_primary_ancestor,
+        lem:area_law_repair_retention_identities,
+        thm:area_law_initial_primary_error_sum}
+    Choose $M$ from the primary-layer error estimate.
+    The retained identifier set at generation $N$ is finite, and so
+    is its rank-zero subset. Each of these non-dummy identifiers
+    comes from one unique original primary $(k,J)$, using exactly
+    the initial stage's jointly chosen residues. Retention preserves
+    its characteristic length, giving $\tau_N(i)=2^k$ and
+    $n_i=\lceil C_P(2^k)^{1+2\delta_0}\rceil$.
+
+    Let $F$ be the finite set of represented layers, and let $G_k$
+    be the primary pitch set for the actual chosen residues.
+    The map sending each retained identifier to its original pair
+    $(k,J)$ is an injection into the finite set
+    $\{(k,J):k\in F,\ J\in G_k\}$.
+    Its weight depends only on $k$ and is nonnegative. Summing over
+    this larger finite set, and then over its layers, gives
+    \begin{align}
+        \sum_{i\in I_{A,0}^{(N)}}(n_i^{100})^{-1}
+         & \le\sum_{k\in F}|G_k|
+         \left(\left\lceil C_P(2^k)^{1+2\delta_0}\right\rceil^{100}\right)^{-1}
+         \le M(2C_0+1)^2|\partial_\Lambda A|.\notag
+    \end{align}
+    This uses only finitely many represented layers and counts each
+    actual identifier once, even when its current region is disconnected.
+\end{proof}
+
 \begin{theorem}[The nonprimary error sum at a finite generation]
     \label{thm:area_law_repair_retained_nonprimary_error_sum}
     \lean{TNLean.PEPS.AreaLaw.Geometry.exists_uniform_repairStage_retained_positive_rank_error_sum_bound}
@@ -1394,4 +1534,67 @@ maximum-norm distances, and colors are represented by $0$ and $1$.
     $C_B\tau_N(i)>0$ and its natural ceiling satisfies $n_i\ge1$.
     Each summand is therefore at most one. Summing over the finite
     retained family proves the estimate with the same $L$.
+\end{proof}
+
+% Source: 10-geometry.tex, prescribed scanner scales, lines 709--740;
+% restriction to the cut and the two error contributions, lines 777--798.
+% Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+
+\begin{theorem}[The prescribed error sum on the retained family]
+    \label{thm:area_law_repair_retained_error_sum}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.exists_uniform_repairStage_retained_error_sum_bound}
+    \leanok
+    \uses{def:area_law_repair_region_sites,def:area_law_repair_birth_rank,
+        def:area_law_repair_characteristic_length,
+        lem:area_law_repair_metric_invariants}
+    Fix $C_P>0$ and $S_*>1$. There is $E>0$, depending only on
+    these two parameters, with the following property.
+    Let $C_B>0$, fix an origin $o\in\mathbb R^2$, a finite domain
+    $\Lambda\subset\mathbb Z^2$, a cut $A\subseteq\Lambda$, integers
+    $C_0\ge2$ and $k_0\ge50{,}000{,}000$, and a number $a_0$.
+    Assume $0<a_0\le1$, that $d(S)\le a_0S/1000$ for every $S\ge S_*$,
+    and that every initial mark has scale at least $S_*$.
+    Assume also that distinct initial marks $(v,S)$ and $(w,T)$ satisfy
+    $\lVert v-w\rVert_\infty\ge a_0\max\{S,T\}$.
+
+    For each generation $N\in\mathbb N$, let $I_A^{(N)}$ be the
+    actual non-dummy identifiers whose current regions meet $A$.
+    For every $i\in I_A^{(N)}$, assign the prescribed natural scale
+    \begin{align}
+        n_i&=
+        \begin{cases}
+            \left\lceil C_P\tau_N(i)^{1+2\delta_0}\right\rceil,
+                &\operatorname{rk}_N(i)=0,\\
+            \left\lceil C_B\tau_N(i)\right\rceil,
+                &\operatorname{rk}_N(i)>0.
+        \end{cases}\notag
+    \end{align}
+    Then
+    \begin{align}
+        \sum_{i\in I_A^{(N)}}(n_i^{100})^{-1}
+        &\le E(2C_0+1)^2|\partial_\Lambda A|.\notag
+    \end{align}
+    The coefficient $E$ is independent of $C_B$, all geometric data,
+    $a_0$, and $N$. For a replacement, the ceiling uses its remembered
+    length $u=\tau_N(i)$, even though its primitive square side is $2u$.
+    These are the prescribed scales in \cite[Section~11]{OpenAI2026AreaLaw}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:area_law_repair_retained_prefix_count,
+        thm:area_law_repair_retained_primary_error_sum,
+        thm:area_law_repair_retained_nonprimary_error_sum}
+    Choose $M>0$ from the primary estimate for $C_P$, and $L>0$
+    from the nonprimary estimate for $S_*$. Set $E=M+L$.
+    The retained identifier set $I_A^{(N)}$ is finite by the
+    finite-generation retained count. Split this finite set into its
+    disjoint rank-zero and positive-rank subsets. On each subset the
+    prescribed scale is exactly the one in the corresponding estimate.
+    Adding those estimates gives
+    \begin{align}
+        \sum_{i\in I_A^{(N)}}(n_i^{100})^{-1}
+        &=\sum_{i\in I_{A,0}^{(N)}}(n_i^{100})^{-1}
+          +\sum_{i\in I_{A,+}^{(N)}}(n_i^{100})^{-1}\notag\\
+        &\le(M+L)(2C_0+1)^2|\partial_\Lambda A|.\notag
+    \end{align}
 \end{proof}

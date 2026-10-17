@@ -121,9 +121,7 @@ layer closures. When `h ≥ k + 2`, their distance is at least
 `(C - 1) / 2 * 2^h`. This is positive for the source radius `C ≥ 2`; the
 proved inequality also includes smaller radii, when its lower bound may
 be nonpositive. Empty layers are allowed. These results establish the
-source's `geometry:layer-distance` and `geometry:nonadjacent` estimates;
-contacts, simultaneous repairs, and the two-family construction remain
-separate proof obligations.
+source's `geometry:layer-distance` and `geometry:nonadjacent` estimates.
 
 `Geometry.fineLayerIndices` subdivides each actual half-open layer cell
 into cells at a finer dyadic scale. For fine exponent `ℓ ≤ k`, its set of
@@ -140,24 +138,21 @@ factor of four. Thus `exists_sparse_dyadic_belt_shift` proves the source's
 `geometry:belt-count` estimate with the explicit bound
 `64*(2*C₀+1)^2*b*2^(-δ₀*k/2)`. The coefficient is fixed after the radius
 and before the domain, cut, origin, and scale. Empty endpoint sets and
-layers are included. Primary-tile geometry, contacts, repairs, birth separation, and
-the two-family construction remain open.
+layers are included.
 
 The three dyadic sides are uniformly separated at large scales. For every
 fixed real factor `M`, one threshold chosen independently of the domain and
 cut gives `M t_k ≤ r_k` and `M r_k ≤ s_k` for every later scale. An explicit
 threshold for the factor `2^d` is `10^7 d`. This proves the scale-separation
-passage in Section 11, lines 200–207. The later geometric constructions remain
-separate obligations.
+passage in Section 11, lines 200–207.
 
 For every real exponent `p`, the polynomially weighted decay
 `(k+1)^p*2^(-δ₀*k/2)` is eventually bounded by `2^(-δ₀*k/4)` and is summable.
 One positive constant bounds the sum over every finite set of scales. These
 numerical estimates are independent of the domain, cut, origin, and initial
-scale. They supply the series estimate used in Section 11, lines 668–692;
-the descendant count and the construction and count of actual repairs remain
-unproved. In particular, these auxiliary results do not prove the full
-`geometry:total-repairs` statement.
+scale. They supply the series estimate used in Section 11, lines 668–692.
+These auxiliary estimates alone do not prove the full `geometry:total-repairs`
+statement.
 
 The real-centred closed-square samples and the nested radii used by the
 polynomial-PEPS patch argument are treated in the
@@ -169,22 +164,22 @@ filter, and rank arguments remain separate obligations.
 
 | Source label | Present status | Remaining mathematical work |
 |---|---|---|
-| Area-law `eq:hamiltonian` | Model defined | Local counting and analytic consequences. |
-| Area-law `sec:prelim` | Regional positivity, squared-norm trace, unit trace, entropy nonnegativity, empty/full entropy, and norm/entropy invariance under site relabelling proved | Complementary entropy, continuity conventions, and the native Hamiltonian transport. |
-| Area-law `thm:area` | Target proposition defined; proved assuming `prop:collar` and `prop:two-families` (`uniformAreaLaw_of_collar_twoFamilies`) | Faithful full proof, #8759 and its prerequisites. |
+| Area-law `eq:hamiltonian` | Model and local counting estimates established (`LocalHamiltonian`, `card_graphBall_domainGraph_le`, `card_anchor_fiber_le`) | None for these statements; analytic consequences are listed separately. |
+| Area-law `sec:prelim` | Regional density and entropy identities, complementary entropy, controlled-system continuity, site relabelling, the no-crossing Hamiltonian split, and rectangular Hamiltonian/ground-state transport proved | None for these preliminaries. |
+| Area-law `thm:area` | Proved by `uniformAreaLaw`, using the physical collar bound and the two-family decomposition | None. |
 | Area-law `prop:positive` | Proved on induced lattice domains (`exists_latticePositiveConstraints`), with anchor multiplicity bounded by `card_anchor_fiber_le` | None. |
-| Area-law `prop:collar` | Statement defined (`SublinearCollarBound`); size and crossing-edge assertions proved for `C_tpl ≥ 24` and `D₀ ≥ 1` (implied by the source's standing choices), reducing it to its information inequality (`sublinearCollarBound_of_mutualInformation_le`) | The information inequality of the scanner. |
+| Area-law `prop:collar` | Proved by `sublinearCollarBound_real` for `q ≥ 1`, `J ≥ 0`, `Δ > 0`, real `D₀ > 2R+10` and `C_tpl ≥ 24`, including the original-state information, cut-size and volume bounds | None; no box-entropy or mutual-information estimate is assumed by this producer. |
 | Area-law `prop:amplification` | Proved (`amplificationBound`) for every gap `Δ > 0`, with `α = p/(p+1)`, `p = 10⁶` | None. |
-| Area-law `cor:rectangles` | Graph and configuration identification and vertex-boundary comparisons proved; vertex entropy bounds proved assuming the uniform edge area law | Hamiltonian and entropy transport and the unconditional area-law theorem. |
-| Area-law `scanner:template` | Template area bound, depth-layer bound, and mixed dyadic-square counts proved for the actual polygon model | Entropy bounds, #8758. |
+| Area-law `cor:rectangles` | Proved by `rectangularEntropyAreaLaw` and `vertex_boundary_bounds`, with the same uniform edge-boundary constant | None. |
+| Area-law `scanner:templates` | Area, depth-row, covering and physical-boundary bounds proved. `template_entropy_bounds_of_real_safe_box` proves the core, shell and partial-row entropy bounds for a normalized pure state, `q ≥ 1`, real `D₀ ≥ 1`, `C_tpl ≥ 24` and a supplied safe-box bound at one fixed `e > 0` (in particular `0 < e < 1`); an arbitrary box constant `C` is replaced by `max(C,0)` | None; the safe-box estimate at the chosen exponent is the source's explicit hypothesis, not an assumption for every exponent. |
 | Area-law `geometry:cancellation` | Proved for a pure state on any finite tensor product, with its finite-domain lattice specialization | None. |
-| Area-law `geometry:exponent-gaps` | Exact arithmetic proved | Applications at uniform thresholds. |
-| Area-law `geometry:belt-count` | Actual fine-cell layer refinement and count, dyadic scale divisibility, residue selection, sparse-belt decay, and polynomial-factor absorption proved | Primary-tile geometry, contacts, repairs, and birth separation. |
-| Area-law `geometry:total-repairs` | Polynomial absorption, summability, and a uniform numerical bound on finite scale sums proved as auxiliary results | Descendant bounds, the repair construction, and comparison of actual repairs with this series. |
-| Area-law `geometry:layer-distance` | Lower and upper endpoint-distance bounds for actual layer closures proved | Use in the later region construction. |
-| Area-law `geometry:nonadjacent` | Pointwise separation of actual layer closures proved | Use in contact and repair estimates. |
-| Area-law `prop:two-families` | Translated dyadic cells, nested neighborhoods, exact layer unions, closure formulas, uniform cell counts, exhaustion, endpoint-distance bounds, nonadjacent-layer separation, primary regions, belts, cell contacts, side matching, cell fans, and initial regions proved | Simultaneous repairs, birth separation, and the full partition. |
-| PEPS `prop:area-law` | Proved assuming `UniformAreaLaw` (`UniformAreaLaw.squareEntropyAreaLaw`), through the Hermitian-part reduction | The uniform area law. |
+| Area-law `geometry:exponent-gaps` | Exact rational inequalities proved (`Exponents.geometry_gaps`); uniform large-scale ratios are supplied by `exists_dyadicScale_side_ratios` | None for these estimates. |
+| Area-law `geometry:belt-count` | Actual fine-cell layer refinement and count, dyadic scale divisibility, residue selection, sparse-belt decay (`exists_sparse_dyadic_belt_shift`), and polynomial-factor absorption proved | None for this estimate; repair and birth-separation results are proved separately. |
+| Area-law `geometry:total-repairs` | Actual ancestor-prefix counts and weighted initial-mark estimates give the uniform finite-prefix bound `exists_uniform_repairStage_markIndex_prefix_bound`; its constant depends only on `S_* > 1` and precedes the geometry and generation cutoff. The existing repair metric hypotheses are supplied at the source thresholds by `exists_repairMetricHypotheses` | None for this finite-prefix estimate used in the construction; numerical summability alone remains an auxiliary result. |
+| Area-law `geometry:layer-distance` | Lower and upper endpoint-distance bounds for actual layer closures proved (`dyadicLayer_infDist_bounds`) | None for this estimate; its later use is part of the geometric construction. |
+| Area-law `geometry:nonadjacent` | Pointwise separation of actual layer closures proved (`dyadicLayer_dist_nonadjacent`) | None for this estimate; its contact and repair applications are part of the geometric construction. |
+| Area-law `prop:two-families` | Proved by `twoFamilyDecomposition`, with the partition, birth templates, ordered clearances and summability of the source statement | None. |
+| PEPS `prop:area-law` | Proved by `squareEntropyAreaLaw`, through the existing Hermitian-part reduction | None. |
 | PEPS `app:companion` | Each listed companion statement compared with its formal statement; see below | As in the rows for the area-law labels. |
 | PEPS `thm:main` | Target proposition defined | Faithful tensor construction and error bounds, #8773 and its prerequisites. |
 
@@ -198,21 +193,21 @@ hypothesis to the printed one.
 | Appendix A statement | Formal statement | Status on `main` |
 |---|---|---|
 | Model: domain, range-`R` Hermitian terms, unit ground vector with projector gap, natural logarithms | `LocalHamiltonian`, `IsGappedGroundState`, `regionalEntropy`; uniqueness by `Matrix.IsGappedGroundState.eigenspace_eq_span` | Definitions; uniqueness proved. |
-| Area-law Theorem 1.1 and Corollary 1.2 | `UniformAreaLaw`, `RectangularEntropyAreaLaw` | Assumed. Proved conditionally on Propositions 9.6 and 11.2 (`uniformAreaLaw_of_collar_twoFamilies`). |
-| Proposition 2.1 at `Γ = Λ_L`, `R = 1` | `SquareEntropyAreaLaw`, `UniformAreaLaw.squareEntropyAreaLaw`, `RectangularEntropyAreaLaw.squareEntropyAreaLaw`, `SquareHamiltonian.sum_hermitianTerm` | Specialization proved; the area law itself assumed. |
+| Area-law Theorem 1.1 and Corollary 1.2 | `UniformAreaLaw`, `RectangularEntropyAreaLaw` | Proved by `uniformAreaLaw`, `rectangularEntropyAreaLaw` and `vertex_boundary_bounds`. |
+| Proposition 2.1 at `Γ = Λ_L`, `R = 1` | `SquareEntropyAreaLaw`, `UniformAreaLaw.squareEntropyAreaLaw`, `RectangularEntropyAreaLaw.squareEntropyAreaLaw`, `SquareHamiltonian.sum_hermitianTerm` | Proved by `squareEntropyAreaLaw`; the displayed implications remain the specialization lemmas. |
 | Positive replacement (area-law Proposition 4.3) | `exists_latticePositiveConstraints`, `card_anchor_fiber_le` | Proved; constants depend on `p, R, J, Δ` only, and `J ≥ 0` suffices. |
 | Template (Definition 9.3) | `Geometry.Template`, `Template.IsSeparated` | Definition. Polygons are read as nondegenerate ([paper-gap note](../paper-gaps/arealaw2d_nondegenerate_templates.tex)). |
-| Sublinear collar bound (Proposition 9.6) | `SublinearCollarBound` | Assumed. Size and crossing-edge parts proved for `C_tpl ≥ 24`, `D₀ ≥ 1` (`Template.collar_cut_card_le`); the information inequality is open. |
+| Sublinear collar bound (Proposition 9.6) | `SublinearCollarBound` | Proved by `sublinearCollarBound_real`, including the information inequality, for `q ≥ 1`, `J ≥ 0`, `Δ > 0`, real `D₀ > 2R+10` and `C_tpl ≥ 24`; no supplied information or box-entropy bound remains. |
 | Amplification (Proposition 10.2) | `AmplificationBound`, `amplificationBound` | Proved. `L + 2r = o(n^β)` follows from the radius bound (`Exponents.collar_add_radius_isLittleO`). The PEPS use with `A = Λ`, `M = 1` is `coarse_mutualInformation_le_of_sublinearCollarBound`, conditional on the collar bound. |
 | Two-family entropy cancellation (Lemma 11.1) | `OrderedTwoFamilyPartition.entropy_le_residual_add_half_sum`, `regionalEntropy_le_residual_add_half_sum` | Proved. |
-| Two families with separated birth templates (Proposition 11.2) | `TwoFamilyDecomposition` | Assumed. |
-| PEPS Lemma 3.2, the local adaptation to a cell | `regionalEntropy_conditional_le_residual_add_sum`, `CellPartition.exists_cell_twoFamily_partition` | Both ingredients proved; their combination into the printed lemma is not yet stated. |
+| Two families with separated birth templates (Proposition 11.2) | `TwoFamilyDecomposition` | Proved by `twoFamilyDecomposition`. |
+| PEPS Lemma 3.2, the local adaptation to a cell | `exists_cell_conditionalMutualInformation_le_square` | Proved from the original square-grid model and full-system spectral gap, with constants uniform over the cell scale, grid translation, conditioning cells, Hamiltonian, ground vector and exterior region. |
 
-Defining a target proposition does not prove the corresponding theorem. The
-source-labelled area-law and PEPS approximation headline theorems have no
-`\leanok` marks in the blueprint.
-Neither statement assumes an area law, a PEPS approximation, a subregion gap,
-frustration freedom, commutativity, or translation invariance.
+The uniform area law and its rectangular, vertex-boundary and square-grid
+consequences are proved. The polynomial-PEPS approximation headline remains a
+target proposition without a `\leanok` mark. Neither headline statement assumes
+an area law, a PEPS approximation, a subregion gap, frustration freedom,
+commutativity, or translation invariance.
 
 ## Ownership and verification
 
