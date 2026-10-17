@@ -1153,6 +1153,17 @@ attaching each party to the anchor of its dyadic block. The four hypotheses are
 now verified for the compressed network of the constructed protocol in the
 proof of Theorem 1.1: the restriction is resolved.
 
+### Polynomial PEPS approximation: the product-reference column
+
+[polypeps_product_reference_column.tex](polypeps_product_reference_column.tex)
+(scope restriction, resolved) records that Section 8.1 and Lemma 8.1 of the
+September 24, 2026 polynomial PEPS manuscript derive the product-reference
+estimates and the compressed operator from the protocol of Proposition 7.1,
+whereas the column extraction and grid routing were formalized taking those
+estimates as hypotheses. The estimates are now verified for the constructed
+protocol and its compressed operator in the proof of Theorem 1.1: the
+restriction is resolved.
+
 ### Polynomial PEPS approximation: the distribution protocol
 
 [polypeps_prop71_consequences_interface.tex](polypeps_prop71_consequences_interface.tex)
