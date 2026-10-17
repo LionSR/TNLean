@@ -696,6 +696,51 @@ by the strict inequalities.
     through generation $N$ by $K(k+1)^K$.
 \end{proof}
 
+% Source: 10-geometry.tex, geometry:descendant-count and
+% geometry:total-repairs, lines 668--692.
+% Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+\begin{theorem}[A uniform bound for marks in finitely many generations]
+    \label{thm:area_law_repair_total_mark_prefix_count}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.exists_uniform_repairStage_markIndex_prefix_bound}
+    \leanok
+    \uses{def:area_law_hamiltonian,def:area_law_repair_stage,
+        lem:area_law_repair_metric_invariants}
+    For every stopping scale $S_*>1$, there is $M>0$ with the following
+    property. For every origin $o\in\mathbb R^2$, finite domain
+    $\Lambda\subset\mathbb Z^2$, cut $A\subseteq\Lambda$, integers
+    $C_0\ge2$ and $k_0\ge50{,}000{,}000$, and isolation constant $a_0$
+    satisfying the repair metric hypotheses of
+    Lemma~\ref{lem:area_law_repair_metric_invariants}, let $K_j$ be the
+    actual mark occurrences at generation $j$. Then, for every
+    $N\in\mathbb N$, with $b=|\partial_\Lambda A|$,
+    \begin{align}
+        \sum_{0\le j<N}|K_j| & \le M(2C_0+1)^2b.\notag
+    \end{align}
+    The constant $M$ is chosen before all geometric data, $a_0$, and
+    the cutoff $N$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:area_law_repair_ancestors,thm:area_law_repair_finite_marks,
+        thm:area_law_repair_root_prefix_count,
+        thm:area_law_initial_repair_weighted_sum}
+    Choose $K>0$ from the bound for the descendants of one initial mark,
+    and then choose the weighted initial-mark budget $B>0$ at exponent
+    $K$. Put $M=576KB$. For an initial mark $p$, let
+    $F_j(p)=\{q\in K_j:\alpha_{0,j}(q)=p\}$ and
+    $w_N(p)=\sum_{0\le j<N}|F_j(p)|$. Whenever $S_p^{(0)}\le2^k$,
+    the per-root estimate gives $w_N(p)\le K(k+1)^K$.
+    Each actual mark has a unique initial ancestor, so finiteness and
+    the weighted initial-mark estimate give
+    \begin{align}
+        \sum_{0\le j<N}|K_j|
+         & =\sum_{p\in K_0}w_N(p)\notag            \\
+         & \le576KB(2C_0+1)^2b=M(2C_0+1)^2b.\notag
+    \end{align}
+    The same constants apply to every finite cutoff, including $N=0$.
+\end{proof}
+
 % Source: 10-geometry.tex, initial marks, lines 325--363, and
 % geometry:repair-induction, termination argument, lines 538--541.
 \begin{theorem}[A common empty generation]
