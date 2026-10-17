@@ -26,6 +26,9 @@ extracted from a limit.
 * `Real.stretchedExpThreshold C c θ s`; beyond it `C x ^ s ≤ exp (c x ^ θ)`
   for `c, θ > 0` (`Real.mul_rpow_le_exp_of_stretchedExpThreshold_le`), and
   equivalently `C exp (-(c x ^ θ)) ≤ x ^ (-s)`.
+* `Real.le_rpow_of_powerRatioThreshold_le`: `b ≤ x ^ y` for `y > 0` beyond
+  `powerRatioThreshold (max b 0) 1 y`; for natural arguments the threshold is
+  `Real.natRpowThreshold y b`.
 * `Real.add_mul_rpow_le_mul_rpow_of_le`: a two-term power sum is at most
   `η x ^ b` beyond the larger of two power-ratio thresholds.
 * `Nat.half_le_floor_of_one_le`: `x / 2 ≤ ⌊x⌋₊` for `x ≥ 1`.
@@ -82,6 +85,29 @@ theorem mul_rpow_le_mul_rpow_of_ceil_powerRatioThreshold_le {C η a b : ℝ} {n 
     (hn : ⌈powerRatioThreshold C η (b - a)⌉₊ ≤ n) :
     C * (n : ℝ) ^ a ≤ η * (n : ℝ) ^ b :=
   mul_rpow_le_mul_rpow_of_powerRatioThreshold_le hC hη hab (Nat.ceil_le.mp hn)
+
+/-- **A positive power exceeds a constant, with an explicit threshold.** If `0 < y`, then
+`b ≤ x ^ y` for every `x ≥ powerRatioThreshold (max b 0) 1 y = max 1 (max b 0 ^ (1 / y))`. -/
+theorem le_rpow_of_powerRatioThreshold_le {b y x : ℝ} (hy : 0 < y)
+    (hx : powerRatioThreshold (max b 0) 1 y ≤ x) : b ≤ x ^ y := by
+  have h := mul_rpow_le_mul_rpow_of_powerRatioThreshold_le (x := x) (le_max_right b 0) one_pos hy
+    (by rwa [sub_zero])
+  rw [rpow_zero, mul_one, one_mul] at h
+  exact (le_max_left b 0).trans h
+
+/-- The natural threshold `⌈max 1 (max b 0 ^ (1 / y))⌉₊` beyond which `b ≤ n ^ y`. -/
+noncomputable def natRpowThreshold (y b : ℝ) : ℕ :=
+  ⌈powerRatioThreshold (max b 0) 1 y⌉₊
+
+/-- The natural power threshold is at least one. -/
+theorem one_le_natRpowThreshold (y b : ℝ) : 1 ≤ natRpowThreshold y b :=
+  Nat.one_le_ceil_iff.mpr (one_pos.trans_le (one_le_powerRatioThreshold _ _ _))
+
+/-- Natural-number form of `le_rpow_of_powerRatioThreshold_le`:
+`b ≤ n ^ y` for every `n ≥ natRpowThreshold y b`. -/
+theorem le_natCast_rpow_of_natRpowThreshold_le {b y : ℝ} {n : ℕ} (hy : 0 < y)
+    (hn : natRpowThreshold y b ≤ n) : b ≤ (n : ℝ) ^ y :=
+  le_rpow_of_powerRatioThreshold_le hy (Nat.ceil_le.mp hn)
 
 /-- **Two-term power sum.** If `0 ≤ C₁, C₂`, `0 < η` and `a₁, a₂ < b`, then
 `C₁ x ^ a₁ + C₂ x ^ a₂ ≤ η x ^ b` beyond the larger of the two power-ratio

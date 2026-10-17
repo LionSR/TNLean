@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.ExplicitThresholds
 import TNLean.PEPS.AreaLaw.Scan.Defs
 
 /-!
@@ -20,7 +21,10 @@ and 8.1, and Lemmas 2.1 and 3.1 for one scan rather than deriving them. Document
 
 ## Main results
 
-* `TNLean.PEPS.AreaLaw.Scan.eventually_scaleFacts`
+* `TNLean.PEPS.AreaLaw.Scan.eventually_scaleFacts`, with the explicit threshold
+  `TNLean.PEPS.AreaLaw.Scan.ScannerExponents.scaleFactsThreshold`
+* `TNLean.PEPS.AreaLaw.Scan.eventually_continuityCost_le`, with the explicit threshold
+  `TNLean.PEPS.AreaLaw.Scan.continuityCostThreshold`
 * `TNLean.PEPS.AreaLaw.Scan.ScanData.SXt_le`, `TNLean.PEPS.AreaLaw.Scan.ScanData.SQt_le`
 * `TNLean.PEPS.AreaLaw.Scan.exists_budgets`
 
@@ -41,24 +45,32 @@ open Filter
 /-- A positive power of `n` eventually exceeds any bound. -/
 lemma eventually_le_natCast_rpow {y : ℝ} (hy : 0 < y) (b : ℝ) :
     ∀ᶠ n : ℕ in atTop, b ≤ (n : ℝ) ^ y :=
-  ((tendsto_rpow_atTop hy).comp tendsto_natCast_atTop_atTop).eventually_ge_atTop b
+  eventually_atTop.2 ⟨_, fun _ => Real.le_natCast_rpow_of_natRpowThreshold_le hy⟩
 
 /-- `⌊x⌋₊ ≥ x / 2` once `x ≥ 2`. -/
 lemma half_le_floor {x : ℝ} (hx : 2 ≤ x) : x / 2 ≤ ⌊x⌋₊ := by
   have := Nat.lt_floor_add_one x
   linarith
 
-/-- The elementary scale facts hold for all sufficiently large `n` (`08-scanner.tex`,
-lines 32–42, 469, 480, 519–520), with `C₁ = 32`. -/
-theorem eventually_scaleFacts (X : ScannerExponents) :
-    ∃ C₁ : ℝ, ∀ᶠ n in atTop, ScaleFacts X n C₁ := by
-  refine ⟨32, ?_⟩
+/-- The explicit threshold of the elementary scale facts: `n ≥ 2`, `n^μ ≥ 2`, `n^{1-ℓ} ≥ 2` and
+`n^{1-ℓ-μ} ≥ 48` (`08-scanner.tex`, lines 32–42, 469, 480, 519–520). -/
+noncomputable def ScannerExponents.scaleFactsThreshold (X : ScannerExponents) : ℕ :=
+  max 2 (max (Real.natRpowThreshold X.mu 2)
+    (max (Real.natRpowThreshold (1 - X.ell) 2)
+      (Real.natRpowThreshold (1 - X.ell - X.mu) 48)))
+
+/-- The elementary scale facts hold, with `C₁ = 32`, at every `n` from the explicit threshold
+`X.scaleFactsThreshold` on (`08-scanner.tex`, lines 32–42, 469, 480, 519–520). -/
+theorem scaleFacts_of_scaleFactsThreshold_le (X : ScannerExponents) {n : ℕ}
+    (hthr : X.scaleFactsThreshold ≤ n) : ScaleFacts X n 32 := by
   have hμ : 0 < X.mu := X.kappa_pos.trans X.kappa_lt_mu
   have hℓ : 0 < 1 - X.ell := sub_pos.2 X.ell_lt_one
   have hℓμ : 0 < 1 - X.ell - X.mu := by linarith [X.mu_lt_one_sub_ell]
-  filter_upwards [eventually_ge_atTop 2, eventually_le_natCast_rpow hμ 2,
-    eventually_le_natCast_rpow hℓ 2, eventually_le_natCast_rpow hℓμ 48]
-    with n hn hm hL hK
+  simp only [ScannerExponents.scaleFactsThreshold, max_le_iff] at hthr
+  obtain ⟨hn, hm, hL, hK⟩ := hthr
+  replace hm := Real.le_natCast_rpow_of_natRpowThreshold_le hμ hm
+  replace hL := Real.le_natCast_rpow_of_natRpowThreshold_le hℓ hL
+  replace hK := Real.le_natCast_rpow_of_natRpowThreshold_le hℓμ hK
   have hn2 : (2 : ℝ) ≤ n := by exact_mod_cast hn
   have hn0 : (0 : ℝ) < n := by linarith
   have hn1 : (1 : ℝ) ≤ n := by linarith
@@ -128,15 +140,28 @@ theorem eventually_scaleFacts (X : ScannerExponents) :
           gcongr
       _ = _ := by ring
 
+/-- The elementary scale facts hold for all sufficiently large `n` (`08-scanner.tex`,
+lines 32–42, 469, 480, 519–520), with `C₁ = 32`. -/
+theorem eventually_scaleFacts (X : ScannerExponents) :
+    ∃ C₁ : ℝ, ∀ᶠ n in atTop, ScaleFacts X n C₁ :=
+  ⟨32, eventually_atTop.2 ⟨_, fun _ => scaleFacts_of_scaleFactsThreshold_le X⟩⟩
+
+/-- The explicit threshold `max 1 ⌈C (1 + C lq)⌉₊` beyond which the continuity cost of
+Lemma 2.1 at trace distance `n^{-500}` is at most `n^{-247}` (`08-scanner.tex`,
+lines 400–403). -/
+noncomputable def continuityCostThreshold (C lq : ℝ) : ℕ :=
+  max 1 ⌈C * (1 + C * lq)⌉₊
 
 /-- The continuity cost `C √t (1 + C n² log q)` of Lemma 2.1 at trace distance
-`t ≤ n^{-500}` is at most `n^{-247}` for all sufficiently large `n`. -/
-lemma eventually_continuityCost_le (C lq : ℝ) (hC : 0 ≤ C) (hlq : 0 ≤ lq) :
-    ∀ᶠ n : ℕ in atTop, ∀ t : ℝ, t ≤ (n : ℝ) ^ (-500 : ℝ) →
+`t ≤ n^{-500}` is at most `n^{-247}` for every `n ≥ continuityCostThreshold C lq`
+(`08-scanner.tex`, lines 400–403). -/
+lemma continuityCost_le_of_continuityCostThreshold_le (C lq : ℝ) (hC : 0 ≤ C) (hlq : 0 ≤ lq)
+    {n : ℕ} (hthr : continuityCostThreshold C lq ≤ n) :
+    ∀ t : ℝ, t ≤ (n : ℝ) ^ (-500 : ℝ) →
       C * √t * (1 + C * (n : ℝ) ^ 2 * lq) ≤ (n : ℝ) ^ (-247 : ℝ) := by
-  filter_upwards [eventually_ge_atTop 1,
-    tendsto_natCast_atTop_atTop.eventually_ge_atTop (C * (1 + C * lq))] with n hn hnC t ht
-  have hn1 : (1 : ℝ) ≤ n := by exact_mod_cast hn
+  intro t ht
+  have hn1 : (1 : ℝ) ≤ n := by exact_mod_cast (le_max_left _ _).trans hthr
+  have hnC : C * (1 + C * lq) ≤ n := Nat.ceil_le.mp ((le_max_right _ _).trans hthr)
   have hn0 : (0 : ℝ) < n := by linarith
   have hs : √t ≤ (n : ℝ) ^ (-250 : ℝ) := by
     rw [Real.sqrt_le_iff]
@@ -159,15 +184,25 @@ lemma eventually_continuityCost_le (C lq : ℝ) (hC : 0 ≤ C) (hlq : 0 ≤ lq) 
     _ ≤ (n : ℝ) ^ (-250 : ℝ) * ((n : ℝ) * (n : ℝ) ^ 2) := by gcongr
     _ = _ := hsplit.symm
 
+/-- The continuity cost `C √t (1 + C n² log q)` of Lemma 2.1 at trace distance
+`t ≤ n^{-500}` is at most `n^{-247}` for all sufficiently large `n`. -/
+lemma eventually_continuityCost_le (C lq : ℝ) (hC : 0 ≤ C) (hlq : 0 ≤ lq) :
+    ∀ᶠ n : ℕ in atTop, ∀ t : ℝ, t ≤ (n : ℝ) ^ (-500 : ℝ) →
+      C * √t * (1 + C * (n : ℝ) ^ 2 * lq) ≤ (n : ℝ) ^ (-247 : ℝ) :=
+  eventually_atTop.2 ⟨_, fun _ => continuityCost_le_of_continuityCostThreshold_le C lq hC hlq⟩
+
 /-- The continuity cost of Lemma 2.1 remains at most `n^{-247}` when the trace-distance
-bound has any fixed nonnegative coefficient. The threshold is chosen before `t`.
+bound has a fixed nonnegative coefficient `A`, for every
+`n ≥ continuityCostThreshold (C √(1 + A)) lq`. The threshold is chosen before `t`.
 Source: `08-scanner.tex`, lines 400–403, where the distance is `O(n^{-500})`. -/
-lemma eventually_continuityCost_le_of_fixed_coefficient (A C lq : ℝ)
-    (hA : 0 ≤ A) (hC : 0 ≤ C) (hlq : 0 ≤ lq) :
-    ∀ᶠ n : ℕ in atTop, ∀ t : ℝ, t ≤ A * (n : ℝ) ^ (-500 : ℝ) →
+lemma continuityCost_le_of_fixed_coefficient_of_threshold_le (A C lq : ℝ)
+    (hA : 0 ≤ A) (hC : 0 ≤ C) (hlq : 0 ≤ lq) {n : ℕ}
+    (hthr : continuityCostThreshold (C * √(1 + A)) lq ≤ n) :
+    ∀ t : ℝ, t ≤ A * (n : ℝ) ^ (-500 : ℝ) →
       C * √t * (1 + C * (n : ℝ) ^ 2 * lq) ≤ (n : ℝ) ^ (-247 : ℝ) := by
-  filter_upwards [eventually_continuityCost_le (C * √(1 + A)) lq
-    (mul_nonneg hC (Real.sqrt_nonneg _)) hlq] with n hn t ht
+  intro t ht
+  have hn := continuityCost_le_of_continuityCostThreshold_le (C * √(1 + A)) lq
+    (mul_nonneg hC (Real.sqrt_nonneg _)) hlq hthr
   have hB : 0 < 1 + A := by positivity
   have hsB : 1 ≤ √(1 + A) := Real.one_le_sqrt.mpr (le_add_of_nonneg_right hA)
   have ht' : t / (1 + A) ≤ (n : ℝ) ^ (-500 : ℝ) :=
@@ -182,6 +217,16 @@ lemma eventually_continuityCost_le_of_fixed_coefficient (A C lq : ℝ)
     _ ≤ C * √(1 + A) * √(t / (1 + A)) *
         (1 + C * √(1 + A) * (n : ℝ) ^ 2 * lq) := by gcongr
     _ ≤ (n : ℝ) ^ (-247 : ℝ) := hn _ ht'
+
+/-- The continuity cost of Lemma 2.1 remains at most `n^{-247}` when the trace-distance
+bound has any fixed nonnegative coefficient. The threshold is chosen before `t`.
+Source: `08-scanner.tex`, lines 400–403, where the distance is `O(n^{-500})`. -/
+lemma eventually_continuityCost_le_of_fixed_coefficient (A C lq : ℝ)
+    (hA : 0 ≤ A) (hC : 0 ≤ C) (hlq : 0 ≤ lq) :
+    ∀ᶠ n : ℕ in atTop, ∀ t : ℝ, t ≤ A * (n : ℝ) ^ (-500 : ℝ) →
+      C * √t * (1 + C * (n : ℝ) ^ 2 * lq) ≤ (n : ℝ) ^ (-247 : ℝ) :=
+  eventually_atTop.2
+    ⟨_, fun _ => continuityCost_le_of_fixed_coefficient_of_threshold_le A C lq hA hC hlq⟩
 
 namespace ScanData
 
