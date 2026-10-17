@@ -8094,6 +8094,24 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Notes:** Two occurrences in two modules, below the promotion threshold.
   The coefficient is chosen before every real clearance and finite instance.
 
+### Passing from real clearance to integer clearance — candidate (2026-10-17)
+
+- **Pattern:** Multiply a comparison between clearance parameters by a
+  nonnegative rectangle size, combine it with the strict distance bound, and
+  use `exact_mod_cast` to obtain integer safety.
+- **Seen:** `exists_condEntropy_le_initialBuffer_real` in
+  `PEPS/AreaLaw/InitialBufferReal.lean` and
+  `exists_regionalEntropy_safe_rect_le_boxError` in
+  `PEPS/AreaLaw/PhysicalSafeBox.lean`. The separation comparison in
+  `sublinearCollarBound_real` in `PEPS/AreaLaw/PhysicalCollarInformation.lean`
+  uses the same multiplication and strict-inequality argument over the reals.
+- **Abstraction:** The two integer-safety proofs already use
+  `mul_le_mul_of_nonneg_right`. A common clearance comparison lemma could
+  combine that argument with the cast when another integer-safety use arises.
+- **Notes:** Two integer-safety occurrences in two modules, with a related
+  real-separation argument in a third module. The separation argument has no
+  integer cast, so a shared statement should distinguish these conclusions.
+
 ### Relabeling finite-product information through regional entropies — candidate (2026-10-15)
 
 - **Pattern:** Expand mutual or conditional mutual information, move finite-region
