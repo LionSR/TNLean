@@ -1969,6 +1969,7 @@ is not proved here.
         TNLean.PEPS.Approximation.DyadicProtocol.participation,
         TNLean.PEPS.Approximation.HierarchySquare,
         TNLean.PEPS.Approximation.DyadicProtocol.IsDistributionProtocol,
+        TNLean.PEPS.Approximation.DyadicProtocol.IsDistributionProtocol.exists_originalCircuit_initialCopies,
         TNLean.PEPS.Approximation.LargeSizeDyadicProtocolConsequences}
     \leanok
     \uses{def:peps_distributed_construction, def:peps_original_circuit,
@@ -1988,7 +1989,7 @@ is not proved here.
     $r_0=\bigotimes_px_p$. The protocol assigns a party to each aligned square of
     the padded hierarchy, and records for each change the square of the
     repainting it belongs to, if any, and a list of encoded frames at each stage,
-    the main frame followed by the auxiliary frames. The circuit vector is
+    the encoded copies of $\Omega$. The circuit vector is
     $\Psi_0=r_0$ and
     $\Psi_{t+1}=W_t\Psi_t$.
 
@@ -2025,12 +2026,18 @@ is not proved here.
         \item $\lVert W_tr_t-r_{t+1}\rVert\le CL^{-20}$ for every $t<n$, and in
               the physical and private coordinates of the last memory
               $r_n=\Omega\otimes\Xi$ with $1-CL^{-57}\le\lVert\Xi\rVert\le1$.
-              Every intermediate $r_t$, $0<t<n$, is the product of the
-              reference vectors of the encoded frames of $\Omega$ at stage
-              $t$, each of norm at most one, and before the last change the
-              raw registers of the main frame are held by the parties of the
-              genuine sites. The last change only reads out the registers
-              and has no counterpart in the source.
+              Every intermediate reference vector is the product over the
+              encoded frames $F$ of stage $t$,
+              \[
+                  r_t=\bigotimes_F\Omega_F,\qquad \Omega_F=K_F\Omega,
+                  \qquad \lVert\Omega_F\rVert\le1,\qquad 0<t<n,
+              \]
+              and before the last change the first frame, the main copy, has
+              its raw registers held by the parties of the genuine sites. At
+              the first stage a circuit $c$ of private maps alone carries
+              $r_0$ to $\bigotimes_F\Omega_F$ over the initial frames. In the
+              constructed protocol the last change only reads out the
+              registers; it has no counterpart in the source.
     \end{enumerate}
     The existence assertion is that for every $q\ge2$ and $J,\Delta>0$ there are
     constants $C$, $b$, $k$, $r$ and $L_0$, chosen before the size, the
