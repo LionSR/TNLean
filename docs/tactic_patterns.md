@@ -4598,6 +4598,19 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 ## Candidates
 
+### Coordinate distance from an ordered diameter bound — candidate (2026-10-18)
+
+- **Pattern:** Use the two ordered support inequalities, unfold `Nat.dist`,
+  and apply `omega` to bound the coordinate distance by the interaction range.
+- **Seen:** Two occurrences: `chainSupport_edist_le` in
+  `MPS/AreaLaw/LiebRobinson.lean` and the common local margin argument in
+  `MPS/AreaLaw/ResetSupportSeparation.lean`.
+- **Abstraction:** Consider a minimal `IsChainSupport` distance lemma if a
+  third consumer appears; no additional helper is needed at two occurrences.
+- **Notes:** The geometric reset argument uses one local margin proof for both
+  crossing witnesses. A boundary-endpoint summary can lose an extra site and
+  does not replace the direct diameter estimate.
+
 ### Supported Gaussian averaging — candidate (2026-10-18)
 
 - **Pattern:** Factor the actual two-Hamiltonian integrand into an evolved

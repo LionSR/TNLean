@@ -720,6 +720,58 @@ for an arbitrary finite set of sites and are instantiated here directly.
     The Gaussian mass is not renormalized.
 \end{proof}
 
+\begin{lemma}[Separation of the reset support from the cores]
+    \label{lem:chain_reset_support_separation}
+    \lean{TNLean.MPS.AreaLaw.chain_reset_support_separation}
+    \leanok
+    \uses{def:chain_model}
+    Let $I=\{0,\ldots,L-1\}$ be a contiguous chain, let $R$ be a
+    natural number, and let $D,C,R_0,C_0\subseteq I$, with $D\cap C=\varnothing$.
+    Suppose that a real number $w$ satisfies
+    \begin{align}
+        w & <|r-y| &  & (r\in R_0,\ y\in I\setminus D),\notag \\
+        w & <|c-x| &  & (c\in C_0,\ x\in I\setminus C).
+    \end{align}
+    Put $Q=I\setminus(D\cup C)$. Let $\mathcal C_D$ consist of all
+    nonempty supports $X\subseteq I$ of diameter at most $R$ that meet
+    both $D$ and its complement, and put $Z=\bigcup_{X\in\mathcal C_D}X$.
+    Then
+    \begin{align}
+        w-R & <|a-z| &  & (z\in Q\cup Z,\ a\in R_0\cup C_0).
+    \end{align}
+    Consequently, for every real $\ell$ with $\ell+R\le w$,
+    \begin{align}
+        \{y\in I:\ \exists z\in Q\cup Z,\ |z-y|\le\ell\}
+        \cap(R_0\cup C_0)=\varnothing.
+    \end{align}
+    Empty chains and empty sets are allowed. No sign assumption on
+    $w$ or $\ell$, or containment of the cores in the outer regions,
+    is needed beyond the displayed hypotheses.
+    This is the support-separation step in Part~II
+    of~\cite{TNLean2026OneDimensional}, lines 419--425, on a contiguous
+    chain; see~\cite{gap:tnlean_one_dimensional_connected_domain_scope}.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{def:chain_model}
+    If $z\in Q$, the two margin inequalities apply directly; weakening
+    the lower bound from $w$ to $w-R$ is permitted since $R\ge0$.
+    If $z\in Z$, choose an actual crossing support $X$ containing $z$,
+    together with $y\in X\setminus D$ and $x\in X\cap D$.
+    The diameter bound gives $|z-y|,|z-x|\le R$.
+    For $r\in R_0$, the first margin and the triangle inequality give
+    \begin{align}
+        w<|r-y|\le|r-z|+R.
+    \end{align}
+    Since $D$ and $C$ are disjoint, $x\notin C$; the second margin
+    gives the same conclusion for every $c\in C_0$.
+    This proves the first assertion with the exact loss $R$.
+    If a core site $a$ also belonged to the displayed neighborhood,
+    there would be $z\in Q\cup Z$ with $|z-a|\le\ell$.
+    Symmetry of distance would then give
+    $w-R<|a-z|\le\ell\le w-R$, a contradiction.
+\end{proof}
+
 \begin{lemma}[Buffered discount on a chain]
     \label{lem:chain_buffer_discount}
     \lean{
