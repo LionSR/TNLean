@@ -17,11 +17,9 @@ constant number of sites, so its entropy is bounded by a constant, and no recurs
 scales is needed.
 
 The note states Theorem A for every finite subset of the integers with its induced path
-graph and reduces it to connected domains, on which the Hamiltonian is a sum over
-components and the ground vector is a product. **Scope restriction (connected
-domains):** this module formalizes the connected case, the chain of `L` sites; the
-component reduction is not formalized. Documented in
-`docs/paper-gaps/tnlean_one_dimensional_connected_domain_scope.tex`.
+graph and reduces it to connected domains. This module proves the connected case, the
+chain of `L` sites; the reduction of an arbitrary finite subset of the integers to it is
+in `TNLean.MPS.AreaLaw.ComponentReduction`.
 
 ## Main results
 
