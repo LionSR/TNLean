@@ -28,10 +28,7 @@ The interface omits the following clauses of the proposition:
   copy at its designated party, rather than arbitrary normalized product initialization;
 * factorization of every intermediate reference vector into main and auxiliary encoded frames,
   with every factor of norm at most one;
-* the repainting-event scale and grid address for each additional party;
-* pre-expansion pair-source and message bounds for each monomial, beyond pair-effect counts;
-* accuracy at every prescribed inverse power of `L`, rather than one contraction per change
-  with error `C L⁻²⁰`.
+* the repainting-event scale and grid address for each additional party.
 
 These omissions and the retained Section 8 consequences are recorded in
 `docs/paper-gaps/polypeps_prop71_consequences_interface.tex`. To eliminate this restriction,
@@ -194,7 +191,7 @@ theorem largeSizeDyadicProtocolConsequences_of_adaptivePatchConstraint
     have hC₁ : (10080 : ℝ) ≤ C₁ := le_max_left _ _
     have hL3 : (0 : ℝ) ≤ (L : ℝ) ^ 3 := by positivity
     nlinarith
-  obtain ⟨D', hD', -⟩ := H₁ ν hν hνν₁ hc (H₃ ν hν hνν₃) P hL hkL hk2 hΩ1 rank R₀
+  obtain ⟨D', hD'⟩ := H₁ ν hν hνν₁ hc (H₃ ν hν hνν₃) P hL hkL hk2 hΩ1 rank R₀
     (protocolFrozen P rank hr) protocolAuxOwner (C' := C') (c' := c') (kK := kK) (C₁ := C₁)
     (Nat.le_ceil C) hC' (Nat.le_ceil c) hseg
     (fun x _ _ hh => norm_act_proj_sub_le_of_mem_holes_protocolFrozen P rank hr (by omega) x hh)

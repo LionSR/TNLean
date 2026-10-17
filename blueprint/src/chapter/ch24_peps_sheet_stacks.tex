@@ -621,7 +621,7 @@ no holes, this is the normalization of $\Omega$.
         \item Each change of the schedule is a bounded change from the reference
               vector of its stage to that of the next stage, with participants
               used by the event of the change, at most $r$ pair effects and at most
-              $r_s$ pair sources in each monomial, at most $K\le CL^{k'}$ monomials
+              $r$ pair sources in each monomial, at most $K\le CL^{k'}$ monomials
               and coefficient sum, and error at most $CL^{-20}$.
         \item At the end of the schedule the main frame is read by the unit-square
               parties and has trivial holes, every hole of the other sheets
@@ -631,9 +631,8 @@ no holes, this is the normalization of $\Omega$.
     If $C\ge5042$, the private initialization, the changes of the schedule and the
     final regrouping form a protocol with the assembly bounds of
     Definition~\ref{def:peps_dyadic_protocol} for the constants $C$,
-    $b=64\cdot189$, $k'$ and $r$, all of whose changes have at most $r_s$ pair
-    sources in each monomial (\texttt{06-geometry.tex}, lines 12--53 and
-    572--681). This is not
+    $b=64\cdot189$, $k'$ and $r$, including the bound $r$ on the pair sources
+    of each monomial (\texttt{06-geometry.tex}, lines 12--53 and 572--681). This is not
     Proposition~\ref{prop:peps_dyadic_protocol}: the frames along the schedule are
     assumed here.
 \end{theorem}
@@ -1115,8 +1114,8 @@ no holes, this is the normalization of $\Omega$.
     most $C_1L^3$ holes. If $5042\le C_1$, $K\le C_1L^{k'}$ and $2b+1\le C_1$,
     there is a protocol with the assembly bounds of
     Definition~\ref{def:peps_dyadic_protocol} for the constants $C_1$,
-    $64\cdot189$, $k'$ and $2b$, all of whose changes have at most $2b$ pair
-    sources in each monomial. This is not
+    $64\cdot189$, $k'$ and $2b$, including the bound $2b$ on the pair sources
+    of each monomial. This is not
     Proposition~\ref{prop:peps_dyadic_protocol}: the large-scale repaintings are
     assumed here, together with the frozen-frame bounds
     (\texttt{06-geometry.tex}, lines 82--241, 507--541 and 572--681).
