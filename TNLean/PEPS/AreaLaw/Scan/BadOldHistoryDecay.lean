@@ -16,7 +16,8 @@ is bounded by the already established all-time tail without a second union
 over rounds. At the fixed scanner exponents, one threshold also supplies
 the stronger margin 4(D + 2r₀) ≤ m required for counting split labels.
 
-The threshold precedes the physical domain, labelled scanner and round. These
+The threshold precedes the physical domain, labelled scanner and round; it is
+given explicitly by `splitCountingThreshold` and `badOldHistoryThreshold`. These
 are classical estimates and impose no condition on a replica vector or an
 interpolation parameter.
 
@@ -67,6 +68,34 @@ theorem sum_historyWeight_bad_old_le_bad_through
 
 end CollarScan
 
+/-- The explicit threshold of the split-counting margin: the status scale-separation
+threshold and `n^{μ-κ} ≥ 24` (`08-scanner.tex`, lines 32–58 and 492–511). -/
+noncomputable def splitCountingThreshold (Cr kappa mu : ℝ) : ℕ :=
+  max (statusScaleSeparationThreshold Cr kappa mu) (Real.natRpowThreshold (mu - kappa) 24)
+
+/-- The literal rounded scales satisfy the stronger split-counting margin, as well as the
+existing status inequalities, at every `n` from the explicit threshold
+`splitCountingThreshold Cr kappa mu` on.
+Source: `08-scanner.tex`, lines 32–58 and 492–511. -/
+theorem split_counting_scale_separation_of_threshold_le {Cr ell kappa mu : ℝ}
+    (hCr : 0 ≤ Cr) (hkappa : 0 < kappa) (hkm : kappa < mu) {n : ℕ}
+    (hthr : splitCountingThreshold Cr kappa mu ≤ n) :
+      let L := ⌊(n : ℝ) ^ (1 - ell)⌋₊
+      let m := ⌊(n : ℝ) ^ mu⌋₊
+      let D := ⌈(n : ℝ) ^ kappa⌉₊
+      let K := L / (8 * m)
+      2 ≤ n ∧ roundedLogRadius Cr n ≤ D ∧ 1 ≤ D ∧
+        4 * (D + 2 * roundedLogRadius Cr n) ≤ m ∧ 8 * K * m ≤ L := by
+  have hstatus := status_scale_separation_of_threshold_le (ell := ell) hCr hkappa hkm
+    ((le_max_left _ _).trans hthr)
+  have hratio := Real.le_natCast_rpow_of_natRpowThreshold_le (sub_pos.mpr hkm)
+    ((le_max_right _ _).trans hthr)
+  dsimp only at hstatus ⊢
+  obtain ⟨hn, hr, hD, _, hL⟩ := hstatus
+  have hmargin : 12 * ⌈(n : ℝ) ^ kappa⌉₊ ≤ ⌊(n : ℝ) ^ mu⌋₊ :=
+    mul_ceil_rpow_le_floor_rpow (by omega) hkappa.le (by push_cast; linarith)
+  exact ⟨hn, hr, hD, by omega, hL⟩
+
 /-- At fixed positive exponent gap, the literal rounded scales satisfy the
 stronger split-counting margin, as well as the existing status inequalities.
 Source: `08-scanner.tex`, lines 32–58 and 492–511. -/
@@ -78,17 +107,74 @@ theorem eventually_split_counting_scale_separation {Cr ell kappa mu : ℝ}
       let D := ⌈(n : ℝ) ^ kappa⌉₊
       let K := L / (8 * m)
       2 ≤ n ∧ roundedLogRadius Cr n ≤ D ∧ 1 ≤ D ∧
-        4 * (D + 2 * roundedLogRadius Cr n) ≤ m ∧ 8 * K * m ≤ L := by
-  have hratio : ∀ᶠ n : ℕ in atTop, (24 : ℝ) ≤ (n : ℝ) ^ (mu - kappa) :=
-    ((tendsto_rpow_atTop (sub_pos.mpr hkm)).comp
-      tendsto_natCast_atTop_atTop).eventually_ge_atTop 24
-  filter_upwards [eventually_status_scale_separation (ell := ell) hCr hkappa hkm,
-    hratio] with n hstatus hratio
-  dsimp only at hstatus ⊢
-  obtain ⟨hn, hr, hD, _, hL⟩ := hstatus
-  have hmargin : 12 * ⌈(n : ℝ) ^ kappa⌉₊ ≤ ⌊(n : ℝ) ^ mu⌋₊ :=
-    mul_ceil_rpow_le_floor_rpow (by omega) hkappa.le (by push_cast; linarith)
-  exact ⟨hn, hr, hD, by omega, hL⟩
+        4 * (D + 2 * roundedLogRadius Cr n) ≤ m ∧ 8 * K * m ≤ L :=
+  eventually_atTop.2 ⟨_, fun _ => split_counting_scale_separation_of_threshold_le hCr hkappa hkm⟩
+
+/-- The explicit threshold at the final scanner exponents controlling every classical old
+history together with the split-counting margin: the larger of the bad-history threshold
+and the split-counting threshold (`08-scanner.tex`, lines 309–329, 492–511 and
+`scanner:final-parameters`). -/
+noncomputable def badOldHistoryThreshold (Cr C1 Ct : ℝ) (multiplicity : ℕ) (P : ℝ) : ℕ :=
+  max (badHistoryThreshold (Exponents.scannerKappa : ℝ) Cr C1 Ct multiplicity P)
+    (splitCountingThreshold Cr (Exponents.scannerKappa : ℝ) (Exponents.scannerMu : ℝ))
+
+open Classical in
+/-- At every `n` from the explicit threshold `badOldHistoryThreshold Cr C1 Ct multiplicity P`
+on, every classical old history at the final scanner exponents is controlled and the
+split-counting margin holds. The threshold is chosen before every physical instance and
+every round. Source: `08-scanner.tex`, lines 309–329, 492–511 and
+`scanner:final-parameters`. -/
+theorem badOldHistory_of_badOldHistoryThreshold_le {Cr C1 Ct : ℝ}
+    (hCr : 0 < Cr) (hC1 : 0 < C1) (hCt : 0 ≤ Ct)
+    (multiplicity : ℕ) (P : ℝ) {n : ℕ}
+    (hthr : badOldHistoryThreshold Cr C1 Ct multiplicity P ≤ n) :
+    ∀ (I : Type u) [Fintype I] [LinearOrder I]
+      (Λ T : Finset (ℤ × ℤ)) (hT : T.Nonempty) (S : CollarScan (Site Λ) I),
+      S.n = n → S.m = ⌊(n : ℝ) ^ (Exponents.scannerMu : ℝ)⌋₊ →
+      S.K = ⌊(n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ / (8 * S.m) →
+      S.D = ⌈(n : ℝ) ^ (Exponents.scannerKappa : ℝ)⌉₊ →
+      S.r₀ = roundedLogRadius Cr n → S.C₁ = C1 →
+      (T.card : ℝ) ≤ Ct * (n : ℝ) ^ 2 →
+      S.graph = domainGraph Λ → S.depth = (fun x ↦ ambientDepth T hT x.val) →
+      (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+        ((2 * ⌊(n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ +
+          10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z) →
+      (∀ d : ℕ, 1 ≤ d → d ≤ ⌊(n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ →
+        (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n) →
+      (∀ y, (Finset.univ.filter fun i ↦ S.anchor i = y).card ≤ multiplicity) →
+      2 ≤ S.n ∧ S.r₀ ≤ S.D ∧ 1 ≤ S.D ∧
+        4 * (S.D + 2 * S.r₀) ≤ S.m ∧
+        8 * S.K * S.m ≤ ⌊(n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ ∧
+        ∀ s : ℕ, s ≤ S.n * S.m →
+          (∑ h : History S.K S.m S.M s,
+            if S.IsGoodOldHistory h then 0 else historyWeight h) ≤ (n : ℝ) ^ (-P) := by
+  have hell : (0 : ℝ) < (Exponents.scannerEll : ℝ) := by
+    norm_num [Exponents.scannerEll]
+  have hkappa : (0 : ℝ) < (Exponents.scannerKappa : ℝ) := by
+    norm_num [Exponents.scannerKappa]
+  have hkm : (Exponents.scannerKappa : ℝ) < (Exponents.scannerMu : ℝ) := by
+    norm_num [Exponents.scannerKappa, Exponents.scannerMu]
+  have hmu : (Exponents.scannerMu : ℝ) < 1 - (Exponents.scannerEll : ℝ) := by
+    norm_num [Exponents.scannerMu, Exponents.scannerEll]
+  have htail := bad_history_probability_le_of_threshold_le hell hkappa hkm hmu
+    hCr hC1 hCt multiplicity P ((le_max_left _ _).trans hthr)
+  have hscales := split_counting_scale_separation_of_threshold_le
+    (ell := (Exponents.scannerEll : ℝ)) hCr.le hkappa hkm ((le_max_right _ _).trans hthr)
+  intro I _ _ Λ T hT S hSn hm hK hD hr hC ht hgraph hdepth hclear hrows hmult
+  have hM : S.M = ⌈C1 * n * S.D⌉₊ := by
+    simp only [CollarScan.M, chargeSlotCount, hC, hSn]
+  have hfull := htail I Λ T hT S hSn hm hK hD hr hM ht hgraph hdepth hclear hrows hmult
+  have hscales' : 2 ≤ S.n ∧ S.r₀ ≤ S.D ∧ 1 ≤ S.D ∧
+      4 * (S.D + 2 * S.r₀) ≤ S.m ∧
+      8 * S.K * S.m ≤ ⌊(n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ := by
+    simpa only [hSn, hm, hK, hD, hr] using hscales
+  refine ⟨hscales'.1, hscales'.2.1, hscales'.2.2.1, hscales'.2.2.2.1,
+    hscales'.2.2.2.2, ?_⟩
+  intro s hs
+  have hMpos : 0 < S.M :=
+    chargeSlotCount_pos (by simpa only [hC] using hC1) (by omega) hscales'.2.2.1
+  exact (S.sum_historyWeight_bad_old_le_bad_through hMpos
+    (show s ≤ n * S.m by simpa only [hSn] using hs)).trans hfull
 
 open Classical in
 /-- One threshold at the final scanner exponents controls every classical old
@@ -117,36 +203,7 @@ theorem exists_badOldHistory_threshold {Cr C1 Ct : ℝ}
         8 * S.K * S.m ≤ ⌊(n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ ∧
         ∀ s : ℕ, s ≤ S.n * S.m →
           (∑ h : History S.K S.m S.M s,
-            if S.IsGoodOldHistory h then 0 else historyWeight h) ≤ (n : ℝ) ^ (-P) := by
-  have hell : (0 : ℝ) < (Exponents.scannerEll : ℝ) := by
-    norm_num [Exponents.scannerEll]
-  have hkappa : (0 : ℝ) < (Exponents.scannerKappa : ℝ) := by
-    norm_num [Exponents.scannerKappa]
-  have hkm : (Exponents.scannerKappa : ℝ) < (Exponents.scannerMu : ℝ) := by
-    norm_num [Exponents.scannerKappa, Exponents.scannerMu]
-  have hmu : (Exponents.scannerMu : ℝ) < 1 - (Exponents.scannerEll : ℝ) := by
-    norm_num [Exponents.scannerMu, Exponents.scannerEll]
-  have htail := eventually_bad_history_probability_le hell hkappa hkm hmu
-    hCr hC1 hCt multiplicity P
-  have hscales := eventually_split_counting_scale_separation
-    (ell := (Exponents.scannerEll : ℝ)) hCr.le hkappa hkm
-  obtain ⟨N, hN⟩ := eventually_atTop.mp (htail.and hscales)
-  refine ⟨N, ?_⟩
-  intro n hn I _ _ Λ T hT S hSn hm hK hD hr hC ht hgraph hdepth hclear hrows hmult
-  obtain ⟨htail, hscales⟩ := hN n hn
-  have hM : S.M = ⌈C1 * n * S.D⌉₊ := by
-    simp only [CollarScan.M, chargeSlotCount, hC, hSn]
-  have hfull := htail I Λ T hT S hSn hm hK hD hr hM ht hgraph hdepth hclear hrows hmult
-  have hscales' : 2 ≤ S.n ∧ S.r₀ ≤ S.D ∧ 1 ≤ S.D ∧
-      4 * (S.D + 2 * S.r₀) ≤ S.m ∧
-      8 * S.K * S.m ≤ ⌊(n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ := by
-    simpa only [hSn, hm, hK, hD, hr] using hscales
-  refine ⟨hscales'.1, hscales'.2.1, hscales'.2.2.1, hscales'.2.2.2.1,
-    hscales'.2.2.2.2, ?_⟩
-  intro s hs
-  have hMpos : 0 < S.M :=
-    chargeSlotCount_pos (by simpa only [hC] using hC1) (by omega) hscales'.2.2.1
-  exact (S.sum_historyWeight_bad_old_le_bad_through hMpos
-    (show s ≤ n * S.m by simpa only [hSn] using hs)).trans hfull
+            if S.IsGoodOldHistory h then 0 else historyWeight h) ≤ (n : ℝ) ^ (-P) :=
+  ⟨_, fun _ hn => badOldHistory_of_badOldHistoryThreshold_le hCr hC1 hCt multiplicity P hn⟩
 
 end TNLean.PEPS.AreaLaw.Scan
