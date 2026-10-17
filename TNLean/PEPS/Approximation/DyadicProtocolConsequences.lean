@@ -23,8 +23,8 @@ supplies the patch constants.
 `LargeSizeDyadicProtocolConsequences` interface used in Section 8, not full Proposition 7.1.
 The interface omits the following clause of the proposition:
 
-* the identity of the main encoded frame among the factors of the intermediate reference
-  vectors; only their factorization into encoded frames of `Ω` is recorded.
+* `r_t` has at least one frame for `0 < t < changes`; the construction satisfies it, but it is
+  not yet stated.
 
 These omissions and the retained Section 8 consequences are recorded in
 `docs/paper-gaps/polypeps_prop71_consequences_interface.tex`. To eliminate this restriction,

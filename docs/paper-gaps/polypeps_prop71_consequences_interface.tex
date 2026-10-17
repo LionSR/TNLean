@@ -104,9 +104,9 @@ and exponent bounds. The retained properties are:
   reference vectors of the encoded frames of $\Omega$ at that stage, the main
   encoded frame and the auxiliary encoded frames, all of norm at most one
   (\path{06-geometry.tex}, lines~38--40); before the readout the raw registers
-  of the main frame are held by the parties of the genuine sites. The main
-  frame is singled out at the initial stage and before the readout; at the
-  stages in between, the order of the factors is not recorded. The last stage
+  of the main frame are held by the parties of the genuine sites. Read per
+  stage, being the main copy carries no content beyond these designations at
+  the initial stage and before the readout. The last stage
   is the readout of the physical and discarded registers, which has no
   counterpart in the source and is described by
   (\ref{eq:prop71_terminal_factorization}).
@@ -122,16 +122,13 @@ gates.\footnote{The protocol predicate is
 
 \section{Omitted clauses}
 
-One part of Proposition~7.1 is omitted from the formal predicate:
+One clause of Proposition~7.1 is omitted from the formal predicate:
 \begin{enumerate}
-\item At the stages strictly between the initial stage and the readout, the
-  formal statement records the reference vector as the product of the
-  reference vectors of encoded frames of $\Omega$, each of norm at most one,
-  but not which of them is the main encoded frame (\path{06-geometry.tex},
-  lines~38--40). The changes may reorder the frames, and the main frame is
-  singled out only at the initial stage and before the readout.
+\item $r_t$ has at least one frame for $0 < t < n$; the construction
+  satisfies it, but it is not yet stated (\path{06-geometry.tex},
+  lines~38--40).
 \end{enumerate}
-This part is not needed for the Section~8 assembly: the gate-density
+This clause is not needed for the Section~8 assembly: the gate-density
 bound, the routing separation hypothesis, and the lifetime gate count depend
 only on the retained bounds, while the message and replacement-slot bounds used
 in compression follow from the message expansion and the nonprivate gate count
@@ -176,9 +173,9 @@ Two further clauses of Proposition~7.1 hold for the formal predicate.
 
 \section{Elimination}
 
-Formalize the full statement of Proposition~7.1 including the identity of the
-main encoded frame at every stage, carried through the concatenation of the
-changes of the schedule. Proving Proposition~7.1 in that stronger form then
+State that $r_t$ has at least one frame for $0 < t < n$, carrying the
+nonemptiness of the frame lists through the chains of changes of the large
+repaintings and the concatenation of the schedule. Proving Proposition~7.1 in that stronger form then
 implies the present existence hypothesis by projection onto the retained
 fields.
 

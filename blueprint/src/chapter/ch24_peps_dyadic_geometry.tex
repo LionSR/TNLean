@@ -2040,11 +2040,11 @@ is not proved here.
 
     These bounds and this assertion are the consequences
     of~\cite[Proposition~7.1]{OpenAI2026PolynomialPEPS} used in Section~8, not
-    the proposition itself. They omit one clause of the source: which of the
-    encoded frames is the main frame at the stages strictly between the initial
-    stage and the readout (\texttt{06-geometry.tex}, lines 38--40); there only
-    the factorization of the reference vector into encoded frames of $\Omega$ is
-    recorded.
+    the proposition itself. They omit one clause: the reference vector $r_t$ has at
+    least one frame for $0<t<n$ (\texttt{06-geometry.tex}, lines 38--40); the
+    construction satisfies it, but it is not yet stated. Read per stage, being
+    the main copy carries no content beyond the designations at the first stage
+    and before the last change.
 
     The remaining clauses of the proposition are carried. The pair-source bound
     of~\cite[Theorem~5.2]{OpenAI2026PolynomialPEPS}, item~3
@@ -2083,10 +2083,10 @@ is not proved here.
     \uses{def:peps_dyadic_protocol, def:peps_dyadic_used_parties}
     Let a protocol satisfy the Section~8 bounds of
     Definition~\ref{def:peps_dyadic_protocol} with $C\ge0$, on a square of side
-    $L\ge1$, for a unit vector $\Omega$. These bounds omit the part
-    of~\cite[Proposition~7.1]{OpenAI2026PolynomialPEPS} described there, the
-    identity of the main frame among the factors of the intermediate reference
-    vectors; it is not used below. Then:
+    $L\ge1$, for a unit vector $\Omega$. These bounds omit the clause
+    of~\cite[Proposition~7.1]{OpenAI2026PolynomialPEPS} described there, that
+    every intermediate reference vector has at least one frame; it is not used
+    below. Then:
     \begin{enumerate}
         \item the physical density of the final circuit vector satisfies
               $\lVert\Tr_{\rm private}|\Psi_n\rangle\langle\Psi_n|
