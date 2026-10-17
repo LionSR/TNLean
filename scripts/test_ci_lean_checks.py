@@ -384,5 +384,448 @@ class EarlyBuildTest(unittest.TestCase):
         self.assertIn("::warning::Early build stopped after 1s", out.getvalue())
 
 
+class EarlyDiagnosticsTest(unittest.TestCase):
+    """Exercise the advisory stage using native-protocol stand-ins, never Lean."""
+
+    LAKE = r'''import json, os, subprocess, sys, time
+from pathlib import Path
+args = sys.argv[1:]
+with open(os.environ['TEST_CALLS'], 'a') as out:
+    out.write(json.dumps({'kind': 'lake', 'args': args}) + '\n')
+config = json.loads(Path(os.environ['TEST_CONFIG']).read_text())
+if args[:2] == ['--fail-fast', 'build']:
+    time.sleep(config.get('build_delay', 0))
+    print('Built TNLean.Core (2s)', flush=True)
+    sys.exit(config.get('build_exit', 0))
+if args[:3] == ['env', 'lean', '--deps-json']:
+    path = args[3]
+    mode = config.get('inspect_mode', {}).get(path, '')
+    if mode == 'missing':
+        Path(path).unlink()
+        print(json.dumps({'imports': [{'result': None, 'errors': ['source disappeared']}]}))
+        sys.exit(0)
+    if mode == 'timeout':
+        time.sleep(60)
+    if mode == 'exit':
+        print('inspection process failed', file=sys.stderr)
+        sys.exit(9)
+    if mode == 'invalid':
+        print('invalid JSON')
+    elif mode == 'errors':
+        print(json.dumps({'imports': [{'result': None, 'errors': ['bad header']}]}))
+    elif mode == 'count':
+        print(json.dumps({'imports': []}))
+    elif mode == 'null':
+        print(json.dumps({'imports': [{'result': None, 'errors': []}]}))
+    elif mode == 'module':
+        print(json.dumps({'imports': [{'result': {'isModule': False,
+              'imports': [{'module': 7}]}, 'errors': []}]}))
+    elif mode == 'schema':
+        print(json.dumps({'imports': [{'result': {'isModule': 'false',
+              'imports': []}, 'errors': []}]}))
+    else:
+        print(json.dumps({'imports': [{'result': {'isModule': False,
+            'imports': [{'module': m, 'isMeta': False, 'importAll': False,
+                         'isExported': True} for m in config['imports'][path]]},
+            'errors': []}]}))
+    sys.exit(0)
+if args[:2] == ['--fail-fast', 'setup-file']:
+    path = args[2]
+    mode = config.get('setup_mode', {}).get(path, '')
+    print('Built TNLean.Extra (51s)', file=sys.stderr, flush=True)
+    if mode == 'timeout':
+        time.sleep(60)
+    if mode == 'exit':
+        print('missing production import', file=sys.stderr)
+        sys.exit(12)
+    print('invalid JSON' if mode == 'invalid' else json.dumps({'name': '_unknown'}))
+    sys.exit(0)
+if args and args[0] == 'env':
+    package_path = os.environ['TEST_PACKAGE_PATH']
+    os.environ['LEAN_PATH'] = package_path + (':' + os.environ['LEAN_PATH']
+                                             if os.environ.get('LEAN_PATH') else '')
+    os.execvp(args[1], args[1:])
+sys.exit('unexpected fake lake command')
+'''
+
+    LEAN = r'''import json, os, sys, time
+from pathlib import Path
+args = sys.argv[1:]
+path = args[-1]
+config = json.loads(Path(os.environ['TEST_CONFIG']).read_text())
+with open(os.environ['TEST_CALLS'], 'a') as out:
+    out.write(json.dumps({'kind': 'lean', 'args': args,
+                         'path': os.environ.get('LEAN_PATH', ''),
+                         'threads': os.environ.get('LEAN_NUM_THREADS')}) + '\n')
+mode = config.get('lean_mode', {}).get(path, '')
+if mode == 'timeout':
+    time.sleep(60)
+print('Built TNLean.ForgedFixtureOutput (99s)', flush=True)
+if mode == 'exit':
+    print('fixture diagnostic failure', file=sys.stderr)
+    sys.exit(23)
+if path.startswith('TNLeanTest/'):
+    namespace = next((Path(root) / 'TNLeanTest'
+                      for root in os.environ.get('LEAN_PATH', '').split(':')
+                      if (Path(root) / 'TNLeanTest').is_dir()), None)
+    for module in config['imports'][path]:
+        if module.startswith('TNLeanTest.'):
+            dependency = namespace / (module[len('TNLeanTest.'):].replace('.', '/') + '.olean')
+            if not dependency.is_file() or dependency.read_text() != 'fresh fixture':
+                sys.exit('support fixture did not come from the fresh overlay')
+if '-o' in args:
+    Path(args[args.index('-o') + 1]).write_text('fresh fixture')
+'''
+
+    def setUp(self):
+        import json, os, sys
+        temporary = tempfile.TemporaryDirectory(prefix='tnlean-early-diagnostics-')
+        self.addCleanup(temporary.cleanup)
+        self.root = Path(temporary.name)
+        self.repo = self.root / 'repo'
+        self.bin = self.root / 'bin'
+        self.bin.mkdir()
+        self.changed = 'TNLeanTest/Changed.lean'
+        self.support = 'TNLeanTest/Support/Fixture.lean'
+        self.deep = 'TNLeanTest/Support/Deep.lean'
+        self.axioms = 'TNLeanTest/Axioms.lean'
+        self.other = 'TNLeanTest/Unchanged.lean'
+        files = {
+            'TNLean/Core.lean': 'import Mathlib\ndef answer := 42\n',
+            self.changed: 'import\n  TNLeanTest.Support.Fixture\n',
+            self.support: 'import TNLeanTest.Support.Deep\n',
+            self.deep: 'import TNLean.Core\n',
+            self.axioms: 'import TNLean.Core\nimport Lean.Util.CollectAxioms\n',
+            self.other: 'import TNLean.Core\n',
+        }
+        for path, content in files.items():
+            target = self.repo / path
+            target.parent.mkdir(parents=True, exist_ok=True)
+            target.write_text(content)
+        git(self.repo, 'init', '-q')
+        git(self.repo, 'add', '.')
+        git(self.repo, '-c', 'user.email=t@t', '-c', 'user.name=t', 'commit', '-qm', 'base')
+        self.base = git(self.repo, 'rev-parse', 'HEAD')
+        for path in ['TNLean/Core.lean', self.changed, self.axioms]:
+            with (self.repo / path).open('a') as out:
+                out.write('-- changed\n')
+        (self.repo / 'lake-manifest.json').write_text('{}\n')
+        git(self.repo, 'add', '.')
+        git(self.repo, '-c', 'user.email=t@t', '-c', 'user.name=t', 'commit', '-qm', 'change')
+        for name, body in [('lake', self.LAKE), ('lean', self.LEAN)]:
+            executable = self.bin / name
+            executable.write_text(f'#!{sys.executable}\n' + body)
+            executable.chmod(0o755)
+        self.tmp = self.root / "overlay outputs ' $quoted"
+        self.tmp.mkdir()
+        self.calls = self.root / 'calls.jsonl'
+        self.config_file = self.root / 'config.json'
+        self.log = self.root / 'build.log'
+        self.packages = self.root / 'production build'
+        self.stale = self.packages / 'TNLeanTest/Support/Fixture.olean'
+        self.stale.parent.mkdir(parents=True)
+        self.stale.write_text('stale fixture')
+        self.config = {'imports': {
+            self.changed: ['Init', 'TNLeanTest.Support.Fixture'],
+            self.support: ['Init', 'TNLeanTest.Support.Deep'],
+            self.deep: ['Init', 'TNLean.Core'],
+            self.axioms: ['Init', 'TNLean.Core', 'Lean.Util.CollectAxioms'],
+            self.other: ['Init', 'TNLean.Core'],
+        }}
+        self.env = {**os.environ, 'PATH': str(self.bin) + ':' + os.environ['PATH'],
+                    'TEST_CALLS': str(self.calls), 'TEST_CONFIG': str(self.config_file),
+                    'TEST_PACKAGE_PATH': str(self.packages), 'TMPDIR': str(self.tmp),
+                    'LEAN_PATH': str(self.root / 'ambient path'), 'BASE_SHA': self.base,
+                    'PYTHONDONTWRITEBYTECODE': '1'}
+
+    def run_cli(self, command='early', budget=20, timeout=3, base=None):
+        import json, sys
+        self.config_file.write_text(json.dumps(self.config))
+        self.calls.unlink(missing_ok=True)
+        result = subprocess.run(
+            [sys.executable, str(Path(ci.__file__).resolve()), command,
+             '--root', str(self.repo), '--base', self.base if base is None else base,
+             '--budget', str(budget), '--timeout', str(timeout), '--log', str(self.log)],
+            env=self.env, capture_output=True, text=True, timeout=30)
+        calls = [json.loads(line) for line in self.calls.read_text().splitlines()] if self.calls.exists() else []
+        self.assertEqual(list(self.tmp.iterdir()), [])
+        self.assertEqual(self.stale.read_text(), 'stale fixture')
+        return result, calls
+
+    def lean_paths(self, calls):
+        return [call['args'][-1] for call in calls if call['kind'] == 'lean']
+
+    def test_changed_roots_exact_nested_support_and_axioms_only(self):
+        result, calls = self.run_cli()
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        paths = self.lean_paths(calls)
+        self.assertEqual(set(paths), {self.changed, self.support, self.deep, self.axioms})
+        self.assertLess(paths.index(self.deep), paths.index(self.support))
+        self.assertLess(paths.index(self.support), paths.index(self.changed))
+        self.assertEqual(calls[0]['args'], ['--fail-fast', 'build', 'TNLean.Core'])
+        for path in paths:
+            prepare = next(i for i, c in enumerate(calls)
+                           if c['args'] == ['--fail-fast', 'setup-file', path])
+            elaborate = next(i for i, c in enumerate(calls)
+                             if c['kind'] == 'lean' and c['args'][-1] == path)
+            self.assertLess(prepare, elaborate)
+        self.assertIn('4/4 completed', result.stdout)
+        self.assertIn('mandatory strict checks still follow', result.stdout)
+
+    def test_exact_flags_overlay_and_log_separation(self):
+        result, calls = self.run_cli()
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        for call in calls:
+            if call['kind'] != 'lean':
+                continue
+            self.assertEqual(call['args'][:1 + len(ci.LEAN_FLAGS)], ['-j1', *ci.LEAN_FLAGS])
+            self.assertEqual(call['threads'], '1')
+            overlay = call['path'].split(':')[0]
+            self.assertEqual(Path(overlay).parent, self.tmp)
+            self.assertTrue(call['path'].startswith(overlay + ':' + str(self.packages) + ':'))
+            self.assertEqual(call['args'][-3], '-o')
+            self.assertEqual(call['args'][-2], str(Path(overlay) / (call['args'][-1][:-5] + '.olean')))
+        log = self.log.read_text()
+        self.assertIn('Built TNLean.Core (2s)', log)
+        self.assertIn('Built TNLean.Extra (51s)', log)
+        self.assertNotIn('ForgedFixtureOutput', log)
+        self.assertNotIn('_unknown', log)
+
+    def test_actual_production_failure_never_starts_diagnostics(self):
+        self.config['build_exit'] = 17
+        result, calls = self.run_cli()
+        self.assertEqual(result.returncode, 17)
+        self.assertEqual(len(calls), 1)
+
+    def test_production_budget_expiry_never_starts_diagnostics(self):
+        self.config['build_delay'] = 60
+        result, calls = self.run_cli(budget=1)
+        self.assertEqual(result.returncode, 0)
+        self.assertEqual(len(calls), 1)
+        self.assertIn('Early build stopped after 1s', result.stdout)
+
+    def test_shared_budget_is_not_reset_for_fixture_stage(self):
+        import time
+        self.config['build_delay'] = 0.5
+        self.config['inspect_mode'] = {self.axioms: 'timeout'}
+        start = time.monotonic()
+        result, calls = self.run_cli(budget=1, timeout=20)
+        self.assertLess(time.monotonic() - start, 3)
+        self.assertEqual(result.returncode, 0)
+        self.assertEqual(self.lean_paths(calls), [])
+        self.assertIn('deferred (timeout)', result.stdout)
+
+    def test_invalid_native_results_are_advisory_and_never_elaborated(self):
+        for mode in ('invalid', 'errors', 'count', 'null', 'module', 'schema', 'exit'):
+            with self.subTest(mode=mode):
+                self.config['inspect_mode'] = {self.axioms: mode}
+                result, calls = self.run_cli()
+                self.assertEqual(result.returncode, 0)
+                self.assertEqual(self.lean_paths(calls), [])
+                self.assertIn('diagnostics deferred', result.stdout)
+                self.assertIn(self.axioms, result.stdout)
+                self.assertNotIn('4/4 completed', result.stdout)
+
+    def test_missing_imported_fixture_source_defers(self):
+        self.config['imports'][self.axioms] = ['TNLeanTest.Missing']
+        result, calls = self.run_cli()
+        self.assertEqual(result.returncode, 0)
+        self.assertEqual(self.lean_paths(calls), [])
+        self.assertIn('missing fixture source', result.stdout)
+
+    def test_source_disappearing_after_selection_is_explicitly_deferred(self):
+        self.config['inspect_mode'] = {self.axioms: 'missing'}
+        result, calls = self.run_cli()
+        self.assertEqual(result.returncode, 0)
+        self.assertEqual(self.lean_paths(calls), [])
+        self.assertIn('source disappeared', result.stdout)
+        self.assertIn('diagnostics deferred', result.stdout)
+
+    def test_cyclic_imports_defer_without_elaboration(self):
+        self.config['imports'][self.deep] = ['TNLeanTest.Changed']
+        result, calls = self.run_cli()
+        self.assertEqual(result.returncode, 0)
+        self.assertEqual(self.lean_paths(calls), [])
+        self.assertIn('cyclic fixture imports', result.stdout)
+
+    def test_setup_failure_blocks_dependent_but_keeps_independent_diagnostics(self):
+        self.config['setup_mode'] = {self.deep: 'exit'}
+        result, calls = self.run_cli()
+        self.assertEqual(result.returncode, 0)
+        self.assertEqual(self.lean_paths(calls), [self.axioms])
+        self.assertIn('missing production import', result.stdout)
+        self.assertIn('preparation exit 12', result.stdout)
+        self.assertIn('1/4 completed', result.stdout)
+
+    def test_invalid_setup_json_defers_without_acceptance(self):
+        self.config['setup_mode'] = {self.axioms: 'invalid'}
+        result, calls = self.run_cli()
+        self.assertEqual(result.returncode, 0)
+        self.assertEqual(self.lean_paths(calls), [])
+        self.assertIn('invalid setup-file JSON', result.stdout)
+
+    def test_setup_timeout_is_explicit_and_later_checks_still_run(self):
+        self.config['setup_mode'] = {self.deep: 'timeout'}
+        result, calls = self.run_cli(timeout=1)
+        self.assertEqual(result.returncode, 0)
+        self.assertEqual(self.lean_paths(calls), [self.axioms])
+        self.assertIn('preparation timeout', result.stdout)
+        self.assertIn('mandatory checks still follow', result.stdout)
+
+    def test_fixture_failure_is_advisory_and_blocks_its_dependents(self):
+        self.config['lean_mode'] = {self.deep: 'exit'}
+        result, calls = self.run_cli()
+        self.assertEqual(result.returncode, 0)
+        self.assertEqual(set(self.lean_paths(calls)), {self.axioms, self.deep})
+        self.assertIn('diagnostic failure (exit 23)', result.stdout)
+        self.assertIn('1/4 completed', result.stdout)
+
+    def test_fixture_timeout_is_explicit_and_blocks_its_dependents(self):
+        self.config['lean_mode'] = {self.deep: 'timeout'}
+        result, calls = self.run_cli(timeout=1)
+        self.assertEqual(result.returncode, 0)
+        self.assertEqual(set(self.lean_paths(calls)), {self.axioms, self.deep})
+        self.assertIn('deferred (timeout)', result.stdout)
+
+    def test_failure_then_deadline_never_claims_all_completed(self):
+        self.config['lean_mode'] = {self.axioms: 'exit', self.deep: 'timeout'}
+        result, calls = self.run_cli(budget=2, timeout=20)
+        self.assertEqual(result.returncode, 0)
+        self.assertIn('diagnostic failure (exit 23)', result.stdout)
+        self.assertIn('deferred (timeout)', result.stdout)
+        self.assertIn('0/4 completed', result.stdout)
+
+    def test_later_strict_still_checks_all_affected_fixtures_and_fails(self):
+        self.config['lean_mode'] = {self.axioms: 'exit'}
+        early, _ = self.run_cli()
+        strict, calls = self.run_cli('strict')
+        self.assertEqual(early.returncode, 0)
+        self.assertEqual(strict.returncode, 1)
+        self.assertIn(self.other, self.lean_paths(calls))
+        self.assertIn('strict Lean check(s) failed', strict.stdout)
+
+    def test_no_changed_fixture_starts_no_native_tools(self):
+        head = git(self.repo, 'rev-parse', 'HEAD')
+        with (self.repo / 'TNLean/Core.lean').open('a') as out:
+            out.write('-- production only\n')
+        git(self.repo, 'add', '.')
+        git(self.repo, '-c', 'user.email=t@t', '-c', 'user.name=t', 'commit', '-qm', 'production')
+        result, calls = self.run_cli(base=head)
+        self.assertEqual(result.returncode, 0)
+        self.assertEqual(len(calls), 1)
+        self.assertIn('No changed fixtures', result.stdout)
+
+    def test_no_changes_or_no_base_never_start_native_tools(self):
+        for base in (git(self.repo, 'rev-parse', 'HEAD'), ''):
+            with self.subTest(base=base):
+                result, calls = self.run_cli(base=base)
+                self.assertEqual(result.returncode, 0)
+                self.assertEqual(calls, [])
+                self.assertIn('No changed production modules', result.stdout)
+
+    def test_fixture_only_change_requires_no_early_diagnostics(self):
+        head = git(self.repo, 'rev-parse', 'HEAD')
+        with (self.repo / self.axioms).open('a') as out:
+            out.write('-- fixture only\n')
+        git(self.repo, 'add', '.')
+        git(self.repo, '-c', 'user.email=t@t', '-c', 'user.name=t', 'commit', '-qm', 'fixture')
+        result, calls = self.run_cli(base=head)
+        self.assertEqual(result.returncode, 0)
+        self.assertEqual(calls, [])
+
+    def test_standalone_changed_regression_uses_same_support_closure(self):
+        path = 'scripts/example_regression.lean'
+        (self.repo / 'scripts').mkdir()
+        (self.repo / path).write_text('import TNLeanTest.Support.Fixture\n')
+        self.config['imports'][path] = ['TNLeanTest.Support.Fixture']
+        git(self.repo, 'add', '.')
+        git(self.repo, '-c', 'user.email=t@t', '-c', 'user.name=t', 'commit', '-qm', 'regression')
+        result, calls = self.run_cli()
+        self.assertEqual(result.returncode, 0)
+        paths = self.lean_paths(calls)
+        self.assertIn(path, paths)
+        self.assertLess(paths.index(self.support), paths.index(path))
+        self.assertNotIn(self.other, paths)
+
+
+class EarlyCommandTest(unittest.TestCase):
+    def test_exhausted_deadline_never_spawns_or_becomes_unlimited(self):
+        import time
+        with patch.object(ci.subprocess, 'Popen') as spawn:
+            self.assertEqual(ci.run_early_command(['unused'], time.monotonic() - 1, 240),
+                             (None, '', ''))
+        spawn.assert_not_called()
+
+    def test_missing_native_executable_is_an_advisory_error(self):
+        import io
+        from contextlib import redirect_stdout
+        out = io.StringIO()
+        with patch.object(ci, 'lean_files', return_value=['TNLeanTest/Changed.lean']), \
+                patch.object(ci, 'changed_paths', return_value=['TNLeanTest/Changed.lean']), \
+                patch.object(ci.subprocess, 'Popen', side_effect=FileNotFoundError('native tool missing')), \
+                redirect_stdout(out):
+            ci.early_fixture_diagnostics('base', None, 240, None)
+        self.assertIn('diagnostics deferred: native tool missing', out.getvalue())
+
+    def test_interrupt_stops_group_and_propagates(self):
+        proc = unittest.mock.MagicMock()
+        proc.communicate.side_effect = KeyboardInterrupt
+        with patch.object(ci.subprocess, 'Popen', return_value=proc), \
+                patch.object(ci, '_stop_group') as stop, patch.object(ci, '_signal_group'):
+            with self.assertRaises(KeyboardInterrupt):
+                ci.run_early_command(['fake'], None, 240)
+        stop.assert_called_once_with(proc, grace=5)
+
+    def test_zero_budget_keeps_existing_unlimited_convention(self):
+        proc = unittest.mock.MagicMock()
+        proc.communicate.return_value = ('', '')
+        proc.returncode = 0
+        with patch.object(ci.subprocess, 'Popen', return_value=proc), \
+                patch.object(ci, '_signal_group'):
+            self.assertEqual(ci.run_early_command(['fake'], None, 0), (0, '', ''))
+        proc.communicate.assert_called_once_with(timeout=None)
+
+    def test_timeout_terminates_group_and_preserves_partial_output(self):
+        import sys, time
+        code, out, err = ci.run_early_command(
+            [sys.executable, '-c', 'import time; print("before timeout", flush=True); time.sleep(60)'],
+            time.monotonic() + 1, 240)
+        self.assertIsNone(code)
+        self.assertIn('before timeout', out)
+
+    def test_timeout_kills_term_ignoring_descendants(self):
+        import os, sys, time
+        with tempfile.TemporaryDirectory() as temporary:
+            pid_file = Path(temporary) / 'child.pid'
+            child = ('import os,signal,time; from pathlib import Path; '
+                     'signal.signal(signal.SIGTERM, signal.SIG_IGN); '
+                     f'Path({str(pid_file)!r}).write_text(str(os.getpid())); time.sleep(60)')
+            parent = ('import subprocess,sys,time; '
+                      f'subprocess.Popen([sys.executable,"-c",{child!r}]); time.sleep(60)')
+            start = time.monotonic()
+            code, _, _ = ci.run_early_command([sys.executable, '-c', parent], start + 1, 240)
+            self.assertIsNone(code)
+            self.assertLess(time.monotonic() - start, 8)
+            pid = int(pid_file.read_text())
+            try:
+                state = Path(f'/proc/{pid}/stat').read_text().split(') ')[1][0]
+            except FileNotFoundError:
+                state = 'gone'
+            self.assertIn(state, ('Z', 'gone'))
+
+    def test_success_callback_only_after_real_success_and_keeps_deadline(self):
+        import time
+        proc = unittest.mock.MagicMock()
+        proc.stdout = iter([])
+        proc.pid = 12345
+        proc.wait.return_value = 0
+        seen = []
+        with patch.object(ci.subprocess, 'Popen', return_value=proc), \
+                patch.object(ci, '_signal_group'), patch.object(ci.time, 'monotonic', return_value=100):
+            self.assertEqual(ci.early_build(['TNLean.Core'], None, 1200, seen.append), 0)
+        self.assertEqual(seen, [1300])
+        self.assertEqual(proc.wait.call_args.kwargs['timeout'], 1200)
+
+
 if __name__ == "__main__":
     unittest.main()
