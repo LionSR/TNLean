@@ -5,7 +5,7 @@
 \input{command}
 \title{Connected Domains in the One-Dimensional Area Law}
 \author{}
-\date{October 16, 2026}
+\date{October 18, 2026}
 \begin{document}
 \maketitle
 \gapnote{scope-restriction}{open}
@@ -46,25 +46,42 @@ $C_0(q,R)(1+J/\Delta)$.\footnote{Declarations:
 \leanid{TNLean.MPS.AreaLaw.chainAreaLaw}.} Theorem~B of the note is stated on
 the chain of $L$ sites in the note itself, so it carries no restriction.
 
-The restriction is to connected domains. For a disconnected
-$\Lambda\subset\mathbb Z$ the interval bound still holds verbatim on every
-interval of positions, since the proof uses only the crossing count and the
-buffered discount; but the subset bound $S_\Omega(A)\le C|\partial_\Lambda A|$
-needs the product structure of the ground vector over components (a region
-inside one component contributes no boundary edge at a gap of $\Lambda$, so
-its entropy must vanish for the bound to hold), and that product structure is
-not formalized.
+The restriction is to connected domains. The finite-dimensional spectral
+step is proved for two finite-dimensional tensor factors: let $H_1,H_2$ be
+Hermitian, put $H=H_1\otimes I+I\otimes H_2$, and suppose that a unit vector
+$\Omega$ satisfies $H\Omega=E_0\Omega$ and
+$H-E_0I\ge\Delta(I-|\Omega\rangle\langle\Omega|)$ with $\Delta>0$, then there
+are unit vectors $\Omega_1,\Omega_2$ and real numbers $E_1,E_2$ such that
+$\Omega=\Omega_1\otimes\Omega_2$, $E_0=E_1+E_2$, and each factor satisfies
+$H_i\Omega_i=E_i\Omega_i$ and
+$H_i-E_iI\ge\Delta(I-|\Omega_i\rangle\langle\Omega_i|)$.
+\footnote{Declaration: \leanid{TNLean.PEPS.AreaLaw.exists_isGappedGroundState_factors_of_kronecker_sum}.}
+The phase is included in one normalized factor, so the product equality is
+exact and the gap does not decrease.
+
+For an arbitrary finite $\Lambda\subset\mathbb Z$, the identification of the
+actual Hamiltonian with a tensor sum over its connected components, and the
+transport of each component to the chain model, remain to be formalized.
+The entropy bound $S_\Omega(A)\le C|\partial_\Lambda A|$ therefore remains
+restricted to connected domains.
 
 \section{Elimination plan}
 
-Formalize the component reduction: for a Hamiltonian that is a sum of terms
-supported in disjoint blocks of sites, a unit gapped ground vector of the sum
-is a tensor product of gapped ground vectors of the blocks (the ground energy
-adds, and uniqueness of the global ground vector forces the product form), and
-the regional entropy of a product vector adds over the blocks. Theorem~A for an
-arbitrary finite $\Lambda\subset\mathbb Z$ then follows from the chain version
-applied to each component. Until then the restriction is recorded on the
-module docstring of \texttt{TNLean/MPS/AreaLaw/AreaLaw.lean} and in the blueprint
+Express the Hamiltonian on an arbitrary finite domain as an iterated tensor
+sum of the Hamiltonians on its connected components. Admissible supports have
+finite diameter in the induced path graph, so each support lies in one
+component. Identify each component, a finite interval, with a chain of its
+cardinality, and verify that the transported Hamiltonian has the same
+interaction range and norm bound. Apply the binary spectral theorem above
+repeatedly to obtain normalized component ground vectors with the same gap.
+Finally identify the actual regional reduced states under the component
+coordinate equivalence. Reuse the existing product reduced-state identity,
+entropy additivity for normalized product vectors, and covariance under site
+relabelling, applying them by finite induction over the components. Prove
+separately that the edge boundary is the disjoint union of the component
+boundaries. The empty domain is handled
+separately; its regional entropy and boundary are both zero. Until then the
+restriction is recorded in the module docstring of \texttt{TNLean/MPS/AreaLaw/AreaLaw.lean} and in the blueprint
 statement of Theorem~A.
 
 \bibliographystyle{alpha}
