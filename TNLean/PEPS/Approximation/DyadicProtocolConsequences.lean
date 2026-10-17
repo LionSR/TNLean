@@ -23,10 +23,6 @@ supplies the patch constants.
 `LargeSizeDyadicProtocolConsequences` interface used in Section 8, not full Proposition 7.1.
 The interface omits the following clauses of the proposition:
 
-* a designated party holding the main copy of `Ω` and private initialization of each auxiliary
-  copy at its designated party, rather than arbitrary normalized product initialization;
-* factorization of every intermediate reference vector into main and auxiliary encoded frames,
-  with every factor of norm at most one;
 * pre-expansion pair-source and message bounds for each monomial, beyond pair-effect counts;
 * accuracy at every prescribed inverse power of `L`, rather than one contraction per change
   with error `C L⁻²⁰`.

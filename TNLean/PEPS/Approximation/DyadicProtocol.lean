@@ -49,11 +49,6 @@ its constants chosen before the size, the Hamiltonian, and the ground vector, is
 `LargeSizeDyadicProtocolConsequences` are weaker than Proposition 7.1. They omit the following
 clauses of the source:
 
-* the main copy of `Ω` held by one party and the auxiliary copies initialized privately at their
-  designated parties (`06-geometry.tex:22–23`);
-* the factorization of each reference vector into the main and auxiliary encoded frames, with
-  every factor of norm at most one (`06-geometry.tex:39–41`); only the initial reference, the
-  per-change error, and the final reference are recorded;
 * the bounds on pair sources and messages in each monomial before their expansion (Theorem 5.2,
   item 3, `04-compression.tex:143–147`); only pair effects are counted;
 * the family of expansions accurate to every fixed inverse power of `L`; the model fixes one
@@ -311,8 +306,8 @@ the target vector `Ω`, the protocol satisfies:
 
 These are the consequences of the four items that the assembly of §8 uses. The predicate is
 weaker than the conclusion of Proposition 7.1: it omits the clauses listed in the scope
-restriction of the module docstring, among them the registers of the copies of `Ω`, the frame
-factorization of the references, and the counts of pair sources and messages.
+restriction of the module docstring: the counts of pair sources and messages, and the
+expansions of every fixed inverse-power accuracy.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), Proposition 7.1 `prop:protocol`,
 `06-geometry.tex:17–52`; the expansions are those of Theorem 5.2, item 3,
