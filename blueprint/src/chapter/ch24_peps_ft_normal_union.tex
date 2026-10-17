@@ -392,24 +392,24 @@ every finite union of injective regions.
     \lean{TNLean.PEPS.regionBlockedTensorInjective_union_overlap}
     \leanok
     \uses{lem:peps_injectiveRegion_union_edgeBlocked}
-    Let $A,B\subseteq V$ be two possibly overlapping regions. If the blocked
+    Extending Lemma~\ref{lem:peps_injectiveRegion_union} to arbitrary
+    overlapping regions when all virtual bond dimensions are positive,
+    let $A,B\subseteq V$ be two possibly overlapping regions. If the blocked
     tensors of $A$ and of $B$ are each injective and every virtual bond dimension
     is positive, then the blocked tensor of their union $A\cup B$ is injective.
-    This extends Lemma~\ref{lem:peps_injectiveRegion_union} to arbitrary
-    overlapping regions when all virtual bond dimensions are positive.
 \end{lemma}
 \begin{proof}\leanok
-    Write the four parts $P_0=A\setminus B$, $P_1=A\cap B$, $P_2=B\setminus A$.
-    A coefficient family annihilating the blocked weights of $A\cup B$ is stripped
+    With the four parts $P_0=A\setminus B$, $P_1=A\cap B$, and $P_2=B\setminus A$,
+    a coefficient family annihilating the blocked weights of $A\cup B$ is stripped
     of $A$ by its left inverse, leaving the coupling through $P_2$ vanishing for
-    every $A$-boundary configuration. The source then reinserts the overlap $P_1$
-    and inverts $B$. The legs running from $P_0$ to the outside are the open legs
-    of the final tensor; they stay uncontracted through the reinsertion. Carrying
-    those legs as a separate label, fix it to a reference value and restrict the
-    coefficient family to the matching fiber. The fiber-restricted first strip
-    still vanishes, so reinserting $P_1$ and inverting $B$ forces the fiber row to
-    vanish. The union boundary edges partition into the $B$-boundary edges and the
-    $P_0$-outer edges, so fixing both the reference label and the $B$-boundary
+    every $A$-boundary configuration. Reinserting the overlap $P_1$
+    and inverting $B$ keeps the legs running from $P_0$ to the outside as the open legs
+    of the final tensor, uncontracted through the reinsertion. Carrying
+    those legs as a separate label, fixing it to a reference value, and restricting the
+    coefficient family to the matching fiber keeps the fiber-restricted first strip
+    vanishing, so reinserting $P_1$ and inverting $B$ forces the fiber row to
+    vanish. Because the union boundary edges partition into the $B$-boundary edges and the
+    $P_0$-outer edges, fixing both the reference label and the $B$-boundary
     label of a configuration realizing a host label selects that single host term,
     forcing the coefficient to vanish at every realizable host label. Surjectivity
     of the union host boundary, available once the bond dimensions are positive,
@@ -427,8 +427,8 @@ every finite union of injective regions.
     $\bigcup_{i\in s} R_i$ is injective.
 \end{lemma}
 \begin{proof}\leanok
-    Induct on the nonempty family. The singleton case is the injectivity of the
-    one block. For the inductive step, the next block is disjoint from the union
+    By induction on the nonempty family, the singleton case is the injectivity of the
+    one block, and in the inductive step the next block is disjoint from the union
     of the remaining blocks, so
     Lemma~\ref{lem:peps_injectiveRegion_union_disjoint} combines the two
     injective pieces.
@@ -439,17 +439,17 @@ every finite union of injective regions.
     \lean{TNLean.PEPS.regionBlockedTensorInjective_biUnion_overlap}
     \leanok
     \uses{lem:peps_injectiveRegion_union_pos}
-    Let $(R_i)_{i\in s}$ be a nonempty finite family of possibly overlapping
-    regions. If the blocked tensor of each $R_i$ is injective and every virtual
-    bond dimension is positive, then the blocked tensor of their union
-    $\bigcup_{i\in s} R_i$ is injective. This is the finite iteration of the
-    overlapping union lemma, with no disjointness assumption.
+    Iterating the overlapping union lemma finitely many times without any
+    disjointness assumption, let $(R_i)_{i\in s}$ be a nonempty finite family of
+    possibly overlapping regions. If the blocked tensor of each $R_i$ is
+    injective and every virtual bond dimension is positive, then the blocked
+    tensor of their union $\bigcup_{i\in s} R_i$ is injective.
 \end{lemma}
 \begin{proof}\leanok
-    Induct on the nonempty family. The singleton case is the injectivity of the
-    one block. For the inductive step, combine the next block with the union of
-    the remaining blocks by Lemma~\ref{lem:peps_injectiveRegion_union_pos}; no
-    disjointness is needed.
+    By induction on the nonempty family, the singleton case is the injectivity of the
+    one block, and in the inductive step Lemma~\ref{lem:peps_injectiveRegion_union_pos}
+    combines the next block with the union of the remaining blocks without
+    requiring disjointness.
 \end{proof}
 
 \begin{definition}[Injectivity predicate for blocked regions]%
@@ -518,7 +518,9 @@ every finite union of injective regions.
     \uses{thm:peps_regionBlockedWeight_applyGauge_eq_globalSum}
     With the same notation, set
     $K_R^X(\mu,\nu):=\prod_{f\in\partial R}G_f^X(\mu_f,\nu_f)$.
-    Then the gauged blocked weight is the original blocked weight multiplied by
+    As in the gauge absorption of the blocked tensor in
+    \cite[Section~4, proof of Theorem~3]{Molnar2018NormalPEPS},
+    the gauged blocked weight is the original blocked weight multiplied by
     the boundary-coupling matrix:
     \begin{align}
         T_{\widetilde B,R}^{\mu}(\tau)
@@ -526,12 +528,10 @@ every finite union of injective regions.
         \sum_{\nu}K_R^X(\mu,\nu)\,T_{B,R}^{\nu}(\tau).
         \label{eq:peps_boundary_coupling}
     \end{align}
-    This is the gauge absorption of the blocked tensor in
-    \cite[Section~4, proof of Theorem~3]{Molnar2018NormalPEPS}.
 \end{theorem}
 \begin{proof}\leanok
-    Start from Theorem~\ref{thm:peps_regionBlockedWeight_applyGauge_eq_globalSum}
-    and group the global virtual configurations by their boundary label $\nu$:
+    Starting from Theorem~\ref{thm:peps_regionBlockedWeight_applyGauge_eq_globalSum}
+    and grouping the global virtual configurations by their boundary label $\nu$ gives
     \begin{align}
         \sum_{\zeta}
         K_R^X(\mu,\zeta|_{\partial R})
@@ -562,7 +562,7 @@ every finite union of injective regions.
     \end{align}
 \end{theorem}
 \begin{proof}\leanok
-    Exchange the finite sum over $\nu$ with the product over boundary edges:
+    Exchanging the finite sum over $\nu$ with the product over boundary edges gives
     \begin{align}
         \sum_{\nu}K_R^X(\mu,\nu)\,(K_R^X)^{-1}(\nu,\rho)
          & =
@@ -687,7 +687,7 @@ every finite union of injective regions.
     finite union of injective finite regions is injective.
 \end{lemma}
 \begin{proof}\leanok
-    Induct on the nonempty finite indexing set. The singleton case is the
+    By induction on the nonempty finite indexing set, the singleton case is the
     given injectivity hypothesis, and the induction step is one application of
     binary union closure.
 \end{proof}
@@ -707,6 +707,6 @@ every finite union of injective regions.
     $(A\setminus B)\cup(A\cap B)\cup(B\setminus A)=A\cup B$.
 \end{lemma}
 \begin{proof}\leanok
-    Rewrite the three selected indexed unions as $A$, $B$, and $A\cup B$,
-    then apply binary union closure.
+    Rewriting the three selected indexed unions as $A$, $B$, and $A\cup B$
+    reduces the claim to binary union closure.
 \end{proof}
