@@ -61,6 +61,32 @@ for an arbitrary finite set of sites and are instantiated here directly.
     both $A$ and its complement; it is at least one.
 \end{definition}
 
+\begin{lemma}[Distance and spheres on a finite path]
+    \label{lem:chain_path_metric_spheres}
+    \lean{SimpleGraph.pathGraph_edist, SimpleGraph.pathGraph_card_sphere_le_two}
+    \leanok
+    Let $L$ be a natural number, and let $P_L$ be the graph on
+    $\{0,\ldots,L-1\}$ joining consecutive coordinates. For vertices $x,y$ and
+    every natural number $d$,
+    \begin{align}
+        d_{P_L}(x,y)                     & =|x-y|, \\
+        \bigl|\{y:d_{P_L}(x,y)=d\}\bigr| & \le2.
+    \end{align}
+    Thus the sphere growth bound holds with coefficient $2$ and exponent $0$,
+    independently of $L$. This concerns the contiguous chain setting of
+    Section~1 of~\cite{TNLean2026OneDimensional}.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Each edge changes the coordinate by one, so the displacement of a walk is
+    at most its length. Taking the infimum over walks gives one inequality.
+    In the other direction, successive coordinates between $x$ and $y$ stay
+    inside the chain and give a walk of length $|x-y|$. A site at distance $d$
+    from $x$ has coordinate $x-d$ or $x+d$; discarding coordinates outside the
+    chain leaves at most two sites. At $d=0$ the candidates coincide. When
+    $L=0$ there are no vertices, so the assertions are vacuous.
+\end{proof}
+
 \begin{lemma}[Marginal tail bound at a cut]
     \label{lem:chain_marginal_tail}
     \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.surprisalTail_regionState_le}
@@ -182,6 +208,112 @@ for an arbitrary finite set of sites and are instantiated here directly.
     bound follows from the crossing count and the dimension bound $q^{R+1}$. If
     a support met the shell with index $j$ and left the shell with index
     $j'>j$, two of its sites would be at distance at least $R+1$.
+\end{proof}
+
+% Source: TNLean2026OneDimensional, eq:ham; setting before lem:LR.
+\begin{lemma}[Interaction norm budget at a site]
+    \label{lem:chain_site_norm_budget}
+    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.sum_norm_terms_containing_le}
+    \leanok
+    \uses{def:chain_model}
+    Let $L,q,R$ be natural numbers and $J\in\mathbb R$. On the chain of $L$
+    sites with local dimension $q$, let $H=\sum_X h_X$ be a finite-range
+    Hamiltonian with one term of norm at most $J$ for each nonempty support
+    $X$ of diameter at most $R$. For every site $x$,
+    \begin{align}
+        \sum_{X\ni x}\lVert h_X\rVert\le 2^{2R+1}J.
+    \end{align}
+    This is an auxiliary consequence of the Hamiltonian setting
+    in Section~1 of~\cite{TNLean2026OneDimensional}; it supplies a
+    per-site interaction estimate of the form assumed immediately before
+    the Lieb--Robinson lemma there. No spectral-gap assumption is needed.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{def:chain_model, lem:chain_crossing_count}
+    Fix a site $x$. The singleton $\{x\}$ is an admissible support, so
+    $0\le\lVert h_{\{x\}}\rVert\le J$. Every support containing $x$ lies in
+    the clipped interval $[x-R,x+R+1)$, which has at most $2R+1$ sites.
+    Counting subsets of this interval gives at most $2^{2R+1}$ such supports.
+    Summing their norm bounds and using $J\ge0$ proves the claim. If the chain
+    has no sites, the assertion is vacuous.
+\end{proof}
+
+\section{Locality on a contiguous chain}
+
+\begin{theorem}[Lieb--Robinson estimates on a contiguous chain]
+    \label{thm:chain_lieb_robinson}
+    \lean{TNLean.MPS.AreaLaw.norm_heisenberg_commutator_le_chainDistance,
+        TNLean.MPS.AreaLaw.norm_heisenberg_sub_siteExpectation_chainNeighborhood_le}
+    \leanok
+    \uses{def:chain_model,def:qc_site_expectation}
+    Let $L,q,R$ be natural numbers. Let $K$ be a finite set of interaction
+    labels, and for each $k\in K$ let $X_k$ be a nonempty support of diameter
+    at most $R$ in the contiguous chain $I=\{0,\ldots,L-1\}$.
+    Let $h_k$ be Hermitian operators supported on $X_k$, and suppose that
+    $b_0\in\mathbb R$ satisfies
+    \begin{align}
+        \sum_{k:\,x\in X_k}\|h_k\|\le b_0
+    \end{align}
+    for every site $x$. Put $H=\sum_{k\in K}h_k$ and
+    $\tau_t(A)=e^{itH}Ae^{-itH}$, and set
+    \begin{align}
+        C_0 & =2+4|b_0|e^{2R},\notag      \\
+        v   & =2(R+1)|b_0|e^{2R}+1,\notag \\
+        \mu & =\tfrac12,\qquad
+        C'=\frac{2C_0e}{1-e^{-1/2}}.\notag
+    \end{align}
+    These constants are independent of $L,q$, the interaction family, and
+    the observable support. For $S\subseteq I$ let
+    $d(S,y)=\min_{x\in S}|x-y|$, with $d(\varnothing,y)=\infty$ and
+    $e^{-\mu\infty}=0$. For every operator $A$ supported on $S$, every site
+    $y$, every operator $B_y$ supported on $\{y\}$, and every real $t$,
+    \begin{align}
+        \|[\tau_t(A),B_y]\|
+        \le C_0|S|\|A\|\|B_y\|e^{v|t|}e^{-d(S,y)/2}.
+    \end{align}
+    This estimate allows every natural local dimension $q$.
+    If $q\ge1$, define, for every real $\ell\ge0$,
+    $N_\ell(S)=\{y\in I:\exists x\in S,\ |x-y|\le\ell\}$.
+    The normalized partial-trace expectation $E_{N_\ell(S)}$ then satisfies
+    \begin{align}
+        \|\tau_t(A)-E_{N_\ell(S)}(\tau_t(A))\|
+        \le C'|S|^2\|A\|e^{v|t|-\ell/2}.
+    \end{align}
+    Both estimates allow $S=\varnothing$. This is the contiguous-chain case
+    of the lemma ``Lieb--Robinson bound on a chain'' in Part~II
+    of~\cite{TNLean2026OneDimensional}, as used for its Theorem~B;
+    the distinction from the broader finite-domain reading is recorded
+    in~\cite{gap:tnlean_one_dimensional_connected_domain_scope}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{lem:chain_path_metric_spheres,thm:area_law_supported_identity,
+        thm:qc_graph_lieb_robinson_finset,
+        thm:qc_graph_neighborhood_localization}
+    Use the path graph on $I$. Its distance is $|x-y|$, each $X_k$ has
+    graph diameter at most $R$ and at most $R+1$ sites, and its nonemptiness
+    permits a choice of an anchor in $X_k$. The matrix-entry characterization
+    of support supplies the hypotheses on the supported algebras.
+    Apply the arbitrary-support graph commutator estimate with decay
+    parameter $1$ and support-size bound $R+1$. If $S$ is nonempty,
+    its least distance to $y$ is a finite nonnegative integer $d$, and
+    $e^{-d}\le e^{-d/2}$. For $S=\varnothing$, the factor $|S|$ makes
+    the commutator bound zero without selecting a point of $S$.
+
+    For localization assume $q\ge1$ and put $m=\lfloor\ell\rfloor$.
+    Every distance sphere of the path has at most two sites, so the graph
+    localization estimate applies with $K_g=2$ and growth exponent zero.
+    Since path distances are integers, the union of graph balls of radius
+    $m$ about $S$ is exactly $N_\ell(S)$. The tail constant and the rounding
+    bound are
+    \begin{align}
+        T_0      & =\frac{e^{1/2}}{1-e^{-1/2}},\notag \\
+        e^{-m/2} & \le e^{1/2}e^{-\ell/2}.\notag
+    \end{align}
+    Thus the graph coefficient $2C_0T_0$, multiplied by the rounding factor
+    $e^{1/2}$, is $C'$. Empty unions and the zero factor $|S|^2$ cover
+    $S=\varnothing$ as well.
 \end{proof}
 
 \section{The buffered discount with a constant-width buffer}

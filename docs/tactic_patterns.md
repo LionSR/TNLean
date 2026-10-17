@@ -4598,6 +4598,20 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 ## Candidates
 
+### Reversal of time in graph commutator bounds — candidate (2026-10-17)
+
+- **Pattern:** Apply the nonnegative-time estimate to the interaction family
+  `fun k ↦ -h k` at time `-t`, preserve its Hermiticity, supports and norm
+  budget, and rewrite with `heisenbergCommutatorNorm_neg_time`.
+- **Seen:** Two occurrences in `Circuit/LiebRobinson/GraphPropagation.lean`,
+  in `heisenbergCommutatorNorm_le_graphDistance` and
+  `heisenbergCommutatorNorm_le_graphDistance_finset`.
+- **Abstraction:** The common identity is already the public lemma
+  `heisenbergCommutatorNorm_neg_time`. The two applications have different
+  support and distance hypotheses. Keep their short arguments explicit until
+  the pattern occurs in a second file and meets the promotion threshold.
+
+
 ### Dyadic padding bounds — candidate (2026-10-16)
 
 - **Pattern:** Combine the lower and strict upper bounds for
@@ -8292,3 +8306,10 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Seen:** Two proofs, in `Circuit/EntropySupport.lean`, `mem_supportedOperators_of_isSupportedOn`, and `PEPS/AreaLaw/RegionalEntropyBridge.lean`, `localLift_eq_entropyLocalLift`.
 - **Possible abstraction:** A lemma identifying these two agreement conditions if a third use appears. The current two occurrences do not require a new public lemma.
 - **Notes:** Both comparisons reuse the existing local-lift entry formula. The Circuit result imports no PEPS or MPS module.
+
+### Choosing sites in nonempty interaction supports — candidate (2026-10-17)
+
+- **Pattern:** Choose a site in each nonempty interaction support and retain its membership proof.
+- **Seen:** The two proofs in `MPS/AreaLaw/LiebRobinson.lean`.
+- **Possible abstraction:** A support-choice lemma if a third substantive use appears. The diameter comparison is already a shared private lemma; two choices in one file do not warrant another abstraction.
+- **Notes:** The choices remain internal to the proofs and add no premise to either theorem.

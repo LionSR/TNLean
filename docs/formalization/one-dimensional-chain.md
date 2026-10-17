@@ -40,10 +40,66 @@ The protocol route of the note (information reset, births, exchanges, the sweep
 and the compression) is not formalized; Theorem B is proved by the two-line route
 alone.
 
+For the commutator estimate in Part II, Lemma `lem:LR`,
+`QuantumCircuit.norm_heisenberg_commutator_le_graphDistance_finset` proves
+graph propagation from an arbitrary finite support S, with prefactor |S| and
+constants independent of its diameter, the number of sites and the local
+dimension. Its restricted-norm version is
+`QuantumCircuit.heisenbergCommutatorNorm_le_graphDistance_finset`.
+For support diameter R, support cardinality bound v_R and per-site norm budget
+b₀, the explicit constants are C = 2 + 4|b₀| exp(2μR) and
+v = 2v_R|b₀| exp(2μR) + 1, for μ ≥ 0.
+
+For localization, under polynomial sphere growth K_g(d + 1)^k,
+`QuantumCircuit.norm_heisenberg_sub_siteExpectation_graphNeighborhood_le`
+bounds the error of the normalized partial trace onto the union of the radius-ℓ
+balls about S by C |S|² ‖A‖ K_g T_k exp(v|t| − ℓ/2), for natural ℓ. Here
+C and v are the preceding constants at μ = 1, and
+T_k = 2^k k! exp(1/2) / (1 − exp(−1/2)). The pure graph tail estimate is
+`QuantumCircuit.sum_exp_neg_edist_compl_graphBall_le`.
+Neither result requires a diameter bound or nonemptiness assumption on S.
+
+For the undoubled Hamiltonian on the contiguous chain,
+`MPS.AreaLaw.ChainHamiltonian.sum_norm_terms_containing_le` proves the per-site
+budget ∑_{X∋x} ‖h_X‖ ≤ 2^(2R+1) J, with the original real bound J.
+No sign assumption is added: an actual site supplies the admissible singleton
+{x}, whose norm bound implies J ≥ 0; the assertion is vacuous on an empty
+chain.
+
+The finite-path graph satisfies `SimpleGraph.pathGraph_edist`: its extended
+distance is the absolute coordinate difference. The lemma
+`SimpleGraph.pathGraph_card_sphere_le_two` bounds every distance sphere by
+two sites, giving growth coefficient 2 and exponent 0 independently of the
+chain length. These statements include the empty chain and all natural
+radii. They concern the contiguous path; coordinate distance does not replace
+graph distance across holes in a disconnected domain.
+
+The matrix-entry condition for support is equivalent to membership in the
+supported-operator algebra by `QuantumCircuit.mem_supportedOperators_of_isSupportedOn`
+and its converse. The paired two-copy construction
+`MPS.AreaLaw.ChainHamiltonian.doubled` keeps the same physical supports and
+has local dimension q² and term bound 2J. The equality
+`MPS.AreaLaw.ChainHamiltonian.doubled_operator` identifies its sum exactly
+with H⊗1+1⊗H in paired coordinates.
+
+On a contiguous chain, `MPS.AreaLaw.norm_heisenberg_commutator_le_chainDistance`
+and `MPS.AreaLaw.norm_heisenberg_sub_siteExpectation_chainNeighborhood_le`
+prove both estimates with common decay exponent μ = 1/2 and velocity
+v = 2(R + 1)|b₀| exp(2R) + 1. The commutator coefficient is
+C = 2 + 4|b₀| exp(2R); the localization coefficient is
+C′ = 2C exp(1)/(1 − exp(−1/2)). Localization uses the exact closed neighborhood
+at every real radius ℓ ≥ 0. Empty supports are allowed; their distance to a
+site is infinity, with decay factor zero. Only localization requires q ≥ 1.
+These are the contiguous-chain estimates needed in the matrix product state
+argument. The broader finite-domain reading of the source lemma remains
+separate, as recorded in the connected-domain scope note. The full protocol
+construction is also separate.
+
 ## Constants
 
-Every constant is a definition of `(q, R, J, Δ)` and, for the bond dimension,
-`L`; no statement carries an existential constant. In the order the proof fixes
+Every constant in the chain area-law and sequential-truncation bounds is a
+definition of `(q, R, J, Δ)` and, for the bond dimension, `L`; these statements
+carry no existential constant. In the order the proof fixes
 them:
 
 | Name | Value |
