@@ -26,8 +26,10 @@ The estimates for the actual protocol vectors and its compressed operator
 are assumed, and the operator network is already on the open square.
 The source selects a column on the party network before routing it.
 The present statement takes the square network first and preserves its
-individual edge dimensions. The missing protocol and routing implications
-are recorded in `docs/paper-gaps/polypeps_product_reference_column.tex`.
+individual edge dimensions. The source order, with the estimates verified for
+the protocol, is followed in
+`largeSizeDyadicOperatorNetwork_of_largeSizeDyadicProtocolConsequences`; see
+`docs/paper-gaps/polypeps_product_reference_column.tex`.
 
 Source: *Polynomial PEPS approximation of gapped square-grid ground states*,
 §8.1, `eq:reference-junk`, `eq:protocol-density`, `eq:compressed-density`, and
