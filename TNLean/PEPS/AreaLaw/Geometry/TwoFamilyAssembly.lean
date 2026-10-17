@@ -96,7 +96,8 @@ theorem exists_primaryLayer_of_repairStageBirthRank_eq_zero (n : ℕ)
     existsUnique_initialPrimary_of_repairStageBirthRank_eq_zero o Λ A C k₀ hC h₀ Sstar
       n x hx hxd
   refine ⟨k, hk, ?_, ?_⟩
-  · exact (repairStageCharacteristicLength_oldInclusion o Λ A C k₀ hC h₀ Sstar 0 n _).trans rfl
+  · exact (repairStageCharacteristicLength_oldInclusion o Λ A C k₀ hC h₀ Sstar 0 n _).trans
+      rfl
   · intro y hyx hyd hy hcol p hp q hq
     obtain ⟨⟨⟨h, hh⟩, ⟨J', hJ'⟩⟩, rfl, -⟩ :=
       existsUnique_initialPrimary_of_repairStageBirthRank_eq_zero o Λ A C k₀ hC h₀ Sstar
@@ -136,7 +137,8 @@ theorem exists_uniform_repairStage_primary_error_sum_bound {CP : ℝ} (hCP : 0 <
         (S : Finset (repairStage o Λ A C k₀ hC h₀ Sstar (0 + n)).regionIndex),
         (∀ x ∈ S, repairStageBirthRank o Λ A C k₀ hC h₀ Sstar (0 + n) x = 0 ∧
           x ≠ (repairStage o Λ A C k₀ hC h₀ Sstar (0 + n)).dummy) →
-        ∑ x ∈ S, (((⌈CP * repairStageCharacteristicLength o Λ A C k₀ hC h₀ Sstar (0 + n) x ^
+        ∑ x ∈ S, (((⌈CP *
+            repairStageCharacteristicLength o Λ A C k₀ hC h₀ Sstar (0 + n) x ^
             (1 + 2 * (Exponents.geometryDelta : ℝ))⌉₊ : ℕ) : ℝ) ^ 100)⁻¹ ≤
           M * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary Λ A).card := by
   classical
@@ -158,10 +160,12 @@ theorem exists_uniform_repairStage_primary_error_sum_bound {CP : ℝ} (hCP : 0 <
   choose p hp using hex
   let layer : S → ℕ := fun x ↦ (p x).1.val
   let w : ℕ → ℝ := fun k ↦
-    (((⌈CP * ((2 : ℝ) ^ k) ^ (1 + 2 * (Exponents.geometryDelta : ℝ))⌉₊ : ℕ) : ℝ) ^ 100)⁻¹
+    (((⌈CP * ((2 : ℝ) ^ k) ^ (1 + 2 * (Exponents.geometryDelta : ℝ))⌉₊ : ℕ) : ℝ) ^
+      100)⁻¹
   have hterm : ∀ x : S,
       (((⌈CP * repairStageCharacteristicLength o Λ A C k₀ hC h₀ Sstar (0 + n) x.val ^
-          (1 + 2 * (Exponents.geometryDelta : ℝ))⌉₊ : ℕ) : ℝ) ^ 100)⁻¹ = w (layer x) := by
+          (1 + 2 * (Exponents.geometryDelta : ℝ))⌉₊ : ℕ) : ℝ) ^ 100)⁻¹ =
+        w (layer x) := by
     intro x
     have hl : repairStageCharacteristicLength o Λ A C k₀ hC h₀ Sstar (0 + n) x.val =
         (2 : ℝ) ^ layer x := by
@@ -226,7 +230,8 @@ theorem card_repairStageExceptionalSites_le_of_isEmpty (N : ℕ)
   have hterm := card_repairTerminalInteriorSites_prefix_le dyadicOrigin Λ A C k₀ hC h₀
     Sstar N
   have hcard := (Finset.card_le_card hsplit).trans (Finset.card_union_le _ _)
-  have hcardR : ((repairStageExceptionalSites dyadicOrigin Λ A C k₀ hC h₀ Sstar N).card : ℝ) ≤
+  have hcardR :
+      ((repairStageExceptionalSites dyadicOrigin Λ A C k₀ hC h₀ Sstar N).card : ℝ) ≤
       ((𝔇 N).regionSites Λ A (𝔇 N).dummy).card +
         (A.filter (fun x ↦ integerPoint x.val ∈
           ⋃ j < N, repairTerminalInteriorSet (𝔇 j).location (𝔇 j).scale Sstar)).card := by
@@ -331,22 +336,24 @@ theorem twoFamilyDecomposition {D₀ Ctpl : ℝ} (hCtpl : 1 ≤ Ctpl) :
   set N : ℕ := 0 + N₀ with hNdef
   obtain ⟨P, e, hpiece, hfam, hres, hmono⟩ :=
     hmh.exists_orderedTwoFamilyPartition_of_isEmpty hS1.le hb N
+  let 𝔇N := repairStage dyadicOrigin Λ A C k₀ hC h₀ Sstar N
+  let Ret := 𝔇N.RetainedRegionIndex Λ A
   -- Names for ranks, lengths and scanner scales of retained identifiers.
-  let rank : (repairStage dyadicOrigin Λ A C k₀ hC h₀ Sstar N).RetainedRegionIndex Λ A → ℕ := fun r ↦
+  let rank : Ret → ℕ := fun r ↦
     repairStageBirthRank dyadicOrigin Λ A C k₀ hC h₀ Sstar N r.val
-  let len : (repairStage dyadicOrigin Λ A C k₀ hC h₀ Sstar N).RetainedRegionIndex Λ A → ℝ := fun r ↦
+  let len : Ret → ℝ := fun r ↦
     repairStageCharacteristicLength dyadicOrigin Λ A C k₀ hC h₀ Sstar N r.val
-  let nf : (repairStage dyadicOrigin Λ A C k₀ hC h₀ Sstar N).RetainedRegionIndex Λ A → ℕ := fun r ↦
+  let nf : Ret → ℕ := fun r ↦
     if rank r = 0 then ⌈CP * len r ^ (1 + 2 * (Exponents.geometryDelta : ℝ))⌉₊
     else ⌈CB * len r⌉₊
   -- Positive-rank lengths are large; rank-zero identifiers are primaries.
   have hlenU : ∀ r, rank r ≠ 0 → U ≤ len r := fun r hr ↦
     hKU dyadicOrigin Λ A C k₀ hC h₀ hKU₀ Sstar hSU N r.val (Nat.pos_of_ne_zero hr)
   have hprimary : ∀ r, rank r = 0 → ∃ k : ℕ, k₀ ≤ k ∧ len r = 2 ^ k ∧
-      ∀ y : (repairStage dyadicOrigin Λ A C k₀ hC h₀ Sstar N).regionIndex, y ≠ r.val → y ≠ (repairStage dyadicOrigin Λ A C k₀ hC h₀ Sstar N).dummy →
+      ∀ y : 𝔇N.regionIndex, y ≠ r.val → y ≠ 𝔇N.dummy →
         repairStageBirthRank dyadicOrigin Λ A C k₀ hC h₀ Sstar N y = 0 →
-        (repairStage dyadicOrigin Λ A C k₀ hC h₀ Sstar N).color y = (repairStage dyadicOrigin Λ A C k₀ hC h₀ Sstar N).color r.val →
-        ∀ p ∈ (repairStage dyadicOrigin Λ A C k₀ hC h₀ Sstar N).birth r.val, ∀ q ∈ (repairStage dyadicOrigin Λ A C k₀ hC h₀ Sstar N).birth y,
+        𝔇N.color y = 𝔇N.color r.val →
+        ∀ p ∈ 𝔇N.birth r.val, ∀ q ∈ 𝔇N.birth y,
           min ((2 : ℝ) ^ fineScaleIndex k) ((2 : ℝ) ^ k / 2) ≤ dist p q := fun r hr ↦
     exists_primaryLayer_of_repairStageBirthRank_eq_zero dyadicOrigin Λ A C k₀ hC h₀ Sstar
       N₀ r.val hr r.property.1
@@ -360,18 +367,18 @@ theorem twoFamilyDecomposition {D₀ Ctpl : ℝ} (hCtpl : 1 ≤ Ctpl) :
   -- Templates for the closed births.
   have htemp : ∀ i : Fin P.pieceCount, ∃ s : ℕ, ∃ T : Template Ctpl (nf (e i)) s,
       ((s : ℝ) = if rank (e i) ≤ 1 then len (e i) else 2 * len (e i)) ∧
-      (∀ y : ℤ × ℤ, y ∈ T.points ↔ integerPoint y ∈ (repairStage dyadicOrigin Λ A C k₀ hC h₀ Sstar N).birth (e i).val) ∧
+      (∀ y : ℤ × ℤ, y ∈ T.points ↔ integerPoint y ∈ 𝔇N.birth (e i).val) ∧
       T.IsSeparated D₀ (boundaryEndpoints Λ A) ∧
       ∀ y ∈ T.points, ∀ z ∈ boundaryEndpoints Λ A,
         2 * (nf (e i) : ℝ) ^ (Exponents.beta : ℝ) < (Scan.ambientSupDistance y z : ℝ) := by
     intro i
     obtain ⟨w, hw⟩ := (e i).property.2
-    have hwb : integerPoint w.val ∈ (repairStage dyadicOrigin Λ A C k₀ hC h₀ Sstar N).birth (e i).val :=
+    have hwb : integerPoint w.val ∈ 𝔇N.birth (e i).val :=
       repairStage_current_subset_birth dyadicOrigin Λ A C k₀ hC h₀ Sstar N _
         (Finset.mem_filter.mp hw).2
     exact hKT dyadicOrigin Λ A k₀ hC h₀ hKT₀ N (e i).val (e i).property.1 w.val hwb
   choose s T hs hpts hTsep hcut using htemp
-  have hlen_pos : ∀ r : (repairStage dyadicOrigin Λ A C k₀ hC h₀ Sstar N).RetainedRegionIndex Λ A, 0 < len r := fun r ↦
+  have hlen_pos : ∀ r : Ret, 0 < len r := fun r ↦
     repairStageCharacteristicLength_pos_of_ne_dummy dyadicOrigin Λ A C k₀ hC h₀ Sstar N
       r.val r.property.1
   refine ⟨P, fun i ↦ nf (e i), s, T, ?_, ?_, ?_, hTsep, ?_, ?_, hcut, ?_, ?_⟩
@@ -391,7 +398,7 @@ theorem twoFamilyDecomposition {D₀ Ctpl : ℝ} (hCtpl : 1 ≤ Ctpl) :
     intro i x hx
     rw [hpiece] at hx
     have hxA := (Finset.mem_filter.mp hx).1
-    have hxb : integerPoint x.val ∈ (repairStage dyadicOrigin Λ A C k₀ hC h₀ Sstar N).birth (e i).val :=
+    have hxb : integerPoint x.val ∈ 𝔇N.birth (e i).val :=
       repairStage_current_subset_birth dyadicOrigin Λ A C k₀ hC h₀ Sstar N _
         (Finset.mem_filter.mp hx).2
     exact Finset.mem_filter.mpr ⟨hxA, (hpts i x.val).mpr hxb⟩
@@ -444,20 +451,19 @@ theorem twoFamilyDecomposition {D₀ Ctpl : ℝ} (hCtpl : 1 ≤ Ctpl) :
     obtain ⟨j, hj, hzj⟩ := Finset.mem_biUnion.mp hz
     obtain ⟨hji, hfji⟩ := (Finset.mem_filter.mp hj).2
     rw [hpiece] at hzj
-    have hzc : integerPoint z.val ∈ (repairStage dyadicOrigin Λ A C k₀ hC h₀ Sstar N).current (e j).val := (Finset.mem_filter.mp hzj).2
-    have hcol : (repairStage dyadicOrigin Λ A C k₀ hC h₀ Sstar N).color (e j).val = (repairStage dyadicOrigin Λ A C k₀ hC h₀ Sstar N).color (e i).val := by
-      rw [← hfam, ← hfam]
-      exact hfji
+    have hzc : integerPoint z.val ∈ 𝔇N.current (e j).val := (Finset.mem_filter.mp hzj).2
+    have hcol : 𝔇N.color (e j).val = 𝔇N.color (e i).val := by
+      exact (hfam j).symm.trans (hfji.trans (hfam i))
     have hrank : rank (e j) ≤ rank (e i) := hmono hji.le
     have hne : (e j).val ≠ (e i).val := fun h ↦
       hji.ne (e.injective (Subtype.ext h))
-    have htb : integerPoint t ∈ (repairStage dyadicOrigin Λ A C k₀ hC h₀ Sstar N).birth (e i).val := (hpts i t).mp ht
+    have htb : integerPoint t ∈ 𝔇N.birth (e i).val := (hpts i t).mp ht
     rw [← dist_integerPoint_eq_ambientSupDistance]
     by_cases hr : rank (e i) = 0
     · obtain ⟨k, hk, hlen, hsepP⟩ := hprimary (e i) hr
       have hrj : repairStageBirthRank dyadicOrigin Λ A C k₀ hC h₀ Sstar N (e j).val = 0 :=
         Nat.le_zero.mp (hr ▸ hrank)
-      have hzb : integerPoint z.val ∈ (repairStage dyadicOrigin Λ A C k₀ hC h₀ Sstar N).birth (e j).val :=
+      have hzb : integerPoint z.val ∈ 𝔇N.birth (e j).val :=
         repairStage_current_subset_birth dyadicOrigin Λ A C k₀ hC h₀ Sstar N _ hzc
       have hd := hsepP (e j).val hne (e j).property.1 hrj hcol _ htb _ hzb
       rw [hnf_primary (e i) hr k hlen]
@@ -481,19 +487,19 @@ theorem twoFamilyDecomposition {D₀ Ctpl : ℝ} (hCtpl : 1 ≤ Ctpl) :
         ((le_max_left _ _).trans (le_max_left _ _)).trans (hlenU (e i) hr)
       exact (hU₁ _ hU1).trans_le hd
   · -- The error sum.
-    have : Finite ((repairStage dyadicOrigin Λ A C k₀ hC h₀ Sstar N).RetainedRegionIndex Λ A) :=
-      (repairStage dyadicOrigin Λ A C k₀ hC h₀ Sstar N).finite_retainedRegionIndex Λ A (hmh.current_pairwise_disjoint N)
-    let := Fintype.ofFinite ((repairStage dyadicOrigin Λ A C k₀ hC h₀ Sstar N).RetainedRegionIndex Λ A)
-    let g : (repairStage dyadicOrigin Λ A C k₀ hC h₀ Sstar N).RetainedRegionIndex Λ A → ℝ := fun r ↦ ((nf r : ℝ) ^ 100)⁻¹
+    have : Finite (Ret) :=
+      𝔇N.finite_retainedRegionIndex Λ A (hmh.current_pairwise_disjoint N)
+    let := Fintype.ofFinite (Ret)
+    let g : Ret → ℝ := fun r ↦ ((nf r : ℝ) ^ 100)⁻¹
     have hsplit : ∑ i, ((nf (e i) : ℝ) ^ 100)⁻¹ =
-        ∑ r : {r : (repairStage dyadicOrigin Λ A C k₀ hC h₀ Sstar N).RetainedRegionIndex Λ A // rank r = 0}, g r.val +
-          ∑ r : {r : (repairStage dyadicOrigin Λ A C k₀ hC h₀ Sstar N).RetainedRegionIndex Λ A // ¬ rank r = 0}, g r.val := by
+        ∑ r : {r : Ret // rank r = 0}, g r.val +
+          ∑ r : {r : Ret // ¬ rank r = 0}, g r.val := by
       rw [Fintype.sum_subtype_add_sum_subtype]
       exact e.sum_comp g
     -- Primaries.
-    have hP : ∑ r : {r : (repairStage dyadicOrigin Λ A C k₀ hC h₀ Sstar N).RetainedRegionIndex Λ A // rank r = 0}, g r.val ≤
+    have hP : ∑ r : {r : Ret // rank r = 0}, g r.val ≤
         Mp * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary Λ A).card := by
-      let f : {r : (repairStage dyadicOrigin Λ A C k₀ hC h₀ Sstar N).RetainedRegionIndex Λ A // rank r = 0} → (repairStage dyadicOrigin Λ A C k₀ hC h₀ Sstar N).regionIndex :=
+      let f : {r : Ret // rank r = 0} → 𝔇N.regionIndex :=
         fun r ↦ r.val.val
       have hf : Function.Injective f := fun r r' h ↦ Subtype.ext (Subtype.ext h)
       have h := hprim dyadicOrigin Λ A C k₀ hC h₀ Sstar N₀ (Finset.univ.image f)
@@ -506,13 +512,13 @@ theorem twoFamilyDecomposition {D₀ Ctpl : ℝ} (hCtpl : 1 ≤ Ctpl) :
       simp only [g, nf, r.property, ite_true]
       rfl
     -- The remaining identifiers.
-    have hQ : ∑ r : {r : (repairStage dyadicOrigin Λ A C k₀ hC h₀ Sstar N).RetainedRegionIndex Λ A // ¬ rank r = 0}, g r.val ≤
+    have hQ : ∑ r : {r : Ret // ¬ rank r = 0}, g r.val ≤
         Lq * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary Λ A).card := by
       have h := hnonprim' dyadicOrigin Λ A C k₀ hC h₀ (1 / 4) hmh N
       simp only at h
       rw [finsum_eq_sum_of_fintype] at h
-      let ε : {r : (repairStage dyadicOrigin Λ A C k₀ hC h₀ Sstar N).RetainedRegionIndex Λ A // ¬ rank r = 0} ≃
-          {r : (repairStage dyadicOrigin Λ A C k₀ hC h₀ Sstar N).RetainedRegionIndex Λ A // 0 < rank r} :=
+      let ε : {r : Ret // ¬ rank r = 0} ≃
+          {r : Ret // 0 < rank r} :=
         Equiv.subtypeEquivRight fun r ↦ Nat.pos_iff_ne_zero.symm
       refine le_of_eq_of_le ?_ h
       rw [← ε.sum_comp]
