@@ -210,6 +210,56 @@ for an arbitrary finite set of sites and are instantiated here directly.
     $j'>j$, two of its sites would be at distance at least $R+1$.
 \end{proof}
 
+\begin{lemma}[Supports split by an arbitrary region of a chain]
+    \label{lem:chain_boundary_crossing_count}
+    \lean{TNLean.MPS.AreaLaw.IsChainSupport.exists_boundary_window_of_split,
+        TNLean.MPS.AreaLaw.card_crossingTerms_le_mul_card_boundaryEdges}
+    \leanok
+    \uses{def:chain_model,lem:chain_entropy_inequalities}
+    Let $L,R$ be natural numbers, let $I=\{0,\ldots,L-1\}$ be the
+    contiguous chain, and let $D\subseteq I$. Write $\partial D$ for the
+    positions $p$ with $p+1<L$ such that exactly one of $p,p+1$ belongs
+    to $D$. For $p\in\partial D$ put
+    \begin{align}
+        W_p=I\cap[\max\{0,p+1-R\},\,p+1+R).
+    \end{align}
+    If a nonempty support $X\subseteq I$ of diameter at most $R$ meets
+    both $D$ and $I\setminus D$, then $X\subseteq W_p$ for some actual
+    boundary edge $p\in\partial D$. Consequently,
+    \begin{align}
+        \#\{X\subseteq I:\ X\ne\varnothing,\ \operatorname{diam}X\le R,
+        \ X\cap D\ne\varnothing,\ X\setminus D\ne\varnothing\}
+        \le 2^{2R}|\partial D|.
+    \end{align}
+    No interval assumption on $D$ is needed. The conclusions include the
+    empty chain and $R=0$; in either case there is no split support.
+    This is the boundary-window count underlying the interval estimate
+    in Section~2, equation~\textup{(count)}, and the boundary count in the
+    paragraph ``Two-sided Gaussian filtering'' of
+    \cite{TNLean2026OneDimensional}.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{def:chain_model,lem:chain_entropy_inequalities,
+        lem:chain_crossing_count}
+    Choose two sites of $X$ with different membership in $D$, and order
+    their coordinates as $a<b$. Along the integer interval from $a$ to
+    $b$, the indicator of $D$ must change at two consecutive sites
+    $p,p+1$. Thus $a\le p<p+1\le b<L$ and $p\in\partial D$.
+
+    For every $x\in X$, the diameter bound gives
+    $x\le a+R$ and $b\le x+R$. Hence
+    \begin{align}
+        \max\{0,p+1-R\}\le x<p+1+R,
+    \end{align}
+    proving $X\subseteq W_p$. Each window has at most $2R$ sites, so
+    contains at most $2^{2R}$ subsets. Cover the split supports by the
+    families of subsets of $W_p$, one family for each $p\in\partial D$,
+    and bound the cardinality of the finite union by the sum of their
+    cardinalities. This proves the stated bound, including the case of
+    an empty boundary.
+\end{proof}
+
 % Source: TNLean2026OneDimensional, eq:ham; setting before lem:LR.
 \begin{lemma}[Interaction norm budget at a site]
     \label{lem:chain_site_norm_budget}

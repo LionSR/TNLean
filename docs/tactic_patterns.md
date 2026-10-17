@@ -8313,3 +8313,10 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Seen:** The two proofs in `MPS/AreaLaw/LiebRobinson.lean`.
 - **Possible abstraction:** A support-choice lemma if a third substantive use appears. The diameter comparison is already a shared private lemma; two choices in one file do not warrant another abstraction.
 - **Notes:** The choices remain internal to the proofs and add no premise to either theorem.
+
+### Counting supports in short windows — candidate (2026-10-17)
+
+- **Pattern:** Bound the number of supports in a window by the size of its powerset, then increase the exponent using a bound on the window length.
+- **Seen:** The symmetric-window comparison occurs in `MPS/AreaLaw/Counting.lean`, `card_crossingTerms_interval_le`, and `MPS/AreaLaw/BoundaryCounting.lean`, `card_crossingTerms_le_mul_card_boundaryEdges`. `InteractionBudget.lean` has the related window of width `2R + 1`.
+- **Existing abstractions:** `card_filter_subset_le`, `Nat.pow_le_pow_right`, and `card_interval_le` already contain the common counting and monotonicity arguments. The finite union uses `Finset.card_biUnion_le_card_mul` directly.
+- **Notes:** No powerset injection or finite-union proof is duplicated. There are two exact symmetric-window comparisons; their remaining arithmetic is a single `omega` call. No further lemma or tactic is needed at present.
