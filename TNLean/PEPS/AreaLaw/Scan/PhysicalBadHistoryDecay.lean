@@ -15,6 +15,7 @@ Only source geometry assumptions remain: compact target size, ambient row
 bounds, target clearance from the cut, and bounded labelled anchor multiplicity.
 The exponent 200 in Lemma 9.1 is a specialization of the arbitrary exponent.
 Quantum transported states and their entropy gains are separate questions.
+The threshold is the explicit `badHistoryThreshold` of the scalar bound.
 
 Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 Lemma 9.1, `08-scanner.tex`, lines 309–329, at `openai/math@adc7f124`.
@@ -26,6 +27,61 @@ open scoped BigOperators
 namespace TNLean.PEPS.AreaLaw.Scan
 
 universe u
+
+open Classical in
+/-- Lemma 9.1's bad-history estimate for actual finite physical histories, with
+an arbitrary decay exponent, at every `n` from the explicit threshold
+`badHistoryThreshold kappa Cr C1 Ct multiplicity p` on (`08-scanner.tex`, lines 309–329).
+The threshold precedes the domain, target, labels, and scanner. -/
+theorem bad_history_probability_le_of_threshold_le
+    {ell kappa mu Cr C1 Ct : ℝ} (hell : 0 < ell) (hkappa : 0 < kappa)
+    (hkappamu : kappa < mu) (hmu : mu < 1 - ell)
+    (hCr : 0 < Cr) (hC1 : 0 < C1) (hCt : 0 ≤ Ct)
+    (multiplicity : ℕ) (p : ℝ) {n : ℕ}
+    (hthr : badHistoryThreshold kappa Cr C1 Ct multiplicity p ≤ n) :
+    ∀ (I : Type u) [Fintype I] [LinearOrder I]
+      (Λ T : Finset (ℤ × ℤ)) (hT : T.Nonempty) (S : CollarScan (Site Λ) I),
+      S.n = n → S.m = ⌊(n : ℝ) ^ mu⌋₊ →
+      S.K = ⌊(n : ℝ) ^ (1 - ell)⌋₊ / (8 * S.m) →
+      S.D = ⌈(n : ℝ) ^ kappa⌉₊ → S.r₀ = roundedLogRadius Cr n →
+      S.M = ⌈C1 * n * S.D⌉₊ → (T.card : ℝ) ≤ Ct * (n : ℝ) ^ 2 →
+      S.graph = domainGraph Λ → S.depth = (fun x ↦ ambientDepth T hT x.val) →
+      (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+        ((2 * ⌊(n : ℝ) ^ (1 - ell)⌋₊ + 10 * S.r₀ : ℕ) : ℤ) <
+          ambientSupDistance t z) →
+      (∀ d : ℕ, 1 ≤ d → d ≤ ⌊(n : ℝ) ^ (1 - ell)⌋₊ →
+        (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n) →
+      (∀ y, (Finset.univ.filter fun i ↦ S.anchor i = y).card ≤ multiplicity) →
+      (∑ h : History S.K S.m S.M (n * S.m),
+        if ¬ S.IsGoodThrough h then historyWeight h else 0) ≤ (n : ℝ) ^ (-p) := by
+  have hscalar := badHistory_bound_le_rpow_of_threshold_le hell hkappa hmu hCr hC1 hCt
+    multiplicity p hthr
+  have hn3 : 3 ≤ n := (three_le_badHistoryThreshold _ _ _ _ _ _).trans hthr
+  have hr := one_le_roundedLogRadius_of_two_le hCr (show 2 ≤ n by omega)
+  have hn : 1 ≤ n := by omega
+  intro I _ _ Λ T hT S hSn hm hK hD hR hM ht hgraph hdepth hclear hrows hmult
+  have hnR : (1 : ℝ) ≤ n := by exact_mod_cast hn
+  have hnpos : (0 : ℝ) < n := lt_of_lt_of_le zero_lt_one hnR
+  have hnNat : 0 < S.n := by omega
+  have hmNat : 0 < S.m := by
+    rw [hm]
+    apply lt_of_lt_of_le Nat.zero_lt_one
+    apply (Nat.one_le_floor_iff _).mpr
+    exact Real.one_le_rpow hnR (by linarith : 0 ≤ mu)
+  have hDpos : 0 < S.D := by
+    rw [hD]
+    exact Nat.ceil_pos.mpr (Real.rpow_pos_of_pos hnpos _)
+  have hMpos : 0 < S.M := by
+    rw [hM]
+    apply Nat.ceil_pos.mpr
+    exact mul_pos (mul_pos hC1 hnpos) (by exact_mod_cast hDpos)
+  have hL : 8 * S.K * S.m ≤ ⌊(n : ℝ) ^ (1 - ell)⌋₊ := by
+    rw [hK]
+    simpa only [mul_comm, mul_left_comm, mul_assoc] using
+      Nat.div_mul_le_self ⌊(n : ℝ) ^ (1 - ell)⌋₊ (8 * S.m)
+  exact (S.sum_historyWeight_bad_through_geometric_domainGraph_le hT hgraph hdepth
+    hnNat hmNat (by omega : 0 < S.r₀) hMpos hL hclear hrows hmult).trans
+      (hscalar (Site Λ) I S T.card hSn hm hK hD hR hM ht)
 
 open Classical in
 /-- Lemma 9.1's bad-history estimate for actual finite physical histories, with
@@ -51,33 +107,8 @@ theorem eventually_bad_history_probability_le
         (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n) →
       (∀ y, (Finset.univ.filter fun i ↦ S.anchor i = y).card ≤ multiplicity) →
       (∑ h : History S.K S.m S.M (n * S.m),
-        if ¬ S.IsGoodThrough h then historyWeight h else 0) ≤ (n : ℝ) ^ (-p) := by
-  have hscalar := eventually_badHistory_bound_le_rpow hell hkappa hmu hCr hC1 hCt
-    multiplicity p
-  filter_upwards [hscalar, eventually_one_le_roundedLogRadius hCr,
-    eventually_ge_atTop (1 : ℕ)] with n hscalar hr hn
-  intro I _ _ Λ T hT S hSn hm hK hD hR hM ht hgraph hdepth hclear hrows hmult
-  have hnR : (1 : ℝ) ≤ n := by exact_mod_cast hn
-  have hnpos : (0 : ℝ) < n := lt_of_lt_of_le zero_lt_one hnR
-  have hnNat : 0 < S.n := by omega
-  have hmNat : 0 < S.m := by
-    rw [hm]
-    apply lt_of_lt_of_le Nat.zero_lt_one
-    apply (Nat.one_le_floor_iff _).mpr
-    exact Real.one_le_rpow hnR (by linarith : 0 ≤ mu)
-  have hDpos : 0 < S.D := by
-    rw [hD]
-    exact Nat.ceil_pos.mpr (Real.rpow_pos_of_pos hnpos _)
-  have hMpos : 0 < S.M := by
-    rw [hM]
-    apply Nat.ceil_pos.mpr
-    exact mul_pos (mul_pos hC1 hnpos) (by exact_mod_cast hDpos)
-  have hL : 8 * S.K * S.m ≤ ⌊(n : ℝ) ^ (1 - ell)⌋₊ := by
-    rw [hK]
-    simpa only [mul_comm, mul_left_comm, mul_assoc] using
-      Nat.div_mul_le_self ⌊(n : ℝ) ^ (1 - ell)⌋₊ (8 * S.m)
-  exact (S.sum_historyWeight_bad_through_geometric_domainGraph_le hT hgraph hdepth
-    hnNat hmNat (by omega : 0 < S.r₀) hMpos hL hclear hrows hmult).trans
-      (hscalar (Site Λ) I S T.card hSn hm hK hD hR hM ht)
+        if ¬ S.IsGoodThrough h then historyWeight h else 0) ≤ (n : ℝ) ^ (-p) :=
+  eventually_atTop.2 ⟨_, fun _ => bad_history_probability_le_of_threshold_le hell hkappa hkappamu
+    hmu hCr hC1 hCt multiplicity p⟩
 
 end TNLean.PEPS.AreaLaw.Scan
