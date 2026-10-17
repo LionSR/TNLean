@@ -183,7 +183,8 @@ theorem protocolPlacement_squareParty {L k : ℕ} (hkL : L ≤ 2 ^ k) (hk2 : 2 ^
     rw [hsplit] at hx hy
     have hx' := Nat.le_of_mul_le_mul_left hx (by positivity)
     have hy' := Nat.le_of_mul_le_mul_left hy (by positivity)
-    exact ⟨⟨⟨j, by omega⟩, ⟨x, by omega⟩, ⟨y, by omega⟩⟩, rfl⟩
+    exact ⟨⟨⟨j, by omega⟩, ⟨x, show x < 2 ^ (k - j) by omega⟩,
+      ⟨y, show y < 2 ^ (k - j) by omega⟩⟩, rfl⟩
   choose g hg using mk
   exact ⟨fun S => .inl (g S), fun S S' h => Subtype.ext (by
     rw [← hg S, ← hg S', Sum.inl_injective h]), fun S => hg S⟩

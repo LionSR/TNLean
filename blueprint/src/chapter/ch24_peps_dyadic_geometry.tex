@@ -1971,6 +1971,7 @@ is not proved here.
         TNLean.PEPS.Approximation.DyadicProtocol.readout,
         TNLean.PEPS.Approximation.DyadicProtocol.physicalDensity,
         TNLean.PEPS.Approximation.DyadicProtocol.participation,
+        TNLean.PEPS.Approximation.HierarchySquare,
         TNLean.PEPS.Approximation.DyadicProtocol.IsDistributionProtocol,
         TNLean.PEPS.Approximation.LargeSizeDyadicProtocolConsequences}
     \leanok
@@ -1996,7 +1997,9 @@ is not proved here.
     \begin{enumerate}
         \item Every party is attached to a square of the padded hierarchy,
               there are at most $CL^2$ parties, and at most $b$ of them are
-              attached to any square.
+              attached to any square. A different party is assigned to each
+              aligned square of the padded hierarchy, including the root
+              square, at the scale and address of that square.
         \item There are at most $CL^3$ changes. Each change has at most $b$
               nonprivate gates, each involving at most $b$ parties. Every
               nonprivate gate is a sum of at most $CL^k$ monomials with
@@ -2018,12 +2021,10 @@ is not proved here.
 
     These bounds and this assertion are the consequences
     of~\cite[Proposition~7.1]{OpenAI2026PolynomialPEPS} used in Section~8, not
-    the proposition itself. They omit the following clauses of the source: a
-    party for every square of the hierarchy, including the root
-    (\texttt{06-geometry.tex}, lines 64--67), since the bounds above constrain
-    the parties of each square only from above; one party holding the main
-    copy of $\Omega$ and the auxiliary copies initialized privately at their
-    designated parties (lines 22--23); the factorization of every reference
+    the proposition itself. They omit the following clauses of the source: one
+    party holding the main copy of $\Omega$ and the auxiliary copies
+    initialized privately at their designated parties
+    (\texttt{06-geometry.tex}, lines 22--23); the factorization of every reference
     vector into the main and auxiliary encoded frames with all factors of norm
     at most one (lines 39--41); the scale and address of each additional party
     at its repainting event (lines 36--37); the bounds on pair sources and

@@ -47,8 +47,6 @@ its constants chosen before the size, the Hamiltonian, and the ground vector, is
 `LargeSizeDyadicProtocolConsequences` are weaker than Proposition 7.1. They omit the following
 clauses of the source:
 
-* a party for every square of the hierarchy, including the root (`06-geometry.tex:64–67`); the
-  placement fields bound the parties of each square from above only;
 * the main copy of `Ω` held by one party and the auxiliary copies initialized privately at their
   designated parties (`06-geometry.tex:22–23`);
 * the factorization of each reference vector into the main and auxiliary encoded frames, with
@@ -194,8 +192,9 @@ structure DyadicProtocol (L q : ℕ) (P : Type) [Fintype P] where
     layout changes = familyPhysicalOutputLayout physicalDimension physicalOrder privateOutput
 
 /-- The aligned squares of the padded dyadic hierarchy of `[0, N] ^ 2`, each given by its scale
-`j` and its block address `(x, y)`: the square `[2 ^ j x, 2 ^ j (x + 1)] × [2 ^ j y, 2 ^ j (y + 1)]`
-lies in `[0, N] ^ 2`. When `N` is a power of two, the root square is the one with `2 ^ j = N`.
+`j` and its block address `(x, y)`: the square
+`[2 ^ j x, 2 ^ j (x + 1)] × [2 ^ j y, 2 ^ j (y + 1)]` lies in `[0, N] ^ 2`. When `N` is a power
+of two, the root square is the one with `2 ^ j = N`.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:64–65`. -/
 def HierarchySquare (N : ℕ) : Type :=
@@ -291,9 +290,8 @@ the target vector `Ω`, the protocol satisfies:
 
 These are the consequences of the four items that the assembly of §8 uses. The predicate is
 weaker than the conclusion of Proposition 7.1: it omits the clauses listed in the scope
-restriction of the module docstring, among them a party for every square of the hierarchy, the
-registers of the copies of `Ω`, the frame factorization of the references, and the counts of
-pair sources and messages.
+restriction of the module docstring, among them the registers of the copies of `Ω`, the frame
+factorization of the references, and the counts of pair sources and messages.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), Proposition 7.1 `prop:protocol`,
 `06-geometry.tex:17–52`; the expansions are those of Theorem 5.2, item 3,

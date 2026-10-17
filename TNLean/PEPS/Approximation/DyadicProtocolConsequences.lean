@@ -23,7 +23,6 @@ supplies the patch constants.
 `LargeSizeDyadicProtocolConsequences` interface used in Section 8, not full Proposition 7.1.
 The interface omits the following clauses of the proposition:
 
-* at least one party on every hierarchy square, including the root;
 * a designated party holding the main copy of `Ω` and private initialization of each auxiliary
   copy at its designated party, rather than arbitrary normalized product initialization;
 * factorization of every intermediate reference vector into main and auxiliary encoded frames,
