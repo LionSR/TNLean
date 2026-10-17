@@ -42,14 +42,15 @@ tensor.
     tensor~\cite{gap:mpu_czx_tensor_normalization}.
 \end{definition}
 
-For $N>0$, close the virtual indices by the ordinary trace:
+For $N>0$, closing the virtual indices by the ordinary trace gives
 $O_N(A)_{st}=\tr(A^{s_0t_0}\cdots A^{s_{N-1}t_{N-1}})$.
-Theorem~\ref{thm:asymex_czx_review_kernel} gives the periodic kernel
-and its relation to the input-phase convention used below.
-Unitarity, the square and normality are established in
-Theorems~\ref{thm:asymex_czx_review_unitarity}--\ref{thm:asymex_czx_review_normal}.
-The decorated representative has its own anomaly-class statement in
-Theorem~\ref{thm:asymex_czx_decorated_anomaly_class}.
+Theorem~\ref{thm:asymex_czx_review_kernel} evaluates this periodic
+kernel and relates it to the input-phase convention used below, while
+Theorems~\ref{thm:asymex_czx_review_unitarity}--\ref{thm:asymex_czx_review_normal}
+establish unitarity, the periodic square law, and normality of $A$;
+Theorem~\ref{thm:asymex_czx_decorated_anomaly_class} then proves that
+the decorated representative carries the nontrivial anomaly class in
+$H^3(\Z_2,\C^\times_{\mathrm{triv}})$.
 
 \subsection{The bond-two tensor and the periodic operator}
 
@@ -173,8 +174,8 @@ $\alpha,\beta\in\{0,1\}$, the local entries are
 
 \begin{proof}
     \leanok
-    Expand the trace over cyclic bond configurations $g$, using
-    (\ref{eq:asymex_czx_entries}):
+    Expanding the trace over cyclic bond configurations $g$
+    via~(\ref{eq:asymex_czx_entries}) gives
     \begin{align}
         U_N(s,t)
          & =\sum_{g\in\{0,1\}^N}
@@ -236,8 +237,9 @@ $\alpha,\beta\in\{0,1\}$, the local entries are
          & =(-1)^N\prod_{j=0}^{N-1}(-1)^{2t_j}=(-1)^N.
         \label{eq:asymex_czx_phase_square}
     \end{align}
-    Apply~(\ref{eq:asymex_czx_kernel}) twice and use
-    $\overline{\bar t}=t$ to obtain~(\ref{eq:asymex_czx_square_operator}).
+    Applying~(\ref{eq:asymex_czx_kernel}) twice and using
+    $\overline{\bar t}=t$ therefore
+    yields~(\ref{eq:asymex_czx_square_operator}).
     The periodic contraction of the stacked product is the product
     of the two periodic operators, by expansion over the intermediate
     physical indices in~(\ref{eq:asymex_czx_stack}).
@@ -310,7 +312,7 @@ $s\in\{0,1\}^N$ the exponent $q(s)$ is~(\ref{eq:asymex_czx_exponent}).
 \begin{proof}
     \leanok
     \uses{thm:asymex_czx_kernel}
-    Expand the trace over cyclic bond configurations $g$. The factor
+    Expanding the trace over cyclic bond configurations $g$, the factor
     $\delta_{g_n,s_n}$ of the entries forces $g=s$, so exactly one bond
     configuration contributes. Its contribution vanishes unless $s=\bar t$
     and otherwise equals $\prod_n(-1)^{s_ns_{n+1}}=(-1)^{q(s)}$. Comparing
@@ -366,9 +368,9 @@ sign $(-1)^N$~\cite{gap:mpu_czx_tensor_normalization}.
     \lean{CZXCompression.reviewCZXMPS_isNormal}
     \leanok
     \uses{def:asymex_czx_review_tensor, def:normal}
-    Read over the alphabet of index pairs, the review's tensor is normal:
-    its words of length two span $\MN{2}$. This is the review's statement
-    that $O(A)$ is injective.
+    Read over the alphabet of index pairs, the review's tensor is normal
+    (the review's statement that $O(A)$ is injective): its words of
+    length two span $\MN{2}$.
 \end{theorem}
 
 \begin{proof}
@@ -531,10 +533,11 @@ sign $(-1)^N$~\cite{gap:mpu_czx_tensor_normalization}.
     left by $Q$ gives $Qb^{ij}=Qb^{ij}Q$.
     Identity~(\ref{eq:asymex_czx_review_canonical}) is a direct
     computation. Let $W_2=\tfrac12(1,-1)$ and $V_2=(1,-1)^{\mathsf T}$.
-    Then $V_2W_2=Q$ and $W_2b^{ij}V_2=-\delta_{ij}$, and
+    Then $V_2W_2=Q$ and $W_2b^{ij}V_2=-\delta_{ij}$, so
     Lemma~\ref{lem:asymex_absorbing_compression} gives
-    $\tr(b^w)=\tr((-\delta)^w)=(-1)^{|w|}\tr(\delta^w)$. The last claim
-    combines this with Theorem~\ref{thm:asymex_czx_review_first_step}.
+    $\tr(b^w)=\tr((-\delta)^w)=(-1)^{|w|}\tr(\delta^w)$, and combining
+    this with Theorem~\ref{thm:asymex_czx_review_first_step} yields
+    $\tr(\widetilde B^w)=(-1)^{|w|}\tr(\delta^w)$.
 \end{proof}
 
 The review says that the projector $Q$ gives an invariant subspace. Read
@@ -668,13 +671,13 @@ $\omega=-1$~\cite[Section~III.A]{GarreRubioSchuch2024DomainWall}.
 \begin{proof}
     \leanok
     \uses{thm:asymex_czx_decorated_operator, thm:asymex_group_cocycle_z2}
-    Both operators have the kernel
+    By Theorems~\ref{thm:asymex_czx_decorated_operator}
+    and~\ref{thm:asymex_group_cocycle_z2}, both operators have the same
+    computational-basis kernel
     \begin{align}
-        (s,t) & \mapsto\delta_{s,\bar t}\,(-1)^{q(s)+|s|},
+        (s,t) & \mapsto\delta_{s,\bar t}\,(-1)^{q(s)+|s|}.
         \notag
     \end{align}
-    by Theorems~\ref{thm:asymex_czx_decorated_operator}
-    and~\ref{thm:asymex_group_cocycle_z2}.
 \end{proof}
 
 \begin{theorem}[Normality of the decorated tensor]
@@ -854,20 +857,20 @@ the case $k=0$ is the identity $S^aS^b=S^aV\hat VS^b$.
         thm:mpug_involution_anomaly_ratio}
     The decorated representation exchanges the product states
     $|0\rangle^{\otimes N}$ and $|1\rangle^{\otimes N}$ with phase one at every
-    length $N\geq1$, so these form a pair of blocks permuted by $\Z_2$. Action
-    tensors are given by the right vectors $|\hat +\rangle$ and
-    $-|\hat +\rangle$ and the left vectors $\langle1|$ and $-\langle0|$. For
-    every choice of action tensors, with the fusion tensors of
-    Theorem~\ref{thm:asymex_czx_decorated_anomaly_class},
+    length $N\geq1$, so these form a pair of blocks permuted by $\Z_2$.
+    Action tensors are given by the right vectors $|\hat +\rangle$ and
+    $-|\hat +\rangle$ together with the left vectors $\langle1|$ and
+    $-\langle0|$ (correcting the printed left action
+    vectors~\cite{gap:gs24_czx_action_left_vectors}). Following the
+    second route to the anomaly
+    in~\cite[lines~1246--1339]{GarreRubioSchuch2024DomainWall}, every
+    choice of action tensors and the fusion tensors of
+    Theorem~\ref{thm:asymex_czx_decorated_anomaly_class} satisfy
     \begin{align}
         \omega(s,s,s)
-         & =\frac{L^0_{s,s}L^0_{s,e}}{L^1_{s,s}L^0_{e,s}}=-1,
+         & =\frac{L^0_{s,s}L^0_{s,e}}{L^1_{s,s}L^0_{e,s}}=-1.
         \notag
     \end{align}
-    the second route to the anomaly in
-    \cite[lines~1246--1339]{GarreRubioSchuch2024DomainWall}. The left action
-    vectors printed there are corrected here
-    \cite{gap:gs24_czx_action_left_vectors}.
 \end{theorem}
 
 \begin{proof}
@@ -906,10 +909,10 @@ the case $k=0$ is the identity $S^aS^b=S^aV\hat VS^b$.
     while the other letter vanishes on both sides. These integer identities,
     checked letter by letter, make $(v_s,w_s)$ a reduction of the action onto
     the exchanged product state; for the identity element the action
-    tensors are the trivial identifications. The
-    ratio formula is Theorem~\ref{thm:mpug_involution_anomaly_ratio} for the
-    compatible L-symbols of Theorem~\ref{thm:mpug_permuted_block_l_compatibility},
-    and its value is $\omega(s,s,s)=-1$.
+    tensors are the trivial identifications. Applying
+    Theorem~\ref{thm:mpug_involution_anomaly_ratio} to the compatible
+    L-symbols of Theorem~\ref{thm:mpug_permuted_block_l_compatibility}
+    then yields the ratio formula and evaluates it to $\omega(s,s,s)=-1$.
 \end{proof}
 
 \begin{theorem}[Domain walls between the two product states]
@@ -968,8 +971,10 @@ the case $k=0$ is the identity $S^aS^b=S^aV\hat VS^b$.
     $\tilde A_0^{\mathbf v}W_0=W'A_1^{\mathbf v}$ for every nonempty word
     $\mathbf v$. Together with $A_0^jV_1=V_1\tilde A_1^j$ for $V_1=-\langle0|$
     and $V_1(O_s\cdot e_{BA})^iW'=-e_{AB}^i$, this gives $c_{BA}=-1$ with at
-    least one site on the right of the wall. The last statement is
-    Theorem~\ref{thm:mpug_domain_wall_state}.
+    least one site on the right of the wall.
+    Theorem~\ref{thm:mpug_domain_wall_state} then gives
+    $U\ket{\psi(0\text{-}1\text{-}0)}=-\ket{\psi(1\text{-}0\text{-}1)}$
+    on every chain with long enough regions.
 \end{proof}
 
 \begin{theorem}[Equal domain-wall phases and a string over a pair of walls]
@@ -980,23 +985,25 @@ the case $k=0$ is the identity $S^aS^b=S^aV\hat VS^b$.
     \leanok
     \uses{thm:asymex_czx_domain_walls, def:mpug_domain_wall_action}
     With the action tensors of
-    Theorem~\ref{thm:asymex_czx_product_state_l_symbols} (with the corrected
-    left action vectors \cite{gap:gs24_czx_action_left_vectors}), the walls
-    $e_{AB}=|0\rangle$ and $e_{BA}=i|1\rangle$ are exchanged by the generator
-    with $c_{AB}=c_{BA}=i$, and the local action of the generator on an open
-    chain containing the pair $|0\rangle$, $-|1\rangle$ with long regions is
-    the phase $-1$. These are the tensor identities behind the semionic
-    exchange statistics of \cite[Section~III.F]{GarreRubioSchuch2024DomainWall}.
+    Theorem~\ref{thm:asymex_czx_product_state_l_symbols} (using the
+    corrected left action vectors~\cite{gap:gs24_czx_action_left_vectors}),
+    the tensor identities underlying the semionic exchange statistics
+    of~\cite[Section~III.F]{GarreRubioSchuch2024DomainWall} hold: the
+    generator exchanges the walls $e_{AB}=|0\rangle$ and
+    $e_{BA}=i|1\rangle$ with equal phases $c_{AB}=c_{BA}=i$, and its
+    local action on an open chain containing the pair $|0\rangle$,
+    $-|1\rangle$ with long regions is the phase $-1$.
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{thm:asymex_czx_domain_walls, thm:mpug_domain_wall_pair,
         thm:mpug_domain_wall_rescaling}
-    Rescale the wall $-|1\rangle$ of Theorem~\ref{thm:asymex_czx_domain_walls}
-    by $1/i$, using Theorem~\ref{thm:mpug_domain_wall_rescaling} with $s=i$;
-    the second statement is Theorem~\ref{thm:mpug_domain_wall_pair} with
-    $c_{AB}c_{BA}=-1$.
+    Rescaling the wall $-|1\rangle$ of
+    Theorem~\ref{thm:asymex_czx_domain_walls} by $1/i$ via
+    Theorem~\ref{thm:mpug_domain_wall_rescaling} with $s=i$ gives
+    $c_{AB}=c_{BA}=i$, while Theorem~\ref{thm:mpug_domain_wall_pair}
+    with $c_{AB}c_{BA}=-1$ yields the phase $-1$ on the open chain.
 \end{proof}
 
 \begin{theorem}[Semionic exchange of domain-wall strings]
@@ -1016,22 +1023,23 @@ the case $k=0$ is the identity $S^aS^b=S^aV\hat VS^b$.
     creates the state $\ket{\psi(0\text{-}1\text{-}0)}$ from
     $|0\rangle^{\otimes N}$ on the periodic chain of every length $N\geq2$,
     for all sites $i<j$. For sites $i_2<i_1<j_1<j_2$ whose three inner
-    regions are longer than a fixed buffer,
+    regions are longer than a fixed buffer, the domain-wall strings obey
+    the semionic exchange relation
+    of~\cite[Section~III.F]{GarreRubioSchuch2024DomainWall},
     \begin{align}
         O^{[i_1,j_1]}O^{[i_2,j_2]}|0\rangle^{\otimes N}
-         & =-\,O^{[i_2,j_2]}O^{[i_1,j_1]}|0\rangle^{\otimes N},
+         & =-\,O^{[i_2,j_2]}O^{[i_1,j_1]}|0\rangle^{\otimes N}.
         \notag
     \end{align}
-    the semionic statistics of the domain walls of
-    \cite[Section~III.F]{GarreRubioSchuch2024DomainWall}.
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{thm:asymex_czx_domain_walls, thm:mpug_domain_wall_string_exchange}
-    The left inverses are checked letter by letter. The exchange is
+    Checking the left inverses letter by letter and applying
     Theorem~\ref{thm:mpug_domain_wall_string_exchange} with
-    $c_{AB}c_{BA}=1\cdot(-1)=-1$.
+    $c_{AB}c_{BA}=1\cdot(-1)=-1$ yields the creation identity and the
+    anticommutation of the two strings.
 \end{proof}
 
 \begin{corollary}[No invariant normal state]
@@ -1166,8 +1174,9 @@ the identity matrix on the corresponding bond space.
     $(0,-\delta_{i,j},0,0)$. A completion compatible with the displayed
     row $W$ gives the compression pair by
     Theorem~\ref{thm:asymex_explicit_gauge} applied to the second
-    coordinate. The vanishing of a product of four remainder matrices is
-    clause (vi) of Theorem~\ref{thm:asym_multiblock} with $|S|+z=4$.
+    coordinate. Clause~(vi) of Theorem~\ref{thm:asym_multiblock} with
+    $|S|+z=4$ then shows that every product of four remainder matrices
+    vanishes.
 \end{proof}
 
 \begin{theorem}[Periodic data of the squared symmetry]
@@ -1202,8 +1211,8 @@ the identity matrix on the corresponding bond space.
 
 \begin{proof}
     \leanok
-    Use the two nonzero matrices~(\ref{eq:asymex_czx_bzero})
-    and~(\ref{eq:asymex_czx_bone}). The right-intertwiner equations are
+    Evaluated on the two nonzero matrices~(\ref{eq:asymex_czx_bzero})
+    and~(\ref{eq:asymex_czx_bone}), the right-intertwiner equations read
     \begin{align}
         (v_2,v_2,-v_2,-v_2)^{\mathsf T}
          & =-(v_0,v_1,v_2,v_3)^{\mathsf T},
@@ -1455,13 +1464,14 @@ asymmetric fundamental theorem.
     $-\delta$ and three zero slots. The other three summands already
     carry $\delta$, $M$, and $M$.
 
-    Assemble the change of bond coordinates from these four summands.
-    Checking block triangularity and the matched and unmatched diagonal
-    blocks is a finite verification over integer matrices.
-    Theorem~\ref{thm:asymex_explicit_gauge} then gives the compression
-    pairs. The dimension count and the nilpotency bound are clauses
-    (vii) and (vi) of Theorem~\ref{thm:asym_multiblock}, with
-    $|S|+z=4+3=7$.
+    Combining the basis changes on these four summands produces an
+    adapted bond basis in which block triangularity and the matched and
+    unmatched diagonal blocks reduce to finite integer-matrix checks.
+    Theorem~\ref{thm:asymex_explicit_gauge} then yields the compression
+    pairs, while clauses~(vii) and~(vi) of
+    Theorem~\ref{thm:asym_multiblock} with $|S|+z=4+3=7$ give the
+    dimension count $9=1+1+2+2+3$ and the vanishing of $R^w$ for
+    $|w|\geq7$.
 \end{proof}
 
 \begin{theorem}[The oscillating structure coefficient]
@@ -1551,8 +1561,8 @@ the three-cocycle and fusion-gauge conventions follow
     \leanok
     \uses{def:asymex_z2_cocycles}
     An identity argument excludes the triple $(s,s,s)$, proving
-    normalization. For the cocycle equation, check the two choices
-    for each of $a,b,c,d$ and for $p$, using $s^2=e$.
+    normalization, and checking the two choices for each of $a,b,c,d$
+    and for $p$ with $s^2=e$ verifies the cocycle equation.
     Every value is either one or a power of $-1$, so its modulus is one.
 \end{proof}
 
@@ -1590,9 +1600,9 @@ the three-cocycle and fusion-gauge conventions follow
     identifies triviality of the scalar gauge
     class with $\sigma_\omega(s)=1$. Hence $\omega_1$ is not
     gauge trivial. If $p\neq q$, one representative is $\omega_0=1$
-    and the other is $\omega_1$; cohomology, using symmetry when
-    needed, would contradict this nontriviality.
-    If $p=q$, use reflexivity.
-    Finally, substitute $s^2=e$ in the fusion-gauge coboundary
-    factor and use $\beta(e,s)=\beta(s,e)=1$.
+    and the other is $\omega_1$, so cohomology (using symmetry when
+    needed) would contradict this nontriviality, whereas for $p=q$
+    reflexivity applies. Finally, substituting $s^2=e$ into the
+    fusion-gauge coboundary factor and using $\beta(e,s)=\beta(s,e)=1$
+    gives $(\beta\cdot\omega_p)(s,s,s)=(-1)^p$.
 \end{proof}

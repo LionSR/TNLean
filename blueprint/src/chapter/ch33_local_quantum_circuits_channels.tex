@@ -197,7 +197,7 @@ change the local dimension act on single sites.
         QuantumCircuit.rectangularKrausMap_rectKronecker_rectKronecker}
     \leanok
     Let $\Phi$ be an onsite channel. If $Z$ acts on a set of sites $X$, then
-    $\Phi^\dagger(Z)$ acts on $X$. If moreover $Z'$ acts on a set of sites
+    $\Phi^\dagger(Z)$ acts on $X$. If in addition $Z'$ acts on a set of sites
     disjoint from $X$, then $\Phi^\dagger(ZZ')=\Phi^\dagger(Z)\Phi^\dagger(Z')$.
     The dual maps $\bigotimes_im_i$ to $\bigotimes_i\Phi_i^\dagger(m_i)$: for
     any operators $K_{ij}\colon\C^d\to\C^e$, the map
@@ -220,7 +220,11 @@ change the local dimension act on single sites.
     \lean{QuantumCircuit.IsLocalChannelProtocol,
         QuantumCircuit.IsLocalChannelConversion}
     \leanok
-    A \emph{local channel protocol of depth $T$} is a composition
+    Modeling the channel form of the circuits
+    $V'=U_\ell V_\ell\cdots U_1V_1U_0$ of \cite{Piroli2021LOCC} (with
+    ancillas attached to each site, local operations between the layers, and
+    the ancillas traced out at the end without measurements), a \emph{local
+        channel protocol of depth $T$} is a composition
     $\Psi=\Phi_T\circ L_T\circ\Phi_{T-1}\circ\dots\circ L_1\circ\Phi_0$ of
     channel layers $L_t$ and maps $\Phi_t$, each a composition of finitely
     many onsite channels, which may change the local dimension; $\Phi_0$
@@ -228,10 +232,7 @@ change the local dimension act on single sites.
     the identity. A matrix $\rho$ on the chain is
     \emph{converted in depth $T$} into a matrix $\sigma$, possibly of
     another local dimension, if $\sigma=\Psi(\rho)$ for a local channel
-    protocol $\Psi$ of depth at most $T$. This is the channel form of the circuits
-    $V'=U_\ell V_\ell\cdots U_1V_1U_0$ of \cite{Piroli2021LOCC}, with
-    ancillas attached to each site, local operations between the layers and
-    the ancillas traced out at the end, without measurements.
+    protocol $\Psi$ of depth at most $T$.
 \end{definition}
 
 \begin{lemma}[Basic properties of local channel conversions]
@@ -257,17 +258,17 @@ change the local dimension act on single sites.
 \end{lemma}
 \begin{proof}
     \leanok
-    By induction on the protocol: onsite channels are trace preserving and
+    By induction on the protocol, onsite channels are trace preserving and
     completely positive by Lemma~\ref{lem:qc_onsite_channel_properties},
     channel layers are by construction, and both properties are stable under
     composition. Appending the layers of a circuit of depth $T$ one at a time,
-    each onsite channel keeps the depth and each layer raises it by one; the
-    attaching and discarding channels are onsite. The identity onsite channel
-    gives depth $0$, depth bounds are monotone, and a conversion is realized by
-    a channel, which maps a positive semidefinite matrix of trace one to a
-    positive semidefinite matrix of trace one. A preparation in depth $T$ by
-    local channels starts from a product density and is itself such a
-    protocol.
+    each onsite channel keeps the depth and each layer raises it by one, while
+    attaching and discarding ancillas are onsite channels. The identity onsite
+    channel gives depth $0$, depth bounds are monotone, and any conversion is
+    realized by a trace-preserving completely positive map, which sends a
+    positive semidefinite matrix of trace one to another such matrix. Finally,
+    a preparation in depth $T$ by local channels starts from a product density
+    and is itself such a protocol.
 \end{proof}
 
 \begin{lemma}[Composition of conversions]
@@ -283,12 +284,12 @@ change the local dimension act on single sites.
 \begin{proof}
     \leanok
     The composition $\Psi_2\circ\Psi_1$ of local channel protocols of depths
-    $T_1$ and $T_2$ is a local channel protocol of depth $T_1+T_2$. Write
-    $\Psi_2$ as the sequence of its onsite channels and channel layers, and
-    apply them after $\Psi_1$ one at a time: the first onsite channel of
-    $\Psi_2$ becomes a further onsite channel in the last group $\Phi_{T_1}$
-    of $\Psi_1$, each onsite channel keeps the depth, and each of the $T_2$
-    channel layers raises it by one.
+    $T_1$ and $T_2$ is a local channel protocol of depth $T_1+T_2$: decomposing
+    $\Psi_2$ into its sequence of onsite channels and channel layers and
+    appending them to $\Psi_1$ one at a time places the first onsite channel of
+    $\Psi_2$ into the final onsite group $\Phi_{T_1}$ of $\Psi_1$, where each
+    onsite channel preserves the depth and each of the $T_2$ channel layers
+    increases it by one.
 \end{proof}
 
 \begin{lemma}[Light cone of a local channel protocol]
@@ -297,7 +298,9 @@ change the local dimension act on single sites.
         lem:qc_channel_light_cone, lem:qc_channel_light_cone_correlations}
     \lean{QuantumCircuit.IsLocalChannelProtocol.exists_dual}
     \leanok
-    A local channel protocol $\Psi$ of depth $T$ has a dual $\Psi^\dagger$ with
+    Extending the light cone of a depth-$T$ circuit in the proof of
+    \cite[Theorem~1]{Malz2024Preparation} to channels and onsite operations,
+    a local channel protocol $\Psi$ of depth $T$ has a dual $\Psi^\dagger$ with
     $\Tr(\Psi(\rho)A)=\Tr(\rho\,\Psi^\dagger(A))$ that maps operators acting
     on a set of sites $X$ to operators acting on the sites within distance
     $T$ of $X$, and that satisfies
@@ -306,18 +309,17 @@ change the local dimension act on single sites.
         \label{eq:qc_conversion_dual_mul}
     \end{align}
     whenever $Z$ and $Z'$ act on sets whose neighbourhoods of radius $T$ are
-    disjoint. This is the light cone of a depth-$T$ circuit in the proof of
-    \cite[Theorem~1]{Malz2024Preparation}, here with channels and onsite
-    operations.
+    disjoint.
 \end{lemma}
 \begin{proof}
     \leanok
-    By induction on the protocol. For an onsite channel this is
-    Lemma~\ref{lem:qc_onsite_channel_locality} with radius $0$; a channel
-    layer adds one to the radius, by Lemma~\ref{lem:qc_channel_light_cone}
-    for the support and as in the proof of
+    By induction on the protocol, the base case of an onsite channel is
+    Lemma~\ref{lem:qc_onsite_channel_locality} with radius $0$; each channel
+    layer increases the radius by one by Lemma~\ref{lem:qc_channel_light_cone}
+    for the support and by the argument of
     Lemma~\ref{lem:qc_channel_light_cone_correlations} for
-    (\ref{eq:qc_conversion_dual_mul}), and an onsite channel keeps it.
+    (\ref{eq:qc_conversion_dual_mul}), while each subsequent onsite channel
+    leaves the radius unchanged.
 \end{proof}
 
 \begin{lemma}[No connected correlations after a conversion]
@@ -325,12 +327,12 @@ change the local dimension act on single sites.
     \uses{def:qc_local_channel_conversion, lem:qc_protocol_light_cone}
     \lean{QuantumCircuit.trace_mul_mul_eq_of_isLocalChannelConversion}
     \leanok
-    Let $\sigma$ be converted in depth $T$ from a product
+    Extending the necessary condition in \cite{Piroli2021LOCC} for preparing
+    pure states from a product state by local unitary circuits, let $\sigma$ be
+    converted in depth $T$ from a product
     $\bigotimes_i\sigma_i$ of one-site matrices of trace one, and let $Z$,
     $Z'$ act on sets of sites at distance larger than $2T$. Then
-    $\Tr(\sigma ZZ')=\Tr(\sigma Z)\Tr(\sigma Z')$. For pure states prepared
-    from a product state by local unitary circuits this is the necessary
-    condition for preparation by quantum circuits of \cite{Piroli2021LOCC}.
+    $\Tr(\sigma ZZ')=\Tr(\sigma Z)\Tr(\sigma Z')$.
 \end{lemma}
 \begin{proof}
     \leanok
@@ -357,7 +359,9 @@ change the local dimension act on single sites.
         QuantumCircuit.blockKronecker,
         QuantumCircuit.IsBlockedLocalChannelConversion}
     \leanok
-    Consider a ring of $Mk$ sites of local dimension $d$. Grouping the sites
+    Following the blocking of $q$ neighbouring sites in the proof of the
+    classification of matrix product states in \cite{Piroli2021LOCC}, consider
+    a ring of $Mk$ sites of local dimension $d$. Grouping the sites
     $jk,\dots,jk+k-1$ into one site $j$ of local dimension $d^k$ gives a ring
     of $M$ sites. On operators, it is the isomorphism
     $\beta_k\colon M_d^{\otimes Mk}\to M_{d^k}^{\otimes M}$ that relabels the
@@ -366,9 +370,7 @@ change the local dimension act on single sites.
     A matrix $\rho$ on the $Mk$ sites is
     \emph{converted in depth $T$ after blocking $k$ sites}
     into a matrix $\sigma$ on the $M$ blocked sites if $\beta_k(\rho)$
-    is converted in depth $T$ into $\sigma$. This is the blocking of $q$
-    neighbouring sites in the proof of the classification of matrix product
-    states in \cite{Piroli2021LOCC}. A layer of two-site channels on the
+    is converted in depth $T$ into $\sigma$. A layer of two-site channels on the
     blocked ring costs one unit of depth; the source realizes each gate on the
     blocked ring by fewer than $2q^2$ nearest-neighbour gates on the original
     ring, a compilation not carried out here
@@ -378,7 +380,7 @@ change the local dimension act on single sites.
     depth $0$.
 \end{definition}
 
-\begin{lemma}[Blocking is a channel that transports supports]
+\begin{lemma}[Blocking is a channel that preserves supports]
     \label{lem:qc_blocking_supports}
     \uses{def:qc_blocked_local_channel_conversion}
     \lean{QuantumCircuit.blockSites_isKrausCPTP,
@@ -442,19 +444,19 @@ change the local dimension act on single sites.
 \end{lemma}
 \begin{proof}
     \leanok
-    The first statements are those of
+    The first statements follow from
     Lemmas~\ref{lem:qc_local_channel_conversion_properties}
     and~\ref{lem:qc_local_channel_conversion_trans} on the blocked ring,
     composed with the blocking channel of
-    Lemma~\ref{lem:qc_blocking_supports}. For the dual, compose the blocking
+    Lemma~\ref{lem:qc_blocking_supports}. Composing the blocking
     channel with the protocol on the blocked ring and
-    apply Lemma~\ref{lem:qc_protocol_light_cone} there; unblocking the dual
-    and Lemma~\ref{lem:qc_blocking_supports} give the supports on the
-    original ring. Blocking maps the product $\bigotimes_i\sigma_i$ to the
-    product over the blocks of $\sigma_{jk}\otimes\dots\otimes\sigma_{jk+k-1}$,
-    each of trace $\prod_t\Tr\sigma_{jk+t}=1$, so the correlation statement is
-    Lemma~\ref{lem:qc_local_channel_conversion_correlations} on the blocked
-    ring.
+    applying Lemma~\ref{lem:qc_protocol_light_cone} there gives the dual on
+    the blocked ring, whose unblocking via Lemma~\ref{lem:qc_blocking_supports}
+    has the stated supports on the original ring. Finally, blocking maps the
+    product $\bigotimes_i\sigma_i$ to the product over the blocks of
+    $\sigma_{jk}\otimes\dots\otimes\sigma_{jk+k-1}$, each of trace
+    $\prod_t\Tr\sigma_{jk+t}=1$, so Lemma~\ref{lem:qc_local_channel_conversion_correlations}
+    on the blocked ring yields the correlation identity.
 \end{proof}
 
 \input{chapter/ch33_local_quantum_circuits_approximate}

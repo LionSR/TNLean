@@ -53,8 +53,8 @@ Documented in \cite{gap:cpgsv21_physical_deformation_general_graph}.
 \begin{proof}
     \leanok
     \uses{def:physical_rotation}
-    Expand both sides of (\ref{eq:physical_rotation_mul}) by
-    (\ref{eq:physical_rotation}) and swap the order of summation:
+    Expanding both sides of (\ref{eq:physical_rotation_mul}) by
+    (\ref{eq:physical_rotation}) and swapping the order of summation gives
     \begin{align}
         \big(\Lambda(\Lambda'A)\big)^i
          & =\sum_{j}\Lambda_{ij}\sum_{k}\Lambda'_{jk}A^k
@@ -126,9 +126,9 @@ Documented in \cite{gap:cpgsv21_physical_deformation_general_graph}.
 \begin{proof}
     \leanok
     \uses{def:physical_rotation}
-    Expand each factor of $(\Lambda A)^{\sigma_1}\cdots(\Lambda A)^{\sigma_N}$ by
-    (\ref{eq:physical_rotation}) and collect the coefficient of $A^{\tau}$, by
-    induction on $N$.
+    Expanding each factor of $(\Lambda A)^{\sigma_1}\cdots(\Lambda A)^{\sigma_N}$ by
+    (\ref{eq:physical_rotation}) and collecting the coefficient of $A^{\tau}$ by
+    induction on $N$ yields the formula.
 \end{proof}
 
 \begin{lemma}[State and boundary map of the rotated tensor]\label{lem:physical_rotation_state}
@@ -167,9 +167,9 @@ Documented in \cite{gap:cpgsv21_physical_deformation_general_graph}.
 \begin{proof}
     \leanok
     \uses{thm:spt_physical_embedding_boundary}
-    Apply Theorem~\ref{thm:spt_physical_embedding_boundary} to the square map
-    $\Lambda$. Its tensor power agrees with the on-site tensor power in the
-    configuration basis.
+    Applying Theorem~\ref{thm:spt_physical_embedding_boundary} to the square map
+    $\Lambda$, whose tensor power agrees with the on-site tensor power in the
+    configuration basis, yields the identity.
 \end{proof}
 
 \begin{definition}[Parent interaction]\label{def:is_parent_interaction}
@@ -193,8 +193,8 @@ Documented in \cite{gap:cpgsv21_physical_deformation_general_graph}.
 \begin{proof}
     \leanok
     \uses{lem:euclidean_local_projector_positive, lem:parent_interaction_es_kernel}
-    An orthogonal projector is hermitian and positive semidefinite
-    (Lemma~\ref{lem:euclidean_local_projector_positive}), and by
+    By Lemma~\ref{lem:euclidean_local_projector_positive}, an orthogonal
+    projector is hermitian and positive semidefinite, and by
     Lemma~\ref{lem:parent_interaction_es_kernel} a vector is annihilated by the
     projector onto $G_L(A)^\perp$ exactly when it lies in $G_L(A)$, so
     $\ker P_L^{\mathrm{ES}}(A)=G_L(A)$.
@@ -204,17 +204,16 @@ Documented in \cite{gap:cpgsv21_physical_deformation_general_graph}.
     \lean{MPSTensor.deformedInteraction}
     \leanok
     \uses{def:on_site_tensor_pow}
-    For $\Lambda\in\MN{d}$ and an operator $h$ on $\ell^2(\Fin{d}^{L})$, the
-    \emph{deformed interaction} is
+    Following \cite[Section~IV.C]{Cirac2021Matrix}, which writes
+    $h'=(A^{-1}\otimes A^{-1})^\dagger h(A^{-1}\otimes A^{-1})$ for the
+    two-site interaction of an isometric tensor network and
+    $h'=({\Lambda^{-1}}^\dagger)^{\otimes k}h(\Lambda^{-1})^{\otimes k}$ for a
+    general physical perturbation, the \emph{deformed interaction} for
+    $\Lambda\in\MN{d}$ and an operator $h$ on $\ell^2(\Fin{d}^{L})$ is
     \begin{align}
         h' & =({\Lambda^{-1}}^\dagger)^{\otimes L}\,h\,(\Lambda^{-1})^{\otimes L}.
         \label{eq:deformed_interaction}
     \end{align}
-    This is the operator written in \cite[Section~IV.C]{Cirac2021Matrix} as
-    $h'=(A^{-1}\otimes A^{-1})^\dagger h(A^{-1}\otimes A^{-1})$ for the
-    two-site interaction of an isometric tensor network, and as
-    $h'=({\Lambda^{-1}}^\dagger)^{\otimes k}h(\Lambda^{-1})^{\otimes k}$ for a
-    general physical perturbation.
 \end{definition}
 
 \begin{theorem}[The deformed interaction is a parent interaction]\label{thm:deformed_interaction_parent}
@@ -232,10 +231,10 @@ Documented in \cite{gap:cpgsv21_physical_deformation_general_graph}.
 \begin{proof}
     \leanok
     \uses{lem:on_site_tensor_pow_mul, thm:ground_space_physical_rotation}
-    Write $S=(\Lambda^{-1})^{\otimes L}$. By Lemma~\ref{lem:on_site_tensor_pow_mul},
-    $({\Lambda^{-1}}^\dagger)^{\otimes L}=S^\dagger$, so $h'=S^\dagger hS$ is
-    positive semidefinite. Since $S$ and $S^\dagger$ are invertible with inverses
-    $\Lambda^{\otimes L}$ and $(\Lambda^\dagger)^{\otimes L}$,
+    With $S=(\Lambda^{-1})^{\otimes L}$, Lemma~\ref{lem:on_site_tensor_pow_mul}
+    gives $({\Lambda^{-1}}^\dagger)^{\otimes L}=S^\dagger$, so $h'=S^\dagger hS$
+    is positive semidefinite. Since $S$ and $S^\dagger$ are invertible with
+    inverses $\Lambda^{\otimes L}$ and $(\Lambda^\dagger)^{\otimes L}$,
     \begin{align}
         h'\Phi=0
         \iff hS\Phi=0
@@ -269,16 +268,16 @@ Documented in \cite{gap:cpgsv21_physical_deformation_general_graph}.
 
 \begin{proof}
     \leanok
-    Write $W=[i,i+L-1]$ for the window. For a configuration $\omega\in\Fin{d}^{N}$
+    Let $W=[i,i+L-1]$ denote the window. For a configuration $\omega\in\Fin{d}^{N}$
     let $\omega_W\in\Fin{d}^{L}$ be the word read off the window,
     $(\omega_W)_r=\omega_{i+r}$, and for a window word $\sigma'\in\Fin{d}^{L}$ let
     $\omega[\sigma']\in\Fin{d}^{N}$ be the configuration that reads $\sigma'$ on the
     window and agrees with $\omega$ outside it, so that
     $(\phi|_{W,\omega})(\sigma')=\phi(\omega[\sigma'])$,
     $(\omega[\sigma'])_W=\sigma'$, $\omega[\sigma'][\omega_W]=\omega$, and
-    $c_\tau(\omega[\sigma'])=c_\tau(\omega)$. Evaluate both sides of
-    (\ref{eq:cyclic_restrict_tensor_pow}) at a window word $\sigma$. On the left,
-    the product over all sites in (\ref{eq:on_site_tensor_pow}) splits into the
+    $c_\tau(\omega[\sigma'])=c_\tau(\omega)$. Evaluating both sides of
+    (\ref{eq:cyclic_restrict_tensor_pow}) at a window word $\sigma$, the product
+    over all sites on the left in (\ref{eq:on_site_tensor_pow}) splits into the
     product over the window, where $\tau[\sigma]$ reads $\sigma$, and the product
     over its complement, where $\tau[\sigma]$ agrees with $\tau$:
     \begin{align}
@@ -319,18 +318,17 @@ Documented in \cite{gap:cpgsv21_physical_deformation_general_graph}.
     \lean{MPSTensor.ker_parentHamiltonian_rotatePhysical}
     \leanok
     \uses{def:physical_rotation, def:on_site_tensor_pow, def:chain_ground_space, def:parent_hamiltonian}
-    Let $\Lambda\in\MN{d}$ be invertible. Then, for all $L$ and $N$,
+    As the periodic-chain matrix-product-state specialization of the one-to-one
+    correspondence, through $R^{\otimes N}$, between the ground states of the
+    parent Hamiltonians of $\ket\psi$ and $\ket{\psi'}=R^{\otimes N}\ket\psi$
+    for an invertible map $R$ in \cite[Section~IV.C]{Cirac2021Matrix}, let
+    $\Lambda\in\MN{d}$ be invertible. Then, for all $L$ and $N$,
     \begin{align}
         \mathcal G_{N,L}(\Lambda A) & =\Lambda^{\otimes N}\,\mathcal G_{N,L}(A),
         \label{eq:chain_ground_space_physical_rotation}
     \end{align}
     and for $0<N$ and $L\le N$ the kernels of the parent Hamiltonians satisfy
-    $\ker H_N(\Lambda A)=\Lambda^{\otimes N}\ker H_N(A)$. This is the
-    matrix-product-state instance, on the periodic chain, of the one-to-one
-    correspondence, through $R^{\otimes N}$, between the ground states of the parent
-    Hamiltonians of $\ket\psi$ and $\ket{\psi'}=R^{\otimes N}\ket\psi$ for an
-    invertible map $R$ stated in \cite[Section~IV.C]{Cirac2021Matrix} for tensor
-    network states on a general graph. Without
+    $\ker H_N(\Lambda A)=\Lambda^{\otimes N}\ker H_N(A)$. Without
     invertibility, the inclusion
     $\Lambda^{\otimes N}\mathcal G_{N,L}(A)\subseteq\mathcal G_{N,L}(\Lambda A)$
     still holds.
@@ -348,9 +346,9 @@ Documented in \cite{gap:cpgsv21_physical_deformation_general_graph}.
     $\Lambda^{\otimes N}\mathcal G_{N,L}(A)\subseteq\mathcal G_{N,L}(\Lambda A)$
     for every $\Lambda$. Applying it to $\Lambda^{-1}$ and $\Lambda A$ gives
     $(\Lambda^{-1})^{\otimes N}\mathcal G_{N,L}(\Lambda A)\subseteq\mathcal G_{N,L}(A)$,
-    and composing with $\Lambda^{\otimes N}$ gives the reverse inclusion. The kernel
-    statement follows from
-    Theorem~\ref{thm:parent_hamiltonian_kernel_eq_chain_ground_space}.
+    and composing with $\Lambda^{\otimes N}$ gives the reverse inclusion;
+    Theorem~\ref{thm:parent_hamiltonian_kernel_eq_chain_ground_space} then
+    yields the kernel equality.
 \end{proof}
 
 \begin{theorem}[Uniqueness of the ground state is preserved]\label{thm:unique_ground_state_physical_rotation}

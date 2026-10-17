@@ -11,18 +11,16 @@
          & =\C\mathbf 1.
         \label{eq:qca_central_star_subalgebra_scalar_centre}
     \end{align}
-    Then there is an $r\geq1$ with
+    As in the single-block case of the structure theorem for
+    finite-dimensional $C^*$-algebras
+    \cite[Proposition~\texttt{Csform}, lines~2082--2098]{SchumacherWerner2004QCA}
+    for an algebra presented inside a matrix algebra
+    \cite{gap:sw04_csform_matrix_scope}, there is an $r\geq1$ with
     \begin{align}
         S            & \cong\MN{r}, \notag \\
         \dim_{\C}(S) & =r^2,
     \end{align}
-    the first isomorphism being one of star-algebras.
-
-    This is the single-block case of the structure theorem for
-    finite-dimensional $C^*$-algebras
-    \cite[Proposition~\texttt{Csform}, lines~2082--2098]{SchumacherWerner2004QCA}
-    for an algebra presented inside a matrix algebra; see
-    \cite{gap:sw04_csform_matrix_scope}.
+    where the first isomorphism is an isomorphism of star-algebras.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -33,15 +31,15 @@
     (\ref{eq:qca_central_star_subalgebra_scalar_centre}) a multiple
     $\lambda\mathbf 1$; comparing its $k$-th coordinate with another one gives
     $\lambda=1$ and $\lambda=0$, so $m\leq1$.  The unit of $M_I(\C)$ is
-    nonzero because $I$ is nonempty, so $m=1$ and $S$ is a simple ring.  The
-    Wedderburn theorem over the algebraically closed field $\C$ then produces
-    an $r\geq1$ and an isomorphism of $\C$-algebras $S\cong\MN{r}$, and
-    conjugating it by a positive definite matrix makes it preserve adjoints
+    nonzero because $I$ is nonempty, so $m=1$ and $S$ is a simple ring.  By the
+    Wedderburn theorem over the algebraically closed field $\C$
     \cite[``A $*$-subalgebra with scalar centre is a full matrix
-        algebra'']{QICLean2026Blueprint}.  A star-isomorphism is in particular
-    a $\C$-linear isomorphism, and $\dim_{\C}\MN{r}=r^2$
+        algebra'']{QICLean2026Blueprint}, there are an $r\geq1$ and an
+    isomorphism of $\C$-algebras $S\cong\MN{r}$, which preserves adjoints after
+    conjugation by a positive definite matrix.  Since a star-isomorphism is in
+    particular a $\C$-linear isomorphism
     \cite[``Dimension of a subalgebra presented as a full matrix
-        algebra'']{QICLean2026Blueprint}.
+        algebra'']{QICLean2026Blueprint}, $\dim_{\C}(S)=\dim_{\C}\MN{r}=r^2$.
 \end{proof}
 
 Gross, Nesme, Vogts and Werner apply this conclusion to the site-indexed

@@ -7,15 +7,14 @@
         MPOTensor.shiftSwapTransposeSymmetry}
     \leanok
     \uses{def:mpu_finite_chain_operator_symmetry, threeMPU2}
-    On every positive-length chain, the adjunction, transposition, and
-    conjugation actions are $U\mapsto U^\dagger$, $U\mapsto U^{\mathsf T}$,
-    and $U\mapsto\overline U$, respectively. For a site consisting of two
+    Following \cite[Sections~IV.A--IV.C]{Cirac2017MPU}, the adjunction,
+    transposition, and conjugation actions on every positive-length chain
+    are $U\mapsto U^\dagger$, $U\mapsto U^{\mathsf T}$, and
+    $U\mapsto\overline U$, respectively. For a site consisting of two
     $d$-dimensional spins, let $S_N=\mathbb S^{\otimes N}$ be their sitewise
-    exchange. The swap-combined actions are
+    exchange; the swap-combined actions are
     $U\mapsto S_NU^\dagger S_N$ and
     $U\mapsto S_NU^{\mathsf T}S_N$.
-    These are the symmetries of
-    \cite[Sections~IV.A--IV.C]{Cirac2017MPU}.
 \end{definition}
 
 \begin{theorem}[Pointwise comparison of symmetry invariance]
@@ -34,8 +33,9 @@
 
 \begin{proof}\leanok
     \uses{def:mpu_finite_chain_operator_symmetry}
-    Restrict the pointwise equivalences to the common set of applicable
-    chain lengths and quantify over that set.
+    Restricting the pointwise equivalences to the common set of applicable
+    chain lengths and quantifying over that set yields the equivalence of
+    invariance.
 \end{proof}
 
 \begin{theorem}[An involution converts a combined fixed equation]
@@ -53,8 +53,8 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    Replace $F(QX)$ by $F(X)Q$ and multiply by $Q$ on the left.
-    Involutivity gives both implications in
+    Replacing $F(QX)$ by $F(X)Q$ and multiplying on the left by the
+    involution $Q$ gives both implications in
     (\ref{eq:mpu_involution_combined_fixed}).
 \end{proof}
 
@@ -76,10 +76,11 @@
     swap-combined transposition if and only if $\widetilde{\mathcal U}$ is
     invariant under transposition, and $\mathcal U$ is invariant under
     conjugation if and only if $\widetilde{\mathcal U}$ is.
-    The one-sided transformation is the one prescribed by the transformed
-    examples in \cite[Section~VI.B.1]{Cirac2017MPU}; the printed proof's
-    two-sided expression has the local correction recorded in
-    \cite{gap:mpu_swap_symmetry_one_sided}.
+    As prescribed by the transformed examples in
+    \cite[Section~VI.B.1]{Cirac2017MPU} and recorded in
+    \cite{gap:mpu_swap_symmetry_one_sided}, the local transformation
+    $\widetilde{\mathcal U}=\mathbb S\mathcal U$ acts on one physical leg
+    rather than by two-sided conjugation.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -88,7 +89,7 @@
         thm:mpu_involution_combined_fixed_equation}
     The swap satisfies
     $S_N^2=I$, $S_N^\dagger=S_N^{\mathsf T}=S_N$, and
-    $\overline{S_N}=S_N$. We show that, for every $N>0$,
+    $\overline{S_N}=S_N$. Consequently, for every $N>0$,
     \begin{align}
         S_N(U^{(N)})^\dagger S_N=U^{(N)}
          & \quad\Longleftrightarrow\quad
@@ -105,9 +106,9 @@
     \end{align}
     Substituting $\widetilde U^{(N)}=S_NU^{(N)}$ and multiplying by
     $S_N$ proves (\ref{eq:mpu_swap_transport_dagger}) and
-    (\ref{eq:mpu_swap_transport_transpose}). Reality of $S_N$ proves
+    (\ref{eq:mpu_swap_transport_transpose}), while reality of $S_N$ proves
     (\ref{eq:mpu_swap_transport_conjugation}). Since all three symmetries
-    apply at the same chain lengths, the pointwise equivalences give the
+    apply at the same chain lengths, these pointwise equivalences give the
     three equivalences of invariance.
 \end{proof}
 
@@ -145,13 +146,13 @@
     \uses{thm:transfer_map_rotate_physical,
         thm:irreducible_tensor_rotate_physical,
         thm:rotate_physical_blocks}
-    On the doubled physical alphabet, the action is the unitary rotation
-    $Q\otimes I$. Apply this rotation to every canonical block. It
+    On the doubled physical alphabet, the output action is the unitary
+    rotation $Q\otimes I$. Applying this rotation to every canonical block
     preserves irreducibility and the transfer map, hence its spectral
     normalization, and distributes over the canonical block decomposition.
 \end{proof}
 
-\begin{theorem}[Transport of symmetry-preserving paths]
+\begin{theorem}[Symmetry-preserving paths under a physical involution]
     \label{thm:mpu_symmetry_path_transport}
     \lean{MPOTensor.joinedIn_isMPU_isInvariantUnderSymmetry_iff_ketLeftMul,
         MPOTensor.strictlyEquivalentUnderSymmetry_iff_ketLeftMul}
@@ -169,11 +170,11 @@
     $Q\mathcal U$ to $Q\mathcal V$ with $\mathcal T$-invariance exists.
     For tensors $\mathcal U,\mathcal V$ of possibly different virtual
     dimensions, strict equivalence under $\mathcal S$ is equivalent to
-    strict equivalence of $Q\mathcal U,Q\mathcal V$ under $\mathcal T$;
-    both relations compare the tensors after unused virtual directions are
-    adjoined up to a common dimension \cite{gap:mpu_equivalence_fixed_bond}.
-    Identity-ancilla stabilization is outside the statement
-    \cite{gap:mpu_symmetry_ancilla_transport}.
+    strict equivalence of $Q\mathcal U,Q\mathcal V$ under $\mathcal T$,
+    where as in \cite{gap:mpu_equivalence_fixed_bond} both relations compare
+    the tensors after unused virtual directions are adjoined up to a common
+    dimension. As recorded in \cite{gap:mpu_symmetry_ancilla_transport},
+    identity-ancilla stabilization is outside the statement.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -183,11 +184,13 @@
     If $p\mapsto\mathcal W(p)$ is the first path, then
     $p\mapsto Q\mathcal W(p)$ is continuous and has the required
     endpoints and symmetry. Its periodic operators are
-    $Q^{\otimes N}W^{(N)}(p)$ and are unitary. Applying the same involution
-    proves the converse. For strict equivalence, apply this to the paths
-    between the enlarged tensors; the action of $Q$ commutes with adjoining
-    unused virtual directions. Canonical form is preserved at both endpoints by
-    Theorem~\ref{thm:mpu_canonical_form_physical_left_action}.
+    $Q^{\otimes N}W^{(N)}(p)$ and are unitary, and applying the same
+    involution proves the converse. For strict equivalence, this
+    fixed-dimension equivalence applies to the paths between the enlarged
+    tensors because the action of $Q$ commutes with adjoining unused
+    virtual directions and
+    Theorem~\ref{thm:mpu_canonical_form_physical_left_action} preserves
+    canonical form at both endpoints.
 \end{proof}
 
 \begin{theorem}[Strict swap comparison]
@@ -205,19 +208,20 @@
     to strict equivalence of
     $\widetilde{\mathcal U},\widetilde{\mathcal V}$ under adjunction.
     The analogous equivalence holds for swap-combined transposition and
-    transposition. Strict equivalence under conjugation is preserved.
-    Identity-ancilla stabilization is outside this statement
-    \cite{gap:mpu_symmetry_ancilla_transport}.
+    transposition, and strict equivalence under conjugation is preserved.
+    As recorded in \cite{gap:mpu_symmetry_ancilla_transport},
+    identity-ancilla stabilization is outside this statement.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:mpu_one_sided_swap_invariance,
         thm:mpu_symmetry_path_transport,
         thm:threeMPU2_chain_formulas}
-    Apply Theorem~\ref{thm:mpu_symmetry_path_transport} with
-    $Q=\mathbb S$. The swap is a unitary involution, and the three
-    required invariance equivalences are precisely those of
-    Theorem~\ref{thm:mpu_one_sided_swap_invariance}.
+    Since the swap $Q=\mathbb S$ is a unitary involution and
+    Theorem~\ref{thm:mpu_one_sided_swap_invariance} gives the three
+    pointwise invariance equivalences,
+    Theorem~\ref{thm:mpu_symmetry_path_transport} yields the three
+    strict-equivalence correspondences.
 \end{proof}
 
 \begin{theorem}[Physical left actions commute with blocking]
@@ -236,15 +240,14 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    Expand each output-leg action in the ordered product of $k$ local
-    tensors. The coefficient of an intermediate physical configuration
-    $(r_0,\ldots,r_{k-1})$ is
-    $\prod_{n=0}^{k-1} Q_{i_n,r_n}$, which is the corresponding entry of
-    $Q^{\otimes k}$. Summing over these configurations gives
-    (\ref{eq:mpu_left_action_blocking}).
+    Expanding each output-leg action in the ordered product of $k$ local
+    tensors gives the coefficient $\prod_{n=0}^{k-1} Q_{i_n,r_n}$ for each
+    intermediate physical configuration $(r_0,\ldots,r_{k-1})$, which is
+    the corresponding entry of $Q^{\otimes k}$. Summing over these
+    configurations gives (\ref{eq:mpu_left_action_blocking}).
 \end{proof}
 
-\begin{theorem}[Symmetry path transport after positive blocking]
+\begin{theorem}[Symmetry-preserving paths after positive blocking]
     \label{thm:mpu_positive_block_symmetry_path_transport}
     \lean{MPOTensor.exists_strictlyEquivalentUnderSymmetry_blockTensor_iff_ketLeftMul}
     \leanok
@@ -261,19 +264,20 @@
     $\mathcal U^{[k]},\mathcal V^{[k]}$ strictly equivalent under
     $\mathcal S^{[k]}$ is equivalent to the existence of such a length
     making $(Q\mathcal U)^{[k]},(Q\mathcal V)^{[k]}$ strictly equivalent
-    under $\mathcal T^{[k]}$. No identity ancillas are included in this
-    comparison \cite{gap:mpu_symmetry_ancilla_transport}.
+    under $\mathcal T^{[k]}$. As recorded in
+    \cite{gap:mpu_symmetry_ancilla_transport}, no identity ancillas are
+    included in this comparison.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:mpu_symmetry_path_transport,
         thm:mpu_physical_left_action_blocking}
-    Fix a positive blocking length $k$. The matrix $Q^{\otimes k}$ is
-    again a unitary involution, so apply
-    Theorem~\ref{thm:mpu_symmetry_path_transport} in the
-    blocked physical space. Identify the transformed endpoints using
-    (\ref{eq:mpu_left_action_blocking}), and then take the existential
-    quantifier over $k>0$.
+    For each positive blocking length $k$, the matrix $Q^{\otimes k}$ is
+    again a unitary involution on the blocked physical space, so
+    Theorem~\ref{thm:mpu_symmetry_path_transport} applies to
+    $\mathcal U^{[k]}$ and $\mathcal V^{[k]}$. Identifying the transformed
+    endpoints by (\ref{eq:mpu_left_action_blocking}) and quantifying over
+    $k>0$ gives the equivalence.
 \end{proof}
 
 \begin{theorem}[Swap comparison after positive blocking]
@@ -294,8 +298,8 @@
     adjunction is equivalent to the existence of such a length for
     $\widetilde{\mathcal U}^{[k]},\widetilde{\mathcal V}^{[k]}$ under
     blocked adjunction. The analogous statements hold for transposition
-    and conjugation. No ancilla enlargement is asserted
-    \cite{gap:mpu_symmetry_ancilla_transport}.
+    and conjugation; as in \cite{gap:mpu_symmetry_ancilla_transport}, no
+    ancilla enlargement is asserted.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -311,7 +315,7 @@
     $B_N^2=I$, $B_N^\dagger=B_N^{\mathsf T}=B_N$, and
     $\overline{B_N}=B_N$. Hence on every blocked tensor the same
     one-sided involution gives the three symmetry-invariance
-    correspondences. Apply
+    correspondences, and
     Theorem~\ref{thm:mpu_positive_block_symmetry_path_transport} with
-    $Q=\mathbb S$.
+    $Q=\mathbb S$ completes the proof.
 \end{proof}

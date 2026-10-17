@@ -44,8 +44,9 @@ compatibilities $C^+_\tau A^j X=Y_\tau A^j$ and $X A^j C^-_\tau=A^jY_\tau$.
 \begin{proof}
     \leanok
     \uses{thm:ground_space_map_injective_blk}
-    Factor the cyclic word at the second cyclic position, rotate the trace, and
-    use injectivity of $\Gamma_{L_0}$ to remove the length-$L_0$ test word.
+    Factoring the cyclic word at the second cyclic position and rotating the
+    trace isolates the length-$L_0$ test word, which injectivity of
+    $\Gamma_{L_0}$ then removes.
 \end{proof}
 
 \begin{theorem}[The two boundary-crossing compatibilities]%
@@ -70,10 +71,10 @@ compatibilities $C^+_\tau A^j X=Y_\tau A^j$ and $X A^j C^-_\tau=A^jY_\tau$.
 \begin{proof}
     \leanok
     \uses{lem:cyclic_window_range_antitonicity, lem:wrapped_window_one_sided_compatibility, lem:mirror_wrapped_window_one_sided_compatibility}
-    First use Lemma~\ref{lem:cyclic_window_range_antitonicity} to reduce the
-    cyclic constraints from range $L$ to range $L_0+1$. Then apply the two
-    cyclic-interval compatibility lemmas at the two boundary positions to obtain
-    the one-sided identities in (\ref{eq:ph_reduced_wrapped_compat}).
+    Lemma~\ref{lem:cyclic_window_range_antitonicity} reduces the cyclic
+    constraints from range $L$ to range $L_0+1$, at which the two
+    cyclic-interval compatibility lemmas at the boundary positions yield the
+    one-sided identities in (\ref{eq:ph_reduced_wrapped_compat}).
 \end{proof}
 
 \begin{lemma}[Boundary-crossing equations for $\Gamma_{M+1}(X)$]%
@@ -97,10 +98,10 @@ compatibilities $C^+_\tau A^j X=Y_\tau A^j$ and $X A^j C^-_\tau=A^jY_\tau$.
 
 \begin{proof}
     \leanok
-    Substitute $\psi=\Gamma_{M+1}(X)$ in the two cyclic restrictions at the
-    last site and at the second boundary-crossing support. Lemmas
+    Substituting $\psi=\Gamma_{M+1}(X)$ into the two cyclic restrictions at the
+    last site and at the second boundary-crossing support and applying Lemmas
     \ref{lem:wrapped_window_one_sided_compatibility} and
-    \ref{lem:mirror_wrapped_window_one_sided_compatibility} then give
+    \ref{lem:mirror_wrapped_window_one_sided_compatibility} yields
     (\ref{eq:ph_closure_boundary_crossing_gamma_equations}).
 \end{proof}
 
@@ -123,11 +124,11 @@ compatibilities $C^+_\tau A^j X=Y_\tau A^j$ and $X A^j C^-_\tau=A^jY_\tau$.
 
 \begin{proof}
     \leanok
-    Substitute $\tau^+_\eta(\mu)$ and $\tau^-_\eta(\mu)$ into
-    Lemma~\ref{lem:closure_property_boundary_crossing_equations_ground_space_map}.
-    The exposed-complement identities of
-    Lemma~\ref{lem:wrapped_middle_backgrounds} identify both complementary
-    products with $A^\mu$.
+    Evaluating
+    Lemma~\ref{lem:closure_property_boundary_crossing_equations_ground_space_map}
+    at $\tau^+_\eta(\mu)$ and $\tau^-_\eta(\mu)$ and applying the
+    exposed-complement identities of Lemma~\ref{lem:wrapped_middle_backgrounds}
+    identifies both complementary products with $A^\mu$.
 \end{proof}
 
 \begin{lemma}[Common complement word for the two boundary supports]%
@@ -148,10 +149,10 @@ compatibilities $C^+_\tau A^j X=Y_\tau A^j$ and $X A^j C^-_\tau=A^jY_\tau$.
 
 \begin{proof}
     \leanok
-    Put the same letter $\eta$ on the remaining sites. Fill the physical sites
-    $L_0,\ldots,M-1$ with $\mu$ for the support crossing the last site, and fill
-    the sites $1,\ldots,M-L_0$ with $\mu$ for the second boundary-crossing
-    support. The two complement-extraction identities follow from the index
+    Placing the letter $\eta$ on the remaining sites while filling the physical
+    sites $L_0,\ldots,M-1$ with $\mu$ for the support crossing the last site
+    and the sites $1,\ldots,M-L_0$ with $\mu$ for the second boundary-crossing
+    support yields the two complement-extraction identities by index
     arithmetic. The same outside-site calculation gives
     $\Res^\rho_{M,L_0+1}\psi
         =\Res^{\tau^+_\eta(\mu)}_{M,L_0+1}\psi$ for any $\rho$ with
@@ -194,13 +195,12 @@ compatibilities $C^+_\tau A^j X=Y_\tau A^j$ and $X A^j C^-_\tau=A^jY_\tau$.
 
 \begin{proof}
     \leanok
-    Apply the first-letter restriction to both equal length-$(L_0+1)$
-    restrictions. The two resulting length-$L_0$ vectors are represented by
-    $\Gamma_{L_0}(Y_\rho A^j)$ and $\Gamma_{L_0}(Y_\tau A^j)$, and block
-    injectivity makes $\Gamma_{L_0}$ injective. The two displayed special cases
-    follow from Lemma~\ref{lem:wrapped_middle_backgrounds}. The length-$L_0$
-    word forms are obtained by multiplying these equations on the right by
-    $A^\sigma$.
+    Restricting both equal length-$(L_0+1)$ states at the first letter produces
+    the length-$L_0$ vectors $\Gamma_{L_0}(Y_\rho A^j)$ and
+    $\Gamma_{L_0}(Y_\tau A^j)$, so injectivity of $\Gamma_{L_0}$ from block
+    injectivity implies $Y_\rho A^j=Y_\tau A^j$. The two displayed special
+    cases then follow from Lemma~\ref{lem:wrapped_middle_backgrounds}, and
+    right multiplication by $A^\sigma$ gives their length-$L_0$ word forms.
 \end{proof}
 
 \begin{lemma}[Reduction to compatible boundary conditions]
@@ -270,8 +270,8 @@ compatibilities $C^+_\tau A^j X=Y_\tau A^j$ and $X A^j C^-_\tau=A^jY_\tau$.
 
 \begin{proof}
     \leanok
-    Fix $j$ and $\sigma$. Lemma~\ref{lem:boundary_assignment_first_letter_products}
-    gives
+    For each fixed pair $(j,\sigma)$,
+    Lemma~\ref{lem:boundary_assignment_first_letter_products} gives
     \begin{align}
         Y_M(\rho^+_{j,\sigma})A^j
          & =Y_M(\tau^+_\eta(\mu))A^j,
@@ -280,9 +280,10 @@ compatibilities $C^+_\tau A^j X=Y_\tau A^j$ and $X A^j C^-_\tau=A^jY_\tau$.
          & =Y_{M+1-L_0}(\tau^-_\eta(\mu))A^j.
         \label{eq:ph_first_letter_minus}
     \end{align}
-    Multiply (\ref{eq:ph_first_letter_plus}) and
-    (\ref{eq:ph_first_letter_minus}) on the right by $A^\sigma$ and use the
-    assumed product equation for the chosen pair $(j,\sigma)$.
+    Multiplying (\ref{eq:ph_first_letter_plus}) and
+    (\ref{eq:ph_first_letter_minus}) on the right by $A^\sigma$ and combining
+    them with the assumed product equation for $(j,\sigma)$ yields the
+    displayed equality.
 \end{proof}
 
 \begin{lemma}[Endpoint words for the periodic-boundary windows]
@@ -305,14 +306,14 @@ compatibilities $C^+_\tau A^j X=Y_\tau A^j$ and $X A^j C^-_\tau=A^jY_\tau$.
 
 \begin{proof}
     \leanok
-    Use Theorem~\ref{thm:cyclic_window_boundary_matrix_transport} for the
-    $L_0-1$ adjacent restrictions starting at $i_0=M+1-L_0$. For
-    $0\le r<L_0-1$, the two endpoint words are determined by
+    Applying Theorem~\ref{thm:cyclic_window_boundary_matrix_transport} to the
+    $L_0-1$ adjacent restrictions starting at $i_0=M+1-L_0$ determines the two
+    endpoint words for $0\le r<L_0-1$ via
     \begin{align}
         i_0+r       & =M+1-L_0+r, \notag           \\
         i_0+r+L_0+1 & \equiv r+1\pmod{M+1}. \notag
     \end{align}
-    Substituting these two words in the iterated transport identity gives the
+    Substituting these two words in the iterated shift identity gives the
     displayed product equation.
 \end{proof}
 
@@ -338,10 +339,9 @@ compatibilities $C^+_\tau A^j X=Y_\tau A^j$ and $X A^j C^-_\tau=A^jY_\tau$.
 
 \begin{proof}
     \leanok
-    Apply Theorem~\ref{thm:cyclic_window_boundary_matrix_transport} to the
-    $L_0-1$ restrictions beginning at $M+1-L_0+r$, with
-    $Y_r(\rho)=Y_{M+1-L_0+r}(\rho)$. With $i_0=M+1-L_0$, the site labels
-    satisfy
+    With $Y_r(\rho)=Y_{M+1-L_0+r}(\rho)$ and $i_0=M+1-L_0$,
+    Theorem~\ref{thm:cyclic_window_boundary_matrix_transport} applies to the
+    $L_0-1$ restrictions beginning at $M+1-L_0+r$, whose site labels satisfy
     \begin{align}
         i_0+r       & =M+1-L_0+r, \notag           \\
         i_0+r+L_0+1 & \equiv r+1\pmod{M+1}. \notag
@@ -352,11 +352,10 @@ compatibilities $C^+_\tau A^j X=Y_\tau A^j$ and $X A^j C^-_\tau=A^jY_\tau$.
          & =A^{\rho_{r+1}}Y_{M+2-L_0+r}(\rho). \notag
     \end{align}
     Multiplying these $L_0-1$ equations from left to right gives the displayed
-    product equation. The right-multiplied form follows by multiplying this
-    equality by $R$.
+    product equation, and right multiplication by $R$ yields the general form.
 \end{proof}
 
-\begin{lemma}[Transport followed by the one-sided boundary equation]
+\begin{lemma}[Window shift followed by the one-sided boundary equation]
     \label{lem:boundary_transport_wrapped_product_ground_space_map}
     \lean{MPSTensor.closure_property_boundary_condition_transport_wrapped_product_of_groundSpaceMap}
     \leanok
@@ -370,10 +369,10 @@ compatibilities $C^+_\tau A^j X=Y_\tau A^j$ and $X A^j C^-_\tau=A^jY_\tau$.
         A^{\rho_{M+1-L_0}}\cdots A^{\rho_{M-1}}A^j =A^{\rho_1}\cdots A^{\rho_{L_0-1}}
         A^{\rho_{L_0}}\cdots A^{\rho_{M-1}}A^jX. \notag
     \end{align}
-    For $\rho=\tau^-_\eta(\mu)$, this is the transport identity supplied by the
+    For $\rho=\tau^-_\eta(\mu)$, this is the shift identity given by the
     adjacent-window argument, with the single factor $A^j$ following
     $Y_{M+1-L_0}(\tau^-_\eta(\mu))$. The padded identity, whose corresponding
-    factor is $A^jA^\sigma$, is supplied separately.
+    factor is $A^jA^\sigma$, is given separately.
 \end{lemma}
 
 \begin{proof}
@@ -384,9 +383,9 @@ compatibilities $C^+_\tau A^j X=Y_\tau A^j$ and $X A^j C^-_\tau=A^jY_\tau$.
          & Y_{M+1-L_0}(\rho)
         A^{\rho_{M+1-L_0}}\cdots A^{\rho_{M-1}}A^j =A^{\rho_1}\cdots A^{\rho_{L_0-1}}Y_M(\rho)A^j. \notag
     \end{align}
-    The one-sided equation for the window beginning at $M$ gives
-    $Y_M(\rho)A^j =A^{\rho_{L_0}}\cdots A^{\rho_{M-1}}A^jX$.
-    Substitution gives the displayed formula.
+    Because the one-sided equation for the window beginning at $M$ gives
+    $Y_M(\rho)A^j =A^{\rho_{L_0}}\cdots A^{\rho_{M-1}}A^jX$, substituting this
+    expression into the right-hand side yields the displayed formula.
 \end{proof}
 
 \begin{lemma}[Long boundary-condition product for the periodic-boundary windows]
@@ -410,15 +409,15 @@ compatibilities $C^+_\tau A^j X=Y_\tau A^j$ and $X A^j C^-_\tau=A^jY_\tau$.
 
 \begin{proof}
     \leanok
-    Apply Theorem~\ref{thm:cyclic_window_boundary_matrix_transport} to the
-    $M+2-L_0$ restrictions beginning at $M+r$ modulo $M+1$. With $i_0=M$, the
-    site labels satisfy
+    With $i_0=M$, Theorem~\ref{thm:cyclic_window_boundary_matrix_transport}
+    applies to the $M+2-L_0$ restrictions beginning at $M+r$ modulo $M+1$,
+    whose site labels satisfy
     \begin{align}
         i_0+r       & \equiv M+r\pmod{M+1}, \notag   \\
         i_0+r+L_0+1 & \equiv L_0+r\pmod{M+1}. \notag
     \end{align}
-    The final window is
-    $i_0+M+2-L_0\equiv M+1-L_0\pmod{M+1}$. Substituting these site labels in
+    Since the final window is
+    $i_0+M+2-L_0\equiv M+1-L_0\pmod{M+1}$, substituting these site labels into
     the iterated product identity gives the displayed equation.
 \end{proof}
 
@@ -443,11 +442,11 @@ compatibilities $C^+_\tau A^j X=Y_\tau A^j$ and $X A^j C^-_\tau=A^jY_\tau$.
 
 \begin{proof}
     \leanok
-    Define $Y_\mu$ to be the first boundary matrix evaluated on the boundary
-    condition $\tau^+_\eta(\mu)$. Lemma~\ref{lem:wrapped_middle_backgrounds}
-    rewrites the first cyclic-window complement as $\mu$, while the assumed
-    comparison at $\tau^-_\eta(\mu)$ rewrites the second boundary matrix to the
-    same $Y_\mu$.
+    Setting $Y_\mu:=Y^+_{\tau^+_\eta(\mu)}$,
+    Lemma~\ref{lem:wrapped_middle_backgrounds} rewrites the first
+    cyclic-window complement as $\mu$, while the assumed equality at
+    $\tau^-_\eta(\mu)$ identifies the second boundary matrix with the same
+    $Y_\mu$.
 \end{proof}
 
 \begin{lemma}[Commutation from two one-sided equations]%
@@ -550,9 +549,9 @@ ground space is spanned by $V^{(N)}(A)$.
 
 \begin{proof}
     \leanok
-    Apply the standard finite-dimensional criterion that a nonzero space has
-    dimension one exactly when all of its vectors are proportional to a single
-    nonzero vector.
+    A finite-dimensional vector space has dimension one if and only if it is
+    spanned by a single nonzero vector $\psi_0$, so every $\psi\in S$ has the
+    form $c\,\psi_0$.
 \end{proof}
 
 \begin{definition}[Periodic parent-Hamiltonian ground space]\label{def:chain_ground_space}
@@ -590,9 +589,9 @@ ground space is spanned by $V^{(N)}(A)$.
 
 \begin{proof}
     \leanok
-    This is the defining cyclic-window condition for membership in
-    $\mathcal G_{N,L}(A)$, together with the definition of the local ground
-    space as the range of $\Gamma_L$.
+    By the defining cyclic-window condition for $\mathcal G_{N,L}(A)$, every
+    restricted $L$-site state lies in $G_L(A)=\range(\Gamma_L)$ and therefore
+    has the form $\Gamma_L(Y)$ for some boundary matrix $Y$.
 \end{proof}
 
 \begin{lemma}[The periodic MPS vector satisfies every cyclic window constraint]
@@ -620,10 +619,11 @@ ground space is spanned by $V^{(N)}(A)$.
     and $u$ with $|w|=N-L_0$ and $|u|=L_0$, we have
     $\tr(A^wA^u)=0$. Since $A$ is $L_0$-block-injective,
     $\{A^u:|u|=L_0\}$ spans $\MN{D}$. By nondegeneracy of the trace pairing,
-    $A^w=0$ for every $|w|=N-L_0$. Repeatedly strip a length-$L_0$ suffix:
-    if every product of length $m+L_0$ vanishes, then the spanning property of
-    the length-$L_0$ products implies that every product of length $m$ vanishes.
-    Eventually all products of some length $r<L_0$ vanish. If $r=0$, this gives
-    $\Id=0$. If $r>0$, every length-$L_0$ product has a zero length-$r$ prefix,
-    so all such products vanish, contradicting that they span $\MN{D}$.
+    $A^w=0$ for every $|w|=N-L_0$. Repeatedly stripping a length-$L_0$ suffix
+    shows that whenever every product of length $m+L_0$ vanishes, the spanning
+    property of the length-$L_0$ products forces every product of length $m$ to
+    vanish. Eventually all products of some length $r<L_0$ vanish. If $r=0$,
+    this gives $\Id=0$. If $r>0$, every length-$L_0$ product has a zero
+    length-$r$ prefix, so all such products vanish, contradicting that they
+    span $\MN{D}$.
 \end{proof}

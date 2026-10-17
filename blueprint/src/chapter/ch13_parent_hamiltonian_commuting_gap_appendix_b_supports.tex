@@ -110,7 +110,9 @@
     \lean{MPSTensor.AppendixBStructuralData.physicalIsometryTensorPowerLeftInverse}
     \leanok
     \uses{def:appendixB_physical_isometry}
-    For every $N\geq 0$, the coefficients of $U$ define
+    For every $N\geq 0$, the tensor power occurring in the basic-vector
+    expression \cite[Equation~(3.17)]{Cirac2016MPDO_arXiv} is the map defined
+    by the coefficients of $U$,
     \begin{align}
         U^{\otimes N}\colon
         (\mathcal H_a\otimes\mathcal H_b)^{\otimes N}
@@ -138,8 +140,6 @@
         \psi_\sigma.
         \notag
     \end{align}
-    This is the tensor power occurring in the basic-vector expression
-    \cite[Equation~(3.17)]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
 \begin{theorem}[The tensor powers are isometric embeddings]
@@ -154,8 +154,8 @@
 
 \begin{proof}
     \leanok
-    For virtual-pair configurations $p$ and $q$, interchange the two finite
-    sums and factor the sum over physical configurations site by site:
+    For virtual-pair configurations $p$ and $q$, interchanging the two finite
+    sums and factoring the sum over physical configurations site by site gives
     \begin{align}
         \sum_\sigma
         \prod_t
@@ -169,8 +169,8 @@
         \notag
     \end{align}
     The pair-index isometry equation turns the last product into
-    $\prod_t\delta_{p_t,q_t}=\delta_{p,q}$. Therefore, the coefficient at $p$
-    is $v_p$. A map with a left inverse is injective.
+    $\prod_t\delta_{p_t,q_t}=\delta_{p,q}$, so the coefficient at $p$
+    is $v_p$, and the resulting left inverse makes $U^{\otimes N}$ injective.
 \end{proof}
 
 \begin{theorem}[Appendix B basis change and the parent interaction]
@@ -208,8 +208,8 @@
     \lean{MPSTensor.AppendixBStructuralData.weightedTwoSiteBoundary}
     \leanok
     \uses{def:appendixB_physical_isometry_tensor_power}
-    Put $\ket{\varphi}=\sum_b\lambda_b\ket{b,b}$. For outer-boundary
-    coefficients $v_{a,c}$, insertion of this vector on the middle virtual
+    For $\ket{\varphi}=\sum_b\lambda_b\ket{b,b}$ and outer-boundary
+    coefficients $v_{a,c}$, insertion of $\ket{\varphi}$ on the middle virtual
     bond is the map $I_\varphi$ defined by
     \begin{align}
         (I_\varphi v)_{(a,b),(b',c)}
@@ -217,12 +217,11 @@
         \delta_{b,b'}\lambda_bv_{a,c}.
         \notag
     \end{align}
-    The two-site physical map is $U^{\otimes2}I_\varphi$. A boundary matrix
-    $Y$ determines outer-boundary coefficients by
-    $(v_Y)_{a,c}=\lambda_aY_{c,a}$. Opening the outer virtual bond in the
-    two-site contraction of
-    \cite[Equations~(3.17)--(3.18)]{Cirac2016MPDO_arXiv} gives these
-    coefficients.
+    The two-site physical map is $U^{\otimes2}I_\varphi$, and opening the outer
+    virtual bond in the two-site contraction of
+    \cite[Equations~(3.17)--(3.18)]{Cirac2016MPDO_arXiv} associates to a
+    boundary matrix $Y$ the outer-boundary coefficients
+    $(v_Y)_{a,c}=\lambda_aY_{c,a}$.
 \end{definition}
 
 \begin{definition}[Virtual bond projector and its adjacent placements]
@@ -232,9 +231,8 @@
     \lean{MPSTensor.AppendixBStructuralData.rightVirtualBondProjection}
     \leanok
     \uses{def:appendixB_two_site_bond_embedding}
-    Write
-    $s=\langle\varphi,\varphi\rangle=\sum_b\lambda_b^2$.
-    The orthogonal projector onto $\C\varphi$ has pair-index coefficients
+    With $s=\langle\varphi,\varphi\rangle=\sum_b\lambda_b^2$,
+    the orthogonal projector onto $\C\varphi$ has pair-index coefficients
     \begin{align}
         (P_\varphi v)_{b,b'}
          & =
@@ -306,8 +304,8 @@
 
 \begin{proof}
     \leanok
-    For prescribed coefficients $v_{a,c}$, take
-    $Y_{c,a}=\lambda_a^{-1}v_{a,c}$.
+    For prescribed coefficients $v_{a,c}$, the matrix
+    $Y_{c,a}=\lambda_a^{-1}v_{a,c}$ satisfies $v_Y=v$.
 \end{proof}
 
 \begin{theorem}[The two-site basic-vector image]
@@ -338,9 +336,9 @@
     \lean{MPSTensor.AppendixBStructuralData.twoSiteBasicSupportProjection}
     \leanok
     \uses{def:appendixB_two_site_basic_space}
-    Let $P_2$ be the orthogonal projector onto $G_2(\Lambda U)$, as in the
-    local parent-space construction of
-    \cite[Definition~3.9]{Cirac2016MPDO_arXiv}.
+    As in the local parent-space construction of
+    \cite[Definition~3.9]{Cirac2016MPDO_arXiv}, $P_2$ is the orthogonal
+    projector onto $G_2(\Lambda U)$.
 \end{definition}
 
 \begin{theorem}[Range and complement of the two-site basic support projector]
@@ -414,10 +412,9 @@
     $V\colon\mathcal V\to\C^d$ be the common physical map whose matrix
     elements are
     $V_{i,(j,\alpha,\beta)}=(U_j^i)_{\alpha,\beta}$.
-    For each sector insert the vector
-    $\ket{\varphi_j}=\sum_b\lambda_{j,b}\ket{b,b}$ on the middle virtual
-    bond, apply $V$ on both sites, and sum the resulting physical vectors.
-    This defines the equal-sector two-site embedding
+    Inserting $\ket{\varphi_j}=\sum_b\lambda_{j,b}\ket{b,b}$ on the middle
+    virtual bond of each sector, applying $V$ on both sites, and summing the
+    resulting physical vectors defines the equal-sector two-site embedding
     \begin{align}
         I_{\mathrm{res}}\colon
         \prod_j\C^{D_j\times D_j}
@@ -440,7 +437,7 @@
     \lean{MPSTensor.IsBNTCanonicalForm.exists_residualFamilyAppendixBData}
     \leanok
     \uses{thm:residual_isometry_family_one_gram, def:residual_family_two_site_support, thm:appendixB_two_site_basic_embedding_range, def:parent_interaction}
-    The common physical map is an isometry, $V^*V=1$. Moreover, the
+    The common physical map is an isometry, $V^*V=1$. In addition, the
     equal-sector bond embedding and the physical support projector satisfy
     \begin{align}
         \ran(I_{\mathrm{res}})
@@ -471,6 +468,6 @@
     ground space of a direct sum is this sum, which proves (\ref{eq:residual_family_two_site_bond_range}) and
     (\ref{eq:residual_family_two_site_proj_range}). Orthogonal projection onto that space is complementary to
     its parent interaction. Finally, the residual-isometry form of the
-    cross-block fixed-point structure supplies the simultaneous sector
+    cross-block fixed-point structure gives the simultaneous sector
     decompositions.
 \end{proof}

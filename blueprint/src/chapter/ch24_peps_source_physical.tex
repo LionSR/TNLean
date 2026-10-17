@@ -1,13 +1,13 @@
 \section{Physical contractions and Gaussian source estimates}
 
-We retain the original source positions, local branch labels, and common
-Gaussian law of Definition~\ref{def:peps_source_gaussian_law}.
-The estimates below concern allowed words and specified isometric
-input frames. They allow different ket and bra input spaces.
-Finite orthonormal coordinates are chosen whenever matrices or partial
-traces are used; their dimensions are unrestricted. This follows the
-finite-space convention in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
-\texttt{04-compression.tex}, lines 5--19 and 383--558.
+With the original source positions, local branch labels, and common
+Gaussian law of Definition~\ref{def:peps_source_gaussian_law},
+the estimates below concern allowed words and specified isometric
+input frames, allowing different ket and bra input spaces.
+Following the finite-space convention in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}
+(\texttt{04-compression.tex}, lines 5--19 and 383--558),
+finite orthonormal coordinates of unrestricted dimension are chosen whenever matrices or partial
+traces are used.
 The intrinsic component and Gram maps also make sense for arbitrary
 inner-product discard spaces.
 
@@ -120,10 +120,10 @@ inner-product discard spaces.
 \end{theorem}
 
 \begin{proof}\leanok
-    Expand the partial trace in the discard basis and use the Gram
-    entry formula. The output matrices are contractions in orthonormal
-    coordinates. The rectangular trace-norm contraction estimate for their
-    mixed partial trace gives the last assertion.
+    Expanding the partial trace in the discard basis and using the Gram
+    entry formula gives the matrix-entry identity; since the output matrices are contractions in orthonormal
+    coordinates, the rectangular trace-norm contraction estimate for their
+    mixed partial trace gives the norm bound.
 \end{proof}
 
 \begin{definition}[Proper input frames]
@@ -164,9 +164,9 @@ inner-product discard spaces.
 \end{theorem}
 
 \begin{proof}\leanok
-    Compose the word with the given isometric input frame.
-    The component and mixed Gram estimates, followed by the rectangular
-    partial-trace inequality, apply without a spanning condition.
+    After composing the word with the given isometric input frame,
+    the component and mixed Gram estimates and the rectangular
+    partial-trace inequality apply without a spanning condition.
 \end{proof}
 
 \begin{definition}[Schmidt-weighted physical vectors]
@@ -204,8 +204,8 @@ inner-product discard spaces.
 \end{theorem}
 
 \begin{proof}\leanok
-    Expand both vectors in their product bases and sum over the
-    common discard coordinate. This gives precisely the weighted source matrix
+    Expanding both vectors in their product bases and summing over the
+    common discard coordinate yields the weighted source matrix
     with the ordinary transpose of the bra-row, ket-column Gram matrix.
 \end{proof}
 
@@ -253,9 +253,9 @@ inner-product discard spaces.
 \end{theorem}
 
 \begin{proof}\leanok
-    Expand the finite Schmidt sums and both discard traces. The trace
+    In the expansion of the finite Schmidt sums and both discard traces, the trace
     over $D$ is the weighted source matrix from
-    Theorem~\ref{thm:peps_weighted_physical_source_identity}; the remaining
+    Theorem~\ref{thm:peps_weighted_physical_source_identity}, and the remaining
     trace gives~(\ref{eq:peps_separated_physical_density_block}).
 \end{proof}
 
@@ -281,10 +281,9 @@ inner-product discard spaces.
 \end{theorem}
 
 \begin{proof}\leanok
-    Use the Gram norm bound and the weighted-source second-moment
-    estimate. The exterior partial trace is a trace-norm contraction.
-    The pair-product integrability gives the integrability needed to
-    integrate this pointwise inequality.
+    The Gram norm bound, the weighted-source second-moment
+    estimate, and the trace-norm contractivity of the exterior partial trace bound the integrand pointwise,
+    while pair-product integrability justifies integrating the pointwise inequality.
 \end{proof}
 
 \begin{definition}[Original corrected Schmidt coordinates]
@@ -320,10 +319,9 @@ inner-product discard spaces.
 
 \begin{proof}\leanok
     The original-source law gives diagonal covariance with
-    $\kappa=k^{-|S|}$ and product probabilities of total mass one.
-    Apply Theorem~\ref{thm:peps_weighted_physical_source_bound} to each block.
-    The trace norm of the full matrix is at most the sum of the block trace
-    norms; sum over the $|X|^2$ affected coordinate pairs. Integrability follows
+    $\kappa=k^{-|S|}$ and product probabilities of total mass one,
+    so Theorem~\ref{thm:peps_weighted_physical_source_bound} bounds each block;
+    summing the block trace norms over the $|X|^2$ affected coordinate pairs bounds the full trace norm. Integrability follows
     from the finite Gaussian coefficient expansion.
 \end{proof}
 
@@ -348,8 +346,8 @@ inner-product discard spaces.
 \end{theorem}
 
 \begin{proof}\leanok
-    Apply the defining matrix action to each input vector. Matrix
-    multiplication of a mixed rank-one operator gives the two resulting
+    Applying the defining matrix action to each input vector shows that matrix
+    multiplication of a mixed rank-one operator produces the outer product of the two resulting
     output vectors, with complex conjugation on the bra side.
 \end{proof}
 
@@ -365,7 +363,7 @@ inner-product discard spaces.
 \end{theorem}
 
 \begin{proof}\leanok
-    Expand the corrected term in source-basis substitutions.
+    In the source-basis substitution expansion of the corrected term,
     Theorem~\ref{thm:peps_prepared_vector_density} expresses every summand as
     the outer product of its output vectors. Independence of the
     finite partial trace and trace norm from orthonormal output coordinates
@@ -381,9 +379,8 @@ inner-product discard spaces.
     $\Psi_{\xi,u}(\psi)$ be the vector obtained by preparing the selected
     Schmidt frame columns and the original unselected sources, adjoining the
     owner-relabeled input $\psi$, and applying the partial residual.
-    It belongs to the original output memory after the inverse owner
-    identification. These are the prepared vectors of
-    Theorem~\ref{thm:peps_corrected_gaussian_sum}.
+    After the inverse owner identification, this prepared vector of
+    Theorem~\ref{thm:peps_corrected_gaussian_sum} belongs to the original output memory.
 \end{definition}
 
 \begin{theorem}[Corrected operator on mixed pure inputs]
@@ -404,8 +401,8 @@ inner-product discard spaces.
 \end{theorem}
 
 \begin{proof}\leanok
-    Apply the corrected-term matrix expansion and then the
-    mixed-vector identity of Theorem~\ref{thm:peps_prepared_vector_density}.
+    The corrected-term matrix expansion followed by the
+    mixed-vector identity of Theorem~\ref{thm:peps_prepared_vector_density} yields the stated sum.
 \end{proof}
 
 \begin{theorem}[Square integrability of the coefficient products]
@@ -424,10 +421,10 @@ inner-product discard spaces.
 \end{theorem}
 
 \begin{proof}\leanok
-    Use the diagonal second moment of the original coefficient
-    products. Reindex the retained positions by the original positions.
-    Square integrability on the probability space, followed by the finite
-    matrix-sum integrability theorem, gives the conclusion.
+    The diagonal second moment of the original coefficient
+    products and reindexing the retained positions by the original positions establish
+    square integrability on the probability space, from which the finite
+    matrix-sum integrability theorem gives the conclusion.
 \end{proof}
 
 \begin{theorem}[Integrability of corrected physical operators]
@@ -449,10 +446,9 @@ inner-product discard spaces.
 \end{theorem}
 
 \begin{proof}\leanok
-    The corrected operator is a finite sum of coefficient
-    products times fixed matrices. Apply
-    Theorem~\ref{thm:peps_gaussian_products_integrable}; a fixed linear map
-    changes only the matrix coefficients.
+    Since the corrected operator is a finite sum of coefficient
+    products times fixed matrices and a fixed linear map
+    changes only the matrix coefficients, Theorem~\ref{thm:peps_gaussian_products_integrable} applies.
 \end{proof}
 
 \begin{definition}[A single Gaussian branch pair]
@@ -479,7 +475,7 @@ inner-product discard spaces.
     If the affected set meets $S$, the two sums defining $B_{\xi\zeta}$ may
     be indexed by $\mathcal I_S$ using the retained-slot bijection.
     At $e\in S$ the coefficient reads the original local labels
-    selected by $\xi,\zeta$; the output vectors are transported by the same
+    selected by $\xi,\zeta$; the output vectors are mapped by the same
     coordinate bijection.
     For $k>0$ and nonnegative local weights, every
     $\|L(B_{\xi\zeta})\|_1$ is integrable. If the weights and frames also
@@ -492,10 +488,10 @@ inner-product discard spaces.
 \end{theorem}
 
 \begin{proof}\leanok
-    Reindex both finite sums and each source product by the retained
-    original positions. Their coefficient products are square integrable.
-    Finally use the mixed-vector expansion, the trace-norm triangle
-    inequality, and linearity of the integral for the resulting finite sum.
+    Reindexing both finite sums and each source product by the retained
+    original positions gives square-integrable coefficient products,
+    and the mixed-vector expansion, the trace-norm triangle
+    inequality, and linearity of the integral for the resulting finite sum yield the bound.
 \end{proof}
 
 \begin{theorem}[A sample bounded by the average error sum]
@@ -570,11 +566,10 @@ inner-product discard spaces.
 \end{theorem}
 
 \begin{proof}\leanok
-    Every source endpoint participates in its gate. Count touched
-    occurrences by summing the lifetime bound over the at most $2|S|$
-    affected parties. The product formula for partial coefficient
-    norms gives the ket and bra factors. Apply the existing corrected-position
-    cost estimate, retaining repeated gate occurrences separately.
+    Because every source endpoint participates in its gate, summing the lifetime bound over the at most $2|S|$
+    affected parties counts the touched occurrences, while the product formula for partial coefficient
+    norms gives the ket and bra factors; the corrected-position
+    cost estimate (retaining repeated gate occurrences separately) then yields both bounds.
 \end{proof}
 
 \begin{definition}[Two contraction factors]
@@ -662,8 +657,8 @@ inner-product discard spaces.
 \end{theorem}
 
 \begin{proof}\leanok
-    Expand the product $\prod_{e\in\mathcal E}(1+q)$ and remove the
-    empty subset. Substitute $q=Q/\sqrt k$. The ceiling bounds its defining
+    Expanding the product $\prod_{e\in\mathcal E}(1+q)$, removing the
+    empty subset, and substituting $q=Q/\sqrt k$ gives the two subset-sum identities. The ceiling bounds its defining
     square, giving the inverse-square-root estimate. Finally,
     $(1+q)^N\leq\exp(Nq)$ and $Nq\leq\epsilon/8$ imply the stated bound.
     The empty source set gives zero throughout.

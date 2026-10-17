@@ -45,10 +45,10 @@ The construction follows \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
 \end{theorem}
 
 \begin{proof}\leanok
-    Coordinates in an orthonormal basis preserve the norm. Apply the finite
-    Schmidt decomposition to each $z_{e,\alpha}$ independently. The
+    Coordinates in an orthonormal basis preserve the norm, and the finite
+    Schmidt decomposition applies to each $z_{e,\alpha}$ independently. Because the
     retained vector at a partial slot is its original source vector at the
-    selected local label, so both the vector and outer-product assertions
+    selected local label, both the vector and outer-product assertions
     follow by substitution.
 \end{proof}
 
@@ -68,9 +68,9 @@ The construction follows \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
 
 \begin{proof}\leanok
     An algebraic tensor belongs to the tensor product of two finite-dimensional
-    subspaces. Choose orthonormal coordinates on these subspaces, apply the
-    finite Schmidt decomposition, and compose the Schmidt frames with the
-    coordinate inclusions. Isometry preserves both the vector and its norm.
+    subspaces. Choosing orthonormal coordinates on these subspaces, applying the
+    finite Schmidt decomposition, and composing the Schmidt frames with the
+    coordinate inclusions preserves both the vector and its norm.
 \end{proof}
 
 \begin{definition}[A single law indexed by original sources]
@@ -102,9 +102,9 @@ The construction follows \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
 \end{theorem}
 
 \begin{proof}\leanok
-    Coordinate projections preserve product measures. Project first to
-    the selected original positions, then to the fixed
-    ordered local labels at those positions.
+    Coordinate projections preserve product measures, so projecting first to
+    the selected original positions and then to the fixed
+    ordered local labels at those positions retains the product Gaussian law.
 \end{proof}
 
 \begin{definition}[Sampled source operators]
@@ -115,7 +115,7 @@ The construction follows \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
     \uses{thm:peps_local_schmidt_sources,def:peps_source_gaussian_law}
     For $k>0$, let $\widehat X_{e,\alpha\beta}$ be the average of the
     Gaussian product operators in Equation~(5.6) of the manuscript,
-    transported by $E_{e,\alpha},F_{e,\alpha}$ on the ket side and
+    mapped by $E_{e,\alpha},F_{e,\alpha}$ on the ket side and
     $E_{e,\beta},F_{e,\beta}$ on the bra side. Thus
     \begin{align}
         \widehat X_{e,\alpha\beta}
@@ -149,17 +149,17 @@ The construction follows \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
     More generally, these assertions hold for any nonnegative weights and
     endpoint matrices representing the source vectors as in
     (\ref{eq:peps_local_schmidt_source}).
-    The ambient correction is the four-frame transport of the
+    The ambient correction is the four-frame image of the
     centered correction in Schmidt coordinates.
 \end{theorem}
 
 \begin{proof}\leanok
-    Use the single-source expectation formula and the projection from
-    Theorem~\ref{thm:peps_source_gaussian_selection}. The exact source
+    By the single-source expectation formula and the projection from
+    Theorem~\ref{thm:peps_source_gaussian_selection}, the exact source
     representation identifies the mean with $X_{e,\alpha\beta}$.
-    Subtraction gives the centered identity; linearity of the four-frame
-    transport gives the final assertion. The required representatives are
-    given by Theorem~\ref{thm:peps_local_schmidt_sources}.
+    Subtraction gives the centered identity, and linearity of the four-frame
+    map gives the final assertion, with the required representatives
+    coming from Theorem~\ref{thm:peps_local_schmidt_sources}.
 \end{proof}
 
 \begin{theorem}[Covariance at original corrected positions]
@@ -192,7 +192,7 @@ The construction follows \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
 \begin{proof}\leanok
     The product is the selected Gaussian coefficient with
     the same original positions and ordered local labels.
-    Substitute its diagonal covariance formula. Independence multiplies
+    Substituting its diagonal covariance formula and using independence multiplies
     the factors $k^{-1}$, one for each original corrected position.
 \end{proof}
 
@@ -213,12 +213,12 @@ The construction follows \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
 \end{theorem}
 
 \begin{proof}\leanok
-    Restrict the multilinear map to the selected arguments and expand
-    the finite sums. Multilinearity brings out one scalar per selected
-    position. The empty selected set gives a single summand.
+    Restricting the multilinear map to the selected arguments and expanding
+    the finite sums brings out one scalar per selected
+    position by multilinearity; the empty selected set gives a single summand.
 \end{proof}
 
-\begin{theorem}[Transported sources in prepared words]
+\begin{theorem}[Frame-mapped sources in prepared words]
     \label{thm:peps_prepared_source_frames}
     \lean{TNLean.PEPS.PairEffect.Word.sourceContraction_preparedDensityCoefficient_selected_frames}
     \leanok
@@ -229,9 +229,9 @@ The construction follows \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
     and on each source halfspace. Ket and bra endpoint bases may differ.
     Fix arbitrary source vectors $\eta_i,\zeta_i$ and a selected set $S$.
     For $i\in S$, let $M_i$ have independent row indices $K_i^2$ and
-    column indices $(K'_i)^2$, and transport it by arbitrary endpoint
+    column indices $(K'_i)^2$, and map it by arbitrary endpoint
     families $u_i,v_i$ and $u'_i,v'_i$.
-    Contracting these transported matrices against the prepared
+    Contracting these mapped matrices against the prepared
     density coefficient, with $|\eta_i\rangle\langle\zeta_i|$ elsewhere,
     equals
     \begin{align}
@@ -246,11 +246,11 @@ The construction follows \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
 \end{theorem}
 
 \begin{proof}\leanok
-    Expand each transported matrix as the sum of its entries times the
-    corresponding rank-one endpoint matrices. Apply
-    Theorem~\ref{thm:peps_selected_multilinear_expansion}, and identify
+    Expanding each mapped matrix as the sum of its entries times the
+    corresponding rank-one endpoint matrices and applying
+    Theorem~\ref{thm:peps_selected_multilinear_expansion} identifies
     each rank-one source contraction with the prepared ket and
-    bra matrices. Separate the independent ket and bra assignments.
+    bra matrices, separating the independent ket and bra assignments.
 \end{proof}
 
 \begin{definition}[Schmidt assignments at retained original positions]
@@ -297,10 +297,11 @@ The construction follows \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
 \end{theorem}
 
 \begin{proof}\leanok
-    Express the corrected term as its partial-branch source
-    contraction. The ambient correction is the transport of its Schmidt
-    correction. Apply Theorem~\ref{thm:peps_prepared_source_frames} at the
-    selected retained slots, and use their original-position identification.
+    Expressing the corrected term as its partial-branch source
+    contraction and using the fact that the ambient correction is the four-frame
+    image of its Schmidt correction, Theorem~\ref{thm:peps_prepared_source_frames}
+    at the selected retained slots together with their original-position
+    identification gives the claim.
 \end{proof}
 
 \begin{theorem}[Pointwise physical error of the sampled operators]
@@ -326,9 +327,9 @@ The construction follows \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
 \end{theorem}
 
 \begin{proof}\leanok
-    Substitute the sampled operators into the nonempty-subset
-    expansion of local source replacements, then apply the triangle inequality
-    after the final partial trace.
+    Substituting the sampled operators into the nonempty-subset
+    expansion of local source replacements and applying the triangle inequality
+    after the final partial trace gives both claims.
 \end{proof}
 
 The statements above construct the source samples and derive their

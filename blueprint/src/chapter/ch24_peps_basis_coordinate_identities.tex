@@ -34,8 +34,8 @@ $E_{a=b}$. All tensor products below retain these conventions.
 
 \begin{proof}
     \leanok
-    Identify the equal register lists and their equal vectors.
-    Each identification becomes the identity, so all assertions are
+    Identifying the equal register lists and their equal vectors turns
+    each identification into the identity, reducing all assertions to
     equalities of the same vectors or isometries.
 \end{proof}
 
@@ -50,7 +50,7 @@ $E_{a=b}$. All tensor products below retain these conventions.
     $E_{ra=rb}(u\otimes x)=u\otimes E_{a=b}x$.
 \end{theorem}
 \begin{proof}\leanok
-    Identify the equal tail lists. Both sides are $u\otimes x$.
+    Identifying the equal tail lists reduces both sides to $u\otimes x$.
 \end{proof}
 
 \begin{theorem}[Head tensor identifications under equality of memories]
@@ -72,8 +72,8 @@ $E_{a=b}$. All tensor products below retain these conventions.
     under this equality, $x+y$ agrees with $x'+y'$.
 \end{theorem}
 \begin{proof}\leanok
-    Identify the equal lists or spaces and their equal vectors.
-    Each pair is then the same tensor or sum.
+    Identifying the equal lists or spaces and their equal vectors
+    reduces each pair to the same tensor or sum.
 \end{proof}
 
 \begin{theorem}[The final scalar factor]
@@ -89,9 +89,9 @@ $E_{a=b}$. All tensor products below retain these conventions.
 
 \begin{proof}
     \leanok
-    Induct on $a$, expanding the concatenation isometry on elementary
-    tensors. Move the scalar through each tensor factor. Linearity
-    gives the identity for arbitrary vectors; set $z=1$ for the
+    By induction on $a$, expanding the concatenation isometry on elementary
+    tensors moves the scalar through each tensor factor; linearity then
+    gives the identity for arbitrary vectors, and setting $z=1$ yields the
     second assertion.
 \end{proof}
 
@@ -136,10 +136,10 @@ tensor product of their identity maps.
 
 \begin{proof}
     \leanok
-    Induct on the register list. Relabelling leaves each head space
-    unchanged; apply the induction hypothesis to its tail. On the
-    resulting tensor product the isometry is the identity, first on
-    elementary tensors and then by linearity.
+    We proceed by induction on the register list. Because relabelling
+    leaves each head space unchanged, applying the induction hypothesis to
+    its tail makes the isometry on the resulting tensor product act as the
+    identity first on elementary tensors and then by linearity.
 \end{proof}
 
 \begin{theorem}[Partitioning commutes with changing owners]
@@ -161,11 +161,11 @@ tensor product of their identity maps.
 \begin{proof}
     \leanok
     \uses{def:peps_basis_owner_restriction,thm:peps_basis_owner_memory}
-    Induct on $a$. The first register has the same selection value
-    before and after relabelling. Use the corresponding associativity
-    or exchange isometry, and apply the induction hypothesis to the
-    tail. The selected-memory isometries preserve the underlying
-    vectors, giving~(\ref{eq:peps_basis_owner_partition}).
+    We proceed by induction on $a$. Since the first register has the same
+    selection value before and after relabelling, combining the
+    corresponding associativity or exchange isometry with the induction
+    hypothesis on the tail---while the selected-memory isometries preserve
+    the underlying vectors---gives~(\ref{eq:peps_basis_owner_partition}).
 \end{proof}
 
 \begin{theorem}[A partition with no selected registers]
@@ -179,9 +179,9 @@ tensor product of their identity maps.
 
 \begin{proof}
     \leanok
-    The filtered lists have the stated forms. Induct on $a$, using
-    the complementary-head partition formula. Exchange the scalar
-    unit with each head factor; linearity extends the identity from
+    The filtered lists have the stated forms, and inducting on $a$ with
+    the complementary-head partition formula exchanges the scalar unit
+    with each head factor before linearity extends the identity from
     elementary tensors to every vector.
 \end{proof}
 
@@ -200,8 +200,8 @@ tensor product of their identity maps.
 
 \begin{proof}
     \leanok
-    Identify $a=b$ and $x=y$. The two isometries give the same successive
-    partitions of the same ordered registers.
+    Identifying $a=b$ and $x=y$ shows that the two isometries perform the
+    same successive partitions of the same ordered registers.
 \end{proof}
 
 \begin{theorem}[The first party of a grouped tensor]
@@ -231,9 +231,9 @@ tensor product of their identity maps.
     \leanok
     \uses{def:peps_party_partition}
     By the recursive grouping identity,
-    $G_{(p,\mathbf p),a}=(1\otimes E G_{\mathbf p,a_{\bar p}})U_p^a$.
-    Cancel $U_p^a(U_p^a)^{-1}$ and apply the tensor product map to
-    $x\otimes y$.
+    $G_{(p,\mathbf p),a}=(1\otimes E G_{\mathbf p,a_{\bar p}})U_p^a$,
+    so cancelling $U_p^a(U_p^a)^{-1}$ and applying the tensor product map
+    to $x\otimes y$ gives the result.
 \end{proof}
 
 % Source: polynomial-PEPS, 04-compression.tex, lines 565--588.
@@ -245,12 +245,11 @@ tensor product of their identity maps.
     Let $(q,\mathbf q)$ be an ordered list of distinct parties, and let
     $a$ be a register list whose owners all belong to $\mathbf q$.
     Under the identifications $a_q=\varnothing$ and
-    $a_{\bar q}=a$, every $x\in M(a)$ satisfies
+    $a_{\bar q}=a$, isolating the empty exterior factor used in the proof of
+    Theorem~5.2 of \cite{OpenAI2026PolynomialPEPS}, every $x\in M(a)$ satisfies
     \begin{align}
         G_{(q,\mathbf q),a}x=1\otimes G_{\mathbf q,a}x.
     \end{align}
-    This is the empty exterior factor used in the proof of
-    Theorem~5.2 of \cite{OpenAI2026PolynomialPEPS}.
 \end{theorem}
 
 \begin{proof}
@@ -260,10 +259,10 @@ tensor product of their identity maps.
         thm:peps_basis_first_party_grouping,
         thm:peps_basis_memory_equalities}
     Since the order has no repetitions and all owners lie in the tail,
-    the first party owns no register. The partition identity therefore
-    gives $U_q^a x=1\otimes x$. Apply the first-party grouping identity
-    to this tensor and identify the complementary register list with $a$.
-    The resulting tail isometry is $G_{\mathbf q,a}$.
+    the first party owns no register, and the partition identity
+    gives $U_q^a x=1\otimes x$. Applying the first-party grouping identity
+    to this tensor and identifying the complementary register list with $a$
+    yields the tail isometry $G_{\mathbf q,a}$.
 \end{proof}
 
 \begin{definition}[Joining two partitioned memories]
@@ -298,10 +297,11 @@ tensor product of their identity maps.
 \begin{proof}
     \leanok
     \uses{def:peps_basis_partition_join}
-    Induct on $a$ and extend by linearity in $x$. A selected head
-    adjoins its factor to the first joined memory; an excluded head
-    adjoins it to the second. In each case, associativity and the
-    exchange of the middle factors reduce the assertion to the tail.
+    We proceed by induction on $a$ and extend by linearity in $x$: a
+    selected head adjoins its factor to the first joined memory, whereas an
+    excluded head adjoins it to the second, and in each case associativity
+    together with the exchange of the middle factors reduces the assertion
+    to the tail.
 \end{proof}
 
 \begin{definition}[Bases adapted to a partition]
@@ -317,7 +317,7 @@ tensor product of their identity maps.
     On the selected and complementary concatenated memories, take
     $C_{x,i}=J_{a_f,b_f}^{-1}(b_A(x)\otimes b_D(i))$ and
     $F_{y,j}=J_{a_{\bar f},b_{\bar f}}^{-1}(b_E(y)\otimes b_F(j))$,
-    transported along the corresponding list equalities.
+    transferred along the corresponding list equalities.
 \end{definition}
 
 \begin{theorem}[Coordinates before and after a joint partition]
@@ -338,19 +338,19 @@ tensor product of their identity maps.
     The second identity holds for every $z\in M(ab)$. It also holds
     for a register list $c$ with a specified equality $c=ab$ and
     $z\in M(c)$: apply $E_{c=ab}$ before $J_{a,b}$ on the left,
-    and transport $C$ and $F$ to $M(c_f)$ and $M(c_{\bar f})$ on
+    and transfer $C$ and $F$ to $M(c_f)$ and $M(c_{\bar f})$ on
     the right, where the partition is $U_f^c$.
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{def:peps_basis_partition_bases,thm:peps_basis_partition_concat}
-    Apply the concatenation identity to the two partition-basis
-    columns and cancel the inverse partition isometries. This gives
+    Applying the concatenation identity to the two partition-basis
+    columns and cancelling the inverse partition isometries gives
     (\ref{eq:peps_basis_partition_columns}). Taking inner products
-    and using the isometries yields
-    (\ref{eq:peps_basis_partition_coefficients}). Identify $c=ab$
-    for the final assertion.
+    through the isometries then yields
+    (\ref{eq:peps_basis_partition_coefficients}), and identifying $c=ab$
+    establishes the final assertion.
 \end{proof}
 
 \begin{definition}[Physical coordinates on the selected output]
@@ -410,9 +410,9 @@ tensor product of their identity maps.
 
 \begin{proof}
     \leanok
-    Changing owners commutes with concatenation. Apply that identity
-    to the two transported basis columns, then use preservation of
-    inner products by the owner and concatenation isometries.
+    Because changing owners commutes with concatenation, applying that
+    identity to the two transferred basis columns and using preservation of
+    inner products by the owner and concatenation isometries gives the result.
 \end{proof}
 
 \subsubsection{Physical register lists and regional dimensions}
@@ -458,7 +458,7 @@ excluded explicitly.
     from its positions to $A$. Reindex the ordered standard tensor
     basis of these registers by this bijection. Its indices are
     assignments $x_p\in[d_p]$ for $p\in A$.
-    Transport along the physical-list restriction identity to obtain
+    Transfer along the physical-list restriction identity to obtain
     bases on the memories selected by $A$. The common-dimension
     case is obtained by setting $d_p=d$.
 \end{definition}
@@ -489,11 +489,11 @@ excluded explicitly.
     \leanok
     \uses{def:peps_family_physical_output,
         thm:peps_basis_physical_list_restriction,def:peps_basis_region_coordinates}
-    Count the assignments indexing each tensor basis. An exhaustive
-    ordering without repetitions contains each element of $A$ once,
-    so its filtered list has length $|A|$. Dimension equals the
-    number of basis elements. Multiply the inequalities $d_p\le D$
-    over $A$ to obtain the bound.
+    Counting the assignments indexing each tensor basis shows that an
+    exhaustive ordering without repetitions contains each element of $A$
+    once, so its filtered list has length $|A|$ and the dimension equals
+    the number of basis elements; multiplying the inequalities $d_p\le D$
+    over $A$ yields the upper bound.
 \end{proof}
 
 \begin{definition}[Physical and regional coordinate isometries]
@@ -540,10 +540,10 @@ excluded explicitly.
 \begin{proof}
     \leanok
     \uses{def:peps_basis_physical_readouts}
-    Evaluate the reindexed product-basis coordinates at
-    $(s,(t,i))$. This is the original product-basis coordinate at
-    $(s\sqcup t,i)$. The coordinate map is an isometry, which gives
-    the operator-norm bound.
+    Evaluating the reindexed product-basis coordinates at
+    $(s,(t,i))$ recovers the original product-basis coordinate at
+    $(s\sqcup t,i)$, and because the coordinate map is an isometry, its
+    operator norm is at most $1$.
 \end{proof}
 
 \subsubsection{Ordered party tensor coordinates}
@@ -609,11 +609,11 @@ $M(a_{p_0})\otimes\cdots\otimes M(a_{p_{m-1}})\otimes\C$.
 \begin{proof}
     \leanok
     \uses{thm:peps_basis_party_recursion}
-    Induct on the party list. Apply the first local map to the first
-    basis column and use the product coordinate formula to separate
-    it from the tail. The empty product is $1$. For labelled
-    coordinates, reindex both bases by the exhaustive ordering and
-    replace the product over its positions by the product over $P$.
+    By induction on the party list, applying the first local map to the
+    first basis column and using the product coordinate formula separates
+    the head factor from the tail, with the empty product equal to $1$.
+    For labelled coordinates, reindexing both bases by the exhaustive
+    ordering replaces the product over positions by the product over $P$.
 \end{proof}
 
 These are the tensor-coordinate identities used in
@@ -633,7 +633,7 @@ These are the tensor-coordinate identities used in
     source-free composition. For each $p$, choose finite orthonormal
     bases $(b_p(i))_{i\in I_p}$ and $(c_p(j))_{j\in J_p}$ of its
     input and output memories. Let $B_y,C_x$ be the corresponding
-    product basis columns, transported to the original register
+    product basis columns, mapped to the original register
     orders by the inverse grouping isometries. Then
     \begin{align}
         \langle C_x,WB_y\rangle
@@ -648,12 +648,12 @@ These are the tensor-coordinate identities used in
 \begin{proof}\leanok
     \uses{thm:peps_actual_singleton_factorization,
         thm:peps_basis_party_map_entries}
-    Apply the operator factorization
+    Applying the operator factorization
     (\ref{eq:peps_actual_singleton_factorization}) to the input
-    basis column. The grouping isometry cancels its inverse in
+    basis column cancels the grouping isometry against its inverse in
     the definition of $B_y$. Taking coordinates in the output
-    product basis gives (\ref{eq:peps_actual_party_word_entries})
-    by the tensor-coordinate formula. Equality of the matrices
+    product basis then gives (\ref{eq:peps_actual_party_word_entries})
+    by the tensor-coordinate formula, from which equality of the matrices
     follows entrywise.
 \end{proof}
 
@@ -678,9 +678,9 @@ These are the tensor-coordinate identities used in
 
 \begin{proof}\leanok
     \uses{thm:peps_actual_party_word_entries,thm:peps_party_product_conjugation}
-    Use (\ref{eq:peps_actual_party_word_entries}) for each of
-    $W,U,V$, keeping the same input and output bases. The finite
-    product-conjugation identity then gives
+    Applying (\ref{eq:peps_actual_party_word_entries}) to each of
+    $W,U,V$ in the same input and output bases and invoking the finite
+    product-conjugation identity gives
     (\ref{eq:peps_actual_party_mixed_matrix}).
 \end{proof}
 

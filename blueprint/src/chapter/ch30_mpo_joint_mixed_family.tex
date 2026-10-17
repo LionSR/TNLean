@@ -109,14 +109,14 @@ $\mathcal I$; the block label $x$ is fixed on both sides.
 \begin{proof}
     \leanok
     \uses{def:blockwise_product_word_span}
-    For a target tuple $(X_x)_x$, expand $(V_xX_xU_x)_x$ using the
-    common coefficients of the original family, then compress:
+    For a target tuple $(X_x)_x$, expanding $(V_xX_xU_x)_x$ using the
+    common coefficients of the original family and compressing gives
     \begin{align}
         V_xX_xU_x & =\sum_i c_iB_x^i,
                   & X_x               & =\sum_i c_iU_xB_x^iV_x.
     \end{align}
-    For the second assertion expand $(X_xR_x)_x$ and multiply on the
-    right by $W_x$:
+    For the second assertion, expanding $(X_xR_x)_x$ and multiplying on the
+    right by $W_x$ gives
     \begin{align}
         X_xR_x & =\sum_i c_iB_x^i,
                & X_x               & =\sum_i c_iB_x^iW_x.
@@ -153,8 +153,8 @@ $\mathcal I$; the block label $x$ is fixed on both sides.
     \leanok
     \uses{def:mpo_joint_mixed_family,thm:mpo_joint_one_site_span,
         thm:spt_normalized_bond_interpolation,thm:mpo_mixed_interior}
-    Decompose an arbitrary tuple $Z=(Z_x)_x$ into its four virtual
-    corners. By~(\ref{eq:mpo_joint_mixed_endpoint_span}), there are common
+    Decomposing an arbitrary tuple $Z=(Z_x)_x$ into its four virtual
+    corners, (\ref{eq:mpo_joint_mixed_endpoint_span}) gives common
     coefficients $c_i^p$ with
     $Z_x^{pp}=\sum_i c_i^p(A_x^p)^i$ for every $x$.
     The letters $(01,x,a,b)$ and $(10,x,a,b)$ give the entries of
@@ -186,9 +186,9 @@ $\mathcal I$; the block label $x$ is fixed on both sides.
         thm:mpo_joint_one_site_span,def:spt_coordinate_inclusions}
     The compression retains the $00$ virtual corner. The letters
     $(00,i)$ give $(A_x^0)^i$, while each other letter gives zero.
-    Since $V_{x,0}^*V_{x,0}=I_{D_x^0}$, apply
-    Theorem~\ref{thm:mpo_joint_one_site_span} to the simultaneous mixed
-    span of Theorem~\ref{thm:mpo_joint_mixed_span}.
+    Since $V_{x,0}^*V_{x,0}=I_{D_x^0}$,
+    Theorem~\ref{thm:mpo_joint_one_site_span} applies to the simultaneous
+    mixed span of Theorem~\ref{thm:mpo_joint_mixed_span}.
 \end{proof}
 
 \begin{definition}[Extended supports of the mixed family]
@@ -246,9 +246,8 @@ $\mathcal I$; the block label $x$ is fixed on both sides.
     $(X_x)_x\mapsto(W_xX_x)_x$ a bijection, with inverse
     $(Y_x)_x\mapsto(W_x^{-1}Y_x)_x$, proving equality of ranges.
     For the mixed family, $W_x(\gamma)$ is invertible in the open
-    interval. The joint canonical boundary range is
-    $\sum_xG_N(A_x(\gamma))$ by
-    Definition~\ref{def:block_ground_space_map}.
+    interval, and by Definition~\ref{def:block_ground_space_map} the
+    joint canonical boundary range is $\sum_xG_N(A_x(\gamma))$.
 \end{proof}
 
 \begin{theorem}[Exact finite-volume support of the mixed family]

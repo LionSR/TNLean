@@ -12,13 +12,14 @@ import Lean.Util.CollectAxioms
 /-!
 # Permitted axioms for cell and angular information from the spectral gap
 
-Both imported declarations must exist and may use only the three standard axioms.
+The imported declarations must exist and may use only the three standard axioms.
 -/
 
 run_cmd do
   let decls := #[
     ``TNLean.PEPS.Approximation.exists_cell_conditionalMutualInformation_le_square,
-    ``TNLean.PEPS.Approximation.angularInformationBound]
+    ``TNLean.PEPS.Approximation.angularInformationBound,
+    ``TNLean.PEPS.Approximation.exists_isAngularScale_ge]
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
   for decl in decls do
     unless (← Lean.getEnv).contains decl do

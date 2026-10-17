@@ -24,9 +24,10 @@
     $C(xzx^{-1})=xC(z)x^{-1}$ for every common conjugating element $x$.
 \end{theorem}
 \begin{proof}\leanok
-    Evaluate the defining cases at the three distinct indices.
-    Conjugation preserves multiplication and inversion, so it commutes with
-    each selected coordinate formula and with every retained coordinate.
+    Evaluating the defining cases at the three distinct indices gives the
+    coordinate formula, and since conjugation preserves multiplication and
+    inversion, it commutes with each selected coordinate formula and with every
+    retained coordinate.
 \end{proof}
 
 \begin{definition}[Exchange of two group labels]%
@@ -61,9 +62,9 @@
     $b$ by $a$.
 \end{theorem}
 \begin{proof}\leanok
-    Evaluate the controlled conjugation followed by the interchange.
-    A second evaluation gives the formula for $H^2$; multiplication cancels
-    $b^{-1}a^{-1}ab$ and gives $ab$. Both component formulas commute with
+    Evaluating the controlled conjugation followed by the interchange once
+    and then a second time gives the formula for $H^2$, where multiplication
+    cancels $b^{-1}a^{-1}ab$ to leave $ab$. Both component formulas commute with
     common conjugation.
 \end{proof}
 
@@ -107,9 +108,9 @@
     $ghg^{-1}h^{-1}$.
 \end{theorem}
 \begin{proof}\leanok
-    Equivariance of $C$ implies equivariance of its inverse. Inversion is
-    equivariant under conjugation, and so is $H$. Compose these identities
-    in the defining order. The coordinate identities follow by cancelling
+    Equivariance of $C$ implies equivariance of its inverse, and since both
+    inversion and $H$ are equivariant under conjugation, composing them in the
+    defining order gives equivariance of $\Phi$ and $\Phi_\varepsilon$. The coordinate identities follow by cancelling
     the inverse coordinate maps; the double exchange formula gives the
     product and conjugacy assertions.
 \end{proof}
@@ -133,14 +134,14 @@
         (W\otimes I_{R^c})\Psi(u_\omega,u)
          & =\Psi(u_{\Phi_\varepsilon\omega},u).
     \end{align}
-    These are actual original-spin contractions. The operation is auxiliary to
+    These are original-spin contractions. The operation is auxiliary to
     the conjugation and controlling-flux backreaction discussed in
     \cite[Section 6.6]{Schuch2010PEPS}. Identifying it with the prescribed
     oriented lattice string crossing remains separate.
 \end{theorem}
 \begin{proof}\leanok
-    The permutation $\Phi_\varepsilon$ is conjugation-equivariant.
-    Apply the actual physical and global cycle-permutation theorem to this
-    single permutation. It supplies the same $W$ for every boundary column
+    Since the permutation $\Phi_\varepsilon$ is conjugation-equivariant,
+    applying the physical and global cycle-permutation theorem to
+    $\Phi_\varepsilon$ yields a single unitary $W$ for every boundary column
     and its identity extension for every common exterior contraction.
 \end{proof}

@@ -15,11 +15,10 @@
     \begin{align}
         \langle Jx,Jy\rangle=\langle x,y\rangle.
     \end{align}
-    Thus $J$ restricts to a Hilbert-space isometry on the actual physical
-    range. No surjectivity onto the ambient physical space is required.
-    This is the support-restricted operation in
-    \cite[Observation~6.4]{Schuch2010PEPS}, with the positive local
-    normalization factor retained.
+    Thus $J$ restricts to the support-restricted Hilbert-space isometry of
+    \cite[Observation~6.4]{Schuch2010PEPS} on the physical range, retaining the
+    positive local normalization factor without requiring surjectivity onto the
+    ambient physical space.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -46,7 +45,7 @@
     The physical alphabets may vary independently with the vertex.
 \end{definition}
 
-\begin{theorem}[Physical operations on actual graph contractions]%
+\begin{theorem}[Physical operations on graph contractions]%
     \label{thm:peps_graph_physical_support_transport}
     \lean{TNLean.PEPS.graphPhysicalProductMatrix_mul,
         TNLean.PEPS.graphPhysicalProductMatrix_conjTranspose,
@@ -57,7 +56,7 @@
     \leanok
     \uses{def:peps_graph_physical_product_map}
     Let $\Gamma$ be a finite simple graph and let $T_v$ be arbitrary site
-    matrices with a common finite virtual edge alphabet. Denote the actual
+    matrices with a common finite virtual edge alphabet. Denote the
     contracted state by $\Psi_T$ and put $\mathcal T=\bigotimes_vT_v$.
     Then $\Psi_T\in\operatorname{ran}\mathcal T$ and
     $\mathcal F\Psi_T=\Psi_{FT}$. Products of physical matrices compose
@@ -75,7 +74,7 @@
     identity gives composition of product matrices. The local Gram
     equalities therefore imply
     $(\mathcal F\mathcal T)^*(\mathcal F\mathcal T)=\mathcal T^*\mathcal T$,
-    which gives the inner-product statement on the actual product range.
+    which gives the inner-product statement on the product range.
 \end{proof}
 
 \begin{theorem}[Unitary incident action of a regular bond bundle]%
@@ -135,7 +134,7 @@
     representation $M_g$, with no uniformity requirement on the physical
     alphabets or site tensors. There exist positive $c_v$ for which each
     $J_v$ is isometric on $\operatorname{ran}T_v$, where $T_v$ is the
-    original site map. The actual state belongs to
+    original site map. The state belongs to
     $S=\operatorname{ran}(\bigotimes_vT_v)$, and $\mathcal D$ restricts to a
     Hilbert-space isometry $I:S\to\mathcal H_0\otimes\mathcal H_{\mathrm{res}}$.
     With $D=|G^K|$, its exact action on that state is
@@ -146,18 +145,18 @@
     \end{align}
     Here $\Psi_0$ and the unit-normalized Bell product $\Omega_K$ are those
     of Theorem~\ref{thm:peps_regular_graph_bond_blocking}. All physical
-    overlaps on $S$, and in particular the norm of the actual state, are
+    overlaps on $S$, and in particular the norm of the state, are
     preserved. No ambient-surjectivity, state-support, or global-factorization
     hypothesis is imposed.
 \end{theorem}
 
 \begin{proof}\leanok
-    Apply the normalized-adjoint construction at each vertex, using the
-    derived unitarity of the bundled incident action. It gives
+    Applying the normalized-adjoint construction at each vertex with the
+    derived unitarity of the bundled incident action gives
     $J_vT_v=\sqrt{c_v}P_v$, where $P_v$ is the canonical averaging tensor,
     and preserves inner products on the local range. Testing on site columns
     gives $(J_vT_v)^*(J_vT_v)=T_v^*T_v$, so the product operation is isometric
-    on $S$. Actual contraction transports it to
+    on $S$. Graph contraction maps it to
     $(\prod_v\sqrt{c_v})\Psi_K$. Physical bond separation then gives the
     asserted normalized Bell product and its scalar. Restricting this same
     explicit map to $S$ gives $I$; membership of $\Psi_a$ in $S$ was derived

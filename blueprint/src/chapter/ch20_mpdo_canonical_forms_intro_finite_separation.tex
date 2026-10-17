@@ -37,9 +37,9 @@
          & =\bigoplus_{j,q}X_{j,q}.
         \notag
     \end{align}
-    This is the strengthened, normalized BNT-refined form of the canonical
-    decomposition in \cite[Section~2.3]{Cirac2016MPDO_arXiv}: unlike the literal
-    predicate (Definition~\ref{def:cpsv_canonical_form}), the direct sum exhausts
+    Strengthening the canonical decomposition of
+    \cite[Section~2.3]{Cirac2016MPDO_arXiv} and
+    Definition~\ref{def:cpsv_canonical_form}, the direct sum exhausts
     the full bond dimension $D$, each copy weight is nonzero and normalized, and
     gauge-equivalent normal blocks are grouped over a minimal BNT representative
     with an independent gauge for each copy.
@@ -56,14 +56,14 @@
     its doubled-index MPS tensor generates the same positive-length MPV family as a
     BNT canonical form
     $\bigoplus_{j=0}^{g-1}\bigoplus_{q=0}^{r_j-1}\mu_{j,q}A_j$.
-    Its length-$N$ matrix product vector is
+    As in the MPV-level decomposition of
+    \cite[Section~2.3, lines~298--301]{Cirac2016MPDO_arXiv}, its length-$N$
+    matrix product vector is
     \begin{align}
         \sum_{j=0}^{g-1}
         \left(\sum_{q=0}^{r_j-1}\mu_{j,q}^{N}\right)V^{(N)}(A_j).
         \label{eq:mpdo_horizontal_mpv}
     \end{align}
-    This is the MPV-level decomposition in
-    \cite[Section~2.3, lines~298--301]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
 \begin{theorem}[BNT-refined horizontal form gives the BNT MPV representation]
@@ -111,12 +111,11 @@
     \end{center}
     \caption{Horizontal canonical form of the doubled tensor: the gauge $X$,
         the direct sum of basis tensors $\mathcal K_j$ carrying the ket and bra
-        indices, and $X^{-1}$. In the source
-        specialized simple-biCF/ZCL display the weights $\mu_j$ are independent
-        of the copy index and absorbed into the basis tensors, so the
-        basis tensors depend only on the block index $j$ while the gauge factors
-        $X_{j,q}$ depend on both block indices. This is
-        \cite[Appendix~C.2, lines~1660--1665]{Cirac2016MPDO_arXiv}.}
+        indices, and $X^{-1}$. In the specialized simple-biCF/ZCL display of
+        \cite[Appendix~C.2, lines~1660--1665]{Cirac2016MPDO_arXiv}, the weights
+        $\mu_j$ are independent of the copy index and absorbed into the basis
+        tensors, so the basis tensors depend only on the block index $j$ while
+        the gauge factors $X_{j,q}$ depend on both block indices.}
     \label{fig:mpdo_horizontal_canonical_form}
 \end{figure}
 
@@ -181,17 +180,17 @@
          & =\bigoplus_\alpha \mu_\alpha\otimes M_\alpha.
         \label{eq:mpdo_vertical_cf}
     \end{align}
-    This is the conclusion of
-    \cite[Proposition~4.13, lines~1863--1870]{Cirac2016MPDO_arXiv}.
-    In this orientation $UU^\dagger=I$ on the retained space, while
+    In the rectangular orientation of
+    \cite[Proposition~4.13, lines~1863--1870]{Cirac2016MPDO_arXiv},
+    $UU^\dagger=I$ on the retained space, while
     $U^\dagger U$ is its support projection in the original physical space.
     The reconstruction identity says that every letter of $\widetilde M$ is
     supported on this projection, so the discarded orthogonal complement and
     the off-diagonal corners vanish.
-    The orthogonal complement may be a zero sector: the source's general
-    canonical-form construction explicitly permits the sum of the nonzero
-    block dimensions to be strictly smaller than the original dimension
-    \cite[lines~214--225]{Cirac2016MPDO_arXiv}.
+    Because the general canonical-form construction of
+    \cite[lines~214--225]{Cirac2016MPDO_arXiv} explicitly permits the sum of the
+    nonzero block dimensions to be strictly smaller than the original dimension,
+    the orthogonal complement may be a zero sector.
     Since each $\mu_\alpha$ is diagonal, the summand
     $\mu_\alpha\otimes M_\alpha$ is the direct sum
     $\bigoplus_{k=0}^{r_\alpha-1}\omega_{\alpha,k}M_\alpha$ of weighted copies
@@ -244,12 +243,12 @@
                 \tnwire{d3.270}{open s}
                 \tnwire{d3.0}{M.158}
             \end{tenkz}}
-    \caption{Vertical direct-sum form of the tensor: after the physical
-        isometry $U$, each block factorizes as the positive diagonal weight
-        $\mu_\alpha$ on the multiplicity factor times the basis tensor $M_\alpha$,
-        and only $M_\alpha$ carries the virtual legs. This is the decomposition
+    \caption{Vertical direct-sum form
         $U\widetilde MU^\dagger=\bigoplus_\alpha\mu_\alpha\otimes M_\alpha$ of
-        \cite[Proposition~4.13, lines~1864--1870]{Cirac2016MPDO_arXiv}.}
+        \cite[Proposition~4.13, lines~1864--1870]{Cirac2016MPDO_arXiv}: after
+        the physical isometry $U$, each block factorizes as the positive
+        diagonal weight $\mu_\alpha$ on the multiplicity factor times the basis
+        tensor $M_\alpha$, and only $M_\alpha$ carries the virtual legs.}
     \label{fig:mpdo_vertical_direct_sum}
 \end{figure}
 
@@ -450,9 +449,8 @@ $\mathcal K_j$ with the label $j$:
         \tnmark[form=label, label pos=w]{on qw 0.8}{$q$}
     \end{tenkz}
 \end{tenkzequation}
-Consequently, $K^{-1}K=\bigoplus_j\Id_j$.
-This is the inverse identity in
-\cite[Appendix~C.2, lines~1666--1670]{Cirac2016MPDO_arXiv}.
+As in \cite[Appendix~C.2, lines~1666--1670]{Cirac2016MPDO_arXiv}, this
+contraction yields the inverse identity $K^{-1}K=\bigoplus_j\Id_j$.
 
 \begin{theorem}[Finite-word trace-separation criterion]
     \label{thm:propblockinj_abstract}

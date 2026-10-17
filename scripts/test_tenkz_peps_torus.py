@@ -56,7 +56,7 @@ def main() -> int:
     picture = source_picture()
     fixture = rf"""
 \documentclass[tikz,border=2pt]{{standalone}}
-\usepackage{{tenkz}}
+\usepackage{{tikz-tensor-networks}}
 \begin{{document}}
 \tenkzkernel
 {picture}

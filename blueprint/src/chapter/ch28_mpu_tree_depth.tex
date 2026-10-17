@@ -22,9 +22,10 @@ construction or conditioning bounds.
 \end{theorem}
 
 \begin{proof}\leanok
-    Induct on $L$. The initial case is $T_0\leq a$. At the induction step,
-    use $\prod_{j<L}q_j\geq1$ to bound the additive overhead by
-    $C2^{L+1}\prod_{j<L}q_j$. Multiplication by $q_L\geq0$ gives
+    By induction on $L$, the base case $L=0$ reduces to $T_0\leq a$. At
+    the induction step, the lower bound $\prod_{j<L}q_j\geq1$ bounds the
+    additive overhead by $C2^{L+1}\prod_{j<L}q_j$, and multiplication by
+    $q_L\geq0$ gives
     \begin{align}
         T_{L+1}
          & \leq q_L\left(2^{L+1}(a+CL)\prod_{j<L}q_j
@@ -47,8 +48,9 @@ construction or conditioning bounds.
 
 \begin{proof}\leanok
     \uses{thm:mpu_tree_depth_product}
-    Substitute the assumed product bound into the preceding estimate.
-    Its coefficient $2^L(a+CL)$ is nonnegative.
+    Since the prefactor $2^L(a+CL)$ in the preceding estimate is
+    nonnegative, substituting the assumed product bound yields the
+    polynomial estimate.
 \end{proof}
 
 \begin{theorem}[Constant conditioning]
@@ -65,7 +67,8 @@ construction or conditioning bounds.
 
 \begin{proof}\leanok
     \uses{thm:mpu_tree_depth_product}
-    Apply the product estimate to $q_j=q$ and use $2^Lq^L=(2q)^L$.
+    Specializing the product estimate to the constant sequence $q_j=q$ and
+    using $2^Lq^L=(2q)^L$ gives the bound.
 \end{proof}
 
 \begin{theorem}[Linear overhead at unit conditioning]
@@ -79,7 +82,8 @@ construction or conditioning bounds.
 \end{theorem}
 
 \begin{proof}\leanok
-    Expand $2^{L+1}=2\cdot2^L$ and distribute multiplication.
+    Expanding $2^{L+1}=2\cdot2^L$ and distributing multiplication over
+    $L+1$ gives the recurrence.
 \end{proof}
 
 For $N=2^L$, the sequence $T_L=CL2^L$ has order $N\log N$ when $C>0$.
@@ -122,19 +126,20 @@ admissible boundary states and the infimum defining the conditioning cost.
 
 \begin{proof}\leanok
     \uses{def:mpu_parity_boundary_grams}
-    Express each inverse as its adjugate divided by its determinant.
-    The determinants are $1-x^2$ and $c^2s^2(1-y^2)$. The mixed
-    off-diagonal contributions to the trace cancel, leaving numerator
-    $c^2+s^2$.
+    Expressing each inverse as its adjugate divided by its determinant
+    gives the denominators $1-x^2$ and $c^2s^2(1-y^2)$. In the trace of
+    the product, the mixed off-diagonal contributions cancel, leaving
+    numerator $c^2+s^2$.
 \end{proof}
 
 \subsection{Interval isometries for product-projection phase gates}
 
 Let $P_j$ be orthogonal projections on the individual sites and $|z|=1$.
-The unitary $I+(z-1)\bigotimes_jP_j$ is a product-projection instance of
-an MPO-projector unitary from \cite{Styliaris2025MPUCircuits}. The following
-boundary frames supply interval isometries directly, without requiring
-realization by exterior density operators.
+Following \cite{Styliaris2025MPUCircuits}, the unitary
+$I+(z-1)\bigotimes_jP_j$ is a product-projection instance of an
+MPO-projector unitary. The following boundary frames give interval
+isometries directly, without requiring realization by exterior density
+operators.
 
 \begin{definition}[Projection interval maps]
     \label{def:mpu_projection_interval_maps}
@@ -161,9 +166,9 @@ realization by exterior density operators.
 
 \begin{proof}\leanok
     \uses{def:mpu_projection_interval_maps}
-    Sum the Gram products of the displayed components, using
-    $P^\dagger=P$ and $P^2=P$. For the prefix and interior maps this gives
-    $I$. For the suffix map, the coefficient of $P$ is
+    Summing the Gram products of the displayed components using
+    $P^\dagger=P$ and $P^2=P$ gives $I$ for the prefix and interior maps.
+    For the suffix map, the coefficient of $P$ is
     \begin{align}
         \frac{z-1}{2}+\frac{\bar z-1}{2}+\frac{|z-1|^2}{2}
          & =\frac{|z|^2-1}{2}=0.
@@ -200,9 +205,10 @@ realization by exterior density operators.
 
 \begin{proof}\leanok
     \uses{def:mpu_projection_boundary_frames}
-    Multiply the two-by-two matrices. Their determinants are
-    $\det C_L=1/2$ and $\det C_R=1$. Evaluate the inverse Gram matrices
-    by their adjugates and determinants.
+    Multiplying the two-by-two matrices gives the first two identities, while
+    their determinants $\det C_L=1/2$ and $\det C_R=1$ show that both frames
+    are invertible and yield the inverse-Gram trace via their adjugates and
+    determinants.
 \end{proof}
 
 The bond contraction in Theorem~\ref{thm:mpu_projection_bond_contraction}
@@ -228,9 +234,10 @@ assumption.
 \end{theorem}
 
 \begin{proof}\leanok
-    Choose a basis of the column space among the columns of $M$.
-    Agreement at these columns is preserved under linear combinations,
-    so it implies agreement at every column.
+    Selecting a basis of the column space among the columns of $M$ gives a
+    subset $J_0\subseteq J$ of cardinality $\operatorname{rank}M$. Since
+    agreement at these columns is preserved under linear combinations, it
+    implies agreement at every column.
 \end{proof}
 
 \begin{theorem}[Number of finite-alphabet rows]
@@ -246,9 +253,10 @@ assumption.
 
 \begin{proof}\leanok
     \uses{thm:mpu_cut_row_separator}
-    Restrict each row to the chosen columns. This injects the set of distinct
-    rows into a set of $|S|^{\operatorname{rank}M}$ functions.
-    The rank-bound consequence uses $|S|\geq1$.
+    Restricting each row to the chosen separating columns injects the set
+    of distinct rows into a set of $|S|^{\operatorname{rank}M}$ functions,
+    and monotonicity for $|S|\geq1$ gives the bound $|S|^D$ when
+    $\operatorname{rank}M\leq D$.
 \end{proof}
 
 \begin{theorem}[Finite-alphabet rows from a bond factorization]
@@ -264,14 +272,15 @@ assumption.
 
 \begin{proof}\leanok
     \uses{thm:mpu_cut_finite_alphabet_rows}
-    Use $\operatorname{rank}(AB)\leq\operatorname{rank}A\leq D$.
-    For the zero-one specialization, take $S=\{0,1\}$.
+    Since $\operatorname{rank}(AB)\leq\operatorname{rank}A\leq D$, the
+    preceding theorem bounds the number of distinct rows by $|S|^D$, and
+    specializing to $S=\{0,1\}$ gives $2^D$.
 \end{proof}
 
 \subsection{Unit-circle geometry and diagonal circuits}
 
-The following elementary geometry is the rank-two step in the diagonal
-circuit argument of \cite{DiagonalMPUCircuits2026}.
+In the diagonal circuit argument of \cite{DiagonalMPUCircuits2026}, the
+following elementary unit-circle geometry governs the rank-two step.
 
 \begin{theorem}[Three points on a vertical line]
     \label{thm:mpu_circle_vertical}
@@ -308,9 +317,9 @@ circuit argument of \cite{DiagonalMPUCircuits2026}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:mpu_circle_functional}
-    Expand the squared moduli. The real parts of
-    $a\overline b\overline u$, $a\overline b\overline v$ and
-    $a\overline b\overline w$ agree. Thus $a\overline b=0$.
+    Expanding the squared moduli shows that the real parts of
+    $a\overline b\overline u$, $a\overline b\overline v$, and
+    $a\overline b\overline w$ agree, so $a\overline b=0$.
 \end{proof}
 
 \begin{theorem}[A unit-modulus factorization dichotomy]
@@ -325,9 +334,10 @@ circuit argument of \cite{DiagonalMPUCircuits2026}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:mpu_circle_affine}
-    If $t$ has three distinct values, apply the preceding theorem to each
-    row. Otherwise choose one value, and, if it exists, a second distinct
-    value. There can be no third.
+    If $t$ takes three distinct values, applying the preceding theorem to
+    each row gives $a_i=0$ or $b_i=0$ for every $i$. Otherwise $t(J)$ has
+    at most two values, which are realized by some $j_0,j_1\in J$ since
+    $J$ is nonempty.
 \end{proof}
 
 % The complete diagonal circuit constructions are not yet formalized.
@@ -353,9 +363,9 @@ for arbitrary unitaries of consecutive cut rank at most two.
     $(P\times Q)\sqcup\{*\}$.
 \end{theorem}
 \begin{proof}\leanok
-    At $(p,q)$ use left entry $sA_{ip}C_{iq}$ and right entry
-    $B_{pj}E_{qj}$. At $*$ use left entry $t$ and right entry $1$.
-    Distributivity gives their product equal to $H$.
+    Setting the left factor to have entry $sA_{ip}C_{iq}$ at $(p,q)$ and
+    $t$ at $*$, and the right factor to have entry $B_{pj}E_{qj}$ at
+    $(p,q)$ and $1$ at $*$, distributes their product to give $H$.
 \end{proof}
 
 \begin{theorem}[Boolean selectors from two bond factorizations]
@@ -369,6 +379,7 @@ for arbitrary unitaries of consecutive cut rank at most two.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:mpu_phase_selector_factorization, thm:mpu_cut_bond_row_count}
-    Apply the finite-alphabet row bound to the displayed factorization.
-    Its middle index has cardinality $|P||Q|+1$.
+    Since the displayed factorization has middle index set of cardinality
+    $|P||Q|+1$, the finite-alphabet row bound gives at most
+    $2^{|P||Q|+1}$ distinct rows.
 \end{proof}

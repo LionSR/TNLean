@@ -130,12 +130,12 @@ Definition~\ref{def:mpdo_blocked_fixed_point_algebra_tower}.
 \end{theorem}
 \begin{proof}\leanok
     The trace-preserving map and its positive-definite fixed point give a
-    $*$-subalgebra $\Fix(E_1^\dagger)$. Take
-    $\mathcal{A}_n := \Fix(E_1^{\dagger})$ for every $n$, with ambient
-    multiplication and inclusion. The stabilization hypothesis
-    $\Fix(E_n^{\dagger}) = \Fix(E_1^{\dagger})$ then gives
+    $*$-subalgebra $\Fix(E_1^\dagger)$, and setting
+    $\mathcal{A}_n := \Fix(E_1^{\dagger})$ for every $n$ with ambient
+    multiplication and inclusion yields
     $\mathcal{A}_n = \Fix(E_n^{\dagger})$ at every positive blocking
-    size $n$, which is compatibility with $M$.
+    size $n$ by the stabilization hypothesis
+    $\Fix(E_n^{\dagger}) = \Fix(E_1^{\dagger})$, which is compatibility with $M$.
 \end{proof}
 
 Stabilization of adjoint fixed points does not establish the converse direction of
@@ -203,9 +203,9 @@ coefficients.
         = \sum_{k \in I_{2n}} c^{(n)}_{i,j,k} b_k^{(2n)}$.
 \end{theorem}
 \begin{proof}\leanok
-    Apply the reconstruction formula of
+    Applying the reconstruction formula of
     Theorem~\ref{thm:mpdo_reconstruct_blocked_coefficients} to the element
-    $m_n(b_i^{(n)},b_j^{(n)}) \in \mathcal{A}_{2n}$.
+    $m_n(b_i^{(n)},b_j^{(n)}) \in \mathcal{A}_{2n}$ yields the expansion.
 \end{proof}
 
 \begin{definition}[Inclusion coefficients between blocking sizes]%
@@ -279,10 +279,10 @@ coefficients.
     For every $n$, $E_1^{\dagger}X=X$ implies $E_n^{\dagger}X=X$.
 \end{lemma}
 \begin{proof}\leanok
-    Induct on $n$, using $E_{n+1} = E_n \circ E_1$ and
-    $(A \circ B)^{\dagger} = B^{\dagger} \circ A^{\dagger}$.
-    The base case is $E_0 = \id$. This argument does not require a compatible
-    family of support algebras.
+    Without requiring a compatible family of support algebras, induction on
+    $n$ with base case $E_0 = \id$, using $E_{n+1} = E_n \circ E_1$ and
+    $(A \circ B)^{\dagger} = B^{\dagger} \circ A^{\dagger}$, proves the
+    claim.
 \end{proof}
 
 \begin{lemma}[Blocked powers of adjoint eigenvectors]%
@@ -331,8 +331,8 @@ coefficients.
     size $n$.
 \end{theorem}
 \begin{proof}\leanok
-    Combine Theorem~\ref{thm:mpdo_adjoint_fix_descent} with
-    Lemma~\ref{lem:mpdo_adjoint_fix_reverse}.
+    Combining Theorem~\ref{thm:mpdo_adjoint_fix_descent} with
+    Lemma~\ref{lem:mpdo_adjoint_fix_reverse} gives both inclusions.
 \end{proof}
 
 \begin{theorem}[Compatibility of the stationary family of support algebras]%
@@ -359,9 +359,9 @@ coefficients.
     idempotent.
 \end{theorem}
 \begin{proof}\leanok
-    Take the phase-flip channel with Kraus operators
-    $K_0=\frac35 \Id$ and $K_1=\frac45 Z$, where $Z=\diag(1,-1)$.
-    Its transfer map satisfies
+    For the phase-flip channel with Kraus operators
+    $K_0=\frac35 \Id$ and $K_1=\frac45 Z$, where $Z=\diag(1,-1)$,
+    the transfer map satisfies
     \begin{align}
         E(X)_{ij}
          & =
@@ -470,16 +470,16 @@ coefficients.
     the canonical sectors and trace out their multiplicity factors, while
     $\widetilde T$ and $\widetilde S$ conjugate by the block unitaries
     relating the BNTs. These compositions are tpCPM on the retained spaces.
-    When discarded zero-sector complements are present, extend the
+    When discarded zero-sector complements are present, extending the
     compressions by trace-and-prepare branches on the discarded input
-    supports to obtain tpCPM on the full physical spaces. These additional
+    supports yields tpCPM on the full physical spaces. These additional
     branches vanish on the tensor letters, so the extended maps still satisfy
     $T[M_1(X)]=M_2(X)$ and $S[M_2(X)]=M_1(X)$, as required for an RFP.
 
     The scalar Newton--Girard identity relates traces of matrix powers to
     characteristic-polynomial coefficients; see
     the corresponding theorem in the companion quantum-channel volume~\cite[``Newton--Girard trace recursion'']{QICLean2026Blueprint}.
-    Such scalar identities do not supply the vertical canonical
+    Such scalar identities do not give the vertical canonical
     decomposition. The trace-power conclusion of
     \cite[Theorem~4.14(ii)]{Cirac2016MPDO_arXiv} concerns a common BNT and
     positive diagonal matrices satisfying

@@ -54,11 +54,11 @@
     \uses{def:mutual_info_chain}
     An MPO tensor $M$ that generates an MPDO and whose positive-length
     finite-chain operators $\rho^{(N)}(M)$ all have nonzero trace (so the normalized states are
-    well-defined) \emph{saturates the area law} if
+    well-defined) \emph{saturates the area law} in the sense of
+    \cite[Definition~4.6, line~811]{Cirac2016MPDO_arXiv} if
     $I_L=I_{L+1}$ for all $1\le L<\lfloor N/2\rfloor$ and all $N$; that is,
     the mutual information is constant,
     $I_1=I_2=\cdots=I_{\lfloor N/2\rfloor}$.
-    This is \cite[Definition~4.6, line~811]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
 \begin{lemma}[Constancy on a finite interval]
@@ -70,7 +70,8 @@
     $i,j\in[a,n]$.
 \end{lemma}
 \begin{proof}\leanok
-    Compose the successive equalities from the smaller index to the larger.
+    Composing the successive equalities from the smaller index to the larger
+    gives $f(i)=f(j)$.
 \end{proof}
 
 \begin{lemma}[Saturation telescopes to a constant mutual information]
@@ -84,9 +85,9 @@
 \end{lemma}
 \begin{proof}\leanok
     \uses{def:is_sal, lem:finite_interval_constancy}
-    The defining condition supplies $I_m=I_{m+1}$ throughout the interval
-    $1\le m<\lfloor N/2\rfloor$. Apply
-    Lemma~\ref{lem:finite_interval_constancy}.
+    Because the defining condition gives $I_m=I_{m+1}$ throughout the interval
+    $1\le m<\lfloor N/2\rfloor$, Lemma~\ref{lem:finite_interval_constancy}
+    yields $I_L=I_{L'}$.
 \end{proof}
 
 \begin{theorem}[Tripartite marginals as block entropies]
@@ -152,15 +153,14 @@
     \uses{def:mutual_info_chain}
     Let $M$ generate an MPDO whose finite-chain operator $\rho^{(N)}(M)$ is
     positive semidefinite with nonzero trace. For every block length $L$ with
-    $2L+1\le N$, $I_L\le I_{L+1}$.
-    Since $1\le L<\lfloor N/2\rfloor$ implies $2L+1\le N$, this contains the
-    range in \cite[Proposition~4.5, line~801]{Cirac2016MPDO_arXiv}.
+    $2L+1\le N$, covering the range $1\le L<\lfloor N/2\rfloor$ of
+    \cite[Proposition~4.5, line~801]{Cirac2016MPDO_arXiv}, $I_L\le I_{L+1}$.
 \end{proposition}
 \begin{proof}\leanok
     \uses{def:block_entropy, thm:mpdo_tripartite_block_entropy_identifications}
-    Apply strong subadditivity to the reduced state of the first $N-L$ spins,
-    split into three contiguous segments of lengths $1$, $L$, and $N-2L-1$.
-    Tracing the appropriate segments yields the four block entropies
+    Splitting the reduced state of the first $N-L$ spins into three contiguous
+    segments of lengths $1$, $L$, and $N-2L-1$ and tracing the appropriate
+    segments yields the four block entropies
     $S_{N-L}$, $S_L$, $S_{L+1}$, and $S_{N-L-1}$, where the cyclic invariance of
     $\rho^{(N)}(M)$ identifies the entropy of a contiguous block with that of any
     block of the same length. Strong subadditivity then gives
@@ -262,9 +262,9 @@
         -\frac{2}{3}\log\frac{2}{3}>0.
         \notag
     \end{align}
-    Consequently the sequence $K\mapsto I_L^{(L+K+1)}$ does not converge,
-    giving the counterexample described in
-    \cite[Proposition~4.5, lines~801--806]{Cirac2016MPDO_arXiv}.
+    Consequently, for the counterexample to
+    \cite[Proposition~4.5, lines~801--806]{Cirac2016MPDO_arXiv}, the sequence
+    $K\mapsto I_L^{(L+K+1)}$ does not converge.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -283,10 +283,10 @@
     \lean{MPOTensor.ThermodynamicLimitCounterexample.proposition45_limit_counterexample}
     \leanok
     \uses{thm:parity_mpdo_no_thermodynamic_limit, thm:parity_mpdo_no_mutual_info_limit}
-    The parity-sensitive tensor generates an MPDO for which the sequence
-    $K\mapsto I_L^{(L+K+1)}$ has no limit for any fixed $L\geq1$, refuting the
-    unrestricted thermodynamic-limit clause of
-    \cite[Proposition~4.5]{Cirac2016MPDO_arXiv}.
+    Refuting the unrestricted thermodynamic-limit clause of
+    \cite[Proposition~4.5]{Cirac2016MPDO_arXiv}, the parity-sensitive tensor
+    generates an MPDO for which the sequence $K\mapsto I_L^{(L+K+1)}$ has no
+    limit for any fixed $L\geq1$.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -393,12 +393,12 @@ The corresponding generic result is proved in the companion quantum-channel volu
 
 \begin{proof}\leanok
     Fixing the word on the second interval leaves a physical closure on the
-    first interval, whose virtual boundary is the fixed word evaluation.
-    Apply the appropriate global closure identity to this slice. Fixing the
-    resulting word on the first interval gives the closure on the second
+    first interval, whose virtual boundary is the fixed word evaluation;
+    applying the appropriate global closure identity to this slice and fixing
+    the resulting word on the first interval gives the closure on the second
     interval. Cyclicity of the virtual trace identifies the two cuts of the
-    periodic contraction. The reverse identity is the same argument with
-    $\mathcal S$ and $\mathcal T$ interchanged.
+    periodic contraction, and the reverse identity follows by the same argument
+    with $\mathcal S$ and $\mathcal T$ interchanged.
 \end{proof}
 
 \begin{theorem}[Conditional RFP mutual-information equality]
@@ -407,17 +407,16 @@ The corresponding generic result is proved in the companion quantum-channel volu
         MPOTensor.mutualInformation_bipartition_eq_of_isRFPViaTS}
     \leanok
     \uses{lem:mpdo_rfp_transfer_across_cut}
-    Let $M$ be a renormalization fixed point. If its $N$-site operator is
+    In the channel calculation of \cite[Appendix~C, lines~1333--1341]{Cirac2016MPDO_arXiv},
+    let $M$ be a renormalization fixed point. If its $N$-site operator is
     positive semidefinite and has nonzero trace, then
     $I(\sigma^{(N)}_{a+1:b+2})
         =I(\sigma^{(N)}_{a+2:b+1})$.
-    This formalizes the channel calculation in
-    \cite[Appendix~C, lines~1333--1341]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 
 \begin{proof}\leanok
-    Apply mutual-information data processing to the forward pair of local
-    channels and to the reverse pair. The two transfer identities turn the
+    Applying mutual-information data processing to the forward pair of local
+    channels and to the reverse pair, the two transfer identities turn the
     resulting inequalities into opposite inequalities between the displayed
     mutual informations.
 \end{proof}
@@ -430,7 +429,7 @@ The corresponding generic result is proved in the companion quantum-channel volu
     \uses{def:is_rfp_via_ts}
     Let $M$ be in normalized BNT-refined horizontal form, generate positive
     semidefinite ring operators, and satisfy the local renormalization
-    fixed-point equations. This horizontal hypothesis is stronger than literal
+    fixed-point equations. This horizontal hypothesis is stronger than
     CPSV canonical form.
     Then $\tr\rho^{(N)}(M)\neq0$ for every $N\geq1$.
 \end{lemma}
@@ -448,20 +447,19 @@ The corresponding generic result is proved in the companion quantum-channel volu
     \leanok
     \uses{lem:mpdo_chain_mutual_information_bipartition, lem:mpdo_rfp_transfer_across_cut, thm:mpdo_rfp_split_mutual_information_eq}
     Let $M$ generate positive semidefinite ring operators with
-    $\tr[\rho^{(N)}(M)]\neq0$ for every $N\geq1$. If $M$ satisfies the local
-    renormalization fixed-point equations of Definition~4.1, then $M$ saturates
-    the area law:
+    $\tr[\rho^{(N)}(M)]\neq0$ for every $N\geq1$, so that normalized states are
+    well-defined. If $M$ satisfies the local renormalization fixed-point
+    equations of Definition~4.1, then $M$ saturates the area law:
     $I_L(M)=I_{L+1}(M)$ whenever
     $1\leq L<\lfloor N/2\rfloor$.
-    The nonvanishing trace condition ensures normalized states are well-defined.
 \end{theorem}
 
 \begin{proof}\leanok
-    Write the cut as $(a+1):(b+2)$. The two channel identities and data
+    Writing the cut as $(a+1):(b+2)$, the two channel identities and data
     processing give
     $I(\sigma^{(N)}_{a+2:b+1})\leq I(\sigma^{(N)}_{a+1:b+2})$ and
-    $I(\sigma^{(N)}_{a+1:b+2})\leq I(\sigma^{(N)}_{a+2:b+1})$. Hence the two
-    quantities are equal. The consecutive-cut identification gives
+    $I(\sigma^{(N)}_{a+1:b+2})\leq I(\sigma^{(N)}_{a+2:b+1})$, so the two
+    quantities are equal and the consecutive-cut identification gives
     $I_L(M)=I_{L+1}(M)$.
 \end{proof}
 
@@ -477,21 +475,21 @@ The corresponding generic result is proved in the companion quantum-channel volu
 
 \begin{proof}\leanok
     Lemma~\ref{lem:mpdo_rfp_positive_length_trace_nonzero} gives nonzero trace
-    at every positive length. Apply
-    Theorem~\ref{thm:mpdo_rfp_implies_sal}.
+    at every positive length, so
+    Theorem~\ref{thm:mpdo_rfp_implies_sal} yields area-law saturation.
 \end{proof}
 
-\begin{theorem}[Trace-normalized renormalization fixed points have literal ZCL and SAL]
+\begin{theorem}[Trace-normalized renormalization fixed points have ZCL and SAL]
     \label{thm:mpdo_rfp_implies_zcl_and_sal}
     \lean{MPOTensor.physTraceTransfer_sq_of_isRFPViaTS}
     \leanok
     \uses{thm:rfp_via_ts_physical_trace_idempotent, thm:mpdo_rfp_implies_sal}
-    Let $M$ generate positive semidefinite ring operators with
-    $\tr[\rho^{(N)}(M)]\neq0$ for every $N\geq1$. If $M$ satisfies the local
-    renormalization fixed-point equations of Definition~4.1, then
-    $\mathcal T_M^2=\mathcal T_M$ and $M$ saturates the area law. This proves the
-    ZCL and SAL forward implications of
-    \cite[Appendix~C, lines~1333--1341]{Cirac2016MPDO_arXiv}.
+    In the ZCL and SAL forward implications of
+    \cite[Appendix~C, lines~1333--1341]{Cirac2016MPDO_arXiv}, let $M$ generate
+    positive semidefinite ring operators with $\tr[\rho^{(N)}(M)]\neq0$ for
+    every $N\geq1$. If $M$ satisfies the local renormalization fixed-point
+    equations of Definition~4.1, then $\mathcal T_M^2=\mathcal T_M$ and $M$
+    saturates the area law.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -499,11 +497,11 @@ The corresponding generic result is proved in the companion quantum-channel volu
     $\mathcal T_M^2=\mathcal T_M$ for the physical-trace transfer. If
     $\mathcal T_M=0$, then
     $\tr[\rho^{(1)}(M)]=\tr(\mathcal T_M)=0$, contradicting nonvanishing at
-    length one. Thus the literal idempotence is nontrivial, and
+    length one. Thus the idempotence is nontrivial, and
     Theorem~\ref{thm:mpdo_rfp_implies_sal} gives saturation of the area law.
 \end{proof}
 
-\begin{corollary}[Horizontal renormalization fixed points have literal ZCL and SAL]
+\begin{corollary}[Horizontal renormalization fixed points have ZCL and SAL]
     \label{cor:mpdo_horizontal_rfp_implies_zcl_and_sal}
     \leanok
     \uses{lem:mpdo_rfp_positive_length_trace_nonzero, thm:mpdo_rfp_implies_zcl_and_sal, cor:mpdo_horizontal_rfp_implies_sal}
@@ -515,8 +513,8 @@ The corresponding generic result is proved in the companion quantum-channel volu
 
 \begin{proof}\leanok
     Lemma~\ref{lem:mpdo_rfp_positive_length_trace_nonzero} gives nonzero trace
-    at every positive length. Apply
-    Theorem~\ref{thm:mpdo_rfp_implies_zcl_and_sal}.
+    at every positive length, so
+    Theorem~\ref{thm:mpdo_rfp_implies_zcl_and_sal} gives both conclusions.
 \end{proof}
 
 \begin{lemma}[Nonnegativity of block entropies]
@@ -543,9 +541,9 @@ The corresponding generic result is proved in the companion quantum-channel volu
 \end{lemma}
 \begin{proof}\leanok
     \uses{def:block_entropy, lem:block_entropy_nonneg}
-    Apply strong subadditivity with a trivial middle subsystem (equivalently,
+    Applying strong subadditivity with a trivial middle subsystem (equivalently,
     subadditivity) to the bipartition of the chain into the first $L$ and last
-    $N-L$ spins: $S_N+S_0\le S_L+S_{N-L}$. Since $S_0\ge0$
+    $N-L$ spins gives $S_N+S_0\le S_L+S_{N-L}$. Since $S_0\ge0$
     (Lemma~\ref{lem:block_entropy_nonneg}), rearranging gives
     $I_L=S_L+S_{N-L}-S_N\ge S_0\ge0$.
 \end{proof}
@@ -836,7 +834,7 @@ The corresponding generic result is proved in the companion quantum-channel volu
 
     Consequently, if $M$ is an LPDO, $N\geq1$, and
     $\tr\rho^{(N)}(M)\neq0$, then its local-purification representation
-    supplies a bond dimension $D'$ satisfying this estimate. The quantity
+    gives a bond dimension $D'$ satisfying this estimate. The quantity
     $D'$ is the bond dimension of the purifying MPS, not the MPO bond
     dimension $D$.
 \end{theorem}

@@ -13,9 +13,9 @@
 \begin{proof}\leanok
     \uses{def:peps_normal_arc_windows, lem:peps_regionInjectivityUnionClosure_finite}
     The enlarged rectangle is the union of its $L\times K$ windows whose
-    starting displacements range over
-    $\{0,\ldots,a-L\}\times\{0,\ldots,b-K\}$. This index set is nonempty.
-    Apply closure under finite unions.
+    starting displacements range over the nonempty index set
+    $\{0,\ldots,a-L\}\times\{0,\ldots,b-K\}$, so closure under finite unions
+    gives $\mathcal R(s;a,b)\in\mathcal I$.
 \end{proof}
 
 \begin{theorem}[Complement of a cyclic rectangle]%
@@ -69,7 +69,7 @@
     Membership in $R$ is given by the two coordinate conditions
     in~(\ref{eq:peps_window_corner_regions}).
     If $2L+1\leq w$ and $2K+1\leq h$, then a vertex is $v_0$ exactly when
-    its coordinate values are $(L,K)$; furthermore $v_0\notin R$ and
+    its coordinate values are $(L,K)$; in addition, $v_0\notin R$ and
     $R\cup\{v_0\}=S$.
     For $L,K>0$, the complement identity is
     \begin{align}
@@ -105,8 +105,9 @@
     writes $S^c$ as two cyclic rectangles of side lengths
     $(w-L-1)\times h$ and $(L+1)\times(h-K-1)$.
     The size bounds give $w-L-1\geq L$ and $h-K-1\geq K$, so these
-    rectangles also contain full windows. Finally apply
-    (\ref{eq:peps_window_corner_complement}) and union closure to $R^c$.
+    rectangles also contain full windows. Combining
+    (\ref{eq:peps_window_corner_complement}) with union closure then places
+    $R^c$ in $\mathcal I$.
 \end{proof}
 
 \begin{theorem}[Boundary edges of the corner regions]%
@@ -131,7 +132,7 @@
     \lean{TNLean.PEPS.regionBlockedTensorInjective_translate}
     \lean{TNLean.PEPS.regionBlockedTensorInjective_reindexTensor}
     \leanok
-    If $\phi$ is a graph isomorphism, the transported tensor is injective
+    If $\phi$ is a graph isomorphism, the relabelled tensor $A^\phi$ is injective
     on $\phi(R)$ exactly when the original tensor is injective on $R$.
     Replacing bond dimensions by equal dimensions also preserves injectivity
     on $R$. For a translation-invariant tensor, every translated region
@@ -159,7 +160,8 @@
     \uses{thm:peps_twoInjectiveTensorInsertionComparison}
     The bare-edge equality gives equality of the region-inserted coefficients
     on each boundary edge of $Q$. The injective two-block comparison gives
-    reciprocal nonzero proportionalities on $Q$ and $Q^c$; retain the first.
+    reciprocal nonzero proportionalities on $Q$ and $Q^c$, the first of which
+    is $A_Q=c_Q C_Q$.
 \end{proof}
 
 \begin{theorem}[Translation preserves the block proportionality scalar]%
@@ -193,7 +195,7 @@
         thm:peps_region_injective_identification,
         thm:peps_regionBlockedTensorInjective_applyGauge,
         cor:peps_component_eq_gaugeVertex_of_twoBlockProportional}
-    Choose the translation $t(v_0)=v$. The two block proportionalities
+    For the translation $t$ sending $v_0$ to $v$, the two block proportionalities
     transfer to $tQ$ and $tQ\cup\{v\}$ with the same $c_Q,c_S$.
     Injectivity of $B$ transfers to $tQ$ and is preserved by the gauge
     and the identification of bond dimensions. The inserted-site

@@ -113,8 +113,8 @@ injectivity condition together with the local inverse it provides.
     region-incident edges and the second input on all remaining edges.
 \end{theorem}
 \begin{proof}\leanok
-    Evaluate the merge at an edge and use the defining alternative according
-    to whether the edge is selected.
+    Evaluating the merge at an edge and using the defining alternative according
+    to whether the edge is selected proves each readback law.
 \end{proof}
 
 \begin{theorem}[Vertex products through a regionwise merge]
@@ -131,9 +131,9 @@ injectivity condition together with the local inverse it provides.
     the second input through the same merge.
 \end{theorem}
 \begin{proof}\leanok
-    Compare the local tensor entry at every vertex. Each incident edge is
-    read from the prescribed input, while an edge incident to both regions is
-    handled by the assumed agreement; a boundary edge is exactly the
+    Comparing the local tensor entry at every vertex shows that each incident
+    edge is read from the prescribed input, while an edge incident to both
+    regions is handled by the assumed agreement; a boundary edge is the
     corresponding special case for a region and its complement.
 \end{proof}
 
@@ -150,7 +150,7 @@ injectivity condition together with the local inverse it provides.
     virtual configurations.
 \end{theorem}
 \begin{proof}\leanok
-    Group the first sum by the value of $m$. Each grouped summand is repeated
+    Grouping the first sum by the value of $m$ repeats each grouped summand
     exactly $n$ times by the common fiber-cardinality hypothesis.
 \end{proof}
 
@@ -429,8 +429,9 @@ sections.
     physical realization, then they agree.
 \end{theorem}
 \begin{proof}\leanok
-    Evaluate both physical realizations on vectors in the image of the local
-    tensor map, where linear independence makes that map injective.
+    Evaluating both physical realizations on vectors in the image of the local
+    tensor map gives equality because linear independence makes that map
+    injective.
 \end{proof}
 
 \begin{definition}[Local projector]%
@@ -447,11 +448,10 @@ sections.
     \lean{TNLean.PEPS.localVirtualOpOfPhysicalOpAt}
     \leanok
     \uses{def:peps_localTensorMap, def:peps_localLeftInverse}
-    For a physical operator $O$ on the local physical space at $v$, define
+    In the local injectivity step used in the physical-to-virtual direction of
+    the insertion-algebra argument in \cite[Section~3]{Molnar2018NormalPEPS},
+    for a physical operator $O$ on the local physical space at $v$, define
     its virtual pullback by $\Psi_v\circ O\circ\Phi_v$.
-    This is the local injectivity step used in the physical-to-virtual
-    direction of the insertion-algebra argument in
-    \cite[Section~3]{Molnar2018NormalPEPS}.
 \end{definition}
 
 \begin{theorem}[Virtual pullback realizes the projected physical action]%
@@ -464,7 +464,7 @@ sections.
     image of $\Phi_v$.
 \end{theorem}
 \begin{proof}\leanok
-    Expand the definitions. The chosen left inverse gives
+    Expanding the definitions, the chosen left inverse gives
     $\Psi_v\Phi_v=\Id$, and the remaining map is the local projector.
 \end{proof}
 
@@ -478,7 +478,8 @@ sections.
     $\Phi_v(c)$.
 \end{theorem}
 \begin{proof}\leanok
-    Use the preceding theorem and the image-preservation hypothesis.
+    The preceding theorem and the image-preservation hypothesis give the
+    equality.
 \end{proof}
 
 \begin{theorem}[Recovery of a virtual operation from a physical realization]%
@@ -513,10 +514,10 @@ sections.
     \end{align}
 \end{theorem}
 \begin{proof}\leanok
-    Apply the local tensor map to the two virtual pullbacks and use the
-    pullback specification. The converse follows from injectivity of the local
-    tensor map; the forward direction is obtained by rewriting the two virtual
-    pullbacks.
+    Applying the local tensor map to the two virtual pullbacks and using the
+    pullback specification gives the equivalence: the converse follows from
+    injectivity of the local tensor map, while the forward direction is
+    obtained by rewriting the two virtual pullbacks.
 \end{proof}
 
 \begin{theorem}[Pullback of the canonical physical realization]%
@@ -529,7 +530,8 @@ sections.
 \end{theorem}
 \begin{proof}\leanok
     The canonical physical realization agrees with the virtual operation on
-    the image of the local tensor map. Apply the preceding recovery theorem.
+    the image of the local tensor map, so the preceding recovery theorem
+    recovers the virtual operation.
 \end{proof}
 
 \begin{theorem}[Physical realization of a pulled-back physical operator]%
@@ -543,8 +545,8 @@ sections.
     $\Phi_v\circ T_O\circ\Psi_v=P_v\circ O\circ P_v$.
 \end{theorem}
 \begin{proof}\leanok
-    Expand the definitions of the physical realization, the virtual pullback,
-    and the local projector.
+    Expanding the definitions of the physical realization, the virtual pullback,
+    and the local projector gives the identity.
 \end{proof}
 
 \begin{theorem}[Projected local recovery]%
@@ -600,9 +602,9 @@ sections.
     local boundary held fixed.
 \end{theorem}
 \begin{proof}\leanok
-    Evaluate both sides on a local virtual configuration and split into the
-    two cases according to whether the residual boundary agrees with the fixed
-    residual boundary.
+    Evaluating both sides on a local virtual configuration and splitting into
+    the two cases according to whether the residual boundary agrees with the
+    fixed residual boundary proves the formula.
 \end{proof}
 
 \begin{theorem}[Local tensor form of a one-edge basis action]%
@@ -615,8 +617,8 @@ sections.
     tensor components.
 \end{theorem}
 \begin{proof}\leanok
-    Use the preceding coefficient identity and linearity of the local tensor
-    map.
+    The preceding coefficient identity and linearity of the local tensor
+    map give the linear combination.
 \end{proof}
 
 \begin{theorem}[Physical realization of one-edge virtual matrix action]%
@@ -629,8 +631,8 @@ sections.
     operator on the physical space at $v$.
 \end{theorem}
 \begin{proof}\leanok
-    Apply the physical realization of local virtual operations to the
-    one-edge matrix action.
+    Applying the physical realization of local virtual operations to the
+    one-edge matrix action gives the physical operator.
 \end{proof}
 
 \begin{definition}[Split at one incident edge]%
@@ -697,8 +699,8 @@ which is the starting point for the edge-middle reduction of the next section.
     \end{align}
 \end{theorem}
 \begin{proof}\leanok
-    Isolate the two distinguished endpoints in the product over $V$ and group
-    the remaining factors into the middle region.
+    Isolating the two distinguished endpoints in the product over $V$ and
+    grouping the remaining factors into the middle region gives the factorization.
 \end{proof}
 
 \begin{theorem}[PEPS coefficient splitting at an edge]%
@@ -711,8 +713,8 @@ which is the starting point for the edge-middle reduction of the next section.
     $V\setminus\{u,v\}$, and the tensor contribution at $v$.
 \end{theorem}
 \begin{proof}\leanok
-    Expand the state coefficient and apply the product splitting at the chosen
-    edge to the per-vertex product inside each summand.
+    Expanding the state coefficient and applying the product splitting at the
+    chosen edge to the per-vertex product inside each summand factors each term.
 \end{proof}
 
 \begin{definition}[Edge-centered boundary data]%
@@ -833,7 +835,7 @@ which is the starting point for the edge-middle reduction of the next section.
     \uses{def:peps_edgeBoundaryConfig, def:peps_edgeInsertedBoundaryConfig}
     Ordinary edge-boundary data together with an independent right endpoint
     bond index are equivalent to inserted-edge boundary data. The ordinary
-    boundary supplies the left bond index and the two residual endpoint
+    boundary gives the left bond index and the two residual endpoint
     boundaries.
 \end{definition}
 
@@ -844,7 +846,7 @@ which is the starting point for the edge-middle reduction of the next section.
     \uses{def:peps_edgeBoundaryConfig, def:peps_edgeInsertedBoundaryConfig}
     Ordinary edge-boundary data together with an independent left endpoint
     bond index are equivalent to inserted-edge boundary data. The ordinary
-    boundary supplies the right bond index and the two residual endpoint
+    boundary gives the right bond index and the two residual endpoint
     boundaries.
 \end{definition}
 

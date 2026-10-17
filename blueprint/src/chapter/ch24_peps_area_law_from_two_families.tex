@@ -1,0 +1,35 @@
+\section{The area law from the two-family decomposition}
+\label{sec:area_law_from_two_families}
+
+\begin{theorem}[Uniform area law from the two-family decomposition]
+    \label{thm:area_law_conditional_two_families}
+    \lean{TNLean.PEPS.AreaLaw.uniformAreaLaw_of_twoFamilies}
+    \leanok
+    \uses{def:area_law_two_family_decomposition,def:area_law_ground_entropy}
+    Suppose that for every integer $R\ge0$ there are real constants
+    $D_0>2R+10$ and $C_{\rm tpl}\ge24$ for which the two-family decomposition
+    of Definition~\ref{def:area_law_two_family_decomposition} holds.
+    Then, for every pair of integers $q\ge1$, $R\ge0$ and every
+    $J,\Delta>0$, there is a constant $C\ge0$ with the following property.
+    For every finite induced domain $\Lambda$, every admissible Hamiltonian
+    of range $R$ and interaction bound $J$ with a unit ground vector $\Omega$
+    and global spectral gap at least $\Delta$, and every $A\subseteq\Lambda$,
+    \begin{align}
+        S_\Omega(A) & \le C|\partial_\Lambda A|.\notag
+    \end{align}
+    The constant is independent of the domain, Hamiltonian, ground vector,
+    and cut. This is a conditional consequence of the argument in
+    \cite[Theorem~1.1, Section~11]{OpenAI2026AreaLaw}; the geometric
+    decomposition remains a hypothesis.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:area_law_sublinear_collar,
+        thm:area_law_conditional_collar_two_families}
+    Fix $q,R,J,\Delta$ and choose $D_0,C_{\rm tpl}$ from the hypothesis
+    for this range $R$. Theorem~\ref{thm:area_law_sublinear_collar}
+    proves the collar bound at this same pair, since $D_0>2R+10$ and
+    $C_{\rm tpl}\ge24$. Theorem~\ref{thm:area_law_conditional_collar_two_families}
+    then applies to this collar bound and the assumed two-family
+    decomposition, and gives the asserted constant.
+\end{proof}

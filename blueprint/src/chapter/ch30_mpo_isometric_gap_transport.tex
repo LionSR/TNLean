@@ -116,9 +116,9 @@ $E^\dagger$, so their coefficients are complex conjugated as in
         thm:spt_sector_bond_gap,thm:spt_isometric_parent_interaction,
         thm:spt_periodic_hamiltonian_order}
     The interaction $B$ is the isometric extension of zero and is an
-    orthogonal projection. Apply the exact kernel relation for
-    commuting projections to the zero interaction and $B$; the original
-    zero Hamiltonian has the whole chain as its kernel. This gives
+    orthogonal projection. Since the original zero Hamiltonian has the
+    whole chain as its kernel, the exact kernel relation for commuting
+    projections applied to the zero interaction and $B$ gives
     (\ref{eq:mpo_isometry_penalty_kernel}). The commuting-projection
     spectral bound gives $\operatorname{spec}P_N\subseteq
         \{0\}\cup[1,\infty)$, hence
@@ -153,7 +153,7 @@ Every $v\in\mathcal F$ has the orthogonal decomposition
     $L$ or $K$ is needed.
 \end{theorem}
 \begin{proof}\leanok
-    If $Lv=0$, use (\ref{eq:mpo_isometry_decomposition}). Then
+    If $Lv=0$, the decomposition (\ref{eq:mpo_isometry_decomposition}) gives
     $Ly=-UKx$, so orthogonality gives $q_L(y)=0$. The strict lower
     bound forces $y=0$. Thus $v=Ux$, and $UKx=Lv=0$ implies $Kx=0$
     by injectivity of $U$. Conversely, $Kx=0$ gives $LUx=UKx=0$.
@@ -202,8 +202,9 @@ Every $v\in\mathcal F$ has the orthogonal decomposition
     \uses{thm:mpo_isometry_abstract_quadratic}
     For a positive operator, the norm-gap hypothesis with
     $\delta\geq0$ gives $q_K(x)\geq\delta\|x\|^2$ on the kernel
-    complement. Apply Theorem~\ref{thm:mpo_isometry_abstract_quadratic}
-    and the bound $q_L(v)\leq\|Lv\|\|v\|$.
+    complement. Theorem~\ref{thm:mpo_isometry_abstract_quadratic}
+    and the bound $q_L(v)\leq\|Lv\|\|v\|$ then yield
+    $\min\{\delta,c\}\|v\|^2\leq\|Lv\|\|v\|$.
     When $v\neq0$, division by $\|v\|$ gives the assertion;
     for $v=0$ it is immediate.
 \end{proof}
@@ -231,8 +232,9 @@ Every $v\in\mathcal F$ has the orthogonal decomposition
     The tensor power $W_N$ is an isometry, and the periodic
     intertwining identity is $H'_NW_N=W_NH_N$.
     Theorem~\ref{thm:mpo_isometry_inactive_bound} gives the strict
-    complementary bound with $c=1$. Apply
-    Theorem~\ref{thm:mpo_isometry_abstract_kernel}. The image of a
+    complementary bound with $c=1$, so
+    Theorem~\ref{thm:mpo_isometry_abstract_kernel} yields the kernel
+    equality. The image of a
     span is the span of the image, giving the final assertion.
 \end{proof}
 
@@ -272,13 +274,14 @@ Every $v\in\mathcal F$ has the orthogonal decomposition
         thm:spt_periodic_hamiltonian_order,thm:mpo_isometry_inactive_bound,
         thm:mpo_isometry_abstract_quadratic,thm:mpo_isometry_abstract_norm}
     Positivity of $h$ and $h'$ makes both periodic sums positive.
-    Combine $H'_NW_N=W_NH_N$ with
-    (\ref{eq:mpo_isometry_inactive_energy}) and apply the abstract
-    quadratic-form or norm theorem with $U=W_N$ and $c=1$.
+    Combining $H'_NW_N=W_NH_N$ with
+    (\ref{eq:mpo_isometry_inactive_energy}) and applying the abstract
+    quadratic-form or norm theorem with $U=W_N$ and $c=1$ gives the first two bounds.
     For the spectral assertion, finite-dimensional spectral separation
-    first gives the quadratic-form bound on $(\ker H_N)^\perp$.
-    Transfer it by (\ref{eq:mpo_isometry_quadratic_gap}) and apply
-    the converse spectral implication to the positive operator $H'_N$.
+    first gives the quadratic-form bound on $(\ker H_N)^\perp$;
+    (\ref{eq:mpo_isometry_quadratic_gap}) transfers this bound to $H'_N$,
+    and the converse spectral implication for the positive operator $H'_N$
+    yields the spectral inclusion.
 \end{proof}
 
 In particular, a positive bound $\delta$ uniform in $N\geq2$ remains
@@ -304,9 +307,9 @@ $\mathscr A_p:\C^{D_p^2}\to\C^{d_p}$ and take its polar
 factorization $\mathscr A_p=F_pP_p$. Let $B_p$ be the tensor formed
 from the rows of $P_p$, with physical dimension $D_p^2$ and bond
 dimension $D_p$, as in Definition~\ref{def:ldpolar_tensor}.
-Thus $A_p=F_pB_p$, where multiplication denotes physical mixing.
-This realizes the physical-support reduction preceding the mixed
-interpolation in \cite[Section~5]{GarreRubio2023MPOSym}.
+As in the physical-support reduction preceding the mixed interpolation of
+\cite[Section~5]{GarreRubio2023MPOSym}, $A_p=F_pB_p$, where multiplication
+denotes physical mixing.
 
 \subsection{Polar support and full endpoint embeddings}
 
@@ -338,9 +341,9 @@ When $A_p$ is injective, Theorems~\ref{thm:ldpolar_tensor_injective}
 and~\ref{thm:spt_common_physical_endpoints} give
 $F_p^\dagger F_p=I$ and $E_p^\dagger E_p=I$.
 The original unused directions are retained in the separate
-$\C^{d_p}$ summands. The disjoint coordinate sectors also give
-$E_0^\dagger E_1=0$, by
-Theorem~\ref{thm:spt_common_physical_endpoint_orthogonality}.
+$\C^{d_p}$ summands. By
+Theorem~\ref{thm:spt_common_physical_endpoint_orthogonality}, the disjoint
+coordinate sectors also give $E_0^\dagger E_1=0$.
 These assertions require no symmetry of the endpoint tensors.
 
 \begin{definition}[The mixed tensor in the common physical space]
@@ -461,8 +464,9 @@ original bond-$D_p$ tensors.
         \label{eq:mpo_periodic_matrix_action}
     \end{align}
     The cyclic window and its complement partition the sites, so their
-    coordinate permutation extracts and replaces precisely these indices.
-    Sum (\ref{eq:mpo_periodic_matrix_action}) over the cyclic origins.
+    coordinate permutation extracts and replaces precisely these indices;
+    summing (\ref{eq:mpo_periodic_matrix_action}) over the cyclic origins
+    gives the periodic identity.
 \end{proof}
 
 \begin{definition}[Enlarged mixed local interaction]
@@ -530,9 +534,10 @@ original bond-$D_p$ tensors.
 \begin{proof}\leanok
     \uses{thm:mpo_mixed_support_continuity,thm:spt_isometric_parent_interaction}
     In the open interval the insertion in the mixed tensor is invertible,
-    so its extended two-site support is the canonical one. The
+    so its extended two-site support is the canonical one. Since the
     canonical parent of a tensor physically included by $J$ is its
-    isometric interaction extension. Apply these two identities.
+    isometric interaction extension, combining these two identities
+    gives the equality.
 \end{proof}
 
 \subsection{Ground lines and a volume-uniform gap}
@@ -590,10 +595,10 @@ original bond-$D_p$ tensors.
         thm:mpo_periodic_interaction_coordinates,
         thm:mpo_arbitrary_interaction_continuity,
         thm:mpo_isometry_positive_gap}
-    Apply the uniform mixed-path gap theorem to the derived injective
-    tensors $B_0,B_1$, which have square physical alphabets.
-    It gives $\delta>0$, independent of $\gamma\in[0,1]$ and
-    $N\geq2$, with $\delta\|x\|\leq\|H_{\gamma,N}x\|$ on the
+    For the derived injective tensors $B_0,B_1$, which have square physical
+    alphabets, the uniform mixed-path gap theorem gives $\delta>0$,
+    independent of $\gamma\in[0,1]$ and $N\geq2$, with
+    $\delta\|x\|\leq\|H_{\gamma,N}x\|$ on the
     kernel complement. The coordinate identity transfers precisely
     this bound to the matrix Hamiltonian. Each $h_\gamma$ is positive,
     so Theorem~\ref{thm:mpo_isometry_positive_gap} applies to the fixed
@@ -607,8 +612,8 @@ endpoint vectors in the orthogonal full embeddings
 (\ref{eq:mpo_arbitrary_full_embeddings}), with a uniform gap including
 $N=2$. The endpoint interactions use the extended limiting supports;
 canonical-parent equality has been asserted only in the open interval.
-Attaching paths to canonical endpoint interactions, proving covariance
-under a common MPO symmetry, and the phase classification with degenerate
-ground spaces are separate assertions; this scope restriction relative to
-the symmetric path of \cite[Section~5]{GarreRubio2023MPOSym} is recorded in
-\cite{gap:glm23_mpo_symmetric_mps_scope}.
+As recorded in \cite{gap:glm23_mpo_symmetric_mps_scope} relative to the
+symmetric path of \cite[Section~5]{GarreRubio2023MPOSym}, attaching paths to
+canonical endpoint interactions, proving covariance under a common MPO
+symmetry, and classifying phases with degenerate ground spaces remain
+separate assertions.

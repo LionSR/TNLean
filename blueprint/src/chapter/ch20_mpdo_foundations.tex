@@ -199,9 +199,9 @@ Diagrammatically,
 \end{theorem}
 
 \begin{proof}\leanok\uses{lem:mpo_direct_sum_eval_word}
-    The trace of a block-diagonal sum is the sum of the traces of the two
-    blocks; apply Lemma~\ref{lem:mpo_direct_sum_eval_word} and take traces
-    entrywise.
+    Because the trace of a block-diagonal sum is the sum of the block traces,
+    applying Lemma~\ref{lem:mpo_direct_sum_eval_word} and taking traces
+    entrywise gives $\rho^{(N)}(M\oplus N)=\rho^{(N)}(M)+\rho^{(N)}(N)$.
 \end{proof}
 
 \begin{definition}[Cyclic-shift reindexing]\label{def:mpo_rotate_config}
@@ -397,21 +397,22 @@ Diagrammatically,
     \lean{MPOTensor.IsMPDO}
     \leanok
     \uses{def:mpo_family}
-    An MPO tensor is an \emph{MPDO} if, for every $N\geq1$,
+    Following the global positivity condition of
+    \cite[Section~4]{Cirac2016MPDO_arXiv}, an MPO tensor is an \emph{MPDO}
+    if, for every $N\geq1$,
     \begin{align}
         \rho^{(N)}(M)
          & \ge0.
         \label{eq:mpdo_positivity}
     \end{align}
-    This is the global positivity condition of
-    \cite[Section~4]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
 \begin{definition}[LPDO]\label{def:lpdo}
     \lean{MPOTensor.IsLPDO}
     \leanok
     \uses{def:mpo_tensor}
-    An MPO tensor is an \emph{LPDO} if there exist a Kraus dimension $d_K$,
+    Following \cite[Section~4.3]{Cirac2016MPDO_arXiv}, an MPO tensor is an
+    \emph{LPDO} if there exist a Kraus dimension $d_K$,
     an inner bond dimension $D'$, a bond-space identification
     $e:\{0,\ldots,D-1\}\simeq
         \{0,\ldots,D'-1\}\times\{0,\ldots,D'-1\}$
@@ -428,7 +429,6 @@ Diagrammatically,
     where $\otimes$ denotes the Kronecker product, $\overline{(\cdot)}$
     denotes entrywise complex conjugation, and $(\cdot)_{e,e}$ denotes
     reindexing along $e$ back to $\{0,\ldots,D-1\}$.
-    See \cite[Section~4.3]{Cirac2016MPDO_arXiv}.
     % Coefficient identity:
     % M^{ij}_{\alpha\beta}
     %   = \sum_{k,a,a',b,b'} e^{aa'}_{\alpha}
@@ -468,7 +468,7 @@ Diagrammatically,
     \uses{def:lpdo, def:mpdo}
     By the mixed-product property
     $(A\otimes B)(C\otimes D)=(AC)\otimes(BD)$, the $N$-site product
-    decomposes as a sum of Kronecker products after transporting along the
+    decomposes as a sum of Kronecker products after reindexing along the
     bond-space identification $e$:
     \begin{align}
         M^{\sigma_1\tau_1}\cdots M^{\sigma_N\tau_N}

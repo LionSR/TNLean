@@ -14,7 +14,7 @@ $r_{\rm old}$, $r_{\rm new}$ and the specified list of parties are bounded,
 as shown in
 Theorem~\ref{thm:peps_frame_small_rewrite_polynomial}.
 
-Throughout, $\Lambda$ is a finite set of sites, each with a raw register
+Throughout, $\Lambda$ is a finite set of sites, each with a site register
 $\C^q$, and operators on $\mathcal H_\Lambda$ are written in the
 coordinates of Lemma~\ref{lem:peps_frame_registers_coordinates}.
 
@@ -132,7 +132,7 @@ coordinates of Lemma~\ref{lem:peps_frame_registers_coordinates}.
     \leanok
     \uses{lem:peps_rank_one_chain,def:peps_rank_one_block,
         lem:peps_grouped_monomial_placement}
-    Let $b$ be a rank-one block with unit vectors $v,w$, let the raw registers
+    Let $b$ be a rank-one block with unit vectors $v,w$, let the site registers
     of $T$ be held by $p_A$ before and by $p_A'$ after, those of $U$ by $p_B$
     and $p_B'$, and those of $E$ by the same party before and after. Then
     $\id_{\rm tags}\otimes\mathrm{op}(b)$ is the operator of an allowed
@@ -140,7 +140,7 @@ coordinates of Lemma~\ref{lem:peps_frame_registers_coordinates}.
     those after, using only $p_A,p_B,p_A',p_B'$, with at most one pair source
     and at most one pair effect. Consequently:
     \begin{enumerate}
-        \item if a nonempty set $O$ of sites has raw owners in a set of at
+        \item if a nonempty set $O$ of sites has site owners in a set of at
               most two parties of $S$, then for unit vectors $v,w$ on $[q]^O$
               the operator $\ket v\bra w$ on $O$, tensored with the identity,
               is such a monomial using only parties of $S$, with the same
@@ -160,14 +160,14 @@ coordinates of Lemma~\ref{lem:peps_frame_registers_coordinates}.
 \end{lemma}
 
 \begin{proof}\leanok
-    Group the registers of $T$ and of $U$, apply the rank-one map of
-    Lemma~\ref{lem:peps_rank_one_chain} and ungroup, by
-    Lemma~\ref{lem:peps_grouped_monomial_placement}. For a set $O$ with owners
-    in $\{p,p'\}$, take $T$ the sites of $O$ held by the owner of a chosen site
-    and $E=\Lambda\setminus O$; a vector on $[q]^O$ is a vector of the same
-    norm on $[q]^T\times[q]^U$. For one-site zero blocks, proceed site by site,
-    contracting with $\bra0$ at the old owner and preparing $\ket0$ at the new
-    owner. Products are compositions.
+    Grouping the registers of $T$ and of $U$, applying the rank-one map of
+    Lemma~\ref{lem:peps_rank_one_chain}, and ungrouping by
+    Lemma~\ref{lem:peps_grouped_monomial_placement} gives the main statement. For a set $O$ with owners
+    in $\{p,p'\}$, taking $T$ to be the sites of $O$ held by the owner of a chosen site
+    and $E=\Lambda\setminus O$ identifies a vector on $[q]^O$ with a vector of the same
+    norm on $[q]^T\times[q]^U$. For one-site zero blocks, proceeding site by site
+    contracts with $\bra0$ at the old owner and prepares $\ket0$ at the new
+    owner, and products are compositions.
 \end{proof}
 
 \begin{lemma}[A product term as a product of blocks]
@@ -242,9 +242,9 @@ coordinates of Lemma~\ref{lem:peps_frame_registers_coordinates}.
     holes with $\bra b$ and preparing those of the affected new holes in
     $\ket a$, each at its tag owner, is an allowed monomial using only the
     affected tag owners and no pair resource. In these coordinates it acts
-    as $\ket a\bra b\otimes\id$ on the affected tags and the raw registers,
+    as $\ket a\bra b\otimes\id$ on the affected tags and the site registers,
     extended by the identity on the untouched tags, and placing a matrix $Y$ on
-    the raw registers in this tag block equals this operator after
+    the site registers in this tag block equals this operator after
     $\id\otimes Y$.
 \end{lemma}
 
@@ -279,18 +279,18 @@ coordinates of Lemma~\ref{lem:peps_frame_registers_coordinates}.
 \end{theorem}
 
 \begin{proof}\leanok
-    Write the product term as in
-    Lemma~\ref{lem:peps_product_term_blocks}. The open input legs of a patch
+    Writing the product term as in
+    Lemma~\ref{lem:peps_product_term_blocks}, the open input legs of a patch
     bra have at most two old owners and the open output legs of a patch ket at
     most two new owners, all in the specified list
     (Lemma~\ref{lem:peps_frame_branch_network}); every site contained in a
     selected square lies in the physical sample of a patch or an affected
-    hole, so its old and new owners belong to the list; a site in no selected
-    square keeps its owner (Lemma~\ref{lem:peps_frame_wires}). Apply
+    hole, so its old and new owners belong to the list, while a site in no selected
+    square keeps its owner (Lemma~\ref{lem:peps_frame_wires}). Applying
     Lemma~\ref{lem:peps_rank_one_block_monomial} to the blocks $B_j$ with the
     old owners, to $Z$ changing the old owners into the new ones, and to the
-    blocks $K_j$ with the new owners, and follow with the tag maps of
-    Lemma~\ref{lem:peps_frame_tag_change}. Only patch vertices have open legs,
+    blocks $K_j$ with the new owners, and following with the tag maps of
+    Lemma~\ref{lem:peps_frame_tag_change} gives the monomial, where only patch vertices have open legs
     and there are at most $2m$ of them.
 \end{proof}
 
@@ -328,12 +328,12 @@ coordinates of Lemma~\ref{lem:peps_frame_registers_coordinates}.
 \end{theorem}
 
 \begin{proof}\leanok
-    Take $M_\delta=(1+\tfrac12\delta)^{-1}\sum_\beta\ket a\bra b\otimes
+    Taking $M_\delta=(1+\tfrac12\delta)^{-1}\sum_\beta\ket a\bra b\otimes
         \bigl(\sum_ic_{\beta,i}T_{\beta,i}\bigr)\otimes\id$ from
-    Theorem~\ref{thm:peps_frame_small_rewrite_product_terms} and replace each
+    Theorem~\ref{thm:peps_frame_small_rewrite_product_terms} and replacing each
     placed product term by $\sigma_{\beta,i}$ times its monomial from
-    Theorem~\ref{thm:peps_frame_small_rewrite_term_monomial}; the coefficients
-    $(1+\tfrac12\delta)^{-1}c_{\beta,i}\sigma_{\beta,i}$ have modulus at most
-    one. Each branch carries at most $k^{2m}$ terms. The branch count is at
+    Theorem~\ref{thm:peps_frame_small_rewrite_term_monomial} yields the expansion, with coefficients
+    $(1+\tfrac12\delta)^{-1}c_{\beta,i}\sigma_{\beta,i}$ of modulus at most
+    one. Each branch carries at most $k^{2m}$ terms, the branch count is at
     most $D^E$, and $k$ increases with $N$.
 \end{proof}

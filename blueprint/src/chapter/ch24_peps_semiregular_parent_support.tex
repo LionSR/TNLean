@@ -2,8 +2,8 @@
 \label{sec:peps_semiregular_parent_support}
 
 The bond transformation of \cite[Section~7]{Schuch2010PEPS} acts on
-head--tail endpoint pairs. We describe its regional blocks, including the
-one-ended factors on crossing edges, and derive the product support of
+head--tail endpoint pairs; its regional blocks, including the
+one-ended factors on crossing edges, determine the product support of
 regional parent spaces. Throughout the graph statements, $\Gamma$ is a
 finite simple graph with ordered vertices. For a region $R$, write $E_R$
 for its internal edges, $\partial E_R$ for its crossing edges, and
@@ -53,10 +53,10 @@ $E_{R^c}$ for its exterior edges. An edge $f=(t,h)$ has $t<h$.
     \end{align}
 \end{theorem}
 \begin{proof}\leanok
-    Conjugate each coefficient in
-    (\ref{eq:peps_parent_support_mixed_product}) to obtain the adjoint
-    formula. For~(\ref{eq:peps_parent_support_mixed_action}), interchange
-    the finite sum over $a$ with the input-coordinate sums. For each
+    Conjugating each coefficient in
+    (\ref{eq:peps_parent_support_mixed_product}) gives the adjoint
+    formula, and interchanging
+    the finite sum over $a$ with the input-coordinate sums gives~(\ref{eq:peps_parent_support_mixed_action}). For each
     fixed $a$, the independent coordinate sums factor into the products
     defining $F_bx_{b,a}$ and $K_fy_{f,a}$.
 \end{proof}
@@ -273,14 +273,14 @@ $E_{R^c}$ for its exterior edges. An edge $f=(t,h)$ has $t<h$.
     \uses{thm:peps_parent_support_boundary_factors,
         thm:peps_full_multiplicity_bond_map,
         lem:peps_matching_sector_bond_inclusion}
-    Apply~(\ref{eq:peps_parent_support_boundary_contraction}) with
-    unit weights and use $B_z^\dagger=B_z^{\mathsf T}$. Reading the
+    Applying~(\ref{eq:peps_parent_support_boundary_contraction}) with
+    unit weights and using $B_z^\dagger=B_z^{\mathsf T}$ gives the adjoint boundary formulas, since reading the
     block weight from the fixed $y$ index permits cancellation of
-    $\lambda_{i(y)}$. The repeated matrix-entry vector in
+    $\lambda_{i(y)}$. Because the repeated matrix-entry vector in
     (\ref{eq:peps_parent_support_internal_adjoint}) is $F$ applied
-    to the square-root-weighted block vector. Apply
-    $F^\dagger F=E_XE_X^\dagger$;
-    the block-diagonal input lies in the matching-sector range.
+    to the square-root-weighted block vector and
+    the block-diagonal input lies in the matching-sector range,
+    $F^\dagger F=E_XE_X^\dagger$ yields the internal adjoint identity.
     The fourth-root identities follow by multiplying block-scalar
     matrices on the left and on the right.
 \end{proof}
@@ -347,9 +347,9 @@ $E_{R^c}$ for its exterior edges. An edge $f=(t,h)$ has $t<h$.
     where the latter operator exchanges the two enumerations.
 \end{theorem}
 \begin{proof}\leanok
-    The product coefficients agree by their definitions.
-    Reindex the matrix-vector sum by the bijection $j_{e^X}$ to
-    obtain the intertwining identity. Conjugating each factor in
+    The product coefficients agree by definition, and
+    reindexing the matrix-vector sum by the bijection $j_{e^X}$
+    gives the intertwining identity. Conjugating each factor in
     (\ref{eq:peps_parent_support_numbered_operator}) proves the
     adjoint identity.
 \end{proof}
@@ -391,8 +391,8 @@ $E_{R^c}$ for its exterior edges. An edge $f=(t,h)$ has $t<h$.
     exterior slice on $R_i$ belongs to $\mathcal G_{R_i}(A)$.
 \end{theorem}
 \begin{proof}\leanok
-    Split the global input-coordinate sum into its regional and
-    exterior coordinates to obtain
+    Splitting the global input-coordinate sum into its regional and
+    exterior coordinates gives
     (\ref{eq:peps_parent_support_block_slice}). Taking the adjoint
     exchanges input and output configurations.
     If $\psi\in\mathcal P_{\mathcal R}(A)$, every summand in
@@ -453,8 +453,8 @@ $E_{R^c}$ for its exterior edges. An edge $f=(t,h)$ has $t<h$.
     \end{align}
 \end{theorem}
 \begin{proof}\leanok
-    Every edge has zero, one, or two endpoints in $R$. Separate the
-    product in~(\ref{eq:peps_parent_support_numbered_operator}) into
+    Since every edge has zero, one, or two endpoints in $R$, the
+    product in~(\ref{eq:peps_parent_support_numbered_operator}) separates into
     these three cases. The first contributes $c_{R,F}$, the second
     gives~(\ref{eq:peps_parent_support_crossing_matrix}), and the third
     retains $F$ on its head--tail pair. Regional regrouping places
@@ -489,15 +489,14 @@ $E_{R^c}$ for its exterior edges. An edge $f=(t,h)$ has $t<h$.
 \begin{proof}\leanok
     \uses{thm:peps_parent_support_sparse_action,
         thm:peps_parent_support_bond_blocks}
-    In~(\ref{eq:peps_parent_support_sparse_coefficient}), separate
-    the indicator for the fixed endpoint from the inside endpoint.
-    Symmetry of $a(y,z)$ gives the other orientation.
-    Substitute~(\ref{eq:peps_parent_support_fixed_endpoint}) into
-    (\ref{eq:peps_parent_support_bond_blocks}) and collect the
-    crossing indicators into $\widehat c_R$.
+    Separating the indicator for the fixed endpoint from the inside endpoint in~(\ref{eq:peps_parent_support_sparse_coefficient})
+    and using symmetry of $a(y,z)$ gives both fixed-endpoint identities;
+    substituting~(\ref{eq:peps_parent_support_fixed_endpoint}) into
+    (\ref{eq:peps_parent_support_bond_blocks}) and collecting the
+    crossing indicators into $\widehat c_R$ yields the regional block formula.
 \end{proof}
 
-\subsection{Actual open contractions and their product support}
+\subsection{Open contractions and their product support}
 
 \begin{definition}[Boundary and internal factors of an open contraction]%
     \label{def:peps_parent_support_open_factors}
@@ -572,12 +571,12 @@ $E_{R^c}$ for its exterior edges. An edge $f=(t,h)$ has $t<h$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_graph_open_averaging_bond_state}
-    Decode the numbered labels and apply the actual open contraction
-    formula. The inverse regional coordinate map puts each crossing,
+    Decoding the numbered labels and applying the open contraction
+    formula shows that the inverse regional coordinate map puts each crossing,
     head, and tail label back at its original incidence, proving the
     column equality in~(\ref{eq:peps_parent_support_open_coordinates}).
     Open columns span $\mathcal G_R$, and their boundary numberings
-    are bijective, so their images span exactly $\mathcal H_R$.
+    are bijective, so their images span $\mathcal H_R$.
     Injectivity of $J_{e,R}$ gives the membership equivalence.
     The final assertion follows directly by decoding the virtual
     boundary labels in the finite contraction sum and then fixing
@@ -626,8 +625,8 @@ $E_{R^c}$ for its exterior edges. An edge $f=(t,h)$ has $t<h$.
     implication of~(\ref{eq:peps_parent_support_product_range}) put its
     $f$-slice in $\operatorname{im}F$. By
     (\ref{eq:peps_parent_support_slice_update}) this is the global
-    $f$-slice. Apply the reverse implication of
-    (\ref{eq:peps_parent_support_product_range}) to all edges.
+    $f$-slice, so the reverse implication of
+    (\ref{eq:peps_parent_support_product_range}) across all edges places $J_e\psi$ in $\operatorname{im}F^{\otimes E}$.
 \end{proof}
 
 \begin{theorem}[Bond-factor support of canonical parent vectors]%
@@ -682,7 +681,7 @@ $E_{R^c}$ for its exterior edges. An edge $f=(t,h)$ has $t<h$.
     representations of a finite group. Put
     $U'(g)=\bigoplus_i(D_i(g)\otimes I_{d_i})$, and let $F$ restore
     multiplicity $d_i$ on the full endpoint pairs. Every internal
-    slice of each actual open column for the unweighted averaging
+    slice of each open column for the unweighted averaging
     tensor of $U'$ lies in $\operatorname{im}F^{\otimes E_R}$.
     This also holds for each vector in the numbered regional range
     $\mathcal G_R(A(U',I,e))$.
@@ -699,12 +698,12 @@ $E_{R^c}$ for its exterior edges. An edge $f=(t,h)$ has $t<h$.
         thm:peps_coherent_multiplicity_transport,
         thm:peps_parent_support_open_coordinates,
         thm:peps_parent_support_internal_slices}
-    Expand each target slice with its own boundary coefficients
-    $c_R^{U',I}(\theta,\sigma;q)$. Coherent multiplicity restoration
+    When each target slice is expanded with its own boundary coefficients
+    $c_R^{U',I}(\theta,\sigma;q)$, coherent multiplicity restoration
     sends the internal factors
     $\operatorname{vec}(\bigoplus_i\sqrt{d_i}\,D_i(q_hq_t^{-1}))$
     to $\operatorname{vec}(U'(q_hq_t^{-1}))$, while retaining these
-    same coefficients. This supplies a preimage for each target
+    same coefficients. This provides a preimage for each target
     open slice. Linear combinations give all regional vectors;
     edge coverage and
     Theorem~\ref{thm:peps_parent_support_internal_slices} give

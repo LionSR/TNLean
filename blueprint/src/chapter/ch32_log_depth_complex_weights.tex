@@ -31,10 +31,10 @@ sites. The coefficients $\beta_j=\mu_j^N$ of
 \cite[eq.~(S3)]{Malz2024Preparation} of $\ket{\phi_N}$, but under
 $V^{\otimes M}$ in \cite[eqs.~(S6) and (S7)]{Malz2024Preparation} they count the
 phase $u_j^N$ twice, and already for orthogonal blocks the approximating state
-does not converge (Theorem~\ref{thm:ldp_approximation_error_phase_weights}). With
+does not converge (Theorem~\ref{thm:ldp_approximation_error_phase_weights}). As
+recorded in \cite{gap:mswc24_block_form_mixed_overlap}, with
 $\beta_j=\lvert\mu_j\rvert^N$ it converges at the rate of
-Theorem~\ref{thm:ldp_approximation_error_complex_weights}
-\cite{gap:mswc24_block_form_mixed_overlap}.
+Theorem~\ref{thm:ldp_approximation_error_complex_weights}.
 
 % **False source result:** refutes Lemma 1'(ii) of arXiv:2307.01696 for two
 % orthogonal blocks of multiplicity one with weights 1 and -1;
@@ -95,10 +95,10 @@ Theorem~\ref{thm:ldp_approximation_error_complex_weights}
     eigenvalues. For $\mu=-1$, every $\lambda_2$ with $0<\lvert\lambda_2\rvert<1$, every
     $\gamma>0$ and every constant $C$ there is an odd $M$ such that, with $q=M$,
     $N=M^2$ and $y=(N/q)e^{-\gamma q/\xi_{\mathrm{diag}}}$,
-    $\varepsilon(\widetilde\phi_N,\phi_N)>Cy\,e^{Cy}$. The sequence $q=M$ satisfies
-    $q=o(N)$, so the bound (\ref{eq:ldp_approximation_error_general}) fails for
-    orthogonal blocks of multiplicity one when a weight is not a nonnegative real
-    number \cite{gap:mswc24_block_form_mixed_overlap}.
+    $\varepsilon(\widetilde\phi_N,\phi_N)>Cy\,e^{Cy}$. Because the sequence $q=M$
+    satisfies $q=o(N)$, as recorded in \cite{gap:mswc24_block_form_mixed_overlap},
+    the bound (\ref{eq:ldp_approximation_error_general}) fails for orthogonal blocks of
+    multiplicity one when a weight is not a nonnegative real number.
 \end{theorem}
 
 \begin{proof}
@@ -161,16 +161,17 @@ Theorem~\ref{thm:ldp_approximation_error_complex_weights}
         \qquad\text{and}\qquad
         \varepsilon(\widetilde\phi_N,\phi_N)\leq Cy\,e^{Cy}.
     \end{align*}
-    This is \cite[Lemma~1$'$(ii)]{Malz2024Preparation} for blocks of multiplicity one,
-    with $\beta_j=\lvert\mu_j\rvert^N$ in place of the coefficients $\beta_j=\mu_j^N$
-    that \cite[eqs.~(S6) and (S7)]{Malz2024Preparation} take from
-    \cite[eq.~(S4)]{Malz2024Preparation}, with $\xi_{\mathrm{diag}}$ replaced by
-    $\max(\xi_{\mathrm{diag}},\xi_{\mathrm{off\text{-}diag}})$, and for $0<\gamma<1$ in
-    place of $0<\gamma<1/2$. The constants do not depend on the weights, and the
+    Relative to \cite[Lemma~1$'$(ii)]{Malz2024Preparation} for blocks of multiplicity one,
+    this replaces the coefficients $\beta_j=\mu_j^N$ that
+    \cite[eqs.~(S6) and (S7)]{Malz2024Preparation} take from
+    \cite[eq.~(S4)]{Malz2024Preparation} by $\beta_j=\lvert\mu_j\rvert^N$, replaces
+    $\xi_{\mathrm{diag}}$ by
+    $\max(\xi_{\mathrm{diag}},\xi_{\mathrm{off\text{-}diag}})$, and extends the range
+    $0<\gamma<1/2$ to $0<\gamma<1$. The constants do not depend on the weights, and the
     normalization $\lvert\mu_j\rvert\leq1$ with one weight of modulus one is not needed.
-    With $\beta_j=\mu_j^N$ the bound is false
-    (Theorem~\ref{thm:ldp_approximation_error_phase_weights})
-    \cite{gap:mswc24_block_form_mixed_overlap}.
+    As recorded in \cite{gap:mswc24_block_form_mixed_overlap}
+    (Theorem~\ref{thm:ldp_approximation_error_phase_weights}), with $\beta_j=\mu_j^N$
+    the bound is false.
 \end{theorem}
 
 \begin{proof}
@@ -214,9 +215,10 @@ isometry $L_j$ of Definition~\ref{def:ldp_repeated_block_sum} carries the phases
 $\overline{\mu_{j,k}^q}/c_j$ of the copies:
 Theorems~\ref{thm:ldp_approximation_error_repeated_orthogonal_blocks}
 and~\ref{thm:ldp_approximation_error_repeated_overlapping} hold for complex weights.
-Neither $\sum_k\lvert\mu_{j,k}\rvert^N$, the coefficient of
+As recorded in \cite{gap:mswc24_repeated_block_corrected_state}, neither
+$\sum_k\lvert\mu_{j,k}\rvert^N$, the coefficient of
 Theorem~\ref{thm:ldp_approximation_error_complex_weights} for one copy, nor $c_j^M$
-works in their place \cite{gap:mswc24_repeated_block_corrected_state}. The
+works in their place. The
 source's construction itself, with the pairs of each block on one of its copies,
 converges once its coefficients are changed: the partial isometry $V$ sends the
 pairs placed on one copy to a multiple of the pairs placed by $L_j$.
@@ -320,7 +322,7 @@ pairs placed on one copy to a multiple of the pairs placed by $L_j$.
     let $0<\gamma<1$, and let $\widetilde\phi_N$ be the approximating state of
     Definition~\ref{def:ldp_non_normal_fixed_point} with the pairs of $\rho_j$ on the
     copies $k_j$ and the coefficients $\beta'_j$ of
-    Definition~\ref{def:ldp_one_copy_weight} in place of $\beta_j$. Put
+    Definition~\ref{def:ldp_one_copy_weight} in place of $\beta_j$. Let
     $y=Me^{-\gamma q/\xi}$.
     \begin{enumerate}
         \item Let $\lambda_2$ bound the moduli of the eigenvalues other than one of every
@@ -330,23 +332,23 @@ pairs placed on one copy to a multiple of the pairs placed by $L_j$.
               states of distinct blocks are orthogonal and every $M\geq1$ with
               $\beta\neq0$, $\varepsilon(\widetilde\phi_N,\phi_N)\leq Cy\,e^{Cy}$ and
               $\varepsilon(\widetilde\phi_N,\phi_N)\leq C'y$.
-        \item Let $\lambda_2$ moreover bound the moduli of all eigenvalues of the mixed
+        \item Let $\lambda_2$ also bound the moduli of all eigenvalues of the mixed
               transfer maps $\E_{jj'}$, $j\neq j'$. There are $C,C'>0$ such that for all
               nonzero complex weights, every choice of the copies $k_j$, every $q\geq1$
               and every $M\geq1$ with $\beta\neq0$,
               $\varepsilon(\widetilde\phi_N,\phi_N)\leq Cy\,e^{Cy}$ and
               $\varepsilon(\widetilde\phi_N,\phi_N)\leq C'y$.
     \end{enumerate}
-    This is \cite[Lemma~1$'$(ii)]{Malz2024Preparation} for the source's construction
-    with the coefficients $\beta'_j$ in place of the coefficients $\beta_j$ that
+    Relative to \cite[Lemma~1$'$(ii)]{Malz2024Preparation} for the source's construction,
+    this replaces the coefficients $\beta_j$ that
     \cite[eq.~(S7)]{Malz2024Preparation} takes from
-    \cite[eq.~(S4)]{Malz2024Preparation}, for weights of any phase, in the scopes of
-    Theorems~\ref{thm:ldp_approximation_error_repeated_orthogonal_blocks}
-    and~\ref{thm:ldp_approximation_error_repeated_overlapping}. With the coefficients
-    $\beta_j$ the bound is false
+    \cite[eq.~(S4)]{Malz2024Preparation} by $\beta'_j$, for weights of any phase, in the
+    scopes of Theorems~\ref{thm:ldp_approximation_error_repeated_orthogonal_blocks}
+    and~\ref{thm:ldp_approximation_error_repeated_overlapping}. As recorded in
+    \cite{gap:mswc24_repeated_block_corrected_state}
     (Theorems~\ref{thm:ldp_approximation_error_repeated_block}
-    and~\ref{thm:ldp_approximation_error_phase_weights})
-    \cite{gap:mswc24_repeated_block_corrected_state}.
+    and~\ref{thm:ldp_approximation_error_phase_weights}), with the coefficients
+    $\beta_j$ the bound is false.
 \end{theorem}
 \begin{proof}
     \leanok

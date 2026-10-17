@@ -6,16 +6,16 @@
 \section{Local root channels and physical shell oscillations}
 \label{sec:al_channel_shell_oscillation}
 
-Use the physical space $\mathcal H=(\C^q)^{\otimes I}$, the finite
-spectator $\mathcal K=\C^J$, and the algebras $\mathcal A_K$ of
-Section~\ref{sec:qc_site_oscillation}, with $q>0$. The dimension of
+Throughout this section, $\mathcal H=(\C^q)^{\otimes I}$ denotes the
+physical space, $\mathcal K=\C^J$ the finite spectator space, and
+$\mathcal A_K$ the site algebras of
+Section~\ref{sec:qc_site_oscillation}, with $q>0$; the dimension of
 $\mathcal K$ may be zero. Let $k$ be a positive contraction on
-$\mathcal H$, so $0\le k\le\mathbb 1$.
-Write $\widehat A=A\otimes\mathbb 1_{\mathcal K}$ for a physical
-operator $A$. All operators $B,C$ on $\mathcal H\otimes\mathcal K$
-are arbitrary complex matrices, with the Euclidean operator norm.
-For $K\subseteq I$, the expectation $E_K$ retains exactly the sites
-in $K$ and averages the sites in $I\setminus K$.
+$\mathcal H$, so $0\le k\le\mathbb 1$. For a physical operator $A$,
+write $\widehat A=A\otimes\mathbb 1_{\mathcal K}$, and equip arbitrary
+complex operators $B,C$ on $\mathcal H\otimes\mathcal K$ with the
+Euclidean operator norm. For $K\subseteq I$, the conditional expectation
+$E_K$ retains the sites in $K$ and averages those in $I\setminus K$.
 
 \subsection{Localized square-root channels}
 
@@ -36,7 +36,9 @@ in $K$ and averages the sites in $I\setminus K$.
         G_K & =(\mathbb 1-k_K)^{1/2}, & R_K & =k_K^{1/2}.
         \label{eq:al_shell_local_roots}
     \end{align}
-    The full and localized channels are
+    Extending the localized channels of
+    \cite[Section~10]{OpenAI2026AreaLaw} by the identity on the
+    spectator, the full and localized channels are
     \begin{align}
         \mathcal E(B) & =\widehat G B\widehat G+\widehat R B\widehat R,
         \label{eq:al_shell_full_channel}
@@ -46,11 +48,8 @@ in $K$ and averages the sites in $I\setminus K$.
         +\widehat R_K B\widehat R_K.
         \label{eq:al_shell_local_channel}
     \end{align}
-    In particular, $\mathcal E(B-C)=\mathcal E(B)-\mathcal E(C)$
-    and $\mathcal E_K(B-C)=\mathcal E_K(B)-\mathcal E_K(C)$ by
-    distributivity. These are the localized channels of
-    \cite[Section~10]{OpenAI2026AreaLaw}, extended by the identity on
-    the spectator.
+    By distributivity, $\mathcal E(B-C)=\mathcal E(B)-\mathcal E(C)$
+    and $\mathcal E_K(B-C)=\mathcal E_K(B)-\mathcal E_K(C)$.
 \end{definition}
 
 \begin{theorem}[Contraction of the root channels]
@@ -77,14 +76,16 @@ in $K$ and averages the sites in $I\setminus K$.
 \begin{proof}
     \leanok
     \uses{lem:al_site_expectation_order,def:al_local_root_channel}
-    The expectation preserves the interval $[0,\mathbb 1]$.
-    Thus the roots are self-adjoint and
+    Because the conditional expectation preserves the operator interval
+    $[0,\mathbb 1]$, the square roots are self-adjoint and satisfy
     $G^2+R^2=\mathbb 1=G_K^2+R_K^2$.
-    The map $V\psi=\widehat G\psi\oplus\widehat R\psi$ is an
-    isometry and $\mathcal E(B)=V^\dagger(B\oplus B)V$, giving
-    (\ref{eq:al_shell_full_contraction}). The same argument for
-    $G_K,R_K$ gives~(\ref{eq:al_shell_local_contraction}). Finally,
-    $\|\mathcal E_K(B)-B\|\le\|\mathcal E_K(B)\|+\|B\|$.
+    The map $V\psi=\widehat G\psi\oplus\widehat R\psi$ is therefore an
+    isometry with $\mathcal E(B)=V^\dagger(B\oplus B)V$, which yields
+    (\ref{eq:al_shell_full_contraction}). The same factorization for
+    $G_K$ and $R_K$ gives~(\ref{eq:al_shell_local_contraction}), and the
+    triangle inequality
+    $\|\mathcal E_K(B)-B\|\le\|\mathcal E_K(B)\|+\|B\|$ gives the third
+    bound.
 \end{proof}
 
 \begin{theorem}[Channel error from localization of the constraint]
@@ -113,27 +114,28 @@ in $K$ and averages the sites in $I\setminus K$.
     \leanok
     \uses{lem:al_site_expectation_order,def:al_local_root_channel}
     All four roots in~(\ref{eq:al_shell_full_roots}) and
-    (\ref{eq:al_shell_local_roots}) have norm at most one.
-    The square-root H\"older inequality gives
+    (\ref{eq:al_shell_local_roots}) have norm at most one, and the
+    square-root H\"older inequality gives
     $\|G-G_K\|\le\sqrt{\varepsilon_K}$ and
     $\|R-R_K\|\le\sqrt{\varepsilon_K}$.
-    For physical operators $A,A'$, expand
+    For any physical operators $A,A'$, the algebraic decomposition
     \begin{align}
         \widehat A B\widehat A-\widehat A'B\widehat A'
          & =(\widehat A-\widehat A')B\widehat A
-        +\widehat A'B(\widehat A-\widehat A'),
+        +\widehat A'B(\widehat A-\widehat A')
         \label{eq:al_shell_root_difference}
     \end{align}
+    yields the norm estimate
     \begin{align}
         \|\widehat A B\widehat A-\widehat A'B\widehat A'\|
          & \le(\|A\|+\|A'\|)\|A-A'\|\,\|B\|.
         \label{eq:al_shell_root_bound}
     \end{align}
-    Apply~(\ref{eq:al_shell_root_bound}) to $(G,G_K)$ and $(R,R_K)$
-    to obtain~(\ref{eq:al_shell_localization_error}). The triangle
-    inequality through $\mathcal E(B)$ gives
-    (\ref{eq:al_shell_two_region_error}). Since norms are nonnegative,
-    $\varepsilon_K,\varepsilon_L\ge0$.
+    Specializing~(\ref{eq:al_shell_root_bound}) to the pairs $(G,G_K)$
+    and $(R,R_K)$ establishes~(\ref{eq:al_shell_localization_error}), and
+    the triangle inequality through $\mathcal E(B)$ then gives
+    (\ref{eq:al_shell_two_region_error}), with
+    $\varepsilon_K,\varepsilon_L\ge0$ by nonnegativity of the norm.
 \end{proof}
 
 \begin{theorem}[Fixing the regional commutant and intertwining commutators]
@@ -167,14 +169,14 @@ in $K$ and averages the sites in $I\setminus K$.
          & =B(\widehat G_K^{\,2}+\widehat R_K^{\,2})=B.
         \label{eq:al_shell_commutant_fixed}
     \end{align}
-    Under the second hypothesis, move $A$ past each root to obtain
+    Under the second hypothesis, commuting $A$ past each root yields
     \begin{align}
         [A,\widehat G_K B\widehat G_K]
          & =\widehat G_K[A,B]\widehat G_K. \notag
     \end{align}
-    The same identity holds for $R_K$; their sum proves
-    (\ref{eq:al_shell_commutator}). Operators supported on disjoint
-    physical regions commute, which gives the final assertion.
+    The same identity holds for $R_K$, and summing the two relations
+    proves (\ref{eq:al_shell_commutator}). Because operators supported on
+    disjoint physical regions commute, the final assertion follows.
 \end{proof}
 
 \begin{theorem}[Oscillation outside the region]
@@ -195,8 +197,9 @@ in $K$ and averages the sites in $I\setminus K$.
         \le\|[\widehat U,B]\|\le d_y(B).
         \label{eq:al_shell_outside_commutator}
     \end{align}
-    Taking the supremum over $U$ proves the assertion, as in
-    \cite[Section~10]{OpenAI2026AreaLaw}.
+    Taking the supremum over $U$, as in
+    \cite[Section~10]{OpenAI2026AreaLaw}, yields
+    $d_y(\mathcal E_K(B))\le d_y(B)$.
 \end{proof}
 
 \subsection{Differences of successive local channels}
@@ -207,8 +210,9 @@ in $K$ and averages the sites in $I\setminus K$.
     \lean{TNLean.PEPS.AreaLaw.localRootChannelShell,
         TNLean.PEPS.AreaLaw.localRootChannelShell_sub}
     \leanok
-    Let $(K_l)_{l\ge0}$ be any sequence of physical regions and put
-    $\mathcal E_l=\mathcal E_{K_l}$. Define
+    Following \cite[Section~10]{OpenAI2026AreaLaw}, for any sequence of
+    physical regions $(K_l)_{l\ge0}$ with $\mathcal E_l=\mathcal E_{K_l}$,
+    define the local channel shells by
     \begin{align}
         \Delta_0(B) & =\mathcal E_0(B)-B,
         \label{eq:al_shell_zero}
@@ -217,10 +221,9 @@ in $K$ and averages the sites in $I\setminus K$.
         \Delta_{l+1}(B) & =\mathcal E_{l+1}(B)-\mathcal E_l(B).
         \label{eq:al_shell_successor}
     \end{align}
-    Equivalently, take $\mathcal E_{-1}=\mathrm{id}$ and
-    $\Delta_l=\mathcal E_l-\mathcal E_{l-1}$, as in
-    \cite[Section~10]{OpenAI2026AreaLaw}.
-    Distributivity gives $\Delta_l(B-C)=\Delta_l(B)-\Delta_l(C)$.
+    Equivalently, $\Delta_l=\mathcal E_l-\mathcal E_{l-1}$ with
+    $\mathcal E_{-1}=\mathrm{id}$, and distributivity gives
+    $\Delta_l(B-C)=\Delta_l(B)-\Delta_l(C)$.
 \end{definition}
 
 \begin{theorem}[Norm bounds for the channel shells]
@@ -251,9 +254,9 @@ in $K$ and averages the sites in $I\setminus K$.
 \begin{proof}
     \leanok
     \uses{thm:al_root_channel_contraction,thm:al_root_channel_error}
-    Apply~(\ref{eq:al_shell_identity_bound}) to $K_0$ for the
-    zeroth shell and~(\ref{eq:al_shell_two_region_error}) to
-    $K_{l+1},K_l$ for the successor shell.
+    Evaluating~(\ref{eq:al_shell_identity_bound}) at $K_0$ bounds the
+    zeroth shell, while specializing~(\ref{eq:al_shell_two_region_error})
+    to the pair $(K_{l+1},K_l)$ bounds the successor shell.
 \end{proof}
 
 \begin{theorem}[Shells vanish on the physical regional commutant]
@@ -271,8 +274,8 @@ in $K$ and averages the sites in $I\setminus K$.
     For $l=0$, the commutant-fixing identity gives
     $\Delta_0(B)=B-B=0$. For $l=m+1$, the inclusion
     $\mathcal A_{K_m}\subseteq\mathcal A_{K_{m+1}}$ implies
-    that both $\mathcal E_m$ and $\mathcal E_{m+1}$ fix $B$.
-    Their difference therefore vanishes.
+    that both $\mathcal E_m$ and $\mathcal E_{m+1}$ fix $B$, so
+    their difference vanishes.
 \end{proof}
 
 \begin{theorem}[Physical-site oscillation bound for channel shells]
@@ -304,12 +307,14 @@ in $K$ and averages the sites in $I\setminus K$.
     \uses{thm:al_channel_shell_norm,thm:al_channel_shell_commutant,
         def:al_local_channel_shell,thm:qc_spectator_commutant,
         thm:qc_spectator_error,thm:qc_site_oscillation_bounds}
-    Fix a shell index $m$ and a nonnegative coefficient $\eta$ from
-    Theorem~\ref{thm:al_channel_shell_norm}, so
+    Following the commutant-averaging argument of
+    \cite[Section~10]{OpenAI2026AreaLaw}, let $m$ be a shell index and
+    let $\eta\ge0$ be a coefficient from
+    Theorem~\ref{thm:al_channel_shell_norm} satisfying
     $\|\Delta_m(C)\|\le\eta\|C\|$ for every $C$.
-    Average precisely the physical sites in $K_m$, leaving the
-    spectator untouched, by setting
-    $\overline B=E_{I\setminus K_m}^{\mathcal K}(B)$.
+    Averaging the physical sites in $K_m$ while leaving the spectator
+    untouched produces
+    $\overline B=E_{I\setminus K_m}^{\mathcal K}(B)$, for which
     Theorems~\ref{thm:qc_spectator_commutant} and
     \ref{thm:qc_spectator_error} give, for every
     $A\in\mathcal A_{K_m}$,
@@ -321,7 +326,7 @@ in $K$ and averages the sites in $I\setminus K$.
         \|B-\overline B\| & \le\sum_{y\in K_m}d_y(B).
         \label{eq:al_shell_averaging_error}
     \end{align}
-    Hence $\Delta_m(\overline B)=0$, and subtraction yields
+    Hence $\Delta_m(\overline B)=0$, and linearity of $\Delta_m$ yields
     \begin{align}
         \|\Delta_m(B)\|
          & =\|\Delta_m(B-\overline B)\|
@@ -329,9 +334,7 @@ in $K$ and averages the sites in $I\setminus K$.
         \le\eta\sum_{y\in K_m}d_y(B).
         \label{eq:al_shell_oscillation_bound}
     \end{align}
-    For $m=0$ use $\eta=2$. For $m=l+1$ use
+    Setting $\eta=2$ for $m=0$ and the nonnegative value
     $\eta=4(\sqrt{\varepsilon_{\rm next}}
-        +\sqrt{\varepsilon_{\rm prev}})$, which is nonnegative.
-    This is the commutant-averaging argument for the channel-shell
-    estimate in \cite[Section~10]{OpenAI2026AreaLaw}.
+        +\sqrt{\varepsilon_{\rm prev}})$ for $m=l+1$ yields both bounds.
 \end{proof}

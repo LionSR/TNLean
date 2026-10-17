@@ -23,13 +23,15 @@ fixed-point condition.
     product tensors for $\ket0$ and $\ket+$, respectively.
 \end{definition}
 
-Close the virtual indices by the trace.
-Theorem~\ref{thm:cpsv16_example_34_mpv} identifies the resulting periodic
-vector. Physical correlation independence is
-Theorem~\ref{thm:cpsv16_example_34_cid}, while
+Closing the virtual indices by the trace produces a periodic vector that
+Theorem~\ref{thm:cpsv16_example_34_mpv} identifies as
+$\ket{0}^{\otimes N}+\ket{+}^{\otimes N}$.
+Theorem~\ref{thm:cpsv16_example_34_cid} establishes physical correlation
+independence across arbitrary disjoint regions, while
 Theorem~\ref{thm:cpsv16_example_34_not_rfp} proves that the tensor is not
-a renormalization fixed point. The blocked overlap calculation is
-Theorem~\ref{thm:cpsv16_example_34_blocked_overlap}.
+a renormalization fixed point. Finally,
+Theorem~\ref{thm:cpsv16_example_34_blocked_overlap} evaluates the length-$n$
+overlap between the two product-state blocks.
 
 
 \begin{theorem}[Positive-length amplitudes]
@@ -89,15 +91,16 @@ Theorem~\ref{thm:cpsv16_example_34_blocked_overlap}.
 \begin{proof}
     \leanok
     \uses{thm:physical_blocking_isometry_iff_transfer_idempotence}
-    Let $E_{01}=\ketbra0{1}$. The transfer map obeys
+    On the matrix unit $E_{01}=\ketbra0{1}$, the transfer map satisfies
     \begin{align}
         \E_A(E_{01})   & =\frac{1}{\sqrt2}E_{01},
                        &
         \E_A^2(E_{01}) & =\frac12E_{01}.
         \notag
     \end{align}
-    Hence $\E_A^2\ne\E_A$. The equivalence between transfer idempotence and a
-    physical blocking isometry gives the second conclusion.
+    Hence $\E_A^2\ne\E_A$, and the equivalence between transfer idempotence
+    and the existence of a physical blocking isometry rules out any such
+    isometry.
 \end{proof}
 
 \begin{theorem}[Blocked product-state overlap]

@@ -1,13 +1,12 @@
 \subsection{Exact Periodic Gap in the One-Species, Zero-Phase Model}
 \label{sec:pvbs_periodic_gap}
 
-For positive real hopping $\mu$, the one-particle dispersion in
+For positive real hopping $\mu$, the zero-phase one-particle dispersion in
 \cite[Section~II, after equation~(8)]{BachmannNachtergaele2012PVBS} is
-$1-2\mu\cos(k)/(1+\mu^2)$ at zero phase. The general multi-species
-thermodynamic gap formula stated there is a conjecture. The finite-ring
-result below is a proved one-species specialization, with an explicit
-operator argument; its scope is recorded
-in~\cite{gap:bn12_pvbs_periodic_gap}.
+$1-2\mu\cos(k)/(1+\mu^2)$, whereas the general multi-species thermodynamic
+gap formula stated there is a conjecture. As recorded
+in~\cite{gap:bn12_pvbs_periodic_gap}, the finite-ring result below proves the
+one-species specialization by an explicit operator decomposition.
 
 \begin{lemma}[Cyclic site and window permutations]
     \label{lem:pvbs_cyclic_geometry}
@@ -26,10 +25,10 @@ in~\cite{gap:bn12_pvbs_periodic_gap}.
 \end{lemma}
 \begin{proof}
     \leanok
-    Transport addition through the equivalence between finite site indices
-    and the cyclic group. For the exchange identity, express each
-    transposition as two function updates and commute those updates with
-    insertion of the cyclic window.
+    Passing addition across the equivalence between finite site indices and
+    the cyclic group gives the successor formulas, and expressing each
+    transposition as two function updates that commute with window insertion
+    gives the exchange identity.
 \end{proof}
 
 \begin{lemma}[Normalized local PVBS projector]
@@ -54,7 +53,7 @@ in~\cite{gap:bn12_pvbs_periodic_gap}.
     The image of the displayed operator is orthogonal to the two-site
     vacuum-particle space, and subtracting its image from any vector leaves
     a vector in that space. Uniqueness of orthogonal projection identifies
-    the displayed operator with the actual parent interaction.
+    the displayed operator with the parent interaction.
 \end{proof}
 
 \begin{theorem}[Periodic occupation decomposition]
@@ -64,7 +63,7 @@ in~\cite{gap:bn12_pvbs_periodic_gap}.
         MPSTensor.parentHamiltonianES_pvbs_decomposition}
     \leanok
     \uses{def:pvbs_tensor, def:parent_hamiltonian_es}
-    On every ring of $N\ge2$ sites, the actual PVBS parent Hamiltonian satisfies
+    On every ring of $N\ge2$ sites, the PVBS parent Hamiltonian satisfies
     \begin{align}
         H_\mu & =\frac{2\mu}{1+\mu^2}H_1+
         \frac{(\mu-1)^2}{1+\mu^2}\mathcal N,
@@ -92,7 +91,7 @@ in~\cite{gap:bn12_pvbs_periodic_gap}.
         MPSTensor.parentHamiltonianES_pvbs_gap}
     \leanok
     \uses{def:pvbs_tensor, def:parent_hamiltonian_es}
-    For $\mu\ge0$, set $c(\mu)=(\mu-1)^2/(1+\mu^2)$.
+    For $\mu\ge0$, let $c(\mu)=(\mu-1)^2/(1+\mu^2)$.
     If $v$ has zero vacuum amplitude, then
     $\langle v,H_\mu v\rangle\ge c(\mu)\|v\|^2$.
     Consequently, for every $N\ge2$ and $v\perp\ker H_\mu$,
@@ -104,12 +103,14 @@ in~\cite{gap:bn12_pvbs_periodic_gap}.
 \begin{proof}
     \leanok
     \uses{thm:pvbs_periodic_occupation, thm:pvbs_periodic_parent}
-    The critical parent $H_1$ is positive. Every nonvacuum configuration
-    contains at least one particle, so $\langle v,\mathcal N v\rangle
-        \ge\|v\|^2$ when the vacuum coefficient vanishes. Apply
-    (\ref{eq:pvbs_periodic_number}). The vacuum belongs to the actual
-    kernel, so kernel-orthogonal vectors meet this condition. The norm
-    bound follows from Cauchy--Schwarz.
+    Because the critical parent Hamiltonian $H_1$ is positive and every
+    nonvacuum configuration contains at least one particle, any vector $v$
+    with vanishing vacuum coefficient satisfies
+    $\langle v,\mathcal N v\rangle\ge\|v\|^2$, and
+    (\ref{eq:pvbs_periodic_number}) then gives
+    $\langle v,H_\mu v\rangle\ge c(\mu)\|v\|^2$. Since the vacuum lies in
+    $\ker H_\mu$, every $v\perp\ker H_\mu$ has zero vacuum amplitude, and the
+    Cauchy--Schwarz inequality yields the norm bound.
 \end{proof}
 
 \begin{theorem}[Attainment and exact noncritical finite-ring gap]

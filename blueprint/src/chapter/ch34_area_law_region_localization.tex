@@ -38,7 +38,9 @@
     \lean{TNLean.PEPS.AreaLaw.exists_quasilocal_region_localization}
     \leanok
     \uses{def:area_law_hamiltonian,def:qc_site_expectation}
-    Fix integers $q\geq1$ and $R\geq0$, and a real number $J$.
+    To establish the operator localization estimate used in
+    \cite{OpenAI2026PolynomialPEPS}, fix integers $q\geq1$ and $R\geq0$,
+    and a real number $J$.
     There are positive constants $C,v,c$ with the following property.
     Let $\Lambda\subseteq\Z^2$ be any finite domain, and let $H$ be a
     finite-range Hamiltonian of range $R$ and term-norm bound $J$ on
@@ -50,7 +52,6 @@
         \|\tau_t(A)-E_{N_l(S)}(\tau_t(A))\|
         \leq\|A\|\min\{2,C|\Lambda|e^{v|t|-cl}\}.
     \end{align*}
-    This is the operator localization estimate used in \cite{OpenAI2026PolynomialPEPS}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{lem:quasilocal-lr,thm:qc_commutator_norm_bound,
@@ -59,10 +60,10 @@
     Let $C_0,v,c$ be the constants of Lemma~\ref{lem:quasilocal-lr}.
     If $y\notin N_l(S)$, then $N_l(y)$ is disjoint from $S$.
     For an on-site unitary $U$ at $y$, the operator
-    $E_{N_l(y)}(\tau_{-t}(U))$ therefore commutes with $A$. Put
-    $D=\tau_{-t}(U)-E_{N_l(y)}(\tau_{-t}(U))$.
-    The singleton localization estimate gives
-    $\|D\|\leq C_0e^{v|t|-cl}$, so the two commutator identities yield
+    $E_{N_l(y)}(\tau_{-t}(U))$ therefore commutes with $A$. For the
+    difference $D=\tau_{-t}(U)-E_{N_l(y)}(\tau_{-t}(U))$, the singleton
+    localization estimate gives $\|D\|\leq C_0e^{v|t|-cl}$, so the two
+    commutator identities yield
     \begin{align*}
         \|[\tau_t(A),U]\|=\|[A,D]\|
         \leq2C_0\|A\|e^{v|t|-cl}.

@@ -31,8 +31,8 @@ for it when the states of distinct blocks on $q$ sites are orthogonal
     $E_{j,k}^\dagger E_{j',k'}=\delta_{jj'}\delta_{kk'}\mathbf 1$, and let
     $\mu_{j,k}$ be nonzero weights, with at least one copy of every block. The
     direct sum with multiplicities is
-    $A^i=\sum_{j,k}\mu_{j,k}E_{j,k}A_j^iE_{j,k}^\dagger$. For $q\geq1$ put
-    $K_{j,k}=E_{j,k}\otimes E_{j,k}$,
+    $A^i=\sum_{j,k}\mu_{j,k}E_{j,k}A_j^iE_{j,k}^\dagger$. For $q\geq1$ and
+    $K_{j,k}=E_{j,k}\otimes E_{j,k}$, define
     \begin{align*}
         c_j=\Bigl(\sum_k\lvert\mu_{j,k}\rvert^{2q}\Bigr)^{1/2},\qquad
         L_j=\sum_k\frac{\overline{\mu_{j,k}^q}}{c_j}K_{j,k}.
@@ -73,7 +73,7 @@ for it when the states of distinct blocks on $q$ sites are orthogonal
     $q\geq1$ is a direct sum, so $B=\sum_{j,k}\mu_{j,k}^qB_jK_{j,k}^\dagger$ and
     $\phi_N(A)=\sum_{j,k}\mu_{j,k}^N\phi_N(A_j)$. Grouping the copies of each
     block gives $B=\sum_jc_jB_jL_j^\dagger$, since
-    $c_j\,\mu_{j,k}^q/c_j=\mu_{j,k}^q$. Moreover
+    $c_j\,\mu_{j,k}^q/c_j=\mu_{j,k}^q$. Also
     $L_j^\dagger L_{j'}=\sum_{k,k'}(\mu_{j,k}^q/c_j)
         (\overline{\mu_{j',k'}^q}/c_{j'})K_{j,k}^\dagger K_{j',k'}$, which is
     $\sum_k\lvert\mu_{j,k}\rvert^{2q}/c_j^2=1$ times the identity for $j=j'$ and
@@ -101,15 +101,15 @@ for it when the states of distinct blocks on $q$ sites are orthogonal
     not all zero, the source's coefficients are
     $\alpha_j=\beta_j/\bigl(\sum_l\lvert\beta_l\rvert^2\bigr)^{1/2}$; if all
     $\beta_j$ vanish these coefficients are undefined.
-    It is obtained from the corrected block form of
-    Theorem~\ref{thm:ldp_repeated_block_polar} by replacing each $P_j$ by its
-    fixed point, as \cite[eq.~(S7)]{Malz2024Preparation} does with the printed
-    block form. The weights are those of the source. The isometry $L_j$ acts
-    on the two legs of each site, so for a repeated block the state
+    Replacing each $P_j$ in the corrected block form of
+    Theorem~\ref{thm:ldp_repeated_block_polar} by its fixed point, just as
+    \cite[eq.~(S7)]{Malz2024Preparation} does with the printed block form,
+    yields this state with the weights of the source. Because the isometry
+    $L_j$ acts on the two legs of each site, for a repeated block the state
     $L_j^{\otimes M}\ket{\Omega_j}$ is not a product of nearest-neighbour pairs
-    of the full bond space; for multiplicity one and $\mu_j>0$ it is the state
-    of Definition~\ref{def:ldp_non_normal_fixed_point}
-    \cite{gap:mswc24_repeated_block_corrected_state}.
+    of the full bond space; for multiplicity one and $\mu_j>0$, as recorded in
+    \cite{gap:mswc24_repeated_block_corrected_state}, it reduces to the state
+    of Definition~\ref{def:ldp_non_normal_fixed_point}.
 \end{definition}
 
 \begin{theorem}[Approximation error for orthogonal blocks with multiplicities]
@@ -135,11 +135,12 @@ for it when the states of distinct blocks on $q$ sites are orthogonal
         \varepsilon(\widetilde\phi_N,\phi_N) & \leq C'y,        &
         \varepsilon(\widetilde\phi_N,\phi_N) & \leq Cy\,e^{Cy}.
     \end{align*}
-    This is \cite[Lemma~1$'$(ii)]{Malz2024Preparation} for the corrected
-    approximating state, with arbitrary multiplicities and complex weights,
-    restricted to blocks whose $q$-site states are orthogonal, for $0<\gamma<1$ in
-    place of $0<\gamma<1/2$, and without the condition $q=o(N)$
-    \cite{gap:mswc24_repeated_block_corrected_state,gap:mswc24_block_form_mixed_overlap}.
+    Relative to \cite[Lemma~1$'$(ii)]{Malz2024Preparation} and
+    \cite{gap:mswc24_repeated_block_corrected_state,gap:mswc24_block_form_mixed_overlap},
+    this establishes the bound for the corrected approximating state with
+    arbitrary multiplicities and complex weights, restricted to blocks whose
+    $q$-site states are orthogonal, for $0<\gamma<1$ in place of
+    $0<\gamma<1/2$, and without the condition $q=o(N)$.
     When the states are orthogonal, the corrected state is the combination
     $\sum_j\alpha_j\ket{\phi_M(V_jP_{j,\infty})}$ of the approximating states of the
     blocks.

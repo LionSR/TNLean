@@ -163,20 +163,19 @@ left-multiplied boundary comparison.
     $L_0<M$, and let $\psi\in\mathcal G_{M+1,L_0+1}(A)$ with
     $\psi=\Gamma_{M+1}(X)$. Let $R_j$ denote restriction to the first physical
     letter $j$. For every outside letter $\eta$, complementary word $\mu$, and
-    physical letter $j$, one has
+    physical letter $j$, the single-letter product form of the periodic-boundary
+    comparison in \cite[Section~IV.C, lines~2078--2079]{Cirac2021Matrix} is
     \begin{align}
         R_j\Res^{\tau^+_\eta(\mu)}_{M,L_0+1}(\psi)
          & =
         R_j\Res^{\tau^-_\eta(\mu)}_{M+1-L_0,L_0+1}(\psi).
         \notag
     \end{align}
-    This provides the single-letter product form of the periodic-boundary
-    comparison in \cite[Section~IV.C, lines~2078--2079]{Cirac2021Matrix}.
 \end{lemma}
 
 \begin{proof}
     \leanok
-    Let $Y_i(\tau)$ be the representation matrices supplied by
+    Let $Y_i(\tau)$ be the representation matrices given by
     Lemma~\ref{lem:chain_ground_space_window_witnesses}. By
     Theorem~\ref{thm:boundary_closing_right_products_chain_ground_space},
     $Y_M(\tau^+_\eta(\mu))A^j = Y_{M+1-L_0}(\tau^-_\eta(\mu))A^j$.
@@ -294,14 +293,14 @@ left-multiplied boundary comparison.
         \notag
     \end{align}
     Theorem~\ref{thm:boundary_closing_product_pointwise_compatible_boundary_assignments}
-    replaces these auxiliary conditions by the displayed boundary conditions:
+    replaces these auxiliary conditions by the displayed boundary conditions
+    for the periodic-boundary comparison:
     \begin{align}
         Y_M(\tau^{+}_{\eta}(\mu))A^jA^\sigma
          & =
-        Y_{M+1-L_0}(\tau^{-}_{\eta}(\mu))A^jA^\sigma,
+        Y_{M+1-L_0}(\tau^{-}_{\eta}(\mu))A^jA^\sigma.
         \notag
     \end{align}
-    which is the product equality needed for the periodic-boundary comparison.
 \end{proof}
 
 \begin{theorem}[Right-product equality at the periodic boundary]
@@ -315,32 +314,29 @@ left-multiplied boundary comparison.
     $\Res^{\tau}_{i,L_0+1}(\psi) = \Gamma_{L_0+1}(Y_i(\tau))$.
     If $L_0<M$, then for every letter $\eta$ used in the two boundary
     conditions, every word $\mu$ on the complementary sites, and every physical
-    letter $j$,
+    letter $j$, the two boundary matrices satisfy the one-site product equality
     \begin{align}
         Y_M(\tau^{+}_{\eta}(\mu))A^j
          & =
         Y_{M+1-L_0}(\tau^{-}_{\eta}(\mu))A^j.
         \notag
     \end{align}
-    This is the one-site product equality used to compare the two boundary
-    matrices in the periodic-boundary comparison.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    Fix $j$ and set
+    For fixed $j$, the difference
     \begin{align}
         Z_j
          & =
         Y_M(\tau^{+}_{\eta}(\mu))A^j
         -
-        Y_{M+1-L_0}(\tau^{-}_{\eta}(\mu))A^j.
+        Y_{M+1-L_0}(\tau^{-}_{\eta}(\mu))A^j
         \notag
     \end{align}
-    Theorem~\ref{thm:boundary_closing_word_equation_chain_ground_space}
-    gives, after subtracting the two sides,
-    $Z_jA^\sigma=0$ for every word $\sigma$ of length $L_0$. Since $A$ is
-    $L_0$-block-injective,
+    satisfies $Z_jA^\sigma=0$ for every word $\sigma$ of length $L_0$ by
+    Theorem~\ref{thm:boundary_closing_word_equation_chain_ground_space}. Since
+    $A$ is $L_0$-block-injective,
     $\spn\{A^\sigma:|\sigma|=L_0\} = \MD$.
     Applying Lemma~\ref{lem:padded_complement_annihilation} gives $Z_j=0$, hence
     \begin{align}
@@ -391,10 +387,9 @@ left-multiplied boundary comparison.
         \end{cases}
         \notag
     \end{align}
-    Then the two families agree on these two boundary conditions:
+    Then the two families satisfy the boundary-matrix comparison required for
+    equality of the two restrictions crossing the periodic cut:
     $Y^{+}_{\tau^{+}_{\eta}(\mu)} = Y^{-}_{\tau^{-}_{\eta}(\mu)}$.
-    This is the boundary-matrix comparison required for equality of the two
-    restrictions crossing the periodic cut.
 \end{theorem}
 
 \begin{proof}
@@ -419,7 +414,7 @@ left-multiplied boundary comparison.
         Y^{-}_{\tau^{-}_{\eta}(\mu)} A^j.
         \notag
     \end{align}
-    Write $N=M+1$. The two boundary-crossing supports start at $M$ and
+    With $N=M+1$, the two boundary-crossing supports start at $M$ and
     $M+1-L_0$. Let $Y_i(\tau)$ denote the cyclic-window representation matrix
     given by Lemma~\ref{lem:chain_ground_space_window_witnesses} at the window
     beginning at $i$. The first step identifies the two abstract
@@ -464,9 +459,9 @@ left-multiplied boundary comparison.
 \begin{proof}
     \leanok
     \uses{lem:parent_cyclic_translate_append}
-    Evaluate the translated equality on a word $\beta j$, where $|\beta|=L_0$.
-    Cyclic translation exchanges the two parts of the word, and cyclicity of the
-    trace gives
+    Evaluating the translated equality on a word $\beta j$ with $|\beta|=L_0$
+    exchanges the two parts of the word under cyclic translation, and cyclicity
+    of the trace gives
     \begin{align}
         \Gamma_{L_0}(XA^j)(\beta)
          & =\tr(A^jA^\beta X)
@@ -515,9 +510,9 @@ left-multiplied boundary comparison.
 \begin{proof}
     \leanok
     \uses{lem:parent_cyclic_translate_preserves_chain_space, thm:cyclic_normal_open_chain_range_reduction, thm:full_ring_boundary_intertwines_step, thm:parent_cyclic_translate_add, thm:ground_space_map_injective_blk, thm:wordspan_blk_inj_succ, lem:boundary_matrix_commutes_long_words}
-    Write $s$ for the cut shift by $L_0$ and $Y_i$ for the boundary matrix of
+    Let $s$ denote the cut shift by $L_0$ and $Y_i$ the boundary matrix of
     the translated state at cut $i$. Translation invariance of the chain space,
-    the cyclic open-chain reduction, and the composition law supply compatible
+    the cyclic open-chain reduction, and the composition law yield compatible
     matrices at successive cuts. Theorem~\ref{thm:full_ring_boundary_intertwines_step}
     gives the single-letter comparison, and induction on the word $w$ gives
     \begin{align}

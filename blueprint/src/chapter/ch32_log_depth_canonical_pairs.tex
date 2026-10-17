@@ -1,4 +1,4 @@
-\subsection{The actual canonical block pairs}
+\subsection{Canonical block pairs}
 
 \begin{definition}[Normalized faithful block fixed points]
     \label{def:ldp_canonical_block_fixed_points}
@@ -11,12 +11,11 @@
         \otimes A_j^i$ be in basis-of-normal-tensors canonical form, with each
     $A_j$ left-canonical. Let $\sigma_j$ be the unique density matrix satisfying
     $\E_{A_j}(\sigma_j)=\sigma_j$. Irreducibility implies $\sigma_j>0$.
-    Choose one retained copy $k_j$ of each block and place
+    Following \cite[eqs.~(8) and~(S7)]{Malz2024Preparation}, choosing one retained copy $k_j$ of each block and placing
     $\ket{\omega_j}=\operatorname{vec}(\sqrt{\sigma_j})$ on both virtual
-    coordinates of that copy. These are the block pairs used in
-    \cite[eqs.~(8) and~(S7)]{Malz2024Preparation}.
+    coordinates of that copy defines the canonical block pairs.
 
-    Write $E_{j,k_j}:\C^{D_j}\to\C^D$ for the corresponding coordinate inclusion.
+    With $E_{j,k_j}:\C^{D_j}\to\C^D$ denoting the corresponding coordinate inclusion:
     % Formula: omega_j = (E_{j,k_j} tensor E_{j,k_j}) vec(sqrt(sigma_j)).
     % Source: MSWC24 (8), (S2), (S7), with the specified retained copy.
     % Ink: the two E boxes embed the two block indices r,l into full bond indices R,L.
@@ -51,13 +50,13 @@
     \leanok
     \uses{def:ldp_canonical_block_fixed_points, thm:ldp_local_orthogonality,
         thm:ldp_ghz_form}
-    The actual block pairs satisfy $\langle\omega_j|\omega_{j'}\rangle
+    The block pairs satisfy $\langle\omega_j|\omega_{j'}\rangle
         =\delta_{jj'}$. Consequently $W\ket{j}=\ket{\omega_j}$ is an isometry.
 \end{theorem}
 \begin{proof}
     \leanok
-    Each diagonal inner product is $\operatorname{tr}\sigma_j=1$.
-    Distinct blocks occupy disjoint virtual coordinates.
+    Each diagonal inner product is $\operatorname{tr}\sigma_j=1$, while
+    distinct blocks occupy disjoint virtual coordinates.
 \end{proof}
 
 \begin{theorem}[Canonical copy coordinates and weights]
@@ -70,12 +69,11 @@
     \uses{def:ldp_sector_fixed_point_state, def:ldp_repeated_block_sum}
     Let $\iota_{j,k}$ include the virtual coordinates of copy $k$ of block $j$
     in the flattened canonical direct sum. Their ranges are disjoint for distinct
-    pairs $(j,k)$, and the assembled tensor satisfies
+    pairs $(j,k)$, and the canonical tensor satisfies
     \begin{align}
         A^i & =\sum_j\sum_k\mu_{j,k}\iota_{j,k}A_j^i\iota_{j,k}^{\dagger}.
     \end{align}
-    Its sector coefficient at length $N$ is exactly
-    $\beta_j=\sum_k\mu_{j,k}^N$.
+    Its sector coefficient at length $N$ is $\beta_j=\sum_k\mu_{j,k}^N$.
 
     % Formula: A^i = sum_{j,k} mu_{j,k} iota_{j,k} A_j^i iota_{j,k}^dagger.
     % Source: MSWC24 (S2), with the flattened canonical copy coordinates.
@@ -103,8 +101,8 @@
 \end{theorem}
 \begin{proof}
     \leanok
-    Expand the block-diagonal matrix as the sum of its inclusions and reindex
-    the flattened list by the pairs $(j,k)$.
+    Expanding the block-diagonal matrix as the sum of its inclusions and reindexing
+    the flattened list by the pairs $(j,k)$ yields both identities.
 \end{proof}
 
 \begin{definition}[Corrected canonical one-copy state]
@@ -120,9 +118,8 @@
         \ket{\Omega'_{\mathrm{corr}}}
          & =\sum_j\alpha'_j\bigotimes_{s=1}^M\ket{\omega_j}_{R_sL_{s+1}}.
     \end{align}
-    The coefficient correction is necessary also for multiplicity one:
-    then $\beta'_j=|\mu_j|^{qM}$
-    \cite{gap:mswc24_repeated_block_corrected_state,gap:mswc24_block_form_mixed_overlap}.
+    As recorded in \cite{gap:mswc24_repeated_block_corrected_state,gap:mswc24_block_form_mixed_overlap}, the coefficient correction is necessary even for multiplicity one, where
+    $\beta'_j=|\mu_j|^{qM}$.
 \end{definition}
 
 \begin{theorem}[Canonical GHZ form and normalization]
@@ -171,7 +168,7 @@
 \end{theorem}
 \begin{proof}
     \leanok
-    Expand the tensor power on the GHZ state. Orthonormality of the pairs gives
+    Expanding the tensor power on the GHZ state gives the bond-coordinate formula, and orthonormality of the pairs gives
     squared norm $\sum_j|\alpha'_j|^2=1$; the nonzero copy weights ensure that
     $(\beta'_j)_j$ vanishes exactly when $(\beta_j)_j$ does.
 \end{proof}
@@ -183,10 +180,10 @@
     \leanok
     \uses{def:ldp_corrected_canonical_one_copy, thm:ldp_canonical_copy_coordinates,
         lem:ldp_one_copy_state}
-    Let $q\geq1$, let $V$ be the polar factor of the actual $q$-site blocked
-    canonical tensor, and let $L_j$ be its copy isometries. Write
-    $\ket{\Omega_j}$ for the product of the unembedded pairs of $\sigma_j$ and
-    $K_{j,k_j}$ for the pair embedding on the chosen copy. Then
+    Let $q\geq1$, let $V$ be the polar factor of the $q$-site blocked
+    canonical tensor, and let $L_j$ be its copy isometries. With
+    $\ket{\Omega_j}$ denoting the product of the unembedded pairs of $\sigma_j$ and
+    $K_{j,k_j}$ the pair embedding on the chosen copy,
     \begin{align}
         V^{\otimes M}\sum_j\beta'_jK_{j,k_j}^{\otimes M}\ket{\Omega_j}
          & =V^{\otimes M}\sum_j\beta_jL_j^{\otimes M}\ket{\Omega_j}.
@@ -238,9 +235,9 @@
 \end{theorem}
 \begin{proof}
     \leanok
-    Use $VK_{j,k_j}=(\mu_{j,k_j}^q/c_j)VL_j$ and
-    $\beta'_j(\mu_{j,k_j}^q/c_j)^M=\beta_j$. The nonzero copy weights make
-    $\beta'=0$ exactly when $\beta=0$, and then both states vanish. Otherwise,
+    The relations $VK_{j,k_j}=(\mu_{j,k_j}^q/c_j)VL_j$ and
+    $\beta'_j(\mu_{j,k_j}^q/c_j)^M=\beta_j$ yield the unnormalized identity. The nonzero copy weights make
+    $\beta'=0$ exactly when $\beta=0$, in which case both states vanish. Otherwise,
     with $\lVert\beta\rVert=(\sum_l|\beta_l|^2)^{1/2}$ and likewise for $\beta'$,
     \begin{align*}
         V^{\otimes M}\sum_j\alpha'_jK_{j,k_j}^{\otimes M}\ket{\Omega_j}

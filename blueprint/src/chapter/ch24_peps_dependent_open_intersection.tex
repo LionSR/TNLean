@@ -161,10 +161,10 @@ steps of \cite[Theorem~5.4]{Schuch2010PEPS}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{def:peps_partial_averaging_site}
-    Expand (\ref{eq:peps_partial_average}) independently at every vertex,
-    obtaining the scalar $|G|^{-n}$ and one assignment $q$ of group labels.
-    Contracting the fixed incident actions gives $B_e^f(q)$ on each bond.
-    Applying the site-to-bond permutation gives the last formula, and the
+    Expanding (\ref{eq:peps_partial_average}) independently at every vertex
+    produces the scalar $|G|^{-n}$ and one assignment $q$ of group labels, and
+    contracting the fixed incident actions gives $B_e^f(q)$ on each bond.
+    Applying the site-to-bond permutation yields the last formula, while the
     definition of $b_B$ gives the vector equality.
 \end{proof}
 
@@ -184,10 +184,10 @@ steps of \cite[Theorem~5.4]{Schuch2010PEPS}.
 \begin{proof}\leanok
     \uses{thm:peps_partial_network_expansion}
     In (\ref{eq:peps_partial_network_sum}), right multiplication
-    $r\mapsto rq$ is a bijection of vertex assignments. The identities
+    $r\mapsto rq$ is a bijection of vertex assignments, and the identities
     $f_v(r_vq_v)=f_v(r_v)f_v(q_v)$ and
-    $(ab)^{-1}=b^{-1}a^{-1}$ identify the transformed summands.
-    For representation-matrix insertions, use multiplicativity of $U_e$.
+    $(ab)^{-1}=b^{-1}a^{-1}$ identify the transformed summands;
+    multiplicativity of $U_e$ specializes this to representation-matrix insertions.
 \end{proof}
 
 \begin{theorem}[Uncut bonds retain representation support under partial averaging]%
@@ -211,8 +211,8 @@ steps of \cite[Theorem~5.4]{Schuch2010PEPS}.
     (\ref{eq:peps_partial_network_sum}) leaves a scalar multiple of this
     matrix, hence a vector in $\operatorname{im}F_e$.
     Linearity preserves this membership through the sum over $q$.
-    Finally expand an arbitrary cut boundary in coordinate vectors.
-    Their networks have matrix units on $C$ and identities outside $C$,
+    Expanding an arbitrary cut boundary in coordinate vectors produces
+    networks with matrix units on $C$ and identities outside $C$,
     so the first assertion applies to every column of the cut map.
 \end{proof}
 
@@ -251,10 +251,10 @@ steps of \cite[Theorem~5.4]{Schuch2010PEPS}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{def:peps_open_bond_generators}
-    In the first case, extend any coefficient function on $G$ by zero on
-    $X_e\times X_e$. The resulting column combination is unchanged.
-    In the second case, for a matrix $x$ take coefficient zero at every
-    $[g]$ and coefficient $x_{a,b}$ at $[a,b]$; its image is
+    In the first case, extending any coefficient function on $G$ by zero on
+    $X_e\times X_e$ leaves the column combination unchanged.
+    In the second case, assigning a matrix $x$ coefficient zero at every
+    $[g]$ and coefficient $x_{a,b}$ at $[a,b]$ produces the image
     $\sum_{a,b}x_{a,b}E_{a,b}=x$.
 \end{proof}
 
@@ -277,11 +277,10 @@ steps of \cite[Theorem~5.4]{Schuch2010PEPS}.
 \begin{proof}\leanok
     \uses{thm:peps_open_bond_ranges}
     Every slice of $\mathcal R\psi$ belongs to
-    $\operatorname{im}\widetilde F_e^C$: use the hypothesis for interior
-    bonds and the full-range assertion for exterior bonds.
-    The product-range criterion gives
-    $\mathcal R\psi=(\bigotimes_e\widetilde F_e^C)c$.
-    Expand this product map and undo $\mathcal R$ to obtain
+    $\operatorname{im}\widetilde F_e^C$ by the interior-bond hypothesis
+    and the full-range assertion for exterior bonds, so the product-range
+    criterion gives $\mathcal R\psi=(\bigotimes_e\widetilde F_e^C)c$.
+    Expanding this product map and undoing $\mathcal R$ yields
     (\ref{eq:peps_open_bond_expansion}).
 \end{proof}
 
@@ -296,9 +295,9 @@ steps of \cite[Theorem~5.4]{Schuch2010PEPS}.
     then $\mathcal N_A(B)\in\mathcal S_{A,C}$.
 \end{theorem}
 \begin{proof}\leanok
-    Take the boundary
-    $M_B(\eta)=\prod_{e\in C}B_e(\eta_{e,+},\eta_{e,-})$.
-    Its contraction equals $\mathcal N_A(B)$ because every remaining
+    With the boundary
+    $M_B(\eta)=\prod_{e\in C}B_e(\eta_{e,+},\eta_{e,-})$,
+    the cut contraction equals $\mathcal N_A(B)$ because every remaining
     bond already carries the identity.
 \end{proof}
 
@@ -311,10 +310,10 @@ steps of \cite[Theorem~5.4]{Schuch2010PEPS}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_network_in_open_cut}
-    Expand $\mathcal S_{A,C}$ in fixed-boundary columns. Each column is
-    a network of matrix units on $C$ and identities elsewhere. It therefore
-    has identity insertions outside $C'$ and belongs to
-    $\mathcal S_{A,C'}$. Taking linear spans proves the inclusion.
+    Expanding $\mathcal S_{A,C}$ in fixed-boundary columns expresses each
+    column as a network of matrix units on $C$ and identities elsewhere,
+    which therefore has identity insertions outside $C'$ and belongs to
+    $\mathcal S_{A,C'}$; taking linear spans proves the inclusion.
 \end{proof}
 
 \begin{theorem}[Physical images of cut ranges]%
@@ -367,13 +366,13 @@ steps of \cite[Theorem~5.4]{Schuch2010PEPS}.
     \uses{thm:peps_average_bond_product,
         thm:peps_partial_vertex_gauge,
         thm:peps_network_in_open_cut}
-    Read $p_e=g$ from a label $[g]$ and $p_e=1$ from a matrix-unit
-    label. Averaging the bond product gives its network with tensors
-    $A^f$. Choose $q$ from (\ref{eq:peps_open_remove_labels}) and apply
-    its vertex gauge. On every interior bond the transformed matrix is
-    $U_e(f_{h(e)}(q_{h(e)})p_ef_{t(e)}(q_{t(e)})^{-1})=I$.
-    The exterior matrices remain unrestricted. The network therefore
-    belongs to $\mathcal S_{A^f,C}$.
+    Reading $p_e=g$ from a label $[g]$ and $p_e=1$ from a matrix-unit
+    label, averaging the bond product gives its network with tensors
+    $A^f$. Applying the vertex gauge for $q$ from
+    (\ref{eq:peps_open_remove_labels}) turns the matrix on every interior
+    bond into $U_e(f_{h(e)}(q_{h(e)})p_ef_{t(e)}(q_{t(e)})^{-1})=I$
+    while leaving the exterior matrices unrestricted, placing the network
+    in $\mathcal S_{A^f,C}$.
 \end{proof}
 
 \begin{theorem}[Intersection of partially averaged open cut ranges]%
@@ -675,17 +674,16 @@ outside $\Omega$ as part of one joint boundary.
     \uses{def:peps_reconstructed_cut_boundary,
         def:peps_lifted_cut,
         def:peps_replace_outside_physical}
-    Expand the left side as a sum over endpoint labels $\beta$, old
-    outside virtual labels $\xi$, and outside physical labels $\tau$.
-    Exchange the outside part of $\beta$ with $\xi$; this is an
-    involution of the two configuration sets. It keeps every inside
-    local configuration unchanged and replaces each outside local
-    configuration by $\xi_v$. Every uncut bond has both ends in
-    $\Omega$, so $w_C(\beta)$ is unchanged by this exchange. The
-    argument of $M$ becomes $r_C\beta$.
+    Expanding the left side as a sum over endpoint labels $\beta$, old
+    outside virtual labels $\xi$, and outside physical labels $\tau$,
+    we exchange the outside part of $\beta$ with $\xi$. This involution
+    of the two configuration sets keeps every inside local configuration
+    unchanged, replaces each outside local configuration by $\xi_v$,
+    leaves $w_C(\beta)$ invariant because every uncut bond has both ends in
+    $\Omega$, and turns the argument of $M$ into $r_C\beta$.
 
-    Split the tensor product over vertices into inside and outside factors.
-    Summing each new outside virtual index gives
+    Splitting the tensor product over vertices into inside and outside factors
+    and summing each new outside virtual index then gives
     \begin{align}
         (T_vL_v)_{\sigma_v,\tau_v}
         =\sum_{\eta\in\mathcal X_v}A_v(\eta,\sigma_v)L_v(\eta,\tau_v).
@@ -769,7 +767,7 @@ outside $\Omega$ as part of one joint boundary.
         =\mathcal S_{A,C}\cap\mathcal S_{A,E}.
         \label{eq:peps_two_lifted_intersection}
     \end{align}
-    The boundary tensors witnessing the two memberships are independent.
+    The boundary tensors realizing the two memberships are independent.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_lifted_cover_support,
@@ -805,17 +803,17 @@ outside $\Omega$ as part of one joint boundary.
 \begin{proof}\leanok
     \uses{thm:peps_g_injective_left_inverse,
         thm:peps_lifted_cut_intersection}
-    Apply (\ref{eq:peps_lifted_intersection}) to replace the lifted
-    intersection by the intersection of full cut ranges. Choose
+    Replacing the lifted intersection by the intersection of full cut
+    ranges via (\ref{eq:peps_lifted_intersection}), we choose $L_v$ with
     $L_vT_v=P_v$ and set $\mathcal L=\bigotimes_vL_v$.
-    The local identities $L_vT_v=P_v$ and $T_vP_v=T_v$ give, for every
-    cut $C$ and the same boundary $M$,
+    Because the local identities $L_vT_v=P_v$ and $T_vP_v=T_v$ give
     $\mathcal L\mathcal C_{A,C}(M)=\mathcal C_{A^0,C}(M)$ and
-    $\mathcal T\mathcal C_{A^0,C}(M)=\mathcal C_{A,C}(M)$.
-    Thus $\mathcal L$ sends every vector in the full intersection to the
-    canonical intersection. Choosing one cut gives its recovery under
-    $\mathcal T$, while the second identity gives the reverse inclusion.
-    This proves (\ref{eq:peps_lifted_canonical_intersection}).
+    $\mathcal T\mathcal C_{A^0,C}(M)=\mathcal C_{A,C}(M)$ for every
+    cut $C$ and boundary $M$, the map $\mathcal L$ sends every vector in
+    the full intersection to the canonical intersection; choosing one cut
+    recovers the vector under $\mathcal T$, while the second identity
+    gives the reverse inclusion, establishing
+    (\ref{eq:peps_lifted_canonical_intersection}).
 \end{proof}
 
 \begin{theorem}[A common inverse realizes canonical membership and recovery]%
@@ -845,15 +843,15 @@ outside $\Omega$ as part of one joint boundary.
 \begin{proof}\leanok
     \uses{thm:peps_g_injective_left_inverse,
         thm:peps_lifted_cut_intersection}
-    By Theorem~\ref{thm:peps_g_injective_left_inverse}, choose
-    $L_v$ with $L_vT_v=P_v$. Applying their product to a cut contraction
-    replaces each local map $T_v$ by $P_v$ and retains the same joint
+    Theorem~\ref{thm:peps_g_injective_left_inverse} provides $L_v$ with
+    $L_vT_v=P_v$, and applying their product to a cut contraction
+    replaces each local map $T_v$ by $P_v$ while retaining the same joint
     boundary, proving (\ref{eq:peps_lifted_inverse_boundary}) for all cuts
     at once.
-    By (\ref{eq:peps_lifted_intersection}), the vector $\psi$ has a
-    full boundary $M_i$ at each cut $C_i$. Applying
-    (\ref{eq:peps_lifted_inverse_boundary}) at every $i$ proves
-    canonical membership. Choose any one $i$ from the nonempty family
-    and recover its original contraction using $T_vP_v=T_v$ at every
-    vertex. This proves $\mathcal T\mathcal L\psi=\psi$.
+    By (\ref{eq:peps_lifted_intersection}), the vector $\psi$ admits a
+    full boundary $M_i$ at each cut $C_i$, so applying
+    (\ref{eq:peps_lifted_inverse_boundary}) at every $i$ establishes
+    canonical membership, and choosing any $i$ from the nonempty family
+    recovers the original contraction $\mathcal T\mathcal L\psi=\psi$
+    via $T_vP_v=T_v$ at every vertex.
 \end{proof}

@@ -172,11 +172,11 @@
 
 \begin{proof}\leanok
     \uses{lem:mpdo_sitewise_physical_coordinate_congruence}
-    Apply the retained physical coisometry to the positive one-site operator.
-    For a positive diagonal coordinate $q$ of the multiplicity matrix
-    $\mu_\gamma$, the corresponding principal submatrix is
-    $(\mu_\gamma)_{q,q}T_\gamma$. Principal submatrices remain positive
-    semidefinite, and $(\mu_\gamma)_{q,q}>0$; division by this scalar proves
+    Applying the retained physical coisometry to the positive one-site
+    operator, the principal submatrix at a positive diagonal coordinate $q$
+    of the multiplicity matrix $\mu_\gamma$ is $(\mu_\gamma)_{q,q}T_\gamma$.
+    Since principal submatrices remain positive semidefinite and
+    $(\mu_\gamma)_{q,q}>0$, division by this scalar proves
     $T_\gamma\succeq0$.
 \end{proof}
 
@@ -200,8 +200,9 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    Sum the two diagonal physical letters $A^{(0,0)}+A^{(1,1)}$ and then use
-    $B^v=XA^vX^{-1}$ with $X=\diag(2,1)$.
+    Summing the two diagonal physical letters $A^{(0,0)}+A^{(1,1)}$ gives
+    $T_A$, and conjugating by $X=\diag(2,1)$ via $B^v=XA^vX^{-1}$ gives
+    $T_B$.
 \end{proof}
 
 \begin{lemma}[The physical traces of the nonunitary similarity pair are not positive semidefinite]%

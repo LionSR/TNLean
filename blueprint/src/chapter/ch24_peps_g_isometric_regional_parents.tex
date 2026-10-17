@@ -9,7 +9,7 @@ on $\operatorname{ran}E_v$: for some $c_v>0$,
 $T_v^*T_v=c_vE_v$. This is the regular-representation condition of
 \cite[Definition~6.1]{Schuch2010PEPS}, allowing a positive normalization.
 Write $T_R=\bigotimes_{v\in R}T_v$ and
-$\mathcal S_R$ for the actual open-boundary PEPS range on $R$.
+$\mathcal S_R$ for the open-boundary PEPS range on $R$.
 The physical local interaction is $h_R=I-\Pi_{\mathcal S_R}$.
 
 \begin{definition}[Coordinate orthogonal projectors]%
@@ -41,8 +41,8 @@ The physical local interaction is $h_R=I-\Pi_{\mathcal S_R}$.
     projector with range $S$ equals $\Pi_S$.
 \end{theorem}
 \begin{proof}\leanok
-    Apply the fixed-vector identity to each column of $Q$.
-    An idempotent fixes its range. For orthogonal projectors with equal
+    Applying the fixed-vector identity to each column of $Q$ gives $PQ=Q$,
+    and an idempotent fixes its range. For orthogonal projectors with equal
     ranges, $PQ=Q$ and $QP=P$; taking adjoints in the first identity gives
     $QP=Q$, hence $P=Q$.
 \end{proof}
@@ -64,7 +64,7 @@ The physical local interaction is $h_R=I-\Pi_{\mathcal S_R}$.
     $K\otimes I_{U\setminus R}$.
 \end{definition}
 
-In the following statement and proof, we write $X$ for the region $R$ of
+In the following statement and proof, $X$ denotes the region $R$ of
 Definition~\ref{def:peps_regional_operator_extension}, matching the patch
 notation below.
 
@@ -178,11 +178,11 @@ notation below.
     $(E_XKE_X^*)\otimes I'_C$, proving
     (\ref{eq:peps_lift_basis_relabelling}). In the partial trace,
     $E_C$ only permutes the summed complementary configuration, while
-    $E_X$ relabels the two retained indices. This gives
-    (\ref{eq:peps_marginal_basis_relabelling}) for the same vector $\xi$.
-    These are the coordinate identities for the
+    $E_X$ relabels the two retained indices, giving
+    (\ref{eq:peps_marginal_basis_relabelling}) for the same vector $\xi$
+    under the
     \href{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex\#L80-L99}{identity-extension and partial-trace conventions}
-    used by the regularized patch problem.
+    of the regularized patch problem.
 \end{proof}
 
 \begin{theorem}[Algebra and slices of regional extensions]%
@@ -210,13 +210,13 @@ notation below.
     are extensions of operators on $R\cup S$.
 \end{theorem}
 \begin{proof}\leanok
-    Multiply the coefficient formula in
-    Definition~\ref{def:peps_regional_operator_extension} and sum over the
-    middle coordinates; the complementary Kronecker delta leaves one slice.
+    Multiplying the coefficient formula in
+    Definition~\ref{def:peps_regional_operator_extension} and summing over the
+    middle coordinates leaves one slice from the complementary Kronecker delta.
     For $R\subseteq U$, the two delta conditions on $U\setminus R$ and
-    $V\setminus U$ combine to equality on $V\setminus R$.
-    Extend both operators first to $R\cup S$ and then take their product,
-    difference, or commutator there.
+    $V\setminus U$ combine to equality on $V\setminus R$, so
+    extending both operators first to $R\cup S$ expresses their product,
+    difference, or commutator as an extension from $R\cup S$.
 \end{proof}
 
 \begin{theorem}[Continuity and norm bound for regional extensions]%
@@ -275,12 +275,12 @@ notation below.
     A product $F_R$ of nonzero site matrices is nonzero, including $R=\varnothing$.
 \end{theorem}
 \begin{proof}\leanok
-    Split the product of entries over $R$ and its complement to obtain
-    (\ref{eq:peps_product_split}). Tensoring the regional intertwining
+    Splitting the product of entries over $R$ and its complement gives
+    (\ref{eq:peps_product_split}), and tensoring the regional intertwining
     identity with $F_{V\setminus R}$ proves its global form.
-    Choose a nonzero entry $L_{ij}$ and cancel it from each entry
-    $M_{ab}L_{ij}=0$. Choosing one nonzero entry of every $F_v$ gives
-    a nonzero product entry; the empty product is $1$.
+    Cancelling a nonzero entry $L_{ij}$ from each entry
+    $M_{ab}L_{ij}=0$ gives $M=0$, while choosing one nonzero entry of every $F_v$ gives
+    a nonzero product entry (with the empty product equal to $1$).
 \end{proof}
 
 \begin{theorem}[Single-coordinate generation and fixed spaces]%
@@ -340,7 +340,7 @@ notation below.
     regional action unchanged.
 \end{definition}
 
-\begin{theorem}[The commuting product is the actual range projector]%
+\begin{theorem}[The commuting product is the regional range projector]%
     \label{thm:peps_regular_actual_projector}
     \lean{TNLean.PEPS.mem_regularGlobalRegionRange_iff_invariant_flat,
         TNLean.PEPS.regularGlobalRegionConstraint_mulVec_eq_self_iff_mem_range,
@@ -371,15 +371,15 @@ notation below.
         thm:peps_regional_extension_algebra,
         thm:peps_projection_range_unique,
         thm:peps_ambient_regional_constraint_commute}
-    Apply the regional invariant-and-flat characterization to each slice.
-    The actions in Definition~\ref{def:peps_ambient_regular_range} leave that
+    The regional invariant-and-flat characterization applies to each slice because
+    the actions in Definition~\ref{def:peps_ambient_regular_range} leave that
     slice's exterior label unchanged. The fixed space of the commuting product
     $Q_R$ is therefore exactly $\widehat{\mathcal S}_R^0$.
     Both $Q_R$ and $\widehat{P_R^0}$ are orthogonal projections onto this
     subspace, so they are equal. Commutation of $Q_R,Q_S$ gives the last identity.
 \end{proof}
 
-\begin{theorem}[Projectors transported by scaled partial isometries]%
+\begin{theorem}[Projectors conjugated by scaled partial isometries]%
     \label{thm:peps_scaled_partial_isometry_projector_transport}
     \lean{TNLean.PEPS.isStarProjection_smul_mul_mul_conjTranspose_of_gram,
         TNLean.PEPS.smul_mul_mul_conjTranspose_mul_of_gram,
@@ -427,10 +427,10 @@ notation below.
     $\mathcal S_R=T_R(\mathcal S_R^0)$.
     Every vector in $\mathcal S_R^0$ is fixed by the product of local regular
     averages, proving $E_RP_R^0=P_R^0$; adjoints give $P_R^0E_R=P_R^0$.
-    Tensor the local Gram identities and apply
-    Theorem~\ref{thm:peps_scaled_partial_isometry_projector_transport}.
-    The resulting orthogonal projector has range $\mathcal S_R$, so uniqueness
-    identifies it with $P_R$ and gives (\ref{eq:peps_physical_projector_transport}).
+    Tensoring the local Gram identities and applying
+    Theorem~\ref{thm:peps_scaled_partial_isometry_projector_transport} produces an
+    orthogonal projector with range $\mathcal S_R$, which uniqueness
+    identifies with $P_R$ to give (\ref{eq:peps_physical_projector_transport}).
 \end{proof}
 
 \begin{theorem}[Nonzero physical site images]%
@@ -494,9 +494,9 @@ notation below.
     \uses{thm:peps_regional_product_cancellation,thm:peps_regional_extension_algebra}
     Taking adjoints gives right support. Every partial site product on $R$
     fixes $J_R$, hence fixes $H_R$ on both sides.
-    Extend that equality through the complementary product to obtain
-    commutation with $M_U$. Use $M_{R\cup S}=M_RM_S$, commute $M_R$
-    past $\widehat H_S$, and absorb each regional factor.
+    Extending that equality through the complementary product gives
+    commutation with $M_U$; writing $M_{R\cup S}=M_RM_S$, commuting $M_R$
+    past $\widehat H_S$, and absorbing each regional factor gives the product identity.
 \end{proof}
 
 \begin{theorem}[Commutation through rectangular product maps]%
@@ -558,16 +558,15 @@ notation below.
         TNLean.PEPS.regularIsometric_canonicalRegionParentInteractions_commute}
     \leanok
     \uses{thm:peps_canonical_complement_projection}
-    For locally regular $G$-isometric tensors on a finite simple graph,
-    the actual canonical regional range projectors and parent interactions
-    commute for arbitrary regions $R,S\subseteq V$:
+    In the finite-simple-graph form of the commuting-parent conclusion
+    of \cite[Theorem~6.12]{Schuch2010PEPS}, locally regular $G$-isometric tensors have
+    commuting canonical regional range projectors and parent interactions
+    for arbitrary (possibly overlapping) regions $R,S\subseteq V$:
     \begin{align}
         [\widehat P_R,\widehat P_S] & =0, &
         [\widehat h_R,\widehat h_S] & =0.
         \label{eq:peps_physical_parent_commutation}
     \end{align}
-    This is the finite-simple-graph form of the commuting-parent conclusion
-    of \cite[Theorem~6.12]{Schuch2010PEPS}. Regions may overlap arbitrarily.
     Periodic presentations with self-loops or parallel bonds require their
     own contraction conventions.
 \end{theorem}
@@ -575,12 +574,12 @@ notation below.
     \uses{thm:peps_nonzero_site_images,thm:peps_physical_regional_projector,
         thm:peps_regular_actual_projector,thm:peps_product_transport_commutation,
         thm:peps_canonical_complement_projection}
-    Local $G$-isometry supplies $L_v,J_v$ with $T_vL_v=J_v\ne0$ and
-    $J_RP_R=P_R$. Equation~(\ref{eq:peps_physical_projector_transport})
+    Local $G$-isometry yields $L_v,J_v$ with $T_vL_v=J_v\ne0$ and
+    $J_RP_R=P_R$, equation~(\ref{eq:peps_physical_projector_transport})
     gives $P_RT_R=T_RP_R^0$, and
     (\ref{eq:peps_actual_virtual_projection}) gives commuting virtual extensions.
-    Apply Theorem~\ref{thm:peps_product_transport_commutation} with $A_v=T_v$.
-    Finally $[I-\widehat P_R,I-\widehat P_S]=[\widehat P_R,\widehat P_S]=0$.
+    Theorem~\ref{thm:peps_product_transport_commutation} with $A_v=T_v$ then gives $[\widehat P_R,\widehat P_S]=0$,
+    so $[I-\widehat P_R,I-\widehat P_S]=[\widehat P_R,\widehat P_S]=0$.
     The complementary-factor argument applies in the full physical space,
     even when the site maps have proper images.
 \end{proof}

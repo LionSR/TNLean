@@ -47,17 +47,17 @@ and as asymmetric compressions of stacked tensors.
     Its two target tensors are $2T$ and $2\eta T$.
 \end{definition}
 
-Close the virtual bonds by the ordinary trace on a ring of $N>0$ sites,
-without dividing by the bond dimension. The resulting operator is
+Closing the virtual bonds by the ordinary trace on a ring of $N>0$ sites,
+without dividing by the bond dimension, defines the operator
 $K_N(a,b)=\tr(W^{a_0b_0}\cdots W^{a_{N-1}b_{N-1}})$.
-Its normalization relative to the source defect follows from
-Theorem~\ref{thm:asymex_kw_kernel} and Corollary~\ref{cor:asymex_kw_square}.
+Theorem~\ref{thm:asymex_kw_kernel} and Corollary~\ref{cor:asymex_kw_square}
+determine its normalization relative to the source defect.
 Theorem~\ref{thm:asymex_kw_bimodule_absorption} proves that $W$ is normal,
 and Theorem~\ref{thm:asymex_kw_normal} that $T$ and $\eta T$ are;
 Corollary~\ref{cor:asymex_kw_exchange} gives the exchange of Ising couplings,
-and Lemma~\ref{lem:asymex_kw_states} describes its action on product and
-GHZ states. The compression of its square is
-Theorem~\ref{thm:asymex_kw_compression}.
+Lemma~\ref{lem:asymex_kw_states} describes the action on product and
+GHZ states, and Theorem~\ref{thm:asymex_kw_compression} establishes the
+compression of the squared tensor.
 
 Consider $N\geq1$ qubits on a periodic chain, with sites
 $I_N=\{0,\ldots,N-1\}$ and all site indices understood modulo $N$.
@@ -777,10 +777,10 @@ normalization on the spectral radius of a transfer map.
     \end{align}
     After clearing the denominator, these are equalities of integer
     matrices. Block diagonality gives the triangularity condition and
-    the vanishing remainder. The coordinate projections and inclusions
-    give the compression pairs by
-    Theorem~\ref{thm:asymex_explicit_gauge}; the dimension count is
-    clause (vii) of Theorem~\ref{thm:asym_multiblock}.
+    the vanishing remainder. By Theorem~\ref{thm:asymex_explicit_gauge},
+    the coordinate projections and inclusions form the compression pairs,
+    and clause (vii) of Theorem~\ref{thm:asym_multiblock} establishes
+    the dimension count.
 \end{proof}
 
 \begin{theorem}[Periodic data of the squared duality]
@@ -855,8 +855,8 @@ normalization on the spectral radius of a transfer map.
     are the corresponding column blocks of $G^{-1}$, as in
     Theorem~\ref{thm:asymex_explicit_gauge}. Each intertwining identity
     is verified by multiplying the explicit matrices and clearing the
-    denominator. The two normalizations also follow from clause (iv) of
-    Theorem~\ref{thm:asym_multiblock}.
+    denominator, while clause (iv) of Theorem~\ref{thm:asym_multiblock}
+    also yields the two normalizations.
 \end{proof}
 
 \begin{center}
@@ -1179,9 +1179,9 @@ rather than the stacked square tensor of Definition~\ref{def:asymex_kw}.
     nonzero entries lie in positions $(0,2)$ and $(3,1)$, so direct
     multiplication gives $R^iR^j=0$. The general bound in clause (vi)
     of Theorem~\ref{thm:asym_multiblock} also gives vanishing at lengths
-    at least $|S|+z=4$, where $S$ is the set of two matched slots.
-    The obstruction to a sitewise splitting is established in
-    Theorem~\ref{thm:asymex_kw_ghz_intertwiner}.
+    at least $|S|+z=4$, where $S$ is the set of two matched slots, while
+    Theorem~\ref{thm:asymex_kw_ghz_intertwiner} establishes the
+    obstruction to a sitewise splitting.
 \end{proof}
 
 A word reduction need not provide a pair of sitewise intertwiners.

@@ -106,9 +106,9 @@ $\eta\|v\|\leq\|Hv\|$ for every $v\perp\ker H$.
     \uses{thm:mpo_mixed_endpoint_projector_comparison,
         thm:mpo_mixed_reducing_sectors,
         thm:periodic-fixed-interaction-order}
-    Sum the inner row and column penalties over all nonwrapping bonds.
-    Each violated register contributes one, while each interaction bounds
-    the two penalties assigned to it. This gives
+    Summing the inner row and column penalties over all nonwrapping bonds
+    assigns a unit penalty to each violated register, while each interaction
+    bounds the two penalties assigned to it; this gives
     (\ref{eq:mpo_mixed_open_sectors}). Every row and column selector
     reduces each overlapping interaction, so their active product also
     commutes with the sum. The orthogonal decomposition
@@ -474,15 +474,16 @@ $\eta\|v\|\leq\|Hv\|$ for every $v\perp\ker H$.
     \end{align}
     Hence a gap $\eta$ of $\sum_iP_i$ gives a gap
     $\eta/(B^2C^2)$ of $\sum_iQ_i$.
-    If $D_0=0$, the active space is zero. Otherwise first take the
-    second-sector dimension to be zero. The extended
-    interaction is then the ordinary injective $A_0$ parent interaction,
+    If $D_0=0$, the active space is zero. Otherwise, when the
+    second-sector dimension is zero, the extended
+    interaction is the ordinary injective $A_0$ parent interaction,
     whose open gap is uniform at all sufficiently large lengths.
-    Normalize its two boundaries, replace its free exterior registers
-    by the enlarged registers, and undo the boundary normalization.
-    The middle step preserves the gap exactly, since the same interior
-    operator acts independently on each exterior fiber. Both normalization
-    losses are independent of volume. Apply the inactive-sector bound
-    and then exchange the endpoint sectors. The smaller of the two
-    positive constants and the larger starting length give the conclusion.
+    Normalizing its two boundaries, replacing its free exterior registers
+    by the enlarged registers, and undoing the boundary normalization
+    transfers this gap to the active space:
+    the middle step preserves the gap exactly because the same interior
+    operator acts independently on each exterior fiber, and both normalization
+    losses are independent of volume. Combining the inactive-sector bound
+    with the endpoint-sector exchange then yields the conclusion from the smaller of the two
+    positive constants and the larger starting length.
 \end{proof}

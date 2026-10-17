@@ -80,22 +80,22 @@ reduction to this normalization via blockwise similarity (\cite[eq.~\emph{unital
         lem:block_scalar_gauge_comm,
         thm:spectral_periodic_sector_normalization,
         thm:periodic_sector_basis_replacement_gauge}
-    Normalize each representative by its positive-definite adjoint Perron
-    fixed point, which is the source construction at
-    \cite[lines~313--332]{DeLasCuevas2017Irreducible}. The normalized
-    representatives are periodic with trace-preserving block maps and are
-    blockwise similar to the originals, so the multiplicities and their power
-    sums are unchanged, the non-repetition of the two bases is preserved, and
-    the two direct-sum tensors generate the same matrix-product vectors as
-    before. Theorem~\ref{thm:periodic_ft_equal_case_trace_preserving} applies
-    to the normalized pair.
+    Normalizing each representative by its positive-definite adjoint Perron
+    fixed point, as in \cite[lines~313--332]{DeLasCuevas2017Irreducible},
+    produces periodic representatives with trace-preserving block maps that are
+    blockwise similar to the originals. The multiplicities and their power
+    sums are therefore unchanged, the non-repetition of the two bases is
+    preserved, and the two direct-sum tensors generate the same matrix-product
+    vectors as before, so
+    Theorem~\ref{thm:periodic_ft_equal_case_trace_preserving} applies to the
+    normalized pair.
 
-    Now transfer the conclusion back to the original tensors. The bijection, the scalars, the periods and
-    the blockwise multiplicity gauges concern only the multiplicity data,
-    which the normalization leaves untouched, and the repeated-block relations
-    compose with the two blockwise similarities. The multiplicity gauge is
-    unchanged: writing $X=\bigoplus_jX_j$ for the normalizing similarity,
-    Lemma~\ref{lem:block_scalar_gauge_comm} gives
+    The conclusion then passes back to the original tensors: the bijection,
+    the scalars, the periods and the blockwise multiplicity gauges concern
+    only the multiplicity data, which the normalization leaves untouched, and
+    the repeated-block relations compose with the two blockwise similarities.
+    The multiplicity gauge is unchanged: writing $X=\bigoplus_jX_j$ for the
+    normalizing similarity, Lemma~\ref{lem:block_scalar_gauge_comm} gives
     \begin{align}
         ZX=\bigoplus_{j}\left(Z_j\otimes\Id_{D_j}\right)X_j=XZ,
         \qquad\text{hence}\qquad
@@ -121,9 +121,9 @@ reduction to this normalization via blockwise similarity (\cite[eq.~\emph{unital
 \end{theorem}
 
 \begin{proof}\leanok
-    Take $Z=\diag(\mu_i/\nu_i)_{i\in I}$ and apply the two diagonal
+    Setting $Z=\diag(\mu_i/\nu_i)_{i\in I}$ and applying the two diagonal
     identities from Lemmas~\ref{lem:z_gauge_diagonal_pow} and
-    \ref{lem:z_gauge_diagonal_mul}.
+    \ref{lem:z_gauge_diagonal_mul} yields both equations.
 \end{proof}
 
 \begin{theorem}[Scalar multiplicity gauge from power sums]
@@ -141,8 +141,9 @@ reduction to this normalization via blockwise similarity (\cite[eq.~\emph{unital
 \end{theorem}
 
 \begin{proof}\leanok
-    Apply Theorem~\ref{thm:zgauge_construction} to obtain $Z$, and apply the
-    Newton--Girard power-sum identity to recover the multiplicity multiset.
+    Theorem~\ref{thm:zgauge_construction} constructs the diagonal matrix $Z$,
+    while the Newton--Girard power-sum identity recovers the multiplicity
+    multiset.
 \end{proof}
 
 \begin{lemma}[Power weights of a sector decomposition]%
@@ -196,8 +197,8 @@ reduction to this normalization via blockwise similarity (\cite[eq.~\emph{unital
 \end{lemma}
 
 \begin{proof}\leanok
-    Raise all multiplicity entries of both decompositions to the power $m$.
-    By Lemma~\ref{lem:sector_power_weights} the hypothesis becomes a
+    By Lemma~\ref{lem:sector_power_weights}, raising all multiplicity entries
+    of both decompositions to the power $m$ turns the hypothesis into a
     comparison of the coefficients of the two resulting decompositions at
     every exponent beyond the threshold, with scalar $\zeta^{m}$. Applying
     Lemma~\ref{lem:sector_bnt_matched_sector_weight_equiv} to those
@@ -262,9 +263,9 @@ reduction to this normalization via blockwise similarity (\cite[eq.~\emph{unital
 \end{theorem}
 
 \begin{proof}\leanok
-    Expand both vectors along the basis $\{A_j\}_{j\in J}$ by
-    Lemma~\ref{lem:paper_decomp_formula}, rewriting each
-    $\ket{V^{(N)}(B_{\pi(j)})}$ as $\zeta_j^{-N}\ket{V^{(N)}(A_j)}$. Equality
+    Expanding both vectors along the basis $\{A_j\}_{j\in J}$ by
+    Lemma~\ref{lem:paper_decomp_formula} and rewriting each
+    $\ket{V^{(N)}(B_{\pi(j)})}$ as $\zeta_j^{-N}\ket{V^{(N)}(A_j)}$, equality
     of the two vectors makes the combination of the $\ket{V^{(N)}(A_j)}$ with
     coefficients $\tr(R_j^N)-\zeta_j^{-N}\tr(S_{\pi(j)}^N)$ vanish. By
     Theorem~\ref{thm:pgvwc07_normalized_periodic_state_vector_decomposition} the term
@@ -299,11 +300,12 @@ reduction to this normalization via blockwise similarity (\cite[eq.~\emph{unital
 \end{theorem}
 
 \begin{proof}\leanok
-    Fix $j$. Theorem~\ref{thm:periodic_equalcase_coefficient_extraction}
-    compares the power sums of $R_j$ and $S_{\pi(j)}$ at every multiple of
-    $m_j$ beyond $N_0$, with scalar $\zeta_j^{-1}$. Feeding that progression
-    to Lemma~\ref{lem:matched_sector_weight_pow_equiv_period} gives the
-    equality of sizes, the reordering $\tau$, and the entry identity
+    For each $j\in J$,
+    Theorem~\ref{thm:periodic_equalcase_coefficient_extraction} compares the
+    power sums of $R_j$ and $S_{\pi(j)}$ at every multiple of $m_j$ beyond
+    $N_0$, with scalar $\zeta_j^{-1}$. Feeding that progression to
+    Lemma~\ref{lem:matched_sector_weight_pow_equiv_period} gives the equality
+    of sizes, the reordering $\tau$, and the entry identity
     $\nu_{\pi(j),\tau(q)}^{m_j}=(\zeta_j\mu_{j,q})^{m_j}$. Since the entries
     $\zeta_j\mu_{j,q}$ are nonzero,
     Theorem~\ref{thm:zgauge_construction} produces the diagonal $Z_j$ with the
@@ -502,11 +504,11 @@ reduction to this normalization via blockwise similarity (\cite[eq.~\emph{unital
     \lean{MPSTensor.weight_norm_eq_one_of_sameMPV₂Pos}
     \leanok
     \uses{thm:periodic_ft_equal_case_trace_preserving}
-    Under the hypotheses of Theorem~\ref{thm:periodic_ft_equal_case_trace_preserving},
+    As in the multiplicity normalization for the corrected forward implication
+    of \cite[Theorem~4.1, lines~743--756]{DeLasCuevas2017Irreducible}, under
+    the hypotheses of Theorem~\ref{thm:periodic_ft_equal_case_trace_preserving},
     if every multiplicity of $B$ has modulus one, then every multiplicity
     of $A$ has modulus one.
-    This is the multiplicity normalization used in the corrected forward
-    implication of \cite[Theorem~4.1, lines~743--756]{DeLasCuevas2017Irreducible}.
 \end{theorem}
 
 \begin{proof}\leanok

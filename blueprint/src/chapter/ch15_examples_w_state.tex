@@ -23,8 +23,8 @@ directly.
     \lean{MPSTensor.wRaising}
     \leanok
     \uses{def:mps_tensor}
-    Following \cite[Appendix~A, ``The W state'']{Cirac2021Matrix}, set $d=D=2$.
-    The W tensor is the site-independent family
+    Following \cite[Appendix~A, ``The W state'']{Cirac2021Matrix}, for $d=D=2$,
+    the W tensor is the site-independent family
     \begin{align}
         A^0 & = \begin{pmatrix}1&0\\0&1\end{pmatrix},
         \notag                                        \\
@@ -37,12 +37,12 @@ directly.
 \end{definition}
 
 Theorem~\ref{thm:w_state_identification} proves the open-boundary state
-identity. Closing the same matrices by a trace instead gives the vacuum
-term of Theorem~\ref{thm:w_state_periodic_closure}.
-The single-length periodic bond-dimension question is distinct: the
-review's general bound $D^3\log D=\Omega(N)$ remains open, with the
-conditional and restricted-length results summarized in
-Remark~\ref{rem:w_state_ti_bound} and \cite{gap:rmp_w_state_ti_bound}.
+identity, whereas Theorem~\ref{thm:w_state_periodic_closure} shows that
+closing the same matrices by a trace gives the vacuum term instead. As
+summarized in Remark~\ref{rem:w_state_ti_bound} and
+\cite{gap:rmp_w_state_ti_bound}, the single-length periodic bond-dimension
+question is distinct, and the review's general bound $D^3\log D=\Omega(N)$
+remains open.
 % The unrestricted lower bound is tracked in #2947.
 
 \begin{definition}[Open-boundary contraction]\label{def:open_coeff}
@@ -128,14 +128,14 @@ Remark~\ref{rem:w_state_ti_bound} and \cite{gap:rmp_w_state_ti_bound}.
 \begin{proof}
     \leanok
     \uses{thm:w_state_identification}
-    Direct instances of Theorem~\ref{thm:w_state_identification}: the excitation
-    count is one in the first three cases and zero or two in the others.
+    By Theorem~\ref{thm:w_state_identification}, the excitation count is one in
+    the first three configurations and zero or two in the others.
 \end{proof}
 
-The representation of Definition~\ref{def:w_tensor} is not translationally
-invariant, because its boundary is not periodic
-\cite[Appendix~A, ``The W state'']{Cirac2021Matrix}. The following computation
-illustrates this remark by closing the same tensor with a trace.
+As noted in \cite[Appendix~A, ``The W state'']{Cirac2021Matrix}, the
+representation of Definition~\ref{def:w_tensor} is not translationally
+invariant because its boundary is not periodic; closing the same tensor with a
+trace illustrates this failure.
 
 \begin{theorem}[The periodic closure is not the W state]%
     \label{thm:w_state_periodic_closure}
@@ -191,7 +191,7 @@ illustrates this remark by closing the same tensor with a trace.
 \begin{proof}
     \leanok
     \uses{def:w_state_periodic_rep}
-    Write $B^0=b_0$ and $B^1=b_1$ as scalars. The vacuum amplitude gives
+    With $B^0=b_0$ and $B^1=b_1$ as scalars, the vacuum amplitude gives
     $b_0^N=0$, so $b_0=0$. The configuration $\ket{10\cdots0}$ then has amplitude
     $b_1b_0^{N-1}=0$, whereas its W-state amplitude is $1$.
 \end{proof}
@@ -241,9 +241,9 @@ illustrates this remark by closing the same tensor with a trace.
         MPSTensor.finrank_span_wIndicator_append_le_two}
     \leanok
     \uses{def:weight_indicator}
-    Split $N=R+R'$ sites into a first piece of $R$ sites and a second piece of
-    $R'$ sites. For configurations $\sigma$ of the first piece and $\tau$ of the
-    second,
+    For a bipartition of $N=R+R'$ sites into a first piece of $R$ sites and a
+    second piece of $R'$ sites, configurations $\sigma$ of the first piece and
+    $\tau$ of the second satisfy
     \begin{align}
         \braket{\sigma\tau}{W_N}
          & =u^{(R)}_1(\sigma)\,u^{(R')}_0(\tau)+u^{(R)}_0(\sigma)\,u^{(R')}_1(\tau).
@@ -331,10 +331,10 @@ illustrates this remark by closing the same tensor with a trace.
     two translation-invariant product states, with one-site amplitudes $x_k$
     and $y_k$ for the letters $0$ and $1$, is not a nonzero multiple of
     $\ket{W_N}$: its amplitude on the configuration $1^m0^{N-m}$ is the left-hand
-    side of (\ref{eq:w_state_two_product_amplitudes}). This supplies the step that
-    \cite[lines~2208--2210]{PerezGarcia2007Matrix} calls trivial, after the
-    rank count has reduced the canonical form to at most two blocks of size one
-    by one.
+    side of (\ref{eq:w_state_two_product_amplitudes}). After the rank count has
+    reduced the canonical form to at most two $1\times1$ blocks, this
+    establishes the step that \cite[lines~2208--2210]{PerezGarcia2007Matrix}
+    treats as immediate.
 \end{theorem}
 
 \begin{proof}
@@ -372,15 +372,15 @@ illustrates this remark by closing the same tensor with a trace.
     The first item holds more generally for $\sum_jc_j\ket{\phi_{A^j}}=c\ket{W_N}$
     with arbitrary nonzero coefficients $c_j$ in place of $\lambda_j^N$, for blocks
     satisfying the three conditions of the canonical form.
-    The first item is the inequality of the proof in
-    \cite{PerezGarcia2007Matrix}, conditional on the canonical form with condition
-    C1, and with the threshold enlarged by $L_0$ so that it also covers a single
-    block. The distinctness hypothesis is stricter than the source's
-    pairwise-different block states. The reduction of an arbitrary tensor to this
-    form holds when $N\geq2$ has no divisor between $2$ and $D$
-    (Theorem~\ref{thm:w_state_no_small_divisor_bound}); the
-    review's asymptotic bound $D^3\log D=\Omega(N)$ at every length is outside
-    the scope of these results~\cite{gap:rmp_w_state_ti_bound}.
+    Conditional on the canonical form with condition C1 and with the threshold
+    enlarged by $L_0$ to cover a single block, the first item is the
+    inequality of the proof in \cite{PerezGarcia2007Matrix}, under a
+    distinctness hypothesis stricter than the source's pairwise-different
+    block states. Theorem~\ref{thm:w_state_no_small_divisor_bound} reduces an
+    arbitrary tensor to this form when $N\geq2$ has no divisor between $2$ and
+    $D$, whereas the review's asymptotic bound $D^3\log D=\Omega(N)$ at every
+    length lies outside the scope of these
+    results~\cite{gap:rmp_w_state_ti_bound}.
 \end{theorem}
 
 \begin{proof}
@@ -388,11 +388,12 @@ illustrates this remark by closing the same tensor with a trace.
     \uses{lem:w_state_cut_rank, lem:pgvwc07_block_tuple_span,
         lem:pgvwc07_cut_rank_lower_bound, thm:w_state_two_product_states,
         thm:wielandt_general}
-    Cut the chain into two pieces of at least
-    $n_0=\max(L_0,3(b-1)(L_0+1))$ sites. By Lemmas~\ref{lem:pgvwc07_block_tuple_span}
-    and~\ref{lem:pgvwc07_cut_rank_lower_bound}, the reduced state of the first
-    piece has rank at least $\sum_j D_j^2$,
-    while Lemma~\ref{lem:w_state_cut_rank} bounds it by two. Hence there are at
+    Bipartitioning the chain into two pieces of at least
+    $n_0=\max(L_0,3(b-1)(L_0+1))$ sites,
+    Lemmas~\ref{lem:pgvwc07_block_tuple_span}
+    and~\ref{lem:pgvwc07_cut_rank_lower_bound} show that the reduced state of
+    the first piece has rank at least $\sum_j D_j^2$, while
+    Lemma~\ref{lem:w_state_cut_rank} bounds it by two. Hence there are at
     most two blocks, each of size one by one, with scalar letters $A^j_0=x_j$ and
     $A^j_1=y_j$, so that the amplitude of $1^m0^{N-m}$ is
     $\sum_jc_j\,y_j^mx_j^{N-m}$. Choosing $z_j$ with $z_j^N=c_j$ absorbs each
@@ -463,11 +464,11 @@ illustrates this remark by closing the same tensor with a trace.
 
 \begin{proof}
     \leanok
-    Rescale by the inverse square root of the spectral radius of the transfer
-    map and gauge by its positive definite eigenvector; the peripheral spectrum
-    of the resulting trace-preserving irreducible channel is the group of $m$-th
-    roots of unity. Period one means that $1$ is the only peripheral eigenvalue,
-    which is primitivity.
+    Rescaling by the inverse square root of the spectral radius of the
+    transfer map and gauging by its positive definite eigenvector yields a
+    trace-preserving irreducible channel whose peripheral spectrum is the
+    group of $m$-th roots of unity. Period one means that $1$ is the only
+    peripheral eigenvalue, which is primitivity.
 \end{proof}
 
 \begin{theorem}[Single-length bound without small divisors]%
@@ -495,19 +496,20 @@ illustrates this remark by closing the same tensor with a trace.
         thm:pgvwc07_normalized_periodic_state_vector_decomposition, def:mpv_phase_class_data,
         thm:periodic_period_le_bondDim, lem:pgvwc07_block_irreducible,
         lem:periodic_scale_of_irreducible, thm:wielandt_general}
-    Write the periodic vector
-    as $\sum_j\lambda_j^N\ket{\phi_{A^j}}$ with unital irreducible blocks $A^j$.
-    Each block is irreducible by Lemma~\ref{lem:pgvwc07_block_irreducible}, and,
-    rescaled and gauged, periodic by Lemma~\ref{lem:periodic_scale_of_irreducible},
-    with a period $m_j\leq D_j\leq D$ by
-    Theorem~\ref{thm:periodic_period_le_bondDim}. If $m_j\neq1$, then
-    $2\leq m_j\leq D$, so the divisor assumption gives $m_j\nmid N$.
-    The block state vanishes by
-    Theorem~\ref{thm:pgvwc07_normalized_periodic_state_vector_decomposition}. If $m_j=1$ the
+    The periodic vector decomposes as $\sum_j\lambda_j^N\ket{\phi_{A^j}}$ with
+    unital irreducible blocks $A^j$. By
+    Lemma~\ref{lem:pgvwc07_block_irreducible},
+    Lemma~\ref{lem:periodic_scale_of_irreducible}, and
+    Theorem~\ref{thm:periodic_period_le_bondDim}, each block is irreducible
+    and, after rescaling and gauging, periodic with period $m_j\leq D_j\leq D$.
+    If $m_j\neq1$, then $2\leq m_j\leq D$, so the divisor assumption gives
+    $m_j\nmid N$ and
+    Theorem~\ref{thm:pgvwc07_normalized_periodic_state_vector_decomposition}
+    shows that the block state vanishes. If $m_j=1$ the
     block is primitive, and the general quantum Wielandt bound of
     Theorem~\ref{thm:wielandt_general} gives injectivity after
-    $L_0=(D^2+1)^2$ sites. Group the blocks into the phase classes of
-    Definition~\ref{def:mpv_phase_class_data}: the $q$-th member $A^{(j,q)}$ of
+    $L_0=(D^2+1)^2$ sites. Grouping the blocks into the phase classes of
+    Definition~\ref{def:mpv_phase_class_data}, the $q$-th member $A^{(j,q)}$ of
     class $j$ satisfies
     $\ket{\phi_{A^{(j,q)}}}=\xi_{j,q}^N\ket{\phi_{A^{(j,0)}}}$, with $A^{(j,0)}$
     the class representative. Then
@@ -548,19 +550,20 @@ illustrates this remark by closing the same tensor with a trace.
     \label{rem:w_state_ti_bound}
     \uses{def:w_state_periodic_rep}
     Theorem~\ref{thm:w_state_periodic_bound} concerns one tensor representing
-    the W state on a range of lengths. The review states the stronger
-    single-length bound: a translation-invariant representation of $\ket{W_N}$
-    with bond dimension $D$ requires $D^3\log D=\Omega(N)$, hence
-    $D=\Omega(N^{1/(3+\delta)})$ for every $\delta>0$, obtained by combining the
-    representation theory of translation-invariant matrix product states with a
-    quantitative quantum Wielandt inequality
-    \cite[Appendix~A, ``The W state'']{Cirac2021Matrix}. This single-length
-    bound is outside the scope of the results here:
-    Theorem~\ref{thm:w_state_canonical_bound} proves the conditional single-length
-    bound of its source, and Theorem~\ref{thm:w_state_prime_bound} establishes the
-    bound $D=\Omega(N^{1/5})$ at prime lengths.
-    Theorem~\ref{thm:w_state_no_small_divisor_bound} also covers lengths with
-    no divisor between $2$ and $D$~\cite{gap:rmp_w_state_ti_bound}.
+    the W state on a range of lengths. In
+    \cite[Appendix~A, ``The W state'']{Cirac2021Matrix}, the review states the
+    stronger single-length bound: combining the representation theory of
+    translation-invariant matrix product states with a quantitative quantum
+    Wielandt inequality shows that a translation-invariant representation of
+    $\ket{W_N}$ with bond dimension $D$ requires $D^3\log D=\Omega(N)$, hence
+    $D=\Omega(N^{1/(3+\delta)})$ for every $\delta>0$. As recorded
+    in~\cite{gap:rmp_w_state_ti_bound}, this unrestricted single-length bound
+    is outside the scope of the results here:
+    Theorem~\ref{thm:w_state_canonical_bound} proves the conditional
+    single-length bound of its source, Theorem~\ref{thm:w_state_prime_bound}
+    establishes $D=\Omega(N^{1/5})$ at prime lengths, and
+    Theorem~\ref{thm:w_state_no_small_divisor_bound} covers lengths with no
+    divisor between $2$ and $D$.
 \end{remark}
 
 %% ===================================================================

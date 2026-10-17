@@ -1,4 +1,4 @@
-\begin{definition}[Joining labels of two actual open regions]
+\begin{definition}[Joining labels of two open regions]
     \label{def:peps_open_region_joining_labels}
     \lean{TNLean.PEPS.RegionJoiningEdge,
         TNLean.PEPS.regionJoiningEdge_ofAdj,
@@ -8,11 +8,10 @@
     Let $L,S$ be disjoint vertex regions of a finite simple graph.
     Their joining bonds are the bonds internal to $L\cup S$ but internal
     to neither part. For joining labels $\mu$ and prescribed outer boundary
-    labels $\theta$, let $\beta_L(\mu,\theta)$ and $\beta_S(\mu,\theta)$
-    read the original crossing labels of the two parts: they equal $\mu$
-    on joining bonds and $\theta$ on the exterior boundary.
-    These are the actual labels in the two-column blocking of
-    \cite{Schuch2010PEPS}, lines 2489--2507.
+    labels $\theta$, in the two-column blocking of
+    \cite{Schuch2010PEPS}, lines 2489--2507, $\beta_L(\mu,\theta)$ and
+    $\beta_S(\mu,\theta)$ read the original crossing labels of the two parts:
+    they equal $\mu$ on joining bonds and $\theta$ on the exterior boundary.
 \end{definition}
 
 \begin{theorem}[Joining two open contractions]
@@ -32,9 +31,9 @@
     exactly once. No factorization identity is assumed.
 \end{theorem}
 \begin{proof}\leanok
-    Split the internal labels of the union into the internal labels of
-    $L$, the internal labels of $S$, and the joining labels. The vertex
-    product splits over the disjoint union. Summing each internal family
+    Splitting the internal labels of the union into the internal labels of
+    $L$, the internal labels of $S$, and the joining labels factors the vertex
+    product over the disjoint union, and summing each internal family
     gives its original open-region contraction.
 \end{proof}
 
@@ -42,11 +41,11 @@
     \label{def:peps_boundary_register_permutation}
     \lean{TNLean.PEPS.regularBoundaryRegisterPermutation}
     \leanok
-    For a rooted spanning tree of a connected region, permute its accessible
-    boundary registers by $y_b\mapsto y_{\tau b}$ and retain all internal
-    reference, normalized vertex and cycle registers. This is the boundary
-    exchange in the two independent column operations of
-    \cite{Schuch2010PEPS}, lines 2489--2507.
+    For a rooted spanning tree of a connected region, the boundary exchange in
+    the two independent column operations of \cite{Schuch2010PEPS}, lines
+    2489--2507, permutes the accessible boundary registers by
+    $y_b\mapsto y_{\tau b}$ and retains all internal reference, normalized
+    vertex, and cycle registers.
 \end{definition}
 
 \begin{theorem}[Original-spin implementation of a boundary exchange]
@@ -61,7 +60,7 @@
     original sites, one original-spin unitary $W_\tau$ satisfies
     \[
         W_\tau\Psi_R(\theta)=\Psi_R(\theta\circ\tau)
-        \qquad\text{for every actual boundary configuration }\theta.
+        \qquad\text{for every boundary configuration }\theta.
     \]
     The spanning tree is chosen internally, and $W_\tau$ is chosen before
     $\theta$. Its preservation of the full Gram form is derived from the
@@ -71,11 +70,11 @@
     Boundary permutations commute with independent vertex translations
     in accessible coordinates. They therefore commute with the product
     averaging projector. The derived local Gram identity lifts each
-    permutation to the original spins; the actual open columns have the
+    permutation to the original spins; the open columns have the
     corresponding permuted boundary labels.
 \end{proof}
 
-\begin{theorem}[Literal diagonal weights on a joining bond]
+\begin{theorem}[Diagonal weights on a joining bond]
     \label{thm:peps_regular_boundary_charge_contraction}
     \lean{TNLean.PEPS.graphOpenRegionNetwork_regularEdgeCharacterSite_boundary,
         TNLean.PEPS.graphOpenRegionNetwork_regularEdgeCharacterSite_union}
@@ -83,16 +82,16 @@
     \uses{thm:peps_graph_open_region_gluing}
     A diagonal insertion $\operatorname{diag}\chi(p\cdot)$ on a joining
     bond $e$ contributes exactly one factor $\chi(p\mu_e)$ to the joined
-    contraction. On its tail part this is the prescribed boundary weight;
-    on the other part no site factor changes. Thus
+    contraction. In the explicit charge insertion of \cite{Schuch2010PEPS},
+    Section~6.6, source lines 2432--2453, this is the prescribed boundary
+    weight on its tail part and leaves every site factor on the other part
+    unchanged, giving
     \[
         \Psi_{L\cup S}^{e,\chi,p}(\theta)
         =\sum_\mu\chi(p\mu_e)
         \Psi_L(\beta_L(\mu,\theta))\otimes
         \Psi_S(\beta_S(\mu,\theta)).
     \]
-    This is the literal charge insertion of \cite{Schuch2010PEPS},
-    Section~6.6, source lines 2432--2453.
 \end{theorem}
 \begin{proof}\leanok
     The ordered tail occurs in exactly one part. Its scalar character
@@ -104,7 +103,7 @@
     \label{def:peps_joining_boundary_edge}
     \lean{TNLean.PEPS.regionJoiningBoundaryEdge}
     \leanok
-    Every actual joining bond is a crossing bond of each of the two
+    Every joining bond is a crossing bond of each of the two
     disjoint regions, with the same underlying native edge.
 \end{definition}
 
@@ -128,14 +127,14 @@
     coordinates by the disjoint-union coordinate equivalence.
 \end{theorem}
 \begin{proof}\leanok
-    Exchange the two joining boundary registers in each part and fix all
-    its other crossing registers. The two independent Gram-preserving
-    exchanges replace $\mu$ by its common transposition. Relabel this
-    finite sum: the single character weight then moves from $e$ to $f$,
+    Exchanging the two joining boundary registers in each part while fixing all
+    other crossing registers, the two independent Gram-preserving
+    exchanges replace $\mu$ by its common transposition. Relabeling this
+    finite sum moves the single character weight from $e$ to $f$,
     with $\chi,p$ and every external label retained.
 \end{proof}
 
-\begin{definition}[The actual two-column torus square]
+\begin{definition}[The two-column torus square]
     \label{def:peps_torus_two_column_charge_geometry}
     \lean{TNLean.PEPS.torusChargeMotionColumn,
         TNLean.PEPS.torusColumnChargeMotionBond,
@@ -158,13 +157,13 @@
     \uses{def:peps_torus_two_column_charge_geometry,
         def:peps_torus_plaquette_flux_geometry}
     On a finite torus with both periods at least three, each column contains
-    exactly two sites and its actual induced graph is connected. The
+    exactly two sites and its induced graph is connected. The
     columns are disjoint and their union is the original plaquette region.
 \end{theorem}
 \begin{proof}\leanok
-    The native vertical edge supplies the two-site connecting walk.
+    The native vertical edge forms the two-site connecting walk.
     Distinct adjacent horizontal and vertical coordinates give the
-    cardinalities and disjointness. The actual plaquette walk has precisely
+    cardinalities and disjointness. The plaquette walk has precisely
     these four sites in its support.
 \end{proof}
 
@@ -177,9 +176,9 @@
     Suppose the original four-leg tensor is $G$-isometric for the regular
     action. On every translated square of a finite torus with periods at
     least three, independent two-spin unitaries on its left and right
-    columns move the literal diagonal charge from the upper horizontal
+    columns move the explicit diagonal charge from the upper horizontal
     bond to the lower bond. They are chosen before its character, internal
-    parameter and every actual outer boundary label, and retain these data.
+    parameter, and every outer boundary label, and retain these data.
 
     This proves the displayed two-column operation of
     \cite[Section~6.6]{Schuch2010PEPS}, source lines 2489--2507, in the stated finite-torus geometry, including both
@@ -187,9 +186,9 @@
     \cite{gap:rmp_peps_quantum_double_g_isometry}.
 \end{theorem}
 \begin{proof}\leanok
-    Use the derived native column geometry and genuine joining bonds in
-    the preceding independent-operation theorem. Numbering the group
+    Applying the preceding independent-operation theorem to the derived native
+    column geometry and genuine joining bonds, numbering the group
     labels identifies its coefficient formula with the ordinary open
-    contraction of the original charge-inserted site tensors. Each
-    column Gram form and the contraction identity are derived internally.
+    contraction of the original charge-inserted site tensors, with each
+    column Gram form and the contraction identity derived internally.
 \end{proof}

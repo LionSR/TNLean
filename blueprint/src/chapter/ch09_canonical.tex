@@ -1,8 +1,9 @@
 \chapter{Canonical Form Reduction}\label{ch:canonical}
 
-The reduction of a translation-invariant matrix product state tensor to a
-weighted direct sum of primitive blocks follows~\cite{PerezGarcia2007Matrix},
-\cite{Cirac2016MPDO_arXiv}, \cite{Cirac2021Matrix}, and~\cite[Chapter~6]{Wolf2012Quantum}.
+Following~\cite{PerezGarcia2007Matrix},
+\cite{Cirac2016MPDO_arXiv}, \cite{Cirac2021Matrix}, and~\cite[Chapter~6]{Wolf2012Quantum},
+a translation-invariant matrix product state tensor reduces to a weighted direct
+sum of primitive blocks.
 The transfer map of an arbitrary tensor may be reducible and periodic.
 The reduction decomposes the bond space into irreducible subspaces. For each
 irreducible block in left-canonical form, powering the transfer map collapses the
@@ -51,8 +52,9 @@ for $p\mid N$ as a sum of $p$ cyclic component chains, and gives zero when $p\nm
          & =\sum_{u\in\mathbb Z/p\mathbb Z}\tr F_u(\sigma).
         \label{eq:pgvwc07_boundary_coefficient_decomposition}
     \end{align}
-    If $N>0$, then $\tr F_u(\sigma)$ is the coefficient of the component chain
-    $B_u$ from Definition~\ref{def:pgvwc07_projector_component_chain}.
+    If $N>0$, then for the component chain $B_u$ of
+    Definition~\ref{def:pgvwc07_projector_component_chain}, $\tr F_u(\sigma)$
+    is the coefficient of $B_u$ at $\sigma$.
     At $N=0$, the boundary product is $F_u(\varnothing)=Q_u$, so
     \begin{align}
         \tr(\Id)
@@ -85,11 +87,10 @@ for $p\mid N$ as a sum of $p$ cyclic component chains, and gives zero when $p\nm
     \leanok
     \uses{def:pgvwc07_projector_component_chain}
     Let $p>0$ and let the orthogonal projections $Q_u$ satisfy
-    $\sum_uQ_u=\Id$ and $Q_uA^i=A^iQ_{u+1}$. At every positive length $N$,
+    $\sum_uQ_u=\Id$ and $Q_uA^i=A^iQ_{u+1}$. As in the proof of
+    \cite[Theorem~5]{PerezGarcia2007Matrix}, at every positive length $N$,
     the coefficient of $A$ is the sum of the coefficients of its component
-    chains $B_u$. If $p\nmid N$, every component-chain coefficient vanishes.
-    These are the coefficient identities in the proof of
-    \cite[Theorem~5]{PerezGarcia2007Matrix}.
+    chains $B_u$, and if $p\nmid N$, every component-chain coefficient vanishes.
 \end{theorem}
 
 \begin{proof}
@@ -109,8 +110,8 @@ for $p\mid N$ as a sum of $p$ cyclic component chains, and gives zero when $p\nm
         MPSTensor.pgvwc07_stateVector_eq_zero_of_not_dvd}
     \leanok
     \uses{def:pgvwc07_projector_component_chain, def:periodic_tensor}
-    This is a normalized form of the state-vector conclusion in
-    \cite[Theorem~5]{PerezGarcia2007Matrix}. Let $A$ be an irreducible
+    In a normalized form of the state-vector conclusion of
+    \cite[Theorem~5]{PerezGarcia2007Matrix}, let $A$ be an irreducible
     left-canonical tensor whose peripheral transfer spectrum is the set of
     $p$-th roots of unity. If $p\mid N$, there are orthogonal cyclic
     projections $(Q_u)_{u\in\mathbb Z/p\mathbb Z}$ such that
@@ -129,17 +130,18 @@ for $p\mid N$ as a sum of $p$ cyclic component chains, and gives zero when $p\nm
          & =\sum_{u\in\mathbb Z/p\mathbb Z}\ket{V^{(N)}(B_u)}.
         \label{eq:pgvwc07_periodic_state_vector_decomposition}
     \end{align}
-    Each $B_u$ is a $p$-periodic MPS of bond dimension $D$ with local matrices
-    given by (\ref{eq:pgvwc07_projector_component_chain}). At $N=0$,
-    (\ref{eq:pgvwc07_periodic_boundary_decomposition}) reduces to the boundary
-    traces $\tr(Q_u)$ from (\ref{eq:pgvwc07_empty_boundary_decomposition}). If
+    With local matrices given by (\ref{eq:pgvwc07_projector_component_chain}),
+    each $B_u$ is a $p$-periodic MPS of bond dimension $D$. At $N=0$,
+    (\ref{eq:pgvwc07_periodic_boundary_decomposition}) and
+    (\ref{eq:pgvwc07_empty_boundary_decomposition}) reduce to the boundary
+    traces $\tr(Q_u)$. If
     $p\nmid N$, then $\ket{V^{(N)}(A)}=0$.
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{def:pgvwc07_projector_component_chain, thm:pgvwc07_boundary_trace_coefficients}
-    Choose the cyclic projections supplied by periodicity. If $p\mid N$, then
+    Periodicity provides the cyclic projections $(Q_u)$. If $p\mid N$, then
     $Q_{u+N}=Q_u$, and Theorem~\ref{thm:pgvwc07_boundary_trace_coefficients}
     gives (\ref{eq:pgvwc07_periodic_boundary_decomposition}) at every length.
     For $N>0$, the explicit component-chain decomposition follows by inserting

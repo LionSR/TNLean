@@ -6,7 +6,7 @@
     \leanok
     \uses{thm:peps_square_grid_contraction}
     The physical coordinates are identical in both presentations, so the coordinate
-    identification is a linear isometry. The transported contraction equals the
+    identification is a linear isometry. The reindexed contraction equals the
     original vector $\Phi$. In particular its norm and nonvanishing are unchanged,
     and so is every error $\|\|\Phi\|^{-1}\Phi-z\Omega\|$, for every vector
     $\Omega$ of the common Euclidean space and every $z\in\C$.
@@ -15,7 +15,8 @@
 \begin{proof}
     \leanok
     \uses{thm:peps_square_grid_contraction}
-    Apply coordinatewise equality of the contractions in their common Euclidean space.
+    Coordinatewise equality of the contractions in their common Euclidean space
+    gives the stated identities.
 \end{proof}
 
 \begin{theorem}[Dimension constraints and crossing edges]
@@ -24,8 +25,8 @@
     \leanok
     \uses{def:peps_square_edge_correspondence}
     Any pointwise condition on $D_e$ is equivalent to the same condition on the
-    transported dimensions. For $B\in\N$, the maximum bond dimension is at most
-    $B$ exactly when each transported bond dimension is at most $B$, and the same
+    reindexed dimensions. For $B\in\N$, the maximum bond dimension is at most
+    $B$ exactly when each reindexed bond dimension is at most $B$, and the same
     equivalence holds for every real threshold $B\ge0$.
     When the grid has no edges, as for $L\le1$, the maximum over the empty
     family of edges is taken to be $0$, and both sides of the equivalence hold.
@@ -35,8 +36,9 @@
 \begin{proof}
     \leanok
     \uses{def:peps_square_edge_correspondence}
-    Every edge retains its dimension and its two endpoints. For a real
-    threshold $B\ge0$, compare integer dimensions with $\lfloor B\rfloor$.
+    Every edge retains its dimension and its two endpoints, and for a real
+    threshold $B\ge0$, comparing integer dimensions with $\lfloor B\rfloor$
+    gives the equivalence.
 \end{proof}
 
 \begin{theorem}[Number of square-lattice edges]
@@ -44,15 +46,15 @@
     \lean{TNLean.PEPS.card_squareLatticeEdges_le}
     \leanok
     \uses{def:peps_squareLatticeCoordinateRegions}
-    Let $L\ge0$ be an integer. The nearest-neighbor graph on
-    $\{0,\ldots,L-1\}^2$, with open boundary, has at most $2L^2$ edges.
-    This is the elementary counting bound used in the doubled-Hamiltonian
-    boundary estimate of \cite{OpenAI2026PolynomialPEPS}.
+    For any integer $L\ge0$, the elementary counting bound for the
+    doubled-Hamiltonian boundary estimate of \cite{OpenAI2026PolynomialPEPS}
+    shows that the nearest-neighbor graph on $\{0,\ldots,L-1\}^2$, with open
+    boundary, has at most $2L^2$ edges.
 \end{theorem}
 \begin{proof}\leanok
-    Orient every horizontal edge to the right and every vertical edge upward.
-    Each edge is determined by its initial vertex and its orientation.
-    There are $L^2$ vertices and two orientations, so the edge set injects
+    Orienting every horizontal edge to the right and every vertical edge upward
+    determines each edge by its initial vertex and its orientation.
+    With $L^2$ vertices and two orientations, the edge set injects
     into a set of cardinality $2L^2$.
 \end{proof}
 
@@ -115,8 +117,9 @@
 \begin{proof}
     \leanok
     \uses{thm:peps_square_vector_error,thm:peps_square_bonds_boundary}
-    Use the transported tensor. Its dimensions are identical edge by edge; substitute
-    the equality of its vector in the nonzero and phase-error conditions.
+    For the reindexed tensor, the dimensions are identical edge by edge, and
+    substituting the equality of its vector into the nonzero and phase-error
+    conditions completes the transfer.
 \end{proof}
 
 

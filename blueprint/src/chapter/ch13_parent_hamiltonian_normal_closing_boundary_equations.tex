@@ -36,10 +36,10 @@
     length $K$. Suppose that, for every word $u$ of length $L_0$ and every
     word $v$ of length $K$,
     $X A^u A^v = A^u Y_v$.
-    Then, for every physical letter $j$,
+    Then, as in the boundary-matrix commutation step of
+    \cite[Section~IV.C, lines~2049--2090]{Cirac2021Matrix}, for every physical
+    letter $j$,
     $X A^j = A^j X$.
-    This establishes the boundary-matrix commutation step of
-    \cite[Section~IV.C, lines~2049--2090]{Cirac2021Matrix}.
 \end{lemma}
 
 \begin{proof}
@@ -122,7 +122,7 @@
          & = \tr\left(A^jA^\alpha Y_\nu\right).
         \label{eq:ph_normal_closing_trace_window}
     \end{align}
-    Put $Z=X A^\alpha A^\nu-A^\alpha Y_\nu$. For every physical letter $j$,
+    For $Z=X A^\alpha A^\nu-A^\alpha Y_\nu$ and every physical letter $j$,
     (\ref{eq:ph_normal_closing_trace_window}) gives $\tr(A^jZ)=0$.
     Since the matrices $A^j$ span the full matrix algebra, the trace pairing
     gives
@@ -150,16 +150,16 @@
 
 \begin{proof}
     \leanok
-    Choose representation matrices for every cyclic restriction of length
-    $L_0+1$. Fix $\alpha$ and $\nu$. The boundary-crossing equations move the
-    matrix $X$ through the first boundary letter. In local boundary notation,
-    this has the form
+    For fixed $\alpha$ and $\nu$, choosing representation matrices for every
+    cyclic restriction of length $L_0+1$ allows the boundary-crossing equations
+    to move the matrix $X$ through the first boundary letter. In local boundary
+    notation, this has the form
     \begin{align}
         X A^{\rho_0}A^{\rho_1\cdots\rho_{M-L_0}}
          & = A^{\rho_0}Y_{M+1-L_0}(\rho).
         \notag
     \end{align}
-    The adjacent boundary-window product then transports this comparison
+    The adjacent boundary-window product then carries this comparison
     through the remaining $L_0-1$ boundary letters:
     \begin{align}
         Y_{M+1-L_0}(\rho)A^{\rho_{M+1-L_0}\cdots\rho_{M-1}}
@@ -283,8 +283,9 @@
 
 \begin{proof}
     \leanok
-    Apply Lemma~\ref{lem:one_sided_boundary_witness_unique} to the two
-    matrices $Y^+_{\tau^+_\eta(\mu)}$ and $Y^-_{\tau^-_\eta(\mu)}$.
+    Applying Lemma~\ref{lem:one_sided_boundary_witness_unique} to the two
+    matrices $Y^+_{\tau^+_\eta(\mu)}$ and $Y^-_{\tau^-_\eta(\mu)}$ yields their
+    equality.
 \end{proof}
 
 \begin{lemma}[Outside labels determine boundary-restriction matrices]
@@ -293,17 +294,14 @@
     \lean{MPSTensor.mirrorMiddleBackground_witness_eq_of_complement_eq}
     \leanok
     \uses{lem:one_sided_boundary_witness_unique, rem:cyclic_window_operators}
-    Let $A$ be $L_0$-block-injective with $L_0>0$ and $L_0\le M$. If an outside
-    configuration $\rho$ has the same word $\mu$ as
-    $\tau^+_\eta(\mu)$ on the sites outside the last-site cyclic window, then
-    the two matrices representing that restriction agree:
-    $Y_\rho = Y_{\tau^+_\eta(\mu)}$.
-    The same assertion holds for the second boundary-crossing window: if
-    $\rho$ has the same outside word as $\tau^-_\eta(\mu)$, then
+    Let $A$ be $L_0$-block-injective with $L_0>0$ and $L_0\le M$. In the
+    closure-property matrix comparison, the boundary-restriction matrix depends
+    only on the outside word: if an outside configuration $\rho$ has the same
+    word $\mu$ as $\tau^+_\eta(\mu)$ on the sites outside the last-site cyclic
+    window, then the two matrices representing that restriction agree,
+    $Y_\rho = Y_{\tau^+_\eta(\mu)}$; and for the second boundary-crossing
+    window, if $\rho$ has the same outside word as $\tau^-_\eta(\mu)$, then
     $Y_\rho = Y_{\tau^-_\eta(\mu)}$.
-    This is the boundary-matrix independence step used to choose one
-    representative outside configuration for each outside word in the
-    closure-property matrix comparison.
 \end{lemma}
 
 \begin{proof}
@@ -370,9 +368,9 @@
 
 \begin{proof}
     \leanok
-    Apply Lemma~\ref{lem:first_letter_restrictions_determine} to the two
-    length-$(L_0+1)$ restrictions, using the displayed family of first-letter
-    equalities.
+    Applying Lemma~\ref{lem:first_letter_restrictions_determine} to the two
+    length-$(L_0+1)$ restrictions and their displayed first-letter equalities
+    gives $B^+_{\eta,\mu}(\psi)=B^-_{\eta,\mu}(\psi)$.
 \end{proof}
 
 \begin{lemma}[Boundary-crossing restriction from right products]
@@ -399,8 +397,8 @@
 
 \begin{proof}
     \leanok
-    Fix $j$ and take the first-letter restriction of the two displayed
-    length-$(L_0+1)$ restrictions. These are
+    For each $j$, the first-letter restrictions of the two displayed
+    length-$(L_0+1)$ restrictions are
     $\Gamma_{L_0}(Y^+_{\eta,\mu}A^j)$ and
     $\Gamma_{L_0}(Y^-_{\eta,\mu}A^j)$. The one-site product equality gives,
     for every $j$,
@@ -433,9 +431,9 @@
 
 \begin{proof}
     \leanok
-    Apply Lemma~\ref{lem:closed_boundary_restriction_from_right_products} for
-    each boundary letter $\eta$, using the corresponding first-letter product
-    equations.
+    Applying Lemma~\ref{lem:closed_boundary_restriction_from_right_products} for
+    each boundary letter $\eta$ to the corresponding first-letter product
+    equations yields the restriction equality.
 \end{proof}
 
 \begin{lemma}[Equality of the two restrictions crossing the periodic cut]

@@ -61,12 +61,12 @@ systems in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
 \end{theorem}
 
 \begin{proof}\leanok
-    Induct on $\ell$. For the empty list the assertion is scalar
-    linearity. For a nonempty list, first consider a tensor with its
-    leading register separated. Apply (\ref{eq:peps_owner_head})
-    and the induction hypothesis to the remaining registers. Additivity
-    extends the identity to arbitrary vectors. Equality on elementary
-    tensors gives the operator identity.
+    By induction on $\ell$, the assertion for the empty list is scalar
+    linearity. For a nonempty list, separating the leading register of a tensor
+    and applying (\ref{eq:peps_owner_head})
+    together with the induction hypothesis on the remaining registers gives
+    the equality, which extends by additivity to arbitrary vectors and yields
+    the operator identity.
 \end{proof}
 
 \begin{definition}[Sources remaining between distinct owners]
@@ -102,7 +102,7 @@ systems in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
 \end{theorem}
 
 \begin{proof}\leanok
-    Induct on $S$. A source with endpoints $p,q$ contributes the label
+    By induction on $S$, a source with endpoints $p,q$ contributes the label
     $\{f(p),f(q)\}$ precisely when $f(p)\ne f(q)$, and nothing otherwise;
     concatenation of lists corresponds to concatenation of label lists.
 \end{proof}
@@ -114,7 +114,7 @@ systems in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
     \leanok
     \uses{def:peps_owner_sources}
     If the vectors of $S$ are normalized, then those of $S_f$ are
-    normalized. Moreover, $S_f$ is empty if and only if
+    normalized, and $S_f$ is empty if and only if
     $f(p)=f(q)$ for the two endpoints of every source in $S$.
 \end{theorem}
 
@@ -151,10 +151,11 @@ systems in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
 
 \begin{proof}\leanok
     The preparation map has norm at most $\|\eta\|$, and the
-    associativity identification is isometric. Tensoring with the
-    spectator identity preserves the contraction bound. For the operator
-    identity, separate an elementary tensor in $\eta$ and apply the
-    concatenation isometries; then extend by linearity.
+    associativity identification is isometric, so tensoring with the
+    spectator identity preserves the contraction bound. Separating
+    an elementary tensor in $\eta$, applying the
+    concatenation isometries, and extending by linearity gives the operator
+    identity.
 \end{proof}
 
 \begin{definition}[Changing the owners of a composition]
@@ -194,17 +195,17 @@ systems in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
 
 \begin{proof}\leanok
     \uses{thm:peps_owner_concatenation,thm:peps_internal_pair_preparation}
-    Induct on the chronological composition. For a local map,
+    By induction on the chronological composition, for a local map
     (\ref{eq:peps_owner_concatenation}) moves the owner identifications
-    through its local and spectator factors; the conjugating isometries
+    through its local and spectator factors, and the conjugating isometries
     cancel. An internal source has the same preparation operator by
     Theorem~\ref{thm:peps_internal_pair_preparation}, while a surviving
     source has the same vector and endpoint spaces. Exchanges and
     operations beside untouched registers commute with the tensor
-    product of identities. Composition preserves the equality.
+    product of identities, and composition preserves the equality.
     Isometric conjugation preserves each local contraction bound, and
-    an internal normalized source is an allowed local preparation.
-    The description of the source list follows by the same induction.
+    an internal normalized source is an allowed local preparation;
+    the description of the source list follows by the same induction.
 \end{proof}
 
 \begin{theorem}[Two contractions when every source is internal]
@@ -236,10 +237,10 @@ systems in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
 \begin{proof}\leanok
     \uses{thm:peps_owner_sources_internal,thm:peps_owner_composition,
         thm:peps_party_binary_factorization,thm:peps_party_restriction}
-    The internal-source condition makes $S_f$ empty. Hence $F^f$
-    contains no pair preparations, while remaining an allowed
-    composition. Apply Theorem~\ref{thm:peps_party_binary_factorization}
-    to its two owners and compose the resulting identity with
-    (\ref{eq:peps_owner_composition}). Its two restricted compositions
-    are allowed and therefore have norm at most one.
+    The internal-source condition makes $S_f$ empty, so $F^f$
+    contains no pair preparations while remaining an allowed
+    composition. Applying Theorem~\ref{thm:peps_party_binary_factorization}
+    to its two owners and composing the resulting identity with
+    (\ref{eq:peps_owner_composition}) gives the factorization, and its two
+    restricted compositions are allowed and therefore have norm at most one.
 \end{proof}

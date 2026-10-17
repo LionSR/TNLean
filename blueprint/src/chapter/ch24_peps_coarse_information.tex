@@ -4,8 +4,8 @@ The first information estimate of \cite[Section~3]{OpenAI2026PolynomialPEPS}
 concerns the lattice sample $T$ of a bounded union of rectangles. Its proof
 reads $T$ as a template of the area-law companion, with the whole domain as
 the cut, and then applies the sublinear collar bound and its amplification.
-The collar bound is not yet available, so the result below is proved
-assuming it.
+The physical collar theorem provides the required bound from the original
+Hamiltonian and its full-system gap. Conditional forms are stated separately.
 
 \begin{definition}[Bounded unions of lattice boxes]
     \label{def:peps_box_union}
@@ -42,7 +42,7 @@ assuming it.
         TNLean.PEPS.Approximation.IsBoxUnion.exists_template}
     \leanok
     \uses{def:peps_box_union,def:area_law_template}
-    A translate of a union of at most $N_0$ boxes is again such a union. Let
+    An integer translate of a union of at most $N_0$ boxes is again such a union. Let
     $T$ be a nonempty union of at most $N_0$ boxes with sup-norm diameter at
     most $D$. If $D+1\le s_0$, $D\le n$ and
     $\max(C_{\rm tpl},0)N_0(s_0+1)\le n$, then $T$ is a template with
@@ -59,9 +59,13 @@ assuming it.
 
 \begin{theorem}[Coarse information outside a sublinear collar]
     \label{thm:peps_coarse_information}
+    \lean{TNLean.PEPS.Approximation.coarse_mutualInformation_le_square,
+        TNLean.PEPS.Approximation.coarse_mutualInformation_le_translated_square}
+    \leanok
     \uses{def:peps_box_union,def:polynomial_peps_model,
-        thm:peps_coarse_information_of_collar}
-    Fix an integer $N_0\ge1$ and a constant $A_0\ge1$. There are $\beta<1$,
+        thm:peps_coarse_information_of_collar,thm:area_law_sublinear_collar}
+    In Proposition~3.1 of \cite{OpenAI2026PolynomialPEPS}, fix an integer
+    $N_0\ge1$ and a constant $A_0\ge1$. There are $\beta<1$,
     $C<\infty$ and $u_0<\infty$ such that the following holds. Let $u\ge u_0$
     and let $T$ be the full ambient lattice sample of a union of at most $N_0$
     axis-parallel rectangles, with $\operatorname{diam}_\infty T\le A_0u$. For
@@ -72,18 +76,22 @@ assuming it.
     \end{align*}
     The same holds for every subset of $\Lambda\cap T$ in the first argument,
     for rectangles with consistently assigned open or closed sides, and after a
-    common translation of the lattice coordinates. This is
-    Proposition~3.1 of \cite{OpenAI2026PolynomialPEPS}.
+    common translation of the lattice coordinates.
 \end{theorem}
 \begin{proof}
-    \uses{def:area_law_collar_bound,thm:peps_coarse_information_of_collar,
+    \leanok
+    \uses{def:area_law_collar_bound,thm:area_law_sublinear_collar,
+        thm:peps_coarse_information_of_collar,
         thm:peps_coarse_information_square,lem:peps_box_union_of_intervals,
         lem:peps_box_union_template}
     By Lemma~\ref{lem:peps_box_union_of_intervals}, the lattice sample $T$ is
-    a union of at most $N_0$ boxes, and by
-    Lemma~\ref{lem:peps_box_union_template} so is each common translate.
-    Apply Theorem~\ref{thm:peps_coarse_information_square} to this union, with
-    the sublinear collar bound, Proposition~9.6 of \cite{OpenAI2026AreaLaw}.
+    a union of at most $N_0$ boxes. For a common real translation $d$,
+    pulling both the physical coordinates and the rectangles back by $-d$
+    before taking lattice samples retains the same interval
+    sides and preserves all diameters and separation distances. The
+    square-grid estimate together with the physical
+    collar theorem, Proposition~9.6 of \cite{OpenAI2026AreaLaw}, at
+    $D_0=13$ and $C_{\rm tpl}=24$ then yields the bound.
 \end{proof}
 
 \begin{theorem}[Coarse information, assuming the sublinear collar bound]
@@ -107,7 +115,7 @@ assuming it.
 \begin{proof}
     \leanok
     \uses{lem:peps_box_union_template}
-    Take $\beta=\beta_0$. If $T$ is empty, so is $X$, and the information
+    Set $\beta=\beta_0$. If $T$ is empty, so is $X$, and the information
     vanishes. Otherwise put $A=\max(A_0,1)$, $s_0=\lceil Au\rceil+1$ and
     $n=\lceil c_1(Au+3)\rceil$ with
     $c_1=(\max(C_{\rm tpl},0)+1)(N_0+1)$. Then $T$ is a template with
@@ -118,7 +126,7 @@ assuming it.
         n^{1-\varepsilon}\le K^{1-\varepsilon}u^{1-\varepsilon}
         \le u^\varepsilon u^{1-\varepsilon}=u\le s_0,
     \end{align*}
-    so the collar bound applies and supplies every hypothesis of the
+    so the collar bound applies and satisfies every hypothesis of the
     amplification bound with $M=1$ and the common constant $\max(C,1)$. Its
     radius $r$ satisfies
     $\lfloor n^{1-\varepsilon}\rfloor+2r<K^{-\beta_0}n^{\beta_0}\le u^{\beta_0}$
@@ -135,7 +143,7 @@ assuming it.
     \leanok
     \uses{thm:peps_coarse_information_of_collar,def:polynomial_peps_model,
         lem:peps_box_union_template}
-    Fix $q$, $J>0$ and $\Delta>0$, and assume the sublinear collar bound at
+    Fix $q$, $J\ge0$ and $\Delta>0$, and assume the sublinear collar bound at
     range one. Fix $N_0$ and $A_0$. There are $\beta<1$, $C$ and $u_0$ such
     that for every $u\ge u_0$, every open square grid with a Hamiltonian of the
     model, every unit ground vector $\Omega$ with full-system gap $\Delta$,
@@ -147,8 +155,34 @@ assuming it.
 \end{theorem}
 \begin{proof}
     \leanok
-    Translate $T$ by $-c$ and place the Hamiltonian on the integer rectangle.
-    The ground vector, the gap, and the entropies of relabelled regions are
-    preserved, so mutual information is preserved as well. Apply
-    Theorem~\ref{thm:peps_coarse_information_of_collar}.
+    Translating $T$ by $-c$ and placing the Hamiltonian on the integer
+    rectangle preserves the ground vector, the gap, and the entropies of
+    relabelled regions, so mutual information is preserved as well and
+    Theorem~\ref{thm:peps_coarse_information_of_collar} applies.
+\end{proof}
+
+\begin{theorem}[Coarse information on finite induced domains]
+    \label{thm:peps_coarse_information_finite_domain}
+    \lean{TNLean.PEPS.Approximation.coarse_mutualInformation_le}
+    \leanok
+    \uses{def:peps_box_union,def:area_law_hamiltonian}
+    Fix integers $q\ge1$, $R\ge0$ and $N_0\ge0$, real numbers
+    $J\ge0$, $\Delta>0$ and $A_0$. There are $\beta<1$, $C$ and $u_0$
+    with the following property. Let $u\ge u_0$, let $\Lambda$ be a finite
+    induced domain, and let $\Omega$ be a normalized ground vector with
+    full-system gap $\Delta$ of an admissible Hamiltonian of range $R$
+    and bound $J$ on $\Lambda$. Let $T$ be a union of at most $N_0$ lattice
+    boxes with $\operatorname{diam}_\infty T\le A_0u$. Then
+    $I_\Omega(X:E)\le C$ whenever $X\subseteq\Lambda\cap T$,
+    $E\subseteq\Lambda$ and $\operatorname{dist}_\infty(T,E)>u^\beta$.
+    The constants precede the scale, domain, Hamiltonian, ground vector,
+    rectangle union and physical regions. Empty sampled regions are included.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_coarse_information_of_collar,thm:area_law_sublinear_collar}
+    With $D_0=2R+11$ and $C_{\rm tpl}=24$ in the physical collar theorem,
+    Theorem~\ref{thm:peps_coarse_information_of_collar} applies to the cut
+    given by the whole physical domain, whose crossing-edge endpoint set is
+    empty.
 \end{proof}

@@ -2,7 +2,7 @@
 \label{sec:source-rounded-information}
 
 The physical final-scale theorem has a further specialization removing its
-three numerical separation hypotheses.  The literal rounded definitions
+three numerical separation hypotheses.  The rounded definitions
 imply those inequalities uniformly at large size.  This specialization
 retains every source geometry and target/prefix entropy hypothesis.
 
@@ -32,19 +32,19 @@ retains every source geometry and target/prefix entropy hypothesis.
     \uses{thm:al_scan_status_scale_separation,
         thm:al_scan_positive_source_bands}
     The accepted logarithmic-radius estimate gives
-    $2r_0\leq n^\kappa$ eventually.  Applying the ceiling bound yields
-    $2r_0\leq D$.  The accepted rounded-scale separation and positive
-    band-count estimates supply the other inequalities because
-    $0<\kappa<\mu<1-\ell$.  Take one maximum threshold.
+    $2r_0\leq n^\kappa$ eventually, so the ceiling bound yields
+    $2r_0\leq D$, while the accepted rounded-scale separation and positive
+    band-count estimates give the remaining inequalities on a common threshold because
+    $0<\kappa<\mu<1-\ell$.
 \end{proof}
 
-\begin{theorem}[Conditional information from literal rounded scales]
+\begin{theorem}[Conditional information from rounded scales]
     \label{thm:source-rounded-information}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_sourceTarget_finalScale_mutualInformation_of_rounded_scales}
     \leanok
     The conditional final-scale physical information theorem holds without
     separately assuming $2r_0\leq D$, $1\leq D$ or $4D\leq m$.
-    Retain its original gapped ground state, literal floor and ceiling
+    Retain its original gapped ground state, floor and ceiling
     scales, scanner graph and support anchors, template-volume bound,
     ambient depth and layer bounds, anchor multiplicity, cut clearance,
     and source target/prefix entropy bounds.  Then one constant $C>0$ and
@@ -61,11 +61,11 @@ retains every source geometry and target/prefix entropy hypothesis.
     \leanok
     \uses{thm:source-final-information,
         thm:final-scanner-admissibility}
-    Keep the same radius coefficient and information constant as the
-    conditional final-scale theorem.  Increase its size threshold to the
-    maximum with the preceding numerical threshold.  Substitute the exact
-    rounded-scale equalities and apply the original theorem to the same
-    physical state and scanner.  No state, label or selected point is
+    With the radius coefficient and information constant of the
+    conditional final-scale theorem and the maximum of its size threshold with
+    the preceding numerical threshold, substituting the exact
+    rounded-scale equalities into the original theorem for the same
+    physical state and scanner yields the bound.  No state, label or selected point is
     changed, and no limit is interchanged.
 \end{proof}
 

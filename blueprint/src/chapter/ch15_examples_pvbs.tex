@@ -1,15 +1,16 @@
 \section{Product Vacua with Boundary States}
 \label{sec:examples_pvbs}
 
-The one-species PVBS chain has a product vacuum and a geometric boundary
-particle~\cite[Section~II, equations~(1)--(8)]{BachmannNachtergaele2012PVBS}.
-We use left-to-right matrix products and write $q=\mu e^{i\theta}$ for the
-hopping parameter and phase. The review's real parameter is $q=1+\lambda$
-\cite[Section~IV.C.4]{Cirac2021Matrix}. Its printed right-localization threshold
-and unconditional periodic-uniqueness claim require the corrections explained
-in~\cite{gap:cpgsv21_pvbs_threshold}. The following finite-chain results allow
-all complex $q$; $q=0$ is an algebraic extension of the original positive-hopping
-family. No spectral-gap assertion is included.
+Following~\cite[Section~II, equations~(1)--(8)]{BachmannNachtergaele2012PVBS},
+the one-species PVBS chain has a product vacuum and a geometric boundary
+particle. In left-to-right matrix products with hopping parameter and phase
+$q=\mu e^{i\theta}$, the real parameter of
+\cite[Section~IV.C.4]{Cirac2021Matrix} is $q=1+\lambda$; as explained
+in~\cite{gap:cpgsv21_pvbs_threshold}, the review's printed right-localization
+threshold and unconditional periodic-uniqueness claim require correction. The
+finite-chain results below hold for all complex $q$ (with $q=0$ as an
+algebraic extension of the original positive-hopping family) and make no
+spectral-gap assertion.
 
 \begin{definition}[One-species PVBS tensor and boundary vectors]
     \label{def:pvbs_tensor}
@@ -17,8 +18,9 @@ family. No spectral-gap assertion is included.
     \lean{MPSTensor.pvbsVacuum}
     \lean{MPSTensor.pvbsEdge}
     \leanok
-    Set $A^0=\operatorname{diag}(q,1)$ and $A^1=|0\rangle\langle1|$.
-    Write $\Omega_N=|0\cdots0\rangle$ and
+    The one-species PVBS tensor has matrices $A^0=\operatorname{diag}(q,1)$
+    and $A^1=|0\rangle\langle1|$, with vacuum vector
+    $\Omega_N=|0\cdots0\rangle$ and boundary-particle vector
     $\Psi_N(q)=\sum_{k=0}^{N-1}q^k|0\cdots1_k\cdots0\rangle$.
 \end{definition}
 
@@ -52,9 +54,10 @@ family. No spectral-gap assertion is included.
 \end{lemma}
 \begin{proof}
     \leanok
-    Multiplication by $A^0$ contributes $q$ before the unique particle;
-    multiplication by $A^1$ creates it. Two particles give the zero matrix.
-    Induction on the word length gives (\ref{eq:pvbs_word}).
+    Because multiplication by $A^0$ contributes a factor of $q$ before the
+    unique particle, multiplication by $A^1$ creates the particle, and two
+    particles give the zero matrix, induction on the word length yields
+    (\ref{eq:pvbs_word}).
 \end{proof}
 
 \begin{theorem}[Open PVBS matrix-product space]
@@ -95,14 +98,14 @@ family. No spectral-gap assertion is included.
 \begin{proof}
     \leanok
     A two-site vector satisfies the local constraint precisely when
-    $a_{11}=0$ and $a_{01}=q a_{10}$.
-    The left and right restrictions of a putative longer ground vector
-    lie in the shorter vacuum-particle spaces. Their common two-site
-    constraints eliminate the two-particle coefficient and relate the
-    remaining particle coefficients by $q$. This proves the intersection
-    property from length two onward. Iterating it identifies all nonwrapping
-    local constraints with $\mathcal G_N$. The existing positive-parent
-    kernel theorem then identifies the actual Hamiltonian kernel.
+    $a_{11}=0$ and $a_{01}=q a_{10}$. For a longer vector whose left and right
+    restrictions lie in the shorter vacuum-particle spaces, their shared
+    two-site constraints eliminate the two-particle coefficient and relate the
+    remaining particle coefficients by $q$, establishing the intersection
+    property from length two onward. Iterating this intersection property
+    identifies the subspace cut out by all nonwrapping local constraints with
+    $\mathcal G_N$, which equals the kernel of the positive parent
+    Hamiltonian.
 \end{proof}
 
 \begin{theorem}[Periodic PVBS vacuum uniqueness]
@@ -124,10 +127,11 @@ family. No spectral-gap assertion is included.
 \end{theorem}
 \begin{proof}
     \leanok
-    Every periodic ground vector satisfies the nonwrapping constraints,
-    hence is $a\Omega_N+b\Psi_N(q)$. A cyclic translate is also a ground
-    vector. Comparing its particle amplitudes at the first two sites yields
-    $b=bq^N$, forcing $b=0$. The vacuum satisfies every cyclic constraint.
+    Every periodic ground vector satisfies the nonwrapping constraints and
+    therefore takes the form $a\Omega_N+b\Psi_N(q)$. Because its cyclic
+    translate is also a periodic ground vector, comparing particle amplitudes
+    at the first two sites gives $b=bq^N$, which forces $b=0$, while the
+    vacuum $\Omega_N$ satisfies every cyclic constraint.
 \end{proof}
 
 \begin{theorem}[Critical W state and geometric localization]

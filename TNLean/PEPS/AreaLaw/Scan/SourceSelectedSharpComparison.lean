@@ -55,66 +55,6 @@ private def sourceSharpExponents : ScannerExponents :=
     e_lt_one := by norm_num [Exponents.boxError]
     kappa_le_e := by norm_num [Exponents.scannerKappa, Exponents.boxError] }
 
-private theorem augmented_prevector_properties_of_global
-    {V : Type} [Fintype V] [DecidableEq V] (q d k : ℕ)
-    (Ω : (V → Fin q) → ℂ) (ell : IrrepLabel (Equiv.Perm (Fin k)))
-    (H : Matrix (V → Fin q) (V → Fin q) ℂ) (e : ℝ)
-    (hne : WithLp.toLp 2 (replicaPrevector Ω d k ell ∘
-      globalReplicaCopiesEquiv (fun _ : V ↦ Fin q) (Fin d) (Fin d) k) ≠ 0)
-    (heigen : Matrix.globalReplicaMeanHamiltonian (fun _ : V ↦ Fin q) (Fin d) (Fin d) H k *ᵥ
-        (replicaPrevector Ω d k ell ∘
-          globalReplicaCopiesEquiv (fun _ : V ↦ Fin q) (Fin d) (Fin d) k) =
-      (e : ℂ) • (replicaPrevector Ω d k ell ∘
-        globalReplicaCopiesEquiv (fun _ : V ↦ Fin q) (Fin d) (Fin d) k)) :
-    let dims := augmentedDimensions (V := V) q (fun _ ↦ d)
-    let pre := replicaPrevector Ω d k ell ∘ augmentedSumReplicaCopiesEquiv q d k
-    pre ≠ 0 ∧ pre ∈ symmetricSubspace k (fun v ↦ Fin (dims v)) ∧
-      copyMean dims k (augmentOperator q (fun _ ↦ d) H) *ᵥ pre = (e : ℂ) • pre := by
-  classical
-  intro dims pre
-  let ecoord := augmentedReplicaConfigurationEquiv (V := V) q d k
-  have hpreEq : pre ∘ ecoord = replicaPrevector Ω d k ell ∘
-      globalReplicaCopiesEquiv (fun _ : V ↦ Fin q) (Fin d) (Fin d) k := by
-    simp only [pre, augmentedSumReplicaCopiesEquiv, Equiv.coe_trans,
-      Function.comp_assoc, ecoord, Equiv.symm_comp_self, Function.comp_id]
-  refine ⟨?_, ?_, ?_⟩
-  · intro hz
-    apply hne
-    rw [← hpreEq, hz]
-    rfl
-  · have hfixed : symProj (copyPerm ((v : V ⊕ Bool) → Fin (dims v)) k) *ᵥ pre = pre :=
-      symProj_mulVec_augmentedReplicaPrevector q d k Ω ell
-    rw [← hfixed]
-    exact symProj_mulVec_mem _ _
-  · have hglobal : Matrix.globalReplicaMeanHamiltonian (fun _ : V ↦ Fin q)
-        (Fin d) (Fin d) H k *ᵥ (pre ∘ ecoord) = (e : ℂ) • (pre ∘ ecoord) := by
-      rw [hpreEq]
-      exact heigen
-    rw [copyMean_augmentOperator_eq_globalReplicaMeanHamiltonian]
-    ext x
-    simpa only [Matrix.submatrix_mulVec_equiv, Equiv.symm_symm,
-      Function.comp_apply, ecoord, Equiv.apply_symm_apply, Pi.smul_apply] using
-      congrFun hglobal (ecoord.symm x)
-
-private theorem selected_density_of_rough_endpoint
-    {k n m D K d : ℕ} {a W C₁ width Q endpoint Brough rate b : ℝ}
-    (hk : 0 < k) (hn : 0 < n) (hm : 0 < m) (hD : 0 < D) (hK : 0 < K)
-    (ha : 0 < a) (hC : 0 < C₁) (hwidth : 0 < width) (hW : a * (K : ℝ) = W)
-    (c Ci Cb : ℝ)
-    (hendpoint : endpoint / (k : ℝ) ≤ Brough + roughEndpointRemainder d c K Ci k)
-    (hb : b ≤ Cb * Real.log ((k : ℝ) + 2))
-    (hselection : Q ≤ (endpoint + (2 * n * m : ℕ) * ((k : ℝ) * rate + b)) /
-      (((k : ℝ) * a * ((1 / (2 * (C₁ + 1))) / ((n : ℝ) * D))) *
-        ((n * m : ℕ) : ℝ) * width)) :
-    Q / (K * n * D : ℝ) ≤ (2 * (C₁ + 1) / (W * ((n * m : ℕ) : ℝ) * width)) *
-      (Brough + (2 * n * m : ℕ) * rate +
-        roughEndpointRemainder d c K (Ci + (2 * n * m : ℕ) * Cb) k) := by
-  have hbudget := roughSelectionBudget_le_of_endpoint_budget (H := n * m)
-    hk c Ci Cb endpoint Brough rate b hendpoint hb
-  have hdensity := selected_density_le_of_normalized_budget hk hn hm hD hK ha hC hwidth
-    hbudget (by simpa only [Nat.mul_assoc] using hselection)
-  simpa only [hW, Nat.mul_assoc] using hdensity
-
 open Classical in
 /-- A single truncated target window and a single physical label sequence
 produce an actual selected charge comparison at the literal final scales.

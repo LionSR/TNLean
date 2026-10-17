@@ -1,0 +1,40 @@
+\section{Degree of the distributed link family}
+\label{sec:peps_distributed_routing_degree}
+
+The links constructed in the compression argument retain their gate and kind
+labels. Thus distinct links between the same parties are counted separately.
+The following comparisons give the degree bound used in
+\cite[Section~8.1]{OpenAI2026PolynomialPEPS}.
+
+\begin{theorem}[Degree and distributed incidence]
+    \label{thm:peps_distributed_degree_incidence}
+    \leanok
+    \uses{def:compression_distributed_links, def:compression_distributed_link_parties}
+    \lean{TNLean.PEPS.Approximation.DistributedOperatorContraction.degreeBounded_of_card_incidentDistributedLinks_le}
+    Let $I(p)$ be the set of constructed links incident to a party $p$.
+    If $|I(p)|\le d$ for every party, the constructed network has degree at
+    most $d$, counting parallel links separately.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:compression_operator_endpoints}
+    The endpoints of each oriented link give precisely its participating
+    set. The links whose source or target is $p$ therefore correspond
+    bijectively to $I(p)$, with every gate and kind label retained.
+\end{proof}
+
+\begin{theorem}[Degree from arity and lifetime participation]
+    \label{thm:peps_distributed_degree_lifetime}
+    \leanok
+    \uses{def:compression_distributed_links}
+    \lean{TNLean.PEPS.Approximation.DistributedOperatorContraction.degreeBounded_of_arity_and_lifetime}
+    Suppose the chosen root of each gate belongs to its participating set,
+    each gate involves at most $b$ parties, and each party participates in
+    at most $b$ gates over the entire construction. Then the constructed
+    network has degree at most $2b(b-1)$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:compression_distributed_incidence_bound,
+        thm:peps_distributed_degree_incidence}
+    The distributed incidence bound gives $|I(p)|\le2b(b-1)$ for every
+    party, so the degree comparison bounds the network degree by $2b(b-1)$.
+\end{proof}

@@ -24,12 +24,12 @@
 \begin{proof}
     \leanok
     \uses{def:cyclic_window_complement_indexing}
-    Reindex the product by the cyclic window and complement identification of
-    Definition~\ref{def:cyclic_window_complement_indexing}, then split the
-    product over the resulting disjoint union.
+    Reindexing the product by the cyclic window and complement identification of
+    Definition~\ref{def:cyclic_window_complement_indexing} and splitting it
+    over the resulting disjoint union gives the factorization.
 \end{proof}
 
-\begin{theorem}[Three-site anticommutator transport to cyclic adjacent pairs]
+\begin{theorem}[Three-site anticommutator embedding into cyclic adjacent pairs]
     \label{thm:three_site_anticommutator_cyclic_transport}
     \lean{MPSTensor.re_inner_localTermES_adjacent_twoSite_forward_ge_of_threeSite}
     \lean{MPSTensor.re_inner_localTermES_adjacent_twoSite_backward_ge_of_threeSite}
@@ -114,8 +114,8 @@
     intertwining (\ref{eq:three_site_anticommutator_restriction_intertwining}),
     this is (\ref{eq:three_site_anticommutator_transport_forward}); in
     particular, summation leaves $c$ unchanged. For the backward
-    pair, begin the forward window at $i-1$. Moving one step forward from that
-    site returns $i$, including when $i=0$, and yields
+    pair, beginning the forward window at $i-1$ and moving one step forward
+    from that site returns $i$, including when $i=0$, and yields
     (\ref{eq:three_site_anticommutator_transport_backward}).
 \end{proof}
 
@@ -147,10 +147,11 @@
 \begin{proof}
     \leanok
     \uses{lem:transported_es_local_projections, lem:ordered_projection_rowsum_reduction}
-    Lemma~\ref{lem:transported_es_local_projections} supplies the symmetric-projection
-    hypothesis for the family $P_i=h_{i,\mathrm{ES}}$. Apply
-    Lemma~\ref{lem:ordered_projection_rowsum_reduction} to this family and use
-    $H_{N,L}^{\mathrm{ES}}=\sum_i h_{i,\mathrm{ES}}$.
+    Lemma~\ref{lem:transported_es_local_projections} gives the symmetric-projection
+    hypothesis for the family $P_i=h_{i,\mathrm{ES}}$, so applying
+    Lemma~\ref{lem:ordered_projection_rowsum_reduction} to this family with
+    $H_{N,L}^{\mathrm{ES}}=\sum_i h_{i,\mathrm{ES}}$ yields the quadratic-form
+    bound.
 \end{proof}
 
 \begin{lemma}[Parent-Hamiltonian gap from ordered local row bounds]
@@ -168,7 +169,7 @@
 \begin{proof}
     \leanok
     \uses{lem:parent_hamiltonian_ordered_rowsum_quadratic, lem:parent_hamiltonian_es_quadratic_reduction}
-    The fixed-chain row-sum reduction supplies the quadratic-form estimate with
+    The fixed-chain row-sum reduction gives the quadratic-form estimate with
     $\gamma=1/(4L)$ for every admissible $N$. The positivity and kernel
     identification of the Hilbert-space Hamiltonian then allow
     Lemma~\ref{lem:parent_hamiltonian_es_quadratic_reduction} to convert this
@@ -202,7 +203,7 @@
 
 \begin{proof}
     \leanok
-    The fixed-chain anticommutator row-sum reduction supplies the quadratic-form
+    The fixed-chain anticommutator row-sum reduction gives the quadratic-form
     estimate with $\gamma=1/(4L)$ for every admissible $N$. The positivity and
     kernel identification of the Hilbert-space Hamiltonian then convert this
     quadratic-form estimate into the norm lower bound on the orthogonal complement
@@ -235,8 +236,8 @@
 
 \begin{proof}
     \leanok
-    Apply the finite-overlap anticommutator projection reduction to the
-    Hilbert-space local terms. The resulting quadratic-form estimate has
+    Applying the finite-overlap anticommutator projection reduction to the
+    Hilbert-space local terms yields the quadratic-form estimate with
     $\gamma=1/(4L)$, and
     Lemma~\ref{lem:parent_hamiltonian_es_quadratic_reduction} converts it to the
     norm lower bound.
@@ -266,8 +267,8 @@
 
 \begin{proof}
     \leanok
-    Apply the finite-overlap projection reduction with
-    $P_i=h_{i,\mathrm{ES}}$.
+    Applying the finite-overlap projection reduction with
+    $P_i=h_{i,\mathrm{ES}}$ gives the quadratic-form inequality.
 \end{proof}
 
 \subsection{Cyclic-window overlap estimates}\label{subsec:spectral_gap_cyclic_overlap}
@@ -293,7 +294,7 @@
 
 \begin{proof}
     \leanok
-    Write $k=i+r\pmod N$ for a representative offset $r$. Membership in
+    Writing $k=i+r\pmod N$ for a representative offset $r$, membership in
     $S_i$ gives an offset $r<L$, and conversely an offset below $L$ gives the
     corresponding point of the support.
 \end{proof}
@@ -351,7 +352,7 @@
 \begin{proof}
     \leanok
     \uses{def:cyclic_window_support, def:cyclic_windows_overlap}
-    If $S_i$ and $S_j$ meet, choose offsets $a,b<L$ with
+    If $S_i$ and $S_j$ meet, there are offsets $a,b<L$ with
     $i+a\equiv j+b\pmod N$. Since $2L\le N$, the offset from $i$ to $j$ is
     either the clockwise distance $a-b\in\{1,\ldots,L-1\}$ or the
     counterclockwise distance $b-a\in\{1,\ldots,L-1\}$; the zero distance is
@@ -403,14 +404,14 @@
     Lemma~\ref{lem:cyclic_window_overlap_cardinality} gives the row-cardinality
     bound $m=2(L-1)$ for the overlap relation among length-$L$ local windows,
     and
-    Lemma~\ref{lem:transported_es_local_projections} supplies the symmetric
+    Lemma~\ref{lem:transported_es_local_projections} gives the symmetric
     projection structure of each Hilbert-space local term. If two cyclic supports
     do not meet, the corresponding windows are site-disjoint, so
     Lemma~\ref{lem:cyclic_window_nonoverlap_positive} gives the required
-    non-negative ordered cross term. Apply
-    Lemma~\ref{lem:parent_hamiltonian_finite_overlap_ordered_cross_term_gap} with
-    these facts and the overlapping-window
-    estimate (\ref{eq:ph_cyclic_window_overlap_estimate}).
+    non-negative ordered cross term. Combining these facts with the
+    overlapping-window estimate (\ref{eq:ph_cyclic_window_overlap_estimate}) in
+    Lemma~\ref{lem:parent_hamiltonian_finite_overlap_ordered_cross_term_gap}
+    yields the norm lower bound.
 \end{proof}
 
 \begin{lemma}[Parent-Hamiltonian gap from a cyclic anticommutator estimate]
@@ -441,6 +442,6 @@
     Lemma~\ref{lem:cyclic_window_overlap_cardinality} gives at most $2(L-1)$
     overlapping off-diagonal windows in each row and column. If two cyclic
     supports do not meet, Lemma~\ref{lem:cyclic_window_nonoverlap_positive}
-    gives non-negative ordered cross terms in both orders. Apply the
-    finite-overlap anticommutator reduction.
+    gives non-negative ordered cross terms in both orders, so the
+    finite-overlap anticommutator reduction yields the norm lower bound.
 \end{proof}

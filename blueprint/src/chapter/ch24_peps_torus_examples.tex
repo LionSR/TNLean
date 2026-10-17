@@ -53,8 +53,8 @@ $(x-1,y)$ to $v$ (left).
 \end{lemma}
 
 \begin{proof}\leanok
-    Induction on the representatives $0,\ldots,w-1$ of the first coordinate
-    and $0,\ldots,h-1$ of the second.
+    Inducting on the representatives $0,\ldots,w-1$ of the first coordinate
+    and $0,\ldots,h-1$ of the second equates every value $f(x,y)$ to $f(0,0)$.
 \end{proof}
 
 \begin{lemma}[Contraction of a torus PEPS]%
@@ -207,10 +207,10 @@ The simple-graph representation requires $w,h\ge2$
 \begin{proof}\leanok
     \uses{lem:peps_torus_site_tensor_contraction}
     The four-leg basis vector with labels $(0,1,0,0)$ has zero image.
-    In the simple graph, give the right bond at one vertex label $1$
-    and every other incident bond label $0$. The top and right bonds are distinct,
-    so no physical label can agree with both. This virtual basis
-    vector is mapped to zero.
+    In the simple graph, assigning label $1$ to the right bond at one vertex
+    and label $0$ to every other incident bond gives distinct labels on the
+    top and right bonds, so no physical label can agree with both and this
+    virtual basis vector is mapped to zero.
 \end{proof}
 
 \begin{theorem}[On-site permutations and their virtual action]
@@ -237,8 +237,8 @@ The simple-graph representation requires $w,h\ge2$
     \uses{thm:peps_ghz_state}
     A permutation preserves equality of the five labels in the site
     tensor. Reindexing the sum over constant configurations in
-    Theorem~\ref{thm:peps_ghz_state} proves the state identity.
-    Take $\pi(i)=i+g$ for the cyclic shift.
+    Theorem~\ref{thm:peps_ghz_state} proves the state identity, and
+    setting $\pi(i)=i+g$ specializes this symmetry to the cyclic shift.
 \end{proof}
 
 \section{The cluster state}%
@@ -358,8 +358,9 @@ The simple-graph representation requires $w,h\ge2$
     Theorem~\ref{thm:peps_cluster_state} identifies the coefficient with
     $2^{-N}g(\sigma)$, and its all-zero coefficient is $2^{-N}\ne0$.
     Each site has one incoming and one outgoing bond in each coordinate
-    direction, giving (\ref{eq:peps_cluster_stabilizer_pauli}). Apply
-    Theorem~\ref{thm:peps_graph_stabilizer_line} and absorb the nonzero scalar.
+    direction, giving (\ref{eq:peps_cluster_stabilizer_pauli}). Applying
+    Theorem~\ref{thm:peps_graph_stabilizer_line} and absorbing the nonzero
+    scalar identifies the common $+1$ eigenspace.
 \end{proof}
 
 \section{The CZX model}%
@@ -559,9 +560,9 @@ of their common plaquette, one effective spin per boundary plaquette
     review's operator $O(A)$ with the printed matrices,
     $V^{\otimes N}\iota=(-1)^N\iota\,O(A)$
     \cite[Appendix~A, ``The CZX MPU'']{Cirac2021Matrix},
-    \cite{ChenLiuWen2011CZX}. For actual positive proper bounded rectangles, the physical region image
+    \cite{ChenLiuWen2011CZX}. For positive proper bounded rectangles, the physical region image
     and this cyclic boundary action are identified in
-    Section~\ref{sec:peps_czx_rectangle_boundary}, together with the actual
+    Section~\ref{sec:peps_czx_rectangle_boundary}, together with the
     reduced-density support and rank, preserved by trace normalization.
     Nonzero spectral values, entropy, isometric normalization of the physical
     boundary map, and nonrectangular regions remain outside that result
@@ -730,8 +731,8 @@ factors by $\pi\in S_4$.
 
 \begin{proof}\leanok
     \uses{lem:peps_torus_site_tensor_contraction}
-    Expand each $A=\Pi_{\mathrm{sym}}L$ as a sum over the intermediate label
-    $\tau_v$. The identity factors of $L$ force the bond index on the top edge
+    Expanding each $A=\Pi_{\mathrm{sym}}L$ as a sum over the intermediate label
+    $\tau_v$, the identity factors of $L$ force the bond index on the top edge
     of $v$ to be $\tau_{v,0}$ and on the right edge to be $\tau_{v,1}$, and the
     $Y$ factors on the down and left legs then give
     $Y_{\tau_{v,2},\tau_{v-(0,1),0}}Y_{\tau_{v,3},\tau_{v-(1,0),1}}$; shifting
@@ -921,9 +922,8 @@ of $h$ is used.
 
 \begin{proof}\leanok
     \uses{thm:peps_classical_coeff}
-    Replace $\overline{\Coeff(\sigma)}\Coeff(\sigma)$ by
-    $e^{-\beta H(\sigma)}$ in both sums, by
-    Theorem~\ref{thm:peps_classical_coeff}.
+    By Theorem~\ref{thm:peps_classical_coeff},
+    $\overline{\Coeff(\sigma)}\Coeff(\sigma)=e^{-\beta H(\sigma)}$ in both sums.
 \end{proof}
 
 In particular, classical correlation functions are expectation values of

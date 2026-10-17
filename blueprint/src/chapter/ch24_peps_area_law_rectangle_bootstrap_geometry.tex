@@ -1,4 +1,4 @@
-\subsection{Actual scanner geometry for weakly safe rectangles}
+\subsection{Scanner geometry for weakly safe rectangles}
 \label{sec:rectangle_bootstrap_geometry}
 
 Let $Q$ be a nonempty integer rectangle, with maximal side length $s$,
@@ -8,13 +8,13 @@ rectangles.
 For a cut $A$ in an arbitrary finite induced domain, the physical target
 is $A\cap Q$; it may be empty even though the ambient rectangle is not.
 
-\begin{definition}[The actual rectangle scanner]
+\begin{definition}[The rectangle scanner]
     \label{def:rectangle_bootstrap_scanner}
     \lean{TNLean.PEPS.AreaLaw.Scan.rectangleBootstrapScanner}
     \leanok
     Fix scanner exponents and real coefficients $C_r,C_1$.
     Put $T=Q\cap\mathbb Z^2$ and $n=\lceil24s\rceil=24s$.
-    Use the actual induced domain graph, the supplied cut $A$, and
+    Use the induced domain graph, the given cut $A$, and
     ambient integer sup-norm depth from $T$.
     Anchor each interaction support at one chosen member of that same
     nonempty support.
@@ -39,7 +39,7 @@ is $A\cap Q$; it may be empty even though the ambient rectangle is not.
     parameter, with the following property.
     Let $s\geq N$ and $D_0\geq1$, and suppose the rectangle has
     strict clearance greater than $D_0s$ from every endpoint of an
-    actual edge crossing $A$.
+    edge crossing $A$.
     For the scanner above and $L=\lfloor n^{1-\ell}\rfloor$,
     \begin{align}
         |T|                    & \leq n^2,
@@ -50,7 +50,7 @@ is $A\cap Q$; it may be empty even though the ambient rectangle is not.
                                & 2L+10r_0  & <\operatorname{dist}_\infty(t,z).
         \label{eq:rectangle_bootstrap_geometry}
     \end{align}
-    The last inequality holds for every $t\in T$ and every actual cut
+    The last inequality holds for every $t\in T$ and every cut
     endpoint $z$.
     Every chosen anchor lies in its original support, and at most
     $2^{(1+2R(R+1))-1}$ labels have a given anchor.
@@ -64,11 +64,11 @@ is $A\cap Q$; it may be empty even though the ambient rectangle is not.
     gives $|T|\leq s^2\leq n^2$ independently of aspect ratio.
     For $1\leq r\leq L\leq s$, the native rectangle layer bound gives
     $|T_r\setminus T_{r-1}|\leq4(s+2r)\leq12s\leq n$.
-    The rounded-clearance theorem supplies $1\leq L\leq s$,
+    The rounded-clearance theorem gives $1\leq L\leq s$,
     $D_0L+L\leq D_0s$, and $2L+10r_0\leq D_0s$ at one threshold
-    uniform in $D_0$.
-    Combine its last inequality with the assumed weak safety.
-    Unpacking an ambient cut endpoint gives its actual crossing edge
+    uniform in $D_0$, and combining its last inequality with the assumed
+    weak safety gives the strict clearance.
+    Unpacking an ambient cut endpoint gives its crossing edge
     and physical endpoint; the natural sup-norm distance equals the
     integer sup-norm distance after casting.
     The existing support count bounds the fibers of the chosen anchors.
@@ -78,7 +78,7 @@ is $A\cap Q$; it may be empty even though the ambient rectangle is not.
 \end{proof}
 
 No template with stronger clearance is used.
-The same original physical entropy and raw shell estimates can now be
+The same original physical entropy and dyadic shell estimates can now be
 applied to these exact regions.
 The entropy improvement, uniform current-exponent coefficient and box
 supremum are separate steps in the proof of

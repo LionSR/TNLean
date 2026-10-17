@@ -6,7 +6,9 @@
         MPOTensor.verticalLoop_eq_physTraceTransfer}
     \leanok
     \uses{def:mpo_tensor}
-    The physical-trace transfer of an MPO tensor $M$ is the virtual matrix
+    As in the zero-correlation-length condition of
+    \cite[Definition~4.2, lines~735--739]{Cirac2016MPDO_arXiv}, the
+    physical-trace transfer of an MPO tensor $M$ is the virtual matrix
     obtained by contracting the ket and bra physical legs of one tensor:
     \begin{align}
         \mathcal T_M
@@ -14,31 +16,29 @@
         \notag
     \end{align}
     % Gap documented in docs/paper-gaps/cpsv16_zcl_canonical_form_normalization.tex.
-    This is the transfer object appearing in the zero-correlation-length
-    condition of \cite[Definition~4.2, lines~735--739]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
-\begin{definition}[Literal physical-trace idempotence]
+\begin{definition}[Physical-trace idempotence]
     \label{def:mpo_physical_trace_idempotence}
     \lean{MPOTensor.IsPhysicalTraceIdempotent}
     \leanok
     \uses{def:mpo_physical_trace_transfer}
-    An MPO tensor $M$ has zero correlation length when its physical-trace
-    transfer is idempotent:
+    In the fixed-tensor condition of
+    \cite[Definition~4.2, lines~735--739]{Cirac2016MPDO_arXiv}, an MPO tensor
+    $M$ has zero correlation length when its physical-trace transfer is
+    idempotent:
     \begin{align}
         \mathcal T_M^2 & = \mathcal T_M.
         \notag
     \end{align}
-    This is the literal fixed-tensor condition of
-    \cite[Definition~4.2, lines~735--739]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
-\begin{theorem}[Equation for literal physical-trace idempotence]
+\begin{theorem}[Equation for physical-trace idempotence]
     \label{thm:mpo_physical_trace_idempotence_iff}
     \lean{MPOTensor.isPhysicalTraceIdempotent_iff}
     \leanok
     \uses{def:mpo_physical_trace_idempotence}
-    An MPO tensor satisfies literal physical-trace idempotence if and only if
+    An MPO tensor has idempotent physical-trace transfer if and only if
     $\mathcal T_M^2=\mathcal T_M$.
 \end{theorem}
 
@@ -77,8 +77,8 @@
     \leanok
     \uses{def:mpo_physical_trace_idempotence,
         def:mpdo_periodic_two_point_correlation}
-    Let $M$ be an MPO tensor satisfying the literal zero-correlation-length
-    condition. Fix $O_1,O_2$ and a middle gap $g_{\mathrm{mid}}\geq0$.
+    Let $M$ be an MPO tensor satisfying the zero-correlation-length
+    condition $\mathcal T_M^2=\mathcal T_M$. Fix $O_1,O_2$ and a middle gap $g_{\mathrm{mid}}\geq0$.
     For two positive wrapping gaps
     $g_{\mathrm{wrap}},g'_{\mathrm{wrap}}>0$,
     \begin{align}
@@ -97,9 +97,9 @@
 \begin{proof}
     \leanok
     Idempotence gives $\mathcal T_M^r=\mathcal T_M$ for every $r>0$.
-    Apply this identity to the wrapping power in each side of
-    (\ref{eq:mpdo_zcl_correlation_positive_wrap_gap_independence}); the middle
-    power is unchanged.
+    Applying this identity to the wrapping power in each side of
+    (\ref{eq:mpdo_zcl_correlation_positive_wrap_gap_independence}) while
+    leaving the middle power unchanged gives the equality.
 \end{proof}
 
 \begin{corollary}[Zero correlation length gives positive-gap distance independence]
@@ -108,8 +108,8 @@
     \leanok
     \uses{def:mpo_physical_trace_idempotence,
         def:mpdo_periodic_two_point_correlation}
-    Let $M$ be an MPO tensor satisfying the literal zero-correlation-length
-    condition. Fix $O_1,O_2$. For two pairs of positive complementary gaps
+    Let $M$ be an MPO tensor satisfying the zero-correlation-length
+    condition $\mathcal T_M^2=\mathcal T_M$. Fix $O_1,O_2$. For two pairs of positive complementary gaps
     $g_{\mathrm{mid}},g_{\mathrm{wrap}}>0$ and
     $g'_{\mathrm{mid}},g'_{\mathrm{wrap}}>0$,
     \begin{align}
@@ -146,7 +146,7 @@
         \notag
     \end{align}
     This scale-invariant condition excludes the zero transfer while remaining
-    invariant under positive rescaling of $M$, extending the literal $\lambda=1$
+    invariant under positive rescaling of $M$, extending the $\lambda=1$
     diagram of \cite[Definition~4.2]{Cirac2016MPDO_arXiv}
     \cite{gap:cpsv16_zcl_canonical_form_normalization}.
 \end{definition}
@@ -167,13 +167,13 @@
     Definition~\ref{def:mpo_source_zcl}.
 \end{proof}
 
-\begin{theorem}[Literal idempotence gives the up-to-scalar physical-trace
+\begin{theorem}[Physical-trace idempotence gives the up-to-scalar physical-trace
         relation]
     \label{thm:mpo_source_zcl_of_physical_trace_idempotent}
     \lean{MPOTensor.IsPhysicalTraceIdempotent.isSourceZCL}
     \leanok
     \uses{def:mpo_source_zcl, def:mpo_physical_trace_idempotence}
-    If $\mathcal T_M\ne0$ and $M$ has literal physical-trace idempotence, then $M$
+    If $\mathcal T_M\ne0$ and $M$ has idempotent physical-trace transfer, then $M$
     satisfies the nonzero up-to-scalar physical-trace relation.
 \end{theorem}
 
@@ -205,7 +205,7 @@
         \tn[skin=mpo]{M} & \tn[skin=mpo]{M}
     \end{tenkz}
 \end{center}
-This is the literal identity in
+This is the unscaled identity in
 \cite[Definition~4.2, lines~735--739]{Cirac2016MPDO_arXiv};
 Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
 
@@ -270,12 +270,12 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     \lean{MPOTensor.isPhysicalTraceIdempotent_of_isRFPViaTS}
     \leanok
     \uses{def:is_rfp_via_ts, def:mpo_physical_trace_idempotence}
-    If $M$ is a renormalization fixed point via trace-preserving maps, then
-    $\mathcal T_M^2=\mathcal T_M$.
-    This proves the zero-correlation-length component of implication
+    Establishing the zero-correlation-length component of implication
     (i)$\Rightarrow$(ii) in
     \cite[Theorem~4.9, lines~851--893]{Cirac2016MPDO_arXiv} and
-    \cite[Appendix~C, lines~1333--1340]{Cirac2016MPDO_arXiv}.
+    \cite[Appendix~C, lines~1333--1340]{Cirac2016MPDO_arXiv}, if $M$ is a
+    renormalization fixed point via trace-preserving maps, then
+    $\mathcal T_M^2=\mathcal T_M$.
 \end{theorem}
 
 \begin{proof}
@@ -409,7 +409,7 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     Let $K$ be the bond-two MPO tensor of
     Theorem~\ref{thm:kato_deformed_mpdo_fixed_tensor_obstruction}, and let
     $A_K$ be its doubled-index MPS tensor, an MPS tensor with four physical
-    symbols. Then $A_K$ is in literal CPSV canonical form: every letter is
+    symbols. Then $A_K$ is in CPSV canonical form: every letter is
     the weighted direct sum
     $A_K^{(i,j)}=\mu_0A_0^{(i,j)}\oplus\mu_1A_1^{(i,j)}$ for
     $i,j\in\{0,1\}$, with weights and bond-one normal tensors
@@ -421,7 +421,7 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
         A_1^{(i,j)} & =(-1)^i\,\frac{\delta_{ij}}{\sqrt2}.
         \notag
     \end{align}
-    Moreover, $K$ saturates the area law: for every $N\geq2$ and every
+    In addition, $K$ saturates the area law: for every $N\geq2$ and every
     $1\leq L<N$, the reduced state of the first $L$ sites is maximally
     mixed,
     \begin{align}
@@ -434,7 +434,7 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
         =N\log2-S_N^{(N)}(K)$ is constant in $L$, giving
     $I_1=I_2=\cdots=I_{\lfloor N/2\rfloor}$.
     Consequently, there is a bond-two MPO tensor whose doubled-index MPS
-    tensor is in literal CPSV canonical form, which generates an MPDO, whose
+    tensor is in CPSV canonical form, which generates an MPDO, whose
     physical-trace transfer is idempotent, which saturates the area law, and
     which is not a renormalization fixed point in the sense of
     Definition~\ref{def:is_rfp_via_ts}.
@@ -458,7 +458,7 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     $\sum_{i,j}A_k^{(i,j)}\,\overline{A_k^{(i,j)}}=1$, hence has identity
     transfer map and is a normal tensor by
     Lemma~\ref{lem:bond_dimension_one_identity_transfer_normal}. The
-    weighted direct sum of positive-dimensional normal blocks is in literal
+    weighted direct sum of positive-dimensional normal blocks is in
     CPSV canonical form by Definition~\ref{def:cpsv_canonical_form}.
 
     Since $\tr\rho_N(K)=1$, the normalized state is $\rho_N(K)$ itself.
@@ -473,7 +473,7 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     $1\leq L<\lfloor N/2\rfloor$, so $K$ saturates the area law by
     Definition~\ref{def:is_sal}.
 
-    Theorem~\ref{thm:kato_deformed_mpdo_fixed_tensor_obstruction} supplies
+    Theorem~\ref{thm:kato_deformed_mpdo_fixed_tensor_obstruction} establishes
     the remaining three properties: $K$ generates an MPDO, its
     physical-trace transfer is idempotent, and it is not a renormalization
     fixed point. Together with canonical form and area-law saturation, this
@@ -493,8 +493,9 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
 
 \begin{proof}
     \leanok
-    Apply Theorem~\ref{thm:rfp_via_ts_physical_trace_idempotent} and take the
-    positive scalar in Definition~\ref{def:mpo_source_zcl} to be $1$.
+    Theorem~\ref{thm:rfp_via_ts_physical_trace_idempotent} gives
+    $\mathcal T_M^2=\mathcal T_M$, which satisfies Definition~\ref{def:mpo_source_zcl}
+    with scalar $1$.
 \end{proof}
 
 \section{Purification fixed points}
@@ -504,11 +505,10 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     \lean{MPOTensor.purificationTensor}
     \leanok
     \uses{def:mps_tensor}
-    Given matrices $A^{(i,k)}$ with a spin index $i$ and an ancillary index $k$,
-    the associated MPS tensor on the product physical space is
-    $\widehat A^{(i,k)}=A^{(i,k)}$.
-    This is the tensor whose finite-chain vector appears in the purification
-    formula of \cite[lines~744--751]{Cirac2016MPDO_arXiv}.
+    Given matrices $A^{(i,k)}$ with a spin index $i$ and an ancillary index
+    $k$, the MPS tensor whose finite-chain vector appears in the purification
+    formula of \cite[lines~744--751]{Cirac2016MPDO_arXiv} is the tensor on the
+    product physical space defined by $\widehat A^{(i,k)}=A^{(i,k)}$.
 \end{definition}
 
 \begin{definition}[Ancillary trace of a purifying MPS]
@@ -516,8 +516,9 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     \lean{MPOTensor.purificationDensity}
     \leanok
     \uses{def:mpdo_purification_tensor, def:mpv}
-    For a purifying spin--ancilla tensor $A$, the reduced spin density matrix is
-    defined by
+    In the coefficient form of the ancillary trace of
+    \cite[eq.~\textup{(4.7)}, line~751]{Cirac2016MPDO_arXiv}, the reduced spin
+    density matrix of a purifying spin--ancilla tensor $A$ is defined by
     \begin{align}
         [\rho^{(N)}_p(A)]_{\sigma,\tau}
          & =
@@ -533,8 +534,6 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
         A^{(\sigma_{N-1},\kappa_{N-1})}\right).
         \notag
     \end{align}
-    This is the coefficient form of the ancillary trace in
-    \cite[eq.~\textup{(4.7)}, line~751]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
 \begin{definition}[Single-site ancillary trace map]
@@ -542,15 +541,15 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     \lean{MPOTensor.ancillaryTraceMap}
     \leanok
 
-    For a matrix $X$ on the spin--ancilla space, the ancillary trace map is
+    Following \cite[lines~751 and~761--764]{Cirac2016MPDO_arXiv}, for a matrix
+    $X$ on the spin--ancilla space, the one-site trace over ancillary degrees
+    of freedom is
     \begin{align}
         [\tr_a(X)]_{ij}
          & =
         \sum_k X_{(i,k),(j,k)}.
         \notag
     \end{align}
-    This is the one-site trace over ancillary degrees of freedom appearing in
-    \cite[lines~751 and~761--764]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
 \begin{theorem}[The ancillary trace is trace-preserving completely positive]
@@ -558,16 +557,16 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     \lean{MPOTensor.ancillaryTraceMap_isKrausCPTP}
     \leanok
     \uses{def:mpdo_ancillary_trace_map}
-    For every ancillary dimension, the one-site ancillary trace map is
-    trace-preserving and completely positive. This is the structure described
-    immediately after Definition~4.3 in
-    \cite[lines~761--764]{Cirac2016MPDO_arXiv}.
+    As noted immediately after Definition~4.3 in
+    \cite[lines~761--764]{Cirac2016MPDO_arXiv}, for every ancillary dimension,
+    the one-site ancillary trace map is trace-preserving and completely
+    positive.
 \end{theorem}
 \begin{proof}
     \leanok
 
-    This is Lemma~\cite[``The right partial trace is trace-preserving completely positive'']{QICLean2026Blueprint} with $A$ the spin
-    space and $B$ the ancillary space.
+    Applying Lemma~\cite[``The right partial trace is trace-preserving completely positive'']{QICLean2026Blueprint}
+    with $A$ the spin space and $B$ the ancillary space gives the claim.
 \end{proof}
 
 \begin{definition}[Global purification equation]
@@ -646,7 +645,8 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
 \end{theorem}
 
 \begin{proof}\leanok
-    Forget the renormalization-fixed-point condition on the purifying tensor.
+    Forgetting the renormalization-fixed-point condition on the purifying
+    tensor leaves the local purification structure.
 \end{proof}
 
 \begin{theorem}[A purification RFP generates MPDOs]
@@ -660,8 +660,8 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
 
 \begin{proof}\leanok
     \uses{thm:prfp_is_lpdo, thm:lpdo_is_mpdo}
-    Apply Theorem~\ref{thm:lpdo_is_mpdo} to the local purification supplied by
-    Theorem~\ref{thm:prfp_is_lpdo}.
+    Applying Theorem~\ref{thm:lpdo_is_mpdo} to the local purification given by
+    Theorem~\ref{thm:prfp_is_lpdo} yields the claim.
 \end{proof}
 
 \begin{theorem}[Purification RFP does not imply doubled-index idempotence]
@@ -675,18 +675,17 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
 
 % Counterexample analysed in docs/paper-gaps/cpsv16_zcl_canonical_form_normalization.tex.
 \begin{proof}\leanok
-    Take the diagonal purification at $d=d_K=2$ and $D=D'=1$ with amplitudes
-    $A=[\tfrac{1}{\sqrt2},0,0,\tfrac{1}{\sqrt2}]$. The purifying tensor is a
-    pure-state renormalization fixed point, since $\sum|A|^2=1$ makes its transfer
-    map the identity. The ancilla contraction
+    Consider the diagonal purification at $d=d_K=2$ and $D=D'=1$ with
+    amplitudes $A=[\tfrac{1}{\sqrt2},0,0,\tfrac{1}{\sqrt2}]$. The purifying
+    tensor is a pure-state renormalization fixed point, since $\sum|A|^2=1$
+    makes its transfer map the identity. The ancilla contraction
     $M^{ij}=\sum_k A^{(i,k)} \overline{A^{(j,k)}}$
     gives the scalar entries $M^{00}=M^{11}=\tfrac12$ (off-diagonal $0$), so the
     induced transfer map is $\tfrac12\cdot\id$ and
-    $\E_M\circ\E_M=\tfrac14\cdot\id\neq\E_M$. The trace contraction has
+    $\E_M\circ\E_M=\tfrac14\cdot\id\neq\E_M$: the trace contraction has
     dropped the leading eigenvalue from $1$ to $\tfrac12$. By contrast, the
-    physical-trace transfer is $1$ and hence is literally idempotent. Thus this
-    example separates doubled-index idempotence from the paper's
-    physical-trace condition.
+    physical-trace transfer is $1$ and hence is idempotent, separating
+    doubled-index idempotence from the paper's physical-trace condition.
 \end{proof}
 
 \begin{lemma}[Physical-trace transfer of the maximally mixed tensor]
@@ -703,8 +702,8 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
 
 \begin{proof}
     \leanok
-    This is the direct computation of the two nonzero diagonal entries of the
-    tensor.
+    Summing the two nonzero diagonal entries of $M_{\mathrm w}$ directly gives
+    $\tfrac12+\tfrac12=1$.
 \end{proof}
 
 \begin{theorem}[The maximally mixed tensor satisfies the nonzero
@@ -737,10 +736,10 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
         \overline{A^{(j,k)}}\right)_{e,e}.
         \notag
     \end{align}
-    Then the purification tensor $\widehat A$ is a pure-state renormalization
-    fixed point if and only if $\mathcal T_M^2=\mathcal T_M$.
-    This is the tensor-level equivalence between the first two conditions of
-    the purification theorem in \cite[lines~744--786]{Cirac2016MPDO_arXiv}.
+    Giving the tensor-level equivalence between the first two conditions of the
+    purification theorem in \cite[lines~744--786]{Cirac2016MPDO_arXiv}, the
+    purification tensor $\widehat A$ is a pure-state renormalization fixed
+    point if and only if $\mathcal T_M^2=\mathcal T_M$.
 \end{theorem}
 
 \begin{proof}
@@ -778,20 +777,21 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     \lean{MPOTensor.IsPRFP.isPhysicalTraceIdempotent}
     \leanok
     \uses{def:mpdo_is_prfp, def:mpo_physical_trace_idempotence}
-    If $M$ is a purification renormalization fixed point, then
+    Establishing the forward implication from PRFP to zero correlation length
+    in \cite[Theorem~4.4]{Cirac2016MPDO_arXiv}, if $M$ is a purification
+    renormalization fixed point, then
     \begin{align}
         \mathcal T_M^2 & = \mathcal T_M.
         \notag
     \end{align}
-    This establishes the forward implication from PRFP to literal zero
-    correlation length \cite[Theorem~4.4]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:purification_tensor_rfp_iff_physical_trace_idempotent}
-    Apply the forward implication of
+    Applying the forward implication of
     Theorem~\ref{thm:purification_tensor_rfp_iff_physical_trace_idempotent} to
-    the purifying tensor and bond identification in the PRFP presentation.
+    the purifying tensor and bond identification in the PRFP presentation
+    yields $\mathcal T_M^2=\mathcal T_M$.
 \end{proof}
 
 \begin{theorem}[Purification form and physical-trace idempotence characterize PRFP]
@@ -814,10 +814,10 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     \uses{thm:prfp_is_lpdo, thm:prfp_physical_trace_idempotent,
         thm:purification_tensor_rfp_iff_physical_trace_idempotent}
     The forward direction combines Theorems~\ref{thm:prfp_is_lpdo} and
-    \ref{thm:prfp_physical_trace_idempotent}. Conversely, choose the local
-    purifying tensor and bond identification and apply
+    \ref{thm:prfp_physical_trace_idempotent}. Conversely, applying
     Theorem~\ref{thm:purification_tensor_rfp_iff_physical_trace_idempotent} to
-    that fixed purification.
+    the local purifying tensor and bond identification yields the PRFP
+    presentation.
 \end{proof}
 
 \begin{theorem}[Nondegenerate PRFP equivalence]
@@ -838,8 +838,9 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
 \begin{proof}
     \leanok
     \uses{thm:prfp_iff_lpdo_physical_trace_idempotent}
-    Combine Theorem~\ref{thm:prfp_iff_lpdo_physical_trace_idempotent} with the
-    nonzero clause in Definition~\ref{def:is_nondegenerate_prfp}.
+    Combining Theorem~\ref{thm:prfp_iff_lpdo_physical_trace_idempotent} with
+    the nonzero clause in Definition~\ref{def:is_nondegenerate_prfp} gives the
+    equivalence.
 \end{proof}
 
 \begin{theorem}[A nonzero purification RFP satisfies the up-to-scalar relation]
@@ -854,7 +855,7 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
 
 \begin{proof}\leanok
     \uses{thm:prfp_physical_trace_idempotent, thm:mpo_source_zcl_of_physical_trace_idempotent}
-    Theorem~\ref{thm:prfp_physical_trace_idempotent} gives literal
+    Theorem~\ref{thm:prfp_physical_trace_idempotent} gives physical-trace
     idempotence, and the nonzero hypothesis gives the scalar-one case of
     Definition~\ref{def:mpo_source_zcl}.
 \end{proof}
@@ -872,8 +873,8 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
 \begin{proof}
     \leanok
     \uses{thm:source_zcl_of_prfp}
-    Apply Theorem~\ref{thm:source_zcl_of_prfp} to the two clauses of
-    Definition~\ref{def:is_nondegenerate_prfp}.
+    Applying Theorem~\ref{thm:source_zcl_of_prfp} to the two clauses of
+    Definition~\ref{def:is_nondegenerate_prfp} yields the relation.
 \end{proof}
 
 \begin{theorem}[The tensor purification identity yields the global purification equation]
@@ -890,11 +891,10 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
         \overline{A^{(j,k)}}\right)_{e,e}.
         \notag
     \end{align}
-    Then at every length $N$ the matrix product operator equals the ancillary
-    trace of the pure spin--ancilla matrix product state,
-    $\rho^{(N)}(M)=\rho^{(N)}_p(A)$.
-    This is the coefficient form of the purification equation of
-    \cite[line~751]{Cirac2016MPDO_arXiv}.
+    In the coefficient form of the purification equation of
+    \cite[line~751]{Cirac2016MPDO_arXiv}, at every length $N$ the matrix
+    product operator equals the ancillary trace of the pure spin--ancilla
+    matrix product state, $\rho^{(N)}(M)=\rho^{(N)}_p(A)$.
 \end{theorem}
 
 \begin{proof}\leanok

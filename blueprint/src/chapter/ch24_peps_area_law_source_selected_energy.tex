@@ -15,7 +15,8 @@
 \end{theorem}
 \begin{proof}
     \leanok
-    Substitute the exact rational final exponents.
+    Direct substitution of the exact rational final exponents gives both
+    displayed values.
 \end{proof}
 
 \begin{theorem}[Principal density at the stronger rate]
@@ -23,7 +24,7 @@
     \lean{TNLean.PEPS.AreaLaw.Scan.exists_final_principalDensity_le_eightNu}
     \leanok
     For every fixed $C\geq0$ and real $C_l$, there is a threshold before
-    $n$ and $W$ such that the literal floor and natural-division scales
+    $n$ and $W$ such that the floor and natural-division scales
     obey $K\geq1$ and, uniformly over $1\leq W\leq n^\omega$,
     \begin{align}
         C\frac{n^e/m+(W/K)^{1/4}(\log n)^{C_l}}{n^{-\nu}}
@@ -33,9 +34,9 @@
 \begin{proof}
     \leanok
     \uses{thm:arealaw-source-density-scale}
-    Apply the arbitrary-rate rounded-scale theorem with rate $8\nu$ and
-    the two strict margins above.  No scanner, entropy or selection input
-    is used in this numerical statement.
+    With no scanner, entropy, or selection input needed for this numerical
+    statement, the arbitrary-rate rounded-scale theorem at rate $8\nu$ and
+    the two strict margins above yield the displayed bound.
 \end{proof}
 
 \begin{theorem}[Unchanged interval and stronger selected density]
@@ -44,7 +45,7 @@
     \leanok
     Under the same explicit target-mass, target-entropy, selected-dimension,
     shell-entropy and logarithmic-cap hypotheses as the modular selected
-    density theorem, retain its raw selected budget and interval denominator
+    density theorem, retain its initial selected bound and interval denominator
     $\varepsilon=n^{-\nu}$.  With all fixed coefficients before the size
     threshold, eventually in replica number the unchanged selected point
     satisfies density at most $\eta=n^{-8\nu}$ and every proposition
@@ -55,22 +56,23 @@
     \uses{thm:arealaw-principal-density-eight-nu,
         thm:arealaw-source-rough-budget-power,
         thm:arealaw-selected-density-principal}
-    Apply the preceding numerical bound at twice the required coefficient.
-    This leaves $\eta/2$ for the principal term.  For each fixed physical
-    system and weight, its scaled replica remainder is eventually at most
-    $\eta/2$.  Keep the same selected point and attached propositions.
-    The interval width is not replaced by $\eta$.
+    Evaluating the preceding numerical bound at twice the required coefficient
+    bounds the principal term by $\eta/2$, while for each fixed physical
+    system and weight the scaled replica remainder is eventually at most
+    $\eta/2$; keeping the same selected point and attached propositions
+    without replacing the interval width by $\eta$ therefore bounds the total
+    density by $\eta=n^{-8\nu}$.
 \end{proof}
 
-\begin{theorem}[Paper-rate actual energy and sharp comparison]
+\begin{theorem}[Paper-rate charge energy and sharp comparison]
     \label{thm:arealaw-source-selected-sharp-energy}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_sourceTarget_selected_actualCharge_sharp_energy}
     \leanok
     Use the same original gapped-ground-state, graph, anchor, depth,
-    whole-row geometry, target-volume, clearance and literal scale premises
+    whole-row geometry, target-volume, clearance and scale premises
     as the concrete source-density theorem.  Fix $C_1>0$ and its anchor
     multiplicity before all thresholds.  Fix $P\geq\nu$.
-    The positive source constants, real transport coefficients and
+    The positive source constants, real round-energy coefficients and
     exponents, and cap constants $C\geq1$, $C_l\geq0$ precede the
     nonnegative entropy coefficient $C_e$, which precedes the enlarged
     size threshold.  The original target and prefix bounds are
@@ -83,8 +85,8 @@
     sequence precede every weight $1\leq W\leq n^\omega$.
     Retain $2r_0\leq D$, $4D\leq m$ and
     $a\,\mathrm{transportLogDimBound}(q,r_0)\leq c_t$ for $a=W/K$.
-    For each fixed admissible instance and weight, eventually there is an
-    actual charge point $(s,p)$ for the same supplied prevector with
+    For each fixed admissible instance and weight, eventually there is a
+    charge point $(s,p)$ for the same prevector with
     \begin{align}
         p                         & \in[n^{-\nu},2n^{-\nu}],     &
         0\leq\frac{Q_k(s,p)}{KnD} & \leq n^{-8\nu},\nonumber       \\
@@ -94,11 +96,11 @@
         \label{eq:arealaw-source-selected-energy-power}
     \end{align}
     The original cap-based energy inequality is also retained.
-    In the full actual sharp comparison, the factor multiplying
+    In the full sharp comparison, the factor multiplying
     $\max\{0,2S'+g_{\max}\}/\tau$ is replaced by this derived energy
     upper bound, for every $0<\tau\leq1/2$ at the same point.
     All other entropy, mass, moment and replica-remainder terms remain
-    literal, including the loss $37K_{\mathrm{mom}}a$.
+    unchanged, including the loss $37K_{\mathrm{mom}}a$.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -109,16 +111,16 @@
         thm:arealaw-selected-density-eight-nu,
         thm:al_scan_actual_charge_energy_coefficients,
         thm:arealaw-selected-energy-decay}
-    Invoke the raw source selected-comparison theorem once and transfer
-    the original target entropy to its same truncated state.  The same
-    spectral window supplies the selected-dimension estimate.  Apply the
-    eight-nu density closure directly to the raw endpoint/selection budget,
-    keeping its chosen interval and selected point.
+    Transferring the original target entropy to the truncated state from the
+    initial source selected-comparison theorem and combining it with the
+    selected-dimension estimate on the same spectral window allows the
+    eight-nu density closure to act directly on the initial endpoint and
+    selection bound while preserving its chosen interval and selected point.
 
-    The actual charge-defect nonnegativity theorem supplies $Q_k\geq0$.
+    The charge-defect nonnegativity theorem gives $Q_k\geq0$.
     Its eighth root is at most $n^{-\nu}$.  Since $P\geq\nu$ and
     $p\leq2n^{-\nu}$, the energy bracket is at most $4n^{-\nu}$.
-    The literal ceiling gives $D\leq2n^\kappa$, while $W\leq n^\omega$.
+    The ceiling bound gives $D\leq2n^\kappa$, while $W\leq n^\omega$.
     The cap is therefore at most
     $16C n^{-111/125000}(\log n)^{C_l}$.
     The positive margin $97/250000$ absorbs these fixed coefficients

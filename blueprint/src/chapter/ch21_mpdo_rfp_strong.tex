@@ -129,9 +129,9 @@ trace.
 \begin{proof}
     \leanok
     \uses{thm:mpdo_global_renormalization_maps, def:finite_tuple_regroupings, lem:mpdo_localized_first_site_preparation, lem:phys_close_identity}
-    Apply Theorem~\ref{thm:mpdo_global_renormalization_maps} to the local map
+    Applying Theorem~\ref{thm:mpdo_global_renormalization_maps} to the local map
     $Y\mapsto U(Y\otimes P)U^\dagger$ and the identity
-    (\ref{eq:mpdo_strong_rfp_closure}). This gives the localized closure
+    (\ref{eq:mpdo_strong_rfp_closure}) gives the localized closure
     equality. Expanding the regroupings $R_1$ and $R_2$, localized unitary
     conjugation is conjugation by $U\otimes\Id$, while
     Lemma~\ref{lem:mpdo_localized_first_site_preparation} gives the middle
@@ -161,7 +161,7 @@ trace.
         MPOTensor.IsStrongRFP.exists_periodic_rank_factor}
     \leanok
     \uses{def:mpdo_strong_rfp, thm:mpdo_strong_rfp_phys_close, thm:mpdo_strong_rfp_global_operator_identity, thm:unitary_single_kraus_rank}
-    Fix witnesses $P\geq0$ and $U$ for the strong fixed-point relation. For
+    Fix operators $P\geq0$ and $U$ satisfying the strong fixed-point relation. For
     every $N\geq0$, the ordinary full periodic MPO matrix ranks satisfy
     \begin{align}
         \operatorname{rank}\rho^{(N+2)}(M)
@@ -173,7 +173,7 @@ trace.
         (\operatorname{rank}P)^N.
         \label{eq:mpdo_strong_rfp_rank_geometric}
     \end{align}
-    Consequently every strong fixed point admits a single positive witness
+    Consequently every strong fixed point admits a single positive operator
     $P$ whose matrix rank is the factor in both formulas, without assuming
     normalization of $P$ or positivity of the periodic operators.
 \end{theorem}
@@ -185,7 +185,7 @@ trace.
     while rank is multiplicative under Kronecker products. Applying these
     facts to (\ref{eq:mpdo_strong_rfp_global_closure}) gives the recurrence.
     Induction from chain length one gives the geometric formula. Finally,
-    Theorem~\ref{thm:mpdo_strong_rfp_phys_close} exposes the same positive
-    witness $P$ for any tensor satisfying the existential strong fixed-point
+    Theorem~\ref{thm:mpdo_strong_rfp_phys_close} provides the same positive
+    operator $P$ for any tensor satisfying the existential strong fixed-point
     relation.
 \end{proof}

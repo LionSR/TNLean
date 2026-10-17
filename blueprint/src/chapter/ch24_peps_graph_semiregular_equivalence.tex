@@ -1,4 +1,4 @@
-\begin{theorem}[Fourier coordinate transport of graph contractions]%
+\begin{theorem}[Fourier coordinate change for graph contractions]%
     \label{thm:peps_graph_bond_coordinate_transport}
     \lean{TNLean.PEPS.physicalProductMap_bondCoordinateMatrix_graphAveragingSite}
     \leanok
@@ -7,14 +7,14 @@
     Let $U$ and $L$ be matrix representations of a finite group and suppose
     $L(g)=QU(g)Q^\dagger$ for every $g$. On any finite simple graph, the
     product of the physical bond operations $Q\otimes\overline Q$ carries
-    the actual averaging contraction for $U$ to the actual averaging
+    the averaging contraction for $U$ to the averaging
     contraction for $L$, after regrouping physical coordinates by edges.
 \end{theorem}
 \begin{proof}\leanok
     Each bond coefficient is the vectorization of
-    $U(q_hq_t^{-1})$. The two-endpoint operation sends it to the
-    vectorization of $QU(q_hq_t^{-1})Q^\dagger=L(q_hq_t^{-1})$.
-    Apply the coherent-product transport lemma.
+    $U(q_hq_t^{-1})$, which the two-endpoint operation sends to the
+    vectorization of $QU(q_hq_t^{-1})Q^\dagger=L(q_hq_t^{-1})$;
+    the coherent-product transformation lemma then gives the global equality.
 \end{proof}
 
 \begin{theorem}[Smallest semi-regular states on finite simple graphs]%
@@ -36,8 +36,8 @@
     semi-regular with character multiplicity one. Its fourth-root-weighted
     averaging contraction $\Psi$ is nonzero. The product of
     $(Q\otimes\overline Q)T$ over the disjoint physical bond pairs sends
-    $\Psi$ to the actual regular averaging contraction and preserves every
-    physical inner product. Moreover,
+    $\Psi$ to the regular averaging contraction and preserves every
+    physical inner product. In addition,
     \begin{align}
         |G|=\sum_i d_i^2,\qquad \dim U=\sum_i d_i\leq |G|,
     \end{align}
@@ -54,12 +54,12 @@
     contractions are outside this statement.
 \end{theorem}
 \begin{proof}\leanok
-    Derive the representations and Fourier coordinates from the regular
-    representation. The actual weighted contraction has matching-sector
-    bond support. Extend the multiplicity map isometrically to the full
-    physical bond space; on the derived support its action is unchanged.
-    The coordinate-transport theorem gives the actual regular contraction.
-    Both product operations are isometries on their full domains.
+    Deriving the representations and Fourier coordinates from the regular
+    representation gives a weighted contraction with matching-sector
+    bond support; extending the multiplicity map isometrically to the full
+    physical bond space leaves its action on the derived support unchanged.
+    The coordinate-change theorem gives the regular contraction, and
+    both product operations are isometries on their full domains.
     Maschke's theorem gives the universal dimension comparison. The regular
     contraction has a positive all-identity coefficient, and hence is
     nonzero; its isometric preimage is therefore nonzero as well.

@@ -32,16 +32,16 @@
         \prod_{n=0}^{N-1}w(a_n,a_{n+1}) \notag
     \end{align}
     be the weighted sum over ordered cyclic vertex sequences. Suppose that
-    $s_N$ is constant for all sufficiently large $N$. Then every edge that
-    belongs to a directed cycle has weight one, every directed cycle is a
+    $s_N$ is constant for all sufficiently large $N$. By the comparison in
+    \cite[Section~IV]{Beigi2012Classification}, every edge that
+    belongs to a directed cycle then has weight one, every directed cycle is a
     repetition of a single loop, and, for every $N>0$,
-    $s_N=\#\{a:w(a,a)>0\}$. This is the comparison in
-    \cite[Section~IV]{Beigi2012Classification}.
+    $s_N=\#\{a:w(a,a)>0\}$.
 \end{theorem}
 
 \begin{proof}\leanok
-    Choose a sufficiently large $N$ such that the sums at lengths $N$,
-    $N+1$, and $N(N+1)$ have their common eventual value. Repeating each
+    For a sufficiently large $N$, the sums at lengths $N$,
+    $N+1$, and $N(N+1)$ share their common eventual value. Repeating each
     ordered $N$-cycle $N+1$ times gives an injection into the cycles of length
     $N(N+1)$, while repeating each ordered $(N+1)$-cycle $N$ times gives a
     second injection. Comparison of the three weighted sums shows first that
@@ -71,7 +71,7 @@
     The ordered-cycle dimension formula identifies the eventual
     parent-ground-space dimension with the eventual weighted-cycle sum.
     The preceding theorem identifies that sum, at every positive length, with
-    the loop number. Transport between coefficient and Euclidean coordinates
+    the loop number. Changing between coefficient and Euclidean coordinates
     preserves the dimension of the ground space.
 \end{proof}
 
@@ -87,10 +87,10 @@
     \lean{MPSTensor.BeigiSectorGraphData.loopProductStateES}
     \leanok
     \uses{def:beigi_sector_graph}
-    Let $a\to a$ be a positive loop and choose a nonzero vector
-    $\varphi_a\in\ran P_{a,a}$. In sector coordinates define the matrix
-    product tensor $(C_a^{(r,l)})_{x,y}=\delta_{x,l}\varphi_a(r,y)$ and set it
-    to zero outside sector~$a$. The physical loop tensor is the
+    For a positive loop $a\to a$ and a nonzero vector
+    $\varphi_a\in\ran P_{a,a}$, the matrix product tensor in sector coordinates
+    is defined by $(C_a^{(r,l)})_{x,y}=\delta_{x,l}\varphi_a(r,y)$ inside
+    sector~$a$ and zero outside sector~$a$. The physical loop tensor is the
     image of $C_a$ under the one-site unitary of the spatial decomposition.
     Its associated cyclic product pairs the right factor at site $n$ with the
     left factor at site $n+1$. The corresponding $N$-site product state is
@@ -108,14 +108,14 @@
     \lean{MPSTensor.BeigiSectorGraphData.minimalLoopCoordinateTensor_sector_ne}
     \leanok
     \uses{def:beigi_loop_product_state}
-    Let $\Phi_a=(\varphi_a(r,l))_{r,l}$ and write
-    $r_a=\rank\Phi_a$. Choose a rank factorization
+    For $\Phi_a=(\varphi_a(r,l))_{r,l}$ of rank
+    $r_a=\rank\Phi_a$ with rank factorization
     \begin{align}
         \Phi_a & = X_aY_a, \notag                        \\
         X_a    & \in M_{D_a^{\mathrm R},r_a}(\C), \notag \\
-        Y_a    & \in M_{r_a,D_a^{\mathrm L}}(\C). \notag
+        Y_a    & \in M_{r_a,D_a^{\mathrm L}}(\C), \notag
     \end{align}
-    The tensor on the minimal Schmidt support is
+    the tensor on the minimal Schmidt support is
     \begin{align}
         (\widetilde C_a^{(r,l)})_{\alpha,\beta}
          & =
@@ -135,7 +135,7 @@
     Let $\nu_a=\lVert\varphi_a\rVert_2>0$, where the norm is the
     Hilbert-space norm of the bond vector, or equivalently the Frobenius norm
     of $\Phi_a$. In either coordinate system, the normalized representative is
-    $\widehat C_a=\nu_a^{-1}\widetilde C_a$. The raw coordinate and physical
+    $\widehat C_a=\nu_a^{-1}\widetilde C_a$. The unnormalized coordinate and physical
     tensors are retained separately.
 \end{definition}
 
@@ -231,8 +231,8 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    Write $D_a^{\mathrm L}$ for the left-factor dimension of sector~$a$.
-    Expanding the closed matrix product on a sector configuration
+    With $D_a^{\mathrm L}$ denoting the left-factor dimension of sector~$a$,
+    expanding the closed matrix product on a sector configuration
     $((r_n,l_n))_{n=0}^{N-1}$ gives
     \begin{align}
          & \sum_{g\in\{0,\ldots,D_a^{\mathrm L}-1\}^N}
@@ -320,7 +320,7 @@
         \prod_{n=0}^{N-1}(\Id-h_n^{\mathrm{E}}). \notag
     \end{align}
     The operators $h_n^{\mathrm{E}}$ are orthogonal projections. Beigi sector
-    data supply pairwise commutativity, which Euclidean transport preserves.
+    data yield pairwise commutativity, which the Euclidean coordinate equivalence preserves.
     For all $0\leq m,n<N$, one has
     $h_m^{\mathrm{E}}h_n^{\mathrm{E}}
         =h_n^{\mathrm{E}}h_m^{\mathrm{E}}$. For any commuting orthogonal
@@ -414,10 +414,10 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    Write $\Phi_a^{(N)}$ for the cyclic product in sector coordinates and
-    $\Psi_a^{(N)}=U^{\otimes N}\Phi_a^{(N)}$ for the physical state, where
-    $U$ is the one-site spatial unitary. Choose $q$ with
-    $\varphi_a(q)\ne0$. On the constant edge-index configuration,
+    Let $\Phi_a^{(N)}$ be the cyclic product in sector coordinates and
+    $\Psi_a^{(N)}=U^{\otimes N}\Phi_a^{(N)}$ be the physical state under the
+    one-site spatial unitary $U$. For an index $q$ with
+    $\varphi_a(q)\ne0$, the constant edge-index configuration satisfies
     \begin{align}
         \Phi_a^{(N)}(q,\ldots,q)
          & =
@@ -435,7 +435,7 @@
         \sum_s\overline{\Phi_a^{(N)}(s)} \Phi_b^{(N)}(s) =
         0. \notag
     \end{align}
-    Moreover,
+    In addition,
     \begin{align}
         \langle\Psi_a^{(N)},\Psi_b^{(N)}\rangle
          & =
@@ -444,12 +444,11 @@
         \langle\Phi_a^{(N)},\Phi_b^{(N)}\rangle =
         0. \notag
     \end{align}
-    Thus the loop states are linearly independent. Their span is contained in
-    $\ker H_N$ by
-    Theorem~\ref{thm:beigi_loop_product_state_ground_state}. Its dimension is
-    the number of positive loops, which equals $\dim\ker H_N$ by
-    Corollary~\ref{cor:beigi_parent_ground_space_loop_number}. The inclusion
-    is consequently an equality.
+    Thus the loop states are linearly independent. By
+    Theorem~\ref{thm:beigi_loop_product_state_ground_state} and
+    Corollary~\ref{cor:beigi_parent_ground_space_loop_number}, their span is
+    contained in $\ker H_N$ and has dimension equal to the number of positive
+    loops, which equals $\dim\ker H_N$, so the inclusion is an equality.
 \end{proof}
 
 \begin{theorem}[All-chain nearest-neighbor commuting parent-Hamiltonian ground spaces imply a renormalization fixed point]
@@ -468,11 +467,11 @@
     Then $B$ is a renormalization fixed point.
 
     \textbf{Scope restriction (NNCPH representative):}
-    These two reverse-implication results cover only normal left-canonical
-    and multiplicity-one unit-weight representatives, whereas
+    As documented in \cite{gap:cpsv16_nncph_ground_state_scope}, these two
+    reverse-implication results cover only normal left-canonical and
+    multiplicity-one unit-weight representatives, whereas
     \cite[Theorem~3.10]{Cirac2016MPDO_arXiv} is stated for general
-    canonical-form tensors with repeated copies and raw weights; documented in
-    \cite{gap:cpsv16_nncph_ground_state_scope}.
+    canonical-form tensors with repeated copies and general weights.
 \end{theorem}
 
 \begin{proof}
@@ -516,13 +515,12 @@
 
 \begin{proof}
     \leanok
-    Expand both physical sums. The coefficient of
-    $A_jX B_k^\dagger$ is
-    $\sum_i u_{ij}\overline{u_{ik}}=\delta_{jk}$, so only the diagonal
-    terms remain.
+    Expanding both physical sums gives the coefficient
+    $\sum_i u_{ij}\overline{u_{ik}}=\delta_{jk}$ for $A_jX B_k^\dagger$,
+    leaving only the diagonal terms.
 \end{proof}
 
-\begin{lemma}[Gauge-phase transport of mixed-transfer vanishing]
+\begin{lemma}[Gauge-phase invariance of mixed-transfer vanishing]
     \label{lem:mixed_transfer_gauge_phase_zero}
     \lean{MPSTensor.mixedMapLM_eq_zero_of_gaugePhaseEquiv}
     \lean{MPSTensor.mixedMapLM_cast_eq_zero_iff}
@@ -547,8 +545,8 @@
 
 \begin{proof}
     \leanok
-    Set $D_A=\zeta_A I$ and $D_B=\zeta_B I$. For every rectangular matrix
-    $Z$, covariance of the mixed transfer map gives
+    With $D_A=\zeta_A I$ and $D_B=\zeta_B I$, covariance of the mixed transfer
+    map gives, for every rectangular matrix $Z$,
     \begin{align}
         \mathcal E_{A,B}(X_A Z X_B^\dagger)
          & =
@@ -581,8 +579,8 @@
         \mathcal E_{L_a,L_b}(Z)
                                 & = \sum_i L_a^i Z (L_b^i)^\dagger = 0.
     \end{align}
-    The common one-site physical unitary preserves the mixed transfer map by
-    Lemma~\ref{lem:mixed_transfer_common_physical_unitary}.
+    By Lemma~\ref{lem:mixed_transfer_common_physical_unitary}, the common
+    one-site physical unitary preserves this vanishing mixed transfer map.
 \end{proof}
 
 \begin{theorem}[Multi-sector NNCPH ground spaces imply a fixed point for the basis direct sum]
@@ -602,10 +600,9 @@
         =
         \spn\{V^{(N)}(A_j):j=1,\ldots,g\}.
     \]
-    Then $B$ is a renormalization fixed point.
-    This establishes the reverse implication of
+    As the reverse implication of
     \cite[Theorem~3.10]{Cirac2016MPDO_arXiv} for multiplicity-one unit-weight
-    representatives.
+    representatives, $B$ is then a renormalization fixed point.
 \end{theorem}
 
 \begin{proof}
@@ -623,7 +620,7 @@
     Each $L_{\ell(j)}$ has an idempotent transfer map. If $j\ne k$, then
     $L_{\ell(j)}$ and $L_{\ell(k)}$ have disjoint sector support, so their
     mixed transfer map vanishes. Lemma~\ref{lem:mixed_transfer_gauge_phase_zero}
-    transports this vanishing through the two virtual changes of basis:
+    carries this vanishing through the two virtual changes of basis:
     \begin{align}
         \mathcal E_{L_{\ell(j)},L_{\ell(k)}}=0
         \quad\Longrightarrow\quad
@@ -653,7 +650,7 @@
         A\text{ has all-chain commuting parent ground spaces spanned by }(A_j)_j.
     \end{align}
     This statement concerns the multiplicity-one, unit-weight direct sum; it
-    does not include repeated copies or arbitrary raw weights.
+    does not include repeated copies or arbitrary nonzero weights.
 \end{theorem}
 
 \begin{proof}

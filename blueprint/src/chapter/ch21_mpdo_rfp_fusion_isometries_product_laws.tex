@@ -264,11 +264,11 @@
         thm:mpdo_transported_vertical_sector_coefficient_comparison,
         thm:mpdo_grouped_vertical_product_positive_fusion_decomposition,
         thm:mpdo_paired_vertical_decompositions_fusion}
-    Obtain the one-site and two-site vertical decompositions from the grouped
-    hypotheses. Transport the renormalization maps to compare their normal
-    sectors. The positive product decomposition supplies the fusion matrices
-    and coisometries; the paired-decomposition argument gives the length-one
-    relation.
+    The grouped hypotheses yield the one-site and two-site vertical
+    decompositions, and conjugating the renormalization maps into retained
+    coordinates compares their normal sectors. The positive product
+    decomposition then gives the fusion matrices and coisometries, while the
+    paired-decomposition argument gives the length-one relation.
 \end{proof}
 
 \begin{theorem}[Renormalization fixed points in CF have active-sector fusion]%
@@ -310,8 +310,8 @@
 
 \begin{proof}\leanok
     \uses{thm:mpdo_grouped_product_inputs_to_bnt_fusion_tensor}
-    Literal canonical form supplies the grouped vertical product hypotheses;
-    apply the grouped active-sector fusion theorem.
+    Because the CPSV canonical form satisfies the grouped vertical product
+    hypotheses, the general active-sector fusion theorem applies directly.
 \end{proof}
 
 \begin{theorem}[Horizontal-form specialization of active-sector fusion]%
@@ -333,8 +333,9 @@
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:mpdo_grouped_product_inputs_to_bnt_fusion_tensor}
-    Normalized BNT-refined horizontal form supplies the grouped vertical
-    product hypotheses; apply the grouped active-sector fusion theorem.
+    Because the normalized BNT-refined horizontal form satisfies the grouped
+    vertical product hypotheses, the general active-sector fusion theorem
+    applies directly.
 \end{proof}
 
 \begin{theorem}[Active-sector fusion implies the algebra relations]%
@@ -667,12 +668,12 @@ Theorem~\ref{thm:mpdo_triple_fusion_comparison_final_sector_kronecker}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{lem:matrix_block_conjugation_restriction}
-    Apply the fusion identity for $U_{\alpha,\beta}$ to the first two
+    Applying the fusion identity for $U_{\alpha,\beta}$ to the first two
     tensors, summed against the physical index contracting with the third
-    tensor. Regroup the result over $\delta$ and use blockwise conjugation to
-    obtain $\chi_{\alpha,\beta,\delta}$ tensored with a letter of
-    $M_\delta M_\gamma$. The fusion identity for $U_{\delta,\gamma}$ gives the
-    second direct sum.
+    tensor, regroups the product over $\delta$. Blockwise conjugation then
+    yields $\chi_{\alpha,\beta,\delta}$ tensored with a letter of
+    $M_\delta M_\gamma$, and the fusion identity for $U_{\delta,\gamma}$ gives
+    the second direct sum.
 \end{proof}
 
 \begin{definition}[Iterated fusion isometry of a triple product, right
@@ -681,17 +682,17 @@ Theorem~\ref{thm:mpdo_triple_fusion_comparison_final_sector_kronecker}.
     \lean{MPOTensor.BNTFusionIsometryFamily.rightFusionIsometry}
     \leanok
     \uses{def:mpdo_bnt_fusion_isometry_family}
-    For labels $\alpha, \beta, \gamma$, the \emph{right iterated fusion
-        isometry} $U^{\mathrm R}_{\alpha,\beta,\gamma}$ is obtained by applying
+    As the right-bracketed composite in the associativity equation of
+    \cite[Section~``Associativity and the pentagon equation'']{Bultinck2017Anyons}
+    before the change of basis by an $F$-matrix, for labels
+    $\alpha, \beta, \gamma$, the \emph{right iterated fusion isometry}
+    $U^{\mathrm R}_{\alpha,\beta,\gamma}$ is obtained by applying
     $U_{\beta,\gamma}$, tensored with the identity on the bond space of
     $M_\alpha$, and then applying $U_{\alpha,\delta}$ for every intermediate
     label $\delta$. Its codomain is indexed by the intermediate and final
     labels $(\delta,\varepsilon)$, the multiplicity indices of
     $\chi_{\beta,\gamma,\delta}$ and $\chi_{\alpha,\delta,\varepsilon}$,
     and the bond index of $M_\varepsilon$.
-    This is the right-bracketed composite in the associativity equation of
-    \cite[Section~``Associativity and the pentagon equation'']{Bultinck2017Anyons},
-    before the change of basis by an $F$-matrix.
 \end{definition}
 
 \begin{theorem}[The right iterated fusion isometry is an isometry]%
@@ -730,13 +731,13 @@ Theorem~\ref{thm:mpdo_triple_fusion_comparison_final_sector_kronecker}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{lem:matrix_block_conjugation_restriction}
-    Apply the fusion identity for $U_{\beta,\gamma}$ to $M_\beta M_\gamma$.
-    In the summand indexed by $\delta$, exchange the first multiplicity
-    factor with the bond space of $M_\alpha$. Blockwise conjugation regroups
-    the contraction as
+    After applying the fusion identity for $U_{\beta,\gamma}$ to
+    $M_\beta M_\gamma$, exchanging the first multiplicity factor in the
+    summand indexed by $\delta$ with the bond space of $M_\alpha$ and applying
+    blockwise conjugation regroups the contraction as
     $\chi_{\beta,\gamma,\delta}\otimes
         (M_\alpha M_\delta)^{ij}$.
-    The fusion identity for $U_{\alpha,\delta}$ gives the sum over
+    The fusion identity for $U_{\alpha,\delta}$ then gives the sum over
     $\varepsilon$.
 \end{proof}
 
@@ -745,21 +746,20 @@ Theorem~\ref{thm:mpdo_triple_fusion_comparison_final_sector_kronecker}.
     \lean{MPOTensor.BNTFusionIsometryFamily.tripleFusionComparison}
     \leanok
     \uses{def:mpdo_left_fusion_isometry, def:mpdo_right_fusion_isometry, def:mpdo_operator_product_associator}
-    The canonical comparison from the right-associated full direct sum to the
-    left-associated full direct sum is
+    Matching the adjoint orientation of the $F$-matrix convention in
+    \cite[Section~3.4]{Bultinck2017Anyons}, the canonical comparison oriented
+    from the right-associated full direct sum to the left-associated full
+    direct sum is
     \begin{align}
         C_{\alpha,\beta,\gamma}
          & =U^{\mathrm L}_{\alpha,\beta,\gamma}
         A_{D_\alpha,D_\beta,D_\gamma}
-        (U^{\mathrm R}_{\alpha,\beta,\gamma})^\dagger.
+        (U^{\mathrm R}_{\alpha,\beta,\gamma})^\dagger,
         \label{eq:rfp_triple_comparison}
     \end{align}
-    Here $A_{D_\alpha,D_\beta,D_\gamma}$ is the permutation matrix identifying
-    the two bracketings of the product bond space.
-    Both intermediate labels and the final label remain in the direct sums.
-    The comparison is oriented from the right-associated sum to the
-    left-associated sum, matching the adjoint orientation of the $F$-matrix
-    convention in \cite[Section~3.4]{Bultinck2017Anyons}.
+    where $A_{D_\alpha,D_\beta,D_\gamma}$ is the permutation matrix identifying
+    the two bracketings of the product bond space and both intermediate labels
+    and the final label remain in the direct sums.
 \end{definition}
 
 \begin{lemma}[Left range projection of the full triple-fusion comparison]%
@@ -768,20 +768,21 @@ Theorem~\ref{thm:mpdo_triple_fusion_comparison_final_sector_kronecker}.
         tripleFusionComparison_mul_conjTranspose}
     \leanok
     \uses{def:mpdo_triple_fusion_comparison}
-    The product of the full comparison with its adjoint is the range
-    projection of the left iterated fusion isometry:
+    With surjectivity of the left iterated fusion map corresponding to
+    completeness of the fusion decomposition in
+    \cite[lines~181--191]{Bultinck2017Anyons}, the product of the full
+    comparison with its adjoint is the range projection of the left iterated
+    fusion isometry:
     \begin{align}
         C_{\alpha,\beta,\gamma}C_{\alpha,\beta,\gamma}^{\dagger}
          & =U^{\mathrm L}_{\alpha,\beta,\gamma}
         (U^{\mathrm L}_{\alpha,\beta,\gamma})^{\dagger}.
         \notag
     \end{align}
-    Surjectivity of the left iterated fusion map corresponds to completeness
-    of the fusion decomposition in \cite[lines~181--191]{Bultinck2017Anyons}.
 \end{lemma}
 \begin{proof}\leanok
     \uses{thm:mpdo_right_fusion_isometry_isometry, def:mpdo_operator_product_associator}
-    Substitute (\ref{eq:rfp_triple_comparison}). The isometry identity
+    Substituting (\ref{eq:rfp_triple_comparison}), the isometry identity
     $(U^{\mathrm R})^\dagger U^{\mathrm R}=1$ and the two-sided inverse
     identities for the permutation matrix $A$ leave
     $U^{\mathrm L}(U^{\mathrm L})^\dagger$.
@@ -793,20 +794,19 @@ Theorem~\ref{thm:mpdo_triple_fusion_comparison_final_sector_kronecker}.
         conjTranspose_mul_tripleFusionComparison}
     \leanok
     \uses{def:mpdo_triple_fusion_comparison}
-    The product in the opposite order is the range projection of the right
-    iterated fusion isometry:
+    With surjectivity of the right iterated fusion map likewise corresponding
+    to completeness of the fusion decomposition, the product in the opposite
+    order is the range projection of the right iterated fusion isometry:
     \begin{align}
         C_{\alpha,\beta,\gamma}^{\dagger}C_{\alpha,\beta,\gamma}
          & =U^{\mathrm R}_{\alpha,\beta,\gamma}
         (U^{\mathrm R}_{\alpha,\beta,\gamma})^{\dagger}.
         \notag
     \end{align}
-    Surjectivity of the right iterated fusion map likewise corresponds to
-    completeness of the fusion decomposition.
 \end{lemma}
 \begin{proof}\leanok
     \uses{thm:mpdo_left_fusion_isometry_isometry, def:mpdo_operator_product_associator}
-    Substitute (\ref{eq:rfp_triple_comparison}). The isometry identity
+    Substituting (\ref{eq:rfp_triple_comparison}), the isometry identity
     $(U^{\mathrm L})^\dagger U^{\mathrm L}=1$ and the two-sided inverse
     identities for $A$ leave
     $U^{\mathrm R}(U^{\mathrm R})^\dagger$.
@@ -836,31 +836,33 @@ Theorem~\ref{thm:mpdo_triple_fusion_comparison_final_sector_kronecker}.
     \end{align}
     and define $D^{\mathrm R}_{ik}$ by the right-associated multiplicities
     $r_{\beta,\gamma}^{\delta}$ and
-    $r_{\alpha,\delta}^{\varepsilon}$. Then
+    $r_{\alpha,\delta}^{\varepsilon}$. Then, on the full direct sums (without
+    extracting an $F$-transformation for a fixed final label or proving
+    invertibility or the pentagon identity),
     \begin{align}
         D^{\mathrm L}_{ik}C_{\alpha,\beta,\gamma}
          & =C_{\alpha,\beta,\gamma}D^{\mathrm R}_{ik}.
         \notag
     \end{align}
-    This is an identity on the full direct sums. It neither extracts an
-    $F$-transformation for a fixed final label nor proves invertibility or
-    the pentagon identity.
 \end{theorem}
 \begin{proof}\leanok
     Length independence makes every positive diagonal factor equal to the
-    identity. Substitute the left and right triple-fusion identities into
-    (\ref{eq:rfp_triple_comparison}), cancel the two isometries, and apply
-    Theorem~\ref{thm:mpdo_operator_product_associativity}.
+    identity, so substituting the left and right triple-fusion identities into
+    (\ref{eq:rfp_triple_comparison}) and canceling the two isometries reduces
+    the claim to Theorem~\ref{thm:mpdo_operator_product_associativity}.
 \end{proof}
 
 \begin{definition}[Common word selectors for the final labels]%
     \label{def:mpdo_final_label_selector_words}
     \lean{MPOTensor.BNTFusionIsometryFamily.HasFinalLabelSelectorWords}
     \leanok
-    Fix a common length $S$. The tensors admit common word selectors for
-    the final labels at length $S$ if, for each final label $\varepsilon$,
-    there are coefficients $c_\varepsilon(w)$, indexed by the words $w$
-    of length $S$ in the doubled physical alphabet, such that
+    As the finite-word form of the simultaneous inverse relation
+    $B_d^+B_{d'}=\delta_{d,d'}1$ used in the fixed-channel argument of
+    \cite{Bultinck2017Anyons}, for a fixed common length $S$, the tensors
+    admit common word selectors for the final labels at length $S$ if, for
+    each final label $\varepsilon$, there are coefficients $c_\varepsilon(w)$,
+    indexed by the words $w$ of length $S$ in the doubled physical alphabet,
+    such that
     \begin{align}
         \sum_{|w|=S}c_\varepsilon(w)M_\varepsilon^w
          & =1,
@@ -870,9 +872,6 @@ Theorem~\ref{thm:mpdo_triple_fusion_comparison_final_sector_kronecker}.
         \notag
     \end{align}
     for every $\varepsilon'\ne\varepsilon$.
-    This is the finite-word form of the simultaneous inverse relation
-    $B_d^+B_{d'}=\delta_{d,d'}1$ used in the fixed-channel argument of
-    \cite{Bultinck2017Anyons}.
 \end{definition}
 
 \begin{theorem}[Pair fusion completeness from positive-length selectors]%
@@ -885,11 +884,10 @@ Theorem~\ref{thm:mpdo_triple_fusion_comparison_final_sector_kronecker}.
     $c^{(L)}_{\alpha,\beta,\gamma}
         =\tr(\chi_{\alpha,\beta,\gamma}^{L})$, with positive diagonal
     $\chi_{\alpha,\beta,\gamma}$, are independent of the positive chain
-    length, and suppose that common selectors exist at a positive length.
-    Then every pair fusion isometry is surjective:
+    length, and suppose that common selectors (the finite-word form of the
+    simultaneous inverse used in \cite[line~269]{Bultinck2017Anyons}) exist at
+    a positive length. Then every pair fusion isometry is surjective:
     $U_{\alpha,\beta}U_{\alpha,\beta}^{\dagger}=1$.
-    The common selectors are the finite-word form of the simultaneous inverse
-    used in \cite[line~269]{Bultinck2017Anyons}.
 \end{theorem}
 \begin{proof}\leanok
     For a word $w$ of the positive selector length, the identity
@@ -912,22 +910,21 @@ Theorem~\ref{thm:mpdo_triple_fusion_comparison_final_sector_kronecker}.
         fusionIsometry_mul_conjTranspose_eq_one_of_bnt_of_lengthIndependent}
     \leanok
     \uses{thm:cpsv_bnt_blocked_simultaneous_span, thm:mpdo_pair_fusion_selector_completeness}
-    Suppose that the tensors $\{M_\alpha\}_\alpha$ with the given fusion
-    isometries form a BNT and that the structure coefficients
+    By the common BNT word span in \cite[lines~317--345]{Cirac2016MPDO_arXiv},
+    the fusion identity at lines~986--993, and length independence at
+    lines~995--1010, suppose that the tensors $\{M_\alpha\}_\alpha$ with the
+    given fusion isometries form a BNT and that the structure coefficients
     $c^{(L)}_{\alpha,\beta,\gamma}
         =\tr(\chi_{\alpha,\beta,\gamma}^{L})$, with positive diagonal
     $\chi_{\alpha,\beta,\gamma}$, are independent of the positive chain
-    length. Then every pair fusion isometry is surjective:
+    length. Then common final-label selectors exist and every pair fusion
+    isometry is surjective:
     $U_{\alpha,\beta}U_{\alpha,\beta}^{\dagger}=1$.
-    In particular, common final-label selectors and the coisometry identity
-    follow from these hypotheses. This is a consequence of the common BNT
-    word span in \cite[lines~317--345]{Cirac2016MPDO_arXiv}, the fusion
-    identity at lines~986--993, and length independence at lines~995--1010.
 \end{theorem}
 \begin{proof}\leanok
     The basis-of-normal-tensors argument gives a positive common word length
     at which the labelled word evaluations span the full product matrix
     algebra. Choosing the tuple which is the identity in one labelled block
-    and zero in every other block gives common final-label selectors. Apply
-    Theorem~\ref{thm:mpdo_pair_fusion_selector_completeness}.
+    and zero in every other block gives common final-label selectors, and
+    Theorem~\ref{thm:mpdo_pair_fusion_selector_completeness} then concludes.
 \end{proof}

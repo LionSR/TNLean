@@ -5,8 +5,8 @@
         MPSPreparation.mixedConfigurationEquiv,
         MPSPreparation.mixedConfigurationEquiv_apply}
     \leanok
-    Choose a central site of a chain with $q=\ell+1+r$ sites. Write $A$ for
-    its tensor and list the left and right subchains from their respective
+    Let $A$ be the tensor at a chosen central site of a chain with $q=\ell+1+r$
+    sites, and list the left and right subchains from their respective
     outer boundaries inward. Thus the right product $R(\sigma_R)$ is the
     transpose of the product in the original physical ordering. For a
     matrix $G\colon\C^s\to\C^{D^2}$ from an arbitrary finite input to the virtual pairs, define
@@ -41,9 +41,9 @@
 \begin{proof}
     \leanok
     \uses{def:ldp_central_input}
-    Expand the two matrix products in (\ref{eq:ldp_central_coefficients})
-    and interchange the finite sums over $\beta,\gamma,\delta$.
-    Transposition reverses the order of matrix multiplication.
+    Expanding the two matrix products in (\ref{eq:ldp_central_coefficients})
+    and interchanging the finite sums over $\beta,\gamma,\delta$ yields the
+    identity, since transposition reverses the order of matrix multiplication.
 \end{proof}
 
 \begin{theorem}[Isometric factorization of virtual-pair coefficients]
@@ -64,10 +64,11 @@
     \leanok
     \uses{thm:seqanc_sweep_matrix_remainder, thm:seqanc_support_propagation,
         thm:ldp_sequential_factorization_general}
-    Apply successive decompositions to the initial row
-    $\sum_\alpha\bra{\alpha,\alpha}$ and the matrices $\Id_D\otimes A_p^i$.
-    Restrict the remainder to its nonzero rows. Preservation of inner
-    products along the isometric sites gives $E^\dagger E=\Id$.
+    Applying successive decompositions to the initial row
+    $\sum_\alpha\bra{\alpha,\alpha}$ and the matrices $\Id_D\otimes A_p^i$,
+    and restricting the remainder to its nonzero rows, gives the factorization;
+    preservation of inner products along the isometric sites gives
+    $E^\dagger E=\Id$.
 \end{proof}
 
 \begin{definition}[Mixed sequential factorization]
@@ -106,8 +107,8 @@
     \uses{thm:ldp_pair_coefficient_factorization, def:ldp_central_input}
     Independent inward decompositions of the left and right virtual-pair
     coefficient matrices give $L=E_L T_L$ and $R=E_R T_R$.
-    Set $C=(T_L\otimes\Id_d\otimes T_R)F$.
-    Matrix multiplication gives (\ref{eq:ldp_mixed_factorization}).
+    With $C=(T_L\otimes\Id_d\otimes T_R)F$,
+    matrix multiplication gives (\ref{eq:ldp_mixed_factorization}).
     Writing $E=E_L\otimes\Id_d\otimes E_R$, the identity
     $C^\dagger C=C^\dagger E^\dagger EC=V^\dagger V=\Id$
     proves that the central map is an isometry.
@@ -124,14 +125,15 @@
     Let $A_1,\ldots,A_q$ have positive bond dimension $D$, let $q\ge1$,
     and suppose the blocked tensor $B$ is injective. Its polar isometry
     $V=BP^{-1}$ has a mixed sequential factorization about any chosen
-    physical site, including either endpoint. This is the injective case of the
-    two-sided construction in \cite[footnote~4 to eqs.~(13)--(15)]{Malz2024Preparation}.
+    physical site, including either endpoint, establishing the injective case
+    of the two-sided construction in
+    \cite[footnote~4 to eqs.~(13)--(15)]{Malz2024Preparation}.
     For non-injective $B$, footnote~3 uses the pseudoinverse and
     $V^\dagger V$ is the polar support projector, rather than the identity;
-    the full-input isometry assertion therefore fails. The corrected
+    the full-input isometry assertion therefore fails. As recorded in
+    \cite{gap:mswc24_mixed_polar_injectivity_scope}, the corrected
     support-restricted factorization is given below in
-    Theorem~\ref{thm:ldp_mixed_polar_support}
-    \cite{gap:mswc24_mixed_polar_injectivity_scope}.
+    Theorem~\ref{thm:ldp_mixed_polar_support}.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -140,7 +142,7 @@
     By Theorem~\ref{thm:ldpolar_tensor_injective}, $V^\dagger V=\Id$.
     Lemma~\ref{lem:ldp_sequential_factorization_first_inputs} expresses
     $V=BP^{-1}$ in the matrix-product coefficients of the given chain.
-    Split the chain at the chosen site and orient its right part inward.
-    Equation~(\ref{eq:ldp_central_coefficients}), with $G=P^{-1}$, gives
-    these same coefficients. Apply the two-sided factorization theorem.
+    Splitting the chain at the chosen site and orienting its right part inward
+    expresses these same coefficients via~(\ref{eq:ldp_central_coefficients})
+    with $G=P^{-1}$, so the two-sided factorization theorem applies.
 \end{proof}

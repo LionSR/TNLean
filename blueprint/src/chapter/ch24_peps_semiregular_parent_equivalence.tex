@@ -36,16 +36,16 @@ $\mathcal P_{\mathcal R}(A)$ for the common regional parent space.
 \begin{proof}\leanok
     \uses{thm:peps_unitary_character_blocks,
         thm:peps_semiregular_remove_copies}
-    Choose the orthonormal irreducible rows of
-    Theorem~\ref{thm:peps_unitary_character_blocks}. The matrices of the
-    action on one row of each component give $D_i$; the common action on
+    In the orthonormal irreducible rows of
+    Theorem~\ref{thm:peps_unitary_character_blocks}, the matrices of the
+    action on one row of each component give $D_i$, while the common action on
     its $m_i$ rows gives $D_i\otimes I_{m_i}$ after exchanging the row
-    and matrix indices. The change between these orthonormal coordinates
-    and the original basis is $Q$, giving
-    (\ref{eq:peps_semiregular_matrix_blocks}). The character multiplicity
-    equals the number of rows. Apply
-    Theorem~\ref{thm:peps_semiregular_remove_copies} for semi-regularity;
-    the direct sum of the unitary $D_i$ is unitary.
+    and matrix indices. Changing between these orthonormal coordinates
+    and the original basis via $Q$ yields
+    (\ref{eq:peps_semiregular_matrix_blocks}), with the character multiplicity
+    equal to the number of rows.
+    Theorem~\ref{thm:peps_semiregular_remove_copies} then gives semi-regularity,
+    and the direct sum of the unitary $D_i$ is unitary.
 \end{proof}
 
 \begin{theorem}[Removing copies preserves semi-regularity]%
@@ -207,7 +207,7 @@ $\mathcal P_{\mathcal R}(A)$ for the common regional parent space.
     the order, giving multiplicativity. Expanding the averaging site
     yields $P_v$. Averaging gives $P_v\rho_v(g)=P_v$ and fixes every
     invariant vector, hence is injective on the invariant subspace.
-    Conjugation by $J_v$ transports invariance, and $E_v$ is injective;
+    Conjugation by $J_v$ preserves invariance, and $E_v$ is injective;
     therefore $E_vP_vJ_v$ has the same two $G$-injectivity properties.
 \end{proof}
 
@@ -221,7 +221,7 @@ $\mathcal P_{\mathcal R}(A)$ for the common regional parent space.
     choose the finite-set enumeration
     $e^X_v:X^{\operatorname{Inc}(v)}\cong\{0,\ldots,|X|^k-1\}$.
     Write $A(U,e)$ for the unweighted canonical averaging tensor in a
-    supplied enumeration $e$, and put $A_{\mathrm{reg}}=A(L,e^G)$.
+    chosen enumeration $e$, and put $A_{\mathrm{reg}}=A(L,e^G)$.
 \end{definition}
 
 \begin{theorem}[Arbitrary semi-regular canonical parent spaces]%
@@ -250,17 +250,18 @@ $\mathcal P_{\mathcal R}(A)$ for the common regional parent space.
         thm:peps_semiregular_block_fourier,
         thm:peps_copy_positive_parent,
         thm:peps_fourier_coordinate_parent,thm:peps_region_parent_common_kernel}
-    Derive $D_i,d_i,m_i,Q$ from
-    Theorem~\ref{thm:peps_semiregular_matrix_blocks}.
-    Transport canonical parents from $U$ to $D^{[m]}$ by $Q^\dagger$.
+    With $D_i,d_i,m_i,Q$ obtained from
+    Theorem~\ref{thm:peps_semiregular_matrix_blocks},
+    $Q^\dagger$ maps canonical parents from $U$ to $D^{[m]}$,
     Theorem~\ref{thm:peps_copy_positive_parent} changes the positive
-    copy family $m_i$ to $d_i$. The normalized Fourier matrix then
-    transports $D^{[d]}$ to $L$ by
+    copy family $m_i$ to $d_i$, and the normalized Fourier matrix
+    maps $D^{[d]}$ to $L$ by
     Theorem~\ref{thm:peps_fourier_coordinate_parent}.
-    Constant incidence supplies the intermediate common alphabets, and
-    edge coverage supplies the supported inverse for the copy change.
-    Compose these three isomorphisms. Positivity identifies the kernel
-    of each parent Hamiltonian with its common regional parent space.
+    Constant incidence provides the intermediate common alphabets, and
+    edge coverage provides the supported inverse for the copy change.
+    Composing these three isomorphisms gives the parent-space isomorphism,
+    while positivity identifies the kernel of each parent Hamiltonian
+    with its common regional parent space.
 \end{proof}
 
 \begin{theorem}[Physical G-injective tensors and their canonical parents]%
@@ -275,17 +276,18 @@ $\mathcal P_{\mathcal R}(A)$ for the common regional parent space.
     $\mathcal P_{\mathcal R}(A)\cong
         \mathcal P_{\mathcal R}(A(U,e))$.
     Neither constant incidence nor semi-regularity is needed for this
-    fixed-representation comparison, provided $e$ is supplied.
+    fixed-representation comparison, for any given enumeration $e$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_semiregular_averaging_g_injective,
         thm:peps_range_parent_g_comparison,
         thm:peps_range_parent_equivalence}
     The canonical averaging tensor is $G$-injective for the same
-    incident action. The fixed-representation comparison supplies
+    incident action. The fixed-representation comparison provides
     physical maps $F_v$ that are injective on its site images and
     satisfy $A_v=F_vA(U,e)_v$. Vertex coverage makes the restriction of
-    $\bigotimes_vF_v$ an isomorphism of the parent spaces. Take its inverse.
+    $\bigotimes_vF_v$ an isomorphism of the parent spaces, and its inverse
+    gives the stated isomorphism.
 \end{proof}
 
 \begin{theorem}[Complete kernels for semi-regular G-injective tensors]%
@@ -300,7 +302,7 @@ $\mathcal P_{\mathcal R}(A)$ for the common regional parent space.
     representation used uniformly on the edges of the finite ordered
     simple graph. Suppose $|\operatorname{Inc}(v)|=k$ at every vertex
     and $A_v:\mathcal V_v^{\mathrm{num}}\to\C^p$ is $G$-injective
-    for the actual oriented action $\rho_v^{\mathrm{num}}$.
+    for the oriented action $\rho_v^{\mathrm{num}}$.
     Assume that every vertex is in some $R_i$, and that every edge has
     both endpoints in some $R_i$. Then
     \begin{align}
@@ -320,14 +322,14 @@ $\mathcal P_{\mathcal R}(A)$ for the common regional parent space.
 \begin{proof}\leanok
     \uses{thm:peps_semiregular_physical_canonical_parent,
         thm:peps_semiregular_canonical_parent_equivalence,thm:peps_region_parent_common_kernel}
-    Use the common incident enumeration $e^X$ and compose
+    In the common incident enumeration $e^X$, the composition
     \begin{align}
         \mathcal P_{\mathcal R}(A)
         \cong\mathcal P_{\mathcal R}(A(U,e^X))
-        \cong\mathcal P_{\mathcal R}(A_{\mathrm{reg}}).
+        \cong\mathcal P_{\mathcal R}(A_{\mathrm{reg}})
     \end{align}
-    The first comparison uses vertex coverage; the second uses edge
-    coverage, constant incidence, and semi-regularity.
+    combines the vertex-coverage comparison with the edge-coverage,
+    constant-incidence, and semi-regularity comparison.
     Dimensions are preserved by linear isomorphisms.
     For positive interactions, $\langle\psi,H\psi\rangle=0$ holds
     exactly when every regional term annihilates $\psi$; hence

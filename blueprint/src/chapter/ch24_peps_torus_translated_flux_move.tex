@@ -7,9 +7,9 @@
     \uses{thm:peps_translated_two_plaquette_geometry,
         thm:peps_regular_two_cycle_flux_move}
     On a finite torus of horizontal period at least four and vertical period
-    at least three, fix any position $v=(x,y)$. Let $u_g^0$ give upward
-    transport $g$ on the vertical bond at $v$, and let $u_g^1$ give upward
-    transport $g$ on both vertical bonds at $v$ and $v+(1,0)$.
+    at least three, fix any position $v=(x,y)$. Let $u_g^0$ assign the upward
+    bond value $g$ to the vertical bond at $v$, and let $u_g^1$ assign the upward
+    bond value $g$ to both vertical bonds at $v$ and $v+(1,0)$.
     Every other bond carries the identity. In the ordered-edge convention,
     both selected bonds receive the same element
     \begin{align}
@@ -19,19 +19,19 @@
             g^{-1}, & \text{otherwise}.
         \end{cases}
     \end{align}
-    The literal assignments are precisely the tree-cycle assignments of the
-    translated six-site block. This specifies the insertion in
-    \cite[Theorem~6.16]{Schuch2010PEPS} at either periodic seam as well.
+    These tree-cycle assignments of the translated six-site block specify the
+    insertion in \cite[Theorem~6.16]{Schuch2010PEPS} at either periodic seam
+    as well.
 \end{definition}
 
-\begin{theorem}[The actual flux endpoint moves at every position]%
+\begin{theorem}[The flux endpoint moves at every position]%
     \label{thm:peps_torus_translated_flux_holonomy}
     \lean{TNLean.PEPS.regularWalkHolonomy_torusTranslatedFluxAssignment}
     \leanok
     \uses{def:peps_torus_translated_flux_assignment,
         def:peps_torus_plaquette_flux_geometry}
     For the counterclockwise native plaquette walks based at $v$ and $v+(1,0)$,
-    the actual holonomies satisfy
+    the holonomies satisfy
     \begin{align}
         (H_L(u_g^0),H_R(u_g^0)) & =(g^{-1},1), &
         (H_L(u_g^1),H_R(u_g^1)) & =(1,g^{-1}).
@@ -43,16 +43,16 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    The directed upward transports are $g$ on the selected bonds, regardless
+    The directed upward bond values are $g$ on the selected bonds, regardless
     of their native endpoint sorting. The left plaquette traverses the left
     insertion downward and the middle insertion upward, so its extended
     holonomy is $g^{-1}g=1$. The right plaquette traverses the middle insertion
     downward, giving $g^{-1}$. Its other vertical bond is distinct from both
-    selected bonds under the period bounds. Every horizontal transport is
+    selected bonds under the period bounds. Every horizontal bond value is
     the identity. Retaining only the left insertion gives the initial values.
 \end{proof}
 
-\begin{theorem}[An actual six-spin flux operation at every position]%
+\begin{theorem}[A six-spin flux operation at every position]%
     \label{thm:peps_torus_translated_physical_flux_move}
     \lean{TNLean.PEPS.IsGIsometric.exists_unitary_torusTranslatedPhysicalFluxMove}
     \leanok
@@ -66,17 +66,18 @@
         W_v\Psi_{R_v}(u_g^0,\theta)=\Psi_{R_v}(u_g^1,\theta)
     \end{align}
     for every $g\in G$ and every crossing configuration $\theta$.
-    Both vectors are the actual open-region contractions of the original
-    tensor. The unitary is chosen before $g$ and $\theta$; no spanning tree,
-    Gram identity, state equality, or state translation invariance is supplied.
+    Both vectors are the open-region contractions of the original
+    tensor. The unitary is chosen before $g$ and $\theta$; no extra spanning tree,
+    Gram identity, state equality, or state translation invariance hypothesis is needed.
 \end{theorem}
 
 \begin{proof}\leanok
-    Derive the actual spanning path, root, and distinct non-tree chords from
-    the translated numbering. Native four-leg $G$-isometry gives the required
-    incident-edge isometry at every site. Apply the fixed physical two-cycle
-    operation to these derived data, with its common insertion element
-    $k_y(g)$. The literal assignment identities give the desired actual columns.
+    From the spanning path, root, and distinct non-tree chords derived from
+    the translated numbering, native four-leg $G$-isometry gives the required
+    incident-edge isometry at every site. Applying the fixed physical two-cycle
+    operation to these derived data with its common insertion element
+    $k_y(g)$, the tree-cycle assignment identities give the desired
+    open-region columns.
 \end{proof}
 
 \begin{theorem}[A global torus flux movement at every position]%
@@ -95,8 +96,8 @@
         \widehat W_v\Psi(u_g^0;u)=\Psi(u_g^1;u)
     \end{align}
     for every $g\in G$ and every common assignment $u$ on exterior and
-    crossing bonds. The internal bonds have the specified literal insertions;
-    the other internal bonds carry the identity. Both states are actual
+    crossing bonds. The internal bonds have the specified bond insertions;
+    the other internal bonds carry the identity. Both states are
     globally contracted torus states. The unitary precedes $g$ and $u$.
     This is the arbitrary-position regular finite-torus realization of the
     local flux movement in \cite[Theorem~6.16]{Schuch2010PEPS}, including either
@@ -105,10 +106,11 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    Apply the global physical two-cycle operation with the derived translated
-    tree, root, and pair of chords. Both native ordered insertion operators
-    equal $k_y(g)$, so the literal assignments give its single- and double-bond
-    inputs. The global contraction identity preserves every common exterior
-    and crossing operator. The complementary identity extension preserves
-    unitarity. The proved plaquette holonomies give the stated flux movement.
+    Applying the global physical two-cycle operation with the derived
+    translated tree, root, and pair of chords, both native ordered insertion
+    operators equal $k_y(g)$, so the bond assignments give its single- and
+    double-bond inputs. The global contraction identity preserves every common
+    exterior and crossing operator, the complementary identity extension
+    preserves unitarity, and the proved plaquette holonomies give the stated
+    flux movement.
 \end{proof}

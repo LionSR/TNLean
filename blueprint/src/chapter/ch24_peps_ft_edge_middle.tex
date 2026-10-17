@@ -36,10 +36,10 @@ used by the edge-kernel argument of Section~\ref{sec:peps_edge_kernel_gauges}.
     \lean{TNLean.PEPS.edgeOpenMiddleWeightOn}
     \leanok
     \uses{def:peps_edgeMiddlePhysicalConfig, def:peps_edgeMiddleConfig, def:peps_edgeOpenMiddleWeight}
-    The ordinary and open middle contractions may be written using only the
-    middle physical configuration, rather than a physical configuration on all
-    vertices. This is the middle tensor in the three-site chain obtained after
-    the edge blocking in arXiv:1804.04964, Section~3.
+    For the middle tensor in the three-site chain obtained after the edge
+    blocking in arXiv:1804.04964, Section~3, the ordinary and open middle
+    contractions may be written using only the middle physical configuration,
+    rather than a physical configuration on all vertices.
 \end{definition}
 
 \begin{theorem}[Middle restriction of the blocked tensor]%
@@ -53,8 +53,8 @@ used by the edge-kernel argument of Section~\ref{sec:peps_edge_kernel_gauges}.
     middle physical configuration.
 \end{theorem}
 \begin{proof}\leanok
-    Rewrite the product over $V\setminus\{u,v\}$ as the product over the
-    corresponding finite set of middle vertices.
+    Rewriting the product over $V\setminus\{u,v\}$ as the product over the
+    corresponding finite set of middle vertices gives the equality.
 \end{proof}
 
 \begin{definition}[Restricting middle configurations away from the edge]%
@@ -99,8 +99,9 @@ used by the edge-kernel argument of Section~\ref{sec:peps_edge_kernel_gauges}.
     physical index already restricted to the middle block.
 \end{theorem}
 \begin{proof}\leanok
-    Reindex the ordinary middle configurations by the equivalence with
-    compatible open-middle configurations, then compare each local tensor entry.
+    Reindexing the ordinary middle configurations by the equivalence with
+    compatible open-middle configurations and comparing each local tensor entry
+    gives the equality.
 \end{proof}
 
 \begin{definition}[Edge insertion coefficient]%
@@ -142,8 +143,9 @@ used by the edge-kernel argument of Section~\ref{sec:peps_edge_kernel_gauges}.
     the diagonal.
 \end{theorem}
 \begin{proof}\leanok
-    Reindex the ordinary middle configurations by the finite equivalence with
-    open-middle configurations and compare the local tensor factors pointwise.
+    Reindexing the ordinary middle configurations by the finite equivalence with
+    open-middle configurations and comparing the local tensor factors pointwise
+    proves the identity.
 \end{proof}
 
 \begin{theorem}[Diagonal summand of the identity insertion]%
@@ -158,10 +160,11 @@ used by the edge-kernel argument of Section~\ref{sec:peps_edge_kernel_gauges}.
     the ordinary edge-boundary sum.
 \end{theorem}
 \begin{proof}\leanok
-    Substitute the identity matrix entry $\Id_{a,a}=1$ and apply the
+    Substituting the identity matrix entry $\Id_{a,a}=1$ and applying the
     reindexing
     $C_{A,M_e}(\beta)=C^{\mathrm{open}}_{A,M_e}(\beta)$
-    from Theorem~\ref{thm:peps_edgeMiddleWeight_eq_edgeOpenMiddleWeight}.
+    from Theorem~\ref{thm:peps_edgeMiddleWeight_eq_edgeOpenMiddleWeight}
+    identifies the two summands.
 \end{proof}
 
 \begin{theorem}[Off-diagonal summands of the identity insertion]%
@@ -188,8 +191,8 @@ used by the edge-kernel argument of Section~\ref{sec:peps_edge_kernel_gauges}.
     edge insertion coefficient is the ordinary edge-blocked coefficient.
 \end{theorem}
 \begin{proof}\leanok
-    Split the inserted-boundary sum according to whether the two bond indices
-    $a,b$ agree:
+    Splitting the inserted-boundary sum according to whether the two bond indices
+    $a,b$ agree gives
     \begin{align}
         C_A(e,\Id;\sigma)
          & =
@@ -408,9 +411,10 @@ used by the edge-kernel argument of Section~\ref{sec:peps_edge_kernel_gauges}.
     injective.
 \end{lemma}
 \begin{proof}\leanok
-    Choose a residual boundary label. By Lemma~\ref{lem:peps_edgeMiddleTensorFamily_eq_zero_of_isEmpty} its middle-tensor
-    vector is the zero vector. A linearly independent family cannot contain a
-    zero vector.
+    For any residual boundary label,
+    Lemma~\ref{lem:peps_edgeMiddleTensorFamily_eq_zero_of_isEmpty} shows that
+    its middle-tensor vector is the zero vector, and a linearly independent
+    family cannot contain a zero vector.
 \end{proof}
 
 \begin{definition}[Edge-blocked three-site injectivity]%
@@ -505,23 +509,24 @@ used by the edge-kernel argument of Section~\ref{sec:peps_edge_kernel_gauges}.
     $\kappa(R)$.
 \end{theorem}
 \begin{proof}\leanok
-    For $R\ne\varnothing$, write $R=\bigcup_{v\in R}\{v\}$.
-    Theorem~\ref{thm:peps_singletonRegionInjectivityFromVertexInjectivity} turns singleton comparison and vertex injectivity into
+    For $R\ne\varnothing$, writing $R=\bigcup_{v\in R}\{v\}$ lets
+    Theorem~\ref{thm:peps_singletonRegionInjectivityFromVertexInjectivity} turn
+    singleton comparison and vertex injectivity into
     $\kappa(\{v\})$ for every $v\in R$. Applying the finite-union consequence
     of union closure to these singleton regions gives $\kappa(R)$.
 \end{proof}
 
-\begin{definition}[Region injectivity supplies the edge-middle tensor]%
+\begin{definition}[Region injectivity gives the edge-middle tensor]%
     \label{def:peps_edgeMiddleRegionInjectivityComparison}
     \lean{TNLean.PEPS.EdgeMiddleRegionInjectivityComparison}
     \leanok
     \uses{def:peps_regionInjectivityData, def:peps_edgeMiddleTensorFamily}
-    A comparison from finite-region injectivity to the edge-middle tensor
+    To isolate the finite-region contraction claim in
+    \cite[Section~3]{Molnar2018NormalPEPS}, a comparison from finite-region
+    injectivity to the edge-middle tensor
     records the following assertion: if the middle vertex region
     $V\setminus\{u,v\}$ is injective after blocking, then the middle tensor
-    in the edge-blocked three-site chain is injective. This isolates the
-    finite-region contraction claim in
-    \cite[Section~3]{Molnar2018NormalPEPS}.
+    in the edge-blocked three-site chain is injective.
 \end{definition}
 
 \begin{theorem}[Endpoint injectivity in the edge-blocked chain]%
@@ -555,7 +560,7 @@ used by the edge-kernel argument of Section~\ref{sec:peps_edge_kernel_gauges}.
     where $M_e = V\setminus\{u,v\}$.
 \end{theorem}
 \begin{proof}\leanok
-    Let $e=(u,v)$ and put $M_e=V\setminus\{u,v\}$. The endpoint theorem supplies
+    Let $e=(u,v)$ and put $M_e=V\setminus\{u,v\}$. The endpoint theorem gives
     $\inj(T_{A,u})$ and $\inj(T_{A,v})$, while the
     hypothesis is $\inj(T_{A,M_e})$. Hence
     $\inj(T_{A,u})\wedge\inj(T_{A,M_e})\wedge\inj(T_{A,v})$.
@@ -594,7 +599,7 @@ used by the edge-kernel argument of Section~\ref{sec:peps_edge_kernel_gauges}.
 \begin{proof}\leanok
     Let $e=(u,v)$ and put $M_e=V\setminus\{u,v\}$. The comparison gives
     $\kappa(M_e)\Longrightarrow\inj(T_{A,M_e})$. Vertex injectivity
-    supplies $\inj(T_{A,u})$ and $\inj(T_{A,v})$.
+    gives $\inj(T_{A,u})$ and $\inj(T_{A,v})$.
     Theorem~\ref{thm:peps_edgeBlockedThreeSiteInjective_of_middle} then gives
     $\inj(T_{A,u})\wedge\inj(T_{A,M_e})\wedge\inj(T_{A,v})$.
 \end{proof}
@@ -680,7 +685,8 @@ used by the edge-kernel argument of Section~\ref{sec:peps_edge_kernel_gauges}.
     chain.
 \end{theorem}
 \begin{proof}\leanok
-    Apply the one-edge statement separately to each edge $e$.
+    Applying the one-edge statement separately to each edge $e$ gives the
+    claim.
 \end{proof}
 
 \begin{theorem}[All edge-blocked chains from singleton regions, cardinal form]%
@@ -699,6 +705,7 @@ used by the edge-kernel argument of Section~\ref{sec:peps_edge_kernel_gauges}.
 \begin{proof}\leanok
     For each $e=(u,v)$,
     Theorem~\ref{thm:peps_edgeMiddleVertices_nonempty_of_two_lt_card}
-    gives $V\setminus\{u,v\}\ne\varnothing$. Apply
-    Theorem~\ref{thm:peps_edgeBlockedThreeSiteInjective_all_of_singletons}.
+    gives $V\setminus\{u,v\}\ne\varnothing$, so
+    Theorem~\ref{thm:peps_edgeBlockedThreeSiteInjective_all_of_singletons}
+    yields the conclusion.
 \end{proof}

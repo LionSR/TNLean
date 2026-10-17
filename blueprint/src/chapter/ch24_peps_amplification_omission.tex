@@ -53,8 +53,8 @@ with their multiplicities. All norms are operator norms.
     \uses{thm:al_channel_word_norm,thm:al_root_channel_contraction,
         thm:al_channel_word_append}
     Linearity holds letter by letter, and contractivity follows from
-    Theorem~\ref{thm:al_channel_word_norm} applied to a difference. Put
-    $A=\mathcal E_w(B)$ and $R=\mathcal E_{w|_P}(B)$. A retained letter acts
+    Theorem~\ref{thm:al_channel_word_norm} applied to a difference. With
+    $A=\mathcal E_w(B)$ and $R=\mathcal E_{w|_P}(B)$, a retained letter acts
     on both, so the new defect is $\|\mathcal E_i(A-R)\|\le\|A-R\|$. An omitted
     letter acts only on $A$, and
     $\|\mathcal E_i(A)-R\|\le\|\mathcal E_i(A-R)\|+\|\mathcal E_i(R)-R\|$.
@@ -90,9 +90,10 @@ with their multiplicities. All norms are operator norms.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:al_channel_word_omission_bounds,thm:al_poisson_prefix_increment}
-    The defect of the empty word vanishes. Apply
-    Theorem~\ref{thm:al_poisson_prefix_increment} to the defect and bound
-    each increment by Theorem~\ref{thm:al_channel_word_omission_bounds}.
+    Since the defect of the empty word vanishes, applying
+    Theorem~\ref{thm:al_poisson_prefix_increment} to the defect and bounding
+    each increment by Theorem~\ref{thm:al_channel_word_omission_bounds} gives
+    the inequality.
 \end{proof}
 
 For a finite alphabet $A$ and $t\ge0$, let $\nu_{A,t}$ be the law of the
@@ -114,11 +115,11 @@ word recorded by independent rate-one clocks on $[0,t]$, one for each label.
     \end{align*}
 \end{theorem}
 \begin{proof}\leanok
-    This is the real occupation identity at omitted labels in
-    \cite[``Real occupation at omitted labels'']{QICLean2026Blueprint}.
-    Set the kernel to zero on retained labels and apply the retained-prefix
-    identity. The sum is bounded by $M|w|$, and the Poisson word length has
-    finite expectation, which gives integrability.
+    Following
+    \cite[``Real occupation at omitted labels'']{QICLean2026Blueprint},
+    setting the kernel to zero on retained labels and applying the retained-prefix
+    identity gives the integral formula, while bounding the sum by $M|w|$ and
+    using the finite expectation of the Poisson word length gives integrability.
 \end{proof}
 
 \begin{theorem}[Expected defect as a time integral]
@@ -137,12 +138,12 @@ word recorded by independent rate-one clocks on $[0,t]$, one for each label.
 \begin{proof}\leanok
     \uses{thm:al_channel_word_omission_bounds,thm:al_channel_word_omission_telescope,
         thm:al_channel_word_filter,thm:al_poisson_omitted_prefix_occupation}
-    The defect is bounded, hence integrable. Integrate the telescope of
-    Theorem~\ref{thm:al_channel_word_omission_telescope}. Identify the filtered
-    word with its word over $F_P$ by Theorem~\ref{thm:al_channel_word_filter}.
-    Apply Theorem~\ref{thm:al_poisson_omitted_prefix_occupation} to
-    $H(u,i)=\|(\mathcal E_i-\mathrm{id})(\mathcal E_u(B))\|$, which lies in
-    $[0,2\|B\|]$ by contraction.
+    The defect is bounded and hence integrable. Integrating the telescope of
+    Theorem~\ref{thm:al_channel_word_omission_telescope}, identifying the filtered
+    word with its word over $F_P$ via Theorem~\ref{thm:al_channel_word_filter},
+    and applying Theorem~\ref{thm:al_poisson_omitted_prefix_occupation} to
+    $H(u,i)=\|(\mathcal E_i-\mathrm{id})(\mathcal E_u(B))\|\in[0,2\|B\|]$
+    yields the bound.
 \end{proof}
 
 \subsection{One omitted event}
@@ -167,9 +168,9 @@ word recorded by independent rate-one clocks on $[0,t]$, one for each label.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:al_channel_shell_exp_bound,thm:qc_component_channel_stabilization}
-    Sum the shell bounds of Theorem~\ref{thm:al_channel_shell_exp_bound}
-    over $0\le l\le n$. For the second claim the radius-$n$ local channel
-    equals the full channel.
+    Summing the shell bounds of Theorem~\ref{thm:al_channel_shell_exp_bound}
+    over $0\le l\le n$ gives the inequality, and for the second claim the
+    radius-$n$ local channel equals the full channel.
 \end{proof}
 
 \begin{theorem}[Component support from the tails]
@@ -258,9 +259,9 @@ word recorded by independent rate-one clocks on $[0,t]$, one for each label.
     $2\|B\|e^{vs}p(z)$, with $\beta=c/(4\cdot2^\alpha)$. Integrating the
     one-event bound of Theorem~\ref{thm:al_channel_event_error} against this
     gives, for each omitted label, a bound by the inner sum of
-    Theorem~\ref{thm:al_omitted_anchor_tail}. Sum over the omitted labels,
-    then integrate over $s\in(0,t]$ in
-    Theorem~\ref{thm:al_channel_word_expected_omission}.
+    Theorem~\ref{thm:al_omitted_anchor_tail}. Summing over the omitted labels
+    and integrating over $s\in(0,t]$ in
+    Theorem~\ref{thm:al_channel_word_expected_omission} completes the estimate.
 \end{proof}
 
 On a finite domain $\Lambda\subseteq\Z^2$ with its induced graph, the balls
@@ -276,21 +277,20 @@ satisfy $|N_l(x)|\le2(l+1)^2$ by Theorem~\ref{thm:al_lattice_counts}.
     finite domain $\Lambda$, anchored at $a_i$ with at most $\mu$ labels per
     site, satisfy $\|k_i-E_{N_l(a_i)}k_i\|\le Ce^{-cl^\alpha}$ for all
     $l\ge0$. Let $B$ act on $S$ and a finite spectator, and let every label
-    outside $P$ be at distance more than $r\ge0$ from $S$. Then
-    $w\mapsto D_P(w;B)$ is integrable and
+    outside $P$ be at distance more than $r\ge0$ from $S$. Then, as in the
+    coupled channel estimate in the proof of the local constraint products
+    lemma, $w\mapsto D_P(w;B)$ is integrable and
     \begin{align*}
         \mathbb E\|\mathcal E_{\rm full}(B)-\mathcal E_{\rm ret}(B)\|
         \le At|S|\|B\|e^{vt-\gamma r^\alpha}.
     \end{align*}
-    This is the coupled channel estimate in the proof of the local
-    constraint products lemma.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:al_graph_channel_omission,thm:al_component_support_of_tail,
         thm:al_lattice_counts}
     Theorem~\ref{thm:al_component_support_of_tail} gives the component
-    support, and the largest distance in the domain serves as a common cutoff.
-    Apply Theorem~\ref{thm:al_graph_channel_omission} with $K=2$.
+    support and the largest distance in the domain serves as a common cutoff, so
+    Theorem~\ref{thm:al_graph_channel_omission} with $K=2$ yields the bound.
 \end{proof}
 
 \begin{theorem}[Omission of distant events from the constraint product]
@@ -318,8 +318,8 @@ satisfy $|N_l(x)|\le2(l+1)^2$ by Theorem~\ref{thm:al_lattice_counts}.
     every site of $S$. On the vector $\Omega\otimes\xi$, every channel word
     acts as the product of its roots $G_i$, so the vector difference is at
     most $D_P(w;B)$ pointwise
-    (Theorem~\ref{thm:al_channel_word_vector_difference}). Integrate and apply
-    Theorem~\ref{thm:al_domain_channel_omission}.
+    (Theorem~\ref{thm:al_channel_word_vector_difference}). Integrating and
+    applying Theorem~\ref{thm:al_domain_channel_omission} gives the stated bound.
 \end{proof}
 
 \begin{theorem}[Omission for the exact positive constraints]
@@ -363,7 +363,7 @@ satisfy $|N_l(x)|\le2(l+1)^2$ by Theorem~\ref{thm:al_lattice_counts}.
     \begin{align*}
         \mathbb E\|D_{\rm ret}-L\|\le At|S|(1+r)^2e^{-\gamma r^\alpha},
     \end{align*}
-    and every $L$ is a contraction supported on $N_{2r}(S)$. If moreover
+    and every $L$ is a contraction supported on $N_{2r}(S)$. If in addition
     $k_i\Omega=0$ for a unit vector $\Omega$ and $B$ acts on $S$ and a finite
     spectator system, then for every unit spectator vector $\xi$,
     \begin{align*}
@@ -371,16 +371,16 @@ satisfy $|N_l(x)|\le2(l+1)^2$ by Theorem~\ref{thm:al_lattice_counts}.
         \le At|S|\|B\|e^{vt-\gamma r^\alpha}.
     \end{align*}
     All three products are read off the same clock realization, and the
-    constants depend only on $C,c,\alpha,\mu$. This is
-    \cite[Lemma~10.1]{OpenAI2026AreaLaw}, without the assumptions that $S$ is
+    constants depend only on $C,c,\alpha,\mu$, giving
+    \cite[Lemma~10.1]{OpenAI2026AreaLaw} without the assumptions that $S$ is
     nonempty and $r\ge1$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:al_domain_product_truncation,thm:al_domain_constraint_omission}
     The retained product over the retained events of a full word is the
     product over the retained letters of that word, in the same order. The
-    first estimate and the support clause are
-    Theorem~\ref{thm:al_domain_product_truncation}, and the second is
-    Theorem~\ref{thm:al_domain_constraint_omission}; take the larger of the
+    first estimate and the support clause follow from
+    Theorem~\ref{thm:al_domain_product_truncation}, and the second follows from
+    Theorem~\ref{thm:al_domain_constraint_omission}, taking the larger of the
     two prefactors and the smaller of the two decay rates.
 \end{proof}

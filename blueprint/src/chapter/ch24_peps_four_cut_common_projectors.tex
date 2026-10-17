@@ -52,12 +52,12 @@
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_dependent_product_calculus}
-    Specialize the product identities to constant input and output
-    alphabets. Finite distributivity factors the intermediate-coordinate
-    sum into $F_vL_v$ at every site. Identity entries force agreement at
-    all unchanged coordinates, giving (\ref{eq:peps_common_one_coordinate}).
-    Apply the single-coordinate maps successively over the finite site set;
-    every step fixes $\psi$, and their product is $\mathcal T_B$.
+    Specializing the product identities to constant input and output
+    alphabets, finite distributivity factors the intermediate-coordinate
+    sum into $F_vL_v$ at every site, while identity entries force agreement at
+    all unchanged coordinates to give (\ref{eq:peps_common_one_coordinate}).
+    Applying the single-coordinate maps successively over the finite site set
+    fixes $\psi$ at every step, and their product is $\mathcal T_B$.
 \end{proof}
 
 \begin{theorem}[Slice characterization of a product range]%
@@ -81,11 +81,11 @@
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_dependent_product_range}
-    Apply Theorem~\ref{thm:peps_dependent_product_range} with constant
-    alphabets. Explicitly, a slice of a product image is a linear combination
-    of the columns of $F_v$. Conversely, choose $L_v$ with $F_vL_v$
-    equal to the identity on $\operatorname{ran}F_v$.
-    The slice conditions imply $\mathcal T_{FL}\psi=\psi$, so
+    Theorem~\ref{thm:peps_dependent_product_range} with constant
+    alphabets gives the equivalence: a slice of a product image is a linear combination
+    of the columns of $F_v$, and conversely, for $L_v$ with $F_vL_v$
+    equal to the identity on $\operatorname{ran}F_v$,
+    the slice conditions imply $\mathcal T_{FL}\psi=\psi$, so
     $\psi=\mathcal T_F(\mathcal T_L\psi)$.
 \end{proof}
 
@@ -120,11 +120,11 @@
     The closure identities include uniform bond representations.
 \end{theorem}
 \begin{proof}\leanok
-    Expand the physical and virtual sums and exchange their order. The
-    physical sum factors into $\sum_sF_v(q,s)A_v(\cdot;s)$ at each site,
+    Expanding the physical and virtual sums and exchanging their order
+    factors the physical sum into $\sum_sF_v(q,s)A_v(\cdot;s)$ at each site,
     leaving every boundary coefficient and bond operator untouched.
-    Substitute the closure operators for the third equality, and take the
-    image of the span of commuting closures for the fourth.
+    Substituting the closure operators gives the third equality, and taking the
+    image of the span of commuting closures gives the fourth.
 \end{proof}
 
 \begin{theorem}[One local inverse for all four cuts]%
@@ -158,26 +158,25 @@
     \end{align}
     On the two-by-two torus this gives
     $\mathcal S^A=\mathcal T_R(\mathcal S^{A^0})$.
-    For the matched actions, invariance alone also gives
-    $\mathcal T_R(\mathcal Z_{A^0})=\mathcal Z_A$.
-    These are common-alphabet local-inverse identities supporting
-    \cite[Theorem~5.5]{Schuch2010PEPS}.
+    In support of \cite[Theorem~5.5]{Schuch2010PEPS},
+    invariance alone also gives
+    $\mathcal T_R(\mathcal Z_{A^0})=\mathcal Z_A$ for the matched actions.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_g_injective_left_inverse,
         thm:peps_site_coefficients_composition,
         thm:peps_four_cut_common_physical_contraction}
-    Average $R_v\rho_v(k)=R_v$ to obtain $R_v\Pi_{\rho_v}=R_v$.
-    Theorem~\ref{thm:peps_g_injective_left_inverse} supplies $L_v$
-    independently at each site. Apply
-    (\ref{eq:peps_common_physical_cut}) to these two local identities.
+    Averaging $R_v\rho_v(k)=R_v$ gives $R_v\Pi_{\rho_v}=R_v$, and
+    Theorem~\ref{thm:peps_g_injective_left_inverse} produces $L_v$
+    independently at each site; equation~(\ref{eq:peps_common_physical_cut})
+    then lifts both local identities to the cuts.
     If $\psi\in\mathcal S^A$, the same vector $\mathcal T_L\psi$
     lies in every canonical cut range by
     (\ref{eq:peps_common_cut_inverse}); recovering it using one cut gives
     $\mathcal T_R\mathcal T_L\psi=\psi$.
     Conversely, (\ref{eq:peps_common_cut_recovery}) maps each canonical
-    range into the corresponding physical range. Finally, physical
-    transport of the closure span and $R_vA^0_v=A_v$ give the asserted
+    range into the corresponding physical range. Finally, the physical
+    action on the closure span and $R_vA^0_v=A_v$ give the asserted
     closure recovery.
 \end{proof}
 
@@ -212,8 +211,8 @@
     normalization is $|G|^{-4}$ and there are four independent group labels.
 \end{theorem}
 \begin{proof}\leanok
-    Distribute the finite sums independently at every site and exchange
-    them with the bond-end sum. Site scalars factor out as their product.
+    Distributing the finite sums independently at every site and exchanging
+    them with the bond-end sum factors out site scalars as their product.
     The averaging formula gives $|G|^{-1}$ at each site and the stated sum
     of matrix entries. Throughout, the same function $M$ multiplies each
     bond-end configuration.
@@ -260,12 +259,12 @@
     \end{align}
 \end{theorem}
 \begin{proof}\leanok
-    Expand each three-matrix bond product and each dressed site row.
-    The bijection $\beta\mapsto(s_v(\beta))_v$ from
+    Expanding each three-matrix bond product and each dressed site row,
+    the bijection $\beta\mapsto(s_v(\beta))_v$ from
     (\ref{eq:peps_common_boundary_restriction}) regroups the intermediate
-    endpoint indices by site. Reindex the factors attached to $L_{v+e}$
-    and $B_{v+n}$ by translation. The scalar summands on both sides then
-    coincide, with the same original bond matrices remaining between them.
+    endpoint indices by site. Reindexing the factors attached to $L_{v+e}$
+    and $B_{v+n}$ by translation matches the scalar summands on both sides,
+    with the same original bond matrices remaining between them.
 \end{proof}
 
 \begin{theorem}[Matched vertex gauge invariance]%
@@ -290,13 +289,13 @@
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_four_cut_common_leg_gauge}
-    Test the site-map invariance on each virtual basis vector to obtain
-    the row identity. In (\ref{eq:peps_common_leg_gauge}), choose
+    Testing the site-map invariance on each virtual basis vector yields
+    the row identity. Setting
     $T_v=U^{\mathrm v}_v(q_v)$,
     $R_v=U^{\mathrm h}_v(q_v^{-1})$,
     $B_v=U^{\mathrm v}_{v-n}(q_v^{-1})$, and
-    $L_v=U^{\mathrm h}_{v-e}(q_v)$.
-    These four factors form $\rho_v(q_v)$, which each physical row absorbs.
+    $L_v=U^{\mathrm h}_{v-e}(q_v)$ in (\ref{eq:peps_common_leg_gauge})
+    combines these four factors into $\rho_v(q_v)$, which each physical row absorbs.
 \end{proof}
 
 \begin{theorem}[Matched averaging networks as coherent bond products]%
@@ -330,12 +329,12 @@
         thm:peps_four_cut_common_leg_gauge,thm:peps_torus_projector_expansion,
         def:peps_torus_physical_bond_regrouping,
         lem:peps_torus_physical_bond_regrouping_overlap}
-    Expand each local average as a sum of its matched matrices. Finite
-    multilinearity produces $|G|^{-|X|}\sum_q$.
-    For each $q$, apply (\ref{eq:peps_common_leg_gauge}) to the fixed
-    rows $\delta_{\sigma_v}$; the remaining identity-site contraction
-    is the product of its bond entries. This gives
-    (\ref{eq:peps_common_network_average}). Substitute the inverse
-    physical regrouping formulas and combine the horizontal and vertical
-    products to obtain (\ref{eq:peps_common_regrouped_average}).
+    Expanding each local average as a sum of its matched matrices produces $|G|^{-|X|}\sum_q$ by finite
+    multilinearity.
+    For each $q$, applying (\ref{eq:peps_common_leg_gauge}) to the fixed
+    rows $\delta_{\sigma_v}$ reduces the remaining identity-site contraction
+    to the product of its bond entries, giving
+    (\ref{eq:peps_common_network_average}); substituting the inverse
+    physical regrouping formulas and combining the horizontal and vertical
+    products yields (\ref{eq:peps_common_regrouped_average}).
 \end{proof}

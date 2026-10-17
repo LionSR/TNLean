@@ -71,13 +71,13 @@ produce the dyadic powers $\E_B^{2^n}$.
     \leanok
     \uses{def:is_canonical_form, def:transfer_map, thm:exponential_convergence_primitive}
     Fix one block $A_k$ in a family satisfying
-    Definition~\ref{def:is_canonical_form}. Then the dyadic powers of its
-    transfer map converge pointwise to an idempotent linear map: there exists
-    $\E_{k,\infty}$ with $\E_{k,\infty}^2=\E_{k,\infty}$ such that
+    Definition~\ref{def:is_canonical_form}. As in the per-block primitive
+    convergence of \cite[Appendix~B, lines~1211--1244]{Cirac2016MPDO_arXiv},
+    the dyadic powers of its transfer map converge pointwise to an idempotent
+    linear map: there exists $\E_{k,\infty}$ with
+    $\E_{k,\infty}^2=\E_{k,\infty}$ such that
     $\E_{A_k}^{2^n}(\rho)\to\E_{k,\infty}(\rho)$ as $n\to\infty$ for every
     virtual matrix $\rho$.
-    This formalizes the per-block primitive convergence of
-    \cite[Appendix~B, lines~1211--1244]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 \begin{proof}\leanok
     Each block is injective and left-canonical, so its transfer map is a
@@ -118,9 +118,9 @@ produce the dyadic powers $\E_B^{2^n}$.
     The right-hand side alternates between $\omega e_{21}$ and
     $\omega^2 e_{21}$, so the dyadic renormalization flow does not converge.
     This refutes the unrestricted canonical-form convergence assertion of
-    \cite[lines~417 and 1211--1244]{Cirac2016MPDO_arXiv}; it does not affect the
-    single-component convergence of
-    Theorem~\ref{thm:rg_flow_converges_of_cf}.
+    \cite[lines~417 and 1211--1244]{Cirac2016MPDO_arXiv}, while leaving the
+    single-component convergence of Theorem~\ref{thm:rg_flow_converges_of_cf}
+    intact.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -299,8 +299,9 @@ produce the dyadic powers $\E_B^{2^n}$.
         MPSTensor.physicalObservableTransferₗ_apply}
     \leanok
     \uses{def:eval_word}
-    For an observable $O$ on a block of $L$ physical spins, define the linear
-    map on the virtual matrix space by
+    Following \cite[lines~490--496]{Cirac2016MPDO_arXiv}, for an observable $O$
+    on a block of $L$ physical spins, define the observable transfer map on the
+    virtual matrix space by
     \begin{align}
         \E_O(X)
          & =\sum_{\boldsymbol i,\boldsymbol j}
@@ -349,8 +350,6 @@ produce the dyadic powers $\E_B^{2^n}$.
             \tnwire{b3.0}{open e}
         \end{tenkz}
     \end{center}
-    This is the observable transfer map of
-    \cite[lines~490--496]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
 \begin{definition}[Two-observable periodic expectation]
@@ -383,7 +382,7 @@ produce the dyadic powers $\E_B^{2^n}$.
             \tn[skin=ring, wires=2]{\E_A^{n_1}}
         \end{tenkz}
     \end{center}
-    The trace is the operator trace on the virtual matrix space, as in
+    Here $\Tr_{\MN{D}}$ is the operator trace on the virtual matrix space
     \cite[lines~490--496]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
@@ -402,9 +401,9 @@ produce the dyadic powers $\E_B^{2^n}$.
         \Tr_{\MN{D}}\!\left(\E_{O_2}\circ\E_A^{m_2}\circ\E_{O_1}\circ\E_A^{m_1}\right).
         \notag
     \end{align}
-    This allows either region to be translated along the chain without crossing
-    the other, including adjacent regions ($n_i=0$)
-    \cite[Definition~3.3]{Cirac2016MPDO_arXiv}.
+    As in \cite[Definition~3.3]{Cirac2016MPDO_arXiv}, either region may be
+    translated along the chain without crossing the other, including adjacent
+    regions ($n_i=0$).
 \end{definition}
 
 \begin{definition}[Positive-gap restriction of physical distance independence]%
@@ -424,8 +423,9 @@ produce the dyadic powers $\E_B^{2^n}$.
         \Tr_{\MN{D}}\!\left(\E_{O_2}\circ\E_A^{m_2}\circ\E_{O_1}\circ\E_A^{m_1}\right).
         \notag
     \end{align}
-    This restricts Definition~\ref{def:source_physical_cid} to strictly positive
-    gaps, excluding adjacent regions \cite[Definition~3.3]{Cirac2016MPDO_arXiv}.
+    This restricts Definition~\ref{def:source_physical_cid}
+    (\cite[Definition~3.3]{Cirac2016MPDO_arXiv}) to strictly positive gaps,
+    excluding adjacent regions.
 \end{definition}
 
 \begin{lemma}[Physical CID implies positive-gap physical CID]%
@@ -439,8 +439,8 @@ produce the dyadic powers $\E_B^{2^n}$.
     (Definition~\ref{def:is_positive_gap_physical_cid}).
 \end{lemma}
 \begin{proof}\leanok
-    Restrict the gap lengths in Definition~\ref{def:source_physical_cid} to
-    strictly positive integers.
+    Restricting the gap lengths in Definition~\ref{def:source_physical_cid} to
+    strictly positive integers gives the positive-gap condition.
 \end{proof}
 
 \begin{theorem}[Idempotent transfer implies positive-gap physical CID]%

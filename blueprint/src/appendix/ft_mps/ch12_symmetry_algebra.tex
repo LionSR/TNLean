@@ -1,7 +1,7 @@
 Let $I=\{0,\ldots,d-1\}$ be the physical index set, $\MN{D}$ the bond algebra,
-and $G$ a group. All sums below are finite. We treat permutation symmetries on
-$I$, gauge scalar uniqueness for injective tensors, and factor-system cocycle
-relations.
+and $G$ a group. All sums below are finite, and the sections below establish
+permutation symmetries on $I$, gauge scalar uniqueness for injective tensors,
+and factor-system cocycle relations.
 
 \section{Permutation reindexing and identity bookkeeping}
 \label{sec:app_symmetry_permutations}
@@ -155,10 +155,9 @@ The same bookkeeping applies to a general matrix acting on the physical index.
 \end{lemma}
 
 \begin{proof}\leanok
-    Substitute $(A_M)^{s_n}=\sum_{t_n}M_{s_n,t_n}A^{t_n}$ at each
-    site, distribute the finite sums through the ordered matrix product, and
-    use linearity of the trace to obtain
-    (\ref{eq:symmetry_mpv_rotation}).
+    Substituting $(A_M)^{s_n}=\sum_{t_n}M_{s_n,t_n}A^{t_n}$ at each site,
+    distributing the finite sums through the ordered matrix product, and using
+    linearity of the trace yield (\ref{eq:symmetry_mpv_rotation}).
 \end{proof}
 
 \begin{theorem}[Blocking commutes with physical maps]
@@ -176,10 +175,10 @@ The same bookkeeping applies to a general matrix acting on the physical index.
 \end{theorem}
 
 \begin{proof}\leanok
-    Decode a blocked physical index as a word $b$ of length~$L$.  Substituting
-    $(C_W)^{b_k}=\sum_{v_k}W_{b_kv_k}C^{v_k}$ into the ordered product and
-    distributing gives, for each word~$v$, the summand
-    $(\prod_kW_{b_kv_k})\,C^{v_0}\cdots C^{v_{L-1}}$.  Reindexing the sum over
+    When a blocked physical index is decoded as a word $b$ of length~$L$,
+    substituting $(C_W)^{b_k}=\sum_{v_k}W_{b_kv_k}C^{v_k}$ into the ordered
+    product and distributing give, for each word~$v$, the summand
+    $(\prod_kW_{b_kv_k})\,C^{v_0}\cdots C^{v_{L-1}}$. Reindexing the sum over
     words by the blocked index gives the right-hand side of
     (\ref{eq:app_block_tensor_rotate_physical}), whose coefficients are the
     entries of $W^{\otimes L}$.
@@ -233,8 +232,8 @@ target tensor differ by a scalar multiple.
 \end{lemma}
 
 \begin{proof}\leanok
-    Direct matrix calculation: conjugating both gauge relations and
-    composing gives $(Y^{-1} X) A^i = A^i (Y^{-1} X)$.
+    Conjugating both gauge relations and composing give
+    $(Y^{-1} X) A^i = A^i (Y^{-1} X)$.
 \end{proof}
 
 \begin{lemma}[Gauge ratio is scalar for injective tensors]%
@@ -242,7 +241,7 @@ target tensor differ by a scalar multiple.
     \lean{MPSTensor.gauge_ratio_isScalar}
     \leanok
     \uses{lem:gauge_ratio_commutes, def:injective, lem:center_scalar}
-    Under the same hypotheses, if $A$ is additionally injective, then
+    Under the same hypotheses, if $A$ is also injective, then
     $Y^{-1} X = \lambda \Id_D$ for some scalar $\lambda \in \C$.
 \end{lemma}
 
@@ -299,9 +298,9 @@ target tensor differ by a scalar multiple.
 \section{Cocycle equivalence and coboundaries}
 \label{sec:app_symmetry_cocycles}
 
-Let $\omega_1,\omega_2:G\times G\to\C^\times$ be arbitrary scalar
-$2$-cochains.  The definitions of coboundary and cohomology are
-Definitions~\ref{def:is_coboundary} and~\ref{def:cohomologous_to}.
+With coboundaries and cohomology defined as in
+Definitions~\ref{def:is_coboundary} and~\ref{def:cohomologous_to}, let
+$\omega_1,\omega_2:G\times G\to\C^\times$ be arbitrary scalar $2$-cochains.
 
 \begin{theorem}[Cohomology relation is an equivalence relation]%
     \label{thm:cohomologous_equivalence}
@@ -314,10 +313,10 @@ Definitions~\ref{def:is_coboundary} and~\ref{def:cohomologous_to}.
 \end{theorem}
 
 \begin{proof}\leanok\uses{def:cohomologous_to}
-    Reflexivity: take $\varphi=1$.
-    Symmetry: replace $\varphi$ by $\varphi^{-1}$.
-    Transitivity: compose the witnesses $\varphi$ and $\psi$ pointwise
-    in (\ref{eq:symmetry_cohomologous}).
+    The trivial cochain $\varphi=1$ establishes reflexivity, replacing $\varphi$
+    by $\varphi^{-1}$ gives symmetry, and pointwise multiplication of the
+    relating $1$-cochains $\varphi$ and $\psi$ in
+    (\ref{eq:symmetry_cohomologous}) establishes transitivity.
 \end{proof}
 
 
@@ -333,8 +332,9 @@ Definitions~\ref{def:is_coboundary} and~\ref{def:cohomologous_to}.
 \end{theorem}
 
 \begin{proof}\leanok\uses{def:is_coboundary, def:cohomologous_to}
-    Divide both sides of (\ref{eq:symmetry_cohomologous}) by
-    $\omega_2(g,h)$, and reorder the factors of
+    Dividing both sides of (\ref{eq:symmetry_cohomologous}) by
+    $\omega_2(g,h)$ and reordering the factors of
     $\varphi(g)\varphi(h)\varphi(gh)^{-1}$ in the commutative group
-    $\C^\times$. For $\omega_2=\Id$ the ratio is $\omega_1$ itself.
+    $\C^\times$ identify $\omega_1\omega_2^{-1}$ as a coboundary; for
+    $\omega_2=\Id$ the ratio reduces to $\omega_1$ itself.
 \end{proof}

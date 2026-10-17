@@ -1,4 +1,4 @@
-\subsection{Fixed bootstrap scales and transport smallness}
+\subsection{Fixed bootstrap scales and smallness of the step weight}
 \label{sec:bootstrap_scanner_numerics}
 
 The bootstrap in \cite{OpenAI2026AreaLaw} fixes its geometric exponents
@@ -48,9 +48,9 @@ For any scanner exponent tuple, write
 The integer quotient defining $K_n$ is used even at small sizes;
 the conclusions below only concern the sufficiently large regime where
 its denominator is positive.
-Let $\ell_q(r)$ be the physical logarithmic-dimension bound for transport.
+Let $\ell_q(r)$ be the physical logarithmic-dimension bound.
 
-\begin{theorem}[Fixed weight satisfies the actual transport condition]
+\begin{theorem}[Fixed weight satisfies the smallness condition]
     \label{thm:fixed_weight_four_transport_smallness}
     \lean{TNLean.PEPS.AreaLaw.Scan.ScannerExponents.exists_fixedWeightFour_transport_smallness}
     \leanok
@@ -71,7 +71,7 @@ Let $\ell_q(r)$ be the physical logarithmic-dimension bound for transport.
         thm:al_moment_band_power,
         thm:area_law_band_count_growth}
     The scanner inequalities give $\alpha=1-\ell-\mu>0$.
-    The rounded band count and physical dimension estimates supply fixed
+    The rounded band count and physical dimension estimates yield fixed
     $C_K,C_d>0$ with
     $n^\alpha\leq C_KK_n$ and
     $\ell_q(r_n)\leq C_d\log^4n$ for large $n$.
@@ -83,8 +83,8 @@ Let $\ell_q(r)$ be the physical logarithmic-dimension bound for transport.
         \label{eq:fixed_weight_four_transport_decay}
     \end{align}
     The band count tends beyond every fixed integer, so one common
-    threshold also ensures $K_n\geq8$.
-    Apply convergence with the supplied positive $c_t$.
+    threshold also ensures $K_n\geq8$, and convergence at the given
+    positive $c_t$ completes the proof.
 \end{proof}
 
 \begin{theorem}[Generic rounded scanner admissibility]
@@ -111,12 +111,12 @@ Let $\ell_q(r)$ be the physical logarithmic-dimension bound for transport.
     Since $0<\kappa<\mu$, the rounded power scales eventually satisfy
     $1\leq D_n$ and $4D_n\leq m_n$.
     Since $\mu<1-\ell$, the rounded band count eventually exceeds seven.
-    Finally, integer division gives $8K_nm_n\leq L_n$ at every size.
-    Take a common threshold for these estimates.
+    Finally, integer division gives $8K_nm_n\leq L_n$ at every size, and
+    taking a common threshold combines these estimates.
 \end{proof}
 
 Specializing these two theorems to
-(\ref{eq:bootstrap_scanner_exponents}) supplies the rough bootstrap's
-numerical transport and scanner prerequisites.
-The physical state, entropy transport, actual-point selection and final
+(\ref{eq:bootstrap_scanner_exponents}) yields the rough bootstrap's
+numerical scale and scanner prerequisites.
+The physical state, entropy comparison, terminal-point selection and final
 bootstrap entropy absorption remain separate mathematical inputs.

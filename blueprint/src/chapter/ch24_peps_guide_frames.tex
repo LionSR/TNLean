@@ -2,9 +2,9 @@
 \label{sec:peps_guide_frames}
 The statements below set up the encoded frames used in the proof of
 Proposition~7.1 of \cite{OpenAI2026PolynomialPEPS}, September 24, 2026,
-\texttt{06-geometry.tex}, lines 62--125 and 669--672: the raw owners are read
+\texttt{06-geometry.tex}, lines 62--125 and 669--672: the initial site owners are read
 from a guide at the sampled sites, the holes sit at given centers with the
-patches supplied by Proposition~4.1 of the same source, and the tags are held by
+patches provided by Proposition~4.1 of the same source, and the tags are held by
 a canonical incident label. Proposition~4.1 itself is stated here and enters as
 a hypothesis; its proof is not part of this section.
 
@@ -27,7 +27,9 @@ outer sample.
     \leanok
     \uses{def:peps_frame_square_patch}
     Let $\Lambda_L=\{1,\ldots,L\}^2$ with its sites at their integer positions.
-    The adaptive patch constraint is the following assertion. Fix $q\ge2$,
+    The adaptive patch constraint (\cite[Proposition~4.1]{OpenAI2026PolynomialPEPS},
+    \texttt{03-patches.tex}, lines 26--49, with the parameters of the main
+    theorem fixed as in \texttt{01-preliminaries.tex}, lines 3--10) is the following assertion. Fix $q\ge2$,
     $J,\Delta>0$, $B_0>0$ and $p>0$. There are constants $C,c>0$ such that for
     every $L\ge2$, every square Hamiltonian with local bounds $J$ and every
     unit ground vector $\Omega$ with gap $\Delta$, every center $z\in\R^2$ and
@@ -37,14 +39,12 @@ outer sample.
         \qquad
         \lVert(\id-\Pi)\Omega\rVert\le L^{-p}.
     \]
-    This is \cite[Proposition~4.1]{OpenAI2026PolynomialPEPS},
-    \texttt{03-patches.tex}, lines 26--49, with the parameters of the main
-    theorem fixed as in \texttt{01-preliminaries.tex}, lines 3--10. The sum
+    The sum
     $\Pi$ is an orthogonal projection supported on the sample of the square of
     radius $2u$ because the cylinder projectors have orthogonal ranges.
 \end{definition}
 
-\begin{lemma}[Supplied patches]
+\begin{lemma}[Adaptive patches on cell centers]
     \label{lem:peps_adaptive_patch_supply}
     \lean{TNLean.PEPS.EncodedFrame.SquarePatch.proj_eq_cylSum,
         TNLean.PEPS.EncodedFrame.SquarePatch.norm_act_proj_sub_le,
@@ -55,10 +55,14 @@ outer sample.
         TNLean.PEPS.EncodedFrame.norm_act_proj_patchAt_sub_le,
         TNLean.PEPS.EncodedFrame.card_tag_patchAt_le,
         TNLean.PEPS.Approximation.cellCenterPos,
+        TNLean.PEPS.Approximation.cellCenterPos_eq_sitePosition_add,
         TNLean.PEPS.Approximation.AdaptivePatchSupply.cellCenterPos,
         TNLean.PEPS.Approximation.AdaptivePatchConstraint.supply_cellCenterPos}
     \leanok
-    \uses{def:peps_adaptive_patch_constraint, def:peps_frame_hole_encoder}
+    \uses{def:peps_adaptive_patch_constraint,
+        def:peps_frame_hole_encoder,
+        def:peps_angular_information_bound,
+        def:peps_squareLatticeCoordinateRegions}
     If the outer sample of square cylinder data is nonempty, its projector
     $P_{c,h}$ is $\Pi$; in all cases
     $\lVert(\id-P_{c,h})\Omega\rVert\le\lVert(\id-\Pi)\Omega\rVert$ and the
@@ -68,17 +72,20 @@ outer sample.
     if the adaptive patch constraint holds, then with the same constants it holds
     on the sites placed at the cell centers $(i+\tfrac12,j+\tfrac12)$,
     $0\le i,j<L$, as in \texttt{06-geometry.tex}, lines 62--63. Fixing one
-    supplied patch for each center and scale, the projector of the patch at
+    such patch for each center and scale, the projector of the patch at
     $(z,u)$ has error at most $L^{-p}$ on $\Omega$ and at most $\max\{1,CL^c\}$
     tags. The patch depends only on the center and the scale, so a given center
     and radius receive the same patch on every sheet, as required at
     \texttt{06-geometry.tex}, lines 114--118.
+    For every natural $L$ and every site of the $L\times L$ lattice,
+    its cell-center position is its integer site position minus $(1/2,1/2)$.
 \end{lemma}
 
 \begin{proof}\leanok
     With a nonempty outer sample the tags are the pairs $(j,\ell)$; with an
     empty one the projector is the identity. A translation preserves sup-norm
-    distances.
+    distances, and the coordinate identity is the pointwise form of the translation between
+    integer lattice positions and cell centers.
 \end{proof}
 
 \begin{definition}[Canonical tag holder and the frame of a guide]
@@ -87,17 +94,38 @@ outer sample.
         TNLean.PEPS.Approximation.guideFrame}
     \leanok
     \uses{def:peps_dyadic_incident_labels, def:peps_frame}
-    Fix a ranking of the labels by natural numbers and a placeholder label. The
+    In the construction of \cite[Section~7]{OpenAI2026PolynomialPEPS} (\texttt{06-geometry.tex},
+    lines 69--80 and 109--125), fix a ranking of the labels by natural numbers and a placeholder label. The
     canonical tag holder of a point $c$ of a guide is the incident label at $c$
     other than the placeholder of least rank. Given a guide read at the sites, an
     assignment of parties to labels, a finite set $V$ of centers and a square
     patch at each center, with pairwise disjoint outer samples, the frame of the
-    guide has the raw owner of a site equal to the party of the label read at its
-    position, and one hole at each center of $V$, carrying its patch, with tag
-    held by the party of the canonical tag holder. This is the frame described
-    in \cite[Section~7]{OpenAI2026PolynomialPEPS}, \texttt{06-geometry.tex},
-    lines 69--80 and 109--125.
+    guide assigns to each site the initial owner equal to the party of the label read at its
+    position, and has one hole at each center of $V$, carrying its patch, with tag
+    held by the party of the canonical tag holder.
 \end{definition}
+
+\begin{theorem}[Guide frames with equal patches at their centers]
+    \label{thm:peps_guide_frame_patch_congruence}
+    \lean{TNLean.PEPS.Approximation.guideFrame_congr_patch,
+        TNLean.PEPS.Approximation.guideFrame_congr}
+    \leanok
+    \uses{def:peps_guide_frame}
+    Fix finite physical sites, their positions and local dimension, a guide,
+    an assignment of owners to labels, a placeholder and a label ranking.
+    Two patch families on the same finite set $V$ of hole centers give equal
+    guide frames if they agree at every point of $V$ and each family has
+    pairwise disjoint outer physical samples. In particular, equal sets of
+    centers and equal patch functions give equal guide frames, with the same
+    remaining data, regardless of the chosen disjointness proofs.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:peps_guide_frame}
+    The initial site owners agree, and the lists of holes agree term by term because every
+    center receives the same patch and canonical tag holder. Equality of
+    center sets and patch functions then gives the second conclusion from the first.
+\end{proof}
 
 \begin{lemma}[Canonical tag holders]
     \label{lem:peps_guide_frame_tags}
@@ -137,13 +165,13 @@ outer sample.
     has projector error at most $\varepsilon$ on $\Omega$, the reference vector of
     the frame of a guide satisfies
     $1-\lvert V\rvert\varepsilon\le\lVert\Omega_{\mathcal F}\rVert\le1$; with
-    supplied patches one may take $\varepsilon=L^{-p}$. If the sites lie at cell
+    adaptive patches one may take $\varepsilon=L^{-p}$. At the last level
+    $n=1$ of \texttt{06-geometry.tex}, lines 669--672, where
+    $2h_1\le2\epsilon_0<\tfrac12$, if the sites lie at cell
     centers, every center of $V$ is a corner of a unit block, and every outer
     radius is less than $\tfrac12$, then every hole has empty physical outer
-    sample, the encoding is an isometry and
-    $\lVert\Omega_{\mathcal F}\rVert=\lVert\Omega\rVert$. This is the last level
-    $n=1$ of \texttt{06-geometry.tex}, lines 669--672, where
-    $2h_1\le2\epsilon_0<\tfrac12$.
+    sample, the encoding is an isometry, and
+    $\lVert\Omega_{\mathcal F}\rVert=\lVert\Omega\rVert$.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -152,6 +180,33 @@ outer sample.
     A cell center is at sup distance at least $\tfrac12$ from every integer
     point, so the outer samples at $n=1$ are empty and every hole projector is
     the identity.
+\end{proof}
+
+\begin{lemma}[Sites separated from the holes of a guide]
+    \label{lem:peps_guide_frame_outer_holes_disjoint}
+    \lean{TNLean.PEPS.Approximation.disjoint_outerHoles_guideFrame}
+    \leanok
+    \uses{def:peps_frame_square_patch, def:peps_frame_rewrite_data,
+        def:peps_guide_frame}
+    Let $I$ be a finite set of sites with positions $p_x\in\mathbb R^2$, and
+    let $q$ be any natural local dimension. Fix any guide, owner map,
+    placeholder label and ranking of the labels. Let $V$ be a finite indexing
+    set of plane points, and assign a square patch $P_z$ to each $z\in V$,
+    with pairwise-disjoint outer samples. Write $c_z$ and $r_z$ for the center
+    and scale of $P_z$; the center $c_z$ need not equal its index $z$.
+    For any set $T\subseteq I$, if
+    $2r_z<\operatorname{dist}(c_z,p_x)$ for every $z\in V$ and $x\in T$,
+    then $T$ is disjoint from the union of the outer samples of all holes
+    of the guide frame.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:peps_frame_square_patch, def:peps_frame_rewrite_data,
+        thm:peps_guide_frame_norm}
+    Every hole is the patch assigned to some $z\in V$. A site in its outer
+    sample satisfies $\operatorname{dist}(p_x,c_z)\le2r_z$, contradicting
+    the strict separation when $x\in T$. Thus each outer sample is disjoint
+    from $T$, and taking their union proves the claim.
 \end{proof}
 
 \begin{theorem}[Small-patch rewrites between frames of guides]
@@ -194,11 +249,11 @@ outer sample.
     Lemma~6.3 lists the untouched holes first, while a frame of a guide lists
     its holes in a fixed order of the centers; the two listings are identified
     by exchanges of tag registers, which preserve norms and carry the
-    reference vector of one listing to that of the other. Compose these
-    exchanges with the circuit of Theorem~\ref{thm:peps_frame_small_rewrite_gate}.
+    reference vector of one listing to that of the other. Composing these
+    exchanges with the circuit of Theorem~\ref{thm:peps_frame_small_rewrite_gate} yields the rewrite circuit.
 \end{proof}
 
-\begin{lemma}[Patch data of supplied small-patch rewrites]
+\begin{lemma}[Patch data of adaptive small-patch rewrites]
     \label{lem:peps_guide_frame_patch_data}
     \lean{TNLean.PEPS.EncodedFrame.IsSuppliedPatch,
         TNLean.PEPS.EncodedFrame.IsSuppliedPatch.norm_act_proj_sub_le,
@@ -210,7 +265,7 @@ outer sample.
     \leanok
     \uses{lem:peps_adaptive_patch_supply, thm:peps_guide_frame_rewrite}
     Let $\lVert\Omega\rVert=1$ and $L\ge2$, and let every additional patch and
-    every hole patch of a rewrite between frames of guides be a patch supplied
+    every hole patch of a rewrite between frames of guides be a patch provided
     by the adaptive patch constraint with test exponent $60$ and constants
     $C,c$, as at \cite[Section~7]{OpenAI2026PolynomialPEPS},
     \texttt{06-geometry.tex}, lines 109--118. Let $C'\ge\max\{1,C\}$ and
@@ -226,9 +281,9 @@ outer sample.
 \end{lemma}
 
 \begin{proof}\leanok
-    The error and the tag count are those of the supplied patches, with
+    The error and the tag count are those of the adaptive patches, with
     $\max\{1,CL^c\}\le C'L^{c'}$ for $L\ge1$. A patch with empty outer sample has
-    its one identity tag. If a supplied patch with nonempty outer sample had no
+    its one identity tag. If an adaptive patch with nonempty outer sample had no
     tag, its cylinder sum would vanish, and its error on $\Omega$ would be
     $\lVert\Omega\rVert=1>L^{-60}$.
 \end{proof}
@@ -508,7 +563,7 @@ outer sample.
     and the ratio.
 \end{proof}
 
-\begin{theorem}[Resizes and point treatments with supplied patches]
+\begin{theorem}[Resizes and point treatments with adaptive patches]
     \label{thm:peps_guide_frame_supplied_gates}
     \lean{TNLean.PEPS.EncodedFrame.suppliedPatch,
         TNLean.PEPS.EncodedFrame.suppliedPatch_center,
@@ -521,7 +576,7 @@ outer sample.
     \leanok
     \uses{thm:peps_guide_frame_reading_gates, lem:peps_guide_frame_patch_data}
     Assume the conclusion of Proposition~4.1 at test exponent $60$ on the sheet,
-    and choose every hole patch and every net patch as the patch it supplies at
+    and choose every hole patch and every net patch as the patch it provides at
     its center and its radius, which must lie in $(0,B_0\log L]$. Let
     $\lVert\Omega\rVert=1$, $L\ge2$, and let $C'\ge\max(1,C)$ and $c'\ge c$ be
     natural numbers. Then the two statements of
@@ -529,13 +584,18 @@ outer sample.
     thresholds, with constants $C'$ and $c'$ and without the hypotheses on the
     tags and the errors of the patches. For the resize, the old and the new hole
     radii are chosen among $\epsilon_0\min(n,t)$ and $\epsilon_0\min(2n,t)$ and
-    agree away from the resized corner (\texttt{06-geometry.tex}, lines 109--133,
-    481--505 and 529--541).
+    agree away from the resized corner. Every monomial of these gates has at most
+    $2b$ pair sources (\texttt{06-geometry.tex}, lines 109--133, 481--505 and
+    529--541; \texttt{04-compression.tex}, lines 143--147).
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:peps_guide_frame_patch_data}
-    The supplied patch at a center depends only on the center and the radius, so
-    the old and new holes agree where their radii do. A supplied patch has at most
-    $C'L^{c'}$ tags, error at most $L^{-60}$ on $\Omega$, and a tag.
+    \uses{lem:peps_guide_frame_patch_data, lem:peps_adaptive_patch_supply,
+        thm:peps_frame_small_rewrite_gate_sources}
+    The chosen patch at a center depends only on the center and the radius, so
+    the old and new holes agree where their radii do. Each such patch has at most
+    $C'L^{c'}$ tags, error at most $L^{-60}$ on $\Omega$, and a tag. These data
+    discharge the patch hypotheses of the source-bounded reading-step results in
+    Theorem~\ref{thm:peps_frame_small_rewrite_gate_sources}. The same gates retain
+    at most $2b$ pair sources in every monomial.
 \end{proof}

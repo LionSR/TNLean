@@ -1,4 +1,4 @@
-\begin{definition}[The literal four-register charge-pair vector]
+\begin{definition}[Four-register charge-pair vector]
     \label{def:peps_regular_charge_four_register}
     \lean{TNLean.PEPS.normalizedRegularChargeFourRegister}
     \leanok
@@ -11,7 +11,7 @@
     \]
     The initial vector in the accessible creation diagram is
     $\Omega=\Phi_{1,1}$: the two uniform diagonal pairs $a=c$ and $b=d$.
-    These are the actual four registers of
+    These are the four registers of
     \cite[charge-pair creation]{Schuch2010PEPS}, lines 2534--2558.
     A comparison with the original six-spin contraction remains separate.
 \end{definition}
@@ -37,7 +37,7 @@
     The remaining sum is the proved two-register inner product.
 \end{proof}
 
-\begin{theorem}[An actual unitary preparation in the four accessible registers]
+\begin{theorem}[Unitary preparation in the four accessible registers]
     \label{thm:peps_regular_charge_pair_preparation}
     \lean{TNLean.PEPS.exists_unitary_regularChargePairPreparation}
     \leanok
@@ -51,11 +51,11 @@
     it does not assert an original six-spin creation operation.
 \end{theorem}
 \begin{proof}\leanok
-    For the trivial character, choose the identity, since the target is
-    $\Omega$. Otherwise the two vectors are orthogonal unit vectors.
-    Choose the reflection
+    For the trivial character, the target is $\Omega$ and $Q=I$ suffices.
+    Otherwise $\Omega$ and $\Phi_{\chi,p}$ are orthogonal unit vectors, and the
+    unitary reflection
     \[
-        Q=I-(\Omega-\Phi_{\chi,p})(\Omega-\Phi_{\chi,p})^*.
+        Q=I-(\Omega-\Phi_{\chi,p})(\Omega-\Phi_{\chi,p})^*
     \]
-    It is unitary and exchanges the two vectors.
+    exchanges them.
 \end{proof}

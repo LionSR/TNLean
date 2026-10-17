@@ -28,12 +28,12 @@ nonzero bond dimensions are needed.
 \end{theorem}
 
 \begin{proof}\leanok
-    Restriction gives the decomposition of assignments; its inverse
+    Restriction gives the decomposition of assignments, and its inverse
     joins the two assignments on their disjoint edge sets.
-    Expand the open tensor in
-    (\ref{eq:peps_nested_boundary_sum}), interchange the finite
-    sums, and retain the unique boundary label
-    $\mu_R=\eta_R|_{\partial R}$.
+    Expanding the open tensor in
+    (\ref{eq:peps_nested_boundary_sum}), interchanging the finite
+    sums, and retaining the unique boundary label
+    $\mu_R=\eta_R|_{\partial R}$ gives the identity.
 \end{proof}
 
 \begin{definition}[Physical slice of a nested region]%
@@ -64,9 +64,9 @@ nonzero bond dimensions are needed.
 \begin{proof}\leanok
     \uses{thm:peps_nested_incident_labels}
     It suffices to consider a boundary-labelled tensor
-    $\psi_{S,\mu_S}$. Separate the incident labels into
-    $\eta_R$ on $E_R$ and $\zeta$ on $E_S\setminus E_R$.
-    Tensor factors at vertices in $S\setminus R$ and the boundary
+    $\psi_{S,\mu_S}$. Separating the incident labels into
+    $\eta_R$ on $E_R$ and $\zeta$ on $E_S\setminus E_R$,
+    the tensor factors at vertices in $S\setminus R$ and the boundary
     constraint on $S$ depend on $\eta_R$ only through its
     crossing labels $\mu_R$. Equation
     (\ref{eq:peps_nested_boundary_sum}) therefore gives
@@ -77,9 +77,9 @@ nonzero bond dimensions are needed.
         \label{eq:peps_nested_contraction}
     \end{align}
     where each coefficient is the product of the tensor factors
-    on $S\setminus R$ when the assembled boundary labels agree
+    on $S\setminus R$ when the combined boundary labels agree
     with $\mu_S$, and is zero otherwise. The right side belongs
-    to $\mathcal G_R$. Linear combinations give the assertion
+    to $\mathcal G_R$, and linear combinations give the assertion
     for every $\phi_S\in\mathcal G_S$.
 \end{proof}
 
@@ -101,10 +101,10 @@ nonzero bond dimensions are needed.
 \begin{proof}\leanok
     \uses{thm:peps_region_ground_space_nested,
         def:peps_subregion_slice,thm:peps_region_parent_common_kernel}
-    For each $R_i$, choose a containing $S_j$. A vector satisfying
+    For each $R_i$, choosing a containing $S_j$ ensures that a vector satisfying
     the $S_j$ condition has every complementary slice in
-    $\mathcal G_{S_j}$. Apply the nesting theorem and the
-    factorization of physical slices to obtain the $R_i$
-    condition. The parent-kernel statement follows from the
+    $\mathcal G_{S_j}$. Applying the nesting theorem and the
+    factorization of physical slices gives the $R_i$
+    condition, and the parent-kernel statement follows from the
     characterization by common regional conditions.
 \end{proof}

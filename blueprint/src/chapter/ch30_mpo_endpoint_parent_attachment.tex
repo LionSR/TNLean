@@ -31,10 +31,10 @@ The limiting interaction on $\mathcal H^{\otimes2}$ is
 Its distinction from the canonical parent
 $k_p=I-\Pi_{\mathcal S^2_{E_pA_p}}$ is essential: their local kernels
 need not have the same dimension. Their periodic kernels do agree.
-This section proves the ordered attachment underlying the affine
-parent-Hamiltonian comparison in
-\cite[Section~5]{GarreRubio2023MPOSym}. It does not impose or establish
-commutation with a common matrix product operator.
+For the affine parent-Hamiltonian comparison in
+\cite[Section~5]{GarreRubio2023MPOSym}, this section establishes the
+ordered attachment without imposing or establishing commutation with a
+common matrix product operator.
 
 \begin{theorem}[Local comparison]
     \label{thm:mpo_arbitrary_endpoint_parent_order}
@@ -146,13 +146,12 @@ commutation with a common matrix product operator.
         \leq\langle v,C_{p,N}(t)v\rangle
         \leq\|v\|\,\|C_{p,N}(t)v\|.
     \end{align}
-    Cancel $\|v\|$ when $v\ne0$; the case $v=0$ is immediate.
-    No new loss in the lower gap bound occurs.
+    Canceling $\|v\|$ when $v\ne0$ (with $v=0$ immediate) gives the bound
+    without any new loss in the lower gap constant.
 \end{proof}
 
 The reverse of the first attachment and the second attachment join the
-mixed path to the two canonical parents. The common MPO covariance and
-fusion requirements in the definition of symmetric phase remain separate;
-these attachments alone do not establish the symmetric classification.
-This scope restriction is recorded in
-\cite{gap:glm23_mpo_symmetric_mps_scope}.
+mixed path to the two canonical parents. As recorded in
+\cite{gap:glm23_mpo_symmetric_mps_scope}, the common MPO covariance and
+fusion requirements in the definition of symmetric phase remain separate,
+so these attachments alone do not establish the symmetric classification.

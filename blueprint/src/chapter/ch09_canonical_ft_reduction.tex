@@ -15,8 +15,8 @@ the resulting splitting decomposes any tensor into irreducible blocks.
 \end{lemma}
 
 \begin{proof}\leanok
-    Expand the transfer map using (\ref{eq:mps_transfer_map}) and use
-    $(\Id-P)A^iP=0$ to reduce each Kraus term to the $P$-corner.
+    Expanding the transfer map via (\ref{eq:mps_transfer_map}) and applying
+    $(\Id-P)A^iP=0$ reduces each Kraus term to the $P$-corner.
 \end{proof}
 
 
@@ -27,21 +27,19 @@ the resulting splitting decomposes any tensor into irreducible blocks.
     Suppose $P$ is an orthogonal projection satisfying
     $(\Id-P)A^iP=0$ for every physical index~$i$.
     Then there exist $n,m$ with $n+m=D$ and MPS tensors $A_1,A_2$ of bond
-    dimensions $n$ and $m$ such that $A$ and the two-block tensor
-    $A_1\oplus A_2$ generate the same MPV family in the sense of
-    Definition~\ref{def:same_mpv2}.
+    dimensions $n$ and $m$ such that, in the sense of
+    Definition~\ref{def:same_mpv2}, $A$ and the two-block tensor
+    $A_1\oplus A_2$ generate the same MPV family.
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{thm:samempv_unitary}
-    Diagonalize $P$ by a unitary $U$.
-    Since $P^2=P$, the diagonal form of $P$ has only $0$- and $1$-eigenvalues,
-    so the basis splits as $n+m=D$.
-    Conjugating $A$ by $U$ preserves the MPV family by
-    Theorem~\ref{thm:samempv_unitary}.
-    In this basis the relation $(\Id-P)A^iP=0$ makes each letter upper
-    block triangular. Write the conjugated letters as
+    A unitary $U$ diagonalizes $P$; since $P^2=P$, the diagonal form of $P$
+    has only $0$- and $1$-eigenvalues, splitting the basis as $n+m=D$.
+    By Theorem~\ref{thm:samempv_unitary}, conjugating $A$ by $U$ preserves the
+    MPV family, and in this basis the relation $(\Id-P)A^iP=0$ puts each
+    conjugated letter in the upper block-triangular form
     \begin{align}
         B^i
          & =
@@ -95,12 +93,12 @@ the resulting splitting decomposes any tensor into irreducible blocks.
     Since $\rho$ is supported on the range of $P$, this forces
     $(\Id-P)A^iP=0$.
 
-    This is the finite-dimensional case of
-    \cite[Proposition~6.10]{Wolf2012Quantum}: the support projection of any
-    stationary state is sub-harmonic. The equivalence between irreducibility
-    and absence of nontrivial invariant projections is
-    \cite[Theorem~6.2]{Wolf2012Quantum}; see
-    also~\cite[Section~IV.A.1]{Cirac2021Matrix}.
+    As in the finite-dimensional case of
+    \cite[Proposition~6.10]{Wolf2012Quantum}, the support projection of any
+    stationary state is sub-harmonic; by
+    \cite[Theorem~6.2]{Wolf2012Quantum} and~\cite[Section~IV.A.1]{Cirac2021Matrix},
+    irreducibility is equivalent to the absence of nontrivial invariant
+    projections.
 \end{proof}
 
 \begin{theorem}[Two-block decomposition]\label{thm:two_block_decomp}
@@ -153,11 +151,11 @@ of strictly smaller bond dimensions.
 \begin{proof}
     \leanok
     \uses{thm:two_block_decomp}
-    By strong induction on $D$. If $A$ is irreducible, take $r=1$. Otherwise a
+    By strong induction on $D$, if $A$ is irreducible, $r=1$ suffices. Otherwise a
     nontrivial invariant projection $P$ gives the upper-triangular splitting of
     Theorem~\ref{thm:two_block_decomp}; deleting the off-diagonal part preserves
-    the MPV family and yields two blocks of strictly smaller bond dimension.
-    Apply the induction hypothesis to each block.
+    the MPV family and yields two blocks of strictly smaller bond dimension, to
+    which the induction hypothesis applies.
 
     Both~\cite[Theorem~4]{PerezGarcia2007Matrix}
     and~\cite[Section~IV.A.1]{Cirac2021Matrix} obtain the block decomposition by
@@ -228,7 +226,7 @@ trace-preserving gauge.
 
 \begin{proof}\leanok
     \uses{thm:nonzero_irreducible_block_decomposition, thm:tp_data_irreducible}
-    Theorem~\ref{thm:nonzero_irreducible_block_decomposition} supplies the
+    Theorem~\ref{thm:nonzero_irreducible_block_decomposition} gives the
     nonzero irreducible blocks $(C_k)_{k=1}^r$, with
     $V^{(N)}(A)_\sigma
         =V^{(N)}(\bigoplus_{k=1}^rC_k)_\sigma$ for every $N\ge1$ and every
@@ -260,12 +258,11 @@ one blocked alphabet.
 \label{sec:cyclic_sectors}
 
 The period-removing blocking of
-\cite[Section~2.3]{Cirac2016MPDO_arXiv} has four distinct steps. Power the
-transfer map by its period, obtain the adjoint-fixed cyclic projections,
-compress to their corners, and prove that each corner restriction is
-irreducible. Only then does the peripheral set $\{1\}$ imply primitivity of the
-sector maps. The cyclic projections come from
-\cite[Theorem~6.6]{Wolf2012Quantum}.
+\cite[Section~2.3]{Cirac2016MPDO_arXiv} proceeds in four distinct steps:
+powering the transfer map by its period, obtaining the adjoint-fixed cyclic
+projections from \cite[Theorem~6.6]{Wolf2012Quantum}, compressing to their
+corners, and proving that each corner restriction is irreducible. Only then
+does the peripheral set $\{1\}$ imply primitivity of the sector maps.
 
 \begin{theorem}[Period removal by blocking]%
     \label{thm:cyclic_sector_decomp_after_blocking}
@@ -295,10 +292,10 @@ sector maps. The cyclic projections come from
               $\varphi_k(XY)=\varphi_k(X)\varphi_k(Y)$ and
               $\varphi_k(X^\dagger)=\varphi_k(X)^\dagger$.
     \end{enumerate}
-    This is the cyclic-sector part of the period-removal step
-    of~\cite[Section~2.3]{Cirac2016MPDO_arXiv}; the projections $P_k$ come
-    from the peripheral spectrum of the adjoint transfer map
-    (\cite[Theorem~6.6]{Wolf2012Quantum}).
+    In the period-removal step of~\cite[Section~2.3]{Cirac2016MPDO_arXiv}
+    and \cite[Theorem~6.6]{Wolf2012Quantum}, this decomposition extracts the
+    cyclic-sector projections $P_k$ from the peripheral spectrum of the
+    adjoint transfer map.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -310,7 +307,8 @@ sector maps. The cyclic projections come from
     identity
     $\E_{(A^{[m]})^\dagger}=(\E_{A^\dagger})^m$
     identifies these with the adjoint transfer map of $A^{[m]}$.
-    Apply the block decomposition from adjoint-fixed projections.
+    The block decomposition from adjoint-fixed projections then yields the
+    stated sector tensors and compression maps.
 \end{proof}
 
 \begin{theorem}[Unconditional primitive blocked sectors]%
@@ -364,8 +362,8 @@ sector maps. The cyclic projections come from
     \end{align}
     because $\gamma$ is a primitive $m$th root of unity. Hence each nonzero
     irreducible corner restriction is primitive. Primitivity and irreducibility
-    are preserved across $\varphi_u$; then use
-    Theorem~\ref{thm:primitive_adjoint_equiv} to pass from the adjoint blocked
+    are preserved across $\varphi_u$, and
+    Theorem~\ref{thm:primitive_adjoint_equiv} then passes from the adjoint blocked
     map to the primal transfer map of $C_u$.
 \end{proof}
 
@@ -386,9 +384,9 @@ sector maps. The cyclic projections come from
     to the adjoint map, and the quantum Perron--Frobenius theorem provides a
     positive-definite fixed point; the cyclic peripheral-spectrum theorem and
     Theorem~\ref{thm:cyclic_sector_decomp_after_blocking} then produce the
-    cyclic-sector decomposition. Keep the projections and compression
-    equivalences, and apply
-    Theorem~\ref{thm:blocked_sector_unconditional} to the sector blocks.
+    cyclic-sector decomposition. Retaining the projections and compression
+    equivalences, Theorem~\ref{thm:blocked_sector_unconditional} then
+    establishes primitivity and tensor-irreducibility of the sector blocks.
 \end{proof}
 
 
@@ -422,10 +420,9 @@ sector maps. The cyclic projections come from
 
 \begin{proof}\leanok
     \uses{thm:ft_after_blocking_per_block_cyclic_nonzero_blocks, thm:exists_common_blocked_cyclic_sector_family_common_multiple, thm:same_mpv2_pos_block_tensor_to_tensor_from_blocks, thm:same_mpv2_pos_to_tensor_from_blocks_block_power, thm:common_blocked_cyclic_sector_derived_properties}
-    Start from
-    Theorem~\ref{thm:ft_after_blocking_per_block_cyclic_nonzero_blocks}. With
-    $p_A,p_B$ the least common multiples of the period-removal lengths on the
-    two sides, use $p=\lcm(p_A,p_B)$. The prescribed-common-multiple
+    In Theorem~\ref{thm:ft_after_blocking_per_block_cyclic_nonzero_blocks}, let
+    $p_A,p_B$ be the least common multiples of the period-removal lengths on the
+    two sides and set $p=\lcm(p_A,p_B)$. The prescribed-common-multiple
     lemma constructs both one-sided sector families at this length, and the
     positive-length blocking lemmas carry the one-sided tensor/nonzero-part
     equalities over to the common alphabet, giving
@@ -457,7 +454,8 @@ sector families are placed over a common blocked alphabet.
 \end{theorem}
 
 \begin{proof}\leanok
-    Choose a positive-definite fixed point $\rho$ of $\E_A$. The weighted
+    Since $\E_A$ is irreducible and trace-preserving on a positive bond
+    dimension, it admits a positive-definite fixed point $\rho$. The weighted
     trace $X\mapsto\tr(\rho X)$ is invariant under $\E_{A^\dagger}$ and its
     powers. Corner preservation gives
     \begin{align}

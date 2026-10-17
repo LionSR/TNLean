@@ -272,7 +272,7 @@ into a single constant.
     On a ring of $N\ge1$ sites the padded chain has the state $\ket{\phi_N}$ of
     the chain. If all bonds already have dimension $D$, zero padding leaves
     every matrix unchanged. If every block has at least one site, the blocked tensor $B_k$
-    of the padded chain vanishes outside $R_k$; if moreover the blocked tensors
+    of the padded chain vanishes outside $R_k$; if the blocked tensors
     are injective, $B_k$ is injective on $R_k$. Padding preserves inner
     products of pairs, so padded unit pairs are unit vectors, and the product
     $\ket\Omega$ of padded pairs vanishes at every bond configuration $c$ with
@@ -330,8 +330,8 @@ into a single constant.
     $b_{p-1}\times b_p$ matrices $X_p^i$ with $\sum_i(X_p^i)^\dagger X_p^i=\Id_{b_p}$
     for every $p$, such that
     $\bra{i_1\cdots i_q}V\ket{\pi(x)}=(X_1^{i_1}\cdots X_q^{i_q})_{1x}$ for every
-    $x<\lvert S\rvert$. For $S$ the set of all pairs this is
-    Theorem~\ref{thm:ldp_sequential_factorization}.
+    $x<\lvert S\rvert$, recovering Theorem~\ref{thm:ldp_sequential_factorization}
+    when $S$ is the set of all pairs.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -339,9 +339,9 @@ into a single constant.
         lem:ldp_sequential_factorization_first_inputs}
     By Theorem~\ref{thm:ldpolar_tensor_injective_on}, $V=BG$ for a matrix $G$
     on the bond pairs, and the columns $V\ket{\pi(x)}$, $x<\lvert S\rvert$, are
-    orthonormal. Reorder the inputs by $\pi$ and apply
+    orthonormal. Reordering the inputs by $\pi$ and applying
     Lemma~\ref{lem:ldp_sequential_factorization_first_inputs} with
-    $r=\lvert S\rvert$.
+    $r=\lvert S\rvert$ yields the chain.
 \end{proof}
 
 \begin{theorem}[Sequential factorization of the partial isometry of any blocked tensor]
@@ -358,12 +358,13 @@ into a single constant.
     families of $b_{p-1}\times b_p$ matrices $X_p^i$ with
     $\sum_i(X_p^i)^\dagger X_p^i=\Id_{b_p}$ for every $p$, such that
     $\bra{i_1\cdots i_q}VT\ket x=(X_1^{i_1}\cdots X_q^{i_q})_{1x}$ for every
-    $x<r$. This is the case $q\ge1$ of the footnote
-    of~\cite[paragraph ``The sequential-RG circuit'']{Malz2024Preparation}: the
+    $x<r$. For $q\ge1$, this establishes the claim of the footnote
+    of~\cite[paragraph ``The sequential-RG circuit'']{Malz2024Preparation} that the
     derivation of \cite[eqs.~(13)--(15)]{Malz2024Preparation} remains valid for
-    non-injective $B$, with $P^{-1}$ read as a pseudo-inverse. The source states
-    no lower bound on $q$; at $q=0$ the conclusion fails for every $D$,
-    see~\cite{gap:mswc24_sequential_factorization_positive_block_length}.
+    non-injective $B$, with $P^{-1}$ read as a pseudo-inverse. Although the source
+    states no lower bound on $q$, as recorded
+    in~\cite{gap:mswc24_sequential_factorization_positive_block_length} the
+    conclusion fails at $q=0$ for every $D$.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -466,9 +467,9 @@ into a single constant.
     isometry into the window, which extends to a unitary by
     Theorem~\ref{thm:ldp_unitary_implementing_isometry}. In the circuit of
     Theorem~\ref{thm:ldp_block_sum_unitary}, after the SWAP gates have brought
-    the two inputs onto the last $2r_1$ sites, apply this unitary for $G$ on
-    those sites, a product of a bounded number of gates by
-    Theorem~\ref{thm:qc_bounded_unitary_two_site_gates}, and then the
+    the two inputs onto the last $2r_1$ sites, this unitary for $G$ acts on
+    those sites as a product of a bounded number of gates by
+    Theorem~\ref{thm:qc_bounded_unitary_two_site_gates}, followed by the
     staircase; $Z(\sigma,y)$ is the amplitude of the staircase on the encoded
     input $y$.
 \end{proof}
@@ -515,7 +516,7 @@ into a single constant.
     vector of Definition~\ref{def:ldp_chain_pos_state}. If every $W_k$ is an
     isometry, $\bigotimes_kW_k$ preserves inner products and norms. If
     $W_k\Pi_k=V_k$ for every $k$, then
-    $\ket{\phi_N}=(\bigotimes_kW_k)\ket{\phi_{\mathrm{pos}}}$, and if moreover
+    $\ket{\phi_N}=(\bigotimes_kW_k)\ket{\phi_{\mathrm{pos}}}$, and if
     every $W_k$ is an isometry, then for all vectors $\omega^k$
     \begin{align}
         \Bigl\langle\Bigl(\bigotimes_kW_k\Bigr)\Omega,
@@ -601,18 +602,18 @@ into a single constant.
     and $D$: if the chain is approximated by pairs with error $\delta$ on the
     given blocks, some unit vector prepared in depth at most $CL$ has error at
     most $\delta$ against the normalized state $\ket{\phi_N}$. No injectivity
-    of the blocked tensors is assumed. This is a scope-restricted variant, for
-    one ring, of the claim of the paragraph ``Inhomogeneous short-range
-    correlated MPS'' of~\cite{Malz2024Preparation}, which states total depth
-    $O(\log(N/\varepsilon))$ with error
+    of the blocked tensors is assumed. Relative to the claim of the paragraph
+    ``Inhomogeneous short-range correlated MPS'' of~\cite{Malz2024Preparation},
+    which states total depth $O(\log(N/\varepsilon))$ with error
     $\varepsilon(\Omega,\phi_{\mathrm{pos}})$ for matrix product states with
-    bond dimension at most $D$. The lower bound $3D\le\ell_k$ is absent from
-    that statement~\cite{gap:mswc24_inhomogeneous_scope}, and the unrestricted
-    claim is not formalized. The hypothesis $D^2\le d^{3D}$ follows from the
+    bond dimension at most $D$, this is a scope-restricted variant for one ring.
+    As recorded in~\cite{gap:mswc24_inhomogeneous_scope}, the lower bound
+    $3D\le\ell_k$ is absent from that statement, and the unrestricted claim is
+    not formalized. The hypothesis $D^2\le d^{3D}$ follows from the
     source's requirement $d^q\ge D^2$ for blocks of $q\ge3D\ge1$ sites. The
     bound $CL$ gives the stated depth when $L=O(\log(N/\varepsilon))$; the
-    source's definition fixes blocks of length $q=O(\log N)$. The choice of
-    $L$ in terms of $N$ and the error is not made here.
+    source's definition fixes blocks of length $q=O(\log N)$, while the choice
+    of $L$ in terms of $N$ and the error is left open here.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -639,7 +640,7 @@ into a single constant.
     \leanok
     \uses{thm:ldp_chain_depth, thm:ldp_chain_block_iso_inner, thm:ldp_zero_pad}
     There is $C$, depending only on $d$ and $D$, such that in the setting of
-    Theorem~\ref{thm:ldp_inhomogeneous}, for any $d$, if moreover every blocked
+    Theorem~\ref{thm:ldp_inhomogeneous}, for any $d$, if every blocked
     tensor is injective in the sense of
     Definition~\ref{def:ldp_varying_bond_chain}, the vector
     $(\bigotimes_kV_k)\ket\Omega$ is a unit vector prepared in depth at most
@@ -685,18 +686,18 @@ into a single constant.
 
     The positive lower bound on block lengths is an additional hypothesis:
     the source's upper bound $q_N=O(\log N)$ alone does not imply it.
-    Convergence of the errors supplies no accuracy-dependent rate, so this
-    statement does not establish $O(\log(N/\varepsilon))$ for arbitrary
-    requested accuracy~\cite{gap:mswc24_inhomogeneous_scope}.
+    As recorded in~\cite{gap:mswc24_inhomogeneous_scope}, convergence of the
+    errors gives no accuracy-dependent rate, so this statement does not
+    establish $O(\log(N/\varepsilon))$ for arbitrary requested accuracy.
 \end{theorem}
 \begin{proof}
     \leanok
-    Choose $N_0>\exp(3D/c)$. For $N\ge N_0$, all block lengths are at least
+    For $N_0>\exp(3D/c)$ and $N\ge N_0$, all block lengths are at least
     $3D$, so Theorem~\ref{thm:ldp_inhomogeneous} gives depth at most $C_0L_N$.
-    On the finitely many rings $2\le N<N_0$, apply
-    Theorem~\ref{thm:ldp_short_chain_preparation} to the normalized target:
-    extending it to a unitary and decomposing that unitary into nearest-neighbour
-    gates gives a bound $K$ depending only on $d,N_0$. A one-site vector is a
+    On the finitely many rings $2\le N<N_0$,
+    Theorem~\ref{thm:ldp_short_chain_preparation} applied to the normalized target
+    extends it to a unitary and decomposes that unitary into nearest-neighbour
+    gates, giving a bound $K$ depending only on $d,N_0$. A one-site vector is a
     product vector and has depth zero. Since $N\ge1$ and the blocks cover the
     ring, $L_N\ge1$, so $C=\max(C_0,K)$ bounds every depth by $CL_N$.
     The exact states have zero error. Cauchy--Schwarz gives nonnegative error
@@ -710,23 +711,24 @@ into a single constant.
     \leanok
     \uses{thm:ldp_isometric_extension_depth, thm:ldp_isometric_extension_overlap,
         thm:ldp_short_chain_preparation}
-    Fix $d\ge1$ and $D$. There is $C$ such that the normalized state of every
-    nonzero inhomogeneous chain of bond dimension $D$ on $N\ge1$ sites is
-    prepared exactly by a local circuit of depth at most $CN$. No injectivity
-    or correlation-decay assumption is required. This is the sequential
-    circuit of~\cite{Malz2024Preparation}, applied to one block covering the
-    ring, including the isometric extension for a non-injective tensor.
+    Fix $d\ge1$ and $D$. Applying the sequential circuit
+    of~\cite{Malz2024Preparation} (including the isometric extension for a
+    non-injective tensor) to a single block covering the ring yields a constant
+    $C$ such that the normalized state of every nonzero inhomogeneous chain of
+    bond dimension $D$ on $N\ge1$ sites is prepared exactly by a local circuit
+    of depth at most $CN$, without any injectivity or correlation-decay
+    assumption.
 \end{theorem}
 \begin{proof}
     \leanok
-    For $N\ge3D$ and $d\ge2$, use one block with positive-part state
-    $\phi_{\mathrm{pos}}$. Its normalized vector is a single unit pair on
+    For $N\ge3D$ and $d\ge2$, a single block with positive-part state
+    $\phi_{\mathrm{pos}}$ has as its normalized vector a single unit pair on
     $\mathbb C^D\otimes\mathbb C^D$, with its two indices interchanged to
     match the cyclic contraction. The block isometry satisfies $WP=B$, so
     it sends that pair to $\phi_N/\lVert\phi_N\rVert$ in depth at most $C_0N$.
     For $2\le N<3D$, bounded-dimensional synthesis gives a constant depth
-    $K$ depending only on $d,D$; take $C=\max(C_0,K)$. One-site states and
-    states with $d=1$ are product states and need no gates.
+    $K$ depending only on $d,D$, so $C=\max(C_0,K)$ suffices across all $N$.
+    One-site states and states with $d=1$ are product states and need no gates.
 \end{proof}
 
 \begin{theorem}[Accuracy-dependent preparation under a uniform decay rate]
@@ -745,21 +747,22 @@ into a single constant.
     $T\le C\log(N/\varepsilon)$ and error
     $\varepsilon(\psi,\phi_N)\le\varepsilon$.
 
-    This is a conditional variant of the accuracy-dependent claim in the
-    inhomogeneous paragraph of~\cite{Malz2024Preparation}. The uniform rate
-    is an additional assumption: convergence of the approximation errors
-    alone does not establish it~\cite{gap:mswc24_inhomogeneous_scope}.
+    Relative to the accuracy-dependent claim in the inhomogeneous paragraph
+    of~\cite{Malz2024Preparation}, this is a conditional variant: as recorded
+    in~\cite{gap:mswc24_inhomogeneous_scope}, the uniform rate is an additional
+    assumption that convergence of the approximation errors alone does not
+    establish.
 \end{theorem}
 \begin{proof}
     \leanok
-    For $N\ge2$, choose $q=\lceil a\log(N/\varepsilon)+b\rceil$, where
-    $a=\max(k,1)/r$ and $b=\max(\log K,0)/r+3D+1$. Then $q\ge3D$ and
+    For $N\ge2$, setting $q=\lceil a\log(N/\varepsilon)+b\rceil$ with
+    $a=\max(k,1)/r$ and $b=\max(\log K,0)/r+3D+1$ ensures $q\ge3D$ and
     $rq\ge\log K+k\log N-\log\varepsilon$, so Lemma~\ref{lem:ldp_log_threshold_error}
     gives $KN^k e^{-rq}\le\varepsilon$.
-    If $q\le N$, choose the partition supplied by the approximation hypothesis.
-    Its block lengths are at most $2q$, so Theorem~\ref{thm:ldp_inhomogeneous}
-    gives depth at most $2C_0q$. If $q>N$, apply
-    Theorem~\ref{thm:ldp_inhomogeneous_exact} to obtain exact preparation in
+    When $q\le N$, the partition given by the approximation hypothesis has
+    block lengths at most $2q$, so Theorem~\ref{thm:ldp_inhomogeneous}
+    gives depth at most $2C_0q$. When $q>N$,
+    Theorem~\ref{thm:ldp_inhomogeneous_exact} yields exact preparation in
     depth at most $C_1N<C_1(a\log(N/\varepsilon)+b)$.
     Since $\log(N/\varepsilon)\ge\log2$, both bounds are a constant multiple
     of $\log(N/\varepsilon)$. The one-site case has depth zero.

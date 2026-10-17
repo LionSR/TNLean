@@ -27,7 +27,7 @@ may depend on that margin, while the geometric constants do not.
     depth, and each anchor belongs to its original admissible support.
     Suppose $n\geq N$, the target is nonempty with size at most $C_Tn^2$, its ambient
     layers have size at most $n$, and the target clearance is greater than
-    $2L+10r_0$.  Retain the literal scales
+    $2L+10r_0$.  Retain the explicit scales
     \begin{align}
         L   & =\lfloor n^{1-\ell}\rfloor,             &
         m   & =\lfloor n^\mu\rfloor,                  &
@@ -59,7 +59,7 @@ may depend on that margin, while the geometric constants do not.
         0 & <1-n^{-100}\leq z\leq1.
         \label{eq:arealaw-target-sharp-moment-mass}
     \end{align}
-    The target budget is at most $C_{\rm target}n(\log n)^{12}$, and every
+    The target cut weight is at most $C_{\rm target}n(\log n)^{12}$, and every
     eigenvalue in this set lies between
     $\exp(-S(\widetilde\Omega_X)-w)$ and
     $\exp(-S(\widetilde\Omega_X)+w)$.
@@ -96,8 +96,8 @@ may depend on that margin, while the geometric constants do not.
         thm:al_scan_status_scale_separation,
         thm:al_moment_weight_smallness,
         thm:al_scan_common_moment_interval}
-    Choose the truncation and target-budget constants from the quantitative
-    target window, then the common status-budget constant.  The rounded
+    With the truncation and target-cut constants fixed by the quantitative
+    target window and the common status-cut constant fixed thereafter, the rounded
     scale separation and the positive margin in
     (\ref{eq:arealaw-target-sharp-moment-margin}) give a common threshold
     with
@@ -105,18 +105,18 @@ may depend on that margin, while the geometric constants do not.
         10a\sqrt B & \leq\min\{c_0,1\}.
         \label{eq:arealaw-target-sharp-product-smallness}
     \end{align}
-    Since $B\geq1$, division by $\sqrt B$ gives both factor-ten bounds;
+    Since $B\geq1$, division by $\sqrt B$ gives both factor-ten bounds, and
     positivity of $a$ gives the factor-six bounds.
-    Apply the target-window construction once.  Each of the five physical
-    status cuts has geometric budget at most $B$, so the marginal-moment
+    In the target-window construction, each of the five physical
+    status cuts has geometric cut weight at most $B$, so the marginal-moment
     estimate for this same truncated state applies on
-    $|u|\leq c_0/\sqrt B$.  The target mass, eigenvalue window and
-    quantitative truncation estimates are unchanged.
+    $|u|\leq c_0/\sqrt B$ while leaving the target mass, eigenvalue window, and
+    quantitative truncation estimates unchanged.
 \end{proof}
 
-The conclusion supplies common physical data for a single supplied label
+The conclusion provides common physical data for a single given label
 sequence in both sharp comparisons.  It does not choose that sequence,
-select a charge point, estimate its actual defect, or perform the entropy
+select a charge point, estimate its defect, or perform the entropy
 telescope and final absorption.  The stronger margin is recorded explicitly;
 at the source's final parameter choice its positive value is
 $499879/2000000$.

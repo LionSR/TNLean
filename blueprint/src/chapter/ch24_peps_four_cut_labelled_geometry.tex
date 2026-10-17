@@ -83,7 +83,7 @@
     a period equals one.
 \end{definition}
 
-\subsection{Flat group labels on the actual bonds}
+\subsection{Flat group labels on the bonds}
 
 \begin{definition}[Horizontal and vertical bond labels]%
     \label{def:peps_labelled_pair}
@@ -136,25 +136,26 @@
     For every $q$, the assignment $q\cdot p$ is flat if and only if $p$ is flat.
 \end{theorem}
 \begin{proof}\leanok
-    Multiply (\ref{eq:peps_bond_flat}) on the left by $q_{x+1,y}$
-    and on the right by $q_{x,y+1}^{-1}$. Substitution of
+    Multiplying (\ref{eq:peps_bond_flat}) on the left by $q_{x+1,y}$
+    and on the right by $q_{x,y+1}^{-1}$ and substituting
     (\ref{eq:peps_bond_gauge}) cancels the two intermediate vertex factors
-    on each side. Apply the same calculation with $q^{-1}$ for the converse.
+    on each side. Applying the same calculation with $q^{-1}$ gives the converse.
 \end{proof}
 
-\begin{theorem}[Comparison with upward parallel transport]%
+\begin{theorem}[Comparison with upward bond labels]%
     \label{thm:peps_bond_flat_transport}
     \lean{TNLean.PEPS.isTorusBondFlat_iff_isTorusFlat}
     \leanok
     \uses{def:peps_bond_flat,lem:peps_torus_parallel_section}
     Bond flatness of $(a,b)$ is equivalent to flatness of the rightward
-    and upward transports $(a,b^{-1})$:
+    and upward bond labels $(a,b^{-1})$:
     $b_{x+1,y}^{-1}a_{x,y}=a_{x,y+1}b_{x,y}^{-1}$.
 \end{theorem}
 \begin{proof}\leanok
-    Multiply (\ref{eq:peps_bond_flat}) on the left by $b_{x+1,y}^{-1}$
-    and on the right by $b_{x,y}^{-1}$, and reverse the resulting equality.
-    Multiplication by the inverse factors gives the converse.
+    Multiplying (\ref{eq:peps_bond_flat}) on the left by $b_{x+1,y}^{-1}$
+    and on the right by $b_{x,y}^{-1}$ and reversing the resulting equality
+    gives the rightward-upward condition, while multiplication by the inverse
+    factors gives the converse.
 \end{proof}
 
 \begin{definition}[Standard closure labels]%
@@ -162,7 +163,9 @@
     \lean{TNLean.PEPS.torusBondClosureLabels}
     \leanok
     \uses{def:peps_labelled_pair}
-    Given $g,h\in G$, the standard closure assignment $\kappa(g,h)$ is
+    For the group labels of the two closures in
+    \cite[Theorem~5.5 and Definition~5.6]{Schuch2010PEPS}, given $g,h\in G$, the
+    standard closure assignment $\kappa(g,h)$ is
     \begin{align}
         \kappa(g,h)^{\mathrm H}_{x,y}
          & =\begin{cases}h&x+1=0,\\1&x+1\ne0,\end{cases} &
@@ -170,8 +173,6 @@
          & =\begin{cases}g&y+1=0,\\1&y+1\ne0.\end{cases}
         \label{eq:peps_bond_closure}
     \end{align}
-    These are the group labels of the two closures in
-    \cite[Theorem~5.5 and Definition~5.6]{Schuch2010PEPS}.
 \end{definition}
 
 \begin{theorem}[Flatness of closure labels]%
@@ -198,7 +199,7 @@
     assignment is flat and vertex gauges preserve flatness.
 \end{definition}
 
-\begin{definition}[Inverse rooted transport]%
+\begin{definition}[Inverse rooted path products]%
     \label{def:peps_bond_tree_gauge}
     \lean{TNLean.PEPS.torusBondTreeGauge}
     \leanok
@@ -214,15 +215,15 @@
     \lean{TNLean.PEPS.IsTorusBondFlat.torusBondGauge_tree}
     \leanok
     \uses{def:peps_bond_tree_gauge,def:peps_bond_flat,def:peps_bond_closure}
-    If $p$ is flat, then the inverse rooted transport satisfies
+    If $p$ is flat, then the inverse rooted path product satisfies
     $q\cdot p=\kappa(B_{0,\ell}^{-1},A_w)$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_bond_flat_transport,thm:peps_torus_flat_connection_gauge}
-    Apply the two rooted-transport identities of
-    Theorem~\ref{thm:peps_torus_flat_connection_gauge} to $(a,b^{-1})$.
-    The horizontal identity is the claimed horizontal component.
-    Invert the vertical identity to obtain the downward component.
+    Applying the two rooted-path identities of
+    Theorem~\ref{thm:peps_torus_flat_connection_gauge} to $(a,b^{-1})$
+    yields the claimed horizontal component directly, while inverting the
+    vertical identity gives the downward component.
 \end{proof}
 
 \begin{theorem}[Classification of flat labelled-bond assignments]%
@@ -256,8 +257,8 @@
     $\sum_r f(r\cdot(q\cdot p))=\sum_r f(r\cdot p)$.
 \end{theorem}
 \begin{proof}\leanok
-    Substitute $r\cdot(q\cdot p)=(rq)\cdot p$ and reindex the sum
-    by the bijection $r\mapsto rq$ of vertex assignments.
+    Substituting $r\cdot(q\cdot p)=(rq)\cdot p$ and reindexing the sum
+    by the bijection $r\mapsto rq$ of vertex assignments gives the equality.
 \end{proof}
 
 \subsection{Moving the commuting seams}
@@ -292,7 +293,8 @@
     \leanok
     \uses{def:peps_bond_seam_gauge,def:peps_bond_closure_at,
         def:peps_bond_gauge}
-    If $gh=hg$ and $w,\ell>0$, then
+    In the group-valued form of the string movement in
+    \cite[Section~5]{Schuch2010PEPS}, if $gh=hg$ and $w,\ell>0$, then
     \begin{align}
         s_{h,c}\cdot\kappa_{0,r}(g,h)      & =\kappa_{c,r}(g,h),\nonumber \\
         s_{g^{-1},r}\cdot\kappa_{c,0}(g,h) & =\kappa_{c,r}(g,h),\nonumber \\
@@ -301,10 +303,8 @@
     \end{align}
     In the first two lines, a one-coordinate function denotes its pullback
     to $\Lambda$. The first line needs only $w>0$ and the second only
-    $\ell>0$. The last line in particular supplies a vertex gauge taking
-    the standard closure to any chosen pair of seams. It is the
-    group-valued form of the string movement in
-    \cite[Section~5]{Schuch2010PEPS}.
+    $\ell>0$. The last line in particular gives a vertex gauge taking
+    the standard closure to any chosen pair of seams.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_four_cut_common_seam_gauge,def:peps_bond_gauge}
@@ -312,8 +312,8 @@
     component. Every value of $s_{h,c}$ commutes with $g$, so conjugation
     leaves the vertical component fixed. The inverse-label seam identity
     gives the vertical movement, while commutation fixes the horizontal
-    component. Compose the horizontal gauge and then the vertical gauge;
-    their pointwise product is $q_{c,r}$.
+    component. Composing the horizontal gauge with the vertical gauge gives
+    their pointwise product $q_{c,r}$.
 \end{proof}
 
 \begin{theorem}[The orbit sum is independent of the seams]%
@@ -328,8 +328,9 @@
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_bond_seam_movement,thm:peps_bond_gauge_average}
-    Replace $\kappa_{c,r}(g,h)$ using (\ref{eq:peps_bond_move_seams})
-    and reindex the orbit sum by multiplication with $q_{c,r}$.
+    Replacing $\kappa_{c,r}(g,h)$ via (\ref{eq:peps_bond_move_seams})
+    and reindexing the orbit sum by multiplication with $q_{c,r}$ gives the
+    equality.
 \end{proof}
 
 \begin{definition}[Closure assignments indexed by individual bonds]%
@@ -365,8 +366,9 @@
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_bond_seam_movement}
-    Take the gauge of Theorem~\ref{thm:peps_bond_seam_movement} and
-    read its horizontal or vertical equality according to the direction of $e$.
+    Taking the gauge of Theorem~\ref{thm:peps_bond_seam_movement} and
+    reading its horizontal or vertical equality according to the direction of $e$
+    gives the bondwise identity.
 \end{proof}
 
 \begin{theorem}[Flatness classification on individual bonds]%
@@ -380,8 +382,9 @@
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_bond_flat_classification}
-    Classify the horizontal and vertical components, then evaluate the
-    resulting pair of equalities in the direction of each bond.
+    Classifying the horizontal and vertical components and evaluating the
+    resulting pair of equalities in the direction of each bond gives the
+    claim.
 \end{proof}
 
 \begin{theorem}[Relative labels on the four uncut bonds]%

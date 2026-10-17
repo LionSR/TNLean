@@ -14,9 +14,9 @@
         \label{eq:mpdo_rep_tuple_sep}
     \end{align}
     They have \emph{eventual representative word-tuple separation} when this
-    equality holds at every sufficiently large length. Notice that the
-    family is indexed by the minimal representatives $j$, and not by the
-    repeated copies lying over each $j$.
+    equality holds at every sufficiently large length. The displayed tuple is
+    indexed by the minimal representatives $j$ rather than by the repeated
+    copies lying over each $j$.
 \end{definition}
 
 \begin{theorem}[Representative-grouped Lemma L]
@@ -39,24 +39,22 @@
     the first-site equality is initially given for any tensor with the same
     positive-length MPV family as $A_{\mathrm{tot}}$.
 
-    The representative grouping is the argument of
-    \cite[Appendix~C.3, lines~1835--1858]{Cirac2016MPDO_arXiv}.
-
-    In the first auxiliary assertion, eventual representative word-tuple
-    separation is an explicit assumption. The later post-blocked theorem
-    derives the needed finite representative separation from the full BNT
-    canonical-form hypotheses. The sharp $3D^5$ representative-separation
-    bound is Theorem~\ref{thm:sharp_bnt_block_separation}; its detailed source
-    comparison is recorded in
-    \cite{gap:cpgsv17_bicf_block_separation}.
+    Following the representative grouping of
+    \cite[Appendix~C.3, lines~1835--1858]{Cirac2016MPDO_arXiv}, the first
+    auxiliary assertion assumes eventual representative word-tuple separation
+    explicitly, whereas the post-blocked theorem below derives the needed
+    finite representative separation from the full BNT canonical-form
+    hypotheses (with the sharp $3D^5$ bound given in
+    Theorem~\ref{thm:sharp_bnt_block_separation} and compared with the source
+    in \cite{gap:cpgsv17_bicf_block_separation}).
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{def:representative_word_tuple_span, lem:paper_decomp_formula, cor:nonvanishing_finite_power_sum}
-    At a fixed tail length $L$, expand the first-site equality at system size
-    $L+1$ and group all copies lying over the same representative. For every
-    length-$L$ word $w$ this gives
+    At a fixed tail length $L$, expanding the first-site equality at system
+    size $L+1$ and grouping all copies lying over the same representative
+    gives, for every length-$L$ word $w$,
     \begin{align}
         \sum_{j=0}^{g-1}
         \tr\!\left(c_j^{(L+1)}(YA_j-ZA_j)A_j^w\right)
@@ -67,10 +65,10 @@
     $c_j^{(L+1)}(YA_j-ZA_j)$ to vanish. A nonzero coefficient may then be
     cancelled.
 
-    For the eventual assertion, choose a threshold $L_0$ and put
-    $M=L_0+1$. For a fixed representative $j$, apply
-    Corollary~\ref{cor:nonvanishing_finite_power_sum} to the nonzero numbers
-    $\mu_{j,q}^{M}$. It yields $r\geq1$ such that
+    For the eventual assertion, choosing a threshold $L_0$, setting
+    $M=L_0+1$, and applying Corollary~\ref{cor:nonvanishing_finite_power_sum}
+    to the nonzero numbers $\mu_{j,q}^{M}$ for a fixed representative $j$
+    yields $r\geq1$ such that
     $c_j^{(Mr)}=\sum_q(\mu_{j,q}^{M})^r\neq0$.
     Since $Mr-1\geq L_0$, the fixed-length argument applies with
     $L=Mr-1$. Finally, equality of the positive-length MPV families gives the
@@ -99,10 +97,10 @@
         \mu_{j,q}C_j^s.
         \label{eq:mpdo_marked_direct_sum}
     \end{align}
-    The marked alphabet need not coincide with the alphabet of the unmarked
-    tensor. This is the algebraic form of the marked matrices in the two
-    diagrams of
-    \cite[Proposition~4.13, lines~1909--1919]{Cirac2016MPDO_arXiv}.
+    Providing the algebraic form of the marked matrices in the two diagrams of
+    \cite[Proposition~4.13, lines~1909--1919]{Cirac2016MPDO_arXiv}, this
+    construction allows the marked alphabet to differ from the alphabet of the
+    unmarked tensor.
 \end{definition}
 
 \begin{lemma}[Trace expansion with one marked letter]
@@ -125,10 +123,9 @@
 
 \begin{proof}
     \leanok
-    Expand both matrices as direct sums. Their product is the direct sum of
-    $\mu_{j,q}^{|w|+1}C_j^sA_j^w$.
-    Taking the trace and summing first over $q$ gives the stated coefficient
-    $c_j^{(|w|+1)}$.
+    Expanding both matrices as direct sums expresses their product as the
+    direct sum of $\mu_{j,q}^{|w|+1}C_j^sA_j^w$; taking the trace and summing
+    first over $q$ gives the stated coefficient $c_j^{(|w|+1)}$.
 \end{proof}
 
 \begin{theorem}[Algebraic marked-letter extension of representative separation]
@@ -157,8 +154,8 @@
 \begin{proof}
     \leanok
     \uses{def:representative_word_tuple_span, lem:marked_representative_trace_expansion, cor:nonvanishing_finite_power_sum}
-    Fix $s$ and a tail length $L$, and put
-    $\Delta_j=c_j^{(L+1)}(C_j^s-E_j^s)$.
+    For a fixed $s$ and tail length $L$, setting
+    $\Delta_j=c_j^{(L+1)}(C_j^s-E_j^s)$ in
     Lemma~\ref{lem:marked_representative_trace_expansion} gives
     $\sum_{j=0}^{g-1}\tr(\Delta_jA_j^w)=0$ for every length-$L$ word $w$.
     Representative word-tuple separation implies $\Delta_j=0$ for every
@@ -166,10 +163,10 @@
     $C_{j_0}^s=E_{j_0}^s$. Since $s$ was arbitrary,
     $C_{j_0}=E_{j_0}$.
 
-    Under eventual separation, apply
+    Under eventual separation, applying
     Corollary~\ref{cor:nonvanishing_finite_power_sum} to the nonzero weights
-    above each fixed representative, exactly as in
-    Theorem~\ref{thm:representative_grouped_insert_eq}. This selects a
+    above each fixed representative as in
+    Theorem~\ref{thm:representative_grouped_insert_eq} selects a
     sufficiently large $L$ with $c_j^{(L+1)}\neq0$ and proves $C_j=E_j$.
 \end{proof}
 
@@ -207,11 +204,11 @@
 
 \begin{proof}\leanok
     \uses{thm:cpsv_representative_sector_decomposition, lem:marked_representative_trace_expansion}
-    Reindex the finite sum over listed coordinates by the
-    class-copy pairs $(j,q)$ and use the bond-dimension identifications to
-    replace each block by its unit-phase representative. The marked
-    block supplies one factor $\lambda_{j,q}$ and the word supplies
-    $|w|$ further factors. Summing first over $q$ gives
+    Reindexing the finite sum over listed coordinates by the
+    class-copy pairs $(j,q)$ and replacing each block by its unit-phase
+    representative along the bond-dimension identifications contributes one
+    factor $\lambda_{j,q}$ from the marked block and $|w|$ further factors
+    from the word; summing first over $q$ gives
     (\ref{eq:cpsv_full_coordinate_marked_trace_identity}).
 \end{proof}
 
@@ -275,7 +272,7 @@
     \lean{MPSTensor.IsCPSVCanonicalForm.linearMarkedTensor_eq_of_trace_agree}
     \leanok
     \uses{thm:cpsv_canonical_form_bnt_refinement, thm:cpsv_full_coordinate_marked_trace_identity, thm:cpsv_retained_representative_grouped_lemma_l}
-    Let $A$ be in literal CPSV canonical form. For canonical-form data and
+    Let $A$ be in CPSV canonical form. For canonical-form data and
     its BNT refinement, write
     \begin{align}
         A^i        & =V^\dagger B^iV,
@@ -320,12 +317,12 @@
     (\ref{eq:cpsv_original_marked_trace}). Linearity of the physical mark
     gives the grouped marked tensor.
 
-    Apply (\ref{eq:cpsv_original_marked_trace}) to both sides of
-    (\ref{eq:cpsv_original_linear_marked_agreement}), remove the block gauge
-    by cyclicity of trace, and use
+    Applying (\ref{eq:cpsv_original_marked_trace}) to both sides of
+    (\ref{eq:cpsv_original_linear_marked_agreement}) and removing the block
+    gauge by cyclicity of trace reduces the hypothesis to
     Theorem~\ref{thm:cpsv_retained_representative_grouped_lemma_l} on the
-    representatives. The resulting equality of the full grouped
-    marked tensors, followed by
+    representatives; the resulting equality of the full grouped
+    marked tensors, together with
     (\ref{eq:cpsv_original_coisometry_reconstruction}), gives $F_A=G_A$.
 \end{proof}
 
@@ -383,14 +380,14 @@
 
 \begin{proof}
     \leanok
-    For the forward implication, split the first block into its first letter
-    and its remaining $L$ letters. The insertion identity
+    For the forward implication, splitting the first block into its first
+    letter and its remaining $L$ letters via
     (\ref{eq:mpdo_blocked_insertion}) reduces the blocked MPV equality to the
     original first-site equality, with the remaining letters of the first
     block prepended to the flattened tail.
 
-    For the converse, put $\Delta^i=(YA)^i-(ZA)^i$. Equality after blocking
-    gives $\Delta^i A^w=0$ for every word $w$ of length $L$.
+    For the converse, setting $\Delta^i=(YA)^i-(ZA)^i$ shows from equality
+    after blocking that $\Delta^i A^w=0$ for every word $w$ of length $L$.
     Since the length-$L$ words span $\MN{D}$, the same equality holds with
     $A^w$ replaced by the identity, and therefore $\Delta^i=0$ for every
     physical index $i$.
@@ -456,10 +453,10 @@
     \leanok
     \uses{lem:bnt_direct_sum_block_separation_word_span, lem:block_separating_equations_from_pairwise_separation, lem:product_word_span_from_bnt_block_separation, thm:representative_grouped_insert_eq}
     Injectivity of $A_j$ implies that its homogeneous words span
-    $\MN{D_j}$ at every positive length. Apply the three-block separation
-    argument with source length $1$. For each ordered pair of distinct
-    representatives it gives a pairwise block-separating equation at length
-    $6$. Multiplying the equations for the $g-1$ representatives different
+    $\MN{D_j}$ at every positive length. Applying the three-block separation
+    argument with source length $1$ yields a pairwise block-separating
+    equation at length $6$ for each ordered pair of distinct representatives.
+    Multiplying the equations for the $g-1$ representatives different
     from $A_j$ gives coefficients $c_w^{(j)}$ satisfying
     \begin{align}
         \sum_{|w|=6(g-1)}c_w^{(j)}A_k^w
@@ -470,15 +467,15 @@
         \end{cases}.
         \label{eq:mpdo_rep_selectors}
     \end{align}
-    If $L\geq6(g-1)+1$, put $m=L-6(g-1)>0$. The length-$m$ words of each
+    For $L\geq6(g-1)+1$ and $m=L-6(g-1)>0$, the length-$m$ words of each
     $A_j$ span $\MN{D_j}$. Concatenating these words with the selectors
     in (\ref{eq:mpdo_rep_selectors}) shows that the simultaneous length-$L$
     word tuples span $\prod_j\MN{D_j}$. This proves eventual representative
     word-tuple separation. The representative-grouped Lemma L gives the two
     first-site conclusions.
 
-    For the unblocked canonical form, propagate $p$-block injectivity to the
-    lengths $2p-1$, $2p$, and $6p$. Applying the direct-sum argument to the
+    For the unblocked canonical form, propagating $p$-block injectivity to the
+    lengths $2p-1$, $2p$, and $6p$ and applying the direct-sum argument to the
     resulting injective tensors gives pair trace separation at original
     length $6p$. The
     bijection between blocked words of length $6$ and original words of length
@@ -507,12 +504,11 @@
     Hence $m_j=1$.
     Primitivity then implies normality. Taking a common
     multiple of the finitely many normality lengths gives a positive length
-    $L$ at which every representative is block injective. Block $L+1$ sites.
-    Injectivity
-    propagates from length $L$ to length $L+1$, so the blocked representatives
-    are injective. Act on the first letter of each physical block and apply
-    the blocked representative separation followed by the
-    representative-grouped Lemma~L. This gives equality of the two induced
+    $L$ at which every representative is block injective. Because injectivity
+    propagates from length $L$ to length $L+1$, blocking $L+1$ sites makes the
+    blocked representatives injective; acting on the first letter of each
+    physical block and applying the blocked representative separation followed
+    by the representative-grouped Lemma~L then equates the two induced
     insertions on every blocked representative. The remaining $L$ letters
     of the first block form a spanning family, so
     Lemma~\ref{lem:first_site_action_physical_blocking} recovers
@@ -533,9 +529,10 @@
 \begin{proof}
     \leanok
     \uses{thm:postblocked_representative_grouped_insert_eq, thm:representative_grouped_marked_separation}
-    The BNT canonical-form hypotheses give eventual representative word-tuple
-    separation. Apply
-    Theorem~\ref{thm:representative_grouped_marked_separation}.
+    Because the BNT canonical-form hypotheses give eventual representative
+    word-tuple separation,
+    Theorem~\ref{thm:representative_grouped_marked_separation} yields
+    $C_j^s=E_j^s$.
 \end{proof}
 
 \begin{corollary}[Physical-letter marked separation in BNT-refined horizontal form]
@@ -563,11 +560,10 @@
 \begin{proof}
     \leanok
     \uses{cor:bnt_marked_representative_separation}
-    Pass through the block-diagonal similarity in the normalized BNT-refined
-    horizontal form. Linear combinations of physical letters are covariant
-    under this similarity, and cyclicity of the trace removes it from each
-    closed marked chain. On the representative-indexed sector
-    decomposition one has
+    Because linear combinations of physical letters are covariant under the
+    block-diagonal similarity in the normalized BNT-refined horizontal form,
+    cyclicity of the trace removes that similarity from each closed marked
+    chain, leaving on the representative-indexed sector decomposition
     \begin{align}
         C_{\mathrm{tot}}^u
          & =\bigoplus_{j,q}\mu_{j,q}

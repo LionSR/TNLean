@@ -32,10 +32,10 @@ produces the global gauge family that relates the two tensors.
     $K(\varnothing)\Longrightarrow Q$, then $K(R)\Longrightarrow Q$.
 \end{lemma}
 \begin{proof}\leanok
-    Induct on the finite set $R$. If $R=\varnothing$, there is nothing to
-    prove. Otherwise write $R=S\cup\{j\}$ with $j\notin S$. The deletion
-    implication gives $K(R)\Longrightarrow K(S)$, and the induction hypothesis
-    gives $K(S)\Longrightarrow K(\varnothing)$.
+    By induction on the finite set $R$, if $R=\varnothing$ there is nothing to
+    prove, and otherwise writing $R=S\cup\{j\}$ with $j\notin S$ lets the
+    deletion implication give $K(R)\Longrightarrow K(S)$ and the induction
+    hypothesis give $K(S)\Longrightarrow K(\varnothing)$.
 \end{proof}
 
 \begin{definition}[Edge-middle kernel descent data]%
@@ -135,7 +135,7 @@ produces the global gauge family that relates the two tensors.
     $K_c(\varnothing)\Longrightarrow \forall\rho,\ c_{\rho}=0$ isolates each
     boundary coefficient by surjectivity of the boundary labelling, which is
     where the positive bond dimensions are used to fill the interior virtual
-    indices of a witness configuration.
+    indices of a configuration.
     The kernel descent theorem gives $\inj(T_{A,M_e})$. The same
     theorem, together with vertex injectivity at $u$ and $v$, gives
     $\inj(T_{A,u})$, $\inj(T_{A,M_e})$, and
@@ -189,8 +189,8 @@ produces the global gauge family that relates the two tensors.
     % thm:peps_edgeInsertedCoeff_endpointPhysicalRealization.
 \end{theorem}
 \begin{proof}\leanok
-    Apply the one-edge realization theorem to the two endpoint incidences of
-    the distinguished edge.
+    Applying the one-edge realization theorem to the two endpoint incidences of
+    the distinguished edge gives both physical operators.
 \end{proof}
 
 \begin{theorem}[Left-endpoint projected recovery]%
@@ -294,8 +294,8 @@ produces the global gauge family that relates the two tensors.
     endpoint tensor.
 \end{theorem}
 \begin{proof}\leanok
-    Expand the physical realization on a basis local configuration at the
-    right endpoint. The resulting sum over the right bond index is then
+    Expanding the physical realization on a basis local configuration at the
+    right endpoint produces a sum over the right bond index that is then
     reindexed together with the ordinary edge-boundary data.
 \end{proof}
 
@@ -312,8 +312,8 @@ produces the global gauge family that relates the two tensors.
     endpoint explicit.
 \end{theorem}
 \begin{proof}\leanok
-    Expand the physical realization on a basis local configuration at the left
-    endpoint. The transpose converts the ordinary right bond index and the new
+    Expanding the physical realization on a basis local configuration at the left
+    endpoint lets the transpose convert the ordinary right bond index and the new
     left bond index into the coefficient $M_{ij}$; the resulting finite sum
     is then reindexed with the ordinary edge-boundary data.
 \end{proof}
@@ -331,8 +331,8 @@ produces the global gauge family that relates the two tensors.
     edge-centered three-site decomposition.
 \end{theorem}
 \begin{proof}\leanok
-    Apply the local physical-realization theorem at the two endpoints and then
-    use the two coefficient identities above.
+    Applying the local physical-realization theorem at the two endpoints and
+    using the two coefficient identities above gives both realizations.
 \end{proof}
 
 \begin{theorem}[Equal neighboring physical actions recover a virtual insertion]%
@@ -368,7 +368,9 @@ produces the global gauge family that relates the two tensors.
          & =\Phi_vT_{v,e}(M).
         \notag
     \end{align}
-    The same implication is represented diagrammatically by the
+    In the converse part of the insertion-algebra lemma in
+    \cite[Section~3]{Molnar2018NormalPEPS}, where the recovered matrix is
+    denoted $W$, the same implication is represented diagrammatically by the
     $O_1,O_2\mapsto W$ step:
     % Formula (paper_normal.tex:355--485): O_1 acting at B_1 and O_2 acting at
     % B_2 give the same three-site state only if both arise from one bond matrix W.
@@ -398,9 +400,6 @@ produces the global gauge family that relates the two tensors.
             \tn[skin=ring, species=operator, at=on bond-1-1-1-2 0.5]{W}
         \end{tenkz}
     \end{center}
-    This is the converse part of the insertion-algebra lemma in
-    \cite[Section~3]{Molnar2018NormalPEPS}, where the recovered matrix is
-    denoted $W$.
 \end{theorem}
 \begin{proof}\leanok
     Contracting the middle block out of the hypothesis leaves a bond-contracted
@@ -429,8 +428,8 @@ produces the global gauge family that relates the two tensors.
 \end{theorem}
 
 \begin{proof}\leanok
-    Realize $M$ on the right endpoint and $M'^{\mathsf T}$ on the left
-    endpoint. The endpoint realizations and the equality
+    Realizing $M$ on the right endpoint and $M'^{\mathsf T}$ on the left
+    endpoint, the endpoint realizations and the equality
     $C_B(e,\sigma,M)=C_B(e,\sigma,M')$ give, for every physical configuration
     $\sigma$,
     \begin{align}

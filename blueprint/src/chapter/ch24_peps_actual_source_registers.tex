@@ -37,11 +37,10 @@ where each $p\in P$ retains its own owner and $*$ denotes the exterior owner.
     $p\in P$, which differs from $*$. Thus no register is retained at $*$.
 \end{proof}
 
-This describes the fixed source registers in
+For the fixed source registers of
 \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
-\texttt{04-compression.tex}, lines 253--267 and 342--434.
-The exterior memory of this empty register list is the scalar space
-$\C$.
+\texttt{04-compression.tex}, lines 253--267 and 342--434,
+the empty sublist at $*$ has exterior memory $\C$.
 
 \begin{definition}[Fixed coordinates of the source input]
     \label{def:peps_actual_source_input_basis}
@@ -57,7 +56,7 @@ $\C$.
     orthonormal basis $(b_x)_{x\in I_W}$ of $\mathcal H_{R_W}$, where
     $I_W=\prod_{e\in\mathcal E_W}
         (\{0,\ldots,u_e-1\}\times\{0,\ldots,v_e-1\})$.
-    Transporting this basis through the standard identification
+    Mapping this basis through the standard identification
     $\mathcal H_{R_W}\simeq\mathcal H_{R_W\,\varnothing}$ gives
     $(b_x^+)_{x\in I_W}$ on the input of the private preparation.
     These bases depend only on the source positions and spaces of $W$, as in
@@ -156,19 +155,18 @@ $\C$.
     \leanok
     \uses{def:peps_actual_private_preparation,
         thm:peps_all_party_source_exterior_empty}
-    Select all original parties. The restriction of the private
-    preparation to the exterior owner $*$ is the identity on the empty memory
-    $\mathbb C$.
-    This is the private-preparation step of the local contraction in
+    When all original parties are selected, the restriction of the private
+    preparation to the exterior owner $*$ in the local contraction of
     \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
-    \texttt{04-compression.tex}, lines 137--139, 246--267 and 409--434.
+    \texttt{04-compression.tex}, lines 137--139, 246--267 and 409--434,
+    acts as the identity on the empty memory $\mathbb C$.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:peps_exterior_owner_selector,thm:peps_all_party_source_exterior_empty,
         thm:peps_excluded_spectator_restriction,
         thm:peps_owner_disjoint_restriction,def:peps_actual_private_preparation}
-    Write the private preparation as $F_\tau(V^f)$, where $V$ prepares
+    The private preparation takes the form $F_\tau(V^f)$, where $V$ prepares
     the private input, $V^f$ relabels each owner $p$ to
     $f(p)=p\in Q$, and $F_\tau$ adjoins the source
     register list $\tau$ unchanged. By
@@ -191,17 +189,17 @@ $\C$.
     \leanok
     \uses{def:peps_partial_source_choices,def:peps_canonical_source_residual,
         thm:peps_empty_party_gate_scalar}
-    Select all original parties, and consider a gate $G$ with
+    When all original parties are selected, let $G$ be a gate with
     no participating parties and branch coefficients $(c_i)_{i\in I}$.
-    For every monomial choice, the exterior restriction of the remaining
-    operations of its partial expansion is
+    In the chronological contraction of
+    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
+    \texttt{04-compression.tex}, lines 24--28, 233--251 and 351--417,
+    every monomial choice gives the exterior restriction of the remaining
+    operations of its partial expansion as
     \begin{align}
         \left(\sum_{i\in I}c_i\right)\operatorname{id}_{\mathbb C}.
         \label{eq:peps_actual_empty_party_gate_scalar}
     \end{align}
-    This is the empty-party case of the chronological
-    contraction in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
-    \texttt{04-compression.tex}, lines 24--28, 233--251 and 351--417.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -246,9 +244,9 @@ $\C$.
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.restrict_partialWord_all_gate_localPart_eval_heq_id}
     \leanok
     \uses{def:peps_partial_source_choices,thm:peps_source_word_parties}
-    Select all original parties. If a gate has at least one participating party, then
-    for each choice of its monomial, the exterior restriction of its remaining
-    operations is $\Id_{\C}$.
+    When all original parties are selected and a gate has at least one
+    participating party, the exterior restriction of its remaining
+    operations for each choice of its monomial is $\Id_{\C}$.
 \end{theorem}
 
 \begin{proof}
@@ -270,8 +268,8 @@ $\C$.
     \uses{def:peps_empty_party_gate_scalar,def:peps_canonical_source_residual,
         thm:peps_actual_touched_gate_exterior,thm:peps_actual_empty_party_gate_scalar,
         thm:peps_actual_private_preparation_exterior}
-    Select all original parties of a composition $W$. For every monomial
-    choice, the exterior restriction of its remaining operations acts as
+    When all original parties of a composition $W$ are selected, the exterior
+    restriction of its remaining operations for every monomial choice acts as
     $\lambda_W\Id_{\C}$. The same identity holds after identifying the
     source registers with their slots and after preparing the
     private product input.
@@ -282,7 +280,7 @@ $\C$.
     \uses{thm:peps_exterior_owner_selector,thm:peps_actual_touched_gate_exterior,thm:peps_actual_empty_party_gate_scalar,
         thm:peps_scalar_residual_composition,thm:peps_all_party_source_exterior_empty,
         thm:peps_actual_private_preparation_exterior}
-    Induct on the composition, writing $\lambda_u$ for the exterior
+    By induction on the composition, let $\lambda_u$ denote the exterior
     scalar of a subword $u$. A local operation or exchange at an original
     party, a gate with participating parties $C$, and a chronological
     composition contribute
@@ -380,8 +378,8 @@ $\C$.
 \begin{proof}\leanok
     \uses{thm:peps_matrix_orthonormal_coordinates,thm:peps_actual_source_column_coordinates,
         thm:peps_actual_party_mixed_matrix,def:peps_actual_party_source_matrices}
-    Express the prepared words and $U$ in orthonormal coordinates.
-    The matrix of their composition on the output memory is independent of the
+    In orthonormal coordinates, the matrix of the composition of the prepared
+    words and $U$ on the output memory is independent of the
     chosen orthonormal input basis. Evaluating it in the grouped input basis $B$
     via the single-owner restrictions gives~(\ref{eq:peps_actual_source_mixed}).
 \end{proof}
@@ -417,7 +415,7 @@ $\C$.
     Fix global monomial choices $\xi,\zeta$ and a sample
     assignment $j$ on the source occurrences. At each source $e$, form
     the endpoint word from the branch pair $(\xi_e,\zeta_e)$ and the two endpoint
-    matrices for sample $j(e)$. Transport this word to the input of the
+    matrices for sample $j(e)$. Transfer this word to the input of the
     private preparation, including the terminal scalar memory,
     and denote it by $U_{\xi,\zeta,j}$.
 \end{definition}
@@ -428,14 +426,14 @@ $\C$.
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.sources_sampledEndpointInputWord}
     \leanok
     \uses{def:peps_actual_sampled_endpoint_word}
-    The sampled endpoint word and its transport $U_{\xi,\zeta,j}$ to the
+    The sampled endpoint word and the induced word $U_{\xi,\zeta,j}$ on the
     source input contain no source preparation.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{def:peps_actual_sampled_endpoint_word,def:peps_source_register_operator_word}
     An endpoint word is a composition of local endpoint operators and register exchanges,
-    none of which prepares a source, and transporting it to the
+    none of which prepares a source, and transferring it to the
     preparation input adds no source preparation.
 \end{proof}
 
@@ -462,8 +460,9 @@ $\C$.
 \begin{proof}\leanok
     \uses{thm:peps_matrix_orthonormal_coordinates,thm:peps_endpoint_matrix_average,def:peps_actual_sampled_endpoint_word,
         def:peps_original_sampled_endpoint_factors,def:peps_actual_source_input_basis}
-    Apply the finite endpoint-averaging identity to the ordered
-    source list, reindexing sample assignments $j$ along $\sigma$.    Conjugating
+    Applying the finite endpoint-averaging identity to the ordered
+    source list and reindexing sample assignments $j$ along $\sigma$ expands
+    the tensor product of sampled source matrices. Conjugating
     the endpoint word by the input identification preserves its matrix entries in $E$,
     which gives the stated average.
 \end{proof}
@@ -487,8 +486,8 @@ $\C$.
 
 \begin{proof}\leanok
     \uses{thm:peps_actual_sampled_endpoint_average,thm:peps_actual_source_mixed_word}
-    Substitute the average~(\ref{eq:peps_actual_sampled_average}) for $X_{\xi,\zeta}$,
-    distribute multiplication over the finite sum, and factor each term across
+    Substituting the average~(\ref{eq:peps_actual_sampled_average}) for $X_{\xi,\zeta}$
+    and distributing multiplication over the finite sum factors each term across
     the parties $q\in Q$.
 \end{proof}
 
@@ -500,14 +499,13 @@ $\C$.
     \leanok
     \uses{def:peps_actual_sampled_endpoint_word,thm:peps_partial_fixed_layout,
         thm:peps_source_register_operator_exclusion}
-    Select all original parties and let $*$ be the exterior owner. For any
+    When all original parties are selected and $*$ is the exterior owner, for any
     ket and bra choices $\xi,\zeta$, sample assignment
-    $j$, and Gaussian samples $\omega$, the sampled endpoint word
-    $U_{\xi,\zeta,j}$ restricts to $\operatorname{id}_{\mathbb C}$ at $*$,
+    $j$, and Gaussian samples $\omega$, the exterior source factor of
+    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS} restricts the sampled
+    endpoint word $U_{\xi,\zeta,j}$ to $\operatorname{id}_{\mathbb C}$ at $*$,
     both on the fixed source layout and after its
     identification with the private preparation input.
-    This is the exterior source factor in
-    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
     % Source: 04-compression.tex, lines 253--267, 279--309 and 565--588.
 \end{theorem}
 
@@ -532,23 +530,22 @@ $\C$.
     source-column matrix in a finite orthonormal output basis.
     Let $\widehat\rho_\psi(Y)$ be the source-replaced output operator
     before tracing out the private registers. For any
-    replacement matrices $Y_{e,\alpha,\beta}$, set
-    $Y_{\xi,\zeta}=\bigotimes_e Y_{e,\xi_e,\zeta_e}$. Then
+    replacement matrices $Y_{e,\alpha,\beta}$, setting
+    $Y_{\xi,\zeta}=\bigotimes_e Y_{e,\xi_e,\zeta_e}$ gives the prepared-input
+    form of source replacement in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}:
     \begin{align}
         \widehat\rho_\psi(Y)
          & =\sum_{\xi,\zeta}c_\xi\overline{c_\zeta}
         D_\xi Y_{\xi,\zeta}D_\zeta^\dagger.
         \label{eq:peps_actual_pure_replacement}
     \end{align}
-    This is the prepared-input form of source replacement in
-    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
     % Source: 04-compression.tex, lines 279--355, 409--434 and 565--588.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{def:peps_global_source_replacement,thm:peps_actual_pure_source_contraction}
-    Expand the source-replaced operator as a sum over independent
-    choices $\xi,\zeta$. Transporting the input basis and the input vector
+    Expanding the source-replaced operator as a sum over independent
+    choices $\xi,\zeta$ and mapping the input basis and the input vector
     through the same owner isometry preserves their coordinates. Applying
     Theorem~\ref{thm:peps_actual_pure_source_contraction} to each term gives
     the stated sum.
@@ -566,23 +563,23 @@ $\C$.
     output memories, and equip the output space with their tensor-product basis.
     Write $G$ for the private output memory.
     With the notation of
-    Theorem~\ref{thm:peps_actual_pure_source_replacement}, the physical
+    Theorem~\ref{thm:peps_actual_pure_source_replacement}, the physical partial
+    trace of the prepared-column expansion in
+    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS} expresses the physical
     source-replaced operator $\widehat\rho_{\mathrm{phys},\psi}(Y)$ on the
-    product input $\psi$ satisfies
+    product input $\psi$ as
     \begin{align*}
         \widehat\rho_{\mathrm{phys},\psi}(Y)
          & =\sum_{\xi,\zeta}c_\xi\overline{c_\zeta}
         \operatorname{tr}_{G}(D_\xi Y_{\xi,\zeta}D_\zeta^\dagger).
     \end{align*}
-    This is the physical partial trace of the prepared-column expansion in
-    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
     % Source: 04-compression.tex, lines 338--383 and 565--588.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:peps_actual_pure_source_replacement,def:peps_physical_source_replacement}
-    Apply the partial trace over $G$ to
-    (\ref{eq:peps_actual_pure_replacement}) and use linearity of the partial trace.
+    Applying the partial trace over $G$ to
+    (\ref{eq:peps_actual_pure_replacement}) and using its linearity yields the sum.
 \end{proof}
 
 
@@ -601,7 +598,9 @@ $\C$.
     tensored with any finite orthonormal reference basis of the private
     output memory $G$. Write $\chi$ for the coordinate bijection separating
     retained physical and discarded private indices and identifying the
-    retained indices with the physical configurations. Then
+    retained indices with the physical configurations. Then the party-coordinate
+    partial trace coincides with the physical partial trace of
+    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}:
     \begin{align*}
         \operatorname{tr}_{\prod_qE_q}
         \left((D_\xi X D_\zeta^\dagger)^\chi\right)
@@ -609,14 +608,12 @@ $\C$.
         \left(D_\xi^{\mathrm{ref}}X
         (D_\zeta^{\mathrm{ref}})^\dagger\right).
     \end{align*}
-    This identifies the party-coordinate partial trace with the physical partial trace in
-    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
     % Source: 04-compression.tex, lines 279--355, 409--434 and 565--588.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:peps_selected_physical_private_trace,thm:peps_actual_source_column_coordinates}
-    Expand $X$ in the standard basis $(e_s)$ of the joint source-coordinate space:
+    Expanding $X$ in the standard basis $(e_s)$ of the joint source-coordinate space gives
     \begin{align*}
         D_\xi XD_\zeta^\dagger
          & =\sum_{s,t}X_{s,t}\,(D_\xi e_s)(D_\zeta e_t)^\dagger,
@@ -659,9 +656,9 @@ $\C$.
 \begin{proof}
     \leanok
     \uses{thm:peps_actual_sampled_party_contraction,thm:peps_party_product_partial_trace}
-    Apply the reindexing $\chi$ and the partial trace over $\prod_q D_q$
-    to Theorem~\ref{thm:peps_actual_sampled_party_contraction}. By linearity,
-    both operations distribute over the scalar factor and the sum over $j$. In each summand,
+    Under the reindexing $\chi$ and the partial trace over $\prod_q D_q$
+    in Theorem~\ref{thm:peps_actual_sampled_party_contraction}, linearity
+    distributes both operations over the scalar factor and the sum over $j$. In each summand,
     Theorem~\ref{thm:peps_party_product_partial_trace} gives
     $\operatorname{tr}_{\prod_qD_q}((\bigotimes_q M_q)^\chi)
         =\bigotimes_q\operatorname{tr}_{D_q}(M_q)$.
@@ -681,14 +678,14 @@ $\C$.
     where $H$ is the retained physical index and $E$ is the discarded private index.
     Let $A_u,A_t$ be the matrices of the restrictions of $u,t$ in
     these bases, and let $U_v$ be the matrix of the restriction of $v$
-    in the input basis $B$. Define the mixed physical matrix by
+    in the input basis $B$. The single-owner coordinate contraction of
+    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS} defines the mixed
+    physical matrix by
     \begin{align}
         \Phi_S(u,t,v;B,C)
          & =\operatorname{tr}_{E}(A_uU_vA_t^\dagger).
         \label{eq:peps_restricted_mixed_physical_trace}
     \end{align}
-    This is the single-owner coordinate contraction in
-    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
     % Source: 04-compression.tex, lines 574--579.
 \end{definition}
 
@@ -724,8 +721,8 @@ $\C$.
     \uses{thm:peps_actual_sampled_local_output_trace,
         def:peps_actual_sampled_physical_factor,
         def:peps_selected_physical_private_basis,thm:peps_selected_physical_product_scalar}
-    Use the local physical and private output bases, the chosen
-    owner order, and compatible input bases. Let
+    In the local physical and private output bases, the chosen
+    owner order, and compatible input bases, let
     $\chi$ separate the retained physical and discarded private coordinates, and
     let $\eta$ identify the retained coordinates with the physical
     configurations $\prod_{p\in\mathcal P}\{0,\ldots,d_p-1\}$.
@@ -733,7 +730,8 @@ $\C$.
     $M_{j,q}=\operatorname{tr}_{E_q}
         (A_{\xi,q}U_{\xi,\zeta,j,q}A_{\zeta,q}^\dagger)$ and
     $\alpha_j=M_{j,*}(1,1)$, where $1$ denotes the sole exterior
-    coordinate. Then
+    coordinate. Then the local-coordinate contraction of
+    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS} takes the form
     \begin{align}
         \left[\operatorname{tr}_{\prod_qE_q}
             \left((D_\xi X_{\xi,\zeta}D_\zeta^\dagger)^\chi\right)\right]^\eta
@@ -741,8 +739,6 @@ $\C$.
         \bigotimes_{p\in\mathcal P}M_{j,p}.
         \label{eq:peps_actual_sampled_physical_factors}
     \end{align}
-    This is the local-coordinate contraction in
-    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
     % Source: 04-compression.tex, lines 565--588, especially 574--579.
 \end{theorem}
 
@@ -750,9 +746,9 @@ $\C$.
     \leanok
     \uses{thm:peps_actual_sampled_local_output_trace,
         thm:peps_selected_physical_product_scalar}
-    Apply the configuration identification $\eta$ to
-    (\ref{eq:peps_actual_sampled_local_trace}). By linearity, $\eta$
-    commutes with the scalar factor and the sum over $j$.
+    Under the configuration identification $\eta$ applied to
+    (\ref{eq:peps_actual_sampled_local_trace}), linearity commutes $\eta$
+    with the scalar factor and the sum over $j$.
     In each summand, Theorem~\ref{thm:peps_selected_physical_product_scalar}
     factors the reindexed tensor product over $Q=P\sqcup\{*\}$ into the exterior
     scalar entry $\alpha_j$ times the tensor product over $P$, giving
@@ -777,10 +773,9 @@ $\C$.
          & =\lambda_W\overline{\lambda_W}\,I_{\{1\}}.
         \label{eq:peps_actual_exterior_trace}
     \end{align}
-    In particular its single entry is $\lambda_W\overline{\lambda_W}$,
-    independently of $j,\xi,\zeta$ and the chosen bases.
-    This is the exterior contribution in
-    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
+    In particular, the exterior contribution in
+    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS} has the single entry
+    $\lambda_W\overline{\lambda_W}$, independently of $j,\xi,\zeta$ and the chosen bases.
     % Source: 04-compression.tex, lines 137--139, 246--267 and 565--588.
 \end{theorem}
 
@@ -803,15 +798,15 @@ $\C$.
     \leanok
     \uses{thm:peps_actual_sampled_physical_factors,thm:peps_actual_sampled_exterior_trace}
     In the notation of Theorem~\ref{thm:peps_actual_sampled_physical_factors},
-    let $\lambda_W$ be the zero-party gate scalar of $W$. Then
+    let $\lambda_W$ be the zero-party gate scalar of $W$. Then factoring out
+    the exterior contribution as in
+    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS} gives
     \begin{align*}
         \left[\operatorname{tr}_{\prod_qE_q}
             \left((D_\xi X_{\xi,\zeta}D_\zeta^\dagger)^\chi\right)\right]^\eta
          & =k^{-n}\lambda_W\overline{\lambda_W}
         \sum_j\bigotimes_{p\in\mathcal P}M_{j,p}.
     \end{align*}
-    This is the factored exterior contribution in
-    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
     % Source: 04-compression.tex, lines 565--588.
 \end{theorem}
 

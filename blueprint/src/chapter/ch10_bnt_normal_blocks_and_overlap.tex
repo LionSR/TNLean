@@ -77,9 +77,9 @@ blocks.
 
 \begin{proof}\leanok
     \uses{thm:cpsv_normal_tp_gauge, thm:normal_tp_primitive_irred}
-    Apply Theorem~\ref{thm:cpsv_normal_tp_gauge}. The trace-preserving,
+    By Theorem~\ref{thm:cpsv_normal_tp_gauge}, the trace-preserving,
     primitive, irreducible representative is eventually block-injective, and
-    gauge invariance transports this conclusion back to the original tensor.
+    gauge invariance carries this conclusion back to the original tensor.
 \end{proof}
 
 \begin{theorem}[A coefficient-form BNT is an algebraic BNT]
@@ -140,18 +140,18 @@ blocks.
     \lean{MPSTensor.MPVBlockPhaseEquiv.dim_eq_and_gaugePhaseEquiv_of_isNormalTensor}
     \leanok
     \uses{def:nt_cpsv, def:mpv_block_phase_equiv, def:gauge_phase_equiv}
-    Let $A$ and $B$ be normal tensors of positive, possibly different, bond
+    As in the gauge recovery used in \cite[Appendix~A]{Cirac2016MPDO_arXiv},
+    let $A$ and $B$ be normal tensors of positive, possibly different, bond
     dimensions. Suppose that, for some nonzero $\zeta\in\C$,
     $\ket{V^{(N)}(B)}=\zeta^N\ket{V^{(N)}(A)}$ for $N\geq 0$.
     Then the bond dimensions are equal and there is an invertible matrix $X$
     and a scalar $\eta$ of unit modulus such that
-    $B^i=\eta X A^iX^{-1}$ for every physical letter $i$. This is the gauge
-    recovery used in \cite[Appendix~A]{Cirac2016MPDO_arXiv}.
+    $B^i=\eta X A^iX^{-1}$ for every physical letter $i$.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:cpsv_normal_tp_gauge, thm:rect_overlap_norm_one_dim_eq, thm:nt_overlap_norm_one_gauge}
-    Apply Theorem~\ref{thm:cpsv_normal_tp_gauge} to both tensors. Gauge
+    Applying Theorem~\ref{thm:cpsv_normal_tp_gauge} to both tensors, gauge
     invariance of matrix product vectors preserves the phase relation, whose
     self-overlap identities imply unit modulus for the phase. The resulting
     rectangular cross-overlap has norm tending to one. If the bond dimensions
@@ -167,26 +167,26 @@ blocks.
     \lean{MPSTensor.IsNormalTensor.overlap_dichotomy}
     \leanok
     \uses{def:nt_cpsv, def:mpv_overlap, def:gauge_phase_equiv}
-    Let $A$ and $B$ be normal tensors of positive, possibly different, bond
-    dimensions. Their self-overlaps satisfy
+    As in \cite[Lemma~A.2]{Cirac2016MPDO_arXiv}, let $A$ and $B$ be normal
+    tensors of positive, possibly different, bond dimensions. Their
+    self-overlaps satisfy
     \begin{align}
         O_{AA}(N) & \longrightarrow 1,
         \notag                         \\
         O_{BB}(N) & \longrightarrow 1.
         \notag
     \end{align}
-    Moreover, either $O_{AB}(N)\longrightarrow 0$, or their bond dimensions
+    In addition, either $O_{AB}(N)\longrightarrow 0$, or their bond dimensions
     are equal; call the common value $D$. Then there are $X\in\GL_D(\C)$ and
     $\zeta\in\C$, with $|\zeta|=1$, such that
-    $B^i=\zeta X A^iX^{-1}$ for every physical letter $i$. In the latter case,
-    $|O_{AB}(N)|\to 1$. This is
-    \cite[Lemma~A.2]{Cirac2016MPDO_arXiv}.
+    $B^i=\zeta X A^iX^{-1}$ for every physical letter $i$, in which case
+    $|O_{AB}(N)|\to 1$.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:cpsv_normal_tp_gauge, thm:overlap_decay_rect_irr_tp, thm:overlap_decay_irr_tp, thm:gauge_invariance, thm:gauge_phase_mpv_scaling, thm:cpsv_normal_mpv_phase_gauge}
-    Put both tensors in their pure trace-preserving gauges. If their bond
-    dimensions differ, rectangular overlap decay gives $O_{AB}(N)\to0$. If
+    In their pure trace-preserving gauges, if the bond dimensions of $A$ and
+    $B$ differ, rectangular overlap decay gives $O_{AB}(N)\to0$. If
     their dimensions agree but they are not gauge-phase equivalent, the
     equal-dimension overlap-decay theorem gives the same conclusion. In the
     remaining case, $B^i=\zeta X A^iX^{-1}$. By
@@ -207,18 +207,17 @@ blocks.
     \lean{MPSTensor.overlap_tendsto_zero_of_not_mpvBlockPhaseEquiv}
     \leanok
     \uses{def:nt_cpsv, def:mpv_overlap, def:mpv_state}
-    Let $A$ and $B$ be normal tensors of positive, possibly different, bond
-    dimensions. Then either $O_{AB}(N)\to0$, or there is a phase
-    $\zeta\in\C$, with $|\zeta|=1$, such that
-    $\ket{V^{(N)}(B)}=\zeta^N\ket{V^{(N)}(A)}$ for every chain length $N$.
-    This is \cite[Corollary~A.3]{Cirac2016MPDO_arXiv}.
+    As in \cite[Corollary~A.3]{Cirac2016MPDO_arXiv}, let $A$ and $B$ be normal
+    tensors of positive, possibly different, bond dimensions. Then either
+    $O_{AB}(N)\to0$, or there is a phase $\zeta\in\C$, with $|\zeta|=1$, such
+    that $\ket{V^{(N)}(B)}=\zeta^N\ket{V^{(N)}(A)}$ for every chain length $N$.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:cpsv_normal_overlap_dichotomy, thm:gauge_phase_mpv_scaling}
-    Apply Theorem~\ref{thm:cpsv_normal_overlap_dichotomy}. In its second
-    alternative, gauge-phase covariance gives
-    $V^{(N)}(B)_\sigma=\zeta^N V^{(N)}(A)_\sigma$ for every configuration
+    In the second alternative of
+    Theorem~\ref{thm:cpsv_normal_overlap_dichotomy}, gauge-phase covariance
+    gives $V^{(N)}(B)_\sigma=\zeta^N V^{(N)}(A)_\sigma$ for every configuration
     $\sigma$, and hence the asserted equality of vectors.
 \end{proof}
 
@@ -251,13 +250,13 @@ blocks.
         exists_unit_phase_power_of_isNormalTensor}
     \leanok
     \uses{def:nt_cpsv, def:mpv_state, def:eventually_nonzero_proportional_mpv}
-    Let $A$ and $B$ be normal tensors of positive, possibly different, bond
+    As in the one-normal-block consequence of
+    \cite[Corollary~A.3 and the proof of Theorem~2.10]{Cirac2016MPDO_arXiv},
+    let $A$ and $B$ be normal tensors of positive, possibly different, bond
     dimensions. Suppose that, for all sufficiently large $N$, their matrix
     product vectors are proportional by a nonzero scalar. Then there is
     $a\in\C$, with $|a|=1$, such that
     $\ket{V^{(N)}(A)}=a^N\ket{V^{(N)}(B)}$ for every positive $N$.
-    This is the one-normal-block consequence of
-    \cite[Corollary~A.3 and the proof of Theorem~2.10]{Cirac2016MPDO_arXiv}.
     % Maintainer note: this determines only the unit-phase part for normalized
     % normal blocks. The distinct positive-rescaling problem is recorded in
     % docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
@@ -271,8 +270,8 @@ blocks.
     Theorem~\ref{thm:cpsv_normal_mpv_phase_alternative} gives
     $O_{AB}(N)\to0$, hence $|O_{AB}(N)|\to0$, a contradiction. In the
     remaining alternative,
-    $\ket{V^{(N)}(B)}=\zeta^N\ket{V^{(N)}(A)}$ with $|\zeta|=1$; take
-    $a=\zeta^{-1}$.
+    $\ket{V^{(N)}(B)}=\zeta^N\ket{V^{(N)}(A)}$ with $|\zeta|=1$, so
+    $a=\zeta^{-1}$ satisfies the claim.
 \end{proof}
 
 \begin{theorem}[Separated normal tensors are eventually independent]
@@ -280,18 +279,17 @@ blocks.
     \lean{MPSTensor.exists_eventually_linearIndependent_of_normalTensor_blocks_not_gaugePhaseEquiv}
     \leanok
     \uses{def:nt_cpsv, def:blocks_not_gauge_phase_equiv}
-    Let $(A_j)_{j=1}^g$ be a finite family of positive-bond-dimension normal
-    tensors, no two of which are gauge-phase equivalent after identifying
-    equal bond dimensions. Then the matrix product vectors
-    $\{\ket{V^{(N)}(A_j)}\}_{j=1}^g$ are linearly independent for all
-    sufficiently large $N$, as in
-    \cite[Appendix~A]{Cirac2016MPDO_arXiv}.
+    As in \cite[Appendix~A]{Cirac2016MPDO_arXiv}, let $(A_j)_{j=1}^g$ be a
+    finite family of positive-bond-dimension normal tensors, no two of which
+    are gauge-phase equivalent after identifying equal bond dimensions. Then
+    the matrix product vectors $\{\ket{V^{(N)}(A_j)}\}_{j=1}^g$ are linearly
+    independent for all sufficiently large $N$.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:cpsv_normal_tp_gauge, lem:bnt_finite_index_overlap_orthonormal_li}
-    Put every tensor in the pure trace-preserving gauge of
-    Theorem~\ref{thm:cpsv_normal_tp_gauge}. Distinct gauge-phase classes have
+    In the pure trace-preserving gauge of
+    Theorem~\ref{thm:cpsv_normal_tp_gauge}, distinct gauge-phase classes have
     overlaps tending to zero, while each self-overlap tends to one. The finite
     Gram matrix therefore tends to the identity and is invertible for all
     sufficiently large lengths. Gauge invariance of matrix product vectors

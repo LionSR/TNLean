@@ -24,6 +24,157 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Labels introduced by the edge operations — promoted (2026-10-16)
+
+- **Pattern:** the case analysis showing that one of the seven births and deaths of an
+  edge construction introduces a single label.
+- **Seen:** the aggregate `edgeOperations_insertsOne` and the per-operation chains of
+  `DyadicEdgeOperationChains.lean`.
+- **Abstraction:** the seven lemmas `auxBirthB_insertsOne`, …, `mainDeathB_insertsOne` in
+  `Approximation/DyadicTrueVertices.lean`; the aggregate is derived from them.
+
+### Sites separated from guide holes — promoted (2026-10-16)
+
+- **Pattern:** recover the patch of a guide hole, turn membership in its outer sample
+  into a weak distance bound, and contradict strict separation of the changed sites.
+- **Seen:** three copies in `centralBirth_hasFrameChange_of`,
+  `bandBirth_hasFrameChange`, and `bandDeath_hasFrameChange`.
+- **Abstraction:** `TNLean.PEPS.Approximation.disjoint_outerHoles_guideFrame` in
+  `DyadicGuideFrames.lean`, reusing `disjoint_footprint_of_forall`; all three callers
+  now supply their separation estimate to this lemma.
+- **Notes:** the lemma permits any site set, guide, owners and finite patch family
+  with pairwise-disjoint outer samples. It uses each patch's own center and scale.
+  The marked-set and true-vertex adapters stay at the callers, including the
+  after-reading to before-reading conversion for band death. No Hamiltonian,
+  supplied-patch or positive local-dimension assumption is added to the lemma.
+
+### Non-root dyadic side bound — promoted (2026-10-16)
+
+- **Pattern:** for `R : RepaintedSquare k` and `hk2 : 2 ^ k < 2 * L`, derive
+  `(2 : ℝ) ^ (R.1.1 : ℕ) ≤ (L : ℝ)` from the non-root level bound.
+- **Promoted helper:** `RepaintedSquare.side_le` in
+  `TNLean/PEPS/Approximation/DyadicProtocolParties.lean`.
+- **Consumers:** `centralBirth_hasFrameChange`, `edgeExchange_hasPairChange`,
+  `bandBirth_hasFrameChange`, and `bandDeath_hasFrameChange`.
+- **Notes:** keep the caller-specific factor `A₀ ≥ 1` outside the helper. The helper
+  needs only the non-root square and the root-size inequality; no protocol constants,
+  Hamiltonian or lower bound on `L` are added.
+
+### The two labels near a treated central birth — promoted (2026-10-16)
+
+- **Pattern:** use the central separation floor to show that the surrounding
+  guide is the old label near the changed region, then split according to
+  whether the point is changed to bound the central guide by two labels.
+- **Seen:** two proof copies, in `RepaintingBaseline.isTrueVertex_central_treated`
+  (`DyadicTrueVertices.lean`) and `RepaintingBaseline.central_treated_mem`
+  (`DyadicCentralBirthChange.lean`).
+- **Abstraction:** the existing `RepaintingBaseline.central_treated_mem` is
+  placed in `DyadicTrueVertices.lean`; the true-vertex theorem uses its two
+  conclusions, and the central-birth frame proof keeps the same call.
+- **Notes:** this reuses an existing public lemma without changing its signature
+  or proof. Two copies were verified; no third occurrence is claimed.
+
+### Owner change of a sampled guide frame — promoted (2026-10-16)
+
+- **Pattern:** the frame of a reading equals the frame of another reading with
+  the owners of the differing sites handed to one label, from equal true
+  vertices, equal incident labels and the label at the differing sites
+  (`06-geometry.tex`, lines 375–387).
+- **Seen:** the band birth and death of `DyadicBandStepChanges.lean` and the
+  central birth of `DyadicCentralBirthChange.lean`.
+- **Abstraction:** `TNLean.PEPS.Approximation.guideFrame_eq_changeOwner_of_ne`
+  (`Approximation/DyadicBulkFrames.lean`); the three call sites use it.
+- **Notes:** the helper itself is generic in the guides and chosen finite centers;
+  it requires equal center sets and incident labels, the exact differing-site set,
+  and one target label there. Its three protocol uses have readings and exact
+  true-vertex sets, but those are not extra hypotheses of the abstraction. The
+  documentation correction changes no proof or call site.
+
+### Fixed-circuit bounded-change lifts beside spectator sheets — promoted (2026-10-16)
+
+- **Pattern:** Assemble the five `OriginalCircuit.IsBoundedChange` fields for
+  `liftOne` or `liftTwo`: transport the nonprivate count, participants, expansion
+  bound, monomial bound and error estimate through untouched spectator sheets.
+- **Seen:** `hasBoundedChange_liftOne`, `hasBoundedChange_liftTwo`
+  (`SheetStackChange.lean`) and their source-bounded forms
+  (`SheetStackSourceBoundedChange.lean`).
+- **Abstraction:** `TNLean.PEPS.EncodedFrame.isBoundedChange_liftOne` and
+  `isBoundedChange_liftTwo` in `SheetStackChange.lean`, stated for the fixed lifted
+  circuit; all four results now use them.
+
+### Positive part of a polynomial constant — promoted (2026-10-16)
+
+- **Pattern:** Replace a constant `C` of a polynomial bound `x ≤ C * L ^ k` by `max C 0`, so that
+  a theorem needs no sign hypothesis on `C`, and transport the given bound along
+  `C * L ^ k ≤ max C 0 * L ^ k` for `0 ≤ L`.
+- **Seen:** the compression theorems and the dyadic protocol, in
+  `UniformApproximateSampledNetwork.lean`, `UniformMessageGateCompression.lean` and
+  `DyadicProtocolCompression.lean` under `TNLean/PEPS/Approximation/`.
+- **Abstraction:** `TNLean.PEPS.Approximation.mul_pow_le_max_zero_mul_pow` in
+  `UniformApproximateSampledNetwork.lean`.
+- **Notes:** The sign of `max C 0` is `le_max_right`. Net Lean line delta: +9 (20 added, 11
+  removed) across the three changed modules, since the new lemma and its docstring outweigh the
+  shortened call sites.
+
+### Euclidean norm and nonvanishing in augmented replica coordinates — promoted (2026-10-16)
+
+- **Pattern:** Reindex a replica prevector from the physical and two auxiliary
+  site coordinates to the scanner coordinates, preserve its Euclidean norm,
+  and transfer nonvanishing or a norm upper bound.
+- **Seen:** Three nonvanishing arguments and three norm arguments across
+  `AugmentedReplicaPrevectorProperties.lean`, `ActualRoughLowerPrevector.lean`,
+  `ActualSharpLowerPrevector.lean`, and `ActualEndpointRoughBudget.lean`, under
+  `PEPS/AreaLaw/Scan/`.
+- **Abstraction:** `norm_augmentedReplicaPrevector_eq_global` and
+  `augmentedReplicaPrevector_ne_zero_iff_global` in
+  `AugmentedReplicaPrevectorProperties.lean`, using Mathlib's
+  `LinearIsometryEquiv.piLpCongrLeft` and the characterization of zero by its
+  norm. The existing larger coordinate theorem and all three comparison
+  consumers use these declarations.
+- **Notes:** Both statements are unconditional in the dimensions and replica
+  count. No ground-state or eigen-equation premise is added. The six existing
+  arguments lose 31 lines; coordinate identities still used by the auxiliary
+  label and eigen-equations are retained. Existing theorem statements are
+  unchanged. The same coordinate isometry preserves the norm for every
+  replica count, so downstream estimates share one mathematical identity.
+
+### Scanner prevector coordinates and selected density — promoted (2026-10-15)
+
+- **Pattern:** Transfer nonvanishing, copy symmetry and a mean-energy
+  eigen-equation from global replica coordinates to augmented site coordinates;
+  then bound the selected normalized density using the rough endpoint estimate.
+- **Seen:** Two identical private copies of each proof in
+  `SourceRoughSelection.lean` and `SourceSelectedSharpComparison.lean`, under
+  `PEPS/AreaLaw/Scan/`, plus the new consumer `SourceChargeSelection.lean`.
+  The two copies were extracted; the new consumer uses the shared declarations.
+- **Abstraction:** `augmented_prevector_properties_of_global` in
+  `AugmentedReplicaPrevectorProperties.lean` and
+  `selected_density_of_rough_endpoint` in `RoughSelectionBudget.lean`.
+  All three comparisons use these shared declarations.
+- **Notes:** The coordinate result requires the supplied global eigen-equation
+  and a nonzero prevector, with no normalization, Hermiticity or positive
+  dimension assumption. The scalar result assumes positivity only for the
+  denominator factors in its statement. Both proof bodies and all seven
+  existing public theorem signatures are preserved.
+
+### Rough lower comparisons at a prescribed metric weight — promoted (2026-10-15)
+
+- **Pattern:** Prove the actual rough lower comparison and its vanishing
+  remainder for an arbitrary per-band weight, then specialize to total weight
+  four by substituting `a = 4 / K`.
+- **Seen:** The finite-copy comparison, remainder limit and supplied-prevector
+  comparison in `ActualRoughLower.lean`, `ActualRoughLowerRemainder.lean` and
+  `ActualRoughLowerPrevector.lean`, under `PEPS/AreaLaw/Scan/`.
+- **Abstraction:** `exists_actualScan_rough_lower_norm_of_weight`,
+  `tendsto_roughLowerRemainderAtWeight_of_label_dimension` and
+  `exists_actualScan_suppliedPrevector_rough_lower_of_weight` retain the weight
+  as a parameter. Each general proof occurs once, and the original
+  weight-four statements invoke these results.
+- **Notes:** The total weight is `a * K`; the lower comparison retains its
+  factor `a * K / 4`. The original remainder is the specialization of
+  `roughLowerRemainderAtWeight` at `4 / K`. Positivity of the band count
+  justifies this substitution. All original theorem signatures are preserved.
+
 ### Patch net covers in the plane conditions — promoted (2026-10-15)
 
 - **Pattern:** From `exists_netCover`, turn the cover of a set `K` by the net `u ℤ²` into a cover
@@ -4447,6 +4598,68 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 ## Candidates
 
+### Dyadic padding bounds — candidate (2026-10-16)
+
+- **Pattern:** Combine the lower and strict upper bounds for
+  `2 ^ Nat.clog 2 L`, then add positivity of the ceiling logarithm.
+- **Seen:** The bounds in `DyadicAnchors.lean` and their former rederivation
+  in `le_two_pow_clog_lt` in `DyadicProtocolConsequences.lean`.
+- **Abstraction:** Reuse the existing `le_paddedSide` and
+  `paddedSide_lt_two_mul`; the public wrapper packages them with `Nat.clog_pos`.
+- **Notes:** The duplicate proof is removed by existing-lemma reuse. These
+  two locations are below the promotion threshold of three occurrences
+  across two files; no new helper, tactic or global attribute is introduced.
+
+### Treated-to-level frame equality — candidate (2026-10-16)
+
+- **Pattern:** Identify true vertices from a guide equality, replace the constant
+  treated radius by the equal level radius, transport disjointness, and change
+  the reference party map.
+- **Seen:** Two occurrences in one file: `levelFrame_eq_treatedFrame_guide`
+  and `treatedFrame_completedGuide_eq_levelFrame` in
+  `TNLean/PEPS/Approximation/DyadicTreatedFrameBoundary.lean`.
+- **Abstraction:** The private `treatedFrame_eq_levelFrame_of_guide_eq` takes
+  the baseline stage, the output stage, an unmodified guide and its equality
+  with the level guide. Both endpoint proofs use it.
+- **Notes:** This private, single-file extraction is below the promotion
+  threshold of three occurrences across two files. It shares the two proofs
+  without a global tactic or attribute; all existing endpoint hypotheses
+  and directions are retained.
+  Affine perturbation avoidance also reuses `eventually_add_ne`, which uses
+  public Mathlib neighborhood lemmas; the similarly named chamber-sampling
+  helper is private to its module.
+
+### Treated birth and death preamble — candidate (2026-10-16)
+
+- **Pattern:** the common setup of a treated birth or death: the scales `n`, `t`, the block
+  corner, two `treatedFrame_spec` extractions, `homogenize_endpointBlocks`, the readings and
+  true-vertex sets, and `BandOperation.treated_frame_facts`.
+- **Seen:** `bandBirth_hasFrameChange` and `bandDeath_hasFrameChange`
+  (`Approximation/DyadicBandStepChanges.lean`). In parent PR #9505 both proofs use
+  `guideFrame_eq_changeOwner`, with separate owner case splits; this PR (#9507)
+  consolidates those splits through `guideFrame_eq_changeOwner_of_ne`.
+- **Abstraction:** a lemma returning the readings, vertex sets and facts for the surrounding
+  guide, if a third occurrence appears.
+
+
+
+### Supported terms in rectangle coordinates — candidate (2026-10-15)
+
+- **Pattern:** Transport membership in a supported-operator algebra through the
+  site bijection, replace the resulting embedding by matrix reindexing, and
+  identify the image support.
+- **Seen:** 2 occurrences: `SquareHamiltonian.toAreaLawHamiltonian` in
+  `PEPS/Approximation/SquareAreaLawHamiltonian.lean` and
+  `SquareHamiltonian.exists_nearestNeighbor_terms` in
+  `PEPS/Approximation/SquareInteractionTerms.lean`.
+- **Abstraction:** The existing `embedOp_mem_supportedOperators_image` and
+  `embedOp_rectangle_eq_reindex` perform the two transports. At a third
+  occurrence, consider a lemma giving the reindexed Hermitian term's
+  supported-operator membership directly.
+- **Notes:** The second occurrence also relabels sites and edges. The support
+  identity already handles the arbitrary order on the rectangle sites;
+  no order-preserving assumption should enter a shared lemma.
+
 ### Logarithmic norm derivatives from squared norms — candidate (2026-10-15)
 
 - **Pattern:** Differentiate the squared norm, compose with the real logarithm,
@@ -6214,6 +6427,30 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Notes:** bounds should be supplied before simplifying dependent matrix
   indices; exhaustive enumeration of all bond-coordinate pairs is unnecessary.
 
+### Uniform expansion bounds under chronological composition — candidate (2026-10-15)
+
+- **Pattern:** Induct on the number of stages while retaining the bounds on
+  every stage below the current index; composition forms the conjunction of
+  the preceding bound and the last stage's bound.
+- **Seen:** `OriginalCircuit.isExpansionBounded_sequence` and
+  `OriginalCircuit.isMonomialBounded_sequence` in
+  `TNLean/PEPS/Approximation/OriginalCircuitSequence.lean`, and formerly
+  `DyadicProtocol.isExpansionBounded_chain` and
+  `DyadicProtocol.isMonomialBounded_chain` in
+  `TNLean/PEPS/Approximation/DyadicProtocolCompression.lean`: four
+  occurrences across two files.
+- **Abstraction:** Done (2026-10-16). `DyadicProtocol.chain` is now
+  `OriginalCircuit.sequence` of the protocol changes, and every `chain` lemma
+  (counts, participation, participating sets, expansion and monomial bounds)
+  is a one-line instance of the generic `sequence` lemma. Two inductions
+  remain, both in `OriginalCircuitSequence.lean`. Before adding a further
+  gate-expansion property, derive it from a common occurrence-wise
+  description, as in the existing retained-memory entry.
+- **Notes:** The gate and lifetime sum identities in the same module use the
+  existing `Finset.sum_range_succ`; their elementary induction follows the
+  recorded decision against abstracting finite-sum proof structure. No new
+  tactic or global simplification rule is introduced.
+
 ## Rejected
 
 ### Axiom allow-list fixtures — rejected (2026-10-12)
@@ -7859,6 +8096,7 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Consumers:** `Scan/SourceRoughSelection.lean`,
   `Scan/SourceBootstrapEntropy.lean`, `Scan/SourceSelectedSharpComparison.lean`,
   `Scan/SourceSelectedSharpEnergy.lean`, `Scan/SourceSelectedSharpDensity.lean`,
+  `Scan/SourceSelectedDensity.lean`, `Scan/SourceSelectedEnergy.lean:224`,
   `Scan/SourceActualInformation.lean`, and `Scan/SourceFinalInformation.lean`.
 - **Notes:** Positivity comes from the existing spectral-window witness; no
   nonzero-dimension hypothesis is added to any theorem.
@@ -7891,3 +8129,152 @@ spectral split → block extraction → MPV calculation → strict bounds
   mutual-information relabeling theorem; no new abstraction is needed here.
 - **Caveat:** The state and all regions must use the same site equivalence.
   No normalization assumption is required for the entropy identity itself.
+
+### Integer lattice distances in the real plane — candidate (2026-10-15)
+
+- **Pattern:** Express the real coercion of the integer sup distance as the
+  product metric between the corresponding real coordinate pairs, using
+  `Prod.dist_eq`, `Real.dist_eq` and integer cast lemmas. A common real
+  translation cancels by `dist_add_right`.
+- **Seen:** The local distance identities in
+  `PEPS/Approximation/CellConditionalInformation.lean` and
+  `coarse_mutualInformation_le_translated_square` in
+  `PEPS/Approximation/CoarseInformationFromGap.lean`.
+- **Abstraction:** Two occurrences in two modules. A third use should promote
+  the cast identity to a geometric lemma; the translation cancellation already
+  uses Mathlib's standard identity.
+
+### Eighth-root separation of a vanishing density remainder — candidate (2026-10-15)
+
+- **Pattern:** Apply `Real.rpow_le_rpow` to a nonnegative density bounded by
+  `δ + ρ`, then use `Real.rpow_add_le_add_rpow` at exponent `1 / 8` to separate
+  the principal term from the replica remainder.
+- **Seen:** Two occurrences, in `PEPS/AreaLaw/Scan/EnergyBalance.lean` and
+  `PEPS/AreaLaw/Scan/SelectedEnergyDelta.lean`.
+- **Abstraction:** The existing Mathlib inequalities provide the two-step
+  argument. The latter module also supplies the complete scalar energy
+  implication, `selectedEnergy_le_of_density_le_add`, for use by physical
+  selected-point estimates. No additional tactic is proposed.
+- **Notes:** No multiplication by `1 - p` is allowed before its sign is known.
+  The scalar implication instead uses `1 - p ≤ 1` on nonnegative terms.
+
+### Unpacking the supplied target and its spectral data — rejected (2026-10-16)
+
+- **Pattern:** Introduce the named local definitions, unpack the truncated
+  ground-state and spectral-window witnesses, and pass these same witnesses
+  to the conclusion while continuing with their remaining properties.
+- **Seen:** The common witness block in `Scan/SourceActualInformation.lean:203`,
+  `Scan/SourceSelectedSharpDensity.lean:236`, and
+  `Scan/SourceSelectedSharpEnergy.lean:242`; the rough-density version in
+  `Scan/SourceSelectedDensity.lean:230` has a different tuple of conclusions.
+  `Scan/SourceSelectedEnergy.lean:218` retains the density witnesses directly.
+- **Abstraction:** The mathematical data already come from the shared source
+  comparison theorems. The nonzero-dimension consequence uses the promoted
+  `NeZero.of_pos`. No additional mathematical lemma is proposed for the
+  introductions and conjunction projections themselves.
+- **Notes:** The sharp versions carry the marginal budget and two regional
+  entropy families; the rough version omits these and has a different size
+  bound tuple. An identical short destructuring block is present, but a
+  tactic hiding these dependent witness choices would obscure which state
+  and labels are retained. A shared data interface should be considered only
+  if a subsequent mathematical theorem needs that interface independently;
+  it is not part of the present proof completion.
+
+### Facts about the jointly chosen initial marks — promoted (2026-10-16)
+
+- **Pattern:** Recover the same two residue choices and finite mark set used by
+  the initial repair stage, then project a geometric property from their
+  existence theorem.
+- **Seen:** Two proof occurrences:
+  `TNLean/PEPS/AreaLaw/Geometry/RepairInductionMetric.lean`,
+  `initialRepairStage_scale_separated`, and
+  `TNLean/PEPS/AreaLaw/Geometry/RepairMarkMesh.lean`,
+  `RepairMetricHypotheses.repairStage_location_mem_affineMesh`.
+  The definitions in `RepairStage` and `RepairBirthRank` also refer to these
+  same choices; they are not additional proofs of a geometric property.
+- **Abstraction:** The lemma
+  `TNLean.PEPS.AreaLaw.Geometry.initialRepairStage_mark_spec` in
+  `TNLean/PEPS/AreaLaw/Geometry/RepairInitialMarkFacts.lean` records sparse cell
+  counts, finite layer support, incidence, scale minimality, separation, and
+  injectivity for the actual chosen initial family. It retains the residue
+  choices used by the actual regions and introduces no new mark family.
+- **Refactor:** The metric proof uses incidence and separation directly. The
+  mesh proof reconstructs membership in a selected belt from the incident
+  cell supplied by the lemma, then retains the existing mesh argument and
+  induction step. Both theorem statements remain unchanged.
+- **Line comparison:** The metric proof decreases from 9 to 4 nonblank proof
+  lines, and the mesh proof from 24 to 23. The shared lemma has 5 proof lines:
+  the two consumers and the common proof therefore use 32 lines rather than
+  33. These counts exclude statements, documentation, imports, and the other
+  declarations in the modules.
+- **Verification:** The shared lemma and both rewritten consumers have
+  passed ordinary builds and imported named axiom checks with only the
+  three standard axioms. Both rewritten consumers also passed strict
+  source checks and named source checks.
+- **Further use:** The uniform weighted initial-mark estimate
+  `exists_uniform_initialRepairStage_weighted_sum_bound` also uses the same
+  chosen-family facts. Its finite layer partition uses incidence, and its
+  summation estimate uses the sparse cell counts. The roots and residue
+  choices remain those of the actual initial family. The estimate has passed
+  strict checking, ordinary compilation, and its exact named imported axiom
+  check. This third use is separate from the two refactored consumers in the
+  line comparison above. No new tactic, simp attribute, or proof limit is
+  introduced.
+
+- **Initial belt count:** `exists_uniform_initial_belt_card_bound` in
+  `TNLean/PEPS/AreaLaw/Geometry/InitialBeltCount.lean` also uses the sparse
+  cell counts and finite layer support from the shared specification. The
+  original selected cells and their actual run identifiers are retained.
+  This is a fourth direct use, with strict, ordinary, and exact-name imported
+  standard-three verification complete. The finite-prefix mark-count proof
+  calls the weighted estimate; it is not another direct extraction of the
+  chosen-family facts.
+
+### Summing sparse selected layers with a uniform dyadic budget — candidate
+
+- **Pattern:** Choose the polynomial dyadic budget before the geometric data,
+  bound each summand by a nonnegative geometric coefficient times the fixed
+  polynomial-decay term, sum over the actual finite supported layers, factor
+  the coefficient, and apply the numerical budget.
+- **Occurrences:**
+  `exists_uniform_initialRepairStage_weighted_sum_bound` in
+  `TNLean/PEPS/AreaLaw/Geometry/RepairInitialWeightedCount.lean` and
+  `exists_uniform_initial_belt_card_bound` in
+  `TNLean/PEPS/AreaLaw/Geometry/InitialBeltCount.lean`.
+- **Existing abstraction:** `exists_uniform_polynomial_dyadic_sum_bound`
+  already supplies the numerical estimate. Both applications retain the
+  same jointly chosen initial cells; their finite layer sets come from actual
+  carriers or selected-cell support.
+- **Possible next abstraction:** If a third proof repeats the summation step,
+  first consider a lemma in `PolynomialBudget` for a finite sum with a
+  pointwise polynomial-dyadic upper bound and a nonnegative common
+  coefficient. Its budget must still precede the coefficient and all
+  geometric data. No new tactic is needed.
+- **Notes:** The initial-mark application permits signed weights and handles
+  their layer partition before this summation step. Finiteness must be proved
+  before using either finite-support sums or `Nat.card`. The belt count
+  concerns the literal belt summand, and supplies no count of all initial
+  primary identifiers. These are two occurrences across two files; no third
+  occurrence has yet been recorded.
+
+### Counting fresh replacement identifiers — candidate (2026-10-16)
+
+- **Pattern:** Bound the cardinality of the actual replacement identifier family
+  by eight times the parent mark count. Remove the unique generation tag,
+  sum the connected-run counts over nonterminal parents, apply the bound of
+  eight runs per parent, and bound the parent subtype by the whole mark family.
+- **Seen:** The same sixteen-line block occurs in
+  `PEPS/AreaLaw/Geometry/RepairRetainedPrefixCount.lean:80–95` and
+  `PEPS/AreaLaw/Geometry/RepairNonprimaryRetainedCount.lean:100–115`.
+  Both occurrences count the existing generation–parent–run identifiers;
+  they do not identify coincident parent locations or require disjoint regions.
+- **Abstraction:** A later third use would justify a lemma for the cardinality
+  of `RepairReplacementIndex` under finiteness of the parent marks.
+  No new helper, tactic or promotion is introduced here. Only two occurrences
+  are presently identified, and no further use is being assumed.
+- **Detection:** The existing pattern scanner, run with `--min-count 2` on
+  private copies of these two modules and `InitialBeltCount`, reports one
+  repeated five-line tactic sequence within this block. Direct source
+  comparison confirms equality of all sixteen lines. The initial-belt proof
+  uses the same fan-run bound in a different layer-and-cell sum and does not
+  supply a third occurrence of this generation–parent–run block.

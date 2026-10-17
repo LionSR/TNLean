@@ -21,7 +21,8 @@ their errors on `Ω` and the existence of a tag. This file chooses these familie
 * `EncodedFrame.suppliedPatch` : the supplied patch at every center, with a radius depending on
   the center, and its center, scale, tag count, error and tag.
 * `exists_resize_step_supplied`, `exists_pointTreatment_step_supplied` : the resize of a hole and
-  the point treatment, or its removal, as gates, with the hole and net patches supplied.
+  the point treatment, or its removal, as gates, with the hole and net patches supplied and at
+  most `2 b` pair sources in each monomial.
 
 ## References
 
@@ -137,8 +138,9 @@ theorem exists_resize_step_supplied {ε₀ : ℝ} (hε : 0 < ε₀) (hε₀ : ε
           (2 * b) * L ^ (3 * b * c' + 4 * b * (3 * b * c' + 30))) ∧
         ‖w.eval ((guideFrame pos q g own ph rank V (suppliedPatch P ρ hρ) hpOld).regRef Ω) -
           (guideFrame pos q g own ph rank V (suppliedPatch P ρ' hρ') hpNew).regRef Ω‖ ≤
-          (2 * b + 1) * ((L : ℝ) ^ 20)⁻¹ := by
-  obtain ⟨ν', hν', H⟩ := exists_resize_step_reading hε hε₀
+          (2 * b + 1) * ((L : ℝ) ^ 20)⁻¹ ∧
+        w.IsSourceBounded (2 * b) := by
+  obtain ⟨ν', hν', H⟩ := exists_resize_step_reading_isSourceBounded hε hε₀
   refine ⟨ν', hν', fun ν hν hνν' {v} hv {ι _ _ q _ pos κ Party n t} hn hnt {lab Q g} hg own ph
     rank {V} hV hc₀ hVc {Ω B₀ C c L} P hΩ hL {ρ ρ'} hρ hρ' hu hscale hsame hpOld hpNew
     {C' c' b} hC hC' hc hb hb9 => ?_⟩
@@ -200,8 +202,9 @@ theorem exists_pointTreatment_step_supplied {ε₀ : ℝ} (hε : 0 < ε₀) (hε
           (2 * b) * L ^ (3 * b * c' + 4 * b * (3 * b * c' + 30))) ∧
         ‖w.eval ((guideFrame pos q g₁ own ph rank V (suppliedPatch P _ hr) hpV).regRef Ω) -
           (guideFrame pos q g₂ own ph rank V' (suppliedPatch P _ hr) hpV').regRef Ω‖ ≤
-          (2 * b + 1) * ((L : ℝ) ^ 20)⁻¹ := by
-  obtain ⟨ν', hν', H⟩ := exists_pointTreatment_step_reading hε hε₀
+          (2 * b + 1) * ((L : ℝ) ^ 20)⁻¹ ∧
+        w.IsSourceBounded (2 * b) := by
+  obtain ⟨ν', hν', H⟩ := exists_pointTreatment_step_reading_isSourceBounded hε hε₀
   refine ⟨ν', hν', fun ν hν hνν' {v} hv {ι _ _ q _ pos κ Party n t} hn ht htn {lab S B g} hg
     {M₁ M₂} Q₀ hQ₀ hM L₀ hL₀ {g₁ g₂} hg₁ hg₂ own ph rank {V V'} hV hV' hVc hVc' hVV'
     {Ω B₀ C c L} P hΩ hL hr hu hpV hpV' {C' c' b} hC hC' hc hb hb53 => ?_⟩

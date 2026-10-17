@@ -178,7 +178,9 @@
     \lean{TNLean.PEPS.edgeGaugeFromInsertionAlgebraIsomorphism}
     \leanok
     \uses{thm:matrixAlgEquiv_inner_of_fin}
-    Suppose the edge insertion correspondence is a $\C$-algebra isomorphism
+    In the finite-dimensional matrix-algebra step of
+    \cite[Section~3]{Molnar2018NormalPEPS}, suppose the edge insertion
+    correspondence is a $\C$-algebra isomorphism
     between the two full matrix algebras on the chosen bond. Then the two bond
     dimensions on that edge are equal. If $h_e:D_A(e)=D_B(e)$ is this
     equality, and if
@@ -196,13 +198,12 @@
     % Boundary signature: not applicable to the displayed algebra; no tensor
     % boundary is asserted by this formula.
     $Y=Z_e\phi_{h_e}(X)Z_e^{-1}$.
-    This is the finite-dimensional matrix-algebra step in
-    \cite[Section~3]{Molnar2018NormalPEPS}.
 \end{theorem}
 
 \begin{proof}\leanok
-    Apply Theorem~\ref{thm:matrixAlgEquiv_inner_of_fin} to the full matrix
-    algebras determined by the two edge bond spaces.
+    Applying Theorem~\ref{thm:matrixAlgEquiv_inner_of_fin} to the full matrix
+    algebras determined by the two edge bond spaces gives the dimension equality
+    and the conjugating matrix $Z_e$.
 \end{proof}
 
 \begin{theorem}[Per-edge gauge family from insertion algebra isomorphisms]%
@@ -229,7 +230,7 @@
     Theorem~\ref{thm:peps_edgeBlockedInsertionAlgebraIsomorphism}
     gives the algebra isomorphism $\Phi_e$ preserving inserted coefficients.
     Theorem~\ref{thm:peps_edgeGaugeFromInsertionAlgebraIsomorphism} realizes
-    $\Phi_e$ by conjugation, and the bond-dimension equality transports the
+    $\Phi_e$ by conjugation, and the bond-dimension equality carries the
     conjugating matrix to the $A$-side bond.
 \end{proof}
 
@@ -259,7 +260,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    The translated horizontal frame supplies, for both $A$ and $B$, the one-edge
+    The translated horizontal frame gives, for both $A$ and $B$, the one-edge
     interior blocking datum. Because the red, blue, and complementary blocks are
     coordinate regions, independent of the tensor, the two data share them:
     $R_A=R_B$, $B_A=B_B$, and $C_A=C_B$.
@@ -273,9 +274,9 @@
     \label{thm:peps_exists_regionEdgeGauge_normalSquareVerticalTranslatedEdge}
     \lean{TNLean.PEPS.exists_regionEdgeGauge_normalSquareVerticalTranslatedEdge}
     \leanok
-    The coordinate-swap counterpart of
-    Theorem~\ref{thm:peps_exists_regionEdgeGauge_normalSquareHorizontalTranslatedEdge}.
-    Under the same hypotheses on $A$ and $B$, for a translated vertical interior
+    As the coordinate-swap counterpart of
+    Theorem~\ref{thm:peps_exists_regionEdgeGauge_normalSquareHorizontalTranslatedEdge},
+    under the same hypotheses on $A$ and $B$, for a translated vertical interior
     frame with two rows and two columns of margin, that is $2\le x_0$,
     $2\le y_0$, $x_0+8\le W$, and $y_0+8\le H$, with distinguished vertical
     edge $e$, the bond dimensions agree on $e$, $D_A(e)=D_B(e)$, and there are an
@@ -291,12 +292,12 @@
     \lean{TNLean.PEPS.Region_map_squareLatticeCoordinateSwap_verticalTranslatedEdgeBlue}
     \leanok
     \uses{thm:peps_exists_regionEdgeGauge_normalSquareHorizontalTranslatedEdge}
-    Interchange the two lattice coordinates. This graph isomorphism sends the
-    vertical translated frame to the horizontal translated frame, transposes the
-    rectangular injectivity hypotheses, and sends the distinguished vertical edge
-    to the distinguished horizontal edge. Apply
+    Interchanging the two lattice coordinates gives a graph isomorphism that sends
+    the vertical translated frame to the horizontal translated frame, transposes
+    the rectangular injectivity hypotheses, and sends the distinguished vertical
+    edge to the distinguished horizontal edge. Applying
     Theorem~\ref{thm:peps_exists_regionEdgeGauge_normalSquareHorizontalTranslatedEdge}
-    to the transported tensors. Transporting its bond-dimension equality and
+    to the coordinate-swapped tensors and pulling its bond-dimension equality and
     conjugating gauge back along the inverse coordinate swap gives the required
     equality on $e$ and the matrix $Z$.
 \end{proof}
@@ -306,7 +307,9 @@
     \lean{TNLean.PEPS.HasFactorizedLocalGauge}
     \leanok
     \uses{def:peps_localTensorMap, def:peps_localLeftInverse}
-    Fix $A$, $B$, a bond-dimension equality, and a vertex $v$. Let
+    For the local output required from the blocked-middle reduction in
+    \cite[Section~3]{Molnar2018NormalPEPS}, fix $A$, $B$, a bond-dimension
+    equality, and a vertex $v$. Let
     $\mathcal T^A_v$ be the local tensor map of $A$, let $L^A_v$ be the
     chosen left inverse of $\mathcal T^A_v$, and let
     $\Pi^A_v=\mathcal T^A_vL^A_v$. The factorized local gauge datum consists
@@ -320,9 +323,7 @@
          & =\prod_{e\ni v}X_e(\eta_e,\eta'_e),
         \notag
     \end{align}
-    with $X_e\in\GL(D_A(e))$ on each incident edge. This is the local output
-    required from the blocked-middle reduction in
-    \cite[Section~3]{Molnar2018NormalPEPS}.
+    with $X_e\in\GL(D_A(e))$ on each incident edge.
 \end{definition}
 
 \begin{definition}[Blocked-middle local gauge formula]%
@@ -377,7 +378,7 @@
     \lean{TNLean.PEPS.localGauge_exists_of_blockedMiddleGaugeFormula}
     \leanok
     \uses{def:peps_blockedMiddleGaugeFormula, thm:peps_hasFactorizedLocalGauge_of_blockedMiddleGaugeFormula, thm:localGauge_exists}
-    Suppose that the edge-centred three-site reduction supplies invertible
+    Suppose that the edge-centred three-site reduction yields invertible
     matrices $X_e$ on the incident edges of $v$ such that, for all local virtual
     configurations $\eta$ and physical indices $\sigma$,
     \begin{align}

@@ -143,15 +143,16 @@ product states, and the square lattice.
     margin-and-cover hypotheses at every edge, and one-site separation, the finite
     square lattice satisfies the general normal blocking hypotheses. The
     edge-blocking hypotheses are exactly the margin-cover construction, the
-    one-edge datum at an edge is the datum supplied there, and the one-site
-    separation is exactly the supplied one-site separation. Hence these hypotheses
+    one-edge datum at an edge is the datum given there, and the one-site
+    separation is the given one-site separation. Hence these hypotheses
     give the three injective regions, the endpoint-disjoint-cover facts at
     each edge, and the one-site membership formula as consequences of the same
     normal blocking hypotheses.
 \end{theorem}
 \begin{proof}\leanok
-    Combine the edge-blocking hypotheses constructed from the margin-cover
-    hypotheses with the given one-site separation hypotheses.
+    Combining the edge-blocking hypotheses constructed from the margin-cover
+    hypotheses with the given one-site separation hypotheses yields the
+    general normal blocking hypotheses.
 \end{proof}
 
 \begin{theorem}[Fundamental Theorem for normal PEPS]%
@@ -273,7 +274,7 @@ product states, and the square lattice.
     injective assignment of the two tensors: around every edge the network
     blocks into three doubly injective regions with the edge endpoints in the
     first two, and every site admits two doubly injective regions, with doubly
-    injective complements, differing exactly at that site. Suppose moreover
+    injective complements, differing exactly at that site. Suppose also
     that at every edge the distinguished edge is
     the only edge of the graph joining its two adjacent blocks. Then the
     defining tensors are related by a local gauge: there are invertible
@@ -281,7 +282,7 @@ product states, and the square lattice.
     $B_v$ at every vertex, with no leftover scalar.
     The shared blocking gives a common tripartition for the two tensors, with
     all three regions injective for both. For an edge $e$ between the first
-    two regions, the coefficient transfer $T_e$ supplied by the three-site
+    two regions, the coefficient transfer $T_e$ given by the three-site
     isomorphism argument satisfies
     \begin{align}
         C_A(R_1,e,X;\sigma,\tau)
@@ -296,11 +297,11 @@ product states, and the square lattice.
     $R_1$ and $R_2$, so $Z_e$ acts on the original edge.
     The equality of the bond dimensions is not assumed; it follows from the
     blocking hypotheses by
-    Theorem~\ref{thm:peps_bondDim_eq_of_normalBlocking}. The nonzero bond
+    Theorem~\ref{thm:peps_bondDim_eq_of_normalBlocking}. Following the
+    blocking argument of \cite[Section~4]{Molnar2018NormalPEPS}, the nonzero bond
     spaces of the pair are used in the injectivity argument, while
     connectivity permits the per-vertex constants to be absorbed into the edge
-    gauges; see Theorem~\ref{thm:fundamentalTheorem_PEPS}. This is the blocking argument
-    of \cite[Section~4]{Molnar2018NormalPEPS}.
+    gauges (see Theorem~\ref{thm:fundamentalTheorem_PEPS}).
     % Source-faithful reading: Section 4 of \cite{Molnar2018NormalPEPS} uses
     % one common blocking of the two states and enlarges the endpoint regions
     % so that they meet only along the distinguished edge.

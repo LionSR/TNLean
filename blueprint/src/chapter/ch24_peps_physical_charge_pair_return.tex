@@ -5,8 +5,7 @@
     \leanok
     For original regular $G$-injective site tensors on a finite region, let
     $A$ be their product physical map and $P$ the product of their local
-    averaging projectors. Then $AP=A$.
-    This is the local-invariance identity used in
+    averaging projectors. Then $A$ satisfies the local-invariance identity $AP=A$ of
     \cite{Schuch2010PEPS}, source lines 1765--1820.
 \end{theorem}
 \begin{proof}\leanok
@@ -23,9 +22,9 @@
     is regularly $G$-isometric. Fix a unitary irreducible character $\chi$
     of dimension $d$ and $p\in G$.
     There is a complete positive binary projection measurement $(Q_0,Q_1)$
-    on the original spins, chosen before $k\in G$ and every actual boundary
+    on the original spins, chosen before $k\in G$ and every boundary
     label $\theta$, with the following action. Let $\psi_{k,\theta}$ be the
-    literal original open contraction with weight
+    original open contraction with weight
     $\chi(p\eta_{e_1}^{-1}k^{-1}\eta_{e_0})$, and let
     $\psi_{1,\theta}$ be the initial correlated column. Then
     \begin{align}
@@ -50,24 +49,24 @@
         thm:peps_regular_weighted_open_recovery,
         thm:peps_regular_correlated_charge_coordinates}
     The local $G$-isometries give $A^\dagger A=cP$ with $c>0$, while
-    regular invariance gives $AP=A$. The actual extended reference return
+    regular invariance gives $AP=A$. The extended reference return
     projector is Hermitian and idempotent and commutes with $P$.
-    Its transport $c^{-1}ADA^\dagger$ and the physical complement are a
-    complete binary measurement. Apply its intertwining identity to the
-    already derived canonical correlated column, then recover the literal
-    original weighted contraction.
+    The operator $c^{-1}ADA^\dagger$ and its physical complement form a
+    complete binary measurement; applying its intertwining identity to the
+    already derived canonical correlated column and recovering the
+    original weighted contraction yields the stated action.
 \end{proof}
 
 \begin{theorem}[Return measurement on six translated torus spins]
     \label{thm:peps_torus_six_spin_return_measurement}
     \lean{TNLean.PEPS.IsGIsometric.exists_torusPhysicalChargePairReturnMeasurement}
     \leanok
-    On the actual translated two-column, three-row torus patch, the preceding
+    On the translated two-column, three-row torus patch, the preceding
     measurement acts on the six original spins. The reference bonds, spanning
     tree and root are derived from the native geometry. The same measurement
     precedes every $k$ and $\theta$, including patches crossing either seam.
     The horizontal period is at least three and the vertical period at least
-    four. This proves the local return operation on the literal correlated
+    four. This proves the local return operation on the correlated
     bond sum; identifying a complete prescribed geometric braid with that
     input remains separate. See \cite{gap:rmp_peps_quantum_double_g_isometry}.
 \end{theorem}
@@ -75,7 +74,8 @@
     \leanok
     \uses{thm:peps_original_charge_pair_return_measurement,
         thm:peps_torus_physical_charge_pair_creation}
-    Apply the finite-region theorem to the actual six-site path tree and its
-    two distinct horizontal chords. Native coordinate sorting retains the
-    original boundary labels through both seams.
+    Applying the finite-region theorem to the six-site path tree and its
+    two distinct horizontal chords, while native coordinate sorting retains the
+    original boundary labels through both seams, yields the six-spin return
+    measurement.
 \end{proof}

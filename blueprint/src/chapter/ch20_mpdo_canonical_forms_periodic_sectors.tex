@@ -34,21 +34,20 @@
 \begin{proof}
     \leanok
     \uses{thm:psd_commute_of_commute_pow}
-    Suppose $Q$ were such a projector. Every $H^{(N+1)}$ is positive
-    semidefinite, so commutation of $Q_1$ with $[H^{(N+1)}]^p$
-    implies commutation with $H^{(N+1)}$
-    (Theorem~\ref{thm:psd_commute_of_commute_pow}), contradicting
-    $Q_1H^{(N+1)}\ne H^{(N+1)}Q_1$. This is the contradiction concluding
-    the periodic-sector step in the proof of
-    \cite[Proposition~4.13]{Cirac2016MPDO_arXiv}, lines 1892--1893.
+    As in the periodic-sector step of
+    \cite[Proposition~4.13]{Cirac2016MPDO_arXiv}, lines 1892--1893, if $Q$
+    were such a projector, positive semidefiniteness of $H^{(N+1)}$ and
+    commutation of $Q_1$ with $[H^{(N+1)}]^p$ would imply commutation with
+    $H^{(N+1)}$ by Theorem~\ref{thm:psd_commute_of_commute_pow},
+    contradicting $Q_1H^{(N+1)}\ne H^{(N+1)}Q_1$.
 \end{proof}
 
-\begin{definition}[Periodic vectors supply projectors]
+\begin{definition}[Periodic vectors yield projectors]
     \label{def:mpdo_periodic_vector_yields_projector}
     \lean{MPOTensor.PeriodicVectorYieldsProjector}
     \leanok
     \uses{def:vertical_tensor_mpdo, def:no_periodic_vectors, def:mpdo_periodic_sector_projector}
-    Say that \emph{periodic vectors of $M$ supply projectors} if for every
+    Say that \emph{periodic vectors of $M$ yield projectors} if for every
     nontrivial $p$-periodic vector of the vertically viewed tensor
     $\widetilde M$ --- an irreducible restriction $B$ of $\widetilde M$ to a
     minimal invariant subspace whose transfer map has a peripheral
@@ -74,7 +73,7 @@
     \leanok
     \uses{def:mpdo, def:vertical_tensor_mpdo, def:no_periodic_vectors, def:mpdo_periodic_vector_yields_projector, thm:mpdo_no_periodic_sector_projector}
     Let $M$ generate matrix product density operators and suppose that
-    periodic vectors of $M$ supply projectors. Then the vertically viewed
+    periodic vectors of $M$ yield projectors. Then the vertically viewed
     tensor $\widetilde M$ has no nontrivial $p$-periodic vectors. This is
     the periodic-sector step in the proof of
     \cite[Proposition~4.13]{Cirac2016MPDO_arXiv}, lines 1888--1893, granted
@@ -86,7 +85,7 @@
 \begin{proof}
     \leanok
     \uses{def:mpdo_periodic_vector_yields_projector, thm:mpdo_no_periodic_sector_projector}
-    A nontrivial $p$-periodic vector of $\widetilde M$ supplies a
+    A nontrivial $p$-periodic vector of $\widetilde M$ yields a
     periodic-sector projector for $M$, and
     Theorem~\ref{thm:mpdo_no_periodic_sector_projector} shows that no such
     projector exists.
@@ -202,12 +201,12 @@
     Definition~\ref{def:mpdo_periodic_sector_projector}.
 \end{proof}
 
-\begin{definition}[Periodic vectors supply cyclic projectors]
+\begin{definition}[Periodic vectors yield cyclic projectors]
     \label{def:mpdo_periodic_vector_yields_cyclic_projector}
     \lean{MPOTensor.PeriodicVectorYieldsCyclicProjector}
     \leanok
     \uses{def:vertical_tensor_mpdo, def:no_periodic_vectors, def:mpdo_vertical_one_site_actions}
-    Say that \emph{periodic vectors of $M$ supply cyclic projectors} if for
+    Say that \emph{periodic vectors of $M$ yield cyclic projectors} if for
     every nontrivial $p$-periodic vector of the vertically viewed tensor
     $\widetilde M$ --- presented as in
     Definition~\ref{def:no_periodic_vectors} --- there are an exponent
@@ -233,8 +232,8 @@
     \leanok
     \uses{def:mpdo, def:mpdo_periodic_vector_yields_cyclic_projector, def:mpdo_periodic_vector_yields_projector}
     Let $M$ generate matrix product density operators. If periodic vectors
-    of $M$ supply cyclic projectors, then they supply periodic-sector
-    projectors. This reduces the projector-supply hypothesis of the
+    of $M$ yield cyclic projectors, then they yield periodic-sector
+    projectors. This reduces the projector hypothesis of the
     periodic-sector step in the proof of
     \cite[Proposition~4.13, lines~1888--1893]{Cirac2016MPDO_arXiv} to the
     cyclic decomposition of the peripheral spectrum of the vertical
@@ -244,7 +243,7 @@
 \begin{proof}
     \leanok
     \uses{def:mpdo_periodic_sector_projector_of_cyclic}
-    A nontrivial $p$-periodic vector supplies an invariant non-commuting
+    A nontrivial $p$-periodic vector yields an invariant non-commuting
     projector, which is a periodic-sector projector by
     Definition~\ref{def:mpdo_periodic_sector_projector_of_cyclic}.
 \end{proof}
@@ -261,14 +260,12 @@
     $B$ of $\widetilde M$ to a minimal invariant subspace, reached through
     an isometry $V$, with a positive definite transfer eigenvector $\rho$
     of eigenvalue $r>0$ and a transfer eigenvalue $\mu\ne r$ of modulus
-    $r$. Then there are an exponent $q\ge 1$ and an orthogonal projector
-    $Q$ on the physical space such that $QA_w=QA_wQ$ for every product
-    $A_w$ of $q$ letters of $\widetilde M$, while
-    $Q\widetilde M\ne Q\widetilde MQ$ in the sense of
-    Definition~\ref{def:mpdo_vertical_one_site_actions}. This realizes
-    the projector that the proof of
-    \cite[Proposition~4.13, lines~1889--1891]{Cirac2016MPDO_arXiv} draws
-    from the general theory of the peripheral spectrum.
+    $r$. Realizing the peripheral-spectrum projector invoked in
+    \cite[Proposition~4.13, lines~1889--1891]{Cirac2016MPDO_arXiv}, there
+    are an exponent $q\ge 1$ and an orthogonal projector $Q$ on the
+    physical space such that $QA_w=QA_wQ$ for every product $A_w$ of $q$
+    letters of $\widetilde M$, while $Q\widetilde M\ne Q\widetilde MQ$ in
+    the sense of Definition~\ref{def:mpdo_vertical_one_site_actions}.
 \end{theorem}
 
 \begin{proof}
@@ -284,9 +281,9 @@
     orthogonal projections $P_0,\ldots,P_{m-1}$ summing to the identity
     with $\E_K(P_{k+1})=P_k$, and the letter-level shift
     $K_vP_{k+1}=P_kK_v$ holds
-    (Lemma~\ref{lem:kraus_cyclic_shift}). Set $q=m$ and let $Q$ be the
+    (Lemma~\ref{lem:kraus_cyclic_shift}). Setting $q=m$ and taking $Q$ to be the
     complement of the support projection $\pi$ of
-    $YY^\dagger$ for $Y=V\rho^{1/2}P_0$. A word $A_w$ of $m$ letters of
+    $YY^\dagger$ for $Y=V\rho^{1/2}P_0$, any word $A_w$ of $m$ letters of
     $\widetilde M$ satisfies $A_wY=YG_w$, where $G_w$ is a scalar multiple
     of the corresponding word in the letters of $K$, which commutes with
     $P_0$ by the full-period shift; so the range of $Y$ is invariant and
@@ -305,17 +302,16 @@
     \lean{MPSTensor.IsCPSVCanonicalForm.exists_not_commute_of_displaced}
     \leanok
     \uses{def:cpsv_canonical_form, def:mpo_family, def:mpdo_vertical_one_site_actions}
-    Let $M$ be an MPO tensor whose doubled-index MPS tensor is in literal
+    Let $M$ be an MPO tensor whose doubled-index MPS tensor is in
     CPSV canonical form. If $Q^2=Q$ and
-    $Q\widetilde M\ne Q\widetilde M Q$, then there is an integer $N\geq0$
-    such that, for $Q_1=Q\otimes\Id^{\otimes N}$,
+    $Q\widetilde M\ne Q\widetilde M Q$, then at some length $N\geq0$ the
+    first-site operator $Q_1=Q\otimes\Id^{\otimes N}$ satisfies the
+    non-commutation needed for the contradiction in
+    \cite[Proposition~4.13, lines~1888--1893]{Cirac2016MPDO_arXiv}:
     \begin{align}
         Q_1H^{(N+1)} & \ne H^{(N+1)}Q_1.
         \label{eq:cpsv_literal_displaced_noncommutation}
     \end{align}
-    This existential non-commutation statement supplies the single length
-    needed for the contradiction in
-    \cite[Proposition~4.13, lines~1888--1893]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 
 \begin{proof}
@@ -330,20 +326,20 @@
         \notag
     \end{align}
     Taking matrix coefficients yields equality of the one-sided first-site
-    contractions. The literal form of Lemma~L in
+    contractions. The CPSV canonical-form case of Lemma~L in
     Theorem~\ref{thm:representative_one_sub_mp_zero} identifies the two
     inserted tensors on the original bond space. By
     Lemma~\ref{lem:mpdo_first_site_insertions_vertical_mul}, this equality is
     $Q\widetilde M=Q\widetilde M Q$, contradicting the displacement.
 \end{proof}
 
-\begin{theorem}[Literal canonical form excludes vertical periodic sectors]
+\begin{theorem}[CPSV canonical form excludes vertical periodic sectors]
     \label{thm:mpdo_vertical_no_periodic_vectors_literal_cpsv}
     \lean{MPOTensor.hasNoPeriodicVectors_verticalTensor_of_cpsvCanonicalForm}
     \leanok
     \uses{def:mpdo, def:cpsv_canonical_form, def:vertical_tensor_mpdo, def:no_periodic_vectors}
     Let $M$ generate matrix product density operators, and suppose that its
-    doubled-index MPS tensor is in literal CPSV canonical form. Then the
+    doubled-index MPS tensor is in CPSV canonical form. Then the
     vertically viewed tensor $\widetilde M$ has no nontrivial periodic
     vectors.
 \end{theorem}
@@ -351,7 +347,7 @@
 \begin{proof}
     \leanok
     \uses{thm:mpdo_displaced_invariant_projector, thm:cpsv_literal_displaced_noncommutation, thm:mpo_stacked_vertical_letters, thm:mpo_stacked_layers_power, thm:mpdo_first_site_invariant_comm, thm:psd_commute_of_commute_pow}
-    A nontrivial periodic vector supplies an integer $p\geq1$ and an
+    A nontrivial periodic vector gives an integer $p\geq1$ and an
     orthogonal projector $Q$ such that every word $A_w$ of length $p$ in the
     letters of $\widetilde M$ satisfies $QA_w=QA_wQ$, while
     $Q\widetilde M\ne Q\widetilde M Q$
@@ -367,12 +363,12 @@
         Q_1[H^{(N+1)}]^p & =[H^{(N+1)}]^pQ_1.
         \notag
     \end{align}
-    Since $H^{(N+1)}$ is positive semidefinite,
-    Theorem~\ref{thm:psd_commute_of_commute_pow} implies
-    $Q_1H^{(N+1)}=H^{(N+1)}Q_1$, a contradiction. This is the periodic
-    exclusion in
-    \cite[Proposition~4.13, lines~1888--1893]{Cirac2016MPDO_arXiv}, with the
-    single noncommuting length supplied by Lemma~L.
+    Because $H^{(N+1)}$ is positive semidefinite,
+    Theorem~\ref{thm:psd_commute_of_commute_pow} then forces
+    $Q_1H^{(N+1)}=H^{(N+1)}Q_1$, completing the periodic-exclusion
+    contradiction of
+    \cite[Proposition~4.13, lines~1888--1893]{Cirac2016MPDO_arXiv} at the
+    noncommuting length obtained from Lemma~L.
 \end{proof}
 
 \begin{theorem}[BNT-refined horizontal form excludes vertical periodic sectors]
@@ -389,7 +385,7 @@
     $\widetilde M$ has no nontrivial periodic vectors.
 
     \textbf{Scope restriction (BNT-refined horizontal form):}
-    The normalized BNT-refined horizontal hypothesis is stronger than the literal
+    The normalized BNT-refined horizontal hypothesis is stronger than the
     CPSV canonical-form hypothesis; documented in
     \cite{gap:cpgsv17_vertical_cf_grouping}.
 \end{theorem}
@@ -405,7 +401,7 @@
     $Q\widetilde M=Q\widetilde MQ$, a contradiction. Thus a displaced
     idempotent has a noncommuting length $N+1$.
 
-    A nontrivial periodic vector supplies the orthogonal projector $Q$ of
+    A nontrivial periodic vector gives the orthogonal projector $Q$ of
     Theorem~\ref{thm:mpdo_displaced_invariant_projector}, invariant under
     every word of some full period $p\ge1$. At the noncommuting length just
     obtained, the stacked-layer identity and the invariant-projection
@@ -454,15 +450,14 @@
 
 \begin{proof}
     \leanok
-    A nontrivial periodic vector supplies the invariant, displaced projector
-    $Q$ of Theorem~\ref{thm:mpdo_displaced_invariant_projector}. Its word
+    Whereas Theorem~\ref{thm:mpdo_vertical_no_periodic_vectors_horizontal_cf}
+    treats normalized BNT-refined horizontal form, here a nontrivial periodic
+    vector gives the invariant, displaced projector $Q$ of
+    Theorem~\ref{thm:mpdo_displaced_invariant_projector}. Its word
     invariance transfers to the stacked tensor, giving commutation with
     $[H^{(2)}]^p$ unconditionally through the invariant-projection step
     applied to the stack; positive semidefiniteness of the density operators
     removes the power, and Theorem~\ref{thm:mpdo_commute_of_isInjective}
     turns the resulting commutation with $H^{(2)}$ into the letter-level
     invariance that the displacement forbids.
-
-    Theorem~\ref{thm:mpdo_vertical_no_periodic_vectors_horizontal_cf}
-    gives the corresponding result for normalized BNT-refined horizontal form.
 \end{proof}

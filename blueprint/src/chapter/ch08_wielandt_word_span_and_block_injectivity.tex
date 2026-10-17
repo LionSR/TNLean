@@ -51,9 +51,8 @@ Section~\ref{sec:app_wielandt_identity_in_span}.
 
 \begin{proof}\leanok\uses{thm:cumspan_to_normal}
     Since $\algspn(A)=\MN{D}$, the ascending chain condition for
-    finite-dimensional subspaces gives an $N$ such that
-    $T_N(A)=\MN{D}$.
-    Apply Theorem~\ref{thm:cumspan_to_normal}.
+    finite-dimensional subspaces gives an $N$ such that $T_N(A)=\MN{D}$, and
+    Theorem~\ref{thm:cumspan_to_normal} then implies that $A$ is normal.
 \end{proof}
 
 \begin{remark}[Normal canonical form and blocked primitivity]\label{rem:d1_bypasses_aperiodicity}
@@ -85,10 +84,10 @@ Section~\ref{sec:app_wielandt_identity_in_span}.
     every nonzero scalar matrix spans $\MN{1}$.
     Hence $A$ is one-site injective, so
     Lemma~\ref{lem:one_block_injective_of_injective} gives the positive
-    witness $L=1$.
+    blocking length $L=1$.
     Suppose now that $D\ge2$.
     Theorem~\ref{thm:normal_tp_primitive_irred} gives a
-    block-injectivity witness~$L$.
+    block-injectivity length~$L$.
     If $L=0$, Corollary~\ref{cor:blk_inj_zero_dim_one} would force $D=1$,
     a contradiction.
     Thus $L>0$, and the blocked-chain equivalence identifies this

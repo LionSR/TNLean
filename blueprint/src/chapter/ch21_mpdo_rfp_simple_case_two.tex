@@ -6,16 +6,15 @@
         weighted_basis_physTraceTransfer_sq_of_literal_ZCL}
     \leanok
     \uses{def:mpo_physical_trace_idempotence, def:mpdo_doubled_phys_trace_transfer, lem:mpdo_doubled_phys_trace_transfer_to_mps, lem:mpdo_doubled_phys_trace_transfer_blockwise}
-    Suppose a tensor satisfying the literal zero-correlation-length equation
-    is gauge equivalent, through block-diagonal copy gauges, to a sector
-    decomposition. Every copy satisfies
+    As in \cite[Appendix~C.2, lines~1652--1657]{Cirac2016MPDO_arXiv}, suppose a
+    tensor satisfying the unscaled zero-correlation-length equation is gauge
+    equivalent, through block-diagonal copy gauges, to a sector decomposition;
+    then every copy satisfies
     \begin{align}
         (\mu_{j,q}\mathcal T_{A_j})^2
          & =\mu_{j,q}\mathcal T_{A_j}.
         \label{eq:rfp_block_zcl}
     \end{align}
-    This is the block equation in
-    \cite[Appendix~C.2, lines~1652--1657]{Cirac2016MPDO_arXiv}.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -31,7 +30,7 @@
     \lean{MPOTensor.weight_copy_independent_of_isPhysicalTraceIdempotent}
     \leanok
     \uses{def:mpo_physical_trace_idempotence, def:mpdo_doubled_phys_trace_transfer, lem:mpdo_doubled_phys_trace_transfer_to_mps, lem:mpdo_doubled_phys_trace_transfer_blockwise, lem:mpdo_simple_blockwise_zcl_equation}
-    Let a tensor satisfying the literal zero-correlation-length equation be
+    Let a tensor satisfying the unscaled zero-correlation-length equation be
     gauge equivalent, through block-diagonal copy gauges, to a sector
     decomposition whose basis elements all have non-nilpotent physical-trace
     transfer. Then the weights do not depend on the copy index:
@@ -40,7 +39,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    Literal zero correlation length states
+    Unscaled zero correlation length states
     $\mathcal T_M^{2}=\mathcal T_M$. If
     $\mathcal T_M=X\mathcal T_SX^{-1}$ is the block-diagonal gauge to the
     transfer of the sector decomposition, then conjugation gives
@@ -76,8 +75,9 @@
 \end{corollary}
 
 \begin{proof}\leanok
-    Apply Theorem~\ref{thm:mpdo_simple_weight_copy_independent} to the
-    witness supplied by the simple canonical-form predicate.
+    Applying Theorem~\ref{thm:mpdo_simple_weight_copy_independent} to the
+    sector decomposition given by the simple canonical-form condition yields
+    the claim.
 \end{proof}
 
 \begin{lemma}[Scale-invariant blockwise zero-correlation-length equation]
@@ -98,8 +98,9 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    Conjugate the scale-invariant physical-trace equation through the induced
-    block-diagonal gauge and restrict it to the $(j,q)$-th diagonal block.
+    Conjugating the scale-invariant physical-trace equation through the induced
+    block-diagonal gauge and restricting to the $(j,q)$-th diagonal block gives
+    the block relation.
 \end{proof}
 
 \begin{theorem}[Scale-invariant copy-independence generalization]
@@ -138,8 +139,9 @@
 \end{corollary}
 
 \begin{proof}\leanok
-    Apply Theorem~\ref{thm:mpdo_scale_invariant_weight_copy_independent} to the
-    witness supplied by the simple canonical-form predicate.
+    Applying Theorem~\ref{thm:mpdo_scale_invariant_weight_copy_independent} to the
+    sector decomposition given by the simple canonical-form condition yields the
+    claim.
 \end{proof}
 
 \begin{definition}[Common sector weight and absorbed representative]
@@ -148,16 +150,15 @@
     \lean{MPSTensor.SectorDecomposition.commonWeightAbsorbedBasis}
     \leanok
     \uses{def:sector_weight_data}
-    Suppose the weights over each representative do not depend on the copy
-    index. Choose the common weight $\mu_j$ from any copy over $j$ and absorb
-    it into the representative:
+    Following the convention of
+    \cite[Appendix~C.2, equation~CFK, lines~1660--1665]
+    {Cirac2016MPDO_arXiv}, suppose the weights over each representative do not
+    depend on the copy index; choosing the common weight $\mu_j$ from any copy
+    over $j$ and absorbing it into the representative defines
     \begin{align}
         \mathcal K_j & =\mu_j A_j.
         \notag
     \end{align}
-    This is the convention of
-    \cite[Appendix~C.2, equation~CFK, lines~1660--1665]
-    {Cirac2016MPDO_arXiv}.
 \end{definition}
 
 \begin{lemma}[Every copy has the common weight]
@@ -169,8 +170,8 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    Compare the $q$-th copy with the distinguished copy used to define
-    $\mu_j$.
+    Comparing the $q$-th copy with the distinguished copy used to define
+    $\mu_j$ gives $\mu_{j,q}=\mu_j$.
 \end{proof}
 
 \begin{theorem}[Coefficient after common-weight absorption]
@@ -197,14 +198,14 @@
     \lean{MPSTensor.SectorDecomposition.coeff_ne_zero_of_weight_copy_independent}
     \leanok
     \uses{def:sector_weight_data, thm:mpdo_common_weight_coefficient}
-    The common weight is nonzero, and hence for every chain length $N$,
+    Establishing the coefficient nonvanishing used for the factorization
+    $m_j=q_j\widetilde m_j$ in
+    \cite[Appendix~C.2, lines~1714--1718]{Cirac2016MPDO_arXiv}, the common
+    weight is nonzero, and hence for every chain length $N$,
     \begin{align}
         q_j=\sum_q\mu_{j,q}^{N} & =r_j\mu_j^{N}\ne0.
         \notag
     \end{align}
-    This establishes the coefficient nonvanishing used for the factorization
-    $m_j=q_j\widetilde m_j$ in
-    \cite[Appendix~C.2, lines~1714--1718]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -229,8 +230,9 @@
     $\alpha,\beta$ satisfy
     $\widetilde m_j=[\mathcal B_j^L]_{\alpha,\beta}\ne0$.
     At total chain length $L+3$, the corresponding copy coefficient is
-    $q_j=\sum_q\mu_{j,q}^{L+3}\ne0$. Thus the three-site closing matrix
-    satisfies
+    $q_j=\sum_q\mu_{j,q}^{L+3}\ne0$, so as in the traced-tail selection of
+    \cite[Appendix~C.2, lines~1714--1718]{Cirac2016MPDO_arXiv}, the three-site
+    closing matrix satisfies
     \begin{align}
         R_j & =q_j\mathcal B_j^L,
         \notag                        \\
@@ -238,14 +240,12 @@
             & =q_j\widetilde m_j\ne0.
         \notag
     \end{align}
-    This is the traced-tail selection made in
-    \cite[Appendix~C.2, lines~1714--1718]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 
 \begin{proof}\leanok
     Since $\mathcal B_j$ is not nilpotent, every positive power of
     $\mathcal B_j$ is nonzero; in particular, one common positive power has a
-    nonzero entry for every $j$. The preceding theorem supplies the nonzero
+    nonzero entry for every $j$. The preceding theorem gives the nonzero
     coefficient at length $L+3$. Therefore its product with the selected
     entry of $\mathcal B_j^L$ is nonzero.
 \end{proof}
@@ -255,22 +255,22 @@
     \lean{MPSTensor.SectorDecomposition.mpv_toTensor_eq_sum_copies_mul_commonWeightAbsorbedBasis}
     \leanok
     \uses{def:mpdo_common_sector_weight_absorption, lem:paper_decomp_formula, lem:mpv_smul, thm:mpdo_common_weight_coefficient}
-    After absorbing the common weight, the matrix product vector of the
-    direct-sum tensor is
+    As in equation~CFK of
+    \cite[Appendix~C.2, lines~1660--1665]{Cirac2016MPDO_arXiv} (with the same
+    multiplicities occurring in equation~sigmaNKj of
+    \cite[Appendix~C.2, lines~1756--1759]{Cirac2016MPDO_arXiv}), after absorbing
+    the common weight, the matrix product vector of the direct-sum tensor is
     \begin{align}
         \mathcal V_N(S) & =\sum_j r_j\mathcal V_N(\mathcal K_j).
         \notag
     \end{align}
-    This is equation~CFK of
-    \cite[Appendix~C.2, lines~1660--1665]{Cirac2016MPDO_arXiv}; the same
-    multiplicities occur in equation~sigmaNKj of
-    \cite[Appendix~C.2, lines~1756--1759]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 
 \begin{proof}\leanok
-    Expand the direct-sum tensor by representatives, use
-    Theorem~\ref{thm:mpdo_common_weight_coefficient}, and absorb
-    $\mu_j^N$ into the length-$N$ matrix product vector of $A_j$.
+    Expanding the direct-sum tensor by representatives, using
+    Theorem~\ref{thm:mpdo_common_weight_coefficient}, and absorbing
+    $\mu_j^N$ into the length-$N$ matrix product vector of $A_j$ yields the
+    sum.
 \end{proof}
 
 \begin{definition}[Three-site family closure and outer inverse contraction]
@@ -338,11 +338,10 @@
         q_j & =\sum_q\mu_{j,q}^{4}.
         \notag
     \end{align}
-    Every $\widehat R_j$ is nonzero. More generally, a tail of length $L$
-    gives
-    $\widehat R_j=\tr(\rho^{(L+3)})^{-1}q_j\mathcal B_j^L$.
-    This is the normalized traced-tail expansion used in
-    \cite[Appendix~C.2, lines~1714--1732]{Cirac2016MPDO_arXiv}.
+    Every $\widehat R_j$ is nonzero; more generally, in the normalized
+    traced-tail expansion of
+    \cite[Appendix~C.2, lines~1714--1732]{Cirac2016MPDO_arXiv}, a tail of length
+    $L$ gives $\widehat R_j=\tr(\rho^{(L+3)})^{-1}q_j\mathcal B_j^L$.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -380,8 +379,8 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    Expand the family closure and interchange the finite sector and physical
-    sums. For $x=(x_s,x_\alpha,x_\beta)$, the inverse identity is
+    Expanding the family closure and interchanging the finite sector and physical
+    sums, for $x=(x_s,x_\alpha,x_\beta)$ the inverse identity is
     \begin{align}
         \sum_{i,j} C_{x,(i,j)}\mathcal K_s^{ij}
          & =
@@ -414,7 +413,8 @@
 \end{corollary}
 
 \begin{proof}\leanok
-    Choose the simultaneous left inverse from
-    Theorem~\ref{thm:mpdo_one_letter_simultaneous_inverse} and apply
-    Theorem~\ref{thm:mpdo_bnt_three_site_outer_inverse_collapse}.
+    Choosing the simultaneous left inverse from
+    Theorem~\ref{thm:mpdo_one_letter_simultaneous_inverse} and applying
+    Theorem~\ref{thm:mpdo_bnt_three_site_outer_inverse_collapse} yields the
+    collapse.
 \end{proof}

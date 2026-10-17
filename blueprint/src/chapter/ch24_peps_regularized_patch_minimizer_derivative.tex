@@ -1,0 +1,47 @@
+\section{The logarithmic derivative at a patch minimum}
+\label{sec:peps_actual_patch_minimum_derivative}
+
+Let $V$ be a finite ordered set with local configuration sets $[n_v]$, and
+write $\mathcal H_X=\ell^2(\prod_{v\in X}[n_v];\C)$.
+Fix nested regions $X_0\subseteq\cdots\subseteq X_{m-1}$, positive weights
+$a_j$, and a unit vector $\Omega\in\mathcal H_V$.
+In the independent density tuples of
+Definition~\ref{def:peps_regularized_patch_objective}, for a feasible tuple $x$,
+put
+\begin{align*}
+    K_j(r,x)  & =(x_j+e^{-r}I_{X_j})^{-a_j/2},                       \\
+    \Psi_x(r) & =\widehat K_{m-1}(r,x)\cdots\widehat K_0(r,x)\Omega,
+    \qquad F_x(r)=\|\Psi_x(r)\|.
+\end{align*}
+A hat denotes extension by the identity to the complementary sites.
+Let $\rho_j(r,x)$ be the marginal on $X_j$ of
+$\Psi_x(r)/F_x(r)$, as in
+Definition~\ref{def:peps_patch_canonical_marginal}.
+The derivative is the fixed-tuple identity in the
+\href{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex\#L453-L466}{minimum-growth argument}.
+
+\begin{theorem}[Radius derivative of a minimizing branch]
+    \label{thm:peps_actual_patch_minimum_log_derivative}
+    \lean{TNLean.PEPS.hasDerivAt_log_regularizedPatchObjective_exp_neg_of_isMinOn}
+    \leanok
+    \uses{def:peps_regularized_patch_objective,def:peps_patch_canonical_marginal}
+    Fix a real radius $R$ and a feasible tuple $x$ minimizing $F_x(R)$.
+    Keep this tuple fixed as the radius varies. Then $\log F_x$ is
+    differentiable at $R$, with
+    \begin{align*}
+        (\log F_x)'(R)
+         & =\sum_{j=0}^{m-1}\frac{a_j}{2}
+        \operatorname{Re}\tr\!\left(
+        \rho_j(R,x)\,e^{-R}(x_j+e^{-R}I_{X_j})^{-1}\right).
+    \end{align*}
+    Repeated regions retain independent density matrices. The formula includes
+    the empty product.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_actual_patch_minimum_stationarity,thm:peps_patch_log_radius_derivative_of_outer_commute}
+    Stationarity at the same minimum gives
+    $[K_k(R,x),\rho_k(R,x)]=0$ for every $k$.
+    These are the commutations required in the ordered logarithmic derivative
+    formula. Applying that formula gives the asserted full derivative of the
+    fixed branch. No family of minimizing tuples is differentiated.
+\end{proof}

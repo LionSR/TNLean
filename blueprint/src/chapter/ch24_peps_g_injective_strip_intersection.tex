@@ -8,21 +8,21 @@
     \uses{def:peps_mps_g_injective}
     If $A$ is $G$-injective for a representation $\rho$ of a finite
     group on a finite-dimensional virtual space, then
-    $\rho(g)A^i\rho(g)^{-1}=A^i$ and there is a linear map $L_A$
+    $\rho(g)A^i\rho(g)^{-1}=A^i$ and, as in
+    \cite[Definition~4.2 and Lemma~4.7]{Schuch2010PEPS} with the left
+    inverse extended by group averaging, there is a linear map $L_A$
     from physical vectors to virtual operators such that
     \[
         L_A\mathcal P(A)=\sigma,\qquad
         \sigma(X)=|G|^{-1}\sum_g\rho(g)X\rho(g)^{-1}.
     \]
-    This is \cite[Definition~4.2 and Lemma~4.7]{Schuch2010PEPS}
-    with the left inverse extended by group averaging.
 \end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_g_injective_left_inverse,
         thm:peps_mps_g_injective_source_form}
-    Apply the averaged left-inverse characterization of $G$-injectivity.
-    Invariance of the trace-pairing map is equivalent to conjugation
+    The averaged left-inverse characterization of $G$-injectivity yields $L_A$,
+    and invariance of the trace-pairing map is equivalent to conjugation
     invariance of its tensor coefficients.
 \end{proof}
 
@@ -48,14 +48,13 @@
     Define $\mathcal L$ to consist of three-block vectors whose every
     fixed-$k$ slice belongs to $\mathcal G_{AB}$, and $\mathcal R$
     to consist of those whose every fixed-$i$ slice belongs to
-    $\mathcal G_{BC}$. Thus
+    $\mathcal G_{BC}$. Leaving the unused physical factor unrestricted as in
+    \cite[Theorem~4.8]{Schuch2010PEPS} gives the local boundary spaces
     \[
         \mathcal L=\mathcal G_{AB}\otimes\mathcal P_C,
         \qquad
         \mathcal R=\mathcal P_A\otimes\mathcal G_{BC}.
     \]
-    These are the local boundary spaces with the unused physical
-    factor unrestricted, as in \cite[Theorem~4.8]{Schuch2010PEPS}.
 \end{definition}
 
 \begin{theorem}[Inhomogeneous strip intersection]%
@@ -74,9 +73,9 @@
         :X\in\operatorname{End}\mathcal V\}.
     \]
     In particular this holds when all three blocks are $G$-injective.
-    The endpoints may have different tensors and physical alphabets.
-    This is the matrix-valued strip argument used in
-    \cite[Theorems~4.8 and~5.4]{Schuch2010PEPS}; identifying an arbitrary
+    The endpoints may have different tensors and physical alphabets;
+    while this matrix-valued strip argument underlies
+    \cite[Theorems~4.8 and~5.4]{Schuch2010PEPS}, identifying an arbitrary
     graph's regional open contractions with these strip maps is a
     separate geometric step.
 \end{theorem}
@@ -137,9 +136,9 @@
             \tnwire[route=arc]{stripX.0}{stripAthree.180}
         \end{tenkz}
     \end{tenkzequation}
-    Apply the left inverse of the middle-right block. If $L_C$ is
+    Applying the left inverse of the middle-right block, where $L_C$ is
     the left inverse of $C$ and $\sigma$ is group averaging on virtual
-    operators, this gives
+    operators, gives
     \[
         \sigma(N^i)=XA^i,
         \qquad
@@ -169,7 +168,7 @@
 \begin{proof}\leanok
     \uses{thm:peps_mps_g_injective_concatenation,
         thm:peps_g_injective_invariants_range}
-    Concatenation makes the three-block map $G$-injective. It therefore
+    Concatenation makes the three-block map $G$-injective, so it
     identifies the invariant virtual operator space with its physical
-    range. Apply the intersection theorem.
+    range, which the intersection theorem equates to $\mathcal L\cap\mathcal R$.
 \end{proof}

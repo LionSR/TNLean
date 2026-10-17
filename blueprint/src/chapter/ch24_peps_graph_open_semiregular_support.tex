@@ -97,7 +97,7 @@ They give support consequences of the bond transformation in
     \leanok
     Suppose $W$ commutes with $U(g)$ for every $g\in G$.
     Let $A$ be the weighted averaging-site family and let
-    $\mathcal C_R(A)\ket{\theta}$ denote its actual open contraction
+    $\mathcal C_R(A)\ket{\theta}$ denote its open contraction
     with fixed virtual boundary labels $\theta$. Then
     \begin{align}
         (\mathcal S_{R,\sigma}\mathcal C_R(A)\ket{\theta})(\beta)
@@ -109,8 +109,8 @@ They give support consequences of the bond transformation in
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_graph_open_averaging_bond_state}
-    Regroup the open contraction into crossing endpoints and
-    internal head--tail pairs. The internal virtual sum gives
+    Regrouping the open contraction into crossing endpoints and
+    internal head--tail pairs, the internal virtual sum gives
     $(U(q_h)W)(WU(q_t^{-1}))=W^2U(q_hq_t^{-1})$.
     Each crossing edge contributes only its retained endpoint factor
     from~(\ref{eq:peps_open_sector_boundary_factors}).
@@ -170,10 +170,10 @@ They give support consequences of the bond transformation in
         thm:peps_coherent_multiplicity_transport}
     The block-scalar matrix $W$ commutes with $U(g)$, and
     $W^2U(g)=\bigoplus_i\sqrt{d_i}\,D_i(g)$.
-    Apply coherent multiplicity restoration to
+    Applying coherent multiplicity restoration to
     (\ref{eq:peps_open_sector_weighted_slice}), with coherent
     coefficients $c_R(\theta,\sigma;q)$ and bond labels
-    $q_hq_t^{-1}$. It gives both product support and
+    $q_hq_t^{-1}$, gives both product support and
     (\ref{eq:peps_open_sector_internal_restoration}).
     Only internal bonds are acted on, so the crossing factors remain
     those in~(\ref{eq:peps_open_sector_boundary_factors}).
@@ -207,9 +207,9 @@ They give support consequences of the bond transformation in
     Theorem~\ref{thm:peps_open_sector_internal_restoration}.
     The slice is linear and the product inclusion range is a subspace,
     so support extends to every vector in $\mathcal G_R(A)$.
-    At a given physical configuration, choose its own crossing
-    labels for $\sigma$ and regroup the remaining endpoints.
-    A mismatched internal sector then forces a zero coefficient by
+    At a given physical configuration, choosing its own crossing
+    labels for $\sigma$ and regrouping the remaining endpoints shows that
+    a mismatched internal sector forces a zero coefficient by
     Theorem~\ref{thm:peps_open_sector_coordinate_support}.
 \end{proof}
 
@@ -237,15 +237,15 @@ They give support consequences of the bond transformation in
 \begin{proof}\leanok
     \uses{thm:peps_open_sector_regional_support,
         thm:peps_open_sector_coordinate_support}
-    Choose a region containing both endpoints of a mismatched bond.
-    Fix the exterior physical configuration. The resulting regional
-    slice belongs to $\mathcal G_{R_i}(A)$ by the parent condition,
+    Choosing a region containing both endpoints of a mismatched bond and
+    fixing the exterior physical configuration places the resulting regional
+    slice in $\mathcal G_{R_i}(A)$ by the parent condition,
     so Theorem~\ref{thm:peps_open_sector_regional_support} makes its
     coefficient zero. Reassembling the regional and exterior indices
     gives the original coefficient of $\psi$.
     The image of the coordinate inclusion $j^E$ consists exactly of
-    configurations with matching sectors on every bond: for each
-    matched pair, select its shared sector and its two internal labels.
+    configurations with matching sectors on every bond, since each
+    matched pair is determined by its shared sector and its two internal labels.
     Equation~(\ref{eq:peps_open_sector_inclusion_support}) therefore
     turns the vanishing condition into
     (\ref{eq:peps_open_sector_parent_support}).

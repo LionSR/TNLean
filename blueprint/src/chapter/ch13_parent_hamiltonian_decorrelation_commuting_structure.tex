@@ -5,13 +5,11 @@
         TripartiteDecorrelation.HasCommutingParentHamiltonian}
     \leanok
     \uses{def:tripartite_local_lifts}
-    There are orthogonal projectors $P_{AX}$ and $P_{XB}$ on the two local
-    factors whose lifts commute and whose ranges satisfy the source
-    ground-space intersection condition
-    $\ran P=\ran\widehat P_{AX}\cap\ran\widehat P_{XB}$.
-    Thus $Q_{AX}=\Id-P_{AX}$ and $Q_{XB}=\Id-P_{XB}$ are exactly the
-    commuting parent terms of
-    \cite[Definition~D.2, lines 2205--2218]{Cirac2016MPDO_arXiv}.
+    In \cite[Definition~D.2, lines 2205--2218]{Cirac2016MPDO_arXiv}, there are
+    orthogonal projectors $P_{AX}$ and $P_{XB}$ on the two local factors whose
+    lifts commute and whose ranges satisfy the source ground-space intersection
+    condition $\ran P=\ran\widehat P_{AX}\cap\ran\widehat P_{XB}$, so that
+    $Q_{AX}=\Id-P_{AX}$ and $Q_{XB}=\Id-P_{XB}$ are the commuting parent terms.
 \end{definition}
 
 \begin{theorem}[Ground-space intersection and projector product]
@@ -29,7 +27,9 @@
     Suppose that the lifted projectors commute,
     $\widehat P_{AX}\widehat P_{XB}
         =\widehat P_{XB}\widehat P_{AX}$.
-    Then
+    In the passage from
+    \cite[Definition~D.2, lines 2205--2218]{Cirac2016MPDO_arXiv} to the
+    projector identity at lines 2279--2289,
     \begin{align}
         \ran P
         =\ran\widehat P_{AX}\cap\ran\widehat P_{XB}
@@ -37,9 +37,6 @@
         \widehat P_{AX}\widehat P_{XB}=P.
         \label{eq:parent_tripartite_projector_product}
     \end{align}
-    This is the passage from
-    \cite[Definition~D.2, lines 2205--2218]{Cirac2016MPDO_arXiv} to the
-    projector identity at lines 2279--2289.
 \end{theorem}
 
 \begin{proof}
@@ -69,12 +66,12 @@
 
 \begin{proof}
     \leanok
-    Starting from decorrelation, take the support projectors of
-    $\rho_{AX}$ and $\rho_{XB}$. The preceding product theorem proves their
-    commutation and identifies their product with $P$.
+    From decorrelation, the preceding product theorem applied to the support
+    projectors of $\rho_{AX}$ and $\rho_{XB}$ proves their commutation and
+    identifies their product with $P$.
 
-    Starting from commuting parent projectors, first use the ground-space
-    intersection theorem to write
+    Conversely, from commuting parent projectors, the ground-space intersection
+    theorem gives
     $P=\widehat P_{AX}\widehat P_{XB}
         =\widehat P_{XB}\widehat P_{AX}$. Locality gives
     $[O_A,\widehat P_{XB}]=[O_B,\widehat P_{AX}]=0$, while
@@ -94,17 +91,19 @@
     \lean{TripartiteDecorrelation.parentHamiltonian_iff_observableDecorrelated}
     \leanok
     \uses{def:tripartite_observable_decorrelation, thm:tripartite_observable_decorrelation_iff, thm:tripartite_parent_iff_complex_linear_decorrelated}
-    Let $P=P^\dagger=P^2$. Then $P$ is the ground-space projector of a
-    parent commuting Hamiltonian on $AX$ and $XB$ if and only if regions
-    $A$ and $B$ are decorrelated when tested on Hermitian observables.
-    This is \cite[Proposition~D.3, lines 2221--2289]{Cirac2016MPDO_arXiv}.
+    For $P=P^\dagger=P^2$,
+    \cite[Proposition~D.3, lines 2221--2289]{Cirac2016MPDO_arXiv} states that
+    $P$ is the ground-space projector of a parent commuting Hamiltonian on $AX$
+    and $XB$ if and only if regions $A$ and $B$ are decorrelated when tested on
+    Hermitian observables.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    Combine the complex-linear parent equivalence with the decomposition
+    Combining the complex-linear parent equivalence with the decomposition
     $O=H+\mathrm{i}K$ from
-    Theorem~\ref{thm:tripartite_observable_decorrelation_iff}.
+    Theorem~\ref{thm:tripartite_observable_decorrelation_iff} gives the
+    equivalence.
 \end{proof}
 
 \begin{definition}[Decorrelation]\label{def:is_decorrelated}
@@ -145,8 +144,8 @@
 \begin{proof}
     \leanok
     \uses{def:has_commuting_parent_ham}
-    Take $P_{AX}=P_{XB}=P_K$. Their commutativity is immediate, and the
-    product identity is exactly the assumed idempotence of $P_K$.
+    For $P_{AX}=P_{XB}=P_K$, commutativity is immediate and the product
+    identity reduces to the assumed idempotence of $P_K$.
 \end{proof}
 
 \begin{lemma}[Cancellation for commuting idempotents]
@@ -304,13 +303,13 @@
     \lean{Decorrelation.commutingHam_isDecorrelated}
     \leanok
     \uses{def:is_decorrelated, def:has_commuting_parent_ham}
-    If $P_{AX}$ and $P_{XB}$ are idempotent endomorphisms satisfying
+    In the idempotent-product form of the backward direction of
+    \cite[Appendix~D, Section~D.2, Proposition~D.3]{Cirac2016MPDO_arXiv}, if
+    $P_{AX}$ and $P_{XB}$ are idempotent endomorphisms satisfying
     $P_{AX}\circ P_{XB}=P_K$ and
     $P_{AX}\circ P_{XB}=P_{XB}\circ P_{AX}$, and
     $A$-observables commute with $P_{XB}$ while $B$-observables commute
     with $P_{AX}$, then regions $A$ and $B$ are decorrelated w.r.t.\ $K$.
-    This is the idempotent-product form of the backward direction of
-    \cite[Appendix~D, Section~D.2, Proposition~D.3]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 
 \begin{proof}
@@ -347,9 +346,9 @@
 \begin{proof}
     \leanok
     \uses{thm:commuting_ham_is_decorrelated}
-    Apply Theorem~\ref{thm:commuting_ham_is_decorrelated} to the witnessing
-    endomorphisms $P_{AX}$ and $P_{XB}$ supplied by the idempotent-product
-    data.
+    Theorem~\ref{thm:commuting_ham_is_decorrelated} applied to the
+    endomorphisms $P_{AX}$ and $P_{XB}$ from the idempotent-product
+    data gives the result.
 \end{proof}
 
 \begin{lemma}[Frustration-free identity]\label{lem:frustration_free_ham_eq}
@@ -391,8 +390,8 @@
 \begin{proof}
     \leanok
     \uses{lem:frustration_free_ham_eq}
-    Apply Lemma~\ref{lem:frustration_free_ham_eq} to $P_{AX}$ and $P_{XB}$,
-    and substitute $P_{AX}\circ P_{XB}=P_K$ to obtain
+    Applying Lemma~\ref{lem:frustration_free_ham_eq} to $P_{AX}$ and $P_{XB}$
+    and substituting $P_{AX}\circ P_{XB}=P_K$ gives
     (\ref{eq:parent_idempotent_product_hamiltonian}).
 \end{proof}
 

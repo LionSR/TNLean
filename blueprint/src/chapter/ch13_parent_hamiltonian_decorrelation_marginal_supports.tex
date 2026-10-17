@@ -17,13 +17,11 @@
 \end{proof}
 
 
-For $\rho \ge 0$ on $H_L\otimes H_R$ with $P_L$ the orthogonal projector
-onto the support of $\tr_R\rho$, the identities
-$(P_L\otimes\Id_R)\rho=\rho$ and $\rho(P_L\otimes\Id_R)=\rho$ provide
-the $P_{AX}$ support-projector identities in
-\cite[Appendix~D.2]{Cirac2016MPDO_arXiv} upon setting
-$H_L=H_A\otimes H_X$ and $H_R=H_B$, as developed in
-\cite{QICLean2026Blueprint}.
+As developed in \cite{QICLean2026Blueprint} for the $P_{AX}$ support-projector
+identities of \cite[Appendix~D.2]{Cirac2016MPDO_arXiv}, when $\rho \ge 0$ on
+$H_L\otimes H_R$ with $H_L=H_A\otimes H_X$, $H_R=H_B$, and $P_L$ the orthogonal
+projector onto the support of $\tr_R\rho$, one has
+$(P_L\otimes\Id_R)\rho=\rho$ and $\rho(P_L\otimes\Id_R)=\rho$.
 
 \begin{theorem}[Hermiticity of the left partial trace]
     \label{thm:partial_trace_left_hermitian}
@@ -47,8 +45,8 @@ $H_L=H_A\otimes H_X$ and $H_R=H_B$, as developed in
 Similarly, for the support projector $P_R$ of $\tr_L\rho$, one has
 $(\Id_L\otimes P_R)\rho=\rho$ and $\rho(\Id_L\otimes P_R)=\rho$.
 
-We now use the explicit tripartite indexing
-$H_A\otimes(H_X\otimes H_B)$. Reassociation identifies it with
+In the explicit tripartite indexing
+$H_A\otimes(H_X\otimes H_B)$, reassociation identifies the space with
 $(H_A\otimes H_X)\otimes H_B$ whenever the $AX$ marginal is taken.
 
 \begin{definition}[Tripartite local lifts]
@@ -65,7 +63,7 @@ $(H_A\otimes H_X)\otimes H_B$ whenever the $AX$ marginal is taken.
         \widehat M_A    & =M_A\otimes\Id_{XB}, \notag                        \\
         \widehat M_B    & =\Id_{AX}\otimes M_B. \label{eq:tripartite_lift_b}
     \end{align}
-    Identities~(\ref{eq:tripartite_lift_ax}) and~(\ref{eq:tripartite_lift_b}) use the canonical identification
+    Identities~(\ref{eq:tripartite_lift_ax}) and~(\ref{eq:tripartite_lift_b}) use the tensor-product associator
     $(H_A\otimes H_X)\otimes H_B\cong H_A\otimes(H_X\otimes H_B)$.
 \end{definition}
 
@@ -107,7 +105,7 @@ $(H_A\otimes H_X)\otimes H_B$ whenever the $AX$ marginal is taken.
          & =\Id_A\otimes(M_{XB}N_{XB}).
         \notag
     \end{align}
-    Moreover,
+    In addition,
     \begin{align}
         (M_{AX}\otimes\Id_B)^\dagger
          & =M_{AX}^\dagger\otimes\Id_B,
@@ -133,10 +131,10 @@ $(H_A\otimes H_X)\otimes H_B$ whenever the $AX$ marginal is taken.
     \lean{TripartiteDecorrelation.IsObservableDecorrelated}
     \leanok
     \uses{def:tripartite_local_lifts}
-    Regions $A$ and $B$ are decorrelated relative to $P$ if, for all Hermitian
+    In \cite[Definition~D.1, lines 2187--2191]{Cirac2016MPDO_arXiv}, regions
+    $A$ and $B$ are decorrelated relative to $P$ if, for all Hermitian
     observables $O_A=O_A^\dagger$ and $O_B=O_B^\dagger$, one has
-    $P O_A(\Id-P)O_B P=0$. This is
-    \cite[Definition~D.1, lines 2187--2191]{Cirac2016MPDO_arXiv}.
+    $P O_A(\Id-P)O_B P=0$.
 \end{definition}
 
 \begin{definition}[Complex-linear extension of decorrelation]
@@ -195,7 +193,8 @@ $(H_A\otimes H_X)\otimes H_B$ whenever the $AX$ marginal is taken.
 
 \begin{proof}
     \leanok
-    Apply decorrelation to $O_A^\dagger$ and $O_B^\dagger$, and take adjoints.
+    Applying decorrelation to $O_A^\dagger$ and $O_B^\dagger$ and taking
+    adjoints gives $P O_B(\Id-P)O_A P=0$.
 \end{proof}
 
 \begin{definition}[Tripartite reduced operators]
@@ -253,7 +252,7 @@ $(H_A\otimes H_X)\otimes H_B$ whenever the $AX$ marginal is taken.
 
 \begin{proof}
     \leanok
-    Substitute the matrix-unit expansions. Every summand has the form
+    Under the matrix-unit expansions, every summand has the form
     \begin{align}
         E^A_{ak}PE^A_{ka}(\Id-P)E^B_{bl}PE^B_{lb}
          & =E^A_{ak}
@@ -275,7 +274,7 @@ $(H_A\otimes H_X)\otimes H_B$ whenever the $AX$ marginal is taken.
 
 \begin{proof}
     \leanok
-    Substitute the matrix-unit expansions. Every summand has the form
+    Under the matrix-unit expansions, every summand has the form
     \begin{align}
         E^B_{bl}PE^B_{lb}(\Id-P)E^A_{ak}PE^A_{ka}
          & =E^B_{bl}
@@ -290,11 +289,11 @@ $(H_A\otimes H_X)\otimes H_B$ whenever the $AX$ marginal is taken.
     \label{def:tripartite_marginal_supports}
     \lean{TripartiteDecorrelation.supportAX, TripartiteDecorrelation.supportXB}
     \leanok
-    For a Hermitian operator $P$, let $P_{AX}$ and $P_{XB}$ be the support
-    projectors of $\tr_B P$ and $\tr_A P$, respectively, as in
-    \cite[Appendix~D.2, lines 2225--2229]{Cirac2016MPDO_arXiv}. Write
-    $\widehat P_{AX}$ and $\widehat P_{XB}$ for their lifts to the tripartite
-    space.
+    As in \cite[Appendix~D.2, lines 2225--2229]{Cirac2016MPDO_arXiv}, for a
+    Hermitian operator $P$, let $P_{AX}$ and $P_{XB}$ be the support
+    projectors of $\tr_B P$ and $\tr_A P$, respectively, with
+    $\widehat P_{AX}$ and $\widehat P_{XB}$ denoting their lifts to the
+    tripartite space.
 \end{definition}
 
 \begin{theorem}[Decorrelation for the two marginal supports]

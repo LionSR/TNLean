@@ -65,7 +65,7 @@ $A$, $B$, $C$ below are permitted to coincide.
 \end{lemma}
 
 \begin{proof}\leanok
-    Write $w\le s/1000$ and $w\le(n-s)/1000$. For opposite edges the bands lie
+    Since $w\le s/1000$ and $w\le(n-s)/1000$, for opposite edges the bands lie
     within $n/250$ of their edges. For adjacent edges a common point at distances
     $r_1,r_2>0$ from the two edge lines would satisfy $r_1<0.002\,r_2$ and
     $r_2<0.002\,r_1$. On $\{-8<x<0\}$ one has $0>d>-8w\ge-n/250$. The diameter
@@ -117,8 +117,8 @@ $A$, $B$, $C$ below are permitted to coincide.
 \end{lemma}
 
 \begin{proof}\leanok
-    Both thresholds $-7$ and $-7/2$ lie in $C$ intervals of both words; compare
-    the two words on each interval.
+    Because both thresholds $-7$ and $-7/2$ lie in $C$ intervals of both words, the
+    two words agree on each interval.
 \end{proof}
 
 \begin{lemma}[Conical band estimate]
@@ -133,7 +133,7 @@ $A$, $B$, $C$ below are permitted to coincide.
 \end{lemma}
 
 \begin{proof}\leanok
-    Put $m=\min(s,n-s)$ at $y$, so $w=m/1000$ and $|d|\le m$; hence
+    With $m=\min(s,n-s)$ at $y$, one has $w=m/1000$ and $|d|\le m$, hence
     $d_{\mathcal V}(y)\le m$. If $|y-z|<m/5000$, the parallel and normal
     coordinates move by less than $m/5000$, and $w$ is $10^{-3}$-Lipschitz, so
     $|\beta'(w(s_z)-w(s_y))|\le8m/(5\cdot10^{6})$. Then
@@ -178,12 +178,12 @@ $A$, $B$, $C$ below are permitted to coincide.
     Consider one of the seven elementary births and deaths of an edge operation,
     and labellings $f_b$, $f_a$ and $f_s$ of the plane whose normal words on
     $\{-8<x<2\}$ are its words before, after and surrounding, with $f_b=f_a$ off
-    that band. Let $P_\circ$ be its surrounding label. For every $y$ in the closure
-    of $\{f_b\ne f_a\}$ and every $z$ with $f_s(z)\ne P_\circ$,
-    $|y-z|\ge a_0\min\{n,d_{\mathcal V}(y)\}$, with $\mathcal V$ the two endpoints
-    of the edge. These are the clearance estimates for the edge births and deaths in
+    that band. Let $P_\circ$ be its surrounding label. In the clearance estimates for the edge births and deaths in
     the proof of~\cite[Lemma~7.2]{OpenAI2026PolynomialPEPS}, for any guides with
-    the stated words.
+    the stated words, every $y$ in the closure
+    of $\{f_b\ne f_a\}$ and every $z$ with $f_s(z)\ne P_\circ$ satisfy
+    $|y-z|\ge a_0\min\{n,d_{\mathcal V}(y)\}$, where $\mathcal V$ is the pair of endpoints
+    of the edge.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -200,12 +200,12 @@ $A$, $B$, $C$ below are permitted to coincide.
     \uses{lem:peps_dyadic_conical_band, def:peps_dyadic_normal_words}
     Let the main labelling be $C$ on the exterior band $\{-8<x<0\}$, and let the
     auxiliary labelling have the word (\ref{eq:pdg_aux_word}) on $\{-8<x<2\}$ and
-    be $C$ off it. Every point $y$ in the closure of the positions that are not
+    be $C$ off it. In the clearance estimate for the lens exchange in the proof
+    of~\cite[Lemma~7.2]{OpenAI2026PolynomialPEPS}, for any guides with the stated
+    properties, every point $y$ in the closure of the positions that are not
     $C$ on both labellings satisfies
     $|y-z|\ge a_0\min\{n,d_{\mathcal V}(y)\}$ for every $z$ on the boundary of the
-    lens $Y$. This is the clearance estimate for the lens exchange in the proof
-    of~\cite[Lemma~7.2]{OpenAI2026PolynomialPEPS}, for any guides with the stated
-    properties.
+    lens $Y$.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -216,8 +216,8 @@ $A$, $B$, $C$ below are permitted to coincide.
     distance below $a_0d_{\mathcal V}(y)$ is then below $m_z/2000$, which keeps
     $y$ in that band because $-7m_z/1000\le d_z\le-\tfrac72m_z/1000$ and $w$ is
     $10^{-3}$-Lipschitz. If $y$ lies in one of
-    the closed auxiliary bands $\{-6\le x\le-4\}$ or $\{-3\le x\le-1\}$, apply the
-    conical band estimate with the open bands $\{-\tfrac{13}2<x<-\tfrac72\}$ or
+    the closed auxiliary bands $\{-6\le x\le-4\}$ or $\{-3\le x\le-1\}$, the
+    conical band estimate places $z$ in the open bands $\{-\tfrac{13}2<x<-\tfrac72\}$ or
     $\{-\tfrac72<x<-\tfrac12\}$, neither of which meets the two boundary curves.
 \end{proof}
 
@@ -353,8 +353,8 @@ $A$, $B$, $C$ below are permitted to coincide.
     to the starting main guide on $Y$, so it changes only points of $Y$ where the two
     sheets differ; these are not common $C_e$. The closure of $Y$ lies in the closed
     band $\{-7\le x\le-7/2\}$, of diameter at most $n$ by
-    Lemma~\ref{lem:peps_dyadic_band_disjoint}. Translate by
-    Lemma~\ref{lem:peps_dyadic_translation}.
+    Lemma~\ref{lem:peps_dyadic_band_disjoint}, and
+    Lemma~\ref{lem:peps_dyadic_translation} translates all estimates to $S$.
 \end{proof}
 
 \begin{lemma}[Levels and active labels]
@@ -407,10 +407,10 @@ $A$, $B$, $C$ below are permitted to coincide.
 
 \begin{proof}\leanok
     In block coordinates a cell center still has half-odd integer coordinates, and so
-    do $s$ and $d$ for every edge. Thus $d\ne0$, and $d\ne w(s)$, since $1000d$ is an
-    integer while $1000\,w(s)=\min(s,n-s)$ is a half-odd integer. Apply
+    do $s$ and $d$ for every edge. Thus $d\ne0$ and $d\ne w(s)$ because $1000d$ is an
+    integer while $1000\,w(s)=\min(s,n-s)$ is a half-odd integer, so
     Lemmas~\ref{lem:peps_dyadic_schedule_guides}
-    and~\ref{lem:peps_dyadic_active_labels}.
+    and~\ref{lem:peps_dyadic_active_labels} apply.
 \end{proof}
 
 \begin{lemma}[Separation for the sampled guides]
@@ -577,21 +577,20 @@ source's sampled guides with these readings and state Lemma~7.2 for them.
     \uses{thm:peps_dyadic_angular_separation}
     Let $0<t\le n$ and $h_n=\epsilon_0\min(n,t)=\epsilon_0t$. Homogenize every
     involved guide of an elementary operation to its surrounding label (to $C_e$ for
-    an exchange) on the open sup squares of radius $t$ about its marks. Every point
+    an exchange) on the open sup squares of radius $t$ about its marks. In this logarithmic floor from~\cite[Section~7]{OpenAI2026PolynomialPEPS} (lines 357--367, with $a_1=a_0$), every point
     $y$ of the closure of the remaining changed region satisfies
     $|y-z|\ge a_0\max\{t,\min(n,d_{\mathcal V}(y))\}$ for every position $z$ of
     another label in the homogenized surrounding guide, and every point $y$ of the
     closure of the remaining positions that are not common $C_e$ satisfies the same
-    bound for every point $z$ of $\partial Y$. This is the logarithmic floor
-    of~\cite[Section~7]{OpenAI2026PolynomialPEPS}, lines 357--367, with $a_1=a_0$.
+    bound for every point $z$ of $\partial Y$.
 \end{lemma}
 
 \begin{proof}\leanok
     Homogenization only removes changed positions, only inside the treated squares,
     and only removes other-label positions. A point of the closure of the remaining
     changed region lies outside the open treated squares, so $d_{\mathcal V}(y)\ge t$
-    and $\min(n,d_{\mathcal V}(y))\ge t$. Apply
-    Theorem~\ref{thm:peps_dyadic_angular_separation}.
+    and $\min(n,d_{\mathcal V}(y))\ge t$, and
+    Theorem~\ref{thm:peps_dyadic_angular_separation} gives the bound.
 \end{proof}
 
 \begin{lemma}[Outer holes on the birth side]
@@ -600,13 +599,13 @@ source's sampled guides with these readings and state Lemma~7.2 for them.
     \leanok
     \uses{lem:peps_dyadic_floor}
     A true vertex, a point in the closures of the regions of three distinct labels,
-    lies in the closure of the positions of labels other than any given label. If
+    lies in the closure of the positions of labels other than any given label. In the enlargement
+    of~\cite[Section~7]{OpenAI2026PolynomialPEPS} (lines 368--373), if
     $2\epsilon_0\le a_0/2$, every point within $2\epsilon_0t$ of a true vertex of
     the homogenized surrounding guide lies at distance at least
     $\tfrac{a_0}2\max\{t,\min(n,d_{\mathcal V}(y))\}$ from every point $y$ of the
     closure of the remaining changed region, for the central birth and for every
-    birth or death along an edge. This is the enlargement
-    of~\cite[Section~7]{OpenAI2026PolynomialPEPS}, lines 368--373.
+    birth or death along an edge.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -624,12 +623,11 @@ source's sampled guides with these readings and state Lemma~7.2 for them.
     Let $g$ and $h$ be $1$-Lipschitz functions, $a,t>0$ and
     $2\epsilon_0(a+1)\le a/2$. If a center $c$ satisfies $g(c)\ge aQ_c$ with
     $Q_x=\max\{t,\min(n,h(x))\}$, then every $x$ with $|x-c|\le2\epsilon_0t$
-    satisfies $g(x)\ge\tfrac a2Q_x$. With $g$ the distance from a point of the lens
-    boundary and $h$ the mark distance, and $2\epsilon_0(a_0+1)\le a_0/2$, every
+    satisfies $g(x)\ge\tfrac a2Q_x$. As in~\cite[Section~7]{OpenAI2026PolynomialPEPS} (lines 400--415), with $g$ the distance from a point of the lens
+    boundary, $h$ the mark distance, and $2\epsilon_0(a_0+1)\le a_0/2$, every
     point within $2\epsilon_0t$ of a true vertex of either homogenized sheet of an
     exchange lies at distance at least
-    $\tfrac{a_0}2\max\{t,\min(n,d_{\mathcal V}(x))\}$ from the lens boundary. This is
-    the step of~\cite[Section~7]{OpenAI2026PolynomialPEPS}, lines 400--415.
+    $\tfrac{a_0}2\max\{t,\min(n,d_{\mathcal V}(x))\}$ from the lens boundary.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -648,11 +646,10 @@ source's sampled guides with these readings and state Lemma~7.2 for them.
     boundary of a set $Y$ lies in $Y$ or in its complement. In particular, let
     $0<t\le n$ and $2\epsilon_0(a_0+1)\le a_0/2$; then the outer hole square of
     radius $2\epsilon_0t$ about a true vertex of either homogenized sheet of an
-    exchange lies in the lens $Y$ or in its complement. If a point $x$
-    is at distance at least $b$ from every point of the boundary of $Y$, then it is
-    at distance at least $b$ from every point on the other side of $Y$. These are
-    the statements of~\cite[Section~7]{OpenAI2026PolynomialPEPS}, lines 403--405
-    and 421--429.
+    exchange lies in the lens $Y$ or in its complement. As in~\cite[Section~7]{OpenAI2026PolynomialPEPS} (lines 403--405
+    and 421--429), a point $x$
+    at distance at least $b$ from every point of the boundary of $Y$ is
+    at distance at least $b$ from every point on the other side of $Y$.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -713,10 +710,25 @@ source's sampled guides with these readings and state Lemma~7.2 for them.
 
 \begin{theorem}[No changed true vertex in the bulk operations]
     \label{thm:peps_dyadic_no_changed_vertex}
-    \lean{TNLean.PEPS.Approximation.BandOperation.InsertsOne, TNLean.PEPS.Approximation.edgeOperations_insertsOne, TNLean.PEPS.Approximation.angularConstant_mul_le_mul_max, TNLean.PEPS.Approximation.BandOperation.treated_surrounding_eq, TNLean.PEPS.Approximation.disjoint_closedBall_of_forall_le_dist, TNLean.PEPS.Approximation.BandOperation.isTrueVertex_treated, TNLean.PEPS.Approximation.RepaintingBaseline.isTrueVertex_central_treated, TNLean.PEPS.Approximation.RepaintingBaseline.treatedStartMain, TNLean.PEPS.Approximation.RepaintingBaseline.treatedAux, TNLean.PEPS.Approximation.RepaintingBaseline.exchange_corridor, TNLean.PEPS.Approximation.RepaintingBaseline.isTrueVertex_exchange_treated}
+    \lean{TNLean.PEPS.Approximation.BandOperation.InsertsOne,
+        TNLean.PEPS.Approximation.auxBirthB_insertsOne,
+        TNLean.PEPS.Approximation.auxBirthA_insertsOne,
+        TNLean.PEPS.Approximation.auxBirthC_insertsOne,
+        TNLean.PEPS.Approximation.mainDeathC_insertsOne,
+        TNLean.PEPS.Approximation.mainDeathA_insertsOne,
+        TNLean.PEPS.Approximation.mainBirthC_insertsOne,
+        TNLean.PEPS.Approximation.mainDeathB_insertsOne,
+        TNLean.PEPS.Approximation.edgeOperations_insertsOne, TNLean.PEPS.Approximation.angularConstant_mul_le_mul_max, TNLean.PEPS.Approximation.BandOperation.treated_surrounding_eq, TNLean.PEPS.Approximation.disjoint_closedBall_of_forall_le_dist, TNLean.PEPS.Approximation.BandOperation.isTrueVertex_treated, TNLean.PEPS.Approximation.RepaintingBaseline.central_treated_mem, TNLean.PEPS.Approximation.RepaintingBaseline.isTrueVertex_central_treated, TNLean.PEPS.Approximation.RepaintingBaseline.treatedStartMain, TNLean.PEPS.Approximation.RepaintingBaseline.treatedAux, TNLean.PEPS.Approximation.RepaintingBaseline.exchange_corridor, TNLean.PEPS.Approximation.RepaintingBaseline.isTrueVertex_exchange_treated}
     \leanok
     \uses{lem:peps_dyadic_floor, lem:peps_dyadic_incident_change, def:peps_dyadic_schedule}
-    Let $0<t\le n$. Each of the seven births and deaths of an edge construction
+    For a repainting baseline of side $n$ and any real $t\le n$, let $g_0$ and
+    $g_1$ be its starting and central guides homogenized to the old label $A$ on
+    the open corner squares of radius $t$. If a point $p$ is at distance
+    strictly less than $a_0t$ from some point where $g_0\ne g_1$, then
+    $g_0(p)=A$ and $g_1(p)\in\{A,B\}$, where $B$ is the final label. Since
+    $a_0>0$, this assertion is vacuous for $t\le0$.
+
+    Now let $0<t\le n$. Each of the seven births and deaths of an edge construction
     introduces a single label: at every changed normal ratio the words before and
     after take only the surrounding label and one further label. Homogenize the
     guides of an elementary birth or death, the central birth included, to its
@@ -736,18 +748,18 @@ source's sampled guides with these readings and state Lemma~7.2 for them.
     By the logarithmic floor of Lemma~\ref{lem:peps_dyadic_floor}, the homogenized
     surrounding guide is $P_\circ$ on the open neighborhood of radius $a_0t$ of the
     remaining changed region. On that neighborhood both guides take only the values
-    $P_\circ$ and the inserted label: off the changed region they agree with the
-    surrounding guide, and on it they carry the operation's words, outside the
-    treated squares. Apply the first part of
-    Lemma~\ref{lem:peps_dyadic_incident_change}. For the exchange, a point within
-    $a_0t$ of $\partial Y$ that is not common $C_e$ would contradict the floor;
-    apply the second part. A point within $2\epsilon_0t<a_0t$ of a retained true
+    $P_\circ$ and the inserted label (off the changed region they agree with the
+    surrounding guide, and on it they carry the operation's words outside the
+    treated squares), so the first part of
+    Lemma~\ref{lem:peps_dyadic_incident_change} applies. For the exchange, a point within
+    $a_0t$ of $\partial Y$ that is not common $C_e$ would contradict the floor,
+    so the second part applies. A point within $2\epsilon_0t<a_0t$ of a retained true
     vertex is closer to it than any point of the closed change.
 \end{proof}
 
-The source's further conclusions at lines 383--387, that the raw target of the
+The source's further conclusions at lines 383--387, that the physical target of the
 bulk change lies outside all holes, satisfies the tapering hypothesis and leaves a
-single-owner raw buffer, so that the birth lemma implements it, belong to the
+single-owner physical buffer, so that the birth lemma implements it, belong to the
 protocol and are not formalized here.
 
 \begin{lemma}[Tags and active labels]
@@ -845,10 +857,10 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     Being outside an open square is the non-strict inequality $r\le|y-h|$, which is
     closed in the pair $(r,y)$; with $r\in[r_0,r_1]$ and $y\in W$ the joint sets are
     compact. Three of them with distinct labels have no common point, since a common
-    point $y$ would be a true vertex with $r_0\le r\le|y-h|<r_0$ for some $h$. Apply
-    the parametric form of Lemma~\ref{lem:peps_dyadic_footprint}, take the minimum
-    over the finitely many templates, and transport by the similarity, which
-    multiplies all sup distances by $s$.
+    point $y$ would be a true vertex with $r_0\le r\le|y-h|<r_0$ for some $h$; the
+    parametric form of Lemma~\ref{lem:peps_dyadic_footprint}, minimized
+    over the finitely many templates and pushed forward by the similarity (which
+    multiplies all sup distances by $s$), gives $\nu$.
 \end{proof}
 
 \begin{lemma}[Square nets of patches]
@@ -867,7 +879,7 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
 \end{lemma}
 
 \begin{proof}\leanok
-    Round each coordinate down to the net. The net coordinates within $\rho+u$ of a
+    Rounding each coordinate down to the net places every point within $u$ of $u\mathbb Z^2$, and the net coordinates within $\rho+u$ of a
     coordinate of the center form an interval of at most $2(\rho+u)/u+1$ integers.
 \end{proof}
 
@@ -876,17 +888,16 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     \lean{TNLean.PEPS.Approximation.holeRadius_div_mem_Icc, TNLean.PEPS.Approximation.holeRadius_resize}
     \leanok
     \uses{lem:peps_dyadic_floor}
-    Let $\epsilon_0\ge0$ and $h_n=\epsilon_0\min(n,t)$. If $0<n\le K_0t$ with $t>0$,
-    then $\epsilon_0/\max(K_0,1)\le h_n/n\le\epsilon_0$. If $n,t\ge0$, then
+    As in~\cite[Section~7]{OpenAI2026PolynomialPEPS} (lines 511--516 and
+    529--533), for $\epsilon_0\ge0$ and $h_n=\epsilon_0\min(n,t)$, if $0<n\le K_0t$ with $t>0$,
+    then $\epsilon_0/\max(K_0,1)\le h_n/n\le\epsilon_0$; if $n,t\ge0$, then
     $h_n\le\epsilon_0\min(2n,t)\le2h_n$, and the two radii differ only when $n<t$.
-    These are~\cite[Section~7]{OpenAI2026PolynomialPEPS}, lines 511--516 and
-    529--533.
 \end{lemma}
 
 \begin{proof}\leanok
-    If $n\le t$ the ratio is $\epsilon_0$. Otherwise it is $\epsilon_0t/n$, which lies
-    between $\epsilon_0/K_0$ and $\epsilon_0$. For the resizing, compare $\min(2n,t)$
-    with $\min(n,t)$ in the two cases $n\le t$ and $t\le n$.
+    If $n\le t$ the ratio is $\epsilon_0$; otherwise it is $\epsilon_0t/n$, which lies
+    between $\epsilon_0/K_0$ and $\epsilon_0$, while comparing $\min(2n,t)$
+    with $\min(n,t)$ in the two cases $n\le t$ and $t\le n$ gives the resizing bounds.
 \end{proof}
 
 \begin{lemma}[Grid corners and direct repaintings]
@@ -1088,9 +1099,9 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     $t/n<1/8$ can be replaced by $1/32$. The reference repainting has finitely many
     unmodified guides, since a guide after completed edges depends only on which edges
     are completed. Choosing for each label-equality type a representative map of the
-    finitely many slots, the guide near $v$ is an injective relabelling of one of
-    finitely many templates, and injective relabellings and similarities preserve true
-    vertices. Apply Lemma~\ref{lem:peps_dyadic_footprint_uniform}. Near one corner of
+    finitely many slots expresses the guide near $v$ as an injective relabelling of one of
+    finitely many templates; since injective relabellings and similarities preserve true
+    vertices, Lemma~\ref{lem:peps_dyadic_footprint_uniform} applies. Near one corner of
     $\mathcal M$ the other treated squares are at distance more than $n-5t>3t$, so
     homogenizing on all of them agrees with homogenizing on its square alone within
     distance $4t$ of the corner, which contains the working set and the holes.
@@ -1119,9 +1130,9 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
 \begin{proof}\leanok
     In units of $s$ about a grid corner, a block guide is the block guide of side one
     whose labels are those of a fixed square window of blocks, so it is an injective
-    relabelling of one of finitely many templates, one for each label-equality type of
-    the window. Apply Lemma~\ref{lem:peps_dyadic_footprint_uniform} and
-    Lemma~\ref{lem:peps_dyadic_small_radius} for the radius ratios; when $n<t$ the
+    relabelling of one of finitely many templates (one for each label-equality type of
+    the window), to which Lemma~\ref{lem:peps_dyadic_footprint_uniform} and
+    Lemma~\ref{lem:peps_dyadic_small_radius} apply for the radius ratios; when $n<t$ the
     radius $h_n=\epsilon_0n$ and $h_{2n}=\epsilon_0\min(2n,t)$ lie between
     $\epsilon_0n$ and $2\epsilon_0n$. Since $h_n\le h_{2n}$, a configuration with some
     holes resized has larger holes than the one with all radii $h_n$.
@@ -1160,8 +1171,8 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     sign. So the template is locally constant along the segment, hence constant on it,
     and its readings after $v$ and after $w$ agree. A template therefore has at most one
     reading for each choice of sides of the finitely many wall directions, and only
-    finitely many readings after generic displacements. Apply the compactness argument
-    of Lemma~\ref{lem:peps_dyadic_footprint_uniform} to these finitely many readings of
+    finitely many readings after generic displacements, so the compactness argument
+    of Lemma~\ref{lem:peps_dyadic_footprint_uniform} applies to these finitely many readings of
     the finitely many templates.
 \end{proof}
 
@@ -1192,15 +1203,23 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     displacement of two guides uniform on the $n$-blocks that differ only on one block,
     the two-owner conditions for footprints of radius $2u=\nu n$ assumed in
     Theorem~\ref{thm:peps_guide_frame_rewrite_events} hold, and the direct repainting of
-    the block is one gate as there, with this $b$ and no further geometric condition
-    (lines 507--527 and 574--583).
+    the block is one gate as there, with this $b$ and at most $2b$ pair sources in
+    each monomial. The remaining hypotheses of that theorem on the input vector,
+    true-vertex sets, disjoint holes and patch data are retained; no further geometric
+    condition is imposed (lines 507--527 and 574--583).
 \end{theorem}
 
 \begin{proof}\leanok
-    Take $\nu'$ the ratio of Theorem~\ref{thm:peps_dyadic_sampled_ratio} for the direct
-    repaintings; the two-owner condition survives shrinking the footprint. The
+    \uses{thm:peps_dyadic_sampled_ratio,
+        lem:peps_dyadic_footprint_uniform,
+        thm:peps_protocol_constants,
+        thm:peps_frame_small_rewrite_gate_sources}
+    With $\nu'$ equal to the ratio of Theorem~\ref{thm:peps_dyadic_sampled_ratio} for the direct
+    repaintings, the two-owner condition survives shrinking the footprint. The
     separation $3u+4r<n$, the patch count and $18\le b$ are those of
     Theorem~\ref{thm:peps_protocol_constants}.
+    The source-bounded rewrite gives the same circuit with at most $2b$ pair sources
+    in each monomial.
 \end{proof}
 
 \begin{lemma}[Trivial holes at the last level]
@@ -1586,7 +1605,7 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     homogenized on any set to such a label, take only such labels, and so does
     every reading of such a guide after a small displacement. For a guide with
     such labels, two sites of its encoded frame, with labels read as the parties
-    of a repainting, have the same raw owner exactly when they carry the same
+    of a repainting, have the same site owner exactly when they carry the same
     label (\texttt{06-geometry.tex}, lines 82--100, 328--339 and 507--527).
 \end{theorem}
 
@@ -1603,10 +1622,10 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     \lean{TNLean.PEPS.Approximation.EventUses.scale_le, TNLean.PEPS.Approximation.EventUses.anchor_dist_le}
     \leanok
     \uses{def:peps_dyadic_protocol_parties}
-    Two parties used by one event have equal or adjacent scales, and in each coordinate
+    Establishing the locality clause of~\cite[Proposition~7.1,
+        item~3]{OpenAI2026PolynomialPEPS} for the parties an event uses, any two parties used by one event have equal or adjacent scales, and in each coordinate
     their addresses differ by at most $12$ times the side of the square of either
-    party. This is the locality of~\cite[Proposition~7.1,
-        item~3]{OpenAI2026PolynomialPEPS} for the parties an event uses.
+    party.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -1631,7 +1650,7 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     radius covering each of them. Its footprint is the union of the outer patch
     squares, of radius $2u$, and of the outer squares of the affected holes. Its
     parties are the labels of the old and of the new guide on the footprint, and the
-    tag holders of both guides at the affected holes; these are the raw owners and
+    tag holders of both guides at the affected holes; these are the site owners and
     the affected tag owners named in condition~4 of the small-patch rewrite lemma
     in~\cite[Section~6]{OpenAI2026PolynomialPEPS}. Conditions~1--3 of that lemma,
     the two-owner tests outside the old and new inner holes and the avoidance of the
@@ -1659,9 +1678,9 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
 \end{theorem}
 
 \begin{proof}\leanok
-    If $na-n<y<nb+n$ then $a-1<y/n<b+1$, so $a-1\le\lfloor y/n\rfloor\le b$. Apply
-    this to each coordinate, with $a=b=u$ near a corner and with $a=r$, $b=r+1$ near
-    the closed block.
+    Since $na-n<y<nb+n$ implies $a-1<y/n<b+1$ and hence $a-1\le\lfloor y/n\rfloor\le b$,
+    evaluating each coordinate with $a=b=u$ near a corner and with $a=r$, $b=r+1$ near
+    the closed block gives both claims.
 \end{proof}
 
 \begin{theorem}[Parties of the junction resizes and the direct repaintings]
@@ -1927,19 +1946,19 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     most $189$ changes for each event.
 \end{proof}
 
-\subsection{The consequences of Proposition 7.1 used in the assembly}
+\subsection{The consequences of Proposition 7.1 used in Section 8}
 \label{sec:peps_dyadic_protocol}
 
 The following definition records the consequences
 of~\cite[Proposition~7.1]{OpenAI2026PolynomialPEPS} (\texttt{06-geometry.tex},
-lines 12--53) that the assembly of Section~8 uses, as a statement about
+lines 12--53) that Section~8 uses, as a statement about
 distributed constructions in the sense of
 Definition~\ref{def:peps_distributed_construction} whose chronology is cut into
 changes. It is weaker than the proposition, whose omitted clauses are listed
 below and in~\cite{gap:polypeps_prop71_consequences_interface}. The statement
 is not proved here.
 
-\begin{definition}[Dyadic distribution protocols and the bounds used in the assembly]
+\begin{definition}[Dyadic distribution protocols and the Section 8 bounds]
     \label{def:peps_dyadic_protocol}
     \lean{TNLean.PEPS.Approximation.DyadicProtocol,
         TNLean.PEPS.Approximation.DyadicProtocol.input,
@@ -1948,6 +1967,7 @@ is not proved here.
         TNLean.PEPS.Approximation.DyadicProtocol.readout,
         TNLean.PEPS.Approximation.DyadicProtocol.physicalDensity,
         TNLean.PEPS.Approximation.DyadicProtocol.participation,
+        TNLean.PEPS.Approximation.HierarchySquare,
         TNLean.PEPS.Approximation.DyadicProtocol.IsDistributionProtocol,
         TNLean.PEPS.Approximation.LargeSizeDyadicProtocolConsequences}
     \leanok
@@ -1965,15 +1985,17 @@ is not proved here.
     registers to be discarded. Each genuine site $v$ has its own party, attached
     to the unit square with address $v$, with $d_p=q$; every other party has
     $d_p=1$. Finally there is a reference vector $r_t\in M_t$ at each stage, with
-    $r_0=\bigotimes_px_p$. The actual vector is $\Psi_0=r_0$ and
+    $r_0=\bigotimes_px_p$. The circuit vector is $\Psi_0=r_0$ and
     $\Psi_{t+1}=W_t\Psi_t$.
 
     For constants $C$, $b$, $k$, $r$ and a unit vector $\Omega$, the protocol
-    satisfies the assembly bounds if the following hold.
+    satisfies the Section~8 bounds if the following hold.
     \begin{enumerate}
         \item Every party is attached to a square of the padded hierarchy,
               there are at most $CL^2$ parties, and at most $b$ of them are
-              attached to any square.
+              attached to any square. A different party is assigned to each
+              aligned square of the padded hierarchy, including the root
+              square, at the scale and address of that square.
         \item There are at most $CL^3$ changes. Each change has at most $b$
               nonprivate gates, each involving at most $b$ parties. Every
               nonprivate gate is a sum of at most $CL^k$ monomials with
@@ -1987,7 +2009,7 @@ is not proved here.
               the physical and private coordinates of the last memory
               $r_n=\Omega\otimes\Xi$ with $1-CL^{-57}\le\lVert\Xi\rVert\le1$.
     \end{enumerate}
-    The assembly assertion is that for every $q\ge2$ and $J,\Delta>0$ there are
+    The existence assertion is that for every $q\ge2$ and $J,\Delta>0$ there are
     constants $C$, $b$, $k$, $r$ and $L_0$, chosen before the size, the
     Hamiltonian and the ground vector, such that for every $L\ge\max\{2,L_0\}$
     and every $(H,E_0,\Omega)\in\mathcal G_{q,J,\Delta}(L)$ there is a protocol
@@ -1995,12 +2017,10 @@ is not proved here.
 
     These bounds and this assertion are the consequences
     of~\cite[Proposition~7.1]{OpenAI2026PolynomialPEPS} used in Section~8, not
-    the proposition itself. They omit the following clauses of the source: a
-    party for every square of the hierarchy, including the root
-    (\texttt{06-geometry.tex}, lines 64--67), since the bounds above constrain
-    the parties of each square only from above; one party holding the main
-    copy of $\Omega$ and the auxiliary copies initialized privately at their
-    designated parties (lines 22--23); the factorization of every reference
+    the proposition itself. They omit the following clauses of the source: one
+    party holding the main copy of $\Omega$ and the auxiliary copies
+    initialized privately at their designated parties
+    (\texttt{06-geometry.tex}, lines 22--23); the factorization of every reference
     vector into the main and auxiliary encoded frames with all factors of norm
     at most one (lines 39--41); the scale and address of each additional party
     at its repainting event (lines 36--37); the bounds on pair sources and
@@ -2019,11 +2039,11 @@ is not proved here.
     distributes $\Omega$ through the padded dyadic hierarchy with all four items
     of~\cite[Proposition~7.1]{OpenAI2026PolynomialPEPS}, applied with patch and
     information power $60$ (\texttt{07-assembly.tex}, line 11). In particular,
-    the assembly assertion of Definition~\ref{def:peps_dyadic_protocol} holds;
+    the existence assertion of Definition~\ref{def:peps_dyadic_protocol} holds;
     the proposition also carries the clauses listed there as omitted.
 \end{proposition}
 
-\begin{theorem}[Consequences of the assembly bounds]
+\begin{theorem}[Consequences of the Section 8 protocol bounds]
     \label{thm:peps_dyadic_protocol_consequences}
     \lean{TNLean.PEPS.Approximation.DyadicProtocol.IsDistributionProtocol.rectangularTraceNorm_physicalDensity_sub_le,
         TNLean.PEPS.Approximation.DyadicProtocol.IsDistributionProtocol.separationBounded,
@@ -2031,23 +2051,23 @@ is not proved here.
         TNLean.PEPS.Approximation.DyadicProtocol.participation_le_of_uses}
     \leanok
     \uses{def:peps_dyadic_protocol, def:peps_dyadic_used_parties}
-    Let a protocol satisfy the assembly bounds of
+    Let a protocol satisfy the Section~8 bounds of
     Definition~\ref{def:peps_dyadic_protocol} with $C\ge0$, on a square of side
     $L\ge1$, for a unit vector $\Omega$. These bounds omit the clauses
-    of~\cite[Proposition~7.1]{OpenAI2026PolynomialPEPS} listed there: a party
-    for every square of the hierarchy, the copies of $\Omega$, the frame
+    of~\cite[Proposition~7.1]{OpenAI2026PolynomialPEPS} listed there: the
+    copies of $\Omega$, the frame
     factorization of the reference vectors, the placement of additional
     parties, the pair-source and message counts, and the expansions of every
     fixed accuracy; none of them is used below. Then:
     \begin{enumerate}
-        \item the physical density of the actual final vector satisfies
+        \item the physical density of the final circuit vector satisfies
               $\lVert\Tr_{\rm private}|\Psi_n\rangle\langle\Psi_n|
                   -|\Omega\rangle\langle\Omega|\rVert_1\le(2C^2+2C)L^{-10}$;
         \item every party network whose links join two parties of a common
               nonprivate gate has link anchors differing in each coordinate by
               at most $b$ times the side of either endpoint square.
     \end{enumerate}
-    Moreover, for every protocol, let the nonprivate gates belong to the
+    In addition, for every protocol, let the nonprivate gates belong to the
     repaintings and junction resizes of the hierarchy, at most $G$ to each. If a
     party represents a block party that participates only in gates of events using
     it, in the sense of Definition~\ref{def:peps_dyadic_used_parties}, it
@@ -2056,7 +2076,7 @@ is not proved here.
 
 \begin{proof}\leanok
     \uses{thm:peps_protocol_density, thm:peps_dyadic_lifetime_parties}
-    The changes are contractions, $\lVert r_0\rVert=1$, and the actual and
+    The changes are contractions, $\lVert r_0\rVert=1$, and the circuit and
     reference vectors agree at the first stage, so the first item is
     Theorem~\ref{thm:peps_protocol_density} with
     $C_{\rm ch}=C_{\rm step}=C_{\rm hole}=C$. The second is the address bound of
@@ -2065,14 +2085,14 @@ is not proved here.
     participates, and Theorem~\ref{thm:peps_dyadic_lifetime_parties} bounds it.
 \end{proof}
 
-\begin{theorem}[Retained norm of a protocol with the assembly bounds]
+\begin{theorem}[Retained norm of a protocol with the Section 8 bounds]
     \label{thm:peps_dyadic_protocol_retained_norm}
     \lean{TNLean.PEPS.Approximation.DyadicProtocol.IsDistributionProtocol.retained_norm_and_trace_le}
     \leanok
     \uses{def:peps_dyadic_protocol}
-    Let a protocol satisfy the assembly bounds of
+    Let a protocol satisfy the Section~8 bounds of
     Definition~\ref{def:peps_dyadic_protocol} with $C\ge0$, on a square of side
-    $L\ge1$, for a unit vector $\Omega$. Then the actual final vector $\Psi_n$
+    $L\ge1$, for a unit vector $\Omega$. Then the final circuit vector $\Psi_n$
     and its physical density
     $\rho=\Tr_{\rm private}|\Psi_n\rangle\langle\Psi_n|$ satisfy
     \begin{align}

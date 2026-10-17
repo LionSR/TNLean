@@ -1,7 +1,7 @@
 \section{Uniform contraction of contiguous blocks}
 \label{sec:ldp_inhomogeneous_contraction}
 
-A quantitative condition on the transfer maps of actual contiguous blocks
+A quantitative condition on the transfer maps of contiguous blocks
 provides a uniform positive-part rate. The condition below is Choi domination,
 which gives the quantum Doeblin contraction of~\cite[Theorem~8.17]{Wolf2012Quantum}.
 It is an additional structural hypothesis; it is not inferred from the
@@ -30,11 +30,11 @@ control ordered products of different maps.
     so does $E_B$.
 \end{theorem}
 \begin{proof}\leanok
-    Expand the Kraus sum, split off the first physical index, and proceed
-    by induction on $n$. The two adjacent matrix products have the same
-    order as the composition; the adjoints appear in the reverse order.
-    Trace preservation follows by applying it to the outermost map at
-    each step.
+    Expanding the Kraus sum, splitting off the first physical index, and
+    proceeding by induction on $n$ shows that the two adjacent matrix products
+    have the same order as the composition, while the adjoints appear in the
+    reverse order. Trace preservation follows by applying it to the outermost
+    map at each step.
 \end{proof}
 
 \begin{theorem}[Uniform Doeblin contraction along a chain]
@@ -51,12 +51,12 @@ control ordered products of different maps.
          & \le(1-\eta)^n\lVert\rho_1-\rho_2\rVert_1.
     \end{align}
     The sites may themselves be contiguous blocks, provided the hypothesis
-    is imposed on their actual transfer maps.
+    is imposed on their transfer maps.
 \end{theorem}
 \begin{proof}\leanok
-    Apply the Choi-dominated quantum Doeblin theorem to the first map and
-    the two density matrices produced by the remaining maps. Induction
-    gives one factor $1-\eta$ for each actual map in the ordered product.
+    Applying the Choi-dominated quantum Doeblin theorem to the first map and
+    the two density matrices produced by the remaining maps, and inducting on
+    $n$, gives one factor $1-\eta$ for each map in the ordered product.
 \end{proof}
 
 \begin{theorem}[Uniform Gram and positive-part bounds]
@@ -84,8 +84,8 @@ control ordered products of different maps.
     $0<\eta<1$, these are uniform exponential bounds in physical length.
 \end{theorem}
 \begin{proof}\leanok
-    Put $P_\sigma(X)=\operatorname{Tr}(X)\sigma$ and
-    $R_j=F_j-\eta P_\sigma$. Choi domination makes every $R_j$ completely
+    With $P_\sigma(X)=\operatorname{Tr}(X)\sigma$ and
+    $R_j=F_j-\eta P_\sigma$, Choi domination makes every $R_j$ completely
     positive. Its trace is scaled by $1-\eta$. The common fixed state and
     trace preservation give, for $m$ contiguous blocks,
     \begin{align}
@@ -99,16 +99,17 @@ control ordered products of different maps.
     bound $2D(1-\eta)^m$. The partition implies $N\le ms$, hence
     $m\ge\lfloor N/s\rfloor$.
 
-    The limiting Gram matrix $\sigma^\mathsf{T}\otimes I$ is positive
-    definite. Apply the square-root Lipschitz estimate at that fixed
-    matrix, with constant $L_\sigma$, and take $K=2DL_\sigma$.
+    Since the limiting Gram matrix $\sigma^\mathsf{T}\otimes I$ is positive
+    definite, the square-root Lipschitz estimate at that fixed
+    matrix, with constant $L_\sigma$, gives the positive-part bound with
+    $K=2DL_\sigma$.
 \end{proof}
 
 These results do not by themselves prove the uniform pair-approximation
 hypothesis for general inhomogeneous chains. A common faithful fixed state
-and quantitative domination on actual contiguous blocks are assumed here.
+and quantitative domination on contiguous blocks are assumed here.
 Varying rectangular bond spaces and varying fixed states require additional
 arguments. Section~\ref{sec:ldp_inhomogeneous_mixing} proves the overlap and
-normalization bounds under a uniform ordered-transfer mixing hypothesis;
-qualitative finite correlation alone still does not supply that hypothesis
-\cite{gap:mswc24_inhomogeneous_scope}.
+normalization bounds under a uniform ordered-transfer mixing hypothesis; as
+recorded in \cite{gap:mswc24_inhomogeneous_scope}, qualitative finite
+correlation alone still does not yield that hypothesis.

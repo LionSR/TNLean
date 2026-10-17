@@ -55,7 +55,7 @@ bond dimension $D_{\mathrm{tot}}=\sum_j r_jD_j$.
 \end{lemma}
 
 \begin{proof}\leanok
-    Induct on the number of terms. Subtracting $w_1$ times the equality at
+    By induction on the number of terms, subtracting $w_1$ times the equality at
     exponent $N$ from the equality at exponent $N+1$ gives
     $\sum_{i=2}^{n} c_i(w_i-w_1)w_i^N=0$.
     The induction hypothesis yields this equality at every exponent, so the
@@ -75,12 +75,12 @@ bond dimension $D_{\mathrm{tot}}=\sum_j r_jD_j$.
 \end{lemma}
 
 \begin{proof}\leanok
-    Set $w_l=a_l$ for $l\leq m$ and $w_{m+l}=b_l$ for $l\leq n$, with
-    coefficients $c_l=1$ for $l\leq m$ and $c_l=-1$ for $l>m$. Then
-    $\sum_{l=1}^{m+n}c_lw_l^k=\sum_i a_i^k-\sum_j b_j^k$.
-    The hypothesis makes this expression zero for every sufficiently large
-    $k$. Lemma~\ref{lem:finite_geometric_sum_eventual_vanishing} makes it zero
-    for every $k$, which is the required power-sum equality.
+    With $w_l=a_l$ for $l\leq m$ and $w_{m+l}=b_l$ for $l\leq n$, and with
+    coefficients $c_l=1$ for $l\leq m$ and $c_l=-1$ for $l>m$, the combined sum
+    $\sum_{l=1}^{m+n}c_lw_l^k=\sum_i a_i^k-\sum_j b_j^k$ vanishes for every
+    sufficiently large $k$ by hypothesis.
+    Lemma~\ref{lem:finite_geometric_sum_eventual_vanishing} therefore makes it
+    zero for every $k$, establishing the power-sum equality.
 \end{proof}
 
 \begin{theorem}[Equal power sums imply equal multisets]\label{thm:power_sum_multiset}
@@ -93,12 +93,11 @@ bond dimension $D_{\mathrm{tot}}=\sum_j r_jD_j$.
 
 \begin{proof}
     \leanok
-    Construct diagonal matrices $\diag(\alpha)$ and
-    $\diag(\beta)$. The power-sum hypothesis gives
-    $\tr(\diag(\alpha)^k) = \tr(\diag(\beta)^k)$.
-    By the corresponding theorem in the companion quantum-channel volume~\cite[``Newton--Girard trace recursion'']{QICLean2026Blueprint}, the characteristic
-    polynomials agree: $\prod_i (X - \alpha_i) = \prod_i (X - \beta_i)$.
-    Extracting roots gives multiset equality.
+    For the diagonal matrices $\diag(\alpha)$ and $\diag(\beta)$, the
+    power-sum hypothesis gives $\tr(\diag(\alpha)^k) = \tr(\diag(\beta)^k)$.
+    By the corresponding theorem in the companion quantum-channel volume~\cite[``Newton--Girard trace recursion'']{QICLean2026Blueprint}, their characteristic
+    polynomials agree: $\prod_i (X - \alpha_i) = \prod_i (X - \beta_i)$, whose
+    roots form equal multisets.
 \end{proof}
 
 \begin{theorem}[Representative dimensions are bounded by the total bond dimension]
@@ -116,9 +115,9 @@ bond dimension $D_{\mathrm{tot}}=\sum_j r_jD_j$.
 \begin{proof}
     \leanok
     \uses{def:sector_weight_data}
-    Since $r_j>0$, choose one copy of $A_j$. Its contribution $D_j$ is one
-    non-negative summand in the total dimension of the flattened copy family,
-    so $D_j\leq D$.
+    Since $r_j>0$, at least one copy of $A_j$ appears in the flattened copy
+    family; its dimension $D_j$ is one non-negative summand in the total
+    dimension, so $D_j\leq D$.
 
     For the second assertion, every representative has multiplicity
     $r_j\geq1$, and each copy has positive dimension $D_j>0$. Therefore
@@ -131,7 +130,7 @@ bond dimension $D_{\mathrm{tot}}=\sum_j r_jD_j$.
     \end{align}
 \end{proof}
 
-\begin{theorem}[Blocked sector coefficients and assembled tensor]%
+\begin{theorem}[Blocked sector coefficients and combined tensor]%
     \label{thm:sector_decomposition_block_tensor_mpv}
     \lean{MPSTensor.SectorDecomposition.coeff_blockTensor}
     \lean{MPSTensor.SectorDecomposition.sameMPV₂_blockTensor_toTensor}
@@ -144,8 +143,8 @@ bond dimension $D_{\mathrm{tot}}=\sum_j r_jD_j$.
         =c_{P,j}^{(Np)}.
         \label{eq:bnt_sector_block_coeff}
     \end{align}
-    Moreover, blocking the tensor assembled from $P$ gives the same MPV family
-    as the tensor assembled from the blocked sector decomposition.
+    In addition, blocking the tensor formed from $P$ gives the same MPV family
+    as the tensor formed from the blocked sector decomposition.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -165,8 +164,8 @@ bond dimension $D_{\mathrm{tot}}=\sum_j r_jD_j$.
 \end{lemma}
 
 \begin{proof}\leanok
-    Choose one original block index. Its occurrence in the phase-class
-    enumeration supplies a phase class containing it.
+    Every original block index appears in the phase-class enumeration, so a
+    nonempty index set produces at least one phase class.
 \end{proof}
 
 \begin{lemma}[Regrouping a matrix sum by MPV phase classes]
@@ -180,8 +179,8 @@ bond dimension $D_{\mathrm{tot}}=\sum_j r_jD_j$.
 \end{lemma}
 
 \begin{proof}\leanok
-    Evaluate both sides at a pair of matrix indices and apply the bijective
-    enumeration of the finite phase-class quotient.
+    Evaluating both sides at each pair of matrix indices reduces the equality to
+    the bijective enumeration of the finite phase-class quotient.
 \end{proof}
 
 \begin{definition}[Single-copy sector decomposition]
@@ -233,8 +232,8 @@ bond dimension $D_{\mathrm{tot}}=\sum_j r_jD_j$.
     If the coefficient vanished for every $N\geq M$, the finite geometric-sum
     extrapolation would make it vanish at every non-negative exponent. However,
     at exponent zero, $c_{P,j}^{(0)}=\sum_q\mu_{j,q}^0=r_j>0$, which is
-    impossible.  For the subsequence, apply the same argument to the nonzero
-    bases $\mu_{j,q}^p$.
+    impossible; the same argument applied to the nonzero bases $\mu_{j,q}^p$
+    handles the subsequence.
 \end{proof}
 
 \subsection{Proportional matching and finite bijection extraction}
@@ -261,20 +260,20 @@ between the sector sets.
     all such $P$-sectors from the remaining ones. For each remaining sector,
     choose a $Q$-sector with non-decaying overlap. Both blocks are normal by the
     canonical-form hypotheses. Theorem~\ref{thm:cpsv_normal_overlap_dichotomy}
-    rules out its decay alternative and supplies equal bond dimensions and a
+    rules out its decay alternative and gives equal bond dimensions and a
     gauge-phase relation with a unit phase. Gauge-phase covariance therefore
     expresses that $P$-sector MPV as a geometric scalar multiple of the chosen
     $Q$-sector MPV.
 
-    Substitute these relations into the eventual proportionality identity.
-    The combined-family Gram criterion makes the decaying residue together
-    with the $Q$ family eventually linearly independent. Exact coefficient
-    extraction then makes the chosen sector coefficient eventually zero,
-    contradicting its power-sum nonvanishing. Thus a non-decaying partner
+    Substituting these relations into the eventual proportionality identity and
+    applying the combined-family Gram criterion make the decaying residue
+    together with the $Q$ family eventually linearly independent. Exact
+    coefficient extraction then makes the chosen sector coefficient eventually
+    zero, contradicting its power-sum nonvanishing, so a non-decaying partner
     exists. A second application of
     Theorem~\ref{thm:cpsv_normal_overlap_dichotomy} rules out decay and gives
-    the required dimension equality and gauge-phase equivalence; no
-    modulus-one overlap limit is assumed.
+    the required dimension equality and gauge-phase equivalence without assuming
+    a modulus-one overlap limit.
 \end{proof}
 
 \begin{theorem}[Full-basis matching under eventual proportionality]
@@ -287,10 +286,10 @@ between the sector sets.
 \end{theorem}
 
 \begin{proof}\leanok
-    Reverse the eventual proportionality and apply
+    Reversing the eventual proportionality and applying
     Theorem~\ref{thm:sector_bnt_proportional_exact_match} to each sector of
-    $Q$; symmetry of the overlap converts the resulting witness to the stated
-    orientation.
+    $Q$ produce a partner in $P$, and symmetry of the overlap converts that
+    partner to the stated orientation.
 \end{proof}
 
 \begin{lemma}[Bijection from matches in both directions]

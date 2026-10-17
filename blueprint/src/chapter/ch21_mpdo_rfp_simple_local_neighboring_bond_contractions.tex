@@ -7,18 +7,16 @@
     \uses{def:mpdo_sector_tensors}
     Fix outer virtual indices $\alpha_1,\beta_3$ with the chosen Hayashi
     decomposition, and let $l_k,r_k$ be the sector tensors of
-    Definition~\ref{def:mpdo_sector_tensors}. For each pair of sectors
-    $(k,h)$, the neighboring operator contracts the right sector tensor of
-    one site with the left sector tensor of the following site over the
-    virtual bond they share:
+    Definition~\ref{def:mpdo_sector_tensors}. Following
+    \cite[Appendix~C.2, lines~1441--1445]{Cirac2016MPDO_arXiv}, for each pair
+    of sectors $(k,h)$, the neighboring operator on $B_k^{R}\otimes B_h^{L}$
+    contracts the right sector tensor of one site with the left sector tensor
+    of the following site over the virtual bond they share:
     \begin{align}
         \eta_{k,h}
          & =\sum_{\gamma}(r_k)_{\gamma}\otimes(l_h)_{\gamma}.
         \notag
     \end{align}
-    It acts on the neighboring bond space $B_k^{R}\otimes B_h^{L}$. This is
-    the operator displayed in
-    \cite[Appendix~C.2, lines~1441--1445]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
 \begin{theorem}[Neighboring bond contraction]
@@ -29,7 +27,10 @@
     In the setting of Theorem~\ref{thm:mpdo_sector_factorization}, for all
     sectors $k,h$ and virtual indices $\beta_1,\alpha_3$, contracting the
     shared virtual bond of two neighboring factorized slices leaves the
-    neighboring operator between the outer sector tensors:
+    neighboring operator between the outer sector tensors, providing the
+    single-bond step that forms $\bigotimes_{n}\eta_{k_n,k_{n+1}}$ from the
+    factorized chain in
+    \cite[Appendix~C.2, lines~1446--1449]{Cirac2016MPDO_arXiv}:
     \begin{align}
          & \sum_{\gamma}
         \left[U_B\kappa_{\beta_1,\gamma}U_B^\dagger\right]_{(k,l_1,r_1),(k,l_1',r_1')}
@@ -41,9 +42,6 @@
         \left[(r_h)_{\alpha_3}\right]_{r_2,r_2'}.
         \notag
     \end{align}
-    This is the single-bond step of the identity forming
-    $\bigotimes_{n}\eta_{k_n,k_{n+1}}$ from the factorized chain in
-    \cite[Appendix~C.2, lines~1446--1449]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 
 \begin{proof}
@@ -79,8 +77,10 @@
         MPOTensor.PhysicalSectorFactorization.transformedPhysicalSlice_apply_ne}
     \leanok
     \uses{def:mpo_tensor}
-    A physical-sector factorization of an MPO tensor $\mc K$ consists of a
-    finite decomposition
+    Following \cite[Appendix~C.2, lines~1381--1388]{Cirac2016MPDO_arXiv}
+    (without imposing positivity, trace factorization, or a quantum-Markov
+    decomposition), a physical-sector factorization of an MPO tensor $\mc K$
+    consists of a finite decomposition
     \begin{align}
         \C^d
          & \simeq\bigoplus_k(B_k^L\otimes B_k^R),
@@ -94,9 +94,6 @@
          & =\bigoplus_k(l_k)_\beta\otimes(r_k)_\alpha.
         \notag
     \end{align}
-    No positivity, trace factorization, or quantum-Markov decomposition is
-    included in this datum. This is the factorization displayed in
-    \cite[Appendix~C.2, lines~1381--1388]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
 \begin{definition}[Algebraic neighboring contraction]
@@ -105,15 +102,15 @@
         MPOTensor.PhysicalSectorFactorization.neighboringOperator_apply}
     \leanok
     \uses{def:mpdo_physical_sector_factorization}
-    For sectors $k,h$, contract the common virtual index of the right and
-    left sector tensors:
+    For sectors $k,h$, contracting the common virtual index of the right and
+    left sector tensors defines the operator on $B_k^R\otimes B_h^L$
     \begin{align}
         \eta_{k,h}
          & =\sum_a(r_k)_a\otimes(l_h)_a.
         \notag
     \end{align}
-    This is an operator on $B_k^R\otimes B_h^L$. Positivity is not part of
-    this definition; it is a separate hypothesis in Proposition~C.7.
+    Positivity is not part of this definition; it is a separate hypothesis in
+    Proposition~C.7.
 \end{definition}
 
 \begin{definition}[Matrix-weighted neighboring contraction]
@@ -133,7 +130,7 @@
     The ordinary neighboring contraction is the case $P=I$.
 \end{definition}
 
-\begin{definition}[Virtual-matrix transport of a physical-sector factorization]
+\begin{definition}[Virtual-matrix transformation of a physical-sector factorization]
     \label{def:mpdo_physical_sector_factorization_virtual_matrices}
     \lean{MPOTensor.PhysicalSectorFactorization.ofVirtualMatrices}
     \leanok
@@ -146,8 +143,12 @@
         L^i & =XK^iY.
         \notag
     \end{align}
-    Every physical-sector factorization of $K$ induces one of $L$ with the
-    same physical decomposition.  Its virtual tensor families are
+    Abstracting the virtual corner in
+    \cite[Section~2.3, lines~195--219]{Cirac2016MPDO_arXiv} and the
+    physical-sector factorization in
+    \cite[Appendix~C.2, lines~1381--1439]{Cirac2016MPDO_arXiv}, every
+    physical-sector factorization of $K$ induces one of $L$ with the same
+    physical decomposition and virtual tensor families
     \begin{align}
         (l_k^L)_\beta
          & =\sum_\gamma X_{\beta,\gamma}(l_k^K)_\gamma,
@@ -156,34 +157,30 @@
          & =\sum_\delta Y_{\delta,\alpha}(r_k^K)_\delta.
         \notag
     \end{align}
-    This construction abstracts the virtual corner in
-    \cite[Section~2.3, lines~195--219]{Cirac2016MPDO_arXiv} and the
-    physical-sector factorization in
-    \cite[Appendix~C.2, lines~1381--1439]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
-\begin{theorem}[Neighboring operators under virtual-matrix transport]
+\begin{theorem}[Neighboring operators under virtual-matrix transformation]
     \label{thm:mpdo_physical_sector_factorization_virtual_matrices_neighbor}
     \lean{MPOTensor.PhysicalSectorFactorization.ofVirtualMatrices_neighboringOperator}
     \leanok
     \uses{def:mpdo_minimal_neighboring_operator, def:mpdo_matrix_weighted_neighboring_operator, def:mpdo_physical_sector_factorization_virtual_matrices}
-    The neighboring operators of the transported factorization satisfy
+    Combining the virtual corner in
+    \cite[Section~2.3, lines~195--219]{Cirac2016MPDO_arXiv} with the
+    neighboring contraction in
+    \cite[Appendix~C.2, lines~1441--1450]{Cirac2016MPDO_arXiv}, the neighboring
+    operators of the transformed factorization satisfy
     \begin{align}
         \eta^L_{k,h}
          & =\eta^K_{k,h}(YX).
         \notag
     \end{align}
-    This identity combines the virtual corner in
-    \cite[Section~2.3, lines~195--219]{Cirac2016MPDO_arXiv} with the
-    neighboring contraction in
-    \cite[Appendix~C.2, lines~1441--1450]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    Replace each left factor by
+    Replacing each left factor by
     $\sum_\gamma X_{\beta,\gamma}(l_k)_\gamma$ and each right factor by
-    $\sum_\delta Y_{\delta,\alpha}(r_k)_\delta$.  Contracting the common
+    $\sum_\delta Y_{\delta,\alpha}(r_k)_\delta$, contracting the common
     virtual index gives
     \begin{align}
         \sum_\beta Y_{\delta,\beta}X_{\beta,\gamma}
@@ -205,12 +202,12 @@
         L^i & =V^\dagger K^iV.
         \notag
     \end{align}
-    Every physical-sector factorization of $K$ induces one of $L$ with the
-    same physical decomposition.
-    This construction combines the virtual corner in
+    Combining the virtual corner in
     \cite[Section~2.3, lines~195--219]{Cirac2016MPDO_arXiv} with the
     physical-sector factorization in
-    \cite[Appendix~C.2, lines~1381--1439]{Cirac2016MPDO_arXiv}.
+    \cite[Appendix~C.2, lines~1381--1439]{Cirac2016MPDO_arXiv}, every
+    physical-sector factorization of $K$ induces one of $L$ with the same
+    physical decomposition.
 \end{definition}
 
 \begin{theorem}[Range projection of a matrix-block inclusion]
@@ -222,7 +219,8 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    Compute the entries of the inclusion and its conjugate transpose.
+    The identity follows by computing the entries of the inclusion and its
+    conjugate transpose.
 \end{proof}
 
 \begin{theorem}[Flattened sector as an isometric virtual corner]
@@ -236,23 +234,21 @@
     \leanok
     \uses{def:sector_weight_data, thm:block_inclusion_projection}
     Let $A=\bigoplus_t \mu_t A_t$ be a weighted block-diagonal tensor in
-    flattened virtual coordinates.
-    For every block $s$, the canonical inclusion $V_s$ of that block satisfies
+    flattened virtual coordinates. As in the blockwise virtual-corner identity
+    of \cite[Section~2.3, equation \emph{II\_Aiplusk1},
+        lines~195--219]{Cirac2016MPDO_arXiv} used in Appendix~C.2, for every
+    block $s$, the canonical inclusion $V_s$ and the corresponding flattened
+    block projection $P_s$ satisfy
     \begin{align}
         V_s^\dagger V_s    & =1, \notag           \\
         V_sV_s^\dagger     & =P_s, \notag         \\
-        V_s^\dagger A^iV_s & =\mu_s A_s^i. \notag
+        V_s^\dagger A^iV_s & =\mu_s A_s^i, \notag
     \end{align}
-    Here $P_s$ is the corresponding block projection, transported to the
-    flattened coordinates.  Moreover,
+    together with the intertwining relations
     \begin{align}
         A^iV_s          & =V_s(\mu_sA_s^i), \notag         \\
         V_s^\dagger A^i & =(\mu_sA_s^i)V_s^\dagger. \notag
     \end{align}
-    This is the exact blockwise virtual-corner identity from
-    \cite[Section~2.3, equation \emph{II\_Aiplusk1},
-        lines~195--219]{Cirac2016MPDO_arXiv}, providing the virtual corner
-    structure used in Appendix~C.2.
 \end{theorem}
 
 \begin{proof}
@@ -261,7 +257,7 @@
     dependent direct sum, let $Q_s$ be the corresponding unflattened block
     projection, and let $e$ flatten the direct-sum coordinates.  Thus $V_s$
     is the reindexing of $E_s$, while $P_s$ is the reindexing of $Q_s$.
-    Multiplicativity of reindexing transports
+    Multiplicativity of reindexing carries
     \begin{align}
         E_s^\dagger E_s & =1, \notag \\
         E_sE_s^\dagger  & =Q_s
@@ -289,23 +285,23 @@
     \lean{MPOTensor.PhysicalSectorFactorization.ofVirtualCompression_neighboringOperator}
     \leanok
     \uses{def:mpdo_minimal_neighboring_operator, def:mpdo_matrix_weighted_neighboring_operator, def:mpdo_physical_sector_factorization_virtual_compression}
-    The neighboring operators of the factorization obtained by virtual
-    compression satisfy
+    Combining the virtual corner in
+    \cite[Section~2.3, lines~195--219]{Cirac2016MPDO_arXiv} with the
+    neighboring contraction in
+    \cite[Appendix~C.2, lines~1441--1450]{Cirac2016MPDO_arXiv}, the neighboring
+    operators of the factorization obtained by virtual compression satisfy
     \begin{align}
         \eta^L_{k,h}
          & =\eta^K_{k,h}(VV^\dagger).
         \notag
     \end{align}
-    This identity combines the virtual corner in
-    \cite[Section~2.3, lines~195--219]{Cirac2016MPDO_arXiv} with the
-    neighboring contraction in
-    \cite[Appendix~C.2, lines~1441--1450]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{thm:mpdo_physical_sector_factorization_virtual_matrices_neighbor}
-    Apply the virtual-matrix transport identity with $X=V^\dagger$ and $Y=V$.
+    This is the virtual-matrix transformation identity with $X=V^\dagger$ and
+    $Y=V$.
 \end{proof}
 
 \begin{theorem}[Virtual-gauge invariance of physical-sector factorizations]
@@ -318,7 +314,7 @@
     \uses{def:mpdo_physical_sector_factorization, def:mpdo_minimal_neighboring_operator, def:mpdo_physical_sector_factorization_virtual_matrices}
     Suppose that two MPO tensors of the same virtual dimension differ by an
     invertible virtual gauge $X$.  The induced factorization is precisely the
-    virtual-matrix transport by $X$ and $X^{-1}$.  Thus every physical-sector
+    virtual-matrix transformation by $X$ and $X^{-1}$.  Thus every physical-sector
     factorization of the first tensor induces one of the second tensor with
     the same physical decomposition and the same neighboring operators.  In
     particular, positive semidefiniteness of all neighboring operators is
@@ -328,9 +324,10 @@
 \begin{proof}
     \leanok
     \uses{def:mpdo_matrix_weighted_neighboring_operator, thm:mpdo_physical_sector_factorization_virtual_matrices_neighbor}
-    Specialize the virtual-matrix neighboring identity to a gauge and its
-    inverse.  Their product is the identity matrix, and contraction through
-    the identity matrix is the ordinary neighboring operator.
+    Specializing the virtual-matrix neighboring identity to a gauge and its
+    inverse replaces the weighting matrix by their product $I$, and
+    contraction through the identity matrix recovers the ordinary neighboring
+    operator.
 \end{proof}
 
 \begin{definition}[One-site matrix spaces of sector sets]%
@@ -341,14 +338,15 @@
     \uses{def:mpdo_physical_sector_factorization}
     For a sector $k$ and physical matrix indices $x,y$ in its summand, let
     $A_{k;x,y}\in\MN{D}$ be the corresponding entry of the
-    sector-coordinate tensor. For a set $S$ of sectors, define
+    sector-coordinate tensor. Following the matrix spaces associated with the
+    physical projections in
+    \cite[Appendix~C.2, lines~1463--1467]{Cirac2016MPDO_arXiv}, for a set $S$
+    of sectors define
     \begin{align}
         \mc A_S
          & =\spn\{A_{k;x,y}:k\in S\}.
         \notag
     \end{align}
-    These are the matrix spaces associated with the physical projections in
-    \cite[Appendix~C.2, lines~1463--1467]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
 \begin{theorem}[Directed-cut annihilation of one-site matrix spaces]%
@@ -358,16 +356,16 @@
     \lean{MPOTensor.PhysicalSectorFactorization.oneSiteSectorSpace_mul_eq_zero}
     \leanok
     \uses{def:mpdo_minimal_neighboring_operator, def:mpdo_one_site_sector_matrix_space}
-    Let $S$ and $C$ be sets of sectors. If $\eta_{k,h}=0$ for every
-    $k\in S$ and $h\in C$, then $XY=0$ for every $X\in\mc A_S$ and
-    $Y\in\mc A_C$. This is the directed local-orthogonality implication used in
-    \cite[Appendix~C.2, lines~1463--1470]{Cirac2016MPDO_arXiv}.
+    As in the directed local-orthogonality implication of
+    \cite[Appendix~C.2, lines~1463--1470]{Cirac2016MPDO_arXiv}, let $S$ and $C$
+    be sets of sectors. If $\eta_{k,h}=0$ for every $k\in S$ and $h\in C$,
+    then $XY=0$ for every $X\in\mc A_S$ and $Y\in\mc A_C$.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    Expand two generating matrices in sector coordinates. Their product has
-    entries
+    Expanding two generating matrices in sector coordinates gives a product
+    with entries
     \begin{align}
         \sum_{\gamma}
         (l_k)_\beta (r_k)_\gamma
@@ -403,12 +401,11 @@
         rephase_neighboringOperator_ne_zero_iff}
     \leanok
     \uses{def:mpdo_physical_sector_rephasing, def:mpdo_minimal_neighboring_operator}
-    Vertex rephasing transforms the neighboring operators by
-    $\eta_{k,h}\longmapsto z_k^{-1}z_h\,\eta_{k,h}$. It leaves every sector
-    virtual matrix unchanged, preserves the nonzero neighboring support, and
-    leaves every complete cyclic product of neighboring operators unchanged.
-    These are the rephasing identities used in
-    \cite[Appendix~C.2, lines~1434--1450]{Cirac2016MPDO_arXiv}.
+    As in \cite[Appendix~C.2, lines~1434--1450]{Cirac2016MPDO_arXiv}, vertex
+    rephasing transforms the neighboring operators by
+    $\eta_{k,h}\longmapsto z_k^{-1}z_h\,\eta_{k,h}$, while leaving every sector
+    virtual matrix, the nonzero neighboring support, and every complete cyclic
+    product of neighboring operators unchanged.
 \end{theorem}
 
 \begin{definition}[Vanishing right tensors on inactive sectors]
@@ -419,7 +416,9 @@
     \uses{def:mpdo_physical_sector_factorization, def:mpdo_minimal_neighboring_operator}
     Let $S$ be a set of active sectors in a physical-sector factorization,
     and suppose that $(l_k)_\beta=0$ for every $k\notin S$ and every $\beta$.
-    Retain every physical summand and define
+    Using the reparameterization freedom in the factorization and neighboring
+    contraction of \cite[Appendix~C.2, lines~1434--1445]{Cirac2016MPDO_arXiv},
+    retain every physical summand and define
     \begin{align}
         \widehat l_k & =l_k,
         \notag               \\
@@ -431,7 +430,7 @@
         \notag
     \end{align}
     Then $\widehat l_k\otimes\widehat r_k=l_k\otimes r_k$ for every $k$,
-    so the physical-slice factorization is unchanged. The neighboring
+    so the physical-slice factorization is unchanged, and the neighboring
     operators become
     \begin{align}
         \widehat\eta_{k,h}
@@ -442,9 +441,6 @@
         \end{cases}
         \notag
     \end{align}
-    This is the reparameterization freedom in the factorization and
-    neighboring contraction of
-    \cite[Appendix~C.2, lines~1434--1445]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
 \begin{definition}[Inverse-map physical-sector factorization]
@@ -454,13 +450,12 @@
     \uses{thm:mpdo_sector_factorization, def:mpdo_physical_sector_factorization, lem:mpdo_trace_one_nonempty}
     Let $\mc K$ be injective, let $\rho$ be its three-site closure against
     a virtual tail $R$, and choose a Hayashi decomposition of $\rho$. Fix
-    outer indices such that $R_{\beta_3,\alpha_1}\ne0$. The inverse-map
-    tensors $l_k,r_k$, together with the Hayashi physical decomposition and
-    unitary, determine a physical-sector factorization of $\mc K$.
-
-    The left and right factor spaces are nonzero because the corresponding
-    Hayashi density matrices have trace one; their nonzero dimensions are
-    conclusions rather than hypotheses. This gives the factorization in
+    outer indices such that $R_{\beta_3,\alpha_1}\ne0$. Because the
+    corresponding Hayashi density matrices have trace one, the left and right
+    factor spaces have nonzero dimensions as a conclusion rather than a
+    hypothesis, and the inverse-map tensors $l_k,r_k$, together with the
+    Hayashi physical decomposition and unitary, determine the physical-sector
+    factorization of $\mc K$ in
     \cite[Appendix~C.2, equations \texttt{AppUkU=rl} and \texttt{formK},
         lines~1383--1387 and~1434--1439]{Cirac2016MPDO_arXiv}.
 \end{definition}
@@ -470,15 +465,15 @@
     \lean{MPOTensor.inverseMapPhysicalSectorFactorization_neighboringOperator_eq_sectorEta}
     \leanok
     \uses{def:mpdo_inverse_map_physical_sector_factorization, def:mpdo_sector_eta, def:mpdo_minimal_neighboring_operator}
-    For all sectors $k,h$, the neighboring contraction of the resulting
-    physical-sector factorization is the inverse-map operator
+    As in equation \texttt{etarl} of
+    \cite[Appendix~C.2, lines~1441--1445]{Cirac2016MPDO_arXiv}, for all sectors
+    $k,h$, the neighboring contraction of the resulting physical-sector
+    factorization is the inverse-map operator
     \begin{align}
         \eta_{k,h}
          & =\sum_\gamma (r_k)_\gamma\otimes(l_h)_\gamma.
         \notag
     \end{align}
-    This is equation \texttt{etarl} in
-    \cite[Appendix~C.2, lines~1441--1445]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 
 \begin{definition}[Zero-weight inverse-map reparameterization]
@@ -486,21 +481,21 @@
     \lean{MPOTensor.zeroWeightReparameterizedInverseMapPhysicalSectorFactorization}
     \leanok
     \uses{def:mpdo_inverse_map_physical_sector_factorization, def:mpdo_physical_sector_inactive_right_zero, lem:mpdo_sector_tensor_left_zero_of_weight_zero}
-    In the inverse-map factorization, retain every physical sector and its
-    factor spaces, and set
+    To resolve the zero-weight freedom left by the Hayashi decomposition used
+    in \cite[Appendix~C.2, lines~1415--1445]{Cirac2016MPDO_arXiv}, retain every
+    physical sector and its factor spaces in the inverse-map factorization and
+    set
     \begin{align}
         \widehat l_k & =l_k,
         \notag               \\
         \widehat r_k & =
         \begin{cases}
             r_k, & p_k\ne0, \\
-            0,   & p_k=0.
+            0,   & p_k=0,
         \end{cases}
         \notag
     \end{align}
-    The physical-slice factorization is unchanged. This treats the
-    zero-weight freedom left by the Hayashi decomposition used in
-    \cite[Appendix~C.2, lines~1415--1445]{Cirac2016MPDO_arXiv}.
+    leaving the physical-slice factorization unchanged.
 \end{definition}
 
 \begin{theorem}[Neighboring operators after zero-weight reparameterization]
@@ -531,13 +526,13 @@
     Lemma~\ref{lem:mpdo_sector_tensor_left_zero_of_weight_zero}.
 \end{proof}
 
-\begin{corollary}[SAL gives a raw physical-sector factorization]
+\begin{corollary}[SAL gives an algebraic physical-sector factorization]
     \label{cor:mpdo_sal_raw_physical_sector_factorization}
     \lean{MPOTensor.nonempty_physicalSectorFactorization_of_isSAL}
     \leanok
     \uses{thm:mpdo_four_site_sal_eta_structure, thm:mpdo_normalized_four_site_tail_entry_ne_zero, def:mpdo_inverse_map_physical_sector_factorization}
     Every injective MPO tensor satisfying SAL admits a physical-sector
-    factorization. This is only the raw algebraic factorization from Lemma C.4
+    factorization. This is only the algebraic factorization from Lemma C.4
     and equations \texttt{formK} and \texttt{etarl}; coherent positivity of
     the neighboring operators, recurrence, and primitivity are not part of
     this conclusion.
@@ -583,7 +578,9 @@
         MPOTensor.PhysicalSectorFactorization.mpo_reindex_sectorChainEquiv_eq_blockDiagonal}
     \leanok
     \uses{def:mpdo_physical_sector_chain_coordinates}
-    Suppose that the physical-sector factorization is given. For every
+    Under the displayed physical-sector factorization, the all-length
+    algebraic decomposition of
+    \cite[Appendix~C.2, lines~1435--1450]{Cirac2016MPDO_arXiv} holds: for every
     $N\geq1$, the physically transformed MPO is block diagonal in the cyclic
     sector configurations, and
     \begin{align}
@@ -591,15 +588,12 @@
          & =\bigoplus_{k_0,\ldots,k_{N-1}}\Omega_k.
         \notag
     \end{align}
-    This establishes the all-length algebraic decomposition of
-    \cite[Appendix~C.2, lines~1435--1450]{Cirac2016MPDO_arXiv} under
-    the displayed physical-sector factorization.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    Fix a sector configuration $k$ and entries $x,y\in I_k$. Expanding the
-    closed horizontal contraction gives
+    For a fixed sector configuration $k$ and entries $x,y\in I_k$, expanding
+    the closed horizontal contraction gives
     \begin{align}
         \sum_g\prod_n
         (l_{k_n})_{g_n}(x_n^L,y_n^L)
@@ -618,7 +612,9 @@
     \lean{MPOTensor.exists_physicalSectorFactorization_with_cyclicNeighboringProduct_posSemidef_of_isSAL}
     \leanok
     \uses{cor:mpdo_sal_raw_physical_sector_factorization, thm:mpdo_conjugated_chain_congruence, thm:mpdo_physical_sector_chain_decomposition}
-    Every injective MPO tensor satisfying SAL admits a physical-sector
+    Establishing the projected-chain inequality of
+    \cite[Appendix~C.2, Lemma~C.4, lines~1446--1450]{Cirac2016MPDO_arXiv},
+    every injective MPO tensor satisfying SAL admits a physical-sector
     factorization such that, for every $N\geq1$ and every cyclic sector
     configuration $k=(k_0,\ldots,k_{N-1})$ with $k_N=k_0$,
     \begin{align}
@@ -626,14 +622,12 @@
          & \geq0.
         \notag
     \end{align}
-    This establishes the projected-chain inequality of
-    \cite[Appendix~C.2, Lemma~C.4, lines~1446--1450]{Cirac2016MPDO_arXiv}.
 \end{corollary}
 
 \begin{proof}
     \leanok
     \uses{cor:mpdo_sal_raw_physical_sector_factorization, thm:mpdo_conjugated_chain_congruence, thm:mpdo_physical_sector_chain_decomposition}
-    Choose the raw physical-sector factorization supplied by SAL. The physical
+    For the algebraic physical-sector factorization given by SAL, the physical
     basis change sends the positive $N$-site MPO to a positive congruence.
     Each cyclic neighboring product is a diagonal sector compression of this
     congruence and is therefore positive semidefinite.
@@ -667,17 +661,17 @@
         MPOTensor.PhysicalSectorFactorization.twoSiteSectorClosure}
     \leanok
     \uses{def:phys_close, def:mpdo_physical_sector_factorization}
-    First pass to the physical basis selected by $U$, so that each slice is
-    written in the sector coordinates of
-    Definition~\ref{def:mpdo_physical_sector_factorization}. Form the
-    two-site closure of this sector-coordinate tensor, restrict it to the
-    physical sectors $(k,h)$, and reindex its physical factors by
+    Passing to the physical basis selected by $U$ so that each slice is written
+    in the sector coordinates of
+    Definition~\ref{def:mpdo_physical_sector_factorization}, form the two-site
+    closure of this sector-coordinate tensor, restrict it to the physical
+    sectors $(k,h)$, and reindex its physical factors by
     \begin{align}
         ((L_k,R_k),(L_h,R_h))
-         & \longmapsto ((L_k,R_h),(R_k,L_h)).
+         & \longmapsto ((L_k,R_h),(R_k,L_h)),
         \notag
     \end{align}
-    Denote the resulting matrix by $\mc K_{2;k,h}(X)$.
+    denoting the resulting matrix by $\mc K_{2;k,h}(X)$.
 \end{definition}
 
 \begin{theorem}[Two-site closure factorization]
@@ -719,16 +713,16 @@
         MPOTensor.PhysicalSectorFactorization.threeSiteSectorClosure}
     \leanok
     \uses{def:phys_close, def:mpdo_physical_sector_factorization}
-    First pass to the physical basis selected by $U$ and form the three-site
-    closure of the resulting sector-coordinate tensor. Restrict this closure
+    Passing to the physical basis selected by $U$ and forming the three-site
+    closure of the resulting sector-coordinate tensor, restrict this closure
     to the sectors $(k,l,h)$ and reindex its physical factors by
     \begin{align}
         ((L_k,R_k),((L_l,R_l),(L_h,R_h)))
          & \longmapsto
-        ((L_k,R_h),((R_k,L_l),(R_l,L_h))).
+        ((L_k,R_h),((R_k,L_l),(R_l,L_h))),
         \notag
     \end{align}
-    Denote the resulting matrix by $\mc K_{3;k,l,h}(X)$.
+    denoting the resulting matrix by $\mc K_{3;k,l,h}(X)$.
 \end{definition}
 
 \begin{theorem}[Three-site closure factorization]
@@ -821,16 +815,16 @@
     \lean{MPOTensor.PhysicalSectorFactorization.threeSiteNeighboringOperator}
     \leanok
     \uses{def:mpdo_minimal_neighboring_operator}
-    For every outer-sector pair $(k,h)$, define
+    Following the three-site closure factorization in
+    \cite[Appendix~C.2, lines~1510--1516]{Cirac2016MPDO_arXiv}, for every
+    outer-sector pair $(k,h)$ define the direct sum of the two neighboring
+    contractions:
     \begin{align}
         \Omega_{k,h}
          & =\bigoplus_l
         (\eta_{k,l}\otimes\eta_{l,h}).
         \notag
     \end{align}
-    This is the direct sum of the two neighboring contractions appearing in
-    the three-site closure factorization
-    \cite[Appendix~C.2, lines~1510--1516]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
 \begin{figure}[ht]
@@ -899,17 +893,18 @@
         MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.neighborIndex_nonempty_of_mul_ne_zero}
     \leanok
     \uses{def:mpdo_minimal_neighboring_operator}
-    Suppose that every neighboring operator is positive semidefinite and that
-    there are real numbers $a_k,b_h$ such that
+    Capturing the remaining hypotheses used in the construction of
+    Proposition~C.7 after the physical-sector factorization has been fixed
+    \cite[Appendix~C.2, lines~1389--1403]{Cirac2016MPDO_arXiv}, a
+    neighboring-operator trace factorization requires that every neighboring
+    operator be positive semidefinite and that there be real numbers $a_k,b_h$
+    such that
     \begin{align}
         \tr(\eta_{k,h}) & =a_kb_h,
         \notag                     \\
         \sum_k a_kb_k   & =1.
         \notag
     \end{align}
-    These are precisely the remaining hypotheses used in the construction of
-    Proposition~C.7 after the physical-sector factorization has been fixed
-    \cite[Appendix~C.2, lines~1389--1403]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
 % This coordinate-invariance theorem is project-derived.  It transports the
@@ -936,25 +931,26 @@
         \notag                     \\
         \tr(\eta_{k,h}) & =a_kb_h,
         \notag                     \\
-        \sum_k a_kb_k   & =1.
+        \sum_k a_kb_k   & =1
         \notag
     \end{align}
-    if and only if ${\cal K}^V$ admits one.  The same sector spaces, tensors
-    $l_k,r_k$, neighboring operators $\eta_{k,h}$, and numbers $a_k,b_h$ may
-    be used on both sides.  This invariance is project-derived; the data being
-    transported are those of
+    if and only if ${\cal K}^V$ admits one, with the same sector spaces,
+    tensors $l_k,r_k$, neighboring operators $\eta_{k,h}$, and numbers
+    $a_k,b_h$ on both sides (where the transformed data are those of
     \cite[Theorem~4.9(iv) and Appendix~C.2, lines~1381--1450]
-    {Cirac2016MPDO_arXiv}, but the equivalence itself is not stated there.
+    {Cirac2016MPDO_arXiv}, though this project-derived equivalence is not
+    stated there).
 \end{theorem}
 
 \begin{proof}
     \leanok
     The two one-sided unitary identities give $d\leq e$ and $e\leq d$,
     respectively, so $d=e$.  If the physical isometry for
-    ${\cal K}$ is $U$, use $UV^\dagger$ for ${\cal K}^V$; then
+    ${\cal K}$ is $U$, then $UV^\dagger$ serves as the physical isometry for
+    ${\cal K}^V$, since
     $(UV^\dagger){\cal K}^V_{\beta,\alpha}(UV^\dagger)^\dagger
-        =U{\cal K}_{\beta,\alpha}U^\dagger$.  Conversely, if the isometry for
-    ${\cal K}^V$ is $U'$, use $U'V$ for ${\cal K}$.  In both directions the
+        =U{\cal K}_{\beta,\alpha}U^\dagger$; conversely, an isometry $U'$ for
+    ${\cal K}^V$ gives $U'V$ for ${\cal K}$.  In both directions the
     tensors $l_k,r_k$ are unchanged, so
     $\eta_{k,h}=\sum_\gamma(r_k)_\gamma\otimes(l_h)_\gamma$ is unchanged.
     The positivity, trace, and normalization identities therefore remain the
@@ -991,7 +987,7 @@
                         & V_GV_G^\dagger  & =P.
         \label{eq:mpdo_support_coordinate_ranges}
     \end{align}
-    Set $Q=V_F^\dagger V_G$.  Then
+    Setting $Q=V_F^\dagger V_G$ gives
     \begin{align}
         Q^\dagger Q & =\Id_{d_G},
                     & QQ^\dagger                & =\Id_{d_F},
@@ -1001,20 +997,19 @@
         \label{eq:mpdo_support_coordinate_tensor}
     \end{align}
     Consequently, the restrictions of ${\cal K}$ along $V_F$ and $V_G$
-    admit neighboring trace factorizations simultaneously.
-
-    Both equivalences are project-derived and are not stated in
-    \cite{Cirac2016MPDO_arXiv}.  The gauge transformation is the one discussed
-    in Section~2.3, lines~187--195; the support-restriction setting is that of
-    Appendix~C.2, lines~1680--1691 and 1733--1770.
+    admit neighboring trace factorizations simultaneously (both equivalences
+    are project-derived rather than stated in \cite{Cirac2016MPDO_arXiv}, where
+    the gauge transformation is discussed in Section~2.3, lines~187--195 and
+    the support-restriction setting is that of Appendix~C.2, lines~1680--1691
+    and 1733--1770).
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{thm:mpdo_physical_sector_factorization_gauge, thm:mpdo_neighboring_trace_factorization_physical_basis_invariant}
-    For the virtual gauge $L^i=XK^iX^{-1}$, write
-    $\eta^K_{k,h}(M)$ for the neighboring contraction with $M$ inserted
-    between the transported virtual factors.  Their composition is
+    For the virtual gauge $L^i=XK^iX^{-1}$, let
+    $\eta^K_{k,h}(M)$ denote the neighboring contraction with $M$ inserted
+    between the conjugated virtual factors.  Their composition is
     $X^{-1}X$, and hence
     \begin{align}
         \eta^L_{k,h}
@@ -1023,7 +1018,7 @@
         =\eta^K_{k,h}.
         \notag
     \end{align}
-    The families $a_k$ and $b_h$ are retained literally, together with their
+    The families $a_k$ and $b_h$ are retained unchanged, together with their
     positivity, trace, and normalization identities.  The reverse implication
     uses the inverse gauge.
 
@@ -1058,17 +1053,17 @@
         MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.trace_threeSiteNeighboringOperator}
     \leanok
     \uses{def:mpdo_physical_sector_three_site_neighboring_operator, def:mpdo_neighboring_trace_factorization}
-    Assume the neighboring-operator trace factorization of
-    Definition~\ref{def:mpdo_neighboring_trace_factorization}. Then, for every
-    outer-sector pair $(k,h)$,
+    Under the neighboring-operator trace factorization of
+    Definition~\ref{def:mpdo_neighboring_trace_factorization}, every
+    outer-sector pair $(k,h)$ satisfies the normalization used in the
+    coarse-graining channel of
+    \cite[Appendix~C.2]{Cirac2016MPDO_arXiv}, lines~1547--1555:
     \begin{align}
         \tr(\Omega_{k,h})
          & =\sum_l\tr(\eta_{k,l})\tr(\eta_{l,h})
         =a_kb_h.
         \notag
     \end{align}
-    This is the normalization used in the coarse-graining channel of
-    \cite[Appendix~C.2]{Cirac2016MPDO_arXiv}, lines~1547--1555.
 \end{theorem}
 
 \begin{proof}

@@ -51,7 +51,7 @@ in the September 24, 2026 polynomial-PEPS manuscript.
     $\delta(x)=\min\{n,\operatorname{dist}_{\infty}(x,\mathcal V)\}$.
 \end{definition}
 
-\begin{theorem}[Capped-distance bounds and marked-point witnesses]
+\begin{theorem}[Capped-distance bounds and nearby marked points]
     \label{thm:peps_capped_distance_bounds}
     \lean{TNLean.PEPS.Approximation.le_cappedMarkDistance_iff,
         TNLean.PEPS.Approximation.cappedMarkDistance_le_cap,
@@ -99,8 +99,9 @@ in the September 24, 2026 polynomial-PEPS manuscript.
 \begin{proof}
     \leanok
     \uses{def:peps_dyadic_scales,thm:peps_dyadic_scale_bounds}
-    Choose $m$ with $2^m\le n/t<2^{m+1}$ and divide by the positive
-    quantities $t$ and $2^m$. The sequence $s_j$ is decreasing.
+    For an integer $m\ge0$ with $2^m\le n/t<2^{m+1}$, dividing by the positive
+    quantities $t$ and $2^m$ gives $t\le s_m<2t$, and the decreasing property
+    of $s_j$ yields $s_j\ge s_m\ge t$ for $0\le j\le m$.
 \end{proof}
 
 \begin{definition}[Farthest-first layers]
@@ -150,7 +151,7 @@ in the September 24, 2026 polynomial-PEPS manuscript.
     thresholds to be expressed through the marked-point distances using
     Theorem~\ref{thm:peps_capped_distance_bounds}. The final layer has
     only the strict upper threshold; every positive-index layer retains
-    this upper threshold, which supplies the asserted mark.
+    this upper threshold, which yields the asserted mark.
 \end{proof}
 
 \begin{theorem}[Cumulative layer identities]
@@ -178,8 +179,8 @@ in the September 24, 2026 polynomial-PEPS manuscript.
     The union defining $A_j$ gives the inclusions, monotonicity, and
     successor identity. If $x\in B_i$ with $i\le j\le m$, then either
     $i=m$, which forces $j=m$, or $\delta(x)\ge s_i\ge s_j$.
-    For the reverse inclusion in (\ref{eq:peps_cumulative_threshold}),
-    use induction on $j$. The case $j=0$ is the first or sole layer.
+    The reverse inclusion in (\ref{eq:peps_cumulative_threshold}) follows by
+    induction on $j$, where the base case $j=0$ is the first or sole layer.
     At $j+1$, a point with $\delta(x)\ge s_j$ is already in $A_j$ by
     induction. Otherwise $\delta(x)<s_j=2s_{j+1}$, and the assumed
     lower threshold, or the equality $j+1=m$, places it in $B_{j+1}$.
@@ -311,8 +312,8 @@ in the September 24, 2026 polynomial-PEPS manuscript.
     Each coordinate interval defining $H_N(j)$ contains $2N+3$ integers.
     Multiplying the two counts proves the exact cardinality, and the
     cardinality of a finite union is at most the sum of the cardinalities.
-    For the last assertion put $j=\iota(c)$, so $c\in Q_j$.
-    The inequalities defining $Q_i$ and $Q_j$, together with
+    For the last assertion, with $j=\iota(c)$ so that $c\in Q_j$,
+    the inequalities defining $Q_i$ and $Q_j$, together with
     $|x_k-c_k|\le u\le Nq$, give
     $(j_k-N-1)q<i_kq<(j_k+N+1)q$ for each coordinate $k$.
     Division by $q>0$ gives the required non-strict integer bounds.
@@ -343,13 +344,13 @@ in the September 24, 2026 polynomial-PEPS manuscript.
 \begin{proof}
     \leanok
     \uses{thm:peps_grid_index_bounds,def:peps_angular_grid}
-    For a selected index $i$, choose $y\in Q_i$ and $x\in A$ with
-    $\operatorname{dist}_{\infty}(y,x)\le r$, then a cover center $c\in F$
+    For a selected index $i$, there exist $y\in Q_i$, $x\in A$ with
+    $\operatorname{dist}_{\infty}(y,x)\le r$, and a cover center $c\in F$
     with $\operatorname{dist}_{\infty}(x,c)\le R$. The triangle inequality
     gives $\operatorname{dist}_{\infty}(y,c)\le R+r\le Nq$.
     Theorem~\ref{thm:peps_grid_index_bounds} places $i$ in
-    $H_N(\iota(c))\subseteq\mathcal C_N(F)$ and bounds the cardinality.
-    Retain exactly those indices in $\mathcal C_N(F)$ whose cells meet
+    $H_N(\iota(c))\subseteq\mathcal C_N(F)$ and bounds the cardinality
+    upon retaining the indices in $\mathcal C_N(F)$ whose cells meet
     the enlargement. In the scaled case, the ceiling inequality gives
     $Rs+rs=(R+r)s\le Nd s=Nq$, proving
     (\ref{eq:peps_scaled_grid_count}).
@@ -378,14 +379,13 @@ in the September 24, 2026 polynomial-PEPS manuscript.
     \leanok
     \uses{def:peps_angular_grid,thm:peps_grid_ownership}
     A center in $A\cup B$ lies in one of the two sets, proving the
-    union identity. Enlarging the center set and radius preserves each
-    distance witness. A point of $A^{+r}$ lies in its owner cell, which
-    is selected. If $x\in U_{q,r}(A)$, choose a point $y$ of the same
-    cell and a center $z\in A$ with
-    $\operatorname{dist}_{\infty}(y,z)\le r$. The cell diameter bound
+    union identity. Enlarging the center set and radius preserves the
+    distance bound. A point of $A^{+r}$ lies in its owner cell, which
+    is selected. If $x\in U_{q,r}(A)$, its cell contains a point $y$ at
+    distance at most $r$ from some center $z\in A$, and the cell diameter bound
     gives $\operatorname{dist}_{\infty}(x,z)\le q+r$, proving
-    (\ref{eq:peps_grid_enlargement}). A witness for selecting a cell
-    from $A$ remains a witness when $A\subseteq B$.
+    (\ref{eq:peps_grid_enlargement}). Any point showing that a cell
+    meets $A^{+r}$ also shows that it meets $B^{+r}$ when $A\subseteq B$.
 \end{proof}
 
 \begin{theorem}[Counting newly selected cells]
@@ -405,12 +405,11 @@ in the September 24, 2026 polynomial-PEPS manuscript.
 \begin{proof}
     \leanok
     \uses{def:peps_angular_grid,thm:peps_scaled_grid_count}
-    The point of $A\cup B$ witnessing selection must lie in $B$ if
+    A point of $A\cup B$ within distance $rs$ of the cell must lie in $B$ if
     the cell is not selected from $A$.
     By Theorem~\ref{thm:peps_scaled_grid_count}, the cells selected from
-    $B$ have the stated finite bound. Among them retain precisely those
-    not selected from $A$; this is exactly the set of newly selected
-    cells and cannot increase the cardinality.
+    $B$ satisfy the stated finite bound, and retaining those not selected from $A$
+    isolates the newly selected cells without increasing the cardinality.
 \end{proof}
 
 \begin{theorem}[Bounded covers and newly selected cells]
@@ -426,7 +425,7 @@ in the September 24, 2026 polynomial-PEPS manuscript.
     Each $B_j$ is covered by at most $m_0+1$ closed squares of radius $Rs_j$.
     It is therefore covered by at most
     $(m_0+1)(2\lceil R\rceil_++3)^2$ ambient cells of side $s_j$.
-    For $d>0$, the actual cells of side $ds_j$ meeting $B_j^{+rs_j}$ form
+    For $d>0$, the cells of side $ds_j$ meeting $B_j^{+rs_j}$ form
     a finite set with cardinal at most
     \begin{align}
         M=(m_0+1)\left(2\left\lceil\frac{R+r}{d}\right\rceil_++3\right)^2.
@@ -441,19 +440,19 @@ in the September 24, 2026 polynomial-PEPS manuscript.
     \uses{thm:peps_annular_mark_witness,thm:peps_scaled_grid_count,
         thm:peps_grid_ownership,thm:peps_new_cell_count,
         thm:peps_cumulative_layer_identities}
-    For the first or sole layer, choose any $x_0\in X$ if $X$ is nonempty.
-    The diameter bound gives $X\subseteq\overline B_\infty(x_0,A_0n)$.
-    If $X$ is empty, use the empty cover.
-    In a later layer, $\delta(x)<2s_j\le n$ gives an actual $v\in\mathcal V$
+    For the first or sole layer, any $x_0\in X$ (when $X$ is nonempty) satisfies
+    $X\subseteq\overline B_\infty(x_0,A_0n)$ by the diameter bound, while an
+    empty $X$ is covered by the empty family.
+    In a later layer, $\delta(x)<2s_j\le n$ gives some $v\in\mathcal V$
     with $\operatorname{dist}_{\infty}(x,v)<2s_j$.
 
     A cell meeting a radius-$(R+r)s_j$ square has index within
     $N+1$ in each coordinate of the center's owner, where
-    $N=\lceil(R+r)/d\rceil_+$. There are exactly $(2N+3)^2$ such indices.
-    Taking the union over the cover centers and retaining precisely the
+    $N=\lceil(R+r)/d\rceil_+$. There are $(2N+3)^2$ such indices, so
+    taking the union over the cover centers and retaining the
     cells that meet the enlargement proves (\ref{eq:peps_annular_cell_count}).
-    Finally, $A_j=A_{j-1}\cup B_j$ and enlargement commutes with union.
-    A newly selected cell must therefore meet $B_j^{+rs_j}$.
+    Finally, $A_j=A_{j-1}\cup B_j$ and enlargement commutes with union, so
+    any newly selected cell meets $B_j^{+rs_j}$.
 \end{proof}
 
 \begin{theorem}[Clearance under enlargement]
@@ -475,15 +474,15 @@ in the September 24, 2026 polynomial-PEPS manuscript.
 \begin{proof}
     \leanok
     \uses{thm:peps_grid_enlargement,def:peps_angular_grid}
-    Choose $z\in A$ and $w\in E$ with
+    For $z\in A$ and $w\in E$ with
     $\operatorname{dist}_{\infty}(x,z)\le r+q$ and
-    $\operatorname{dist}_{\infty}(y,w)\le\rho$.
-    The triangle inequality gives
+    $\operatorname{dist}_{\infty}(y,w)\le\rho$,
+    the triangle inequality gives
     $b\le\operatorname{dist}_{\infty}(z,w)
         \le r+q+\operatorname{dist}_{\infty}(x,y)+\rho$, proving
     (\ref{eq:peps_enlargement_clearance}). For the second assertion,
-    take $z\in A$ with $\operatorname{dist}_{\infty}(x,z)\le r$.
-    If $\operatorname{dist}_{\infty}(x,y)\le\rho-r$, then
+    picking $z\in A$ with $\operatorname{dist}_{\infty}(x,z)\le r$ shows that
+    $\operatorname{dist}_{\infty}(x,y)\le\rho-r$ would imply
     $\operatorname{dist}_{\infty}(y,z)\le\rho$, contradicting
     $y\notin A^{+\rho}$.
 \end{proof}
@@ -504,9 +503,9 @@ in the September 24, 2026 polynomial-PEPS manuscript.
 \begin{proof}
     \leanok
     \uses{thm:peps_enlargement_clearance}
-    Substitute $b=as/2$, $q=ds$, and $r=\rho=3a's/2$ into
-    (\ref{eq:peps_enlargement_clearance}). For positivity,
-    $a>100a'$ and $d<a'/4$ give
+    Substituting $b=as/2$, $q=ds$, and $r=\rho=3a's/2$ into
+    (\ref{eq:peps_enlargement_clearance}) yields the distance bound, and for
+    $a>100a'$ and $d<a'/4$ we have
     $a/2-3a'-d>(50-3-1/4)a'>0$.
 \end{proof}
 
@@ -569,7 +568,8 @@ in the September 24, 2026 polynomial-PEPS manuscript.
 \begin{proof}
     \leanok
     \uses{thm:peps_angular_reset_uniform_width}
-    Apply Theorem~\ref{thm:peps_angular_reset_uniform_width} with $c=a'/3$.
+    Applying Theorem~\ref{thm:peps_angular_reset_uniform_width} with $c=a'/3$
+    yields $D$ and $L_0$.
 \end{proof}
 
 \begin{theorem}[Clearance of the closed ambient cell]
@@ -577,22 +577,21 @@ in the September 24, 2026 polynomial-PEPS manuscript.
     \lean{TNLean.PEPS.Approximation.AngularGrid.selected_cell_closure_clearance}
     \leanok
     \uses{def:peps_angular_grid}
-    Let $s,r,b\in\mathbb R$, and use the coordinate inequalities of
-    Definition~\ref{def:peps_angular_grid} to define the cells $Q_i$.
+    Let $s,r,b\in\mathbb R$, and let $Q_i$ be the cells defined by the coordinate
+    inequalities of Definition~\ref{def:peps_angular_grid}.
     Let $U$ be the union of the cells meeting $A^{+r}$, and suppose that
-    $Q_i$ is one of these selected cells. If
+    $Q_i$ is one of these selected cells. To establish the closed-cell separation
+    required in \cite[Lemma~3.2 and Proposition~3.4]{OpenAI2026PolynomialPEPS}, if
     $\operatorname{dist}_\infty(x,y)\ge b$ for every $x\in U$ and $y\in C$,
-    the same inequality holds for every $x\in\overline{Q_i}$ and $y\in C$.
-    This gives the closed-cell separation required in
-    \cite[Lemma~3.2 and Proposition~3.4]{OpenAI2026PolynomialPEPS}.
+    then the same inequality holds for every $x\in\overline{Q_i}$ and $y\in C$.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{def:peps_angular_grid}
-    Fix $y\in C$. Every point of $Q_i$ belongs to $U$, so its distance
-    from $y$ is at least $b$. The set
-    $\{x:\operatorname{dist}_\infty(x,y)\ge b\}$ is closed.
-    It therefore contains $\overline{Q_i}$.
+    For any $y\in C$, every point of $Q_i$ belongs to $U$, so its distance
+    from $y$ is at least $b$. Because the set
+    $\{x:\operatorname{dist}_\infty(x,y)\ge b\}$ is closed,
+    it contains $\overline{Q_i}$.
 \end{proof}
 
 \begin{theorem}[Membership in a selected cell]
@@ -616,23 +615,22 @@ in the September 24, 2026 polynomial-PEPS manuscript.
     \lean{TNLean.PEPS.Approximation.dist_sitePosition_eq_supDist}
     \leanok
     \uses{def:peps_angular_information_bound}
-    Let $L\in\mathbb N$ and let $x,y\in\{0,\ldots,L-1\}^2$.
-    Their physical positions are $x+(1,1)$ and $y+(1,1)$, and
+    For $L\in\mathbb N$ and $x,y\in\{0,\ldots,L-1\}^2$,
+    their physical positions $x+(1,1)$ and $y+(1,1)$ identify the distances in
+    the geometric construction with those in the information reset of
+    \cite[Lemma~3.3]{OpenAI2026PolynomialPEPS} via
     \begin{align}
         \operatorname{dist}_\infty(x+(1,1),y+(1,1))
          & =\max\{|x_1-y_1|,|x_2-y_2|\}.
         \notag
     \end{align}
-    This identifies the distances in the geometric construction with
-    those in the information reset of
-    \cite[Lemma~3.3]{OpenAI2026PolynomialPEPS}.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{def:peps_angular_information_bound}
-    Subtracting the coordinates cancels the common translation.
-    The maximum of the two absolute coordinate differences is the
-    integer sup distance, viewed as a real number.
+    Subtracting the coordinates cancels the common translation, leaving the
+    maximum of the two absolute coordinate differences as the integer sup
+    distance viewed as a real number.
 \end{proof}
 
 % Completion markers concern only the geometric and numerical statements above.

@@ -4,13 +4,13 @@
     \leanok
     \uses{def:peps_regular_edge_charge_contraction}
     Let $e_0,e_1$ be ordered edges of a finite graph, and let $u$ be a
-    bond assignment. Resolve the remote label $q$ by inserting
-    $\mathbf1_{\eta_{e_1}=q}$ on $e_1$, and put
-    $\chi(pq^{-1}z\eta_{e_0})$ on $e_0$. Sum the resulting
-    closed tensor states over $q$. Denote this correlated state by
-    $\Psi_z(u;\chi,p)$. This definition retains the same original
-    site coefficients in every summand. It is auxiliary to the literal
-    charge-pair formula in \cite{Schuch2010PEPS}, lines 2505--2535.
+    bond assignment. To form the correlated state $\Psi_z(u;\chi,p)$
+    auxiliary to the charge-pair formula in \cite{Schuch2010PEPS}, lines
+    2505--2535, we resolve the remote label $q$ by inserting
+    $\mathbf1_{\eta_{e_1}=q}$ on $e_1$, place
+    $\chi(pq^{-1}z\eta_{e_0})$ on $e_0$, and sum the resulting
+    closed tensor states over $q$, retaining the same original
+    site coefficients in every summand.
 \end{definition}
 
 \begin{theorem}[Correlated weights in the physical cut]
@@ -30,7 +30,7 @@
     \]
     A diagonal inserted at an edge tail in a region gives precisely the
     corresponding weighted open coefficient. Suppose $t(e_0)\in R$
-    and $t(e_1)\notin R$. If a regional matrix changes every actual
+    and $t(e_1)\notin R$. If a regional matrix changes every
     weighted boundary column by
     \[
         \chi(pq^{-1}\eta_{e_0})
@@ -41,18 +41,17 @@
     \[
         (W_R\otimes I)\Psi_1(u;\chi,p)=\Psi_{k^{-1}}(u;\chi,p).
     \]
-    This is a linear contraction identity for
-    \cite{Schuch2010PEPS}, lines 2505--2535 and 2560--2581.
-    The column premise in this auxiliary statement is discharged by the
-    actual native operation below.
+    In this linear contraction identity for
+    \cite{Schuch2010PEPS}, lines 2505--2535 and 2560--2581, the native
+    operation below discharges the column premise.
 \end{theorem}
 \begin{proof}\leanok
     The product of the diagonal factors reduces to the factor at its
-    actual tail vertex. Summing the remote indicator fixes
-    $q=\eta_{e_1}$ and restores the joint character weight.
-    For each fixed $q$, use the native physical cut identity; the remote
-    diagonal belongs to the common complementary tensor. Pass the
-    column action through that cut sum and then sum over $q$.
+    tail vertex, and summing the remote indicator fixes
+    $q=\eta_{e_1}$ to restore the joint character weight.
+    For each fixed $q$, the remote diagonal belongs to the common
+    complementary tensor, so passing the column action through the native
+    physical cut identity and summing over $q$ yields the global identity.
 \end{proof}
 
 \begin{definition}[The native remote charge edge]
@@ -61,13 +60,13 @@
     \leanok
     \uses{def:peps_torus_charge_flux_crossing_strip}
     At $v=(x,y)$, the remote reference is the native horizontal bond
-    joining $(x+1,y)$ to $(x+2,y)$, below the eight-site crossing strip.
-    Both periodic seam orientations are retained.
-    This is auxiliary native geometry for
-    \cite{Schuch2010PEPS}, lines 2505--2581.
+    joining $(x+1,y)$ to $(x+2,y)$, below the eight-site crossing strip;
+    in this auxiliary native geometry for
+    \cite{Schuch2010PEPS}, lines 2505--2581, both periodic seam orientations
+    are retained.
 \end{definition}
 
-\begin{theorem}[A physical crossing with the actual remote partner]
+\begin{theorem}[A physical crossing with the remote partner]
     \label{thm:peps_torus_correlated_charge_flux_crossing_global}
     \lean{TNLean.PEPS.torusChargeFluxPartnerEdge_tail_not_mem,
         TNLean.PEPS.IsGIsometric.exists_unitary_torusCorrelatedChargeFluxCrossing_global}
@@ -84,25 +83,25 @@
         (W_R\otimes I)\Psi_1(u^{(0)}_k;\chi,p)
         =\Psi_{k^{-1}}(u^{(0)}_k;\chi,p).
     \]
-    Here $e_0$ is the displayed charge bond, $e_1$ is the actual remote
-    edge above, and $u^{(0)}_k$ is the literal initial flux string.
-    Thus the actual joint weight changes in the order
+    Here $e_0$ is the displayed charge bond, $e_1$ is the remote
+    edge above, and $u^{(0)}_k$ is the initial flux string.
+    Thus the joint weight changes in the order
     \[
         \chi(p\eta_1^{-1}\eta_0)
         \longmapsto\chi(p\eta_1^{-1}k^{-1}\eta_0).
     \]
     The remote label is summed in the original-spin contraction.
     No tree gauge, factorization, Gram identity or state-action premise is
-    supplied. This remains an auxiliary local crossing consequence:
+    assumed. This remains an auxiliary local crossing consequence:
     the identification of the complete prescribed geometric braid and
     its reunion experiment in \cite{Schuch2010PEPS}, lines 2560--2615,
     is separate.
 \end{theorem}
 \begin{proof}\leanok
-    The remote bond tail has height $y$; every strip vertex has height
-    $y+1$ or $y+2$. The period bound therefore puts that tail outside
-    the actual region, including at a seam. Apply the derived uniform
-    correlated column operation and the preceding actual cut identity.
-    Extending the regional unitary by the complementary identity
-    preserves unitarity.
+    Because the remote bond tail has height $y$ while every strip vertex has
+    height $y+1$ or $y+2$, the period bound places that tail outside
+    the region, including at a seam. Applying the derived uniform
+    correlated column operation and the preceding cut identity gives the
+    state transformation, and extending the regional unitary by the
+    complementary identity preserves unitarity.
 \end{proof}

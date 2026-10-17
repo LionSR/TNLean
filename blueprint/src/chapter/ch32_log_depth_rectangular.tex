@@ -2,12 +2,12 @@
 \label{sec:ldp_rectangular}
 
 Let $A_i^s:\C^{D_{i+1}}\to\C^{D_i}$ be the site matrices of a ring,
-with $1\le D_i\le D$ and cyclic subscripts. Choose density matrices
-$\sigma_i$ on the actual bond spaces; they may be singular. The following
-quantitative hypothesis concerns these rectangular matrices themselves.
-It is sufficient for the accuracy-dependent depth claimed in the
-inhomogeneous paragraph of~\cite{Malz2024Preparation}; it is not implied
-by the qualitative convergence condition in that paragraph.
+with $1\le D_i\le D$ and cyclic subscripts, and let $\sigma_i$ be
+possibly singular density matrices on the bond spaces. Relative to the
+inhomogeneous paragraph of~\cite{Malz2024Preparation}, the quantitative
+hypothesis below acts on these rectangular matrices directly and is
+sufficient for the claimed accuracy-dependent depth, though it is not
+implied by the qualitative convergence condition in that paragraph.
 
 \begin{theorem}[Rectangular blocking and zero padding]
     \label{thm:ldp_rectangular_blocking}
@@ -25,10 +25,10 @@ by the qualitative convergence condition in that paragraph.
         VaryingBondChain.rectangularBlockTensor,
         VaryingBondChain.zeroPad_rectangularBlockTensor}
     \leanok
-    For a nonempty interval $[a,b)$, write
+    For a nonempty interval $[a,b)$, let
     $B^{\boldsymbol s}=A_a^{s_a}\cdots A_{b-1}^{s_{b-1}}$,
     a matrix of size $D_a\times D_b$. Let $J_i:\C^{D_i}\to\C^D$
-    be the coordinate isometry, and put $P_i=J_iJ_i^\dagger$.
+    be the coordinate isometry, with $P_i=J_iJ_i^\dagger$.
     Then
     \begin{align}
         (J_aA_a^{s_a}J_{a+1}^\dagger)\cdots
@@ -39,12 +39,12 @@ by the qualitative convergence condition in that paragraph.
         (B^{\boldsymbol s})^\dagger
         =F_a\circ\cdots\circ F_{b-1}(X).
     \end{align}
-    The empty product on an actual bond pads to $P_a$, whereas the
+    The empty product on a bond space pads to $P_a$, whereas the
     empty product of ambient matrices is $I_D$.
 \end{theorem}
 \begin{proof}\leanok
-    Induct on the interval length. Each internal contraction uses
-    $J_i^\dagger J_i=I_{D_i}$. Summing over the first physical index and
+    By induction on the interval length, each internal contraction uses
+    $J_i^\dagger J_i=I_{D_i}$, and summing over the first physical index and
     then over the remaining word gives the transfer composition.
 \end{proof}
 
@@ -84,13 +84,13 @@ the contracted middle bond has dimension $D_{a+1}$.
         MPSPreparation.cornerProjection_full,
         MPSPreparation.cornerReferenceMap_full}
     \leanok
-    Set $\widehat\sigma_i=J_i\sigma_iJ_i^\dagger$. The padded reference
+    For $\widehat\sigma_i=J_i\sigma_iJ_i^\dagger$, the padded reference
     for an interval $[a,b)$ is
-    $Q_{a:b}(X)=\operatorname{Tr}(P_bX)\widehat\sigma_a$.
-    It vanishes on inputs outside the outgoing bond corner.
+    $Q_{a:b}(X)=\operatorname{Tr}(P_bX)\widehat\sigma_a$, which
+    vanishes on inputs outside the outgoing bond corner.
 \end{definition}
 
-\begin{theorem}[Gram matrices and pairs on the actual bonds]
+\begin{theorem}[Gram matrices and pairs on the bond spaces]
     \label{thm:ldp_rectangular_gram_pairs}
     \lean{MPSTensor.exists_norm_gram_transferMatrix_sub_le_of_entries,
         MPSTensor.zeroPad_eq_embeddedBlockState,
@@ -104,7 +104,7 @@ the contracted middle bond has dimension $D_{a+1}$.
         MPSPreparation.mixedMapLM_sqrt_transpose_kronecker_corner,
         MPSPreparation.exists_norm_transferMatrix_zeroPad_sub_cornerReferenceMap_le}
     \leanok
-    Give every map between actual matrix spaces its Hilbert--Schmidt
+    Let every map between the bond matrix spaces carry its Hilbert--Schmidt
     induced operator norm, namely the $L^2$ operator norm of its
     matrix in the matrix-unit bases. Padding changes transfer-matrix
     errors by at most a constant depending only on $D$.
@@ -116,20 +116,21 @@ the contracted middle bond has dimension $D_{a+1}$.
     Consequently the positive-polar error is bounded by a
     dimension-dependent constant times
     $\|F_{a:b}-\operatorname{Tr}(\cdot)\sigma_a\|^{1/2}$.
-    Moreover $\sqrt{\widehat\sigma_i}=J_i\sqrt{\sigma_i}J_i^\dagger$,
-    so the pair obtained from the padded reference is precisely the
-    padding of the pair on the actual bond.
+    Also $\sqrt{\widehat\sigma_i}=J_i\sqrt{\sigma_i}J_i^\dagger$,
+    so the pair obtained from the padded reference is the
+    padding of the pair on the bond space.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:ldp_rectangular_blocking,thm:ldp_sqrt_holder}
-    Extend the matrix-unit coefficient matrix by zero and permute its
-    indices into the transfer convention. There are only finitely many
-    pairs of endpoint dimensions at most $D$, so these linear maps have
-    a common operator-norm bound. Reshuffling the corner reset gives
-    $G_{a:b}$. Its displayed square root is positive and squares to it.
-    Apply the global square-root H\"older estimate. Conjugation by a
-    coordinate isometry preserves positivity and squares, giving the
-    square-root and pair identities.
+    Extending the matrix-unit coefficient matrix by zero and permuting its
+    indices into the transfer convention gives a linear map between
+    endpoint spaces of dimension at most $D$; since there are only finitely
+    many such dimension pairs, these linear maps have a common
+    operator-norm bound. Reshuffling the corner reset gives $G_{a:b}$,
+    whose displayed square root is positive and squares to it, and the
+    global square-root H\"older estimate then bounds the positive-polar
+    error. Since conjugation by a coordinate isometry preserves positivity
+    and squares, the square-root and pair identities follow.
 \end{proof}
 
 \begin{theorem}[Ordered corner references and normalized error]
@@ -156,13 +157,12 @@ the contracted middle bond has dimension $D_{a+1}$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:ldp_rectangular_gram_pairs,thm:ldp_varying_reference_products,thm:ldp_varying_reference_pairs,thm:ldp_normalization_triangle}
-    Composition removes the middle bond because
-    $\operatorname{Tr}(P_b\widehat\sigma_b)=1$.
-    The surviving outgoing-corner mask is a contraction. Apply the
-    ordered-product perturbation estimate to the mixed transfers and
-    then take their trace. Control normalization separately by taking
-    the trace of the whole-ring transfer error. The inverse-norm
-    estimate gives the stated normalized error, including the regime
+    Because $\operatorname{Tr}(P_b\widehat\sigma_b)=1$, composition removes
+    the middle bond and leaves a contracting outgoing-corner mask. The
+    ordered-product perturbation estimate applied to the mixed transfers,
+    followed by the trace, bounds the pair overlap, while the trace of the
+    whole-ring transfer error controls normalization. The inverse-norm
+    estimate then gives the stated normalized error, including the regime
     where the trivial error bound one is sharper.
 \end{proof}
 
@@ -188,12 +188,11 @@ the contracted middle bond has dimension $D_{a+1}$.
     \uses{thm:ldp_rectangular_error,thm:ldp_inhomogeneous_uniform_rate_from}
     Whole-ring mixing gives
     $|\|\phi_N\|^2-1|\le C_DKe^{-rN}$, hence nonvanishing beyond
-    a fixed cutoff. Partition into blocks with
-    $q\le\ell_j\le2q$. The pair error is at most
-    $C'_D\sqrt K\,N e^{-rq/2}$.
-    Apply the uniform-rate preparation theorem, which chooses a
-    logarithmic block length and uses exact preparation if that length
-    exceeds $N$.
+    a fixed cutoff. Partitioning into blocks with
+    $q\le\ell_j\le2q$ bounds the pair error by
+    $C'_D\sqrt K\,N e^{-rq/2}$, and the uniform-rate preparation theorem
+    then selects a logarithmic block length, falling back to exact
+    preparation if that length exceeds $N$.
 \end{proof}
 
 Equation (S39) of~\cite{Malz2024Preparation} concerns open-boundary

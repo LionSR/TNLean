@@ -68,9 +68,10 @@
 
 \begin{proof}
     \leanok
-    Choose a nonzero entry in each factor and evaluate the product at the
-    resulting row and column. The rescaling identity follows immediately from
-    the entry formula in Definition~\ref{def:finite_kronecker_product}.
+    Evaluating the product at the row and column of a nonzero entry from each
+    factor produces a nonzero entry of the product. The rescaling identity
+    follows immediately from the entry formula in
+    Definition~\ref{def:finite_kronecker_product}.
 \end{proof}
 
 \begin{theorem}[Uniqueness of the positive rescaling phase]%
@@ -123,40 +124,39 @@
 \begin{proof}
     \leanok
     \uses{lem:finite_kronecker_elementary, thm:kronecker_factor_positive_rescaling}
-    The assertion is proved by induction on $N$. Separate the first factor
-    from the remaining Kronecker product and apply
-    Theorem~\ref{thm:kronecker_factor_positive_rescaling}. Absorb the inverse
-    of the first rescaling coefficient into one factor of the tail, then
-    apply the induction hypothesis. The resulting coefficients are nonzero,
-    their product is one, and every rescaled factor is positive semidefinite.
+    Proceeding by induction on $N$, separating the first factor from the
+    remaining Kronecker product and applying
+    Theorem~\ref{thm:kronecker_factor_positive_rescaling} yields a first
+    rescaling coefficient. Absorbing its inverse into one factor of the tail
+    and applying the induction hypothesis produces nonzero coefficients whose
+    product is one and for which every rescaled factor is positive
+    semidefinite.
 \end{proof}
 
 \begin{lemma}[One-sided product obstruction in a full matrix algebra]%
     \label{lem:matrix_one_sided_product_obstruction}
     \lean{Matrix.submodule_sup_ne_top_of_mul_eq_zero}
     \leanok
-    Let $\mathcal A_1,\mathcal A_2\subseteq\MN{D}$ be nonzero linear
-    subspaces. If $XY=0$ for every $X\in\mathcal A_1$ and
-    $Y\in\mathcal A_2$, then
-    $\mathcal A_1+\mathcal A_2\ne\MN{D}$.
-    No vanishing condition on products in the reverse order is required.
-    This is the matrix-algebra obstruction used in
-    \cite[Appendix~C.2, lines~1465--1470]{Cirac2016MPDO_arXiv}.
+    As in the matrix-algebra obstruction used in
+    \cite[Appendix~C.2, lines~1465--1470]{Cirac2016MPDO_arXiv}, let
+    $\mathcal A_1,\mathcal A_2\subseteq\MN{D}$ be nonzero linear subspaces. If
+    $XY=0$ for every $X\in\mathcal A_1$ and $Y\in\mathcal A_2$, then
+    $\mathcal A_1+\mathcal A_2\ne\MN{D}$, with no vanishing condition required
+    on products in the reverse order.
 \end{lemma}
 
 \begin{proof}
     \leanok
-    Choose nonzero matrices $X\in\mathcal A_1$ and
-    $Y\in\mathcal A_2$, together with nonzero entries $X_{ip}$ and
-    $Y_{qj}$. If the two subspaces spanned the full matrix algebra, write
-    the matrix unit $E_{pq}=E_1+E_2$ with
-    $E_1\in\mathcal A_1$ and $E_2\in\mathcal A_2$. The one-sided product
-    hypothesis gives
+    Let $X\in\mathcal A_1$ and $Y\in\mathcal A_2$ be nonzero matrices with
+    nonzero entries $X_{ip}$ and $Y_{qj}$. If the two subspaces spanned the
+    full matrix algebra, the matrix unit $E_{pq}$ would decompose as
+    $E_{pq}=E_1+E_2$ with $E_1\in\mathcal A_1$ and $E_2\in\mathcal A_2$. The
+    one-sided product hypothesis gives
     \begin{align}
-        XE_{pq}Y & =X(E_1Y)+(XE_2)Y=0.
+        XE_{pq}Y & =X(E_1Y)+(XE_2)Y=0,
         \notag
     \end{align}
-    Its $(i,j)$ entry is $X_{ip}Y_{qj}\ne0$, a contradiction.
+    whose $(i,j)$ entry is $X_{ip}Y_{qj}\ne0$, a contradiction.
 \end{proof}
 
 \begin{definition}[Nonzero sector support and recurrence]%
@@ -244,10 +244,10 @@
     \leanok
     A nonzero entry of $\eta_{k,h}$, together with nonzero sector matrices at
     $k$ and $h$, gives matrices $A$ from sector $k$ and $B$ from sector $h$
-    with $AB\ne0$. By nondegeneracy of the trace pairing, choose $Y$ with
-    $\tr(ABY)\ne0$. Expanding $Y$ in the spanning family, some sector matrix
-    $C$ from a sector $j$ satisfies $\tr(ABC)\ne0$. Cyclicity of the trace
-    gives $BC\ne0$ and $CA\ne0$. The sector multiplication identity then
+    with $AB\ne0$. By nondegeneracy of the trace pairing, there is a matrix
+    $Y$ with $\tr(ABY)\ne0$. Expanding $Y$ in the spanning family, some sector
+    matrix $C$ from a sector $j$ satisfies $\tr(ABC)\ne0$. Cyclicity of the
+    trace gives $BC\ne0$ and $CA\ne0$. The sector multiplication identity then
     forces $\eta_{h,j}\ne0$ and $\eta_{j,k}\ne0$.
 \end{proof}
 
@@ -266,8 +266,8 @@
 \begin{proof}
     \leanok
     A walk gives an element of the reflexive transitive closure by induction
-    on its edges. Conversely, append the final edge at each induction step in
-    the reflexive transitive closure.
+    on its edges. Conversely, appending the final edge at each induction step
+    in the reflexive transitive closure constructs a finite directed walk.
 \end{proof}
 
 \begin{lemma}[Finite cyclic form of a closed directed walk]%
@@ -284,9 +284,9 @@
 
 \begin{proof}
     \leanok
-    Enumerate the sources of the successive edges. The last edge ends at the
-    initial vertex because the walk is closed. The product identity follows
-    by induction on the number of edges.
+    Enumerating the sources of the successive edges gives the vertices, with
+    the last edge ending at the initial vertex because the walk is closed. The
+    product identity follows by induction on the number of edges.
 \end{proof}
 
 \begin{theorem}[Closed-walk criterion for vertex phases]%
@@ -296,22 +296,22 @@
     Let $E$ be a directed relation on a set $V$, and suppose that every edge
     $a\to b$ admits a directed return walk from $b$ to $a$. Let $G$ be a
     group and assign a weight $\kappa_{a,b}\in G$ to each ordered
-    pair of vertices. If the product of the edge weights along every closed
-    directed walk is one, then there are vertex weights $z_a\in G$ such that
-    $\kappa_{a,b}=z_a^{-1}z_b$ whenever $a\to b$ is an edge. This is the
-    graph-theoretic coboundary step needed to make the phase choices in
-    \cite[Appendix~C.2, lines~1446--1450]{Cirac2016MPDO_arXiv} coherent across
-    a recurrent support component.
+    pair of vertices. As in the graph-theoretic coboundary step that makes the
+    phase choices in \cite[Appendix~C.2, lines~1446--1450]{Cirac2016MPDO_arXiv}
+    coherent across a recurrent support component, if the product of the edge
+    weights along every closed directed walk is one, then there are vertex
+    weights $z_a\in G$ such that $\kappa_{a,b}=z_a^{-1}z_b$ whenever $a\to b$
+    is an edge.
 \end{theorem}
 
 \begin{proof}
     \leanok
     Reachability is an equivalence relation because every edge has a return
-    walk. Choose one vertex in each reachability class and, for every vertex
-    $a$, choose a walk from the class representative to $a$. Define $z_a$ as
-    the product of the edge weights along this walk. If two such walks have
-    the same endpoints, append a common return walk; the two resulting closed
-    walks have weight one, so the original walk weights agree. Comparing the
+    walk. Choosing one representative vertex in each reachability class and a
+    walk from that representative to every vertex $a$ in its class defines
+    $z_a$ as the product of the edge weights along this walk. If two such walks
+    have the same endpoints, appending a common return walk produces two closed
+    walks of weight one, so the original walk weights agree. Comparing the
     chosen walk to $b$ with the chosen walk to $a$ followed by the edge
     $a\to b$ gives $z_b=z_a\kappa_{a,b}$.
 \end{proof}
@@ -345,9 +345,9 @@
 
 \begin{proof}
     \leanok
-    Expand both sides entrywise. The shifted left component of the bond fiber
-    at site $n+1$ is precisely the left index paired with the right component
-    at site $n$.
+    Expanding both sides entrywise shows that the shifted left component of the
+    bond fiber at site $n+1$ is precisely the left index paired with the right
+    component at site $n$.
 \end{proof}
 
 \begin{theorem}[Positive rescaling around one sector cycle]%
@@ -358,24 +358,23 @@
     Let $N\geq1$, and fix a cyclic sector assignment
     $k_0,\ldots,k_{N-1}$ such that every operator
     $\eta_{k_n,k_{n+1}}$ is nonzero. If the corresponding cyclic tensor
-    product is positive semidefinite, then there are nonzero scalars $c_n$
-    satisfying
+    product is positive semidefinite, then a coherent positive rescaling along
+    the cycle exists: there are nonzero scalars $c_n$ satisfying
     \begin{align}
         \prod_{n=0}^{N-1}c_n  & =1,
         \notag                                           \\
         c_n\eta_{k_n,k_{n+1}} & \geq0 \quad (0\leq n<N).
         \notag
     \end{align}
-    This establishes a coherent positive rescaling along a single fixed cycle.
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{lem:mpdo_eta_cycle_fin_kronecker, thm:finite_kronecker_positive_rescaling}
-    Reindex the cyclic sector block by the shared horizontal-bond indices.
-    Its matrix entries then become the finite Kronecker product of the
-    consecutive neighboring operators. Apply
-    Theorem~\ref{thm:finite_kronecker_positive_rescaling}.
+    Reindexing the cyclic sector block by the shared horizontal-bond indices
+    turns its matrix entries into the finite Kronecker product of the
+    consecutive neighboring operators, to which
+    Theorem~\ref{thm:finite_kronecker_positive_rescaling} applies.
 \end{proof}
 
 \begin{corollary}[Positive rescaling of the concrete sector operators around
@@ -388,25 +387,25 @@
     and fix an $\eta$-structure and a nonzero tail entry. Let $N\geq1$. For a
     cyclic sector assignment $k_0,\ldots,k_{N-1}$, suppose that every
     concrete operator $\eta_{k_n,k_{n+1}}$ obtained from these data is
-    nonzero. Then there are nonzero scalars $c_n$ such that
+    nonzero. Specializing
+    Theorem~\ref{thm:mpdo_eta_cycle_positive_rescaling} to these inverse-map
+    sector operators (whose cyclic product is positive semidefinite by the MPDO
+    property) yields nonzero scalars $c_n$ such that
     \begin{align}
         \prod_{n=0}^{N-1}c_n  & =1,
         \notag                                           \\
         c_n\eta_{k_n,k_{n+1}} & \geq0 \quad (0\leq n<N).
         \notag
     \end{align}
-    This is the specialization of
-    Theorem~\ref{thm:mpdo_eta_cycle_positive_rescaling} to the inverse-map
-    sector operators; positivity of the cyclic product follows from the MPDO
-    property.
 \end{corollary}
 
 \begin{proof}
     \leanok
     \uses{thm:mpdo_eta_cycle_positive_rescaling, thm:mpdo_cyclic_eta_posSemidef}
-    The fixed-sector cyclic product is positive semidefinite by
-    Theorem~\ref{thm:mpdo_cyclic_eta_posSemidef}. Apply
-    Theorem~\ref{thm:mpdo_eta_cycle_positive_rescaling}.
+    Since the fixed-sector cyclic product is positive semidefinite by
+    Theorem~\ref{thm:mpdo_cyclic_eta_posSemidef},
+    Theorem~\ref{thm:mpdo_eta_cycle_positive_rescaling} yields the stated
+    scalars.
 \end{proof}
 
 \begin{theorem}[The conjugated chain is a congruence]%
@@ -428,9 +427,9 @@
 
 \begin{proof}
     \leanok
-    Expand the closed trace over bond configurations $g$ (with
-    $g_{N+1}=g_1$), and each conjugated local entry over its two physical
-    indices:
+    Expanding the closed trace over bond configurations $g$ (with
+    $g_{N+1}=g_1$) and each conjugated local entry over its two physical
+    indices gives
     \begin{align}
         [\rho^{(N)}(\widetilde{\cal K})]_{\sigma,\tau}
          & =\sum_{g}\prod_{n=1}^{N}
@@ -454,8 +453,10 @@
     \leanok
     \uses{def:mpdo, def:mpdo_cyclic_eta_tensor_product, thm:mpdo_fixed_sector_cyclic_eta, thm:mpdo_conjugated_chain_congruence}
     Let ${\cal K}$ be an MPDO whose transformed physical slices satisfy the
-    sector factorization hypothesis. Then for every $N\ge1$ and every
-    cyclic sector assignment $k_1,\ldots,k_N$ with $k_{N+1}=k_1$,
+    sector factorization hypothesis. As in the positivity half of the display at
+    \cite[Appendix~C.2, lines~1446--1450]{Cirac2016MPDO_arXiv}, for every
+    $N\ge1$ and every cyclic sector assignment $k_1,\ldots,k_N$ with
+    $k_{N+1}=k_1$,
     \begin{align}
         0
          & \leq
@@ -465,8 +466,6 @@
          & =\bigotimes_{n=1}^{N}\eta_{k_n,k_{n+1}}.
         \notag
     \end{align}
-    This is the positivity half of the display at
-    \cite[Appendix~C.2, lines~1446--1450]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 
 \begin{proof}
@@ -547,10 +546,10 @@
 \begin{proof}
     \leanok
     \uses{lem:mpdo_eta_reachability_equivalence, lem:directed_closed_walk_finite_cycle, thm:positive_rescaling_phase_unique, thm:mpdo_eta_cycle_positive_rescaling, thm:directed_cycle_coboundary, def:mpdo_physical_sector_rephasing, thm:mpdo_eta_local_structure_of_positive_physical_sector_factorization}
-    For a nonzero edge, choose a directed return path and close it with the
-    edge. Positive rescaling of the corresponding cyclic tensor product
-    supplies a scalar that makes the edge operator positive; retain only its
-    unit-modulus part. On any closed directed walk, positive rescaling of the
+    For a nonzero edge, choosing a directed return path and closing it with the
+    edge yields a cyclic tensor product whose positive rescaling gives a scalar
+    making the edge operator positive; retaining its unit-modulus part defines
+    the edge phase. On any closed directed walk, positive rescaling of the
     associated cyclic tensor product gives phases whose product is one.
     Uniqueness of the unit phase identifies them edge by edge with the chosen
     phases. Hence the chosen edge phases have product one around every closed
@@ -582,18 +581,18 @@
 \begin{proof}
     \leanok
     \uses{def:mpdo_eta_recurrent_support, thm:mpdo_cyclic_eta_posSemidef, thm:mpdo_eta_cycle_positive_rescaling, def:mpdo_zero_weight_reparameterized_inverse_map_factorization, thm:mpdo_zero_weight_reparameterized_neighboring_operator, thm:mpdo_sector_virtual_matrix_spanning, thm:mpdo_sector_support_triangle_closure, thm:positive_rescaling_phase_unique, thm:directed_cycle_coboundary, thm:mpdo_eta_coherent_positive_choice_recurrent}
-    First set the right tensor to zero in every zero-weight sector. The left
-    tensor already vanishes there, so this does not alter the factorization
+    Setting the right tensor to zero in every zero-weight sector leaves the
+    factorization unchanged because the left tensor already vanishes there,
     and removes every support edge incident to such a sector. Every remaining
     endpoint has positive weight. If all virtual matrices in a positive-weight
     sector vanished, then the corresponding middle-site block of the
     three-site closure would vanish; this contradicts its Hayashi expression
     as a nonzero weight times two trace-one sector states. Thus every endpoint
-    of a nonzero edge contains a nonzero virtual matrix. Injectivity supplies
+    of a nonzero edge contains a nonzero virtual matrix. Injectivity gives
     spanning by all sector virtual matrices, and triangle closure gives
-    recurrence. The projected chain identity makes every cyclic Kronecker
-    product positive semidefinite. Apply
-    Theorem~\ref{thm:mpdo_eta_coherent_positive_choice_recurrent} to obtain the
+    recurrence. Since the projected chain identity makes every cyclic Kronecker
+    product positive semidefinite,
+    Theorem~\ref{thm:mpdo_eta_coherent_positive_choice_recurrent} yields the
     coherent vertex rephasing.
 \end{proof}
 
@@ -629,7 +628,7 @@
     taken to be one. For a pair of distinct sectors, either both
     neighboring operators vanish and any nonzero scalar works, or both are
     nonzero by symmetric support and
-    Theorem~\ref{thm:mpdo_sector_eta_pair_posSemidef} supplies the
+    Theorem~\ref{thm:mpdo_sector_eta_pair_posSemidef} gives the
     reciprocal pair of scalars. Choosing the scalar once per unordered
     pair makes the two assignments reciprocal, and the block-preserving
     equality of Theorem~\ref{thm:kronecker_factor_positive_rescaling}

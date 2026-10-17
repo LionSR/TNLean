@@ -1,8 +1,7 @@
 \section{Corrected source inputs and local outputs}
 \label{sec:peps_corrected_input_frames}
 
-We construct the local input isometries and output expansion used in
-\cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
+The proof of Theorem~5.2 in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS} expands each partial output through local input isometries.
 % Source: 04-compression.tex, lines 409--434, at
 % adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 
@@ -31,7 +30,7 @@ Relabelling parties changes neither the order nor the Hilbert spaces.
 \end{theorem}
 \begin{proof}
     \leanok
-    Identify the equal lists. Each assertion is then an equality of the same
+    Identifying the equal lists reduces each assertion to an equality of the same
     vector or linear map.
 \end{proof}
 
@@ -67,8 +66,8 @@ Relabelling parties changes neither the order nor the Hilbert spaces.
 \begin{proof}
     \leanok
     \uses{def:peps_ordered_source_positions,thm:peps_register_identifications}
-    Induct on the list of positions. The induction step prepends the
-    source vector and identifies the unchanged spectator lists.
+    Induction on the list of positions prepends the
+    source vector at each step and identifies the unchanged spectator lists.
 \end{proof}
 
 \begin{theorem}[Uniform permutation of source registers]
@@ -90,11 +89,11 @@ Relabelling parties changes neither the order nor the Hilbert spaces.
 \begin{proof}
     \leanok
     \uses{thm:peps_ordered_source_preparation}
-    Induct on a decomposition of the permutation into adjacent exchanges.
-    Use the identity for the empty list, retain a common first pair as
-    spectators of the inductively constructed composition, exchange adjacent two-register
-    blocks, and compose successive permutations. Apply this result to the
-    selected list followed by its complement.
+    Induction on a decomposition of the permutation into adjacent exchanges
+    uses the identity for the empty list, retains a common first pair as
+    spectators of the inductively constructed composition, exchanges adjacent two-register
+    blocks, and composes successive permutations. Specializing this permutation to the
+    selected list followed by its complement places the selected positions first.
 \end{proof}
 
 \begin{definition}[The joint vector of selected sources]
@@ -172,8 +171,7 @@ Relabelling parties changes neither the order nor the Hilbert spaces.
 \begin{proof}
     \leanok
     \uses{def:peps_corrected_crossing_blocks}
-    Membership in $A(S)$ is defined by being an endpoint of an occurrence
-    in $S$. Apply this to each corrected position. The two Boolean masks are
+    Because $A(S)$ consists of the endpoints of occurrences in $S$, both endpoints of each corrected position lie in $A(S)$. The two Boolean masks are
     then disjoint, and their union is precisely the defining free mask.
 \end{proof}
 
@@ -190,8 +188,7 @@ Relabelling parties changes neither the order nor the Hilbert spaces.
 \begin{proof}
     \leanok
     \uses{thm:peps_reorder_source_positions,thm:peps_corrected_crossing_masks}
-    Apply the uniform permutation theorem to the free positions, selecting
-    the corrected positions. The complementary list is the crossing list by
+    Applying the uniform permutation theorem to the free positions with the corrected positions selected leaves the crossing list as the complement by
     the disjointness of the two masks.
 \end{proof}
 
@@ -213,10 +210,10 @@ Relabelling parties changes neither the order nor the Hilbert spaces.
 \begin{proof}
     \leanok
     \uses{thm:peps_free_source_norm,thm:peps_register_identifications}
-    Use the preparation identity~(\ref{eq:peps_frames_prepare}) and the
-    scalar tensor identity. Tensoring with the identity commutes with preparing the unchanged
-    source registers. Apply this once to an inventory and then to its two
-    concatenated parts.
+    The preparation identity~(\ref{eq:peps_frames_prepare}) and the
+    scalar tensor identity give the first claim. Because tensoring with the identity commutes with preparing the unchanged
+    source registers, applying this relation once to an inventory and then to its two
+    concatenated parts yields the remaining claims.
 \end{proof}
 
 \begin{definition}[Absorbing the original input preparation]
@@ -253,9 +250,9 @@ Relabelling parties changes neither the order nor the Hilbert spaces.
 \begin{proof}
     \leanok
     \uses{def:peps_prepared_reordered_word,thm:peps_source_scalar_preparation}
-    First move the input preparation past the two free-source
-    preparations. Apply the defining equality for $U$, then compose free
-    preparation with fixed preparation. Their composition is full
+    Moving the input preparation past the two free-source
+    preparations and applying the defining equality for $U$ composes free
+    preparation with fixed preparation, which together form full
     source preparation.
 \end{proof}
 
@@ -281,8 +278,8 @@ Relabelling parties changes neither the order nor the Hilbert spaces.
 \begin{proof}
     \leanok
     \uses{thm:peps_corrected_reordering,thm:peps_prepared_reordered_vector}
-    Theorem~\ref{thm:peps_corrected_reordering} gives the common permutation.
-    Apply Theorem~\ref{thm:peps_prepared_reordered_vector} separately to each
+    Theorem~\ref{thm:peps_corrected_reordering} gives the common permutation,
+    and Theorem~\ref{thm:peps_prepared_reordered_vector} then applies separately to each
     branch and vector family.
 \end{proof}
 
@@ -302,9 +299,9 @@ Relabelling parties changes neither the order nor the Hilbert spaces.
     \leanok
     \uses{thm:peps_corrected_crossing_masks,def:peps_prepared_reordered_word}
     Every source remaining in the selectively prepared composition is
-    internal to the division. Relabel by the side, so these preparations
-    become local operations, and apply the source-free binary factorization.
-    Retaining spectators and composing the allowed source-free $p_0$ preserves these
+    internal to the division. Relabelling by the side turns these preparations
+    into local operations, so the source-free binary factorization applies;
+    retaining spectators and composing the allowed source-free $p_0$ preserves these
     properties.
 \end{proof}
 
@@ -338,9 +335,9 @@ Relabelling parties changes neither the order nor the Hilbert spaces.
 \begin{proof}
     \leanok
     \uses{def:peps_source_input_isometries,thm:peps_ordered_source_preparation}
-    Evaluate each matrix isometry on a coordinate basis vector. Induct on
-    the list using the product basis and source preparation.
-    Then reindex the selected coordinate assignments by the filtered list.
+    Evaluating each matrix isometry on a coordinate basis vector and inducting on
+    the list via the product basis and source preparation gives the full-list formula;
+    reindexing the selected coordinate assignments by the filtered list gives the selected case.
 \end{proof}
 
 \begin{definition}[The corrected-source isometry]
@@ -366,10 +363,10 @@ Relabelling parties changes neither the order nor the Hilbert spaces.
 \begin{proof}
     \leanok
     \uses{thm:peps_source_input_columns,thm:peps_free_source_norm}
-    Apply the selected-column identity. The existence of the branch and
+    The existence of the branch and
     the normalization of its original source vectors make each needed
-    endpoint coordinate set nonempty. Extend a selected assignment outside
-    the selected positions, then remove those choices using dependence only
+    endpoint coordinate set nonempty. Extending a selected assignment outside
+    the selected positions and applying the selected-column identity then removes the outside choices because the joint vector depends only
     on the selected source vectors.
 \end{proof}
 
@@ -402,10 +399,10 @@ Relabelling parties changes neither the order nor the Hilbert spaces.
     \leanok
     \uses{thm:peps_free_source_norm,def:peps_actual_crossing_vector}
     Every original source vector is normalized by the prepared-gate construction, so the
-    crossing vector has norm one. Place this algebraic tensor in finite
-    dimensional subspaces of its two memories, apply the finite dimensional
-    Schmidt decomposition, and include the resulting orthonormal families
-    back into the original memories.
+    crossing vector has norm one. Placing this algebraic tensor in finite-dimensional
+    subspaces of its two memories, applying the finite-dimensional
+    Schmidt decomposition, and including the resulting orthonormal families
+    back into the original memories yields the crossing Schmidt decomposition.
 \end{proof}
 
 \begin{definition}[Schmidt input isometries]
@@ -438,12 +435,12 @@ Relabelling parties changes neither the order nor the Hilbert spaces.
 \begin{proof}
     \leanok
     \uses{thm:peps_corrected_crossing_masks,thm:peps_crossing_schmidt,def:peps_corrected_source_frame}
-    Tensor $Q_\xi$ with the affected isometry in
-    (\ref{eq:peps_frames_crossing_schmidt}), and use the exterior isometry
-    unchanged. The corrected registers all lie on the affected side, so
+    Tensoring $Q_\xi$ with the affected isometry in
+    (\ref{eq:peps_frames_crossing_schmidt}) and keeping the exterior isometry
+    unchanged defines $A$ and $B$. Because the corrected registers all lie on the affected side,
     concatenation identifies their targets with the two
-    restrictions of $C+T$. Distribute the tensor product over the Schmidt
-    sum.
+    restrictions of $C+T$, and distributing the tensor product over the Schmidt
+    sum gives the input frame representation.
 \end{proof}
 
 \begin{definition}[A local-word Schmidt output representation]
@@ -473,10 +470,10 @@ Relabelling parties changes neither the order nor the Hilbert spaces.
 \begin{proof}
     \leanok
     \uses{def:peps_schmidt_input_frames,def:peps_schmidt_local_output}
-    Transport the input isometries along the equal-list
-    identifications, apply the tensor-product factorization to
-    (\ref{eq:peps_frames_input_schmidt}), and use linearity. The norm bounds
-    come from allowedness of the two local words.
+    Transferring the input isometries along the equal-list
+    identifications and applying the tensor-product factorization to
+    (\ref{eq:peps_frames_input_schmidt}) by linearity gives the output frame representation, with the norm bounds
+    coming from allowedness of the two local words.
 \end{proof}
 
 \begin{definition}[The corrected-column input identity]
@@ -501,10 +498,9 @@ Relabelling parties changes neither the order nor the Hilbert spaces.
 \begin{proof}
     \leanok
     \uses{thm:peps_uniform_corrected_input,thm:peps_corrected_crossing_masks,thm:peps_free_source_norm}
-    In the uniform input identity, substitute the original endpoint
-    columns at corrected positions and the original source vectors elsewhere.
-    Fixed positions are not corrected; crossing positions are not corrected
-    either. Dependence only on selected positions therefore preserves the
+    Substituting the original endpoint
+    columns at corrected positions and the original source vectors elsewhere into the uniform input identity leaves the fixed and crossing positions untouched, since neither is corrected.
+    Dependence only on selected positions therefore preserves the
     crossing vector and every fixed source.
 \end{proof}
 
@@ -525,10 +521,10 @@ Relabelling parties changes neither the order nor the Hilbert spaces.
 \begin{proof}
     \leanok
     \uses{thm:peps_corrected_schmidt_input_identity,thm:peps_reordered_local_factors,thm:peps_actual_schmidt_input_frames,thm:peps_local_schmidt_output}
-    Choose the common rearrangement from the corrected-column input
-    identity. Factor the absorbed composition into its two local words.
-    Construct its input isometries from the corrected-source isometry and
-    crossing vector, then apply Theorem~\ref{thm:peps_local_schmidt_output}.
-    Finally substitute the original partial-output identity. This keeps the
+    With the common rearrangement from the corrected-column input
+    identity, the absorbed composition factors into its two local words.
+    Constructing its input isometries from the corrected-source isometry and
+    crossing vector and applying Theorem~\ref{thm:peps_local_schmidt_output},
+    then substituting the original partial-output identity, keeps the
     original occurrence-coordinate bijection and both owner relabellings.
 \end{proof}

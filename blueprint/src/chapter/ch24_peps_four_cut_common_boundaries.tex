@@ -134,11 +134,11 @@ $A_v:V^4\times P\to\C$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{def:peps_four_cut_common_product_boundary}
-    Multiplying the restricted product boundary by $W_{c,r}$ gives exactly
-    the bond weights in (\ref{eq:peps_common_boundary_network}). Expand
-    $M=\sum_\eta M(\eta)\delta_\eta$ and use linearity. Each fixed-boundary
-    vector already belongs to the range, proving the reverse span inclusion.
-    The matrix-unit identity gives the final assertion.
+    Multiplying the restricted product boundary by $W_{c,r}$ gives
+    the bond weights in (\ref{eq:peps_common_boundary_network}), and expanding
+    $M=\sum_\eta M(\eta)\delta_\eta$ by linearity gives the second identity. Each fixed-boundary
+    vector already belongs to the range, proving the reverse span inclusion, and
+    the matrix-unit identity gives the final assertion.
 \end{proof}
 
 \begin{definition}[Matching bond actions and their averaging tensors]%
@@ -155,7 +155,9 @@ $A_v:V^4\times P\to\C$.
         TNLean.PEPS.torusMatchedAveragingSites}
     \leanok
     \uses{def:peps_torus_bond_network,def:peps_g_injective,def:peps_semiregular}
-    Let $G$ be a group and assign representations $U^{\mathrm h}_v$ and
+    Following the matching convention of \cite[Definition~5.1]{Schuch2010PEPS},
+    in which each link carries its own representation used at both ends, let
+    $G$ be a group and assign representations $U^{\mathrm h}_v$ and
     $U^{\mathrm v}_v$ on $\C^V$ to the individual bonds. Their action on
     the top, right, down, left coordinates of site $v$ is
     \begin{align}
@@ -173,18 +175,15 @@ $A_v:V^4\times P\to\C$.
     For any representation $\rho$ on $\C^{V^4}$ of finite $G$, put
     $\Pi_\rho=|G|^{-1}\sum_k\rho(k)$ and
     $A^0_\rho(t,r,b,l;s)=(\Pi_\rho)_{s,(t,r,b,l)}$.
-    Its site map is exactly $\Pi_\rho$. Write $A^0_v=A^0_{\rho_v}$
-    for the matched family. Constant bond representations recover the
+    Its site map is $\Pi_\rho$. Write $A^0_v=A^0_{\rho_v}$
+    for the matched family; constant bond representations recover the
     uniform four-leg action and its averaging tensor.
-    The matching convention is that of
-    \cite[Definition~5.1]{Schuch2010PEPS}: each link carries its own
-    representation, used at both ends.
 \end{definition}
 \begin{proof}\leanok
     The inverse transpose reverses the order twice, so
     (\ref{eq:peps_common_matched_action}) is a representation.
     The stated coefficient action and the site map of $A^0_\rho$
-    follow by reading their matrix entries. Constant bond families
+    follow by reading their matrix entries, and constant bond families
     give the uniform formulas by substitution.
 \end{proof}
 
@@ -238,12 +237,12 @@ $A_v:V^4\times P\to\C$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_torus_commuting_closure_seams,thm:peps_four_cut_common_boundary_span}
-    Put $B(t,r,b,l;(v,s))=A_v(t,r,b,l;s)$, with $(v,s)$ as its
-    physical label. Its invariance holds separately at each physical label. Apply
+    Setting $B(t,r,b,l;(v,s))=A_v(t,r,b,l;s)$ with $(v,s)$ as its
+    physical label preserves invariance separately at each physical label. Applying
     Theorem~\ref{thm:peps_torus_commuting_closure_seams} to $B$ and the
-    configuration $v\mapsto(v,\sigma_v)$. The product-boundary identity
-    gives the explicit witness in (\ref{eq:peps_common_uniform_membership});
-    taking spans proves the inclusion.
+    configuration $v\mapsto(v,\sigma_v)$ together with the product-boundary identity
+    gives the explicit boundary tensor in (\ref{eq:peps_common_uniform_membership}),
+    and taking spans proves the inclusion.
 \end{proof}
 
 \begin{definition}[Cyclic seam changes of basis]%
@@ -273,12 +272,12 @@ $A_v:V^4\times P\to\C$.
     If $kl=lk$, then $s_{k,c}(x)$ commutes with $l$.
 \end{theorem}
 \begin{proof}\leanok
-    Check separately the wrap $x+1=0$, the crossing $x+1=c$, and
-    the two intervals between them. The adjacent factors cancel except
+    Checking the wrap $x+1=0$, the crossing $x+1=c$, and
+    the two intervals between them shows that adjacent factors cancel except
     at the seam crossings, proving (\ref{eq:peps_common_seam_horizontal}).
-    Invert that formula with $k^{-1}$ in place of $k$ to obtain
-    (\ref{eq:peps_common_seam_vertical}). Each $s_{k,c}(x)$ is either
-    $1$ or $k^{-1}$, proving commutation.
+    Inverting that formula with $k^{-1}$ in place of $k$ gives
+    (\ref{eq:peps_common_seam_vertical}), and since each $s_{k,c}(x)$ is either
+    $1$ or $k^{-1}$, commutation follows.
 \end{proof}
 
 \begin{theorem}[Matched commuting closures belong to every cut range]%
@@ -290,26 +289,25 @@ $A_v:V^4\times P\to\C$.
     \leanok
     \uses{def:peps_four_cut_common_closure,def:peps_four_cut_common_product_boundary}
     Suppose $\mathcal P(A_v)\rho_v(k)=\mathcal P(A_v)$ for every $v,k$.
-    For $gh=hg$ and every $(c,r)$,
+    In the first inclusion in the proof of \cite[Theorem~5.5]{Schuch2010PEPS}
+    with a common coordinate alphabet, for $gh=hg$ and every $(c,r)$,
     \begin{align}
         \mathcal N_A(H^c(h),V^r(g))
          & =\mathcal C^A_{c,r}M^{(U^{\mathrm h}(h),U^{\mathrm v}(g))}_{c,r}
-        =\mathcal M_A(g,h)\in\mathcal S^A_{c,r}.
+        =\mathcal M_A(g,h)\in\mathcal S^A_{c,r},
         \label{eq:peps_common_matched_membership}
     \end{align}
-    On the two-by-two torus, $\mathcal Z_A\subseteq\mathcal S^A$.
-    This is the first inclusion in the proof of
-    \cite[Theorem~5.5]{Schuch2010PEPS}, with a common coordinate alphabet.
+    and on the two-by-two torus, $\mathcal Z_A\subseteq\mathcal S^A$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_four_cut_common_seam_gauge,
         thm:peps_four_cut_common_vertex_gauge,thm:peps_four_cut_common_boundary_span}
-    Apply the matched vertex-gauge identity first with
-    $q_v=s_{h,c}(v_x)$ and then with $q_v=s_{g^{-1},r}(v_y)$.
-    Formulas (\ref{eq:peps_common_seam_horizontal}) and
-    (\ref{eq:peps_common_seam_vertical}) move the two seams.
-    Commutation with the transverse closure label leaves its matrices
+    Applying the matched vertex-gauge identity first with
+    $q_v=s_{h,c}(v_x)$ and then with $q_v=s_{g^{-1},r}(v_y)$ allows
+    (\ref{eq:peps_common_seam_horizontal}) and
+    (\ref{eq:peps_common_seam_vertical}) to move the two seams, while
+    commutation with the transverse closure label leaves its matrices
     unchanged. Each bond uses its own representation of these group
-    identities. The product boundary gives the stated range witness;
-    linearity then gives the span inclusion.
+    identities; the product boundary gives the stated boundary tensor, and
+    linearity gives the span inclusion.
 \end{proof}

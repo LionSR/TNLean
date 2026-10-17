@@ -5,9 +5,9 @@
     \lean{MPSTensor.fixed_eq_scalar_of_isIrreducibleTensor_unital}
     \leanok
     \uses{def:transfer_map, def:irreducible_tensor}
-    If $A$ is irreducible and unital, $\E_A(\Id)=\Id$, and $\E_A(X)=X$, then
-    $X$ is a scalar multiple of $\Id$. This is the final fixed-point assertion
-    in the proof of \cite[Theorem~4]{PerezGarcia2007Matrix}.
+    As in the final fixed-point assertion in the proof of
+    \cite[Theorem~4]{PerezGarcia2007Matrix}, if $A$ is irreducible and unital,
+    $\E_A(\Id)=\Id$, and $\E_A(X)=X$, then $X$ is a scalar multiple of $\Id$.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -30,10 +30,10 @@
          & =\Id.
         \label{eq:canon_unital_gauge_identity}
     \end{align}
-    If $r=1$, then the unscaled gauge
+    As in the spectral-radius normalization and full-rank fixed-point gauge of
+    \cite[Theorem~4]{PerezGarcia2007Matrix}, if $r=1$, then the unscaled gauge
     $B^i:=\rho^{-1/2}A^i\rho^{1/2}$ is unital and generates the same MPV
-    family as $A$. This is the spectral-radius normalization and full-rank
-    fixed-point gauge of \cite[Theorem~4]{PerezGarcia2007Matrix}.
+    family as $A$.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -46,7 +46,7 @@
         =\Id,
         \notag
     \end{align}
-    which is (\ref{eq:canon_unital_gauge_identity}). For $r=1$, the change
+    which proves (\ref{eq:canon_unital_gauge_identity}). For $r=1$, the change
     from $A$ to $B$ is a similarity, so cyclicity of the trace gives equality
     of all MPV coefficients.
 \end{proof}
@@ -70,8 +70,8 @@
          & =U^\dagger\!\left(\bigoplus_k\mu_kA_k^i\right)U.
         \label{eq:cpsv_cfii_ambient}
     \end{align}
-    Thus omitted bond-space coordinates are literally zero. Every retained
-    block additionally satisfies
+    Thus omitted bond-space coordinates are zero. Every retained
+    block also satisfies
     \begin{align}
         \sum_i(A_k^i)^\dagger A_k^i
          & =\Id_{D_k},
@@ -105,9 +105,9 @@
         B^i
          & =G A^iG^{-1}.
     \end{align}
-    Moreover, $B$ is in canonical form II and the total retained block
-    dimension is unchanged. This is the nonsingular gauge assertion of
-    \cite[Appendix~A]{Cirac2016MPDO_arXiv}.
+    As in the nonsingular gauge assertion of
+    \cite[Appendix~A]{Cirac2016MPDO_arXiv}, the tensor $B$ is in canonical
+    form II and the total retained block dimension is unchanged.
     % Maintainer source anchor: arXiv:1606.00608, lines 1058--1077,
     % especially eq:II_TPLambda and eq:II_XAX at lines 1062--1077.
 \end{theorem}
@@ -115,14 +115,14 @@
 \begin{proof}
     \leanok
     \uses{thm:cpsv_normal_tp_gauge, thm:CFII_data, def:global_gauge_of_blocks}
-    Write the retained part of the canonical-form decomposition as
-    $C^i=\bigoplus_k\mu_kA_k^i$, and let
-    $U\in\C^{S\times D}$ satisfy $UU^\dagger=\Id_S$ and
-    $A^i=U^\dagger C^iU$. For each normal block, first choose its pure
-    trace-preserving Perron gauge and then diagonalize its positive definite
-    fixed point by a unitary. This gives $X_k\in\GL(D_k,\C)$ and blocks
-    $B_k$ satisfying the two canonical-form-II identities. Put
-    $X=\bigoplus_kX_k$ and extend it to the omitted zero coordinates by
+    With the retained part of the canonical-form decomposition written as
+    $C^i=\bigoplus_k\mu_kA_k^i$ and
+    $U\in\C^{S\times D}$ satisfying $UU^\dagger=\Id_S$ and
+    $A^i=U^\dagger C^iU$, passing each normal block to its pure
+    trace-preserving Perron gauge and unitarily diagonalizing its positive definite
+    fixed point gives $X_k\in\GL(D_k,\C)$ and blocks
+    $B_k$ satisfying the two canonical-form-II identities. Extending
+    $X=\bigoplus_kX_k$ to the omitted zero coordinates defines
     \begin{align}
         G
          & =U^\dagger XU+(\Id_D-U^\dagger U).
@@ -177,7 +177,8 @@
 \begin{proof}
     \leanok
     \uses{def:gauge_equiv, def:unitary_gl}
-    Choose $X\in\GL(n,\C)$ such that, for every physical index~$i$,
+    Since $C$ and $E$ are gauge equivalent, there is an $X\in\GL(n,\C)$ such
+    that, for every physical index~$i$,
     $E^i=XC^iX^{-1}$. Equality of the
     Gram matrices $U_AU_A^\dagger$ and $U_BU_B^\dagger$ gives a unitary
     $W\in\C^{D\times D}$ with
@@ -189,7 +190,7 @@
         U_B
          & =U_AW^\dagger.
     \end{align}
-    Extend the retained gauge through $U_A$ by
+    Extending the retained gauge through $U_A$ defines
     \begin{align}
         G
          & =U_A^\dagger XU_A+(\Id_D-U_A^\dagger U_A).
@@ -245,12 +246,11 @@
 \section{Normal canonical form}\label{sec:normal_canonical_form}
 
 The spectral normal canonical form equips each irreducible block with
-left-canonical normalization and primitivity. Supporting overlap consequences
-are collected in Section~\ref{sec:app_canonical_prepared_consequences} and
-Section~\ref{sec:bnt_overlap_rigidity}.
+left-canonical normalization and primitivity. Sections~\ref{sec:app_canonical_prepared_consequences}
+and~\ref{sec:bnt_overlap_rigidity} collect the supporting overlap consequences.
 
-Recall from Definition~\ref{def:mpv_overlap} and
-Lemma~\ref{thm:overlap_trace} that the bilinear overlap is
+From Definition~\ref{def:mpv_overlap} and
+Lemma~\ref{thm:overlap_trace}, the bilinear overlap is
 \begin{align}
     O_{AB}(N)
      & =
@@ -266,9 +266,9 @@ below.
 \begin{remark}[Normalization convention]\label{rem:tp_vs_unital}
     \cite[Theorem~4]{PerezGarcia2007Matrix} uses the unital gauge
     $\sum_iA_k^i(A_k^i)^\dagger=\Id$; here the blocks are in the dual TP gauge
-    $\sum_i(A_k^i)^\dagger A_k^i=\Id$. A positive-definite fixed point of the
-    adjoint transfer map provides the change of gauge between the two
-    (Theorem~\ref{thm:left_canonical_gauge}).
+    $\sum_i(A_k^i)^\dagger A_k^i=\Id$. By Theorem~\ref{thm:left_canonical_gauge},
+    a positive-definite fixed point of the adjoint transfer map provides the
+    change of gauge between the two.
 \end{remark}
 
 \begin{definition}[Normal canonical form conditions]
@@ -286,17 +286,17 @@ below.
         \item all $\mu_k\neq0$,
         \item all bond dimensions are positive.
     \end{enumerate}
-    Here ``normal'' is the spectral sense of~\cite{Cirac2016MPDO_arXiv}, which
-    by~\cite[Proposition~3]{Sanz2010Quantum} is equivalent to the eventual
-    block-injectivity formulation of Definition~\ref{def:normal}.
+    By~\cite[Proposition~3]{Sanz2010Quantum} and Definition~\ref{def:normal},
+    this spectral sense of ``normal'' from~\cite{Cirac2016MPDO_arXiv} is
+    equivalent to eventual block injectivity.
 \end{definition}
 
 \subsection{Separated one-copy normal canonical forms}
 \label{subsec:normal_canonical_form_bnt_separation}
 
 The following specialization attaches BNT separation to the one-copy normal
-canonical form. Repeated representatives and their power-sum coefficients are
-instead recorded by the sector decomposition of Chapter~\ref{ch:bnt}.
+canonical form. In Chapter~\ref{ch:bnt}, the sector decomposition instead
+records repeated representatives and their power-sum coefficients.
 
 \begin{definition}[No gauge-phase-equivalent distinct blocks]%
     \label{def:blocks_not_gauge_phase_equiv}
@@ -315,8 +315,8 @@ instead recorded by the sector decomposition of Chapter~\ref{ch:bnt}.
         separation} if it satisfies Definition~\ref{def:is_normal_canonical_form}
     and distinct blocks of equal bond dimension are not gauge-phase equivalent.
     The weight moduli satisfy $|\mu_1|\ge\cdots\ge|\mu_r|>0$. Equal-modulus
-    blocks are permitted; repeated copies of a single basis tensor are grouped
-    into sectors in Chapter~\ref{ch:bnt}.
+    blocks are permitted, whereas in Chapter~\ref{ch:bnt} repeated copies of a
+    single basis tensor are grouped into sectors.
     % Maintainer note: this is not the source two-layer BNT expansion
     %   A^i = \bigoplus_{j=1}^g \bigoplus_{q=1}^{r_j} \mu_{j,q} X_{j,q} A_j^i X_{j,q}^{-1},
     % where repeated copies stay visible through their coefficients,
@@ -362,9 +362,9 @@ condition together with the overlap-decay theorems of the preceding chapter.
     Injective blocks are normal. The block-diagonal decomposition theorem gives
     the MPV expansion of $\bigoplus_k \mu_k A_k$ in terms of the block MPVs.
     The self-overlap limits are part of the hypotheses, and
-    Theorem~\ref{thm:cross_overlap_zero_split} supplies the off-diagonal
-    decay. Therefore Lemma~\ref{lem:bnt_finite_index_overlap_orthonormal_li} gives the
-    eventual linear independence required in Definition~\ref{def:bnt}.
+    Theorem~\ref{thm:cross_overlap_zero_split} gives the off-diagonal
+    decay. By Definition~\ref{def:bnt}, Lemma~\ref{lem:bnt_finite_index_overlap_orthonormal_li}
+    therefore establishes the required eventual linear independence.
 \end{proof}
 
 The normal-canonical formulation encodes normality spectrally (primitive
@@ -374,7 +374,7 @@ transfer map), the BNT definition algebraically (eventual block injectivity).
     \label{rem:normalcf_bnt_gap}
     The spectral normality of Definition~\ref{def:is_normal_canonical_form} and
     the algebraic normality of Definition~\ref{def:normal} agree: the Wielandt
-    theory of Chapter~\ref{ch:wielandt} supplies the implication from
+    theory of Chapter~\ref{ch:wielandt} gives the implication from
     primitivity to eventual block injectivity used here.
 \end{remark}
 
@@ -397,8 +397,8 @@ transfer map), the BNT definition algebraically (eventual block injectivity).
     The normal-canonical hypotheses already give the block-diagonal MPV
     expansion, the self-overlap normalization, and the eventual linear
     independence coming from irreducible trace-preserving overlap decay.
-    Supplying algebraic normality for each block adds the remaining clause in
-    Definition~\ref{def:bnt}.
+    In Definition~\ref{def:bnt}, including algebraic normality for each block
+    completes the remaining condition.
 \end{proof}
 
 % The weight moduli are non-increasing, not strictly decreasing; equal-modulus
@@ -419,11 +419,11 @@ transfer map), the BNT definition algebraically (eventual block injectivity).
 A normal block needs a primitive transfer map; an irreducible TP block may still
 have a cyclic peripheral spectrum. Raising the map to its period sends every
 peripheral eigenvalue to~$1$, but eigenvalue~$1$ can then have several cyclic
-corners and need not be simple on the full powered space. Period removal
-therefore proceeds in this order: power the map, obtain the adjoint-fixed cyclic
-projections, compress to their corners, prove each corner irreducible, and only
-then infer primitivity of the sector maps. This is the blocking step of
-\cite[Section~2.3]{Cirac2016MPDO_arXiv}.
+corners and need not be simple on the full powered space. As in the blocking
+step of \cite[Section~2.3]{Cirac2016MPDO_arXiv}, period removal
+therefore proceeds in order: powering the map, obtaining the adjoint-fixed cyclic
+projections, compressing to their corners, proving each corner irreducible, and only
+then inferring primitivity of the sector maps.
 % rem:primitivity_reduces_assumptions / "two ways" (deleted): once
 % peripheral-spectrum primitivity is known, the overlap-convergence hypothesis is
 % redundant, derived from the transfer-map gap of Chapter~\ref{ch:spectral}; these
@@ -441,7 +441,7 @@ then infer primitivity of the sector maps. This is the blocking step of
 \end{theorem}
 
 \begin{proof}\leanok
-    Pass to the conjugate-transposed Kraus family $K_i:=(A^i)^\dagger$, which
+    The conjugate-transposed Kraus family $K_i:=(A^i)^\dagger$
     is unital with irreducible Kraus map. The TP fixed-point theorem for
     $\E_A$ provides a positive definite fixed point for the adjoint of $K$, so
     the corresponding theorem in the companion quantum-channel volume~\cite[``Roots of unity via adjoint fixed point'']{QICLean2026Blueprint} shows that every peripheral
@@ -451,15 +451,13 @@ then infer primitivity of the sector maps. This is the blocking step of
     $\mu^p=1$ for every $\mu\in\sigma_\partial(\E_A)$, and
     the corresponding lemma in the companion quantum-channel volume~\cite[``Powering collapses peripheral eigenvalues'']{QICLean2026Blueprint} gives
     $\sigma_\partial(\E_A^p)=\{1\}$. Blocking by $p$ takes the $p$th power of
-    the transfer map, so $\E_{A^{[p]}}$ is primitive in the
-    peripheral-spectrum sense of the corresponding definition in the companion quantum-channel volume~\cite[``Primitive map'']{QICLean2026Blueprint}.
+    the transfer map, so in the peripheral-spectrum sense of the companion quantum-channel volume~\cite[``Primitive map'']{QICLean2026Blueprint}, $\E_{A^{[p]}}$ is primitive.
     The blocked map need not remain irreducible: eigenvalue~$1$ may have several
-    cyclic corners. The adjoint-fixed projections are therefore compressed
-    before irreducibility and primitivity are asserted sector by sector in
-    Theorem~\ref{thm:cyclic_sector_decomp_irr_tp_prim_irr}. This is the
-    periodicity-removal step of
-    \cite[Section~2.3]{Cirac2016MPDO_arXiv} for an irreducible block already in
-    TP gauge.
+    cyclic corners. For an irreducible block already in TP gauge, the
+    periodicity-removal step of \cite[Section~2.3]{Cirac2016MPDO_arXiv} and
+    Theorem~\ref{thm:cyclic_sector_decomp_irr_tp_prim_irr} therefore compress
+    the adjoint-fixed projections before asserting irreducibility and
+    primitivity sector by sector.
 \end{proof}
 
 \section{Left-canonical and dual diagonalization of irreducible blocks}%
@@ -468,8 +466,9 @@ then infer primitivity of the sector maps. This is the blocking step of
 Each irreducible block in trace-preserving gauge admits a unitary
 normalization with diagonal positive Perron data. This is the normalization
 component of CFII (Definition~\ref{def:cpsv_cfii}); the full CFII assertion also
-requires the CPSV canonical-form and normal-block hypotheses. The full PGVWC07
-canonical form is Theorem~\ref{thm:pgvwc07_ti_canonical_form}.
+requires the CPSV canonical-form and normal-block hypotheses, while
+Theorem~\ref{thm:pgvwc07_ti_canonical_form} establishes the full PGVWC07
+canonical form.
 
 \begin{theorem}[Diagonal Perron data for an irreducible TP block]%
     \label{thm:CFII_data}
@@ -485,16 +484,15 @@ canonical form is Theorem~\ref{thm:pgvwc07_ti_canonical_form}.
         \item $\Lambda$ is diagonal and positive definite,
         \item $A$ and $B$ generate the same MPV family.
     \end{enumerate}
-    These are the two normalization identities in the canonical form~II
-    definition of \cite[Appendix~A]{Cirac2016MPDO_arXiv}.
+    In \cite[Appendix~A]{Cirac2016MPDO_arXiv}, these two identities define the
+    canonical form~II block normalization.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:form_II, thm:samempv_unitary}
     Theorem~\ref{thm:form_II} provides the unitary and the diagonal
-    positive-definite fixed point, and unitary conjugation preserves
-    trace preservation and the MPV family
-    (Theorem~\ref{thm:samempv_unitary}).
+    positive-definite fixed point, and by Theorem~\ref{thm:samempv_unitary}
+    unitary conjugation preserves trace preservation and the MPV family.
 \end{proof}
 
 \begin{theorem}[Dual diagonalization for irreducible unital blocks]%
@@ -514,16 +512,16 @@ canonical form is Theorem~\ref{thm:pgvwc07_ti_canonical_form}.
          & =\Lambda.
         \label{eq:canon_dual_diag_unital_pair}
     \end{align}
-    Moreover, $A$ and $B$ generate the same MPV family. This is the dual-map
-    fixed-point and unitary-diagonalization step of
-    \cite[Theorem~4]{PerezGarcia2007Matrix}.
+    As in the dual-map fixed-point and unitary-diagonalization step of
+    \cite[Theorem~4]{PerezGarcia2007Matrix}, the tensors $A$ and $B$ generate
+    the same MPV family.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:CFII_data, thm:samempv_unitary}
-    Apply Theorem~\ref{thm:CFII_data} to the conjugate-transposed family
-    $i\mapsto(A^i)^\dagger$: unitality of $A$ is trace preservation for this
-    family, whose transfer map is the dual of $\E_A$. Translating back gives
+    Applying Theorem~\ref{thm:CFII_data} to the conjugate-transposed family
+    $i\mapsto(A^i)^\dagger$ uses that unitality of $A$ is trace preservation for this
+    family, whose transfer map is the dual of $\E_A$; translating back gives
     (\ref{eq:canon_dual_diag_unital_pair}).
 \end{proof}
 
@@ -597,9 +595,9 @@ over a common blocked alphabet.
 \begin{proof}\leanok
     \uses{lem:blocked_irreducibility_direct_support, thm:normal_from_primitive_posdef}
     The primitive peripheral spectrum, tensor irreducibility, and
-    left-canonical normalization give primitive fixed-point data. The fixed
-    point is positive definite by
-    Lemma~\ref{lem:blocked_irreducibility_direct_support}.
+    left-canonical normalization give primitive fixed-point data. By
+    Lemma~\ref{lem:blocked_irreducibility_direct_support}, the fixed
+    point is positive definite, and
     Theorem~\ref{thm:normal_from_primitive_posdef} then gives normality.
 \end{proof}
 
@@ -637,13 +635,13 @@ refines them into primitive irreducible blocks.
 
 \begin{proof}\leanok
     \uses{thm:tp_gauge_arbitrary, thm:common_blocking_period_tp_irreducible, lem:block_weights_ne_zero, thm:same_mpv2_pos_block_tensor_to_tensor_from_blocks}
-    Theorem~\ref{thm:tp_gauge_arbitrary} supplies the left-canonical nontrivial
+    Theorem~\ref{thm:tp_gauge_arbitrary} gives the left-canonical nontrivial
     blocks, the positive-length equality, and the bound $\sum_kD_k\le D$.
-    Apply Theorem~\ref{thm:common_blocking_period_tp_irreducible} directly to
-    this finite irreducible family. Its proof first applies
-    Theorem~\ref{thm:blocking_primitivity} to each block and then takes the
+    Applying Theorem~\ref{thm:common_blocking_period_tp_irreducible} directly to
+    this finite irreducible family first invokes
+    Theorem~\ref{thm:blocking_primitivity} on each block and then takes the
     least common multiple of the resulting periods through
-    Theorem~\ref{thm:common_blocking_period}. This gives one positive length
+    Theorem~\ref{thm:common_blocking_period}, yielding one positive length
     $p$ at which every blocked transfer map is primitive.
     Lemma~\ref{lem:block_weights_ne_zero} keeps the blocked weights nonzero, and
     Lemma~\ref{thm:same_mpv2_pos_block_tensor_to_tensor_from_blocks} carries
@@ -667,13 +665,12 @@ refines them into primitive irreducible blocks.
 \begin{proof}
     \leanok
     \uses{thm:ft_after_blocking_common_length_common_sector_theorem, thm:common_blocked_cyclic_sector_reindexed_nonzero_part}
-    Apply
-    Theorem~\ref{thm:ft_after_blocking_common_length_common_sector_theorem} to
-    choose the common blocking length and the two common cyclic-sector
-    families. For either family, write $G_k$ for its cyclic-sector blocks and
-    $(\nu_x,C_x)$ for the weights and blocks of the flattened common-sector
+    Theorem~\ref{thm:ft_after_blocking_common_length_common_sector_theorem}
+    provides the common blocking length and the two common cyclic-sector
+    families. For either family, with $G_k$ denoting its cyclic-sector blocks and
+    $(\nu_x,C_x)$ the weights and blocks of the flattened common-sector
     family from
-    Lemma~\ref{thm:common_blocked_cyclic_sector_reindexed_nonzero_part}. The
+    Lemma~\ref{thm:common_blocked_cyclic_sector_reindexed_nonzero_part}, the
     common-alphabet nonzero-part identity gives, for every length~$N$ and
     blocked word $\sigma$,
     \begin{align}

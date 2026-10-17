@@ -47,33 +47,30 @@ theorem roughLowerLabelDefect_label_bound
   dsimp only [roughLowerLabelDefect]
   linarith only [h]
 
-/-- The exact remainder of the coefficient-three rough estimate, with the
-same supplied label sequence and total band weight four.
-Source: `07-comparators.tex`, lines 585--651; `08-scanner.tex`, 755--769. -/
-def roughLowerRemainder (Kband : ℕ) (c Cf : ℝ)
+/-- The replica remainder at an arbitrary fixed per-band weight.
+Source: area-law manuscript, 07-comparators.tex, lines 97--169 and 585--651. -/
+def roughLowerRemainderAtWeight (Kband : ℕ) (a c Cf : ℝ)
     (ell : (k : ℕ) → IrrepLabel (Equiv.Perm (Fin k))) (Sent : ℝ) (k : ℕ) : ℝ :=
   ((Kband : ℝ) / 2 *
     (2 * |Real.log ((k : ℝ) + 1) + c * Real.log ((k : ℝ) + 2) +
-      (4 / (Kband : ℝ)) * roughLowerLabelDefect ell Sent k| +
+      a * roughLowerLabelDefect ell Sent k| +
       Cf * Real.log ((k : ℝ) + 2) + 2 * Real.log 2 + Real.log (3 / 2))) /
         (k : ℝ)
 
-/-- The exact little-o label conclusion of the physical prevector theorem
-makes the actual rough lower remainder vanish for this same label sequence.
-Source: `07-comparators.tex`, lines 255--281 and 585--651, adc7f124. -/
-theorem tendsto_roughLowerRemainder_of_label_dimension
+/-- The same supplied label sequence makes the fixed-weight remainder vanish.
+Source: area-law manuscript, 07-comparators.tex, lines 255--281 and 585--651. -/
+theorem tendsto_roughLowerRemainderAtWeight_of_label_dimension
     (ell : (k : ℕ) → IrrepLabel (Equiv.Perm (Fin k))) (Sent : ℝ)
     (hdim : Asymptotics.IsLittleO atTop
       (fun k : ℕ => Real.log (ell k).dim - (k : ℝ) * Sent)
-      (fun k : ℕ => (k : ℝ))) (Kband : ℕ) (c Cf : ℝ) :
-    Tendsto (roughLowerRemainder Kband c Cf ell Sent) atTop (𝓝 0) := by
-  let a := 4 / (Kband : ℝ)
+      (fun k : ℕ => (k : ℝ))) (Kband : ℕ) (a c Cf : ℝ) :
+    Tendsto (roughLowerRemainderAtWeight Kband a c Cf ell Sent) atTop (𝓝 0) := by
   have hlog (b : ℝ) :
       Tendsto (fun k : ℕ => Real.log ((k : ℝ) + b) / (k : ℝ)) atTop (𝓝 0) := by
     have hshift : Tendsto (fun k : ℕ => (k : ℝ) + b) atTop atTop :=
       tendsto_atTop_add_const_right _ _ tendsto_natCast_atTop_atTop
     have hh := (Real.tendsto_pow_log_div_mul_add_atTop 1 (-b) 1 one_ne_zero).comp hshift
-    simpa only [Function.comp_def, pow_one, one_mul, add_neg_cancel_right] using hh
+    simpa only [Function.comp_def, pow_one, _root_.one_mul, add_neg_cancel_right] using hh
   have hinv : Tendsto (fun k : ℕ => (k : ℝ)⁻¹) atTop (𝓝 0) :=
     tendsto_inv_atTop_zero.comp tendsto_natCast_atTop_atTop
   have hconst (b : ℝ) : Tendsto (fun k : ℕ => b / (k : ℝ)) atTop (𝓝 0) := by
@@ -104,6 +101,26 @@ theorem tendsto_roughLowerRemainder_of_label_dimension
         2 * Real.log 2 + Real.log (3 / 2))) / (k : ℝ)) atTop (𝓝 0)
   simpa only [mul_div_assoc, mul_zero] using
     herr.const_mul ((Kband : ℝ) / 2)
+
+
+/-- The exact remainder of the coefficient-three rough estimate, with the
+same supplied label sequence and total band weight four.
+Source: `07-comparators.tex`, lines 585--651; `08-scanner.tex`, 755--769. -/
+def roughLowerRemainder (Kband : ℕ) (c Cf : ℝ)
+    (ell : (k : ℕ) → IrrepLabel (Equiv.Perm (Fin k))) (Sent : ℝ) (k : ℕ) : ℝ :=
+  roughLowerRemainderAtWeight Kband (4 / (Kband : ℝ)) c Cf ell Sent k
+
+/-- The exact little-o label conclusion of the physical prevector theorem
+makes the actual rough lower remainder vanish for this same label sequence.
+Source: `07-comparators.tex`, lines 255--281 and 585--651, adc7f124. -/
+theorem tendsto_roughLowerRemainder_of_label_dimension
+    (ell : (k : ℕ) → IrrepLabel (Equiv.Perm (Fin k))) (Sent : ℝ)
+    (hdim : Asymptotics.IsLittleO atTop
+      (fun k : ℕ => Real.log (ell k).dim - (k : ℝ) * Sent)
+      (fun k : ℕ => (k : ℝ))) (Kband : ℕ) (c Cf : ℝ) :
+    Tendsto (roughLowerRemainder Kband c Cf ell Sent) atTop (𝓝 0) := by
+  exact tendsto_roughLowerRemainderAtWeight_of_label_dimension
+    ell Sent hdim Kband (4 / (Kband : ℝ)) c Cf
 
 /-- For any positive error allowance, one replica threshold controls the
 remainder before a copy number or any actual interpolation is selected.

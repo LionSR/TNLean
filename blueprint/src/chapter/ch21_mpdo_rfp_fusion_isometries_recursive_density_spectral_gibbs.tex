@@ -20,8 +20,8 @@
     bond matrix $K_\gamma$. Choose an orthonormal eigenbasis of each
     $K_\gamma$. Its spectral indices are pairs $s=(\gamma,k)$; write
     $\lambda_s$ for the corresponding eigenvalue and $E_s$ for the rank-one
-    orthogonal projection onto the chosen eigenvector. Recursively transport
-    this family through every fusion history and the adjoint sequential
+    orthogonal projection onto the chosen eigenvector. Recursively carry
+    this family across every fusion history and the adjoint sequential
     coisometry. Taking the direct sum over all labels and multiplicities
     at positive length $N$ defines the operator $P_s^{(N)}$.
 
@@ -85,15 +85,15 @@ spectral indices $s=(\gamma,k)$ with first entry $\gamma$.
     \leanok
     \uses{def:horizontal_cf_mpdo, def:mpdo, def:is_rfp_via_ts, def:mpdo_bnt_fusion_tensor_clause, def:mpdo_fusion_clause_terminal_spectral_refinement, thm:mpdo_horizontal_rfp_to_bnt_fusion_tensor}
     For an MPDO in normalized BNT-refined horizontal form satisfying the
-    RFP condition, fix the fusion decomposition supplied by that
+    RFP condition, fix the fusion decomposition given by that
     construction. For every terminal label $\gamma$, close the horizontal
     operator leg of $M_\gamma$ to obtain a matrix $K_\gamma$ on its bond
     space. Choose an orthonormal eigenbasis of each $K_\gamma$, with spectral
     indices $s=(\gamma,k)$ satisfying $0\leq k<D_\gamma$.
     Write $\lambda_s$ for the corresponding eigenvalue and $E_s$ for the
     rank-one orthogonal projection onto the chosen eigenvector, extended by
-    zero on terminal labels different from~$\gamma$. Recursively transport
-    this terminal family through every fusion history, then through the
+    zero on terminal labels different from~$\gamma$. Recursively carry
+    this terminal family across every fusion history, then across the
     adjoint sequential fusion coisometry, and take the direct sum over all
     sitewise label and multiplicity configurations. Denote the resulting
     operator at positive chain length $N$ by $P_s^{(N)}$.
@@ -153,11 +153,11 @@ spectral indices $s=(\gamma,k)$ with first entry $\gamma$.
 \end{theorem}
 \begin{proof}\leanok
     Positivity of the physical density operator makes each terminal bond
-    matrix positive semidefinite. Its spectral theorem supplies the
+    matrix positive semidefinite. Its spectral theorem gives the
     non-negative eigenvalues and orthogonal rank-one projections. Length
     independence makes every retained diagonal entry of
     $\chi_{\alpha,\beta,\gamma}$ equal to one, so recursive coisometric
-    transport preserves orthogonality and the spectral sum.
+    conjugation preserves orthogonality and the spectral sum.
     Corollary~\ref{cor:mpdo_fusion_clause_topological_density_factor_commutator}
     gives the final two identities.
 \end{proof}
@@ -169,7 +169,7 @@ spectral indices $s=(\gamma,k)$ with first entry $\gamma$.
     \leanok
     \uses{def:horizontal_cf_mpdo, def:mpdo, def:is_rfp_via_ts, def:mpdo_terminal_spectral_refinement, thm:mpdo_horizontal_rfp_to_bnt_fusion_tensor, thm:mpdo_fusion_clause_terminal_spectral_projector_refinement}
     Let $M$ generate MPDOs, be in normalized BNT-refined horizontal form,
-    and satisfy the RFP condition. Fix the fusion decomposition supplied by
+    and satisfy the RFP condition. Fix the fusion decomposition given by
     that construction, and suppose that its structure coefficients
     $c_{\alpha,\beta,\gamma}^{(L)}
         =\tr(\chi_{\alpha,\beta,\gamma}^{L})$, with positive diagonal
@@ -203,7 +203,7 @@ spectral indices $s=(\gamma,k)$ with first entry $\gamma$.
         \label{eq:rfp_density_spectral_sum}
     \end{align}
     Length independence is assumed for the coefficients of the fixed fusion
-    decomposition supplied by the RFP construction, not for an arbitrary
+    decomposition given by the RFP construction, not for an arbitrary
     fusion decomposition.
 
     The normalized BNT-refined horizontal hypothesis is stronger than CF
@@ -216,14 +216,14 @@ spectral indices $s=(\gamma,k)$ with first entry $\gamma$.
 \begin{proof}\leanok
     \uses{thm:mpdo_topological_projector_recursion, thm:mpdo_topological_density_decomposition, cor:mpdo_topological_density_factor_commutator}
     Positivity of the one-site density operator passes to every fixed BNT
-    block; division by its strictly positive multiplicity weight shows that
-    each $K_\gamma$ is positive semidefinite. Apply the finite-dimensional
-    spectral theorem to obtain the non-negative eigenvalues and rank-one
-    orthogonal projections. Length independence makes every retained diagonal
-    entry of $\chi_{\alpha,\beta,\gamma}$ equal to one, so the recursive
-    direct sum preserves idempotence and pairwise orthogonality. Write
+    block, and division by its strictly positive multiplicity weight shows that
+    each $K_\gamma$ is positive semidefinite. The finite-dimensional
+    spectral theorem then yields the non-negative eigenvalues and rank-one
+    orthogonal projections. Because length independence makes every retained
+    diagonal entry of $\chi_{\alpha,\beta,\gamma}$ equal to one, the recursive
+    direct sum preserves idempotence and pairwise orthogonality. Writing
     $Q_{N,c,s}$ for the recursive spectral block in copy
-    configuration~$c$. The coisometry identity
+    configuration~$c$, the coisometry identity
     $W_{N,c}W_{N,c}^\dagger=\Id$ gives
     \begin{align}
         (W_{N,c}^\dagger Q_{N,c,s}W_{N,c})^\dagger
@@ -233,8 +233,8 @@ spectral indices $s=(\gamma,k)$ with first entry $\gamma$.
          & =W_{N,c}^\dagger Q_{N,c,s}W_{N,c}.
         \notag
     \end{align}
-    Thus transport through the adjoint sequential coisometry preserves the
-    projector identities. Linearity gives
+    Thus conjugation by the adjoint sequential coisometry preserves the
+    projector identities, and linearity gives
     (\ref{eq:rfp_terminal_spectral_sum}). Finally, $A_N$ is scalar on every
     copy-configuration block, hence it commutes with each $P_s^{(N)}$ and
     gives (\ref{eq:rfp_density_spectral_sum}).
@@ -360,17 +360,18 @@ spectral indices $s=(\gamma,k)$ with first entry $\gamma$.
     \uses{thm:mpdo_fusion_clause_topological_density_decomposition, cor:mpdo_fusion_clause_topological_density_factor_commutator, thm:mpdo_fusion_clause_terminal_spectral_projector_refinement}
     Each diagonal entry of $\mu$ is strictly positive, so its negative
     logarithm is real. The translated terms are diagonal, and each site
-    contributes once to their sum. Exponentiating gives
+    contributes once to their sum; exponentiating gives
     (\ref{eq:rfp_gibbs_factor}).
 
     Positivity of the multiplicities embeds one terminal mode for every
-    terminal spectral index into the retained coordinates. The rank of the
-    coisometry restricted to the retained rows is at most $d$, so the terminal
-    family has at most $d$ members. Extend the eigenvalues and spectral
-    projectors by zero along an injection into $\{0,\ldots,d-1\}$. The added
-    zero projectors preserve self-adjointness, idempotence, commutation, and
-    the spectral sum. Combine that sum with (\ref{eq:rfp_gibbs_factor}) and
-    the exact adjoint reconstruction of the retained density operator.
+    terminal spectral index into the retained coordinates. Because the rank of
+    the coisometry restricted to the retained rows is at most $d$, the
+    terminal family has at most $d$ members. Extending the eigenvalues and
+    spectral projectors by zero along an injection into $\{0,\ldots,d-1\}$,
+    the added zero projectors preserve self-adjointness, idempotence,
+    commutation, and the spectral sum, which combines with
+    (\ref{eq:rfp_gibbs_factor}) and the exact adjoint reconstruction of the
+    retained density operator.
 \end{proof}
 
 \begin{theorem}[Commuting Gibbs decomposition on the retained vertical space
@@ -381,7 +382,7 @@ spectral indices $s=(\gamma,k)$ with first entry $\gamma$.
     \uses{def:horizontal_cf_mpdo, def:mpdo, def:is_rfp_via_ts, thm:mpdo_horizontal_rfp_to_bnt_fusion_tensor, thm:mpdo_fusion_clause_topological_gibbs_at_least_two}
     Let $M$ generate MPDOs, be in normalized BNT-refined horizontal form,
     and satisfy the RFP condition. Select the fusion decomposition on the
-    nonzero product sectors supplied by that condition, and suppose that the
+    nonzero product sectors given by that condition, and suppose that the
     structure coefficients $c_{\alpha,\beta,\gamma}^{(L)}
         =\tr(\chi_{\alpha,\beta,\gamma}^{L})$ of this same decomposition are
     independent of $L$ for all positive lengths. Then the commuting Gibbs
@@ -396,10 +397,10 @@ spectral indices $s=(\gamma,k)$ with first entry $\gamma$.
     \cite{gap:cpsv16_topological_gibbs_length_one} regarding length one).
 \end{theorem}
 \begin{proof}\leanok
-    Select the fusion decomposition on the nonzero product sectors supplied
-    by the RFP condition and apply
-    Theorem~\ref{thm:mpdo_fusion_clause_topological_gibbs_at_least_two}
-    with the assumed length independence of its structure coefficients.
+    Applying Theorem~\ref{thm:mpdo_fusion_clause_topological_gibbs_at_least_two}
+    to the fusion decomposition on the nonzero product sectors given by the
+    RFP condition, together with the assumed length independence of its
+    structure coefficients, yields the decomposition.
 \end{proof}
 
 \begin{theorem}[Fusion decomposition gives a physical commuting Gibbs
@@ -452,10 +453,10 @@ spectral indices $s=(\gamma,k)$ with first entry $\gamma$.
     Figure~11. See
     \cite{gap:cpsv16_figure11_fusion_coisometry}.
 
-    To define the operators on the full physical space, transport the retained
-    one-site energy through the adjoint coisometry and extend it by zero
-    energy on the orthogonal complement. Transport the retained projectors
-    through the adjoint sitewise coisometry. This supplies the physical
+    To define the operators on the full physical space, conjugate the retained
+    one-site energy by the adjoint coisometry and extend it by zero
+    energy on the orthogonal complement. Conjugate the retained projectors
+    by the adjoint sitewise coisometry. This gives the physical
     complement correction described in
     \cite{gap:cpsv16_topological_gibbs_physical_complement}.
 
@@ -477,10 +478,10 @@ spectral indices $s=(\gamma,k)$ with first entry $\gamma$.
     on separate one-site factors, hence commute, and their exponential is the
     tensor power of (\ref{eq:rfp_physical_weight}).
 
-    For the sitewise coisometry $W=V^{\otimes L}$, transport each retained
-    projector by $\widehat P_i^{(L)}=W^\dagger P_i^{(L)}W$. The identity
+    For the sitewise coisometry $W=V^{\otimes L}$, set
+    $\widehat P_i^{(L)}=W^\dagger P_i^{(L)}W$. The identity
     $WW^\dagger=\Id$ preserves self-adjointness, idempotence, and pairwise
-    orthogonality. The one-site intertwining identities transport the
+    orthogonality. The one-site intertwining identities carry the
     retained commutator to the physical Gibbs factor. Applying the same
     identities term by term to (\ref{eq:rfp_retained_gibbs_sum}), and then
     using exact adjoint reconstruction, gives
@@ -495,7 +496,7 @@ spectral indices $s=(\gamma,k)$ with first entry $\gamma$.
     \uses{def:horizontal_cf_mpdo, def:mpdo, def:is_rfp_via_ts, thm:mpdo_horizontal_rfp_to_bnt_fusion_tensor, thm:mpdo_fusion_clause_physical_coordinate_gibbs_at_least_two}
     Let $M$ generate MPDOs, be in normalized BNT-refined horizontal form,
     and satisfy the RFP condition. Select the fusion decomposition on the
-    nonzero product sectors supplied by that condition, and suppose that the
+    nonzero product sectors given by that condition, and suppose that the
     structure coefficients $c_{\alpha,\beta,\gamma}^{(L)}
         =\tr(\chi_{\alpha,\beta,\gamma}^{L})$ of this same decomposition are
     independent of $L$ for all positive lengths. Then the physical commuting
@@ -503,19 +504,20 @@ spectral indices $s=(\gamma,k)$ with first entry $\gamma$.
     Theorem~\ref{thm:mpdo_fusion_clause_physical_coordinate_gibbs_at_least_two}
     holds for every $L=N+2$, with $N\in\N$.
 
-    The retained one-site energy is transported through the adjoint
+    The retained one-site energy is conjugated by the adjoint
     coisometry and extended by zero energy on the orthogonal complement.
-    The retained projectors are transported through the adjoint sitewise
-    coisometry, supplying the physical complement correction described in
+    The retained projectors are conjugated by the adjoint sitewise
+    coisometry, giving the physical complement correction described in
     \cite{gap:cpsv16_topological_gibbs_physical_complement}.
     The conclusion holds for $L=N+2$ (see
     \cite{gap:cpsv16_topological_gibbs_length_one} regarding length one).
 \end{theorem}
 \begin{proof}\leanok
-    Select the fusion decomposition on the nonzero product sectors supplied
-    by the RFP condition and apply
+    Applying
     Theorem~\ref{thm:mpdo_fusion_clause_physical_coordinate_gibbs_at_least_two}
-    with the assumed length independence of its structure coefficients.
+    to the fusion decomposition on the nonzero product sectors given by the
+    RFP condition, together with the assumed length independence of its
+    structure coefficients, yields the physical commuting Gibbs decomposition.
 \end{proof}
 
 \begin{definition}[Fusion decomposition for an RFP tensor in CPSV canonical
@@ -557,7 +559,7 @@ spectral indices $s=(\gamma,k)$ with first entry $\gamma$.
     Let $M$ generate MPDOs, suppose that its MPS tensor with paired physical
     indices is in CF as defined by CPSV, and suppose that $M$ satisfies the
     RFP condition. Select the fusion decomposition on the nonzero product
-    sectors supplied by these three hypotheses, and assume that the structure
+    sectors given by these three hypotheses, and assume that the structure
     coefficients $c_{\alpha,\beta,\gamma}^{(L)}
         =\tr(\chi_{\alpha,\beta,\gamma}^{L})$ of this same decomposition are
     independent of $L$ for all positive lengths.
@@ -604,10 +606,10 @@ spectral indices $s=(\gamma,k)$ with first entry $\gamma$.
     Figure~11. See
     \cite{gap:cpsv16_figure11_fusion_coisometry}.
 
-    The retained one-site energy is transported through the adjoint
+    The retained one-site energy is conjugated by the adjoint
     coisometry and extended by zero energy on the orthogonal complement.
-    The retained projectors are transported through the adjoint sitewise
-    coisometry. This supplies the physical complement correction described in
+    The retained projectors are conjugated by the adjoint sitewise
+    coisometry. This gives the physical complement correction described in
     \cite{gap:cpsv16_topological_gibbs_physical_complement}.
 
     The conclusion holds for $L=N+2$. The definition of the local interaction
@@ -616,10 +618,12 @@ spectral indices $s=(\gamma,k)$ with first entry $\gamma$.
     \cite{gap:cpsv16_topological_gibbs_length_one}.
 \end{theorem}
 \begin{proof}\leanok
-    Choose the fusion decomposition on the nonzero product sectors supplied by
-    Theorem~\ref{thm:mpdo_literal_cpsv_rfp_to_bnt_fusion_tensor}. Its
-    structure coefficients are length independent by hypothesis. Apply
-    Theorem~\ref{thm:mpdo_fusion_clause_physical_coordinate_gibbs_at_least_two}.
+    Applying
+    Theorem~\ref{thm:mpdo_fusion_clause_physical_coordinate_gibbs_at_least_two}
+    to the fusion decomposition on the nonzero product sectors given by
+    Theorem~\ref{thm:mpdo_literal_cpsv_rfp_to_bnt_fusion_tensor}, whose
+    structure coefficients are length independent by hypothesis, yields the
+    claim.
 \end{proof}
 
 \begin{remark}[Length-one boundary of the two-site construction]%
@@ -627,7 +631,7 @@ spectral indices $s=(\gamma,k)$ with first entry $\gamma$.
     The local-interaction definition in \cite{Cirac2016MPDO_arXiv} lets a
     local operator act on the first two spins and translates it around the
     periodic chain. Thus its construction has domain $L\geq2$. Periodic
-    identification of site labels supplies neither a map from two-site
+    identification of site labels provides neither a map from two-site
     operators to one-site operators nor a multiplicity for the coincident
     edge.
 

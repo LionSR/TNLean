@@ -11,21 +11,21 @@
     Put $P_i=\bigcup_{j<i,\,f_j=f_i}X_j$.
     Assume $I_\Omega(X_i:C\cup B\cup P_i)\le\varepsilon_i$ when $f_i=0$ and
     $I_\Omega(X_i:(G\cup B)^c\cup P_i)\le\varepsilon_i$ when $f_i=1$.
-    Then
+    Then, as in the entropy estimate preceding the geometric counting argument
+    in \cite[Lemma~3.2]{OpenAI2026PolynomialPEPS},
     \begin{align}
         S_\Omega(G\cup B)+S_\Omega(C\cup B)-S_\Omega(B)-S_\Omega(G\cup C\cup B)
         \le 2S_\Omega(D)+\sum_i\varepsilon_i.
         \notag
     \end{align}
-    This is the entropy estimate used before the geometric counting argument in
-    \cite[Lemma~3.2]{OpenAI2026PolynomialPEPS}.
 \end{theorem}
 \begin{proof}\leanok
-    Filter the common order by the two labels. In each family, its preceding union
-    is exactly $P_i$. Since $C$ is disjoint from $G\cup B$,
-    $C\cup(G\cup B\cup C)^c=(G\cup B)^c$, so the second-family hypothesis has
-    the required complementary-exterior form. Apply the generic pure-state
-    conditional two-family bound and combine the two disjoint index sums.
+    Filtering the common order by the two labels identifies each family's
+    preceding union with $P_i$. Since $C$ is disjoint from $G\cup B$,
+    $C\cup(G\cup B\cup C)^c=(G\cup B)^c$, giving the second-family hypothesis
+    the required complementary-exterior form; the generic pure-state
+    conditional two-family bound and the combined disjoint index sums then
+    yield the displayed inequality.
     The finite-domain regional entropies agree with the corresponding generic
     finite-product reduced-state entropies.
 \end{proof}
@@ -68,8 +68,8 @@
     \end{align}
 \end{corollary}
 \begin{proof}\leanok
-    Apply Corollary~\ref{cor:peps_cell_information_counting_form} to the
-    partition of $G$ with no pieces and remainder $G$.
+    Applying Corollary~\ref{cor:peps_cell_information_counting_form} to the
+    partition of $G$ with no pieces and remainder $G$ gives the stated bound.
 \end{proof}
 
 % Source: OpenAI2026PolynomialPEPS, Lemma 3.2 (lem:cell-cmi), 02-information.tex,
@@ -92,7 +92,7 @@
         m & \le C+C\log\log(s+e).
         \notag
     \end{align}
-    For every branching bound $b\ge0$ there is moreover $C>0$ such that, under
+    For every branching bound $b\ge0$ there is also $C>0$ such that, under
     the same condition and with $s\ge1$,
     \begin{align}
         \sum_{j=0}^{m}b^{j} & \le C(1+\log s)^{C}.
@@ -221,12 +221,11 @@
     number at most $C(1+\log s)^{K}$ in total.
 \end{theorem}
 \begin{proof}\leanok
-    Run the recursion of Lemma~\ref{lem:peps_cell_generation_invariant} from
-    the chosen cell until the side drops below $u_*$, where $u_*$ is so large
+    Iterating the recursion of Lemma~\ref{lem:peps_cell_generation_invariant}
+    from the chosen cell until the side drops below $u_*$ (chosen so large
     that $1000u^{\gamma}\le u$ and $8u^{\gamma}\le u^{\gamma'}$ for $u\ge u_*$,
-    with $\gamma<\gamma'<1$ and $\gamma'>0$. By
-    Theorem~\ref{thm:peps_cell_generation_count} this happens after finitely
-    many generations. The tiles of all generations are the pieces, and the
+    with $0<\gamma<\gamma'<1$) terminates after finitely
+    many generations by Theorem~\ref{thm:peps_cell_generation_count}. The tiles of all generations are the pieces, and the
     sites still allowed are the remainder. Each active square has at most
     $25$ children, so there are at most $25^{g}$ active squares in generation
     $g$, two tiles per active square, and at most $(u_*+1)^2$ lattice points

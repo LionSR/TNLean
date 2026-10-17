@@ -52,12 +52,12 @@
         thm:peps_two_plaquette_graph,thm:peps_edge_map_subgraph}
     On a torus of horizontal period at least four and vertical period
     at least three, place the six sites at the displayed coordinates.
-    Their numbering identifies $\Gamma$ with the actual induced torus
-    graph on the resulting region $R$. Transport $T,e_0,e_1$ by this
+    Their numbering identifies $\Gamma$ with the induced torus
+    graph on the resulting region $R$. Carry $T,e_0,e_1$ across this
     identification, retaining the ordered bond endpoints.
 \end{definition}
 
-\begin{theorem}[Actual six-site torus geometry]
+\begin{theorem}[Six-site torus geometry]
     \label{thm:peps_two_plaquette_torus_geometry}
     \lean{TNLean.PEPS.twoPlaquetteTorusTree_isTree,
         TNLean.PEPS.twoPlaquetteTorusTree_le,
@@ -71,10 +71,10 @@
     \leanok
     \uses{def:peps_two_plaquette_torus_geometry,
         thm:peps_two_plaquette_graph}
-    The actual region $R$ is the coordinate rectangle
+    The region $R$ is the coordinate rectangle
     $\{0,1,2\}\times\{0,1\}$. It has six physical sites,
     seven internal bonds, and a connected induced graph.
-    The transported $T$ is a spanning tree with five bonds.
+    The image of $T$ is a spanning tree with five bonds.
     Its two selected non-tree bonds are distinct and have ordered endpoints
     $(0,0)\to(0,1)$ and $(1,0)\to(1,1)$.
     These statements concern the ambient torus region, including its exterior
@@ -85,7 +85,7 @@
     coordinates lie between zero and one. The period bounds exclude
     additional wraparound adjacency inside the region. Thus coordinate
     comparison preserves and reflects each bond of $\Gamma$.
-    The resulting graph isomorphism transports the spanning tree,
+    The resulting graph isomorphism carries over the spanning tree,
     connectivity, and both edge counts. The lexicographic order
     orients each selected vertical bond upward.
 \end{proof}

@@ -18,11 +18,10 @@ spectral decomposition, and quantitative decay bounds.
     \lean{MPSTensor.onePointExpectation}
     \leanok
     \uses{def:transfer_map, thm:qpf}
-    Fix an MPS tensor and a right fixed point of its transfer map.
-    Write the tensor as $A$ and the fixed point as $\rho^R$.
-    Under the hypotheses of Theorem~\ref{thm:qpf}, that fixed point exists
-    and is unique up to scaling; we normalize it so that $\tr(\rho^R)=1$.
-    For an auxiliary-space insertion $X\in\MN{D}$, define
+    Let $A$ be an MPS tensor and $\rho^R$ a right fixed point of its transfer map.
+    Under the hypotheses of Theorem~\ref{thm:qpf}, this fixed point exists
+    and is unique up to scaling, normalized here so that $\tr(\rho^R)=1$.
+    For an auxiliary-space insertion $X\in\MN{D}$, the one-point functional is
     \begin{align}
         \langle X_0 \rangle & = \tr(X\rho^R). \notag
     \end{align}
@@ -32,13 +31,14 @@ spectral decomposition, and quantitative decay bounds.
     \lean{MPSTensor.twoPointExpectation}
     \leanok
     \uses{def:transfer_map, def:one_point_expectation}
-    For auxiliary-space insertions $X,Y\in\MN{D}$ and $n\ge0$, define
+    For auxiliary-space insertions $X,Y\in\MN{D}$ and $n\ge0$, the two-point
+    functional at distance $n$ is
     \begin{align}
         \langle X_0 Y_n \rangle
          & = \tr\!\left(Y\,\E_A^n(X\rho^R)\right). \notag
     \end{align}
-    Equivalently, insert $X$ at site $0$, propagate by $\E_A^n$, then insert
-    $Y$ and take the trace.
+    This functional inserts $X$ at site $0$, propagates the resulting state by
+    $\E_A^n$, and traces against $Y$.
     \begin{center}
         \tenkzkernel
         % Formula: \langle X_0Y_n\rangle
@@ -78,13 +78,13 @@ spectral decomposition, and quantitative decay bounds.
     \lean{MPSTensor.tracelessPart}
     \leanok
     For a matrix $\rho\in\MN{D}$ and an auxiliary insertion
-    $X\in\MN{D}$, define
+    $X\in\MN{D}$, the fixed-point-centered insertion is
     \begin{align}
         Z_\rho(X)
-         & = X\rho-\tr(X\rho)\rho.
+         & = X\rho-\tr(X\rho)\rho,
         \label{eq:correlator_traceless_part}
     \end{align}
-    When $\tr(\rho)=1$, this removes the trace component of $X\rho$.
+    which removes the trace component of $X\rho$ when $\tr(\rho)=1$.
 \end{definition}
 
 \begin{lemma}[Trace of the centered insertion]%
@@ -121,9 +121,9 @@ spectral decomposition, and quantitative decay bounds.
          & =\tr\!\left(Y\,\E_A^n\bigl(Z_\rho(X)\bigr)\right).
         \label{eq:connected_correlator_traceless_reduction}
     \end{align}
-    When moreover $\tr(\rho)=1$, the preceding lemma shows that
-    $Z_\rho(X)$ is traceless.  The identity isolates the fixed-point
-    contribution before the remaining transfer iterates are analysed.
+    When $\tr(\rho)=1$, the preceding lemma shows that $Z_\rho(X)$ is
+    traceless, so this identity isolates the fixed-point contribution before
+    the remaining transfer iterates act.
 \end{theorem}
 
 \begin{proof}
@@ -150,13 +150,13 @@ spectral decomposition, and quantitative decay bounds.
     Let $\rho\in\MN{D}$ have nonzero trace, and set
     $P(Z)=\tr(Z)\rho/\tr\rho$. For physical operators $X,Y$ on independently
     chosen blocks of lengths $L_1,L_2$, and $n\geq0$ unobserved intermediate
-    sites, define
+    sites, the physical connected correlator is
     \[
         C_{\mathrm{phys}}(X,Y;n)=
         \tr\!\left(\E_X(\E_A-P)^n
         \bigl(\E_Y(\rho)-P(\E_Y(\rho))\bigr)\right).
     \]
-    The centering of the inner insertion includes adjacent blocks, $n=0$.
+    Centering the inner insertion covers adjacent blocks at $n=0$.
 \end{definition}
 
 \begin{lemma}[Physical connected contraction]
@@ -179,11 +179,11 @@ spectral decomposition, and quantitative decay bounds.
 \end{lemma}
 \begin{proof}
     \leanok
-    Trace preservation and stationarity give $P\E_A=\E_AP=P$ and $P^2=P$.
-    Induction yields
+    Trace preservation and stationarity give $P\E_A=\E_AP=P$ and $P^2=P$, so
+    induction yields
     $(\E_A-P)^n(Z-PZ)=\E_A^nZ-PZ$ at every $n\geq0$.
-    Taking $Z=\E_Y(\rho)$ proves the first identity. For $n\geq1$,
-    $\E_A^n=P+(\E_A-P)^n$, which proves the second.
+    Evaluating this identity at $Z=\E_Y(\rho)$ gives the first equality, while
+    the decomposition $\E_A^n=P+(\E_A-P)^n$ for $n\geq1$ gives the second.
 \end{proof}
 
 \begin{lemma}[Complementary gap in trace-preserving gauge]
@@ -197,10 +197,10 @@ spectral decomposition, and quantitative decay bounds.
 \end{lemma}
 \begin{proof}
     \leanok
-    Normality supplies irreducibility and peripheral spectrum $\{1\}$.
-    The complementary transfer-map gap for irreducible primitive channels
-    applies to the nonzero positive fixed state
-    \cite[``Complementary transfer-map gap for primitive maps'']{QICLean2026Blueprint}.
+    Normality implies irreducibility and peripheral spectrum $\{1\}$.
+    By the complementary transfer-map gap for primitive channels
+    \cite[``Complementary transfer-map gap for primitive maps'']{QICLean2026Blueprint},
+    the nonzero positive fixed state $\rho$ satisfies $\rho_{\spec}(\E_A-P)<1$.
 \end{proof}
 
 \begin{theorem}[Physical correlation decay in trace-preserving gauge]%
@@ -221,40 +221,40 @@ spectral decomposition, and quantitative decay bounds.
     $\rho_{\spec}(\E_A-P)<r<1$ for every finite support and every pair of
     observables. Thus the fixed-point infinite-chain connected correlations
     decay exponentially, without a diagonalizability assumption.
-    The source's pure-exponential expansion needs the Jordan-block
-    correction recorded in
-    \cite{gap:cpgsv21_correlator_diagonalizable_expansion}.
+    As recorded in
+    \cite{gap:cpgsv21_correlator_diagonalizable_expansion}, the source's
+    pure-exponential expansion requires a Jordan-block correction when
+    $\E_A-P$ is not diagonalizable.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{lem:normal_tensor_complement_gap}
-    Put $T=\E_A-P$ and $Z=\E_Y(\rho)-P(\E_Y(\rho))$.
-    The Gelfand formula gives a constant $C>0$ such that
+    For $T=\E_A-P$ and $Z=\E_Y(\rho)-P(\E_Y(\rho))$,
+    the Gelfand formula gives a constant $C>0$ such that
     $\|T^nZ\|\leq Cr^n\|Z\|$ at every $n\geq0$.
-    The linear functional $W\mapsto\tr(\E_X(W))$ on the finite-dimensional
-    matrix space has a bound $|\tr(\E_X(W))|\leq M_X\|W\|$ with $M_X>0$.
-    Hence $C_{XY}=M_XC\|Z\|+1$ proves the estimate.
-    Lemma~\ref{lem:normal_tensor_complement_gap} permits the choice $r<1$.
+    Because the linear functional $W\mapsto\tr(\E_X(W))$ on the finite-dimensional
+    matrix space satisfies $|\tr(\E_X(W))|\leq M_X\|W\|$ for some $M_X>0$,
+    the constant $C_{XY}=M_XC\|Z\|+1$ yields the geometric bound.
+    Under the normality hypothesis, Lemma~\ref{lem:normal_tensor_complement_gap}
+    gives $\rho_{\spec}(\E_A-P)<1$, permitting a rate $r<1$.
 \end{proof}
 
 \begin{remark}[Transfer-map spectral hypothesis]%
     \label{rem:spectral_hypothesis}
     \uses{thm:physical_correlator_tp_bound, thm:transfer_operator_gap_irr_tp, thm:transfer_map_gap_wielandt}
     The rate $r<1$ in Theorem~\ref{thm:physical_correlator_tp_bound}
-    gives exponential decay. It
-    is a transfer-map gap condition: all non-leading eigenvalues of $\E_A$ lie
-    strictly inside the unit disk. It is distinct from the Hamiltonian spectral gap of
-    Chapter~\ref{ch:parent_hamiltonian_commuting_and_gap}.
-    The complementary transfer-map gap $\rho_{\spec}(\E_A-P)<1$ is established for
-    primitive channels
-    (the corresponding theorem in the companion quantum-channel volume~\cite[``Complementary transfer-map gap for primitive maps'']{QICLean2026Blueprint}).
-    The mixed-transfer gap needed for separation of non-equivalent canonical
-    blocks is supplied for irreducible trace-preserving tensors
-    (Theorem~\ref{thm:transfer_operator_gap_irr_tp}), and quantitative
-    single-tensor transfer-map bounds for injective tensors are recorded in
-    Theorem~\ref{thm:transfer_map_gap_wielandt}.
+    expresses a transfer-map gap condition: unlike the Hamiltonian spectral gap of
+    Chapter~\ref{ch:parent_hamiltonian_commuting_and_gap}, it requires all
+    non-leading eigenvalues of $\E_A$ to lie strictly inside the unit disk.
+    In the companion quantum-channel volume~\cite[``Complementary transfer-map gap for primitive maps'']{QICLean2026Blueprint},
+    primitive channels are shown to satisfy the complementary transfer-map gap
+    $\rho_{\spec}(\E_A-P)<1$.
+    Similarly, Theorem~\ref{thm:transfer_operator_gap_irr_tp} establishes the
+    mixed-transfer gap separating non-equivalent canonical blocks for irreducible
+    trace-preserving tensors, and Theorem~\ref{thm:transfer_map_gap_wielandt}
+    provides quantitative single-tensor transfer-map bounds for injective tensors.
 
-    These transfer-map gap results give exponential convergence of the
+    Together, these transfer-map gap results guarantee exponential convergence of the
     complementary transfer map at every rate strictly exceeding its
     spectral radius.
 \end{remark}
@@ -284,8 +284,8 @@ spectral decomposition, and quantitative decay bounds.
 
 \begin{proof}
     \leanok
-    Since $0<|\lambda_2|<1$, we have $\log|\lambda_2|<0$, so
-    $\xi=-1/\log|\lambda_2|>0$.
+    Since $0<|\lambda_2|<1$, the logarithm satisfies $\log|\lambda_2|<0$, which
+    gives $\xi=-1/\log|\lambda_2|>0$.
 \end{proof}
 
 \section{Quantitative transfer-map gap bounds}
@@ -300,9 +300,8 @@ for the transfer map $\E_A$.
     \lean{MPSTensor.exponential_convergence_of_primitive}
     \leanok
     \uses{thm:primitive_overlap}
-    Fix an injective, trace-preserving MPS tensor $A$ with positive
-    definite fixed point $\rho$.
-    Let
+    Let $A$ be an injective, trace-preserving MPS tensor with positive
+    definite fixed point $\rho$, and let
     \begin{align}
         P(X)
          & = \frac{\tr(X)}{\tr(\rho)}\rho
@@ -316,22 +315,20 @@ for the transfer map $\E_A$.
          & \le C(1-\delta)^n\|X\|.
         \label{eq:correlations_channel_convergence}
     \end{align}
-    The transfer-map gap $\delta$ exists by primitivity
-    (the corresponding theorem in the companion quantum-channel volume~\cite[``Complementary transfer-map gap for primitive maps'']{QICLean2026Blueprint}, the complementary transfer-map
-    gap).
+    By the complementary transfer-map gap for primitive channels in the companion
+    quantum-channel volume~\cite[``Complementary transfer-map gap for primitive maps'']{QICLean2026Blueprint},
+    primitivity guarantees such a transfer-map gap $\delta>0$.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    Injectivity implies primitivity of the transfer map.
-    The complementary spectral-radius bound $\rho_{\spec}(\E_A-P)<1$ then follows
-    from the primitive transfer-map gap theorem. Choose
-    $r$ with $\rho_{\spec}(\E_A-P)<r<1$. The Gelfand formula yields
-    $\|(\E_A-P)^n\|\le Cr^n$ for a suitable constant $C>0$.
-    Since $P$ is the fixed-point projection, $\E_A P=P\E_A=P$, and hence
-    $\E_A^n-P=(\E_A-P)^n$ for $n\ge 1$. The case $n=0$ is absorbed by
-    increasing $C$ if necessary. Setting $\delta=1-r$ gives
-    (\ref{eq:correlations_channel_convergence}).
+    Injectivity implies primitivity of the transfer map, so the primitive
+    transfer-map gap theorem gives the complementary spectral-radius bound
+    $\rho_{\spec}(\E_A-P)<1$. For any rate $r$ with $\rho_{\spec}(\E_A-P)<r<1$,
+    the Gelfand formula yields $\|(\E_A-P)^n\|\le Cr^n$ for a suitable constant
+    $C>0$. Since $P$ is the fixed-point projection, $\E_A P=P\E_A=P$, and hence
+    $\E_A^n-P=(\E_A-P)^n$ for $n\ge 1$. Absorbing the $n=0$ case into $C$ and
+    setting $\delta=1-r$ yields (\ref{eq:correlations_channel_convergence}).
 \end{proof}
 
 \begin{theorem}[Correlation length bound]\label{thm:correlation_length_bound}
@@ -346,23 +343,22 @@ for the transfer map $\E_A$.
          & \le C e^{-n/\xi}\|X\|.
         \label{eq:correlations_traceless_decay}
     \end{align}
-    Traceless matrices lie in $\ker P$, where $P$ is the fixed-point
-    projection (\ref{eq:correlations_fixed_point_projection}).
-    Since $\E_A-P$ has spectral radius strictly less than~$1$, choose any
-    $r$ with $\rho_{\spec}(\E_A-P)<r<1$. The Gelfand formula then gives exponential
-    decay with $\xi=-1/\log r$. Choosing a rate strictly above the spectral
-    radius is necessary in general because a Jordan block at the spectral
-    radius can prevent a uniform bound proportional to
+    Traceless matrices lie in $\ker P$ for the fixed-point projection $P$ of
+    (\ref{eq:correlations_fixed_point_projection}).
+    For any rate $r$ with $\rho_{\spec}(\E_A-P)<r<1$, the Gelfand formula gives
+    exponential decay with correlation length $\xi=-1/\log r$. Taking $r$
+    strictly above the spectral radius is necessary in general because a Jordan
+    block at the spectral radius can prevent a uniform bound proportional to
     $\rho_{\spec}(\E_A-P)^n$.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    For traceless $X$, we have $P(X)=0$, so
+    Every traceless matrix $X$ satisfies $P(X)=0$, so
     $\E_A^n(X)=(\E_A-P)^n(X)$.
-    Applying the Gelfand-formula estimate with
-    $\rho_{\spec}(\E_A-P)<r<1$ gives $\|\E_A^n(X)\|\le Cr^n\|X\|$.
-    With $\xi=-1/\log r>0$, the identity $r^n=e^{-n/\xi}$ yields
+    The Gelfand-formula estimate at a rate
+    $\rho_{\spec}(\E_A-P)<r<1$ therefore gives $\|\E_A^n(X)\|\le Cr^n\|X\|$,
+    and substituting $r^n=e^{-n/\xi}$ with $\xi=-1/\log r>0$ yields
     (\ref{eq:correlations_traceless_decay}).
 \end{proof}
 
@@ -388,15 +384,14 @@ for the transfer map $\E_A$.
 
 \begin{remark}\label{rem:correlations_parent_hamiltonian}
     \uses{def:parent_hamiltonian, lem:parent_hamiltonian_annihilates, def:correlation_length, thm:physical_correlator_tp_bound}
-    Suppose that the MPS tensor $A$ generates a parent Hamiltonian $H_N(A,L)$
-    (Definition~\ref{def:parent_hamiltonian}) whose ground state is the matrix
-    product vector (Lemma~\ref{lem:parent_hamiltonian_annihilates}), and
-    consider its fixed-point infinite-chain state. If the hypotheses of
-    Theorem~\ref{thm:physical_correlator_tp_bound} hold, then for every rate
-    $r$ with $\rho_{\spec}(\E_A-P)<r<1$ the corresponding ground-state
+    When the MPS tensor $A$ generates a parent Hamiltonian $H_N(A,L)$
+    (Definition~\ref{def:parent_hamiltonian}) with the matrix product vector as
+    ground state (Lemma~\ref{lem:parent_hamiltonian_annihilates}), its
+    fixed-point infinite-chain state inherits the decay bound of
+    Theorem~\ref{thm:physical_correlator_tp_bound}: for every rate
+    $r$ with $\rho_{\spec}(\E_A-P)<r<1$, the corresponding ground-state
     correlations decay as $r^n=e^{-n/\xi}$ with finite correlation length
-    $\xi=-1/\log r$, the quantity of
-    Definition~\ref{def:correlation_length} evaluated at $r$. When $\E_A-P$ is
+    $\xi=-1/\log r$ (Definition~\ref{def:correlation_length}). When $\E_A-P$ is
     diagonalizable, one may take $r=|\lambda_2|$, the largest modulus of a
     subleading eigenvalue, provided $\lambda_2\neq0$.
 \end{remark}
@@ -409,8 +404,10 @@ for the transfer map $\E_A$.
     \lean{MPSTensor.physicalLeftRightConnectedCorrelator}
     \leanok
     \uses{def:physical_observable_transfer, def:transfer_map}
-    For matrices $\rho^L,\rho^R\in\MN{D}$ and physical operators $X,Y$
-    on independently chosen blocks of lengths $L_1,L_2$, define
+    Following \cite[Section~II.B.3]{Cirac2021Matrix}, for matrices
+    $\rho^L,\rho^R\in\MN{D}$ and physical operators $X,Y$
+    on independently chosen blocks of lengths $L_1,L_2$, the physical connected
+    left-right contraction is
     \begin{align}
         C_{\rho^L,\rho^R}^{A}(X,Y;n)
          & =\tr\!\left(\rho^L\E_X\E_A^n(\E_Y(\rho^R))\right)
@@ -419,10 +416,8 @@ for the transfer map $\E_A$.
     \end{align}
     When $\rho^L,\rho^R$ are positive fixed matrices of the dual transfer
     map and the transfer map, respectively, normalized by
-    $\tr(\rho^L\rho^R)=1$, this is the connected infinite-chain
-    physical expectation with $n\geq0$ unobserved intermediate sites.
-    This is the fixed-point contraction of
-    \cite[Section~II.B.3]{Cirac2021Matrix}.
+    $\tr(\rho^L\rho^R)=1$, this quantity gives the connected infinite-chain
+    physical expectation across $n\geq0$ unobserved intermediate sites.
 \end{definition}
 
 \begin{theorem}[Gauge covariance of physical insertions]
@@ -441,9 +436,9 @@ for the transfer map $\E_A$.
 \begin{proof}
     \leanok
     \uses{lem:eval_word_gauge, def:physical_observable_transfer}
-    Every word satisfies $B^w=UA^wU^{-1}$. Substitute this into the
-    finite word sum defining the insertion and cancel $U^{-1}U$ and
-    $U^\dagger U^{-\dagger}$.
+    Every word satisfies $B^w=UA^wU^{-1}$. Substituting this relation into the
+    finite word sum defining $\E_O^B(UZU^\dagger)$ and cancelling the inner
+    factors $U^{-1}U$ and $U^\dagger U^{-\dagger}$ yields $U\E_O^A(Z)U^\dagger$.
 \end{proof}
 
 \begin{theorem}[Gauge invariance of physical connected correlations]
@@ -451,7 +446,7 @@ for the transfer map $\E_A$.
     \lean{MPSTensor.physicalLeftRightConnectedCorrelator_eq_of_gauge}
     \leanok
     \uses{def:physical_left_right_correlator}
-    Suppose $B^i=UA^iU^{-1}$ with $U$ invertible, and put
+    Suppose $B^i=UA^iU^{-1}$ with $U$ invertible, and let
     $\widetilde\rho^L=U^{-\dagger}\rho^LU^{-1}$ and
     $\widetilde\rho^R=U\rho^RU^\dagger$. Then, for every pair of
     independently supported physical operators and every $n\geq0$,
@@ -467,12 +462,13 @@ for the transfer map $\E_A$.
     \leanok
     \uses{thm:physical_insertion_gauge, lem:ldp_observable_transfer_products,
         def:physical_left_right_correlator}
-    Insertion of the identity on $n$ sites is $\E_A^n$, so
-    (\ref{eq:correlations_insertion_gauge}) also gives covariance of every
-    transfer power. Apply this and
-    (\ref{eq:correlations_insertion_gauge}) to the two-point and one-point
-    terms. Trace cyclicity gives
-    $\tr(U^{-\dagger}\rho^LZU^\dagger)=\tr(\rho^LZ)$ in each term.
+    Because inserting the identity on $n$ sites gives $\E_A^n$, the gauge
+    relation (\ref{eq:correlations_insertion_gauge}) also applies to every
+    transfer power. Combining that relation with
+    (\ref{eq:correlations_insertion_gauge}) on the two-point and one-point
+    terms and using trace cyclicity
+    $\tr(U^{-\dagger}\rho^LZU^\dagger)=\tr(\rho^LZ)$ on each term establishes
+    the equality.
 \end{proof}
 
 \begin{theorem}[Left-right contraction in trace-preserving gauge]
@@ -488,9 +484,9 @@ for the transfer map $\E_A$.
 \begin{proof}
     \leanok
     \uses{lem:physical_connected_correlator_identity}
-    Multiplication by $\Id$ leaves each contraction unchanged.
-    Lemma~\ref{lem:physical_connected_correlator_identity} gives the
-    claimed equality at every separation.
+    Multiplying on the left by $\Id$ leaves each trace contraction unchanged,
+    so Lemma~\ref{lem:physical_connected_correlator_identity} gives
+    $C_{\Id,\rho}^{A}(X,Y;n)=C_{\mathrm{phys}}(X,Y;n)$ at every separation.
 \end{proof}
 
 \begin{theorem}[Physical correlation decay for a normal tensor]
@@ -512,29 +508,29 @@ for the transfer map $\E_A$.
     with
     $|C_{\rho^L,\rho^R}^{A}(X,Y;n)|\leq C_{XY}r^n$ for every $n\geq0$.
     No trace-preserving gauge or diagonalizability hypothesis is imposed.
-    This proves the decay conclusion of
-    \cite[Section~II.B.3]{Cirac2021Matrix} for normal tensors. The more
-    general class whose unique eigenvalue of largest modulus is algebraically
-    simple, with possibly singular fixed matrices, is outside this statement.
+    For normal tensors, this bound establishes the decay conclusion of
+    \cite[Section~II.B.3]{Cirac2021Matrix}, whereas the broader class of
+    tensors whose unique eigenvalue of largest modulus is algebraically
+    simple with possibly singular fixed matrices lies outside this statement.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{lem:ldp_normal_gauge_reduction, thm:cpsv_normal_tensor_gauge_transport,
         thm:physical_correlator_tp_bound, thm:physical_correlator_gauge,
         thm:physical_left_right_tp}
-    Choose $B^i=UA^iU^{-1}$ in trace-preserving gauge, with a positive
-    definite fixed state $\rho$ of trace one. Gauge invariance of normality
-    implies that $B$ is normal. Set
-    $\rho^L=U^\dagger U$ and $\rho^R=U^{-1}\rho U^{-\dagger}$.
-    Trace preservation of $\E_B$ implies $\E_A^*(\rho^L)=\rho^L$;
+    The tensor $A$ admits a trace-preserving gauge representative
+    $B^i=UA^iU^{-1}$ with a positive definite fixed state $\rho$ of trace one,
+    and gauge invariance of normality implies that $B$ is normal. For
+    $\rho^L=U^\dagger U$ and $\rho^R=U^{-1}\rho U^{-\dagger}$,
+    trace preservation of $\E_B$ implies $\E_A^*(\rho^L)=\rho^L$, while
     transfer covariance gives $\E_A(\rho^R)=\rho^R$.
     Congruence preserves positive definiteness, and trace cyclicity gives
     $\tr(\rho^L\rho^R)=\tr\rho=1$.
-    Theorem~\ref{thm:physical_correlator_tp_bound} supplies a common
-    rate $r<1$ in the gauge of $B$.
-    Since its left-right contraction with left matrix $\Id$ equals the
-    centered fixed-point correlator, (\ref{eq:correlations_gauge_invariance})
-    transports the bound to $A$ at every separation, including $n=0$.
+    In the gauge of $B$, Theorem~\ref{thm:physical_correlator_tp_bound} provides
+    a common decay rate $r<1$; since the left-right contraction of $B$ with left
+    matrix $\Id$ equals the centered fixed-point correlator,
+    (\ref{eq:correlations_gauge_invariance}) carries the geometric bound to $A$
+    at every separation, including $n=0$.
 \end{proof}
 
 \section{Jordan spectral expansions}
