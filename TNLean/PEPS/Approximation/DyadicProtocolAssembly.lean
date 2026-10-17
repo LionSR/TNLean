@@ -227,6 +227,9 @@ def protocolSquareParty {L k : ℕ} (hN : paddedSide L = 2 ^ k)
   .inl ⟨⟨S.1.1, (S.lt_of_eq_pow hN).1⟩, ⟨S.1.2.1, (S.lt_of_eq_pow hN).2.1⟩,
     ⟨S.1.2.2, (S.lt_of_eq_pow hN).2.2⟩⟩
 
+/-- The party of a square of the hierarchy is attached to that square.
+
+Polynomial-PEPS manuscript, `06-geometry.tex`, lines 19–20 and 64–67. -/
 theorem toTriple_protocolSquareParty {L k : ℕ} (hN : paddedSide L = 2 ^ k)
     (S : HierarchySquare (paddedSide L)) :
     (protocolSquareParty hN S).square.toTriple = S.1 := rfl
@@ -399,8 +402,7 @@ theorem exists_isDistributionProtocol_of_frames {L q k : ℕ} [NeZero q] (hL : 2
         exact (isEmpty_nonprivateLocations_of_nonprivateCount_eq_zero _ ((hQ t).2.1 h')).false g
       simp only [ev, ht, and_self, dite_true] at hu
       change (if h : 0 < t ∧ t - 1 < n then _ else none) = _
-      rw [dif_pos ht, hu]
-      rfl
+      simp only [ht, and_self, dite_true, hu, Sum.elim_inl]
   -- a change recorded as a repainting change of `S` is a change of the repainting event of `S`
   have hrs : ∀ t S, D.repaintingSquare t = some S → ∃ h : 0 < t ∧ t - 1 < n,
       ∃ T : DyadicSquare k, (sch[t - 1]'h.2).1 = .inl T ∧ T.toTriple = S := by
@@ -438,7 +440,8 @@ theorem exists_isDistributionProtocol_of_frames {L q k : ℕ} [NeZero q] (hL : 2
     have hm := protocolSchedule_fst_eq_of_le large (i := t₁ - 1) (m := t - 1) (by omega)
       (by omega) g₂.2 hT hT'
     change (if h : 0 < t ∧ t - 1 < n then _ else none) = _
-    rw [dif_pos ht, hm]
+    simp only [ht, and_self, dite_true]
+    rw [hm]
     rfl
   have hrs_near : ∀ t < D.changes, ∀ S, D.repaintingSquare t = some S →
       ∀ g, ∀ p ∈ (D.step t).participants g,
