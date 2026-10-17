@@ -1,0 +1,456 @@
+\chapter{The one-dimensional area law and matrix product state approximation}
+\label{ch:one_dimensional_chain}
+
+% The chain specialization of the 2026 area-law and PEPS manuscripts, following the
+% TNLean note docs/notes/one_dimensional_note. Every constant is explicit. The model is
+% stated natively on the chain of L sites; nothing is derived from the two-dimensional
+% lattice development.
+
+The chain of $L$ sites carries a local dimension $q$, a finite-range Hamiltonian
+with one Hermitian term of norm at most $J$ per support of diameter at most $R$,
+and a unit ground vector separated from the rest of the spectrum by a gap
+$\Delta$. On a chain the two-dimensional argument of \cite{OpenAI2026AreaLaw}
+collapses to three steps: the marginal tail bound at an interval cut, the
+buffered discount with a buffer of constant width, and the Araki--Lieb
+inequality. The matrix product state approximation of
+\cite{OpenAI2026PolynomialPEPS} then follows from the tail bound alone by
+truncating the Schmidt decompositions across the cuts in sequence. This chapter
+follows \cite{TNLean2026OneDimensional}; all constants are explicit, and the
+area-law constant is linear in $1+J/\Delta$. The two finite-dimensional cores,
+the tail bound and the buffered discount, are stated in the companion library
+for an arbitrary finite set of sites and are instantiated here directly.
+
+\section{Chains, supports and Hamiltonians}
+
+\begin{definition}[Chains, intervals and finite-range Hamiltonians]
+    \label{def:chain_model}
+    \lean{
+        TNLean.MPS.AreaLaw.interval,
+        TNLean.MPS.AreaLaw.mem_interval,
+        TNLean.MPS.AreaLaw.interval_mono,
+        TNLean.MPS.AreaLaw.interval_eq_empty,
+        TNLean.MPS.AreaLaw.interval_zero_eq_univ,
+        TNLean.MPS.AreaLaw.card_interval_le,
+        TNLean.MPS.AreaLaw.IsChainSupport,
+        TNLean.MPS.AreaLaw.ChainSupport,
+        TNLean.MPS.AreaLaw.IsChainSupport.card_le,
+        TNLean.MPS.AreaLaw.supportDim_le,
+        TNLean.MPS.AreaLaw.one_le_supportDim,
+        TNLean.MPS.AreaLaw.ChainHamiltonian,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.operator,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.operator_isHermitian,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.zero,
+        TNLean.MPS.AreaLaw.cutLogBudget,
+        TNLean.MPS.AreaLaw.one_le_cutLogBudget
+    }
+    \leanok
+    The \emph{chain of $L$ sites} has sites $0,\ldots,L-1$, each carrying
+    $\mathbb C^q$. For natural numbers $a\le b$ the \emph{interval} $[a,b)$ is
+    the set of sites with position at least $a$ and less than $b$; it has at
+    most $b-a$ sites, and its dilation $[a-d,b+d)$ is clipped at the ends of the
+    chain. A \emph{support of range $R$} is a nonempty set of sites of diameter
+    at most $R$; it has at most $R+1$ sites and Hilbert-space dimension at most
+    $q^{R+1}$. A \emph{finite-range Hamiltonian} assigns to every support $X$
+    of range $R$ a Hermitian term $h_X$ acting as the identity off $X$ with
+    operator norm at most $J$, zero terms allowed, and
+    $H=\sum_X h_X$. A \emph{gapped ground vector} with gap $\Delta$ is a unit
+    vector $\Omega$ with $H\Omega=E_0\Omega$ and
+    $H-E_0\ge\Delta(1-|\Omega\rangle\langle\Omega|)$. For a cut $A$ the
+    \emph{cut budget} is
+    $\mathcal B_A=1+\sum_X\log^2(e\,q^{|X|})$ over the supports $X$ meeting
+    both $A$ and its complement; it is at least one.
+\end{definition}
+
+\begin{lemma}[Marginal tail bound at a cut]
+    \label{lem:chain_marginal_tail}
+    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.surprisalTail_regionState_le}
+    \leanok
+    \uses{def:chain_model}
+    Let $\Omega$ be a gapped ground vector, with gap $\Delta>0$, of a
+    finite-range Hamiltonian with term norms at most $J\ge0$ on the chain, and
+    let $A$ be any set of sites. Let $K$ be the surprisal $-\log p$ of the
+    eigenvalue $p$ of the reduced state on $A$ drawn with probability $p$, so
+    that $\mathbb E K=S(A)$. For every real $w$,
+    \begin{align}
+        \Pr\{|K-S(A)|>w\}\le
+        \min\Bigl\{1,\ 2e^{e/2}\exp\Bigl(-\frac{w}{32\sqrt{(1+J/\Delta)\,
+                \mathcal B_A}}\Bigr)\Bigr\}.
+    \end{align}
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{def:chain_model}
+    This is Lemma~3.1 of \cite{OpenAI2026AreaLaw}, which holds on any finite
+    tensor product: each term acts as the identity off its support, is
+    Hermitian and has norm at most $J$, and the ground vector is a unit
+    eigenvector with the projector gap. The chain model supplies exactly these
+    hypotheses.
+\end{proof}
+
+\begin{lemma}[Interactions split by an interval]
+    \label{lem:chain_crossing_count}
+    \lean{
+        TNLean.MPS.AreaLaw.IsChainSupport.subset_window_of_splits,
+        TNLean.MPS.AreaLaw.chainCrossConst,
+        TNLean.MPS.AreaLaw.card_filter_subset_le,
+        TNLean.MPS.AreaLaw.card_crossingTerms_interval_le,
+        TNLean.MPS.AreaLaw.chainBudgetConst,
+        TNLean.MPS.AreaLaw.one_le_chainBudgetConst,
+        TNLean.MPS.AreaLaw.supportDim_le_real,
+        TNLean.MPS.AreaLaw.cutLogBudget_interval_le,
+        TNLean.MPS.AreaLaw.not_splits_two_shells
+    }
+    \leanok
+    \uses{def:chain_model}
+    Let $X=[a,b)$ be an interval of the chain. A support of range $R$ that
+    meets both $X$ and its complement lies in the window $[a-R,a+R)$ or in the
+    window $[b-R,b+R)$, each of at most $2R$ sites. Hence at most
+    \begin{align}
+        N_R=2\cdot2^{2R}
+    \end{align}
+    supports are split by $X$, and the cut budget of $X$ is at most
+    \begin{align}
+        B_R=1+N_R\log^2\bigl(e\,q^{R+1}\bigr).
+    \end{align}
+    Both bounds are independent of the interval, and no support of range $R$
+    is split by two of the shells $[l-(j+1)R,\,r+(j+1)R)$, $j\ge0$, of an
+    interval $[l,r)$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{def:chain_model}
+    A split support contains a site $v$ in $X$ and a site $w$ outside $X$
+    with $|v-w|\le R$. If $w<a$ then every site $x$ of the support satisfies
+    $a-R\le v-R\le x\le w+R<a+R$; if $w\ge b$ then $b-R\le w-R\le x\le v+R<b+R$.
+    A window of at most $2R$ sites has at most $2^{2R}$ subsets. The budget
+    bound follows from the crossing count and the dimension bound $q^{R+1}$. If
+    a support met the shell with index $j$ and left the shell with index
+    $j'>j$, two of its sites would be at distance at least $R+1$.
+\end{proof}
+
+\section{The buffered discount with a constant-width buffer}
+
+\begin{lemma}[Buffered discount on a chain]
+    \label{lem:chain_buffer_discount}
+    \lean{
+        TNLean.MPS.AreaLaw.chainEnergyThreshold,
+        TNLean.MPS.AreaLaw.chainTailThreshold,
+        TNLean.MPS.AreaLaw.chainShellCount,
+        TNLean.MPS.AreaLaw.four_le_chainShellCount,
+        TNLean.MPS.AreaLaw.chainEnergyThreshold_le_chainShellCount,
+        TNLean.MPS.AreaLaw.chainTailThreshold_le_chainShellCount,
+        TNLean.MPS.AreaLaw.chainDiscountConst,
+        TNLean.MPS.AreaLaw.chainBuffer,
+        TNLean.MPS.AreaLaw.disjoint_interval_chainBuffer,
+        TNLean.MPS.AreaLaw.card_chainBuffer_le,
+        TNLean.MPS.AreaLaw.two_mul_condEntropy_interval_le
+    }
+    \leanok
+    \uses{def:chain_model}
+    Let $\Omega$ be a gapped ground vector, with gap $\Delta>0$, of a
+    finite-range Hamiltonian with term norms at most $J\ge0$ on the chain with
+    local dimension $q\ge1$. Put $\vartheta=J/\Delta$ and
+    \begin{align}
+        m=\Bigl\lceil\max\bigl\{4,\ 32N_Rq^{2(R+1)}\vartheta,\
+        128\sqrt{(1+\vartheta)B_R}\bigr\}\Bigr\rceil .
+    \end{align}
+    For an interval $X=[l,r)$ let $T=X^{+mR}\setminus X$ be the buffer,
+    which has at most $2mR$ sites. Then
+    \begin{align}
+        2\bigl(S(X\cup T)-S(T)\bigr)\le S(X)+
+        \frac{4096\,e\,\vartheta B_R}{m}+m\log2 .
+    \end{align}
+    The energy threshold $\Delta/2$, the overlap losses $m\log2$ and the
+    explicit tail term, with the three-entry $m$, replace the printed
+    constants of Lemma~4.2 of \cite{TNLean2026OneDimensional}, which runs at
+    the threshold $\Delta/4$, absorbs the tail term through a fourth entry of
+    $m$ and concludes with $1+16N_Rq^{2(R+1)}\vartheta$; see
+    \cite{gap:tnlean_one_dimensional_discount_constants}.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{lem:chain_crossing_count, def:chain_model}
+    This is the finite-dimensional buffered discount (optimized filters,
+    stationarity, the energy estimate, the prefix comparison and Schmidt
+    pinning) of Lemma~3.2 of \cite{OpenAI2026AreaLaw}, applied to the nested
+    shells $X_j=X^{+(j+1)R}$, $0\le j<m$, with the uniform weights $a_j=2/m$ of
+    total mass two. The shells are intervals, so each is split by at most $N_R$
+    supports with cut budget at most $B_R$ by
+    Lemma~\ref{lem:chain_crossing_count}, and no support is split by two of
+    them. The choice of $m$ makes the energy of the filtered vector at most
+    $\Delta/2$, each weight at most $1/2$, and each tilt $a_j/(1-a_j)$ at most
+    the tail radius $1/(32\sqrt{(1+\vartheta)B_j})$. The error terms sum to
+    $1024e\vartheta\sum_jB_ja_j^2\le4096e\vartheta B_R/m$, and the overlap
+    losses to $m\log2$.
+\end{proof}
+
+\section{Closing the argument}
+
+\begin{lemma}[Araki--Lieb and the area law from interval bounds]
+    \label{lem:chain_entropy_inequalities}
+    \lean{
+        TNLean.MPS.AreaLaw.regionEntropy_union_le,
+        TNLean.MPS.AreaLaw.regionEntropy_le_union_add,
+        TNLean.MPS.AreaLaw.regionEntropy_empty,
+        TNLean.MPS.AreaLaw.regionEntropy_univ,
+        TNLean.MPS.AreaLaw.regionEntropy_le_card_mul_log,
+        TNLean.MPS.AreaLaw.boundaryEdges,
+        TNLean.MPS.AreaLaw.mem_boundaryEdges,
+        TNLean.MPS.AreaLaw.boundaryEdges_empty,
+        TNLean.MPS.AreaLaw.boundaryEdges_univ,
+        TNLean.MPS.AreaLaw.exists_interval_subset_boundaryEdges_sdiff_ssubset,
+        TNLean.MPS.AreaLaw.regionEntropy_le_mul_card_boundaryEdges_of_intervals
+    }
+    \leanok
+    \uses{def:chain_model}
+    For a unit vector $\Omega$ on the chain and disjoint sets of sites $X,T$,
+    $S(X\cup T)\le S(X)+S(T)$ and $S(X)\le S(X\cup T)+S(T)$; the empty set and
+    the whole chain have entropy zero, and $S(A)\le|A|\log q$. The
+    \emph{boundary edges} of a set $A$ are the edges $\{p,p+1\}$ of the chain
+    with exactly one endpoint in $A$. If every interval has entropy at most
+    $C\ge0$, then every subset $A$ has entropy at most $C\,|\partial A|$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{def:chain_model}
+    Subadditivity and purity are the finite-product entropy inequalities of the
+    companion library; the Araki--Lieb inequality is purity,
+    $S(X)=S(\Lambda\setminus X)$, followed by subadditivity for the disjoint
+    union $\Lambda\setminus X=(\Lambda\setminus(X\cup T))\cup T$. The dimension
+    bound is the entropy bound $\log\dim$ for a trace-one positive state. For
+    the last claim, induct on the number of sites of $A$. If $A$ is empty or
+    the whole chain its entropy vanishes. Otherwise split off the maximal run
+    $I$ of consecutive sites starting at the least position of $A$.
+    Subadditivity gives $S(A)\le S(I)+S(A\setminus I)\le C+S(A\setminus I)$,
+    every boundary edge of $A\setminus I$ is a boundary edge of $A$, and $A$
+    has at least one more boundary edge (the edge at the right end of $I$ when
+    $A\setminus I$ is nonempty, and an edge at an end of $I$ otherwise, since
+    $I$ is then a proper nonempty subset of the chain).
+\end{proof}
+
+\begin{theorem}[Theorem A: the one-dimensional area law]
+    \label{thm:chain_area_law}
+    \lean{
+        TNLean.MPS.AreaLaw.chainIntervalEntropyBound,
+        TNLean.MPS.AreaLaw.chainDiscountConst_nonneg,
+        TNLean.MPS.AreaLaw.chainIntervalEntropyBound_nonneg,
+        TNLean.MPS.AreaLaw.regionEntropy_interval_le,
+        TNLean.MPS.AreaLaw.chainShellConst,
+        TNLean.MPS.AreaLaw.chainShellCount_le,
+        TNLean.MPS.AreaLaw.chainAreaLawConst,
+        TNLean.MPS.AreaLaw.chainIntervalEntropyBound_le,
+        TNLean.MPS.AreaLaw.regionEntropy_le_mul_card_boundaryEdges,
+        TNLean.MPS.AreaLaw.chainAreaLaw
+    }
+    \leanok
+    \uses{def:chain_model}
+    Let $\Omega$ be a gapped ground vector, with gap $\Delta>0$, of a
+    finite-range Hamiltonian with term norms at most $J\ge0$ on the chain of
+    $L$ sites with local dimension $q\ge1$. Every interval $X$ satisfies
+    \begin{align}
+        S(X)\le C_{\mathrm{int}}(q,R,J,\Delta)
+        =8mR\log q+\frac{4096\,e\,\vartheta B_R}{m}+m\log2
+        \le C_0(q,R)\,(1+J/\Delta),
+    \end{align}
+    with
+    $C_0(q,R)=\bigl(8R\log q+\log2\bigr)\bigl(5+32N_Rq^{2(R+1)}+128B_R\bigr)
+        +1024\,e\,B_R$, and every subset $A$ of the chain satisfies
+    $S(A)\le C_{\mathrm{int}}\,|\partial A|$. Hence the constant
+    $C_0(q,R)(1+J/\Delta)$, chosen before $L$, the Hamiltonian, the ground
+    vector and the region, bounds $S(A)/|\partial A|$ for every gapped chain.
+    The note states Theorem~A for every finite subset of the integers and
+    reduces it to connected domains; this chapter proves the connected case,
+    the chain of $L$ sites, and the component reduction is not formalized;
+    see \cite{gap:tnlean_one_dimensional_connected_domain_scope}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{lem:chain_buffer_discount, lem:chain_entropy_inequalities}
+    The discount of Lemma~\ref{lem:chain_buffer_discount} and the Araki--Lieb
+    inequality of Lemma~\ref{lem:chain_entropy_inequalities} give
+    $S(X)-2S(T)\le S(X\cup T)-S(T)\le\frac12S(X)+\frac12C_{\mathrm{disc}}$,
+    hence $S(X)\le4S(T)+C_{\mathrm{disc}}$, and $S(T)\le|T|\log q\le
+        2mR\log q$. The linear bound uses
+    $m\le(5+32N_Rq^{2(R+1)}+128B_R)(1+\vartheta)$, which follows from
+    $\sqrt{(1+\vartheta)B_R}\le(1+\vartheta)B_R$, and $m\ge4$. The subset
+    bound is the second part of Lemma~\ref{lem:chain_entropy_inequalities}.
+\end{proof}
+
+\section{Matrix product states and sequential truncation}
+
+\begin{definition}[Open-boundary matrix product states and cut matrices]
+    \label{def:chain_open_mps}
+    \lean{
+        TNLean.MPS.AreaLaw.leftBlock,
+        TNLean.MPS.AreaLaw.mem_leftBlock,
+        TNLean.MPS.AreaLaw.leftBlock_eq_interval,
+        TNLean.MPS.AreaLaw.cutMatrix,
+        TNLean.MPS.AreaLaw.cutMatrix_apply,
+        TNLean.MPS.AreaLaw.IsOpenMPS,
+        TNLean.MPS.AreaLaw.IsOpenMPS.smul
+    }
+    \leanok
+    \uses{def:chain_model}
+    A vector $\psi$ on $L$ sites of local dimension $q$ is an
+    \emph{open-boundary matrix product state of bond dimension at most $D$}
+    when there are matrices $A_i(s)\in\mathbb C^{D\times D}$ for each site $i$
+    and value $s$ and vectors $v_L,v_R\in\mathbb C^D$ with
+    \begin{align}
+        \psi(x_0,\ldots,x_{L-1})=v_L^{\mathsf T}A_0(x_0)\cdots A_{L-1}(x_{L-1})\,v_R .
+    \end{align}
+    Scaling such a vector scales $v_R$. The \emph{left block} of $k$ sites is
+    the interval $[0,k)$, and the \emph{cut matrix} at $k$ has the
+    configurations of the left block as rows and those of the remaining sites
+    as columns; its rank is the Schmidt rank across the cut.
+\end{definition}
+
+\begin{lemma}[Bounded cut ranks give a matrix product state]
+    \label{lem:chain_mps_of_cut_rank}
+    \lean{
+        Submodule.exists_fin_span_of_finrank_le,
+        TNLean.MPS.AreaLaw.glueLeft,
+        TNLean.MPS.AreaLaw.sliceMatrix,
+        TNLean.MPS.AreaLaw.sliceMatrix_apply,
+        TNLean.MPS.AreaLaw.rank_sliceMatrix_le,
+        TNLean.MPS.AreaLaw.sliceSpace,
+        TNLean.MPS.AreaLaw.finrank_sliceSpace_le,
+        TNLean.MPS.AreaLaw.glueLeft_snoc,
+        TNLean.MPS.AreaLaw.slice_mem_sliceSpace,
+        TNLean.MPS.AreaLaw.isOpenMPS_of_cutMatrix_rank_le
+    }
+    \leanok
+    \uses{def:chain_open_mps}
+    A vector all of whose cut matrices have rank at most $D$ is an
+    open-boundary matrix product state of bond dimension at most $D$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{def:chain_open_mps}
+    Let $V_k$ be the span of the columns of the cut matrix at $k$, a space of
+    dimension at most $D$, and choose a spanning family $u_k$ of $D$ vectors.
+    Slicing a column of the cut matrix at $k+1$ at a fixed value of site $k$
+    gives a column of the cut matrix at $k$, so each $u_{k+1}(\alpha)$ sliced
+    at the value $s$ is a combination $\sum_\beta A_k(s)_{\beta\alpha}u_k(\beta)$.
+    By induction $u_k(\alpha)=v_L^{\mathsf T}A_0\cdots A_{k-1}$ with $v_L=u_0$,
+    and at $k=L$ the vector itself lies in $V_L$, which supplies $v_R$.
+\end{proof}
+
+\begin{lemma}[Sequential truncation]
+    \label{lem:chain_sequential_truncation}
+    \lean{
+        Matrix.schmidtCoeffMatrix_kronecker_one_mulVec,
+        Matrix.toEuclideanLin_one_apply,
+        Matrix.toEuclideanLin_mul_apply,
+        Entropy.localLift_sub,
+        Entropy.exists_localLift_eq_localLift_of_subset,
+        Entropy.norm_sq_toEuclideanLin_localLift_eq_trace,
+        Entropy.norm_toEuclideanLin_localLift_le,
+        Entropy.trace_regionState_eq_one,
+        Matrix.PosSemidef.trace_complement_spectralProjectionGE_le_surprisalTail,
+        Matrix.PosSemidef.rank_spectralProjectionGE_exp_le,
+        TNLean.MPS.AreaLaw.cutMatrix_localLift,
+        TNLean.MPS.AreaLaw.rank_cutMatrix_localLift_le,
+        TNLean.MPS.AreaLaw.rank_cutMatrix_zero_le,
+        TNLean.MPS.AreaLaw.rank_cutMatrix_le_one_of_le,
+        TNLean.MPS.AreaLaw.LeftBlockMatrix,
+        TNLean.MPS.AreaLaw.cutTruncation,
+        TNLean.MPS.AreaLaw.sequentialTruncation,
+        TNLean.MPS.AreaLaw.leftBlock_mono,
+        TNLean.MPS.AreaLaw.norm_sub_sequentialTruncation_le,
+        TNLean.MPS.AreaLaw.exists_sequentialTruncation_eq_localLift,
+        TNLean.MPS.AreaLaw.rank_cutMatrix_sequentialTruncation_le,
+        TNLean.MPS.AreaLaw.exists_sequentialTruncation
+    }
+    \leanok
+    \uses{def:chain_open_mps}
+    Let $\psi$ be a unit vector on $L$ sites and let $w$ be a real number. For
+    each cut $k$,
+    $1\le k\le L-1$, let $S_k$ be the entropy of the first $k$ sites, let
+    $\Pi_k$ be the spectral projector of their reduced state onto the
+    eigenvalues at least $e^{-(S_k+w)}$, an operator on the first $k$ sites,
+    and let $P_k=\Pi_k\otimes1$ be its extension by the identity on the
+    remaining sites. Then the regional projector $\Pi_k$ has rank at most
+    $e^{S_k+w}$, the mass $\|(1-P_k)\psi\|^2$ discarded by $P_k$ is at most
+    the surprisal tail of the reduced state beyond $w$, and the vector
+    $\Phi=P_1P_2\cdots P_{L-1}\psi$ has cut rank at most
+    $\max\{1,e^{S_k+w}\}$ across every cut $k$ of the chain, the trivial
+    cuts at its ends included; it satisfies
+    \begin{align}
+        \|\psi-\Phi\|\le\sum_{k=1}^{L-1}\sqrt{\text{tail}_k(w)} .
+    \end{align}
+    This is the threshold form of the sequential truncation, Proposition~7.1
+    of \cite{TNLean2026OneDimensional}: the note projects every cut onto its
+    $D$ largest eigenvalues, or onto all of them when the cut has fewer than
+    $D$, for an arbitrary bond dimension $D$, with the error
+    $\sum_k\sqrt{\epsilon_k(D)}$; that form is not formalized, and
+    Theorem~B uses only the threshold form; see
+    \cite{gap:tnlean_one_dimensional_threshold_truncation}.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{def:chain_open_mps}
+    Write $M_k(\psi)$ for the cut matrix of $\psi$ at $k$, with the
+    configurations of the first $k$ sites as rows. For an operator $\Pi$ on
+    the first $k$ sites, the extension $\Pi\otimes1$ acts on it by left
+    multiplication,
+    \begin{align}
+        M_k\bigl((\Pi\otimes1)\psi\bigr)=\Pi\,M_k(\psi),
+    \end{align}
+    so the cut rank of $(\Pi\otimes1)\psi$ is at most the rank of $\Pi$; the
+    rank of the extended operator itself, which is the rank of $\Pi$ times the
+    dimension of the remaining sites, plays no role. The projector on the
+    smallest block is
+    applied last, and the product of the projectors on blocks of size at most
+    $k$ is one extension of an operator on the first $k$ sites ending in
+    $\Pi_k$. The distance follows by induction from
+    $\psi-P_k\Phi'=(1-P_k)\psi+P_k(\psi-\Phi')$ and the contraction property
+    of a projector, and $\|(1-P_k)\psi\|^2$ is the trace of $1-\Pi_k$ against
+    the reduced state, the mass of the eigenvalues below the threshold, which
+    is at most the surprisal tail.
+\end{proof}
+
+\begin{theorem}[Theorem B: polynomial matrix product state approximation]
+    \label{thm:chain_mps_approximation}
+    \lean{
+        TNLean.MPS.AreaLaw.tailPrefactorRoot,
+        TNLean.MPS.AreaLaw.tailPrefactorRoot_pos,
+        TNLean.MPS.AreaLaw.tailPrefactorRoot_sq,
+        TNLean.MPS.AreaLaw.one_lt_tailPrefactorRoot,
+        TNLean.MPS.AreaLaw.chainTruncationWidth,
+        TNLean.MPS.AreaLaw.chainTruncationWidth_nonneg,
+        TNLean.MPS.AreaLaw.exp_neg_chainTruncationWidth,
+        TNLean.MPS.AreaLaw.chainBondDimension,
+        TNLean.MPS.AreaLaw.exists_isOpenMPS_norm_sub_le,
+        TNLean.MPS.AreaLaw.chainBondDimension_le_mul_rpow
+    }
+    \leanok
+    \uses{def:chain_model, def:chain_open_mps}
+    Let $\Omega$ be a gapped ground vector, with gap $\Delta>0$, of a
+    finite-range Hamiltonian with term norms at most $J\ge0$ on the chain of
+    $L\ge1$ sites with local dimension $q\ge1$. Put
+    $s=\sqrt{(1+J/\Delta)B_R}$, $c_0=\sqrt{2e^{e/2}}$ and
+    \begin{align}
+        w(L)=64\,s\log\bigl(2L^2c_0\bigr),\qquad
+        D(L)=\bigl\lfloor\exp\bigl(C_{\mathrm{int}}+w(L)\bigr)\bigr\rfloor
+        \le e^{C_{\mathrm{int}}}(2c_0)^{64s}\,L^{128s}.
+    \end{align}
+    There is a normalized open-boundary matrix product state $\Phi$ of bond
+    dimension at most $D(L)$ with $\|\Phi-\Omega\|\le1/L$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:chain_area_law, lem:chain_marginal_tail,
+        lem:chain_sequential_truncation, lem:chain_mps_of_cut_rank,
+        lem:chain_crossing_count}
+    By Theorem~\ref{thm:chain_area_law} the entropy of every left block, an
+    interval $[0,k)$, is at most $C_{\mathrm{int}}$, and by the tail bound of
+    Lemma~\ref{lem:chain_marginal_tail} with the budget $B_R$ of
+    Lemma~\ref{lem:chain_crossing_count} its surprisal tail beyond $w$ is at
+    most $2e^{e/2}e^{-w/(32s)}$. The sequential truncation of
+    Lemma~\ref{lem:chain_sequential_truncation} at width $w(L)$ gives cut
+    ranks at most $e^{C_{\mathrm{int}}+w(L)}$ and distance at most
+    $(L-1)\cdot\frac1{2L^2}\le\frac1{2L}$. Normalizing moves the vector by at
+    most the same amount, so the distance is at most $1/L$, and
+    Lemma~\ref{lem:chain_mps_of_cut_rank} exhibits the matrix product
+    structure, which survives the normalization.
+\end{proof}

@@ -4,13 +4,13 @@
     \lean{MPSTensor.IsBNT}
     \leanok
     \uses{def:normal, def:mpv}
-    A \emph{basis of normal tensors} (BNT) for a total tensor $A_{\mathrm{tot}}$
-    consists of $g$ block tensors $(A_1, \ldots, A_g)$ with bond dimensions
-    $(D_1, \ldots, D_g)$ such that each $A_j$ is normal
-    (Definition~\ref{def:normal}); at each system size~$N\geq1$ the MPV of
-    $A_{\mathrm{tot}}$ lies in the span of the block MPVs
-    $\{\ket{V^{(N)}(A_j)}\}_{j=1}^g$; and for sufficiently large~$N$ those block
-    MPVs are linearly independent \cite[Definition~IV.2]{Cirac2021Matrix}.
+    As in \cite[Definition~IV.2]{Cirac2021Matrix}, a \emph{basis of normal
+        tensors} (BNT) for a total tensor $A_{\mathrm{tot}}$ consists of $g$ block
+    tensors $(A_1, \ldots, A_g)$ with bond dimensions $(D_1, \ldots, D_g)$
+    such that each $A_j$ is normal (Definition~\ref{def:normal}); at each
+    system size~$N\geq1$ the MPV of $A_{\mathrm{tot}}$ lies in the span of the
+    block MPVs $\{\ket{V^{(N)}(A_j)}\}_{j=1}^g$; and for sufficiently large~$N$
+    those block MPVs are linearly independent.
     In the canonical-form characterization of
     \cite[Section~2.3]{Cirac2016MPDO_arXiv}, a BNT is a minimal family of
     representatives for $\widetilde A_k^i=e^{i\phi_k}X_kA_j^iX_k^{-1}$ among
@@ -22,13 +22,13 @@
     \leanok
     \uses{def:nt_cpsv, def:mpv}
     % Source: Cirac2017MPDO_AnnPhys \S~II.C, lines 271--274.
-    In the coefficient form of a basis of normal tensors, each block $A_j$ is a
+    In the coefficient form of a basis of normal tensors
+    \cite[Section~2.3]{Cirac2016MPDO_arXiv}, each block $A_j$ is a
     normal tensor in the spectral sense (Definition~\ref{def:nt_cpsv}), the
     MPV of $A$ is given at every positive length by coefficients
     $c_j^{(N)} \in \C$ with
     $\ket{V^{(N)}(A)} = \sum_{j=1}^{g} c_j^{(N)} \ket{V^{(N)}(A_j)}$, and the
-    block MPVs $\{\ket{V^{(N)}(A_j)}\}$ are eventually linearly independent
-    \cite[Section~2.3]{Cirac2016MPDO_arXiv}.
+    block MPVs $\{\ket{V^{(N)}(A_j)}\}$ are eventually linearly independent.
 \end{definition}
 
 \begin{theorem}[Distinct BNT members are not gauge-phase equivalent]
@@ -61,7 +61,9 @@
         exists_phase_match_of_isCPSVBasisOfNormalTensors}
     \leanok
     \uses{def:bnt_cpsv, def:nt_cpsv, def:block_diagonal_tensor, def:same_mpv2_pos, def:blocks_not_gauge_phase_equiv}
-    Let $A$ have a canonical-form MPV expansion
+    As in \cite[Proposition~2.7]{Cirac2016MPDO_arXiv} read with the
+    nonzero-coefficient convention of Definition~\ref{def:cpsv_canonical_form},
+    let $A$ have a canonical-form MPV expansion
     \begin{align}
         \ket{V^{(N)}(A)}
          & = \sum_{k=1}^{r}\mu_k^N\ket{V^{(N)}(\widetilde A_k)}
@@ -81,22 +83,20 @@
         \item no two distinct tensors $A_j$ and $A_{j'}$ are related in this
               way.
     \end{enumerate}
-    This is \cite[Proposition~2.7]{Cirac2016MPDO_arXiv}, read with the
-    nonzero-coefficient convention of Definition~\ref{def:cpsv_canonical_form}.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:cpsv_normal_mpv_phase_gauge, thm:cpsv_normal_mpv_phase_alternative, thm:cpsv_bnt_blocks_not_gaugePhaseEquiv, lem:bnt_finite_index_overlap_orthonormal_li, lem:finite_geometric_sum_eventual_vanishing, lem:sector_decomposition_coeff_not_eventually_zero, def:mpv_phase_class_data, thm:cpsv_normal_separated_eventually_li, thm:mpv_decomposition}
-    Group the summands into the MPV
-    phase classes of Definition~\ref{def:mpv_phase_class_data}, and choose one
-    representative from each class. By
-    Theorem~\ref{thm:cpsv_bnt_blocks_not_gaugePhaseEquiv}, eventual linear
-    independence of a BNT excludes gauge-phase equivalence between two
+    Grouping the summands into the MPV phase classes of
+    Definition~\ref{def:mpv_phase_class_data} and selecting one representative
+    from each class,
+    Theorem~\ref{thm:cpsv_bnt_blocks_not_gaugePhaseEquiv} shows that eventual
+    linear independence of a BNT excludes gauge-phase equivalence between two
     distinct $A_j$.
 
     Suppose that some phase-class representative is not gauge-phase equivalent
-    to any $A_j$. Partition all phase classes into the unmatched classes $T$
-    and the remaining classes. Every remaining representative is a nonzero
+    to any $A_j$. Partitioning all phase classes into the unmatched classes $T$
+    and the remaining classes makes every remaining representative a nonzero
     scalar multiple of some $\ket{V^{(N)}(A_j)}$ at each positive length.
     Distinct unmatched representatives have vanishing mutual overlaps, and
     their overlaps with every $A_j$ also vanish. Explicitly, for $t\ne t'$ in
@@ -125,10 +125,9 @@
     Linear independence forces every $c_{N,t}$ to vanish. Hence the
     coefficient of every unmatched phase class vanishes for all sufficiently
     large $N$.
-    For an unmatched class $t$, let $q$ range over its canonical-form
-    summands, write $\mu_q$ for the corresponding canonical-form weight, and
-    write $\zeta_q$ for the phase relating that summand to the chosen
-    representative. Then
+    For an unmatched class $t$, as $q$ ranges over its canonical-form
+    summands with canonical-form weight $\mu_q$ and phase $\zeta_q$ relating
+    that summand to the chosen representative, the class coefficient is
     $c_{N,t}=\sum_{q\in t}(\zeta_q\mu_q)^N$.
     Every base $\zeta_q\mu_q$ is nonzero because every coefficient is nonzero.
     Eventual vanishing of this finite geometric sum would imply vanishing at

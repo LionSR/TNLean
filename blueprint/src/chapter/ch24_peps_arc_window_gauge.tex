@@ -55,13 +55,13 @@
     \uses{thm:peps_staircase_cross_tensor_bond_dimension,
         thm:peps_torus_coordinate_swap_windows,
         thm:peps_torusUniformBondDim_of_translationInvariant}
-    Apply the staircase bond-dimension comparison to a horizontal
-    reference edge. Apply it again after coordinate exchange, with
-    the side lengths $K,L$, to obtain equality at a vertical reference
-    edge. Translation invariance makes the bond dimension constant
-    within each orientation, so these two comparisons determine every
-    edge dimension. No equality of non-boundary bond products is
-    assumed.
+    Without assuming any equality of non-boundary bond products,
+    applying the staircase bond-dimension comparison to a horizontal
+    reference edge and again after coordinate exchange (with side lengths
+    $K,L$) establishes equality at both a horizontal and a vertical reference
+    edge. Since translation invariance makes the bond dimension constant
+    within each orientation, these two comparisons determine every
+    edge dimension.
 \end{proof}
 
 \begin{theorem}[A covariant absorbed gauge family from two reference edges]%
@@ -72,7 +72,8 @@
     $w,h>2$, matched bond dimensions, and positive bond dimensions
     for $A$. Let $e_{\mathrm h}$ and $e_{\mathrm v}$ be distinguished
     horizontal and vertical edges. Suppose that at each of these
-    edges there are reference coefficient-identity data: a region $R$ such that
+    edges there are reference coefficient-identity data: a region $R$ (not
+    necessarily a rectangle) such that
     $R$ and its complement are injective for $B$, all bond dimensions of $B$ are
     positive, and two invertible matrices $Z,Z_{\mathrm{ref}}$ satisfy
     $C_A(R,e,M;\sigma,\tau)=C_B(R,e,Z M Z^{-1};\sigma,\tau)$
@@ -84,23 +85,23 @@
     matrices $X_e$ such that, for every edge $e$, global physical
     configuration $\sigma$, and matrix $M$,
     \begin{align}
-        C_A(e,M;\sigma)=C_{X\cdot B}(e,M;\sigma).
+        C_A(e,M;\sigma)=C_{X\cdot B}(e,M;\sigma),
     \end{align}
-    Here $X\cdot B$ denotes the tensor obtained by the edge gauges,
+    where $X\cdot B$ denotes the tensor obtained by the edge gauges
     and the matrix on the right is identified by the matched bond
-    dimensions. The regions $R$ need not be rectangles.
+    dimensions.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{def:peps_absorbedBoundaryGauge,
         thm:peps_regionInsertedCoeff_translate_coeffIdentity}
-    Translate the horizontal reference data to each horizontal edge and
-    the vertical reference data to each vertical edge. Absorb the gauge on
-    each translated boundary into the tensor $B$.
-    The translation reaching an edge is unique when $w,h>2$;
-    composition of translations therefore gives covariance of the
-    resulting family. If the stored endpoint order is reversed, the
-    absorbed matrix is replaced by its transposed inverse.
-    The translated coefficient identity gives the displayed
+    Translating the horizontal reference data to each horizontal edge and
+    the vertical reference data to each vertical edge allows the gauge on
+    each translated boundary to be absorbed into the tensor $B$.
+    Because the translation reaching an edge is unique when $w,h>2$,
+    composition of translations gives covariance of the
+    resulting family, with the absorbed matrix replaced by its transposed
+    inverse whenever the stored endpoint order is reversed.
+    The translated coefficient identity then gives the displayed
     bare-edge identity at each edge.
 \end{proof}

@@ -55,7 +55,8 @@ operator.
 \begin{proof}
     \leanok
     \uses{thm:overlap_trace_rect}
-    Specialize Lemma~\ref{thm:overlap_trace_rect} to $D_1=D_2=D$.
+    Setting $D_1=D_2=D$ in Lemma~\ref{thm:overlap_trace_rect} gives the
+    identity.
 \end{proof}
 
 \begin{lemma}[Rectangular overlap as transfer trace]\label{thm:overlap_trace_rect}
@@ -108,11 +109,11 @@ embedding of the eigenvector forces gauge-phase equivalence between two injectiv
 \begin{proof}
     \leanok
     \uses{thm:eigenvalue_bound_rect}
-    This is the equal-bond-dimension case $D_1=D_2=D$ of
-    Theorem~\ref{thm:eigenvalue_bound_rect}.  The argument uses only the
+    The equal-bond-dimension case $D_1=D_2=D$ of
+    Theorem~\ref{thm:eigenvalue_bound_rect} yields $|\mu|\leq1$ using only the
     trace-preserving normalization (\ref{eq:spec_tp_normalization}) and the
-    general eigenvalue bound for trace-preserving Kraus maps; it does not
-    appeal to Perron--Frobenius theory.
+    general eigenvalue bound for trace-preserving Kraus maps, without appealing
+    to Perron--Frobenius theory.
 \end{proof}
 
 \begin{theorem}[Rectangular eigenvalue bound]\label{thm:eigenvalue_bound_rect}
@@ -125,11 +126,10 @@ embedding of the eigenvector forces gauge-phase equivalence between two injectiv
 \end{theorem}
 
 \begin{proof}\leanok
-    This is the MPS formulation of
-    the corresponding theorem in the companion quantum-channel volume~\cite[``Eigenvalue bound for a trace-preserving mixed Kraus map'']{QICLean2026Blueprint}: the map
-    $F_{AB}^{\mathrm{rect}}$ is the mixed Kraus map of the two matrix
-    families, and the normalizations of $A$ and $B$ are exactly its two
-    trace-preserving hypotheses.
+    Since $F_{AB}^{\mathrm{rect}}$ is the mixed Kraus map of the two matrix
+    families and the normalizations of $A$ and $B$ are its two trace-preserving
+    hypotheses, the bound follows directly from the companion quantum-channel
+    theorem~\cite[``Eigenvalue bound for a trace-preserving mixed Kraus map'']{QICLean2026Blueprint}.
 \end{proof}
 
 \begin{lemma}[Spectral radius bound]\label{thm:spectral_radius_le_one}
@@ -165,14 +165,15 @@ embedding of the eigenvector forces gauge-phase equivalence between two injectiv
     Section~\ref{sec:app_spectral_rigidity}.
 
     \emph{Step~1 (Separate gauging).}
-    Choose positive definite fixed points $\rho_A$ and $\rho_B$ of
-    $\E_A$ and $\E_B$ by Theorem~\ref{thm:qpf}. Gauge the tensors separately
-    to unital Kraus families by Theorem~\cite[``Right-canonical (unital) gauge'']{QICLean2026Blueprint}:
-    $A'^i=\rho_A^{-1/2}A^i\rho_A^{1/2}$ and similarly for $B$. Set
-    $X'=\rho_A^{-1/2}X\rho_B^{-1/2}$.
+    Theorem~\ref{thm:qpf} provides positive definite fixed points $\rho_A$ and
+    $\rho_B$ of $\E_A$ and $\E_B$, and
+    Theorem~\cite[``Right-canonical (unital) gauge'']{QICLean2026Blueprint}
+    gauges the tensors separately to unital Kraus families
+    $A'^i=\rho_A^{-1/2}A^i\rho_A^{1/2}$ and $B'^i=\rho_B^{-1/2}B^i\rho_B^{1/2}$,
+    with rescaled eigenvector $X'=\rho_A^{-1/2}X\rho_B^{-1/2}$.
 
     \emph{Step~2 (Block Kraus family and off-diagonal embedding).}
-    Form
+    The block matrices
     \begin{align}
         C^i
          & :=
@@ -186,10 +187,10 @@ embedding of the eigenvector forces gauge-phase equivalence between two injectiv
         \begin{pmatrix}
             0 & X' \\
             0 & 0
-        \end{pmatrix}.
+        \end{pmatrix}
         \notag
     \end{align}
-    The matrices $\{C^i\}$ form a unital Kraus family on $\MN{2D}$, and
+    define a unital Kraus family $\{C^i\}$ on $\MN{2D}$ satisfying
     $E_C(Y)=\mu Y$.
 
     \emph{Step~3 (Kadison--Schwarz equality and Kraus relations).}
@@ -310,12 +311,11 @@ embedding of the eigenvector forces gauge-phase equivalence between two injectiv
     eigenvalue of $F_{AB}^{\mathrm{rect}}$. If its spectral radius were
     $1$, there would be a modulus-one eigenvector
     $X\in M_{D_1\times D_2}(\C)\setminus\{0\}$.
-
-    Gauge $A$ and $B$ to unital families $A'$ and $B'$ and form the gauged
-    nonzero rectangular intertwiner $X'$ satisfying
-    (\ref{eq:spectral_gauged_intertwining}).
-    Lemma~\ref{thm:rectangular_intertwining_dim_eq} would then give
-    $D_1=D_2$, contradicting the hypothesis.
+    Gauging $A$ and $B$ to unital families $A'$ and $B'$ produces a nonzero
+    gauged rectangular intertwiner $X'$ satisfying
+    (\ref{eq:spectral_gauged_intertwining}), for which
+    Lemma~\ref{thm:rectangular_intertwining_dim_eq} forces $D_1=D_2$,
+    contradicting the hypothesis.
 \end{proof}
 
 \begin{theorem}[Rectangular transfer powers below unit spectral radius]%
@@ -323,16 +323,16 @@ embedding of the eigenvector forces gauge-phase equivalence between two injectiv
     \lean{Kraus.mixedMapLM_pow_tendsto_zero_of_spectralRadius_lt_one}
     \leanok
     \uses{def:mixed_transfer_rect}
-    Let $A$ and $B$ have bond dimensions $D_1$ and $D_2$, respectively. If
+    Providing the decay mechanism for off-diagonal transfer operators in
+    \cite[Appendix~B, equations~(B.3)--(B.4) and the paragraph following
+        equation~(B.6)]{Cirac2016MPDO_arXiv}, let $A$ and $B$ have bond
+    dimensions $D_1$ and $D_2$, respectively. If
     $\rho_{\spec}(F_{AB}^{\mathrm{rect}})<1$, then, for every
     $X\in M_{D_1\times D_2}(\C)$,
     \begin{align}
         (F_{AB}^{\mathrm{rect}})^n(X)\longrightarrow0.
         \notag
     \end{align}
-    This is the decay mechanism for the off-diagonal transfer operators in
-    \cite[Appendix~B, equations~(B.3)--(B.4) and the paragraph following
-        equation~(B.6)]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -491,10 +491,10 @@ fixed point.
 \begin{proof}
     \leanok
     \uses{thm:modulus_one_gauge, thm:qpf, thm:transfer_psd_fp_pd_irred, thm:gauged_intertwining_core, thm:gauged_intertwining_gauge_phase}
-    Choose a modulus-one eigenvector as in
-    Theorem~\ref{thm:modulus_one_gauge}. The proof follows its five steps,
-    with one change. Separate gauging, the block Kraus family, and the
-    Kadison--Schwarz equality proceed as before. The equality makes the
+    Choosing a modulus-one eigenvector as in
+    Theorem~\ref{thm:modulus_one_gauge}, the proof follows its five steps,
+    with one change: separate gauging, the block Kraus family, and the
+    Kadison--Schwarz equality proceed as before, making the
     relevant positive products of the gauged intertwiner nonzero
     positive semidefinite fixed points. Under irreducibility,
     Theorem~\ref{thm:transfer_psd_fp_pd_irred} makes these fixed points positive
@@ -552,16 +552,15 @@ fixed point.
 \begin{proof}
     \leanok
     \uses{thm:eigenvalue_bound, thm:transfer_psd_fp_pd_irred}
-    Suppose instead that
-    $\rho_{\spec}(F_{AB}^{\mathrm{rect}})=1$, and choose a modulus-one
-    eigenvector $X\in M_{D_1\times D_2}(\C)\setminus\{0\}$. Gauge $A$ and
-    $B$ separately to unital families $A'$ and $B'$ and form the gauged intertwiner
-    $X'\neq0$. The matrix $X'X'^\dagger$ is a nonzero positive semidefinite
-    fixed point of the appropriate transfer map on $\MN{D_1}$, so
-    Theorem~\ref{thm:transfer_psd_fp_pd_irred} makes it positive definite. Thus $X'$
-    has full row rank and $D_1\leq D_2$. Similarly, $X'^\dagger X'$ is
-    positive definite, so $X'$ has full column rank and $D_2\leq D_1$.
-    Hence $D_1=D_2$, a contradiction.
+    If instead $\rho_{\spec}(F_{AB}^{\mathrm{rect}})=1$ with a modulus-one
+    eigenvector $X\in M_{D_1\times D_2}(\C)\setminus\{0\}$, gauging $A$ and
+    $B$ separately to unital families $A'$ and $B'$ produces a nonzero gauged
+    intertwiner $X'$. The matrix $X'X'^\dagger$ is a nonzero positive
+    semidefinite fixed point of the appropriate transfer map on $\MN{D_1}$, so
+    Theorem~\ref{thm:transfer_psd_fp_pd_irred} makes it positive definite; thus
+    $X'$ has full row rank and $D_1\leq D_2$. Similarly, $X'^\dagger X'$ is
+    positive definite, so $X'$ has full column rank and $D_2\leq D_1$,
+    forcing $D_1=D_2$, a contradiction.
 \end{proof}
 
 \begin{theorem}[Rectangular overlap decay (irreducible-TP)]%

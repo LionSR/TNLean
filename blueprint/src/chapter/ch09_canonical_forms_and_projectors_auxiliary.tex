@@ -28,14 +28,15 @@
     \lean{MPSTensor.exists_pgvwc07_positiveLengthWitness}
     \leanok
     \uses{def:pgvwc07_positive_length_witness, thm:nonzero_irreducible_block_decomposition, thm:unital_data_irreducible, thm:irreducible_tensor_to_action, lem:irreducible_action_to_tensor, thm:irreducible_unital_scalar_fixed_point, thm:pgvwc07_dual_diag_unital}
-    Every MPS tensor admits a decomposition satisfying
-    Definition~\ref{def:pgvwc07_positive_length_witness}.
+    In the sense of Definition~\ref{def:pgvwc07_positive_length_witness},
+    every MPS tensor admits an unnormalized positive-length canonical
+    decomposition.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{def:pgvwc07_positive_length_witness, thm:nonzero_irreducible_block_decomposition, thm:unital_data_irreducible, thm:irreducible_tensor_to_action, lem:irreducible_action_to_tensor, thm:irreducible_unital_scalar_fixed_point, thm:pgvwc07_dual_diag_unital}
-    Follow \cite[Theorem~4]{PerezGarcia2007Matrix}. The nonzero irreducible
-    decomposition is obtained by strict dimension induction. On a nonzero
+    As in \cite[Theorem~4]{PerezGarcia2007Matrix}, strict dimension induction
+    produces the nonzero irreducible decomposition. On a nonzero
     current block, Perron--Frobenius gives a positive semidefinite eigenvector
     at a positive spectral radius. If it is singular, positivity makes its
     support invariant: $(\Id-P)A^iP=0$. After diagonalizing $P$, every letter is
@@ -46,34 +47,35 @@
         +\tr(A_2^{i_1}\cdots A_2^{i_N}).
         \notag
     \end{align}
-    Discard all-zero blocks and repeat on the two strictly smaller diagonal
-    blocks. This gives the finite nonzero irreducible family of
+    Discarding all-zero blocks and repeating on the two strictly smaller
+    diagonal blocks gives the finite nonzero irreducible family of
     Theorem~\ref{thm:nonzero_irreducible_block_decomposition}.
 
-    For each retained irreducible block, divide by the square root of its
-    positive spectral radius and conjugate by the square root of its
-    positive-definite Perron eigenvector. Theorem~\ref{thm:unital_data_irreducible}
-    gives the unital identity
+    For each retained irreducible block, dividing by the square root of its
+    positive spectral radius and conjugating by the square root of its
+    positive-definite Perron eigenvector gives, by
+    Theorem~\ref{thm:unital_data_irreducible}, the unital identity
     \begin{align}
         \sum_i A_k^i(A_k^i)^\dagger
          & =\Id.
         \notag
     \end{align}
-    Nonzero scalar rescaling preserves irreducibility. The proof passes
-    from tensor irreducibility to irreducibility of the matrix action, carries
-    invariant subspaces through the gauge similarity, and returns to tensor
-    irreducibility using Theorem~\ref{thm:irreducible_tensor_to_action} and
-    Lemma~\ref{lem:irreducible_action_to_tensor}. Hence
+    Nonzero scalar rescaling preserves irreducibility. By
+    Theorem~\ref{thm:irreducible_tensor_to_action} and
+    Lemma~\ref{lem:irreducible_action_to_tensor}, passing from tensor
+    irreducibility to irreducibility of the matrix action and carrying
+    invariant subspaces through the gauge similarity preserves tensor
+    irreducibility. Hence
     Theorem~\ref{thm:irreducible_unital_scalar_fixed_point} makes every fixed
     point scalar. Theorem~\ref{thm:pgvwc07_dual_diag_unital} then diagonalizes a
     positive-definite dual fixed point by a unitary without changing unitality.
 
-    Apply this single-block construction to every member of the finite family.
-    The square roots of the block spectral radii become positive weights, gauge
-    invariance preserves every positive-length MPV coefficient, and the block
-    dimensions are unchanged. Combining this blockwise result with the initial
-    decomposition yields the arbitrary-input unnormalized form and its bound
-    $\sum_k\dim(A_k)\le D$.
+    Applying this single-block construction to every member of the finite family
+    turns the square roots of the block spectral radii into positive weights,
+    preserves every positive-length MPV coefficient by gauge invariance, and
+    leaves the block dimensions unchanged. Combining this blockwise result with
+    the initial decomposition yields the arbitrary-input unnormalized form and
+    its bound $\sum_k\dim(A_k)\le D$.
 \end{proof}
 
 \begin{theorem}[Normalization of a nonempty PGVWC07 decomposition]%
@@ -82,8 +84,8 @@
     \lean{MPSTensor.PGVWC07PositiveLengthWitness.exists_weight_normalization}
     \leanok
     \uses{def:pgvwc07_positive_length_witness}
-    Let $A_k,a_k$ satisfy Definition~\ref{def:pgvwc07_positive_length_witness}.
-    If some positive-length MPV coefficient of the original tensor is
+    For $A_k,a_k$ satisfying Definition~\ref{def:pgvwc07_positive_length_witness},
+    if some positive-length MPV coefficient of the original tensor is
     nonzero, then the decomposition has at least one block. For a nonempty
     block family, define
     \begin{align}
@@ -143,9 +145,9 @@
 
 \begin{proof}\leanok
     \uses{thm:pgvwc07_positive_length_witness, thm:pgvwc07_positive_length_weight_normalization}
-    Choose the blocks and weights from
-    Theorem~\ref{thm:pgvwc07_positive_length_witness}. The assumed nonzero
-    coefficient makes its block family nonempty, so
+    For the blocks and weights from
+    Theorem~\ref{thm:pgvwc07_positive_length_witness}, the assumed nonzero
+    coefficient makes the block family nonempty, so
     Theorem~\ref{thm:pgvwc07_positive_length_weight_normalization} gives
     $s>0$ and the normalized positive weights. Equation
     (\ref{eq:canonical_pgvwc_weight_normalization}) and homogeneity give
@@ -176,10 +178,9 @@
 
 \begin{proof}\leanok
     \uses{thm:pgvwc07_ti_canonical_form_nonzero}
-    Split according to whether there exist $N>0$ and $\sigma$ with
-    $V^{(N)}(A)_\sigma\neq0$. In that case apply
-    Theorem~\ref{thm:pgvwc07_ti_canonical_form_nonzero}. If no such pair
-    exists, every positive-length coefficient vanishes.
+    If there exist $N>0$ and $\sigma$ with $V^{(N)}(A)_\sigma\neq0$,
+    Theorem~\ref{thm:pgvwc07_ti_canonical_form_nonzero} gives the second
+    alternative; otherwise, every positive-length coefficient vanishes.
 \end{proof}
 
 \begin{theorem}[Translation-invariant canonical form]%
@@ -217,18 +218,18 @@
     exists $c\in\C$ such that $X=c\Id$.
     The total bond dimension of the decomposition is at most~$D$.
 
-    This is the positive-length form of
-    \cite[Theorem~4]{PerezGarcia2007Matrix}, with the global
-    spectral-radius normalization step made explicit.
+    As the positive-length form of
+    \cite[Theorem~4]{PerezGarcia2007Matrix}, this statement makes the global
+    spectral-radius normalization step explicit.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:pgvwc07_ti_canonical_form_dichotomy}
-    Apply Theorem~\ref{thm:pgvwc07_ti_canonical_form_dichotomy}. If every
-    positive-length coefficient vanishes, take $s=1$ and the empty retained
-    family; the block conditions and bond-dimension bound are vacuous, and the
-    MPV identity is the zero identity. In the nonzero branch, use the nonempty
-    normalized family given by the second alternative.
+    By Theorem~\ref{thm:pgvwc07_ti_canonical_form_dichotomy}, if every
+    positive-length coefficient vanishes, $s=1$ and the empty retained
+    family satisfy the vacuous block conditions, bond-dimension bound, and
+    zero MPV identity; in the nonzero branch, the second alternative provides
+    the nonempty normalized family.
 \end{proof}
 
 \begin{remark}[CPSV blocked canonical form (source statement)]%
@@ -262,9 +263,9 @@
 
 \section{Normal tensors and canonical forms}\label{sec:cpsv_canonical_defs}
 
-The definitions of \emph{normal tensor} and \emph{canonical form}
-follow~\cite{Cirac2016MPDO_arXiv}. For a transfer map $\E$ with spectral radius
-$r(\E)$, write
+Following~\cite{Cirac2016MPDO_arXiv}, the definitions of \emph{normal tensor}
+and \emph{canonical form} use the peripheral spectrum of a transfer map $\E$:
+for spectral radius $r(\E)$, write
 \begin{align}
     \sigma_\partial(\E)
      & =
@@ -272,8 +273,9 @@ $r(\E)$, write
     \label{eq:canonical_peripheral_spectrum}
 \end{align}
 for its peripheral spectrum. The weight moduli are ordered non-increasingly,
-$|\mu_1|\ge|\mu_2|\ge\cdots\ge|\mu_r|>0$; equal-modulus and repeated sectors are
-retained and compared by the sector coefficients in Chapter~\ref{ch:bnt}.
+$|\mu_1|\ge|\mu_2|\ge\cdots\ge|\mu_r|>0$, while in Chapter~\ref{ch:bnt}
+equal-modulus and repeated sectors are retained and compared by the sector
+coefficients.
 
 \begin{definition}[CPSV normal tensor (NT)]\label{def:nt_cpsv}
     \lean{MPSTensor.IsNormalTensor}
@@ -466,8 +468,8 @@ retained and compared by the sector coefficients in Chapter~\ref{ch:bnt}.
     moved to the zero complement. No ordering or separation condition is
     imposed.
 
-    The basis-of-normal-tensors refinement is
-    Definition~\ref{def:bnt}; it is not part of canonical form itself.
+    Definition~\ref{def:bnt} gives the basis-of-normal-tensors refinement,
+    which is not part of canonical form itself.
 \end{definition}
 
 \begin{theorem}[Physical relabeling preserves CPSV normal and canonical form]
@@ -508,8 +510,9 @@ retained and compared by the sector coefficients in Chapter~\ref{ch:bnt}.
     A bijection of the physical alphabet only permutes the summands in
     $\E_A(X)=\sum_iA^iX(A^i)^\dagger$. Hence the transfer map, its spectral
     radius, its peripheral spectrum, and its invariant orthogonal projections
-    are unchanged. Formula~(\ref{eq:cpsv_physical_reindexing_cf}) is obtained
-    from Formula~(\ref{eq:cpsv_canonical_form}) by replacing $i$ with $e(j)$.
+    are unchanged. Replacing $i$ with $e(j)$ in
+    Formula~(\ref{eq:cpsv_canonical_form}) gives
+    Formula~(\ref{eq:cpsv_physical_reindexing_cf}).
 \end{proof}
 
 \begin{theorem}[Transfer maps under a bond-space gauge]
@@ -527,7 +530,7 @@ retained and compared by the sector coefficients in Chapter~\ref{ch:bnt}.
 \end{theorem}
 
 \begin{proof}\leanok
-    Expand both transfer maps and take $C=X^{-1}$.
+    Expanding both transfer maps with $C=X^{-1}$ yields the identity.
 \end{proof}
 
 \begin{theorem}[Gauge invariance of transfer quasi-idempotence]
@@ -612,14 +615,13 @@ retained and compared by the sector coefficients in Chapter~\ref{ch:bnt}.
         \label{eq:cpsv_transfer_similarity}
     \end{align}
     Similarity preserves the spectral radius and the peripheral spectrum.
-    For irreducibility, start with an invariant orthogonal projection $Q$ for
-    one transfer map and form the support projection of the corresponding
-    positive congruence $XQX^\dagger$ (using $X^{-1}$ in the reverse
-    direction).  The intertwining in
-    Formula~(\ref{eq:cpsv_transfer_similarity}) makes this support projection
-    invariant for the other transfer map.  Irreducibility forces its support
-    to be zero or full, and invertibility of $X$ then forces $Q=0$ or
-    $Q=\Id$.  Thus both conditions in Definition~\ref{def:nt_cpsv} carry over
+    For irreducibility, if $Q$ is an invariant orthogonal projection for
+    one transfer map, the intertwining in
+    Formula~(\ref{eq:cpsv_transfer_similarity}) makes the support projection
+    of the positive congruence $XQX^\dagger$ (with $X^{-1}$ in the reverse
+    direction) invariant for the other transfer map. Irreducibility forces its
+    support to be zero or full, and invertibility of $X$ then forces $Q=0$ or
+    $Q=\Id$. Thus both conditions in Definition~\ref{def:nt_cpsv} carry over
     across the gauge.
 \end{proof}
 
@@ -635,14 +637,14 @@ retained and compared by the sector coefficients in Chapter~\ref{ch:bnt}.
 
 \begin{proof}\leanok
     \uses{thm:cpsv_normal_tp_gauge, thm:tp_primitive_irreducible_extra_blocking, thm:cpsv_normal_tensor_gauge_transport, thm:is_normal_tensor_of_is_normal_left_canonical}
-    Choose a trace-preserving gauge $B^i=XA^iX^{-1}$. Positive blocking gives
+    In a trace-preserving gauge $B^i=XA^iX^{-1}$, positive blocking gives
     \begin{align}
         (B^{[L]})^I
          & =X(A^{[L]})^IX^{-1}.
         \label{eq:cpsv_blocking_gauge}
     \end{align}
-    The trace-preserving primitive and irreducible structure of $B$ is
-    preserved by positive blocking, so Theorem~\ref{thm:is_normal_tensor_of_is_normal_left_canonical}
+    Positive blocking preserves the trace-preserving primitive and irreducible
+    structure of $B$, so Theorem~\ref{thm:is_normal_tensor_of_is_normal_left_canonical}
     makes $B^{[L]}$ CPSV normal. Gauge invariance
     (Theorem~\ref{thm:cpsv_normal_tensor_gauge_transport}) then gives CPSV
     normality of $A^{[L]}$.
@@ -677,7 +679,7 @@ retained and compared by the sector coefficients in Chapter~\ref{ch:bnt}.
 
 \begin{proof}\leanok
     \uses{def:cpsv_canonical_form, def:blocked_tensor, thm:cpsv_normal_tensor_positive_blocking}
-    Write $I=(i_1,\ldots,i_L)$. Since $L\geq1$, the word $I$ is nonempty.
+    Since $L\geq1$, each physical word $I=(i_1,\ldots,i_L)$ is nonempty.
     Repeatedly inserting $UU^\dagger=\Id$ into
     $A^{i_1}\cdots A^{i_L}$ gives
     \begin{align}
@@ -692,7 +694,7 @@ retained and compared by the sector coefficients in Chapter~\ref{ch:bnt}.
         \notag
     \end{align}
     The preceding theorem gives CPSV normality of every blocked block
-    $A_k^{[L]}$, and the displayed identity is exactly the retained direct-sum
+    $A_k^{[L]}$, and the displayed identity is the retained direct-sum
     reconstruction.
 \end{proof}
 
@@ -717,10 +719,10 @@ retained and compared by the sector coefficients in Chapter~\ref{ch:bnt}.
 
 \begin{proof}\leanok
     \uses{thm:unconditional_common_primitive_irreducible_blocks, thm:normal_tp_primitive_irred, thm:is_normal_tensor_of_is_normal_left_canonical, def:cpsv_canonical_form}
-    Apply Theorem~\ref{thm:unconditional_common_primitive_irreducible_blocks}
-    to $A$ and itself. It gives $p\ge1$, weights $\mu_k$, and
-    left-canonical, primitive, tensor-irreducible blocks $C_k$ such that, for
-    every $N\ge1$,
+    Applied to $A$ and itself,
+    Theorem~\ref{thm:unconditional_common_primitive_irreducible_blocks} gives
+    $p\ge1$, weights $\mu_k$, and left-canonical, primitive,
+    tensor-irreducible blocks $C_k$ such that, for every $N\ge1$,
     \begin{align}
         V^{(N)}(A^{[p]})_\sigma
          & =V^{(N)}\!\left(\bigoplus_k\mu_kC_k\right)_\sigma.
@@ -748,17 +750,17 @@ retained and compared by the sector coefficients in Chapter~\ref{ch:bnt}.
     \leanok
     \uses{def:cpsv_canonical_form, def:mpv}
     % Maintainer source anchor: CPSV16 eq:II_Psi_k, lines 259--263.
-    For canonical-form data as in~(\ref{eq:cpsv_canonical_form}), every
-    positive length~$N$ and every configuration~$\sigma$ satisfy
+    As in the identity immediately following the canonical-form definition
+    in~\cite[Section~2.3]{Cirac2016MPDO_arXiv}, for canonical-form data as
+    in~(\ref{eq:cpsv_canonical_form}), every positive length~$N$ and every
+    configuration~$\sigma$ satisfy
     \begin{align}
         V^{(N)}(A)_\sigma
-         & =\sum_{k=1}^{r}\mu_k^N V^{(N)}(A_k)_\sigma.
+         & =\sum_{k=1}^{r}\mu_k^N V^{(N)}(A_k)_\sigma,
         \label{eq:cpsv_canonical_form_mpv_expansion}
     \end{align}
-    Equivalently,
+    or equivalently
     $\ket{V^{(N)}(A)}=\sum_{k=1}^{r}\mu_k^N\ket{V^{(N)}(A_k)}$.
-    This is the identity immediately following the canonical-form definition
-    in~\cite[Section~2.3]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -794,9 +796,11 @@ retained and compared by the sector coefficients in Chapter~\ref{ch:bnt}.
     \leanok
     \uses{def:cpsv_canonical_form, def:bnt_cpsv}
     % Maintainer source anchors: CPSV16 prop:char-BNT, lines 278--301 and 1137--1148.
-    Let $A$ have canonical-form data as in~(\ref{eq:cpsv_canonical_form}), and
-    let $(B_j)_{j=1}^{g}$ have positive bond dimensions. The family
-    $(B_j)_{j=1}^{g}$ is a basis of normal tensors for $A$ if and only if
+    As in \cite[Proposition~2.7 and Appendix~A]{Cirac2016MPDO_arXiv}
+    specialized to canonical-form data, let $A$ have canonical-form data as
+    in~(\ref{eq:cpsv_canonical_form}), and let $(B_j)_{j=1}^{g}$ have positive
+    bond dimensions. The family $(B_j)_{j=1}^{g}$ is a basis of normal tensors
+    for $A$ if and only if
     \begin{align}
          & \bigl(\forall j,\ B_j\text{ is normal}\bigr)
         \notag                                          \\
@@ -806,13 +810,11 @@ retained and compared by the sector coefficients in Chapter~\ref{ch:bnt}.
         \notag                                          \\
          & \quad\land
         \bigl(\forall j\ne j',\ \nexists X,\phi,\ \forall i,\
-        B_{j'}^i=e^{i\phi}XB_j^iX^{-1}\bigr).
+        B_{j'}^i=e^{i\phi}XB_j^iX^{-1}\bigr),
         \label{eq:cpsv_cf_bnt_characterization}
     \end{align}
-    Each displayed conjugacy also requires the two bond dimensions to agree,
-    and every scalar $e^{i\phi}$ has modulus one. This is
-    \cite[Proposition~2.7 and Appendix~A]{Cirac2016MPDO_arXiv}, specialized to
-    the canonical-form data.
+    where each displayed conjugacy requires the two bond dimensions to agree
+    and every scalar $e^{i\phi}$ has modulus one.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -820,7 +822,7 @@ retained and compared by the sector coefficients in Chapter~\ref{ch:bnt}.
     The canonical-form data give normality of every $A_k$ and the
     positive-length identity
     $\ket{V^{(N)}(A)}=\sum_k\mu_k^N\ket{V^{(N)}(A_k)}$.
-    Substitution of these two facts into
+    Substituting these two facts into
     Theorem~\ref{thm:cpsv_bnt_characterization} gives
     (\ref{eq:cpsv_cf_bnt_characterization}).
 \end{proof}
@@ -866,11 +868,11 @@ yields Definition~\ref{def:cpsv_canonical_form}.
     \lean{MPSTensor.HasInvariantProjectorClosure}
     \leanok
     \uses{def:mps_tensor}
-    An MPS tensor $A$ has \emph{invariant-projector closure} if every
-    orthogonal projection $P$ satisfying $PA^i=PA^iP$ for all~$i$ also
-    satisfies $A^iP=PA^iP$ for all~$i$.
-    This is the projector hypothesis in the sufficient condition for canonical
-    form of~\cite[Section~2]{Cirac2016MPDO_arXiv}.
+    As in the projector hypothesis in the sufficient condition for canonical
+    form of~\cite[Section~2]{Cirac2016MPDO_arXiv}, an MPS tensor $A$ has
+    \emph{invariant-projector closure} if every orthogonal projection $P$
+    satisfying $PA^i=PA^iP$ for all~$i$ also satisfies $A^iP=PA^iP$ for
+    all~$i$.
 \end{definition}
 
 
@@ -880,18 +882,18 @@ yields Definition~\ref{def:cpsv_canonical_form}.
     \lean{MPSTensor.hasInvariantProjectorClosure_of_leftCanonical_of_posDef_fixedPoint}
     \leanok
     \uses{def:left_canonical_tensor, def:invariant_projector_closure}
-    Let $A$ be left-canonical, and suppose its transfer map has a
-    positive-definite fixed point $\rho$. Every orthogonal projection $P$
-    satisfying $(\Id-P)A^iP=0$ for all $i$ commutes with every $A^i$.
-    Consequently $A$ has invariant-projector closure.
-    This is a sufficient stationary-weight criterion, obtained from
-    \cite[Proposition~6.11 and Theorem~6.13]{Wolf2012Quantum}.
+    By the stationary-weight criterion obtained from
+    \cite[Proposition~6.11 and Theorem~6.13]{Wolf2012Quantum}, if $A$ is
+    left-canonical and its transfer map has a positive-definite fixed point
+    $\rho$, then every orthogonal projection $P$ satisfying
+    $(\Id-P)A^iP=0$ for all $i$ commutes with every $A^i$, and consequently
+    $A$ has invariant-projector closure.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    Write $E$ for the transfer map and $E^*$ for its trace adjoint.
-    Invariance and normalization give $PE^*(P)=P=E^*(P)P$, whence
+    With $E$ denoting the transfer map and $E^*$ its trace adjoint,
+    invariance and normalization give $PE^*(P)=P=E^*(P)P$, whence
     \[
         E^*(P)-P=(\Id-P)E^*(P)(\Id-P)\geq0.
     \]
@@ -919,25 +921,25 @@ yields Definition~\ref{def:cpsv_canonical_form}.
 \begin{proof}
     \leanok
     \uses{def:has_inv_proj, thm:invariant_projector_closure_commutes, lem:projection_support_isometry, lem:projector_closure_corner, lem:mpv_partition_isometries}
-    Proceed by strong induction on the bond dimension. If $A$ is irreducible,
+    By strong induction on the bond dimension, if $A$ is irreducible then
     the single corner $V=\Id$ suffices. Otherwise, $A$ has a nontrivial
-    invariant projection $P$, which commutes with every $A^i$ by
-    Theorem~\ref{thm:invariant_projector_closure_commutes}. Factoring
-    $P=V_1V_1^\dagger$ and $\Id-P=V_2V_2^\dagger$ through support isometries
-    by Lemma~\ref{lem:projection_support_isometry} splits $A$ into two corner
-    tensors of strictly smaller bond dimension. For $j=1,2$, commutation gives
-    $A^iV_j=V_j(V_j^\dagger A^iV_j)$, and each corner inherits
-    invariant-projector closure by Lemma~\ref{lem:projector_closure_corner}.
-    The two recursively obtained families are combined. Ranges from different
-    corners are orthogonal because
+    invariant projection $P$, which by
+    Theorem~\ref{thm:invariant_projector_closure_commutes} commutes with
+    every $A^i$. Factoring $P=V_1V_1^\dagger$ and $\Id-P=V_2V_2^\dagger$
+    through support isometries by Lemma~\ref{lem:projection_support_isometry}
+    splits $A$ into two corner tensors of strictly smaller bond dimension. For
+    $j=1,2$, commutation gives $A^iV_j=V_j(V_j^\dagger A^iV_j)$, and by
+    Lemma~\ref{lem:projector_closure_corner} each corner inherits
+    invariant-projector closure. Combining the two recursively obtained
+    families yields pairwise orthogonal ranges because
     \begin{align}
         V_1^\dagger V_2
          & =V_1^\dagger P(\Id-P)V_2
-        =0.
+        =0,
         \notag
     \end{align}
-    Equality of matrix product vectors follows from
-    Lemma~\ref{lem:mpv_partition_isometries}.
+    and Lemma~\ref{lem:mpv_partition_isometries} then gives equality of the
+    matrix product vectors.
 \end{proof}
 
 \begin{definition}[No nontrivial periodic vectors]
@@ -950,13 +952,12 @@ yields Definition~\ref{def:cpsv_canonical_form}.
     with $B$ irreducible (equivalently, for every restriction $B$ of $A$ to a
     minimal invariant subspace), and for every $\rho>0$ and $r>0$ with
     $\E_B(\rho)=r\rho$, every eigenvalue of $\E_B$ of modulus~$r$ equals~$r$.
-    The eigenvalue $r$ is the spectral radius of $\E_B$
-    (Theorem~\cite[``Spectral radius is the Perron eigenvalue'']{QICLean2026Blueprint}), so the condition states
+    Since $r$ is the spectral radius of $\E_B$
+    (Theorem~\cite[``Spectral radius is the Perron eigenvalue'']{QICLean2026Blueprint}), the condition states
     that no block of the invariant-subspace decomposition
     of~\cite[Section~2]{Cirac2016MPDO_arXiv}, rescaled to spectral radius
-    one, has a peripheral eigenvalue $e^{2\pi iq/p}\neq1$. Eigenvectors with
-    such eigenvalues are the $p$-periodic vectors
-    of~\cite[Section~2]{Cirac2016MPDO_arXiv}.
+    one, has a peripheral eigenvalue $e^{2\pi iq/p}\neq1$, whose eigenvectors
+    are the $p$-periodic vectors of~\cite[Section~2]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
 
@@ -967,8 +968,12 @@ yields Definition~\ref{def:cpsv_canonical_form}.
     \lean{MPSTensor.exists_normalTensor_blockDecomp_sameMPV₂Pos_of_hasInvariantProjectorClosure}
     \leanok
     \uses{def:invariant_projector_closure, def:no_periodic_vectors, def:nt_cpsv, def:same_mpv2_pos, def:block_diagonal_tensor}
-    Suppose $A$ has invariant-projector closure and no nontrivial
-    $p$-periodic vectors. Then there are normal tensors
+    As in the sufficient condition for canonical form
+    of~\cite[Section~2]{Cirac2016MPDO_arXiv} (with that paper's convention
+    $\sum_kD_k\le D$ allowing zero blocks, since a corner of $A$ carrying the
+    zero tensor cannot be rescaled to spectral radius one and vanishes at
+    every positive length), suppose $A$ has invariant-projector closure and no
+    nontrivial $p$-periodic vectors. Then there are normal tensors
     $A_1,\ldots,A_r$ of positive bond dimensions $D_1,\ldots,D_r$, with
     $\sum_kD_k\le D$, and nonzero weights $\mu_1,\ldots,\mu_r$ such that
     \begin{align}
@@ -987,29 +992,23 @@ yields Definition~\ref{def:cpsv_canonical_form}.
          & =\sum_kV_k(\mu_kA_k^i)V_k^\dagger.
         \label{eq:canonical_projector_isometries}
     \end{align}
-    This is the sufficient condition for canonical form
-    of~\cite[Section~2]{Cirac2016MPDO_arXiv}, with that paper's convention
-    $\sum_kD_k\le D$ allowing zero blocks: a corner of $A$ carrying the
-    zero tensor cannot be rescaled to spectral radius one and is omitted
-    because it vanishes at every positive length.
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{thm:projector_closure_irreducible_corners, lem:irreducible_transfer_perron_pair, lem:irreducible_block_spectral_normalization}
-    Decompose $A$ into irreducible corners $B_k$ along isometries $V_k$
-    by Theorem~\ref{thm:projector_closure_irreducible_corners}; every matrix
+    Theorem~\ref{thm:projector_closure_irreducible_corners} decomposes $A$
+    into irreducible corners $B_k$ along isometries $V_k$ so that every matrix
     product vector coefficient of $A$ is the sum of those of the corners. A
     corner whose matrices all vanish contributes nothing at positive length
-    and is dropped. Every remaining corner has a Perron eigenpair
-    $\E_{B_k}(\rho_k)=r_k\rho_k$ by
-    Lemma~\ref{lem:irreducible_transfer_perron_pair}. The absence of
-    $p$-periodic vectors, applied to the corner $B_k$, gives that every
-    eigenvalue of $\E_{B_k}$ of modulus~$r_k$ equals~$r_k$, so
-    $A_k:=r_k^{-1/2}B_k$ is normal by
-    Lemma~\ref{lem:irreducible_block_spectral_normalization}. Setting
-    $\mu_k:=r_k^{1/2}$ gives $\mu_kA_k=B_k$ at the level of matrices, so for
-    every word $w$ of positive length~$N$ the weight cancels:
+    and is dropped. By Lemma~\ref{lem:irreducible_transfer_perron_pair}, every
+    remaining corner has a Perron eigenpair $\E_{B_k}(\rho_k)=r_k\rho_k$. The
+    absence of $p$-periodic vectors, applied to the corner $B_k$, gives that
+    every eigenvalue of $\E_{B_k}$ of modulus~$r_k$ equals~$r_k$, so by
+    Lemma~\ref{lem:irreducible_block_spectral_normalization} the rescaled
+    block $A_k:=r_k^{-1/2}B_k$ is normal. Setting $\mu_k:=r_k^{1/2}$ gives
+    $\mu_kA_k=B_k$ at the level of matrices, so for every word $w$ of positive
+    length~$N$ the weight cancels:
     \begin{align}
         \mu_k^N\tr(A_k^w)
          & =
@@ -1030,21 +1029,21 @@ yields Definition~\ref{def:cpsv_canonical_form}.
     \lean{MPSTensor.exists_twoBlock_decomp_of_unital_nonScalar_fixedPoint}
     \leanok
     \uses{def:transfer_map, def:same_mpv2, thm:two_block_decomp}
-    Suppose $A$ is unital, $\E_A(\Id)=\Id$. If $X$ is a Hermitian fixed point
-    of $\E_A$ which is not a scalar multiple of $\Id$, then there is a nonzero
-    PSD fixed point $\rho$ which is not positive definite, and consequently
-    $A$ admits a two-block MPV-equivalent decomposition with both block
-    dimensions strictly smaller than~$D$. This is the fixed-point shift and
-    further decomposition step in
-    \cite[Theorem~4]{PerezGarcia2007Matrix}.
+    As in the fixed-point shift and further decomposition step in
+    \cite[Theorem~4]{PerezGarcia2007Matrix}, suppose $A$ is unital,
+    $\E_A(\Id)=\Id$. If $X$ is a Hermitian fixed point of $\E_A$ which is not
+    a scalar multiple of $\Id$, then there is a nonzero PSD fixed point $\rho$
+    which is not positive definite, and consequently $A$ admits a two-block
+    MPV-equivalent decomposition with both block dimensions strictly smaller
+    than~$D$.
 \end{theorem}
 
 \begin{proof}\leanok
-    Let $\lambda_{\max}$ be the largest eigenvalue of $X$. Then
+    If $\lambda_{\max}$ is the largest eigenvalue of $X$, then
     $\rho:=\lambda_{\max}\Id-X$ is positive semidefinite, singular, and
-    nonzero because $X$ is not scalar. Unitality and the fixed-point equation
-    for $X$ give $\E_A(\rho)=\rho$. Apply
-    Theorem~\ref{thm:two_block_decomp}. The non-scalar hypothesis is needed
+    nonzero because $X$ is not scalar (the non-scalar hypothesis is needed
     because scalar multiples of $\Id$ are fixed by every unital map and yield
-    no nontrivial support projection.
+    no nontrivial support projection). Unitality and the fixed-point equation
+    for $X$ give $\E_A(\rho)=\rho$, so Theorem~\ref{thm:two_block_decomp}
+    yields the two-block MPV-equivalent decomposition.
 \end{proof}

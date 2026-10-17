@@ -36,9 +36,9 @@ trace-norm estimates do not involve private dimensions.
 \end{theorem}
 \begin{proof}
     \leanok
-    Induct on the chronology. Composition multiplies operator norms,
-    and tensoring with a spectator identity does not increase the norm.
-    The prescribed owner and register identifications are isometries.
+    By induction on the chronology, composition multiplies operator norms,
+    tensoring with a spectator identity does not increase the norm, and
+    the prescribed owner and register identifications are isometries.
 \end{proof}
 
 \begin{definition}[Rescaling an approximate expansion]
@@ -47,9 +47,9 @@ trace-norm estimates do not involve private dimensions.
     \lean{TNLean.PEPS.PairEffect.EffectCircuit.rescaledOriginal}
     \leanok
     \uses{def:peps_approximate_original_operators}
-    Replace each coefficient $c_{g,j}$ by $c_{g,j}/(1+\delta)$.
-    Write $\widetilde W_\delta$ for the chronological circuit with these
-    new expansions and the original private operations. Thus its local
+    Replacing each coefficient $c_{g,j}$ by $c_{g,j}/(1+\delta)$ defines
+    the chronological circuit $\widetilde W_\delta$ with these
+    new expansions and the original private operations, whose local
     operator at $g$ is $\widetilde T_g=T_g/(1+\delta)$.
 \end{definition}
 \begin{proof}
@@ -74,9 +74,9 @@ trace-norm estimates do not involve private dimensions.
     \lean{TNLean.PEPS.PairEffect.EffectCircuit.monomialCount}
     \leanok
     \uses{def:peps_rescaled_original}
-    Match every gate of $\widetilde W_\delta$ to the same original
-    occurrence, and let $k_g$ be the length of its prescribed monomial
-    list. Repeated occurrences remain distinct in this correspondence.
+    Matching every gate of $\widetilde W_\delta$ to the same original
+    occurrence while keeping repeated occurrences distinct, let $k_g$ be
+    the length of its prescribed monomial list.
 \end{definition}
 
 \begin{theorem}[Preservation of the original resource bounds]
@@ -112,8 +112,8 @@ trace-norm estimates do not involve private dimensions.
 \end{theorem}
 \begin{proof}
     \leanok
-    Use $BA-DC=B(A-C)+(B-D)C$, the triangle inequality, and
-    submultiplicativity of the operator norm.
+    Combining the decomposition $BA-DC=B(A-C)+(B-D)C$ with the triangle
+    inequality and submultiplicativity of the operator norm yields the bound.
 \end{proof}
 
 \begin{theorem}[Chronological operator error]
@@ -135,9 +135,9 @@ trace-norm estimates do not involve private dimensions.
         \le2\delta.
         \label{eq:peps_rescaled_local_error}
     \end{align}
-    Apply the two-factor estimate at every composition. Private maps and
-    register permutations add no error; spectator identities preserve
-    the local bound. Induction adds one contribution for each gate.
+    Applying the two-factor estimate at every composition shows that private maps and
+    register permutations add no error while spectator identities preserve
+    the local bound, so induction adds one contribution for each gate.
 \end{proof}
 
 \begin{definition}[Physical output of the original operators]
@@ -145,11 +145,11 @@ trace-norm estimates do not involve private dimensions.
     \lean{TNLean.PEPS.PairEffect.EffectCircuit.physicalDensityWithGateMaps}
     \leanok
     \uses{def:peps_approximate_original_operators}
-    Choose an isometric identification $K$ of the final memory with
-    finite physical and discarded coordinate spaces. For an input $x$, set
-    $\rho_G(x)=\operatorname{Tr}_{\rm discard}|KW_Gx\rangle\langle KW_Gx|$.
-    Define $\widetilde\rho_\delta(x)$ by the same formula with
-    $\widetilde W_\delta$. These operators are not normalized by their trace.
+    Given an isometric identification $K$ of the final memory with
+    finite physical and discarded coordinate spaces and an input $x$, define
+    the unnormalized physical outputs
+    $\rho_G(x)=\operatorname{Tr}_{\rm discard}|KW_Gx\rangle\langle KW_Gx|$
+    and $\widetilde\rho_\delta(x)=\operatorname{Tr}_{\rm discard}|K\widetilde W_\delta x\rangle\langle K\widetilde W_\delta x|$.
 \end{definition}
 
 \begin{theorem}[Physical error of approximate original gates]
@@ -168,8 +168,8 @@ trace-norm estimates do not involve private dimensions.
 \begin{proof}
     \leanok
     \uses{thm:peps_approximate_chronological_error,thm:peps_original_operator_contraction}
-    Put $u=K\widetilde W_\delta x$ and $v=KW_Gx$.
-    Contractivity and the isometry $K$ give $\|u\|,\|v\|\le1$.
+    For $u=K\widetilde W_\delta x$ and $v=KW_Gx$,
+    contractivity and the isometry $K$ give $\|u\|,\|v\|\le1$.
     Therefore
     \begin{align}
         \|\widetilde\rho_\delta(x)-\rho_G(x)\|_1
@@ -222,7 +222,7 @@ trace-norm estimates do not involve private dimensions.
 \end{theorem}
 \begin{proof}
     \leanok
-    Write $s=\lceil16C\rceil_+$. The elementary inequalities
+    With $s=\lceil16C\rceil_+$, the elementary inequalities
     $16C\le s\le2^s\le L^s$ imply
     \begin{align}
         4L^{-q}N\le \frac{16C}{L^s}\,
@@ -239,18 +239,19 @@ trace-norm estimates do not involve private dimensions.
     gate occurrences, where $L\ge2$. Fix a real exponent $p$, and choose $q$
     as in Theorem~\ref{thm:peps_approximate_gate_real_accuracy}.
     At every original gate, let an allowed monomial expansion approximate
-    that gate in operator norm to accuracy $L^{-q}$. Divide all coefficients
+    that gate in operator norm to accuracy $L^{-q}$, and divide all coefficients
     of this expansion by $1+L^{-q}$. For an input vector of norm at most one,
-    the physical output of the resulting contraction circuit differs from
+    the unnormalized physical output of the resulting contraction circuit
+    (with all private registers traced out) differs from
     the original physical density by at most $L^{-p}/4$ in trace norm.
-    The output density is not normalized; all private registers are traced out.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:peps_approximate_gate_real_accuracy,thm:peps_approximate_physical_error}
-    The chronological physical-density estimate is $4L^{-q}N$;
-    apply Theorem~\ref{thm:peps_approximate_gate_real_accuracy}. The comparison uses the original gate
-    operators, the same private operations, and the same physical readout.
+    Because the comparison uses the original gate operators, the same private
+    operations, and the same physical readout, the chronological physical-density
+    estimate is $4L^{-q}N$, and Theorem~\ref{thm:peps_approximate_gate_real_accuracy}
+    bounds this quantity by $L^{-p}/4$.
 \end{proof}
 
 \begin{definition}[Termwise bounds on the original gate expansions]
@@ -269,23 +270,23 @@ trace-norm estimates do not involve private dimensions.
     \lean{TNLean.PEPS.PairEffect.PartyGate.sum_norm_coefficients_le}
     \lean{TNLean.PEPS.PairEffect.PartyGate.sum_norm_coefficients_le_of_power_bounds}
     \leanok
-    Write a prescribed gate expansion as $\sum_{j=1}^{k}c_jM_j$.
-    If $|c_j|\leq C$ for every listed term, then
+    For a prescribed gate expansion $\sum_{j=1}^{k}c_jM_j$ satisfying
+    $|c_j|\leq C$ for every listed term,
     $\sum_{j=1}^{k}|c_j|\leq kC$.
     In particular, if $L\geq0$, $C_C\geq0$, $u,v$ are nonnegative integers,
-    $k\leq C_KL^u$, and $|c_j|\leq C_CL^v$ for every listed term, then
+    $k\leq C_KL^u$, and $|c_j|\leq C_CL^v$ for every listed term, then the
+    coefficient estimate used in assumption~3 and the opening reduction of
+    Theorem~5.2 gives
     \begin{align}
         \sum_{j=1}^{k}|c_j|\leq C_KC_CL^{u+v}.
         \label{eq:peps_termwise_polynomial_sum}
     \end{align}
-    This is the coefficient estimate used in Theorem~5.2, assumption~3, and
-    the opening reduction in its proof.
 \end{theorem}
 \begin{proof}
     \leanok
-    Sum the individual inequalities over the ordered list. For the
-    polynomial estimate, multiply its length bound by the nonnegative
-    number $C_CL^v$ and combine the powers of $L$.
+    Summing the individual inequalities over the ordered list gives $kC$, and
+    multiplying the length bound $k\leq C_KL^u$ by $C_CL^v\geq0$ combines the
+    powers of $L$ into the displayed polynomial bound.
 \end{proof}
 
 \begin{theorem}[Uniform coefficient sums for the original circuit]
@@ -306,7 +307,8 @@ trace-norm estimates do not involve private dimensions.
 \begin{proof}
     \leanok
     \uses{def:peps_original_termwise_bounds,thm:peps_gate_coefficient_sum}
-    Bound the coefficient sum at each original gate occurrence by $KC$.
+    The preceding theorem bounds the coefficient sum at
+    each original gate occurrence by $KC$.
     Composition and addition of spectator registers retain these same
     local conditions; private operations and register permutations add
     no nonprivate gate expansions, and the effect count is unchanged.

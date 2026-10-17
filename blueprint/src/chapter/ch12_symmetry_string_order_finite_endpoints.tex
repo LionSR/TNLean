@@ -26,14 +26,14 @@ length is an arbitrary $N\in\N$, not a multiple of the endpoint support.
 \begin{proof}
     \leanok
     \uses{thm:physical_observable_word_span_mul}
-    Consider the increasing spaces
+    The subspaces
     \begin{align}
         S_\ell(\Omega)
          & :=\operatorname{span}_{\C}
-        \{A^\sigma\Omega(A^\tau)^\dagger:|\sigma|=|\tau|=\ell\}.
+        \{A^\sigma\Omega(A^\tau)^\dagger:|\sigma|=|\tau|=\ell\}
         \notag
     \end{align}
-    Stationarity gives $S_\ell\subseteq S_{\ell+1}$. Equality at one step
+    form an increasing chain $S_\ell\subseteq S_{\ell+1}$ by stationarity. Equality at one step
     propagates through the recurrence
     $S_{\ell+1}=\sum_{i,j}A_iS_\ell A_j^\dagger$.
     By Theorem~\ref{thm:physical_observable_word_span_mul}, normality and

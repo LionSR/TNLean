@@ -95,13 +95,13 @@ the number $Np$ of original sites.
          & =\Gamma_L^A(U^\dagger YU),
         \label{eq:gamma_lc_from_u_adj}
     \end{align}
-    where (\ref{eq:gamma_lc_from_u_adj}) uses $UU^\dagger=I_n$. This proves
+    where (\ref{eq:gamma_lc_from_u_adj}) uses $UU^\dagger=I_n$, proving
     (\ref{eq:coisometric_reconstruction_local_space}). For explicit
-    canonical-form data, apply this equality to the retained direct sum.
-    Theorem~\ref{thm:block_sum_local_ground_space} gives the sum over all
-    displayed normal blocks. Blocks in one BNT phase class differ by a
-    nonzero phase and an invertible gauge, so their local spaces agree; the
-    sum therefore reduces to the distinct representatives, which proves
+    canonical-form data, applying this equality to the retained direct sum
+    together with Theorem~\ref{thm:block_sum_local_ground_space} gives the sum
+    over all displayed normal blocks. Because blocks in one BNT phase class
+    differ by a nonzero phase and an invertible gauge, their local spaces
+    agree; the sum therefore reduces to the distinct representatives, proving
     (\ref{eq:cpsv_blocked_representative_local_space}).
 \end{proof}
 
@@ -154,13 +154,13 @@ the number $Np$ of original sites.
     Equation~(\ref{eq:block_diagonal_one_site_span}) gives common
     coefficients $c_i$ satisfying $\sum_i c_iA_j^i=I_{D_j}$ for every $j$.
     In the restriction-intersection argument of the proof of
-    \cite[Theorem~12]{PerezGarcia2007Matrix}, these coefficients replace the
-    right-canonical identity and yield (\ref{eq:block_diagonal_chain_space_join}). This conditional
-    variant and its relation to the source proof are documented in
-    \cite{gap:pgvwc07_common_identity_coefficients}. The same span makes every
-    $A_j$ injective, so
+    \cite[Theorem~12]{PerezGarcia2007Matrix} (with the conditional variant
+    documented in \cite{gap:pgvwc07_common_identity_coefficients}), these
+    coefficients replace the right-canonical identity and yield
+    (\ref{eq:block_diagonal_chain_space_join}). Because the same span makes
+    every $A_j$ injective,
     Theorem~\ref{thm:chain_ground_space_eq_mpv_blk} identifies its periodic
-    chain space with $\spn\{\ket{V^{(N)}(A_j)}\}$. The block-diagonal
+    chain space with $\spn\{\ket{V^{(N)}(A_j)}\}$, and the block-diagonal
     comparison of
     Lemma~\ref{lem:block_diagonal_chain_space_comparison_parent_spanning}
     then gives (\ref{eq:block_diagonal_one_site_span_parent_spanning}).
@@ -195,9 +195,9 @@ the number $Np$ of original sites.
     \leanok
     \uses{thm:parent_hamiltonian_kernel_eq_chain_ground_space}
     When $N=0$ or $L>N$, both chain spaces are $\top$ by definition. Otherwise
-    $0<N$ and $L\leq N$. Every translated local constraint is then the inverse
-    image of the same subspace $G_L(B)=G_L(C)$, so their intersections are
-    equal. This gives
+    $0<N$ and $L\leq N$, so every translated local constraint is the inverse
+    image of the same subspace $G_L(B)=G_L(C)$; their intersections are
+    therefore equal, giving
     (\ref{eq:parent_spanning_local_space_chain_congruence}) for every $N$.
     When $N>L$,
     Theorem~\ref{thm:parent_hamiltonian_kernel_eq_chain_ground_space} identifies
@@ -228,11 +228,11 @@ the number $Np$ of original sites.
          & =\spn\left\{\ket{V^{(N)}(A_j)}:1\leq j\leq g\right\}.
         \label{eq:cpsv_original_lattice_parent_hamiltonian_range}
     \end{align}
-    Thus the orthogonal complement of the local MPS space is nonzero, and
-    the corresponding bounded-range interaction is a parent Hamiltonian.
-    This is the construction of
-    \cite[Definition~3.9 and line~527]{Cirac2016MPDO_arXiv}, with its
-    condition $d^L>D^2$ made explicit.
+    In the construction of
+    \cite[Definition~3.9 and line~527]{Cirac2016MPDO_arXiv} with its
+    condition $d^L>D^2$ made explicit, the orthogonal complement of the local
+    MPS space is therefore nonzero, and the corresponding bounded-range
+    interaction is a parent Hamiltonian.
 \end{theorem}
 
 \begin{proof}
@@ -249,8 +249,8 @@ the number $Np$ of original sites.
         thm:block_diagonal_one_site_span_parent_spanning,
         thm:unital_gauge_of_pd_fixed_point,
         thm:pgvwc07_dual_diag_unital}
-    Choose one normal representative from each BNT phase class and put each
-    representative in a Perron gauge for which
+    Selecting one normal representative from each BNT phase class and placing
+    each representative in a Perron gauge gives
     \begin{align}
         \sum_a A^j_a A^{j\,\dagger}_a          & =\Id,
                                                &
@@ -261,7 +261,7 @@ the number $Np$ of original sites.
     $\sum_jD_j\leq D$, so $g\leq D$, and quantum Wielandt makes every
     representative block-injective at the common length $L_0=D^4$.
 
-    Suppose first that $g\geq2$. Put
+    When $g\geq2$, the auxiliary ranges are
     \begin{align}
         R                & =3(g-1)(L_0+1)+1,
                          &
@@ -288,15 +288,15 @@ the number $Np$ of original sites.
         \leq 3D^5.
         \notag
     \end{align}
-    If $g=1$, the same spanning conclusion holds at
-    $L_{\mathrm{aux}}=D^4+1$ by the normal-tensor intersection and closure
-    property reviewed in \cite[Section~IV.C]{Cirac2021Matrix}. If $g=0$,
+    If $g=1$, the normal-tensor intersection and closure property reviewed in
+    \cite[Section~IV.C]{Cirac2021Matrix} gives the same spanning conclusion at
+    $L_{\mathrm{aux}}=D^4+1$. If $g=0$,
     the one-site block-diagonal spanning result gives it at
     $L_{\mathrm{aux}}=2$; this is a formal boundary extension of the source
     argument.
 
-    In every case enlarge the interaction range to the common value
-    $L=3D^5$. For every $N>L$, range antitonicity and the
+    In every case, enlarging the interaction range to the common value
+    $L=3D^5$ shows that for every $N>L$, range antitonicity and the
     frustration-free inclusion give the second kernel sandwich
     \begin{align}
         \ker H_L^{(N)}
@@ -336,12 +336,13 @@ the number $Np$ of original sites.
         \label{eq:cpsv_blocked_nearest_neighbor_parent_hamiltonian}
     \end{align}
     Thus the blocked tensor has a nearest-neighbor parent Hamiltonian
-    on the blocked lattice. This is distinct from
+    on the blocked lattice. As recorded in
+    \cite{gap:cpsv16_parent_hamiltonian_range_short_ring} alongside the
+    argument closing the short-ring window, this blocked-lattice statement is
+    distinct from
     Theorem~\ref{thm:cpsv_original_lattice_parent_hamiltonian_range}, which
     gives a nonzero bounded-range interaction and the parent-Hamiltonian
-    spanning identity on every sufficiently long original chain. The two
-    conclusions and the argument closing the short-ring window are recorded in
-    \cite{gap:cpsv16_parent_hamiltonian_range_short_ring}.
+    spanning identity on every sufficiently long original chain.
 \end{theorem}
 
 \begin{proof}
@@ -354,10 +355,10 @@ the number $Np$ of original sites.
         thm:block_sum_local_ground_space,
         thm:block_diagonal_one_site_span_parent_spanning,
         lem:parent_spanning_of_local_space_eq}
-    Choose $p$ so that the simultaneous one-letter evaluations of the blocked
-    normal representatives span the product of their full matrix algebras.
-    Positive blocking preserves the BNT property. Set
-    $C^i=\bigoplus_{j=1}^{g}(A_j^{[p]})^i$. Then
+    For a block length $p$ at which the simultaneous one-letter evaluations of
+    the blocked normal representatives span the product of their full matrix
+    algebras, positive blocking preserves the BNT property, and for the direct
+    sum $C^i=\bigoplus_{j=1}^{g}(A_j^{[p]})^i$,
     Theorem~\ref{thm:block_diagonal_one_site_span_parent_spanning} gives, for
     every $N>2$,
     \begin{align}
@@ -399,11 +400,10 @@ the number $Np$ of original sites.
          & =W_{N,p}P_{G_N^{\mathrm{ES}}(A^{[p]})}W_{N,p}^{*}.
         \label{eq:blocked_ground_projector_conjugacy}
     \end{align}
-    These statements include $N=0$ or $p=0$; in those cases the same explicit
-    configuration isometry and boundary-map calculation apply. In particular,
-    the projector identity holds for three blocked sites and $3p$ original
-    sites. These identities concern the full local ground spaces and their
-    orthogonal projectors under blocking.
+    These full local ground-space and projector identities include $N=0$ or
+    $p=0$, where the same explicit configuration isometry and boundary-map
+    calculation apply, and in particular the projector identity holds for three
+    blocked sites and $3p$ original sites.
     % Scope: this theorem does not identify the left or tail open-chain spectator
     % spaces needed by a three-block estimate and does not compare the blocked and
     % original parent Hamiltonians.
@@ -425,6 +425,6 @@ the number $Np$ of original sites.
         P_{W_{N,p}(K)} & =W_{N,p}P_KW_{N,p}^{*}.
         \label{eq:projection_under_blocked_isometry}
     \end{align}
-    Taking $K=G_N^{\mathrm{ES}}(A^{[p]})$ gives
+    Evaluating at $K=G_N^{\mathrm{ES}}(A^{[p]})$ gives
     (\ref{eq:blocked_ground_projector_conjugacy}).
 \end{proof}

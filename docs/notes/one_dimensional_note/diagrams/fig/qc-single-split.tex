@@ -1,0 +1,15 @@
+\(\displaystyle \begin{gathered}
+    \langle\phi,Kh_YK^{-1}\phi\rangle
+    \;=\;
+    \Bigl\langle\phi,\;
+    \begin{quantikz}
+      \lstick{$X_{j-1}$} & \gate[2]{L_j^{-1}} & & \gate[2]{L_j} & \\
+      \lstick{$X_j\setminus X_{j-1}$} & & \gate[2]{h_Y} & & \\
+      \lstick{$\Lambda\setminus X_j$} & & & &
+    \end{quantikz}
+    \;\phi\Bigr\rangle
+    \\[2pt]
+    \text{\small outer filters $L_{j+1},\dots,L_m$: stripped by the stripping identity, $[L_k,\rho_k]=0$}
+    \\[-1pt]
+    \text{\small inner filters $L_1,\dots,L_{j-1}$: disjoint from $Y$, commute with $h_Y$}
+  \end{gathered}\)

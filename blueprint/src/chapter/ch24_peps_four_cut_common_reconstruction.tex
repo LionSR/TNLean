@@ -66,7 +66,7 @@ Let $\mathcal B=X\times\{\mathrm h,\mathrm v\}$ denote the set of bonds.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_torus_projector_extraction}
-    Pair the product vector bond by bond. Trace duality gives
+    Pairing the product vector bond by bond, trace duality gives
     $E_p(B_q)=\prod_f\delta_{p_f,q_f}=\delta_{p,q}$, since all labelled
     bonds are distinct. Linearity extracts a specified coefficient from
     any finite coherent sum. Applying every $E_p$ to a zero sum proves
@@ -79,12 +79,11 @@ Let $\mathcal B=X\times\{\mathrm h,\mathrm v\}$ denote the set of bonds.
     \lean{TNLean.PEPS.fourBlock_relativeLabel_compatibility,
         TNLean.PEPS.fourBlock_compatibility_commute}
     \leanok
-    For arbitrary $a,b,c,d$ in a group, put
-    $h_1=b^{-1}a$, $h_2=d^{-1}c$, $v_1=c^{-1}a$, $v_2=d^{-1}b$.
+    For the group identities in the proof of
+    \cite[Theorem~5.5]{Schuch2010PEPS}, for arbitrary $a,b,c,d$ in a group,
+    put $h_1=b^{-1}a$, $h_2=d^{-1}c$, $v_1=c^{-1}a$, $v_2=d^{-1}b$.
     Then $v_2h_1=h_2v_1$. More generally, any four labels satisfying
     $v_2h_1=h_2v_1$, $h_1=h_2$, and $v_1=v_2$ obey $v_1h_1=h_1v_1$.
-    These are the group identities in the proof of
-    \cite[Theorem~5.5]{Schuch2010PEPS}.
 \end{theorem}
 \begin{proof}\leanok
     Both $(d^{-1}b)(b^{-1}a)$ and $(d^{-1}c)(c^{-1}a)$ equal $d^{-1}a$.
@@ -136,12 +135,13 @@ Let $\mathcal B=X\times\{\mathrm h,\mathrm v\}$ denote the set of bonds.
 \begin{proof}\leanok
     \uses{thm:peps_four_cut_common_network_expansion,
         def:peps_four_cut_common_bond_slices}
-    Separate the $j$th factor from the finite product to obtain
+    Separating the $j$th factor from the finite product gives
     (\ref{eq:peps_common_product_slice}). In
     (\ref{eq:peps_common_regrouped_average}), an identity bond has factor
     $U_f(q_{h(f)}q_{t(f)}^{-1})$. Its $f$-slice is a scalar multiple of
-    one column of $F_f$ by (\ref{eq:peps_common_product_slice}). Sum these
-    vectors over all $q$ and retain the normalization $|G|^{-|X|}$.
+    one column of $F_f$ by (\ref{eq:peps_common_product_slice}), and summing
+    these vectors over all $q$ with the normalization $|G|^{-|X|}$ keeps the
+    slice in $\operatorname{ran}F_f$.
 \end{proof}
 
 \begin{theorem}[The four cuts derive a complete bond-product expansion]%
@@ -182,18 +182,18 @@ Let $\mathcal B=X\times\{\mathrm h,\mathrm v\}$ denote the set of bonds.
         thm:peps_four_cut_common_product_range,
         thm:peps_four_cut_common_coefficient_uniqueness,
         def:peps_four_cut_common_bond_coefficients}
-    Expand each boundary in fixed endpoint tensors. Each such cut vector
-    has matrix units on cut bonds and identities on uncut bonds, so
+    Expanding each boundary in fixed endpoint tensors gives cut vectors with
+    matrix units on cut bonds and identities on uncut bonds, so
     Theorem~\ref{thm:peps_four_cut_common_uncut_support} gives the slice
     condition; linearity extends it to the entire cut range.
     A bond based at $v$ is uncut in the cut $(v_x,v_y)$ on the
     two-by-two torus. Thus every bond satisfies the slice condition, and
     (\ref{eq:peps_common_product_range}) gives a vector $a$ with
     $\mathcal R\psi=\mathcal T_Fa$.
-    Expand this product map and undo regrouping to obtain the first sum
+    Expanding this product map and undoing regrouping gives the first sum
     in (\ref{eq:peps_common_derived_bond_span}); the bond-label bijection
-    gives the second. Only after this existence argument, apply each
-    $E_p$ and use (\ref{eq:peps_common_bond_duality}) to obtain
+    gives the second. After this existence argument, applying each
+    $E_p$ and using (\ref{eq:peps_common_bond_duality}) gives
     (\ref{eq:peps_common_extracted_expansion}).
 \end{proof}
 
@@ -216,10 +216,10 @@ Let $\mathcal B=X\times\{\mathrm h,\mathrm v\}$ denote the set of bonds.
 \begin{proof}\leanok
     \uses{thm:peps_four_cut_common_network_expansion,
         thm:peps_torus_projector_extraction}
-    Apply the linear functional $E_p$ to
-    (\ref{eq:peps_common_network_average}). Move it through the finite sum
-    and normalization, and factor the pairing of each product into its
-    individual bond pairings.
+    Applying the linear functional $E_p$ to
+    (\ref{eq:peps_common_network_average}), moving it through the finite sum
+    and normalization, and factoring the pairing of each product into its
+    individual bond pairings gives the extraction formula.
 \end{proof}
 
 \begin{theorem}[Nonflat coefficients vanish in the four-cut intersection]%
@@ -260,9 +260,10 @@ Let $\mathcal B=X\times\{\mathrm h,\mathrm v\}$ denote the set of bonds.
         \nonumber
     \end{align}
     contradicting (\ref{eq:peps_common_failed_plaquette}). Thus every
-    summand vanishes. Apply this conclusion to the matrix-unit networks
-    spanning the cut range. Finally, a nonflat labelling fails the
-    plaquette equation at some $(c,r)$, whose cut membership gives the result.
+    summand vanishes, and this conclusion extends by linearity from the
+    matrix-unit networks to the cut range they span. Finally, a nonflat
+    labelling fails the plaquette equation at some $(c,r)$, whose cut
+    membership gives the result.
 \end{proof}
 
 \begin{definition}[Product of the local invariant projectors]%
@@ -311,11 +312,11 @@ Let $\mathcal B=X\times\{\mathrm h,\mathrm v\}$ denote the set of bonds.
         def:peps_four_cut_common_average_projection,
         thm:peps_four_cut_common_physical_contraction,
         thm:peps_torus_projector_expansion}
-    Apply the recovery identity
-    (\ref{eq:peps_common_cut_recovery}) with $A_v=A^0_{\rho_v}$;
+    Applying the recovery identity
+    (\ref{eq:peps_common_cut_recovery}) with $A_v=A^0_{\rho_v}$,
     its invariance proves the fixed-vector assertion.
-    Express $B_p$ as a bond network whose local tensors have coefficients
-    $\delta_{(t,r,b,l),s}$. Applying $\Pi_{\rho_v}$ to such an identity
+    Expressing $B_p$ as a bond network whose local tensors have coefficients
+    $\delta_{(t,r,b,l),s}$, applying $\Pi_{\rho_v}$ to such an identity
     tensor produces $A^0_{\rho_v}$. Moving the physical maps through the
     contraction gives (\ref{eq:peps_common_project_bond_product}).
 \end{proof}
@@ -367,8 +368,8 @@ Let $\mathcal B=X\times\{\mathrm h,\mathrm v\}$ denote the set of bonds.
         thm:peps_four_cut_common_matched_membership,
         def:peps_four_cut_common_average_projection}
     For $\psi\in\mathcal S^{A^0}$, the cut $(0,0)$ gives
-    $\mathcal Q_\rho\psi=\psi$. Apply this projector to the derived
-    expansion (\ref{eq:peps_common_extracted_expansion}):
+    $\mathcal Q_\rho\psi=\psi$. Applying this projector to the derived
+    expansion (\ref{eq:peps_common_extracted_expansion}) gives
     \begin{align}
         \psi & =\sum_pE_p(\psi)\mathcal Q_\rho B_p
         =\sum_{p\text{ flat}}E_p(\psi)\mathcal Q_\rho B_p
@@ -388,7 +389,10 @@ Let $\mathcal B=X\times\{\mathrm h,\mathrm v\}$ denote the set of bonds.
     \uses{def:peps_four_cut_common_boundary,
         def:peps_four_cut_common_matched_action,
         def:peps_four_cut_common_closure,def:peps_g_injective}
-    Let $G,V,P$ be finite and $X=(\Z/2\Z)^2$. Assign an arbitrary
+    In the common-coordinate specialization of
+    \cite[Theorem~5.5]{Schuch2010PEPS} (independently sized bond and
+    physical spaces are treated in Theorem~\ref{thm:peps_four_cut_closure}),
+    let $G,V,P$ be finite and $X=(\Z/2\Z)^2$. Assign an arbitrary
     semi-regular representation on $\C^V$ to each of the eight bonds,
     and let each independent site tensor $A_v:V^4\times P\to\C$ be
     $G$-injective for its matched action $\rho_v$. Then
@@ -397,9 +401,6 @@ Let $\mathcal B=X\times\{\mathrm h,\mathrm v\}$ denote the set of bonds.
          & =\spn_{\C}\{\mathcal M_A(g,h):g,h\in G,\ gh=hg\}.
         \label{eq:peps_common_four_cut_closure}
     \end{align}
-    This is the common-coordinate specialization of
-    \cite[Theorem~5.5]{Schuch2010PEPS}; the independently sized bond and
-    physical spaces are treated in Theorem~\ref{thm:peps_four_cut_closure}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_four_cut_common_local_inverse,

@@ -20,9 +20,10 @@ Every open contraction retains its full virtual boundary coefficient.
     If also $Q^\dagger Q=I$, then $U(g)=Q^\dagger L(g)Q$.
 \end{theorem}
 \begin{proof}\leanok
-    Evaluate the first identity at $g=1$, since $U(1)=L(1)=I$.
-    For the second, multiply it on the left by $Q^\dagger$ and on
-    the right by $Q$, and cancel $Q^\dagger Q$.
+    Evaluating the first identity at $g=1$ with $U(1)=L(1)=I$ gives
+    $QQ^\dagger=I$. Multiplying $L(g)=QU(g)Q^\dagger$ on the left by
+    $Q^\dagger$ and on the right by $Q$ and cancelling $Q^\dagger Q$
+    yields the second identity.
 \end{proof}
 
 \begin{definition}[Oriented regional Fourier matrices]%
@@ -98,12 +99,12 @@ Every open contraction retains its full virtual boundary coefficient.
 \begin{proof}\leanok
     For an internal edge, vectorization of
     $L(q_hq_t^{-1})=QU(q_hq_t^{-1})Q^\dagger$ gives its factor identity.
-    At a head crossing use $L(g)Q=QU(g)$; at a tail crossing use
-    $Q^\dagger L(g)=U(g)Q^\dagger$, with $g=q_t^{-1}$, and take
-    coefficients in tail order. These identities leave the oriented
+    At a head crossing $L(g)Q=QU(g)$, while at a tail crossing
+    $Q^\dagger L(g)=U(g)Q^\dagger$ with $g=q_t^{-1}$ in tail-ordered
+    coefficients; both identities leave the oriented
     virtual boundary matrix $Q_f$.
-    Expand the site averages and distribute the product of crossing
-    sums to obtain~(\ref{eq:peps_fourier_open_generator}).
+    Expanding the site averages and distributing the product of crossing
+    sums yields~(\ref{eq:peps_fourier_open_generator}).
     Summing against $c(\theta)$ and interchanging finite sums proves
     (\ref{eq:peps_fourier_open_superposition}).
 \end{proof}
@@ -122,10 +123,10 @@ Every open contraction retains its full virtual boundary coefficient.
         thm:peps_fourier_reverse_coordinates,
         thm:peps_fourier_product_composition}
     Equation~(\ref{eq:peps_fourier_open_generator}) maps every source
-    generator into the target span. Apply it also to $Q^\dagger$,
-    using Theorem~\ref{thm:peps_fourier_reverse_coordinates}, to send
-    every target range vector back into the source range.
-    The identity $Q_R(Q^\dagger)_R=I$ then gives its preimage.
+    generator into the target span. Applying it to $Q^\dagger$ via
+    Theorem~\ref{thm:peps_fourier_reverse_coordinates} sends
+    every target range vector back into the source range, and
+    the identity $Q_R(Q^\dagger)_R=I$ then gives its preimage.
 \end{proof}
 
 \subsection{Exterior blocks and complete kernels}
@@ -181,11 +182,11 @@ Every open contraction retains its full virtual boundary coefficient.
 \begin{proof}\leanok
     \uses{thm:peps_oriented_global_coordinate_inverse,
         thm:peps_oriented_coordinate_parent,thm:peps_region_parent_common_kernel}
-    Take every $o_e=0$ in
+    Setting every $o_e=0$ in
     Theorems~\ref{thm:peps_oriented_global_coordinate_inverse}
-    and~\ref{thm:peps_oriented_coordinate_parent}. Then the oriented
-    global coordinate matrix is $\mathcal Q$ and the oriented averaging
-    tensors are the ordered ones, which gives the inverse identities,
+    and~\ref{thm:peps_oriented_coordinate_parent} makes the oriented
+    global coordinate matrix equal to $\mathcal Q$ and the oriented averaging
+    tensors equal to the ordered ones, which gives the inverse identities,
     injectivity, and the equality of parent spaces.
     Restricting $\mathcal Q$ to the source parent space is therefore
     injective with image the target parent space, which gives the
@@ -233,10 +234,10 @@ Every open contraction retains its full virtual boundary coefficient.
     \uses{thm:peps_copy_parent_equivalence,thm:peps_fourier_coordinate_parent,
         thm:peps_region_parent_common_kernel}
     Copy restoration identifies the full weighted single-copy parent
-    space with the unweighted $D^{[d]}$ parent space. The Fourier
-    isomorphism then identifies that entire space with the regular
-    parent space. Compose the two maps, use preservation of dimension,
-    and identify each positive Hamiltonian kernel with its parent space.
+    space with the unweighted $D^{[d]}$ parent space, and the Fourier
+    isomorphism identifies that entire space with the regular
+    parent space. Composing the two maps preserves dimension,
+    and positivity identifies each Hamiltonian kernel with its parent space.
 \end{proof}
 
 % This supplied-Fourier comparison is distinct from deriving the blocks and

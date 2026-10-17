@@ -45,9 +45,9 @@ identities.
 
 \begin{proof}
     \leanok
-    Induct on $N$. The base case is $F_{AB}^0(X)=X$. For the inductive
-    step, apply $F_{AB}$ to each summand in
-    (\ref{eq:spectral_mixed_power}) and reindex using
+    By induction on $N$, the base case is $F_{AB}^0(X)=X$, and the inductive
+    step applies $F_{AB}$ to each summand in
+    (\ref{eq:spectral_mixed_power}) and reindexes via
     $\{0,\ldots,d{-}1\}^{N+1}\cong
         \{0,\ldots,d{-}1\}\times\{0,\ldots,d{-}1\}^N$.
 \end{proof}
@@ -86,10 +86,10 @@ statement, so it needs no separate expansion.
 \end{lemma}
 
 \begin{proof}\leanok
-    This is the MPS formulation of
-    the corresponding theorem in the companion quantum-channel volume~\cite[``Spectral-radius bound for a trace-preserving mixed Kraus map'']{QICLean2026Blueprint}: the rectangular
-    mixed transfer is the mixed Kraus map, and the two tensor normalization
-    identities are its trace-preserving hypotheses.
+    Since the rectangular mixed transfer is the mixed Kraus map and the two
+    tensor normalization identities are its trace-preserving hypotheses, the
+    bound follows from the companion quantum-channel
+    result~\cite[``Spectral-radius bound for a trace-preserving mixed Kraus map'']{QICLean2026Blueprint}.
 \end{proof}
 
 \section{Peripheral intertwiners and gauge rigidity}
@@ -113,8 +113,9 @@ Theorem~\ref{thm:transfer_operator_gap_rect_irr_tp}.
     $S_BS_B^\dagger=\rho_B$ (for instance the positive definite
     Perron--Frobenius fixed points of Theorem~\ref{thm:qpf} and their
     square roots, as in the right-canonical gauge of
-    Theorem~\cite[``Right-canonical (unital) gauge'']{QICLean2026Blueprint}). Gauge to unital families
-    $A'^i=S_A^{-1}A^iS_A$ and $B'^i=S_B^{-1}B^iS_B$. If
+    Theorem~\cite[``Right-canonical (unital) gauge'']{QICLean2026Blueprint}).
+    For the gauged families $A'^i=S_A^{-1}A^iS_A$ and
+    $B'^i=S_B^{-1}B^iS_B$, if
     $X\in M_{D_1\times D_2}(\C)\setminus\{0\}$ satisfies
     $F_{AB}^{\mathrm{rect}}(X)=\mu X$ with $|\mu|=1$, then
     $X'=S_A^{-1}X(S_B^\dagger)^{-1}$ is nonzero, the families $A'$ and $B'$
@@ -130,7 +131,7 @@ Theorem~\ref{thm:transfer_operator_gap_rect_irr_tp}.
 \end{lemma}
 
 \begin{proof}\leanok
-    Embed the gauged families and transformed eigenvector into the block
+    Embedding the gauged families and transformed eigenvector into the block
     matrices
     \begin{align}
         C^i
@@ -145,11 +146,11 @@ Theorem~\ref{thm:transfer_operator_gap_rect_irr_tp}.
         \begin{pmatrix}
             0 & X' \\
             0 & 0
-        \end{pmatrix},
+        \end{pmatrix}
         \label{eq:spectral_block_embedding}
     \end{align}
-    on $M_{D_1+D_2}(\C)$; the matrices $\{C^i\}$ form a unital Kraus family,
-    and $E_C(Y)=\mu Y$. The positive definite fixed points of the adjoint
+    on $M_{D_1+D_2}(\C)$ defines a unital Kraus family $\{C^i\}$ satisfying
+    $E_C(Y)=\mu Y$. The positive definite fixed points of the adjoint
     maps give a faithful weighted trace for the block map. Applying the
     Kadison--Schwarz inequality to $Y$ and pairing its positive semidefinite
     gap with this fixed point shows that the gap vanishes. The Kraus
@@ -308,10 +309,10 @@ Chapter~\ref{ch:qpf}), the overlap--trace identity
 (\ref{eq:spectral_overlap_trace}) with $A=B$ gives
 $O_{AA}(N)=\Tr(\E_A^N)$, so Theorem~\ref{thm:trace_pow_one} yields the
 primitive self-overlap limit of Theorem~\ref{thm:primitive_overlap}. The
-hypothesis $\rho_{\spec}(N)<1$ is exactly the complementary transfer-map gap
+hypothesis $\rho_{\spec}(N)<1$ is the complementary transfer-map gap
 that the complementary spectral-radius theorem for primitive maps
 (the corresponding theorem in the companion quantum-channel volume~\cite[``Complementary transfer-map gap for primitive maps'']{QICLean2026Blueprint})
-gives: for a primitive $E$ all eigenvalues bounded by $1$ in modulus and
+gives: for a primitive $E$ with all eigenvalues bounded by $1$ in modulus and
 no trace-zero fixed point, every eigenvalue of $N=E-P$ has modulus strictly
 less than $1$, and since $\MN{D}$ is finite-dimensional this bounds the
 spectral radius $\rho_{\spec}(N)$ itself.
@@ -332,9 +333,9 @@ spectral radius $\rho_{\spec}(N)$ itself.
     \uses{thm:psd_fp_exists}
     The channel fixed-point existence theorem
     (Theorem~\ref{thm:psd_fp_exists}) gives a nonzero positive
-    semidefinite fixed point $\rho$. Apply
-    Theorem~\cite[``Complementary gap at a prescribed fixed point'']{QICLean2026Blueprint} to
-    $\E_A$ and $\rho$.
+    semidefinite fixed point $\rho$, and
+    Theorem~\cite[``Complementary gap at a prescribed fixed point'']{QICLean2026Blueprint}
+    applied to $\E_A$ and $\rho$ then gives $\rho_{\spec}(N)<1$.
 \end{proof}
 
 This concretely instantiates the hypothesis of
@@ -363,8 +364,8 @@ them.
 
 Corner preservation, the associated corner subspace, irreducibility of the
 restricted map, and corner rank are defined in the companion quantum-channel
-volume~\cite[``Corner preservation'' and the following corner definitions]{QICLean2026Blueprint}.
-We use those definitions here in the MPS periodicity-removal argument.
+volume~\cite[``Corner preservation'' and the following corner definitions]{QICLean2026Blueprint}
+and enter the MPS periodicity-removal argument below.
 
 
 \subsection{Group structure and divisibility}
@@ -388,9 +389,9 @@ $D=\tr(\Id)=\sum_{k=0}^{m-1}\tr(P_k)=m\,\tr(P_0)$. Since the trace of an
 orthogonal projection is a natural number (Theorem~\cite[``Rank equals trace for an orthogonal projection'']{QICLean2026Blueprint}),
 $m\mid D$.
 
-This periodicity-removal chain --- unitary normalization, Fourier
-projections, cyclic Kraus shift (Lemma~\ref{lem:kraus_cyclic_shift}), the
-blocked cyclic corners of this section, and restricted primitivity ---
+This periodicity-removal chain (unitary normalization, Fourier
+projections, cyclic Kraus shift in Lemma~\ref{lem:kraus_cyclic_shift}, the
+blocked cyclic corners of this section, and restricted primitivity)
 underlies the period-removing blocking theorems of
 Chapter~\ref{ch:canonical}: \cite[Theorem~6.6]{Wolf2012Quantum} gives the
 cyclic peripheral spectrum of the adjoint transfer map, and

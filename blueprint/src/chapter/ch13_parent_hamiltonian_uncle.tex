@@ -26,11 +26,12 @@ one scalar need not be a similarity transformation.
 \end{lemma}
 \begin{proof}
     \leanok
-    Injectivity is open. In a neighborhood of $x_0$, write the projector as
-    $T_x(T_x^\dagger T_x)^{-1}T_x^\dagger$ using the existing inverse-Gram
-    formula. Inversion is continuous at the invertible base-point Gram
-    operator. This is the continuous-basis argument of the source, with
-    inverse Gram matrices in place of explicit Gram--Schmidt coordinates.
+    Because injectivity is open, the existing inverse-Gram formula writes the
+    projector in a neighborhood of $x_0$ as
+    $T_x(T_x^\dagger T_x)^{-1}T_x^\dagger$, and inversion is continuous at the
+    invertible base-point Gram operator; this realizes the continuous-basis
+    argument of the source with inverse Gram matrices in place of explicit
+    Gram--Schmidt coordinates.
 \end{proof}
 
 \begin{lemma}[Invertible off-diagonal virtual rescaling]
@@ -96,8 +97,8 @@ one scalar need not be a similarity transformation.
 \end{lemma}
 \begin{proof}
     \leanok
-    Multiply the four matrix blocks and cancel the nonzero factor
-    $\varepsilon$ in each off-diagonal block. All remaining entries are
+    Multiplying the four matrix blocks and canceling the nonzero factor
+    $\varepsilon$ in each off-diagonal block leaves entries that are all
     polynomials in $\varepsilon$.
 \end{proof}
 

@@ -1,13 +1,13 @@
 \section{Conditional final-scale physical information}
 \label{sec:source-final-information}
 
-The same-source physical information inequality and the final numerical
-absorption now compose.  The result is conditional on the complete physical
-scanner hypotheses and the original target and positive-prefix entropy
-inputs.  It does not construct those inputs or claim the full area law.
-The source is \emph{A two-dimensional area law from a global spectral gap},
-\texttt{08-scanner.tex}, lines 353--357, 399--533 and 839--941, at revision
-\texttt{adc7f1241b42e322a6451854ab7e4b4c146bf78a}.
+Following \emph{A two-dimensional area law from a global spectral gap}
+(\texttt{08-scanner.tex}, lines 353--357, 399--533 and 839--941, at revision
+\texttt{adc7f1241b42e322a6451854ab7e4b4c146bf78a}), the same-source physical
+information inequality and the final numerical absorption now compose. The
+resulting bound is conditional on the complete physical scanner hypotheses and
+the original target and positive-prefix entropy inputs; it neither constructs
+those inputs nor claims the full area law.
 
 \begin{theorem}[The target dimension]
     \label{thm:physical-information-dimension}
@@ -23,9 +23,9 @@ The source is \emph{A two-dimensional area law from a global spectral gap},
 
 \begin{proof}
     \leanok
-    The configuration dimension is $q^{|X|}$.  Take its logarithm,
-    use $\log q\geq0$ and substitute the cardinality estimate.  No dimension
-    of the far region enters the estimate.
+    Because the configuration dimension is $q^{|X|}$, taking its logarithm and
+    using $\log q\geq0$ together with the cardinality estimate yields the bound
+    without any dependence on the dimension of the far region.
 \end{proof}
 
 \begin{theorem}[The concrete source's final-scale conditional information]
@@ -77,23 +77,23 @@ The source is \emph{A two-dimensional area law from a global spectral gap},
         thm:arealaw-target-entropy-transfer,
         thm:arealaw-final-sharp-source,
         def:arealaw-final-sharp-error}
-    Invoke the same-source information theorem once.  Its concrete
-    data give $X\subseteq S_0$, $|S_0|\leq(C_T+1)n^2$ and the
-    trace-distance bound.  Therefore the preceding dimension lemma applies
-    with $C_{\rm vol}=C_T+1$.  Quantitative regional entropy continuity gives
+    Invoking the same-source information theorem once provides
+    $X\subseteq S_0$, $|S_0|\leq(C_T+1)n^2$, and the trace-distance bound,
+    so the preceding dimension lemma applies with $C_{\rm vol}=C_T+1$.
+    Quantitative regional entropy continuity then gives
     \[
         S_{\Omega_t}(X)\leq C_e n^{1+e_{\rm box}}+n^{-247}
     \]
-    for the same truncated vector.  The same original prefix input gives
+    for the same truncated vector, while the original prefix input gives
     the already-derived shell bound with its unchanged $n^{-247}$ error.
 
-    Use $W=n^\omega$ and $\tau=n^{-1/4000}$.  The uniform numerical scale
-    theorem gives $0<\tau\leq1/2$ and the rounded per-band weight;
-    the round-step smallness theorem puts that same weight in the required
-    interval.  Identify the scalar right-hand side with the complete final
-    error expression, including the selected mass, window, marginal bound
-    and original-state continuity correction.  Apply the final source error
-    bound at these data.
+    Setting $W=n^\omega$ and $\tau=n^{-1/4000}$, the uniform numerical scale
+    theorem yields $0<\tau\leq1/2$ and the rounded per-band weight, which
+    the round-step smallness theorem places in the required interval.
+    Identifying the scalar right-hand side with the complete final error
+    expression---including the selected mass, window, marginal bound, and
+    original-state continuity correction---and applying the final source error
+    bound at these data gives the exponents.
 
     The same-source theorem has already taken the replica limit at fixed
     physical size, weight and smoothing parameter.  This proof only applies
