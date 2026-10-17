@@ -812,7 +812,7 @@ class EarlyCommandTest(unittest.TestCase):
             while True:
                 try:
                     state = Path(f'/proc/{pid}/stat').read_text().split(') ')[1][0]
-                except FileNotFoundError:
+                except (FileNotFoundError, ProcessLookupError):
                     state = 'gone'
                 if state in ('Z', 'gone') or time.monotonic() >= deadline:
                     break
