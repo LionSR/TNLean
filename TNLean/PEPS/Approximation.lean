@@ -72,6 +72,7 @@ import TNLean.PEPS.Approximation.ApproximateGateEvaluation
 import TNLean.PEPS.Approximation.ApproximateGateRescaling
 import TNLean.PEPS.Approximation.ApproximateSampledNetworkApproximation
 import TNLean.PEPS.Approximation.ApproximateSourceSampling
+import TNLean.PEPS.Approximation.ApproximationFromSquareAreaLaw
 import TNLean.PEPS.Approximation.AuxiliaryRegisterFiniteness
 import TNLean.PEPS.Approximation.Basic
 import TNLean.PEPS.Approximation.BasisMatrixOperator
