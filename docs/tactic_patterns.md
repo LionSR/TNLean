@@ -8115,6 +8115,24 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Notes:** Two occurrences in two modules, below the promotion threshold.
   The coefficient is chosen before every real clearance and finite instance.
 
+### Passing from real clearance to integer clearance — candidate (2026-10-17)
+
+- **Pattern:** Multiply a comparison between clearance parameters by a
+  nonnegative rectangle size, combine it with the strict distance bound, and
+  use `exact_mod_cast` to obtain integer safety.
+- **Seen:** `exists_condEntropy_le_initialBuffer_real` in
+  `PEPS/AreaLaw/InitialBufferReal.lean` and
+  `exists_regionalEntropy_safe_rect_le_boxError` in
+  `PEPS/AreaLaw/PhysicalSafeBox.lean`. The separation comparison in
+  `sublinearCollarBound_real` in `PEPS/AreaLaw/PhysicalCollarInformation.lean`
+  uses the same multiplication and strict-inequality argument over the reals.
+- **Abstraction:** The two integer-safety proofs already use
+  `mul_le_mul_of_nonneg_right`. A common clearance comparison lemma could
+  combine that argument with the cast when another integer-safety use arises.
+- **Notes:** Two integer-safety occurrences in two modules, with a related
+  real-separation argument in a third module. The separation argument has no
+  integer cast, so a shared statement should distinguish these conclusions.
+
 ### Relabeling finite-product information through regional entropies — candidate (2026-10-15)
 
 - **Pattern:** Expand mutual or conditional mutual information, move finite-region
@@ -8309,3 +8327,20 @@ spectral split → block extraction → MPV calculation → strict bounds
   check of the refactored template entropy theorem found exactly
   `propext`, `Classical.choice` and `Quot.sound`. No tactic, global simp
   attribute, additional hypothesis or import is introduced.
+
+### Uniform padding constants for buffered rectangles — candidate
+
+- **Pattern:** Choose a real threshold as the maximum of the normalization,
+  energy, and tail thresholds. Choose the padding constant by taking the
+  natural ceiling of an exponential expression, then obtain the entropy
+  constant from the same choices before introducing the clearance parameter
+  and the physical data.
+- **Occurrences:** `exists_condEntropy_le_initialBuffer` in
+  `TNLean/PEPS/AreaLaw/InitialBuffer.lean` and
+  `exists_condEntropy_le_initialBuffer_real` in
+  `TNLean/PEPS/AreaLaw/InitialBufferReal.lean`.
+- **Possible next abstraction:** If a third proof needs the same choices,
+  first consider an existence lemma for the numerical padding and entropy
+  constants and their inequalities. The constants must remain uniform in
+  the clearance and physical data. These are two occurrences across two
+  files; no promotion or proof refactor is proposed.
