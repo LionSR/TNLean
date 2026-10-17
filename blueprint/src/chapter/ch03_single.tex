@@ -104,8 +104,8 @@ algebra structure of $\MN{D}$.
     The $\{A^i\}$ span $\MN{D}$, so $\range \Phi_A \subseteq
         \range \Phi_B$. With $\ker \Phi_A = \{0\}$
     (Theorem~\ref{thm:trace_pairing_injective}),
-    Lemma~\ref{lem:injectivity_transfer} gives $\ker \Phi_B = \{0\}$. Let $g$ be
-    a left inverse of~$\Phi_B$ and set $T = g \circ \Phi_A$; then
+    Lemma~\ref{lem:injectivity_transfer} gives $\ker \Phi_B = \{0\}$. Choosing a
+    left inverse $g$ of~$\Phi_B$ and setting $T = g \circ \Phi_A$ gives
     \begin{align}
         T(A^i) & = g(\Phi_A(A^i)) = g(\Phi_B(B^i)) = B^i.
         \notag
@@ -140,11 +140,11 @@ algebra structure of $\MN{D}$.
         \notag
     \end{align}
     Hence injectivity of $\Phi_B$ yields
-    $T(A^i A^j) = B^i B^j$. Extend in two stages: for fixed~$j$, the maps
-    $M \mapsto T(M A^j)$ and $M \mapsto T(M) B^j$ agree on the spanning
-    $\{A^i\}$, hence $T(M A^j) = T(M) B^j$ for all~$M$; then for fixed~$M$,
-    the maps $N \mapsto T(M N)$ and $N \mapsto T(M) T(N)$ agree on the
-    spanning $\{A^j\}$, hence $T(M N) = T(M) T(N)$ for all~$N$.
+    $T(A^i A^j) = B^i B^j$. Linearity extends this relation in two stages: for
+    fixed~$j$, the maps $M \mapsto T(M A^j)$ and $M \mapsto T(M) B^j$ agree on
+    the spanning $\{A^i\}$, hence $T(M A^j) = T(M) B^j$ for all~$M$; then for
+    fixed~$M$, the maps $N \mapsto T(M N)$ and $N \mapsto T(M) T(N)$ agree on
+    the spanning $\{A^j\}$, hence $T(M N) = T(M) T(N)$ for all~$N$.
 \end{proof}
 
 \section{Inner automorphism and the single-block theorem}
@@ -177,7 +177,8 @@ invertible matrix by the Skolem--Noether theorem.
 
 \begin{proof}
     \leanok
-    Choose~$X$ with $T(X) = \Id$. Then
+    Since $T$ is surjective, some $X \in \MN{D}$ satisfies $T(X) = \Id$, and
+    multiplicativity gives
     \begin{align}
         T(\Id) & = T(X)T(\Id) = T(X\Id) = T(X) = \Id.
         \notag
@@ -247,14 +248,14 @@ invertible matrix by the Skolem--Noether theorem.
     \lean{MPSTensor.exists_eq_pow_of_mpv_eq_smul, MPSTensor.unitGaugePhaseEquiv_of_mpv_eq_smul_of_isInjective}
     \leanok
     \uses{thm:ft_single, def:gauge_phase_equiv}
-    Let $A$ be an injective MPS tensor with $D\ge1$ and $B$ a tensor of the same
-    bond dimension. Suppose that for every $N\ge1$ there is $c_N\in\C$ with
-    $|c_N|=1$ and $\ket{V^{(N)}(B)}=c_N\ket{V^{(N)}(A)}$. Then there are
-    $\lambda\in\C$ with $|\lambda|=1$ and $X\in\GL_D(\C)$ with
-    $B^i=\lambda\,XA^iX^{-1}$ for all~$i$, and $c_N=\lambda^N$. This is the
-    single-block case of the Fundamental Theorem of matrix product vectors
-    \cite[Theorem~2.10]{Cirac2016MPDO_arXiv}, with unimodular proportionality
-    constants.
+    As the single-block case of the Fundamental Theorem of matrix product
+    vectors \cite[Theorem~2.10]{Cirac2016MPDO_arXiv} with unimodular
+    proportionality constants, let $A$ be an injective MPS tensor with $D\ge1$
+    and $B$ a tensor of the same bond dimension. Suppose that for every $N\ge1$
+    there is $c_N\in\C$ with $|c_N|=1$ and
+    $\ket{V^{(N)}(B)}=c_N\ket{V^{(N)}(A)}$. Then there are $\lambda\in\C$ with
+    $|\lambda|=1$ and $X\in\GL_D(\C)$ with $B^i=\lambda\,XA^iX^{-1}$ for
+    all~$i$, and $c_N=\lambda^N$.
 \end{theorem}
 
 \begin{proof}

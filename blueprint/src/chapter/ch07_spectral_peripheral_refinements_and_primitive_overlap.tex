@@ -61,8 +61,9 @@ Section~\ref{sec:app_spectral_periodicity}.
 
 \begin{proof}\leanok
     \uses{lem:kraus_cyclic_shift}
-    Induct on the length of the word using
-    (\ref{eq:spectral_kraus_cyclic_shift}).
+    Induction on the length of the word via
+    (\ref{eq:spectral_kraus_cyclic_shift}) shifts the projection index by one
+    step per letter.
 \end{proof}
 
 The primitivity and irreducibility of the restricted sector dynamics, the
@@ -88,12 +89,12 @@ Section~\ref{sec:app_spectral_periodicity}.
 \begin{proof}
     \leanok
     \uses{thm:cyclic_sector_decomp_after_blocking_isometry, thm:blocked_sector_unconditional, thm:primitive_overlap, thm:overlap_decay_irr_tp, thm:overlap_decay_rect_irr_tp}
-    Apply
+    Applying
     Theorem~\ref{thm:cyclic_sector_decomp_after_blocking_isometry} to the
-    period-$m$ blocking $A^{[m]}$. It gives $m$ nonzero cyclic-sector
+    period-$m$ blocking $A^{[m]}$ gives $m$ nonzero cyclic-sector
     tensors $C_0,\ldots,C_{m-1}$, each left-canonical, whose unit-weight direct
     sum has the same MPV family as $A^{[m]}$. The cyclic-sector relations make
-    every $C_u$ primitive and irreducible. Distinct sectors are not
+    every $C_u$ primitive and irreducible, while distinct sectors are not
     gauge-phase equivalent. Hence the primitive self-overlap limit and the
     equal- and unequal-dimension overlap-decay theorems give
     \begin{align}
@@ -147,8 +148,8 @@ Section~\ref{sec:app_spectral_periodicity}.
 
 \begin{proof}
     \leanok
-    This is the normality conclusion of
-    Theorem~\ref{thm:bnt_primitivity_normality_from_self_overlap}.
+    Theorem~\ref{thm:bnt_primitivity_normality_from_self_overlap} yields
+    normality directly.
 \end{proof}
 
 \section{Primitive overlap convergence (complementary transfer-map gap form)}

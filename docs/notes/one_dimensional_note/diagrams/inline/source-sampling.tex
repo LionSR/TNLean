@@ -1,0 +1,12 @@
+% alt: The source operator eta times eta-tilde-dagger equals the expectation of one over k times U_j joined to V_j by a bond j.
+% Section 11 (sec:compression), Theorem thm:compression, proof sketch (part2b_mps_protocol.tex): each source operator $X=\ket\eta\bra{\tilde\eta}$ on a pair of registers is replaced by $\widehat X=\frac1k\sum_{j=1}^k U_j\otimes V_j$ with Gaussian coefficients, and $\mathbb E\,\widehat X=X$. Left: the upper box is the shared vector $\eta$, its two upward legs the two registers of the pair; the lower box is the covector $\tilde\eta^{\,\dagger}$, its two downward legs the same two registers; the two boxes are not joined (the operator is the rank-one product $\ket\eta\bra{\tilde\eta}$). Right: the box $U_j$ acts on the first register (upward leg output, downward leg input) and the box $V_j$ on the second; the bond between them carries the sample index $j$, which is averaged with weight $1/k$ and then the expectation over the Gaussians is taken. All physical legs are open.
+\begin{tenkz}[size=l, rows={wire,wire}, cols=2, bonds=none]
+  \tn[at=(1,1), skin=box, wide=2, ports={90@1:physical, 90@2:physical}]{\eta}
+  \tn[at=(2,1), skin=box, wide=2, ports={270@1:physical, 270@2:physical}]{\tilde\eta^{\,\dagger}}
+\end{tenkz}
+=\mathbb E\,\frac1k
+\begin{tenkz}[size=l, rows={wire}, cols=2, bonds=none]
+  \tn[at=(1,1), name=u, skin=box, ports={0:virtual, 90:physical, 270:physical}]{U_j}
+  \tn[at=(1,2), name=w, skin=box, ports={180:virtual, 90:physical, 270:physical}]{V_j}
+  \tnbond[name=j]{u.0}{w.180}
+\end{tenkz}

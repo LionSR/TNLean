@@ -1,0 +1,97 @@
+% alt: Seven horizontal bars, one above the other, over a common axis x from -8 to 2 with ticks at the integers and at -7/2: each bar is the ownership word near the band, its segments coloured by owner (blue C, grey A, orange B) with the owner letter written inside; the top bar reads C | A | B with interfaces at 0 and 1; the second bar, marked aux, is the auxiliary sheet C | B | A | C | A | B | C with interfaces at -6, -5, -4, -3, -2, -1; a bracket Y = (-7, -7/2) stands above the third bar, which reads C | B | A | C | A | B at -6, -5, -4, 0, 1; the remaining bars read C | B | A | B at -6, -5, 1, then C | B at -6, then C | B | C | B at -6, -3, 0, then C | B at 0; in every bar the segment just changed is outlined in a heavier stroke.
+% Section 10 (The sweep), Construction con:band (part2b_mps_protocol.tex), the band dissolution and the proof of Lemma lem:band: x = (. - a)/w is the scaled coordinate near the band [a, a+w), so one unit of x is the band width w. Row "start" is the main sheet C | A | B with C on x < 0 (down to at least -8), A on (0,1), B on x > 1 (up to at least 2). Row (i), marked aux, is the auxiliary sheet, initialized at C, after the births of B on (-6,-1), A on (-5,-2) and C on (-4,-3): the word C|B|A|C|A|B|C at -6,-5,-4,-3,-2,-1. Row (ii) is the main sheet after the exchange of the two sheets inside Y = (-7, -7/2) (the bracket above the bar) with P_circ = C: the word C|B|A|C|A|B at -6,-5,-4,0,1. Rows (iii)-(vi) are the main sheet after the death of the C band (-4,0) into A (word C|B|A|B at -6,-5,1), after the death of the A band (-5,1) into B (word C|B at -6), after the birth of C on (-3,0) inside B (word C|B|C|B at -6,-3,0), and after the death of the B band (-6,-3) into C (final word C|B at 0). Ink-to-index: each bar is the chain near the band with the site coordinate x increasing to the right, each coloured segment is the set of sites owned by the party written in it (blue C, grey A, orange B), the heavier outline marks the sites whose owner changed in that move (in row (i) the union (-6,-1) of the three nested births, in row (ii) the part (-6,-4) of Y where the two sheets differed), and the ticks are the interfaces used by the construction. No tensor is drawn and no leg is contracted.
+\begin{tikzpicture}[x=1cm, y=1cm, line width=0.3pt,
+    lab/.style={font=\small, inner sep=1pt},
+    name/.style={font=\scriptsize, text=black!55, inner sep=1pt},
+    coord/.style={font=\scriptsize, inner sep=1pt},
+    edge/.style={draw=black!60, line width=0.3pt},
+    C/.style={fill=blue!20},
+    A/.style={fill=black!12},
+    B/.style={fill=orange!35},
+    moved/.style={draw=black, line width=0.9pt},
+    brace/.style={decorate, decoration={brace, amplitude=3pt}}]
+  % geometry: one unit of x is the band width w; the bars run from x = -8 to
+  % x = 2 (the words are drawn only on this window); bar height \h, row gap \dy
+  \def\xa{-8}\def\xb{2}\def\h{0.42}\def\dy{0.95}\def\yY{0.38}  % extra room above row (ii) for the bracket Y
+  % a segment of the word: \seg{from}{to}{owner}
+  \newcommand\seg[3]{\fill[#3] (#1, 0) rectangle (#2, \h);
+    \node[lab] at ({0.5*(#1+#2)}, 0.5*\h) {\(#3\)};}
+  % the hairline frame of a bar with its interfaces: \barframe{list of interfaces}
+  \newcommand\barframe[1]{\draw[edge] (\xa, 0) -- (\xb, 0) (\xa, \h) -- (\xb, \h);
+    \foreach \xi in {#1} {\draw[edge] (\xi, 0) -- (\xi, \h);}}
+  % the segment changed by the move, in a heavier stroke
+  \newcommand\moved[2]{\draw[moved] (#1, 0) rectangle (#2, \h);}
+  % faint guides at the integer interfaces, behind the bars
+  \foreach \xi in {-8,...,2} {\draw[black!14] (\xi, {-6*\dy-\yY-0.12}) -- (\xi, \h+0.1);}
+  % ---- start: the main sheet C | A | B ------------------------------------
+  \begin{scope}[yshift=0cm]
+    \node[lab, anchor=east] at (\xa-0.35, 0.5*\h) {start};
+    \seg{\xa}{0}{C} \seg{0}{1}{A} \seg{1}{\xb}{B}
+    \barframe{0,1}
+    \node[name, anchor=west] at (\xb+0.3, 0.5*\h) {main sheet \(C\,|\,A\,|\,B\)};
+  \end{scope}
+  % ---- (i): the auxiliary sheet after its three births --------------------
+  \begin{scope}[yshift=-\dy cm]
+    \node[lab, anchor=east] at (\xa-0.35, 0.5*\h) {(i) aux};
+    \seg{\xa}{-6}{C} \seg{-6}{-5}{B} \seg{-5}{-4}{A} \seg{-4}{-3}{C}
+    \seg{-3}{-2}{A} \seg{-2}{-1}{B} \seg{-1}{\xb}{C}
+    \barframe{-6,-5,-4,-3,-2,-1}
+    \moved{-6}{-1}
+    \node[name, anchor=west] at (\xb+0.3, 0.5*\h)
+      {auxiliary sheet: births of \(B\) on \((-6,-1)\), \(A\) on \((-5,-2)\), \(C\) on \((-4,-3)\)};
+  \end{scope}
+  % ---- (ii): the main sheet after the exchange inside Y -------------------
+  \begin{scope}[yshift={(-2*\dy-\yY)*1cm}]
+    \node[lab, anchor=east] at (\xa-0.35, 0.5*\h) {(ii)};
+    \seg{\xa}{-6}{C} \seg{-6}{-5}{B} \seg{-5}{-4}{A} \seg{-4}{0}{C}
+    \seg{0}{1}{A} \seg{1}{\xb}{B}
+    \barframe{-6,-5,-4,0,1}
+    \moved{-6}{-4}
+    \draw[brace, orange!80!black, line width=0.5pt] (-7, \h+0.07) -- (-3.5, \h+0.07)
+      node[coord, midway, above=4pt, text=orange!80!black] {\(Y=(-7,-\tfrac72)\)};
+    \node[name, anchor=west] at (\xb+0.3, 0.5*\h) {exchange of the two sheets inside \(Y\), \(P_\circ=C\)};
+  \end{scope}
+  % ---- (iii): death of the C band (-4,0) into A ---------------------------
+  \begin{scope}[yshift={(-3*\dy-\yY)*1cm}]
+    \node[lab, anchor=east] at (\xa-0.35, 0.5*\h) {(iii)};
+    \seg{\xa}{-6}{C} \seg{-6}{-5}{B} \seg{-5}{1}{A} \seg{1}{\xb}{B}
+    \barframe{-6,-5,1}
+    \moved{-4}{0}
+    \node[name, anchor=west] at (\xb+0.3, 0.5*\h) {death of the \(C\) band \((-4,0)\) into \(A\)};
+  \end{scope}
+  % ---- (iv): death of the A band (-5,1) into B ----------------------------
+  \begin{scope}[yshift={(-4*\dy-\yY)*1cm}]
+    \node[lab, anchor=east] at (\xa-0.35, 0.5*\h) {(iv)};
+    \seg{\xa}{-6}{C} \seg{-6}{\xb}{B}
+    \barframe{-6}
+    \moved{-5}{1}
+    \node[name, anchor=west] at (\xb+0.3, 0.5*\h) {death of the \(A\) band \((-5,1)\) into \(B\)};
+  \end{scope}
+  % ---- (v): birth of C on (-3,0) inside B ---------------------------------
+  \begin{scope}[yshift={(-5*\dy-\yY)*1cm}]
+    \node[lab, anchor=east] at (\xa-0.35, 0.5*\h) {(v)};
+    \seg{\xa}{-6}{C} \seg{-6}{-3}{B} \seg{-3}{0}{C} \seg{0}{\xb}{B}
+    \barframe{-6,-3,0}
+    \moved{-3}{0}
+    \node[name, anchor=west] at (\xb+0.3, 0.5*\h) {birth of \(C\) on \((-3,0)\) inside \(B\)};
+  \end{scope}
+  % ---- (vi): death of the B band (-6,-3) into C ---------------------------
+  \begin{scope}[yshift={(-6*\dy-\yY)*1cm}]
+    \node[lab, anchor=east] at (\xa-0.35, 0.5*\h) {(vi)};
+    \seg{\xa}{0}{C} \seg{0}{\xb}{B}
+    \barframe{0}
+    \moved{-6}{-3}
+    \node[name, anchor=west] at (\xb+0.3, 0.5*\h) {death of the \(B\) band \((-6,-3)\) into \(C\): final word \(C\,|\,B\)};
+  \end{scope}
+  % ---- the axis: x in units of the band width w ---------------------------
+  \begin{scope}[yshift={(-6*\dy-\yY)*1cm}]
+    \draw[black!60] (\xa, -0.22) -- (\xb, -0.22);
+    \foreach \xi in {-8,...,2} {
+      \draw[black!60] (\xi, -0.22) -- (\xi, -0.3);
+      \node[coord, anchor=north] at (\xi, -0.32) {\(\xi\)};}
+    \draw[black!60] (-3.5, -0.22) -- (-3.5, -0.3);
+    \draw[black!30] (-3.5, -0.3) -- (-3.5, -0.62);
+    \node[coord, anchor=north] at (-3.5, -0.64) {\(-\tfrac72\)};
+    \node[coord, anchor=west] at (\xb+0.3, -0.5) {\(x=(\,\cdot\,-a)/w\), units of the band width \(w\)};
+  \end{scope}
+\end{tikzpicture}

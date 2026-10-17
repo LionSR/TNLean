@@ -1,11 +1,11 @@
 \section{The GHZ state}\label{sec:ghz}
 %% ===================================================================
 
-The Greenberger--Horne--Zeilinger (GHZ)
-state~\cite{GreenbergerHorneZeilinger1989,Greenberger1990Bell} is the
-prototypical non-injective, renormalization-fixed-point
-MPS~\cite[Section~III.A]{Cirac2021Matrix}. On a $d$-level system it is an MPS
-with bond dimension $d$~\cite[Appendix~A, ``The GHZ state'']{Cirac2021Matrix}.
+In~\cite[Section~III.A]{Cirac2021Matrix}, the Greenberger--Horne--Zeilinger
+(GHZ) state~\cite{GreenbergerHorneZeilinger1989,Greenberger1990Bell} serves as
+the prototypical non-injective, renormalization-fixed-point MPS;
+following~\cite[Appendix~A, ``The GHZ state'']{Cirac2021Matrix}, on a $d$-level
+system it is represented with bond dimension $d$.
 
 \begin{definition}[GHZ tensor on a $d$-level system]\label{def:ghz_tensor_d}
     \lean{MPSTensor.ghzTensorD,
@@ -13,24 +13,27 @@ with bond dimension $d$~\cite[Appendix~A, ``The GHZ state'']{Cirac2021Matrix}.
         MPSTensor.ghzTensorD_eq_diagonal}
     \leanok
     \uses{def:mps_tensor}
-    Set $D = d$. The GHZ tensor on a $d$-level system is the family
+    Following~\cite[Appendix~A, ``The GHZ
+        state'']{Cirac2021Matrix}, set $D = d$. The GHZ tensor on a $d$-level
+    system is the family
     $\{A^i\}_{i=0}^{d-1}\subset\MN{d}$ with entries
     \begin{align}
         A^{i}_{\alpha\beta} & = \delta_{i=\alpha=\beta},
         \notag
     \end{align}
-    that is, $A^i=\ketbra{i}{i}$~\cite[Appendix~A, ``The GHZ
-        state'']{Cirac2021Matrix}.
+    that is, $A^i=\ketbra{i}{i}$.
 \end{definition}
 
-The virtual indices are closed by the ordinary trace. The resulting
-periodic vector is identified in Theorem~\ref{thm:ghz_d_mpv}.
-Theorems~\ref{thm:ghz_d_transfer}--\ref{thm:ghz_d_symmetric} give the
-idempotent transfer map, non-injectivity for $d\ge2$, and on-site
-permutation symmetry. For the qubit tensor, the virtual symmetry and zero
-correlation length are Theorems~\ref{thm:ghz_virtual_z2} and
-\ref{thm:ghz_zcl}; its parent ground space is
-Theorem~\ref{thm:ghz_chain_ground_space_two}.
+Closing the virtual indices by the ordinary trace produces a periodic
+vector that Theorem~\ref{thm:ghz_d_mpv} identifies as the $d$-level GHZ
+state. Theorems~\ref{thm:ghz_d_transfer}--\ref{thm:ghz_d_symmetric}
+establish the idempotent transfer map, non-injectivity for $d\ge2$, and
+on-site permutation symmetry. For the qubit specialization ($d=2$),
+Theorems~\ref{thm:ghz_virtual_z2} and \ref{thm:ghz_zcl} establish the
+virtual $\Z_2$ symmetry and zero correlation length, while
+Theorem~\ref{thm:ghz_chain_ground_space_two} characterizes the
+two-dimensional periodic ground space of its nearest-neighbour parent
+Hamiltonian.
 
 
 \begin{definition}[GHZ state]\label{def:ghz_state_d}
@@ -47,10 +50,11 @@ Theorem~\ref{thm:ghz_chain_ground_space_two}.
     \lean{MPSTensor.mpv_ghzTensorD}
     \leanok
     \uses{def:ghz_tensor_d, def:ghz_state_d, def:mpv}
-    For every $N$, the matrix product vector of the tensor of
-    Definition~\ref{def:ghz_tensor_d} on $N$ sites is the GHZ state
-    $\sum_{i=0}^{d-1}\ket{i,\ldots,i}$~\cite[Appendix~A, ``The GHZ
-        state'']{Cirac2021Matrix}. For $N=0$ both sides equal $d$.
+    As in~\cite[Appendix~A, ``The GHZ
+        state'']{Cirac2021Matrix}, for every $N$ the matrix product vector of
+    the tensor of Definition~\ref{def:ghz_tensor_d} on $N$ sites equals the GHZ
+    state $\sum_{i=0}^{d-1}\ket{i,\ldots,i}$, with both sides equal to $d$ at
+    $N=0$.
 \end{theorem}
 
 \begin{proof}
@@ -109,9 +113,9 @@ Theorem~\ref{thm:ghz_chain_ground_space_two}.
     evaluated on the relabelled configuration, which equals the GHZ state.
 \end{proof}
 
-For $d=2$ the tensor of Definition~\ref{def:ghz_tensor_d} is the two-level GHZ
-tensor of Definition~\ref{def:ghz_tensor}, which is the representative used in
-the rest of this section.
+For $d=2$ the tensor of Definition~\ref{def:ghz_tensor_d} specializes to the
+two-level GHZ tensor of Definition~\ref{def:ghz_tensor}, which serves as the
+representative in the remainder of this section.
 
 \begin{definition}[Two-level GHZ tensor]\label{def:ghz_tensor}
     \lean{MPSTensor.ghzTensor,
@@ -138,8 +142,9 @@ the rest of this section.
     \lean{MPSTensor.ghzTensorD_two}
     \leanok
     \uses{def:ghz_tensor_d, def:ghz_tensor}
-    The GHZ tensor on a $d$-level system with $d=2$ is the tensor of
-    Definition~\ref{def:ghz_tensor}.
+    At $d=2$, the $d$-level GHZ tensor coincides with the two-level GHZ tensor of
+    Definition~\ref{def:ghz_tensor}: both have $A^0=\ketbra{0}{0}$ and
+    $A^1=\ketbra{1}{1}$.
 \end{lemma}
 
 \begin{proof}
@@ -193,7 +198,8 @@ the rest of this section.
 \begin{proof}
     \leanok
     \uses{thm:ghz_transfer_idempotent}
-    The claim follows from Theorem~\ref{thm:ghz_transfer_idempotent}.
+    By Theorem~\ref{thm:ghz_transfer_idempotent}, the transfer map satisfies
+    $\E_A^2=\E_A$, which is the renormalization fixed-point condition.
 \end{proof}
 
 \begin{theorem}[GHZ tensor is not injective]\label{thm:ghz_not_injective}
@@ -295,33 +301,33 @@ the rest of this section.
 \begin{proof}
     \leanok
     \uses{thm:zcl_iff_idempotent_transfer, thm:ghz_is_rfp}
-    The claim follows from the idempotence of the GHZ transfer map and the
-    equivalence of zero correlation length with transfer-map idempotence
-    (Theorem~\ref{thm:zcl_iff_idempotent_transfer}).
+    By Theorem~\ref{thm:zcl_iff_idempotent_transfer}, transfer-map idempotence
+    is equivalent to zero correlation length, so the idempotence of the GHZ
+    transfer map yields the claim.
 \end{proof}
 
 
 \subsection{The $G$-injective fixed-point tensor}
 
-For a finite group $G$, the review constructs a $G$-injective MPS that is a
-renormalization fixed point and generalizes the GHZ state to arbitrary groups
-\cite[Section~III.A, ``Virtual symmetries'']{Cirac2021Matrix}. Write $L_g$ for
-the left regular representation, $L_g\ket{k}=\ket{gk}$.
+Following \cite[Section~III.A, ``Virtual symmetries'']{Cirac2021Matrix}, a
+finite group $G$ with left regular representation $L_g\ket{k}=\ket{gk}$
+defines a $G$-injective renormalization-fixed-point MPS that generalizes the
+GHZ state to arbitrary groups.
 
 \begin{definition}[$G$-injective fixed-point tensor]\label{def:ghz_g_injective_tensor}
     \lean{MPSTensor.gInjEntry, MPSTensor.gInjEntry_eq, MPSTensor.gInjPhysEquiv,
         MPSTensor.gInjTensor, MPSTensor.gInjTensor_apply}
     \leanok
     \uses{def:mps_tensor}
-    The tensor with physical index $(i,j)\in G\times G$ and bond dimension
-    $|G|$ is
+    As in \cite[Section~III.A, ``Virtual symmetries'']{Cirac2021Matrix}, the
+    tensor with physical index $(i,j)\in G\times G$ and bond dimension $|G|$
+    is
     \begin{align}
         A^{ij} & =\frac{1}{|G|}\sum_{g\in G}\sum_{\alpha,\beta}
-        (L_g)_{\alpha i}(\bar L_g)_{\beta j}\,\ketbra{\alpha}{\beta}
+        (L_g)_{\alpha i}(\bar L_g)_{\beta j}\,\ketbra{\alpha}{\beta}.
         \notag
     \end{align}
-    \cite[Section~III.A, ``Virtual symmetries'']{Cirac2021Matrix}. Only
-    $g=\alpha i^{-1}$ contributes, so $A^{ij}_{\alpha\beta}=|G|^{-1}$ if
+    Only $g=\alpha i^{-1}$ contributes, so $A^{ij}_{\alpha\beta}=|G|^{-1}$ if
     $\beta=\alpha i^{-1}j$ and $0$ otherwise.
 \end{definition}
 
@@ -333,10 +339,10 @@ the left regular representation, $L_g\ket{k}=\ket{gk}$.
     \leanok
     \uses{def:ghz_g_injective_tensor, def:transfer_map,
         def:mps_transfer_idempotence, thm:transfer_idempotent_eigenvalue_eq_one}
-    The transfer map of the $G$-injective tensor is
-    $\E_A(X)_{\alpha\beta}=|G|^{-1}\sum_{k\in G}X_{\alpha k,\beta k}$. It is
-    idempotent, so every nonzero eigenvalue of the transfer map equals $1$
-    \cite[Section~III.A, ``Virtual symmetries'']{Cirac2021Matrix}.
+    As in \cite[Section~III.A, ``Virtual symmetries'']{Cirac2021Matrix}, the
+    transfer map of the $G$-injective tensor is
+    $\E_A(X)_{\alpha\beta}=|G|^{-1}\sum_{k\in G}X_{\alpha k,\beta k}$, which is
+    idempotent and therefore has $1$ as its only nonzero eigenvalue.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -354,12 +360,12 @@ the left regular representation, $L_g\ket{k}=\ket{gk}$.
         MPSTensor.isGInjective_gInjTensor}
     \leanok
     \uses{def:ghz_g_injective_tensor, def:peps_g_injective}
-    Let $G$ act on the two virtual legs by $L_g\otimes\bar L_g$. The map
-    $\mathcal P(A)=\sum_{ij}\sum_{\alpha\beta}A^{ij}_{\alpha\beta}
+    Let $G$ act on the two virtual legs by $L_g\otimes\bar L_g$. In the sense
+    of \cite[Section~III.A, ``Virtual symmetries'']{Cirac2021Matrix} and
+    \cite[Section~``Two dimensions: $G$-injective PEPS'']{Schuch2010PEPS}, the
+    map $\mathcal P(A)=\sum_{ij}\sum_{\alpha\beta}A^{ij}_{\alpha\beta}
         \ket{ij}(\alpha\beta|$ is invariant under this action and injective on
-    its invariant subspace, so the tensor is $G$-injective
-    \cite[Section~III.A, ``Virtual symmetries'']{Cirac2021Matrix},
-    \cite[Section~``Two dimensions: $G$-injective PEPS'']{Schuch2010PEPS}.
+    its invariant subspace, so the tensor is $G$-injective.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -377,9 +383,10 @@ the left regular representation, $L_g\ket{k}=\ket{gk}$.
     \leanok
     \uses{def:ghz_g_injective_tensor, def:on_site_symmetric}
     Let $G$ act on the physical index by $L_g\otimes\bar L_g$, that is
-    $(i,j)\mapsto(gi,gj)$. Each matrix $A^{ij}$ is unchanged by this action,
-    so the tensor is on-site symmetric under the regular representation
-    \cite[Section~III.A, ``Virtual symmetries'']{Cirac2021Matrix}.
+    $(i,j)\mapsto(gi,gj)$. As in
+    \cite[Section~III.A, ``Virtual symmetries'']{Cirac2021Matrix}, each matrix
+    $A^{ij}$ is invariant under this action, so the tensor is on-site symmetric
+    under the regular representation.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -395,11 +402,11 @@ the left regular representation, $L_g\ket{k}=\ket{gk}$.
     \leanok
     \uses{def:ghz_g_injective_tensor, def:ghz_tensor_d, def:gauge_equiv}
     For $G=\Z_2$ the tensor is $A^{ij}=\tfrac12\sigma_x^{i+j}$. Let
-    $H=\bigl(\begin{smallmatrix}1&1\\1&-1\end{smallmatrix}\bigr)$. After the
-    Fourier transform $\tfrac12 H\otimes H$ on the physical index $(i,j)$,
-    the resulting tensor is gauge equivalent, through $H$ on the bond, to the
-    GHZ tensor on two-level systems blocked over two sites
-    \cite[Section~III.A, ``Virtual symmetries'']{Cirac2021Matrix}.
+    $H=\bigl(\begin{smallmatrix}1&1\\1&-1\end{smallmatrix}\bigr)$. As noted in
+    \cite[Section~III.A, ``Virtual symmetries'']{Cirac2021Matrix}, applying the
+    Fourier transform $\tfrac12 H\otimes H$ on the physical index $(i,j)$
+    yields a tensor that is gauge equivalent, via $H$ on the bond, to the
+    two-level GHZ tensor blocked over two sites.
 \end{theorem}
 
 \begin{proof}\leanok

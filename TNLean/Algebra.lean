@@ -55,6 +55,7 @@ import TNLean.Algebra.ExponentialSumWindow
 import TNLean.Algebra.FinCyclicInduction
 import TNLean.Algebra.FinKronecker
 import TNLean.Algebra.FinOrderedProduct
+import TNLean.Algebra.FinSpanOfFinrank
 import TNLean.Algebra.FinStepOrbit
 import TNLean.Algebra.FinSumPermutation
 import TNLean.Algebra.FinTupleEquiv
@@ -193,9 +194,11 @@ import TNLean.Algebra.SwapMatrix
 import TNLean.Algebra.SymmetryParity
 import TNLean.Algebra.SymplecticOrthogonalFour
 import TNLean.Algebra.TailPowerSumUniqueness
+import TNLean.Algebra.TailRadiusWeights
 import TNLean.Algebra.TensorProductContraction
 import TNLean.Algebra.TensorProductRegrouping
 import TNLean.Algebra.ThreeOperatorPerturbation
+import TNLean.Algebra.ToEuclideanLinApply
 import TNLean.Algebra.TraceInvariantSubmodule
 import TNLean.Algebra.TranslatedCharacterOrthogonality
 import TNLean.Algebra.TwistedRegularProjective

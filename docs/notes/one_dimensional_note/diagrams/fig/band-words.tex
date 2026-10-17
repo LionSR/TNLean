@@ -1,0 +1,81 @@
+\begin{tikzpicture}[x=1cm, y=1cm, line width=0.3pt,
+    lab/.style={font=\small, inner sep=1pt},
+    name/.style={font=\scriptsize, text=black!55, inner sep=1pt},
+    coord/.style={font=\scriptsize, inner sep=1pt},
+    edge/.style={draw=black!60, line width=0.3pt},
+    C/.style={fill=blue!20},
+    A/.style={fill=black!12},
+    B/.style={fill=orange!35},
+    moved/.style={draw=black, line width=0.9pt},
+    brace/.style={decorate, decoration={brace, amplitude=3pt}}]
+  \def\xa{-8}\def\xb{2}\def\h{0.42}\def\dy{0.95}\def\yY{0.38}  % extra room above row (ii) for the bracket Y
+  \newcommand\seg[3]{\fill[#3] (#1, 0) rectangle (#2, \h);
+    \node[lab] at ({0.5*(#1+#2)}, 0.5*\h) {\(#3\)};}
+  \newcommand\barframe[1]{\draw[edge] (\xa, 0) -- (\xb, 0) (\xa, \h) -- (\xb, \h);
+    \foreach \xi in {#1} {\draw[edge] (\xi, 0) -- (\xi, \h);}}
+  \newcommand\moved[2]{\draw[moved] (#1, 0) rectangle (#2, \h);}
+  \foreach \xi in {-8,...,2} {\draw[black!14] (\xi, {-6*\dy-\yY-0.12}) -- (\xi, \h+0.1);}
+  \begin{scope}[yshift=0cm]
+    \node[lab, anchor=east] at (\xa-0.35, 0.5*\h) {start};
+    \seg{\xa}{0}{C} \seg{0}{1}{A} \seg{1}{\xb}{B}
+    \barframe{0,1}
+    \node[name, anchor=west] at (\xb+0.3, 0.5*\h) {main sheet \(C\,|\,A\,|\,B\)};
+  \end{scope}
+  \begin{scope}[yshift=-\dy cm]
+    \node[lab, anchor=east] at (\xa-0.35, 0.5*\h) {(i) aux};
+    \seg{\xa}{-6}{C} \seg{-6}{-5}{B} \seg{-5}{-4}{A} \seg{-4}{-3}{C}
+    \seg{-3}{-2}{A} \seg{-2}{-1}{B} \seg{-1}{\xb}{C}
+    \barframe{-6,-5,-4,-3,-2,-1}
+    \moved{-6}{-1}
+    \node[name, anchor=west] at (\xb+0.3, 0.5*\h)
+      {auxiliary sheet: births of \(B\) on \((-6,-1)\), \(A\) on \((-5,-2)\), \(C\) on \((-4,-3)\)};
+  \end{scope}
+  \begin{scope}[yshift={(-2*\dy-\yY)*1cm}]
+    \node[lab, anchor=east] at (\xa-0.35, 0.5*\h) {(ii)};
+    \seg{\xa}{-6}{C} \seg{-6}{-5}{B} \seg{-5}{-4}{A} \seg{-4}{0}{C}
+    \seg{0}{1}{A} \seg{1}{\xb}{B}
+    \barframe{-6,-5,-4,0,1}
+    \moved{-6}{-4}
+    \draw[brace, orange!80!black, line width=0.5pt] (-7, \h+0.07) -- (-3.5, \h+0.07)
+      node[coord, midway, above=4pt, text=orange!80!black] {\(Y=(-7,-\tfrac72)\)};
+    \node[name, anchor=west] at (\xb+0.3, 0.5*\h) {exchange of the two sheets inside \(Y\), \(P_\circ=C\)};
+  \end{scope}
+  \begin{scope}[yshift={(-3*\dy-\yY)*1cm}]
+    \node[lab, anchor=east] at (\xa-0.35, 0.5*\h) {(iii)};
+    \seg{\xa}{-6}{C} \seg{-6}{-5}{B} \seg{-5}{1}{A} \seg{1}{\xb}{B}
+    \barframe{-6,-5,1}
+    \moved{-4}{0}
+    \node[name, anchor=west] at (\xb+0.3, 0.5*\h) {death of the \(C\) band \((-4,0)\) into \(A\)};
+  \end{scope}
+  \begin{scope}[yshift={(-4*\dy-\yY)*1cm}]
+    \node[lab, anchor=east] at (\xa-0.35, 0.5*\h) {(iv)};
+    \seg{\xa}{-6}{C} \seg{-6}{\xb}{B}
+    \barframe{-6}
+    \moved{-5}{1}
+    \node[name, anchor=west] at (\xb+0.3, 0.5*\h) {death of the \(A\) band \((-5,1)\) into \(B\)};
+  \end{scope}
+  \begin{scope}[yshift={(-5*\dy-\yY)*1cm}]
+    \node[lab, anchor=east] at (\xa-0.35, 0.5*\h) {(v)};
+    \seg{\xa}{-6}{C} \seg{-6}{-3}{B} \seg{-3}{0}{C} \seg{0}{\xb}{B}
+    \barframe{-6,-3,0}
+    \moved{-3}{0}
+    \node[name, anchor=west] at (\xb+0.3, 0.5*\h) {birth of \(C\) on \((-3,0)\) inside \(B\)};
+  \end{scope}
+  \begin{scope}[yshift={(-6*\dy-\yY)*1cm}]
+    \node[lab, anchor=east] at (\xa-0.35, 0.5*\h) {(vi)};
+    \seg{\xa}{0}{C} \seg{0}{\xb}{B}
+    \barframe{0}
+    \moved{-6}{-3}
+    \node[name, anchor=west] at (\xb+0.3, 0.5*\h) {death of the \(B\) band \((-6,-3)\) into \(C\): final word \(C\,|\,B\)};
+  \end{scope}
+  \begin{scope}[yshift={(-6*\dy-\yY)*1cm}]
+    \draw[black!60] (\xa, -0.22) -- (\xb, -0.22);
+    \foreach \xi in {-8,...,2} {
+      \draw[black!60] (\xi, -0.22) -- (\xi, -0.3);
+      \node[coord, anchor=north] at (\xi, -0.32) {\(\xi\)};}
+    \draw[black!60] (-3.5, -0.22) -- (-3.5, -0.3);
+    \draw[black!30] (-3.5, -0.3) -- (-3.5, -0.62);
+    \node[coord, anchor=north] at (-3.5, -0.64) {\(-\tfrac72\)};
+    \node[coord, anchor=west] at (\xb+0.3, -0.5) {\(x=(\,\cdot\,-a)/w\), units of the band width \(w\)};
+  \end{scope}
+\end{tikzpicture}

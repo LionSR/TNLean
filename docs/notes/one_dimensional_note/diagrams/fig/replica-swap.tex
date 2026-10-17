@@ -1,0 +1,22 @@
+\(\displaystyle \Phi=F_R\Psi\;=\;
+  \begin{tenkz}[rows={wire,wire}, cols=7, bonds=none]
+    \tn[at=(2,1), skin=box, wide=3, name=o1,
+        ports={90@1:physical:$C$, 90@2:physical:$Q$, 90@3:physical}]{\Omega}
+    \tn[at=(2,5), skin=box, wide=3, name=o2,
+        ports={90@1:physical, 90@2:physical:$Q$, 90@3:physical:$C$}]{\Omega}
+    \tn[at=(1,3), skin=box, wide=3, name=f,
+        ports={270@1:physical, 270@3:physical, 90@1:physical:$R$, 90@3:physical:$R$}]{F_R}
+    \tnwire{o1.90@3}{f.270@1}
+    \tnwire{o2.90@1}{f.270@3}
+  \end{tenkz}
+  \;=\;
+  \begin{tenkz}[rows={wire,wire}, cols=7, bonds=none]
+    \tn[at=(2,1), skin=box, wide=3, name=o1,
+        ports={90@1:physical:$C$, 90@2:physical:$Q$, 90@3:physical}]{\Omega}
+    \tn[at=(2,5), skin=box, wide=3, name=o2,
+        ports={90@1:physical, 90@2:physical:$Q$, 90@3:physical:$C$}]{\Omega}
+    \tn[at=(1,3), skin=none, name=r1, ports={270:physical, 90:physical:$R$}]{}
+    \tn[at=(1,5), skin=none, name=r2, ports={270:physical, 90:physical:$R$}]{}
+    \tnwire[name=a]{o1.90@3}{r2.270}
+    \tnwire[name=b, cross={under at crossing of a and b}]{o2.90@1}{r1.270}
+  \end{tenkz}\)

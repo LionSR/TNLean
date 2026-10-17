@@ -1,12 +1,12 @@
 \subsection{Coherent coefficients forced by complementary cuts}
 \label{sec:peps_dependent_bond_support}
 
-Use the independent incidence spaces and incident representations of
+Retaining the independent incidence spaces and incident representations of
 Definitions~\ref{def:peps_dependent_incidence} and
-\ref{def:peps_dependent_incident_action}. This section derives a bond-product
-expansion from cut membership before extracting its coefficients.
-The trace duality is \cite[Lemma~4.6]{Schuch2010PEPS}; its use in the
-four-block comparison is part of \cite[Theorem~5.5]{Schuch2010PEPS}.
+\ref{def:peps_dependent_incident_action}, this section derives a bond-product
+expansion from cut membership before extracting its coefficients via the
+trace duality of \cite[Lemma~4.6]{Schuch2010PEPS}, as used in the
+four-block comparison of \cite[Theorem~5.5]{Schuch2010PEPS}.
 % Source: lemma:noninj:semireg-trace-ug-delta, paper_v3.tex:1015--1029;
 % thm:2d:closure, eq:2d:close-in-in, paper_v3.tex:1488--1513.
 
@@ -67,11 +67,11 @@ four-block comparison is part of \cite[Theorem~5.5]{Schuch2010PEPS}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_torus_projector_extraction}
-    Distribute (\ref{eq:peps_dependent_bond_pairing}) over the bond pairs.
-    The $e$-th sum is $K_e(B_e)$ by expansion in matrix units.
-    Trace duality gives $\ell_{e,p_e}(U_e(q_e))=\delta_{p_e,q_e}$;
-    their product is $\delta_{p,q}$. Apply linearity to the entire coherent
-    sum, then compare each coefficient.
+    Distributing (\ref{eq:peps_dependent_bond_pairing}) over the bond pairs
+    evaluates the $e$-th sum as $K_e(B_e)$ by expansion in matrix units.
+    Trace duality then gives $\ell_{e,p_e}(U_e(q_e))=\delta_{p_e,q_e}$,
+    whose product is $\delta_{p,q}$, and applying linearity to the entire
+    coherent sum identifies each coefficient.
 \end{proof}
 
 \begin{definition}[Bond slices and transformed bond matrices]%
@@ -114,10 +114,10 @@ four-block comparison is part of \cite[Theorem~5.5]{Schuch2010PEPS}.
 \begin{proof}\leanok
     \uses{thm:peps_dependent_projector_expansion,
         thm:peps_dependent_coefficient_extraction}
-    Separate the $e$-th factor for the slice identity. Regroup
-    (\ref{eq:peps_dependent_projector_expansion}) by $J$, obtaining the
-    first two formulas. Apply the product-functional identity to each
-    term to obtain the third formula.
+    Separating the $e$-th factor establishes the slice identity, while
+    regrouping (\ref{eq:peps_dependent_projector_expansion}) by $J$ yields the
+    first two formulas and applying the product-functional identity to each
+    term gives the third.
 \end{proof}
 
 \begin{theorem}[An uncut bond forces representation-matrix support]%
@@ -135,11 +135,11 @@ four-block comparison is part of \cite[Theorem~5.5]{Schuch2010PEPS}.
 \begin{proof}\leanok
     \uses{thm:peps_dependent_canonical_bond_sum, thm:peps_dependent_cut_basis}
     In a summand of (\ref{eq:peps_dependent_canonical_bonds}), an identity
-    insertion gives $B_e(q)=U_e(q_{h(e)}q_{t(e)}^{-1})$.
-    Every slice is a scalar multiple of this representation matrix; sums
+    insertion gives $B_e(q)=U_e(q_{h(e)}q_{t(e)}^{-1})$, so
+    every slice is a scalar multiple of this representation matrix and sums
     retain membership in $\operatorname{im}F_e$.
-    Expand a general boundary in fixed configurations. Each resulting
-    matrix-unit network still has $B_e=I$ when $e\notin C$.
+    Expanding a general boundary into fixed configurations produces
+    matrix-unit networks that still have $B_e=I$ when $e\notin C$.
 \end{proof}
 
 \begin{theorem}[Complementary cuts give a coherent bond expansion]%
@@ -162,11 +162,11 @@ four-block comparison is part of \cite[Theorem~5.5]{Schuch2010PEPS}.
 \begin{proof}\leanok
     \uses{thm:peps_dependent_uncut_support, thm:peps_dependent_product_range,
         thm:peps_dependent_coefficient_extraction}
-    For each bond, choose a cut leaving it uncut. The preceding theorem
+    Choosing a cut for each bond that leaves it uncut, the preceding theorem
     places every slice in $\operatorname{im}F_e$. The product-range
-    criterion gives a preimage under $\bigotimes_eF_e$, whose entries
-    are the coefficients $a_p$. Apply $c_p$ to the whole expansion to
-    identify $a_p=c_p(\psi)$ in the semi-regular case.
+    criterion then provides a preimage under $\bigotimes_eF_e$ whose entries
+    are the coefficients $a_p$, and applying $c_p$ to the whole expansion
+    identifies $a_p=c_p(\psi)$ in the semi-regular case.
 \end{proof}
 
 \begin{theorem}[A nonzero coefficient has compatible uncut labels]%
@@ -192,10 +192,10 @@ four-block comparison is part of \cite[Theorem~5.5]{Schuch2010PEPS}.
 \begin{proof}\leanok
     \uses{thm:peps_dependent_canonical_bond_sum,
         thm:peps_dependent_coefficient_extraction, thm:peps_dependent_cut_basis}
-    Fix a vertex assignment $q$ in the extracted sum of
-    (\ref{eq:peps_dependent_canonical_bonds}). Incompatibility gives
-    an uncut bond with $p_e\ne q_{h(e)}q_{t(e)}^{-1}$; its trace-dual
-    factor is zero. Thus every summand vanishes. For an arbitrary boundary,
-    expand into fixed-coordinate columns and use their matrix-unit
-    realization. The implication is the contrapositive of this vanishing.
+    For any vertex assignment $q$ in the extracted sum of
+    (\ref{eq:peps_dependent_canonical_bonds}), incompatibility yields
+    an uncut bond with $p_e\ne q_{h(e)}q_{t(e)}^{-1}$ whose trace-dual
+    factor is zero, so every summand vanishes. Expanding an arbitrary boundary
+    into fixed-coordinate columns and using their matrix-unit
+    realization extends this vanishing, whose contrapositive is the stated implication.
 \end{proof}

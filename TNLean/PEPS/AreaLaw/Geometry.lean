@@ -77,6 +77,7 @@ import TNLean.PEPS.AreaLaw.Geometry.InitialBeltCount
 import TNLean.PEPS.AreaLaw.Geometry.InitialComponentRegions
 import TNLean.PEPS.AreaLaw.Geometry.InitialLatticePartition
 import TNLean.PEPS.AreaLaw.Geometry.InitialMarkFamily
+import TNLean.PEPS.AreaLaw.Geometry.InitialPrimaryErrorSum
 import TNLean.PEPS.AreaLaw.Geometry.InitialRegionBoundaries
 import TNLean.PEPS.AreaLaw.Geometry.InitialRegionInterfaces
 import TNLean.PEPS.AreaLaw.Geometry.InitialRegionInteriors
@@ -102,6 +103,7 @@ import TNLean.PEPS.AreaLaw.Geometry.NonbeltPrimaries
 import TNLean.PEPS.AreaLaw.Geometry.OrderedTwoFamilyPartitionComap
 import TNLean.PEPS.AreaLaw.Geometry.PolynomialBudget
 import TNLean.PEPS.AreaLaw.Geometry.PowerScaleDepth
+import TNLean.PEPS.AreaLaw.Geometry.PrimaryBirthSeparation
 import TNLean.PEPS.AreaLaw.Geometry.PrimaryBirthTemplates
 import TNLean.PEPS.AreaLaw.Geometry.PrimaryCounting
 import TNLean.PEPS.AreaLaw.Geometry.PrimaryFineCellCover
@@ -144,9 +146,14 @@ import TNLean.PEPS.AreaLaw.Geometry.RepairInitialWeightedCount
 import TNLean.PEPS.AreaLaw.Geometry.RepairLatticeCoverage
 import TNLean.PEPS.AreaLaw.Geometry.RepairMarkMesh
 import TNLean.PEPS.AreaLaw.Geometry.RepairNextRegionDisjointness
+import TNLean.PEPS.AreaLaw.Geometry.RepairNonprimaryRetainedCount
+import TNLean.PEPS.AreaLaw.Geometry.RepairOrderedBirthSeparation
+import TNLean.PEPS.AreaLaw.Geometry.RepairOrderedPartition
+import TNLean.PEPS.AreaLaw.Geometry.RepairRankZeroAncestry
 import TNLean.PEPS.AreaLaw.Geometry.RepairRegionDisjointness
 import TNLean.PEPS.AreaLaw.Geometry.RepairReplacementLatticeCoverage
 import TNLean.PEPS.AreaLaw.Geometry.RepairReplacementRegions
+import TNLean.PEPS.AreaLaw.Geometry.RepairRetainedNonprimaryErrorSum
 import TNLean.PEPS.AreaLaw.Geometry.RepairRetainedPrefixCount
 import TNLean.PEPS.AreaLaw.Geometry.RepairRootPrefixCount
 import TNLean.PEPS.AreaLaw.Geometry.RepairStabilization
@@ -158,6 +165,7 @@ import TNLean.PEPS.AreaLaw.Geometry.RepairTerminalInteriors
 import TNLean.PEPS.AreaLaw.Geometry.RepairTerminalPrefixSites
 import TNLean.PEPS.AreaLaw.Geometry.RepairTerminalSquareCount
 import TNLean.PEPS.AreaLaw.Geometry.RepairTermination
+import TNLean.PEPS.AreaLaw.Geometry.RepairTotalMarkPrefixCount
 import TNLean.PEPS.AreaLaw.Geometry.ScaleSeparation
 import TNLean.PEPS.AreaLaw.Geometry.SegmentBallClipping
 import TNLean.PEPS.AreaLaw.Geometry.SideEndpoints

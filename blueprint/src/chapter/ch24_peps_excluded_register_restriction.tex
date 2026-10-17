@@ -52,8 +52,8 @@ Concatenation of register lists is denoted by juxtaposition.
 
 \begin{proof}\leanok
     \uses{thm:peps_party_restriction}
-    Induct on the spectator list $\rho$. For the empty list the two
-    compositions coincide. Write a nonempty list as $r\sigma$, and let
+    By induction on the spectator list $\rho$, for the empty list the two
+    compositions coincide. Writing a nonempty list as $r\sigma$, let
     $W_\sigma$ denote $W$ with the remaining spectators $\sigma$.
     The owner of $r$ is excluded because $\rho|_A=\varnothing$.
     If $H_r$ is the register space, adjoining $r$ acts as
@@ -63,7 +63,8 @@ Concatenation of register lists is denoted by juxtaposition.
          & =W_\sigma|_A.
         \label{eq:peps_excluded_head}
     \end{align}
-    Apply the induction hypothesis to the remaining spectator registers.
+    Applying the induction hypothesis to the remaining spectator registers then
+    completes the induction.
 \end{proof}
 
 These identities concern the register selections used in
@@ -94,10 +95,10 @@ These identities concern the register selections used in
     A register retained by $B$ is also retained by $A$, so its
     position and space are identical after either selection:
     $(\tau|_A)|_B=\tau|_B$ for every register list $\tau$.
-    Induct on the composition. Identities and composition respect
-    this equality of selected lists. Write $\Lambda_p(M;\tau)$ for a
-    local map $M$ at party $p$ beside the unchanged registers $\tau$.
-    Its restriction to $C$ is $\Lambda_p(M;\tau|_C)$ when $p\in C$ and
+    By induction on the composition, identities and composition respect
+    this equality of selected lists. Writing $\Lambda_p(M;\tau)$ for a
+    local map $M$ at party $p$ beside the unchanged registers $\tau$,
+    its restriction to $C$ is $\Lambda_p(M;\tau|_C)$ when $p\in C$ and
     $\operatorname{id}_{\tau|_C}$ otherwise. Since $p\in B$ implies
     $p\in A$, and $(\tau|_A)|_B=\tau|_B$,
     \begin{align}
@@ -108,8 +109,8 @@ These identities concern the register selections used in
             \end{cases}
         =\Lambda_p(M;\tau)|_B.
     \end{align}
-    Write $S_{r,s}(\tau)$ for the exchange of registers $r,s$ with owners
-    $o(r),o(s)$ before $\tau$. Its restriction to $C$ keeps the exchange
+    Writing $S_{r,s}(\tau)$ for the exchange of registers $r,s$ with owners
+    $o(r),o(s)$ before $\tau$, its restriction to $C$ keeps the exchange
     when both owners lie in $C$, and otherwise is the identity on the
     retained registers among $r,s$ followed by $\tau|_C$. Hence
     \begin{align}
@@ -122,8 +123,8 @@ These identities concern the register selections used in
             \end{cases}
         =S_{r,s}(\tau)|_B.
     \end{align}
-    Write $F_r(w)$ for a composition $w$ beside an unchanged register $r$.
-    Its restriction to $C$ is $F_r(w|_C)$ when $o(r)\in C$ and $w|_C$
+    Writing $F_r(w)$ for a composition $w$ beside an unchanged register $r$,
+    its restriction to $C$ is $F_r(w|_C)$ when $o(r)\in C$ and $w|_C$
     otherwise. Since $o(r)\in B$ implies $o(r)\in A$, the induction
     hypothesis $(w|_A)|_B=w|_B$ gives
     \begin{align}
@@ -160,8 +161,8 @@ These identities concern the register selections used in
 \begin{proof}\leanok
     \uses{thm:peps_nested_party_restrictions,def:peps_single_party_selector}
     Since $q\ne p$, the set $\{q\}$ is contained in
-    $P\setminus\{p\}$. Apply
-    (\ref{eq:peps_nested_party_restrictions}).
+    $P\setminus\{p\}$, so (\ref{eq:peps_nested_party_restrictions}) gives the
+    claim.
 \end{proof}
 
 
@@ -171,7 +172,10 @@ These identities concern the register selections used in
     \lean{TNLean.PEPS.PairEffect.Word.restrict_localPart_frame_scalar}
     \leanok
     \uses{def:peps_canonical_source_residual,thm:peps_party_restriction}
-    Let $W:\ell\to m$ and $V:m\to n$ be chronological compositions,
+    In the scalar-restriction identities used in
+    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
+    \texttt{04-compression.tex}, lines 246--251 and 351--381, let $W:\ell\to m$
+    and $V:m\to n$ be chronological compositions,
     possibly containing pair preparations. Fix a selection for which
     $\ell,m,n$ and both source-register lists restrict to the empty list.
     Suppose the corresponding remaining operations restrict to
@@ -182,17 +186,15 @@ These identities concern the register selections used in
 
     If $W$ instead is extended by an untouched register whose owner is
     excluded, its remaining operations have the same scalar restriction
-    $\alpha\operatorname{id}_{\mathbb C}$. These identities are used in
-    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
-    \texttt{04-compression.tex}, lines 246--251 and 351--381.
+    $\alpha\operatorname{id}_{\mathbb C}$.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{def:peps_canonical_source_residual,
         thm:peps_excluded_spectator_restriction,thm:peps_party_restriction}
-    Write $A$ for the selected registers and $W^{\mathrm r},V^{\mathrm r}$
-    for the remaining operations of $W,V$. In the remaining operations
-    of $VW$, the sources of $V$ are untouched registers beside those of
+    Writing $A$ for the selected registers and $W^{\mathrm r},V^{\mathrm r}$
+    for the remaining operations of $W,V$, in the remaining operations
+    of $VW$ the sources of $V$ are untouched registers beside those of
     $W$, and every one of them is excluded. By
     Theorem~\ref{thm:peps_excluded_spectator_restriction} they
     disappear under restriction, and restriction of a composition is

@@ -25,18 +25,18 @@
 \begin{proof}
     \leanok
     \uses{lem:block_diagonal_boundary_local_sum_mem, lem:block_diagonal_last_crossing_coefficients_from_sum_membership}
-    The local constraint of $\psi$ at the cyclic interval beginning at $M$
-    gives
+    By Lemma~\ref{lem:block_diagonal_boundary_local_sum_mem}, the local
+    constraint of $\psi$ at the cyclic interval beginning at $M$ gives
     \begin{align}
         \sum_j
         R_{M,\tau}\!\left(\Gamma_{M+1}^{A_j}(\mu_j^{M+1}X_j)\right)
          & \in
-        \bigvee_j G_{m+2}(A^j)
+        \bigvee_j G_{m+2}(A^j),
         \notag
     \end{align}
-    by Lemma~\ref{lem:block_diagonal_boundary_local_sum_mem}. Applying
+    and
     Lemma~\ref{lem:block_diagonal_last_crossing_coefficients_from_sum_membership}
-    gives the displayed equations.
+    then yields the displayed equations.
 \end{proof}
 
 \begin{lemma}[Last crossing-window component membership from a chain vector]
@@ -138,10 +138,10 @@
     \leanok
     \uses{def:chain_ground_space, lem:block_diagonal_boundary_nonwrapping_component}
     By definition, membership in $\mathcal G_{N,L}(A_j)$ is the collection of
-    all cyclic length-$L$ local constraints. For an interval beginning at $i$,
-    either $i+L\le N$ or $N<i+L$. In the first case, use
-    Lemma~\ref{lem:block_diagonal_boundary_nonwrapping_component}. In the
-    second case, use the displayed hypothesis.
+    all cyclic length-$L$ local constraints. An interval beginning at $i$
+    satisfies either $i+L\le N$, in which case
+    Lemma~\ref{lem:block_diagonal_boundary_nonwrapping_component} applies, or
+    $N<i+L$, in which case the displayed hypothesis applies.
 \end{proof}
 
 \begin{lemma}[Right boundary-matrix identities give single-block periodic-boundary constraints]
@@ -191,7 +191,7 @@
 \begin{proof}
     \leanok
     \uses{thm:word_span_common_boundary_matrix, lem:block_diagonal_boundary_component_right_boundary_matrices}
-    For fixed $j,i$, apply
+    For fixed $j,i$, applying
     Theorem~\ref{thm:word_span_common_boundary_matrix} to the family
     \begin{align}
         Z_\beta
@@ -200,11 +200,12 @@
         \notag \\
         F_\beta
          & =
-        A^j_\beta.
+        A^j_\beta
         \notag
     \end{align}
-    Since the length-$N-L$ outside-word products span the full matrix
-    algebra, there is a single matrix $Y_{j,i}$ such that, for every $\beta$,
+    together with the fact that the length-$N-L$ outside-word products span the
+    full matrix algebra yields a single matrix $Y_{j,i}$ such that, for every
+    $\beta$,
     $\mu_j^NX_jA^j_\beta = A^j_\beta Y_{j,i}$.
     Lemma~\ref{lem:block_diagonal_boundary_component_right_boundary_matrices}
     then gives the periodic-boundary constraints for each block.
@@ -228,12 +229,11 @@
 \begin{proof}
     \leanok
     \uses{lem:block_diagonal_boundary_component_complementary_word_identities, thm:wordspan_propagation_unital}
-    Since $L+L_0\le N$, the complementary length satisfies $L_0\le N-L$.
-    Theorem~\ref{thm:wordspan_propagation_unital} therefore gives, for every
-    block $j$,
-    $\wordspn{N-L}{A_j} = \MN{D_j}$.
-    Apply
-    Lemma~\ref{lem:block_diagonal_boundary_component_complementary_word_identities}.
+    Since $L+L_0\le N$, the complementary length satisfies $L_0\le N-L$, so
+    Theorem~\ref{thm:wordspan_propagation_unital} gives
+    $\wordspn{N-L}{A_j} = \MN{D_j}$ for every block $j$, and
+    Lemma~\ref{lem:block_diagonal_boundary_component_complementary_word_identities}
+    applies.
 \end{proof}
 
 \begin{lemma}[Normalization for words]
@@ -249,8 +249,8 @@
 \begin{proof}
     \leanok
 
-    The case $M=0$ is the identity matrix. For the induction step, write a
-    word of length $M+1$ as $a\rho$. Since $A_{a\rho}=A_aA_\rho$,
+    The case $M=0$ is the identity matrix. For the induction step, writing a
+    word of length $M+1$ as $a\rho$ with $A_{a\rho}=A_aA_\rho$ gives
     \begin{align}
         \sum_{a,\rho} A_aA_\rho A_\rho^\dagger A_a^\dagger
          & =
@@ -454,10 +454,9 @@
 \begin{proof}
     \leanok
     \uses{lem:block_diagonal_boundary_component_trace_decomposition_injective}
-    Choose a block-diagonal boundary representation of $\psi$. For that
-    representation, the boundary trace comparison yields the matrices
-    $C^j_{i,\rho}$. Applying
+    For a block-diagonal boundary representation of $\psi$, the boundary trace
+    comparison yields the matrices $C^j_{i,\rho}$, and
     Lemma~\ref{lem:block_diagonal_boundary_component_trace_decomposition_injective}
-    gives the desired containment
+    then gives the containment
     $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$ for every block $j$.
 \end{proof}

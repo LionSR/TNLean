@@ -55,9 +55,8 @@
 
 \begin{proof}
     \leanok
-    The upper bound $\dim G_L(A) \le D^2$ is
-    Lemma~\ref{lem:ground_space_finrank_le}. Injectivity of $\Gamma_L$ gives
-    $\dim G_L(A) = \dim \MN{D} = D^2$.
+    By Lemma~\ref{lem:ground_space_finrank_le}, $\dim G_L(A) \le D^2$, while
+    injectivity of $\Gamma_L$ gives $\dim G_L(A) = \dim \MN{D} = D^2$.
 \end{proof}
 
 \subsection{The intersection property}
@@ -107,7 +106,7 @@ only through the choice of the matrices $R_j$ in the second one.
 
 \begin{proof}
     \leanok
-    Put $X=\sum_jR_jZ_j$. Then
+    For $X=\sum_jR_jZ_j$,
     \begin{align}
         Y_i
          & =\sum_jR_jA^jY_i
@@ -179,11 +178,10 @@ only through the choice of the matrices $R_j$ in the second one.
               $i,j$.
         \item Since $A$ is injective, the matrices $\{A^j\}$ span $\MN{D}$
               (Definition~\ref{def:injective}), so
-              $\Id = \sum_j c_jA^j$ for some coefficients $c_j \in \C$. Thus,
-              with $X' := \sum_j c_jZ_j$,
+              $\Id = \sum_j c_jA^j$ for some coefficients $c_j \in \C$.
+              Applying Theorem~\ref{thm:ground_space_grow_back} with
+              $R_j=c_j\Id$ and $X' := \sum_j c_jZ_j$ gives
               $Y_i = \Id Y_i = \sum_j c_jA^jY_i = \sum_j c_jZ_jA^i = X'A^i$.
-              This is Theorem~\ref{thm:ground_space_grow_back} with
-              $R_j=c_j\Id$.
         \item By trace cyclicity, $\psi(\sigma) = \tr(A^\sigma X')$, so
               $\psi \in G_{L+1}(A)$.
     \end{enumerate}
@@ -201,8 +199,8 @@ only through the choice of the matrices $R_j$ in the second one.
 
 \begin{proof}
     \leanok
-    The claim follows from the two forward-direction lemmas and
-    Theorem~\ref{thm:ground_space_intersection}.
+    The two forward-direction lemmas and
+    Theorem~\ref{thm:ground_space_intersection} establish both inclusions.
 \end{proof}
 
 \subsection{Unique ground state}
@@ -219,7 +217,7 @@ only through the choice of the matrices $R_j$ in the second one.
     \lean{MPSTensor.tailRestrictₗ_contiguousRestrictₗ}
     \leanok
     For a non-wrapping interval $[s,s+M-1] \subseteq \{0,\ldots,N-1\}$ and a
-    full configuration $\rho$ supplying the complementary values, the
+    full configuration $\rho$ specifying the complementary values, the
     restriction map is
     \begin{align}
         (\Res^\rho_{s,M}\psi)(\omega)
@@ -248,8 +246,8 @@ only through the choice of the matrices $R_j$ in the second one.
     \lean{MPSTensor.cyclicCfg_eq_contiguousCfg}
     \lean{MPSTensor.cyclicRestrictₗ_eq_contiguousRestrictₗ}
     \leanok
-    On the periodic chain, for a full configuration $\rho$ supplying the
-    complementary values, put
+    On the periodic chain, for a full configuration $\rho$ specifying the
+    complementary values, the relative site index and cyclic configuration are
     \begin{align}
         \delta_i(k)
          & := (k+N-i)\bmod N,
@@ -390,9 +388,10 @@ only through the choice of the matrices $R_j$ in the second one.
 
 \begin{proof}
     \leanok
-    Write $\psi(\rho) = \tr(A^\rho X)$ for a boundary matrix $X$. Fixing the
-    final site gives the boundary matrix $A^jX$, while fixing the first site
-    gives $XA^i$ by cyclicity of the trace. Fixing a prefix $u$ gives
+    Every $\psi \in G_{K+L}(A)$ has the form $\psi(\rho) = \tr(A^\rho X)$ for a
+    boundary matrix $X$. Fixing the final site gives the boundary matrix
+    $A^jX$, while fixing the first site gives $XA^i$ by cyclicity of the trace.
+    Fixing a prefix $u$ gives
     $\psi(u,\sigma)=\tr(A^uA^\sigma X)=\tr(A^\sigma XA^u)$, so the suffix
     restriction again has the form of a ground-space vector.
 \end{proof}
@@ -402,7 +401,7 @@ only through the choice of the matrices $R_j$ in the second one.
     \uses{thm:contiguous_restriction_ground_space_map, def:ground_space_map, def:ground_space_parent, rem:contiguous_window_operators}
     The two-sided window restriction is recorded in the martingale chapter as
     Theorem~\ref{thm:contiguous_restriction_ground_space_map}: for sites
-    $s,L,N$ with $s+L \le N$, a full configuration $\tau$ supplying the
+    $s,L,N$ with $s+L \le N$, a full configuration $\tau$ specifying the
     complementary values, and a boundary matrix $X$, the nonwrapping
     restriction of the open-boundary ground-space vector $\Gamma_N(X)$ to the
     window $[s,s+L-1]$ is again an open-boundary ground-space vector,
@@ -448,12 +447,11 @@ only through the choice of the matrices $R_j$ in the second one.
 
 \begin{proof}
     \leanok
-    Choose $Z_j$ from the long left-window condition and $Y_u$ from the suffix
-    ground condition. The two restrictions give the same vector in
-    $G_{L_0}(A)$, namely
-    $\Gamma_{L_0}(Z_jA^u)=\Gamma_{L_0}(A^jY_u)$. Injectivity of
-    $\Gamma_{L_0}$, obtained from $L_0$-block injectivity, gives
-    $Z_jA^u=A^jY_u$.
+    The long left-window condition and the suffix ground condition yield
+    boundary matrices $Z_j$ and $Y_u$ whose restrictions to the common
+    $L_0$-site overlap agree:
+    $\Gamma_{L_0}(Z_jA^u)=\Gamma_{L_0}(A^jY_u)$. Since $L_0$-block injectivity
+    makes $\Gamma_{L_0}$ injective, $Z_jA^u=A^jY_u$.
 \end{proof}
 
 \begin{theorem}[Inverting step for word compatibility]%
@@ -473,9 +471,9 @@ only through the choice of the matrices $R_j$ in the second one.
     the coefficients of the blocked tensor $A^{[L_0]}$. Since $A^{[L_0]}$ is
     injective, the identity matrix is a linear combination of those blocked
     coefficients, and substituting this decomposition yields $Z_j=A^jX$ for a
-    common matrix $X$. For larger $K$, strip the first letter: for each $i$, the
-    matrices $Z_jA^i$ satisfy the same compatibility hypothesis with words of
-    length $K-1$, so the induction hypothesis reduces the problem to the case
+    common matrix $X$. For larger $K$, stripping the first letter $i$ produces
+    matrices $Z_jA^i$ that satisfy the same compatibility hypothesis on words of
+    length $K-1$, so the induction hypothesis reduces the claim to the case
     $K=1$.
 \end{proof}
 
@@ -527,7 +525,7 @@ only through the choice of the matrices $R_j$ in the second one.
     \lean{MPSTensor.mem_openChainLeftGroundSpaceES_iff}
     \leanok
     \uses{def:open_chain_ground_subspaces_es, def:in_left_ground}
-    Under the canonical $\ell^2$ identification, a Hilbert-space vector
+    Under the $\ell^2$ coordinate identification, a Hilbert-space vector
     belongs to $\mathcal U_L(A)$ exactly when the corresponding function
     satisfies the left ground condition: every fixed-final-site restriction
     belongs to $G_L(A)$.
@@ -535,8 +533,8 @@ only through the choice of the matrices $R_j$ in the second one.
 
 \begin{proof}
     \leanok
-    Conjugate through the $\ell^2$ coordinate equivalence and unfold the
-    left-site restriction condition.
+    Conjugating through the $\ell^2$ coordinate equivalence and unfolding the
+    left-site restriction condition yields the equivalence.
 \end{proof}
 
 \begin{theorem}[Membership in the open-chain tail ground subspace]
@@ -544,7 +542,7 @@ only through the choice of the matrices $R_j$ in the second one.
     \lean{MPSTensor.mem_openChainTailGroundSpaceES_iff}
     \leanok
     \uses{def:open_chain_ground_subspaces_es, def:in_tail_ground}
-    Under the canonical $\ell^2$ identification, a Hilbert-space vector
+    Under the $\ell^2$ coordinate identification, a Hilbert-space vector
     belongs to $\mathcal V_{K,L}(A)$ exactly when the corresponding function
     satisfies the tail ground condition: every fixed-prefix restriction
     belongs to $G_L(A)$.
@@ -552,8 +550,8 @@ only through the choice of the matrices $R_j$ in the second one.
 
 \begin{proof}
     \leanok
-    Conjugate through the $\ell^2$ coordinate equivalence and unfold the tail
-    restriction condition.
+    Conjugating through the $\ell^2$ coordinate equivalence and unfolding the
+    tail restriction condition yields the equivalence.
 \end{proof}
 
 \begin{theorem}[Open-chain left--tail ground-space intersection]
@@ -593,11 +591,11 @@ only through the choice of the matrices $R_j$ in the second one.
 \begin{proof}
     \leanok
     \uses{thm:ground_space_extend_right_block_injective, def:tail_restrict_parent, rem:contiguous_window_operators}
-    Induct on the extra length beyond $L_0+1$. The induction hypothesis gives
-    the long left-window ground condition after deleting the last site, while
-    Definition~\ref{def:tail_restrict_parent} and
+    By induction on the number of sites beyond $L_0+1$, the induction
+    hypothesis gives the long left-window ground condition after deleting the
+    last site, while Definition~\ref{def:tail_restrict_parent} and
     Remark~\ref{rem:contiguous_window_operators} identify every fixed-prefix
-    suffix with one of the assumed length-$L_0+1$ intervals.
+    suffix with one of the assumed length-$(L_0+1)$ intervals.
     Theorem~\ref{thm:ground_space_extend_right_block_injective} then grows back
     the rightmost site.
 \end{proof}
@@ -618,10 +616,11 @@ only through the choice of the matrices $R_j$ in the second one.
 \begin{proof}
     \leanok
     \uses{rem:contiguous_window_operators}
-    Induct on the length $m$ of a non-wrapping interval. The case $m=L$ is the
-    assumed local condition. If all length-$m$ intervals lie in $S_m$, then the
-    two one-site restrictions of a length-$(m+1)$ interval are adjacent
-    length-$m$ intervals. Hence the length-$(m+1)$ interval lies in
+    We proceed by induction on the length $m$ of a non-wrapping interval,
+    starting from the assumed local condition at $m=L$. If all length-$m$
+    intervals lie in $S_m$, then the two one-site restrictions of a
+    length-$(m+1)$ interval are adjacent length-$m$ intervals. Hence the
+    length-$(m+1)$ interval lies in
     $(\C^d\otimes S_m)\cap(S_m\otimes\C^d)$, and the displayed identity places
     it in $S_{m+1}$. Taking $m=N$ and the interval starting at the first site
     gives $\psi\in S_N$.
@@ -687,5 +686,6 @@ only through the choice of the matrices $R_j$ in the second one.
     Lemma~\ref{lem:cyclic_window_range_antitonicity} reduces the cyclic
     hypotheses to range $L_0+1$. On every non-wrapping interval, the cyclic and
     contiguous restriction maps agree, so
-    Theorem~\ref{thm:normal_open_chain_range_reduction} applies.
+    Theorem~\ref{thm:normal_open_chain_range_reduction} places the state in
+    $G_N(A)$.
 \end{proof}

@@ -4,9 +4,9 @@
 Fix two explicitly labelled sector families with the same number of labels.
 The constructions below retain their complex relative phases and map
 one logical encoding to the other. They do not identify the coefficients of
-separately selected periodic vectors. This is an operator-norm refinement
-motivated by the discussion of~\cite{Malz2024Preparation}, rather than a
-definition of the non-normal phase relation in that discussion.
+separately selected periodic vectors; rather than defining the non-normal
+phase relation in the discussion of~\cite{Malz2024Preparation}, this section
+develops an operator-norm refinement motivated by that discussion.
 
 \begin{definition}[Canonical encoding of periodic sectors]
     \label{def:ldp_sector_encoder}
@@ -38,9 +38,9 @@ definition of the non-normal phase relation in that discussion.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:ldpolar_decomposition, thm:ldpolar_injective}
-    Write $P=(V_{A,N}^\dagger V_{A,N})^{1/2}$. The polar identities
+    For $P=(V_{A,N}^\dagger V_{A,N})^{1/2}$, the polar identities
     $F_{A,N}=V_{A,N}G_{A,N}^{-1/2}$ and $V_{A,N}=F_{A,N}P$ give both
-    range inclusions. Injectivity makes the initial support projector
+    range inclusions, and injectivity makes the initial support projector
     $I_b$.
 \end{proof}
 
@@ -116,8 +116,8 @@ definition of the non-normal phase relation in that discussion.
     \end{align}
 \end{theorem}
 \begin{proof}\leanok
-    Expand matrix multiplication and the Euclidean inner product in
-    the common physical configuration basis.
+    Expanding matrix multiplication and the Euclidean inner product in
+    the common physical configuration basis gives both identities.
 \end{proof}
 
 \begin{theorem}[Perturbation of the fixed polar encoder]
@@ -126,8 +126,8 @@ definition of the non-normal phase relation in that discussion.
     \leanok
     \uses{def:ldpolar_matrix}
     Let $V$ be an injective column matrix, $F$ its polar isometry, and
-    $W$ any isometry on the same coordinate spaces. Set
-    $\eta=\|V^\dagger V-I\|$ and $\zeta=\|W^\dagger V-I\|$. Then
+    $W$ any isometry on the same coordinate spaces. For
+    $\eta=\|V^\dagger V-I\|$ and $\zeta=\|W^\dagger V-I\|$,
     \begin{align}
         \|(V^\dagger V)^{1/2}-I\| & \le\eta,                    &
         \|F-W\|                   & \le\sqrt{\eta+2\zeta}+\eta.
@@ -140,7 +140,8 @@ definition of the non-normal phase relation in that discussion.
     Since $V=F(V^\dagger V)^{1/2}$ and $\|F\|\le1$, it follows that
     $\|F-V\|\le\eta$. In addition,
     $(V-W)^\dagger(V-W)=(V^\dagger V-I)-(W^\dagger V-I)-(W^\dagger V-I)^\dagger$,
-    so $\|V-W\|^2\le\eta+2\zeta$. Add these two distances.
+    so $\|V-W\|^2\le\eta+2\zeta$, and adding these two distances gives
+    the second bound.
 \end{proof}
 
 \begin{theorem}[Coherent local conversion through a common seed]
@@ -188,7 +189,8 @@ definition of the non-normal phase relation in that discussion.
     \uses{lem:qc_circuit_inverse_composition}
     Inversion and composition give the depth. Since
     $U(U_AJ)=U_BJ$, the difference is
-    $U(F_A-U_AJ)+(U_BJ-F_B)$. Use the triangle inequality and $\|U\|=1$.
+    $U(F_A-U_AJ)+(U_BJ-F_B)$, and the triangle inequality together with
+    $\|U\|=1$ gives the conversion error bound.
 \end{proof}
 
 \begin{theorem}[Conversion of canonical sector encoders]
@@ -216,19 +218,21 @@ definition of the non-normal phase relation in that discussion.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:ldp_polar_frame_bound, thm:ldp_common_encoder_conversion}
-    Both $U_AJ$ and $U_BJ$ are isometries. Apply
-    Theorem~\ref{thm:ldp_polar_frame_bound} to each family, use the
+    Both $U_AJ$ and $U_BJ$ are isometries. Applying
+    Theorem~\ref{thm:ldp_polar_frame_bound} to each family, using the
     monotonicity of the square root in (\ref{eq:ldp_encoder_defects}),
-    and then apply Theorem~\ref{thm:ldp_common_encoder_conversion}.
+    and combining the two bounds through
+    Theorem~\ref{thm:ldp_common_encoder_conversion} yields
+    the stated conversion bound.
 \end{proof}
 
 For every finite reference $\C^k$ and every input
 $\xi\in\C^b\otimes\C^k$, an operator error
 $\|UF_{A,N}-F_{B,N}\|\le\delta$ gives
 $\|(U\otimes I_k)(F_{A,N}\otimes I_k)\xi-(F_{B,N}\otimes I_k)\xi\|
-    \le\delta\|\xi\|$. To see this, write $\xi=\sum_r\xi_r\otimes e_r$
-and sum the squared bounds for $(UF_{A,N}-F_{B,N})\xi_r$.
-There is no factor depending on $k$.
+    \le\delta\|\xi\|$: writing $\xi=\sum_r\xi_r\otimes e_r$
+and summing the squared bounds for $(UF_{A,N}-F_{B,N})\xi_r$
+establishes this inequality with no factor depending on $k$.
 
 The finite-length estimates here are inputs to the uniform all-accuracy
 conversion theorem in Section~\ref{sec:ldp_coherent_groundspace_conversion}.

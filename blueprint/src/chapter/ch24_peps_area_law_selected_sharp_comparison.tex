@@ -43,8 +43,8 @@ entropy of the selected auxiliary marginal.
 \end{theorem}
 \begin{proof}
     \leanok
-    Subtract the two rates and divide by $W/2>0$. The upper quadratic
-    contribution becomes $12K_{\rm mom}a$, giving $25+12=37$.
+    Subtracting the two rates and dividing by $W/2>0$ turns the upper quadratic
+    contribution into $12K_{\rm mom}a$, giving $25+12=37$.
 \end{proof}
 
 \begin{theorem}[Uniform same-prevector charge comparison]
@@ -83,11 +83,11 @@ entropy of the selected auxiliary marginal.
     \uses{thm:al_actual_sharp_upper,
         thm:actual_scan_supplied_prevector_sharp_lower,
         thm:arealaw-sharp-comparison-subtraction}
-    The factor-ten assumptions imply the upper factor-six assumptions.
-    Apply the upper and lower theorems to the same prevector.
-    Sum over the $K$ bands, use $W=aK$, and apply
+    The factor-ten assumptions imply the upper factor-six assumptions,
+    so the upper and lower theorems apply to the same prevector;
+    summing over the $K$ bands with $W=aK$ and applying
     Theorem~\ref{thm:arealaw-sharp-comparison-subtraction} with
-    $r_+=R_+(k)$ and $r_-=WR_-(k)/2$.
+    $r_+=R_+(k)$ and $r_-=WR_-(k)/2$ yields the comparison.
 \end{proof}
 
 \begin{theorem}[Energy at the selected charge]
@@ -114,9 +114,9 @@ entropy of the selected auxiliary marginal.
     \leanok
     \uses{thm:al_scan_actual_charge_sum_selection,
         thm:al_scan_actual_round_transport}
-    The same charge is the odd round $2s+1$ in the finite-family
-    round-step theorem. Its energy clause gives $\mu_k\le2e+$error.
-    Subtract one copy of $e$ and divide by the positive gap $g/2$.
+    Because the selected charge is the odd round $2s+1$ in the finite-family
+    round-step theorem, its energy clause gives $\mu_k\le2e+$error;
+    subtracting one copy of $e$ and dividing by the positive gap $g/2$ bounds $\delta_k$.
 \end{proof}
 
 \begin{theorem}[Density cap and conditional selected comparison]
@@ -141,9 +141,9 @@ entropy of the selected auxiliary marginal.
 \end{theorem}
 \begin{proof}
     \leanok
-    The energy error is nonnegative, so replacing $C_{\rm en}$
-    by $|C_{\rm en}|$ only increases its contribution. Apply the
-    coefficient bound at the unchanged point. Finally $M/\tau\ge0$.
+    Since the energy error is nonnegative, replacing $C_{\rm en}$
+    by $|C_{\rm en}|$ only increases its contribution; applying the
+    coefficient bound at the unchanged point and using $M/\tau\ge0$ completes the estimate.
 \end{proof}
 
 The last theorem is a conditional composition. The following source

@@ -48,9 +48,10 @@
 \begin{proof}
     \leanok
     \uses{thm:peps_binary_projection_family}
-    Use $T^*T=cP$, $DP=PD$, and $TP=T$ to obtain $QT=TD$.
-    Hermiticity follows from that of $D$, and $D^2=D$ then gives $Q^2=Q$.
-    Apply the preceding binary projection identity and expand $(I-Q)T$.
+    Combining $T^*T=cP$, $DP=PD$, and $TP=T$ gives $QT=TD$.
+    Hermiticity follows from that of $D$, and $D^2=D$ then gives $Q^2=Q$;
+    applying the preceding binary projection identity and expanding $(I-Q)T$
+    completes the proof.
 \end{proof}
 
 \begin{theorem}[Return projection on pair coefficients]
@@ -74,6 +75,7 @@
 \begin{proof}
     \leanok
     \uses{thm:peps_regular_charge_pair_return_projection}
-    Remove the common normalization from the established projector action.
-    Simultaneous left translation fixes $w$, and hence its outer product.
+    Removing the common normalization from the established projector action
+    gives $Dw_k^x=\chi(k^{-1})w/d$, while simultaneous left translation fixes
+    $w$ and hence its outer product.
 \end{proof}

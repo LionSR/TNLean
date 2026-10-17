@@ -23,11 +23,11 @@ intersection step in the geometry of
     on $R\cup S$ if and only if it is flat on both $R$ and $S$.
 \end{theorem}
 \begin{proof}\leanok
-    Restrict a flatness potential to obtain flatness on a subregion.
-    Conversely, let $k_R,k_S$ be flatness potentials on $R,S$. Set
-    $t=k_S(b)^{-1}k_R(b)$ and replace $k_S(v)$ by $k_S(v)t$.
-    The new potentials agree at $b$, and for each internal edge $e=(v,w)$
-    of $S$ one has
+    Restricting a flatness potential gives flatness on a subregion.
+    Conversely, for flatness potentials $k_R,k_S$ on $R,S$, setting
+    $t=k_S(b)^{-1}k_R(b)$ and replacing $k_S(v)$ by $k_S(v)t$ makes
+    the new potentials agree at $b$, and every internal edge $e=(v,w)$
+    of $S$ satisfies
     \begin{align}
         (k_S(v)t)^{-1}\alpha_{v,e}
          & =t^{-1}k_S(v)^{-1}\alpha_{v,e}
@@ -55,8 +55,9 @@ intersection step in the geometry of
 \begin{proof}\leanok
     \uses{thm:peps_regular_actual_projector,thm:peps_regular_constraint_fixed_spaces,
         thm:peps_regular_flat_union}
-    Replace simultaneous vertex and edge invariance in the range
-    characterization by the corresponding individual fixedness conditions.
+    Replacing simultaneous vertex and edge invariance in the range
+    characterization by the corresponding individual fixedness conditions gives
+    the equivalence.
     For $R\subseteq S$, every vertex and internal edge of $R$ belongs to $S$,
     and flatness on $S$ implies flatness on $R$.
 \end{proof}
@@ -108,7 +109,8 @@ intersection step in the geometry of
         TNLean.PEPS.regularRegionRangeWithin_inf_eq_range}
     \leanok
     \uses{def:peps_regular_core_slice_range}
-    One has $\mathcal S_{R;T}^0=J_T^{-1}(\widehat{\mathcal S}_R^0)$ and
+    The slice space satisfies
+    $\mathcal S_{R;T}^0=J_T^{-1}(\widehat{\mathcal S}_R^0)$ and
     $\mathcal S_{T;T}^0=\mathcal S_T^0=\operatorname{range}\Gamma_T$.
     Suppose $R\cap S=\{b\}$, no edge joins $R\setminus S$ to $S\setminus R$,
     and $T=R\cup S$. Then
@@ -191,9 +193,9 @@ boundary data. The two horizontal internal labels are summed.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_regular_region_intersection,thm:peps_regular_core_intersection}
-    Count the edges in (\ref{eq:peps_three_block_edges}). The overlap is
-    $\{1\}$, the union is $T$, and the only possible edge between the
-    disjoint parts would be $02$, which is absent. Apply
+    Counting the edges in (\ref{eq:peps_three_block_edges}) gives the degree
+    and boundary counts; since the overlap is $\{1\}$, the union is $T$, and the
+    edge $02$ between the disjoint parts is absent,
     Theorems~\ref{thm:peps_regular_region_intersection}
-    and~\ref{thm:peps_regular_core_intersection}.
+    and~\ref{thm:peps_regular_core_intersection} give both intersections.
 \end{proof}

@@ -10,9 +10,9 @@ Let $G$ be a graph on a finite set $I$, with extended graph distance
 $d_G:I\times I\to\N\cup\{\infty\}$. Fix an anchor $a\in I$ and write
 $C(a)=\{x\in I:d_G(a,x)<\infty\}$ and
 $N_l(a)=\{x\in I:d_G(a,x)\le l\}$.
-Let $R_a$ be the maximum distance from $a$ to a vertex in $C(a)$.
-Equivalently, take the maximum over all vertices after assigning zero
-to the distance from $a$ to an unreachable vertex.
+Let $R_a$ be the maximum distance from $a$ to a vertex in $C(a)$, or
+equivalently the maximum over all vertices after assigning zero to the
+distance from $a$ to an unreachable vertex.
 All distances are measured in $G$ itself; when $G$ is an induced-domain
 graph, no ambient distance is substituted.
 
@@ -30,10 +30,10 @@ graph, no ambient distance is substituted.
 \begin{proof}
     \leanok
     The implication $d_G(a,x)\le m\le n\Rightarrow d_G(a,x)\le n$
-    proves monotonicity. Membership in a finite ball implies finite
-    distance, hence reachability from $a$. Conversely, a reachable
-    vertex $x$ has $d_G(a,x)\le R_a\le n$.
-    Infinite distance cannot be bounded by a natural number.
+    gives monotonicity of $N_l(a)$. Membership in a finite ball implies finite
+    distance and hence reachability from $a$; conversely, every reachable
+    vertex $x\in C(a)$ satisfies $d_G(a,x)\le R_a\le n$, whereas an infinite
+    distance cannot be bounded by any natural number.
 \end{proof}
 
 Let $q>0$, $\mathcal H=(\C^q)^{\otimes I}$, and let
@@ -72,10 +72,11 @@ $\Delta_{l+1}=\mathcal E_{k,l+1}-\mathcal E_{k,l}$.
 \begin{proof}
     \leanok
     \uses{thm:qc_graph_ball_stabilization,lem:qc_site_expectation_properties}
-    For $n\ge R_a$, the ball is $C(a)$ and the expectation fixes every
-    operator supported there. Substitute $E_{N_n(a)}(k)=k$ into
-    (\ref{eq:qc_component_root_channel}) to obtain equality of channels.
-    Both terms in $\Delta_{n+1}(B)$ are then $\mathcal E_k(B)$.
+    For $n\ge R_a$, the ball $N_n(a)$ equals $C(a)$, so $E_{N_n(a)}$ fixes
+    every operator supported on $C(a)$. Substituting $E_{N_n(a)}(k)=k$ into
+    (\ref{eq:qc_component_root_channel}) identifies $\mathcal E_{k,n}$ with
+    $\mathcal E_k$, which makes both terms in $\Delta_{n+1}(B)$ equal to
+    $\mathcal E_k(B)$.
 \end{proof}
 
 For a real sequence $\varepsilon_l$, put $b_0=2$ and
@@ -88,7 +89,9 @@ Definition~\ref{def:qc_site_oscillation}.
     \uses{def:qc_site_oscillation,thm:qc_component_channel_stabilization}
     \lean{TNLean.PEPS.AreaLaw.siteOscillation_spectatorRootChannel_le_of_component_support}
     \leanok
-    Suppose $0\le k\le1$, $k$ is supported on $C(a)$, and $n\ge R_a$.
+    As the finite-radius consequence of component support in
+    \cite{OpenAI2026AreaLaw} before choosing a decaying error bound,
+    suppose $0\le k\le1$, $k$ is supported on $C(a)$, and $n\ge R_a$.
     If $\|k-E_{N_l(a)}(k)\|\le\varepsilon_l$ for every $l\le n$, then
     \begin{align}
         \label{eq:qc_component_increment}
@@ -96,19 +99,16 @@ Definition~\ref{def:qc_site_oscillation}.
          & \le d_y(B)+2\sum_{0\le l\le n,\ d_G(a,y)\le l}
         b_l\sum_{z\in N_l(a)}d_z(B).
     \end{align}
-    This is the finite-radius consequence of component support in
-    \cite{OpenAI2026AreaLaw}, before choosing a decaying error bound.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:qc_graph_ball_stabilization,thm:qc_component_channel_stabilization,
         thm:al_channel_finite_increment}
-    Apply Theorem~\ref{thm:al_channel_finite_increment} to the increasing
-    regions $N_l(a)$. It gives the right side of
-    (\ref{eq:qc_component_increment}) with
-    $d_y(\mathcal E_{k,n}(B))$ on the left.
-    Component localization identifies this local channel with
-    $\mathcal E_k$, and $y\in N_l(a)$ is $d_G(a,y)\le l$.
+    Applying Theorem~\ref{thm:al_channel_finite_increment} to the increasing
+    regions $N_l(a)$ bounds $d_y(\mathcal E_{k,n}(B))$ by the right-hand side
+    of~(\ref{eq:qc_component_increment}).
+    Component localization then identifies $\mathcal E_{k,n}$ with
+    $\mathcal E_k$, while the condition $y\in N_l(a)$ is $d_G(a,y)\le l$.
 \end{proof}
 
 \begin{theorem}[No increase across components]
@@ -123,10 +123,10 @@ Definition~\ref{def:qc_site_oscillation}.
     \leanok
     \uses{thm:qc_graph_ball_stabilization,thm:qc_component_channel_stabilization,
         thm:al_root_channel_outside_oscillation}
-    At radius $R_a$, the local channel equals the full channel and
-    $y\notin N_{R_a}(a)$. Apply
-    Theorem~\ref{thm:al_root_channel_outside_oscillation}: the local channel
+    At radius $R_a$, the local channel $\mathcal E_{k,R_a}$ equals the full
+    channel $\mathcal E_k$ and $y\notin N_{R_a}(a)$. By
+    Theorem~\ref{thm:al_root_channel_outside_oscillation}, $\mathcal E_{k,R_a}$
     commutes with on-site unitary conjugation at $y$, and its contractivity
-    bounds each resulting commutator by its original norm. Taking the
-    supremum gives the claim.
+    bounds each resulting commutator by its original norm, so taking the
+    supremum over unitaries at $y$ gives $d_y(\mathcal E_k(B))\le d_y(B)$.
 \end{proof}

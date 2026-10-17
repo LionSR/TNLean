@@ -5,22 +5,22 @@
     \lean{MPSTensor.physicalStringOrderParam_le_geometric}
     \leanok
     \uses{def:physical_string_order_param, def:twisted_transfer_map}
-    Let $A,\Lambda,x,y,u$ be arbitrary and choose a real rate
-    $r>\rho(\E_u)$. There is a constant $C>0$ such that every
-    middle length $N\geq0$ satisfies $|S_N(x,y,u)|\leq Cr^N$.
-    When $r<1$, this gives the exponential decay asserted in
-    \cite[lines~241--243]{PerezGarcia2008StringOrder}.
+    For any $A,\Lambda,x,y,u$ and any real rate
+    $r>\rho(\E_u)$, there is a constant $C>0$ such that every
+    middle length $N\geq0$ satisfies $|S_N(x,y,u)|\leq Cr^N$;
+    as in \cite[lines~241--243]{PerezGarcia2008StringOrder}, this bound
+    gives exponential decay whenever $r<1$.
 \end{theorem}
 \begin{proof}
-    Write $S_N=\ell(\E_u^N(Y))$, where
-    $Y=\E_y(\Id)$ and $\ell(X)=\tr(\Lambda\E_x(X))$.
+    With $Y=\E_y(\Id)$ and $\ell(X)=\tr(\Lambda\E_x(X))$, the correlator
+    takes the form $S_N=\ell(\E_u^N(Y))$.
     Gelfand's formula gives $\|\E_u^N\|\leq Mr^N$ for a constant $M>0$.
     Thus $|S_N|\leq\|\ell\|M\|Y\|r^N$, including $N=0$.
 \end{proof}
 
 Assume $D>0$, $\E_A(\Id)=\Id$, $\Lambda>0$,
-$\tr\Lambda=1$, and $\E_A^*(\Lambda)=\Lambda$. Suppose also that
-$\E_A$ is irreducible and peripheral-primitive. Put
+$\tr\Lambda=1$, and $\E_A^*(\Lambda)=\Lambda$, with
+$\E_A$ irreducible and peripheral-primitive, and let
 $P(X)=\tr(\Lambda X)\Id$.
 
 \begin{theorem}[Canonical geometric remainder]
