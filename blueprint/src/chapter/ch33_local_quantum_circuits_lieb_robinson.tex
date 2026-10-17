@@ -173,10 +173,10 @@ contains any given site sum to at most $b_0$.
         \exp\bigl(2v_Rb_0e^{2\mu R}|t|-\mu n\bigr).
     \]
     The restricted norm satisfies
-    \[
-        C_B(X_i,t)\leq 2e^{\mu R}\|B\|
-        \exp\bigl(2v_Rb_0e^{2\mu R}|t|-\mu n\bigr).
-    \]
+    \begin{align}
+        C_B(X_i,t) & \leq 2e^{\mu R}\|B\|
+        \exp\bigl(2v_Rb_0e^{2\mu R}|t|-\mu n\bigr).\notag
+    \end{align}
     Consequently there are positive constants $C,v,c$, depending only on
     $R,v_R,b_0$, such that
     $\|[\tau_t(A),B]\|\leq C\|A\|\|B\|e^{v|t|-cd_G(a_i,y)}$ whenever
@@ -214,14 +214,14 @@ contains any given site sum to at most $b_0$.
     $S=\varnothing$ is allowed. Fix $\mu\geq0$ and an integer $n\geq0$ such
     that $n\leq d_G(x,y)$ for every $x\in S$. Put
     \begin{align}
-        C&=2+4|b_0|e^{2\mu R},\notag\\
-        v&=2v_R|b_0|e^{2\mu R}+1.\notag
+        C & =2+4|b_0|e^{2\mu R},\notag    \\
+        v & =2v_R|b_0|e^{2\mu R}+1.\notag
     \end{align}
     For every real $t$,
     \begin{align}
-        C_B(S,t)&\leq C|S|\|B\|e^{v|t|-\mu n},
-        \label{eq:qc_lr_finset_norm}\\
-        \|[\tau_t(A),B]\|&\leq C|S|\|A\|\|B\|e^{v|t|-\mu n}.
+        C_B(S,t)          & \leq C|S|\|B\|e^{v|t|-\mu n},
+        \label{eq:qc_lr_finset_norm}                           \\
+        \|[\tau_t(A),B]\| & \leq C|S|\|A\|\|B\|e^{v|t|-\mu n}.
         \label{eq:qc_lr_finset_commutator}
     \end{align}
     The constants depend only on $R,v_R,b_0,\mu$, not on the graph, the
@@ -253,10 +253,10 @@ contains any given site sum to at most $b_0$.
     $e^{\lambda t}$ for $0\leq s\leq t$ gives
     \begin{align}
         C_B(S,t)
-        &\leq |S|\|B\|e^{-\mu n}
-            \bigl(2+4be^{2\mu R}t e^{\lambda t}\bigr)\notag\\
-        &\leq (2+4be^{2\mu R})|S|\|B\|
-            e^{(\lambda+1)t-\mu n}.\notag
+         & \leq |S|\|B\|e^{-\mu n}
+        \bigl(2+4be^{2\mu R}t e^{\lambda t}\bigr)\notag \\
+         & \leq (2+4be^{2\mu R})|S|\|B\|
+        e^{(\lambda+1)t-\mu n}.\notag
     \end{align}
     The last inequality uses $1\leq e^{\lambda t}$ and $1,t\leq e^t$.
     Replacing $H$ by $-H$ gives the same bound for negative times and proves
