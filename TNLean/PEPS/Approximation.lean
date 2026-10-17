@@ -280,6 +280,7 @@ import TNLean.PEPS.Approximation.MessageMonomial
 import TNLean.PEPS.Approximation.MonomialFixesOutside
 import TNLean.PEPS.Approximation.NestedCylinderSquarePatch
 import TNLean.PEPS.Approximation.NestedPatchEnergy
+import TNLean.PEPS.Approximation.NestedPatchMarginalCloseness
 import TNLean.PEPS.Approximation.NetworkScalarAbsorption
 import TNLean.PEPS.Approximation.NoneResidualGate
 import TNLean.PEPS.Approximation.NoneResidualOperations
