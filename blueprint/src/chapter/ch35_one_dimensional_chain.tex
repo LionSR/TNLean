@@ -372,9 +372,9 @@ for an arbitrary finite set of sites and are instantiated here directly.
     remaining sites. Then the regional projector $\Pi_k$ has rank at most
     $e^{S_k+w}$, the mass $\|(1-P_k)\psi\|^2$ discarded by $P_k$ is at most
     the surprisal tail of the reduced state beyond $w$, and the vector
-    $\Phi=P_1P_2\cdots P_{L-1}\psi$ has cut rank at most the rank of $\Pi_k$,
-    hence at most $e^{S_k+w}$, across every cut $k$, and cut rank at most one
-    across the trivial cuts at the ends of the chain; it satisfies
+    $\Phi=P_1P_2\cdots P_{L-1}\psi$ has cut rank at most
+    $\max\{1,e^{S_k+w}\}$ across every cut $k$ of the chain, the trivial
+    cuts at its ends included; it satisfies
     \begin{align}
         \|\psi-\Phi\|\le\sum_{k=1}^{L-1}\sqrt{\text{tail}_k(w)} .
     \end{align}
