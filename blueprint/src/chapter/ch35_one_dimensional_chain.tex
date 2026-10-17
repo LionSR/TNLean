@@ -128,6 +128,35 @@ for an arbitrary finite set of sites and are instantiated here directly.
     $j'>j$, two of its sites would be at distance at least $R+1$.
 \end{proof}
 
+% Source: TNLean2026OneDimensional, eq:ham; setting before lem:LR.
+\begin{lemma}[Interaction norm budget at a site]
+    \label{lem:chain_site_norm_budget}
+    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.sum_norm_terms_containing_le}
+    \leanok
+    \uses{def:chain_model}
+    Let $L,q,R$ be natural numbers and $J\in\mathbb R$. On the chain of $L$
+    sites with local dimension $q$, let $H=\sum_X h_X$ be a finite-range
+    Hamiltonian with one term of norm at most $J$ for each nonempty support
+    $X$ of diameter at most $R$. For every site $x$,
+    \begin{align}
+        \sum_{X\ni x}\lVert h_X\rVert\le 2^{2R+1}J.
+    \end{align}
+    This is an auxiliary consequence of the Hamiltonian setting
+    in Section~1 of~\cite{TNLean2026OneDimensional}; it supplies a
+    per-site interaction estimate of the form assumed immediately before
+    the Lieb--Robinson lemma there. No spectral-gap assumption is needed.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{def:chain_model, lem:chain_crossing_count}
+    Fix a site $x$. The singleton $\{x\}$ is an admissible support, so
+    $0\le\lVert h_{\{x\}}\rVert\le J$. Every support containing $x$ lies in
+    the clipped interval $[x-R,x+R+1)$, which has at most $2R+1$ sites.
+    Counting subsets of this interval gives at most $2^{2R+1}$ such supports.
+    Summing their norm bounds and using $J\ge0$ proves the claim. If the chain
+    has no sites, the assertion is vacuous.
+\end{proof}
+
 \section{The buffered discount with a constant-width buffer}
 
 \begin{lemma}[Buffered discount on a chain]
