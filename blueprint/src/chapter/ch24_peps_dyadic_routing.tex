@@ -10,11 +10,12 @@ bounded degree, and link separation bounded by a fixed multiple of the endpoint
 scales) are derived from the distribution protocol, and a fourth (all anchors lying
 in the padded square) from attaching each party to the anchor of its dyadic
 block. Here these four properties are stated as hypotheses
-on an arbitrary party network, giving a conditional form of
-the lemma that specializes to the protocol network once the protocol
-and attachment are shown to satisfy
-them~\cite{gap:polypeps_routing_network_bounds}.
-% Status: that the protocol has these properties is not yet formalized.
+on an arbitrary party network, and the lemma is proved in that generality. The
+four properties are verified for the network produced by the protocol and its
+density compression in
+Theorem~\ref{thm:peps_large_size_network_from_protocol}, with constants
+independent of the side length and the
+Hamiltonian~\cite{gap:polypeps_routing_network_bounds}.
 Although the two endpoint scales of every link in the protocol network
 are equal or adjacent, the congestion bound below does not use this property, so it is
 not assumed.
@@ -223,8 +224,10 @@ Following~\cite[Section~8.2--8.3]{OpenAI2026PolynomialPEPS}
 compressed operator network on the party graph and routes the resulting ket network
 afterwards. The statements below follow this
 order. The operator network, its placement, the four routing properties, and
-the trace-norm estimate remain hypotheses, as described at the beginning of
-this section and in~\cite{gap:polypeps_product_reference_column}.
+the trace-norm estimate are hypotheses of the statements below; they are
+verified for the compressed protocol network in
+Theorem~\ref{thm:peps_large_size_network_from_protocol}, as recorded
+in~\cite{gap:polypeps_product_reference_column}.
 
 \begin{definition}[Operator party network and a fixed input]
     \label{def:peps_party_operator_fix_input}
