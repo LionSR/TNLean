@@ -39,8 +39,9 @@ conditional form of Theorem 1.1.
 (`06-geometry.tex:12–53`). It omits the pair-source and message counts of each monomial and the
 expansions of every fixed inverse-power accuracy; neither is used here, since the single
 instantiated expansion of each change is exact and serves at every accuracy of Theorem 5.2.
-Documented in `docs/paper-gaps/polypeps_prop71_consequences_interface.tex`. Elimination: prove Proposition 7.1
-for a construction certificate carrying the omitted clauses and forget it into this interface.
+Documented in `docs/paper-gaps/polypeps_prop71_consequences_interface.tex`. Elimination: prove
+Proposition 7.1 for a construction certificate carrying the omitted clauses and forget it into
+this interface.
 
 ## Main results
 

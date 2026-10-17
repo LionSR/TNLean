@@ -92,11 +92,12 @@ vector of the initial encoded frames: the main copy of `Ω` followed by the auxi
 
 Polynomial-PEPS manuscript, Proposition 7.1 `prop:protocol`, item 1, `06-geometry.tex`,
 lines 21–23, and item 4, lines 38–40. -/
-theorem IsDistributionProtocol.exists_originalCircuit_initialCopies [DecidableEq P] [NeZero q]
+theorem IsDistributionProtocol.exists_originalCircuit_initialCopies [NeZero q]
     {Ω : StateSpace L q} {C : ℝ} {b k r : ℕ} (h : D.IsDistributionProtocol Ω C b k r)
     (hΩ : ‖Ω‖ = 1) :
     ∃ c : OriginalCircuit (D.layout 0) (stackRegs (D.frames 0) []),
       c.nonprivateCount = 0 ∧ c.eval (D.reference 0) = framesVec Ω (D.frames 0) := by
+  classical
   obtain ⟨-, holder, hF, hsv⟩ := h.initialCopies
   obtain ⟨hs, hv⟩ := hsv
   obtain ⟨c, h0, -, -, -, hc⟩ := D.exists_originalCircuit_initial hΩ (D.frames 0) holder
