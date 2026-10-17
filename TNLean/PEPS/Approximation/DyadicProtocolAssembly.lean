@@ -180,6 +180,44 @@ theorem HierarchySquare.lt_of_eq_pow {N k : ℕ} (hN : N = 2 ^ k) (S : Hierarchy
   have hy' := Nat.le_of_mul_le_mul_left hy (by positivity)
   omega
 
+/-- **Events occupy segments of the schedule.** The changes of one event form a contiguous
+segment of the protocol schedule: the events are listed without repetition, and each contributes
+its changes in one block.
+
+Polynomial-PEPS manuscript, `06-geometry.tex`, lines 82–87. -/
+theorem protocolSchedule_fst_eq_of_le {k : ℕ} (large : DyadicSquare k → Bool) {i m j : ℕ}
+    (him : i ≤ m) (hmj : m ≤ j) (hj : j < (protocolSchedule k large).length)
+    {e : ProtocolEvent k} (hi : ((protocolSchedule k large)[i]'(by omega)).1 = e)
+    (hj' : ((protocolSchedule k large)[j]).1 = e) :
+    ((protocolSchedule k large)[m]'(by omega)).1 = e := by
+  set l := eventSchedule k
+  have hl : l.Nodup := nodup_eventSchedule k
+  let key : ProtocolEvent k × RepaintOp → ℕ := fun x => l.idxOf x.1
+  have hpos : l.Pairwise fun a b => l.idxOf a < l.idxOf b := by
+    refine List.pairwise_iff_getElem.2 fun a b ha hb hab => ?_
+    rw [hl.idxOf_getElem a ha, hl.idxOf_getElem b hb]
+    exact hab
+  have hsorted : (protocolSchedule k large).Pairwise fun x y => key x ≤ key y := by
+    refine List.pairwise_flatMap.2 ⟨fun a _ => ?_, hpos.imp fun {a b} hab x hx y hy => ?_⟩
+    · refine List.pairwise_map.2 (List.pairwise_of_forall fun _ _ => le_rfl)
+    · obtain ⟨_, -, rfl⟩ := List.mem_map.1 hx
+      obtain ⟨_, -, rfl⟩ := List.mem_map.1 hy
+      exact hab.le
+  have hle : ∀ {a b : ℕ} (hab : a ≤ b) (hb : b < (protocolSchedule k large).length),
+      key ((protocolSchedule k large)[a]'(by omega)) ≤ key ((protocolSchedule k large)[b]) :=
+    fun {a b} hab hb => by
+      rcases hab.lt_or_eq with hab | rfl
+      · exact List.pairwise_iff_getElem.1 hsorted a b _ hb hab
+      · exact le_rfl
+  have hmem : ∀ x ∈ protocolSchedule k large, x.1 ∈ l := fun x hx => by
+    obtain ⟨a, ha, hx⟩ := List.mem_flatMap.1 hx
+    obtain ⟨_, -, rfl⟩ := List.mem_map.1 hx
+    exact ha
+  have h1 := hle him (by omega)
+  have h2 := hle hmj hj
+  simp only [key, hi, hj'] at h1 h2
+  exact (List.idxOf_inj (hmem _ (List.getElem_mem _))).1 (le_antisymm h2 h1)
+
 /-- **The party of each square of the hierarchy.** When the padded side is `2 ^ k`, each aligned
 square of the padded square, including the root square, is assigned its block party.
 
@@ -363,6 +401,58 @@ theorem exists_isDistributionProtocol_of_frames {L q k : ℕ} [NeZero q] (hL : 2
       change (if h : 0 < t ∧ t - 1 < n then _ else none) = _
       rw [dif_pos ht, hu]
       rfl
+  -- a change recorded as a repainting change of `S` is a change of the repainting event of `S`
+  have hrs : ∀ t S, D.repaintingSquare t = some S → ∃ h : 0 < t ∧ t - 1 < n,
+      ∃ T : DyadicSquare k, (sch[t - 1]'h.2).1 = .inl T ∧ T.toTriple = S := by
+    intro t S hS
+    change (if h : 0 < t ∧ t - 1 < n then _ else none) = _ at hS
+    split_ifs at hS with h
+    refine ⟨h, ?_⟩
+    rcases he : (sch[t - 1]'h.2).1 with T | J
+    · rw [he] at hS
+      exact ⟨T, rfl, Option.some_injective _ hS⟩
+    · rw [he] at hS
+      exact absurd hS (by simp)
+  have hrs_mem : ∀ t S, D.repaintingSquare t = some S →
+      ∃ S' : HierarchySquare (paddedSide L), S'.1 = S ∧ 2 ^ S.1 < paddedSide L := by
+    intro t S hS
+    obtain ⟨h, T, hT, rfl⟩ := hrs t S hS
+    have hsch : (.inl T : ProtocolEvent k) ∈ eventSchedule k := by
+      rw [← hT]
+      obtain ⟨a, ha, hx⟩ := List.mem_flatMap.1 (List.getElem_mem (l := sch) h.2)
+      obtain ⟨_, -, hx⟩ := List.mem_map.1 hx
+      rw [← hx]
+      exact ha
+    have hTk : (T.1 : ℕ) < k := mem_eventSchedule.1 hsch
+    refine ⟨⟨T.toTriple, by rw [hN]; exact (protocolPlacement_inGrid k) (.inl T)⟩, rfl, ?_⟩
+    change 2 ^ (T.1 : ℕ) < paddedSide L
+    rw [hN]
+    exact Nat.pow_lt_pow_right (by norm_num) hTk
+  have hrs_segment : ∀ S t₁ t t₂, t₁ ≤ t → t ≤ t₂ → D.repaintingSquare t₁ = some S →
+      D.repaintingSquare t₂ = some S → D.repaintingSquare t = some S := by
+    intro S t₁ t t₂ h₁ h₂ hS₁ hS₂
+    obtain ⟨g₁, T, hT, rfl⟩ := hrs t₁ S hS₁
+    obtain ⟨g₂, T', hT', hTT⟩ := hrs t₂ _ hS₂
+    obtain rfl := DyadicSquare.toTriple_injective k hTT
+    have ht : 0 < t ∧ t - 1 < n := ⟨by omega, by omega⟩
+    have hm := protocolSchedule_fst_eq_of_le large (i := t₁ - 1) (m := t - 1) (by omega)
+      (by omega) g₂.2 hT hT'
+    change (if h : 0 < t ∧ t - 1 < n then _ else none) = _
+    rw [dif_pos ht, hm]
+    rfl
+  have hrs_near : ∀ t < D.changes, ∀ S, D.repaintingSquare t = some S →
+      ∀ g, ∀ p ∈ (D.step t).participants g,
+        S.1 ≤ D.placement.scale p + 1 ∧ D.placement.scale p ≤ S.1 + 1 ∧
+          Nat.dist (D.placement.anchor p).1 (dyadicAnchor S.1 S.2.1) ≤ 64 * 189 * 2 ^ S.1 ∧
+          Nat.dist (D.placement.anchor p).2 (dyadicAnchor S.1 S.2.2) ≤ 64 * 189 * 2 ^ S.1 := by
+    intro t _ S hS g p hp
+    obtain ⟨h, T, hT, rfl⟩ := hrs t S hS
+    have hu : EventUses (ev t) p := (hQ t).2.2.1 g (mem_coe.2 hp)
+    simp only [ev, h, and_self, dite_true, hT] at hu
+    obtain ⟨h1, h2, h3, h4⟩ := near_of_eventUses_repaint hu
+    have hpow : 6 * 2 ^ (T.1 : ℕ) ≤ 64 * 189 * 2 ^ (T.1 : ℕ) :=
+      Nat.mul_le_mul_right _ (by norm_num)
+    exact ⟨Nat.le_succ_of_le h1, h2, h3.le.trans hpow, h4.le.trans hpow⟩
   have hL1 : (1 : ℝ) ≤ L := by exact_mod_cast (by omega : 1 ≤ L)
   have hL0 : (0 : ℝ) < L := by linarith
   have hC0 : 0 ≤ C := by linarith
@@ -386,7 +476,7 @@ theorem exists_isDistributionProtocol_of_frames {L q k : ℕ} [NeZero q] (hL : 2
         ((card_nonprivateLocations _).trans_le (hQ i).1)
     rw [Subsingleton.elim g g']
   refine ⟨D, ⟨?_, ?_, fun j r s => (protocolPlacement_blockBounded k j r s).trans (by norm_num),
-    protocolSquareParty_injective hN, fun _ => rfl, hadd,
+    protocolSquareParty_injective hN, fun _ => rfl, hadd, hrs_mem, hrs_segment, hrs_near,
     ?_, fun t _ => (hQ t).1.trans (by norm_num), fun t _ g => ?_,
     fun t _ => isMonomialBounded_mono _ (hQ t).2.2.2.2.1 (Nat.le_floor (by exact_mod_cast hK)),
     fun t _ => isExpansionBounded_mono _ (hQ t).2.2.2.1 le_rfl hK, fun p => ?_,

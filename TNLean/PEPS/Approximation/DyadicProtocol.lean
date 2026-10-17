@@ -338,6 +338,31 @@ structure IsDistributionProtocol (Ω : StateSpace L q) (C : ℝ) (b k r : ℕ) :
     2 ^ S.1.1 < paddedSide L ∧
       (D.placement.scale p, D.placement.blockX p, D.placement.blockY p) = S.1 ∧
       ∀ t < D.changes, ∀ g, p ∈ (D.step t).participants g → D.repaintingSquare t = some S.1
+  /-- Item 3: a change recorded as belonging to the repainting of `S` belongs to the repainting
+  of a square of the hierarchy other than the root square.
+
+  Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:19–22`, and the repainted
+  squares, `06-geometry.tex:82–84`. -/
+  repaintingSquare_mem : ∀ t, ∀ S, D.repaintingSquare t = some S →
+    ∃ S' : HierarchySquare (paddedSide L), S'.1 = S ∧ 2 ^ S.1 < paddedSide L
+  /-- Item 3: the changes recorded as belonging to the repainting of a square form one
+  contiguous segment of the schedule, the repainting of that square.
+
+  Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:19–22, 35–37`, and the
+  schedule of repaintings, `06-geometry.tex:82–87`. -/
+  repaintingSquare_segment : ∀ S, ∀ t₁ t t₂, t₁ ≤ t → t ≤ t₂ → D.repaintingSquare t₁ = some S →
+    D.repaintingSquare t₂ = some S → D.repaintingSquare t = some S
+  /-- Item 3: every party of a change of the repainting of a square `S` of scale `j` has scale
+  `j` or an adjacent scale, and its address is within `b` times the side of `S` of the address of
+  `S` in each coordinate.
+
+  Source: Polynomial-PEPS manuscript (Sept 24 2026), Proposition 7.1, item 3,
+  `06-geometry.tex:33–37`. -/
+  repaintingSquare_near : ∀ t < D.changes, ∀ S, D.repaintingSquare t = some S →
+    ∀ g, ∀ p ∈ (D.step t).participants g,
+      S.1 ≤ D.placement.scale p + 1 ∧ D.placement.scale p ≤ S.1 + 1 ∧
+        Nat.dist (D.placement.anchor p).1 (dyadicAnchor S.1 S.2.1) ≤ b * 2 ^ S.1 ∧
+        Nat.dist (D.placement.anchor p).2 (dyadicAnchor S.1 S.2.2) ≤ b * 2 ^ S.1
   /-- Item 2: at most `C L³` changes. -/
   changes_le : (D.changes : ℝ) ≤ C * (L : ℝ) ^ 3
   /-- Item 2: each change has a fixed number of nonprivate gates. -/
