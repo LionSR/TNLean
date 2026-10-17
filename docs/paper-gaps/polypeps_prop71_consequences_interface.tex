@@ -66,8 +66,11 @@ and exponent bounds. The retained properties are:
   lines~18--20 and~64--67); every other party is an additional party with the
   scale and address of a non-root square of the hierarchy, and it takes part
   only in changes of the repainting of that square (lines~19--22 and~35--37).
-  Each change records the square of the repainting it belongs to, if any. The
-  source bounds the additional parties of each repainting; the retained bound
+  Each change records the square of the repainting it belongs to, if any; the
+  changes of the repainting of a square form one contiguous segment of the
+  schedule, and every party acted on in such a change has the scale of the
+  square or an adjacent one and an address within $b$ times the side of the
+  square of its address. The source bounds the additional parties of each repainting; the retained bound
   on the parties at each square implies this, since the additional parties of a
   repainting are placed at its square;
 \item there are at most $C L^3$ changes, each change contains at most $b$

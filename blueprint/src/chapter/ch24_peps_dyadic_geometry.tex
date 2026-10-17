@@ -2001,7 +2001,11 @@ is not proved here.
               party belongs to the repainting of a square of the hierarchy
               other than the root square: it has the scale and address of
               that square, and it participates only in changes of that
-              repainting.
+              repainting. The changes of the repainting of a square $S$ of
+              side $2^j$ form one contiguous segment of the schedule, and
+              every party of such a change has scale $j$ or an adjacent
+              scale and an address within $b\,2^j$ of the address of $S$ in
+              each coordinate.
         \item There are at most $CL^3$ changes. Each change has at most $b$
               nonprivate gates, each involving at most $b$ parties. Every
               nonprivate gate is a sum of at most $CL^k$ monomials with

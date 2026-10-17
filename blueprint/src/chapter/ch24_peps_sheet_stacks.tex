@@ -3445,7 +3445,9 @@ no holes, this is the normalization of $\Omega$.
         TNLean.PEPS.Approximation.HierarchySquare.lt_of_eq_pow,
         TNLean.PEPS.Approximation.protocolSquareParty,
         TNLean.PEPS.Approximation.protocolSquareParty_injective,
-        TNLean.PEPS.Approximation.exists_eq_inr_of_notMem_range_protocolSquareParty}
+        TNLean.PEPS.Approximation.exists_eq_inr_of_notMem_range_protocolSquareParty,
+        TNLean.PEPS.Approximation.protocolSchedule_fst_eq_of_le,
+        TNLean.PEPS.Approximation.near_of_eventUses_repaint}
     \leanok
     \uses{def:peps_adaptive_patch_constraint,
         def:peps_dyadic_protocol}
@@ -3496,7 +3498,11 @@ no holes, this is the normalization of $\Omega$.
     other party is the placeholder of a non-root square $S$, placed at $S$;
     each change is recorded as belonging to the repainting of $S$ when its
     scheduled event is that repainting, and the placeholder of $S$ takes part
-    only in gates of that repainting. The
+    only in gates of that repainting. The events are listed without repetition
+    and each contributes its changes in one block, so the changes of the
+    repainting of $S$ form one segment; a party used by that repainting has the
+    scale of $S$ or the next one and an address within $6\cdot2^j$ of the
+    address of $S$, for $S$ of side $2^j$. The
     large repaintings pass the memory from one state to the next by
     Theorem~\ref{thm:peps_protocol_large_repainting_segment}, with the
     frozen frames and owners of Definition~\ref{def:peps_protocol_frozen_frames}.
