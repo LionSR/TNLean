@@ -64,7 +64,8 @@
 
 \begin{theorem}[Square-grid cell information under the collar bound]
     \label{thm:peps_square_cell_conditional_information_of_collar}
-    % Pending verification: \lean{TNLean.PEPS.Approximation.exists_cell_conditionalMutualInformation_le_square_of_sublinearCollarBound}
+    \lean{TNLean.PEPS.Approximation.exists_cell_conditionalMutualInformation_le_square_of_sublinearCollarBound}
+    \leanok
     \uses{def:area_law_collar_bound,def:polynomial_peps_model}
     Fix $q\in\mathbb N$, $J\in\mathbb R$ and $\Delta>0$, and assume the range-one
     sublinear collar bound for fixed template constants. Fix $c>0$.
@@ -80,6 +81,7 @@
     \cite{gap:polypeps_angular_annular_geometry_scope}.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{thm:peps_cell_conditional_information_of_collar,
         thm:finite_product_entropy_relabel,thm:square_area_law_ground_gap}
     Relabeling the square sites by the integer rectangle
@@ -197,7 +199,8 @@
 
 \begin{theorem}[Selected-cell information under the collar bound]
     \label{thm:peps_selected_region_information_of_collar}
-    % Pending verification: \lean{TNLean.PEPS.Approximation.exists_mutualInformation_selectedRegion_le_square_of_sublinearCollarBound}
+    \lean{TNLean.PEPS.Approximation.exists_mutualInformation_selectedRegion_le_square_of_sublinearCollarBound}
+    \leanok
     \uses{def:area_law_collar_bound,def:polynomial_peps_model,def:peps_angular_grid}
     In the conditional step of
     \cite[Proposition~3.4]{OpenAI2026PolynomialPEPS} (with the collar
@@ -225,6 +228,7 @@
     ground vector and exterior region.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{thm:peps_square_cell_conditional_information_of_collar,
         thm:peps_selected_region_information_of_cell_bounds}
     Let $C_1,K$ be the constants from the square-grid cell information theorem.
