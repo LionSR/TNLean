@@ -1999,8 +1999,9 @@ is not proved here.
         \item There are at most $CL^3$ changes. Each change has at most $b$
               nonprivate gates, each involving at most $b$ parties. Every
               nonprivate gate is a sum of at most $CL^k$ monomials with
-              absolute coefficient sum at most $CL^k$ and at most $r$ pair
-              effects in each monomial. Every party participates in at most
+              absolute coefficient sum at most $CL^k$, at most $r$ pair
+              effects and at most $r$ pair sources in each monomial. Every
+              party participates in at most
               $b$ nonprivate gates over the whole schedule.
         \item Two parties of a nonprivate gate have equal or adjacent scales,
               and their addresses differ in each coordinate by at most $b$
@@ -2023,11 +2024,19 @@ is not proved here.
     (\texttt{06-geometry.tex}, lines 22--23); the factorization of every reference
     vector into the main and auxiliary encoded frames with all factors of norm
     at most one (lines 39--41); the scale and address of each additional party
-    at its repainting event (lines 36--37); the bounds on pair sources and
-    messages of each monomial before expansion
-    from~\cite[Theorem~5.2]{OpenAI2026PolynomialPEPS}, item~3; and expansions
-    of every fixed inverse-power accuracy, in place of the single instantiated
-    contraction of each change used here.
+    at its repainting event (lines 36--37).
+
+    The remaining clauses of the proposition are carried. The pair-source bound
+    of~\cite[Theorem~5.2]{OpenAI2026PolynomialPEPS}, item~3
+    (\texttt{04-compression.tex}, lines 143--147), is part of item~2 above, with
+    the same constant $r$ as the pair effects; the recorded monomials contain no
+    messages, since messages are expanded before a gate is recorded
+    (\texttt{04-compression.tex}, lines 42--45). The gates $W_t$ are the selected contractions, as in Section~8
+    (\texttt{07-assembly.tex}, lines 29--34). Each nonprivate gate $G$ of $W_t$
+    equals its recorded expansion, $G=\sum_\xi c_\xi M_\xi$, so
+    $\lVert G-\sum_\xi c_\xi M_\xi\rVert=0\le L^{-a}$ for every $a$, as
+    required of expansions accurate to every fixed inverse power of $L$
+    (\texttt{06-geometry.tex}, lines 29--30).
 \end{definition}
 
 \begin{proposition}[Distribution through a dyadic hierarchy]
@@ -2056,9 +2065,8 @@ is not proved here.
     $L\ge1$, for a unit vector $\Omega$. These bounds omit the clauses
     of~\cite[Proposition~7.1]{OpenAI2026PolynomialPEPS} listed there: the
     copies of $\Omega$, the frame
-    factorization of the reference vectors, the placement of additional
-    parties, the pair-source and message counts, and the expansions of every
-    fixed accuracy; none of them is used below. Then:
+    factorization of the reference vectors, and the placement of additional
+    parties; none of them is used below. Then:
     \begin{enumerate}
         \item the physical density of the final circuit vector satisfies
               $\lVert\Tr_{\rm private}|\Psi_n\rangle\langle\Psi_n|
