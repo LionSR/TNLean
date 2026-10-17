@@ -1285,7 +1285,7 @@ original open square. We state the two models separately, following
     \lean{TNLean.PEPS.AreaLaw.twoFamilyDecomposition}
     \leanok
     \uses{def:area_law_two_family_decomposition}
-    For every $D_0$ and every $C_{\rm tpl}\ge1$ the two-family decomposition of
+    For all real $D_0$ and $C_{\rm tpl}$ the two-family decomposition of
     Definition~\ref{def:area_law_two_family_decomposition} holds. This is
     Proposition~11.2 of \cite{OpenAI2026AreaLaw}.
 \end{theorem}
@@ -1309,6 +1309,10 @@ original open square. We state the two models separately, following
         thm:area_law_repair_retained_nonprimary_error_sum,
         lem:area_law_two_family_primaries,
         lem:area_law_two_family_exceptional_sites}
+    The constant $C_{\rm tpl}$ enters a template only through
+    $C_{\rm tpl}N_0(s_0+1)\le n$, whose other factors are nonnegative, so a
+    template for $\max(C_{\rm tpl},1)$ is a template for $C_{\rm tpl}$. We may
+    therefore assume $C_{\rm tpl}\ge1$.
     Fix $n_*\ge1$. The constants are chosen in the order of the source. First
     take the template coefficients $C_P$ and $C_B$ for $C_{\rm tpl}$, the
     isolation constant $a_0=1/4$, and the separation constant $c_1$. Next take
@@ -1676,10 +1680,8 @@ state.
     $\lfloor n_i^{1-\varepsilon}\rfloor\le s_i$, both clearances
     $2n_i^{\beta_0}$, and $\sum_in_i^{-100}\le Cb$, with $C$ depending only on
     $n_*$ and the template constants.
-    Theorem~\ref{thm:area_law_two_family_decomposition} proves it for every
-    $D_0$ and every $C_{\rm tpl}\ge1$.
-    % Status: proved for C_tpl >= 1, which covers the constants C_tpl = 24 used
-    % by the collar bound.
+    Theorem~\ref{thm:area_law_two_family_decomposition} proves it for all real
+    $D_0$ and $C_{\rm tpl}$.
 \end{remark}
 
 \begin{remark}[The adaptation to a cell]

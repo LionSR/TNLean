@@ -265,7 +265,7 @@ by birth rank (lines 776–787); the error sum is split into primaries and the
 remaining identifiers (lines 796–802). The lower bound `Ctpl ≥ 1` is the
 standing convention that the template constant is a large positive constant
 (Definition 9.3). -/
-theorem twoFamilyDecomposition {D₀ Ctpl : ℝ} (hCtpl : 1 ≤ Ctpl) :
+theorem twoFamilyDecomposition_of_one_le {D₀ Ctpl : ℝ} (hCtpl : 1 ≤ Ctpl) :
     TwoFamilyDecomposition D₀ Ctpl := by
   classical
   intro nstar hnstar
@@ -532,5 +532,36 @@ theorem twoFamilyDecomposition {D₀ Ctpl : ℝ} (hCtpl : 1 ≤ Ctpl) :
       _ = Csum * (edgeBoundary Λ A).card := by rw [hCsum]; ring
       _ ≤ max Cres Csum * (edgeBoundary Λ A).card :=
         mul_le_mul_of_nonneg_right (le_max_right _ _) hb0
+
+/-- A template for a larger template constant is a template for any smaller one:
+the constant enters only the scale inequality `Ctpl N₀ (s₀ + 1) ≤ n`, whose
+other factors are nonnegative. -/
+def Geometry.Template.ofLe {Ctpl Ctpl' : ℝ} {n s₀ : ℕ} (h : Ctpl ≤ Ctpl')
+    (T : Geometry.Template Ctpl' n s₀) : Geometry.Template Ctpl n s₀ where
+  n_pos := T.n_pos
+  s₀_pos := T.s₀_pos
+  pieceCount := T.pieceCount
+  pieceCount_pos := T.pieceCount_pos
+  polygon := T.polygon
+  sample := T.sample
+  mem_sample := T.mem_sample
+  piece_diameter := T.piece_diameter
+  points := T.points
+  nonempty := T.nonempty
+  cover := T.cover
+  scale := (mul_le_mul_of_nonneg_right
+    (mul_le_mul_of_nonneg_right h (Nat.cast_nonneg T.pieceCount)) (by positivity)).trans T.scale
+  diameter := T.diameter
+
+/-- Proposition 11.2 of the area-law manuscript (`prop:two-families`,
+`10-geometry.tex` lines 98–141), for every real `D₀` and `Ctpl`, with no further
+hypothesis. Templates are built for `max Ctpl 1` and read as templates for `Ctpl`. -/
+theorem twoFamilyDecomposition (D₀ Ctpl : ℝ) : TwoFamilyDecomposition D₀ Ctpl := by
+  intro nstar hnstar
+  obtain ⟨C, hC⟩ :=
+    twoFamilyDecomposition_of_one_le (D₀ := D₀) (le_max_right Ctpl 1) nstar hnstar
+  refine ⟨C, fun Λ A hb ↦ ?_⟩
+  obtain ⟨P, n, s, T, h₁, h₂, h₃, h₄, h₅, h₆, h₇, h₈, h₉⟩ := hC Λ A hb
+  exact ⟨P, n, s, fun i ↦ (T i).ofLe (le_max_left Ctpl 1), h₁, h₂, h₃, h₄, h₅, h₆, h₇, h₈, h₉⟩
 
 end TNLean.PEPS.AreaLaw

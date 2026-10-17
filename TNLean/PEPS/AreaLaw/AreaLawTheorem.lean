@@ -44,7 +44,7 @@ the uniform boundary law for gapped ground states on finite induced domains of
 the square lattice. -/
 theorem uniformAreaLaw : UniformAreaLaw :=
   uniformAreaLaw_of_twoFamilies fun R ↦
-    ⟨2 * R + 11, 24, by linarith, le_rfl, twoFamilyDecomposition (by norm_num)⟩
+    ⟨2 * R + 11, 24, by linarith, le_rfl, twoFamilyDecomposition _ _⟩
 
 /-- Corollary 1.2 of the area-law manuscript, `00-introduction.tex`, lines
 69–86: the uniform bound in terms of the inner and the endpoint vertex
