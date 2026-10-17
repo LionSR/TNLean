@@ -207,6 +207,14 @@ modules or tests.
   compile error fails the step, but a build that runs past the budget (for
   example behind a cold dependency cache after a pin change) stops with a
   warning and leaves the remaining modules to the root build.
+  Only after that build completes successfully, the remaining part of the same
+  budget is used for advisory diagnostics of changed fixtures and their imported
+  fixture support files. Lean's native import parser determines those prerequisites;
+  Lake prepares their package dependencies, and fixtures elaborate in import order
+  into a fresh overlay with the strict options. Each diagnostic is capped by the
+  remaining budget and the existing per-file timeout. Errors and timeouts are
+  reported without replacing or skipping any mandatory check below. Dependency
+  build timings join the build log; fixture output and parser JSON do not.
 - **Strict checks** (after the root build): every changed production file and
   every affected test file is elaborated with the package options
   and `-DwarningAsError=true`, three files at a time, each with a time limit.
