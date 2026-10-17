@@ -42,10 +42,10 @@ The source is \emph{A two-dimensional area law from a global spectral gap},
     \leanok
     Monotonicity gives
     $\max(0,2S'+g_{\max})\leq2(S+c)+B_{\rm pre}$.
-    Substitute the displayed estimates into the first, smoothing and defect
-    terms.  The two smoothing terms combine into
-    $\tau\bigl(2(S+c)+B_{\rm pre}\bigr)$.
-    Add the unchanged information correction.
+    Substituting the displayed estimates into the first, smoothing, and defect
+    terms combines the two smoothing terms into
+    $\tau\bigl(2(S+c)+B_{\rm pre}\bigr)$, and adding the unchanged information
+    correction gives $2I\leq F+r$.
 \end{proof}
 
 \begin{theorem}[The fixed-instance replica limit]
@@ -65,9 +65,9 @@ The source is \emph{A two-dimensional area law from a global spectral gap},
 \begin{proof}
     \leanok
     \uses{thm:sharp-information-scalar}
-    The right-hand side converges by continuity of addition, multiplication
-    and division by the fixed scalars.  Pass the eventual real inequality to
-    the limit.  No convergence of selected stages or parameters is needed,
+    The right-hand side converges by continuity of addition, multiplication,
+    and division by the fixed scalars, so passing the eventual real inequality to
+    the limit gives the bound.  No convergence of selected stages or parameters is needed,
     since the scalar right-hand side no longer depends on them.  This is only
     the replica limit, with the physical size and weight already fixed.
 \end{proof}
@@ -111,21 +111,21 @@ The source is \emph{A two-dimensional area law from a global spectral gap},
         thm:sharp-information-scalar,
         thm:sharp-information-replica-limit,
         thm:area_law_selected_schmidt_entropy_bounds}
-    Invoke the stronger source energy theorem once.  Transfer the original
-    positive-prefix entropy input to its same vector.  The scanner geometry
+    Invoking the stronger source energy theorem once and transferring the original
+    positive-prefix entropy input to its same vector, the scanner geometry
     gives $0\leq G_{\rm pre}\leq B_{\rm pre}$ and
-    $g_{\max}\leq B_{\rm pre}$, using $B_{\rm pre}\geq0$.
-    The same selected spectrum gives
+    $g_{\max}\leq B_{\rm pre}$ from $B_{\rm pre}\geq0$, while
+    the same selected spectrum gives
     $\log d,S'\leq S_t+c$ and $c\geq0$.
 
-    For each sufficiently large replica count, use the very same selected
-    stage and parameter that satisfy the sharp and stronger energy bounds.
-    The parameter stays in the source consumer's interval
-    $[n^{-\nu},2n^{-\nu}]$; it is never selected again.
-    Apply the information bridge and the scalar substitution with
-    defect bound $n^{-1/2000}+r_k/(g/2)$.  The remaining errors are precisely
-    the same upper and lower sharp remainders.  With the physical system,
-    $W$ and $\tau$ fixed, send all three remainders to zero.
+    For each sufficiently large replica count, using the very same selected
+    stage and parameter that satisfy the sharp and stronger energy bounds
+    keeps the parameter in the source consumer's interval
+    $[n^{-\nu},2n^{-\nu}]$, where it is never selected again.
+    Applying the information bridge and the scalar substitution with
+    defect bound $n^{-1/2000}+r_k/(g/2)$ leaves precisely
+    the same upper and lower sharp remainders, and sending all three remainders
+    to zero with the physical system, $W$, and $\tau$ fixed gives the bound.
 \end{proof}
 
 The final size-power estimate and its geometric application are separate.
