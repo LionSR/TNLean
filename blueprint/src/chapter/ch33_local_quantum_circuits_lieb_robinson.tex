@@ -279,6 +279,42 @@ contains any given site sum to at most $b_0$.
     gives $[\tau_t(A),B]=0$.
 \end{proof}
 
+\begin{lemma}[Exponential kernel outside a graph ball]
+    \label{lem:qc_graph_kernel_tail}
+    \lean{QuantumCircuit.sum_exp_neg_edist_compl_graphBall_le}
+    \leanok
+    Let $G$ be a simple graph on a finite set $I$, let $x\in I$, let
+    $K_g\in\mathbb R$ and $k\in\mathbb N$, and suppose that for every
+    $d\in\mathbb N$ at most $K_g(d+1)^k$ vertices have graph distance
+    exactly $d$ from $x$. For $\ell\in\mathbb N$ put
+    $N_\ell(x)=\{y:d_G(x,y)\leq\ell\}$ and
+    $T_k=2^kk!e^{1/2}/(1-e^{-1/2})$. Then
+    \begin{align}
+        \sum_{\substack{y\notin N_\ell(x) \\d_G(x,y)<\infty}}
+        e^{-d_G(x,y)}
+         & \leq K_gT_ke^{-\ell/2}.
+        \label{eq:qc_kernel_tail}
+    \end{align}
+    This is the polynomial-growth form of the distance sum used in
+    \cite[Lemma~4.1]{OpenAI2026AreaLaw}.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The growth inequality at $d=0$ gives $K_g\geq0$.
+    Grouping the vertices by their finite distance from $x$ bounds the sum
+    by $K_g\sum_{d\in D}(d+1)^ke^{-d}$ for a finite set of integers
+    $D\subseteq\{d:d>\ell\}$. The power-series bound for the exponential
+    gives
+    \begin{align}
+        (d+1)^ke^{-d}
+         & \leq 2^kk!e^{1/2}e^{-d/2}.\notag
+    \end{align}
+    Summing the geometric series from $d=\ell+1$ and using
+    $e^{-(\ell+1)/2}\leq e^{-\ell/2}$ proves
+    (\ref{eq:qc_kernel_tail}). Vertices at infinite distance do not
+    contribute.
+\end{proof}
+
 \paragraph{Normalized partial traces.}
 For $K\subseteq I$ let
 $E_K(B)=q^{-|I\setminus K|}\operatorname{Tr}_{I\setminus K}(B)\otimes\mathbb 1_{I\setminus K}$,
@@ -341,6 +377,89 @@ with every tensor factor at its original site.
     bounds each summand by $\sum_{y\notin K}\varepsilon_y$.
 \end{proof}
 
+% Source: TNLean2026OneDimensional, lemma labelled lem:LR,
+% part2a_mps_information.tex, lines 267--309. The linked result has a natural
+% radius and general-graph interaction/growth premises; chain conversion and
+% the real-radius observation below receive no completion credit here.
+\begin{theorem}[Localization near an arbitrary finite support]
+    \label{thm:qc_graph_neighborhood_localization}
+    \lean{QuantumCircuit.norm_heisenberg_sub_siteExpectation_graphNeighborhood_le}
+    \leanok
+    \uses{def:qc_site_expectation}
+    Under the finite-range interaction assumptions above, with the chosen
+    anchors $a_k\in X_k$, let $q\geq1$,
+    let $K_g\in\mathbb R$ and $k\in\mathbb N$, and assume that for every
+    vertex $x$ and integer $d\geq0$ at most $K_g(d+1)^k$ vertices have
+    graph distance exactly $d$ from $x$. Let $S$ be any finite set of sites
+    and $A\in\mathcal A_S$. For $\ell\in\mathbb N$ set
+    $N_\ell(S)=\bigcup_{x\in S}N_\ell(x)$, and put
+    \begin{align}
+        C   & =2+4|b_0|e^{2R},\notag                  \\
+        v   & =2v_R|b_0|e^{2R}+1,\notag               \\
+        T_k & =\frac{2^kk!e^{1/2}}{1-e^{-1/2}}.\notag
+    \end{align}
+    Then for every real $t$,
+    \begin{align}
+        \|\tau_t(A)-E_{N_\ell(S)}(\tau_t(A))\|
+         & \leq C|S|^2\|A\|K_gT_k e^{v|t|-\ell/2}.
+        \label{eq:qc_neighborhood_localization}
+    \end{align}
+    No diameter bound or nonemptiness assumption on $S$ is imposed.
+    The constants depend only on the interaction bounds and the sphere-growth
+    bounds, not on the number of sites, the local dimension, or $S$.
+    This is the natural-radius graph form of the localization estimate
+    in the lemma ``Lieb--Robinson bound on a chain'' of
+    \cite{TNLean2026OneDimensional}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:qc_graph_lieb_robinson_finset,lem:qc_graph_kernel_tail,
+        lem:qc_lr_closed_region,lem:qc_site_expectation_commutator}
+    For each vertex $y$ define
+    $w(y)=\sum_{x\in S,\ d_G(x,y)<\infty}e^{-d_G(x,y)}$.
+    If some $x\in S$ has finite distance from $y$, let $n$ be the least
+    such distance. The arbitrary-support propagation estimate with $\mu=1$
+    and $e^{-n}\leq w(y)$ gives, for every on-site unitary $U_y$,
+    \begin{align}
+        \|[\tau_t(A),U_y]\|
+         & \leq C|S|\|A\|e^{v|t|}w(y).\notag
+    \end{align}
+    If all these distances are infinite, take the complement of the connected
+    component of $y$. It contains $S$, and each interaction support lies
+    entirely inside it or is disjoint from it. Exact locality on such regions
+    makes the commutator zero, so the same inequality holds with $w(y)=0$.
+    For $S=\varnothing$, the zero cardinality in the propagation bound gives
+    the same conclusion without choosing a vertex of $S$.
+
+    The on-site commutator estimate for the expectation therefore gives
+    \begin{align}
+        \|\tau_t(A)-E_{N_\ell(S)}(\tau_t(A))\|
+         & \leq C|S|\|A\|e^{v|t|}
+        \sum_{y\notin N_\ell(S)}w(y).\notag
+    \end{align}
+    Interchange the two finite sums. For each $x\in S$, every vertex outside
+    $N_\ell(S)$ is outside $N_\ell(x)$, so the kernel-tail lemma gives
+    \begin{align}
+        \sum_{y\notin N_\ell(S)}w(y)
+         & \leq |S|K_gT_ke^{-\ell/2}.\notag
+    \end{align}
+    Substitution proves (\ref{eq:qc_neighborhood_localization}).
+    The sums are empty when $S=\varnothing$; otherwise a vertex of $S$
+    and its zero-distance sphere give $K_g\geq0$.
+\end{proof}
+
+% This unmarked radius comparison is outside the linked natural-radius theorem.
+\paragraph{Comparison with real radii.}
+For $r\geq0$, finite graph distances are integers, so
+$N_r(S)=N_{\lfloor r\rfloor}(S)$. Moreover,
+\begin{align}
+    e^{-\lfloor r\rfloor/2} & \leq e^{1/2}e^{-r/2}.\notag
+\end{align}
+Thus passing from the natural-radius estimate to a real-radius estimate costs
+an additional factor $e^{1/2}$ in the constant. This radius comparison is
+separate from identifying a physical chain Hamiltonian and its doubled local
+space with the graph interaction hypotheses.
+
 \begin{theorem}[Localization onto graph balls]
     \label{thm:qc_graph_ball_localization}
     \lean{QuantumCircuit.norm_heisenberg_sub_siteExpectation_graphBall_le,
@@ -357,6 +476,7 @@ with every tensor factor at its original site.
     with $v=2v_Rb_0e^{2R}$ and $C=2e^RK_g\,2^kk!\,e^{1/2}/(1-e^{-1/2})$.
 \end{theorem}
 \begin{proof}\leanok
+    \uses{lem:qc_graph_kernel_tail}
     Contractivity of $E_{N_l(a_i)}$ gives the bound $2\|A\|$. For the
     exponential bound, applying the commutator localization lemma with
     $\varepsilon_y=0$ when $d_G(a_i,y)=\infty$ and
