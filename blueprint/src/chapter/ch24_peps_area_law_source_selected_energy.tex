@@ -15,7 +15,8 @@
 \end{theorem}
 \begin{proof}
     \leanok
-    Substitute the exact rational final exponents.
+    Direct substitution of the exact rational final exponents gives both
+    displayed values.
 \end{proof}
 
 \begin{theorem}[Principal density at the stronger rate]
@@ -33,9 +34,9 @@
 \begin{proof}
     \leanok
     \uses{thm:arealaw-source-density-scale}
-    Apply the arbitrary-rate rounded-scale theorem with rate $8\nu$ and
-    the two strict margins above.  No scanner, entropy or selection input
-    is used in this numerical statement.
+    With no scanner, entropy, or selection input needed for this numerical
+    statement, the arbitrary-rate rounded-scale theorem at rate $8\nu$ and
+    the two strict margins above yield the displayed bound.
 \end{proof}
 
 \begin{theorem}[Unchanged interval and stronger selected density]
@@ -55,11 +56,12 @@
     \uses{thm:arealaw-principal-density-eight-nu,
         thm:arealaw-source-rough-budget-power,
         thm:arealaw-selected-density-principal}
-    Apply the preceding numerical bound at twice the required coefficient.
-    This leaves $\eta/2$ for the principal term.  For each fixed physical
-    system and weight, its scaled replica remainder is eventually at most
-    $\eta/2$.  Keep the same selected point and attached propositions.
-    The interval width is not replaced by $\eta$.
+    Evaluating the preceding numerical bound at twice the required coefficient
+    bounds the principal term by $\eta/2$, while for each fixed physical
+    system and weight the scaled replica remainder is eventually at most
+    $\eta/2$; keeping the same selected point and attached propositions
+    without replacing the interval width by $\eta$ therefore bounds the total
+    density by $\eta=n^{-8\nu}$.
 \end{proof}
 
 \begin{theorem}[Paper-rate charge energy and sharp comparison]
@@ -109,11 +111,11 @@
         thm:arealaw-selected-density-eight-nu,
         thm:al_scan_actual_charge_energy_coefficients,
         thm:arealaw-selected-energy-decay}
-    Invoke the initial source selected-comparison theorem once and transfer
-    the original target entropy to its same truncated state.  The same
-    spectral window gives the selected-dimension estimate.  Apply the
-    eight-nu density closure directly to the initial endpoint/selection bound,
-    keeping its chosen interval and selected point.
+    Transferring the original target entropy to the truncated state from the
+    initial source selected-comparison theorem and combining it with the
+    selected-dimension estimate on the same spectral window allows the
+    eight-nu density closure to act directly on the initial endpoint and
+    selection bound while preserving its chosen interval and selected point.
 
     The charge-defect nonnegativity theorem gives $Q_k\geq0$.
     Its eighth root is at most $n^{-\nu}$.  Since $P\geq\nu$ and
