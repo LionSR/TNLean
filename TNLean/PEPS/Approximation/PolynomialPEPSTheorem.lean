@@ -18,13 +18,15 @@ manuscript) is the square-grid specialization of the two-dimensional area law.
 
 ## Main results
 
+* `adaptivePatchConstraint`: Proposition 4.1, the adaptive patch constraint.
 * `polynomialPEPSApproximation`: Theorem 1.1.
 
 ## References
 
 * OpenAI, *Polynomial PEPS approximation of gapped square-grid ground states*,
-  September 24, 2026, Theorem 1.1 (`00-introduction.tex`, lines 36–57) and
-  Proposition 2.1 (`01-preliminaries.tex`, lines 39–58). Source revision:
+  September 24, 2026, Theorem 1.1 (`00-introduction.tex`, lines 36–57),
+  Proposition 2.1 (`01-preliminaries.tex`, lines 39–58) and Proposition 4.1
+  (`03-patches.tex`, lines 26–603). Source revision:
   `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 * OpenAI, *A two-dimensional area law from a global spectral gap*,
   September 24, 2026, Theorem 1.1 (`00-introduction.tex`, lines 39–53).
@@ -33,6 +35,14 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 -/
 
 namespace TNLean.PEPS.Approximation
+
+/-- Proposition 4.1 of the polynomial-PEPS manuscript, `03-patches.tex`,
+lines 26–49 (proof lines 51–603): adaptive square patches with polynomially
+many cylinder terms around every center and at every logarithmic radius. The
+square entropy area law used in its proof is supplied by the two-dimensional
+area law. -/
+theorem adaptivePatchConstraint : AdaptivePatchConstraint :=
+  AreaLaw.squareEntropyAreaLaw.adaptivePatchConstraint
 
 /-- Theorem 1.1 of the polynomial-PEPS manuscript, `00-introduction.tex`,
 lines 36–57: gapped ground states of nearest-neighbor Hamiltonians on the

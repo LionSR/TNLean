@@ -9,15 +9,18 @@ import Lean.Util.CollectAxioms
 /-!
 # Logical dependencies of the polynomial PEPS approximation theorem
 
-The theorem must exist and have precisely the three standard logical axioms.
+Each public theorem must exist and have precisely the three standard logical axioms.
 -/
 
 run_cmd do
-  let decl := `TNLean.PEPS.Approximation.polynomialPEPSApproximation
+  let names := #[
+    `TNLean.PEPS.Approximation.adaptivePatchConstraint,
+    `TNLean.PEPS.Approximation.polynomialPEPSApproximation]
   let expected := #[``propext, ``Classical.choice, ``Quot.sound]
-  unless (← Lean.getEnv).contains decl do
-    throwError "Missing declaration {decl}"
-  let axioms ← Lean.collectAxioms decl
-  unless axioms.all (expected.contains ·) && expected.all (axioms.contains ·) do
-    throwError "Unexpected logical dependencies for {decl}: {axioms}"
-  Lean.logInfo m!"{decl}: {axioms}"
+  for decl in names do
+    unless (← Lean.getEnv).contains decl do
+      throwError "The intended approximation declaration is absent: {decl}"
+    let axioms ← Lean.collectAxioms decl
+    unless axioms.all (expected.contains ·) && expected.all (axioms.contains ·) do
+      throwError "Unexpected logical dependencies for {decl}: {axioms}"
+    Lean.logInfo m!"{decl}: {axioms}"

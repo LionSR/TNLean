@@ -311,6 +311,8 @@ original open square. We state the two models separately, following
 
 \begin{theorem}[Uniform finite-domain area law]
     \label{thm:openai_uniform_area_law}
+    \lean{TNLean.PEPS.AreaLaw.uniformAreaLaw}
+    \leanok
     \uses{def:area_law_domain,def:area_law_hamiltonian,def:area_law_ground_entropy}
     In Theorem~1.1 of \cite{OpenAI2026AreaLaw}, for fixed integers $q\ge1$,
     $R\ge0$ and reals $J,\Delta>0$, there is a finite constant
@@ -321,7 +323,10 @@ original open square. We state the two models separately, following
     The same constant applies to all domains, interaction families, and cuts.
 \end{theorem}
 \begin{proof}
-    \uses{def:area_law_template,def:area_law_two_family_partition}
+    \leanok
+    \uses{def:area_law_template,def:area_law_two_family_partition,
+        thm:area_law_conditional_two_families,thm:area_law_sublinear_collar,
+        thm:area_law_amplification,thm:area_law_two_family_decomposition}
     For disjoint $B,C\subseteq\Lambda$ write
     $I_\Omega(B:C)=S_\Omega(B)+S_\Omega(C)-S_\Omega(B\cup C)$, and let $Z$ be the
     set of endpoints of the edges in $\partial_\Lambda A$. Empty and full cuts
@@ -816,15 +821,19 @@ original open square. We state the two models separately, following
 
 \begin{theorem}[Entropy area law on the square grid]
     \label{thm:openai_square_area_law}
+    \lean{TNLean.PEPS.AreaLaw.squareEntropyAreaLaw}
+    \leanok
     \uses{def:square_entropy_area_law}
     As Proposition~2.1 of \cite{OpenAI2026PolynomialPEPS}, the range-one
     square-domain specialization of Theorem~1.1 and Corollary~1.2 of
     \cite{OpenAI2026AreaLaw}, the square-grid entropy area law holds.
 \end{theorem}
 \begin{proof}
-    \uses{thm:openai_uniform_area_law,thm:square_area_law_from_uniform}
-    Applying the conditional specialization below to the uniform finite-domain
-    area law gives the result.
+    \leanok
+    \uses{cor:rectangles,thm:rectangular_equal_side_entropy}
+    The edge-boundary bound of Corollary~\ref{cor:rectangles}, specialized to
+    equal sides by Theorem~\ref{thm:rectangular_equal_side_entropy}, gives the
+    result.
 \end{proof}
 
 \begin{theorem}[The square-grid area law, assuming the uniform finite-domain area law]
@@ -853,6 +862,8 @@ original open square. We state the two models separately, following
 
 \begin{theorem}[Polynomial PEPS approximation]
     \label{thm:openai_polynomial_peps}
+    \lean{TNLean.PEPS.Approximation.polynomialPEPSApproximation}
+    \leanok
     \uses{def:polynomial_peps_model}
     In Theorem~1.1 of \cite{OpenAI2026PolynomialPEPS}, fix an integer $q\ge2$
     and reals $J,\Delta>0$. There are $C,c>0$, depending only on these
@@ -867,7 +878,8 @@ original open square. We state the two models separately, following
     \end{align}
 \end{theorem}
 \begin{proof}
-    \uses{thm:openai_uniform_area_law}
+    \leanok
+    \uses{thm:openai_square_area_law,thm:peps_approximation_of_square_area_law}
     Write $\Lambda_L$ for the sites of the grid and $\mathcal H_X$ for the
     tensor product of the site spaces in $X\subseteq\Lambda_L$. The physical
     registers are distributed among parties indexed by dyadic squares, starting
@@ -1553,9 +1565,8 @@ state.
     Propositions~9.6 and~11.2 of \cite{OpenAI2026AreaLaw}.
     The collar proposition is Theorem~\ref{thm:area_law_sublinear_collar};
     amplification is Theorem~\ref{thm:area_law_amplification}.
-    % Status: the collar and amplification propositions are proved. The
-    % two-family decomposition of Proposition 11.2 remains an assumption, so
-    % the uniform area law is not proved. The passage to the square grid is proved.
+    % Status: the collar, amplification and two-family propositions are
+    % formalized, and so are the uniform area law and its square-grid passage.
     The site and edge terms of the
     original model need not be Hermitian individually. Replacing each by its
     Hermitian part keeps its support and norm bound and leaves the total
@@ -1565,7 +1576,7 @@ state.
     and Theorem~\ref{thm:rectangular_equal_side_entropy} gives the same
     conclusion through the rectangle corollary, giving Proposition~2.1
     (Theorem~\ref{thm:openai_square_area_law}) from the uniform area law.
-    % Status: Proposition 2.1 is assumed, through the uniform area law.
+    % Status: Proposition 2.1 is formalized through the uniform area law.
 \end{remark}
 
 \begin{remark}[Positive replacement]
@@ -1655,7 +1666,8 @@ state.
 
 \begin{remark}[Two families with separated birth templates]
     \label{rem:peps_companion_two_families}
-    \uses{def:area_law_two_family_decomposition}
+    \uses{def:area_law_two_family_decomposition,
+        thm:area_law_two_family_decomposition}
     Definition~\ref{def:area_law_two_family_decomposition} states
     Proposition~11.2 of \cite{OpenAI2026AreaLaw} as printed in the appendix:
     for every cut with $b=|\partial_\Gamma A|>0$ and every lower scale $n_*$, a
@@ -1664,7 +1676,10 @@ state.
     $\lfloor n_i^{1-\varepsilon}\rfloor\le s_i$, both clearances
     $2n_i^{\beta_0}$, and $\sum_in_i^{-100}\le Cb$, with $C$ depending only on
     $n_*$ and the template constants.
-    % Status: Proposition 11.2 is assumed; it is not proved.
+    Theorem~\ref{thm:area_law_two_family_decomposition} proves it for every
+    $D_0$ and every $C_{\rm tpl}\ge1$.
+    % Status: proved for C_tpl >= 1, which covers the constants C_tpl = 24 used
+    % by the collar bound.
 \end{remark}
 
 \begin{remark}[The adaptation to a cell]
