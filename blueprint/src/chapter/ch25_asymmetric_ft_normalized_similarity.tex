@@ -1,6 +1,10 @@
 \section{Normalized split compressions}%
 \label{sec:asym_normalized_similarity}
 
+When a split compression is combined with left-normalization, the unmatched
+zero slots disappear and the compression maps combine into a simultaneous
+similarity.
+
 \begin{definition}[Combined compression matrices]
     \label{def:asym_assembled_compression}
     \lean{MPSTensor.MultiBlockCompression.assembledLeft,
@@ -35,18 +39,18 @@
 \begin{proof}
     \leanok
     \uses{thm:asym_multiblock, prop:asym_split_intertwiners}
-    Put $E=\sum_sV_sW_s$. Zero remainder and biorthogonality give
-    $B^iE=B^i$, hence $B^i(\id-E)=0$. Normalization yields
+    For $E=\sum_sV_sW_s$, zero remainder and biorthogonality give
+    $B^iE=B^i$, so $B^i(\id-E)=0$. Left-normalization then gives
     \begin{align}
         (\id-E)^\dagger(\id-E)
          & =\sum_i\bigl(B^i(\id-E)\bigr)^\dagger
-        \bigl(B^i(\id-E)\bigr)=0.
+        \bigl(B^i(\id-E)\bigr)=0,
     \end{align}
-    Thus $E=\id$. Biorthogonality gives $LR=\id$, and $RL=E=\id$.
-    The sitewise intertwiners give
-    $W_sB^iV_t=\delta_{st}C_s^i$, which is the stated simultaneous
-    similarity. The inverse maps give dimension equality; comparison
-    with $D_B=\sum_sD_s+z$ then gives $z=0$.
+    forcing $E=\id$. Biorthogonality of the blocks yields $LR=\id$, while
+    $RL=E=\id$, so $L$ and $R$ are mutually inverse. The sitewise
+    intertwining relations give $W_sB^iV_t=\delta_{st}C_s^i$, which combines
+    into $LB^iR=\bigoplus_sC_s^i$, and the invertibility of $L$ and $R$
+    equates $D_B$ with $\sum_sD_s$, forcing $z=0$ in $D_B=\sum_sD_s+z$.
 \end{proof}
 
 \begin{theorem}[Faithful stationary asymmetric similarity]

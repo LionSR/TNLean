@@ -134,7 +134,7 @@ def main() -> int:
     print(f"PASS placeholder sentinel: {sentinel!r}")
 
     slide_preamble = _SLIDE_PREAMBLE.read_text(encoding="utf-8")
-    package_loader = r"\usepackage{tenkz}"
+    package_loader = r"\usepackage{tikz-tensor-networks}"
     dark_palette = r"\input{tn_library_dark}"
     assert package_loader in slide_preamble, "slides lost the native tenkz package"
     assert dark_palette in slide_preamble, "slides lost the native dark palette"

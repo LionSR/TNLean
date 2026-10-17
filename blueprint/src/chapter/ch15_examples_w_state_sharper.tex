@@ -23,11 +23,11 @@
         =\sum_j\tr(X_jB^j_\sigma).
         \label{eq:w_state_trace_range}
     \end{align}
-    To obtain the dimension bound, choose $X_k=0$ for $k\ne j$.
-    The map $X_j\mapsto(\tr(X_jB^j_\sigma))_\sigma$ is injective: if all its
-    values vanish, $R$-block injectivity gives $\tr(X_jY)=0$ for every matrix
-    $Y$, and matrix units then give $X_j=0$. Its image lies in $V$ by
-    (\ref{eq:w_state_trace_range}), so $D_j^2\le\dim V$.
+    Setting $X_k=0$ for $k\ne j$ yields the linear map
+    $X_j\mapsto(\tr(X_jB^j_\sigma))_\sigma$, which is injective because
+    $R$-block injectivity and vanishing trace pairings against all matrix
+    units force $X_j=0$. By (\ref{eq:w_state_trace_range}), its image lies in
+    $V$, so $D_j^2\le\dim V$.
 \end{proof}
 
 \begin{theorem}[W-state bound from unequal cuts]%
@@ -57,17 +57,17 @@
     \leanok
     \uses{thm:w_state_one_sided_cut_rank, lem:w_state_cut_rank,
         lem:pgvwc07_block_tuple_span, thm:w_state_canonical_bound}
-    Suppose $N\ge\max\{L_0+F,12(b-1)\}$ and cut at $L_0$.
-    The word tuples on the other side, of length $N-L_0\ge F$, span the
-    product algebra by Lemma~\ref{lem:pgvwc07_block_tuple_span}.
+    If $N\ge\max\{L_0+F,12(b-1)\}$, cutting the chain at $L_0$ leaves a second
+    piece of length $N-L_0\ge F$, whose word tuples span the product algebra
+    by Lemma~\ref{lem:pgvwc07_block_tuple_span}.
     Individual injectivity on the first side and
     Theorem~\ref{thm:w_state_one_sided_cut_rank} give $D_j^2\le2$, since
     the W-state cut rank is at most two. Thus every $D_j=1$.
 
-    For scalar letters $b_i^j$, unitality reads $\sum_i|b_i^j|^2=1$.
-    A nonzero letter spans the one-dimensional matrix algebra, so the
-    same blocks are injective at length one. Reapply
-    Theorem~\ref{thm:w_state_canonical_bound} with this length to obtain
+    For scalar letters $b_i^j$, unitality reads $\sum_i|b_i^j|^2=1$. Because a
+    nonzero scalar spans the one-dimensional matrix algebra, the same blocks
+    are injective at length one, and applying
+    Theorem~\ref{thm:w_state_canonical_bound} at length one gives
     \begin{align}
         N & <2\max\{1,6(b-1)\}
         =\max\{2,12(b-1)\}
@@ -83,11 +83,11 @@
     \lean{Kraus.wordSpan_eq_top_of_mem_wordSpan_one_of_nonzero_eigenvalue}
     \leanok
     \uses{def:word_span}
-    Let $B$ be a tensor of bond dimension $D\ge1$ whose exact word spans
-    equal $\MN{D}$ at all sufficiently large lengths. If $S_1(B)$ contains
-    a matrix with a nonzero eigenvalue, then $S_{D^2}(B)=\MN{D}$.
-    This is the nonzero-eigenvalue bound of
-    \cite[Theorem~6.9(3)]{Wolf2012Quantum}, in its word-span form.
+    In the word-span form of the nonzero-eigenvalue bound of
+    \cite[Theorem~6.9(3)]{Wolf2012Quantum}, if $B$ is a tensor of bond
+    dimension $D\ge1$ whose exact word spans equal $\MN{D}$ at all
+    sufficiently large lengths and $S_1(B)$ contains a matrix with a nonzero
+    eigenvalue, then $S_{D^2}(B)=\MN{D}$.
 \end{lemma}
 
 \begin{theorem}[Cubic bound from a nonzero one-step eigenvalue]%
@@ -113,9 +113,9 @@
 \begin{proof}
     \leanok
     \uses{thm:w_state_asymmetric_bound, lem:w_state_nonzero_eigenvalue_word_span}
-    Positive-length injectivity implies full word span at every larger length.
-    Lemma~\ref{lem:w_state_nonzero_eigenvalue_word_span} gives injectivity
-    at $D_j^2$ in each block.
-    Since $D_j\le D$, this propagates to the common length $L$.
-    Apply Theorem~\ref{thm:w_state_asymmetric_bound} and use $b\le D$.
+    Positive-length injectivity implies full word span at every larger length,
+    so Lemma~\ref{lem:w_state_nonzero_eigenvalue_word_span} gives injectivity
+    at length $D_j^2$ in each block. Since $D_j\le D$, injectivity propagates
+    to the common length $L$, and Theorem~\ref{thm:w_state_asymmetric_bound}
+    with $b\le D$ yields the stated bound.
 \end{proof}

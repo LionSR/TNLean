@@ -83,9 +83,9 @@
     Let $m>0$, $p\geq0$, and $r=\gcd(m,p)$. Every residue $u$ modulo $m$
     has a unique expression $u=\alpha+pk\pmod m$, with
     $0\leq\alpha<r$ and $0\leq k<m/r$.
-    Adding $p$ preserves $\alpha$ and adds one to $k$ modulo $m/r$.
-    These are the coordinates used in
-    \cite[proof of Theorem~4.1]{DeLasCuevas2017Irreducible}.
+    In these coordinates from
+    \cite[proof of Theorem~4.1]{DeLasCuevas2017Irreducible}, adding $p$
+    preserves $\alpha$ and increments $k$ by one modulo $m/r$.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -104,12 +104,11 @@
     \leanok
     \uses{thm:periodic_step_coordinates}
     Let $m>0$, $p\ge0$, $r=\gcd(m,p)$, and let $P_u$ be projections indexed
-    modulo $m$. For $0\le\alpha<r$, set
+    modulo $m$. For $0\le\alpha<r$, define the grouped projections of
+    \cite[Lemma~6]{DeLasCuevas2017Irreducible} by
     \begin{align}
         Q_\alpha & =\sum_{k=0}^{m/r-1}P_{[\alpha+pk]_m}. \notag
     \end{align}
-    These are the grouped projections of
-    \cite[Lemma~6]{DeLasCuevas2017Irreducible}.
 \end{definition}
 
 \begin{theorem}[Compression to the step orbits]
@@ -159,10 +158,10 @@
     $V_\alpha$, and left-canonical tensors $C_\alpha$ of
     Theorem~\ref{thm:periodic_step_orbit_compression} exist, with the same
     identities and the same MPV at every length, including zero. If $p>0$,
-    every resulting block satisfies $\spec_{\mathrm{per}}(\E_{C_\alpha})=\{z\in\C:z^{m/\gcd(m,p)}=1\}$
+    as in the prescribed-blocking conclusion of
+    \cite[Lemma~6]{DeLasCuevas2017Irreducible}, every resulting block satisfies
+    $\spec_{\mathrm{per}}(\E_{C_\alpha})=\{z\in\C:z^{m/\gcd(m,p)}=1\}$
     and is periodic of period $m/\gcd(m,p)$.
-    This is the prescribed-blocking conclusion of
-    \cite[Lemma~6]{DeLasCuevas2017Irreducible}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -224,13 +223,12 @@
     Suppose $P_u$ are orthogonal projections summing to $\Id_D$, $A$ is
     left canonical, and $P_uA^i=A^iP_{u+1}$. Let $p\ge0$, fix an orbit
     $\alpha$, and suppose $VV^\dagger=Q_\alpha$ and
-    $C^I=V^\dagger(A^{[p]})^IV$. For $u=[\alpha+pk]_m$,
+    $C^I=V^\dagger(A^{[p]})^IV$. For $u=[\alpha+pk]_m$, compressing the final
+    display in the proof of \cite[Lemma~6]{DeLasCuevas2017Irreducible} yields
     \begin{align}
         \E_C^\dagger(V^\dagger P_uV) & =V^\dagger P_{u+p}V.
         \label{eq:periodic_compressed_projection_shift}
     \end{align}
-    This is the compressed form of the final display in the proof of
-    \cite[Lemma~6]{DeLasCuevas2017Irreducible}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -336,10 +334,9 @@
     Let $A$ be periodic of period $m$, let $p>0$, and let $P_u$ be
     orthogonal projections summing to $\Id_D$ with $P_uA^i=A^iP_{u+1}$.
     Fix $\alpha<\gcd(m,p)$ and an isometry $V$ with
-    $VV^\dagger=Q_\alpha$. The compressed tensor
+    $VV^\dagger=Q_\alpha$. Then, establishing the irreducibility assertion in
+    \cite[Lemma~6]{DeLasCuevas2017Irreducible}, the compressed tensor
     $C^I=V^\dagger(A^{[p]})^IV$ is irreducible.
-    This proves the irreducibility assertion in
-    \cite[Lemma~6]{DeLasCuevas2017Irreducible}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -445,14 +442,13 @@
     Let $A$ be left canonical and $m>0$. Suppose the Hermitian projections
     $P_u$ satisfy $P_uP_v=\delta_{uv}P_u$, $\sum_uP_u=\Id$, and
     $P_uA^i=A^iP_{u+1}$. Let $p\ge0$, $r=\gcd(m,p)$, and
-    $c_\alpha^{m/r}=1$. There is a left-canonical tensor $A'$ such that,
-    for every word $w$ of length $p$,
+    $c_\alpha^{m/r}=1$. Then, realizing the rephasing identity in
+    \cite[proof of Theorem~4.1]{DeLasCuevas2017Irreducible}, there is a
+    left-canonical tensor $A'$ such that for every word $w$ of length $p$,
     \begin{align}
         A'^w & = \sum_u c_{\alpha_u}P_uA^w.
         \label{eq:periodic_orbit_phase_tensor}
     \end{align}
-    This is the rephasing identity in
-    \cite[proof of Theorem~4.1]{DeLasCuevas2017Irreducible}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -561,9 +557,9 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    Apply the $Z$-gauge extraction hypothesis to obtain a blocked
-    $\Z_m$-gauge equivalence between $C$ and $A^{[p]}$, and then apply the
-    construction of $\widetilde A$ to that equivalence.
+    The $Z$-gauge extraction hypothesis produces a blocked
+    $\Z_m$-gauge equivalence between $C$ and $A^{[p]}$, to which the
+    construction of $\widetilde A$ then applies.
 \end{proof}
 
 \begin{theorem}[Reduction to the blocked equal-case construction]
@@ -578,8 +574,8 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    Apply Theorem~\ref{thm:p_refinement_pullback_irreducible_form} to
-    $B$. This produces a blocked tensor $C$ in
+    Theorem~\ref{thm:p_refinement_pullback_irreducible_form} applied to
+    $B$ produces a blocked tensor $C$ in
     irreducible form~II with $\E_C = \E_B$ and the same MPV
     family as $A^{[p]}$. The blocked equal-case construction then
     gives a left-canonical tensor $\widetilde A$ with
@@ -983,11 +979,12 @@ Theorem~\ref{thm:thm_4_1_p_refinement_reverse}.
 
 \begin{proof}\leanok
     \uses{thm:periodic_injective_composition_choi_rank, thm:periodic_refinement_from_bounded_root}
-    Choose a channel root $\mathcal F$ with $\mathcal F^p=\mathcal E_B$.
-    It is invertible, so the preceding theorem gives
+    Any channel root $\mathcal F$ with $\mathcal F^p=\mathcal E_B$ is
+    invertible, so the preceding theorem gives
     $\operatorname{rank}C_{\mathcal F}\le
-        \operatorname{rank}C_{\mathcal E_B}\le d$.
-    Apply Theorem~\ref{thm:periodic_refinement_from_bounded_root}.
+        \operatorname{rank}C_{\mathcal E_B}\le d$,
+    and Theorem~\ref{thm:periodic_refinement_from_bounded_root} then yields
+    $p$-refinability of $B$.
 \end{proof}
 
 \begin{remark}
@@ -1040,9 +1037,9 @@ Theorem~\ref{thm:thm_4_1_p_refinement_reverse}.
         =\operatorname{rank}_{\mathrm{Choi}}\mathcal E_B\le d.
         \notag
     \end{align}
-    A completely positive map has a Kraus representation with as many
-    operators as its Choi rank. Apply
-    Theorem~\ref{thm:periodic_refinement_from_bounded_root}.
+    Since a completely positive map admits a Kraus representation with as many
+    operators as its Choi rank,
+    Theorem~\ref{thm:periodic_refinement_from_bounded_root} applies.
 \end{proof}
 
 \begin{remark}[Continuum-limit application]\notready
@@ -1065,10 +1062,10 @@ Theorem~\ref{thm:thm_4_1_p_refinement_reverse}.
         \label{eq:periodic_orbit_gauge_action}
         ZQ_\alpha(A^{[p]})^I & =c_\alpha Q_\alpha(A^{[p]})^I,
     \end{align}
-    then there is a left-canonical tensor $A'$ of the same dimensions with
+    then, comparing the two phase formulas in the proof of
+    \cite[Theorem~4.1]{DeLasCuevas2017Irreducible}, there is a left-canonical
+    tensor $A'$ of the same dimensions with
     $(A'^{[p]})^I=Z(A^{[p]})^I$ for every $I$.
-    This is the comparison of the two phase formulas in the proof of
-    \cite[Theorem~4.1]{DeLasCuevas2017Irreducible}.
 \end{theorem}
 
 \begin{proof}
@@ -1086,10 +1083,9 @@ Theorem~\ref{thm:thm_4_1_p_refinement_reverse}.
     \lean{MPSTensor.exists_isLeftCanonical_blockTensor_eq_of_unitary_conj}
     \leanok
     If $A$ is left canonical and $(A^{[p]})^I=UC^IU^\dagger$ for a
-    unitary $U$, then $C$ has a left-canonical root $B$ at the original
-    physical dimension: $B^{[p]}=C$.
-    This is the final conjugation in the proof of
-    \cite[Theorem~4.1]{DeLasCuevas2017Irreducible}.
+    unitary $U$, then as in the final conjugation of the proof of
+    \cite[Theorem~4.1]{DeLasCuevas2017Irreducible}, $C$ has a left-canonical
+    root $B$ at the original physical dimension satisfying $B^{[p]}=C$.
 \end{theorem}
 
 \begin{proof}
@@ -1140,9 +1136,9 @@ Theorem~\ref{thm:thm_4_1_p_refinement_reverse}.
     The blocked presentation of $A^{[p]}$ is indexed by the pairs $(k,a)$ with
     $0\le a<\gcd(m_k,p)$; the block $B_{k,a}$ is the $a$th prescribed orbit
     block of $A_k^{[p]}$, with weight $\mu_k^p$ and period
-    $m_k/\gcd(m_k,p)$. It is an irreducible-form presentation of $A^{[p]}$.
-    This is the blockwise application of
-    \cite[Lemma~6, proof of Theorem~4.1]{DeLasCuevas2017Irreducible}.
+    $m_k/\gcd(m_k,p)$. Applying
+    \cite[Lemma~6, proof of Theorem~4.1]{DeLasCuevas2017Irreducible} blockwise
+    makes this family an irreducible-form presentation of $A^{[p]}$.
 \end{definition}
 
 \begin{proof}
@@ -1306,11 +1302,10 @@ Theorem~\ref{thm:thm_4_1_p_refinement_reverse}.
     sector decomposition $Q$ with a pairwise non-repeated basis and
     unit-modulus multiplicities. Then $A$ has the same positive-length matrix
     product vectors as a unit-weight sum $\bigoplus_k C_k$ of left-canonical
-    periodic tensors. Their total bond dimension equals that of $Q$ and is
-    at most $D$.
-    This is the normalization step of
+    periodic tensors. As in the normalization step of
     \cite[Theorem~4.1, lines~750--756]{DeLasCuevas2017Irreducible} for an
-    arbitrary input tensor.
+    arbitrary input tensor, their total bond dimension equals that of $Q$ and
+    is at most $D$.
 \end{theorem}
 
 \begin{proof}

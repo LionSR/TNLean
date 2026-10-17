@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.ApproximateCircuitError
+import TNLean.PEPS.Approximation.OriginalProducerResources
 import TNLean.PEPS.Approximation.SampledOriginalCircuit
 import TNLean.PEPS.Approximation.SheetStackReadoutCircuit
 import TNLean.PEPS.Approximation.TwoSheetRegisters
@@ -61,19 +62,6 @@ namespace PairEffect
 variable {P : Type}
 
 namespace OriginalCircuit
-
-/-- Increasing the pair-effect bound and the coefficient bound preserves the original expansion
-condition. Source: polynomial-PEPS, `04-compression.tex`, lines 199–208. -/
-theorem isExpansionBounded_mono {a b : Layout P} (w : OriginalCircuit a b) {r r' : ℕ}
-    {s s' : ℝ} (h : w.IsExpansionBounded r s) (hr : r ≤ r') (hs : s ≤ s') :
-    w.IsExpansionBounded r' s' := by
-  induction w with
-  | id => trivial
-  | comp w v ihw ihv => exact ⟨ihw h.1, ihv h.2⟩
-  | privateMap => trivial
-  | nonprivateGate => exact ⟨fun m hm => (h.1 m hm).trans hr, h.2.trans hs⟩
-  | swap => trivial
-  | frame _ w ih => exact ih h
 
 /-- An original circuit does not increase the norm of a vector. -/
 theorem norm_eval_le_norm {a b : Layout P} (w : OriginalCircuit a b) (v : Mem a) :
@@ -280,6 +268,19 @@ theorem HasBoundedChange.perm_right (h : HasBoundedChange Ω Fs Gs ξ S r K ε) 
   obtain ⟨c, hc⟩ := h
   exact ⟨c.comp e, by simpa [he] using hc.comp_right e h0 (hE r K) (hM K)⟩
 
+/-- The lift of a bounded change of one sheet to the stack. -/
+theorem isBoundedChange_liftOne {F F' : Frame pos q Party} (pre post : List (Frame pos q Party))
+    {c : OriginalCircuit F.regs F'.regs} (hc : c.IsBoundedChange S r K ε (F.regRef Ω) (F'.regRef Ω))
+    (hΩ : ‖Ω‖ ≤ 1) (hξ : ‖ξ‖ ≤ 1) :
+    (liftOne post ℓ c pre).IsBoundedChange S r K ε (stackVec Ω (pre ++ F :: post) ξ)
+      (stackVec Ω (pre ++ F' :: post) ξ) where
+  nonprivateCount_le := (nonprivateCount_liftOne post ℓ c pre).trans_le hc.nonprivateCount_le
+  participants_subset := participants_liftOne_subset post ℓ c hc.participants_subset pre
+  isExpansionBounded := isExpansionBounded_liftOne post ℓ c hc.isExpansionBounded pre
+  isMonomialBounded := isMonomialBounded_liftOne post ℓ c hc.isMonomialBounded pre
+  norm_eval_sub_le := (norm_eval_liftOne_stackVec_sub_le post c hΩ hξ pre).trans
+    hc.norm_eval_sub_le
+
 /-- **A change of one sheet, on the whole stack.** A bounded change of the frame `F` into `F'`,
 from `Ω_F` to `Ω_{F'}`, is a bounded change of the stack `pre ++ F :: post` into
 `pre ++ F' :: post`, with the same participants, bounds and error, when `‖Ω‖ ≤ 1` and the idle
@@ -290,13 +291,22 @@ theorem hasBoundedChange_liftOne {F F' : Frame pos q Party} (pre post : List (Fr
     {c : OriginalCircuit F.regs F'.regs} (hc : c.IsBoundedChange S r K ε (F.regRef Ω) (F'.regRef Ω))
     (hΩ : ‖Ω‖ ≤ 1) (hξ : ‖ξ‖ ≤ 1) :
     HasBoundedChange Ω (pre ++ F :: post) (pre ++ F' :: post) ξ S r K ε :=
-  ⟨liftOne post ℓ c pre,
-    { nonprivateCount_le := (nonprivateCount_liftOne post ℓ c pre).trans_le hc.nonprivateCount_le
-      participants_subset := participants_liftOne_subset post ℓ c hc.participants_subset pre
-      isExpansionBounded := isExpansionBounded_liftOne post ℓ c hc.isExpansionBounded pre
-      isMonomialBounded := isMonomialBounded_liftOne post ℓ c hc.isMonomialBounded pre
-      norm_eval_sub_le := (norm_eval_liftOne_stackVec_sub_le post c hΩ hξ pre).trans
-        hc.norm_eval_sub_le }⟩
+  ⟨liftOne post ℓ c pre, isBoundedChange_liftOne pre post hc hΩ hξ⟩
+
+/-- The lift of a bounded change of two adjacent sheets to the stack. -/
+theorem isBoundedChange_liftTwo {F₁ F₂ F₁' F₂' : Frame pos q Party}
+    (pre post : List (Frame pos q Party))
+    {c : OriginalCircuit (F₁.regs ++ F₂.regs) (F₁'.regs ++ F₂'.regs)}
+    (hc : c.IsBoundedChange S r K ε (pairRef F₁ F₂ Ω) (pairRef F₁' F₂' Ω)) (hΩ : ‖Ω‖ ≤ 1)
+    (hξ : ‖ξ‖ ≤ 1) :
+    (liftTwo post ℓ c pre).IsBoundedChange S r K ε (stackVec Ω (pre ++ F₁ :: F₂ :: post) ξ)
+      (stackVec Ω (pre ++ F₁' :: F₂' :: post) ξ) where
+  nonprivateCount_le := (nonprivateCount_liftTwo post ℓ c pre).trans_le hc.nonprivateCount_le
+  participants_subset := participants_liftTwo_subset post ℓ c hc.participants_subset pre
+  isExpansionBounded := isExpansionBounded_liftTwo post ℓ c hc.isExpansionBounded pre
+  isMonomialBounded := isMonomialBounded_liftTwo post ℓ c hc.isMonomialBounded pre
+  norm_eval_sub_le := (norm_eval_liftTwo_stackVec_sub_le post c hΩ hξ pre).trans
+    hc.norm_eval_sub_le
 
 /-- **A change of two adjacent sheets, on the whole stack.** A bounded change of the frames
 `F₁, F₂` into `F₁', F₂'`, from `Ω_{F₁} ⊗ Ω_{F₂}` to `Ω_{F₁'} ⊗ Ω_{F₂'}`, is a bounded change of
@@ -309,13 +319,7 @@ theorem hasBoundedChange_liftTwo {F₁ F₂ F₁' F₂' : Frame pos q Party}
     (hc : c.IsBoundedChange S r K ε (pairRef F₁ F₂ Ω) (pairRef F₁' F₂' Ω)) (hΩ : ‖Ω‖ ≤ 1)
     (hξ : ‖ξ‖ ≤ 1) :
     HasBoundedChange Ω (pre ++ F₁ :: F₂ :: post) (pre ++ F₁' :: F₂' :: post) ξ S r K ε :=
-  ⟨liftTwo post ℓ c pre,
-    { nonprivateCount_le := (nonprivateCount_liftTwo post ℓ c pre).trans_le hc.nonprivateCount_le
-      participants_subset := participants_liftTwo_subset post ℓ c hc.participants_subset pre
-      isExpansionBounded := isExpansionBounded_liftTwo post ℓ c hc.isExpansionBounded pre
-      isMonomialBounded := isMonomialBounded_liftTwo post ℓ c hc.isMonomialBounded pre
-      norm_eval_sub_le := (norm_eval_liftTwo_stackVec_sub_le post c hΩ hξ pre).trans
-        hc.norm_eval_sub_le }⟩
+  ⟨liftTwo post ℓ c pre, isBoundedChange_liftTwo pre post hc hΩ hξ⟩
 
 /-- **Activating an auxiliary sheet.** If the frames `Fs` are a reordering of
 `pre ++ F₁ :: F₂ :: post`, for instance with an idle auxiliary copy `F₂` moved next to the main

@@ -26,10 +26,10 @@ a definition of phase or exclude conversion of compatible coherent seeds.
 \begin{proof}
     \leanok
     A product operator with identity factors outside $S$ has an entry
-    containing $\delta_{\sigma_k,\tau_k}=0$ at the differing site $k$.
-    Extend this equality by linearity. A computational-basis vector is
-    the product of its one-site basis vectors, so disjoint expectations
-    factor.
+    containing $\delta_{\sigma_k,\tau_k}=0$ at the differing site $k$,
+    and linearity extends this equality to all operators supported on $S$.
+    Since a computational-basis vector is the product of its one-site
+    basis vectors, disjoint expectations factor.
 \end{proof}
 
 \begin{theorem}[Stability of connected correlations]
@@ -40,7 +40,7 @@ a definition of phase or exclude conversion of compatible coherent seeds.
         QuantumCircuit.expect_smul_state,
         QuantumCircuit.norm_covariance_sub_le}
     \leanok
-    For unit vectors $\psi,\phi$ and unitary observables $A,B$, write
+    For unit vectors $\psi,\phi$ and unitary observables $A,B$, let
     $\operatorname{Cov}_\psi(A,B)=
         \langle\psi|AB|\psi\rangle-
         \langle\psi|A|\psi\rangle\langle\psi|B|\psi\rangle$.
@@ -56,12 +56,12 @@ a definition of phase or exclude conversion of compatible coherent seeds.
 \end{theorem}
 \begin{proof}
     \leanok
-    Expand the expectation difference as
+    Expanding the expectation difference as
     $\langle\psi-\phi|A\psi\rangle+
-        \langle\phi|A(\psi-\phi)\rangle$ and apply Cauchy--Schwarz.
-    Expand the difference of the two products of expectations into two
-    terms. The three expectation differences each contribute at most
-    $2\|\psi-\phi\|$.
+        \langle\phi|A(\psi-\phi)\rangle$ and applying Cauchy--Schwarz
+    gives the first bound. Splitting the difference of the two products
+    of expectations into two terms then bounds the covariance difference
+    by three expectation differences, each at most $2\|\psi-\phi\|$.
 \end{proof}
 
 \begin{theorem}[Separated correlations in a weighted GHZ vector]
@@ -81,7 +81,7 @@ a definition of phase or exclude conversion of compatible coherent seeds.
     Let $|a|^2+|b|^2=1$, $N\ge1$, and
     $\chi=a|0^N\rangle+b|1^N\rangle$.
     Let unitary observables $X,Y$ act on disjoint sets $I,J$ with
-    nonempty complement. Put $x_s=\langle s^N|X|s^N\rangle$ and
+    nonempty complement, and let $x_s=\langle s^N|X|s^N\rangle$ and
     $y_s=\langle s^N|Y|s^N\rangle$. For arbitrary $a,b$, $\|\chi\|^2=|a|^2+|b|^2$, and scaling $\chi$
     by $c$ scales both coefficients by $c$. Under the normalization above,
     $\|\chi\|=1$ and
@@ -97,10 +97,11 @@ a definition of phase or exclude conversion of compatible coherent seeds.
     \leanok
     \uses{thm:ldp_offsupport_matrix_elements,thm:ldp_covariance_stability}
     The unobserved site kills both cross terms. Within each product branch,
-    $\langle XY\rangle_s=x_sy_s$. Subtract the product of the two weighted
-    expectations and use $|a|^2+|b|^2=1$. Each diagonal expectation has
-    modulus at most one. For a circuit, pull both observables back through
-    the unitary, retaining their support inside the backward light cones.
+    $\langle XY\rangle_s=x_sy_s$; subtracting the product of the two weighted
+    expectations and using $|a|^2+|b|^2=1$ gives the covariance formula, while
+    each diagonal expectation has modulus at most one. After a depth-$T$
+    circuit, pulling both observables back through the unitary retains their
+    support inside the backward light cones.
 \end{proof}
 
 % TENKZ-SECTOR-WEIGHT-BEGIN
@@ -180,28 +181,28 @@ a definition of phase or exclude conversion of compatible coherent seeds.
         QuantumCircuit.exists_separated_singletons_notMem_neighbourhood}
     \leanok
     \uses{def:qc_local_circuit}
-    Let $\psi_N=(2|0^N\rangle+|1^N\rangle)/\sqrt5$ and
-    $\phi_N=(|0^N\rangle+|1^N\rangle)/\sqrt2$.
-    Every depth-$T$ nearest-neighbour unitary circuit $U$ on the ring,
-    with $N>4T+4$, satisfies
+    For the normalized periodic vectors
+    $\psi_N=(2|0^N\rangle+|1^N\rangle)/\sqrt5$ and
+    $\phi_N=(|0^N\rangle+|1^N\rangle)/\sqrt2$ of the tensors in
+    Theorem~\ref{thm:ldp_sector_weight_parent}, every depth-$T$
+    nearest-neighbour unitary circuit $U$ on the ring with $N>4T+4$
+    satisfies
     \begin{align}
         1-|\langle U\psi_N|\phi_N\rangle|\ge\frac9{5000}.
     \end{align}
-    These are the normalized periodic vectors of the tensors in
-    Theorem~\ref{thm:ldp_sector_weight_parent}. Conversely, overlap error
-    strictly below $9/5000$ forces $N\le4T+4$.
+    Conversely, overlap error strictly below $9/5000$ forces $N\le4T+4$.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:ldp_weighted_ghz_covariance,thm:ldp_covariance_stability,
         lem:ldp_error_triangle}
-    Choose sites $i=0$, $j=2T+2$ and $k=T+1$. The radius-$T$ backward
+    For the sites $i=0$, $j=2T+2$ and $k=T+1$, the radius-$T$ backward
     cones of $i,j$ are disjoint, and neither contains $k$, including around
-    the periodic boundary. The Pauli observables $Z_i,Z_j$ have covariance
-    at most $16/25$ in modulus in $U\psi_N$, while their covariance in
-    $\phi_N$ is one. Choose $|c|=1$ with
+    the periodic boundary. The Pauli observables $Z_i,Z_j$ therefore have
+    covariance at most $16/25$ in modulus in $U\psi_N$, while their covariance
+    in $\phi_N$ is one. For $|c|=1$ chosen so that
     $\eta^2=\|U\psi_N-c\phi_N\|^2
-        =2(1-|\langle U\psi_N|\phi_N\rangle|)$.
-    Correlation stability gives $1\le16/25+6\eta$, hence
+        =2(1-|\langle U\psi_N|\phi_N\rangle|)$,
+    correlation stability gives $1\le16/25+6\eta$, hence
     $\eta\ge3/50$ and the stated bound.
 \end{proof}

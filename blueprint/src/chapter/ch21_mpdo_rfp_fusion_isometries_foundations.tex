@@ -142,7 +142,7 @@ reconstruction from full-support isometries.
     \end{align}
 \end{theorem}
 \begin{proof}\leanok
-    Expand both product tensors. Reassociation preserves every elementary
+    Expanding both product tensors, reassociation preserves every elementary
     tensor factor, while exchanging the order of the two finite sums gives
     the same contraction over the two intermediate physical indices.
 \end{proof}
@@ -162,8 +162,8 @@ reconstruction from full-support isometries.
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    Induction on the length, using the mixed-product property of the tensor
-    product to merge one letter at a time.
+    By induction on the length, the mixed-product property of the tensor
+    product merges one letter at a time.
 \end{proof}
 
 \begin{theorem}[The operator family is multiplicative]%
@@ -176,7 +176,7 @@ reconstruction from full-support isometries.
     $O_L(M\mathbin{\cdot}N)=O_L(M)O_L(N)$.
 \end{theorem}
 \begin{proof}\leanok
-    Take traces in (\ref{eq:rfp_product_word}): the trace of a tensor
+    Taking traces in (\ref{eq:rfp_product_word}), the trace of a tensor
     product is the product of the traces, and the sum over middle
     configurations is the entrywise form of the operator product.
 \end{proof}
@@ -256,9 +256,9 @@ reconstruction from full-support isometries.
     corresponding orthonormality of $F$.
 \end{lemma}
 \begin{proof}\leanok
-    Evaluate the amplified identity on one basis vector of the nonzero
-    factor. Multiplicativity of the Kronecker product gives the product and
-    adjoint specializations.
+    Evaluating the amplified identity on one basis vector of the nonzero
+    factor proves injectivity, and multiplicativity of the Kronecker product
+    gives the product and adjoint specializations.
 \end{proof}
 
 \begin{definition}[Fusion isometries on the full product bond space]%
@@ -407,9 +407,10 @@ With $G_{\alpha,\beta}^{ij}$ denoting the retained direct-sum letter,
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    Substitute exact reconstruction
-    (\ref{eq:rfp_coisometry_reconstruction}) into the left-hand sides and use
-    $U_{\alpha,\beta}U_{\alpha,\beta}^\dagger=1$.
+    Substituting exact reconstruction
+    (\ref{eq:rfp_coisometry_reconstruction}) into the left-hand sides and
+    using $U_{\alpha,\beta}U_{\alpha,\beta}^\dagger=1$ gives both zipper
+    identities.
 \end{proof}
 
 \begin{theorem}[Weighted zipper identities]%
@@ -442,10 +443,10 @@ With $G_{\alpha,\beta}^{ij}$ denoting the retained direct-sum letter,
     $F$-move.
 \end{theorem}
 \begin{proof}\leanok
-    Multiply the fusion identity (\ref{eq:rfp_fusion_identity}) on the right
-    by $U_{\alpha,\beta}$ and on the left by
-    $U_{\alpha,\beta}^\dagger$, respectively, and use
-    $U_{\alpha,\beta}^\dagger U_{\alpha,\beta}=1$.
+    Multiplying the fusion identity (\ref{eq:rfp_fusion_identity}) on the
+    right by $U_{\alpha,\beta}$ and on the left by
+    $U_{\alpha,\beta}^\dagger$, respectively, and using
+    $U_{\alpha,\beta}^\dagger U_{\alpha,\beta}=1$ yields the two identities.
 \end{proof}
 
 \begin{theorem}[Length-independent zipper identities and reconstruction]%
@@ -496,12 +497,13 @@ With $G_{\alpha,\beta}^{ij}$ denoting the retained direct-sum letter,
 \end{theorem}
 \begin{proof}\leanok
     Length independence makes every positive diagonal entry of
-    $\chi_{\alpha,\beta,\gamma}$ equal to one. Substitute the resulting
+    $\chi_{\alpha,\beta,\gamma}$ equal to one; substituting the resulting
     identity matrices into
-    Theorem~\ref{thm:mpdo_bnt_weighted_zipper}. For reconstruction, insert
+    Theorem~\ref{thm:mpdo_bnt_weighted_zipper} gives the two zipper
+    identities. For reconstruction, inserting
     $U_{\alpha,\beta}^\dagger U_{\alpha,\beta}=1$ on both sides of the product
-    letter and apply the fusion identity between the two inserted factors,
-    yielding (\ref{eq:rfp_unweighted_reconstruction}).
+    letter and applying the fusion identity between the two inserted factors
+    yields (\ref{eq:rfp_unweighted_reconstruction}).
 \end{proof}
 
 \begin{theorem}[Common positive blocking of BNT fusion isometries]
@@ -570,8 +572,8 @@ With $G_{\alpha,\beta}^{ij}$ denoting the retained direct-sum letter,
 \end{theorem}
 
 \begin{proof}\leanok
-    Choose the positive block length given by simultaneous BNT blocking.
-    The canonical pairing of the blocked ket and bra words transfers the
+    At the positive block length $L$ given by simultaneous BNT blocking,
+    the canonical pairing of the blocked ket and bra words transfers the
     one-letter product-algebra span to the blocked MPO tensors, and projection
     to each labelled factor gives injectivity. Along a nonempty block, the
     products of the conjugated fusion letters telescope using only

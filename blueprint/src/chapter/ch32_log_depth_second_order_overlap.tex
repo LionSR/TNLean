@@ -42,8 +42,8 @@ with $c>2$ \cite{gap:mswc24_block_form_mixed_overlap}.
 \end{theorem}
 \begin{proof}
     \leanok
-    From $CM\delta^2<1$ with $C\ge4$ one gets $\delta\le1$ and $\alpha\ge3/4$. Put
-    $Z=\alpha^{-1}T-e$. Then $eZe=0$, $T=\alpha(e+Z)$, and
+    From $CM\delta^2<1$ with $C\ge4$ one gets $\delta\le1$ and $\alpha\ge3/4$. For
+    $Z=\alpha^{-1}T-e$, one has $eZe=0$, $T=\alpha(e+Z)$, and
     $\lVert Z\rVert\le\alpha^{-1}(\lVert T-e\rVert+(1-\alpha)\lVert e\rVert)
         \le2(1+\lVert e\rVert)\delta$, so the blocks of $Z$ are bounded by a multiple $z$ of
     $\delta$ with $z\le1/2$. Theorem~\ref{thm:ldp_idempotent_second_order} bounds
@@ -173,7 +173,7 @@ with $c>2$ \cite{gap:mswc24_block_form_mixed_overlap}.
     holds because the pairs of the $\tilde\rho_j$ are orthonormal and the overlap of products
     of pairs is the $N$-th power of the overlap of the pairs. Part~(3) is
     $c-2\operatorname{Re}z+\lvert z\rvert^2/c=\lvert c-z\rvert^2/c\ge0$ with $z=\braket Wu$.
-    For part~(4) put $u=\phi_1(P)$ and $W=\sum_j\phi_1(P_{\infty,\tilde\rho_j})$. Then
+    For part~(4), with $u=\phi_1(P)$ and $W=\sum_j\phi_1(P_{\infty,\tilde\rho_j})$,
     $\lVert u\rVert=\lVert\phi_q\rVert$, the sum is $\braket Wu$, and
     $\lVert W\rVert^2=b$ by part~(2), so part~(3) bounds the left side by
     $\lVert u-W\rVert^2$. The overlaps of $\phi_1(P_\infty)$ with the
@@ -208,10 +208,11 @@ with $c>2$ \cite{gap:mswc24_block_form_mixed_overlap}.
         \qquad\text{and}\qquad
         \varepsilon(\widetilde\phi_N,\phi_N)\le Cy\,e^{Cy}.
     \end{align*}
-    This is \cite[Lemma~1$'$(ii)]{Malz2024Preparation} for blocks of multiplicity one and
-    weight one, with $\xi_{\mathrm{diag}}$ replaced by
+    Relative to \cite[Lemma~1$'$(ii)]{Malz2024Preparation} and
+    \cite{gap:mswc24_block_form_mixed_overlap}, this establishes the bound for
+    blocks of multiplicity one and weight one with $\xi_{\mathrm{diag}}$ replaced by
     $\max(\xi_{\mathrm{diag}},\xi_{\mathrm{off\text{-}diag}})$ and the exponent $\gamma q/\xi$
-    by $2\gamma q/\xi$ \cite{gap:mswc24_block_form_mixed_overlap}.
+    sharpened to $2\gamma q/\xi$.
 \end{theorem}
 \begin{proof}
     \leanok

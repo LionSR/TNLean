@@ -18,7 +18,7 @@ numerical estimates give the required clearance.
     \end{align}
 \end{theorem}
 \begin{proof}\leanok
-    Since $1-\eta>0$, choose $N\ge1$ such that
+    Since $1-\eta>0$, there is an integer $N\ge1$ such that
     $s^{1-\eta}\ge2(C_2+1)^\eta$ for every integer $s\ge N$.
     The ceiling bound gives $n_s<C_2s+1\le(C_2+1)s$, and hence
     \begin{align}
@@ -66,14 +66,13 @@ numerical estimates give the required clearance.
     \leanok
     \uses{thm:area_law_bootstrap_margins,thm:area_law_rounded_collar_half,
         thm:area_law_collar_scalar_clearance}
-    The fixed parameter bounds give $0<\ell<1$, so $0<1-\ell<1$.
-    Apply Theorem~\ref{thm:area_law_rounded_collar_half} with
-    $\eta=1-\ell$ to choose $N$ depending only on $C_2$ and $e_0$.
-    Enlarge $N$ to at least one. Since $C_2s>0$, the integer $n_s$
-    is at least one, so $L_s\ge1$. For every $s\ge N$, one also has
-    $2L_s\le s$. For each $D_0\ge1$,
-    Theorem~\ref{thm:area_law_collar_scalar_clearance} now gives the
-    claimed bound without changing $N$.
+    The fixed parameter bounds give $0<\ell<1$, so $0<1-\ell<1$, and
+    Theorem~\ref{thm:area_law_rounded_collar_half} with
+    $\eta=1-\ell$ provides an integer $N\ge1$ depending only on $C_2$ and $e_0$
+    such that $2L_s\le s$ for every $s\ge N$. Since $C_2s>0$, the integer $n_s$
+    is at least one, so $L_s\ge1$, and for each $D_0\ge1$,
+    Theorem~\ref{thm:area_law_collar_scalar_clearance} gives
+    $D_0L_s+L_s\le D_0s$ without changing $N$.
 \end{proof}
 
 % These are auxiliary numerical statements, not Proposition 9.5 itself.

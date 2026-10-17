@@ -48,10 +48,10 @@
 \end{theorem}
 \begin{proof}
     \leanok
-    Substitute $SH=\widetilde S\widetilde H$ in
-    $\widetilde S\widetilde HS$ and $SH\widetilde S$, then cancel the
-    coordinate identities. Left multiplication by the corresponding
-    analysis matrix gives the two inverse identities.
+    Substituting $SH=\widetilde S\widetilde H$ into
+    $\widetilde S\widetilde HS$ and $SH\widetilde S$ and cancelling $HS=I$ and
+    $\widetilde H\widetilde S=I$ gives $\widetilde SC=S$ and $SD=\widetilde S$;
+    left multiplication by $\widetilde H$ or $H$ then gives $CD=I$ and $DC=I$.
 \end{proof}
 
 \begin{theorem}[Composition and action of exact decompositions]
@@ -73,10 +73,10 @@
 \end{theorem}
 \begin{proof}
     \leanok
-    Cancel the intermediate analysis-synthesis pairs in each product.
-    Substitute the exact reconstruction formulas and distribute the
-    finite sums. Multiplicativity of Kronecker products gives the two
-    action identities.
+    Cancelling the intermediate analysis-synthesis pairs in each product and
+    distributing the finite reconstruction sums establishes the composition
+    and sandwich formulas, while multiplicativity of Kronecker products yields
+    the two action identities.
 \end{proof}
 
 \begin{definition}[Full decomposition coordinates]
@@ -105,9 +105,11 @@
     \leanok
     \uses{thm:glm_boundary_representation_unique,
         thm:glm_boundary_support_comparison}
-    Sum the separate biorthogonality identities and apply
+    Summing the separate biorthogonality identities gives $HS=I$ and
+    $SH=\sum_iW_iV_i$, after which
     Theorems~\ref{thm:glm_boundary_representation_unique}
-    and~\ref{thm:glm_boundary_support_comparison}.
+    and~\ref{thm:glm_boundary_support_comparison} show that $\widetilde HS$
+    and $H\widetilde S$ are inverse coordinate changes.
 \end{proof}
 
 \begin{theorem}[Target intertwiners and reindexing]
@@ -126,9 +128,11 @@
 \end{theorem}
 \begin{proof}
     \leanok
-    Multiply the reconstruction formula by the selected analysis or
-    synthesis map and cancel all other copies. Compose the two resulting
-    intertwiners. Reindex the finite reconstruction sum for the last assertion.
+    Multiplying the reconstruction formula by the selected analysis or
+    synthesis map cancels all other copies and yields $V_iB^a=A_i^aV_i$ and
+    $B^aW_i=W_iA_i^a$; composing these two intertwiners gives the cross
+    relation for $V_i\widetilde W_j$, and reindexing the finite reconstruction
+    sum preserves every identity.
 \end{proof}
 
 \begin{definition}[The two exact action trees]
@@ -173,10 +177,11 @@
     \leanok
     \uses{thm:glm_boundary_decomposition_operations,
         thm:glm_boundary_representation_unique}
-    Lift each first-stage decomposition through the other action factor,
-    then compose with the second-stage decomposition. The bond associator
-    puts both trees on the same incoming space. Apply
-    Theorem~\ref{thm:glm_boundary_representation_unique} to their supports.
+    Lifting each first-stage decomposition through the other action factor and
+    composing with the second-stage decomposition gives two exact
+    decompositions that the bond associator places on the same incoming space;
+    Theorem~\ref{thm:glm_boundary_representation_unique} then equates their
+    support idempotents.
 \end{proof}
 
 \begin{definition}[The full action comparison]
@@ -358,10 +363,10 @@
     \uses{thm:glm_boundary_action_l_factor,
         thm:glm_boundary_action_comparison,
         thm:glm_boundary_spanning}
-    Derive a common positive word span. Substitute
-    (\ref{eq:glm_boundary_action_l_factor}) in the full inverse and analysis
-    equations. Take each final block and cancel its nonzero identity
-    factor to obtain (\ref{eq:glm_boundary_action_l_defining}).
+    At a common positive word-spanning length, substituting
+    (\ref{eq:glm_boundary_action_l_factor}) into the full inverse and analysis
+    equations and cancelling the nonzero identity factor $I_{D_y}$ on each
+    final block yields (\ref{eq:glm_boundary_action_l_defining}).
 \end{proof}
 
 \paragraph{Source index convention.}

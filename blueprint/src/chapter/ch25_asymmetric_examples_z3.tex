@@ -341,12 +341,11 @@ fusion rules follow from them.
 \begin{proof}
     \leanok
     \uses{thm:asymex_explicit_gauge}
-    Choose bond coordinates adapted to the common kernel, the common image
-    modulo that kernel, and a completion. Conjugation by this change of
-    coordinates makes every letter block upper triangular with $M^\dagger$
-    on the matched diagonal block. The entries and the inverse change of
-    coordinates are checked over $\Z[\omega]$, as in
-    Theorem~\ref{thm:asymex_explicit_gauge}.
+    In bond coordinates adapted to the common kernel, the common image
+    modulo that kernel, and a completion, conjugation makes every letter
+    block upper triangular with $M^\dagger$ on the matched diagonal block.
+    The entries and the inverse change of coordinates are checked over
+    $\Z[\omega]$, as in Theorem~\ref{thm:asymex_explicit_gauge}.
     The rows and columns belonging to the matched block give $W$ and $V$.
     Multiplication of upper triangular block matrices gives
     $WB^wV=(M^\dagger)^w$, including $WV=\Id$ for the empty word.
@@ -434,9 +433,9 @@ $U_L^2=O_L(M^\dagger)$:
 \begin{proof}
     \leanok
     \uses{thm:asymex_explicit_gauge}
-    Use the conjugation argument of
+    The conjugation argument of
     Theorem~\ref{thm:asymex_z3anomalous_uu_compression}, over $\Z[\omega]$,
-    with two one-dimensional zero diagonal blocks before the target and
+    places two one-dimensional zero diagonal blocks before the target and
     one after. The target rows and columns give $WV=\Id$ and
     $WB^wV=\delta^w$. Direct multiplication gives zero for every triple
     product of remainder letters. The products $R^0R^4$ for
@@ -492,8 +491,8 @@ $U_L^2=O_L(M^\dagger)$:
 
 \begin{proof}
     \leanok
-    Select eight scalar equations for the equal-factor products and
-    four for the inverse-factor products. Write the selected sitewise
+    Selecting eight scalar equations for the equal-factor products and
+    four for the inverse-factor products writes the chosen sitewise
     intertwining equations as $Kx=0$, where $x$ lists
     the entries of $X$ or $Y$. The coefficient matrix $K$ has entries in
     $\Z[\omega]$ and admits a matrix $H$ with $HK=c\Id$ for a nonzero
@@ -702,8 +701,8 @@ proved here.
     the dressed identities. For $(g,e,g)$ both trees are the fusion tensor
     of $M\otimes M$. The product is invariant under the fusion-tensor gauge
     action because $g^3=e$, and $\omega^2\neq1$. Since the anomaly
-    three-cocycle is not cohomologous to the constant cochain one, its class
-    is nonzero by Corollary~\ref{cor:mpug_anomaly_class}.
+    three-cocycle is not cohomologous to the constant cochain one,
+    Corollary~\ref{cor:mpug_anomaly_class} shows that its class is nonzero.
 \end{proof}
 
 \begin{theorem}[Orientation of the class]
@@ -725,9 +724,9 @@ proved here.
     \uses{thm:asymex_z3anomalous_anomaly_class}
     The cube root $\omega=(-1+i\sqrt3)/2$ is $e^{2\pi i/3}$, so
     $\omega_1(a,b,c)=\omega^{a\lfloor(b+c)/3\rfloor}$ and only the factor
-    $\omega_1(g,g^2,g)=\omega$ is nontrivial. The product for the family is
-    $\omega^2$ by Theorem~\ref{thm:asymex_z3anomalous_anomaly_class}, and
-    $\omega^2\cdot\omega=1$.
+    $\omega_1(g,g^2,g)=\omega$ is nontrivial. By
+    Theorem~\ref{thm:asymex_z3anomalous_anomaly_class}, the product for the
+    family is $\omega^2$, which satisfies $\omega^2\cdot\omega=1$.
 \end{proof}
 
 Both~\cite{GarreRubioSchuch2024DomainWall} and~\cite{GarreRubio2023MPOSym}
@@ -766,14 +765,14 @@ not a discrepancy between the two definitions of the anomaly.
 
 \begin{proof}
     \leanok
-    The first claim is
-    Theorem~\ref{thm:asymex_group_cocycle_inverse_cocycle}, and
-    $\omega_j^{-1}=\omega_{(n-1)j}$ because $\omega_j$ is a power of the
-    primitive root $e^{2\pi i/n}$. The cyclic product of $\omega_1^{-1}$ is
-    the inverse of that of $\omega_1$, which is $\omega^2$ by
-    Theorem~\ref{thm:asymex_z3anomalous_class_orientation}. The domain-wall
-    phase is the table entry for $\omega_2$. The last claim is
-    Theorem~\ref{thm:asymex_group_cocycle_identity_not_normal}.
+    Theorem~\ref{thm:asymex_group_cocycle_inverse_cocycle} gives the first
+    claim, and $\omega_j^{-1}=\omega_{(n-1)j}$ because $\omega_j$ is a power
+    of the primitive root $e^{2\pi i/n}$. By
+    Theorem~\ref{thm:asymex_z3anomalous_class_orientation}, the cyclic
+    product of $\omega_1^{-1}$ is the inverse of that of $\omega_1$, namely
+    $\omega^2$, and the domain-wall phase is the table entry for $\omega_2$.
+    Theorem~\ref{thm:asymex_group_cocycle_identity_not_normal} proves that
+    the construction is not a representation with normal tensors.
 \end{proof}
 
 \begin{corollary}[The domain-wall phase of the family]
@@ -927,9 +926,9 @@ targets separately.
     \uses{def:asymex_z3anomalous_defect, def:mpdo_operator_product}
     Write $M_0=\delta$, $M_1=M$, $M_2=M^\dagger$, and
     $B_{gh}=(M_g\cdot M_h)^a$ for the pair block at a fixed letter $a$.
-    Reindex the bond coordinate $p=5p_1+p_2$ by the summand pair and its
-    internal coordinates. The stacked tensor $A\cdot A$ of bond dimension
-    twenty-five is then block diagonal over the nine pairs
+    Reindexing the bond coordinate $p=5p_1+p_2$ by the summand pair and its
+    internal coordinates makes the stacked tensor $A\cdot A$ of bond dimension
+    twenty-five block diagonal over the nine pairs
     $(g,h)\in\{0,1,2\}^2$, with $(g,h)$ block $M_g\cdot M_h$.
     In these coordinates, for every letter $a$,
     \begin{align}
@@ -1024,14 +1023,14 @@ targets separately.
         thm:asymex_z3anomalous_ud_compression}
     On the five pairs with $g=0$ or $h=0$, the pair block equals its
     target under the natural bond identification and requires no zero
-    diagonal block. On the other four pairs, use the gauges of
-    Theorem~\ref{thm:asymex_z3anomalous_uu_compression} or
-    Theorem~\ref{thm:asymex_z3anomalous_ud_compression}.
-    Their direct sum, conjugated by the bond reindexing of
-    Theorem~\ref{thm:asymex_z3anomalous_defect_square_blocks}, gives
-    the required triangular form
-    (Theorem~\ref{thm:asymex_direct_sum_compression}). Distinct pair blocks have disjoint
-    coordinates, which gives $W_sV_t=0$ for $s\neq t$.
+    diagonal block, whereas on the other four pairs the gauges of
+    Theorem~\ref{thm:asymex_z3anomalous_uu_compression} and
+    Theorem~\ref{thm:asymex_z3anomalous_ud_compression} place each block in
+    triangular form. By Theorem~\ref{thm:asymex_direct_sum_compression},
+    their direct sum, conjugated by the bond reindexing of
+    Theorem~\ref{thm:asymex_z3anomalous_defect_square_blocks}, places
+    $A\cdot A$ in the required triangular form. Distinct pair blocks have
+    disjoint coordinates, which gives $W_sV_t=0$ for $s\neq t$.
 
     The original block dimensions sum to
     $1+2+2+2+4+4+2+4+4=25$.

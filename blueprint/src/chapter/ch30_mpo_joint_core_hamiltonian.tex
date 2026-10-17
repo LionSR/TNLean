@@ -83,8 +83,9 @@ physical alphabet remains $\Fin{d_0}$ throughout the interior.
 \begin{proof}
     \leanok
     In the first identity a rectangular boundary $Y_x$ gives
-    $u_c=Y_x[c,a]$ at each fixed $x,a$. Conversely, choose such a vector
-    independently for each $x,a$ and assemble these columns into $Y_x$.
+    $u_c=Y_x[c,a]$ at each fixed $x,a$. Conversely, choosing such a
+    vector independently for each $x,a$ and collecting these columns
+    into $Y_x$ gives the reverse inclusion.
     The last identity uses the rows $u_b=Z_x[e,b]$ in the same way.
     Neither construction selects a label or an exterior value from an
     empty set.
@@ -107,9 +108,10 @@ physical alphabet remains $\Fin{d_0}$ throughout the interior.
 \begin{proof}
     \leanok
     \uses{thm:mpo_joint_core_edge_fibers,thm:mpo_dependent_orthogonal_projections}
-    Their kernels are exactly the ranges in
-    Theorem~\ref{thm:mpo_joint_core_edge_fibers}; apply
-    Theorem~\ref{thm:mpo_dependent_orthogonal_projections}.
+    Because their kernels are the ranges in
+    Theorem~\ref{thm:mpo_joint_core_edge_fibers},
+    Theorem~\ref{thm:mpo_dependent_orthogonal_projections} gives both
+    identities.
 \end{proof}
 
 \begin{definition}[Ordered-pair chain and core coordinates]
@@ -223,7 +225,8 @@ physical alphabet remains $\Fin{d_0}$ throughout the interior.
     The first edge identity fixes $x,a$ and leaves the right boundary
     unchanged. The last fixes $y,e$ and leaves the left boundary unchanged.
     The middle placement evaluates the same joint open-chain operator on
-    $\sigma$ in both coordinate systems. Add these three identities.
+    $\sigma$ in both coordinate systems, and summing the three identities
+    gives the result.
 \end{proof}
 
 \begin{theorem}[Exact dependent spectator operator identification]
@@ -245,8 +248,9 @@ physical alphabet remains $\Fin{d_0}$ throughout the interior.
 \begin{proof}
     \leanok
     \uses{thm:mpo_joint_core_term_fibers}
-    Evaluate both sides at an arbitrary $(x,y),(b,\sigma,c),(a,e)$ and
-    use Theorem~\ref{thm:mpo_joint_core_term_fibers}.
+    Evaluating both sides at an arbitrary $(x,y),(b,\sigma,c),(a,e)$ and
+    applying Theorem~\ref{thm:mpo_joint_core_term_fibers} gives the
+    identity.
 \end{proof}
 
 % Identifying K with the boundary-deformed actual physical Hamiltonian
@@ -274,8 +278,9 @@ physical alphabet remains $\Fin{d_0}$ throughout the interior.
     \leanok
     \uses{thm:mpo_joint_core_operator_identity,thm:mpo_joint_boundary_spectator_gap,
         thm:martingale_isometric_conjugation_gap}
-    The coordinate unitaries preserve norms, kernels and their orthogonal
-    complements. Apply (\ref{eq:mpo_joint_core_identity}) on each side and
-    then Theorem~\ref{thm:mpo_joint_boundary_spectator_gap} to the common
-    family $G_{x,y,m}$. The exterior fibers are nonempty because $D_x^0>0$.
+    The coordinate unitaries preserve norms, kernels, and their orthogonal
+    complements, so applying (\ref{eq:mpo_joint_core_identity}) on each
+    side reduces the equivalence to
+    Theorem~\ref{thm:mpo_joint_boundary_spectator_gap} for the common
+    family $G_{x,y,m}$; the exterior fibers are nonempty because $D_x^0>0$.
 \end{proof}

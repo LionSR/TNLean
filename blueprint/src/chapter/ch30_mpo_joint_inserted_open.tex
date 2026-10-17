@@ -24,9 +24,9 @@
         \label{eq:mpo_joint_inserted_map}                                            \\
         \mathcal S'_{W,N} & =\operatorname{range}\Gamma'_{W,N}.
     \end{align}
-    The boundary domain is $\prod_x\MN{D_x}$.
-    This is the joint extended boundary space for the block construction
-    of \cite[Section~5]{GarreRubio2023MPOSym}.
+    The boundary domain is $\prod_x\MN{D_x}$, forming the joint extended
+    boundary space for the block construction of
+    \cite[Section~5]{GarreRubio2023MPOSym}.
 \end{definition}
 
 \begin{theorem}[Joint boundary injectivity]
@@ -85,11 +85,11 @@
     \leanok
     \uses{thm:mpo_joint_inserted_injective,thm:mpo_mixed_extended_intersection}
     Fixing the first or last letter changes $X_x$ to $X_xA_x^iW_x$ or
-    $W_xA_x^jX_x$, respectively. Conversely, let $Y_{i,x}$ and $Z_{j,x}$
-    be boundary tuples for the first and last restrictions of a vector.
-    Joint injectivity on the common interior gives
+    $W_xA_x^jX_x$, respectively. Conversely, for boundary tuples
+    $Y_{i,x}$ and $Z_{j,x}$ of the first and last restrictions of a
+    vector, joint injectivity on the common interior gives
     $W_xA_x^jY_{i,x}=Z_{j,x}A_x^iW_x$ for every $i,j,x$.
-    Define $X_x=\sum_jR_{x,j}Z_{j,x}$. Then
+    Setting $X_x=\sum_jR_{x,j}Z_{j,x}$ yields
     $Y_{i,x}=X_xA_x^iW_x$, reconstructing the vector as
     $\Gamma'_{W,L+1}(X)$. Iterating the two endpoint restriction formulas
     proves closure under contiguous restrictions.

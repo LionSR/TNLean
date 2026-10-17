@@ -14,6 +14,7 @@ import TNLean.PEPS.AreaLaw.Geometry.AllowedSlopeAffineLine
 import TNLean.PEPS.AreaLaw.Geometry.AmbientBoundary
 import TNLean.PEPS.AreaLaw.Geometry.BeltFanColors
 import TNLean.PEPS.AreaLaw.Geometry.BeltMarks
+import TNLean.PEPS.AreaLaw.Geometry.BeltReplacementTemplates
 import TNLean.PEPS.AreaLaw.Geometry.BeltRunInterfaces
 import TNLean.PEPS.AreaLaw.Geometry.BirthSeparationAngular
 import TNLean.PEPS.AreaLaw.Geometry.BirthSeparationAtoms
@@ -38,6 +39,7 @@ import TNLean.PEPS.AreaLaw.Geometry.CellFans
 import TNLean.PEPS.AreaLaw.Geometry.CellSides
 import TNLean.PEPS.AreaLaw.Geometry.ClosedSquare
 import TNLean.PEPS.AreaLaw.Geometry.ConcentricFans
+import TNLean.PEPS.AreaLaw.Geometry.DescendantCutClearance
 import TNLean.PEPS.AreaLaw.Geometry.DistanceLayers
 import TNLean.PEPS.AreaLaw.Geometry.DummyContacts
 import TNLean.PEPS.AreaLaw.Geometry.DummyCorners
@@ -63,6 +65,7 @@ import TNLean.PEPS.AreaLaw.Geometry.FanRunComponents
 import TNLean.PEPS.AreaLaw.Geometry.FanRunConnectedness
 import TNLean.PEPS.AreaLaw.Geometry.FanRunContacts
 import TNLean.PEPS.AreaLaw.Geometry.FanRunDisjointness
+import TNLean.PEPS.AreaLaw.Geometry.FanRunTemplate
 import TNLean.PEPS.AreaLaw.Geometry.FanRuns
 import TNLean.PEPS.AreaLaw.Geometry.FanSideContacts
 import TNLean.PEPS.AreaLaw.Geometry.FineBelts
@@ -70,6 +73,7 @@ import TNLean.PEPS.AreaLaw.Geometry.FineCellPartition
 import TNLean.PEPS.AreaLaw.Geometry.FineMarkSeparation
 import TNLean.PEPS.AreaLaw.Geometry.InitialActiveRayCount
 import TNLean.PEPS.AreaLaw.Geometry.InitialActiveRays
+import TNLean.PEPS.AreaLaw.Geometry.InitialBeltCount
 import TNLean.PEPS.AreaLaw.Geometry.InitialComponentRegions
 import TNLean.PEPS.AreaLaw.Geometry.InitialLatticePartition
 import TNLean.PEPS.AreaLaw.Geometry.InitialMarkFamily
@@ -99,6 +103,7 @@ import TNLean.PEPS.AreaLaw.Geometry.NonbeltPrimaries
 import TNLean.PEPS.AreaLaw.Geometry.OrderedTwoFamilyPartitionComap
 import TNLean.PEPS.AreaLaw.Geometry.PolynomialBudget
 import TNLean.PEPS.AreaLaw.Geometry.PowerScaleDepth
+import TNLean.PEPS.AreaLaw.Geometry.PrimaryBirthTemplates
 import TNLean.PEPS.AreaLaw.Geometry.PrimaryCounting
 import TNLean.PEPS.AreaLaw.Geometry.PrimaryFineCellCover
 import TNLean.PEPS.AreaLaw.Geometry.PrimaryFragments
@@ -107,6 +112,7 @@ import TNLean.PEPS.AreaLaw.Geometry.QuotientIntervals
 import TNLean.PEPS.AreaLaw.Geometry.RectangleMixedSquares
 import TNLean.PEPS.AreaLaw.Geometry.RectangleShellCounts
 import TNLean.PEPS.AreaLaw.Geometry.RectangleShellWeightedCover
+import TNLean.PEPS.AreaLaw.Geometry.RepairBirthLatticePoint
 import TNLean.PEPS.AreaLaw.Geometry.RepairBirthRank
 import TNLean.PEPS.AreaLaw.Geometry.RepairCharacteristicLength
 import TNLean.PEPS.AreaLaw.Geometry.RepairChildCones
@@ -116,13 +122,14 @@ import TNLean.PEPS.AreaLaw.Geometry.RepairCurrentAssignments
 import TNLean.PEPS.AreaLaw.Geometry.RepairCurrentDisjointness
 import TNLean.PEPS.AreaLaw.Geometry.RepairCurrentRegions
 import TNLean.PEPS.AreaLaw.Geometry.RepairCurrentRetention
+import TNLean.PEPS.AreaLaw.Geometry.RepairCurrentTerminalDisjointness
 import TNLean.PEPS.AreaLaw.Geometry.RepairDepth
 import TNLean.PEPS.AreaLaw.Geometry.RepairDescendantCounts
 import TNLean.PEPS.AreaLaw.Geometry.RepairDescendantScales
 import TNLean.PEPS.AreaLaw.Geometry.RepairDescendants
 import TNLean.PEPS.AreaLaw.Geometry.RepairDummySites
 import TNLean.PEPS.AreaLaw.Geometry.RepairFanCones
-import TNLean.PEPS.AreaLaw.Geometry.RepairFinalLatticeCoverage
+import TNLean.PEPS.AreaLaw.Geometry.RepairFinalLatticePartition
 import TNLean.PEPS.AreaLaw.Geometry.RepairFinalRegion
 import TNLean.PEPS.AreaLaw.Geometry.RepairFinalRegionStabilization
 import TNLean.PEPS.AreaLaw.Geometry.RepairFinalRegionTransport
@@ -131,18 +138,23 @@ import TNLean.PEPS.AreaLaw.Geometry.RepairInclusionComposition
 import TNLean.PEPS.AreaLaw.Geometry.RepairInduction
 import TNLean.PEPS.AreaLaw.Geometry.RepairInductionMetric
 import TNLean.PEPS.AreaLaw.Geometry.RepairInductionStatement
+import TNLean.PEPS.AreaLaw.Geometry.RepairInitialMarkFacts
+import TNLean.PEPS.AreaLaw.Geometry.RepairInitialWeightedCount
 import TNLean.PEPS.AreaLaw.Geometry.RepairLatticeCoverage
 import TNLean.PEPS.AreaLaw.Geometry.RepairMarkMesh
 import TNLean.PEPS.AreaLaw.Geometry.RepairNextRegionDisjointness
 import TNLean.PEPS.AreaLaw.Geometry.RepairRegionDisjointness
 import TNLean.PEPS.AreaLaw.Geometry.RepairReplacementLatticeCoverage
 import TNLean.PEPS.AreaLaw.Geometry.RepairReplacementRegions
+import TNLean.PEPS.AreaLaw.Geometry.RepairRetainedPrefixCount
+import TNLean.PEPS.AreaLaw.Geometry.RepairRootPrefixCount
 import TNLean.PEPS.AreaLaw.Geometry.RepairStabilization
 import TNLean.PEPS.AreaLaw.Geometry.RepairStage
 import TNLean.PEPS.AreaLaw.Geometry.RepairStageSites
 import TNLean.PEPS.AreaLaw.Geometry.RepairStageStars
 import TNLean.PEPS.AreaLaw.Geometry.RepairStarModel
 import TNLean.PEPS.AreaLaw.Geometry.RepairTerminalInteriors
+import TNLean.PEPS.AreaLaw.Geometry.RepairTerminalPrefixSites
 import TNLean.PEPS.AreaLaw.Geometry.RepairTerminalSquareCount
 import TNLean.PEPS.AreaLaw.Geometry.RepairTermination
 import TNLean.PEPS.AreaLaw.Geometry.ScaleSeparation
@@ -163,6 +175,7 @@ import TNLean.PEPS.AreaLaw.Geometry.TemplateEntropy
 import TNLean.PEPS.AreaLaw.Geometry.TemplateInstances
 import TNLean.PEPS.AreaLaw.Geometry.TemplateLayers
 import TNLean.PEPS.AreaLaw.Geometry.TemplateMixedSquares
+import TNLean.PEPS.AreaLaw.Geometry.TemplatePolygonFiniteIntegerPoints
 import TNLean.PEPS.AreaLaw.Geometry.TemplatePolygons
 import TNLean.PEPS.AreaLaw.Geometry.TemplateRowBounds
 import TNLean.PEPS.AreaLaw.Geometry.TemplateRows

@@ -139,8 +139,8 @@ $M(a_{p_1})\otimes\cdots\otimes M(a_{p_m})\otimes\C$.
 
 \begin{proof}
     \leanok
-    Partition the remaining registers first. Their selected memory is
-    $\C$, so $y$ is sent to $1\otimes y$. Adjoining the first register
+    Partitioning the remaining registers first sends $y$ to $1\otimes y$ because their selected memory is
+    $\C$. Adjoining the first register
     and applying the associativity isometry gives
     $e\otimes y\mapsto(e\otimes1)\otimes y$.
 \end{proof}
@@ -178,11 +178,10 @@ $M(a_{p_1})\otimes\cdots\otimes M(a_{p_m})\otimes\C$.
 
 \begin{proof}\leanok
     \uses{thm:peps_selected_head_partition,def:peps_party_tensor_basis}
-    Induct on the length of the ordered list. For the empty list,
-    both columns are $1\in\C$. At a nonempty list, its first
-    party does not occur in the tail. The selected-register partition
-    therefore separates its physical column as $e_{x_p}\otimes1$.
-    Apply the induction hypothesis to the tail. The prescribed physical
+    By induction on the length of the ordered list, both columns are $1\in\C$ for the empty list. At a nonempty list, the first
+    party does not occur in the tail, so the selected-register partition
+    separates its physical column as $e_{x_p}\otimes1$
+    and the induction hypothesis applies to the tail. The prescribed physical
     column thus groups as the ordered tensor product of its singleton
     columns. By the given identifications, these are
     $b_{p_j}(y_{p_j})$ at every listed party. The ordered tensor basis
@@ -212,13 +211,13 @@ $M(a_{p_1})\otimes\cdots\otimes M(a_{p_m})\otimes\C$.
     \leanok
     \uses{def:peps_party_grouped_basis,def:peps_family_physical_output,
         def:peps_singleton_physical_basis,thm:peps_selected_head_partition}
-    First consider any ordered list without repetitions, retaining
-    only its physical registers. Induct on this list. For the empty
-    list, both memories are $\C$ with basis vector $1$. In the
-    induction step, no remaining register is owned by the first party.
-    Theorem~\ref{thm:peps_selected_head_partition} separates its basis
-    vector as $e_{p,j}\otimes1$, leaving the ordered physical basis
-    vector on the tail. Apply the induction hypothesis to that tail.
+    On any ordered list without repetitions retaining
+    only its physical registers, induction on the list starts from the empty
+    list, where both memories are $\C$ with basis vector $1$. In the
+    induction step, no remaining register is owned by the first party,
+    so Theorem~\ref{thm:peps_selected_head_partition} separates its basis
+    vector as $e_{p,j}\otimes1$ and the induction hypothesis applies to the ordered physical basis
+    vector on the tail.
     When the list exhausts $P$, applying $G_a^{-1}$ to the resulting equality
     gives equality of the two bases.
 \end{proof}
@@ -255,12 +254,12 @@ $M(a_{p_1})\otimes\cdots\otimes M(a_{p_m})\otimes\C$.
 \begin{proof}
     \leanok
     \uses{def:peps_party_grouped_basis,def:peps_party_local_output_basis}
-    Induct on the ordered party list. Partitioning a concatenation
+    By induction on the ordered party list, partitioning a concatenation
     first partitions each list and then regroups its four factors,
     joining the two selected memories and the two complementary
-    memories. The selected vector is the stated joint local column.
-    Apply the induction hypothesis to the two complementary lists,
-    and apply $G_{a+c}^{-1}$. For the empty list all memories
+    memories so that the selected vector is the stated joint local column.
+    Applying the induction hypothesis to the two complementary lists
+    and then applying $G_{a+c}^{-1}$ completes the step, while for the empty list all memories
     are scalar and the assertion reduces to multiplication in $\C$.
 \end{proof}
 
@@ -276,11 +275,10 @@ These coordinate identities apply to the local contractions in
     \uses{def:peps_affected_owner,def:peps_party_registers,def:peps_owner_layout}
     Let $P$ be any party set, let
     $Q=P\sqcup\{*\}$, and let $\iota:P\to Q$
-    assign each original party its selected owner. For any register list $a$,
-    the registers of $\iota_*a$ at $*$ form the empty list. At $\iota(p)$,
-    their list is $\iota_*(a_p)$, in the original order. This is the
-    all-party selection in the proof of
-    \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS}.
+    assign each original party its selected owner. In the all-party selection from the proof of
+    \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS}, for any register list $a$,
+    the registers of $\iota_*a$ at $*$ form the empty list, and at $\iota(p)$
+    their list is $\iota_*(a_p)$ in the original order.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -393,9 +391,9 @@ These coordinate identities apply to the local contractions in
 
 \begin{proof}\leanok
     \uses{def:peps_selected_physical_configurations}
-    Separate the exterior factor from the finite product over
-    $Q=P\sqcup\{*\}$, and relabel the remaining
-    factors by their original owners.
+    Separating the exterior factor from the finite product over
+    $Q=P\sqcup\{*\}$ and relabelling the remaining
+    factors by their original owners gives the stated product factorization.
 \end{proof}
 
 
@@ -441,13 +439,13 @@ These coordinate identities apply to the local contractions in
         thm:peps_selected_family_physical_columns,thm:peps_basis_empty_first_party,
         thm:peps_basis_grouping_equality,thm:peps_basis_memory_equalities,
         thm:peps_basis_party_recursion}
-    First group the relabelled physical column along
-    $(\iota(p_0),\ldots,\iota(p_{m-1}))$. The owner isometry preserves the
+    Grouping the relabelled physical column along
+    $(\iota(p_0),\ldots,\iota(p_{m-1}))$ via the owner isometry preserves the
     ordered physical factors. At each listed owner the selected local column
     is the original singleton column, so the grouped vector is their
-    ordered tensor product. Prepending $*$ contributes only $1$,
-    since it owns no register. Map back to the register memory to
-    obtain~(\ref{eq:peps_selected_physical_basis_grouped}).
+    ordered tensor product; prepending $*$ contributes only $1$
+    because it owns no register, and mapping back to the register memory
+    gives~(\ref{eq:peps_selected_physical_basis_grouped}).
 \end{proof}
 
 
@@ -477,8 +475,8 @@ These coordinate identities apply to the local contractions in
 
 \begin{proof}\leanok
     \uses{thm:peps_party_grouped_basis_append,thm:peps_basis_memory_equalities}
-    Apply the concatenation identity to the separately relabelled register
-    lists. Map each local column and the grouped column by the
-    displayed equality of output lists. Equality identifications preserve
+    Applying the concatenation identity to the separately relabelled register
+    lists and mapping each local column and the grouped column along the
+    displayed equality of output lists preserves
     these columns, yielding~(\ref{eq:peps_selected_physical_private_basis_grouped}).
 \end{proof}

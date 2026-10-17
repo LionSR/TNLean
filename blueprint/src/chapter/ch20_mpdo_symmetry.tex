@@ -2,10 +2,10 @@
 
 For a unitary on-site symmetry $U$, a density operator $\rho$ satisfies
 $[U,\rho]=0$ (weak symmetry) or $U\rho=\lambda\rho$ (strong
-symmetry)~\cite{deGroot2022SPTOpen,GarreRubio2026LocalCharacterization}.
-Sun formulates both notions for families of matrix product
-operators~\cite{Sun2025Anomalous}. The density operators have a virtual boundary $\mathcal X$ commuting
-with every tensor letter~\cite{Sun2025Anomalous}.
+symmetry)~\cite{deGroot2022SPTOpen,GarreRubio2026LocalCharacterization};
+following~\cite{Sun2025Anomalous}, both notions extend to families of matrix
+product operators acting on density operators with a virtual boundary
+$\mathcal X$ that commutes with every tensor letter~\cite{Sun2025Anomalous}.
 
 \begin{definition}[Commuting boundaries and density operators]
     \label{def:mpdo_commuting_boundary}
@@ -15,7 +15,8 @@ with every tensor letter~\cite{Sun2025Anomalous}.
         MPSTensor.mpvWithBoundary, MPSTensor.mpvWithBoundary_one}
     \leanok
     \uses{def:mpo_family}
-    For a virtual matrix $\mathcal X$, define the operator family by
+    Following~\cite[lines~175--182]{Sun2025Anomalous}, for a virtual matrix
+    $\mathcal X$, define the operator family by
     \begin{align}
         \rho^{(L)}(\mathcal X,M)_{\sigma,\tau}
          & =\tr\bigl(\mathcal X M^{\sigma_1\tau_1}\cdots
@@ -28,9 +29,8 @@ with every tensor letter~\cite{Sun2025Anomalous}.
     $\rho^{(L)}(\mathcal X,M)\ge0$ for every $L>0$.
     Commutation does not imply this positivity condition.
     The vectorized coefficients are the same boundary-weighted traces
-    on the doubled physical alphabet. Identity boundary recovers the
+    on the doubled physical alphabet, and the identity boundary recovers the
     ordinary periodic operator and vector families.
-    This is the family of~\cite[lines~175--182]{Sun2025Anomalous}.
 \end{definition}
 
 \begin{theorem}[Commutation of boundaries with virtual words]
@@ -323,8 +323,9 @@ follows, the first for strong and the second for weak symmetry.
     $O_{B_gB_g}(N)\neq0$ for all large $N$, and then $c_g(N)\neq0$.
     Theorems~\ref{thm:normal_proportional_mpv_geometric_phase}
     and~\ref{thm:cpsv_normal_mpv_phase_gauge} turn this proportionality into
-    the gauge relation. The converse is
-    Theorem~\ref{thm:mpdo_symmetry_local_conditions}.
+    the gauge relation, and conversely
+    Theorem~\ref{thm:mpdo_symmetry_local_conditions} gives strong on-site
+    symmetry from the local gauge relation.
 \end{proof}
 
 \begin{theorem}[Symmetries of the vectorized density operator]\label{thm:mpdo_symmetry_vectorized}

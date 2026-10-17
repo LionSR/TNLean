@@ -256,7 +256,7 @@ def run(work: Path) -> None:
 \usepackage{{amssymb,amsthm,amsmath,mathtools}}
 \newcounter{{chapter}}
 \input{{macros/common}}
-\usepackage{{tenkz}}
+\usepackage{{tikz-tensor-networks}}
 \input{{macros/diagrams}}
 \begin{{document}}
 {unit.source}
