@@ -73,9 +73,9 @@ conjugate-transposed tensor.
 
 \begin{proof}
     \leanok
-    Insert the resolution of the identity
+    Inserting the resolution of the identity
     $\sum_{\beta}\ket{\beta}\bra{\beta}$ at the two cut bonds of the ring
-    trace: $\tr(A^{\sigma}A^{\tau})
+    trace yields $\tr(A^{\sigma}A^{\tau})
         =\sum_{\alpha,\beta}\bra{\alpha}A^{\sigma}\ket{\beta}
         \bra{\beta}A^{\tau}\ket{\alpha}$.
 \end{proof}
@@ -130,9 +130,9 @@ conjugate-transposed tensor.
 
 \begin{proof}
     \leanok
-    Expand the overlap as a sum over configurations of products
+    Expanding the overlap as a sum over configurations of products
     $\bra{\alpha'}A^{\sigma}\ket{\beta'}
-        \overline{\bra{\alpha}A^{\sigma}\ket{\beta}}$ and recognize the entry of
+        \overline{\bra{\alpha}A^{\sigma}\ket{\beta}}$ yields the $(\alpha',\alpha)$ entry of
     $\sum_{\sigma}A^{\sigma}\ket{\beta'}\bra{\beta}(A^{\sigma})^{\dagger}$,
     which is the $L$-fold transfer map applied to the matrix unit.
 \end{proof}
@@ -183,9 +183,9 @@ conjugate-transposed tensor.
 \begin{proof}
     \leanok
     \uses{thm:half_chain_schmidt_factorization, lem:matrix_rectangular_charpoly_cyclicity}
-    Apply the rectangular cyclicity of the characteristic polynomial to the
-    factorization (\ref{eq:half_chain_factorization}), regrouping the product
-    as $\Psi$ times $(SG^{\mathsf T}S)\Psi^{\dagger}$; the reversed product is
+    Applying rectangular cyclicity of the characteristic polynomial to the
+    factorization (\ref{eq:half_chain_factorization}) after regrouping the product
+    as $\Psi$ times $(SG^{\mathsf T}S)\Psi^{\dagger}$ replaces $\rho_L$ by the reversed product
     $(SG^{\mathsf T}S)\Psi^{\dagger}\Psi=(SG^{\mathsf T}S)G$.
 \end{proof}
 
@@ -222,12 +222,12 @@ conjugate-transposed tensor.
 \begin{proof}
     \leanok
     \uses{lem:half_chain_gram_transfer, thm:geometric_bound_of_spectral_radius_lt_one}
-    Write $\E_A^{L}=P_{\Lambda}+(\E_A-P_{\Lambda})^{L}$ for $L\geq1$ by the
-    power decomposition. By (\ref{eq:half_chain_gram_transfer}) the deviation
-    of a Gram entry from the fixed-point projection entry is an entry of
-    $(\E_A-P_{\Lambda})^{L}$ applied to a matrix unit, bounded by the operator
-    norm of the $L$-th power, which decays geometrically below unit spectral
-    radius.
+    For $L\geq1$, the power decomposition gives
+    $\E_A^{L}=P_{\Lambda}+(\E_A-P_{\Lambda})^{L}$. By (\ref{eq:half_chain_gram_transfer}),
+    the deviation of each Gram entry from the corresponding fixed-point projection
+    entry is a matrix element of $(\E_A-P_{\Lambda})^{L}$ applied to a matrix unit,
+    which is bounded by the operator norm of $(\E_A-P_{\Lambda})^{L}$ and therefore
+    decays geometrically below unit spectral radius.
 \end{proof}
 
 \begin{lemma}[Diagonal limit of the half-chain overlaps]%
@@ -245,16 +245,15 @@ conjugate-transposed tensor.
         \delta_{\alpha,\alpha'}\delta_{\beta,\beta'}.
         \label{eq:half_chain_limit_diagonal}
     \end{align}
-    For $\tr(\Lambda)=1$ this is the display
-    $\lambda_\alpha\delta_{\alpha,\alpha'}\delta_{\beta,\beta'}$ of
-    \cite{PerezGarcia2007Matrix}.
+    When $\tr(\Lambda)=1$, as in \cite{PerezGarcia2007Matrix}, this formula reduces
+    to $\lambda_\alpha\delta_{\alpha,\alpha'}\delta_{\beta,\beta'}$.
 \end{lemma}
 
 \begin{proof}
     \leanok
-    Evaluate the fixed-point projection on the matrix unit: its trace is
-    $\delta_{\beta,\beta'}$, and the diagonal entry of $\Lambda$ at
-    $(\alpha',\alpha)$ is $\lambda_\alpha\delta_{\alpha,\alpha'}$.
+    Evaluating the fixed-point projection on $\ket{\beta'}\bra{\beta}$ gives
+    $\tr(\ket{\beta'}\bra{\beta})=\delta_{\beta,\beta'}$, while the diagonal entry
+    of $\Lambda$ at $(\alpha',\alpha)$ is $\lambda_\alpha\delta_{\alpha,\alpha'}$.
 \end{proof}
 
 \begin{theorem}[Geometric convergence to the doubled fixed-point spectrum]%
@@ -289,14 +288,13 @@ conjugate-transposed tensor.
 \begin{proof}
     \leanok
     \uses{thm:half_chain_gram_geometric, lem:half_chain_gram_limit_diagonal}
-    Both factors of the comparison matrix are entrywise within $Cr^{L}$ of
-    their diagonal limits by Theorem~\ref{thm:half_chain_gram_geometric} and
-    Lemma~\ref{lem:half_chain_gram_limit_diagonal}, the swapped-transposed
-    factor because swapping and transposing permute entries and exchange the
-    two diagonal weights. The limit entries are bounded, so the product
-    deviates from the product of the limits by at most a constant multiple of
-    $r^{L}$, with constant $D^2\bigl(C(B+C)+BC\bigr)+1$ for an entry bound
-    $B$ on the limits.
+    By Theorem~\ref{thm:half_chain_gram_geometric} and
+    Lemma~\ref{lem:half_chain_gram_limit_diagonal}, both factors of
+    $(SG^{\mathsf T}S)G$ lie entrywise within $Cr^{L}$ of their diagonal
+    limits, since swapping and transposing $G$ permute its entries and exchange
+    the two diagonal weights. Because the limiting entries are bounded by some
+    $B$, the matrix product deviates from the product of the limits by at most
+    $\bigl(D^2(C(B+C)+BC)+1\bigr)r^{L}$.
 \end{proof}
 
 \subsection{Ordered eigenvalues and finite-size normalization}
@@ -335,11 +333,13 @@ conjugate-transposed tensor.
 
 \begin{proof}
     \leanok
-    Apply the scalar function to the spectral decomposition and sort the
-    characteristic roots in decreasing order. For the perturbation bound,
-    use $-\lVert M-N\rVert I\leq M-N\leq\lVert M-N\rVert I$, Weyl
-    monotonicity, and the scalar-translation identity. The resulting bound
-    implies convergence.
+    Applying the increasing scalar function to the spectral decomposition and
+    sorting the characteristic roots in decreasing order gives the
+    functional-calculus identities. The operator inequality
+    $-\lVert M-N\rVert I\leq M-N\leq\lVert M-N\rVert I$, combined with Weyl
+    monotonicity and scalar translation, then yields the eigenvalue
+    perturbation bound, from which convergence of the zero-extended ordered
+    eigenvalues follows.
 \end{proof}
 
 \begin{theorem}[Characteristic roots with zero padding]%
@@ -354,9 +354,10 @@ conjugate-transposed tensor.
 
 \begin{proof}
     \leanok
-    Sort the real characteristic roots. Positivity places the additional
-    $m$ and $n$ zeros at the ends of the respective ordered lists. Extending
-    either list by further zeros therefore gives the same sequence.
+    Sorting the real characteristic roots in decreasing order places the
+    additional $m$ and $n$ zeros of the nonnegative matrices $M$ and $N$ at
+    the ends of their respective ordered lists, so extending either list by
+    further zeros produces the same sequence.
 \end{proof}
 
 \begin{definition}[Positive boundary density and ring normalization]%
@@ -419,14 +420,14 @@ conjugate-transposed tensor.
 \begin{proof}
     \leanok
     \uses{thm:half_chain_charpoly, thm:half_chain_padded_charpoly}
-    The matrix $H_L$ is a positive congruence of $W_L$.
-    Cyclicity of trace and $\sqrt{G_L}\sqrt{G_L}=G_L$ give
-    (\ref{eq:half_chain_actual_norm}). Apply the rectangular-product
-    characteristic-polynomial identity to
-    $\rho_L=\Psi_L W_L\Psi_L^\dagger$ and then the square-product identity
-    to $H_L$. Insert the same scalar $Z_L^{-1}$ into both products to obtain
-    (\ref{eq:half_chain_normalized_charpoly}), and apply
-    Theorem~\ref{thm:half_chain_padded_charpoly}.
+    Because $H_L$ is a positive congruence of $W_L$, it is positive
+    semidefinite, and cyclicity of trace together with $\sqrt{G_L}\sqrt{G_L}=G_L$
+    yields (\ref{eq:half_chain_actual_norm}). Applying the rectangular-product
+    characteristic-polynomial identity to $\rho_L=\Psi_L W_L\Psi_L^\dagger$ and
+    the square-product identity to $H_L$, then scaling both products by
+    $Z_L^{-1}$, gives (\ref{eq:half_chain_normalized_charpoly}), from which
+    Theorem~\ref{thm:half_chain_padded_charpoly} equates the ordered
+    eigenvalues.
 \end{proof}
 
 \begin{definition}[Two-boundary limiting density]%
@@ -476,16 +477,16 @@ conjugate-transposed tensor.
     \uses{thm:half_chain_gram_geometric, thm:half_chain_positive_comparison,
         thm:half_chain_weyl}
     The geometric transfer estimate $Cr^L$ gives $G_L\to G_\infty$.
-    More generally, if $G_L\to\operatorname{diag}(g_p)$ with $g_p\geq0$,
-    continuity of the positive square root gives
-    $H_L\to\operatorname{diag}(g_p g_{p^{\mathrm{swap}}})$.
-    Apply this with $g_{\alpha\beta}=\lambda_\alpha$ to obtain
+    More generally, whenever $G_L\to\operatorname{diag}(g_p)$ with $g_p\geq0$,
+    continuity of the positive square root implies
+    $H_L\to\operatorname{diag}(g_p g_{p^{\mathrm{swap}}})$, so specializing to
+    $g_{\alpha\beta}=\lambda_\alpha$ yields
     $H_L\to\Lambda\otimes\Lambda$.
-    Taking traces gives $Z_L\to1$, hence
-    $\widehat H_L\to\Lambda\otimes\Lambda$.
-    Weyl's bound and the exact physical comparison yield
-    (\ref{eq:half_chain_ordered_limit}). This use of square-root continuity
-    asserts convergence, not a sharper quantitative spectral rate.
+    Taking traces gives $Z_L\to1$ and hence
+    $\widehat H_L\to\Lambda\otimes\Lambda$, from which Weyl's bound and the
+    exact physical comparison yield (\ref{eq:half_chain_ordered_limit})
+    (here square-root continuity establishes qualitative convergence rather
+    than a sharper quantitative rate).
 \end{proof}
 
 \subsection{The unital canonical convention}
@@ -501,9 +502,10 @@ conjugate-transposed tensor.
 
 \begin{proof}
     \leanok
-    The transfer map of $B$ is the trace-pairing adjoint of that of $A$.
-    The adjoint of a power is the corresponding power of the adjoint.
-    Apply this identity to the matrix units in the overlap formula.
+    Because the transfer map of $B$ is the trace-pairing adjoint of that of
+    $A$, its $L$-th power is the corresponding power of the adjoint, and
+    evaluating this relation on the matrix units in the overlap formula
+    exchanges the boundary pairs.
 \end{proof}
 
 \begin{theorem}[Half-chain limit for normal unital tensors]%
@@ -520,30 +522,28 @@ conjugate-transposed tensor.
     Then $Z_L\to1$ and $Z_L>0$ for all sufficiently large $L$.
     For every $k\in\mathbb N$, the physical reduced density obeys
     $s_k(\widehat\rho_L)\to s_k(\Lambda\otimes\Lambda)$.
-    This statement assumes normality explicitly.
-    The source canonical conditions and Condition C2 are treated in
-    Theorem~\ref{thm:half_chain_source_limit}.
-    The index and decay conventions are detailed in
-    \cite{gap:pgvwc07_half_chain_spectrum_conventions}.
-    The intermediate Gram limit is
-    $\operatorname{diag}_{\alpha\beta}(\lambda_\beta)$.
+    Here normality is assumed explicitly, whereas
+    Theorem~\ref{thm:half_chain_source_limit} derives it from the source
+    canonical conditions and Condition C2.
+    Under the index and decay conventions detailed in
+    \cite{gap:pgvwc07_half_chain_spectrum_conventions}, the intermediate Gram
+    limit is $\operatorname{diag}_{\alpha\beta}(\lambda_\beta)$.
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{thm:half_chain_adjoint_gram, thm:half_chain_ordered_limit}
-    Normality gives irreducibility and a unique peripheral eigenvalue.
-    The dual channel has the same eigenvalues under the trace pairing;
-    irreducibility also passes to the adjoint family. Its complementary
-    fixed-point map therefore has spectral radius strictly below one.
-    Apply the geometric Gram estimate to $B_i=A_i^\dagger$ and use
-    Theorem~\ref{thm:half_chain_adjoint_gram} to return to the original
-    tensor $A$. With $g_{\alpha\beta}=\lambda_\beta$, the positive boundary
-    limit has entries $g_{\alpha\beta}g_{\beta\alpha}
-        =\lambda_\alpha\lambda_\beta$.
-    The norm and ordered-eigenvalue arguments of
-    Theorem~\ref{thm:half_chain_ordered_limit} now apply to the original
-    physical reduced matrices.
+    Normality gives irreducibility and a unique peripheral eigenvalue, both of
+    which pass to the adjoint family $B_i=A_i^\dagger$ because the dual channel
+    has the same eigenvalues under the trace pairing. Its complementary
+    fixed-point map therefore has spectral radius strictly below one, so the
+    geometric Gram estimate applied to $B_i=A_i^\dagger$ and
+    Theorem~\ref{thm:half_chain_adjoint_gram} give the Gram limit for the
+    original tensor $A$. With $g_{\alpha\beta}=\lambda_\beta$, the positive
+    boundary limit has entries $g_{\alpha\beta}g_{\beta\alpha}
+        =\lambda_\alpha\lambda_\beta$, and the norm and ordered-eigenvalue
+    arguments of Theorem~\ref{thm:half_chain_ordered_limit} then yield the
+    eigenvalue convergence of the physical reduced matrices.
 \end{proof}
 
 
@@ -575,21 +575,22 @@ conjugate-transposed tensor.
     The faithful dual fixed point and scalar fixed-point condition imply
     irreducibility: an invariant projection has a positive defect with
     zero pairing against $\Lambda$, hence is fixed, scalar, and trivial.
-    Unitality gives the identity eigenvector, while Condition C2 excludes
-    other peripheral eigenvalues. These statements and the spectral-radius
-    normalization give normality. Apply
-    Theorem~\ref{thm:half_chain_unital_limit} to the original tensor.
+    Together with the identity eigenvector from unitality, the exclusion of
+    other peripheral eigenvalues by Condition C2, and the spectral-radius
+    normalization, this irreducibility establishes that $A$ is normal, so
+    Theorem~\ref{thm:half_chain_unital_limit} yields the half-chain eigenvalue
+    limit.
 \end{proof}
 
 
 \begin{theorem}[General canonical C2 half-chain limit]%
     \label{thm:half_chain_general_c2_source}
     \notready
-    For a TI MPS satisfying Condition C2, the source asserts convergence of
-    the half-chain reduced spectrum to the doubled canonical fixed-point
-    spectrum~\cite[Theorem~6]{PerezGarcia2007Matrix}. For a general weighted
-    canonical representation, passing to its dominant block and controlling
-    the subleading physical contribution remains separate from
-    Theorem~\ref{thm:half_chain_source_limit}; see
-    \cite{gap:pgvwc07_half_chain_spectrum_conventions}.
+    For a TI MPS satisfying Condition C2, \cite[Theorem~6]{PerezGarcia2007Matrix}
+    asserts convergence of the half-chain reduced spectrum to the doubled
+    canonical fixed-point spectrum. As recorded in
+    \cite{gap:pgvwc07_half_chain_spectrum_conventions}, extending
+    Theorem~\ref{thm:half_chain_source_limit} to a general weighted canonical
+    representation requires passing to its dominant block and controlling the
+    subleading physical contribution.
 \end{theorem}

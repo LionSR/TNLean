@@ -37,7 +37,7 @@ $L_j$ of Theorem~\ref{thm:ldp_repeated_block_polar}.
         def:prep_fixed_point_tensor}
     With the notation of Theorem~\ref{thm:ldp_repeated_block_polar}, let the blocks be
     as in Lemma~\ref{lem:ldp_overlapping_positive_part}, with $c_j$ and $L_j$ the norms
-    and isometries of the copies on $q$ sites, and put
+    and isometries of the copies on $q$ sites, and define
     \begin{align*}
         P_\infty=\sum_jc_jL_j\bigl(\sqrt{\rho_j}^{\,\mathsf T}\otimes\Id\bigr)L_j^\dagger,
         \qquad
@@ -172,7 +172,7 @@ $L_j$ of Theorem~\ref{thm:ldp_repeated_block_polar}.
     \uses{lem:ldp_relative_positive_part, lem:ldp_repeated_overlapping_overlaps,
         lem:ldp_shared_overlap_estimates, def:prep_fixed_point_tensor}
     With the notation of Lemma~\ref{lem:ldp_relative_positive_part}, let $q\geq1$ and
-    $M\geq1$, and put $N=qM$.
+    $M\geq1$, with $N=qM$.
     \begin{enumerate}
         \item The letters of the tensor read from $YK^\dagger$, for a coordinate isometry $K$
               placing a bond pair, are those of the tensor read from $Y$, placed on the bond
@@ -215,9 +215,9 @@ $L_j$ of Theorem~\ref{thm:ldp_repeated_block_polar}.
     \leanok
     \uses{lem:ldp_relative_positive_part, lem:ldp_relative_overlaps,
         def:prep_fixed_point_tensor}
-    With the notation of Lemma~\ref{lem:ldp_relative_positive_part}, let $q\geq1$, write
-    $H_{kj}=L_k^\dagger PC^{-1}L_j$ for the relative blocks, and, for a positive
-    semidefinite $\sigma$, write $\lVert X\rVert_\sigma^2=\Tr\sum_iX^i\sigma(X^i)^\dagger$
+    With the notation of Lemma~\ref{lem:ldp_relative_positive_part}, let $q\geq1$, let
+    $H_{kj}=L_k^\dagger PC^{-1}L_j$ be the relative blocks, and for a positive
+    semidefinite $\sigma$ let $\lVert X\rVert_\sigma^2=\Tr\sum_iX^i\sigma(X^i)^\dagger$
     for a tensor $X$ read from a matrix. Let $\sigma_j$ be a positive semidefinite fixed
     point of $\E_{A_j}$ of trace one, $F_j$ its fixed-point tensor, and
     $\alpha_j=\Tr\E_{H_{jj}F_j}(\sigma_j)$.
@@ -248,8 +248,8 @@ $L_j$ of Theorem~\ref{thm:ldp_repeated_block_polar}.
     norm at most one, and $\lVert F_j\rVert_{\sigma_j}=1$. It is nonnegative since $P\geq0$.
     Expanding $\lVert H_{jj}-F_j\rVert_{\sigma_j}^2$ and using (1) gives the identity.
     (3) Each $\sigma_j$-norm is bounded by a dimensional constant times the operator norm;
-    the off-diagonal limits vanish. (4) Combine (3) with
-    Lemma~\ref{lem:ldp_relative_positive_part}(3).
+    the off-diagonal limits vanish. (4) Combining (3) with
+    Lemma~\ref{lem:ldp_relative_positive_part}(3) gives the exponential bound.
 \end{proof}
 
 \begin{lemma}[Second-order overlaps of the relative rows]
@@ -302,13 +302,15 @@ $L_j$ of Theorem~\ref{thm:ldp_repeated_block_polar}.
         \varepsilon(\widetilde\phi_N,\phi_N)\leq Cy\,e^{Cy},\qquad
         \varepsilon(\widetilde\phi_N,\phi_N)\leq C'y.
     \end{align*}
-    This is \cite[Lemma~1$'$(ii)]{Malz2024Preparation} for the corrected state, with
-    $\xi_{\mathrm{diag}}$ replaced by $\max(\xi_{\mathrm{diag}},\xi_{\mathrm{off\text{-}diag}})$,
-    and for $0<\gamma<1$ in place of $0<\gamma<1/2$. The constants do not depend on the weights: the sums $\beta_j$ may cancel and
-    $\sum_j\lvert\beta_j\rvert^2$ may be arbitrarily small, and the normalization
-    $\lvert\mu_{j,k}\rvert\leq1$ of the source is not used
-    \cite{gap:mswc24_repeated_overlap_small_weight_sum}. The states of distinct blocks need
-    not be orthogonal, and no condition $q=o(N)$ is needed.
+    Relative to \cite[Lemma~1$'$(ii)]{Malz2024Preparation}, this establishes the
+    error bound for the corrected state with $\xi_{\mathrm{diag}}$ replaced by
+    $\max(\xi_{\mathrm{diag}},\xi_{\mathrm{off\text{-}diag}})$ and with $0<\gamma<1$ in
+    place of $0<\gamma<1/2$. As recorded in
+    \cite{gap:mswc24_repeated_overlap_small_weight_sum}, the constants do not depend on
+    the weights: the sums $\beta_j$ may cancel and $\sum_j\lvert\beta_j\rvert^2$ may be
+    arbitrarily small, while the normalization $\lvert\mu_{j,k}\rvert\leq1$ of the source
+    is not used. The states of distinct blocks need not be orthogonal, and no condition
+    $q=o(N)$ is needed.
 \end{theorem}
 \begin{proof}
     \leanok

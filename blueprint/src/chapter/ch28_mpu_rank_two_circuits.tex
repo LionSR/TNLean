@@ -36,7 +36,7 @@ removes the spectral conditioning hypothesis at every fixed bond bound.
     $T_L\leq(a+C)r^L-C$ for every nonnegative integer $L$.
 \end{theorem}
 \begin{proof}\leanok
-    Induct on $L$. At the step use
+    By induction on $L$, the induction step uses
     $r((a+C)r^L-C)+C\leq(a+C)r^{L+1}-C$, since $(r-2)C\geq0$.
 \end{proof}
 
@@ -80,9 +80,9 @@ removes the spectral conditioning hypothesis at every fixed bond bound.
     at the end.
 \end{theorem}
 \begin{proof}\leanok
-    Multiply the blocks using $P^2=P$,
-    $P(I-P)=(I-P)P=0$, and $(I-P)^2=I-P$.
-    Matrices acting on distinct tensor factors commute.
+    Multiplying the blocks using $P^2=P$,
+    $P(I-P)=(I-P)P=0$, and $(I-P)^2=I-P$ eliminates the cross terms, since
+    matrices acting on distinct tensor factors commute.
 \end{proof}
 
 \begin{theorem}[Combining sector erasure with its final factor]
@@ -118,11 +118,11 @@ removes the spectral conditioning hypothesis at every fixed bond bound.
 \end{lemma}
 \begin{proof}
     \uses{thm:mpu_two_kraus_polar}
-    Put $H=E^\dagger E$, and choose unitary polar extensions
-    $E=V\sqrt H$ and $F=W\sqrt{I-H}$.
+    For $H=E^\dagger E$, unitary polar extensions
+    $E=V\sqrt H$ and $F=W\sqrt{I-H}$ exist.
     The second normalization gives $VHV^\dagger=WHW^\dagger$.
-    Thus $V^\dagger W$ commutes with $H$; diagonalize both on the
-    eigenspaces of $H$. The resulting left and right bases give the
+    Thus $V^\dagger W$ commutes with $H$, and diagonalizing both on the
+    eigenspaces of $H$ produces left and right bases that give the
     simultaneous singular-value decomposition.
 \end{proof}
 
@@ -139,10 +139,10 @@ removes the spectral conditioning hypothesis at every fixed bond bound.
 \end{lemma}
 \begin{proof}
     \uses{lem:mpu_two_operator_svd}
-    Take a Hilbert--Schmidt orthogonal Schmidt decomposition.
-    Normalizing one pair and tracing the two unitary identities of
+    In a Hilbert--Schmidt orthogonal Schmidt decomposition, normalizing
+    one pair and tracing the two unitary identities of
     $U$ gives the hypotheses of Lemma~\ref{lem:mpu_two_operator_svd}
-    for the opposite pair. Repeat on the other side. Thus $U$ is
+    for the opposite pair, and the same argument on the other side shows that $U$ is
     equivalent under local left and right unitary multiplication to
     a diagonal operator with a unit-modulus coefficient matrix of rank two.
     The circle--line argument of~\cite[Lemma~3]{RankTwoMPUCircuits2026}
@@ -167,10 +167,10 @@ removes the spectral conditioning hypothesis at every fixed bond bound.
     \uses{thm:mpu_schmidt_span_contraction,
         thm:mpu_constant_branching_cost, lem:mpu_two_schmidt_sectors,
         thm:mpu_two_sector_merging, thm:mpu_two_sector_cancellation}
-    At each balanced split use the two-sector decomposition.
+    At each balanced split the two-sector decomposition applies.
     A clean qubit records the eigenvalue of $R$ by a Hadamard,
-    controlled $R$, and a second Hadamard. Apply $A_0,A_1$ conditioned
-    on the record, erase it, and apply $B_+$.
+    controlled $R$, and a second Hadamard, after which $A_0,A_1$ act conditioned
+    on the record before the record is erased and $B_+$ acts.
     Since $R=B_+^\dagger B_-$ and $R=R^\dagger$, the erasure and the
     final $B_+$ combine into two controlled child calls. Recording
     takes two calls, and the $A_s$ take two more, for six in total.
@@ -189,8 +189,8 @@ removes the spectral conditioning hypothesis at every fixed bond bound.
 
 \section{Limits of recursion inside the original Schmidt spaces}
 
-The following finite-dimensional examples are discussed in
-\cite{MPUSchmidtObstructions2026}. They constrain a possible recursive
+In \cite{MPUSchmidtObstructions2026}, the following finite-dimensional
+examples constrain a possible recursive
 proof, rather than providing a circuit complexity lower bound.
 
 \begin{theorem}[A spin-one reflection]
@@ -283,7 +283,7 @@ proof, rather than providing a circuit complexity lower bound.
     $V=\sum_j(n_j\cdot\sigma)\otimes|j\rangle\langle j|$ are unitary.
 \end{theorem}
 \begin{proof}\leanok
-    Expand the two-dimensional Pauli matrices. Each of the eight
+    Expanding the two-dimensional Pauli matrices shows that each of the eight
     integer rows has squared length $225$.
     The controlled operator is block diagonal in its control label,
     so unitarity follows from unitarity of each block.
@@ -322,7 +322,7 @@ proof, rather than providing a circuit complexity lower bound.
     Let $q_0=e_1$, $q_1=e_2$, $q_2=e_3$,
     $q_3=(3e_1+4e_2)/5$, and
     $O=I-2\mathbf 1\mathbf 1^T/3$, with $\mathbf 1=(1,1,1)^T$.
-    Put $n_j=q_j$ and $n_{j+4}=Oq_j$ for $0\leq j<4$.
+    Define $n_j=q_j$ and $n_{j+4}=Oq_j$ for $0\leq j<4$.
     The controlled Pauli operator
     $V=\sum_{j=0}^7(n_j\cdot\sigma)\otimes|j\rangle\langle j|$
     is unitary. At the second cut its coefficient vectors
@@ -350,19 +350,19 @@ proof, rather than providing a circuit complexity lower bound.
 \end{theorem}
 \begin{proof}
     \uses{thm:mpu_pauli_control_unitary}
-    Write $s_i=\det O_i$ and $R_i=s_iO_i\in SO(3)$.
-    A rotation through angle $\theta$ about unit axis $u$ lifts to
+    With $s_i=\det O_i$ and $R_i=s_iO_i\in SO(3)$,
+    a rotation through angle $\theta$ about unit axis $u$ lifts to
     $V_i=\cos(\theta/2)I-i\sin(\theta/2)(u\cdot\sigma)$.
     The Pauli product rule gives
     $V_i(v\cdot\sigma)V_i^\dagger=(R_iv)\cdot\sigma$.
     Thus, with $W(x)=V_1^{x_1}\cdots V_n^{x_n}$,
     $n(x)\cdot\sigma=(\prod_i s_i^{x_i})
         W(x)(n_0\cdot\sigma)W(x)^\dagger$.
-    Apply the two controlled products and the central target gate;
+    Applying the two controlled products and the central target gate implements this conjugation, where
     each $s_i=-1$ contributes a $Z$ on its control.
-    On a line, move the target past the controls during the first
-    product and return it during the second, using two sweeps of
-    adjacent swaps. Every logical position is restored.
+    On a line, moving the target past the controls during the first
+    product and returning it during the second uses two sweeps of
+    adjacent swaps and restores every logical position.
 \end{proof}
 
 \begin{theorem}[Approximation with a small quantum target]
@@ -381,28 +381,28 @@ proof, rather than providing a circuit complexity lower bound.
     resources in $N,D,\log(1/\varepsilon)$.
 \end{theorem}
 \begin{proof}
-    Put $q=2^t$. A right-canonical representation of the normalized
+    For $q=2^t$, a right-canonical representation of the normalized
     Choi vector has letter matrices of norm at most one.
-    Compute the $q^2$ block entries reversibly using matrix--vector
-    contractions. Largest-entry-pivoted QR decomposes each computed
+    Reversible matrix--vector contractions compute the $q^2$ block
+    entries, and largest-entry-pivoted QR decomposes each computed
     block into $O(q^2)$ two-level rotations and row permutations.
-    Compare the numerical procedure to exact QR with the same pivot
-    choices. Pivots remain at least $1/(4\sqrt q)$; conservative
+    Comparing the numerical procedure to exact QR with the same pivot
+    choices keeps the pivots at least $1/(4\sqrt q)$, so conservative
     error amplification is at most $(Cq)^{q^2}$.
     Its logarithm requires only polynomially many precision bits:
     \begin{align}
         O\bigl(N+\log(ND+1)+q^2\log(q+1)
         +\log(1/\varepsilon)\bigr).
     \end{align}
-    Convert the recorded rotations to binary angles, retaining all
+    Converting the recorded rotations to binary angles retains all
     diagonal phases. A Gray path of length at most $t$ implements
     each two-level operation using basis-pattern controls, with
     reusable conjunction qubits. Uniform block approximation gives
     $\|\widetilde U-U\|=\max_y\|\widetilde V(y)-V(y)\|$.
     Since every computed bit depends only on unchanged controls,
     reversing the arithmetic erases all auxiliaries exactly.
-    The detailed finite-precision proof is in
-    \cite{MPUSchmidtObstructions2026}.
+    Following \cite{MPUSchmidtObstructions2026}, this finite-precision
+    error analysis gives the stated polynomial resource bounds.
 \end{proof}
 
 \section{Completions and general approximation}
@@ -417,8 +417,8 @@ proof, rather than providing a circuit complexity lower bound.
     $S=I-(V-J)(V-J)^\dagger$ is a unitary satisfying $SJ=V$ and $SV=J$.
 \end{theorem}
 \begin{proof}\leanok
-    Orthogonality gives both cross Gram terms zero. Put $W=V-J$;
-    then $W^\dagger W=2I$ and $(WW^\dagger)^2=2WW^\dagger$.
+    Orthogonality gives both cross Gram terms zero. For $W=V-J$,
+    one has $W^\dagger W=2I$ and $(WW^\dagger)^2=2WW^\dagger$.
     Thus $S=S^\dagger$ and $S^2=I$. Multiplication by $J$ or $V$
     gives the two asserted actions.
 \end{proof}
@@ -441,11 +441,11 @@ recursion depth.
     The same contraction admits a signed unitary completion of bond two.
 \end{theorem}
 \begin{proof}
-    Put $q=2^m$, $h=\pi/(2q)$ and
+    For $q=2^m$ and $h=\pi/(2q)$, define
     $\Theta|i,j\rangle=h(i-j)|i,j\rangle$ on two $m$-qubit blocks.
-    Take $E=\cos\Theta$, $F=\sin\Theta$, and
-    $U=E\otimes I+iF\otimes X$ with its target at an endpoint.
-    Controlled target rotations give the exact circuit.
+    Setting $E=\cos\Theta$, $F=\sin\Theta$, and
+    $U=E\otimes I+iF\otimes X$ with its target at an endpoint
+    realizes the exact circuit by controlled target rotations.
     The positive defect has coefficient matrix
     $K_{ij}=\sin(h|i-j|)$. If $Kv=0$, its interior second differences
     give $2\sin(h)v_a=0$; the first and last rows then kill the
@@ -492,8 +492,8 @@ recursion depth.
     Final constant-cost amplification of the unitary block yields
     a block $B$ with $\|B-U\|=O(\varepsilon^2)$; unitarity then gives
     $\|WJ-JU\|\leq\sqrt{2\|B-U\|}$.
-    The complete Fourier and circuit estimates are in
-    \cite{MPUSchmidtObstructions2026}, Section~7.
+    By the Fourier and circuit estimates of
+    \cite{MPUSchmidtObstructions2026}, Section~7, this bounds the overall approximation error.
 \end{proof}
 
 \section{Uniform families without exact-length full rank}
@@ -518,11 +518,11 @@ recursion depth.
     quotient by the vectors annihilated by all positive-word rows
     $lA_u$. This preserves the operators at lengths at least two,
     using endpoint tensors $lA^{ij}$ and $A^{ij}r$ on the quotient.
-    Write $w$ for its dimension. Cumulative cap lengths $1,\ldots,w$
+    With $w$ denoting its dimension, cumulative cap lengths $1,\ldots,w$
     span the quotient and its dual: a plateau in either cumulative
     span is invariant and therefore terminal.
 
-    Choose Hilbert coordinates on this quotient. For each cap length
+    In Hilbert coordinates on this quotient, for each cap length
     let $P_m$ and $Q_n$ be its left and right Gram matrices, with
     cap inputs averaged and cap outputs summed. Unitarity at length
     $m+k+n$ gives, for a central interval tensor $T$ of length $k$,
@@ -538,7 +538,7 @@ recursion depth.
     are positive definite. One-sided cap traces give the endpoint
     identities. The Grams are averaged before taking square roots.
 
-    Put $L=P^{1/2}$ and $R=Q^{1/2}$. The amplitudes $LTR$ define
+    For $L=P^{1/2}$ and $R=Q^{1/2}$, the amplitudes $LTR$ define
     fixed interval isometries with two outer flags. Their flags merge
     by the contraction $R^{-1}L^{-1}$, whose finite norm is a constant
     of the family. A fixed unitary dilation and exact subspace
@@ -549,12 +549,12 @@ recursion depth.
     image reflections reuse one $O(N)$ reversible scratch pool.
     All inner flags and scratch are erased exactly; the root has
     no outer flags. Adjacent swaps add at most a linear cost factor.
-    The complete quotient, normalization, amplification and auxiliary
-    count are proved in \cite{RankTwoMPUCircuits2026}, Section~4.
+    As proved in \cite{RankTwoMPUCircuits2026}, Section~4, combining
+    this quotient, normalization, and amplification bounds the total auxiliary count.
 \end{proof}
 
-This removes Assumption~1 from the uniform-bulk circuit theorem of
-\cite{Styliaris2025MPUCircuits}. The averaging argument uses the same
+In the uniform-bulk circuit theorem of \cite{Styliaris2025MPUCircuits},
+this construction removes Assumption~1. The averaging argument uses the same
 fixed presentation at every positive length. The following affine
 construction removes that restriction.
 Fixed trace boundaries $\operatorname{Tr}(bA_{\rm word})$ are included:
@@ -628,8 +628,8 @@ left multiplication, right vector $b$ and left functional the trace.
     matrices, so both signs of each Hermitian affine direction are
     feasible near $P$. Fermat's theorem gives a zero real derivative.
     The trace of a product of Hermitian matrices is real by cyclicity
-    of the trace and conjugate transposition. Cancel the nonzero
-    real determinant to obtain the complex trace identity.
+    of the trace and conjugate transposition, and canceling the nonzero
+    real determinant yields the complex trace identity.
 \end{proof}
 
 \begin{theorem}[Algebra of the balanced dual metric]
@@ -646,7 +646,7 @@ left multiplication, right vector $b$ and left functional the trace.
     $\operatorname{Tr}(XQ)=1$.
 \end{theorem}
 \begin{proof}\leanok
-    Use $PP^{-1}=P^{-1}P=I$ and $\operatorname{Tr}I=r$.
+    The identities $PP^{-1}=P^{-1}P=I$ and $\operatorname{Tr}I=r$ give both claims.
 \end{proof}
 
 \begin{theorem}[A balanced positive metric on an affine space]
@@ -673,8 +673,8 @@ left multiplication, right vector $b$ and left functional the trace.
     maximizer $P_*$. Both signs of every affine
     tangent direction $H$ are feasible near $P_*$, so
     $\operatorname{Tr}(P_*^{-1}H)=0$ by the derivative of the determinant.
-    Apply this to $H=P-P_*$ and use
-    $\operatorname{Tr}(P_*^{-1}P_*)=r$. The final trace identity
+    Applying this identity to $H=P-P_*$ and using
+    $\operatorname{Tr}(P_*^{-1}P_*)=r$ gives $\operatorname{Tr}(P_*^{-1}P)=r$, and the final trace identity
     follows from the algebra of the dual metric.
 \end{proof}
 
@@ -702,7 +702,7 @@ left multiplication, right vector $b$ and left functional the trace.
     The positive square root commutes with inversion and with
     multiplication by nonnegative real scalars. Therefore
     $(\sqrt Q)^{-1}=\sqrt{rP}=\sqrt r\sqrt P$.
-    Cancel $\sqrt P$ and take the trace of $C^\dagger C$.
+    Canceling $\sqrt P$ and taking the trace of $C^\dagger C$ gives $\operatorname{Tr}(C^\dagger C)=r^2$.
 \end{proof}
 
 \begin{theorem}[Optimality within positive-metric joining]
@@ -723,8 +723,8 @@ left multiplication, right vector $b$ and left functional the trace.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:mpu_dual_gram_metric_algebra}
-    Set $X=\sqrt Q\sqrt P$ and $Y=\sqrt{Q^{-1}}\sqrt{P^{-1}}$.
-    Then $X^\dagger Y=I$,
+    For $X=\sqrt Q\sqrt P$ and $Y=\sqrt{Q^{-1}}\sqrt{P^{-1}}$, one has
+    $X^\dagger Y=I$,
     $\operatorname{Tr}(X^\dagger X)=1$ and
     $\operatorname{Tr}(Y^\dagger Y)=\operatorname{Tr}(Q^{-1}P^{-1})$.
     Hilbert--Schmidt Cauchy--Schwarz gives the inequality.
@@ -758,8 +758,8 @@ left multiplication, right vector $b$ and left functional the trace.
     $P_{FA}(\rho\otimes\sigma)=\mathcal T^A_\sigma(P_F(\rho))$.
 \end{theorem}
 \begin{proof}\leanok
-    Expand the finite sums, use $(AB)^\dagger=B^\dagger A^\dagger$,
-    and permute the independent physical indices.
+    Expanding the finite sums, using $(AB)^\dagger=B^\dagger A^\dagger$,
+    and permuting the independent physical indices gives the identity.
 \end{proof}
 
 \begin{theorem}[Density matrices determine the entire interval Gram]
@@ -804,10 +804,10 @@ left multiplication, right vector $b$ and left functional the trace.
     $P_F(\rho)=\sum_aF_a^\dagger\rho^T F_a$.
 \end{theorem}
 \begin{proof}\leanok
-    Expand the matrix entries to obtain the sandwich formula.
+    Expanding the matrix entries gives the sandwich formula.
     The transpose of a positive semidefinite matrix is positive
-    semidefinite. Each sandwich and their sum are therefore positive
-    semidefinite. Apply the real affine Hermitian closure lemma.
+    semidefinite, so each sandwich and their sum are positive
+    semidefinite, and the real affine Hermitian closure lemma gives the affine-hull properties.
     \uses{thm:mpu_real_affine_gram_identities}
 \end{proof}
 
@@ -853,8 +853,8 @@ left multiplication, right vector $b$ and left functional the trace.
 \begin{proof}\leanok
     \uses{thm:mpu_density_gram_separation}
     The inner product of two vectorized matrices is their
-    Hilbert--Schmidt trace pairing. Sum this identity over the
-    physical output index, and apply density separation.
+    Hilbert--Schmidt trace pairing; summing this identity over the
+    physical output index and applying density separation gives the equivalence.
 \end{proof}
 
 \begin{theorem}[Interval isometries from affine Gram normalization]
@@ -873,8 +873,8 @@ left multiplication, right vector $b$ and left functional the trace.
         thm:mpu_vectorized_density_isometry}
     For every density matrix $\rho$, transfer membership gives
     $\mathcal T_\rho(P)\in\mathcal C_{FA}$, so its trace pairing
-    with $Q$ is one. Apply the full density-test isometry identity
-    and the positive square-root identities.
+    with $Q$ is one, and the full density-test isometry identity
+    together with the positive square-root identities completes the proof.
 \end{proof}
 
 \begin{theorem}[Balanced metrics at two consecutive cuts]
@@ -896,9 +896,9 @@ left multiplication, right vector $b$ and left functional the trace.
     \uses{thm:mpu_affine_gram_balancing,
         thm:mpu_affine_interval_isometry,
         thm:mpu_prefix_gram_positivity}
-    Apply determinant balancing to both Hermitian affine spaces,
-    then use the earlier chosen metric and the later dual metric in
-    the affine interval-isometry theorem.
+    Determinant balancing on both Hermitian affine spaces, combined
+    with the earlier chosen metric and the later dual metric in
+    the affine interval-isometry theorem, gives the balanced interval isometry.
 \end{proof}
 
 \begin{definition}[Prefix and suffix Grams at a finite cut]
@@ -932,13 +932,13 @@ left multiplication, right vector $b$ and left functional the trace.
     with the one-row prefix Gram above.
 \end{theorem}
 \begin{proof}\leanok
-    Write $U^\dagger U$ as the sum of the rank-one Grams of its rows.
-    The vectorization trace identity turns each product-density
+    Writing $U^\dagger U$ as the sum of the rank-one Grams of its rows,
+    the vectorization trace identity turns each product-density
     pairing into $\operatorname{Tr}((F_aG_c)^\dagger\rho^T
         F_aG_c\tau)$. Trace cyclicity and the finite sums give the
     displayed identity. Positivity follows from the matrix
-    sandwiches. Substitute $U^\dagger U=I$ and take the trace of a
-    tensor product to obtain the normalized formula.
+    sandwiches, and substituting $U^\dagger U=I$ and taking the trace of a
+    tensor product yields the normalized formula.
 \end{proof}
 
 \begin{theorem}[Positive definite cap Gram matrices from minimal spans]
@@ -983,9 +983,9 @@ left multiplication, right vector $b$ and left functional the trace.
     Global isometry is preserved by this reassociation.
 \end{theorem}
 \begin{proof}\leanok
-    Expand the two finite virtual sums and apply associativity of
-    scalar multiplication. Reindex the physical coordinates by
-    the natural product associativity bijections.
+    Expanding the two finite virtual sums, applying associativity of
+    scalar multiplication, and reindexing the physical coordinates by
+    the natural product associativity bijections gives the identity.
 \end{proof}
 
 \begin{theorem}[An affine normalizer from global isometry]
@@ -1001,8 +1001,8 @@ left multiplication, right vector $b$ and left functional the trace.
 \begin{proof}\leanok
     \uses{thm:mpu_minimal_cap_gram_witnesses,
         thm:mpu_real_affine_gram_identities}
-    Take the maximally mixed suffix Gram and extend its physical
-    trace normalization to the real affine hull.
+    Taking the maximally mixed suffix Gram and extending its physical
+    trace normalization to the real affine hull gives the normalizer.
 \end{proof}
 
 \begin{theorem}[Balanced interval isometries from global isometry]
@@ -1025,10 +1025,10 @@ left multiplication, right vector $b$ and left functional the trace.
         thm:mpu_affine_normalizer_global_isometry,
         thm:mpu_minimal_cap_gram_witnesses,
         thm:mpu_two_cut_balanced_isometry}
-    Apply global normalization and the spanning criterion at both
-    cuts. These give positive definite normalizers and positive
-    definite points in both affine spaces. Apply the two-cut
-    determinant-balancing theorem.
+    Global normalization and the spanning criterion at both
+    cuts yield positive definite normalizers and positive
+    definite points in both affine spaces, to which the two-cut
+    determinant-balancing theorem applies.
 \end{proof}
 
 \begin{definition}[Physical coefficient flattenings]
@@ -1060,7 +1060,7 @@ left multiplication, right vector $b$ and left functional the trace.
 \begin{proof}\leanok
     Rank of a product is bounded by the rank of each factor, and
     each factor has rank at most $r$. Both ranks therefore equal
-    $r$, giving the two spans. Apply this at both cuts.
+    $r$, which gives the two spans at both cuts.
     Matrix multiplication gives the coefficient factorization,
     and associativity gives the equality of regrouped coefficients.
 \end{proof}
@@ -1110,8 +1110,8 @@ left multiplication, right vector $b$ and left functional the trace.
 \end{theorem}
 \begin{proof}\leanok
     Global isometry and minimality give a positive normalizer and
-    a positive point at each cut. Apply affine determinant balancing
-    separately, and choose one balanced metric at each index.
+    a positive point at each cut, so affine determinant balancing
+    applied separately yields a balanced metric at each index.
 \end{proof}
 
 \begin{definition}[Scalar endpoint caps]
@@ -1141,8 +1141,8 @@ left multiplication, right vector $b$ and left functional the trace.
     Closing the scalar bonds gives $K(I,I)=U^\dagger U$.
     Trace pairing therefore gives the scalar Gram identity for
     every $\rho$. A faithful density matrix realizes the identity
-    in the physical Gram set. Take its affine hull, and use the
-    dimension-one dual-metric formula.
+    in the physical Gram set, and passing to its affine hull with the
+    dimension-one dual-metric formula gives unit metrics.
 \end{proof}
 
 \begin{definition}[Normalized joining contraction]
@@ -1178,8 +1178,8 @@ left multiplication, right vector $b$ and left functional the trace.
 \begin{proof}\leanok
     \uses{thm:mpu_balanced_gram_contraction}
     The unnormalized contraction has squared Hilbert--Schmidt norm
-    $r^2$. Divide by $r$, cancel the two invertible square roots,
-    and take the input Gram of the resulting scalar multiple.
+    $r^2$; dividing by $r$, canceling the two invertible square roots,
+    and taking the input Gram of the resulting scalar multiple gives the claim.
 \end{proof}
 
 \begin{definition}[Two-reflection subspace amplification]
@@ -1229,9 +1229,9 @@ left multiplication, right vector $b$ and left functional the trace.
     $Q_\theta^\ell V_\theta=G$ exactly, with no residual phase.
 \end{theorem}
 \begin{proof}\leanok
-    Expand the two reflections on the orthogonal images of $G,H$.
-    The trigonometric addition identities give the one-step rotation.
-    Iterate it by induction. The final angle is
+    Expanding the two reflections on the orthogonal images of $G,H$
+    and using the trigonometric addition identities gives the one-step rotation.
+    Iterating by induction produces the final angle
     $(2\ell+1)\pi/(4\ell+2)=\pi/2$.
 \end{proof}
 
@@ -1265,8 +1265,8 @@ left multiplication, right vector $b$ and left functional the trace.
     original nonnegative success amplitude by $t$.
 \end{theorem}
 \begin{proof}\leanok
-    The two flag coefficients satisfy $t^2+s^2=1$. Multiply the
-    two-by-two rotation and the block matrices, using this identity
+    Since the two flag coefficients satisfy $t^2+s^2=1$, multiplying the
+    two-by-two rotation and the block matrices uses this identity
     for normalization and the first row block for the success Gram.
 \end{proof}
 
@@ -1300,8 +1300,8 @@ left multiplication, right vector $b$ and left functional the trace.
 \end{theorem}
 \begin{proof}\leanok
     Projection identities give the two projected Grams $p^2I$ and
-    $(1-p^2)I$, and their mixed Gram is zero. Divide by their
-    positive amplitudes. Adding the projected parts recovers $V$.
+    $(1-p^2)I$, and their mixed Gram is zero. Dividing by their
+    positive amplitudes and adding the projected parts recovers $V$.
 \end{proof}
 
 \begin{theorem}[Exact amplification from the initial isometry]
@@ -1327,7 +1327,7 @@ left multiplication, right vector $b$ and left functional the trace.
         thm:mpu_uniform_postselection_decomposition}
     Derive the orthogonal isometric decomposition. In the first
     quadrant, $\sqrt{1-\sin^2\theta}=\cos\theta$, so it is the
-    initial amplification plane. Apply the rotation identities.
+    initial amplification plane, where the rotation identities apply.
     At probability one the complementary projected Gram is zero,
     forcing the complementary map to vanish.
 \end{proof}
@@ -1458,8 +1458,8 @@ left multiplication, right vector $b$ and left functional the trace.
     the original coefficients, including their normalization and phase.
 \end{theorem}
 \begin{proof}\leanok
-    Fix the two one-dimensional endpoint bases and choose bases
-    at the other cuts. Composition of the evaluation maps gives
+    Fixing the two one-dimensional endpoint bases and choosing bases
+    at the other cuts, composition of the evaluation maps gives
     the product formula. At the initial cut evaluation is the row
     selecting the zero coordinate; at the last cut its selected
     column evaluates $\psi$.
@@ -1476,8 +1476,8 @@ left multiplication, right vector $b$ and left functional the trace.
     dimension $r_k$ at each cut.
 \end{theorem}
 \begin{proof}\leanok
-    Use the chain of coordinate slices with the endpoint bases fixed
-    above. Its bond dimensions are the physical cut ranks by construction,
+    In the chain of coordinate slices with the endpoint bases fixed
+    above, the bond dimensions are the physical cut ranks by construction,
     and reconstruction gives every coefficient.
 \end{proof}
 
@@ -1538,11 +1538,11 @@ left multiplication, right vector $b$ and left functional the trace.
     neighboring-pair circuit of at most $4c_da^2$ gates.
 \end{theorem}
 \begin{proof}\leanok
-    Induct on the completed prefix. At the next step its temporary
+    By induction on the completed prefix, at the next step its temporary
     coordinate is still zero, and the previous Boolean value records
     the earlier prefix test. The controlled increment is independent
-    of its target and supported on at most three sites. Synthesize
-    that finite permutation and concatenate the routed steps.
+    of its target and supported on at most three sites, so synthesizing
+    that finite permutation and concatenating the routed steps gives the circuit.
 \end{proof}
 
 \begin{definition}[Reflection using a temporary zero-test register]
@@ -1641,7 +1641,7 @@ left multiplication, right vector $b$ and left functional the trace.
     $AA^\dagger A=A$.
 \end{theorem}
 \begin{proof}\leanok
-    Multiply the two outer products and use the unit norm of the row.
+    Multiplying the two outer products and using the unit norm of the row gives $AA^\dagger A=A$.
 \end{proof}
 
 \begin{definition}[The normalized bond reset and its dilation]
@@ -1670,8 +1670,8 @@ left multiplication, right vector $b$ and left functional the trace.
 \end{theorem}
 \begin{proof}\leanok
     The normalized contraction has vectorized norm one, so the bond
-    reset is a partial isometry. Apply its explicit dilation and the
-    first-copy action formula.
+    reset is a partial isometry, and its explicit dilation together with the
+    first-copy action formula gives the stated properties.
 \end{proof}
 
 \begin{definition}[Quantitative finite-register synthesis]
@@ -1819,7 +1819,7 @@ left multiplication, right vector $b$ and left functional the trace.
 \begin{proof}\leanok
     The configuration bijections act site by site. A zero paired
     tensor would make the entire unitary matrix zero, contradicting
-    its unit Gram. Apply the minimal representation theorem.
+    its unit Gram, so the minimal representation theorem applies.
 \end{proof}
 
 \begin{definition}[Operator factors in minimal cut bases]
@@ -1857,8 +1857,8 @@ left multiplication, right vector $b$ and left functional the trace.
     configurations bijectively relabelled, so their operator is
     isometric. Both spans follow from the minimal physical cut
     factorization and the bijection of paired configurations.
-    Choose endpoint-compatible bases and apply simultaneous
-    determinant balancing to these derived factors.
+    Choosing endpoint-compatible bases and applying simultaneous
+    determinant balancing to these derived factors gives the metrics.
 \end{proof}
 
 \begin{theorem}[Dimensions of encoded bond registers]
@@ -1876,8 +1876,8 @@ left multiplication, right vector $b$ and left functional the trace.
 \begin{proof}\leanok
     The ceiling logarithm gives both dimension inequalities.
     Embed the finite basis by cardinality and interchange its
-    zero image with the all-zero configuration. Multiply the
-    two flag bounds; the two-site exceptional packet also fits
+    zero image with the all-zero configuration; multiplying the
+    two flag bounds shows that the two-site exceptional packet also fits
     the displayed estimate.
 \end{proof}
 
@@ -1913,7 +1913,7 @@ left multiplication, right vector $b$ and left functional the trace.
     finite reference identity.
 \end{theorem}
 \begin{proof}\leanok
-    Multiply the two intertwining identities. Taking the Gram
+    Multiplying the two intertwining identities and taking the Gram
     of $UJ=JZ$ gives $Z^\dagger Z=I$; ambient and logical unitarity
     then give the inverse identity. Tensor multiplication preserves
     the intertwining identity with a reference system.
@@ -2030,9 +2030,9 @@ left multiplication, right vector $b$ and left functional the trace.
     $38(2d^3r^2)^6$.
 \end{theorem}
 \begin{proof}\leanok
-    Choose a cardinality embedding and exchange the prescribed reset
-    vector with zero. Extend the encoded logical unitary to the
-    whole packet, then apply quantitative unitary synthesis.
+    Choosing a cardinality embedding, exchanging the prescribed reset
+    vector with zero, and extending the encoded logical unitary to the
+    whole packet allows quantitative unitary synthesis to produce the circuit.
 \end{proof}
 
 \begin{definition}[Reflections on selected initialized flags]
@@ -2266,8 +2266,8 @@ left multiplication, right vector $b$ and left functional the trace.
     These assertions are numerical consequences of the stated recurrence.
 \end{theorem}
 \begin{proof}\leanok
-    Substitute the joining and reflection bounds into the exact
-    amplification gate count. Induct on $j$ using
+    Substituting the joining and reflection bounds into the exact
+    amplification gate count and inducting on $j$ gives
     $T_j+C\leq(a+C)R^j$. Ceiling-logarithmic bounds give
     $R\leq2^{\lceil\log_2R\rceil}$ and $2^L\leq2N$.
     Finally $4D+2\leq8D$ for $D\geq1$.
@@ -2316,15 +2316,15 @@ left multiplication, right vector $b$ and left functional the trace.
             \bigl[(Q^{-1})^T(P^{-1})^T\bigr]}=r.
     \end{align}
     These metrics give an explicit candidate of joining norm $r$.
-    The assertion does not bound the appendix's infimum restricted
-    to physical cap Grams in \cite{Styliaris2025MPUCircuits}.
+    Unlike the appendix of \cite{Styliaris2025MPUCircuits}, this
+    assertion does not restrict the infimum to physical cap Grams.
 \end{theorem}
 \begin{proof}\leanok
     Reverse the matrix product under transpose and use invariance
     of trace under transpose. The balanced inverse-trace identity
     gives $r^2$. Its real part is nonnegative and its positive
-    square root is $r$. The interval and flag conventions are
-    expanded explicitly in \cite{RankTwoMPUCircuits2026}, Section~5.
+    square root is $r$, matching the interval and flag conventions
+    of \cite{RankTwoMPUCircuits2026}, Section~5.
 \end{proof}
 
 \begin{definition}[The physical registers of an interval]
@@ -2396,8 +2396,8 @@ left multiplication, right vector $b$ and left functional the trace.
     Multiplying an injective basis inclusion by its adjoint sums
     orthogonal basis projections over its image. The image of the
     selected-flag inclusion is the stated zero-flag set.
-    Substitute this projection identity into the already constructed
-    shared-pool selected-reflection circuit.
+    Substituting this projection identity into the already constructed
+    shared-pool selected-reflection circuit gives the reflection.
 \end{proof}
 
 \begin{definition}[Bond encodings at the endpoint cuts]
@@ -2424,8 +2424,8 @@ left multiplication, right vector $b$ and left functional the trace.
 \begin{proof}\leanok
     Nonvanishing of the operator coefficient tensor gives rank one
     at the empty and complete cuts. Its remaining cut ranks fit the
-    ceiling-logarithmic capacity. Choose basis embeddings and exchange
-    the image of the distinguished zero label with physical zero.
+    ceiling-logarithmic capacity, so choosing basis embeddings and exchanging
+    the image of the distinguished zero label with physical zero gives the code.
 \end{proof}
 
 \begin{definition}[The balanced interval tree]
@@ -2524,10 +2524,10 @@ left multiplication, right vector $b$ and left functional the trace.
     $38\bigl(d^{2+q_-+q_+}\bigr)^6$.
 \end{theorem}
 \begin{proof}\leanok
-    Choose normalized bases at the two endpoint cuts and derive the
+    Choosing normalized bases at the two endpoint cuts determines the
     balanced metrics and all interval isometries from unitarity.
-    Reindex each one-site interval and extend its isometry to a
-    unitary on the padded packet. Apply the exact unitary synthesis
+    Reindexing each one-site interval and extending its isometry to a
+    unitary on the padded packet then allows exact unitary synthesis
     with one initialized workspace qudit. Endpoint bond labels use
     zero-site registers.
 \end{proof}
@@ -2708,11 +2708,11 @@ remain separate assertions.
     operators is $X\otimes Y\otimes I$.
 \end{theorem}
 \begin{proof}\leanok
-    Expand the matrix product of the two disjoint placed operators.
-    Agreement of the remaining coordinates reduces the sum to the two
+    Expanding the matrix product of the two disjoint placed operators,
+    agreement of the remaining coordinates reduces the sum to the two
     independent child matrix entries. Relabel the configuration by the
-    two packets and the remaining sites, and apply the two individual
-    column identities inside their tensor product.
+    two packets and the remaining sites and applying the two individual
+    column identities inside their tensor product gives the joint identity.
 \end{proof}
 
 \begin{definition}[Uniform numerical resource bounds]
@@ -2762,9 +2762,9 @@ remain separate assertions.
     and $q\leq D$. Monotonicity of $K_d$ gives the uniform reflection
     bound. The allocation gives $A\leq2N(q+1)$ and $g\leq5N(q+1)$.
     Thus every node overhead is at most a coefficient depending only
-    on $d,D$ times $\bigl(N(q+1)\bigr)^3$. Substitute these estimates
-    in the balanced-tree recurrence and use
-    $\lceil\log_2(4D+2)\rceil\leq\lceil\log_2D\rceil+3$.
+    on $d,D$ times $\bigl(N(q+1)\bigr)^3$; substituting these estimates
+    in the balanced-tree recurrence and using
+    $\lceil\log_2(4D+2)\rceil\leq\lceil\log_2D\rceil+3$ gives the polynomial bound.
 \end{proof}
 
 \begin{theorem}[Selected-zero reflections act only on their flags]
@@ -2779,8 +2779,8 @@ remain separate assertions.
 \begin{proof}\leanok
     A diagonal operator placed on a selected packet depends only on
     the selected configuration, and has a Kronecker delta on the
-    remaining coordinates. Apply this identity to the local diagonal
-    all-zero reflection.
+    remaining coordinates, and applying this identity to the local diagonal
+    all-zero reflection gives the placed reflection.
 \end{proof}
 
 \begin{theorem}[Exact amplification preserves interval support]
@@ -2921,9 +2921,9 @@ remain separate assertions.
 \end{theorem}
 \begin{proof}\leanok
     The finite permutation factors into at most $n$ transpositions,
-    each routed with at most $2n$ neighboring swaps. Use the
+    each routed with at most $2n$ neighboring swaps. Placing the
     permutation circuit and its adjoint on the two sides of the
-    original circuit. The extended permutation changes only logical
+    original circuit changes only logical
     coordinates and fixes each initialized workspace site, which
     gives the exact clean identity under conjugation.
 \end{proof}
@@ -2989,7 +2989,7 @@ remain separate assertions.
     preserves these identities.
 \end{theorem}
 \begin{proof}\leanok
-    Induct on the consecutive interval partition. Its leaves use the
+    By induction on the consecutive interval partition, the leaves use the
     given single-site circuits. Each node uses the given merging rule
     on the two child implementations, whose endpoint cuts
     coincide. The resulting gate bound is the defining numerical
@@ -3074,8 +3074,8 @@ remain separate assertions.
     independent of those labels.
 \end{theorem}
 \begin{proof}\leanok
-    Restrict the joint product inclusion to its disjoint coordinate
-    blocks. The interval boundary configuration reads a bond label
+    Restricting the joint product inclusion to its disjoint coordinate
+    blocks shows that the interval boundary configuration reads a bond label
     only at its allocated boundary register. The stated independence
     follows by distinguishing those boundary sites from all others.
 \end{proof}
@@ -3166,8 +3166,8 @@ remain separate assertions.
     followed by zeros on the logical auxiliaries, scratch pool, and padding.
 \end{theorem}
 \begin{proof}\leanok
-    The padding count is at most one. Apply the common register bound and expand
-    the three successive initialized inclusions.
+    Since the padding count is at most one, the common register bound and
+    the three successive initialized inclusions give the stated layout.
 \end{proof}
 
 \begin{definition}[Initialized joining flags]
@@ -3199,8 +3199,8 @@ remain separate assertions.
     contraction order and both flags zero.
 \end{theorem}
 \begin{proof}\leanok
-    Evaluate the prescribed boundary configurations on the two shared bond
-    registers, then use the initialized joining-flag identities.
+    Evaluating the prescribed boundary configurations on the two shared bond
+    registers and using the initialized joining-flag identities gives the code.
 \end{proof}
 
 \begin{definition}[Derived product coordinates]
@@ -3222,8 +3222,8 @@ remain separate assertions.
     bijection nor its factorization is an additional hypothesis.
 \end{theorem}
 \begin{proof}\leanok
-    Use the ordered joining packet and its complementary site bijection.
-    Every prefix site is independent of the joining labels. Injectivity of the full
+    In the ordered joining packet and its complementary site bijection,
+    every prefix site is independent of the joining labels, so injectivity of the full
     joint output code therefore implies injectivity of its prefix factor.
 \end{proof}
 
@@ -3239,8 +3239,8 @@ remain separate assertions.
     neighboring-pair gates, where $g$ is the complete logical and scratch site count.
 \end{theorem}
 \begin{proof}\leanok
-    Conjugate both child circuits into the suffix coordinates. Apply the supported
-    encoded merger, then conjugate its logical and physical operators back.
+    Conjugating both child circuits into the suffix coordinates, applying the supported
+    encoded merger, and conjugating its logical and physical operators back gives the merged circuit.
     The site permutation fixes the scratch pool. Its basis action carries the
     rectangular initialized columns to the permuted coordinates.
 \end{proof}
@@ -3261,7 +3261,7 @@ remain separate assertions.
 \begin{proof}\leanok
     Bound the joining preparation by the common packet bound, both reflections
     by $F$, and the prescribed number of amplification rounds by $r\leq D$.
-    Expand the gate formula. The node reserve absorbs the three conjugations.
+    Expanding the gate formula shows that the node reserve absorbs the three conjugations.
 \end{proof}
 
 \begin{definition}[Joining with arbitrary spectator states]
@@ -3282,9 +3282,9 @@ remain separate assertions.
     Kronecker tensor, with every spectator coordinate retained.
 \end{theorem}
 \begin{proof}\leanok
-    Expand the joining contraction entrywise. The spectator Kronecker delta
-    passes through its finite sum. Reindex the child product and use the
-    parent isometry.
+    Expanding the joining contraction entrywise passes the spectator Kronecker delta
+    through its finite sum, and reindexing the child product with the
+    parent isometry gives the identity.
 \end{proof}
 
 \begin{definition}[Coordinates of basis inclusions]
@@ -3345,9 +3345,9 @@ remain separate assertions.
 \end{theorem}
 \begin{proof}\leanok
     The parent support is the union of the two child supports and the joining
-    flags. Its complement gives the remaining-site bijection. Evaluate the two
-    input configurations on these disjoint sets. Compose the supported child
-    identities with the resulting initialized inclusion.
+    flags, whose complement gives the remaining-site bijection. Evaluating the two
+    input configurations on these disjoint sets and composing the supported child
+    identities with the resulting initialized inclusion gives the joint columns.
 \end{proof}
 
 \begin{theorem}[Joining reset gives the parent output]
@@ -3361,8 +3361,8 @@ remain separate assertions.
     includes both joining flags and every interior auxiliary.
 \end{theorem}
 \begin{proof}\leanok
-    Evaluate on the left child, right child, joining flags, and parent complement.
-    The reset code makes both shared bond configurations zero, the flags are
+    Evaluating on the left child, right child, joining flags, and parent complement,
+    the reset code makes both shared bond configurations zero, the flags are
     initialized to zero, and the outer labels and arbitrary outside configuration
     agree with the parent boundary configuration.
 \end{proof}
@@ -3378,7 +3378,7 @@ remain separate assertions.
     canonical-form assumption.
 \end{theorem}
 \begin{proof}\leanok
-    Split the ordered word at the physical cut. A trace contraction factors
+    Splitting the ordered word at the physical cut factors a trace contraction
     through its two open virtual indices; scalar open boundaries factor through
     one. The cut matrix rank is bounded by the dimension of this intermediate
     space. For an MPO, its paired-letter coefficient tensor is the
@@ -3395,7 +3395,7 @@ remain separate assertions.
     also determines the logical columns from its ambient columns.
 \end{theorem}
 \begin{proof}\leanok
-    Use the matrix reindexing product identity. Reindexing input columns passes
+    By the matrix reindexing product identity, reindexing input columns passes
     through the joining finite sum. To recover logical columns, multiply the
     ambient identity by the adjoint of the initialized inclusion.
 \end{proof}
@@ -3409,7 +3409,7 @@ remain separate assertions.
     configuration in the regrouped joining tensor.
 \end{theorem}
 \begin{proof}\leanok
-    Expand the basis inclusion. Its Kronecker delta leaves only the reset label;
+    Expanding the basis inclusion leaves only the reset label through its Kronecker delta, while
     the spectator delta is unchanged.
 \end{proof}
 
@@ -3424,7 +3424,7 @@ remain separate assertions.
 \begin{proof}\leanok
     The joining cut is strictly between the parent endpoints. Its two bond
     registers belong to the respective interval boundary and interior sets, and
-    its flags belong to the parent interior. Apply the site-coordinate bijection.
+    its flags belong to the parent interior, so the site-coordinate bijection gives the partition.
 \end{proof}
 
 \begin{theorem}[The one-site case and empty padding]
@@ -3438,9 +3438,9 @@ remain separate assertions.
     with the same gate count and physical columns.
 \end{theorem}
 \begin{proof}\leanok
-    At one site the complete register has two sites. Reindex the padded physical
-    unitary along this equality of site counts. At longer lengths, append the
-    empty padding configuration and reindex along the resulting site equality.
+    At one site the complete register has two sites, and reindexing the padded physical
+    unitary along this equality of site counts gives the one-site case; at longer lengths, appending the
+    empty padding configuration and reindexing along the resulting site equality gives the general case.
 \end{proof}
 
 \begin{theorem}[Derived support conditions for an interval merger]
@@ -3453,7 +3453,7 @@ remain separate assertions.
     its entire suffix range also lies in the reindexed parent support.
 \end{theorem}
 \begin{proof}\leanok
-    Use the consecutive support decomposition at the joining cut. The selected
+    By the consecutive support decomposition at the joining cut, the selected
     sites are the parent auxiliaries, and the suffix range is the image
     of the joining packet.
 \end{proof}
@@ -3468,9 +3468,9 @@ remain separate assertions.
     of arbitrary spectator identity factors.
 \end{theorem}
 \begin{proof}\leanok
-    Compose the initialized basis inclusions and reindex matrix products. Apply
-    the normalized joining contraction before reindexing the input; its finite
-    sum is unchanged. The spectator identity preserves the isometry.
+    Composing the initialized basis inclusions, reindexing the matrix products, and applying
+    the normalized joining contraction before reindexing the input leaves the finite
+    sum unchanged, while the spectator identity preserves the isometry.
 \end{proof}
 
 \begin{theorem}[The encoded contraction gives the parent columns]
@@ -3489,8 +3489,8 @@ remain separate assertions.
     \uses{thm:mpu_column_coordinate_transport,
         thm:mpu_joining_reset_columns,
         thm:mpu_actual_parent_isometry}
-    Reindex the initialized basis inclusion and cancel the input-coordinate
-    bijection. The normalized joining identity gives the weighted parent tensor.
+    Reindexing the initialized basis inclusion and canceling the input-coordinate
+    bijection, the normalized joining identity gives the weighted parent tensor.
     The zero-label identity identifies the reset output inclusion with
     the parent inclusion, including its unchanged outside register.
 \end{proof}
@@ -3505,7 +3505,7 @@ remain separate assertions.
 \end{theorem}
 \begin{proof}\leanok
     The derived joint input-coordinate bijection covers the parent input inclusion.
-    Evaluate the joint column identity at the inverse image of each parent column.
+    Evaluating the joint column identity at the inverse image of each parent column gives the parent identity.
 \end{proof}
 
 \begin{theorem}[The minimal-interval circuit merger]
@@ -3532,10 +3532,10 @@ remain separate assertions.
         thm:mpu_encoded_actual_parent_columns,
         thm:mpu_parent_invariant_from_joint_columns,
         thm:mpu_uniform_numeric_resources}
-    Derive the shared cut encoding, product coordinates, selected initialized
-    sites, and normalized parent isometry from the minimal intervals.
-    Apply exact clean amplification in these coordinates and return to the original
-    site order. The preceding two column results establish the parent invariant.
+    The minimal intervals determine the shared cut encoding, product coordinates, selected initialized
+    sites, and normalized parent isometry.
+    Exact clean amplification in these coordinates, followed by returning to the original
+    site order, combines with the preceding two column results to establish the parent invariant.
     The uniform joining estimate gives the displayed recurrence.
 \end{proof}
 
@@ -3559,9 +3559,9 @@ remain separate assertions.
         thm:mpu_actual_interval_recursion,
         thm:mpu_actual_root_columns,
         thm:mpu_uniform_numeric_resources}
-    Obtain the minimal representation, normalized metrics, and leaf circuits from
-    $U$. Apply the interval merger in the midpoint-tree induction, use the uniform
-    resource estimate, and identify the root columns with $U$.
+    The unitary $U$ determines the minimal representation, normalized metrics, and leaf
+    circuits; applying the interval merger in the midpoint-tree induction, using the uniform
+    resource estimate, and identifying the root columns with $U$ completes the construction.
 \end{proof}
 
 \begin{theorem}[Exact circuits for arbitrary MPUs]
@@ -3619,8 +3619,8 @@ remain separate assertions.
         thm:mpu_single_site_complete,
         thm:mpu_complete_register,
         thm:mpu_periodic_operator_cut_rank}
-    Take a minimal open-boundary MPO representation, with cut dimensions
-    $r_j\leq D$ and $r_0=r_N=1$. Let $f_{\mathbf a,\mathbf b}$ be
+    In a minimal open-boundary MPO representation with cut dimensions
+    $r_j\leq D$ and $r_0=r_N=1$, let $f_{\mathbf a,\mathbf b}$ be
     its prefix rows at cut $j$. For each prefix density matrix $\rho$,
     define
     \begin{align}
@@ -3633,8 +3633,8 @@ remain separate assertions.
     is positive definite by minimality, as is the maximally mixed
     suffix Gram $\overline Q_j$. Global unitarity gives
     $\operatorname{Tr}(P_j(\rho)\overline Q_j)=1$.
-    Apply the lemma to the real affine hull $\mathcal C_j$ of all
-    prefix Grams. Obtain $P_j^*>0$ and
+    Applying determinant balancing to the real affine hull $\mathcal C_j$ of all
+    prefix Grams yields $P_j^*>0$ and
     $Q_j^*=(P_j^*)^{-1}/r_j$ normalizing every element of
     $\mathcal C_j$. At the endpoint cuts the affine space is $\{1\}$,
     so both metrics are one.
@@ -3672,16 +3672,16 @@ remain separate assertions.
     Every inner flag is erased; the root interval is $U$
     with no outer flags. Routing on a line adds at most a linear
     factor in the total number of registers.
-    The complete proof and bounds are in
-    \cite{RankTwoMPUCircuits2026}, Section~5.
+    Following \cite{RankTwoMPUCircuits2026}, Section~5, combining these
+    tree recurrences and routing estimates yields the stated polynomial bounds.
 \end{proof}
 
 The metric is chosen in the positive semidefinite slice of an affine
 space, which may contain real affine combinations with negative
 coefficients. Its positivity gives a physical isometry; the affine
-identities give its normalization. This removes the spectral condition
-from the general nonuniform circuit statement of
-\cite{Styliaris2025MPUCircuits}. It asserts circuit existence with
+identities give its normalization, which in the general nonuniform circuit statement of
+\cite{Styliaris2025MPUCircuits} removes the spectral
+condition. It asserts circuit existence with
 arbitrary gates, without an additional claim about computing exact
 gate parameters from finite-precision input data. A periodic bond-$D$
 presentation has an open presentation of bond at most $D^2$, and is

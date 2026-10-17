@@ -12,14 +12,14 @@
     conjugacy classes of a group $H$. The simultaneous-conjugacy classes
     of commuting pairs are in bijection with
     $\coprod_{C\in\operatorname{Cl}(G)}\operatorname{Cl}(Z_G(g_C))$.
-    If $G$ is finite, their number is therefore
+    In the group-theoretic classification following
+    \cite[Theorem~5.9]{Schuch2010PEPS}, when $G$ is finite their number is
+    therefore
     \begin{align}
         K=\sum_{C\in\operatorname{Cl}(G)}
         \bigl|\operatorname{Cl}(Z_G(g_C))\bigr|.
         \label{eq:peps_pair_class_count}
     \end{align}
-    This is the group-theoretic classification following
-    \cite[Theorem~5.9]{Schuch2010PEPS}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -48,14 +48,13 @@
     and let $A$ be $G$-injective for its four-leg virtual representation.
     On a nonempty rectangular torus, let $\mathcal V_A$ be the span
     of the vectors $\ket{\mathcal M(A\mid C)}$ indexed by commuting
-    simultaneous-conjugacy classes $C$. Then
+    simultaneous-conjugacy classes $C$. Then the commuting closure span of
+    \cite[Theorem~5.9]{Schuch2010PEPS} has dimension
     \begin{align}
         \dim\mathcal V_A
         =\sum_{C\in\operatorname{Cl}(G)}
         \bigl|\operatorname{Cl}(Z_G(g_C))\bigr|.
     \end{align}
-    This is the dimension of the commuting closure span appearing in
-    \cite[Theorem~5.9]{Schuch2010PEPS}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -64,6 +63,6 @@
     The class-labelled vectors are linearly independent by
     Theorem~\ref{thm:peps_semiregular_g_injective_closure_independence}.
     They form a basis of their span, whose dimension is therefore
-    the number of commuting pair classes. Apply
+    the number of commuting pair classes given by
     Theorem~\ref{thm:peps_pair_centralizer_count}.
 \end{proof}

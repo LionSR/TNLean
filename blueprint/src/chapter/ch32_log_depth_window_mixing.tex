@@ -3,11 +3,11 @@
 
 We retain a fixed square bond space of dimension $D$. The transfer maps
 are those of the site tensors, and their ordered product acts
-right to left. Write $R_\rho(X)=\operatorname{Tr}(X)\rho$ and use the
-output-first normalized Choi matrix $J(E)$. The local criterion below
-is a quantitative sufficient condition for the inhomogeneous discussion
-of~\cite{Malz2024Preparation}, not a consequence of qualitative finite
-correlation~\cite{gap:mswc24_inhomogeneous_scope}.
+right to left. Let $R_\rho(X)=\operatorname{Tr}(X)\rho$, and let $J(E)$
+denote the output-first normalized Choi matrix. For the inhomogeneous
+discussion of~\cite{Malz2024Preparation}, the local criterion below gives
+a quantitative sufficient condition that is not implied by qualitative
+finite correlation alone~\cite{gap:mswc24_inhomogeneous_scope}.
 
 \begin{definition}[Nonwrapping interval]
     \label{def:ldp_actual_interval}
@@ -28,7 +28,8 @@ correlation~\cite{gap:mswc24_inhomogeneous_scope}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:ldp_chain_transfer_product}
-    Expand the restricted family and its ordered transfer product.
+    Expanding the restricted family and its ordered transfer product gives
+    both identities.
 \end{proof}
 
 \begin{theorem}[Residual product relative to a propagated density]
@@ -50,7 +51,7 @@ correlation~\cite{gap:mswc24_inhomogeneous_scope}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:ldp_chain_transfer_product}
-    Set $Q_j=F_j-\delta_jR_{\tau_j}$. Choi domination makes each $Q_j$
+    For $Q_j=F_j-\delta_jR_{\tau_j}$, Choi domination makes each $Q_j$
     completely positive, and it scales trace by $1-\delta_j$. On
     traceless inputs the ordered products of $F_j$ and $Q_j$ agree.
     If $Q=Q_0\circ\cdots\circ Q_{M-1}$, this gives the map identity
@@ -77,8 +78,8 @@ correlation~\cite{gap:mswc24_inhomogeneous_scope}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:ldp_actual_interval_transfer}
-    Choose a density fixed point $\theta$ of the whole-ring channel and
-    set $\sigma_a=(E_a\circ\cdots\circ E_{N-1})(\theta)$. Complete
+    For a density fixed point $\theta$ of the whole-ring channel,
+    let $\sigma_a=(E_a\circ\cdots\circ E_{N-1})(\theta)$. Complete
     positivity and trace preservation retain the density conditions.
     The fixed-point equation closes the cut, and the ordered suffix
     identity proves every displayed propagation equation.
@@ -135,10 +136,11 @@ not identified with either window's Choi minorizer.
 \begin{proof}\leanok
     \uses{thm:ldp_transported_choi_residual,thm:ldp_compatible_cyclic_densities,
         thm:ldp_actual_interval_transfer}
-    Partition the interval into complete $s$-windows and one shorter
-    remainder. Assign minorization strength zero to the remainder; its
-    map is still completely positive and trace preserving. Apply the
-    residual product bound to input $\sigma_{a+n}$ and use $E_{[a,a+n)}(\sigma_{a+n})=\sigma_a$.
+    Partitioning the interval into complete $s$-windows and one shorter
+    remainder, and assigning minorization strength zero to the completely
+    positive, trace-preserving remainder map, allows the residual product
+    bound to be applied to input $\sigma_{a+n}$ with
+    $E_{[a,a+n)}(\sigma_{a+n})=\sigma_a$.
 \end{proof}
 
 \begin{theorem}[Physical preparation from the local window criterion]
@@ -158,13 +160,14 @@ not identified with either window's Choi minorizer.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:ldp_window_mixing_rate,thm:ldp_varying_reference_preparation}
-    The window at ring length $s$ forces $\eta\le1$. Weaken
-    domination to $\eta/2$, so $\rho=1-\eta/2\in[1/2,1)$, including
-    the original endpoint $\eta=1$. The floor bound gives
+    The window at ring length $s$ forces $\eta\le1$. Weakening
+    domination to $\eta/2$ puts $\rho=1-\eta/2\in[1/2,1)$, including
+    the original endpoint $\eta=1$, and the floor bound gives
     $\rho^{\lfloor n/s\rfloor}\le2e^{-rn}$ with
-    $r=-\log(\rho)/s>0$. Apply varying-reference preparation and enlarge
-    its uniform cutoff to at least $s$. Whole-ring convergence derives
-    eventual nonvanishing without replacing any short-chain tensor.
+    $r=-\log(\rho)/s>0$. Varying-reference preparation with its uniform
+    cutoff enlarged to at least $s$ then gives the circuit, while
+    whole-ring convergence derives eventual nonvanishing without replacing
+    any short-chain tensor.
 \end{proof}
 
 \paragraph{Scope and boundary example.}

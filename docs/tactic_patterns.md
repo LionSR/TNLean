@@ -24,6 +24,15 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Labels introduced by the edge operations — promoted (2026-10-16)
+
+- **Pattern:** the case analysis showing that one of the seven births and deaths of an
+  edge construction introduces a single label.
+- **Seen:** the aggregate `edgeOperations_insertsOne` and the per-operation chains of
+  `DyadicEdgeOperationChains.lean`.
+- **Abstraction:** the seven lemmas `auxBirthB_insertsOne`, …, `mainDeathB_insertsOne` in
+  `Approximation/DyadicTrueVertices.lean`; the aggregate is derived from them.
+
 ### Sites separated from guide holes — promoted (2026-10-16)
 
 - **Pattern:** recover the patch of a guide hole, turn membership in its outer sample
@@ -4588,6 +4597,37 @@ three-plaquette output measurement, and the routed reunion measurement.
   `isReordering_comp_iff`; apply `IsReordering.comp` as a term instead.
 
 ## Candidates
+
+### Dyadic padding bounds — candidate (2026-10-16)
+
+- **Pattern:** Combine the lower and strict upper bounds for
+  `2 ^ Nat.clog 2 L`, then add positivity of the ceiling logarithm.
+- **Seen:** The bounds in `DyadicAnchors.lean` and their former rederivation
+  in `le_two_pow_clog_lt` in `DyadicProtocolConsequences.lean`.
+- **Abstraction:** Reuse the existing `le_paddedSide` and
+  `paddedSide_lt_two_mul`; the public wrapper packages them with `Nat.clog_pos`.
+- **Notes:** The duplicate proof is removed by existing-lemma reuse. These
+  two locations are below the promotion threshold of three occurrences
+  across two files; no new helper, tactic or global attribute is introduced.
+
+### Treated-to-level frame equality — candidate (2026-10-16)
+
+- **Pattern:** Identify true vertices from a guide equality, replace the constant
+  treated radius by the equal level radius, transport disjointness, and change
+  the reference party map.
+- **Seen:** Two occurrences in one file: `levelFrame_eq_treatedFrame_guide`
+  and `treatedFrame_completedGuide_eq_levelFrame` in
+  `TNLean/PEPS/Approximation/DyadicTreatedFrameBoundary.lean`.
+- **Abstraction:** The private `treatedFrame_eq_levelFrame_of_guide_eq` takes
+  the baseline stage, the output stage, an unmodified guide and its equality
+  with the level guide. Both endpoint proofs use it.
+- **Notes:** This private, single-file extraction is below the promotion
+  threshold of three occurrences across two files. It shares the two proofs
+  without a global tactic or attribute; all existing endpoint hypotheses
+  and directions are retained.
+  Affine perturbation avoidance also reuses `eventually_add_ne`, which uses
+  public Mathlib neighborhood lemmas; the similarly named chamber-sampling
+  helper is private to its module.
 
 ### Treated birth and death preamble — candidate (2026-10-16)
 

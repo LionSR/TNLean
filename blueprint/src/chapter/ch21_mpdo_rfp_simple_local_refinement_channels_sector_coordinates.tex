@@ -86,12 +86,12 @@
     \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.tMap}
     \leanok
     \uses{def:mpdo_t0_map, def:mpdo_physical_sector_t1_preparation, def:mpdo_t2_map}
-    Define the channel from two physical sites to three physical sites by
-    $\mathcal T=\mathcal T_2\mathcal T_1\mathcal T_0$.
-    Thus $\mathcal T_0$ traces the neighboring subspins, $\mathcal T_1$
-    adjoins the completed three-site neighboring density, and $\mathcal T_2$
-    restores the three complete physical sectors. This is the refinement map
-    in \cite[Appendix~C.2, lines~1522--1545]{Cirac2016MPDO_arXiv}.
+    Following \cite[Appendix~C.2, lines~1522--1545]{Cirac2016MPDO_arXiv},
+    define the refinement channel from two physical sites to three physical
+    sites by $\mathcal T=\mathcal T_2\mathcal T_1\mathcal T_0$, so that
+    $\mathcal T_0$ traces the neighboring subspins, $\mathcal T_1$ adjoins the
+    completed three-site neighboring density, and $\mathcal T_2$ restores the
+    three complete physical sectors.
 \end{definition}
 
 \begin{theorem}[$\mathcal T$ is trace-preserving completely positive]
@@ -209,10 +209,10 @@ outer-sector summand. The composite channel has type
     \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.sMap}
     \leanok
     \uses{def:mpdo_s0_map, def:mpdo_physical_sector_s1_map, def:mpdo_s2_map}
-    Define the channel from three physical sites to two physical sites by
+    Following Proposition~C.7
+    \cite[Appendix~C.2, lines~1547--1563]{Cirac2016MPDO_arXiv}, define the
+    coarse-graining channel from three physical sites to two physical sites by
     $\mathcal S=\mathcal S_2\mathcal S_1\mathcal S_0$.
-    This is the coarse-graining map in Proposition~C.7
-    \cite[Appendix~C.2, lines~1547--1563]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
 \begin{theorem}[$\mathcal S$ is trace-preserving completely positive]
@@ -431,17 +431,17 @@ outer-sector summand. The composite channel has type
     \leanok
     \uses{def:phys_close, def:mpdo_physical_sector_t_map, def:mpdo_physical_sector_closure_coordinates, def:mpdo_neighboring_trace_factorization}
     Assume the neighboring-operator trace factorization of
-    Definition~\ref{def:mpdo_neighboring_trace_factorization}. For every
-    virtual matrix $X$, in the canonical physical-sector coordinates selected
-    by the isometry $U$, the refinement channel satisfies
+    Definition~\ref{def:mpdo_neighboring_trace_factorization}. As in the
+    refinement half of Proposition~C.7
+    \cite[Appendix~C.2, lines~1510--1516 and~1522--1545]
+    {Cirac2016MPDO_arXiv}, for every virtual matrix $X$, in the canonical
+    physical-sector coordinates selected by the isometry $U$, the refinement
+    channel satisfies
     \begin{align}
         \mathcal T(\mathfrak R_2(\mathcal K_2(X)))
          & =\mathfrak R_3(\mathcal K_3(X)).
         \label{eq:rfp_t_closure}
     \end{align}
-    This is the refinement half of Proposition~C.7
-    \cite[Appendix~C.2, lines~1510--1516 and~1522--1545]
-    {Cirac2016MPDO_arXiv}.
 \end{theorem}
 
 \begin{proof}

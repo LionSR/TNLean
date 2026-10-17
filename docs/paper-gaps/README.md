@@ -1171,6 +1171,19 @@ Lemmas 2.1 and 2.3 for one scan, taken as the fields of one data package; the
 construction of that package from the scan geometry and the transported states
 remains open.
 
+### Two-dimensional area law: belt and replacement templates
+
+[arealaw2d_belt_replacement_template_scope.tex](arealaw2d_belt_replacement_template_scope.tex)
+records the two premises of the belt and replacement templates of Section 11
+of the September 24, 2026 two-dimensional area-law manuscript (lines 731–740)
+that are absent from the printed passage. The region must contain a lattice
+point, because Definition 9.3 requires a nonempty template, and the stopping
+scale must satisfy `S_* ≥ 1`. The source uses these templates only for regions
+meeting the cut and chooses `S_*` large. The lattice-point premise is
+discharged for every identifier whose current region meets the cut by
+`repairStage_exists_integerPoint_mem_birth_of_oldInclusion`; the note stays
+open until the stopping-scale premise, handled in #9558, is also discharged on main.
+
 ### Two-dimensional area law: nondegenerate template pieces
 
 [arealaw2d_nondegenerate_templates.tex](arealaw2d_nondegenerate_templates.tex)
@@ -1178,3 +1191,13 @@ records that the closed convex rectangles and triangles of Definition 9.3 of
 the September 24, 2026 two-dimensional area-law manuscript are read in the
 ordinary nondegenerate sense, with noncollinear triangle vertices and nonzero
 orthogonal rectangle sides, as a convention built into the permitted polygons.
+
+## Polynomial PEPS: zero-floor maximizing filters
+
+- [`polypeps_square_zero_floor_optimizer_scope.tex`](polypeps_square_zero_floor_optimizer_scope.tex)
+  records the original-square
+  zero-floor maximizing-family energy and full-system fidelity estimates in
+  canonical integer-domain coordinates. The existing Hamiltonian conversion
+  requires a nonnegative interaction bound; the companion's empty-square
+  case with a negative vacuous bound, its filter-coordinate comparison and
+  the geometric region and weight construction remain separate.

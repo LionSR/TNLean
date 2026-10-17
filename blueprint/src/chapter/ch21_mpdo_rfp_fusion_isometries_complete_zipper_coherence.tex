@@ -164,18 +164,18 @@ $B_{ab}^{ik}$ on the vertical bond between $B_a$ and $B_b$.
 \end{theorem}
 \begin{proof}\leanok
     Length independence makes each positive diagonal matrix
-    $\chi_{\alpha,\beta,\gamma}$ the identity. Use a common positive
-    blocking length for the BNT and carry the fusion equation through
-    the blocking. Completeness of the pair decomposition gives
+    $\chi_{\alpha,\beta,\gamma}$ the identity. Choosing a common positive
+    blocking length for the BNT and carrying the fusion equation through
+    the blocking, completeness of the pair decomposition gives
     $U_{\alpha,\beta}U_{\alpha,\beta}^{\dagger}=\Id$, so the synthesis
     map followed by the analysis map is the identity. The other three
     matrix identities are the blocked zipper identities
     (\ref{eq:rfp_zipper_synthesis}) and
     (\ref{eq:rfp_zipper_analysis}) and the reconstruction identity
     (\ref{eq:rfp_fusion_reconstruction}). At this blocking length, the
-    labelled matrices span the direct sum of the block matrix algebras.
-    This gives both block injectivity and the simultaneous left inverse
-    of the block coefficients. These maps satisfy
+    labelled matrices span the direct sum of the block matrix algebras,
+    which yields both block injectivity and the simultaneous left inverse
+    of the block coefficients required by
     Definition~\ref{def:mpdo_complete_zipper_fusion_family}.
 \end{proof}
 
@@ -339,9 +339,9 @@ $B_{ab}^{ik}$ on the vertical bond between $B_a$ and $B_b$.
     the chosen final block and annihilates every other final block.
 \end{lemma}
 \begin{proof}\leanok
-    Apply the simultaneous left inverse entrywise and sum over the diagonal
-    matrix units of block $d$. If $e=d$, their sum is $\Id_{D_d}$; if
-    $e\ne d$, every term vanishes.
+    Applying the simultaneous left inverse entrywise and summing over the
+    diagonal matrix units of block $d$ gives $\Id_{D_d}$ when $e=d$ and zero
+    when $e\ne d$.
 \end{proof}
 
 \begin{theorem}[F-move and inverse]%
@@ -354,30 +354,30 @@ $B_{ab}^{ik}$ on the vertical bond between $B_a$ and $B_b$.
         inversePrintedFMatrix_mul_printedFMatrix}
     \leanok
     \uses{def:mpdo_complete_zipper_fusion_family, lem:mpdo_complete_zipper_final_block_selector, lem:matrix_kronecker_identity_cancellation}
-    Fix $a,b,c,d\in\Lambda$. There is an invertible matrix
+    Fix $a,b,c,d\in\Lambda$. Following \cite[Section~3.4]{Bultinck2017Anyons},
+    there is an invertible $F$-move matrix
     \begin{align}
         F^{abc}_d:
         \bigoplus_e\C^{N_{ab}^{e}}\otimes\C^{N_{ec}^{d}}
          & \longrightarrow
         \bigoplus_f\C^{N_{bc}^{f}}\otimes\C^{N_{af}^{d}} \notag
     \end{align}
-    whose rows are indexed by $(f,\lambda,\sigma)$ and whose columns are
-    indexed by $(e,\mu,\nu)$. Its entries satisfy
+    whose rows are indexed by $(f,\lambda,\sigma)$, whose columns are
+    indexed by $(e,\mu,\nu)$, and whose entries satisfy
     \begin{align}
         (X^e_{ab,\mu}\otimes\Id)X^d_{ec,\nu}
          & =
         \sum_{f,\lambda,\sigma}
         (F^{abc}_d)^{f\lambda\sigma}_{e\mu\nu}
-        (\Id\otimes X^f_{bc,\lambda})X^d_{af,\sigma}.
+        (\Id\otimes X^f_{bc,\lambda})X^d_{af,\sigma},
         \label{eq:rfp_printed_fmove}
     \end{align}
-    The matrix in the opposite orientation is its two-sided inverse. This is
-    the $F$-move of \cite[Section~3.4]{Bultinck2017Anyons}.
+    with the matrix in the opposite orientation as its two-sided inverse.
 \end{theorem}
 \begin{proof}\leanok
     \uses{def:mpdo_complete_zipper_final_block_selector, lem:matrix_kronecker_identity_cancellation}
-    Form the full left- and right-associated synthesis matrices $L$ and $R$
-    and their analysis matrices $L^+$ and $R^+$. Applying
+    Let $L$ and $R$ be the full left- and right-associated synthesis matrices,
+    with analysis matrices $L^+$ and $R^+$. Applying
     (\ref{eq:rfp_fusion_reconstruction}) twice to the two associative
     decompositions gives
     \begin{align}
@@ -386,11 +386,11 @@ $B_{ab}^{ik}$ on the vertical bond between $B_a$ and $B_b$.
         =R D_{\mathrm R}^{il}R^+.
         \label{eq:rfp_triple_reconstruction}
     \end{align}
-    Contract (\ref{eq:rfp_triple_reconstruction}) with the coefficients
+    Contracting (\ref{eq:rfp_triple_reconstruction}) with the coefficients
     $s_d$ from
-    Definition~\ref{def:mpdo_complete_zipper_final_block_selector} and sum
-    over the final labels $d$. The direct sums $D_{\mathrm L}$ and
-    $D_{\mathrm R}$ both contract to the identity. Consequently,
+    Definition~\ref{def:mpdo_complete_zipper_final_block_selector} and summing
+    over the final labels $d$ contracts both $D_{\mathrm L}$ and
+    $D_{\mathrm R}$ to the identity, so that
     \begin{align}
         P    & :=LL^+=RR^+,
         \label{eq:rfp_triple_support} \\
@@ -661,15 +661,15 @@ $B_{ab}^{ik}$ on the vertical bond between $B_a$ and $B_b$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{lem:matrix_kronecker_identity_cancellation}
-    Apply the elementary three-block $F$-move along each of the five edges.
-    Both paths give the same expansion in the right-associated fourfold
-    fusion map. Its analysis map is a left inverse, by three successive
+    Applying the elementary three-block $F$-move along each of the five edges,
+    both paths give the same expansion in the right-associated fourfold
+    fusion map. Because its analysis map is a left inverse by three successive
     applications of fusion-tensor biorthogonality
-    (\ref{eq:rfp_fusion_biorthogonality}). This gives equality after
+    (\ref{eq:rfp_fusion_biorthogonality}), the two paths agree after
     tensoring with the identity on the nonzero final bond space, and
     Lemma~\ref{lem:matrix_kronecker_identity_cancellation} gives equality of
     the forward composites. The reverse composites are two-sided inverses of
-    this common matrix, hence they coincide. Taking a matrix entry gives
+    this common matrix, hence they coincide; taking a matrix entry gives
     (\ref{eq:rfp_fusion_pentagon}).
 \end{proof}
 

@@ -29,9 +29,9 @@ correspondence in the proof sketch of the two-dimensional corollary
 \end{theorem}
 \begin{proof}
     \leanok
-    Evaluate both functions at a physical configuration $\sigma$ on $R$ and
-    apply the equality of the two closed-state coefficients at
-    $\omega_{R,\sigma,\tau}$.
+    Evaluating both functions at a physical configuration $\sigma$ on $R$ and
+    applying the equality of the two closed-state coefficients at
+    $\omega_{R,\sigma,\tau}$ gives the identity.
 \end{proof}
 
 \begin{theorem}[Blocked-tensor expansion of a partial state]%
@@ -52,7 +52,7 @@ correspondence in the proof sketch of the two-dimensional corollary
 \end{theorem}
 \begin{proof}
     \leanok
-    Split the closed contraction across $R$. If $\mu$ and $\nu$ are boundary
+    Splitting the closed contraction across $R$ shows that if $\mu$ and $\nu$ are boundary
     labels on $R$, the complement-boundary identification satisfies
     \begin{align}
         \bar\mu=\bar\nu
@@ -128,9 +128,8 @@ correspondence in the proof sketch of the two-dimensional corollary
 \end{theorem}
 \begin{proof}
     \leanok
-    Apply $O$ to~(\ref{eq:peps_partial_state_blocked_expansion}) and evaluate
-    at $\sigma$. This proves
-    (\ref{eq:peps_physical_op_partial_state}).
+    Applying $O$ to~(\ref{eq:peps_partial_state_blocked_expansion}) and evaluating
+    at $\sigma$ proves~(\ref{eq:peps_physical_op_partial_state}).
 \end{proof}
 
 \begin{theorem}[Physical operator transferred between equal closed states]%
@@ -150,9 +149,9 @@ correspondence in the proof sketch of the two-dimensional corollary
 \begin{proof}
     \leanok
     Equality of the closed states gives
-    $\psi^\tau_{A,R}=\psi^\tau_{B,R}$. Apply
+    $\psi^\tau_{A,R}=\psi^\tau_{B,R}$. Applying
     (\ref{eq:peps_physical_op_partial_state}) to both tensors and
-    cross-multiply the two interior-bond products.
+    cross-multiplying the two interior-bond products yields the identity.
 \end{proof}
 
 \begin{definition}[Interior-bond region insert]%
@@ -242,7 +241,7 @@ correspondence in the proof sketch of the two-dimensional corollary
 \begin{proof}
     \leanok
     Each staircase window is an $L\times K$ translate and is therefore
-    injective.  Apply the open-boundary realization theorem to $C_j(X)$.
+    injective, so applying the open-boundary realization theorem to $C_j(X)$ yields $O_j(X)$.
 \end{proof}
 
 \begin{lemma}[The two end inserts of the staircase family]%
@@ -284,10 +283,10 @@ correspondence in the proof sketch of the two-dimensional corollary
 \begin{proof}
     \leanok
     On $W_0$, the boundary orientation sends $X^{\mathsf T}$ to $X$.
-    On $W_1,\ldots,W_{L-1}$, apply the interior-bond identity.  On the
-    remaining windows the ordered left endpoint lies in the window, so the
+    On $W_1,\ldots,W_{L-1}$, the interior-bond identity applies, while on the
+    remaining windows the ordered left endpoint lies in the window so the
     boundary orientation fixes $X$.  Each case gives
-    $P_B(W_j)E_B(e,\omega,X)$.  Translation invariance identifies
+    $P_B(W_j)E_B(e,\omega,X)$, and translation invariance identifies
     $P_B(W_j)$ with $P_B(W_0)$.
 \end{proof}
 
@@ -437,9 +436,9 @@ correspondence in the proof sketch of the two-dimensional corollary
     \leanok
     \uses{lem:peps_staircase_virtual_operation_end_inserts,
         thm:peps_lemma5_end_operation_multiplication}
-    Split the virtual boundary of either end window into the reference-edge
-    coordinate and the remaining external coordinates.  Let $E$ be this
-    splitting map, and write $C_M$ for insertion of $M$ on the reference edge.
+    Splitting the virtual boundary of either end window into the reference-edge
+    coordinate and the remaining external coordinates via a map $E$,
+    write $C_M$ for insertion of $M$ on the reference edge.
     On every fixed external fibre,
     \begin{align}
         C_M\bigl(E^{-1}(j,\eta)\bigr)
@@ -592,7 +591,7 @@ correspondence in the proof sketch of the two-dimensional corollary
 \end{theorem}
 \begin{proof}
     \leanok
-    Identify $R$ with $S$ and evaluate both sides at a boundary configuration.
+    Identifying $R$ with $S$ and evaluating both sides at a boundary configuration gives the equality.
 \end{proof}
 
 \begin{theorem}[Blocked images of equal states]%
@@ -646,8 +645,8 @@ correspondence in the proof sketch of the two-dimensional corollary
 \begin{proof}
     \leanok
     \uses{thm:peps_bond_insert_split}
-    Distribute the finite insertion sum over addition and scalar
-    multiplication. For the identity matrix, the sum in
+    Distributing the finite insertion sum over addition and scalar
+    multiplication gives linearity, and for the identity matrix the sum in
     (\ref{eq:peps_bond_insert_split}) reduces to its $i=j$ term.
 \end{proof}
 
@@ -662,8 +661,8 @@ correspondence in the proof sketch of the two-dimensional corollary
     \leanok
     \uses{thm:peps_regionInsertedCoeff_injective,
         thm:peps_deformedRegionState_bondInsertedRegionInsert}
-    Contract the two equal boundary-indexed tensors with the complementary
-    blocked tensor. Their inserted coefficients coincide, so the inserted
+    Contracting the two equal boundary-indexed tensors with the complementary
+    blocked tensor shows that their inserted coefficients coincide, so the inserted
     matrices coincide.
 \end{proof}
 
@@ -688,8 +687,8 @@ correspondence in the proof sketch of the two-dimensional corollary
         lem:peps_staircase_virtual_operation_end_inserts,
         thm:peps_realization_identification, thm:peps_bond_insert_algebra,
         def:peps_physical_operator_of_region_insert}
-    Identify the last staircase window with $W_{\mathrm L}$ and use its
-    prescribed boundary insertion. The physical operator is the linear
+    Identifying the last staircase window with $W_{\mathrm L}$ and using its
+    prescribed boundary insertion shows that the physical operator is the linear
     combination of that insertion followed by a fixed left inverse, so
     it preserves addition and scalar multiplication.
 \end{proof}
@@ -709,9 +708,9 @@ correspondence in the proof sketch of the two-dimensional corollary
     \leanok
     \uses{thm:peps_bond_insert_split}
     The staircase boundary bijection differs from $E_e$ only by a
-    bijection on the exterior coordinates. At the coordinates of any
-    fixed boundary configuration, cancel that bijection and apply
-    (\ref{eq:peps_bond_insert_split}).
+    bijection on the exterior coordinates; cancelling that bijection at the coordinates of any
+    fixed boundary configuration and applying
+    (\ref{eq:peps_bond_insert_split}) yields the identity.
 \end{proof}
 
 \begin{theorem}[Cross-tensor realization and normalized coefficients]%
@@ -736,9 +735,9 @@ correspondence in the proof sketch of the two-dimensional corollary
         thm:peps_global_left_relation_insert, thm:peps_staircase_left_realization,
         thm:peps_physical_operator_same_state_transfer,
         thm:peps_deformedRegionState_bondInsertedRegionInsert}
-    The globally quantified left end relation gives the boundary insertion.
-    Apply the same-state physical-operator identity to $O_1^A(X)$ and
-    substitute its two insertion realizations.
+    The globally quantified left end relation gives the boundary insertion;
+    applying the same-state physical-operator identity to $O_1^A(X)$ and
+    substituting its two insertion realizations yields the claim.
 \end{proof}
 
 \begin{theorem}[Injectivity of a single-window complement]%
@@ -843,7 +842,7 @@ correspondence in the proof sketch of the two-dimensional corollary
     \uses{def:peps_staircase_cross_tensor_algebra_isomorphism,
         thm:matrixAlgEquiv_inner_of_fin,
         thm:peps_cross_tensor_realization_coefficients}
-    Skolem--Noether expresses $F_{AB}(X)$ as $Z\iota_h(X)Z^{-1}$.
-    Substitute this expression into
-    (\ref{eq:peps_cross_tensor_normalized_coefficients}).
+    The Skolem--Noether theorem expresses $F_{AB}(X)$ as $Z\iota_h(X)Z^{-1}$,
+    and substituting this expression into
+    (\ref{eq:peps_cross_tensor_normalized_coefficients}) gives the identity.
 \end{proof}

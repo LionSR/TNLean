@@ -69,6 +69,19 @@ def HasFrameChange {ι : Type} [Fintype ι] [DecidableEq ι] {q : ℕ} [NeZero q
   ∃ w : OriginalCircuit F.regs F'.regs,
     w.IsBoundedChange S r K ε (F.regRef Ω) (F'.regRef Ω) ∧ w.IsSourceBounded rs
 
+section Bounds
+
+variable {ι : Type} [Fintype ι] [DecidableEq ι] {q : ℕ} [NeZero q] {pos : ι → ℝ × ℝ}
+  {Party : Type} {Ω : EuclideanSpace ℂ (ι → Fin q)} {S : Set Party} {r K rs : ℕ} {ε ε' : ℝ}
+
+/-- A change of one frame remains bounded when its error bound is enlarged. -/
+lemma HasFrameChange.mono_error {F F' : Frame pos q Party}
+    (h : HasFrameChange Ω F F' S r K rs ε) (hε : ε ≤ ε') : HasFrameChange Ω F F' S r K rs ε' :=
+  let ⟨w, hw, hs⟩ := h
+  ⟨w, hw.mono subset_rfl le_rfl le_rfl hε, hs⟩
+
+end Bounds
+
 variable {L q : ℕ} {Ω : StateSpace L q} {B₀ C c : ℝ}
 
 /-- **The treated hole radius is admissible.** At the constants of the protocol and `L ≥ 2`, the

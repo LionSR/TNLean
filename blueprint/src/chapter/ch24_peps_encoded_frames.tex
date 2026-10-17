@@ -45,12 +45,11 @@ norm of matrices, rectangular ones included.
     \]
     Every $D_j$ contains the inner sample and is contained in the outer
     sample. If the outer sample is empty, then $P_{c,h}=\id$, whatever the
-    cylinder data. This is the projector of \texttt{05-frames.tex}, lines 26--48,
-    with the cylinder data of \cite[Proposition~4.1]{OpenAI2026PolynomialPEPS};
+    cylinder data. In \texttt{05-frames.tex}, lines 26--48,
+    with the cylinder data of \cite[Proposition~4.1]{OpenAI2026PolynomialPEPS},
     the accuracy $\lVert(\id-P_{c,h})\Omega\rVert\le\varepsilon$ enters as
-    a hypothesis where it is used. The polynomial bound on $\sum_jd_j$ is not
-    recorded: the count of branches below takes a uniform bound on the number
-    of cylinder terms of each patch instead.
+    a hypothesis where it is used, while the count of branches below takes a uniform bound on the number
+    of cylinder terms of each patch rather than recording a polynomial bound on $\sum_jd_j$.
 \end{definition}
 
 \begin{definition}[Hole encoder]
@@ -89,10 +88,9 @@ norm of matrices, rectangular ones included.
         TNLean.PEPS.EncodedFrame.SquarePatch.norm_encoder_le_one}
     \leanok
     \uses{def:peps_frame_hole_encoder}
-    The operator $P_{c,h}$ is an orthogonal projection,
+    As in \texttt{05-frames.tex}, equation (encoder-contraction),
+    lines 62--64, the operator $P_{c,h}$ is an orthogonal projection,
     $K_{c,h}^\dagger K_{c,h}=P_{c,h}$, and $\lVert K_{c,h}\rVert\le1$.
-    This is \texttt{05-frames.tex}, equation (encoder-contraction),
-    lines 62--64.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -121,17 +119,17 @@ norm of matrices, rectangular ones included.
         TNLean.PEPS.EncodedFrame.Frame.refVec}
     \leanok
     \uses{def:peps_frame_hole_encoder}
-    An encoded frame $\mathcal F$ consists of a site ownership assignment on
+    Following \cite[Definition~6.1]{OpenAI2026PolynomialPEPS}
+    (\texttt{05-frames.tex}, lines 71--82), an encoded frame $\mathcal F$ consists of a site ownership assignment on
     one sheet, a list of holes $(c,h)$ with square cylinder data and pairwise
     disjoint outer samples, and a specified party holding each hole's tag.
     The order of the list is the fixed ordering of the appended tags. The
     encoding $K_{\mathcal F}$ is the product of the hole encoders, with the
     tags appended in that order, and the reference vector is
-    $\Omega_{\mathcal F}=K_{\mathcal F}\Omega$. A frame without holes is an unencoded
-    sheet. This is \cite[Definition~6.1]{OpenAI2026PolynomialPEPS},
-    \texttt{05-frames.tex}, lines 71--82. The source requires the outer
-    squares to be disjoint in the plane; only the disjointness of their
-    physical samples, which follows, is used.
+    $\Omega_{\mathcal F}=K_{\mathcal F}\Omega$; a frame without holes is an unencoded
+    sheet. While the source requires the outer
+    squares to be disjoint in the plane, only the resulting disjointness of their
+    physical samples is used.
 \end{definition}
 
 \begin{lemma}[Disjoint encodings commute]
@@ -171,7 +169,7 @@ norm of matrices, rectangular ones included.
 \end{lemma}
 
 \begin{proof}\leanok
-    By induction on the list. Write the site part on the tags $(s,t)$ as
+    Proceeding by induction on the list, write the site part on the tags $(s,t)$ as
     $B_sR_t$, with $B_s$ from the first hole. Summing $R_t^\dagger
         B_s^\dagger B_sR_t$ over $s$ gives $R_t^\dagger P_1R_t$, and $P_1$
     commutes with $R_t^\dagger$ by disjointness of supports; the sum over $t$
@@ -207,13 +205,12 @@ norm of matrices, rectangular ones included.
         TNLean.PEPS.EncodedFrame.Frame.one_sub_mul_le_norm_refVec}
     \leanok
     \uses{lem:peps_frame_gram,lem:peps_frame_telescoping}
-    For a frame with $r$ holes, $\lVert\Omega_{\mathcal F}\rVert
+    As in \texttt{05-frames.tex}, equation (frame-norm), lines 86--94, a frame with $r$ holes satisfies $\lVert\Omega_{\mathcal F}\rVert
         =\lVert P_1\cdots P_r\Omega\rVert$. If $\lVert\Omega\rVert=1$ and every
     hole projector satisfies $\lVert(\id-P_a)\Omega\rVert\le\varepsilon$, then
     \[
         1-r\varepsilon\le\lVert\Omega_{\mathcal F}\rVert\le1 .
     \]
-    This is \texttt{05-frames.tex}, equation (frame-norm), lines 86--94.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -245,12 +242,12 @@ norm of matrices, rectangular ones included.
     the sites. This list contains every site exactly once, so taking the
     site at a position gives a bijection from its positions to $\Lambda$.
     More generally, if all sites in any list have site owner $p$, every site
-    register of that list is owned by $p$. The tensor product of the frame's
+    register of that list is owned by $p$. Matching the
+    sheet of \texttt{05-frames.tex}, lines 13--20 (one site register at
+    each site with a specified owner, together with the tags
+    of Definition~6.1, lines 71--82), the tensor product of the frame's
     registers is its memory in the
-    sense of Theorem~5.2 of \cite{OpenAI2026PolynomialPEPS}. This is the
-    sheet of \texttt{05-frames.tex}, lines 13--20, with one site register at
-    each site and a specified owner for each register, together with the tags
-    of Definition~6.1, lines 71--82.
+    sense of Theorem~5.2 of \cite{OpenAI2026PolynomialPEPS}.
 \end{definition}
 
 \begin{lemma}[Canonical coordinates of the registers]
@@ -429,9 +426,8 @@ norm of matrices, rectangular ones included.
         \le(m+r_{\rm old})\varepsilon .
     \]
     The same holds for frames whose tags are listed in any order, with $M$
-    relabelled along the identification of the two tag orderings. This is the
-    first assertion of \cite[Lemma~6.3]{OpenAI2026PolynomialPEPS}, with its
-    hypotheses; the error estimate uses condition (1) only. No
+    relabelled along the identification of the two tag orderings. In this
+    first assertion of \cite[Lemma~6.3]{OpenAI2026PolynomialPEPS}, the error estimate uses condition (1) only: no
     smallness of the errors of the untouched holes is assumed, and the
     projectors of overlapping patches need not commute.
 \end{theorem}
@@ -474,8 +470,8 @@ norm of matrices, rectangular ones included.
 \end{lemma}
 
 \begin{proof}\leanok
-    Expand every patch projector as the sum of its cylinder projectors and
-    read off the entries of $K_{\rm new}P_m\cdots P_1K_{\rm old}^\dagger$ on
+    Expanding every patch projector as the sum of its cylinder projectors
+    identifies the entries of $K_{\rm new}P_m\cdots P_1K_{\rm old}^\dagger$ on
     the tag basis. The number of tag configurations of a list is the product
     of the numbers of cylinder terms of its members.
 \end{proof}
@@ -539,8 +535,8 @@ norm of matrices, rectangular ones included.
     $\lVert\widetilde M\rVert\le1+\tfrac12\delta$. Splitting
     $M_\delta-M=(1+\tfrac12\delta)^{-1}(\widetilde M-M)
         -\tfrac{\delta/2}{1+\delta/2}M$ bounds the error by
-    $\delta/(1+\tfrac12\delta)\le\delta$. Take
-    $k=\lceil(2Ng/\delta)^2\rceil+1$.
+    $\delta/(1+\tfrac12\delta)\le\delta$, and
+    $k=\lceil(2Ng/\delta)^2\rceil+1$ satisfies the final inequality.
 \end{proof}
 
 \begin{lemma}[Reference error of an approximate rewrite]
@@ -558,10 +554,10 @@ norm of matrices, rectangular ones included.
 \end{lemma}
 
 \begin{proof}\leanok
-    Split $M_a\Omega_{\mathcal F_{\rm old}}-\Omega_{\mathcal F_{\rm new}}$ as
-    $(M_a-M)\Omega_{\mathcal F_{\rm old}}$ plus the error of the theorem, and
-    use $\lVert\Omega_{\mathcal F_{\rm old}}\rVert\le1$. For the
-    specialization, $L^{-60}\le L^{-30}$.
+    Splitting $M_a\Omega_{\mathcal F_{\rm old}}-\Omega_{\mathcal F_{\rm new}}$ as
+    $(M_a-M)\Omega_{\mathcal F_{\rm old}}$ plus the small-error rewrite difference and
+    using $\lVert\Omega_{\mathcal F_{\rm old}}\rVert\le1$ gives the general bound; the
+    specialization uses $L^{-60}\le L^{-30}$.
 \end{proof}
 
 \begin{lemma}[Chains of rank-one site operators as networks]
@@ -591,8 +587,8 @@ norm of matrices, rectangular ones included.
 \end{lemma}
 
 \begin{proof}\leanok
-    Expand the product as a sum over paths of intermediate configurations.
-    A path of nonzero weight keeps the value of a site across factors that do
+    Expanding the product as a sum over paths of intermediate configurations,
+    a path of nonzero weight keeps the value of a site across factors that do
     not contain it, so it is determined by the values on the internal edges,
     and conversely every labelling of the internal edges determines such a
     path; along it the weight is the product of the vertex tensors.
@@ -626,9 +622,9 @@ norm of matrices, rectangular ones included.
     The vertex tensors are normalized, so the whole-group truncation lemma
     applies to the contraction $Z$. An operator read off from a tensor $W$ on
     the open legs is $W$, reshaped as a matrix from inputs to outputs,
-    tensored with the identity on the remaining sites, so its operator norm is
+    tensored with the identity on the remaining sites, so its operator norm on $W=Z-Z_k$ is
     at most the largest Hilbert--Schmidt norm of its diagonal blocks, hence
-    at most $\lVert W\rVert$. Apply this to $W=Z-Z_k$.
+    at most $\lVert Z-Z_k\rVert$.
 \end{proof}
 
 \begin{lemma}[Network of a branch]
@@ -699,9 +695,9 @@ norm of matrices, rectangular ones included.
 \end{theorem}
 
 \begin{proof}\leanok
-    Apply the truncation of a chain to the network of each branch with the
-    patch vertices as groups, and combine with the rescaling lemma, using
-    $N\cdot 2m/\sqrt k\le\tfrac12\delta$.
+    Applying the chain truncation to the network of each branch with the
+    patch vertices as groups and combining with the rescaling lemma via
+    $N\cdot 2m/\sqrt k\le\tfrac12\delta$ gives both bounds.
 \end{proof}
 
 \begin{theorem}[Small-patch rewrite: polynomial approximation]
@@ -729,9 +725,9 @@ norm of matrices, rectangular ones included.
     (\texttt{05-frames.tex}, lines 21--25), the choice $a=30$ gives
     $\lVert M_{30}\Omega_{\mathcal F_{\rm old}}-\Omega_{\mathcal F_{\rm new}}
         \rVert\le(2b+1)L^{-20}$, where $b$ bounds $m$, $r_{\rm old}$,
-    $r_{\rm new}$ and the number of specified parties; the rewrite is a bounded
-    change with reference-vector error $O(L^{-20})$. This is the second
-    assertion of \cite[Lemma~6.3]{OpenAI2026PolynomialPEPS}.
+    $r_{\rm new}$ and the number of specified parties; as in the second
+    assertion of \cite[Lemma~6.3]{OpenAI2026PolynomialPEPS}, the rewrite is a bounded
+    change with reference-vector error $O(L^{-20})$.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -802,12 +798,12 @@ norm of matrices, rectangular ones included.
     with at most one gate that is not private to one party. Every party taking
     part in a gate of the circuit lies in the specified list, and the
     expansion of the gate into monomials allowed by
-    \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS} has at most
+    \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS}---the form
+    in which the changes of \cite[Proposition~7.1]{OpenAI2026PolynomialPEPS}
+    are composed (\texttt{06-geometry.tex}, lines 574--583)---has at most
     $K L^e$ terms, each with at most $2b$ normalized pair effects, and
     coefficients of total modulus at most $K L^e$, with $K$ and $e$ as in
-    Theorem~\ref{thm:peps_frame_small_rewrite_polynomial}. This is the form
-    in which the changes of \cite[Proposition~7.1]{OpenAI2026PolynomialPEPS}
-    are composed (\texttt{06-geometry.tex}, lines 574--583).
+    Theorem~\ref{thm:peps_frame_small_rewrite_polynomial}.
 \end{theorem}
 
 \begin{proof}\leanok

@@ -43,8 +43,8 @@
     the total block trace, and
     Theorem~\ref{thm:mpdo_transported_vertical_sector_composites_identity}
     gives both inverse laws.
-    Apply Theorem~\cite[``Unitary action of an invertible CPTP map'']{QICLean2026Blueprint} to this
-    pair. Its equivalence of summands, dimension equalities, and unitary
+    Applying Theorem~\cite[``Unitary action of an invertible CPTP map'']{QICLean2026Blueprint} to this
+    pair, its equivalence of summands, dimension equalities, and unitary
     matrices give the two displayed formulas without changing the chosen
     relabelling.
 \end{proof}
@@ -80,8 +80,8 @@
 
 \begin{proof}\leanok
     \uses{lem:mpdo_vertical_bond_contraction_encoded_matrix_unit, lem:mpdo_vertical_sector_retraction, thm:mpdo_transported_vertical_sector_unitary_relabeling, thm:mpdo_transported_vertical_sector_maps}
-    Decompose the weighted contraction family into its individual matrix
-    summands. At the summand paired with $\alpha$, the unitary formula gives
+    Decomposing the weighted contraction family into its individual matrix
+    summands, the unitary formula at the summand paired with $\alpha$ gives
     \begin{align}
         m_\alpha V_\alpha
         \iota_\alpha(A^{(1)}_\alpha(X))V_\alpha^*
@@ -516,9 +516,9 @@
 
 \begin{proof}\leanok
     The sector-compression separation hypothesis gives a nonzero
-    finite-chain compression for each active corner. Apply
+    finite-chain compression for each active corner, so
     Theorem~\ref{thm:mpdo_active_product_coefficient_phase_pos_of_sector_separation}
-    with this separation property.
+    gives $0<\lambda_j\zeta_j$.
 \end{proof}
 
 \begin{theorem}[Unitary normalization of active product gauges]
@@ -528,8 +528,10 @@
     \leanok
     \uses{def:mpdo, def:mpdo_grouped_vertical_product_inputs, thm:mpdo_active_product_corner_blocked_bnt_coverage, thm:mpdo_retained_product_spectral_family_exists, thm:mpdo_active_product_coefficient_phase_pos, thm:mpdo_blocked_reference_corners, thm:mpdo_pairwise_vertical_gram_conjugation, thm:normal_tensor_gram_rigidity}
     Under the hypotheses of
-    Theorem~\ref{thm:mpdo_active_product_coefficient_phase_pos},
-    for every active product corner $j$ there is a real number $\omega_j>0$ such that
+    Theorem~\ref{thm:mpdo_active_product_coefficient_phase_pos}, as in the
+    gauge normalization of
+    \cite[Appendix~C.4, lines~2025--2029]{Cirac2016MPDO_arXiv},
+    every active product corner $j$ admits a real number $\omega_j>0$ such that
     \begin{align}
         X_j^\dagger X_j
          & =\omega_j\Id,
@@ -538,17 +540,15 @@
          & \in\mathrm{U}(D_j).
         \notag
     \end{align}
-    This is the gauge normalization used in
-    \cite[Appendix~C.4, lines~2025--2029]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 
 \begin{proof}\leanok
-    Apply the Figure~8 comparison to the active corner and the distinguished
-    blocked reference corner. Both coefficients are positive, and the
-    two-site Gram comparison identifies their Gram-dressed normal tensors.
-    Normal-tensor rigidity then makes $X_j^\dagger X_j$ a positive real
-    multiple of the identity. Division by the positive square root gives a
-    unitary matrix.
+    In the Figure~8 comparison between the active corner and the
+    distinguished blocked reference corner, both coefficients are positive,
+    and the two-site Gram comparison identifies their Gram-dressed normal
+    tensors. Normal-tensor rigidity then makes $X_j^\dagger X_j$ a positive
+    real multiple of the identity, and division by the positive square root
+    gives a unitary matrix.
 \end{proof}
 
 \begin{definition}[Original-label corner family]
@@ -789,8 +789,8 @@
 
 \begin{proof}\leanok
     The grouped vertical product hypotheses give simultaneous spectra for all
-    retained product corners. Compare each active corner with the blocked
-    vertical BNT. Sector separation makes its coefficient positive, and the
+    retained product corners. Comparing each active corner with the blocked
+    vertical BNT, sector separation makes its coefficient positive and the
     blocked Gram comparison normalizes its gauge to a unitary. Passing these
     corners through the one-site--two-site sector correspondence gives
     positive original-label corners; their adjoints form the rows of the
@@ -806,24 +806,24 @@
     are identified by the vertical-sector unitary relabelling. Suppose that the
     product tensors have positive diagonal fusion matrices
     $\chi_{\alpha,\beta,\gamma}$ and exact forward and reverse coisometric
-    fusion identities. If the blocked operator has the two simultaneous
-    representations of
-    Theorem~\ref{thm:mpdo_blocked_vertical_operator_representations}, then
+    fusion identities. As in
+    \cite[Appendix~C.4, lines~2030--2042]{Cirac2016MPDO_arXiv}, if the blocked
+    operator has the two simultaneous representations of
+    Theorem~\ref{thm:mpdo_blocked_vertical_operator_representations}, then the
+    trace scalars satisfy the idempotent coefficient identity
     \begin{align}
         m_\gamma
          & =\sum_{\alpha,\beta}
         \tr(\chi_{\alpha,\beta,\gamma})m_\alpha m_\beta.
         \notag
     \end{align}
-    This is the idempotent coefficient identity in
-    \cite[Appendix~C.4, lines~2030--2042]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 
 \begin{proof}\leanok
-    For every sufficiently large $L$, expand the product of one-site sector
-    operators with the fusion identity. Eventual linear independence of the
-    BNT operators and the two blocked representations then identify, for
-    every $\gamma$, the two positive power sums
+    For every sufficiently large $L$, expanding the product of one-site sector
+    operators with the fusion identity and using eventual linear independence
+    of the BNT operators together with the two blocked representations
+    identifies, for every $\gamma$, the two positive power sums
     \begin{align}
         \tr\!\left[
             \left(\frac{m_\gamma}{n_{\sigma(\gamma)}}
@@ -877,12 +877,12 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    Apply the proved normalized BNT-refined specialization of
-    Proposition~4.13 to $M$ and to its two-site blocking. In each case, retain
+    Applying the proved normalized BNT-refined specialization of
+    Proposition~4.13 to $M$ and to its two-site blocking gives, in each case,
     the CPSV basis-of-normal-tensors assertion, the positive multiplicity
     matrices, and both coisometric decomposition identities.
-    Unpack the two completely positive, trace-preserving maps in the
-    renormalization fixed-point condition.
+    With the two completely positive, trace-preserving maps from the
+    renormalization fixed-point condition,
     Theorem~\ref{thm:mpdo_transported_vertical_product_positive_fusion_decomposition}
     then gives the positive diagonal family, the row
     coisometries, the forward fusion identity, and exact reconstruction for
@@ -899,5 +899,6 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    Expand the two blocked tensor matrices and reassociate their product.
+    Expanding the two blocked tensor matrices and reassociating their product
+    gives the identity.
 \end{proof}

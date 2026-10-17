@@ -675,3 +675,194 @@ Its marginals are those of the same final normalized vector defined in
     to~(\ref{eq:peps_minimum_density_variation}), gives
     (\ref{eq:peps_minimum_clipped}) and $0<\lambda_j\leq1$.
 \end{proof}
+
+\begin{theorem}[Logarithmic filter ratios at a patch minimum]
+    \label{thm:peps_patch_minimum_filter_log_ratio}
+    \lean{TNLean.PEPS.exists_clipped_filter_of_isMinOn_regularizedPatchObjective}
+    \leanok
+    \uses{def:peps_regularized_patch_objective,def:peps_patch_canonical_marginal}
+    Let $X_0\subseteq\cdots\subseteq X_{m-1}$, let $a_j>0$ and $b>0$,
+    and let $\Omega$ be a unit vector. Suppose that $x\in\mathcal D$
+    minimizes $F$ on $\mathcal D$, and write $\rho_j$ for the marginal on
+    $X_j$ of the normalized output $\Psi(x)/\|\Psi(x)\|$. For every $j$,
+    the filter $K_j=(x_j+bI_{X_j})^{-a_j/2}$ commutes with $\rho_j$, and
+    there are a unitary $W_j$ and real families $l_j,p_j$ with all
+    $l_{j,i}>0$ such that
+    \begin{align}
+        K_j & =W_j\operatorname{diag}(l_j)W_j^*,\qquad
+        \rho_j=W_j\operatorname{diag}(p_j)W_j^*, \notag           \\
+        \bigl|\log l_{j,i}-\log l_{j,k}\bigr|
+            & \le\frac{a_j}2\bigl|\log p_{j,i}-\log p_{j,k}\bigr|
+        \label{eq:peps_patch_filter_log_ratio}
+    \end{align}
+    whenever $p_{j,i}>0$ and $p_{j,k}>0$. Repeated and empty regions are
+    admitted. This is the logarithmic ratio estimate in the
+    \href{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex\#L201-L212}{proof of Proposition 4.1}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_patch_minimum_clipped,
+        thm:peps_ordered_patch_normalized_coordinates,
+        thm:peps_ordered_patch_marginal_coordinates}
+    Theorem~\ref{thm:peps_patch_minimum_clipped} gives a unitary $U_j$
+    diagonalizing $x_j$ and $\rho_j$ together, with
+    $s_{j,i}+b=\max\{p_{j,i}/\lambda_j,b\}$ and $0<\lambda_j\le1$.
+    Hence $K_j$ is diagonal in the same basis with positive eigenvalues
+    $l_{j,i}=(s_{j,i}+b)^{-a_j/2}$, and it commutes with $\rho_j$. The
+    function $t\mapsto\log\max\{t/\lambda_j,b\}$ changes by at most
+    $|\log t-\log t'|$ between positive arguments $t,t'$. Multiplying by
+    $a_j/2$ gives (\ref{eq:peps_patch_filter_log_ratio}).
+\end{proof}
+
+\begin{theorem}[Energy of a minimizing nested patch output]
+    \label{thm:peps_nested_patch_minimizer_energy}
+    \lean{TNLean.PEPS.Approximation.SquareHamiltonian.nestedPatch_minimizer_energy_le}
+    \leanok
+    \uses{def:polynomial_peps_model,def:square_area_law_hamiltonian,
+        def:square_area_law_state,def:peps_nested_patches,
+        def:peps_regularized_patch_objective,def:peps_regularized_patch_minimum}
+    Let $H$ be an original square Hamiltonian with interaction bound
+    $J\ge0$, and let $\Delta>0$. Let $\Omega$ be a unit vector and $E_0$ a
+    real number with $H\Omega=E_0\Omega$ and
+    $H-E_0I\ge\Delta(I-|\Omega\rangle\langle\Omega|)$. Fix an order on the
+    sites of the integer domain, a centre $c$, and reals $u\ge4$,
+    $0<\kappa\le1$ and $b>0$. Use the nested patches $X_j=K(c,r_j)$, $0\le j<m$,
+    with the equal weights $a_j=\kappa/m$ and the input vector $U\Omega$.
+    If $x\in\mathcal D$ minimizes $F$ on $\mathcal D$ and
+    $\phi=\widehat\Psi(x)$, then
+    \begin{align}
+        \operatorname{Re}\langle\phi,H_{\mathrm{int}}\phi\rangle-E_0
+         & \le36q^2J\kappa^2.
+        \label{eq:peps_nested_patch_minimizer_energy}
+    \end{align}
+    Repeated clipped patches retain independent densities, and no density
+    is assumed nonsingular. This is the energy bound in the
+    \href{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex\#L213-L336}{proof of Proposition 4.1}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_regularized_patch_minimum,thm:peps_nested_patch_sizes,
+        thm:peps_patch_minimum_filter_log_ratio,
+        thm:peps_ordered_patch_normalized_coordinates,
+        thm:peps_patch_factor_chain_list,
+        thm:square_nearest_neighbor_terms,thm:square_area_law_ground_gap,
+        thm:peps_nested_patch_crossing,thm:area_law_nearest_neighbor_budget,
+        thm:area_law_crossing_support_count,
+        thm:peps_nested_patch_quadratic_sum}
+    The weights are positive, so $\phi$ is a unit vector, and they are at
+    most one. Write $H_{\mathrm{int}}$ as a sum of Hermitian site and edge
+    terms $T_i$, supported on single sites or edges $D_i$, with
+    $\|T_i\|\le J$. The filters are invertible, so
+    $\phi$ is the normalized image of the gapped ground vector $U\Omega$
+    under the ordered filter product. Each site term crosses no patch, and
+    each edge crosses at most one selected patch. For a term $T_i$ crossing
+    $X_j$, let $d_{ij}=q^{|D_i\cap X_j|}$ be the dimension of its support
+    inside $X_j$. The logarithmic ratio estimate of
+    Theorem~\ref{thm:peps_patch_minimum_filter_log_ratio} at that single
+    index, together with $a_j\le1$, gives
+    \begin{align}
+        \operatorname{Re}\langle\phi,H_{\mathrm{int}}\phi\rangle-E_0
+         & \le\sum_{j=0}^{m-1}a_j^2
+        \sum_{T_i\text{ crossing }X_j}d_{ij}^2J.
+        \label{eq:peps_nested_patch_single_crossing_energy}
+    \end{align}
+    A crossing edge has exactly one endpoint in $X_j$, so $d_{ij}=q$ and the
+    inner sum equals $q^2J|\partial_\Lambda X_j|$. Hence the right side of
+    (\ref{eq:peps_nested_patch_single_crossing_energy}) equals
+    $q^2J\sum_ja_j^2|\partial_\Lambda X_j|$, and the quadratic boundary sum
+    bounds this by $36q^2J\kappa^2$.
+\end{proof}
+
+\begin{theorem}[Uniform marginal closeness at a minimizing nested patch]
+    \label{thm:peps_nested_patch_minimizer_marginal_closeness}
+    \lean{TNLean.PEPS.Approximation.exists_uniform_nestedPatch_minimizer_marginal_closeness}
+    \leanok
+    \uses{def:polynomial_peps_model,def:square_area_law_state,
+        def:peps_nested_patches,def:peps_regularized_patch_objective,
+        def:peps_patch_canonical_marginal}
+    Let $q\ge0$ be an integer, $J\ge0$ and $\Delta>0$. There is
+    $0<\kappa\le\tfrac12$ with the following property. For every $L$, every
+    original square Hamiltonian $H$ with interaction bound $J$, every unit
+    vector $\Omega$ and real $E_0$ with $H\Omega=E_0\Omega$ and
+    $H-E_0I\ge\Delta(I-|\Omega\rangle\langle\Omega|)$, every centre $c$, and
+    all reals $u\ge4$ and $b>0$, use the nested patches with equal weights
+    $a_j=\kappa/m$ and input vector $U\Omega$. If $x\in\mathcal D$
+    minimizes $F$ on $\mathcal D$, then every region $X$ of the integer
+    domain satisfies
+    \begin{align}
+        \|\rho_X-\rho_X^{U\Omega}\|_1 & \le\frac1{16},
+        \label{eq:peps_nested_patch_marginal_closeness}
+    \end{align}
+    where $\rho_X$ is the marginal of $\widehat\Psi(x)$. The choice of
+    $\kappa$ depends only on $q$, $J$ and $\Delta$. This is the marginal
+    estimate in the
+    \href{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex\#L335-L365}{proof of Proposition 4.1}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{lem:peps_patch_energy_parameter_choice,
+        thm:peps_nested_patch_minimizer_energy,
+        thm:peps_regularized_patch_minimum,
+        thm:square_area_law_ground_gap,
+        thm:peps_gap_marginal_one_sixteenth,
+        thm:peps_regional_basis_relabelling}
+    Choose $\kappa$ with $0<\kappa\le\tfrac12$ and
+    $36q^2J\kappa^2\le\Delta/1024$. The energy bound of
+    Theorem~\ref{thm:peps_nested_patch_minimizer_energy} then gives
+    $\operatorname{Re}\langle\phi,H_{\mathrm{int}}\phi\rangle-E_0\le\Delta/1024$
+    for the unit vector $\phi=\widehat\Psi(x)$. The vector $U\Omega$ is a
+    gapped ground vector of $H_{\mathrm{int}}$, so the marginal trace-norm
+    estimate of Theorem~\ref{thm:peps_gap_marginal_one_sixteenth} gives
+    (\ref{eq:peps_nested_patch_marginal_closeness}) after the regional
+    coordinate identification.
+\end{proof}
+
+\begin{theorem}[Uniform approximation in the selected nested cylinders]
+    \label{thm:peps_nested_patch_cylinder_approximation}
+    \lean{TNLean.PEPS.Approximation.SquareEntropyAreaLaw.exists_uniform_nestedPatch_cylinders}
+    \leanok
+    \uses{def:square_entropy_area_law,def:polynomial_peps_model,
+        def:area_law_ground_entropy,def:square_area_law_state,
+        def:peps_nested_patches,def:peps_regional_cylinder}
+    Assume the square-grid entropy area law. Let $q\ge2$ be an integer,
+    $J,\Delta>0$ and $B_0,p>0$. There is $R_0>0$ with the following property.
+    For every $L\ge2$, every original square Hamiltonian $H$ with interaction
+    bound $J$, every unit vector $\Omega$ and real $E_0$ with
+    $H\Omega=E_0\Omega$ and $H-E_0I\ge\Delta(I-|\Omega\rangle\langle\Omega|)$,
+    every centre $c$, and every real $u$ with $4\le u\le B_0\log L$, let
+    $K_0\subseteq\dots\subseteq K_{m-1}$ be the nested patches about $c$ in the
+    integer square of side $L$. Then there are subspaces $S_j$ of the states
+    on $K_j$ with $\dim S_j\le L^{R_0}$, and a vector $v$ in the sum of the
+    cylinders $S_j\otimes\mathcal H_{K_j^c}$, such that
+    \begin{align}
+        \|U\Omega-v\| & \le L^{-p}.
+        \label{eq:peps_nested_patch_cylinder_approximation}
+    \end{align}
+    The exponent $R_0$ is chosen before $L$, $H$, $\Omega$, $c$ and $u$. The
+    area law is a hypothesis here; its derivation from the spectral gap is
+    the separate rectangular specialization of the finite-domain area law,
+    which is not yet established. This is the cylinder estimate
+    \href{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex\#L484-L563}{in the proof of Proposition 4.1}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_nested_patch_minimizer_marginal_closeness,
+        thm:peps_nested_patch_entropy,def:peps_patch_radius_exponent,
+        thm:peps_patch_radius_bounds,
+        thm:peps_patch_minimum_growth_entropy_distance,
+        thm:peps_regularized_patch_minimum,thm:peps_patch_inverse_cylinder,
+        thm:peps_nested_patch_sizes}
+    Choose $\kappa$ by
+    Theorem~\ref{thm:peps_nested_patch_minimizer_marginal_closeness} and
+    $C_S$ by Theorem~\ref{thm:peps_nested_patch_entropy}. Put
+    $C_0=16C_S+\log8$, take $R_0$ as in the explicit radius choice, and set
+    $R=R_0\log L$, $b=e^{-R}$ and $a_j=\kappa/m$. The entropy bound and the
+    marginal closeness at every minimizer give the growth bound
+    $\log N(R)\le\frac\kappa2\bigl(C_0(1+u)+R/4\bigr)$. At a minimizer, the
+    first-head expansion of
+    Theorem~\ref{thm:peps_patch_inverse_cylinder} produces subspaces of
+    dimension at most $1/b=L^{R_0}$ and a vector in the sum of their
+    cylinders within $N(R)(2b)^{\kappa/2}$ of $U\Omega$. Taking logarithms,
+    the radius bounds turn this into the estimate
+    (\ref{eq:peps_nested_patch_cylinder_approximation}).
+\end{proof}

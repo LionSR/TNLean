@@ -29,7 +29,7 @@
 
 \begin{proof}
     \leanok
-    Choose finite decompositions of the fixed-boundary vectors:
+    Finite decompositions of the fixed-boundary vectors,
     \begin{align}
         \psi(a,i_2,\ldots,i_{n+2})
          & =
@@ -38,16 +38,16 @@
         \psi(i_1,\ldots,i_{n+1},b)
          & =
         \sum_j
-        \tr\!\left(A^j_{i_1}\cdots A^j_{i_{n+1}}D^j_b\right). \notag
+        \tr\!\left(A^j_{i_1}\cdots A^j_{i_{n+1}}D^j_b\right), \notag
     \end{align}
-    For every middle word $w$,
+    give, for every middle word $w$,
     \begin{align}
         \psi(a,w,b)
          & =
         \sum_j\tr\!\left(A^j_wA^j_bC^j_a\right) =
         \sum_j\tr\!\left(A^j_bC^j_aA^j_w\right), \notag
     \end{align}
-    and the second decomposition gives
+    while the second decomposition gives
     \begin{align}
         \psi(a,w,b)
          & =
@@ -60,8 +60,8 @@
          & =
         \sum_j\tr\!\left(D^j_bA^j_aA^j_w\right). \notag
     \end{align}
-    For an arbitrary word $(i_1,\ldots,i_{n+2})$, the first decomposition
-    gives
+    For an arbitrary word $(i_1,\ldots,i_{n+2})$, cyclicity of the trace applied
+    to the first decomposition gives
     \begin{align}
         \psi(i_1,\ldots,i_{n+2})
          & =
@@ -69,9 +69,8 @@
         \tr\!\left(A^j_{i_2}\cdots A^j_{i_{n+2}}C^j_{i_1}\right) =
         \sum_j
         \tr\!\left(A^j_{i_{n+2}}C^j_{i_1}
-        A^j_{i_2}\cdots A^j_{i_{n+1}}\right), \notag
+        A^j_{i_2}\cdots A^j_{i_{n+1}}\right). \notag
     \end{align}
-    by cyclicity of the trace.
 \end{proof}
 
 \begin{lemma}[One-step block intersection from block restrictions]
@@ -95,7 +94,7 @@
 
 \begin{proof}
     \leanok
-    Choose finite decompositions of the fixed-boundary vectors:
+    Finite decompositions of the fixed-boundary vectors,
     \begin{align}
         \psi(a,i_2,\ldots,i_{n+2})
          & =
@@ -104,10 +103,9 @@
         \psi(i_1,\ldots,i_{n+1},b)
          & =
         \sum_j
-        \tr\!\left(A^j_{i_1}\cdots A^j_{i_{n+1}}D^j_b\right). \notag
+        \tr\!\left(A^j_{i_1}\cdots A^j_{i_{n+1}}D^j_b\right), \notag
     \end{align}
-    Evaluating these two decompositions on $(a,w,b)$, where $w$ has length
-    $n$, gives
+    evaluated on $(a,w,b)$ for a word $w$ of length $n$, give
     \begin{align}
         \sum_j\tr\!\left(A^j_bC^j_aA^j_w\right)
          & =
@@ -145,23 +143,22 @@
 
 \begin{proof}
     \leanok
-    The reverse implication is
-    Lemma~\ref{lem:block_restrictions_mem_block_ground_spaces}. For the
-    forward implication, write
+    Lemma~\ref{lem:block_restrictions_mem_block_ground_spaces} establishes the
+    reverse implication. For the forward implication, any
     \begin{align}
         \psi     & =\sum_j\gamma_j,
-        \notag                       \\
-        \gamma_j & \in G_{n+2}(A^j).
+        \notag                      \\
+        \gamma_j & \in G_{n+2}(A^j)
         \notag
     \end{align}
-    Each $\gamma_j$ has fixed-boundary restrictions in $G_{n+1}(A^j)$:
+    has summands whose fixed-boundary restrictions lie in $G_{n+1}(A^j)$:
     \begin{align}
         \gamma_j(a,-) & \in G_{n+1}(A^j),
         \notag                            \\
         \gamma_j(-,b) & \in G_{n+1}(A^j).
         \notag
     \end{align}
-    Taking the finite sum over $j$ gives the two restrictions of $\psi$ in
+    Taking the finite sum over $j$ places the two restrictions of $\psi$ in
     $\bigvee_jG_{n+1}(A^j)$.
 \end{proof}
 
@@ -336,20 +333,20 @@ direct.
     Suppose that the length-$q$ simultaneous products span the product algebra,
     $\spn\{(A^1_w,\ldots,A^r_w):|w|=q\} = \prod_j\MN{D_j}$,
     and that every block satisfies
-    $\sum_a A^j_aA^{j\,\dagger}_a=\Id$. Then the simultaneous products span
-    the product algebra at every length $n\ge q$. This is the
+    $\sum_a A^j_aA^{j\,\dagger}_a=\Id$. As the
     simultaneous-tuple form of the unital propagation in
-    \cite[lines~893--898]{PerezGarcia2007Matrix}.
+    \cite[lines~893--898]{PerezGarcia2007Matrix}, the simultaneous products
+    then span the product algebra at every length $n\ge q$.
 \end{lemma}
 
 \begin{proof}
     \leanok
     \uses{lem:block_separating_equations_from_pairwise_separation}
-    Given matrices $M_j$, first represent the tuple
-    $((A^j_a)^\dagger M_j)_j$ by words of length $q$. Prefixing the letter $a$
+    For given matrices $M_j$, representing the tuple
+    $((A^j_a)^\dagger M_j)_j$ by words of length $q$, prefixing the letter $a$,
     and summing over $a$ gives
     $\left(\sum_aA^j_aA^{j\,\dagger}_aM_j\right)_j =(M_j)_j$.
-    This proves the step from $q$ to $q+1$; induction gives every $n\ge q$.
+    This proves the step from $q$ to $q+1$, and induction gives every $n\ge q$.
 \end{proof}
 
 \begin{lemma}[Normalized block-separating equations give all large product spans]
@@ -381,7 +378,7 @@ direct.
         \spn\{A^j_u:|u|=m\}
          & =\MN{D_j}. \notag
     \end{align}
-    For $n\ge L+(r-1)S$, take $m=n-(r-1)S$. Combining the length-$m$ block
+    For $n\ge L+(r-1)S$ and $m=n-(r-1)S$, combining the length-$m$ block
     span with the $r-1$ block-separating equations gives the displayed product
     span at length $n$. In the BNT case, the injectivity of
     $\Gamma_{L_0}^{A^j}$ gives the full span at length $L_0$, and the
@@ -450,9 +447,9 @@ direct.
 
 \begin{proof}
     \leanok
-    Compose the left gauge, the gauge-phase intertwiner, and the inverse right
-    gauge. After carrying across the bond-dimension identification, the
-    composite is the required gauge-phase intertwiner.
+    Composing the left gauge, the gauge-phase intertwiner, and the inverse right
+    gauge produces, after carrying across the bond-dimension identification, the
+    required gauge-phase intertwiner.
 \end{proof}
 
 \begin{theorem}[Prepared-gauge simultaneous product span]
@@ -488,12 +485,12 @@ direct.
 \begin{proof}
     \leanok
     \uses{lem:tp_gauge_equiv, thm:tp_gauge_from_adjoint_fixed, thm:irreducible_tensor_to_transfer_map, lem:tp_gauge_preserves_irreducibility, lem:gauge_phase_equiv_transport_left_right, lem:gauge_invariance_block_injective, thm:is_normal_tensor_of_is_normal_left_canonical, thm:cpsv_normal_mpv_phase_gauge, lem:bnt_direct_sum_block_separation_word_span, thm:word_tuple_span_gauge_invariance}
-    Define the prepared blocks by
+    For the prepared blocks
     \begin{align}
-        B^j_a & =(\Lambda^j)^{1/2}A^j_a(\Lambda^j)^{-1/2}. \notag
+        B^j_a & =(\Lambda^j)^{1/2}A^j_a(\Lambda^j)^{-1/2}, \notag
     \end{align}
-    Positive definiteness makes this an invertible gauge, while the dual
-    fixed-point equation gives
+    positive definiteness makes the transformation an invertible gauge, while
+    the dual fixed-point equation gives
     \begin{align}
         \sum_a(B^j_a)^\dagger B^j_a & =\Id. \notag
     \end{align}
@@ -530,13 +527,13 @@ direct.
         \sum_aA^j_aA^{j\,\dagger}_a & =\Id,
                                     & \sum_a(A^j_a)^\dagger\Lambda^jA^j_a & =\Lambda^j. \notag
     \end{align}
-    For every $n\ge 3(r-1)(L_0+1)$,
+    For every $n\ge 3(r-1)(L_0+1)$, the simultaneous spanning estimate used in
+    \cite[Theorem~12, proof lines~1424--1456]{PerezGarcia2007Matrix} holds:
     \begin{align}
         \spn\{(A^1_w,\ldots,A^r_w):|w|=n\} & =\prod_j\MN{D_j}. \notag
     \end{align}
     No identity $\sum_a(A^j_a)^\dagger A^j_a=\Id$ is assumed for the source
-    blocks. This is the simultaneous spanning estimate used in
-    \cite[Theorem~12, proof lines~1424--1456]{PerezGarcia2007Matrix}.
+    blocks.
 \end{theorem}
 
 \begin{proof}
@@ -571,8 +568,8 @@ direct.
 \begin{proof}
     \leanok
     \uses{thm:pgvwc_product_span_source_length, lem:product_span_block_image_direct_sum}
-    Write $\phi_j=\Gamma_n^{A^j}(X_j)$ and suppose that
-    $\sum_j\phi_j=0$. The simultaneous spanning equality gives
+    If $\phi_j=\Gamma_n^{A^j}(X_j)$ satisfy
+    $\sum_j\phi_j=0$, the simultaneous spanning equality gives
     \begin{align}
         \sum_j \Gamma_n^{A^j}(X_j)=0
          & \Longrightarrow
@@ -590,19 +587,17 @@ direct.
     \uses{def:ground_space_parent}
     Under the hypotheses of
     Theorem~\ref{thm:pgvwc_product_span_source_length}, let
-    $m\ge3(r-1)(L_0+1)+1$. Then
+    $m\ge3(r-1)(L_0+1)+1$. Then the direct-sum lemma in the proof of
+    \cite[Theorem~12, proof lines~1346--1456]{PerezGarcia2007Matrix} holds,
     \begin{align}
         \C^d\otimes\left(\sum_jG_m(A^j)\right)
         \cap
         \left(\sum_jG_m(A^j)\right)\otimes\C^d
          & =
-        \sum_jG_{m+1}(A^j). \notag
+        \sum_jG_{m+1}(A^j), \notag
     \end{align}
-    Theorem~\ref{thm:pgvwc_block_space_independence_source_length} also shows
-    that the sums
-    at lengths $m$ and $m+1$ are internal. This is the direct-sum lemma in the
-    proof of
-    \cite[Theorem~12, proof lines~1346--1456]{PerezGarcia2007Matrix}.
+    and Theorem~\ref{thm:pgvwc_block_space_independence_source_length} shows
+    that the sums at lengths $m$ and $m+1$ are internal.
 \end{theorem}
 
 \begin{proof}
@@ -623,7 +618,7 @@ direct.
         A_b^jC_a^j & =D_b^jA_a^j.
         \label{eq:ph_endpoint_block_commute}
     \end{align}
-    Set $E^j=\sum_a C_a^jA_a^{j\,\dagger}$. Identity~(\ref{eq:ph_endpoint_block_commute}) and the
+    With $E^j=\sum_a C_a^jA_a^{j\,\dagger}$, identity~(\ref{eq:ph_endpoint_block_commute}) and the
     right-unital normalization imply
     $A_b^jC_a^j=A_b^jE^jA_a^j$.
     Thus the component in block $j$ lies in $G_{m+1}(A^j)$. The reverse
@@ -652,9 +647,10 @@ direct.
 \begin{proof}
     \leanok
     \uses{thm:wordspan_propagation_unital, lem:bnt_direct_sum_block_separation_word_span, lem:unital_simultaneous_product_span_propagation}
-    Propagate injectivity to the two longer lengths used by the sharp block
-    separation theorem, obtain the simultaneous span at
-    $3(r-1)(L_0+1)$, and propagate it using the right-unital identity.
+    Propagating injectivity to the two longer lengths used by the sharp block
+    separation theorem yields the simultaneous span at
+    $3(r-1)(L_0+1)$, which the right-unital identity then propagates to every
+    larger length.
 \end{proof}
 
 \begin{theorem}[Doubly normalized block-space independence]
@@ -671,7 +667,8 @@ direct.
 \begin{proof}
     \leanok
     \uses{thm:pgvwc_product_span_doubly_normalized, lem:product_span_block_image_direct_sum}
-    Apply nondegeneracy of the trace pairing to the simultaneous product span.
+    Applying nondegeneracy of the trace pairing to the simultaneous product span
+    yields the internal sum.
 \end{proof}
 
 \begin{theorem}[Doubly normalized restriction intersection]
@@ -690,8 +687,8 @@ direct.
 \begin{proof}
     \leanok
     \uses{thm:pgvwc_product_span_doubly_normalized, lem:block_restriction_intersection_subspace}
-    Use the simultaneous product span at length $m-1$ in the endpoint
-    restriction calculation.
+    The simultaneous product span at length $m-1$ in the endpoint
+    restriction calculation yields the intersection equality.
 \end{proof}
 
 \begin{lemma}[Product span makes the sum of local spaces direct]
@@ -716,13 +713,14 @@ direct.
 
 \begin{proof}
     \leanok
-    Write $\phi_j(\sigma)=\tr(A^j_\sigma X_j)$. Evaluating
+    For $\phi_j(\sigma)=\tr(A^j_\sigma X_j)$, evaluating
     $\sum_j\phi_j=0$ on each word $w$ of length $n$ gives
     $\sum_j\tr(A^j_wX_j)=0$.
     Since $\tr(A^j_wX_j)=\tr(X_jA^j_w)$, the product-span equation gives, for
     every $(M_1,\ldots,M_r)\in\prod_j\MN{D_j}$,
     $\sum_j\tr(X_jM_j)=0$.
     Taking only the $j$-th component nonzero and using nondegeneracy of the
-    trace pairing yields $X_j=0$, hence $\phi_j=0$. The BNT statement follows
-    by substituting Lemma~\ref{lem:unital_block_separating_product_span}.
+    trace pairing yields $X_j=0$ and hence $\phi_j=0$; substituting
+    Lemma~\ref{lem:unital_block_separating_product_span} establishes the BNT
+    case.
 \end{proof}
