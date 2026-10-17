@@ -145,7 +145,9 @@ import TNLean.PEPS.AreaLaw.Geometry.RepairLatticeCoverage
 import TNLean.PEPS.AreaLaw.Geometry.RepairMarkMesh
 import TNLean.PEPS.AreaLaw.Geometry.RepairNextRegionDisjointness
 import TNLean.PEPS.AreaLaw.Geometry.RepairNonprimaryRetainedCount
+import TNLean.PEPS.AreaLaw.Geometry.RepairOrderedBirthSeparation
 import TNLean.PEPS.AreaLaw.Geometry.RepairOrderedPartition
+import TNLean.PEPS.AreaLaw.Geometry.RepairRankZeroAncestry
 import TNLean.PEPS.AreaLaw.Geometry.RepairRegionDisjointness
 import TNLean.PEPS.AreaLaw.Geometry.RepairReplacementLatticeCoverage
 import TNLean.PEPS.AreaLaw.Geometry.RepairReplacementRegions
