@@ -28,7 +28,8 @@ and every bond dimension at most `(C₁ L ^ k) ^ χ` when every link dimension i
 The column may also be selected from the product-reference estimates of Section 8.1, with
 the compression error measured against the physical density of the same joint vector.
 
-The operator party network, its dyadic placement, the bounds of Lemma 8.2 (`InGrid`,
+**Scope restriction (supplied network and estimates):** The operator party network, its
+dyadic placement, the bounds of Lemma 8.2 (`InGrid`,
 `BlockBounded`, `DegreeBounded`, `SeparationBounded`), and the trace-norm estimate are
 hypotheses on an arbitrary network here. They are verified for the network constructed from
 the protocol and the compression theorem in
