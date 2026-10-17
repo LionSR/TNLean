@@ -56,20 +56,21 @@ clauses of the source:
   every factor of norm at most one (`06-geometry.tex:39–41`); only the initial reference, the
   per-change error, and the final reference are recorded;
 * the scale and address of each additional party, which are those of its repainting event
-  (`06-geometry.tex:36–37`);
+  (`06-geometry.tex:36–37`).
 
 None of these clauses is used by the density estimate of §8.1, the separation hypothesis of
-Lemma 8.2, or the lifetime count.
+Lemma 8.2, or the lifetime count. Documented in
+`docs/paper-gaps/polypeps_prop71_consequences_interface.tex`. Elimination: build a richer
+construction certificate carrying the omitted clauses, prove Proposition 7.1 for it, and forget
+it into this interface.
 
 The bound on pair sources and messages in each monomial (Theorem 5.2, item 3,
 `04-compression.tex:143–147`) is the field `IsDistributionProtocol.sourceBounded`; the gates carry
 no messages, which are expanded before a gate is recorded (`04-compression.tex:42–45`). The
 accuracy of the expansions at every fixed inverse power of `L` (`06-geometry.tex:29–30`) holds
-because each gate of the protocol is the selected contraction, and its recorded expansion is
-exact; §8 uses these selected contractions throughout (`07-assembly.tex:29–34`). Documented in
-`docs/paper-gaps/polypeps_prop71_consequences_interface.tex`. Elimination: build a richer
-construction certificate carrying the omitted clauses, prove Proposition 7.1 for it, and forget
-it into this interface.
+because each gate of the protocol is the selected contraction: a nonprivate gate `G` is by
+definition its recorded expansion `G = ∑ ξ, c ξ • M ξ`, so `‖G - ∑ ξ, c ξ • M ξ‖ = 0 ≤ L⁻ᵃ` for
+every `a`. Section 8 uses these selected contractions throughout (`07-assembly.tex:29–34`).
 
 Three consequences are proved for every protocol satisfying the bounds:
 
@@ -287,9 +288,10 @@ the target vector `Ω`, the protocol satisfies:
    reference vector is `Ω ⊗ Ξ` with `1 - C L⁻⁵⁷ ≤ ‖Ξ‖ ≤ 1`.
 
 These are the consequences of the four items that the assembly of §8 uses, together with the
-pair-source bound of Theorem 5.2, item 3. Each recorded expansion is exact and has no messages,
-since messages are expanded before a gate is recorded (`04-compression.tex:42–45`), so the
-expansions are accurate at every inverse power of `L` (`06-geometry.tex:29–30`). The predicate
+pair-source bound of Theorem 5.2, item 3. Each nonprivate gate `G` equals its recorded expansion
+`∑ ξ, c ξ • M ξ`, so `‖G - ∑ ξ, c ξ • M ξ‖ = 0` and the expansions are accurate at every inverse
+power of `L` (`06-geometry.tex:29–30`); the monomials have no messages, since messages are
+expanded before a gate is recorded (`04-compression.tex:42–45`). The predicate
 is weaker than the conclusion of Proposition 7.1: it omits the clauses listed in the scope
 restriction of the module docstring, among them a party for every square of the hierarchy, the
 registers of the copies of `Ω`, and the frame factorization of the references.

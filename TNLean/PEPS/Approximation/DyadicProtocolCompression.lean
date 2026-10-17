@@ -38,8 +38,9 @@ conditional form of Theorem 1.1.
 `LargeSizeDyadicProtocolConsequences`, which is weaker than Proposition 7.1
 (`06-geometry.tex:12–53`). It omits a party for every square of the hierarchy, the registers of
 the copies of `Ω`, the frame factorization of the reference vectors, and the placement of
-additional parties; none of these is used here. The single instantiated expansion of each change
-is exact and serves at every accuracy of Theorem 5.2. Documented in
+additional parties; none of these is used here. Each nonprivate gate `G` equals its recorded
+expansion `∑ ξ, c ξ • M ξ`, so the error `‖G - ∑ ξ, c ξ • M ξ‖ = 0` meets every accuracy of
+Theorem 5.2. Documented in
 `docs/paper-gaps/polypeps_prop71_consequences_interface.tex`. Elimination: prove Proposition 7.1
 for a construction certificate carrying the omitted clauses and forget it into this interface.
 

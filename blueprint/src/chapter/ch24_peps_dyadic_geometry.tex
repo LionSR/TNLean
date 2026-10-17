@@ -2035,8 +2035,10 @@ is not proved here.
     the same constant $r$ as the pair effects; the recorded monomials contain no
     messages, since messages are expanded before a gate is recorded
     (\texttt{04-compression.tex}, lines 42--45). The gates $W_t$ are the selected contractions, as in Section~8
-    (\texttt{07-assembly.tex}, lines 29--34), and each is equal to its recorded
-    expansion, so the expansions are accurate to every fixed inverse power of $L$
+    (\texttt{07-assembly.tex}, lines 29--34). Each nonprivate gate $G$ of $W_t$
+    equals its recorded expansion, $G=\sum_\xi c_\xi M_\xi$, so
+    $\lVert G-\sum_\xi c_\xi M_\xi\rVert=0\le L^{-a}$ for every $a$, as
+    required of expansions accurate to every fixed inverse power of $L$
     (\texttt{06-geometry.tex}, lines 29--30).
 \end{definition}
 

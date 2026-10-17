@@ -129,21 +129,23 @@ Two further clauses of Proposition~7.1 hold for the formal predicate.
   before a gate is recorded (\path{04-compression.tex}, lines~42--45), and the
   formal monomials are built from local contractions, pair sources and pair
   effects only.
-\item Item~2 provides expansions accurate to any fixed inverse power of $L$ in
+\item Item~2 of Proposition~7.1 provides expansions accurate to any fixed inverse power of $L$ in
   operator norm where an approximation is needed (\path{06-geometry.tex},
   lines~29--30), with constants that may depend on the accuracy exponent
   (\path{04-compression.tex}, line~17). The gates $W_t$ of the formal protocol
   are the selected contractions, as in the instantiation of Section~8
-  (\path{07-assembly.tex}, lines~29--34), and each formal gate is equal to its
-  recorded expansion. These expansions are therefore exact at every accuracy,
+  (\path{07-assembly.tex}, lines~29--34), and each formal nonprivate gate $G$
+  equals its recorded expansion, $G = \sum_{\xi} c_{\xi} M_{\xi}$, so
+  $\lVert G - \sum_{\xi} c_{\xi} M_{\xi}\rVert = 0 \le L^{-a}$ for every
+  $a$. These expansions are therefore exact at every accuracy,
   with bounds independent of the accuracy exponent. The selected gates are
   contractions acting on their participating parties, with contractive
   constituent maps, which are the only conditions the source places on the
   gates of a change (\path{06-geometry.tex}, lines~25--27;
   \path{04-compression.tex}, lines~28 and~143--147). The source asserts no
   smaller reference error and no separate exact gate: the reference error of
-  each change is $C L^{-20}$ (\path{06-geometry.tex}, lines~41--42
-  and~580--583).
+  each change is as in (\ref{eq:prop71_step_error}) (\path{06-geometry.tex},
+  lines~41--42 and~580--583).
 \end{enumerate}
 
 \section{Elimination}
