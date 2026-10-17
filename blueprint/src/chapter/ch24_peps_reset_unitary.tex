@@ -1,7 +1,8 @@
 \section{The supported unitary of the information reset}
 
-This section carries out the overlap, filtering, localization and polar steps
-in the proof of the information reset of \cite{OpenAI2026PolynomialPEPS}.
+The information reset of \cite{OpenAI2026PolynomialPEPS} combines a
+relative-entropy overlap bound, a two-sided Gaussian energy filter,
+Lieb--Robinson localization, and a polar unitary correction.
 Throughout, $\mathcal X_D=[q]^D$ denotes the configurations on a region $D$,
 and two replicas of a state are compared after the exchange $F_R$ of the
 replicas on a region $R$.
@@ -113,9 +114,9 @@ replicas on a region $R$.
 \begin{proof}
     \leanok
     \uses{thm:peps_supported_polar_unitary}
-    Apply Theorem~\ref{thm:peps_supported_polar_unitary} to $D=M/z$. Both
-    residuals of $D$ are at most $z^{-1}Ce^{-10b}\varepsilon\le Ce^{-8b}\varepsilon$,
-    since $z^{-1}\le e^{2b}$.
+    Applying Theorem~\ref{thm:peps_supported_polar_unitary} to $D=M/z$
+    bounds both residuals of $D$ by
+    $z^{-1}Ce^{-10b}\varepsilon\le Ce^{-8b}\varepsilon$, since $z^{-1}\le e^{2b}$.
 \end{proof}
 
 \begin{theorem}[The localized filter of the information reset]
@@ -141,10 +142,10 @@ replicas on a region $R$.
     \leanok
     \uses{thm:peps_reset_regional_filter,
         thm:peps_supported_physical_buffer_gaussian}
-    Take $A,T_0$ from Theorem~\ref{thm:peps_reset_regional_filter} in the paired
-    site coordinates, and the localized integral of
+    With $A,T_0$ from Theorem~\ref{thm:peps_reset_regional_filter} in the paired
+    site coordinates, let $M$ be the localized integral of
     Theorem~\ref{thm:peps_supported_physical_buffer_gaussian} for the buffer
-    operator $W$, variance $AB_*$, cutoff $T_0B_*$ and radius
+    operator $W$, variance $AB_*$, cutoff $T_0B_*$, and radius
     $\ell=\lceil KB_*\rceil$. Its distance from the truncated integral is at most
     \begin{align*}
         C'L^2(1+8JL^2T_0B_*)e^{vT_0B_*-c\ell}
@@ -169,6 +170,6 @@ replicas on a region $R$.
 \begin{proof}
     \leanok
     \uses{thm:peps_reset_localized_filter,thm:peps_reset_polar_step}
-    Combine Theorem~\ref{thm:peps_reset_localized_filter} with
-    Theorem~\ref{thm:peps_reset_polar_step}.
+    Combining Theorem~\ref{thm:peps_reset_localized_filter} with
+    Theorem~\ref{thm:peps_reset_polar_step} yields the supported unitary $U$.
 \end{proof}

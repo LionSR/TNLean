@@ -3064,3 +3064,431 @@ no holes, this is the normalization of $\Omega$.
     congruence allows the two arbitrary endpoint homogenizing labels. The
     length is $1+15+9+20=45$.
 \end{proof}
+
+\begin{definition}[The final auxiliary frame of an edge]
+    \label{def:peps_protocol_auxiliary_final_frame}
+    \lean{TNLean.PEPS.Approximation.auxFinal}
+    \leanok
+    \uses{def:peps_adaptive_patch_constraint,
+        def:peps_dyadic_edge_band,
+        def:peps_dyadic_protocol_parties,
+        def:peps_dyadic_schedule,
+        def:peps_frame,
+        def:peps_protocol_repaint_baseline,
+        def:peps_protocol_treated_frame,
+        def:polynomial_peps_model,
+        lem:peps_adaptive_patch_supply,
+        lem:peps_dyadic_unmodified_vertices}
+    Let $k,L,q\in\mathbb N$, let $\Omega$ be any vector in the physical state
+    space of the $L$-square, and fix real $B_0,C,c,\epsilon_0,D$. Fix a patch
+    supply at the cell-center positions with parameters $B_0,C,c,60,L$, a
+    rank from guide labels to $\mathbb N$, a repaintable square $R$ of
+    hierarchy $k$, and an arbitrary set $\mathit{done}\subseteq\mathbb Z^2$.
+    Assume $0<\epsilon_0D\log L\le B_0\log L$. For every edge $e$, its final
+    auxiliary frame $A_e$ is the exchanged auxiliary guide of the baseline
+    $(R,\mathit{done})$, treated at no mark and with the label across $e$ as
+    the homogenizing label. This is the total treated-frame construction,
+    including its raw-frame fallback. No ground-state, angular-scale or
+    protocol-constant hypothesis is imposed
+    (\texttt{06-geometry.tex}, lines 198--214 and 620--624).
+\end{definition}
+
+\begin{definition}[Auxiliary indices of one event]
+    \label{def:peps_protocol_event_auxiliary_indices}
+    \lean{TNLean.PEPS.Approximation.eventAuxIndices}
+    \leanok
+    \uses{def:peps_dyadic_hierarchy,
+        def:peps_dyadic_protocol_schedule}
+    For every hierarchy $k\in\mathbb N$ and every Boolean choice of which
+    dyadic squares are large, the auxiliary-index list of a repainting event
+    of $S$ is the four pairs $(S,\operatorname{auxInit}(e))$ in edge order
+    if $S$ is designated large, and is empty otherwise. The list of a resize
+    event is empty. These are combinatorial lists, with no physical or
+    protocol-constant assumptions.
+\end{definition}
+
+\begin{theorem}[The auxiliary-index lists]
+    \label{thm:peps_protocol_auxiliary_index_facts}
+    \lean{TNLean.PEPS.Approximation.filter_largeRepaintingOps,
+        TNLean.PEPS.Approximation.auxIndices_eq,
+        TNLean.PEPS.Approximation.fst_of_mem_eventAuxIndices,
+        TNLean.PEPS.Approximation.nodup_auxIndices,
+        TNLean.PEPS.Approximation.mem_auxIndices,
+        TNLean.PEPS.Approximation.eq_auxInit_of_mem_auxIndices}
+    \leanok
+    \uses{def:peps_dyadic_edge_band,
+        def:peps_dyadic_hierarchy,
+        def:peps_dyadic_protocol_schedule,
+        def:peps_protocol_event_auxiliary_indices,
+        thm:peps_dyadic_protocol_schedule_counts,
+        thm:peps_protocol_from_large_repaintings}
+    For every hierarchy and Boolean large-square choice, filtering the
+    operations of a large repainting for auxiliary initialization gives the
+    four edge initializations in edge order. The global auxiliary-index list
+    is the concatenation of the lists of
+    Definition~\ref{def:peps_protocol_event_auxiliary_indices} over the event
+    schedule, and has no repetitions. Every member of an event's list has
+    that event as its first component. Each edge initialization of a scheduled
+    repainting designated large belongs to the global list. Conversely, if a
+    global auxiliary index has a repainting event $S$ as its first component,
+    it is $(S,\operatorname{auxInit}(e))$ for some edge $e$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:peps_dyadic_protocol_schedule,
+        def:peps_protocol_event_auxiliary_indices,
+        thm:peps_dyadic_protocol_schedule_counts,
+        thm:peps_protocol_from_large_repaintings}
+    Filter each event's operation list. A large repainting contributes its
+    four edge initializations, and every other event contributes none.
+    Distinct edges give distinct pairs, and the event schedule has no
+    repetitions, so concatenating these lists has no repetitions. Membership
+    in a concatenation gives the stated forward and reverse descriptions.
+\end{proof}
+
+\begin{theorem}[The chain of a large repainting]
+    \label{thm:peps_protocol_large_repainting_chain}
+    \lean{TNLean.PEPS.Approximation.isStepChain_largeRepainting}
+    \leanok
+    \uses{def:peps_adaptive_patch_constraint,
+        def:peps_angular_scale,
+        def:peps_dyadic_edge_band,
+        def:peps_dyadic_protocol_parties,
+        def:peps_dyadic_schedule,
+        def:peps_frame,
+        def:peps_protocol_auxiliary_final_frame,
+        def:peps_protocol_local_point_treatments,
+        def:peps_protocol_repaint_baseline,
+        def:peps_protocol_step_chain,
+        def:peps_protocol_treated_frame,
+        def:polynomial_peps_model,
+        lem:peps_adaptive_patch_supply,
+        thm:peps_protocol_constants,
+        thm:peps_protocol_event_segments}
+    Let $k,L,q\in\mathbb N$ with $q\ge1$ and $L\ge2$. Fix real
+    $J,\Delta,a,A_0,D,L'_0,K_0,\epsilon_0,\nu,B_0,C,c$, and $m_0\in\mathbb N$.
+    Assume the angular-scale condition with parameters
+    $(q,J,\Delta,a,A_0,m_0,60,D,L'_0)$, $L'_0\le L$, $m_0\ge4$, $A_0\ge1$,
+    and the protocol-constant condition for $(K_0,\epsilon_0,\nu,a,D,B_0)$.
+    Let $\Omega$ be a gapped ground vector with gap $\Delta$ and ground energy
+    $E_0$ of a square Hamiltonian with parameters $(L,q,J)$.
+    Assume only the upper padding bound $2^k<2L$.
+
+    Fix a patch supply with parameters $B_0,C,c,60,L$ for $\Omega$ at the
+    cell centers, an arbitrary rank on guide labels, a repaintable square $R$
+    of side $n=2^j>K_0t$, where $t=D\log L$, and an arbitrary stage set
+    $\mathit{done}\subseteq\mathbb Z^2$. Supply the radius witness
+    $0<\epsilon_0t\le B_0\log L$. Let $b,K\in\mathbb N$ with $b\ge2$ and
+    $K\ge1$, and assume bounded point treatments for the parties used by
+    the repainting, with bounds
+    \begin{align}
+        (r,K,r_s,\varepsilon)
+         & =\bigl(2b,K,2b,(2b+1)(L^{20})^{-1}\bigr).
+        \label{eq:peps_large_repainting_change_bounds}
+    \end{align}
+    Let $X$ be an arbitrary set, let $l$ be a list in $X$
+    without repetitions, and let $e\mapsto x_e$ inject the four edges into
+    members of $l$. Let $A$ assign a frame to every element of $X$, with
+    $A(x_e)$ the raw frame held by the party of the label across $e$.
+    For any two homogenizing labels $\lambda_1,\lambda_2$, there is a chain
+    of $189$ source-bounded changes, with scalar $1$, empty idle-register layout,
+    participants among the parties used by $R$, and the bounds
+    (\ref{eq:peps_large_repainting_change_bounds}). It starts with the
+    starting main guide treated at no mark with label $\lambda_1$, followed by
+    $l$ mapped through $A$. It ends with the main guide with all four edges
+    completed, treated at no mark with label $\lambda_2$, followed by the same list
+    with $A(x_e)$ replaced by the final auxiliary frame $A_e$ of
+    Definition~\ref{def:peps_protocol_auxiliary_final_frame}; every other
+    value of $A$ is unchanged
+    (\texttt{06-geometry.tex}, lines 142--221, 328--339 and 572--583).
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:peps_protocol_auxiliary_final_frame,
+        def:peps_protocol_repaint_baseline,
+        def:polynomial_peps_model,
+        lem:peps_protocol_change_chains,
+        thm:peps_protocol_central_birth_chain,
+        thm:peps_protocol_edge_construction_chain,
+        thm:peps_protocol_treated_frame_congruence}
+    The gapped-ground-state hypothesis gives $\|\Omega\|=1$, so the central
+    birth lifts to the memory without an additional norm assumption.
+    Concatenate its $9$ changes with the $45$ changes on each edge, in the
+    order bottom, right, top, left. The distinct auxiliary indices ensure
+    that each previous update leaves the next idle copy unchanged. Thus
+    $9+4\cdot45=189$, with the same bounds at every step.
+\end{proof}
+
+\begin{theorem}[The memory through a large repainting]
+    \label{thm:peps_protocol_large_repainting_segment}
+    \lean{TNLean.PEPS.Approximation.exists_largeRepainting_segment}
+    \leanok
+    \uses{def:peps_adaptive_patch_constraint,
+        def:peps_angular_scale,
+        def:peps_dyadic_edge_band,
+        def:peps_dyadic_hierarchy,
+        def:peps_dyadic_protocol_parties,
+        def:peps_dyadic_protocol_schedule,
+        def:peps_frame,
+        def:peps_protocol_auxiliary_final_frame,
+        def:peps_protocol_local_point_treatments,
+        def:peps_protocol_repaint_baseline,
+        def:polynomial_peps_model,
+        lem:peps_adaptive_patch_supply,
+        thm:peps_protocol_constants,
+        thm:peps_protocol_event_segments,
+        thm:peps_protocol_from_large_repaintings,
+        thm:peps_protocol_main_frame_schedule}
+    Fix $k,L,q\in\mathbb N$, with $q\ge1$ and $L\ge2$, and the real
+    angular-scale parameters $(J,\Delta,a,A_0,D,L'_0)$ with $m_0\in\mathbb N$.
+    Assume the angular-scale condition at power $60$, $L'_0\le L$,
+    $m_0\ge4$, $A_0\ge1$, and let $\Omega$ be a gapped ground vector of
+    a square Hamiltonian with parameters $(L,q,J)$ and gap $\Delta$.
+    Fix protocol constants $(K_0,\epsilon_0,\nu,a,D,B_0)$, a patch supply
+    with parameters $B_0,C,c,60,L$, a rank on guide labels, and a reference
+    repaintable square $R_0$. Assume $L\le2^k<2L$, and explicitly supply
+    $t=D\log L>0$ and $\epsilon_0t\le B_0\log L$.
+
+    Let $i$ be less than the event-schedule length, and suppose its $i$th
+    event repaints $S$ with side $2^j>K_0t$. Let $b,K\in\mathbb N$ satisfy
+    $b\ge2$, $K\ge1$. Whenever $j<k$, assume bounded point
+    treatments of $S$ at stage $\mathit{repaintedBlocks}(k,i,j)$, with
+    participants used by this event and bounds
+    (\ref{eq:peps_large_repainting_change_bounds}). Fix arbitrary frozen
+    frames and idle owners for all event-operation pairs. Under the same
+    condition $j<k$, require, for every edge of $S$, its frozen frame to equal
+    Definition~\ref{def:peps_protocol_auxiliary_final_frame} at that stage,
+    and its idle owner to be the party of the label across the edge.
+    Then there is a sequence of memory lists indexed by $\mathbb N$ whose
+    values at $0$ and $189$ are the protocol states at $i$ and $i+1$.
+    For every $s<189$, the transition from $s$ to $s+1$ is a source-bounded
+    change with scalar $1$, empty idle-register layout, the same participant set
+    and the bounds (\ref{eq:peps_large_repainting_change_bounds})
+    (\texttt{06-geometry.tex}, lines 82--100, 142--221, 572--583 and 653--667).
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:peps_dyadic_protocol_parties,
+        def:peps_dyadic_protocol_schedule,
+        def:peps_frame,
+        thm:peps_protocol_auxiliary_index_facts,
+        thm:peps_protocol_constants,
+        thm:peps_protocol_from_large_repaintings,
+        thm:peps_protocol_large_repainting_chain,
+        thm:peps_protocol_main_frame_schedule,
+        thm:peps_protocol_treated_frame_ends}
+    The scheduled square has level $j<k$. Its four auxiliary indices are
+    distinct and present in the memory. Apply
+    Theorem~\ref{thm:peps_protocol_large_repainting_chain}. The starting
+    and completed treated main frames are the main frames before this
+    event and before the next one. Before the event its four auxiliary
+    copies are idle; afterward they equal the prescribed frozen frames.
+    The event-prefix membership identity leaves all other auxiliary
+    frames unchanged.
+\end{proof}
+
+\begin{definition}[The frozen auxiliary frames]
+    \label{def:peps_protocol_frozen_frames}
+    \lean{TNLean.PEPS.Approximation.scheduleIndex,
+        TNLean.PEPS.Approximation.scheduleIndex_getElem,
+        TNLean.PEPS.Approximation.protocolFrozen,
+        TNLean.PEPS.Approximation.protocolAuxOwner,
+        TNLean.PEPS.Approximation.protocolFrozen_auxInit,
+        TNLean.PEPS.Approximation.protocolAuxOwner_auxInit}
+    \leanok
+    \uses{def:peps_adaptive_patch_constraint,
+        def:peps_dyadic_edge_band,
+        def:peps_dyadic_hierarchy,
+        def:peps_dyadic_protocol_parties,
+        def:peps_dyadic_protocol_schedule,
+        def:peps_dyadic_schedule,
+        def:peps_frame,
+        def:peps_protocol_repaint_baseline,
+        def:peps_protocol_treated_frame,
+        def:polynomial_peps_model,
+        lem:peps_adaptive_patch_supply,
+        lem:peps_dyadic_unmodified_vertices,
+        thm:peps_dyadic_protocol_initial_step,
+        thm:peps_protocol_main_frame_schedule}
+    For any hierarchy $k\in\mathbb N$, an event's schedule index is its
+    first list position, with the schedule length as its value when the event
+    is absent. At every $i$ less than the schedule length, the
+    index of the $i$th scheduled event is $i$.
+
+    For arbitrary $L,q\in\mathbb N$ and physical vector $\Omega$, fix
+    real $B_0,C,c,\epsilon_0,t$, a patch supply with parameters
+    $B_0,C,c,60,L$, a rank on guide labels, and
+    $0<\epsilon_0t\le B_0\log L$. At an index consisting of a repainting
+    of $S$ and an edge initialization, with $S$ at level $j<k$, the frozen
+    frame is its exchanged auxiliary guide treated at no mark, at stage
+    $\mathit{repaintedBlocks}(k,\mathit{scheduleIndex}(S),j)$.
+    Its idle owner is the party of the label across that edge at the same
+    stage. Every other index, including the top-level case $j=k$, has the
+    raw frame of the root party and that party as owner.
+    The idle-owner construction depends only on the hierarchy and index,
+    and requires none of the patch, radius or physical-state data.
+    If the $i$th scheduled event repaints $S$ and $j<k$, the two constructions
+    evaluate to these same formulas with stage index $i$
+    (\texttt{06-geometry.tex}, lines 183--187, 620--624 and 653--667).
+\end{definition}
+
+\begin{proof}\leanok
+    \uses{thm:peps_dyadic_protocol_schedule_counts}
+    The event schedule has no repetitions, so the position of its $i$th
+    event is $i$. Substituting this position in the definitions gives the
+    frozen frame and idle owner at that stage.
+\end{proof}
+
+\begin{theorem}[The holes of the frozen auxiliary frames]
+    \label{thm:peps_protocol_frozen_frame_bounds}
+    \lean{TNLean.PEPS.Approximation.norm_act_proj_sub_le_of_mem_holes_protocolFrozen,
+        TNLean.PEPS.Approximation.length_holes_protocolFrozen_le}
+    \leanok
+    \uses{def:peps_adaptive_patch_constraint,
+        def:peps_dyadic_protocol_parties,
+        def:peps_dyadic_protocol_schedule,
+        def:peps_frame,
+        def:peps_frame_square_patch,
+        def:peps_protocol_frozen_frames,
+        def:polynomial_peps_model,
+        lem:peps_adaptive_patch_supply,
+        lem:peps_front_registers,
+        thm:peps_protocol_constants,
+        thm:peps_protocol_from_large_repaintings}
+    First fix arbitrary $k,L,q\in\mathbb N$ with $L\ge1$, an arbitrary
+    physical vector $\Omega$, real $B_0,C,c,\epsilon_0,t$, a patch supply
+    with parameters $B_0,C,c,60,L$, ranks on guide labels, and
+    $0<\epsilon_0t\le B_0\log L$. For every index and every hole $h$ of
+    its frozen frame, the supplied-patch projector satisfies
+    $\|\Pi_h\Omega-\Omega\|\le(L^{60})^{-1}$. Neither normalization nor
+    a ground-state or angular-scale hypothesis is required.
+
+    Separately, let $k,L,q\in\mathbb N$ with $L\ge2$, keep an arbitrary
+    vector, patch supply and rank as above, assume the protocol-constant
+    condition for $(K_0,\epsilon_0,\nu,a,D,B_0)$, set $t=D\log L$, and
+    supply $0<\epsilon_0t\le B_0\log L$. For each member of the auxiliary
+    index list for the choice $2^j>K_0t$, its frozen frame has at most two
+    holes. This count requires no padding bound, ground-state condition,
+    angular information or point-treatment hypothesis
+    (\texttt{06-geometry.tex}, lines 108--118, 620--624 and 653--655).
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:peps_dyadic_block_guide,
+        def:peps_dyadic_edge_band,
+        def:peps_dyadic_protocol_parties,
+        def:peps_dyadic_schedule,
+        def:peps_frame,
+        def:peps_protocol_frozen_frames,
+        def:peps_protocol_repaint_baseline,
+        def:peps_protocol_treated_frame,
+        lem:peps_adaptive_patch_supply,
+        lem:peps_dyadic_floor,
+        lem:peps_dyadic_frozen_hole_count,
+        lem:peps_dyadic_unmodified_vertices,
+        thm:peps_bulk_steps_treated_frames,
+        thm:peps_dyadic_temporary_holes,
+        thm:peps_guide_frame_norm,
+        thm:peps_protocol_auxiliary_index_facts,
+        thm:peps_protocol_bounded_changes,
+        thm:peps_protocol_from_large_repaintings,
+        thm:peps_protocol_main_frame_schedule,
+        thm:peps_treated_frame_spec}
+    A raw frame has no holes. Otherwise, each hole uses the supplied patch
+    at its center and radius, so the patch-supply bound gives the projector
+    estimate. An auxiliary index of a large repainting is one of its four
+    edge initializations. With no marks treated, homogenizing the exchanged
+    auxiliary guide leaves it unchanged. Its reading has true vertices only
+    at translates of the two edge endpoints, by
+    Theorem~\ref{thm:peps_bulk_steps_treated_frames} and
+    Lemma~\ref{lem:peps_dyadic_frozen_hole_count}. Thus the hole count is at
+    most the cardinality of a two-point set, hence at most two.
+\end{proof}
+
+\begin{theorem}[Enlarging an angular scale]
+    \label{thm:peps_angular_scale_monotonicity}
+    \lean{TNLean.PEPS.Approximation.IsAngularScale.mono}
+    \leanok
+    \uses{def:peps_angular_scale}
+    For arbitrary $q,m_0,p\in\mathbb N$ and real $J,\Delta,a,A_0,D,L_0,D'$,
+    assume the angular-scale condition with parameters
+    $(q,J,\Delta,a,A_0,m_0,p,D,L_0)$, $a\ge0$ and $D\le D'$.
+    The angular-scale condition then holds with scale $D'$ and threshold
+    $\max(L_0,1)$, with all other parameters unchanged. No positivity of
+    $J$, $\Delta$, $A_0$ or $D$ is an additional premise.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:peps_angular_scale}
+    At the new threshold $\log L\ge0$, so $D\log L\le D'\log L$.
+    The lower size and angular-separation requirements at $D'$ imply those
+    at $D$, since $a\ge0$; apply the original angular-scale condition.
+\end{proof}
+
+\begin{theorem}[Dyadic padding of the side length]
+    \label{thm:peps_dyadic_padding_bounds}
+    \lean{TNLean.PEPS.Approximation.le_two_pow_clog_lt}
+    \leanok
+    For every natural $L\ge2$, the natural depth $d=\lceil\log_2L\rceil$
+    satisfies $d\ge1$ and $L\le2^d<2L$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:peps_dyadic_padded_side}
+    Since $L\ge2$, positivity of the ceiling logarithm gives $d\ge1$.
+    The padded-side bounds give $L\le2^d<2L$.
+\end{proof}
+
+\begin{theorem}[The dyadic distribution protocol from the patch bound]
+    \label{thm:peps_protocol_from_angular_and_patch_bounds}
+    \lean{TNLean.PEPS.Approximation.largeSizeDyadicProtocolConsequences_of_adaptivePatchConstraint}
+    \leanok
+    \uses{def:peps_adaptive_patch_constraint,
+        def:peps_dyadic_protocol}
+    Assume the adaptive patch constraint of Proposition~4.1. For every
+    $q\in\mathbb N$ with $q\ge2$ and real $J,\Delta>0$, there are a real
+    constant $C$ and natural constants $b,\kappa,r,L_0$, chosen before the
+    side length and physical instance, such that for every natural
+    $L\ge\max(2,L_0)$, square Hamiltonian with parameters $(L,q,J)$, ground
+    energy $E_0$ and gapped ground vector $\Omega$ with gap $\Delta$, there
+    exist a finite party type and a dyadic distribution protocol with the
+    assembly bounds $(C,b,\kappa,r)$ of
+    Definition~\ref{def:peps_dyadic_protocol}. This is the form in which
+    Proposition~\ref{prop:peps_dyadic_protocol} is used later, weaker than
+    that proposition (\texttt{06-geometry.tex}, lines 12--53 and 559--681).
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:peps_dyadic_protocol_parties,
+        def:peps_protocol_frozen_frames,
+        def:polynomial_peps_model,
+        lem:peps_adaptive_patch_supply,
+        thm:peps_angular_information_from_gap,
+        thm:peps_angular_scale_exists,
+        thm:peps_angular_scale_monotonicity,
+        thm:peps_dyadic_direct_repainting_constants,
+        thm:peps_dyadic_padding_bounds,
+        thm:peps_dyadic_protocol_schedule_counts,
+        thm:peps_protocol_constants,
+        thm:peps_protocol_from_large_repaintings,
+        thm:peps_protocol_frozen_frame_bounds,
+        thm:peps_protocol_large_repainting_segment,
+        thm:peps_protocol_level_events,
+        thm:peps_protocol_point_treatment_change}
+    The angular information bound of Proposition~3.4 holds by
+    Theorem~\ref{thm:peps_angular_information_from_gap}. Fix the constants in
+    the order of the source: $K_0=20$, a small $\epsilon_0$, a mesh ratio
+    $\nu$ below the thresholds of the resizes, the point treatments and the
+    direct repaintings, the clearance $a=a_0/2$, the information scale $D$
+    of Proposition~3.4 at that clearance, enlarged to at least $1$, and
+    $B_0=K_0D$; Proposition~4.1 then supplies the patch constants. Choose
+    the fixed bounds $C,b,\kappa,r,L_0$ from these constants, before $L$
+    and the Hamiltonian. For $L\ge\max(2,L_0)$ take the dyadic depth
+    $d=\lceil\log_2L\rceil$ and padded side $N=2^d$, so that $L\le N<2L$.
+    The large repaintings pass the memory from one state to the next by
+    Theorem~\ref{thm:peps_protocol_large_repainting_segment}, with the
+    frozen frames and owners of Definition~\ref{def:peps_protocol_frozen_frames}.
+    Theorem~\ref{thm:peps_protocol_frozen_frame_bounds} and the schedule
+    count bound give at most $2\cdot5040L^3$ holes, and
+    Theorem~\ref{thm:peps_protocol_from_large_repaintings} assembles the protocol.
+\end{proof}

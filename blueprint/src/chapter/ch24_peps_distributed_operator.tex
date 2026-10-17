@@ -238,7 +238,7 @@ the finite-dimensional density application uses finite ones.
 
 \begin{proof}\leanok
     \uses{def:compression_operator_root_coefficients}
-    Regroup the gate product by the fibers of $g\mapsto r_g$. Every active gate has a unique root.
+    Regrouping the gate product by the fibers of $g\mapsto r_g$ gives the equality because every active gate has a unique root.
 \end{proof}
 
 \begin{definition}[Endpoint form of the local tensor]
@@ -270,7 +270,7 @@ the finite-dimensional density application uses finite ones.
 
 \begin{proof}\leanok
     \uses{def:compression_operator_operator,thm:compression_operator_diagonal_reader}
-    The identity matrix on each edge forces its two endpoint labels to coincide. Reindex the remaining diagonal assignments by one label per edge; the endpoint reader then yields $\eta_p$.
+    The identity matrix on each edge forces its two endpoint labels to coincide, and reindexing the remaining diagonal assignments by one label per edge makes the endpoint reader yield $\eta_p$.
 \end{proof}
 
 \begin{theorem}[Exact branch and sample evaluation]
@@ -290,7 +290,7 @@ the finite-dimensional density application uses finite ones.
 
 \begin{proof}\leanok
     \uses{thm:compression_operator_link_sum,def:compression_operator_local_tensor,def:compression_operator_configuration_bijection,thm:compression_operator_shared_samples,thm:compression_operator_coefficient_product}
-    Expand the product of the local sums in~(\ref{eq:compression_operator_link_sum}) using~(\ref{eq:compression_operator_local_tensor}). The consistency indicators restrict the sum to globally consistent configurations. Reindex by the bijection with $(\kappa,j)$, then use the shared-sample identity and the root-coefficient product identity.
+    Expanding the product of the local sums in~(\ref{eq:compression_operator_link_sum}) via~(\ref{eq:compression_operator_local_tensor}) makes the consistency indicators restrict the sum to globally consistent configurations. Reindexing by the bijection with $(\kappa,j)$ and applying the shared-sample identity together with the root-coefficient product identity then gives the display.
 \end{proof}
 
 \begin{theorem}[Rectangular matrix form of exact evaluation]
@@ -310,7 +310,7 @@ the finite-dimensional density application uses finite ones.
 
 \begin{proof}\leanok
     \uses{thm:compression_operator_branch_sum}
-    Evaluate both sides at $(x,y)$, distribute the finite matrix sums and scalar multiplication, and apply the entrywise identity.
+    Evaluating both sides at $(x,y)$, distributing the finite matrix sums and scalar multiplication, and applying the entrywise identity gives the operator equality.
 \end{proof}
 
 \begin{theorem}[Exact virtual dimensions]
@@ -322,7 +322,7 @@ the finite-dimensional density application uses finite ones.
 
 \begin{proof}\leanok
     \uses{def:compression_operator_alphabets}
-    Compute the cardinalities of the two cases in the definition of $D_\ell$.
+    The two cardinalities follow directly from the two cases in the definition of $D_\ell$.
 \end{proof}
 
 \begin{theorem}[Uniform virtual dimension bound]
@@ -361,7 +361,7 @@ the finite-dimensional density application uses finite ones.
 
 \begin{proof}\leanok
     \uses{thm:compression_operator_matrix_sum,def:compression_operator_density_coefficient}
-    Specialize the rectangular matrix identity to the complete ket/bra alphabet and the stated coefficient function.
+    Specializing the rectangular matrix identity to the complete ket/bra alphabet and the stated coefficient function gives the claim.
 \end{proof}
 
 \begin{theorem}[A scalar in one vertex tensor]
@@ -390,7 +390,9 @@ the finite-dimensional density application uses finite ones.
     \lean{TNLean.PEPS.Approximation.DistributedOperatorContraction.toPartyNetwork}
     \leanok
     \uses{def:compression_operator_local_tensor,def:peps_party_network_routing}
-    Use the distributed links and their finite alphabets $A_e$ from
+    In a finite change of coordinates for the construction in
+    \cite[proof of Theorem~5.2 and Lemma~8.2]{OpenAI2026PolynomialPEPS}, use the
+    distributed links and their finite alphabets $A_e$ from
     Definition~\ref{def:compression_operator_operator}. For each link choose
     a bijection $\vartheta_e:A_e\to[|A_e|]$, where
     $[m]=\{0,\ldots,m-1\}$. Fix $q\in\mathbb N$ and physical readouts
@@ -404,8 +406,6 @@ the finite-dimensional density application uses finite ones.
         \label{eq:compression_finite_coordinates}
     \end{align}
     Here $(s,t)$ is read as one index in $[q^2]$.
-    This is a finite change of coordinates for the construction in
-    \cite[proof of Theorem~5.2 and Lemma~8.2]{OpenAI2026PolynomialPEPS}.
 \end{definition}
 
 \begin{theorem}[Contraction in enumerated coordinates]

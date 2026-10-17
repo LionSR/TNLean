@@ -19,7 +19,8 @@ positive; its tensor-network representation is proved separately.
 \end{theorem}
 \begin{proof}
     \leanok
-    Induct on the register list, using finite-dimensionality of tensor products.
+    Induction on the register list together with the finite-dimensionality
+    of tensor products shows that the full product is finite-dimensional.
     Relabelling parties does not change the underlying Hilbert spaces, and
     restricting to one side of a partition selects a sublist of registers.
 \end{proof}
@@ -58,7 +59,8 @@ positive; its tensor-network representation is proved separately.
 \begin{proof}
     \leanok
     \uses{def:peps_exterior_family_physical_basis}
-    Count the indices of the orthonormal basis from the preceding definition.
+    Counting the indices of the orthonormal basis from the preceding
+    definition gives $\prod_{p\notin A}d_p$.
 \end{proof}
 
 \begin{theorem}[Expected norm of a partial branch]
@@ -92,14 +94,13 @@ positive; its tensor-network representation is proved separately.
 \begin{proof}
     \leanok
     \uses{thm:peps_actual_corrected_schmidt_output,thm:peps_gaussian_separated_physical_bound,thm:peps_local_schmidt_output_coordinates,def:peps_separated_physical_density,thm:peps_gaussian_branch_density_bound}
-    Construct the local Schmidt output representation
-    independently for $\xi$ and $\zeta$, and denote their separated ket and
-    bra outputs by $\Psi_u$ and $\Phi_v$, as in
-    Definition~\ref{def:peps_separated_physical_density}.
+    Constructing the local Schmidt output representation independently for
+    $\xi$ and $\zeta$ yields separated ket and bra outputs $\Psi_u$ and
+    $\Phi_v$, as in Definition~\ref{def:peps_separated_physical_density}.
     At each occurrence $s\in S$, let $\xi_s,\zeta_s$ be the
     selected local labels and let $\delta_s^{\xi_s,\zeta_s}(\omega)$ be
     the centered correction in Schmidt coordinates. For assignments
-    $u,v$ of pairs of Schmidt indices on $S$, set
+    $u,v$ of pairs of Schmidt indices on $S$, let
     \begin{align}
         Z^{\xi,\zeta}_{u,v}(\omega)
          & =\prod_{s\in S}
@@ -159,12 +160,12 @@ positive; its tensor-network representation is proved separately.
 \begin{proof}
     \leanok
     \uses{thm:peps_actual_gaussian_branch,thm:peps_physical_corrected_basis_invariance,thm:peps_gaussian_branch_density_bound}
-    Write $F_S$ in the bases adapted to $A(S)$, which leaves the trace norm
-    unchanged. Expand $F_S$ into partial branches, apply the triangle inequality
-    inside the expectation with weights $|c_\xi\overline{c_\zeta}|$, and bound
-    each pair by Theorem~\ref{thm:peps_actual_gaussian_branch}. Finite sums of
-    products of Gaussian entries are integrable, so expectation commutes with
-    the sum.
+    Writing $F_S$ in the bases adapted to $A(S)$ leaves the trace norm
+    unchanged. Expanding $F_S$ into partial branches, applying the triangle
+    inequality inside the expectation with weights $|c_\xi\overline{c_\zeta}|$,
+    and bounding each pair by Theorem~\ref{thm:peps_actual_gaussian_branch}
+    yields the claimed bound, since finite sums of products of Gaussian
+    entries are integrable and expectation commutes with the sum.
 \end{proof}
 
 \begin{theorem}[Corrected-term bound from circuit participation]
@@ -193,9 +194,9 @@ positive; its tensor-network representation is proved separately.
 \begin{proof}
     \leanok
     \uses{thm:peps_actual_corrected_source_bound,thm:peps_actual_source_lifetime_cost,thm:peps_affected_original_dimensions,def:peps_exterior_family_physical_basis,def:peps_restricted_discard_basis}
-    Take the product physical bases on $A(S)$ and its complement, together with
-    orthonormal bases on the two parts of the finite-dimensional discarded space.
-    The discarded dimensions do not enter~(\ref{eq:peps_actual_corrected_bound}),
+    With the product physical bases on $A(S)$ and its complement and
+    orthonormal bases on the two parts of the finite-dimensional discarded
+    space, the discarded dimensions do not enter~(\ref{eq:peps_actual_corrected_bound}),
     and the squared affected physical dimension is $|X|^2=\prod_{p\in A(S)}d_p^2$.
     Since each of the at most $2|S|$ parties in $A(S)$ participates in at most
     $b$ gates, the product of $|X|^2$ with the ket--bra coefficient sum is at most
@@ -267,8 +268,9 @@ positive; its tensor-network representation is proved separately.
 \begin{proof}
     \leanok
     \uses{thm:peps_actual_source_lifetime_bound,thm:peps_local_schmidt_sources,thm:peps_source_sample_choice_conditional}
-    Choose normalized Schmidt decompositions for all source vectors. For every
-    nonempty set $S$ of source occurrences, the circuit participation bound gives
+    With normalized Schmidt decompositions chosen for all source vectors,
+    for every nonempty set $S$ of source occurrences, the circuit
+    participation bound gives
     $\mathbb E\,\|F_S\|_1\leq Q^{|S|}k^{-|S|/2}$. With $k$ given
     by~(\ref{eq:peps_actual_sample_count}), the conditional sampling theorem yields
     a realization $\omega$ satisfying~(\ref{eq:peps_actual_sample_error}).
@@ -384,9 +386,10 @@ positive; its tensor-network representation is proved separately.
 \begin{proof}
     \leanok
     \uses{thm:peps_effect_stack_polynomial,thm:peps_source_only_resources}
-    Raise $m\leq HL^{2(n+s+p)}$ to the power $r$ and multiply by $K\leq C_KL^a$.
-    Replacing up to $r$ pair effects in each of the at most $K$ monomials by a
-    stack of length $m$ produces at most $Km^r$ branch labels per gate occurrence.
+    Raising $m\leq HL^{2(n+s+p)}$ to the power $r$ and multiplying by
+    $K\leq C_KL^a$ gives the first inequality, and replacing up to $r$ pair
+    effects in each of the at most $K$ monomials by a stack of length $m$
+    produces at most $Km^r$ branch labels per gate occurrence.
 \end{proof}
 
 \begin{theorem}[Sampled physical operator as a sum of party tensor products]
@@ -405,7 +408,9 @@ positive; its tensor-network representation is proved separately.
     $\lambda_W$ be the scalar factor from gates with no participating parties.
     For the sampled source matrices $\widehat X$, write
     $\widehat\rho_{\mathrm{phys},\psi}(\widehat X)$ for the resulting physical
-    operator. If $n$ is the number of source occurrences, then
+    operator. If $n$ is the number of source occurrences, the party-factored
+    expansion of the sampled physical operator in
+    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS} is
     \begin{align}
         \widehat\rho_{\mathrm{phys},\psi}(\widehat X)
          & =k^{-n}\lambda_W\overline{\lambda_W}
@@ -418,8 +423,6 @@ positive; its tensor-network representation is proved separately.
     $j\in[k]^n$ assigns a sample index to every source occurrence. The case
     $k=0$ is included with the convention $0^{-1}=0$: if $n\ge1$ both sides
     vanish, since $[0]^n$ is empty, and if $n=0$ the factor $k^{-n}$ equals $1$.
-    This is the party-factored expansion of the sampled physical operator in
-    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
     % Source: 04-compression.tex, lines 279--355, 409--434 and 565--588.
 \end{theorem}
 
@@ -427,10 +430,9 @@ positive; its tensor-network representation is proved separately.
     \leanok
     \uses{thm:peps_actual_pure_physical_source_replacement,
         thm:peps_actual_source_column_physical_trace,thm:peps_actual_sampled_physical_scalar}
-    Expand the sampled operator over independent ket and bra branch choices
-    $\xi,\zeta$ by
-    Theorem~\ref{thm:peps_actual_pure_physical_source_replacement}.
-    For each pair $(\xi,\zeta)$,
+    Theorem~\ref{thm:peps_actual_pure_physical_source_replacement} expands
+    the sampled operator over independent ket and bra branch choices
+    $\xi,\zeta$. For each pair $(\xi,\zeta)$,
     Theorem~\ref{thm:peps_actual_source_column_physical_trace} replaces the
     private output basis by the party-grouped basis without changing the partial
     trace over the private registers. Applying

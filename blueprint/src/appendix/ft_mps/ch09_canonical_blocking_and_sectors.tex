@@ -47,10 +47,10 @@ through its own period agrees with the directly $p$-blocked block.
 
 \begin{proof}\leanok
     \uses{thm:blocking_primitivity, thm:common_blocking_period}
-    Apply Theorem~\ref{thm:blocking_primitivity} to each block, then apply
-    Theorem~\ref{thm:common_blocking_period} to the resulting finite family of
-    positive periods. Their least common multiple is positive and makes every
-    blocked transfer map primitive.
+    Theorem~\ref{thm:blocking_primitivity} gives a positive primitive blocking
+    period for each block, and Theorem~\ref{thm:common_blocking_period} combines
+    these periods through their least common multiple into a single positive
+    length that makes every blocked transfer map primitive.
 \end{proof}
 
 \begin{theorem}[Quasi-idempotence under physical blocking]%
@@ -119,8 +119,8 @@ through its own period agrees with the directly $p$-blocked block.
 \end{theorem}
 
 \begin{proof}\leanok
-    Expand the blocked matrices as products indexed by words and sum one
-    letter at a time.
+    Expanding the blocked matrices as products indexed by words and summing one
+    letter at a time telescope the inner sums to the identity.
 \end{proof}
 
 \begin{theorem}[Irreducibility from a faithful fixed point]
@@ -207,7 +207,8 @@ through its own period agrees with the directly $p$-blocked block.
     \uses{def:primitive_mps, lem:blocked_irreducibility_direct_support, thm:transfer_channel}
     Lemma~\ref{lem:blocked_irreducibility_direct_support} gives primitive
     fixed-point data with $\rho>0$. In particular, if
-    $P_\rho(X)=\tr(X)\rho/\tr(\rho)$ and $N:=\E_A-P_\rho$, then
+    $P_\rho(X)=\tr(X)\rho/\tr(\rho)$ and $N:=\E_A-P_\rho$, the primitive
+    fixed-point decomposition gives
     \begin{align}
         \E_A
          & =P_\rho+N,
@@ -216,8 +217,6 @@ through its own period agrees with the directly $p$-blocked block.
          & \longrightarrow0.
         \notag
     \end{align}
-    The primitive fixed-point theorem gives this complementary-power
-    convergence.
 
     The blocked transfer map is the corresponding positive power:
     \begin{align}
@@ -225,17 +224,17 @@ through its own period agrees with the directly $p$-blocked block.
          & =\E_A^P(X).
         \label{eq:canonical_block_transfer_power}
     \end{align}
-    Hence $\rho$ remains a positive-definite fixed point after blocking. Let
-    $\sigma\ge0$ be any fixed point of $\E_A^P$, set
+    Hence $\rho$ remains a positive-definite fixed point after blocking. For
+    any fixed point $\sigma\ge0$ of $\E_A^P$, the scalar and difference
     \begin{align}
         c
          & =\frac{\tr(\sigma)}{\tr(\rho)},
         \notag                             \\
         \sigma'
-         & =\sigma-c\rho.
+         & =\sigma-c\rho
         \notag
     \end{align}
-    Then $\tr(\sigma')=0$, so $P_\rho(\sigma')=0$, while
+    satisfy $\tr(\sigma')=0$, so $P_\rho(\sigma')=0$, while
     $\E_A^P(\sigma')=\sigma'$. Since the fixed-point projection and the
     complement annihilate one another, iteration gives, for every $k\ge1$,
     \begin{align}
@@ -333,8 +332,9 @@ through its own period agrees with the directly $p$-blocked block.
 
 \begin{proof}\leanok
     If proportionality holds from length $N_0$ onward, a blocked chain of length
-    $N\ge N_0$ expands to an original chain of length $Np\ge N_0$. Use the
-    original proportionality scalar at length $Np$.
+    $N\ge N_0$ expands to an original chain of length $Np\ge N_0$, where the
+    original proportionality scalar at length $Np$ relates the blocked MPV
+    coefficients.
 \end{proof}
 
 \begin{lemma}[Positive-length blocking of a weighted block sum]%
@@ -416,12 +416,11 @@ multiple cyclic-sector families into a single common blocked alphabet.
     \end{align}
     \begin{proof}\leanok
 
-        Apply Theorem~\cite[``Compression of a supported finite Kraus family'']{QICLean2026Blueprint} to the
-        family $(A^i)_i$. It gives $C$, $\varphi$, and $V$ satisfying
-        (\ref{eq:canonical_support_isometry}) and $\varphi(C^i)=A^i$. It remains
-        to identify the coefficients of the associated words. For each word
-        $\sigma=(\sigma_1,\ldots,\sigma_N)$, cyclicity of the trace and
-        $VV^\dagger=P$ give
+        Theorem~\cite[``Compression of a supported finite Kraus family'']{QICLean2026Blueprint},
+        applied to the family $(A^i)_i$, produces $C$, $\varphi$, and $V$
+        satisfying (\ref{eq:canonical_support_isometry}) and
+        $\varphi(C^i)=A^i$. For each word $\sigma=(\sigma_1,\ldots,\sigma_N)$,
+        cyclicity of the trace and $VV^\dagger=P$ then give
         \begin{align}
             V^{(N)}(C)_\sigma
              & =
@@ -460,11 +459,12 @@ multiple cyclic-sector families into a single common blocked alphabet.
     \end{align}
     The sector letters obey $\varphi_k(C_k^i)=P_kA^iP_k$.
     \begin{proof}\leanok
-        Apply Theorem~\ref{thm:supported_corner_compression_isometry} to the
-        compression of $A$ on each sector $P_k$. Orthogonality and
-        $\sum_kP_k=\Id$ give the direct-sum decomposition. For every word
+        Theorem~\ref{thm:supported_corner_compression_isometry} compresses $A$
+        on each sector $P_k$, and orthogonality together with $\sum_kP_k=\Id$
+        assembles the sectors into a direct sum. For every word
         $\sigma=(\sigma_1,\ldots,\sigma_N)$, the partition of unity and
-        (\ref{eq:canonical_corner_trace}) give
+        (\ref{eq:canonical_corner_trace}) establish the unit-weight
+        matrix-product-vector identity:
         \begin{align}
             V^{(N)}(A)_\sigma
              & =
@@ -476,7 +476,6 @@ multiple cyclic-sector families into a single common blocked alphabet.
             \sum_kV^{(N)}(C_k)_\sigma.
             \notag
         \end{align}
-        This is the unit-weight matrix-product-vector identity.
     \end{proof}
 \end{theorem}
 
@@ -536,14 +535,14 @@ multiple cyclic-sector families into a single common blocked alphabet.
 
 \begin{proof}\leanok
     \uses{thm:tp_gauge_arbitrary, thm:cyclic_sector_decomp_irr_tp_prim_irr}
-    Apply Theorem~\ref{thm:tp_gauge_arbitrary} separately to $A$ and $B$.
-    Its positive-length conclusion gives
-    (\ref{eq:canonical_nonzero_part_a}) and
-    (\ref{eq:canonical_nonzero_part_b}). Chaining these identities through
-    $\mc{V}^+(A)=\mc{V}^+(B)$ gives
-    (\ref{eq:canonical_nonzero_parts_equal}). Finally apply
-    Theorem~\ref{thm:cyclic_sector_decomp_irr_tp_prim_irr} to every
-    trace-preserving irreducible nonzero-weight block.
+    Theorem~\ref{thm:tp_gauge_arbitrary}, applied separately to $A$ and $B$,
+    establishes (\ref{eq:canonical_nonzero_part_a}) and
+    (\ref{eq:canonical_nonzero_part_b}) at every positive length. Chaining these
+    identities through $\mc{V}^+(A)=\mc{V}^+(B)$ yields
+    (\ref{eq:canonical_nonzero_parts_equal}), and
+    Theorem~\ref{thm:cyclic_sector_decomp_irr_tp_prim_irr} decomposes every
+    trace-preserving irreducible nonzero-weight block into primitive irreducible
+    cyclic sectors.
 \end{proof}
 
 \begin{lemma}[Common reblocking of cyclic-sector families]%
@@ -633,11 +632,11 @@ non-increasing weight modulus produces a normal canonical form.
 
 \begin{proof}\leanok
     \uses{def:is_normal_canonical_form, thm:primitive_overlap}
-    Fix a block~$k$. Irreducibility and the TP normalization give a nonzero
+    For each block~$k$, irreducibility and the TP normalization give a nonzero
     positive semidefinite fixed point $\rho$ of $\E_{A_k}$ with fixed-point
-    projector $P$; primitivity gives the complementary gap
-    $\rho_{\spec}(\E_{A_k}-P)<1$
-    (the corresponding theorem in the companion quantum-channel volume~\cite[``Complementary transfer-map gap for primitive maps'']{QICLean2026Blueprint}).
+    projector $P$, while primitivity gives the complementary gap
+    $\rho_{\spec}(\E_{A_k}-P)<1$ by the corresponding theorem in the companion
+    quantum-channel volume~\cite[``Complementary transfer-map gap for primitive maps'']{QICLean2026Blueprint}.
     Theorem~\ref{thm:primitive_overlap} then yields
     $O_{A_kA_k}(N)\to1$.
 \end{proof}
@@ -659,11 +658,11 @@ non-increasing weight modulus produces a normal canonical form.
 
 \begin{proof}\leanok
     \uses{def:is_normal_canonical_form}
-    The given blocks are already primitive, so take $p=1$. Reorder the blocks
-    by non-increasing weight modulus, with ties allowed, and set
-    $\nu_k:=\mu_k$ and $B_k:=A_k$ in that order. Irreducibility, TP
-    normalization, primitivity, nonzero weights, and positive bond dimensions
-    are preserved, so the reordered family satisfies
+    Because the given blocks are already primitive, blocking length $p=1$
+    suffices. Reordering the blocks by non-increasing weight modulus (with ties
+    allowed) and indexing $\nu_k:=\mu_k$ and $B_k:=A_k$ in that order preserves
+    irreducibility, TP normalization, primitivity, nonzero weights, and positive
+    bond dimensions, so the reordered family satisfies
     Definition~\ref{def:is_normal_canonical_form} and generates the same MPV
     family as $A$.
 \end{proof}

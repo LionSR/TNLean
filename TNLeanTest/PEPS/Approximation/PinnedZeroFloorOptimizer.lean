@@ -10,7 +10,7 @@ import TNLean.PEPS.Approximation.PinnedZeroFloorOptimizer
 noncomputable section
 
 open Matrix
-open scoped BigOperators InnerProductSpace Matrix.Norms.L2Operator
+open scoped BigOperators ComplexOrder InnerProductSpace Matrix.Norms.L2Operator
 
 namespace TNLean.PEPS.Approximation
 

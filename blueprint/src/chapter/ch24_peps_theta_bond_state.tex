@@ -5,10 +5,10 @@
     \uses{def:peps_representation_theta, thm:peps_torus_projector_expansion}
     Let $U$ be a representation of a finite group on a finite virtual space,
     and let $\Theta$ be its fourth-root isotypic weight operator.
-    Obtain the weighted site from the canonical averaging site by placing
-    $\Theta$ on each of its four virtual legs.
-    For the multiplicity-one representation, this is the tensor displayed
-    in \cite[Section~7]{Schuch2010PEPS}, divided by $|G|$.
+    The weighted site is obtained from the canonical averaging site by placing
+    $\Theta$ on each of its four virtual legs; for the multiplicity-one
+    representation, this gives the tensor displayed in
+    \cite[Section~7]{Schuch2010PEPS}, divided by $|G|$.
 \end{definition}
 
 \begin{theorem}[Fourth-root site weights combine on the bonds]%
@@ -39,12 +39,12 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    Move the virtual-leg matrices into the incident bonds. Each bond acquires
+    Moving the virtual-leg matrices into the incident bonds gives each bond
     two factors $\Theta$, hence $\Theta^2$.
-    Expand the average independently at each site to obtain a vertex label $q_v$.
-    The horizontal bond has matrix
-    $U(q_{v+\mathrm{east}})\Theta^2U(q_v^{-1})$, and the vertical bond has
+    Expanding the average independently at each site to obtain a vertex label
+    $q_v$ yields the horizontal bond matrix
+    $U(q_{v+\mathrm{east}})\Theta^2U(q_v^{-1})$ and the vertical bond matrix
     $U(q_v)\Theta^2U(q_{v+\mathrm{north}}^{-1})$.
-    Since $\Theta$ commutes with $U$, these become the displayed relative matrices.
-    Reading their endpoint labels gives the stated product.
+    Since $\Theta$ commutes with $U$, these become the displayed relative
+    matrices, and reading their endpoint labels gives the stated product.
 \end{proof}

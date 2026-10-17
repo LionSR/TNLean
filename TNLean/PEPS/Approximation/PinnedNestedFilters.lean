@@ -14,6 +14,8 @@ counting retain the source conventions. No upstream Lean proof text is copied.
 -/
 import TNLean.PEPS.Approximation.PinnedRegionalState
 import Mathlib.Analysis.CStarAlgebra.Matrix
+import Mathlib.Analysis.Matrix.Spectrum
+import Mathlib.LinearAlgebra.Matrix.PosDef
 
 /-!
 # Adapted positive filters on the original finite square
@@ -27,7 +29,7 @@ allowed. No eigenbasis or spectral-coordinate representation is part of the data
 
 noncomputable section
 
-open scoped BigOperators
+open scoped BigOperators ComplexOrder
 
 namespace TNLean.PEPS.Approximation.Pinned
 

@@ -175,8 +175,8 @@
     \begin{align}
         (\widehat F_j)_{x,y}
          & =\begin{cases}
-                (F_j)_{x|_{X_j},y|_{X_j}} & x|_{V_L\setminus X_j}=y|_{V_L\setminus X_j},\\
-                0 & \text{otherwise}.
+                (F_j)_{x|_{X_j},y|_{X_j}} & x|_{V_L\setminus X_j}=y|_{V_L\setminus X_j}, \\
+                0                         & \text{otherwise}.
             \end{cases}\notag
     \end{align}
     For real weights $a_j$, call $F=(F_j)_{j=0}^{m-1}$ admissible when
@@ -186,7 +186,7 @@
     For every state $\Omega$, set
     \begin{align}
         \psi(F,\Omega) & =\widehat F_{m-1}\cdots\widehat F_0\Omega,
-        \notag\\
+        \notag                                                      \\
         \phi(F,\Omega) & =\|\psi(F,\Omega)\|^{-1}\psi(F,\Omega).
         \label{eq:pinned_filter_output}
     \end{align}
@@ -265,7 +265,7 @@
     usual tensor-factor action and
     \begin{align}
         U\psi(F,\Omega) & =\widehat K_{m-1}(F)\cdots\widehat K_0(F)U\Omega,
-        \notag\\
+        \notag                                                              \\
         U\phi(F,\Omega) & =
         \|\widehat K_{m-1}(F)\cdots\widehat K_0(F)U\Omega\|^{-1}
         \widehat K_{m-1}(F)\cdots\widehat K_0(F)U\Omega.
@@ -336,9 +336,9 @@
     There is one maximizing admissible family $F$ whose output
     $\psi=\psi(F,\Omega)$ and normalization $\phi=\phi(F,\Omega)$ satisfy
     \begin{align}
-        0 & <\|\psi\|, & \|\phi\| & =1, \notag\\
+        0 & <\|\psi\|,                                  & \|\phi\| & =1, \notag \\
         |\operatorname{Re}\langle\phi,H\phi\rangle-E_0|
-          & \le q^2J\sum_{j=0}^{m-1}b(X_j)a_j^2, \notag\\
+          & \le q^2J\sum_{j=0}^{m-1}b(X_j)a_j^2, \notag                         \\
         \Delta\bigl(1-|\langle\Omega,\phi\rangle|^2\bigr)
           & \le q^2J\sum_{j=0}^{m-1}b(X_j)a_j^2.
         \label{eq:pinned_square_energy}

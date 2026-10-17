@@ -5,10 +5,9 @@
     \leanok
     \lean{TNLean.PEPS.AreaLaw.Exponents.radiusExponent}
     \uses{thm:area_law_exponent_gaps}
-    For the fixed amplification parameters, let
+    For the fixed amplification parameters, the exponent in the radius bound of
+    \cite[Proposition~10.2]{OpenAI2026AreaLaw} is
     $\gamma=(1-\varepsilon)/\alpha$.
-    This is the exponent in the radius bound of
-    \cite[Proposition~10.2]{OpenAI2026AreaLaw}.
 \end{definition}
 
 \begin{theorem}[Separation of the collar scales]
@@ -24,8 +23,9 @@
 \end{theorem}
 \begin{proof}
     \leanok
-    The inequalities follow by substituting the fixed parameters.
-    Each power in the numerator has exponent strictly smaller than $\beta$.
+    Substituting the fixed parameters gives the exponent inequalities, and
+    since each power in the numerator has exponent strictly smaller than $\beta$,
+    the quotient tends to zero.
 \end{proof}
 
 \begin{theorem}[Uniform control of rounded collars]
@@ -34,21 +34,21 @@
     \lean{TNLean.PEPS.AreaLaw.Exponents.exists_collar_radius_threshold,
         TNLean.PEPS.AreaLaw.Exponents.collar_add_radius_isLittleO}
     \uses{thm:area_law_radius_exponent_gaps}
-    For every $C\in\mathbb R$ and $\eta>0$, there is $N\ge2$ such that
+    For every $C\in\mathbb R$ and $\eta>0$, there is a threshold $N\ge2$ depending
+    only on $C$ and $\eta$ such that
     every integer $L\ge N$ and every nonnegative integer radius
     $r\le CL^\gamma$ satisfy
     $\lfloor L^{1-\varepsilon}\rfloor+2r<\eta L^\beta$.
     Consequently, for every sequence of nonnegative integer radii satisfying
     $r(L)\le CL^\gamma$ eventually,
     $\lfloor L^{1-\varepsilon}\rfloor+2r(L)=o(L^\beta)$.
-    The threshold depends only on $C$ and $\eta$.
 \end{theorem}
 \begin{proof}
     \leanok
-    Apply the preceding limit and use
-    $\lfloor L^{1-\varepsilon}\rfloor\le L^{1-\varepsilon}$.
-    This proves the scale comparison in the final paragraph of the proof of
-    \cite[Proposition~10.2]{OpenAI2026AreaLaw}; the geometric clearance and
+    Combining the preceding limit with
+    $\lfloor L^{1-\varepsilon}\rfloor\le L^{1-\varepsilon}$ yields the scale
+    comparison in the final paragraph of the proof of
+    \cite[Proposition~10.2]{OpenAI2026AreaLaw}, while the geometric clearance and
     amplified mutual-information estimate require separate arguments.
 \end{proof}
 
@@ -65,12 +65,12 @@ inputs.
     \leanok
     \lean{TNLean.PEPS.AreaLaw.amplificationTime,
         TNLean.PEPS.AreaLaw.amplificationRadius}
-    For $g>0$, real numbers $\mathcal I,w$ and integers $K,n\ge1$, put
-    $t_*=(6/g)(\mathcal I+w+K\log n)$. For real $C'$ and $\alpha$, put
-    $r=\lceil(C'(t_*+K\log n))^{1/\alpha}\rceil$.
-    This is the choice of time and radius of
-    \cite[Proposition~10.2]{OpenAI2026AreaLaw}, with the constant $C=6/g$,
-    which gives $gt_*\ge\mathcal I+3w+6K\log n$ when
+    For $g>0$, real numbers $\mathcal I,w$, and integers $K,n\ge1$, and for real
+    $C'$ and $\alpha$, the time and radius choices of
+    \cite[Proposition~10.2]{OpenAI2026AreaLaw} with constant $C=6/g$ are
+    $t_*=(6/g)(\mathcal I+w+K\log n)$ and
+    $r=\lceil(C'(t_*+K\log n))^{1/\alpha}\rceil$,
+    so that $gt_*\ge\mathcal I+3w+6K\log n$ whenever
     $\mathcal I,w\ge0$.
 \end{definition}
 
@@ -102,8 +102,8 @@ inputs.
 \end{theorem}
 \begin{proof}
     \leanok
-    For $r\le1$ the left side is at most $4$. For $r\ge1$ choose an integer
-    $m\ge2/\alpha$; comparing with the $m$-th term of the exponential series
+    For $r\le1$ the left side is at most $4$. For $r\ge1$ and an integer
+    $m\ge2/\alpha$, comparing with the $m$-th term of the exponential series
     gives $e^{cr^\alpha}\ge c^mr^{\alpha m}/m!\ge c^mr^2/m!$, so the left side
     is at most $4m!/c^m$.
 \end{proof}
@@ -114,8 +114,9 @@ inputs.
     \lean{TNLean.PEPS.AreaLaw.amplification_scale_bounds}
     \uses{def:area_law_amplification_time_radius}
     Let $g,c,\alpha>0$, let $v,C,C_0\ge0$ and let $K\ge1$ be an integer.
-    There are $C'>0$ and $N\ge2$ with the
-    following property. For every integer $n\ge N$, all
+    Without any upper bound on $\mathcal I$, the explicit scale control of
+    \cite[Proposition~10.2]{OpenAI2026AreaLaw} gives $C'>0$ and $N\ge2$ such
+    that, for every integer $n\ge N$, all
     $\mathcal I,w\ge0$ and every integer $0\le s\le C_0n^2$, the time
     $t_*$ and radius $r$ of
     Definition~\ref{def:area_law_amplification_time_radius} and
@@ -137,9 +138,6 @@ inputs.
     $B\ge1$ depending only on $c$ and $\alpha$, by comparing a power of
     $r^\alpha$ with the exponential series. Finally $t_*e^{-t_*}\le1$, and
     $n\ge CC_0B$ gives the remaining factor $n^{-3K}$.
-    This is the explicit control of the scale choices in
-    \cite[Proposition~10.2]{OpenAI2026AreaLaw}; no bound on $\mathcal I$
-    is needed for it.
 \end{proof}
 
 \begin{theorem}[A good clock realization]
@@ -159,11 +157,11 @@ inputs.
         \mathbb EZ   & \le Ct_*s(1+r)^2M_0e^{-cr^\alpha}.
     \end{align*}
     Then one realization satisfies $X,Y,Z\le n^{-K}$.
-    In the proof of \cite[Proposition~10.2]{OpenAI2026AreaLaw}, with $s=|S_0|$,
-    the three variables are $\|D(I-P_\Omega)\zeta\|$,
-    $\|(D-D_{\rm ret})\zeta\|$, and $M_0\|D_{\rm ret}-L'\|$, and
-    taking the three averaged estimates as hypotheses yields the desired
-    clock realization.
+    In the proof of \cite[Proposition~10.2]{OpenAI2026AreaLaw}, where $s=|S_0|$
+    and the three variables are $\|D(I-P_\Omega)\zeta\|$,
+    $\|(D-D_{\rm ret})\zeta\|$, and $M_0\|D_{\rm ret}-L'\|$,
+    taking the three averaged estimates as hypotheses yields this simultaneous
+    bound on a single clock realization.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -172,6 +170,7 @@ inputs.
     By Theorem~\ref{thm:area_law_amplification_scale_bounds} the three
     averages are at most $n^{-6K}$, $n^{-3K}$ and $n^{-3K}$. With
     $\varepsilon=n^{-K}\le1/2$, the failure probabilities sum to at most
-    $\varepsilon^4+2\varepsilon^2<1$, and
-    Theorem~\ref{thm:area_law_amplification_three_failures} applies.
+    $\varepsilon^4+2\varepsilon^2<1$, so
+    Theorem~\ref{thm:area_law_amplification_three_failures} gives a realization
+    where $X,Y,Z\le n^{-K}$.
 \end{proof}
