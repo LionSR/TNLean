@@ -206,8 +206,10 @@ structure DyadicProtocol (L q : ℕ) (P : Type) [Fintype P] where
   square to whose repainting they belong”). The construction of the protocol records here the
   square of the scheduled repainting event of each change. -/
   repaintingSquare : ℕ → Option (ℕ × ℕ × ℕ)
-  /-- The encoded frames of each stage: the main encoded frame, followed by the auxiliary encoded
-  frames.
+  /-- The encoded frames of each stage, the encoded copies of `Ω`. The first frame is designated
+  as the main copy at the initial stage, by `IsDistributionProtocol.initialCopies`, and before the
+  last change, by `IsDistributionProtocol.mainFrame_owner`; at the other stages the list is not
+  labelled.
 
   Source: Polynomial-PEPS manuscript (Sept 24 2026), Proposition 7.1, items 1 and 4,
   `06-geometry.tex:21–23` and `06-geometry.tex:38–40`. -/
@@ -406,14 +408,14 @@ structure IsDistributionProtocol (Ω : StateSpace L q) (C : ℝ) (b k r : ℕ) :
         Nat.dist (D.placement.anchor p).2 (D.placement.anchor p').2 ≤
           b * 2 ^ D.placement.scale p
   /-- Item 4: the reference vector of every intermediate stage is the product of the reference
-  vectors `K_F Ω` of the encoded frames of that stage, of the protocol's own `Ω`: the main encoded
-  frame and the auxiliary encoded frames. All its factors have norm at most one. Read per stage,
-  being the main copy carries no content beyond the designations at the endpoints, which are
-  stated by `initialCopies` at the initial stage and by `mainFrame_owner` before the readout. The
-  initial stage is the product initialization of `initialCopies`. The last stage is the readout
-  of the physical registers and the discarded ones, recorded in `reference_changes`; the readout
-  change, which only rearranges registers, has no counterpart in the source, which is why that
-  stage is excluded here.
+  vectors `K_F Ω` of the encoded frames of that stage, of the protocol's own `Ω`, an unlabelled
+  list of the encoded copies. All its factors have norm at most one. Read per stage, being the
+  main copy carries no content beyond the designations at the endpoints, which are stated by
+  `initialCopies` at the initial stage and by `mainFrame_owner` before the last change. The
+  initial stage is the product initialization of `initialCopies`, and the last stage is described
+  by `reference_changes`. In the constructed protocol the last change is the readout, which
+  rearranges the registers into the physical and discarded ones and has no counterpart in the
+  source; this is why the last stage is excluded here.
 
   Source: Polynomial-PEPS manuscript (Sept 24 2026), Proposition 7.1, item 4,
   `06-geometry.tex:38–40`: “There is a designated reference vector at every stage, formed from
