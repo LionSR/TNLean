@@ -8285,3 +8285,27 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Seen:** `TNLean/PEPS/AreaLaw/Geometry/RepairRankZeroAncestry.lean`, in `repairStage_color_oldInclusion` and `repairStageCharacteristicLength_oldInclusion`, and `TNLean/PEPS/AreaLaw/Geometry/RepairBirthLatticePoint.lean`, in `repairStage_birth_oldInclusion`.
 - **Abstraction:** The existing natural-number recursor already expresses the shared induction in one line. No further helper or tactic is proposed.
 - **Notes:** Each occurrence is a one-line induction, so a shared lemma would not shorten the proofs.
+
+### Real value of the lattice sup-norm distance — promoted lemma
+
+- **Pattern:** Express the natural-valued lattice sup-norm distance, viewed
+  as a real number, as the maximum of the absolute coordinate differences.
+- **Occurrences:** The former private helper in
+  `TNLean/PEPS/AreaLaw/Geometry/TemplateSafeRectangles.lean`, the local
+  calculation in `Geometry/TemplateInstances.lean`, the dyadic-cell
+  clearance proof in `Geometry/TemplateClearance.lean`, and the real
+  clearance argument in `Geometry/TemplateBoxEntropyReal.lean`.
+- **Promotion:** `TNLean.PEPS.AreaLaw.cast_supDist`, beside
+  `supDist` in `BufferedRectangles.lean`, replaces the three occurrences
+  whose modules already import its defining module.
+  Its proof is the existing cast calculation. The private helper and the
+  repeated local calculation are removed. `TemplateClearance` instead
+  converts a primitive maximum of natural absolute differences. Its single
+  Mathlib cast calculation is retained: the module does not import the
+  lattice-distance definition, and importing it would introduce the
+  analytic dependencies of `BufferedRectangles` into this geometric module.
+- **Verification:** The defining module, its three consumers and the older
+  entropy module passed ordinary package builds. The literal imported
+  check of the refactored template entropy theorem found exactly
+  `propext`, `Classical.choice` and `Quot.sound`. No tactic, global simp
+  attribute, additional hypothesis or import is introduced.
