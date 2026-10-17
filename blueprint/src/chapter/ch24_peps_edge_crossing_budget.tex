@@ -164,7 +164,7 @@
         TNLean.PEPS.Approximation.Pinned.NestedFilter.normalizedOutput,
         TNLean.PEPS.Approximation.Pinned.NestedFilter.PositiveFilter.ext
     }
-    % Completion marks await hosted proof and declaration checks.
+    \leanok
     \uses{def:peps_pinned_regional_matrix}
     Let $V_L=\{0,\ldots,L-1\}^2$, let $q,m\ge0$ be integers, and
     supply regions $X_j\subseteq V_L$ for $0\le j<m$. A positive regional
@@ -208,7 +208,7 @@
         TNLean.PEPS.Approximation.Pinned.NestedFilter.canonicalMatrices,
         TNLean.PEPS.Approximation.Pinned.NestedFilter.fromCanonical
     }
-    % Completion marks await hosted proof and declaration checks.
+    \leanok
     \uses{def:pinned_square_filters,thm:area_law_domain_identifications}
     Let $\sigma:V_L\to\Lambda$ be the canonical site bijection, let $U$
     be its configuration isometry, and write $D_j=\sigma(X_j)$.
@@ -228,7 +228,7 @@
         TNLean.PEPS.Approximation.Pinned.NestedFilter.admissible_iff_feasible,
         TNLean.PEPS.Approximation.Pinned.NestedFilter.admissible_fromCanonical
     }
-    % Completion marks await hosted proof and declaration checks.
+    \leanok
     \uses{def:pinned_filter_coordinates}
     For arbitrary real weights, every feasible family $K$ satisfies
     $K(F(K))=K$, and every positive family $F$ whose canonical matrices are
@@ -240,7 +240,7 @@
     is required.
 \end{theorem}
 \begin{proof}
-    % Completion marks await hosted proof and declaration checks.
+    \leanok
     Permutation conjugation preserves positive semidefiniteness and
     eigenvalues. For a positive weight, floor-zero feasibility is
     equivalent to positive semidefiniteness and
@@ -259,7 +259,7 @@
         TNLean.PEPS.Approximation.Pinned.NestedFilter.squareAreaLawState_normalizedOutput,
         TNLean.PEPS.Approximation.Pinned.NestedFilter.isMaximizer_iff
     }
-    % Completion marks await hosted proof and declaration checks.
+    \leanok
     \uses{def:pinned_filter_coordinates}
     For every family $F$ and vector $\Omega$, the regional lift is the
     usual tensor-factor action and
@@ -277,7 +277,7 @@
     family. Repeated regions retain their separate filter occurrences.
 \end{theorem}
 \begin{proof}
-    % Completion marks await hosted proof and declaration checks.
+    \leanok
     \uses{thm:pinned_filter_coordinates}
     The complement-agreement entries agree with the tensor-factor lift.
     The ascending sequence of applications gives the reversed matrix
@@ -297,7 +297,7 @@
         TNLean.PEPS.Approximation.Pinned.NestedFilter.Energy.Crosses,
         TNLean.PEPS.Approximation.Pinned.NestedFilter.Energy.crossingCount
     }
-    % Completion marks await hosted proof and declaration checks.
+    \leanok
     \uses{def:peps_forward_square_edges}
     Orient every horizontal edge to the right and every vertical edge up.
     For $X\subseteq V_L$, let $b(X)$ be the number of these forward edges
@@ -307,13 +307,13 @@
 \begin{theorem}[Forward and unordered crossing counts]
     \label{thm:pinned_filter_crossings}
     \lean{TNLean.PEPS.Approximation.Pinned.NestedFilter.Energy.card_edgeBoundary_eq_crossingCount}
-    % Completion marks await hosted proof and declaration checks.
+    \leanok
     \uses{def:pinned_filter_crossings,def:pinned_filter_coordinates}
     For every original-grid region $X$, its once-counted crossing number
     equals $|\partial_\Lambda\sigma(X)|$.
 \end{theorem}
 \begin{proof}
-    % Completion marks await hosted proof and declaration checks.
+    \leanok
     \uses{thm:peps_square_bonds_boundary,thm:square_edge_boundary_card}
     Forgetting the fixed forward orientation identifies the forward edges
     with the original unordered edges. The rectangle graph isomorphism
@@ -325,7 +325,7 @@
 \begin{theorem}[An original-grid maximizing family with energy and fidelity bounds]
     \label{thm:pinned_square_maximizer_energy}
     \lean{TNLean.PEPS.Approximation.SquareHamiltonian.exists_pinned_maximizer_energy_fidelity}
-    % Completion marks await hosted proof and declaration checks.
+    \leanok
     \uses{def:polynomial_peps_model,def:pinned_square_filters,def:pinned_filter_crossings}
     Let $H$ be an original square-grid Hamiltonian with real interaction
     bound $J$. Suppose $\|\Omega\|=1$, $H\Omega=E_0\Omega$, and
@@ -349,7 +349,7 @@
     in~\cite{gap:polypeps_square_zero_floor_optimizer_scope}.
 \end{theorem}
 \begin{proof}
-    % Completion marks await hosted proof and declaration checks.
+    \leanok
     \uses{thm:square_zero_floor_maximizer_energy,thm:pinned_filter_output_maximum,
         thm:pinned_filter_crossings,thm:square_area_law_hamiltonian_operator}
     Replace only the interaction norm bounds by $J_+=\max(J,0)$, retaining

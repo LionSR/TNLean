@@ -88,7 +88,7 @@ private theorem rectangleForwardEdge_crosses_iff {L : ℕ}
     ((rectangleForwardEdgeEquiv L e).1.2 ∈ A.map σ.toEmbedding ∧
       (rectangleForwardEdgeEquiv L e).1.1 ∉ A.map σ.toEmbedding)) ↔ _
   rcases hend with ⟨h₁, h₂⟩ | ⟨h₁, h₂⟩ <;>
-    simp only [h₁, h₂, hmem, Crosses] <;> tauto
+    (simp only [h₁, h₂, hmem, Crosses]; tauto)
 
 /-- Every canonical edge inherits the original one-crossing condition. -/
 private theorem rectangle_singleCrossing {L m : ℕ}

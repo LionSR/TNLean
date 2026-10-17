@@ -77,7 +77,7 @@ example : ¬ ∃ F : FilterFamily 0 1 (fun _ ↦ (Finset.univ : Finset (Vertex 1
     ⟨fun σ ↦ Fin.elim0 (σ ⟨(0, 0), Finset.mem_univ _⟩)⟩
   rintro ⟨F, hF⟩
   have h := hF (0 : Fin 1)
-  simpa [tracePower] using h
+  simp [tracePower] at h
 
 -- No region or tail data are needed for an empty family.
 example {L q : ℕ} (X : Fin 0 → Finset (Vertex L))

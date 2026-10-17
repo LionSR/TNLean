@@ -88,8 +88,11 @@ private theorem projectionFamily_output (ψ : EuclideanSpace ℂ (Fin 2)) :
         [liftLocal Finset.univ (oneSiteFilter firstProjection firstProjection_positive).matrix,
           liftLocal Finset.univ (oneSiteFilter complexProjection complexProjection_positive).matrix]
         (oneSiteState ψ)
-  rw [hfold, oneSite_lift, oneSite_lift,
-    ← map_mul (reindexAlgEquiv ℂ ℂ configurationEquiv.symm)]
+  rw [hfold, oneSite_lift, oneSite_lift]
+  have hmul := map_mul (reindexAlgEquiv ℂ ℂ configurationEquiv.symm)
+    complexProjection firstProjection
+  simp only [coe_reindexAlgEquiv] at hmul
+  rw [← hmul]
   exact oneSite_action _ ψ
 
 private theorem projectionFamily_e0 :

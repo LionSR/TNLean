@@ -36,7 +36,7 @@ example {L q : ℕ} {J E₀ Δ : ℝ} (h : SquareHamiltonian L q J)
       IsMaximizer Ω (fun _ ↦ 1) F ∧ 0 < ‖output F Ω‖ := by
   obtain ⟨F, hF, hpos, _⟩ := h.exists_pinned_maximizer_energy_fidelity hΩ
     (fun _ : Fin 2 ↦ ∅) (fun _ _ _ ↦ le_rfl)
-    (by intro _ _ _ hi; simpa [Crosses] using hi)
+    (by intro _ _ _; simp [Crosses])
     (fun _ ↦ 1) (fun _ ↦ zero_lt_one) (fun _ ↦ le_rfl)
   exact ⟨F, hF, hpos⟩
 
@@ -47,9 +47,7 @@ private def emptyHamiltonian (q : ℕ) : SquareHamiltonian 0 q (-1) where
   edge_supported := fun _ ↦ Submodule.zero_mem _
   site_norm_le := fun v ↦ Fin.elim0 v.1
   edge_norm_le := fun e ↦ Fin.elim0 e.1.1.1
-  hermitian := by
-    simpa using (Matrix.isHermitian_zero :
-      (0 : Matrix (Configuration 0 q) (Configuration 0 q) ℂ).IsHermitian)
+  hermitian := by simp
 
 private def emptyConfiguration (q : ℕ) : Configuration 0 q :=
   fun v ↦ Fin.elim0 v.1
@@ -86,7 +84,7 @@ example (q : ℕ) (Δ : ℝ) :
       Δ * (1 - ‖⟪emptyState q, normalizedOutput F (emptyState q)⟫_ℂ‖ ^ 2) ≤ 0 := by
   have h := (emptyHamiltonian q).exists_pinned_maximizer_energy_fidelity
     (emptyHamiltonian_gapped q Δ) (fun _ : Fin 1 ↦ ∅) (fun _ _ _ ↦ le_rfl)
-    (by intro _ _ _ hi; simpa [Crosses] using hi)
+    (by intro _ _ _; simp [Crosses])
     (fun _ ↦ 1) (fun _ ↦ zero_lt_one) (fun _ ↦ le_rfl)
   simpa [crossingCount, Crosses] using h
 
@@ -115,14 +113,23 @@ example : crossingCount ({(0, 0)} : Finset (Vertex 2)) = 2 := by
   let ev : ForwardEdge 2 := ⟨((0, 0), (0, 1)), Or.inr ⟨rfl, rfl⟩⟩
   have hc (e : ForwardEdge 2) :
       Crosses ({(0, 0)} : Finset (Vertex 2)) e ↔ e = eh ∨ e = ev := by
+    have heh : e = eh ↔ e.val = eh.val := ⟨congrArg Subtype.val, Subtype.ext⟩
+    have hev : e = ev ↔ e.val = ev.val := ⟨congrArg Subtype.val, Subtype.ext⟩
+    rw [heh, hev]
+    clear heh hev
+    unfold Crosses
     rcases e with ⟨⟨⟨x, y⟩, ⟨u, v⟩⟩, he⟩
     fin_cases x <;> fin_cases y <;> fin_cases u <;> fin_cases v <;>
-      simp_all [ForwardAdjacent, Crosses, eh, ev, Subtype.ext_iff]
+      simp_all [ForwardAdjacent, eh, ev]
   have hf : Finset.univ.filter (Crosses ({(0, 0)} : Finset (Vertex 2))) = {eh, ev} := by
     ext e
     simpa only [Finset.mem_filter, Finset.mem_univ, true_and,
       Finset.mem_insert, Finset.mem_singleton] using hc e
+  have hne : eh ≠ ev := by
+    intro h
+    have hx : (1 : Fin 2) = 0 := congrArg (fun e : ForwardEdge 2 ↦ e.val.2.1) h
+    norm_num at hx
   rw [crossingCount, hf]
-  simp [eh, ev]
+  simp [hne]
 
 end TNLean.PEPS.Approximation
