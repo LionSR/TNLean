@@ -1167,13 +1167,15 @@ restriction is resolved.
 ### Polynomial PEPS approximation: the distribution protocol
 
 [polypeps_prop71_consequences_interface.tex](polypeps_prop71_consequences_interface.tex)
-(scope restriction, open) records that Proposition 7.1 of the September 24, 2026
-polynomial PEPS manuscript is formalized only as the consequences that the
-assembly of Section 8 uses, and lists the omitted clauses: a party for every
-hierarchy square, the main and auxiliary copies of `Ω`, the frame factorization
-of the reference vectors with factors of norm at most one, the placement of
-additional parties at their repainting events, the pair-source and message
-counts before expansion, and the family of expansions of every fixed accuracy.
+(scope restriction, resolved) records that Proposition 7.1 of the September 24,
+2026 polynomial PEPS manuscript was first formalized only as the consequences
+that the assembly of Section 8 uses. Every clause is now a field of the formal
+predicate, proved for the constructed protocol: a party for every hierarchy
+square, the additional parties at their repaintings, the private copies of `Ω`,
+the frame factorization of the reference vectors with factors of norm at most
+one, the pair-source and message counts, and the expansions of every fixed
+accuracy. The existence theorem still assumes the adaptive patch constraint of
+Proposition 4.1.
 
 ### Two-dimensional area law: the scanner estimate
 

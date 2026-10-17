@@ -18,19 +18,10 @@ the source: `K₀ = 20`, a small `ε₀`, a small mesh ratio `ν`, the clearance
 information scale `D` of Proposition 3.4 at that clearance, and `B₀ = K₀ D`; then Proposition 4.1
 supplies the patch constants.
 
-**Scope restriction (consequences of Proposition 7.1):**
-`largeSizeDyadicProtocolConsequences_of_adaptivePatchConstraint` proves the weaker
-`LargeSizeDyadicProtocolConsequences` interface used in Section 8, not full Proposition 7.1.
-The interface omits the following clause of the proposition:
-
-* `r_t` has at least one frame for `0 < t < changes`; the construction satisfies it, but it is
-  not yet stated.
-
-These omissions and the retained Section 8 consequences are recorded in
-`docs/paper-gaps/polypeps_prop71_consequences_interface.tex`. To eliminate this restriction,
-construct a certificate carrying the omitted clause, prove full Proposition 7.1 for it, and
-project to the present interface. The angular-scale and dyadic-padding lemmas in this module
-are not part of this restriction.
+`largeSizeDyadicProtocolConsequences_of_adaptivePatchConstraint` proves
+`LargeSizeDyadicProtocolConsequences`, which carries every clause of Proposition 7.1, from the
+adaptive patch constraint of Proposition 4.1. The former scope restriction of this interface is
+resolved in `docs/paper-gaps/polypeps_prop71_consequences_interface.tex`.
 
 * `IsAngularScale.mono` : a larger information scale and threshold are again admissible;
 * `largeSizeDyadicProtocolConsequences_of_adaptivePatchConstraint` : the consequences of

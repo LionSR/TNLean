@@ -17,11 +17,11 @@
 
 \title{The Consequences of the Distribution Protocol Used in the Assembly}
 \author{}
-\date{2026-10-17}
+\date{2026-10-18}
 
 \begin{document}
 \maketitle
-\gapnote{scope-restriction}{open}
+\gapnote{scope-restriction}{resolved}
 
 \section{The source proposition}
 
@@ -44,14 +44,14 @@ describe:
 
 \section{The formal statement}
 
-The formal statement defines the subset of properties of Proposition~7.1 that
-the PEPS assembly of Section~8 uses. This retained statement is proved from
+The formal statement was first introduced as the subset of properties of
+Proposition~7.1 that the PEPS assembly of Section~8 uses; it now carries every
+clause of the proposition. It is proved from
 the adaptive patch constraint of Proposition~4.1 of
 Ref.~\cite{OpenAI2026PolynomialPEPS}, which is assumed; the angular information
 bound of Proposition~3.4 is proved.\footnote{The theorem is
     \leanid{TNLean.PEPS.Approximation.largeSizeDyadicProtocolConsequences_of_adaptivePatchConstraint}.}
-The full Proposition~7.1 remains open until the omitted clauses listed below
-are proved as well. A protocol is formalized as a distributed
+A protocol is formalized as a distributed
 construction in the sense of Theorem~5.2 of Ref.~\cite{OpenAI2026PolynomialPEPS}
 whose chronology is divided into $n$ changes, with each party attached to a
 square of the padded dyadic hierarchy and with a reference vector $r_t$ at each
@@ -101,8 +101,9 @@ and exponent bounds. The retained properties are:
       \label{eq:prop71_junk_norm}
   \end{align}
 \item every intermediate reference vector $r_t$ is the product of the
-  reference vectors of the encoded frames of $\Omega$ at that stage, the main
-  encoded frame and the auxiliary encoded frames, all of norm at most one
+  reference vectors of the encoded frames of $\Omega$ at that stage, at least
+  one, the main encoded frame and the auxiliary encoded frames, all of norm at
+  most one
   (\path{06-geometry.tex}, lines~38--40); before the readout the raw registers
   of the main frame are held by the parties of the genuine sites. Read per
   stage, being the main copy carries no content beyond these designations at
@@ -122,19 +123,14 @@ gates.\footnote{The protocol predicate is
 
 \section{Omitted clauses}
 
-One clause of Proposition~7.1 is omitted from the formal predicate:
-\begin{enumerate}
-\item $r_t$ has at least one frame for $0 < t < n$; the construction
-  satisfies it, but it is not yet stated (\path{06-geometry.tex},
-  lines~38--40).
-\end{enumerate}
-This clause is not needed for the Section~8 assembly: the gate-density
-bound, the routing separation hypothesis, and the lifetime gate count depend
-only on the retained bounds, while the message and replacement-slot bounds used
-in compression follow from the message expansion and the nonprivate gate count
-and arity. The formal statement is therefore a weaker consequence of
-Proposition~7.1 sufficient for Section~8, proved modulo Proposition~4.1, while
-the full Proposition~7.1 remains open.
+No clause of Proposition~7.1 is omitted from the formal predicate. The last
+omitted clause, that every intermediate reference vector $r_t$, $0 < t < n$,
+has at least one frame (\path{06-geometry.tex}, lines~38--40), is now stated
+and proved for the construction: every change of the schedule keeps the main
+sheet. Read per stage, being the main copy carries no content beyond the
+designations at the initial stage and before the readout. The formal statement
+is therefore Proposition~7.1, proved modulo the adaptive patch constraint of
+Proposition~4.1, which is a separate hypothesis.
 
 \section{Clauses carried by the formal statement}
 
@@ -171,13 +167,12 @@ Two further clauses of Proposition~7.1 hold for the formal predicate.
   lines~41--42 and~580--583).
 \end{enumerate}
 
-\section{Elimination}
+\section{Resolution}
 
-State that $r_t$ has at least one frame for $0 < t < n$, carrying the
-nonemptiness of the frame lists through the chains of changes of the large
-repaintings and the concatenation of the schedule. Proving Proposition~7.1 in that stronger form then
-implies the present existence hypothesis by projection onto the retained
-fields.
+The restriction is resolved: every clause of Proposition~7.1 is a field of the
+formal predicate and is proved for the constructed protocol. What remains of
+the proposition is the adaptive patch constraint of Proposition~4.1, assumed by
+the existence theorem and not part of this note.
 
 \bibliographystyle{alpha}
 \bibliography{references}

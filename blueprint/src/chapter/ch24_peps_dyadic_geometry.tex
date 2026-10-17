@@ -2027,7 +2027,8 @@ is not proved here.
               $r_n=\Omega\otimes\Xi$ with $1-CL^{-57}\le\lVert\Xi\rVert\le1$.
               Every intermediate $r_t$, $0<t<n$, is the product of the
               reference vectors of the encoded frames of $\Omega$ at stage
-              $t$, each of norm at most one, and before the last change the
+              $t$, at least one and each of norm at most one, and before the
+              last change the
               raw registers of the main frame are held by the parties of the
               genuine sites. The last change only reads out the registers
               and has no counterpart in the source.
@@ -2038,15 +2039,12 @@ is not proved here.
     and every $(H,E_0,\Omega)\in\mathcal G_{q,J,\Delta}(L)$ there is a protocol
     with these bounds.
 
-    These bounds and this assertion are the consequences
-    of~\cite[Proposition~7.1]{OpenAI2026PolynomialPEPS} used in Section~8, not
-    the proposition itself. They omit one clause: the reference vector $r_t$ has at
-    least one frame for $0<t<n$ (\texttt{06-geometry.tex}, lines 38--40); the
-    construction satisfies it, but it is not yet stated. Read per stage, being
-    the main copy carries no content beyond the designations at the first stage
-    and before the last change.
-
-    The remaining clauses of the proposition are carried. The pair-source bound
+    These bounds carry every clause
+    of~\cite[Proposition~7.1]{OpenAI2026PolynomialPEPS}. Every intermediate
+    reference vector $r_t$, $0<t<n$, has at least one frame
+    (\texttt{06-geometry.tex}, lines 38--40), and read per stage, being the
+    main copy carries no content beyond the designations at the first stage and
+    before the last change. The pair-source bound
     of~\cite[Theorem~5.2]{OpenAI2026PolynomialPEPS}, item~3
     (\texttt{04-compression.tex}, lines 143--147), is part of item~2 above, with
     the same constant $r$ as the pair effects; the recorded monomials contain no
@@ -2069,8 +2067,7 @@ is not proved here.
     distributes $\Omega$ through the padded dyadic hierarchy with all four items
     of~\cite[Proposition~7.1]{OpenAI2026PolynomialPEPS}, applied with patch and
     information power $60$ (\texttt{07-assembly.tex}, line 11). In particular,
-    the existence assertion of Definition~\ref{def:peps_dyadic_protocol} holds;
-    the proposition also carries the clauses listed there as omitted.
+    the existence assertion of Definition~\ref{def:peps_dyadic_protocol} holds.
 \end{proposition}
 
 \begin{theorem}[Consequences of the Section 8 protocol bounds]
@@ -2083,10 +2080,7 @@ is not proved here.
     \uses{def:peps_dyadic_protocol, def:peps_dyadic_used_parties}
     Let a protocol satisfy the Section~8 bounds of
     Definition~\ref{def:peps_dyadic_protocol} with $C\ge0$, on a square of side
-    $L\ge1$, for a unit vector $\Omega$. These bounds omit the clause
-    of~\cite[Proposition~7.1]{OpenAI2026PolynomialPEPS} described there, that
-    every intermediate reference vector has at least one frame; it is not used
-    below. Then:
+    $L\ge1$, for a unit vector $\Omega$. Then:
     \begin{enumerate}
         \item the physical density of the final circuit vector satisfies
               $\lVert\Tr_{\rm private}|\Psi_n\rangle\langle\Psi_n|

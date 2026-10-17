@@ -32,16 +32,13 @@ two parties of a common gate.
 The hypothesis `LargeSizeDyadicProtocolConsequences` is not proved, so the final statement is a
 conditional form of Theorem 1.1.
 
-**Scope restriction (consequences of Proposition 7.1):** the main theorems
-`largeSizeDyadicOperatorNetwork_of_largeSizeDyadicProtocolConsequences` and
+The main theorems `largeSizeDyadicOperatorNetwork_of_largeSizeDyadicProtocolConsequences` and
 `polynomialPEPSApproximation_of_largeSizeDyadicProtocolConsequences` assume
-`LargeSizeDyadicProtocolConsequences`, which is weaker than Proposition 7.1
-(`06-geometry.tex:12–53`). It omits one clause, not used here: `r_t` has at least one frame for
-`0 < t < changes`; the construction satisfies it, but it is not yet stated. Each nonprivate gate
-`G` equals its recorded expansion `∑ ξ, c ξ • M ξ`, so the error `‖G - ∑ ξ, c ξ • M ξ‖ = 0`
-meets every accuracy of Theorem 5.2. Documented in
-`docs/paper-gaps/polypeps_prop71_consequences_interface.tex`. Elimination: prove Proposition 7.1
-for a construction certificate carrying the omitted clause and forget it into this interface.
+`LargeSizeDyadicProtocolConsequences`, which carries every clause of Proposition 7.1
+(`06-geometry.tex:12–53`). Each nonprivate gate `G` equals its recorded expansion
+`∑ ξ, c ξ • M ξ`, so the error `‖G - ∑ ξ, c ξ • M ξ‖ = 0` meets every accuracy of Theorem 5.2.
+The former scope restriction is resolved in
+`docs/paper-gaps/polypeps_prop71_consequences_interface.tex`.
 
 ## Main results
 

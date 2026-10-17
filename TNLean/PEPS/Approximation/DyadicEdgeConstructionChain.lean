@@ -117,8 +117,10 @@ theorem isStepChain_lensExchange (hD : IsAngularScale q J Δ a A₀ m₀ 60 D L�
   have c₄ := isStepChain_main l (Function.update A x (T ga' ms.toFinset)) hΩ1
     (huntreat hum')
   have c₅ := isStepChain_aux (T gm' ∅) hl hx A hΩ1 (huntreat hua')
-  exact ((((c₁.trans c₂).trans (IsStepChain.single ⟨h₃, List.cons_ne_nil _ _⟩)).trans c₄).trans c₅).cast_length
-    (by rw [hlen])
+  have c₃ := IsStepChain.single (Rel := fun Fs Fs' => HasSourceBoundedChange Ω Fs Fs' (ℓ := [])
+    (1 : ℂ) {p | EventUses (.inl R.1) p} (2 * b) K (2 * b) ((2 * b + 1) * ((L : ℝ) ^ 20)⁻¹) ∧
+      Fs' ≠ []) ⟨h₃, List.cons_ne_nil _ _⟩
+  exact ((((c₁.trans c₂).trans c₃).trans c₄).trans c₅).cast_length (by rw [hlen])
 
 /-- **The edge construction as a chain of changes, conditional on Proposition 3.4.** At the
 constants of the protocol, in the repainting of a square `R` of side `n = 2 ^ j > K₀ t`, let the

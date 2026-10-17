@@ -234,7 +234,7 @@ theorem exists_isDistributionProtocol_of_largeRepaintings {ε₀ : ℝ} (hε : 0
       ⟨fun j => if j = 0 then st i else st (i + 1), by simp, by rw [h1]; simp, fun j hj => by
         rw [h1] at hj
         obtain rfl : j = 0 := by omega
-        simpa using h, fun j _ => by split_ifs <;> exact hstne _⟩
+        simpa using h, fun j _ => by dsimp only; split_ifs <;> exact hstne _⟩
     rcases he : (eventSchedule k)[i] with S | J
     · by_cases hlS : large S = true
       · obtain ⟨seg, h0, h1, h2⟩ := hlarge i hi S he hlS
