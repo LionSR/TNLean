@@ -260,6 +260,98 @@ for an arbitrary finite set of sites and are instantiated here directly.
     an empty boundary.
 \end{proof}
 
+\begin{theorem}[The boundary perturbation of a doubled chain]
+    \label{thm:chain_partial_swap_boundary}
+    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.partialSwap_term_difference_spec,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.partialSwap_difference_eq_sum_crossing,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.partialSwap_boundary_spec}
+    \leanok
+    \uses{def:chain_model,def:chain_doubled_hamiltonian,
+        def:qc_site_pair_coordinates,def:peps_frame_sheet_swap,
+        lem:chain_boundary_crossing_count}
+    Let $L,q,R$ be natural numbers, let $J\in\mathbb R$, and let
+    $H=\sum_Xh_X$ be a range-$R$ Hamiltonian on the contiguous chain
+    $I=\{0,\ldots,L-1\}$, with local dimension $q$ and
+    $\|h_X\|\le J$. Let $D\subseteq I$ be arbitrary. In the paired
+    coordinates $p$ of Definition~\ref{def:chain_doubled_hamiltonian}, put
+    \begin{align}
+        F       & =p_*F_D,\notag                                \\
+        T_{X,0} & =p_*(h_X\otimes\mathbb 1),\notag              \\
+        T_{X,1} & =p_*(\mathbb 1\otimes h_X),\notag             \\
+        K_{X,b} & =FT_{X,b}F^\dagger-T_{X,b}\quad(b\in\{0,1\}).
+    \end{align}
+    Every $K_{X,b}$ is Hermitian, is supported on the original set $X$,
+    and satisfies $\|K_{X,b}\|\le2J$. Let $\mathcal C$ be the set of
+    original supports meeting both $D$ and $I\setminus D$, and let
+    $N_R=2\cdot2^{2R}$. For the actual doubled operator $\widehat H$,
+    \begin{align}
+        F\widehat H F^\dagger-\widehat H
+                      & =\sum_{X\in\mathcal C}\sum_{b\in\{0,1\}}K_{X,b},\notag \\
+        2|\mathcal C| & \le N_R|\partial D|.
+    \end{align}
+    Let $Z=\bigcup_{X\in\mathcal C}X$ be the actual union of crossing
+    supports and put $\Delta H=F\widehat H F^\dagger-\widehat H$.
+    The operator $\Delta H$ is supported on $Z$. For every $z\in Z$ there
+    is an actual boundary position $a\in\partial D$ with $|z-a|\le R$,
+    and
+    \begin{align}
+        \|\Delta H\|\le 2J N_R|\partial D|.
+    \end{align}
+    These assertions include $q=0$, the empty chain, and empty or full
+    $D$. They give the boundary decomposition on a contiguous chain used
+    in the paragraph ``Two-sided Gaussian filtering'' of
+    \cite{TNLean2026OneDimensional}; the distinction from arbitrary finite
+    induced domains is recorded
+    in~\cite{gap:tnlean_one_dimensional_connected_domain_scope}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:chain_doubled_hamiltonian,thm:qc_site_pair_tensor_support,
+        thm:area_law_supported_identity,thm:peps_sheet_swap_conjugate_support,
+        thm:peps_frame_sheet_swap_norm,
+        thm:peps_sheet_swap_doubled_cancellation,
+        lem:chain_boundary_crossing_count}
+    The support reduction for a conjugated tensor product in paired
+    coordinates shows that $FT_{X,b}F^\dagger$ is supported on $X$.
+    The same is true of $T_{X,b}$, so subtraction preserves its support.
+    Taking adjoints proves Hermiticity. Pairing coordinates preserves
+    the operator norm, and the regional swap satisfies $\|F\|\le1$.
+    Tensoring with an identity does not increase the operator norm, hence
+    \begin{align}
+        \|T_{X,b}\|           & \le\|h_X\|\le J,\notag \\
+        \|FT_{X,b}F^\dagger\| & \le J,\notag           \\
+        \|K_{X,b}\|           & \le J+J=2J.
+    \end{align}
+
+    If $X$ lies inside $D$, swapping exchanges the two replica terms;
+    if $X$ is disjoint from $D$, each replica term commutes with the swap.
+    Thus, for every support outside $\mathcal C$,
+    \begin{align}
+        F(T_{X,0}+T_{X,1})F^\dagger=T_{X,0}+T_{X,1}.
+    \end{align}
+    By definition, each doubled interaction is $T_{X,0}+T_{X,1}$.
+    Summing these identities expresses $\widehat H$ as the sum of these
+    pairs. Distributing conjugation and subtraction over the finite sum
+    cancels each pair outside $\mathcal C$, leaving exactly the sum over
+    the crossing supports. Finally, Lemma~\ref{lem:chain_boundary_crossing_count}
+    gives $|\mathcal C|\le2^{2R}|\partial D|$; counting the two replica
+    labels for each support gives the stated bound.
+
+    Each term in the resulting expansion is supported on some
+    $X\subseteq Z$, so their finite sum is supported on $Z$. If $z\in Z$,
+    choose a crossing support $X$ containing it. The boundary-window
+    inclusion gives $a+1-R\le z<a+1+R$ for an actual boundary position
+    $a$, whence $|z-a|\le R$.
+    If $L=0$, the boundary and the crossing family are empty and
+    $\Delta H=0$. Otherwise, a singleton interaction implies
+    $0\le\|h_{\{x\}}\|\le J$ at an actual site $x$, so $J\ge0$.
+    The triangle inequality and the bound on the number of replica labels
+    now give
+    \begin{align}
+        \|\Delta H\|\le 2J(2|\mathcal C|)\le 2J N_R|\partial D|.
+    \end{align}
+\end{proof}
+
 % Source: TNLean2026OneDimensional, eq:ham; setting before lem:LR.
 \begin{lemma}[Interaction norm budget at a site]
     \label{lem:chain_site_norm_budget}
