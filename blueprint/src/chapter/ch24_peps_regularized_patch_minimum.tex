@@ -152,10 +152,10 @@ are scalar identities.
     The eigenvalues of $x_j+bI$ therefore lie in $[b,1+b]$.
     The negative power has operator norm at most $b^{-a_j/2}$, while its
     inverse has norm at most $(1+b)^{a_j/2}$.
-    Apply the identity-extension inequality to the factor and its inverse
-    to obtain the upper and lower bounds. Apply these bounds successively
-    in the order $L_0,\ldots,L_{m-1}$, and use $\|\Omega\|=1$.
-    This argument never exchanges two factors.
+    Applying the identity-extension inequality to the factor and its inverse
+    gives the upper and lower bounds, and applying these bounds successively
+    in the order $L_0,\ldots,L_{m-1}$ with $\|\Omega\|=1$ gives the objective
+    bounds without exchanging any two factors.
 \end{proof}
 
 \begin{definition}[Minimum and normalization]
@@ -202,9 +202,9 @@ are scalar identities.
     \uses{lem:peps_regularized_patch_compact_continuous,thm:peps_regularized_patch_bounds}
     A continuous real-valued function on a nonempty compact set attains
     its minimum. The value at any minimizing point is the least element
-    of $F(\mathcal D)$, hence its infimum. Apply the bounds for every
-    feasible tuple at a minimizer. Positivity permits division by $F(x)$;
-    at a minimizer this divisor equals $N$.
+    of $F(\mathcal D)$, hence its infimum. Evaluating the bounds for every
+    feasible tuple at a minimizer gives the bounds on $N$; positivity permits
+    division by $F(x)$, and at a minimizer this divisor equals $N$.
 \end{proof}
 
 \begin{corollary}[Exponential regularization]
@@ -228,8 +228,8 @@ are scalar identities.
 \begin{proof}
     \leanok
     \uses{thm:peps_regularized_patch_bounds,thm:peps_regularized_patch_minimum}
-    Substitute $b=e^{-R}>0$. If $R\ge0$, then $1+e^{-R}\le2$,
-    so the nonpositive exponent $-A/2$ gives
+    Substituting $b=e^{-R}>0$ gives the first display; if $R\ge0$, then
+    $1+e^{-R}\le2$, so the nonpositive exponent $-A/2$ gives
     $(1+e^{-R})^{-A/2}\ge2^{-A/2}$.
 \end{proof}
 
@@ -250,8 +250,53 @@ without asserting uniqueness or smooth dependence of a minimizer on $R$.
 \begin{proof}
     \leanok
     \uses{thm:peps_regularized_patch_minimum}
-    Choose a feasible minimizer $x_*$. Then $F(x_*)=N>0$ and
+    At any feasible minimizer $x_*$, one has $F(x_*)=N>0$ and
     $N\le F(x)$ for every $x\in\mathcal D$. Monotonicity of the
     logarithm on the positive real numbers gives
     $\log N\le\log F(x)$, with equality at $x_*$.
+\end{proof}
+
+\begin{theorem}[Cylinder approximation from ordered inverse filters]
+    \label{thm:peps_patch_inverse_cylinder}
+    \lean{TNLean.PEPS.exists_mem_iSup_dependentRegionCylinder_norm_sub_le}
+    \leanok
+    \uses{def:peps_regularized_patch_objective,def:peps_regional_cylinder}
+    In the first-head expansion of the
+    \href{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex\#L484-L532}{proof of Proposition 4.1},
+    let $X_0\subseteq\cdots\subseteq X_{m-1}$, let $a_j\ge0$ and $b>0$, put
+    $A=\sum_ja_j$, and let $\Omega$ be a unit vector. For every
+    $x\in\mathcal D$ there are subspaces $S_j\subseteq\mathcal H_{X_j}$ with
+    $\dim S_j\le1/b$ and a vector
+    $v\in\sum_j\mathcal C_{X_j}(S_j)$ such that
+    \begin{align}
+        \|\Omega-v\| & \le F(x)\,(2b)^{A/2}.
+        \label{eq:peps_patch_inverse_cylinder}
+    \end{align}
+    The tuple $x$ need not be a minimizer, and repeated regions, zero weights,
+    singular densities, and $m=0$ are admitted.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_regional_extension_algebra,
+        thm:peps_regional_extension_norm,thm:peps_cylinder_projector}
+    Splitting $(x_j+bI)^{a_j/2}=H_j+T_j$ into the spectral part on eigenvalues
+    of $x_j$ at least $b$ and the remaining part gives
+    $\operatorname{rank}H_j\le1/b$ and $\|T_j\|\le(2b)^{a_j/2}$ because $x_j$
+    has trace one. The
+    product $(x_0+bI)^{a_0/2}\cdots(x_{m-1}+bI)^{a_{m-1}/2}$ inverts the
+    filter product $M(x)$, so $\Omega$ is this product applied to
+    $\Psi(x)$. Writing $G_j=H_j+T_j$ and expanding according to the first index
+    $j$ at which a head occurs gives
+    \begin{align}
+        G_0G_1\cdots G_{m-1}
+         & =\sum_{j=0}^{m-1}T_0\cdots T_{j-1}\,H_j\,G_{j+1}\cdots G_{m-1}
+        +T_0\cdots T_{m-1}.
+        \label{eq:peps_patch_first_head_expansion}
+    \end{align}
+    The preceding tails act inside $X_j$ because the regions
+    are nested, so the $j$th term lies in the cylinder over the range
+    $S_j$ of $T_0\cdots T_{j-1}H_j$ on $X_j$, whose dimension is at most
+    $\operatorname{rank}H_j$. The remaining term contains only tails and
+    has norm at most $(2b)^{A/2}\|\Psi(x)\|$, which gives
+    (\ref{eq:peps_patch_inverse_cylinder}).
 \end{proof}

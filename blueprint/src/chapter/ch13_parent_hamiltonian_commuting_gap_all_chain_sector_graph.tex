@@ -40,9 +40,8 @@
         \delta_{\alpha,\alpha'}\delta_{\beta,\beta'}.
         \notag
     \end{align}
-    This is an orthogonality relation after summing over the physical letter
-    $i$. It is not a coefficient identity for a fixed physical word
-    $\sigma$.
+    Summing over the physical letter $i$ yields this orthogonality relation
+    rather than a coefficient identity for a fixed physical word $\sigma$.
     The coefficient associated to the source basic-vector formula is
     \begin{align}
         C_L(\sigma)
@@ -111,9 +110,9 @@
         V^{(2)}(\Lambda U)(a,b).
         \notag
     \end{align}
-    The source places each virtual pair across neighboring sites and applies an
-    on-site physical isometry, as in
-    \cite[equations~(3.17)--(3.18) and Appendix~B]{Cirac2016MPDO_arXiv}.
+    As in \cite[equations~(3.17)--(3.18) and Appendix~B]{Cirac2016MPDO_arXiv},
+    the source places each virtual pair across neighboring sites and applies an
+    on-site physical isometry.
     On a three-site chain, the two adjacent length-two local terms are the
     $AX$ and $XB$ actions of the canonical two-site parent interaction.
     Theorem~\ref{thm:appendixB_overlapping_two_site_commutation} constructs the
@@ -133,12 +132,12 @@
     pairwise commutation directly from adjacent commutation. Together with
     Lemma~\ref{lem:parent_hamiltonian_ff}, this gives the zero-energy equation
     for $V^{(N)}(A)$. Neither conclusion requires a disjoint physical-pair
-    factorization. The full source implication additionally includes the
-    ground-space spanning equation. The coefficient-space analog of the
-    local kernel-intersection equation is
-    Theorem~\ref{thm:appendixB_definition_d2_coefficient_analogue}; identifying
-    its hatted maps with the source projectors remains separate and is not
-    needed for the chain commutator.
+    factorization. Although the full source implication additionally includes
+    the ground-space spanning equation (whose local kernel-intersection analog
+    in coefficient space is
+    Theorem~\ref{thm:appendixB_definition_d2_coefficient_analogue}),
+    identifying those hatted maps with the source projectors remains separate
+    and is not needed for the chain commutator.
 \end{remark}
 
 \begin{remark}[Cyclic contraction and disjoint physical pairs]
@@ -147,10 +146,10 @@
     The unit pair-index isometry and cyclic coefficient formula in
     Remark~\ref{rem:product_pair_projectors} do not imply factorization of a
     fixed physical-word coefficient over disjoint physical pairs.
-    For example, take virtual indices $0,1$, physical labels $(a,b)$, and
+    For virtual indices $0,1$, physical labels $(a,b)$, and
     $U^{(a,b)}_{x,y}=\delta_{x,a}\delta_{y,b}$, with
-    $A^{(a,b)}=\lambda_a E_{a,b}$ and $\lambda_0,\lambda_1>0$.
-    The pair-index isometry holds. For the word
+    $A^{(a,b)}=\lambda_a E_{a,b}$ and $\lambda_0,\lambda_1>0$,
+    the pair-index isometry holds. For the word
     $\sigma=((0,1),(1,0),(1,0),(0,1))$, the cyclic coefficient is
     \begin{align}
         V^{(4)}(A)_\sigma
@@ -180,26 +179,26 @@
     nearest-neighbor commuting parent-Hamiltonian ground-space condition with
     these representatives. Then there is $N_0$ such that, for every $N>N_0$,
     $\dim_{\C}\ker H_2^{(N)}(B) = g$.
-    Thus the ground-state degeneracy is eventually constant, as required in
-    \cite[Section~IV]{Beigi2012Classification}.
+    As required in \cite[Section~IV]{Beigi2012Classification}, the
+    ground-state degeneracy is therefore eventually constant.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{def:bnt_span, def:has_nncph_ground_spaces}
-    Choose $N_0\geq2$ beyond the linear-independence threshold. For $N>N_0$,
+    For $N_0\geq2$ beyond the linear-independence threshold and $N>N_0$,
     the ground-space spanning equation gives
     $\ker H_2^{(N)}(B) = \spn\{\ket{V^{(N)}(A_j)}:j=1,\ldots,g\}$.
-    Identifying these vectors with their coefficient functions preserves
-    linear independence. The dimension of their span is therefore $g$.
+    Because identifying these vectors with their coefficient functions preserves
+    linear independence, their span has dimension $g$.
 \end{proof}
 
 \begin{definition}[Two-site parent-interaction matrix]%
     \label{def:two_site_parent_interaction_matrix}
     \lean{MPSTensor.twoSiteParentInteractionMatrix}
     \leanok
-    Let $A$ be a matrix product tensor. Write its canonical two-site parent
-    interaction in the ordered-pair basis of the two-site physical Hilbert
-    space, and denote the resulting matrix by $Q_A$.
+    For a matrix product tensor $A$, the two-site parent-interaction matrix
+    $Q_A$ is the matrix of its canonical two-site parent interaction in the
+    ordered-pair basis of the two-site physical Hilbert space.
 \end{definition}
 
 \begin{theorem}[Hermitian commuting overlapping parent interactions]%
@@ -230,7 +229,9 @@
     \lean{MPSTensor.IsNNCPH.exists_unitary_blockActions_of_twoSiteParentInteractionMatrix}
     \leanok
     \uses{thm:two_site_parent_interaction_commuting_overlaps}
-    Under the preceding hypothesis, there are positive integers
+    Under the preceding hypothesis, the spatial decomposition of
+    \cite[Lemma~2.1]{Beigi2012Classification} for the canonical parent
+    interaction gives positive integers
     $d_q,m_q$, a unitary identification
     \begin{align}
         \mathcal H
@@ -257,15 +258,12 @@
         \notag
     \end{align}
     on the last pair.
-    This is the spatial decomposition of
-    \cite[Lemma~2.1]{Beigi2012Classification} for the canonical parent
-    interaction.
 \end{theorem}
 
 \begin{proof}\leanok
-    Apply the finite-dimensional spatial decomposition for two Hermitian
-    overlapping operators to $Q_A$ in both positions, using
-    Theorem~\ref{thm:two_site_parent_interaction_commuting_overlaps}.
+    By Theorem~\ref{thm:two_site_parent_interaction_commuting_overlaps},
+    applying the finite-dimensional spatial decomposition for two Hermitian
+    overlapping operators to $Q_A$ in both positions gives the stated blocks.
 \end{proof}
 
 \begin{definition}[Finite sector graph]\label{def:beigi_sector_graph}
@@ -289,9 +287,9 @@
     $P_{a,b}$ is an orthogonal projector. The directed edge
     $a\to b$ is present precisely when $\ran P_{a,b}$ is nonzero.
     An ordered cycle of length $N$ is a sequence $(a_0,\ldots,a_{N-1})$ for
-    which every cyclically adjacent edge $a_n\to a_{n+1}$ is present. Cyclic
-    rotations are not identified. This is the graph following equation~(2)
-    of \cite[Section~III]{Beigi2012Classification}.
+    which every cyclically adjacent edge $a_n\to a_{n+1}$ is present; following
+    equation~(2) of \cite[Section~III]{Beigi2012Classification}, cyclic
+    rotations are not identified.
 \end{definition}
 
 \begin{theorem}[Symmetric spatial form of a commuting positive interaction]
@@ -301,7 +299,9 @@
     \leanok
     Let $B\geq0$ be a two-site operator whose overlapping placements commute:
     $(B\otimes\Id)(\Id\otimes B) = (\Id\otimes B)(B\otimes\Id)$.
-    There are positive integers $d_{q,l},d_{q,r}$, a one-site unitary $U$,
+    In the symmetric two-sided form obtained from
+    \cite[Lemma~2.1 and Section~III, equation~(2)]{Beigi2012Classification},
+    there are positive integers $d_{q,l},d_{q,r}$, a one-site unitary $U$,
     and positive semidefinite operators $\eta_{q,h}$ on
     $\mathcal H_{q,r}\otimes\mathcal H_{h,l}$ such that
     \begin{align}
@@ -311,16 +311,14 @@
         \Id_{q,l}\otimes\eta_{q,h}\otimes\Id_{h,r}.
         \notag
     \end{align}
-    This is the symmetric two-sided form obtained from
-    \cite[Lemma~2.1 and Section~III, equation~(2)]{Beigi2012Classification}.
 \end{theorem}
 
 \begin{proof}\leanok
-    Apply the spatial decomposition to the two overlapping placements of $B$.
-    In the resulting coordinates, matrix entries vanish unless both the left
-    and right sector labels agree. For fixed sectors $q,h$, choose unit
-    vectors $l_0\in\mathcal H_{q,l}$ and
-    $r_0\in\mathcal H_{h,r}$ and define
+    In the coordinates of the spatial decomposition for the two overlapping
+    placements of $B$, matrix entries vanish unless both the left and right
+    sector labels agree. For fixed sectors $q,h$ and unit vectors
+    $l_0\in\mathcal H_{q,l}$ and $r_0\in\mathcal H_{h,r}$, the operator
+    $\eta_{q,h}$ is defined by
     \begin{align}
         \bra{r,l}\eta_{q,h}\ket{r',l'}
          & =
@@ -350,18 +348,18 @@
     \leanok
     \uses{def:beigi_sector_graph}
     Suppose that the canonical length-two parent terms of $A$ commute on a
-    three-site chain. Then the complementary two-site interaction admits a
-    finite sector graph as in Definition~\ref{def:beigi_sector_graph}.
+    three-site chain. Then, in the sense of
+    Definition~\ref{def:beigi_sector_graph}, the complementary two-site
+    interaction admits a finite sector graph.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:commuting_positive_interaction_symmetric_spatial_form}
-    The canonical two-site parent interaction $Q_A$ is an orthogonal
-    projector. Thus $\Id-Q_A$ is a positive semidefinite orthogonal
-    projector. The overlapping placements of $\Id-Q_A$ commute because
-    those of $Q_A$ commute. Apply
-    Theorem~\ref{thm:commuting_positive_interaction_symmetric_spatial_form} to
-    obtain
+    Because the canonical two-site parent interaction $Q_A$ is an orthogonal
+    projector whose overlapping placements commute, $\Id-Q_A$ is a positive
+    semidefinite orthogonal projector with commuting overlapping placements, so
+    Theorem~\ref{thm:commuting_positive_interaction_symmetric_spatial_form}
+    gives
     \begin{align}
         (U\otimes U)^*(\Id-Q_A)(U\otimes U)
          & =
@@ -381,7 +379,10 @@
     \lean{MPSTensor.BeigiSectorGraphData.parentHamiltonianGroundSpaceES_finrank_eq}
     \leanok
     \uses{def:beigi_sector_graph}
-    For every $N\geq2$, the periodic ground-space dimension is
+    For every $N\geq2$ (with the one-site periodic interaction requiring a
+    separate convention), equations~(3)--(4) of
+    \cite[Section~III]{Beigi2012Classification} express the periodic
+    ground-space dimension as
     \begin{align}
         \dim\ker H_N
          & =
@@ -391,9 +392,6 @@
         \notag
     \end{align}
     where the sum is over ordered cycles and the indices are read modulo $N$.
-    This is equations~(3)--(4) of
-    \cite[Section~III]{Beigi2012Classification} for chains of length at least
-    two. The one-site periodic interaction requires a separate convention.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -420,13 +418,13 @@
         \dim\ran P_{b,a}.
         \notag
     \end{align}
-    The sum is over ordered pairs: if $a\ne b$, then $(a,b)$ and $(b,a)$
-    are distinct summands. This is the length-two convention stated after
-    equation~(4) of \cite[Section~III]{Beigi2012Classification}.
+    In the length-two convention stated after equation~(4) of
+    \cite[Section~III]{Beigi2012Classification}, the sum runs over ordered
+    pairs, so $(a,b)$ and $(b,a)$ are distinct summands whenever $a\ne b$.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:beigi_ordered_cycle_ground_space_dimension}
-    Specialize the ordered-cycle formula to $N=2$. Its two cyclic factors are
-    $P_{a,b}$ and $P_{b,a}$, which gives the displayed product of ranks.
+    At $N=2$, the two cyclic factors in the ordered-cycle formula are
+    $P_{a,b}$ and $P_{b,a}$, yielding the displayed product of ranks.
 \end{proof}

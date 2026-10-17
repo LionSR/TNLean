@@ -10,13 +10,15 @@ import TNLean.PEPS.AreaLaw.Geometry.RepairFinalRegionStabilization
 import TNLean.PEPS.AreaLaw.Geometry.RepairInclusionComposition
 
 /-!
-# Earlier final regions at an empty generation
+# Final regions under retention
 
-The final region of an earlier identifier equals its current region at a later
-empty generation, with the identifier carried by the canonical inclusions.
-Removing a finite prefix from the decreasing sequence of current regions does
-not change their intersection. The comparison uses equalities of subsets,
-rather than equalities between maps with different dependent codomains.
+Canonical retention of an identifier preserves its final actual region:
+removing a finite prefix from the decreasing family of its current regions
+leaves the intersection unchanged. At a later empty generation, this final
+region equals the current region of the retained identifier. Both statements
+include a retention interval of length zero. The comparisons use equalities
+of subsets rather than equalities between maps with different dependent
+codomain types.
 
 Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 September 24, 2026, Section 11, replacement instructions, lines 398–409,
@@ -34,14 +36,13 @@ variable (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ))
 
 local notation "𝔇" => repairStage o Λ A C k₀ hC h₀ Sstar
 
-/-- At a later empty generation, the final region of an earlier identifier
-is its current region under the canonical old-identifier inclusion. The case
-n = 0 is included. Source: area-law Section 11, lines 398–409, 558–561 and
-584–591. -/
-theorem repairFinalRegion_eq_current_oldInclusion_of_isEmpty (j n : ℕ)
-    [IsEmpty (𝔇 (j + n)).markIndex] (i : (𝔇 j).regionIndex) :
+/-- The final actual region is unchanged under the canonical retention of an
+identifier. This includes an interval of length zero and does not require an
+empty generation. Auxiliary to area-law Section 11, `10-geometry.tex`,
+lines 398–409, 558–561 and 584–591. -/
+theorem repairFinalRegion_eq_final_oldInclusion (j n : ℕ) (i : (𝔇 j).regionIndex) :
     repairFinalRegion o Λ A C k₀ hC h₀ Sstar j i =
-      (𝔇 (j + n)).current
+      repairFinalRegion o Λ A C k₀ hC h₀ Sstar (j + n)
         (repairStageOldInclusion o Λ A C k₀ hC h₀ Sstar j n i) :=
   let R : ℕ → Set (ℝ × ℝ) := fun m ↦
     (𝔇 (j + m)).current
@@ -66,9 +67,18 @@ theorem repairFinalRegion_eq_current_oldInclusion_of_isEmpty (j n : ℕ)
               (repairRegionLift_eq_oldInclusion o Λ A C k₀ hC h₀ Sstar
                 (j + n) m
                 (repairStageOldInclusion o Λ A C k₀ hC h₀ Sstar j n i))).symm)
-    _ = (𝔇 (j + n)).current
+
+/-- At a later empty generation, the final region of an earlier identifier
+is its current region under the canonical old-identifier inclusion. The case
+n = 0 is included. Source: area-law Section 11, lines 398–409, 558–561 and
+584–591. -/
+theorem repairFinalRegion_eq_current_oldInclusion_of_isEmpty (j n : ℕ)
+    [IsEmpty (𝔇 (j + n)).markIndex] (i : (𝔇 j).regionIndex) :
+    repairFinalRegion o Λ A C k₀ hC h₀ Sstar j i =
+      (𝔇 (j + n)).current
         (repairStageOldInclusion o Λ A C k₀ hC h₀ Sstar j n i) :=
-      repairFinalRegion_eq_current_of_isEmpty o Λ A C k₀ hC h₀ Sstar (j + n)
-        (repairStageOldInclusion o Λ A C k₀ hC h₀ Sstar j n i)
+  (repairFinalRegion_eq_final_oldInclusion o Λ A C k₀ hC h₀ Sstar j n i).trans
+    (repairFinalRegion_eq_current_of_isEmpty o Λ A C k₀ hC h₀ Sstar (j + n)
+      (repairStageOldInclusion o Λ A C k₀ hC h₀ Sstar j n i))
 
 end TNLean.PEPS.AreaLaw.Geometry

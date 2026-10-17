@@ -175,13 +175,14 @@ not assumed.
     \lean{TNLean.PEPS.Approximation.foldedRouting, TNLean.PEPS.Approximation.foldedRouting_card_traversal_le}
     \leanok
     \uses{thm:peps_dyadic_padded_congestion, lem:peps_dyadic_fold, lem:peps_dyadic_padded_side}
-    Let $L\ge1$ and let every dyadic block lie in the padded square of side $N$.
+    Establishing the congestion bound of~\cite[Lemma~8.2]{OpenAI2026PolynomialPEPS}
+    for any party network satisfying the hypotheses stated above, let $L\ge1$ and
+    let every dyadic block lie in the padded square of side $N$.
     Under the hypotheses of the previous theorem, applying the fold in both
     coordinates turns the padded walks into walks of the open $L\times L$ square
     lattice, the party at an anchor is placed at its fold, and every edge of the
     genuine square is traversed at most $8(2c+1)B\Delta$ times, counted with
-    repetition. This establishes the congestion bound of~\cite[Lemma~8.2]{OpenAI2026PolynomialPEPS}
-    for any party network satisfying the hypotheses stated above.
+    repetition.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -209,9 +210,10 @@ not assumed.
 \end{theorem}
 
 \begin{proof}\leanok
-    Apply the routed contraction to the folded routing, whose congestion is at
-    most $\chi$ by the previous theorem. The fold fixes genuine coordinates, so a
-    party whose anchor is a genuine site is read at that site.
+    Applying the routed contraction to the folded routing, whose congestion is at
+    most $\chi$ by the previous theorem, yields the square-lattice PEPS. Because
+    the fold fixes genuine coordinates, a party whose anchor is a genuine site is
+    read at that site.
 \end{proof}
 
 \subsection{Fixing a column before routing}
@@ -244,13 +246,13 @@ this section and in~\cite{gap:polypeps_product_reference_column}.
     \lean{TNLean.PEPS.Approximation.PartyNetwork.dim_fixInput, TNLean.PEPS.Approximation.PartyNetwork.coeff_fixInput, TNLean.PEPS.Approximation.PartyNetwork.exists_fixInput_of_rectangularTraceNorm_sub_pure_le}
     \leanok
     \uses{def:peps_party_operator_fix_input}
-    The coefficient vector of the network with input fixed to $z$ is the column
+    In the party-graph setting of \cite[Lemma~8.1]{OpenAI2026PolynomialPEPS},
+    the coefficient vector of the network with input fixed to $z$ is the column
     $\sigma|z\rangle$. If $\Omega$ is a unit vector and
     $\lVert\sigma-|\Omega\rangle\langle\Omega|\rVert_1\le\eta<1$, then for some
     $z$ this column $\psi$ is nonzero and
     $\lVert\psi/\lVert\psi\rVert-e^{i\theta}\Omega\rVert\le2\eta$ for some real
-    $\theta$. The operator $\sigma$ need not be positive or Hermitian. This is
-    \cite[Lemma~8.1]{OpenAI2026PolynomialPEPS} on the party graph.
+    $\theta$, where the operator $\sigma$ need not be positive or Hermitian.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -282,10 +284,10 @@ this section and in~\cite{gap:polypeps_product_reference_column}.
 
 \begin{proof}\leanok
     \uses{thm:peps_product_reference_column}
-    Select a column of the party network by Theorem~\ref{thm:peps_party_column},
-    and route the resulting ket network by
-    Theorem~\ref{thm:peps_dyadic_routing_peps}. The routed PEPS has the
-    coefficients of the input-fixed network, hence it is the selected column.
+    Selecting a column of the party network by Theorem~\ref{thm:peps_party_column}
+    and routing the resulting ket network by
+    Theorem~\ref{thm:peps_dyadic_routing_peps} produces a routed PEPS whose
+    coefficients equal those of the input-fixed network, hence the selected column.
     A zero bond dimension would make the sum over virtual configurations empty
     and the contraction zero, so every bond dimension is positive. In the
     second form, the estimate in the proof of
@@ -298,20 +300,20 @@ this section and in~\cite{gap:polypeps_product_reference_column}.
     \lean{TNLean.PEPS.Approximation.hasPEPSApproximation_of_fixInput_dyadicRouting}
     \leanok
     \uses{thm:peps_party_column_routing}
-    In the setting of Theorem~\ref{thm:peps_party_column_routing}, suppose that
+    In the final bond bound of~\cite[Section~8.3]{OpenAI2026PolynomialPEPS}
+    (\texttt{07-assembly.tex}, lines 164--170) for the routed column, in the
+    setting of Theorem~\ref{thm:peps_party_column_routing}, suppose that
     every link dimension is at most $C_1L^k$ with $C_1\ge1$ and $k\ge0$, and that
     $2\eta\le L^{-1}$. Then the nonzero PEPS has every bond dimension at most
     \begin{align}
         {(C_1L^k)}^\chi & =C_1^\chi L^{k\chi},
     \end{align}
-    and normalized error at most $L^{-1}$, up to a phase. This is the final bond
-    bound of~\cite[Section~8.3]{OpenAI2026PolynomialPEPS}
-    (\texttt{07-assembly.tex}, lines 164--170) for the routed column.
+    and normalized error at most $L^{-1}$, up to a phase.
 \end{theorem}
 
 \begin{proof}\leanok
     Since $L\ge1$ and $k\ge0$, one has $1\le C_1L^k$, so every link dimension is
-    at most $D=\lfloor C_1L^k\rfloor$ and $\max(D,1)\le C_1L^k$. Apply
-    Theorem~\ref{thm:peps_party_column_routing} and raise this bound to the power
-    $\chi$.
+    at most $D=\lfloor C_1L^k\rfloor$ and $\max(D,1)\le C_1L^k$. Applying
+    Theorem~\ref{thm:peps_party_column_routing} and raising this bound to the power
+    $\chi$ gives the polynomial bond bound.
 \end{proof}

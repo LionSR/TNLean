@@ -200,14 +200,14 @@ decomposition of the $\ell$-site blocked map of $\bigoplus_jA_j$.
     $A^i=\bigoplus_j\operatorname{diag}(\mu_{j,1},\dots,\mu_{j,m_j})\otimes A_j^i$
     of \cite[eq.~(S2)]{Malz2024Preparation}, $\ket{\phi_N(A)}$ is $\ket\phi$
     with $\beta_j=\sum_k\mu_{j,k}^N$, so this bounds the error for every
-    multiplicity and every complex weight. This is
+    multiplicity and every complex weight. Relative to
     \cite[Lemma~1$'$(ii)]{Malz2024Preparation} for the state of the paragraph
-    ``Long-range MPS using measurements'', with blocks of unequal lengths, with
-    $\xi_{\mathrm{diag}}$ replaced by
-    $\max(\xi_{\mathrm{diag}},\xi_{\mathrm{off\text{-}diag}})$
-    \cite{gap:mswc24_block_form_mixed_overlap}, and with the isometries of the
-    direct sum with weights one in place of that of the blocked map of $A$
-    \cite{gap:mswc24_measurement_preparation_scope}. Unlike
+    ``Long-range MPS using measurements'', with blocks of unequal lengths, this
+    replaces $\xi_{\mathrm{diag}}$ by
+    $\max(\xi_{\mathrm{diag}},\xi_{\mathrm{off\text{-}diag}})$ as recorded in
+    \cite{gap:mswc24_block_form_mixed_overlap}, and uses the isometries of the
+    direct sum with weights one in place of that of the blocked map of $A$ as
+    recorded in \cite{gap:mswc24_measurement_preparation_scope}. Unlike
     Theorem~\ref{thm:ldp_approximation_error_repeated_overlapping}, it has no
     factor $\min(1,\sum_j\lvert\beta_j\rvert^2)^{-1/2}$.
     The source states the bound for $0<\gamma<1/2$; the range $\gamma<1$ is a
@@ -217,7 +217,7 @@ decomposition of the $\ell$-site blocked map of $\bigoplus_jA_j$.
     \leanok
     If $\lambda_2=0$, $\lvert\lambda_2\rvert\geq1$ or $q=0$, then
     $Me^{-\gamma q/\xi}\geq1$ and
-    the bound holds with $C=1$. Otherwise write $w=\sum_l\lvert\beta_l\rvert^2$
+    the bound holds with $C=1$. Otherwise let $w=\sum_l\lvert\beta_l\rvert^2$
     and $\ket{\psi}=\sum_j\alpha_j\ket{\psi_j}$. By
     Lemma~\ref{lem:ldp_overlapping_block_states}(2),
     $\braket\psi\phi=w^{-1/2}S$ with
@@ -257,13 +257,14 @@ decomposition of the $\ell$-site blocked map of $\bigoplus_jA_j$.
 \begin{proof}
     \leanok
     As in the proof of Theorem~\ref{thm:ldp_orthogonal_blocks_measurement},
-    encode the labels and the bond indices in $r_1=b+D+2$ sites, prepare the
+    encoding the labels and the bond indices in $r_1=b+D+2$ sites, preparing the
     GHZ-type state with amplitudes $\alpha$ on the registers by
-    Theorem~\ref{thm:ldp_window_ghz_measurement}, and apply on every pair window
-    one unitary sending the encoded label $j$ to $\ket{\omega_j}$. On every block
-    apply the unitary of Theorem~\ref{thm:ldp_block_sum_unitary} for an ordering
-    of the bond pairs in which those of $S$ come first; by
-    Theorem~\ref{thm:ldp_sequential_factorization_on} it implements the
+    Theorem~\ref{thm:ldp_window_ghz_measurement}, and applying on every pair window
+    one unitary sending the encoded label $j$ to $\ket{\omega_j}$ sets up the
+    inputs. On every block,
+    the unitary of Theorem~\ref{thm:ldp_block_sum_unitary} for an ordering
+    of the bond pairs in which those of $S$ come first implements, by
+    Theorem~\ref{thm:ldp_sequential_factorization_on}, the
     isometric factor $V^{(\ell_k)}$ on the pairs of $S$, which suffices because
     the products of the pairs are supported there. For the second statement, the
     measurement stage measures no site and the circuit after it is empty, by
@@ -307,7 +308,7 @@ decomposition of the $\ell$-site blocked map of $\bigoplus_jA_j$.
     \leanok
     Lemma~\ref{lem:ldp_common_gap} bounds the transfer maps. Each $\E_{jj'}$ has
     finitely many eigenvalues, all of modulus below one, so their largest
-    modulus $t_{jj'}$ is below one; take the maximum of these bounds.
+    modulus $t_{jj'}$ is below one; the maximum of these bounds gives $t$.
 \end{proof}
 
 \begin{theorem}[Every translation-invariant MPS with measurements, in depth
@@ -333,12 +334,13 @@ decomposition of the $\ell$-site blocked map of $\bigoplus_jA_j$.
     measurements and a circuit in depth at most $c\log(N/\varepsilon)$. There is
     $N_0$ such that $\ket{\phi_N(A)}\neq0$ for every $N\geq N_0$ at which the
     weights $\beta_j=\sum_k\mu_{j,k}^N$ are not all zero, so the same holds for
-    these $N$. This is the depth $O(\log(N/\varepsilon))$ of the paragraph
+    these $N$. Under the readings recorded in
+    \cite{gap:mswc24_measurement_preparation_scope,gap:mswc24_block_form_mixed_overlap,gap:mswc24_depth_upper_bound_nonzero_state},
+    this establishes the depth $O(\log(N/\varepsilon))$ of the paragraph
     ``Long-range MPS using measurements'' of \cite{Malz2024Preparation}, with
     measurements used only for the GHZ-type state, for blocks whose $q$-site
     states may overlap, every multiplicity, every nonzero complex weight and
-    every chain length, under the readings recorded in
-    \cite{gap:mswc24_measurement_preparation_scope,gap:mswc24_block_form_mixed_overlap,gap:mswc24_depth_upper_bound_nonzero_state}.
+    every chain length.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -347,11 +349,11 @@ decomposition of the $\ell$-site blocked map of $\bigoplus_jA_j$.
     Theorem~\ref{thm:ldp_overlapping_unequal_blocks_error} at $\gamma=1/4$, and
     $L_{\min}$ larger than the lengths of
     Lemma~\ref{lem:ldp_overlapping_block_injectivity}(2) and
-    Theorem~\ref{thm:ldp_injective_on_measurement}. Put
+    Theorem~\ref{thm:ldp_injective_on_measurement}. Let
     $Q=a\log(N/\varepsilon)+b'$ with $a=1/r$ and
-    $b'=\max(\log K,0)/r+L_{\min}$, and $q=\lceil Q\rceil$. If $q\leq N$, cut the
+    $b'=\max(\log K,0)/r+L_{\min}$, and $q=\lceil Q\rceil$. When $q\leq N$, cutting the
     chain into $\lfloor N/q\rfloor-1$ blocks of length $q$ and one of length
-    $q+(N\bmod q)<2q$. Every blocked map is injective on the bond pairs of the
+    $q+(N\bmod q)<2q$ ensures that every blocked map is injective on the bond pairs of the
     blocks, the state of Theorem~\ref{thm:ldp_overlapping_unequal_blocks_error}
     has error at most $KNe^{-rq}\leq\varepsilon$ by
     Lemma~\ref{lem:ldp_log_threshold_error}, and it is prepared in depth
@@ -385,14 +387,14 @@ decomposition of the $\ell$-site blocked map of $\bigoplus_jA_j$.
     satisfy
     $\lVert\ket{\psi_N}\bra{\psi_N}-\ket{\phi_N}\bra{\phi_N}\rVert_1\to0$.
 
-    This is the direction from the trivial sequence to the sequence of MPS of
-    the theorem of \cite{Piroli2021LOCC} stating that in one dimension every
-    translation-invariant MPS of fixed bond dimension is in the same phase as
-    the trivial state, for the equivalence of sequences of states of its
-    paragraph ``Phases of matter''; the depth $C\log N$ is polylogarithmic.
-    The converse direction, and the reduction of an arbitrary
-    translation-invariant tensor to the canonical form assumed here, are not
-    formalized \cite{gap:psc21_mps_classification_scope}.
+    For the equivalence of sequences of states in the paragraph ``Phases of
+    matter'' of \cite{Piroli2021LOCC}, this proves the direction from the
+    trivial sequence to the sequence of MPS of the theorem stating that in one
+    dimension every translation-invariant MPS of fixed bond dimension is in the
+    same phase as the trivial state, in polylogarithmic depth $C\log N$.
+    As recorded in \cite{gap:psc21_mps_classification_scope}, the converse
+    direction and the reduction of an arbitrary translation-invariant tensor to
+    the canonical form assumed here are not formalized.
 \end{theorem}
 \begin{proof}
     \leanok

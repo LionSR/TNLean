@@ -24,19 +24,18 @@
     where $V_k$ is the blocked polar isometry, and
     $|\operatorname{reg}(j)\rangle$ carries the encoded value $j$ on every
     designated register and zero on every other physical site.
-    Consequently, the same $U$ implements every linear combination of
-    (\ref{eq:ldp_coherent_sector}), with arbitrary complex coefficients.
-    This is the unitary stage following seed preparation in
-    \cite[Long-range MPS using measurements]{Malz2024Preparation}.
+    Consequently, as in the unitary stage following seed preparation in
+    \cite[Long-range MPS using measurements]{Malz2024Preparation}, the same $U$ implements every linear combination of
+    (\ref{eq:ldp_coherent_sector}) with arbitrary complex coefficients.
 \end{theorem}
 \begin{proof}
     \leanok
-    On each pair window, extend the orthonormal family $\omega_j$ to a
-    unitary mapping the encoded sector basis to that family. On each
-    physical block, extend the polar isometry on $S$ using its sequential
-    factorization. The first layer has constant depth and the second has
-    depth at most a constant times $L$. Their product gives
-    (\ref{eq:ldp_coherent_sector}); linearity gives the superposition identity.
+    Extending the orthonormal family $\omega_j$ on each pair window to a
+    unitary maps the encoded sector basis to that family, and extending
+    the polar isometry on $S$ on each physical block via its sequential
+    factorization completes the block operation. Because the first layer has constant depth and the second has
+    depth at most a constant times $L$, their product gives
+    (\ref{eq:ldp_coherent_sector}), and linearity gives the superposition identity.
 \end{proof}
 
 \begin{theorem}[Conversion through compatible coherent seeds]
@@ -48,16 +47,16 @@
     Let $a,b,\chi_A,\chi_B$ be unit vectors in the same physical ring
     space $\mathcal H_N=(\mathbb C^d)^{\otimes N}$. Let $U_A,U_B,R$ be
     local circuits of depths $T_A,T_B,T_R$ with $R\chi_A=\chi_B$.
-    Put $a'=U_A\chi_A$, $b'=U_B\chi_B$ and assume
+    For $a'=U_A\chi_A$ and $b'=U_B\chi_B$, if
     $\varepsilon(a',a)\leq\varepsilon_A$ and
-    $\varepsilon(b',b)\leq\varepsilon_B$. Then
+    $\varepsilon(b',b)\leq\varepsilon_B$, then
     \begin{align}
         U                 & =U_BRU_A^\dagger,                   & T_U & \leq T_A+T_R+T_B,
         \label{eq:ldp_seed_composition}                                                   \\
         \varepsilon(Ua,b) & \leq2(\varepsilon_A+\varepsilon_B).
         \label{eq:ldp_seed_error}
     \end{align}
-    For an exactly common seed, take $R=I$ and $T_R=0$.
+    For an exactly common seed, $R=I$ and $T_R=0$.
     All auxiliary sites, if present, are included in these full vectors
     with their specified reset states. No measurement is inverted.
 
@@ -95,8 +94,8 @@
     \leanok
     \uses{lem:qc_circuit_inverse_composition, lem:ldp_error_triangle}
     Circuit inversion and composition give
-    (\ref{eq:ldp_seed_composition}). The seed equation gives $Ua'=b'$.
-    Unitary invariance yields $\varepsilon(Ua,b')=\varepsilon(a,a')$;
+    (\ref{eq:ldp_seed_composition}), while the seed equation gives $Ua'=b'$.
+    Unitary invariance then yields $\varepsilon(Ua,b')=\varepsilon(a,a')$, and
     the error triangle bound gives (\ref{eq:ldp_seed_error}).
 \end{proof}
 
@@ -117,12 +116,11 @@
 \begin{proof}
     \leanok
     \uses{thm:ldp_compatible_seed_conversion}
-    Apply Theorem~\ref{thm:ldp_compatible_seed_conversion} and add the
-    three depth bounds.
+    Applying Theorem~\ref{thm:ldp_compatible_seed_conversion} and summing the
+    three depth bounds yields the conversion circuit.
 \end{proof}
 
 The explicit compatibility condition is sufficient for the chosen-vector
 interpretation of the discussion remark in~\cite{Malz2024Preparation}.
-Equality of non-normal parent groundspaces alone does not ensure it:
-sector amplitudes can obstruct arbitrarily accurate shallow conversion
-\cite{gap:mswc24_same_phase_compatible_seed}.
+As shown in \cite{gap:mswc24_same_phase_compatible_seed}, equality of non-normal parent groundspaces alone does not ensure it:
+sector amplitudes can obstruct arbitrarily accurate shallow conversion.

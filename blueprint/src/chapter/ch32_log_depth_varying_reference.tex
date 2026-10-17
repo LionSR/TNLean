@@ -24,10 +24,10 @@ The rectangular extension is given in Section~\ref{sec:ldp_rectangular}.
     \end{align}
 \end{theorem}
 \begin{proof}\leanok
-    Telescope the difference by taking an initial segment from $X$, one
-    difference $X_j-Y_j$, and the remaining segment from $Y$. Bound each
-    initial segment recursively by its reference product plus its error.
-    The resulting geometric sum gives the assertion.
+    Telescoping the difference into an initial segment from $X$, one
+    difference $X_j-Y_j$, and the remaining segment from $Y$, and bounding each
+    initial segment recursively by its reference product plus its error,
+    produces a geometric sum that gives the assertion.
 \end{proof}
 
 \begin{theorem}[The reference on an outgoing pair]
@@ -35,8 +35,8 @@ The rectangular extension is given in Section~\ref{sec:ldp_rectangular}.
     \lean{MPSPreparation.mpvFamily_fixedPointTensor,
         MPSPreparation.sum_mpvFamily_mul_star_mpvFamily}
     \leanok
-    Write $F_j^{l,r}=\sqrt{\sigma_j}\,|l\rangle\langle r|$.
-    For a periodic family of $M\ge1$ such tensors,
+    For $F_j^{l,r}=\sqrt{\sigma_j}\,|l\rangle\langle r|$ and a periodic
+    family of $M\ge1$ such tensors,
     \begin{align}
         \operatorname{Tr}(F_0^{l_0,r_0}\cdots F_{M-1}^{l_{M-1},r_{M-1}})
         =\prod_{j=0}^{M-1}(\sqrt{\sigma_{j+1}})_{r_j,l_{j+1}},
@@ -46,9 +46,9 @@ The rectangular extension is given in Section~\ref{sec:ldp_rectangular}.
     families is the trace of their ordered mixed-transfer product.
 \end{theorem}
 \begin{proof}\leanok
-    Expand the cyclic virtual contraction in matrix units. Each right
-    index fixes the incoming virtual index of the next tensor. Expanding
-    both layers in the same way proves the mixed-transfer identity.
+    Expanding the cyclic virtual contraction in matrix units fixes the
+    incoming virtual index of the next tensor at each right index, and
+    expanding both layers in the same way proves the mixed-transfer identity.
 \end{proof}
 
 The following two-block equality displays all four physical indices.
@@ -110,15 +110,16 @@ $\operatorname{Tr}(\sigma_j)=1$, even when $\sigma_j$ is singular.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:ldp_uniform_gram_transfer,thm:ldp_sqrt_holder,thm:ldp_varying_reference_products,thm:ldp_varying_reference_pairs,thm:ldp_inhomogeneous_normalized_pairs,thm:ldp_normalization_triangle,thm:ldp_chain_block_iso_inner,thm:ldp_rectangular_error}
-    Apply the global square-root H\"older bound to the reshuffled Gram
-    matrices. Density matrices form a compact set, so the reset matrices
-    and the linear maps defining mixed transfers have uniform bounds.
-    Since $R_\sigma R_\tau=R_\sigma$, every nonempty reference product has
-    the same bound as one reset matrix and has trace one. Apply ordered
-    telescoping, then use the whole-ring trace for the target norm.
-    For $M\sqrt\delta\le1$ one has $\delta\le\sqrt\delta$ and the
-    exponential is uniformly bounded. For the complementary range the
-    normalized error is at most one.
+    The global square-root H\"older bound applied to the reshuffled Gram
+    matrices bounds the positive polar factor. Because density matrices form
+    a compact set, the reset matrices and the linear maps defining mixed
+    transfers have uniform bounds, and since $R_\sigma R_\tau=R_\sigma$,
+    every nonempty reference product shares the bound of a single reset
+    matrix and has trace one. Ordered telescoping together with the
+    whole-ring trace for the target norm then yields the overlap and
+    normalized pair bounds. For $M\sqrt\delta\le1$ one has
+    $\delta\le\sqrt\delta$ and the exponential is uniformly bounded, while
+    for the complementary range the normalized error is at most one.
 \end{proof}
 
 \begin{theorem}[Eventual preparation from varying-reference mixing]
@@ -141,11 +142,12 @@ $\operatorname{Tr}(\sigma_j)=1$, even when $\sigma_j$ is singular.
 \begin{proof}\leanok
     \uses{thm:ldp_varying_reference_error,thm:ldp_inhomogeneous_uniform_rate_from,thm:ldp_chain_transfer_product,lem:ldp_log_threshold_error}
     The whole-ring estimate bounds the squared-norm deviation from one
-    by $K_nK e^{-rN}$, uniformly over the density references. Choose the
-    cutoff so this is at most $1/2$. On blocks of lengths between $q$ and
+    by $K_nK e^{-rN}$, uniformly over the density references, which is at
+    most $1/2$ beyond a fixed cutoff. On blocks of lengths between $q$ and
     $2q$ the preceding theorem gives error
-    $C_D\sqrt K\,N e^{-rq/2}$. Apply the uniform-rate preparation theorem
-    with exponent $r/2$, including its exact short-ring branch.
+    $C_D\sqrt K\,N e^{-rq/2}$, and the uniform-rate preparation theorem
+    with exponent $r/2$, including its exact short-ring branch, completes
+    the proof.
 \end{proof}
 
 \paragraph{Discussion and outlook.}

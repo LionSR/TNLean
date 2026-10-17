@@ -3,9 +3,9 @@
     \lean{TNLean.PEPS.torusSweptPatchBJointLoop}
     \leanok
     \uses{def:peps_torus_swept_patch_endpoint_walks}
-    Start at $B_1$, follow the partner connector to $B_2$, traverse its
-    clockwise endpoint loop, and return along the reversed connector.
-    Then traverse the clockwise endpoint loop at $B_1$.
+    The based comparison loop starts at $B_1$, follows the partner connector to
+    $B_2$, traverses its clockwise endpoint loop, returns along the reversed
+    connector, and finally traverses the clockwise endpoint loop at $B_1$.
     Thus, if $P$ is the connector holonomy, the reverse-ordered joint
     holonomy is $f_{B_1}(P^{-1}f_{B_2}P)$.
 \end{definition}
@@ -23,15 +23,16 @@
     For the initial string assignment, the A and B connector
     holonomies are respectively $g^{-1}$ and $1$.
     After either of the two swept vertex gauges, they are respectively
-    $g^{-1}$ and $g^{-1}$. These are identities for the same native walks
-    at every translated position, including either seam.
+    $g^{-1}$ and $g^{-1}$ for the same native walks at every translated
+    position, including either seam.
 \end{theorem}
 \begin{proof}\leanok
-    Substitute the explicit directed bond values into the connector formulas.
-    For either swept gauge, the holonomy along a path changes by the gauge at
-    its final base on the left and the inverse gauge at its initial base on
-    the right. Both A bases remain outside the sweep. The B connector starts
-    at the swept base and ends at its unchanged partner.
+    Substituting the explicit directed bond values into the connector formulas
+    gives the initial holonomies. For either swept gauge, the holonomy along a
+    path changes by the gauge at its final base on the left and the inverse
+    gauge at its initial base on the right; both A bases remain outside the
+    sweep, whereas the B connector starts at the swept base and ends at its
+    unchanged partner.
 \end{proof}
 
 \begin{theorem}[The same-connector gauge comparison has trivial joint flux]
@@ -50,14 +51,14 @@
     \[
         (g h g^{-1})(g h^{-1}g^{-1})=1.
     \]
-    This is an auxiliary statement about the explicit swept gauge presentation
-    in \cite[fluxon-braiding passage]{Schuch2010PEPS}. It does not identify
+    This auxiliary statement about the explicit swept gauge presentation
+    in \cite[fluxon-braiding passage]{Schuch2010PEPS} does not identify
     physical reunion or string rerouting with this same connector, and is
     neither a counterexample to the source nor a physical braiding theorem.
 \end{theorem}
 \begin{proof}\leanok
     Conjugating a loop of holonomy $f$ along a connector of holonomy $P$
-    gives $P^{-1}fP$. Initially $P=1$ and the partner fluxes are $h,h^{-1}$.
-    After the sweep $P=g^{-1}$, the first flux is $ghg^{-1}$ and the unchanged
-    distant partner has flux $h^{-1}$. Their based product therefore cancels.
+    gives $P^{-1}fP$. Initially $P=1$ and the partner fluxes are $h,h^{-1}$;
+    after the sweep $P=g^{-1}$, the first flux is $ghg^{-1}$, and the unchanged
+    distant partner has flux $h^{-1}$, so their based product cancels.
 \end{proof}

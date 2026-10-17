@@ -41,8 +41,8 @@ bounds in low dimensions.
         A^{w_1w_2} & =A^{w_1}A^{w_2}.
         \notag
     \end{align}
-    Split each word of length $m+n$ after its first $m$ letters for one
-    inclusion, and concatenate words of lengths $m$ and $n$ for the other.
+    Splitting each word of length $m+n$ after its first $m$ letters gives one
+    inclusion, and concatenating words of lengths $m$ and $n$ gives the other.
 \end{proof}
 
 \begin{lemma}[Zero-length word span]
@@ -174,11 +174,11 @@ span used throughout Chapter~\ref{ch:wielandt}.
     \lean{Kraus.exists_nonzero_trace_word}
     \leanok
     \uses{def:normal}
-    Let $D>0$. If $A$ is normal, then there exists a word $w$ of length at
-    most $D^2$ such that $\tr(A^w)\neq0$.
-    This is the weaker $D^2$ corollary of
-    \cite[Lemma~1]{Sanz2010Quantum}. The sharp source statement is
-    Theorem~\ref{thm:nonzero_trace_word_primitive_sharp}.
+    As the weaker $D^2$ corollary of \cite[Lemma~1]{Sanz2010Quantum} (whose
+    sharp source statement is
+    Theorem~\ref{thm:nonzero_trace_word_primitive_sharp}), let $D>0$. If $A$ is
+    normal, then there exists a word $w$ of length at most $D^2$ such that
+    $\tr(A^w)\neq0$.
 \end{theorem}
 
 \begin{proof}
@@ -271,7 +271,7 @@ eigenvector.
 
 \begin{proof}
     \leanok
-    This is the length-one word with letter~$i$.
+    The matrix $A^i$ is the evaluation of the length-one word with letter~$i$.
 \end{proof}
 
 \begin{lemma}[Redundant one-step augmentation]\label{lem:one_step_augment_word_span}
@@ -368,8 +368,9 @@ eigenvector.
 \begin{proof}
     \leanok
     \uses{lem:kraus_mem_word_span_one, thm:wielandt_case2_one_step_span, cor:wielandt_case2_one_step_index}
-    Apply the one-step case to $X=A^{i_0}$, which belongs to $S_1(A)$ by
-    Lemma~\ref{lem:kraus_mem_word_span_one}.
+    Since $X=A^{i_0}$ belongs to $S_1(A)$ by
+    Lemma~\ref{lem:kraus_mem_word_span_one}, the one-step theorem and index
+    bound apply directly.
 \end{proof}
 
 \begin{corollary}[Wielandt case (3), non-invertible Kraus operator]%
@@ -396,8 +397,9 @@ eigenvector.
 \begin{proof}
     \leanok
     \uses{lem:kraus_mem_word_span_one, thm:wielandt_case3_one_step_span, cor:wielandt_case3_one_step_index}
-    Apply the one-step case to $X=A^{i_0}$, which belongs to $S_1(A)$ by
-    Lemma~\ref{lem:kraus_mem_word_span_one}.
+    Since $X=A^{i_0}$ belongs to $S_1(A)$ by
+    Lemma~\ref{lem:kraus_mem_word_span_one}, the one-step theorem and index
+    bound apply directly.
 \end{proof}
 
 \section{Blocking and fixed-length spanning}
@@ -417,9 +419,9 @@ eigenvectors to be transferred to single-index eigenvectors of blocked tensors.
 
 \begin{proof}\leanok
     \uses{lem:word_span_le_blockTensor, lem:word_span_mul}
-    Choose $N$ with $S_N(A)=\MN{D}$. Then $\Id\in S_N(A)$.
-    For any $M\in S_N(A)$, write
-    $\Id=\sum_r c_rA^{w_r}$ with each $|w_r|=N$. Then
+    Normality provides $N$ with $S_N(A)=\MN{D}$, so $\Id\in S_N(A)$ expands as
+    $\Id=\sum_r c_rA^{w_r}$ with each $|w_r|=N$, and every $M\in S_N(A)$
+    satisfies
     \begin{align}
         M
          & =M\Id
@@ -500,14 +502,15 @@ eigenvectors to be transferred to single-index eigenvectors of blocked tensors.
 \begin{proof}
     \leanok
     \uses{thm:isNormal_blockTensor, thm:blockTensor_single_eigenvector, thm:eigenvector_spreading, lem:blocking_transfer, thm:lemma2b_assembly}
-    Set $B=A^{[L]}$, which is normal by
-    Theorem~\ref{thm:isNormal_blockTensor}. The word eigenvectors transfer to
-    single-index eigenvectors of $B$ and $B^T$ by
+    The blocked tensor $B=A^{[L]}$ is normal by
+    Theorem~\ref{thm:isNormal_blockTensor}, and the word eigenvectors transfer
+    to single-index eigenvectors of $B$ and $B^T$ by
     Theorem~\ref{thm:blockTensor_single_eigenvector}. Eigenvector spreading
     and padding then give
     $H_{D-1}(B,\varphi)=H_{D-1}(B^T,\psi)=\C^D$.
 
-    For each standard basis vector $e_j$, choose
+    For each standard basis vector $e_j$, the equality
+    $H_{D-1}(B^T,\psi)=\C^D$ provides
     $R_j\in S_{D-1}(B^T)$ with $R_j\psi=e_j$. Reversing each word after
     transposition shows that $R_j^T\in S_{D-1}(B)$, and therefore
     $(\varphi\psi^T)R_j^T=\varphi e_j^T$ belongs to
@@ -538,12 +541,9 @@ eigenvectors to be transferred to single-index eigenvectors of blocked tensors.
 \begin{proof}
     \leanok
     \uses{def:blocked_tensor, thm:isNormal_blockTensor}
-    Set $B=A^{[N_0]}$.
-    By (\ref{eq:mps_blocked_tensor}) and
-    $S_{N_0}(A)=\MN{D}$, one has $S_1(B)=\MN{D}$.
-    Hence $\Id\in S_1(B)$, so not all blocked generators can have trace
-    zero.
-    Choose $j_0$ with $\tr(B^{j_0})\neq0$.
+    For $B=A^{[N_0]}$, (\ref{eq:mps_blocked_tensor}) and
+    $S_{N_0}(A)=\MN{D}$ give $S_1(B)=\MN{D}$, so $\Id\in S_1(B)$ and some
+    blocked generator $B^{j_0}$ has $\tr(B^{j_0})\neq0$.
     By Theorem~\cite[``Nonzero trace implies eigenvector'']{QICLean2026Blueprint},
     $B^{j_0}$ has a nonzero eigenvector $\varphi$
     with eigenvalue $\mu\neq0$.
@@ -565,11 +565,11 @@ eigenvectors to be transferred to single-index eigenvectors of blocked tensors.
     \lean{MPSTensor.wielandt_lemma2b}
     \leanok
     \uses{def:word_span, def:normal}
-    If $A$ is a normal MPS tensor with bond dimension $D>0$,
-    then there exists $N$ such that $S_N(A)=\MN{D}$.
-    This is a blocked fixed-length construction under the stated normality
-    hypothesis. The quantitative result of \cite[Lemma~2(b)]{Sanz2010Quantum}
-    is Theorem~\ref{thm:rank_one_noninvertible_eigenvector_primitive}.
+    Via a blocked fixed-length construction under normality (whereas the
+    quantitative result of \cite[Lemma~2(b)]{Sanz2010Quantum} is
+    Theorem~\ref{thm:rank_one_noninvertible_eigenvector_primitive}), if $A$ is
+    a normal MPS tensor with bond dimension $D>0$, then there exists $N$ such
+    that $S_N(A)=\MN{D}$.
 \end{theorem}
 
 \begin{proof}
@@ -668,8 +668,8 @@ uniqueness.
 \end{lemma}
 
 \begin{proof}\leanok
-    Set $\sigma'=\sigma-\frac{\tr(\sigma)}{\tr(\rho)}\rho$.
-    Then $\tr(\sigma')=0$ and $(\E_A-P_\rho)(\sigma')=\sigma'$.
+    The traceless difference $\sigma'=\sigma-\frac{\tr(\sigma)}{\tr(\rho)}\rho$
+    satisfies $\tr(\sigma')=0$ and $(\E_A-P_\rho)(\sigma')=\sigma'$.
     If $\sigma'\neq0$, then $1$ is an eigenvalue of $\E_A-P_\rho$,
     contradicting the complementary transfer-map gap
     $\rho_{\spec}(\E_A-P_\rho)<1$.
@@ -685,10 +685,9 @@ uniqueness.
 \end{lemma}
 
 \begin{proof}\leanok
-    The spectral radius of $\E_A-P_\rho$ is strictly less
-    than $1$ by the complementary transfer-map gap hypothesis.
-    Apply the general result that powers of an operator
-    with spectral radius $<1$ tend to zero.
+    Because the complementary transfer-map gap hypothesis gives
+    $\rho_{\spec}(\E_A-P_\rho)<1$, the powers $(\E_A-P_\rho)^n$ tend to zero
+    in operator norm.
 \end{proof}
 
 \begin{lemma}[Primitive tensors with positive-definite fixed point have irreducible transfer map]%

@@ -24,6 +24,15 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Labels introduced by the edge operations — promoted (2026-10-16)
+
+- **Pattern:** the case analysis showing that one of the seven births and deaths of an
+  edge construction introduces a single label.
+- **Seen:** the aggregate `edgeOperations_insertsOne` and the per-operation chains of
+  `DyadicEdgeOperationChains.lean`.
+- **Abstraction:** the seven lemmas `auxBirthB_insertsOne`, …, `mainDeathB_insertsOne` in
+  `Approximation/DyadicTrueVertices.lean`; the aggregate is derived from them.
+
 ### Sites separated from guide holes — promoted (2026-10-16)
 
 - **Pattern:** recover the patch of a guide hole, turn membership in its outer sample
@@ -4589,6 +4598,18 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 ## Candidates
 
+### Dyadic padding bounds — candidate (2026-10-16)
+
+- **Pattern:** Combine the lower and strict upper bounds for
+  `2 ^ Nat.clog 2 L`, then add positivity of the ceiling logarithm.
+- **Seen:** The bounds in `DyadicAnchors.lean` and their former rederivation
+  in `le_two_pow_clog_lt` in `DyadicProtocolConsequences.lean`.
+- **Abstraction:** Reuse the existing `le_paddedSide` and
+  `paddedSide_lt_two_mul`; the public wrapper packages them with `Nat.clog_pos`.
+- **Notes:** The duplicate proof is removed by existing-lemma reuse. These
+  two locations are below the promotion threshold of three occurrences
+  across two files; no new helper, tactic or global attribute is introduced.
+
 ### Treated-to-level frame equality — candidate (2026-10-16)
 
 - **Pattern:** Identify true vertices from a guide equality, replace the constant
@@ -8235,3 +8256,32 @@ spectral split → block extraction → MPV calculation → strict bounds
   concerns the literal belt summand, and supplies no count of all initial
   primary identifiers. These are two occurrences across two files; no third
   occurrence has yet been recorded.
+
+### Counting fresh replacement identifiers — candidate (2026-10-16)
+
+- **Pattern:** Bound the cardinality of the actual replacement identifier family
+  by eight times the parent mark count. Remove the unique generation tag,
+  sum the connected-run counts over nonterminal parents, apply the bound of
+  eight runs per parent, and bound the parent subtype by the whole mark family.
+- **Seen:** The same sixteen-line block occurs in
+  `PEPS/AreaLaw/Geometry/RepairRetainedPrefixCount.lean:80–95` and
+  `PEPS/AreaLaw/Geometry/RepairNonprimaryRetainedCount.lean:100–115`.
+  Both occurrences count the existing generation–parent–run identifiers;
+  they do not identify coincident parent locations or require disjoint regions.
+- **Abstraction:** A later third use would justify a lemma for the cardinality
+  of `RepairReplacementIndex` under finiteness of the parent marks.
+  No new helper, tactic or promotion is introduced here. Only two occurrences
+  are presently identified, and no further use is being assumed.
+- **Detection:** The existing pattern scanner, run with `--min-count 2` on
+  private copies of these two modules and `InitialBeltCount`, reports one
+  repeated five-line tactic sequence within this block. Direct source
+  comparison confirms equality of all sixteen lines. The initial-belt proof
+  uses the same fan-run bound in a different layer-and-cell sum and does not
+  supply a third occurrence of this generation–parent–run block.
+
+### Preservation under iterated retention — candidate (2026-10-16)
+
+- **Pattern:** A quantity preserved by one retention step is preserved by every finite iteration. The proofs of color and characteristic-length preservation are each `exact Nat.rec rfl (fun _ ih ↦ ih) n`; remembered-birth preservation (`repairStage_birth_oldInclusion`, `RepairBirthLatticePoint.lean`) is the same induction written with `induction n`.
+- **Seen:** `TNLean/PEPS/AreaLaw/Geometry/RepairRankZeroAncestry.lean`, in `repairStage_color_oldInclusion` and `repairStageCharacteristicLength_oldInclusion`, and `TNLean/PEPS/AreaLaw/Geometry/RepairBirthLatticePoint.lean`, in `repairStage_birth_oldInclusion`.
+- **Abstraction:** The existing natural-number recursor already expresses the shared induction in one line. No further helper or tactic is proposed.
+- **Notes:** Each occurrence is a one-line induction, so a shared lemma would not shorten the proofs.

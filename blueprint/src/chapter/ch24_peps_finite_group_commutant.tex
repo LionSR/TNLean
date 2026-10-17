@@ -8,9 +8,9 @@
     \leanok
     For a finite index set $I$, let $G_I$ be the group of matrices sending
     each standard basis vector to another standard basis vector with sign
-    $+1$ or $-1$. Its defining representation is unitary, and $G_I$ is finite.
-    These groups provide the finite-dimensional matrix representations used
-    in the construction of \cite[Theorem~4.1]{Schuch2010PEPS}.
+    $+1$ or $-1$. Its defining representation is unitary, and $G_I$ is finite,
+    providing the finite-dimensional matrix representations in the construction
+    of \cite[Theorem~4.1]{Schuch2010PEPS}.
 \end{definition}
 
 \begin{theorem}[Matrix units from signed permutations]%
@@ -25,10 +25,10 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    Choose a permutation taking $j$ to $i$, and let $P$ be its permutation
-    matrix. Negate only its column $j$ to obtain $Q$. Then
-    $P-Q=2E_{ij}$. The matrix units span all matrices. The empty index set
-    causes no exception: its matrix space is zero.
+    For any permutation taking $j$ to $i$ with permutation matrix $P$,
+    negating only column $j$ produces a signed permutation matrix $Q$ with
+    $P-Q=2E_{ij}$. Since the matrix units span all matrices, $G_I$ spans
+    $M_I(\mathbb C)$; the empty index set has zero matrix space.
 \end{proof}
 
 \begin{definition}[Independent groups on multiplicity factors]%
@@ -57,10 +57,10 @@
     Two group elements which agree on all factors except $k$ produce,
     by their half-difference, $E_{ij}\otimes I_{d_k}$ supported on block $k$.
     Thus the span of $U(G)$ contains every
-    $\bigoplus_k C_k\otimes I_{d_k}$. Commutation passes to this span.
-    Swap the two tensor factors on each block and apply the commutant
-    formula for a direct sum of full matrix algebras. Conversely,
-    $I_{m_k}\otimes B_k$ commutes with $g_k\otimes I_{d_k}$.
+    $\bigoplus_k C_k\otimes I_{d_k}$, and commutation passes to this span.
+    Swapping the two tensor factors on each block and applying the commutant
+    formula for a direct sum of full matrix algebras characterizes the commutant;
+    conversely, $I_{m_k}\otimes B_k$ commutes with $g_k\otimes I_{d_k}$.
 \end{proof}
 
 \begin{theorem}[Unital matrix algebras as finite-group commutants]%
@@ -69,22 +69,22 @@
     \leanok
     \uses{thm:peps_block_signed_permutation_commutant}
     Let $S\subset M_I(\mathbb C)$ be a unital C*-subalgebra, with $I$ finite.
-    There exist a finite group $G$ and a unitary representation $U$ such that
+    In the unital setting of \cite[Theorem~4.1]{Schuch2010PEPS},
+    there exist a finite group $G$ and a unitary representation $U$ such that
     $S=\{A\in M_I(\mathbb C): AU(g)=U(g)A\text{ for every }g\in G\}$.
-    This is the unital version of \cite[Theorem~4.1]{Schuch2010PEPS}.
-    The source's definition of C*-algebra does not require the identity;
+    Although the source's definition of C*-algebra does not require the identity,
     the printed nonunital assertion fails because every commutant contains
-    the identity. See \cite{gap:scp10_finite_group_commutant_unital}.
+    the identity \cite{gap:scp10_finite_group_commutant_unital}.
 \end{theorem}
 
 \begin{proof}\leanok
     The unitary block-decomposition theorem for matrix C*-algebras
     \cite[Theorem~6.14]{Wolf2012Quantum} gives a unitary $W$ with
     $W^*SW=\bigoplus_k I_{m_k}\otimes M_{d_k}(\mathbb C)$.
-    Apply the independent signed permutation groups to the multiplicity
-    factors. Their commutant is this block algebra. Conjugating their
+    On the multiplicity factors, the independent signed permutation groups
+    have this block algebra as their commutant. Conjugating their
     representation by $W$ therefore gives a finite unitary group with
-    commutant $S$. All decomposition data are obtained from $S$.
+    commutant $S$, with all decomposition data obtained from $S$.
 \end{proof}
 
 
@@ -96,21 +96,19 @@
         def:peps_mps_g_injective}
     Suppose that a family of complex matrices $A^i$ spans a unital
     C*-subalgebra $S\subset M_I(\mathbb C)$, with $I$ finite.
-    There exist a finite group $G$ and a unitary representation $U$ whose
+    Passing from the unital version of \cite[Theorem~4.1]{Schuch2010PEPS}
+    \cite{gap:scp10_finite_group_commutant_unital} to its Definition~4.2,
+    there exist a finite group $G$ and a unitary representation $U$ whose
     commutant is $S$, such that the tensor $A$ is $G$-injective.
-    This gives the passage from the unital version of
-    \cite[Theorem~4.1]{Schuch2010PEPS} to its Definition~4.2.
-    The unital restriction is recorded in
-    \cite{gap:scp10_finite_group_commutant_unital}.
 \end{theorem}
 
 \begin{proof}\leanok
-    Choose the finite unitary representation with commutant $S$.
-    Each $A^i\in S$ commutes with this representation, so its site map
+    For the finite unitary representation with commutant $S$,
+    each $A^i\in S$ commutes with $U(G)$, so its site map
     $X\mapsto (\operatorname{tr}(A^iX))_i$ is invariant under conjugation.
-    If $X\in S$ is in the kernel, linearity gives
+    If $X\in S$ lies in the kernel, linearity gives
     $\operatorname{tr}(YX)=0$ for every $Y\in S$.
-    Since $S$ is closed under adjoints, take $Y=X^*$.
-    Then $\operatorname{tr}(X^*X)=0$, hence $X=0$.
-    Thus the site map is injective on the invariant subspace $S$.
+    Since $S$ is closed under adjoints, taking $Y=X^*$ yields
+    $\operatorname{tr}(X^*X)=0$ and hence $X=0$,
+    so the site map is injective on the invariant subspace $S$.
 \end{proof}

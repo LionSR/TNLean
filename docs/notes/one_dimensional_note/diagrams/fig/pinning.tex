@@ -1,0 +1,48 @@
+\(\displaystyle \begin{aligned}
+  &\begin{tenkz}[rows={wire}, cols=6, bonds=none]
+    \tn[at=(1,1), skin=box, wide=6, name=o,
+        ports={90@1:physical:$X$, 90@3:physical:$T_1$,
+               90@4:physical:$T_2\setminus T_1$, 90@6:physical:$\Lambda\setminus X_2$}]{\Omega}
+  \end{tenkz}
+  \;=\;\sum_i\sqrt{p_i}\;\;
+  \begin{tenkz}[rows={wire}, cols=6, bonds=none]
+    \tn[at=(1,1), skin=box, name=u, ports={90:physical:$X$}]{u_i}
+    \tn[at=(1,3), skin=box, wide=4, name=w,
+        ports={90@1:physical:$T_1$, 90@2:physical:$T_2\setminus T_1$,
+               90@4:physical:$\Lambda\setminus X_2$}]{w_i}
+  \end{tenkz}
+  \\[2ex]
+  &\begin{tenkz}[rows={wire,wire,wire}, cols=6, bonds=none]
+    \tn[at=(3,1), skin=box, wide=6, name=o,
+        ports={90@1:physical, 90@3:physical, 90@4:physical, 90@6:physical}]{\Omega}
+    \tn[at=(1,6), skin=none, name=ox, ports={270:physical, 90:physical:$\Lambda\setminus X_2$}]{}
+    \tnwire{o.90@6}{ox.270}
+    \tn[at=(1,1), skin=box, wide=2, name=p,
+        ports={270@1:physical, 90@1:physical:$X$}]{\lvert u_i\rangle\langle u_i\rvert}
+    \tn[at=(2,3), skin=box, name=m1,
+        ports={270:physical, 90:physical}]{M_1}
+    \tn[at=(1,3), skin=box, wide=2, name=m2,
+        ports={270@1:physical, 270@2:physical,
+               90@1:physical:$T_1$, 90@2:physical:$T_2\setminus T_1$}]{M_2}
+    \tnwire{o.90@1}{p.270@1}
+    \tnwire{o.90@3}{m1.270} \tnwire{m1.90}{m2.270@1}
+    \tnwire{o.90@4}{m2.270@2}
+  \end{tenkz}
+  \;=\;\sqrt{p_i}\;\;
+  \begin{tenkz}[rows={wire,wire,wire}, cols=6, bonds=none]
+    \tn[at=(3,1), skin=box, name=u, ports={90:physical}]{u_i}
+    \tn[at=(1,1), skin=none, name=ux, ports={270:physical, 90:physical:$X$}]{}
+    \tnwire{u.90}{ux.270}
+    \tn[at=(3,3), skin=box, wide=4, name=w,
+        ports={90@1:physical, 90@2:physical, 90@4:physical}]{w_i}
+    \tn[at=(1,6), skin=none, name=wx, ports={270:physical, 90:physical:$\Lambda\setminus X_2$}]{}
+    \tnwire{w.90@4}{wx.270}
+    \tn[at=(2,3), skin=box, name=m1,
+        ports={270:physical, 90:physical}]{M_1}
+    \tn[at=(1,3), skin=box, wide=2, name=m2,
+        ports={270@1:physical, 270@2:physical,
+               90@1:physical:$T_1$, 90@2:physical:$T_2\setminus T_1$}]{M_2}
+    \tnwire{w.90@1}{m1.270} \tnwire{m1.90}{m2.270@1}
+    \tnwire{w.90@2}{m2.270@2}
+  \end{tenkz}
+\end{aligned}\)
