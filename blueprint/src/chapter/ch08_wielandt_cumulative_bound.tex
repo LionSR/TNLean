@@ -10,13 +10,13 @@ Section~\ref{sec:app_wielandt_cumulative_support}.
     \lean{Kraus.wordSpan}
     \leanok
     \uses{def:eval_word}
-    The \emph{word span} at length~$n$ is the subspace
+    Following~\cite[Section~II]{Sanz2010Quantum}, the \emph{word span} at
+    length~$n$ is the subspace
     \begin{align}
         S_n(A)
          & =\spn_{\C}\{A^w:|w|=n\}\subseteq\MN{D}.
         \notag
     \end{align}
-    This is~\cite[Section~II]{Sanz2010Quantum}.
 \end{definition}
 
 \begin{definition}[Cumulative span]\label{def:cumulative_span}
@@ -135,7 +135,8 @@ matrices, and let $\E_K$ be its Kraus map.
 \end{theorem}
 
 \begin{proof}\leanok
-    This is the corresponding theorem in the companion quantum-channel volume~\cite[``Powers on an eigenspace'']{QICLean2026Blueprint} for the eigenspace of $\mu$.
+    Specializing the companion quantum-channel result~\cite[``Powers on an eigenspace'']{QICLean2026Blueprint}
+    to the eigenspace of $\mu$ gives $\E_A^n(X)=\mu^nX$.
 \end{proof}
 
 
@@ -159,11 +160,11 @@ matrices, and let $\E_K$ be its Kraus map.
 \end{theorem}
 
 \begin{proof}\leanok
-
-    Apply Theorem~\cite[``Hermitian power-fixed point from a finite-order eigenmatrix'']{QICLean2026Blueprint} to the transfer
-    channel. The resulting matrix is nonzero, Hermitian, trace zero, and fixed
-    by $\E_A^p$. A nonzero positive-semidefinite matrix has positive trace, so
-    this matrix is not positive semidefinite.
+    Applying
+    Theorem~\cite[``Hermitian power-fixed point from a finite-order eigenmatrix'']{QICLean2026Blueprint}
+    to the transfer channel produces a nonzero Hermitian matrix of trace zero
+    fixed by $\E_A^p$; since a nonzero positive-semidefinite matrix has
+    positive trace, this matrix is not positive semidefinite.
 \end{proof}
 
 \begin{theorem}[Uniqueness of power-fixed positive matrices]
@@ -178,9 +179,9 @@ matrices, and let $\E_K$ be its Kraus map.
 \end{theorem}
 
 \begin{proof}\leanok
-
-    This is Theorem~\cite[``Uniqueness of power-fixed positive matrices for a Kraus map'']{QICLean2026Blueprint}
-    for the Kraus family formed by the matrices of the tensor.
+    Applying
+    Theorem~\cite[``Uniqueness of power-fixed positive matrices for a Kraus map'']{QICLean2026Blueprint}
+    to the Kraus family formed by the matrices of $A$ yields $\sigma=c\rho$.
 \end{proof}
 
 
@@ -238,7 +239,7 @@ matrices, and let $\E_K$ be its Kraus map.
 
 \begin{proof}
     \leanok
-    Regard the matrices of $A$ as a finite Kraus family.
+    For the finite Kraus family of $A$,
     Theorems~\cite[``Positive-definite fixed point from vector spreading'']{QICLean2026Blueprint}
     and~\cite[``Primitivity from vector spreading'']{QICLean2026Blueprint}
     give a positive-definite fixed point and show that $1$ is the only
@@ -277,13 +278,13 @@ matrices, and let $\E_K$ be its Kraus map.
     Theorem~\ref{thm:strongly_irreducible_of_paper_primitive} is
     (1)$\Rightarrow$(3).
 
-    For (3)$\Rightarrow$(2), write
-    $\E_A^m=P_\rho+(\E_A-P_\rho)^m$. The complementary powers tend to zero.
-    If $S_m(A)\neq\MN{D}$ for every $m$, choose a nonzero matrix $B$
-    orthogonal to $S_m(A)$. The associated trace pairing vanishes on the
-    left, while positive definiteness gives a lower bound
-    $c\lVert B\rVert^2$ for the $P_\rho$ term and the complementary term is
-    $o(\lVert B\rVert^2)$. For large $m$ this is a contradiction.
+    For (3)$\Rightarrow$(2), the power decomposition
+    $\E_A^m=P_\rho+(\E_A-P_\rho)^m$ has complementary powers tending to zero.
+    If $S_m(A)\neq\MN{D}$ for every $m$, a nonzero matrix $B$ orthogonal to
+    $S_m(A)$ has vanishing trace pairing on the left, while positive
+    definiteness gives a lower bound $c\lVert B\rVert^2$ for the $P_\rho$ term
+    and the complementary term is $o(\lVert B\rVert^2)$, a contradiction for
+    large $m$.
 \end{proof}
 
 \begin{theorem}[Normalized normal tensors are strongly irreducible]
@@ -314,15 +315,14 @@ matrices, and let $\E_K$ be its Kraus map.
     \lean{MPSTensor.qIndex_le_iIndex_of_isPrimitivePaper}
     \leanok
     \uses{def:wielandt_i_index, def:wielandt_q_index, thm:wielandt_proposition_three}
-    Under the hypotheses of Theorem~\ref{thm:wielandt_proposition_three},
-    paper primitivity implies
+    As the primitive-channel specialization of the universal inequality
+    $q(\E)\le\iota$ of Sanz et al.~\cite[Proposition~1]{Sanz2010Quantum} (see
+    \cite{gap:spwc10_wielandt_one_step_subspace}), under the hypotheses of
+    Theorem~\ref{thm:wielandt_proposition_three}, paper primitivity implies
     \begin{align}
         q(\E_A) & \le\iota(A).
         \notag
     \end{align}
-    This is the primitive-channel specialization of the universal inequality
-    $q(\E)\le\iota$ of Sanz et al.~\cite[Proposition~1]{Sanz2010Quantum}; see
-    \cite{gap:spwc10_wielandt_one_step_subspace}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -337,12 +337,11 @@ matrices, and let $\E_K$ be its Kraus map.
     \lean{MPSTensor.wolf_theorem_6_15}
     \leanok
     \uses{thm:wielandt_proposition_three}
-    Let $D>0$ and suppose $\sum_i(A^i)^\dagger A^i=\Id$. If there is a
-    positive $n$ for which $S_n(A)=\MN{D}$, then there is a unique positive
-    definite density matrix $\rho\in\MN{D}$ such that every fixed point of
-    $\E_A$ is a scalar multiple of $\rho$.
-
-    This is~\cite[Theorem~6.15]{Wolf2012Quantum}.
+    Following~\cite[Theorem~6.15]{Wolf2012Quantum}, let $D>0$ and suppose
+    $\sum_i(A^i)^\dagger A^i=\Id$. If there is a positive $n$ for which
+    $S_n(A)=\MN{D}$, then there is a unique positive definite density matrix
+    $\rho\in\MN{D}$ such that every fixed point of $\E_A$ is a scalar multiple
+    of $\rho$.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -440,7 +439,9 @@ matrices, and let $\E_K$ be its Kraus map.
     \lean{MPSTensor.isNBlkInjective_of_le}
     \leanok
     \uses{def:word_span, def:l_blk_injective}
-    For every $n$,
+    Combining the block-injectivity discussion in
+    \cite[Section~II]{Cirac2016MPDO_arXiv} with
+    \cite[Appendix~C.3, Lemma~L]{Cirac2016MPDO_arXiv}, for every $n$,
     \begin{align}
         S_{n+1}(A)
          & =\spn_{\C}\{A^i\}_{i=0}^{d-1}S_n(A).
@@ -448,16 +449,13 @@ matrices, and let $\E_K$ be its Kraus map.
     \end{align}
     Consequently, if $L>0$ and $A$ is $L$-block injective, then
     $A$ is $m$-block injective for every $m\ge L$.
-    This combines the block-injectivity discussion in
-    \cite[Section~II]{Cirac2016MPDO_arXiv} with
-    \cite[Appendix~C.3, Lemma~L]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 
 \begin{proof}\leanok\uses{def:word_span}
     Every word of length $n+1$ factors into its first letter and a word
     of length~$n$, which proves the displayed equality by bilinearity.
-    Write $L=n+1$. Since $S_L(A)=\MN{D}$, one has
-    $S_n(A)\le S_L(A)$. Hence
+    For $L=n+1$, since $S_L(A)=\MN{D}$, one has
+    $S_n(A)\le S_L(A)$, hence
     \begin{align}
         \MN{D}
         =S_L(A)
@@ -476,13 +474,13 @@ matrices, and let $\E_K$ be its Kraus map.
     \lean{Kraus.cumulativeSpan_eq_top}
     \leanok
     \uses{def:cumulative_span, def:normal}
-    Let $D>0$. If $A$ is normal, then $T_{D^2}(A)=\MN{D}$.
-    This cumulative estimate corresponds to the intermediate step in the proof of
-    \cite[Lemma~1]{Sanz2010Quantum}.
+    Corresponding to the intermediate cumulative-span step in the proof of
+    \cite[Lemma~1]{Sanz2010Quantum}, let $D>0$. If $A$ is normal, then
+    $T_{D^2}(A)=\MN{D}$.
 \end{theorem}
 
 \begin{proof}\leanok\uses{thm:cumulative_eq_top_bound}
-    This is Theorem~\ref{thm:cumulative_eq_top_bound}.
+    Theorem~\ref{thm:cumulative_eq_top_bound} gives the equality directly.
 \end{proof}
 
 \begin{theorem}[Cumulative span reaches $\MN{D}$ --- sharp bound]%
@@ -490,11 +488,10 @@ matrices, and let $\E_K$ be its Kraus map.
     \lean{MPSTensor.cumulativeSpan_eq_top_of_isNormal_sharp}
     \leanok
     \uses{def:cumulative_span, def:normal}
-    Let $D>0$. If $A$ is normal, then
+    Providing the cumulative-span estimate behind the sharp trace conclusion in
+    \cite[Lemma~1]{Sanz2010Quantum}, let $D>0$. If $A$ is normal, then
     $T_{D^2-d'+1}(A)=\MN{D}$, where
     $d'=\dim S_1(A)=\krausrk(A)$.
-    This is the cumulative-span estimate used to prove the sharp trace
-    conclusion in \cite[Lemma~1]{Sanz2010Quantum}.
 \end{theorem}
 
 \begin{proof}
@@ -522,8 +519,8 @@ matrices, and let $\E_K$ be its Kraus map.
 \end{theorem}
 
 \begin{proof}\leanok
-
-    Apply the finite-family theorem to the matrices of the tensor.
+    Applying the finite-family theorem to the matrices of $A$ yields the
+    eigenvector.
 \end{proof}
 
 \begin{theorem}[Sharp nonzero trace product for a primitive channel]%
@@ -531,31 +528,31 @@ matrices, and let $\E_K$ be its Kraus map.
     \lean{MPSTensor.exists_nonzero_trace_word_of_isPrimitivePaper_sharp_pos}
     \leanok
     \uses{def:paper_primitive, def:wielandt_kraus_rank, thm:wielandt_proposition_three}
-    Let $D>0$, suppose $\sum_i(A^i)^\dagger A^i=\Id$, and assume that
-    $A$ is primitive in the sense of
-    Definition~\ref{def:paper_primitive}. Then there is a word $w$ with
+    Establishing the sharp trace conclusion of
+    \cite[Lemma~1]{Sanz2010Quantum}, let $D>0$, suppose
+    $\sum_i(A^i)^\dagger A^i=\Id$, and assume that $A$ is primitive in the
+    sense of Definition~\ref{def:paper_primitive}. Then there is a word $w$
+    with
     \begin{align}
         1\le|w|  & \le D^2-\krausrk(A)+1,
         \notag                            \\
         \tr(A^w) & \neq0.
         \notag
     \end{align}
-    This is the sharp trace conclusion of
-    \cite[Lemma~1]{Sanz2010Quantum}.
 \end{theorem}
 
 \begin{proof}\leanok
     Theorem~\ref{thm:wielandt_proposition_three} gives eventual full Kraus
-    rank, hence normality. Put $b=D^2-\krausrk(A)+1$ and let
+    rank, hence normality. For $b=D^2-\krausrk(A)+1$, let
     $V_n$ be the span of $A^w$ with $1\le|w|\le n$. Then
     $S_1(A)\subseteq V_1$, so $\dim V_1\ge\krausrk(A)$. If
     $V_n=V_{n+1}$ for some $n\ge1$, then $V_n$ is closed under left
-    multiplication by every $A^i$. It therefore contains every positive-length
-    word product; normality forces $V_n=\MN{D}$. Thus, until the full matrix
+    multiplication by every $A^i$ and therefore contains every positive-length
+    word product, so normality forces $V_n=\MN{D}$. Thus, until the full matrix
     algebra is reached, the dimensions increase strictly, and the bound on
-    $\dim\MN{D}$ gives $V_b=\MN{D}$. Express $\Id$ as a linear combination of
-    the positive-length words defining $V_b$. Since $\tr(\Id)=D\neq0$, at
-    least one has nonzero trace.
+    $\dim\MN{D}$ gives $V_b=\MN{D}$. Since $\Id\in V_b$ is a linear
+    combination of the positive-length words defining $V_b$ and
+    $\tr(\Id)=D\neq0$, at least one such word has nonzero trace.
 \end{proof}
 
 \begin{theorem}[Sharp nonzero trace product]%
@@ -563,11 +560,11 @@ matrices, and let $\E_K$ be its Kraus map.
     \lean{Kraus.exists_nonzero_trace_word_sharp}
     \leanok
     \uses{def:normal}
-    Let $D>0$. If $A$ is normal, then there exists a word $w$ of length at
-    most $D^2-\krausrk(A)+1$ such that $\tr(A^w)\neq0$.
-    This normality variant has the same sharp length bound as
-    \cite[Lemma~1]{Sanz2010Quantum}; the source hypotheses are stated in
-    Theorem~\ref{thm:nonzero_trace_word_primitive_sharp}.
+    Matching the sharp length bound of \cite[Lemma~1]{Sanz2010Quantum} under
+    normality (whose source-hypothesis counterpart is
+    Theorem~\ref{thm:nonzero_trace_word_primitive_sharp}), let $D>0$. If $A$ is
+    normal, then there exists a word $w$ of length at most $D^2-\krausrk(A)+1$
+    such that $\tr(A^w)\neq0$.
 \end{theorem}
 
 \begin{proof}
@@ -584,21 +581,18 @@ matrices, and let $\E_K$ be its Kraus map.
     \lean{Kraus.exists_nonzero_trace_word_sharp_pos}
     \leanok
     \uses{def:normal, thm:nonzero_trace_word_sharp}
-    If $A$ is normal and $D\ge1$, then there exists a word~$w$ of
-    \emph{positive} length
+    Strengthening Theorem~\ref{thm:nonzero_trace_word_sharp} to positive word
+    length for the blocking step in the general Wielandt bound, if $A$ is
+    normal and $D\ge1$, then there exists a word~$w$ of \emph{positive} length
     $1\le|w|\le D^2-\krausrk(A)+1$ such that $\tr(A^w)\neq0$.
-    This strengthens Theorem~\ref{thm:nonzero_trace_word_sharp} by requiring
-    $|w|\ge1$, a feature needed for the blocking argument in the general
-    Wielandt bound below.
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{thm:cumulative_span_sharp}
-    Define the \emph{positive-level} cumulative span
-    $V_n=\spn_{\C}\{A^w:1\le|w|\le n\}$.
-    The same stabilization-or-strict-growth dichotomy shows
-    $V_{D^2-d'+1}=\MN{D}$: if $V_n$ stabilises and is not $\MN{D}$, then
+    The \emph{positive-level} cumulative span
+    $V_n=\spn_{\C}\{A^w:1\le|w|\le n\}$ satisfies $V_{D^2-d'+1}=\MN{D}$ by
+    the same stabilization-or-strict-growth dichotomy: if $V_n$ stabilises and is not $\MN{D}$, then
     $V_n$ is closed under left multiplication by each $A^i$, so
     $\wordspn{N}{A}\subseteq V_n\neq\MN{D}$ for every $N\ge1$,
     contradicting normality.
@@ -614,25 +608,24 @@ matrices, and let $\E_K$ be its Kraus map.
     \lean{Kraus.cumulativeVectorSpan}
     \leanok
     \uses{def:mps_tensor}
-    Given an MPS tensor~$A$ and a vector $\varphi\in\C^D$, the
-    \emph{cumulative vector span} is
+    Following~\cite[proof of Lemma~2(a)]{Sanz2010Quantum}, given an MPS
+    tensor~$A$ and a vector $\varphi\in\C^D$, the \emph{cumulative vector span}
+    is
     \begin{align}
         K_n(A,\varphi)
          & =\spn_{\C}\{A^w\varphi:|w|\le n\}\subseteq\C^D.
         \notag
     \end{align}
-    This is~\cite[proof of Lemma~2(a)]{Sanz2010Quantum}.
 \end{definition}
 
 \begin{theorem}[Eigenvector spreading]\label{thm:eigenvector_spreading}
     \lean{MPSTensor.eigenvector_spreading}
     \leanok
     \uses{def:cumulative_vector_span, def:normal}
-    Let $A$ be a normal MPS tensor and let
+    Providing the cumulative dimension-growth step in
+    \cite[Lemma~2(a)]{Sanz2010Quantum}, let $A$ be a normal MPS tensor and let
     $A^{i_0}\varphi=\mu\varphi$, where $\mu\neq0$ and $\varphi\neq0$.
     Then $K_{D-1}(A,\varphi)=\C^D$.
-    This cumulative form provides the dimension-growth step in
-    \cite[Lemma~2(a)]{Sanz2010Quantum}.
 \end{theorem}
 
 \begin{proof}
@@ -654,12 +647,11 @@ matrices, and let $\E_K$ be its Kraus map.
     \lean{MPSTensor.vectorSpreadSpan_eq_top_of_isPrimitivePaper_of_eigenvector}
     \leanok
     \uses{def:paper_primitive, thm:wielandt_proposition_three, thm:eigenvector_spreading, lem:eigenvector_padding}
-    Let $D>0$, suppose $\sum_i(A^i)^\dagger A^i=\Id$, and assume that
-    $A$ is primitive in the sense of
-    Definition~\ref{def:paper_primitive}. If $\varphi\neq0$, $\mu\neq0$, and
-    $A^{i_0}\varphi=\mu\varphi$, then
+    Following~\cite[Lemma~2(a)]{Sanz2010Quantum}, let $D>0$, suppose
+    $\sum_i(A^i)^\dagger A^i=\Id$, and assume that $A$ is primitive in the
+    sense of Definition~\ref{def:paper_primitive}. If $\varphi\neq0$,
+    $\mu\neq0$, and $A^{i_0}\varphi=\mu\varphi$, then
     $H_{D-1}(A,\varphi)=\C^D$.
-    This is~\cite[Lemma~2(a)]{Sanz2010Quantum}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -698,31 +690,29 @@ case are proved in Section~\ref{sec:app_wielandt_blocking_support}.
     \lean{MPSTensor.wordSpan_eq_top_of_isPrimitivePaper_of_mem_wordSpan_one_of_isUnit}
     \leanok
     \uses{def:word_span, def:one_step_augment, lem:one_step_augment_word_span, lem:one_step_augment_normal_kraus_rank, thm:wielandt_case2_normal_generator, def:paper_primitive}
-    Let $A$ be an MPS tensor with bond dimension $D\ge1$, satisfying
-    $\sum_i(A^i)^\dagger A^i=\Id$, and suppose that $A$ is primitive in the
-    sense of Definition~\ref{def:paper_primitive}.
+    In the exact word-span form of \cite[Theorem~1, case~(2)]{Sanz2010Quantum},
+    where the first application space $S_1(A)$ of~\cite{Sanz2010Quantum}
+    contains an invertible operator, let $A$ be an MPS tensor with bond
+    dimension $D\ge1$, satisfying $\sum_i(A^i)^\dagger A^i=\Id$, and suppose
+    that $A$ is primitive in the sense of Definition~\ref{def:paper_primitive}.
     If $S_1(A)$ contains an invertible matrix~$X$, then
     \begin{align}
         S_{D^2-\krausrk(A)+1}(A)
          & =\MN{D}.
         \label{eq:wld_case2_one_step_wordspan_top}
     \end{align}
-    In the terminology of~\cite{Sanz2010Quantum}, this is the case where
-    the first application space $S_1(A)$ contains an invertible operator.
-    This is the exact word-span form of
-    \cite[Theorem~1, case~(2)]{Sanz2010Quantum}.
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{thm:wielandt_proposition_three, lem:one_step_augment_word_span, lem:one_step_augment_normal_kraus_rank, thm:wielandt_case2_normal_generator}
-    Adjoin $X$ as an extra first Kraus operator, obtaining $\widetilde A$.
-    Theorem~\ref{thm:wielandt_proposition_three} gives normality of $A$, hence normality of
-    $\widetilde A$; the Kraus rank and all exact word spans are unchanged.
-    The first Kraus operator of $\widetilde A$ is invertible, so
-    Theorem~\ref{thm:wielandt_case2_normal_generator} gives
-    $S_{D^2-\krausrk(\widetilde A)+1}(\widetilde A)=\MN{D}$.
-    Transfer this equality back to $A$.
+    Adjoining $X$ as an extra first Kraus operator produces an augmented tensor
+    $\widetilde A$. Theorem~\ref{thm:wielandt_proposition_three} gives normality
+    of $A$, hence normality of $\widetilde A$, while preserving the Kraus rank
+    and all exact word spans. Since the first Kraus operator of $\widetilde A$
+    is invertible, Theorem~\ref{thm:wielandt_case2_normal_generator} gives
+    $S_{D^2-\krausrk(\widetilde A)+1}(\widetilde A)=\MN{D}$, which transfers
+    directly back to $A$.
 \end{proof}
 
 \begin{corollary}[Wielandt case (2), index bound]%
@@ -797,26 +787,24 @@ case are proved in Section~\ref{sec:app_wielandt_blocking_support}.
     \lean{MPSTensor.vecMulVec_mem_wordSpan_of_isPrimitivePaper_of_noninvertible_eigenvector}
     \leanok
     \uses{def:paper_primitive, thm:wielandt_proposition_three}
-    Let $D>0$, suppose $\sum_i(A^i)^\dagger A^i=\Id$, and assume that
-    $A$ is primitive in the sense of
-    Definition~\ref{def:paper_primitive}. Suppose $A^{i_0}$ is not invertible
-    and
-    $A^{i_0}\varphi=\mu\varphi$ with $\varphi\neq0$ and $\mu\neq0$.
-    Then, for every $\psi\in\C^D$,
+    Establishing the quantitative rank-one conclusion of
+    \cite[Lemma~2(b)]{Sanz2010Quantum}, let $D>0$, suppose
+    $\sum_i(A^i)^\dagger A^i=\Id$, and assume that $A$ is primitive in the
+    sense of Definition~\ref{def:paper_primitive}. Suppose $A^{i_0}$ is not
+    invertible and $A^{i_0}\varphi=\mu\varphi$ with $\varphi\neq0$ and
+    $\mu\neq0$. Then, for every $\psi\in\C^D$,
     \begin{align}
         \ketbra{\varphi}{\psi}
          & \in S_{D^2-D+1}(A).
         \notag
     \end{align}
-    This is the quantitative rank-one conclusion of
-    \cite[Lemma~2(b)]{Sanz2010Quantum}.
 \end{theorem}
 
 \begin{proof}\leanok
     Theorem~\ref{thm:wielandt_proposition_three} first gives normality.
-    Apply the Fitting decomposition to left multiplication
-    $\mathcal L(M)=A^{i_0}M$. Choose $r$ so that $\mathcal L^r$ kills its
-    generalized zero-eigenspace. Dimension growth then gives $n_0$ with
+    Applying the Fitting decomposition to left multiplication
+    $\mathcal L(M)=A^{i_0}M$ with index $r$ chosen so that $\mathcal L^r$ kills
+    its generalized zero-eigenspace, dimension growth gives $n_0$ with
     \begin{align}
         (A^{i_0})^rS_{n_0}(A)
               & =\{(A^{i_0})^rM:M\in\MN{D}\},
@@ -838,31 +826,27 @@ case are proved in Section~\ref{sec:app_wielandt_blocking_support}.
     \lean{MPSTensor.wordSpan_eq_top_of_isPrimitivePaper_of_mem_wordSpan_one_of_noninvertible_eigenvector}
     \leanok
     \uses{def:word_span, def:one_step_augment, lem:one_step_augment_word_span, lem:one_step_augment_normal_kraus_rank, thm:eigenvector_spreading, lem:rank_one_noninvertible_eigenvector, thm:lemma2b_assembly, def:paper_primitive}
-    Let $A$ be an MPS tensor with bond dimension $D\ge1$, satisfying
+    In the exact word-span form of \cite[Theorem~1, case~(3)]{Sanz2010Quantum},
+    where the first application space $S_1(A)$ of~\cite{Sanz2010Quantum}
+    contains a non-invertible operator with a nonzero eigenvalue, let $A$ be an
+    MPS tensor with bond dimension $D\ge1$, satisfying
     $\sum_i(A^i)^\dagger A^i=\Id$, and suppose that $A$ is primitive in the
-    sense of Definition~\ref{def:paper_primitive}.
-    If $S_1(A)$ contains a non-invertible matrix $X$ with a nonzero
-    eigenvalue, then $S_{D^2}(A)=\MN{D}$.
-    More explicitly, it is enough to have $X\varphi=\mu\varphi$ with
-    $\varphi\neq0$ and $\mu\neq0$.
-    In the terminology of~\cite{Sanz2010Quantum}, this is the case where
-    the first application space $S_1(A)$ contains a non-invertible operator
-    with a nonzero eigenvalue.
-    This is the exact word-span form of
-    \cite[Theorem~1, case~(3)]{Sanz2010Quantum}.
+    sense of Definition~\ref{def:paper_primitive}. If $S_1(A)$ contains a
+    non-invertible matrix $X$ with a nonzero eigenvalue (that is,
+    $X\varphi=\mu\varphi$ with $\varphi\neq0$ and $\mu\neq0$), then
+    $S_{D^2}(A)=\MN{D}$.
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{thm:wielandt_proposition_three, lem:one_step_augment_word_span, lem:one_step_augment_normal_kraus_rank, thm:eigenvector_spreading, lem:rank_one_noninvertible_eigenvector, thm:lemma2b_assembly}
     Theorem~\ref{thm:wielandt_proposition_three} gives normality.
-    Adjoin $X$ as an extra first Kraus operator. The augmented tensor remains
-    normal and has the same exact word spans as $A$.
-    The eigenvector relation for $X$ is now a one-generator eigenvector
-    relation. The eigenvector-spreading argument gives full fixed-length
-    vector span by length $D-1$, and
-    Lemma~\ref{lem:rank_one_noninvertible_eigenvector} gives the rank-one
-    operators $\ketbra{\varphi}{\psi}$ at length $D^2-D+1$.
+    Adjoining $X$ as an extra first Kraus operator yields an augmented tensor
+    that remains normal and has the same exact word spans as $A$, turning the
+    eigenvector relation for $X$ into a one-generator eigenvector relation. The
+    eigenvector-spreading argument gives full fixed-length vector span by
+    length $D-1$, and Lemma~\ref{lem:rank_one_noninvertible_eigenvector} gives
+    the rank-one operators $\ketbra{\varphi}{\psi}$ at length $D^2-D+1$.
     Multiplying these two fixed-length spans gives $S_{D^2}$ for the
     augmented tensor, hence for $A$.
 \end{proof}
@@ -888,9 +872,9 @@ case are proved in Section~\ref{sec:app_wielandt_blocking_support}.
     \lean{MPSTensor.iIndex_le_general_of_isPrimitivePaper}
     \leanok
     \uses{def:paper_primitive, def:wielandt_i_index, def:wielandt_kraus_rank}
-    Let $A$ be a normalized MPS tensor with $D>0$,
-    $\sum_i(A^i)^\dagger A^i=\Id$, that is primitive in the sense of
-    Definition~\ref{def:paper_primitive}.
+    Following~\cite[Theorem~1, case~(1)]{Sanz2010Quantum}, let $A$ be a
+    normalized MPS tensor with $D>0$, $\sum_i(A^i)^\dagger A^i=\Id$, that is
+    primitive in the sense of Definition~\ref{def:paper_primitive}.
     Then
     \begin{align}
         \iota(A)
@@ -899,7 +883,6 @@ case are proved in Section~\ref{sec:app_wielandt_blocking_support}.
     \end{align}
     where $\iota(A)=\min\{n\ge1:S_n(A)=\MN{D}\}$ is the
     full-Kraus-rank index.
-    This is~\cite[Theorem~1, case~(1)]{Sanz2010Quantum}.
 \end{theorem}
 
 \begin{proof}
@@ -913,9 +896,9 @@ case are proved in Section~\ref{sec:app_wielandt_blocking_support}.
     The matrix $A^w$ has nonzero trace, hence a nonzero eigenvalue~$\mu$
     and eigenvector~$\varphi$ by
     Theorem~\cite[``Nonzero trace implies eigenvector'']{QICLean2026Blueprint}.
-    Set $n=|w|$ and let $B=A^{[n]}$ be the blocked tensor.
-    Then $B$ is normal by Theorem~\ref{thm:isNormal_blockTensor}, and the
-    encoding of $w$ as a single block index gives $B^{i_0}=A^w$.
+    For $n=|w|$, the blocked tensor $B=A^{[n]}$ is normal by
+    Theorem~\ref{thm:isNormal_blockTensor}, and encoding $w$ as a single block
+    index gives $B^{i_0}=A^w$.
     \begin{enumerate}
         \item If $A^w$ is invertible, then
               $S_{D^2}(B)=\MN{D}$, whence

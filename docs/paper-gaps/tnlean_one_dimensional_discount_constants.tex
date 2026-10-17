@@ -1,0 +1,135 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+\input{command}
+\title{The Constants of the Buffered Discount in the One-Dimensional Area Law}
+\author{}
+\date{October 16, 2026}
+\begin{document}
+\maketitle
+\gapnote{local-correction}{open}
+
+\section{The source statement}
+
+Lemma~4.2 of the one-dimensional note~\cite{TNLean2026OneDimensional}
+(label \texttt{lem:buffer}, file \texttt{part1\_arealaw.tex}, lines~360--364)
+is the buffered discount. For an interval $X$ of the chain with the shells
+$X_j=X^{+jR}$, $1\le j\le m$, the flanks $T_j=X_j\setminus X$ and the uniform
+weights $a_j=2/m$, the note fixes the constants (equation \texttt{eq:CE},
+lines~321--328)
+\begin{align}
+    C_E
+        &= 8\,N_R\,J\,q^{2(R+1)},
+    \label{eq:tnlean_one_dimensional_discount_constants_source_energy_constant}\\
+    m
+        &= \Bigl\lceil\max\Bigl\{4,\ \frac{4C_E}{\Delta},\ 128\sqrt{(1+\vartheta)\mathcal B_R},\
+        4096\,e\,(1+\vartheta)\,\mathcal B_R\Bigr\}\Bigr\rceil,
+    \label{eq:tnlean_one_dimensional_discount_constants_source_shell_count}
+\end{align}
+with $\vartheta=J/\Delta$, notes $m\le C_1(q,R)(1+\vartheta)$
+(equation \texttt{eq:mbound}, lines~331--333), and concludes
+(equation \texttt{eq:discount})
+\begin{align}
+    S(X\,|\,T_m)
+        &\le \tfrac12\,S(X)+\tfrac12+\frac{C_E}{\Delta}.
+    \label{eq:tnlean_one_dimensional_discount_constants_source_discount}
+\end{align}
+In the proof, the energy of the filtered vector is bounded by
+$\sum_j N_R\cdot 2a_j^2q^{2(R+1)}J=C_E/m$ (equation \texttt{eq:energy},
+lines~458--463), so that by the second entry of $m$ it is at most $\Delta/4$
+and the overlap defect $1-|\langle\Omega,\phi\rangle|^2\le C_E/(m\Delta)$ is
+at most $1/4$ (equation \texttt{eq:overlap}, lines~465--467); the overlap
+losses of the $m$ prefixes are then summed with $-\frac12\log(1-v)\le v$ to
+$C_E/\Delta$, and the tail term
+$512\,e\,\vartheta\,\mathcal B_R\sum_ja_j^2=2048\,e\,\vartheta\,\mathcal B_R/m$
+is bounded by $\frac12$ through the fourth entry of $m$ (lines~505--516,
+equation \texttt{eq:lowerN}). The closing step (equation \texttt{eq:final},
+lines~606--608) then gives the interval bound
+$C_{\mathrm{int}}=8mR\log q+1+2C_E/\Delta\le C_0(q,R)(1+J/\Delta)$ with
+$C_0(q,R)=8C_1(q,R)R\log q+1+16N_Rq^{2(R+1)}$.
+
+\section{What is proved and the deviations}
+
+The formalization proves the discount on the chain for every interval
+$X=[l,r)$ with the buffer $T=X^{+mR}\setminus X$, as an instance of the
+finite-dimensional discount of the companion library,\footnote{Declarations:
+\leanid{TNLean.MPS.AreaLaw.chainEnergyThreshold},
+\leanid{TNLean.MPS.AreaLaw.chainTailThreshold},
+\leanid{TNLean.MPS.AreaLaw.chainShellCount},
+\leanid{TNLean.MPS.AreaLaw.chainDiscountConst},
+\leanid{TNLean.MPS.AreaLaw.two_mul_condEntropy_interval_le}; the
+finite-dimensional lemma is \leanid{Entropy.two_mul_condEntropy_le} of
+QICLean.} in the form
+\begin{align}
+    2\bigl(S(X\cup T)-S(T)\bigr)
+        &\le S(X)+\frac{4096\,e\,\vartheta\,\mathcal B_R}{m}+m\log2,
+    \label{eq:tnlean_one_dimensional_discount_constants_formal_discount}\\
+    m
+        &= \Bigl\lceil\max\Bigl\{4,\ \frac{4C_E}{\Delta},\ 128\sqrt{(1+\vartheta)\mathcal B_R}\Bigr\}\Bigr\rceil .
+    \label{eq:tnlean_one_dimensional_discount_constants_formal_shell_count}
+\end{align}
+The shells, the flanks, the weights, the crossing count $N_R$ and the cut
+budget $\mathcal B_R$ are those of the note. The constants deviate from the
+printed ones in three connected places, each at the level of an absolute
+constant.
+
+\begin{enumerate}
+\item \emph{Energy threshold $\Delta/2$ in place of $\Delta/4$.} The
+finite-dimensional lemma bounds the energy of the filtered vector by
+$\sum_j4a_j^2\sum_{Y\text{ split by }X_j}(\dim\mathcal H_Y)^2J$, that is by
+$16N_Rq^{2(R+1)}J/m=2C_E/m$, twice the printed estimate $C_E/m$. With the
+same second entry $m\ge4C_E/\Delta$ of $m$ this is at most $\Delta/2$, so the
+discount runs at the energy threshold $\Delta/2$, and the overlap defect of
+every prefix is at most $1/2$ rather than $1/4$.
+\item \emph{Overlap losses $m\log2$ in place of $2C_E/\Delta$.} The
+finite-dimensional lemma keeps the overlap losses of the $m$ prefixes as
+$-m\log(1-E/\Delta)$ with $E$ the energy threshold; at $E=\Delta/2$ this is
+$m\log2$. The note instead uses $-\frac12\log(1-v)\le v$ at
+$v=C_E/(m\Delta)\le\frac14$ and sums to $C_E/\Delta$ in $\log N$, that is
+$2C_E/\Delta$ in the discount. Since $m\ge4C_E/\Delta$, the formal term
+$m\log2$ dominates the printed $2C_E/\Delta$, and both are at most a
+constant times $1+\vartheta$.
+\item \emph{The tail term stays explicit and the fourth entry of $m$ is
+omitted.} The error terms of the tail bound sum to
+$\sum_j1024\,e\,\vartheta\,\mathcal B_ja_j^2\le4096\,e\,\vartheta\,\mathcal B_R/m$
+in the discount, which is twice the printed $2048\,e\,\vartheta\,\mathcal B_R/m$
+of $\log N$. The note bounds this by $1$ (that is, $\frac12$ in $\log N$)
+through the fourth entry $m\ge4096\,e\,(1+\vartheta)\mathcal B_R$; the
+formalization keeps the term $4096\,e\,\vartheta\,\mathcal B_R/m$ in the
+discount constant and omits the fourth entry from $m$, so its $m$ is at most
+the printed one.
+\end{enumerate}
+
+Consequently the formal interval bound of Theorem~A
+is\footnote{Declarations:
+\leanid{TNLean.MPS.AreaLaw.chainIntervalEntropyBound},
+\leanid{TNLean.MPS.AreaLaw.chainShellConst},
+\leanid{TNLean.MPS.AreaLaw.chainAreaLawConst},
+\leanid{TNLean.MPS.AreaLaw.chainIntervalEntropyBound_le}.}
+$C_{\mathrm{int}}=8mR\log q+4096\,e\,\vartheta\,\mathcal B_R/m+m\log2$ in
+place of the printed $8mR\log q+1+2C_E/\Delta$, with the explicit
+$C_1(q,R)=5+32N_Rq^{2(R+1)}+128\mathcal B_R$ in \texttt{eq:mbound} and
+$C_0(q,R)=(8R\log q+\log2)\,C_1(q,R)+1024\,e\,\mathcal B_R$ in place of the
+printed $C_0$. Every deviation is a change of absolute constants; the
+structure of the argument, its hypotheses, and the linear dependence of the
+area-law constant on $1+J/\Delta$ are those of the note.
+
+\section{Elimination plan}
+
+None of the deviations needs a formal change: the formal constants are valid
+in place of the printed ones, and the printed ones are not sharper in any
+respect that the note uses. A revision of the note may adopt the formal
+constants (energy threshold $\Delta/2$, overlap losses $m\log2$, the tail
+term kept explicit with the three-entry $m$), or the formalization may be
+tightened to the printed ones by proving the finite-dimensional discount with
+the sharper energy coefficient $2a_j^2$ and the inequality
+$-\frac12\log(1-v)\le v$ for the overlap losses and by adding the fourth
+entry to $m$. Until then the deviations are recorded on the module docstring
+of \texttt{TNLean/MPS/AreaLaw/BufferDiscount.lean}, in the blueprint statements of
+the buffered discount and of Theorem~A, which print the formal constants, and
+in the status table of \path{docs/formalization/one-dimensional-chain.md}.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}

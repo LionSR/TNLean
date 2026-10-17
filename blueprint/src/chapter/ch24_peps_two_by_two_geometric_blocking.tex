@@ -27,10 +27,9 @@
         a_i(\lambda_i(\alpha,x),\sigma_i).
     \end{align}
     On a periodic coarse lattice, with horizontal and vertical paired bond
-    assignments $h,v$, the boundary at $z$ is
-    $(v_z,h_z,v_{z-\hat y},h_{z-\hat x})$.
-    This is the four-site grouping in
-    \cite[Observation~6.6]{Schuch2010PEPS}.
+    assignments $h,v$, the four-site grouping of
+    \cite[Observation~6.6]{Schuch2010PEPS} has boundary
+    $(v_z,h_z,v_{z-\hat y},h_{z-\hat x})$ at $z$.
 \end{definition}
 
 \begin{definition}[The periodic bond bijection]%
@@ -69,10 +68,10 @@
 
 \begin{proof}\leanok
     \uses{def:peps_two_by_two_bond_bijection}
-    Reindex the fine horizontal and vertical sums by the displayed
-    bijection. The remaining internal sum separates as
-    $\sum_{x:C\to X^4}\prod_v f_v(x_v)=\prod_v\sum_{x_v\in X^4}f_v(x_v)$.
-    Its factor at $v$ is precisely $B_v(\alpha_v,\tau_v)$.
+    Reindexing the fine horizontal and vertical sums by the displayed
+    bijection separates the remaining internal sum as
+    $\sum_{x:C\to X^4}\prod_v f_v(x_v)=\prod_v\sum_{x_v\in X^4}f_v(x_v)$,
+    whose factor at $v$ is precisely $B_v(\alpha_v,\tau_v)$.
 \end{proof}
 
 \begin{definition}[Physical four-site regrouping]%
@@ -130,6 +129,7 @@
 
 \begin{proof}\leanok
     Every coarse graph edge is uniquely a horizontal or vertical outgoing
-    edge. Reindexing its label sum yields the bond-indexed contraction.
-    Apply the exact fine-to-coarse reblocking equality.
+    edge, so reindexing its label sum yields the bond-indexed contraction,
+    and the exact fine-to-coarse reblocking equality completes the
+    identification.
 \end{proof}

@@ -4,13 +4,13 @@
     \leanok
     \uses{def:peps_regular_edge_charge_contraction}
     Let $e_0,e_1$ be ordered edges of a finite graph, and let $u$ be a
-    bond assignment. Resolve the remote label $q$ by inserting
-    $\mathbf1_{\eta_{e_1}=q}$ on $e_1$, and put
-    $\chi(pq^{-1}z\eta_{e_0})$ on $e_0$. Sum the resulting
-    closed tensor states over $q$. Denote this correlated state by
-    $\Psi_z(u;\chi,p)$. This definition retains the same original
-    site coefficients in every summand. It is auxiliary to the
-    charge-pair formula in \cite{Schuch2010PEPS}, lines 2505--2535.
+    bond assignment. To form the correlated state $\Psi_z(u;\chi,p)$
+    auxiliary to the charge-pair formula in \cite{Schuch2010PEPS}, lines
+    2505--2535, we resolve the remote label $q$ by inserting
+    $\mathbf1_{\eta_{e_1}=q}$ on $e_1$, place
+    $\chi(pq^{-1}z\eta_{e_0})$ on $e_0$, and sum the resulting
+    closed tensor states over $q$, retaining the same original
+    site coefficients in every summand.
 \end{definition}
 
 \begin{theorem}[Correlated weights in the physical cut]
@@ -41,18 +41,17 @@
     \[
         (W_R\otimes I)\Psi_1(u;\chi,p)=\Psi_{k^{-1}}(u;\chi,p).
     \]
-    This is a linear contraction identity for
-    \cite{Schuch2010PEPS}, lines 2505--2535 and 2560--2581.
-    The column premise in this auxiliary statement is discharged by the
-    native operation below.
+    In this linear contraction identity for
+    \cite{Schuch2010PEPS}, lines 2505--2535 and 2560--2581, the native
+    operation below discharges the column premise.
 \end{theorem}
 \begin{proof}\leanok
     The product of the diagonal factors reduces to the factor at its
-    tail vertex. Summing the remote indicator fixes
-    $q=\eta_{e_1}$ and restores the joint character weight.
-    For each fixed $q$, use the native physical cut identity; the remote
-    diagonal belongs to the common complementary tensor. Pass the
-    column action through that cut sum and then sum over $q$.
+    tail vertex, and summing the remote indicator fixes
+    $q=\eta_{e_1}$ to restore the joint character weight.
+    For each fixed $q$, the remote diagonal belongs to the common
+    complementary tensor, so passing the column action through the native
+    physical cut identity and summing over $q$ yields the global identity.
 \end{proof}
 
 \begin{definition}[The native remote charge edge]
@@ -61,10 +60,10 @@
     \leanok
     \uses{def:peps_torus_charge_flux_crossing_strip}
     At $v=(x,y)$, the remote reference is the native horizontal bond
-    joining $(x+1,y)$ to $(x+2,y)$, below the eight-site crossing strip.
-    Both periodic seam orientations are retained.
-    This is auxiliary native geometry for
-    \cite{Schuch2010PEPS}, lines 2505--2581.
+    joining $(x+1,y)$ to $(x+2,y)$, below the eight-site crossing strip;
+    in this auxiliary native geometry for
+    \cite{Schuch2010PEPS}, lines 2505--2581, both periodic seam orientations
+    are retained.
 \end{definition}
 
 \begin{theorem}[A physical crossing with the remote partner]
@@ -99,10 +98,10 @@
     is separate.
 \end{theorem}
 \begin{proof}\leanok
-    The remote bond tail has height $y$; every strip vertex has height
-    $y+1$ or $y+2$. The period bound therefore puts that tail outside
-    the region, including at a seam. Apply the derived uniform
-    correlated column operation and the preceding cut identity.
-    Extending the regional unitary by the complementary identity
-    preserves unitarity.
+    Because the remote bond tail has height $y$ while every strip vertex has
+    height $y+1$ or $y+2$, the period bound places that tail outside
+    the region, including at a seam. Applying the derived uniform
+    correlated column operation and the preceding cut identity gives the
+    state transformation, and extending the regional unitary by the
+    complementary identity preserves unitarity.
 \end{proof}

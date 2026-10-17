@@ -23,10 +23,10 @@ the overlaps.
 
 \begin{proof}\leanok\uses{lem:bnt_eventual_change_basis, thm:overlap_decay, thm:overlap_decay_rect}
     For large $N$, Lemma~\ref{lem:bnt_eventual_change_basis} gives an
-    invertible matrix $U_N$ relating the two MPV families. Fix $j$ and write
-    $\ket{V^{(N)}(B_j)}=\sum_i u_{ij}^{(N)}\ket{V^{(N)}(A_i)}$. With
+    invertible matrix $U_N$ relating the two MPV families. For a fixed $j$,
+    expanding $\ket{V^{(N)}(B_j)}=\sum_i u_{ij}^{(N)}\ket{V^{(N)}(A_i)}$ with
     $G_A(N)=(O_{A_iA_\ell}(N))_{i,\ell}$ and
-    $b_j(N)=(O_{A_iB_j}(N))_i$, this gives
+    $b_j(N)=(O_{A_iB_j}(N))_i$ gives
     \begin{align}
         G_A(N)\overline{u_j(N)}
          & =b_j(N).
@@ -73,9 +73,9 @@ the overlaps.
 
 \begin{proof}\leanok\uses{lem:bnt_finite_index_overlap_orthonormal_li, thm:bnt_perm_same_card}
     By Lemma~\ref{lem:bnt_finite_index_overlap_orthonormal_li}, both families are
-    linearly independent for all sufficiently large $N$. Choose $N$ large
+    linearly independent for all sufficiently large $N$. For $N$ large
     enough that both families are linearly independent and the assumed span
-    equality holds. The common span then has the same dimension when computed
+    equality holds, the common span has the same dimension when computed
     from the $A$-family or the $B$-family, so $g_A = g_B$. After identifying
     the two index sets, Theorem~\ref{thm:bnt_perm_same_card} yields the
     permutation conclusion.
@@ -128,8 +128,8 @@ two-layer BNT expansion are power sums of the copy weights. Recovering the
 individual weights from these sums is a Newton--Girard problem: equal power sums
 determine equal characteristic polynomials, hence equal multisets of roots.
 
-The general matrix statement is
-the corresponding theorem in the companion quantum-channel volume~\cite[``Newton--Girard trace recursion'']{QICLean2026Blueprint}. It identifies a characteristic polynomial
+In the general matrix statement,
+the corresponding theorem in the companion quantum-channel volume~\cite[``Newton--Girard trace recursion'']{QICLean2026Blueprint} identifies a characteristic polynomial
 from the first $n$ power-sum traces.
 
 The matched-sector comparison below applies the power-sum identities to a single
@@ -154,26 +154,26 @@ multiset with multiplicity.
     $\sum_i \alpha_i^k = \sum_i \beta_i^k$ for $1 \le k \le n$, then the
     multisets $\{\alpha_i\}$ and $\{\beta_i\}$ are equal.
 
-    Two variants relax the equal-cardinality assumption. If
+    Two variants relax the equal-cardinality assumption. As in
+    \cite[Lemma~A.5]{Cirac2016MPDO_arXiv} applied to the nonzero coefficients
+    of a canonical form, if
     $\alpha : \{0, \ldots, m-1\} \to \C$ and $\beta : \{0, \ldots, n-1\} \to \C$
     have no zero entries and their power sums agree for $1 \le k \le \max(m,n)$,
     then $m=n$ and the multisets are equal. Without a nonzero hypothesis, the
     list form $\sum_{k=1}^{x_a} \lambda_{a,k}^N = \sum_{k=1}^{x_b} \lambda_{b,k}^N$
     for $1 \le N \le \max(x_a,x_b)$ gives equality of the nonzero multisets; if
-    it also holds at $N=0$ then $x_a=x_b$ and the full lists agree. The
-    nonzero variant is the one applied to the nonzero coefficients of a
-    canonical form, which is how \cite[Lemma~A.5]{Cirac2016MPDO_arXiv} is used.
+    it also holds at $N=0$ then $x_a=x_b$ and the full lists agree.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    Apply the finite-range Newton--Girard theorem to $\diag(\alpha)$ and
-    $\diag(\beta)$ and extract the roots of $\prod_i (X - \alpha_i)$ and
-    $\prod_i (X - \beta_i)$. For unequal cardinalities, pad both lists with zeros
-    to length $\max(m,n)$; the nonzero hypothesis makes the padded-zero counts
-    $\max(m,n)-m$ and $\max(m,n)-n$, forcing $m=n$. Without that hypothesis,
-    delete the zero entries first (unchanged for positive $N$); the equality at
-    $N=0$ gives $x_a=x_b$.
+    Applying the finite-range Newton--Girard theorem to $\diag(\alpha)$ and
+    $\diag(\beta)$ extracts the roots of $\prod_i (X - \alpha_i)$ and
+    $\prod_i (X - \beta_i)$. For unequal cardinalities, padding both lists with
+    zeros to length $\max(m,n)$ gives padded-zero counts $\max(m,n)-m$ and
+    $\max(m,n)-n$ under the nonzero hypothesis, forcing $m=n$. Without that
+    hypothesis, deleting the zero entries first leaves the positive-$N$ power
+    sums unchanged, and the equality at $N=0$ gives $x_a=x_b$.
 \end{proof}
 
 \begin{corollary}[A nonzero finite family has a nonvanishing power sum]
@@ -181,14 +181,12 @@ multiset with multiplicity.
     \lean{Matrix.exists_sum_pow_ne_zero_of_pos_card}
     \leanok
     \uses{thm:bounded_power_sum_multiset}
-    Let $m\geq 1$ and let $\lambda_0,\ldots,\lambda_{m-1}\in\C$ be nonzero.
-    Then there is an exponent $N$ with $1\leq N\leq m$ such that
+    As in the consequence of the Appendix power-sum lemma
+    \cite[Appendix~A, lines~1155--1163]{Cirac2016MPDO_arXiv} used in the proof
+    of Lemma~L \cite[Appendix~C.3, lines~1851--1858]{Cirac2016MPDO_arXiv}, if
+    $m\geq 1$ and $\lambda_0,\ldots,\lambda_{m-1}\in\C$ are nonzero, then there
+    is an exponent $N$ with $1\leq N\leq m$ such that
     $\sum_{q=0}^{m-1}\lambda_q^N\neq 0$.
-    This is the consequence of the Appendix power-sum lemma used in the proof
-    of Lemma~L
-    \cite[Appendix~C.3, lines~1851--1858]{Cirac2016MPDO_arXiv}; the finite-range
-    comparison is
-    \cite[Appendix~A, lines~1155--1163]{Cirac2016MPDO_arXiv}.
 \end{corollary}
 
 \begin{proof}

@@ -12,10 +12,10 @@
         \left(\prod_e(K_e)_{\zeta_{h,e},\zeta_{t,e}}\right)
         \prod_v A_v(\zeta|_v,\sigma_v).
     \end{align}
-    Here $\zeta|_v$ reads the head or tail label at the corresponding incidence.
-    Thus each bond matrix has row at the head and column at the tail.
-    This is an auxiliary inserted-bond extension of the closed contraction
-    calculation in \cite[Section~7]{Schuch2010PEPS}.
+    Here $\zeta|_v$ reads the head or tail label at the corresponding incidence,
+    so each bond matrix has row at the head and column at the tail, extending
+    the closed contraction calculation in \cite[Section~7]{Schuch2010PEPS} to
+    inserted bond matrices.
 \end{definition}
 
 \begin{theorem}[Identity and regular insertions in the closed contraction]%
@@ -52,8 +52,8 @@
     \uses{def:peps_graph_inserted_bond_state,
         thm:peps_monoid_hom_commuting_weight}
     Let $G$ be finite and $U$ a matrix representation on $\mathbb C^X$.
-    Dress the averaging site by the same virtual matrix $W$ on each leg.
-    Regroup the physical labels into head-tail bond pairs $\beta_e$. Then
+    When the averaging site is dressed by the same virtual matrix $W$ on each
+    leg and the physical labels are regrouped into head-tail bond pairs $\beta_e$,
     \begin{align}
         \Psi_{U,W,K}(\beta)
         =|G|^{-|V|}\sum_{q:V\to G}
@@ -76,9 +76,9 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    Expand the independent local averages and regroup the incidence products
-    by edges. The two independent virtual endpoint sums multiply
+    Expanding the independent local averages and regrouping the incidence products
+    by edges, the two independent virtual endpoint sums multiply
     $U(q_h)W$, $K_e$, and $WU(q_t^{-1})$ in that order.
-    For representation insertions, commute the weights and combine the
-    representation factors to obtain $W^2U(q_hu_eq_t^{-1})$.
+    For representation insertions, commuting the weights and combining the
+    representation factors yields $W^2U(q_hu_eq_t^{-1})$.
 \end{proof}

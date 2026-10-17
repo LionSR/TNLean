@@ -5,10 +5,11 @@
 % Exact counting and target coefficients are added below; the last section
 % specializes graph-distance propagation (Lemma 4.1) to lattice domains.
 
-Let $G$ be a graph on a site set $V$. Graph distance $d_G$ takes the value
-$\infty$ between different components. All walks below remain in $G$;
-they need not remain in an interaction support. These are the counting
-ingredients in \cite[Sections~2 and~4]{OpenAI2026AreaLaw}.
+To establish the combinatorial counting bounds of
+\cite[Sections~2 and~4]{OpenAI2026AreaLaw}, let $G$ be a graph on a site
+set $V$, with graph distance $d_G$ taking the value $\infty$ between
+distinct connected components. All walks below remain in $G$ and need
+not stay inside a single interaction support.
 
 \section{Walks through overlapping supports}
 
@@ -26,10 +27,11 @@ ingredients in \cite[Sections~2 and~4]{OpenAI2026AreaLaw}.
 \end{theorem}
 \begin{proof}
     \leanok
-    Induct on $m$. For $m=0$, use the range condition on $X_0$.
-    Otherwise choose $z\in X_0\cap X_1$. Concatenate the walk from $x$
-    to $z$ in the range condition with the inductively constructed walk
-    from $z$ to $y$. Walk lengths add.
+    We proceed by induction on $m$. When $m=0$, the range condition on
+    $X_0$ provides the desired walk directly. For the inductive step, any
+    site $z\in X_0\cap X_1$ joins to $x$ by a walk of length at most
+    $r(X_0)$, whose concatenation with the inductively constructed walk
+    from $z$ to $y$ has length at most $\sum_{j=0}^m r(X_j)$.
 \end{proof}
 
 \begin{theorem}[Distance and component restrictions]
@@ -52,7 +54,7 @@ ingredients in \cite[Sections~2 and~4]{OpenAI2026AreaLaw}.
     \uses{thm:area_chain_walk}
     The constructed walk proves reachability, equality of components, and
     the upper bound on distance. Each exclusion contradicts one of these
-    conclusions. The bound counts the initial support even when $m=0$.
+    conclusions, and the bound counts the initial support even when $m=0$.
 \end{proof}
 
 \section{Ambient lattice counting}
@@ -81,9 +83,11 @@ ingredients in \cite[Sections~2 and~4]{OpenAI2026AreaLaw}.
 \end{theorem}
 \begin{proof}
     \leanok
-    Coordinate absolute values satisfy the triangle inequality. Induct
-    over the edges of the walk and add the one-step displacement bounds.
-    For finite graph distance, choose a shortest walk.
+    Coordinate absolute values satisfy the triangle inequality, and
+    induction along the edges of $p$ sums the one-step displacement
+    bounds to give $\ell(\iota(a),\iota(b))\le |p|$. When
+    $d_G(a,b)\le R<\infty$, applying this walk bound to a shortest walk
+    from $a$ to $b$ yields $\ell(\iota(a),\iota(b))\le R$.
 \end{proof}
 
 The exact ambient cardinality and its graph-ball consequences are given in
@@ -104,7 +108,7 @@ Theorem~\ref{thm:area_diamond_count}.
 \begin{proof}
     \leanok
     Deleting $a$ maps the family injectively into the power set of
-    $B\setminus\{a\}$. Inserting $a$ recovers the original support.
+    $B\setminus\{a\}$, since inserting $a$ recovers the original support.
 \end{proof}
 
 \begin{theorem}[Per-site interaction weight]
@@ -120,8 +124,8 @@ Theorem~\ref{thm:area_diamond_count}.
 \begin{proof}
     \leanok
     \uses{thm:area_support_count}
-    Bound each summand by $J$ and apply the count to the subfamily
-    containing $a$. The nonnegative factor $J$ preserves the inequality.
+    Bounding each summand by $J\ge0$ and applying the support-cardinality
+    bound to the subfamily of supports containing $a$ yields the estimate.
 \end{proof}
 
 \begin{theorem}[Weights meeting a region]
@@ -141,9 +145,10 @@ Theorem~\ref{thm:area_diamond_count}.
 \end{theorem}
 \begin{proof}
     \leanok
-    A support meeting $S$ is counted at least once on the right; all
-    additional occurrences have nonnegative weight. Interchange the
-    two finite sums, then apply the site bound.
+    Every support meeting $S$ appears at least once on the right-hand
+    side, and all additional occurrences have nonnegative weight.
+    Interchanging the two finite sums and bounding each inner sum by $b$
+    yields the $|S|b$ estimate.
 \end{proof}
 
 \begin{definition}[Interaction-chain weight]
@@ -173,9 +178,11 @@ Theorem~\ref{thm:area_diamond_count}.
 \begin{proof}
     \leanok
     \uses{thm:area_region_weight,def:area_chain_weight}
-    Induct on $n$. For the step, bound every $W_n(Y)$ in
-    (\ref{eq:area_chain_step}) by $(vb)^n$. The weights of supports meeting
-    $X$ sum to at most $|X|b\le vb$, giving the next power.
+    Proceeding by induction on $n$, the base case $W_0(X)=1=(vb)^0$ holds
+    by definition. In the inductive step, bounding each factor $W_n(Y)$
+    in (\ref{eq:area_chain_step}) by $(vb)^n$ and bounding the sum of
+    weights of supports meeting $X$ by $|X|b\le vb$ gives
+    $W_{n+1}(X)\le(vb)^{n+1}$.
 \end{proof}
 
 \input{chapter/ch34_area_law_diamond_counting}

@@ -24,7 +24,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    Write $(A,C)$ for the list $A$ followed by $C$, and let $J_{A,C}$
+    Writing $(A,C)$ for the list $A$ followed by $C$, let $J_{A,C}$
     identify its memory with $\mathcal H_A\otimes\mathcal H_C$.
     For a register $r$ with vector
     $x$ and vectors $a\in\mathcal H_A$, $c\in\mathcal H_C$, the move
@@ -34,11 +34,12 @@
          & =x\otimes J_{A,C}^{-1}(a\otimes c).
         \label{eq:peps_register_head_move}
     \end{align}
-    Induct on $A$: after moving $r$ through the tail, exchange it with
-    the first register. The empty-list case is the scalar unit identity.
-    Next induct on $B$, composing this move for its first register with
+    By induction on $A$, moving $r$ through the tail and exchanging it with
+    the first register establishes the move identity, with the empty-list case
+    reducing to the scalar unit identity.
+    Inducting next on $B$ and composing this move for its first register with
     the exchange of the remaining lists, while leaving that register
-    untouched. The resulting exchange $X_{A,B;C}$ satisfies, for
+    untouched, produces an exchange $X_{A,B;C}$ that satisfies, for
     $b\in\mathcal H_B$,
     \begin{align}
         X_{A,B;C}J_{A,(B,C)}^{-1}
@@ -47,9 +48,9 @@
         \bigl(b\otimes J_{A,C}^{-1}(a\otimes c)\bigr),
         \label{eq:peps_register_block_exchange}
     \end{align}
-    The identities extend from elementary tensors by linearity. Only
-    adjacent exchanges and identities are used, so the composition is allowed
-    and has no sources.
+    Extending from elementary tensors by linearity completes the identity, and
+    because only adjacent exchanges and identities appear, the composition is
+    allowed and has no sources.
 \end{proof}
 
 \begin{definition}[The sources of a composition]
@@ -87,11 +88,11 @@
         \label{eq:peps_source_preparation}
     \end{align}
     Tensor products are identified by the prescribed associativity maps.
-    The source list of a composition records each occurrence separately,
-    including repetitions of the same vector on the same pair of parties.
-    This is the source data used in
+    As in the source data of
     \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
-    \texttt{04-compression.tex}, lines 233--251.
+    \texttt{04-compression.tex}, lines 233--251, the source list of a
+    composition records each occurrence separately, including repetitions of
+    the same vector on the same pair of parties.
 \end{definition}
 
 \begin{theorem}[Preparation before the local operations]
@@ -128,23 +129,22 @@
 
 \begin{proof}\leanok
     \uses{thm:peps_register_exchange}
-    Induct on the composition. A local operation, an exchange, or the
-    identity contributes no source. For a pair-source preparation, take
-    that source as the entire list and take the remaining operation to be
-    the identity. In the composition case, move a later preparation before
-    an earlier operation $A:\mathcal H\to\mathcal H'$ by adjoining its
-    untouched registers. The required identity is
+    We proceed by induction on the composition. A local operation, an
+    exchange, or the identity contributes no source, whereas a pair-source
+    preparation has that source as its entire list and the identity as the
+    remaining operation. In the composition case, moving a later preparation
+    before an earlier operation $A:\mathcal H\to\mathcal H'$ by adjoining its
+    untouched registers uses the identity
     \begin{align*}
         P_{S,\mathcal H'}\circ A
         =(\operatorname{id}_{\mathcal H_S}\otimes A)
-        \circ P_{S,\mathcal H}.
+        \circ P_{S,\mathcal H},
     \end{align*}
-    It follows first on elementary tensors and then by linearity.
-    When an untouched register precedes the composition, exchanges move
-    it in front of the newly prepared source registers before the remaining
-    local operations act. These
-    exchanges are isometries. Tensoring each original local map with an
-    identity preserves its contraction bound.
+    which holds first on elementary tensors and then by linearity.
+    When an untouched register precedes the composition, isometric exchanges
+    move it in front of the newly prepared source registers before the
+    remaining local operations act, and tensoring each original local map
+    with an identity preserves its contraction bound.
 \end{proof}
 
 \begin{theorem}[Parties of the remaining operations]
@@ -169,9 +169,9 @@
 
 \begin{proof}\leanok
     \uses{thm:peps_source_preparation,def:peps_owner_composition,thm:peps_party_factorization,thm:peps_party_restriction,def:peps_single_party_selector}
-    Induct on the composition. Moving a pair preparation to the beginning
-    replaces it by the identity on its two endpoint registers and the
-    original spectators, with the same owners. In a concatenation, the
+    By induction on the composition, moving a pair preparation to the
+    beginning replaces it by the identity on its two endpoint registers and
+    the original spectators, with the same owners. In a concatenation, the
     extra spectators are source registers of the later composition, so
     their owners already occur there, and
     \begin{align*}
@@ -179,8 +179,8 @@
          & =\mathcal P(B_{W_1})\cup\mathcal P(B_{W_2})
         =\mathcal P(W_1)\cup\mathcal P(W_2)=\mathcal P(W_2W_1).
     \end{align*}
-    The exchanges in the framed case involve only the framed owner and
-    owners of the original registers and sources. Thus no party is added
+    Because the exchanges in the framed case involve only the framed owner and
+    owners of the original registers and sources, no party is added
     or removed. Relabelling preserves register owners and named local
     maps, and the party sets transform through
     \begin{align*}
@@ -237,16 +237,17 @@
 \begin{proof}\leanok
     \uses{thm:peps_register_exchange,thm:peps_source_preparation}
     Identity maps and composition prove reflexivity and transitivity.
-    Tensor an expansion $E$ with the identity on a common first source's
-    registers, using the prescribed associativity maps, to obtain $E_s$.
+    Tensoring an expansion $E$ with the identity on a common first source's
+    registers, via the prescribed associativity maps, produces $E_s$.
     Writing $(s,G)$ for $s$ followed by $G$, the preparation identity in
     Theorem~\ref{thm:peps_source_preparation} gives
     $E_sP_{(s,G),\mathcal H}=P_{(s,S),\mathcal H}$ whenever
     $EP_{G,\mathcal H}=P_{S,\mathcal H}$.
-    For successive sources, exchange their entire register lists using
-    (\ref{eq:peps_register_block_exchange}). For a reversed source,
-    exchange its two registers; applying the tensor exchange twice is the
-    identity. Each construction is allowed and contains no sources.
+    Exchanging the entire register lists of successive sources via
+    (\ref{eq:peps_register_block_exchange}) handles the swap, while
+    exchanging the two registers of a reversed source uses the fact that
+    applying the tensor exchange twice is the identity. Each construction is
+    allowed and contains no sources.
 \end{proof}
 
 \begin{theorem}[One source for each participating pair]
@@ -279,18 +280,18 @@
 
 \begin{proof}\leanok
     \uses{thm:peps_source_preparation,thm:peps_source_expansion_operations,thm:peps_register_exchange}
-    Insert the sources successively. Exchange tensor factors to bring
-    together the sources with a prescribed unordered pair of owners;
-    reverse the order of the two half-spaces when necessary. Replace two
-    such vectors, on $U\otimes V$ and $U'\otimes V'$, by the image of
-    their tensor product under the factor-swapping isometry
+    Inserting the sources successively and exchanging tensor factors brings
+    together the sources with a prescribed unordered pair of owners,
+    reversing the order of the two half-spaces when necessary. Two
+    such vectors, on $U\otimes V$ and $U'\otimes V'$, can then be replaced by
+    the image of their tensor product under the factor-swapping isometry
     $(U\otimes V)\otimes(U'\otimes V')
-        \to(U\otimes U')\otimes(V\otimes V')$.
-    Its norm is the product of the two original norms and is therefore
+        \to(U\otimes U')\otimes(V\otimes V')$,
+    whose norm is the product of the two original norms and is therefore
     one. Splitting the two local tensor factors and exchanging the
     middle registers recovers the original preparations by isometries.
     Continuing through the finite list proves
-    (\ref{eq:peps_grouped_preparation}); no other pair of owners is
-    introduced. Compose this expansion with the local operations in
-    Theorem~\ref{thm:peps_source_preparation}.
+    (\ref{eq:peps_grouped_preparation}) without introducing any other pair of
+    owners, and composing this expansion with the local operations in
+    Theorem~\ref{thm:peps_source_preparation} completes the factorization.
 \end{proof}

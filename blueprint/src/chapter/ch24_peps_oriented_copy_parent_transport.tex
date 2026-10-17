@@ -12,11 +12,10 @@ $X=\coprod_i\{0,\ldots,d_i-1\}$ and
 $Y=\coprod_i(\{0,\ldots,d_i-1\}\times\{0,\ldots,m_i-1\})$.
 Write $\pi(i,a,u)=(i,a)$ and
 $\alpha(y,z)=m_i^{-1/2}$ when $y=(i,a,u),z=(i,b,u)$ share a
-sector and copy, and zero otherwise. The bond map $F_m$ sends a
-matching-sector pair $(i,a;i,b)$ to
-$m_i^{-1/2}\sum_u(i,a,u;i,b,u)$ and vanishes on different-sector
-pairs. These are the copy maps of
-\cite[Section~7]{Schuch2010PEPS}, with arbitrary positive multiplicities.
+sector and copy, and zero otherwise. As in the copy maps of
+\cite[Section~7]{Schuch2010PEPS} with arbitrary positive multiplicities,
+the bond map $F_m$ sends a matching-sector pair $(i,a;i,b)$ to
+$m_i^{-1/2}\sum_u(i,a,u;i,b,u)$ and vanishes on different-sector pairs.
 
 \subsection{Copy maps on open oriented regions}
 
@@ -36,9 +35,9 @@ pairs. These are the copy maps of
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_full_multiplicity_bond_map}
-    Apply the ordinary restoration and adjoint formulas to $M_i^T$.
-    Transposition commutes with block sums and scalar multiplication,
-    and $(M_i\otimes1_{m_i})^T=M_i^T\otimes1_{m_i}$.
+    Applying the ordinary restoration and adjoint formulas to $M_i^T$ gives
+    both identities, since transposition commutes with block sums and scalar
+    multiplication, and $(M_i\otimes1_{m_i})^T=M_i^T\otimes1_{m_i}$.
 \end{proof}
 
 \begin{theorem}[Oriented copy action on open contractions]%
@@ -97,8 +96,8 @@ pairs. These are the copy maps of
     Taking its adjoint gives the factor $w_y^{-1}\alpha(y,z)$,
     which proves~(\ref{eq:peps_oriented_copy_crossing}) and
     (\ref{eq:peps_oriented_copy_crossing_adjoint}).
-    Substitute into~(\ref{eq:peps_oriented_open}) and distribute the
-    independent boundary sums. This gives
+    Substituting into~(\ref{eq:peps_oriented_open}) and distributing the
+    independent boundary sums gives
     (\ref{eq:peps_oriented_copy_open}) and
     (\ref{eq:peps_oriented_copy_open_adjoint}).
 \end{proof}
@@ -123,8 +122,8 @@ pairs. These are the copy maps of
     \uses{thm:peps_oriented_copy_open,thm:peps_oriented_open_range}
     Equations~(\ref{eq:peps_oriented_copy_open}) and
     (\ref{eq:peps_oriented_copy_open_adjoint}) put every image of a
-    boundary column in the required span. Extend by linearity and use
-    the range identification~(\ref{eq:peps_oriented_range}).
+    boundary column in the required span. Extending by linearity and using
+    the range identification~(\ref{eq:peps_oriented_range}) yields the inclusions.
 \end{proof}
 
 \begin{theorem}[Supported inverses on the full parent spaces]%
@@ -236,9 +235,10 @@ pairs. These are the copy maps of
         thm:peps_region_parent_ground_space_physical_transport}
     Each $D_i(g)$ preserves its sector. A diagonal factor $m_i^{1/4}$
     can therefore be moved to the physical index at either end of an
-    incidence, regardless of $o_e$. Factor the product of these
-    scalars out of the group average. Positive multiplicities make
-    every diagonal entry nonzero. Applying the invertible physical maps gives
+    incidence, regardless of $o_e$. Factoring the product of these
+    scalars out of the group average gives the coefficient identity.
+    Positive multiplicities make every diagonal entry nonzero, and
+    applying the invertible physical maps gives
     (\ref{eq:peps_oriented_filter_parent}).
 \end{proof}
 
@@ -334,8 +334,8 @@ pairs. These are the copy maps of
     The fixed-representation physical comparison constructs local maps
     $F_v$ with $a_v=F_vA^{U,1,o}_v$, injective on the local image.
     Vertex coverage makes their product injective on the parent space
-    and identifies its image with $\mathcal P_{\mathcal R}(a)$.
-    Invert that equivalence.
+    and identifies its image with $\mathcal P_{\mathcal R}(a)$;
+    inverting that equivalence gives $\mathcal P_{\mathcal R}(a)\simeq\mathcal P_{\mathcal R}(A^{U,1,o})$.
 \end{proof}
 
 \begin{theorem}[Full oriented semi-regular physical parent equivalence]%
@@ -362,10 +362,10 @@ pairs. These are the copy maps of
     \uses{thm:peps_oriented_physical_canonical_parent,
         thm:peps_oriented_semiregular_canonical_parent,
         thm:peps_region_parent_common_kernel}
-    Use vertex coverage to compare $a$ with $A^{U,1,o}$, then use
-    edge coverage and~(\ref{eq:peps_oriented_semiregular_parent}) to
-    compare the latter with $A^{L,1,o}$. Compose the equivalences.
-    The dimension and positive-parent kernel assertions follow.
+    Vertex coverage compares $a$ with $A^{U,1,o}$, while
+    edge coverage and~(\ref{eq:peps_oriented_semiregular_parent})
+    compare $A^{U,1,o}$ with $A^{L,1,o}$. Composing these equivalences
+    yields the dimension and positive-parent kernel assertions.
     The positive filters $S_v$ need not be unitary, so this assertion
     concerns ground spaces and kernels, without a spectral comparison.
 \end{proof}

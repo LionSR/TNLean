@@ -57,8 +57,19 @@ two-family proposition. The final assembly, which is not yet formalized, will
 apply the theorems only to retained regions, which meet $A$, and with a
 stopping scale chosen at least one. It discharges both premises there, and no
 unrestricted statement is needed. The unrestricted reading of the first premise
-is vacuous, because Definition~9.3 has no empty template. This note becomes
-resolved once that assembly exists.
+is vacuous, because Definition~9.3 has no empty template.
+
+The first premise is discharged by the lemma on lattice points in retained
+births.\footnote{\leanid{TNLean.PEPS.AreaLaw.Geometry.repairStage_exists_integerPoint_mem_birth_of_oldInclusion},
+\leanid{TNLean.PEPS.AreaLaw.Geometry.repairStage_retained_exists_integerPoint_mem_birth}.}
+If an identifier keeps a current region meeting $A$ at a later generation,
+then its birth, which retention leaves unchanged, contains a lattice point:
+a point of $A$ is a lattice point, and every current region lies in its
+birth. The second premise is absorbed into the stopping-scale threshold by
+taking the threshold at least one; this is done in
+\href{https://github.com/LionSR/TNLean/pull/9558}{pull request \#9558}, which
+applies the templates to all actual births. This note becomes resolved
+once both discharges are in the library.
 
 \bibliographystyle{alpha}
 \bibliography{references}

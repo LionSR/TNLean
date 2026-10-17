@@ -118,13 +118,13 @@ depth $O(q)$.
     $M\geq1$ blocks of lengths $3r_1\leq\ell_k\leq L$ and every unit vector
     $\alpha$ on $(\C^d)^{\otimes r_1}$, the GHZ-type state on the registers of
     Definition~\ref{def:ldp_window_ghz_state} is prepared with measurements in
-    depth at most $CL$. This is the preparation of $\ket{\chi_{N/q}}$ in the
-    paragraph ``Long-range MPS using measurements'' of
-    \cite{Malz2024Preparation}, by the construction of
-    \cite[Example~1]{Piroli2021LOCC} for registers of $r_1$ sites; the depth is
-    $O(L)$ rather than constant, because the register of a block and the
-    ancilla at its start are $\ell_k-r_1$ sites apart
-    \cite{gap:mswc24_measurement_preparation_scope}.
+    depth at most $CL$. Following the construction of
+    \cite[Example~1]{Piroli2021LOCC} for registers of $r_1$ sites, this prepares
+    $\ket{\chi_{N/q}}$ in the paragraph ``Long-range MPS using measurements'' of
+    \cite{Malz2024Preparation}; as recorded in
+    \cite{gap:mswc24_measurement_preparation_scope}, the depth is $O(L)$ rather
+    than constant because the register of a block and the ancilla at its start
+    are $\ell_k-r_1$ sites apart.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -134,14 +134,14 @@ depth $O(q)$.
     One layer of gates on the pair windows adds each register to its ancilla,
     and on every block the unitary of Lemma~\ref{lem:ldp_block_shift} subtracts
     the register of the block from the ancilla at its start, which belongs to the
-    register of the previous block. The circuit has depth $O(L)$. Measure every
-    ancilla, with outcomes $m_k\in\mathbb Z_d^{r_1}$, and let
-    $p_k=m_0+\cdots+m_{k-1}$. Correct by adding $m_k$ on the ancilla of $R_k$ and
-    $-p_k$ on $R_k$, site by site. By Lemma~\ref{lem:qc_configuration_layers},
-    the corrected vector has the amplitude $\alpha(x|_{R_0})$ at a
+    register of the previous block. The circuit has depth $O(L)$. Measuring every
+    ancilla, with outcomes $m_k\in\mathbb Z_d^{r_1}$ and partial sums
+    $p_k=m_0+\cdots+m_{k-1}$, and correcting by adding $m_k$ on the ancilla of $R_k$ and
+    $-p_k$ on $R_k$ site by site gives, by Lemma~\ref{lem:qc_configuration_layers},
+    a corrected vector with amplitude $\alpha(x|_{R_0})$ at a
     configuration $x$ that is $0$ outside the registers and satisfies
     $m_k+(x|_{R_{k+1}}-p_{k+1})-(x|_{R_k}-p_k)=0$ for every $k$, cyclically, and
-    the amplitude $0$ elsewhere. These conditions hold exactly when
+    amplitude $0$ elsewhere. These conditions hold exactly when
     $\sum_km_k=0$ and all the registers of $x$ agree. So every outcome with
     $\sum_km_k=0$ gives the GHZ-type state, and every other outcome gives the
     zero vector, which has probability zero.
@@ -188,24 +188,24 @@ depth $O(q)$.
 \end{theorem}
 \begin{proof}
     \leanok
-    Use the seed and copying gates of
-    Theorem~\ref{thm:ldp_window_ghz_measurement}. In a block of length $q$, put
+    Starting from the seed and copying gates of
+    Theorem~\ref{thm:ldp_window_ghz_measurement}, in a block of length $q$ let
     $e=q\bmod2$ and $L=\lfloor(q-2r_1)/2\rfloor$, so
-    $2L+2r_1+e=q$. When $e=1$, rotate the first $r_1+1$ sites to send
+    $2L+2r_1+e=q$. When $e=1$, rotating the first $r_1+1$ sites sends
     $\ket{a_1\cdots a_{r_1},0}$ to $\ket{0,a_1\cdots a_{r_1}}$; for $e=0$
-    do nothing. The registers now occupy offsets
-    $e,\ldots,e+r_1-1$ and $q-r_1,\ldots,q-1$, separated by $2L$ zero sites.
-    Their teleportation stretches lie inside disjoint blocks. Apply the
-    controlled subtraction by Theorem~\ref{thm:qc_register_layer}, and undo
-    the rotations. The resulting operator is exactly the controlled
+    no rotation is needed. The registers now occupy offsets
+    $e,\ldots,e+r_1-1$ and $q-r_1,\ldots,q-1$, separated by $2L$ zero sites, and
+    their teleportation stretches lie inside disjoint blocks. Applying the
+    controlled subtraction of Theorem~\ref{thm:qc_register_layer} and undoing
+    the rotations yields the controlled
     subtraction between the original end registers, with all central sites
     fixed. The padding rotations use only $r_1+1$ sites each, so both have
     constant depth; the register gates have depth $4r_1+K+2$ for a fixed
     $2r_1$-site gate bound $K$.
 
-    Finally measure and correct the ancillas as in
-    Theorem~\ref{thm:ldp_window_ghz_measurement}. The cyclic consistency
-    condition is $\sum_k m_k=0$; every other outcome has zero probability.
+    Measuring and correcting the ancillas as in
+    Theorem~\ref{thm:ldp_window_ghz_measurement} enforces the cyclic consistency
+    condition $\sum_k m_k=0$; every other outcome has zero probability.
     The same correction acts on every label amplitude, preserving coherent
     superpositions. Quantum layers on neighbouring sites are counted;
     on-site measurements, outcome-dependent on-site corrections, and global
@@ -289,27 +289,27 @@ depth $O(q)$.
     $\omega_j$ unit vectors on $\C^{D_j}\otimes\C^{D_j}$ and $\alpha$ a unit
     vector in $\C^b$. Cut the ring of $N$ sites into $M\geq1$ blocks of lengths
     $L_0\leq\ell_k\leq L$ such that every blocked tensor of every $A_j$ is
-    injective and $B_j^\dagger B_{j'}=0$ for $j\neq j'$ on every block. Then
+    injective and $B_j^\dagger B_{j'}=0$ for $j\neq j'$ on every block. For
+    blocks with orthogonal states, this prepares
+    $V^{\otimes N/q}W^{\otimes N/q}\ket{\chi_{N/q}}$ in the paragraph
+    ``Long-range MPS using measurements'' of \cite{Malz2024Preparation}:
     $\sum_j\alpha_j\ket{\psi_{\ell,\omega_j}(A_j)}$, with the states of
     Definition~\ref{def:ldp_block_isometry_state}, is prepared with
-    measurements and a circuit in depth at most $CL$. This is the preparation of
-    $V^{\otimes N/q}W^{\otimes N/q}\ket{\chi_{N/q}}$ in the paragraph
-    ``Long-range MPS using measurements'' of \cite{Malz2024Preparation}, for
-    blocks with orthogonal states.
+    measurements and a circuit in depth at most $CL$.
 \end{theorem}
 \begin{proof}
     \leanok
     Encode the labels and the bond indices in $r_1=b+\sum_jD_j+2$ sites; for
     $d\geq2$ this is possible since $r_1<d^{r_1}$, and for $d=1$
     Theorem~\ref{thm:ldp_block_sum_unitary} gives $\sum_jD_j^2\leq1$, so $b\leq1$
-    and $\sum_jD_j\leq1$. Prepare the GHZ-type state on the registers with
-    $\alpha(\delta(j))=\alpha_j$ by Theorem~\ref{thm:ldp_window_ghz_measurement}.
+    and $\sum_jD_j\leq1$. Theorem~\ref{thm:ldp_window_ghz_measurement} prepares
+    the GHZ-type state on the registers with $\alpha(\delta(j))=\alpha_j$.
     The columns $\ket{\omega_j}$, placed on the bond indices of block $j$ and
     encoded on a pair window, are orthonormal, so one unitary $W$ on a pair
-    window sends $\ket{\delta(j),0}$ to them. Apply $W$ on every window and the
-    unitary of Theorem~\ref{thm:ldp_block_sum_unitary} on every block. By
-    Definition~\ref{def:ldp_window_ghz_state} the GHZ-type state is
-    $\sum_j\alpha_j\ket{x_j}$; the window layer sends $\ket{x_j}$ to the state of
+    window sends $\ket{\delta(j),0}$ to them. Applying $W$ on every window and the
+    unitary of Theorem~\ref{thm:ldp_block_sum_unitary} on every block acts on the
+    GHZ-type state $\sum_j\alpha_j\ket{x_j}$ of
+    Definition~\ref{def:ldp_window_ghz_state}: the window layer sends $\ket{x_j}$ to the state of
     a window layer preparing $\ket{\omega_j}$ from $\ket{0\cdots0}$, and the
     computation of Theorem~\ref{thm:ldp_approximating_state_depth} gives
     $\ket{\psi_{\ell,\omega_j}(A_j)}$.
@@ -334,11 +334,12 @@ depth $O(q)$.
     Definition~\ref{def:ldp_repeated_block_state}, on $N=Mq$ sites, equals
     $\sum_j\alpha_j\ket{\psi_{q,\omega_j}(A_j)}$ with $\omega_j$ the pair of
     $\sigma_j$, is a unit vector, and is prepared with measurements and a
-    circuit in depth at most $Cq$. This is the paragraph ``Long-range MPS using
+    circuit in depth at most $Cq$. Under the scope restriction to blocks whose
+    $q$-site states are orthogonal recorded in
+    \cite{gap:mswc24_block_form_mixed_overlap,gap:mswc24_repeated_block_corrected_state},
+    this establishes the preparation in the paragraph ``Long-range MPS using
     measurements'' of \cite{Malz2024Preparation} for the corrected
-    approximating state, restricted to blocks whose $q$-site states are
-    orthogonal
-    \cite{gap:mswc24_block_form_mixed_overlap,gap:mswc24_repeated_block_corrected_state}.
+    approximating state.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -346,8 +347,8 @@ depth $O(q)$.
     state is $\sum_j\alpha_j\ket{\phi_M(V_jP_{j,\infty})}$, and each term is the
     approximating state of the block $A_j$, which is
     $\ket{\psi_{q,\omega_j}(A_j)}$ by
-    Theorem~\ref{thm:ldp_approximating_state_depth}. Write
-    $\ket{\psi_j}=\ket{\psi_{q,\omega_j}(A_j)}$. Each $\ket{\psi_j}$ is a unit
+    Theorem~\ref{thm:ldp_approximating_state_depth}. With
+    $\ket{\psi_j}=\ket{\psi_{q,\omega_j}(A_j)}$, each $\ket{\psi_j}$ is a unit
     vector, and for $j\neq j'$ the hypothesis $B_j^\dagger B_{j'}=0$ makes the
     physical matrices of the approximating tensors of $A_j$ and $A_{j'}$
     orthogonal, so that the overlap of the two states on $M$ blocks vanishes.
@@ -374,7 +375,7 @@ depth $O(q)$.
 \begin{proof}
     \leanok
     Lemma~\ref{lem:ldp_normal_gap} gives such a bound $t_j$ for every block;
-    take $t=\max_jt_j$.
+    taking $t=\max_jt_j$ bounds them all.
 \end{proof}
 
 \begin{theorem}[Tensors that are not normal, with measurements, in depth
@@ -396,12 +397,13 @@ depth $O(q)$.
     $B_j^\dagger B_{j'}=0$ for $j\neq j'$, such that the weights
     $\beta_j=\sum_k\mu_{j,k}^N$ are not all zero. Then a unit vector $\ket\psi$
     with $\varepsilon(\psi,\phi_N)\leq\varepsilon$ is prepared with measurements
-    and a circuit in depth at most $c\log(N/\varepsilon)$. This is the depth
+    and a circuit in depth at most $c\log(N/\varepsilon)$. As recorded in
+    \cite{gap:mswc24_measurement_preparation_scope}, this establishes the depth
     $O(\log(N/\varepsilon))$ of the paragraph ``Long-range MPS using
     measurements'' of \cite{Malz2024Preparation}, with measurements used only
     for the GHZ-type state, for the corrected approximating state, restricted to
-    blocks whose $q$-site states are orthogonal and to block lengths dividing $N$
-    \cite{gap:mswc24_measurement_preparation_scope}. Because $q$ must divide $N$
+    blocks whose $q$-site states are orthogonal and to block lengths dividing $N$.
+    Because $q$ must divide $N$
     and lie in the window above, the statement applies only to chain lengths
     with a divisor in the window and is vacuous for the others, for instance for
     every large prime $N$.
@@ -413,9 +415,9 @@ depth $O(q)$.
     Theorem~\ref{thm:ldp_approximation_error_repeated_orthogonal_blocks} at
     $\gamma=1/4$, so the error of the corrected approximating state with the
     amplitudes $\alpha_j=\beta_j/(\sum_l\lvert\beta_l\rvert^2)^{1/2}$ is at most
-    $KMe^{-rq}$. Put $a=1/r$ and $b'=a\max(\log K,0)+L_0+L_1+1$, with $L_0$ the
-    length of Theorem~\ref{thm:ldp_repeated_block_measurement} and $L_1$ the sum
-    of the injectivity lengths of the blocks. Then $q\geq L_0$, every blocked
+    $KMe^{-rq}$. With $a=1/r$ and $b'=a\max(\log K,0)+L_0+L_1+1$, where $L_0$ is the
+    length of Theorem~\ref{thm:ldp_repeated_block_measurement} and $L_1$ is the sum
+    of the injectivity lengths of the blocks, one has $q\geq L_0$, every blocked
     tensor is injective, and the state is prepared in depth at most $Cq$. Since
     $N=Mq$, $rq=q/a$ and $a\log(N/\varepsilon)+b'\leq q$, the error is at most
     $\varepsilon$ by Lemma~\ref{lem:ldp_block_length_threshold_error}, and

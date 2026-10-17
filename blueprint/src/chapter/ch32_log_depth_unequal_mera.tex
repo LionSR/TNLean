@@ -41,7 +41,7 @@ independent of the chain length and the requested accuracy.
 \end{theorem}
 \begin{proof}
     \leanok
-    Induct on the tree. At a binary vertex,
+    By induction on the tree, at a binary vertex one has
     $T^\dagger T=W^\dagger(T_1^\dagger T_1\otimes T_2^\dagger T_2)W
         =W^\dagger W=\Id$.
 \end{proof}
@@ -59,14 +59,13 @@ independent of the chain length and the requested accuracy.
 \begin{proof}
     \leanok
     \uses{lem:ldp_polar_merge}
-    Split $n$ into $n_1=\lfloor n/2\rfloor$ and $n_2=n-n_1$.
-    At a successor depth both satisfy
-    $2^h s\le n_i\le2^h c$; no rounding error is added to the upper
-    bound, since its endpoint is even. The polar-merge identity gives
-    $V_{n_1+n_2}=(V_{n_1}\otimes V_{n_2})W_{n_1,n_2}$.
-    Injectivity makes $W_{n_1,n_2}$ an isometry. Induction gives the
-    two descendants, and at depth zero the polar isometry is itself
-    the bounded leaf.
+    Splitting $n$ into $n_1=\lfloor n/2\rfloor$ and $n_2=n-n_1$ gives
+    $2^h s\le n_i\le2^h c$ at a successor depth, with no rounding error
+    added to the upper bound because its endpoint is even. The polar-merge
+    identity gives $V_{n_1+n_2}=(V_{n_1}\otimes V_{n_2})W_{n_1,n_2}$,
+    where injectivity makes $W_{n_1,n_2}$ an isometry. Induction then
+    gives the two descendants, and at depth zero the polar isometry is
+    itself the bounded leaf.
 \end{proof}
 
 \begin{theorem}[Polar trees on a common supported space]
@@ -85,8 +84,8 @@ independent of the chain length and the requested accuracy.
     be an injective coordinate inclusion with range $\C^S$.
     Suppose that for every $m\ge s\ge1$, the matrices of $A^{[m]}$
     vanish outside $S$ and span every matrix unit indexed by $S$.
-    Write $A^{[m]}=V_mP_m$ and $\widehat V_m=V_mJ$.
-    Then $\widehat V_m^\dagger\widehat V_m=I_\chi$.
+    For $A^{[m]}=V_mP_m$ and $\widehat V_m=V_mJ$, one has
+    $\widehat V_m^\dagger\widehat V_m=I_\chi$.
     For $l,r\ge s$, the polar merge $W_{l,r}$ restricts to
     $\widehat W_{l,r}=(J^\dagger\otimes J^\dagger)W_{l,r}J$, and
     \begin{align}
@@ -95,11 +94,11 @@ independent of the chain length and the requested accuracy.
          & \widehat W_{l,r}^\dagger\widehat W_{l,r}            & =I_\chi.
         \label{eq:ldp_supported_polar_merge}
     \end{align}
-    Consequently, if $2^h s\le n\le2^h c$, then $\widehat V_n$
-    is a tree of coarse depth $h$ with at most $c$ sites per physical leaf.
-    The same maps act on every superposition of the pairs in $S$.
-    This is the supported-space form of the tree in
-    \cite[eq.~(16), Long-range MPS using measurements]{Malz2024Preparation}.
+    Consequently, in the supported-space form of the tree in
+    \cite[eq.~(16), Long-range MPS using measurements]{Malz2024Preparation},
+    if $2^h s\le n\le2^h c$, then $\widehat V_n$ is a tree of coarse depth $h$
+    with at most $c$ sites per physical leaf, and the same maps act on every
+    superposition of the pairs in $S$.
 
     % Formula: Vhat_(l+r) = (Vhat_l tensor Vhat_r) What_(l,r).
     % Source: MSWC24 eq. (16), restricted to the common support S.
@@ -133,17 +132,17 @@ independent of the chain length and the requested accuracy.
 \begin{proof}
     \leanok
     \uses{thm:ldpolar_tensor_injective_on, lem:ldp_polar_merge}
-    The polar support is the coordinate projection $JJ^\dagger$.
-    Thus $V_m$ vanishes outside the selected columns and
+    The polar support is the coordinate projection $JJ^\dagger$,
+    so $V_m$ vanishes outside the selected columns and
     $J^\dagger V_m^\dagger V_mJ=I_\chi$.
-    Restrict the polar-merge sum to those columns in each child to obtain
+    Restricting the polar-merge sum to those columns in each child gives
     (\ref{eq:ldp_supported_polar_merge}). With
     $L=\widehat V_l\otimes\widehat V_r$, this also proves that the
     image of $\widehat V_{l+r}$ is contained in the image of $L$.
     Since $L^\dagger L=I$, the restricted merge satisfies
     $\widehat W^\dagger\widehat W
-        =\widehat V_{l+r}^\dagger\widehat V_{l+r}=I_\chi$.
-    Repeated floor/ceiling splits give the bounded-leaf tree.
+        =\widehat V_{l+r}^\dagger\widehat V_{l+r}=I_\chi$, and
+    repeated floor/ceiling splits give the bounded-leaf tree.
 \end{proof}
 
 \begin{definition}[Finite-range networks on unequal blocks]
@@ -189,9 +188,10 @@ independent of the chain length and the requested accuracy.
     \leanok
     \uses{thm:ldp_bounded_tree_isometry, thm:ldp_chain_block_iso_inner,
         thm:ldp_isometric_extension_overlap, thm:ldp_unitary_implementing_isometry}
-    Complete the unit column $\ket\omega$ to a unitary taking
-    $\ket{0,0}$ to it. Tensor products of the normalized pairs have
-    norm one, and the isometric forest preserves their norm.
+    Completing the unit column $\ket\omega$ to a unitary taking
+    $\ket{0,0}$ to it realizes the top pair, while tensor products of the
+    normalized pairs have norm one and the isometric forest preserves
+    their norm.
 \end{proof}
 
 \begin{theorem}[Polar forests and the block-isometry state]
@@ -209,9 +209,9 @@ independent of the chain length and the requested accuracy.
 \begin{proof}
     \leanok
     \uses{def:ldp_unequal_mera, def:ldp_block_isometry_state, thm:ldp_unequal_mera_norm}
-    Substitute the tree contractions into
-    (\ref{eq:ldp_unequal_mera_state}); the regrouping of physical
-    configurations is precisely the prescribed block partition.
+    Substituting the tree contractions into
+    (\ref{eq:ldp_unequal_mera_state}) regroups the physical
+    configurations according to the prescribed block partition.
 \end{proof}
 
 \begin{theorem}[Bounded single leaves and product states]
@@ -229,9 +229,9 @@ independent of the chain length and the requested accuracy.
 \begin{proof}
     \leanok
     \uses{thm:ldp_unequal_mera_norm}
-    For the first assertion use the unit column $1\mapsto\ket\psi$
-    and the scalar top unitary. For the second use the column
-    $1\mapsto\ket0$ separately at every site.
+    The unit column $1\mapsto\ket\psi$ and the scalar top unitary give
+    the first assertion, while the column $1\mapsto\ket0$ applied
+    separately at every site gives the second.
 \end{proof}
 
 \begin{theorem}[Uniform finite-range networks at every positive length]
@@ -264,27 +264,27 @@ independent of the chain length and the requested accuracy.
         thm:ldp_unequal_mera_caps, thm:ldp_block_approximation_error,
         thm:ldp_short_chain_preparation, lem:ldp_normalized_state_rescaling,
         thm:ldp_depth_upper_bound_divisible, thm:prep_pair_norm}
-    For $\varepsilon>1$, a product state suffices. Hence assume
-    $0<\varepsilon\le1$. Pass to a normal left-canonical representative $B$, changing
-    normalized states only by a phase. Choose $s\ge1$ from its
+    For $\varepsilon>1$, a product state suffices, so assume
+    $0<\varepsilon\le1$. Passing to a normal left-canonical representative $B$ changes
+    normalized states only by a phase; let $s\ge1$ be its
     eventual injectivity threshold and set $R=4s$. The unequal-block
     second-order estimate at $\gamma=1/2$ gives constants $K,r>0$
     with error at most $KM e^{-rq}$ for blocks of length at least $q$.
-    Choose $q=\lceil a\log(N/\varepsilon)+b\rceil$, with $a=1/r$
+    Let $q=\lceil a\log(N/\varepsilon)+b\rceil$, with $a=1/r$
     and fixed $b$ large enough that $q\ge s$ and $KN e^{-rq}\le\varepsilon$.
 
-    If $q\le N$, take $M=\lfloor N/q\rfloor$ blocks, the first
-    $M-1$ of length $q$ and the last of length $q+N\bmod q$.
-    Choose $h$ so that $2^h s\le q<2^h(2s)$. Every block then lies
+    If $q\le N$, partitioning into $M=\lfloor N/q\rfloor$ blocks, the first
+    $M-1$ of length $q$ and the last of length $q+N\bmod q$,
+    and choosing $h$ with $2^h s\le q<2^h(2s)$ places every block length
     between $2^h s$ and $2^h(4s)$, so
     Theorem~\ref{thm:ldp_unequal_polar_tree} gives its bounded-leaf
-    tree. Use the fixed-point pair at the top and apply the
-    unequal-block error estimate.
+    tree, and the fixed-point pair at the top together with the
+    unequal-block error estimate yields the stated fidelity bound.
 
-    If $s\le N<q$, use one polar tree over $N$, with $h$ chosen
-    from $N/s$. The normalized trace pair at its root gives the
-    normalized periodic state exactly. This is not one leaf of
-    accuracy-dependent width: its terminal widths remain at most $4s$.
+    If $s\le N<q$, one polar tree over $N$, with $h$ chosen
+    from $N/s$, together with the normalized trace pair at its root, prepares the
+    normalized periodic state exactly; its terminal widths remain at most $4s$
+    rather than forming a single leaf of accuracy-dependent width.
     If $N<s$, the bounded single leaf of
     Theorem~\ref{thm:ldp_unequal_mera_caps} gives the state exactly,
     with $D'=1$.
@@ -307,6 +307,6 @@ independent of the chain length and the requested accuracy.
 \begin{proof}
     \leanok
     \uses{thm:ldp_every_length_mera, lem:ldp_periodic_state_nonzero}
-    Normality implies eventual nonvanishing of the periodic state.
-    Apply Theorem~\ref{thm:ldp_every_length_mera} beyond that threshold.
+    Normality implies eventual nonvanishing of the periodic state, so
+    Theorem~\ref{thm:ldp_every_length_mera} applies beyond that threshold.
 \end{proof}

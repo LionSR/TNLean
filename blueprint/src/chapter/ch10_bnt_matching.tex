@@ -4,17 +4,17 @@
 % Source: copy-weight recovery, Cirac2016MPDO_arXiv Appendix MPV proof,
 % lines 1184--1188.
 The exact matching of Section~\ref{sec:sector_bnt_strong_match} produces a
-coefficient identity on each matched pair. By Newton--Girard power-sum
-recovery, this identity determines the per-copy weight multisets with
-multiplicity \cite[Appendix~A]{Cirac2016MPDO_arXiv}.
+coefficient identity on each matched pair. As in
+\cite[Appendix~A]{Cirac2016MPDO_arXiv}, Newton--Girard power-sum recovery
+determines the per-copy weight multisets with multiplicity from this identity.
 
 \subsection{Matched-sector weight multiset equality}
 
-For a matched pair of sectors with
+As in \cite[Appendix~A]{Cirac2016MPDO_arXiv}, for a matched pair of sectors with
 $c_N^{(j_0)}(P) = \zeta^N c_N^{(\tilde k_0)}(Q)$ for all $N > N_0$ and
 $\zeta\ne0$, power-sum recovery yields multiset equality of the per-copy
 weights, inducing an explicit copy permutation that realizes
-$\mu_{j,q} = \nu_{j,q}\, e^{i\varphi_j}$ \cite[Appendix~A]{Cirac2016MPDO_arXiv}.
+$\mu_{j,q} = \nu_{j,q}\, e^{i\varphi_j}$.
 % Source: matched normal sectors at Cirac2016MPDO_arXiv line 1182; equal-MPV
 % coefficient comparison at lines 1184--1188; global-gauge construction at
 % lines 1189--1192.
@@ -31,7 +31,10 @@ Remark~\ref{rem:proportional_length_scalar_gap}.
     \lean{MPSTensor.matched_sector_weight_multiset_eq}
     \leanok
     \uses{def:sector_weight_data, thm:power_sum_multiset}
-    Let $P, Q$ be sector decompositions with weights $\mu_{j,q}$ and
+    % Source: Cirac2016MPDO_arXiv Appendix MPV proof, lines 1184--1188
+    % (\mu_{j,q} = \nu_{j,q} e^{i\varphi_j}, matching multiplicities r_{a,j} = r_{b,j}).
+    As in \cite[Appendix~A]{Cirac2016MPDO_arXiv} read on a single matched
+    sector, let $P, Q$ be sector decompositions with weights $\mu_{j,q}$ and
     $\nu_{k,q'}$, and fix indices $j_0$, $\tilde k_0$, and a nonzero scalar
     $\zeta \in \C \setminus \{0\}$. Suppose that for every $N > N_0$,
     \begin{align}
@@ -41,29 +44,24 @@ Remark~\ref{rem:proportional_length_scalar_gap}.
     \end{align}
     Then the per-sector multiplicities agree, $r_{j_0}(P) = r_{\tilde k_0}(Q)$,
     and the rescaled per-copy weight multisets coincide.
-    % Source: Cirac2016MPDO_arXiv Appendix MPV proof, lines 1184--1188
-    % (\mu_{j,q} = \nu_{j,q} e^{i\varphi_j}, matching multiplicities r_{a,j} = r_{b,j}).
-    This is \cite[Appendix~A]{Cirac2016MPDO_arXiv} read on a single matched
-    sector.
 \end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:bounded_power_sum_multiset}
-    Expand both sides of the coefficient identity
+    Expanding both sides of the coefficient identity
     (\ref{eq:bnt_matched_sector_coeff_identity}) into per-copy power sums
-    $\sum_q \mu_{j_0, q}^N$ and $\sum_{q'} \nu_{\tilde k_0, q'}^N$, and
-    distribute $\zeta^N$ through the right-hand sum to obtain, for every
+    $\sum_q \mu_{j_0, q}^N$ and $\sum_{q'} \nu_{\tilde k_0, q'}^N$ and
+    distributing $\zeta^N$ through the right-hand sum gives, for every
     $N > N_0$,
     \begin{align}
         \sum_q \mu_{j_0, q}^N
          & = \sum_{q'} (\zeta \cdot \nu_{\tilde k_0, q'})^N.
         \notag
     \end{align}
-    Extend to all positive exponents and apply the unequal-cardinality
-    multiset-recovery lemma (Theorem~\ref{thm:bounded_power_sum_multiset}),
-    using $\zeta \neq 0$ together with the weight non-vanishing assumption
-    to ensure the input weights are nonzero. This yields the multiplicity
-    match and the multiset equality.
+    Extending to all positive exponents and applying the unequal-cardinality
+    multiset-recovery lemma (Theorem~\ref{thm:bounded_power_sum_multiset})
+    with $\zeta \neq 0$ and the weight non-vanishing assumption yields the
+    multiplicity match and the multiset equality.
 \end{proof}
 
 \begin{lemma}[Matched-sector weight-permutation extractor]%
@@ -71,36 +69,34 @@ Remark~\ref{rem:proportional_length_scalar_gap}.
     \lean{MPSTensor.matched_sector_weight_equiv}
     \leanok
     \uses{lem:sector_bnt_matched_sector_weight_multiset_eq}
-    Under the hypotheses of
-    Lemma~\ref{lem:sector_bnt_matched_sector_weight_multiset_eq}, the
+    % Source: Cirac2016MPDO_arXiv Appendix MPV proof, line 1188
+    % (\mu_{j,q} = \nu_{j,q} e^{i\varphi_j}).
+    In the per-copy realisation of \cite[Appendix~A]{Cirac2016MPDO_arXiv},
+    which upgrades the multiset equality from
+    Lemma~\ref{lem:sector_bnt_matched_sector_weight_multiset_eq} to a concrete
+    indexing between the matched $P$- and $Q$-copies, under the hypotheses of
+    Lemma~\ref{lem:sector_bnt_matched_sector_weight_multiset_eq} the
     per-sector multiplicities agree and there is a permutation $\tau$ of
     the per-copy index set identifying the individual weights up to the
     gauge phase: for every $q$,
     $\nu_{\tilde k_0, \tau(q)} = \zeta^{-1} \cdot \mu_{j_0, q}$.
-    % Source: Cirac2016MPDO_arXiv Appendix MPV proof, line 1188
-    % (\mu_{j,q} = \nu_{j,q} e^{i\varphi_j}).
-    This is the per-copy realisation of \cite[Appendix~A]{Cirac2016MPDO_arXiv}:
-    the multiset equality from
-    Lemma~\ref{lem:sector_bnt_matched_sector_weight_multiset_eq} is upgraded to
-    a concrete indexing between the matched $P$- and $Q$-copies.
 \end{lemma}
 
 \begin{proof}\leanok
-    Invoke Lemma~\ref{lem:sector_bnt_matched_sector_weight_multiset_eq} to
-    obtain the cardinality match and the multiset equality.
-    From this multiset-map equality extract a permutation matching the
-    elements pointwise (proved by induction on the cardinality).
-    Compose with the cardinality identification and cancel $\zeta$ via
-    $\zeta \neq 0$ to convert the gauge factor on the right of the
-    pointwise identity to $\zeta^{-1}$ on the left.
+    Lemma~\ref{lem:sector_bnt_matched_sector_weight_multiset_eq} gives
+    the cardinality match and the multiset equality, and induction on the
+    cardinality extracts a permutation matching the elements pointwise from
+    this multiset-map equality. Composing with the cardinality identification
+    and cancelling $\zeta$ via $\zeta \neq 0$ converts the gauge factor on the
+    right of the pointwise identity to $\zeta^{-1}$ on the left.
 \end{proof}
 
 \section{Strong existential matching by exact linear independence}
 \label{sec:sector_bnt_strong_match}
 
-The exact matching shows that equal MPV families force each basis sector
-of one canonical form to pair with a unique basis sector of the other
-\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
+As in \cite[Appendix~A]{Cirac2016MPDO_arXiv}, the exact matching shows that
+equal MPV families force each basis sector of one canonical form to pair with
+a unique basis sector of the other.
 
 \begin{theorem}[Exact single-sector matching]
     \label{thm:sector_bnt_exact_block_match}
@@ -117,8 +113,9 @@ of one canonical form to pair with a unique basis sector of the other
 \begin{proof}\leanok
     \uses{thm:sector_bnt_proportional_exact_match}
     Equality at every positive length gives eventual nonzero proportionality
-    with scalar $1$. Apply
-    Theorem~\ref{thm:sector_bnt_proportional_exact_match} to the chosen sector.
+    with scalar $1$, so
+    Theorem~\ref{thm:sector_bnt_proportional_exact_match} applies to the chosen
+    sector.
 \end{proof}
 
 \begin{theorem}[Strong existential matching, full-basis form]
@@ -135,17 +132,18 @@ of one canonical form to pair with a unique basis sector of the other
 
 \begin{proof}\leanok
     \uses{thm:sector_bnt_proportional_full_basis_match}
-    Convert equality to eventual nonzero proportionality with scalar $1$ and
-    apply Theorem~\ref{thm:sector_bnt_proportional_full_basis_match}.
+    Converting equality to eventual nonzero proportionality with scalar $1$ and
+    applying Theorem~\ref{thm:sector_bnt_proportional_full_basis_match} yields
+    the conclusion.
 \end{proof}
 
 \subsection{Bijective matching by symmetry}
 \label{subsec:sector_bnt_strong_match_bijective_symmetry}
 
-Applying the matching in both directions yields a bijection between the basis
-sectors: the basis-distinctness clause ensures injectivity both ways, so
-$g_a = g_b$ and $B_k = e^{i\phi_k} X_k A_{j_k} X_k^{-1}$ on the full basis
-\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
+As in \cite[Appendix~A]{Cirac2016MPDO_arXiv}, applying the matching in both
+directions yields a bijection between the basis sectors: the basis-distinctness
+clause ensures injectivity both ways, so $g_a = g_b$ and
+$B_k = e^{i\phi_k} X_k A_{j_k} X_k^{-1}$ on the full basis.
 
 \begin{theorem}[Bijective matching by symmetry]
     \label{thm:sector_bnt_bijective_match_of_sameMPV}
@@ -162,7 +160,7 @@ $g_a = g_b$ and $B_k = e^{i\phi_k} X_k A_{j_k} X_k^{-1}$ on the full basis
 
 \begin{proof}\leanok
     \uses{thm:sector_bnt_forall_unit_k_exists_j_nondecaying_overlap_of_sameMPV, lem:sector_bnt_bijection_from_matches}
-    Apply the full-basis matcher in both directions, using symmetry of the
-    same-MPV relation. Lemma~\ref{lem:sector_bnt_bijection_from_matches}
+    Applying the full-basis matcher in both directions by symmetry of the
+    same-MPV relation, Lemma~\ref{lem:sector_bnt_bijection_from_matches}
     converts these two families of matches into the required bijection.
 \end{proof}

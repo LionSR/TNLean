@@ -15,12 +15,12 @@ inequivalence of distinct blocks, the parent-Hamiltonian kernel coincides with
 the span of the basis of normal tensors.
 
 \textbf{Scope restriction (gauge-phase inequivalence and canonical normalization):}
-The formalized kernel equality requires that distinct blocks be inequivalent up
-to gauge and phase, whereas \cite[Theorem~12]{PerezGarcia2007Matrix} assumes
-only distinct finite-ring component vectors; documented in
-\cite{gap:pgvwc07_direct_sum_input}. In addition, the doubly-normalized
-corollary assumes normalized self-overlap; documented in
-\cite{gap:pgvwc07_ti_canonical_form_scope}.
+As documented in \cite{gap:pgvwc07_direct_sum_input}, the formalized kernel
+equality requires that distinct blocks be inequivalent up to gauge and phase,
+whereas \cite[Theorem~12]{PerezGarcia2007Matrix} assumes only distinct
+finite-ring component vectors. As documented in
+\cite{gap:pgvwc07_ti_canonical_form_scope}, the doubly-normalized corollary
+additionally assumes normalized self-overlap.
 
 \begin{theorem}[Doubly-normalized PGVWC07 source-length kernel equality]
     \label{thm:gs_eq_bnt_span}
@@ -69,9 +69,9 @@ corollary assumes normalized self-overlap; documented in
     % Scope restrictions documented in
     % docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex and
     % docs/paper-gaps/pgvwc07_direct_sum_input.tex.
-    Apply Theorem~\ref{thm:gs_eq_bnt_span_source_normalization} with
-    $\Lambda_j=\Id$. Positive definiteness is immediate, and the assumed
-    left-canonical identity is the dual fixed-point equation at $\Lambda_j=\Id$.
+    At $\Lambda_j=\Id$, positive definiteness is immediate and the assumed
+    left-canonical identity is the dual fixed-point equation, so
+    Theorem~\ref{thm:gs_eq_bnt_span_source_normalization} applies directly.
 \end{proof}
 
 \begin{theorem}[PGVWC07 source-length kernel equality at general canonical normalization]

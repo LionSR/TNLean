@@ -23,15 +23,23 @@ Source revision: `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 namespace TNLean.PEPS.AreaLaw.Geometry
 
 /-- A repair half-side computed from a parent scale at least one is a
+natural power of two. Source: area-law Section 11, `geometry:trim-radius`,
+lines 380–385, and the integral recursion, lines 545–551. -/
+theorem exists_natPow_repairHalfSide {S : ℝ} (hS : 1 ≤ S) :
+    ∃ e : ℕ, repairHalfSide S = (2 : ℝ) ^ e := by
+  have hf : 0 ≤ (⌊(Exponents.rho : ℝ) * Real.logb 2 S⌋ : ℤ) :=
+    Int.floor_nonneg.mpr
+      (mul_nonneg rho_pos_lt_one.1.le (Real.logb_nonneg one_lt_two hS))
+  refine ⟨(⌊(Exponents.rho : ℝ) * Real.logb 2 S⌋ : ℤ).toNat, ?_⟩
+  simp only [repairHalfSide, ← zpow_natCast, Int.toNat_of_nonneg hf]
+
+/-- A repair half-side computed from a parent scale at least one is a
 natural number. Source: area-law Section 11, `geometry:trim-radius`,
 lines 380–385, and the integral recursion, lines 545–551. -/
 theorem exists_natCast_repairHalfSide {S : ℝ} (hS : 1 ≤ S) :
     ∃ n : ℕ, repairHalfSide S = (n : ℝ) := by
-  have hf : 0 ≤ (⌊(Exponents.rho : ℝ) * Real.logb 2 S⌋ : ℤ) :=
-    Int.floor_nonneg.mpr
-      (mul_nonneg rho_pos_lt_one.1.le (Real.logb_nonneg one_lt_two hS))
-  refine ⟨2 ^ (⌊(Exponents.rho : ℝ) * Real.logb 2 S⌋ : ℤ).toNat, ?_⟩
-  simp only [repairHalfSide, Nat.cast_pow, Nat.cast_ofNat, ← zpow_natCast,
-    Int.toNat_of_nonneg hf]
+  obtain ⟨e, he⟩ := exists_natPow_repairHalfSide hS
+  refine ⟨2 ^ e, ?_⟩
+  simpa only [Nat.cast_pow, Nat.cast_ofNat] using he
 
 end TNLean.PEPS.AreaLaw.Geometry

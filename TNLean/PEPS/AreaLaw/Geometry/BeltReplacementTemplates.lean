@@ -33,7 +33,10 @@ existing fan-run template then applies.
 `repairReplacement_exists_template` and `exists_belt_replacement_templates` assume that
 the region contains a lattice point, which Definition 9.3 needs for a nonempty template,
 and the replacement statements assume `S_* ≥ 1`. The source applies these templates only
-to regions meeting the cut and chooses `S_*` large. Documented in
+to regions meeting the cut and chooses `S_*` large. The lattice-point premise is
+discharged for every belt tile or replacement whose current region at some later
+generation meets the cut by `repairStage_exists_integerPoint_mem_birth_of_oldInclusion`
+(`RepairBirthLatticePoint.lean`); the premise `S_* ≥ 1` remains here. Documented in
 `docs/paper-gaps/arealaw2d_belt_replacement_template_scope.tex`.
 
 ## Main statements

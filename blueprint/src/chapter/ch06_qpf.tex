@@ -43,8 +43,8 @@ Wolf~\cite[Chapter~6]{Wolf2012Quantum} and Evans~\cite{Evans1978Spectral}.
 
 \begin{proof}\leanok
     \uses{thm:injective_irreducible, thm:transfer_psd_fp_pd_irred}
-    Injectivity implies irreducibility of the transfer map. Apply
-    Theorem~\ref{thm:transfer_psd_fp_pd_irred}.
+    Because injectivity implies irreducibility of the transfer map,
+    Theorem~\ref{thm:transfer_psd_fp_pd_irred} yields positive definiteness.
 \end{proof}
 
 
@@ -78,8 +78,8 @@ Wolf~\cite[Chapter~6]{Wolf2012Quantum} and Evans~\cite{Evans1978Spectral}.
 
 \begin{proof}\leanok
     \uses{thm:injective_irreducible, thm:psd_fp_unique_irred}
-    Injectivity implies irreducibility of the transfer map. Apply
-    Theorem~\ref{thm:psd_fp_unique_irred}.
+    Because injectivity implies irreducibility of the transfer map,
+    Theorem~\ref{thm:psd_fp_unique_irred} yields uniqueness up to scaling.
 \end{proof}
 
 
@@ -120,8 +120,9 @@ Wolf~\cite[Chapter~6]{Wolf2012Quantum} and Evans~\cite{Evans1978Spectral}.
 \begin{proof}
     \leanok
     \uses{thm:psd_fp_exists, thm:psd_fp_pd, thm:psd_fp_unique}
-    Combine Theorems~\ref{thm:psd_fp_exists},~\ref{thm:psd_fp_pd},
-    and~\ref{thm:psd_fp_unique}.
+    Theorems~\ref{thm:psd_fp_exists},~\ref{thm:psd_fp_pd},
+    and~\ref{thm:psd_fp_unique} together provide existence, positive
+    definiteness, and uniqueness up to scaling.
 \end{proof}
 
 \begin{theorem}[Quantum Perron--Frobenius for irreducible transfer maps]
@@ -167,10 +168,9 @@ Wolf~\cite[Chapter~6]{Wolf2012Quantum} and Evans~\cite{Evans1978Spectral}.
     Let $\sigma$ be a fixed point of the adjoint transfer map
     $\sum_i (A^i)^\dagger \sigma A^i = \sigma$,
     and let $S$ be invertible with $S^\dagger S = \sigma$.
-    Define $A'^i = SA^iS^{-1}$.
-    Then $\sum_i (A'^i)^\dagger A'^i = \Id$, i.e.\ the gauged
-    Kraus map is trace-preserving. This is the left-canonical
-    normalization.
+    Then the gauged tensor $A'^i = SA^iS^{-1}$ satisfies the left-canonical
+    normalization $\sum_i (A'^i)^\dagger A'^i = \Id$, so its Kraus map is
+    trace-preserving.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -179,8 +179,8 @@ Wolf~\cite[Chapter~6]{Wolf2012Quantum} and Evans~\cite{Evans1978Spectral}.
         =(S^\dagger)^{-1}(A^i)^\dagger\sigma A^iS^{-1}$.
     The adjoint fixed-point substitution leaves
     $(S^\dagger)^{-1}\sigma S^{-1}$, and $\sigma=S^\dagger S$ cancels
-    the outer factors. See Section~\ref{sec:app_qpf_gauge} for the full
-    calculation.
+    the outer factors (Section~\ref{sec:app_qpf_gauge} gives the full
+    calculation).
 \end{proof}
 
 \begin{theorem}[Square-root trace-preserving gauge from an adjoint fixed point]%
@@ -201,15 +201,14 @@ Wolf~\cite[Chapter~6]{Wolf2012Quantum} and Evans~\cite{Evans1978Spectral}.
 \end{theorem}
 
 \begin{proof}\leanok
-
-    This is the specialization $K_i = A^i$ of
-    Theorem~\cite[``Trace-preserving gauge from an adjoint fixed point, Kraus form'']{QICLean2026Blueprint}. Each conjugated
-    summand is
+    Specializing
+    Theorem~\cite[``Trace-preserving gauge from an adjoint fixed point, Kraus form'']{QICLean2026Blueprint}
+    to $K_i = A^i$ writes each conjugated summand as
     $(B^i)^\dagger B^i
         =\sigma^{-1/2}(A^i)^\dagger\sigma A^i\sigma^{-1/2}$.
     Substituting $\sum_i(A^i)^\dagger\sigma A^i=\sigma$ and cancelling
-    the outer inverse square roots gives $\Id$. The complete calculation
-    appears in Section~\ref{sec:app_qpf_gauge}.
+    the outer inverse square roots gives $\Id$, as calculated in full in
+    Section~\ref{sec:app_qpf_gauge}.
 \end{proof}
 
 \begin{theorem}[Square-root trace-preserving gauge from an adjoint eigenvector]%
@@ -230,9 +229,10 @@ Wolf~\cite[Chapter~6]{Wolf2012Quantum} and Evans~\cite{Evans1978Spectral}.
 \end{theorem}
 
 \begin{proof}\leanok
-    Rescale $A$ by $r^{-1/2}$. The adjoint transfer map is quadratic in
-    the tensor, so the eigenvector equation becomes a fixed-point equation.
-    Theorem~\ref{thm:tp_gauge_from_adjoint_fixed} then gives the result.
+    Rescaling $A$ by $r^{-1/2}$ turns the eigenvector equation into a
+    fixed-point equation because the adjoint transfer map is quadratic in
+    the tensor, and Theorem~\ref{thm:tp_gauge_from_adjoint_fixed} then gives
+    the result.
 \end{proof}
 
 
@@ -281,17 +281,14 @@ Cirac et al.~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
     \lean{MPSTensor.exists_posDef_adjoint_eigenvector}
     \leanok
     \uses{def:irreducible_tensor, def:transfer_map}
-    Let $A$ be an irreducible MPS tensor with $D > 0$
-    and some $A^i \neq 0$.
+    Combining the eigenvector-existence statement of
+    \cite[Theorem~6.5]{Wolf2012Quantum} with the irreducible positive-definiteness
+    upgrade of \cite[Theorem~6.3(2)--(3)]{Wolf2012Quantum} and applying them to
+    the adjoint transfer map as in~\cite[Appendix~A]{Cirac2016MPDO_arXiv}, let
+    $A$ be an irreducible MPS tensor with $D > 0$ and some $A^i \neq 0$.
     Then there exist a positive definite matrix~$\sigma$
     and a positive real $r > 0$ such that
     $\E_A^\dagger(\sigma) = r\sigma$.
-
-    This combines the eigenvector-existence part of
-    \cite[Theorem~6.5]{Wolf2012Quantum} with the
-    irreducible upgrade to positive definiteness
-    (\cite[Theorem~6.3(2)--(3)]{Wolf2012Quantum});
-    the application to the adjoint transfer map follows~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -311,8 +308,9 @@ Cirac et al.~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
     \lean{MPSTensor.exists_tp_data_of_irreducible}
     \leanok
     \uses{def:irreducible_tensor, def:gauge_equiv}
-    Let $A$ be an irreducible MPS tensor with $D > 0$
-    and some $A^i \neq 0$.
+    Following the spectral rescaling and trace-preserving gauge construction of
+    \cite[Appendix~A]{Cirac2016MPDO_arXiv}, let $A$ be an irreducible MPS tensor
+    with $D > 0$ and some $A^i \neq 0$.
     Then there exist a positive real~$r$, a positive definite matrix~$\sigma$,
     and a tensor~$B$ gauge-equivalent to $r^{-1/2}A$ such that
     \begin{align}
@@ -321,24 +319,18 @@ Cirac et al.~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
         \label{eq:qpf_irred_tp_gauge}
     \end{align}
     and $\sum_i (B^i)^\dagger B^i = \Id$.
-
-    This corresponds to the spectral rescaling and trace-preserving gauge
-    construction of \cite[Appendix~A]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:posDef_adjoint_eigenvector, thm:tp_gauge_from_adjoint_eigenvector, lem:tp_gauge_equiv}
-    By Theorem~\ref{thm:posDef_adjoint_eigenvector},
-    obtain $\sigma$ positive definite and $r > 0$ with
-    $\E_A^\dagger(\sigma) = r\sigma$.
-    Set $c = r^{-1/2}$ and $A'^i = cA^i$.
-    Then $\E_{A'}^\dagger(\sigma) = \sigma$.
+    Theorem~\ref{thm:posDef_adjoint_eigenvector} provides a positive definite
+    $\sigma$ and $r > 0$ with $\E_A^\dagger(\sigma) = r\sigma$. For
+    $c = r^{-1/2}$ and $A'^i = cA^i$, this gives $\E_{A'}^\dagger(\sigma) = \sigma$.
     By the square-root trace-preserving eigenvector gauge construction
     (Theorem~\ref{thm:tp_gauge_from_adjoint_eigenvector}), the tensor defined by
     (\ref{eq:qpf_irred_tp_gauge}) satisfies
-    $\sum_i (B^i)^\dagger B^i = \Id$.
-    Lemma~\ref{lem:tp_gauge_equiv} gives the required gauge equivalence to
-    $r^{-1/2}A$.
+    $\sum_i (B^i)^\dagger B^i = \Id$, and Lemma~\ref{lem:tp_gauge_equiv} gives
+    the required gauge equivalence to $r^{-1/2}A$.
 \end{proof}
 
 \begin{theorem}[Unital-gauge existence for irreducible tensors]%
@@ -346,8 +338,9 @@ Cirac et al.~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
     \lean{MPSTensor.exists_unital_data_of_irreducible}
     \leanok
     \uses{def:irreducible_tensor}
-    Let $A$ be an irreducible MPS tensor with $D > 0$
-    and some $A^i \neq 0$.
+    Following the Perron--Frobenius unital gauge construction of
+    \cite[Theorem~4]{PerezGarcia2007Matrix} for an irreducible block, let $A$ be
+    an irreducible MPS tensor with $D > 0$ and some $A^i \neq 0$.
     Then there exist a positive real~$r$, a positive definite matrix~$\rho$,
     and a tensor~$B$ gauge-equivalent to $r^{-1/2}A$ such that
     \begin{align}
@@ -356,19 +349,15 @@ Cirac et al.~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
         \label{eq:qpf_irred_unital_gauge}
     \end{align}
     and $\sum_i B^i(B^i)^\dagger = \Id$.
-
-    This corresponds to the Perron--Frobenius unital gauge of
-    \cite[Theorem~4]{PerezGarcia2007Matrix} for an irreducible block.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:posDef_adjoint_eigenvector, thm:unital_gauge_of_pd_fixed_point}
-    Apply Theorem~\ref{thm:posDef_adjoint_eigenvector} to the
-    conjugate-transposed Kraus family. Irreducibility transfers to that
-    family, and the nonzero Kraus hypothesis is preserved by taking adjoints.
-    Translating the resulting adjoint eigenvector equation back gives
-    $\E_A(\rho)=r\rho$ with $\rho$ positive definite and $r>0$. The unital
-    gauge theorem then gives the representative
+    Applying Theorem~\ref{thm:posDef_adjoint_eigenvector} to the
+    conjugate-transposed Kraus family (to which irreducibility and the nonzero
+    Kraus hypothesis transfer) and translating the resulting adjoint eigenvector
+    equation back gives $\E_A(\rho)=r\rho$ with $\rho$ positive definite and
+    $r>0$. The unital gauge theorem then gives the representative
     (\ref{eq:qpf_irred_unital_gauge}), and the same square-root similarity
     gives gauge equivalence to $r^{-1/2}A$.
 \end{proof}

@@ -5,7 +5,9 @@
     \lean{QuantumCircuit.exists_supported_projected_relative_evolution}
     \leanok
     \uses{def:qc_site_expectation}
-    Let $I$ be a finite set of sites, let $q\geq1$, and let $K\subseteq I$.
+    Following \cite{OpenAI2026PolynomialPEPS}, let $I$ be a finite set of
+    sites, let $q\geq1$, and let $K\subseteq I$, with empty site sets and
+    empty regions included.
     Let $H'$ and $H$ be Hermitian operators on $(\C^q)^{\otimes I}$, and put
     $G_K(t)=E_K(e^{itH'}(H'-H)e^{-itH'})$. There is a unique differentiable
     path $U$ satisfying
@@ -22,25 +24,22 @@
     \begin{align*}
         \|e^{itH'}e^{-itH}-U(t)\|\leq\varepsilon |t|.
     \end{align*}
-    Empty site sets and empty regions are included. This is the supported
-    relative evolution used in \cite{OpenAI2026PolynomialPEPS}.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{lem:qc_site_expectation_properties,lem:al_site_expectation_order}
-    The expectation is complex linear, preserves Hermiticity, and is a
-    contraction in the operator norm. The theorem ``Projected evolution approximates
-    the explicit product'' in \cite{QICLean2026Blueprint} therefore
-    constructs a single unitary path with the stated derivative,
-    uniqueness, and comparison estimate.
-    The derivative of $e^{itH'}e^{-itH}$ has generator
-    $e^{itH'}(H'-H)e^{-itH'}$ multiplying on the left, so both evolutions
-    have the same initial value.
+    Because the expectation $E_K$ is complex linear, preserves Hermiticity,
+    and is a contraction in the operator norm, the theorem ``Projected
+    evolution approximates the explicit product'' in
+    \cite{QICLean2026Blueprint} constructs a unique unitary path $U$ with the
+    stated derivative and comparison estimate, since the derivative of
+    $e^{itH'}e^{-itH}$ has left generator $e^{itH'}(H'-H)e^{-itH'}$ and both
+    evolutions share the initial value $1$.
 
-    Each $G_K(s)$ acts on $K$. Hence every operator $B$ acting on $K^c$
-    commutes with every $G_K(s)$. The theorem ``Commutation with the
-    evolution'' in \cite{QICLean2026Blueprint} gives that $U(t)$ commutes
-    with $B$, by the conservation identity $U(t)^*BU(t)=B$ and unitarity.
-    The commutant characterization of the supported-operator algebra
-    shows that $U(t)$ acts on $K$ for every real time $t$.
+    Since each $G_K(s)$ acts on $K$, every operator $B$ acting on $K^c$
+    commutes with $G_K(s)$ for all $s$. The theorem ``Commutation with the
+    evolution'' in \cite{QICLean2026Blueprint} then yields
+    $U(t)^*BU(t)=B$, so unitarity of $U(t)$ implies that $U(t)$ commutes with
+    $B$, and the commutant characterization of the supported-operator algebra
+    concludes that $U(t)$ acts on $K$ for every real time $t$.
 \end{proof}

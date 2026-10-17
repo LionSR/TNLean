@@ -13,12 +13,9 @@ The isometries of the tree circuit act on registers that are far apart. They
 \cite{Malz2024Preparation}, so that every layer of the tree takes constant
 depth. Theorem~\ref{thm:qc_long_range_layer} applies a layer of two-site gates
 joining the sites $a$ and $a+2L+1$, on pairwise disjoint stretches
-$\{a,\dots,a+2L+1\}$, with measurements in depth $5$ for every $L$. This
-section deduces that a binary tree of two-site gates with $k$ levels is
-applied with measurements in depth $5k$. Every register here is one site of
-the ring. The registers of the tree circuit carry $\mathbb C^{D^2}$; registers
-of several sites, and the resulting depth $O(\log\log(N/\varepsilon))$ for
-matrix product states, are the subject of Section~\ref{sec:ldp_register_tree}.
+$\{a,\dots,a+2L+1\}$, with measurements in depth $5$ for every $L$. When every register is one site of the ring, composing these layers implements a binary tree of two-site gates with $k$ levels
+with measurements in depth $5k$. Because the registers of a general tree circuit carry $\mathbb C^{D^2}$, Section~\ref{sec:ldp_register_tree} extends this construction to multi-site registers and establishes the resulting depth $O(\log\log(N/\varepsilon))$ for
+matrix product states.
 
 Throughout, the sites of the ring are $\{0,\dots,N-1\}$ with addition modulo
 $N$, and the local labels are $\mathbb Z_d=\{0,\dots,d-1\}$ with $d\ge1$.
@@ -28,9 +25,8 @@ $N$, and the local labels are $\mathbb Z_d=\{0,\dots,d-1\}$ with $d\ge1$.
     \lean{MPSPreparation.isZeroOn_productVector}
     \leanok
     \uses{lem:qc_site_permutations}
-    A product vector whose site vectors at the sites of a set $Z$ are multiples
-    of $\ket0$ has $\ket0$ at the sites of $Z$, in the sense of
-    Lemma~\ref{lem:qc_site_permutations}.
+    In the sense of Lemma~\ref{lem:qc_site_permutations}, a product vector whose site vectors at the sites of a set $Z$ are multiples
+    of $\ket0$ has $\ket0$ at the sites of $Z$.
 \end{lemma}
 \begin{proof}
     \leanok
@@ -76,10 +72,10 @@ $N$, and the local labels are $\mathbb Z_d=\{0,\dots,d-1\}$ with $d\ge1$.
     level $i$ on the vectors with $\ket0$ at $J_{i+1}$. The gates of level $i$
     act on sites $x$ with $x\equiv0$ or $x+1\equiv0$ modulo $2^{i+1}$, hence
     modulo $2^{j+1}$ for every $j<i$, so on no site of $J_i$; and
-    $J_i\subseteq J_{i+1}$. So level $i$ maps the vectors with $\ket0$ at
-    $J_{i+1}$ to vectors with $\ket0$ at $J_i$, and
+    $J_i\subseteq J_{i+1}$. Level $i$ therefore maps the vectors with $\ket0$ at
+    $J_{i+1}$ to vectors with $\ket0$ at $J_i$, and since $J_0$ is empty,
     Lemma~\ref{lem:qc_round_implementation_compose} composes the levels by
-    induction over $k$; $J_0$ is empty.
+    induction over $k$.
 \end{proof}
 
 \begin{remark}[The tree circuit of matrix product states]
@@ -93,8 +89,8 @@ $N$, and the local labels are $\mathbb Z_d=\{0,\dots,d-1\}$ with $d\ge1$.
     and obtains the depth $O(\log\log(N/\varepsilon))$ of
     \cite{Malz2024Preparation} for normal tensors and the chain lengths
     divisible by $s2^{k+1}$ for some $k$ with
-    $a\log(N/\varepsilon)+b\le s2^{k+1}\le2(a\log(N/\varepsilon)+b)$, and
-    Theorem~\ref{thm:ldp_loglog_depth_every_length} obtains it for every chain
-    length, with trees on leaves of unequal widths
-    \cite{gap:mswc24_tree_measurement_scope}.
+    $a\log(N/\varepsilon)+b\le s2^{k+1}\le2(a\log(N/\varepsilon)+b)$; as recorded in
+    \cite{gap:mswc24_tree_measurement_scope},
+    Theorem~\ref{thm:ldp_loglog_depth_every_length} extends this depth bound to every chain
+    length using trees on leaves of unequal widths.
 \end{remark}

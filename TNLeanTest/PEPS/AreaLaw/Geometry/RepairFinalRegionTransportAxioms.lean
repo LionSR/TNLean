@@ -7,14 +7,18 @@ import Lean.Elab.Command
 import Lean.Util.CollectAxioms
 import TNLean.PEPS.AreaLaw.Geometry.RepairFinalRegionTransport
 
-/-! Logical dependencies of the geometric repair theorem. -/
+/-! Logical dependencies of final-region retention and its empty-generation specialization. -/
 
 run_cmd do
-  let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
-  let decl := ``TNLean.PEPS.AreaLaw.Geometry.repairFinalRegion_eq_current_oldInclusion_of_isEmpty
-  unless (← Lean.getEnv).contains decl do
-    throwError "Missing declaration {decl}"
-  let axioms ← Lean.collectAxioms decl
-  unless axioms.all (allowed.contains ·) do
-    throwError "Unexpected axioms for {decl}: {axioms}"
-  Lean.logInfo m!"{decl}: {axioms}"
+  let ns := `TNLean.PEPS.AreaLaw.Geometry
+  let names := #["repairFinalRegion_eq_final_oldInclusion",
+    "repairFinalRegion_eq_current_oldInclusion_of_isEmpty"]
+  let expected := #[``propext, ``Classical.choice, ``Quot.sound]
+  for name in names do
+    let decl := Lean.Name.str ns name
+    unless (← Lean.getEnv).contains decl do
+      throwError "Missing declaration {decl}"
+    let axioms ← Lean.collectAxioms decl
+    unless axioms.all (expected.contains ·) && expected.all (axioms.contains ·) do
+      throwError "Unexpected logical dependencies for {decl}: {axioms}"
+    Lean.logInfo m!"{decl}: {axioms}"

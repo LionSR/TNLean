@@ -15,29 +15,26 @@
     \end{align}
     It is enough to assume the local frustration-free equations
     $h_iV^{(N)}(A_j)=0$ for every $i$ and $j$.
-    For $N>0$ and $L\le N$, in the block-diagonal case
-    $B=\bigoplus_j\mu_jA_j$, with every $\mu_j\ne0$, the same inclusion
-    follows because each local space $G_L(A_j)$ is contained in $G_L(B)$.
-    This establishes the forward inclusion
-    $\spn\{V^{(N)}(A_j)\}_j \subseteq \ker H_L^{(N)}(B)$ of
-    \cite[Definition~3.9]{Cirac2016MPDO_arXiv}.
+    For $N>0$ and $L\le N$ in the block-diagonal case
+    $B=\bigoplus_j\mu_jA_j$ with every $\mu_j\ne0$, the forward inclusion of
+    \cite[Definition~3.9]{Cirac2016MPDO_arXiv},
+    $\spn\{V^{(N)}(A_j)\}_j \subseteq \ker H_L^{(N)}(B)$, follows because
+    each local space $G_L(A_j)$ is contained in $G_L(B)$.
 \end{lemma}
 
 \begin{proof}
     \leanok
-    The kernel is a linear subspace. Hence it is enough to check the generators
-    $V^{(N)}(A_j)$. The first hypothesis gives this directly. Under the
-    local frustration-free equations,
+    Because the kernel is a linear subspace, it suffices to check the
+    generators $V^{(N)}(A_j)$, which follows directly from the first hypothesis
+    or, under the local frustration-free equations, from
     \begin{align}
         H_L^{(N)}(B)V^{(N)}(A_j)
          & =\sum_i h_iV^{(N)}(A_j) =0. \notag
     \end{align}
-    For a block-diagonal tensor, write $R_{i,\tau}$ for the cyclic
-    length-$L$ restriction at site $i$, with the outside configuration
-    fixed by $\tau$. Then
-    $R_{i,\tau}V^{(N)}(A_j) \in G_L(A_j)\subseteq G_L(B)$.
-    The preceding theorem therefore gives
-    $h_i(B,L)V^{(N)}(A_j)=0$ for every $i$.
+    For a block-diagonal tensor, the cyclic length-$L$ restriction $R_{i,\tau}$
+    at site $i$ with the outside configuration fixed by $\tau$ satisfies
+    $R_{i,\tau}V^{(N)}(A_j) \in G_L(A_j)\subseteq G_L(B)$, so the preceding
+    theorem gives $h_i(B,L)V^{(N)}(A_j)=0$ for every $i$.
 \end{proof}
 
 \begin{lemma}[Kernel containment from chain-space splitting]
@@ -302,8 +299,8 @@
 
 \begin{proof}\leanok
     \uses{thm:cpsv_normal_tp_gauge, lem:rfp_parent_gauge_invariance, thm:left_canonical_rfp_chain_commutation, thm:gauge_invariance_normal}
-    Put $A$ into its trace-preserving gauge. This is a pure similarity, since
-    the normal-tensor normalization fixes the transfer spectral radius at one.
+    Because the normal-tensor normalization fixes the transfer spectral radius
+    at one, passing to the trace-preserving gauge of $A$ is a pure similarity.
     Similarity preserves the physical blocking relation and the local MPS
     spaces, hence also the canonical parent interactions. In the
     trace-preserving gauge, the Appendix~B virtual-bond projectors give
@@ -338,8 +335,9 @@
 \begin{proof}
     \leanok
     \uses{thm:rfp_implies_nncph, lem:parent_hamiltonian_ff}
-    Commutation (\ref{eq:nncph_terms_commute}) is Theorem~\ref{thm:rfp_implies_nncph}. Annihilation (\ref{eq:nncph_terms_annihilate}) is
-    Lemma~\ref{lem:parent_hamiltonian_ff} with $L=2$.
+    Theorem~\ref{thm:rfp_implies_nncph} gives the commutation identity
+    (\ref{eq:nncph_terms_commute}), and Lemma~\ref{lem:parent_hamiltonian_ff}
+    at $L=2$ gives the annihilation identity (\ref{eq:nncph_terms_annihilate}).
 \end{proof}
 
 \begin{theorem}[Nearest-neighbor parent ground spaces for a single normal RFP tensor]%
@@ -391,8 +389,8 @@
     columns form one orthonormal family on the disjoint union of the sector
     matrix spaces. On the tensor square of this disjoint union, let $Q$ be the
     sum of the sector bond projectors, extended by zero between unequal
-    sectors. Write $L_j$ and $R_j$ for the left and right overlapping lifts
-    of the sector-$j$ bond projector. The single-sector relation and the
+    sectors. For the left and right overlapping lifts $L_j$ and $R_j$
+    of the sector-$j$ bond projector, the single-sector relation and the
     mixed-sector orthogonality give
     \begin{align}
         L_jR_j & =R_jL_j, \notag \\
@@ -420,13 +418,13 @@
     \uses{def:sector_bnt_cf, def:mps_transfer_idempotence, def:parent_hamiltonian_ground_space_spanning}
     Let $A_1,\ldots,A_g$ be the distinct basis tensors of a BNT canonical
     form, and let $B=\bigoplus_{j=1}^g A_j$ contain one copy of every basis
-    tensor. If $B$ is a renormalization fixed point, then for every $N>2$,
+    tensor. If $B$ is a renormalization fixed point, then in the
+    multiplicity-one distinct-sector case of
+    \cite[Theorem~3.10]{Cirac2016MPDO_arXiv}, for every $N>2$,
     \begin{align}
         \ker H_2^{(N)}(B)
          & =\spn\bigl\{V^{(N)}(A_j):j=1,\ldots,g\bigr\}. \notag
     \end{align}
-    This establishes the multiplicity-one distinct-sector case of
-    \cite[Theorem~3.10]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -460,10 +458,10 @@
         \ker H_2^{(N)}(B)
                                & =\spn\bigl\{V^{(N)}(A_j):j=1,\ldots,g\bigr\}. \notag
     \end{align}
-    Hence $B$ satisfies the all-chain nearest-neighbor commuting
-    parent-Hamiltonian ground-space condition, establishing the
-    multiplicity-one distinct-sector forward implication of
-    \cite[Theorem~3.10]{Cirac2016MPDO_arXiv}.
+    In the multiplicity-one distinct-sector forward implication of
+    \cite[Theorem~3.10]{Cirac2016MPDO_arXiv}, $B$ therefore satisfies the
+    all-chain nearest-neighbor commuting parent-Hamiltonian ground-space
+    condition.
 \end{theorem}
 
 \begin{proof}\leanok
