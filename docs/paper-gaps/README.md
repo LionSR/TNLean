@@ -1231,6 +1231,7 @@ absolute constants.
   records the attributed positive-filter adaptation on the original square,
   its all-competitor matrix comparison and exact ascending output, and the
   same family's original-energy and full-system fidelity estimates. The
-  vacuous negative-interaction-bound case is included. Literal imported OAI
+  canonical physical theorem permits every real interaction bound directly,
+  including the vacuous negative-bound case. Literal imported OAI
   model types and geometric region/weight construction remain outside the
   result, so the note stays open.

@@ -90,15 +90,16 @@ No regional gap, factor loss or extra termwise Hermiticity premise is added.
 
 \section{The vacuous negative-bound case}
 
-The canonical physical theorem assumes $J\ge0$. The original-grid theorem
-removes that premise by retaining every site and edge term and replacing only
-their norm-bound proofs by the larger bound $J_+=\max(J,0)$. The total operator
-and gapped-ground-state predicate are unchanged. If $J<0$ and $L>0$, the site
-$(0,0)$ would satisfy $0\le\|h_{(0,0)}\|\le J<0$. Thus a negative bound
-forces $L=0$, when all forward crossing counts are zero. Consequently
-$J_+\sum_j b(X_j)a_j^2=J\sum_j b(X_j)a_j^2$.
+The canonical physical theorem permits every real interaction bound $J$.
+Every admissible support is nonempty. For an unused admissible support, choose
+one of its sites $v$. The original site-term bound gives
+$0\le\|h_v\|\le J$, which also bounds the zero term assigned to that support.
+On the empty square there are no admissible supports, so no sign condition on
+$J$ is imposed. The original-grid theorem therefore applies the canonical
+physical theorem directly to the original Hamiltonian and transports its
+selected family and exact crossing budget without replacing $J$.
 
-This argument also allows $q=0$ on the empty grid, whose configuration set has
+The theorem also allows $q=0$ on the empty grid, whose configuration set has
 one element. By contrast, a nonempty region with $q=0$ has no configurations
 and no trace-normalized filter. The representation statements keep these
 cases distinct. No positivity of $\Delta$ is needed for the weighted fidelity

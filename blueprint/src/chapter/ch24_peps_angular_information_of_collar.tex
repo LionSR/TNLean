@@ -64,10 +64,9 @@
 
 \begin{theorem}[Square-grid cell information under the collar bound]
     \label{thm:peps_square_cell_conditional_information_of_collar}
-    \lean{TNLean.PEPS.Approximation.exists_cell_conditionalMutualInformation_le_square_of_sublinearCollarBound}
-    \leanok
+    % Pending verification: \lean{TNLean.PEPS.Approximation.exists_cell_conditionalMutualInformation_le_square_of_sublinearCollarBound}
     \uses{def:area_law_collar_bound,def:polynomial_peps_model}
-    Fix $q\in\mathbb N$, $J\ge0$ and $\Delta>0$, and assume the range-one
+    Fix $q\in\mathbb N$, $J\in\mathbb R$ and $\Delta>0$, and assume the range-one
     sublinear collar bound for fixed template constants. Fix $c>0$.
     The conclusion of
     Theorem~\ref{thm:peps_cell_conditional_information_of_collar} holds with
@@ -80,7 +79,7 @@
     The collar hypothesis remains explicit, as in
     \cite{gap:polypeps_angular_annular_geometry_scope}.
 \end{theorem}
-\begin{proof}\leanok
+\begin{proof}
     \uses{thm:peps_cell_conditional_information_of_collar,
         thm:finite_product_entropy_relabel,thm:square_area_law_ground_gap}
     Relabeling the square sites by the integer rectangle
@@ -198,14 +197,13 @@
 
 \begin{theorem}[Selected-cell information under the collar bound]
     \label{thm:peps_selected_region_information_of_collar}
-    \lean{TNLean.PEPS.Approximation.exists_mutualInformation_selectedRegion_le_square_of_sublinearCollarBound}
-    \leanok
+    % Pending verification: \lean{TNLean.PEPS.Approximation.exists_mutualInformation_selectedRegion_le_square_of_sublinearCollarBound}
     \uses{def:area_law_collar_bound,def:polynomial_peps_model,def:peps_angular_grid}
     In the conditional step of
     \cite[Proposition~3.4]{OpenAI2026PolynomialPEPS} (with the collar
     hypothesis remaining explicit, as recorded in
     \cite{gap:polypeps_angular_annular_geometry_scope}), fix $q\in\mathbb N$,
-    $J\ge0$, $\Delta>0$ and fixed template constants
+    $J\in\mathbb R$, $\Delta>0$ and fixed template constants
     for which the range-one sublinear collar bound holds, and fix $c>0$.
     There exist $C_1>0$ and $K\ge0$ with the following property.
     Let $s\ge1$, let $o\in\mathbb R^2$ be a grid origin, let $r\in\mathbb R$,
@@ -226,7 +224,7 @@
     The constants precede the grid, ambient sets, square size, Hamiltonian,
     ground vector and exterior region.
 \end{theorem}
-\begin{proof}\leanok
+\begin{proof}
     \uses{thm:peps_square_cell_conditional_information_of_collar,
         thm:peps_selected_region_information_of_cell_bounds}
     Let $C_1,K$ be the constants from the square-grid cell information theorem.

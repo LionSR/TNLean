@@ -153,9 +153,11 @@ theorem embedOp_rectangle_eq_reindex {L q : ℕ}
 
 /-- The original square Hamiltonian, with Hermitian parts at its actual
 range-one supports and zero at unused supports. The interaction bound is
-unchanged. Source: area-law Corollary 1.2 and polynomial-PEPS `eq:model`. -/
+unchanged, for every real interaction bound. Each unused admissible support is
+nonempty, so one of its sites supplies the nonnegative bound needed for its zero
+term. Source: area-law Corollary 1.2 and polynomial-PEPS `eq:model`. -/
 def SquareHamiltonian.toAreaLawHamiltonian {L q : ℕ} {J : ℝ}
-    (h : SquareHamiltonian L q J) (hJ : 0 ≤ J) :
+    (h : SquareHamiltonian L q J) :
     AreaLaw.LocalHamiltonian (AreaLaw.rectangularDomain L L) q 1 J := by
   classical
   let e := AreaLaw.rectangleConfigurationEquiv L L q
@@ -186,13 +188,16 @@ def SquareHamiltonian.toAreaLawHamiltonian {L q : ℕ} {J : ℝ}
       exact (Matrix.l2_opNorm_reindex_equiv e (h.hermitianTerm i)).le.trans
         (h.hermitianTerm_norm_le i)
     · rw [Function.extend_apply' _ _ _ hx]
-      simpa only [Pi.zero_apply, norm_zero] using hJ
+      obtain ⟨v, _⟩ := X.property.1
+      simpa only [Pi.zero_apply, norm_zero] using
+        (norm_nonneg _).trans
+          (h.site_norm_le ((AreaLaw.rectangleSiteEquiv L L).symm v))
 
 /-- The interaction conversion has exactly the transported original sum.
 Source: area-law Corollary 1.2 and polynomial-PEPS `eq:model`. -/
 theorem SquareHamiltonian.toAreaLawHamiltonian_operator {L q : ℕ} {J : ℝ}
-    (h : SquareHamiltonian L q J) (hJ : 0 ≤ J) :
-    (h.toAreaLawHamiltonian hJ).operator =
+    (h : SquareHamiltonian L q J) :
+    h.toAreaLawHamiltonian.operator =
       Matrix.reindex (AreaLaw.rectangleConfigurationEquiv L L q)
         (AreaLaw.rectangleConfigurationEquiv L L q) h.operator := by
   classical
@@ -218,15 +223,15 @@ theorem SquareHamiltonian.toAreaLawHamiltonian_operator {L q : ℕ} {J : ℝ}
 the actual conversion. Source: area-law Corollary 1.2 and polynomial-PEPS
 `eq:global-gap`. -/
 theorem SquareHamiltonian.isGappedGroundState_toAreaLawHamiltonian
-    {L q : ℕ} {J : ℝ} (h : SquareHamiltonian L q J) (hJ : 0 ≤ J)
+    {L q : ℕ} {J : ℝ} (h : SquareHamiltonian L q J)
     {E₀ Δ : ℝ} {Ω : StateSpace L q} (hΩ : h.IsGappedGroundState E₀ Ω Δ) :
     AreaLaw.IsGappedGroundState (AreaLaw.rectangularDomain L L) q
-      (h.toAreaLawHamiltonian hJ).operator E₀ (squareAreaLawState Ω) Δ := by
+      h.toAreaLawHamiltonian.operator E₀ (squareAreaLawState Ω) Δ := by
   classical
   let e := AreaLaw.rectangleConfigurationEquiv L L q
   let E := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ e
   refine ⟨(norm_squareAreaLawState Ω).trans hΩ.1, ?_, ?_⟩
-  · rw [h.toAreaLawHamiltonian_operator hJ]
+  · rw [h.toAreaLawHamiltonian_operator]
     have heq : Matrix.toEuclideanLin (Matrix.reindex e e h.operator) (E Ω) =
         E (Matrix.toEuclideanLin h.operator Ω) := by
       ext x
@@ -238,7 +243,7 @@ theorem SquareHamiltonian.isGappedGroundState_toAreaLawHamiltonian
     rw [heq, show Matrix.toEuclideanLin h.operator Ω = (E₀ : ℂ) • Ω from hΩ.2.1,
       map_smul]
     rfl
-  · rw [h.toAreaLawHamiltonian_operator hJ]
+  · rw [h.toAreaLawHamiltonian_operator]
     have hg := hΩ.2.2.submatrix e.symm
     have hdef : (h.operator - (E₀ : ℂ) • 1 -
         (Δ : ℂ) • (1 - vecMulVec (fun x ↦ Ω x) (star (fun x ↦ Ω x)))).submatrix

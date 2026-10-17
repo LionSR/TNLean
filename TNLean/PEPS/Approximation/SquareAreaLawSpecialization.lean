@@ -170,8 +170,8 @@ theorem _root_.TNLean.PEPS.AreaLaw.UniformAreaLaw.squareEntropyAreaLaw
   intro q hq J Δ hJ hΔ
   obtain ⟨C, hC, hbound⟩ := harea q (by omega) 1 J Δ hJ hΔ
   refine ⟨C, hC, fun L h E₀ Ω hΩ A ↦ ?_⟩
-  have hgap := h.isGappedGroundState_toAreaLawHamiltonian hJ.le hΩ
-  have := hbound (AreaLaw.rectangularDomain L L) (h.toAreaLawHamiltonian hJ.le) E₀
+  have hgap := h.isGappedGroundState_toAreaLawHamiltonian hΩ
+  have := hbound (AreaLaw.rectangularDomain L L) h.toAreaLawHamiltonian E₀
     (squareAreaLawState Ω) hgap (A.map (AreaLaw.rectangleSiteEquiv L L).toEmbedding)
   rw [AreaLaw.regionalEntropy_eq_finiteProduct, card_edgeBoundary_rectangle] at this
   exact (finiteProductEntropy_relabel (AreaLaw.rectangleSiteEquiv L L) q Ω A).symm.trans_le

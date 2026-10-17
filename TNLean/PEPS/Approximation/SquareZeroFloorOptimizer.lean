@@ -28,11 +28,11 @@ September 24, 2026, `00-introduction.tex`, `eq:model`, `eq:global-gap`, and comp
 Independently formalized using the existing QICLean and TNLean estimates; no upstream
 Lean proof text is reused.
 
-**Scope restriction (nonnegative budget and supplied feasible filters):** This
-assumes `J ≥ 0` and selects one maximizing family on supplied nested single-crossing
-regions. The nonnegative-budget restriction, including the empty-square case, is
-recorded in `docs/paper-gaps/polypeps_square_zero_floor_optimizer_scope.tex`. It does
-not construct the geometric regions or weights or identify the source's filter
+**Scope restriction (supplied feasible filters):** This selects one maximizing
+family on supplied nested single-crossing regions, for every real interaction
+bound. The scope, including the empty-square case, is recorded in
+`docs/paper-gaps/polypeps_square_zero_floor_optimizer_scope.tex`. It does not
+construct the geometric regions or weights or identify the source's filter
 coordinates with QICLean's feasible families. The representation comparison is
 recorded in https://sirui-lu.com/QICLean/paper-gaps/oai26_zero_floor_energy_scope.pdf.
 -/
@@ -51,7 +51,7 @@ Source: the companion `EnergyOptimizer.lean`, `exists_maximizer_energy`,
 lines 62–109, at the revision cited in the module docstring. The vectors and
 regional matrices below are in the canonical integer square coordinates. -/
 theorem SquareHamiltonian.exists_zero_floor_maximizer_energy_fidelity
-    {L q m : ℕ} {J E₀ Δ : ℝ} (h : SquareHamiltonian L q J) (hJ : 0 ≤ J)
+    {L q m : ℕ} {J E₀ Δ : ℝ} (h : SquareHamiltonian L q J)
     [LinearOrder (AreaLaw.Site (AreaLaw.rectangularDomain L L))]
     {Ω : StateSpace L q} (hΩ : h.IsGappedGroundState E₀ Ω Δ)
     (D : ℕ → Finset (AreaLaw.Site (AreaLaw.rectangularDomain L L)))
@@ -78,15 +78,15 @@ theorem SquareHamiltonian.exists_zero_floor_maximizer_energy_fidelity
         (squareAreaLawState Ω)
       let φ := ((‖ψ‖⁻¹ : ℝ) : ℂ) • ψ
       0 < ‖ψ‖ ∧ ‖φ‖ = 1 ∧
-        |(⟪φ, toEuclideanLin (h.toAreaLawHamiltonian hJ).operator φ⟫_ℂ).re - E₀| ≤
+        |(⟪φ, toEuclideanLin h.toAreaLawHamiltonian.operator φ⟫_ℂ).re - E₀| ≤
           (q : ℝ) ^ 2 * J * ∑ j : Fin m,
             a j ^ 2 * (AreaLaw.edgeBoundary (AreaLaw.rectangularDomain L L) (D j)).card ∧
         Δ * (1 - ‖⟪squareAreaLawState Ω, φ⟫_ℂ‖ ^ 2) ≤
           (q : ℝ) ^ 2 * J * ∑ j : Fin m,
             a j ^ 2 * (AreaLaw.edgeBoundary (AreaLaw.rectangularDomain L L) (D j)).card := by
   classical
-  obtain ⟨T, hT, hTH, hTJ, hsum⟩ := h.exists_nearestNeighbor_terms hJ
-  have hgs := h.isGappedGroundState_toAreaLawHamiltonian hJ hΩ
+  obtain ⟨T, hT, hTH, hTJ, hsum⟩ := h.exists_nearestNeighbor_terms
+  have hgs := h.isGappedGroundState_toAreaLawHamiltonian hΩ
   have hΩ0 : squareAreaLawState Ω ≠ 0 := fun h0 ↦ by
     have hnorm := hgs.1
     simp [h0] at hnorm
