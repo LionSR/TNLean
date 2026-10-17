@@ -40,9 +40,10 @@ The bound below does not use that information, so it is not assumed.
 Proposition 7.1 `prop:protocol` (`06-geometry.tex:12–53`), from which the source derives the
 block bound, the degree bound and the separation bound. Here `load_horizontal_le` and
 `load_vertical_le` take these three bounds (`BlockBounded`, `DegreeBounded`,
-`SeparationBounded`) as hypotheses on an arbitrary placement, so they are a conditional form of
-the lemma. Documented in `docs/paper-gaps/polypeps_routing_network_bounds.tex`; the hypotheses
-are discharged once Proposition 7.1 is formalized.
+`SeparationBounded`) as hypotheses on an arbitrary placement; they are verified for the
+compressed protocol network in
+`largeSizeDyadicOperatorNetwork_of_largeSizeDyadicProtocolConsequences`, as recorded in
+`docs/paper-gaps/polypeps_routing_network_bounds.tex`.
 
 ## Main results
 
