@@ -94,7 +94,8 @@ theorem exists_frames_of_segments {E α : Type*} (U : E → Set Party) (ops : E 
 
 /-- **A protocol from the existence of the changes.** The form of
 `exists_isDistributionProtocol_of_frames` in which each change of the schedule is a bounded change
-of the sheets with at most `rs` pair sources in each monomial, given by its existence.
+of the sheets with at most `r` pair effects and at most `r` pair sources in each monomial, given by
+its existence.
 
 Polynomial-PEPS manuscript, Proposition 7.1 `prop:protocol`, `06-geometry.tex`, lines 12–53,
 and its proof, lines 572–681; Theorem 5.2, item 3, `04-compression.tex`, lines 143–147. -/
@@ -107,7 +108,7 @@ theorem exists_isDistributionProtocol_of_hasSourceBoundedChange {L k : ℕ} (hL 
     {kK : ℕ} {C : ℝ}
     (hc : ∀ t (ht : t < (protocolSchedule k large).length),
       HasSourceBoundedChange Ω (st t) (st (t + 1)) (ℓ := []) (1 : ℂ)
-        {p | EventUses ((protocolSchedule k large)[t]).1 p} r K rs ε)
+        {p | EventUses ((protocolSchedule k large)[t]).1 p} r K r ε)
     (M : Frame (cellCenterPos L) q (ProtocolParty k))
     (Fs : List (Frame (cellCenterPos L) q (ProtocolParty k)))
     (hfin : st (protocolSchedule k large).length = M :: Fs)
@@ -116,14 +117,13 @@ theorem exists_isDistributionProtocol_of_hasSourceBoundedChange {L k : ℕ} (hL 
     (hholes : (Fs.map fun F => (F.holes.length : ℝ)).sum ≤ C * (L : ℝ) ^ 3)
     (hC : 5042 ≤ C) (hK : (K : ℝ) ≤ C * (L : ℝ) ^ kK) (hεC : ε ≤ C / (L : ℝ) ^ 20) :
     ∃ D : DyadicProtocol L q (ProtocolParty k),
-      D.IsDistributionProtocol Ω C (64 * 189) kK r ∧
-        ∀ t < D.changes, (D.step t).IsSourceBounded rs := by
+      D.IsDistributionProtocol Ω C (64 * 189) kK r := by
   classical
   set n := (protocolSchedule k large).length with hn
   set st' : ℕ → List (Frame (cellCenterPos L) q (ProtocolParty k)) := fun t => st (min t n)
   have hst' : ∀ t ≤ n, st' t = st t := fun t ht => by simp only [st', min_eq_left ht]
   have hall : ∀ t, HasSourceBoundedChange Ω (st' t) (st' (t + 1)) (ℓ := []) (1 : ℂ)
-      (if h : t < n then {p | EventUses ((protocolSchedule k large)[t]).1 p} else ∅) r K rs
+      (if h : t < n then {p | EventUses ((protocolSchedule k large)[t]).1 p} else ∅) r K r
       (max ε 0) := fun t => by
     by_cases h : t < n
     · rw [hst' t h.le, hst' (t + 1) h]

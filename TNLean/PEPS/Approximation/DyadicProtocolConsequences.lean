@@ -21,15 +21,14 @@ supplies the patch constants.
 **Scope restriction (consequences of Proposition 7.1):**
 `largeSizeDyadicProtocolConsequences_of_adaptivePatchConstraint` proves the weaker
 `LargeSizeDyadicProtocolConsequences` interface used in Section 8, not full Proposition 7.1.
-The interface omits the following clauses of the proposition:
+The interface omits the following clause of the proposition:
 
-* pre-expansion pair-source and message bounds for each monomial, beyond pair-effect counts;
-* accuracy at every prescribed inverse power of `L`, rather than one contraction per change
-  with error `C L⁻²⁰`.
+* the identity of the main encoded frame among the factors of the intermediate reference
+  vectors; only their factorization into encoded frames of `Ω` is recorded.
 
 These omissions and the retained Section 8 consequences are recorded in
 `docs/paper-gaps/polypeps_prop71_consequences_interface.tex`. To eliminate this restriction,
-construct a certificate carrying all omitted clauses, prove full Proposition 7.1 for it, and
+construct a certificate carrying the omitted clause, prove full Proposition 7.1 for it, and
 project to the present interface. The angular-scale and dyadic-padding lemmas in this module
 are not part of this restriction.
 
@@ -188,7 +187,7 @@ theorem largeSizeDyadicProtocolConsequences_of_adaptivePatchConstraint
     have hC₁ : (10080 : ℝ) ≤ C₁ := le_max_left _ _
     have hL3 : (0 : ℝ) ≤ (L : ℝ) ^ 3 := by positivity
     nlinarith
-  obtain ⟨D', hD', -⟩ := H₁ ν hν hνν₁ hc (H₃ ν hν hνν₃) P hL hkL hk2 hΩ1 rank R₀
+  obtain ⟨D', hD'⟩ := H₁ ν hν hνν₁ hc (H₃ ν hν hνν₃) P hL hkL hk2 hΩ1 rank R₀
     (protocolFrozen P rank hr) protocolAuxOwner (C' := C') (c' := c') (kK := kK) (C₁ := C₁)
     (Nat.le_ceil C) hC' (Nat.le_ceil c) hseg
     (fun x _ _ hh => norm_act_proj_sub_le_of_mem_holes_protocolFrozen P rank hr (by omega) x hh)

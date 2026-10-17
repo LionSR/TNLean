@@ -151,8 +151,8 @@ copies, the following holds. Suppose that each repainting of a square of side la
 `t = D log L`, passes the memory from its state before to its state after by `189` bounded changes
 whose participants the repainting uses, with the bounds of the small-patch rewrites, that the holes
 of the frozen frames satisfy the frame constraint at accuracy `L⁻⁶⁰` and number at most `C₁ L³`,
-and that `C₁` dominates the counts. Then there is a dyadic protocol with the bounds of §8, all of
-whose changes have at most `2 b` pair sources in each monomial.
+and that `C₁` dominates the counts. Then there is a dyadic protocol with the bounds of §8, with
+at most `2 b` pair effects and at most `2 b` pair sources in each monomial.
 
 Polynomial-PEPS manuscript, Proposition 7.1 `prop:protocol`, `06-geometry.tex`, lines 12–53, and
 its proof, lines 82–241, 507–541 and 572–681. -/
@@ -187,8 +187,7 @@ theorem exists_isDistributionProtocol_of_largeRepaintings {ε₀ : ℝ} (hε : 0
       5042 ≤ C₁ → (rewriteGateBound C' c' (protocolPatchBound ε₀ ν) L : ℝ) ≤ C₁ * (L : ℝ) ^ kK →
       (2 * protocolPatchBound ε₀ ν + 1 : ℝ) ≤ C₁ →
       ∃ D' : DyadicProtocol L q (ProtocolParty k),
-        D'.IsDistributionProtocol Ω C₁ (64 * 189) kK (2 * protocolPatchBound ε₀ ν) ∧
-          ∀ t < D'.changes, (D'.step t).IsSourceBounded (2 * protocolPatchBound ε₀ ν) := by
+        D'.IsDistributionProtocol Ω C₁ (64 * 189) kK (2 * protocolPatchBound ε₀ ν) := by
   obtain ⟨ν', hν', Hres⟩ := exists_resize_hasSourceBoundedChange hε hε₀
   refine ⟨ν', hν', fun ν hν hνν' {k K₀ a D B₀} hc hm {L q} _ {Ω C c} P hL hkL hk2 hΩ rank R₀
     frozen auxOwner {C' c' kK C₁} hC hC' hcc hlarge hfε hfh hC₁ hK hεC => ?_⟩
