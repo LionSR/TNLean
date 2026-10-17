@@ -4598,6 +4598,20 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 ## Candidates
 
+### Reversal of time in graph commutator bounds — candidate (2026-10-17)
+
+- **Pattern:** Apply the nonnegative-time estimate to the interaction family
+  `fun k ↦ -h k` at time `-t`, preserve its Hermiticity, supports and norm
+  budget, and rewrite with `heisenbergCommutatorNorm_neg_time`.
+- **Seen:** Two occurrences in `Circuit/LiebRobinson/GraphPropagation.lean`,
+  in `heisenbergCommutatorNorm_le_graphDistance` and
+  `heisenbergCommutatorNorm_le_graphDistance_finset`.
+- **Abstraction:** The common identity is already the public lemma
+  `heisenbergCommutatorNorm_neg_time`. The two applications have different
+  support and distance hypotheses. Keep their short arguments explicit until
+  the pattern occurs in a second file and meets the promotion threshold.
+
+
 ### Dyadic padding bounds — candidate (2026-10-16)
 
 - **Pattern:** Combine the lower and strict upper bounds for

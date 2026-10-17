@@ -157,7 +157,8 @@ contains any given site sum to at most $b_0$.
 
 \begin{theorem}[Graph-distance propagation]
     \label{thm:qc_graph_lieb_robinson}
-    \lean{QuantumCircuit.norm_heisenberg_commutator_le_graphDistance,
+    \lean{QuantumCircuit.heisenbergCommutatorNorm_le_graphDistance,
+        QuantumCircuit.norm_heisenberg_commutator_le_graphDistance,
         QuantumCircuit.exists_graph_lieb_robinson}\leanok
     \uses{aux:restricted-commutator-recursion,aux:weighted-volterra-comparison,
         aux:restricted-commutator-evaluation,aux:restricted-commutator-negative-time,
@@ -169,6 +170,11 @@ contains any given site sum to at most $b_0$.
     $0\leq n\leq d_G(a_i,y)$ and every real $t$,
     \[
         \|[\tau_t(A),B]\|\leq 2e^{\mu R}\|A\|\|B\|
+        \exp\bigl(2v_Rb_0e^{2\mu R}|t|-\mu n\bigr).
+    \]
+    The restricted norm satisfies
+    \[
+        C_B(X_i,t)\leq 2e^{\mu R}\|B\|
         \exp\bigl(2v_Rb_0e^{2\mu R}|t|-\mu n\bigr).
     \]
     Consequently there are positive constants $C,v,c$, depending only on
@@ -192,6 +198,70 @@ contains any given site sum to at most $b_0$.
     times and multiplying by $\|A\|$ bounds $\|[\tau_t(A),B]\|$; setting
     $\mu=1$ gives the constants $C,v,c$ for $d_G(a_i,y)<\infty$, while
     Lemma~\ref{thm:qc_graph_lieb_robinson_zero} handles $d_G(a_i,y)=\infty$.
+\end{proof}
+
+% Source: TNLean2026OneDimensional, lemma labelled lem:LR,
+% part2a_mps_information.tex, lines 267--309. Only the arbitrary-support
+% graph commutator estimate is asserted here, not chain localization.
+\begin{theorem}[Graph-distance propagation from an arbitrary finite support]
+    \label{thm:qc_graph_lieb_robinson_finset}
+    \lean{QuantumCircuit.heisenbergCommutatorNorm_le_graphDistance_finset,
+        QuantumCircuit.norm_heisenberg_commutator_le_graphDistance_finset}\leanok
+    \uses{aux:restricted-commutator-norm}
+    Under the preceding finite-range interaction assumptions, let $S$ be any
+    finite set of sites, let $A\in\mathcal A_S$, and let
+    $B\in\mathcal A_{\{y\}}$. No diameter bound on $S$ is assumed, and
+    $S=\varnothing$ is allowed. Fix $\mu\geq0$ and an integer $n\geq0$ such
+    that $n\leq d_G(x,y)$ for every $x\in S$. Put
+    \begin{align}
+        C&=2+4|b_0|e^{2\mu R},\notag\\
+        v&=2v_R|b_0|e^{2\mu R}+1.\notag
+    \end{align}
+    For every real $t$,
+    \begin{align}
+        C_B(S,t)&\leq C|S|\|B\|e^{v|t|-\mu n},
+        \label{eq:qc_lr_finset_norm}\\
+        \|[\tau_t(A),B]\|&\leq C|S|\|A\|\|B\|e^{v|t|-\mu n}.
+        \label{eq:qc_lr_finset_commutator}
+    \end{align}
+    The constants depend only on $R,v_R,b_0,\mu$, not on the graph, the
+    number of sites, the local dimension, or $S$.
+    The second estimate has the form used in the lemma
+    ``Lieb--Robinson bound on a chain'' of
+    \cite{TNLean2026OneDimensional}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{aux:restricted-commutator-recursion,thm:qc_graph_lieb_robinson,
+        aux:restricted-initial-commutator-bound,
+        aux:restricted-initial-commutator-vanishing,
+        aux:restricted-commutator-continuity,
+        aux:restricted-commutator-evaluation,
+        aux:restricted-commutator-negative-time}
+    Write $b=|b_0|$ and $\lambda=2v_Rbe^{2\mu R}$, and first take $t\geq0$.
+    The per-site budget gives
+    $\sum_{k:X_k\cap S\ne\varnothing}\|h_k\|\leq |S|b$.
+    For a term meeting $S$, choose $x\in S\cap X_k$.
+    Since $d_G(x,a_k)\leq R$, the triangle inequality gives
+    $n-R\leq d_G(a_k,y)$, with subtraction in the nonnegative integers.
+    Graph-distance propagation applied at $n-R$ therefore bounds
+    $C_B(X_k,s)$ by $2\|B\|e^{2\mu R-\mu n}e^{\lambda s}$ for $s\geq0$;
+    here $n\leq(n-R)+R$ also covers $n<R$.
+    The initial norm vanishes unless $y\in S$, in which case $n=0$ and
+    $|S|\geq1$. Thus $C_B(S,0)\leq2|S|\|B\|e^{-\mu n}$, including
+    $S=\varnothing$.
+    Applying the local recursion once and bounding $e^{\lambda s}$ by
+    $e^{\lambda t}$ for $0\leq s\leq t$ gives
+    \begin{align}
+        C_B(S,t)
+        &\leq |S|\|B\|e^{-\mu n}
+            \bigl(2+4be^{2\mu R}t e^{\lambda t}\bigr)\notag\\
+        &\leq (2+4be^{2\mu R})|S|\|B\|
+            e^{(\lambda+1)t-\mu n}.\notag
+    \end{align}
+    The last inequality uses $1\leq e^{\lambda t}$ and $1,t\leq e^t$.
+    Replacing $H$ by $-H$ gives the same bound for negative times and proves
+    (\ref{eq:qc_lr_finset_norm}); evaluation on $A$ gives
+    (\ref{eq:qc_lr_finset_commutator}).
 \end{proof}
 
 \begin{lemma}[Vanishing between connected components]
