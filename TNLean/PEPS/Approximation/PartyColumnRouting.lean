@@ -29,11 +29,12 @@ The column may also be selected from the product-reference estimates of Section 
 the compression error measured against the physical density of the same joint vector.
 
 **Scope restriction (supplied network and estimates):** The operator party network, its
-dyadic placement, the bounds of Lemma 8.2 (`InGrid`, `BlockBounded`, `DegreeBounded`,
-`SeparationBounded`), and the trace-norm estimate are hypotheses on an arbitrary network,
-not constructed from Proposition 7.1 `prop:protocol` and the compression theorem. The
-routing bounds are documented in `docs/paper-gaps/polypeps_routing_network_bounds.tex`
-and the supplied product-reference estimates in
+dyadic placement, the bounds of Lemma 8.2 (`InGrid`,
+`BlockBounded`, `DegreeBounded`, `SeparationBounded`), and the trace-norm estimate are
+hypotheses on an arbitrary network here. They are verified for the network constructed from
+the protocol and the compression theorem in
+`largeSizeDyadicOperatorNetwork_of_largeSizeDyadicProtocolConsequences`, as recorded in
+`docs/paper-gaps/polypeps_routing_network_bounds.tex` and
 `docs/paper-gaps/polypeps_product_reference_column.tex`.
 
 ## Main results

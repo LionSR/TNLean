@@ -3,81 +3,125 @@
 \usepackage{xurl}
 \usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
 \input{command}
-\title{The Square-Grid Zero-Floor Optimizer in Integer-Domain Coordinates}
+\title{Positive Filter Families for the Original Square-Grid Hamiltonian}
 \author{}
-\date{October 16, 2026}
+\date{October 17, 2026}
 \begin{document}
 \maketitle
 \gapnote{scope-restriction}{open}
 
 \section{The source statement}
 
-The companion source of~\cite{OpenAI2026PolynomialPEPS} selects a family
-of positive filters on supplied nested regions $D_0\subseteq\cdots\subseteq D_{m-1}$
-of an open square grid. Each edge crosses at most one region and the weights
-satisfy $0<a_j\le1$. Let $q$ be the local dimension and $J$ a common
-operator-norm bound for the site and edge terms of the original Hamiltonian
-$H$. For a unique unit ground vector $\Omega$, energy $E_0$ and full-system
-projector gap $\Delta$, one family
-maximizes the filtered output norm, has nonzero output $\psi$, and its
-normalization $\phi=\psi/\|\psi\|$ satisfies
+Let $L,q,m\ge0$ be integers, let $V_L=\{0,\ldots,L-1\}^2$, and use the
+physical Hilbert space $\ell^2(V_L\to\{0,\ldots,q-1\};\mathbb C)$.
+The original Hamiltonian is $H=\sum_v h_v+\sum_e h_e$, where $h_v$ is
+supported at the site $v$ and $h_e$ at the two endpoints of an edge $e$.
+Their Euclidean operator norms are at most the real interaction bound $J$,
+and the total $H$ is Hermitian. Let $\Omega$ be a unit ground vector with
+energy $E_0\in\mathbb R$ and full-system projector-gap parameter
+$\Delta\in\mathbb R$, so $H\Omega=E_0\Omega$ and
+$H-E_0I\ge\Delta(I-|\Omega\rangle\langle\Omega|)$.
+
+For $q>0$ and under its unique-ground-vector hypothesis, the companion source
+of~\cite{OpenAI2026PolynomialPEPS} selects one family of positive semidefinite
+regional filters on supplied nested regions
+$X_0\subseteq\cdots\subseteq X_{m-1}\subseteq V_L$.
+Each edge crosses at most one region and $0<a_j\le1$. For a region $X$,
+let $b(X)$ count its crossing edges oriented right or up, each physical edge
+occurring once. The filters satisfy
+$\sum_r\lambda_r(F_j)^{2/a_j}=1$, and their local continuous linear maps
+act in ascending order, so the output is
+$\psi(F,\Omega)=\widehat F_{m-1}\cdots\widehat F_0\Omega$.
+The selected family maximizes its output norm against every admissible family,
+has nonzero output, and its normalization $\phi=\psi/\|\psi\|$ satisfies
 \begin{align}
  |\operatorname{Re}\langle\phi,H\phi\rangle-E_0|
- &\le q^2J\sum_j a_j^2|\partial D_j|,
+ &\le q^2J\sum_j b(X_j)a_j^2,
  \label{eq:polypeps_square_zero_floor_energy_bound}\\
  \Delta(1-|\langle\Omega,\phi\rangle|^2)
- &\le q^2J\sum_j a_j^2|\partial D_j|.
+ &\le q^2J\sum_j b(X_j)a_j^2.
  \label{eq:polypeps_square_zero_floor_fidelity_bound}
 \end{align}
-Only the total Hamiltonian must be Hermitian; the individual site and edge
-terms need not be. The companion statement allows real $J$ subject to the
-termwise norm bounds. A negative $J$ is therefore possible only when the
-interaction index set is empty.\footnote{Source: \texttt{openai/math} revision
+The Hamiltonian, ground vector and full-system gap are the original ones.
+Only the total Hamiltonian must be Hermitian.\footnote{Source: \texttt{openai/math} revision
 \texttt{adc7f1241b42e322a6451854ab7e4b4c146bf78a},
-\texttt{lean/OAI/MathematicalPhysics/PEPSFilters/EnergyOptimizer.lean},
-\texttt{exists\_maximizer\_energy}, lines 62--109; compare the model and
-full-system gap in \texttt{00-introduction.tex}.}
+\texttt{lean/OAI/MathematicalPhysics/PEPSFilters/Basic.lean}, lines 151--179;
+\texttt{EnergyOptimizer.lean}, \texttt{exists\_maximizer\_energy}, lines 62--109.}
 
-\section{The physical specialization and its boundary}
+\section{The adapted original-grid comparison}
 
-The square-grid specialization takes the original Hamiltonian and its original
-unit gapped ground vector. It assumes $J\ge0$, transports the site and edge
-terms by the canonical configuration isometry $U$ to the integer square
-$\Lambda$, and uses their Hermitian parts. The sum is exactly $UHU^*$, the norm
-bound is still $J$, and the projector gap is unchanged. The regional filters
-are specified spectrally as
-$K_j=V_j\operatorname{diag}(p_{j,r}^{a_j/2})V_j^*$ with $V_j$ unitary,
-$p_{j,r}\ge0$ and $\sum_r p_{j,r}=1$.
+TNLean retains its existing square-grid state and regional-configuration
+coordinates and adapts the source's positive-filter definitions in its
+\texttt{Pinned} namespace. The adaptation preserves positive semidefiniteness,
+the real eigenvalue-power normalization, repeated region occurrences,
+ascending local action, and inverse-zero normalization. The local lift is
+identified with the existing tensor-factor lift entry by entry.
 
-For one such family, the global maximum, positive output norm, unit
-normalization and the estimates
-(\ref{eq:polypeps_square_zero_floor_energy_bound}) and
-(\ref{eq:polypeps_square_zero_floor_fidelity_bound}) hold simultaneously, with
-$H,\Omega$ replaced by $UHU^*,U\Omega$ and with each unordered integer-grid
-boundary edge counted once. No additional hypothesis on a regional gap is
-used.\footnote{Declaration:
-\leanid{TNLean.PEPS.Approximation.SquareHamiltonian.exists_zero_floor_maximizer_energy_fidelity}.}
-The sign restriction $J\ge0$ belongs to the existing conversion to a
-finite-domain Hamiltonian, which assigns zero to unused supports. It excludes
-the empty square with a negative vacuous bound from the companion signature;
-no source estimate is claimed for that case here. For a nonempty original
-square, the termwise norm bound already forces $J\ge0$.
+At each positive weight, conjugating by the regional configuration permutation
+identifies admissible bundled filters with all floor-zero feasible canonical
+matrix families. Both matrix conversions are inverse. The canonical output
+is exactly $U\psi(F,\Omega)$ for the existing physical configuration isometry
+$U$, and the normalized output is exactly $U\phi(F,\Omega)$ even at zero
+output. A global maximum on either side therefore compares with every
+competitor on the other side, including singular matrices; it does not
+compare only a selected spectral subclass.\footnote{Declarations in
+\texttt{PinnedNestedFilterCoordinates.lean}:
+\leanid{TNLean.PEPS.Approximation.Pinned.NestedFilter.admissible_iff_feasible},
+\leanid{TNLean.PEPS.Approximation.Pinned.NestedFilter.canonicalMatrices_fromCanonical},
+\leanid{TNLean.PEPS.Approximation.Pinned.NestedFilter.fromCanonical_canonicalMatrices},
+\leanid{TNLean.PEPS.Approximation.Pinned.NestedFilter.squareAreaLawState_output},
+\leanid{TNLean.PEPS.Approximation.Pinned.NestedFilter.squareAreaLawState_normalizedOutput},
+\leanid{TNLean.PEPS.Approximation.Pinned.NestedFilter.isMaximizer_iff}.}
+These comparisons reuse QICLean's PSD trace-power characterization
+of~\cite{QICLean2026FilterFeasibility} and ordered-output transport
+of~\cite{QICLean2026FilterOutput}. They require no nesting, positive dimension,
+invertibility or nonzero-output assumption. Positive weights are needed only
+for the admissibility and maximum comparisons.
 
-The identification of the source's filter coordinates and ordered products
-with these spectral feasible families is recorded separately in the
-QICLean note on zero-floor energy~\cite{gap:oai26_zero_floor_energy_scope}.
-The present result supplies the physical Hamiltonian, exact crossing coefficient
-and original full-system gap. It still takes the nested regions, single-crossing
-condition and weights as inputs; it does not construct them or prove the
-geometric optimizer, the two-family decomposition or Proposition 4.1.
+Applying the canonical physical theorem once and pulling back its selected
+family gives a single adapted maximizing family with nonzero output, unit
+normalization and bounds~(\ref{eq:polypeps_square_zero_floor_energy_bound})
+and~(\ref{eq:polypeps_square_zero_floor_fidelity_bound}) for the original
+$H$, $\Omega$ and $\Delta$. The conversion does not choose another optimizer.
+The boundary count is exactly the original once-counted forward-edge count.
+No regional gap, factor loss or extra termwise Hermiticity premise is added.
+\footnote{Declaration:
+\leanid{TNLean.PEPS.Approximation.SquareHamiltonian.exists_pinned_maximizer_energy_fidelity}.}
 
-\section{Effect and remaining work}
+\section{The vacuous negative-bound case}
 
-This is a restriction of the formalized statement, not an error in the
-source. A direct configuration-reindexed interaction sum, or a separate
-empty-grid argument, can remove the nonnegative-budget restriction without
-altering the estimates. The coordinate-family comparison and geometric choice
-of regions and weights remain independent steps in issue 8741.
+The canonical physical theorem assumes $J\ge0$. The original-grid theorem
+removes that premise by retaining every site and edge term and replacing only
+their norm-bound proofs by the larger bound $J_+=\max(J,0)$. The total operator
+and gapped-ground-state predicate are unchanged. If $J<0$ and $L>0$, the site
+$(0,0)$ would satisfy $0\le\|h_{(0,0)}\|\le J<0$. Thus a negative bound
+forces $L=0$, when all forward crossing counts are zero. Consequently
+$J_+\sum_j b(X_j)a_j^2=J\sum_j b(X_j)a_j^2$.
+
+This argument also allows $q=0$ on the empty grid, whose configuration set has
+one element. By contrast, a nonempty region with $q=0$ has no configurations
+and no trace-normalized filter. The representation statements keep these
+cases distinct. No positivity of $\Delta$ is needed for the weighted fidelity
+bound; no uniqueness assertion for nonpositive $\Delta$ is made.
+
+\section{What remains outside the result}
+
+This is an attributed adaptation, not an identification with unimported OAI
+Lean types. The theorem uses TNLean's existing \texttt{SquareHamiltonian} and
+its native full-system gapped-ground-state predicate. It does not import the
+source's \texttt{IsGridHamiltonian}, \texttt{UniqueGround} or
+\texttt{FullSystemGap} declarations. A theorem literally stated on those
+source types would require their import and a checked model conversion under
+a compatible toolchain; the source and current TNLean toolchains differ.
+No new source dependency is introduced here.
+
+The regions, their nesting and one-crossing property, and the weights remain
+inputs. Their geometric construction, the two-family decomposition,
+Proposition 4.1, inverse-density minimizers, and adaptive-patch or complete
+PEPS compositions are separate work. The former filter-representation,
+original-coordinate and negative-$J$ restrictions have been removed for the
+adapted interface. This note stays open for the literal model comparison and
+geometric obligations; it records no error in the source.
 
 \bibliographystyle{alpha}
 \bibliography{references}
