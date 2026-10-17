@@ -168,6 +168,7 @@ import TNLean.PEPS.Approximation.DyadicProtocolFrozenFrames
 import TNLean.PEPS.Approximation.DyadicProtocolInitialStep
 import TNLean.PEPS.Approximation.DyadicProtocolOwners
 import TNLean.PEPS.Approximation.DyadicProtocolParties
+import TNLean.PEPS.Approximation.DyadicProtocolPatchApproximation
 import TNLean.PEPS.Approximation.DyadicProtocolRetainedNorm
 import TNLean.PEPS.Approximation.DyadicProtocolSchedule
 import TNLean.PEPS.Approximation.DyadicProtocolSegments
