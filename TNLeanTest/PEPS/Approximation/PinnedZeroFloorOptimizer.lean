@@ -119,8 +119,9 @@ example : crossingCount ({(0, 0)} : Finset (Vertex 2)) = 2 := by
     clear heh hev
     unfold Crosses
     rcases e with ⟨⟨⟨x, y⟩, ⟨u, v⟩⟩, he⟩
-    fin_cases x <;> fin_cases y <;> fin_cases u <;> fin_cases v <;>
-      simp_all [ForwardAdjacent, eh, ev]
+    fin_cases x <;> fin_cases y <;> fin_cases u <;> fin_cases v
+    all_goals simp [TNLean.PEPS.Approximation.ForwardAdjacent] at he
+    all_goals simp [eh, ev]
   have hf : Finset.univ.filter (Crosses ({(0, 0)} : Finset (Vertex 2))) = {eh, ev} := by
     ext e
     simpa only [Finset.mem_filter, Finset.mem_univ, true_and,
