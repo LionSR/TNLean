@@ -63,19 +63,22 @@ before any replacement regions are adjoined.
 % Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 \begin{theorem}[Integral removal half-sides]
     \label{thm:area_law_repair_halfside_integral}
-    \lean{TNLean.PEPS.AreaLaw.Geometry.exists_natCast_repairHalfSide}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.exists_natPow_repairHalfSide,
+        TNLean.PEPS.AreaLaw.Geometry.exists_natCast_repairHalfSide}
     \leanok
     \uses{def:area_law_repair_square}
-    For every real parent scale $S\ge1$, there is $n\in\mathbb N$
+    For every real parent scale $S\ge1$, there is $e\in\mathbb N$
+    such that $d(S)=2^e$. In particular, there is $n\in\mathbb N$
     such that $d(S)=n$.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    \uses{thm:area_law_repair_margins}
+    \uses{def:area_law_repair_square,thm:area_law_repair_margins}
     Since $\rho_0>0$ and $\log_2 S\ge0$, the integer
-    $m=\lfloor\rho_0\log_2 S\rfloor$ is nonnegative.
-    Thus $d(S)=2^m$ is a natural number.
+    $e=\lfloor\rho_0\log_2 S\rfloor$ is nonnegative. Hence
+    $e\in\mathbb N$ and $d(S)=2^e$. Taking $n=2^e$ proves the
+    natural-number conclusion.
 \end{proof}
 
 \begin{definition}[Simultaneous old-region remnants]

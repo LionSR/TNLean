@@ -1,0 +1,10 @@
+% alt: a chain of fourteen sites with an interval X of five sites enclosed, a bracket under the four sites around each of the two cut edges of X labelled window, and two shaded supports, Y' of two sites straddling the left cut edge inside the left window and Y of three sites straddling the right cut edge inside the right window.
+% Section 2 (Setting, reductions, and counting), eq:count: a support Y with diam_{d_Lam} Y <= R split by the interval X lies in one of the two windows of 2R consecutive sites centered at the cut edges of X (drawn for R = 2); the dots are the sites, the upward legs are the physical indices C^q and every leg is open (nothing is contracted); the red enclosure is X (sites 5 to 9), the two brackets under the chain are the windows (sites 3 to 6 and 8 to 11, the 2R = 4 sites centered at the cut edges 4|5 and 9|10), and the shaded blue enclosures are two example split supports, Y' (sites 4 and 5, one site in X and one outside) in the left window and Y (sites 8 to 10, two sites in X and one outside) in the right window; hence #{Y split by X} <= 2 * 2^{2R} = N_R.
+\begin{tenkz}[lattice={1x14}, frame=plane, physical=up, bonds=none]
+  \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{}
+  \tnmark[form=enclosure, species=secondary, tint, label pos=n]{(1,4) .. (1,5)}{$Y'$}
+  \tnmark[form=enclosure, species=secondary, tint, label pos=n]{(1,8) .. (1,10)}{$Y$}
+  \tnmark[form=enclosure, species=selected, label pos=n]{(1,5) .. (1,9)}{$X$}
+  \tnmark[form=bracket, species=collar, label pos=s]{(1,3) .. (1,6)}{\text{window}}
+  \tnmark[form=bracket, species=collar, label pos=s]{(1,8) .. (1,11)}{\text{window}}
+\end{tenkz}

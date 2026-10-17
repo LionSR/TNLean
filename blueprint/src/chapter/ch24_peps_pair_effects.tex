@@ -1,9 +1,11 @@
 \section{Elimination of normalized pair effects}
 \label{sec:peps_pair_effects}
-This section treats \cite[Lemma~5.1]{OpenAI2026PolynomialPEPS},
-September 24, 2026, \texttt{04-compression.tex}, lines 53--127, together with
-the choice of the stack length and the rescaling in the proof of
-\cite[Theorem~5.2]{OpenAI2026PolynomialPEPS}, lines 201--212. The estimates
+Eliminating normalized pair effects
+(\cite[Lemma~5.1]{OpenAI2026PolynomialPEPS}, September 24, 2026,
+\texttt{04-compression.tex}, lines 53--127), together with the stack-length
+selection and rescaling in the proof of
+\cite[Theorem~5.2]{OpenAI2026PolynomialPEPS} (lines 201--212), replaces each
+pair effect by a cyclic insertion into a fresh register stack. The estimates
 are first proved for monomials written as chains of recorded pair effects
 between arbitrary contractions. The statements about parties are then proved
 after assigning every register to a party. Preparing the sources before the
@@ -23,18 +25,17 @@ conclusion of the source lemma.
     $\|\widetilde G_m-G\otimes|\Gamma_m\rangle\|\le(r/\sqrt m)\sum_\xi|c_\xi|$.
     The gate $\widetilde G_m$ has an expansion using only local contractions
     and normalized pair sources, with at most $Km^r$ monomials and absolute
-    coefficient sum at most $\sum_\xi|c_\xi|$. Its additional registers are
-    owned by the original participating parties, and all sources on the same
-    pair of parties may be combined into one normalized pair source. This is
-    \cite[Lemma~5.1]{OpenAI2026PolynomialPEPS}.
+    coefficient sum at most $\sum_\xi|c_\xi|$. As in \cite[Lemma~5.1]{OpenAI2026PolynomialPEPS}, its additional registers
+    are owned by the original participating parties, and all sources on the same
+    pair of parties may be combined into one normalized pair source.
 \end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_pair_effects_party,thm:peps_grouped_sources}
     The error, normalization, expansion, and ownership conclusions follow
-    from Theorem~\ref{thm:peps_pair_effects_party}. Apply
-    Theorem~\ref{thm:peps_grouped_sources} to each monomial in this expansion.
-    It replaces all sources on a given unordered pair by one normalized
+    from Theorem~\ref{thm:peps_pair_effects_party}. Applying
+    Theorem~\ref{thm:peps_grouped_sources} to each monomial in this expansion
+    replaces all sources on a given unordered pair by one normalized
     source and recovers the original registers by local isometries and
     exchanges. The operator of each monomial is unchanged, as are the
     number of monomials, their coefficients, and their common output space.
@@ -134,7 +135,7 @@ and $m\ge1$.
     \lean{CyclicInsertion.norm_rTensor_cyclicInsertion_sub_ideal_le}
     \leanok
     \uses{def:peps_cyclic_insertion}
-    For every $v\perp\eta$ one has $\|T_mv\|=\|v\|/\sqrt m$. Consequently
+    Every $v\perp\eta$ satisfies $\|T_mv\|=\|v\|/\sqrt m$. Consequently
     $\|T_m-P_m\|\le m^{-1/2}$, with equality when the orthogonal complement of
     $\eta$ is nonzero, and $T_m=P_m$ when it is zero. The same upper bound
     holds for $(T_m-P_m)\otimes\mathbf 1_{\mathcal S}$ on any spectator space
@@ -252,8 +253,8 @@ and $m\ge1$.
 
 \begin{proof}\leanok
     \uses{def:peps_cyclic_insertion}
-    Expand each average $T_m$ by linearity and collect the $m^n$ choices of
-    positions, by induction on $n$. Each term composes the contractions
+    Expanding each average $T_m$ by linearity and inducting on $n$ collects
+    the $m^n$ choices of positions. Each term composes the contractions
     $F_i$ with the isometries $I_{\kappa_i}$ and tensor rearrangements.
 \end{proof}
 
@@ -371,7 +372,7 @@ and $m\ge1$.
     source-only composition. As an operator it is a
     monomial with recorded pair effects in the sense of
     Definition~\ref{def:peps_effect_chain}, whose pieces between effects are
-    source-only. This is the notion of allowed monomial of
+    source-only. Together these conditions define the allowed monomials of
     \cite[Section~5.1]{OpenAI2026PolynomialPEPS}, lines 32--35.
 \end{definition}
 

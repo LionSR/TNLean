@@ -12,6 +12,8 @@ Commands
             before the full library build, so a failure surfaces quickly.
             If any changed source is not confidently import-only, defer
             import-only aggregators to the mandatory full library build.
+            After a successful build, use the remaining budget for advisory
+            changed-fixture diagnostics. All later checks still run.
 ``strict``  After the full build, elaborate with warnings as errors
 
             * every changed production source file, and
@@ -36,6 +38,7 @@ from __future__ import annotations
 
 import argparse
 import concurrent.futures
+import json
 import os
 import re
 import shutil
@@ -44,6 +47,8 @@ import subprocess
 import sys
 import tempfile
 import threading
+import time
+from collections.abc import Callable
 from pathlib import Path
 
 from lean_import_syntax import pure_import_modules
@@ -254,7 +259,10 @@ def levels(tests: list[str], graph: dict[str, set[str]]) -> list[list[str]]:
     return batches
 
 
-def run_lean(path: str, overlay: Path | None, timeout: int) -> tuple[str, int, str]:
+def lean_command(
+    path: str, overlay: Path | None, timeout: int | None
+) -> tuple[list[str], dict[str, str]]:
+    """Share strict arguments; early diagnostics use their own process-group timer."""
     cmd = ["lean", "-j1", *LEAN_FLAGS]
     if overlay is not None:
         target = overlay / (path[: -len(".lean")] + ".olean")
@@ -267,6 +275,16 @@ def run_lean(path: str, overlay: Path | None, timeout: int) -> tuple[str, int, s
               'exec timeout --signal=INT --kill-after=5s "$0" "$@"')
     full = ["lake", "env", "bash", "-c", script, str(timeout) + "s",
             str(overlay) if overlay is not None else "", *cmd]
+    if timeout is None:
+        script = ('[ -n "$1" ] && export LEAN_PATH="$1${LEAN_PATH:+:$LEAN_PATH}"; shift; '
+                  'exec "$@"')
+        full = ["lake", "env", "bash", "-c", script, "early-fixture",
+                str(overlay) if overlay is not None else "", *cmd]
+    return full, env
+
+
+def run_lean(path: str, overlay: Path | None, timeout: int) -> tuple[str, int, str]:
+    full, env = lean_command(path, overlay, timeout)
     proc = subprocess.run(full, env=env, capture_output=True, text=True)
     return path, proc.returncode, proc.stdout + proc.stderr
 
@@ -305,11 +323,15 @@ def _stop_group(proc: subprocess.Popen, grace: int = 30) -> None:
     proc.wait()
 
 
-def early_build(modules: list[str], log_path: Path | None, budget: int) -> int:
+def early_build(
+    modules: list[str], log_path: Path | None, budget: int,
+    on_success: Callable[[float | None], None] | None = None,
+) -> int:
     """Fail-fast `lake build` of `modules`. The early build is only a shortcut,
     since the root build compiles the same modules, so when it exceeds `budget`
     seconds (for example behind a cold dependency cache) it is stopped with a
     warning instead of failing the job."""
+    deadline = time.monotonic() + budget if budget else None
     proc = subprocess.Popen(["lake", "--fail-fast", "build", *modules],
                             stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True,
                             start_new_session=True)
@@ -324,7 +346,8 @@ def early_build(modules: list[str], log_path: Path | None, budget: int) -> int:
         reader = threading.Thread(target=pump, args=(proc.stdout, log), daemon=True)
         reader.start()
         try:
-            code: int | None = proc.wait(timeout=budget or None)
+            code: int | None = proc.wait(
+                timeout=max(0, deadline - time.monotonic()) if deadline is not None else None)
         except subprocess.TimeoutExpired:
             _stop_group(proc)
             code = None
@@ -341,7 +364,173 @@ def early_build(modules: list[str], log_path: Path | None, budget: int) -> int:
         print(f"::warning::Early build stopped after {budget}s; "
               "the root build compiles the remaining modules.", flush=True)
         return 0
+    if code == 0 and on_success is not None:
+        on_success(deadline)
     return code
+
+
+def run_early_command(
+    command: list[str], deadline: float | None, timeout: int,
+    env: dict[str, str] | None = None,
+) -> tuple[int | None, str, str]:
+    """Run within the remaining shared budget; None means explicitly deferred.
+
+    Early elaboration does not start an inner GNU timeout process group, so
+    the same session supervisor can terminate all its descendants.
+    """
+    remaining = None if deadline is None else deadline - time.monotonic()
+    if remaining is not None and remaining <= 0:
+        return None, "", ""
+    limit = min(remaining, timeout) if remaining is not None and timeout > 0 else (
+        remaining if remaining is not None else timeout or None)
+    proc = subprocess.Popen(command, env=env, stdout=subprocess.PIPE,
+                            stderr=subprocess.PIPE, text=True, start_new_session=True)
+    try:
+        output, errors = proc.communicate(timeout=limit)
+        code = proc.returncode
+    except subprocess.TimeoutExpired:
+        _stop_group(proc, grace=5)
+        output, errors = proc.communicate()
+        code = None
+    except BaseException:
+        _stop_group(proc, grace=5)
+        raise
+    finally:
+        _signal_group(proc.pid, signal.SIGKILL)
+        if proc.stdout is not None:
+            proc.stdout.close()
+        if proc.stderr is not None:
+            proc.stderr.close()
+    return code, output, errors
+
+
+def native_fixture_imports(path: str, deadline: float | None, timeout: int) -> set[str]:
+    """Use Lake's pinned native parser only for early diagnostic prerequisites.
+
+    --deps-json can exit 0 with per-file errors. Its data must never replace
+    the mandatory selector or certify a proof.
+    """
+    code, output, errors = run_early_command(
+        ["lake", "env", "lean", "--deps-json", path], deadline, timeout)
+    if errors.strip():
+        print(errors.rstrip(), flush=True)
+    if code != 0:
+        raise ValueError(f"{path}: import inspection "
+                         + ("deferred (timeout)" if code is None else f"exited {code}"))
+    try:
+        data = json.loads(output)
+    except ValueError as exc:
+        raise ValueError(f"{path}: invalid import-inspection JSON: {exc}") from exc
+    results = data.get("imports") if isinstance(data, dict) else None
+    if not isinstance(results, list) or len(results) != 1 or not isinstance(results[0], dict):
+        raise ValueError(f"{path}: invalid import-inspection result count/schema")
+    result = results[0]
+    if result.get("errors") != []:
+        raise ValueError(f"{path}: import inspection errors: {result.get('errors')!r}")
+    header = result.get("result")
+    if not isinstance(header, dict) or not isinstance(header.get("isModule"), bool):
+        raise ValueError(f"{path}: missing import-inspection header")
+    imports = header.get("imports")
+    if not isinstance(imports, list) or any(
+        not isinstance(item, dict) or not isinstance(item.get("module"), str)
+        or not item["module"] for item in imports
+    ):
+        raise ValueError(f"{path}: invalid import-inspection module list")
+    return {item["module"] for item in imports}
+
+
+def early_fixture_plan(
+    roots: list[str], tests: list[str], deadline: float | None, timeout: int,
+) -> tuple[list[str], dict[str, set[str]]]:
+    """Changed fixtures plus their native-parsed fixture prerequisites only."""
+    by_module = {module_of(path): path for path in tests}
+    graph: dict[str, set[str]] = {}
+    needed = set(roots)
+    pending = list(reversed(sorted(roots)))
+    while pending:
+        path = pending.pop()
+        imports = native_fixture_imports(path, deadline, timeout)
+        missing = sorted(m for m in imports if m.startswith("TNLeanTest.") and m not in by_module)
+        if missing:
+            raise ValueError(f"{path}: missing fixture source(s): {', '.join(missing)}")
+        graph[module_of(path)] = imports & by_module.keys()
+        for module in sorted(graph[module_of(path)], reverse=True):
+            dependency = by_module[module]
+            if dependency not in needed:
+                needed.add(dependency)
+                pending.append(dependency)
+    ordered = order_tests(sorted(needed), graph)
+    positions = {module_of(path): index for index, path in enumerate(ordered)}
+    if any(positions[dep] >= positions[module] for module in positions for dep in graph[module]):
+        raise ValueError("cyclic fixture imports; early diagnostics deferred")
+    return ordered, graph
+
+
+def early_fixture_diagnostics(
+    base: str | None, deadline: float | None, timeout: int, log_path: Path | None,
+) -> None:
+    """Advisory only: later full/strict/axiom checks always remain mandatory."""
+    overlay: Path | None = None
+    try:
+        tests = [path for path in lean_files(Path(".")) if is_test(path)]
+        roots = sorted(set(changed_paths(base) or []) & set(tests))
+        if not roots:
+            print("No changed fixtures for early diagnostics.", flush=True)
+            return
+        print("Early fixture diagnostics (advisory; mandatory strict checks still follow):",
+              *roots, sep="\n  ", flush=True)
+        ordered, graph = early_fixture_plan(roots, tests, deadline, timeout)
+        overlay = Path(tempfile.mkdtemp(prefix="tnlean-early-test-overlay-"))
+        completed: set[str] = set()
+        for path in ordered:
+            if not graph[module_of(path)] <= completed:
+                print(f"::warning file={path}::Early diagnostic deferred: fixture prerequisite "
+                      "did not complete successfully.", flush=True)
+                continue
+            print(f"::group::Early fixture preparation: {path}", flush=True)
+            code, output, errors = run_early_command(
+                ["lake", "--fail-fast", "setup-file", path], deadline, timeout)
+            # setup-file emits JSON on stdout and ordinary build records on stderr.
+            # Keep preparation timings, but never fixture text or JSON, in this log.
+            with open(log_path or os.devnull, "a") as log:
+                log.write(errors)
+            if errors.strip():
+                print(errors.rstrip(), flush=True)
+            print("::endgroup::", flush=True)
+            if code != 0:
+                if output.strip():
+                    print(output.rstrip(), flush=True)
+                status = "timeout" if code is None else f"exit {code}"
+                print(f"::warning file={path}::Early diagnostic deferred: dependency "
+                      f"preparation {status}; mandatory checks still follow.", flush=True)
+                continue
+            try:
+                setup = json.loads(output)
+            except ValueError as exc:
+                raise ValueError(f"{path}: invalid setup-file JSON: {exc}") from exc
+            if not isinstance(setup, dict) or not isinstance(setup.get("name"), str):
+                raise ValueError(f"{path}: invalid setup-file JSON")
+            command, env = lean_command(path, overlay, None)
+            code, output, errors = run_early_command(command, deadline, timeout, env)
+            status = "completed" if code == 0 else ("deferred (timeout)" if code is None
+                                                   else f"diagnostic failure (exit {code})")
+            print(f"::group::Early fixture {path}: {status}", flush=True)
+            if (output + errors).strip():
+                print((output + errors).rstrip(), flush=True)
+            print("::endgroup::", flush=True)
+            if code == 0:
+                completed.add(module_of(path))
+            else:
+                print(f"::warning file={path}::Early fixture {status}; "
+                      "mandatory checks still follow.", flush=True)
+        print(f"Early fixture diagnostics: {len(completed)}/{len(ordered)} completed; "
+              "full build and mandatory strict checks still follow.", flush=True)
+    except Exception as exc:
+        print(f"::warning::Early fixture diagnostics deferred: {exc}. "
+              "Full build and mandatory strict checks still follow.", flush=True)
+    finally:
+        if overlay is not None:
+            shutil.rmtree(overlay, ignore_errors=True)
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -376,7 +565,8 @@ def main(argv: list[str] | None = None) -> int:
             print("No changed production modules to build early.")
             return 0
         print("Building changed modules early:", *early, sep="\n  ", flush=True)
-        return early_build(early, args.log, args.budget)
+        return early_build(early, args.log, args.budget, on_success=lambda deadline:
+                           early_fixture_diagnostics(args.base, deadline, args.timeout, args.log))
 
     print(f"Strict checks: {len(sources)} changed source file(s), {len(tests)} test file(s).",
           flush=True)

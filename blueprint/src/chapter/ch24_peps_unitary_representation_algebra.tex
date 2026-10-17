@@ -7,8 +7,8 @@
     Let $U:G\to\mathrm U(D)$ be a unitary representation. Regard its
     matrices as operators on the standard Hilbert space $\mathbb C^D$,
     and let $\mathcal A_U$ be their generated unital star algebra.
-    Every $\mathcal A_U$-invariant subspace carries the restriction of $U$.
-    These are the algebra and invariant sectors used in
+    Every $\mathcal A_U$-invariant subspace carries the restriction of $U$,
+    giving the algebra and invariant sectors of
     \cite[Section~4.1]{Schuch2010PEPS}.
 \end{definition}
 
@@ -36,9 +36,10 @@
     identical invariant subspaces. Irreducibility is minimality among
     nonzero invariant subspaces, or equivalently the atom condition for
     the lattice of subrepresentations. A nonzero intertwiner between
-    irreducible subspaces is an isomorphism. Conversely, extend an
+    irreducible subspaces is an isomorphism; conversely, extending an
     isomorphism of the restricted representations to the ambient space
-    by first projecting orthogonally onto its source subspace.
+    by first projecting orthogonally onto its source subspace produces an
+    algebra intertwiner.
 \end{proof}
 
 \begin{theorem}[Orthonormal irreducible matrix blocks]
@@ -50,19 +51,19 @@
     orthonormal basis $(e_{i,a,j})$, with $1\leq a\leq m_i$ and
     $1\leq j\leq d_i$, such that every row spans an irreducible
     subrepresentation. Rows belonging to distinct indices $i$ have
-    distinct characters. For each $g\in G$, there are matrices $D_i(g)$
+    distinct characters. For each $g\in G$, the unitary sector decomposition of
+    \cite[Sections~4.1 and~7]{Schuch2010PEPS} provides matrices $D_i(g)$
     satisfying
     \begin{align}
         U(g)e_{i,a,j}=\sum_{j'}D_i(g)_{j'j}e_{i,a,j'}.
         \label{eq:peps_unitary_irreducible_rows}
     \end{align}
-    This is the unitary sector decomposition used in
-    \cite[Sections~4.1 and~7]{Schuch2010PEPS}.
 \end{theorem}
 \begin{proof}\leanok
-    Apply the orthonormal adapted-basis decomposition of a finite-dimensional
-    star algebra to $\mathcal A_U$. The preceding correspondence identifies
-    its irreducible rows and distinct isotypes with irreducible group
-    representations and distinct characters. Its common matrix action on
-    the multiplicity rows gives (\ref{eq:peps_unitary_irreducible_rows}).
+    Applying the orthonormal adapted-basis decomposition of a
+    finite-dimensional star algebra to $\mathcal A_U$, the preceding
+    correspondence identifies its irreducible rows and distinct isotypes with
+    irreducible group representations and distinct characters, and its common
+    matrix action on the multiplicity rows gives
+    (\ref{eq:peps_unitary_irreducible_rows}).
 \end{proof}

@@ -1,0 +1,32 @@
+% alt: One wide box B_i with a bond leaving to the left, a bond leaving to the right, and four physical legs rising from it, equals a row of four boxes A^{[x_1]} to A^{[x_4]} with the same two outer bonds, three internal bonds between neighbours, and one physical leg rising from each box.
+% Section 12, proof of Theorem thm:B (part2b_mps_protocol.tex, lines 530-545): the tensor at block B_i = {x_1 < ... < x_n} is a map from its left and right block-bond indices, each of dimension at most (C_1 L^r)^chi, to the block register H_{B_i}; successive singular value decompositions across x_1 | x_2 ... x_n, x_1 x_2 | x_3 ... x_n, ... split it into single-site tensors whose internal bonds have dimension at most q^{2t} (C_1 L^r)^chi while the block bonds are unchanged. Drawn for a block of n = t = 4 sites.
+% Ink-to-index: the wide box is the block tensor, its left and right horizontal stubs the block-bond indices (dimension written at the tips), its four vertical legs the physical indices of the sites x_1, ..., x_4 of the block; on the right the box A^{[x_j]} is the site tensor at x_j, the horizontal stubs at the two ends are the same block bonds, the horizontal bond between A^{[x_j]} and A^{[x_{j+1}]} is the new internal bond created by the j-th singular value decomposition (every bond label is an upper bound on the dimension, as in the note: at most (C_1 L^r)^chi for the block bonds and at most q^{2t} (C_1 L^r)^chi for the internal bonds), and the vertical leg above each box is that site's physical index. On both sides the block bonds and the physical legs are open; on the right the three internal bonds are contracted.
+\[
+  \begin{tenkz}[size=l, rows={wire,wire}, cols=4, bonds=none]
+    \tn[at=(2,1), skin=box, wide=4, name=b,
+        ports={180:virtual:$(C_1L^r)^{\chi}$, 0:virtual:$(C_1L^r)^{\chi}$,
+               90@1:physical, 90@2:physical, 90@3:physical, 90@4:physical}]{B_i}
+    \tn[at=(1,1), skin=none, name=p1, ports={270:physical, 90:physical:$x_1$}]{}
+    \tn[at=(1,2), skin=none, name=p2, ports={270:physical, 90:physical:$x_2$}]{}
+    \tn[at=(1,3), skin=none, name=p3, ports={270:physical, 90:physical:$x_3$}]{}
+    \tn[at=(1,4), skin=none, name=p4, ports={270:physical, 90:physical:$x_4$}]{}
+    \tnwire{b.90@1}{p1.270} \tnwire{b.90@2}{p2.270}
+    \tnwire{b.90@3}{p3.270} \tnwire{b.90@4}{p4.270}
+  \end{tenkz}
+  \;=\;
+  \begin{tenkz}[size=l, rows={wire,wire}, cols=7, bonds=none]
+    \tn[at=(2,1), name=a1, skin=box, ports={180:virtual:$(C_1L^r)^{\chi}$, 0:virtual, 90:physical}]{A^{[x_1]}}
+    \tn[at=(2,3), name=a2, skin=box, ports={180:virtual, 0:virtual, 90:physical}]{A^{[x_2]}}
+    \tn[at=(2,5), name=a3, skin=box, ports={180:virtual, 0:virtual, 90:physical}]{A^{[x_3]}}
+    \tn[at=(2,7), name=a4, skin=box, ports={180:virtual, 0:virtual:$(C_1L^r)^{\chi}$, 90:physical}]{A^{[x_4]}}
+    \tn[at=(1,1), skin=none, name=q1, ports={270:physical, 90:physical:$x_1$}]{}
+    \tn[at=(1,3), skin=none, name=q2, ports={270:physical, 90:physical:$x_2$}]{}
+    \tn[at=(1,5), skin=none, name=q3, ports={270:physical, 90:physical:$x_3$}]{}
+    \tn[at=(1,7), skin=none, name=q4, ports={270:physical, 90:physical:$x_4$}]{}
+    \tnwire{a1.90}{q1.270} \tnwire{a2.90}{q2.270} \tnwire{a3.90}{q3.270} \tnwire{a4.90}{q4.270}
+    \tnbond[name=d1]{a1.0}{a2.180} \tnbond[name=d2]{a2.0}{a3.180} \tnbond[name=d3]{a3.0}{a4.180}
+    \tnmark[form=label, label pos=90]{on d1 0.5}{$q^{2t}(C_1L^r)^{\chi}$}
+    \tnmark[form=label, label pos=90]{on d2 0.5}{$q^{2t}(C_1L^r)^{\chi}$}
+    \tnmark[form=label, label pos=90]{on d3 0.5}{$q^{2t}(C_1L^r)^{\chi}$}
+  \end{tenkz}
+\]

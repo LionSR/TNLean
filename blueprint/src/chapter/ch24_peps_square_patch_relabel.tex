@@ -9,11 +9,11 @@
     Let $e\colon V\to W$ be a bijection of finite site sets, and give each site
     $w\in W$ the position of $e^{-1}(w)$. Square cylinder data on $V$ at $(z,u)$
     give square cylinder data on $W$ at $(z,u)$ with the same radii and the same
-    inside dimensions, whose sum of cylinder projectors is the transport of the
-    original sum along the configuration bijection induced by $e$. Consequently
-    the conclusion of the adaptive patch constraint at $(z,u)$ for a vector
-    $\Omega$ on $V$ holds, with the same dimension bound and error, for the
-    transported vector on $W$. No nonemptiness condition is imposed on the
+    inside dimensions, whose sum of cylinder projectors is the image of the
+    original sum under conjugation by the configuration unitary induced by $e$.
+    Consequently the conclusion of the adaptive patch constraint at $(z,u)$ for
+    a vector $\Omega$ on $V$ holds, with the same dimension bound and error, for
+    the relabelled vector on $W$. No nonemptiness condition is imposed on the
     sites or samples.
 \end{theorem}
 
@@ -28,15 +28,15 @@
     \begin{align}
         U_V=U_{D}\otimes U_{V\setminus D}.
     \end{align}
-    Give the transported data the radii $r_j$, the samples $e(D_j)$ and the
-    vectors $v'_{j\ell}=U_{D_j}v_{j\ell}$, which are unit vectors. Then
+    Assigning the relabelled patch data the radii $r_j$, the samples $e(D_j)$,
+    and the unit vectors $v'_{j\ell}=U_{D_j}v_{j\ell}$ gives
     \begin{align}
         U_V\Bigl(\bigl(\ket{v_{j\ell}}\bra{v_{j\ell}}\bigr)_{D_j}\otimes\id\Bigr)
         U_V^{*}
         =\bigl(\ket{v'_{j\ell}}\bra{v'_{j\ell}}\bigr)_{e(D_j)}\otimes\id,
     \end{align}
-    so the transported cylinder projectors still have mutually orthogonal
-    ranges, and their sum is
+    so the relabelled cylinder projectors retain mutually orthogonal
+    ranges and sum to
     \begin{align}
         \Pi'=U_V\,\Pi\,U_V^{*}.
     \end{align}
@@ -46,7 +46,7 @@
         =\bigl\lVert U_V(\id-\Pi)\Omega\bigr\rVert
         =\bigl\lVert(\id-\Pi)\Omega\bigr\rVert,
     \end{align}
-    while the radii and the dimensions $d_j$ are unchanged. This gives both
-    assertions (\cite{OpenAI2026PolynomialPEPS}, \texttt{03-patches.tex}, lines
-    24--49 and 563--603).
+    while the radii and the dimensions $d_j$ are unchanged, establishing both
+    assertions of \cite{OpenAI2026PolynomialPEPS}, \texttt{03-patches.tex},
+    lines 24--49 and 563--603.
 \end{proof}

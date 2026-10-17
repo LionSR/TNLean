@@ -15,13 +15,13 @@ Coincident points contribute only once to the union.
     \lean{TNLean.PEPS.AreaLaw.Geometry.beltCellMarks}
     \leanok
     \uses{def:area_law_dyadic_cells}
-    For a cell $C_{\ell,z}=o+t(z+[0,1)^2)$, where $t=2^\ell$, put
+    For a cell $C_{\ell,z}=o+t(z+[0,1)^2)$, where $t=2^\ell$, the set of
+    its four corners, four side midpoints and center is
     \begin{align}
         M_{\ell,z}
          & =\left\{o+t\left(z+\frac e2\right):
         e\in\{0,1,2\}^2\right\}.
     \end{align}
-    These are its four corners, four side midpoints and center.
 \end{definition}
 
 \begin{definition}[The union of cell marks]
@@ -83,17 +83,15 @@ Coincident points contribute only once to the union.
     \uses{def:area_law_belt_marks,def:area_law_belt_cells,
         def:area_law_fine_layer_indices,def:area_law_fine_belt_scales}
     Let $F_k(a,b)$ be the belt-cell indices in the refined
-    layer for coordinate residues $a,b$. There is a pair
-    of residues $(a,b)$ such that
+    layer for coordinate residues $a,b$. Uniformly in the finite domain, cut,
+    origin and scale, there is a pair of residues $(a,b)$ such that
     \begin{align}
         |M_{\ell_k}(F_k(a,b))|
          & \le576(2C_0+1)^2|\partial_\Lambda A|\,2^{-\delta_0 k/2}.
     \end{align}
-    The estimate is uniform in the finite domain, cut, origin and scale.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:area_law_belt_mark_count,thm:area_law_sparse_dyadic_belts}
-    Choose the sparse-belt pair of residues $(a,b)$
-    and multiply the belt-cell count by $9$. The coefficient is
-    $9\cdot64=576$.
+    For the sparse-belt pair of residues $(a,b)$, multiplying the belt-cell
+    count by $9$ gives the coefficient $9\cdot64=576$.
 \end{proof}

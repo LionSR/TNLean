@@ -120,3 +120,72 @@ square cylinder data at the same radii.
     points (\cite{OpenAI2026PolynomialPEPS}, \texttt{03-patches.tex}, lines
     53--54).
 \end{proof}
+
+\begin{theorem}[Adaptive patches from the square entropy area law]
+    \label{thm:peps_adaptive_patch_constraint_of_area_law}
+    \lean{TNLean.PEPS.Approximation.SquareEntropyAreaLaw.adaptivePatchConstraint}
+    \leanok
+    \uses{def:square_entropy_area_law, def:peps_adaptive_patch_constraint}
+    If the square-grid entropy area law holds, then the adaptive patch
+    constraint holds. This is the implication proved in
+    \cite[Proposition~4.1]{OpenAI2026PolynomialPEPS}, \texttt{03-patches.tex},
+    lines 26--54 and 534--603, with the area law taken as an assumption.
+    % Status: the unconditional proposition follows once the area law is proved.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:peps_nested_patch_cylinder_approximation,
+        thm:peps_square_patch_of_nested_cylinders,
+        thm:peps_bounded_radius_square_patch,
+        thm:peps_square_sample_integer_coordinates,
+        thm:peps_square_patch_relabel,
+        lem:peps_adaptive_patch_supply,
+        def:peps_nested_patches,
+        thm:peps_nested_patch_sizes,
+        thm:peps_patch_count_polynomial,
+        def:square_area_law_state}
+    Fix $q\ge2$, $J,\Delta>0$, $B_0>0$ and $p>0$. Let $R_0>0$ be given by
+    Theorem~\ref{thm:peps_nested_patch_cylinder_approximation}, and put
+    \begin{align}
+        C=\max\{q^{81},1+B_0/2\},
+        \qquad
+        c=R_0+1 .
+    \end{align}
+    Work on the integer domain $\{0,\ldots,L-1\}^2$; relabelling its sites and
+    translating by $(1,1)$ returns to the lattice positions without changing
+    the conclusion. Let $0<u\le B_0\log L$. If $u\ge4$, the nested patches
+    $X_0\subseteq\cdots\subseteq X_{m-1}$ at the center $z-(1,1)$ have radii
+    between $u$ and $2u$, with $m\le\lfloor u/2\rfloor+1$. The approximation
+    theorem gives subspaces $S_j$ with $\dim S_j\le L^{R_0}$ and a vector $v$
+    in the sum of their cylinder spaces with $\lVert\Omega-v\rVert\le L^{-p}$.
+    The square patch built from them has error at most $L^{-p}$ and
+    \begin{align}
+        \sum_jd_j\le m\,L^{R_0}
+        \le\Bigl(\frac{B_0}{2}\log L+1\Bigr)L^{R_0}
+        \le\Bigl(1+\frac{B_0}{2}\Bigr)L^{R_0+1}
+        \le C L^{c} .
+    \end{align}
+    If $u<4$, the exact patch at bounded radius has error zero and at most
+    $q^{81}\le CL^c$ terms.
+\end{proof}
+
+\begin{theorem}[Polynomial approximation from the square entropy area law]
+    \label{thm:peps_approximation_of_square_area_law}
+    \lean{TNLean.PEPS.Approximation.polynomialPEPSApproximation_of_squareEntropyAreaLaw}
+    \leanok
+    \uses{def:square_entropy_area_law, def:polynomial_peps_model}
+    If the square-grid entropy area law holds, then the uniform polynomial
+    approximation assertion of \cite[Theorem~1.1]{OpenAI2026PolynomialPEPS}
+    holds.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:peps_adaptive_patch_constraint_of_area_law,
+        thm:peps_ground_state_approximation_from_patch_bound}
+    Theorem~\ref{thm:peps_adaptive_patch_constraint_of_area_law} gives the
+    adaptive patch constraint, and
+    Theorem~\ref{thm:peps_ground_state_approximation_from_patch_bound} turns it
+    into the approximation assertion.
+\end{proof}
