@@ -36,13 +36,13 @@ asymptotic scale specialization is proved below.
     in $A\cap T_L$. A scheduled fill cannot create a bad lead.
 \end{theorem}
 \begin{proof}\leanok
-    Induct on the fill--charge evaluation. If the last charge makes a new
-    assignment, choose a same-side predecessor in that ball. The ball meets the
-    old middle, hence the cut clearance places the whole ball inside $A$.
-    This includes far-side predecessors despite the exterior initially being far.
-    Repeat the argument for an earlier assignment, or stop at the preceding fill.
-    The resulting path family deliberately also permits selected charges that
-    made no move; only containment of the evaluated assignments in this family is used.
+    We proceed by induction on the fill--charge evaluation. If the last charge makes a new
+    assignment, we select a same-side predecessor in that ball. Because the ball meets the
+    old middle, the cut clearance places the whole ball inside $A$, including far-side
+    predecessors despite the exterior initially being far. Repeating this step for an earlier
+    assignment or stopping at the preceding fill yields the path, whose ambient family also
+    permits selected charges that made no move since only containment of the evaluated
+    assignments is used.
 \end{proof}
 
 \begin{theorem}[Length and time window of a bad ancestry]
@@ -65,10 +65,10 @@ asymptotic scale specialization is proved below.
     \end{align}
 \end{theorem}
 \begin{proof}\leanok
-    Each charge changes oriented depth by at most $2r$. Keep the front at the
-    first charge as the reference front, instead of replacing it by the final
-    front. The exact padded fill counts give the displayed speed estimate with
-    both floor errors included. Combining the two inequalities gives the bounds.
+    Each charge changes oriented depth by at most $2r$. Retaining the front at the
+    first charge as the reference front, rather than replacing it by the final
+    front, allows the exact padded fill counts to yield the displayed speed estimate with
+    both floor errors included. Combining the two inequalities gives the stated bounds.
 \end{proof}
 
 \begin{theorem}[Probability of prescribed labelled hits]
@@ -87,11 +87,11 @@ asymptotic scale specialization is proved below.
     probability is at most the sum of these bounds.
 \end{theorem}
 \begin{proof}\leanok
-    Sorted labelled candidate lists contain a label at most once, including when
-    different labels share an anchor. Thus one required hit constrains at most
-    one side--slot coordinate. Factor the finite product of independent choices
-    and then take a union bound. Successful physical moves are not asserted
-    independent; they are contained in the selected-coordinate events.
+    Sorted labelled candidate lists contain a label at most once, even when
+    different labels share an anchor, so one required hit constrains at most
+    one side--slot coordinate. Factoring the finite product of independent choices
+    and taking a union bound yields the estimate, because successful physical moves
+    need not be independent to lie inside the selected-coordinate events.
 \end{proof}
 
 \begin{theorem}[Counting spatial label paths]
@@ -114,10 +114,10 @@ asymptotic scale specialization is proved below.
     \end{align}
 \end{theorem}
 \begin{proof}\leanok
-    Inductively choose a nearby labelled anchor and continue from it. The finite
-    union has at most $B$ choices at each step. Fiber counting retains label
-    multiplicity, and an induced graph ball injects into the ambient lattice
-    diamond. Counting labels alone suffices because predecessor choices do
+    Choosing a nearby labelled anchor inductively leaves a finite
+    union of at most $B$ choices at each step. Fiber counting retains label
+    multiplicity while an induced graph ball injects into the ambient lattice
+    diamond, and counting labels alone suffices because predecessor choices do
     not enter the selected-coordinate probability.
 \end{proof}
 
@@ -142,9 +142,9 @@ asymptotic scale specialization is proved below.
     For $n,r,s>0$ and $W=4n(rs+1)$, one has $v\le 9nrs$.
 \end{theorem}
 \begin{proof}\leanok
-    Use the subsets of cardinality $s$, sort them, and pair their times with the
-    label path in chronological order. The image cannot increase cardinality.
-    Keeping the inclusive endpoint produces $W+1$; positivity absorbs it and
+    Sorting the subsets of cardinality $s$ and pairing their times with the
+    label path in chronological order cannot increase cardinality.
+    Keeping the inclusive endpoint produces $W+1$, and positivity absorbs both this term and
     the additive rounding terms into $9nrs$.
 \end{proof}
 
@@ -174,8 +174,8 @@ asymptotic scale specialization is proved below.
 \end{theorem}
 \begin{proof}\leanok
     The reversed labels satisfy the spatial chain relation, and strict time order
-    bounds the path length by $k$. Insert the path into its sorted-time
-    family. Families of different lengths are disjoint, so summing their
+    bounds the path length by $k$, placing each path into its sorted-time
+    family. Because families of different lengths are disjoint, summing their
     cardinality bounds gives the displayed estimate.
 \end{proof}
 
@@ -192,8 +192,8 @@ asymptotic scale specialization is proved below.
     \end{align}
 \end{theorem}
 \begin{proof}\leanok
-    Use $\binom vs\le v^s/s!$ and $s^s/s!\le e^s$. The factorial cancels
-    the ancestry length in the time-window estimate.
+    Combining $\binom vs\le v^s/s!$ with $s^s/s!\le e^s$ cancels the factorial
+    against the ancestry length in the time-window estimate.
 \end{proof}
 
 \begin{theorem}[Compact collar cardinality]
@@ -208,9 +208,9 @@ asymptotic scale specialization is proved below.
     \end{align}
 \end{theorem}
 \begin{proof}\leanok
-    The zero dilation is $T$. Add the cardinalities of successive dilation
-    differences and inject physical collar sites into the ambient dilation.
-    No volume of $\Lambda\setminus A$ occurs.
+    Because the zero dilation is $T$, summing the cardinalities of successive dilation
+    differences and injecting physical collar sites into the ambient dilation gives the bound
+    without introducing any volume from $\Lambda\setminus A$.
 \end{proof}
 
 \begin{theorem}[Exact prefix-history marginals]
@@ -227,9 +227,9 @@ asymptotic scale specialization is proved below.
     weights as under length-$j$ history weights.
 \end{theorem}
 \begin{proof}\leanok
-    Appending a charge preserves all earlier prefixes. Sum the appended independent
-    choices, whose total weight is one, and induct from $j$ to $N$. Empty
-    offset spaces give zero on both sides and require no extra convention.
+    Appending a charge preserves all earlier prefixes, so summing the appended independent
+    choices of total weight one and inducting from $j$ to $N$ establishes the identity; empty
+    offset spaces give zero on both sides without extra conventions.
 \end{proof}
 
 \begin{theorem}[Finite bad-endpoint bound]
@@ -248,9 +248,9 @@ asymptotic scale specialization is proved below.
     \end{align}
 \end{theorem}
 \begin{proof}\leanok
-    Derive the ancestry from the evaluated physical history, put it in the finite
-    cover, and apply the selected-coordinate probability bound to each path.
-    The graph and ambient depth provide the spatial variation and diamond count.
+    Extracting the ancestry from the evaluated physical history places it in the finite
+    cover, where the selected-coordinate probability bound applies to each path while
+    the graph and ambient depth provide the spatial variation and diamond count.
 \end{proof}
 
 \begin{theorem}[Bands, sides, compact endpoints, and offsets]
@@ -267,9 +267,10 @@ asymptotic scale specialization is proved below.
     their preceding fill.
 \end{theorem}
 \begin{proof}\leanok
-    Every bad endpoint belongs to the compact collar. Union over it, both sides,
-    and all bands, then average the normalized initial offsets. A fill cannot
-    create a bad lead, so old charge states are covered as well.
+    Because every bad endpoint belongs to the compact collar, taking a union bound over the collar,
+    both sides, and all bands and averaging over the normalized initial offsets gives the
+    completed-history estimate. Since a fill cannot create a bad lead, old charge states
+    satisfy the same bound.
 \end{proof}
 
 \begin{theorem}[All times on one full history]
@@ -288,9 +289,9 @@ asymptotic scale specialization is proved below.
     intervening deterministic fill.
 \end{theorem}
 \begin{proof}\leanok
-    Take the finite union over prefix times and use their exact marginals. Insert
-    the compact collar cardinality bound. All tests concern the same full
-    history, rather than independently sampled histories at different times.
+    Taking the finite union over prefix times and substituting their exact marginals
+    together with the compact collar cardinality bound yields the estimate, where all tests
+    concern the same full history rather than independently sampled histories at different times.
 \end{proof}
 
 \begin{theorem}[Finite geometric bad-history tail]
@@ -313,12 +314,12 @@ asymptotic scale specialization is proved below.
     \end{align}
 \end{theorem}
 \begin{proof}\leanok
-    Apply the binomial cancellation with $v_s(k)\le9nrs$. The nonnegative
-    length sum increases with the observation horizon. The label-only count
-    gives a ratio of order $r^3/D$ when $M$ has the source scale $nD$,
-    with uniformly bounded anchor multiplicity and fixed positive $C_1$;
-    counting predecessor sites as well gives the manuscript's looser $r^5/D$.
-    No asymptotic limit or quantum measure is used here.
+    Applying the binomial cancellation with $v_s(k)\le9nrs$ and using the monotonicity of the
+    nonnegative length sum in the observation horizon gives the bound. The label-only count
+    produces a ratio of order $r^3/D$ when $M$ has the source scale $nD$
+    with uniformly bounded anchor multiplicity and fixed positive $C_1$,
+    whereas counting predecessor sites as well gives the manuscript's looser $r^5/D$;
+    no asymptotic limit or quantum measure enters.
 \end{proof}
 
 \begin{figure}[ht]
@@ -383,10 +384,10 @@ asymptotic scale specialization is proved below.
     for sufficiently large $n$.
 \end{lemma}
 \begin{proof}\leanok
-    The ceiling differs from the nonnegative squared logarithm by less than one.
-    Every fixed power of the logarithm is negligible relative to every positive
-    power of $n$. Apply this first with exponent $\varepsilon$ and then with
-    exponent $\varepsilon/3$ before cubing.
+    Because the ceiling differs from the nonnegative squared logarithm by less than one and
+    every fixed power of the logarithm is negligible relative to any positive
+    power of $n$, applying this growth bound first with exponent $\varepsilon$ and then with
+    exponent $\varepsilon/3$ before cubing yields the claims.
 \end{proof}
 
 \begin{lemma}[A fixed ancestry cutoff]
@@ -416,10 +417,10 @@ asymptotic scale specialization is proved below.
     $n^{-aJ}$ is at most $n^{-p}$.
 \end{lemma}
 \begin{proof}\leanok
-    For $r\ge1$ the lattice diamond factor is at most $13r^2$.
-    Cancel $n$ against the padded capacity. Every retained length is at least
-    $J$, and there are at most $N+1$ lengths. Bound $N+1$ by $2n^2$ and absorb
-    the remaining fixed constant into one additional power of $n$.
+    For $r\ge1$, the lattice diamond factor is at most $13r^2$, and $n$ cancels
+    against the padded capacity. Since every retained length is at least
+    $J$ across at most $N+1$ terms, bounding $N+1$ by $2n^2$ and absorbing
+    the remaining fixed constant into one additional power of $n$ completes the estimate.
 \end{proof}
 
 \begin{theorem}[Bad-history probability at the source scales]
@@ -446,11 +447,11 @@ asymptotic scale specialization is proved below.
     In particular $p=200$ gives the bad-history exponent in Lemma~9.1.
 \end{theorem}
 \begin{proof}\leanok
-    Choose an integer $J$ with $p+8\le\kappa J/2$, before choosing $n$ or
-    the physical domain. The rounded-radius estimates imply eventually
-    $\rho\le n^{-\kappa/2}$ and $4rJ\le D$. The source floors give
-    $K,L,m\le n$. Apply the fixed-cutoff estimate to the finite-history
-    union bound. The same good-prefix event controls the old-charge states,
+    Fixing an integer $J$ with $p+8\le\kappa J/2$ before choosing $n$ or
+    the physical domain, the rounded-radius estimates eventually give
+    $\rho\le n^{-\kappa/2}$ and $4rJ\le D$, while the source floors give
+    $K,L,m\le n$. Applying the fixed-cutoff estimate to the finite-history
+    union bound then controls both completed prefixes and old-charge states,
     since a scheduled fill cannot create a bad lead.
 \end{proof}
 
@@ -475,10 +476,11 @@ asymptotic scale specialization is proved below.
         |T_d\setminus T_{d-1}|\le n\quad(1\le d\le L),\qquad
         \operatorname{dist}_\infty(T,Z)>2L+10r_0.
     \end{align}
-    For all sufficiently large $n$, uniformly over finite lattice domains,
-    cuts, nonempty targets, labels and scanners, the following hold
+    For all sufficiently large $n$, making explicit the constants in \cite[Lemma~9.1]{OpenAI2026AreaLaw},
+    the following hold uniformly over finite lattice domains,
+    cuts, nonempty targets, labels and scanners
     for completed statuses after $k\le nm$ fill--charge pairs and for
-    pre-charge statuses with $k+1\le nm$.
+    pre-charge statuses with $k+1\le nm$, where all probabilities are classical path probabilities of the history tree:
     \begin{enumerate}
         \item Every splitting designated support is the graph $r_0$-ball of its
               anchor and lies in $A$. It splits at most one band, where it meets
@@ -500,8 +502,6 @@ asymptotic scale specialization is proved below.
               least $1/[2(C_1+1)nD]$, and the sampled move is exactly the old
               $Y$-part of its designated support.
     \end{enumerate}
-    All probabilities are classical path probabilities of the history tree.
-    This is \cite[Lemma~9.1]{OpenAI2026AreaLaw} with explicit constants.
 \end{theorem}
 \begin{proof}\leanok
     The source scales eventually give $n\ge2$, $1\le D$, $2r_0\le D$,

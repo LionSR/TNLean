@@ -159,13 +159,13 @@ the subsequent separation and second-moment arguments.
 \begin{proof}
     \leanok
     \uses{thm:peps_grouped_gate_sum,thm:peps_prepared_gate_grouped,thm:peps_grouped_block_map,def:peps_source_circuit}
-    At a touched gate, sum its original branch expansion and extend
-    the sum by the spectator identity. At an untouched gate, the
-    single partial branch is its aggregate operator. The resulting
-    identity is compatible with consecutive composition, since the
-    two independent finite sums distribute and their coefficients
-    multiply. It is also compatible with adjoining idle registers.
-    Induction gives (\ref{eq:peps_partial_source_evaluation}).
+    At a touched gate, summing the original branch expansion and extending
+    the sum by the spectator identity reproduces the gate operator, while at
+    an untouched gate the single partial branch is already its aggregate
+    operator. Because the two independent finite sums distribute with
+    multiplying coefficients under consecutive composition and commute with
+    adjoining idle registers, induction gives
+    (\ref{eq:peps_partial_source_evaluation}).
 \end{proof}
 
 \begin{theorem}[Local contributions to the scalar cost]
@@ -189,9 +189,10 @@ the subsequent separation and second-moment arguments.
 \begin{proof}
     \leanok
     \uses{def:peps_partial_source_choices}
-    Use the defining choice set at each elementary operation. For
-    consecutive compositions, apply $|cd|=|c|\,|d|$ and distribute the
-    sum over the Cartesian product of the two choice sets.
+    Evaluating the defining choice set at each elementary operation gives
+    the elementary costs, and for consecutive compositions applying
+    $|cd|=|c|\,|d|$ and distributing the sum over the Cartesian product of
+    the two choice sets multiplies the factors.
 \end{proof}
 
 \begin{theorem}[The exact product of the gate costs]
@@ -221,9 +222,9 @@ the subsequent separation and second-moment arguments.
     \leanok
     \uses{thm:peps_partial_source_local_cost,def:peps_partial_source_choices}
     Induction on the chronological composition gives the product
-    formula from the local contributions. Bound each nonnegative
-    factor by $B$. The ket and bra sums are independent, and complex
-    conjugation preserves absolute value, so their total cost is the
+    formula from the local contributions, and bounding each nonnegative
+    factor by $B$ yields $B^t$; since the ket and bra sums are independent
+    and complex conjugation preserves absolute value, their total cost is the
     square of the first sum.
 \end{proof}
 
@@ -254,9 +255,10 @@ the subsequent separation and second-moment arguments.
 \begin{proof}
     \leanok
     \uses{thm:peps_partial_source_evaluation}
-    Compose (\ref{eq:peps_partial_source_evaluation}) with $I_a^{-1}$
-    and take matrices. Distribute the finite sums in $M\rho M^\dagger$.
-    Taking the adjoint conjugates each bra coefficient.
+    Composing (\ref{eq:peps_partial_source_evaluation}) with $I_a^{-1}$
+    and taking matrices gives the matrix expansion, and distributing the
+    finite sums in $M\rho M^\dagger$ while conjugating each bra coefficient
+    under the adjoint gives the density expansion.
 \end{proof}
 
 \begin{theorem}[Fixed positions for every partial source inventory]
@@ -292,12 +294,12 @@ the subsequent separation and second-moment arguments.
 \begin{proof}
     \leanok
     \uses{thm:peps_partial_source_inventory,thm:peps_affected_source_occurrences}
-    Induct on the chronological composition. The two occurrence sets
+    By induction on the chronological composition, the two occurrence sets
     of consecutive compositions are disjoint, so concatenating their
-    lists preserves uniqueness. At a gate, list its prescribed slots.
-    The participant injection preserves their distinct endpoints, and
-    grouping owners removes a slot exactly when both endpoints are
-    exterior. Each retained position carries its prescribed spaces and
-    branch vector, so the register layout is
+    lists preserves uniqueness, while at a gate listing its prescribed slots
+    preserves distinct endpoints under the participant injection and removes
+    a slot under owner grouping exactly when both endpoints are exterior.
+    Because each retained position carries its prescribed spaces and
+    branch vector, the register layout is
     determined solely by the original positions and $\mathcal A$.
 \end{proof}

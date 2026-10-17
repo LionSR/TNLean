@@ -69,9 +69,10 @@ with a physical cut.
 \end{lemma}
 \begin{proof}
     \leanok
-    Cover the crossing edges by the four incident edges at each point of $R$.
-    For the first bound use the outside endpoints. For the second, an inside
-    endpoint in $S_{j-1}$ would put its outside neighbor in $S_j$, a
+    Covering the crossing edges by the four incident edges at each point of $R$
+    gives $|\partial S|\le4|R|$.
+    The first displayed bound uses the outside endpoints, while for the second,
+    an inside endpoint in $S_{j-1}$ would put its outside neighbor in $S_j$, a
     contradiction. No connectedness or nonemptiness assumption is needed.
 \end{proof}
 
@@ -91,8 +92,8 @@ with a physical cut.
 \end{lemma}
 \begin{proof}
     \leanok
-    An edge leaving $S\setminus U$ either leaves $S$ or enters $U$.
-    Count the union of these two sets of unordered edges.
+    An edge leaving $S\setminus U$ either leaves $S$ or enters $U$, and
+    counting the union of these two sets of unordered edges gives the cardinality bound.
 \end{proof}
 
 \begin{lemma}[Template ambient boundary bounds]
@@ -112,9 +113,10 @@ with a physical cut.
 \end{lemma}
 \begin{proof}
     \leanok
-    For positive $j$, count inside endpoints in $T_j\setminus T_{j-1}$
-    and apply the depth-layer bound. At $j=0$, use outside endpoints in
-    $T_1\setminus T$; the template assumption $s_0\ge1$ permits this layer.
-    Thus the largest radius $s_0$ never needs a bound at radius $s_0+1$.
-    Apply the set-difference estimate for the shell.
+    For positive $j$, counting inside endpoints in $T_j\setminus T_{j-1}$
+    and applying the depth-layer bound gives $|\partial T_j|\le4n$. At $j=0$,
+    using outside endpoints in $T_1\setminus T$ gives the same bound because the
+    template assumption $s_0\ge1$ permits this layer, so the largest radius $s_0$
+    never needs a bound at radius $s_0+1$. The set-difference estimate then bounds
+    the shell boundary.
 \end{proof}

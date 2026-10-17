@@ -4,29 +4,30 @@
     \leanok
     \uses{def:mpu, def:injective, def:mpu_canonical_form_ii}
     Let $d>0$ and let $\mathcal U$ be an injective MPU tensor of bond
-    dimension $D$. There are a canonical-form-II tensor $\mathcal V$ of
-    the same bond dimension and an invertible matrix $X$ such that, for every
-    $N>0$,
+    dimension $D$. Combining the canonical replacement of
+    \cite[lines~319--356]{Cirac2017MPU} with the equality case of
+    \cite[Proposition~20]{Molnar2018SemiInjective}, there are a
+    canonical-form-II tensor $\mathcal V$ of the same bond dimension and an
+    invertible matrix $X$ such that, for every $N>0$,
     \begin{align}
         \mathcal V^{ij} & =X\mathcal U^{ij}X^{-1}, \\
         V^{(N)}         & =U^{(N)}.
     \end{align}
-    This combines the canonical replacement in
-    \cite[lines~319--356]{Cirac2017MPU} with the equality case of
-    \cite[Proposition~20]{Molnar2018SemiInjective}.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:mpu_reduced_cfii_representative,
         thm:mps_equality_reduction_exists, thm:mps_rectangular_reduction_identities}
-    Choose a reduced canonical representative of bond dimension $E\leq D$.
-    Equality of the positive-length periodic operators identifies the
-    doubled-index matrix product vectors. Since $\mathcal U$ is injective,
-    there are $P\in\C^{D\times E}$ and $Q\in\C^{E\times D}$ with
-    $PQ=I_D$ and $P\mathcal V^{ij}Q=\mathcal U^{ij}$. Thus $D\leq E$,
-    and hence $D=E$. For square matrices, $PQ=I$ also gives $QP=I$.
-    Multiplying the letter identity by $Q$ and $P$ yields
-    $\mathcal V^{ij}=Q\mathcal U^{ij}P$, as required with $X=Q$.
+    A reduced canonical representative $\mathcal V$ has bond dimension
+    $E\leq D$, and equality of the positive-length periodic operators
+    identifies the doubled-index matrix product vectors of $\mathcal U$ and
+    $\mathcal V$. Since $\mathcal U$ is injective, there are
+    $P\in\C^{D\times E}$ and $Q\in\C^{E\times D}$ with $PQ=I_D$ and
+    $P\mathcal V^{ij}Q=\mathcal U^{ij}$. This left-invertibility implies
+    $D\leq E$ and hence $D=E$, so for square matrices $PQ=I_D$ also gives
+    $QP=I_D$. Multiplying the letter identity on the left by $Q$ and on the
+    right by $P$ yields $\mathcal V^{ij}=Q\mathcal U^{ij}P$, as required
+    with $X=Q$.
 \end{proof}
 
 \begin{theorem}[Source ranks and index of a simple injective MPU]
@@ -36,17 +37,15 @@
     \leanok
     \uses{def:mpu, def:injective, def:mpu_simple,
         def:mpu_reduced_representative_index, def:mpu_right_rank, def:mpu_left_rank}
-    Let $d>0$ and let $\mathcal U$ be a simple injective MPU tensor.
-    Its source-cut ranks $r$ and $\ell$ satisfy
+    Let $d>0$ and let $\mathcal U$ be a simple injective MPU tensor as in
+    \cite[lines~1403--1407]{FrancoRubio2025MPUGauging}. Following
+    \cite[lines~562--573 and~681--704]{Cirac2017MPU}, its source-cut ranks
+    $r$ and $\ell$ satisfy
     \begin{align}
         r\ell & =d^2,                                    \\
         \operatorname{ind}(\mathcal U)
               & =\frac12\bigl(\log_2 r-\log_2\ell\bigr).
     \end{align}
-    These are the rank-product and index identities of
-    \cite[lines~562--573 and~681--704]{Cirac2017MPU}, for the simple
-    injective tensors considered in
-    \cite[lines~1403--1407]{FrancoRubio2025MPUGauging}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -56,11 +55,11 @@
         thm:mpu_bounded_simple_blocking,
         thm:mpu_source_ranks_physical_reindexing,
         ThmFund1, prop:mpu_admissible_index_well_defined}
-    Pass to the same-dimensional canonical representative
-    $\mathcal V^{ij}=X\mathcal U^{ij}X^{-1}$.
-    Simplicity is preserved by this bond similarity, as are both source
-    ranks. The simple canonical tensor therefore has rank product $d^2$.
-    Its one-site blocking only relabels the physical alphabet, so its index
-    is $\frac12(\log_2 r-\log_2\ell)$. Equality of the periodic operators
-    identifies this index with $\operatorname{ind}(\mathcal U)$.
+    Passing to the same-dimensional canonical representative
+    $\mathcal V^{ij}=X\mathcal U^{ij}X^{-1}$ preserves both simplicity and
+    the two source ranks. The simple canonical tensor $\mathcal V$ therefore
+    has rank product $r\ell=d^2$. Since its one-site blocking only relabels
+    the physical alphabet, its index is
+    $\frac12(\log_2 r-\log_2\ell)$, and equality of the periodic operators
+    identifies this value with $\operatorname{ind}(\mathcal U)$.
 \end{proof}

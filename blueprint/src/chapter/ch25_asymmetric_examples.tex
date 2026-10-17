@@ -32,15 +32,15 @@ positive chain length $N$, an MPS tensor $A$ and an MPO tensor $M$ give
     \ket{i_1,\ldots,i_N}\bra{j_1,\ldots,j_N}.
     \notag
 \end{align}
-The physical indices $i,j$ range over $\{0,\ldots,d-1\}$.
-Each local matrix acts on its tensor's virtual bond space, with rows
-and columns indexed by $\{0,\ldots,D-1\}$ for bond dimension $D$.
-The periodic boundary contraction is the ordinary matrix trace, with
-no boundary insertion. The first MPO physical index is the output and
-the second is the input; operator products act from right to left.
-Thus the local tensor $\sum_jM^{ij}\otimes P^{jk}$ represents
-$O_N(M)O_N(P)$. MPS vectors need not be normalized. A nonzero positive
-periodic MPDO operator gives a density operator after division by its
+The physical indices $i,j$ range over $\{0,\ldots,d-1\}$, while each
+local matrix acts on a virtual bond space of dimension $D$ with rows
+and columns indexed by $\{0,\ldots,D-1\}$. Closing the ring by the
+ordinary matrix trace without a boundary insertion, and reading the
+first MPO physical index as the output and the second as the input so
+that operator products act from right to left, the stacked local tensor
+$\sum_jM^{ij}\otimes P^{jk}$ generates the product $O_N(M)O_N(P)$.
+Whereas MPS vectors need not be normalized, a nonzero positive
+periodic MPDO operator yields a density operator upon division by its
 trace.
 
 Physical examples of matrix product operators, topological symmetries, and
@@ -71,12 +71,13 @@ Refs.~\cite{GarreRubio2023MPOSym,GarreRubioSchuch2024DomainWall,Roumpedakis2023C
 $\Z_2\times\Z_2$ representation, where the invariant detectors match the
 type-II class~\cite{gap:glm23_z2z2_anomaly_detector_scope});
 and mixed Bell-bond fixed points addressing the length-dependence question
-of Ref.~\cite[Theorem~4.14]{Cirac2016MPDO_arXiv}. The general notions used
-by the symmetry examples, namely fusion rules, units, invertible and
-non-invertible labels, Perron--Frobenius dimensions, symmetric matrix
-product states with their nonnegative integer representations, and the
-zipper condition, are defined in Chapter~\ref{ch:mpo_symmetry_basics}; this
-chapter gives the explicit tensors, fusion tables, and computations.
+of Ref.~\cite[Theorem~4.14]{Cirac2016MPDO_arXiv}. Building on the general
+definitions of Chapter~\ref{ch:mpo_symmetry_basics} (fusion rules, units,
+invertible and non-invertible labels, Perron--Frobenius dimensions,
+symmetric matrix product states with their nonnegative integer
+representations, and the zipper condition), each section below constructs
+the explicit local tensors, evaluates their fusion tables, and computes
+their periodic compressions and anomaly invariants.
 
 
 \input{chapter/ch25_asymmetric_examples_elementary_states.tex}%

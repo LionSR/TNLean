@@ -1,11 +1,13 @@
 \section{The splitting criterion}%
 \label{sec:asym_splitting}
 
-Periodic vector equality permits upper-triangular nilpotent extensions between
-composition factors, preventing sitewise intertwining
-(Remark~\ref{rem:asym_zipper}). Theorem~\ref{thm:asym_splitting} provides
-an algebraic condition ensuring that the compressions of
-Theorem~\ref{thm:asym_multiblock} split into sitewise intertwiners.
+As Remark~\ref{rem:asym_zipper} shows, periodic vector equality permits
+upper-triangular nilpotent extensions between composition factors that
+obstruct sitewise intertwining. In the setting of
+Theorem~\ref{thm:asym_multiblock}, Theorem~\ref{thm:asym_splitting} shows
+that closure of the source virtual algebra under conjugate transposition
+eliminates these extensions and splits the compressions into sitewise
+intertwiners.
 
 \begin{theorem}[Splitting criterion]
     \label{thm:asym_splitting}
@@ -92,18 +94,18 @@ Theorem~\ref{thm:asym_multiblock} split into sitewise intertwiners.
     \uses{thm:asym_multiblock, def:asym_word_module,
         def:invariant_projector_closure, thm:faithful_stationary_projector_closure}
     Invariant-projector closure makes the word-algebra module semisimple.
-    In particular, suppose that the source tensor in
-    Theorem~\ref{thm:asym_multiblock} satisfies
+    In particular, when the source tensor in
+    Theorem~\ref{thm:asym_multiblock} is assumed left-normalized with a
+    faithful stationary state (hypotheses not implied by periodic equality
+    alone),
     \[
         \sum_i (B^i)^\dagger B^i=\id,\qquad
         \sum_i B^i\rho(B^i)^\dagger=\rho
-        \quad\text{for some }\rho>0.
+        \quad\text{for some }\rho>0,
     \]
-    Then its compression may be chosen with zero remainder and with
-    two-sided sitewise intertwiners as in
-    Corollary~\ref{cor:asym_fusion_tensors_star}.
-    Normalization and faithful stationarity are hypotheses here rather than
-    consequences of periodic equality.
+    its compression may be chosen as in
+    Corollary~\ref{cor:asym_fusion_tensors_star} with zero remainder and
+    two-sided sitewise intertwiners.
 \end{theorem}
 
 \begin{proof}
@@ -167,12 +169,12 @@ $0\leq\mu<N_c$, with
     B^i                 & =\sum_c\sum_{\mu=0}^{N_c-1}W_{c,\mu}C_c^iV_{c,\mu}
     \label{eq:asym_zipper_decomposition}
 \end{align}
-for every physical index $i$. This is the zipper condition of
-\cite{Bultinck2017Anyons}: the block triangular form has no nonzero blocks
-above the diagonal. The maps $W_{c,\mu}$ need not span the bond space of $B$,
-so zero diagonal blocks are allowed. In this subsection the compression is
-written on the left and denoted $V$, as for rectangular reductions, so the
-roles of the letters are exchanged relative to Corollary~\ref{cor:asym_fusion_tensors_star}.
+for every physical index $i$, where the compression map is written on the
+left as $V$ (exchanging the letter roles of
+Corollary~\ref{cor:asym_fusion_tensors_star}). Under this zipper condition of
+\cite{Bultinck2017Anyons}, the block triangular form has no nonzero blocks
+above the diagonal, while the embeddings $W_{c,\mu}$ need not span the bond
+space of $B$ and therefore still permit unmatched zero diagonal blocks.
 
 \begin{definition}[Gauge-related tensors]
     \label{def:asym_gauge_related}
@@ -236,10 +238,10 @@ roles of the letters are exchanged relative to Corollary~\ref{cor:asym_fusion_te
         B^i\widetilde W_{c,\mu} & =\sum_\nu B^iW_{c,\nu}(Y_c^{-1})_{\nu\mu}
         \label{eq:asym_zipper_gauge}
     \end{align}
-    for every physical index $i$, so the two compressions differ by
-    $\bigoplus_c\GL_{N_c}(\C)$ on the support of $B$, with no dressing by
-    words. This is the uniqueness of fusion tensors under the zipper
-    condition in \cite{Bultinck2017Anyons}.
+    for every physical index $i$; as in the zipper uniqueness criterion for
+    fusion tensors \cite{Bultinck2017Anyons}, the two compressions therefore
+    differ by $\bigoplus_c\GL_{N_c}(\C)$ on the support of $B$, with no
+    dressing by words.
     % Source anchor: arXiv:1511.08090, AnyonsPEPS.tex lines 164--166 (the
     %   gauge Y) and 181--200 (uniqueness under the zipper condition);
     %   arXiv:2203.12563, lines 415--424.
@@ -290,8 +292,9 @@ roles of the letters are exchanged relative to Corollary~\ref{cor:asym_fusion_te
 \begin{proof}
     \leanok
     \uses{thm:asym_zipper_uniqueness}
-    Apply Theorem~\ref{thm:asym_zipper_uniqueness} to the stacked product on
-    the pair alphabet.
+    Viewing the stacked product $T_aT_b$ and the blocks $T_c$ as tensors on
+    the pair alphabet, Theorem~\ref{thm:asym_zipper_uniqueness} gives the
+    unique invertible multiplicity gauges $Y_{ab}^c$.
 \end{proof}
 
 \begin{corollary}[Uniqueness of zipper action tensors]
@@ -301,12 +304,11 @@ roles of the letters are exchanged relative to Corollary~\ref{cor:asym_fusion_te
     \uses{thm:asym_zipper_uniqueness}
     Let $T_a$ be a matrix product operator tensor, $A_x$ a tensor, and $A_y$
     normal tensors of positive bond dimension that are pairwise not gauge
-    related. Two families of action tensors that split
-    $T_a\cdot A_x$ over the blocks $A_y$ with multiplicities $M_{a,x}^y$, as in
-    (\ref{eq:asym_zipper_decomposition}), differ by a unique
-    $X_{ax}^y\in\GL_{M_{a,x}^y}(\C)$ for each $y$ in the sense of
-    (\ref{eq:asym_zipper_gauge}). This is the gauge freedom of action tensors
-    in \cite[Section~3.1]{GarreRubio2023MPOSym}.
+    related. As in \cite[Section~3.1]{GarreRubio2023MPOSym}, any two families
+    of action tensors that split $T_a\cdot A_x$ over the blocks $A_y$ with
+    multiplicities $M_{a,x}^y$ via (\ref{eq:asym_zipper_decomposition})
+    differ in the sense of (\ref{eq:asym_zipper_gauge}) by a unique gauge
+    matrix $X_{ax}^y\in\GL_{M_{a,x}^y}(\C)$ on each multiplicity space.
     % Source anchor: arXiv:2203.12563, lines 459--490 and 595--602.
     % PR #7969 plans this as thm:mpoalg_zipper_action_uniqueness.
 \end{corollary}
@@ -314,7 +316,9 @@ roles of the letters are exchanged relative to Corollary~\ref{cor:asym_fusion_te
 \begin{proof}
     \leanok
     \uses{thm:asym_zipper_uniqueness}
-    Apply Theorem~\ref{thm:asym_zipper_uniqueness} to $T_a\cdot A_x$.
+    Theorem~\ref{thm:asym_zipper_uniqueness} for the action tensor
+    $T_a\cdot A_x$ and the normal blocks $A_y$ gives the unique multiplicity
+    gauges $X_{ax}^y$.
 \end{proof}
 
 \section{The single-block reduction of Moln\'ar--Ge--Schuch--Cirac}%
@@ -379,26 +383,26 @@ roles of the letters are exchanged relative to Corollary~\ref{cor:asym_fusion_te
 \begin{proof}
     \leanok
     \uses{thm:asym_multiblock}
-    Apply Theorem~\ref{thm:asym_multiblock} to the single-block target
-    $C=A$. Clauses (iv) and (v) give the compression pair and
+    For the single-block target $C=A$, clauses (iv) and (v) of
+    Theorem~\ref{thm:asym_multiblock} give the compression pair and
     (\ref{eq:asym_single_block_compression}), clause (vii) gives
     $D_B=D_A+z\geq D_A$, and clause (vi) gives
     (\ref{eq:asym_single_block_nilpotency}) with $r=|S|+z=1+(D_B-D_A)$.
 \end{proof}
 
-The proportional case, in which $\ket{V^{(N)}(B)}=\lambda^N\ket{V^{(N)}(A)}$
-for a scalar $\lambda\in\C^\times$, reduces to
-Corollary~\ref{cor:asym_single_block} by replacing $B$ with
-$\lambda^{-1}B$, and then $WB^{i_1}\cdots B^{i_N}V=\lambda^NA^{i_1}\cdots A^{i_N}$
-with remainder $R^i=B^i-\lambda\,VA^iW$; the compression pair of that case
-is recorded in Theorem~\ref{thm:mps_proportional_reduction_exists}.
+When $\ket{V^{(N)}(B)}=\lambda^N\ket{V^{(N)}(A)}$ for a scalar
+$\lambda\in\C^\times$, rescaling $B$ to $\lambda^{-1}B$ reduces this
+proportional case (Theorem~\ref{thm:mps_proportional_reduction_exists}) to
+Corollary~\ref{cor:asym_single_block}, yielding
+$WB^{i_1}\cdots B^{i_N}V=\lambda^NA^{i_1}\cdots A^{i_N}$ with remainder
+$R^i=B^i-\lambda\,VA^iW$.
 
-Corollary~\ref{cor:asym_single_block} together with the proportional case
-corresponds to Propositions~20 and~21 of~\cite{Molnar2018SemiInjective}
-(where $V,W$ are swapped). The hypothesis $\lambda\neq0$ is required because
-the zero tensor $B=0$ admits no compression onto a nonzero normal target.
-The non-unital remainder algebra generated by the $R^i$ satisfies the
-nilpotency length bound $r=D_B-D_A+1$ from Theorem~\ref{thm:asym_multiblock}.
-The paper-gap note~\cite{gap:mgsc18_reduction_proportionality_scalar}
-discusses the scalar normalization, and~\cite{gap:mgsc18_nilpotency_length_one_terminology}
-discusses the nilpotency length terminology.
+Together with this proportional case, Corollary~\ref{cor:asym_single_block}
+gives Propositions~20 and~21 of~\cite{Molnar2018SemiInjective} (with $V$ and
+$W$ interchanged). As detailed in
+\cite{gap:mgsc18_reduction_proportionality_scalar}, the hypothesis
+$\lambda\neq0$ is essential because the zero tensor $B=0$ admits no
+compression onto a nonzero normal target; as detailed in
+\cite{gap:mgsc18_nilpotency_length_one_terminology}, the non-unital remainder
+algebra generated by the $R^i$ satisfies the nilpotency length bound
+$r=D_B-D_A+1$ from Theorem~\ref{thm:asym_multiblock}.

@@ -1,9 +1,9 @@
 \section{Changes of ownership in encoded frames}
 \label{sec:peps_ownership_changes}
-The statements below formalize Lemmas~6.5 and~6.6 of
-\cite{OpenAI2026PolynomialPEPS}, September 24, 2026, \texttt{05-frames.tex},
-lines 347--570, for the maps constructed in their proofs, with the
-information bounds as hypotheses, together with their realization as bounded
+Changes of site and hole ownership in encoded frames
+(\cite[Lemmas~6.5 and~6.6]{OpenAI2026PolynomialPEPS}, September 24, 2026,
+\texttt{05-frames.tex}, lines 347--570) take the mutual-information bounds as
+hypotheses and realize the maps constructed in their proofs as bounded
 changes: allowed monomials of \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS}
 (Section~\ref{sec:peps_pair_effects}) on the registers of the frames, one per
 site and per tag (Definition~\ref{def:peps_frame_registers}). The monomials are
@@ -71,9 +71,9 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
         \lVert(\id_{TE}\otimes V)\Omega-s\otimes s'\rVert
         \le\sqrt{2(1-e^{-b/2})}\le\sqrt b .
     \end{align}
-    In particular, if $b\le L^{-60}$ the error is at most $L^{-30}$. This is
+    In particular, for the sheet splitting of
     \cite[Lemma~6.4]{OpenAI2026PolynomialPEPS} (\texttt{05-frames.tex},
-    lines 352--368) on the sheet.
+    lines 352--368), $b\le L^{-60}$ gives an error of at most $L^{-30}$.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -162,7 +162,8 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 \end{lemma}
 
 \begin{proof}\leanok
-    Compare the two sides on each tag; the encoding is a contraction.
+    Comparing the two sides on each tag gives the intertwining identity, and
+    contractivity of the encoding gives the norm bound.
 \end{proof}
 
 \begin{definition}[Birth partition]
@@ -224,10 +225,10 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     $K_{\mathcal F'}=K_{\mathcal F}$ and $\Omega_{\mathcal
             F'}=\Omega_{\mathcal F}$, so the intertwining identity says that $B$
     commutes with the encoding; the change of owner is the content of the
-    bounded-change assertion below. The death is the same map with the
-    reverse input and output ownership; its conditions are those of the frame
-    after the death. This establishes the operator statement of
-    \cite[Lemma~6.5]{OpenAI2026PolynomialPEPS}.
+    bounded-change assertion below. In the operator statement of
+    \cite[Lemma~6.5]{OpenAI2026PolynomialPEPS}, the death is the same map with the
+    reverse input and output ownership, subject to the conditions of the frame
+    after the death.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -327,7 +328,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 \end{lemma}
 
 \begin{proof}\leanok
-    Check the identity on pure tensors, using linearity.
+    Both sides agree on pure tensors and extend by linearity.
 \end{proof}
 
 \begin{definition}[Birth and death monomials]
@@ -435,9 +436,9 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 \begin{proof}\leanok
     \uses{thm:peps_frame_birth,lem:peps_frame_birth_monomial_operators,
         lem:peps_frame_birth_partition_owners}
-    Take the splitting data of Theorem~\ref{thm:peps_frame_birth}. The
+    With the splitting data of Theorem~\ref{thm:peps_frame_birth}, the
     registers of $U$ lie outside $E$, so they are owned by $P_\circ$ before
-    and after, and those of $T$ are owned by $P_\circ$ before and by $Q_\circ$
+    and after, while those of $T$ are owned by $P_\circ$ before and by $Q_\circ$
     after. The birth and death monomials have operator $K^\dagger K$ on
     $\mathcal H_T\otimes\mathcal H_U$, and $B=\id_E\otimes K^\dagger K$.
 \end{proof}
@@ -732,23 +733,22 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     pair source, whose operator in product coordinates is
     $\id_{\rm tags}\otimes B$ for the birth map $B$, and which maps the
     reference vector of $\mathcal F$ within $L^{-30}$ of the reference vector
-    of the new frame. The reversed death obeys the same
-    bound when these conditions hold in the frame after the death, with one
-    normalized pair effect instead and no pair source. This is
-    \cite[Lemma~6.5]{OpenAI2026PolynomialPEPS}, \texttt{05-frames.tex},
-    lines 396--410.
+    of the new frame. In \cite[Lemma~6.5]{OpenAI2026PolynomialPEPS} (\texttt{05-frames.tex},
+    lines 396--410), the reversed death obeys the same bound when these
+    conditions hold in the frame after the death, using one normalized pair
+    effect and no pair source.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:peps_frame_birth,lem:peps_frame_birth_partition_owners,
         thm:peps_frame_birth_bounded_grouped,lem:peps_grouped_monomial_placement,
         thm:peps_monomial_composition_counts}
-    Take the splitting data of Theorem~\ref{thm:peps_frame_birth}. The
+    With the splitting data of Theorem~\ref{thm:peps_frame_birth}, the
     registers of $T$ and $U$ are held by $P_\circ$ before the birth, and those
-    of $T$ by $Q_\circ$ and those of $U$ by $P_\circ$ after it; the owners on
-    $E$ are unchanged. Compose the grouping at $P_\circ$, the birth or death
+    of $T$ by $Q_\circ$ and those of $U$ by $P_\circ$ after it, while the owners on
+    $E$ are unchanged. Composing the grouping at $P_\circ$, the birth or death
     monomial on grouped registers, and the ungrouping at the owners after the
-    change. By Lemma~\ref{lem:peps_grouped_monomial_placement} its operator is
+    change produces the required monomial. By Lemma~\ref{lem:peps_grouped_monomial_placement} its operator is
     $\id_{\rm tags}\otimes(\id_E\otimes K^\dagger K)=\id_{\rm
             tags}\otimes B$, and the reference error is that of
     Theorem~\ref{thm:peps_frame_birth}, read through the unitary
@@ -823,19 +823,18 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     \leanok
     \uses{def:peps_frame_sheet_swap}
     Let $R\subseteq\Lambda$, and let $A$ and $B$ be operators on
-    $\mathcal H_\Lambda$ supported on $R$. Then
+    $\mathcal H_\Lambda$ supported on $R$. Then the replica-term exchange identity of
+    \cite{OpenAI2026PolynomialPEPS} (\texttt{02-information.tex},
+    lines 416--424) holds:
     \begin{align*}
         F_R(A\otimes B)=(B\otimes A)F_R.
     \end{align*}
-    This identity gives the exchange of replica terms supported inside the
-    swapped region in \cite{OpenAI2026PolynomialPEPS},
-    \texttt{02-information.tex}, lines 416--424.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{lem:peps_frame_split_forms,lem:peps_frame_exchange_intertwining}
-    Split each sheet into $R$ and its complement. The support assumptions give
-    $A=A_R\otimes I$ and $B=B_R\otimes I$. The swap interchanges the two
+    Splitting each sheet into $R$ and its complement expresses
+    $A=A_R\otimes I$ and $B=B_R\otimes I$ by the support assumptions. The swap interchanges the two
     copies of $R$ and fixes the complementary factors. Writing each
     configuration as $x=(x_R,x_{R^c})$, both sides have the entry
     \begin{align*}
@@ -852,14 +851,13 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     \uses{def:peps_frame_sheet_swap}
     Let $q\geq0$ be a local dimension and $R,S\subseteq\Lambda$. Let $A$
     be an operator supported on $S$, and let
-    $F_R$ exchange two copies at the sites in $R$. If $S\subseteq R$
-    or $S\cap R=\varnothing$, then
+    $F_R$ exchange two copies at the sites in $R$. If $S\subseteq R$ or $S\cap R=\varnothing$, then the noncrossing
+    cancellation of the boundary perturbation argument in
+    \cite{OpenAI2026PolynomialPEPS} gives
     \begin{align*}
         F_R(A\otimes I+I\otimes A)F_R^\dagger
         =A\otimes I+I\otimes A.
     \end{align*}
-    This is the noncrossing cancellation used in the boundary perturbation
-    argument of \cite{OpenAI2026PolynomialPEPS}.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -885,13 +883,12 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     Let $q\geq0$ be a local dimension and $R,S\subseteq\Lambda$. Let $A$
     be an operator supported on $S$.
     Write $T(A)=A\otimes I+I\otimes A$, and let $F_D$ exchange the
-    two copies at the sites in $D$. Then
+    two copies at the sites in $D$. Then the support reduction in the boundary perturbation argument
+    of \cite{OpenAI2026PolynomialPEPS} gives
     \begin{align}
         F_R T(A) F_R^\dagger = F_{R\cap S}^\dagger T(A) F_{R\cap S}.
         \label{eq:peps_swap_interaction_restriction}
     \end{align}
-    This is the support reduction in the boundary perturbation argument
-    of \cite{OpenAI2026PolynomialPEPS}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{lem:peps_frame_sheet_swap_compose,thm:peps_sheet_swap_doubled_cancellation,
@@ -914,13 +911,12 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     vertices. For an operator $A$, write $T(A)=A\otimes I+I\otimes A$.
     Let $F_R$ exchange the two copies at the sites of $R$, and let
     $\partial R$ be the set of edges with exactly one endpoint in $R$.
-    Then
+    Then the crossing-edge reduction in the boundary perturbation argument of
+    \cite{OpenAI2026PolynomialPEPS} gives
     \begin{align*}
         F_RT(H)F_R^\dagger-T(H)
         =\sum_{e\in\partial R}\bigl(F_RT(h_e)F_R^\dagger-T(h_e)\bigr).
     \end{align*}
-    This is the crossing-edge reduction in the boundary perturbation argument of
-    \cite{OpenAI2026PolynomialPEPS}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_sheet_swap_doubled_cancellation}
@@ -942,12 +938,11 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     \uses{def:peps_frame_sheet_swap}
     Let $q\geq0$ be a local dimension and $R\subseteq\Lambda$. For an
     arbitrary operator $A$ on $\mathcal H_\Lambda$, write $T(A)=A\otimes I+I\otimes A$.
-    Then
+    Then the single-interaction estimate for the boundary perturbation in
+    \cite{OpenAI2026PolynomialPEPS} gives
     \begin{align*}
         \|F_RT(A)F_R^\dagger-T(A)\|\leq4\|A\|.
     \end{align*}
-    This is the single-interaction estimate for the boundary perturbation in
-    \cite{OpenAI2026PolynomialPEPS}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -967,9 +962,8 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     \uses{def:qc_site_pair_coordinates,def:peps_frame_sheet_swap}
     Let $q\geq0$ be a local dimension and $R\subseteq\Lambda$. Identify two configurations of local dimension $q$
     with one configuration of local dimension $q^2$ by pairing the two values
-    at each site. In these coordinates, the sheet swap $F_R$ is supported on
-    $R$. This is the local support property used for the doubled Hamiltonian in
-    \cite{OpenAI2026PolynomialPEPS}.
+    at each site. In these coordinates for the doubled Hamiltonian in
+    \cite{OpenAI2026PolynomialPEPS}, the sheet swap $F_R$ is supported on $R$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{lem:qc_permutation_layers}
@@ -996,17 +990,16 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     $R,S\subseteq\Lambda$. Suppose that $A$ is supported on $S$.
     Express the two-copy operators in paired-site coordinates, and denote
     the resulting matrices of $F_R$ and $A\otimes I+I\otimes A$ by
-    $\widetilde F_R$ and $\widetilde T(A)$, respectively. Then
+    $\widetilde F_R$ and $\widetilde T(A)$, respectively. Then, as in the boundary perturbation argument of
+    \cite{OpenAI2026PolynomialPEPS},
     $\widetilde F_R\widetilde T(A)\widetilde F_R^\dagger$ is supported on $S$.
-    This is the interaction-support assertion used for the boundary perturbation in
-    \cite{OpenAI2026PolynomialPEPS}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_sheet_swap_interaction_restriction,
         thm:peps_sheet_swap_paired_site_support,thm:qc_site_pair_tensor_support}
-    Set $B=R\cap S$. By
-    Theorem~\ref{thm:peps_sheet_swap_interaction_restriction},
-    (\ref{eq:peps_swap_interaction_restriction}) gives
+    With $B=R\cap S$,
+    Theorem~\ref{thm:peps_sheet_swap_interaction_restriction} and
+    (\ref{eq:peps_swap_interaction_restriction}) give
     $F_RT(A)F_R^\dagger=F_B^\dagger T(A)F_B$.
     In paired-site coordinates, $F_B$ is supported on $B\subseteq S$,
     and each summand of $T(A)$ is supported on $S$.
@@ -1033,12 +1026,11 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     In paired-site coordinates, let $K$ be the matrix of
     $H\otimes I+I\otimes H$, and let $F$ be the matrix of the operator
     exchanging the two copies at the sites in $R$.
-    Then $FKF^\dagger-K$ is supported on $Z$, with local dimension $q^2$, and
+    Then the boundary perturbation of \cite{OpenAI2026PolynomialPEPS},
+    $FKF^\dagger-K$, is supported on $Z$ with local dimension $q^2$ and satisfies
     \begin{align*}
         \|FKF^\dagger-K\|\leq 8JL^2.
     \end{align*}
-    This is the boundary perturbation estimate used
-    in \cite{OpenAI2026PolynomialPEPS}.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -1258,16 +1250,15 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
         lem:peps_frame_sheet_swap_compose,lem:peps_frame_exchange_owners}
     In the setting of the exchange partition, let $\lVert\Omega\rVert=1$. If
     $I_\Omega(T:E)\le L^{-60}$, then for splitting data with error at most
-    $L^{-30}$ the map $C$ is a contraction,
-    $CK_{\rm in}=K_{\rm out}D_UF_T$, and
+    $L^{-30}$ the map $C$ is a contraction satisfying
+    $CK_{\rm in}=K_{\rm out}D_UF_T$ and the operator bound of
+    \cite[Lemma~6.6]{OpenAI2026PolynomialPEPS} (when the holes of each frame are
+    listed as those outside $Y$ followed by those inside $Y$):
     \begin{align}
         \lVert C(\Omega_{\mathcal F_1}\otimes\Omega_{\mathcal F_2})
         -\Omega_{\mathcal F_1'}\otimes\Omega_{\mathcal F_2'}\rVert
         \le4L^{-30}.
     \end{align}
-    This establishes the operator statement of
-    \cite[Lemma~6.6]{OpenAI2026PolynomialPEPS} when the holes of each frame are
-    listed as those outside $Y$ followed by those inside $Y$.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -1310,9 +1301,9 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     \uses{thm:peps_frame_exchange,thm:peps_frame_small_rewrite,
         lem:peps_frame_exchange_error}
     Encodings of distinct holes commute after the identification of
-    tag orderings (\texttt{05-frames.tex}, lines 84--85), which gives $G$.
-    Apply the exchange to the regrouped listings and compose with $G$, a
-    contraction.
+    tag orderings (\texttt{05-frames.tex}, lines 84--85), which gives the
+    contraction $G$. Applying the exchange to the regrouped listings and
+    composing with $G$ completes the proof.
 \end{proof}
 
 \begin{lemma}[Exchange corrections as one private contraction]
@@ -1363,8 +1354,8 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 \end{lemma}
 
 \begin{proof}\leanok
-    Combine the identifications of the two frames, and expand a vector in the
-    standard basis.
+    Combining the identifications of the two frames and expanding a vector in the
+    standard basis yields both claims.
 \end{proof}
 
 \begin{lemma}[The renaming as reorderings]
@@ -1388,10 +1379,10 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 \end{lemma}
 
 \begin{proof}\leanok
-    Follow a product basis vector through the reorderings. Inside $Y$ the
-    configurations and the inside tags of the two sheets change places, and
-    the owners of the moved site registers are the new owners at those sites,
-    so the result is the basis vector of the renamed configuration.
+    Under these reorderings, the configurations inside $Y$ and the inside
+    tags of the two sheets change places on each product basis vector, and
+    the owners of the moved site registers become the new owners at those sites,
+    producing the basis vector of the renamed configuration.
 \end{proof}
 
 \begin{theorem}[Coordinates on two copies of a region]
@@ -1429,12 +1420,13 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 \begin{proof}\leanok
     \uses{thm:peps_region_register_coordinates,thm:peps_region_configuration,
         lem:peps_frame_registers_coordinates}
-    Group the two lists by their position bijections and identify the tensor
+    Grouping the two lists by their position bijections and identifying the tensor
     product of their coordinate spaces with the space indexed by pairs of
-    configurations. This proves (\ref{eq:peps_two_region_basis}). The
+    configurations proves (\ref{eq:peps_two_region_basis}), while the
     complementary list contains only sites outside $U$. For the inverse,
-    $c_j^{u_j}|_U=u_j$ by (\ref{eq:peps_region_reconstruction}); substitute
-    into (\ref{eq:peps_two_region_basis}) and apply $Q_U^{-1}$.
+    $c_j^{u_j}|_U=u_j$ by (\ref{eq:peps_region_reconstruction}), so substituting
+    into (\ref{eq:peps_two_region_basis}) and applying $Q_U^{-1}$ gives the
+    inverse formula.
 \end{proof}
 
 \begin{lemma}[The corrections on the registers of two frames]
@@ -1489,12 +1481,11 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     resource, whose operator in product coordinates is the implemented map
     $C=D_UF_A\mathcal R$ (composed with the relabelling $G$ of the tags when
     the holes are listed in any order), and which maps the product of the two
-    reference vectors within $4L^{-30}$ of the product of the new ones. In
-    particular the exchange is a bounded change in the sense of
-    \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS}. This is
-    \cite[Lemma~6.6]{OpenAI2026PolynomialPEPS}, \texttt{05-frames.tex},
-    lines 460--479; the source allows also the owners of the renamed registers
-    and tags, which exchanges of tensor factors do not involve.
+    reference vectors within $4L^{-30}$ of the product of the new ones. In particular, the exchange of
+    \cite[Lemma~6.6]{OpenAI2026PolynomialPEPS} (\texttt{05-frames.tex},
+    lines 460--479) is a bounded change in the sense of
+    \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS}, without using the additional
+    owners of the renamed registers and tags allowed by the source.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -1502,7 +1493,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
         lem:peps_exchange_renaming_word,lem:peps_exchange_correction_word,
         lem:peps_frame_exchange_correction_monomial,
         lem:peps_frame_exchange_owners,lem:peps_register_reorderings}
-    Compose the renaming as reorderings with the corrections on the
+    We compose the renaming as reorderings with the corrections on the
     registers of the exchanged frames, whose site registers of $U$ are held by
     $P_\circ$ on both sheets. The operators compose to
     $D_UF_A\mathcal R$, since $D_UF_A$ is the identity on the tags and on the

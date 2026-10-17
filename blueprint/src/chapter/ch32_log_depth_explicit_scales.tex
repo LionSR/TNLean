@@ -18,8 +18,8 @@ physical dimension satisfies $d\ge1$ and $0<\varepsilon\le1$.
     \uses{lem:ldp_log_threshold_error}
     The inequalities $ra\ge k$, $ra\ge1$, $\log N\ge0$ and
     $-\log\varepsilon\ge0$ give
-    $rq\ge\log K+k\log N-\log\varepsilon$.
-    Apply Lemma~\ref{lem:ldp_log_threshold_error}.
+    $rq\ge\log K+k\log N-\log\varepsilon$, so
+    Lemma~\ref{lem:ldp_log_threshold_error} yields $KN^ke^{-rq}\le\varepsilon$.
 \end{proof}
 
 \begin{theorem}[Explicit scale with a minimum usable block length]
@@ -43,9 +43,10 @@ physical dimension satisfies $d\ge1$ and $0<\varepsilon\le1$.
     vector $\psi$ satisfies $\varepsilon(\psi,\phi_N(A))\le\varepsilon$
     and is prepared in depth $T\le C\min(N,q)$.
 
-    This is a sufficient quantitative condition for the inhomogeneous
-    scheme of~\cite{Malz2024Preparation}; qualitative convergence does not
-    give the assumed rate~\cite{gap:mswc24_inhomogeneous_scope}.
+    For the inhomogeneous scheme of~\cite{Malz2024Preparation}, this provides
+    a sufficient quantitative condition; as recorded
+    in~\cite{gap:mswc24_inhomogeneous_scope}, qualitative convergence alone
+    does not give the assumed rate.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -97,9 +98,9 @@ physical dimension satisfies $d\ge1$ and $0<\varepsilon\le1$.
 \begin{proof}
     \leanok
     \uses{thm:ldp_ordered_mixing_pair_rate, thm:ldp_explicit_usable_scale}
-    Apply Theorem~\ref{thm:ldp_explicit_usable_scale} with $k=1$, $L=0$,
-    prefactor $C_pK$, $a=1/r$, and
-    $b=\max(\log(C_pK),0)/r+3D+1$.
+    Taking $k=1$, $L=0$, prefactor $C_pK$, $a=1/r$, and
+    $b=\max(\log(C_pK),0)/r+3D+1$ in
+    Theorem~\ref{thm:ldp_explicit_usable_scale} yields the claim.
 \end{proof}
 
 \begin{theorem}[Every prescribed slope above half the correlation length]
@@ -117,8 +118,8 @@ physical dimension satisfies $d\ge1$ and $0<\varepsilon\le1$.
     in depth $T\le C\min(N,q)$. In particular, $q$ may be the ceiling
     of this threshold; no divisibility of $N$ is required.
 
-    This refines the sufficient blocking scale in
-    \cite{Malz2024Preparation}; it makes no assertion at $a=\xi/2$ or
+    Refining the sufficient blocking scale in
+    \cite{Malz2024Preparation}, this bound makes no assertion at $a=\xi/2$ or
     at the spectral-bound endpoint $t=0$.
 \end{theorem}
 \begin{proof}
@@ -127,13 +128,13 @@ physical dimension satisfies $d\ge1$ and $0<\varepsilon\le1$.
         thm:ldp_inhomogeneous_exact, thm:ldp_polynomial_exponential_scale,
         lem:ldp_normalized_state_rescaling, thm:wordspan_blk_inj_succ,
         lem:isNBlkInjective_iff_blockTensor_isInjective}
-    Choose $\gamma=\xi/(2a)\in(0,1)$. The unequal-block bound gives
-    $KMe^{-2\gamma q/\xi}=KMe^{-q/a}$. Let $L$ be an eventual injectivity
-    length and take $b=a\max(\log K,0)+L+3D+1$. If $q\le N$, use
-    the $M=\lfloor N/q\rfloor$ remainder-absorbing blocks. Every block
-    is injective and has between $3D$ and $2q$ sites, so its approximating
+    For $\gamma=\xi/(2a)\in(0,1)$, the unequal-block bound gives
+    $KMe^{-2\gamma q/\xi}=KMe^{-q/a}$. With $L$ an eventual injectivity
+    length and $b=a\max(\log K,0)+L+3D+1$, when $q\le N$ the
+    $M=\lfloor N/q\rfloor$ remainder-absorbing blocks are each
+    injective and have between $3D$ and $2q$ sites, so their approximating
     state is a unit vector prepared in depth at most $2C_bq$, with error
     at most $KNe^{-q/a}\le\varepsilon$. The normalized overlap is unchanged
-    by the factor $\zeta^N$. If $q>N$, prepare $\phi_N(A)$ exactly in
-    depth at most $C_eN$. Again $C=\max(2C_b,C_e)$ suffices.
+    by the factor $\zeta^N$. When $q>N$, exact preparation of $\phi_N(A)$
+    has depth at most $C_eN$. Thus $C=\max(2C_b,C_e)$ suffices.
 \end{proof}

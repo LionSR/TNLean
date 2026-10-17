@@ -20,8 +20,12 @@
     Theorem~\ref{thm:al_global_schmidt_bell_prevector}.
 
     Fix a finite index set $J$, a finite nested list $\mathcal R$ of
-    physical regions disjoint from $X$, and $K\geq8$. There is a constant
-    $c\geq0$ for which the following holds eventually in $k$.
+    physical regions disjoint from $X$, and $K\geq8$. Following the
+    label-sequence application of the rough upper comparison in
+    \cite[Section~8, lines~130--169 and~332--381]{OpenAI2026AreaLaw},
+    there is a constant $c\geq0$ for which the following holds eventually
+    in $k$, with $c$ and the eventual threshold chosen before
+    $Z,U,Y,T,B_{\mathrm{sh}}$ and $B_{\mathrm{exc}}$.
     Choose $Z$ with $Z^*Z=I$ and $ZZ^*=P_{\mathrm{sym}}$, physical
     regions $U_{jg},Y_{jg}$ for $j\in J$ and $0\leq g<K$, and an
     iterated weighted geometric mean $T$. Assume
@@ -55,20 +59,15 @@
         R_{d,c,K}(k)
          & =\frac{\log4+(d^2+cK)\log(k+2)}{k}\longrightarrow0.
     \end{align}
-    The constant and eventual threshold precede all the choices of
-    $Z,U,Y,T,B_{\mathrm{sh}}$ and $B_{\mathrm{exc}}$.
-    This is the label-sequence application of the rough upper comparison
-    in \cite[Section~8, lines~130--169 and~332--381]{OpenAI2026AreaLaw}.
 \end{theorem}
 \begin{proof}
     \leanok
-    Express the auxiliary mass in physical-site coordinates.
-    Apply the rough upper estimate for the original prevector with
-    $t=2/K$ and inverse-power exponent $1/4$. The disjointness assumptions
-    give $Y_{jg}\setminus X=Y_{jg}$, so its ordered product is precisely
-    $M_k$. Its coefficient $8(1/4)(2/K)K$ is $4$.
-    The remaining terms are logarithmic in $k$, and division by $k$
-    gives the asserted limit.
+    Expressing the auxiliary mass in physical-site coordinates and
+    applying the rough upper estimate for the original prevector with
+    $t=2/K$ and inverse-power exponent $1/4$ gives the bound. Because the
+    disjointness assumptions imply $Y_{jg}\setminus X=Y_{jg}$, the ordered
+    product equals $M_k$ with coefficient $8(1/4)(2/K)K=4$, while the
+    remaining logarithmic terms in $k$ vanish upon division by $k$.
 \end{proof}
 
 \section{The sharp upper comparison}
@@ -136,15 +135,15 @@
     \uses{thm:al_scan_band_nesting,thm:al_scan_receiving_regions,
         thm:al_augmented_root_compression,thm:al_scan_nested_band_metrics,
         thm:al_scan_actual_fill_admission,thm:al_scan_actual_charge_admissible}
-    Use one finite family containing every completed and pre-charge
-    partition up to the horizon. The terminal maps preserve the
-    physical partitions and the weights of both kinds of mean tree.
-    Cross-status nesting gives the common band order.
-    Apply the sharp upper comparison of
+    Collecting every completed and pre-charge partition up to the horizon
+    into a single finite family, the terminal maps preserve the
+    physical partitions and the weights of both kinds of mean tree, while
+    cross-status nesting gives the common band order.
+    Applying the sharp upper comparison of
     \cite[Section~8, lines~383--418]{OpenAI2026AreaLaw} to this family
-    and the given labels. Express the original prevector in symmetric
-    coordinates and specialize the inverse-power exponent to $1/4$.
-    The three coefficients are $2(1/4)a=a/2$,
+    and the given labels, expressing the original prevector in symmetric
+    coordinates, and specializing the inverse-power exponent to $1/4$
+    yields the three coefficients $2(1/4)a=a/2$,
     $24(1/4)K K_{\mathrm{mom}}a^2=6K K_{\mathrm{mom}}a^2$,
     and $2(1/4)K=K/2$.
 \end{proof}
@@ -168,9 +167,10 @@
 \begin{proof}
     \leanok
     \uses{thm:al_global_schmidt_bell_prevector,thm:al_actual_sharp_upper}
-    Choose the labels once using the selected Schmidt vector and retain
-    all conclusions of Theorem~\ref{thm:al_global_schmidt_bell_prevector}.
-    Apply Theorem~\ref{thm:al_actual_sharp_upper} to that same sequence.
+    Choosing the labels once from the selected Schmidt vector via
+    Theorem~\ref{thm:al_global_schmidt_bell_prevector} and applying
+    Theorem~\ref{thm:al_actual_sharp_upper} to that same sequence yields
+    the result.
 \end{proof}
 
 \begin{theorem}[The truncated target instance with an explicit power margin]
@@ -232,21 +232,20 @@
     The coefficients are uniform in the physical instance; the
     replica-copy threshold and remainder constant may depend on the
     fixed finite-domain instance and its label sequence.
-    This is the stated target-instance consequence, with
-    (\ref{eq:al_source_target_sharp_margin}) explicit. It is not the
-    complete comparison assertion of Proposition~9.6 in
-    \cite{OpenAI2026AreaLaw}.
+    With (\ref{eq:al_source_target_sharp_margin}) explicit, this gives
+    the target-instance consequence rather than the complete comparison
+    assertion of Proposition~9.6 in \cite{OpenAI2026AreaLaw}.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:al_scan_target_typical_window,thm:al_scan_common_status_budget,
         thm:al_scan_status_scale_separation,thm:al_moment_weight_smallness,
         thm:al_scan_common_moment_interval,thm:al_actual_sharp_upper}
-    Choose the truncated target vector and window once. Evaluate every
-    completed and pre-charge status bound on that same vector.
-    The strict power margin dominates the common factor
-    $\sqrt{nD}(\log n)^6$ by the growth of $K/W$.
-    Apply the marginal moment estimate with the common bound and then
-    Theorem~\ref{thm:al_actual_sharp_upper} at $K_{\mathrm{mom}}=C_0B$.
-    No independent truncated-vector choice enters the argument.
+    Choosing the truncated target vector and window once allows every
+    completed and pre-charge status bound to be evaluated on that same
+    vector. Because the strict power margin dominates the common factor
+    $\sqrt{nD}(\log n)^6$ through the growth of $K/W$, applying the
+    marginal moment estimate with the common bound and then
+    Theorem~\ref{thm:al_actual_sharp_upper} at $K_{\mathrm{mom}}=C_0B$
+    establishes the rate without any independent truncated-vector choice.
 \end{proof}

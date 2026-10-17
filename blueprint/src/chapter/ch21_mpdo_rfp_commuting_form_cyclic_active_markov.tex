@@ -59,9 +59,10 @@
 
 \begin{proof}\leanok
     \uses{thm:mpdo_finite_chain_normalized_proportionality}
-    Apply the same finite-index identification and partial trace to both
+    Applying the same finite-index identification and partial trace to both
     sides of
-    Theorem~\ref{thm:mpdo_finite_chain_normalized_proportionality}.
+    Theorem~\ref{thm:mpdo_finite_chain_normalized_proportionality} yields the
+    equality of reduced operators.
 \end{proof}
 
 \begin{theorem}[Eventual equality of normalized finite-chain operators]
@@ -82,9 +83,9 @@
 
 \begin{proof}\leanok
     \uses{thm:mpdo_finite_chain_normalized_proportionality}
-    At each sufficiently large length, apply
+    At each sufficiently large length, applying
     Theorem~\ref{thm:mpdo_finite_chain_normalized_proportionality} to the
-    nonzero proportionality scalar at that length.
+    nonzero proportionality scalar at that length gives the equality.
 \end{proof}
 
 \begin{theorem}[Eventual equality of fixed-size reduced marginals]
@@ -106,8 +107,9 @@
 
 \begin{proof}\leanok
     \uses{thm:mpdo_finite_chain_reduced_proportionality}
-    At each sufficiently large length, apply
-    Theorem~\ref{thm:mpdo_finite_chain_reduced_proportionality}.
+    At each sufficiently large length,
+    Theorem~\ref{thm:mpdo_finite_chain_reduced_proportionality} gives the
+    equality of reduced marginals.
 \end{proof}
 
 \begin{lemma}[Marginal stability under source zero correlation length]
@@ -118,13 +120,11 @@
         reducedBlockState_succ_succ_eq_succ_of_isSourceZCL}
     \leanok
     \uses{def:mpo_source_zcl, lem:mpdo_trace_loop_chain}
-    Let $M$ have source zero correlation length. For every $N\geq0$, the
+    Let $M$ have source zero correlation length. As in the first replacement of
+    \cite[Appendix~C.2, line~1613]{Cirac2016MPDO_arXiv}, for every $N\geq0$, the
     normalized $N$-site marginal obtained by tracing two sites from
     $\sigma^{(N+2)}(M)$ equals the normalized $N$-site marginal obtained by
     tracing one site from $\sigma^{(N+1)}(M)$.
-
-    This establishes the first replacement of
-    \cite[Appendix~C.2, line~1613]{Cirac2016MPDO_arXiv}.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -153,10 +153,10 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    First retain $L+1$ sites and apply
-    Lemma~\ref{lem:mpdo_source_zcl_marginal_stability}. Trace the last of
-    these retained sites, and then apply the same lemma while retaining $L$
-    sites.
+    Applying Lemma~\ref{lem:mpdo_source_zcl_marginal_stability} while
+    retaining $L+1$ sites, tracing the last of these retained sites, and
+    then applying the same lemma while retaining $L$ sites gives the
+    identity.
 \end{proof}
 
 % Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
@@ -261,10 +261,10 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    Split the cyclic product into the retained internal edges, the two
-    boundary edges, and the internal suffix edges. Apply
+    Splitting the cyclic product into the retained internal edges, the two
+    boundary edges, and the internal suffix edges, and applying
     Theorem~\ref{thm:mpdo_sector_chain_fiber_contraction} to the suffix
-    coordinates. The two boundary sums are the indicated partial traces.
+    coordinates, reduces the two boundary sums to the indicated partial traces.
 \end{proof}
 
 % Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
@@ -300,7 +300,7 @@
 
 \begin{proof}\leanok
     \uses{thm:mpdo_physical_sector_chain_decomposition}
-    Decompose each discarded physical configuration uniquely as a suffix
+    Each discarded physical configuration decomposes uniquely into a suffix
     sector word $t\in S^R$ and a fiber coordinate $z\in I_t$. By
     Theorem~\ref{thm:mpdo_physical_sector_chain_decomposition}, matrix
     elements with distinct retained sector words vanish. For a fixed
@@ -320,7 +320,9 @@
     \label{def:mpdo_generic_eta_rank_one_trace_factorization}
     \lean{Matrix.EtaRankOneTraceFactorization}
     \leanok
-    A rank-one trace factorization of neighboring matrices $\eta_{q,h}$
+    Invoked at \cite[Appendix~C.2, line~1613]{Cirac2016MPDO_arXiv} as an
+    explicit assumption (not deduced from zero correlation length), a
+    rank-one trace factorization of neighboring matrices $\eta_{q,h}$
     consists of real numbers $a_q,b_h$ such that
     \begin{align}
         \tr(\eta_{q,h}) & =a_qb_h,
@@ -328,9 +330,6 @@
         \sum_q a_qb_q   & =1.
         \notag
     \end{align}
-    The factorization is an explicit assumption; it is not deduced from zero
-    correlation length. It is the factorization invoked at
-    \cite[Appendix~C.2, line~1613]{Cirac2016MPDO_arXiv}.
     % Scope restriction documented in
     % docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
 \end{definition}
@@ -348,7 +347,9 @@
         L_{h,v} & =\tr_{H_{h,r}}(\eta_{h,v}).
         \notag
     \end{align}
-    Then
+    Then the corrected edge contraction of
+    \cite[Appendix~C.2, lines~1613--1617]{Cirac2016MPDO_arXiv} takes the
+    separated form
     \begin{align}
         \sum_{q,h}\tr(\eta_{q,h})(R_{u,q}\otimes L_{h,v})
          & =
@@ -356,13 +357,12 @@
         \left(\sum_h b_hL_{h,v}\right).
         \notag
     \end{align}
-    This is the corrected edge contraction at
-    \cite[Appendix~C.2, lines~1613--1617]{Cirac2016MPDO_arXiv}.
 \end{lemma}
 
 \begin{proof}\leanok
     \uses{def:mpdo_generic_eta_rank_one_trace_factorization}
-    Substitute $\tr(\eta_{q,h})=a_qb_h$ and distribute the two finite sums.
+    Substituting $\tr(\eta_{q,h})=a_qb_h$ and distributing the two finite sums
+    gives the tensor-product factorization.
 \end{proof}
 
 % **Scope restriction (rank-one trace factorization):** the theorem below
@@ -387,8 +387,10 @@
         L_{h,v} & =\tr_{H_{h,r}}(\eta_{h,v}).
         \notag
     \end{align}
-    The edge contraction corresponding to tracing the two boundary sites of
-    the longer cyclic chain is
+    In the edge-coordinate interpretation of the fourth-region trace in
+    \cite[Appendix~C.2, lines~1606 and 1613--1617]{Cirac2016MPDO_arXiv}, the
+    edge contraction corresponding to tracing the two boundary sites of the
+    longer cyclic chain is
     \begin{align}
          & \bigoplus_k P_k\otimes
         \sum_{q,h}\tr(\eta_{q,h})
@@ -400,16 +402,13 @@
         \left(\sum_h b_hL_{h,k_0}\right).
         \notag
     \end{align}
-    This is the edge-coordinate interpretation of the displayed
-    fourth-region trace in
-    \cite[Appendix~C.2, lines~1606 and 1613--1617]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{lem:mpdo_eta_two_boundary_contraction_separated}
-    Apply Lemma~\ref{lem:mpdo_eta_two_boundary_contraction_separated} for
-    each retained sector word. Tensor with the unchanged product $P_k$ and
-    take the direct sum over $k$.
+    Applying Lemma~\ref{lem:mpdo_eta_two_boundary_contraction_separated} for
+    each retained sector word, tensoring with the unchanged product $P_k$, and
+    taking the direct sum over $k$ yields the identity.
 \end{proof}
 
 \begin{remark}
@@ -689,9 +688,10 @@
 \begin{proof}\leanok
     In the selected physical coordinates, the periodic operators of $K$ at
     both lengths are positive nonzero scalar multiples of those of $C$.
-    Cancel these scalars by
-    Theorem~\ref{thm:mpdo_selected_fixed_product_reduced_states}, pass
-    through the physical isometry, and apply source marginal stability.
+    Cancelling these scalars by
+    Theorem~\ref{thm:mpdo_selected_fixed_product_reduced_states}, passing
+    through the physical isometry, and applying source marginal stability
+    yields equality of the two reduced states.
 \end{proof}
 
 \begin{theorem}[Iterated selected fixed-product marginals]
@@ -707,9 +707,9 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    Apply the two-step source marginal identity to $K$, pass both sides
-    through the selected physical isometry, and cancel the two positive
-    realization scalars.
+    Applying the two-step source marginal identity to $K$, passing both sides
+    through the selected physical isometry, and cancelling the two positive
+    realization scalars gives equality of the reduced states.
 \end{proof}
 
 \begin{theorem}[Positive traces of the selected fixed product]
@@ -1086,12 +1086,12 @@
 
 \begin{proof}\leanok
     \uses{thm:mpdo_cyclic_active_three_boundary_trace, thm:mpdo_cyclic_active_deletion}
-    Expand the reduced state as a direct sum of three-suffix contractions.
-    Terms outside positive-length cyclic support vanish. For a retained
+    Expanding the reduced state as a direct sum of three-suffix contractions,
+    the terms outside positive-length cyclic support vanish. For a retained
     cyclic-active word, the three traced suffix sites leave the interior
-    product and the two-step boundary contraction. Substitute
-    $(\lambda^{-1}T_C)^2=a b^{\mathsf T}$ to separate its two boundary
-    factors, retaining the normalization by the length-$(n+4)$ trace.
+    product and the two-step boundary contraction, and substituting
+    $(\lambda^{-1}T_C)^2=a b^{\mathsf T}$ separates its two boundary
+    factors while retaining the normalization by the length-$(n+4)$ trace.
 \end{proof}
 
 \begin{theorem}[Cyclic-active fourth-region factorization]
@@ -1141,13 +1141,13 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    Regroup every retained fourth-region block at the distinguished middle
-    sector. Its positive left and right path factors are normalized by their
-    traces, with fixed density matrices used only when a factor vanishes.
-    The positive long-chain trace makes all block weights nonnegative. The
-    nonzero short-chain trace makes the reduced state trace one, so these
-    weights sum to one. The resulting direct sum is exactly the Hayashi
-    decomposition in the sector-coordinate middle-site splitting.
+    Regrouping every retained fourth-region block at the distinguished middle
+    sector splits its positive left and right path factors, which are
+    normalized by their traces (using fixed density matrices only when a
+    factor vanishes). The positive long-chain trace makes all block weights
+    nonnegative, and the nonzero short-chain trace makes the reduced state
+    trace one so that these weights sum to one. The resulting direct sum is
+    the Hayashi decomposition in the sector-coordinate middle-site splitting.
 \end{proof}
 
 \begin{theorem}[Cyclic-active Markov decomposition at every cut]
@@ -1172,11 +1172,11 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    Separate the retained chain at the distinguished middle site. The
-    retained neighboring factors split into the left and right path products,
-    while the two cyclic endpoint factors become their respective boundary
-    matrices. Normalize each positive block by its trace, using an arbitrary
-    trace-one positive matrix when the block vanishes. The trace-one identity
+    Separating the retained chain at the distinguished middle site splits the
+    retained neighboring factors into the left and right path products while
+    turning the two cyclic endpoint factors into their respective boundary
+    matrices. Normalizing each positive block by its trace (using an arbitrary
+    trace-one positive matrix when the block vanishes), the trace-one identity
     for the full marginal shows that the resulting non-negative block weights
     sum to one.
 \end{proof}
@@ -1202,12 +1202,12 @@
 
 \begin{proof}\leanok
     Positivity of the neighboring operators makes every nonempty
-    sector-coordinate chain operator positive. Source zero correlation
-    length makes its trace nonzero. Apply
+    sector-coordinate chain operator positive, and source zero correlation
+    length makes its trace nonzero. Applying
     Theorem~\ref{thm:mpdo_cyclic_active_markov_all_cuts} with
-    $A=m-1$ and $C=N-m-1$ at every admissible cut, then use the all-cut
-    Markov criterion. Finally, carry saturation across the physical
-    isometry of $F$.
+    $A=m-1$ and $C=N-m-1$ at every admissible cut and invoking the all-cut
+    Markov criterion gives saturation of the area law in sector coordinates,
+    which the physical isometry of $F$ carries back to $\mathcal K$.
 \end{proof}
 
 \begin{theorem}[A translation-invariant commuting bond and ZCL imply SAL]
@@ -1224,11 +1224,10 @@
          & =c_N\prod_{i=0}^{N-1}B_{i,i+1}.
         \notag
     \end{align}
-    If the physical-trace transfer of $\mathcal K$ has zero correlation
-    length, then $\mathcal K$ saturates the area law.
-
-    This is the proposition at
-    \cite[Appendix~C.2, lines~1597--1619]{Cirac2016MPDO_arXiv}.
+    Establishing the proposition of
+    \cite[Appendix~C.2, lines~1597--1619]{Cirac2016MPDO_arXiv}, if the
+    physical-trace transfer of $\mathcal K$ has zero correlation length, then
+    $\mathcal K$ saturates the area law.
 
     % **Local fix (cyclic-active two-step coefficient):** Source lines
     % 1613--1616 use an invalid one-step rank-one inference. The proof instead
@@ -1245,14 +1244,13 @@
     this isometry, and its trace is unchanged, hence nonzero at every
     positive length by source zero correlation length.
 
-    For every $1\leq m\leq\lfloor N/2\rfloor$, apply
+    For every $1\leq m\leq\lfloor N/2\rfloor$, applying
     Theorem~\ref{thm:mpdo_selected_fixed_product_markov_cuts} with
-    $A=m-1$ and $C=N-m-1$. Since
-    $A+C+2=N$, the resulting decomposition is the quantum Markov
-    decomposition required at the $m$-th cut. The all-cut criterion gives
-    saturation of the area law in the selected physical coordinates.
-    Finally, isometric invariance of the chain and marginal entropies
-    carries saturation back to $\mathcal K$.
+    $A=m-1$ and $C=N-m-1$ ($A+C+2=N$) gives the quantum Markov
+    decomposition required at the $m$-th cut. The all-cut criterion then gives
+    saturation of the area law in the selected physical coordinates, and
+    isometric invariance of the chain and marginal entropies carries
+    saturation back to $\mathcal K$.
 \end{proof}
 
 \begin{theorem}[$\eta$-local structure gives the one-sector GSNNCH form]
@@ -1266,8 +1264,9 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    At each chain length, apply the one-sector construction directly to the
-    commuting-form data carried by the $\eta$-local structure.
+    At each chain length, applying the one-sector GSNNCH construction to the
+    commuting-form data carried by the $\eta$-local structure yields the
+    explicit GSNNCH decomposition.
 \end{proof}
 
 \begin{theorem}[Injective SAL tensors generate GSNNCH states]

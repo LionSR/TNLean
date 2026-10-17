@@ -1,9 +1,9 @@
 \section{Product states}\label{sec:product_states}
 %% ===================================================================
 
-Every product state is a matrix product state with bond dimension
-one~\cite[Appendix~A, ``Product states'']{Cirac2021Matrix}. For site-dependent
-local tensors, the matrix product is closed by boundary vectors.
+As reviewed in~\cite[Appendix~A, ``Product states'']{Cirac2021Matrix}, every
+product state is a matrix product state with bond dimension one. For
+site-dependent local tensors, the matrix product is closed by boundary vectors.
 
 \begin{definition}[Product vector and its tensor]\label{def:product_state_tensor}
     \lean{QuantumCircuit.productVector,
@@ -37,8 +37,8 @@ translation-invariant specialization and its periodic closure.
         A^{[N]\,\sigma_N}\,v_R.
         \notag
     \end{align}
-    When all sites carry the same tensor this is the open-boundary contraction
-    of Definition~\ref{def:open_coeff}.
+    When all sites carry the same tensor, this coincides with the open-boundary
+    contraction of Definition~\ref{def:open_coeff}.
 \end{definition}
 
 \begin{lemma}[Site-independent families]\label{lem:site_open_coeff_const}
@@ -59,8 +59,8 @@ translation-invariant specialization and its periodic closure.
     \lean{MPSTensor.siteOpenCoeff_productSiteTensor}
     \leanok
     \uses{def:product_state_tensor, def:site_open_coeff}
-    Every product state is a matrix product state with bond dimension one
-    \cite[Appendix~A, ``Product states'']{Cirac2021Matrix}:
+    As in \cite[Appendix~A, ``Product states'']{Cirac2021Matrix}, every product
+    state is a matrix product state with bond dimension one:
     for the tensor of Definition~\ref{def:product_state_tensor}, with
     $A^{[s]\,i}=a^{i,[s]}$ and trivial boundary vectors $v_L=v_R=1$, the
     site-dependent open-boundary contraction of every configuration
@@ -77,8 +77,8 @@ translation-invariant specialization and its periodic closure.
 
 \begin{proof}
     \leanok
-    A product of $1\times1$ matrices is the $1\times1$ matrix of the product of
-    their entries; induct on $N$.
+    By induction on $N$, a product of $1\times1$ matrices is the $1\times1$
+    matrix whose entry is the product of their entries.
 \end{proof}
 
 \begin{corollary}[Translation-invariant product states]\label{cor:product_state_ti}
@@ -96,10 +96,10 @@ translation-invariant specialization and its periodic closure.
 \begin{proof}
     \leanok
     \uses{thm:product_state_mps, lem:site_open_coeff_const}
-    The open-boundary statement is Theorem~\ref{thm:product_state_mps} combined
-    with Lemma~\ref{lem:site_open_coeff_const}. For bond dimension one the trace
-    of a $1\times1$ matrix is its only entry, so the periodic closure agrees
-    with the open one.
+    Combining Theorem~\ref{thm:product_state_mps} with
+    Lemma~\ref{lem:site_open_coeff_const} gives the open-boundary statement.
+    Because the trace of a $1\times1$ matrix is its sole entry, the periodic
+    closure agrees with the open-boundary contraction.
 \end{proof}
 
 %% ===================================================================

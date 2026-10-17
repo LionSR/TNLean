@@ -14,9 +14,9 @@
     Every listed sector has a positive number of copies, and every copy weight
     is nonzero. If the total tensors $P_{\mathrm{tot}}$,
     $Q_{\mathrm{tot}}$ generate eventually
-    nonzero proportional MPV families --- for all sufficiently large $N$ there is
-    a nonzero scalar $c_N$ with
-    $V^{(N)}(P_{\mathrm{tot}})=c_NV^{(N)}(Q_{\mathrm{tot}})$ --- then
+    nonzero proportional MPV families (meaning that for all sufficiently large
+    $N$ there is a nonzero scalar $c_N$ with
+    $V^{(N)}(P_{\mathrm{tot}})=c_NV^{(N)}(Q_{\mathrm{tot}})$), then
     $g_a=g_b$. After relabelling the basis of normal tensors of $P$ by a
     bijection $\beta:J(Q)\simeq J(P)$, there are scalars $\zeta_k\in\C$ with
     $|\zeta_k|=1$ and invertible matrices $Y_k$ such that, for every $k$ and
@@ -31,10 +31,10 @@
 
 \begin{proof}\leanok
     \uses{thm:sector_bnt_proportional_sector_match_witnesses}
-    Apply Theorem~\ref{thm:sector_bnt_proportional_sector_match_witnesses}.
-    Its partition-and-substitution argument gives a bijection
-    $\beta:J(Q)\simeq J(P)$, equal bond dimensions, invertible block gauges
-    $X_k$, and phases $\zeta_k$ of unit modulus. Taking $Y_k=X_k$ gives exactly
+    The partition-and-substitution argument of
+    Theorem~\ref{thm:sector_bnt_proportional_sector_match_witnesses} gives a
+    bijection $\beta:J(Q)\simeq J(P)$, equal bond dimensions, invertible block
+    gauges $X_k$, and phases $\zeta_k$ of unit modulus; setting $Y_k=X_k$ gives
     the asserted relations.
 \end{proof}
 
@@ -97,9 +97,10 @@
     \lean{MPSTensor.ft_sector_bnt_proportional_unitary_sector_match_witnesses}
     \leanok
     \uses{def:sector_bnt_cf, thm:cpgsv_multiblock_ft_source}
-    Under the hypotheses of
-    Theorem~\ref{thm:cpgsv_multiblock_ft_source}, there exist a bijection
-    $\beta:J(Q)\simeq J(P)$, unitary matrices
+    As in the proportional part of
+    \cite[Corollary~A.6, lines~1197--1199]{Cirac2016MPDO_arXiv}, under the
+    hypotheses of Theorem~\ref{thm:cpgsv_multiblock_ft_source} there exist a
+    bijection $\beta:J(Q)\simeq J(P)$, unitary matrices
     $U_k\in\mathrm{U}(\dim Q_k)$, and phases $\zeta_k\in\C$ with
     $|\zeta_k|=1$, such that $\dim P_{\beta(k)}=\dim Q_k$ and, for every $k$
     and every physical index~$i$,
@@ -107,8 +108,6 @@
         Q_k^i
          & =\zeta_k\,U_k\,P_{\beta(k)}^i\,U_k^\dagger. \notag
     \end{align}
-    This is the proportional part of
-    \cite[Corollary~A.6, lines~1197--1199]{Cirac2016MPDO_arXiv}.
 \end{corollary}
 
 \begin{proof}\leanok
@@ -148,7 +147,7 @@
 
 \begin{proof}\leanok
     \uses{thm:sector_bnt_equal_mps_gaugeEquiv_literal}
-    This is Theorem~\ref{thm:sector_bnt_equal_mps_gaugeEquiv_literal}. The BNT
+    By Theorem~\ref{thm:sector_bnt_equal_mps_gaugeEquiv_literal}, the BNT
     comparison of Chapter~\ref{ch:bnt} provides the basis relabelling, the
     per-block gauge-phase equivalences, and the copy-weight multiset matching,
     which combine into the block-diagonal global gauge.
@@ -174,7 +173,7 @@
 
 \begin{proof}\leanok
     \uses{lem:sector_bnt_equal_unitary_matched_gauge}
-    For each matched sector, retain the phase in both identities
+    For each matched sector, retaining the phase in both identities gives
     \begin{align}
         Q_k^i
          & = \zeta_k U_kP_{\beta(k)}^iU_k^\dagger,

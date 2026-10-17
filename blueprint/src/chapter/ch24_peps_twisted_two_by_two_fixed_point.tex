@@ -22,11 +22,11 @@
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_g_isometric_physical_transport}
-    Choose the local normalized-adjoint maps before choosing $K$.
-    Their column Gram identities imply isometry on the product range.
-    Expand each inserted contraction over its independent endpoint labels.
-    Products of physical maps commute with this sum, and every summand
-    belongs to the product range. The local tensor identities give the
+    Choosing the local normalized-adjoint maps before choosing $K$,
+    their column Gram identities imply isometry on the product range.
+    Expanding each inserted contraction over its independent endpoint labels,
+    products of physical maps commute with this sum and every summand
+    belongs to the product range, so the local tensor identities give the
     displayed equality with the same factors for every $K$.
 \end{proof}
 
@@ -68,12 +68,12 @@
 \end{theorem}
 \begin{proof}\leanok
     \uses{def:peps_twisted_two_by_two_coordinates}
-    Reindex all fine bonds into four internal bonds per block and the two
-    labels of every coarse crossing bond. The corner-by-corner endpoint
-    identity retains the original heads of both orientations. Summing the
-    internal labels gives exactly the four-site tensor. For a doubled
+    Reindexing all fine bonds into four internal bonds per block and the two
+    labels of every coarse crossing bond, the corner-by-corner endpoint
+    identity retains the original heads of both orientations, and summing the
+    internal labels gives the four-site tensor. For a doubled
     periodic coordinate $2x+b$, the outgoing bond crosses the seam precisely
-    when $b=1$ and $x$ is the final coarse coordinate. Thus precisely the
+    when $b=1$ and $x$ is the final coarse coordinate, so the
     two crossing bonds, and no internal bond, receive each seam insertion.
 \end{proof}
 
@@ -111,11 +111,11 @@
 \begin{proof}\leanok
     \uses{def:peps_twisted_torus_ordered_labels,
         thm:peps_twisted_two_by_two_geometry}
-    Use the incidence-coordinate and endpoint bijections in the finite
-    sums. A permutation matrix for left multiplication satisfies
-    $L_u^{\mathsf T}=L_{u^{-1}}$, also for simultaneous multiplication of
-    the two labels. The resulting native and ordered contraction factors
-    therefore agree at every endpoint, including periodic seam endpoints.
+    Under the incidence-coordinate and endpoint bijections in the finite
+    sums, a permutation matrix for left multiplication satisfies
+    $L_u^{\mathsf T}=L_{u^{-1}}$, including for simultaneous multiplication of
+    the two labels, so the resulting native and ordered contraction factors
+    agree at every endpoint, including periodic seam endpoints.
 \end{proof}
 
 \begin{theorem}[Inserted bonds preserve the surplus Bell state]%
@@ -140,9 +140,9 @@
         thm:peps_regular_graph_surplus_factorization}
     At a twisted head the relative label remains unchanged because
     $(ua)^{-1}(ub_k)=a^{-1}b_k$. The sum over distinguished labels gives
-    the original inserted contraction, and the independent relative sums
-    give the surplus equality vectors. Apply the uniform physical-support
-    isometry and retain the inverse-square-root normalizations.
+    the original inserted contraction and the independent relative sums
+    give the surplus equality vectors, so applying the uniform physical-support
+    isometry and retaining the inverse-square-root normalizations completes the proof.
 \end{proof}
 
 \begin{theorem}[Nonzero native closures in one fine physical support]%
@@ -160,12 +160,13 @@
 \begin{proof}\leanok
     \uses{thm:peps_twisted_torus_graph_coordinates,
         thm:peps_inserted_physical_support_transport}
-    Identify the four-coordinate tensor with its native four-leg form.
-    Its closure self-overlap is a positive site factor times a positive
-    power of $|G|$ and the order of the common centralizer of the closure
-    labels. This centralizer contains the identity. Support membership
-    follows from the exact inserted coarse contraction and its product
-    range membership.
+    Identifying the four-coordinate tensor with its native four-leg form
+    expresses its closure self-overlap as the product of a positive site
+    factor, a positive power of $|G|$, and the order of the common
+    centralizer of the closure labels; because this centralizer contains
+    the identity, its order is positive and the closure is nonzero.
+    Support membership then follows from the exact inserted coarse
+    contraction and its product range membership.
 \end{proof}
 
 \begin{theorem}[Uniform twisted fixed point and coherent superpositions]%
@@ -201,18 +202,18 @@
         thm:peps_inserted_regular_surplus,
         thm:peps_two_by_two_original_scale,
         thm:peps_physical_state_normalization}
-    Apply the uniform inserted support isometry between the
-    four-site block tensor and the original tensor with surplus registers.
-    Exact native seam coordinates identify its input and output. Their
-    positive norm relation gives the normalized equalities. Linearity
-    gives the coherent equality with the same $I$ and $R$; its norm relation
-    is $\|x\|=R\|y\|$, proving nonvanishing equivalence and normalization.
+    Applying the uniform inserted support isometry between the
+    four-site block tensor and the original tensor with surplus registers,
+    exact native seam coordinates identify its input and output, and their
+    positive norm relation gives the normalized equalities. Linearity then
+    gives the coherent equality with the same $I$ and $R$, whose norm relation
+    $\|x\|=R\|y\|$ establishes the nonvanishing equivalence and normalization.
 \end{proof}
 
-The all-pairs algebraic identity asserts a ground-state interpretation only
-for commuting closures. This is the native periodic, physical-support
-specialization of \cite[Observation~6.6]{Schuch2010PEPS}. The geometric
-identity includes all positive periods, but physical Bell separation for
+In the native periodic, physical-support specialization of
+\cite[Observation~6.6]{Schuch2010PEPS}, the all-pairs algebraic identity
+asserts a ground-state interpretation only for commuting closures. The geometric
+identity includes all positive periods, whereas physical Bell separation for
 coarse periods one and two, other boundary conditions, and extension to an
 ambient physical unitary remain outside this statement.
 

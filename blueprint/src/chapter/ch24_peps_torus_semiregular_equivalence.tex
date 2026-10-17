@@ -35,9 +35,9 @@
     \end{align}
 \end{theorem}
 \begin{proof}\leanok
-    The product of $C_Q$ is an isometry. Remove it from the overlap,
-    then apply preservation of overlaps by the product of $F$ on the
-    matching-sector support.
+    Since the product of $C_Q$ is an isometry, removing it from the overlap
+    and applying overlap preservation for the product of $F$ on the
+    matching-sector support gives the identity.
 \end{proof}
 
 \begin{theorem}[The weighted torus state under a chosen Fourier intertwiner]%
@@ -70,8 +70,9 @@
 \begin{proof}\leanok
     The weighted contraction has matching-sector support, and
     the product of $F$ sends it to the averaging-site state of $L$.
-    The product of $C_Q$ sends that state to the regular state
-    by the matrix intertwining identity. Compose the two equalities.
+    Because the product of $C_Q$ sends that state to the regular state
+    by the matrix intertwining identity, composing the two equalities gives
+    the stated transformation.
 \end{proof}
 
 \begin{theorem}[An ambient physical isometry for the chosen block construction]%
@@ -95,11 +96,11 @@
     The overlap identity holds for all vectors in the original physical space.
 \end{theorem}
 \begin{proof}\leanok
-    Extend $F$ to an isometry $T$ satisfying $TE_V=FE_V$.
-    Product matrices respect multiplication, so their products agree on
-    $\operatorname{ran}\bigotimes_e E_V$. The weighted state lies
-    in this range, and hence retains the chosen Fourier state equality.
-    Both physical product maps in $\mathcal U$ are isometries.
+    Extending $F$ to an isometry $T$ satisfying $TE_V=FE_V$, multiplicativity
+    of product matrices shows that their products agree on
+    $\operatorname{ran}\bigotimes_e E_V$. Because the weighted state lies
+    in this range, it retains the chosen Fourier state equality, and
+    both physical product maps in $\mathcal U$ are isometries.
 \end{proof}
 
 \begin{theorem}[Finite-torus equivalence from a multiplicity-one semi-regular representation]%
@@ -130,11 +131,10 @@
     are conclusions rather than additional hypotheses.
 \end{theorem}
 \begin{proof}\leanok
-    Construct the orthonormal Fourier basis of the regular
-    representation, with each irreducible repeated by its dimension.
-    The associated single-copy block representation is unitary and
-    semi-regular, with character multiplicity one in every sector.
-    Its change to the original group basis gives $Q$ and the matrix
-    intertwining relation. Apply the ambient physical isometry theorem
-    to these derived data.
+    From the orthonormal Fourier basis of the regular representation, with
+    each irreducible repeated by its dimension, the associated single-copy
+    block representation is unitary and semi-regular with character
+    multiplicity one in every sector. Changing to the original group basis
+    gives $Q$ and the matrix intertwining relation, and applying the ambient
+    physical isometry theorem to these derived data completes the proof.
 \end{proof}

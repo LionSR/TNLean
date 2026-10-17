@@ -64,8 +64,8 @@ preserved.
 \begin{proof}
     \leanok
     \uses{thm:mpo_joint_phase_boundary}
-    Inspect the four physical summands. An endpoint letter stays in its
-    corresponding virtual corner after both labels are exchanged; a
+    On each of the four physical summands, an endpoint letter stays in its
+    corresponding virtual corner after both labels are exchanged, while a
     rectangular matrix unit keeps its row and column indices. Exchanging
     the two diagonal weights replaces $\gamma$ by $1-\gamma$.
     In each summand of the joint boundary trace, the whole product is
@@ -141,16 +141,16 @@ preserved.
     \leanok
     \uses{thm:mpo_joint_endpoint_swap_periodic,thm:mpo_joint_periodic_gap,
         thm:martingale_isometric_conjugation_gap}
-    Apply Theorem~\ref{thm:mpo_joint_periodic_gap} to $(A_1,A_0)$.
-    Its required positive dimensions are precisely $D_1^x$.
+    For the reversed pair $(A_1,A_0)$, Theorem~\ref{thm:mpo_joint_periodic_gap}
+    requires positive dimensions $D_1^x$.
     Conjugacy sends the reversed kernel to the original kernel; it also
     sends the reversed component span to the span in
     (\ref{eq:mpo_joint_right_periodic_kernel}). If $v$ is orthogonal to the
     original kernel, then $U_N^{-1}v$ is orthogonal to the reversed kernel:
     for every reversed kernel vector $z$,
     $\langle z,U_N^{-1}v\rangle=\langle U_Nz,v\rangle=0$.
-    Apply the reversed gap bound and use preservation of both norms.
-    Finally choose $\delta_*=\min(\delta_0,\delta_1)$ from the two
-    common joint-parent endpoint bounds. No interior parameter enters
+    The reversed gap bound and norm preservation under $U_N$ then give the bound at $\gamma=1$.
+    Finally, $\delta_*=\min(\delta_0,\delta_1)$ from the two
+    common joint-parent endpoint bounds serves as a common lower bound at both endpoints; no interior parameter enters
     this argument.
 \end{proof}

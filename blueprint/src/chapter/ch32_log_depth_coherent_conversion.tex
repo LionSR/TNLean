@@ -2,10 +2,9 @@
 \label{sec:ldp_coherent_groundspace_conversion}
 
 The endpoints below are the fixed polar encoders of the periodic
-sector columns. A single physical circuit acts on the whole logical
-space, including inputs entangled with an external reference. This is a
-precise enhancement of the discussion and outlook of
-\cite{Malz2024Preparation}; it does not identify an additional phase predicate.
+sector columns. Enhancing the discussion and outlook of
+\cite{Malz2024Preparation} without identifying an additional phase predicate, a single physical circuit acts on the whole logical
+space, including inputs entangled with an external reference.
 
 \begin{theorem}[Decay of the logical Gram matrix]
     \label{thm:ldp_sector_gram_rate}
@@ -27,9 +26,9 @@ precise enhancement of the discussion and outlook of
         thm:ldp_sector_gram_cross_entries}
     The diagonal entries are the squared sector norms minus one; the
     off-diagonal entries are complex periodic overlaps. Their existing
-    transfer estimates give entry bounds $K_{ij}x^N$. Sum these bounds
-    weighted by the norms of the logical matrix units, over the fixed
-    indices $i,j$. No sum over the physical dimension occurs.
+    transfer estimates give entry bounds $K_{ij}x^N$, and summing these bounds
+    weighted by the norms of the logical matrix units over the fixed
+    indices $i,j$ yields $K_G$ without any sum over the physical dimension.
 \end{proof}
 
 \begin{theorem}[Decay of the complex cross matrix]
@@ -53,11 +52,10 @@ precise enhancement of the discussion and outlook of
     \uses{lem:ldp_overlapping_block_states, lem:ldp_overlapping_block_overlaps_limit,
         thm:ldp_sector_gram_cross_entries}
     The exact cross-overlap identity identifies each entry with the
-    trace of an ordered mixed-transfer product. Its difference from
-    $\delta_{ij}$ is bounded by $C_{ij}y e^{C_{ij}y}$. Choose $K_Z>0$
-    dominating all $C_{ij}$ and their sum weighted by the norms of the
-    logical matrix units. Sum the entry bounds with these weights. The
-    sums again have only the fixed logical dimension.
+    trace of an ordered mixed-transfer product, whose difference from
+    $\delta_{ij}$ is bounded by $C_{ij}y e^{C_{ij}y}$. With $K_Z>0$ chosen to
+    dominate all $C_{ij}$ and their sum weighted by the norms of the
+    logical matrix units, summing the entry bounds with these weights over the fixed logical dimension gives the operator-norm bound.
 \end{proof}
 
 \begin{theorem}[A square-root exponential encoder estimate]
@@ -79,9 +77,9 @@ precise enhancement of the discussion and outlook of
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:ldp_polar_frame_bound}
-    Both defects are bounded respectively by $K_Gz$ and $K_Zze^{K_Z}$.
-    Apply the polar-frame estimate and use $0\le z\le\sqrt z$ for
-    $0\le z\le1$.
+    Both defects are bounded respectively by $K_Gz$ and $K_Zze^{K_Z}$, so the
+    polar-frame estimate together with $0\le z\le\sqrt z$ for
+    $0\le z\le1$ gives the bound.
 \end{proof}
 
 \begin{theorem}[Uniform approximate and exact encoding from fixed registers]
@@ -92,8 +90,8 @@ precise enhancement of the discussion and outlook of
     Fix the embedded canonical family, a common spectral bound $0<t<1$,
     and injective bond and logical encodings in $r_0\ge2$ sites. Suppose
     $L\ge3r_0$ and every blocked unweighted sum of length at least $L$ is
-    injective on its sector-pair support. Put $r=-\tfrac12\log t>0$.
-    There are $C\in\mathbb N$ and $K\ge1$, fixed before all partitions,
+    injective on its sector-pair support. With $r=-\tfrac12\log t>0$,
+    there are $C\in\mathbb N$ and $K\ge1$, fixed before all partitions,
     with the following properties.
     For $L\le q\le\ell_k\le2q$ and $Ne^{-rq}\le1$, one genuine local
     unitary $U$ of depth at most $Cq$ satisfies
@@ -107,12 +105,12 @@ precise enhancement of the discussion and outlook of
     \uses{thm:ldp_sector_gram_rate, thm:ldp_sector_cross_rate,
         thm:ldp_sector_sqrt_rate, thm:ldp_supported_sector_independence,
         thm:ldp_coherent_sector_circuit, thm:ldp_exact_whole_encoder_circuit}
-    Use the simultaneous genuine-unitary block construction for the
-    orthonormal embedded fixed-point pairs. Supported injectivity gives
-    independent endpoint columns. The common transfer bound with
+    The simultaneous genuine-unitary block construction for the
+    orthonormal embedded fixed-point pairs produces the approximate circuit: supported injectivity gives
+    independent endpoint columns, and the common transfer bound with
     $\gamma=1/2$ bounds the two defects in the preceding estimate.
-    The exact assertion is the fixed-width whole-encoder construction.
-    Increase the constants to cover both depth bounds.
+    The fixed-width whole-encoder construction gives the exact assertion, and enlarging
+    the constants covers both depth bounds.
 \end{proof}
 
 \begin{theorem}[All-accuracy block-length choice for whole encoders]
@@ -131,14 +129,14 @@ precise enhancement of the discussion and outlook of
     operator-norm error at most $\varepsilon$.
 \end{theorem}
 \begin{proof}\leanok
-    Take $q=\lceil a\log(N/\varepsilon)+b\rceil$, with $a=2/r$ and
-    $b=\max(\log K,0)/(r/2)+L+1$. Set $u=Ne^{-(r/2)q}$.
-    The logarithmic threshold gives $Ku\le\varepsilon$, while
+    With $q=\lceil a\log(N/\varepsilon)+b\rceil$ for $a=2/r$ and
+    $b=\max(\log K,0)/(r/2)+L+1$, and $u=Ne^{-(r/2)q}$,
+    the logarithmic threshold gives $Ku\le\varepsilon$, while
     $Ne^{-rq}\le u^2$ because $N\ge1$. Thus the square-root error is
     at most $Ku\le\varepsilon$, and the small-defect hypothesis holds.
-    If $q>N$, use the exact conversion. In either branch, the depth is
-    at most $Cq$, and $q\le c_0\log(N/\varepsilon)$ for a fixed $c_0$,
-    using $\log(N/\varepsilon)\ge\log2$.
+    When $q>N$, the exact conversion applies instead; in either branch, the depth is
+    at most $Cq$, and $q\le c_0\log(N/\varepsilon)$ for a fixed $c_0$
+    since $\log(N/\varepsilon)\ge\log2$.
 \end{proof}
 
 \begin{theorem}[Coherent conversion of matched canonical sector spaces]
@@ -171,15 +169,15 @@ precise enhancement of the discussion and outlook of
     \uses{thm:ldp_uniform_sector_encoding, thm:ldp_sector_all_accuracy_compilation,
         lem:ldp_common_mixed_gap, lem:ldp_overlapping_block_injectivity,
         thm:ldp_common_encoder_conversion}
-    Choose one common strict spectral bound, one register width large
+    Fixing one common strict spectral bound, one register width large
     enough for both virtual bonds and the logical labels, and one
-    eventual support-injectivity cutoff. Both approximate circuits use
+    eventual support-injectivity cutoff lets both approximate circuits use
     the same partition and register encoder $J$. Their relative unitary
-    $U_BU_A^\dagger$ has the sum of their depths and endpoint errors.
-    The exact one-block circuits share the same seed as well. Apply the
-    preceding all-accuracy theorem. The operator error tensored with an
-    identity has the same bound, by summing squared norms of reference
-    slices. No preparation of the common seed is charged.
+    $U_BU_A^\dagger$ has the sum of their depths and endpoint errors, and
+    the exact one-block circuits share the same seed as well, so the
+    preceding all-accuracy theorem gives $U$ without charging any preparation of the common seed. Tensoring the operator error with an
+    identity preserves the same bound by summing the squared norms of the reference
+    slices.
 \end{proof}
 
 \begin{theorem}[The encoder range is a canonical parent kernel]

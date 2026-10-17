@@ -24,6 +24,84 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Labels introduced by the edge operations — promoted (2026-10-16)
+
+- **Pattern:** the case analysis showing that one of the seven births and deaths of an
+  edge construction introduces a single label.
+- **Seen:** the aggregate `edgeOperations_insertsOne` and the per-operation chains of
+  `DyadicEdgeOperationChains.lean`.
+- **Abstraction:** the seven lemmas `auxBirthB_insertsOne`, …, `mainDeathB_insertsOne` in
+  `Approximation/DyadicTrueVertices.lean`; the aggregate is derived from them.
+
+### Sites separated from guide holes — promoted (2026-10-16)
+
+- **Pattern:** recover the patch of a guide hole, turn membership in its outer sample
+  into a weak distance bound, and contradict strict separation of the changed sites.
+- **Seen:** three copies in `centralBirth_hasFrameChange_of`,
+  `bandBirth_hasFrameChange`, and `bandDeath_hasFrameChange`.
+- **Abstraction:** `TNLean.PEPS.Approximation.disjoint_outerHoles_guideFrame` in
+  `DyadicGuideFrames.lean`, reusing `disjoint_footprint_of_forall`; all three callers
+  now supply their separation estimate to this lemma.
+- **Notes:** the lemma permits any site set, guide, owners and finite patch family
+  with pairwise-disjoint outer samples. It uses each patch's own center and scale.
+  The marked-set and true-vertex adapters stay at the callers, including the
+  after-reading to before-reading conversion for band death. No Hamiltonian,
+  supplied-patch or positive local-dimension assumption is added to the lemma.
+
+### Non-root dyadic side bound — promoted (2026-10-16)
+
+- **Pattern:** for `R : RepaintedSquare k` and `hk2 : 2 ^ k < 2 * L`, derive
+  `(2 : ℝ) ^ (R.1.1 : ℕ) ≤ (L : ℝ)` from the non-root level bound.
+- **Promoted helper:** `RepaintedSquare.side_le` in
+  `TNLean/PEPS/Approximation/DyadicProtocolParties.lean`.
+- **Consumers:** `centralBirth_hasFrameChange`, `edgeExchange_hasPairChange`,
+  `bandBirth_hasFrameChange`, and `bandDeath_hasFrameChange`.
+- **Notes:** keep the caller-specific factor `A₀ ≥ 1` outside the helper. The helper
+  needs only the non-root square and the root-size inequality; no protocol constants,
+  Hamiltonian or lower bound on `L` are added.
+
+### The two labels near a treated central birth — promoted (2026-10-16)
+
+- **Pattern:** use the central separation floor to show that the surrounding
+  guide is the old label near the changed region, then split according to
+  whether the point is changed to bound the central guide by two labels.
+- **Seen:** two proof copies, in `RepaintingBaseline.isTrueVertex_central_treated`
+  (`DyadicTrueVertices.lean`) and `RepaintingBaseline.central_treated_mem`
+  (`DyadicCentralBirthChange.lean`).
+- **Abstraction:** the existing `RepaintingBaseline.central_treated_mem` is
+  placed in `DyadicTrueVertices.lean`; the true-vertex theorem uses its two
+  conclusions, and the central-birth frame proof keeps the same call.
+- **Notes:** this reuses an existing public lemma without changing its signature
+  or proof. Two copies were verified; no third occurrence is claimed.
+
+### Owner change of a sampled guide frame — promoted (2026-10-16)
+
+- **Pattern:** the frame of a reading equals the frame of another reading with
+  the owners of the differing sites handed to one label, from equal true
+  vertices, equal incident labels and the label at the differing sites
+  (`06-geometry.tex`, lines 375–387).
+- **Seen:** the band birth and death of `DyadicBandStepChanges.lean` and the
+  central birth of `DyadicCentralBirthChange.lean`.
+- **Abstraction:** `TNLean.PEPS.Approximation.guideFrame_eq_changeOwner_of_ne`
+  (`Approximation/DyadicBulkFrames.lean`); the three call sites use it.
+- **Notes:** the helper itself is generic in the guides and chosen finite centers;
+  it requires equal center sets and incident labels, the exact differing-site set,
+  and one target label there. Its three protocol uses have readings and exact
+  true-vertex sets, but those are not extra hypotheses of the abstraction. The
+  documentation correction changes no proof or call site.
+
+### Fixed-circuit bounded-change lifts beside spectator sheets — promoted (2026-10-16)
+
+- **Pattern:** Assemble the five `OriginalCircuit.IsBoundedChange` fields for
+  `liftOne` or `liftTwo`: transport the nonprivate count, participants, expansion
+  bound, monomial bound and error estimate through untouched spectator sheets.
+- **Seen:** `hasBoundedChange_liftOne`, `hasBoundedChange_liftTwo`
+  (`SheetStackChange.lean`) and their source-bounded forms
+  (`SheetStackSourceBoundedChange.lean`).
+- **Abstraction:** `TNLean.PEPS.EncodedFrame.isBoundedChange_liftOne` and
+  `isBoundedChange_liftTwo` in `SheetStackChange.lean`, stated for the fixed lifted
+  circuit; all four results now use them.
+
 ### Positive part of a polynomial constant — promoted (2026-10-16)
 
 - **Pattern:** Replace a constant `C` of a polynomial bound `x ≤ C * L ^ k` by `max C 0`, so that
@@ -4520,6 +4598,51 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 ## Candidates
 
+### Dyadic padding bounds — candidate (2026-10-16)
+
+- **Pattern:** Combine the lower and strict upper bounds for
+  `2 ^ Nat.clog 2 L`, then add positivity of the ceiling logarithm.
+- **Seen:** The bounds in `DyadicAnchors.lean` and their former rederivation
+  in `le_two_pow_clog_lt` in `DyadicProtocolConsequences.lean`.
+- **Abstraction:** Reuse the existing `le_paddedSide` and
+  `paddedSide_lt_two_mul`; the public wrapper packages them with `Nat.clog_pos`.
+- **Notes:** The duplicate proof is removed by existing-lemma reuse. These
+  two locations are below the promotion threshold of three occurrences
+  across two files; no new helper, tactic or global attribute is introduced.
+
+### Treated-to-level frame equality — candidate (2026-10-16)
+
+- **Pattern:** Identify true vertices from a guide equality, replace the constant
+  treated radius by the equal level radius, transport disjointness, and change
+  the reference party map.
+- **Seen:** Two occurrences in one file: `levelFrame_eq_treatedFrame_guide`
+  and `treatedFrame_completedGuide_eq_levelFrame` in
+  `TNLean/PEPS/Approximation/DyadicTreatedFrameBoundary.lean`.
+- **Abstraction:** The private `treatedFrame_eq_levelFrame_of_guide_eq` takes
+  the baseline stage, the output stage, an unmodified guide and its equality
+  with the level guide. Both endpoint proofs use it.
+- **Notes:** This private, single-file extraction is below the promotion
+  threshold of three occurrences across two files. It shares the two proofs
+  without a global tactic or attribute; all existing endpoint hypotheses
+  and directions are retained.
+  Affine perturbation avoidance also reuses `eventually_add_ne`, which uses
+  public Mathlib neighborhood lemmas; the similarly named chamber-sampling
+  helper is private to its module.
+
+### Treated birth and death preamble — candidate (2026-10-16)
+
+- **Pattern:** the common setup of a treated birth or death: the scales `n`, `t`, the block
+  corner, two `treatedFrame_spec` extractions, `homogenize_endpointBlocks`, the readings and
+  true-vertex sets, and `BandOperation.treated_frame_facts`.
+- **Seen:** `bandBirth_hasFrameChange` and `bandDeath_hasFrameChange`
+  (`Approximation/DyadicBandStepChanges.lean`). In parent PR #9505 both proofs use
+  `guideFrame_eq_changeOwner`, with separate owner case splits; this PR (#9507)
+  consolidates those splits through `guideFrame_eq_changeOwner_of_ne`.
+- **Abstraction:** a lemma returning the readings, vertex sets and facts for the surrounding
+  guide, if a third occurrence appears.
+
+
+
 ### Supported terms in rectangle coordinates — candidate (2026-10-15)
 
 - **Pattern:** Transport membership in a supported-operator algebra through the
@@ -6304,6 +6427,30 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Notes:** bounds should be supplied before simplifying dependent matrix
   indices; exhaustive enumeration of all bond-coordinate pairs is unnecessary.
 
+### Uniform expansion bounds under chronological composition — candidate (2026-10-15)
+
+- **Pattern:** Induct on the number of stages while retaining the bounds on
+  every stage below the current index; composition forms the conjunction of
+  the preceding bound and the last stage's bound.
+- **Seen:** `OriginalCircuit.isExpansionBounded_sequence` and
+  `OriginalCircuit.isMonomialBounded_sequence` in
+  `TNLean/PEPS/Approximation/OriginalCircuitSequence.lean`, and formerly
+  `DyadicProtocol.isExpansionBounded_chain` and
+  `DyadicProtocol.isMonomialBounded_chain` in
+  `TNLean/PEPS/Approximation/DyadicProtocolCompression.lean`: four
+  occurrences across two files.
+- **Abstraction:** Done (2026-10-16). `DyadicProtocol.chain` is now
+  `OriginalCircuit.sequence` of the protocol changes, and every `chain` lemma
+  (counts, participation, participating sets, expansion and monomial bounds)
+  is a one-line instance of the generic `sequence` lemma. Two inductions
+  remain, both in `OriginalCircuitSequence.lean`. Before adding a further
+  gate-expansion property, derive it from a common occurrence-wise
+  description, as in the existing retained-memory entry.
+- **Notes:** The gate and lifetime sum identities in the same module use the
+  existing `Finset.sum_range_succ`; their elementary induction follows the
+  recorded decision against abstracting finite-sum proof structure. No new
+  tactic or global simplification rule is introduced.
+
 ## Rejected
 
 ### Axiom allow-list fixtures — rejected (2026-10-12)
@@ -8074,9 +8221,45 @@ spectral split → block extraction → MPV calculation → strict bounds
   line comparison above. No new tactic, simp attribute, or proof limit is
   introduced.
 
+- **Initial belt count:** `exists_uniform_initial_belt_card_bound` in
+  `TNLean/PEPS/AreaLaw/Geometry/InitialBeltCount.lean` also uses the sparse
+  cell counts and finite layer support from the shared specification. The
+  original selected cells and their actual run identifiers are retained.
+  This is a fourth direct use, with strict, ordinary, and exact-name imported
+  standard-three verification complete. The finite-prefix mark-count proof
+  calls the weighted estimate; it is not another direct extraction of the
+  chosen-family facts.
+
+### Summing sparse selected layers with a uniform dyadic budget — candidate
+
+- **Pattern:** Choose the polynomial dyadic budget before the geometric data,
+  bound each summand by a nonnegative geometric coefficient times the fixed
+  polynomial-decay term, sum over the actual finite supported layers, factor
+  the coefficient, and apply the numerical budget.
+- **Occurrences:**
+  `exists_uniform_initialRepairStage_weighted_sum_bound` in
+  `TNLean/PEPS/AreaLaw/Geometry/RepairInitialWeightedCount.lean` and
+  `exists_uniform_initial_belt_card_bound` in
+  `TNLean/PEPS/AreaLaw/Geometry/InitialBeltCount.lean`.
+- **Existing abstraction:** `exists_uniform_polynomial_dyadic_sum_bound`
+  already supplies the numerical estimate. Both applications retain the
+  same jointly chosen initial cells; their finite layer sets come from actual
+  carriers or selected-cell support.
+- **Possible next abstraction:** If a third proof repeats the summation step,
+  first consider a lemma in `PolynomialBudget` for a finite sum with a
+  pointwise polynomial-dyadic upper bound and a nonnegative common
+  coefficient. Its budget must still precede the coefficient and all
+  geometric data. No new tactic is needed.
+- **Notes:** The initial-mark application permits signed weights and handles
+  their layer partition before this summation step. Finiteness must be proved
+  before using either finite-support sums or `Nat.card`. The belt count
+  concerns the literal belt summand, and supplies no count of all initial
+  primary identifiers. These are two occurrences across two files; no third
+  occurrence has yet been recorded.
+
 ### Preservation under iterated retention — candidate (2026-10-16)
 
-- **Pattern:** A quantity preserved by one retention step is preserved by every finite iteration. The proofs of remembered-birth, color, and characteristic-length preservation are each `exact Nat.rec rfl (fun _ ih ↦ ih) n`.
-- **Seen:** `TNLean/PEPS/AreaLaw/Geometry/RepairRankZeroAncestry.lean:78`, `:87`, and `:98`, in `repairStage_birth_oldInclusion`, `repairStage_color_oldInclusion`, and `repairStageCharacteristicLength_oldInclusion` respectively. The source-text scan finds exactly these three occurrences.
+- **Pattern:** A quantity preserved by one retention step is preserved by every finite iteration. The proofs of color and characteristic-length preservation are each `exact Nat.rec rfl (fun _ ih ↦ ih) n`; remembered-birth preservation (`repairStage_birth_oldInclusion`, `RepairBirthLatticePoint.lean`) is the same induction written with `induction n`.
+- **Seen:** `TNLean/PEPS/AreaLaw/Geometry/RepairRankZeroAncestry.lean`, in `repairStage_color_oldInclusion` and `repairStageCharacteristicLength_oldInclusion`, and `TNLean/PEPS/AreaLaw/Geometry/RepairBirthLatticePoint.lean`, in `repairStage_birth_oldInclusion`.
 - **Abstraction:** The existing natural-number recursor already expresses the shared induction in one line. No further helper or tactic is proposed.
-- **Notes:** These are three occurrences in one file. They do not meet the promotion threshold of three occurrences across at least two files; the alternative threshold for longer repeated blocks also does not apply.
+- **Notes:** Each occurrence is a one-line induction, so a shared lemma would not shorten the proofs.

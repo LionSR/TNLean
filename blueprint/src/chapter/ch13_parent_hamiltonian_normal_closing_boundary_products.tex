@@ -38,13 +38,12 @@
 
 \begin{proof}
     \leanok
-    For the product indexed by $j$ and $\sigma$, specialize
+    For the product indexed by $j$ and $\sigma$, specializing
     (\ref{eq:boundary_crossing_restriction_match}) at the outside letter
-    $\eta=j$. Take
-    $\rho^+_{j,\sigma}=\tau^+_j(\mu)$ and
-    $\rho^-_{j,\sigma}=\tau^-_j(\mu)$. The complement equations are the two
-    identities of Lemma~\ref{lem:wrapped_middle_backgrounds}. Fix $j$. Applying
-    the first-letter restriction to the displayed equality gives
+    $\eta=j$ and setting $\rho^+_{j,\sigma}=\tau^+_j(\mu)$ and
+    $\rho^-_{j,\sigma}=\tau^-_j(\mu)$ gives the two complement equations by
+    Lemma~\ref{lem:wrapped_middle_backgrounds}. Applying the first-letter
+    restriction at $j$ to the displayed equality gives
     \begin{align}
         \Gamma_{L_0}\!\left(Y_M(\tau^+_j(\mu))A^j\right)
          & =
@@ -129,11 +128,11 @@
 
 \begin{proof}
     \leanok
-    Fix $\eta$ and $j$, and set
-    $Z_{\eta,j} = Y_{M+1-L_0}(\tau^-_\eta(\mu))A^j-A^\mu A^jX$.
-    The hypothesis gives $Z_{\eta,j}A^\sigma=0$ for every $\sigma$ with
-    $|\sigma|=L_0$. Since $A$ is $L_0$-block-injective, the products
-    $A^\sigma$ with $|\sigma|=L_0$ span the full matrix algebra. Applying
+    For fixed $\eta$ and $j$, the difference
+    $Z_{\eta,j} := Y_{M+1-L_0}(\tau^-_\eta(\mu))A^j-A^\mu A^jX$ satisfies
+    $Z_{\eta,j}A^\sigma=0$ for every $\sigma$ with $|\sigma|=L_0$. Since $A$
+    is $L_0$-block-injective, the products $A^\sigma$ with $|\sigma|=L_0$ span
+    the full matrix algebra, so
     Lemma~\ref{lem:padded_complement_annihilation} gives $Z_{\eta,j}=0$.
 \end{proof}
 
@@ -164,17 +163,17 @@
 
 \begin{proof}
     \leanok
-    Fix $\eta$, $j$, and $\sigma$, and set
+    For fixed $\eta$, $j$, and $\sigma$, the difference
     \begin{align}
         Z_{\eta,j,\sigma}
          & =
         Y_{M+1-L_0}(\tau^-_\eta(\mu))A^jA^\sigma
         -
-        A^\mu A^jXA^\sigma.
+        A^\mu A^jXA^\sigma
         \notag
     \end{align}
-    The hypothesis says that $A^\alpha Z_{\eta,j,\sigma}=0$ for every word
-    $\alpha$ of length $L_0$. The left-handed form of
+    satisfies $A^\alpha Z_{\eta,j,\sigma}=0$ for every word $\alpha$ of length
+    $L_0$. The left-handed form of
     Lemma~\ref{lem:padded_complement_annihilation} gives
     $Z_{\eta,j,\sigma}=0$.
 \end{proof}
@@ -428,9 +427,9 @@
 
 \begin{proof}
     \leanok
-    Choose matrices $Y_i(\tau)$ representing the length-$(L_0+1)$
-    restrictions. The one-sided boundary-product lemma gives, for every
-    outside letter $\eta$ and physical letter $j$,
+    For matrices $Y_i(\tau)$ representing the length-$(L_0+1)$ restrictions,
+    the one-sided boundary-product lemma gives, for every outside letter $\eta$
+    and physical letter $j$,
     \begin{align}
         Y_M(\tau^+_\eta(\mu))A^j
          & =
@@ -450,8 +449,7 @@
     Lemma~\ref{lem:boundary_restrictions_from_commutation_one_sided_products}
     gives
     $Y_M(\tau^+_\eta(\mu))A^j = Y_{M+1-L_0}(\tau^-_\eta(\mu))A^j$.
+    As in \cite[lines~2078--2079]{Cirac2021Matrix},
     Lemma~\ref{lem:closed_boundary_restrictions_from_first_letter_products}
-    then identifies the two boundary-crossing restrictions, giving the
-    periodic-boundary comparison of
-    \cite[lines~2078--2079]{Cirac2021Matrix}.
+    then identifies the two boundary-crossing restrictions.
 \end{proof}

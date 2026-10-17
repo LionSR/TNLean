@@ -1,14 +1,14 @@
 \subsection{Physical endpoint string order in the AKLT and cluster states}
 \label{sec:physical_string_order_examples}
 
-The following computations concern the stationary infinite-chain correlator
-of Definition~\ref{def:physical_string_order_param}. They use physical
-endpoint operators on the printed tensors, rather than arbitrary virtual
-boundaries. The middle-string length is finite, but the boundary density
-represents the thermodynamic state; these are not finite periodic-ring
-expectations. They give Examples~1--2 of
-\cite[local TeX lines~392--411]{PerezGarcia2008StringOrder} without invoking
-the stronger one-site injectivity hypotheses of the general virtual-boundary
+For the stationary infinite-chain correlator of
+Definition~\ref{def:physical_string_order_param}, the following computations
+evaluate physical endpoint operators on the printed tensors rather than
+arbitrary virtual boundaries. The middle-string length is finite while the
+boundary density represents the thermodynamic state, distinguishing these
+correlators from finite periodic-ring expectations; as in Examples~1--2 of
+\cite[local TeX lines~392--411]{PerezGarcia2008StringOrder}, they require
+none of the one-site injectivity hypotheses of the general virtual-boundary
 theorems.
 
 \begin{definition}[Physical data of the AKLT string correlator]
@@ -31,10 +31,10 @@ theorems.
     \end{align}
     It is the diagonal physical rephasing $\operatorname{diag}(1,1,-1)$ of
     Definition~\ref{def:aklt_tensor}; this is a unitary basis change, not a
-    virtual gauge. Take
+    virtual gauge. With
     $x=y=S_z=\operatorname{diag}(0,1,-1)$ and
-    $u=e^{i\pi S_z}=\operatorname{diag}(1,-1,-1)$.
-    The rephasing leaves these physical operators unchanged, and the virtual
+    $u=e^{i\pi S_z}=\operatorname{diag}(1,-1,-1)$,
+    the rephasing leaves these physical operators unchanged, and the virtual
     gauge $V=\sigma_z$ implements $u$ on the printed letters.
 \end{definition}
 
@@ -62,8 +62,8 @@ theorems.
     \end{align}
     Thus the unblocked physical endpoints give string order with
     limiting absolute value $4/9$ and a nonscalar physical unitary.
-    The same value holds for the existing representative $A$ of
-    Definition~\ref{def:aklt_tensor}.
+    For the representative $A$ of Definition~\ref{def:aklt_tensor}, the
+    correlator takes the same value.
 \end{theorem}
 \begin{proof}\leanok
     Diagonal insertions are invariant under the physical rephasing. Direct
@@ -119,12 +119,12 @@ theorems.
         S_N(x,y,-\sigma_x) & =0\qquad (N\geq2).
         \notag
     \end{align}
-    Hence no such endpoints give a positive limiting absolute value for
-    this fixed twist. This does not quantify over other possible twists.
     % **Scope restriction (specified twist):** Only u=-sigma_x is excluded;
     % see docs/paper-gaps/pgwsvc08_string_order_virtual_boundary.tex.
-    This scope is recorded in
-    \path{docs/paper-gaps/pgwsvc08_string_order_virtual_boundary.tex}.
+    Hence no such endpoints give a positive limiting absolute value for
+    this fixed twist; as recorded in
+    \path{docs/paper-gaps/pgwsvc08_string_order_virtual_boundary.tex},
+    this exclusion does not quantify over other possible twists.
 \end{theorem}
 \begin{proof}\leanok
     Every $\mathcal E_y(\Id)$ is diagonal. The twist sends $\Id$ to zero,
@@ -143,8 +143,8 @@ theorems.
         MPSTensor.clusterStringTwist_eq_blockKron}
     \leanok
     \uses{def:cluster_tensor_review}
-    Take $x=\sigma_z\otimes\sigma_y$ and
-    $y=\sigma_y\otimes\sigma_z$ on the two endpoint blocks. Blocked index
+    On the two endpoint blocks, let $x=\sigma_z\otimes\sigma_y$ and
+    $y=\sigma_y\otimes\sigma_z$. Blocked index
     $i$ decodes to the ordered word $(i\bmod2,\lfloor i/2\rfloor)$;
     the endpoint coefficient formulas use this order explicitly. On a
     two-site blocked chain the twist is $u\otimes u$.
@@ -204,7 +204,7 @@ theorems.
     \uses{lem:physical_string_scalar_phases, thm:projective_physical_string_order,
         lem:irreducible_twisted_transfer_reduction,
         thm:twisted_peripheral_eigendirection_unique, thm:condC1_imp_condC2}
-    Take $D=2$, $d=4$, $\Lambda=\Id/2$, and
+    For $D=2$, $d=4$, and $\Lambda=\Id/2$, let
     \begin{align}
         A_j & =\sqrt{p_j}\,U_j,
             & (p_0,p_x,p_y,p_z) & =(1/2,1/4,1/6,1/12),\notag             \\
@@ -231,24 +231,24 @@ theorems.
     the identity. Yet $x=y=\Id$ and $u=-\Id$ give $S_N=(-1)^N$.
     The nonzero letter-trace condition forces its eigenmatrix to be nonzero,
     so this tensor refutes the full existential criterion printed in
-    Theorem~1 of~\cite{PerezGarcia2008StringOrder}. It has no physical
+    Theorem~1 of~\cite{PerezGarcia2008StringOrder}; as recorded
+    in~\cite{gap:pgwsvc08_string_order_scalar_phase}, it has no physical
     string order under the explicit projective convention.
-    See~\cite{gap:pgwsvc08_string_order_scalar_phase}.
 
     On the normalized periodic ring, the scalar twist $i\Id$ gives
     $\langle(i\Id)^{\otimes L}\rangle_L=i^L$ whenever the periodic vector
     is nonzero. The twist $-\Id$ has no complex full-ring limit, despite
-    unit magnitude on the eventual nonzero tail. These phase-sensitive
-    statements use the same tensor and the periodic closure of
-    Theorem~\ref{thm:periodic_string_exact_phase}; the qualification of
-    display RL is recorded in~\cite{gap:pgwsvc08_string_order_virtual_boundary}.
+    unit magnitude on the eventual nonzero tail. By the periodic closure of
+    Theorem~\ref{thm:periodic_string_exact_phase} and the qualification of
+    display RL in~\cite{gap:pgwsvc08_string_order_virtual_boundary}, these
+    phase-sensitive statements hold for the same tensor.
     \lean{MPSTensor.stringPhaseTensor_fullRing_I_eq_pow,
         MPSTensor.stringPhaseTensor_fullRing_neg_one_not_tendsto}
 \end{example}
 \subsection{Exact periodic symmetry overlaps in the AKLT and cluster states}
 
-The periodic examples in~\cite[lines~392--411]{PerezGarcia2008StringOrder}
-concern the full-ring observable of
+In~\cite[lines~392--411]{PerezGarcia2008StringOrder}, the periodic examples
+evaluate the full-ring observable of
 Definition~\ref{def:source_periodic_string_overlap}. The following formulas
 include the short lengths under the trace convention for the periodic vector.
 
@@ -274,10 +274,10 @@ include the short lengths under the trace convention for the periodic vector.
          & =\begin{cases}0,&L=1,\\1,&L\ne1.\end{cases}
         \label{eq:aklt_periodic_full_ring}
     \end{align}
-    Thus $L=1$ is exactly the zero-vector exception. Length zero has
-    coefficient two, and every length at least two has positive squared norm.
-    This makes explicit the admissible lengths in the value $R_L(u)=1$
-    stated in~\cite[line~399]{PerezGarcia2008StringOrder}.
+    Thus $L=1$ is exactly the zero-vector exception: length zero has
+    coefficient two, and every length at least two has positive squared norm,
+    making explicit the admissible lengths for the overlap $R_L(u)=1$
+    of~\cite[line~399]{PerezGarcia2008StringOrder}.
 \end{theorem}
 \begin{proof}
     \uses{thm:aklt_physical_string_order_value, thm:periodic_string_exact_phase,
@@ -302,7 +302,8 @@ include the short lengths under the trace convention for the periodic vector.
     \uses{def:cluster_tensor_review, def:source_periodic_string_overlap}
     Let $A^0=\ket0\bra+$ and $A^1=\ket1\bra-$ be the printed cluster tensor,
     and let $u=-\sigma_x$. The periodic vector is nonzero for every
-    $L\geq0$, with
+    $L\geq0$, giving the overlap stated
+    in~\cite[line~411]{PerezGarcia2008StringOrder}:
     \begin{align}
         Z_L=\|\Phi_L(A)\|^2
                                        & =\begin{cases}4,&L=0,\\1,&L\geq1,\end{cases}
@@ -313,7 +314,6 @@ include the short lengths under the trace convention for the periodic vector.
     At positive lengths the vector is the cyclic product of controlled-$Z$
     gates applied to $\ket+^{\otimes L}$. This convention gives $\ket-$ at
     length one and $\ket+\otimes\ket+$ at length two.
-    The overlap is the value stated in~\cite[line~411]{PerezGarcia2008StringOrder}.
 \end{theorem}
 \begin{proof}
     \uses{thm:cluster_one_site_physical_string_obstruction,

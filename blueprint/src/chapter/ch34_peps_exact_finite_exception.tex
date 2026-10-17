@@ -34,15 +34,19 @@ Hermitian; individual terms need not be. The remaining conditions are
 \end{theorem}
 \begin{proof}
     \leanok
-    Keep the same PEPS and phase. For every edge, $D_e\le CL^c\le C'L^c$
-    because $L^c\ge0$. The normalized vector and its error are unchanged.
+    Retaining the same PEPS and phase preserves the normalized vector and its
+    approximation error, while $L^c\ge0$ implies $D_e\le CL^c\le C'L^c$ on
+    every edge.
 \end{proof}
 
 \begin{theorem}[A uniform prefactor for every size]
     \label{thm:peps_remove_finite_exceptions}
     \lean{TNLean.PEPS.Approximation.exists_uniform_approximation_of_sufficiently_large}
     \leanok
-    Fix integers $q\ge1$ and $L_0\ge0$, real $J,\Delta,C$, and $c\ge0$.
+    Following the finite-size argument
+    in~\cite[Section~8]{OpenAI2026PolynomialPEPS}
+    (\texttt{07-assembly.tex}, lines 203--214), fix integers $q\ge1$ and
+    $L_0\ge0$, real $J,\Delta,C$, and $c\ge0$.
     Suppose $\mathcal A_{C,c}(L,\Omega)$ holds for every integer
     $L\ge\max\{2,L_0\}$ and every
     $(H,E_0,\Omega)\in\mathcal G_{q,J,\Delta}(L)$.
@@ -50,19 +54,16 @@ Hermitian; individual terms need not be. The remaining conditions are
     $\mathcal A_{C',c}(L,\Omega)$ holds for every integer $L\ge2$ and every
     $(H,E_0,\Omega)\in\mathcal G_{q,J,\Delta}(L)$.
     The exponent $c$ is unchanged, and $C'$ is independent of $L,H,E_0,\Omega$.
-    This is the finite-size argument
-    in~\cite[Section~8]{OpenAI2026PolynomialPEPS}
-    (\texttt{07-assembly.tex}, lines 203--214).
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:peps_uniform_small_size_approximation,thm:peps_prefactor_monotone}
-    Theorem~\ref{thm:peps_uniform_small_size_approximation} gives a positive
-    $C'\ge C$ covering all $2\le L<L_0$ and all unit vectors. Its choice is
-    $C'=\max\{C,q^{L_0^2}\}$. For $L<L_0$, apply that theorem using
-    $\|\Omega\|=1$ from~(\ref{eq:peps_finite_ground}). For $L\ge L_0$,
-    apply the assumed approximation and
-    Theorem~\ref{thm:peps_prefactor_monotone}. Both cases use the same $C'$.
+    Theorem~\ref{thm:peps_uniform_small_size_approximation} provides the
+    positive constant $C'=\max\{C,q^{L_0^2}\}\ge C$ covering all $2\le L<L_0$
+    and all unit vectors. When $L<L_0$, that theorem applies directly because
+    $\|\Omega\|=1$ by~(\ref{eq:peps_finite_ground}); when $L\ge L_0$, the
+    assumed approximation combines with Theorem~\ref{thm:peps_prefactor_monotone}
+    at the same prefactor $C'$.
 \end{proof}
 
 \begin{theorem}[Equivalence with the sufficiently large size statement]
@@ -90,13 +91,13 @@ Hermitian; individual terms need not be. The remaining conditions are
 \begin{proof}
     \leanok
     \uses{thm:peps_remove_finite_exceptions}
-    Assertion~(\ref{eq:peps_finite_uniform}) gives
+    Assertion~(\ref{eq:peps_finite_uniform}) implies
     (\ref{eq:peps_finite_large}) with $L_0=0$ and the same constants.
-    Conversely, fix $q,J,\Delta$ and choose $C,c,L_0$ from
-    (\ref{eq:peps_finite_large}).
-    Theorem~\ref{thm:peps_remove_finite_exceptions} produces one positive
-    $C'\ge C$ for every $L\ge2$, with the same positive exponent $c$.
-    These constants prove~(\ref{eq:peps_finite_uniform}).
+    Conversely, for fixed $q,J,\Delta$ and constants $C,c,L_0$ satisfying
+    (\ref{eq:peps_finite_large}),
+    Theorem~\ref{thm:peps_remove_finite_exceptions} produces a single positive
+    prefactor $C'\ge C$ valid for every $L\ge2$ with the same positive exponent
+    $c$, establishing~(\ref{eq:peps_finite_uniform}).
 \end{proof}
 
 % The equivalence does not prove either existence assertion on its own.
@@ -124,8 +125,8 @@ Theorem~\ref{thm:openai_polynomial_peps}, not that theorem.
 \end{theorem}
 \begin{proof}
     \leanok
-    Keep the same PEPS and phase; $CL^c\le CL^{c'}$ because $L\ge1$ and
-    $C\ge0$.
+    Retaining the same PEPS and phase preserves the approximation error, while
+    $L\ge1$ and $C\ge0$ yield $CL^c\le CL^{c'}$.
 \end{proof}
 
 \begin{definition}[Compressed dyadic operator networks for large sizes]
@@ -133,10 +134,14 @@ Theorem~\ref{thm:openai_polynomial_peps}, not that theorem.
     \lean{TNLean.PEPS.Approximation.LargeSizeDyadicOperatorNetwork}
     \leanok
     \uses{def:peps_dyadic_hv_routing, def:peps_party_operator_fix_input}
-    Say that compressed dyadic operator networks exist for large sizes if for
-    every integer $q\ge2$ and all reals
-    $J,\Delta>0$ there are reals $C,C_1,k$ and natural numbers $B,\Delta_0,c,L_0$
-    such that for every integer $L\ge\max\{2,L_0\}$ and every
+    Capturing the conclusion of~\cite[Section~8.1]{OpenAI2026PolynomialPEPS}
+    (\texttt{07-assembly.tex}, lines 53--63), together with the anchors of
+    lines 102--114 and the network properties of Proposition~7.1 used in the
+    proof of Lemma~8.2 (lines 128--131), compressed dyadic operator networks
+    exist for large sizes if for every integer $q\ge2$ and all reals
+    $J,\Delta>0$ there are reals $C,C_1,k$ and natural numbers
+    $B,\Delta_0,c,L_0$, independent of $L,H,E_0,\Omega$, such that for every
+    integer $L\ge\max\{2,L_0\}$ and every
     $(H,E_0,\Omega)\in\mathcal G_{q,J,\Delta}(L)$ there is an operator party
     network with the following properties. Every party is attached to a dyadic
     block inside the padded square, with at most $B$ parties per block; every
@@ -148,10 +153,6 @@ Theorem~\ref{thm:openai_polynomial_peps}, not that theorem.
         \bigl\lVert\sigma-|\Omega\rangle\langle\Omega|\bigr\rVert_1
          & \le CL^{-5}.
     \end{align}
-    The constants are independent of $L,H,E_0,\Omega$. This is the conclusion
-    of~\cite[Section~8.1]{OpenAI2026PolynomialPEPS} (\texttt{07-assembly.tex},
-    lines 53--63), with the anchors of lines 102--114 and the network properties
-    of Proposition~7.1 used in the proof of Lemma~8.2 (lines 128--131).
 \end{definition}
 
 \begin{theorem}[Uniform approximation from compressed dyadic operator networks]
@@ -159,21 +160,21 @@ Theorem~\ref{thm:openai_polynomial_peps}, not that theorem.
     \lean{TNLean.PEPS.Approximation.polynomialPEPSApproximation_of_largeSizeDyadicOperatorNetwork}
     \leanok
     \uses{def:peps_large_size_dyadic_operator_network}
-    If the assertion of
+    Following~\cite[Section~8]{OpenAI2026PolynomialPEPS}
+    (\texttt{07-assembly.tex}, lines 53--214) once the compressed network has
+    been obtained, if the assertion of
     Definition~\ref{def:peps_large_size_dyadic_operator_network} holds, then
     the uniform polynomial approximation assertion~(\ref{eq:peps_finite_uniform})
     holds: for every $q\ge2$ and $J,\Delta>0$ there are $C',c'>0$ such that
     $\mathcal A_{C',c'}(L,\Omega)$ for every $L\ge2$ and every
-    $(H,E_0,\Omega)\in\mathcal G_{q,J,\Delta}(L)$. This is the argument
-    of~\cite[Section~8]{OpenAI2026PolynomialPEPS} (\texttt{07-assembly.tex},
-    lines 53--214) after the compressed network has been obtained.
+    $(H,E_0,\Omega)\in\mathcal G_{q,J,\Delta}(L)$.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:peps_party_column_routing_polynomial, thm:peps_exponent_monotone, thm:peps_approximation_iff_large}
     By Theorem~\ref{thm:peps_approximation_iff_large} it suffices to treat large
-    $L$. Fix $q,J,\Delta$ and take the constants of the assumption. Replace
-    $C_1$ by $\max\{C_1,1\}$ and $k$ by $\max\{k,0\}$; the link bound persists
+    $L$. For fixed $q,J,\Delta$ and the constants of the assumption, replacing
+    $C_1$ by $\max\{C_1,1\}$ and $k$ by $\max\{k,0\}$ preserves the link bound
     since $L\ge1$. For $L\ge\max\{2,L_0,2C\}$ one has $2C\le L\le L^4$, hence
     $2CL^{-5}\le L^{-1}\le1/2$ and $CL^{-5}<1$.
     Theorem~\ref{thm:peps_party_column_routing_polynomial} with $\eta=CL^{-5}$
@@ -195,8 +196,9 @@ conditional form of Theorem~\ref{thm:openai_polynomial_peps}.
 \begin{lemma}[Operator party networks from compressed protocol densities]
     \label{lem:peps_protocol_compressed_party_network}
     \lean{TNLean.PEPS.Approximation.DyadicProtocol.exists_partyNetwork_of_contractedOperator,
-        TNLean.PEPS.Approximation.DyadicProtocol.toGateMapConstruction,
-        TNLean.PEPS.Approximation.DyadicProtocol.physicalDensity_toGateMapConstruction,
+        TNLean.PEPS.Approximation.DyadicProtocol.toDistributedConstruction,
+        TNLean.PEPS.Approximation.DyadicProtocol.toDistributedConstruction_circuit_induction,
+        TNLean.PEPS.Approximation.DyadicProtocol.physicalDensity_toDistributedConstruction,
         TNLean.PEPS.Approximation.DyadicProtocol.physicalOut_foldVertex}
     \leanok
     \uses{def:peps_dyadic_protocol, def:peps_dyadic_hv_routing,
@@ -204,8 +206,8 @@ conditional form of Theorem~\ref{thm:openai_polynomial_peps}.
     Let a protocol satisfy the bounds of
     Definition~\ref{def:peps_dyadic_protocol} with $C\ge0$ on a square of side
     $L\ge1$, for a unit vector $\Omega$. Composing its changes gives one
-    distributed construction, with the gate operators equal to their recorded
-    expansions, whose physical density is that of the final vector, the
+    distributed construction, with the recorded expansions of its gates, whose
+    physical density is that of the final vector, the
     physical configurations of the parties being identified with the
     configurations of the square. Let $\tau$ be a distributed operator contraction
     on the parties of the protocol with
@@ -237,7 +239,8 @@ conditional form of Theorem~\ref{thm:openai_polynomial_peps}.
 
 \begin{theorem}[Compressed dyadic operator networks from the protocol assertion]
     \label{thm:peps_large_size_network_from_protocol}
-    \lean{TNLean.PEPS.Approximation.largeSizeDyadicOperatorNetwork_of_largeSizeDyadicProtocolConsequences}
+    \lean{TNLean.PEPS.Approximation.largeSizeDyadicOperatorNetwork_of_largeSizeDyadicProtocolConsequences,
+        TNLean.PEPS.PairEffect.OriginalCircuit.IsExpansionBounded.isTermwiseBounded}
     \leanok
     \uses{def:peps_dyadic_protocol, def:peps_large_size_dyadic_operator_network}
     If the protocol assertion of Definition~\ref{def:peps_dyadic_protocol} holds,
@@ -246,16 +249,17 @@ conditional form of Theorem~\ref{thm:openai_polynomial_peps}.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:peps_uniform_approximate_operator_network, lem:peps_protocol_compressed_party_network}
-    Fix $q,J,\Delta$ and take the constants $C,b,k,r,L_0$ of the assertion. The
-    protocols of all sides $L\ge\max\{2,L_0\}$, Hamiltonians and ground vectors
-    form one family of distributed constructions indexed by their size. In this
+    \uses{thm:peps_distributed_construction_compression, lem:peps_protocol_compressed_party_network}
+    For fixed $q,J,\Delta$ and the constants $C,b,k,r,L_0$ of the assertion, the
+    protocols across all sides $L\ge\max\{2,L_0\}$, Hamiltonians, and ground
+    vectors form a single family of distributed constructions indexed by their
+    size. In this
     family the number of nonprivate gates is at most $bCL^3$, each gate involves
     at most $b$ parties, each party participates in at most $b$ gates, every
     physical dimension is at most $q$, and every gate is exactly the sum of its
     recorded expansion, with at most $CL^k$ monomials, coefficients of modulus at
-    most $CL^k$, and at most $r$ pair effects per monomial. These expansions serve
-    at every accuracy. Theorem~\ref{thm:peps_uniform_approximate_operator_network}
+    most $CL^k$, since their absolute values sum to at most $CL^k$, and at most $r$
+    pair effects per monomial. Theorem~\ref{thm:peps_distributed_construction_compression}
     with $p=5$ then gives constants $C_p,\alpha$, chosen before the family member,
     and for each protocol a distributed operator contraction within $L^{-5}$ of its
     physical density, with link alphabets of size at most $C_pL^\alpha$, at most
@@ -282,6 +286,25 @@ conditional form of Theorem~\ref{thm:openai_polynomial_peps}.
 \begin{proof}
     \leanok
     \uses{thm:peps_large_size_network_from_protocol, thm:peps_ground_state_approximation_conditional}
-    Combine Theorem~\ref{thm:peps_large_size_network_from_protocol} with
-    Theorem~\ref{thm:peps_ground_state_approximation_conditional}.
+    Theorem~\ref{thm:peps_large_size_network_from_protocol} and
+    Theorem~\ref{thm:peps_ground_state_approximation_conditional} together yield
+    the uniform polynomial approximation.
+\end{proof}
+
+\begin{theorem}[Uniform approximation from the patch bound]
+    \label{thm:peps_ground_state_approximation_from_patch_bound}
+    \lean{TNLean.PEPS.Approximation.polynomialPEPSApproximation_of_adaptivePatchConstraint}
+    \leanok
+    \uses{def:peps_adaptive_patch_constraint}
+    If the adaptive patch constraint of Proposition~4.1 holds, then the uniform
+    polynomial approximation assertion~(\ref{eq:peps_finite_uniform}) holds.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_protocol_from_angular_and_patch_bounds,
+        cor:peps_ground_state_approximation_from_protocol}
+    Theorem~\ref{thm:peps_protocol_from_angular_and_patch_bounds} gives the
+    protocol assertion of Definition~\ref{def:peps_dyadic_protocol}, and
+    Corollary~\ref{cor:peps_ground_state_approximation_from_protocol} turns it
+    into the uniform polynomial approximation.
 \end{proof}

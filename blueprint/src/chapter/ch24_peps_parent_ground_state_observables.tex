@@ -7,14 +7,14 @@
     For each native plaquette $R_v$, let $P_v\geq0$
     have kernel equal to the image of the regional PEPS map, and put
     $H=\sum_v(P_v\otimes\mathbf1_{R_v^c})$.
-    Every vector $\psi\in\ker H$, including zero, admits coefficients
+    In the coefficient form of \cite[Theorem~5.7]{Schuch2010PEPS}
+    for this finite regular-torus setting,
+    every vector $\psi\in\ker H$, including zero, admits coefficients
     $\mu_{g,h}\in\mathbb C$ such that
     \begin{align}
         \psi & =\sum_{gh=hg}\mu_{g,h}\lvert A;(g,h)\rangle.
         \label{eq:peps_parent_vector_coefficients}
     \end{align}
-    This is the coefficient form of \cite[Theorem~5.7]{Schuch2010PEPS}
-    in the stated finite regular-torus setting.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_regular_torus_parent_ground_space}
@@ -46,14 +46,13 @@
         S(\rho_R)                 & =(b-1)\log|G|,
                                   & S_\alpha(\rho_R)              & =(b-1)\log|G|.
     \end{align}
-    The R\'enyi equality holds for every finite real $\alpha\geq0$.
-    This is \cite[Theorem~6.9]{Schuch2010PEPS} for all parent
-    ground states in the stated geometry.
+    In this parent-ground-state form of \cite[Theorem~6.9]{Schuch2010PEPS},
+    the R\'enyi equality holds for every finite real $\alpha\geq0$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_parent_ground_vector_coefficients,
         thm:peps_torus_simply_connected_physical_density}
-    Insert (\ref{eq:peps_parent_vector_coefficients}) into $M_\psi$.
+    Inserting (\ref{eq:peps_parent_vector_coefficients}) into $M_\psi$ expresses it as a commuting-closure cut matrix.
     Restricting an arbitrary global configuration to $R$ and $R^c$
     and reassembling it recovers that configuration, so $M_\psi=0$
     would imply $\psi=0$. The common-density theorem for nonzero
@@ -78,18 +77,17 @@
     \end{align}
     In particular, the complement of the nonwrapping rectangle of sites
     with both coordinates nonzero is $\{(x,y):x=0\lor y=0\}$.
-    A unitary on these two width-one stripes relates any two normalized
-    nonzero parent ground states. These are the conclusions of
-    \cite[Theorem~6.7 and Corollary~6.8]{Schuch2010PEPS} in the stated scope.
+    As in \cite[Theorem~6.7 and Corollary~6.8]{Schuch2010PEPS}, a unitary on these two width-one stripes relates any two normalized
+    nonzero parent ground states.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_parent_ground_vector_coefficients,
         thm:peps_torus_simply_connected_physical_local_equivalence,
         thm:peps_torus_stripe_local_equivalence}
-    Expand both ground vectors using
-    (\ref{eq:peps_parent_vector_coefficients}). Their cuts are nonzero
-    by restriction and reassembly. Apply the local-equivalence and
-    stripe-unitary theorems to these derived expansions.
+    Expanding both ground vectors by
+    (\ref{eq:peps_parent_vector_coefficients}) produces nonzero cuts
+    by restriction and reassembly, to which the local-equivalence and
+    stripe-unitary theorems apply.
 \end{proof}
 
 \begin{theorem}[Boundary rank and zero-order entropy of every regular parent ground state]%
@@ -108,14 +106,13 @@
         \operatorname{rank}\rho_R & =|G|^{b-1},
                                   & S_0(\rho_R) & =\log\operatorname{rank}\rho_R=(b-1)\log|G|.
     \end{align}
-    Only $G$-injectivity is required. This is
-    \cite[Corollary~6.10]{Schuch2010PEPS} for all parent ground
-    states in the stated regular native-torus scope.
+    As in \cite[Corollary~6.10]{Schuch2010PEPS} for this regular native-torus scope,
+    only $G$-injectivity is required.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_parent_ground_vector_coefficients,
         thm:peps_regular_ginjective_simply_connected_entropy}
-    Substitute (\ref{eq:peps_parent_vector_coefficients}) into the
-    physical coefficient matrix and apply the rank and zero-order
-    entropy theorem to the resulting nonzero closure superposition.
+    Substituting (\ref{eq:peps_parent_vector_coefficients}) into the
+    physical coefficient matrix expresses $\psi$ as a nonzero closure superposition, to which the rank and zero-order
+    entropy theorem applies.
 \end{proof}

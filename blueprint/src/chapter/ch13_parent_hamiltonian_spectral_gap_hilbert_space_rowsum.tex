@@ -29,10 +29,10 @@
 
 \begin{proof}
     \leanok
-    This is an immediate unraveling of the definitions: both constructions are
-    obtained from the same parent Hamiltonian by conjugating with the canonical
-    identification between the site space and the $\ell^2$ space, so
-    the ground space is precisely the kernel after this identification.
+    Both constructions are obtained from the same parent Hamiltonian by
+    conjugating with the coordinate identification between the site space and
+    the $\ell^2$ space, so the ground space is the kernel after this
+    identification.
 \end{proof}
 
 \begin{lemma}[Membership criterion under the canonical $\ell^2$ identification]
@@ -102,10 +102,10 @@
 
 \begin{proof}
     \leanok
-    Unfold the Hilbert-space local term and compare it
-    configuration-by-configuration with the cyclic restrictions. The $d^{-L}$
-    factor compensates for the $d^L$ choices of the window coordinates in the
-    ambient configuration parameter $\tau$.
+    Unfolding the Hilbert-space local term and comparing it
+    configuration-by-configuration with the cyclic restrictions gives the
+    formula, where the $d^{-L}$ factor compensates for the $d^L$ choices of
+    the window coordinates in the ambient configuration parameter $\tau$.
 \end{proof}
 
 \begin{lemma}[Positivity of the Hilbert-space Hamiltonian]
@@ -120,10 +120,10 @@
 
 \begin{proof}
     \leanok
-    Apply the averaging formula (\ref{eq:ph_cyclic_averaging}):
+    By the averaging formula (\ref{eq:ph_cyclic_averaging}),
     $h_{i,\mathrm{ES}}$ is a non-negative scalar multiple of a finite sum of
-    positive conjugates of $P_L^{\mathrm{ES}}(A)$, hence is itself positive.
-    Summing over $i$ yields positivity of $H_{N,\mathrm{ES}}$.
+    positive conjugates of $P_L^{\mathrm{ES}}(A)$, hence is itself positive;
+    summing over $i$ yields positivity of $H_{N,\mathrm{ES}}$.
 \end{proof}
 
 \begin{lemma}[Hilbert-space local terms are symmetric projections]
@@ -221,11 +221,12 @@
 \begin{proof}
     \leanok
     \uses{def:restrict_last, def:restrict_first, def:tail_restrict_parent, rem:euclidean_local_projector_ingredients}
-    Expand the restriction maps on a configuration. At site $0$, cyclic order
-    is ordinary order and fixing the complement fixes the final coordinate.
-    A one-site prefix is its unique coordinate, which gives the middle identity.
-    If $L>0$, cyclic restriction beginning at site $1$ fixes the first coordinate
-    and preserves the order of the remaining $L$ coordinates.
+    Expanding the restriction maps on a configuration shows that at site $0$,
+    cyclic order is ordinary order and fixing the complement fixes the final
+    coordinate. A one-site prefix is its unique coordinate, which gives the
+    middle identity. If $L>0$, cyclic restriction beginning at site $1$ fixes
+    the first coordinate and preserves the order of the remaining $L$
+    coordinates.
 \end{proof}
 
 \begin{theorem}[Adjacent three-site kernels and excitation projections]
@@ -276,14 +277,14 @@
 
 \begin{proof}
     \leanok
-    Let $e_N$ be the canonical $\ell^2$ identification from the Hilbert-space
+    Let $e_N$ be the coordinate identification from the Hilbert-space
     model to the coefficient space. Since $H_N(A,L)$ is the $e_N$-conjugate of
     $H_{N,L}^{\mathrm{ES}}(A)$, the hypothesis gives
     \begin{align}
         H_{N,L}^{\mathrm{ES}}(A)(e_N^{-1}\psi)
          & =e_N^{-1}(H_N(A,L)\psi) =0. \notag
     \end{align}
-    Put $P_i=h_{i,\mathrm{ES}}$ and $H=\sum_iP_i$. If $Hv=0$, then
+    For $P_i=h_{i,\mathrm{ES}}$ and $H=\sum_iP_i$, the condition $Hv=0$ gives
     \begin{align}
         0
          & =\re\langle Hv,v\rangle =\sum_i\re\langle P_i v,v\rangle =\sum_i\|P_i v\|^2. \notag
@@ -296,7 +297,7 @@
     with the conditions
     $R_{i,\tau}(e_N^{-1}\psi)\in G_L^{\mathrm{ES}}(A)$ for all $i$ and $\tau$.
     Pulling these conditions back through $e_N$ gives
-    $R_{i,\tau}\psi\in G_L(A)$ for all $i$ and $\tau$, which are exactly the
+    $R_{i,\tau}\psi\in G_L(A)$ for all $i$ and $\tau$, which are the
     cyclic-window defining equations of $G_L^{(N)}(A)$.
 \end{proof}
 
@@ -533,7 +534,7 @@
 
 \begin{proof}
     \leanok
-    Put $x=P_Uv$. Since the common intersection is contained in $U$, the
+    For $x=P_Uv$, since the common intersection is contained in $U$, the
     projection preserves orthogonality to $U\cap V$. Thus
     $x\in U\cap(U\cap V)^\perp$, and
     $\langle x,v\rangle=\langle x,x\rangle=\|x\|^2$. The Friedrichs bound gives
@@ -557,8 +558,9 @@
 
 \begin{proof}
     \leanok
-    The vector $P_Vv$ belongs to $V$ and remains orthogonal to $U\cap V$.
-    Apply Lemma~\ref{lem:two_projection_friedrichs_compression}.
+    Because the vector $P_Vv$ belongs to $V$ and remains orthogonal to
+    $U\cap V$, Lemma~\ref{lem:two_projection_friedrichs_compression} yields
+    the bound.
 \end{proof}
 
 \begin{lemma}[Directional compression on a reduced projection range]
@@ -599,8 +601,8 @@
 
 \begin{proof}
     \leanok
-    Apply Lemma~\ref{lem:two_projection_friedrichs_directional} to the two
-    subspaces $K^\perp$ and $L^\perp$.
+    Applying Lemma~\ref{lem:two_projection_friedrichs_directional} to the two
+    subspaces $K^\perp$ and $L^\perp$ gives the bound.
 \end{proof}
 
 \begin{remark}[Projection-geometry identities for row-sum arguments]
@@ -656,8 +658,8 @@
 
 \begin{proof}
     \leanok
-    Expand $\re\langle Hv,Hv\rangle$ as an ordered double sum.
-    Symmetric idempotence identifies each diagonal term with
+    Expanding $\re\langle Hv,Hv\rangle$ as an ordered double sum,
+    symmetric idempotence identifies each diagonal term with
     $\re\langle P_i v,v\rangle$, while the row-summable ordered
     cross-term bounds control the off-diagonal contribution by
     $-(1-\gamma)\sum_i\re\langle P_i v,v\rangle$.
@@ -685,11 +687,11 @@
 
 \begin{proof}
     \leanok
-    Expand $\re\langle Hv,Hv\rangle$ as an ordered double sum. The
+    Expanding $\re\langle Hv,Hv\rangle$ as an ordered double sum, the
     anticommutator bound controls the sum of each ordered term with its reversed
     term. The row and column estimates bound the coefficient-weighted diagonal
-    contribution by twice $\sum_i\re\langle P_i v,v\rangle$; after
-    dividing by two, the same quadratic-form estimate follows.
+    contribution by twice $\sum_i\re\langle P_i v,v\rangle$; dividing by two
+    yields the quadratic-form estimate.
 \end{proof}
 
 \begin{lemma}[Finite-overlap projection anticommutator reduction]
@@ -714,11 +716,12 @@
 
 \begin{proof}
     \leanok
-    Choose $c_{ij}=1/m$ on interacting pairs and $c_{ij}=0$ otherwise. The row
+    Setting $c_{ij}=1/m$ on interacting pairs and $c_{ij}=0$ otherwise, the row
     and column cardinality bounds give the corresponding coefficient sums, and
     the noninteracting anticommutator non-negativity yields the
-    zero-coefficient estimates. Apply
-    Lemma~\ref{lem:anticommutator_projection_rowsum_reduction}.
+    zero-coefficient estimates, so
+    Lemma~\ref{lem:anticommutator_projection_rowsum_reduction} gives the
+    quadratic-form bound.
 \end{proof}
 
 \begin{lemma}[Finite-overlap projection row-sum reduction]
@@ -740,10 +743,11 @@
 
 \begin{proof}
     \leanok
-    Choose $c_{ij}=1/m$ on interacting pairs and $c_{ij}=0$ otherwise. The row
-    cardinality bound gives $\sum_{j\ne i}c_{ij}\le1$; noninteracting
-    nonnegativity yields the zero-coefficient cross-term estimates. Apply
-    Lemma~\ref{lem:ordered_projection_rowsum_reduction}.
+    Setting $c_{ij}=1/m$ on interacting pairs and $c_{ij}=0$ otherwise, the row
+    cardinality bound gives $\sum_{j\ne i}c_{ij}\le1$ and noninteracting
+    nonnegativity yields the zero-coefficient cross-term estimates, so
+    Lemma~\ref{lem:ordered_projection_rowsum_reduction} gives the
+    quadratic-form bound.
 \end{proof}
 
 \begin{lemma}[Finite-overlap projection norm-compression reduction]
@@ -771,12 +775,13 @@
 \begin{proof}
     \leanok
     \uses{lem:finite_overlap_projection_rowsum_reduction, rem:projection_geometry_rowsum_identities}
-    Cauchy--Schwarz and symmetric idempotence turn the norm-compression estimate
-    into
+    The Cauchy--Schwarz inequality and symmetric idempotence turn the
+    norm-compression estimate into
     $\re\langle P_i v,P_jv\rangle
         \ge-(1-\gamma)m^{-1}\re\langle P_iv,v\rangle$.
-    If a separate coefficient $\eta$ is used, the assumption
+    When a separate coefficient $\eta$ is used, the assumption
     $\eta\le(1-\gamma)/m$ first weakens that estimate to
-    (\ref{eq:ph_finite_overlap_norm_compression}). The finite-overlap row-sum
-    reduction then applies. For the strict form, take $\gamma=1-\eta m$.
+    (\ref{eq:ph_finite_overlap_norm_compression}), and the finite-overlap
+    row-sum reduction then applies; setting $\gamma=1-\eta m$ gives the strict
+    form.
 \end{proof}
