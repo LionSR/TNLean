@@ -56,7 +56,7 @@ private def extendRegions (X : Fin m → Finset (Vertex L)) (k : ℕ) :
 
 private theorem extendRegions_fin (X : Fin m → Finset (Vertex L)) (j : Fin m) :
     extendRegions X j = X j := by
-  simp only [extendRegions, dif_pos j.isLt]
+  simp only [extendRegions, dite_eq_left j.isLt]
 
 /-- The supplied finite regions in integer-square coordinates, extended by empty
 regions only to meet the existing natural-indexed ordered-chain API. -/
@@ -139,14 +139,39 @@ theorem squareAreaLawState_eq_relabelVector (Ω : State L q) :
 private def extendedMatrices (F : FilterFamily q m X) :
     (j : Fin m) → Matrix (Entropy.RegionConfig (fun _ : Vertex L ↦ q) (extendRegions X j))
       (Entropy.RegionConfig (fun _ : Vertex L ↦ q) (extendRegions X j)) ℂ :=
-  fun j ↦ by simpa only [extendRegions_fin] using (F j).matrix
+  fun j x y ↦ (F j).matrix
+    (fun v ↦ x ⟨v.1, (extendRegions_fin X j).symm ▸ v.2⟩)
+    (fun v ↦ y ⟨v.1, (extendRegions_fin X j).symm ▸ v.2⟩)
+
+private theorem localLift_extendedMatrices (F : FilterFamily q m X) (j : Fin m) :
+    Entropy.localLift (extendRegions X j) (extendedMatrices F j) =
+      Entropy.localLift (X j) (F j).matrix := by
+  ext x y
+  simp only [Entropy.localLift_apply, extendedMatrices, extendRegions_fin]
+
+private theorem reindex_extendedMatrices (F : FilterFamily q m X) (j : Fin m)
+    (hD : ∀ v, v ∈ extendRegions X j ↔
+      AreaLaw.rectangleSiteEquiv L L v ∈ canonicalRegions X j) :
+    reindex
+        (Entropy.regionConfigurationEquiv
+          (n := fun _ : Vertex L ↦ q)
+          (n' := fun _ : AreaLaw.Site (AreaLaw.rectangularDomain L L) ↦ q)
+          (extendRegions X j) (canonicalRegions X j)
+          (AreaLaw.rectangleSiteEquiv L L) hD (fun _ ↦ Equiv.refl (Fin q)))
+        (Entropy.regionConfigurationEquiv
+          (n := fun _ : Vertex L ↦ q)
+          (n' := fun _ : AreaLaw.Site (AreaLaw.rectangularDomain L L) ↦ q)
+          (extendRegions X j) (canonicalRegions X j)
+          (AreaLaw.rectangleSiteEquiv L L) hD (fun _ ↦ Equiv.refl (Fin q)))
+        (extendedMatrices F j) = canonicalMatrices F j := by
+  ext x y
+  rfl
 
 private theorem output_eq_extended_chain (F : FilterFamily q m X) (Ω : State L q) :
     output F Ω = toEuclideanLin
       (Entropy.liftProd (Entropy.chainList (extendRegions X) (extendedMatrices F)
         fun _ ↦ True)) Ω := by
-  simpa only [output, asMap, liftLocal_eq_localLift, extendedMatrices,
-    extendRegions_fin] using
+  simpa only [output, asMap, liftLocal_eq_localLift, localLift_extendedMatrices] using
     Entropy.foldl_localLift_eq_liftProd_chainList (extendRegions X) (extendedMatrices F) Ω
 
 /-- The actual adapted ascending output equals the canonical reverse-product action.
@@ -162,7 +187,7 @@ theorem squareAreaLawState_output (F : FilterFamily q m X) (Ω : State L q) :
       v ∈ extendRegions X k ↔
         AreaLaw.rectangleSiteEquiv L L v ∈ canonicalRegions X k := by
     simp [canonicalRegions]
-  simpa only [extendedMatrices, extendRegions_fin, canonicalMatrices, regionEquiv] using
+  simpa only [reindex_extendedMatrices] using
     Entropy.relabelVector_liftProd_chainList
       (n := fun _ : Vertex L ↦ q)
       (n' := fun _ : AreaLaw.Site (AreaLaw.rectangularDomain L L) ↦ q)
