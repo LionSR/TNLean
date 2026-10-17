@@ -74,6 +74,7 @@ import TNLean.PEPS.Approximation.ApproximateSourceSampling
 import TNLean.PEPS.Approximation.AuxiliaryRegisterFiniteness
 import TNLean.PEPS.Approximation.Basic
 import TNLean.PEPS.Approximation.BasisMatrixOperator
+import TNLean.PEPS.Approximation.BoundedRadiusSquarePatch
 import TNLean.PEPS.Approximation.CanonicalPartyFactorization
 import TNLean.PEPS.Approximation.CellChambers
 import TNLean.PEPS.Approximation.CellColouredGeneration
@@ -169,6 +170,7 @@ import TNLean.PEPS.Approximation.DyadicProtocolInitialStep
 import TNLean.PEPS.Approximation.DyadicProtocolOriginalCircuit
 import TNLean.PEPS.Approximation.DyadicProtocolOwners
 import TNLean.PEPS.Approximation.DyadicProtocolParties
+import TNLean.PEPS.Approximation.DyadicProtocolPatchApproximation
 import TNLean.PEPS.Approximation.DyadicProtocolPhysicalReadout
 import TNLean.PEPS.Approximation.DyadicProtocolRetainedNorm
 import TNLean.PEPS.Approximation.DyadicProtocolSchedule
@@ -282,6 +284,7 @@ import TNLean.PEPS.Approximation.MessageGateLists
 import TNLean.PEPS.Approximation.MessageMonomial
 import TNLean.PEPS.Approximation.MonomialFixesOutside
 import TNLean.PEPS.Approximation.NestedCylinderSquarePatch
+import TNLean.PEPS.Approximation.NestedPatchApproximation
 import TNLean.PEPS.Approximation.NestedPatchEnergy
 import TNLean.PEPS.Approximation.NestedPatchMarginalCloseness
 import TNLean.PEPS.Approximation.NetworkScalarAbsorption

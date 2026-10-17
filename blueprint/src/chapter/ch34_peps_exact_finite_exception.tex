@@ -290,3 +290,21 @@ conditional form of Theorem~\ref{thm:openai_polynomial_peps}.
     Theorem~\ref{thm:peps_ground_state_approximation_conditional} together yield
     the uniform polynomial approximation.
 \end{proof}
+
+\begin{theorem}[Uniform approximation from the patch bound]
+    \label{thm:peps_ground_state_approximation_from_patch_bound}
+    \lean{TNLean.PEPS.Approximation.polynomialPEPSApproximation_of_adaptivePatchConstraint}
+    \leanok
+    \uses{def:peps_adaptive_patch_constraint}
+    If the adaptive patch constraint of Proposition~4.1 holds, then the uniform
+    polynomial approximation assertion~(\ref{eq:peps_finite_uniform}) holds.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_protocol_from_angular_and_patch_bounds,
+        cor:peps_ground_state_approximation_from_protocol}
+    Theorem~\ref{thm:peps_protocol_from_angular_and_patch_bounds} gives the
+    protocol assertion of Definition~\ref{def:peps_dyadic_protocol}, and
+    Corollary~\ref{cor:peps_ground_state_approximation_from_protocol} turns it
+    into the uniform polynomial approximation.
+\end{proof}
