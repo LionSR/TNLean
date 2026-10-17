@@ -111,9 +111,24 @@ The theorem `MPS.AreaLaw.ChainHamiltonian.partialSwap_boundary_spec` places
 the perturbation on the actual union of crossing supports, within distance
 R of the boundary positions, and bounds its norm by 2J N_R|∂D|.
 These assertions retain the original real J and include the empty chain,
-zero local dimension and zero range. Transport of the doubled ground state
-and spectral gap, followed by the Gaussian-filter estimates, remains to be
-proved for the protocol route.
+zero local dimension and zero range.
+
+The model `MPS.AreaLaw.ChainHamiltonian.swappedDoubled` conjugates every
+doubled interaction by the actual paired swap. It retains the same supports
+and range, local dimension q² and term bound 2J; its operator identity is
+`MPS.AreaLaw.ChainHamiltonian.swappedDoubled_operator`.
+The theorem
+`MPS.AreaLaw.ChainHamiltonian.doubled_swappedDoubled_isGappedGroundState`
+constructs the two ground-state predicates for the actual paired tensor
+square Ψ and its swap image Φ. Both vectors are normalized, have energy
+2E₀ and inherit the lower gap Δ from the original ground-state predicate
+and Δ > 0. No additional positivity or nonemptiness assumption is imposed.
+
+The existing generic theorem
+`TNLean.PEPS.Approximation.exists_regional_physicalBuffer_filter` supplies the
+two-sided Gaussian-filter estimates on any finite site set. Constructing a supported
+approximation of that actual filter from the chain locality estimates remains
+necessary for the protocol route.
 
 ## Constants
 
