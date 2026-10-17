@@ -11,8 +11,8 @@ import QICLean.Analysis.Entropy
 
 The constant is chosen before the finite domain, interaction family, ground
 vector, and cut. Regional entropy is the existing von Neumann entropy of the
-partial trace, after splitting configuration coordinates. The target is a
-proposition; this module does not assert that the area law has been proved.
+partial trace, after splitting configuration coordinates. The proposition
+`UniformAreaLaw` is proved in `TNLean.PEPS.AreaLaw.UniformAreaLaw`.
 
 ## Main definitions
 
@@ -65,8 +65,7 @@ noncomputable def regionalEntropy (Λ : Finset (ℤ × ℤ)) (q : ℕ)
   vonNeumannEntropy (reducedState Λ q Ω A) (reducedState_isHermitian Λ q Ω A)
 
 /-- The uniform area-law target, with its constant chosen before all physical
-instances. Source: area-law Theorem 1.1 (`thm:area`, `eq:area-law`).
-This proposition is a theorem statement, not a proof of that theorem. -/
+instances. Source: area-law Theorem 1.1 (`thm:area`, `eq:area-law`). -/
 def UniformAreaLaw : Prop :=
   ∀ q : ℕ, 1 ≤ q → ∀ R : ℕ, ∀ J Δ : ℝ, 0 < J → 0 < Δ →
     ∃ C : ℝ, 0 ≤ C ∧

@@ -17,7 +17,7 @@
 
 \begin{document}
 \maketitle
-\gapnote{scope-restriction}{wip}
+\gapnote{scope-restriction}{resolved}
 
 \section{The source passage}
 
@@ -53,8 +53,8 @@ carry two premises that the passage does not print.
 \section{Elimination}
 
 Neither premise restricts the use of these results in the proof of the
-two-family proposition. The final assembly, which is not yet formalized, will
-apply the theorems only to retained regions, which meet $A$, and with a
+two-family proposition. The final assembly applies the theorems only to
+retained regions, which meet $A$, and with a
 stopping scale chosen at least one. It discharges both premises there, and no
 unrestricted statement is needed. The unrestricted reading of the first premise
 is vacuous, because Definition~9.3 has no empty template.
@@ -66,10 +66,10 @@ If an identifier keeps a current region meeting $A$ at a later generation,
 then its birth, which retention leaves unchanged, contains a lattice point:
 a point of $A$ is a lattice point, and every current region lies in its
 birth. The second premise is absorbed into the stopping-scale threshold by
-taking the threshold at least one; this is done in
-\href{https://github.com/LionSR/TNLean/pull/9558}{pull request \#9558}, which
-applies the templates to all actual births. This note becomes resolved
-once both discharges are in the library.
+taking the threshold at least one in the uniform theorem on templates for
+actual births.\footnote{
+\leanid{TNLean.PEPS.AreaLaw.Geometry.exists_uniform_repairStage_birth_templates}.}
+Both premises are thus discharged where the template bounds are used.
 
 \bibliographystyle{alpha}
 \bibliography{references}

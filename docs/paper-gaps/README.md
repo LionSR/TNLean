@@ -1181,8 +1181,10 @@ point, because Definition 9.3 requires a nonempty template, and the stopping
 scale must satisfy `S_* ≥ 1`. The source uses these templates only for regions
 meeting the cut and chooses `S_*` large. The lattice-point premise is
 discharged for every identifier whose current region meets the cut by
-`repairStage_exists_integerPoint_mem_birth_of_oldInclusion`; the note stays
-open until the stopping-scale premise, handled in #9558, is also discharged on main.
+`repairStage_exists_integerPoint_mem_birth_of_oldInclusion`. The stopping-scale
+premise is absorbed into the uniform threshold in
+`exists_uniform_repairStage_birth_templates`, whose proof chooses the threshold
+at least one. Both premises are discharged in the actual repair construction.
 
 ### Two-dimensional area law: nondegenerate template pieces
 

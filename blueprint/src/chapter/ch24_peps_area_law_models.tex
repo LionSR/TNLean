@@ -311,6 +311,8 @@ original open square. We state the two models separately, following
 
 \begin{theorem}[Uniform finite-domain area law]
     \label{thm:openai_uniform_area_law}
+    \lean{TNLean.PEPS.AreaLaw.uniformAreaLaw}
+    \leanok
     \uses{def:area_law_domain,def:area_law_hamiltonian,def:area_law_ground_entropy}
     In Theorem~1.1 of \cite{OpenAI2026AreaLaw}, for fixed integers $q\ge1$,
     $R\ge0$ and reals $J,\Delta>0$, there is a finite constant
@@ -321,7 +323,10 @@ original open square. We state the two models separately, following
     The same constant applies to all domains, interaction families, and cuts.
 \end{theorem}
 \begin{proof}
-    \uses{def:area_law_template,def:area_law_two_family_partition}
+    \leanok
+    \uses{def:area_law_template,def:area_law_two_family_partition,
+        thm:area_law_conditional_two_families,
+        thm:area_law_two_family_decomposition}
     For disjoint $B,C\subseteq\Lambda$ write
     $I_\Omega(B:C)=S_\Omega(B)+S_\Omega(C)-S_\Omega(B\cup C)$, and let $Z$ be the
     set of endpoints of the edges in $\partial_\Lambda A$. Empty and full cuts
@@ -816,12 +821,15 @@ original open square. We state the two models separately, following
 
 \begin{theorem}[Entropy area law on the square grid]
     \label{thm:openai_square_area_law}
+    \lean{TNLean.PEPS.AreaLaw.squareEntropyAreaLaw}
+    \leanok
     \uses{def:square_entropy_area_law}
     As Proposition~2.1 of \cite{OpenAI2026PolynomialPEPS}, the range-one
     square-domain specialization of Theorem~1.1 and Corollary~1.2 of
     \cite{OpenAI2026AreaLaw}, the square-grid entropy area law holds.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{thm:openai_uniform_area_law,thm:square_area_law_from_uniform}
     Applying the conditional specialization below to the uniform finite-domain
     area law gives the result.
@@ -1211,6 +1219,122 @@ original open square. We state the two models separately, following
     and $\sum_in_i^{-100}\le Cb$.
 \end{definition}
 
+% Source: OpenAI2026AreaLaw, Proposition 11.2 (prop:two-families),
+% 10-geometry.tex, lines 98--140 and 709--798; template definition,
+% 08-scanner.tex, lines 536--564, revision
+% adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+\begin{theorem}[Two families with separated birth templates]
+    \label{thm:area_law_two_family_decomposition}
+    \lean{TNLean.PEPS.AreaLaw.twoFamilyDecomposition}
+    \leanok
+    \uses{def:area_law_two_family_decomposition}
+    For every $D_0,C_{\rm tpl}\in\mathbb R$, the two-family decomposition
+    of Definition~\ref{def:area_law_two_family_decomposition} holds.
+    For each integer lower scale $n_*\ge1$, its constant $C$ depends only
+    on $D_0,C_{\rm tpl},n_*$ and is chosen before the finite induced
+    domain and the cut. All partition, template, clearance and
+    summability conditions are those of that definition.
+    This is~\cite[Proposition~11.2]{OpenAI2026AreaLaw}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:area_law_two_family_decomposition,
+        thm:area_law_repair_birth_templates,
+        thm:area_law_birth_separation,
+        lem:area_law_repair_metric_choice,
+        thm:area_law_fine_clearance,
+        thm:area_law_belt_replacement_scale_limit,
+        thm:area_law_primary_scale_limits,
+        thm:area_law_repair_positive_rank_length_lower_bound,
+        thm:area_law_repair_uniform_exceptional_sites,
+        thm:area_law_repair_retained_error_sum,
+        thm:area_law_repair_ordered_partition_empty,
+        thm:area_law_repair_retained_prefix_count,
+        thm:area_law_repair_current_birth_containment,
+        thm:area_law_uniform_separated_initial_marks,
+        lem:area_law_repair_rank_zero_primary_ancestor,
+        lem:area_law_repair_retention_identities,
+        thm:area_law_primary_same_parity_separation,
+        thm:area_law_repair_final_current_empty,
+        thm:area_law_birth_separation_common_stage}
+    Put $C_{\rm tpl}'=\max\{C_{\rm tpl},1\}$. The uniform birth-template
+    theorem fixes $C_P,C_B$ and its stopping threshold. Fix also the
+    positive birth-separation coefficient $c_1$ and the uniform repair
+    estimates with isolation constant $1/4$.
+    After $n_*$ is given, choose $U\ge2$ so that, whenever $u\ge U$,
+    \begin{align}
+        2\lceil C_Bu\rceil^\beta
+            & <c_1u^{\rho_0}, \\
+        \bigl\lfloor\lceil C_Bu\rceil^{1-\ell_{\rm geo}}\bigr\rfloor
+            & \le u,          \\
+        n_* & \le C_Bu.
+    \end{align}
+    Choose $S_*$ above $U$, $2$ and all the stopping thresholds, then
+    choose an integer $C_0>\max\{4D_0,2\}$ and a lower layer index $k_0$
+    satisfying all template, separation, repair and primary-scale
+    thresholds. The characteristic-length lower bound makes every
+    positive-rank length at least $U$. For primaries, use the scale
+    limits with coefficient $1/8$, together with their lower scanner
+    threshold. All these choices precede the finite domain and cut.
+
+    The uniform exceptional-site and retained-error estimates now give
+    coefficients $C_D,C_E$. For a given domain and positive-boundary
+    cut, the repair estimates and the exceptional-site theorem supply
+    a common empty generation $N$ and an exceptional set $D$ with
+    $|D|\le C_Db$. At this generation the current regions equal their
+    final regions. The ordered partition is obtained from the actual
+    non-dummy identifiers whose current regions meet $A$; its pieces
+    are precisely those intersections, ordered by nondecreasing birth
+    rank with their inherited labels. Its residual set is $D$.
+    The retained identifiers are finite because their intersections
+    are nonempty disjoint subsets of $A$.
+
+    A lattice point in each retained piece also lies in its remembered
+    birth. The uniform birth-template theorem therefore gives its
+    exact ambient lattice sample, primitive size and both endpoint
+    bounds. For rank zero, the primitive is the original layer size
+    $r_k$, and the primary scale bounds give both $n_i\ge n_*$ and
+    $\lfloor n_i^{1-\ell_{\rm geo}}\rfloor\le r_k$.
+    At positive rank the primitive is $u$ or $2u$; the choice of $U$
+    gives the same two conclusions. Birth containment gives
+    $X_i\subseteq A\cap T_i$.
+
+    To prove ordered clearance for a rank-zero piece, rank monotonicity
+    makes every earlier piece rank zero. Each comes from a unique
+    original primary, with its birth, colour and characteristic length
+    preserved. Distinct retained identifiers give distinct original
+    primary indices, and equal colours give equal layer parity.
+    The primary scale bounds with coefficient $1/8$ imply
+    $2n_i^\beta<\min\{t_k,r_k/2\}$, so the same-parity separation
+    estimate applies to the whole birth templates.
+    For a positive-rank piece, the earlier piece lies in its final
+    region because generation $N$ is empty. The birth-separation
+    estimate applies to distinct same-colour identifiers of no larger
+    rank, including equal ranks, and gives distance at least
+    $c_1u^{\rho_0}$. The strict margin at $u\ge U$ yields the required
+    ordered clearance.
+
+    The equivalence between the ordered pieces and the finite retained
+    identifier set preserves the scanner scale of every summand.
+    Transport the retained error sum through that equivalence to get
+    \begin{align}
+        \sum_i n_i^{-100} & \le C_E(2C_0+1)^2b.
+    \end{align}
+    The single constant $C=\max\{C_D,C_E(2C_0+1)^2\}$ therefore bounds
+    both the exceptional cardinality and the error sum, independently
+    of the domain, cut and the resulting empty generation $N$.
+
+    Finally retain the same polygons, lattice samples and size
+    parameters, and use
+    \begin{align}
+        C_{\rm tpl}N_i(s_i+1)
+         & \le C_{\rm tpl}'N_i(s_i+1)\le n_i.
+    \end{align}
+    The polygons, samples, point sets, size parameters, labels,
+    diameters and both clearances are unchanged. This supplies all
+    conditions of the two-family decomposition at the
+    prescribed real constant $C_{\rm tpl}$.
+\end{proof}
+
 \begin{theorem}[Uniform area law from collar, amplification and two-family bounds]
     \label{thm:area_law_conditional_assembly}
     \lean{TNLean.PEPS.AreaLaw.uniformAreaLaw_of_collar_amplification_twoFamilies,
@@ -1413,7 +1537,7 @@ state.
 
 \begin{remark}[The area law and its square-grid specialization]
     \label{rem:peps_companion_area_law}
-    \uses{thm:openai_uniform_area_law,cor:rectangles,
+    \uses{thm:openai_uniform_area_law,thm:area_law_rectangles,
         thm:area_law_conditional_collar_two_families,
         thm:area_law_sublinear_collar,thm:area_law_amplification,
         thm:square_hermitian_term_sum,thm:square_area_law_from_uniform,
@@ -1427,9 +1551,6 @@ state.
     Propositions~9.6 and~11.2 of \cite{OpenAI2026AreaLaw}.
     The collar proposition is Theorem~\ref{thm:area_law_sublinear_collar};
     amplification is Theorem~\ref{thm:area_law_amplification}.
-    % Status: the collar and amplification propositions are proved. The
-    % two-family decomposition of Proposition 11.2 remains an assumption, so
-    % the uniform area law is not proved. The passage to the square grid is proved.
     The site and edge terms of the
     original model need not be Hermitian individually. Replacing each by its
     Hermitian part keeps its support and norm bound and leaves the total
@@ -1439,7 +1560,6 @@ state.
     and Theorem~\ref{thm:rectangular_equal_side_entropy} gives the same
     conclusion through the rectangle corollary, giving Proposition~2.1
     (Theorem~\ref{thm:openai_square_area_law}) from the uniform area law.
-    % Status: Proposition 2.1 is assumed, through the uniform area law.
 \end{remark}
 
 \begin{remark}[Positive replacement]
@@ -1529,7 +1649,8 @@ state.
 
 \begin{remark}[Two families with separated birth templates]
     \label{rem:peps_companion_two_families}
-    \uses{def:area_law_two_family_decomposition}
+    \uses{def:area_law_two_family_decomposition,
+        thm:area_law_two_family_decomposition}
     Definition~\ref{def:area_law_two_family_decomposition} states
     Proposition~11.2 of \cite{OpenAI2026AreaLaw} as printed in the appendix:
     for every cut with $b=|\partial_\Gamma A|>0$ and every lower scale $n_*$, a
@@ -1538,7 +1659,8 @@ state.
     $\lfloor n_i^{1-\varepsilon}\rfloor\le s_i$, both clearances
     $2n_i^{\beta_0}$, and $\sum_in_i^{-100}\le Cb$, with $C$ depending only on
     $n_*$ and the template constants.
-    % Status: Proposition 11.2 is assumed; it is not proved.
+    Theorem~\ref{thm:area_law_two_family_decomposition} establishes
+    this decomposition.
 \end{remark}
 
 \begin{remark}[The adaptation to a cell]
