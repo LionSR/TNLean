@@ -12,7 +12,8 @@ import TNLean.PEPS.AreaLaw.AreaLawTheorem
 Theorem 1.1 of the polynomial-PEPS manuscript: for every local dimension
 `q ≥ 2` and all `J, Δ > 0` there are constants `C, c > 0` such that every
 gapped ground state of a nearest-neighbor Hamiltonian on the `L × L` grid is
-approximated in trace norm by a PEPS of bond dimension polynomial in `L`.
+within `L⁻¹`, up to a global phase and in the Euclidean norm of the normalized
+vector, of a PEPS of bond dimension polynomial in `L`.
 The square entropy area law it consumes (Proposition 2.1 of the same
 manuscript) is the square-grid specialization of the two-dimensional area law.
 
@@ -46,7 +47,8 @@ theorem adaptivePatchConstraint : AdaptivePatchConstraint :=
 
 /-- Theorem 1.1 of the polynomial-PEPS manuscript, `00-introduction.tex`,
 lines 36–57: gapped ground states of nearest-neighbor Hamiltonians on the
-`L × L` grid have trace-norm PEPS approximations of polynomial bond dimension,
+`L × L` grid are within `L⁻¹` of normalized PEPS vectors of polynomial bond
+dimension, up to a global phase,
 with constants depending only on `q`, `J` and `Δ`. The square entropy area law
 of Proposition 2.1 (`01-preliminaries.tex`, lines 39–58) is supplied by the
 two-dimensional area law. -/
