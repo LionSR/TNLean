@@ -1,0 +1,84 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+\input{command}
+\title{The Square-Grid Zero-Floor Optimizer in Integer-Domain Coordinates}
+\author{}
+\date{October 16, 2026}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+\section{The source statement}
+
+The companion source of~\cite{OpenAI2026PolynomialPEPS} selects a family
+of positive filters on supplied nested regions $D_0\subseteq\cdots\subseteq D_{m-1}$
+of an open square grid. Each edge crosses at most one region and the weights
+satisfy $0<a_j\le1$. Let $q$ be the local dimension and $J$ a common
+operator-norm bound for the site and edge terms of the original Hamiltonian
+$H$. For a unique unit ground vector $\Omega$, energy $E_0$ and full-system
+projector gap $\Delta$, one family
+maximizes the filtered output norm, has nonzero output $\psi$, and its
+normalization $\phi=\psi/\|\psi\|$ satisfies
+\begin{align}
+ |\operatorname{Re}\langle\phi,H\phi\rangle-E_0|
+ &\le q^2J\sum_j a_j^2|\partial D_j|,
+ \label{eq:polypeps_square_zero_floor_energy_bound}\\
+ \Delta(1-|\langle\Omega,\phi\rangle|^2)
+ &\le q^2J\sum_j a_j^2|\partial D_j|.
+ \label{eq:polypeps_square_zero_floor_fidelity_bound}
+\end{align}
+Only the total Hamiltonian must be Hermitian; the individual site and edge
+terms need not be. The companion statement allows real $J$ subject to the
+termwise norm bounds. A negative $J$ is therefore possible only when the
+interaction index set is empty.\footnote{Source: \texttt{openai/math} revision
+\texttt{adc7f1241b42e322a6451854ab7e4b4c146bf78a},
+\texttt{lean/OAI/MathematicalPhysics/PEPSFilters/EnergyOptimizer.lean},
+\texttt{exists\_maximizer\_energy}, lines 62--109; compare the model and
+full-system gap in \texttt{00-introduction.tex}.}
+
+\section{The physical specialization and its boundary}
+
+The square-grid specialization takes the original Hamiltonian and its original
+unit gapped ground vector. It assumes $J\ge0$, transports the site and edge
+terms by the canonical configuration isometry $U$ to the integer square
+$\Lambda$, and uses their Hermitian parts. The sum is exactly $UHU^*$, the norm
+bound is still $J$, and the projector gap is unchanged. The regional filters
+are specified spectrally as
+$K_j=V_j\operatorname{diag}(p_{j,r}^{a_j/2})V_j^*$ with $V_j$ unitary,
+$p_{j,r}\ge0$ and $\sum_r p_{j,r}=1$.
+
+For one such family, the global maximum, positive output norm, unit
+normalization and the estimates
+(\ref{eq:polypeps_square_zero_floor_energy_bound}) and
+(\ref{eq:polypeps_square_zero_floor_fidelity_bound}) hold simultaneously, with
+$H,\Omega$ replaced by $UHU^*,U\Omega$ and with each unordered integer-grid
+boundary edge counted once. No additional hypothesis on a regional gap is
+used.\footnote{Declaration:
+\leanid{TNLean.PEPS.Approximation.SquareHamiltonian.exists_zero_floor_maximizer_energy_fidelity}.}
+The sign restriction $J\ge0$ belongs to the existing conversion to a
+finite-domain Hamiltonian, which assigns zero to unused supports. It excludes
+the empty square with a negative vacuous bound from the companion signature;
+no source estimate is claimed for that case here. For a nonempty original
+square, the termwise norm bound already forces $J\ge0$.
+
+The identification of the source's filter coordinates and ordered products
+with these spectral feasible families is recorded separately in the
+QICLean note on zero-floor energy~\cite{gap:oai26_zero_floor_energy_scope}.
+The present result supplies the physical Hamiltonian, exact crossing coefficient
+and original full-system gap. It still takes the nested regions, single-crossing
+condition and weights as inputs; it does not construct them or prove the
+geometric optimizer, the two-family decomposition or Proposition 4.1.
+
+\section{Effect and remaining work}
+
+This is a restriction of the formalized statement, not an error in the
+source. A direct configuration-reindexed interaction sum, or a separate
+empty-grid argument, can remove the nonnegative-budget restriction without
+altering the estimates. The coordinate-family comparison and geometric choice
+of regions and weights remain independent steps in issue 8741.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}
