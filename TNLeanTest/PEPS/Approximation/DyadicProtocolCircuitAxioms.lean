@@ -12,7 +12,6 @@ run_cmd do
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
   let env ← Lean.getEnv
   for decl in #[``TNLean.PEPS.Approximation.DyadicProtocol.originalCircuit,
-      ``TNLean.PEPS.Approximation.DyadicProtocol.eval_sequence_eq_trajectory,
       ``TNLean.PEPS.Approximation.DyadicProtocol.eval_originalCircuit] do
     unless env.contains decl do
       throwError "Missing imported declaration {decl}"

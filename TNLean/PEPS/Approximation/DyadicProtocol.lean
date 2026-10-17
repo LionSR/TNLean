@@ -238,17 +238,6 @@ def physicalConfigEquiv : ((p : P) → Fin (D.physicalDimension p)) ≃ Configur
       (Equiv.piCongr (Equiv.ofInjective D.site D.site_injective)
         fun v ↦ finCongr (D.physicalDimension_site v).symm).symm)
 
-/-- The configuration of the square read from the physical configuration of the parties: the
-value at a site is the physical value of its unit-square party.
-
-Source: polynomial-PEPS manuscript, Proposition 7.1, `06-geometry.tex`, lines 48–51. -/
-theorem physicalConfigEquiv_apply_val (σ : (p : P) → Fin (D.physicalDimension p))
-    (v : SquareLatticeVertex L L) : (D.physicalConfigEquiv σ v : ℕ) = σ (D.site v) := by
-  classical
-  simp only [physicalConfigEquiv, Equiv.trans_apply, Equiv.piEquivPiSubtypeProd_apply,
-    Equiv.prodUnique_apply]
-  rfl
-
 /-- The coordinates of the final memory: the configuration of the physical outputs on the
 square, and an orthonormal coordinate of the private registers.
 
