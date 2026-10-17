@@ -87,6 +87,62 @@ for an arbitrary finite set of sites and are instantiated here directly.
     hypotheses.
 \end{proof}
 
+\begin{definition}[Doubled chain Hamiltonian]
+    \label{def:chain_doubled_hamiltonian}
+    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.doubled}
+    \leanok
+    \uses{def:chain_model,def:qc_site_pair_coordinates}
+    Let $L,q,R$ be natural numbers, let $J$ be real, and let
+    $H=\sum_X h_X$ be a range-$R$ chain Hamiltonian with local dimension $q$
+    and $\|h_X\|\le J$. Pair the two copies at each original site by the
+    bijection $p$ of Definition~\ref{def:qc_site_pair_coordinates}, with
+    $p(\sigma,\tau)(i)=q\sigma(i)+\tau(i)$. Write $p_*M$ for simultaneous
+    relabelling of the rows and columns of a matrix $M$ by $p$. The
+    \emph{doubled Hamiltonian} has local dimension $q^2$ and interactions
+    \begin{align}
+        \widehat h_X=p_*(h_X\otimes\mathbb 1+\mathbb 1\otimes h_X).
+    \end{align}
+    Each $\widehat h_X$ is Hermitian, is supported on the same set $X$, and
+    satisfies $\|\widehat h_X\|\le2J$. Thus the range remains $R$.
+    This is the two-copy construction in the paragraph ``Two-sided Gaussian
+    filtering'' of \cite{TNLean2026OneDimensional}.
+\end{definition}
+\begin{proof}
+    \leanok
+    \uses{def:qc_local_circuit,thm:area_law_supported_identity,thm:qc_site_pair_tensor_support}
+    By the matrix-entry characterization, $h_X$ belongs to the algebra
+    supported on $X$; the identity belongs to that algebra as well. The tensor-product support identity,
+    applied to each summand, gives support on $X\cup X=X$, and the
+    matrix-entry characterization gives the required support condition.
+    Taking adjoints preserves each summand and commutes with relabelling.
+    Relabelling preserves the operator norm, and tensoring with an identity
+    does not increase it. Hence
+    \begin{align}
+        \|\widehat h_X\|
+        \le\|h_X\otimes\mathbb 1\|+\|\mathbb 1\otimes h_X\|
+        \le\|h_X\|+\|h_X\|\le2J.
+    \end{align}
+\end{proof}
+
+\begin{lemma}[Operator of the doubled Hamiltonian]
+    \label{lem:chain_doubled_operator}
+    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.doubled_operator}
+    \leanok
+    \uses{def:chain_doubled_hamiltonian}
+    Under the hypotheses of Definition~\ref{def:chain_doubled_hamiltonian},
+    the sum of the doubled interactions satisfies
+    \begin{align}
+        \widehat H=\sum_X\widehat h_X
+        =p_*(H\otimes\mathbb 1+\mathbb 1\otimes H).
+    \end{align}
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{def:chain_doubled_hamiltonian}
+    Sum the defining interaction identity over the original supports $X$.
+    Relabelling is linear, and the tensor product is linear in each factor.
+\end{proof}
+
 \begin{lemma}[Interactions split by an interval]
     \label{lem:chain_crossing_count}
     \lean{
