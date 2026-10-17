@@ -18,17 +18,23 @@ is the buffered discount. For an interval $X$ of the chain with the shells
 $X_j=X^{+jR}$, $1\le j\le m$, the flanks $T_j=X_j\setminus X$ and the uniform
 weights $a_j=2/m$, the note fixes the constants (equation \texttt{eq:CE},
 lines~321--328)
-\[
- C_E=8\,N_R\,J\,q^{2(R+1)},\qquad
- m=\Bigl\lceil\max\Bigl\{4,\ \frac{4C_E}{\Delta},\ 128\sqrt{(1+\vartheta)\mathcal B_R},\
- 4096\,e\,(1+\vartheta)\,\mathcal B_R\Bigr\}\Bigr\rceil,
-\]
+\begin{align}
+    C_E
+        &= 8\,N_R\,J\,q^{2(R+1)},
+    \label{eq:tnlean_one_dimensional_discount_constants_source_energy_constant}\\
+    m
+        &= \Bigl\lceil\max\Bigl\{4,\ \frac{4C_E}{\Delta},\ 128\sqrt{(1+\vartheta)\mathcal B_R},\
+        4096\,e\,(1+\vartheta)\,\mathcal B_R\Bigr\}\Bigr\rceil,
+    \label{eq:tnlean_one_dimensional_discount_constants_source_shell_count}
+\end{align}
 with $\vartheta=J/\Delta$, notes $m\le C_1(q,R)(1+\vartheta)$
 (equation \texttt{eq:mbound}, lines~331--333), and concludes
 (equation \texttt{eq:discount})
-\[
- S(X\,|\,T_m)\le\tfrac12\,S(X)+\tfrac12+\frac{C_E}{\Delta}.
-\]
+\begin{align}
+    S(X\,|\,T_m)
+        &\le \tfrac12\,S(X)+\tfrac12+\frac{C_E}{\Delta}.
+    \label{eq:tnlean_one_dimensional_discount_constants_source_discount}
+\end{align}
 In the proof, the energy of the filtered vector is bounded by
 $\sum_j N_R\cdot 2a_j^2q^{2(R+1)}J=C_E/m$ (equation \texttt{eq:energy},
 lines~458--463), so that by the second entry of $m$ it is at most $\Delta/4$
@@ -55,11 +61,14 @@ finite-dimensional discount of the companion library,\footnote{Declarations:
 \leanid{TNLean.MPS.AreaLaw.two_mul_condEntropy_interval_le}; the
 finite-dimensional lemma is \leanid{Entropy.two_mul_condEntropy_le} of
 QICLean.} in the form
-\[
- 2\bigl(S(X\cup T)-S(T)\bigr)\le S(X)+\frac{4096\,e\,\vartheta\,\mathcal B_R}{m}+m\log2,
- \qquad
- m=\Bigl\lceil\max\Bigl\{4,\ \frac{4C_E}{\Delta},\ 128\sqrt{(1+\vartheta)\mathcal B_R}\Bigr\}\Bigr\rceil .
-\]
+\begin{align}
+    2\bigl(S(X\cup T)-S(T)\bigr)
+        &\le S(X)+\frac{4096\,e\,\vartheta\,\mathcal B_R}{m}+m\log2,
+    \label{eq:tnlean_one_dimensional_discount_constants_formal_discount}\\
+    m
+        &= \Bigl\lceil\max\Bigl\{4,\ \frac{4C_E}{\Delta},\ 128\sqrt{(1+\vartheta)\mathcal B_R}\Bigr\}\Bigr\rceil .
+    \label{eq:tnlean_one_dimensional_discount_constants_formal_shell_count}
+\end{align}
 The shells, the flanks, the weights, the crossing count $N_R$ and the cut
 budget $\mathcal B_R$ are those of the note. The constants deviate from the
 printed ones in three connected places, each at the level of an absolute
