@@ -14,7 +14,8 @@ are absorbed at that power. Its margin to the claimed collar power
 `1 - 1/100000 = 0.99999` is exactly `19/500000`.
 
 All coefficients are fixed before the size threshold, which precedes every
-remaining scalar datum. This is conditional final-scale absorption. It does
+remaining scalar datum. The logarithmic absorption threshold is given explicitly by
+`finalSharpEnvelopeThreshold`. This is conditional final-scale absorption. It does
 not construct the safe-box entropy input, the scanner, or a physical
 mutual-information inequality. Replica remainders must first be removed
 with the physical instance, size, total weight and fraction fixed.
@@ -24,7 +25,7 @@ revision `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 See `docs/paper-gaps/arealaw2d_safe_box_collar_scope.tex`.
 -/
 
-open Filter Asymptotics
+open Filter
 
 namespace TNLean.PEPS.AreaLaw.Scan
 
@@ -56,49 +57,43 @@ This helper is independent of the physical comparison and replica count. -/
 theorem eventually_finalSharp_log_cost_le (A Cl u v : ℝ)
     (hA : 0 ≤ A) (huv : u < v) :
     ∀ᶠ n : ℕ in atTop,
-      A * (n : ℝ) ^ u * Real.log (n : ℝ) ^ Cl ≤ (n : ℝ) ^ v := by
-  have hlog : (fun n : ℕ => A * Real.log (n : ℝ) ^ Cl) =o[atTop]
-      fun n => (n : ℝ) ^ (v - u) :=
-    (isLittleO_log_rpow_rpow_atTop Cl (sub_pos.mpr huv)).natCast_atTop.const_mul_left A
-  filter_upwards [eventually_ge_atTop 2, hlog.bound (by norm_num : (0 : ℝ) < 1)]
-    with n hn hsmall
-  have hn1 : (1 : ℝ) ≤ n := by exact_mod_cast (show 1 ≤ n by omega)
-  have hnpos : (0 : ℝ) < n := zero_lt_one.trans_le hn1
-  have hlog0 : 0 ≤ Real.log (n : ℝ) := Real.log_nonneg hn1
-  have hsmall' : A * Real.log (n : ℝ) ^ Cl ≤ (n : ℝ) ^ (v - u) := by
-    simpa only [Real.norm_of_nonneg (mul_nonneg hA (Real.rpow_nonneg hlog0 Cl)),
-      Real.norm_of_nonneg (Real.rpow_nonneg (Nat.cast_nonneg n) (v - u)), one_mul]
-      using hsmall
-  calc
-    _ = (A * Real.log (n : ℝ) ^ Cl) * (n : ℝ) ^ u := by ring
-    _ ≤ (n : ℝ) ^ (v - u) * (n : ℝ) ^ u :=
-      mul_le_mul_of_nonneg_right hsmall' (by positivity)
-    _ = _ := by rw [← Real.rpow_add hnpos, sub_add_cancel]
+      A * (n : ℝ) ^ u * Real.log (n : ℝ) ^ Cl ≤ (n : ℝ) ^ v :=
+  eventually_atTop.2 ⟨_, fun _ hn => by simpa only [one_mul] using
+    Real.mul_rpow_mul_log_rpow_le_mul_rpow_of_ceil_logRpowThreshold_le hA one_pos huv hn⟩
 
-/-- The seven source errors have their exact maximum power after absorbing
-only fixed logarithmic factors. The displayed coefficient is explicit and
-independent of `C0`, `CB` and `Ca`; their effect enters the threshold. -/
-theorem eventually_finalSharp_powerEnvelope_le
+/-- The explicit threshold of the logarithmic absorption in the final error envelope: the
+thresholds for `n^(74969/100000) log n / 1000 ≤ n^(62497/62500)` and
+`74 C_a C₀ C_B n^(250061/1000000) (log n)^12 ≤ n^(62497/62500)`
+(`08-scanner.tex`, lines 839--942). -/
+noncomputable def finalSharpEnvelopeThreshold (C₀ CB Ca : ℝ) : ℕ :=
+  max ⌈Real.logRpowThreshold (1 / 1000) 1 (74969 / 100000) (62497 / 62500) 1⌉₊
+    ⌈Real.logRpowThreshold (74 * Ca * C₀ * CB) 1 (250061 / 1000000) (62497 / 62500) 12⌉₊
+
+/-- The seven source errors have their exact maximum power at every `n` from the explicit
+threshold `finalSharpEnvelopeThreshold C₀ CB Ca` on. The displayed coefficient is explicit
+and independent of `C0`, `CB` and `Ca`; their effect enters the threshold.
+Source: `08-scanner.tex`, lines 839--942. -/
+theorem finalSharp_powerEnvelope_le_of_finalSharpEnvelopeThreshold_le
     {Ce C₀ CB Ca Ctr Cdim lq : ℝ}
     (hCe : 0 ≤ Ce) (hC₀ : 0 ≤ C₀) (hCB : 0 ≤ CB) (hCa : 0 ≤ Ca)
-    (_hCtr : 0 ≤ Ctr) (hCdim : 0 ≤ Cdim) (hlq : 0 ≤ lq) :
-    ∀ᶠ n : ℕ in atTop,
-      finalSharpPowerEnvelope Ce C₀ CB Ca Ctr Cdim lq n ≤
-        (20 * Ce + 62 + 24 * lq + 16 * Real.sqrt Ctr * (1 + Cdim)) *
-          (n : ℝ) ^ (62497 / 62500 : ℝ) := by
-  have hbinary : ∀ᶠ n : ℕ in atTop,
-      (1 / 1000 : ℝ) * (n : ℝ) ^ (74969 / 100000 : ℝ) * Real.log (n : ℝ) ≤
+    (_hCtr : 0 ≤ Ctr) (hCdim : 0 ≤ Cdim) (hlq : 0 ≤ lq) {n : ℕ}
+    (hthr : finalSharpEnvelopeThreshold C₀ CB Ca ≤ n) :
+    finalSharpPowerEnvelope Ce C₀ CB Ca Ctr Cdim lq n ≤
+      (20 * Ce + 62 + 24 * lq + 16 * Real.sqrt Ctr * (1 + Cdim)) *
         (n : ℝ) ^ (62497 / 62500 : ℝ) := by
-    simpa only [Real.rpow_one] using
-      eventually_finalSharp_log_cost_le (1 / 1000) 1
-        (74969 / 100000) (62497 / 62500) (by norm_num) (by norm_num)
-  have hmoment : ∀ᶠ n : ℕ in atTop,
-      (74 * Ca * C₀ * CB) * (n : ℝ) ^ (250061 / 1000000 : ℝ) *
-        Real.log (n : ℝ) ^ 12 ≤ (n : ℝ) ^ (62497 / 62500 : ℝ) := by
-    simpa only [Real.rpow_ofNat] using
-      eventually_finalSharp_log_cost_le (74 * Ca * C₀ * CB) 12
-        (250061 / 1000000) (62497 / 62500) (by positivity) (by norm_num)
-  filter_upwards [eventually_ge_atTop 1, hbinary, hmoment] with n hn hbin hmom
+  have hn : 1 ≤ n := by
+    have := Real.two_le_of_ceil_logRpowThreshold_le ((le_max_left _ _).trans hthr)
+    omega
+  have hbin : (1 / 1000 : ℝ) * (n : ℝ) ^ (74969 / 100000 : ℝ) * Real.log (n : ℝ) ≤
+      (n : ℝ) ^ (62497 / 62500 : ℝ) := by
+    simpa only [Real.rpow_one, one_mul] using
+      Real.mul_rpow_mul_log_rpow_le_mul_rpow_of_ceil_logRpowThreshold_le (by norm_num)
+        one_pos (by norm_num) ((le_max_left _ _).trans hthr)
+  have hmom : (74 * Ca * C₀ * CB) * (n : ℝ) ^ (250061 / 1000000 : ℝ) *
+      Real.log (n : ℝ) ^ 12 ≤ (n : ℝ) ^ (62497 / 62500 : ℝ) := by
+    simpa only [Real.rpow_ofNat, one_mul] using
+      Real.mul_rpow_mul_log_rpow_le_mul_rpow_of_ceil_logRpowThreshold_le (by positivity)
+        one_pos (by norm_num) ((le_max_right _ _).trans hthr)
   have hn1 : (1 : ℝ) ≤ n := by exact_mod_cast hn
   have hmono (u : ℝ) (hu : u ≤ (62497 / 62500 : ℝ)) :
       (n : ℝ) ^ u ≤ (n : ℝ) ^ (62497 / 62500 : ℝ) :=
@@ -120,6 +115,20 @@ theorem eventually_finalSharp_powerEnvelope_le
     (show 0 ≤ 16 * Real.sqrt Ctr * (1 + Cdim) by positivity)
   unfold finalSharpPowerEnvelope
   nlinarith only [hmass, hbin', hmom, hz, hw, ht]
+
+/-- The seven source errors have their exact maximum power after absorbing
+only fixed logarithmic factors. The displayed coefficient is explicit and
+independent of `C0`, `CB` and `Ca`; their effect enters the threshold. -/
+theorem eventually_finalSharp_powerEnvelope_le
+    {Ce C₀ CB Ca Ctr Cdim lq : ℝ}
+    (hCe : 0 ≤ Ce) (hC₀ : 0 ≤ C₀) (hCB : 0 ≤ CB) (hCa : 0 ≤ Ca)
+    (_hCtr : 0 ≤ Ctr) (hCdim : 0 ≤ Cdim) (hlq : 0 ≤ lq) :
+    ∀ᶠ n : ℕ in atTop,
+      finalSharpPowerEnvelope Ce C₀ CB Ca Ctr Cdim lq n ≤
+        (20 * Ce + 62 + 24 * lq + 16 * Real.sqrt Ctr * (1 + Cdim)) *
+          (n : ℝ) ^ (62497 / 62500 : ℝ) :=
+  eventually_atTop.2 ⟨_, fun _ => finalSharp_powerEnvelope_le_of_finalSharpEnvelopeThreshold_le
+    hCe hC₀ hCB hCa _hCtr hCdim hlq⟩
 
 /-- One threshold bounds the complete source error at the exact maximal
 power and at the paper's sublinear power. The target and prefix entropy
@@ -152,9 +161,7 @@ theorem exists_finalSharp_error_le
         finalSharpError n a C₀ B St Bsh z lq t dlog ≤
           C * (n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ)) := by
   obtain ⟨Ca, hCa, Ns, hNs, hscale⟩ := exists_finalSharp_scale_bounds
-  obtain ⟨Ne, hNe⟩ := eventually_atTop.mp
-    (eventually_finalSharp_powerEnvelope_le hCe hC₀ hCB
-      (zero_le_one.trans hCa) hCtr hCdim hlq)
+  let Ne := finalSharpEnvelopeThreshold C₀ CB Ca
   let C := 20 * Ce + 62 + 24 * lq + 16 * Real.sqrt Ctr * (1 + Cdim)
   have hC : 0 < C := by dsimp only [C]; positivity
   refine ⟨C, hC, max Ns Ne, hNs.trans (le_max_left _ _), ?_⟩
@@ -170,7 +177,8 @@ theorem exists_finalSharp_error_le
       (show 1 - (Exponents.scannerEll : ℝ) ≤ 1 by norm_num [Exponents.scannerEll]))
   have hbound := (finalSharpError_le_powerEnvelope hn2 hL ha hCe hC₀ hCB
     (zero_le_one.trans hCa) hCtr hCdim hlq haUpper haInv hz hzupper hmass
-    hSt hBsh hB ht hdlog).trans (hNe n ((le_max_right Ns Ne).trans hn))
+    hSt hBsh hB ht hdlog).trans (finalSharp_powerEnvelope_le_of_finalSharpEnvelopeThreshold_le
+      hCe hC₀ hCB (zero_le_one.trans hCa) hCtr hCdim hlq ((le_max_right Ns Ne).trans hn))
   refine ⟨hbound, hbound.trans ?_⟩
   exact mul_le_mul_of_nonneg_left
     (Real.rpow_le_rpow_of_exponent_le
