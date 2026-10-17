@@ -37,6 +37,7 @@ import TNLean.PEPS.Approximation.ActualSourceLifetimeBound
 import TNLean.PEPS.Approximation.ActualSourcePolynomial
 import TNLean.PEPS.Approximation.ActualSourceRegisters
 import TNLean.PEPS.Approximation.ActualSourceSampling
+import TNLean.PEPS.Approximation.AdaptivePatchConstraintFromAreaLaw
 import TNLean.PEPS.Approximation.AdaptivePatchSupply
 import TNLean.PEPS.Approximation.AffectedOwners
 import TNLean.PEPS.Approximation.AffectedPhysicalDimension
