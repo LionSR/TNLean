@@ -280,6 +280,7 @@ import TNLean.PEPS.Approximation.MatrixAction
 import TNLean.PEPS.Approximation.MessageGateCircuit
 import TNLean.PEPS.Approximation.MessageGateExpansion
 import TNLean.PEPS.Approximation.MessageGateLists
+import TNLean.PEPS.Approximation.MessageGateSegmentExpansion
 import TNLean.PEPS.Approximation.MessageMonomial
 import TNLean.PEPS.Approximation.MonomialFixesOutside
 import TNLean.PEPS.Approximation.NestedCylinderSquarePatch
@@ -362,7 +363,10 @@ import TNLean.PEPS.Approximation.PhysicalFirstNetworkResources
 import TNLean.PEPS.Approximation.PhysicalFirstPolynomial
 import TNLean.PEPS.Approximation.PhysicalFirstReadout
 import TNLean.PEPS.Approximation.PhysicalOutputContraction
+import TNLean.PEPS.Approximation.PinnedNestedFilterCoordinates
+import TNLean.PEPS.Approximation.PinnedNestedFilters
 import TNLean.PEPS.Approximation.PinnedRegionalState
+import TNLean.PEPS.Approximation.PinnedZeroFloorOptimizer
 import TNLean.PEPS.Approximation.PointwiseChoiceCoefficient
 import TNLean.PEPS.Approximation.PreparedMatrixNorm
 import TNLean.PEPS.Approximation.PreparedPartyMaps

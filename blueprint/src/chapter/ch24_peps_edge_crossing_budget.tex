@@ -145,3 +145,223 @@
         \le B. \notag
     \end{align}
 \end{proof}
+
+\subsection{Positive filters on the original square}
+\label{sec:pinned_square_filters}
+
+\begin{definition}[Positive regional filters and ascending output]
+    \label{def:pinned_square_filters}
+    \lean{
+        TNLean.PEPS.Approximation.Pinned.liftLocal,
+        TNLean.PEPS.Approximation.Pinned.asMap,
+        TNLean.PEPS.Approximation.Pinned.NestedFilter.PositiveFilter,
+        TNLean.PEPS.Approximation.Pinned.NestedFilter.tracePower,
+        TNLean.PEPS.Approximation.Pinned.NestedFilter.FilterFamily,
+        TNLean.PEPS.Approximation.Pinned.NestedFilter.Admissible,
+        TNLean.PEPS.Approximation.Pinned.NestedFilter.output,
+        TNLean.PEPS.Approximation.Pinned.NestedFilter.IsMaximizer,
+        TNLean.PEPS.Approximation.Pinned.NestedFilter.normalizedOutput,
+        TNLean.PEPS.Approximation.Pinned.NestedFilter.PositiveFilter.ext
+    }
+    \leanok
+    \uses{def:peps_pinned_regional_matrix}
+    Let $V_L=\{0,\ldots,L-1\}^2$, let $q,m\ge0$ be integers, and
+    supply regions $X_j\subseteq V_L$ for $0\le j<m$. A positive regional
+    filter $F_j$ is a positive semidefinite matrix indexed by the
+    configurations $X_j\to\{0,\ldots,q-1\}$. The regional matrix determines
+    the filter. Singular matrices are allowed.
+    Its lift $\widehat F_j$ has matrix entries
+    \begin{align}
+        (\widehat F_j)_{x,y}
+         & =\begin{cases}
+                (F_j)_{x|_{X_j},y|_{X_j}} & x|_{V_L\setminus X_j}=y|_{V_L\setminus X_j}, \\
+                0                         & \text{otherwise}.
+            \end{cases}\notag
+    \end{align}
+    For real weights $a_j$, call $F=(F_j)_{j=0}^{m-1}$ admissible when
+    $\sum_r\lambda_r(F_j)^{2/a_j}=1$ for every $j$, where the powers are
+    real powers of nonnegative eigenvalues, with $2/0=0$, $0^0=1$, and
+    $0^t=0$ for $t\ne0$.
+    For every state $\Omega$, set
+    \begin{align}
+        \psi(F,\Omega) & =\widehat F_{m-1}\cdots\widehat F_0\Omega,
+        \notag                                                      \\
+        \phi(F,\Omega) & =\|\psi(F,\Omega)\|^{-1}\psi(F,\Omega).
+        \label{eq:pinned_filter_output}
+    \end{align}
+    The empty product is the identity and $0^{-1}=0$, so the normalized
+    output is defined even when the output vanishes. A maximizing family
+    is admissible and satisfies
+    $\|\psi(G,\Omega)\|\le\|\psi(F,\Omega)\|$ for every admissible family $G$.
+    These are the positive filters and ascending application order of the
+    companion source of~\cite{OpenAI2026PolynomialPEPS}.
+\end{definition}
+
+\begin{definition}[Regional coordinates in the integer square]
+    \label{def:pinned_filter_coordinates}
+    \lean{
+        TNLean.PEPS.Approximation.Pinned.NestedFilter.canonicalRegions,
+        TNLean.PEPS.Approximation.Pinned.NestedFilter.canonicalRegions_fin,
+        TNLean.PEPS.Approximation.Pinned.NestedFilter.regionEquiv,
+        TNLean.PEPS.Approximation.Pinned.NestedFilter.CanonicalFamily,
+        TNLean.PEPS.Approximation.Pinned.NestedFilter.canonicalMatrices,
+        TNLean.PEPS.Approximation.Pinned.NestedFilter.fromCanonical
+    }
+    \leanok
+    \uses{def:pinned_square_filters,thm:area_law_domain_identifications}
+    Let $\sigma:V_L\to\Lambda$ be the canonical site bijection, let $U$
+    be its configuration isometry, and write $D_j=\sigma(X_j)$.
+    Restriction of $\sigma$ gives a configuration bijection $R_j$ on each
+    region. Conjugating $F_j$ by its permutation matrix gives $K_j(F)$ on
+    $D_j$. Conversely, conjugation by the inverse permutation gives
+    $F_j(K)$ from every floor-zero feasible matrix $K_j$.
+    The natural-indexed sequence of regions is extended by the empty set
+    after $m$; the ordered product uses only $0\le j<m$.
+\end{definition}
+
+\begin{theorem}[All admissible families in either coordinate system]
+    \label{thm:pinned_filter_coordinates}
+    \lean{
+        TNLean.PEPS.Approximation.Pinned.NestedFilter.canonicalMatrices_fromCanonical,
+        TNLean.PEPS.Approximation.Pinned.NestedFilter.fromCanonical_canonicalMatrices,
+        TNLean.PEPS.Approximation.Pinned.NestedFilter.admissible_iff_feasible,
+        TNLean.PEPS.Approximation.Pinned.NestedFilter.admissible_fromCanonical
+    }
+    \leanok
+    \uses{def:pinned_filter_coordinates}
+    For arbitrary real weights, every feasible family $K$ satisfies
+    $K(F(K))=K$, and every positive family $F$ whose canonical matrices are
+    feasible satisfies $F(K(F))=F$.
+    If $a_j>0$ for every $j$, then $F$ is admissible if and only if every
+    $K_j(F)$ is floor-zero feasible at weight $a_j$, and every feasible
+    family $K$ has an admissible inverse $F(K)$.
+    No nesting, positive dimension, invertibility or bound $a_j\le1$
+    is required.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Permutation conjugation preserves positive semidefiniteness and
+    eigenvalues. For a positive weight, floor-zero feasibility is
+    equivalent to positive semidefiniteness and
+    $\sum_r\lambda_r^{2/a_j}=1$, including singular matrices and empty
+    configuration sets. Conjugation by the inverse permutation gives
+    both exact inverse identities. The eigenvalue characterization is
+    proved in~\cite{QICLean2026FilterFeasibility}.
+\end{proof}
+
+\begin{theorem}[Ascending output and global maximality]
+    \label{thm:pinned_filter_output_maximum}
+    \lean{
+        TNLean.PEPS.Approximation.Pinned.liftLocal_eq_localLift,
+        TNLean.PEPS.Approximation.Pinned.NestedFilter.squareAreaLawState_eq_relabelVector,
+        TNLean.PEPS.Approximation.Pinned.NestedFilter.squareAreaLawState_output,
+        TNLean.PEPS.Approximation.Pinned.NestedFilter.squareAreaLawState_normalizedOutput,
+        TNLean.PEPS.Approximation.Pinned.NestedFilter.isMaximizer_iff
+    }
+    \leanok
+    \uses{def:pinned_filter_coordinates}
+    For every family $F$ and vector $\Omega$, the regional lift is the
+    usual tensor-factor action and
+    \begin{align}
+        U\psi(F,\Omega) & =\widehat K_{m-1}(F)\cdots\widehat K_0(F)U\Omega,
+        \notag                                                              \\
+        U\phi(F,\Omega) & =
+        \|\widehat K_{m-1}(F)\cdots\widehat K_0(F)U\Omega\|^{-1}
+        \widehat K_{m-1}(F)\cdots\widehat K_0(F)U\Omega.
+        \label{eq:pinned_filter_coordinates}
+    \end{align}
+    The normalization identity holds also at zero output. If all $a_j>0$,
+    $F$ is a maximizing admissible family if and only if $K(F)$ is feasible
+    and its output norm is at least that of every feasible canonical
+    family. Repeated regions retain their separate filter occurrences.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:pinned_filter_coordinates}
+    The complement-agreement entries agree with the tensor-factor lift.
+    The ascending sequence of applications gives the reversed matrix
+    product. The identity $U\widehat F_j=\widehat K_j(F)U$ preserves every
+    factor in its position; these ordered-action identities are proved
+    in~\cite{QICLean2026FilterOutput}. Since $U$ preserves norms and scalar
+    multiplication, normalization commutes with $U$, including at zero.
+    For the forward maximum implication, pull an arbitrary canonical
+    competitor $K'$ back to $F(K')$, compare its original output with that
+    of $F$, and use $K(F(K'))=K'$. For the reverse implication, map every
+    original admissible competitor forward and use the same norm identity.
+\end{proof}
+
+\begin{definition}[Forward crossings of an original region]
+    \label{def:pinned_filter_crossings}
+    \lean{
+        TNLean.PEPS.Approximation.Pinned.NestedFilter.Energy.Crosses,
+        TNLean.PEPS.Approximation.Pinned.NestedFilter.Energy.crossingCount
+    }
+    \leanok
+    \uses{def:peps_forward_square_edges}
+    Orient every horizontal edge to the right and every vertical edge up.
+    For $X\subseteq V_L$, let $b(X)$ be the number of these forward edges
+    with exactly one endpoint in $X$. Each physical edge is counted once.
+\end{definition}
+
+\begin{theorem}[Forward and unordered crossing counts]
+    \label{thm:pinned_filter_crossings}
+    \lean{TNLean.PEPS.Approximation.Pinned.NestedFilter.Energy.card_edgeBoundary_eq_crossingCount}
+    \leanok
+    \uses{def:pinned_filter_crossings,def:pinned_filter_coordinates}
+    For every original-grid region $X$, its once-counted crossing number
+    equals $|\partial_\Lambda\sigma(X)|$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_square_bonds_boundary,thm:square_edge_boundary_card}
+    Forgetting the fixed forward orientation identifies the forward edges
+    with the original unordered edges. The rectangle graph isomorphism
+    then identifies their crossings with $\partial_\Lambda\sigma(X)$.
+    Crossing is symmetric in the endpoints, so changing their order
+    changes neither the predicate nor its cardinality.
+\end{proof}
+
+\begin{theorem}[An original-grid maximizing family with energy and fidelity bounds]
+    \label{thm:pinned_square_maximizer_energy}
+    \lean{TNLean.PEPS.Approximation.SquareHamiltonian.exists_pinned_maximizer_energy_fidelity}
+    \leanok
+    \uses{def:polynomial_peps_model,def:pinned_square_filters,def:pinned_filter_crossings}
+    Let $H$ be an original square-grid Hamiltonian with real interaction
+    bound $J$. Suppose $\|\Omega\|=1$, $H\Omega=E_0\Omega$, and
+    $H-E_0I\ge\Delta(I-|\Omega\rangle\langle\Omega|)$, where
+    $E_0,\Delta\in\mathbb R$. Supply nested regions
+    $X_0\subseteq\cdots\subseteq X_{m-1}$ such that each forward edge
+    crosses at most one $X_j$, and weights $0<a_j\le1$.
+    There is one maximizing admissible family $F$ whose output
+    $\psi=\psi(F,\Omega)$ and normalization $\phi=\phi(F,\Omega)$ satisfy
+    \begin{align}
+        0 & <\|\psi\|,                                  & \|\phi\| & =1, \notag \\
+        |\operatorname{Re}\langle\phi,H\phi\rangle-E_0|
+          & \le q^2J\sum_{j=0}^{m-1}b(X_j)a_j^2, \notag                         \\
+        \Delta\bigl(1-|\langle\Omega,\phi\rangle|^2\bigr)
+          & \le q^2J\sum_{j=0}^{m-1}b(X_j)a_j^2.
+        \label{eq:pinned_square_energy}
+    \end{align}
+    There is no sign assumption on $J$ or $\Delta$, and $L,q,m$ may be zero.
+    Only the total Hamiltonian must be Hermitian. The adapted source
+    definitions and the remaining model and geometric scope are recorded
+    in~\cite{gap:polypeps_square_zero_floor_optimizer_scope}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:square_zero_floor_maximizer_energy,thm:pinned_filter_output_maximum,
+        thm:pinned_filter_crossings,thm:square_area_law_hamiltonian_operator}
+    Choose a linear order on the canonical sites internally. Apply
+    Theorem~\ref{thm:square_zero_floor_maximizer_energy} once to the original
+    Hamiltonian with its original real bound $J$. Pull its chosen canonical
+    family $K$ back to $F(K)$.
+    Theorem~\ref{thm:pinned_filter_output_maximum} gives maximality against
+    every admissible family and identifies both outputs exactly. The
+    configuration isometry satisfies
+    $\langle U\phi,(UHU^*)U\phi\rangle=\langle\phi,H\phi\rangle$ and
+    $\langle U\Omega,U\phi\rangle=\langle\Omega,\phi\rangle$.
+    Thus its energy and fidelity inequalities become
+    (\ref{eq:pinned_square_energy}), with the same $\Delta$.
+    Theorem~\ref{thm:pinned_filter_crossings} identifies their budgets with
+    the once-counted original crossings. No second maximizer is chosen.
+\end{proof}

@@ -1,0 +1,29 @@
+% alt: The norm N of the filtered vector L_3 L_2 L_1 Omega: three stacked filter boxes on nested windows of the chain, the innermost acting on X, each wider one reaching one shell further out, above a box Omega with seven physical legs.
+% Section 4 (part1_arealaw.tex, proof of Lemma lem:buffer, paragraph "The optimization"): N = ||L_m ... L_1 Omega|| maximized over positive filters L_j on H_{X_j}, drawn for m = 3 with X_j = X^{+jD} and flanks T_j = X_j \ X.
+% Ink-to-index: the wide box Omega is the ground state, its seven legs the sites of X_3 from left to right; L_1 sits on legs 3-5 (X_1), L_2 on legs 2-6 (X_2), L_3 on all seven (X_3); the legs leaving the ends of L_2 and L_3 are the two flanks of each shell. Every leg of Omega is contracted with the lowest filter covering its site, every filter output with the next filter; the seven top legs of L_3 are open, the middle one X, the outermost ones the flanks T_3.
+\[
+  N=\Biggl\|
+  \begin{tenkz}[rows={wire,wire,wire,wire}, cols=7, bonds=none]
+    \tn[at=(4,1), skin=box, wide=7, name=o,
+        ports={90@1:physical, 90@2:physical, 90@3:physical, 90@4:physical,
+               90@5:physical, 90@6:physical, 90@7:physical}]{\Omega}
+    \tn[at=(3,3), skin=box, wide=3, name=l1,
+        ports={270@1:physical, 270@2:physical, 270@3:physical,
+               90@1:physical, 90@2:physical, 90@3:physical}]{L_1}
+    \tn[at=(2,2), skin=box, wide=5, name=l2,
+        ports={270@1:physical, 270@2:physical, 270@3:physical, 270@4:physical, 270@5:physical,
+               90@1:physical, 90@2:physical, 90@3:physical, 90@4:physical, 90@5:physical}]{L_2}
+    \tn[at=(1,1), skin=box, wide=7, name=l3,
+        ports={270@1:physical, 270@2:physical, 270@3:physical, 270@4:physical,
+               270@5:physical, 270@6:physical, 270@7:physical,
+               90@1:physical:$T_3$, 90@2:physical, 90@3:physical, 90@4:physical:$X$,
+               90@5:physical, 90@6:physical, 90@7:physical:$T_3$}]{L_3}
+    \tnwire{o.90@3}{l1.270@1} \tnwire{o.90@4}{l1.270@2} \tnwire{o.90@5}{l1.270@3}
+    \tnwire{l1.90@1}{l2.270@2} \tnwire{l1.90@2}{l2.270@3} \tnwire{l1.90@3}{l2.270@4}
+    \tnwire{o.90@2}{l2.270@1} \tnwire{o.90@6}{l2.270@5}
+    \tnwire{l2.90@1}{l3.270@2} \tnwire{l2.90@2}{l3.270@3} \tnwire{l2.90@3}{l3.270@4}
+    \tnwire{l2.90@4}{l3.270@5} \tnwire{l2.90@5}{l3.270@6}
+    \tnwire{o.90@1}{l3.270@1} \tnwire{o.90@7}{l3.270@7}
+  \end{tenkz}
+  \Biggr\|
+\]
