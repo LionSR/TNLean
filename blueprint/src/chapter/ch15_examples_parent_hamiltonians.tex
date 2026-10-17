@@ -79,8 +79,9 @@ eigenspace.
     \lean{MPSTensor.ghz_chainGroundSpace_two_eq_constant_span}
     \leanok
     \uses{def:ghz_tensor, def:chain_ground_space, def:constant_ket, thm:ghz_ground_space_two}
-    For $N\ge2$, the common nearest-neighbour cyclic ground space of the GHZ
-    tensor satisfies
+    In the cyclic-window formulation of the two-fold degeneracy in
+    \cite[line~2205]{Cirac2021Matrix}, for $N\ge2$ the common
+    nearest-neighbour cyclic ground space of the GHZ tensor satisfies
     \begin{align}
         \mathcal G_{N,2}(A_{\mathrm{GHZ}})
          & =
@@ -90,8 +91,6 @@ eigenspace.
         \}.
         \notag
     \end{align}
-    This is the cyclic-window form of the two-fold degeneracy in
-    \cite[line~2205]{Cirac2021Matrix}.
 \end{theorem}
 
 \begin{proof}
@@ -141,22 +140,22 @@ eigenspace.
         = \Id-\ketbra{00}{00}-\ketbra{11}{11}.
         \notag
     \end{align}
-    The periodic nearest-neighbour parent Hamiltonian therefore satisfies
+    By the cyclic-window equality
+    $\mathcal G_{N,2}(A_{\mathrm{GHZ}})
+        =\spn\{\ket{0}^{\otimes N},\ket{1}^{\otimes N}\}$ of
+    Theorem~\ref{thm:ghz_chain_ground_space_two}, the periodic
+    nearest-neighbour parent Hamiltonian of
+    \cite[lines~1194--1196 and line~2205]{Cirac2021Matrix} (with the two-site
+    space and interaction also displayed in
+    \cite[Section~3]{FernandezGonzalez2015Uncle}) is the ferromagnetic Ising
+    Hamiltonian satisfying
     \begin{align}
         H_{\mathrm{GHZ},N}
          & = \sum_i (h_{\mathrm{GHZ}})_i, \notag              \\
         \ker H_{\mathrm{GHZ},N}
-         & = \spn\{\ket{0}^{\otimes N},\ket{1}^{\otimes N}\},
+         & = \spn\{\ket{0}^{\otimes N},\ket{1}^{\otimes N}\}.
         \notag
     \end{align}
-    using the cyclic-window equality
-    $\mathcal G_{N,2}(A_{\mathrm{GHZ}})
-        =\spn\{\ket{0}^{\otimes N},\ket{1}^{\otimes N}\}$ from
-    Theorem~\ref{thm:ghz_chain_ground_space_two}.
-    This is the ferromagnetic Ising parent Hamiltonian
-    \cite[lines~1194--1196 and line~2205]{Cirac2021Matrix};
-    see also \cite[Section~3]{FernandezGonzalez2015Uncle} for the displayed
-    two-site space and interaction.
 \end{remark}
 
 \begin{definition}[Cluster-state stabilizer]\label{def:cluster_stabilizer}
@@ -190,7 +189,7 @@ eigenspace.
 \begin{proof}
     \leanok
     \uses{def:cluster_tensor, def:ground_space_map, def:cluster_stabilizer}
-    Write $q = 1/\sqrt2$. The matrices $A^s = \ketbra{\pm}{s}$ have entries
+    With $q = 1/\sqrt2$, the matrices $A^s = \ketbra{\pm}{s}$ have entries
     $A^s_{ij} = q(-1)^{is}\delta_{sj}$, so
     \begin{align}
         \Gamma_3(X)(s_1,s_2,s_3)
@@ -199,13 +198,13 @@ eigenspace.
         \bigl(X_{s_30} + (-1)^{s_1}X_{s_31}\bigr).
         \label{eq:cluster_gamma_three}
     \end{align}
-    The sign $(-1)^{s_1s_2+s_2s_3}$ changes by $(-1)^{s_1+s_3}$ when $s_2$ is
-    replaced by $s_2+1$, so $K\Gamma_3(X) = \Gamma_3(X)$ by
-    (\ref{eq:cluster_gamma_three}). Conversely, if $Kv = v$, then
-    $v(s_1,1,s_3) = (-1)^{s_1+s_3}v(s_1,0,s_3)$, and the matrix $X$ with rows
+    Replacing $s_2$ by $s_2+1$ changes the sign $(-1)^{s_1s_2+s_2s_3}$ by
+    $(-1)^{s_1+s_3}$, so (\ref{eq:cluster_gamma_three}) gives
+    $K\Gamma_3(X) = \Gamma_3(X)$. Conversely, if $Kv = v$, then
+    $v(s_1,1,s_3) = (-1)^{s_1+s_3}v(s_1,0,s_3)$, and by
+    (\ref{eq:cluster_gamma_three}) the matrix $X$ with rows
     $X_{s0} = v(0,0,s) + v(1,0,s)$, $X_{s1} = v(0,0,s) - v(1,0,s)$ satisfies
-    $\Gamma_3(X) = 2q^3\,v$ by (\ref{eq:cluster_gamma_three}); hence
-    $v = \Gamma_3(X/(2q^3)) \in \mathcal G_3(A)$.
+    $\Gamma_3(X) = 2q^3\,v$, so $v = \Gamma_3(X/(2q^3)) \in \mathcal G_3(A)$.
 \end{proof}
 
 \begin{theorem}[The stabilizer has eigenvalue $-1$ on the source's matrices]
@@ -246,11 +245,11 @@ eigenspace.
     \end{align}
     Replacing $t_2$ by $t_2+1$ changes the exponent by $1+t_1+t_3$ modulo
     $2$, so $K\Gamma_3(X) = -\Gamma_3(X)$. Conversely, if $Kv = -v$, then
-    $v(t_1,1,t_3) = -(-1)^{t_1+t_3}v(t_1,0,t_3)$, and the matrix $X$ with
+    $v(t_1,1,t_3) = -(-1)^{t_1+t_3}v(t_1,0,t_3)$, and by
+    (\ref{eq:cluster_source_gamma_three}) the matrix $X$ with
     $X_{0,1-t} = (-1)^t\bigl(v(t,0,0)+v(t,0,1)\bigr)$,
     $X_{1,1-t} = (-1)^t\bigl(v(t,0,0)-v(t,0,1)\bigr)$ satisfies
-    $\Gamma_3(X) = 2v$ by (\ref{eq:cluster_source_gamma_three}); hence
-    $v = \Gamma_3(X/2)\in\mathcal G_3(A_{\mathrm{src}})$.
+    $\Gamma_3(X) = 2v$, so $v = \Gamma_3(X/2)\in\mathcal G_3(A_{\mathrm{src}})$.
 \end{proof}
 
 \begin{definition}[Translated cluster stabilizers]\label{def:cluster_chain_stabilizer}
@@ -344,11 +343,11 @@ eigenspace.
     Theorem~\ref{thm:cluster_source_ground_space_three_eigenspace} identifies
     $\mathcal G_3(A_{\mathrm{src}})$ with the $-1$ eigenspace of $K=ZXZ$.
     The periodic ground space imposes this local condition at every position
-    around the ring. Each translated operator $K_i$ acts only on its three
-    sites, so we can apply the local calculation with the outside spins fixed.
+    around the ring. Because each translated operator $K_i$ acts only on its
+    three sites, the local calculation applies with the outside spins fixed.
 
-    Fix a site $i$ and fix the spins outside $[i,i+2]$ to a configuration
-    $\tau$. The remaining coefficients form a three-site vector
+    For a site $i$ and an assignment $\tau$ of the spins outside $[i,i+2]$,
+    the remaining coefficients form a three-site vector
     $\psi|_{[i,i+2],\tau}$. The operator $K_i$ acts only on these three
     sites: it flips the middle spin and multiplies by the two endpoint
     signs. Since $N\ge3$, these sites are distinct, and therefore
@@ -362,7 +361,7 @@ eigenspace.
     every coefficient of $K_i\psi+\psi$ occurs in one of these
     three-site vectors, so all its coefficients vanish.
 
-    Substituting the local ground-space identity, we obtain
+    Substituting the local ground-space identity shows that
     $K_i\psi=-\psi$ for every $i$ exactly when every three-site
     restriction belongs to $\mathcal G_3(A_{\mathrm{src}})$, which is the
     defining condition for $\psi\in\mathcal G_{N,3}(A_{\mathrm{src}})$.
@@ -372,7 +371,7 @@ eigenspace.
     \lean{MPSTensor.clusterSource_mpv_eq_globalZ, MPSTensor.clusterSource_mpv_ne_zero, MPSTensor.clusterSource_iInf_eigenspace_eq_mpvSubmodule, MPSTensor.clusterSource_stabilizer_unique_gs, MPSTensor.clusterSource_hamiltonian_eigenspace_eq_mpvSubmodule, MPSTensor.clusterSource_energy_lower_bound}
     \leanok
     \uses{def:cluster_tensor, thm:cluster_source_ground_space_three_eigenspace, def:cluster_chain_stabilizer, def:mpv_submodule}
-    Let $N\ge3$ and put
+    For $N\ge3$, let
     $U=(\sigma^z)^{\otimes N}$ and $H=\sum_i K_i$. Then
     \begin{align}
         \ket{V^{(N)}(A_{\mathrm{src}})}
@@ -387,10 +386,9 @@ eigenspace.
         \operatorname{Re}\langle v,Hv\rangle & \ge-N\|v\|^2,\notag                       \\
         \ker(H+N\Id)                         & =\C\ket{V^{(N)}(A_{\mathrm{src}})}.\notag
     \end{align}
-    Thus the ground energy is $-N$, and the normalized ground state is unique
-    up to phase. This proves the periodic-chain claim for the matrices in
-    \cite{PerezGarcia2007Matrix}, for odd as well as
-    even $N\ge3$.
+    Thus, for the matrices in \cite{PerezGarcia2007Matrix} and for both odd
+    and even $N\ge3$, the periodic chain has ground energy $-N$ and a
+    normalized ground state unique up to phase.
     % Source location: Papers/quant-ph_0608197/MPSarchive.tex, lines 374--387.
 \end{theorem}
 
@@ -398,10 +396,8 @@ eigenspace.
     \leanok
     \uses{thm:cluster_stabilizer_unique_gs, thm:cluster_normal, thm:gauge_invariance, lem:mpv_smul}
     Applying $\sigma^z$ at every site changes every stabilizer eigenvalue from
-    $+1$ to $-1$. We first relate the vector associated with the normalized
-    cluster tensor to the vector defined by the source matrices.
-
-    Put
+    $+1$ to $-1$. To relate $\ket{V^{(N)}(A_{\mathrm{cl}})}$ to
+    $\ket{V^{(N)}(A_{\mathrm{src}})}$, let
     \begin{align}
         G=\begin{pmatrix}1&-1\\1&1\end{pmatrix},\qquad
         G^{-1}=\frac12\begin{pmatrix}1&1\\-1&1\end{pmatrix}.\notag
@@ -480,10 +476,10 @@ eigenspace.
     % are not formalized; the formal statements are the eigenspace
     % identities above.
 
-    The older review states instead that cluster states are unique ground
-    states of $\sum_i \sigma^z_i\sigma^x_{i+1}\sigma^z_{i+2}$ with the sign as
-    printed \cite[local TeX lines~374--387]{PerezGarcia2007Matrix}. Both
-    statements are correct for their own tensors: on the matrices
+    In \cite[local TeX lines~374--387]{PerezGarcia2007Matrix}, the older
+    review states instead that cluster states are unique ground states of
+    $\sum_i \sigma^z_i\sigma^x_{i+1}\sigma^z_{i+2}$ with the sign as printed.
+    Both statements are correct for their own tensors: on the matrices
     $A_{\mathrm{src}}$ displayed there every stabilizer has eigenvalue $-1$
     (Theorem~\ref{thm:cluster_source_ground_space_three_eigenspace}), while on
     $A_{\mathrm{cl}}$ it has eigenvalue $+1$. The two tensors are related by
@@ -492,10 +488,10 @@ eigenspace.
     $\bra{\pm}\sigma^x = \pm\bra{\pm}$ the states differ by $\sigma^z$ on
     every site, which conjugates each $K_i$ to $-K_i$ and exchanges the two
     Hamiltonians $\sum_i K_i$ and $-\sum_i K_i = \sum_i(\Id-K_i) - N\Id$.
+    As recorded in \cite{gap:rmp_example_parent_hamiltonian_scope},
     Theorem~\ref{thm:cluster_source_periodic_ground_state} proves this on-site
     relation for the matrix product vectors and identifies the ground energy
-    and eigenspace for the printed matrices; see
-    \cite{gap:rmp_example_parent_hamiltonian_scope}.
+    and eigenspace for the printed matrices.
 \end{remark}
 
 \begin{theorem}[AKLT two-site parent space]\label{thm:aklt_ground_space_two}
@@ -519,8 +515,8 @@ eigenspace.
 \begin{proof}
     \leanok
     \uses{def:aklt_tensor, def:ground_space_map}
-    Write $A^0 = c\,\sigma^z$, $A^1 = b\,\sigma^+$, $A^2 = -b\,\sigma^-$ with
-    $c = 1/\sqrt3$, $b = \sqrt2/\sqrt3$, so that $b^2 = 2c^2$. The products are
+    With $A^0 = c\,\sigma^z$, $A^1 = b\,\sigma^+$, and $A^2 = -b\,\sigma^-$ for
+    $c = 1/\sqrt3$ and $b = \sqrt2/\sqrt3$, one has $b^2 = 2c^2$. The products are
     $A^0A^0 = c^2\Id$, $A^0A^1 = -A^1A^0 = cb\,\ketbra01$,
     $A^0A^2 = -A^2A^0 = cb\,\ketbra10$, $A^1A^2 = -b^2\ketbra00$,
     $A^2A^1 = -b^2\ketbra11$, and $A^1A^1 = A^2A^2 = 0$. Hence
@@ -536,7 +532,7 @@ eigenspace.
     given $v$ satisfying (\ref{eq:aklt_two_site_constraints}), the matrix
     $X$ with $X_{00} = -c^2v_{12}$, $X_{01} = cb\,v_{02}$, $X_{10} = cb\,v_{01}$,
     $X_{11} = -c^2v_{21}$ satisfies $\Gamma_2(X) = c^2b^2\,v$ by
-    (\ref{eq:aklt_gamma_two}), so $v = \Gamma_2(X/(c^2b^2))$.
+    (\ref{eq:aklt_gamma_two}), giving $v = \Gamma_2(X/(c^2b^2))$.
 \end{proof}
 
 \begin{remark}[AKLT two-site parent space as a span]\label{rem:aklt_ground_space_two_span}
@@ -593,9 +589,10 @@ eigenspace.
         + b^3X_{01}\ket{212}.
         \label{eq:aklt_gamma_three}
     \end{align}
-    Set $X_{00} = c\,\psi_{102}$, $X_{01} = -b\,\psi_{002}$,
-    $X_{10} = b\,\psi_{001}$, $X_{11} = c\,\psi_{210}$. Then
-    $\Gamma_3(X) = c^2b^2\,\psi$ coordinate by coordinate: the twelve
+    For the matrix $X$ with $X_{00} = c\,\psi_{102}$,
+    $X_{01} = -b\,\psi_{002}$, $X_{10} = b\,\psi_{001}$, and
+    $X_{11} = c\,\psi_{210}$, the identity $\Gamma_3(X) = c^2b^2\,\psi$ holds
+    coordinate by coordinate: the twelve
     coordinates absent from (\ref{eq:aklt_gamma_three}) vanish for $\psi$ by
     the constraints $v_{11} = v_{22} = 0$ on the six restrictions, together
     with $\psi_{101} = -\psi_{110} = 0$ and $\psi_{202} = -\psi_{220} = 0$;
@@ -621,11 +618,12 @@ eigenspace.
          & = \C\,V^{(N)}(A_{\mathrm{AKLT}}).
         \notag
     \end{align}
-    Thus the two-site parent Hamiltonian has a unique ground state although
-    the AKLT tensor becomes injective only after blocking $L_0 = 2$ sites
-    \cite[line~2095]{Cirac2021Matrix}. On two periodic sites the two-site
-    chain ground space is $\mathcal G_2(A_{\mathrm{AKLT}})$ itself, so the
-    condition $N\ge3$ is necessary.
+    As noted in \cite[line~2095]{Cirac2021Matrix}, the two-site parent
+    Hamiltonian therefore has a unique ground state even though the AKLT
+    tensor becomes injective only after blocking $L_0 = 2$ sites. On two
+    periodic sites the two-site chain ground space is
+    $\mathcal G_2(A_{\mathrm{AKLT}})$ itself, so the condition $N\ge3$ is
+    necessary.
 \end{theorem}
 
 \begin{proof}
@@ -644,9 +642,9 @@ eigenspace.
     $\mathcal G_{N,3}(A_{\mathrm{AKLT}}) = \C\,V^{(N)}(A_{\mathrm{AKLT}})$.
     The reverse inclusion holds because the periodic MPS vector satisfies
     every cyclic two-site constraint
-    (Lemma~\ref{lem:mpv_mem_chain_ground_space}). Finally
-    $V^{(N)}(A_{\mathrm{AKLT}})\ne0$ by
-    Theorem~\ref{thm:mpv_ne_zero_blk_injective} with $L_0 = 2 < N$, so
+    (Lemma~\ref{lem:mpv_mem_chain_ground_space}). Finally,
+    Theorem~\ref{thm:mpv_ne_zero_blk_injective} with $L_0 = 2 < N$ gives
+    $V^{(N)}(A_{\mathrm{AKLT}})\ne0$, so
     $\dim\mathcal G_{N,2}(A_{\mathrm{AKLT}}) = 1$.
 \end{proof}
 
@@ -684,9 +682,9 @@ eigenspace.
     periodic chain. As a consequence of
     Theorem~\ref{thm:open_parent_hamiltonian_kernel_finrank} at $L_{0}=2$,
     and not as a statement of the review, the three-site open-chain parent
-    Hamiltonian also has a four-dimensional kernel for $N\ge3$. The spin-$0$
-    statement of the same passage is proved in
-    Theorem~\ref{thm:aklt_parent_hamiltonian}.
+    Hamiltonian also has a four-dimensional kernel for $N\ge3$.
+    Theorem~\ref{thm:aklt_parent_hamiltonian} proves the spin-$0$ statement of
+    the same passage.
 \end{theorem}
 
 \begin{proof}
@@ -731,20 +729,21 @@ eigenspace.
     Definition~\ref{def:aklt_tensor} are proportional to
     $\sigma^z,\sqrt2\sigma^+,-\sqrt2\sigma^-$ on the indices $0,1,2$. For two sites
     $j,k$ of a chain let
-    $\vec S_j\cdot\vec S_k=\sum_\alpha S^\alpha_jS^\alpha_k$. On a periodic
-    chain of $N$ spin-$1$ sites, with indices modulo $N$, the AKLT Hamiltonian is
+    $\vec S_j\cdot\vec S_k=\sum_\alpha S^\alpha_jS^\alpha_k$. Following
+    \cite{AKLT1987Rigorous,AKLT1988ValenceBond} (see also
+    \cite[local TeX lines~340--349]{PerezGarcia2007Matrix} and, up to an
+    additive constant, \cite[lines~2126--2130]{Schuch2011Phases}), on a
+    periodic chain of $N$ spin-$1$ sites with indices modulo $N$, the AKLT
+    Hamiltonian is
     \begin{align}
         H_{\mathrm{AKLT},N}
          & =
         \sum_i
         \left(\vec S_i\cdot\vec S_{i+1}
-        +\frac13(\vec S_i\cdot\vec S_{i+1})^2\right)
+        +\frac13(\vec S_i\cdot\vec S_{i+1})^2\right),
         \label{eq:aklt_polynomial_hamiltonian}
     \end{align}
-    \cite{AKLT1987Rigorous,AKLT1988ValenceBond}; see also
-    \cite[local TeX lines~340--349]{PerezGarcia2007Matrix}, and, up to an
-    additive constant, \cite[lines~2126--2130]{Schuch2011Phases}. Its two-site
-    term is
+    with two-site term
     $h=\vec S_0\cdot\vec S_1+\tfrac13(\vec S_0\cdot\vec S_1)^2$.
 \end{definition}
 
@@ -772,10 +771,10 @@ eigenspace.
     \end{align}
     where $P^{(2)}$ is the orthogonal projector onto the subspace of total spin
     $2$, the eigenspace of $\vec S_{\mathrm{tot}}^{2}$ for $6=2(2+1)$, with
-    $\vec S_{\mathrm{tot}}=\vec S_0+\vec S_1$. This projector is the two-site
-    parent interaction of the AKLT tensor, the orthogonal projector onto
-    $\mathcal G_2(A_{\mathrm{AKLT}})^{\perp}$. Writing the Hamiltonian as a sum
-    of such spin-$2$ projectors is the form of~\cite{AKLT1987Rigorous}.
+    $\vec S_{\mathrm{tot}}=\vec S_0+\vec S_1$. As in~\cite{AKLT1987Rigorous},
+    which writes the Hamiltonian as a sum of spin-$2$ projectors, $P^{(2)}$ is
+    the two-site parent interaction of the AKLT tensor, namely the orthogonal
+    projector onto $\mathcal G_2(A_{\mathrm{AKLT}})^{\perp}$.
 \end{theorem}
 
 \begin{proof}
@@ -791,10 +790,9 @@ eigenspace.
     $\sum_kw_kw_k^{\mathsf T}/\lVert w_k\rVert^{2}$ for the five vectors
     $\ket{11}$, $\ket{22}$, $\ket{01}+\ket{10}$, $\ket{02}+\ket{20}$,
     $\ket{12}+2\ket{00}+\ket{21}$. Hence $Q$ is real symmetric and idempotent,
-    and its kernel is cut out by the five constraints
-    (\ref{eq:aklt_two_site_constraints}), which is
-    $\mathcal G_2(A_{\mathrm{AKLT}})$ by
-    Theorem~\ref{thm:aklt_ground_space_two}. A self-adjoint idempotent is the
+    and by Theorem~\ref{thm:aklt_ground_space_two} its kernel, cut out by the
+    five constraints (\ref{eq:aklt_two_site_constraints}), equals
+    $\mathcal G_2(A_{\mathrm{AKLT}})$. A self-adjoint idempotent is the
     orthogonal projector onto the orthogonal complement of its kernel. The same
     computation gives $(\vec S_0\cdot\vec S_1)Q=Q$, so a vector is fixed by
     $\vec S_0\cdot\vec S_1$ exactly when it is fixed by $Q$. Since
@@ -829,10 +827,10 @@ eigenspace.
     \end{align}
     where $H^{(2)}_{N,\mathrm{AKLT}}$ is the two-site parent Hamiltonian of the
     AKLT tensor. Hence every eigenvalue of $H_{\mathrm{AKLT},N}$ is real and at
-    least $-\tfrac{2N}{3}$. For $N\ge3$ the eigenspace for $-\tfrac{2N}{3}$ is
-    $\C\,V^{(N)}(A_{\mathrm{AKLT}})$, so the AKLT state is the unique ground
-    state of $H_{\mathrm{AKLT},N}$
-    \cite{AKLT1987Rigorous}, \cite[local TeX lines~340--349]{PerezGarcia2007Matrix}.
+    least $-\tfrac{2N}{3}$. As in \cite{AKLT1987Rigorous} and
+    \cite[local TeX lines~340--349]{PerezGarcia2007Matrix}, for $N\ge3$ the
+    eigenspace for $-\tfrac{2N}{3}$ is $\C\,V^{(N)}(A_{\mathrm{AKLT}})$, so
+    the AKLT state is the unique ground state of $H_{\mathrm{AKLT},N}$.
     The ground energy $-\tfrac{2N}{3}$ is derived here from the identity above;
     the local source states only the ground-state property, for no specified
     boundary condition.
@@ -844,18 +842,17 @@ eigenspace.
         thm:parent_hamiltonian_kernel_eq_chain_ground_space,
         thm:aklt_chain_ground_space_two}
     Restricting a chain vector to the window $i,i+1$ turns
-    $\vec S_i\cdot\vec S_{i+1}$ into $\vec S_0\cdot\vec S_1$, so the local term
-    of the two-site parent Hamiltonian at $i$ is
-    $\tfrac12\bigl(h_i+\tfrac23\bigr)$ by
-    Theorem~\ref{thm:aklt_spin_two_projector}. Summing over the $N$ bonds gives
-    the identity. The parent Hamiltonian is positive by
-    Lemma~\ref{lem:transported_es_positive}, so a nonzero $v$ with
-    $H_{\mathrm{AKLT},N}v=\mu v$ satisfies $\mu+\tfrac{2N}{3}\ge0$. The
-    eigenspace for $-\tfrac{2N}{3}$ is the kernel of $H^{(2)}_{N,\mathrm{AKLT}}$,
-    which is $\mathcal G_{N,2}(A_{\mathrm{AKLT}})$ by
+    $\vec S_i\cdot\vec S_{i+1}$ into $\vec S_0\cdot\vec S_1$, so
+    Theorem~\ref{thm:aklt_spin_two_projector} identifies the local term of the
+    two-site parent Hamiltonian at $i$ as $\tfrac12\bigl(h_i+\tfrac23\bigr)$.
+    Summing over the $N$ bonds gives the identity. The parent Hamiltonian is
+    positive by Lemma~\ref{lem:transported_es_positive}, so a nonzero $v$ with
+    $H_{\mathrm{AKLT},N}v=\mu v$ satisfies $\mu+\tfrac{2N}{3}\ge0$. By
     Theorem~\ref{thm:parent_hamiltonian_kernel_eq_chain_ground_space} and
-    $\C\,V^{(N)}(A_{\mathrm{AKLT}})$, a line, by
-    Theorem~\ref{thm:aklt_chain_ground_space_two}.
+    Theorem~\ref{thm:aklt_chain_ground_space_two}, the eigenspace for
+    $-\tfrac{2N}{3}$ equals
+    $\ker H^{(2)}_{N,\mathrm{AKLT}}=\mathcal G_{N,2}(A_{\mathrm{AKLT}})
+        =\C\,V^{(N)}(A_{\mathrm{AKLT}})$, which is one-dimensional.
 \end{proof}
 
 \begin{definition}[Open-chain AKLT polynomial Hamiltonian]%
@@ -863,16 +860,16 @@ eigenspace.
     \lean{MPSTensor.akltOpenHamiltonian, MPSTensor.akltOpenHamiltonianES}
     \leanok
     \uses{def:aklt_polynomial_hamiltonian}
-    On $N$ spin-$1$ sites with open boundaries, put
+    Combining the polynomial of~\cite[local TeX lines~340--349]{PerezGarcia2007Matrix}
+    with the open boundaries of~\cite[lines~1171--1174]{Cirac2021Matrix}, on
+    $N$ spin-$1$ sites with open boundaries and no interaction joining the
+    last site to the first, the open-chain AKLT Hamiltonian is
     \begin{align}
         H^{\mathrm{open}}_{\mathrm{AKLT},N}
          & =\sum_{i=0}^{N-2}\left(\vec S_i\cdot\vec S_{i+1}
         +\frac13(\vec S_i\cdot\vec S_{i+1})^2\right).
         \notag
     \end{align}
-    There is no interaction joining the last site to the first.
-    This is the polynomial of~\cite[local TeX lines~340--349]{PerezGarcia2007Matrix}
-    with the open boundaries of~\cite[lines~1171--1174]{Cirac2021Matrix}.
 \end{definition}
 
 \begin{theorem}[Ground energy of the open AKLT chain]%
@@ -902,8 +899,10 @@ eigenspace.
 \begin{proof}\leanok
     \uses{thm:aklt_open_ground_space, thm:aklt_spin_two_projector,
         lem:open_parent_hamiltonian_es_positive}
-    Sum the local identity $h+\frac23I=2P^{(2)}$ over the $N-1$
-    nonwrapping bonds. The sum of projectors is positive and its kernel
+    Summing the local identity $h+\frac23I=2P^{(2)}$ over the $N-1$
+    nonwrapping bonds gives
+    $H^{\mathrm{open}}_{\mathrm{AKLT},N}-E_0I=2H^{\mathrm{open}}_{N,2}(A_{\mathrm{AKLT}})$.
+    The sum of projectors is positive and its kernel
     is the four-dimensional open matrix-product space, so the lower
     energy bound is attained precisely on that space.
 \end{proof}

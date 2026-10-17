@@ -22,9 +22,10 @@ a unit phase.
 \end{theorem}
 
 \begin{proof}\leanok
-    Apply the full-basis matching theorem first from $Q$ to $P$ and then to the
-    reverse proportionality from $P$ to $Q$. If $P_j$ and $P_{j'}$ had the same
-    partner $Q_k$, then symmetry and transitivity would give
+    Applying the full-basis matching theorem first from $Q$ to $P$ and then to
+    the reverse proportionality from $P$ to $Q$ produces partner maps in both
+    directions. If $P_j$ and $P_{j'}$ had the same partner $Q_k$, then symmetry
+    and transitivity would give
     \begin{align}
         P_j\sim_{\mathrm{gp}}Q_k\sim_{\mathrm{gp}}P_{j'}
          & \Longrightarrow P_j\sim_{\mathrm{gp}}P_{j'},
@@ -77,18 +78,18 @@ coefficient identification from the linear independence of the BNT basis.
     \lean{MPSTensor.coeff_identity_via_global_gauge}
     \leanok
     \uses{def:sector_bnt_cf, def:gauge_phase_equiv}
-    Let $P$ and $Q$ be BNT canonical forms with the same MPV family at every
-    positive length, matched by a bijection $\beta:J(Q)\simeq J(P)$ with
-    bond-dimension equalities and a
-    gauge-phase equivalence between $Q_k$ and $P_{\beta(k)}$ for every $k$. Then
-    each sector carries a unit-modulus phase $\zeta_k$, and eventually
+    Following the equal-MPV coefficient comparison of
+    \cite[Appendix MPV proof, lines~1187--1188]{Cirac2016MPDO_arXiv}, let $P$
+    and $Q$ be BNT canonical forms with the same MPV family at every positive
+    length, matched by a bijection $\beta:J(Q)\simeq J(P)$ with bond-dimension
+    equalities and a gauge-phase equivalence between $Q_k$ and $P_{\beta(k)}$
+    for every $k$. Then each sector carries a unit-modulus phase $\zeta_k$, and
+    eventually
     \begin{align}
         c_N^{(\beta(k))}(P)
          & = \zeta_k^N\,c_N^{(k)}(Q).
         \label{eq:ft_coeff_identity}
     \end{align}
-    This is the equal-MPV coefficient comparison of
-    \cite[Appendix MPV proof, lines~1187--1188]{Cirac2016MPDO_arXiv}.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -129,14 +130,14 @@ such implication is possible.
          & = c_N\,\zeta_k^N\,c_N^{(k)}(Q).
         \label{eq:ft_coeff_identity_threaded}
     \end{align}
-    The scalar $c_N$ is the same for every sector $k$: it is the single global
-    proportionality scalar of \cite[Theorem~\texttt{thm1}, lines~1167--1170]%
-    {Cirac2016MPDO_arXiv} at length $N$.
+    Here $c_N$, the global proportionality scalar of
+    \cite[Theorem~\texttt{thm1}, lines~1167--1170]%
+    {Cirac2016MPDO_arXiv}, is common to every sector $k$ at length $N$.
 \end{lemma}
 
 \begin{proof}\leanok
-    For each $N$ on the proportionality tail, expand both total MPVs in their
-    sector bases and use the global proportionality scalar $c_N$:
+    For each $N$ on the proportionality tail, expanding both total MPVs in
+    their sector bases with the global proportionality scalar $c_N$ gives
     \begin{align}
         \sum_{j\in J(P)} c_N^{(j)}(P)\ket{V^{(N)}(P_j)}
          & =
@@ -217,15 +218,13 @@ transformation on the direct-sum tensor (Section~\ref{sec:ft_equal_global_gauge}
     \lean{MPSTensor.sector_bnt_global_gauge_of_copy_weight_matching}
     \leanok
     \uses{def:sector_bnt_copy_weight_matching, thm:sector_bnt_global_gauge_of_matched_weights}
-    Suppose that the sectors of $P$ and $Q$ are matched, with
-    bond-dimension equalities, nonzero phases, and block gauges satisfying
-    $Q_k^i=\zeta_k X_kP_{\beta(k)}^iX_k^{-1}$.
-    If the same phases also give a copy-weight matching, then the flattened
-    $Q$-tensor is obtained from the matched-coordinate $P$-tensor by the
-    direct-sum gauge $X=\bigoplus_k(\mathbf{1}_{r_k}\otimes X_k)$.
-    This reformulates
-    Theorem~\ref{thm:sector_bnt_global_gauge_of_matched_weights}
-    in terms of copy-weight matchings.
+    Reformulating Theorem~\ref{thm:sector_bnt_global_gauge_of_matched_weights}
+    in terms of copy-weight matchings, suppose that the sectors of $P$ and $Q$
+    are matched, with bond-dimension equalities, nonzero phases, and block
+    gauges satisfying $Q_k^i=\zeta_k X_kP_{\beta(k)}^iX_k^{-1}$. If the same
+    phases also give a copy-weight matching, then the flattened $Q$-tensor is
+    obtained from the matched-coordinate $P$-tensor by the direct-sum gauge
+    $X=\bigoplus_k(\mathbf{1}_{r_k}\otimes X_k)$.
 \end{theorem}
 
 \begin{proof}\leanok

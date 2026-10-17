@@ -9,8 +9,7 @@ import Lean.Util.CollectAxioms
 /-! # Logical dependencies of template entropy estimates with real clearance -/
 
 run_cmd do
-  let ns := `TNLean.PEPS.AreaLaw.Geometry
-  let decl := Lean.Name.str ns "template_entropy_bounds_of_real_safe_box"
+  let decl := ``TNLean.PEPS.AreaLaw.Geometry.template_entropy_bounds_of_real_safe_box
   unless (← Lean.getEnv).contains decl do
     throwError "The intended template entropy theorem is absent: {decl}"
   let expected := #[``propext, ``Classical.choice, ``Quot.sound]

@@ -11,11 +11,11 @@ $\Sigma=\{0,\ldots,q-1\}^{V}$ and $N=|\Sigma|=q^{|V|}$.
     \label{def:peps_configuration_copy}
     \lean{TNLean.PEPS.ExactTreeRepresentation.configurationEquiv,TNLean.PEPS.ExactTreeRepresentation.bondDim,TNLean.PEPS.ExactTreeRepresentation.decode,TNLean.PEPS.ExactTreeRepresentation.encode,TNLean.PEPS.ExactTreeRepresentation.Ports,TNLean.PEPS.ExactTreeRepresentation.Ports.ofConnected,TNLean.PEPS.ExactTreeRepresentation.localLabel,TNLean.PEPS.ExactTreeRepresentation.IsConsistent,TNLean.PEPS.ExactTreeRepresentation.tensor}
     \leanok
-    Suppose $|V|\ge2$. Choose a connected spanning subgraph $T\subseteq G$, a
-    root $r\in V$, and, at every vertex $v$, an incident edge $p(v)$ of $T$.
-    For $\psi\colon\Sigma\to\C$, assign bond dimensions
-    $D_e=N$ when $e\in T$ and $D_e=1$ otherwise. Decode each active edge index
-    as a configuration $\tau_e\in\Sigma$, and define
+    For $|V|\ge2$, fix a connected spanning subgraph $T\subseteq G$, a
+    root $r\in V$, and an incident edge $p(v)$ of $T$ at each vertex $v$.
+    Given $\psi\colon\Sigma\to\C$, assign bond dimensions
+    $D_e=N$ for $e\in T$ and $D_e=1$ otherwise; decoding each active edge
+    index as a configuration $\tau_e\in\Sigma$, define
     \begin{align}
         A_v((\tau_e)_{e\ni v},i)
          & = a_v(\tau_{p(v)})\,
@@ -75,8 +75,8 @@ to a vertex of any degree.
 \begin{proof}
     \leanok
     \uses{thm:peps_copy_unique}
-    Choose a spanning tree of $G$. Its connectedness and $|V|\ge2$ provide
-    an incident tree edge at each vertex. By
+    Every connected graph $G$ with $|V|\ge2$ admits a spanning tree $T$,
+    whose connectedness provides an incident tree edge at each vertex. By
     Theorem~\ref{thm:peps_copy_unique}, all terms of the contraction vanish
     except the assignment $\tau_e=\sigma$. Its root factor is $\psi(\sigma)$
     and every other factor is one, giving

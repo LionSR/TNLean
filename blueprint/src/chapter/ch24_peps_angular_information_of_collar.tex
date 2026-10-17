@@ -8,8 +8,11 @@
     \lean{TNLean.PEPS.Approximation.exists_cell_conditionalMutualInformation_le_of_sublinearCollarBound}
     \leanok
     \uses{def:area_law_collar_bound,def:area_law_ground_entropy}
-    Fix $q\in\mathbb N$, $J\in\mathbb R$, $\Delta>0$, and template constants
-    for which the range-one sublinear collar bound holds. Fix $c>0$.
+    In the conditional form of \cite[Lemma~3.2]{OpenAI2026PolynomialPEPS}
+    (with the explicit collar hypothesis discussed in
+    \cite{gap:polypeps_angular_annular_geometry_scope}), fix
+    $q\in\mathbb N$, $J\in\mathbb R$, $\Delta>0$, and template constants
+    for which the range-one sublinear collar bound holds, and fix $c>0$.
     There exist $C_1>0$ and $K\ge0$ with the following property.
     Let $s\ge1$, let $o\in\mathbb R^2$ be a grid origin, and set
     $Q_i=o+si+[0,s)^2$ for $i\in\mathbb Z^2$.
@@ -27,10 +30,7 @@
         \notag
     \end{align}
     The constants precede the scale, grid, finite domain, Hamiltonian and
-    ground vector. This is the conditional form of
-    \cite[Lemma~3.2]{OpenAI2026PolynomialPEPS}; the explicit collar
-    hypothesis is discussed in
-    \cite{gap:polypeps_angular_annular_geometry_scope}.
+    ground vector.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_coarse_information_of_collar,
@@ -39,12 +39,12 @@
         cor:peps_cell_information_counting_form}
     The coarse information estimate gives an exponent $\beta<1$ and a
     uniform bound $C_2$ for tiles that are unions of at most $66^2$ rectangles.
-    Choose the partition threshold large enough that
-    $2u^\beta\le cu$ at every tile scale $u$.
-    Give the cells indexed by $A$ colour zero and the other exterior cells
-    colour one, and restrict the ordered partition to $\Lambda$.
-    Its order and families are retained, and its residual cardinality cannot
-    increase. The separation of tiles of one family from their predecessors
+    Selecting the partition threshold large enough that
+    $2u^\beta\le cu$ at every tile scale $u$,
+    giving the cells indexed by $A$ colour zero and the other exterior cells
+    colour one, and restricting the ordered partition to $\Lambda$
+    retains its order and families without increasing its residual
+    cardinality. The separation of tiles of one family from their predecessors
     and from the corresponding exterior cells gives the two coarse
     information bounds. For the first family, the additional separation from
     $E$ follows from $u^\beta<cs$ and the closed-cell hypothesis.
@@ -58,8 +58,8 @@
         \notag
     \end{align}
     where $M=\max\{1,2\log q,C_2\}$.
-    Take $C_1=MC_{\rm part}$ and $K=\max\{K_{\rm part},0\}$; the last
-    exponent can be enlarged because $1+\log s\ge1$.
+    Setting $C_1=MC_{\rm part}$ and $K=\max\{K_{\rm part},0\}$ completes the
+    bound; the last exponent can be enlarged because $1+\log s\ge1$.
 \end{proof}
 
 \begin{theorem}[Square-grid cell information under the collar bound]
@@ -83,16 +83,18 @@
 \begin{proof}\leanok
     \uses{thm:peps_cell_conditional_information_of_collar,
         thm:finite_product_entropy_relabel,thm:square_area_law_ground_gap}
-    Relabel the square sites by the integer rectangle
-    $\{0,\ldots,L-1\}^2$ and replace the grid origin $o$ by $o-(1,1)$.
-    Translation by $(1,1)$ sends the chosen half-open cell and its closure
-    to the original cell and closure, and preserves distances.
+    Relabeling the square sites by the integer rectangle
+    $\{0,\ldots,L-1\}^2$ and replacing the grid origin $o$ by $o-(1,1)$
+    sends the chosen half-open cell and its closure
+    to the original cell and closure under translation by $(1,1)$, while
+    preserving distances.
     The relabeling preserves the Hamiltonian, ground-state equation and
-    full-system gap. It also carries both cell samples and the conditioning
+    full-system gap, and carries both cell samples and the conditioning
     union to the original physical regions.
-    Apply Theorem~\ref{thm:peps_cell_conditional_information_of_collar}.
-    Relabeling preserves each of the four regional entropies in
-    $I_\Omega(G:E\mid B)$, proving the stated bound for the same vector $\Omega$.
+    Theorem~\ref{thm:peps_cell_conditional_information_of_collar} then
+    applies, and because relabeling preserves each of the four regional
+    entropies in $I_\Omega(G:E\mid B)$, the stated bound holds for the same
+    vector $\Omega$.
 \end{proof}
 
 \begin{theorem}[Information gained by adjoining selected cells]
@@ -100,8 +102,10 @@
     \lean{TNLean.PEPS.Approximation.mutualInformation_selectedRegion_le_of_cell_bound}
     \leanok
     \uses{def:peps_angular_grid,def:area_law_ground_entropy}
-    Fix a grid origin $o$, a side length $s>0$, an enlargement radius $r$,
-    and $c>0$. Write $Q_i=o+si+[0,s)^2$ for $i\in\mathbb Z^2$.
+    For the finite cell addition in the proof of
+    \cite[Proposition~3.4]{OpenAI2026PolynomialPEPS}, fix a grid origin $o$,
+    a side length $s>0$, an enlargement radius $r$, and $c>0$.
+    Write $Q_i=o+si+[0,s)^2$ for $i\in\mathbb Z^2$.
     Let $A_{\rm old}\subseteq A$ be ambient sets and let $S$ be the
     finite set of cells selected by $A$ but not by $A_{\rm old}$.
     Write $R_{\rm old},R$ for the physical samples of their selected unions,
@@ -119,8 +123,6 @@
         \notag
     \end{align}
     No normalization or sign assumption on $k$ is required.
-    This is the finite cell addition in the proof of
-    \cite[Proposition~3.4]{OpenAI2026PolynomialPEPS}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_selected_cell_owner,thm:peps_selected_cell_closure_clearance}
@@ -140,7 +142,8 @@
     \lean{TNLean.PEPS.Approximation.exists_angular_information_reset}
     \leanok
     \uses{def:peps_angular_grid,def:area_law_ground_entropy}
-    Fix a local dimension $q\ge1$, an interaction bound $J\ge0$, a gap
+    For the regions used in \cite[Proposition~3.4]{OpenAI2026PolynomialPEPS},
+    fix a local dimension $q\ge1$, an interaction bound $J\ge0$, a gap
     $\Delta>0$, and $p>0$. There are constants $C_p>0$ and $L_0$ with the
     following property. Let $L\ge L_0$ and let $\Omega$ be a normalized
     ground vector of the square Hamiltonian with full-system gap $\Delta$.
@@ -156,8 +159,6 @@
         \notag
     \end{align}
     Then $I_\Omega(R_0:C_0)\le L^{-p}$.
-    These are the regions used in
-    \cite[Proposition~3.4]{OpenAI2026PolynomialPEPS}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_annular_cell_clearance,thm:peps_physical_integer_sup_distance,
@@ -173,7 +174,9 @@
     \label{thm:peps_angular_reset_width_of_cell_information}
     \lean{TNLean.PEPS.Approximation.exists_angular_reset_width_lt_of_cell_information}
     \leanok
-    Fix $a',C_p,C_1,p>0$, $0<d\le1$, and real numbers $N,K\ge0$.
+    For the uniform choice of scales in
+    \cite[Proposition~3.4]{OpenAI2026PolynomialPEPS}, fix $a',C_p,C_1,p>0$,
+    $0<d\le1$, and real numbers $N,K\ge0$.
     There are $D\ge1$ and $L_0\ge e$ such that, for all real $L,s$ with
     $L\ge L_0$ and $s\ge D\log L$, one has $ds\ge1$ and
     \begin{align}
@@ -181,14 +184,12 @@
          & <a's/3.
         \notag
     \end{align}
-    This is the uniform choice of scales in
-    \cite[Proposition~3.4]{OpenAI2026PolynomialPEPS}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_annular_reset_width}
-    Choose $D=\max\{1,4C_p/(a'/3),1/d\}$ and apply the fixed-slope width
-    estimate with coefficients $C_3=C_p(2+NC_1)$ and $C_4=C_p$.
-    Increase the resulting threshold to at least $e$.
+    With $D=\max\{1,4C_p/(a'/3),1/d\}$, the fixed-slope width
+    estimate applies with coefficients $C_3=C_p(2+NC_1)$ and $C_4=C_p$,
+    where the resulting threshold is increased to at least $e$.
     Then $\log L\ge1$ implies $ds\ge1$, while $L^{-p}\le1$ and
     $(1+\log(ds))^K\le(1+\log s)^K$.
     Since $(1+\log s)^K\ge1$, the required width is at most
@@ -200,8 +201,12 @@
     \lean{TNLean.PEPS.Approximation.exists_mutualInformation_selectedRegion_le_square_of_sublinearCollarBound}
     \leanok
     \uses{def:area_law_collar_bound,def:polynomial_peps_model,def:peps_angular_grid}
-    Fix $q\in\mathbb N$, $J\ge0$, $\Delta>0$ and fixed template constants
-    for which the range-one sublinear collar bound holds. Fix $c>0$.
+    In the conditional step of
+    \cite[Proposition~3.4]{OpenAI2026PolynomialPEPS} (with the collar
+    hypothesis remaining explicit, as recorded in
+    \cite{gap:polypeps_angular_annular_geometry_scope}), fix $q\in\mathbb N$,
+    $J\ge0$, $\Delta>0$ and fixed template constants
+    for which the range-one sublinear collar bound holds, and fix $c>0$.
     There exist $C_1>0$ and $K\ge0$ with the following property.
     Let $s\ge1$, let $o\in\mathbb R^2$ be a grid origin, let $r\in\mathbb R$,
     and let $A_{\rm old}\subseteq A$ be ambient sets.
@@ -219,15 +224,12 @@
         \notag
     \end{align}
     The constants precede the grid, ambient sets, square size, Hamiltonian,
-    ground vector and exterior region. This is the corresponding conditional
-    step in \cite[Proposition~3.4]{OpenAI2026PolynomialPEPS}; the collar
-    hypothesis remains explicit, as recorded in
-    \cite{gap:polypeps_angular_annular_geometry_scope}.
+    ground vector and exterior region.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_square_cell_conditional_information_of_collar,
         thm:peps_selected_region_information_of_cell_bounds}
-    Choose the constants from the square-grid cell information theorem.
+    Let $C_1,K$ be the constants from the square-grid cell information theorem.
     Its bound applies to every new cell conditioned on any union of the other
     whole cells, with the same vector $\Omega$ and exterior $E$.
     The selected-cell summation theorem therefore gives
@@ -284,9 +286,9 @@
     of mutual information therefore bounds their information by
     $\varepsilon$. The exact new-cell count is again at most $N$, and
     the reset implication proves the invariant at the new scale.
-    Finally $A_m=X$. Removing the padding from both regions gives
-    the desired estimate. This is the finite induction in
-    \cite[Proposition~3.4]{OpenAI2026PolynomialPEPS}.
+    In the finite induction of
+    \cite[Proposition~3.4]{OpenAI2026PolynomialPEPS}, $A_m=X$, and removing
+    the padding from both regions gives the desired estimate.
 \end{proof}
 
 \begin{theorem}[Uniform information reset at one scale]
@@ -328,17 +330,17 @@
         thm:peps_selected_region_information_of_collar,
         thm:peps_angular_reset_width_of_cell_information,
         thm:peps_angular_information_reset}
-    Set $c=(a/2-3a'-d)/d>0$, and choose the cell-information constants
-    $C_1,K$ for this clearance coefficient and the information-reset
-    constant $C_p$. Choose $D,L_0$ so that $ds\ge1$ and
+    With $c=(a/2-3a'-d)/d>0$, let $C_1,K$ be the cell-information constants
+    for this clearance coefficient and $C_p$ the information-reset
+    constant. Choosing $D,L_0$ so that $ds\ge1$ and
     \begin{align}
         C_p\bigl(1+L^{-p}+NC_1(1+\log(ds))^K+\log L\bigr)
          & <a's/3
         \label{eq:peps_single_scale_width}
     \end{align}
-    whenever $L\ge L_0$ and $s\ge D\log L$, increasing $L_0$ to the
-    reset threshold if necessary.
-    The selected union $U_{ds,3a's/2}(A)$ has distance at least
+    whenever $L\ge L_0$ and $s\ge D\log L$ (increasing $L_0$ to the
+    reset threshold if necessary) ensures that
+    the selected union $U_{ds,3a's/2}(A)$ has distance at least
     $(a/2-3a'-d)s=c\,ds>0$ from the exterior enlargement.
     Thus its physical sample $R$ is disjoint from $C$. The selected-cell
     estimate and $|S|\le N$ give
@@ -355,7 +357,11 @@
     \lean{TNLean.PEPS.Approximation.angularInformationBound_of_sublinearCollarBound}
     \leanok
     \uses{def:area_law_collar_bound,def:polynomial_peps_model}
-    Fix $q\in\mathbb N$ with $q\ge1$, an interaction bound $J\ge0$, and
+    In the conditional form of
+    \cite[Proposition~3.4]{OpenAI2026PolynomialPEPS} (with the collar
+    premise remaining separate from the model and gap assumptions, as
+    recorded in \cite{gap:polypeps_angular_annular_geometry_scope}), fix
+    $q\in\mathbb N$ with $q\ge1$, an interaction bound $J\ge0$, and
     a full-system gap $\Delta>0$. Assume the range-one sublinear collar
     bound for these parameters and fixed template constants.
     For every $a>0$, $A_0\ge1$, $m_0\in\mathbb N$ and $p>0$, there are
@@ -377,16 +383,13 @@
     \end{align}
     then $I_\Omega(X:E)\le L^{-p}$.
     The constants precede the Hamiltonian, ground vector, marked points,
-    physical regions and scale. This is a conditional form of
-    \cite[Proposition~3.4]{OpenAI2026PolynomialPEPS}; the collar premise
-    remains separate from the model and gap assumptions, as recorded in
-    \cite{gap:polypeps_angular_annular_geometry_scope}.
+    physical regions and scale.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_angular_single_scale_reset_of_collar,
         thm:peps_annular_information_induction,thm:peps_annular_cutoff,
         thm:peps_annular_separation}
-    Choose $a'=\min\{a,1\}/200$ and $d=a'/8$, and put
+    Set $a'=\min\{a,1\}/200$ and $d=a'/8$, and put
     \begin{align}
         N & =(m_0+1)
         \left(2\left\lceil\frac{\max\{A_0,2\}+3a'/2}{d}\right\rceil_{+}

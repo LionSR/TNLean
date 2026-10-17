@@ -58,11 +58,11 @@ at the final scanner exponents.
     Every fixed logarithmic power is smaller than any positive power:
     for $A\geq0$ and $p<q$, eventually
     $A n^p(\log n)^{C_\ell}\leq\tfrac12 n^q$.
-    Apply this with $q=-r-\nu$ to the two terms bounded in
-    (\ref{eq:density_scale_rounded}), using respectively coefficients
-    $CC_m$ and $CC_K^{1/4}$ and logarithmic powers $0$ and $C_\ell$.
-    The strict inequalities in (\ref{eq:density_scale_margins}) give
-    the required gaps. Adding the two half-bounds and dividing by
+    Applying this bound with $q=-r-\nu$ to the two terms bounded in
+    (\ref{eq:density_scale_rounded}), with coefficients
+    $CC_m$ and $CC_K^{1/4}$ and logarithmic powers $0$ and $C_\ell$,
+    where the strict inequalities in (\ref{eq:density_scale_margins}) provide
+    the required gaps, adding the two half-bounds, and dividing by
     $\varepsilon=n^{-\nu}>0$ gives (\ref{eq:density_scale_bound}).
 \end{proof}
 
@@ -83,7 +83,7 @@ at the final scanner exponents.
 
 \begin{proof}
     \leanok
-    Substitute the displayed rational values and simplify.
+    Substituting the displayed rational values and simplifying yields both identities.
 \end{proof}
 
 \begin{theorem}[Final rounded principal density]
@@ -108,9 +108,9 @@ at the final scanner exponents.
     \leanok
     \uses{thm:arealaw-source-density-scale}
     Exact rational arithmetic verifies (\ref{eq:density_scale_margins})
-    with $r=\nu$, as quantified in (\ref{eq:density_scale_final_gaps}).
-    Apply Theorem~\ref{thm:arealaw-source-density-scale} with
-    $\kappa=1/1000000$.
+    with $r=\nu$, as quantified in (\ref{eq:density_scale_final_gaps}),
+    so Theorem~\ref{thm:arealaw-source-density-scale} with
+    $\kappa=1/1000000$ gives the bound.
 \end{proof}
 
 The estimate concerns only the displayed principal density. To control

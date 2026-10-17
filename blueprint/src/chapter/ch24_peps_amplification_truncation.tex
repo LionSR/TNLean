@@ -28,9 +28,9 @@ combined.
 \end{theorem}
 \begin{proof}\leanok
     Each root $(I-k_i)^{1/2}$ is a positive contraction, so $D_w$ is a
-    contraction. For the second claim, write $D_w=GX$ and $D_w'=G'X'$,
-    with $G,G'$ the last factors. Then
-    $GX-G'X'=G(X-X')+(G-G')X'$, and induction on $m$ gives the bound.
+    contraction. For the second claim, factoring $D_w=GX$ and $D_w'=G'X'$
+    with last factors $G,G'$ gives
+    $GX-G'X'=G(X-X')+(G-G')X'$, and induction on $m$ yields the bound.
 \end{proof}
 
 \begin{theorem}[Expected truncation error on retained events]
@@ -125,12 +125,12 @@ combined.
         thm:al_retained_anchor_count,thm:al_truncated_product_support}
     Operator monotonicity of the square root gives
     $\|(I-k_i)^{1/2}-(I-E_{i,r}k_i)^{1/2}\|\le\|k_i-E_{i,r}k_i\|^{1/2}
-        \le C^{1/2}e^{-cr^\alpha/2}$. Apply
-    Theorem~\ref{thm:al_contraction_word_expected_truncation} and bound
+        \le C^{1/2}e^{-cr^\alpha/2}$. Applying
+    Theorem~\ref{thm:al_contraction_word_expected_truncation} and bounding
     the number of retained labels by
-    Theorem~\ref{thm:al_retained_anchor_count}; take $A=2\mu C^{1/2}$ and
-    $\gamma=c/2$. The support follows from
-    Theorem~\ref{thm:al_truncated_product_support}.
+    Theorem~\ref{thm:al_retained_anchor_count} yields the integral estimate with
+    $A=2\mu C^{1/2}$ and $\gamma=c/2$, while
+    Theorem~\ref{thm:al_truncated_product_support} gives the support.
 \end{proof}
 
 \begin{theorem}[Truncation of the retained constraint product]
@@ -139,8 +139,13 @@ combined.
     \leanok
     \uses{thm:al_lattice_positive_replacement}
     Fix an integer $p\ge1$, a range $R$, a strength $J\ge0$ and a gap
-    $\Delta>0$, and put $\alpha=p/(p+1)$. There are constants $C\ge0$
-    and $c>0$ with the following property. Let $\Lambda$ be a finite
+    $\Delta>0$, and put $\alpha=p/(p+1)$. Specializing the
+    first estimate of \cite[Lemma~10.1]{OpenAI2026AreaLaw} (stated for
+    general constraints in
+    Theorem~\ref{thm:al_domain_product_truncation}) to the exact positive
+    constraints without requiring $S$ to be nonempty or $r\ge1$ gives constants
+    $C\ge0$ and $c>0$, depending only on $p,R,J,\Delta$, with the following property.
+    Let $\Lambda$ be a finite
     induced lattice domain with local dimension $q\ge1$, let $H$ be a
     range-$R$ interaction of strength $J$, and let $\Omega$ be a ground
     vector with full-system gap $\Delta$. Let $k_i$ be the exact
@@ -158,12 +163,6 @@ combined.
         \le Ct\,|S|\,(1+r)^2e^{-cr^\alpha},
     \end{align*}
     and every $L(w)$ is a contraction supported on $N_{2r}(S)$.
-    The constants depend only on $p,R,J,\Delta$. This specializes the
-    first estimate of \cite[Lemma~10.1]{OpenAI2026AreaLaw}, stated for
-    general constraints in
-    Theorem~\ref{thm:al_domain_product_truncation}, to the exact positive
-    constraints, without the assumptions that $S$ is nonempty and
-    $r\ge1$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:al_lattice_quasilocal_roots,

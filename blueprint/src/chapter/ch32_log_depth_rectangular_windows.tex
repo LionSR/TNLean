@@ -3,8 +3,8 @@
 The local criterion also applies directly to the rectangular site maps of a ring.
 Let $1\le D_i\le D$, with $D_N=D_0$, and let
 $E_i:M_{D_{i+1}}\to M_{D_i}$ be the completely positive, trace-preserving
-map of the original site tensor. Write $F_{a,b}=E_a\circ\cdots\circ E_{b-1}$.
-The norm below is the operator norm induced by the Hilbert--Schmidt norms
+map of the original site tensor. For $F_{a,b}=E_a\circ\cdots\circ E_{b-1}$,
+the norm below is the operator norm induced by the Hilbert--Schmidt norms
 on these bond matrix spaces, represented in their matrix-unit bases.
 
 \begin{definition}[Rectangular cut and block channels]
@@ -42,18 +42,18 @@ on these bond matrix spaces, represented in their matrix-unit bases.
 \end{theorem}
 \begin{proof}\leanok
     A fixed density of the full-cycle channel, propagated along suffixes,
-    gives the references. Subtract the trace-prepare minorizer from each complete
-    window. The residual is completely positive and scales trace by $1-\eta$.
-    Peeling complete windows from the right leaves one shorter interval on the left.
-    Their residual product $Q$ agrees with $F_{a,b}$ on traceless inputs and scales
+    gives the references. Subtracting the trace-prepare minorizer from each complete
+    window leaves a completely positive residual that scales trace by $1-\eta$.
+    Peeling complete windows from the right leaves one shorter interval on the left;
+    their residual product $Q$ agrees with $F_{a,b}$ on traceless inputs and scales
     trace by $t=(1-\eta)^{\lfloor(b-a)/s\rfloor}$.
     Its unnormalized Choi matrix is positive with trace $D_b t$, which gives
-    $\|Q\|_{2\to2}\le D_b t$. The same bound holds for
-    $X\mapsto\operatorname{Tr}(X)Q(\sigma_b)$. Their difference is
+    $\|Q\|_{2\to2}\le D_b t$; the same bound holds for
+    $X\mapsto\operatorname{Tr}(X)Q(\sigma_b)$, and their difference is
     $F_{a,b}-\operatorname{Tr}(\,\cdot\,)\sigma_a$.
 \end{proof}
 
-For example, let $c-a<s$ and $b=c+2s$, set $B=F_{a,c}$ and
+For example, let $c-a<s$ and $b=c+2s$, with $B=F_{a,c}$ and
 $R_u=F_{u,u+s}-\eta\operatorname{Tr}(\,\cdot\,)\tau_u$.
 For every traceless $X\in M_{D_b}$ the following equality holds.
 The channels act from right to left. Internal matrix-entry indices have dimensions
@@ -107,14 +107,14 @@ These need not be equal, and none is a physical spin index.
     $\varepsilon$ against the original MPS.
 \end{theorem}
 \begin{proof}\leanok
-    The window on the ring of length $s$ forces $\eta\le1$. Weaken the minorization
-    to $\eta/2$ and put $r=-\log(1-\eta/2)/s>0$. Since
-    $1-\eta/2\ge1/2$, the preceding bound is at most $4D e^{-r(b-a)}$.
-    The rectangular preparation theorem applies with $K=4D$ and this $r$.
-    Enlarge its cutoff to at least $s$. All reference densities may remain singular.
+    The window on the ring of length $s$ forces $\eta\le1$. Weakening the minorization
+    to $\eta/2$ and setting $r=-\log(1-\eta/2)/s>0$ gives
+    $1-\eta/2\ge1/2$, so the preceding bound is at most $4D e^{-r(b-a)}$.
+    The rectangular preparation theorem then applies with $K=4D$ and this $r$
+    once its cutoff is enlarged to at least $s$, while all reference densities may remain singular.
 \end{proof}
 
-This is an additional quantitative sufficient criterion for the inhomogeneous
-paragraph of arXiv:2307.01696v2. Qualitative finite correlation alone does not imply
-a uniform window strength or an exponential accuracy rate. The resulting circuit
+For the inhomogeneous paragraph of arXiv:2307.01696v2, this theorem provides an
+additional quantitative sufficient criterion, since qualitative finite correlation alone
+does not imply a uniform window strength or an exponential accuracy rate. The resulting circuit
 uses ring adjacency; the statement does not assert an open-line locality bound.

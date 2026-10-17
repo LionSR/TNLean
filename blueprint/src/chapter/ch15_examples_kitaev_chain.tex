@@ -4,25 +4,24 @@
 The Kitaev chain, or Majorana chain~\cite{Kitaev2001Majorana}, is a chain of
 spinless fermions. In the limit where the Majorana modes pair up only across
 neighbouring sites, its ground state is the non-trivial fixed point of the
-topological phase, and it is described by a graded (fermionic) matrix product
-state with bond dimension two and a twist at the boundary
-\cite[Appendix~A, ``The Kitaev chain'']{Cirac2021Matrix},
-\cite{Bultinck2017FermionicMPS}.
+topological phase; following
+\cite[Appendix~A, ``The Kitaev chain'']{Cirac2021Matrix} and
+\cite{Bultinck2017FermionicMPS}, it is represented by a graded (fermionic)
+matrix product state of bond dimension two with a boundary twist.
 
 \begin{definition}[Kitaev-chain tensor and twist]\label{def:kitaev_tensor}
     \lean{MPSTensor.kitaevTensor, MPSTensor.kitaevTwist}
     \leanok
     \uses{def:mps_tensor}
-    Set $d=D=2$. The Kitaev-chain tensor is
+    Following \cite[Appendix~A, ``The Kitaev chain'']{Cirac2021Matrix} and
+    \cite{Bultinck2017FermionicMPS}, set $d=D=2$. The Kitaev-chain tensor is
     \begin{align}
         A^0 & = \begin{pmatrix}1&0\\0&1\end{pmatrix},
         \qquad
         A^1 = \begin{pmatrix}0&1\\-1&0\end{pmatrix},
         \notag
     \end{align}
-    with the twist $Y=\begin{pmatrix}0&1\\-1&0\end{pmatrix}$ at the boundary
-    \cite[Appendix~A, ``The Kitaev chain'']{Cirac2021Matrix},
-    \cite{Bultinck2017FermionicMPS}.
+    with the twist $Y=\begin{pmatrix}0&1\\-1&0\end{pmatrix}$ at the boundary.
 \end{definition}
 
 On a ring of $N$ sites the state is
@@ -36,21 +35,22 @@ On a ring of $N$ sites the state is
 where $\otimes_g$ is the graded tensor product; the state has odd fermion
 parity~\cite[Section~II.B.4]{Cirac2021Matrix}.
 
-\paragraph{Scope.} The results below concern the ordinary contraction of the
-matrices, which gives the coefficients of~(\ref{eq:kitaev_chain_state}) in the
-ordered graded product basis; the graded contraction rules and the graded
-notion of injectivity are outside the scope of these
-results~\cite{gap:rmp_kitaev_chain_bosonic_scope}.
+\paragraph{Scope.} As recorded in~\cite{gap:rmp_kitaev_chain_bosonic_scope},
+the results below concern the ordinary contraction of the matrices, which
+gives the coefficients of~(\ref{eq:kitaev_chain_state}) in the ordered graded
+product basis, whereas graded contraction rules and graded injectivity lie
+outside the scope of these results.
 
 The boundary twist enters as $\tr(YA^{i_1}\cdots A^{i_N})$.
 Theorem~\ref{thm:kitaev_amplitudes} and
 Corollary~\ref{cor:kitaev_parity_supports} compute both twisted and
-untwisted coefficients and their parity supports.
-Lemma~\ref{lem:kitaev_open_boundary} gives the open closures.
+untwisted coefficients and their parity supports, while
+Lemma~\ref{lem:kitaev_open_boundary} relates the four open-boundary closures.
 Theorems~\ref{thm:kitaev_not_normal} and \ref{thm:kitaev_two_injective}
-describe non-normality and the two injective sectors of the ordinary
-matrix tensor. These are not statements of graded injectivity; that
-distinction is maintained in \cite{gap:rmp_kitaev_chain_bosonic_scope}.
+establish non-normality of the ordinary matrix tensor and decompose its
+twisted contraction into a sum of two injective bond-dimension-one sectors;
+as noted in \cite{gap:rmp_kitaev_chain_bosonic_scope}, these are statements
+about the ungraded contraction rather than graded injectivity.
 
 
 \begin{definition}[Twisted periodic amplitude]\label{def:kitaev_twisted_coeff}
@@ -68,14 +68,14 @@ distinction is maintained in \cite{gap:rmp_kitaev_chain_bosonic_scope}.
         MPSTensor.kitaevTwist_mul_kitaevTensor}
     \leanok
     \uses{def:kitaev_tensor}
-    $A^0=\mathbb 1$, $A^1=Y$, $(A^1)^2=Y^2=-\mathbb 1$, and $Y$ commutes with
-    $A^0$ and $A^1$
-    \cite{Bultinck2017FermionicMPS}.
+    As in \cite{Bultinck2017FermionicMPS}, the generators satisfy
+    $A^0=\mathbb 1$, $A^1=Y$, and $(A^1)^2=Y^2=-\mathbb 1$, so $Y$ commutes
+    with both $A^0$ and $A^1$.
 \end{lemma}
 
 \begin{proof}
     \leanok
-    Direct multiplication of $2\times2$ matrices.
+    Multiplying the $2\times2$ matrices directly verifies each identity.
 \end{proof}
 
 \begin{lemma}[Products of the Kitaev-chain matrices]\label{lem:kitaev_eval_word}
@@ -88,7 +88,8 @@ distinction is maintained in \cite{gap:rmp_kitaev_chain_bosonic_scope}.
 
 \begin{proof}
     \leanok
-    Induction on the word, using $A^0=\mathbb 1$ and $A^1=Y$.
+    Induction on the word using $A^0=\mathbb 1$ and $A^1=Y$ yields
+    $A^{i_1}\cdots A^{i_N}=Y^k$.
 \end{proof}
 
 \begin{theorem}[Periodic amplitudes]\label{thm:kitaev_amplitudes}
@@ -136,7 +137,8 @@ distinction is maintained in \cite{gap:rmp_kitaev_chain_bosonic_scope}.
 
 \begin{proof}
     \leanok
-    Immediate from~(\ref{eq:kitaev_amplitudes_untwisted}) and~(\ref{eq:kitaev_amplitudes_twisted}).
+    The equivalences follow immediately from~(\ref{eq:kitaev_amplitudes_untwisted})
+    and~(\ref{eq:kitaev_amplitudes_twisted}).
 \end{proof}
 
 \begin{lemma}[Open-boundary closures]\label{lem:kitaev_open_boundary}
@@ -148,9 +150,10 @@ distinction is maintained in \cite{gap:rmp_kitaev_chain_bosonic_scope}.
         M_{00}=M_{11}, \qquad M_{01}=-M_{10}.
         \label{eq:kitaev_open_closures}
     \end{align}
-    Of the four ways to close the virtual indices at the two ends of an open
-    chain, the two diagonal closures give the same amplitudes and the two
-    off-diagonal closures differ by a sign~\cite{Bultinck2017FermionicMPS}.
+    As in~\cite{Bultinck2017FermionicMPS}, of the four ways to close the
+    virtual indices at the two ends of an open chain, the two diagonal
+    closures give the same amplitudes and the two off-diagonal closures differ
+    by a sign.
 \end{lemma}
 
 \begin{proof}
@@ -165,13 +168,13 @@ distinction is maintained in \cite{gap:rmp_kitaev_chain_bosonic_scope}.
         MPSTensor.kitaevTensor_not_isInjective, MPSTensor.kitaevTensor_not_isNormal}
     \leanok
     \uses{def:kitaev_tensor, def:injective, def:normal, lem:kitaev_open_boundary}
-    Read as an ordinary matrix product state, the Kitaev-chain tensor is
+    Read as an ordinary matrix product state as in
+    \cite[Section~III.A.4]{Cirac2021Matrix}, the Kitaev-chain tensor is
     reducible: the vector $(1,i)$ is a common eigenvector of $A^0$ and $A^1$,
     with eigenvalues $1$ and $i$, and the orthogonal projection onto the line it
-    spans is a nontrivial projection invariant under both matrices. The tensor is
-    not injective, and it is not normal: no blocking length makes the products
-    span the full matrix algebra
-    \cite[Section~III.A.4]{Cirac2021Matrix}.
+    spans is a nontrivial projection invariant under both matrices.
+    Consequently, the tensor is neither injective nor normal, as no blocking
+    length makes its products span the full matrix algebra.
 \end{theorem}
 
 \begin{proof}
@@ -197,11 +200,12 @@ distinction is maintained in \cite{gap:rmp_kitaev_chain_bosonic_scope}.
         \tr(YA^{i_1}\cdots A^{i_N})
         =
         i\,a_+^{i_1}\cdots a_+^{i_N}
-        -i\,a_-^{i_1}\cdots a_-^{i_N},
+        -i\,a_-^{i_1}\cdots a_-^{i_N}.
         \label{eq:kitaev_sum_two_injective}
     \end{align}
-    so the ordinary contraction of the twisted state is a sum of two injective
-    matrix product states \cite[Section~III.A.4]{Cirac2021Matrix}.
+    As in \cite[Section~III.A.4]{Cirac2021Matrix}, the ordinary contraction of
+    the twisted state therefore decomposes as a sum of two injective matrix
+    product states.
 \end{theorem}
 
 \begin{proof}
@@ -228,5 +232,6 @@ contraction is the equal superposition of even-parity configurations.
 
 \begin{proof}
     \leanok
-    $X\sigma^xX^{-1}=\sigma^y$ and $i\sigma^y=Y$.
+    Conjugating $\sigma^x$ by $X$ gives $X\sigma^xX^{-1}=\sigma^y$, and
+    $i\sigma^y=Y$.
 \end{proof}

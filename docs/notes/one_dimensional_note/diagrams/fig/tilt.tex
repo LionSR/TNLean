@@ -1,0 +1,20 @@
+\(\displaystyle \frac{1}{M(u)}\;
+  \begin{tenkz}[rows={wire,wire,wire,wire}, cols=3, bonds=none]
+    \tn[at=(2,1), skin=box, name=f, ports={90:physical:$X$, 270:physical}]{F}
+    \tn[at=(3,1), skin=box, wide=2, name=k, ports={90@1:physical, 90@2:physical}]{\Omega}
+    \tn[at=(4,1), skin=box, wide=2, name=b, ports={270@1:physical, 270@2:physical}]{\overline{\Omega}}
+    \tn[at=(5,1), skin=box, name=g, ports={90:physical, 270:physical:$X$}]{\overline{F}}
+    \tnwire{k.90@1}{f.270}
+    \tnwire{b.270@1}{g.90}
+    \tn[at=(2,2), skin=none, name=j1, ports={270:physical, 0:physical}]{}
+    \tn[at=(2,3), skin=none, name=j2, ports={180:physical, 270:physical}]{}
+    \tn[at=(5,3), skin=none, name=j3, ports={90:physical, 180:physical}]{}
+    \tn[at=(5,2), skin=none, name=j4, ports={0:physical, 90:physical}]{}
+    \tnwire{k.90@2}{j1.270} \tnwire{j1.0}{j2.180} \tnwire[name=tr]{j2.270}{j3.90}
+    \tnwire{j3.180}{j4.0} \tnwire{j4.90}{b.270@2}
+    \tnmark[form=label, label pos=0]{on tr 0.5}{$\Lambda\setminus X$}
+  \end{tenkz}
+  \;=\;
+  \begin{tenkz}[cols=1]
+    \tn[skin=box, ports={90:physical:$X$, 270:physical:$X$}]{\sigma}
+  \end{tenkz}\)

@@ -10,11 +10,13 @@ import Lean.Util.CollectAxioms
 
 run_cmd do
   let ns := `TNLean.PEPS.AreaLaw.Geometry
-  let decl := Lean.Name.str ns "exists_natCast_repairHalfSide"
-  unless (← Lean.getEnv).contains decl do
-    throwError "The intended geometric theorem is absent: {decl}"
+  let names := #["exists_natPow_repairHalfSide", "exists_natCast_repairHalfSide"]
   let expected := #[``propext, ``Classical.choice, ``Quot.sound]
-  let axioms ← Lean.collectAxioms decl
-  unless axioms.all (expected.contains ·) && expected.all (axioms.contains ·) do
-    throwError "Unexpected logical dependencies for {decl}: {axioms}"
-  Lean.logInfo m!"{decl}: {axioms}"
+  for name in names do
+    let decl := Lean.Name.str ns name
+    unless (← Lean.getEnv).contains decl do
+      throwError "The intended geometric theorem is absent: {decl}"
+    let axioms ← Lean.collectAxioms decl
+    unless axioms.all (expected.contains ·) && expected.all (axioms.contains ·) do
+      throwError "Unexpected logical dependencies for {decl}: {axioms}"
+    Lean.logInfo m!"{decl}: {axioms}"
