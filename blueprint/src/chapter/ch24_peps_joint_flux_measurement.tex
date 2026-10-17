@@ -9,17 +9,17 @@
     matrix. If a physical matrix $Q$ satisfies
     $Q\Psi_R(\theta)=z\Psi_R(\theta)$ for every crossing configuration $\theta$,
     then $QK_R=zK_R$. In particular, if one condition $P$ selects every
-    group-labelled column or annihilates every such column, the same
-    condition selects $K_R$ or annihilates it.
-    This is the contraction step used in the local measurements of
-    \cite[Theorem~6.15]{Schuch2010PEPS}.
+    group-labelled column or annihilates every such column, then in the
+    contraction step of the local measurements in
+    \cite[Theorem~6.15]{Schuch2010PEPS}, the same condition selects $K_R$
+    or annihilates it.
 \end{theorem}
 
 \begin{proof}\leanok
     The column identities give $QB_R=zB_R$. Therefore
     $QK_R=(QB_R)B_{R^c}^{\mathsf T}=zK_R$.
-    For the conditional statement, reindex the finite group labels and take
-    $z=\mathbf1_P$.
+    For the conditional statement, reindexing the finite group labels with
+    $z=\mathbf1_P$ yields the claim.
 \end{proof}
 
 \begin{definition}[The outer walk and routed joint-flux assignment]%
@@ -40,9 +40,8 @@
     bond label $(ab)^{-1}$ to the left vertical bond and $b^{-1}$ to the middle
     vertical bond. Every other bond label is the identity. Each ordered bond
     receives the specified element when its ordering agrees with the upward
-    direction, and its inverse otherwise. Thus this definition also applies
-    at the vertical seam. This is the routed geometry of the joint flux
-    measurement in \cite[braiding passage]{Schuch2010PEPS}.
+    direction, and its inverse otherwise. Thus this routed geometry for the joint flux measurement in
+    \cite[braiding passage]{Schuch2010PEPS} also applies at the vertical seam.
 \end{definition}
 
 \begin{theorem}[Individual and joint holonomies]%
@@ -88,19 +87,18 @@
         Q_CK_{R_v}(u_{a,b};u)
          & =\mathbf 1_{C=C[ab]}K_{R_v}(u_{a,b};u).
     \end{align}
-    Here the internal bonds carry $u_{a,b}$, whereas all exterior and crossing
-    bonds retain $u$. This proves the regular finite-torus joint measurement
-    step described in \cite[braiding passage]{Schuch2010PEPS}.
-    No braiding transformation, energy, or parent-Hamiltonian membership is
-    asserted; the broader source scope remains separate as recorded in
-    \cite{gap:rmp_peps_quantum_double_g_isometry}.
+    Here the internal bonds carry $u_{a,b}$ while all exterior and crossing
+    bonds retain $u$, establishing the regular finite-torus joint measurement
+    step of \cite[braiding passage]{Schuch2010PEPS} (as recorded in
+    \cite{gap:rmp_peps_quantum_double_g_isometry}, no braiding transformation,
+    energy, or parent-Hamiltonian membership is asserted).
 \end{theorem}
 
 \begin{proof}\leanok
     The outer walk induces a closed walk in the connected six-site
-    block. Native four-leg $G$-isometry gives incident-edge $G$-isometry at each
-    of its sites. Apply the closed-walk class measurement to this walk.
-    The proved outer holonomy is $ab$, independently of all exterior and
-    crossing assignments. The column identity then passes to the
+    block, and native four-leg $G$-isometry gives incident-edge $G$-isometry at each
+    of its sites. Applying the closed-walk class measurement to this walk,
+    whose outer holonomy is $ab$ independently of all exterior and
+    crossing assignments, gives the column identity, which then passes to the
     cut matrix by the uniform boundary-column theorem.
 \end{proof}

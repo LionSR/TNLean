@@ -8,18 +8,18 @@
     of a finite group $G$. For any finite family $(D_i)_{i\in I}$ of
     irreducible representations with distinct characters,
     $\sum_{i\in I}\dim D_i\leq\dim\sigma$.
-    No unitarity assumption on $\sigma$ is required.
-    This is the dimension comparison underlying the smallest representation
-    in \cite[Section~7]{Schuch2010PEPS}.
+    This dimension comparison, which underlies the smallest representation
+    in \cite[Section~7]{Schuch2010PEPS}, requires no unitarity assumption on
+    $\sigma$.
 \end{theorem}
 \begin{proof}\leanok
-    Write $\sigma=\bigoplus_{T\in\mathcal A}T$ as a finite internal sum of
-    irreducible subrepresentations. Semi-regularity ensures that for each
+    Decomposing $\sigma=\bigoplus_{T\in\mathcal A}T$ as a finite internal sum
+    of irreducible subrepresentations, semi-regularity ensures that for each
     $i$ some $T_i\in\mathcal A$ has character $\chi_{D_i}$.
-    The distinct characters make $i\mapsto T_i$ injective.
-    Equal irreducible characters give equivalent representations, hence
+    The distinct characters make $i\mapsto T_i$ injective, and equal
+    irreducible characters give equivalent representations with
     $\dim T_i=\dim D_i$.
-    Taking dimensions in the internal sum gives
+    Taking dimensions in the internal sum therefore gives
     $\sum_i\dim D_i=\sum_i\dim T_i\leq
         \sum_{T\in\mathcal A}\dim T=\dim\sigma$.
 \end{proof}
@@ -39,7 +39,7 @@
     a specified invariant inner product.
 \end{theorem}
 \begin{proof}\leanok
-    Choose the multiplicity-one representation from the regular Fourier
-    decomposition. The dimension bound for its distinct irreducible
+    For the multiplicity-one representation from the regular Fourier
+    decomposition, the dimension bound on its distinct irreducible
     sectors gives $\dim U_{\min}=\sum_i\dim D_i\leq\dim\sigma$.
 \end{proof}

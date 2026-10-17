@@ -108,11 +108,11 @@ source lines 330--345, with the image of this physical region map.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_czx_pull_through,thm:peps_region_physical_maps}
-    Apply the one-site pull-through identity inside the finite contraction.
-    Reindex vertex--edge incidences by edge--endpoint incidences. Each
-    internal bond contributes the square of its controlled phase, hence
-    one; each crossing bond contributes its phase once. Reindex the
-    incident-bond sum by simultaneous bit flips.
+    Applying the one-site pull-through identity inside the finite contraction
+    and reindexing vertex--edge incidences by edge--endpoint incidences, each
+    internal bond contributes the square of its controlled phase (hence
+    one) while each crossing bond contributes its phase once; reindexing the
+    incident-bond sum by simultaneous bit flips yields the displayed identity.
 \end{proof}
 
 \begin{definition}[Oriented rectangle boundary labels]%
@@ -141,10 +141,10 @@ source lines 330--345, with the image of this physical region map.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:czx_rectangle_perimeter,thm:czx_open_region_coefficients}
-    Extract the nonzero incident-bond assignment. On each straight side,
-    the shared internal bond equates the adjacent physical qubits. At each
-    corner, the equality is within one site tensor. These eight cases give
-    the cyclic adjacent-pair constraint, including the final wraparound.
+    For the unique nonzero incident-bond assignment, the shared internal bond
+    along each straight side equates the adjacent physical qubits, while at each
+    corner the equality holds within one site tensor; together these eight cases
+    give the cyclic adjacent-pair constraint, including the final wraparound.
 \end{proof}
 
 \begin{definition}[Plaquette-bit configurations]%
@@ -176,9 +176,9 @@ source lines 330--345, with the image of this physical region map.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:czx_rectangle_perimeter,thm:czx_open_region_coefficients}
-    Extend arbitrary boundary bits from the distinct perimeter corners to
-    torus plaquette bits, assigning zero elsewhere. The resulting physical
-    configuration has coefficient one in the selected column and zero in
+    Extending arbitrary boundary bits from the distinct perimeter corners to
+    torus plaquette bits by assigning zero elsewhere produces a physical
+    configuration with coefficient one in the selected column and zero in
     all other columns by disjointness.
 \end{proof}
 
@@ -212,9 +212,9 @@ source lines 330--345, with the image of this physical region map.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:czx_region_physical_pullthrough,thm:czx_rectangle_boundary_faithful}
-    Reorder crossing bonds clockwise. Pair reversal preserves the controlled
-    phase and commutes with bit flip, giving one controlled phase for each
-    adjacent pair of effective spins.
+    Under clockwise reordering of the crossing bonds, pair reversal preserves
+    the controlled phase and commutes with bit flip, giving one controlled
+    phase for each adjacent pair of effective spins.
 \end{proof}
 
 \begin{theorem}[The printed matrix product operator on the physical rectangle image]%
@@ -255,8 +255,8 @@ source lines 330--345, with the image of this physical region map.
     \uses{thm:czx_open_region_coefficients,thm:czx_rectangle_boundary_faithful,
         thm:czx_rectangle_physical_image,thm:peps_open_region_cut_unconditional,
         thm:peps_region_reduced_density_support}
-    Extend the chosen perimeter bits to global plaquette bits. On the
-    complement, the copied physical configuration has coefficient one for
+    When the chosen perimeter bits are extended to global plaquette bits, the
+    copied physical configuration on the complement has coefficient one for
     its native crossing labels and zero for all others by disjointness.
     The cut contraction therefore reduces to a single boundary
     term. Its coefficient-matrix range is the reduced-density range, while

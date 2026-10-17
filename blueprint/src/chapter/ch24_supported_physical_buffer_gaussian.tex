@@ -70,10 +70,9 @@
         \|M_{\eta,T}-\widetilde M_{\eta,T}\|
                        & \le\|W\|CL^2(1+8JL^2T)e^{vT-c\ell}.
     \end{align*}
-    The integrals retain the original restricted Gaussian measure.
-    Empty grids and regions, zero variance and zero cutoff are included.
-    This is the spatial Gaussian approximation in
-    \cite{OpenAI2026PolynomialPEPS}.
+    The integrals retain the original restricted Gaussian measure, and this
+    spatial Gaussian approximation of \cite{OpenAI2026PolynomialPEPS} includes
+    empty grids and regions, zero variance, and zero cutoff.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -81,11 +80,11 @@
         thm:peps_swapped_doubled_boundary_bound,
         thm:swapped_square_hamiltonian_interaction,
         thm:area_supported_gaussian_integral}
-    Choose $C,v,c$ from Theorem~\ref{thm:area_supported_gaussian_integral}
-    at local dimension $q^2$, range one and interaction bound $2J$.
+    For $C,v,c$ from Theorem~\ref{thm:area_supported_gaussian_integral}
+    at local dimension $q^2$, range one, and interaction bound $2J$,
     Theorem~\ref{thm:swapped_square_hamiltonian_interaction} constructs
-    a local interaction family with these parameters and total $K'$.
-    It uses the Hermitian parts of the original interactions, whose
+    a local interaction family with these parameters and total $K'$,
+    using the Hermitian parts of the original interactions whose
     sum is the given Hermitian operator $H$.
 
     Theorem~\ref{thm:peps_physical_buffer_coordinates} identifies $V$
@@ -95,11 +94,11 @@
     $\|K'-K\|\le8JL^2$. Coordinate reindexing preserves norms, while
     the tensor-product norm inequality gives $\|V\|\le\|W\|$.
 
-    Apply Theorem~\ref{thm:area_supported_gaussian_integral} to these
-    operators and the common neighbourhood $B$. It constructs
+    Applying Theorem~\ref{thm:area_supported_gaussian_integral} to these
+    operators and the common neighbourhood $B$ constructs
     the path $U$ independently of $\eta$ and $T$, and hence the integral
     $M_{\eta,T}$. Its support and norm conclusions give the first
-    assertion. Since $|\Lambda|=L^2$ and $T\ge0$, its error estimate
+    assertion, and since $|\Lambda|=L^2$ and $T\ge0$, its error estimate
     yields
     \begin{align*}
         \|M_{\eta,T}-\widetilde M_{\eta,T}\|
