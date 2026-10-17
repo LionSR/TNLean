@@ -193,6 +193,14 @@ structure DyadicProtocol (L q : ℕ) (P : Type) [Fintype P] where
   layout_changes :
     layout changes = familyPhysicalOutputLayout physicalDimension physicalOrder privateOutput
 
+/-- The aligned squares of the padded dyadic hierarchy of `[0, N] ^ 2`, each given by its scale
+`j` and its block address `(x, y)`: the square `[2 ^ j x, 2 ^ j (x + 1)] × [2 ^ j y, 2 ^ j (y + 1)]`
+lies in `[0, N] ^ 2`. When `N` is a power of two, the root square is the one with `2 ^ j = N`.
+
+Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:64–65`. -/
+def HierarchySquare (N : ℕ) : Type :=
+  {S : ℕ × ℕ × ℕ // 2 ^ S.1 * (S.2.1 + 1) ≤ N ∧ 2 ^ S.1 * (S.2.2 + 1) ≤ N}
+
 namespace DyadicProtocol
 
 variable {L q : ℕ} {P : Type} [Fintype P] (D : DyadicProtocol L q P)
@@ -297,6 +305,14 @@ structure IsDistributionProtocol (Ω : StateSpace L q) (C : ℝ) (b k r : ℕ) :
   card_le : (Fintype.card P : ℝ) ≤ C * (L : ℝ) ^ 2
   /-- Item 1: a fixed number of parties for each square. -/
   blockBounded : D.placement.BlockBounded b
+  /-- Item 1: a different party is assigned to each square of the padded hierarchy, including
+  the root square, at the scale and address of that square.
+
+  Source: Polynomial-PEPS manuscript (Sept 24 2026), Proposition 7.1, item 1,
+  `06-geometry.tex:18–20`, and the hierarchy, `06-geometry.tex:64–67`: “A different party is
+  assigned to each dyadic square.” -/
+  squareParty : ∃ f : HierarchySquare (paddedSide L) → P, Function.Injective f ∧
+    ∀ S, (D.placement.scale (f S), D.placement.blockX (f S), D.placement.blockY (f S)) = S.1
   /-- Item 2: at most `C L³` changes. -/
   changes_le : (D.changes : ℝ) ≤ C * (L : ℝ) ^ 3
   /-- Item 2: each change has a fixed number of nonprivate gates. -/

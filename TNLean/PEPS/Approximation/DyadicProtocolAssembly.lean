@@ -162,6 +162,32 @@ theorem memCongr_stackVec {ι : Type} [Fintype ι] [DecidableEq ι] {q : ℕ} [N
   subst h
   rfl
 
+/-- **A party for every square of the hierarchy.** When `L ≤ 2 ^ k < 2 L`, the block parties
+give an injective assignment of a party to every aligned square of the padded square
+`[0, N] ^ 2`, `N = 2 ^ k`, including the root square, at the scale and address of that square.
+
+Polynomial-PEPS manuscript, `06-geometry.tex`, lines 18–20 and 64–67. -/
+theorem protocolPlacement_squareParty {L k : ℕ} (hkL : L ≤ 2 ^ k) (hk2 : 2 ^ k < 2 * L) :
+    ∃ f : HierarchySquare (paddedSide L) → ProtocolParty k, Function.Injective f ∧
+      ∀ S, ((protocolPlacement k).scale (f S), (protocolPlacement k).blockX (f S),
+        (protocolPlacement k).blockY (f S)) = S.1 := by
+  have hN : paddedSide L = 2 ^ k :=
+    le_antisymm (paddedSide_le_of_le_pow hkL) (pow_le_paddedSide hk2)
+  have mk : ∀ S : HierarchySquare (paddedSide L), ∃ T : DyadicSquare k, T.toTriple = S.1 := by
+    rintro ⟨⟨j, x, y⟩, hx, hy⟩
+    simp only [hN] at hx hy
+    have hj : j ≤ k := by
+      have : 2 ^ j ≤ 2 ^ k := (Nat.le_mul_of_pos_right _ (by omega)).trans hx
+      exact (Nat.pow_le_pow_iff_right (by norm_num)).1 this
+    have hsplit : (2 : ℕ) ^ k = 2 ^ j * 2 ^ (k - j) := by rw [← pow_add, Nat.add_sub_cancel' hj]
+    rw [hsplit] at hx hy
+    have hx' := Nat.le_of_mul_le_mul_left hx (by positivity)
+    have hy' := Nat.le_of_mul_le_mul_left hy (by positivity)
+    exact ⟨⟨⟨j, by omega⟩, ⟨x, by omega⟩, ⟨y, by omega⟩⟩, rfl⟩
+  choose g hg using mk
+  exact ⟨fun S => .inl (g S), fun S S' h => Subtype.ext (by
+    rw [← hg S, ← hg S', Sum.inl_injective h]), fun S => hg S⟩
+
 /-- **A protocol from a bounded trajectory of sheets.** Let `L ≥ 2` and `L ≤ 2 ^ k < 2 L`, let
 `‖Ω‖ = 1`, and let `st t` be lists of encoded frames on the parties of the hierarchy of
 `[0, 2 ^ k] ^ 2`, read at the cell centers, such that:
@@ -306,6 +332,7 @@ theorem exists_isDistributionProtocol_of_frames {L q k : ℕ} [NeZero q] (hL : 2
         ((card_nonprivateLocations _).trans_le (hQ i).1)
     rw [Subsingleton.elim g g']
   refine ⟨D, ⟨?_, ?_, fun j r s => (protocolPlacement_blockBounded k j r s).trans (by norm_num),
+    protocolPlacement_squareParty hkL hk2,
     ?_, fun t _ => (hQ t).1.trans (by norm_num), fun t _ g => ?_,
     fun t _ => isMonomialBounded_mono _ (hQ t).2.2.2.2.1 (Nat.le_floor (by exact_mod_cast hK)),
     fun t _ => isExpansionBounded_mono _ (hQ t).2.2.2.1 le_rfl hK, fun p => ?_,
