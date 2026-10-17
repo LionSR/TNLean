@@ -157,7 +157,7 @@ theorem largeSizeDyadicProtocolConsequences_of_adaptivePatchConstraint
           (protocolFrozen P rank hr) protocolAuxOwner (i + 1) ∧
         ∀ j < 189, HasSourceBoundedChange Ω (seg j) (seg (j + 1)) (ℓ := []) (1 : ℂ)
           {p | EventUses (.inl S) p} (2 * b) (rewriteGateBound C' c' b L) (2 * b)
-          ((2 * b + 1) * ((L : ℝ) ^ 20)⁻¹) := by
+          ((2 * b + 1) * ((L : ℝ) ^ 20)⁻¹) ∧ seg (j + 1) ≠ [] := by
     intro i hi S he hl
     have hlarge : K₀ * (D * Real.log L) < (2 : ℝ) ^ (S.1 : ℕ) := by
       simpa [largeSquare] using hl

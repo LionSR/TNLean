@@ -57,7 +57,8 @@ theorem isStepChain_lensExchange (hD : IsAngularScale q J Δ a A₀ m₀ 60 D L�
       (ProtocolParty k)) :
     let Bl := repaintBaseline R done
     IsStepChain (fun Fs Fs' => HasSourceBoundedChange Ω Fs Fs' (ℓ := []) (1 : ℂ)
-        {p | EventUses (.inl R.1) p} (2 * b) K (2 * b) ((2 * b + 1) * ((L : ℝ) ^ 20)⁻¹)) 9
+        {p | EventUses (.inl R.1) p} (2 * b) K (2 * b) ((2 * b + 1) * ((L : ℝ) ^ 20)⁻¹) ∧
+          Fs' ≠ []) 9
       (treatedFrame (q := q) P rank R hr ∅ (Bl.nbrLabel e)
           (Bl.mainGuide E e (edgeStartWord Bl.oldLabel Bl.finalLabel (Bl.nbrLabel e))) ::
         l.map (Function.update A x (treatedFrame P rank R hr ∅ (Bl.nbrLabel e)
@@ -116,7 +117,7 @@ theorem isStepChain_lensExchange (hD : IsAngularScale q J Δ a A₀ m₀ 60 D L�
   have c₄ := isStepChain_main l (Function.update A x (T ga' ms.toFinset)) hΩ1
     (huntreat hum')
   have c₅ := isStepChain_aux (T gm' ∅) hl hx A hΩ1 (huntreat hua')
-  exact ((((c₁.trans c₂).trans (IsStepChain.single h₃)).trans c₄).trans c₅).cast_length
+  exact ((((c₁.trans c₂).trans (IsStepChain.single ⟨h₃, List.cons_ne_nil _ _⟩)).trans c₄).trans c₅).cast_length
     (by rw [hlen])
 
 /-- **The edge construction as a chain of changes, conditional on Proposition 3.4.** At the
@@ -145,7 +146,8 @@ theorem isStepChain_edgeConstruction (hD : IsAngularScale q J Δ a A₀ m₀ 60 
     (L₁ L₂ : GuideLabel) :
     let Bl := repaintBaseline R done
     IsStepChain (fun Fs Fs' => HasSourceBoundedChange Ω Fs Fs' (ℓ := []) (1 : ℂ)
-        {p | EventUses (.inl R.1) p} (2 * b) K (2 * b) ((2 * b + 1) * ((L : ℝ) ^ 20)⁻¹)) 45
+        {p | EventUses (.inl R.1) p} (2 * b) K (2 * b) ((2 * b + 1) * ((L : ℝ) ^ 20)⁻¹) ∧
+          Fs' ≠ []) 45
       (treatedFrame (q := q) P rank R hr ∅ L₁ (Bl.completedGuide E) :: l.map A)
       (treatedFrame P rank R hr ∅ L₂ (Bl.completedGuide (e :: E)) ::
         l.map (Function.update A x (treatedFrame P rank R hr ∅ (Bl.nbrLabel e)
@@ -158,13 +160,14 @@ theorem isStepChain_edgeConstruction (hD : IsAngularScale q J Δ a A₀ m₀ 60 
     (treatedFrame_auxStart_eq_raw P rank R hr done e Ce).trans hA.symm
   have hstart := treatedFrame_edgeStart (q := q) P rank R hc hL hlarge done he Ce Ce
   have c₀ : IsStepChain (fun Fs Fs' => HasSourceBoundedChange Ω Fs Fs' (ℓ := []) (1 : ℂ)
-      {p | EventUses (.inl R.1) p} (2 * b) K (2 * b) ((2 * b + 1) * ((L : ℝ) ^ 20)⁻¹)) 1
+      {p | EventUses (.inl R.1) p} (2 * b) K (2 * b) ((2 * b + 1) * ((L : ℝ) ^ 20)⁻¹) ∧
+        Fs' ≠ []) 1
       (treatedFrame (q := q) P rank R hr ∅ L₁ (Bl.completedGuide E) :: l.map A)
       (treatedFrame (q := q) P rank R hr ∅ Ce (Bl.completedGuide E) ::
         l.map (Function.update A x
           (treatedFrame (q := q) P rank R hr ∅ Ce (Bl.auxGuide e (bandWord Ce []))))) := by
     rw [haux0, Function.update_eq_self, treatedFrame_empty_congr P rank R L₁ Ce]
-    exact IsStepChain.single (hasSourceBoundedChange_refl _ _ _ _ _ _ hε0)
+    exact IsStepChain.single ⟨hasSourceBoundedChange_refl _ _ _ _ _ _ hε0, List.cons_ne_nil _ _⟩
   have c₁ := isStepChain_aux (treatedFrame (q := q) P rank R hr ∅ Ce (Bl.completedGuide E)) hl
     hx A hΩ1 (isStepChain_auxBirths hD hLL hΩ hm₀ hA₀ hc hL hk2 P rank R hlarge done e hr
       (by omega) hK hpt Ce)

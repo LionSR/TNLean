@@ -433,6 +433,12 @@ structure IsDistributionProtocol (Ω : StateSpace L q) (C : ℝ) (b k r : ℕ) :
     (∀ F ∈ D.frames t, ‖F.refVec Ω‖ ≤ 1) ∧
       ∃ h : D.layout t = EncodedFrame.stackRegs (D.frames t) [],
         D.reference t = Layout.memCongr h.symm (EncodedFrame.framesVec Ω (D.frames t))
+  /-- Item 4: every intermediate stage has at least one encoded frame.
+
+  Source: Polynomial-PEPS manuscript (Sept 24 2026), Proposition 7.1, item 4,
+  `06-geometry.tex:38–40`: the reference vector of every stage is formed from the main encoded
+  frame and the auxiliary encoded frames. -/
+  frames_ne_nil : ∀ t, 0 < t → t < D.changes → D.frames t ≠ []
   /-- Item 4: before the readout, the raw registers of the main encoded frame are held by the
   parties of the genuine sites, so they become the physical outputs.
 
