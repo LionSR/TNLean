@@ -108,8 +108,9 @@
     % docs/paper-gaps/peps_normal_ft_section3_route.tex.
 \end{theorem}
 \begin{proof}\leanok
-    Apply the general construction for one-edge blocking data to the datum
-    determined by the chosen translated window at each edge.
+    Applying the general construction for one-edge blocking data to the datum
+    determined by the chosen translated window at each edge establishes the
+    normal edge-blocking hypotheses.
 \end{proof}
 
 \begin{lemma}[Conditional injectivity of the normal $R$ and $S$ regions]%
@@ -124,8 +125,9 @@
 \end{lemma}
 \begin{proof}\leanok
     Region $R$ is the union of one injective $2\times3$ rectangle and one
-    injective $3\times2$ rectangle. Region $S$ is the union of two
-    injective $2\times3$ rectangles. Apply union closure in each case.
+    injective $3\times2$ rectangle, while region $S$ is the union of two
+    injective $2\times3$ rectangles; union closure therefore implies that both
+    regions are injective.
 \end{proof}
 
 \begin{lemma}[Injectivity of the normal $R$, $S$, and $T$ regions]%
@@ -143,11 +145,11 @@
     overlapping union lemma, so no single-vertex injectivity is assumed.
 \end{lemma}
 \begin{proof}\leanok
-    Apply the conditional injectivity of $R$ and $S$
+    The conditional injectivity of $R$ and $S$
     (Lemma~\ref{lem:peps_normalSquareRegionRS_injective_of_unionClosure}) and the
     conditional cover criterion for $T$
-    (Lemma~\ref{lem:peps_normalSquareRegionT_injective_of_cover}), with the union
-    closure discharged by
+    (Lemma~\ref{lem:peps_normalSquareRegionT_injective_of_cover}) establish the
+    claim once union closure is discharged by
     Theorem~\ref{thm:peps_regionInjectivityUnionClosure_of_overlap}.
 \end{proof}
 
@@ -199,8 +201,8 @@
 \end{lemma}
 \begin{proof}\leanok
     Membership unfolds the union of the two contiguous rectangles into
-    (\ref{eq:peps_comp_region_mem}). Place the region at $v$'s own
-    coordinates, so $(a,b)=(x,y)=(v_1,v_2)$. The corner offset $(v_1,v_2)$ fails
+    (\ref{eq:peps_comp_region_mem}). Placing the region at $v$'s own
+    coordinates sets $(a,b)=(x,y)=(v_1,v_2)$. The corner offset $(v_1,v_2)$ fails
     the first disjunct because $v_1+1\le v_1$ is false, and fails the second
     because $v_2+1\le v_2$ is false:
     \begin{align}
@@ -313,9 +315,9 @@
     rectangle.
 \end{lemma}
 \begin{proof}\leanok
-    Apply union closure to the rectangular injectivity of the contained
-    $2\times3$ and $3\times2$ rectangles for the region, the square being a
-    single large rectangle.
+    Applying union closure to the rectangular injectivity of the contained
+    $2\times3$ and $3\times2$ rectangles proves injectivity of the comparison
+    region, while the comparison square is a single large rectangle.
 \end{proof}
 
 \begin{lemma}[Injectivity of the comparison complements]%
@@ -332,8 +334,9 @@
     rectangle.
 \end{lemma}
 \begin{proof}\leanok
-    Rewrite each complement by its band decomposition and apply union closure to
-    the bands, each a large contiguous rectangle, and to the corner rectangle.
+    Rewriting each complement by its band decomposition and applying union
+    closure to the bands, each a large contiguous rectangle, and to the corner
+    rectangle yields injectivity of both complements.
 \end{proof}
 
 \begin{definition}[Normal edge-blocking hypotheses]%
@@ -478,7 +481,8 @@
     injective MPS blocking as a hypothesis.
 \end{theorem}
 \begin{proof}\leanok
-    Use the relation $\inj_{\partial}$ and the three preceding theorems.
+    The relation $\inj_{\partial}$ together with the three preceding theorems
+    establishes the claim.
 \end{proof}
 
 \begin{theorem}[Injectivity from normal edge blocking]%

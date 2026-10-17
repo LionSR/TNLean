@@ -172,8 +172,8 @@ $(\hbox{lower bond},\hbox{upper bond})$.
     $|z_M-1|$, where $z_M=\langle\Omega,\phi_{\mathrm{pos}}\rangle$.
     The normalization inequality is
     $1-|z_M|/c_N\le|1-|z_M||+|c_N^2-1|$.
-    For $M\delta\le1$, the exponential factor is bounded by a constant.
-    For $M\delta>1$, use the universal upper bound $1$ on the error.
+    For $M\delta\le1$, the exponential factor is bounded by a constant;
+    for $M\delta>1$, the universal upper bound $1$ on the error suffices.
 \end{proof}
 
 For the circuit blocks of length at least $3D$ and $d\ge2$, the next
@@ -248,14 +248,14 @@ preparation, and $d\le1$ is prepared directly in depth zero.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:ldp_inhomogeneous_normalized_pairs,thm:ldp_inhomogeneous_uniform_rate_from,thm:ldp_chain_transfer_product}
-    For $1\le q\le N$, partition the ring with
-    $q\le\ell_j\le2q$, putting the remainder into the last block.
-    Both the block and whole-ring transfer errors are at most
+    For $1\le q\le N$, partitioning the ring with
+    $q\le\ell_j\le2q$ by placing the remainder into the last block ensures
+    that both the block and whole-ring transfer errors are at most
     $\delta=Ke^{-rq}$. The preceding theorem gives pair error at most
-    $C_1KM e^{-rq}\le C_1KN e^{-rq}$. Apply the uniform-rate preparation
-    theorem. If the accuracy-dependent choice of $q$ exceeds $N$, use
-    exact linear-depth preparation. Nonvanishing is required for these
-    short rings as well as for the asymptotic family.
+    $C_1KM e^{-rq}\le C_1KN e^{-rq}$, so the uniform-rate preparation
+    theorem applies. When the accuracy-dependent choice of $q$ exceeds $N$,
+    exact linear-depth preparation applies instead. Nonvanishing is required
+    for these short rings as well as for the asymptotic family.
 \end{proof}
 
 
@@ -273,8 +273,8 @@ preparation, and $d\le1$ is prepared directly in depth zero.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:ldp_inhomogeneous,thm:ldp_inhomogeneous_exact,lem:ldp_log_threshold_error}
-    For $N\ge2$, choose $q=\lceil a\log(N/\varepsilon)+b\rceil$ with
-    $a=\max(k,1)/r$ and $b=\max(\log K,0)/r+3D+1$. Then $q\ge3D$ and
+    For $N\ge2$, setting $q=\lceil a\log(N/\varepsilon)+b\rceil$ with
+    $a=\max(k,1)/r$ and $b=\max(\log K,0)/r+3D+1$ ensures $q\ge3D$ and
     $KN^ke^{-rq}\le\varepsilon$. When $q\le N$, the given partition
     gives depth $O(q)$; when $q>N$, exact preparation gives depth $O(N)$.
     Both are $O(\log(N/\varepsilon))$, and the one-site case has depth zero.
@@ -297,10 +297,10 @@ preparation, and $d\le1$ is prepared directly in depth zero.
     \uses{thm:ldp_inhomogeneous_normalized_pairs,thm:ldp_inhomogeneous_uniform_rate_from,thm:ldp_chain_transfer_product,lem:ldp_log_threshold_error}
     The whole-ring estimate gives
     $|\|\phi_N\|^2-1|\le K_DK e^{-rN}$.
-    Choose $N_0$ so that this is at most $1/2$ for $N\ge N_0$.
-    Then $\|\phi_N\|^2\ge1/2$, uniformly before $N$ and $\varepsilon$
-    are chosen. Apply the cutoff version of the rate-to-preparation
-    theorem. No member of the physical family is replaced on short rings.
+    For $N_0$ large enough that this bound is at most $1/2$ for $N\ge N_0$,
+    one has $\|\phi_N\|^2\ge1/2$, uniformly before $N$ and $\varepsilon$
+    are chosen, so the cutoff version of the rate-to-preparation
+    theorem applies. No member of the physical family is replaced on short rings.
 \end{proof}
 
 \begin{theorem}[Physical preparation from uniform Choi domination]
@@ -322,17 +322,17 @@ preparation, and $d\le1$ is prepared directly in depth zero.
     \uses{thm:ldp_uniform_gram_transfer,thm:ldp_chain_positive_part_rate,
         thm:ldp_inhomogeneous_ordered_mixing_preparation,
         thm:ldp_inhomogeneous_normalized_pairs,thm:ldp_chain_transfer_product}
-    Split the first map as $E_0=\eta R_\sigma+Q$, with $Q$ completely
-    positive, and let $S$ be the remaining ordered product. Trace preservation
-    gives $R_\sigma S=R_\sigma$. Since a completely positive map has
+    Splitting the first map as $E_0=\eta R_\sigma+Q$, with $Q$ completely
+    positive, and letting $S$ be the remaining ordered product gives
+    $R_\sigma S=R_\sigma$ by trace preservation. Since a completely positive map has
     nonnegative supertrace, $\|\phi_N\|^2=\operatorname{Tr}(QS)+\eta\ge\eta$.
     The inverse Gram reshuffling is a bounded linear permutation of matrix
-    entries. Apply Theorem~\ref{thm:ldp_chain_positive_part_rate} to the
-    individual sites, regarded as blocks of length one. This gives
+    entries, and Theorem~\ref{thm:ldp_chain_positive_part_rate} applied to the
+    individual sites, regarded as blocks of length one, gives
     $\|T_{B_I}-T_\sigma\|\le K(1-\eta)^{|I|}$, uniformly in every
-    interval. To keep a finite positive logarithmic decay parameter
-    also at $\eta=1$, weaken domination to $\eta/2$ and set
-    $r=-\log(1-\eta/2)>0$. The preceding theorem applies.
+    interval. Weakening domination to $\eta/2$ and setting
+    $r=-\log(1-\eta/2)>0$ keeps a finite positive logarithmic decay parameter
+    even at $\eta=1$, so the preceding theorem applies.
     The transfer bound itself includes both $\eta=0$ and $\eta=1$;
     preparation with exponential accuracy requires $\eta>0$.
 \end{proof}

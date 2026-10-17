@@ -1,11 +1,10 @@
 \section{Fixed sources for the chronological partial expansion}
 
-We now place the sources of every partial branch in the same ordered
-register spaces. The order is inherited from the original gate
-occurrences, before any branch labels are chosen. This gives the
-common free inputs used in the two separated contractions in
-\cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
-\texttt{04-compression.tex}, lines 342--434.
+The two separated contractions in
+\cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}
+(\texttt{04-compression.tex}, lines 342--434) act on common free inputs obtained by placing the sources of every partial branch in the same ordered
+register spaces, with the order inherited from the original gate
+occurrences before any branch labels are chosen.
 
 \begin{definition}[The retained source positions]
     \label{def:peps_partial_fixed_positions}
@@ -51,8 +50,8 @@ common free inputs used in the two separated contractions in
     \leanok
     \uses{thm:peps_source_circuit_incidence,thm:peps_affected_owner_equality,
         thm:peps_partial_source_order}
-    Filter the fixed exhaustive list of original positions by endpoint
-    incidence. Its lack of repetitions gives the stated bijection.
+    Filtering the fixed exhaustive list of original positions by endpoint
+    incidence without repetitions gives the stated bijection.
     At least one endpoint of every retained position is affected, so
     grouping exterior owners cannot identify its two endpoints.
     The ordered inventory formula of
@@ -92,8 +91,8 @@ common free inputs used in the two separated contractions in
     \uses{thm:peps_partial_source_inventory,thm:peps_partial_fixed_layout,
         thm:peps_source_preparation,thm:peps_common_source_lists}
     Equal ordered layouts identify the two halfspaces at each source
-    position. Transfer the normalized source vectors along
-    these identifications. The resulting reference list is
+    position, and transferring the normalized source vectors along
+    these identifications produces the reference list as
     the branch's source inventory. The source-preparation theorem
     moves this inventory to the initial registers and gives an allowed
     remaining composition containing no sources. Its exact recovery
@@ -152,9 +151,9 @@ common free inputs used in the two separated contractions in
     touched. Induction on the chronological composition recovers its
     chosen local label and original vector. At a gate the vector is
     the given normalized source vector; composition and idle registers
-    preserve its occurrence. Compare the two ordered inventory lists
-    at reference index $i$. Equality of their source records gives
-    equality of the vectors in their common halfspaces. Substitution
+    preserve its occurrence. Comparing the two ordered inventory lists
+    at reference index $i$ equates their source records and hence
+    the vectors in their common halfspaces; substitution
     in the fixed preparation gives the final assertion.
 \end{proof}
 
@@ -198,11 +197,11 @@ common free inputs used in the two separated contractions in
     \leanok
     \uses{thm:peps_source_preparation,thm:peps_selective_preparation_recovery,
         thm:peps_selective_partition}
-    Enumerate the source list in its original halfspaces.
-    The source-preparation theorem gives $W=VP_\eta$ with $V$
-    allowed and containing no sources. Every fixed source is internal
-    to one side and its original vector has norm one. Apply selective
-    factorization to $V$ and these fixed preparations. Its equality
+    Enumerating the source list in its original halfspaces,
+    the source-preparation theorem gives $W=VP_\eta$ with $V$
+    allowed and containing no sources. Because every fixed source is internal
+    to one side and its original vector has norm one, selective
+    factorization applies to $V$ and these fixed preparations; its equality
     holds before evaluating any free source vectors, and hence
     specializes both to arbitrary $\zeta$ and to the original vectors.
 \end{proof}
@@ -244,8 +243,8 @@ common free inputs used in the two separated contractions in
 
 \begin{proof}
     \leanok
-    Induct on the chronological composition. At a touched gate both
-    choices record the same local label; at an untouched gate the
+    Induction on the chronological composition shows that at a touched gate both
+    choices record the same local label, while at an untouched gate the
     choice set is a singleton.
 \end{proof}
 
@@ -270,9 +269,9 @@ common free inputs used in the two separated contractions in
 
 \begin{proof}
     \leanok
-    A grouped owner selects the original party $p$ exactly. Compare
-    the two partial choices label by label using
-    Theorem~\ref{thm:peps_touched_labels}.
+    Because a grouped owner selects the original party $p$ exactly, comparing
+    the two partial choices label by label via
+    Theorem~\ref{thm:peps_touched_labels} yields the equivalence.
 \end{proof}
 
 \begin{theorem}[Coefficients factor over participating occurrences]
@@ -292,10 +291,10 @@ common free inputs used in the two separated contractions in
 
 \begin{proof}
     \leanok
-    Induct on the chronological composition; composition multiplies
+    By induction on the chronological composition, composition multiplies
     the coefficients and the products over the two disjoint occurrence
-    sets. Restrict the product over all occurrences to $\mathcal G^+$,
-    where the touched condition holds.
+    sets; restricting the product over all occurrences to $\mathcal G^+$
+    keeps precisely the occurrences where the touched condition holds.
 \end{proof}
 
 \begin{theorem}[Mixed coefficients at the original gate occurrences]
@@ -313,19 +312,17 @@ common free inputs used in the two separated contractions in
         =\prod_{g\in\mathcal G^+}
         c_{g,\xi_g}\overline{c_{g,\zeta_g}}.
     \end{align}
-    The product over an empty occurrence set is one. Empty-participant
+    For the expansion in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}
+    (\texttt{04-compression.tex}, lines 351--381 and 565--573), the product over an empty occurrence set is one, while empty-participant
     occurrences remain in the residual composition and contribute no factor
-    to this coefficient product. This is an auxiliary identity for the
-    expansion in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
-    \texttt{04-compression.tex}, lines 351--381 and 565--573.
+    to this coefficient product.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:peps_chronological_coefficients}
-    Apply Theorem~\ref{thm:peps_chronological_coefficients} to each choice.
-    Complex conjugation preserves finite products, so
-    $\overline{c_\zeta}=\prod_{g\in\mathcal G^+}\overline{c_{g,\zeta_g}}$.
-    Multiply the two products term by term.
+    Applying Theorem~\ref{thm:peps_chronological_coefficients} to each choice and using
+    $\overline{c_\zeta}=\prod_{g\in\mathcal G^+}\overline{c_{g,\zeta_g}}$
+    multiplies the two products term by term.
 \end{proof}
 
 \begin{theorem}[Reindexing the mixed expansion by gate labels]
@@ -346,19 +343,18 @@ common free inputs used in the two separated contractions in
         c_{g,\eta_g}\overline{c_{g,\theta_g}}\right)
         K(e^{-1}\eta,e^{-1}\theta).
     \end{align}
-    The identity includes empty party sets and empty label sets.
-    An empty label-function set gives an empty sum; an empty occurrence set
-    gives a singleton label-function set and coefficient one. This is an
-    auxiliary reindexing of the expansion in
-    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
-    \texttt{04-compression.tex}, lines 351--381 and 565--573.
+    In the expansion of
+    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}
+    (\texttt{04-compression.tex}, lines 351--381 and 565--573), the identity includes empty party sets and empty label sets:
+    an empty label-function set gives an empty sum, and an empty occurrence set
+    gives a singleton label-function set and coefficient one.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{def:peps_touched_labels,thm:peps_mixed_chronological_coefficients}
-    Replace each mixed coefficient by
-    Theorem~\ref{thm:peps_mixed_chronological_coefficients}. Reindex the outer
-    sum by $\eta=e\xi$ and the inner sum by $\theta=e\zeta$.
-    The inverse identities give
+    Replacing each mixed coefficient via
+    Theorem~\ref{thm:peps_mixed_chronological_coefficients} and reindexing the outer
+    sum by $\eta=e\xi$ and the inner sum by $\theta=e\zeta$
+    uses the inverse identities to rewrite
     $K(\xi,\zeta)=K(e^{-1}\eta,e^{-1}\theta)$.
 \end{proof}

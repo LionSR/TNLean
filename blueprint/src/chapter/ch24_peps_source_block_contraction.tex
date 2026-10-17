@@ -46,11 +46,11 @@ This gives the contractions used in
 
 \begin{proof}\leanok
     \uses{thm:peps_source_preparation_sums}
-    Induct on the ordered slots. Tensor the bases of the first two
+    By induction on the ordered slots, tensoring the bases of the first two
     halfspaces with the basis already constructed for the remaining
-    slots, and identify a full assignment with its first component
+    slots identifies a full assignment with its first component
     and its restriction to the remaining slots. Tensor products and
-    isometric identifications preserve orthonormal bases. This gives
+    isometric identifications preserve orthonormal bases, giving
     (\ref{eq:peps_source_slot_basis}); tensoring with the input basis
     and applying the preparation identity gives
     (\ref{eq:peps_source_input_basis}).
@@ -112,8 +112,8 @@ This gives the contractions used in
         thm:peps_source_preparation_sums}
     The preparation identity gives
     $K_T(a)[\psi]=[T(s_a\otimes\psi)]=A_{T,\psi}(:,a)$.
-    Apply Theorem~\ref{thm:peps_prepared_vector_density} to the ket
-    and bra preparations to obtain
+    Applying Theorem~\ref{thm:peps_prepared_vector_density} to the ket
+    and bra preparations gives
     (\ref{eq:peps_pure_source_density_coefficient}).
 \end{proof}
 
@@ -193,9 +193,9 @@ This gives the contractions used in
 \begin{proof}\leanok
     \uses{thm:peps_pure_source_density_coefficient,
         thm:peps_source_column_contraction}
-    Substitute (\ref{eq:peps_pure_source_density_coefficient}) into
-    each prepared coefficient, then apply
-    (\ref{eq:peps_source_column_contraction}).
+    Substituting (\ref{eq:peps_pure_source_density_coefficient}) into
+    each prepared coefficient and applying
+    (\ref{eq:peps_source_column_contraction}) gives the claim.
 \end{proof}
 
 \begin{theorem}[Physical entries of a pure prepared coefficient]
@@ -222,9 +222,9 @@ This gives the contractions used in
 
 \begin{proof}\leanok
     \uses{thm:peps_pure_source_density_coefficient}
-    Take the $((r,z),(s,z))$ entry of
-    (\ref{eq:peps_pure_source_density_coefficient}) and sum over
-    the common discarded index $z$.
+    Taking the $((r,z),(s,z))$ entry of
+    (\ref{eq:peps_pure_source_density_coefficient}) and summing over
+    the common discarded index $z$ gives the claim.
 \end{proof}
 
 \begin{theorem}[Mixed products of party matrices]
@@ -296,8 +296,8 @@ This gives the contractions used in
          & =\prod_p\sum_{z_p\in D_p}
         M_p((a_p,z_p),(b_p,z_p)),
     \end{align*}
-    by finite distributivity. For the mixed product, first apply
-    (\ref{eq:peps_party_product_conjugation}) and then this identity.
+    by finite distributivity. For the mixed product, applying
+    (\ref{eq:peps_party_product_conjugation}) and then this identity gives the claim.
 \end{proof}
 
 \begin{theorem}[Absorbing a common scalar at one party]
@@ -397,8 +397,8 @@ This gives the contractions used in
     Cyclicity of the rectangular trace gives
     $\tr(K_T(a)\rho K_{T'}(b)^\dagger)
         =\tr(\rho K_{T'}(b)^\dagger K_T(a))$.
-    Expand the trace and substitute the block identity
-    (\ref{eq:peps_free_source_overlap}).
+    Expanding the trace and substituting the block identity
+    (\ref{eq:peps_free_source_overlap}) gives the claim.
 \end{proof}
 
 \begin{definition}[Pair labels of the source slots]
@@ -421,20 +421,17 @@ This gives the contractions used in
     \lean{TNLean.PEPS.PairEffect.SourceInventory.length_le_card_sq}
     \leanok
     \uses{def:peps_source_pair_index}
-    If $P$ is finite and $R$ has the pair coverage and distinctness
-    in Definition~\ref{def:peps_source_pair_index}, then
-    $|R|=\binom{|P|}{2}\le|P|^2$.
+    For the pair slots in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
+    \texttt{04-compression.tex}, lines 565--585, if $P$ is finite and $R$ has
+    the pair coverage and distinctness in Definition~\ref{def:peps_source_pair_index},
+    then $|R|=\binom{|P|}{2}\le|P|^2$.
     This includes empty and singleton party sets.
-    These are the pair slots used in
-    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
-    \texttt{04-compression.tex}, lines 565--585.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{def:peps_source_pair_index}
-    Count the unordered pairs of distinct elements under the stated
-    bijection. Their number is $\binom{|P|}{2}$, which is at most
-    $|P|^2$.
+    Under the stated bijection, the unordered pairs of distinct elements
+    have cardinality $\binom{|P|}{2}$, which is at most $|P|^2$.
 \end{proof}
 \begin{definition}[Local maps on source slots]
     \label{def:peps_source_slot_maps}
@@ -469,10 +466,10 @@ This gives the contractions used in
 
 \begin{proof}\leanok
     \uses{thm:peps_map_source_pair,thm:peps_source_preparation}
-    Induct on the ordered source slots. Apply the two endpoint maps
-    of the first source, and then apply the construction to the
-    remaining sources while leaving those first two registers fixed.
-    Moving the remaining preparation past these fixed registers gives
+    By induction on the ordered source slots, applying the two endpoint maps
+    of the first source and then applying the construction to the
+    remaining sources while leaving those first two registers fixed
+    moves the remaining preparation past these fixed registers to give
     (\ref{eq:peps_source_slot_maps}). Each constituent is a local map,
     and its allowedness follows from the corresponding endpoint norm
     bound.
@@ -506,9 +503,9 @@ This gives the contractions used in
 
 \begin{proof}\leanok
     \uses{thm:peps_source_slot_maps}
-    Evaluate (\ref{eq:peps_source_slot_maps}) on each elementary
-    endpoint-basis preparation and each physical input basis vector.
-    The resulting columns agree with
+    Evaluating (\ref{eq:peps_source_slot_maps}) on each elementary
+    endpoint-basis preparation and each physical input basis vector
+    gives columns that agree with
     (\ref{eq:peps_source_frame_matrix}).
 \end{proof}
 
@@ -548,15 +545,15 @@ This gives the contractions used in
     operations $V_\xi,V_\zeta$ and elementary source vectors $b_x,b_y$.
     For arbitrary complex matrices $X_e$ on the endpoint-coordinate pairs,
     put $\mathcal X_{x,y}=\prod_e(X_e)_{x_e,y_e}$.
-    The column matrices satisfy
+    As the circuit-source specialization of the coordinate contraction in
+    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
+    \texttt{04-compression.tex}, lines 137--139, 279--355 and 409--434,
+    the column matrices satisfy
     \begin{align}
         \sum_{x,y\in I_W}\mathcal X_{x,y}C_{\xi,\zeta}(x,y)
          & =M_\xi\mathcal X M_\zeta^\dagger.
         \label{eq:peps_actual_pure_source_contraction}
     \end{align}
-    This is the circuit-source specialization of the coordinate contraction
-    in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
-    \texttt{04-compression.tex}, lines 137--139, 279--355 and 409--434.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -576,13 +573,12 @@ This gives the contractions used in
         TNLean.PEPS.PairEffect.SourceCircuit.sourcePairEquiv_apply}
     \leanok
     \uses{def:peps_source_pair_index,def:compression_operator_samples}
-    For each gate occurrence, its recorded source slots are in bijection with
+    For each gate occurrence in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
+    its recorded source slots are in bijection with
     the unordered pairs of distinct participants of that occurrence. The slot
     corresponding to a pair has the original two endpoint owners. The order of
     these endpoints, their two Euclidean spaces, and the source vector assigned
     to the slot are retained independently of this unordered pair index.
-    This is an auxiliary identification in
-    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
     % Source: 04-compression.tex, lines 233--245, 342--364 and 568--588.
 \end{definition}
 \begin{proof}\leanok
@@ -599,13 +595,12 @@ This gives the contractions used in
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourceSampleEquiv}
     \leanok
     \uses{def:peps_original_source_pair_indices,def:compression_operator_samples}
-    Identify an original source occurrence with the sample position consisting
+    In \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}, identify an
+    original source occurrence with the sample position consisting
     of its nonempty-participant gate occurrence and its unordered endpoint pair.
     A gate with no participants or only one participant contributes no sample
     position. The inverse identification recovers the original recorded slot,
     with its original endpoint order and dimensions.
-    This is an auxiliary identification in
-    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
     % Source: 04-compression.tex, lines 568--588.
 \end{definition}
 
@@ -617,10 +612,9 @@ This gives the contractions used in
     \uses{def:peps_original_source_pair_indices,
         def:peps_original_source_sample_indices}
     Let $e$ be an original source position with ordered endpoint owners
-    $p_e,q_e$, and let $p$ be any party. The sample position corresponding
-    to $e$ is incident to $p$ if and only if $p_e=p$ or $q_e=p$.
-    This is the incidence identification for the sample links in
-    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
+    $p_e,q_e$, and let $p$ be any party. For the sample links in
+    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}, the sample position
+    corresponding to $e$ is incident to $p$ if and only if $p_e=p$ or $q_e=p$.
     % Source: 04-compression.tex, lines 342--364 and 568--579.
 \end{theorem}
 
@@ -642,12 +636,11 @@ This gives the contractions used in
     Enumerating these slots in their original order gives a bijection
     from $\{0,\ldots,r_p-1\}$ to the sample positions incident to $p$.
     The corresponding original slot retains its ordered endpoint spaces.
-    For any sample alphabet $J$, a local assignment therefore consists
+    For any sample alphabet $J$ in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
+    a local assignment for the sample links therefore consists
     of a map $\{0,\ldots,r_p-1\}\to J$; no value at a sample position
     not incident to $p$ is required. This includes the empty alphabet
     and the empty list of incident positions.
-    This is the local indexing used for the sample links in
-    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
     % Source: 04-compression.tex, lines 253--267, 383--417 and 568--579.
 \end{definition}
 
@@ -664,23 +657,22 @@ This gives the contractions used in
     enumeration and $\tau:\mathcal E\to\mathcal S$ for the source-to-sample
     bijection, where $[r]=\{0,\ldots,r-1\}$.
     For each $k\in\mathbb N$, write $[k]=\{0,\ldots,k-1\}$.
-    The bijection $\sigma=\tau\circ\rho$ induces the assignment bijection
+    For \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
+    the bijection $\sigma=\tau\circ\rho$ induces the assignment bijection
     \begin{align}
         T:([r]\to[k]) & \longrightarrow(\mathcal S\to[k]), \\
         (Tj)(s)       & =j(\sigma^{-1}s).
     \end{align}
     The original source occurrence retains its ordered endpoint spaces and
-    Gaussian array. The same sample value is used at its two endpoints.
-    Empty sample alphabets and empty source sets are included. This is an
-    auxiliary identification for
-    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
+    Gaussian array. The same sample value is used at its two endpoints, and
+    empty sample alphabets and empty source sets are included.
     % Source: 04-compression.tex, lines 342--417 and 568--579.
 \end{definition}
 
 \begin{proof}\leanok
     \uses{def:peps_all_original_source_slots,def:peps_original_source_sample_indices}
-    Compose the two occurrence bijections to obtain $\sigma$. Precomposition
-    with $\sigma^{-1}$ is a bijection of assignment sets, with inverse
+    Composing the two occurrence bijections gives $\sigma$, and precomposition
+    with $\sigma^{-1}$ is a bijection of assignment sets with inverse
     $j\mapsto j\circ\sigma$.
 \end{proof}
 
@@ -690,11 +682,10 @@ This gives the contractions used in
     \leanok
     \uses{def:peps_source_sample_assignment_indices}
     For each assignment $j:\mathcal S\to[k]$ and each original source
-    occurrence $e\in\mathcal E$,
+    occurrence $e\in\mathcal E$ in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
     $(T^{-1}j)(\rho^{-1}e)=j(\tau e)$.
     This identity reads the sample at the original occurrence and chooses no
-    orientation for its unordered pair. It is an auxiliary identity for
-    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
+    orientation for its unordered pair.
     % Source: 04-compression.tex, lines 342--417 and 568--579.
 \end{theorem}
 
@@ -710,21 +701,21 @@ This gives the contractions used in
     \leanok
     \uses{def:peps_source_sample_assignment_indices}
     For arbitrary index sets $I,J$ and any matrix family
-    $F:([r]\to[k])\to\C^{I\times J}$,
+    $F:([r]\to[k])\to\C^{I\times J}$, reindexing the sample sum in
+    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS} gives
     \begin{align}
         \sum_{j:[r]\to[k]}F(j)
          & =\sum_{j:\mathcal S\to[k]}F(T^{-1}j).
     \end{align}
     If $k=0$ and $r>0$, both sums are empty. If $r=0$, both assignment sets
     are singletons, also when $k=0$. No normalization or positivity condition
-    is imposed on $F$. This is an auxiliary reindexing of the sample sum in
-    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
+    is imposed on $F$.
     % Source: 04-compression.tex, lines 568--579.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{def:peps_source_sample_assignment_indices}
-    Reindex the finite sum by the inverse bijection $T^{-1}$.
+    Reindexing the finite sum by the inverse bijection $T^{-1}$ gives the equality.
 \end{proof}
 
 
@@ -735,7 +726,8 @@ This gives the contractions used in
     \uses{def:peps_all_original_source_slots,def:peps_original_source_sample_indices,
         thm:peps_source_pair_count}
     Let $G$ be the nonempty participant occurrences of the original
-    chronological composition. For $g\in G$, write $C_g$ for its
+    chronological composition in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
+    For $g\in G$, write $C_g$ for its
     participant set and $\mathcal E(C_g)$ for the unordered pairs of
     distinct members of $C_g$. If $N$ is the number of original source
     slots, then
@@ -744,10 +736,8 @@ This gives the contractions used in
         =\sum_{g\in G}\binom{|C_g|}{2}.
         \label{eq:peps_original_source_sample_count}
     \end{align}
-    Repeated gate uses are counted as distinct occurrences.
-    Empty and singleton participant sets contribute no source slots.
-    This is an auxiliary count for
-    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
+    Repeated gate uses are counted as distinct occurrences, and
+    empty and singleton participant sets contribute no source slots.
     % Source: 04-compression.tex, lines 342--417 and 568--588.
 \end{theorem}
 
@@ -756,9 +746,9 @@ This gives the contractions used in
     \uses{def:peps_all_original_source_slots,def:peps_original_source_sample_indices,
         thm:peps_source_pair_count}
     The original ordered source slots are in bijection with the
-    disjoint union of the sets $\mathcal E(C_g)$. Take cardinalities
-    and sum over the original occurrences. The number of unordered
-    distinct pairs in $C_g$ is $\binom{|C_g|}{2}$.
+    disjoint union of the sets $\mathcal E(C_g)$. Taking cardinalities
+    and summing over the original occurrences gives the first equality, and
+    the number of unordered distinct pairs in $C_g$ is $\binom{|C_g|}{2}$.
 \end{proof}
 
 \begin{theorem}[Distributing the source averaging factor]
@@ -767,6 +757,8 @@ This gives the contractions used in
     \leanok
     \uses{thm:peps_original_source_sample_count}
     With the notation of Theorem~\ref{thm:peps_original_source_sample_count},
+    distributing one averaging factor to each gate-owned sample in
+    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS} gives,
     for any nonnegative integer $k$,
     \begin{align}
         (k^{-1})^N & =\prod_{g\in G}(k^{-1})^{|\mathcal E(C_g)|}.
@@ -775,15 +767,14 @@ This gives the contractions used in
     The equality holds in $\C$, with $0^{-1}=0$ and zeroth powers
     equal to $1$. It includes $k=0$ and an empty family of gates.
     The scalar from empty participant occurrences remains separate.
-    This distributes one averaging factor to each gate-owned sample
-    in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
     % Source: 04-compression.tex, lines 568--588.
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{thm:peps_original_source_sample_count}
-    Substitute (\ref{eq:peps_original_source_sample_count}) for $N$ and
-    use the product formula
-    for powers in a commutative monoid. No cancellation is required.
+    Substituting (\ref{eq:peps_original_source_sample_count}) for $N$ and
+    using the product formula
+    for powers in a commutative monoid gives the equality,
+    with no cancellation required.
 \end{proof}

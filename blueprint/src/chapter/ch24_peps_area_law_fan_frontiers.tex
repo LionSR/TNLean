@@ -23,14 +23,13 @@ endpoint.
     Let $Q\subseteq\mathbb R^2$, let $\mathcal E$ be a finite index set,
     and let $P_e$ be closed sets satisfying
     $\bigcup_{e\in\mathcal E}P_e=\overline Q$.
-    For every $e\in\mathcal E$,
+    In the finite-cover inclusion entering the local geometric argument
+    of \cite[Section~11]{OpenAI2026AreaLaw}, every $e\in\mathcal E$ satisfies
     \begin{align}
         \partial P_e
          & \subseteq\partial Q\cup
         \bigcup_{\substack{f\in\mathcal E \\f\ne e}}(P_e\cap P_f).
     \end{align}
-    This finite-cover inclusion enters the local geometric argument
-    of \cite[Section~11]{OpenAI2026AreaLaw}.
 \end{theorem}
 \begin{proof}\leanok
     Let $x\in\partial P_e$ with $x\notin\partial Q$.
@@ -58,11 +57,13 @@ endpoint.
     \uses{thm:area_law_finite_cover_frontier,
         thm:area_law_cell_fan_cover,
         thm:area_law_fan_triangle_contact,thm:area_law_cell_fan_intersections}
-    Apply Theorem~\ref{thm:area_law_finite_cover_frontier} to the closed fan
-    triangles $P_e$, whose union is $\overline Q$. Any point in $P_e\cap P_f$
-    ($f\ne e$) is either the center $c$ or a second common point distinct from
-    $c$. In the latter case, the triangle-contact classification places it on a
-    radial segment $[c,v_f]$, and $c$ itself belongs to every such segment.
+    Because the closed fan triangles $P_e$ have union $\overline Q$,
+    Theorem~\ref{thm:area_law_finite_cover_frontier} places every boundary
+    point of $P_e$ outside $\partial Q$ in some intersection $P_e\cap P_f$
+    ($f\ne e$). Any point in $P_e\cap P_f$ is either the center $c$ or a
+    second common point distinct from $c$; in the latter case the
+    triangle-contact classification places it on a radial segment $[c,v_f]$,
+    while $c$ itself belongs to every such segment.
 \end{proof}
 
 The inclusion retains all radial edges of the fan, including seams that

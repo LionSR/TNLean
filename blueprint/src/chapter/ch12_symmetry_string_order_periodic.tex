@@ -1,8 +1,9 @@
 \subsection{Periodic expectations and fixed-support limits}
 
-Write $\Phi_L(A)=V^{(L)}(A)$ for the unnormalized periodic vector and
-$Z_L=\langle\Phi_L(A),\Phi_L(A)\rangle$. For a physical matrix $O$ on the
-ring, put $\langle O\rangle_L=\langle\Phi_L(A),O\Phi_L(A)\rangle/Z_L$,
+Let $\Phi_L(A)=V^{(L)}(A)$ denote the unnormalized periodic vector and
+$Z_L=\langle\Phi_L(A),\Phi_L(A)\rangle$ its squared norm; for a physical
+matrix $O$ on the ring, let
+$\langle O\rangle_L=\langle\Phi_L(A),O\Phi_L(A)\rangle/Z_L$,
 with value zero when $Z_L=0$. The trace $\operatorname{Tr}$ below is taken
 on the virtual matrix space, whereas $\tr$ is the trace of a virtual matrix.
 
@@ -73,11 +74,11 @@ condition retained rather than only uniqueness of the eigenvalue as a set.
          & =\tr\!\left[\Lambda\E_O(\Id)\right].
         \label{eq:periodic_string_fixed_support}
     \end{align}
-    In particular, for fixed endpoint blocks $x,y$ of lengths $p,q$ and
-    fixed middle length $N$, the limit for
-    $x\otimes u^{\otimes N}\otimes y$ is
-    $\tr[\Lambda\E_x\E_u^N\E_y(\Id)]$, recovering display SOPMP of
-    \cite[lines~176--181]{PerezGarcia2008StringOrder} when $p=q=1$.
+    In particular, as in display SOPMP of
+    \cite[lines~176--181]{PerezGarcia2008StringOrder} for $p=q=1$, fixed
+    endpoint blocks $x,y$ of lengths $p,q$ and a fixed middle length $N$
+    give the limit $\tr[\Lambda\E_x\E_u^N\E_y(\Id)]$ for
+    $x\otimes u^{\otimes N}\otimes y$.
     The middle length is fixed before the exterior $n$ tends to infinity;
     no exchange of limits or rate uniform in $N$ is asserted.
 \end{theorem}
@@ -86,14 +87,14 @@ condition retained rather than only uniqueness of the eigenvalue as a set.
     \uses{thm:periodic_string_normalization,
         lem:canonical_transfer_stationary_trace_limit,
         lem:ldp_observable_transfer_products, thm:periodic_string_trace_ratio}
-    Put $F=\E_O$ and $P(X)=\tr(\Lambda X)\Id$. The exact numerator is
+    With $F=\E_O$ and $P(X)=\tr(\Lambda X)\Id$, the exact numerator is
     $\operatorname{Tr}(F\E_A^n)$. Pointwise convergence and finite
     dimensionality give
     $\operatorname{Tr}(F\E_A^n)\to\operatorname{Tr}(FP)
-        =\tr[\Lambda F(\Id)]$.
-    The denominator tends to one by
-    Theorem~\ref{thm:periodic_string_normalization}. Tensor-product insertions
-    give the stated physical string specializations.
+        =\tr[\Lambda F(\Id)]$, while by
+    Theorem~\ref{thm:periodic_string_normalization} the denominator tends to
+    one. Tensor-product insertions give the stated physical string
+    specializations.
 \end{proof}
 
 \begin{theorem}[Exact periodic symmetry phase]
@@ -138,12 +139,11 @@ condition retained rather than only uniqueness of the eigenvalue as a set.
     Assume the canonical purity conditions above and let $u$ be unitary.
     Either $\rho(\E_u)<1$ and the complex full-ring expectation tends to
     zero, or $\rho(\E_u)=1$ and its magnitude tends to one.
-    In the latter case, choose the unitary intertwiner and phase $\mu$
-    given by the twisted spectral criterion. The expectation is
-    eventually exactly $\mu^L$, so its phase-adjusted value tends to one;
-    if $\mu\ne1$, the unadjusted complex sequence has no limit.
-    This is the phase qualification of display RL, lines 381--388,
-    recorded in~\cite{gap:pgwsvc08_string_order_virtual_boundary}.
+    In the latter case, for the unitary intertwiner and phase $\mu$
+    from the twisted spectral criterion, the expectation is
+    eventually $\mu^L$; as recorded in~\cite{gap:pgwsvc08_string_order_virtual_boundary}
+    for display RL (lines 381--388), its phase-adjusted value tends to one,
+    while the unadjusted complex sequence has no limit whenever $\mu\ne1$.
     No implication concerning a parameterized Hamiltonian gap is asserted.
 \end{theorem}
 \begin{proof}

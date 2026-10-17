@@ -14,15 +14,15 @@ periodic state factors into a product of nearest-neighbor entangled pairs.
     \lean{MPSTensor.fixedPointTensor_finProdFinEquiv}
     \leanok
     \uses{def:mps_tensor}
-    Let $\sigma\in\MN{D}$. The \emph{fixed-point tensor} $P_\infty$ of
-    $\sigma$ has physical space $\C^D\otimes\C^D$ and bond dimension $D$;
-    its matrix at the physical pair $(l,r)$ is
+    Let $\sigma\in\MN{D}$. Following \cite{Malz2024Preparation}, the
+    \emph{fixed-point tensor} $P_\infty$ of $\sigma$ has physical space
+    $\C^D\otimes\C^D$ and bond dimension $D$; its matrix at the physical
+    pair $(l,r)$ is
     \begin{align}
         P_\infty^{(l,r)}
          & =\sqrt{\sigma}\,\ketbra{l}{r}.
         \notag
     \end{align}
-    This is the tensor $P_\infty$ of \cite{Malz2024Preparation}.
 \end{definition}
 
 \begin{center}
@@ -85,10 +85,10 @@ periodic state factors into a product of nearest-neighbor entangled pairs.
          & =\prod_{k=0}^{N-1}\omega_{(r_k,\,l_{k+1})},
         \label{eq:prep_pair_product}
     \end{align}
-    with indices of sites taken modulo $N$. In terms of $\rho=\sigma^T$,
-    $\omega$ corresponds to $(\Id\otimes\sqrt\rho)\sum_i\ket{ii}$, with pair
-    product state $\Omega=\bigotimes_k\ket{\omega}_{R_kL_{k+1}}$
-    \cite{Malz2024Preparation}.
+    with indices of sites taken modulo $N$. In the notation of
+    \cite{Malz2024Preparation} with $\rho=\sigma^T$, $\omega$ corresponds
+    to $(\Id\otimes\sqrt\rho)\sum_i\ket{ii}$, with pair product state
+    $\Omega=\bigotimes_k\ket{\omega}_{R_kL_{k+1}}$.
 \end{definition}
 
 \begin{theorem}[The transfer map of the fixed-point tensor]
@@ -98,14 +98,13 @@ periodic state factors into a product of nearest-neighbor entangled pairs.
     \leanok
     \uses{def:prep_fixed_point_tensor, def:transfer_map}
     Let $\sigma$ be positive semidefinite. Then
-    $\E_{P_\infty}(X)=\tr(X)\,\sigma$ for every $X\in\MN{D}$. If
-    $\tr\sigma=1$, then $\E_{P_\infty}$ is the projection
-    $X\mapsto\tr(X)\,\sigma$ onto the fixed point $\sigma$
-    \cite{Malz2024Preparation}.
+    $\E_{P_\infty}(X)=\tr(X)\,\sigma$ for every $X\in\MN{D}$. As in
+    \cite{Malz2024Preparation}, when $\tr\sigma=1$, $\E_{P_\infty}$ is the
+    projection $X\mapsto\tr(X)\,\sigma$ onto the fixed point $\sigma$.
 \end{theorem}
 \begin{proof}
     \leanok
-    Write $S=\sqrt\sigma$, so $S^\dagger=S$ and $S^2=\sigma$. Since
+    With $S=\sqrt\sigma$, one has $S^\dagger=S$ and $S^2=\sigma$. Since
     $\ketbra{l}{r}X\ketbra{r}{l}=X_{rr}\ketbra{l}{l}$,
     \begin{align}
         \E_{P_\infty}(X)
@@ -175,11 +174,11 @@ periodic state factors into a product of nearest-neighbor entangled pairs.
 \end{center}
 \begin{proof}
     \leanok
-    Expand the trace of the product
+    Expanding the trace of the product
     $\prod_k\sqrt\sigma\,\ketbra{l_k}{r_k}$ as a sum over cyclic index
-    paths $(t_k)_k$, one index per bond. The entry
+    paths $(t_k)_k$, one index per bond, shows that the entry
     $(\sqrt\sigma\,\ketbra{l_k}{r_k})_{t_k t_{k+1}}$ vanishes unless
-    $t_{k+1}=r_k$, so only the path $t_{k+1}=r_k$ survives, and its
+    $t_{k+1}=r_k$. Only the path $t_{k+1}=r_k$ survives, and its
     product is $\prod_k(\sqrt\sigma)_{r_{k-1}l_k}$. Reindexing the product
     along the cyclic shift of the sites gives~(\ref{eq:prep_pair_product}).
 \end{proof}
@@ -264,15 +263,16 @@ periodic state factors into a product of nearest-neighbor entangled pairs.
         def:left_canonical_tensor}
     Let $A$ be left-canonical, let $\sigma$ be positive semidefinite with
     $\tr\sigma=1$ and $\E_A(\sigma)=\sigma$, and suppose that
-    $\E_A-\E_{P_\infty}$ has spectral radius less than one. Then
-    $\E_{A^{[q]}}(X)\to\E_{P_\infty}(X)$ as $q\to\infty$, for every
-    $X\in\MN{D}$ \cite{Malz2024Preparation}.
+    $\E_A-\E_{P_\infty}$ has spectral radius less than one. As in
+    \cite{Malz2024Preparation},
+    $\E_{A^{[q]}}(X)\to\E_{P_\infty}(X)$ as $q\to\infty$ for every
+    $X\in\MN{D}$.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:prep_transfer_fixed_point_tensor, thm:blocked_transfer_map}
-    Write $P=\E_{P_\infty}$, the projection $X\mapsto\tr(X)\,\sigma$ by
-    Theorem~\ref{thm:prep_transfer_fixed_point_tensor}. The powers of an
+    With $P=\E_{P_\infty}$, the projection $X\mapsto\tr(X)\,\sigma$ of
+    Theorem~\ref{thm:prep_transfer_fixed_point_tensor}, the powers of an
     operator of spectral radius less than one tend to zero, so
     $(\E_A-P)^q(X)\to0$. Since $\E_A$ is trace preserving and fixes
     $\sigma$, $\E_A^q=P+(\E_A-P)^q$ for $q\ge1$. Finally

@@ -76,11 +76,12 @@ Ancillary systems are included by enlarging $V$.
     \end{align*}
 \end{lemma}
 \begin{proof}\leanok
-    Apply \cite[Lemma~2.1]{OpenAI2026AreaLaw} to $S(X)$ and $S(X|J)$ for the
-    joint reduced states on $X\cup J$, and use $I(X:J)=S(X)-S(X|J)$. The two
-    continuity bounds sum to $8\sqrt\delta\log(e\dim\mathcal H_X)$, where
+    Applying \cite[Lemma~2.1]{OpenAI2026AreaLaw} to $S(X)$ and $S(X|J)$ for the
+    joint reduced states on $X\cup J$ and using $I(X:J)=S(X)-S(X|J)$ bounds
+    $I_\psi(X:J)$ by the sum of the two continuity bounds, namely
+    $8\sqrt\delta\log(e\dim\mathcal H_X)$, where
     $\delta$ is the trace distance between the joint reductions on $X\cup J$.
-    By Lemma~\ref{lem:al_amp_pure_trace_distance}, $\delta\le\|\psi-\eta\|$.
+    Lemma~\ref{lem:al_amp_pure_trace_distance} then gives $\delta\le\|\psi-\eta\|$.
 \end{proof}
 
 \begin{theorem}[Entropy comparison after the local unitary]
@@ -90,19 +91,18 @@ Ancillary systems are included by enlarging $V$.
     \uses{lem:al_amp_unitary_complement, lem:al_amp_continuity_product}
     Let $X,J\subseteq V$ be disjoint, let $U$ be a unitary on
     $\mathcal H_{V\setminus(X\cup J)}$, and let $\varphi,\eta\in\mathcal H$
-    be unit vectors with $I_\eta(X:J)=0$. Put
-    $\delta=\|(I_{X\cup J}\otimes U)\varphi-\eta\|$. Then
+    be unit vectors with $I_\eta(X:J)=0$. For
+    $\delta=\|(I_{X\cup J}\otimes U)\varphi-\eta\|$, the comparison in the
+    final step of the proof of \cite[Proposition~10.2]{OpenAI2026AreaLaw} gives
     \begin{align*}
         I_\varphi(X:J) & \le 8\sqrt\delta\,\log(e\dim\mathcal H_X).
     \end{align*}
-    This is the comparison in the final step of the proof of
-    \cite[Proposition~10.2]{OpenAI2026AreaLaw}.
 \end{theorem}
 \begin{proof}\leanok
     By Lemma~\ref{lem:al_amp_unitary_complement}, the unit vector
     $(I_{X\cup J}\otimes U)\varphi$ has the same mutual information $I(X:J)$ as
-    $\varphi$. Apply Lemma~\ref{lem:al_amp_continuity_product} to
-    $(I_{X\cup J}\otimes U)\varphi$ and $\eta$.
+    $\varphi$, so applying Lemma~\ref{lem:al_amp_continuity_product} to
+    $(I_{X\cup J}\otimes U)\varphi$ and $\eta$ yields the bound.
 \end{proof}
 
 \begin{theorem}[Polynomial decay of the amplified information]
@@ -117,10 +117,11 @@ Ancillary systems are included by enlarging $V$.
     \begin{align*}
         I_\varphi(X:J) & \le 8\sqrt{C_1}\,(1+C_2)\,n^{2-K/4}.
     \end{align*}
-    If $M,K$ are integers with $K\ge4(M+2)$, then every $X'\subseteq X$
-    satisfies $I_\varphi(X':J)\le8\sqrt{C_1}\,(1+C_2)\,n^{-M}$. The constant
-    depends only on $C_1$ and $C_2$. The choice $K\ge4(M+3)$ in the proof of
-    \cite[Proposition~10.2]{OpenAI2026AreaLaw} satisfies this condition.
+    If $M,K$ are integers with $K\ge4(M+2)$ (as satisfied by the choice
+    $K\ge4(M+3)$ in the proof of \cite[Proposition~10.2]{OpenAI2026AreaLaw}),
+    then every $X'\subseteq X$ satisfies
+    $I_\varphi(X':J)\le8\sqrt{C_1}\,(1+C_2)\,n^{-M}$, with a constant
+    depending only on $C_1$ and $C_2$.
 \end{theorem}
 \begin{proof}\leanok
     Since $\log\dim\mathcal H_X\ge0$ and $n\ge1$, we have $C_2\ge0$ and

@@ -5,10 +5,11 @@ The infinitesimal condition in
 \cite[lines~331--359]{PerezGarcia2008StringOrder} is
 $M(H)=[E,H\otimes\Id-\Id\otimes\overline H]=0$ for Hermitian $H$.
 Every scalar Hermitian matrix belongs to this kernel. Here an effective
-generator means $H\notin\C\Id$; Theorem~\ref{thm:continuous_generator_string_order}
-proves that such a generator produces a nonscalar physical symmetry and
-string order with identity endpoints, as suggested by
-\cite[lines~291--296]{PerezGarcia2008StringOrder}.
+generator means $H\notin\C\Id$; as suggested by
+\cite[lines~291--296]{PerezGarcia2008StringOrder},
+Theorem~\ref{thm:continuous_generator_string_order} proves that such a
+generator produces a nonscalar physical symmetry and string order with
+identity endpoints.
 % Scope: only the forward implication from a nonscalar Hermitian generator
 % is asserted. No classification of all ambient physical stabilizers, or
 % converse to the effective-generator criterion, is claimed here.
@@ -54,10 +55,10 @@ string order with identity endpoints, as suggested by
     Consequently $[L_H,E]=0$ if and only if $[L_H,FF^\dagger]=0$.
 \end{theorem}
 \begin{proof}\leanok
-    Expanding the Gram product gives
-    $G_{(a,b),(c,e)}=\sum_i(A^i)_{ab}\overline{(A^i)_{ce}}$,
-    which is (\ref{eq:symmetry_gram_realignment}). For any doubled matrix
-    $X$ and pair indices $p,q$, the two actions of $L_H$ are
+    In (\ref{eq:symmetry_gram_realignment}), expanding the Gram product gives
+    $G_{(a,b),(c,e)}=\sum_i(A^i)_{ab}\overline{(A^i)_{ce}}$.
+    For any doubled matrix $X$ and pair indices $p,q$, the two actions of
+    $L_H$ are
     \begin{align}
         (L_HX)_{(a,b),q}
          & =\sum_r H_{ar}X_{(r,b),q}
@@ -67,8 +68,8 @@ string order with identity endpoints, as suggested by
         -\sum_r X_{p,(c,r)}\overline{H_{re}}.
         \notag
     \end{align}
-    Substitute (\ref{eq:symmetry_gram_realignment}) and
-    $\overline{H_{br}}=H_{rb}$ into the difference of these sums to obtain
+    Substituting (\ref{eq:symmetry_gram_realignment}) and
+    $\overline{H_{br}}=H_{rb}$ into the difference of these sums yields
     (\ref{eq:symmetry_commutator_realignment}). Realignment permutes the
     four indices, so the two commutators vanish simultaneously.
 \end{proof}
@@ -100,8 +101,8 @@ string order with identity endpoints, as suggested by
     multiplication with $(K_0^\top)_{ij}=(K_0)_{ji}$.
     The second expands as
     $\sum_{c,e}V_{ac}(A^i)_{ce}\overline{V_{be}}$.
-    For the infinitesimal identity use
-    $\overline{H_{be}}=H_{eb}$ in the second tensor-factor action.
+    In the second tensor-factor action,
+    $\overline{H_{be}}=H_{eb}$ yields the infinitesimal identity.
     Taking adjoints of the tensor factors gives $L_H^\dagger=L_H$.
 \end{proof}
 
@@ -159,8 +160,8 @@ string order with identity endpoints, as suggested by
             & FK_0                & =L_HF.
         \label{eq:symmetry_supported_generator}
     \end{align}
-    Set $K=K_0^\top$. Theorem~\ref{thm:row_physical_virtual_actions}
-    gives the infinitesimal relation, and $K$ is Hermitian because $K_0$ is.
+    With $K=K_0^\top$, Theorem~\ref{thm:row_physical_virtual_actions}
+    gives the infinitesimal relation, and $K$ inherits Hermiticity from $K_0$.
     Intertwining passes to powers and then to the exponential series:
     \begin{align}
         Fe^{itK_0}     & =e^{itL_H}F
@@ -168,9 +169,9 @@ string order with identity endpoints, as suggested by
         e^{itK_0^\top} & =(e^{itK_0})^\top.
         \notag
     \end{align}
-    The tensor-exponential identity is proved in
-    \cite[``Hermitian exponential paths'']{QICLean2026Blueprint}.
-    Applying (\ref{eq:symmetry_row_actions}) yields
+    By the tensor-exponential identity of
+    \cite[``Hermitian exponential paths'']{QICLean2026Blueprint},
+    applying (\ref{eq:symmetry_row_actions}) yields
     (\ref{eq:symmetry_continuous_covariance}).
     The same exponential identities give continuity, unitarity, and the
     group laws for all real parameters.

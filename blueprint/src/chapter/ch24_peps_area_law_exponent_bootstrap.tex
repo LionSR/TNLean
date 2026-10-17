@@ -61,9 +61,9 @@
     (\ref{eq:area_law_bootstrap_density_values}). Since $g_0>0$ when $e_0<1$,
     the identities imply (\ref{eq:area_law_bootstrap_density_margin}) for
     $e\le e_0$. The bound $\kappa\le\ell$ gives
-    (\ref{eq:area_law_bootstrap_energy_margin}). For the comparison bounds,
-    substitute the same formulas and use $\kappa\le e_*/4$, $e>e_*$, and
-    $e_0>0$.
+    (\ref{eq:area_law_bootstrap_energy_margin}), and substituting the same
+    formulas together with $\kappa\le e_*/4$, $e>e_*$, and
+    $e_0>0$ yields the comparison bounds.
 \end{proof}
 
 % Source: 08-scanner.tex, lines 371--384 and 731--755, adc7f124.
@@ -76,7 +76,9 @@
     Fix $0<e_0<1$, use the fixed parameters of
     Definition~\ref{def:area_law_bootstrap_parameters}, and fix
     $C,C_\delta\ge0$ and $\gamma,\gamma_\delta\in\mathbb R$.
-    For an integer $n\ge2$ and a real exponent $e\le e_0$, put
+    For an integer $n\ge2$ and a real exponent $e\le e_0$, with the convention
+    $x/0=0$ for all quotients, the numerical principal term in the energy
+    estimate of \cite[Section~9, lines~731--755]{OpenAI2026AreaLaw} is defined via
     \begin{align}
         L_n         & =\lfloor n^{1-\ell}\rfloor,                 &
         m_n         & =\lfloor n^\mu\rfloor,                      &
@@ -90,31 +92,27 @@
         \bigl(\delta_n(e)^{1/8}+n^{-\nu}+n^{-100}\bigr).
         \label{eq:al_principal_energy_term}
     \end{align}
-    All quotients have the convention $x/0=0$.
     There is an integer $N\ge2$, depending only on the fixed constants
     and $e_0$, such that every integer $n\ge N$ and every real $e\le e_0$
     satisfy $A_n(e)\le n^{-\nu/2}$.
-    This is the numerical principal term in the energy estimate of
-    \cite[Section~9, lines~731--755]{OpenAI2026AreaLaw}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{lem:al_scanner_scale_facts,thm:area_law_bootstrap_margins}
-    Apply the numerical scale estimates with the fixed exponents and
-    auxiliary entropy exponent $\mu$. For some fixed $C_1\ge1$ and all
-    sufficiently large $n$, cancellation of the positive $D_n^2$ gives
+    Applying the numerical scale estimates with the fixed exponents and
+    auxiliary entropy exponent $\mu$, and cancelling the positive factor $D_n^2$,
+    shows that for some fixed $C_1\ge1$ and all sufficiently large $n$,
     \begin{align}
         n   & \le C_1n^\ell m_nK_n\le C_1n^{\ell+\mu}K_n, &
         a_n & \le4C_1n^{-(g_0-\ell)}.
         \label{eq:al_principal_energy_band}
     \end{align}
-    Increase the threshold so that
+    Because $\nu>0$ and every fixed power of $\log n$ grows more slowly than
+    every positive power of $n$, enlarging the threshold ensures that
     \begin{align}
         4C_1                     & \le n^\nu,     & 2C_\delta & \le n^\nu, \\
         (\log n)^{\gamma_\delta} & \le n^\nu,     &
         192C(\log n)^\gamma      & \le n^{\nu/4}.
     \end{align}
-    These bounds follow because $\nu>0$ and every fixed power of $\log n$
-    grows more slowly than every positive power of $n$.
     The parameter inequalities $g_0-\ell\ge45\nu$ and
     $e-\mu\le-10\nu$ hold uniformly for $e\le e_0$. Hence
     \begin{align}
@@ -149,14 +147,14 @@
         E_n(e)=A_n(e)+Cn^{-1000}.
         \label{eq:al_bootstrap_energy_expression}
     \end{align}
-    There is an integer $N\ge2$, depending only on the fixed constants
+    There is an integer $N\ge2$ (for which the threshold in the principal
+    energy estimate suffices), depending only on the fixed constants
     and $e_0$, such that every integer $n\ge N$ and every real $e\le e_0$
     satisfy
     \begin{align}
         E_n(e)\le(1+C)n^{-\nu/2}.
         \label{eq:al_bootstrap_energy_expression_bound}
     \end{align}
-    The threshold in the principal energy estimate suffices.
 \end{corollary}
 \begin{proof}\leanok
     \uses{thm:area_law_bootstrap_principal_energy,def:area_law_bootstrap_parameters}
@@ -183,18 +181,17 @@ replica index at each fixed system size.
         K_n=\left\lfloor\frac{L_n}{8m_n}\right\rfloor,\qquad
         a_n=\frac4{K_n}.
     \end{align}
-    There is an integer $N\ge1$, depending only on these fixed exponents,
-    such that $K_n\ge1$ and $a_n>0$ for every integer $n\ge N$.
     Define $h(\tau)=-\tau\log|\tau|-(1-\tau)\log|1-\tau|$ for
-    $\tau\in\mathbb R$, with the convention $0\log0=0$.
-    On $[0,1]$, this is the binary entropy.
-    For every such $n$ and every $\tau\in\mathbb R$,
+    $\tau\in\mathbb R$, with the convention $0\log0=0$ (which coincides with the
+    binary entropy on $[0,1]$).
+    To bound the binary-entropy term in the proof of
+    \cite[Proposition~9.5]{OpenAI2026AreaLaw} for the rounded band count $K_n$,
+    there is an integer $N\ge1$, depending only on these fixed exponents and
+    independent of $\tau$, such that $K_n\ge1$, $a_n>0$, and
     \begin{align}
-        \frac{h(\tau)}{a_n}\le\frac{\log2}{4}\,n.
+        \frac{h(\tau)}{a_n}\le\frac{\log2}{4}\,n
     \end{align}
-    The threshold $N$ is independent of $\tau$. This bounds the
-    binary-entropy term in the proof of
-    \cite[Proposition~9.5]{OpenAI2026AreaLaw} for the rounded band count $K_n$.
+    for every integer $n\ge N$ and every $\tau\in\mathbb R$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{lem:al_scanner_scale_facts}
@@ -225,7 +222,9 @@ replica index at each fixed system size.
         K_n=\left\lfloor\frac{L_n}{8m_n}\right\rfloor,\qquad
         D_n=\lceil n^\kappa\rceil,\qquad a_n=\frac4{K_n}.
     \end{align}
-    There is an integer $N\ge1$, depending only on $e_0$, such that
+    For the additive terms following the comparison in the proof of
+    \cite[Proposition~9.5]{OpenAI2026AreaLaw}, there is an integer $N\ge1$,
+    depending only on $e_0$ and chosen before $e$ and $\tau$, such that
     $K_n\ge1$ and $a_n>0$ for every integer $n\ge N$ and, simultaneously,
     \begin{align}
         nL_n^e+nD_n+n^{3/5}+\frac{h(\tau)}{a_n}+1
@@ -233,17 +232,15 @@ replica index at each fixed system size.
     \end{align}
     for every $e_*<e\le e_0$ and every real $\tau$, where
     $h(\tau)=-\tau\log|\tau|-(1-\tau)\log|1-\tau|$ with the convention
-    $0\log0=0$. The threshold is chosen before $e$ and $\tau$.
-    This is a numerical estimate for the additive terms following the
-    comparison in the proof of \cite[Proposition~9.5]{OpenAI2026AreaLaw}.
+    $0\log0=0$.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:area_law_bootstrap_binary_entropy_cost,thm:area_law_bootstrap_margins}
-    Apply the binary-entropy estimate with the fixed parameters chosen from
-    $e_0$. It gives one $N\ge1$ such that $K_n\ge1$, $a_n>0$, and
+    Applying the binary-entropy estimate with the fixed parameters chosen from
+    $e_0$ gives one $N\ge1$ such that $K_n\ge1$, $a_n>0$, and
     $h(\tau)/a_n\le(\log2/4)n$ for every $n\ge N$ and every real $\tau$.
-    Fix such an $n$ and an exponent $e_*<e\le e_0$, and set
+    For such an $n$ and an exponent $e_*<e\le e_0$, let
     $P=n^{1+\eta e}$. Since $\eta>0$, $e>0$ and $n\ge1$, we have
     $1\le n\le P$. The floor bound $L_n\le n^\eta$ yields
     $nL_n^e\le P$. Since $\kappa>0$ and $n\ge1$, we have $n^\kappa\ge1$.
@@ -282,12 +279,12 @@ replica index at each fixed system size.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:area_law_bootstrap_margins}
-    Write $a=1-\ell$, so $0<a<1$. At each improvement, enlarge the constant
-    using the quadratic bound in (\ref{eq:area_law_bootstrap_initial}) to include
-    $1\le r<N_e$. The enlarged constant is independent of $i$.
-    Starting at $e_0$, apply (\ref{eq:area_law_bootstrap_step}) while the current
-    exponent exceeds $e_*$. Since $a^ne_0\to0$, only finitely many steps are
-    needed. Once $a^ne_0\le e_*$, the inequality
+    With $a=1-\ell\in(0,1)$, enlarging the constant at each improvement step
+    using the quadratic bound in (\ref{eq:area_law_bootstrap_initial}) extends
+    the bound across $1\le r<N_e$ independently of $i$.
+    Iterating (\ref{eq:area_law_bootstrap_step}) from $e_0$ while the current
+    exponent exceeds $e_*$ terminates in finitely many steps because $a^ne_0\to0$.
+    Once $a^ne_0\le e_*$, the inequality
     $r^{1+a^ne_0}\le r^{1+e_*}$ for $r\ge1$ gives the result.
 \end{proof}
 

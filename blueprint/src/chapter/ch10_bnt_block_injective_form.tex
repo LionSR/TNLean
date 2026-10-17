@@ -8,15 +8,16 @@ span after blocking.
     \lean{MPSTensor.wordTuple}
     \lean{MPSTensor.WordTupleSpanTop}
     \leanok
-    For a fixed blocked length $m$, the fixed-length form of the
-    block-injective canonical-form condition is
+    As in \cite[lines~2113--2117]{Cirac2021Matrix}, for a fixed blocked
+    length $m$ the fixed-length form of the block-injective canonical-form
+    condition is
     \begin{align}
         \spn\{(A_1^\omega,\ldots,A_g^\omega):|\omega|=m\}
          & =
-        \prod_{j=1}^g \MN{D_j}.
+        \prod_{j=1}^g \MN{D_j},
         \notag
     \end{align}
-    Equivalently,
+    or equivalently
     \begin{align}
         \forall X=(X_j)_j\in\bigoplus_{j=1}^g \MN{D_j},
         \quad
@@ -28,8 +29,6 @@ span after blocking.
         (A_1^\omega,\ldots,A_g^\omega).
         \notag
     \end{align}
-    This is the fixed-length form of the block-injective canonical-form
-    condition of \cite[lines~2113--2117]{Cirac2021Matrix}.
 \end{definition}
 
 \begin{theorem}[Gauge invariance of simultaneous fixed-length product spans]
@@ -64,10 +63,10 @@ span after blocking.
 \begin{proof}
     \leanok
     \uses{lem:eval_word_gauge}
-    Given a target tuple $(M_j)_j$, conjugate it backwards to
-    $(X_j^{-1}M_jX_j)_j$. If the word tuples of $(A_j)_j$ span the product
-    algebra, one common coefficient family $(c_\omega)_\omega$ expresses this
-    conjugated tuple. Gauge covariance of word evaluation then gives
+    If the word tuples of $(A_j)_j$ span the product algebra, then for any
+    target tuple $(M_j)_j$ one common coefficient family $(c_\omega)_\omega$
+    expresses the backwards-conjugated tuple $(X_j^{-1}M_jX_j)_j$. Gauge
+    covariance of word evaluation then gives
     \begin{align}
         \sum_{|\omega|=L}c_\omega B_j^\omega
          & =X_j\left(\sum_{|\omega|=L}c_\omega A_j^\omega\right)X_j^{-1}
@@ -84,18 +83,18 @@ span after blocking.
     \lean{MPSTensor.wordTupleSpanTop_threeBlock_mul_pred_of_blocksNotGaugePhaseEquiv_c1}
     \leanok
     \uses{def:blockwise_product_word_span, def:blocks_not_gauge_phase_equiv, lem:bnt_direct_sum_injective_prefix_word_span}
-    Let $(A_j)_{j=1}^g$ be irreducible left-canonical tensors with normalized
-    self-overlaps and with no gauge-phase-equivalent distinct blocks. Suppose
-    $g\geq2$, $L_0>0$, and every $A_j$ is block-injective at lengths $L_0$,
-    $L_0+1$, and $3(L_0+1)$. Then
+    As at the direct-sum induction length in
+    \cite[lines~1346--1408]{PerezGarcia2007Matrix}, let $(A_j)_{j=1}^g$ be
+    irreducible left-canonical tensors with normalized self-overlaps and with
+    no gauge-phase-equivalent distinct blocks. Suppose $g\geq2$, $L_0>0$, and
+    every $A_j$ is block-injective at lengths $L_0$, $L_0+1$, and $3(L_0+1)$.
+    Then
     \begin{align}
         \spn\{(A_1^\omega,\ldots,A_g^\omega):
         |\omega|=3(g-1)(L_0+1)\}
          & =\prod_{j=1}^{g}\MN{D_j}.
         \notag
     \end{align}
-    This is the direct-sum induction length in
-    \cite[lines~1346--1408]{PerezGarcia2007Matrix}.
 \end{lemma}
 
 \begin{proof}
@@ -122,9 +121,10 @@ span after blocking.
         exists_blocked_wordTupleSpanTop_one}
     \leanok
     \uses{def:bnt_cpsv, def:blocked_tensor, def:blockwise_product_word_span}
-    Let $(A_j)_{j=1}^g$ be a basis of normal tensors, with bond dimensions
-    $D_j$. There is a positive integer $L$ such that the one-letter
-    evaluations of the blocked tensors span the full product algebra:
+    Following \cite[lines~317--345]{Cirac2016MPDO_arXiv}, let $(A_j)_{j=1}^g$
+    be a basis of normal tensors, with bond dimensions $D_j$. There is a
+    positive integer $L$ such that the one-letter evaluations of the blocked
+    tensors span the full product algebra:
     \begin{align}
         \spn_{\C}\left\{((A_1^{[L]})^i,\ldots,(A_g^{[L]})^i)
         : 0\leq i<d^L\right\}
@@ -138,26 +138,23 @@ span after blocking.
          & =\prod_{j=1}^g\MN{D_j}.
         \notag
     \end{align}
-    This establishes simultaneous block injectivity following
-    \cite[lines~317--345]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{lem:cpsv_bnt_block_dimensions_positive, thm:cpsv_bnt_blocks_not_gaugePhaseEquiv, thm:cpsv_normal_tp_gauge, thm:normal_tp_primitive_irred, thm:common_exact_block_injectivity_normal_left_canonical, thm:wordspan_blk_inj_succ, lem:bnt_direct_sum_block_separation_word_span, lem:gauge_invariance_block_injective}
-    Put each BNT representative in its trace-preserving Perron gauge. The
-    gauged family is irreducible and left-canonical, has normalized
-    self-overlaps, and remains gauge-phase separated. Choose a common positive
-    length $p$ at which every gauged block is block-injective. Propagation of
-    homogeneous word spans gives block injectivity at $p+1$ and $3(p+1)$.
+    In its trace-preserving Perron gauge, the gauged family is irreducible and
+    left-canonical, has normalized self-overlaps, and remains gauge-phase
+    separated. At a common positive length $p$ where every gauged block is
+    block-injective, propagation of homogeneous word spans gives block
+    injectivity at $p+1$ and $3(p+1)$.
 
     Lemma~\ref{lem:bnt_direct_sum_block_separation_word_span} gives pairwise
-    separation at length $S=3(p+1)$. Write
-    $g\mathbin{\dot-}1=\max\{g-1,0\}$. Multiplying one separator for each of
+    separation at length $S=3(p+1)$. With
+    $g\mathbin{\dot-}1=\max\{g-1,0\}$, multiplying one separator for each of
     the other blocks gives a selector of length $(g\mathbin{\dot-}1)S$ for
-    every block.
-    Carry these selectors back from the Perron gauges. Gauge invariance
-    also gives block injectivity of every original block at length $p$.
-    Concatenating the injective prefix with the selectors yields the full
+    every block. Carrying these selectors back from the Perron gauges and using
+    gauge invariance for block injectivity of every original block at length
+    $p$, concatenating the injective prefix with the selectors yields the full
     product-algebra span at
     \begin{align}
         L
@@ -167,8 +164,8 @@ span after blocking.
     \end{align}
     The truncated factor makes the same construction valid for empty and
     singleton families. The same span provides selectors and block
-    injectivity at length $L$. For every sufficiently large $n$, concatenate
-    an $(n-L)$-letter injective prefix with these selectors to obtain the full
+    injectivity at length $L$. For every sufficiently large $n$, concatenating
+    an $(n-L)$-letter injective prefix with these selectors gives the full
     product-algebra span at length $n$. Finally, length-$L$ words of $A_j$ are
     the one-letter evaluations of $A_j^{[L]}$, which proves the blocked
     statement.
@@ -198,14 +195,15 @@ span after blocking.
 \begin{proof}
     \leanok
     \uses{lem:cpsv_bnt_block_dimensions_positive, thm:cpsv_bnt_blocks_not_gaugePhaseEquiv, thm:cpsv_normal_tp_gauge, thm:normal_tp_primitive_irred, thm:exact_pow_four_block_injectivity_normal_left_canonical, thm:wordspan_blk_inj_succ, lem:bnt_direct_sum_block_separation_word_span, thm:word_tuple_span_gauge_invariance}
-    Put every representative in its trace-preserving Perron gauge. Since
+    In the trace-preserving Perron gauge of each representative, since
     $D_j\leq\sum_kD_k\leq K$, quantum Wielandt and homogeneous-span
     propagation make every representative block-injective at $K^4$,
-    $K^4+1$, and $3(K^4+1)$. Conjugation preserves the simultaneous word
+    $K^4+1$, and $3(K^4+1)$, and conjugation preserves the simultaneous word
     span.
 
-    For $g=0$, take $L=1$; the product algebra has only its zero element. For
-    $g=1$, take $L=K^4$. If $g\geq2$, the three-block separation theorem gives
+    For $g=0$, $L=1$ suffices since the product algebra has only its zero
+    element, and for $g=1$, $L=K^4$ suffices. If $g\geq2$, the three-block
+    separation theorem gives
     \begin{align}
         L & =3(g-1)(K^4+1).
         \notag
@@ -234,7 +232,7 @@ span after blocking.
 \begin{proof}
     \leanok
     \uses{thm:cpsv_canonical_form_bnt_refinement}
-    In every phase class, choose its first copy. The class-copy
+    Selecting the first copy in every phase class, the class-copy
     equivalence sends these choices to distinct displayed block indices, and
     the first copy is the chosen representative. Thus the sum of the
     representative dimensions is bounded by the sum over all displayed
@@ -248,37 +246,36 @@ span after blocking.
         exists_bnt_biCF_after_blocking_le_three_bondDim_pow_five}
     \leanok
     \uses{def:cpsv_canonical_form, def:bnt_cpsv, def:blocked_tensor, def:blockwise_product_word_span}
-    Let $A$ be in CPSV canonical form with positive ambient bond
-    dimension $D$. There is a basis of normal tensors
-    $(A_j)_{j=1}^{g}$ and a positive integer $L\leq3D^5$ such that
+    As in the proposition at \cite[lines~342--345]{Cirac2016MPDO_arXiv}, let
+    $A$ be in CPSV canonical form with positive ambient bond dimension $D$.
+    There is a basis of normal tensors $(A_j)_{j=1}^{g}$ and a positive integer
+    $L\leq3D^5$ such that
     \begin{align}
         \spn_{\C}\left\{((A_1^{[L]})^i,\ldots,(A_g^{[L]})^i):
         0\leq i<d^L\right\}
-         & =\prod_{j=1}^{g}\MN{D_j}.
+         & =\prod_{j=1}^{g}\MN{D_j},
         \notag
     \end{align}
-    Hence $A$ is in block-injective canonical form after blocking at most
-    $3D^5$ sites. This is the proposition at
-    \cite[lines~342--345]{Cirac2016MPDO_arXiv}.
+    so $A$ is in block-injective canonical form after blocking at most $3D^5$
+    sites.
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{thm:cpsv_canonical_form_bnt_refinement, thm:cpsv_bnt_dimension_bound, thm:cpsv_bnt_sharp_span_ambient_cap, thm:cpsv_bnt_blocked_simultaneous_span}
-    Choose one representative from every matrix-product-vector phase
-    class. These representatives form a basis of normal tensors, and their
-    total bond dimension is at most $D$ by
-    Theorem~\ref{thm:cpsv_bnt_dimension_bound}. Apply
-    Theorem~\ref{thm:cpsv_bnt_sharp_span_ambient_cap} with $K=D$. A word of
-    length $L$ in $A_j$ is a one-letter evaluation of $A_j^{[L]}$, so the
-    resulting length-$L$ span is exactly the asserted one-letter span.
+    Selecting one representative from every matrix-product-vector phase class
+    produces a basis of normal tensors whose total bond dimension is at most
+    $D$ by Theorem~\ref{thm:cpsv_bnt_dimension_bound}. Applying
+    Theorem~\ref{thm:cpsv_bnt_sharp_span_ambient_cap} with $K=D$ and noting
+    that a word of length $L$ in $A_j$ is a one-letter evaluation of
+    $A_j^{[L]}$ yields the asserted one-letter span.
 \end{proof}
 
-Let $A$ be a tensor in canonical form, and let $A_1,\ldots,A_g$ be a basis of
-normal tensors of $A$. For suitable coefficients $\mu_{j,q}$ and invertible
-matrices $X_{j,q}$, write
-$M_j=\diag(\mu_{j,1},\ldots,\mu_{j,r_j})$ and
-$X=\bigoplus_{j=1}^{g}\bigoplus_{q=1}^{r_j}X_{j,q}$. Then
+As in \cite[Section~2.3, Equations~(20a)--(21)]{Cirac2016MPDO_arXiv}, if $A$
+is a tensor in canonical form and $A_1,\ldots,A_g$ is a basis of normal tensors
+of $A$, then for suitable coefficients $\mu_{j,q}$ and invertible matrices
+$X_{j,q}$, with $M_j=\diag(\mu_{j,1},\ldots,\mu_{j,r_j})$ and
+$X=\bigoplus_{j=1}^{g}\bigoplus_{q=1}^{r_j}X_{j,q}$,
 % Source: CPSV16, Section 2.3, labels eq:II_ABasicTensors and eq:II_X,
 % source lines 283--301; rendered Equations (20a)--(21).
 % Source-faithfulness verdict: the display labelled Eq19 in the source replaces
@@ -291,9 +288,8 @@ $X=\bigoplus_{j=1}^{g}\bigoplus_{q=1}^{r_j}X_{j,q}$. Then
      & =X\left[\bigoplus_{j=1}^{g}
         \left(M_j\otimes A_j^i\right)\right]X^{-1}
     =\bigoplus_{j=1}^{g}\bigoplus_{q=1}^{r_j}
-    \mu_{j,q}X_{j,q}A_j^iX_{j,q}^{-1}.
+    \mu_{j,q}X_{j,q}A_j^iX_{j,q}^{-1},
     \label{eq:bnt_found_canonical_decomp}
 \end{align}
-This is \cite[Section~2.3, Equations~(20a)--(21)]{Cirac2016MPDO_arXiv}.
-The decomposition (\ref{eq:bnt_found_canonical_decomp}) is used below to
-separate the normal blocks.
+and the decomposition (\ref{eq:bnt_found_canonical_decomp}) separates the
+normal blocks below.
