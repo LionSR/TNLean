@@ -1,5 +1,5 @@
 {
-  "reviewedAt": "2026-10-16T21:00:00Z",
+  "reviewedAt": "2026-10-17T06:00:00Z",
   "entries": [
     {
       "id": "docs/paper-gaps/oai26_peps_patch_stationarity_gap.tex",
@@ -289,7 +289,7 @@
       "id": "docs/paper-gaps/arealaw2d_rectangular_specialization_scope.tex",
       "repo": "TNLean",
       "kind": "narrower",
-      "status": "open",
+      "status": "resolved",
       "paper": "area",
       "result": "Corollary 1.2, rectangular and vertex-boundary area laws",
       "issue": 9339,
@@ -299,12 +299,12 @@
         ]
       },
       "title": "Reducing the rectangular area law to the uniform finite-domain theorem",
-      "summary": "The deduction of Corollary 1.2 from Theorem 1.1 is proved; Theorem 1.1 itself remains an explicit hypothesis.",
+      "summary": "Corollary 1.2 is proved in all three forms with the paper's hypotheses: Theorem 1.1, at first an explicit hypothesis of the reduction, is now proved.",
       "context": "Corollary 1.2 specializes the finite-domain area law of Theorem 1.1 to an open rectangular grid and deduces vertex-boundary forms of the bound, including the square-grid area law used in the PEPS construction.",
       "claims": "Fix a local dimension <i>q</i> ≥ 1, an interaction norm bound <i>J</i> &gt; 0, and a spectral gap Δ &gt; 0. On the rectangular grid <i>V</i> = {0, …, <i>w</i> − 1} × {0, …, <i>h</i> − 1} with open nearest-neighbor edge set <i>E</i>, let <i>H</i> = Σ<sub><i>v</i>∈<i>V</i></sub> <i>h<sub>v</sub></i> + Σ<sub><i>e</i>∈<i>E</i></sub> <i>h<sub>e</sub></i> be a Hermitian Hamiltonian whose site and edge terms have operator norm at most <i>J</i>, and let Ω be a unit ground state with ground energy <i>E</i><sub>0</sub> satisfying <i>H</i> − <i>E</i><sub>0</sub><i>I</i> ≥ Δ(<i>I</i> − |Ω⟩⟨Ω|). For any region <i>A</i> ⊆ <i>V</i>, let <i>S</i><sub>Ω</sub>(<i>A</i>) be the von Neumann entropy of the reduced state on <i>A</i>, ∂<sub><i>V</i></sub><i>A</i> the set of edges in <i>E</i> between <i>A</i> and <i>V</i> ∖ <i>A</i>, ∂<sub>in</sub><i>A</i> the set of vertices in <i>A</i> adjacent to <i>V</i> ∖ <i>A</i>, and <i>Z<sub>A</sub></i> the set of vertices incident to ∂<sub><i>V</i></sub><i>A</i>. There is a constant <i>C</i> = <i>C</i>(<i>q</i>, 1, <i>J</i>, Δ), chosen before <i>w</i>, <i>h</i>, the terms <i>h<sub>v</sub></i>, <i>h<sub>e</sub></i>, Ω, and <i>A</i>, such that <i>S</i><sub>Ω</sub>(<i>A</i>) ≤ <i>C</i>|∂<sub><i>V</i></sub><i>A</i>|, <i>S</i><sub>Ω</sub>(<i>A</i>) ≤ 4<i>C</i>|∂<sub>in</sub><i>A</i>|, and <i>S</i><sub>Ω</sub>(<i>A</i>) ≤ 2<i>C</i>|<i>Z<sub>A</sub></i>|.",
-      "found": "The formalization proves that Theorem 1.1 implies Corollary 1.2, taking the uniform area law of Theorem 1.1 as an explicit hypothesis. It embeds <i>V</i> into ℤ<sup>2</sup>, replaces each site and edge term by its Hermitian part on the corresponding singleton or pair support in ℤ<sup>2</sup>, and sets the interaction to zero on all other supports. Under the configuration isometry <i>U</i> between the two Hilbert spaces, the embedded Hamiltonian equals <i>UHU</i><sup>*</sup>, and <i>U</i> preserves the unit ground vector, the spectral gap Δ, the regional entropy <i>S</i><sub>Ω</sub>(<i>A</i>), and the cardinalities of ∂<sub><i>V</i></sub><i>A</i>, ∂<sub>in</sub><i>A</i>, and <i>Z<sub>A</sub></i>. The vertex-boundary bounds follow from the degree bound of the rectangular grid, and setting <i>w</i> = <i>h</i> = <i>L</i> gives the square-grid area law used in the PEPS construction. Still assumed: the uniform finite-domain area law of Theorem 1.1.",
+      "found": "The formalization proves that Theorem 1.1 implies Corollary 1.2, taking the uniform area law of Theorem 1.1 as an explicit hypothesis. It embeds <i>V</i> into ℤ<sup>2</sup>, replaces each site and edge term by its Hermitian part on the corresponding singleton or pair support in ℤ<sup>2</sup>, and sets the interaction to zero on all other supports. Under the configuration isometry <i>U</i> between the two Hilbert spaces, the embedded Hamiltonian equals <i>UHU</i><sup>*</sup>, and <i>U</i> preserves the unit ground vector, the spectral gap Δ, the regional entropy <i>S</i><sub>Ω</sub>(<i>A</i>), and the cardinalities of ∂<sub><i>V</i></sub><i>A</i>, ∂<sub>in</sub><i>A</i>, and <i>Z<sub>A</sub></i>. The vertex-boundary bounds follow from the degree bound of the rectangular grid, and setting <i>w</i> = <i>h</i> = <i>L</i> gives the square-grid area law used in the PEPS construction. The uniform finite-domain area law of Theorem 1.1, at first a hypothesis of this reduction, is now proved from the spectral-gap hypotheses, so the corollary holds unconditionally.",
       "impact": "No. The deduction of Corollary 1.2 from Theorem 1.1 introduces no extra geometric or physical hypotheses.",
-      "plan": "Complete the proof of Theorem 1.1 from the spectral-gap hypotheses."
+      "plan": "None for this corollary. Its square-grid case supplies Proposition 2.1 of the PEPS manuscript."
     },
     {
       "id": "docs/paper-gaps/polypeps_angular_annular_geometry_scope.tex",
@@ -405,7 +405,7 @@
       "id": "docs/paper-gaps/arealaw2d_belt_replacement_template_scope.tex",
       "repo": "TNLean",
       "kind": "convention",
-      "status": "open",
+      "status": "resolved",
       "paper": "area",
       "result": "Proposition 11.2, templates for belt tiles and replacements",
       "issue": 8758,
@@ -415,12 +415,12 @@
         ]
       },
       "title": "Lattice points and the stopping scale in belt and replacement templates",
-      "summary": "The templates of belt tiles and replacements are built as the paper describes, for regions that contain a lattice point and with a stopping scale at least one. The final assembly of Proposition 11.2, which will discharge both premises, is not yet formalized.",
+      "summary": "The templates of belt tiles and replacements are built as the paper describes. The proof of Proposition 11.2 applies them only to regions that contain a lattice point and with a stopping scale at least one, so both premises are discharged.",
       "context": "The two-family construction of Proposition 11.2 attaches a template to each region it produces, so that the scanner estimates apply to it. A belt tile of side <i>u</i> = <i>t<sub>k</sub></i> gets <i>s</i><sub>0</sub> = <i>u</i>, and a replacement with removal half-side <i>u</i> gets <i>s</i><sub>0</sub> = 2<i>u</i>; both get <i>n</i> = ⌈<i>C<sub>B</sub></i><i>u</i>⌉.",
       "claims": "Each region is a union of at most eight closed triangles, and <i>C<sub>B</sub></i> can be chosen so that every such template satisfies <i>n</i> ≥ <i>C</i><sub>tpl</sub><i>N</i><sub>0</sub>(<i>s</i><sub>0</sub> + 1) and diam<sub>∞</sub> <i>T</i> ≤ <i>n</i>.",
       "found": "Two premises are not printed in the passage. First, the region contains a lattice point: Definition 9.3 requires a template to be nonempty, and the paper uses these templates only for regions that meet the cut <i>A</i>. Second, for replacements, the stopping scale <i>S</i><sub>*</sub> is at least one, so every nonterminal removal half-side is a power of two and <i>s</i><sub>0</sub> = 2<i>u</i> is a positive integer. The paper chooses <i>S</i><sub>*</sub> sufficiently large, which implies this.",
-      "impact": "No. The final assembly will apply these templates only to retained regions, which meet <i>A</i>, and with a stopping scale at least one.",
-      "plan": "Formalize the final assembly of Proposition 11.2, which discharges both premises (issue #8758)."
+      "impact": "No. Proposition 11.2 applies these templates only to retained regions, which meet <i>A</i>, and with a stopping scale at least one.",
+      "plan": "None. Proposition 11.2 is proved with both premises discharged."
     },
     {
       "id": "docs/paper-gaps/oai26_zero_floor_energy_scope.tex",
