@@ -45,7 +45,7 @@ for a construction certificate carrying the omitted clauses and forget it into t
 
 ## Main results
 
-* `TNLean.PEPS.Approximation.DyadicProtocol.IsDistributionProtocol.nonprivateCount_toDistributedConstruction_circuit_le`
+* `DyadicProtocol.IsDistributionProtocol.nonprivateCount_toDistributedConstruction_circuit_le`
   and its companions: the gate-count, lifetime, monomial, and expansion bounds of the protocol
   for its composed circuit.
 * `TNLean.PEPS.Approximation.DyadicProtocol.exists_partyNetwork_of_contractedOperator`: a
