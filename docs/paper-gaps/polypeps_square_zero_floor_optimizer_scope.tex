@@ -5,7 +5,7 @@
 \input{command}
 \title{The Square-Grid Zero-Floor Optimizer in Integer-Domain Coordinates}
 \author{}
-\date{October 16, 2026}
+\date{October 17, 2026}
 \begin{document}
 \maketitle
 \gapnote{scope-restriction}{open}
@@ -41,7 +41,7 @@ full-system gap in \texttt{00-introduction.tex}.}
 \section{The physical specialization and its boundary}
 
 The square-grid specialization takes the original Hamiltonian and its original
-unit gapped ground vector. It assumes $J\ge0$, transports the site and edge
+unit gapped ground vector. For every real interaction bound $J$, it transports the site and edge
 terms by the canonical configuration isometry $U$ to the integer square
 $\Lambda$, and uses their Hermitian parts. The sum is exactly $UHU^*$, the norm
 bound is still $J$, and the projector gap is unchanged. The regional filters
@@ -57,11 +57,14 @@ $H,\Omega$ replaced by $UHU^*,U\Omega$ and with each unordered integer-grid
 boundary edge counted once. No additional hypothesis on a regional gap is
 used.\footnote{Declaration:
 \leanid{TNLean.PEPS.Approximation.SquareHamiltonian.exists_zero_floor_maximizer_energy_fidelity}.}
-The sign restriction $J\ge0$ belongs to the existing conversion to a
-finite-domain Hamiltonian, which assigns zero to unused supports. It excludes
-the empty square with a negative vacuous bound from the companion signature;
-no source estimate is claimed for that case here. For a nonempty original
-square, the termwise norm bound already forces $J\ge0$.
+No sign hypothesis on $J$ is needed for this conversion. Every admissible
+support is nonempty. If $X$ is an unused admissible support, choose a site
+$v\in X$ and let $A_v$ be the original term at the corresponding square-grid
+site. Its norm bound gives $0\le\|A_v\|\le J$, which also bounds the zero
+term assigned to $X$. On the empty square there are no admissible supports,
+so the conversion imposes no sign condition on $J$. Thus the energy and
+fidelity estimates include the empty square with a negative vacuous bound.\footnote{
+This removes the former nonnegative-budget restriction recorded in issue 9586.}
 
 The identification of the source's filter coordinates and ordered products
 with these spectral feasible families is recorded separately in the
@@ -73,11 +76,11 @@ geometric optimizer, the two-family decomposition or Proposition 4.1.
 
 \section{Effect and remaining work}
 
-This is a restriction of the formalized statement, not an error in the
-source. A direct configuration-reindexed interaction sum, or a separate
-empty-grid argument, can remove the nonnegative-budget restriction without
-altering the estimates. The coordinate-family comparison and geometric choice
-of regions and weights remain independent steps in issue 8741.
+The nonnegative-budget restriction has been removed without changing either
+estimate. The remaining scope concerns the representation of the feasible
+families and the supplied geometric data, not the sign of the interaction
+bound. The coordinate-family comparison and geometric choice of regions and
+weights remain independent steps in issue 8741.
 
 \bibliographystyle{alpha}
 \bibliography{references}

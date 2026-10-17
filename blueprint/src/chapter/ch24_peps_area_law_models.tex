@@ -667,34 +667,34 @@ original open square. We state the two models separately, following
 
 \begin{definition}[The original square Hamiltonian as a finite-domain interaction]
     \label{def:square_area_law_hamiltonian}
-    \lean{TNLean.PEPS.Approximation.SquareHamiltonian.toAreaLawHamiltonian}
-    \leanok
+    % Pending verification: \lean{TNLean.PEPS.Approximation.SquareHamiltonian.toAreaLawHamiltonian}
     \uses{def:square_area_law_support,thm:square_area_law_support_admissible,
         thm:square_area_law_support_injective,
         def:square_area_law_state,thm:square_hermitian_term_properties,
         thm:square_hermitian_term_supported_algebra}
     Let $H=\sum_i A_i$ be an original Hermitian square Hamiltonian with
-    interaction bound $J\ge0$. At every designated support set
+    interaction bound $J\in\mathbb R$. At every designated support set
     \begin{align*}
         h_{X_i} & =U A_i^{\mathrm h}U^*,
     \end{align*}
     and put $h_X=0$ at every other admissible range-one support.
     This defines a Hermitian interaction family on $\Lambda$, with the
-    same bound $\|h_X\|\le J$. Neither a nonempty lattice nor a positive
-    local dimension is required.
+    same bound $\|h_X\|\le J$. Indeed, any unused admissible support
+    contains a site $v$, whose original term gives $0\le\|A_v\|\le J$.
+    An empty lattice has no admissible supports. Neither a nonempty lattice
+    nor a positive local dimension is required.
 \end{definition}
 
 \begin{theorem}[Exact Hamiltonian in integer coordinates]
     \label{thm:square_area_law_hamiltonian_operator}
-    \lean{TNLean.PEPS.Approximation.SquareHamiltonian.toAreaLawHamiltonian_operator}
-    \leanok
+    % Pending verification: \lean{TNLean.PEPS.Approximation.SquareHamiltonian.toAreaLawHamiltonian_operator}
     \uses{def:square_area_law_hamiltonian,thm:square_hermitian_term_sum}
     The finite-domain interaction has total Hamiltonian
     \begin{align*}
         H_{\mathrm{int}} & =UHU^*.
     \end{align*}
 \end{theorem}
-\begin{proof}\leanok
+\begin{proof}
     The support map is injective and every unused support contributes
     zero. Thus the sum is $\sum_i U A_i^{\mathrm h}U^*$.
     Conjugation is linear and $\sum_i A_i^{\mathrm h}=H$.
@@ -702,11 +702,10 @@ original open square. We state the two models separately, following
 
 \begin{theorem}[The original nearest-neighbor interaction family]
     \label{thm:square_nearest_neighbor_terms}
-    \lean{TNLean.PEPS.Approximation.SquareHamiltonian.exists_nearestNeighbor_terms}
-    \leanok
+    % Pending verification: \lean{TNLean.PEPS.Approximation.SquareHamiltonian.exists_nearestNeighbor_terms}
     \uses{def:polynomial_peps_model,def:square_area_law_hamiltonian,
         def:area_law_nearest_neighbor_support}
-    Let $H$ be an original square Hamiltonian with interaction bound $J\ge0$.
+    Let $H$ be an original square Hamiltonian with interaction bound $J\in\mathbb R$.
     Index the sites and unordered nearest-neighbor edges of $\Lambda$ by
     $\mathcal I$, and let $D_j$ be the singleton or endpoint pair of $j$.
     There exist operators $(T_j)_{j\in\mathcal I}$ such that each $T_j$ is
@@ -718,7 +717,7 @@ original open square. We state the two models separately, following
     The assertion holds for every side length and local dimension, and for
     every choice of order on the rectangle sites.
 \end{theorem}
-\begin{proof}\leanok
+\begin{proof}
     \uses{thm:square_interaction_support_relabel,
         thm:square_area_law_hamiltonian_operator,thm:square_hermitian_term_properties,
         thm:square_hermitian_term_supported_algebra,thm:square_hermitian_term_sum,
@@ -735,8 +734,7 @@ original open square. We state the two models separately, following
 
 \begin{theorem}[The same ground vector and full-system gap]
     \label{thm:square_area_law_ground_gap}
-    \lean{TNLean.PEPS.Approximation.SquareHamiltonian.isGappedGroundState_toAreaLawHamiltonian}
-    \leanok
+    % Pending verification: \lean{TNLean.PEPS.Approximation.SquareHamiltonian.isGappedGroundState_toAreaLawHamiltonian}
     \uses{thm:square_area_law_hamiltonian_operator,thm:norm_square_area_law_state}
     Let $E_0,\Delta\in\mathbb R$. If an original unit vector $\Omega$
     satisfies
@@ -753,7 +751,7 @@ original open square. We state the two models separately, following
     The conclusion holds for any real lower-gap parameter $\Delta$.
     In particular, a positive original full-system gap is preserved.
 \end{theorem}
-\begin{proof}\leanok
+\begin{proof}
     Conjugating the eigenvector equation and the positive semidefinite
     gap defect by the unitary $U$, together with norm preservation, gives both
     relations.

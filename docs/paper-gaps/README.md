@@ -1197,7 +1197,7 @@ orthogonal rectangle sides, as a convention built into the permitted polygons.
 - [`polypeps_square_zero_floor_optimizer_scope.tex`](polypeps_square_zero_floor_optimizer_scope.tex)
   records the original-square
   zero-floor maximizing-family energy and full-system fidelity estimates in
-  canonical integer-domain coordinates. The existing Hamiltonian conversion
-  requires a nonnegative interaction bound; the companion's empty-square
-  case with a negative vacuous bound, its filter-coordinate comparison and
-  the geometric region and weight construction remain separate.
+  canonical integer-domain coordinates for every real interaction bound,
+  including the empty square with a negative vacuous bound. The comparison
+  of filter coordinates and the geometric region and weight construction
+  remain separate.

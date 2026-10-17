@@ -271,7 +271,7 @@ greater than `u^β` from `T`, one has `I_Ω(X : E) ≤ C`.
 This is a reduction: the sublinear collar bound is assumed. Source: polynomial-PEPS
 Proposition 3.1, `02-information.tex` lines 91–145. -/
 theorem coarse_mutualInformation_le_square_of_sublinearCollarBound {q : ℕ}
-    {J Δ D₀ Ctpl : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < Δ)
+    {J Δ D₀ Ctpl : ℝ} (_hJ : 0 ≤ J) (hΔ : 0 < Δ)
     (hcol : SublinearCollarBound q 1 J Δ D₀ Ctpl) (N₀ : ℕ) (A₀ : ℝ) :
     ∃ β : ℝ, β < 1 ∧ ∃ C u₀ : ℝ, ∀ u : ℝ, u₀ ≤ u →
       ∀ (L : ℕ) (h : SquareHamiltonian L q J) (E₀ : ℝ) (Ω : StateSpace L q),
@@ -295,8 +295,8 @@ theorem coarse_mutualInformation_le_square_of_sublinearCollarBound {q : ℕ}
   have hdist' (x y : ℤ × ℤ) :
       Scan.ambientSupDistance (x + -c) (y + -c) = Scan.ambientSupDistance x y := by
     rw [hdist, neg_add_cancel_right]
-  have h := hmain u hu (AreaLaw.rectangularDomain L L) (h.toAreaLawHamiltonian hJ) E₀
-    (squareAreaLawState Ω) (h.isGappedGroundState_toAreaLawHamiltonian hJ hΩ)
+  have h := hmain u hu (AreaLaw.rectangularDomain L L) h.toAreaLawHamiltonian E₀
+    (squareAreaLawState Ω) (h.isGappedGroundState_toAreaLawHamiltonian hΩ)
     (T.image fun t ↦ t + -c) (hT.translate (-c))
     (by
       simp only [Finset.mem_image]

@@ -80,7 +80,7 @@ theorem exists_uniform_nestedPatch_minimizer_marginal_closeness
     ((U.symm.norm_map _).trans ((norm_squareAreaLawState Ω).trans hgs.1)) hx
   have hgap := FiniteProduct.re_trace_abs_reducedPure_sub_le_one_sixteenth_of_energy
     (fun _ : AreaLaw.Site Λ ↦ Fin q)
-    (h.isGappedGroundState_toAreaLawHamiltonian hJ hgs) hΔ
+    (h.isGappedGroundState_toAreaLawHamiltonian hgs) hΔ
     ((U.norm_map _).trans hnorm) henergy R
   have hρ := reindex_reducedPure_eq_regionState
     (fun _ : AreaLaw.Site Λ ↦ Equiv.refl (Fin q)) R Ωᵤ

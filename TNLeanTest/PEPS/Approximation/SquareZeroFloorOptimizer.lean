@@ -17,7 +17,7 @@ variable [LinearOrder (AreaLaw.Site (AreaLaw.rectangularDomain L L))]
 
 /-- The selected family gives the usual divided fidelity estimate for a positive gap.
 No positivity of the individual original terms or gap on a subregion is assumed. -/
-example (h : SquareHamiltonian L q J) (hJ : 0 ≤ J) (hΔ : 0 < Δ)
+example (h : SquareHamiltonian L q J) (hΔ : 0 < Δ)
     {Ω : StateSpace L q} (hΩ : h.IsGappedGroundState E₀ Ω Δ)
     (D : ℕ → Finset (AreaLaw.Site (AreaLaw.rectangularDomain L L)))
     (hD : ∀ i j : Fin m, i ≤ j → D i ⊆ D j)
@@ -43,20 +43,20 @@ example (h : SquareHamiltonian L q J) (hJ : 0 ≤ J) (hΔ : 0 < Δ)
         (squareAreaLawState Ω)
       let φ := ((‖ψ‖⁻¹ : ℝ) : ℂ) • ψ
       0 < ‖ψ‖ ∧ ‖φ‖ = 1 ∧
-        |(⟪φ, toEuclideanLin (h.toAreaLawHamiltonian hJ).operator φ⟫_ℂ).re - E₀| ≤
+        |(⟪φ, toEuclideanLin h.toAreaLawHamiltonian.operator φ⟫_ℂ).re - E₀| ≤
           (q : ℝ) ^ 2 * J * ∑ j : Fin m,
             a j ^ 2 * (AreaLaw.edgeBoundary (AreaLaw.rectangularDomain L L) (D j)).card ∧
         1 - ((q : ℝ) ^ 2 * J * ∑ j : Fin m,
           a j ^ 2 * (AreaLaw.edgeBoundary (AreaLaw.rectangularDomain L L) (D j)).card) / Δ ≤
             ‖⟪squareAreaLawState Ω, φ⟫_ℂ‖ ^ 2 := by
   obtain ⟨K, hK, hmax, hpos, hunit, henergy, hfidelity⟩ :=
-    h.exists_zero_floor_maximizer_energy_fidelity hJ hΩ D hD hsingle a ha ha1
+    h.exists_zero_floor_maximizer_energy_fidelity hΩ D hD hsingle a ha ha1
   refine ⟨K, hK, hmax, hpos, hunit, henergy, ?_⟩
   have hdiv := (le_div_iff₀' hΔ).mpr hfidelity
   linarith
 
 /-- The endpoint weight one is allowed and retains the global maximum and nonzero output. -/
-example (h : SquareHamiltonian L q J) (hJ : 0 ≤ J)
+example (h : SquareHamiltonian L q J)
     {Ω : StateSpace L q} (hΩ : h.IsGappedGroundState E₀ Ω Δ)
     (D : ℕ → Finset (AreaLaw.Site (AreaLaw.rectangularDomain L L)))
     (hD : ∀ i j : Fin m, i ≤ j → D i ⊆ D j)
@@ -80,12 +80,12 @@ example (h : SquareHamiltonian L q J) (hJ : 0 ≤ J)
       0 < ‖toEuclideanLin (Entropy.liftProd (Entropy.chainList D K fun _ ↦ True))
         (squareAreaLawState Ω)‖ := by
   obtain ⟨K, hK, hmax, hpos, _⟩ :=
-    h.exists_zero_floor_maximizer_energy_fidelity hJ hΩ D hD hsingle
+    h.exists_zero_floor_maximizer_energy_fidelity hΩ D hD hsingle
       (fun _ ↦ 1) (fun _ ↦ zero_lt_one) (fun _ ↦ le_rfl)
   exact ⟨K, hK, hmax, hpos⟩
 
 /-- The zero-length chain is admitted, with zero energy and infidelity budgets. -/
-example (h : SquareHamiltonian L q J) (hJ : 0 ≤ J)
+example (h : SquareHamiltonian L q J)
     {Ω : StateSpace L q} (hΩ : h.IsGappedGroundState E₀ Ω Δ)
     (D : ℕ → Finset (AreaLaw.Site (AreaLaw.rectangularDomain L L))) :
     ∃ K : (j : Fin 0) → Matrix
@@ -95,10 +95,10 @@ example (h : SquareHamiltonian L q J) (hJ : 0 ≤ J)
         (squareAreaLawState Ω)
       let φ := ((‖ψ‖⁻¹ : ℝ) : ℂ) • ψ
       0 < ‖ψ‖ ∧ ‖φ‖ = 1 ∧
-        |(⟪φ, toEuclideanLin (h.toAreaLawHamiltonian hJ).operator φ⟫_ℂ).re - E₀| ≤ 0 ∧
+        |(⟪φ, toEuclideanLin h.toAreaLawHamiltonian.operator φ⟫_ℂ).re - E₀| ≤ 0 ∧
         Δ * (1 - ‖⟪squareAreaLawState Ω, φ⟫_ℂ‖ ^ 2) ≤ 0 := by
   obtain ⟨K, _, _, hpos, hunit, henergy, hfidelity⟩ :=
-    h.exists_zero_floor_maximizer_energy_fidelity (m := 0) hJ hΩ D
+    h.exists_zero_floor_maximizer_energy_fidelity (m := 0) hΩ D
       (by intro i; exact Fin.elim0 i) (by intro _ i; exact Fin.elim0 i)
       (fun _ ↦ 1) (fun _ ↦ zero_lt_one) (fun _ ↦ le_rfl)
   exact ⟨K, hpos, hunit, by simpa using henergy, by simpa using hfidelity⟩
