@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.ExplicitThresholds
 import TNLean.PEPS.AreaLaw.Scan.Defs
 
 /-!
@@ -20,9 +21,15 @@ and 8.1, and Lemmas 2.1 and 3.1 for one scan rather than deriving them. Document
 
 ## Main results
 
-* `TNLean.PEPS.AreaLaw.Scan.eventually_scaleFacts`
-* `TNLean.PEPS.AreaLaw.Scan.ScanData.SXt_le`, `TNLean.PEPS.AreaLaw.Scan.ScanData.SQt_le`
-* `TNLean.PEPS.AreaLaw.Scan.exists_budgets`
+* `TNLean.PEPS.AreaLaw.Scan.eventually_scaleFacts`, with the explicit threshold
+  `TNLean.PEPS.AreaLaw.Scan.ScannerExponents.scaleFactsThreshold`
+* `TNLean.PEPS.AreaLaw.Scan.eventually_continuityCost_le`, with the explicit threshold
+  `TNLean.PEPS.AreaLaw.Scan.continuityCostThreshold`
+* `TNLean.PEPS.AreaLaw.Scan.ScanData.SXt_le`, `TNLean.PEPS.AreaLaw.Scan.ScanData.SQt_le`, with
+  the explicit threshold `TNLean.PEPS.AreaLaw.Scan.ScanConstants.truncationThreshold`
+* `TNLean.PEPS.AreaLaw.Scan.exists_budgets`, with the explicit constant
+  `TNLean.PEPS.AreaLaw.Scan.ScanConstants.budgetConstant` and threshold
+  `TNLean.PEPS.AreaLaw.Scan.budgetThreshold`
 
 ## References
 
@@ -41,24 +48,32 @@ open Filter
 /-- A positive power of `n` eventually exceeds any bound. -/
 lemma eventually_le_natCast_rpow {y : ℝ} (hy : 0 < y) (b : ℝ) :
     ∀ᶠ n : ℕ in atTop, b ≤ (n : ℝ) ^ y :=
-  ((tendsto_rpow_atTop hy).comp tendsto_natCast_atTop_atTop).eventually_ge_atTop b
+  eventually_atTop.2 ⟨_, fun _ => Real.le_natCast_rpow_of_natRpowThreshold_le hy⟩
 
 /-- `⌊x⌋₊ ≥ x / 2` once `x ≥ 2`. -/
 lemma half_le_floor {x : ℝ} (hx : 2 ≤ x) : x / 2 ≤ ⌊x⌋₊ := by
   have := Nat.lt_floor_add_one x
   linarith
 
-/-- The elementary scale facts hold for all sufficiently large `n` (`08-scanner.tex`,
-lines 32–42, 469, 480, 519–520), with `C₁ = 32`. -/
-theorem eventually_scaleFacts (X : ScannerExponents) :
-    ∃ C₁ : ℝ, ∀ᶠ n in atTop, ScaleFacts X n C₁ := by
-  refine ⟨32, ?_⟩
+/-- The explicit threshold of the elementary scale facts: `n ≥ 2`, `n^μ ≥ 2`, `n^{1-ℓ} ≥ 2` and
+`n^{1-ℓ-μ} ≥ 48` (`08-scanner.tex`, lines 32–42, 469, 480, 519–520). -/
+noncomputable def ScannerExponents.scaleFactsThreshold (X : ScannerExponents) : ℕ :=
+  max 2 (max (Real.natRpowThreshold X.mu 2)
+    (max (Real.natRpowThreshold (1 - X.ell) 2)
+      (Real.natRpowThreshold (1 - X.ell - X.mu) 48)))
+
+/-- The elementary scale facts hold, with `C₁ = 32`, at every `n` from the explicit threshold
+`X.scaleFactsThreshold` on (`08-scanner.tex`, lines 32–42, 469, 480, 519–520). -/
+theorem scaleFacts_of_scaleFactsThreshold_le (X : ScannerExponents) {n : ℕ}
+    (hthr : X.scaleFactsThreshold ≤ n) : ScaleFacts X n 32 := by
   have hμ : 0 < X.mu := X.kappa_pos.trans X.kappa_lt_mu
   have hℓ : 0 < 1 - X.ell := sub_pos.2 X.ell_lt_one
   have hℓμ : 0 < 1 - X.ell - X.mu := by linarith [X.mu_lt_one_sub_ell]
-  filter_upwards [eventually_ge_atTop 2, eventually_le_natCast_rpow hμ 2,
-    eventually_le_natCast_rpow hℓ 2, eventually_le_natCast_rpow hℓμ 48]
-    with n hn hm hL hK
+  simp only [ScannerExponents.scaleFactsThreshold, max_le_iff] at hthr
+  obtain ⟨hn, hm, hL, hK⟩ := hthr
+  replace hm := Real.le_natCast_rpow_of_natRpowThreshold_le hμ hm
+  replace hL := Real.le_natCast_rpow_of_natRpowThreshold_le hℓ hL
+  replace hK := Real.le_natCast_rpow_of_natRpowThreshold_le hℓμ hK
   have hn2 : (2 : ℝ) ≤ n := by exact_mod_cast hn
   have hn0 : (0 : ℝ) < n := by linarith
   have hn1 : (1 : ℝ) ≤ n := by linarith
@@ -128,15 +143,28 @@ theorem eventually_scaleFacts (X : ScannerExponents) :
           gcongr
       _ = _ := by ring
 
+/-- The elementary scale facts hold for all sufficiently large `n` (`08-scanner.tex`,
+lines 32–42, 469, 480, 519–520), with `C₁ = 32`. -/
+theorem eventually_scaleFacts (X : ScannerExponents) :
+    ∃ C₁ : ℝ, ∀ᶠ n in atTop, ScaleFacts X n C₁ :=
+  ⟨32, eventually_atTop.2 ⟨_, fun _ => scaleFacts_of_scaleFactsThreshold_le X⟩⟩
+
+/-- The explicit threshold `max 1 ⌈C (1 + C lq)⌉₊` beyond which the continuity cost of
+Lemma 2.1 at trace distance `n^{-500}` is at most `n^{-247}` (`08-scanner.tex`,
+lines 400–403). -/
+noncomputable def continuityCostThreshold (C lq : ℝ) : ℕ :=
+  max 1 ⌈C * (1 + C * lq)⌉₊
 
 /-- The continuity cost `C √t (1 + C n² log q)` of Lemma 2.1 at trace distance
-`t ≤ n^{-500}` is at most `n^{-247}` for all sufficiently large `n`. -/
-lemma eventually_continuityCost_le (C lq : ℝ) (hC : 0 ≤ C) (hlq : 0 ≤ lq) :
-    ∀ᶠ n : ℕ in atTop, ∀ t : ℝ, t ≤ (n : ℝ) ^ (-500 : ℝ) →
+`t ≤ n^{-500}` is at most `n^{-247}` for every `n ≥ continuityCostThreshold C lq`
+(`08-scanner.tex`, lines 400–403). -/
+lemma continuityCost_le_of_continuityCostThreshold_le (C lq : ℝ) (hC : 0 ≤ C) (hlq : 0 ≤ lq)
+    {n : ℕ} (hthr : continuityCostThreshold C lq ≤ n) :
+    ∀ t : ℝ, t ≤ (n : ℝ) ^ (-500 : ℝ) →
       C * √t * (1 + C * (n : ℝ) ^ 2 * lq) ≤ (n : ℝ) ^ (-247 : ℝ) := by
-  filter_upwards [eventually_ge_atTop 1,
-    tendsto_natCast_atTop_atTop.eventually_ge_atTop (C * (1 + C * lq))] with n hn hnC t ht
-  have hn1 : (1 : ℝ) ≤ n := by exact_mod_cast hn
+  intro t ht
+  have hn1 : (1 : ℝ) ≤ n := by exact_mod_cast (le_max_left _ _).trans hthr
+  have hnC : C * (1 + C * lq) ≤ n := Nat.ceil_le.mp ((le_max_right _ _).trans hthr)
   have hn0 : (0 : ℝ) < n := by linarith
   have hs : √t ≤ (n : ℝ) ^ (-250 : ℝ) := by
     rw [Real.sqrt_le_iff]
@@ -159,15 +187,25 @@ lemma eventually_continuityCost_le (C lq : ℝ) (hC : 0 ≤ C) (hlq : 0 ≤ lq) 
     _ ≤ (n : ℝ) ^ (-250 : ℝ) * ((n : ℝ) * (n : ℝ) ^ 2) := by gcongr
     _ = _ := hsplit.symm
 
+/-- The continuity cost `C √t (1 + C n² log q)` of Lemma 2.1 at trace distance
+`t ≤ n^{-500}` is at most `n^{-247}` for all sufficiently large `n`. -/
+lemma eventually_continuityCost_le (C lq : ℝ) (hC : 0 ≤ C) (hlq : 0 ≤ lq) :
+    ∀ᶠ n : ℕ in atTop, ∀ t : ℝ, t ≤ (n : ℝ) ^ (-500 : ℝ) →
+      C * √t * (1 + C * (n : ℝ) ^ 2 * lq) ≤ (n : ℝ) ^ (-247 : ℝ) :=
+  eventually_atTop.2 ⟨_, fun _ => continuityCost_le_of_continuityCostThreshold_le C lq hC hlq⟩
+
 /-- The continuity cost of Lemma 2.1 remains at most `n^{-247}` when the trace-distance
-bound has any fixed nonnegative coefficient. The threshold is chosen before `t`.
+bound has a fixed nonnegative coefficient `A`, for every
+`n ≥ continuityCostThreshold (C √(1 + A)) lq`. The threshold is chosen before `t`.
 Source: `08-scanner.tex`, lines 400–403, where the distance is `O(n^{-500})`. -/
-lemma eventually_continuityCost_le_of_fixed_coefficient (A C lq : ℝ)
-    (hA : 0 ≤ A) (hC : 0 ≤ C) (hlq : 0 ≤ lq) :
-    ∀ᶠ n : ℕ in atTop, ∀ t : ℝ, t ≤ A * (n : ℝ) ^ (-500 : ℝ) →
+lemma continuityCost_le_of_fixed_coefficient_of_threshold_le (A C lq : ℝ)
+    (hA : 0 ≤ A) (hC : 0 ≤ C) (hlq : 0 ≤ lq) {n : ℕ}
+    (hthr : continuityCostThreshold (C * √(1 + A)) lq ≤ n) :
+    ∀ t : ℝ, t ≤ A * (n : ℝ) ^ (-500 : ℝ) →
       C * √t * (1 + C * (n : ℝ) ^ 2 * lq) ≤ (n : ℝ) ^ (-247 : ℝ) := by
-  filter_upwards [eventually_continuityCost_le (C * √(1 + A)) lq
-    (mul_nonneg hC (Real.sqrt_nonneg _)) hlq] with n hn t ht
+  intro t ht
+  have hn := continuityCost_le_of_continuityCostThreshold_le (C * √(1 + A)) lq
+    (mul_nonneg hC (Real.sqrt_nonneg _)) hlq hthr
   have hB : 0 < 1 + A := by positivity
   have hsB : 1 ≤ √(1 + A) := Real.one_le_sqrt.mpr (le_add_of_nonneg_right hA)
   have ht' : t / (1 + A) ≤ (n : ℝ) ^ (-500 : ℝ) :=
@@ -183,6 +221,22 @@ lemma eventually_continuityCost_le_of_fixed_coefficient (A C lq : ℝ)
         (1 + C * √(1 + A) * (n : ℝ) ^ 2 * lq) := by gcongr
     _ ≤ (n : ℝ) ^ (-247 : ℝ) := hn _ ht'
 
+/-- The continuity cost of Lemma 2.1 remains at most `n^{-247}` when the trace-distance
+bound has any fixed nonnegative coefficient. The threshold is chosen before `t`.
+Source: `08-scanner.tex`, lines 400–403, where the distance is `O(n^{-500})`. -/
+lemma eventually_continuityCost_le_of_fixed_coefficient (A C lq : ℝ)
+    (hA : 0 ≤ A) (hC : 0 ≤ C) (hlq : 0 ≤ lq) :
+    ∀ᶠ n : ℕ in atTop, ∀ t : ℝ, t ≤ A * (n : ℝ) ^ (-500 : ℝ) →
+      C * √t * (1 + C * (n : ℝ) ^ 2 * lq) ≤ (n : ℝ) ^ (-247 : ℝ) :=
+  eventually_atTop.2
+    ⟨_, fun _ => continuityCost_le_of_fixed_coefficient_of_threshold_le A C lq hA hC hlq⟩
+
+/-- The explicit threshold `continuityCostThreshold (C √(1 + C)) (log q)` beyond which the
+truncation costs of Lemma 2.1 in the target and shell entropies are at most `n^{-247}`
+(`08-scanner.tex`, lines 400–403). -/
+noncomputable def ScanConstants.truncationThreshold (κ : ScanConstants) : ℕ :=
+  continuityCostThreshold (κ.C * √(1 + κ.C)) (Real.log κ.q)
+
 namespace ScanData
 
 variable {X : ScannerExponents} {κ : ScanConstants}
@@ -191,32 +245,47 @@ variable {X : ScannerExponents} {κ : ScanConstants}
 lemma log_q_nonneg (κ : ScanConstants) : 0 ≤ Real.log κ.q :=
   Real.log_nonneg (by exact_mod_cast (by linarith [κ.two_le_q] : 1 ≤ κ.q))
 
-/-- The truncation costs `O(n^{-247})` in the target entropy: the trace distance is
-`O(n^{-500})` and the target has `O(n²)` sites (lines 400–403, Lemma 2.1). -/
-theorem SXt_le (X : ScannerExponents) (κ : ScanConstants) :
-    ∀ᶠ n in atTop, ∀ S : ScanData X κ n,
-      S.SXt ≤ κ.Ce * (n : ℝ) ^ (1 + X.e) + (n : ℝ) ^ (-247 : ℝ) := by
-  filter_upwards [eventually_continuityCost_le_of_fixed_coefficient κ.C κ.C _
-    (by linarith [κ.one_le_C]) (by linarith [κ.one_le_C])
-    (log_q_nonneg κ)] with n hn S
+/-- The truncation costs at most `n^{-247}` in the target entropy at every `n` from the
+explicit threshold `κ.truncationThreshold` on: the trace distance is `O(n^{-500})` and the
+target has `O(n²)` sites (lines 400–403, Lemma 2.1). -/
+theorem SXt_le_of_truncationThreshold_le (X : ScannerExponents) (κ : ScanConstants) {n : ℕ}
+    (hthr : κ.truncationThreshold ≤ n) (S : ScanData X κ n) :
+    S.SXt ≤ κ.Ce * (n : ℝ) ^ (1 + X.e) + (n : ℝ) ^ (-247 : ℝ) := by
+  have hn := continuityCost_le_of_fixed_coefficient_of_threshold_le κ.C κ.C _
+    (by linarith [κ.one_le_C]) (by linarith [κ.one_le_C]) (log_q_nonneg κ) hthr
   have := hn _ S.traceDist_le
   have := S.continuity_X
   have := S.entropy_input_X
   have := le_abs_self (S.SXt - S.SX)
   linarith
 
-/-- The truncation costs `O(n^{-247})` in every shell entropy (lines 400–403, Lemma 2.1). -/
-theorem SQt_le (X : ScannerExponents) (κ : ScanConstants) :
-    ∀ᶠ n in atTop, ∀ S : ScanData X κ n, ∀ j ≤ X.L n,
+/-- The truncation costs `O(n^{-247})` in the target entropy: the trace distance is
+`O(n^{-500})` and the target has `O(n²)` sites (lines 400–403, Lemma 2.1). -/
+theorem SXt_le (X : ScannerExponents) (κ : ScanConstants) :
+    ∀ᶠ n in atTop, ∀ S : ScanData X κ n,
+      S.SXt ≤ κ.Ce * (n : ℝ) ^ (1 + X.e) + (n : ℝ) ^ (-247 : ℝ) :=
+  eventually_atTop.2 ⟨_, fun _ hn => SXt_le_of_truncationThreshold_le X κ hn⟩
+
+/-- The truncation costs at most `n^{-247}` in every shell entropy at every `n` from the
+explicit threshold `κ.truncationThreshold` on (lines 400–403, Lemma 2.1). -/
+theorem SQt_le_of_truncationThreshold_le (X : ScannerExponents) (κ : ScanConstants) {n : ℕ}
+    (hthr : κ.truncationThreshold ≤ n) (S : ScanData X κ n) :
+    ∀ j ≤ X.L n,
       S.SQt j ≤ κ.Ce * (n * (X.L n : ℝ) ^ X.e + n) + (n : ℝ) ^ (-247 : ℝ) := by
-  filter_upwards [eventually_continuityCost_le_of_fixed_coefficient κ.C κ.C _
-    (by linarith [κ.one_le_C]) (by linarith [κ.one_le_C])
-    (log_q_nonneg κ)] with n hn S j hj
+  intro j hj
+  have hn := continuityCost_le_of_fixed_coefficient_of_threshold_le κ.C κ.C _
+    (by linarith [κ.one_le_C]) (by linarith [κ.one_le_C]) (log_q_nonneg κ) hthr
   have := hn _ S.traceDist_le
   have := S.continuity_Q j hj
   have := S.entropy_input_Q j hj
   have := le_abs_self (S.SQt j - S.SQ j)
   linarith
+
+/-- The truncation costs `O(n^{-247})` in every shell entropy (lines 400–403, Lemma 2.1). -/
+theorem SQt_le (X : ScannerExponents) (κ : ScanConstants) :
+    ∀ᶠ n in atTop, ∀ S : ScanData X κ n, ∀ j ≤ X.L n,
+      S.SQt j ≤ κ.Ce * (n * (X.L n : ℝ) ^ X.e + n) + (n : ℝ) ^ (-247 : ℝ) :=
+  eventually_atTop.2 ⟨_, fun _ hn => SQt_le_of_truncationThreshold_le X κ hn⟩
 
 variable {n : ℕ} (S : ScanData X κ n)
 
@@ -258,17 +327,33 @@ lemma terminalBound_le_of {B E : ℝ} (hB0 : 0 ≤ B) (hBsh : S.inputs.Bsh ≤ B
 
 end ScanData
 
+/-- The explicit constant of the comparator budgets of Proposition 9.2:
+`C₁ + C₂ + C + (2 C_e + 7 + 4 C₁ + 32 C₂)` with `C₁ = C_e + 1 + log q` and
+`C₂ = 1 + C log q`, where `32` is the scale-facts constant (`08-scanner.tex`,
+lines 386–391, 400–410 and 462–470). -/
+noncomputable def ScanConstants.budgetConstant (κ : ScanConstants) : ℝ :=
+  (κ.Ce + 1 + Real.log κ.q) + (1 + κ.C * Real.log κ.q) + κ.C +
+    (2 * κ.Ce + 7 + 4 * (κ.Ce + 1 + Real.log κ.q) + (1 + κ.C * Real.log κ.q) * 32)
+
+/-- The explicit threshold of the comparator budgets of Proposition 9.2: the larger of the
+scale-facts threshold and the truncation threshold (`08-scanner.tex`, lines 32–42 and
+400–403). -/
+noncomputable def budgetThreshold (X : ScannerExponents) (κ : ScanConstants) : ℕ :=
+  max X.scaleFactsThreshold κ.truncationThreshold
+
 /-- The comparator budgets of Proposition 9.2 (lines 386–391, proof lines 400–410) and the
-terminal rough upper bound (lines 462–470): for all sufficiently large `n`, uniformly in the
-scan data, `B_sh ≤ C (n L^e + n)`, `B_exc ≤ C n D`, `𝓑 ≤ C n D (log n)^{C_l}`, and
-`2 log d_* - log z + 2sW(2B_sh/z + 2B_exc) ≤ C W n^{1+e}`. -/
-theorem exists_budgets (X : ScannerExponents) (κ : ScanConstants) :
-    ∃ C Cl : ℝ, ∀ᶠ n in atTop, ∀ S : ScanData X κ n,
-      S.inputs.Bsh ≤ C * (n * (X.L n : ℝ) ^ X.e + n) ∧
-      S.inputs.Bexc ≤ C * n * X.D n ∧
-      S.Bmarg ≤ C * n * X.D n * Real.log n ^ Cl ∧
-      S.terminalBound ≤ C * S.W * (n : ℝ) ^ (1 + X.e) := by
-  obtain ⟨C₁, hC₁⟩ := eventually_scaleFacts X
+terminal rough upper bound (lines 462–470) hold with the explicit constant
+`κ.budgetConstant` and logarithmic exponent `12` at every `n` from the explicit threshold
+`budgetThreshold X κ` on, uniformly in the scan data. -/
+theorem budgets_of_budgetThreshold_le (X : ScannerExponents) (κ : ScanConstants) {n : ℕ}
+    (hthr : budgetThreshold X κ ≤ n) (S : ScanData X κ n) :
+    S.inputs.Bsh ≤ κ.budgetConstant * (n * (X.L n : ℝ) ^ X.e + n) ∧
+      S.inputs.Bexc ≤ κ.budgetConstant * n * X.D n ∧
+      S.Bmarg ≤ κ.budgetConstant * n * X.D n * Real.log n ^ (12 : ℝ) ∧
+      S.terminalBound ≤ κ.budgetConstant * S.W * (n : ℝ) ^ (1 + X.e) := by
+  have hF := scaleFacts_of_scaleFactsThreshold_le X ((le_max_left _ _).trans hthr)
+  have hSX := ScanData.SXt_le_of_truncationThreshold_le X κ ((le_max_right _ _).trans hthr)
+  have hSQ := ScanData.SQt_le_of_truncationThreshold_le X κ ((le_max_right _ _).trans hthr)
   have hlq : 0 ≤ Real.log κ.q := ScanData.log_q_nonneg κ
   have hC : 1 ≤ κ.C := κ.one_le_C
   have hCe := κ.Ce_pos
@@ -278,8 +363,10 @@ theorem exists_budgets (X : ScannerExponents) (κ : ScanConstants) :
   have hC10 : 0 ≤ C1 := by rw [hC1]; positivity
   have hC20 : 1 ≤ C2 := by rw [hC2]; nlinarith
   have hC30 : 0 ≤ C3 := by rw [hC3]; linarith
-  refine ⟨C1 + C2 + C3 + (2 * κ.Ce + 7 + 4 * C1 + C2 * C₁), 12, ?_⟩
-  filter_upwards [hC₁, ScanData.SXt_le X κ, ScanData.SQt_le X κ] with n hF hSX hSQ S
+  have hBC : κ.budgetConstant = C1 + C2 + C3 + (2 * κ.Ce + 7 + 4 * C1 + C2 * 32) := by
+    rw [hC1, hC2, hC3, ScanConstants.budgetConstant]
+  rw [hBC]
+  set C₁ : ℝ := 32
   have hW := S.one_le_W
   have hC₁1 := hF.one_le_C₁
   have hC40 : 0 ≤ 2 * κ.Ce + 7 + 4 * C1 + C2 * C₁ := by positivity
@@ -345,5 +432,17 @@ theorem exists_budgets (X : ScannerExponents) (κ : ScanConstants) :
           S.W * (2 * (C1 * (2 * N)) + C2 * C₁ * N) := by ring
     rw [hfin]
     nlinarith
+
+/-- The comparator budgets of Proposition 9.2 (lines 386–391, proof lines 400–410) and the
+terminal rough upper bound (lines 462–470): for all sufficiently large `n`, uniformly in the
+scan data, `B_sh ≤ C (n L^e + n)`, `B_exc ≤ C n D`, `𝓑 ≤ C n D (log n)^{C_l}`, and
+`2 log d_* - log z + 2sW(2B_sh/z + 2B_exc) ≤ C W n^{1+e}`. -/
+theorem exists_budgets (X : ScannerExponents) (κ : ScanConstants) :
+    ∃ C Cl : ℝ, ∀ᶠ n in atTop, ∀ S : ScanData X κ n,
+      S.inputs.Bsh ≤ C * (n * (X.L n : ℝ) ^ X.e + n) ∧
+      S.inputs.Bexc ≤ C * n * X.D n ∧
+      S.Bmarg ≤ C * n * X.D n * Real.log n ^ Cl ∧
+      S.terminalBound ≤ C * S.W * (n : ℝ) ^ (1 + X.e) :=
+  ⟨κ.budgetConstant, 12, eventually_atTop.2 ⟨_, fun _ hn => budgets_of_budgetThreshold_le X κ hn⟩⟩
 
 end TNLean.PEPS.AreaLaw.Scan
