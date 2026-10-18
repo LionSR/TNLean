@@ -17,10 +17,10 @@ whose total inside dimension is polynomially bounded in the side length. The
 constants are chosen before the Hamiltonian, ground vector, center, and radius.
 Bounded radii admit an exact patch with at most `q ^ 81` terms.
 
-**Scope restriction (conditional area law):** The theorem assumes the square
-entropy area law explicitly as `harea`. Its deduction from the spectral-gap
-hypotheses remains the separate area-law problem described in
-`docs/paper-gaps/arealaw2d_rectangular_specialization_scope.tex`.
+The theorem takes the square entropy area law as the hypothesis `harea`. That
+law is proved as `TNLean.PEPS.AreaLaw.squareEntropyAreaLaw`, and the
+unconditional Proposition 4.1 is `adaptivePatchConstraint` in
+`TNLean.PEPS.Approximation.PolynomialPEPSTheorem`.
 
 Source: OpenAI, *Polynomial PEPS approximation of gapped square-grid ground
 states*, Proposition 4.1, `03-patches.tex`, lines 26–54 and 534–603, revision
@@ -39,8 +39,8 @@ statement, including when a sample is empty.
 
 Source: polynomial-PEPS manuscript, Proposition 4.1, `03-patches.tex`,
 lines 26–54 and 534–603, revision
-`adc7f1241b42e322a6451854ab7e4b4c146bf78a`. The area-law premise must be discharged
-before this implication can establish the unconditional source proposition. -/
+`adc7f1241b42e322a6451854ab7e4b4c146bf78a`. The area-law premise is discharged
+in `adaptivePatchConstraint`. -/
 theorem SquareEntropyAreaLaw.adaptivePatchConstraint
     (harea : SquareEntropyAreaLaw) : AdaptivePatchConstraint := by
   classical
