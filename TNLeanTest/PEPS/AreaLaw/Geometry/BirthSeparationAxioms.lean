@@ -24,6 +24,36 @@ info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashC
 #guard_msgs (whitespace := lax) in
 #print axioms TNLean.PEPS.AreaLaw.Geometry.half_max_le_norm_sub_of_isQuarterSectorial
 
+/-- The explicit birth-separation constant is `1/28`. -/
+example : TNLean.PEPS.AreaLaw.Geometry.birthSeparationConstant = 1 / 28 := rfl
+
+/--
+info: 'TNLean.PEPS.AreaLaw.Geometry.facetPolygon_contact_dichotomy'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+---
+info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms TNLean.PEPS.AreaLaw.Geometry.facetPolygon_contact_dichotomy
+
+/--
+info: 'TNLean.PEPS.AreaLaw.Geometry.repairSameLabel_dichotomy'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+---
+info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms TNLean.PEPS.AreaLaw.Geometry.repairSameLabel_dichotomy
+
+/--
+info: 'TNLean.PEPS.AreaLaw.Geometry.repairBirth_separation'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+---
+info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms TNLean.PEPS.AreaLaw.Geometry.repairBirth_separation
+
 /--
 info: 'TNLean.PEPS.AreaLaw.Geometry.exists_repairSameLabel_dichotomy'
 depends on axioms: [propext, Classical.choice, Quot.sound]
@@ -77,6 +107,15 @@ info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashC
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms TNLean.PEPS.AreaLaw.Geometry.exists_pos_common_contact_dichotomy
+
+/--
+info: 'TNLean.PEPS.AreaLaw.Geometry.beltAtom_dichotomy'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+---
+info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms TNLean.PEPS.AreaLaw.Geometry.beltAtom_dichotomy
 
 /--
 info: 'TNLean.PEPS.AreaLaw.Geometry.exists_beltAtom_dichotomy'
