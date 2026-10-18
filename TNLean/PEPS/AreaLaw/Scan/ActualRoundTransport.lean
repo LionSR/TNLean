@@ -189,6 +189,18 @@ theorem exists_finiteFamilyTransportBound :
     ∃ c₀ Cent eent Cen een : ℝ, 0 < c₀ ∧ FiniteFamilyTransportBound c₀ Cent eent Cen een :=
   transport_finite_family
 
+/-- Recover an existential statement over the truncation constant `Ctr` and the transport
+constants from its form at every choice of transport constants satisfying
+`FiniteFamilyTransportBound`, which leaves only `Ctr` existential. Source: `08-scanner.tex`,
+lines 83–154. -/
+theorem exists_of_finiteFamilyTransportBound {P : ℝ → ℝ → ℝ → ℝ → ℝ → ℝ → Prop}
+    (h : ∀ ct Cent eent Cen een : ℝ, 0 < ct → FiniteFamilyTransportBound ct Cent eent Cen een →
+      ∃ Ctr : ℝ, 0 < Ctr ∧ P Ctr ct Cent eent Cen een) :
+    ∃ Ctr ct Cent eent Cen een : ℝ, 0 < Ctr ∧ 0 < ct ∧ P Ctr ct Cent eent Cen een := by
+  obtain ⟨ct, Cent, eent, Cen, een, hct, htransport⟩ := exists_finiteFamilyTransportBound
+  obtain ⟨Ctr, hCtr, hP⟩ := h ct Cent eent Cen een hct htransport
+  exact ⟨Ctr, ct, Cent, eent, Cen, een, hCtr, hct, hP⟩
+
 /-- A single nonnegative error pair works for every actual fill and charge round, at any
 constants `c₀, C_ent, e_ent, C_en, e_en` satisfying the finite-family transport bound, such as
 QICLean's universal transport constants, which depend on none of `q, R, J, Δ`. Source:
