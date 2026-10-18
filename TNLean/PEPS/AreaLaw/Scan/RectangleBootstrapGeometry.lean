@@ -96,6 +96,64 @@ def rectangleBootstrapScanner {Λ : Finset (ℤ × ℤ)}
   C₁ := C₁
 
 open Classical in
+/-- The literal weak-rectangle geometry needed by the actual bootstrap scanner holds at every
+rectangle size from the explicit threshold `roundedClearanceThreshold 24 Cr F.ell` on. The
+threshold depends only on `Cr` and `F.ell`, not on the finite domain, cut, rectangle, range,
+charge constant or safety parameter.
+Source: `08-scanner.tex`, lines 43--58 and 705--729, adc7f124. -/
+theorem rectangleBootstrapScanner_geometry_of_threshold_le (F : ScannerExponents)
+    {Cr : ℝ} (hCr : 0 ≤ Cr) {Λ : Finset (ℤ × ℤ)} (A : Finset (Site Λ)) (Q : IntRect)
+    (R : ℕ) (C₁ : ℝ) {D₀ : ℕ} (hD₀ : 1 ≤ D₀)
+    (hQN : roundedClearanceThreshold 24 Cr F.ell ≤ Q.size) (hsafe : IsSafe Λ A D₀ Q) :
+    let S := rectangleBootstrapScanner Q A R F Cr C₁
+    ∃ hT : Q.toFinset.Nonempty,
+      S.graph = domainGraph Λ ∧ S.A = A ∧
+      S.n = 24 * Q.size ∧ Q.size ≤ S.n ∧
+      S.depth = (fun x ↦ ambientDepth Q.toFinset hT x.val) ∧
+      (∀ i, S.anchor i ∈ i.val) ∧
+      (∀ x, (Finset.univ.filter fun i ↦ S.anchor i = x).card ≤
+        2 ^ ((1 + 2 * R * (R + 1)) - 1)) ∧
+      (Q.toFinset.card : ℝ) ≤ (S.n : ℝ) ^ 2 ∧
+      1 ≤ F.L S.n ∧ F.L S.n ≤ Q.size ∧
+      D₀ * F.L S.n + F.L S.n ≤ D₀ * Q.size ∧
+      (∀ r : ℕ, 1 ≤ r → r ≤ F.L S.n →
+        (ambientDilation Q.toFinset r \ ambientDilation Q.toFinset (r - 1)).card ≤ S.n) ∧
+      (∀ t ∈ Q.toFinset, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+        ((2 * F.L S.n + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z) ∧
+      (S.A.filter fun x ↦ x.val ∈ Q.toFinset) = rectRegion A Q ∧
+      (∀ j : ℕ, positiveDepthPrefix S.A S.depth (j : ℤ) =
+        A.filter fun x ↦ x.val ∈ (Q.dilate j).toFinset \ Q.toFinset) ∧
+      (∀ L : ℕ, S.truncationSet L = rectRegion A (Q.dilate L)) := by
+  intro S
+  obtain ⟨hLpos, hLs, hbudgets⟩ :=
+    F.rounded_clearance_of_threshold_le (C₂ := 24) (by norm_num) hCr hQN
+  have hnEq : S.n = 24 * Q.size := by
+    change Nat.ceil ((24 : ℝ) * (Q.size : ℝ)) = 24 * Q.size
+    simpa only [Nat.cast_mul, Nat.cast_ofNat] using
+      (show Nat.ceil (((24 * Q.size : ℕ) : ℝ)) = 24 * Q.size from Nat.ceil_natCast _)
+  have hn24 : 24 * Q.size ≤ S.n := hnEq.ge
+  have hsn : Q.size ≤ S.n := by omega
+  have hsize : (Q.toFinset.card : ℝ) ≤ (S.n : ℝ) ^ 2 := by
+    exact_mod_cast (rectangleBootstrap_card_le Q).trans (Nat.pow_le_pow_left hsn 2)
+  have hanchor : ∀ i, S.anchor i ∈ i.val := fun i ↦ i.property.1.choose_spec
+  have hbudget : D₀ * F.L S.n + F.L S.n ≤ D₀ * Q.size := by
+    change D₀ * F.L (Nat.ceil ((24 : ℝ) * Q.size)) +
+      F.L (Nat.ceil ((24 : ℝ) * Q.size)) ≤ D₀ * Q.size
+    simpa only [add_mul, one_mul] using (hbudgets D₀ hD₀).1
+  refine ⟨rectangleBootstrap_nonempty Q, rfl, rfl, hnEq, hsn, rfl, hanchor,
+    fun x ↦ card_anchor_fiber_le S.anchor hanchor x,
+    hsize, hLpos, hLs, hbudget, ?_, ?_, rfl, ?_, ?_⟩
+  · intro r hr hrL
+    exact (rectangleBootstrap_row_card_le Q hr hrL hLs).trans (by omega)
+  · exact rectangleBootstrap_clearance hsafe (hbudgets D₀ hD₀).2
+  · intro j
+    exact rectangleBootstrap_prefix_eq Q A (rectangleBootstrap_nonempty Q) j
+  · intro L
+    ext x
+    simp only [S, rectangleBootstrapScanner, CollarScan.truncationSet, rectRegion,
+      Finset.mem_filter, ambientDepth_le_iff_mem_dilation, ← Q.toFinset_dilate L]
+
+open Classical in
 /-- One threshold supplies the literal weak-rectangle geometry needed by the
 actual bootstrap scanner. It is chosen before the finite domain, cut,
 rectangle, range, charge constant and safety parameter. The target-size
@@ -125,36 +183,8 @@ theorem exists_rectangleBootstrapScanner_geometry (F : ScannerExponents)
         (S.A.filter fun x ↦ x.val ∈ Q.toFinset) = rectRegion A Q ∧
         (∀ j : ℕ, positiveDepthPrefix S.A S.depth (j : ℤ) =
           A.filter fun x ↦ x.val ∈ (Q.dilate j).toFinset \ Q.toFinset) ∧
-        (∀ L : ℕ, S.truncationSet L = rectRegion A (Q.dilate L)) := by
-  obtain ⟨N, hN, hclearance⟩ :=
-    F.exists_rounded_clearance_threshold (C₂ := 24) (Cr := Cr) (by norm_num) hCr
-  refine ⟨N, hN, ?_⟩
-  intro Λ A Q R C₁ D₀ hD₀ hQN hsafe S
-  obtain ⟨hLpos, hLs, hbudgets⟩ := hclearance Q.size hQN
-  have hnEq : S.n = 24 * Q.size := by
-    change Nat.ceil ((24 : ℝ) * (Q.size : ℝ)) = 24 * Q.size
-    simpa only [Nat.cast_mul, Nat.cast_ofNat] using
-      (show Nat.ceil (((24 * Q.size : ℕ) : ℝ)) = 24 * Q.size from Nat.ceil_natCast _)
-  have hn24 : 24 * Q.size ≤ S.n := hnEq.ge
-  have hsn : Q.size ≤ S.n := by omega
-  have hsize : (Q.toFinset.card : ℝ) ≤ (S.n : ℝ) ^ 2 := by
-    exact_mod_cast (rectangleBootstrap_card_le Q).trans (Nat.pow_le_pow_left hsn 2)
-  have hanchor : ∀ i, S.anchor i ∈ i.val := fun i ↦ i.property.1.choose_spec
-  have hbudget : D₀ * F.L S.n + F.L S.n ≤ D₀ * Q.size := by
-    change D₀ * F.L (Nat.ceil ((24 : ℝ) * Q.size)) +
-      F.L (Nat.ceil ((24 : ℝ) * Q.size)) ≤ D₀ * Q.size
-    simpa only [add_mul, one_mul] using (hbudgets D₀ hD₀).1
-  refine ⟨rectangleBootstrap_nonempty Q, rfl, rfl, hnEq, hsn, rfl, hanchor,
-    fun x ↦ card_anchor_fiber_le S.anchor hanchor x,
-    hsize, hLpos, hLs, hbudget, ?_, ?_, rfl, ?_, ?_⟩
-  · intro r hr hrL
-    exact (rectangleBootstrap_row_card_le Q hr hrL hLs).trans (by omega)
-  · exact rectangleBootstrap_clearance hsafe (hbudgets D₀ hD₀).2
-  · intro j
-    exact rectangleBootstrap_prefix_eq Q A (rectangleBootstrap_nonempty Q) j
-  · intro L
-    ext x
-    simp only [S, rectangleBootstrapScanner, CollarScan.truncationSet, rectRegion,
-      Finset.mem_filter, ambientDepth_le_iff_mem_dilation, ← Q.toFinset_dilate L]
+        (∀ L : ℕ, S.truncationSet L = rectRegion A (Q.dilate L)) :=
+  ⟨_, le_max_left _ _, fun A Q R C₁ _ hD₀ hQN hsafe ↦
+    rectangleBootstrapScanner_geometry_of_threshold_le F hCr A Q R C₁ hD₀ hQN hsafe⟩
 
 end TNLean.PEPS.AreaLaw.Scan
