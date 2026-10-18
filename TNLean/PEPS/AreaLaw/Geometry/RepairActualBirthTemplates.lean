@@ -8,6 +8,7 @@ import TNLean.PEPS.AreaLaw.Geometry.BeltReplacementTemplates
 import TNLean.PEPS.AreaLaw.Geometry.DescendantCutClearance
 import TNLean.PEPS.AreaLaw.Geometry.RepairCharacteristicLength
 import TNLean.PEPS.AreaLaw.Geometry.RepairBirthRank
+import TNLean.PEPS.AreaLaw.Geometry.TwoFamilyExplicitThresholds
 
 /-!
 # Templates for remembered birth regions
@@ -27,14 +28,13 @@ open TNLean.Lattice
 
 namespace TNLean.PEPS.AreaLaw.Geometry
 
-open Filter
-
 /-- Uniform templates for the full ambient lattice samples of actual remembered
 birth regions. The primary and belt coefficients are chosen before the endpoint
 constant and all geometric data. At every generation the primitive size is the
 remembered characteristic length for primaries and initial belts, and twice
 that length for replacements. Both endpoint clearances hold after uniform
-stopping-scale and lower-layer choices.
+stopping-scale and lower-layer choices. The primary part of the lower-layer
+choice is the explicit layer `primaryScaleLimitThreshold C_P (1 / 4)`.
 
 Auxiliary to area-law Section 11, `10-geometry.tex`, lines 709–750, with the
 replacement instructions of lines 393–417 and retention of lines 565–568.
@@ -73,8 +73,10 @@ theorem exists_uniform_repairStage_birth_templates (Ctpl : ℝ) (hCtpl : 1 ≤ C
   have hStop : 1 ≤ Sstar := (le_max_right _ _).trans hSstar
   obtain ⟨KD, hKD⟩ := hDescendant Sstar ((le_max_left _ _).trans hSstar) C D₀ CB
   obtain ⟨KB, hKB⟩ := initialBelt_birthTemplate_cutClearance D₀ CB
-  obtain ⟨KP, hKP⟩ := eventually_atTop.mp
-    (eventually_primaryScaleLimits CP (show (0 : ℝ) < 1 / 4 by norm_num))
+  set KP : ℕ := primaryScaleLimitThreshold CP (1 / 4)
+  have hKP (k : ℕ) (hk : KP ≤ k) :=
+    primaryScaleLimits_of_primaryScaleLimitThreshold_le CP
+      (show (0 : ℝ) < 1 / 4 by norm_num) hk
   refine ⟨max KD (max KB KP), ?_⟩
   intro o Λ A k₀ hC h₀ hK N
   have hKD₀ : KD ≤ k₀ := le_of_max_le_left hK

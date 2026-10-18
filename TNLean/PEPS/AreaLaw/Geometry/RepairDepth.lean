@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Geometry.PowerScaleDepth
 import TNLean.PEPS.AreaLaw.Geometry.SimultaneousRepair
+import TNLean.PEPS.AreaLaw.Geometry.TwoFamilyExplicitThresholds
 import Mathlib.Analysis.Complex.ExponentialBounds
 
 /-!
@@ -199,43 +200,13 @@ theorem exists_repair_descendant_count_layer_bound {Sstar : ℝ} (hSstar : 1 < S
 
 /-- **Fine clearance threshold** (`geometry:fine-clearance`). For fixed `c₁ > 0`
 and `C_B ≥ 0`, every sufficiently large `u` satisfies
-`2 ⌈C_B u⌉ ^ β < c₁ u ^ ρ₀`. This is possible because `ρ₀ > β`.
+`2 ⌈C_B u⌉ ^ β < c₁ u ^ ρ₀`. This is possible because `ρ₀ > β`; the threshold is
+`fineClearanceThreshold c₁ C_B`.
 Source: Section 11, `10-geometry.tex`, lines 761–768. -/
 theorem eventually_fine_clearance {c₁ CB : ℝ} (hc₁ : 0 < c₁) (hCB : 0 ≤ CB) :
     ∀ᶠ u : ℝ in atTop,
-      2 * (⌈CB * u⌉₊ : ℝ) ^ (Exponents.beta : ℝ) < c₁ * u ^ (Exponents.rho : ℝ) := by
-  have hβ : 0 < (Exponents.beta : ℝ) := by
-    norm_num [Exponents.beta, Exponents.boxError]
-  have hβρ : (Exponents.beta : ℝ) < (Exponents.rho : ℝ) := by
-    exact_mod_cast Exponents.geometry_gaps.2.2.2.2.1
-  set B : ℝ := 2 * (CB + 1) ^ (Exponents.beta : ℝ) with hB_def
-  have hB : 0 < B := by positivity
-  have hlim : Tendsto (fun u : ℝ ↦ u ^ (-((Exponents.rho : ℝ) - (Exponents.beta : ℝ))))
-      atTop (nhds 0) := tendsto_rpow_neg_atTop (by linarith)
-  filter_upwards [hlim.eventually (gt_mem_nhds (div_pos hc₁ hB)),
-    eventually_ge_atTop (1 : ℝ)] with u hu hu1
-  have hu0 : 0 < u := by linarith
-  have hceil : (⌈CB * u⌉₊ : ℝ) ≤ (CB + 1) * u := by
-    have := Nat.ceil_lt_add_one (mul_nonneg hCB hu0.le)
-    nlinarith
-  have hsplit : u ^ (Exponents.beta : ℝ) =
-      u ^ (-((Exponents.rho : ℝ) - (Exponents.beta : ℝ))) * u ^ (Exponents.rho : ℝ) := by
-    rw [← Real.rpow_add hu0]
-    ring_nf
-  have hρpos : 0 < u ^ (Exponents.rho : ℝ) := Real.rpow_pos_of_pos hu0 _
-  calc 2 * (⌈CB * u⌉₊ : ℝ) ^ (Exponents.beta : ℝ)
-      ≤ 2 * ((CB + 1) * u) ^ (Exponents.beta : ℝ) := by
-        gcongr
-    _ = B * u ^ (Exponents.beta : ℝ) := by
-        rw [Real.mul_rpow (by linarith) hu0.le, hB_def]
-        ring
-    _ = B * u ^ (-((Exponents.rho : ℝ) - (Exponents.beta : ℝ))) *
-          u ^ (Exponents.rho : ℝ) := by
-        rw [hsplit]
-        ring
-    _ < B * (c₁ / B) * u ^ (Exponents.rho : ℝ) := by
-        gcongr
-    _ = c₁ * u ^ (Exponents.rho : ℝ) := by
-        field_simp
+      2 * (⌈CB * u⌉₊ : ℝ) ^ (Exponents.beta : ℝ) < c₁ * u ^ (Exponents.rho : ℝ) :=
+  eventually_atTop.2 ⟨fineClearanceThreshold c₁ CB,
+    fun _ hu ↦ fine_clearance_of_fineClearanceThreshold_le hc₁ hCB hu⟩
 
 end TNLean.PEPS.AreaLaw.Geometry
