@@ -4621,26 +4621,23 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 ## Candidates
 
-### Collar and amplification constants from the existential collar bound — candidate (2026-10-18)
+### Collar and amplification constants from the existential collar bound — promoted (2026-10-18)
 - **Pattern:**
   ```lean
   obtain ⟨C, N, hcol⟩ := hcol
   obtain ⟨Ca, Na, hamp⟩ := amplificationBound (q := q) (R := 1) (J := J) hΔ (max C 1)
     (lt_of_lt_of_le one_pos (le_max_right _ _)) 1 le_rfl
   ```
-- **Seen:** 5 occurrences in 5 files:
-  `TNLean/PEPS/Approximation/CellConditionalInformation.lean`,
-  `SquareCellConditionalInformation.lean`, `AngularWholeCellInformationFromCollar.lean`,
-  `AngularSingleScaleReset.lean`, `AngularInformationFromCollar.lean`.
-- **Abstraction:** proposed lemma
-  `AreaLaw.exists_amplificationBoundAt_max_one (hΔ : 0 < Δ) (C : ℝ) :
-  ∃ Ca Na, AmplificationBoundAt q 1 J Δ (max C 1) 1 Ca Na`, used after
-  `obtain ⟨C, N, hcol⟩ := hcol` when an existential corollary is derived from a
-  named-constant theorem taking `SublinearCollarBoundAt` and `AmplificationBoundAt`.
-- **Notes:** the criteria are met; promotion is deferred until the open Lemma 3.2
-  named-constant work on the two cell files has merged, so that all five call sites can be
-  refactored together.
-
+- **Seen:** 6 occurrences in 6 files: `TNLean/PEPS/Approximation/CoarseInformation.lean`,
+  `CellConditionalInformation.lean`, `SquareCellConditionalInformation.lean`,
+  `AngularWholeCellInformationFromCollar.lean`, `AngularSingleScaleReset.lean`,
+  `AngularInformationFromCollar.lean`.
+- **Abstraction:** `TNLean.PEPS.Approximation.exists_amplificationBoundAt_max_one
+  (hΔ : 0 < Δ) (C : ℝ) : ∃ Ca Na, AmplificationBoundAt q R J Δ (max C 1) 1 Ca Na` in
+  `CoarseInformation.lean`, used after `obtain ⟨C, N, hcol⟩ := hcol` when an existential
+  corollary is derived from a named-constant theorem taking `SublinearCollarBoundAt` and
+  `AmplificationBoundAt`.
+- **Notes:** all six call sites use the lemma.
 ### Dyadic padding bounds — candidate (2026-10-16)
 
 - **Pattern:** Combine the lower and strict upper bounds for

@@ -23,8 +23,7 @@ allow arbitrary fixed real values.
         TNLean.PEPS.Approximation.two_le_angularResetWidthThreshold,
         TNLean.PEPS.Approximation.angularResetWidthThreshold_anti}
     \leanok
-    Let $k=\lceil K\rceil_{\mathbb N}$ be the least natural number with $k\ge K$
-    (so $k=0$ when $K\le0$), and put
+    Let $k=\lceil K\rceil_+=\max\{0,\lceil K\rceil\}$, and put
     \begin{align}
         L_* & =\max\Bigl\{e,\Bigl(\frac{2e\max\{C_3,0\}\,(2k+2)^k}{c}\Bigr)^2\Bigr\},
         \notag

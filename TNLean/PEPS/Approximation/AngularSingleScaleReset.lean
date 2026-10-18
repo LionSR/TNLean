@@ -193,8 +193,7 @@ theorem exists_angular_single_scale_reset_of_sublinearCollarBound
                 FiniteProduct.mutualInformation (fun _ : Vertex L ↦ Fin q)
                   Ω R₀ C₀ ≤ (L : ℝ) ^ (-p) := by
   obtain ⟨C, Ncol, hcol⟩ := hcol
-  obtain ⟨Ca, Na, hamp⟩ := AreaLaw.amplificationBound (q := q) (R := 1) (J := J) hΔ (max C 1)
-    (lt_of_lt_of_le one_pos (le_max_right _ _)) 1 le_rfl
+  obtain ⟨Ca, Na, hamp⟩ := exists_amplificationBoundAt_max_one (q := q) (R := 1) (J := J) hΔ C
   exact ⟨_, _, one_le_angularCellResetSlope _ _ _,
     exp_one_le_angularSingleScaleThreshold q J Δ a a' d p Ctpl Ncol Ca Na N,
     angular_single_scale_reset_of_sublinearCollarBoundAt q hq J hJ hΔ hcol hamp

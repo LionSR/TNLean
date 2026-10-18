@@ -14,11 +14,12 @@ For each prescribed accuracy, the cell estimate and information reset give
 one logarithmic lower scale that works at every annulus. The finite annular
 induction then bounds the mutual information of the original physical
 regions in the original ground state. All constants are chosen before the
-system size, Hamiltonian, marked points, regions, and scale. They are named: the slope
-`angularScale J Δ a p = max(1, 12 C_p / a', 1 / d)` with `a' = min(a, 1) / 200`, `d = a' / 8`
-and the reset width `C_p` of Lemma 3.3, which equals `2400 C_p / min(a, 1)`, and the size
-threshold `angularThreshold q J Δ a A₀ m₀ p C_tpl N C_a N_a`, a function of the collar
-threshold `N` and the amplification constant and threshold `C_a`, `N_a`
+system size, Hamiltonian, marked points, regions, and scale. They are named. The slope is
+`angularScale J Δ a p = max(1, 12 C_p / a', 1 / d)`, with `a' = min(a, 1) / 200`, `d = a' / 8`
+and the reset width `C_p` of Lemma 3.3. The slope equals `2400 C_p / min(a, 1)`
+(`angularScale_eq`). The size threshold is
+`angularThreshold q J Δ a A₀ m₀ p C_tpl N C_a N_a`, a function of the collar threshold `N`
+and the amplification constant and threshold `C_a`, `N_a`
 (`angularInformationBound_of_sublinearCollarBoundAt_le`).
 
 **Scope restriction (sublinear collar bound):** The sublinear collar
@@ -211,8 +212,7 @@ theorem angularInformationBound_of_sublinearCollarBound {q : ℕ} (hq : 1 ≤ q)
     AngularInformationBound q J Δ := by
   intro a A₀ ha _hA₀ m₀ p hp
   obtain ⟨C, N, hcol⟩ := hcol
-  obtain ⟨Ca, Na, hamp⟩ := AreaLaw.amplificationBound (q := q) (R := 1) (J := J) hΔ (max C 1)
-    (lt_of_lt_of_le one_pos (le_max_right _ _)) 1 le_rfl
+  obtain ⟨Ca, Na, hamp⟩ := exists_amplificationBoundAt_max_one (q := q) (R := 1) (J := J) hΔ C
   exact ⟨_, _, angularInformationBound_of_sublinearCollarBoundAt_le hq hJ hΔ hcol hamp ha m₀ hp
     le_rfl le_rfl⟩
 
