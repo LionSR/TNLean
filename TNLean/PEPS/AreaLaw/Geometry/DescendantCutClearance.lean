@@ -484,7 +484,6 @@ theorem descendant_birthTemplate_cutClearance :
               T.IsSeparated D₀ (boundaryEndpoints Λ A) ∧
                 ∀ t ∈ T.points, ∀ z ∈ boundaryEndpoints Λ A,
                   2 * (n : ℝ) ^ (Exponents.beta : ℝ) < (Scan.ambientSupDistance t z : ℝ) :=
-  ⟨_, fun _ hS C D₀ CB ↦ ⟨_, fun o Λ A k₀ hC h₀ hK ↦
-    descendant_birthTemplate_cutClearance_of_le hS C D₀ CB o Λ A k₀ hC h₀ hK⟩⟩
+  ⟨_, fun _ hS C D₀ CB ↦ ⟨_, descendant_birthTemplate_cutClearance_of_le hS C D₀ CB⟩⟩
 
 end TNLean.PEPS.AreaLaw.Geometry

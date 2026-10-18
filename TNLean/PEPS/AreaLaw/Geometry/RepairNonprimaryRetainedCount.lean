@@ -201,8 +201,8 @@ theorem repairStage_retained_positive_rank_le {Sstar : ℝ} (hSstar : 1 < Sstar)
 /-- A coefficient chosen before all geometric data bounds the retained
 sampled identifiers of positive birth rank at every generation. Finiteness
 is established for the actual subtype, and the metric hypotheses are exactly
-those of the uniform mark estimate. No empty generation is assumed. The coefficient is
-`repairRetainedCountConstant S_*` (`repairStage_retained_positive_rank_le`).
+those of the uniform mark estimate. No empty generation is assumed. The coefficient
+is `repairRetainedCountConstant S_*` (`repairStage_retained_positive_rank_le`).
 Source: area-law Section 11, `geometry:total-repairs`, lines 685–692, and
 the nonprimary error contribution, lines 796–798. -/
 theorem exists_uniform_repairStage_retained_positive_rank_bound {Sstar : ℝ}
@@ -218,7 +218,6 @@ theorem exists_uniform_repairStage_retained_positive_rank_bound {Sstar : ℝ}
               0 < repairStageBirthRank o Λ A C k₀ hC h₀ Sstar N i.val}
           Finite I ∧ (Nat.card I : ℝ) ≤
             L * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary Λ A).card :=
-  ⟨_, repairRetainedCountConstant_pos Sstar, fun o Λ A C k₀ hC h₀ a₀ h N ↦
-    repairStage_retained_positive_rank_le hSstar o Λ A C k₀ hC h₀ a₀ h N⟩
+  ⟨_, repairRetainedCountConstant_pos Sstar, repairStage_retained_positive_rank_le hSstar⟩
 
 end TNLean.PEPS.AreaLaw.Geometry

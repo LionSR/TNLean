@@ -119,7 +119,7 @@ theorem exists_uniform_repairStage_retained_positive_rank_error_sum_bound
                 i.val.val⌉₊
             (∑ᶠ i : I, (((n i : ℝ) ^ 100)⁻¹)) ≤
               L * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary Λ A).card :=
-  ⟨_, repairRetainedCountConstant_pos Sstar, fun _ hC_B o Λ A C k₀ hC h₀ a₀ h N ↦
-    repairStage_retained_positive_rank_error_sum_le hSstar hC_B o Λ A C k₀ hC h₀ a₀ h N⟩
+  ⟨_, repairRetainedCountConstant_pos Sstar, fun _ hC_B ↦
+    repairStage_retained_positive_rank_error_sum_le hSstar hC_B⟩
 
 end TNLean.PEPS.AreaLaw.Geometry

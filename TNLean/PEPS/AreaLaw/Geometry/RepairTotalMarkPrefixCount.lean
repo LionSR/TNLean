@@ -106,7 +106,6 @@ theorem exists_uniform_repairStage_markIndex_prefix_bound {Sstar : ℝ}
           ∑ j ∈ Finset.range N,
               (Nat.card (repairStage o Λ A C k₀ hC h₀ Sstar j).markIndex : ℝ) ≤
             M * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary Λ A).card :=
-  ⟨_, repairMarkCountConstant_pos Sstar, fun o Λ A C k₀ hC h₀ a₀ h N ↦
-    repairStage_markIndex_prefix_le hSstar o Λ A C k₀ hC h₀ a₀ h N⟩
+  ⟨_, repairMarkCountConstant_pos Sstar, repairStage_markIndex_prefix_le hSstar⟩
 
 end TNLean.PEPS.AreaLaw.Geometry

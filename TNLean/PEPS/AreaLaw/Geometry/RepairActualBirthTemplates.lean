@@ -208,7 +208,7 @@ theorem exists_uniform_repairStage_birth_templates (Ctpl : ℝ) (hCtpl : 1 ≤ C
                             2 * (n : ℝ) ^ (Exponents.beta : ℝ) <
                               (Scan.ambientSupDistance y z : ℝ) :=
   ⟨_, _, one_le_primaryScannerConstant Ctpl, beltScannerConstant_pos hCtpl, fun D₀ ↦
-    ⟨_, one_le_repairMarginThreshold _, fun _ hS C hWidth ↦ ⟨_, fun o Λ A k₀ hC h₀ hK N ↦
-      repairStage_birth_templates_of_le Ctpl hCtpl D₀ hS C hWidth o Λ A k₀ hC h₀ hK N⟩⟩⟩
+    ⟨_, one_le_repairMarginThreshold _, fun _ hS C hWidth ↦
+      ⟨_, repairStage_birth_templates_of_le Ctpl hCtpl D₀ hS C hWidth⟩⟩⟩
 
 end TNLean.PEPS.AreaLaw.Geometry
