@@ -16,3 +16,11 @@ open TNLean.PEPS.AreaLaw.Scan.CollarScan in
 depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
 #print axioms exists_sourceTarget_selected_actualCharge_sharp_comparison
+
+open TNLean.PEPS.AreaLaw.Scan.CollarScan in
+/-- info:
+'TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_sourceTarget_selected_actualCharge_sharp_comparison_of_finiteFamilyTransportBound'
+depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms
+  exists_sourceTarget_selected_actualCharge_sharp_comparison_of_finiteFamilyTransportBound
