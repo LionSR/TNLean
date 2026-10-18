@@ -12,7 +12,9 @@ import TNLean.PEPS.Approximation.AngularGridCells
 
 The cell estimate on finite integer domains transfers to the original square
 lattice by relabeling sites and translating all positions by `(1, 1)`. The state,
-full-system gap and conditioning regions are preserved.
+full-system gap and conditioning regions are preserved, and so are the named constants
+`cellInformationConstant` and `cellInformationExponent`
+(`cell_conditionalMutualInformation_le_square_of_sublinearCollarBoundAt`).
 
 **Scope restriction (sublinear collar bound):** The sublinear collar bound is an
 explicit premise. This is a conditional step toward polynomial-PEPS Lemma 3.2;
@@ -35,33 +37,36 @@ open TNLean.PEPS.AreaLaw
 open TNLean.PEPS.AreaLaw.Geometry
 
 open Classical in
-/-- The cell conditional-information bound on the original open square, with
-sites at `(i + 1, j + 1)`. The same ground vector, full-system gap and arbitrary
-union of conditioning cells are retained. A common translation identifies this
-placement with the integer-domain placement.
+/-- **Lemma 3.2 on the original open square, with named constants.** Under the range-one
+sublinear collar bound with constant `C` and threshold `N`, and the range-one amplification
+bound at the input constant `max(C, 1)` and order `1` with constant `C_a` and threshold `N_a`,
+the cell conditional-information bound holds on the original open square, with sites at
+`(i + 1, j + 1)`, with the prefactor `cellInformationConstant q c C_tpl N C_a N_a` and the
+exponent `cellInformationExponent c C_tpl N C_a N_a` of the integer-domain estimate. A common
+translation identifies this placement with the integer-domain placement, so the constants are
+unchanged.
 
 Source: polynomial-PEPS Lemma 3.2 (`lem:cell-cmi`), `02-information.tex`,
-lines 163–178, and its application in Proposition 3.4, lines 688–737. -/
-theorem exists_cell_conditionalMutualInformation_le_square_of_sublinearCollarBound
-    {q : ℕ} {J Δ D₀ Ctpl : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < Δ)
-    (hcol : AreaLaw.SublinearCollarBound q 1 J Δ D₀ Ctpl) {c : ℝ} (hc : 0 < c) :
-    ∃ C₁ K : ℝ, 0 < C₁ ∧ 0 ≤ K ∧
-      ∀ s : ℝ, 1 ≤ s → ∀ (o : ℝ × ℝ) (m₀ : ℤ × ℤ) (A : Set (ℤ × ℤ)),
-        m₀ ∉ A →
-        ∀ (L : ℕ) (h : SquareHamiltonian L q J) (E₀ : ℝ) (Ω : StateSpace L q),
-          h.IsGappedGroundState E₀ Ω Δ →
-          let G : Finset (Vertex L) :=
-            Finset.univ.filter (fun v ↦ sitePosition L v ∈ AngularGrid.cell o s m₀)
-          let B : Finset (Vertex L) := Finset.univ.filter
-            (fun v ↦ AngularGrid.owner o s (sitePosition L v) ∈ A)
-          ∀ E : Finset (Vertex L), E ⊆ (G ∪ B)ᶜ →
-            (∀ x ∈ closure (AngularGrid.cell o s m₀),
-              ∀ y ∈ E, c * s ≤ dist x (sitePosition L y)) →
-            FiniteProduct.conditionalMutualInformation (fun _ : Vertex L ↦ Fin q)
-              Ω G E B ≤ C₁ * (1 + Real.log s) ^ K := by
-  obtain ⟨C₁, K, hC₁, hK, hcell⟩ :=
-    exists_cell_conditionalMutualInformation_le_of_sublinearCollarBound hΔ hcol hc
-  refine ⟨C₁, K, hC₁, hK, ?_⟩
+lines 161–178, and its application in Proposition 3.4, lines 688–737. -/
+theorem cell_conditionalMutualInformation_le_square_of_sublinearCollarBoundAt
+    {q : ℕ} {J Δ D₀ Ctpl C Ca : ℝ} {N Na : ℕ} (hJ : 0 ≤ J)
+    (hcol : AreaLaw.SublinearCollarBoundAt q 1 J Δ D₀ Ctpl C N)
+    (hamp : AreaLaw.AmplificationBoundAt q 1 J Δ (max C 1) 1 Ca Na) {c : ℝ} (hc : 0 < c) :
+    ∀ s : ℝ, 1 ≤ s → ∀ (o : ℝ × ℝ) (m₀ : ℤ × ℤ) (A : Set (ℤ × ℤ)),
+      m₀ ∉ A →
+      ∀ (L : ℕ) (h : SquareHamiltonian L q J) (E₀ : ℝ) (Ω : StateSpace L q),
+        h.IsGappedGroundState E₀ Ω Δ →
+        let G : Finset (Vertex L) :=
+          Finset.univ.filter (fun v ↦ sitePosition L v ∈ AngularGrid.cell o s m₀)
+        let B : Finset (Vertex L) := Finset.univ.filter
+          (fun v ↦ AngularGrid.owner o s (sitePosition L v) ∈ A)
+        ∀ E : Finset (Vertex L), E ⊆ (G ∪ B)ᶜ →
+          (∀ x ∈ closure (AngularGrid.cell o s m₀),
+            ∀ y ∈ E, c * s ≤ dist x (sitePosition L y)) →
+          FiniteProduct.conditionalMutualInformation (fun _ : Vertex L ↦ Fin q)
+            Ω G E B ≤ cellInformationConstant q c Ctpl N Ca Na *
+              (1 + Real.log s) ^ cellInformationExponent c Ctpl N Ca Na := by
+  have hcell := cell_conditionalMutualInformation_le_of_sublinearCollarBoundAt hcol hamp hc
   intro s hs o m₀ A hm₀ L h E₀ Ω hΩ G B E hE hclear
   let σ := rectangleSiteEquiv L L
   let o' : ℝ × ℝ := o - (1, 1)
@@ -125,5 +130,41 @@ theorem exists_cell_conditionalMutualInformation_le_square_of_sublinearCollarBou
     σ.arrowCongr (Equiv.refl (Fin q)) from rfl,
     FiniteProduct.conditionalMutualInformation, ← Finset.map_union,
     finiteProductEntropy_relabel] using hfinal
+
+open Classical in
+/-- The cell conditional-information bound on the original open square, with
+sites at `(i + 1, j + 1)`. The same ground vector, full-system gap and arbitrary
+union of conditioning cells are retained. A common translation identifies this
+placement with the integer-domain placement. The constants are
+`cellInformationConstant` and `cellInformationExponent`
+(`cell_conditionalMutualInformation_le_square_of_sublinearCollarBoundAt`), at the collar
+constant and threshold and at the amplification constant and threshold supplied by
+`amplificationBound`.
+
+Source: polynomial-PEPS Lemma 3.2 (`lem:cell-cmi`), `02-information.tex`,
+lines 163–178, and its application in Proposition 3.4, lines 688–737. -/
+theorem exists_cell_conditionalMutualInformation_le_square_of_sublinearCollarBound
+    {q : ℕ} {J Δ D₀ Ctpl : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < Δ)
+    (hcol : AreaLaw.SublinearCollarBound q 1 J Δ D₀ Ctpl) {c : ℝ} (hc : 0 < c) :
+    ∃ C₁ K : ℝ, 0 < C₁ ∧ 0 ≤ K ∧
+      ∀ s : ℝ, 1 ≤ s → ∀ (o : ℝ × ℝ) (m₀ : ℤ × ℤ) (A : Set (ℤ × ℤ)),
+        m₀ ∉ A →
+        ∀ (L : ℕ) (h : SquareHamiltonian L q J) (E₀ : ℝ) (Ω : StateSpace L q),
+          h.IsGappedGroundState E₀ Ω Δ →
+          let G : Finset (Vertex L) :=
+            Finset.univ.filter (fun v ↦ sitePosition L v ∈ AngularGrid.cell o s m₀)
+          let B : Finset (Vertex L) := Finset.univ.filter
+            (fun v ↦ AngularGrid.owner o s (sitePosition L v) ∈ A)
+          ∀ E : Finset (Vertex L), E ⊆ (G ∪ B)ᶜ →
+            (∀ x ∈ closure (AngularGrid.cell o s m₀),
+              ∀ y ∈ E, c * s ≤ dist x (sitePosition L y)) →
+            FiniteProduct.conditionalMutualInformation (fun _ : Vertex L ↦ Fin q)
+              Ω G E B ≤ C₁ * (1 + Real.log s) ^ K := by
+  obtain ⟨C, N, hcol⟩ := hcol
+  obtain ⟨Ca, Na, hamp⟩ := amplificationBound (q := q) (R := 1) (J := J) hΔ (max C 1)
+    (lt_of_lt_of_le one_pos (le_max_right _ _)) 1 le_rfl
+  exact ⟨_, _, cellInformationConstant_pos q c Ctpl N Ca Na,
+    (cellInformationExponent_pos c Ctpl N Ca Na).le,
+    cell_conditionalMutualInformation_le_square_of_sublinearCollarBoundAt hJ hcol hamp hc⟩
 
 end TNLean.PEPS.Approximation

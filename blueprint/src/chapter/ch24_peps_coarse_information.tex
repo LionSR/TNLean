@@ -94,6 +94,81 @@ Hamiltonian and its full-system gap. Conditional forms are stated separately.
     $D_0=13$ and $C_{\rm tpl}=24$ then yields the bound.
 \end{proof}
 
+% Source: OpenAI2026PolynomialPEPS, proof of Proposition 3.1 (prop:coarse),
+% 02-information.tex, lines 110--146.
+\begin{definition}[Constants of the coarse information estimate]
+    \label{def:peps_coarse_information_constants}
+    \lean{TNLean.PEPS.Approximation.coarseScaleFactor,
+        TNLean.PEPS.Approximation.coarseInformationThreshold}
+    \leanok
+    \uses{thm:area_law_uniform_collar_threshold}
+    Fix a template constant $C_{\rm tpl}$, an integer $N_0$ and $A_0\in\mathbb R$.
+    The scale factor is
+    \begin{align}
+        K_{\rm c}(C_{\rm tpl},N_0,A_0) & =(\max\{C_{\rm tpl},0\}+1)(N_0+1)
+        (\max\{A_0,1\}+4).
+        \notag
+    \end{align}
+    For a collar threshold $N$, an amplification constant $C_a$ and an
+    amplification threshold $N_a$, let $N_r$ be the threshold of
+    Theorem~\ref{thm:area_law_uniform_collar_threshold} for the constant $C_a$
+    and $\eta=K_{\rm c}^{-\beta_0}$, so that
+    $\lfloor n^{1-\varepsilon}\rfloor+2r<K_{\rm c}^{-\beta_0}n^{\beta_0}$ for
+    $n\ge N_r$ and every integer $0\le r\le C_an^{(1-\varepsilon)/\alpha}$.
+    The coarse threshold is
+    \begin{align}
+        u_0(C_{\rm tpl},N_0,A_0,N,C_a,N_a) & =
+        \max\{N,N_a,N_r,2,K_{\rm c}^{1/\varepsilon}\}.
+        \notag
+    \end{align}
+\end{definition}
+
+\begin{theorem}[Coarse information with explicit constants]
+    \label{thm:peps_coarse_information_of_collar_explicit}
+    \lean{TNLean.PEPS.Approximation.coarse_mutualInformation_le_of_sublinearCollarBoundAt}
+    \leanok
+    \uses{def:peps_box_union,def:area_law_collar_bound,
+        def:area_law_amplification_bound,def:peps_coarse_information_constants}
+    Fix $q,R,J,\Delta$ and template constants $D_0,C_{\rm tpl}$. Suppose that
+    the sublinear collar bound holds with constant $C$ and threshold $N$, and
+    that the amplification bound holds at $(\max\{C,1\},1)$ with constant $C_a$
+    and threshold $N_a$. Fix $N_0$ and $A_0$, and let
+    $u_0=u_0(C_{\rm tpl},N_0,A_0,N,C_a,N_a)$ be the coarse threshold of
+    Definition~\ref{def:peps_coarse_information_constants}. Let $u\ge u_0$, let
+    $\Omega$ be a unit ground vector with full-system gap $\Delta$ of an
+    admissible Hamiltonian of range $R$ and bound $J$ on a finite induced
+    domain $\Lambda$, and let $T$ be a union of at most $N_0$ boxes with
+    $\operatorname{diam}_\infty T\le A_0u$. Then
+    $I_\Omega(X:E)\le\max\{C_a,0\}$ for every $X\subseteq\Lambda\cap T$ and
+    every $E\subseteq\Lambda$ with
+    $\operatorname{dist}_\infty(E,T)>u^{\beta_0}$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{lem:peps_box_union_template,def:peps_coarse_information_constants,
+        thm:area_law_uniform_collar_threshold}
+    Set $\beta=\beta_0$. If $T$ is empty, so is $X$, and the information
+    vanishes. Otherwise put $A=\max(A_0,1)$, $s_0=\lceil Au\rceil+1$ and
+    $n=\lceil c_1(Au+3)\rceil$ with
+    $c_1=(\max(C_{\rm tpl},0)+1)(N_0+1)$. Then $T$ is a template with
+    parameters $(n,s_0)$, and $u\le n\le Ku$ with $K=c_1(A+4)=K_{\rm c}$ once
+    $u\ge2$.
+    The cut is $A=\Lambda$, whose crossing-edge endpoint set is empty, so the
+    template is separated from it. When $u^\varepsilon\ge K$,
+    \begin{align*}
+        n^{1-\varepsilon}\le K^{1-\varepsilon}u^{1-\varepsilon}
+        \le u^\varepsilon u^{1-\varepsilon}=u\le s_0,
+    \end{align*}
+    so the collar bound applies and satisfies every hypothesis of the
+    amplification bound with $M=1$ and the common constant $\max(C,1)$. Its
+    radius $r$ satisfies
+    $\lfloor n^{1-\varepsilon}\rfloor+2r<K^{-\beta_0}n^{\beta_0}\le u^{\beta_0}$
+    because $n\ge u\ge N_r$. A walk of length at most $2r$ moves by at most $2r$ in
+    sup norm, so every point of the graph neighborhood $N_{2r}(S_0)$ lies within
+    $\lfloor n^{1-\varepsilon}\rfloor+2r$ of $T$. Hence $E$ avoids
+    $N_{2r}(S_0)$, and $I_\Omega(X:E)\le C_an^{-1}\le\max(C_a,0)$.
+\end{proof}
+
 \begin{theorem}[Coarse information, assuming the sublinear collar bound]
     \label{thm:peps_coarse_information_of_collar}
     \lean{TNLean.PEPS.Approximation.coarse_mutualInformation_le_of_sublinearCollarBound}
@@ -114,26 +189,14 @@ Hamiltonian and its full-system gap. Conditional forms are stated separately.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{lem:peps_box_union_template}
-    Set $\beta=\beta_0$. If $T$ is empty, so is $X$, and the information
-    vanishes. Otherwise put $A=\max(A_0,1)$, $s_0=\lceil Au\rceil+1$ and
-    $n=\lceil c_1(Au+3)\rceil$ with
-    $c_1=(\max(C_{\rm tpl},0)+1)(N_0+1)$. Then $T$ is a template with
-    parameters $(n,s_0)$, and $u\le n\le Ku$ with $K=c_1(A+4)$ once $u\ge2$.
-    The cut is $A=\Lambda$, whose crossing-edge endpoint set is empty, so the
-    template is separated from it. When $u^\varepsilon\ge K$,
-    \begin{align*}
-        n^{1-\varepsilon}\le K^{1-\varepsilon}u^{1-\varepsilon}
-        \le u^\varepsilon u^{1-\varepsilon}=u\le s_0,
-    \end{align*}
-    so the collar bound applies and satisfies every hypothesis of the
-    amplification bound with $M=1$ and the common constant $\max(C,1)$. Its
-    radius $r$ satisfies
-    $\lfloor n^{1-\varepsilon}\rfloor+2r<K^{-\beta_0}n^{\beta_0}\le u^{\beta_0}$
-    at all large $n$. A walk of length at most $2r$ moves by at most $2r$ in
-    sup norm, so every point of the graph neighborhood $N_{2r}(S_0)$ lies within
-    $\lfloor n^{1-\varepsilon}\rfloor+2r$ of $T$. Hence $E$ avoids
-    $N_{2r}(S_0)$, and $I_\Omega(X:E)\le C_1n^{-1}\le\max(C_1,0)$.
+    \uses{thm:peps_coarse_information_of_collar_explicit,thm:area_law_amplification,
+        def:peps_coarse_information_constants}
+    Choose a constant $C$ and a threshold $N$ for the collar bound, and by
+    Theorem~\ref{thm:area_law_amplification} a constant $C_a$ and a threshold
+    $N_a$ for the amplification bound at $(\max\{C,1\},1)$.
+    Theorem~\ref{thm:peps_coarse_information_of_collar_explicit} gives the
+    claim with $\beta=\beta_0<1$, the constant $\max\{C_a,0\}$ and the coarse
+    threshold of Definition~\ref{def:peps_coarse_information_constants}.
 \end{proof}
 
 \begin{theorem}[Coarse information on the square grid, assuming the collar bound]

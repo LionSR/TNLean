@@ -23,8 +23,12 @@ manuscript. They do not construct either recursion.
 ## Main statements
 
 * `log_iterate_le_of_le_rpow`: `log f^[i] S ≤ ρ ^ i log S` along nonterminal generations.
-* `exists_iterate_depth_bound`: at most `C + C log log (S + e)` generations.
-* `exists_iterate_generation_count_bound`: `∑_{j ≤ m} b ^ j ≤ C (log (S + e)) ^ C`.
+* `iterate_depth_bound`: at most `C_d + C_d log log (S + e)` generations, with the named
+  constant `C_d = iterateDepthConstant ρ S_*`; `exists_iterate_depth_bound` is its
+  existential form.
+* `iterate_generation_count_bound`: `∑_{j ≤ m} b ^ j ≤ C (log (S + e)) ^ C` with the named
+  constant `C = iterateGenerationCountConstant ρ S_* b`; `exists_iterate_generation_count_bound`
+  is its existential form.
 * `mul_rpow_le_max_mul_rpow`: change of the logarithmic size measure in such a count.
 * `forall_le_iterate_of_le_iterate`: for a globally contracting map, a generation
   above the stopping scale has only ancestors above it.
@@ -73,22 +77,37 @@ theorem one_le_log_add_exp_one {S : ℝ} (hS : 0 ≤ S) : 1 ≤ Real.log (S + Re
   rw [Real.le_log_iff_exp_le (by positivity)]
   linarith
 
-/-- **Depth of a power-contracting recursion.** If `0 < f u ≤ u ^ ρ` for every
-`u ≥ S_*`, with `0 < ρ < 1` and `S_* > 1`, then there is a constant `C > 0` such
-that every recursion from a positive scale `S` whose generations `0, …, m - 1`
-are nonterminal has `m ≤ C + C log log (S + e)`.
+/-- The depth constant `C_d = (|log log S_*| + 1) / log (1 / ρ) + 1` of a power-contracting
+recursion with contraction exponent `ρ` and stopping scale `S_*`: a recursion whose
+generations `0, …, m - 1` are nonterminal has `m ≤ C_d + C_d log log (S + e)`.
 Source: area-law Section 11, `10-geometry.tex`, lines 670–675; polynomial-PEPS
 Lemma 3.2, `02-information.tex`, lines 302–308. -/
-theorem exists_iterate_depth_bound
+def iterateDepthConstant (ρ Sstar : ℝ) : ℝ :=
+  (|Real.log (Real.log Sstar)| + 1) / -Real.log ρ + 1
+
+/-- The depth constant is positive for `0 < ρ < 1`. -/
+theorem iterateDepthConstant_pos {ρ : ℝ} (hρ : 0 < ρ) (hρ1 : ρ < 1) (Sstar : ℝ) :
+    0 < iterateDepthConstant ρ Sstar := by
+  have hc : 0 < -Real.log ρ := neg_pos.mpr (Real.log_neg hρ hρ1)
+  unfold iterateDepthConstant
+  positivity
+
+/-- **Depth of a power-contracting recursion, with the named constant.** If
+`0 < f u ≤ u ^ ρ` for every `u ≥ S_*`, with `0 < ρ < 1` and `S_* > 1`, then every
+recursion from a positive scale `S` whose generations `0, …, m - 1` are nonterminal has
+`m ≤ C_d + C_d log log (S + e)` with `C_d = iterateDepthConstant ρ S_*`.
+Source: area-law Section 11, `10-geometry.tex`, lines 670–675; polynomial-PEPS
+Lemma 3.2, `02-information.tex`, lines 302–308. -/
+theorem iterate_depth_bound
     (hf : ∀ u, Sstar ≤ u → 0 < f u ∧ f u ≤ u ^ ρ) (hρ : 0 < ρ) (hρ1 : ρ < 1)
-    (hSstar : 1 < Sstar) :
-    ∃ C : ℝ, 0 < C ∧ ∀ S : ℝ, 0 < S → ∀ m : ℕ, (∀ i < m, Sstar ≤ f^[i] S) →
-      (m : ℝ) ≤ C + C * Real.log (Real.log (S + Real.exp 1)) := by
+    (hSstar : 1 < Sstar) (S : ℝ) (hS : 0 < S) (m : ℕ) (hm : ∀ i < m, Sstar ≤ f^[i] S) :
+    (m : ℝ) ≤ iterateDepthConstant ρ Sstar +
+      iterateDepthConstant ρ Sstar * Real.log (Real.log (S + Real.exp 1)) := by
   have hc : 0 < -Real.log ρ := neg_pos.mpr (Real.log_neg hρ hρ1)
   set a : ℝ := Real.log (Real.log Sstar)
   set A : ℝ := (|a| + 1) / -Real.log ρ with hA
   have hA0 : 0 < A := by positivity
-  refine ⟨A + 1, by positivity, fun S hS m hm => ?_⟩
+  change (m : ℝ) ≤ (A + 1) + (A + 1) * Real.log (Real.log (S + Real.exp 1))
   have hL0 : 0 ≤ Real.log (Real.log (S + Real.exp 1)) :=
     Real.log_nonneg (one_le_log_add_exp_one hS.le)
   cases m with
@@ -117,19 +136,51 @@ theorem exists_iterate_depth_bound
     push_cast
     nlinarith
 
-/-- **Generation count of a power-contracting recursion.** Under the hypotheses of
-`exists_iterate_depth_bound`, for a branching bound `b ≥ 0` there is a constant
-`C > 0` such that, whenever the generations `0, …, m - 1` from a positive scale
-`S` are nonterminal, the at most `b ^ j` members of each generation `j ≤ m`
-number in total at most `C (log (S + e)) ^ C`.
+/-- **Depth of a power-contracting recursion.** If `0 < f u ≤ u ^ ρ` for every
+`u ≥ S_*`, with `0 < ρ < 1` and `S_* > 1`, then there is a constant `C > 0` such
+that every recursion from a positive scale `S` whose generations `0, …, m - 1`
+are nonterminal has `m ≤ C + C log log (S + e)`. The constant is
+`iterateDepthConstant ρ S_*` (`iterate_depth_bound`).
+Source: area-law Section 11, `10-geometry.tex`, lines 670–675; polynomial-PEPS
+Lemma 3.2, `02-information.tex`, lines 302–308. -/
+theorem exists_iterate_depth_bound
+    (hf : ∀ u, Sstar ≤ u → 0 < f u ∧ f u ≤ u ^ ρ) (hρ : 0 < ρ) (hρ1 : ρ < 1)
+    (hSstar : 1 < Sstar) :
+    ∃ C : ℝ, 0 < C ∧ ∀ S : ℝ, 0 < S → ∀ m : ℕ, (∀ i < m, Sstar ≤ f^[i] S) →
+      (m : ℝ) ≤ C + C * Real.log (Real.log (S + Real.exp 1)) :=
+  ⟨_, iterateDepthConstant_pos hρ hρ1 Sstar, iterate_depth_bound hf hρ hρ1 hSstar⟩
+
+/-- The generation-count constant `max (B ^ (C_d + 1)) (C_d log B)` of a power-contracting
+recursion with branching bound `b`, where `B = b + 2` and `C_d = iterateDepthConstant ρ S_*`
+is the depth constant. The exponent `C_d log B` comes from the depth bound and the
+prefactor `B ^ (C_d + 1)` from the geometric sum. Source: area-law Section 11,
+`10-geometry.tex`, lines 676–682; polynomial-PEPS Lemma 3.2, `02-information.tex`,
+lines 302–311. -/
+def iterateGenerationCountConstant (ρ Sstar b : ℝ) : ℝ :=
+  max ((b + 2) ^ (iterateDepthConstant ρ Sstar + 1))
+    (iterateDepthConstant ρ Sstar * Real.log (b + 2))
+
+/-- The generation-count constant is positive for `0 ≤ b` and `0 < ρ < 1`. -/
+theorem iterateGenerationCountConstant_pos {ρ : ℝ} (hρ : 0 < ρ) (hρ1 : ρ < 1) (Sstar : ℝ)
+    {b : ℝ} (hb : 0 ≤ b) : 0 < iterateGenerationCountConstant ρ Sstar b :=
+  lt_max_of_lt_left (Real.rpow_pos_of_pos (by linarith) _)
+
+/-- **Generation count of a power-contracting recursion, with the named constant.** Under
+the hypotheses of `iterate_depth_bound`, for a branching bound `b ≥ 0` and every recursion
+from a positive scale `S` whose generations `0, …, m - 1` are nonterminal, the at most `b ^ j`
+members of each generation `j ≤ m` number in total at most `C (log (S + e)) ^ C` with
+`C = iterateGenerationCountConstant ρ S_* b`.
 Source: area-law Section 11, `10-geometry.tex`, lines 676–682; polynomial-PEPS
 Lemma 3.2, `02-information.tex`, lines 302–311. -/
-theorem exists_iterate_generation_count_bound
+theorem iterate_generation_count_bound
     (hf : ∀ u, Sstar ≤ u → 0 < f u ∧ f u ≤ u ^ ρ) (hρ : 0 < ρ) (hρ1 : ρ < 1)
-    (hSstar : 1 < Sstar) {b : ℝ} (hb : 0 ≤ b) :
-    ∃ C : ℝ, 0 < C ∧ ∀ S : ℝ, 0 < S → ∀ m : ℕ, (∀ i < m, Sstar ≤ f^[i] S) →
-      ∑ j ∈ Finset.range (m + 1), b ^ j ≤ C * Real.log (S + Real.exp 1) ^ C := by
-  obtain ⟨C₁, hC₁, hdepth⟩ := exists_iterate_depth_bound hf hρ hρ1 hSstar
+    (hSstar : 1 < Sstar) {b : ℝ} (hb : 0 ≤ b) (S : ℝ) (hS : 0 < S) (m : ℕ)
+    (hm : ∀ i < m, Sstar ≤ f^[i] S) :
+    ∑ j ∈ Finset.range (m + 1), b ^ j ≤ iterateGenerationCountConstant ρ Sstar b *
+      Real.log (S + Real.exp 1) ^ iterateGenerationCountConstant ρ Sstar b := by
+  have hdepth := iterate_depth_bound hf hρ hρ1 hSstar
+  set C₁ := iterateDepthConstant ρ Sstar
+  have hC₁ : 0 < C₁ := iterateDepthConstant_pos hρ hρ1 Sstar
   set B : ℝ := b + 2 with hB_def
   have hB : 2 ≤ B := by linarith
   have hlogB : 0 < Real.log B := Real.log_pos (by linarith)
@@ -137,7 +188,7 @@ theorem exists_iterate_generation_count_bound
   have hp : 0 ≤ p := by positivity
   set K : ℝ := B ^ (C₁ + 1) with hK_def
   have hK : 0 < K := by positivity
-  refine ⟨max K p, lt_max_of_lt_left hK, fun S hS m hm => ?_⟩
+  change ∑ j ∈ Finset.range (m + 1), b ^ j ≤ max K p * Real.log (S + Real.exp 1) ^ max K p
   set x : ℝ := Real.log (S + Real.exp 1) with hx_def
   have hx1 : 1 ≤ x := one_le_log_add_exp_one hS.le
   have hx0 : 0 < x := by linarith
@@ -168,6 +219,22 @@ theorem exists_iterate_generation_count_bound
     _ ≤ max K p * x ^ max K p := by
         gcongr
         exact le_max_left _ _
+
+/-- **Generation count of a power-contracting recursion.** Under the hypotheses of
+`exists_iterate_depth_bound`, for a branching bound `b ≥ 0` there is a constant
+`C > 0` such that, whenever the generations `0, …, m - 1` from a positive scale
+`S` are nonterminal, the at most `b ^ j` members of each generation `j ≤ m`
+number in total at most `C (log (S + e)) ^ C`. The constant is
+`iterateGenerationCountConstant ρ S_* b` (`iterate_generation_count_bound`).
+Source: area-law Section 11, `10-geometry.tex`, lines 676–682; polynomial-PEPS
+Lemma 3.2, `02-information.tex`, lines 302–311. -/
+theorem exists_iterate_generation_count_bound
+    (hf : ∀ u, Sstar ≤ u → 0 < f u ∧ f u ≤ u ^ ρ) (hρ : 0 < ρ) (hρ1 : ρ < 1)
+    (hSstar : 1 < Sstar) {b : ℝ} (hb : 0 ≤ b) :
+    ∃ C : ℝ, 0 < C ∧ ∀ S : ℝ, 0 < S → ∀ m : ℕ, (∀ i < m, Sstar ≤ f^[i] S) →
+      ∑ j ∈ Finset.range (m + 1), b ^ j ≤ C * Real.log (S + Real.exp 1) ^ C :=
+  ⟨_, iterateGenerationCountConstant_pos hρ hρ1 Sstar hb,
+    iterate_generation_count_bound hf hρ hρ1 hSstar hb⟩
 
 /-- A bound `C x ^ C` with `0 ≤ x ≤ 2 y` and `y ≥ 1` is a bound of the same form in `y`,
 with the constant `max (C 2 ^ C) C`. Used to pass from `log (S + e)` to another

@@ -137,7 +137,13 @@ generation $j$ contains at most $9^j$ marks.
     \label{thm:area_law_power_recursion_depth}
     \lean{TNLean.PEPS.AreaLaw.Geometry.log_iterate_le_of_le_rpow,
         TNLean.PEPS.AreaLaw.Geometry.one_le_log_add_exp_one,
+        TNLean.PEPS.AreaLaw.Geometry.iterateDepthConstant,
+        TNLean.PEPS.AreaLaw.Geometry.iterateDepthConstant_pos,
+        TNLean.PEPS.AreaLaw.Geometry.iterate_depth_bound,
         TNLean.PEPS.AreaLaw.Geometry.exists_iterate_depth_bound,
+        TNLean.PEPS.AreaLaw.Geometry.iterateGenerationCountConstant,
+        TNLean.PEPS.AreaLaw.Geometry.iterateGenerationCountConstant_pos,
+        TNLean.PEPS.AreaLaw.Geometry.iterate_generation_count_bound,
         TNLean.PEPS.AreaLaw.Geometry.exists_iterate_generation_count_bound,
         TNLean.PEPS.AreaLaw.Geometry.mul_rpow_le_max_mul_rpow,
         TNLean.PEPS.AreaLaw.Geometry.forall_le_iterate_of_le_iterate}
@@ -150,9 +156,11 @@ generation $j$ contains at most $9^j$ marks.
         m & \le C+C\log\log(S+e).
         \notag
     \end{align}
+    One may take
+    $C=C_d=(|\log\log S_*|+1)/\log(1/\rho)+1$.
     For every $b\ge0$ there also exists $C>0$ such that
     $\sum_{j=0}^{m}b^{j}\le C\bigl(\log(S+e)\bigr)^{C}$ under the same
-    hypothesis. If $0<f(u)\le u^{\rho}$ for all $u>0$ and $S_*\ge1$, then
+    hypothesis; one may take $C=\max\{B^{C_d+1},C_d\log B\}$ with $B=b+2$. If $0<f(u)\le u^{\rho}$ for all $u>0$ and $S_*\ge1$, then
     $f^{m}(S)\ge S_*$ implies $f^{i}(S)\ge S_*$ for all $0\le i\le m$.
 \end{theorem}
 
