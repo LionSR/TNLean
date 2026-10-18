@@ -37,29 +37,58 @@ namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
 
 open SpectralFilter ActualTerminals
 
+/-- The explicit threshold of the final-scale source information: the paper-rate selected
+energy threshold, the final source-error threshold at `C₀ = 512 e (2 / g)` and the status
+budget coefficient, and the final transport-smallness threshold (`08-scanner.tex`,
+lines 868--941). -/
+noncomputable def sourceFinalInformationThreshold (q R : ℕ) (g C_T C₁ : ℝ) (multiplicity : ℕ)
+    (P Ce Ctr ct Cent eent Cen een : ℝ) : ℕ :=
+  max (sourceSelectedSharpEnergyThreshold q R g C_T C₁ multiplicity P Ce Ctr Cent eent Cen een)
+    (max (finalSharpErrorThreshold (512 * Real.exp 1 * (2 / g))
+        (statusMarginalBudgetConstant q R Ctr))
+      (finalSharpTransportThreshold q Ctr ct))
+
+/-- The final-scale source information threshold is at least two. -/
+theorem two_le_sourceFinalInformationThreshold (q R : ℕ) (g C_T C₁ : ℝ) (multiplicity : ℕ)
+    (P Ce Ctr ct Cent eent Cen een : ℝ) :
+    2 ≤ sourceFinalInformationThreshold q R g C_T C₁ multiplicity P Ce Ctr ct Cent eent Cen een :=
+  (two_le_sourceSelectedSharpEnergyThreshold _ _ _ _ _ _ _ _ _ _ _ _ _).trans (le_max_left _ _)
+
+/-- The explicit coefficient of the final-scale source information: the final source-error
+coefficient `finalSharpErrorConstant Ce √(2 / g) ((C_T + 1) log q) (log q)`
+(`08-scanner.tex`, lines 839--941). -/
+noncomputable def sourceFinalInformationConstant (q : ℕ) (g C_T Ce : ℝ) : ℝ :=
+  finalSharpErrorConstant Ce (Real.sqrt (2 / g)) ((C_T + 1) * Real.log q) (Real.log q)
+
+/-- The final-scale source information coefficient is positive. -/
+theorem sourceFinalInformationConstant_pos {q : ℕ} (hq : 1 ≤ q) (g : ℝ) {C_T Ce : ℝ}
+    (hC_T : 0 ≤ C_T) (hCe : 0 ≤ Ce) : 0 < sourceFinalInformationConstant q g C_T Ce := by
+  have hlq : 0 ≤ Real.log (q : ℝ) := Real.log_nonneg (by exact_mod_cast hq)
+  exact finalSharpErrorConstant_pos hCe (mul_nonneg (by linarith) hlq) hlq
+
 open Classical in
-/-- At the literal final scales, the same physical source has conditional
-original-state collar information bounded by the exact maximal error power
-and the paper's weaker sublinear power. The radius constant precedes the
-source entropy coefficient; the information coefficient and size threshold
-precede every physical instance. All original source geometry and entropy
-hypotheses remain explicit. The fixed-instance replica limit is already
-proved by the same-source information theorem and is not interchanged with
-the size estimate. Source: `08-scanner.tex`, lines 868--941. -/
-theorem exists_sourceTarget_finalScale_mutualInformation
+/-- At the literal final scales, the same physical source has conditional original-state collar
+information bounded by the exact maximal error power and the paper's weaker sublinear power,
+with the explicit coefficient `sourceFinalInformationConstant` at every `S.n` from the explicit
+threshold `sourceFinalInformationThreshold` on. The truncation constant `Ctr` and the transport
+constants `ct, Cent, eent, Cen, een` remain existential. Source: `08-scanner.tex`,
+lines 868--941. -/
+theorem exists_sourceTarget_finalScale_mutualInformation_of_threshold_le
     {q : ℕ} [NeZero q] (hq : 1 ≤ q) (R : ℕ)
     {J Δ C_T C₁ : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < Δ)
     (hC_T : 0 ≤ C_T) (hC₁ : 0 < C₁) (multiplicity : ℕ)
     (hmultiplicity : 3 * (multiplicity : ℝ) ≤ C₁) (P : ℝ)
     (hP : (Exponents.scannerNu : ℝ) ≤ P) :
-    ∃ Ctr : ℝ, 0 < Ctr ∧
-      ∀ Ce : ℝ, 0 ≤ Ce → ∃ C : ℝ, 0 < C ∧ ∃ N : ℕ, 2 ≤ N ∧
+    ∃ Ctr ct Cent eent Cen een : ℝ, 0 < Ctr ∧ 0 < ct ∧
+      ∀ Ce : ℝ, 0 ≤ Ce →
         ∀ (Λ T : Finset (ℤ × ℤ)) [LinearOrder (AdmissibleSupport Λ R)]
           (hT : T.Nonempty) (h : LocalHamiltonian Λ q R J)
           (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (E₀ : ℝ)
           (Ω : StateSpace Λ q),
           IsGappedGroundState Λ q h.operator E₀ Ω Δ →
-          S.graph = domainGraph Λ → (∀ i, S.anchor i ∈ i.val) → N ≤ S.n →
+          S.graph = domainGraph Λ → (∀ i, S.anchor i ∈ i.val) →
+          sourceFinalInformationThreshold q R (Δ / positiveNormalization 1 (Δ / 2) J) C_T C₁
+            multiplicity P Ce Ctr ct Cent eent Cen een ≤ S.n →
           S.r₀ = ⌈Ctr * Real.log (S.n : ℝ) ^ 2⌉₊ →
           S.m = ⌊(S.n : ℝ) ^ (Exponents.scannerMu : ℝ)⌋₊ →
           S.D = ⌈(S.n : ℝ) ^ (Exponents.scannerKappa : ℝ)⌉₊ →
@@ -85,43 +114,40 @@ theorem exists_sourceTarget_finalScale_mutualInformation
           let X := S.A.filter fun x ↦ x.val ∈ T
           let β := fun _ : Site Λ ↦ Fin q
           2 * FiniteProduct.mutualInformation β Ω X (S.truncationSet L)ᶜ ≤
-              C * (S.n : ℝ) ^ (62497 / 62500 : ℝ) ∧
+              sourceFinalInformationConstant q (Δ / positiveNormalization 1 (Δ / 2) J) C_T Ce *
+                (S.n : ℝ) ^ (62497 / 62500 : ℝ) ∧
             2 * FiniteProduct.mutualInformation β Ω X (S.truncationSet L)ᶜ ≤
-              C * (S.n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ)) := by
+              sourceFinalInformationConstant q (Δ / positiveNormalization 1 (Δ / 2) J) C_T Ce *
+                (S.n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ)) := by
   classical
-  obtain ⟨Ctr, Ctarget, CB, ct, Cent, eent, Cen, een, Cenergy, Cl,
-      hCtr, hCtarget, hCB, hct, hCenergy, hCl, hsource⟩ :=
-    exists_sourceTarget_actual_mutualInformation_bound hq R hJ hΔ hC_T
+  obtain ⟨Ctr, ct, Cent, eent, Cen, een, hCtr, hct, hsource⟩ :=
+    exists_sourceTarget_actual_mutualInformation_bound_of_threshold_le hq R hJ hΔ hC_T
       hC₁ multiplicity hmultiplicity P hP
+  let CB := statusMarginalBudgetConstant q R Ctr
+  have hCB : 0 < CB := statusMarginalBudgetConstant_pos q R hCtr.le
   let g := Δ / positiveNormalization 1 (Δ / 2) J
   let C₀ := 512 * Real.exp 1 * (2 / g)
   have hg : 0 < g := div_pos hΔ (positiveNormalization_pos 1 (Δ / 2) J)
   have hC₀ : 0 ≤ C₀ := by dsimp only [C₀]; positivity
   have hCvol : 0 ≤ C_T + 1 := by linarith
-  let Nt := truncationEntropyThreshold q g (C_T + 1)
-  have htarget := fun n (hn : Nt ≤ n) =>
+  have htarget := fun n (hn : truncationEntropyThreshold q g (C_T + 1) ≤ n) =>
     abs_regionalEntropy_sub_le_of_truncationEntropyThreshold_le q hq g (C_T + 1) hg hn
-  let Nsml := finalSharpTransportThreshold q Ctr ct
-  have hsmall := fun n (hn : Nsml ≤ n) =>
+  have hsmall := fun n (hn : finalSharpTransportThreshold q Ctr ct ≤ n) =>
     finalSharp_transport_smallness_of_threshold_le hq hCtr.le hct hn
-  refine ⟨Ctr, hCtr, ?_⟩
+  refine ⟨Ctr, ct, Cent, eent, Cen, een, hCtr, hct, ?_⟩
   intro Ce hCe
-  obtain ⟨Ns, hNs, hsourceN⟩ := hsource Ce hCe
-  let Ne := finalSharpErrorThreshold C₀ CB
-  have herror := fun n (hn : Ne ≤ n) =>
+  have herror := fun n (hn : finalSharpErrorThreshold C₀ CB ≤ n) =>
     finalSharp_source_error_le_of_finalSharpErrorThreshold_le q hq Ce C₀ CB g (C_T + 1) hCe hC₀
       hCB.le hg hCvol hn
-  have hlq : 0 ≤ Real.log (q : ℝ) := Real.log_nonneg (by exact_mod_cast hq)
-  refine ⟨_, finalSharpErrorConstant_pos (Ctr := Real.sqrt (2 / g)) hCe
-    (mul_nonneg hCvol hlq) hlq,
-    max Ns (max Ne (max Nt Nsml)), hNs.trans (le_max_left _ _), ?_⟩
   intro Λ T _ hT h S E₀ Ω hgs hgraph hanchor hn hr hmScale hDScale hKScale
     hCeq hsize hdepth hrows hmult hclear htargetEntropy hprefix hrD hDpos hDm L X β
-  have hnS : Ns ≤ S.n := by omega
-  have hnE : Ne ≤ S.n := by omega
-  have hnT : Nt ≤ S.n := by omega
-  have hnSmall : Nsml ≤ S.n := by omega
-  have hn2 : 2 ≤ S.n := hNs.trans hnS
+  simp only [sourceFinalInformationThreshold, max_le_iff] at hn
+  obtain ⟨hnS, hnE, hnSmall⟩ := hn
+  have hnT := hnS
+  simp only [sourceSelectedSharpEnergyThreshold, max_le_iff] at hnT
+  replace hnT := hnT.2.2.2.1
+  have hn2 : 2 ≤ S.n :=
+    (two_le_sourceSelectedSharpEnergyThreshold _ _ _ _ _ _ _ _ _ _ _ _ _).trans hnS
   have hn1 : (1 : ℝ) ≤ S.n := by exact_mod_cast (show 1 ≤ S.n by omega)
   let W := (S.n : ℝ) ^ (Exponents.scannerOmega : ℝ)
   let a := W / (S.K : ℝ)
@@ -129,7 +155,7 @@ theorem exists_sourceTarget_finalScale_mutualInformation
   let B := CB * ((S.n : ℝ) * S.D * Real.log (S.n : ℝ) ^ 12)
   let Bsh := Ce * ((S.n : ℝ) * (L : ℝ) ^ (Exponents.boxError : ℝ) + S.n) +
     (S.n : ℝ) ^ (-247 : ℝ)
-  obtain ⟨hm, hM, hdata⟩ := hsourceN Λ T hT h S E₀ Ω hgs hgraph hanchor hnS
+  obtain ⟨hm, hM, hdata⟩ := hsource Ce hCe Λ T hT h S E₀ Ω hgs hgraph hanchor hnS
     hr hmScale hDScale hKScale hCeq hsize hdepth hrows hmult hclear
     htargetEntropy hprefix hrD hDpos hDm
   obtain ⟨hK, hKL, hB, hcard, hX, e, Ωt, htrgs, he0, he, htrace, hBX, htail, hwdata⟩ :=
@@ -186,5 +212,62 @@ theorem exists_sourceTarget_finalScale_mutualInformation
   have hscalar := hbound B St Bsh z t dlog hwindow.2.2.1 hwindow.2.2.2.1
     hwindow.2.1 hSt le_rfl hbudget htrace hdlog
   exact ⟨hMI.trans hscalar.1, hMI.trans hscalar.2⟩
+
+open Classical in
+/-- At the literal final scales, the same physical source has conditional
+original-state collar information bounded by the exact maximal error power
+and the paper's weaker sublinear power. The radius constant precedes the
+source entropy coefficient; the information coefficient and size threshold
+precede every physical instance. All original source geometry and entropy
+hypotheses remain explicit. The fixed-instance replica limit is already
+proved by the same-source information theorem and is not interchanged with
+the size estimate. Source: `08-scanner.tex`, lines 868--941. -/
+theorem exists_sourceTarget_finalScale_mutualInformation
+    {q : ℕ} [NeZero q] (hq : 1 ≤ q) (R : ℕ)
+    {J Δ C_T C₁ : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < Δ)
+    (hC_T : 0 ≤ C_T) (hC₁ : 0 < C₁) (multiplicity : ℕ)
+    (hmultiplicity : 3 * (multiplicity : ℝ) ≤ C₁) (P : ℝ)
+    (hP : (Exponents.scannerNu : ℝ) ≤ P) :
+    ∃ Ctr : ℝ, 0 < Ctr ∧
+      ∀ Ce : ℝ, 0 ≤ Ce → ∃ C : ℝ, 0 < C ∧ ∃ N : ℕ, 2 ≤ N ∧
+        ∀ (Λ T : Finset (ℤ × ℤ)) [LinearOrder (AdmissibleSupport Λ R)]
+          (hT : T.Nonempty) (h : LocalHamiltonian Λ q R J)
+          (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (E₀ : ℝ)
+          (Ω : StateSpace Λ q),
+          IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+          S.graph = domainGraph Λ → (∀ i, S.anchor i ∈ i.val) → N ≤ S.n →
+          S.r₀ = ⌈Ctr * Real.log (S.n : ℝ) ^ 2⌉₊ →
+          S.m = ⌊(S.n : ℝ) ^ (Exponents.scannerMu : ℝ)⌋₊ →
+          S.D = ⌈(S.n : ℝ) ^ (Exponents.scannerKappa : ℝ)⌉₊ →
+          S.K = ⌊(S.n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ / (8 * S.m) →
+          S.C₁ = C₁ → (T.card : ℝ) ≤ C_T * (S.n : ℝ) ^ 2 →
+          S.depth = (fun x ↦ ambientDepth T hT x.val) →
+          (∀ r : ℕ, 1 ≤ r →
+            r ≤ ⌊(S.n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ →
+            (ambientDilation T r \ ambientDilation T (r - 1)).card ≤ S.n) →
+          (∀ x, (Finset.univ.filter fun i ↦ S.anchor i = x).card ≤ multiplicity) →
+          (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+            ((2 * ⌊(S.n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ +
+              10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z) →
+          regionalEntropy Λ q Ω (S.A.filter fun x ↦ x.val ∈ T) ≤
+            Ce * (S.n : ℝ) ^ (1 + (Exponents.boxError : ℝ)) →
+          (∀ j : ℕ, j ≤ ⌊(S.n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ →
+            regionalEntropy Λ q Ω (positiveDepthPrefix S.A S.depth (j : ℤ)) ≤
+              Ce * ((S.n : ℝ) *
+                ((⌊(S.n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ : ℕ) : ℝ) ^
+                  (Exponents.boxError : ℝ) + S.n)) →
+          2 * S.r₀ ≤ S.D → ∀ (_hDpos : 1 ≤ S.D) (_hDm : 4 * S.D ≤ S.m),
+          let L := ⌊(S.n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊
+          let X := S.A.filter fun x ↦ x.val ∈ T
+          let β := fun _ : Site Λ ↦ Fin q
+          2 * FiniteProduct.mutualInformation β Ω X (S.truncationSet L)ᶜ ≤
+              C * (S.n : ℝ) ^ (62497 / 62500 : ℝ) ∧
+            2 * FiniteProduct.mutualInformation β Ω X (S.truncationSet L)ᶜ ≤
+              C * (S.n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ)) := by
+  obtain ⟨Ctr, ct, Cent, eent, Cen, een, hCtr, -, hall⟩ :=
+    exists_sourceTarget_finalScale_mutualInformation_of_threshold_le hq R hJ hΔ hC_T hC₁
+      multiplicity hmultiplicity P hP
+  exact ⟨Ctr, hCtr, fun Ce hCe => ⟨_, sourceFinalInformationConstant_pos hq _ hC_T hCe, _,
+    two_le_sourceFinalInformationThreshold _ _ _ _ _ _ _ _ _ _ _ _ _ _, hall Ce hCe⟩⟩
 
 end TNLean.PEPS.AreaLaw.Scan.CollarScan
