@@ -21,6 +21,8 @@ defined by the endpoint neighborhoods, including empty layers.
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
+open TNLean.Lattice
+
 namespace TNLean.PEPS.AreaLaw.Geometry
 
 /-- The coarse ancestor of a fine dyadic cell index after the given number

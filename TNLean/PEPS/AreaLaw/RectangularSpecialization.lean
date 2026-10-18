@@ -32,6 +32,8 @@ Independently formalized from the manuscripts; no upstream Lean proof text is re
 
 noncomputable section
 
+open TNLean.Lattice
+
 namespace TNLean.PEPS.AreaLaw
 
 /-- Native rectangular entropy, with one constant for the edge and both

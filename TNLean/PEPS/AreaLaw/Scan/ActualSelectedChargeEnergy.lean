@@ -31,6 +31,7 @@ noncomputable section
 open Matrix Set Filter Topology MeasureTheory PermutationRepresentation
 open TensorPower TensorPower.ReplicaTransport
 open scoped BigOperators Matrix ComplexOrder MatrixOrder Matrix.Norms.L2Operator
+open TNLean.Lattice
 
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
 

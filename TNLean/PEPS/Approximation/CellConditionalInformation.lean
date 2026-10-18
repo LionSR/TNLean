@@ -31,6 +31,8 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 
 noncomputable section
 
+open TNLean.Lattice
+
 namespace TNLean.PEPS.Approximation
 
 open TNLean.PEPS.AreaLaw
@@ -52,9 +54,9 @@ theorem exists_cell_conditionalMutualInformation_le_of_sublinearCollarBound
     ∃ C₁ K : ℝ, 0 < C₁ ∧ 0 ≤ K ∧
       ∀ s : ℝ, 1 ≤ s → ∀ (o : ℝ × ℝ) (m₀ : ℤ × ℤ) (A : Set (ℤ × ℤ)),
         m₀ ∉ A →
-        ∀ (Λ : Finset (ℤ × ℤ)) (h : AreaLaw.LocalHamiltonian Λ q 1 J)
-          (E₀ : ℝ) (Ω : AreaLaw.StateSpace Λ q),
-          AreaLaw.IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+        ∀ (Λ : Finset (ℤ × ℤ)) (h : Lattice.LocalHamiltonian Λ q 1 J)
+          (E₀ : ℝ) (Ω : Lattice.StateSpace Λ q),
+          Lattice.IsGappedGroundState Λ q h.operator E₀ Ω Δ →
           let G : Finset (Site Λ) :=
             Finset.univ.filter (fun x ↦ x.val ∈ CellPartition.cellSample o s m₀)
           let B : Finset (Site Λ) := Finset.univ.filter

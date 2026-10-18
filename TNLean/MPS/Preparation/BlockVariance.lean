@@ -138,7 +138,7 @@ theorem exists_norm_sub_inner_smul_sq_le_mpv [NeZero D] {A : MPSTensor d D} {L�
           mpvExpectation A N (chainWindowOperator N p X * chainWindowOperator N q X) -
             mpvExpectation A N (chainWindowOperator N p X) *
               mpvExpectation A N (chainWindowOperator N q X) := by
-        rw [← MPSPreparation.toEuclideanLin_mul_apply]
+        rw [← Matrix.toEuclideanLin_mul_apply]
         rfl
       rw [hcov]
       refine hcl.trans ?_
