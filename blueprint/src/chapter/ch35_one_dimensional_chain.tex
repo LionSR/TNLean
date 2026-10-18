@@ -87,16 +87,23 @@ for an arbitrary finite set of sites and are instantiated here directly.
     $L=0$ there are no vertices, so the assertions are vacuous.
 \end{proof}
 
-\begin{lemma}[Marginal tail bound at a cut]
+\begin{lemma}[Marginal moment and tail bounds at a cut]
     \label{lem:chain_marginal_tail}
-    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.surprisalTail_regionState_le}
+    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.surprisalTail_regionState_le,
+        Entropy.log_surprisalMoment_cut_le}
     \leanok
     \uses{def:chain_model}
     Let $\Omega$ be a gapped ground vector, with gap $\Delta>0$, of a
     finite-range Hamiltonian with term norms at most $J\ge0$ on the chain, and
     let $A$ be any set of sites. Let $K$ be the surprisal $-\log p$ of the
     eigenvalue $p$ of the reduced state on $A$ drawn with probability $p$, so
-    that $\mathbb E K=S(A)$. For every real $w$,
+    that $\mathbb E K=S(A)$. For every real $u$ with
+    $|u|\le1/(32\sqrt{(1+J/\Delta)\,\mathcal B_A})$,
+    \begin{align}
+        \log\mathbb E e^{uK}
+        \le uS(A)+512e\frac J\Delta\mathcal B_Au^2.\notag
+    \end{align}
+    For every real $w$,
     \begin{align}
         \Pr\{|K-S(A)|>w\}\le
         \min\Bigl\{1,\ 2e^{e/2}\exp\Bigl(-\frac{w}{32\sqrt{(1+J/\Delta)\,
@@ -106,8 +113,9 @@ for an arbitrary finite set of sites and are instantiated here directly.
 \begin{proof}
     \leanok
     \uses{def:chain_model}
-    This is Lemma~3.1 of \cite{OpenAI2026AreaLaw}, which holds on any finite
-    tensor product: each term acts as the identity off its support, is
+    These are the log-moment and tail bounds of Lemma~3.1 of
+    \cite{OpenAI2026AreaLaw}, valid on any finite tensor product: each term
+    acts as the identity off its support, is
     Hermitian and has norm at most $J$, and the ground vector is a unit
     eigenvector with the projector gap. The chain model supplies exactly these
     hypotheses.
@@ -385,6 +393,65 @@ for an arbitrary finite set of sites and are instantiated here directly.
     Divide by $c^2>0$.
 \end{proof}
 
+
+% Source: part1_arealaw.tex:280--287, rem:renyi.
+\begin{theorem}[Rényi entropies near order one]
+    \label{thm:chain_renyi_near_one}
+    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.near_one_renyi_entropy_interval_bounds}
+    \leanok
+    \uses{def:chain_model,lem:chain_crossing_count,lem:chain_marginal_tail}
+    Let $\Omega$ be a gapped ground vector, with gap $\Delta>0$, of a
+    finite-range chain Hamiltonian with local dimension $q\ge1$ and term
+    norms at most $J\ge0$. For an interval $X$, let $\rho_X$ be its reduced
+    density matrix and put
+    \begin{align}
+        \vartheta=J/\Delta,\qquad
+        B_R=1+N_R\log^2(e q^{R+1}),\qquad
+        u_0=\frac1{32\sqrt{(1+\vartheta)B_R}}.\notag
+    \end{align}
+    For $0<\alpha<1$, define
+    \begin{align}
+        S_\alpha(X)=\frac{\log\operatorname{Tr}(\rho_X^\alpha)}{1-\alpha},
+        \qquad S_1(X)=S(X).\notag
+    \end{align}
+    Zero eigenvalues contribute zero to the trace. For every
+    $\alpha\in[1-u_0,1]$,
+    \begin{align}
+        S(X)               & \le S_\alpha(X)
+        \le S(X)+512e\vartheta B_R(1-\alpha),\notag               \\
+        |S_\alpha(X)-S(X)| & \le16e\sqrt{(1+\vartheta)B_R}.\notag
+    \end{align}
+    This is the near-one Rényi bound in Part~I of
+    \cite{TNLean2026OneDimensional}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Write $p_i$ for the eigenvalues of $\rho_X$ and set
+    $M(u)=\sum_i p_i\exp(-u\log p_i)$, with zero terms interpreted as zero.
+    Since $p_i\ge0$ and $\sum_i p_i=1$, Jensen's inequality gives
+    \begin{align}
+        \exp(uS(X))\le M(u).\notag
+    \end{align}
+    The physical log-moment estimate, with the interval cut budget bounded
+    by $B_R$, gives
+    \begin{align}
+        uS(X)\le\log M(u)
+        \le uS(X)+512e\vartheta B_Ru^2
+        \qquad(0\le u\le u_0).\notag
+    \end{align}
+    Put $s=\sqrt{(1+\vartheta)B_R}\ge1$. Then $u_0\le1/32$, so the
+    orders in the statement are positive. For $u=1-\alpha>0$,
+    $M(u)=\operatorname{Tr}(\rho_X^\alpha)$, including when $\rho_X$
+    has a kernel. Dividing by $u$ proves the first pair of inequalities.
+    Moreover,
+    \begin{align}
+        512e\vartheta B_Ru
+        \le16e\frac{\vartheta B_R}{s}
+        \le16es,\notag
+    \end{align}
+    which proves the absolute bound. At $u=0$, all conclusions follow
+    from $S_1(X)=S(X)$.
+\end{proof}
 
 \begin{lemma}[Supports split by an arbitrary region of a chain]
     \label{lem:chain_boundary_crossing_count}
