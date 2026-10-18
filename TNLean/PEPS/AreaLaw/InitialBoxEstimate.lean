@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.InitialBuffer
+import TNLean.PEPS.AreaLaw.InitialScaleCoefficient
 import TNLean.PEPS.AreaLaw.RotatedChainRule
 import TNLean.PEPS.AreaLaw.SafeBoxChildren
 import TNLean.PEPS.AreaLaw.EntropyDimension
@@ -376,6 +377,26 @@ theorem boxEntropy_le_of_scale (hq : 1 ≤ q) {Cpad : ℕ} {Cbuf : ℝ} (hCbuf :
       positivity
     positivity
 
+/-- An explicit coefficient for the safe-box power estimate from a supplied scale
+recurrence. Proposition 3.3, `02-initial.tex`, lines 648–669, bounds the initial
+value by `log q`; the recurrence parameters retain the dependence on `J` and `Δ`. -/
+theorem boxEntropy_le_initialScaleCoefficient (hq : 1 ≤ q) {M : ℕ} {lam K : ℝ}
+    (hM : 2 ≤ M) (hlam : (M : ℝ) < lam) (hK : 0 ≤ K)
+    (hrec : ∀ r, 1 ≤ r → boxEntropy q R J Δ D₀ (M * r) ≤
+      lam * boxEntropy q R J Δ D₀ r + K * r)
+    {r : ℕ} (hr : 1 ≤ r) :
+    boxEntropy q R J Δ D₀ r ≤ initialScaleCoefficient M lam K (Real.log q) *
+      (r : ℝ) ^ (Real.log lam / Real.log M) := by
+  have hlog : 0 ≤ Real.log q := Real.log_nonneg (by exact_mod_cast hq)
+  have hinitial : boxEntropy q R J Δ D₀ 1 ≤ Real.log q := by
+    simpa using boxEntropy_le_sq_mul_log (R := R) (J := J) (Δ := Δ) (D₀ := D₀) hq 1
+  refine (le_initialScaleCoefficient_mul_rpow (boxEntropy_mono hq) hM hlam hK hrec hr).trans ?_
+  apply mul_le_mul_of_nonneg_right _ (Real.rpow_nonneg (Nat.cast_nonneg _) _)
+  unfold initialScaleCoefficient
+  apply mul_le_mul_of_nonneg_left _ (le_trans (Nat.cast_nonneg M) hlam.le)
+  exact add_le_add_right (max_le (hinitial.trans (le_max_left _ _))
+    (hlog.trans (le_max_left _ _))) _
+
 /-- The safe-box estimate at a fixed safety parameter. This auxiliary form follows the
 scale-recurrence argument of Proposition 3.3 (`prop:initial-box`, `02-initial.tex`,
 lines 606–669). The estimate uniform in the safety parameter is stated separately below. -/
@@ -405,7 +426,6 @@ private theorem exists_boxEntropy_le_rpow_fixed (q R : ℕ) (hq : 1 ≤ q) {J Δ
   have hlamM2 : lam < (M : ℝ) ^ 2 := by
     have : 0 < (M : ℝ) ^ 2 := by positivity
     simp only [lam]; nlinarith
-  have hF := boxEntropy_mono (q := q) (R := R) (J := J) (Δ := Δ) (D₀ := D₀) hq
   have hrec : ∀ r, 1 ≤ r → boxEntropy q R J Δ D₀ (M * r) ≤
       lam * boxEntropy q R J Δ D₀ r + Cbuf * M ^ 2 * r := by
     intro r hr
@@ -420,13 +440,12 @@ private theorem exists_boxEntropy_le_rpow_fixed (q R : ℕ) (hq : 1 ≤ q) {J Δ
     change (1 - p) * M ^ 2 + p * (2 * (2 * Cpad + 1) * M) ≤ lam
     simp only [lam]
     nlinarith
-  obtain ⟨C, hC⟩ := Entropy.exists_le_mul_rpow_of_scale_recurrence hF hM hMlam
-    (by positivity) hrec
   have hexp := Entropy.one_lt_log_div_log_lt_two (by exact_mod_cast hM) hMlam hlamM2
-  refine ⟨C, Real.log lam / Real.log M - 1, by linarith [hexp.1], by linarith [hexp.2],
+  refine ⟨initialScaleCoefficient M lam (Cbuf * M ^ 2) (Real.log q),
+    Real.log lam / Real.log M - 1, by linarith [hexp.1], by linarith [hexp.2],
     fun r hr ↦ ?_⟩
   rw [add_sub_cancel]
-  exact hC r hr
+  exact boxEntropy_le_initialScaleCoefficient hq hM hMlam (by positivity) hrec hr
 
 
 /-- **Proposition 3.3: the initial safe-box estimate** (area-law manuscript,

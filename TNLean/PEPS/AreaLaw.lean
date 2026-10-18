@@ -51,6 +51,7 @@ import TNLean.PEPS.AreaLaw.InitialBuffer
 import TNLean.PEPS.AreaLaw.InitialBufferReal
 import TNLean.PEPS.AreaLaw.InitialRoundedCollarEntropy
 import TNLean.PEPS.AreaLaw.InitialSafeRectangleEntropy
+import TNLean.PEPS.AreaLaw.InitialScaleCoefficient
 import TNLean.PEPS.AreaLaw.InitialWeakRectangleShellEntropy
 import TNLean.PEPS.AreaLaw.LatticeConstraints
 import TNLean.PEPS.AreaLaw.LatticeCounts
