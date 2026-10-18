@@ -334,13 +334,15 @@ for an arbitrary finite set of sites and are instantiated here directly.
 \end{lemma}
 \begin{proof}
     \leanok
+    \uses{thm:area_law_product_ground_state}
     In the coordinates of the cut $B\,|\,B^c$ the sum is
     $H_1\otimes1+1\otimes H_2$ with Hermitian $H_1$ and $H_2$. With least
     eigenvalues $a$, $b$ and unit eigenvectors $u$, $v$, the inequality
     $H\ge a+b$ gives $E_0\ge a+b$, and the gap inequality evaluated on
     $u\otimes v$ gives $\Delta(1-|\langle\Omega,u\otimes v\rangle|^2)\le
         a+b-E_0\le0$. Hence $\Omega$ is a multiple of $u\otimes v$, and its
-    reduced state on $B$ is pure.
+    reduced state on $B$ is pure; this is
+    Theorem~\ref{thm:area_law_product_ground_state}.
 \end{proof}
 
 \begin{lemma}[Flipping a region of zero entropy]
