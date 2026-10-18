@@ -142,9 +142,12 @@ C = 2 + 4|b₀| exp(2R); the localization coefficient is
 C′ = 2C exp(1)/(1 − exp(−1/2)). Localization uses the exact closed neighborhood
 at every real radius ℓ ≥ 0. Empty supports are allowed; their distance to a
 site is infinity, with decay factor zero. Only localization requires q ≥ 1.
-These are the contiguous-chain estimates needed in the matrix product state
-argument. The broader finite-domain reading of the source lemma remains
-separate, as recorded in the connected-domain scope note. These contiguous-chain estimates supply the physical protocol above.
+These are the chain estimates used in Part II. After the reduction to
+connected domains, the note explicitly sets `Λ = {1, …, N}`
+(`part1_arealaw.tex`, lines 91–93); Theorem B itself is stated on a chain.
+Additional versions on arbitrary finite induced-path domains are not asserted;
+see the connected-domain scope note. These chain estimates supply the physical
+protocol above.
 
 For an arbitrary region D of the contiguous chain,
 `MPS.AreaLaw.IsChainSupport.exists_boundary_window_of_split` places every
@@ -212,8 +215,9 @@ I(R₀:C₀) ≤ L^(−p) for L ≥ L₀. The proof derives b ≥ 0 and construc
 Gaussian filter, its supported approximation, a unitary on the same support
 and the product marginal after the actual regional replica swap. Only the
 original full-system ground-state gap is assumed. The additive constant in
-log(e q^|R₀|) is retained, including q = 1. The broader finite-domain reading
-of the source remains open, as recorded in the connected-domain scope note.
+log(e q^|R₀|) is retained, including q = 1. This is the chain setting of
+Part II. An additional version on an arbitrary finite induced-path domain is
+not asserted; see the connected-domain scope note.
 
 The theorem
 `MPS.AreaLaw.ChainHamiltonian.mutualInformation_le_of_logarithmic_separation`
@@ -232,8 +236,9 @@ D = N_(w+1)(T) and C = complement N_(2w+2)(T). Their mutual information
 is at most 2S(D) ≤ b, and Dₚ = 3Cₚ(2+b)+3 gives both strict reset
 margins once log L ≥ 1. `MPS.AreaLaw.ChainHamiltonian.norm_bound_nonneg`
 supplies the sign of J from an actual singleton interaction.
-The extension of these Part II estimates to disconnected domains remains
-separate; the arbitrary-domain entropy theorem above is already proved.
+These Part II estimates concern the chain used in Theorem B. Versions on
+disconnected induced-path domains would be additional results and are not
+claimed. The arbitrary-domain entropy theorem above is already proved.
 
 ## Constants
 
