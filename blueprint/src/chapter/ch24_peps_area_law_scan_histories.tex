@@ -2944,8 +2944,7 @@ The finite-leaf estimates below follow the charge-energy argument in
         TNLean.PEPS.AreaLaw.Scan.CollarScan.actualRoundHistory_length_add_one_le,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.actualRoundData_isAdmissible,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.FiniteFamilyTransportBound,
-        TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_finiteFamilyTransportBound,
-        TNLean.PEPS.AreaLaw.Scan.CollarScan.actualRounds_transport_domainGraph_of_finiteFamilyTransportBound}
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_finiteFamilyTransportBound}
     \leanok
     \uses{def:al_scan_actual_round_family,def:al_scan_actual_energy_terms,
         def:al_scan_physical_dimension_cap}
@@ -3112,8 +3111,7 @@ The finite-leaf estimates below follow the charge-energy argument in
 \begin{theorem}[Integrated entropy over all scan rounds]
     \label{thm:al_scan_actual_round_entropy}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualRounds_entropy_integral_le_domainGraph,
-        TNLean.PEPS.AreaLaw.Scan.CollarScan.actualRoundData_crossBandCommute,
-        TNLean.PEPS.AreaLaw.Scan.CollarScan.actualRounds_entropy_integral_le_domainGraph_of_finiteFamilyTransportBound}
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.actualRoundData_crossBandCommute}
     \leanok
     \uses{def:al_scan_actual_round_family,def:al_scan_physical_dimension_cap}
     There exist universal real constants
@@ -3566,8 +3564,7 @@ The finite-leaf estimates below follow the charge-energy argument in
 
 \begin{theorem}[Integrated charge defect over the scan]
     \label{thm:al_scan_actual_charge_sum_bound}
-    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualCharges_integral_bound_domainGraph,
-        TNLean.PEPS.AreaLaw.Scan.CollarScan.actualCharges_integral_bound_domainGraph_of_finiteFamilyTransportBound}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualCharges_integral_bound_domainGraph}
     \leanok
     \uses{thm:al_scan_actual_charge_sum_sampling,thm:al_scan_actual_round_transport}
     There exist universal real constants $c_0,C_{\mathrm{ent}},e_{\mathrm{ent}}$,
@@ -3669,8 +3666,7 @@ The finite-leaf estimates below follow the charge-energy argument in
 
 \begin{theorem}[Selection from the integrated charge bound]
     \label{thm:al_scan_actual_charge_sum_selection}
-    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualCharges_selection_domainGraph,
-        TNLean.PEPS.AreaLaw.Scan.CollarScan.actualCharges_selection_domainGraph_of_finiteFamilyTransportBound}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualCharges_selection_domainGraph}
     \leanok
     \uses{thm:al_scan_actual_charge_sum_bound}
     Under the geometric, Hamiltonian, dimension, and smallness hypotheses of
