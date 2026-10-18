@@ -189,11 +189,11 @@ for an arbitrary finite set of sites and are instantiated here directly.
 \begin{lemma}[Araki--Lieb and the area law from interval bounds]
     \label{lem:chain_entropy_inequalities}
     \lean{
-        TNLean.MPS.AreaLaw.regionEntropy_union_le,
-        TNLean.MPS.AreaLaw.regionEntropy_le_union_add,
-        TNLean.MPS.AreaLaw.regionEntropy_empty,
-        TNLean.MPS.AreaLaw.regionEntropy_univ,
-        TNLean.MPS.AreaLaw.regionEntropy_le_card_mul_log,
+        TNLean.Lattice.regionEntropy_union_le,
+        TNLean.Lattice.regionEntropy_le_union_add,
+        TNLean.Lattice.regionEntropy_empty,
+        TNLean.Lattice.regionEntropy_univ,
+        TNLean.Lattice.regionEntropy_le_card_mul_log,
         TNLean.MPS.AreaLaw.boundaryEdges,
         TNLean.MPS.AreaLaw.mem_boundaryEdges,
         TNLean.MPS.AreaLaw.boundaryEdges_empty,
@@ -324,8 +324,8 @@ for an arbitrary finite set of sites and are instantiated here directly.
 \begin{lemma}[A cut that splits no term]
     \label{lem:zero_entropy_cut}
     \lean{
-        TNLean.MPS.AreaLaw.isSupportedOn_sum,
-        TNLean.MPS.AreaLaw.regionEntropy_eq_zero_of_forall_subset_or_disjoint
+        TNLean.Lattice.isSupportedOn_sum,
+        TNLean.Lattice.regionEntropy_eq_zero_of_forall_subset_or_disjoint
     }
     \leanok
     Let $\Omega$ be a gapped ground vector, with gap $\Delta>0$, of a sum of
@@ -348,10 +348,10 @@ for an arbitrary finite set of sites and are instantiated here directly.
 \begin{lemma}[Flipping a region of zero entropy]
     \label{lem:zero_entropy_flip}
     \lean{
-        TNLean.MPS.AreaLaw.regionEntropy_union_add_inter_le,
-        TNLean.MPS.AreaLaw.regionEntropy_sdiff_eq_of_eq_zero,
-        TNLean.MPS.AreaLaw.regionEntropy_union_eq_of_eq_zero,
-        TNLean.MPS.AreaLaw.regionEntropy_symmDiff_eq_of_eq_zero,
+        TNLean.Lattice.regionEntropy_union_add_inter_le,
+        TNLean.Lattice.regionEntropy_sdiff_eq_of_eq_zero,
+        TNLean.Lattice.regionEntropy_union_eq_of_eq_zero,
+        TNLean.Lattice.regionEntropy_symmDiff_eq_of_eq_zero,
         TNLean.MPS.AreaLaw.exists_mem_val_eq_iff,
         TNLean.MPS.AreaLaw.boundaryEdges_symmDiff_interval,
         TNLean.MPS.AreaLaw.exists_regionEntropy_eq_boundaryEdges_eq_symmDiff
