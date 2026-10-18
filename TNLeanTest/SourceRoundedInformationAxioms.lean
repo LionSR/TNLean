@@ -30,7 +30,7 @@ run_cmd do
 run_cmd do
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
   let declarations := #[
-    ``TNLean.PEPS.AreaLaw.Scan.CollarScan.sourceTarget_finalScale_mutualInformation_of_rounded_scales_explicit]
+    ``sourceTarget_finalScale_mutualInformation_of_rounded_scales_explicit]
   for decl in declarations do
     unless (← Lean.getEnv).contains decl do
       throwError "Missing declaration {decl}"
