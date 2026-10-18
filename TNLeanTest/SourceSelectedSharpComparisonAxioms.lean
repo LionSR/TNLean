@@ -29,10 +29,10 @@ depends on axioms: [propext, Classical.choice, Quot.sound] -/
 
 /-! The selected sharp comparison at the named truncation constant -/
 
+open TNLean.PEPS.AreaLaw.Scan.CollarScan in
 run_cmd do
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
-  let declarations := #[
-    ``TNLean.PEPS.AreaLaw.Scan.CollarScan.sourceTarget_selected_actualCharge_sharp_comparison_explicit]
+  let declarations := #[``sourceTarget_selected_actualCharge_sharp_comparison_explicit]
   for decl in declarations do
     unless (← Lean.getEnv).contains decl do
       throwError "Missing declaration {decl}"
