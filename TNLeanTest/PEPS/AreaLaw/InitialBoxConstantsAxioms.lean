@@ -15,6 +15,7 @@ run_cmd do
       ``TNLean.PEPS.AreaLaw.boxEntropy_le_initialBoxRatio_mul,
       ``TNLean.PEPS.AreaLaw.initialBoxExponent_pos_and_lt_one,
       ``TNLean.PEPS.AreaLaw.boxEntropy_le_initialBoxConstant_mul_rpow_of_scaleRecurrence,
+      ``TNLean.PEPS.AreaLaw.boxEntropy_le_initialBoxConstant_mul_rpow,
       ``TNLean.PEPS.AreaLaw.exists_boxEntropy_le_rpow] do
     unless (← Lean.getEnv).contains decl do
       throwError "Missing declaration {decl}"
