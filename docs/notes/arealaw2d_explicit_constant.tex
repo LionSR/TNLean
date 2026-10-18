@@ -139,10 +139,9 @@ thresholds that grow logarithmically in $D_0$. The collar estimate itself uses
 the integer clearance $2R+10$ and does not depend on $D_0$ beyond $D_0>2R+10$.
 The template constant $\Ctpl=24$ enters only through the template coefficients
 $C_P=\max(18\Ctpl,1)=432$ and $C_B=32\Ctpl=768$ of Proposition~11.2. These
-values are computed in the proofs, but the statements
-\leanid{TNLean.PEPS.AreaLaw.Geometry.exists_primaryScannerConstant} and
-\leanid{TNLean.PEPS.AreaLaw.Geometry.exists_belt_replacement_templates} still
-quantify over them existentially.
+are the named definitions
+\leanid{TNLean.PEPS.AreaLaw.Geometry.primaryScannerConstant} and
+\leanid{TNLean.PEPS.AreaLaw.Geometry.beltScannerConstant}.
 
 The exponents are fixed rationals:
 \[
@@ -339,36 +338,76 @@ above. This is an explicit power bound, $N_3\approx(8C_2)^{1.43\cdot10^5}$.
 
 Proposition~11.2 (\src{10-geometry.tex}, lines~98--140, with the constants
 fixed in lines~756--774) is assembled in the Lean proof
-\leanid{TNLean.PEPS.AreaLaw.Geometry.twoFamilyDecomposition_of_one_le}. The
-constants are fixed in the following order.
+\leanid{TNLean.PEPS.AreaLaw.isTwoFamilyDecompositionConstant_of_one_le}, and
+every constant except the birth-separation constant $c_1$ is a named
+definition. The function
+\leanid{TNLean.PEPS.AreaLaw.twoFamilyDecompositionConstant}$(D_0,\Ctpl,n_*,c_1)$
+is a constant of the decomposition at $n_*$ for every $c_1$ satisfying
+\leanid{TNLean.PEPS.AreaLaw.Geometry.IsBirthSeparationConstant}
+(\leanid{TNLean.PEPS.AreaLaw.isTwoFamilyDecompositionConstant_twoFamilyDecompositionConstant});
+for $\Ctpl<1$ it uses $\max(\Ctpl,1)$. The constants are fixed in the
+following order.
 \begin{enumerate}
-    \item The template coefficients $C_P=432$ and $C_B=768$, computed in the
-          proofs but existential in the statements.
+    \item The template coefficients $C_P=\max(18\Ctpl,1)=432$ and
+          $C_B=32\Ctpl=768$
+          (\leanid{TNLean.PEPS.AreaLaw.Geometry.primaryScannerConstant},
+          \leanid{TNLean.PEPS.AreaLaw.Geometry.beltScannerConstant}).
     \item The birth-separation constant $c_1$
           (\leanid{TNLean.PEPS.AreaLaw.Geometry.exists_birthSeparation};
           Lemma~11.5, lines~573--659). It is an absolute constant: it depends on
           none of $q,R,J,\Delta,D_0,\Ctpl$. It is $\min(c_2,c_3)$, where $c_2$
           is a compactness minimum, kind (b) (rows~57--58), mirroring the
           source's ``has a positive minimum \dots\ the list of rescaled patterns
-          is finite'' (\src{10-geometry.tex}, lines~596--631).
-    \item The stopping scale
-          $S_*=\max\{T_0,2,T_1,T_2,U\}$ with
-          $U=\max\{U_1,U_2,n_*/C_B,1\}$. Here $U_1$ is the fine-clearance
-          threshold $2\lceil C_Bu\rceil^\beta<c_1u^{\rho_0}$, which needs
+          is finite'' (\src{10-geometry.tex}, lines~596--631). It is the one
+          remaining input of the explicit constant: a positive number for which
+          the initial belt tiles are separated at all data and the local
+          replacement separation holds. On \texttt{main} such a number exists by
+          \leanid{TNLean.PEPS.AreaLaw.Geometry.exists_isBirthSeparationConstant},
+          still through the two compactness minima. The explicit separation
+          constant of the belt facets, $1/28$ for the replacements and
+          $1/112$ for the initial belt tiles, supplies it once the explicit
+          birth-separation statements are on \texttt{main}.
+    \item The stopping scale $S_*=\max\{T(1/128),T(1/4),2,U\}$
+          (\leanid{TNLean.PEPS.AreaLaw.twoFamilyStoppingScale}), with
+          $U=\max\{U_1,U_2,n_*/C_B,1\}$. Here
+          $T(a_0)=\max\{1,(1000/a_0)^{1/(1-\rho_0)}\}$
+          (\leanid{TNLean.PEPS.AreaLaw.Geometry.repairMarginThreshold}) is the
+          removal-margin threshold $d(S)\le(a_0/1000)S$ (row~39). The isolation
+          constant $1/128$ of the initial stars enters the templates and the
+          separation through the repair induction, and $1/4$ enters the metric
+          hypotheses of the counting estimates; $T(1/128)$ is of order
+          $128000^{10^6}$. $U_1$ is the fine-clearance threshold
+          $2\lceil C_Bu\rceil^\beta<c_1u^{\rho_0}$, which needs
           $u>(2(C_B+1)^\beta/c_1)^{1/(\rho_0-\beta)}$ with
           $\rho_0-\beta=10^{-6}$, so $U_1$ is of order
           $(C_B^\beta/c_1)^{10^6}$; $U_2$ is the belt-replacement threshold
-          $\lfloor\lceil C_Bu\rceil^{1-\ell_{\rm geo}}\rfloor\le u$; and $T_1$
-          is the removal-margin threshold, of order $4000^{10^6}$ (row~39).
+          $\lfloor\lceil C_Bu\rceil^{1-\ell_{\rm geo}}\rfloor\le u$.
     \item The layer width $C=\lceil4D_0\rceil+2$.
     \item The lower layer index
-          $k_0=\max\{5\cdot10^7,K_T,K_M,K_B,K_U,K_P,K_n\}$. Each $K_\bullet$ is
-          a dyadic threshold of the form ``$M(2^k)^a<2^k$'' or
-          ``$C_P2^k\ge n_*$'' (rows~37--40 and~74--79), hence logarithmic in
-          its data.
-    \item The counting constants $M_t$, $M_p$ and $L_q$, which are explicit
-          multiples of the series value
-          $1+\sum_k(k+1)^P2^{-\delta_0k/2}$ (row~41).
+          \leanid{TNLean.PEPS.AreaLaw.twoFamilyLowerLayerIndex}
+          $k_0=\max\{5\cdot10^7,K_T,K_U,K_P,K_n\}$, where
+          $K_T=\max\{K_\zeta(S_*),K_c,K_P(C_P,1/4)\}$
+          (\leanid{TNLean.PEPS.AreaLaw.Geometry.birthTemplateLayerThreshold})
+          collects the template, metric and separation thresholds. The metric
+          and separation thresholds are both $K_\zeta(S_*)$, the least layer
+          whose fine side reaches $S_*$ (row~40), and $K_c$
+          (\leanid{TNLean.PEPS.AreaLaw.Geometry.descendantCutClearanceThreshold})
+          is the cut-clearance layer of rows~37--38: the dyadic index of the
+          power-ratio thresholds for $2R^{\zeta\rho_0}$,
+          $8\max(D_0,0)R^\zeta$ and $2(\max(C_B,0)+1)^\beta R^{\zeta\beta}$
+          against $R/2$. Each is logarithmic in its data.
+    \item The counting constants, named definitions in terms of the series
+          value $B(p)=1+\sum_k(k+1)^p2^{-\delta_0k/2}$
+          (\leanid{TNLean.PEPS.AreaLaw.Geometry.polynomialDyadicBudget},
+          row~41): $M_t=576\,L\,B(L)$
+          (\leanid{TNLean.PEPS.AreaLaw.Geometry.repairMarkCountConstant}),
+          where $L$ is the descendant-count exponent built from the depth
+          constant $D=(|\log\log S_*|+1)/(-\log\rho_0)+1$ through
+          $G=\max\{11^{D+1},D\log11\}$, $E=\max\{G2^G,G\}$ and
+          $L=\max\{E(\log3+1)^E,E\}$; $M_p=32\,C_P^{-100}B(0)$
+          (\leanid{TNLean.PEPS.AreaLaw.Geometry.primaryErrorSumConstant}); and
+          $L_q=512\,B(0)+8M_t$
+          (\leanid{TNLean.PEPS.AreaLaw.Geometry.repairRetainedCountConstant}).
 \end{enumerate}
 The constant is then
 \begin{align*}
@@ -376,7 +415,11 @@ The constant is then
     \Cres & =2\bigl(2(C+1)2^{k_0}+1\bigr)^2+(2S_*+1)^2M_t(2C+1)^2,\qquad
     \Csum=(M_p+L_q)(2C+1)^2.
 \end{align*}
-It is explicit in $C$, $S_*$ and $k_0$, and $\cD\gtrsim4^{k_0}$.
+It is explicit in $C$, $S_*$ and $k_0$, and $\cD\gtrsim4^{k_0}$. The
+descendant-count exponent is very large, roughly $L\approx2^{G2^G}$ with
+$G\approx(\log S_*)^{2.4\cdot10^6}$, and $B(L)$ grows like
+$L!\,(2/(\delta_0\log2))^{L}$, so $M_t$ is by far the largest factor of
+$C_3$. This affects the size of the constant, not its explicitness.
 
 \section{Inventory of extraction sites}
 \label{sec:inventory}
@@ -536,7 +579,10 @@ the primary scanner scale, in \src{Geometry/PrimaryBirthTemplates.lean}, and
 named in its row; \leanid{isTwoFamilyDecompositionConstant_twoFamilyConstant} states
 the constant of Proposition~11.2 as \leanid{twoFamilyConstant} of these
 thresholds and of the constants of the template, isolation, separation and
-counting estimates.
+counting estimates. Those constants are now named as well (Section~\ref{sec:geometry}),
+and rows~37--41 of the geometry block have closed forms; the only remaining
+input of \leanid{twoFamilyDecompositionConstant} is the birth-separation
+constant of rows~57--58.
 
 Sites that merely read a property of an existing witness (for example the inequality $C_1=32\ge1$ read off from the witness
 of an eventual statement) are listed
@@ -631,15 +677,15 @@ line~59, which extracts nothing.
 36  & \src{Geometry/PolynomialBudget.lean}:61
 \leanid{exists_polynomial_dyadic_absorption}                & $(k+1)^pe^{-ak}<1$, $a=\delta_0\log2/4$                                      & a    & G      & P6     \\
 37  & \src{Geometry/DescendantCutClearance.lean}:337
-\leanid{initialBelt_birthTemplate_cutClearance}             & late-layer scale inequalities                                                & a    & G      & P6     \\
+\leanid{initialBelt_birthTemplate_cutClearance}             & late-layer scale inequalities; explicit layer \leanid{descendantCutClearanceThreshold} & a & G & P6 \\
 38  & \src{Geometry/DescendantCutClearance.lean}:398
-\leanid{descendant_birthTemplate_cutClearance}              & late-layer scale inequalities                                                & a    & G      & P6     \\
+\leanid{descendant_birthTemplate_cutClearance}              & late-layer scale inequalities; explicit layer \leanid{descendantCutClearanceThreshold} & a & G & P6 \\
 39  & \src{Geometry/RepairInductionMetric.lean}:465
-\leanid{exists_repairMetricHypotheses}                      & $S^{\rho_0}\le(a_0/1000)S$                                                   & a    & G      & P2     \\
-40  & \src{Geometry/RepairInductionMetric.lean}:468 (same)       & least $m$ with $2^m>S_*$; then $K=\lceil m/\zeta\rceil$                     & a    & G      & P9     \\
+\leanid{exists_repairMetricHypotheses}                      & $S^{\rho_0}\le(a_0/1000)S$; explicit scale \leanid{repairMarginThreshold} & a & G & P2 \\
+40  & \src{Geometry/RepairInductionMetric.lean}:468 (same)       & least $m$ with $2^m\ge S_*$; then $K=\lceil m/\zeta\rceil$; explicit layer \leanid{fineScaleIndexThreshold} & a & G & P9 \\
 \multicolumn{6}{l}{\emph{Series values}}                                                                                                                        \\
 41  & \src{Geometry/PolynomialBudget.lean}:112
-\leanid{exists_uniform_polynomial_dyadic_sum_bound}         & $1+\sum_k(k+1)^p2^{-\delta_0k/2}$                                            & a    & G      & P10    \\
+\leanid{exists_uniform_polynomial_dyadic_sum_bound}         & $1+\sum_k(k+1)^p2^{-\delta_0k/2}$; named \leanid{polynomialDyadicBudget} & a & G & P10 \\
 42  & \src{TruncationSeries.lean}:90
 \leanid{exists_sum_shell_le}                                & $\sum_d(d+1)^{-2}=\pi^2/6$                                                   & a    & B, S, A & P10   \\
 43  & \src{Amplification/GraphOmittedAnchorTail.lean}:283
@@ -722,7 +768,10 @@ line~59, which extracts nothing.
 Table~\ref{tab:sites} has 79 rows: 56 of kind (a), of which 43 are on the path
 of Theorem~1.1 and 13 are not; 2 of kind (b); 1 of kind (c), not on the path;
 14 of kind (d); and 6 further kind (a) rows in the Lean proof of
-Proposition~11.2, now with closed-form thresholds. Every kind (a) row reduces to the
+Proposition~11.2, now with closed-form thresholds. Rows~37--41 also have
+closed forms, and with the named template and counting coefficients the
+constant of Proposition~11.2 is explicit up to the birth-separation constant of
+rows~57--58 (Section~\ref{sec:geometry}). Every kind (a) row reduces to the
 shapes (P1)--(P10). By frequency on the path, the shapes are: power against a
 constant and rounded scales (P1, P7), logarithmic factors against power
 margins (P3, P4), the entropy-continuity and logarithm bounds (P8), dyadic
