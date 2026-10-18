@@ -36,6 +36,8 @@ sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1]))
 from generate_badges import strip_lean_comments_and_strings  # noqa: E402
 
 THEOREM_KINDS = r"Theorem|Lemma|Proposition|Corollary|Definition|Remark"
+# A result is numbered like `2.1`, or lettered like the `Theorem A` of a note.
+RESULT_NUMBER = r"\d+(?:\.\d+)*|[A-Z]\b"
 
 
 # --------------------------------------------------------------------------- tools
@@ -164,13 +166,50 @@ def collect_issues(repo: dict, label: str) -> list[dict]:
     return sorted(issues, key=lambda i: i["number"])
 
 
-def streams_of(tracker: int, issues: list[dict], names: dict[str, str]) -> list[dict]:
-    """The tracker's sub-issues that have sub-issues of their own, in tracker order."""
+def subtree(roots: list[int], issues: list[dict]) -> set[int]:
+    """The given issues and every collected issue below them in the sub-issue tree."""
+    children: dict[int, set[int]] = {}
+    for issue in issues:
+        for child in issue["subIssues"]:
+            children.setdefault(issue["number"], set()).add(child)
+        if issue["parent"]:
+            children.setdefault(issue["parent"], set()).add(issue["number"])
+    seen, stack = set(), list(roots)
+    while stack:
+        n = stack.pop()
+        if n not in seen:
+            seen.add(n)
+            stack += children.get(n, ())
+    return seen
+
+
+def scope_issues(cfg: dict, issues: list[dict]) -> tuple[list[dict], set[int]]:
+    """The campaign's issues and the labelled issues it leaves out.
+
+    Issues under an `excludeTrackers` entry belong to another campaign with the
+    same label. With `scope` set to `tracker`, only the tracker and the issues
+    below it count.
+    """
+    excluded = subtree(cfg.get("excludeTrackers", []), issues)
+    kept = [i for i in issues if i["number"] not in excluded]
+    if cfg.get("scope") == "tracker":
+        inside = subtree([cfg["tracker"]], kept)
+        excluded |= {i["number"] for i in kept if i["number"] not in inside}
+        kept = [i for i in kept if i["number"] in inside]
+    return kept, excluded
+
+
+def streams_of(tracker: int, issues: list[dict], names: dict[str, str], explicit: list[int] | None = None) -> list[dict]:
+    """The tracker's sub-issues that have sub-issues of their own, in tracker order.
+
+    A config may instead name the stream issues explicitly (`streams`), for
+    example the tracker itself when its sub-issues are the work issues.
+    """
     by_number = {i["number"]: i for i in issues}
     streams = []
-    for number in by_number.get(tracker, {}).get("subIssues", []):
+    for number in explicit if explicit is not None else by_number.get(tracker, {}).get("subIssues", []):
         issue = by_number.get(number)
-        if issue and issue["subIssues"]:
+        if issue and (explicit is not None or issue["subIssues"]):
             name = names.get(str(number)) or re.sub(r"^Tracking:\s*", "", issue["title"])
             streams.append({"issue": number, "name": name})
     return streams
@@ -180,7 +219,7 @@ def result_table(body: str) -> list[dict]:
     """Rows of the markdown tables in a tracker body that name a numbered paper result.
 
     A row qualifies when one of its first two cells names a result such as
-    `Lemma 2.1`. The source label is the first backticked `kind:name` token, the
+    `Lemma 2.1` or `Theorem A`. The source label is the first backticked `kind:name` token, the
     issues are the `#NNNN` references in the third cell, and a name, if any,
     follows an em dash after the label.
     """
@@ -192,7 +231,7 @@ def result_table(body: str) -> list[dict]:
         if len(cells) < 3:
             continue
         head = " ".join(cells[:2])
-        kind = re.search(rf"\b({THEOREM_KINDS}) (\d+(?:\.\d+)*)", head)
+        kind = re.search(rf"\b({THEOREM_KINDS}) ({RESULT_NUMBER})", head)
         label = re.search(r"`([a-z]+:[^`]+)`", head)
         if not kind or not label:
             continue
@@ -244,10 +283,28 @@ def file_stats(repo_slug: str, number: int, head: str, base: str) -> dict:
     return stats
 
 
-def collect_prs(cfg: dict, campaign_issues: set[int], cache: dict | None = None) -> list[dict]:
+def pull_request(repo_slug: str, number: int) -> dict:
+    owner, name = repo_slug.split("/")
+    gql = """query($owner: String!, $name: String!, $number: Int!) {
+      repository(owner: $owner, name: $name) { pullRequest(number: $number) { %s } }
+    }""" % PR_FIELDS
+    pr = graphql(gql, owner=owner, name=name, number=number)["repository"]["pullRequest"]
+    if pr is None:
+        raise ValueError(f"includePRs: {repo_slug}#{number} is not a pull request")
+    return pr
+
+
+def collect_prs(cfg: dict, campaign_issues: set[int], cache: dict | None = None,
+                excluded: set[int] = frozenset()) -> list[dict]:
     """Campaign pull requests. File statistics are reused from `cache`, keyed by
-    (repository, number, head commit), so unchanged pull requests cost no request."""
+    (repository, number, head commit), so unchanged pull requests cost no request.
+
+    A labelled pull request that cites only issues of `excluded` belongs to
+    another campaign and is left out. With `scope` set to `tracker`, a labelled
+    pull request is kept only when it cites a campaign issue or is listed in
+    `includePRs`. Pull requests listed in `excludePRs` are always left out."""
     cache = cache or {}
+    scoped = cfg.get("scope") == "tracker"
     primary = next(r for r in cfg["repos"] if r.get("primary"))
     # A companion repository refers to primary issues as `TNLean#123` or by URL.
     cross_ref = re.compile(rf"{re.escape(primary['name'])}(?:#|/issues/)(\d{{4,}})")
@@ -256,9 +313,22 @@ def collect_prs(cfg: dict, campaign_issues: set[int], cache: dict | None = None)
     for repo in cfg["repos"]:
         found = {p["number"]: p for p in search(f"repo:{repo['slug']} is:pr label:{cfg['label']}", PR_FIELDS)}
         refs = local_ref if repo.get("primary") else cross_ref
+        listed = set(cfg.get("includePRs", {}).get(repo["name"], []))
+        dropped = set(cfg.get("excludePRs", {}).get(repo["name"], []))
+        body_refs = lambda p: {int(n) for n in refs.findall(p["body"] or "")}  # noqa: E731
+        for number in dropped:
+            found.pop(number, None)
+        for number in sorted(listed - set(found)):
+            found[number] = pull_request(repo["slug"], number)
+        for number, p in list(found.items()):
+            cited = body_refs(p) | {n["number"] for n in p["closingIssuesReferences"]["nodes"]}
+            if number not in listed and not cited & campaign_issues and (scoped or cited & excluded):
+                del found[number]
         # Labelling lags in every repository: also take recent PRs citing a campaign issue.
         for p in search(f"repo:{repo['slug']} is:pr created:>={cfg['since']}", PR_FIELDS):
-            if {int(n) for n in refs.findall(p["body"] or "")} & campaign_issues:
+            if p["number"] in dropped:
+                continue
+            if body_refs(p) & campaign_issues:
                 found.setdefault(p["number"], p)
         for p in found.values():
             referenced = {int(n) for n in refs.findall(p.pop("body") or "")}
@@ -279,6 +349,12 @@ def collect_prs(cfg: dict, campaign_issues: set[int], cache: dict | None = None)
 
 # ------------------------------------------------------------- notes and blueprint
 
+def skipped(cfg: dict, path: str) -> bool:
+    """Whether a note or chapter belongs to another campaign (`excludePathPattern`)."""
+    pattern = cfg.get("excludePathPattern")
+    return bool(pattern and re.search(pattern, path))
+
+
 def note_meta(source: str) -> dict:
     title = re.search(r"\\title\{(.*?)\}", source, re.S)
     verdict = re.search(r"\\gapnote\{([^}]*)\}\{([^}]*)\}", source)
@@ -292,7 +368,7 @@ def gap_notes(cfg: dict, checkouts: dict[str, Checkout], prs: list[dict], cites:
     for repo in cfg["repos"]:
         checkout = checkouts[repo["name"]]
         for path in checkout.files("docs/paper-gaps"):
-            source = checkout.read(path) if path.endswith(".tex") else None
+            source = checkout.read(path) if path.endswith(".tex") and not skipped(cfg, path) else None
             if source and cites.search(source):
                 notes[(repo["name"], path)] = {"repo": repo["name"], "path": path, "onMain": True, "prs": [], **note_meta(source)}
     slugs = {r["name"]: r["slug"] for r in cfg["repos"]}
@@ -304,6 +380,8 @@ def gap_notes(cfg: dict, checkouts: dict[str, Checkout], prs: list[dict], cites:
     for pr in sorted(prs, key=lambda p: p["number"], reverse=True):
         for path in pr["gapFiles"]:
             key = (pr["repo"], path)
+            if skipped(cfg, path):
+                continue
             if key not in refreshed and pr["state"] == "OPEN":
                 source = raw_file(slugs[pr["repo"]], path, pr["headRefOid"])
                 if source and cites.search(source):
@@ -330,7 +408,7 @@ def blueprint_status(cfg: dict, checkouts: dict[str, Checkout], cites: re.Patter
     for repo in cfg["repos"]:
         checkout = checkouts[repo["name"]]
         for path in checkout.files("blueprint/src/chapter"):
-            source = checkout.read(path) if path.endswith(".tex") else None
+            source = checkout.read(path) if path.endswith(".tex") and not skipped(cfg, path) else None
             if not source or not cites.search(source):
                 continue
             count = {"proved": 0, "stated": 0, "unformalized": 0, "notready": 0}
@@ -397,14 +475,14 @@ def collect(campaign_dir: pathlib.Path) -> dict:
     primary = next(r for r in cfg["repos"] if r.get("primary"))
     cites = re.compile(cfg["citationPattern"], re.I)
 
-    issues = collect_issues(primary, cfg["label"])
+    issues, excluded = scope_issues(cfg, collect_issues(primary, cfg["label"]))
     by_number = {i["number"]: i for i in issues}
-    streams = streams_of(cfg["tracker"], issues, cfg.get("streamNames", {}))
+    streams = streams_of(cfg["tracker"], issues, cfg.get("streamNames", {}), cfg.get("streams"))
     results = []
     for paper, spec in cfg["papers"].items():
         body = run("gh", "api", f"repos/{primary['slug']}/issues/{spec['stream']}", "--jq", ".body")
         results += [{"paper": paper, **row} for row in result_table(body)]
-    prs = collect_prs(cfg, set(by_number), previous_stats())
+    prs = collect_prs(cfg, set(by_number), previous_stats(), excluded)
     return {
         "generatedAt": datetime.datetime.now(datetime.timezone.utc).isoformat(timespec="minutes"),
         "mainCommit": checkouts[primary["name"]].short_head(),
