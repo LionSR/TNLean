@@ -323,10 +323,9 @@ locality** (Lemma 10.1, `eq:amplification-product-omission`; `09-amplification.t
 lines 42–72 and 188–226, with Proposition 4.3, `03-quasilocal.tex`, lines 220–334). Let
 `C₃ ≥ 0`, `c₃ > 0` be the filter-locality constants of `latticePositiveConstraints_of_locality`.
 Then the omission bound holds with `A = latticeOmissionPrefactor R C₃ c₃ p`,
-`v = latticeOmissionRate R C₃ c₃ p` and `γ = latticeOmissionExponent c₃ p`. Once QICLean
-provides the named constants, `htail` is `SpectralFilter.norm_positiveConstraint_sub_map_le`
-with `C₃ = positiveConstraintLocalityConst p Δ J (localizationPrefactor R 2 2) (1 / 2)` and
-`c₃ = positiveConstraintLocalityRate p Δ (localizationVelocity R v_R (μ_R J)) (1 / 2)`. -/
+`v = latticeOmissionRate R C₃ c₃ p` and `γ = latticeOmissionExponent c₃ p`. At the named
+constants `C₃ = latticePositiveConstraintConst R J Δ p` and
+`c₃ = latticePositiveConstraintRate R J Δ p` this is `latticeConstraintWord_omission_explicit`. -/
 theorem latticeConstraintWord_omission_of_locality {p : ℕ} (hp : 1 ≤ p) (R : ℕ)
     {J Δ C₃ c₃ : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < Δ) (hC₃ : 0 ≤ C₃) (hc₃ : 0 < c₃)
     (htail : ∀ {n : Type} [Fintype n] [DecidableEq n]
@@ -370,6 +369,43 @@ theorem latticeConstraintWord_omission_of_locality {p : ℕ} (hp : 1 ≤ p) (R :
                 latticeOmissionExponent c₃ p * (r : ℝ) ^ kernelExponent p) :=
   latticeConstraintWord_omission_of_positiveConstraints hp R hC₃ hc₃
     (latticePositiveConstraints_of_locality hp R hJ hΔ htail)
+
+/-- **Omission of distant events for the exact positive constraints, at the named constants**
+(Lemma 10.1, `eq:amplification-product-omission`; `09-amplification.tex`, lines 42–72 and
+188–226, with Proposition 4.3, `03-quasilocal.tex`, lines 220–334). The bound of
+`exists_latticeConstraintWord_omission` holds with `A = latticeOmissionPrefactor R C₃ c₃ p`,
+`v = latticeOmissionRate R C₃ c₃ p` and `γ = latticeOmissionExponent c₃ p`, where
+`C₃ = latticePositiveConstraintConst R J Δ p` and `c₃ = latticePositiveConstraintRate R J Δ p`. -/
+theorem latticeConstraintWord_omission_explicit {p : ℕ} (hp : 1 ≤ p) (R : ℕ) {J Δ : ℝ}
+    (hJ : 0 ≤ J) (hΔ : 0 < Δ) :
+    ∀ {q : ℕ} [NeZero q] (Λ : Finset (ℤ × ℤ)) (h : LocalHamiltonian Λ q R J)
+      (a : AdmissibleSupport Λ R → Site Λ), (∀ X, a X ∈ X.1) →
+      ∀ (E₀ : ℝ) (Ω : StateSpace Λ q), IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+      ∀ (Aux : Type*) [Fintype Aux] [DecidableEq Aux] (S : Finset (Site Λ))
+        (B : Matrix (Configuration Λ q × Aux) (Configuration Λ q × Aux) ℂ),
+        (∀ x y : Aux, (Matrix.of fun σ τ => B (σ, x) (τ, y)) ∈
+          supportedOperators q (S : Set (Site Λ))) →
+        ∀ (ξ : Aux → ℂ), ‖WithLp.toLp 2 ξ‖ = 1 → ∀ (r : ℕ) (t : ℝ≥0),
+          let P := fun i : AdmissibleSupport Λ R => a i ∈ graphNeighborhood Λ r S
+          let k := fun i => positiveConstraint (positiveNormalization p (Δ / 2) J)
+            (centeredFilter p (Δ / 2) h.operator Ω (h.term i))
+          let D := fun u : List (AdmissibleSupport Λ R) =>
+            ((u.reverse.map fun i => CFC.sqrt (1 - k i)).prod ⊗ₖ (1 : Matrix Aux Aux ℂ)) *ᵥ
+              (B *ᵥ fun x => WithLp.ofLp Ω x.1 * ξ x.2)
+          let F := fun w : PoissonWord.Word (AdmissibleSupport Λ R) =>
+            ‖WithLp.toLp 2 (D (List.ofFn w.2) -
+              D ((List.ofFn w.2).filter fun i => decide (P i)))‖
+          Integrable F (PoissonWord.measure (AdmissibleSupport Λ R) t) ∧
+          (∫ w, F w ∂PoissonWord.measure (AdmissibleSupport Λ R) t) ≤
+            latticeOmissionPrefactor R (latticePositiveConstraintConst R J Δ p)
+                (latticePositiveConstraintRate R J Δ p) p * t * S.card * ‖B‖ *
+              Real.exp (latticeOmissionRate R (latticePositiveConstraintConst R J Δ p)
+                  (latticePositiveConstraintRate R J Δ p) p * t -
+                latticeOmissionExponent (latticePositiveConstraintRate R J Δ p) p *
+                  (r : ℝ) ^ kernelExponent p) :=
+  latticeConstraintWord_omission_of_positiveConstraints hp R
+    (latticePositiveConstraintConst_nonneg R J Δ p) (latticePositiveConstraintRate_pos hp R J hΔ)
+    (latticePositiveConstraints_explicit hp R hJ hΔ)
 
 /-- **Omission of distant events for the exact positive constraints**
 (Lemma 10.1, `eq:amplification-product-omission`, applied to the constraints
