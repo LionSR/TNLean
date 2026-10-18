@@ -288,6 +288,41 @@ theorem rank_cutMatrix_sequentialTruncation_le (ψ : EuclideanSpace ℂ (Fin L �
 
 end Sequential
 
+/-- The actual reverse-prefix product has the rank bounds of its interior
+projections and error bounded by the square roots of their discarded masses
+on the same original vector. Source: one-dimensional note,
+part2a_mps_information.tex, prop:VC, proof of the sequential truncation estimate.
+No spectral selection or normalization assertion is included. -/
+private theorem sequentialTruncation_prefix_rank_error
+    (P : ∀ k : ℕ, LeftBlockMatrix L q k)
+    (ψ : EuclideanSpace ℂ (Fin L → Fin q))
+    (hP : ∀ k, IsStarProjection (P k)) :
+    (∀ k, 1 ≤ k → k < L →
+      (cutMatrix (sequentialTruncation P (L - 1) ψ) k).rank ≤ (P k).rank) ∧
+    ‖ψ - sequentialTruncation P (L - 1) ψ‖ ≤
+      ∑ k ∈ Finset.Ico 1 L, Real.sqrt
+        (((1 - P k) * Entropy.regionState
+          (n := fun _ : Fin L ↦ q) (leftBlock L k) ψ).trace.re) := by
+  classical
+  have hmass (k : ℕ) :
+      Real.sqrt (((1 - P k) * Entropy.regionState (leftBlock L k) ψ).trace.re) =
+        ‖toEuclideanLin (Entropy.localLift (leftBlock L k) (1 - P k)) ψ‖ := by
+    rw [← Entropy.norm_sq_toEuclideanLin_localLift_eq_trace (hP k).one_sub,
+      Real.sqrt_sq (norm_nonneg _)]
+  have herror : ‖ψ - sequentialTruncation P (L - 1) ψ‖ ≤
+      ∑ k ∈ Finset.Ico 1 L, Real.sqrt
+        (((1 - P k) * Entropy.regionState (leftBlock L k) ψ).trace.re) := by
+    refine (norm_sub_sequentialTruncation_le P hP ψ (L - 1)).trans ?_
+    rw [Finset.sum_Ico_eq_sum_range]
+    conv_lhs => rw [← Finset.sum_range_reflect]
+    refine Finset.sum_le_sum fun i hi ↦ ?_
+    have hi' : i < L - 1 := Finset.mem_range.mp hi
+    rw [show L - 1 - (L - 1 - 1 - i) = 1 + i by omega, hmass]
+  refine ⟨fun k hk hkL ↦ ?_, herror⟩
+  obtain ⟨i, hi, rfl⟩ : ∃ i, i < L - 1 ∧ k = L - 1 - i :=
+    ⟨L - 1 - k, by omega, by omega⟩
+  exact rank_cutMatrix_sequentialTruncation_le P ψ hi
+
 /-- **Sequential truncation.** Cutting every left block of a unit vector to the spectral
 projector of its regional state above the threshold `exp (-(S_k + w))`, from the largest
 block to the smallest, gives a vector whose cut ranks are at most `exp (S_k + w)` (and at
@@ -306,42 +341,17 @@ theorem exists_sequentialTruncation (ψ : EuclideanSpace ℂ (Fin L → Fin q))
       (Real.exp (-(Entropy.regionEntropy (leftBlock L k) ψ + w)))
   have hP : ∀ k, IsStarProjection (P k) := fun k ↦
     (Entropy.regionState_isHermitian _ _).isStarProjection_spectralProjectionGE _
+  obtain ⟨hrank, herror⟩ := sequentialTruncation_prefix_rank_error P ψ hP
   refine ⟨sequentialTruncation P (L - 1) ψ, fun k ↦ ?_, ?_⟩
   · rcases Nat.eq_zero_or_pos k with rfl | hk0
     · exact le_trans (by exact_mod_cast rank_cutMatrix_zero_le _) (le_max_left _ _)
     rcases le_or_gt L k with hLk | hkL
     · exact le_trans (by exact_mod_cast rank_cutMatrix_le_one_of_le hLk _) (le_max_left _ _)
-    obtain ⟨i, hi, rfl⟩ : ∃ i, i < L - 1 ∧ k = L - 1 - i :=
-      ⟨L - 1 - k, by omega, by omega⟩
-    refine le_trans ?_ (le_max_right _ _)
-    calc ((cutMatrix (sequentialTruncation P (L - 1) ψ) (L - 1 - i)).rank : ℝ)
-        ≤ (P (L - 1 - i)).rank := by
-          exact_mod_cast rank_cutMatrix_sequentialTruncation_le P ψ hi
-      _ ≤ _ := (Entropy.regionState_posSemidef _ _).rank_spectralProjectionGE_exp_le
-          (Entropy.trace_regionState_eq_one hψ) _ _
-  · have hterm : ∀ k, ‖toEuclideanLin (Entropy.localLift (leftBlock L k) (1 - P k)) ψ‖ ≤
-        Real.sqrt (Entropy.surprisalTail
-          (Entropy.regionState_isHermitian (n := fun _ : Fin L ↦ q) (leftBlock L k)
-            ψ).eigenvalues
-          (Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (leftBlock L k) ψ) w) := by
-      intro k
-      have hsq : ‖toEuclideanLin (Entropy.localLift (leftBlock L k) (1 - P k)) ψ‖ ^ 2 ≤
-          Entropy.surprisalTail
-            (Entropy.regionState_isHermitian (n := fun _ : Fin L ↦ q) (leftBlock L k)
-              ψ).eigenvalues
-            (Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (leftBlock L k) ψ) w := by
-        rw [Entropy.norm_sq_toEuclideanLin_localLift_eq_trace (hP _).one_sub]
-        exact (Entropy.regionState_posSemidef _
-          _).trace_complement_spectralProjectionGE_le_surprisalTail _ _
-      exact (Real.le_sqrt (norm_nonneg _) ((sq_nonneg _).trans hsq)).mpr hsq
-    refine (norm_sub_sequentialTruncation_le P hP ψ (L - 1)).trans ?_
-    rw [Finset.sum_Ico_eq_sum_range]
-    conv_lhs => rw [← Finset.sum_range_reflect]
-    refine Finset.sum_le_sum fun i hi ↦ ?_
-    have hi' : L - 1 - (L - 1 - 1 - i) = 1 + i := by
-      have := Finset.mem_range.mp hi
-      omega
-    rw [hi']
-    exact hterm _
+    exact le_trans (le_trans (by exact_mod_cast hrank k hk0 hkL)
+      ((Entropy.regionState_posSemidef _ _).rank_spectralProjectionGE_exp_le
+        (Entropy.trace_regionState_eq_one hψ) _ _)) (le_max_right _ _)
+  · refine herror.trans (Finset.sum_le_sum fun k _ ↦ Real.sqrt_le_sqrt ?_)
+    exact (Entropy.regionState_posSemidef _
+      _).trace_complement_spectralProjectionGE_le_surprisalTail _ _
 
 end TNLean.MPS.AreaLaw
