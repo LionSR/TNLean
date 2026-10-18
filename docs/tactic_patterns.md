@@ -4635,6 +4635,23 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 ## Candidates
 
+### Two-frame lists in a finite family of bounded changes — candidate (2026-10-18)
+
+- **Pattern:** Before selecting a circuit witness, identify the two consecutive
+  frame lists with the explicit lists used by the one-sheet or two-sheet lift.
+  Associate list append while the statement is still a bounded-change
+  proposition; then extract the circuit and its bounds.
+- **Seen:** The eight cases of
+  `OneBand.circuits_of_primitive_information` in
+  `TNLean/MPS/AreaLaw/BandDissolution.lean`. Five cases use the same
+  two-element-list and spectator-list identification in the source and target.
+- **Existing tools:** The construction uses `hasSourceBoundedChange_liftOne`,
+  `isBoundedChange_liftTwo` and their source-count lemmas. The repeated part is
+  only the equality of the ordered frame lists.
+- **Next step:** This occurs in one file. If a second file needs the same list
+  identification, first seek a list lemma or a bounded-change transport lemma;
+  no new tactic is warranted by the present occurrences alone.
+
 
 ### Nonnegativity of a natural remainder in arithmetic bounds — candidate (2026-10-18)
 
