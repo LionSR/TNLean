@@ -38,7 +38,7 @@ rectangles.
   `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 
 The explicit constant is recorded in `docs/notes/arealaw2d_explicit_constant.tex`
-(Section `sec:top`), following issue #9535.
+(Section `sec:top`).
 
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
@@ -65,7 +65,7 @@ Propositions 9.6, 10.2 and 11.2, at the template constants `D₀ = 2R + 11` and 
 and the constant is `uniformAreaLawConstantOf q C₂ C₃ = c_D log q + c_M c_D / 2` with
 `c_D = max C₃ 0` and `c_M = max C₂ 0`. The source asserts only that a constant exists.
 Source: proof of Theorem 1.1, `10-geometry.tex`, lines 803–857; the constant is tabulated
-in `docs/notes/arealaw2d_explicit_constant.tex`, Section `sec:top` (issue #9535). -/
+in `docs/notes/arealaw2d_explicit_constant.tex`, Section `sec:top`. -/
 noncomputable def uniformAreaLawConstant (q R : ℕ)
     (J Δ Cbox Ctr ct Cent eent Cen een Cloc cloc c₁ : ℝ) : ℝ :=
   let C₀ := max (sublinearCollarConstant q J Δ Cbox) 1
@@ -90,7 +90,7 @@ sublinear collar bound `sublinearCollarBound_real_of_boxEntropy` supplies them s
 This is an auxiliary result: Theorem 1.1 of the source (`00-introduction.tex`, lines 39–53)
 asserts only that a constant exists, and `uniformAreaLaw` is that statement. Source: proof
 of Theorem 1.1, `10-geometry.tex`, lines 803–857; the constant is tabulated in
-`docs/notes/arealaw2d_explicit_constant.tex`, Section `sec:top` (issue #9535). -/
+`docs/notes/arealaw2d_explicit_constant.tex`, Section `sec:top`. -/
 theorem exists_regionalEntropy_le_uniformAreaLawConstant
     (q R : ℕ) (hq : 1 ≤ q) {J Δ Cbox Cloc cloc c₁ : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < Δ)
     (hCbox : 0 ≤ Cbox)
