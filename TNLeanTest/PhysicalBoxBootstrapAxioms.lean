@@ -37,35 +37,21 @@ run_cmd do
       throwError "Unexpected axioms for {decl}: {axioms}"
     Lean.logInfo m!"{decl}: {axioms}"
 
-set_option linter.hashCommand false in
-open TNLean.PEPS.AreaLaw.Scan.CollarScan in
-/-- info:
-'TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_sourceTarget_selected_actualCharge_rough_comparison_of_finiteFamilyTransportBound'
-depends on axioms: [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax) in
-#print axioms
-  exists_sourceTarget_selected_actualCharge_rough_comparison_of_finiteFamilyTransportBound
-
-set_option linter.hashCommand false in
-open TNLean.PEPS.AreaLaw.Scan.CollarScan in
-/-- info:
-'TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_sourceBootstrap_entropy_improvement_of_finiteFamilyTransportBound'
-depends on axioms: [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax) in
-#print axioms exists_sourceBootstrap_entropy_improvement_of_finiteFamilyTransportBound
-
 /-! The safe-box bootstrap at named constants -/
 
+open TNLean.PEPS.AreaLaw TNLean.PEPS.AreaLaw.Scan.CollarScan in
 run_cmd do
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
   let declarations := #[
-    ``TNLean.PEPS.AreaLaw.Scan.CollarScan.sourceTarget_selected_actualCharge_rough_comparison_explicit,
-    ``TNLean.PEPS.AreaLaw.Scan.CollarScan.sourceBootstrap_entropy_improvement_explicit,
-    ``TNLean.PEPS.AreaLaw.Scan.uniform_boxEntropy_improvement_explicit,
-    ``TNLean.PEPS.AreaLaw.Scan.boxEntropy_le_boxError_of_initial_explicit,
-    ``TNLean.PEPS.AreaLaw.Scan.initialBoxConstantExplicit_nonneg,
-    ``TNLean.PEPS.AreaLaw.Scan.physicalBoxConstantExplicit_nonneg,
-    ``TNLean.PEPS.AreaLaw.Scan.boxEntropy_le_boxError_explicit]
+    ``sourceTarget_selected_actualCharge_rough_comparison_explicit,
+    ``sourceBootstrap_entropy_improvement_explicit,
+    ``Scan.uniform_boxEntropy_improvement_explicit,
+    ``Scan.boxEntropy_le_boxError_of_initial_explicit,
+    ``Scan.initialBoxConstantExplicit_nonneg,
+    ``Scan.physicalBoxConstantExplicit_nonneg,
+    ``Scan.boxEntropy_le_boxError_explicit,
+    ``exists_sourceTarget_selected_actualCharge_rough_comparison_of_finiteFamilyTransportBound,
+    ``exists_sourceBootstrap_entropy_improvement_of_finiteFamilyTransportBound]
   for decl in declarations do
     unless (← Lean.getEnv).contains decl do
       throwError "Missing declaration {decl}"
