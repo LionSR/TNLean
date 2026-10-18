@@ -4,33 +4,19 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.IntegerComponents
+import Lean.Elab.Command
+import Lean.Util.CollectAxioms
 
 /-! Logical-dependency checks for integer reachability, components and finite paths. -/
 
-/--
-info: 'SimpleGraph.hasse_int_induce_reachable_iff' depends on axioms:
-[propext, Classical.choice, Quot.sound]
----
-info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
--/
-#guard_msgs (whitespace := lax) in
-#print axioms SimpleGraph.hasse_int_induce_reachable_iff
-
-/--
-info: 'SimpleGraph.ConnectedComponent.ordConnected_image_hasse_int_induce' depends on axioms:
-[propext, Classical.choice, Quot.sound]
----
-info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
--/
-#guard_msgs (whitespace := lax) in
-#print axioms SimpleGraph.ConnectedComponent.ordConnected_image_hasse_int_induce
-
-/--
-info: 'SimpleGraph.ConnectedComponent.nonempty_pathGraph_iso_hasse_int_induce_finset'
-depends on axioms:
-[propext, Classical.choice, Quot.sound]
----
-info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
--/
-#guard_msgs (whitespace := lax) in
-#print axioms SimpleGraph.ConnectedComponent.nonempty_pathGraph_iso_hasse_int_induce_finset
+run_cmd do
+  let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
+  for decl in #[``SimpleGraph.hasse_int_induce_reachable_iff,
+      ``SimpleGraph.ConnectedComponent.ordConnected_image_hasse_int_induce,
+      ``SimpleGraph.ConnectedComponent.nonempty_pathGraph_iso_hasse_int_induce_finset] do
+    unless (← Lean.getEnv).contains decl do
+      throwError "Missing declaration {decl}"
+    let axioms ← Lean.collectAxioms decl
+    unless axioms.all (allowed.contains ·) do
+      throwError "Unexpected axioms for {decl}: {axioms}"
+    Lean.logInfo m!"{decl}: {axioms}"
