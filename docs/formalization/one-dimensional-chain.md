@@ -62,22 +62,30 @@ protocol route has the following proved intermediate results:
 | Derived gate support and tagged-link congestion | `ChainSweep.sweepMiddleCircuit_participants_subset_stage`, `sweepMiddleCircuit_participants_level_dist_le_two`, `prefixCrossingLinks_card_le_of_originalCircuit`, `compressedMiddle_prefixCrossingLinks_card_le_24960` | Proved: the actual middle gates lie in prescribed stage participant sets and have level distance at most two. For a tagged compression graph whose links share actual original gates and whose incident degree is at most 3120, every prefix has at most 24960 crossing links. The generic original-circuit version has bound `8d`; it does not assert that physical compression hypotheses have been discharged. |
 | Cut rank of the distributed identity-bond network | `DependentBondNetwork.rank_flattening_network_one_le`, `DistributedOperatorContraction.rank_flattening_contractedOperator_column_le` | Proved for every party partition and every actual product-basis input column. The rank is bounded by the product of the alphabets of the tagged crossing links, each counted once. Varying and empty alphabets, loops and parallel links are included; placement and crossing counts are separate. These declarations belong to the corresponding `TNLean.PEPS` namespaces. |
 
+
+| Conditional preparation including initialization and terminal readout | `ChainSweep.exists_preparation_of_local_circuits` | Proved from the actual conditional local family: one constructed product input and one full circuit, at most `18m` nonprivate gates, lifetime at most 40, expansion bounds one, norm at most one, vector error `4(18m)L^(-30)` from the retained-copy reference, and physical density error at most twice that error. Stage support and level distance at most two hold for every original nonprivate gate. |
+| Three-party stage support | `ChainSweep.card_le_three_of_subset_stageParticipants` | Proved for every finite subset of the prescribed stage participants. Together with the full preparation support, each original nonprivate gate has at most three participants. |
+| One compressed column for all cuts | `DistributedOperatorContraction.exists_useful_column_of_sub_pure_le`, `ChainSweep.exists_uniform_sampled_block_column` | Proved under the full uniform compression hypotheses and the original-gate distance bound. The polynomial alphabet constants precede all family members; for each member with error less than one, one nonzero actual column works for every prefix. Its normalized cut ranks are at most `max(1,ceil(C_p L^alpha))^24960`. The generic useful-column declaration belongs to `TNLean.PEPS.Approximation`. |
+| Original-site coordinates and cut ranks | `ChainSweep.rank_partyPrefix_eq_cutMatrix`, `rank_partyPrefix_last_eq_cutMatrix`, `rank_cutMatrix_le_of_partyPrefix_bounds` | Proved for the literal inverse main-coordinate vector. Under `q >= 1`, `w >= 1`, `60w <= L` and internal party-prefix ranks at most `R >= 1`, every original-site cut has rank at most `q^(40w) R`. Endpoint and scalar physical factors are retained; no vector normalization premise is needed. |
+
 The half-open
 lattice bands and the distinction between main physical outputs and retained
 auxiliary registers are recorded in
 [`tnlean_one_dimensional_band_sweep_corrections.tex`](../paper-gaps/tnlean_one_dimensional_band_sweep_corrections.tex).
 The one-band declarations belong to `TNLean.MPS.AreaLaw.OneBand`; the
 remaining protocol declarations belong to `TNLean.MPS.AreaLaw.ChainSweep`.
-Deriving the physical information inequalities, composing the conditional
-middle with initialization and terminal readout, and applying compression remain
-separate obligations. The conditional middle already reaches the specified
-terminal frame memory and has the stated actual counts and accumulated error;
-its hypotheses must still be derived from the gapped Hamiltonian.
+Deriving the local information inequalities from the gapped Hamiltonian and
+establishing the complete family of physical compression hypotheses remain
+separate obligations. The conditional preparation already includes initialization
+and terminal readout. Compression and the conversion to original-site ranks are
+proved under their stated hypotheses; they do not yet constitute the physical
+protocol proof of Theorem B.
 
 ## Constants
 
-Every constant is a definition of `(q, R, J, Δ)` and, for the bond dimension,
-`L`; no statement carries an existential constant. In the order the proof fixes
+The area-law and sequential-truncation constants below are definitions of
+`(q, R, J, Δ)` and, for the bond dimension, `L`. The separate compression
+statements use existential polynomial constants. In the order the proof fixes
 them:
 
 | Name | Value |

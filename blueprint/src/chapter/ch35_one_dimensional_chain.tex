@@ -2063,5 +2063,354 @@ with the retained-copy correction of
     gate and substitute $d=3120$.
 \end{proof}
 
-% Physical information estimates, composition with initialization and terminal
-% readout, physical output error, and applying compression remain separate.
+
+\section{Conditional preparation and ranks in the original chain coordinates}
+
+Retain the parties, original copy labels, stage boundaries and placement of
+Definitions~\ref{def:chain_terminal_registers},
+\ref{def:chain_sweep_frame_path}, \ref{def:chain_stage_participants}
+and~\ref{def:chain_party_placement}.
+For an original circuit $W$, let $N(W)$ count its nonprivate occurrences
+and $n_a(W)$ those involving party $a$; write $\operatorname{part}(g)$
+for the participant set of a gate.
+Write $F_S(v)$ for the coefficient matrix of a party tensor $v$ across
+$S\mid S^c$, and $M_k(v)$ for the original-site cut matrix of
+Definition~\ref{def:chain_open_mps}.
+
+\begin{theorem}[Preparation from the conditional local family]
+    \label{thm:chain_conditional_preparation}
+    \lean{TNLean.MPS.AreaLaw.ChainSweep.exists_preparation_of_local_circuits}
+    \leanok
+    \uses{def:chain_conditional_middle_circuit,def:chain_terminal_reference,
+        def:chain_terminal_coordinates}
+    Let $L,w,q$ be natural numbers with $L>0$ and $q\ge1$, and let
+    $\Omega$ be a unit vector on the original chain. Suppose the circuits $c_{k,j}$ satisfy exactly
+    the local conditions in Definition~\ref{def:chain_conditional_middle_circuit}:
+    they are bounded changes between the prescribed boundary references,
+    with participants in $\mathcal S_{k,j}$, bounds $r=K=1$, error
+    $4L^{-30}$ and pair-source bound one; the seven first-stage padding
+    positions are identities with zero error and zero nonprivate count.
+    Put $N=18m$ and $\varepsilon=4NL^{-30}$.
+
+    Let $\mathcal F_0$ be the original ordered initial frame list.
+    Its frames have constant owner; let $h(F)$ be the owner of site zero
+    in frame $F$. For each party $a$, define $H_a$ as the tensor product,
+    in the original order, of the frame spaces with $h(F)=a$, and let
+    $x_a$ be the product of their $\Omega$-reference vectors. Then
+    $\|x_a\|=1$, including an empty product. From the constructed product
+    input $X=\bigotimes_a x_a$ there is an original circuit $C$ to the
+    actual terminal physical factors followed by all retained private
+    registers. The physical factor at $a$ has dimension $d_a=q^{|M_a|}$.
+    Its output $\Psi=CX$ satisfies
+    \begin{align}
+        N(C) & \le N, & n_a(C) & \le40, & \|\Psi\| & \le1.
+        \label{eq:chain_preparation_counts}
+    \end{align}
+    Each original nonprivate gate has at most one recorded monomial, absolute
+    coefficient sum at most one, and at most one normalized pair source
+    and one normalized pair effect per monomial. Every nonprivate gate
+    $g$ of this same $C$ has a stage and position with
+    \begin{align}
+        \operatorname{part}(g) & \subseteq\mathcal S_{k,j}.
+        \label{eq:chain_preparation_support}
+    \end{align}
+    In particular its arity is at most $40$ and its participant levels
+    have pairwise distance at most two.
+
+    Let $J$ be the prescribed identification of the terminal frame stack
+    with its raw register list, and let $T$ be the existing private
+    terminal regrouping. Put $Y=J^{-1}T^{-1}\Psi$.
+    With the sheet readout $\mathcal R$ and copy-labelled vector $\Xi$
+    of Definition~\ref{def:chain_terminal_reference}, one has
+    \begin{align}
+        \|\Xi\|                          & =1,             &
+        \|\mathcal RY-\Omega\otimes\Xi\| & \le\varepsilon.
+        \label{eq:chain_preparation_sheet_error}
+    \end{align}
+    The prescribed owner-grouping isometry $A_{\rm aux}$ identifies the
+    private memory with the Euclidean space of the original auxiliary
+    copy-site configurations, so that memory is finite-dimensional.
+    Write $V$ for the actual readout of $\Psi$ in the prescribed physical
+    coordinates and the fixed standard private orthonormal basis, and put
+    $\rho=\operatorname{Tr}_{\rm private}|V\rangle\langle V|$.
+    For the fixed main-block coordinate map $U_\chi$,
+    \begin{align}
+        \|\rho-|U_\chi\Omega\rangle\langle U_\chi\Omega|\|_1
+         & \le2\varepsilon.
+        \label{eq:chain_preparation_physical_error}
+    \end{align}
+    All auxiliary copy-site labels remain at their specified private
+    owners. The vector $\Xi$ is the product over original copies,
+    including the scalar $1$ for an empty copy family; it need not
+    factor over its final parties. This is the conditional preparation
+    step in \cite[Part~II]{TNLean2026OneDimensional}, with
+    \cite{gap:tnlean_one_dimensional_band_sweep_corrections}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:chain_initial_copies,thm:chain_conditional_middle_bounds,
+        thm:chain_middle_gate_support,thm:chain_terminal_private_operations,
+        thm:chain_terminal_reference_density,thm:chain_terminal_reference_error,
+        thm:chain_terminal_coordinates}
+    Compose the constructed private initialization, the given family's
+    chronological middle, and the actual private terminal regrouping.
+    The two ends have no nonprivate occurrence; each such occurrence
+    of the composite is the same occurrence of the middle with the same
+    participant set. Its support and bounds therefore give
+    (\ref{eq:chain_preparation_counts}) and
+    (\ref{eq:chain_preparation_support}). The initialization is exact
+    and the terminal regrouping is an isometry, so pulling back by
+    $J^{-1}T^{-1}$ gives the actual middle output. The terminal reference
+    identity and its derived auxiliary norm give
+    (\ref{eq:chain_preparation_sheet_error}). The actual private layout
+    is finite-dimensional through the existing grouping by auxiliary
+    owner. The physical marginal theorem is invariant under the choice
+    of private orthonormal basis, so the terminal density-error estimate
+    gives (\ref{eq:chain_preparation_physical_error}) in the stated
+    physical coordinates.
+\end{proof}
+
+\begin{theorem}[Three-party bound at a stage position]
+    \label{thm:chain_stage_arity_three}
+    \lean{TNLean.MPS.AreaLaw.ChainSweep.card_le_three_of_subset_stageParticipants}
+    \leanok
+    \uses{def:chain_stage_participants}
+    For arbitrary natural $L,w$, any finite party set $A$ contained in
+    one prescribed $\mathcal S_{k,j}$ satisfies $|A|\le3$.
+    Consequently every nonprivate gate of the circuit constructed in
+    Theorem~\ref{thm:chain_conditional_preparation} has at most three parties.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:chain_stage_participants,thm:chain_conditional_preparation}
+    The two births and first boundary death have at most two parties,
+    the padding sets are empty, and every band row uses a subset of
+    its three designated roles. Coincident roles decrease the count.
+    Applying this finite-set bound to
+    (\ref{eq:chain_preparation_support}) gives the last assertion.
+\end{proof}
+
+\begin{theorem}[One useful column and all its cut ranks]
+    \label{thm:compression_useful_column_all_cuts}
+    \lean{TNLean.PEPS.Approximation.DistributedOperatorContraction.exists_useful_column_of_sub_pure_le}
+    \leanok
+    \uses{def:compression_operator_operator,def:compression_operator_alphabets,
+        def:compression_operator_endpoint_tensor,def:peps_dependent_network,
+        def:peps_ket_column_dependent_fix_input}
+    Let $\sigma$ be the actual distributed operator contraction with
+    input and output alphabet $X_a$ at each party, all finite. Retain its
+    tagged link alphabets $D_e$ and actual endpoint tensors $A_a$.
+    Let $\omega\in\bigotimes_a\mathbb C^{X_a}$ be a unit vector and suppose
+    $\|\sigma-|\omega\rangle\langle\omega|\|_1\le\epsilon<1$.
+    There exist one product-basis input $z$ and one nonzero column
+    $v=\sigma|z\rangle$. With the same identity bonds, its coefficients are
+    \begin{align}
+        A_{a,z}(\eta,x_a) & =A_a(\eta;(x_a,z_a)),                &
+        v(x)              & =\sigma(x,z)=\mathcal N_{A_z}(1)(x).
+        \label{eq:compression_useful_column_tensor}
+    \end{align}
+    For $\widehat v=v/\|v\|$, one has $\|\widehat v\|=1$ and some real
+    $\theta$ satisfies $\|\widehat v-e^{i\theta}\omega\|\le2\epsilon$.
+    The same $z,v$ satisfy, for every party subset $S$,
+    \begin{align}
+        \operatorname{rank}F_S(v)
+         & \le\prod_{e\in\partial S}|D_e|, &
+        \operatorname{rank}F_S(\widehat v)
+         & =\operatorname{rank}F_S(v).
+        \label{eq:compression_useful_column_ranks}
+    \end{align}
+    The cut product contains one alphabet for each actual tagged crossing
+    edge, retaining parallel links and allowing empty alphabets.
+    The column selection is that of
+    \cite[Lemma~8.1]{OpenAI2026PolynomialPEPS}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_ket_column_dependent,thm:compression_operator_column_cut_rank}
+    Apply the existing column selection to the actual endpoint tensors
+    of $\sigma$. Fixing $z_a$ locally gives this same column on the
+    same graph and alphabets. The identity-bond factorization therefore
+    bounds its rank at every cut. Since $v\ne0$, multiplication by the
+    nonzero scalar $\|v\|^{-1}$ preserves each matrix rank, giving
+    (\ref{eq:compression_useful_column_ranks}). The vector statement
+    gives the unit norm and phase-error bound.
+\end{proof}
+
+\begin{theorem}[Uniform compression and useful block columns]
+    \label{thm:chain_uniform_compressed_block_column}
+    \lean{TNLean.MPS.AreaLaw.ChainSweep.exists_uniform_sampled_block_column}
+    \leanok
+    \uses{def:peps_distributed_construction,def:peps_distributed_construction_density,
+        def:chain_party_placement,def:compression_operator_operator}
+    Let $i$ range over an arbitrary index set $I$, with sizes $s_i\ge2$
+    and natural lengths and widths $L_i,w_i$. Let $\mathcal C_i$ be given
+    distributed constructions on the actual parties of these chains,
+    with no messages in their recorded monomial expansions;
+    write $W_i$ for their original circuits and $\rho_i$ for their
+    unrenormalized physical densities. The index map $i\mapsto L_i$
+    need not be injective.
+    Fix natural $n,d,r,u,v$ and real $C_N,C_D,C_K,C_C$, independent of $i$.
+    For each member, all parties $b$ and all original nonprivate gates $g$
+    satisfy the following resource bounds:
+    \begin{align}
+        N(W_i)                   & \le C_Ns_i^n, & d_{i,b}  & \le C_Ds_i^d,\notag \\
+        |\operatorname{part}(g)| & \le40,        & n_b(W_i) & \le40.\notag
+    \end{align}
+    For each $i$ there is a natural number $K_i$ bounding the number of
+    recorded monomials at every original nonprivate gate, with
+    $K_i\le C_Ks_i^u$. Every recorded monomial has at most $r$ pair
+    effects, and its scalar coefficient has modulus at most $C_Cs_i^v$.
+    Let $\omega_i$ be unit vectors in the actual physical output spaces,
+    and let $\eta_i\in\mathbb R$ satisfy
+    \begin{align}
+        \|\rho_i-|\omega_i\rangle\langle\omega_i|\|_1 & \le\eta_i.
+        \label{eq:chain_uniform_pure_input}
+    \end{align}
+    Assume also that any two participants of one original nonprivate
+    gate of $W_i$ have level distance at most two. These hypotheses
+    concern every member of the family. For circuits constructed in
+    Theorem~\ref{thm:chain_conditional_preparation}, the geometric
+    conclusion follows from its derived stage support.
+
+    For every real $p>0$, there exist $C_p\ge0$ and an integer $\alpha>0$,
+    chosen before all $i$, such that every member has an actual tagged
+    distributed operator network $\sigma_i$ satisfying
+    \begin{align}
+        \|\sigma_i-\rho_i\|_1 & \le s_i^{-p},\notag                                \\
+        \|\sigma_i-|\omega_i\rangle\langle\omega_i|\|_1
+                              & \le\epsilon_i:=s_i^{-p}+\eta_i,
+        \label{eq:chain_uniform_compression_error}                                 \\
+        1-\eta_i              & \le\operatorname{Re}\operatorname{Tr}\rho_i\le1, &
+        |D_e|                 & \le C_ps_i^\alpha.
+        \label{eq:chain_uniform_compression_dimensions}
+    \end{align}
+    The alphabet bound in (\ref{eq:chain_uniform_compression_dimensions})
+    holds for every actual tagged link $e$.
+    Every party meets at most $3120$ actual links, and the two endpoints
+    of each link participate in one common original nonprivate gate
+    of this same $W_i$. Consequently every level prefix has at most
+    $24960$ tagged crossing links.
+    Set $B_i=\max\{1,\lceil C_ps_i^\alpha\rceil\}$, a natural number.
+    Every actual star or sample alphabet has size at most $B_i$.
+
+    Only for a member with $\epsilon_i<1$, choose one product-basis
+    input $z_i$ and a nonzero actual column $v_i=\sigma_i|z_i\rangle$.
+    This is the same input-fixed endpoint network, with
+    $\|\widehat v_i\|=1$ and
+    $\|\widehat v_i-e^{i\theta_i}\omega_i\|\le2\epsilon_i$ for some real
+    $\theta_i$. For every natural prefix index $a$, put
+    $S_a=\{b:\ell(b)<a\}$. The same column satisfies
+    \begin{align}
+        \operatorname{rank}F_{S_a}(v_i)
+         & \le\prod_{e\in\partial S_a}|D_e|\le B_i^{24960},
+        \label{eq:chain_uniform_column_rank}                \\
+        \operatorname{rank}F_{S_a}(\widehat v_i)
+         & =\operatorname{rank}F_{S_a}(v_i)\le B_i^{24960}.
+        \label{eq:chain_uniform_normalized_rank}
+    \end{align}
+    The constants precede every family member, its network, the
+    member's condition $\epsilon_i<1$, the useful column and all cuts.
+    This is the conditional compression and column step of
+    \cite[Theorem~5.2, Remark~5.3 and Lemma~8.1]{OpenAI2026PolynomialPEPS}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_compression_retained_norm_network,
+        thm:chain_tagged_link_congestion,thm:compression_useful_column_all_cuts}
+    Apply uniform compression to the whole family with the common
+    participation constant $40$. Its actual physical density is
+    $\rho_i$, giving the two errors and retained-trace bounds in
+    (\ref{eq:chain_uniform_compression_error}) and
+    (\ref{eq:chain_uniform_compression_dimensions}). The degree bound
+    $2\cdot40\cdot39=3120$ and the common-original-gate conclusion give
+    $24960$ crossings by Theorem~\ref{thm:chain_tagged_link_congestion}.
+    For each link, round its uniform alphabet bound upwards to $B_i$.
+    Since $B_i\ge1$, the crossing product is at most
+    $B_i^{|\partial S_a|}\le B_i^{24960}$.
+    After fixing a member with $\epsilon_i<1$, apply
+    Theorem~\ref{thm:compression_useful_column_all_cuts} once to its
+    actual network. Its one choice of $z_i,v_i$ has the literal
+    input-fixed tensors and works for all prefixes, giving
+    (\ref{eq:chain_uniform_column_rank}) and
+    (\ref{eq:chain_uniform_normalized_rank}).
+\end{proof}
+
+\begin{theorem}[Party prefixes and original-site coefficient matrices]
+    \label{thm:chain_party_prefix_site_coordinates}
+    \lean{TNLean.MPS.AreaLaw.ChainSweep.rank_partyPrefix_eq_cutMatrix,
+        TNLean.MPS.AreaLaw.ChainSweep.rank_partyPrefix_last_eq_cutMatrix}
+    \leanok
+    \uses{def:chain_terminal_coordinates,def:chain_sweep_stage_assignments,
+        def:chain_party_placement,def:chain_open_mps}
+    Let $L,w,q$ be arbitrary natural numbers, with the same owner and
+    block-coordinate definitions, including the zero-width convention.
+    Let $\psi$ be any vector on the actual physical party factors
+    $\bigotimes_a\mathbb C^{d_a}$, where $d_a=q^{|M_a|}$.
+    Define the original-site vector exactly by
+    \begin{align}
+        \Phi(x) & =\psi(\chi(x)).
+        \label{eq:chain_party_vector_pullback}
+    \end{align}
+    For every natural $a$, put $S_a=\{b:\ell(b)<a\}$. If $a\le m$, then
+    \begin{align}
+        \operatorname{rank}F_{S_a}(\psi)
+         & =\operatorname{rank}M_{at}(\Phi).
+        \label{eq:chain_party_prefix_rank}
+    \end{align}
+    The last prefix $S_{m+1}$ includes every party, including $R_m$, and
+    \begin{align}
+        \operatorname{rank}F_{S_{m+1}}(\psi)
+         & =\operatorname{rank}M_L(\Phi).
+        \label{eq:chain_party_last_rank}
+    \end{align}
+    Scalar physical factors remain in these products. The prefix $S_m$
+    ends at site $mt$; the final remainder is included by $S_{m+1}$.
+    These are the original block coordinates in
+    \cite[Part~II, proof of Theorem~B]{TNLean2026OneDimensional}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:chain_terminal_coordinates,def:chain_sweep_stage_assignments,
+        def:chain_party_placement,def:chain_open_mps}
+    For $a\le m$, the actual owner satisfies
+    $\ell(\operatorname{owner}(x))<a$ exactly when $x<at$.
+    On each side, restricting that owner map and applying the existing
+    block encoding gives a bijection between site configurations and
+    the corresponding party configurations, including empty owner fibres.
+    Encoding after gluing the two site configurations is the same as
+    gluing their two encoded party configurations. Thus $M_{at}(\Phi)$
+    is $F_{S_a}(\psi)$ with its rows and columns separately reindexed
+    by these bijections, giving (\ref{eq:chain_party_prefix_rank}).
+    Every party level is less than $m+1$, so the same argument for all
+    sites gives (\ref{eq:chain_party_last_rank}). No auxiliary coordinate
+    is changed by these physical configuration bijections.
+\end{proof}
+
+\begin{theorem}[Rank bounds at every original-site cut]
+    \label{thm:chain_site_ranks_of_party_prefixes}
+    \lean{TNLean.MPS.AreaLaw.ChainSweep.rank_cutMatrix_le_of_partyPrefix_bounds}
+    \leanok
+    \uses{thm:chain_party_prefix_site_coordinates,def:chain_open_mps}
+    In (\ref{eq:chain_party_vector_pullback}), suppose $q\ge1$, $w\ge1$,
+    $L\ge60w$ and $R\in\mathbb N$ with $R\ge1$. Suppose the actual
+    physical party tensor has the prefix bounds
+    \begin{align}
+        \operatorname{rank}F_{S_a}(\psi) & \le R
+        \label{eq:chain_physical_prefix_hypothesis}
+    \end{align}
+    for every integer $1\le a\le m$. Then every original-site cut
+    $0\le k\le L$ satisfies
+    \begin{align}
+        \operatorname{rank}M_k(\Phi) & \le q^{40w}R.
+        \label{eq:chain_all_site_rank_bound}
+    \end{align}
+    The vector $\psi$ is arbitrary; no norm or nonzero premise is needed.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:chain_party_prefix_site_coordinates,thm:chain_cut_rank_growth,
+        thm:chain_terminal_block_sizes}
+    The coordinate equalities give the same bound $R$ at cuts $at$,
+    for $1\le a\le m$. The endpoint cuts at $0,L$ have rank at most
+    one, hence at most $R$. A cut below $mt$ lies between two adjacent
+    completed-block boundaries, separated by $t=20w$. A cut at or beyond
+    $mt$ lies in the final interval $[mt,L]$, of length less than
+    $4t=80w$. Apply Theorem~\ref{thm:chain_cut_rank_growth} using the
+    rank bound $R$ at both ends of the appropriate interval. This gives
+    (\ref{eq:chain_all_site_rank_bound}). If $m=0$, the prefix assumption
+    is empty and this final interval is the entire chain.
+\end{proof}

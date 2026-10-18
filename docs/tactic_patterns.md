@@ -8500,3 +8500,16 @@ spectral split → block extraction → MPV calculation → strict bounds
   beside the elementary tensor-coordinate transport results and replace all
   occurrences. Two uses in two files are currently identified; no tactic or
   additional hypothesis is required.
+
+### Finite-coordinate presentations in a uniform family — candidate (2026-10-18)
+
+- **Pattern:** A generic family theorem uses a classical equality decision on its
+  finite party type, while the concrete party type has a sum-of-finite-indices
+  decision. Dependent product norms and tagged-link witnesses expose this
+  difference during specialization.
+- **Seen:** `MPS/AreaLaw/CompressedBlockColumn.lean`, in the uniform sampled
+  column proof.
+- **Reuse:** Identify the two decisions by `Subsingleton.elim`, transport the
+  norm and density hypotheses, and rewrite the fixed family member before
+  extracting its actual network witnesses. This retains the same tensors and
+  all cut bounds. One occurrence does not justify a new abstraction.

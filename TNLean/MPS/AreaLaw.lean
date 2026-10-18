@@ -14,6 +14,7 @@ import TNLean.MPS.AreaLaw.Basic
 import TNLean.MPS.AreaLaw.BufferDiscount
 import TNLean.MPS.AreaLaw.ChainStageIncidence
 import TNLean.MPS.AreaLaw.ComponentReduction
+import TNLean.MPS.AreaLaw.CompressedBlockColumn
 import TNLean.MPS.AreaLaw.Counting
 import TNLean.MPS.AreaLaw.CutMatrixGrowth
 import TNLean.MPS.AreaLaw.EntropyInequalities
@@ -21,8 +22,11 @@ import TNLean.MPS.AreaLaw.Hamiltonian
 import TNLean.MPS.AreaLaw.MPSApproximation
 import TNLean.MPS.AreaLaw.OpenMPS
 import TNLean.MPS.AreaLaw.OpenMPSRank
+import TNLean.MPS.AreaLaw.ProtocolConditionalPreparation
+import TNLean.MPS.AreaLaw.ProtocolCutCoordinates
 import TNLean.MPS.AreaLaw.ProtocolInitialization
 import TNLean.MPS.AreaLaw.ProtocolRetiredAuxiliary
+import TNLean.MPS.AreaLaw.ProtocolStageArity
 import TNLean.MPS.AreaLaw.ProtocolSweepFrames
 import TNLean.MPS.AreaLaw.ProtocolSweepGeometry
 import TNLean.MPS.AreaLaw.ProtocolSweepHistory
