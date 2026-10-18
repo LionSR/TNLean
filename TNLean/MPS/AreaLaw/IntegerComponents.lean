@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import Mathlib.Combinatorics.SimpleGraph.Hasse
 import Mathlib.Data.Int.SuccPred
 import Mathlib.Data.Finset.Sort
-import Mathlib.SetTheory.Cardinal.NatCard
+import Mathlib.SetTheory.Cardinal.Finite
 import Mathlib.Order.Interval.Set.OrdConnected
 
 /-!
