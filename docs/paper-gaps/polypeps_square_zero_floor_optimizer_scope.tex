@@ -8,7 +8,7 @@
 \date{October 17, 2026}
 \begin{document}
 \maketitle
-\gapnote{scope-restriction}{open}
+\gapnote{scope-restriction}{resolved}
 
 \section{The source statement}
 
@@ -104,24 +104,14 @@ and no trace-normalized filter. The representation statements keep these
 cases distinct. No positivity of $\Delta$ is needed for the weighted fidelity
 bound; no uniqueness assertion for nonpositive $\Delta$ is made.
 
-\section{What remains outside the result}
+\section{Status}
 
-This is an attributed adaptation, not an identification with unimported OAI
-Lean types. The theorem uses TNLean's existing \texttt{SquareHamiltonian} and
-its native full-system gapped-ground-state predicate. It does not import the
-source's \texttt{IsGridHamiltonian}, \texttt{UniqueGround} or
-\texttt{FullSystemGap} declarations. A theorem literally stated on those
-source types would require their import and a checked model conversion under
-a compatible toolchain; the source and current TNLean toolchains differ.
-No new source dependency is introduced here.
-
-The regions, their nesting and one-crossing property, and the weights remain
-inputs. Their geometric construction, the two-family decomposition,
-Proposition 4.1, inverse-density minimizers, and adaptive-patch or complete
-PEPS compositions are separate work. The former filter-representation,
-original-coordinate and negative-$J$ restrictions have been removed for the
-adapted interface. This note stays open for the literal model comparison and
-geometric obligations; it records no error in the source.
+The result is a standalone adaptation of a lemma of the companion Lean code
+of~\cite{OpenAI2026PolynomialPEPS}. The proofs of the area law and of the
+polynomial PEPS approximation theorem do not use it. The further comparison
+with the companion code's own types is not pursued. The note is resolved
+because that comparison bears on no proved theorem, not because it was carried
+out.
 
 \bibliographystyle{alpha}
 \bibliography{references}

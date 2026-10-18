@@ -133,14 +133,17 @@ variable {ι : Type} [Fintype ι] [DecidableEq ι] {q : ℕ} [NeZero q] {pos : �
   {X : Type*} [DecidableEq X]
 
 omit [DecidableEq X] in
-/-- **A chain of changes of the main sheet.** -/
+/-- **A chain of changes of the main sheet.** Every memory of the chain keeps the main sheet, so
+no stack of the chain is empty.
+
+Polynomial-PEPS manuscript, `06-geometry.tex`, lines 38–40 and 662–664. -/
 theorem isStepChain_main {n : ℕ} {F F' : Frame pos q Party} (l : List X)
     (A : X → Frame pos q Party) (hΩ : ‖Ω‖ ≤ 1)
     (h : IsStepChain (fun F F' => HasFrameChange Ω F F' S r K rs ε) n F F') :
-    IsStepChain (fun Fs Fs' => HasSourceBoundedChange Ω Fs Fs' (ℓ := []) (1 : ℂ) S r K rs ε) n
-      (F :: l.map A) (F' :: l.map A) :=
+    IsStepChain (fun Fs Fs' => HasSourceBoundedChange Ω Fs Fs' (ℓ := []) (1 : ℂ) S r K rs ε ∧
+      Fs' ≠ []) n (F :: l.map A) (F' :: l.map A) :=
   h.map (fun F => F :: l.map A) fun _ _ ⟨_, hc, hs⟩ =>
-    hasSourceBoundedChange_main _ hc hs hΩ (by simp)
+    ⟨hasSourceBoundedChange_main _ hc hs hΩ (by simp), List.cons_ne_nil _ _⟩
 
 /-- **A change of one auxiliary sheet, by its value.** -/
 theorem hasSourceBoundedChange_aux_of_eq (M : Frame pos q Party) {l : List X} (hl : l.Nodup)
@@ -152,16 +155,18 @@ theorem hasSourceBoundedChange_aux_of_eq (M : Frame pos q Party) {l : List X} (h
   obtain ⟨c, hc, hs⟩ := h
   exact hasSourceBoundedChange_aux M hl hx A hc hs hΩ (by simp)
 
-/-- **A chain of changes of one auxiliary sheet.** -/
+/-- **A chain of changes of one auxiliary sheet.** Every memory of the chain keeps the main sheet
+`M`, so no stack of the chain is empty. -/
 theorem isStepChain_aux {n : ℕ} (M : Frame pos q Party) {l : List X} (hl : l.Nodup) {x : X}
     (hx : x ∈ l) (A : X → Frame pos q Party) {F F' : Frame pos q Party} (hΩ : ‖Ω‖ ≤ 1)
     (h : IsStepChain (fun F F' => HasFrameChange Ω F F' S r K rs ε) n F F') :
-    IsStepChain (fun Fs Fs' => HasSourceBoundedChange Ω Fs Fs' (ℓ := []) (1 : ℂ) S r K rs ε) n
-      (M :: l.map (Function.update A x F)) (M :: l.map (Function.update A x F')) :=
+    IsStepChain (fun Fs Fs' => HasSourceBoundedChange Ω Fs Fs' (ℓ := []) (1 : ℂ) S r K rs ε ∧
+      Fs' ≠ []) n (M :: l.map (Function.update A x F)) (M :: l.map (Function.update A x F')) :=
   h.map (fun F => M :: l.map (Function.update A x F)) fun G G' hG => by
     have := hasSourceBoundedChange_aux_of_eq M hl hx (A := Function.update A x G)
       (Function.update_self x G A) hΩ hG
-    rwa [Function.update_idem] at this
+    rw [Function.update_idem] at this
+    exact ⟨this, List.cons_ne_nil _ _⟩
 
 /-- **A change of the main sheet and one auxiliary sheet.** -/
 theorem hasSourceBoundedChange_of_hasPairChange {M M' : Frame pos q Party} {l : List X}

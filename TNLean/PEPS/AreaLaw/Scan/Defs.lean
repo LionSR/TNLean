@@ -24,12 +24,12 @@ endpoint values.
 The charge defect needs only AE strong measurability in the interior: its existing bound
 then gives interval integrability, which suffices for the telescope and exact averaging.
 
-**Scope restriction (inputs as hypotheses):** `ScanData` takes the conclusions of Lemma 9.1,
-Propositions 7.4 and 8.1, and Lemmas 2.1 and 3.1 for one scan as fields instead of deriving them
-from the scan geometry and the transported states. Results over `ScanData` retain this
-restriction; a physical construction must supply the fields for the same original and
-truncated ground vectors. Documented in
-`docs/paper-gaps/arealaw2d_scanner_inputs.tex`.
+`ScanData` records the conclusions of Lemma 9.1, Propositions 7.4 and 8.1, and Lemmas 2.1
+and 3.1 for one scan as fields; the route through `ScanData` is auxiliary, and its results
+are conditional steps, not source statements.
+The source statement of Proposition 9.2 is proved for the original physical system as
+`TNLean.PEPS.AreaLaw.Scan.CollarScan.scannerStatement`, without these fields as hypotheses
+(`docs/paper-gaps/arealaw2d_scanner_inputs.tex`, which records its output-coefficient convention).
 
 The conclusions of Lemma 9.1 form the sub-record `HistoryFacts`, and those of Proposition 4.5
 and Lemmas 2.1 and 3.1 form the parent structure `ScanTruncation`, so that a physical
@@ -325,10 +325,8 @@ structure ScanTruncation (X : ScannerExponents) (κ : ScanConstants) (n : ℕ) w
   the trace norm of the difference of their density matrices (lines 400–403). -/
   traceDist : ℝ
   traceDist_nonneg : 0 ≤ traceDist
-  /-- **Local fix (retained trace-distance coefficient):** the source's `O(n^(-500))`
-  estimate (`08-scanner.tex`, lines 400–403) is kept with its fixed coefficient `κ.C`
-  rather than coefficient one; see `docs/paper-gaps/arealaw2d_scanner_inputs.tex`, which
-  also records the remaining physical construction. -/
+  /-- The source's `O(n^(-500))` estimate (`08-scanner.tex`, lines 400–403), with the
+  constant named explicitly as `κ.C`. -/
   traceDist_le : traceDist ≤ κ.C * (n : ℝ) ^ (-500 : ℝ)
   /-- Lemma 2.1 on the target, whose Hilbert space has `log`-dimension at most `C n² log q`. -/
   continuity_X : |SXt - SX| ≤ κ.C * √traceDist * (1 + κ.C * n ^ 2 * Real.log κ.q)
