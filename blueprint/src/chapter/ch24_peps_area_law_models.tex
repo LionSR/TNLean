@@ -1372,8 +1372,7 @@ original open square. We state the two models separately, following
 
 \begin{theorem}[Uniform area law from collar, amplification and two-family bounds]
     \label{thm:area_law_conditional_assembly}
-    \lean{TNLean.PEPS.AreaLaw.uniformAreaLaw_of_collar_amplification_twoFamilies,
-        TNLean.PEPS.AreaLaw.exists_ambientSupDistance_le_of_mem_graphNeighborhood}
+    \lean{TNLean.PEPS.AreaLaw.uniformAreaLaw_of_collar_amplification_twoFamilies}
     \leanok
     \uses{def:area_law_collar_bound,def:area_law_amplification_bound,
         def:area_law_two_family_decomposition,def:area_law_ground_entropy}
@@ -1390,26 +1389,16 @@ original open square. We state the two models separately, following
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:area_law_zero_boundary,thm:area_law_boundary_assembly,
-        thm:area_law_uniform_collar_threshold,
-        thm:area_law_conditional_assembly_constants}
-    If $|\partial_\Lambda A|=0$, the entropy vanishes by
-    Theorem~\ref{thm:area_law_zero_boundary}. Otherwise, choosing the collar
-    constant $C_1$, applying amplification with $C_0=\max(C_1,1)$ and $M=100$,
-    and choosing the scale threshold so that every admissible radius satisfies
-    $L_n+2r<n^\beta$, we apply the two-family decomposition with $n_*$ at least
-    these thresholds. For each piece, the collar bound gives the hypotheses
-    of amplification for $T_i$. Since $L_{n_i}<n_i^\beta$, the cut clearance
-    $\operatorname{dist}_\infty(T_i,Z)>2n_i^\beta$ gives
-    $N_{2r_i}^\Lambda(S_i)\subseteq A$. A walk of length at most $2r_i$ from
-    $S_i$ moves at most $2r_i$ in sup-norm, so every point of
-    $N_{2r_i}^\Lambda(S_i)$ lies within $L_{n_i}+2r_i<n_i^\beta$ of $T_i$ and
-    hence outside every earlier piece of the same family. Thus
-    $J_i=(\Lambda\setminus A)\cup\bigcup_{j<i,\,f_j=f_i}X_j$ avoids
-    $N_{2r_i}^\Lambda(S_i)$, and amplification applied to $X_i\subseteq A\cap T_i$
-    gives $I_\Omega(X_i:J_i)\le C_{100}n_i^{-100}$. The boundary estimate from
-    partition bounds, with $\sum_in_i^{-100}\le Cb$ and $|D|\le Cb$, gives the
-    linear bound with a constant chosen before the domain and the cut.
+    \uses{thm:area_law_conditional_assembly_constants}
+    Fix $q,R,J,\Delta$ and take template constants $D_0,C_{\rm tpl}$ with the
+    collar bound and the two-family decomposition. Choose the collar constant
+    $C_1$ and threshold $N_1$, then the amplification constant $C_2$ and
+    threshold $N_2$ at the input constant $\max\{C_1,1\}$ and the order $100$,
+    and then a two-family constant $C_3$ at the lower scale
+    $n_*(N_1,N_2,C_2)\ge2$.
+    Theorem~\ref{thm:area_law_conditional_assembly_constants} gives the bound
+    with the constant $C(q,C_2,C_3)\ge0$, which is chosen before the domain
+    and the cut.
 \end{proof}
 
 The proof of Proposition~9.6 of \cite{OpenAI2026AreaLaw} combines the scanner
