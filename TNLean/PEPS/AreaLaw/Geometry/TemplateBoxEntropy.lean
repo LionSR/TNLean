@@ -19,6 +19,11 @@ and the proved weighted coverings bound the core and shells. The existing
 partial-row theorem then bounds arbitrary prefixes. The input is an estimate
 for every safe rectangle, not for the desired template regions.
 
+These results use natural clearance. The final theorem additionally assumes
+box estimates at every exponent in `(0, 1)`. The corresponding statement
+at one fixed positive exponent and real clearance is proved by
+`template_entropy_bounds_of_real_safe_box` in `TemplateBoxEntropyReal`.
+
 Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 September 24, 2026, Lemma 9.4, `08-scanner.tex`, lines 574–590 and 641–667,
 at `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
