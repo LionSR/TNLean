@@ -4621,6 +4621,25 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 ## Candidates
 
+
+### Product-basis vectors under equal register lists — candidate (2026-10-18)
+
+- **Pattern:** Induct on a list of raw registers, transport its elementary
+  tensor along equality of the register lists, and use
+  `Layout.memCongr_cons_tmul` and `Layout.memCongr_symm` to retain the actual
+  basis coordinates.
+- **Seen:** Two occurrences in one file: `rawAppend_siteVec` and
+  `auxiliaryRaw_siteVec` in `MPS/AreaLaw/ProtocolTerminalWord.lean`.
+- **Abstraction:** The existing tensor transport lemmas are used at both
+  occurrences. If a third consumer appears in another file, consider a
+  concatenation or label-map basis identity in `PEPS/Approximation/SiteRegisters`
+  before adding another list induction.
+- **Notes:** The first identity splits an actual raw list at a specified
+  boundary; the second identifies the unchanged auxiliary labels. Neither
+  assumes an output vector or a different ownership assignment. The focused
+  area-law tactic scan found no repeated block at its three-occurrence threshold.
+
+
 ### Partial trace under a change of discarded basis — candidate (2026-10-18)
 
 - **Pattern:** Apply `OrthonormalBasis.tensorProduct_rankOne_basisChange` with
