@@ -43,6 +43,90 @@ theorem leftBlock_eq_interval (L k : ℕ) : leftBlock L k = interval L 0 k := by
   ext i
   simp
 
+/-- The actual reduced state at every prefix cut satisfies the marginal tail
+bound with the uniform chain budget. Source: the one-dimensional note,
+`part1_arealaw.tex`, `lem:tail` and `eq:theta`, together with
+`part2a_mps_information.tex`, `thm:Bshort`, lines 81–91. -/
+private theorem surprisalTail_leftBlock_le
+    {L q R : ℕ} {J Δ : ℝ}
+    (hq : 1 ≤ q) (hJ : 0 ≤ J) (hΔ : 0 < Δ)
+    (h : ChainHamiltonian L q R J)
+    {E₀ : ℝ} {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
+    (hgs : Matrix.IsGappedGroundState h.operator E₀ Ω Δ)
+    (k : ℕ) (w : ℝ) (hw : 0 ≤ w) :
+    Entropy.surprisalTail
+      (Entropy.regionState_isHermitian
+        (n := fun _ : Fin L ↦ q) (leftBlock L k) Ω).eigenvalues
+      (Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (leftBlock L k) Ω) w ≤
+      2 * Real.exp (Real.exp 1 / 2) *
+        Real.exp (-(w /
+          (32 * Real.sqrt ((1 + J / Δ) * chainBudgetConst q R)))) := by
+  have hϑ : 0 ≤ J / Δ := div_nonneg hJ hΔ.le
+  have hK := one_le_chainBudgetConst q R
+  have hs : 0 < Real.sqrt ((1 + J / Δ) * chainBudgetConst q R) :=
+    Real.sqrt_pos.mpr (by nlinarith)
+  refine (h.surprisalTail_regionState_le hJ hΔ hgs _ w).trans ((min_le_right _ _).trans ?_)
+  have hB : cutLogBudget L q R (leftBlock L k) ≤ chainBudgetConst q R := by
+    rw [leftBlock_eq_interval]
+    exact cutLogBudget_interval_le hq 0 k
+  have hB1 := one_le_cutLogBudget L q R (leftBlock L k)
+  have hsA : 0 < Real.sqrt ((1 + J / Δ) * cutLogBudget L q R (leftBlock L k)) :=
+    Real.sqrt_pos.mpr (by nlinarith)
+  have hsle : Real.sqrt ((1 + J / Δ) * cutLogBudget L q R (leftBlock L k)) ≤
+      Real.sqrt ((1 + J / Δ) * chainBudgetConst q R) :=
+    Real.sqrt_le_sqrt (by gcongr)
+  gcongr
+
+open scoped ComplexOrder in
+/-- At every prefix cut, the spectral projection of the actual reduced ground
+state at threshold `exp (-(C_int + w))` has uniformly bounded rank and discarded
+mass. The constants are independent of the chain length and the cut.
+Source: the one-dimensional note, `part2a_mps_information.tex`,
+`sec:shortcut`, proof of `thm:Bshort`, lines 81–94, together with the marginal
+tail estimate in `part1_arealaw.tex`, `lem:tail` and `eq:theta`.
+This is the per-cut estimate requested in issue #9549, not the arbitrary-rank
+sequential truncation proposition `prop:VC`. -/
+theorem ChainHamiltonian.spectralProjectionGE_leftBlock_bounds
+    {L q R : ℕ} {J Δ : ℝ} (h : ChainHamiltonian L q R J)
+    (hq : 1 ≤ q) (hJ : 0 ≤ J) (hΔ : 0 < Δ)
+    {E₀ : ℝ} {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
+    (hgs : Matrix.IsGappedGroundState h.operator E₀ Ω Δ)
+    (k : ℕ) (w : ℝ) (hw : 0 ≤ w) :
+    let ρ := Entropy.regionState (n := fun _ : Fin L ↦ q) (leftBlock L k) Ω
+    let P := Matrix.spectralProjectionGE ρ
+      (Real.exp (-(chainIntervalEntropyBound q R J Δ + w)))
+    IsStarProjection P ∧
+      (P.rank : ℝ) ≤ Real.exp (chainIntervalEntropyBound q R J Δ + w) ∧
+      ((1 - P) * ρ).trace.re ≤
+        2 * Real.exp (Real.exp 1 / 2) *
+          Real.exp (-(w /
+            (32 * Real.sqrt ((1 + J / Δ) * chainBudgetConst q R)))) := by
+  classical
+  dsimp only
+  have hρ := Entropy.regionState_posSemidef (n := fun _ : Fin L ↦ q) (leftBlock L k) Ω
+  refine ⟨hρ.isHermitian.isStarProjection_spectralProjectionGE _,
+    hρ.rank_spectralProjectionGE_exp_le (Entropy.trace_regionState_eq_one hgs.1) _ _, ?_⟩
+  let C := chainIntervalEntropyBound q R J Δ
+  let S := Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (leftBlock L k) Ω
+  let v := C + w - S
+  have hS : S ≤ C := by
+    dsimp only [S, C]
+    rw [leftBlock_eq_interval]
+    exact regionEntropy_interval_le hq hJ hΔ h hgs _ _
+  have hwv : w ≤ v := by
+    dsimp only [v]
+    linarith
+  have hv : 0 ≤ v := hw.trans hwv
+  have hcenter : S + v = C + w := by
+    dsimp only [v]
+    ring
+  have hmass := hρ.trace_complement_spectralProjectionGE_le_surprisalTail S v
+  rw [hcenter] at hmass
+  refine hmass.trans ((surprisalTail_leftBlock_le hq hJ hΔ h hgs k v hv).trans ?_)
+  apply mul_le_mul_of_nonneg_left _ (by positivity)
+  apply Real.exp_le_exp.mpr
+  exact neg_le_neg (div_le_div_of_nonneg_right hwv (by positivity))
+
 /-- Scaling a matrix product state multiplies its scalar endpoint cap. -/
 theorem IsOpenMPS.smul {L q D : ℕ} {ψ : (Fin L → Fin q) → ℂ} (h : IsOpenMPS L q D ψ) (c : ℂ) :
     IsOpenMPS L q D fun x ↦ c * ψ x := by
@@ -128,15 +212,7 @@ theorem exists_isOpenMPS_norm_sub_le_of_error
       (Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (leftBlock L k) Ω) w ≤
       2 * Real.exp (Real.exp 1 / 2) * Real.exp (-(w / (32 * s))) := by
     intro k
-    refine (h.surprisalTail_regionState_le hJ hΔ hgs _ w).trans ((min_le_right _ _).trans ?_)
-    have hB : cutLogBudget L q R (leftBlock L k) ≤ chainBudgetConst q R := by
-      rw [leftBlock_eq_interval]; exact cutLogBudget_interval_le hq 0 k
-    have hB1 := one_le_cutLogBudget L q R (leftBlock L k)
-    have hsA : 0 < Real.sqrt ((1 + J / Δ) * cutLogBudget L q R (leftBlock L k)) :=
-      Real.sqrt_pos.mpr (by nlinarith)
-    have hsle : Real.sqrt ((1 + J / Δ) * cutLogBudget L q R (leftBlock L k)) ≤ s :=
-      Real.sqrt_le_sqrt (by gcongr)
-    gcongr
+    exact surprisalTail_leftBlock_le hq hJ hΔ h hgs k w hw0
   -- the sequential truncation
   obtain ⟨Φ₀, hrank, hdist⟩ := exists_sequentialTruncation Ω hΩ w
   -- the distance

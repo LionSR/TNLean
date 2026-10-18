@@ -13,7 +13,8 @@ its fixed-accuracy specialization. -/
 run_cmd do
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
   for decl in #[``TNLean.MPS.AreaLaw.exists_isOpenMPS_norm_sub_le_of_error,
-      ``TNLean.MPS.AreaLaw.exists_isOpenMPS_norm_sub_le] do
+      ``TNLean.MPS.AreaLaw.exists_isOpenMPS_norm_sub_le,
+      ``TNLean.MPS.AreaLaw.ChainHamiltonian.spectralProjectionGE_leftBlock_bounds] do
     unless (← Lean.getEnv).contains decl do
       throwError "Missing declaration {decl}"
     let axioms ← Lean.collectAxioms decl

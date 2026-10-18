@@ -615,6 +615,46 @@ for an arbitrary finite set of sites and are instantiated here directly.
     is at most the surprisal tail.
 \end{proof}
 
+\begin{theorem}[Spectral truncation at a prefix cut]
+    \label{thm:chain_prefix_spectral_bounds}
+    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.spectralProjectionGE_leftBlock_bounds}
+    \leanok
+    \uses{def:chain_model}
+    Let $\Omega$ be a gapped ground vector, with gap $\Delta>0$, of a
+    finite-range Hamiltonian with term norms at most $J\ge0$ on a chain of
+    $L\ge0$ sites with local dimension $q\ge1$.
+    For any natural number $k$, let $X$ be the sites $i$ with $0\le i<k$,
+    let $\rho_X$ be the reduced state, and put
+    $s=\sqrt{(1+J/\Delta)B_R}$.
+    For $w\ge0$, let $P$ be the spectral projection of $\rho_X$ onto
+    eigenvalues at least $e^{-(C_{\mathrm{int}}+w)}$. Then $P$ is an
+    orthogonal projection and
+    \begin{align}
+        \operatorname{rank}P
+         & \le e^{C_{\mathrm{int}}+w}, \notag                  \\
+        \operatorname{Tr}((1-P)\rho_X)
+         & \le 2e^{e/2}\exp\left(-\frac{w}{32s}\right). \notag
+    \end{align}
+    The constants are independent of $L$ and $k$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:chain_area_law, lem:chain_marginal_tail,
+        lem:chain_crossing_count}
+    The eigenvalues retained by $P$ are at least
+    $e^{-(C_{\mathrm{int}}+w)}$, and their sum is at most
+    $\operatorname{Tr}\rho_X=1$, giving the rank bound.
+    Write $S=S(X)\le C_{\mathrm{int}}$ and
+    $v=C_{\mathrm{int}}+w-S\ge w\ge0$.
+    The discarded mass is at most the surprisal tail beyond $v$ centred
+    at $S$, because $S+v=C_{\mathrm{int}}+w$.
+    The marginal tail estimate with the uniform interval budget $B_R$ gives
+    $\operatorname{Tr}((1-P)\rho_X)\le2e^{e/2}e^{-v/(32s)}
+        \le2e^{e/2}e^{-w/(32s)}$.
+    This is the prefix-cut estimate used in the argument for Theorem~B
+    of \cite[Part~IIa]{TNLean2026OneDimensional}.
+\end{proof}
+
 \begin{theorem}[Matrix product state approximation at a prescribed accuracy]
     \label{thm:chain_mps_approximation_error}
     \lean{TNLean.MPS.AreaLaw.exists_isOpenMPS_norm_sub_le_of_error}
