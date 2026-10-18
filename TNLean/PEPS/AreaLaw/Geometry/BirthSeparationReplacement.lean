@@ -333,7 +333,7 @@ theorem repairBirth_separation {ι : Type*} (ξ : ι → Fin 2) (σ : RepairFanS
           Real.rpow_le_rpow_of_exponent_le hu rho_pos_lt_one.2.le
       _ = u := Real.rpow_one u
   have hρ0 : 0 ≤ u ^ (Exponents.rho : ℝ) := Real.rpow_nonneg hu0.le _
-  have hc : birthSeparationConstant ≤ 1 := hη4.trans (by norm_num)
+  have hc := birthSeparationConstant_le_one
   have hx'n : ‖x'‖ ≤ 1 := by
     simp only [repairNormRunRegion, cellFanRunRegion, Set.mem_iUnion] at hx'
     obtain ⟨s, -, hs⟩ := hx'

@@ -97,7 +97,7 @@ theorem isBeltFacet_ne_zero {f : ℤ × ℤ × ℤ} (hf : IsBeltFacet f) :
   rcases hf with ⟨ha | ha, hb⟩ | ⟨ha, hb | hb⟩ | ⟨ha | ha, hb | hb, -⟩ <;> omega
 
 /-- The two normal coefficients of a belt facet are `0` or `±1`, and not both
-`0`; their squares sum to `|a| + |b|`. -/
+`0`, so their squares sum to at least `1`. -/
 private theorem isBeltFacet_coeffs {f : ℤ × ℤ × ℤ} (hf : IsBeltFacet f) :
     |(f.1 : ℝ)| ≤ 1 ∧ |(f.2.1 : ℝ)| ≤ 1 ∧ 1 ≤ (f.1 : ℝ) ^ 2 + (f.2.1 : ℝ) ^ 2 := by
   rcases hf with ⟨ha | ha, hb⟩ | ⟨ha, hb | hb⟩ | ⟨ha | ha, hb | hb, -⟩ <;>
@@ -154,11 +154,8 @@ theorem mem_facetPolygon {S : Set (ℤ × ℤ × ℤ)} {z : ℝ × ℝ} :
   simp [facetPolygon, intHalfPlane]
 
 theorem facetPolygon_union (S T : Set (ℤ × ℤ × ℤ)) :
-    facetPolygon (S ∪ T) = facetPolygon S ∩ facetPolygon T := by
-  ext z
-  simp only [mem_facetPolygon, Set.mem_union, Set.mem_inter_iff]
-  exact ⟨fun h ↦ ⟨fun f hf ↦ h f (.inl hf), fun f hf ↦ h f (.inr hf)⟩,
-    fun h f hf ↦ hf.elim (h.1 f) (h.2 f)⟩
+    facetPolygon (S ∪ T) = facetPolygon S ∩ facetPolygon T :=
+  Set.biInter_union S T _
 
 theorem facetPolygon_range {ι : Type*} (F : ι → ℤ × ℤ × ℤ) :
     facetPolygon (Set.range F) = ⋂ i, intHalfPlane (F i).1 (F i).2.1 (F i).2.2 :=
