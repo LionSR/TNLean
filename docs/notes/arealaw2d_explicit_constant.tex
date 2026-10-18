@@ -237,7 +237,7 @@ The exponent is improved from $e$ to $(1-\ell)e$ in each round
 \leanid{TNLean.PEPS.AreaLaw.Scan.exists_uniform_boxEntropy_improvement}). If the
 current bound is $C_j r^{1+e}$, the next constant is
 \begin{equation}
-    C_{j+1}=576\,C_{\rm out}(C_j)+N(C_j)^2\log q+1,
+    C_{j+1}=576\,C_{\rm out}(C_j)+N(C_j)^2\log q+1+\log q,
     \label{eq:round}
 \end{equation}
 where $C_{\rm out}(C_j)$ is the output coefficient of the rough scanner
@@ -247,9 +247,9 @@ geometry threshold (\leanid{TNLean.PEPS.AreaLaw.Scan.roundedClearanceThreshold})
 recursion is the named sequence
 \leanid{TNLean.PEPS.AreaLaw.Scan.boxBootstrapConstant}, and the round count is
 \leanid{TNLean.PEPS.AreaLaw.Scan.boxBootstrapRounds}, the least $m$ with
-$(1-\ell)^m e_0\le e_*$. The rounds are iterated with threshold $1$, so each round
-adds one further $\log q$ to the right-hand side of \eqref{eq:round}. The
-term $N^2\log q$ absorbs the bounded scales by the
+$(1-\ell)^m e_0\le e_*$. The last term $\log q$ appears because the rounds
+are iterated with threshold $1$: extending the improved bound from scale $1$ on costs the volume
+bound once more. The term $N^2\log q$ absorbs the bounded scales by the
 volume bound $F(r)\le r^2\log q$
 (\src{TNLean/PEPS/AreaLaw/Scan/ExponentBootstrap.lean}, line~39). The threshold
 $N(C_j)$ is a maximum of kind (a) thresholds, rows~1--17 and~32--33 of

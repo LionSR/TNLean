@@ -338,7 +338,8 @@ generation's squares, including terminal ones, from every old region.
         TNLean.PEPS.AreaLaw.Geometry.repairFinalRegion,
         TNLean.PEPS.AreaLaw.Geometry.IsRepairBirthSeparated,
         TNLean.PEPS.AreaLaw.Geometry.exists_isRepairBirthSeparated_of_isUniformRepairInduction,
-        TNLean.PEPS.AreaLaw.Geometry.exists_isRepairBirthSeparated_of_uniformRepairInductionStatement}
+        TNLean.PEPS.AreaLaw.Geometry.exists_isRepairBirthSeparated_of_uniformRepairInductionStatement,
+        TNLean.PEPS.AreaLaw.Geometry.exists_threshold_isRepairBirthSeparated_of_uniformRepairInductionStatement}
     \leanok
     \uses{thm:area_law_replacement_birth_separation_local,
         thm:area_law_star_same_label_bound,
@@ -352,7 +353,8 @@ generation's squares, including terminal ones, from every old region.
     the intersection of its current regions over all later generations. Let a
     replacement be born at a parent mark of scale $S$. Then its closed birth
     has distance at least $c_1d(S)^{\rho_0}$ from the final actual region of
-    every other identifier of its generation with the same label.
+    every other identifier of its generation with the same label. One may
+    take $c_1=1/28$.
 \end{theorem}
 
 \begin{proof}
@@ -548,7 +550,9 @@ Definition~\ref{def:area_law_normalized_repair_fan}; we call them atoms.
 \begin{theorem}[Birth separation of an initial belt tile from local
         comparison regions]
     \label{thm:area_law_initial_belt_birth_separation_local}
-    \lean{TNLean.PEPS.AreaLaw.Geometry.exists_initialBeltRun_birth_separation}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.birthTemplateSeparationConstant,
+        TNLean.PEPS.AreaLaw.Geometry.initialBeltRun_birth_separation,
+        TNLean.PEPS.AreaLaw.Geometry.exists_initialBeltRun_birth_separation}
     \leanok
     \uses{def:area_law_initial_birth_regions, def:area_law_initial_open_regions,
         def:area_law_belt_cell_marks}
@@ -560,14 +564,14 @@ Definition~\ref{def:area_law_normalized_repair_fan}; we call them atoms.
     subset of the open region of $y$ whose points have distance greater than
     $u^{\rho_0}/4$ from each of the nine marks of the cell. Then every point
     of the closed birth region of $x$ has distance at least $c_1u^{\rho_0}$
-    from $Y$.
+    from $Y$. One may take $c_1=1/112$.
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{thm:area_law_belt_atom_dichotomy, thm:area_law_belt_cell_local_atoms,
         thm:area_law_initial_belt_contacts, thm:area_law_belt_atoms}
-    Put $c_1=\min(\eta/4,1/8)$ with $\eta$ from
+    Put $c_1=\min(\eta/4,1/8)=1/112$ with $\eta=1/28$ from
     Theorem~\ref{thm:area_law_belt_atom_dichotomy}. If $\|p-w\|\ge u$ there is
     nothing to prove, since $u\ge u^{\rho_0}$. Otherwise the normalized points
     $p$ and $w$ lie in atoms $A$ and $B$ contained in the normalized birth
@@ -586,6 +590,7 @@ Definition~\ref{def:area_law_normalized_repair_fan}; we call them atoms.
     \label{thm:area_law_initial_belt_birth_separation}
     \lean{TNLean.PEPS.AreaLaw.Geometry.InitialRegionIndex.beltScaleIndex,
         TNLean.PEPS.AreaLaw.Geometry.IsInitialBirthSeparated,
+        TNLean.PEPS.AreaLaw.Geometry.isInitialBirthSeparated_birthTemplateSeparationConstant,
         TNLean.PEPS.AreaLaw.Geometry.exists_isInitialBirthSeparated}
     \leanok
     \uses{def:area_law_repair_stage}
@@ -595,7 +600,7 @@ Definition~\ref{def:area_law_normalized_repair_fan}; we call them atoms.
     Let $\mathcal B$ be the closed birth region of an initial belt tile of
     side scale $u=t_k$. Then its distance from the final actual region of
     every primary and of every other initial belt tile with the same label is
-    at least $c_1u^{\rho_0}$.
+    at least $c_1u^{\rho_0}$. One may take $c_1=1/112$.
 \end{theorem}
 
 \begin{proof}
@@ -622,7 +627,9 @@ Definition~\ref{def:area_law_normalized_repair_fan}; we call them atoms.
     \lean{TNLean.PEPS.AreaLaw.Geometry.IsInitialBirthSeparated.mono,
         TNLean.PEPS.AreaLaw.Geometry.IsRepairBirthSeparated.mono,
         TNLean.PEPS.AreaLaw.Geometry.exists_birthSeparation_of_uniformRepairInductionStatement,
-        TNLean.PEPS.AreaLaw.Geometry.exists_birthSeparation_of_initialIsolatedStars}
+        TNLean.PEPS.AreaLaw.Geometry.exists_birthSeparation_of_initialIsolatedStars,
+        TNLean.PEPS.AreaLaw.Geometry.exists_threshold_birthSeparation_of_uniformRepairInductionStatement,
+        TNLean.PEPS.AreaLaw.Geometry.exists_threshold_birthSeparation_of_initialIsolatedStars}
     \leanok
     \uses{def:area_law_uniform_repair_conclusion}
     Assume the conclusion of the uniform repair induction of
@@ -634,15 +641,16 @@ Definition~\ref{def:area_law_normalized_repair_fan}; we call them atoms.
     Theorems~\ref{thm:area_law_replacement_birth_separation_conditional}
     and~\ref{thm:area_law_initial_belt_birth_separation} hold with $c_1$.
     The same holds under the conclusion of the initial isolated-star lemma,
-    from which the uniform repair induction follows.
+    from which the uniform repair induction follows. One may take
+    $c_1=1/112$.
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{thm:area_law_replacement_birth_separation_conditional,
         thm:area_law_initial_belt_birth_separation}
-    Take the smaller of the two constants; both lower bounds remain valid for
-    a smaller constant.
+    Take the smaller of the two constants, $\min(1/28,1/112)=1/112$; both
+    lower bounds remain valid for a smaller constant.
 \end{proof}
 
 The isolated stars of the initial stage are proved in
@@ -654,7 +662,8 @@ Theorem~\ref{thm:area_law_birth_separation}~\cite{gap:arealaw2d_birth_separation
 % geometry:birth-separation, lines 573--582.
 \begin{theorem}[Birth-template separation]
     \label{thm:area_law_birth_separation}
-    \lean{TNLean.PEPS.AreaLaw.Geometry.exists_birthSeparation}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.exists_birthSeparation,
+        TNLean.PEPS.AreaLaw.Geometry.exists_threshold_birthSeparation}
     \leanok
     \uses{def:area_law_repair_stage}
     There is a fixed $c_1>0$ such that the following holds, for every layer
@@ -665,7 +674,7 @@ Theorem~\ref{thm:area_law_birth_separation}~\cite{gap:arealaw2d_birth_separation
     of every earlier or peer identifier of the same label is at least
     $c_1u^{\rho_0}$. A peer means
     another initial belt tile, or another replacement born at the same
-    generation, respectively.
+    generation, respectively. One may take $c_1=1/112$.
 \end{theorem}
 
 \begin{proof}

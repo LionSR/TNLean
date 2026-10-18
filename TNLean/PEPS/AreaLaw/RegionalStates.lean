@@ -56,24 +56,15 @@ Source: area-law `sec:prelim`, lines 23–25, empty tensor products. -/
 @[simp] theorem regionalEntropy_empty (Λ : Finset (ℤ × ℤ)) (q : ℕ)
     (Ω : StateSpace Λ q) (hΩ : ‖Ω‖ = 1) :
     regionalEntropy Λ q Ω ∅ = 0 := by
-  apply vonNeumannEntropy_eq_zero_of_rank_le_one
-    (reducedState_posSemidef Λ q Ω ∅) (trace_reducedState Ω hΩ ∅)
-  simpa using Matrix.rank_le_card_width (reducedState Λ q Ω ∅)
+  rw [regionalEntropy_eq_regionEntropy]
+  exact regionEntropy_empty hΩ
 
 /-- The full region has zero entropy for a unit pure vector.
 Source: area-law `sec:prelim`, lines 23–25, purity and empty complements. -/
 @[simp] theorem regionalEntropy_univ (Λ : Finset (ℤ × ℤ)) (q : ℕ)
     (Ω : StateSpace Λ q) (hΩ : ‖Ω‖ = 1) :
     regionalEntropy Λ q Ω Finset.univ = 0 := by
-  apply vonNeumannEntropy_eq_zero_of_rank_le_one
-    (reducedState_posSemidef Λ q Ω Finset.univ)
-    (trace_reducedState Ω hΩ Finset.univ)
-  change (Matrix.partialTraceRight (Matrix.vecMulVec
-    (fun x ↦ Ω ((configurationSplit Λ q Finset.univ).symm x))
-    (star (fun x ↦ Ω ((configurationSplit Λ q Finset.univ).symm x))))).rank ≤ 1
-  rw [Matrix.partialTraceRight_vecMulVec_eq]
-  exact (Matrix.rank_mul_le_left _ _).trans (by
-    simpa using Matrix.rank_le_card_width
-      (Matrix.schmidtCoeffMatrix (fun x ↦ Ω ((configurationSplit Λ q Finset.univ).symm x))))
+  rw [regionalEntropy_eq_regionEntropy]
+  exact regionEntropy_univ hΩ
 
 end TNLean.PEPS.AreaLaw
