@@ -190,6 +190,15 @@ info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashC
 #print axioms TNLean.PEPS.AreaLaw.Geometry.exists_birthSeparation_of_uniformRepairInductionStatement
 
 /--
+info: 'TNLean.PEPS.AreaLaw.Geometry.exists_threshold_birthSeparation_of_initialIsolatedStars'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+---
+info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms TNLean.PEPS.AreaLaw.Geometry.exists_threshold_birthSeparation_of_initialIsolatedStars
+
+/--
 info: 'TNLean.PEPS.AreaLaw.Geometry.exists_birthSeparation_of_initialIsolatedStars'
 depends on axioms: [propext, Classical.choice, Quot.sound]
 ---
