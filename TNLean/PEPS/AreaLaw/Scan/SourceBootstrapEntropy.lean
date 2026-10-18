@@ -133,22 +133,21 @@ noncomputable def sourceBootstrapEntropyThreshold (q R : ℕ) {e₀ : ℝ} (he�
 
 open Classical in
 /-- The actual rough-only bootstrap improvement of
-`exists_sourceBootstrap_entropy_improvement_of_threshold_le` at any transport constants
-`ct, C_ent, e_ent, C_en, e_en` with `0 < ct` satisfying the finite-family transport bound, such
-as QICLean's universal transport constants, which depend on none of `q, R, J, Δ`. Only the
-truncation constant `Ctr` remains existential, chosen before the entropy coefficient `Ce`.
-Source: `08-scanner.tex`, lines 693--792. -/
-theorem exists_sourceBootstrap_entropy_improvement_of_finiteFamilyTransportBound
+`exists_sourceBootstrap_entropy_improvement_of_finiteFamilyTransportBound` at the named
+truncation constant `Ctr = latticeTruncationRadiusConstant R J Δ (C_T + 1)`, which depends only
+on `R, J, Δ, C_T`. Source: `08-scanner.tex`, lines 693--792. -/
+theorem sourceBootstrap_entropy_improvement_explicit
     {q : ℕ} [NeZero q] (hq : 1 ≤ q) (R : ℕ)
     {J Δ C_T C₁ e₀ : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < Δ)
     (hC_T : 0 ≤ C_T) (hC₁ : 0 < C₁) (multiplicity : ℕ)
     (hmultiplicity : 3 * (multiplicity : ℝ) ≤ C₁)
     (he₀ : (Exponents.boxError : ℝ) < e₀) (he₀₁ : e₀ < 1)
     {ct Cent eent Cen een : ℝ} (hct : 0 < ct)
-    (htransport : FiniteFamilyTransportBound ct Cent eent Cen een) :
+    (htransport : FiniteFamilyTransportBound ct Cent eent Cen een)
+    {Ctr : ℝ} (hCtrEq : Ctr = latticeTruncationRadiusConstant R J Δ (C_T + 1)) :
     let he₀pos : 0 < e₀ := lt_trans (by norm_num [Exponents.boxError]) he₀
     let F := BootstrapParameters.scannerExponents e₀ he₀pos he₀₁
-    ∃ Ctr : ℝ, 0 < Ctr ∧ ∀ Ce : ℝ, 0 ≤ Ce →
+    ∀ Ce : ℝ, 0 ≤ Ce →
       ∀ η : ℝ, (Exponents.boxError : ℝ) < η → η ≤ e₀ →
       ∀ (Λ T : Finset (ℤ × ℤ)) [LinearOrder (AdmissibleSupport Λ R)]
         (hT : T.Nonempty) (h : LocalHamiltonian Λ q R J)
@@ -176,11 +175,12 @@ theorem exists_sourceBootstrap_entropy_improvement_of_finiteFamilyTransportBound
           bootstrapRestoredBudgetCoefficient q Ce *
             (S.n : ℝ) ^ (1 + (1 - BootstrapParameters.ell e₀) * η) := by
   intro he₀pos F
-  obtain ⟨Ctr, hCtr, hsource⟩ :=
-    exists_sourceTarget_selected_actualCharge_rough_comparison_of_finiteFamilyTransportBound
-      hq R hJ hΔ hC_T hC₁ multiplicity hmultiplicity 100 htransport
+  have hsource := sourceTarget_selected_actualCharge_rough_comparison_explicit
+    hq R hJ hΔ hC_T hC₁ multiplicity hmultiplicity 100 htransport hCtrEq
+  have hCtr : 0 < Ctr := by
+    rw [hCtrEq]; exact latticeTruncationRadiusConstant_pos R hΔ (by positivity)
   have hsource := hsource F
-  refine ⟨Ctr, hCtr, fun Ce hCe ↦ ?_⟩
+  intro Ce hCe
   let C := actualChargeEnergyCoefficient q Ctr multiplicity Cen een
   let Cl := transportLogExponent een (een + 1 / 8)
   let Ct := transportLogCoefficient q Ctr Cent eent Cen een
@@ -392,6 +392,55 @@ theorem exists_sourceBootstrap_entropy_improvement_of_finiteFamilyTransportBound
   rw [← hKExplicit, ← hDExplicit, ← hLExplicit] at hbudgetN
   exact hbudgetN η hη hηe₀ (regionalEntropy Λ q Ω X) z τ hwindow.2.2.1 hwindow.2.1
     hτ.le (hτhalf.le.trans (by norm_num)) hrestored
+
+open Classical in
+/-- The actual rough-only bootstrap improvement of
+`exists_sourceBootstrap_entropy_improvement_of_threshold_le` at any transport constants
+`ct, C_ent, e_ent, C_en, e_en` with `0 < ct` satisfying the finite-family transport bound, such
+as QICLean's universal transport constants, which depend on none of `q, R, J, Δ`. Only the
+truncation constant `Ctr` remains existential, chosen before the entropy coefficient `Ce`.
+Source: `08-scanner.tex`, lines 693--792. -/
+theorem exists_sourceBootstrap_entropy_improvement_of_finiteFamilyTransportBound
+    {q : ℕ} [NeZero q] (hq : 1 ≤ q) (R : ℕ)
+    {J Δ C_T C₁ e₀ : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < Δ)
+    (hC_T : 0 ≤ C_T) (hC₁ : 0 < C₁) (multiplicity : ℕ)
+    (hmultiplicity : 3 * (multiplicity : ℝ) ≤ C₁)
+    (he₀ : (Exponents.boxError : ℝ) < e₀) (he₀₁ : e₀ < 1)
+    {ct Cent eent Cen een : ℝ} (hct : 0 < ct)
+    (htransport : FiniteFamilyTransportBound ct Cent eent Cen een) :
+    let he₀pos : 0 < e₀ := lt_trans (by norm_num [Exponents.boxError]) he₀
+    let F := BootstrapParameters.scannerExponents e₀ he₀pos he₀₁
+    ∃ Ctr : ℝ, 0 < Ctr ∧ ∀ Ce : ℝ, 0 ≤ Ce →
+      ∀ η : ℝ, (Exponents.boxError : ℝ) < η → η ≤ e₀ →
+      ∀ (Λ T : Finset (ℤ × ℤ)) [LinearOrder (AdmissibleSupport Λ R)]
+        (hT : T.Nonempty) (h : LocalHamiltonian Λ q R J)
+        (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (E₀ : ℝ)
+        (Ω : StateSpace Λ q),
+        IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+        S.graph = domainGraph Λ → (∀ i, S.anchor i ∈ i.val) →
+        sourceBootstrapEntropyThreshold q R he₀pos he₀₁ Ctr ct Cent eent Cen een
+          (Δ / positiveNormalization 1 (Δ / 2) J) C₁ C_T Ce multiplicity ≤ S.n →
+        S.r₀ = roundedLogRadius Ctr S.n →
+        S.m = F.m S.n → S.D = F.D S.n → S.K = F.K S.n →
+        S.C₁ = C₁ → (T.card : ℝ) ≤ C_T * (S.n : ℝ) ^ 2 →
+        S.depth = (fun x ↦ ambientDepth T hT x.val) →
+        (∀ r : ℕ, 1 ≤ r → r ≤ F.L S.n →
+          (ambientDilation T r \ ambientDilation T (r - 1)).card ≤ S.n) →
+        (∀ x, (Finset.univ.filter fun i ↦ S.anchor i = x).card ≤ multiplicity) →
+        (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+          ((2 * F.L S.n + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z) →
+        regionalEntropy Λ q Ω (S.A.filter fun x ↦ x.val ∈ T) ≤
+          Ce * (S.n : ℝ) ^ (1 + η) →
+        (∀ j : ℕ, j ≤ F.L S.n →
+          regionalEntropy Λ q Ω (positiveDepthPrefix S.A S.depth (j : ℤ)) ≤
+            Ce * ((S.n : ℝ) * (F.L S.n : ℝ) ^ η + S.n)) →
+        regionalEntropy Λ q Ω (S.A.filter fun x ↦ x.val ∈ T) ≤
+          bootstrapRestoredBudgetCoefficient q Ce *
+            (S.n : ℝ) ^ (1 + (1 - BootstrapParameters.ell e₀) * η) := by
+  intro he₀pos F
+  exact ⟨_, latticeTruncationRadiusConstant_pos R hΔ (by positivity : (0 : ℝ) ≤ C_T + 1),
+    sourceBootstrap_entropy_improvement_explicit hq R hJ hΔ hC_T hC₁ multiplicity hmultiplicity
+      he₀ he₀₁ hct htransport rfl⟩
 
 open Classical in
 /-- The actual rough-only bootstrap improves the entropy exponent on the original target at every

@@ -53,3 +53,8 @@ depends on axioms: [propext, Classical.choice, Quot.sound] -/
 depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
 #print axioms latticeConstraintWord_omission_of_locality
+
+/-- info: 'TNLean.PEPS.AreaLaw.latticeConstraintWord_omission_explicit'
+depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms latticeConstraintWord_omission_explicit

@@ -4,8 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.DyadicBlockFootprints
-import TNLean.PEPS.Approximation.DyadicChamberSampling
-import TNLean.PEPS.Approximation.DyadicFootprintTemplates
+import TNLean.PEPS.Approximation.DyadicConicalFootprints
 
 /-!
 # Footprint ratios of the sampled guides
@@ -37,6 +36,10 @@ The argument:
 * hence one ratio `ν > 0` serves the readings after every generic `v` of all the point-treated
   guides near a mark, of the guides homogenized about several marks at once, and of the block
   guides at direct repaintings and resizings, at every scale.
+
+Near a mark the ratio is explicit: every `ν ≤ pointTreatmentRatio ε₀ = min(ε₀, 1) / 20000`
+serves the readings of the templates (`template_footprintRatio_reading_of_le`), by the slope
+argument of `TNLean.PEPS.Approximation.DyadicConicalFootprints`.
 
 For the block guides there is also an explicit ratio: three distinct labels of a reading of a
 block guide in a footprint of radius `δ < s / 2` come from three blocks about one grid corner, which
@@ -147,34 +150,6 @@ theorem isRayConstant_footprintTemplate (i : TemplateIndex) :
 
 /-! ### Readings after generic displacements -/
 
-/-- Rescaling the argument about a point keeps a set lying locally in lines so, with the same
-normals. -/
-theorem IsLocallyInLines.preimage_affine {𝒩 Z : Set (ℝ × ℝ)} (h : IsLocallyInLines 𝒩 Z)
-    (c : ℝ × ℝ) {a : ℝ} (ha : a ≠ 0) : IsLocallyInLines 𝒩 ((fun u => c + a • u) ⁻¹' Z) :=
-  fun p => by
-  obtain ⟨U, hU, F, hF, h𝒩, hs⟩ := h (c + a • p)
-  refine ⟨(fun u => c + a • u) ⁻¹' U,
-    (by fun_prop : Continuous fun u : ℝ × ℝ => c + a • u).continuousAt.preimage_mem_nhds hU,
-    (fun L => (L.1, (L.2 - (L.1.1 * c.1 + L.1.2 * c.2)) / a)) '' F, hF.image _, ?_, ?_⟩
-  · rintro _ ⟨L, hL, rfl⟩
-    exact h𝒩 L hL
-  · rintro q ⟨hqZ, hqU⟩
-    obtain ⟨L, hL, hm⟩ := mem_iUnion₂.1 (hs ⟨hqZ, hqU⟩)
-    refine mem_iUnion₂.2 ⟨_, mem_image_of_mem _ hL, ?_⟩
-    simp only [normalLine, mem_ofPred_eq, Prod.fst_add, Prod.snd_add, Prod.smul_fst,
-      Prod.smul_snd, smul_eq_mul] at hm ⊢
-    rw [eq_div_iff ha]
-    linear_combination hm
-
-/-- Composing with an affine map of nonzero ratio keeps the walls on lines with the same
-normals. -/
-theorem HasLineWalls.comp_affine {𝒩 : Set (ℝ × ℝ)} {ι : Sort*} {f : ℝ × ℝ → ι}
-    (h : HasLineWalls 𝒩 f) (c : ℝ × ℝ) {a : ℝ} (ha : a ≠ 0) :
-    HasLineWalls 𝒩 fun u => f (c + a • u) := by
-  obtain ⟨Z, hZ, hl⟩ := h
-  exact ⟨_, hZ.preimage_affine c ha, fun q hq =>
-    ((by fun_prop : Continuous fun u : ℝ × ℝ => c + a • u).tendsto q).eventually (hl _ hq)⟩
-
 /-- **Displacements on the same side of every wall give the same labels.** Let `f` be constant
 off walls on lines with normals in `𝒩`, and let `v` and `w` lie strictly on the same side of each
 line through the origin with normal in `𝒩`. Then at every point `p` the labels at `p + ε v` and
@@ -245,14 +220,6 @@ theorem IsDisplacedReading.of_sameSide {𝒩 : Set (ℝ × ℝ)} {ι : Type*} {f
     (hg : IsDisplacedReading g f v) : IsDisplacedReading g f w :=
   fun p => ((hg p).and (hf.eventually_eq_of_sameSide hvw p)).mono fun _ h => h.1.trans h.2
 
-/-- There are finitely many wall normals. -/
-theorem finite_wallNormals : wallNormals.Finite := by
-  have hT : wallThresholds.Finite := by simp [wallThresholds]
-  refine (hT.biUnion fun t _ =>
-    Set.toFinite ({(t, 1000), (-t, 1000), (1000, t), (1000, -t)} : Set (ℝ × ℝ))).subset ?_
-  rintro N ⟨t, ht, h⟩
-  exact mem_biUnion ht (by rcases h with rfl | rfl | rfl | rfl <;> simp)
-
 /-- **Finitely many generic readings.** A labelling with walls on lines with normals in
 `wallNormals` has only finitely many readings after generic displacements: the reading after a
 generic `v` depends only on the side of each of the finitely many wall directions on which `v`
@@ -286,14 +253,41 @@ theorem hasLineWalls_footprintTemplate (i : TemplateIndex) :
 
 /-! ### The point treatment -/
 
+/-- **The footprint ratio of the readings of the templates.** Fix `ε₀ > 0` and
+`ν ≤ pointTreatmentRatio ε₀`. For every generic displacement `v`, whenever a guide `f` agrees on
+the open square of radius `4 t` about `c` with the image of a template of the point treatment,
+relabelled by a map injective on its values and read through `u ↦ c + t u`, every reading of `f`
+after `v` has the two-owner condition with working set the closed square of radius `2 t` about
+`c`, holes at its own true vertices within `3 t` of `c`, inner radius `ε₀ t` and footprint radius
+`ν t`.
+
+Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:69–80, 447–479, 481–505,
+559–563`. -/
+theorem template_footprintRatio_reading_of_le {ε₀ : ℝ} (hε : 0 < ε₀) {ν : ℝ}
+    (hν : ν ≤ pointTreatmentRatio ε₀) : ∀ {v : ℝ × ℝ}, IsGenericDisplacement v →
+      ∀ {ι : Type u} {t : ℝ}, 0 < t → ∀ (i : TemplateIndex) (σ : BlockSlot 1 → ι),
+      InjOn σ (range (footprintTemplate i)) → ∀ (c : ℝ × ℝ) (f g' : ℝ × ℝ → ι),
+      (∀ q ∈ ball c (4 * t), f q = σ (footprintTemplate i (t⁻¹ • (q - c)))) →
+      IsDisplacedReading g' f v →
+      HasTwoOwnerFootprints g' (closedBall c (2 * t))
+        {x | x ∈ closedBall c (3 * t) ∧ IsTrueVertex g' x} (ε₀ * t) (ν * t) := by
+  intro v hv ι t ht i σ hσ c f g' hf hg'
+  obtain ⟨T, hT⟩ := (isRayConstant_footprintTemplate i).exists_isDisplacedReading v
+  have key := HasTwoOwnerFootprints.of_template (ρ₁ := 2) (ρ₂ := 3) (ρ₃ := 4)
+    (hσ.mono hT.range_subset) ht (by norm_num) (by norm_num)
+    (hT.eq_on_ball ht (fun q hq => hf q (by rwa [mul_comm] at hq)) hg')
+    (((hasTwoOwnerFootprints_reading_footprintTemplate i hv hT hε hν).image_similarity c
+      ht).relabel σ)
+  rwa [mul_comm t 2, mul_comm t 3, mul_comm t ε₀, mul_comm t ν] at key
+
 /-- **One footprint ratio for the readings of the templates.** Fix `ε₀ > 0`. There is a ratio
 `ν > 0` such that, for every generic displacement `v`, whenever a guide `f` agrees on the open
 square of radius `4 t` about `c` with the image of a template of the point treatment, relabelled
 by a map injective on its values and read through `u ↦ c + t u`, every reading of `f` after `v`
 has the two-owner condition with working set the closed square of radius `2 t` about `c`, holes at
 its own true vertices within `3 t` of `c`, inner radius `ε₀ t` and footprint radius `ν t`. The
-ratio is chosen before `v`: the templates have finitely many readings after generic
-displacements.
+ratio is chosen before `v`; the ratio `pointTreatmentRatio ε₀` serves
+(`template_footprintRatio_reading_of_le`).
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:69–80, 464–479, 481–505,
 559–563`. -/
@@ -304,23 +298,9 @@ theorem exists_template_footprintRatio_reading {ε₀ : ℝ} (hε : 0 < ε₀) :
       (∀ q ∈ ball c (4 * t), f q = σ (footprintTemplate i (t⁻¹ • (q - c)))) →
       IsDisplacedReading g' f v →
       HasTwoOwnerFootprints g' (closedBall c (2 * t))
-        {x | x ∈ closedBall c (3 * t) ∧ IsTrueVertex g' x} (ε₀ * t) (ν * t) := by
-  let R (i : TemplateIndex) : Set (ℝ × ℝ → BlockSlot 1) :=
-    {T | ∃ v, IsGenericDisplacement v ∧ IsDisplacedReading T (footprintTemplate i) v}
-  have (i : TemplateIndex) : Finite (R i) :=
-    (hasLineWalls_footprintTemplate i).finite_genericReadings.to_subtype
-  obtain ⟨ν, hν, H⟩ := exists_footprintRatio.{0, 0, u} (I := Σ i, R i) (g := fun j => j.2.1)
-    (fun _ => Set.toFinite _) (W := fun _ => closedBall 0 2) (fun _ => isCompact_closedBall 0 2)
-    (H := fun j => {u | u ∈ closedBall (0 : ℝ × ℝ) 3 ∧ IsTrueVertex j.2.1 u})
-    (r₀ := ε₀) (r₁ := ε₀) (fun _ c hc htv =>
-      ⟨c, ⟨closedBall_subset_closedBall (by norm_num) hc, htv⟩, mem_ball_self hε⟩)
-  refine ⟨ν, hν, fun {v} hv {ι t} ht i σ hσ c f g' hf hg' => ?_⟩
-  obtain ⟨T, hT⟩ := (isRayConstant_footprintTemplate i).exists_isDisplacedReading v
-  have key := HasTwoOwnerFootprints.of_template (ρ₁ := 2) (ρ₂ := 3) (ρ₃ := 4)
-    (hσ.mono hT.range_subset) ht (by norm_num) (by norm_num)
-    (hT.eq_on_ball ht (fun q hq => hf q (by rwa [mul_comm] at hq)) hg')
-    (H ⟨i, T, v, hv, hT⟩ σ c ht ε₀ ⟨le_rfl, le_rfl⟩)
-  rwa [mul_comm t 2, mul_comm t 3, mul_comm t ε₀] at key
+        {x | x ∈ closedBall c (3 * t) ∧ IsTrueVertex g' x} (ε₀ * t) (ν * t) :=
+  ⟨pointTreatmentRatio ε₀, pointTreatmentRatio_pos hε,
+    template_footprintRatio_reading_of_le hε le_rfl⟩
 
 /-- **One footprint ratio for the readings of the point treatment.** Fix `ε₀ > 0`. There is a
 ratio `ν > 0` such that, for every generic displacement `v`, the conclusion of
