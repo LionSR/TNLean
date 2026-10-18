@@ -264,6 +264,67 @@ theorem final_scanner_moment_margin :
   norm_num [Exponents.scannerEll, Exponents.scannerMu,
     Exponents.scannerOmega, Exponents.scannerKappa]
 
+/-- The final scanner exponents `ℓ = 1/100000`, `κ = 1/1000000`, `μ = 1/4`, `ν = 1/1000`
+and `e = 2/1000000`, as a `ScannerExponents` structure. Source: `scanner:final-parameters`,
+`08-scanner.tex`, lines 839--849. -/
+def finalSharpScannerExponents : ScannerExponents where
+  ell := Exponents.scannerEll
+  kappa := Exponents.scannerKappa
+  mu := Exponents.scannerMu
+  nu := Exponents.scannerNu
+  e := Exponents.boxError
+  ell_pos := by norm_num [Exponents.scannerEll]
+  ell_lt_one := by norm_num [Exponents.scannerEll]
+  kappa_pos := by norm_num [Exponents.scannerKappa]
+  kappa_lt_mu := by norm_num [Exponents.scannerKappa, Exponents.scannerMu]
+  mu_lt_one_sub_ell := by norm_num [Exponents.scannerMu, Exponents.scannerEll]
+  nu_pos := by norm_num [Exponents.scannerNu]
+  e_pos := by norm_num [Exponents.boxError]
+  e_lt_one := by norm_num [Exponents.boxError]
+  kappa_le_e := by norm_num [Exponents.scannerKappa, Exponents.boxError]
+
+/-- The explicit threshold of the final moment-radius bound `|t a| ≤ c / √B`: the
+moment-radius threshold of the final exponents at weight exponent `ω = 1/20000` and
+multiple `|t|` (`08-scanner.tex`, lines 839--865). -/
+noncomputable def finalMomentRadiusThreshold (CB c t : ℝ) : ℕ :=
+  finalSharpScannerExponents.momentRadiusThreshold (Exponents.scannerOmega : ℝ) CB |t| c
+
+/-- At the final collar parameters, every fixed real multiple of the actual per-band weight
+lies in the common marginal-moment interval at every `n` from the explicit threshold
+`finalMomentRadiusThreshold CB c t` on. Both floors, the natural-number division and the
+separation ceiling are retained. Source: `scanner:final-parameters` and `08-scanner.tex`,
+lines 839–865. -/
+theorem final_a_le_moment_radius_of_finalMomentRadiusThreshold_le {CB c : ℝ} (hCB : 0 ≤ CB)
+    (hc : 0 < c) (t : ℝ) {n : ℕ} (hthr : finalMomentRadiusThreshold CB c t ≤ n) :
+    let L := Nat.floor ((n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ)))
+    let m := Nat.floor ((n : ℝ) ^ (Exponents.scannerMu : ℝ))
+    let K := L / (8 * m)
+    let D := Nat.ceil ((n : ℝ) ^ (Exponents.scannerKappa : ℝ))
+    let a := (n : ℝ) ^ (Exponents.scannerOmega : ℝ) / (K : ℝ)
+    1 ≤ K ∧ ∀ B : ℝ, 1 ≤ B →
+      B ≤ CB * (n : ℝ) * (D : ℝ) * Real.log (n : ℝ) ^ 12 →
+      |t * a| ≤ c / Real.sqrt B := by
+  let X := finalSharpScannerExponents
+  have hmargin : (Exponents.scannerOmega : ℝ) + (1 + X.kappa) / 2 <
+      1 - X.ell - X.mu := by
+    have hgap := final_scanner_moment_margin
+    change (Exponents.scannerOmega : ℝ) +
+      (1 + (Exponents.scannerKappa : ℝ)) / 2 <
+        1 - (Exponents.scannerEll : ℝ) - (Exponents.scannerMu : ℝ)
+    linarith
+  change 1 ≤ X.K n ∧ ∀ B : ℝ, 1 ≤ B →
+    B ≤ CB * (n : ℝ) * (X.D n : ℝ) * Real.log (n : ℝ) ^ 12 →
+    |t * X.a ((n : ℝ) ^ (Exponents.scannerOmega : ℝ)) n| ≤ c / Real.sqrt B
+  obtain ⟨hK, hsmall⟩ :=
+    X.a_le_moment_radius_of_momentRadiusThreshold_le hmargin hCB (abs_nonneg t) hc hthr
+  refine ⟨hK, ?_⟩
+  intro B hB hBupper
+  have ha : 0 ≤ X.a ((n : ℝ) ^ (Exponents.scannerOmega : ℝ)) n := by
+    unfold ScannerExponents.a
+    positivity
+  simpa only [abs_mul, abs_of_nonneg ha] using
+    hsmall ((n : ℝ) ^ (Exponents.scannerOmega : ℝ)) B (by positivity) le_rfl hB hBupper
+
 /-- At the final collar parameters, every fixed real multiple of the actual
 per-band weight lies in the common marginal-moment interval. Both floors,
 the natural-number division and the separation ceiling are retained.
@@ -278,42 +339,8 @@ theorem exists_final_a_le_moment_radius {CB c : ℝ} (hCB : 0 ≤ CB)
       let a := (n : ℝ) ^ (Exponents.scannerOmega : ℝ) / (K : ℝ)
       1 ≤ K ∧ ∀ B : ℝ, 1 ≤ B →
         B ≤ CB * (n : ℝ) * (D : ℝ) * Real.log (n : ℝ) ^ 12 →
-        |t * a| ≤ c / Real.sqrt B := by
-  let X : ScannerExponents :=
-    { ell := Exponents.scannerEll
-      kappa := Exponents.scannerKappa
-      mu := Exponents.scannerMu
-      nu := Exponents.scannerNu
-      e := Exponents.boxError
-      ell_pos := by norm_num [Exponents.scannerEll]
-      ell_lt_one := by norm_num [Exponents.scannerEll]
-      kappa_pos := by norm_num [Exponents.scannerKappa]
-      kappa_lt_mu := by norm_num [Exponents.scannerKappa, Exponents.scannerMu]
-      mu_lt_one_sub_ell := by norm_num [Exponents.scannerMu, Exponents.scannerEll]
-      nu_pos := by norm_num [Exponents.scannerNu]
-      e_pos := by norm_num [Exponents.boxError]
-      e_lt_one := by norm_num [Exponents.boxError]
-      kappa_le_e := by norm_num [Exponents.scannerKappa, Exponents.boxError] }
-  have hmargin : (Exponents.scannerOmega : ℝ) + (1 + X.kappa) / 2 <
-      1 - X.ell - X.mu := by
-    have hgap := final_scanner_moment_margin
-    change (Exponents.scannerOmega : ℝ) +
-      (1 + (Exponents.scannerKappa : ℝ)) / 2 <
-        1 - (Exponents.scannerEll : ℝ) - (Exponents.scannerMu : ℝ)
-    linarith
-  obtain ⟨N, hN, hbound⟩ := X.exists_a_le_moment_radius hmargin hCB (abs_nonneg t) hc
-  refine ⟨N, hN, ?_⟩
-  intro n hn
-  change 1 ≤ X.K n ∧ ∀ B : ℝ, 1 ≤ B →
-    B ≤ CB * (n : ℝ) * (X.D n : ℝ) * Real.log (n : ℝ) ^ 12 →
-    |t * X.a ((n : ℝ) ^ (Exponents.scannerOmega : ℝ)) n| ≤ c / Real.sqrt B
-  obtain ⟨hK, hsmall⟩ := hbound n hn
-  refine ⟨hK, ?_⟩
-  intro B hB hBupper
-  have ha : 0 ≤ X.a ((n : ℝ) ^ (Exponents.scannerOmega : ℝ)) n := by
-    unfold ScannerExponents.a
-    positivity
-  simpa only [abs_mul, abs_of_nonneg ha] using
-    hsmall ((n : ℝ) ^ (Exponents.scannerOmega : ℝ)) B (by positivity) le_rfl hB hBupper
+        |t * a| ≤ c / Real.sqrt B :=
+  ⟨_, finalSharpScannerExponents.two_le_momentRadiusThreshold _ _ _ _,
+    fun _ => final_a_le_moment_radius_of_finalMomentRadiusThreshold_le hCB hc t⟩
 
 end TNLean.PEPS.AreaLaw.Scan
