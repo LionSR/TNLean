@@ -23,3 +23,17 @@ run_cmd do
     unless axioms.all (allowed.contains ·) do
       throwError "Unexpected axioms for {decl}: {axioms}"
     Lean.logInfo m!"{decl}: {axioms}"
+
+/-! The actual information bound at the named truncation constant -/
+
+run_cmd do
+  let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
+  let declarations := #[
+    ``TNLean.PEPS.AreaLaw.Scan.CollarScan.sourceTarget_actual_mutualInformation_bound_explicit]
+  for decl in declarations do
+    unless (← Lean.getEnv).contains decl do
+      throwError "Missing declaration {decl}"
+    let axioms ← Lean.collectAxioms decl
+    unless axioms.all (allowed.contains ·) do
+      throwError "Unexpected axioms for {decl}: {axioms}"
+    Lean.logInfo m!"{decl}: {axioms}"
