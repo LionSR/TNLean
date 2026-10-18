@@ -128,6 +128,40 @@ for an arbitrary finite set of sites and are instantiated here directly.
     $j'>j$, two of its sites would be at distance at least $R+1$.
 \end{proof}
 
+\begin{theorem}[Logarithmic dependence of the interval cut budget]
+    \label{thm:chain_budget_log_sq}
+    \lean{TNLean.MPS.AreaLaw.chainBudgetConst_le_mul_log_sq}
+    \leanok
+    \uses{lem:chain_crossing_count}
+    Let $R$ be a nonnegative integer and put $N_R=2\cdot2^{2R}$ and
+    $B_R(q)=1+N_R\log^2(e q^{R+1})$. For every integer $q\ge2$,
+    \begin{align}
+        B_R(q)\le\frac{B_R(2)}{(\log2)^2}(\log q)^2.
+    \end{align}
+    Here $N_R$ is the interval crossing bound for the
+    family of all admissible supports, as in the cut-budget definition of
+    \cite[Part~I]{TNLean2026OneDimensional}.
+    The remark on sharper constants in that part describes its application
+    to the logarithmic dependence of the area-law constant.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{lem:chain_crossing_count}
+    Put $c=\log2>0$ and $t=\log q\ge c$. The identity
+    $\log(e q^{R+1})=1+(R+1)t$ gives
+    $c(1+(R+1)t)\le t(1+(R+1)c)$.
+    Both sides are nonnegative. Squaring, multiplying by $N_R$ and adding
+    $c^2\le t^2$ yields
+    \begin{align}
+        c^2 B_R(q)
+         & =c^2+N_R\bigl(c(1+(R+1)t)\bigr)^2 \notag \\
+         & \le t^2+N_R\bigl(t(1+(R+1)c)\bigr)^2
+        =t^2 B_R(2). \notag
+    \end{align}
+    Divide by $c^2>0$.
+\end{proof}
+
+
 \section{The buffered discount with a constant-width buffer}
 
 \begin{lemma}[Buffered discount on a chain]
@@ -227,6 +261,25 @@ for an arbitrary finite set of sites and are instantiated here directly.
     $A\setminus I$ is nonempty, and an edge at an end of $I$ otherwise, since
     $I$ is then a proper nonempty subset of the chain).
 \end{proof}
+
+\begin{theorem}[Entropy at local dimension one]
+    \label{thm:chain_entropy_dim_one}
+    \lean{TNLean.MPS.AreaLaw.regionEntropy_eq_zero_of_localDimension_one}
+    \leanok
+    \uses{def:chain_model}
+    Let $\Omega$ be a unit vector on a finite chain with one-dimensional
+    local spaces. For every set $A$ of sites, $S_\Omega(A)=0$. This is the
+    dimension-one case of the entropy dimension bound used in
+    \cite[Part~I]{TNLean2026OneDimensional}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{lem:rank_one_entropy_zero}
+    The reduced state on $A$ is positive semidefinite with trace one.
+    Its space has dimension one, so its rank is at most one and its
+    von Neumann entropy vanishes.
+\end{proof}
+
 
 \begin{theorem}[The one-dimensional area law on a chain]
     \label{thm:chain_area_law}
