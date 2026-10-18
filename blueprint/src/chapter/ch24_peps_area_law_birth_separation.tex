@@ -165,6 +165,7 @@ midpoints are the points of $\{-1,0,1\}^2$.
     \label{thm:area_law_contact_dichotomy}
     \lean{TNLean.PEPS.AreaLaw.Geometry.exists_pos_le_norm_sub_away_from_intPoints,
         TNLean.PEPS.AreaLaw.Geometry.exists_pos_contact_dichotomy,
+        TNLean.PEPS.AreaLaw.Geometry.exists_pos_common_contact_dichotomy,
         TNLean.PEPS.AreaLaw.Geometry.exists_pos_forall_of_finite}
     \leanok
     \uses{thm:area_law_contact_angular_estimate}
@@ -186,19 +187,79 @@ midpoints are the points of $\{-1,0,1\}^2$.
 \end{proof}
 
 % Source: OpenAI2026AreaLaw, Section 11, 10-geometry.tex,
+% geometry:birth-separation, lines 616--625, with geometry:initial-stars,
+% lines 352--359.
+\begin{theorem}[Explicit separation of belt polygons]
+    \label{thm:area_law_belt_polygon_separation}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.facetPolygon,
+        TNLean.PEPS.AreaLaw.Geometry.exists_mem_facetPolygon_of_le_add,
+        TNLean.PEPS.AreaLaw.Geometry.birthSeparationConstant,
+        TNLean.PEPS.AreaLaw.Geometry.exists_mem_facetPolygon_inter_of_norm_sub_lt,
+        TNLean.PEPS.AreaLaw.Geometry.facetPolygon_contact_dichotomy}
+    \leanok
+    \uses{thm:area_law_belt_atoms, thm:area_law_quarter_sections,
+        thm:area_law_contact_angular_estimate}
+    Call a closed half-plane $\{a x_1+b x_2\le n\}$ a belt half-plane if
+    $n\in\mathbb Z$ and $(a,b)$ is one of $(\pm1,0)$, $(0,\pm1)$, or if
+    $(a,b)=(\pm1,\pm1)$ and $n$ is even.
+    \begin{enumerate}
+        \item Let $F$ be a set of belt half-planes, let
+              $0\le\varepsilon<1/7$, and let $z$ satisfy
+              $a z_1+b z_2\le n+\varepsilon$ for every member of $F$. Then
+              the intersection of $F$ contains a point within distance
+              $3\varepsilon$ of $z$.
+        \item Let $P$ and $Q$ be intersections of belt half-planes with
+              $P\cap Q\subseteq\mathbb Z^2$. For all $x\in P$ and
+              $y\in Q$, either $\|x-y\|\ge1/28$, or there is
+              $q\in P\cap Q$ with $\|x-q\|,\|y-q\|<1/4$ and
+              $\|x-y\|\ge\|y-q\|/2$.
+    \end{enumerate}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    For (1), suppose some member is violated at $z$, with normal $(a,b)$ and
+    excess $c\in(0,\varepsilon]$, and consider the members whose value at
+    $z$ exceeds their level minus $2\varepsilon$. If one of them is not
+    parallel to the violated one, the two boundary lines meet in a point
+    $v\in\mathbb Z^2$, and Cramer's rule, with a nonzero integer
+    determinant, gives $\|z-v\|\le3\varepsilon$. Each value is
+    $2$-Lipschitz for the sup norm, so every member has value less than its
+    level plus $7\varepsilon<1$ at $v$; this value is an integer, so $v$
+    satisfies every member. Otherwise move $z$ by $-c(a,b)/(a^2+b^2)$, a
+    vector of length at most $\varepsilon$. The members parallel to the
+    violated one then hold, because their levels differ from its level by
+    integers; the others had value at most their level minus
+    $2\varepsilon$ and change by at most $2\varepsilon$.
+
+    For (2), the values at $x$ of the half-planes of $Q$ exceed their levels
+    by at most $2\|x-y\|$. If $\|x-y\|<1/28$, part (1) with
+    $\varepsilon=2\|x-y\|$ gives $q\in P\cap Q$ with
+    $\|x-q\|\le6\|x-y\|<1/4$ and $\|y-q\|\le7\|x-y\|<1/4$. Then
+    $q\in\mathbb Z^2$, belt half-planes are quarter-sectorial at every point
+    of $\mathbb Z^2$ by Theorem~\ref{thm:area_law_quarter_sections}, and
+    Theorem~\ref{thm:area_law_contact_angular_estimate} applies.
+\end{proof}
+
+The constant $1/28$ replaces the positive minimum over the finitely many
+rescaled local patterns in the source's compactness argument.
+
+% Source: OpenAI2026AreaLaw, Section 11, 10-geometry.tex,
 % geometry:birth-separation, lines 573--659.
 \begin{theorem}[Birth separation of a replacement from local comparison
         regions]
     \label{thm:area_law_replacement_birth_separation_local}
     \lean{TNLean.PEPS.AreaLaw.Geometry.repairNormRunRegion,
         TNLean.PEPS.AreaLaw.Geometry.repairSameLabelBound,
+        TNLean.PEPS.AreaLaw.Geometry.repairSameLabel_dichotomy,
         TNLean.PEPS.AreaLaw.Geometry.exists_repairSameLabel_dichotomy,
+        TNLean.PEPS.AreaLaw.Geometry.repairBirth_separation,
         TNLean.PEPS.AreaLaw.Geometry.exists_repairBirth_separation}
     \leanok
     \uses{thm:area_law_normalized_fan_contacts,
-        thm:area_law_contact_dichotomy, thm:area_law_repair_margins,
+        thm:area_law_belt_polygon_separation, thm:area_law_repair_margins,
         def:area_law_repair_children}
-    There is $c_1>0$ with the following property. Let the exterior labels of
+    Let $c_1=1/28$. The following holds. Let the exterior labels of
     the eight wedges be given, let $C$ be one of their maximal cyclic runs of
     equal label, and let $B_C=\bigcup_{s\in C}T_s$. Let $W_C$ be the union
     of the exterior trapezoids $E_t$ of the wedges whose label differs from
@@ -215,13 +276,13 @@ midpoints are the points of $\{-1,0,1\}^2$.
 
 \begin{proof}
     \leanok
-    Apply Theorem~\ref{thm:area_law_contact_dichotomy} to each pair of a
-    triangle $T_s$, $s\in C$, and a set $E_t$ or $T_t$ in $W_C$. A wedge
+    Apply part (2) of Theorem~\ref{thm:area_law_belt_polygon_separation} to
+    each pair of a triangle $T_s$, $s\in C$, and a set $E_t$ or $T_t$ in
+    $W_C$; all of them are intersections of belt half-planes. A wedge
     $t$ of different label is distinct from $s$, and a wedge of another run
     with the same label is neither $s$ nor consecutive to $s$, so
     Theorem~\ref{thm:area_law_normalized_fan_contacts} gives the contact
-    hypothesis. The finitely many pairs give one $\eta\in(0,1]$; put
-    $c_1=\min(\eta,1/4)$. If $\|y-v\|\ge2u$, then $\|x-y\|\ge u\ge
+    hypothesis. This gives $\eta=1/28$, and $c_1=\min(\eta,1/4)=1/28$. If $\|y-v\|\ge2u$, then $\|x-y\|\ge u\ge
         u^{\rho_0}$. Otherwise rescale: either $\|x-y\|\ge\eta u$, or there
     is a mark $q=v+up$ with $\|x-y\|\ge\|y-q\|/2$, where $p$ lies in
     $\{-1,0,1\}^2$ because $\|(x-v)/u\|\le1$. The second hypothesis and
@@ -385,11 +446,11 @@ Definition~\ref{def:area_law_normalized_repair_fan}; we call them atoms.
 % geometry:birth-separation, lines 597--645.
 \begin{theorem}[Uniform dichotomy for atoms]
     \label{thm:area_law_belt_atom_dichotomy}
-    \lean{TNLean.PEPS.AreaLaw.Geometry.exists_pos_common_contact_dichotomy,
+    \lean{TNLean.PEPS.AreaLaw.Geometry.beltAtom_dichotomy,
         TNLean.PEPS.AreaLaw.Geometry.exists_beltAtom_dichotomy}
     \leanok
-    \uses{thm:area_law_belt_atoms}
-    There is $\eta\in(0,1]$ such that for any two atoms $A,B$ with
+    \uses{thm:area_law_belt_atoms, thm:area_law_belt_polygon_separation}
+    Let $\eta=1/28$. For any two atoms $A,B$ with
     $A\cap B\subseteq\mathbb Z^2$, and all $x\in A$, $y\in B$, either
     $\|x-y\|\ge\eta$, or there is a common point $q\in A\cap B$ with
     $\|x-q\|,\|y-q\|<1/4$ and $\|x-y\|\ge\|y-q\|/2$.
@@ -397,14 +458,9 @@ Definition~\ref{def:area_law_normalized_repair_fan}; we call them atoms.
 
 \begin{proof}
     \leanok
-    \uses{thm:area_law_contact_angular_estimate}
-    For one pair, the pairs of points that do not lie together in an open
-    quarter-square about a common point of $A$ and $B$ form a compact set,
-    on which $\|x-y\|$ has a positive minimum; inside such a square about
-    $q$, Theorem~\ref{thm:area_law_contact_angular_estimate} applies. Up to a
-    translation by an even integer vector, which preserves the arrangement,
-    only finitely many pairs of atoms come within distance one of each
-    other.
+    Every atom is the intersection of three belt half-planes, so part (2)
+    of Theorem~\ref{thm:area_law_belt_polygon_separation} applies to every
+    pair of atoms meeting only in points of $\mathbb Z^2$.
 \end{proof}
 
 % Source: OpenAI2026AreaLaw, Section 11, 10-geometry.tex,
