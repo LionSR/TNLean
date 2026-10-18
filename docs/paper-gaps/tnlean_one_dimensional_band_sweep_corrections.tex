@@ -1,0 +1,79 @@
+\documentclass[10pt]{article}
+\usepackage[margin=0.9in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+\input{command}
+\title{Lattice Interfaces and Output Registers in the Chain Sweep}
+\author{}
+\date{October 18, 2026}
+\begin{document}
+\maketitle
+\gapnote{local-correction}{open}
+
+\paragraph{Source.}
+The one-dimensional note~\cite{TNLean2026OneDimensional}, Part~II,
+Construction \texttt{con:band} and Proposition \texttt{prop:sweep}
+(\path{part2b_mps_protocol.tex}, lines~248--276 and 349--360),
+requires two local corrections. Neither introduces a new hypothesis.
+
+\paragraph{Lattice interfaces.}
+The source fixes an integer width $w\ge1$ and initially specifies
+$[a,a+w)$, but writes the subsequent scaled bands as open intervals.
+Choose an interior band with $8w\le a$ and $a+2w\le L$.
+Then $0<a-3w<L$, so $z=a-3w$ is an actual chain site with scaled
+coordinate $-3$. It is initially held by $C$ and lies outside the exchange
+window $(-7,-7/2)$. The first two main-sheet deaths send it to $A$ and
+then $B$. It belongs to neither $(-3,0)$ nor $(-6,-3)$, so remains at
+$B$, contrary to the asserted final $C$ ownership left of zero. This
+witness persists at every positive integer width; it is not a degenerate
+case.
+
+Interpret integer-ended bands as half-open lattice intervals $[u,v)$,
+including their first sites, consistently with the initial band and the
+inclusive sweep intervals (lines~333--342). Retain the open real exchange
+window $(-7,-7/2)$; no parity assumption on $w$ is needed. The ownership
+calculation then restores the original main-sheet owner outside
+$[a,a+w)$ and assigns that band to $B$. The auxiliary sheet ends at $A$
+on $[a-3w,a-2w)$, at $B$ on $[a-2w,a-w)$, and at $C$ elsewhere.
+The seven information margins and the exchange margin are at least $w$.
+
+\paragraph{Distinguished physical outputs.}
+The source explicitly retains auxiliary registers at their actual owners
+(lines~271--272), yet later says that each output party holds precisely
+its block registers and no other party holds any raw register
+(lines~355--360). The auxiliary ownership just computed contradicts that
+all-register assertion. Restrict the block ownership and dimension bound
+$q^{|B_i|}\le q^{4t}$ to the distinguished main sheet. Retain every
+auxiliary register at its actual owner. Their reference factor $\Xi$ is a
+tensor product across copies, not necessarily across parties.
+
+\paragraph{Remaining construction.}
+The ownership and separation calculation alone supplies neither physical
+gates nor the terminal output identification. One must construct the
+party-private coordinate regrouping which selects the main blocks as
+physical outputs, assigns a one-dimensional physical output to each other
+party, and leaves all auxiliary registers private at their actual owners.
+One must then identify the physical density with the partial trace over
+those auxiliary registers. Once this identification is established,
+$\|\Xi\|=1$ gives
+\begin{equation*}
+    \operatorname{Tr}_{\rm aux}
+    \bigl|\Omega\otimes\Xi\bigr\rangle
+    \bigl\langle\Omega\otimes\Xi\bigr|
+    =|\Omega\rangle\langle\Omega|.
+\end{equation*}
+The downstream compression statement bounds only intended physical
+outputs; private spaces remain finite-dimensional without a numerical
+size bound (lines~423--424, 439--442, 459--461). This does not prove the
+required regrouping or partial-trace identity for the actual construction.
+No completion of the full sweep or compression argument is asserted.
+
+\begin{thebibliography}{1}
+    \bibitem{TNLean2026OneDimensional}
+    TNLean contributors,
+    \emph{A one-dimensional area law and matrix product state approximation
+        from a global gap}, Part~II,
+    \href{https://github.com/LionSR/TNLean/blob/65a8026e8489243b870c70daf872eed5c5f6cfc6/docs/notes/one_dimensional_note/part2b_mps_protocol.tex}{source at revision 65a8026} (2026).
+\end{thebibliography}
+\end{document}
