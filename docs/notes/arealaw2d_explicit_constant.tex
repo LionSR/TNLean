@@ -113,6 +113,19 @@ The formula \eqref{eq:top} is explicit. The constant is therefore explicit as
 soon as $C_1,N_1,C_2,N_2,N_3$ and $C_3$ are, and the rest of the note concerns
 these six numbers.
 
+In Lean, \eqref{eq:top} is \leanid{TNLean.PEPS.AreaLaw.uniformAreaLawConstantOf}
+and $n_*$ is \leanid{TNLean.PEPS.AreaLaw.uniformAreaLawScale}; the proof of
+Theorem~1.1 at given $C_1,N_1,C_2,N_2,C_3$ is
+\leanid{TNLean.PEPS.AreaLaw.regionalEntropy_le_of_collar_amplification_twoFamilies_constants}.
+The constant at the named constants of the three propositions, with $D_0=2R+11$
+and $\Ctpl=24$, is \leanid{TNLean.PEPS.AreaLaw.uniformAreaLawConstant}, and
+\leanid{TNLean.PEPS.AreaLaw.exists_regionalEntropy_le_uniformAreaLawConstant}
+proves the bound with it. Its inputs that are not yet closed forms are the
+safe-box constant $C_{\rm box}$ with its entropy bound, the six truncation and
+transport constants of the scanner (still existential), the filter-locality
+constants $(C,c)$ of the positive constraints, and the birth-separation
+constant $c_1$.
+
 \paragraph{Dependence on the parameters.}
 The parameters $q,R,J,\Delta$ enter through four explicit quantities:
 \begin{itemize}
