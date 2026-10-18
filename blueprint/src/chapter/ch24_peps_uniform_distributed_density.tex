@@ -174,7 +174,7 @@ monomial lists at the gate occurrences to vary independently.
         TNLean.PEPS.Approximation.sampledNetworkExponent}
     \leanok
     For integers $r,b,n,d,u,s\ge0$, reals $C_N,C_D,C_K,C_B$ and $p$, put
-    $t=\lceil p\rceil$,
+    $t=\max\{\lceil p\rceil,0\}$,
     \begin{align}
         C_S=\max\{1,C_N\tbinom b2\},\qquad
         C_X=C_K\bigl(64C_N^2(rC_B)^2+2\bigr)^r,\qquad
@@ -204,7 +204,8 @@ monomial lists at the gate occurrences to vary independently.
     In the setting of
     Theorem~\ref{thm:peps_uniform_prescribed_expansion_bounds}, let the
     constants $C_K,C_B\ge0$ and degrees $u,s$ at the precision
-    $q=n+\lceil p\rceil+\lceil16C_N\rceil$ be fixed. For every
+    $q=n+t+\lceil16C_N\rceil$, with $t=\max\{\lceil p\rceil,0\}$, be fixed.
+    For every
     $C_p\ge C_{\mathrm{net}}$ and every integer
     $\alpha_p\ge\alpha_{\mathrm{net}}$, with the constants of
     Definition~\ref{def:peps_sampled_network_constants}, the conclusion of
@@ -317,7 +318,8 @@ monomial lists at the gate occurrences to vary independently.
     \uses{def:peps_compression_constants,def:peps_original_gate_construction}
     In the setting of
     Theorem~\ref{thm:peps_uniform_approximate_operator_network}, fix $p$ and
-    put $q=n+\lceil p\rceil+\lceil16(1+(C_N)_+)\rceil$. Suppose that every
+    put $t=\max\{\lceil p\rceil,0\}$ and $q=n+t+\lceil16(1+(C_N)_+)\rceil$.
+    Suppose that every
     family member admits allowed monomial lists at its original gate
     occurrences with at most $C_KL^u$ monomials per list, individual
     coefficients of norm at most $C_CL^v$, at most $r$ pair effects per
