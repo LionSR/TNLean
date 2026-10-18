@@ -19,7 +19,9 @@ their stated bounds.
 
 The strict exponent inequality is an explicit hypothesis of the general
 numerical statement. It follows from the final collar parameters, but not
-from the ordinary scanner exponent conditions alone. No marginal estimate,
+from the ordinary scanner exponent conditions alone. The thresholds are given explicitly
+by `ScannerExponents.scaleFactsThreshold` and `ScannerExponents.momentRadiusThreshold`.
+No marginal estimate,
 physical state, comparator or bootstrap entropy improvement is constructed.
 
 Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
@@ -29,20 +31,19 @@ choice and marginal-moment smallness, lines 839–865, at revision
 Independently formalized from the manuscript; no upstream Lean proof is reused.
 -/
 
-open Filter Asymptotics
+open Filter
 
 namespace TNLean.PEPS.AreaLaw.Scan
 
-/-- The rounded band count retains its positive power growth with a fixed
-coefficient. Source: `scanner:scales`, `08-scanner.tex`, lines 32–41. -/
-theorem ScannerExponents.exists_eventually_rpow_le_mul_K (X : ScannerExponents) :
-    ∃ C : ℝ, 1 ≤ C ∧ ∀ᶠ n : ℕ in atTop,
-      2 ≤ n ∧ 1 ≤ X.K n ∧
-        (n : ℝ) ^ (1 - X.ell - X.mu) ≤ C * (X.K n : ℝ) := by
-  obtain ⟨C, hC⟩ := eventually_scaleFacts X
-  have hC1 : 1 ≤ C := (hC.exists).choose_spec.one_le_C₁
-  refine ⟨C, hC1, ?_⟩
-  filter_upwards [hC] with n hn
+/-- The rounded band count retains its positive power growth with the coefficient `32` at
+every `n` from the explicit threshold `X.scaleFactsThreshold` on. Source: `scanner:scales`,
+`08-scanner.tex`, lines 32–41. -/
+theorem ScannerExponents.rpow_le_mul_K_of_scaleFactsThreshold_le (X : ScannerExponents)
+    {n : ℕ} (hthr : X.scaleFactsThreshold ≤ n) :
+    2 ≤ n ∧ 1 ≤ X.K n ∧ (n : ℝ) ^ (1 - X.ell - X.mu) ≤ 32 * (X.K n : ℝ) := by
+  have hn := scaleFacts_of_scaleFactsThreshold_le X hthr
+  generalize hCdef : (32 : ℝ) = C at hn ⊢
+  have hC1 : 1 ≤ C := hCdef ▸ by norm_num
   have hnpos : (0 : ℝ) < n := by
     exact_mod_cast (show 0 < n by have := hn.two_le_n; omega)
   have hmpos : (0 : ℝ) < X.m n := by
@@ -83,6 +84,14 @@ theorem ScannerExponents.exists_eventually_rpow_le_mul_K (X : ScannerExponents) 
             Real.rpow_one]
     _ ≤ (C * (X.K n : ℝ)) * (n : ℝ) ^ (X.ell + X.mu) := hpower
 
+/-- The rounded band count retains its positive power growth with a fixed
+coefficient. Source: `scanner:scales`, `08-scanner.tex`, lines 32–41. -/
+theorem ScannerExponents.exists_eventually_rpow_le_mul_K (X : ScannerExponents) :
+    ∃ C : ℝ, 1 ≤ C ∧ ∀ᶠ n : ℕ in atTop,
+      2 ≤ n ∧ 1 ≤ X.K n ∧
+        (n : ℝ) ^ (1 - X.ell - X.mu) ≤ C * (X.K n : ℝ) :=
+  ⟨32, by norm_num, eventually_atTop.2 ⟨_, fun _ => X.rpow_le_mul_K_of_scaleFactsThreshold_le⟩⟩
+
 /-- A ceiling budget of order `n D (log n)^12` has the expected square-root
 power bound, with the ceiling factor retained. Auxiliary to the smallness
 estimate in `08-scanner.tex`, lines 859–865. -/
@@ -120,38 +129,45 @@ theorem ScannerExponents.sqrt_budget_le (X : ScannerExponents) {n : ℕ}
       rw [mul_pow, mul_pow, Real.sq_sqrt (by positivity), hpow]
       ring
 
-/-- Under the explicit positive exponent margin, all admissible growing
-weights and marginal budgets obey one eventual sharp-comparison smallness
-bound. The threshold precedes the scale, weight and budget.
-Source: the numerical implication in `08-scanner.tex`, lines 859–865.
-The ordinary scanner exponent hypotheses alone do not imply the margin. -/
-theorem ScannerExponents.eventually_mul_a_sqrt_budget_le (X : ScannerExponents)
-    {ω CB A c : ℝ} (hmargin : ω + (1 + X.kappa) / 2 < 1 - X.ell - X.mu)
-    (hCB : 0 ≤ CB) (hA : 0 ≤ A) (hc : 0 < c) :
-    ∀ᶠ n : ℕ in atTop, 2 ≤ n ∧ 1 ≤ X.K n ∧
+/-- The explicit threshold of the sharp-comparison smallness bound: the scale-facts threshold
+and the threshold for `32 A √(2 C_B) (log n)^6 ≤ c n^δ`, where
+`δ = 1 - ℓ - μ - (ω + (1 + κ) / 2)` (`08-scanner.tex`, lines 859–865). -/
+noncomputable def ScannerExponents.momentRadiusThreshold (X : ScannerExponents)
+    (ω CB A c : ℝ) : ℕ :=
+  max X.scaleFactsThreshold ⌈Real.logPowThreshold (A * 32 * Real.sqrt (2 * CB)) c
+    (1 - X.ell - X.mu - (ω + (1 + X.kappa) / 2)) 6⌉₊
+
+/-- The moment-radius threshold is at least `2`. -/
+theorem ScannerExponents.two_le_momentRadiusThreshold (X : ScannerExponents) (ω CB A c : ℝ) :
+    2 ≤ X.momentRadiusThreshold ω CB A c :=
+  (le_max_left _ _).trans (le_max_left _ _)
+
+/-- Under the explicit positive exponent margin, all admissible growing weights and marginal
+budgets obey the sharp-comparison smallness bound at every `n` from the explicit threshold
+`X.momentRadiusThreshold ω CB A c` on. Source: the numerical implication in
+`08-scanner.tex`, lines 859–865. -/
+theorem ScannerExponents.mul_a_sqrt_budget_le_of_momentRadiusThreshold_le
+    (X : ScannerExponents) {ω CB A c : ℝ} (hmargin : ω + (1 + X.kappa) / 2 < 1 - X.ell - X.mu)
+    (hCB : 0 ≤ CB) (hA : 0 ≤ A) (hc : 0 < c) {n : ℕ}
+    (hthr : X.momentRadiusThreshold ω CB A c ≤ n) :
+    2 ≤ n ∧ 1 ≤ X.K n ∧
       ∀ W B : ℝ, 0 ≤ W → W ≤ (n : ℝ) ^ ω →
         B ≤ CB * (n : ℝ) * (X.D n : ℝ) * Real.log (n : ℝ) ^ 12 →
         A * X.a W n * Real.sqrt B ≤ c := by
-  obtain ⟨C, hC, hK⟩ := X.exists_eventually_rpow_le_mul_K
+  have hn := X.rpow_le_mul_K_of_scaleFactsThreshold_le ((le_max_left _ _).trans hthr)
   let δ := 1 - X.ell - X.mu - (ω + (1 + X.kappa) / 2)
   have hδ : 0 < δ := sub_pos.mpr hmargin
-  have hlog : (fun n : ℕ => A * C * Real.sqrt (2 * CB) *
-      Real.log (n : ℝ) ^ 6) =o[atTop] fun n => (n : ℝ) ^ δ := by
-    simpa only [Real.rpow_ofNat] using
-      ((isLittleO_log_rpow_rpow_atTop 6 hδ).natCast_atTop.const_mul_left
-        (A * C * Real.sqrt (2 * CB)))
-  filter_upwards [hK, hlog.bound hc] with n hn hsmall
+  have hsmall' : A * 32 * Real.sqrt (2 * CB) * Real.log (n : ℝ) ^ 6 ≤ c * (n : ℝ) ^ δ :=
+    Real.mul_log_pow_le_mul_rpow_of_ceil_logPowThreshold_le (by positivity) hc hδ
+      ((le_max_right _ _).trans hthr)
+  generalize hCdef : (32 : ℝ) = C at hn hsmall'
+  have hC : (1 : ℝ) ≤ C := hCdef ▸ by norm_num
   refine ⟨hn.1, hn.2.1, ?_⟩
   intro W B hW hWle hB
   have hn1 : 1 ≤ n := by omega
   have hnpos : (0 : ℝ) < n := by exact_mod_cast (show 0 < n by omega)
   have hKpos : (0 : ℝ) < X.K n := by
     exact_mod_cast (show 0 < X.K n by omega)
-  have hsmall' : A * C * Real.sqrt (2 * CB) * Real.log (n : ℝ) ^ 6 ≤
-      c * (n : ℝ) ^ δ := by
-    simpa only [Real.norm_of_nonneg (by positivity : 0 ≤
-      A * C * Real.sqrt (2 * CB) * Real.log (n : ℝ) ^ 6),
-      Real.norm_of_nonneg (Real.rpow_nonneg (Nat.cast_nonneg n) δ)] using hsmall
   have hroot := X.sqrt_budget_le hn1 hCB hB
   have hweight : A * W * Real.sqrt B ≤ c * (X.K n : ℝ) := by
     calc
@@ -190,6 +206,40 @@ theorem ScannerExponents.eventually_mul_a_sqrt_budget_le (X : ScannerExponents)
         (A * W * Real.sqrt B) / (X.K n : ℝ) := by ring
     _ ≤ c := (div_le_iff₀ hKpos).2 hweight
 
+/-- Under the explicit positive exponent margin, all admissible growing
+weights and marginal budgets obey one eventual sharp-comparison smallness
+bound. The threshold precedes the scale, weight and budget.
+Source: the numerical implication in `08-scanner.tex`, lines 859–865.
+The ordinary scanner exponent hypotheses alone do not imply the margin. -/
+theorem ScannerExponents.eventually_mul_a_sqrt_budget_le (X : ScannerExponents)
+    {ω CB A c : ℝ} (hmargin : ω + (1 + X.kappa) / 2 < 1 - X.ell - X.mu)
+    (hCB : 0 ≤ CB) (hA : 0 ≤ A) (hc : 0 < c) :
+    ∀ᶠ n : ℕ in atTop, 2 ≤ n ∧ 1 ≤ X.K n ∧
+      ∀ W B : ℝ, 0 ≤ W → W ≤ (n : ℝ) ^ ω →
+        B ≤ CB * (n : ℝ) * (X.D n : ℝ) * Real.log (n : ℝ) ^ 12 →
+        A * X.a W n * Real.sqrt B ≤ c :=
+  eventually_atTop.2
+    ⟨_, fun _ => X.mul_a_sqrt_budget_le_of_momentRadiusThreshold_le hmargin hCB hA hc⟩
+
+/-- Every fixed multiple of the per-band weight lies in the moment interval at every `n` from
+the explicit threshold `X.momentRadiusThreshold ω CB A c` on, uniformly in positive admissible
+budgets. Source: `07-comparators.tex`, lines 70–85 and 171–173, and `08-scanner.tex`,
+lines 859–865. -/
+theorem ScannerExponents.a_le_moment_radius_of_momentRadiusThreshold_le (X : ScannerExponents)
+    {ω CB A c : ℝ} (hmargin : ω + (1 + X.kappa) / 2 < 1 - X.ell - X.mu)
+    (hCB : 0 ≤ CB) (hA : 0 ≤ A) (hc : 0 < c) {n : ℕ}
+    (hthr : X.momentRadiusThreshold ω CB A c ≤ n) :
+    1 ≤ X.K n ∧
+      ∀ W B : ℝ, 0 ≤ W → W ≤ (n : ℝ) ^ ω → 1 ≤ B →
+        B ≤ CB * (n : ℝ) * (X.D n : ℝ) * Real.log (n : ℝ) ^ 12 →
+        A * X.a W n ≤ c / Real.sqrt B := by
+  obtain ⟨_, hK, hsmall⟩ :=
+    X.mul_a_sqrt_budget_le_of_momentRadiusThreshold_le hmargin hCB hA hc hthr
+  refine ⟨hK, ?_⟩
+  intro W B hW hWle hB hBupper
+  exact (le_div_iff₀ (Real.sqrt_pos.2 (zero_lt_one.trans_le hB))).2
+    (hsmall W B hW hWle hBupper)
+
 /-- Every fixed multiple of the per-band weight is eventually in the moment
 interval, uniformly in positive admissible budgets. Source:
 `07-comparators.tex`, lines 70–85 and 171–173, and
@@ -200,16 +250,9 @@ theorem ScannerExponents.exists_a_le_moment_radius (X : ScannerExponents)
     ∃ N : ℕ, 2 ≤ N ∧ ∀ n : ℕ, N ≤ n → 1 ≤ X.K n ∧
       ∀ W B : ℝ, 0 ≤ W → W ≤ (n : ℝ) ^ ω → 1 ≤ B →
         B ≤ CB * (n : ℝ) * (X.D n : ℝ) * Real.log (n : ℝ) ^ 12 →
-        A * X.a W n ≤ c / Real.sqrt B := by
-  obtain ⟨N, hN⟩ := eventually_atTop.mp
-    (X.eventually_mul_a_sqrt_budget_le hmargin hCB hA hc)
-  refine ⟨max N 2, le_max_right _ _, ?_⟩
-  intro n hn
-  obtain ⟨_, hK, hsmall⟩ := hN n ((le_max_left N 2).trans hn)
-  refine ⟨hK, ?_⟩
-  intro W B hW hWle hB hBupper
-  exact (le_div_iff₀ (Real.sqrt_pos.2 (zero_lt_one.trans_le hB))).2
-    (hsmall W B hW hWle hBupper)
+        A * X.a W n ≤ c / Real.sqrt B :=
+  ⟨_, X.two_le_momentRadiusThreshold ω CB A c,
+    fun _ => X.a_le_moment_radius_of_momentRadiusThreshold_le hmargin hCB hA hc⟩
 
 /-- The exact final scanner parameters have the positive margin used in the
 sharp marginal-moment estimate. Source: `scanner:final-parameters` and

@@ -23,6 +23,9 @@ extracted from a limit.
   (`Real.mul_rpow_le_mul_rpow_of_powerRatioThreshold_le`).
 * `Real.logPowThreshold C η a k`; beyond it `C (log x) ^ k ≤ η x ^ a` for
   `a > 0` (`Real.mul_log_pow_le_mul_rpow_of_logPowThreshold_le`).
+* `Real.logRpowThreshold C η u v L`; beyond it `C x ^ u (log x) ^ L ≤ η x ^ v` for
+  `u < v` and real `L`
+  (`Real.mul_rpow_mul_log_rpow_le_mul_rpow_of_logRpowThreshold_le`).
 * `Real.stretchedExpThreshold C c θ s`; beyond it `C x ^ s ≤ exp (c x ^ θ)`
   for `c, θ > 0` (`Real.mul_rpow_le_exp_of_stretchedExpThreshold_le`), and
   equivalently `C exp (-(c x ^ θ)) ≤ x ^ (-s)`.
@@ -176,6 +179,45 @@ theorem mul_log_pow_le_mul_rpow_of_ceil_logPowThreshold_le {C η a : ℝ} {k n :
     (hC : 0 ≤ C) (hη : 0 < η) (ha : 0 < a) (hn : ⌈logPowThreshold C η a k⌉₊ ≤ n) :
     C * log (n : ℝ) ^ k ≤ η * (n : ℝ) ^ a :=
   mul_log_pow_le_mul_rpow_of_logPowThreshold_le hC hη ha (Nat.ceil_le.mp hn)
+
+/-- The explicit threshold `max e (logPowThreshold C η (v - u) ⌈L⌉₊)` beyond which
+`C x ^ u (log x) ^ L ≤ η x ^ v` for `u < v` and a real exponent `L`. -/
+noncomputable def logRpowThreshold (C η u v L : ℝ) : ℝ :=
+  max (exp 1) (logPowThreshold C η (v - u) ⌈L⌉₊)
+
+/-- The threshold `logRpowThreshold C η u v L` exceeds `2`. -/
+theorem two_lt_logRpowThreshold (C η u v L : ℝ) : 2 < logRpowThreshold C η u v L :=
+  (by linarith [add_one_lt_exp one_ne_zero] : (2 : ℝ) < exp 1).trans_le (le_max_left _ _)
+
+/-- **A power times a real power of a logarithm against a larger power, with an explicit
+threshold.** If `0 ≤ C`, `0 < η` and `u < v`, then `C x ^ u (log x) ^ L ≤ η x ^ v` for every
+`x ≥ logRpowThreshold C η u v L`, for every real exponent `L`. -/
+theorem mul_rpow_mul_log_rpow_le_mul_rpow_of_logRpowThreshold_le {C η u v L x : ℝ}
+    (hC : 0 ≤ C) (hη : 0 < η) (huv : u < v) (hx : logRpowThreshold C η u v L ≤ x) :
+    C * x ^ u * log x ^ L ≤ η * x ^ v := by
+  have he : exp 1 ≤ x := (le_max_left _ _).trans hx
+  have hx0 : 0 < x := (exp_pos 1).trans_le he
+  have hlog : 1 ≤ log x := (log_exp 1).symm.le.trans (log_le_log (exp_pos 1) he)
+  have hk : log x ^ L ≤ log x ^ ⌈L⌉₊ := by
+    rw [← rpow_natCast]
+    exact rpow_le_rpow_of_exponent_le hlog (Nat.le_ceil L)
+  have hmain := mul_log_pow_le_mul_rpow_of_logPowThreshold_le hC hη (sub_pos.2 huv)
+    ((le_max_right _ _).trans hx)
+  calc C * x ^ u * log x ^ L = (C * log x ^ L) * x ^ u := by ring
+    _ ≤ (C * log x ^ ⌈L⌉₊) * x ^ u := by gcongr
+    _ ≤ (η * x ^ (v - u)) * x ^ u := by gcongr
+    _ = η * x ^ v := by rw [mul_assoc, ← rpow_add hx0, sub_add_cancel]
+
+/-- Natural-number form of `mul_rpow_mul_log_rpow_le_mul_rpow_of_logRpowThreshold_le`. -/
+theorem mul_rpow_mul_log_rpow_le_mul_rpow_of_ceil_logRpowThreshold_le {C η u v L : ℝ} {n : ℕ}
+    (hC : 0 ≤ C) (hη : 0 < η) (huv : u < v) (hn : ⌈logRpowThreshold C η u v L⌉₊ ≤ n) :
+    C * (n : ℝ) ^ u * log (n : ℝ) ^ L ≤ η * (n : ℝ) ^ v :=
+  mul_rpow_mul_log_rpow_le_mul_rpow_of_logRpowThreshold_le hC hη huv (Nat.ceil_le.mp hn)
+
+/-- Every `n` from `⌈logRpowThreshold C η u v L⌉₊` on is at least `2`. -/
+theorem two_le_of_ceil_logRpowThreshold_le {C η u v L : ℝ} {n : ℕ}
+    (hn : ⌈logRpowThreshold C η u v L⌉₊ ≤ n) : 2 ≤ n := by
+  exact_mod_cast (two_lt_logRpowThreshold C η u v L).le.trans (Nat.ceil_le.mp hn)
 
 /-- The number of Taylor terms `⌊s / θ⌋₊ + 1` used to compare `x ^ s` with
 `exp (c x ^ θ)`; it satisfies `s < θ m`. -/
