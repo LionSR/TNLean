@@ -83,11 +83,13 @@ theorem exists_int_eq_of_isBeltFacet {f g : ℤ × ℤ × ℤ} (hf : IsBeltFacet
   · rw [e₁, hp]; push_cast; ring
   · rw [e₂, hq]; push_cast; ring
 
+/-- The two normal coefficients of a belt facet have absolute values summing to at most `2`. -/
 theorem isBeltFacet_abs {f : ℤ × ℤ × ℤ} (hf : IsBeltFacet f) :
     |f.1| + |f.2.1| ≤ 2 := by
   rcases hf with ⟨ha | ha, hb⟩ | ⟨ha, hb | hb⟩ | ⟨ha | ha, hb | hb, -⟩ <;>
     simp [ha, hb]
 
+/-- The normal vector of a belt facet is nonzero. -/
 theorem isBeltFacet_ne_zero {f : ℤ × ℤ × ℤ} (hf : IsBeltFacet f) :
     ((f.1 : ℝ), (f.2.1 : ℝ)) ≠ 0 := by
   intro h
