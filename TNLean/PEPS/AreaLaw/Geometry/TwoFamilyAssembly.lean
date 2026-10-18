@@ -133,25 +133,24 @@ theorem exists_primaryLayer_of_repairStageBirthRank_eq_zero (n : ℕ)
     exact primaryBirthRegion_dist_separation_of_same_parity o k h (boundaryEndpoints Λ A) C
       (fun k ↦ ((a k).val : ℤ)) (fun k ↦ ((b k).val : ℤ)) J J' hC hpar hne p q hp' hq'
 
-/-- The inverse hundredth powers of the primary scanner scales of any finite
-set of rank-zero non-dummy identifiers have a uniform boundary-weighted bound.
-The constant precedes the origin, domain, cut, width, layer index and stopping
-scale. Auxiliary to area-law Section 11, `10-geometry.tex`, lines 709–715 and
-796–800. -/
-theorem exists_uniform_repairStage_primary_error_sum_bound {CP : ℝ} (hCP : 0 < CP) :
-    ∃ M : ℝ, 0 < M ∧
-      ∀ (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ))
-        (C k₀ : ℕ) (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀) (Sstar : ℝ) (n : ℕ)
-        (S : Finset (repairStage o Λ A C k₀ hC h₀ Sstar (0 + n)).regionIndex),
-        (∀ x ∈ S, repairStageBirthRank o Λ A C k₀ hC h₀ Sstar (0 + n) x = 0 ∧
-          x ≠ (repairStage o Λ A C k₀ hC h₀ Sstar (0 + n)).dummy) →
-        ∑ x ∈ S, (((⌈CP *
-            repairStageCharacteristicLength o Λ A C k₀ hC h₀ Sstar (0 + n) x ^
-            (1 + 2 * (Exponents.geometryDelta : ℝ))⌉₊ : ℕ) : ℝ) ^ 100)⁻¹ ≤
-          M * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary Λ A).card := by
+/-- **Primary error sum with an explicit coefficient.** The inverse hundredth
+powers of the primary scanner scales of any finite set of rank-zero non-dummy
+identifiers have boundary-weighted sum at most
+`primaryErrorSumConstant C_P (2 C₀ + 1) ^ 2 |∂A|`. Auxiliary to area-law
+Section 11, `10-geometry.tex`, lines 709–715 and 796–800. -/
+theorem repairStage_primary_error_sum_le {CP : ℝ} (hCP : 0 < CP) (o : ℝ × ℝ)
+    (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ)) (C k₀ : ℕ) (hC : 2 ≤ C)
+    (h₀ : 50000000 ≤ k₀) (Sstar : ℝ) (n : ℕ)
+    (S : Finset (repairStage o Λ A C k₀ hC h₀ Sstar (0 + n)).regionIndex) :
+    (∀ x ∈ S, repairStageBirthRank o Λ A C k₀ hC h₀ Sstar (0 + n) x = 0 ∧
+      x ≠ (repairStage o Λ A C k₀ hC h₀ Sstar (0 + n)).dummy) →
+    ∑ x ∈ S, (((⌈CP *
+        repairStageCharacteristicLength o Λ A C k₀ hC h₀ Sstar (0 + n) x ^
+        (1 + 2 * (Exponents.geometryDelta : ℝ))⌉₊ : ℕ) : ℝ) ^ 100)⁻¹ ≤
+      primaryErrorSumConstant CP * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary Λ A).card := by
   classical
-  obtain ⟨M, hM, hsum⟩ := exists_uniform_primaryPitchIndices_error_sum_bound hCP
-  refine ⟨M, hM, fun o Λ A C k₀ hC h₀ Sstar n S hS ↦ ?_⟩
+  intro hS
+  have hsum := primaryPitchIndices_error_sum_le hCP
   let hch := (Classical.choose_spec exists_uniform_separated_initial_marks).2
     o Λ A C k₀ hC h₀
   let a := Classical.choose hch
@@ -202,6 +201,25 @@ theorem exists_uniform_repairStage_primary_error_sum_bound {CP : ℝ} (hCP : 0 <
     rw [hpe]
     exact hp y
 
+/-- The inverse hundredth powers of the primary scanner scales of any finite
+set of rank-zero non-dummy identifiers have a uniform boundary-weighted bound.
+The constant precedes the origin, domain, cut, width, layer index and stopping
+scale; it is `primaryErrorSumConstant C_P` (`repairStage_primary_error_sum_le`).
+Auxiliary to area-law Section 11, `10-geometry.tex`, lines 709–715 and
+796–800. -/
+theorem exists_uniform_repairStage_primary_error_sum_bound {CP : ℝ} (hCP : 0 < CP) :
+    ∃ M : ℝ, 0 < M ∧
+      ∀ (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ))
+        (C k₀ : ℕ) (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀) (Sstar : ℝ) (n : ℕ)
+        (S : Finset (repairStage o Λ A C k₀ hC h₀ Sstar (0 + n)).regionIndex),
+        (∀ x ∈ S, repairStageBirthRank o Λ A C k₀ hC h₀ Sstar (0 + n) x = 0 ∧
+          x ≠ (repairStage o Λ A C k₀ hC h₀ Sstar (0 + n)).dummy) →
+        ∑ x ∈ S, (((⌈CP *
+            repairStageCharacteristicLength o Λ A C k₀ hC h₀ Sstar (0 + n) x ^
+            (1 + 2 * (Exponents.geometryDelta : ℝ))⌉₊ : ℕ) : ℝ) ^ 100)⁻¹ ≤
+          M * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary Λ A).card :=
+  ⟨_, primaryErrorSumConstant_pos hCP, repairStage_primary_error_sum_le hCP⟩
+
 end Primary
 
 section Exceptional
@@ -251,6 +269,66 @@ theorem card_repairStageExceptionalSites_le_of_isEmpty (N : ℕ)
   nlinarith [mul_le_mul_of_nonneg_left hM hsq]
 
 end Exceptional
+
+section Separation
+
+/-- A **birth-separation constant** `c₁`: a positive constant for which both
+cases of the birth-separation lemma hold before the threshold choices. The
+initial belt tiles are separated by `c₁` at all data, and the replacement
+births are separated by `c₁` from every set with the two properties of a final
+actual region of an older or peer identifier of the same label. The source
+obtains such a constant as a minimum over finitely many rescaled patterns
+(`10-geometry.tex`, lines 596–631). Auxiliary to the explicit constant of
+Theorem 1.1 (`docs/notes/arealaw2d_explicit_constant.tex`).
+Source: area-law Section 11, `geometry:birth-separation`, lines 573–659. -/
+structure IsBirthSeparationConstant (c₁ : ℝ) : Prop where
+  /-- The constant is positive. -/
+  pos : 0 < c₁
+  /-- The initial belt tiles are separated by `c₁`. Source: lines 573–582. -/
+  initial : ∀ (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ)) (C k₀ : ℕ)
+    (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀) (Sstar : ℝ),
+    IsInitialBirthSeparated o Λ A C k₀ hC h₀ Sstar c₁
+  /-- The local separation of a replacement birth from its comparison regions.
+  Source: lines 584–659. -/
+  replacement : ∀ {ι : Type} (ξ : ι → Fin 2) (σ : RepairFanSlot → ι)
+    (C : RepairFanRun ξ σ) (v : ℝ × ℝ) {u : ℝ}, 1 ≤ u → ∀ Y : Set (ℝ × ℝ),
+    (∀ y ∈ Y, ‖y - v‖ < 2 * u → u⁻¹ • (y - v) ∈ repairSameLabelBound ξ σ C) →
+    (∀ y ∈ Y, ∀ p : Fin 3 × Fin 3, y ∉ repairSquare (v + u • repairChildOffset p) u) →
+    ∀ x ∈ (fun z ↦ v + u • z) '' repairNormRunRegion ξ σ C, ∀ y ∈ Y,
+      c₁ * u ^ (Exponents.rho : ℝ) ≤ ‖x - y‖
+
+/-- A birth-separation constant exists: the smaller of the constants of the
+initial and the replacement separation lemmas.
+Source: area-law Section 11, `geometry:birth-separation`, lines 573–659. -/
+theorem exists_isBirthSeparationConstant : ∃ c₁ : ℝ, IsBirthSeparationConstant c₁ := by
+  obtain ⟨c₃, hc₃, hI⟩ := exists_isInitialBirthSeparated
+  obtain ⟨c₂, hc₂, hR⟩ := exists_repairBirth_separation
+  refine ⟨min c₂ c₃, lt_min hc₂ hc₃, fun o Λ A C k₀ hC h₀ Sstar ↦
+    (hI o Λ A C k₀ hC h₀ Sstar).mono (min_le_right _ _), ?_⟩
+  intro ι ξ σ C v u hu Y hloc htrim x hx y hy
+  exact (mul_le_mul_of_nonneg_right (min_le_left _ _)
+    (Real.rpow_nonneg (by linarith) _)).trans (hR ξ σ C v hu Y hloc htrim x hx y hy)
+
+/-- **Birth separation with explicit thresholds.** For a birth-separation
+constant `c₁`, every stopping scale `S_* ≥ repairMarginThreshold (1/128)`, every
+width and every lower layer index `k₀ ≥ fineScaleIndexThreshold S_*`, both cases
+of the birth-separation lemma hold with `c₁` for the actual repair stages.
+Source: area-law Section 11, `geometry:birth-separation`, lines 573–659, from
+`geometry:repair-induction`, lines 471–485. -/
+theorem IsBirthSeparationConstant.birthSeparated {c₁ : ℝ} (hc : IsBirthSeparationConstant c₁)
+    {Sstar : ℝ} (hS : repairMarginThreshold (1 / 128) ≤ Sstar) (o : ℝ × ℝ)
+    (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ)) (C k₀ : ℕ) (hC : 2 ≤ C)
+    (h₀ : 50000000 ≤ k₀) (hK : fineScaleIndexThreshold Sstar ≤ k₀) :
+    IsInitialBirthSeparated o Λ A C k₀ hC h₀ Sstar c₁ ∧
+      IsRepairBirthSeparated o Λ A C k₀ hC h₀ Sstar c₁ := by
+  have hM := repairMetricHypotheses_of_le (a₀ := 1 / 128) (by norm_num) (by norm_num) hS
+    o Λ A C k₀ hC h₀ hK
+  exact ⟨hc.initial o Λ A C k₀ hC h₀ Sstar,
+    isRepairBirthSeparated_of_isUniformRepairInduction hc.replacement hM.pos
+      ((one_le_repairMarginThreshold _).trans hS) hM.le_scale hM.margin
+      (isUniformRepairInduction_of_le hS o Λ A C k₀ hC h₀ hK)⟩
+
+end Separation
 
 end TNLean.PEPS.AreaLaw.Geometry
 
@@ -613,42 +691,76 @@ theorem isTwoFamilyDecompositionConstant_twoFamilyConstant
         mul_le_mul_of_nonneg_right (le_max_right _ _) hb0
 
 
-/-- **Proposition 11.2** (`prop:two-families`, `10-geometry.tex` lines 98–141).
-For every pair of template constants with `Ctpl ≥ 1` and every lower scale
-threshold `n_* ≥ 1` there is a constant `C`, chosen before the domain and the
-cut, such that every cut with positive boundary has an ordered two-family
-partition with separated birth templates, `|D| ≤ C b` and `∑ nᵢ^(-100) ≤ C b`.
+/-- The stopping scale of the two-family decomposition: the largest of the
+margin thresholds `repairMarginThreshold (1/128)` (templates and separation) and
+`repairMarginThreshold (1/4)` (metric hypotheses), `2`, and the length bound
+`twoFamilyLengthBound c₁ C_B n_*`. Source: area-law Section 11,
+`10-geometry.tex`, lines 756–767. -/
+def twoFamilyStoppingScale (c₁ CB : ℝ) (nstar : ℕ) : ℝ :=
+  max (max (repairMarginThreshold (1 / 128)) (repairMarginThreshold (1 / 4)))
+    (max 2 (twoFamilyLengthBound c₁ CB nstar))
 
-The constants are fixed in the order of lines 756–774: the template
-coefficients `C_P, C_B`, the isolation constant and the separation constant
-`c₁`, then the stopping scale `S_*`, then the layer width and the lower layer
-index `k₀`. The regions are the final actual regions meeting the cut, ordered
-by birth rank (lines 776–787); the error sum is split into primaries and the
-remaining identifiers (lines 796–802). The lower bound `Ctpl ≥ 1` is the
-standing convention that the template constant is a large positive constant
-(Definition 9.3). The constant is `twoFamilyConstant` of these choices
-(`isTwoFamilyDecompositionConstant_twoFamilyConstant`). -/
-theorem twoFamilyDecomposition_of_one_le {D₀ Ctpl : ℝ} (hCtpl : 1 ≤ Ctpl) :
-    TwoFamilyDecomposition D₀ Ctpl := by
+/-- The lower layer index of the two-family decomposition: the largest of
+`5·10⁷`, the birth-template threshold at the stopping scale (which contains the
+metric and separation thresholds `fineScaleIndexThreshold S_*`), and
+`twoFamilyLayerThreshold`. Source: area-law Section 11, `10-geometry.tex`,
+lines 768–774. -/
+def twoFamilyLowerLayerIndex (D₀ CP CB c₁ : ℝ) (nstar : ℕ) : ℕ :=
+  max 50000000 (max (birthTemplateLayerThreshold D₀ CP CB (twoFamilyStoppingScale c₁ CB nstar))
+    (twoFamilyLayerThreshold CP CB c₁ nstar))
+
+/-- **The explicit constant of the two-family decomposition.** With
+`C_tpl' = max C_tpl 1`, `C_P = primaryScannerConstant C_tpl'`,
+`C_B = beltScannerConstant C_tpl'`, the stopping scale
+`S_* = twoFamilyStoppingScale c₁ C_B n_*`, the layer width
+`twoFamilyLayerWidth D₀` and the lower layer index
+`twoFamilyLowerLayerIndex D₀ C_P C_B c₁ n_*`, it is `twoFamilyConstant` with the
+counting coefficients `M_t = repairMarkCountConstant S_*`,
+`M_p = primaryErrorSumConstant C_P` and `L_q = repairRetainedCountConstant S_*`.
+The birth-separation constant `c₁` is an argument. Auxiliary to the explicit
+constant of Theorem 1.1 (`docs/notes/arealaw2d_explicit_constant.tex`); the
+source asserts only that a constant exists. Source: area-law Section 11,
+`10-geometry.tex`, threshold order lines 756–774 and assembly lines 776–802. -/
+def twoFamilyDecompositionConstant (D₀ Ctpl : ℝ) (nstar : ℕ) (c₁ : ℝ) : ℝ :=
+  let CP := primaryScannerConstant (max Ctpl 1)
+  let CB := beltScannerConstant (max Ctpl 1)
+  let Sstar := twoFamilyStoppingScale c₁ CB nstar
+  twoFamilyConstant (twoFamilyLayerWidth D₀) (twoFamilyLowerLayerIndex D₀ CP CB c₁ nstar) Sstar
+    (repairMarkCountConstant Sstar) (primaryErrorSumConstant CP)
+    (repairRetainedCountConstant Sstar)
+
+/-- **Proposition 11.2 with the explicit constant, for `C_tpl ≥ 1`.** For every
+birth-separation constant `c₁` and every lower scale threshold `n_*`, the
+constant `twoFamilyConstant` of the explicit choices of
+`twoFamilyDecompositionConstant`, at `C_tpl` itself, is a constant of the
+two-family decomposition. Auxiliary to area-law Section 11, `10-geometry.tex`,
+threshold order lines 756–774 and assembly lines 776–802. -/
+theorem isTwoFamilyDecompositionConstant_of_one_le {D₀ Ctpl c₁ : ℝ} (hCtpl : 1 ≤ Ctpl)
+    (hc : Geometry.IsBirthSeparationConstant c₁) (nstar : ℕ) :
+    IsTwoFamilyDecompositionConstant D₀ Ctpl nstar
+      (twoFamilyConstant (twoFamilyLayerWidth D₀)
+        (twoFamilyLowerLayerIndex D₀ (primaryScannerConstant Ctpl) (beltScannerConstant Ctpl)
+          c₁ nstar)
+        (twoFamilyStoppingScale c₁ (beltScannerConstant Ctpl) nstar)
+        (repairMarkCountConstant (twoFamilyStoppingScale c₁ (beltScannerConstant Ctpl) nstar))
+        (primaryErrorSumConstant (primaryScannerConstant Ctpl))
+        (repairRetainedCountConstant
+          (twoFamilyStoppingScale c₁ (beltScannerConstant Ctpl) nstar))) := by
   classical
-  intro nstar hnstar
-  -- Template coefficients, isolation and separation constants.
-  obtain ⟨CP, CB, hCP, hCB, htpl⟩ := exists_uniform_repairStage_birth_templates Ctpl hCtpl
-  obtain ⟨T₀, -, htplD⟩ := htpl D₀
-  obtain ⟨T₁, hmetric⟩ :=
-    exists_repairMetricHypotheses (a₀ := 1 / 4) (by norm_num) le_rfl
-  obtain ⟨c₁, hc₁, T₂, hsep⟩ := exists_birthSeparation
+  set CP := primaryScannerConstant Ctpl
+  set CB := beltScannerConstant Ctpl
+  have hCP : 1 ≤ CP := one_le_primaryScannerConstant Ctpl
+  have hCB : 0 < CB := beltScannerConstant_pos hCtpl
   -- The stopping scale.
-  set U : ℝ := twoFamilyLengthBound c₁ CB nstar
-  set Sstar : ℝ := max (max T₀ 2) (max (max T₁ T₂) U) with hSstar
-  have hS2 : 2 ≤ Sstar := (le_max_right _ _).trans (le_max_left _ _)
+  set Sstar := twoFamilyStoppingScale c₁ CB nstar
+  have hS128 : repairMarginThreshold (1 / 128) ≤ Sstar :=
+    (le_max_left _ _).trans (le_max_left _ _)
+  have hS4 : repairMarginThreshold (1 / 4) ≤ Sstar :=
+    (le_max_right _ _).trans (le_max_left _ _)
+  have hS2 : 2 ≤ Sstar := (le_max_left _ _).trans (le_max_right _ _)
+  have hSU : twoFamilyLengthBound c₁ CB nstar ≤ Sstar :=
+    (le_max_right _ _).trans (le_max_right _ _)
   have hS1 : 1 < Sstar := by linarith
-  have hST₀ : T₀ ≤ Sstar := (le_max_left _ _).trans (le_max_left _ _)
-  have hST₁ : T₁ ≤ Sstar :=
-    ((le_max_left _ _).trans (le_max_left _ _)).trans (le_max_right _ _)
-  have hST₂ : T₂ ≤ Sstar :=
-    ((le_max_right _ _).trans (le_max_left _ _)).trans (le_max_right _ _)
-  have hSU : U ≤ Sstar := (le_max_right _ _).trans (le_max_right _ _)
   -- The layer width.
   set C : ℕ := twoFamilyLayerWidth D₀ with hCdef
   have hC : 2 ≤ C := Nat.le_add_left 2 _
@@ -658,33 +770,27 @@ theorem twoFamilyDecomposition_of_one_le {D₀ Ctpl : ℝ} (hCtpl : 1 ≤ Ctpl) 
     push_cast
     linarith
   -- The lower layer index.
-  obtain ⟨KT, hKT⟩ := htplD Sstar hST₀ C hCD
-  obtain ⟨KM, hKM⟩ := hmetric Sstar hST₁ C
-  obtain ⟨KB, hKB⟩ := hsep Sstar hST₂ C
-  set k₀ : ℕ :=
-    max 50000000 (max (max KT KM) (max KB (twoFamilyLayerThreshold CP CB c₁ nstar)))
-    with hk₀
+  set k₀ : ℕ := twoFamilyLowerLayerIndex D₀ CP CB c₁ nstar
   have h₀ : 50000000 ≤ k₀ := le_max_left _ _
-  have hKT₀ : KT ≤ k₀ := by omega
-  have hKM₀ : KM ≤ k₀ := by omega
-  have hKB₀ : KB ≤ k₀ := by omega
-  have hK₀ : twoFamilyLayerThreshold CP CB c₁ nstar ≤ k₀ := by omega
-  -- The counting constants.
-  obtain ⟨Mt, -, hmark⟩ := exists_uniform_repairStage_markIndex_prefix_bound hS1
-  obtain ⟨Mp, -, hprim⟩ :=
-    exists_uniform_repairStage_primary_error_sum_bound (CP := CP) (by linarith)
-  obtain ⟨Lq, -, hnonprim⟩ :=
-    exists_uniform_repairStage_retained_positive_rank_error_sum_bound hS1
-  exact ⟨twoFamilyConstant C k₀ Sstar Mt Mp Lq,
-    isTwoFamilyDecompositionConstant_twoFamilyConstant hCP hCB hc₁ hC h₀ hS2 hSU hK₀
-      (fun Λ A N ↦ hKT dyadicOrigin Λ A k₀ hC h₀ hKT₀ N)
-      (fun Λ A ↦ hKM dyadicOrigin Λ A k₀ hC h₀ hKM₀)
-      (fun Λ A ↦ hKB dyadicOrigin Λ A k₀ hC h₀ hKB₀)
-      (fun Λ A N ↦ hmark dyadicOrigin Λ A C k₀ hC h₀ (1 / 4)
-        (hKM dyadicOrigin Λ A k₀ hC h₀ hKM₀) N)
-      (fun Λ A n S hS ↦ hprim dyadicOrigin Λ A C k₀ hC h₀ Sstar n S hS)
-      (fun Λ A N ↦ hnonprim CB hCB dyadicOrigin Λ A C k₀ hC h₀ (1 / 4)
-        (hKM dyadicOrigin Λ A k₀ hC h₀ hKM₀) N)⟩
+  have hKT : birthTemplateLayerThreshold D₀ CP CB Sstar ≤ k₀ :=
+    (le_max_left _ _).trans (le_max_right _ _)
+  have hK₀ : twoFamilyLayerThreshold CP CB c₁ nstar ≤ k₀ :=
+    (le_max_right _ _).trans (le_max_right _ _)
+  have hKF : fineScaleIndexThreshold Sstar ≤ k₀ := (le_max_left _ _).trans hKT
+  have hmetric (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ)) :=
+    repairMetricHypotheses_of_le (a₀ := 1 / 4) (by norm_num) le_rfl hS4 dyadicOrigin Λ A C k₀
+      hC h₀ hKF
+  exact isTwoFamilyDecompositionConstant_twoFamilyConstant hCP hCB hc.pos hC h₀ hS2 hSU hK₀
+    (fun Λ A N ↦ repairStage_birth_templates_of_le Ctpl hCtpl D₀ hS128 C hCD dyadicOrigin Λ A
+      k₀ hC h₀ hKT N)
+    hmetric
+    (fun Λ A ↦ hc.birthSeparated hS128 dyadicOrigin Λ A C k₀ hC h₀ hKF)
+    (fun Λ A N ↦ repairStage_markIndex_prefix_le hS1 dyadicOrigin Λ A C k₀ hC h₀ (1 / 4)
+      (hmetric Λ A) N)
+    (fun Λ A n S hS ↦ repairStage_primary_error_sum_le (by linarith) dyadicOrigin Λ A C k₀ hC h₀
+      Sstar n S hS)
+    (fun Λ A N ↦ repairStage_retained_positive_rank_error_sum_le hS1 hCB dyadicOrigin Λ A C k₀
+      hC h₀ (1 / 4) (hmetric Λ A) N)
 
 /-- A template for a larger template constant is a template for any smaller one:
 the constant enters only the scale inequality `Ctpl N₀ (s₀ + 1) ≤ n`, whose
@@ -706,15 +812,60 @@ def Geometry.Template.ofLe {Ctpl Ctpl' : ℝ} {n s₀ : ℕ} (h : Ctpl ≤ Ctpl'
     (mul_le_mul_of_nonneg_right h (Nat.cast_nonneg T.pieceCount)) (by positivity)).trans T.scale
   diameter := T.diameter
 
+/-- A constant of the two-family decomposition for a larger template constant is
+a constant for any smaller one: templates are read with `Geometry.Template.ofLe`.
+Source: area-law Section 11, `prop:two-families`, `10-geometry.tex`,
+lines 98–141, with Definition 9.3 (`scanner:template`). -/
+theorem IsTwoFamilyDecompositionConstant.ofLe {D₀ Ctpl Ctpl' C : ℝ} {nstar : ℕ}
+    (hC : IsTwoFamilyDecompositionConstant D₀ Ctpl' nstar C) (h : Ctpl ≤ Ctpl') :
+    IsTwoFamilyDecompositionConstant D₀ Ctpl nstar C := by
+  intro Λ A hb
+  obtain ⟨P, n, s, T, h₁, h₂, h₃, h₄, h₅, h₆, h₇, h₈, h₉⟩ := hC Λ A hb
+  exact ⟨P, n, s, fun i ↦ (T i).ofLe h, h₁, h₂, h₃, h₄, h₅, h₆, h₇, h₈, h₉⟩
+
+/-- **Proposition 11.2 with the explicit constant.** For all real template
+constants `D₀` and `C_tpl`, every lower scale threshold `n_*` and every
+birth-separation constant `c₁`, the number
+`twoFamilyDecompositionConstant D₀ C_tpl n_* c₁` is a constant of the two-family
+decomposition at `n_*`. Templates are built for `max C_tpl 1` and read as
+templates for `C_tpl`. Auxiliary to area-law Section 11, `prop:two-families`,
+`10-geometry.tex`, lines 98–141, with the threshold order of lines 756–774;
+the source asserts only that a constant exists. -/
+theorem isTwoFamilyDecompositionConstant_twoFamilyDecompositionConstant (D₀ Ctpl : ℝ)
+    (nstar : ℕ) {c₁ : ℝ} (hc : Geometry.IsBirthSeparationConstant c₁) :
+    IsTwoFamilyDecompositionConstant D₀ Ctpl nstar
+      (twoFamilyDecompositionConstant D₀ Ctpl nstar c₁) :=
+  (isTwoFamilyDecompositionConstant_of_one_le (le_max_right Ctpl 1) hc nstar).ofLe
+    (le_max_left Ctpl 1)
+
+/-- **Proposition 11.2** (`prop:two-families`, `10-geometry.tex` lines 98–141).
+For every pair of template constants with `Ctpl ≥ 1` and every lower scale
+threshold `n_* ≥ 1` there is a constant `C`, chosen before the domain and the
+cut, such that every cut with positive boundary has an ordered two-family
+partition with separated birth templates, `|D| ≤ C b` and `∑ nᵢ^(-100) ≤ C b`.
+
+The constants are fixed in the order of lines 756–774: the template
+coefficients `C_P, C_B`, the isolation constant and the separation constant
+`c₁`, then the stopping scale `S_*`, then the layer width and the lower layer
+index `k₀`. The regions are the final actual regions meeting the cut, ordered
+by birth rank (lines 776–787); the error sum is split into primaries and the
+remaining identifiers (lines 796–802). The lower bound `Ctpl ≥ 1` is the
+standing convention that the template constant is a large positive constant
+(Definition 9.3). Every constant is explicit except the separation constant
+`c₁` (`isTwoFamilyDecompositionConstant_of_one_le`). -/
+theorem twoFamilyDecomposition_of_one_le {D₀ Ctpl : ℝ} (hCtpl : 1 ≤ Ctpl) :
+    TwoFamilyDecomposition D₀ Ctpl := by
+  intro nstar _
+  obtain ⟨c₁, hc⟩ := Geometry.exists_isBirthSeparationConstant
+  exact ⟨_, isTwoFamilyDecompositionConstant_of_one_le hCtpl hc nstar⟩
+
 /-- Proposition 11.2 of the area-law manuscript (`prop:two-families`,
 `10-geometry.tex` lines 98–141), for every real `D₀` and `Ctpl`, with no further
-hypothesis. Templates are built for `max Ctpl 1` and read as templates for `Ctpl`. -/
+hypothesis. The constant is `twoFamilyDecompositionConstant`
+(`isTwoFamilyDecompositionConstant_twoFamilyDecompositionConstant`). -/
 theorem twoFamilyDecomposition (D₀ Ctpl : ℝ) : TwoFamilyDecomposition D₀ Ctpl := by
-  intro nstar hnstar
-  obtain ⟨C, hC⟩ :=
-    twoFamilyDecomposition_of_one_le (D₀ := D₀) (le_max_right Ctpl 1) nstar hnstar
-  refine ⟨C, fun Λ A hb ↦ ?_⟩
-  obtain ⟨P, n, s, T, h₁, h₂, h₃, h₄, h₅, h₆, h₇, h₈, h₉⟩ := hC Λ A hb
-  exact ⟨P, n, s, fun i ↦ (T i).ofLe (le_max_left Ctpl 1), h₁, h₂, h₃, h₄, h₅, h₆, h₇, h₈, h₉⟩
+  intro nstar _
+  obtain ⟨c₁, hc⟩ := Geometry.exists_isBirthSeparationConstant
+  exact ⟨_, isTwoFamilyDecompositionConstant_twoFamilyDecompositionConstant D₀ Ctpl nstar hc⟩
 
 end TNLean.PEPS.AreaLaw

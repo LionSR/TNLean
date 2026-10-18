@@ -34,3 +34,10 @@ depends on axioms: [propext, Classical.choice, Quot.sound] -/
 depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
 #print axioms TNLean.PEPS.AreaLaw.Scan.CollarScan.actualRounds_entropy_integral_le_domainGraph
+
+open TNLean.PEPS.AreaLaw.Scan.CollarScan in
+/-- info:
+'TNLean.PEPS.AreaLaw.Scan.CollarScan.actualRounds_entropy_integral_le_domainGraph_of_finiteFamilyTransportBound'
+depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms actualRounds_entropy_integral_le_domainGraph_of_finiteFamilyTransportBound

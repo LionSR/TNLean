@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Lattice.RegionalEntropyBridge
+import TNLean.Lattice.RegionEntropyInequalities
 
 /-!
 # Entropy bounded by the number of sites
@@ -31,13 +32,7 @@ theorem regionalEntropy_le_card_mul_log
     (Λ : Finset (ℤ × ℤ)) (q : ℕ)
     (Ω : StateSpace Λ q) (hΩ : ‖Ω‖ = 1) (A : Finset (Site Λ)) :
     regionalEntropy Λ q Ω A ≤ (A.card : ℝ) * Real.log q := by
-  rw [regionalEntropy_eq_finiteProduct]
-  have hρ := FiniteProduct.reducedPure_posSemidef (fun _ : Site Λ ↦ Fin q) Ω A
-  have htr := FiniteProduct.trace_reducedPure (fun _ : Site Λ ↦ Fin q) Ω hΩ A
-  refine (vonNeumannEntropy_le_log_rank hρ htr).trans ?_
-  have h := Real.log_le_log (Nat.cast_pos.mpr (hρ.rank_pos_of_trace_one htr))
-    (Nat.cast_le.mpr (Matrix.rank_le_card_width
-      (FiniteProduct.reducedPure (fun _ : Site Λ ↦ Fin q) Ω A)))
-  simpa [Nat.cast_pow, Real.log_pow] using h
+  rw [regionalEntropy_eq_regionEntropy]
+  exact regionEntropy_le_card_mul_log hΩ A
 
 end TNLean.Lattice
