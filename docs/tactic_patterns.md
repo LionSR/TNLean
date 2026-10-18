@@ -4622,6 +4622,17 @@ three-plaquette output measurement, and the routed reunion measurement.
 ## Candidates
 
 
+### Nonnegativity of a natural remainder in arithmetic bounds — candidate (2026-10-18)
+
+- **Pattern:** Supply `Nat.zero_le (L % (20 * w))` explicitly to `nlinarith`
+  after Euclidean division of the chain length.
+- **Seen:** Two occurrences in `MPS/AreaLaw/ProtocolSweepGeometry.lean`, in
+  `stage_right_margin` and `twenty_mul_stageCount_le`.
+- **Abstraction:** The existing `Nat.zero_le` supplies the needed fact. The
+  two occurrences in one file do not justify another arithmetic lemma or tactic.
+
+
+
 ### Product-basis vectors under equal register lists — candidate (2026-10-18)
 
 - **Pattern:** Induct on a list of raw registers, transport its elementary
