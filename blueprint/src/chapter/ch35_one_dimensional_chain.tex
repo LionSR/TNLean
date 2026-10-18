@@ -280,8 +280,7 @@ for an arbitrary finite set of sites and are instantiated here directly.
         TNLean.MPS.AreaLaw.chainBudgetConst,
         TNLean.MPS.AreaLaw.one_le_chainBudgetConst,
         TNLean.MPS.AreaLaw.supportDim_le_real,
-        TNLean.MPS.AreaLaw.cutLogBudget_interval_le,
-        TNLean.MPS.AreaLaw.not_splits_two_shells
+        TNLean.MPS.AreaLaw.cutLogBudget_interval_le
     }
     \leanok
     \uses{def:chain_model}
@@ -295,9 +294,7 @@ for an arbitrary finite set of sites and are instantiated here directly.
     \begin{align}
         B_R=1+N_R\log^2\bigl(e\,q^{R+1}\bigr).
     \end{align}
-    Both bounds are independent of the interval, and no support of range $R$
-    is split by two of the shells $[l-(j+1)R,\,r+(j+1)R)$, $j\ge0$, of an
-    interval $[l,r)$.
+    Both bounds are independent of the interval.
 \end{lemma}
 \begin{proof}
     \leanok
@@ -306,9 +303,53 @@ for an arbitrary finite set of sites and are instantiated here directly.
     with $|v-w|\le R$. If $w<a$ then every site $x$ of the support satisfies
     $a-R\le v-R\le x\le w+R<a+R$; if $w\ge b$ then $b-R\le w-R\le x\le v+R<b+R$.
     A window of at most $2R$ sites has at most $2^{2R}$ subsets. The budget
-    bound follows from the crossing count and the dimension bound $q^{R+1}$. If
-    a support met the shell with index $j$ and left the shell with index
-    $j'>j$, two of its sites would be at distance at least $R+1$.
+    bound follows from the crossing count and the dimension bound $q^{R+1}$.
+\end{proof}
+
+% Source: part1_arealaw.tex:388--403, single-splitting lemma.
+\begin{theorem}[Single splitting of nested chain intervals]
+    \label{thm:chain_single_splitting}
+    \lean{
+        TNLean.MPS.AreaLaw.single_splitting_shells,
+        TNLean.MPS.AreaLaw.not_splits_two_shells
+    }
+    \leanok
+    \uses{def:chain_model}
+    Let $L,R,l,r$ be natural numbers. For each natural number $i$, define
+    the coordinate interval
+    \begin{align}
+        X_i=[l-iR,r+iR)\cap\{0,\ldots,L-1\}.\notag
+    \end{align}
+    Let $Y$ be a set of chain sites with $|x-y|\le R$ for all $x,y\in Y$.
+    Suppose $Y$ meets both $X_j$ and its complement for some $j\ge0$.
+    For every natural number $i$,
+    \begin{align}
+        i>j & \ \Longrightarrow\ Y\subseteq X_i,\notag        \\
+        i<j & \ \Longrightarrow\ Y\cap X_i=\varnothing,\notag \\
+        Y\cap X_i\ne\varnothing\ \text{and}\ Y\setminus X_i\ne\varnothing
+            & \ \Longrightarrow\ i=j.\notag
+    \end{align}
+    In particular, $Y$ is split by at most one of these intervals, including
+    $X_0$. For a nonempty initial interval, these coordinate intervals are
+    its metric enlargements by $iR$, so this gives the single-splitting
+    lemma of \cite[Part~I]{TNLean2026OneDimensional}. The coordinate
+    statement also holds for arbitrary endpoints $l,r$ and for $R=0$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Choose $v\in Y\cap X_j$ and $w\in Y\setminus X_j$.
+    If $i>j$, then $iR\ge jR+R$. For every $y\in Y$,
+    \begin{align}
+        l-iR & \le l-jR-R\le v-R\le y,\notag \\
+        y    & \le v+R<r+jR+R\le r+iR.\notag
+    \end{align}
+    Thus $Y\subseteq X_i$. If $i<j$ and $z\in Y\cap X_i$, the same
+    comparison with $z$ in place of $v$ and the indices $i,j$ exchanged
+    would give $Y\subseteq X_j$, contradicting $w\notin X_j$.
+    Hence $Y\cap X_i=\varnothing$. Neither a containing interval nor a
+    disjoint interval splits $Y$, which proves uniqueness. Taking the
+    positive indices $j+1$ gives the corresponding assertion for the
+    family starting with radius $R$.
 \end{proof}
 
 \begin{theorem}[Logarithmic dependence of the interval cut budget]

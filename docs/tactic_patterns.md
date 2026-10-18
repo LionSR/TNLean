@@ -8683,3 +8683,12 @@ spectral split → block extraction → MPV calculation → strict bounds
   physical specialization uses 1600.
 - **Notes:** These are different applications of existing lemmas, not three
   copies of one proof block. No additional scalar theorem or tactic is needed.
+
+### Consecutive radii of chain intervals — candidate (2026-10-18)
+
+- **Pattern:** Convert `i < j` to `i * R + R ≤ j * R` by
+  `Nat.succ_le_of_lt`, `Nat.mul_le_mul_right`, and `Nat.succ_mul`.
+- **Seen:** Twice in `MPS/AreaLaw/Counting.lean`, in the later-containment
+  and earlier-disjointness parts of `single_splitting_shells`.
+- **Abstraction:** Below the promotion threshold. The common geometric
+  argument is already factored into the local two-radius containment lemma.
