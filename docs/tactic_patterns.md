@@ -4598,6 +4598,29 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 ## Candidates
 
+### Unit logarithm from a threshold at least three — candidate (2026-10-18)
+
+- **Pattern:**
+
+  ```lean
+  have hlogn : 1 ≤ Real.log n := by
+    rw [Real.le_log_iff_exp_le (by positivity)]
+    exact Real.exp_one_lt_three.le.trans (by exact_mod_cast hn3)
+  ```
+
+- **Seen:** Four occurrences across four files:
+  `Scan/RadiusAsymptotics.lean`, `Scan/FixedWeightTransportSmallness.lean`,
+  `Scan/SourceSelectedSharpEnergy.lean` and `Scan/GenericChargeEnergy.lean`;
+  `Scan/EnergyBalance.lean` and `Geometry/RepairDepth.lean` run the same
+  exponential comparison with a real lower bound.
+- **Abstraction:** proposed `Real.one_le_log_natCast_of_three_le
+  {n : ℕ} (hn : 3 ≤ n) : 1 ≤ Real.log n` in `TNLean/Algebra/ExplicitThresholds.lean`,
+  beside `Real.one_le_log_of_ceil_logRpowThreshold_le`, which covers only thresholds of
+  the form `⌈logRpowThreshold C η u v L⌉₊`.
+- **Notes:** The occurrences meet the rule of three. Promotion waits for the
+  threshold module to be free of concurrent edits; each call site then shrinks
+  from three lines to one.
+
 ### Dyadic padding bounds — candidate (2026-10-16)
 
 - **Pattern:** Combine the lower and strict upper bounds for

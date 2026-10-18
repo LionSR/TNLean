@@ -99,6 +99,15 @@ private theorem charge_energy_coefficient_identity
     Real.mul_rpow (by norm_num : (0 : ℝ) ≤ 2) hℓ.le, Real.rpow_add hℓ]
   field_simp [hK.ne', hm.ne']; ring
 
+/-- The explicit coefficient `32 C_d` of the actual charge-energy bound: the scale-facts
+constant `32` times the common logarithmic-power coefficient `C_d` of the two transport
+factors `10 (10 M)^{7/8} |C_en| ℓ^{e_en}` and `50 M 2^{1/8} |C_en| ℓ^{e_en + 1/8}`, where `M`
+is the anchor multiplicity (`08-scanner.tex`, lines 492--520 and 693--755). -/
+noncomputable def actualChargeEnergyCoefficient (q : ℕ) (Cr : ℝ) (multiplicity : ℕ)
+    (Cen een : ℝ) : ℝ :=
+  32 * transportLogCoefficient q Cr (10 * (10 * (multiplicity : ℝ)) ^ (7 / 8 : ℝ) * |Cen|) een
+    (50 * (multiplicity : ℝ) * (2 : ℝ) ^ (1 / 8 : ℝ) * |Cen|) (een + 1 / 8)
+
 open Classical in
 /-- The actual charge error has uniform logarithmic coefficients at the fixed
 rounded scales. The density is the same literal defect divided by `KnD`;
