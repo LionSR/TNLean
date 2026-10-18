@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.ExplicitThresholds
 import TNLean.PEPS.AreaLaw.Geometry.Exponents
 import Mathlib.Analysis.SpecialFunctions.Log.Base
 import Mathlib.Analysis.SpecialFunctions.Pow.Asymptotics
@@ -84,20 +85,36 @@ theorem repairHalfSide_lt_self {S : ℝ} (hS : 1 < S) : repairHalfSide S < S := 
     _ < S ^ (1 : ℝ) := Real.rpow_lt_rpow_of_exponent_lt hS rho_pos_lt_one.2
     _ = S := Real.rpow_one S
 
+/-- The stopping-scale threshold `max 1 ((1000 / a₀) ^ (1 / (1 - ρ₀)))`, the
+power-ratio threshold from which on `d(S) ≤ (a₀ / 1000) S`. Since
+`1 - ρ₀ = 10⁻⁶`, it is of order `(1000 / a₀) ^ 1000000`. Auxiliary to the
+explicit constant of Theorem 1.1 (`docs/notes/arealaw2d_explicit_constant.tex`).
+Source: area-law Section 11, `geometry:trim-margins`, lines 386–391. -/
+def repairMarginThreshold (a₀ : ℝ) : ℝ :=
+  Real.powerRatioThreshold 1 (a₀ / 1000) (1 - (Exponents.rho : ℝ))
+
+/-- The margin threshold is at least one. -/
+theorem one_le_repairMarginThreshold (a₀ : ℝ) : 1 ≤ repairMarginThreshold a₀ :=
+  Real.one_le_powerRatioThreshold _ _ _
+
+/-- **Explicit removal margin.** For `a₀ > 0`, every scale
+`S ≥ repairMarginThreshold a₀` satisfies `d(S) ≤ (a₀ / 1000) S`.
+Source: area-law Section 11, `geometry:trim-margins`, lines 386–391. -/
+theorem repairHalfSide_le_of_repairMarginThreshold_le {a₀ S : ℝ} (ha₀ : 0 < a₀)
+    (hS : repairMarginThreshold a₀ ≤ S) : repairHalfSide S ≤ a₀ / 1000 * S := by
+  have hS0 : 0 < S := one_pos.trans_le ((one_le_repairMarginThreshold a₀).trans hS)
+  have h := Real.mul_rpow_le_mul_rpow_of_powerRatioThreshold_le (C := 1) (η := a₀ / 1000)
+    zero_le_one (by positivity) rho_pos_lt_one.2 hS
+  rw [one_mul, Real.rpow_one] at h
+  exact (repairHalfSide_le_rpow hS0).trans h
+
 /-- For every positive constant `a₀`, the removal half-side is eventually at
-most `(a₀ / 1000) S`.
+most `(a₀ / 1000) S`; the threshold is `repairMarginThreshold a₀`.
 Source: area-law Section 11, `geometry:trim-margins`, lines 386–391. -/
 theorem eventually_repairHalfSide_le {a₀ : ℝ} (ha₀ : 0 < a₀) :
-    ∀ᶠ S in Filter.atTop, repairHalfSide S ≤ a₀ / 1000 * S := by
-  have hlim : Filter.Tendsto (fun S : ℝ ↦ S ^ (-(1 - (Exponents.rho : ℝ))))
-      Filter.atTop (nhds 0) :=
-    tendsto_rpow_neg_atTop (by linarith [rho_pos_lt_one.2])
-  filter_upwards [hlim.eventually (ge_mem_nhds (by positivity : (0 : ℝ) < a₀ / 1000)),
-    Filter.eventually_gt_atTop 0] with S hle hS
-  have hsplit : S ^ (Exponents.rho : ℝ) = S ^ (-(1 - (Exponents.rho : ℝ))) * S := by
-    rw [neg_sub, Real.rpow_sub_one hS.ne', div_mul_cancel₀ _ hS.ne']
-  calc repairHalfSide S ≤ S ^ (Exponents.rho : ℝ) := repairHalfSide_le_rpow hS
-    _ ≤ a₀ / 1000 * S := by rw [hsplit]; exact mul_le_mul_of_nonneg_right hle hS.le
+    ∀ᶠ S in Filter.atTop, repairHalfSide S ≤ a₀ / 1000 * S :=
+  Filter.eventually_atTop.2 ⟨repairMarginThreshold a₀,
+    fun _ hS ↦ repairHalfSide_le_of_repairMarginThreshold_le ha₀ hS⟩
 
 /-- For every positive constant `a₀`, all sufficiently large scales satisfy the
 three removal margins `S ^ ρ₀ / 2 ≤ d(S) ≤ S ^ ρ₀` and `d(S) ≤ (a₀ / 1000) S`;

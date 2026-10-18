@@ -377,10 +377,33 @@ theorem two_pow_pitchScaleIndex_le_primaryScannerScale {CP : ℝ} (hCP : 1 ≤ C
         le_mul_of_one_le_left hpos hCP
     _ ≤ primaryScannerScale CP k := Nat.le_ceil _
 
+/-- The primary scanner coefficient `C_P = max (18 C_tpl) 1`. Auxiliary to the
+explicit constant of Theorem 1.1 (`docs/notes/arealaw2d_explicit_constant.tex`).
+Source: area-law Section 11, lines 716–720 and 756–757. -/
+def primaryScannerConstant (Ctpl : ℝ) : ℝ :=
+  max (18 * Ctpl) 1
+
+/-- The primary scanner coefficient is at least one. -/
+theorem one_le_primaryScannerConstant (Ctpl : ℝ) : 1 ≤ primaryScannerConstant Ctpl :=
+  le_max_right _ _
+
+/-- **Choice of `C_P`, explicitly.** With `C_P = primaryScannerConstant C_tpl`,
+every primary of every layer, with the scanner scale `n = ⌈C_P r ^ (1 + 2 δ₀)⌉`,
+satisfies `n ≥ C_tpl N₀ (s₀ + 1)` and `s_k ≤ n`.
+Source: area-law Section 11, lines 716–720 and 756–757. -/
+theorem primaryScannerConstant_spec (Ctpl : ℝ) (o : ℝ × ℝ) (k ℓ : ℕ)
+    (Z : Finset (ℤ × ℤ)) (C : ℕ) (a b : ℤ) (j : ℤ × ℤ) :
+    Ctpl * ((primaryFragmentIndices o k ℓ (pitchScaleIndex k) Z C a b j).card : ℝ) *
+        ((2 : ℝ) ^ k + 1) ≤ primaryScannerScale (primaryScannerConstant Ctpl) k ∧
+      (2 : ℝ) ^ pitchScaleIndex k ≤ primaryScannerScale (primaryScannerConstant Ctpl) k :=
+  ⟨primaryBirthTemplate_scale (le_max_left _ _) o k ℓ Z C a b j,
+    two_pow_pitchScaleIndex_le_primaryScannerScale (le_max_right _ _) k⟩
+
 /-- **Choice of `C_P`.** For every template constant `C_tpl` there is `C_P ≥ 1` such
 that every primary of every layer, with the scanner scale `n = ⌈C_P r ^ (1 + 2 δ₀)⌉`,
 satisfies `n ≥ C_tpl N₀ (s₀ + 1)` and `s_k ≤ n`; its sup diameter is at most `s_k`.
-Thus `primaryBirthTemplate` is a template of Definition 9.3 at this scale.
+Thus `primaryBirthTemplate` is a template of Definition 9.3 at this scale. The
+constant is `primaryScannerConstant C_tpl = max (18 C_tpl) 1`.
 Source: area-law Section 11, lines 716–720 and 756–757. -/
 theorem exists_primaryScannerConstant (Ctpl : ℝ) :
     ∃ CP : ℝ, 1 ≤ CP ∧ ∀ (o : ℝ × ℝ) (k ℓ : ℕ) (Z : Finset (ℤ × ℤ)) (C : ℕ) (a b : ℤ)
@@ -388,9 +411,7 @@ theorem exists_primaryScannerConstant (Ctpl : ℝ) :
       Ctpl * ((primaryFragmentIndices o k ℓ (pitchScaleIndex k) Z C a b j).card : ℝ) *
           ((2 : ℝ) ^ k + 1) ≤ primaryScannerScale CP k ∧
         (2 : ℝ) ^ pitchScaleIndex k ≤ primaryScannerScale CP k :=
-  ⟨max (18 * Ctpl) 1, le_max_right _ _, fun o k ℓ Z C a b j ↦
-    ⟨primaryBirthTemplate_scale (le_max_left _ _) o k ℓ Z C a b j,
-      two_pow_pitchScaleIndex_le_primaryScannerScale (le_max_right _ _) k⟩⟩
+  ⟨_, one_le_primaryScannerConstant Ctpl, primaryScannerConstant_spec Ctpl⟩
 
 /-! ### Cut clearance -/
 

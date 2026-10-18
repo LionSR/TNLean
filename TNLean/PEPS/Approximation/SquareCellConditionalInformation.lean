@@ -17,7 +17,9 @@ full-system gap and conditioning regions are preserved, and so are the named con
 (`cell_conditionalMutualInformation_le_square_of_sublinearCollarBoundAt`).
 
 **Scope restriction (sublinear collar bound):** The sublinear collar bound is an
-explicit premise. This is a conditional step toward polynomial-PEPS Lemma 3.2;
+explicit premise of the results of this module; the named-constant form also takes
+the amplification bound at given constants as a premise, which `amplificationBound`
+supplies. This is a conditional step toward polynomial-PEPS Lemma 3.2;
 it does not supply the collar estimate. See
 `docs/paper-gaps/polypeps_angular_annular_geometry_scope.tex`.
 

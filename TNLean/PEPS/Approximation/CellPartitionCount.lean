@@ -115,7 +115,7 @@ def cellGenerationCountConstant (γ' ustar b : ℝ) : ℝ :=
 /-- The tile-count constant is positive. -/
 theorem cellGenerationCountConstant_pos {γ' : ℝ} (hγ' : 0 < γ') (hγ'1 : γ' < 1) (ustar : ℝ)
     {b : ℝ} (hb : 0 ≤ b) : 0 < cellGenerationCountConstant γ' ustar b :=
-  lt_max_of_lt_right (iterateGenerationCountConstant_pos hγ' hγ'1 ustar hb)
+  lt_max_of_lt_right (iterateGenerationCountConstant_pos γ' ustar hb)
 
 /-- **Tile count of the cell recursion, with the named constant.** Let `0 < γ' < 1` and let
 `u_* > 1` be a stopping threshold with `8 u ^ γ ≤ u ^ γ'` for `u ≥ u_*`. For a branching bound
@@ -130,7 +130,7 @@ theorem cell_generation_count_bound {γ γ' ustar : ℝ} (hγ' : 0 < γ') (hγ'1
     ∑ j ∈ Finset.range (m + 1), b ^ j ≤
       cellGenerationCountConstant γ' ustar b *
         (1 + Real.log s) ^ cellGenerationCountConstant γ' ustar b := by
-  have hC := iterateGenerationCountConstant_pos hγ' hγ'1 ustar hb
+  have hC := iterateGenerationCountConstant_pos γ' ustar hb
   have hs0 : 0 < s := by linarith
   set y : ℝ := 1 + Real.log s
   have hy1 : 1 ≤ y := by have := Real.log_nonneg hs; linarith
@@ -147,7 +147,7 @@ theorem cell_generation_count_bound {γ γ' ustar : ℝ} (hγ' : 0 < γ') (hγ'1
           mul_le_mul_of_nonneg_right he1 hs0.le])
     rw [Real.log_mul (Real.exp_pos 2).ne' hs0.ne', Real.log_exp] at this
     linarith [Real.log_nonneg hs]
-  exact (iterate_generation_count_bound (cellChildSide_pos_le_rpow hustar hthr) hγ' hγ'1
+  exact (sum_pow_le_iterateGenerationCountConstant (cellChildSide_pos_le_rpow hustar hthr) hγ' hγ'1
     hustar hb s hs0 m hm).trans (mul_rpow_le_max_mul_rpow hC
       (Real.log_nonneg (by linarith [Real.add_one_le_exp (1 : ℝ)])) hxy hy1)
 
