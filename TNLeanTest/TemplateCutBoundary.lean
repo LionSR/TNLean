@@ -9,6 +9,8 @@ Physical-cut regressions. The complete thin-polygon fixture is preserved from
 TNLean commit acb16ed1bb9b15ca95e3487aa093b29124cd00b9, not upstream OpenAI code.
 -/
 
+open TNLean.Lattice
+
 open TNLean.PEPS.AreaLaw TNLean.PEPS.AreaLaw.Geometry
 
 /-- A real thin rectangle with two diagonal side directions. -/

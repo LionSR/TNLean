@@ -26,6 +26,8 @@ in `02-initial.tex`, lines 223–228. Revision:
 Independently formalized from the manuscript; no upstream Lean proof text reused.
 -/
 
+open TNLean.Lattice
+
 namespace TNLean.PEPS.AreaLaw.Geometry
 
 /-- The core, shell and prefix entropy estimates of Lemma 9.4 for real

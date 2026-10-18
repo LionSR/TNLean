@@ -22,6 +22,8 @@ open Entropy TensorPower TensorPower.ReplicaTransport
 open TNLean.PEPS.AreaLaw TNLean.PEPS.AreaLaw.Scan
 
 noncomputable section
+open TNLean.Lattice
+
 namespace TNLeanTest.ActualEnergyTerms
 
 private def aux : Bool → ℕ := fun b => if b then 3 else 2

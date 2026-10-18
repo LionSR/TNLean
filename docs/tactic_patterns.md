@@ -38,12 +38,14 @@ abstracted — record why, so it is not re-proposed).
   `Scan/FixedWeightTransportSmallness.lean`, `Scan/SourceSelectedSharpEnergy.lean`
   and `Scan/GenericChargeEnergy.lean`.
 - **Abstraction:** `Real.one_le_log_natCast_of_three_le {n : ℕ} (hn : 3 ≤ n) :
-  1 ≤ Real.log n` in `TNLean/PEPS/AreaLaw/Scan/RadiusAsymptotics.lean`. It
-  complements `Real.one_le_log_of_ceil_logRpowThreshold_le`, which covers only
-  thresholds of the form `⌈logRpowThreshold C η u v L⌉₊`.
-- **Notes:** Three call sites now use the lemma. The site in
-  `Scan/SourceSelectedSharpEnergy.lean` is under concurrent edit and keeps its
-  inline proof until that work lands.
+  1 ≤ Real.log n` in `TNLean/Algebra/ExplicitThresholds.lean`, next to
+  `Real.one_le_log_of_ceil_logRpowThreshold_le`, which covers only thresholds of
+  the form `⌈logRpowThreshold C η u v L⌉₊`.
+- **Notes:** `RadiusAsymptotics.lean`, `FixedWeightTransportSmallness.lean` and
+  `GenericChargeEnergy.lean` call the lemma, as do the later
+  `ActualChargeEnergyCoefficients.lean` and `SourceBootstrapEntropy.lean`. The
+  inline proof in `SourceSelectedSharpEnergy.lean` is replaced by the open
+  pull request that names that file's thresholds.
 
 ### Labels introduced by the edge operations — promoted (2026-10-16)
 
@@ -932,8 +934,8 @@ abstracted — record why, so it is not re-proposed).
 - **Seen:** `subset_of_isSafe` in `TNLean/PEPS/AreaLaw/BufferedRectangles.lean`,
   `card_crossingTerms_le_edgeBoundary` in `TNLean/PEPS/AreaLaw/TailParameter.lean`, and
   `TNLean/PEPS/AreaLaw/Scan/SupportLocalization.lean`.
-- **Abstraction:** the lemma `TNLean.PEPS.AreaLaw.exists_edgeBoundary_of_walk` in
-  `TNLean/PEPS/AreaLaw/FiniteDomain.lean` returns the boundary edge, its endpoint in the
+- **Abstraction:** the lemma `TNLean.Lattice.exists_edgeBoundary_of_walk` in
+  `TNLean/Lattice/FiniteDomain.lean` returns the boundary edge, its endpoint in the
   region and the shortened walk; the three call sites use it.
 - **Notes:** `exists_cut_edge_near` in `TNLean/PEPS/AreaLaw/CrossingBudget.lean` is the
   analogue for an arbitrary graph in the extended graph distance.

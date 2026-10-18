@@ -34,6 +34,8 @@ open TensorPower TensorPower.ReplicaTransport
 
 noncomputable section
 
+open TNLean.Lattice
+
 namespace TNLean.PEPS.AreaLaw.Scan
 
 open Classical in

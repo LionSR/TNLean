@@ -203,7 +203,21 @@ is the constant of the scale recurrence
 $F(Mr)\le\lambda F(r)+\Cbuf M^2r$ (the QICLean lemma
 \leanid{Entropy.exists_le_mul_rpow_of_scale_recurrence}, with $F(1)\le\log q$).
 Note that $1-e_0=-\log(1-p/2)/\log M\approx p/(2\log M)$ is of order
-$\Cpad^{-2}/\log\Cpad$.
+$\Cpad^{-2}/\log\Cpad$. These quantities are named:
+\leanid{TNLean.PEPS.AreaLaw.initialPaddingScale} ($Z$),
+\leanid{TNLean.PEPS.AreaLaw.initialPaddingConst} ($\Cpad$),
+\leanid{TNLean.PEPS.AreaLaw.initialBufferConst} ($\Cbuf$),
+\leanid{TNLean.PEPS.AreaLaw.initialBoxExponent} ($e_0$) and
+\leanid{TNLean.PEPS.AreaLaw.initialBoxConstant} ($C_{\rm init}$, through the
+QICLean constant \leanid{Entropy.scaleRecurrenceConst}).
+
+The values of $M$, $\lambda$ and $p$ above are those of the Lean proof, not of
+the source. The source (\src{02-initial.tex}, lines~614--656) orders the
+children at random, takes $p_0=(2\Cpad+5)^{-2}$, $M\ge16(\Cpad+2)$ and
+$\lambda=(1-p_0/4)M^2$. The Lean proof averages over cyclic rotations of the
+colours instead, which gives $p=1/(2(2\Cpad+1)^2)$, $M=8(\Cpad+1)$ and
+$\lambda=(1-p/2)M^2$. The statement proved is the same; only these constants
+differ.
 
 \paragraph{Bootstrap rounds.}
 The exponent is improved from $e$ to $(1-\ell)e$ in each round
@@ -217,7 +231,11 @@ current bound is $C_j r^{1+e}$, the next constant is
 where $C_{\rm out}(C_j)$ is the output coefficient of the rough scanner
 (\leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_sourceBootstrap_entropy_improvement})
 and $N(C_j)=\max(N_s,N_g)$ is the largest of its thresholds and the rectangle
-geometry threshold. The rounds are iterated with threshold $1$, so each round
+geometry threshold (\leanid{TNLean.PEPS.AreaLaw.Scan.roundedClearanceThreshold}). The
+recursion is the named sequence
+\leanid{TNLean.PEPS.AreaLaw.Scan.boxBootstrapConstant}, and the round count is
+\leanid{TNLean.PEPS.AreaLaw.Scan.boxBootstrapRounds}, the least $m$ with
+$(1-\ell)^m e_0\le e_*$. The rounds are iterated with threshold $1$, so each round
 adds one further $\log q$ to the right-hand side of \eqref{eq:round}. The
 term $N^2\log q$ absorbs the bounded scales by the
 volume bound $F(r)\le r^2\log q$
@@ -277,6 +295,11 @@ and the filter constants $c$, $v$ and $C_g$ of the lattice constraint words,
     C_2 & =\max\bigl\{C_{\rm rad},\,24(1+C_0\log q)\bigr\},\qquad
     N_2=\max\bigl\{2,\lceil C_gC_0B\rceil,N_t\bigr\}.
 \end{align*}
+These are \leanid{TNLean.PEPS.AreaLaw.amplificationConstant} and
+\leanid{TNLean.PEPS.AreaLaw.amplificationThreshold}. The cut-clearance clause of
+Proposition~10.2 needs in addition $n\ge N_3$, the collar radius threshold at
+$C_2$, so the full conclusion holds for $n\ge\max(N_2,N_3)$. This costs
+nothing in Theorem~1.1, whose lower scale $n_*$ already contains $N_3$.
 The quasi-local filter constants are named definitions in QICLean
 (\leanid{kernelDecayConst}$(\delta)=2\delta e/\pi$ and \leanid{kernelDecayRate}).
 The typical-projector threshold $N_t$ (row~34) is kind (a): it compares a
@@ -469,8 +492,8 @@ Declaration (file:line)                                          & Elementary in
 (\src{Scan/FinalSharpErrorPower.lean}:56, 81)                    & $An^u(\log n)^L\le n^v$, with $v=62497/62500$                                      & P3    \\
 \leanid{ScannerExponents.eventually_bandCount_le_rpow}
 (\src{Scan/FinalSharpScalarBounds.lean}:94)                      & $2\le n^\mu$                                                                       & P1, P7 \\
-\leanid{roundedClearance_ratio_tendsto_zero}
-(\src{Scan/RoundedClearance.lean}:31)                            & $(4n^{1-\ell}+20(C_r(\log n)^2+1))/n\to0$                                          & P2, P3 \\
+\leanid{roundedClearanceThreshold}
+(\src{Scan/RoundedClearance.lean}:33)                            & $(4n^{1-\ell}+20(C_r(\log n)^2+1))/n\to0$                                          & P2, P3 \\
 \leanid{collar_radius_scale_tendsto_zero}
 (\src{Amplification/RadiusScales.lean}:56)                       & $(n^{1-\eps}+2Cn^{(1-\eps)/\alpha})/n^\beta\to0$                                   & P2    \\
 \leanid{eventually_stretchedExp_le_rpow_neg}

@@ -23,6 +23,7 @@ Lemma 9.1, `08-scanner.tex`, lines 309–329, at `openai/math@adc7f124`.
 
 open Filter
 open scoped BigOperators
+open TNLean.Lattice
 
 namespace TNLean.PEPS.AreaLaw.Scan
 

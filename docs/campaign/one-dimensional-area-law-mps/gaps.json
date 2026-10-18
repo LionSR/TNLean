@@ -5,7 +5,7 @@
   {
    "id": "docs/paper-gaps/tnlean_one_dimensional_discount_constants.tex",
    "kind": "local-correction",
-   "status": "open",
+   "status": "resolved",
    "paper": "chain",
    "result": "Lemma 4.2, constants of the buffered discount",
    "issue": 9533,
