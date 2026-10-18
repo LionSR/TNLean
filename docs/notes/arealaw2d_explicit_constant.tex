@@ -262,7 +262,13 @@ give a constant $C_m$ and a threshold $N_1=\max(N_s,N_g)$
 (\leanid{TNLean.PEPS.AreaLaw.Scan.exists_template_final_mutualInformation_of_boxEntropy}),
 and $C_1=\max(C_m/2,10)$
 (\leanid{TNLean.PEPS.AreaLaw.sublinearCollarBound_of_mutualInformation_le}
-replaces the constant $C_m/2$ by $\max(C_m/2,10)$).
+replaces the constant $C_m/2$ by $\max(C_m/2,10)$). In Lean these are
+\leanid{TNLean.PEPS.AreaLaw.collarBoxConstant} ($C_w$),
+\leanid{TNLean.PEPS.AreaLaw.sublinearCollarConstant} ($C_1$) and
+\leanid{TNLean.PEPS.AreaLaw.sublinearCollarThreshold} ($N_1$), with $C_m$ and
+$N_1$ given by \leanid{TNLean.PEPS.AreaLaw.Scan.collarConstant} and
+\leanid{TNLean.PEPS.AreaLaw.Scan.collarThreshold} at $C_{\rm box}$ replaced by
+$C_w$.
 
 The output coefficients of the scanner are explicit expressions in the input
 coefficient, as recorded in
@@ -355,18 +361,21 @@ following order.
     \item The birth-separation constant $c_1$
           (\leanid{TNLean.PEPS.AreaLaw.Geometry.exists_birthSeparation};
           Lemma~11.5, lines~573--659). It is an absolute constant: it depends on
-          none of $q,R,J,\Delta,D_0,\Ctpl$. It is $\min(c_2,c_3)$, where $c_2$
-          is a compactness minimum, kind (b) (rows~57--58), mirroring the
-          source's ``has a positive minimum \dots\ the list of rescaled patterns
-          is finite'' (\src{10-geometry.tex}, lines~596--631). It is the one
-          remaining input of the explicit constant: a positive number for which
-          the initial belt tiles are separated at all data and the local
-          replacement separation holds. On \texttt{main} such a number exists by
-          \leanid{TNLean.PEPS.AreaLaw.Geometry.exists_isBirthSeparationConstant},
-          still through the two compactness minima. The explicit separation
-          constant of the belt facets, $1/28$ for the replacements and
-          $1/112$ for the initial belt tiles, supplies it once the explicit
-          birth-separation statements are on \texttt{main}.
+          none of $q,R,J,\Delta,D_0,\Ctpl$. The source obtains it as a compactness
+          minimum (``has a positive minimum \dots\ the list of rescaled
+          patterns is finite'', \src{10-geometry.tex}, lines~596--631). It is
+          now explicit. For two polygons cut out by belt half-planes, each
+          pair of points, one from each polygon, is either at sup distance at
+          least $c_2=1/28$, or both points lie in the open quarter-square
+          about a common integer contact and satisfy the angular estimate
+          (\leanid{TNLean.PEPS.AreaLaw.Geometry.birthSeparationConstant},
+          \leanid{TNLean.PEPS.AreaLaw.Geometry.facetPolygon_contact_dichotomy}).
+          With the angular constant $c_3=1/2$ and the normalization of belt
+          cells to side $4$, this gives $c_1=1/112$
+          (\leanid{TNLean.PEPS.AreaLaw.Geometry.birthTemplateSeparationConstant}).
+          The assembly of Proposition~11.2 takes $c_1$ as an input
+          (\leanid{TNLean.PEPS.AreaLaw.Geometry.IsBirthSeparationConstant}); the
+          explicit form of Theorem~1.1 instantiates it at $1/112$.
     \item The stopping scale $S_*=\max\{T(1/128),T(1/4),2,U\}$
           (\leanid{TNLean.PEPS.AreaLaw.twoFamilyStoppingScale}), with
           $U=\max\{U_1,U_2,n_*/C_B,1\}$. Here
@@ -715,9 +724,9 @@ line~59, which extracts nothing.
 \leanid{exists_dyadicScale_side_ratios}                     & least $d$ with $2^d>M$                                                       & a    & off    & P9     \\
 \multicolumn{6}{l}{\emph{Compactness minima}}                                                                                                                   \\
 57  & \src{Geometry/BirthSeparationAtoms.lean}:631
-\leanid{exists_pos_common_contact_dichotomy}                & minimum of $\|x-y\|$ on a compact set of pairs of points of two sectorial polygons away from their common lattice contacts & b & G & -- \\
+\leanid{exists_pos_common_contact_dichotomy}                & minimum of $\|x-y\|$ on a compact set of pairs of points of two sectorial polygons away from their common lattice contacts; replaced on the path by $c_2=1/28$ & b & off & -- \\
 58  & \src{Geometry/BirthSeparationReplacement.lean}:84
-\leanid{exists_pos_le_norm_sub_away_from_intPoints}         & minimum of $\|x-y\|$ on a compact set of pairs away from common integer points & b  & G      & --     \\
+\leanid{exists_pos_le_norm_sub_away_from_intPoints}         & minimum of $\|x-y\|$ on a compact set of pairs away from common integer points; replaced on the path by $c_2=1/28$ & b  & off    & --     \\
 \multicolumn{6}{l}{\emph{Replica limits}}                                                                                                                       \\
 59  & \src{Scan/ActualRoughLowerRemainder.lean}:135
 \leanid{exists_roughLowerRemainder_threshold}               & rough lower remainder below $\eps_{\rm rep}$ for large $k$                   & c    & off    & --     \\
@@ -770,8 +779,9 @@ of Theorem~1.1 and 13 are not; 2 of kind (b); 1 of kind (c), not on the path;
 14 of kind (d); and 6 further kind (a) rows in the Lean proof of
 Proposition~11.2, now with closed-form thresholds. Rows~37--41 also have
 closed forms, and with the named template and counting coefficients the
-constant of Proposition~11.2 is explicit up to the birth-separation constant of
-rows~57--58 (Section~\ref{sec:geometry}). Every kind (a) row reduces to the
+constant of Proposition~11.2 is explicit: the two kind (b) rows~57--58 are off
+the path, replaced by the explicit birth-separation constant
+(Section~\ref{sec:geometry}). Every kind (a) row reduces to the
 shapes (P1)--(P10). By frequency on the path, the shapes are: power against a
 constant and rounded scales (P1, P7), logarithmic factors against power
 margins (P3, P4), the entropy-continuity and logarithm bounds (P8), dyadic
@@ -892,19 +902,19 @@ constant. The constant is not explicit as written, and it is enormous.
           scanner (Propositions~9.2, 9.5, 9.6), amplification
           (Proposition~10.2) and geometry (Proposition~11.2). This is on the
           order of a hundred statements and is mechanical.
-    \item[4.] \emph{An explicit birth-separation constant.} Replace the two
-          compactness minima (rows~57--58) by an explicit lower bound for the
-          distance between polygons with vertices on the quarter mesh and four
-          slopes, following \src{10-geometry.tex}, lines~351--363. This is
-          elementary but new geometry.
+    \item[4.] \emph{An explicit birth-separation constant.} Done: the two
+          compactness minima (rows~57--58) are replaced by $c_2=1/28$, from an
+          error bound for polygons cut out by belt half-planes, which gives
+          $c_1=1/112$. The compactness lemmas of rows~57--58 remain in the
+          library but no proof on the path of Theorem~1.1 uses them.
     \item[5.] \emph{The explicit theorem.} State Theorem~1.1 with
           $C=C_{\rm expl}(q,R,J,\Delta)$ and give it its own blueprint entry,
-          after Proposition~11.2 and Theorem~1.1 are proved in the main
-          development. A recursively defined computable $C_{\rm expl}$ needs no
+          now that Proposition~11.2 and Theorem~1.1 are proved on main. A
+          recursively defined computable $C_{\rm expl}$ needs no
           further mathematics. An elementary closed form additionally needs a
           bound for the bootstrap recursion \eqref{eq:round}.
 \end{enumerate}
-Only item~4 and the closed-form bound for the recursion are new quantitative
-mathematics; the rest is restatement.
+Apart from item~4, now done, only the closed-form bound for the recursion is
+new quantitative mathematics; the rest is restatement.
 
 \end{document}
