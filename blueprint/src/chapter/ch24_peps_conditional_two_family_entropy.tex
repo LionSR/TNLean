@@ -220,18 +220,13 @@
     \lean{TNLean.PEPS.Approximation.CellPartition.cellIntermediateExponent,
         TNLean.PEPS.Approximation.CellPartition.cellStopScale,
         TNLean.PEPS.Approximation.CellPartition.cellPartitionExponent,
-        TNLean.PEPS.Approximation.CellPartition.cellPartitionConstant,
-        TNLean.PEPS.Approximation.CellPartition.cellIntermediateExponent_bounds,
-        TNLean.PEPS.Approximation.CellPartition.le_cellStopScale,
-        TNLean.PEPS.Approximation.CellPartition.one_lt_cellStopScale,
-        TNLean.PEPS.Approximation.CellPartition.cellPartitionExponent_pos,
-        TNLean.PEPS.Approximation.CellPartition.cellPartitionConstant_pos}
+        TNLean.PEPS.Approximation.CellPartition.cellPartitionConstant}
     \leanok
     \uses{thm:peps_cell_generation_count}
-    Fix $\gamma<1$ and $u_0\in\mathbb R$, and let $U(K,\gamma,\delta)$ and the
+    Fix $\gamma,u_0\in\mathbb R$, and let $U(K,\gamma,\delta)$ and the
     tile-count constant be as in Theorem~\ref{thm:peps_cell_generation_count}.
-    The intermediate exponent is $\gamma'=(\max\{\gamma,0\}+1)/2$, so that
-    $\gamma<\gamma'$ and $0<\gamma'<1$. The stopping scale is
+    The intermediate exponent is $\gamma'=(\max\{\gamma,0\}+1)/2$. The stopping
+    scale is
     \begin{align}
         u_*(\gamma,u_0) & =\max\{U(1000,\gamma,1),U(8,\gamma,\gamma'),u_0,2\}.
         \notag
@@ -240,9 +235,30 @@
     exponent $\gamma'$, the stopping threshold $u_*(\gamma,u_0)$ and branching
     bound $25$, and the partition prefactor is
     $C(\gamma,u_0)=(2+(u_*(\gamma,u_0)+1)^2)K(\gamma,u_0)$.
-    Then $u_0\le u_*(\gamma,u_0)$, $u_*(\gamma,u_0)>1$, and $C(\gamma,u_0)$ and
-    $K(\gamma,u_0)$ are positive.
 \end{definition}
+
+\begin{theorem}[Bounds on the partition constants]
+    \label{thm:peps_cell_partition_constants_bounds}
+    \lean{TNLean.PEPS.Approximation.CellPartition.cellIntermediateExponent_bounds,
+        TNLean.PEPS.Approximation.CellPartition.le_cellStopScale,
+        TNLean.PEPS.Approximation.CellPartition.one_lt_cellStopScale,
+        TNLean.PEPS.Approximation.CellPartition.cellPartitionExponent_pos,
+        TNLean.PEPS.Approximation.CellPartition.cellPartitionConstant_pos}
+    \leanok
+    \uses{def:peps_cell_partition_constants}
+    For all $\gamma,u_0\in\mathbb R$ one has $u_0\le u_*(\gamma,u_0)$ and
+    $u_*(\gamma,u_0)>1$, and $C(\gamma,u_0)$ and $K(\gamma,u_0)$ are positive.
+    If $\gamma<1$, then $\gamma<\gamma'$ and $0<\gamma'<1$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:peps_cell_generation_count}
+    The scale bounds hold because $u_*$ is a maximum containing $u_0$ and $2$.
+    The tile-count constant of Theorem~\ref{thm:peps_cell_generation_count} is
+    positive, hence so are $K$ and $C$. For $\gamma<1$, $\gamma'$ is the midpoint
+    of $\max\{\gamma,0\}$ and $1$.
+\end{proof}
 
 % Source: OpenAI2026PolynomialPEPS, Lemma 3.2 (lem:cell-cmi), 02-information.tex,
 % lines 181--196 and 224--311.
