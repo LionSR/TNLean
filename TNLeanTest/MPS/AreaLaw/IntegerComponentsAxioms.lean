@@ -7,12 +7,13 @@ import TNLean.MPS.AreaLaw.IntegerComponents
 import Lean.Elab.Command
 import Lean.Util.CollectAxioms
 
-/-! Logical-dependency checks for reachability and order-connected integer components. -/
+/-! Logical-dependency checks for integer reachability, components and finite paths. -/
 
 run_cmd do
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
   for decl in #[``SimpleGraph.hasse_int_induce_reachable_iff,
-      ``SimpleGraph.ConnectedComponent.ordConnected_image_hasse_int_induce] do
+      ``SimpleGraph.ConnectedComponent.ordConnected_image_hasse_int_induce,
+      ``SimpleGraph.ConnectedComponent.nonempty_pathGraph_iso_hasse_int_induce_finset] do
     unless (← Lean.getEnv).contains decl do
       throwError "Missing declaration {decl}"
     let axioms ← Lean.collectAxioms decl

@@ -5,6 +5,8 @@ Authors: TNLean contributors
 -/
 import Mathlib.Combinatorics.SimpleGraph.Hasse
 import Mathlib.Data.Int.SuccPred
+import Mathlib.Data.Finset.Sort
+import Mathlib.SetTheory.Cardinal.Finite
 import Mathlib.Order.Interval.Set.OrdConnected
 
 /-!
@@ -20,6 +22,8 @@ No finiteness or nonemptiness assumption on the set is required.
   containment.
 * `SimpleGraph.ConnectedComponent.ordConnected_image_hasse_int_induce` shows that
   the coordinates of each component are order-connected.
+* `SimpleGraph.ConnectedComponent.nonempty_pathGraph_iso_hasse_int_induce_finset`
+  identifies each component of a finite domain with the path on its number of vertices.
 
 This is the geometric ingredient of the one-dimensional component reduction in
 `docs/notes/one_dimensional_note/part1_arealaw.tex`, lines 71–80; the induced
@@ -122,5 +126,42 @@ theorem ConnectedComponent.ordConnected_image_hasse_int_induce (S : Set ℤ)
   refine ⟨⟨z, hz⟩, ?_, rfl⟩
   rw [ConnectedComponent.mem_supp_iff] at hx ⊢
   exact (ConnectedComponent.sound hxz').symm.trans hx
+
+private theorem hasse_int_component_covBy_iff (Λ : Finset ℤ)
+    (C : ((hasse ℤ).induce (Λ : Set ℤ)).ConnectedComponent) (x y : C) :
+    (x.val : ℤ) ⋖ (y.val : ℤ) ↔ x ⋖ y := by
+  let f : C ↪o ℤ :=
+    (OrderEmbedding.subtype (fun x : (Λ : Set ℤ) ↦ x ∈ C.supp)).trans
+      (OrderEmbedding.subtype (fun z : ℤ ↦ z ∈ Λ))
+  have hrange : Set.range f = Subtype.val '' C.supp := by
+    ext z
+    constructor
+    · rintro ⟨x, rfl⟩
+      exact ⟨x.val, x.property, rfl⟩
+    · rintro ⟨x, hx, rfl⟩
+      exact ⟨⟨x, hx⟩, rfl⟩
+  have hconv : Set.OrdConnected (Set.range f) := by
+    rw [hrange]
+    exact C.ordConnected_image_hasse_int_induce (Λ : Set ℤ)
+  exact hconv.apply_covBy_apply_iff f
+
+/-- A connected component of a finite induced integer graph is a finite path, with
+its canonical cardinality as the number of vertices. No positivity or nonemptiness
+assumption on the domain is needed. This is the component interval chart used in the TNLean
+one-dimensional note, `part1_arealaw.tex:71–80`, for the standing graph specified in
+`part0_preamble.tex:191–199`. -/
+theorem ConnectedComponent.nonempty_pathGraph_iso_hasse_int_induce_finset
+    (Λ : Finset ℤ)
+    (C : ((hasse ℤ).induce (Λ : Set ℤ)).ConnectedComponent) :
+    Nonempty (pathGraph (Nat.card C) ≃g C.toSimpleGraph) := by
+  classical
+  let _ := Fintype.ofFinite C
+  let e : Fin (Nat.card C) ≃o C :=
+    Fintype.orderIsoFinOfCardEq C Nat.card_eq_fintype_card.symm
+  refine ⟨{ e.toEquiv with map_rel_iff' := ?_ }⟩
+  intro i j
+  change ((e i).val : ℤ) ⋖ ((e j).val : ℤ) ∨
+      ((e j).val : ℤ) ⋖ ((e i).val : ℤ) ↔ i ⋖ j ∨ j ⋖ i
+  simp only [hasse_int_component_covBy_iff, apply_covBy_apply_iff]
 
 end SimpleGraph
