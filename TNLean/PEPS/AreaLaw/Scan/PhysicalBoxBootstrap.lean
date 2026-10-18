@@ -186,11 +186,9 @@ theorem exists_uniform_boxEntropy_improvement_of_threshold_le
           boxImprovementConstant q R he₀pos he₀₁ J Δ Ctr ct Cent eent Cen een Cbox *
             (r : ℝ) ^ (1 + (1 - BootstrapParameters.ell e₀) * e) := by
   intro he₀pos
-  obtain ⟨ct, Cent, eent, Cen, een, hct, htransport⟩ := CollarScan.exists_finiteFamilyTransportBound
-  obtain ⟨Ctr, hCtr, hall⟩ :=
-    exists_uniform_boxEntropy_improvement_of_finiteFamilyTransportBound q R hq hJ hΔ he₀ he₀₁ hct
-      htransport
-  exact ⟨Ctr, ct, Cent, eent, Cen, een, hCtr, hct, hall⟩
+  exact CollarScan.exists_of_finiteFamilyTransportBound fun _ _ _ _ _ hct htransport ↦
+    exists_uniform_boxEntropy_improvement_of_finiteFamilyTransportBound
+      q R hq hJ hΔ he₀ he₀₁ hct htransport
 
 /-- The genuine physical one-step improvement, uniformly in the current
 exponent and safety parameter. Its input is only the current safe-box power;
@@ -283,11 +281,9 @@ theorem exists_boxEntropy_le_boxError_of_initial
       ∀ D₀ : ℕ, 2 * R + 10 < D₀ → ∀ r : ℕ, 1 ≤ r → boxEntropy q R J Δ D₀ r ≤
         physicalBoxBootstrapConstant q R he₀ he₀₁ J Δ Ctr ct Cent eent Cen een C₀ *
           (r : ℝ) ^ (1 + (Exponents.boxError : ℝ)) := by
-  obtain ⟨ct, Cent, eent, Cen, een, hct, htransport⟩ := CollarScan.exists_finiteFamilyTransportBound
-  obtain ⟨Ctr, hCtr, hall⟩ :=
-    exists_boxEntropy_le_boxError_of_initial_of_finiteFamilyTransportBound q R hq hJ hΔ hC₀ he₀
-      he₀₁ hinitial hct htransport
-  exact ⟨Ctr, ct, Cent, eent, Cen, een, hCtr, hct, hall⟩
+  exact CollarScan.exists_of_finiteFamilyTransportBound fun _ _ _ _ _ hct htransport ↦
+    exists_boxEntropy_le_boxError_of_initial_of_finiteFamilyTransportBound
+      q R hq hJ hΔ hC₀ he₀ he₀₁ hinitial hct htransport
 
 /-- The physical safe-box estimate at the fixed source exponent, with one
 constant before every safety parameter, finite system and positive scale.

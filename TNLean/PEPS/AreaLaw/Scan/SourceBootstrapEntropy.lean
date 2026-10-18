@@ -436,11 +436,9 @@ theorem exists_sourceBootstrap_entropy_improvement_of_threshold_le
           bootstrapRestoredBudgetCoefficient q Ce *
             (S.n : ℝ) ^ (1 + (1 - BootstrapParameters.ell e₀) * η) := by
   intro he₀pos F
-  obtain ⟨ct, Cent, eent, Cen, een, hct, htransport⟩ := exists_finiteFamilyTransportBound
-  obtain ⟨Ctr, hCtr, hall⟩ :=
-    exists_sourceBootstrap_entropy_improvement_of_finiteFamilyTransportBound hq R hJ hΔ hC_T hC₁
-      multiplicity hmultiplicity he₀ he₀₁ hct htransport
-  exact ⟨Ctr, ct, Cent, eent, Cen, een, hCtr, hct, hall⟩
+  exact exists_of_finiteFamilyTransportBound fun _ _ _ _ _ hct htransport ↦
+    exists_sourceBootstrap_entropy_improvement_of_finiteFamilyTransportBound
+      hq R hJ hΔ hC_T hC₁ multiplicity hmultiplicity he₀ he₀₁ hct htransport
 
 open Classical in
 /-- The actual rough-only bootstrap improves the entropy exponent on the
