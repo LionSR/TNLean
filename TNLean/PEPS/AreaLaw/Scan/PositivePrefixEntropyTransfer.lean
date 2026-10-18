@@ -34,38 +34,37 @@ noncomputable section
 
 namespace TNLean.PEPS.AreaLaw.Scan
 
-/-- A single large-scale threshold transfers the original entropy bound to
-every positive-depth prefix in the same truncated vector. The actual global
+/-- The explicit threshold `truncationEntropyThreshold q g Cvol` transfers the original
+entropy bound to every positive-depth prefix in the same truncated vector. The actual global
 trace distance retains the normalized gap coefficient, and the dimension
 bound concerns only the compact region. The threshold is independent of
 the entropy coefficient and exponent as well as the supplied finite system.
 Source: `08-scanner.tex`, lines 353--357 and 399--404, at the manuscript
 revision stated in the module documentation. -/
-theorem eventually_regionalEntropy_positiveDepthPrefix_le
-    (q : ℕ) (hq : 1 ≤ q) (g Cvol : ℝ) (hg : 0 < g) :
-    ∀ᶠ n : ℕ in atTop,
-      ∀ (Λ : Finset (ℤ × ℤ)) (Ω Ωt : StateSpace Λ q),
-      ‖Ω‖ = 1 → ‖Ωt‖ = 1 →
-      ∀ (A : Finset (Site Λ)) (depth : Site Λ → ℤ) (L : ℕ),
-      ((depthPrefix A depth (L : ℤ)).card : ℝ) ≤ Cvol * (n : ℝ) ^ 2 →
-      Matrix.traceDistance (Matrix.vecMulVec Ωt (star Ωt))
-          (Matrix.vecMulVec Ω (star Ω)) ≤
-        Real.sqrt (2 * min ((n : ℝ) ^ (-1000 : ℝ)) (g / 4) / g) →
-      ∀ Ce e : ℝ,
-      (∀ j : ℕ, j ≤ L →
-        regionalEntropy Λ q Ω (positiveDepthPrefix A depth (j : ℤ)) ≤
-          Ce * ((n : ℝ) * (L : ℝ) ^ e + n)) →
-      ∀ j : ℕ, j ≤ L →
-        regionalEntropy Λ q Ωt (positiveDepthPrefix A depth (j : ℤ)) ≤
-          Ce * ((n : ℝ) * (L : ℝ) ^ e + n) + (n : ℝ) ^ (-247 : ℝ) := by
+theorem regionalEntropy_positiveDepthPrefix_le_of_truncationEntropyThreshold_le
+    (q : ℕ) (hq : 1 ≤ q) (g Cvol : ℝ) (hg : 0 < g) {n : ℕ}
+    (hthr : truncationEntropyThreshold q g Cvol ≤ n) :
+    ∀ (Λ : Finset (ℤ × ℤ)) (Ω Ωt : StateSpace Λ q),
+    ‖Ω‖ = 1 → ‖Ωt‖ = 1 →
+    ∀ (A : Finset (Site Λ)) (depth : Site Λ → ℤ) (L : ℕ),
+    ((depthPrefix A depth (L : ℤ)).card : ℝ) ≤ Cvol * (n : ℝ) ^ 2 →
+    Matrix.traceDistance (Matrix.vecMulVec Ωt (star Ωt))
+        (Matrix.vecMulVec Ω (star Ω)) ≤
+      Real.sqrt (2 * min ((n : ℝ) ^ (-1000 : ℝ)) (g / 4) / g) →
+    ∀ Ce e : ℝ,
+    (∀ j : ℕ, j ≤ L →
+      regionalEntropy Λ q Ω (positiveDepthPrefix A depth (j : ℤ)) ≤
+        Ce * ((n : ℝ) * (L : ℝ) ^ e + n)) →
+    ∀ j : ℕ, j ≤ L →
+      regionalEntropy Λ q Ωt (positiveDepthPrefix A depth (j : ℤ)) ≤
+        Ce * ((n : ℝ) * (L : ℝ) ^ e + n) + (n : ℝ) ^ (-247 : ℝ) := by
   classical
   have hq' : (1 : ℝ) ≤ (q : ℝ) := by exact_mod_cast hq
-  have key := eventually_continuityCost_le_of_fixed_coefficient
+  have hcost := continuityCost_le_of_fixed_coefficient_of_threshold_le
     (Real.sqrt (2 / g)) (max 4 Cvol) (Real.log q)
     (Real.sqrt_nonneg _) (le_trans (by norm_num) (le_max_left _ _))
-    (Real.log_nonneg hq')
-  filter_upwards [key] with
-    n hcost Λ Ω Ωt hΩ hΩt A depth L hcard hdist Ce e hentropy j hj
+    (Real.log_nonneg hq') hthr
+  intro Λ Ω Ωt hΩ hΩt A depth L hcard hdist Ce e hentropy j hj
   have hlq : 0 ≤ Real.log (q : ℝ) := Real.log_nonneg (by exact_mod_cast hq)
   set R := positiveDepthPrefix A depth (j : ℤ) with hR
   -- Entropy continuity in the regional dimension.
@@ -129,5 +128,32 @@ theorem eventually_regionalEntropy_positiveDepthPrefix_le
     have habs := le_abs_self (regionalEntropy Λ q Ωt R - regionalEntropy Λ q Ω R)
     linarith [hcont, habs]
   linarith [heΩ, hupper, hBcost]
+
+/-- A single large-scale threshold transfers the original entropy bound to
+every positive-depth prefix in the same truncated vector. The actual global
+trace distance retains the normalized gap coefficient, and the dimension
+bound concerns only the compact region. The threshold is independent of
+the entropy coefficient and exponent as well as the supplied finite system.
+Source: `08-scanner.tex`, lines 353--357 and 399--404, at the manuscript
+revision stated in the module documentation. -/
+theorem eventually_regionalEntropy_positiveDepthPrefix_le
+    (q : ℕ) (hq : 1 ≤ q) (g Cvol : ℝ) (hg : 0 < g) :
+    ∀ᶠ n : ℕ in atTop,
+      ∀ (Λ : Finset (ℤ × ℤ)) (Ω Ωt : StateSpace Λ q),
+      ‖Ω‖ = 1 → ‖Ωt‖ = 1 →
+      ∀ (A : Finset (Site Λ)) (depth : Site Λ → ℤ) (L : ℕ),
+      ((depthPrefix A depth (L : ℤ)).card : ℝ) ≤ Cvol * (n : ℝ) ^ 2 →
+      Matrix.traceDistance (Matrix.vecMulVec Ωt (star Ωt))
+          (Matrix.vecMulVec Ω (star Ω)) ≤
+        Real.sqrt (2 * min ((n : ℝ) ^ (-1000 : ℝ)) (g / 4) / g) →
+      ∀ Ce e : ℝ,
+      (∀ j : ℕ, j ≤ L →
+        regionalEntropy Λ q Ω (positiveDepthPrefix A depth (j : ℤ)) ≤
+          Ce * ((n : ℝ) * (L : ℝ) ^ e + n)) →
+      ∀ j : ℕ, j ≤ L →
+        regionalEntropy Λ q Ωt (positiveDepthPrefix A depth (j : ℤ)) ≤
+          Ce * ((n : ℝ) * (L : ℝ) ^ e + n) + (n : ℝ) ^ (-247 : ℝ) :=
+  eventually_atTop.2 ⟨_, fun _ =>
+    regionalEntropy_positiveDepthPrefix_le_of_truncationEntropyThreshold_le q hq g Cvol hg⟩
 
 end TNLean.PEPS.AreaLaw.Scan

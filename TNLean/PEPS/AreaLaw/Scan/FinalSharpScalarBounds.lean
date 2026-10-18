@@ -19,7 +19,7 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 -/
 
-open Filter Asymptotics
+open Filter
 
 namespace TNLean.PEPS.AreaLaw.Scan
 
@@ -89,14 +89,16 @@ theorem finalSharp_binary_cost_le {n : ℕ} (hn : 2 ≤ n) {a : ℝ}
       rw [← mul_assoc, mul_assoc 4, ← Real.rpow_add hnpos]
       norm_num
 
-/-- The upper power of the literal rounded band count, complementing the
-accepted lower power. No asymptotic replacement of either floor is made. -/
-theorem ScannerExponents.eventually_bandCount_le_rpow (X : ScannerExponents) :
-    ∀ᶠ n : ℕ in atTop, 2 ≤ n ∧
-      (X.K n : ℝ) ≤ (n : ℝ) ^ (1 - X.ell - X.mu) := by
+/-- The upper power of the literal rounded band count at every `n` from the explicit threshold
+`X.scaleFactsThreshold` on, complementing the accepted lower power. No asymptotic replacement
+of either floor is made. Source: `scanner:scales`, `08-scanner.tex`, lines 32--41. -/
+theorem ScannerExponents.bandCount_le_rpow_of_scaleFactsThreshold_le (X : ScannerExponents)
+    {n : ℕ} (hthr : X.scaleFactsThreshold ≤ n) :
+    2 ≤ n ∧ (X.K n : ℝ) ≤ (n : ℝ) ^ (1 - X.ell - X.mu) := by
   have hmu : 0 < X.mu := X.kappa_pos.trans X.kappa_lt_mu
-  filter_upwards [eventually_ge_atTop 2, eventually_le_natCast_rpow hmu 2]
-    with n hn hlarge
+  simp only [ScannerExponents.scaleFactsThreshold, max_le_iff] at hthr
+  have hn := hthr.1
+  have hlarge := Real.le_natCast_rpow_of_natRpowThreshold_le hmu hthr.2.1
   have hnpos : (0 : ℝ) < n := by exact_mod_cast (show 0 < n by omega)
   have hm : (n : ℝ) ^ X.mu / 2 ≤ X.m n := half_le_floor hlarge
   have hKL : (X.K n : ℝ) * (8 * (X.m n : ℝ)) ≤ X.L n := by
@@ -108,6 +110,94 @@ theorem ScannerExponents.eventually_bandCount_le_rpow (X : ScannerExponents) :
   nlinarith [mul_le_mul_of_nonneg_left hm (Nat.cast_nonneg (X.K n)),
     mul_nonneg (show (0 : ℝ) ≤ X.K n from Nat.cast_nonneg _)
       (show (0 : ℝ) ≤ X.m n from Nat.cast_nonneg _)]
+
+/-- The upper power of the literal rounded band count, complementing the
+accepted lower power. No asymptotic replacement of either floor is made. -/
+theorem ScannerExponents.eventually_bandCount_le_rpow (X : ScannerExponents) :
+    ∀ᶠ n : ℕ in atTop, 2 ≤ n ∧
+      (X.K n : ℝ) ≤ (n : ℝ) ^ (1 - X.ell - X.mu) :=
+  eventually_atTop.2 ⟨_, fun _ => X.bandCount_le_rpow_of_scaleFactsThreshold_le⟩
+
+/-- The final scanner exponents `ℓ = 1/100000`, `κ = 1/1000000`, `μ = 1/4`, `ν = 1/1000`
+and `e = 2/1000000`, as a `ScannerExponents` structure. Source: `scanner:final-parameters`,
+`08-scanner.tex`, lines 839--849. -/
+def finalSharpScannerExponents : ScannerExponents where
+  ell := Exponents.scannerEll
+  kappa := Exponents.scannerKappa
+  mu := Exponents.scannerMu
+  nu := Exponents.scannerNu
+  e := Exponents.boxError
+  ell_pos := by norm_num [Exponents.scannerEll]
+  ell_lt_one := by norm_num [Exponents.scannerEll]
+  kappa_pos := by norm_num [Exponents.scannerKappa]
+  kappa_lt_mu := by norm_num [Exponents.scannerKappa, Exponents.scannerMu]
+  mu_lt_one_sub_ell := by norm_num [Exponents.scannerMu, Exponents.scannerEll]
+  nu_pos := by norm_num [Exponents.scannerNu]
+  e_pos := by norm_num [Exponents.boxError]
+  e_lt_one := by norm_num [Exponents.boxError]
+  kappa_le_e := by norm_num [Exponents.scannerKappa, Exponents.boxError]
+
+/-- The explicit threshold of the final per-band scale bounds: the scale-facts threshold of
+the final exponents and `2 ≤ n^(1/4000)` (`08-scanner.tex`, lines 32--41 and 839--865). -/
+noncomputable def finalSharpScaleThreshold : ℕ :=
+  max finalSharpScannerExponents.scaleFactsThreshold (Real.natRpowThreshold (1 / 4000) 2)
+
+/-- The final scale threshold is at least `2`. -/
+theorem two_le_finalSharpScaleThreshold : 2 ≤ finalSharpScaleThreshold :=
+  (le_max_left _ _).trans (le_max_left _ _)
+
+/-- The actual rounded source scales have the two required per-band bounds, with the
+coefficient `C_a = 32`, and the prescribed final fraction is at most one half, at every `n`
+from the explicit threshold `finalSharpScaleThreshold` on. Source: `08-scanner.tex`,
+lines 32--41 and 839--865. -/
+theorem finalSharp_scale_bounds_of_finalSharpScaleThreshold_le {n : ℕ}
+    (hthr : finalSharpScaleThreshold ≤ n) :
+    let L := Nat.floor ((n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ)))
+    let m := Nat.floor ((n : ℝ) ^ (Exponents.scannerMu : ℝ))
+    let K := L / (8 * m)
+    let W := (n : ℝ) ^ (Exponents.scannerOmega : ℝ)
+    let a := W / (K : ℝ)
+    1 ≤ K ∧ 0 < a ∧
+      a ≤ 32 * (n : ℝ) ^ (-37497 / 50000 : ℝ) ∧
+      1 / a ≤ (n : ℝ) ^ (37497 / 50000 : ℝ) ∧
+      0 < (n : ℝ) ^ (-(1 / 4000 : ℝ)) ∧
+      (n : ℝ) ^ (-(1 / 4000 : ℝ)) ≤ 1 / 2 := by
+  intro L m K W a
+  let X := finalSharpScannerExponents
+  have hexponent : 1 - X.ell - X.mu = (74999 / 100000 : ℝ) := by
+    norm_num [X, finalSharpScannerExponents, Exponents.scannerEll, Exponents.scannerMu]
+  have hscale := X.rpow_le_mul_K_of_scaleFactsThreshold_le ((le_max_left _ _).trans hthr)
+  have hupper := X.bandCount_le_rpow_of_scaleFactsThreshold_le ((le_max_left _ _).trans hthr)
+  have ht : (2 : ℝ) ≤ (n : ℝ) ^ (1 / 4000 : ℝ) :=
+    Real.le_natCast_rpow_of_natRpowThreshold_le (by norm_num) ((le_max_right _ _).trans hthr)
+  rw [hexponent] at hscale hupper
+  obtain ⟨hn2, hK, hlow⟩ := hscale
+  have hupp := hupper.2
+  have hnpos : (0 : ℝ) < n := by exact_mod_cast (show 0 < n by omega)
+  have hKpos : (0 : ℝ) < K := by exact_mod_cast (show 0 < X.K n by omega)
+  have hWpos : 0 < W := by dsimp only [W]; positivity
+  have ha : 0 < a := div_pos hWpos hKpos
+  refine ⟨hK, ha, ?_, ?_, by positivity, ?_⟩
+  · apply (div_le_iff₀ hKpos).2
+    calc
+      W = (n : ℝ) ^ (-37497 / 50000 : ℝ) *
+          (n : ℝ) ^ (74999 / 100000 : ℝ) := by
+        rw [← Real.rpow_add hnpos]
+        norm_num [W, Exponents.scannerOmega]
+      _ ≤ (n : ℝ) ^ (-37497 / 50000 : ℝ) * (32 * (K : ℝ)) :=
+        mul_le_mul_of_nonneg_left hlow (by positivity)
+      _ = _ := by ring
+  · change 1 / (W / (K : ℝ)) ≤ _
+    rw [one_div_div]
+    apply (div_le_iff₀ hWpos).2
+    calc
+      (K : ℝ) ≤ (n : ℝ) ^ (74999 / 100000 : ℝ) := hupp
+      _ = (n : ℝ) ^ (37497 / 50000 : ℝ) * W := by
+        dsimp only [W]
+        rw [← Real.rpow_add hnpos]
+        norm_num [Exponents.scannerOmega]
+  · rw [Real.rpow_neg hnpos.le, one_div]
+    simpa only [one_div] using inv_anti₀ (by norm_num) ht
 
 /-- The actual rounded source scales have the two required per-band bounds,
 and the prescribed final fraction is eventually at most one half. The fixed
@@ -123,63 +213,9 @@ theorem exists_finalSharp_scale_bounds :
         a ≤ Ca * (n : ℝ) ^ (-37497 / 50000 : ℝ) ∧
         1 / a ≤ (n : ℝ) ^ (37497 / 50000 : ℝ) ∧
         0 < (n : ℝ) ^ (-(1 / 4000 : ℝ)) ∧
-        (n : ℝ) ^ (-(1 / 4000 : ℝ)) ≤ 1 / 2 := by
-  let X : ScannerExponents :=
-    { ell := Exponents.scannerEll
-      kappa := Exponents.scannerKappa
-      mu := Exponents.scannerMu
-      nu := Exponents.scannerNu
-      e := Exponents.boxError
-      ell_pos := by norm_num [Exponents.scannerEll]
-      ell_lt_one := by norm_num [Exponents.scannerEll]
-      kappa_pos := by norm_num [Exponents.scannerKappa]
-      kappa_lt_mu := by norm_num [Exponents.scannerKappa, Exponents.scannerMu]
-      mu_lt_one_sub_ell := by norm_num [Exponents.scannerMu, Exponents.scannerEll]
-      nu_pos := by norm_num [Exponents.scannerNu]
-      e_pos := by norm_num [Exponents.boxError]
-      e_lt_one := by norm_num [Exponents.boxError]
-      kappa_le_e := by norm_num [Exponents.scannerKappa, Exponents.boxError] }
-  obtain ⟨Ca, hCa, hlower⟩ := X.exists_eventually_rpow_le_mul_K
-  have hexponent : 1 - X.ell - X.mu = (74999 / 100000 : ℝ) := by
-    norm_num [X, Exponents.scannerEll, Exponents.scannerMu]
-  have hscales : ∀ᶠ n : ℕ in atTop, 2 ≤ n ∧ 1 ≤ X.K n ∧
-      (n : ℝ) ^ (74999 / 100000 : ℝ) ≤ Ca * (X.K n : ℝ) ∧
-      (X.K n : ℝ) ≤ (n : ℝ) ^ (74999 / 100000 : ℝ) ∧
-      2 ≤ (n : ℝ) ^ (1 / 4000 : ℝ) := by
-    filter_upwards [hlower, X.eventually_bandCount_le_rpow,
-      eventually_le_natCast_rpow (by norm_num : (0 : ℝ) < 1 / 4000) 2]
-      with n hn hupper ht
-    rw [hexponent] at hn hupper
-    exact ⟨hn.1, hn.2.1, hn.2.2, hupper.2, ht⟩
-  obtain ⟨N, hN⟩ := eventually_atTop.mp hscales
-  refine ⟨Ca, hCa, max N 2, le_max_right _ _, ?_⟩
-  intro n hn L m K W a
-  obtain ⟨hn2, hK, hlow, hupp, ht⟩ := hN n ((le_max_left N 2).trans hn)
-  have hnpos : (0 : ℝ) < n := by exact_mod_cast (show 0 < n by omega)
-  have hKpos : (0 : ℝ) < K := by exact_mod_cast (show 0 < X.K n by omega)
-  have hWpos : 0 < W := by dsimp only [W]; positivity
-  have ha : 0 < a := div_pos hWpos hKpos
-  refine ⟨hK, ha, ?_, ?_, by positivity, ?_⟩
-  · apply (div_le_iff₀ hKpos).2
-    calc
-      W = (n : ℝ) ^ (-37497 / 50000 : ℝ) *
-          (n : ℝ) ^ (74999 / 100000 : ℝ) := by
-        rw [← Real.rpow_add hnpos]
-        norm_num [W, Exponents.scannerOmega]
-      _ ≤ (n : ℝ) ^ (-37497 / 50000 : ℝ) * (Ca * (K : ℝ)) :=
-        mul_le_mul_of_nonneg_left hlow (by positivity)
-      _ = _ := by ring
-  · change 1 / (W / (K : ℝ)) ≤ _
-    rw [one_div_div]
-    apply (div_le_iff₀ hWpos).2
-    calc
-      (K : ℝ) ≤ (n : ℝ) ^ (74999 / 100000 : ℝ) := hupp
-      _ = (n : ℝ) ^ (37497 / 50000 : ℝ) * W := by
-        dsimp only [W]
-        rw [← Real.rpow_add hnpos]
-        norm_num [Exponents.scannerOmega]
-  · rw [Real.rpow_neg hnpos.le, one_div]
-    simpa only [one_div] using inv_anti₀ (by norm_num) ht
+        (n : ℝ) ^ (-(1 / 4000 : ℝ)) ≤ 1 / 2 :=
+  ⟨32, by norm_num, _, two_le_finalSharpScaleThreshold,
+    fun _ => finalSharp_scale_bounds_of_finalSharpScaleThreshold_le⟩
 
 /-- The quantitative source trace budget has its actual fixed coefficient.
 The first limit is unrelated to this system-size estimate. -/
