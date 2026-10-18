@@ -1167,13 +1167,14 @@ restriction is resolved.
 ### Polynomial PEPS approximation: the distribution protocol
 
 [polypeps_prop71_consequences_interface.tex](polypeps_prop71_consequences_interface.tex)
-(scope restriction, open) records that Proposition 7.1 of the September 24, 2026
-polynomial PEPS manuscript is formalized only as the consequences that the
-assembly of Section 8 uses, and lists the omitted clauses: a party for every
-hierarchy square, the main and auxiliary copies of `Ω`, the frame factorization
-of the reference vectors with factors of norm at most one, the placement of
-additional parties at their repainting events, the pair-source and message
-counts before expansion, and the family of expansions of every fixed accuracy.
+(scope restriction, resolved) records that Proposition 7.1 of the September 24,
+2026 polynomial PEPS manuscript was first formalized only as the consequences
+that the assembly of Section 8 uses. Every clause is now a field of the formal
+predicate, proved for the constructed protocol: a party for every hierarchy
+square, the additional parties at their repaintings, the private copies of `Ω`,
+the frame factorization of the reference vectors with factors of norm at most
+one, the pair-source and message counts, and the expansions of every fixed
+accuracy. The existence of the protocol is proved without hypotheses.
 
 ### Two-dimensional area law: the scanner estimate
 
@@ -1194,8 +1195,9 @@ point, because Definition 9.3 requires a nonempty template, and the stopping
 scale must satisfy `S_* ≥ 1`. The source uses these templates only for regions
 meeting the cut and chooses `S_*` large. The lattice-point premise is
 discharged for every identifier whose current region meets the cut by
-`repairStage_exists_integerPoint_mem_birth_of_oldInclusion`; the note stays
-open until the stopping-scale premise, handled in #9558, is also discharged on main.
+`repairStage_exists_integerPoint_mem_birth_of_oldInclusion`. The stopping-scale
+premise is discharged by `exists_uniform_repairStage_birth_templates`, whose
+threshold `T₀ ≥ 1` is chosen before `S_*`. The note is resolved.
 
 ### Two-dimensional area law: nondegenerate template pieces
 
@@ -1208,11 +1210,11 @@ orthogonal rectangle sides, as a convention built into the permitted polygons.
 ### One-dimensional area law: connected domains
 
 [tnlean_one_dimensional_connected_domain_scope.tex](tnlean_one_dimensional_connected_domain_scope.tex)
-records that Theorem A of the repository's one-dimensional note is formalized
-on the chain of `L` consecutive sites, the connected case to which the note
-reduces the theorem in a sentence; the component reduction for a disconnected
-finite subset of the integers (the ground vector of a sum over components is a
-product, and entropy and edge boundary add over components) is not formalized.
+(scope restriction, resolved) records that Theorem A of the repository's
+one-dimensional note, first formalized on the chain of `L` consecutive sites,
+is now formalized for every finite subset of the integers. The reduction to the
+chain uses the zero entropy of the prefixes ending at the gaps of the domain in
+place of the factorization of the ground vector over components.
 
 ### One-dimensional matrix product state approximation: threshold truncation
 

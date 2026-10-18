@@ -119,6 +119,99 @@ theorem surprisalTail_truncated_reducedState_le
       hΩt hg heig hgap (partialTraceRight_cutVector Ωt X)
       (reducedState_isHermitian Λ q Ωt X) w)
 
+/-- **Both marginal estimates for one truncated ground vector, with an explicit base-radius
+constant** (Proposition 4.5, `03-quasilocal.tex`, lines 405–433 and 457–505, with
+Proposition 4.3 at `p = 1`, lines 220–334; Lemma 3.1 as used in `08-scanner.tex`,
+lines 400–414). Let `C₃ ≥ 0`, `c₃ > 0` be the filter-locality constants of
+`latticePositiveConstraints_of_locality` at `p = 1`. Then every conclusion of
+`exists_truncated_reducedState_moment_tail_bounds` holds with
+`Ctr = latticeFiniteSetTruncationConstant R J Δ C₀ C₃ c₃`. Once QICLean provides the named
+filter-locality constants, `htail` is `SpectralFilter.norm_positiveConstraint_sub_map_le`. -/
+theorem truncated_reducedState_moment_tail_bounds_of_locality
+    (R : ℕ) {J Δ C₀ C₃ c₃ : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < Δ) (hC₀ : 0 ≤ C₀) (hC₃ : 0 ≤ C₃)
+    (hc₃ : 0 < c₃)
+    (htail : ∀ {n : Type} [Fintype n] [DecidableEq n]
+      {H : Matrix n n ℂ} {Ω : EuclideanSpace ℂ n} {h : Matrix n n ℂ},
+      H.IsHermitian → ‖Ω‖ = 1 → h.IsHermitian → ‖h‖ ≤ J →
+      ∀ (L : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ), (∀ X, ‖L X‖ ≤ ‖X‖) → L 1 = 1 →
+      (∀ X, X.IsHermitian → (L X).IsHermitian) →
+      L (CFC.abs (L (centeredFilter 1 (Δ / 2) H Ω h))) =
+        CFC.abs (L (centeredFilter 1 (Δ / 2) H Ω h)) →
+      ∀ {l : ℝ}, 0 ≤ l →
+      (∀ t : ℝ, ‖Matrix.hermitianUnitaryPath H t * h * Matrix.hermitianUnitaryPath H (-t) -
+          L (Matrix.hermitianUnitaryPath H t * h * Matrix.hermitianUnitaryPath H (-t))‖ ≤
+        ‖h‖ * min 2 (localizationPrefactor R 2 2 * Real.exp (localizationVelocity R
+          (1 + 2 * R * (R + 1)) (((2 ^ ((1 + 2 * R * (R + 1)) - 1) : ℕ) : ℝ) * J) * |t| -
+            1 / 2 * l))) →
+      ‖positiveConstraint (positiveNormalization 1 (Δ / 2) J) (centeredFilter 1 (Δ / 2) H Ω h) -
+          L (positiveConstraint (positiveNormalization 1 (Δ / 2) J)
+            (centeredFilter 1 (Δ / 2) H Ω h))‖ ≤
+        C₃ * Real.exp (-(c₃ * l ^ kernelExponent 1))) :
+    ∀ {q : ℕ} [NeZero q] (Λ : Finset (ℤ × ℤ))
+      (h : LocalHamiltonian Λ q R J)
+      (S : CollarScan (Site Λ) (AdmissibleSupport Λ R))
+      (E₀ : ℝ) (Ω : StateSpace Λ q),
+      IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+      S.graph = domainGraph Λ →
+      (∀ i, S.anchor i ∈ i.val) →
+      ∀ L : ℕ, 2 ≤ S.n →
+      S.r₀ = ⌈latticeFiniteSetTruncationConstant R J Δ C₀ C₃ c₃ * Real.log (S.n : ℝ) ^ 2⌉₊ →
+      ((S.truncationSet L).card : ℝ) ≤ C₀ * (S.n : ℝ) ^ 2 →
+      let g := Δ / positiveNormalization 1 (Δ / 2) J
+      let ε := min ((S.n : ℝ) ^ (-1000 : ℝ)) (g / 4)
+      let B : Finset (Site Λ) → ℝ :=
+        fun X => cutBudget q S.graph (S.truncationSet L) S.r₀ S.anchor X
+      ∃ (e : ℝ) (Ωt : StateSpace Λ q),
+        IsGappedGroundState Λ q (∑ i, S.truncatedEnergyTerm h Ω Δ L i) e Ωt (g / 2) ∧
+        0 ≤ e ∧ e ≤ ε ∧
+        (∃ θ : ℝ, ‖Ωt - Complex.exp (θ * Complex.I) • Ω‖ ≤ 2 * Real.sqrt (ε / g)) ∧
+        Matrix.traceDistance (Matrix.vecMulVec (WithLp.ofLp Ωt) (star (WithLp.ofLp Ωt)))
+            (Matrix.vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))) ≤
+          Real.sqrt (2 * ε / g) ∧
+        (∀ (X : Finset (Site Λ)) (u : ℝ),
+          |u| ≤ Entropy.tailRadius (2 / g) (B X) →
+          Real.log (Entropy.surprisalMoment
+            (reducedState_isHermitian Λ q Ωt X).eigenvalues u) ≤
+            u * regionalEntropy Λ q Ωt X +
+              512 * Real.exp 1 * (2 / g) * B X * u ^ 2) ∧
+        (∀ (X : Finset (Site Λ)) (w : ℝ),
+          Entropy.surprisalTail (reducedState_isHermitian Λ q Ωt X).eigenvalues
+            (regionalEntropy Λ q Ωt X) w ≤
+            min 1 (2 * Real.exp (Real.exp 1 / 2) *
+              Real.exp (-(w / (32 * Real.sqrt ((1 + 2 / g) * B X)))))) := by
+  classical
+  set Ctr := latticeFiniteSetTruncationConstant R J Δ C₀ C₃ c₃
+  intro q _ Λ h S E₀ Ω hgs hgraph hanchor L hn hr hcard
+  have hΩ : ‖Ω‖ = 1 := hgs.1
+  obtain ⟨_, _, _, e, Ωt, hΩt, heig, he0, he, hgap, hphase, htrace⟩ :=
+    latticeFiniteSetTruncation_of_locality R hJ hΔ hC₀ hC₃ hc₃ htail Λ h S.anchor hanchor E₀ Ω hgs
+      (S.n : ℝ) (by exact_mod_cast hn)
+      (S.truncationSet L) hcard
+  have hterm (i : AdmissibleSupport Λ R) :
+      S.truncatedEnergyTerm h Ω Δ L i =
+        truncatedConstraint q (domainGraph Λ) (S.truncationSet L)
+          ⌈Ctr * Real.log (S.n : ℝ) ^ 2⌉₊ (S.anchor i)
+          (positiveConstraint (positiveNormalization 1 (Δ / 2) J)
+            (centeredFilter 1 (Δ / 2) h.operator Ω (h.term i))) := by
+    rw [truncatedEnergyTerm, hgraph, hr, LocalHamiltonian.positiveTerm]
+  have hsum : (∑ i, S.truncatedEnergyTerm h Ω Δ L i) =
+      ∑ i, truncatedConstraint q (domainGraph Λ) (S.truncationSet L)
+        ⌈Ctr * Real.log (S.n : ℝ) ^ 2⌉₊ (S.anchor i)
+        (positiveConstraint (positiveNormalization 1 (Δ / 2) J)
+          (centeredFilter 1 (Δ / 2) h.operator Ω (h.term i))) :=
+    Finset.sum_congr rfl fun i _ => hterm i
+  have htrgs : IsGappedGroundState Λ q (∑ i, S.truncatedEnergyTerm h Ω Δ L i) e Ωt
+      ((Δ / positiveNormalization 1 (Δ / 2) J) / 2) := by
+    apply Matrix.isGappedGroundState_iff.mpr
+    rw [hsum]
+    exact ⟨hΩt, heig, hgap⟩
+  refine ⟨e, Ωt, htrgs, he0, he, hphase, htrace, ?_, ?_⟩
+  · intro X u hu
+    exact S.log_surprisalMoment_truncated_reducedState_le h Ω hgraph hanchor hΔ hΩ L
+      htrgs X hu
+  · intro X w
+    exact S.surprisalTail_truncated_reducedState_le h Ω hgraph hanchor hΔ hΩ L htrgs X w
+
 /-- One physical truncated ground vector satisfies both marginal estimates for every cut.
 The constant `Ctr` depends only on `R, J, Δ, C₀` and is independent of the scanner's
 charge-slot constant `S.C₁`. The original `Ω` still centers every positive constraint;
@@ -166,37 +259,10 @@ theorem exists_truncated_reducedState_moment_tail_bounds
               (regionalEntropy Λ q Ωt X) w ≤
               min 1 (2 * Real.exp (Real.exp 1 / 2) *
                 Real.exp (-(w / (32 * Real.sqrt ((1 + 2 / g) * B X)))))) := by
-  classical
-  obtain ⟨Ctr, hCtr, htr⟩ := exists_latticeFiniteSetTruncation R hJ hΔ hC₀
-  refine ⟨Ctr, hCtr, ?_⟩
-  intro q _ Λ h S E₀ Ω hgs hgraph hanchor L hn hr hcard
-  have hΩ : ‖Ω‖ = 1 := hgs.1
-  obtain ⟨_, _, _, e, Ωt, hΩt, heig, he0, he, hgap, hphase, htrace⟩ :=
-    htr Λ h S.anchor hanchor E₀ Ω hgs (S.n : ℝ) (by exact_mod_cast hn)
-      (S.truncationSet L) hcard
-  have hterm (i : AdmissibleSupport Λ R) :
-      S.truncatedEnergyTerm h Ω Δ L i =
-        truncatedConstraint q (domainGraph Λ) (S.truncationSet L)
-          ⌈Ctr * Real.log (S.n : ℝ) ^ 2⌉₊ (S.anchor i)
-          (positiveConstraint (positiveNormalization 1 (Δ / 2) J)
-            (centeredFilter 1 (Δ / 2) h.operator Ω (h.term i))) := by
-    rw [truncatedEnergyTerm, hgraph, hr, LocalHamiltonian.positiveTerm]
-  have hsum : (∑ i, S.truncatedEnergyTerm h Ω Δ L i) =
-      ∑ i, truncatedConstraint q (domainGraph Λ) (S.truncationSet L)
-        ⌈Ctr * Real.log (S.n : ℝ) ^ 2⌉₊ (S.anchor i)
-        (positiveConstraint (positiveNormalization 1 (Δ / 2) J)
-          (centeredFilter 1 (Δ / 2) h.operator Ω (h.term i))) :=
-    Finset.sum_congr rfl fun i _ => hterm i
-  have htrgs : IsGappedGroundState Λ q (∑ i, S.truncatedEnergyTerm h Ω Δ L i) e Ωt
-      ((Δ / positiveNormalization 1 (Δ / 2) J) / 2) := by
-    apply Matrix.isGappedGroundState_iff.mpr
-    rw [hsum]
-    exact ⟨hΩt, heig, hgap⟩
-  refine ⟨e, Ωt, htrgs, he0, he, hphase, htrace, ?_, ?_⟩
-  · intro X u hu
-    exact S.log_surprisalMoment_truncated_reducedState_le h Ω hgraph hanchor hΔ hΩ L
-      htrgs X hu
-  · intro X w
-    exact S.surprisalTail_truncated_reducedState_le h Ω hgraph hanchor hΔ hΩ L htrgs X w
+  obtain ⟨C₃, c₃, hC₃, hc₃, htail⟩ := exists_norm_positiveConstraint_sub_map_le (le_refl 1) hΔ hJ
+    (localizationPrefactor_nonneg R 2 2) (localizationVelocity_pos R (1 + 2 * R * (R + 1))
+      (((2 ^ ((1 + 2 * R * (R + 1)) - 1) : ℕ) : ℝ) * J)) one_half_pos
+  exact ⟨_, latticeFiniteSetTruncationConstant_pos R hΔ hC₀ hC₃ hc₃,
+    truncated_reducedState_moment_tail_bounds_of_locality R hJ hΔ hC₀ hC₃ hc₃ htail⟩
 
 end TNLean.PEPS.AreaLaw.Scan.CollarScan

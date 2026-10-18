@@ -98,15 +98,23 @@ theorem exists_sourceTarget_finalScale_mutualInformation
   have hg : 0 < g := div_pos hΔ (positiveNormalization_pos 1 (Δ / 2) J)
   have hC₀ : 0 ≤ C₀ := by dsimp only [C₀]; positivity
   have hCvol : 0 ≤ C_T + 1 := by linarith
-  obtain ⟨Nt, htarget⟩ := eventually_atTop.mp
-    (eventually_abs_regionalEntropy_sub_le_of_truncation q hq g (C_T + 1) hg)
-  obtain ⟨Nsml, hNsml, hsmall⟩ := exists_finalSharp_transport_smallness hq hCtr.le hct
+  let Nt := truncationEntropyThreshold q g (C_T + 1)
+  have htarget := fun n (hn : Nt ≤ n) =>
+    abs_regionalEntropy_sub_le_of_truncationEntropyThreshold_le q hq g (C_T + 1) hg hn
+  let Nsml := finalSharpTransportThreshold q Ctr ct
+  have hsmall := fun n (hn : Nsml ≤ n) =>
+    finalSharp_transport_smallness_of_threshold_le hq hCtr.le hct hn
   refine ⟨Ctr, hCtr, ?_⟩
   intro Ce hCe
   obtain ⟨Ns, hNs, hsourceN⟩ := hsource Ce hCe
-  obtain ⟨C, hC, Ne, hNe, herror⟩ := exists_finalSharp_source_error_le
-    q hq Ce C₀ CB g (C_T + 1) hCe hC₀ hCB.le hg hCvol
-  refine ⟨C, hC, max Ns (max Ne (max Nt Nsml)), hNs.trans (le_max_left _ _), ?_⟩
+  let Ne := finalSharpErrorThreshold C₀ CB
+  have herror := fun n (hn : Ne ≤ n) =>
+    finalSharp_source_error_le_of_finalSharpErrorThreshold_le q hq Ce C₀ CB g (C_T + 1) hCe hC₀
+      hCB.le hg hCvol hn
+  have hlq : 0 ≤ Real.log (q : ℝ) := Real.log_nonneg (by exact_mod_cast hq)
+  refine ⟨_, finalSharpErrorConstant_pos (Ctr := Real.sqrt (2 / g)) hCe
+    (mul_nonneg hCvol hlq) hlq,
+    max Ns (max Ne (max Nt Nsml)), hNs.trans (le_max_left _ _), ?_⟩
   intro Λ T _ hT h S E₀ Ω hgs hgraph hanchor hn hr hmScale hDScale hKScale
     hCeq hsize hdepth hrows hmult hclear htargetEntropy hprefix hrD hDpos hDm L X β
   have hnS : Ns ≤ S.n := by omega

@@ -113,9 +113,11 @@ import TNLean.PEPS.AreaLaw.Geometry.QuotientIntervals
 import TNLean.PEPS.AreaLaw.Geometry.RectangleMixedSquares
 import TNLean.PEPS.AreaLaw.Geometry.RectangleShellCounts
 import TNLean.PEPS.AreaLaw.Geometry.RectangleShellWeightedCover
+import TNLean.PEPS.AreaLaw.Geometry.RepairActualBirthTemplates
 import TNLean.PEPS.AreaLaw.Geometry.RepairBirthLatticePoint
 import TNLean.PEPS.AreaLaw.Geometry.RepairBirthRank
 import TNLean.PEPS.AreaLaw.Geometry.RepairCharacteristicLength
+import TNLean.PEPS.AreaLaw.Geometry.RepairCharacteristicLengthLowerBound
 import TNLean.PEPS.AreaLaw.Geometry.RepairChildCones
 import TNLean.PEPS.AreaLaw.Geometry.RepairChildStarStep
 import TNLean.PEPS.AreaLaw.Geometry.RepairChildStars
@@ -190,3 +192,4 @@ import TNLean.PEPS.AreaLaw.Geometry.TemplateRows
 import TNLean.PEPS.AreaLaw.Geometry.TemplateSafeRectangles
 import TNLean.PEPS.AreaLaw.Geometry.TemplateShellCover
 import TNLean.PEPS.AreaLaw.Geometry.Templates
+import TNLean.PEPS.AreaLaw.Geometry.TwoFamilyAssembly

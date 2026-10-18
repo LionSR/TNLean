@@ -18,21 +18,11 @@ the source: `K₀ = 20`, a small `ε₀`, a small mesh ratio `ν`, the clearance
 information scale `D` of Proposition 3.4 at that clearance, and `B₀ = K₀ D`; then Proposition 4.1
 supplies the patch constants.
 
-**Scope restriction (consequences of Proposition 7.1):**
-`largeSizeDyadicProtocolConsequences_of_adaptivePatchConstraint` proves the weaker
-`LargeSizeDyadicProtocolConsequences` interface used in Section 8, not full Proposition 7.1.
-The interface omits the following clauses of the proposition:
-
-* a designated party holding the main copy of `Ω` and private initialization of each auxiliary
-  copy at its designated party, rather than arbitrary normalized product initialization;
-* factorization of every intermediate reference vector into main and auxiliary encoded frames,
-  with every factor of norm at most one.
-
-These omissions and the retained Section 8 consequences are recorded in
-`docs/paper-gaps/polypeps_prop71_consequences_interface.tex`. To eliminate this restriction,
-construct a certificate carrying all omitted clauses, prove full Proposition 7.1 for it, and
-project to the present interface. The angular-scale and dyadic-padding lemmas in this module
-are not part of this restriction.
+`largeSizeDyadicProtocolConsequences_of_adaptivePatchConstraint` proves
+`LargeSizeDyadicProtocolConsequences`, which carries every clause of Proposition 7.1, from the
+adaptive patch constraint of Proposition 4.1; with that constraint proved, it gives
+`largeSizeDyadicProtocolConsequences` without hypotheses. The former scope restriction of this
+interface is resolved in `docs/paper-gaps/polypeps_prop71_consequences_interface.tex`.
 
 * `IsAngularScale.mono` : a larger information scale and threshold are again admissible;
 * `largeSizeDyadicProtocolConsequences_of_adaptivePatchConstraint` : the consequences of
@@ -159,7 +149,7 @@ theorem largeSizeDyadicProtocolConsequences_of_adaptivePatchConstraint
           (protocolFrozen P rank hr) protocolAuxOwner (i + 1) ∧
         ∀ j < 189, HasSourceBoundedChange Ω (seg j) (seg (j + 1)) (ℓ := []) (1 : ℂ)
           {p | EventUses (.inl S) p} (2 * b) (rewriteGateBound C' c' b L) (2 * b)
-          ((2 * b + 1) * ((L : ℝ) ^ 20)⁻¹) := by
+          ((2 * b + 1) * ((L : ℝ) ^ 20)⁻¹) ∧ seg (j + 1) ≠ [] := by
     intro i hi S he hl
     have hlarge : K₀ * (D * Real.log L) < (2 : ℝ) ^ (S.1 : ℕ) := by
       simpa [largeSquare] using hl

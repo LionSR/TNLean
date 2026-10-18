@@ -8,7 +8,7 @@
 \date{October 18, 2026}
 \begin{document}
 \maketitle
-\gapnote{scope-restriction}{open}
+\gapnote{scope-restriction}{resolved}
 
 \section{The source statement}
 
@@ -30,9 +30,9 @@ vector is a product of the component ground vectors, and both the entropy and
 the edge boundary add over components. The theorem is then proved for
 connected $\Lambda$, that is, for a chain of $L$ consecutive sites.
 
-\section{What is proved and the restriction}
+\section{The chain case}
 
-The formalization states the model on the chain of $L$ sites, with sites
+The formalization first states the model on the chain of $L$ sites, with sites
 $\{0,\ldots,L-1\}$, supports of range $R$ the nonempty sets of sites of
 diameter at most $R$, and the Hamiltonian, gapped ground vector, regional
 entropies and boundary edges as in the note.\footnote{Declarations:
@@ -46,57 +46,63 @@ $C_0(q,R)(1+J/\Delta)$.\footnote{Declarations:
 \leanid{TNLean.MPS.AreaLaw.chainAreaLaw}.} Theorem~B of the note is stated on
 the chain of $L$ sites in the note itself, so it carries no restriction.
 
-The restriction is to connected domains. The finite-dimensional spectral
-step is proved for two finite-dimensional tensor factors: let $H_1,H_2$ be
-Hermitian, put $H=H_1\otimes I+I\otimes H_2$, and suppose that a unit vector
-$\Omega$ satisfies $H\Omega=E_0\Omega$ and
-$H-E_0I\ge\Delta(I-|\Omega\rangle\langle\Omega|)$ with $\Delta>0$, then there
-are unit vectors $\Omega_1,\Omega_2$ and real numbers $E_1,E_2$ such that
-$\Omega=\Omega_1\otimes\Omega_2$, $E_0=E_1+E_2$, and each factor satisfies
-$H_i\Omega_i=E_i\Omega_i$ and
-$H_i-E_iI\ge\Delta(I-|\Omega_i\rangle\langle\Omega_i|)$.
-\footnote{Declaration: \leanid{TNLean.PEPS.AreaLaw.exists_isGappedGroundState_factors_of_kronecker_sum}.}
-The phase is included in one normalized factor, so the product equality is
-exact and the gap does not decrease.
+\section{Resolution: arbitrary finite domains}
 
-The induced integer geometry is also established: two vertices of a subset
-of $\mathbb Z$ are connected precisely when every integer between them is
-present, and the coordinate image of every connected component is order-convex.
-\footnote{Declarations: \leanid{SimpleGraph.hasse_int_induce_reachable_iff},
+Theorem~A is now formalized for every finite $\Lambda\subset\mathbb Z$, with
+no hypothesis beyond the source's and with the constant
+$C_0(q,R)(1+J/\Delta)$ of the chain case.\footnote{Declarations:
+\leanid{TNLean.MPS.AreaLaw.DomainHamiltonian},
+\leanid{TNLean.MPS.AreaLaw.domainBoundaryEdges},
+\leanid{TNLean.MPS.AreaLaw.regionEntropy_le_mul_card_domainBoundaryEdges},
+\leanid{TNLean.MPS.AreaLaw.domainAreaLaw}.} The sites of $\Lambda$ are
+labelled $0,\ldots,|\Lambda|-1$ in increasing order, the supports are the
+nonempty sets of graph diameter at most $R$ in the induced path graph, and
+$\partial_\Lambda A$ is the set of edges $\{x,x+1\}\subseteq\Lambda$ with
+exactly one endpoint in $A$, as in the note.
+
+The proof takes a shorter route than the factorization sketched in the note.
+A support of range $R$ in $\Lambda$ is a support of range $R$ on the chain of
+$|\Lambda|$ sites, so the Hamiltonian is a chain Hamiltonian and the chain
+theorem bounds $S_\Omega(A)$ by $C_{\mathrm{int}}$ times the number of chain
+boundary edges of $A$. These include the chain edges at the gaps of
+$\Lambda$, which are not edges of $\Lambda$. At a gap no term crosses, so the
+Hamiltonian is $H_1\otimes1+1\otimes H_2$ across the prefix $P$ of the chain
+ending at the gap, the gapped ground vector is a product vector across that
+cut, and $S_\Omega(P)=0$. For $S_\Omega(P)=0$, the Araki--Lieb inequality and
+strong subadditivity give $S_\Omega(A\triangle P)=S_\Omega(A)$ for every
+region $A$, while replacing $A$ by $A\triangle P$ toggles exactly the chain
+edge at the end of $P$. Flipping the prefixes at the gaps where $A$ changes
+yields a region with the entropy of $A$ whose chain boundary edges are the
+edges of $\partial_\Lambda A$. The full factorization of the ground vector
+over the components is therefore not needed.
+
+\section{Independent factorization statements}
+
+The spectral part of the factorization argument in Section~2 of the note is
+also proved for two finite-dimensional Hermitian factors. If a unit vector
+$\Omega$ is a ground vector of $H_1\otimes I+I\otimes H_2$ with projector
+gap $\Delta>0$, then there are unit vectors $\Omega_1,\Omega_2$ and real
+numbers $E_1,E_2$ such that $\Omega=\Omega_1\otimes\Omega_2$,
+$E_0=E_1+E_2$, and each factor satisfies the ground-state inequality with the
+same gap $\Delta$.\footnote{Declaration:
+\leanid{TNLean.PEPS.AreaLaw.exists_isGappedGroundState_factors_of_kronecker_sum}.}
+The phase is included in one factor, so the product equality is exact.
+This statement does not supply a component Hamiltonian decomposition, and
+that decomposition is not needed for the proof of Theorem~A above.
+
+For an arbitrary subset of $\mathbb Z$, two sites of the induced integer
+graph are connected precisely when every integer between them belongs to
+the subset. The coordinate image of each connected component is therefore
+order-convex; no finiteness hypothesis is needed.\footnote{Declarations:
+\leanid{SimpleGraph.hasse_int_induce_reachable_iff},
 \leanid{SimpleGraph.ConnectedComponent.ordConnected_image_hasse_int_induce}.}
-This geometric statement requires no finiteness hypothesis. For a finite
-domain, each component graph is also isomorphic to the path on its number of
-vertices.\footnote{Declaration:
+For a finite domain, every actual component is isomorphic to the path on
+its cardinality, including singleton components.\footnote{Declaration:
 \leanid{SimpleGraph.ConnectedComponent.nonempty_pathGraph_iso_hasse_int_induce_finset}.}
-These graph isomorphisms do not yet supply the termwise transport of
-the actual Hamiltonian to the chain model or its decomposition into component
-Hamiltonians.
-
-For an arbitrary finite $\Lambda\subset\mathbb Z$, the identification of the
-actual Hamiltonian with a tensor sum over its connected components, and the
-transport of each component to the chain model, remain to be formalized.
-The entropy bound $S_\Omega(A)\le C|\partial_\Lambda A|$ therefore remains
-restricted to connected domains.
-
-\section{Elimination plan}
-
-Express the Hamiltonian on an arbitrary finite domain as an iterated tensor
-sum of the Hamiltonians on its connected components. Admissible supports have
-finite diameter in the induced path graph, so each support lies in one
-component. Use the finite component path isomorphisms to transport the actual
-interaction terms to the chain model, verifying the support ranges, the
-operator identity and the original norm bound $J$ term by term. Apply the
-binary spectral theorem above
-repeatedly to obtain normalized component ground vectors with the same gap.
-Finally identify the actual regional reduced states under the component
-coordinate equivalence. Reuse the existing product reduced-state identity,
-entropy additivity for normalized product vectors, and covariance under site
-relabelling, applying them by finite induction over the components. Prove
-separately that the edge boundary is the disjoint union of the component
-boundaries. The empty domain is handled
-separately; its regional entropy and boundary are both zero. Until then the
-restriction is recorded in the module docstring of \texttt{TNLean/MPS/AreaLaw/AreaLaw.lean} and in the blueprint
-statement of Theorem~A.
+There is no nonempty-domain hypothesis: an empty domain has no component
+for which a path is to be chosen. These geometric statements describe the
+interval components in the note's factorization argument. They are
+independent of the zero-entropy proof of Theorem~A above.
 
 \bibliographystyle{alpha}
 \bibliography{references}
