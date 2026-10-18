@@ -164,7 +164,8 @@ theorem exists_protocol_isOpenMPS_norm_sub_phase_le
     (mainConfigurationEquiv (length i) (width i) q) (ground i)
   obtain ⟨Cp, α, hCp, hα, hnetwork⟩ := exists_uniform_sampled_block_column
     (fun i : ι ↦ (length i : ℝ)) hsize length width C₀
-    1 s 1 0 0 2 K 1 1 hcount hphysical harity hlifetime hmonomial htermwise
+    1 s 1 0 0 2 K 1 1 hcount hphysical
+      (fun i g ↦ (harity i g).trans (by decide)) hlifetime hmonomial htermwise
     target htarget (fun i : ι ↦ 52 * (length i : ℝ) ^ (-11 : ℤ))
     hdensity hgate 5 (by norm_num)
   let n := max 1 (⌈40 * D * Real.log (q : ℝ)⌉₊ + 24960 * α)

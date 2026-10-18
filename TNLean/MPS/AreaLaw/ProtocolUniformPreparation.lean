@@ -126,7 +126,7 @@ theorem exists_uniform_preparation_family
               2 * (length i : ℝ) ^ (1 : ℕ)) ∧
             (∀ (i : ι) p, ((C₀ i).physicalDimension p : ℝ) ≤
               K * (length i : ℝ) ^ s) ∧
-            (∀ (i : ι) g, ((C₀ i).circuit.participants g).card ≤ 40) ∧
+            (∀ (i : ι) g, ((C₀ i).circuit.participants g).card ≤ 3) ∧
             (∀ (i : ι) p, (C₀ i).circuit.participationCount p ≤ 40) ∧
             (∀ i : ι, ∃ M : ℕ, (C₀ i).circuit.IsMonomialBounded M ∧
               (M : ℝ) ≤ 1 * (length i : ℝ) ^ (0 : ℕ)) ∧
@@ -174,10 +174,10 @@ theorem exists_uniform_preparation_family
   dsimp only
   simp only [← forall_and]
   intro i
-  obtain ⟨hpart, _, _, hexp, hmono, _, _, _, _, _, harity, hgate,
-      _, hcount20, htwenty, _, hpoly, _, hdensity, _, hw, hmargin⟩ := hp i
+  obtain ⟨hpart, _, _, hexp, hmono, _, _, _, _, _, _harity, hgate,
+      _, hcount20, htwenty, _, hpoly, _, hdensity, harityThree, hw, hmargin⟩ := hp i
   have hcount : (C i).nonprivateCount ≤ 2 * length i := hcount20.trans htwenty
-  refine ⟨?_, ?_, hpoly, harity, hpart, ?_, ?_, ?_, ?_, hgate, ?_, ⟨hw, hmargin⟩⟩
+  refine ⟨?_, ?_, hpoly, harityThree, hpart, ?_, ?_, ?_, ?_, hgate, ?_, ⟨hw, hmargin⟩⟩
   · exact_mod_cast (hL₀.trans i.property.1)
   · change ((C i).nonprivateCount : ℝ) ≤ 2 * (length i : ℝ) ^ (1 : ℕ)
     simpa only [pow_one] using
