@@ -12,7 +12,8 @@ import Lean.Util.CollectAxioms
 run_cmd do
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
   let declarations := #[``norm_commutator_le, ``norm_exp_commutator_eq,
-    ``TNLean.PEPS.AreaLaw.exists_quasilocal_region_localization]
+    ``TNLean.PEPS.AreaLaw.exists_quasilocal_region_localization,
+    ``TNLean.PEPS.AreaLaw.quasilocal_region_localization]
   for decl in declarations do
     unless (← Lean.getEnv).contains decl do
       throwError "Missing declaration {decl}"
