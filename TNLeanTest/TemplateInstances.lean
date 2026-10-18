@@ -10,6 +10,8 @@ templates of Definition 9.3. The counting and entropy estimates of Lemma 9.4
 apply to them with no further geometric hypothesis.
 -/
 
+open TNLean.Lattice
+
 open TNLean.PEPS.AreaLaw TNLean.PEPS.AreaLaw.Geometry
 
 /-! ### A thin rectangle -/

@@ -31,10 +31,10 @@ the cut.
 
 ## Main results
 
-* `TNLean.PEPS.AreaLaw.exists_isGappedGroundState_factors_of_kronecker_sum`: normalized
+* `TNLean.Lattice.exists_isGappedGroundState_factors_of_kronecker_sum`: normalized
   factor ground vectors with additive energies and the same lower gap bound.
-* `TNLean.PEPS.AreaLaw.exists_eq_mul_of_gap`: the ground vector is a product.
-* `TNLean.PEPS.AreaLaw.vonNeumannEntropy_partialTraceRight_eq_zero_of_gap`: its
+* `TNLean.Lattice.exists_eq_mul_of_gap`: the ground vector is a product.
+* `TNLean.Lattice.vonNeumannEntropy_partialTraceRight_eq_zero_of_gap`: its
   reduced state on the first factor has zero entropy.
 
 For a tensor sum with a strictly positive gap, the normalized factors inherit the same
@@ -60,7 +60,7 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 open Matrix
 open scoped ComplexOrder MatrixOrder Matrix.Norms.L2Operator Kronecker
 
-namespace TNLean.PEPS.AreaLaw
+namespace TNLean.Lattice
 
 private theorem norm_toLp_eq_one_of_star_dotProduct {γ : Type*} [Fintype γ]
     (w : γ → ℂ) (hw : star w ⬝ᵥ w = 1) : ‖WithLp.toLp 2 w‖ = 1 := by
@@ -346,4 +346,4 @@ theorem vonNeumannEntropy_partialTraceRight_eq_zero_of_gap {HA : Matrix α α �
   rw [hred]
   exact rank_vecMulVec_le _ _
 
-end TNLean.PEPS.AreaLaw
+end TNLean.Lattice

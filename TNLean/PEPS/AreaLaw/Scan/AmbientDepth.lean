@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.AreaLaw.FiniteDomain
+import TNLean.Lattice.FiniteDomain
 import TNLean.PEPS.AreaLaw.Scan.PhysicalPartition
 import Mathlib.Data.Finset.Lattice.Fold
 import Mathlib.Algebra.Order.Group.Abs
@@ -28,6 +28,8 @@ allowing individual sampled pieces to be empty. No empty-target distance
 convention is needed for the scanner.
 These are the geometric inputs to the scan, not the full histories lemma.
 -/
+
+open TNLean.Lattice
 
 namespace TNLean.PEPS.AreaLaw.Scan
 

@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.RectangularDomain
-import TNLean.PEPS.AreaLaw.LocalHamiltonian
+import TNLean.Lattice.LocalHamiltonian
 import QICLean.Algebra.HermitianPartSum
 import QICLean.Algebra.L2OpNormReindex
 import Mathlib.Analysis.Complex.Basic
@@ -30,6 +30,8 @@ open Matrix ComplexStarModule
 open scoped BigOperators Matrix.Norms.L2Operator ComplexOrder
 
 noncomputable section
+
+open TNLean.Lattice
 
 namespace TNLean.PEPS.AreaLaw
 
@@ -327,7 +329,7 @@ the actual conversion. Source: area-law Corollary 1.2 and polynomial-PEPS
 theorem RectangularHamiltonian.isGappedGroundState_toAreaLawHamiltonian
     {width height q : ℕ} {J : ℝ} (h : RectangularHamiltonian width height q J) (hJ : 0 ≤ J)
     {E₀ Δ : ℝ} {Ω : RectangleStateSpace width height q} (hΩ : h.IsGappedGroundState E₀ Ω Δ) :
-    TNLean.PEPS.AreaLaw.IsGappedGroundState (rectangularDomain width height) q
+    TNLean.Lattice.IsGappedGroundState (rectangularDomain width height) q
       (h.toAreaLawHamiltonian hJ).operator E₀ (rectangleAreaLawState Ω) Δ := by
   classical
   let e := rectangleConfigurationEquiv width height q

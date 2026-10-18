@@ -27,6 +27,7 @@ Independently formalized from the manuscript; no upstream Lean text is reused.
 
 open Matrix
 open scoped BigOperators ComplexOrder MatrixOrder Matrix.Norms.L2Operator
+open TNLean.Lattice
 
 namespace TNLean.PEPS.Approximation
 
@@ -51,23 +52,23 @@ theorem SquareHamiltonian.nestedPatch_minimizer_energy_le
     (center : ℝ × ℝ) (u κ b : ℝ)
     (hu : 4 ≤ u) (hκ : 0 < κ) (hκ₁ : κ ≤ 1) (hb : 0 < b) :
     let Λ := AreaLaw.rectangularDomain L L
-    letI : LinearOrder (AreaLaw.Site Λ) :=
-      (Fintype.equivFin (AreaLaw.Site Λ)).linearOrder
+    letI : LinearOrder (Lattice.Site Λ) :=
+      (Fintype.equivFin (Lattice.Site Λ)).linearOrder
     let m := AreaLaw.Geometry.nestedPatchCount u
-    let regions : Fin m → Finset (AreaLaw.Site Λ) :=
+    let regions : Fin m → Finset (Lattice.Site Λ) :=
       fun j ↦ AreaLaw.Geometry.nestedPatch Λ center u j
     let a : Fin m → ℝ := fun _ ↦ κ / (m : ℝ)
     let U := dependentGlobalConfigIsometry
-      (V := AreaLaw.Site Λ) (Out := fun _ ↦ Fin q)
+      (V := Lattice.Site Λ) (Out := fun _ ↦ Fin q)
     let Ωᵤ := U.symm (squareAreaLawState Ω)
     ∀ x : ∀ j, Matrix ((v : regions j) → Fin q) ((v : regions j) → Fin q) ℂ,
-      x ∈ regularizedPatchDomain (Out := fun _ : AreaLaw.Site Λ ↦ Fin q) regions →
+      x ∈ regularizedPatchDomain (Out := fun _ : Lattice.Site Λ ↦ Fin q) regions →
       IsMinOn
-        (regularizedPatchObjective (Out := fun _ : AreaLaw.Site Λ ↦ Fin q)
+        (regularizedPatchObjective (Out := fun _ : Lattice.Site Λ ↦ Fin q)
           regions a b Ωᵤ)
-        (regularizedPatchDomain (Out := fun _ : AreaLaw.Site Λ ↦ Fin q) regions) x →
-      let φ : AreaLaw.StateSpace Λ q := U
-        (normalizedRegularizedPatchOutput (Out := fun _ : AreaLaw.Site Λ ↦ Fin q)
+        (regularizedPatchDomain (Out := fun _ : Lattice.Site Λ ↦ Fin q) regions) x →
+      let φ : Lattice.StateSpace Λ q := U
+        (normalizedRegularizedPatchOutput (Out := fun _ : Lattice.Site Λ ↦ Fin q)
           regions a b Ωᵤ x)
       (inner ℂ φ (Matrix.toEuclideanLin (h.toAreaLawHamiltonian hJ).operator φ)).re - E₀ ≤
         36 * (q : ℝ) ^ 2 * J * κ ^ 2 := by
@@ -76,18 +77,18 @@ theorem SquareHamiltonian.nestedPatch_minimizer_energy_le
   have ha : ∀ j, 0 < a j := fun _ ↦ div_pos hκ hm
   have hΩᵤ : ‖Ωᵤ‖ = 1 :=
     (U.symm.norm_map _).trans ((norm_squareAreaLawState Ω).trans hgs.1)
-  let : LinearOrder (AreaLaw.Site Λ) := (Fintype.equivFin (AreaLaw.Site Λ)).linearOrder
+  let : LinearOrder (Lattice.Site Λ) := (Fintype.equivFin (Lattice.Site Λ)).linearOrder
   have hnorm := norm_normalizedRegularizedPatchOutput
-    (Out := fun _ : AreaLaw.Site Λ ↦ Fin q) regions a (fun j ↦ (ha j).le) hb Ωᵤ hΩᵤ hx
+    (Out := fun _ : Lattice.Site Λ ↦ Fin q) regions a (fun j ↦ (ha j).le) hb Ωᵤ hΩᵤ hx
   have hφ : ‖φ‖ = 1 := (U.norm_map _).trans hnorm
   have hregions : Monotone regions := fun i j hij ↦
     AreaLaw.Geometry.nestedPatch_mono Λ center u hij
   have hcl := exists_clipped_filter_of_isMinOn_regularizedPatchObjective
-    (n := fun _ : AreaLaw.Site Λ ↦ q) regions hregions a ha hb Ωᵤ hΩᵤ x hx hmin
+    (n := fun _ : Lattice.Site Λ ↦ q) regions hregions a ha hb Ωᵤ hΩᵤ x hx hmin
   obtain ⟨T, hsupp, hherm, hTnorm, hTsum⟩ := h.exists_nearestNeighbor_terms hJ
-  let D : ℕ → Finset (AreaLaw.Site Λ) := AreaLaw.Geometry.nestedPatch Λ center u
-  let K : (j : Fin m) → Matrix (Entropy.RegionConfig (fun _ : AreaLaw.Site Λ ↦ q) (D j))
-      (Entropy.RegionConfig (fun _ : AreaLaw.Site Λ ↦ q) (D j)) ℂ :=
+  let D : ℕ → Finset (Lattice.Site Λ) := AreaLaw.Geometry.nestedPatch Λ center u
+  let K : (j : Fin m) → Matrix (Entropy.RegionConfig (fun _ : Lattice.Site Λ ↦ q) (D j))
+      (Entropy.RegionConfig (fun _ : Lattice.Site Λ ↦ q) (D j)) ℂ :=
     fun j ↦ (x j + b • 1) ^ (-(a j) / 2)
   have hunit : ∀ j, IsUnit (K j).det := fun j ↦
     (Matrix.isUnit_iff_isUnit_det _).mp (((hx j).1.add_smul_one_posDef hb).rpow _).isUnit
@@ -95,7 +96,7 @@ theorem SquareHamiltonian.nestedPatch_minimizer_energy_le
     (div_nat_le_self_of_nonnneg hκ.le m).trans hκ₁
   have hD : ∀ i j : Fin m, i ≤ j → D i ⊆ D j := fun _ _ hij ↦ hregions hij
   have hφpatch := dependentGlobalConfigIsometry_normalizedRegularizedPatchOutput
-    (n := fun _ : AreaLaw.Site Λ ↦ q) (fun j : Fin m ↦ D j) a b Ωᵤ x
+    (n := fun _ : Lattice.Site Λ ↦ q) (fun j : Fin m ↦ D j) a b Ωᵤ x
   change φ = Entropy.patchState b (regularizedPatchFactorList (fun j : Fin m ↦ D j) a x)
     (U (U.symm (squareAreaLawState Ω))) at hφpatch
   simp only [U.apply_symm_apply, Entropy.patchState, Entropy.patchOutput,
@@ -112,7 +113,7 @@ theorem SquareHamiltonian.nestedPatch_minimizer_energy_le
   have hφne : φ ≠ 0 := norm_ne_zero_iff.mp (hφ.trans_ne one_ne_zero)
   obtain ⟨σ₀, _⟩ := Function.ne_iff.mp (show (φ : _ → ℂ) ≠ 0 from by
     intro hzero; apply hφne; simpa using congrArg (WithLp.toLp 2) hzero)
-  have hsingle : ∀ (i : AreaLaw.Site Λ ⊕ Edge (AreaLaw.domainGraph Λ)),
+  have hsingle : ∀ (i : Lattice.Site Λ ⊕ Edge (Lattice.domainGraph Λ)),
       ∀ j ∈ Entropy.splitIndices (AreaLaw.nearestNeighborSupport (Λ := Λ) i) D m,
       ∀ k ∈ Entropy.splitIndices (AreaLaw.nearestNeighborSupport (Λ := Λ) i) D m,
         j = k := by
@@ -130,8 +131,8 @@ theorem SquareHamiltonian.nestedPatch_minimizer_energy_le
           ((AreaLaw.inr_mem_crossingTerms_iff (D k) e).mp (hc k hk)))
   have henergy := Entropy.re_inner_sub_le_of_chain_sharp D hD K hunit hφ a ha₁ hcl
     T (AreaLaw.nearestNeighborSupport (Λ := Λ)) hsupp hherm σ₀ hTnorm hsingle heig
-  have hcard (A S : Finset (AreaLaw.Site Λ)) :
-      Fintype.card (Entropy.InnerConfig (fun _ : AreaLaw.Site Λ ↦ q) A S) =
+  have hcard (A S : Finset (Lattice.Site Λ)) :
+      Fintype.card (Entropy.InnerConfig (fun _ : Lattice.Site Λ ↦ q) A S) =
         Fintype.card (↥(S ∩ A) → Fin q) := by
     rw [Entropy.card_innerConfig]
     simp only [Finset.prod_const, Fintype.card_fun, Fintype.card_fin, Fintype.card_coe]
@@ -139,7 +140,7 @@ theorem SquareHamiltonian.nestedPatch_minimizer_energy_le
   rw [AreaLaw.nearestNeighbor_crossing_budget (Λ := Λ) q J
     (fun j : Fin m ↦ D j) a] at henergy
   have hboundary : (∑ j : Fin m, a j ^ 2 *
-      (AreaLaw.edgeBoundary Λ (D j)).card) ≤ 36 * κ ^ 2 := by
+      (Lattice.edgeBoundary Λ (D j)).card) ≤ 36 * κ ^ 2 := by
     simpa only [D, a, m, mul_comm] using
       AreaLaw.Geometry.sum_card_edgeBoundary_nestedPatch_mul_sq_le Λ center (u := u) hu κ
   calc

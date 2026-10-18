@@ -47,6 +47,7 @@ at `openai/math@adc7f124`.
 
 open Filter TensorPower TensorPower.ReplicaTransport
 open scoped BigOperators symmDiff
+open TNLean.Lattice
 
 namespace TNLean.PEPS.AreaLaw.Scan
 

@@ -11,6 +11,7 @@ lattice counts and the boundary filter exponent. -/
 
 open QuantumCircuit SpectralFilter Matrix TNLean.PEPS.AreaLaw
 open scoped BigOperators Matrix.Norms.L2Operator MatrixOrder ComplexOrder
+open TNLean.Lattice
 
 namespace LatticeChannelWeightedRowTest
 

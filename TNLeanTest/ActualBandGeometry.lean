@@ -23,6 +23,7 @@ open TNLean.PEPS.AreaLaw TNLean.PEPS.AreaLaw.Scan
 open scoped BigOperators
 open TNLeanTest.ActualBandGeometryData
 open scoped symmDiff
+open TNLean.Lattice
 
 namespace TNLeanTest.ActualBandGeometry
 noncomputable section

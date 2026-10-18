@@ -32,6 +32,8 @@ open Filter
 
 noncomputable section
 
+open TNLean.Lattice
+
 namespace TNLean.PEPS.AreaLaw.Scan
 
 /-- The explicit threshold `truncationEntropyThreshold q g Cvol` transfers the original

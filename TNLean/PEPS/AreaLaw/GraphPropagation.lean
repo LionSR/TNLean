@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.AreaLaw.LocalHamiltonian
+import TNLean.Lattice.LocalHamiltonian
 import TNLean.PEPS.AreaLaw.GraphInteractionDiamondCounting
 import TNLean.Circuit.LiebRobinson.GraphLocalization
 
@@ -30,11 +30,11 @@ graph; sites joined only through a hole are far apart.
 
 ## Main results
 
-* `TNLean.PEPS.AreaLaw.LocalHamiltonian.norm_commutator_le_graphDistance`: the explicit
+* `TNLean.Lattice.LocalHamiltonian.norm_commutator_le_graphDistance`: the explicit
   commutator bound.
-* `TNLean.PEPS.AreaLaw.LocalHamiltonian.commutator_eq_zero_of_edist_eq_top`: exact vanishing
+* `TNLean.Lattice.LocalHamiltonian.commutator_eq_zero_of_edist_eq_top`: exact vanishing
   between different connected components of the domain.
-* `TNLean.PEPS.AreaLaw.LocalHamiltonian.norm_sub_siteExpectation_graphBall_le`: the explicit
+* `TNLean.Lattice.LocalHamiltonian.norm_sub_siteExpectation_graphBall_le`: the explicit
   graph-ball localization bound.
 * `TNLean.PEPS.AreaLaw.exists_quasilocal_lieb_robinson`: Lemma 4.1 of the source, with
   constants depending only on `R` and `J`.
@@ -50,6 +50,7 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 -/
 
 open scoped Matrix.Norms.L2Operator Nat
+open TNLean.Lattice
 
 namespace TNLean.PEPS.AreaLaw
 
@@ -80,7 +81,11 @@ theorem card_domainGraph_sphere_le (Λ : Finset (ℤ × ℤ)) (x : Site Λ) (d :
   push_cast at hreal
   nlinarith
 
-namespace IsAdmissibleSupport
+end TNLean.PEPS.AreaLaw
+
+namespace TNLean.Lattice.IsAdmissibleSupport
+
+open TNLean.PEPS.AreaLaw QuantumCircuit
 
 variable {Λ : Finset (ℤ × ℤ)} {R : ℕ} {X : Finset (Site Λ)}
 
@@ -96,11 +101,13 @@ theorem card_le (hX : IsAdmissibleSupport Λ R X) : X.card ≤ 1 + 2 * R * (R + 
   card_support_le_diamond Subtype.val Subtype.val_injective
     (fun _ _ => latticeL1Distance_le_one_of_domainGraph_adj) X R hX.2
 
-end IsAdmissibleSupport
+end TNLean.Lattice.IsAdmissibleSupport
 
 /-! ### The interaction budget -/
 
-namespace LocalHamiltonian
+namespace TNLean.Lattice.LocalHamiltonian
+
+open TNLean.PEPS.AreaLaw QuantumCircuit
 
 variable {Λ : Finset (ℤ × ℤ)} {q R : ℕ} {J : ℝ}
 
@@ -227,7 +234,11 @@ theorem norm_sub_siteExpectation_graphBall_le [NeZero q] (h : LocalHamiltonian �
     (fun x d => card_domainGraph_sphere_le Λ x d) X hA l t
   rwa [anchors_self] at hBound
 
-end LocalHamiltonian
+end TNLean.Lattice.LocalHamiltonian
+
+namespace TNLean.PEPS.AreaLaw
+
+open QuantumCircuit
 
 /-- **Graph-distance propagation** (OpenAI area law, Lemma 4.1, `lem:quasilocal-lr`). For
 local dimension `q ≥ 1`, range `R` and term-norm bound `J`, there are positive constants
