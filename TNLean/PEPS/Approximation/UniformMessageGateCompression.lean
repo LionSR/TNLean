@@ -22,8 +22,9 @@ networks with uniform polynomial virtual dimensions and constant incidence,
 approximating the full original physical density without normalization.
 No private-dimension or Schmidt-rank bound is imposed.
 
-The exterior scalar is absorbed at an existing party, by the nonempty-party convention
-of `TNLean.PEPS.Approximation.DistributedConstruction`.
+The exterior scalar is absorbed at an existing party: the construction data carry the
+nonempty-party convention, a degenerate-case reading of the source recorded in
+`docs/paper-gaps/polypeps_nonempty_parties.tex` and marked on `DistributedConstruction`.
 
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 32–43,
 137–175, 199–229, 565–588 and 590–600.

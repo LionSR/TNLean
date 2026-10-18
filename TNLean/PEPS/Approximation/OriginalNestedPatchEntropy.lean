@@ -14,8 +14,10 @@ selected square of every original gapped ground state. The constant is chosen
 before the lattice size, Hamiltonian, vector, center and scale. If `C_A` is the
 area-law constant, the choice `C_S = max 1 (16 * C_A)` suffices.
 
-The theorem takes the square entropy area law as the hypothesis `harea`. That
-law is proved as `TNLean.PEPS.AreaLaw.squareEntropyAreaLaw`.
+The theorem takes the square entropy area law as the hypothesis `harea`; it is a
+conditional step, not the source statement. That law is proved as
+`TNLean.PEPS.AreaLaw.squareEntropyAreaLaw`, and the unconditional Proposition 4.1 is
+`adaptivePatchConstraint` in `TNLean.PEPS.Approximation.PolynomialPEPSTheorem`.
 
 The state is the original ground vector in integer-domain coordinates.
 

@@ -15,9 +15,9 @@ Lemma 9.1(4), and new leaves by their total weight `p ≤ ε`. The coefficient
 
 The results of this module stated over `ScanData` are proved from its fields, which record
 the conclusions of Lemma 9.1, Propositions 7.4 and 8.1, and Lemmas 2.1 and 3.1 for one scan;
-this route is auxiliary. The source statement of Proposition 9.2 is proved for the original
-physical system as `TNLean.PEPS.AreaLaw.Scan.CollarScan.scannerStatement`, without these
-fields as hypotheses.
+this route is auxiliary and these results are conditional steps, not source statements. The
+source statement of Proposition 9.2 is proved for the original physical system as
+`TNLean.PEPS.AreaLaw.Scan.CollarScan.scannerStatement`, without these fields as hypotheses.
 
 ## Main results
 

@@ -17,8 +17,10 @@ of the ordered regularized filter product. An explicit logarithmic regulator
 then gives polynomial-dimensional inside spaces and inverse-polynomial error.
 The exponent is chosen before the physical instance and the selected square.
 
-The theorem takes the square entropy area law as the hypothesis `harea`. That
-law is proved as `TNLean.PEPS.AreaLaw.squareEntropyAreaLaw`.
+The theorem takes the square entropy area law as the hypothesis `harea`; it is a
+conditional step, not the source statement. That law is proved as
+`TNLean.PEPS.AreaLaw.squareEntropyAreaLaw`, and the unconditional Proposition 4.1 is
+`adaptivePatchConstraint` in `TNLean.PEPS.Approximation.PolynomialPEPSTheorem`.
 
 Source: OpenAI, *Polynomial PEPS approximation of gapped square-grid ground
 states*, Proposition 4.1, `03-patches.tex`, lines 335–563,

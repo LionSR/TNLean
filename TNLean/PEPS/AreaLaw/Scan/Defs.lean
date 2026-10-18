@@ -25,7 +25,8 @@ The charge defect needs only AE strong measurability in the interior: its existi
 then gives interval integrability, which suffices for the telescope and exact averaging.
 
 `ScanData` records the conclusions of Lemma 9.1, Propositions 7.4 and 8.1, and Lemmas 2.1
-and 3.1 for one scan as fields; the route through `ScanData` is auxiliary.
+and 3.1 for one scan as fields; the route through `ScanData` is auxiliary, and its results
+are conditional steps, not source statements.
 The source statement of Proposition 9.2 is proved for the original physical system as
 `TNLean.PEPS.AreaLaw.Scan.CollarScan.scannerStatement`, without these fields as hypotheses.
 

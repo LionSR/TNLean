@@ -27,8 +27,9 @@ then combines this absolute error with a separately proved bound `‖ρ - |Ω⟩
 `‖σ - |Ω⟩⟨Ω|‖₁ ≤ L⁻ᵖ + η` and `1 - η ≤ Re Tr ρ ≤ 1`. Nothing is renormalized, `σ` need be
 neither positive nor Hermitian, and no bound on private dimensions or Schmidt ranks enters.
 
-The exterior scalar is absorbed at an existing party, by the nonempty-party convention
-of `TNLean.PEPS.Approximation.DistributedConstruction`.
+The exterior scalar is absorbed at an existing party: the construction data carry the
+nonempty-party convention, a degenerate-case reading of the source recorded in
+`docs/paper-gaps/polypeps_nonempty_parties.tex` and marked on `DistributedConstruction`.
 
 ## Main results
 

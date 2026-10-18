@@ -18,7 +18,8 @@ and 8.1 (`ScanInputs`) hold for its rounds, its total weight `W` and the same `Î
 
 `scanner_estimate_actualScan` takes the conclusions of Proposition 7.4 (`prop:transport`) and
 Proposition 8.1 (`prop:comparators`) for the actual rounds as the hypothesis `ScanInputs`; the
-other inputs of the proof of Proposition 9.2 are derived. This route is auxiliary.
+other inputs of the proof of Proposition 9.2 are derived. This conditional route is auxiliary
+and is not the source statement.
 The source statement of Proposition 9.2 is proved for the original physical system as
 `TNLean.PEPS.AreaLaw.Scan.CollarScan.scannerStatement`, without these fields as hypotheses.
 

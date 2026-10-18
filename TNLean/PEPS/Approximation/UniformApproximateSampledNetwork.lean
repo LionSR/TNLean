@@ -27,8 +27,9 @@ The same actual source circuit and sample count are used in the contraction
 and its resource estimates. No numerical private-dimension or Schmidt-rank
 bound is assumed.
 
-The exterior scalar is absorbed at an existing party, by the nonempty-party convention
-of `TNLean.PEPS.Approximation.DistributedConstruction`.
+The exterior scalar is absorbed at an existing party: the construction data carry the
+nonempty-party convention, a degenerate-case reading of the source recorded in
+`docs/paper-gaps/polypeps_nonempty_parties.tex` and marked on `DistributedConstruction`.
 
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 137–175,
 199–229, 565–588 and 590–600.
