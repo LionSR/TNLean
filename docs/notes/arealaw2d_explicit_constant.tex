@@ -482,9 +482,12 @@ A (Proposition~10.2), R (the collar radius threshold $N_3$), G
 (Proposition~11.2), and ``off'' for a site whose declaration is not used in the
 proof of Theorem~1.1. A site used by the bootstrap is also used by the collar
 bound, since the latter consumes $C_{\rm box}$. Rows marked $\dagger$ belong to
-the Lean proof of Proposition~11.2 and of Theorem~1.1, which is not yet part of
-the main development; their line numbers refer to that proof as currently
-written.
+the Lean proof of Proposition~11.2. Each of them now uses a closed-form
+threshold, defined in \src{Geometry/TwoFamilyExplicitThresholds.lean} and named
+in its row; \leanid{isTwoFamilyDecompositionConstant_twoFamilyConstant} states
+the constant of Proposition~11.2 as \leanid{twoFamilyConstant} of these
+thresholds and of the constants of the template, isolation, separation and
+counting estimates.
 
 Sites that merely read a property of an existing witness (for example the inequality $C_1=32\ge1$ read off from the witness
 of an eventual statement) are listed
@@ -654,14 +657,14 @@ line~59, which extracts nothing.
 \leanid{exists_isMinOn_regularizedPatchObjective}           & a minimizing filter on a compact domain (callers at \src{RegularizedPatchLogMinimum.lean}:38, \src{RegularizedPatchMinimum.lean}:240, 317, \src{RegularizedPatchMinimumGrowth.lean}:79) & d & off & -- \\
 \multicolumn{6}{l}{\emph{Proposition~11.2 and Theorem~1.1 assembly}}                                                                                            \\
 74$\dagger$ & \src{Geometry/RepairActualBirthTemplates.lean}:74
-\leanid{exists_uniform_repairStage_birth_templates}         & primary scale limits with $\eps=1/4$                                         & a    & G      & P6     \\
-75$\dagger$ & \src{Geometry/RepairCharacteristicLengthLowerBound.lean}:54
-\leanid{exists_uniform_repairStage_positive_rank_length_lower_bound} & $2^{\lfloor\zeta k\rfloor}\ge U$                                    & a    & G      & P6     \\
-76$\dagger$ & \src{Geometry/TwoFamilyAssembly.lean}:278
-\leanid{twoFamilyDecomposition_of_one_le}                   & fine clearance $U_1$                                                         & a    & G      & P2     \\
-77$\dagger$ & \src{Geometry/TwoFamilyAssembly.lean}:279 (same)           & belt-replacement scale $U_2$                                                 & a    & G      & P2, P7 \\
-78$\dagger$ & \src{Geometry/TwoFamilyAssembly.lean}:305 (same)           & primary scale limits with $\eps=1/8$, giving $K_P$                           & a    & G      & P6     \\
-79$\dagger$ & \src{Geometry/TwoFamilyAssembly.lean}:307 (same)           & $C_P2^k\ge n_*$, giving $K_n$                                                & a    & G      & P6     \\
+\leanid{exists_uniform_repairStage_birth_templates}         & primary scale limits with $\eps=1/4$; explicit layer \leanid{primaryScaleLimitThreshold} & a & G & P6 \\
+75$\dagger$ & \src{Geometry/RepairCharacteristicLengthLowerBound.lean}:53
+\leanid{repairStage_positive_rank_length_lower_bound}       & $2^{\lfloor\zeta k\rfloor}\ge U$; explicit layer \leanid{fineScaleIndexThreshold} & a & G & P6 \\
+76$\dagger$ & \src{Geometry/TwoFamilyAssembly.lean}:562
+\leanid{isTwoFamilyDecompositionConstant_twoFamilyConstant} & fine clearance $U_1$; explicit scale \leanid{fineClearanceThreshold} & a & G & P2 \\
+77$\dagger$ & \src{Geometry/TwoFamilyAssembly.lean}:496 (same)           & belt-replacement scale $U_2$; explicit scale \leanid{beltReplacementScaleThreshold} & a & G & P2, P7 \\
+78$\dagger$ & \src{Geometry/TwoFamilyAssembly.lean}:393 (same)           & primary scale limits with $\eps=1/8$, giving $K_P$; explicit layer \leanid{primaryScaleLimitThreshold} & a & G & P6 \\
+79$\dagger$ & \src{Geometry/TwoFamilyAssembly.lean}:513 (same)           & $C_P2^k\ge n_*$, giving $K_n$; explicit layer \leanid{primaryScannerScaleThreshold} & a & G & P6 \\
 \bottomrule
 \end{longtable}
 }
@@ -670,7 +673,7 @@ line~59, which extracts nothing.
 Table~\ref{tab:sites} has 79 rows: 56 of kind (a), of which 43 are on the path
 of Theorem~1.1 and 13 are not; 2 of kind (b); 1 of kind (c), not on the path;
 14 of kind (d); and 6 further kind (a) rows in the Lean proof of
-Proposition~11.2 that is not yet merged. Every kind (a) row reduces to the
+Proposition~11.2, now with closed-form thresholds. Every kind (a) row reduces to the
 shapes (P1)--(P10). By frequency on the path, the shapes are: power against a
 constant and rounded scales (P1, P7), logarithmic factors against power
 margins (P3, P4), the entropy-continuity and logarithm bounds (P8), dyadic

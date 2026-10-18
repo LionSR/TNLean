@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Geometry.RepairBirthRank
 import TNLean.PEPS.AreaLaw.Geometry.RepairCharacteristicLength
+import TNLean.PEPS.AreaLaw.Geometry.TwoFamilyExplicitThresholds
 
 /-!
 # Uniform lower bounds for nonprimary birth lengths
@@ -14,7 +15,8 @@ is created only when its removal half-side is at least the stopping scale.
 Old identifiers retain their characteristic lengths. Consequently, for any
 prescribed lower bound, a sufficiently large initial layer and stopping scale
 give that bound for every identifier of positive birth rank at every stage.
-The initial-layer threshold depends only on the prescribed lower bound.
+The initial-layer threshold depends only on the prescribed lower bound `U`; it
+is the explicit layer `fineScaleIndexThreshold U = ⌈⌈log₂ ⌈U⌉⌉ / ζ⌉`.
 
 This is an auxiliary for the choice of scanner thresholds. It applies to all
 actual identifiers of positive birth rank, including those whose current
@@ -29,13 +31,37 @@ Independently formalized; no upstream Lean proof text reused.
 
 namespace TNLean.PEPS.AreaLaw.Geometry
 
-open Filter
+
+/-- **Explicit uniform lower bound for nonprimary lengths.** Every prescribed
+real lower bound `U` holds for the remembered lengths of all positive-rank
+identifiers once the initial layer is at least `fineScaleIndexThreshold U` and
+the stopping scale is at least `U`. The usual formation assumptions of the
+actual repair family are retained.
+Source: area-law Section 11, `10-geometry.tex`, lines 398–409, 732–740
+and 761–771. -/
+theorem repairStage_positive_rank_length_lower_bound (U : ℝ) (o : ℝ × ℝ)
+    (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ)) (C k₀ : ℕ) (hC : 2 ≤ C)
+    (h₀ : 50000000 ≤ k₀) (hk : fineScaleIndexThreshold U ≤ k₀) (Sstar : ℝ)
+    (hSstar : U ≤ Sstar) (N : ℕ) (i : (repairStage o Λ A C k₀ hC h₀ Sstar N).regionIndex)
+    (hi : 0 < repairStageBirthRank o Λ A C k₀ hC h₀ Sstar N i) :
+    U ≤ repairStageCharacteristicLength o Λ A C k₀ hC h₀ Sstar N i := by
+  induction N with
+  | zero =>
+    rcases i with u | (p | b)
+    · exact (Nat.lt_irrefl 0 hi).elim
+    · exact (Nat.lt_irrefl 0 hi).elim
+    · exact le_two_pow_fineScaleIndex_of_fineScaleIndexThreshold_le
+        (hk.trans b.1.property)
+  | succ N ih =>
+    rcases i with i | q
+    · exact ih i hi
+    · exact hSstar.trans q.2.1.property
 
 /-- Every prescribed real lower bound holds uniformly for the remembered
 lengths of all positive-rank identifiers once the initial layer and stopping
 scale are sufficiently large. The threshold is chosen before all geometric
-data, the stopping scale and the generation. The usual formation assumptions
-of the actual repair family are retained.
+data, the stopping scale and the generation; it is `fineScaleIndexThreshold U`
+(`repairStage_positive_rank_length_lower_bound`).
 Source: area-law Section 11, `10-geometry.tex`, lines 398–409, 732–740
 and 761–771. -/
 theorem exists_uniform_repairStage_positive_rank_length_lower_bound (U : ℝ) :
@@ -44,24 +70,7 @@ theorem exists_uniform_repairStage_positive_rank_length_lower_bound (U : ℝ) :
       ∀ Sstar : ℝ, U ≤ Sstar → ∀ (N : ℕ)
         (i : (repairStage o Λ A C k₀ hC h₀ Sstar N).regionIndex),
         0 < repairStageBirthRank o Λ A C k₀ hC h₀ Sstar N i →
-        U ≤ repairStageCharacteristicLength o Λ A C k₀ hC h₀ Sstar N i := by
-  have hζ : 0 < (Exponents.zeta : ℝ) := by
-    norm_num [Exponents.zeta, Exponents.geometryDelta]
-  have hlim : Tendsto (fun k : ℕ ↦ (2 : ℝ) ^ fineScaleIndex k)
-      atTop atTop :=
-    (tendsto_pow_atTop_atTop_of_one_lt (one_lt_two : (1 : ℝ) < 2)).comp
-      (tendsto_nat_floor_mul_atTop (Exponents.zeta : ℝ) hζ)
-  obtain ⟨K, hK⟩ := eventually_atTop.mp (hlim.eventually_ge_atTop U)
-  refine ⟨K, fun o Λ A C k₀ hC h₀ hk Sstar hSstar N ↦ ?_⟩
-  induction N with
-  | zero =>
-    rintro (u | (p | b)) hi
-    · exact (Nat.lt_irrefl 0 hi).elim
-    · exact (Nat.lt_irrefl 0 hi).elim
-    · exact hK b.1.val (hk.trans b.1.property)
-  | succ N ih =>
-    rintro (i | q) hi
-    · exact ih i hi
-    · exact hSstar.trans q.2.1.property
+        U ≤ repairStageCharacteristicLength o Λ A C k₀ hC h₀ Sstar N i :=
+  ⟨fineScaleIndexThreshold U, repairStage_positive_rank_length_lower_bound U⟩
 
 end TNLean.PEPS.AreaLaw.Geometry

@@ -9,12 +9,14 @@ import Lean.Util.CollectAxioms
 /-! # Logical dependencies of the uniform lower bound on nonprimary birth lengths -/
 
 run_cmd do
-  let decl :=
-    `TNLean.PEPS.AreaLaw.Geometry.exists_uniform_repairStage_positive_rank_length_lower_bound
-  unless (← Lean.getEnv).contains decl do
-    throwError "The intended characteristic-length theorem is absent: {decl}"
+  let names := #[
+    `TNLean.PEPS.AreaLaw.Geometry.repairStage_positive_rank_length_lower_bound,
+    `TNLean.PEPS.AreaLaw.Geometry.exists_uniform_repairStage_positive_rank_length_lower_bound]
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
-  let axioms ← Lean.collectAxioms decl
-  unless axioms.all (allowed.contains ·) && allowed.all (axioms.contains ·) do
-    throwError "Unexpected logical dependencies for {decl}: {axioms}"
-  Lean.logInfo m!"{decl}: {axioms}"
+  for decl in names do
+    unless (← Lean.getEnv).contains decl do
+      throwError "The intended characteristic-length theorem is absent: {decl}"
+    let axioms ← Lean.collectAxioms decl
+    unless axioms.all (allowed.contains ·) && allowed.all (axioms.contains ·) do
+      throwError "Unexpected logical dependencies for {decl}: {axioms}"
+    Lean.logInfo m!"{decl}: {axioms}"

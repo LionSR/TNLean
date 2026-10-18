@@ -56,10 +56,12 @@ with arbitrary ties within each class.
 
 \begin{theorem}[A uniform lower bound on nonprimary birth lengths]
     \label{thm:area_law_repair_positive_rank_length_lower_bound}
-    \lean{TNLean.PEPS.AreaLaw.Geometry.exists_uniform_repairStage_positive_rank_length_lower_bound}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.exists_uniform_repairStage_positive_rank_length_lower_bound,
+        TNLean.PEPS.AreaLaw.Geometry.repairStage_positive_rank_length_lower_bound}
     \leanok
     \uses{def:area_law_repair_characteristic_length,
-        def:area_law_repair_birth_rank}
+        def:area_law_repair_birth_rank,
+        def:area_law_two_family_scale_thresholds}
     For every $U\in\mathbb R$ there is $K\in\mathbb N$ with the
     following property. Fix an origin $o\in\mathbb R^2$, a finite
     domain $\Lambda\subset\mathbb Z^2$, a cut $A\subseteq\Lambda$,
@@ -67,17 +69,20 @@ with arbitrary ties within each class.
     and a stopping scale $S_*\ge U$. For every generation
     $N\in\mathbb N$ and every actual identifier $i\in I_N$ of
     positive birth rank, the remembered length satisfies
-    $\tau_N(i)\ge U$. The threshold $K$ depends only on $U$.
+    $\tau_N(i)\ge U$. The threshold $K$ depends only on $U$; one may take
+    $K=K_\zeta(U)=\lceil\lceil\log_2\lceil U\rceil\rceil/\zeta\rceil$ of
+    Definition~\ref{def:area_law_two_family_scale_thresholds}.
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{def:area_law_fine_belt_scales,
         def:area_law_repair_characteristic_length,
-        def:area_law_repair_birth_rank,def:area_law_repair_successor_regions}
-    Since $\zeta>0$, the integers $\lfloor\zeta k\rfloor$ tend to
-    infinity, and hence $t_k=2^{\lfloor\zeta k\rfloor}$ tends to
-    infinity. Choose $K$ so that $t_k\ge U$ whenever $k\ge K$.
+        def:area_law_repair_birth_rank,def:area_law_repair_successor_regions,
+        thm:area_law_two_family_scale_thresholds}
+    Take $K=K_\zeta(U)$. Whenever $k\ge K$, the fine side
+    $t_k=2^{\lfloor\zeta k\rfloor}$ satisfies $t_k\ge U$ by
+    Theorem~\ref{thm:area_law_two_family_scale_thresholds}.
     Induct on $N$. Initially, positive birth rank excludes the dummy
     and primary identifiers. Every remaining identifier is a belt
     in a layer $k\ge k_0\ge K$, with length $t_k\ge U$.
