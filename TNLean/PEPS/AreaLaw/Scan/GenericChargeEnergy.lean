@@ -37,6 +37,65 @@ namespace TNLean.PEPS.AreaLaw.Scan
 
 universe u
 
+/-- The explicit threshold at arbitrary fixed scanner exponents controlling every classical old
+history together with the split-counting margin: the generic form of
+`badOldHistoryThreshold`, the larger of the bad-history threshold and the split-counting
+threshold at `κ` and `μ` (`08-scanner.tex`, lines 309--329 and 492--520). -/
+noncomputable def ScannerExponents.badOldHistoryThreshold (F : ScannerExponents)
+    (Cr C1 Ct : ℝ) (multiplicity : ℕ) (P : ℝ) : ℕ :=
+  max (badHistoryThreshold F.kappa Cr C1 Ct multiplicity P)
+    (splitCountingThreshold Cr F.kappa F.mu)
+
+open Classical in
+/-- At arbitrary fixed scanner exponents, every classical old history is controlled and the
+split-counting margin holds at every `n` from the explicit threshold
+`F.badOldHistoryThreshold Cr C1 Ct multiplicity P` on (`08-scanner.tex`, lines 309--329 and
+492--520). -/
+theorem ScannerExponents.badOldHistory_of_badOldHistoryThreshold_le (F : ScannerExponents)
+    {Cr C1 Ct : ℝ} (hCr : 0 < Cr) (hC1 : 0 < C1) (hCt : 0 ≤ Ct)
+    (multiplicity : ℕ) (P : ℝ) {n : ℕ}
+    (hthr : F.badOldHistoryThreshold Cr C1 Ct multiplicity P ≤ n) :
+    ∀ (I : Type u) [Fintype I] [LinearOrder I]
+      (Λ T : Finset (ℤ × ℤ)) (hT : T.Nonempty) (S : CollarScan (Site Λ) I),
+      S.n = n → S.m = ⌊(n : ℝ) ^ F.mu⌋₊ →
+      S.K = ⌊(n : ℝ) ^ (1 - F.ell)⌋₊ / (8 * S.m) →
+      S.D = ⌈(n : ℝ) ^ F.kappa⌉₊ →
+      S.r₀ = roundedLogRadius Cr n → S.C₁ = C1 →
+      (T.card : ℝ) ≤ Ct * (n : ℝ) ^ 2 →
+      S.graph = domainGraph Λ → S.depth = (fun x ↦ ambientDepth T hT x.val) →
+      (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+        ((2 * ⌊(n : ℝ) ^ (1 - F.ell)⌋₊ +
+          10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z) →
+      (∀ d : ℕ, 1 ≤ d → d ≤ ⌊(n : ℝ) ^ (1 - F.ell)⌋₊ →
+        (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n) →
+      (∀ y, (Finset.univ.filter fun i ↦ S.anchor i = y).card ≤ multiplicity) →
+      2 ≤ S.n ∧ S.r₀ ≤ S.D ∧ 1 ≤ S.D ∧
+        4 * (S.D + 2 * S.r₀) ≤ S.m ∧
+        8 * S.K * S.m ≤ ⌊(n : ℝ) ^ (1 - F.ell)⌋₊ ∧
+        ∀ s : ℕ, s ≤ S.n * S.m →
+          (∑ h : History S.K S.m S.M s,
+            if S.IsGoodOldHistory h then 0 else historyWeight h) ≤ (n : ℝ) ^ (-P) := by
+  have htail := bad_history_probability_le_of_threshold_le F.ell_pos F.kappa_pos F.kappa_lt_mu
+    F.mu_lt_one_sub_ell hCr hC1 hCt multiplicity P ((le_max_left _ _).trans hthr)
+  have hscales := split_counting_scale_separation_of_threshold_le
+    (ell := F.ell) hCr.le F.kappa_pos F.kappa_lt_mu ((le_max_right _ _).trans hthr)
+  intro I _ _ Λ T hT S hSn hm hK hD hr hC ht hgraph hdepth hclear hrows hmult
+  have hM : S.M = ⌈C1 * n * S.D⌉₊ := by
+    simp only [CollarScan.M, chargeSlotCount, hC, hSn]
+  have hfull := htail I Λ T hT S hSn hm hK hD hr hM ht hgraph hdepth hclear hrows hmult
+  have hscales' : 2 ≤ S.n ∧ S.r₀ ≤ S.D ∧ 1 ≤ S.D ∧
+      4 * (S.D + 2 * S.r₀) ≤ S.m ∧
+      8 * S.K * S.m ≤ ⌊(n : ℝ) ^ (1 - F.ell)⌋₊ := by
+    simpa only [hSn, hm, hK, hD, hr] using hscales
+  refine ⟨hscales'.1, hscales'.2.1, hscales'.2.2.1, hscales'.2.2.2.1,
+    hscales'.2.2.2.2, ?_⟩
+  intro s hs
+  have hMpos : 0 < S.M :=
+    chargeSlotCount_pos (by simpa only [hC] using hC1) (by omega) hscales'.2.2.1
+  exact (S.sum_historyWeight_bad_old_le_bad_through hMpos
+    (show s ≤ n * S.m by simpa only [hSn] using hs)).trans hfull
+
+
 open Classical in
 private theorem exists_generic_badOldHistory_threshold (F : ScannerExponents) {Cr C1 Ct : ℝ}
     (hCr : 0 < Cr) (hC1 : 0 < C1) (hCt : 0 ≤ Ct)
@@ -60,31 +119,8 @@ private theorem exists_generic_badOldHistory_threshold (F : ScannerExponents) {C
         8 * S.K * S.m ≤ ⌊(n : ℝ) ^ (1 - F.ell)⌋₊ ∧
         ∀ s : ℕ, s ≤ S.n * S.m →
           (∑ h : History S.K S.m S.M s,
-            if S.IsGoodOldHistory h then 0 else historyWeight h) ≤ (n : ℝ) ^ (-P) := by
-  have htail := eventually_bad_history_probability_le F.ell_pos F.kappa_pos F.kappa_lt_mu
-    F.mu_lt_one_sub_ell
-    hCr hC1 hCt multiplicity P
-  have hscales := eventually_split_counting_scale_separation
-    (ell := F.ell) hCr.le F.kappa_pos F.kappa_lt_mu
-  obtain ⟨N, hN⟩ := eventually_atTop.mp (htail.and hscales)
-  refine ⟨N, ?_⟩
-  intro n hn I _ _ Λ T hT S hSn hm hK hD hr hC ht hgraph hdepth hclear hrows hmult
-  obtain ⟨htail, hscales⟩ := hN n hn
-  have hM : S.M = ⌈C1 * n * S.D⌉₊ := by
-    simp only [CollarScan.M, chargeSlotCount, hC, hSn]
-  have hfull := htail I Λ T hT S hSn hm hK hD hr hM ht hgraph hdepth hclear hrows hmult
-  have hscales' : 2 ≤ S.n ∧ S.r₀ ≤ S.D ∧ 1 ≤ S.D ∧
-      4 * (S.D + 2 * S.r₀) ≤ S.m ∧
-      8 * S.K * S.m ≤ ⌊(n : ℝ) ^ (1 - F.ell)⌋₊ := by
-    simpa only [hSn, hm, hK, hD, hr] using hscales
-  refine ⟨hscales'.1, hscales'.2.1, hscales'.2.2.1, hscales'.2.2.2.1,
-    hscales'.2.2.2.2, ?_⟩
-  intro s hs
-  have hMpos : 0 < S.M :=
-    chargeSlotCount_pos (by simpa only [hC] using hC1) (by omega) hscales'.2.2.1
-  exact (S.sum_historyWeight_bad_old_le_bad_through hMpos
-    (show s ≤ n * S.m by simpa only [hSn] using hs)).trans hfull
-
+            if S.IsGoodOldHistory h then 0 else historyWeight h) ≤ (n : ℝ) ^ (-P) :=
+  ⟨_, fun _ hn => F.badOldHistory_of_badOldHistoryThreshold_le hCr hC1 hCt multiplicity P hn⟩
 
 open Classical in
 private theorem exists_generic_actualCharge_energy_threshold
