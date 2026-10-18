@@ -577,7 +577,8 @@ for an arbitrary finite set of sites and are instantiated here directly.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{def:chain_open_mps, thm:chain_mps_of_cut_rank}
+    \uses{def:chain_open_mps, thm:chain_mps_of_cut_rank,
+        lem:chain_sequential_truncation}
     Each $P_k$ is an orthogonal projection, hence a contraction. Telescoping
     gives
     $\Phi-\psi=\sum_k P_1\cdots P_{k-1}(P_k-1)\psi$,
@@ -689,7 +690,7 @@ for an arbitrary finite set of sites and are instantiated here directly.
 \begin{proof}
     \leanok
     \uses{thm:chain_area_law, lem:chain_marginal_tail,
-        lem:chain_crossing_count}
+        lem:chain_crossing_count, lem:chain_sequential_truncation}
     The eigenvalues retained by $P$ are at least
     $e^{-(C_{\mathrm{int}}+w)}$, and their sum is at most
     $\operatorname{Tr}\rho_X=1$, giving the rank bound.

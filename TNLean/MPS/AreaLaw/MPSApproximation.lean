@@ -46,7 +46,7 @@ theorem leftBlock_eq_interval (L k : ℕ) : leftBlock L k = interval L 0 k := by
 /-- The actual reduced state at every prefix cut satisfies the marginal tail
 bound with the uniform chain budget. Source: the one-dimensional note,
 `part1_arealaw.tex`, `lem:tail` and `eq:theta`, together with
-`part2a_mps_information.tex`, `thm:Bshort`, lines 81–91. -/
+`part2a_mps_information.tex`, `thm:Bshort`, lines 80–92. -/
 private theorem surprisalTail_leftBlock_le
     {L q R : ℕ} {J Δ : ℝ}
     (hq : 1 ≤ q) (hJ : 0 ≤ J) (hΔ : 0 < Δ)
@@ -82,7 +82,7 @@ open scoped ComplexOrder in
 state at threshold `exp (-(C_int + w))` has uniformly bounded rank and discarded
 mass. The constants are independent of the chain length and the cut.
 Source: the one-dimensional note, `part2a_mps_information.tex`,
-`sec:shortcut`, proof of `thm:Bshort`, lines 81–94, together with the marginal
+`sec:shortcut`, proof of `thm:Bshort`, lines 80–92, together with the marginal
 tail estimate in `part1_arealaw.tex`, `lem:tail` and `eq:theta`.
 -/
 theorem ChainHamiltonian.spectralProjectionGE_leftBlock_bounds
@@ -166,7 +166,7 @@ theorem one_lt_tailPrefactorRoot : 1 < tailPrefactorRoot := by
 floor bond dimension. The original `1/L` result is its specialization at `ε = 1/L`.
 
 Source: the one-dimensional note, `part2a_mps_information.tex`,
-`sec:shortcut`, proof of `thm:Bshort`, lines 81–91, with a free accuracy
+`sec:shortcut`, proof of `thm:Bshort`, lines 80–92, with a free accuracy
 parameter in the same threshold and sequential truncation argument. -/
 theorem exists_isOpenMPS_norm_sub_le_of_error
     (hq : 1 ≤ q) (hJ : 0 ≤ J) (hΔ : 0 < Δ) {L : ℕ}
