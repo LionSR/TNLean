@@ -7,6 +7,7 @@ import QICLean.Entropy.MovementEtaRegional
 import QICLean.Entropy.RegionCovariance
 import TNLean.PEPS.Approximation.SquareAreaLawHamiltonian
 import TNLean.PEPS.AreaLaw.EdgeBoundaryCalculus
+import TNLean.PEPS.AreaLaw.TheoremStatements
 import TNLean.PEPS.AreaLaw.TwoFamilies
 import TNLean.PEPS.RegionBlock.Basic
 

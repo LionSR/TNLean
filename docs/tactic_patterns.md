@@ -932,8 +932,8 @@ abstracted — record why, so it is not re-proposed).
 - **Seen:** `subset_of_isSafe` in `TNLean/PEPS/AreaLaw/BufferedRectangles.lean`,
   `card_crossingTerms_le_edgeBoundary` in `TNLean/PEPS/AreaLaw/TailParameter.lean`, and
   `TNLean/PEPS/AreaLaw/Scan/SupportLocalization.lean`.
-- **Abstraction:** the lemma `TNLean.PEPS.AreaLaw.exists_edgeBoundary_of_walk` in
-  `TNLean/PEPS/AreaLaw/FiniteDomain.lean` returns the boundary edge, its endpoint in the
+- **Abstraction:** the lemma `TNLean.Lattice.exists_edgeBoundary_of_walk` in
+  `TNLean/Lattice/FiniteDomain.lean` returns the boundary edge, its endpoint in the
   region and the shortened walk; the three call sites use it.
 - **Notes:** `exists_cut_edge_near` in `TNLean/PEPS/AreaLaw/CrossingBudget.lean` is the
   analogue for an arbitrary graph in the extended graph distance.

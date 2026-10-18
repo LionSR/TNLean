@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Geometry.TemplateLayers
 import TNLean.Lattice.EntropyDimension
+import TNLean.PEPS.AreaLaw.TwoFamilies
 
 /-!
 # Entropy cost of a partial template depth row

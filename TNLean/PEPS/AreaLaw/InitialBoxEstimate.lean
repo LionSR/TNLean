@@ -7,6 +7,7 @@ import TNLean.PEPS.AreaLaw.InitialBuffer
 import TNLean.PEPS.AreaLaw.RotatedChainRule
 import TNLean.PEPS.AreaLaw.SafeBoxChildren
 import TNLean.Lattice.EntropyDimension
+import TNLean.PEPS.AreaLaw.TwoFamilies
 import QICLean.Analysis.ScaleRecurrence
 
 /-!

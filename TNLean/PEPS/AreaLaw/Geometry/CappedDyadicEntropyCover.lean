@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Geometry.LatticeDyadicRect
 import TNLean.Lattice.EntropyDimension
+import TNLean.PEPS.AreaLaw.TwoFamilies
 
 /-!
 # Entropy subadditivity on the actual capped dyadic partition
