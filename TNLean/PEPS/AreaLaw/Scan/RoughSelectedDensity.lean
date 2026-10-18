@@ -14,8 +14,8 @@ selected density to the principal expression used by the bootstrap energy
 estimate. Its coefficient and scale threshold precede the current entropy
 exponent and every physical scalar. Only the replica threshold depends on
 that fixed instance. All conclusions attached to the selected point survive.
-The coefficient and threshold are given explicitly by `roughSelectedDensityCoefficient`
-and `ScannerExponents.roughSelectedDensityThreshold`.
+The coefficient is given explicitly by `roughSelectedDensityCoefficient`, and the threshold
+is `ScannerExponents.scaleFactsThreshold`.
 
 Source: OpenAI area-law manuscript, `08-scanner.tex`, lines 457--490 and
 693--755, revision `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
@@ -35,19 +35,14 @@ principal density (`08-scanner.tex`, lines 480--490 and 731--755). -/
 noncomputable def roughSelectedDensityCoefficient (q : ℕ) (Ce C₁ Ct : ℝ) : ℝ :=
   4 * (2 * (C₁ + 1) * (6 * Ce + 13 + 6 * Real.log q + 2 * Ct))
 
-/-- The explicit threshold of the rough selected density: the scale-facts threshold and
-`n^μ ≥ 2` (`08-scanner.tex`, lines 32--42 and 480--490). -/
-noncomputable def ScannerExponents.roughSelectedDensityThreshold (F : ScannerExponents) : ℕ :=
-  max F.scaleFactsThreshold (Real.natRpowThreshold F.mu 2)
-
 /-- The actual rough selection numerator gives the bootstrap principal density with the
 explicit coefficient `roughSelectedDensityCoefficient q Ce C₁ Ct`, at every `n` from the
-explicit threshold `F.roughSelectedDensityThreshold` on. Source: `08-scanner.tex`,
+explicit threshold `F.scaleFactsThreshold` on. Source: `08-scanner.tex`,
 lines 480--490 and 731--755. -/
 theorem ScannerExponents.rough_selectedDensity_principal_of_threshold_le
     (F : ScannerExponents) {q : ℕ} (hq : 1 ≤ q) (Ce C₁ Ct Cl : ℝ)
     (hCe : 0 ≤ Ce) (hC : 0 < C₁) (hCt : 0 ≤ Ct) {n : ℕ}
-    (hthr : F.roughSelectedDensityThreshold ≤ n) :
+    (hthr : F.scaleFactsThreshold ≤ n) :
     let L := F.L n
     let m := F.m n
     let K := F.K n
@@ -78,10 +73,10 @@ theorem ScannerExponents.rough_selectedDensity_principal_of_threshold_le
   have hlq : 0 ≤ Real.log (q : ℝ) := Real.log_nonneg (by exact_mod_cast hq)
   have hCr : 0 < Cr := by dsimp only [Cr]; positivity
   have hC0 : 0 < C := by dsimp only [C]; positivity
-  simp only [roughSelectedDensityThreshold, max_le_iff] at hthr
-  have hf := scaleFacts_of_scaleFactsThreshold_le F hthr.1
+  have hf := scaleFacts_of_scaleFactsThreshold_le F hthr
+  simp only [ScannerExponents.scaleFactsThreshold, max_le_iff] at hthr
   have hmu := Real.le_natCast_rpow_of_natRpowThreshold_le
-    (F.kappa_pos.trans F.kappa_lt_mu) hthr.2
+    (F.kappa_pos.trans F.kappa_lt_mu) hthr.2.1
   rw [show roughSelectedDensityCoefficient q Ce C₁ Ct = 4 * C from rfl]
   intro L m K D a ε e he δ St logd z Bsh G hz hmass hSt hlogd hBsh hG
     Brough R hR α density keep p₀ p₁ hselected
@@ -172,7 +167,7 @@ theorem ScannerExponents.exists_rough_selectedDensity_principal
           ∀ᶠ k : ℕ in atTop, ∃ x : α, ∃ p ∈ Set.Icc p₀ p₁,
             density k x p ≤ δ ∧ keep k x p :=
   ⟨_, by unfold roughSelectedDensityCoefficient; positivity, _,
-    (scaleFacts_of_scaleFactsThreshold_le F (le_max_left _ _)).two_le_n,
+    (scaleFacts_of_scaleFactsThreshold_le F le_rfl).two_le_n,
     fun _ => F.rough_selectedDensity_principal_of_threshold_le hq Ce C₁ Ct Cl hCe hC hCt⟩
 
 end TNLean.PEPS.AreaLaw.Scan

@@ -95,7 +95,6 @@ theorem ScannerExponents.badOldHistory_of_badOldHistoryThreshold_le (F : Scanner
   exact (S.sum_historyWeight_bad_old_le_bad_through hMpos
     (show s ≤ n * S.m by simpa only [hSn] using hs)).trans hfull
 
-
 open Classical in
 private theorem exists_generic_badOldHistory_threshold (F : ScannerExponents) {Cr C1 Ct : ℝ}
     (hCr : 0 < Cr) (hC1 : 0 < C1) (hCt : 0 ≤ Ct)

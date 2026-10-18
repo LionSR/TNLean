@@ -21,8 +21,6 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 -/
 
-open Filter
-
 namespace TNLean.PEPS.AreaLaw.Scan
 
 /-- The explicit threshold of the rounded scanner inequalities: the status scale separation

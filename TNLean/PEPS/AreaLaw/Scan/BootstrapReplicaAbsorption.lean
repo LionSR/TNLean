@@ -94,10 +94,10 @@ theorem bootstrap_comparison_loss_of_threshold_le (C Cₑ : ℝ) {e₀ : ℝ}
     let E := Cₑ * (n : ℝ) ^ (-BootstrapParameters.nu e₀ / 2)
     0 < τ ∧ τ < 1 / 2 ∧ C * (τ + E / τ) ≤ 1 := by
   obtain ⟨hg₀, _, _, _, _⟩ := BootstrapParameters.parameter_bounds he₀ he₀₁
-  have hν : 0 < BootstrapParameters.nu e₀ / 4 := div_pos (div_pos hg₀ (by norm_num)) (by norm_num)
+  have hν₄ : 0 < BootstrapParameters.nu e₀ / 4 := div_pos (div_pos hg₀ (by norm_num)) (by norm_num)
   have hnpos : (0 : ℝ) < n := by
     exact_mod_cast (Real.one_le_natRpowThreshold _ _).trans hthr
-  have hpow := Real.le_natCast_rpow_of_natRpowThreshold_le hν hthr
+  have hpow := Real.le_natCast_rpow_of_natRpowThreshold_le hν₄ hthr
   have hP : 0 < (n : ℝ) ^ (BootstrapParameters.nu e₀ / 4) := Real.rpow_pos_of_pos hnpos _
   have hτ : (n : ℝ) ^ (-BootstrapParameters.nu e₀ / 4) =
       ((n : ℝ) ^ (BootstrapParameters.nu e₀ / 4))⁻¹ := by

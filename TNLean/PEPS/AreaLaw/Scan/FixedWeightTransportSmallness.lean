@@ -23,8 +23,6 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 -/
 
-open Filter
-
 namespace TNLean.PEPS.AreaLaw.Scan
 
 /-- The explicit threshold of the fixed-weight transport smallness: the scale-facts threshold
@@ -55,7 +53,6 @@ theorem ScannerExponents.fixedWeightFour_transport_smallness_of_threshold_le
     rw [Real.le_log_iff_exp_le (by positivity)]
     exact Real.exp_one_lt_three.le.trans (by exact_mod_cast hn3)
   have hdim := transportLogDimBound_roundedLogRadius_le hq hCr hlogn
-  have hlq : 0 ≤ Real.log q := Real.log_nonneg (by exact_mod_cast hq)
   have hsmall' := Real.mul_log_pow_le_mul_rpow_of_ceil_logPowThreshold_le (by positivity) hct
     (sub_pos.mpr X.mu_lt_one_sub_ell) hl
   generalize hCdef : (32 : ℝ) = C at hKn hsmall'

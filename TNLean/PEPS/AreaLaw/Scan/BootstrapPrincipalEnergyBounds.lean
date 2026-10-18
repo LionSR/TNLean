@@ -30,9 +30,6 @@ lines 693–703; and `scanner:bootstrap-energy`, lines 731–755, at
 `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 -/
 
-open Filter
-open scoped Topology
-
 namespace TNLean.PEPS.AreaLaw.Scan
 
 /-- The explicit threshold of the bootstrap principal energy bound: the scale-facts threshold
