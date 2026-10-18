@@ -36,6 +36,8 @@ in `TNLean.MPS.AreaLaw.ComponentReduction`.
   and Section 2 (reductions).
 -/
 
+open TNLean.Lattice
+
 namespace TNLean.MPS.AreaLaw
 
 variable {L q R : ℕ} {J Δ : ℝ}
