@@ -285,6 +285,7 @@ theorem exists_isDistributionProtocol_of_largeRepaintings {ε₀ : ℝ} (hε : 0
   have hL0 : 0 < L := by omega
   have hε4 : 4 * ε₀ < 1 := by have := hc.ε₀_lt; linarith
   refine exists_isDistributionProtocol_of_hasSourceBoundedChange hL hkL hk2 large hΩ tr
+    (by rw [hst0]; exact List.cons_ne_nil _ _)
     (fun F => F.owner (⟨0, hL0⟩, ⟨0, hL0⟩)) (fun F hF => ?_) (fun F hF x => ?_)
     (fun t ht => htrs t ht) _ _ hfin
     (finalMain_owner P rank R₀ hε ht hB hkL hε4) (finalMain_holes P rank R₀ hε ht hB hε4)
