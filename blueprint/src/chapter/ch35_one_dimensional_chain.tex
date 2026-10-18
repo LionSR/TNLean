@@ -2167,6 +2167,95 @@ for an arbitrary finite set of sites and are instantiated here directly.
     Substituting $\|\Xi\|=1$ gives the result.
 \end{proof}
 
+\section{Birth, death and exchange of plain sheets}
+
+\begin{theorem}[Birth and death of a plain sheet]
+    \label{thm:chain_plain_birth_death}
+    \lean{TNLean.MPS.AreaLaw.birth_bounded_rpow,
+        TNLean.MPS.AreaLaw.death_bounded_rpow}
+    \leanok
+    \uses{def:chain_model,def:peps_bounded_change}
+    Let $L,q\ge1$ be integers, let $p\in\mathbb R$, and let $\Omega$ be a
+    unit vector on the chain. A plain sheet has one register $\mathbb C^q$
+    per site and an owner assignment $o$. Write $\Omega_o$ for $\Omega$
+    placed on those registers. Let $T$ be owned by $P$, put
+    $E=\{x:o(x)\ne P\}$, and suppose $I_\Omega(T:E)\le L^{-2p}$.
+    For any party $Q$ define
+    \begin{align}
+        o'(x)=\begin{cases}
+                  Q,    & x\in T,    \\
+                  o(x), & x\notin T.
+              \end{cases}\notag
+    \end{align}
+    There is a birth from $o$ to $o'$ consisting of private contractions
+    and at most one normalized pair source, involving only $P,Q$.
+    There is also a death from $o'$ to $o$ using private contractions,
+    at most one normalized pair effect and no pair source, again involving
+    only $P,Q$. Their maps $\mathcal B,\mathcal D$ satisfy
+    \begin{align}
+        \|\mathcal B\Omega_o-\Omega_{o'}\| & \le L^{-p},\notag \\
+        \|\mathcal D\Omega_{o'}-\Omega_o\| & \le L^{-p}.\notag
+    \end{align}
+    The information condition for the death is evaluated in its
+    after-death assignment $o$. In particular, every fixed $p>0$ gives
+    the birth and death estimates of \cite[Part~II]{TNLean2026OneDimensional}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{lem:peps_frame_splitting,thm:peps_frame_birth_bounded}
+    Apply the full bounded birth and death constructions to the sheets
+    with these owner assignments and with no holes. Their environment is
+    exactly $E$, so no hole condition remains. In those constructions
+    choose the real size parameter $s=L^{p/30}$. Then
+    \begin{align}
+        s^{-60}=L^{-2p},\qquad s^{-30}=L^{-p}.\notag
+    \end{align}
+    Each construction retains its splitting data and constructed monomial
+    together with all owner, resource and error conclusions. The reversed construction uses
+    the information environment after the death.
+\end{proof}
+
+\begin{theorem}[Exchange of two plain sheets]
+    \label{thm:chain_plain_exchange}
+    \lean{TNLean.MPS.AreaLaw.exchange_bounded_rpow}
+    \leanok
+    \uses{def:chain_model,def:peps_bounded_change}
+    Let $L,q\ge1$ be integers, let $p\in\mathbb R$, and let $\Omega$ be a
+    unit vector on the chain. Consider two labelled copies of the sheet with
+    owner assignments $o_1,o_2$, a set of sites $Y$, and a party $P$. Put
+    \begin{align}
+        Z & =\{x:\neg(o_1(x)=P\ \text{and}\ o_2(x)=P)\},\notag \\
+        T & =Z\cap Y,\notag                                    \\
+        E & =Z\setminus Y.\notag
+    \end{align}
+    Suppose $I_\Omega(T:E)\le L^{-2p}$. Exchange the two owner assignments
+    on $Y$ and leave them unchanged outside $Y$, obtaining $o_1',o_2'$.
+    There is a contraction $\mathcal X$ between the corresponding
+    register spaces, consisting of owner-preserving reorderings and
+    private contractions at $P$, with no shared pair source or effect, such
+    that
+    \begin{align}
+        \bigl\|\mathcal X(\Omega_{o_1}\otimes\Omega_{o_2})
+        -\Omega_{o_1'}\otimes\Omega_{o_2'}\bigr\|
+        \le4L^{-p}.\notag
+    \end{align}
+    Every register retains its party; only its sheet label changes in the
+    reordering. The two copies remain distinct even when their owner
+    assignments agree. For $p>0$, this includes the interval exchange of
+    \cite[Part~II]{TNLean2026OneDimensional}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{lem:peps_frame_splitting,thm:peps_frame_exchange_bounded}
+    Construct the exchange from the two plain sheets. All hole lists are
+    empty, and its environment is precisely $Z$, so its splitting regions
+    are $T,E$. Apply the full bounded exchange construction with real size
+    parameter $L^{p/30}$. Its error is $4(L^{p/30})^{-30}=4L^{-p}$.
+    The returned monomial retains the same register reordering and private
+    correction at $P$, and uses no pair resource.
+\end{proof}
+
+
 \section{One-band dissolution}
 
 \begin{definition}[Assignments in one band dissolution]

@@ -8692,3 +8692,18 @@ spectral split → block extraction → MPV calculation → strict bounds
   and earlier-disjointness parts of `single_splitting_shells`.
 - **Abstraction:** Below the promotion threshold. The common geometric
   argument is already factored into the local two-radius containment lemma.
+
+### Changing the size parameter in ownership estimates — candidate (2026-10-18)
+
+- **Pattern:** Specialize a fixed-error ownership construction at `L^(p/30)`,
+  rewrite its integer powers as real powers, and retain all map and resource
+  conclusions from that one application.
+- **Seen:** The birth, death and exchange proofs in
+  `MPS/AreaLaw/OwnershipChanges.lean`; two scalar normalizations use
+  `Real.rpow_intCast` followed by `Real.rpow_mul` and exponent arithmetic.
+- **Abstraction:** The two private power identities are shared by all three
+  constructions. No tactic is proposed: the remaining applications are short,
+  and the pattern occurs in only one file.
+- **Notes:** Birth and exchange use definitional equality of plain frames
+  after rewriting the error bound; death uses the existing owner-change frame
+  directly. No positivity assumption on the size or exponent is introduced.
