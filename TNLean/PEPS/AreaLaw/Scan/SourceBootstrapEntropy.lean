@@ -132,20 +132,23 @@ noncomputable def sourceBootstrapEntropyThreshold (q R : ℕ) {e₀ : ℝ} (he�
                   (max (Real.natRpowThreshold F.nu 4) 3))))))))
 
 open Classical in
-/-- The actual rough-only bootstrap improves the entropy exponent on the original target at every
-`S.n` from the explicit threshold `sourceBootstrapEntropyThreshold` on, with the explicit output
-coefficient `bootstrapRestoredBudgetCoefficient q Ce`. The truncation constant `Ctr` and the
-transport constants `ct, Cent, eent, Cen, een` remain existential. Source: `08-scanner.tex`,
-lines 693--792. -/
-theorem exists_sourceBootstrap_entropy_improvement_of_threshold_le
+/-- The actual rough-only bootstrap improvement of
+`exists_sourceBootstrap_entropy_improvement_of_threshold_le` at any transport constants
+`ct, C_ent, e_ent, C_en, e_en` with `0 < ct` satisfying the finite-family transport bound, such
+as QICLean's universal transport constants, which depend on none of `q, R, J, Δ`. Only the
+truncation constant `Ctr` remains existential, chosen before the entropy coefficient `Ce`.
+Source: `08-scanner.tex`, lines 693--792. -/
+theorem exists_sourceBootstrap_entropy_improvement_of_finiteFamilyTransportBound
     {q : ℕ} [NeZero q] (hq : 1 ≤ q) (R : ℕ)
-    {J Δ C_T C₁ e₀ Ce : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < Δ)
+    {J Δ C_T C₁ e₀ : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < Δ)
     (hC_T : 0 ≤ C_T) (hC₁ : 0 < C₁) (multiplicity : ℕ)
     (hmultiplicity : 3 * (multiplicity : ℝ) ≤ C₁)
-    (he₀ : (Exponents.boxError : ℝ) < e₀) (he₀₁ : e₀ < 1) (hCe : 0 ≤ Ce) :
+    (he₀ : (Exponents.boxError : ℝ) < e₀) (he₀₁ : e₀ < 1)
+    {ct Cent eent Cen een : ℝ} (hct : 0 < ct)
+    (htransport : FiniteFamilyTransportBound ct Cent eent Cen een) :
     let he₀pos : 0 < e₀ := lt_trans (by norm_num [Exponents.boxError]) he₀
     let F := BootstrapParameters.scannerExponents e₀ he₀pos he₀₁
-    ∃ Ctr ct Cent eent Cen een : ℝ, 0 < Ctr ∧ 0 < ct ∧
+    ∃ Ctr : ℝ, 0 < Ctr ∧ ∀ Ce : ℝ, 0 ≤ Ce →
       ∀ η : ℝ, (Exponents.boxError : ℝ) < η → η ≤ e₀ →
       ∀ (Λ T : Finset (ℤ × ℤ)) [LinearOrder (AdmissibleSupport Λ R)]
         (hT : T.Nonempty) (h : LocalHamiltonian Λ q R J)
@@ -173,10 +176,11 @@ theorem exists_sourceBootstrap_entropy_improvement_of_threshold_le
           bootstrapRestoredBudgetCoefficient q Ce *
             (S.n : ℝ) ^ (1 + (1 - BootstrapParameters.ell e₀) * η) := by
   intro he₀pos F
-  obtain ⟨Ctr, ct, Cent, eent, Cen, een, hCtr, hct, hsource⟩ :=
-    exists_sourceTarget_selected_actualCharge_rough_comparison_of_threshold_le
-      hq R hJ hΔ hC_T hC₁ multiplicity hmultiplicity 100
+  obtain ⟨Ctr, hCtr, hsource⟩ :=
+    exists_sourceTarget_selected_actualCharge_rough_comparison_of_finiteFamilyTransportBound
+      hq R hJ hΔ hC_T hC₁ multiplicity hmultiplicity 100 htransport
   have hsource := hsource F
+  refine ⟨Ctr, hCtr, fun Ce hCe ↦ ?_⟩
   let C := actualChargeEnergyCoefficient q Ctr multiplicity Cen een
   let Cl := transportLogExponent een (een + 1 / 8)
   let Ct := transportLogCoefficient q Ctr Cent eent Cen een
@@ -213,7 +217,6 @@ theorem exists_sourceBootstrap_entropy_improvement_of_threshold_le
   have hinterval := fun n (hn : Real.natRpowThreshold F.nu 4 ≤ n) =>
     Real.le_natCast_rpow_of_natRpowThreshold_le F.nu_pos hn
   have hlog := fun n (hn : 3 ≤ n) => Real.one_le_log_natCast_of_three_le hn
-  refine ⟨Ctr, ct, Cent, eent, Cen, een, hCtr, hct, ?_⟩
   intro η hη hηe₀ Λ T _ hT h S E₀ Ω hgs hgraph hanchor hn hr hmScale hDScale hKScale
     hCeq hsize hdepth hrows hmult hclear htargetEntropy hprefix
   have hthresholds := hn
@@ -391,6 +394,53 @@ theorem exists_sourceBootstrap_entropy_improvement_of_threshold_le
     hτ.le (hτhalf.le.trans (by norm_num)) hrestored
 
 open Classical in
+/-- The actual rough-only bootstrap improves the entropy exponent on the original target at every
+`S.n` from the explicit threshold `sourceBootstrapEntropyThreshold` on, with the explicit output
+coefficient `bootstrapRestoredBudgetCoefficient q Ce`. The truncation constant `Ctr` and the
+transport constants `ct, Cent, eent, Cen, een` remain existential; they are chosen before the
+entropy coefficient `Ce`, so one choice serves every `Ce`. Source: `08-scanner.tex`,
+lines 693--792. -/
+theorem exists_sourceBootstrap_entropy_improvement_of_threshold_le
+    {q : ℕ} [NeZero q] (hq : 1 ≤ q) (R : ℕ)
+    {J Δ C_T C₁ e₀ : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < Δ)
+    (hC_T : 0 ≤ C_T) (hC₁ : 0 < C₁) (multiplicity : ℕ)
+    (hmultiplicity : 3 * (multiplicity : ℝ) ≤ C₁)
+    (he₀ : (Exponents.boxError : ℝ) < e₀) (he₀₁ : e₀ < 1) :
+    let he₀pos : 0 < e₀ := lt_trans (by norm_num [Exponents.boxError]) he₀
+    let F := BootstrapParameters.scannerExponents e₀ he₀pos he₀₁
+    ∃ Ctr ct Cent eent Cen een : ℝ, 0 < Ctr ∧ 0 < ct ∧ ∀ Ce : ℝ, 0 ≤ Ce →
+      ∀ η : ℝ, (Exponents.boxError : ℝ) < η → η ≤ e₀ →
+      ∀ (Λ T : Finset (ℤ × ℤ)) [LinearOrder (AdmissibleSupport Λ R)]
+        (hT : T.Nonempty) (h : LocalHamiltonian Λ q R J)
+        (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (E₀ : ℝ)
+        (Ω : StateSpace Λ q),
+        IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+        S.graph = domainGraph Λ → (∀ i, S.anchor i ∈ i.val) →
+        sourceBootstrapEntropyThreshold q R he₀pos he₀₁ Ctr ct Cent eent Cen een
+          (Δ / positiveNormalization 1 (Δ / 2) J) C₁ C_T Ce multiplicity ≤ S.n →
+        S.r₀ = roundedLogRadius Ctr S.n →
+        S.m = F.m S.n → S.D = F.D S.n → S.K = F.K S.n →
+        S.C₁ = C₁ → (T.card : ℝ) ≤ C_T * (S.n : ℝ) ^ 2 →
+        S.depth = (fun x ↦ ambientDepth T hT x.val) →
+        (∀ r : ℕ, 1 ≤ r → r ≤ F.L S.n →
+          (ambientDilation T r \ ambientDilation T (r - 1)).card ≤ S.n) →
+        (∀ x, (Finset.univ.filter fun i ↦ S.anchor i = x).card ≤ multiplicity) →
+        (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+          ((2 * F.L S.n + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z) →
+        regionalEntropy Λ q Ω (S.A.filter fun x ↦ x.val ∈ T) ≤
+          Ce * (S.n : ℝ) ^ (1 + η) →
+        (∀ j : ℕ, j ≤ F.L S.n →
+          regionalEntropy Λ q Ω (positiveDepthPrefix S.A S.depth (j : ℤ)) ≤
+            Ce * ((S.n : ℝ) * (F.L S.n : ℝ) ^ η + S.n)) →
+        regionalEntropy Λ q Ω (S.A.filter fun x ↦ x.val ∈ T) ≤
+          bootstrapRestoredBudgetCoefficient q Ce *
+            (S.n : ℝ) ^ (1 + (1 - BootstrapParameters.ell e₀) * η) := by
+  intro he₀pos F
+  exact exists_of_finiteFamilyTransportBound fun _ _ _ _ _ hct htransport ↦
+    exists_sourceBootstrap_entropy_improvement_of_finiteFamilyTransportBound
+      hq R hJ hΔ hC_T hC₁ multiplicity hmultiplicity he₀ he₀₁ hct htransport
+
+open Classical in
 /-- The actual rough-only bootstrap improves the entropy exponent on the
 original target. The source entropy premises retain the current exponent;
 the output exponent is multiplied by `1 - ell e₀`. Source:
@@ -430,9 +480,9 @@ theorem exists_sourceBootstrap_entropy_improvement
   intro he₀pos F
   obtain ⟨Ctr, ct, Cent, eent, Cen, een, hCtr, hct, hall⟩ :=
     exists_sourceBootstrap_entropy_improvement_of_threshold_le hq R hJ hΔ hC_T hC₁ multiplicity
-      hmultiplicity he₀ he₀₁ hCe
+      hmultiplicity he₀ he₀₁
   exact ⟨Ctr, _, hCtr, mul_pos (show (0 : ℝ) < 8 * Ce + 12 * Real.log q + 30 by
       linarith [Real.log_nonneg (show (1 : ℝ) ≤ q by exact_mod_cast hq)]) (by positivity), _,
-    (le_max_left _ _).trans ((le_max_left _ _).trans (le_max_left _ _)), hall⟩
+    (le_max_left _ _).trans ((le_max_left _ _).trans (le_max_left _ _)), hall Ce hCe⟩
 
 end TNLean.PEPS.AreaLaw.Scan.CollarScan

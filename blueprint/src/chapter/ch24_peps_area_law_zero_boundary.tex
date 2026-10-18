@@ -52,12 +52,10 @@ cases recorded before it in Section~2 of that preprint.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:area_law_product_ground_state}
-    Every term of the Hamiltonian acts inside $A$ or inside its complement, so
-    across the cut $H=H_A\otimes I+I\otimes H_{\Lambda\setminus A}$;
-    replacing both factors by their Hermitian parts preserves this decomposition.
-    Hence the ground vector is a
-    product vector across the cut and its reduced state on $A$ has zero entropy.
+    \uses{lem:zero_entropy_cut}
+    Every term of the Hamiltonian acts inside $A$ or inside its complement.
+    This is the hypothesis of Lemma~\ref{lem:zero_entropy_cut} for the finite
+    set of sites $\Lambda$, which gives $S_\Omega(A)=0$.
 \end{proof}
 
 \begin{theorem}[A cut with no crossing edge]

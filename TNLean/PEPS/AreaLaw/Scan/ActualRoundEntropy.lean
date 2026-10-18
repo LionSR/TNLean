@@ -166,6 +166,94 @@ theorem actualRoundData_crossBandCommute
 
 end Roots
 
+/-- The actual-round entropy telescope at any constants `c₀, C_ent, e_ent, C_en, e_en`
+satisfying the finite-family transport bound, such as QICLean's universal transport constants,
+which depend on none of `q, R, J, Δ`. Source: `08-scanner.tex`, lines 442–457. -/
+theorem actualRounds_entropy_integral_le_domainGraph_of_finiteFamilyTransportBound
+    {c₀ Cent eent Cen een : ℝ} (htransport : FiniteFamilyTransportBound c₀ Cent eent Cen een) :
+    ∀ {Λ T : Finset (ℤ × ℤ)} {q R : ℕ} {J Δ : ℝ}
+      [NeZero q] [LinearOrder (AdmissibleSupport Λ R)]
+      (aux : Bool → ℕ) [∀ b, NeZero (aux b)]
+      (_h : LocalHamiltonian Λ q R J) (Ω : StateSpace Λ q)
+      (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (hT : T.Nonempty),
+      S.graph = domainGraph Λ →
+      S.depth = (fun x => ambientDepth T hT x.val) →
+      (∀ i, S.anchor i ∈ i.val) → 0 < Δ → ‖Ω‖ = 1 →
+      ∀ {L : ℕ} (hn : 0 < S.n), S.r₀ ≤ S.D →
+      ∀ (hDpos : 1 ≤ S.D) (hD : 4 * S.D ≤ S.m),
+      8 * S.K * S.m ≤ L → ∀ (hC : 0 < S.C₁),
+      (∀ d : ℕ, 1 ≤ d → d ≤ L →
+        (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n) →
+      (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+        ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z) →
+      ∀ {a : ℝ}, 0 < a → a * transportLogDimBound q S.r₀ ≤ c₀ →
+      let hm : 0 < S.m := by omega
+      let hM : 0 < S.M := chargeSlotCount_pos hC (Nat.succ_le_iff.mpr hn) hDpos
+      let n := augmentedDimensions (V := Site Λ) q aux
+      let D := S.actualRoundData hm hM
+      let ℓ := transportLogDimBound q S.r₀
+      ∃ (β : ℕ → ℝ) (Cβ : ℝ), 0 ≤ Cβ ∧
+        (∀ k, 0 ≤ β k) ∧ (∀ k, β k ≤ Cβ * Real.log (k + 2)) ∧
+        ∀ (k : ℕ) (pre : Config k (fun v => Fin (n v)) → ℂ),
+          pre ∈ symmetricSubspace k (fun v => Fin (n v)) → pre ≠ 0 →
+          (k : ℝ) * a * ∑ j : Fin (2 * S.n * S.m),
+              ∫ p in (0 : ℝ)..1, (D j).entropyGain n (a / 2) k pre p ≤
+            Real.log (Transport.filteredNormSq
+              ((S.actualFillData hm hM 0).rootPath n (a / 2) k 0) pre) -
+              Real.log (Transport.filteredNormSq
+                ((S.actualFillData hm hM (S.n * S.m)).rootPath n (a / 2) k 0) pre) +
+              (2 * S.n * S.m : ℕ) *
+                (Cent * k * a * S.K * a ^ (1 / 4 : ℝ) * ℓ ^ eent + β k) := by
+  classical
+  intro Λ T q R J Δ _ _ aux _ h Ω S hT hgraph hdepth hanchor hΔ hΩ
+    L hn hr hDpos hD hL hC hrows hclear a ha haℓ
+  let hm : 0 < S.m := by omega
+  let hM : 0 < S.M := chargeSlotCount_pos hC (Nat.succ_le_iff.mpr hn) hDpos
+  let n := augmentedDimensions (V := Site Λ) q aux
+  let D := S.actualRoundData hm hM
+  let ℓ := transportLogDimBound q S.r₀
+  obtain ⟨β, rem, Cβ, hCβ, hβ0, hrem0, hβ, hrem, hround⟩ :=
+    actualRounds_transport_domainGraph_of_finiteFamilyTransportBound htransport aux h Ω S hT
+      hgraph hdepth hanchor hΔ hΩ hn hr hDpos hD hL hC
+      hrows hclear ha haℓ
+  refine ⟨β, Cβ, hCβ, hβ0, hβ, ?_⟩
+  intro k pre hpre hne
+  let err := Cent * k * a * S.K * a ^ (1 / 4 : ℝ) * ℓ ^ eent + β k
+  have ht : 0 ≤ a / 2 := (half_pos ha).le
+  have hstep (j : Fin (2 * S.n * S.m)) :
+      (k : ℝ) * a * (∫ p in (0 : ℝ)..1, (D j).entropyGain n (a / 2) k pre p) ≤
+        Real.log (Transport.filteredNormSq ((D j).rootPath n (a / 2) k 0) pre) -
+          Real.log (Transport.filteredNormSq ((D j).rootPath n (a / 2) k 1) pre) + err := by
+    have hint := (D j).intervalIntegrable_entropyGain
+      (S.actualRoundData_isAdmissible hm hM j) ht
+      (S.actualRoundData_crossBandCommute hm hM j n ht k) hne
+    have hbound := (hround j k pre hpre hne).2 0 1 le_rfl zero_le_one le_rfl
+    rw [intervalIntegral.integral_sub ((hint.const_mul _).sub intervalIntegrable_const)
+        intervalIntegrable_const,
+      intervalIntegral.integral_sub (hint.const_mul _) intervalIntegrable_const,
+      intervalIntegral.integral_const_mul] at hbound
+    simp only [intervalIntegral.integral_const, sub_zero, one_smul] at hbound
+    dsimp only [err]
+    linarith
+  calc
+    (k : ℝ) * a * ∑ j : Fin (2 * S.n * S.m),
+        ∫ p in (0 : ℝ)..1, (D j).entropyGain n (a / 2) k pre p =
+        ∑ j : Fin (2 * S.n * S.m),
+          (k : ℝ) * a * (∫ p in (0 : ℝ)..1, (D j).entropyGain n (a / 2) k pre p) :=
+      Finset.mul_sum _ _ _
+    _ ≤ ∑ j : Fin (2 * S.n * S.m),
+        (Real.log (Transport.filteredNormSq ((D j).rootPath n (a / 2) k 0) pre) -
+          Real.log (Transport.filteredNormSq ((D j).rootPath n (a / 2) k 1) pre) + err) :=
+      Finset.sum_le_sum fun j _ => hstep j
+    _ = _ := by
+      rw [Finset.sum_add_distrib, S.sum_actualRoundData_logNormSq_sub hm hM n ht k pre]
+      simp only [Finset.sum_const, Finset.card_univ, Fintype.card_fin, nsmul_eq_mul]
+      -- The remaining equality holds definitionally: the proof-local `let` binders
+      -- (`n`, `err`, `ℓ`) still appear on the left, while the goal's right-hand side
+      -- has the statement-level `let`s zeta-reduced. `simp only` cannot unfold the
+      -- local `let` fvars, so close the definitional gap explicitly.
+      rfl
+
 /-- Integrating every actual fill and charge gives the initial-to-final logarithmic
 norm difference plus exactly `2 * S.n * S.m` copies of the common error
 (`08-scanner.tex`, lines 442–457). The supplied vector is nonzero and symmetric;
@@ -205,55 +293,8 @@ theorem actualRounds_entropy_integral_le_domainGraph :
                   ((S.actualFillData hm hM (S.n * S.m)).rootPath n (a / 2) k 0) pre) +
                 (2 * S.n * S.m : ℕ) *
                   (Cent * k * a * S.K * a ^ (1 / 4 : ℝ) * ℓ ^ eent + β k) := by
-  classical
-  obtain ⟨c₀, Cent, eent, Cen, een, hc₀, htransport⟩ := actualRounds_transport_domainGraph
-  refine ⟨c₀, Cent, eent, hc₀, ?_⟩
-  intro Λ T q R J Δ _ _ aux _ h Ω S hT hgraph hdepth hanchor hΔ hΩ
-    L hn hr hDpos hD hL hC hrows hclear a ha haℓ
-  let hm : 0 < S.m := by omega
-  let hM : 0 < S.M := chargeSlotCount_pos hC (Nat.succ_le_iff.mpr hn) hDpos
-  let n := augmentedDimensions (V := Site Λ) q aux
-  let D := S.actualRoundData hm hM
-  let ℓ := transportLogDimBound q S.r₀
-  obtain ⟨β, rem, Cβ, hCβ, hβ0, hrem0, hβ, hrem, hround⟩ :=
-    htransport aux h Ω S hT hgraph hdepth hanchor hΔ hΩ hn hr hDpos hD hL hC
-      hrows hclear ha haℓ
-  refine ⟨β, Cβ, hCβ, hβ0, hβ, ?_⟩
-  intro k pre hpre hne
-  let err := Cent * k * a * S.K * a ^ (1 / 4 : ℝ) * ℓ ^ eent + β k
-  have ht : 0 ≤ a / 2 := (half_pos ha).le
-  have hstep (j : Fin (2 * S.n * S.m)) :
-      (k : ℝ) * a * (∫ p in (0 : ℝ)..1, (D j).entropyGain n (a / 2) k pre p) ≤
-        Real.log (Transport.filteredNormSq ((D j).rootPath n (a / 2) k 0) pre) -
-          Real.log (Transport.filteredNormSq ((D j).rootPath n (a / 2) k 1) pre) + err := by
-    have hint := (D j).intervalIntegrable_entropyGain
-      (S.actualRoundData_isAdmissible hm hM j) ht
-      (S.actualRoundData_crossBandCommute hm hM j n ht k) hne
-    have hbound := (hround j k pre hpre hne).2 0 1 le_rfl zero_le_one le_rfl
-    rw [intervalIntegral.integral_sub ((hint.const_mul _).sub intervalIntegrable_const)
-        intervalIntegrable_const,
-      intervalIntegral.integral_sub (hint.const_mul _) intervalIntegrable_const,
-      intervalIntegral.integral_const_mul] at hbound
-    simp only [intervalIntegral.integral_const, sub_zero, one_smul] at hbound
-    dsimp only [err]
-    linarith
-  calc
-    (k : ℝ) * a * ∑ j : Fin (2 * S.n * S.m),
-        ∫ p in (0 : ℝ)..1, (D j).entropyGain n (a / 2) k pre p =
-        ∑ j : Fin (2 * S.n * S.m),
-          (k : ℝ) * a * (∫ p in (0 : ℝ)..1, (D j).entropyGain n (a / 2) k pre p) :=
-      Finset.mul_sum _ _ _
-    _ ≤ ∑ j : Fin (2 * S.n * S.m),
-        (Real.log (Transport.filteredNormSq ((D j).rootPath n (a / 2) k 0) pre) -
-          Real.log (Transport.filteredNormSq ((D j).rootPath n (a / 2) k 1) pre) + err) :=
-      Finset.sum_le_sum fun j _ => hstep j
-    _ = _ := by
-      rw [Finset.sum_add_distrib, S.sum_actualRoundData_logNormSq_sub hm hM n ht k pre]
-      simp only [Finset.sum_const, Finset.card_univ, Fintype.card_fin, nsmul_eq_mul]
-      -- The remaining equality holds definitionally: the proof-local `let` binders
-      -- (`n`, `err`, `ℓ`) still appear on the left, while the goal's right-hand side
-      -- has the statement-level `let`s zeta-reduced. `simp only` cannot unfold the
-      -- local `let` fvars, so close the definitional gap explicitly.
-      rfl
+  obtain ⟨c₀, Cent, eent, Cen, een, hc₀, htransport⟩ := exists_finiteFamilyTransportBound
+  exact ⟨c₀, Cent, eent, hc₀,
+    actualRounds_entropy_integral_le_domainGraph_of_finiteFamilyTransportBound htransport⟩
 
 end TNLean.PEPS.AreaLaw.Scan.CollarScan
