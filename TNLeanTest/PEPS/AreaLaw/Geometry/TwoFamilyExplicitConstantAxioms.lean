@@ -41,6 +41,7 @@ run_cmd do
     geo ++ `descendant_birthTemplate_cutClearance_of_le,
     geo ++ `repairStage_birth_templates_of_le, geo ++ `repairStage_primary_error_sum_le,
     geo ++ `exists_isBirthSeparationConstant, geo ++ `IsBirthSeparationConstant.birthSeparated,
+    geo ++ `isBirthSeparationConstant_birthTemplateSeparationConstant,
     top ++ `isTwoFamilyDecompositionConstant_of_one_le,
     top ++ `IsTwoFamilyDecompositionConstant.ofLe,
     top ++ `isTwoFamilyDecompositionConstant_twoFamilyDecompositionConstant]

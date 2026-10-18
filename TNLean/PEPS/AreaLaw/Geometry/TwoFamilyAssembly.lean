@@ -309,6 +309,20 @@ theorem exists_isBirthSeparationConstant : ∃ c₁ : ℝ, IsBirthSeparationCons
   exact (mul_le_mul_of_nonneg_right (min_le_left _ _)
     (Real.rpow_nonneg (by linarith) _)).trans (hR ξ σ C v hu Y hloc htrim x hx y hy)
 
+/-- The explicit constant `c₁ = birthTemplateSeparationConstant = 1/112` is a birth-separation
+constant: the initial belt tiles are separated by it, and the replacement births are separated
+by `birthSeparationConstant = 1/28 ≥ c₁`. Auxiliary to the explicit constant of Theorem 1.1
+(`docs/notes/arealaw2d_explicit_constant.tex`); the source obtains `c₁` as a compactness
+minimum. Source: area-law Section 11, `geometry:birth-separation`, lines 573–659. -/
+theorem isBirthSeparationConstant_birthTemplateSeparationConstant :
+    IsBirthSeparationConstant birthTemplateSeparationConstant := by
+  refine ⟨birthTemplateSeparationConstant_pos,
+    isInitialBirthSeparated_birthTemplateSeparationConstant, ?_⟩
+  intro ι ξ σ C v u hu Y hloc htrim x hx y hy
+  exact (mul_le_mul_of_nonneg_right birthTemplateSeparationConstant_le
+    (Real.rpow_nonneg (by linarith) _)).trans
+      (repairBirth_separation ξ σ C v hu Y hloc htrim x hx y hy)
+
 /-- **Birth separation with explicit thresholds.** For a birth-separation
 constant `c₁`, every stopping scale `S_* ≥ repairMarginThreshold (1/128)`, every
 width and every lower layer index `k₀ ≥ fineScaleIndexThreshold S_*`, both cases

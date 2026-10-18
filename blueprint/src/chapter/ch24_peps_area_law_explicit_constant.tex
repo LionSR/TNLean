@@ -53,7 +53,7 @@ Theorem~\ref{thm:openai_uniform_area_law} is the statement of Theorem~1.1.
         thm:area_law_boundary_assembly,thm:area_law_uniform_collar_threshold}
     This is the proof of Theorem~\ref{thm:area_law_conditional_assembly} with
     the constants fixed. The collar radius threshold $N_3\ge2$ gives
-    $L_n+2r<n^\beta$ for every $n\ge N_3$ and every $r\le C_2n^{(1-\eps)/\alpha}$.
+    $L_n+2r<n^\beta$ for every $n\ge N_3$ and every $r\le C_2n^{(1-\varepsilon)/\alpha}$.
     Each piece has scale $n_i\ge n_*\ge\max\{2,N_1,N_2,N_3\}$, so the collar
     and amplification bounds apply to it and give
     $I_\Omega(X_i:J_i)\le c_Mn_i^{-100}$. The boundary estimate from partition
@@ -74,7 +74,7 @@ Theorem~\ref{thm:openai_uniform_area_law} is the statement of Theorem~1.1.
     $C_{\rm tr},c_t,C_{\rm ent},e_{\rm ent},C_{\rm en},e_{\rm en}$ be
     truncation and transport constants of the scanner, let
     $C_{\rm loc},c_{\rm loc}$ be filter-locality constants of the positive
-    constraints, and let $c_1$ be a birth-separation constant. Let $C_1$ and
+    constraints, and put $c_1=1/112$. Let $C_1$ and
     $N_1$ be the constant and the threshold of the sublinear collar bound at
     these data, put $C_0=\max\{C_1,1\}$, let $C_2$ and $N_2'$ be the constant
     and the threshold of the amplification bound at $C_0$ and the order
@@ -95,8 +95,7 @@ Theorem~\ref{thm:openai_uniform_area_law} is the statement of Theorem~1.1.
     $C_{\rm box}\ge0$ satisfies $F_{\rm box}(r)\le C_{\rm box}r^{1+e_*}$ at
     safety parameter $2R+11$ for every $r\ge1$; that $C_{\rm loc}\ge0$ and
     $c_{\rm loc}>0$ are filter-locality constants of the positive constraints
-    used in the proof of Proposition~10.2; and that $c_1$ is a
-    birth-separation constant. Then there are truncation and transport
+    used in the proof of Proposition~10.2. Then there are truncation and transport
     constants of the scanner, with $C_{\rm tr},c_t>0$, such that the constant
     $C$ of Definition~\ref{def:area_law_named_constant} at these data is
     nonnegative, and for every finite induced domain $\Lambda$, every
@@ -116,8 +115,8 @@ Theorem~\ref{thm:openai_uniform_area_law} is the statement of Theorem~1.1.
     $N_1$ on, at $D_0=2R+11>2R+10$ and $C_{\rm tpl}=24$. The filter-locality
     constants give the amplification bound at the input constant $C_0$ and
     the order $100$ with the constant $C_2$ from the threshold
-    $\max\{N_2',N_3\}$ on. The birth-separation constant makes
-    $C_{\rm expl}(2R+11,24,n_*,c_1)$ a constant of the two-family
+    $\max\{N_2',N_3\}$ on. Since $1/112$ is a birth-separation constant,
+    $C_{\rm expl}(2R+11,24,n_*,1/112)$ is a constant of the two-family
     decomposition at $n_*$. Theorem~\ref{thm:area_law_conditional_assembly_constants}
     then gives the bound.
 \end{proof}

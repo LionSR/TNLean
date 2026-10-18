@@ -60,39 +60,40 @@ Propositions 9.6, 10.2 and 11.2, at the template constants `D₀ = 2R + 11` and 
   `N₃ = Exponents.collarRadiusThreshold C₂ 1` (Proposition 10.2), for the filter-locality
   constants `Cloc, cloc` of the positive constraints;
 * `C₃ = twoFamilyDecompositionConstant (2R + 11) 24 n_* c₁` at the lower scale
-  `n_* = uniformAreaLawScale N₁ N₂ C₂` (Proposition 11.2), for a birth-separation
-  constant `c₁`;
+  `n_* = uniformAreaLawScale N₁ N₂ C₂` (Proposition 11.2), for the birth-separation
+  constant `c₁ = Geometry.birthTemplateSeparationConstant = 1/112`;
 and the constant is `uniformAreaLawConstantOf q C₂ C₃ = c_D log q + c_M c_D / 2` with
 `c_D = max C₃ 0` and `c_M = max C₂ 0`. The source asserts only that a constant exists.
 Source: proof of Theorem 1.1, `10-geometry.tex`, lines 803–857; the constant is tabulated
 in `docs/notes/arealaw2d_explicit_constant.tex`, Section `sec:top`. -/
 noncomputable def uniformAreaLawConstant (q R : ℕ)
-    (J Δ Cbox Ctr ct Cent eent Cen een Cloc cloc c₁ : ℝ) : ℝ :=
+    (J Δ Cbox Ctr ct Cent eent Cen een Cloc cloc : ℝ) : ℝ :=
   let C₀ := max (sublinearCollarConstant q J Δ Cbox) 1
   let C₂ := amplificationConstant q R J Δ C₀ Cloc cloc 100
   let N₂ := max (amplificationThreshold q R J Δ C₀ Cloc cloc 100)
     (Exponents.collarRadiusThreshold C₂ 1)
   let nstar := uniformAreaLawScale (sublinearCollarThreshold q R J Δ Cbox Ctr ct Cent eent Cen een)
     N₂ C₂
-  uniformAreaLawConstantOf q C₂ (twoFamilyDecompositionConstant (2 * (R : ℝ) + 11) 24 nstar c₁)
+  uniformAreaLawConstantOf q C₂ (twoFamilyDecompositionConstant (2 * (R : ℝ) + 11) 24 nstar
+    Geometry.birthTemplateSeparationConstant)
 
 /-- **The area law with the constant of its proof, from the named constants of the three
 propositions.** Let `Cbox ≥ 0` bound the safe-box entropy at clearance `2R + 11` by
-`Cbox r^(1 + ε_box)`, let `Cloc ≥ 0`, `cloc > 0` be filter-locality constants of the positive
-constraints in the form of `amplificationBound_of_locality`, and let `c₁` be a
-birth-separation constant. Then there are truncation and transport constants
-`Ctr, ct, Cent, eent, Cen, een` of the scanner such that every cut of every finite induced
-domain, for every gapped ground state, has regional entropy at most
-`uniformAreaLawConstant q R J Δ Cbox Ctr ct Cent eent Cen een Cloc cloc c₁` times the number
-of cut edges. The truncation and transport constants remain existential because the
-sublinear collar bound `sublinearCollarBound_real_of_boxEntropy` supplies them so.
+`Cbox r^(1 + ε_box)`, and let `Cloc ≥ 0`, `cloc > 0` be filter-locality constants of the
+positive constraints in the form of `amplificationBound_of_locality`. Then there are
+truncation and transport constants `Ctr, ct, Cent, eent, Cen, een` of the scanner such that
+every cut of every finite induced domain, for every gapped ground state, has regional entropy
+at most `uniformAreaLawConstant q R J Δ Cbox Ctr ct Cent eent Cen een Cloc cloc` times the
+number of cut edges, where the birth-separation constant is `c₁ = 1/112`. The truncation and
+transport constants remain existential because the sublinear collar bound
+`sublinearCollarBound_real_of_boxEntropy` supplies them so.
 
 This is an auxiliary result: Theorem 1.1 of the source (`00-introduction.tex`, lines 39–53)
 asserts only that a constant exists, and `uniformAreaLaw` is that statement. Source: proof
 of Theorem 1.1, `10-geometry.tex`, lines 803–857; the constant is tabulated in
 `docs/notes/arealaw2d_explicit_constant.tex`, Section `sec:top`. -/
 theorem exists_regionalEntropy_le_uniformAreaLawConstant
-    (q R : ℕ) (hq : 1 ≤ q) {J Δ Cbox Cloc cloc c₁ : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < Δ)
+    (q R : ℕ) (hq : 1 ≤ q) {J Δ Cbox Cloc cloc : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < Δ)
     (hCbox : 0 ≤ Cbox)
     (hbox : ∀ r : ℕ, 1 ≤ r → boxEntropy q R J Δ (2 * R + 11) r ≤
       Cbox * (r : ℝ) ^ (1 + (Exponents.boxError : ℝ)))
@@ -114,14 +115,13 @@ theorem exists_regionalEntropy_le_uniformAreaLawConstant
           (centeredFilter Exponents.amplificationPower (Δ / 2) H Ω h) -
           L (positiveConstraint (positiveNormalization Exponents.amplificationPower (Δ / 2) J)
             (centeredFilter Exponents.amplificationPower (Δ / 2) H Ω h))‖ ≤
-        Cloc * Real.exp (-(cloc * l ^ kernelExponent Exponents.amplificationPower)))
-    (hc : Geometry.IsBirthSeparationConstant c₁) :
+        Cloc * Real.exp (-(cloc * l ^ kernelExponent Exponents.amplificationPower))) :
     ∃ Ctr ct Cent eent Cen een : ℝ, 0 < Ctr ∧ 0 < ct ∧
-      0 ≤ uniformAreaLawConstant q R J Δ Cbox Ctr ct Cent eent Cen een Cloc cloc c₁ ∧
+      0 ≤ uniformAreaLawConstant q R J Δ Cbox Ctr ct Cent eent Cen een Cloc cloc ∧
       ∀ Λ : Finset (ℤ × ℤ), ∀ H : LocalHamiltonian Λ q R J, ∀ E₀ : ℝ, ∀ Ω : StateSpace Λ q,
         IsGappedGroundState Λ q H.operator E₀ Ω Δ → ∀ A : Finset (Site Λ),
           regionalEntropy Λ q Ω A ≤
-            uniformAreaLawConstant q R J Δ Cbox Ctr ct Cent eent Cen een Cloc cloc c₁ *
+            uniformAreaLawConstant q R J Δ Cbox Ctr ct Cent eent Cen een Cloc cloc *
               (edgeBoundary Λ A).card := by
   obtain ⟨Ctr, ct, Cent, eent, Cen, een, hCtr, hct, hcol⟩ :=
     sublinearCollarBound_real_of_boxEntropy (D₀ := 2 * (R : ℝ) + 11) (Ctpl := 24) q R hq hJ
@@ -131,12 +131,13 @@ theorem exists_regionalEntropy_le_uniformAreaLawConstant
     hcloc htail 100
   exact ⟨Ctr, ct, Cent, eent, Cen, een, hCtr, hct, uniformAreaLawConstantOf_nonneg hq _ _,
     regionalEntropy_le_of_collar_amplification_twoFamilies_constants hq hΔ hcol hamp
-      (isTwoFamilyDecompositionConstant_twoFamilyDecompositionConstant _ _ _ hc)⟩
+      (isTwoFamilyDecompositionConstant_twoFamilyDecompositionConstant _ _ _
+        Geometry.isBirthSeparationConstant_birthTemplateSeparationConstant)⟩
 
 /-- Theorem 1.1 of the area-law manuscript, `00-introduction.tex`, lines 39–53:
 the uniform boundary law for gapped ground states on finite induced domains of
-the square lattice. The constant is `uniformAreaLawConstant` at a safe-box constant,
-filter-locality constants and a birth-separation constant whose existence is proved
+the square lattice. The constant is `uniformAreaLawConstant` at a safe-box constant and
+filter-locality constants whose existence is proved
 (`exists_regionalEntropy_le_uniformAreaLawConstant`). -/
 theorem uniformAreaLaw : UniformAreaLaw := by
   intro q hq R J Δ hJ hΔ
@@ -145,10 +146,9 @@ theorem uniformAreaLaw : UniformAreaLaw := by
     (by norm_num [Exponents.amplificationPower] : 1 ≤ Exponents.amplificationPower) hΔ hJ.le
     (localizationPrefactor_nonneg R 2 2) (localizationVelocity_pos R (1 + 2 * R * (R + 1))
       (((2 ^ ((1 + 2 * R * (R + 1)) - 1) : ℕ) : ℝ) * J)) one_half_pos
-  obtain ⟨c₁, hc⟩ := Geometry.exists_isBirthSeparationConstant
   obtain ⟨_, _, _, _, _, _, _, _, hC, hbound⟩ :=
     exists_regionalEntropy_le_uniformAreaLawConstant q R hq hJ.le hΔ hCbox.le
-      (hbox _ (by omega)) hCloc hcloc htail hc
+      (hbox _ (by omega)) hCloc hcloc htail
   exact ⟨_, hC, hbound⟩
 
 /-- Corollary 1.2 of the area-law manuscript, `00-introduction.tex`, lines
