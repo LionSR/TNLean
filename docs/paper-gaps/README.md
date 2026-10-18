@@ -1220,13 +1220,19 @@ place of the factorization of the ground vector over components.
 ### One-dimensional matrix product state approximation: threshold truncation
 
 [tnlean_one_dimensional_threshold_truncation.tex](tnlean_one_dimensional_threshold_truncation.tex)
-(scope restriction, open) records that Proposition 7.1 of the repository's
-one-dimensional note, the sequential truncation onto the `D` largest Schmidt
-weights at every cut for an arbitrary bond dimension `D`, is formalized only
-in the threshold form that Theorem B uses: the projectors onto the eigenvalues
-at least `exp(-(S_k + w))` at a common slack `w`, with cut ranks at most
-`max 1 (exp(S_k + w))` and error the sum of the square roots of the surprisal
-tails; the form with an arbitrary `D` is not formalized.
+(scope restriction, resolved) records the former threshold-only treatment of
+Proposition 7.1 of the repository's one-dimensional note. The actual sequential
+product now has an open-boundary MPS representation of internal bond dimension
+at most any prescribed natural `D`, for every vector and every ordered
+orthonormal basis at each internal cut, by
+`TNLean.MPS.AreaLaw.isOpenMPS_sequentialTruncation_prefixBasisProjection`.
+Choosing marginal eigenbases in nonincreasing eigenvalue order gives the
+printed proposition, including every choice within a repeated eigenspace.
+The error is bounded by the sum of the square roots of the original discarded
+expectations. The separate threshold projection still gives the surprisal-tail
+estimate used for Theorem B; its projectors need not equal those chosen at a
+prescribed dimension. Both estimates concern the projected vector before
+normalization, which is a separate step in the approximation theorem.
 
 ### One-dimensional area law: the constants of the buffered discount
 
