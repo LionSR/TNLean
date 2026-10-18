@@ -118,7 +118,7 @@ explicit coefficient `collarConstant q J Δ Cbox` at every `n` from the explicit
 `collarThreshold q R J Δ Cbox Ctr ct Cent eent Cen een` on. The truncation constant `Ctr` and the
 transport constants `ct, Cent, eent, Cen, een` remain existential and precede the entire physical
 instance. Source: `08-scanner.tex`, lines 808--944. -/
-theorem template_final_mutualInformation_of_boxEntropy_of_threshold_le
+theorem exists_template_final_mutualInformation_of_boxEntropy_of_threshold_le
     (q R D₀ : ℕ) (hq : 1 ≤ q) (hD₀ : 1 ≤ D₀)
     {J Δ Ctpl Cbox : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < Δ)
     (hCtpl : 24 ≤ Ctpl) (hCbox : 0 ≤ Cbox)
@@ -223,7 +223,7 @@ theorem exists_template_final_mutualInformation_of_boxEntropy
               2 * FiniteProduct.mutualInformation β Ω X S₀ᶜ ≤
                 C * (n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ)) := by
   obtain ⟨Ctr, ct, Cent, eent, Cen, een, -, -, hall⟩ :=
-    template_final_mutualInformation_of_boxEntropy_of_threshold_le q R D₀ hq hD₀ hJ hΔ hCtpl
+    exists_template_final_mutualInformation_of_boxEntropy_of_threshold_le q R D₀ hq hD₀ hJ hΔ hCtpl
       hCbox hbox
   exact ⟨_, collarConstant_pos hq J Δ Cbox, _, two_le_collarThreshold q R J Δ Cbox Ctr ct Cent
     eent Cen een, hall⟩
