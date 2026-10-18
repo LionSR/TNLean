@@ -1766,7 +1766,7 @@ state.
     \lean{TNLean.PEPS.AreaLaw.sublinearCollarBound_real_of_boxEntropy,
         TNLean.PEPS.AreaLaw.sublinearCollarBound_real_of_initial}
     \leanok
-    \uses{thm:area_law_sublinear_collar}
+    \uses{def:area_law_collar_bound}
     This is an auxiliary refinement of
     Theorem~\ref{thm:area_law_sublinear_collar} with two hypotheses that
     \cite[Proposition~9.6]{OpenAI2026AreaLaw} does not carry. Fix the data
@@ -1789,12 +1789,18 @@ state.
     \end{enumerate}
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:area_law_sublinear_collar,
+    \uses{thm:arealaw-box-clearance-comparison,
+        thm:template-final-information,
+        thm:area_law_collar_bound_of_information,
         thm:arealaw-physical-box-fixed-exponent}
-    The first part is the proof of
-    Theorem~\ref{thm:area_law_sublinear_collar} with the safe-box constant
-    $C_b$ given, where the constant and the threshold are recorded as
-    formulas. The second part composes it with the physical safe-box
-    bootstrap of Theorem~\ref{thm:arealaw-physical-box-fixed-exponent},
-    which gives $C_b$ from the initial bound.
+    For the first part, the clearance comparison turns the bound at
+    clearance $2R+11$ into the bound with constant $4C_b+4\log q+1$ at
+    the integer clearance $d=2R+10$. The template information theorem at
+    clearance $d$ gives the information coefficient $C_m$ and its
+    threshold as formulas, and
+    Theorem~\ref{thm:area_law_collar_bound_of_information} converts them
+    into the constant $\max(C_m/2,10)$ for all the conclusions. For the
+    second part, the physical safe-box bootstrap of
+    Theorem~\ref{thm:arealaw-physical-box-fixed-exponent} gives $C_b$
+    from the initial bound, and the first part applies.
 \end{proof}
