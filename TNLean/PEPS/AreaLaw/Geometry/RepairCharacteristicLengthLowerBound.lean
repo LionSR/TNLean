@@ -16,7 +16,7 @@ Old identifiers retain their characteristic lengths. Consequently, for any
 prescribed lower bound, a sufficiently large initial layer and stopping scale
 give that bound for every identifier of positive birth rank at every stage.
 The initial-layer threshold depends only on the prescribed lower bound `U`; it
-is the explicit layer `fineScaleIndexThreshold U = ⌈⌈log₂ ⌈U⌉⌉ / ζ⌉`.
+is the explicit layer `fineScaleIndexThreshold U = ⌈dyadicIndexThreshold U / ζ⌉₊`.
 
 This is an auxiliary for the choice of scanner thresholds. It applies to all
 actual identifiers of positive birth rank, including those whose current

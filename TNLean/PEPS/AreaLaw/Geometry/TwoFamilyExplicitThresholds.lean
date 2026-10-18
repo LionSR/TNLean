@@ -18,7 +18,8 @@ above it.
 
 ## Main definitions
 
-* `dyadicIndexThreshold T = ⌈log₂ ⌈T⌉⌉`: from it on, `T ≤ 2 ^ k`.
+* `dyadicIndexThreshold T = Nat.clog 2 ⌈T⌉₊`, which is `0` for `T ≤ 1` and
+  `⌈log₂ ⌈T⌉⌉` otherwise: from it on, `T ≤ 2 ^ k`.
 * `fineScaleIndexThreshold U = ⌈dyadicIndexThreshold U / ζ⌉`: from it on,
   `U ≤ 2 ^ ⌊ζ k⌋`.
 * `primaryScaleLimitThreshold C_P ε`: from it on, the primary scale limits
@@ -51,8 +52,8 @@ namespace TNLean.PEPS.AreaLaw.Geometry
 
 /-! ### Dyadic indices -/
 
-/-- The least dyadic index whose power of two is at least `⌈T⌉`,
-`⌈log₂ ⌈T⌉⌉`. -/
+/-- The least dyadic index `k` with `⌈T⌉₊ ≤ 2 ^ k`: it is `0` for `T ≤ 1` and
+`⌈log₂ ⌈T⌉⌉` otherwise. -/
 def dyadicIndexThreshold (T : ℝ) : ℕ :=
   Nat.clog 2 ⌈T⌉₊
 

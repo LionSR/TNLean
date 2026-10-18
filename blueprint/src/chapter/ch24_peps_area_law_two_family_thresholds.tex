@@ -12,9 +12,11 @@ For real $C\ge0$, $\eta>0$ and $d>0$ write
     P(C,\eta,d) & =\max\bigl\{1,(C/\eta)^{1/d}\bigr\},
 \end{align}
 so that $Cx^a\le\eta x^{a+d}$ for every real $a$ and every $x\ge P(C,\eta,d)$.
-For real $T$ write $\kappa(T)=\lceil\log_2\lceil T\rceil\rceil$ for the least
-integer $k\ge0$ with $\lceil T\rceil\le2^k$, so that $T\le2^k$ for every
-$k\ge\kappa(T)$.
+For real $T$ write $\lceil T\rceil_+=\max\{0,\lceil T\rceil\}$ and
+$\kappa(T)$ for the least integer $k\ge0$ with $\lceil T\rceil_+\le2^k$.
+Thus $\kappa(T)=0$ for $T\le1$ and
+$\kappa(T)=\lceil\log_2\lceil T\rceil\rceil$ for $T>1$, and $T\le2^k$ for
+every $k\ge\kappa(T)$.
 
 % Source: 10-geometry.tex, primary scale limits, lines 722--729; belt and
 % replacement scales, lines 732--740; threshold order, lines 756--774.
