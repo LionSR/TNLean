@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.BufferedRectangles
-import TNLean.PEPS.AreaLaw.RegionalEntropyBridge
+import TNLean.Lattice.RegionalEntropyBridge
 import QICLean.Entropy.BufferDiscount
 import QICLean.Analysis.HarmonicWeights
 import TNLean.Algebra.TailRadiusWeights
@@ -48,6 +48,7 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 
 open Matrix
 open scoped Matrix.Norms.L2Operator
+open TNLean.Lattice
 
 namespace TNLean.PEPS.AreaLaw
 

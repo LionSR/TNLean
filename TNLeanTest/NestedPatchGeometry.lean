@@ -8,6 +8,7 @@ import TNLean.PEPS.AreaLaw.Geometry.NestedPatches
 /-! # Closed boundaries, clipping, disconnected domains, and nested-crossing regressions -/
 
 open TNLean.PEPS.AreaLaw TNLean.PEPS.AreaLaw.Geometry
+open TNLean.Lattice
 
 namespace NestedPatchGeometryTest
 

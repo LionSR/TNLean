@@ -27,6 +27,7 @@ Original formalization from the mathematical manuscript. No upstream Lean proof 
 -/
 
 open scoped BigOperators
+open TNLean.Lattice
 
 namespace TNLean.PEPS.AreaLaw
 

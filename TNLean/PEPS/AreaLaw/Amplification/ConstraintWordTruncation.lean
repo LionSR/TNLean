@@ -52,6 +52,7 @@ set_option linter.mathlibStandardSet true
 
 open QuantumCircuit SpectralFilter Matrix MeasureTheory
 open scoped BigOperators NNReal Matrix.Norms.L2Operator MatrixOrder ComplexOrder
+open TNLean.Lattice
 
 namespace TNLean.PEPS.AreaLaw
 

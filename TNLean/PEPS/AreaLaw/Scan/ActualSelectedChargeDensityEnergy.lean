@@ -29,6 +29,7 @@ noncomputable section
 
 open Matrix Set TensorPower TensorPower.ReplicaTransport
 open scoped BigOperators Matrix ComplexOrder MatrixOrder
+open TNLean.Lattice
 
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
 

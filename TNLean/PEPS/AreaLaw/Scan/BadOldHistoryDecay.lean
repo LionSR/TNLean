@@ -29,6 +29,7 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 
 open Filter
 open scoped BigOperators
+open TNLean.Lattice
 
 namespace TNLean.PEPS.AreaLaw.Scan
 

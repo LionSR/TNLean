@@ -3,7 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.AreaLaw.MarginalTails
+import TNLean.Lattice.MarginalTails
+import QICLean.Entropy.FiniteProduct
 import QICLean.Entropy.RegionEntropy
 import QICLean.Entropy.RegionUnion
 
@@ -19,6 +20,8 @@ results of QICLean, stated on an arbitrary finite set of sites, be read on latti
 
 * `reducedState_eq_regionState`, `regionalEntropy_eq_regionEntropy`,
   `localLift_eq_entropyLocalLift`, `card_regionConfig`.
+* `reducedState_eq_finiteProduct`, `regionalEntropy_eq_finiteProduct`: the same
+  identifications with QICLean's generic finite-product entropy.
 
 ## References
 
@@ -31,7 +34,7 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 
 open Matrix
 
-namespace TNLean.PEPS.AreaLaw
+namespace TNLean.Lattice
 
 variable {Λ : Finset (ℤ × ℤ)} {q : ℕ}
 
@@ -65,4 +68,39 @@ theorem card_regionConfig (A : Finset (Site Λ)) :
     Fintype.card (Entropy.RegionConfig (fun _ : Site Λ ↦ q) A) = q ^ A.card := by
   simp [Entropy.RegionConfig]
 
-end TNLean.PEPS.AreaLaw
+/-- The domain model's partial trace equals the generic finite-product reduction. -/
+theorem reducedState_eq_finiteProduct (Λ : Finset (ℤ × ℤ)) (q : ℕ)
+    (Ω : StateSpace Λ q) (A : Finset (Site Λ)) :
+    reducedState Λ q Ω A = FiniteProduct.reducedPure (fun _ : Site Λ ↦ Fin q) Ω A := by
+  classical
+  let e : ({x : Site Λ // x ∉ A} → Fin q) ≃
+      FiniteProduct.Configuration (fun _ : Site Λ ↦ Fin q) Aᶜ :=
+    { toFun := fun f x ↦ f ⟨x, Finset.mem_compl.mp x.property⟩
+      invFun := fun f x ↦ f ⟨x, Finset.mem_compl.mpr x.property⟩
+      left_inv := fun f ↦ rfl
+      right_inv := fun f ↦ rfl }
+  ext a b
+  unfold reducedState FiniteProduct.reducedPure
+  simp only [Matrix.partialTraceRight_apply, Matrix.submatrix_apply,
+    FiniteProduct.reducedMatrix_apply, Matrix.vecMulVec_apply, Pi.star_apply]
+  have heq (a : {x : Site Λ // x ∈ A} → Fin q)
+      (c : {x : Site Λ // x ∉ A} → Fin q) :
+      (configurationSplit Λ q A).symm (a, c) =
+        (FiniteProduct.splitEquiv (fun _ : Site Λ ↦ Fin q) A).symm (a, e c) := by
+    funext v
+    by_cases hv : v ∈ A <;>
+      simp [configurationSplit, Equiv.piEquivPiSubtypeProd, FiniteProduct.splitEquiv,
+        FiniteProduct.complementEquiv, hv, e]
+  simp_rw [heq]
+  exact e.sum_comp (fun c ↦
+    Ω ((FiniteProduct.splitEquiv (fun _ : Site Λ ↦ Fin q) A).symm (a, c)) *
+      star (Ω ((FiniteProduct.splitEquiv (fun _ : Site Λ ↦ Fin q) A).symm (b, c))))
+
+/-- The finite-domain regional entropy uses exactly the generic QICLean entropy. -/
+theorem regionalEntropy_eq_finiteProduct (Λ : Finset (ℤ × ℤ)) (q : ℕ)
+    (Ω : StateSpace Λ q) (A : Finset (Site Λ)) :
+    regionalEntropy Λ q Ω A = FiniteProduct.entropy (fun _ : Site Λ ↦ Fin q) Ω A := by
+  apply vonNeumannEntropy_congr
+  exact reducedState_eq_finiteProduct Λ q Ω A
+
+end TNLean.Lattice

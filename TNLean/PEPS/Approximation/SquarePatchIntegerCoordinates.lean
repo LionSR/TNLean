@@ -31,7 +31,7 @@ Source: polynomial-PEPS manuscript, `03-patches.tex`, lines 14–22. -/
 theorem squareSample_integerCoordinates (Λ : Finset (ℤ × ℤ))
     (center : ℝ × ℝ) (r : ℝ) :
     EncodedFrame.squareSample
-      (fun x : AreaLaw.Site Λ ↦ ((x.1.1 : ℝ), (x.1.2 : ℝ))) center r =
+      (fun x : Lattice.Site Λ ↦ ((x.1.1 : ℝ), (x.1.2 : ℝ))) center r =
       AreaLaw.Geometry.closedSquareSample Λ center r := by
   ext x
   simp [EncodedFrame.squareSample, AreaLaw.Geometry.mem_closedSquareSample,

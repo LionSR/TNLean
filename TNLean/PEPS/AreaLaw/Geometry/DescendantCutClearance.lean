@@ -61,6 +61,8 @@ open Filter
 
 noncomputable section
 
+open TNLean.Lattice
+
 namespace TNLean.PEPS.AreaLaw.Geometry
 
 /-! ### Scalar estimates -/

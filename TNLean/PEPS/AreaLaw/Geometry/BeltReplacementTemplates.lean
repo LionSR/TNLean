@@ -66,6 +66,8 @@ open Filter
 
 noncomputable section
 
+open TNLean.Lattice
+
 namespace TNLean.PEPS.AreaLaw.Geometry
 
 /-! ### Transport of the normalized fan -/
