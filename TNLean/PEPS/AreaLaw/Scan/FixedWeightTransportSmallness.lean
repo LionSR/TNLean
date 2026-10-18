@@ -49,9 +49,7 @@ theorem ScannerExponents.fixedWeightFour_transport_smallness_of_threshold_le
   obtain ⟨hsf, hn3, hb, hl⟩ := hthr
   have hKn := X.rpow_le_mul_K_of_scaleFactsThreshold_le hsf
   have hK8 := X.le_K_of_bandCountThreshold_le 8 hb
-  have hlogn : 1 ≤ Real.log n := by
-    rw [Real.le_log_iff_exp_le (by positivity)]
-    exact Real.exp_one_lt_three.le.trans (by exact_mod_cast hn3)
+  have hlogn := Real.one_le_log_natCast_of_three_le hn3
   have hdim := transportLogDimBound_roundedLogRadius_le hq hCr hlogn
   have hsmall' := Real.mul_log_pow_le_mul_rpow_of_ceil_logPowThreshold_le (by positivity) hct
     (sub_pos.mpr X.mu_lt_one_sub_ell) hl

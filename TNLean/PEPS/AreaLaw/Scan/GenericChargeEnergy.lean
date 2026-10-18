@@ -296,9 +296,7 @@ theorem ScannerExponents.actualCharge_energy_coefficients_of_threshold_le
     (10 * (10 * (multiplicity : ℝ)) ^ (7 / 8 : ℝ) * |Cen|) een
     (50 * (multiplicity : ℝ) * (2 : ℝ) ^ (1 / 8 : ℝ) * |Cen|) (een + 1 / 8)
   have hF := scaleFacts_of_scaleFactsThreshold_le F hsf
-  have hlogn : 1 ≤ Real.log n := by
-    rw [Real.le_log_iff_exp_le (by positivity)]
-    exact Real.exp_one_lt_three.le.trans (by exact_mod_cast hn3)
+  have hlogn := Real.one_le_log_natCast_of_three_le hn3
   rw [actualChargeEnergyCoefficient]
   generalize transportLogCoefficient q Cr _ een _ (een + 1 / 8) = Cd at hCd hcoeff ⊢
   generalize transportLogExponent een (een + 1 / 8) = Cl at hcoeff ⊢
