@@ -1,11 +1,37 @@
 \section{A supported Gaussian operator for the physical buffer}
 
+\begin{definition}[Localization constants of the doubled square Hamiltonian]
+    \label{def:peps_square_localization_constants}
+    \lean{TNLean.PEPS.Approximation.squareLocalizationPrefactor,
+        TNLean.PEPS.Approximation.squareLocalizationVelocity,
+        TNLean.PEPS.Approximation.squareLocalizationPrefactor_pos,
+        TNLean.PEPS.Approximation.squareLocalizationVelocity_nonneg,
+        TNLean.PEPS.Approximation.squareLocalizationPrefactor_eq,
+        TNLean.PEPS.Approximation.squareLocalizationVelocity_eq}
+    \leanok
+    \uses{def:area_graph_ball_localization_constants}
+    For a real number $J$, put $C_\square=2C_0(1)$ and
+    $v_\square(J)=v(1,2J)$, with $C_0$ and $v$ as in
+    Definition~\ref{def:area_graph_ball_localization_constants}. These are the
+    constants for range one and term-norm bound $2J$, and
+    \begin{align*}
+        C_\square    & =\frac{64e^{3/2}}{1-e^{-1/2}}, &
+        v_\square(J) & =320e^2J.
+    \end{align*}
+    Thus $C_\square>0$, and $v_\square(J)\geq0$ when $J\geq0$. They are the
+    constants $C$ and $v$ of the Lieb--Robinson and localization bounds of
+    \cite{OpenAI2026PolynomialPEPS}, \texttt{02-information.tex}, lines
+    486--508, with decay rate $\mu=1/2$.
+\end{definition}
+
 \begin{theorem}[Supported Gaussian approximation of the physical buffer]
     \label{thm:peps_supported_physical_buffer_gaussian}
-    \lean{TNLean.PEPS.Approximation.SquareHamiltonian.exists_supported_buffer_gaussian_integral}
+    \lean{TNLean.PEPS.Approximation.SquareHamiltonian.exists_supported_buffer_gaussian_integral,
+        TNLean.PEPS.Approximation.SquareHamiltonian.supported_buffer_gaussian_integral}
     \leanok
     \uses{def:polynomial_peps_model,def:qc_site_pair_coordinates,
-        def:peps_frame_sheet_swap,def:qc_site_expectation}
+        def:peps_frame_sheet_swap,def:qc_site_expectation,
+        def:peps_square_localization_constants}
     Fix an integer $q\ge1$ and a real number $J\ge0$.
     There are positive constants $C,v,c$ with the following property.
     Let $L\ge0$ be an integer and let
@@ -73,15 +99,20 @@
     The integrals retain the original restricted Gaussian measure, and this
     spatial Gaussian approximation of \cite{OpenAI2026PolynomialPEPS} includes
     empty grids and regions, zero variance, and zero cutoff.
+    The estimate holds with $C=C_\square$, $v=v_\square(J)$ and $c=1/2$, the
+    constants of Definition~\ref{def:peps_square_localization_constants}.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:peps_physical_buffer_coordinates,
         thm:peps_swapped_doubled_boundary_bound,
         thm:swapped_square_hamiltonian_interaction,
-        thm:area_supported_gaussian_integral}
-    For $C,v,c$ from Theorem~\ref{thm:area_supported_gaussian_integral}
-    at local dimension $q^2$, range one, and interaction bound $2J$,
+        thm:area_supported_gaussian_integral,
+        def:peps_square_localization_constants}
+    Take $C=C_\square$, $v=v_\square(J)$ and $c=1/2$, which are the explicit
+    constants of Theorem~\ref{thm:area_supported_gaussian_integral}
+    at local dimension $q^2$, range one, and interaction bound $2J\geq0$.
+    The existence of positive constants follows by replacing $v$ by $v+1$.
     Theorem~\ref{thm:swapped_square_hamiltonian_interaction} constructs
     a local interaction family with these parameters and total $K'$,
     using the Hermitian parts of the original interactions whose

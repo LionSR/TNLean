@@ -2,9 +2,11 @@
 
 \begin{theorem}[Supported Gaussian approximation]
     \label{thm:area_supported_gaussian_integral}
-    \lean{TNLean.PEPS.AreaLaw.exists_supported_gaussian_integral}
+    \lean{TNLean.PEPS.AreaLaw.exists_supported_gaussian_integral,
+        TNLean.PEPS.AreaLaw.supported_gaussian_integral}
     \leanok
-    \uses{def:area_law_hamiltonian,def:qc_site_expectation}
+    \uses{def:area_law_hamiltonian,def:qc_site_expectation,
+        def:area_graph_ball_localization_constants}
     To establish the supported Gaussian approximation used in
     \cite{OpenAI2026PolynomialPEPS}, fix integers $q\geq1$ and $R\geq0$,
     and a real number $J$.
@@ -39,14 +41,18 @@
         \leq \|W\|C|\Lambda|(1+\|D\|T)e^{vT-cl}.
     \end{align*}
     The integrals retain their original Gaussian mass, and zero variance,
-    empty domains, and empty regions are included.
+    empty domains, and empty regions are included. If $J\geq0$, the
+    estimate holds with $C=2C_0(R)$, $v=v(R,J)$ and $c=1/2$, the constants
+    of Definition~\ref{def:area_graph_ball_localization_constants}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:area_region_localization,
         thm:qc_supported_projected_relative_evolution,
-        lem:qc_site_expectation_properties}
-    With the constants $C,v,c$ from
-    Theorem~\ref{thm:area_region_localization}, applying
+        lem:qc_site_expectation_properties,
+        def:area_graph_ball_localization_constants}
+    Take constants $C,v,c$ of Theorem~\ref{thm:area_region_localization}
+    with $C,v\geq0$; for $J\geq0$ these may be $2C_0(R)$, $v(R,J)$ and $1/2$.
+    Applying
     Theorem~\ref{thm:qc_supported_projected_relative_evolution} to the
     projection region $B$ constructs the path $U$ from $H',H,B$
     independently of $\eta$ and $T$. Setting
