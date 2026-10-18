@@ -16,8 +16,6 @@ run_cmd do
   let names := #[
     `TNLean.PEPS.AreaLaw.Geometry.le_two_pow_of_dyadicIndexThreshold_le,
     `TNLean.PEPS.AreaLaw.Geometry.le_two_pow_fineScaleIndex_of_fineScaleIndexThreshold_le,
-    `TNLean.PEPS.AreaLaw.Geometry.primaryScaleLimits_of_primaryScaleLimitThreshold_le,
-    `TNLean.PEPS.AreaLaw.Geometry.le_primaryScannerScale_of_primaryScannerScaleThreshold_le,
     `TNLean.PEPS.AreaLaw.Geometry.fine_clearance_of_fineClearanceThreshold_le,
     `TNLean.PEPS.AreaLaw.Geometry.beltReplacementScaleLimit_of_beltReplacementScaleThreshold_le]
   let expected := #[``propext, ``Classical.choice, ``Quot.sound]

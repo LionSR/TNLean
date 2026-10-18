@@ -38,14 +38,14 @@ every $k\ge\kappa(T)$.
         K_\zeta(U)           & =\bigl\lceil\kappa(U)/\zeta\bigr\rceil,
         \\
         K_P(C_P,\varepsilon) & =\kappa\Bigl(\max\bigl\{
-        P\bigl(C^{1-\ell},\varepsilon,1-e(1-\ell)\bigr),
+        P\bigl(C^{1-\ell_{\rm geo}},\varepsilon,1-e(1-\ell_{\rm geo})\bigr),
         P\bigl(C^\beta,\varepsilon/2,\zeta-e\beta\bigr)\bigr\}\Bigr),
         \\
         K_n(C_P,n_*)         & =\kappa(n_*/C_P),
         \\
         U_1(c_1,C_B)         & =P\bigl(2(C_B+1)^\beta,c_1/2,\rho_0-\beta\bigr),
         \\
-        U_2(C_B,\varepsilon) & =P\bigl(B^{1-\ell},\varepsilon,\ell\bigr).
+        U_2(C_B,\varepsilon) & =P\bigl(B^{1-\ell_{\rm geo}},\varepsilon,\ell_{\rm geo}\bigr).
     \end{align}
 \end{definition}
 
@@ -64,13 +64,13 @@ every $k\ge\kappa(T)$.
     \begin{enumerate}
         \item If $k\ge K_\zeta(U)$, then $U\le t_k$.
         \item If $\varepsilon>0$ and $k\ge K_P(C_P,\varepsilon)$, then
-              $\lfloor n_k^{1-\ell}\rfloor\le\varepsilon2^k$,
+              $\lfloor n_k^{1-\ell_{\rm geo}}\rfloor\le\varepsilon2^k$,
               $n_k^\beta\le\varepsilon t_k$ and $n_k^\beta\le\varepsilon2^k$.
         \item If $C_P>0$ and $k\ge K_n(C_P,n_*)$, then $n_k\ge n_*$.
         \item If $c_1>0$, $C_B\ge0$ and $u\ge U_1(c_1,C_B)$, then
               $2\lceil C_Bu\rceil^\beta<c_1u^{\rho_0}$.
         \item If $\varepsilon>0$ and $u\ge U_2(C_B,\varepsilon)$, then
-              $\lfloor\lceil C_Bu\rceil_+^{1-\ell}\rfloor\le\varepsilon u$.
+              $\lfloor\lceil C_Bu\rceil_+^{1-\ell_{\rm geo}}\rfloor\le\varepsilon u$.
     \end{enumerate}
 \end{theorem}
 
@@ -80,14 +80,14 @@ every $k\ge\kappa(T)$.
     For the first item, $k\ge\kappa(U)/\zeta$ gives
     $\lfloor\zeta k\rfloor\ge\kappa(U)$, hence $t_k\ge2^{\kappa(U)}\ge U$.
     For the second, $n_k\le C(2^k)^e$, and the exponent gaps give
-    $e(1-\ell)<1$ and $e\beta<\zeta$; at $x=2^k\ge P$ the two power ratios
-    give $C^{1-\ell}x^{e(1-\ell)}\le\varepsilon x$ and
+    $e(1-\ell_{\rm geo})<1$ and $e\beta<\zeta$; at $x=2^k\ge P$ the two power ratios
+    give $C^{1-\ell_{\rm geo}}x^{e(1-\ell_{\rm geo})}\le\varepsilon x$ and
     $C^\beta x^{e\beta}\le(\varepsilon/2)x^\zeta$, and $x^\zeta\le2t_k$.
     For the third, $n_k\ge C_P2^k\ge n_*$. For the fourth, $u\ge1$ gives
     $\lceil C_Bu\rceil\le(C_B+1)u$, so
     $2\lceil C_Bu\rceil^\beta\le2(C_B+1)^\beta u^\beta
         \le(c_1/2)u^{\rho_0}<c_1u^{\rho_0}$. For the fifth,
-    $\lceil C_Bu\rceil_+\le Bu$ and $B^{1-\ell}u^{1-\ell}\le\varepsilon u$.
+    $\lceil C_Bu\rceil_+\le Bu$ and $B^{1-\ell_{\rm geo}}u^{1-\ell_{\rm geo}}\le\varepsilon u$.
 \end{proof}
 
 % Source: 10-geometry.tex, threshold order, lines 756--774; exceptional

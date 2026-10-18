@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.PEPS.AreaLaw.Geometry.FanRunTemplate
 import TNLean.PEPS.AreaLaw.Geometry.IsolatedStars
 import TNLean.PEPS.AreaLaw.Geometry.RepairDescendants
+import TNLean.PEPS.AreaLaw.Geometry.TwoFamilyExplicitThresholds
 
 /-!
 # Templates for belt tiles and replacements
@@ -305,35 +306,12 @@ statement `L = ⌊n ^ (1 - ℓ)⌋ = o(u)` for the belt and replacement scanner 
 `n = ⌈C_B u⌉`, with `u = t_k` for a belt tile and `u` the removal half-side for
 a replacement.
 Source: area-law Section 11, `10-geometry.tex`, line 740, with
-`L = ⌊n ^ (1 - ℓ)⌋` as in `geometry:primary-limits` (lines 725–729). -/
+`L = ⌊n ^ (1 - ℓ)⌋` as in `geometry:primary-limits` (lines 725–729). The threshold is
+`beltReplacementScaleThreshold C_B ε`. -/
 theorem eventually_beltReplacementScaleLimit (CB : ℝ) {ε : ℝ} (hε : 0 < ε) :
     ∀ᶠ u : ℝ in atTop,
-      (⌊(⌈CB * u⌉₊ : ℝ) ^ (1 - (Exponents.geometryEll : ℝ))⌋₊ : ℝ) ≤ ε * u := by
-  have hℓ : (0 : ℝ) < Exponents.geometryEll := by norm_num [Exponents.geometryEll]
-  have hℓ1 : (0 : ℝ) ≤ 1 - Exponents.geometryEll := by norm_num [Exponents.geometryEll]
-  set e : ℝ := 1 - (Exponents.geometryEll : ℝ)
-  set B : ℝ := max CB 0 + 1
-  have hB : 0 < B := by positivity
-  have hBe : 0 < B ^ e := Real.rpow_pos_of_pos hB e
-  have hlim := tendsto_rpow_neg_atTop hℓ
-  filter_upwards [hlim.eventually (ge_mem_nhds (div_pos hε hBe)), eventually_ge_atTop 1]
-    with u hu hu1
-  have hu0 : 0 < u := by linarith
-  have hceil : (⌈CB * u⌉₊ : ℝ) ≤ B * u := by
-    have hmono : (⌈CB * u⌉₊ : ℝ) ≤ ⌈max CB 0 * u⌉₊ := by
-      exact_mod_cast Nat.ceil_mono (mul_le_mul_of_nonneg_right (le_max_left CB 0) hu0.le)
-    have hlt := Nat.ceil_lt_add_one (mul_nonneg (le_max_right CB 0) hu0.le)
-    nlinarith
-  have hsplit : u ^ e = u ^ (-(Exponents.geometryEll : ℝ)) * u := by
-    rw [← Real.rpow_add_one hu0.ne']
-    congr 1
-    ring
-  calc (⌊(⌈CB * u⌉₊ : ℝ) ^ e⌋₊ : ℝ) ≤ (⌈CB * u⌉₊ : ℝ) ^ e :=
-        Nat.floor_le (Real.rpow_nonneg (Nat.cast_nonneg _) e)
-    _ ≤ (B * u) ^ e := Real.rpow_le_rpow (Nat.cast_nonneg _) hceil hℓ1
-    _ = B ^ e * (u ^ (-(Exponents.geometryEll : ℝ)) * u) := by
-        rw [Real.mul_rpow hB.le hu0.le, hsplit]
-    _ ≤ B ^ e * (ε / B ^ e * u) := by gcongr
-    _ = ε * u := by field_simp
+      (⌊(⌈CB * u⌉₊ : ℝ) ^ (1 - (Exponents.geometryEll : ℝ))⌋₊ : ℝ) ≤ ε * u :=
+  eventually_atTop.2 ⟨beltReplacementScaleThreshold CB ε,
+    fun _ hu ↦ beltReplacementScaleLimit_of_beltReplacementScaleThreshold_le CB hε hu⟩
 
 end TNLean.PEPS.AreaLaw.Geometry

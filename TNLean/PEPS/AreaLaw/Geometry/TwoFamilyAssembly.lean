@@ -41,8 +41,12 @@ fine-clearance inequality.
 
 ## Main statements
 
-* `twoFamilyDecomposition`: Proposition 11.2 (`prop:two-families`), for every
-  pair of template constants with `Ctpl ≥ 1`.
+* `twoFamilyDecomposition`: Proposition 11.2 (`prop:two-families`), for all
+  real template constants `D₀` and `Ctpl`.
+* `twoFamilyDecomposition_of_one_le`: the core case `Ctpl ≥ 1`; templates for
+  `max Ctpl 1` are read as templates for `Ctpl` (`Geometry.Template.ofLe`).
+* `isTwoFamilyDecompositionConstant_twoFamilyConstant`: the assembly with the
+  named constant `twoFamilyConstant` above the explicit thresholds.
 
 ## References
 
