@@ -21,10 +21,11 @@ run_cmd do
 
 /-! The sharp moment window at the named truncation constant -/
 
+open TNLean.PEPS.AreaLaw TNLean.PEPS.AreaLaw.Scan.CollarScan in
 run_cmd do
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
   let declarations := #[
-    ``TNLean.PEPS.AreaLaw.Scan.CollarScan.truncated_target_sharp_moments_explicit]
+    ``truncated_target_sharp_moments_explicit]
   for decl in declarations do
     unless (← Lean.getEnv).contains decl do
       throwError "Missing declaration {decl}"
