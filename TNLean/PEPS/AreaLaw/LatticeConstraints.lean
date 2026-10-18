@@ -33,7 +33,8 @@ allows `q, R, J, Δ` (`03-quasilocal.tex`, lines 41–42).
   truncation and ground-state part together with uniqueness of the truncated ground vector.
 * `TNLean.PEPS.AreaLaw.exists_latticeCrossingBudget`,
   `TNLean.PEPS.AreaLaw.exists_latticeCutBudget_le_log`: Proposition 4.5, crossing count and
-  cut budget.
+  cut budget; `TNLean.PEPS.AreaLaw.latticeCutBudget_le_log` gives the cut budget with the
+  explicit constant `latticeCutBudgetConstant`.
 
 ## References
 
@@ -303,6 +304,53 @@ theorem exists_latticeCrossingBudget {q : ℕ} (hq : 1 ≤ q) (R : ℕ) :
       hMult).trans ?_
     gcongr
 
+/-- The explicit cut-budget coefficient `max 1 (4 μ_R (1 + 2 log q)²)` on a lattice domain,
+where `μ_R = 2^(2R(R+1))` bounds the labels per anchor and balls of radius `d` have at most
+`2 (d + 1)²` sites (`03-quasilocal.tex`, lines 434–451 and 505–518). -/
+noncomputable def latticeCutCoefficient (q R : ℕ) : ℝ :=
+  max 1 (2 * ((2 ^ ((1 + 2 * R * (R + 1)) - 1) : ℕ) : ℝ) * 2 * (1 + 2 * Real.log q) ^ 2)
+
+/-- **The cut budget on a lattice domain, with an explicit coefficient**
+(Proposition 4.5, `eq:quasilocal-cut-budget`, `03-quasilocal.tex`, lines 434–451 and
+505–518): `ℬ_X ≤ latticeCutCoefficient q R (1 + b_X) (r₀ + 1)⁶` for every `X ⊆ S₀`. -/
+theorem cutBudget_le_latticeCutCoefficient {q : ℕ} (hq : 1 ≤ q) (R : ℕ)
+    (Λ : Finset (ℤ × ℤ)) (a : AdmissibleSupport Λ R → Site Λ) (ha : ∀ X, a X ∈ X.1)
+    (S₀ : Finset (Site Λ)) (r₀ : ℕ) {X : Finset (Site Λ)} (hX : X ⊆ S₀) :
+    cutBudget q (domainGraph Λ) S₀ r₀ a X ≤
+      latticeCutCoefficient q R * (1 + (edgeBoundary Λ X).card) * ((r₀ : ℝ) + 1) ^ 6 := by
+  refine (cutBudget_le hq _ S₀ r₀ a hX zero_le_two (Nat.cast_nonneg _)
+    card_graphBall_domainGraph_le fun x => by exact_mod_cast card_anchor_fiber_le a ha x).trans ?_
+  have hb : ((cutEdges (domainGraph Λ) X).card : ℝ) ≤ (edgeBoundary Λ X).card := by
+    exact_mod_cast card_cutEdges_le_card_edgeBoundary X
+  unfold latticeCutCoefficient
+  gcongr
+
+/-- The explicit constant `latticeCutCoefficient q R (1 + C₂) (C₁ + 2 / (log 2)²)⁶` of the
+cut budget in terms of `n` (Proposition 4.5, last sentence, `03-quasilocal.tex`,
+lines 452–455 and 519–520). -/
+noncomputable def latticeCutBudgetConstant (q R : ℕ) (C₁ C₂ : ℝ) : ℝ :=
+  latticeCutCoefficient q R * (1 + C₂) * (C₁ + 2 / Real.log 2 ^ 2) ^ 6
+
+/-- The lattice cut-budget constant is nonnegative. -/
+theorem latticeCutBudgetConstant_nonneg (q R : ℕ) {C₁ C₂ : ℝ} (hC₁ : 0 ≤ C₁) (hC₂ : 0 ≤ C₂) :
+    0 ≤ latticeCutBudgetConstant q R C₁ C₂ := by
+  have : 0 ≤ latticeCutCoefficient q R := zero_le_one.trans (le_max_left _ _)
+  unfold latticeCutBudgetConstant
+  positivity
+
+/-- **The cut budget in terms of `n`, with an explicit constant** (Proposition 4.5, last
+sentence, `03-quasilocal.tex`, lines 452–455 and 519–520): with `r₀ = ⌈C₁ (log n)²⌉`, every
+`X ⊆ S₀` with `b_X ≤ C₂ n D`, `n ≥ 2` and `D ≥ 1` has
+`ℬ_X ≤ latticeCutBudgetConstant q R C₁ C₂ · n D (log n)¹²`. -/
+theorem latticeCutBudget_le_log {q : ℕ} (hq : 1 ≤ q) (R : ℕ) {C₁ C₂ : ℝ}
+    (hC₁ : 0 ≤ C₁) (hC₂ : 0 ≤ C₂) (Λ : Finset (ℤ × ℤ)) (a : AdmissibleSupport Λ R → Site Λ)
+    (ha : ∀ X, a X ∈ X.1) (S₀ X : Finset (Site Λ)) (hX : X ⊆ S₀) {n D : ℝ} (hn : 2 ≤ n)
+    (hD : 1 ≤ D) (hb : ((edgeBoundary Λ X).card : ℝ) ≤ C₂ * n * D) :
+    cutBudget q (domainGraph Λ) S₀ ⌈C₁ * Real.log n ^ 2⌉₊ a X ≤
+      latticeCutBudgetConstant q R C₁ C₂ * (n * D * Real.log n ^ 12) :=
+  le_of_cutBudget_le (zero_le_one.trans (le_max_left _ _)) hC₁ hC₂ hn hD hb
+    (cutBudget_le_latticeCutCoefficient hq R Λ a ha S₀ _ hX)
+
 /-- **The cut budget in terms of `n` on a lattice domain** (Proposition 4.5, last sentence,
 `03-quasilocal.tex`, lines 452–455 and 519–520). For `q ≥ 1`, `R`, `C₁ ≥ 0` and `C₂ ≥ 0` there
 is `C ≥ 0` such that, with `r₀ = ⌈C₁ (log n)²⌉`, every `X ⊆ S₀` with `b_X ≤ C₂ n D`, `n ≥ 2`
@@ -314,10 +362,8 @@ theorem exists_latticeCutBudget_le_log {q : ℕ} (hq : 1 ≤ q) (R : ℕ) {C₁ 
       ∀ (S₀ X : Finset (Site Λ)), X ⊆ S₀ → ∀ n D : ℝ, 2 ≤ n → 1 ≤ D →
         ((edgeBoundary Λ X).card : ℝ) ≤ C₂ * n * D →
         cutBudget q (domainGraph Λ) S₀ ⌈C₁ * Real.log n ^ 2⌉₊ a X ≤
-          C * (n * D * Real.log n ^ 12) := by
-  obtain ⟨C, hC, hcross⟩ := exists_latticeCrossingBudget hq R
-  refine ⟨C * (1 + C₂) * (C₁ + 2 / Real.log 2 ^ 2) ^ 6, by positivity, ?_⟩
-  intro Λ a ha S₀ X hX n D hn hD hb
-  exact le_of_cutBudget_le hC hC₁ hC₂ hn hD hb (hcross Λ a ha S₀ _ X hX).2.2.2
+          C * (n * D * Real.log n ^ 12) :=
+  ⟨_, latticeCutBudgetConstant_nonneg q R hC₁ hC₂, fun Λ a ha S₀ X hX _ _ hn hD hb =>
+    latticeCutBudget_le_log hq R hC₁ hC₂ Λ a ha S₀ X hX hn hD hb⟩
 
 end TNLean.PEPS.AreaLaw
