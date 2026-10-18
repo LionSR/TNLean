@@ -12,6 +12,7 @@ import TNLean.MPS.AreaLaw.AreaLaw
 import TNLean.MPS.AreaLaw.BandDissolution
 import TNLean.MPS.AreaLaw.Basic
 import TNLean.MPS.AreaLaw.BufferDiscount
+import TNLean.MPS.AreaLaw.ChainStageIncidence
 import TNLean.MPS.AreaLaw.ComponentReduction
 import TNLean.MPS.AreaLaw.Counting
 import TNLean.MPS.AreaLaw.CutMatrixGrowth
@@ -25,7 +26,10 @@ import TNLean.MPS.AreaLaw.ProtocolRetiredAuxiliary
 import TNLean.MPS.AreaLaw.ProtocolSweepFrames
 import TNLean.MPS.AreaLaw.ProtocolSweepGeometry
 import TNLean.MPS.AreaLaw.ProtocolSweepHistory
+import TNLean.MPS.AreaLaw.ProtocolSweepLocalCircuits
+import TNLean.MPS.AreaLaw.ProtocolSweepMiddle
 import TNLean.MPS.AreaLaw.ProtocolSweepPath
+import TNLean.MPS.AreaLaw.ProtocolSweepPlacement
 import TNLean.MPS.AreaLaw.ProtocolTerminalCoordinates
 import TNLean.MPS.AreaLaw.ProtocolTerminalReference
 import TNLean.MPS.AreaLaw.ProtocolTerminalWord

@@ -7170,6 +7170,13 @@ spectral split → block extraction → MPV calculation → strict bounds
   calculations. A new generic congruence lemma would restate the existing
   equality lemmas, so no additional theorem or tactic is promoted. Previously
   audited source-preparation proofs are unchanged.
+- **Further reuse (2026-10-18):** In
+  `MPS/AreaLaw/ProtocolSweepPlacement.lean`, the participant assertion quantifies
+  over occurrences indexed by the circuit. Before splitting the circuit's
+  dependent conditional, package the whole assertion as a predicate of that
+  circuit. The existing `castLayouts_induction` then transports it through
+  layout equalities. This is one local predicate, without a new theorem or
+  tactic; its gate witnesses and participant sets are unchanged.
 - **Further reuse (2026-10-08):** `PartyPartitionAppend` repeats the two
   head transports from `PartyPartition`, and transports vector addition.
   These are again defining equations after identifying layout types, rather
@@ -8479,3 +8486,17 @@ spectral split → block extraction → MPV calculation → strict bounds
   constants and their inequalities. The constants must remain uniform in
   the clearance and physical data. These are two occurrences across two
   files; no promotion or proof refactor is proposed.
+
+### Transport of a tensor factor through a layout equality — candidate (2026-10-18)
+
+- **Pattern:** An equality of the second tensor-factor spaces and a heterogeneous
+  equality of their vectors preserve heterogeneous equality after tensoring with
+  a fixed first factor. Both proofs substitute the layout equality and the
+  vector equality.
+- **Occurrences:** `cons_tensor_heq` in
+  `TNLean/MPS/AreaLaw/ProtocolTerminalReference.lean` and
+  `TNLean/PEPS/Approximation/EffectCircuitReplacement.lean`.
+- **Possible next abstraction:** At a third occurrence, introduce a shared lemma
+  beside the elementary tensor-coordinate transport results and replace all
+  occurrences. Two uses in two files are currently identified; no tactic or
+  additional hypothesis is required.

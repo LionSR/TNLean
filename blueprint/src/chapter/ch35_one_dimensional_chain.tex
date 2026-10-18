@@ -1709,5 +1709,359 @@ The objects below are owner assignments and ordered lists of frames without hole
     terminal identities apply to the same boundary.
 \end{proof}
 
-% Physical information estimates, the complete sweep circuit, its resource
-% bounds and accumulated error, and compression are separate obligations.
+\section{Participants and conditional circuits of the chain stages}
+
+Use the parties, labelled copies and ordered lists of
+Definitions~\ref{def:chain_terminal_registers},
+\ref{def:chain_sweep_labelled_history} and~\ref{def:chain_sweep_frame_path}.
+Thus $t=20w$, there are $m$ stages, and stage $k$ has boundaries
+$\mathcal B_{k,0},\ldots,\mathcal B_{k,18}$.
+These are the prescribed stages of
+\cite[Part~II, Construction~\texttt{con:sweep}]{TNLean2026OneDimensional},
+with the retained-copy correction of
+\cite{gap:tnlean_one_dimensional_band_sweep_corrections}.
+
+\begin{definition}[Prescribed participants and position counts]
+    \label{def:chain_stage_participants}
+    \lean{TNLean.MPS.AreaLaw.ChainSweep.stageParticipants,
+        TNLean.MPS.AreaLaw.ChainSweep.adjacentStageIndices,
+        TNLean.MPS.AreaLaw.ChainSweep.stageOccurrences,
+        TNLean.MPS.AreaLaw.ChainSweep.participatingStageIndices,
+        TNLean.MPS.AreaLaw.ChainSweep.scheduledParticipationCount}
+    \leanok
+    \uses{def:chain_sweep_frame_path,def:chain_one_band_assignments}
+    Write $\Pi_j(A,B,C)$ for the participant set in row $j$ of the table
+    in Theorem~\ref{thm:chain_one_band_conditional_changes}.
+    For $0\le k<m$ and $0\le j<18$, prescribe
+    \begin{align}
+        \mathcal S_{k,j} & =
+        \begin{cases}
+            \{R_k,R_{k+1}\},                 & j=0,             \\
+            \{R_k,P_{k+1}\},                 & j=1,             \\
+            \Pi_{j-2}(R_k,P_{k+1},P_k),      & k>0,\ 2\le j<10, \\
+            \{P_1,R_0\},                     & k=0,\ j=2,       \\
+            \varnothing,                     & k=0,\ 3\le j<10, \\
+            \Pi_{j-10}(R_k,R_{k+1},P_{k+1}), & 10\le j<18.
+        \end{cases}
+        \label{eq:chain_stage_participants}
+    \end{align}
+    Let $\mathrm{Occ}(p)=\{(k,j):p\in\mathcal S_{k,j}\}$,
+    let $J(p)$ be its set of stage indices, and set
+    $N_{\rm pos}(p)=|\mathrm{Occ}(p)|$.
+    Define $\mathcal A(R_r)=\{\max\{r-1,0\},r\}$ and
+    $\mathcal A(P_{r+1})=\{r,r+1\}$.
+    The number $N_{\rm pos}(p)$ counts prescribed positions, including
+    positions whose realized operation may be private.
+\end{definition}
+
+\begin{theorem}[Incidence in two adjacent stages]
+    \label{thm:chain_stage_incidence}
+    \lean{TNLean.MPS.AreaLaw.ChainSweep.remainder_participating_stage,
+        TNLean.MPS.AreaLaw.ChainSweep.completed_participating_stage,
+        TNLean.MPS.AreaLaw.ChainSweep.stageIndex_mem_adjacent,
+        TNLean.MPS.AreaLaw.ChainSweep.participatingStageIndices_subset,
+        TNLean.MPS.AreaLaw.ChainSweep.participatingStageIndices_card_le_two,
+        TNLean.MPS.AreaLaw.ChainSweep.scheduledParticipationCount_eq_sum,
+        TNLean.MPS.AreaLaw.ChainSweep.scheduledParticipationCount_le_thirtySix,
+        TNLean.MPS.AreaLaw.ChainSweep.scheduledParticipationCount_le_forty}
+    \leanok
+    \uses{def:chain_stage_participants}
+    Membership in the prescribed sets implies
+    \begin{align}
+        R_r\in\mathcal S_{k,j}     & \ \Longrightarrow\ k=r\ \text{or}\ k+1=r,
+        \label{eq:chain_stage_remainder_incidence}                             \\
+        P_{r+1}\in\mathcal S_{k,j} & \ \Longrightarrow\ k=r\ \text{or}\ k=r+1.
+        \label{eq:chain_stage_completed_incidence}
+    \end{align}
+    Consequently $J(p)\subseteq\mathcal A(p)$ and $|J(p)|\le2$. The position count is
+    \begin{align}
+        N_{\rm pos}(p)
+         & =\sum_{k<m}|\{j<18:p\in\mathcal S_{k,j}\}|\le36\le40.
+        \label{eq:chain_stage_position_bound}
+    \end{align}
+    This is the position count in the sweep construction of
+    \cite[Part~II]{TNLean2026OneDimensional}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:chain_stage_participants}
+    Every row of a band uses only its three specified parties. Thus the
+    possible stage roles are $R_k,R_{k+1},P_{k+1}$ and, only for $k>0$,
+    $P_k$. Comparing these labels gives
+    (\ref{eq:chain_stage_remainder_incidence}) and
+    (\ref{eq:chain_stage_completed_incidence}). Projecting
+    $\mathrm{Occ}(p)$ to its stage coordinate gives $J(p)$.
+    Each fibre has at most eighteen elements, so
+    $|\mathrm{Occ}(p)|\le18|J(p)|\le36$; summing these fibres gives
+    (\ref{eq:chain_stage_position_bound}). No predecessor is formed at stage zero.
+\end{proof}
+
+\begin{theorem}[Local stage circuits under primitive information bounds]
+    \label{thm:chain_conditional_local_circuits}
+    \lean{TNLean.MPS.AreaLaw.ChainSweep.local_stage_circuits_of_primitive_information}
+    \leanok
+    \uses{def:chain_stage_participants,def:chain_sweep_frame_path,
+        def:peps_bounded_change,def:peps_circuit_source_bound,def:peps_sheet_stack}
+    Suppose $q\ge1$, $w\ge1$, $L\ge60w$ and $0\le k<m$.
+    Let $\Omega$ be a unit vector on the original chain and put
+    $\delta=L^{-30}$. Assume the two before-birth bounds
+    \begin{align}
+        I_\Omega(T_k^R:E(M_k,R_k))       & \le L^{-60},
+        \label{eq:chain_stage_remainder_information}    \\
+        I_\Omega(T_k^P:E(M_k^{(1)},R_k)) & \le L^{-60}.
+        \label{eq:chain_stage_block_information}
+    \end{align}
+    At $k=0$, assume also the after-death bound
+    \begin{align}
+        I_\Omega([0,w)_L:E(M_0^{(L)},P_1)) & \le L^{-60}.
+        \label{eq:chain_stage_boundary_information}
+    \end{align}
+    For $k>0$, assume each of the eight information inequalities in the
+    table of Theorem~\ref{thm:chain_one_band_conditional_changes}, with
+    \begin{align}
+        (M_0,a,A,B,C) & =(M_k^{(2)},kt,R_k,P_{k+1},P_k).
+        \label{eq:chain_stage_left_information}
+    \end{align}
+    For every $k$, assume the eight inequalities in that table with
+    \begin{align}
+        (M_0,a,A,B,C) & =(\widehat M_k^{(L)},(k+1)t,R_k,R_{k+1},P_{k+1}).
+        \label{eq:chain_stage_right_information}
+    \end{align}
+    In each table the auxiliary starts entirely at its specified party $C$.
+    All nineteen premises concern the original $\Omega$: the boundary
+    premise is conditional on $k=0$, and the eight left premises on $k>0$.
+    In particular rows $4,5,7$ use their actual after-death environments,
+    and row $6$ uses its before-birth environment.
+
+    Let $\psi(\mathcal F)$ denote the tensor product of the frame references
+    formed from $\Omega$ in the order of the list $\mathcal F$.
+    There exist circuits
+    $c_{k,j}:\mathcal H_{\mathcal B_{k,j}}\to
+        \mathcal H_{\mathcal B_{k,j+1}}$, for $0\le j<18$, each with at most
+    one nonprivate gate, whose participants lie in $\mathcal S_{k,j}$, and
+    \begin{align}
+        \|c_{k,j}\psi(\mathcal B_{k,j})-
+        \psi(\mathcal B_{k,j+1})\| & \le4\delta.
+        \label{eq:chain_stage_local_error}
+    \end{align}
+    Each original nonprivate gate has at most one recorded monomial,
+    absolute coefficient sum at most one, and at most one normalized
+    pair source and one normalized pair effect per monomial.
+    At stage zero, position $2$ joins the boundaries of the direct
+    death into $P_1$; positions $3,\ldots,9$ are identity circuits, with
+    zero error and no nonprivate gate. Every original auxiliary label and the order
+    of all spectator occurrences are retained.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:chain_sweep_stage_owners,thm:chain_stage_margins,
+        thm:chain_one_band_conditional_changes,thm:chain_sweep_local_boundaries,
+        thm:peps_frame_birth_bounded,thm:peps_bounded_change_closure}
+    The two birth targets are held by $R_k$ in their actual before-birth
+    frames. Apply the birth estimate with
+    (\ref{eq:chain_stage_remainder_information}) and
+    (\ref{eq:chain_stage_block_information}). The derived band flanks and
+    margins permit the two substitutions
+    (\ref{eq:chain_stage_left_information}) and
+    (\ref{eq:chain_stage_right_information}) in the one-band theorem.
+    Select the original copy $\lambda_{k-1}$ only for $k>0$, and select
+    $\rho_k$ on the right. The entrance and exit permutations identify
+    these band circuits with the prescribed boundaries, restoring the
+    original spectator order within the same operation position.
+    At $k=0$, the boundary death uses
+    (\ref{eq:chain_stage_boundary_information}); the seven subsequent
+    boundaries agree. Tensoring with spectator references preserves the
+    bounds, since their norms are at most one. Widening each ordinary
+    error $\delta$ to $4\delta$ gives (\ref{eq:chain_stage_local_error}).
+\end{proof}
+
+\begin{definition}[The conditional chronological middle circuit]
+    \label{def:chain_conditional_middle_circuit}
+    \lean{TNLean.MPS.AreaLaw.ChainSweep.sweepMiddleStep,
+        TNLean.MPS.AreaLaw.ChainSweep.sweepMiddleCircuit}
+    \leanok
+    \uses{def:chain_sweep_frame_path,def:chain_stage_participants,
+        def:peps_bounded_change,def:peps_circuit_source_bound,
+        def:peps_original_chronology_composite}
+    Let $q\ge1$ and let $\Omega$ be any original chain vector.
+    Write $\delta_L=L^{-30}$ for $L>0$ and $\delta_0=0$.
+    Suppose each given circuit $c_{k,j}$ between the actual successive
+    boundary lists is a bounded change from $\psi(\mathcal B_{k,j})$ to
+    $\psi(\mathcal B_{k,j+1})$, with participants in $\mathcal S_{k,j}$,
+    bounds $r=K=1$ and error $4\delta_L$, and has pair-source bound one.
+    At $k=0$ and $3\le j<10$, require the identity circuit, zero
+    reference error and zero nonprivate count, as in the local conclusion.
+    Put $N=18m$. On the existing chronological lists $\mathcal G_n$, define
+    \begin{align}
+        d_n & =
+        \begin{cases}
+            c_{\lfloor n/18\rfloor,n\bmod18}, & n<N,    \\
+            1_{\mathcal H_{\mathcal F_m}},    & n\ge N,
+        \end{cases}
+            & C & =d_{N-1}\cdots d_0.
+        \label{eq:chain_conditional_middle}
+    \end{align}
+    The boundary identities of Theorem~\ref{thm:chain_sweep_frame_path}
+    identify the displayed source and target spaces. For $N=0$, take
+    $C$ to be the identity. It maps the memory of the initial list
+    $\mathcal F_0$ to that of the exact terminal list $\mathcal F_m$.
+\end{definition}
+
+\begin{theorem}[Counts, expansions and error of the middle circuit]
+    \label{thm:chain_conditional_middle_bounds}
+    \lean{TNLean.MPS.AreaLaw.ChainSweep.sweepMiddleStep_tail_identity,
+        TNLean.MPS.AreaLaw.ChainSweep.sweepMiddleStep_first_padding,
+        TNLean.MPS.AreaLaw.ChainSweep.sweepMiddleCircuit_participation_le_forty,
+        TNLean.MPS.AreaLaw.ChainSweep.sweepMiddleCircuit_nonprivateCount_le,
+        TNLean.MPS.AreaLaw.ChainSweep.sweepMiddleCircuit_resource_bounds,
+        TNLean.MPS.AreaLaw.ChainSweep.sweepMiddleCircuit_norm_and_error}
+    \leanok
+    \uses{def:chain_conditional_middle_circuit}
+    In Definition~\ref{def:chain_conditional_middle_circuit}, let $N(C)$
+    count actual nonprivate occurrences and let $n_p(C)$ count those
+    involving party $p$. Then
+    \begin{align}
+        N(C) & \le18m, & n_p(C) & \le40.
+        \label{eq:chain_middle_circuit_counts}
+    \end{align}
+    Every original nonprivate gate retains the recorded monomial,
+    coefficient-sum, pair-effect and pair-source bounds one.
+    If $\|\Omega\|=1$, then, with $\Psi=C\psi(\mathcal F_0)$,
+    \begin{align}
+        \|\Psi\|                    & \le1,              &
+        \|\Psi-\psi(\mathcal F_m)\| & \le4(18m)\delta_L.
+        \label{eq:chain_middle_circuit_error}
+    \end{align}
+    The tail $d_n$ for $n\ge18m$ is the identity. When a first stage
+    exists, its positions $3,\ldots,9$ are identities. If $m=0$, the
+    middle is the identity on the common initial and terminal list.
+    If $m=1$, it has one eighteen-position stage with the direct
+    left-death boundaries, seven identities and one right auxiliary copy.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:chain_stage_incidence,thm:peps_original_chronology_composition,
+        lem:peps_protocol_telescoping,thm:chain_initial_copies}
+    The count identities for chronological composition sum the actual
+    position counts. There is at most one nonprivate occurrence per position,
+    and an occurrence involving $p$ lies in a position counted by
+    $N_{\rm pos}(p)$. Thus Theorem~\ref{thm:chain_stage_incidence} gives
+    (\ref{eq:chain_middle_circuit_counts}). The recorded expansion at
+    each occurrence is unchanged by composition or by the boundary
+    identifications, preserving its four bounds one.
+    Put $x_0=\psi(\mathcal G_0)$ and $x_{n+1}=d_nx_n$.
+    The circuits are contractions, so $\|x_N\|\le\|x_0\|=1$ and
+    \begin{align}
+        \|x_N-\psi(\mathcal G_N)\|
+         & \le\sum_{n<N}\|d_n\psi(\mathcal G_n)-\psi(\mathcal G_{n+1})\|
+        \le4N\delta_L.\notag
+    \end{align}
+    The initial and terminal boundary identities give
+    (\ref{eq:chain_middle_circuit_error}). The remaining assertions use
+    the specified identity slots and stationary terminal lists.
+\end{proof}
+
+\begin{definition}[Party placement and tagged prefix crossings]
+    \label{def:chain_party_placement}
+    \lean{TNLean.MPS.AreaLaw.ChainSweep.partyLevel,
+        TNLean.MPS.AreaLaw.ChainSweep.prefixCrossingLinks}
+    \leanok
+    \uses{def:chain_terminal_registers,def:compression_operator_links,
+        def:compression_operator_endpoints}
+    Place $R_i$ at level $\ell(R_i)=i$ and $P_{j+1}$ at
+    $\ell(P_{j+1})=j$.
+    Retain all parties, including $R_m$ and the parties with scalar
+    main output. For an actual tagged star or sample link $e$, write
+    $s(e),t(e)$ for its two oriented party endpoints. Let $\partial_r$
+    be the links with exactly one endpoint in $\{p:\ell(p)<r\}$.
+    Every crossing link retains its original gate and kind tag.
+\end{definition}
+
+\begin{theorem}[Derived stage support, arity and placement distance]
+    \label{thm:chain_middle_gate_support}
+    \lean{TNLean.MPS.AreaLaw.ChainSweep.stageParticipants_level_dist_le_two,
+        TNLean.MPS.AreaLaw.ChainSweep.card_le_eight_of_subset_stageParticipants,
+        TNLean.MPS.AreaLaw.ChainSweep.sweepMiddleCircuit_participants_subset_stage,
+        TNLean.MPS.AreaLaw.ChainSweep.sweepMiddleCircuit_participants_level_dist_le_two,
+        TNLean.MPS.AreaLaw.ChainSweep.sweepMiddleCircuit_participants_card_le_forty}
+    \leanok
+    \uses{def:chain_party_placement,def:chain_conditional_middle_circuit}
+    Write $\operatorname{part}(g)$ for the participant set of a gate.
+    Every pair of parties in one $\mathcal S_{k,j}$ has level distance
+    at most two, and each finite subset of $\mathcal S_{k,j}$ has at
+    most eight elements. Each actual nonprivate gate $g$ of the middle
+    circuit has a stage and position with
+    \begin{align}
+        \operatorname{part}(g) & \subseteq\mathcal S_{k,j}.
+        \label{eq:chain_middle_gate_support}
+    \end{align}
+    Consequently $|\operatorname{part}(g)|\le40$, and
+    $|\ell(p)-\ell(q)|\le2$ whenever $p,q\in\operatorname{part}(g)$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:chain_stage_incidence,thm:peps_original_chronology_composition}
+    The explicit roles at stage $k$ have levels between
+    $\max\{k-1,0\}$ and $k+1$, giving the distance bound.
+    They lie in a window of at most four levels,
+    $[\max\{k-1,0\},k+3)$, with at most one remainder party and one
+    completed party at each level, giving the coarse bound eight.
+    Each local gate has the required stage support. Transporting its
+    participant set through the actual boundary identifications and
+    chronological composition gives (\ref{eq:chain_middle_gate_support}).
+    Apply the two stage bounds to this same support witness, and use
+    $8\le40$. When $m=0$, there is no nonprivate gate to which a stage
+    need be assigned.
+\end{proof}
+
+\begin{theorem}[Congestion of the actual tagged links]
+    \label{thm:chain_tagged_link_congestion}
+    \lean{TNLean.MPS.AreaLaw.ChainSweep.prefixCrossingLinks_zero,
+        TNLean.MPS.AreaLaw.ChainSweep.prefixCrossingLinks_eq_empty_of_stageCount_lt,
+        TNLean.MPS.AreaLaw.ChainSweep.prefixCrossingLinks_card_le_of_originalCircuit,
+        TNLean.MPS.AreaLaw.ChainSweep.compressedMiddle_prefixCrossingLinks_card_le,
+        TNLean.MPS.AreaLaw.ChainSweep.compressedMiddle_prefixCrossingLinks_card_le_24960}
+    \leanok
+    \uses{def:chain_party_placement}
+    Let $W$ be an original circuit on these parties such that any two
+    participants of one nonprivate gate have level distance at most two.
+    Consider a tagged distributed link family on these parties. Suppose each
+    party is incident to at most $d$ links and that the two endpoints
+    of every link participate in a common original nonprivate gate of
+    $W$. Then, for every natural prefix index $r$,
+    \begin{align}
+        |\partial_r| & \le8d.
+        \label{eq:chain_tagged_link_congestion}
+    \end{align}
+    The endpoint prefixes $r=0$ and $r>m$ have no crossing links.
+    For the middle circuit $C$, its derived support supplies the
+    required gate distance. Thus the actual common-original-gate and
+    degree conclusions of distributed compression at $d=3120$ imply
+    \begin{align}
+        |\partial_r| & \le24960.
+        \label{eq:chain_middle_link_congestion}
+    \end{align}
+    Here $3120=2\cdot40\cdot39$ is the degree bound in
+    Theorem~\ref{thm:peps_distributed_construction_compression} at $b=40$,
+    from \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS}.
+    This gives a coarse bound for the routing argument of
+    \cite[Part~II, proof of Theorem~B]{TNLean2026OneDimensional}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:chain_middle_gate_support,def:compression_operator_endpoints}
+    A crossing link with endpoint levels differing by at most two has
+    both endpoints in
+    $\mathcal N_r=\{p:\max\{r-2,0\}\le\ell(p)<r+2\}$.
+    Mapping a party to its level offset and its remainder/completed
+    type injects $\mathcal N_r$ into four levels times two types, so
+    $|\mathcal N_r|\le8$. Every crossing link belongs to the incident
+    link set of its first endpoint. The union bound therefore gives
+    \begin{align}
+        |\partial_r| & \le\sum_{p\in\mathcal N_r}
+        |\{e:p\text{ is an endpoint of }e\}|\le8d.\notag
+    \end{align}
+    This counts the full link tags; parallel links stay distinct and
+    a loop never crosses a prefix. Every party level is at most $m$,
+    proving the endpoint assertions. For $C$, apply
+    Theorem~\ref{thm:chain_middle_gate_support} to the common original
+    gate and substitute $d=3120$.
+\end{proof}
+
+% Physical information estimates, composition with initialization and terminal
+% readout, physical output error, and applying compression remain separate.

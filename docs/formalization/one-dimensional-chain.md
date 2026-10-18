@@ -56,6 +56,10 @@ protocol route has the following proved intermediate results:
 | Eight one-band changes and the boundary death, under primitive information bounds | `OneBand.circuits_of_primitive_information`, `boundary_change_of_primitive_information` | Proved conditionally on the eight stated mutual-information inequalities for the original vector. Each circuit has the stated source, effect, coefficient and gate bounds; the exchange is private. These results do not derive the information inequalities from a gapped Hamiltonian. |
 | Stage ownership and retired auxiliary copies | `ChainSweep.birth_environments`, `left_band_owners`, `rightBandMain_eq_stageFrame`, `rightRetiredAuxiliary_eq_raw`, `leftRetiredAuxiliary_eq_raw` | Proved from the actual stage assignments and margins, retaining the original stage-and-side copy labels. |
 | Labelled history and chronological frame sequence | `ChainSweep.afterRightFrames_eq_sweepFrames`, `stageBoundaryFrames_eighteen`, `operationFrames_stageBoundary`, `operationFrames_step` | Proved for the specified eighteen-step stages, with one direct first-stage left death followed by seven unchanged boundaries. The zero-stage, one-stage and stationary terminal cases are included. This constructs frame lists, without supplying a circuit between them. |
+| Prescribed stage incidence | `ChainSweep.participatingStageIndices_card_le_two`, `scheduledParticipationCount_le_thirtySix` | Proved for the specified participant sets: each party occurs in at most two stages and at most 36 prescribed positions. Actual circuit counts are a separate consequence. |
+| Eighteen local circuits from primitive information | `ChainSweep.local_stage_circuits_of_primitive_information` | Proved under the nineteen written information premise forms for the original vector, with their zero-stage and positive-stage guards. Each actual successive-boundary circuit has at most one nonprivate gate and error at most `4 L^(-30)`; the seven first-stage padding circuits are identities. |
+| Conditional chronological middle | `ChainSweep.sweepMiddleCircuit_participation_le_forty`, `sweepMiddleCircuit_nonprivateCount_le`, `sweepMiddleCircuit_resource_bounds`, `sweepMiddleCircuit_norm_and_error` | Proved from the same actual local family: lifetime at most 40, at most `18m` nonprivate occurrences, the recorded gate expansion bounds one, and error at most `4(18m)L^(-30)` for a unit original vector. Initialization and terminal readout are separate. |
+| Derived gate support and tagged-link congestion | `ChainSweep.sweepMiddleCircuit_participants_subset_stage`, `sweepMiddleCircuit_participants_level_dist_le_two`, `prefixCrossingLinks_card_le_of_originalCircuit`, `compressedMiddle_prefixCrossingLinks_card_le_24960` | Proved: the actual middle gates lie in prescribed stage participant sets and have level distance at most two. For a tagged compression graph whose links share actual original gates and whose incident degree is at most 3120, every prefix has at most 24960 crossing links. The generic original-circuit version has bound `8d`; it does not assert that physical compression hypotheses have been discharged. |
 | Cut rank of the distributed identity-bond network | `DependentBondNetwork.rank_flattening_network_one_le`, `DistributedOperatorContraction.rank_flattening_contractedOperator_column_le` | Proved for every party partition and every actual product-basis input column. The rank is bounded by the product of the alphabets of the tagged crossing links, each counted once. Varying and empty alphabets, loops and parallel links are included; placement and crossing counts are separate. These declarations belong to the corresponding `TNLean.PEPS` namespaces. |
 
 The half-open
@@ -64,11 +68,11 @@ auxiliary registers are recorded in
 [`tnlean_one_dimensional_band_sweep_corrections.tex`](../paper-gaps/tnlean_one_dimensional_band_sweep_corrections.tex).
 The one-band declarations belong to `TNLean.MPS.AreaLaw.OneBand`; the
 remaining protocol declarations belong to `TNLean.MPS.AreaLaw.ChainSweep`.
-Deriving the physical information inequalities, assembling the complete sweep
-circuit, proving its total gate and participation counts and accumulated error,
-and applying compression remain separate obligations. The frame identities
-identify the required terminal memory; they do not by themselves construct
-a circuit reaching it.
+Deriving the physical information inequalities, composing the conditional
+middle with initialization and terminal readout, and applying compression remain
+separate obligations. The conditional middle already reaches the specified
+terminal frame memory and has the stated actual counts and accumulated error;
+its hypotheses must still be derived from the gapped Hamiltonian.
 
 ## Constants
 
