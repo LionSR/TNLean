@@ -83,8 +83,7 @@ example (Λ : Finset (ℤ × ℤ)) (q : ℕ) (Ω : StateSpace Λ q) (A : Finset 
   regionalEntropy_eq_finiteProduct Λ q Ω A
 
 /--
-info: 'TNLean.PEPS.AreaLaw.reducedState_eq_finiteProduct' depends on axioms:
-[propext, Classical.choice, Quot.sound]
+info: 'TNLean.Lattice.reducedState_eq_finiteProduct' depends on axioms: [propext, Classical.choice, Quot.sound]
 ---
 info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
 -/
@@ -92,8 +91,7 @@ info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashC
 #print axioms TNLean.Lattice.reducedState_eq_finiteProduct
 
 /--
-info: 'TNLean.PEPS.AreaLaw.regionalEntropy_eq_finiteProduct' depends on axioms:
-[propext, Classical.choice, Quot.sound]
+info: 'TNLean.Lattice.regionalEntropy_eq_finiteProduct' depends on axioms: [propext, Classical.choice, Quot.sound]
 ---
 info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
 -/

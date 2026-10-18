@@ -164,8 +164,7 @@ section AxiomChecks
 set_option linter.hashCommand false
 
 /--
-info: 'TNLean.PEPS.AreaLaw.mem_ambientDilation_iff'
-depends on axioms: [propext, Classical.choice, Quot.sound]
+info: 'TNLean.Lattice.mem_ambientDilation_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms TNLean.Lattice.mem_ambientDilation_iff
