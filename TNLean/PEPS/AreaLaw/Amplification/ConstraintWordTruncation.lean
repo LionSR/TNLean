@@ -283,6 +283,66 @@ theorem contractionWord_siteExpectation_mem_supportedOperators {q : ℕ} [NeZero
     rw [contractionWord]
     exact mul_mem_supportedOperators (hmem _) (ih _)
 
+/-- The prefactor `2 μ √C` of the truncation of the retained constraint product, for
+localization tails `C e^{-c l^α}` and at most `μ` labels per site. Source: area law,
+`09-amplification.tex`, lines 228–234. -/
+noncomputable def constraintWordTruncationPrefactor (μ C : ℝ) : ℝ :=
+  2 * μ * Real.sqrt C
+
+theorem constraintWordTruncationPrefactor_nonneg {μ : ℝ} (hμ : 0 ≤ μ) (C : ℝ) :
+    0 ≤ constraintWordTruncationPrefactor μ C := by
+  unfold constraintWordTruncationPrefactor; positivity
+
+/-- **Truncation of the retained constraint product for general constraints, with explicit
+constants** (Lemma 10.1, `eq:amplification-product-truncation`, `09-amplification.tex`,
+lines 42–63 and 228–234). The bound of `exists_domainConstraintWord_truncation` holds with
+`A = constraintWordTruncationPrefactor μ C = 2 μ √C` and `γ = c / 2`. -/
+theorem domainConstraintWord_truncation {C μ c α : ℝ} (hC : 0 ≤ C) (hμ : 0 ≤ μ) :
+    ∀ {q : ℕ} [NeZero q] (Λ : Finset (ℤ × ℤ)) (κ : Type*) [Fintype κ]
+      (a : κ → Site Λ) (k : κ → Matrix (Configuration Λ q) (Configuration Λ q) ℂ),
+      (∀ i, 0 ≤ k i) → (∀ i, k i ≤ 1) →
+      (∀ x, ((Finset.univ.filter fun i : κ => a i = x).card : ℝ) ≤ μ) →
+      (∀ i (l : ℕ), ‖k i - siteExpectation q (graphBall (domainGraph Λ) (a i) l) (k i)‖ ≤
+        C * Real.exp (-(c * (l : ℝ) ^ α))) →
+      ∀ (S : Finset (Site Λ)) (r : ℕ) (t : ℝ≥0),
+      let P := fun i : κ => a i ∈ graphNeighborhood Λ r S
+      let kr := fun i : {i // P i} =>
+        siteExpectation q (graphBall (domainGraph Λ) (a i) r) (k i)
+      let D := fun w : PoissonWord.Word κ =>
+        contractionWord (fun i : {i // P i} => k i) (PoissonWord.partitionWords P w).1.1
+          (PoissonWord.partitionWords P w).1.2
+      let L := fun w : PoissonWord.Word κ =>
+        contractionWord kr (PoissonWord.partitionWords P w).1.1
+          (PoissonWord.partitionWords P w).1.2
+      Integrable (fun w => ‖D w - L w‖) (PoissonWord.measure κ t) ∧
+      (∫ w, ‖D w - L w‖ ∂PoissonWord.measure κ t) ≤
+        constraintWordTruncationPrefactor μ C * t * S.card * (1 + (r : ℝ)) ^ 2 *
+          Real.exp (-(c / 2 * (r : ℝ) ^ α)) ∧
+      ∀ w, ‖L w‖ ≤ 1 ∧
+        L w ∈ supportedOperators q (graphNeighborhood Λ (2 * r) S : Set (Site Λ)) := by
+  unfold constraintWordTruncationPrefactor
+  intro q _ Λ κ _ a k hk₀ hk₁ hfiber htail S r t P kr D L
+  have hkr₀ (i : {i // P i}) : 0 ≤ kr i := siteExpectation_nonneg _ (hk₀ i)
+  have hkr₁ (i : {i // P i}) : kr i ≤ 1 := siteExpectation_le_one _ (hk₁ i)
+  set ε := Real.sqrt C * Real.exp (-(c / 2 * (r : ℝ) ^ α)) with hε_def
+  have hε (i : {i // P i}) : ‖CFC.sqrt (1 - k i) - CFC.sqrt (1 - kr i)‖ ≤ ε := by
+    refine (norm_sqrt_one_sub_sub_le (hk₁ i) (hkr₁ i)).trans ?_
+    calc Real.sqrt ‖k i - kr i‖ ≤ Real.sqrt (C * Real.exp (-(c * (r : ℝ) ^ α))) :=
+          Real.sqrt_le_sqrt (htail i r)
+      _ = ε := by
+          rw [Real.sqrt_mul hC, ← Real.exp_half, hε_def]
+          ring_nf
+  obtain ⟨hint, hle⟩ := integrable_and_integral_norm_contractionWord_retained_sub_le P
+    (fun i : {i // P i} => k i) kr (fun i => hk₀ i) hkr₀ hε t
+  refine ⟨hint, hle.trans ?_, fun w => ⟨norm_contractionWord_le_one kr hkr₀ _ _,
+    contractionWord_siteExpectation_mem_supportedOperators a _ (fun i => hk₁ i) _ _⟩⟩
+  have hcardP : (Fintype.card {i // P i} : ℝ) ≤ 2 * μ * S.card * (1 + (r : ℝ)) ^ 2 := by
+    rw [Fintype.card_subtype]; exact card_filter_anchor_mem_graphNeighborhood_le a hμ hfiber S r
+  have hε0 : 0 ≤ ε := by positivity
+  calc ε * Fintype.card {i // P i} * t ≤ ε * (2 * μ * S.card * (1 + (r : ℝ)) ^ 2) * t :=
+        mul_le_mul_of_nonneg_right (mul_le_mul_of_nonneg_left hcardP hε0) t.2
+    _ = _ := by rw [hε_def]; ring
+
 /-- **Truncation of the retained constraint product for general constraints**
 (Lemma 10.1, `lem:amplification-local-products`, `eq:amplification-product-truncation`,
 `09-amplification.tex`, lines 42–63, proof at lines 228–234).
@@ -320,29 +380,62 @@ theorem exists_domainConstraintWord_truncation {C μ c α : ℝ} (hC : 0 ≤ C) 
         (∫ w, ‖D w - L w‖ ∂PoissonWord.measure κ t) ≤
           A * t * S.card * (1 + (r : ℝ)) ^ 2 * Real.exp (-(γ * (r : ℝ) ^ α)) ∧
         ∀ w, ‖L w‖ ≤ 1 ∧
-          L w ∈ supportedOperators q (graphNeighborhood Λ (2 * r) S : Set (Site Λ)) := by
-  refine ⟨2 * μ * Real.sqrt C, c / 2, by positivity, by positivity, ?_⟩
-  intro q _ Λ κ _ a k hk₀ hk₁ hfiber htail S r t P kr D L
-  have hkr₀ (i : {i // P i}) : 0 ≤ kr i := siteExpectation_nonneg _ (hk₀ i)
-  have hkr₁ (i : {i // P i}) : kr i ≤ 1 := siteExpectation_le_one _ (hk₁ i)
-  set ε := Real.sqrt C * Real.exp (-(c / 2 * (r : ℝ) ^ α)) with hε_def
-  have hε (i : {i // P i}) : ‖CFC.sqrt (1 - k i) - CFC.sqrt (1 - kr i)‖ ≤ ε := by
-    refine (norm_sqrt_one_sub_sub_le (hk₁ i) (hkr₁ i)).trans ?_
-    calc Real.sqrt ‖k i - kr i‖ ≤ Real.sqrt (C * Real.exp (-(c * (r : ℝ) ^ α))) :=
-          Real.sqrt_le_sqrt (htail i r)
-      _ = ε := by
-          rw [Real.sqrt_mul hC, ← Real.exp_half, hε_def]
-          ring_nf
-  obtain ⟨hint, hle⟩ := integrable_and_integral_norm_contractionWord_retained_sub_le P
-    (fun i : {i // P i} => k i) kr (fun i => hk₀ i) hkr₀ hε t
-  refine ⟨hint, hle.trans ?_, fun w => ⟨norm_contractionWord_le_one kr hkr₀ _ _,
-    contractionWord_siteExpectation_mem_supportedOperators a _ (fun i => hk₁ i) _ _⟩⟩
-  have hcardP : (Fintype.card {i // P i} : ℝ) ≤ 2 * μ * S.card * (1 + (r : ℝ)) ^ 2 := by
-    rw [Fintype.card_subtype]; exact card_filter_anchor_mem_graphNeighborhood_le a hμ hfiber S r
-  have hε0 : 0 ≤ ε := by positivity
-  calc ε * Fintype.card {i // P i} * t ≤ ε * (2 * μ * S.card * (1 + (r : ℝ)) ^ 2) * t :=
-        mul_le_mul_of_nonneg_right (mul_le_mul_of_nonneg_left hcardP hε0) t.2
-    _ = _ := by rw [hε_def]; ring
+          L w ∈ supportedOperators q (graphNeighborhood Λ (2 * r) S : Set (Site Λ)) :=
+  ⟨_, _, constraintWordTruncationPrefactor_nonneg hμ C, half_pos hc,
+    domainConstraintWord_truncation hC hμ⟩
+
+/-- **Truncation of the retained constraint product for the exact positive constraints, with
+explicit constants** (Lemma 10.1, `eq:amplification-product-truncation`;
+`09-amplification.tex`, lines 42–63 and 228–234). Let `C ≥ 0` be a localization prefactor of
+the positive constraints, in the form of Proposition 4.3, with rate `c`. Then the bound of
+`exists_latticeConstraintWord_truncation` holds with
+`C_t = constraintWordTruncationPrefactor μ_R C = 2 μ_R √C`, `μ_R = 2^{2R(R+1)}`, and
+`c_t = c / 2`. -/
+theorem latticeConstraintWord_truncation_of_positiveConstraints {p : ℕ} (R : ℕ) {J Δ C c : ℝ}
+    (hC : 0 ≤ C)
+    (hpos : ∀ {q : ℕ} [NeZero q] (Λ : Finset (ℤ × ℤ)) (h : LocalHamiltonian Λ q R J)
+        (a : AdmissibleSupport Λ R → Site Λ), (∀ X, a X ∈ X.1) →
+        ∀ (E₀ : ℝ) (Ω : StateSpace Λ q), IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+        let cs := positiveNormalization p (Δ / 2) J
+        let k := fun i => positiveConstraint cs (centeredFilter p (Δ / 2) h.operator Ω (h.term i))
+        0 < cs ∧
+        (∀ i, 0 ≤ k i ∧ k i ≤ 1 ∧ k i *ᵥ WithLp.ofLp Ω = 0) ∧
+        cs⁻¹ • (h.operator - (E₀ : ℂ) • 1) ≤ ∑ i, k i ∧
+        ((Δ / cs : ℝ) : ℂ) • (1 - Matrix.vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))) ≤
+          cs⁻¹ • (h.operator - (E₀ : ℂ) • 1) ∧
+        ((Δ / cs : ℝ) : ℂ) • (1 - Matrix.vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))) ≤
+          ∑ i, k i ∧
+        (∀ i (l : ℕ), 0 ≤ siteExpectation q (graphBall (domainGraph Λ) (a i) l) (k i) ∧
+          siteExpectation q (graphBall (domainGraph Λ) (a i) l) (k i) ≤ 1 ∧
+          ‖k i - siteExpectation q (graphBall (domainGraph Λ) (a i) l) (k i)‖ ≤
+            C * Real.exp (-(c * (l : ℝ) ^ kernelExponent p))) ∧
+        (∀ i, k i ∈ supportedOperators q {x | (domainGraph Λ).Reachable (a i) x})) :
+    ∀ {q : ℕ} [NeZero q] (Λ : Finset (ℤ × ℤ)) (h : LocalHamiltonian Λ q R J)
+      (a : AdmissibleSupport Λ R → Site Λ), (∀ X, a X ∈ X.1) →
+      ∀ (E₀ : ℝ) (Ω : StateSpace Λ q), IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+      ∀ (S : Finset (Site Λ)) (r : ℕ) (t : ℝ≥0),
+      let P := fun i : AdmissibleSupport Λ R => a i ∈ graphNeighborhood Λ r S
+      let k := fun i : {i // P i} => positiveConstraint (positiveNormalization p (Δ / 2) J)
+        (centeredFilter p (Δ / 2) h.operator Ω (h.term i))
+      let kr := fun i : {i // P i} =>
+        siteExpectation q (graphBall (domainGraph Λ) (a i) r) (k i)
+      let D := fun w : PoissonWord.Word (AdmissibleSupport Λ R) =>
+        contractionWord k (PoissonWord.partitionWords P w).1.1
+          (PoissonWord.partitionWords P w).1.2
+      let L := fun w : PoissonWord.Word (AdmissibleSupport Λ R) =>
+        contractionWord kr (PoissonWord.partitionWords P w).1.1
+          (PoissonWord.partitionWords P w).1.2
+      Integrable (fun w => ‖D w - L w‖) (PoissonWord.measure (AdmissibleSupport Λ R) t) ∧
+      (∫ w, ‖D w - L w‖ ∂PoissonWord.measure (AdmissibleSupport Λ R) t) ≤
+        constraintWordTruncationPrefactor ((2 ^ ((1 + 2 * R * (R + 1)) - 1) : ℕ) : ℝ) C * t *
+          S.card * (1 + (r : ℝ)) ^ 2 * Real.exp (-(c / 2 * (r : ℝ) ^ kernelExponent p)) ∧
+      ∀ w, ‖L w‖ ≤ 1 ∧
+        L w ∈ supportedOperators q (graphNeighborhood Λ (2 * r) S : Set (Site Λ)) := by
+  intro q _ Λ h a ha E₀ Ω hgs S r t
+  obtain ⟨-, hk, -, -, -, htail, -⟩ := hpos Λ h a ha E₀ Ω hgs
+  exact domainConstraintWord_truncation hC (Nat.cast_nonneg _) Λ (AdmissibleSupport Λ R) a _
+    (fun i => (hk i).1) (fun i => (hk i).2.1)
+    (fun x => by exact_mod_cast card_anchor_fiber_le a ha x) (fun i l => (htail i l).2.2) S r t
 
 /-- **Truncation of the retained constraint product** (Lemma 10.1,
 `lem:amplification-local-products`, `eq:amplification-product-truncation`,
@@ -382,28 +475,9 @@ theorem exists_latticeConstraintWord_truncation {p : ℕ} (hp : 1 ≤ p) (R : �
             Real.exp (-(c * (r : ℝ) ^ kernelExponent p)) ∧
         ∀ w, ‖L w‖ ≤ 1 ∧
           L w ∈ supportedOperators q (graphNeighborhood Λ (2 * r) S : Set (Site Λ)) := by
-  obtain ⟨C, c, hC, hc, hroots⟩ := exists_latticeQuasilocalRoots.{0} hp R hJ hΔ
-  obtain ⟨C', c', -, -, hpos⟩ := exists_latticePositiveConstraints hp R hJ hΔ
-  set μ : ℕ := 2 ^ ((1 + 2 * R * (R + 1)) - 1)
-  refine ⟨2 * μ * C, c, by positivity, hc, ?_⟩
-  intro q _ Λ h a ha E₀ Ω hgs S r t P k kr D L
-  obtain ⟨-, hk, -⟩ := hpos Λ h a ha E₀ Ω hgs
-  have hk₀ (i : {i // P i}) : 0 ≤ k i := (hk i).1
-  have hkr₀ (i : {i // P i}) : 0 ≤ kr i := siteExpectation_nonneg _ (hk i).1
-  set ε := C * Real.exp (-(c * (r : ℝ) ^ kernelExponent p))
-  have hε (i : {i // P i}) : ‖CFC.sqrt (1 - k i) - CFC.sqrt (1 - kr i)‖ ≤ ε := by
-    obtain ⟨-, -, -, -, -, -, htail, -⟩ := hroots Λ h a ha E₀ Ω hgs i r
-    exact le_of_add_le_of_nonneg_left htail (norm_nonneg _)
-  obtain ⟨hint, hle⟩ :=
-    integrable_and_integral_norm_contractionWord_retained_sub_le P k kr hk₀ hkr₀ hε t
-  refine ⟨hint, hle.trans ?_, fun w => ⟨norm_contractionWord_le_one kr hkr₀ _ _,
-    contractionWord_siteExpectation_mem_supportedOperators a k (fun i => (hk i).2.1) _ _⟩⟩
-  have hcardP : (Fintype.card {i // P i} : ℝ) ≤ 2 * μ * S.card * (1 + (r : ℝ)) ^ 2 := by
-    rw [Fintype.card_subtype]; exact card_anchor_graphNeighborhood_le a ha S r
-  have hε0 : 0 ≤ ε := by positivity
-  calc ε * Fintype.card {i // P i} * t ≤ ε * (2 * μ * S.card * (1 + (r : ℝ)) ^ 2) * t :=
-        mul_le_mul_of_nonneg_right (mul_le_mul_of_nonneg_left hcardP hε0) t.2
-    _ = _ := by ring
+  obtain ⟨C, c, hC, hc, hpos⟩ := exists_latticePositiveConstraints hp R hJ hΔ
+  exact ⟨_, _, constraintWordTruncationPrefactor_nonneg (Nat.cast_nonneg _) C, half_pos hc,
+    latticeConstraintWord_truncation_of_positiveConstraints R hC hpos⟩
 
 end Lattice
 

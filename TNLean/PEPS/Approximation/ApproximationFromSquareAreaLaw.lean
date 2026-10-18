@@ -12,10 +12,10 @@ import TNLean.PEPS.Approximation.DyadicProtocolPatchApproximation
 The polynomial-PEPS theorem follows from the square-grid entropy area law,
 through the adaptive patch constraint of Proposition 4.1.
 
-**Scope restriction (conditional area law):** the theorem assumes the square
-entropy area law explicitly. Its deduction from the spectral-gap hypotheses is
-the separate area-law problem described in
-`docs/paper-gaps/arealaw2d_rectangular_specialization_scope.tex`.
+The theorem takes the square entropy area law as a hypothesis. That law is
+proved as `TNLean.PEPS.AreaLaw.squareEntropyAreaLaw`, and the unconditional
+Theorem 1.1 is `polynomialPEPSApproximation` in
+`TNLean.PEPS.Approximation.PolynomialPEPSTheorem`.
 
 ## References
 

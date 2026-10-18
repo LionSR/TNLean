@@ -43,7 +43,8 @@ the output bound, with `K = 4(M + 2)`.
 
 * `TNLean.PEPS.AreaLaw.amplificationBound`: Proposition 10.2.
 * `TNLean.PEPS.AreaLaw.uniformAreaLaw_of_collar_twoFamilies`: the uniform area law from
-  Propositions 9.6 and 11.2 alone. This is conditional on those two propositions.
+  Propositions 9.6 and 11.2 alone, taken as hypotheses. Both are proved, and
+  `uniformAreaLaw` is the unconditional Theorem 1.1.
 
 ## References
 

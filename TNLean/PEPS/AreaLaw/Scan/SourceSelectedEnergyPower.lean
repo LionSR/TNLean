@@ -17,7 +17,8 @@ Consequently the energy cap is at most
 `n^(-1/2000)` is `97/250000`.
 
 After fixing the coefficient, logarithmic power, positive gap and tail power,
-one threshold works for every admissible scalar datum. An initial error at
+one threshold works for every admissible scalar datum; it is given explicitly by
+`finalSelectedEnergyThreshold`. An initial error at
 most `n^(-1000)` is absorbed as well. An additional replica remainder is
 retained additively after division by `g/2`; its decay is not assumed here.
 
@@ -35,7 +36,7 @@ corollary. Independently formalized from the manuscript; no upstream Lean
 proof text is reused.
 -/
 
-open Filter Asymptotics
+open Filter
 
 namespace TNLean.PEPS.AreaLaw.Scan
 
@@ -63,33 +64,6 @@ theorem final_selectedEnergy_margins :
       (97 / 250000 : ℝ) := by
   norm_num [Exponents.scannerOmega, Exponents.scannerEll,
     Exponents.scannerKappa, Exponents.scannerNu]
-
-/-- A fixed coefficient and logarithmic power are absorbed by a strict
-power margin, with any prescribed positive coefficient on the right. -/
-private theorem eventually_energy_const_mul_rpow_log_rpow_le
-    (A Cl u v b : ℝ) (hA : 0 ≤ A) (huv : u < v) (hb : 0 < b) :
-    ∀ᶠ n : ℕ in atTop,
-      A * (n : ℝ) ^ u * Real.log (n : ℝ) ^ Cl ≤ b * (n : ℝ) ^ v := by
-  have hgap : 0 < v - u := sub_pos.mpr huv
-  have hlog : (fun n : ℕ => A * Real.log (n : ℝ) ^ Cl) =o[atTop]
-      fun n => (n : ℝ) ^ (v - u) :=
-    (isLittleO_log_rpow_rpow_atTop Cl hgap).natCast_atTop.const_mul_left A
-  filter_upwards [eventually_ge_atTop 2, hlog.bound hb] with n hn hsmall
-  have hn1 : (1 : ℝ) ≤ n := by exact_mod_cast (show 1 ≤ n by omega)
-  have hnpos : (0 : ℝ) < n := zero_lt_one.trans_le hn1
-  have hlog0 : 0 ≤ Real.log (n : ℝ) := Real.log_nonneg hn1
-  have hsmall' : A * Real.log (n : ℝ) ^ Cl ≤ b * (n : ℝ) ^ (v - u) := by
-    simpa only [Real.norm_of_nonneg
-      (mul_nonneg hA (Real.rpow_nonneg hlog0 Cl)),
-      Real.norm_of_nonneg (Real.rpow_nonneg (Nat.cast_nonneg n) (v - u))]
-      using hsmall
-  calc
-    A * (n : ℝ) ^ u * Real.log (n : ℝ) ^ Cl =
-        (A * Real.log (n : ℝ) ^ Cl) * (n : ℝ) ^ u := by ring
-    _ ≤ (b * (n : ℝ) ^ (v - u)) * (n : ℝ) ^ u :=
-      mul_le_mul_of_nonneg_right hsmall' (by positivity)
-    _ = b * (n : ℝ) ^ v := by
-      rw [mul_assoc, ← Real.rpow_add hnpos, sub_add_cancel]
 
 /-- The literal energy cap has a uniform explicit power bound. It uses the
 matched density rate `8ν`, the full interpolation interval and `P ≥ ν`.
@@ -194,6 +168,45 @@ theorem finalSelectedEnergyCap_le {C Cl P : ℝ} (hC : 0 ≤ C)
             Real.log (n : ℝ) ^ Cl := by ring
     _ = _ := by rw [hpowers]
 
+/-- The explicit threshold of the final selected-energy bound: the thresholds for
+`16 C n^(-111/125000) (log n)^Cl ≤ (g/4) n^(-1/2000)` and
+`n^(-1000) ≤ (g/4) n^(-1/2000)` (`08-scanner.tex`, lines 492--511 and 839--865). -/
+noncomputable def finalSelectedEnergyThreshold (C Cl g : ℝ) : ℕ :=
+  max ⌈Real.logRpowThreshold (16 * C) (g / 4) (-111 / 125000) (-1 / 2000) Cl⌉₊
+    ⌈Real.logRpowThreshold 1 (g / 4) (-1000) (-1 / 2000) 0⌉₊
+
+/-- The initial error and literal final-scale energy cap together are at most `n^(-1/2000)`
+after division by `g/2` at every `n` from the explicit threshold
+`finalSelectedEnergyThreshold C Cl g` on, uniformly over every displayed scalar datum.
+Source: `08-scanner.tex`, lines 492--511 and 839--865. -/
+theorem final_selectedEnergy_le_rpow_of_finalSelectedEnergyThreshold_le {C Cl g P : ℝ}
+    (hC : 0 ≤ C) (hg : 0 < g) (hP : (Exponents.scannerNu : ℝ) ≤ P) {n : ℕ}
+    (hthr : finalSelectedEnergyThreshold C Cl g ≤ n) :
+    2 ≤ n ∧
+      ∀ W x p e : ℝ, 1 ≤ W → W ≤ (n : ℝ) ^ (Exponents.scannerOmega : ℝ) →
+        0 ≤ x → x ≤ (n : ℝ) ^ (-(8 * (Exponents.scannerNu : ℝ))) →
+        p ∈ Set.Icc ((n : ℝ) ^ (-(Exponents.scannerNu : ℝ)))
+          (2 * (n : ℝ) ^ (-(Exponents.scannerNu : ℝ))) →
+        e ≤ (n : ℝ) ^ (-1000 : ℝ) →
+        (e + finalSelectedEnergyCap C Cl P n W x p) / (g / 2) ≤
+          (n : ℝ) ^ (-(1 / 2000 : ℝ)) := by
+  have hn := Real.two_le_of_ceil_logRpowThreshold_le ((le_max_left _ _).trans hthr)
+  have hcap : (16 * C) * (n : ℝ) ^ (-111 / 125000 : ℝ) * Real.log (n : ℝ) ^ Cl ≤
+      (g / 4) * (n : ℝ) ^ (-(1 / 2000 : ℝ)) := by
+    simpa only [neg_div] using
+      Real.mul_rpow_mul_log_rpow_le_mul_rpow_of_ceil_logRpowThreshold_le
+        (by positivity) (by positivity) (by norm_num) ((le_max_left _ _).trans hthr)
+  have he : (n : ℝ) ^ (-1000 : ℝ) ≤ (g / 4) * (n : ℝ) ^ (-(1 / 2000 : ℝ)) := by
+    simpa only [Real.rpow_zero, mul_one, one_mul, neg_div] using
+      Real.mul_rpow_mul_log_rpow_le_mul_rpow_of_ceil_logRpowThreshold_le
+        (by norm_num) (by positivity) (by norm_num) ((le_max_right _ _).trans hthr)
+  refine ⟨hn, ?_⟩
+  intro W x p e hW hWupper hx hxupper hp heupper
+  have hbound := finalSelectedEnergyCap_le (Cl := Cl) hC hP
+    (show 1 ≤ n by omega) hW hWupper hx hxupper hp
+  apply (div_le_iff₀ (by positivity : (0 : ℝ) < g / 2)).2
+  nlinarith [hbound.trans hcap, heupper.trans he]
+
 /-- After fixing the coefficients and positive gap, the initial error and
 literal final-scale energy cap together decay at least as `n^(-1/2000)`
 after division by `g/2`, uniformly over every displayed scalar datum.
@@ -208,27 +221,9 @@ theorem eventually_final_selectedEnergy_le_rpow {C Cl g P : ℝ}
           (2 * (n : ℝ) ^ (-(Exponents.scannerNu : ℝ))) →
         e ≤ (n : ℝ) ^ (-1000 : ℝ) →
         (e + finalSelectedEnergyCap C Cl P n W x p) / (g / 2) ≤
-          (n : ℝ) ^ (-(1 / 2000 : ℝ)) := by
-  have henergy : ∀ᶠ n : ℕ in atTop,
-      (16 * C) * (n : ℝ) ^ (-111 / 125000 : ℝ) * Real.log (n : ℝ) ^ Cl ≤
-        (g / 4) * (n : ℝ) ^ (-(1 / 2000 : ℝ)) := by
-    simpa only [neg_div] using
-      eventually_energy_const_mul_rpow_log_rpow_le (16 * C) Cl
-        (-111 / 125000) (-1 / 2000) (g / 4)
-        (by positivity) (by norm_num) (by positivity)
-  have hinitial : ∀ᶠ n : ℕ in atTop,
-      (n : ℝ) ^ (-1000 : ℝ) ≤ (g / 4) * (n : ℝ) ^ (-(1 / 2000 : ℝ)) := by
-    simpa only [Real.rpow_zero, mul_one, one_mul, neg_div] using
-      eventually_energy_const_mul_rpow_log_rpow_le 1 0
-        (-1000) (-1 / 2000) (g / 4)
-        (by norm_num) (by norm_num) (by positivity)
-  filter_upwards [eventually_ge_atTop 2, henergy, hinitial] with n hn hcap he
-  refine ⟨hn, ?_⟩
-  intro W x p e hW hWupper hx hxupper hp heupper
-  have hbound := finalSelectedEnergyCap_le (Cl := Cl) hC hP
-    (show 1 ≤ n by omega) hW hWupper hx hxupper hp
-  apply (div_le_iff₀ (by positivity : (0 : ℝ) < g / 2)).2
-  nlinarith [hbound.trans hcap, heupper.trans he]
+          (n : ℝ) ^ (-(1 / 2000 : ℝ)) :=
+  eventually_atTop.2
+    ⟨_, fun _ => final_selectedEnergy_le_rpow_of_finalSelectedEnergyThreshold_le hC hg hP⟩
 
 /-- Explicit threshold form of the uniform numerical energy bound. The
 threshold precedes the size, weight, density, interpolation parameter and
@@ -243,12 +238,9 @@ theorem exists_final_selectedEnergy_le_rpow {C Cl g P : ℝ}
           (2 * (n : ℝ) ^ (-(Exponents.scannerNu : ℝ))) →
         e ≤ (n : ℝ) ^ (-1000 : ℝ) →
         (e + finalSelectedEnergyCap C Cl P n W x p) / (g / 2) ≤
-          (n : ℝ) ^ (-(1 / 2000 : ℝ)) := by
-  obtain ⟨N, hN⟩ := eventually_atTop.mp
-    (eventually_final_selectedEnergy_le_rpow (Cl := Cl) hC hg hP)
-  refine ⟨max N 2, le_max_right _ _, ?_⟩
-  intro n hn
-  exact (hN n ((le_max_left N 2).trans hn)).2
+          (n : ℝ) ^ (-(1 / 2000 : ℝ)) :=
+  ⟨_, Real.two_le_of_ceil_logRpowThreshold_le (le_max_left _ _), fun _ hn =>
+    (final_selectedEnergy_le_rpow_of_finalSelectedEnergyThreshold_le (Cl := Cl) hC hg hP hn).2⟩
 
 /-- Adding a replica remainder preserves it exactly, after division by the
 same gap. No estimate or sign assumption on that remainder is introduced. -/

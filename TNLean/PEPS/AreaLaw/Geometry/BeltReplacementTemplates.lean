@@ -36,7 +36,8 @@ and the replacement statements assume `S_* ≥ 1`. The source applies these temp
 to regions meeting the cut and chooses `S_*` large. The lattice-point premise is
 discharged for every belt tile or replacement whose current region at some later
 generation meets the cut by `repairStage_exists_integerPoint_mem_birth_of_oldInclusion`
-(`RepairBirthLatticePoint.lean`); the premise `S_* ≥ 1` remains here. Documented in
+(`RepairBirthLatticePoint.lean`), and the premise `S_* ≥ 1` by the choice `S_* ≥ 2`
+in `twoFamilyDecomposition` (`TwoFamilyAssembly.lean`). Documented in
 `docs/paper-gaps/arealaw2d_belt_replacement_template_scope.tex`.
 
 ## Main statements
