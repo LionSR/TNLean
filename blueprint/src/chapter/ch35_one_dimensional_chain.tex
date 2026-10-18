@@ -987,7 +987,7 @@ for an arbitrary finite set of sites and are instantiated here directly.
     is introduced, and the equality holds on every input vector.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{def:chain_terminal_coordinates}
+    \uses{def:chain_terminal_coordinates, lem:peps_frame_registers_coordinates}
     First place the main owner fibres in the prescribed party order,
     followed by the complete auxiliary list. These are precisely the
     original labels, each occurring once. At each party apply the local
@@ -995,6 +995,120 @@ for an arbitrary finite set of sites and are instantiated here directly.
     An empty main fibre produces its one-dimensional physical factor.
     The resulting map agrees with $T$ on every raw product-basis
     vector and therefore on the whole memory space by linearity.
+\end{proof}
+
+\begin{definition}[The terminal reference vector]
+    \label{def:chain_terminal_reference}
+    \uses{def:chain_terminal_registers, thm:chain_initial_copies,
+        def:chain_terminal_coordinates}
+    \lean{
+        TNLean.MPS.AreaLaw.ChainSweep.auxiliaryReference,
+        TNLean.MPS.AreaLaw.ChainSweep.auxiliaryReference_apply,
+        TNLean.MPS.AreaLaw.ChainSweep.terminalAuxiliarySiteOrder,
+        TNLean.MPS.AreaLaw.ChainSweep.terminalRawOrder,
+        TNLean.MPS.AreaLaw.ChainSweep.terminalRawOrder_nodup,
+        TNLean.MPS.AreaLaw.ChainSweep.mem_terminalRawOrder,
+        TNLean.MPS.AreaLaw.ChainSweep.terminalAuxiliaryFrames,
+        TNLean.MPS.AreaLaw.ChainSweep.terminalFrames,
+        TNLean.MPS.AreaLaw.ChainSweep.stackRegs_terminalFrames,
+        TNLean.MPS.AreaLaw.ChainSweep.terminalStackReadout
+    }
+    \leanok
+    Retain the chain, parties and labelled copies of
+    Definition~\ref{def:chain_terminal_registers}, with $q\ge1$.
+    Let $\mathcal C$ be the auxiliary copy family, ordered as in
+    Theorem~\ref{thm:chain_initial_copies}. For an auxiliary configuration
+    $a:\mathcal A\to\{0,\ldots,q-1\}$, put $a_c(x)=a(c,x)$.
+    For an arbitrary chain vector $\Omega$, define the auxiliary vector by
+    \begin{align}
+        \Xi(a)=\prod_{c\in\mathcal C}\Omega(a_c).\notag
+    \end{align}
+    The empty copy family gives the scalar $\Xi=1$.
+    Each copy retains its own site labels and retired owners; a copy
+    may be entangled across its owners.
+
+    Let $\mathcal F_{\rm term}$ be the list consisting of the main raw
+    sheet with its prescribed main owner, followed by the raw auxiliary
+    sheets at their prescribed retired owners in this copy order.
+    Write $v_{\rm ref}$ for the product of their raw copy reference
+    vectors associated with $\Omega$ in this specified memory. Enumerate the
+    main labels first, followed
+    by every copy-site label in the prescribed copy order. Each original
+    raw label occurs once, and flattening the frame list gives exactly
+    this register list. Denote by $\mathcal R$ the existing main/auxiliary
+    sheet readout transported along that register-list equality.
+\end{definition}
+
+\begin{theorem}[The reference in its sheet coordinates]
+    \label{thm:chain_terminal_reference_coordinates}
+    \uses{def:chain_terminal_reference}
+    \lean{TNLean.MPS.AreaLaw.ChainSweep.terminalStackReadout_framesVec}
+    \leanok
+    For every chain vector $\Omega$,
+    \begin{align}
+        \mathcal R v_{\rm ref}=\Omega\otimes\Xi.\notag
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:chain_terminal_reference, lem:peps_frame_registers_coordinates}
+    In the raw site basis, a copy has coefficient $\Omega(b)$ at the
+    configuration $b$. The tensor product over the labelled copies
+    therefore has coefficient $\Omega(b)\prod_{c\in\mathcal C}\Omega(a_c)$
+    at $(b,a)$ after flattening. The specified sheet readout sends that
+    raw basis vector to the basis vector at $(b,a)$. Its coefficient
+    is consequently $\Omega(b)\Xi(a)$, as asserted.
+\end{proof}
+
+\begin{theorem}[Normalization and the main reference density]
+    \label{thm:chain_terminal_reference_density}
+    \uses{def:chain_terminal_reference}
+    \lean{
+        TNLean.MPS.AreaLaw.ChainSweep.norm_auxiliaryReference,
+        TNLean.MPS.AreaLaw.ChainSweep.partialTrace_terminalStackReference
+    }
+    \leanok
+    If $\|\Omega\|=1$, then $\|\Xi\|=1$, including when
+    $\mathcal C=\varnothing$, and
+    \begin{align}
+        \operatorname{Tr}_{\mathcal A}
+        |\mathcal Rv_{\rm ref}\rangle\langle\mathcal Rv_{\rm ref}|
+        =|\Omega\rangle\langle\Omega|.\notag
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:chain_terminal_reference,
+        thm:chain_terminal_reference_coordinates}
+    The tensor norm gives $\|\Xi\|=\prod_{c\in\mathcal C}\|\Omega\|=1$.
+    Tracing the auxiliary factor of the reference in sheet coordinates
+    gives $\|\Xi\|^2|\Omega\rangle\langle\Omega|$.
+\end{proof}
+
+\begin{theorem}[Density error from a terminal vector error]
+    \label{thm:chain_terminal_reference_error}
+    \uses{def:chain_terminal_reference}
+    \lean{TNLean.MPS.AreaLaw.ChainSweep.rectangularTraceNorm_terminalStackReadout_sub_le}
+    \leanok
+    Let $\|\Omega\|=1$ and let $\Psi$ belong to the specified terminal
+    memory, with $\|\Psi\|\le1$. For every real $\varepsilon$ satisfying
+    $\|\Psi-v_{\rm ref}\|\le\varepsilon$, the main density in the
+    original sheet coordinates obeys
+    \begin{align}
+        \left\|\operatorname{Tr}_{\mathcal A}
+        |\mathcal R\Psi\rangle\langle\mathcal R\Psi|
+        -|\Omega\rangle\langle\Omega|\right\|_1
+        \le2\varepsilon.\notag
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:chain_terminal_reference_coordinates,
+        thm:chain_terminal_reference_density}
+    The readout is an isometry, so
+    $\|\mathcal R\Psi-\Omega\otimes\Xi\|
+        =\|\Psi-v_{\rm ref}\|\le\varepsilon$ and $\|\mathcal R\Psi\|\le1$.
+    The absolute pure-density estimate after partial trace bounds the
+    density error by
+    $2\|\mathcal R\Psi-\Omega\otimes\Xi\|+1-\|\Xi\|^2$.
+    Substituting $\|\Xi\|=1$ gives the result.
 \end{proof}
 
 The construction of the preceding band operations, their information

@@ -50,6 +50,7 @@ protocol route has the following proved intermediate results:
 | Block sizes, stage margins and party count | `ChainSweep.terminal_length_bounds`, `stage_right_margin`, `stage_left_margin`, `physicalDimension_le`, `card_party_le` | Proved for positive local dimension and width and `L ≥ 60w`; these are geometric bounds, not a count of constructed gates. |
 | Product initialization | `ChainSweep.exists_initialization` | Proved: the actual main and auxiliary copies are prepared privately from a constructed product input, with no nonprivate gate. |
 | Private terminal regrouping and its physical marginal | `ChainSweep.eval_terminalRegroupingWord`, `physicalDensity_terminalRegrouping` | Proved for every terminal vector, without a product or normalization premise, retaining all auxiliary labels and owners. |
+| Terminal copy reference and conditional density error | `ChainSweep.terminalStackReadout_framesVec`, `partialTrace_terminalStackReference`, `rectangularTraceNorm_terminalStackReadout_sub_le` | Proved for the specified terminal frames and positive local dimension: the reference is `Ω ⊗ Ξ` for arbitrary `Ω`, and unit `Ω` gives unit `Ξ` and the pure main marginal. For unit `Ω`, a terminal vector of norm at most one and distance at most `ε` from that reference has density error at most `2ε`; this does not construct a sweep or establish its required vector-error bound. |
 
 These declarations belong to `TNLean.MPS.AreaLaw.ChainSweep`. The half-open
 lattice bands and the distinction between main physical outputs and retained

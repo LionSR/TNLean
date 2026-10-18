@@ -253,6 +253,7 @@ norm of matrices, rectangular ones included.
 \begin{lemma}[Canonical coordinates of the registers]
     \label{lem:peps_frame_registers_coordinates}
     \lean{TNLean.PEPS.EncodedFrame.siteVec,
+        TNLean.PEPS.EncodedFrame.siteVec_append,
         TNLean.PEPS.EncodedFrame.siteVec_congr,
         TNLean.PEPS.EncodedFrame.siteIsoList,
         TNLean.PEPS.EncodedFrame.siteIsoList_siteVec,
@@ -280,6 +281,10 @@ norm of matrices, rectangular ones included.
     For any list $\ell$ of sites, including lists with repetitions, write
     $\ket c_\ell$ for its product basis vector. If $c(x)=c'(x)$ for every
     site in $\ell$, then $\ket c_\ell=\ket{c'}_\ell$.
+    Under the canonical unitary for concatenating register lists, the basis
+    vector $\ket c_{\ell_1\ell_2}$ is identified with
+    $\ket c_{\ell_1}\otimes\ket c_{\ell_2}$. The empty list contributes
+    the scalar one.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -289,6 +294,8 @@ norm of matrices, rectangular ones included.
     enumerating $A$ gives a bijection between its positions and $A$.
     Configurations agreeing on a list give the same basis vector at every
     position, hence the same product vector, even if sites repeat.
+    The same induction splits the vector at any prescribed list boundary;
+    its empty-list case is $1\otimes v\mapsto v$.
 \end{proof}
 
 \begin{definition}[Data and conditions of a small-patch rewrite]

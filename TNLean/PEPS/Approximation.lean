@@ -427,6 +427,7 @@ import TNLean.PEPS.Approximation.SiteChainMonomials
 import TNLean.PEPS.Approximation.SiteChainNetwork
 import TNLean.PEPS.Approximation.SiteChainTruncation
 import TNLean.PEPS.Approximation.SiteRegisters
+import TNLean.PEPS.Approximation.SiteVectorAppend
 import TNLean.PEPS.Approximation.SourceAlphabetPolynomial
 import TNLean.PEPS.Approximation.SourceApproximation
 import TNLean.PEPS.Approximation.SourceBlockMatrix

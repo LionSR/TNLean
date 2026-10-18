@@ -21,5 +21,6 @@ import TNLean.MPS.AreaLaw.OpenMPSRank
 import TNLean.MPS.AreaLaw.ProtocolInitialization
 import TNLean.MPS.AreaLaw.ProtocolSweepGeometry
 import TNLean.MPS.AreaLaw.ProtocolTerminalCoordinates
+import TNLean.MPS.AreaLaw.ProtocolTerminalReference
 import TNLean.MPS.AreaLaw.ProtocolTerminalWord
 import TNLean.MPS.AreaLaw.SequentialTruncation
