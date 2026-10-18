@@ -23,12 +23,11 @@ The accepted finite exponent iteration then reaches the fixed box exponent.
 Source: OpenAI area-law manuscript, `08-scanner.tex`, Proposition 9.5,
 lines 681--805, revision `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 Original formalization from the manuscript; no upstream Lean proof text reused.
-
-Validation and inherited-dependency scope:
-`docs/paper-gaps/arealaw2d_safe_box_collar_scope.tex`.
 -/
 
 noncomputable section
+
+open TNLean.Lattice
 
 namespace TNLean.PEPS.AreaLaw.Scan
 

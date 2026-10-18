@@ -23,6 +23,8 @@ Independently written from the manuscript; no upstream Lean proof reused.
 
 noncomputable section
 
+open TNLean.Lattice
+
 namespace TNLean.PEPS.AreaLaw.Scan
 
 /-- The actual finite-history scanner at the final rounded scales, with

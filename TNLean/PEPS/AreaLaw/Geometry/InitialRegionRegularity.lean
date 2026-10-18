@@ -29,6 +29,8 @@ Independently proved from the manuscript; no upstream Lean proof text is reused.
 
 noncomputable section
 
+open TNLean.Lattice
+
 namespace TNLean.PEPS.AreaLaw.Geometry
 
 /-- A closed dyadic square is the closure of its interior, which contains

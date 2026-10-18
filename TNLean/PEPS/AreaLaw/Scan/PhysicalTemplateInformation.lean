@@ -30,6 +30,8 @@ Independently proved by composition; no upstream Lean proof text reused.
 
 noncomputable section
 
+open TNLean.Lattice
+
 namespace TNLean.PEPS.AreaLaw.Scan
 
 open _root_.TNLean.PEPS.AreaLaw.Geometry

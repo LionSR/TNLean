@@ -11,6 +11,7 @@ noncomputable section
 
 open Complex Matrix
 open scoped ComplexOrder
+open TNLean.Lattice
 
 namespace TNLean.PEPS.Approximation
 

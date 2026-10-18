@@ -63,6 +63,7 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 
 open Matrix
 open scoped ComplexOrder
+open TNLean.Lattice
 
 namespace FiniteProduct
 

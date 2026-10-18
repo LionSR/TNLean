@@ -22,6 +22,8 @@ OpenAI, *A two-dimensional area law from a global spectral gap*, September 24,
 `08-scanner.tex`, lines 442–490.
 -/
 
+open TNLean.Lattice
+
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
 
 open scoped BigOperators
