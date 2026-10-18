@@ -113,8 +113,8 @@ def cellGenerationCountConstant (γ' ustar b : ℝ) : ℝ :=
     (iterateGenerationCountConstant γ' ustar b)
 
 /-- The tile-count constant is positive. -/
-theorem cellGenerationCountConstant_pos {γ' : ℝ} (hγ' : 0 < γ') (hγ'1 : γ' < 1) (ustar : ℝ)
-    {b : ℝ} (hb : 0 ≤ b) : 0 < cellGenerationCountConstant γ' ustar b :=
+theorem cellGenerationCountConstant_pos (γ' ustar : ℝ) {b : ℝ} (hb : 0 ≤ b) :
+    0 < cellGenerationCountConstant γ' ustar b :=
   lt_max_of_lt_right (iterateGenerationCountConstant_pos γ' ustar hb)
 
 /-- **Tile count of the cell recursion, with the named constant.** Let `0 < γ' < 1` and let
@@ -164,7 +164,7 @@ theorem exists_cell_generation_count_bound {γ γ' ustar : ℝ} (hγ' : 0 < γ')
     ∃ C : ℝ, 0 < C ∧ ∀ s : ℝ, 1 ≤ s → ∀ m : ℕ,
       (∀ i < m, ustar ≤ (cellChildSide γ)^[i] s) →
         ∑ j ∈ Finset.range (m + 1), b ^ j ≤ C * (1 + Real.log s) ^ C :=
-  ⟨_, cellGenerationCountConstant_pos hγ' hγ'1 ustar hb,
+  ⟨_, cellGenerationCountConstant_pos γ' ustar hb,
     cell_generation_count_bound hγ' hγ'1 hustar hthr hb⟩
 
 end TNLean.PEPS.Approximation

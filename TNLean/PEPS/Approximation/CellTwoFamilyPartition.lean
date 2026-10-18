@@ -101,16 +101,15 @@ theorem cellIntermediateExponent_bounds {γ : ℝ} (hγ : γ < 1) :
   have h3 : max γ 0 < 1 := max_lt hγ one_pos
   refine ⟨?_, ?_, ?_⟩ <;> linarith
 
-/-- The exponent of the partition count is positive for `γ < 1`. -/
-theorem cellPartitionExponent_pos {γ : ℝ} (hγ : γ < 1) (u₀ : ℝ) :
+/-- The exponent of the partition count is positive. -/
+theorem cellPartitionExponent_pos (γ u₀ : ℝ) :
     0 < cellPartitionExponent γ u₀ :=
-  cellGenerationCountConstant_pos (cellIntermediateExponent_bounds hγ).2.1
-    (cellIntermediateExponent_bounds hγ).2.2 _ (by norm_num)
+  cellGenerationCountConstant_pos _ _ (by norm_num)
 
-/-- The prefactor of the partition count is positive for `γ < 1`. -/
-theorem cellPartitionConstant_pos {γ : ℝ} (hγ : γ < 1) (u₀ : ℝ) :
+/-- The prefactor of the partition count is positive. -/
+theorem cellPartitionConstant_pos (γ u₀ : ℝ) :
     0 < cellPartitionConstant γ u₀ :=
-  mul_pos (by positivity) (cellPartitionExponent_pos hγ u₀)
+  mul_pos (by positivity) (cellPartitionExponent_pos γ u₀)
 
 /-- **The two-family partition of a cell, with named constants.** Fix `γ < 1` and a lower
 bound `u₀`, and put `u_* = cellStopScale γ u₀`, `C = cellPartitionConstant γ u₀` and
@@ -380,7 +379,7 @@ theorem exists_cell_twoFamily_partition {γ : ℝ} (hγ : γ < 1) (u₀ : ℝ) :
             scale i ^ γ < dist (integerPoint x) (integerPoint y)) ∧
           (P.pieceCount : ℝ) + P.residual.card ≤ C * (1 + Real.log s) ^ K :=
   ⟨cellStopScale γ u₀, le_cellStopScale γ u₀, one_lt_cellStopScale γ u₀,
-    cellPartitionConstant γ u₀, cellPartitionExponent γ u₀, cellPartitionConstant_pos hγ u₀,
+    cellPartitionConstant γ u₀, cellPartitionExponent γ u₀, cellPartitionConstant_pos γ u₀,
     cell_twoFamily_partition hγ u₀⟩
 
 end TNLean.PEPS.Approximation.CellPartition
