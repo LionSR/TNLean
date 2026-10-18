@@ -1709,9 +1709,7 @@ state.
 
 \begin{theorem}[Sublinear information across a template collar]
     \label{thm:area_law_sublinear_collar}
-    \lean{TNLean.PEPS.AreaLaw.sublinearCollarBound_real,
-        TNLean.PEPS.AreaLaw.sublinearCollarBound_real_of_boxEntropy,
-        TNLean.PEPS.AreaLaw.sublinearCollarBound_real_of_initial}
+    \lean{TNLean.PEPS.AreaLaw.sublinearCollarBound_real}
     \leanok
     \uses{def:area_law_collar_bound}
     In~\cite[Proposition~9.6]{OpenAI2026AreaLaw}, fix $q,R\in\mathbb N$ with
@@ -1761,4 +1759,42 @@ state.
     Theorem~\ref{thm:area_law_collar_bound_of_information} shows that the
     single constant $\max(C_m/2,10)$ also bounds the three cuts and the
     collar cardinality, with the same threshold.
+\end{proof}
+
+\begin{theorem}[Sublinear collar bound at the constants of its proof]
+    \label{thm:area_law_sublinear_collar_named}
+    \lean{TNLean.PEPS.AreaLaw.sublinearCollarBound_real_of_boxEntropy,
+        TNLean.PEPS.AreaLaw.sublinearCollarBound_real_of_initial}
+    \leanok
+    \uses{thm:area_law_sublinear_collar}
+    This is an auxiliary refinement of
+    Theorem~\ref{thm:area_law_sublinear_collar} with two hypotheses that
+    \cite[Proposition~9.6]{OpenAI2026AreaLaw} does not carry. Fix the data
+    $q,R,J,\Delta,D_0,C_{\mathrm{tpl}}$ of that theorem.
+    \begin{enumerate}
+        \item Suppose $C_b\geq0$ satisfies
+              $F_{\mathrm{box},2R+11}(r)\leq C_br^{1+e_*}$ for every
+              integer $r\geq1$. Then there are truncation and transport
+              constants of the scanner such that the conclusions of
+              Theorem~\ref{thm:area_law_sublinear_collar} hold with
+              $C=\max(C_m/2,10)$, where $C_m$ is the collar information
+              coefficient at the input $4C_b+4\log q+1$, and with a
+              threshold $N$ given by an explicit formula in $C_b$ and these
+              constants.
+        \item Suppose $C_0\geq0$ and $0<e_0<1$ satisfy
+              $F_{\mathrm{box},D}(r)\leq C_0r^{1+e_0}$ for every integer
+              $D>2R+10$ and every integer $r\geq1$. Then the same holds with
+              $C_b$ the constant produced by the safe-box bootstrap from
+              $C_0$ and $e_0$.
+    \end{enumerate}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_sublinear_collar,
+        thm:arealaw-physical-box-fixed-exponent}
+    The first part is the proof of
+    Theorem~\ref{thm:area_law_sublinear_collar} with the safe-box constant
+    $C_b$ given, where the constant and the threshold are recorded as
+    formulas. The second part composes it with the physical safe-box
+    bootstrap of Theorem~\ref{thm:arealaw-physical-box-fixed-exponent},
+    which gives $C_b$ from the initial bound.
 \end{proof}

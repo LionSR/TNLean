@@ -265,9 +265,11 @@ input \leanid{TNLean.PEPS.AreaLaw.Scan.weakRectangleSourceEntropyCoefficient})
 and $N(C_j)=\max(N_s,N_g)$ is the largest of its thresholds
 (\leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.sourceBootstrapEntropyThreshold}) and the
 rectangle geometry threshold
-(\leanid{TNLean.PEPS.AreaLaw.Scan.roundedClearanceThreshold}). One round is
+(\leanid{TNLean.PEPS.AreaLaw.Scan.roundedClearanceThreshold}). The large-scale
+constant $576\,C_{\rm out}(C_j)+N(C_j)^2\log q+1$ of a round is
 \leanid{TNLean.PEPS.AreaLaw.Scan.boxImprovementConstant}, with threshold
-\leanid{TNLean.PEPS.AreaLaw.Scan.boxImprovementThreshold}. The
+\leanid{TNLean.PEPS.AreaLaw.Scan.boxImprovementThreshold}; the extension of the
+improved bound to all scales adds the last term $\log q$ of \eqref{eq:round}. The
 recursion is the named sequence
 \leanid{TNLean.PEPS.AreaLaw.Scan.boxBootstrapConstant}, and the round count is
 \leanid{TNLean.PEPS.AreaLaw.Scan.boxBootstrapRounds}, the least $m$ with
@@ -1017,12 +1019,15 @@ constant. The constant is not explicit as written, and it is enormous.
     \item[5.] \emph{The explicit theorem.} State Theorem~1.1 with
           $C=C_{\rm expl}(q,R,J,\Delta)$ and give it its own blueprint entry,
           now that Proposition~11.2 and Theorem~1.1 are proved on main. A
-          recursively defined computable $C_{\rm expl}$ needs no
-          further mathematics. An elementary closed form additionally needs a
+          recursively defined computable $C_{\rm expl}$ needs, besides
+          substituting the existing closed forms listed below, explicit
+          values of the transport constants of the scanner, which are still
+          existential. An elementary closed form additionally needs a
           bound for the bootstrap recursion \eqref{eq:round}.
 \end{enumerate}
-Apart from item~4, now done, only the closed-form bound for the recursion is
-new quantitative mathematics; the rest is restatement.
+Apart from item~4, now done, the new quantitative mathematics is explicit
+transport constants and the closed-form bound for the recursion; the rest is
+restatement.
 
 \paragraph{Open dependencies.}
 \label{sec:open}
