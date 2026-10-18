@@ -35,7 +35,7 @@ The proposition quantifies over the bond dimension $D$: the truncation at
 every cut keeps the $D$ largest Schmidt weights, whatever the spectrum, and
 the error is expressed through the masses $\epsilon_k=\epsilon_k(D)$ beyond
 the $D$-th eigenvalue. Theorem~B is then derived (the two-line route,
-label \texttt{thm:Bshort}, lines~81--94) by choosing a slack $w$ from the
+label \texttt{thm:Bshort}, lines~80--92) by choosing a slack $w$ from the
 tail bound and taking $D=\lceil e^{C_{\mathrm{int}}+w}\rceil$, so that the
 eigenvalues at least $e^{-(S(X)+w)}$ are among the $D$ largest and
 $\epsilon_k(D)$ is at most the surprisal tail beyond $w$.
@@ -87,10 +87,12 @@ The ordered product
 $\Phi=(\Pi_1\otimes\mathbb 1)\cdots(\Pi_{L-1}\otimes\mathbb 1)\psi$
 has an open-boundary matrix product representation with internal bond
 dimensions at most $D$, and
-\[
-    \|\Phi-\psi\|\le\sum_{k=1}^{L-1}
+\begin{align}
+    \|\Phi-\psi\|
+     & \le\sum_{k=1}^{L-1}
     \sqrt{\operatorname{Re}\langle\psi,(\mathbb 1-\Pi_k\otimes\mathbb 1)\psi\rangle}.
-\]
+    \label{eq:tnlean_one_dimensional_threshold_truncation_ordered_span_error}
+\end{align}
 The statement holds for every vector and every such basis family, for all
 natural $L,q,D$.\footnote{Declarations:
     \leanid{TNLean.MPS.AreaLaw.prefixBasisProjection},
