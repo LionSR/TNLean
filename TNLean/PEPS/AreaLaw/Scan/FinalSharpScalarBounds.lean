@@ -118,25 +118,6 @@ theorem ScannerExponents.eventually_bandCount_le_rpow (X : ScannerExponents) :
       (X.K n : ℝ) ≤ (n : ℝ) ^ (1 - X.ell - X.mu) :=
   eventually_atTop.2 ⟨_, fun _ => X.bandCount_le_rpow_of_scaleFactsThreshold_le⟩
 
-/-- The final scanner exponents `ℓ = 1/100000`, `κ = 1/1000000`, `μ = 1/4`, `ν = 1/1000`
-and `e = 2/1000000`, as a `ScannerExponents` structure. Source: `scanner:final-parameters`,
-`08-scanner.tex`, lines 839--849. -/
-def finalSharpScannerExponents : ScannerExponents where
-  ell := Exponents.scannerEll
-  kappa := Exponents.scannerKappa
-  mu := Exponents.scannerMu
-  nu := Exponents.scannerNu
-  e := Exponents.boxError
-  ell_pos := by norm_num [Exponents.scannerEll]
-  ell_lt_one := by norm_num [Exponents.scannerEll]
-  kappa_pos := by norm_num [Exponents.scannerKappa]
-  kappa_lt_mu := by norm_num [Exponents.scannerKappa, Exponents.scannerMu]
-  mu_lt_one_sub_ell := by norm_num [Exponents.scannerMu, Exponents.scannerEll]
-  nu_pos := by norm_num [Exponents.scannerNu]
-  e_pos := by norm_num [Exponents.boxError]
-  e_lt_one := by norm_num [Exponents.boxError]
-  kappa_le_e := by norm_num [Exponents.scannerKappa, Exponents.boxError]
-
 /-- The explicit threshold of the final per-band scale bounds: the scale-facts threshold of
 the final exponents and `2 ≤ n^(1/4000)` (`08-scanner.tex`, lines 32--41 and 839--865). -/
 noncomputable def finalSharpScaleThreshold : ℕ :=
