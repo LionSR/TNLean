@@ -10,14 +10,14 @@ original open square. We state the two models separately, following
 \begin{definition}[Induced lattice domain]
     \label{def:area_law_domain}
     \lean{
-        TNLean.PEPS.AreaLaw.Site,
-        TNLean.PEPS.AreaLaw.Configuration,
-        TNLean.PEPS.AreaLaw.StateSpace,
-        TNLean.PEPS.AreaLaw.domainGraph,
-        TNLean.PEPS.AreaLaw.graphNeighborhood,
-        TNLean.PEPS.AreaLaw.configurationSplit,
-        TNLean.PEPS.AreaLaw.card_configuration,
-        TNLean.PEPS.AreaLaw.card_regionConfig
+        TNLean.Lattice.Site,
+        TNLean.Lattice.Configuration,
+        TNLean.Lattice.StateSpace,
+        TNLean.Lattice.domainGraph,
+        TNLean.Lattice.graphNeighborhood,
+        TNLean.Lattice.configurationSplit,
+        TNLean.Lattice.card_configuration,
+        TNLean.Lattice.card_regionConfig
     }
     \leanok
     Let $\Lambda\subset\mathbb Z^2$ be finite. Join sites at coordinate distance
@@ -49,18 +49,18 @@ original open square. We state the two models separately, following
 \begin{definition}[Finite-range interactions and boundary]
     \label{def:area_law_hamiltonian}
     \lean{
-        TNLean.PEPS.AreaLaw.IsAdmissibleSupport,
-        TNLean.PEPS.AreaLaw.AdmissibleSupport,
-        TNLean.PEPS.AreaLaw.LocalHamiltonian,
-        TNLean.PEPS.AreaLaw.LocalHamiltonian.operator,
-        TNLean.PEPS.AreaLaw.LocalHamiltonian.operator_isHermitian,
-        TNLean.PEPS.AreaLaw.LocalHamiltonian.zero,
-        TNLean.PEPS.AreaLaw.localLift,
-        TNLean.PEPS.AreaLaw.localLift_mem_supportedOperators,
-        TNLean.PEPS.AreaLaw.localLift_eq_entropyLocalLift,
-        TNLean.PEPS.AreaLaw.edgeBoundary,
-        TNLean.PEPS.AreaLaw.edgeBoundary_empty,
-        TNLean.PEPS.AreaLaw.edgeBoundary_univ
+        TNLean.Lattice.IsAdmissibleSupport,
+        TNLean.Lattice.AdmissibleSupport,
+        TNLean.Lattice.LocalHamiltonian,
+        TNLean.Lattice.LocalHamiltonian.operator,
+        TNLean.Lattice.LocalHamiltonian.operator_isHermitian,
+        TNLean.Lattice.LocalHamiltonian.zero,
+        TNLean.Lattice.localLift,
+        TNLean.Lattice.localLift_mem_supportedOperators,
+        TNLean.Lattice.localLift_eq_entropyLocalLift,
+        TNLean.Lattice.edgeBoundary,
+        TNLean.Lattice.edgeBoundary_empty,
+        TNLean.Lattice.edgeBoundary_univ
     }
     \leanok
     \uses{def:area_law_domain}
@@ -85,10 +85,10 @@ original open square. We state the two models separately, following
 \begin{theorem}[Interaction range and rectangular coordinates]
     \label{thm:area_law_domain_identifications}
     \lean{
-        TNLean.PEPS.AreaLaw.exists_walk_length_le_iff_edist_le,
-        TNLean.PEPS.AreaLaw.isAdmissibleSupport_zero_iff,
-        TNLean.PEPS.AreaLaw.isAdmissibleSupport_singleton,
-        TNLean.PEPS.AreaLaw.isAdmissibleSupport_pair_of_adj,
+        TNLean.Lattice.exists_walk_length_le_iff_edist_le,
+        TNLean.Lattice.isAdmissibleSupport_zero_iff,
+        TNLean.Lattice.isAdmissibleSupport_singleton,
+        TNLean.Lattice.isAdmissibleSupport_pair_of_adj,
         TNLean.PEPS.AreaLaw.rectangleEmbedding,
         TNLean.PEPS.AreaLaw.rectangleEmbedding_injective,
         TNLean.PEPS.AreaLaw.rectangularDomain,
@@ -123,12 +123,12 @@ original open square. We state the two models separately, following
     \lean{
         Matrix.IsGappedGroundState,
         Matrix.isGappedGroundState_iff,
-        TNLean.PEPS.AreaLaw.IsGappedGroundState,
-        TNLean.PEPS.AreaLaw.reducedState,
-        TNLean.PEPS.AreaLaw.reducedState_isHermitian,
-        TNLean.PEPS.AreaLaw.regionalEntropy,
-        TNLean.PEPS.AreaLaw.reducedState_eq_regionState,
-        TNLean.PEPS.AreaLaw.regionalEntropy_eq_regionEntropy,
+        TNLean.Lattice.IsGappedGroundState,
+        TNLean.Lattice.reducedState,
+        TNLean.Lattice.reducedState_isHermitian,
+        TNLean.Lattice.regionalEntropy,
+        TNLean.Lattice.reducedState_eq_regionState,
+        TNLean.Lattice.regionalEntropy_eq_regionEntropy,
         TNLean.PEPS.AreaLaw.UniformAreaLaw
     }
     \leanok
@@ -183,7 +183,7 @@ original open square. We state the two models separately, following
 \begin{theorem}[Regional reductions of pure vectors]
     \label{thm:area_law_regional_state_identities}
     \lean{
-        TNLean.PEPS.AreaLaw.reducedState_posSemidef,
+        TNLean.Lattice.reducedState_posSemidef,
         TNLean.PEPS.AreaLaw.trace_reducedState_eq_norm_sq,
         TNLean.PEPS.AreaLaw.trace_reducedState,
         TNLean.PEPS.AreaLaw.regionalEntropy_nonneg,
@@ -819,6 +819,23 @@ original open square. We state the two models separately, following
     endpoint in $A$. The constant is chosen before $L$, $H$, $\Omega$ and $A$.
 \end{definition}
 
+\begin{definition}[The square-grid entropy area law at a given constant]
+    \label{def:square_entropy_area_law_at}
+    \lean{TNLean.PEPS.Approximation.SquareEntropyAreaLawAt,
+        TNLean.PEPS.Approximation.SquareEntropyAreaLaw.exists_squareEntropyAreaLawAt}
+    \leanok
+    \uses{def:square_entropy_area_law}
+    Let $q$ be an integer and $J,\Delta,C_A$ reals. The square-grid entropy
+    area law holds at $q$, $J$, $\Delta$ with constant $C_A$ if $C_A\ge0$ and,
+    for every $L$, every Hamiltonian of the original model with interaction
+    bound $J$, every unit vector $\Omega$ and real $E_0$ satisfying
+    $H\Omega=E_0\Omega$ and $H-E_0I\ge\Delta(I-|\Omega\rangle\langle\Omega|)$,
+    and every set $A$ of sites, $S_\Omega(A)\le C_A|\partial_\Lambda A|$. The
+    square-grid entropy area law of
+    Definition~\ref{def:square_entropy_area_law} says that for $q\ge2$ and
+    $J,\Delta>0$ some constant $C_A$ has this property.
+\end{definition}
+
 \begin{theorem}[Entropy area law on the square grid]
     \label{thm:openai_square_area_law}
     \lean{TNLean.PEPS.AreaLaw.squareEntropyAreaLaw}
@@ -961,8 +978,8 @@ original open square. We state the two models separately, following
         TNLean.PEPS.AreaLaw.Geometry.Template.IsSeparated,
         TNLean.PEPS.AreaLaw.Geometry.Template.core,
         TNLean.PEPS.AreaLaw.Geometry.Template.collar,
-        TNLean.PEPS.AreaLaw.ambientDilation,
-        TNLean.PEPS.AreaLaw.ambientDilation_zero
+        TNLean.Lattice.ambientDilation,
+        TNLean.Lattice.ambientDilation_zero
     }
     \leanok
     \uses{def:area_law_domain,def:area_law_hamiltonian}

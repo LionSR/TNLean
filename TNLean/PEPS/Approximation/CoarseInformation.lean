@@ -56,6 +56,7 @@ Independently formalized from the manuscripts; no upstream Lean proof text is re
 -/
 
 open TNLean.PEPS.AreaLaw
+open TNLean.Lattice
 
 namespace TNLean.PEPS.Approximation
 
@@ -99,9 +100,9 @@ Proposition 3.1, `02-information.tex` lines 91–145. -/
 theorem coarse_mutualInformation_le_of_sublinearCollarBound {q R : ℕ} {J Δ D₀ Ctpl : ℝ}
     (hΔ : 0 < Δ) (hcol : SublinearCollarBound q R J Δ D₀ Ctpl) (N₀ : ℕ) (A₀ : ℝ) :
     ∃ β : ℝ, β < 1 ∧ ∃ C u₀ : ℝ, ∀ u : ℝ, u₀ ≤ u →
-      ∀ (Λ : Finset (ℤ × ℤ)) (h : AreaLaw.LocalHamiltonian Λ q R J) (E₀ : ℝ)
-        (Ω : AreaLaw.StateSpace Λ q),
-        AreaLaw.IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+      ∀ (Λ : Finset (ℤ × ℤ)) (h : Lattice.LocalHamiltonian Λ q R J) (E₀ : ℝ)
+        (Ω : Lattice.StateSpace Λ q),
+        Lattice.IsGappedGroundState Λ q h.operator E₀ Ω Δ →
         ∀ T : Finset (ℤ × ℤ), IsBoxUnion N₀ T →
           (∀ x ∈ T, ∀ y ∈ T, (Scan.ambientSupDistance x y : ℝ) ≤ A₀ * u) →
           ∀ X ⊆ Finset.univ.filter (fun x : Site Λ ↦ x.val ∈ T),

@@ -23,6 +23,8 @@ initial fan runs, lines 299–318; and the initial-belt contribution to
 Source revision: `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 -/
 
+open TNLean.Lattice
+
 namespace TNLean.PEPS.AreaLaw.Geometry
 
 /-- The carrier of the actual initial belt regions is finite, and its

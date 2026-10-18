@@ -10,8 +10,8 @@ Lean proof text is reused.
 ## Objects and boundary conventions
 
 The domain is the existing finite induced square-lattice domain
-`Λ : Finset (ℤ × ℤ)`. Its vertices are `AreaLaw.Site Λ`; its graph and unordered
-edge boundary are `AreaLaw.domainGraph Λ` and `AreaLaw.edgeBoundary Λ`.
+`Λ : Finset (ℤ × ℤ)`. Its vertices are `Lattice.Site Λ`; its graph and unordered
+edge boundary are `Lattice.domainGraph Λ` and `Lattice.edgeBoundary Λ`.
 No second lattice graph, edge convention, Hamiltonian, or support algebra is
 introduced. On the original open square, the rectangular identification and
 native square-grid transport remain those of the existing model and #8788.

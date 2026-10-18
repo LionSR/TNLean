@@ -27,6 +27,8 @@ Original formalization from the manuscript; no upstream Lean proof text reused.
 
 noncomputable section
 
+open TNLean.Lattice
+
 namespace TNLean.PEPS.AreaLaw.Scan
 
 /-- The explicit threshold of one physical bootstrap round at current safe-box coefficient

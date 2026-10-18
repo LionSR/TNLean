@@ -29,6 +29,8 @@ Written from the manuscript; no upstream Lean text is reused.
 
 noncomputable section
 
+open TNLean.Lattice
+
 namespace TNLean.PEPS.AreaLaw.Geometry
 
 /-- The assignment chosen from the current regions in the working square of

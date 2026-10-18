@@ -31,6 +31,8 @@ open Matrix Set Filter Topology MeasureTheory PermutationRepresentation Entropy
 
 noncomputable section
 
+open TNLean.Lattice
+
 namespace TensorPower.ReplicaTransport.TransportData
 
 variable {V : Type*} [Fintype V] [DecidableEq V] {K : ℕ}

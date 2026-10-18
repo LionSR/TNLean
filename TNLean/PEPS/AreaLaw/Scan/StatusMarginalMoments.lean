@@ -25,6 +25,8 @@ open scoped BigOperators Matrix.Norms.L2Operator
 
 noncomputable section
 
+open TNLean.Lattice
+
 namespace TNLean.PEPS.AreaLaw.Scan
 
 /-- Increasing a positive budget only shortens the allowed real moment interval. -/

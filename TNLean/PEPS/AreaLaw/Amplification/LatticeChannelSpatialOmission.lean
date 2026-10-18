@@ -36,6 +36,8 @@ open QuantumCircuit SpectralFilter Matrix MeasureTheory
 open scoped BigOperators Kronecker ENNReal NNReal Matrix.Norms.L2Operator MatrixOrder
   ComplexOrder
 
+open TNLean.Lattice
+
 namespace TNLean.PEPS.AreaLaw
 
 /-- The Euclidean norm of a product vector is the product of the two norms. -/

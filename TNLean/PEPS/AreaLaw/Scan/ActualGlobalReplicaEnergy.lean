@@ -24,6 +24,7 @@ noncomputable section
 
 open TensorPower TensorPower.ReplicaTransport
 open scoped BigOperators Matrix
+open TNLean.Lattice
 
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
 

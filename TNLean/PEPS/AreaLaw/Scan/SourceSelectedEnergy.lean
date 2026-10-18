@@ -37,6 +37,8 @@ open Matrix TensorPower TensorPower.ReplicaTransport PermutationRepresentation F
 open scoped BigOperators Matrix Kronecker ComplexOrder MatrixOrder
   Matrix.Norms.L2Operator Topology
 
+open TNLean.Lattice
+
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
 
 open SpectralFilter
