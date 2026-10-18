@@ -21,6 +21,8 @@ open TNLean.PEPS.AreaLaw TNLean.PEPS.AreaLaw.Scan SpectralFilter
 open scoped BigOperators Matrix.Norms.L2Operator
 
 noncomputable section
+open TNLean.Lattice
+
 namespace TNLeanTest.StatusMarginalInputs
 
 example (depth : Fin 0 → ℤ) (σ : PhysicalPartition (Fin 0)) :

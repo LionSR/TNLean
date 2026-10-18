@@ -24,6 +24,8 @@ real-clearance physical conclusion is proved in `PhysicalSafeBox.lean`.
 Original formalization from the manuscript; no upstream Lean proof text reused.
 -/
 
+open TNLean.Lattice
+
 namespace TNLean.PEPS.AreaLaw
 
 /-- A uniform actual-state safe-rectangle bound at the initial exponent.
