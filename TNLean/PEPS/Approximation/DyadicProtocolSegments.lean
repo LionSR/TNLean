@@ -130,12 +130,7 @@ theorem exists_isDistributionProtocol_of_hasSourceBoundedChange {L k : ℕ} (hL 
     ∃ D : DyadicProtocol L q (ProtocolParty k),
       D.IsDistributionProtocol Ω C_N C_K C_E (64 * 189) kK r := by
   classical
-  have hCE : 0 ≤ C_E := by
-    have h0 : (0 : ℝ) ≤ (Fs.map fun F => (F.holes.length : ℝ)).sum :=
-      List.sum_nonneg fun x hx => by
-        obtain ⟨F, -, rfl⟩ := List.mem_map.1 hx
-        positivity
-    exact nonneg_of_mul_nonneg_left (h0.trans hholes) (by positivity)
+  have hCE : 0 ≤ C_E := nonneg_of_sum_map_natCast_le_mul hholes (by positivity)
   set n := (protocolSchedule k large).length with hn
   set st' : ℕ → List (Frame (cellCenterPos L) q (ProtocolParty k)) := fun t => st (min t n)
   have hst' : ∀ t ≤ n, st' t = st t := fun t ht => by simp only [st', min_eq_left ht]

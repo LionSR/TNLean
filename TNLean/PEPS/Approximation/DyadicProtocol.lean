@@ -395,7 +395,7 @@ structure IsDistributionProtocol (Ω : StateSpace L q) (C_N C_K C_E : ℝ) (b k 
           EncodedFrame.framesSpace ((D.frames 0).filter fun F => holder F = p)) ∧
         ∀ [NeZero q], HEq D.initialVector
           fun p => EncodedFrame.framesVec Ω ((D.frames 0).filter fun F => holder F = p)
-  /-- Item 2: at most `C L³` changes. -/
+  /-- Item 2: at most `C_N L³` changes. -/
   changes_le : (D.changes : ℝ) ≤ C_N * (L : ℝ) ^ 3
   /-- Item 2: each change has a fixed number of nonprivate gates. -/
   nonprivateCount_le : ∀ t < D.changes, (D.step t).nonprivateCount ≤ b

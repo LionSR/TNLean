@@ -257,6 +257,14 @@ theorem exists_eq_inr_of_notMem_range_protocolSquareParty {L k : ℕ} (hN : padd
         (toTriple_protocolSquareParty hN _))
   · exact ⟨R, rfl⟩
 
+/-- A sum of natural numbers bounded by `C x` with `0 < x` forces `0 ≤ C`; applied to the hole
+counts of the frozen sheets (`06-geometry.tex:653–656`). -/
+theorem nonneg_of_sum_map_natCast_le_mul {α : Type*} {l : List α} {f : α → ℕ} {C x : ℝ}
+    (h : (l.map fun a => (f a : ℝ)).sum ≤ C * x) (hx : 0 < x) : 0 ≤ C :=
+  nonneg_of_mul_nonneg_left ((List.sum_nonneg fun y hy => by
+    obtain ⟨a, -, rfl⟩ := List.mem_map.1 hy
+    positivity).trans h) hx
+
 /-- **A protocol from a bounded trajectory of sheets.** Let `L ≥ 2` and `L ≤ 2 ^ k < 2 L`, let
 `‖Ω‖ = 1`, and let `st t` be lists of encoded frames on the parties of the hierarchy of
 `[0, 2 ^ k] ^ 2`, read at the cell centers, such that:
@@ -491,12 +499,7 @@ theorem exists_isDistributionProtocol_of_frames {L q k : ℕ} [NeZero q] (hL : 2
   have hL1 : (1 : ℝ) ≤ L := by exact_mod_cast (by omega : 1 ≤ L)
   have hL0 : (0 : ℝ) < L := by linarith
   have hC0 : 0 ≤ C_N := by linarith
-  have hCE : 0 ≤ C_E := by
-    have h0 : (0 : ℝ) ≤ (Fs.map fun F => (F.holes.length : ℝ)).sum :=
-      List.sum_nonneg fun x hx => by
-        obtain ⟨F, -, rfl⟩ := List.mem_map.1 hx
-        positivity
-    exact nonneg_of_mul_nonneg_left (h0.trans hholes) (by positivity)
+  have hCE : 0 ≤ C_E := nonneg_of_sum_map_natCast_le_mul hholes (by positivity)
   -- the gates of the protocol belong to the changes of the schedule
   have hgate : ∀ γ : D.Gate, 0 < (γ.1 : ℕ) ∧ (γ.1 : ℕ) - 1 < n := fun γ => by
     by_contra h

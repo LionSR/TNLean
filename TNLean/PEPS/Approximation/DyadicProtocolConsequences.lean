@@ -25,8 +25,16 @@ adaptive patch constraint of Proposition 4.1; with that constraint proved, it gi
 interface is resolved in `docs/paper-gaps/polypeps_prop71_consequences_interface.tex`.
 
 * `IsAngularScale.mono` : a larger information scale and threshold are again admissible;
-* `largeSizeDyadicProtocolConsequences_of_adaptivePatchConstraint` : the consequences of
-  Proposition 7.1 used in §8.
+* `DyadicProtocol.IsDistributionProtocol.mono` : larger count, expansion and error constants are
+  again admissible;
+* `protocolCountConstant`, `protocolExpansionConstant`, `protocolErrorConstant`,
+  `protocolExpansionExponent`, `protocolLifetimeBound` : the named constants of the protocol, with
+  the mesh ratio `ν` and the patch constants of Proposition 4.1 as parameters;
+* `largeSizeDyadicProtocol_of_le_of_adaptivePatchConstraint` : Proposition 7.1 at every count,
+  expansion and error constant at least the named ones;
+* `largeSizeDyadicProtocolBounds_of_adaptivePatchConstraint` and
+  `largeSizeDyadicProtocolConsequences_of_adaptivePatchConstraint` : the consequences of
+  Proposition 7.1 used in §8, with separate constants and with one constant.
 
 ## References
 

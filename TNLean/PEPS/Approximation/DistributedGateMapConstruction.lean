@@ -362,13 +362,10 @@ theorem uniform_sampled_network_of_le
     (fun L ↦ by
       obtain ⟨K, hK, hKb⟩ := hmonomial₀ L
       have hL0 : 0 ≤ size L := by linarith [hsize L]
-      refine (C₀ L).circuit.isExpansionBounded_of_isTermwiseBounded hK
-        ((htermwise₀ L).mono (mul_pow_le_max_zero_mul_pow C_C hL0 v)) (by positivity) ?_
-      calc (K : ℝ) * (max C_C 0 * size L ^ v)
-          ≤ (max C_K 0 * size L ^ u) * (max C_C 0 * size L ^ v) :=
-            mul_le_mul_of_nonneg_right (hKb.trans (mul_pow_le_max_zero_mul_pow C_K hL0 u))
-              (by positivity)
-        _ = max C_K 0 * max C_C 0 * size L ^ (u + v) := by rw [pow_add]; ring)
+      exact (C₀ L).circuit.isExpansionBounded_of_termwise_power_bounds (size L) (max C_K 0)
+        (max C_C 0) u v hL0 (le_max_right _ _) hK
+        ((htermwise₀ L).mono (mul_pow_le_max_zero_mul_pow C_C hL0 v))
+        (hKb.trans (mul_pow_le_max_zero_mul_pow C_K hL0 u)))
     p (by rwa [compressionPrefactor_eq_sumCompressionPrefactor] at hC) hα
 
 /-- **Theorem 5.2 without messages, for distributed constructions.** Consider a

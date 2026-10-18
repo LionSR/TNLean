@@ -57,6 +57,22 @@ theorem isExpansionBounded_of_isTermwiseBounded {a b : Layout P}
   | swap => trivial
   | frame r w ih => exact ih hK ht
 
+/-- Polynomial bounds `K ≤ C_K L ^ u` on the monomial counts and `C_C L ^ v` on the individual
+coefficients give the absolute coefficient-sum bound `C_K C_C L ^ (u + v)`.
+Source: polynomial-PEPS Theorem 5.2, assumption 3, `04-compression.tex`,
+lines 143–149 and 199–208. -/
+theorem isExpansionBounded_of_termwise_power_bounds {a b : Layout P}
+    (w : EffectCircuit a b) {r K : ℕ} (L C_K C_C : ℝ) (u v : ℕ)
+    (hL : 0 ≤ L) (hCC : 0 ≤ C_C)
+    (hK : ∀ g, w.monomialCount g ≤ K) (ht : w.IsTermwiseBounded r (C_C * L ^ v))
+    (hKbound : (K : ℝ) ≤ C_K * L ^ u) :
+    w.IsExpansionBounded r (C_K * C_C * L ^ (u + v)) := by
+  apply w.isExpansionBounded_of_isTermwiseBounded hK ht (by positivity)
+  calc
+    (K : ℝ) * (C_C * L ^ v) ≤ (C_K * L ^ u) * (C_C * L ^ v) :=
+      mul_le_mul_of_nonneg_right hKbound (by positivity)
+    _ = _ := by rw [pow_add]; ring
+
 /-- Polynomial bounds on original monomial counts and individual coefficients
 supply a coefficient-sum bound at least one, with constants fixed independently
 of the circuit and its private dimensions. The existing rescaling construction

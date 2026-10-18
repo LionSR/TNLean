@@ -65,29 +65,6 @@ noncomputable section
 
 open scoped Matrix
 
-namespace TNLean.PEPS.PairEffect.OriginalCircuit
-
-variable {P : Type} {a b : Layout P}
-
-/-- An absolute coefficient sum at most `S` bounds every individual coefficient by any `S' ≥ S`,
-and the pair-effect count of every monomial is unchanged.
-Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 143–149. -/
-theorem IsExpansionBounded.isTermwiseBounded {w : OriginalCircuit a b} {r : ℕ} {S S' : ℝ}
-    (h : w.IsExpansionBounded r S) (hS : S ≤ S') : w.IsTermwiseBounded r S' := by
-  induction w with
-  | id => trivial
-  | comp w v ihw ihv => exact ⟨ihw h.1, ihv h.2⟩
-  | privateMap => trivial
-  | nonprivateGate owner hC L hL hG tail =>
-      refine fun term hterm ↦ ⟨h.1 term hterm, (h.2.trans hS).trans' ?_⟩
-      exact List.single_le_sum (fun x hx ↦ by
-        obtain ⟨y, -, rfl⟩ := List.mem_map.mp hx
-        exact norm_nonneg _) _ (List.mem_map_of_mem hterm)
-  | swap => trivial
-  | frame r w ih => exact ih h
-
-end TNLean.PEPS.PairEffect.OriginalCircuit
-
 namespace TNLean.PEPS.Approximation.DyadicProtocol
 
 open Finset TNLean.PEPS.PairEffect
@@ -516,9 +493,9 @@ theorem largeSizeDyadicOperatorNetwork_of_largeSizeDyadicProtocolBounds
     linarith [hD.card_le]
   have hC : 0 ≤ C_E := by
     obtain ⟨Ξ, hΞ, hlower, -⟩ := hD.reference_changes
-    have h57 : (0 : ℝ) < (L : ℝ) ^ 57 := by positivity
-    have : 0 ≤ C_E / (L : ℝ) ^ 57 := by linarith
-    exact (div_nonneg_iff.mp this).elim (fun h ↦ h.1) fun h ↦ absurd h.2 (not_le.mpr h57)
+    by_contra hneg
+    have := div_neg_of_neg_of_pos (not_le.mp hneg) (by positivity : (0 : ℝ) < (L : ℝ) ^ 57)
+    linarith
   classical
   obtain ⟨Λ, _, _, N, hdeg, hsep, hdimN, hnorm⟩ :=
     D.exists_partyNetwork_of_contractedOperator hL0 hD hC hΩ.1 _ _ _ _ _ _ _ T

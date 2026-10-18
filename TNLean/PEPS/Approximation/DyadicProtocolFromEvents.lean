@@ -192,7 +192,7 @@ theorem exists_isDistributionProtocol_of_largeRepaintings {ε₀ : ℝ} (hε : 0
         D'.IsDistributionProtocol Ω C_N C_K C_E (64 * 189) kK (2 * protocolPatchBound ε₀ ν) := by
   obtain ⟨ν', hν', Hres⟩ := exists_resize_hasSourceBoundedChange hε hε₀
   refine ⟨ν', hν', fun ν hν hνν' {k K₀ a D B₀} hc hm {L q} _ {Ω C c} P hL hkL hk2 hΩ rank R₀
-    frozen auxOwner {C' c' kK C_N C_K C_E} hC hC' hcc hlarge hfε hfh hC₁ hK hεC => ?_⟩
+    frozen auxOwner {C' c' kK C_N C_K C_E} hC hC' hcc hlarge hfε hfh hCN hK hεC => ?_⟩
   classical
   have ht := hc.t_pos hL
   have hB := hc.hole_le hL
@@ -304,7 +304,7 @@ theorem exists_isDistributionProtocol_of_largeRepaintings {ε₀ : ℝ} (hε : 0
     (fun F => F.owner (⟨0, hL0⟩, ⟨0, hL0⟩)) (fun F hF => ?_) (fun F hF x => ?_)
     (fun t ht => htrs t ht) _ _ hfin
     (finalMain_owner P rank R₀ hε ht hB hkL hε4) (finalMain_holes P rank R₀ hε ht hB hε4)
-    (fun F hF h hh => ?_) (by simpa [List.map_map, Function.comp_def] using hfh) hC₁ hK
+    (fun F hF h hh => ?_) (by simpa [List.map_map, Function.comp_def] using hfh) hCN hK
     (by rw [div_eq_mul_inv]; gcongr)
   · rw [hst0] at hF
     rcases List.mem_cons.1 hF with rfl | hF

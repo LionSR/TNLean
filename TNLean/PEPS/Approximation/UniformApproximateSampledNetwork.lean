@@ -452,14 +452,10 @@ theorem uniform_approximate_sampled_network_of_le
     (by rwa [compressionPrefactor_eq_sumCompressionPrefactor] at hC) hα
   obtain ⟨lists, K, ht, hm, hK, happrox⟩ := hLists L
   have hL0 : 0 ≤ size L := by linarith [hsize L]
-  refine ⟨lists, K, ?_, hm, hK, happrox⟩
-  refine EffectCircuit.isExpansionBounded_of_isTermwiseBounded _ hm
-    (ht.mono_coefficient (mul_pow_le_max_zero_mul_pow C_C₀ hL0 v)) (by positivity) ?_
-  calc (K : ℝ) * (max C_C₀ 0 * size L ^ v)
-      ≤ (max C_K₀ 0 * size L ^ u) * (max C_C₀ 0 * size L ^ v) :=
-        mul_le_mul_of_nonneg_right (hK.trans (mul_pow_le_max_zero_mul_pow C_K₀ hL0 u))
-          (by positivity)
-    _ = max C_K₀ 0 * max C_C₀ 0 * size L ^ (u + v) := by rw [pow_add]; ring
+  exact ⟨lists, K, EffectCircuit.isExpansionBounded_of_termwise_power_bounds _ (size L)
+    (max C_K₀ 0) (max C_C₀ 0) u v hL0 (le_max_right _ _) hm
+    (ht.mono_coefficient (mul_pow_le_max_zero_mul_pow C_C₀ hL0 v))
+    (hK.trans (mul_pow_le_max_zero_mul_pow C_K₀ hL0 u)), hm, hK, happrox⟩
 
 /-- Expansions available at each fixed inverse-power precision yield literal
 operator tensor networks approximating the original density uniformly in size.
