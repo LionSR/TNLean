@@ -410,7 +410,7 @@
     {
       "id": "docs/paper-gaps/arealaw2d_belt_replacement_template_scope.tex",
       "repo": "TNLean",
-      "kind": "convention",
+      "kind": "narrower",
       "status": "resolved",
       "paper": "area",
       "result": "Proposition 11.2, templates for belt tiles and replacements",
@@ -432,9 +432,9 @@
       "id": "docs/paper-gaps/oai26_zero_floor_energy_scope.tex",
       "repo": "QICLean",
       "kind": "narrower",
-      "status": "open",
+      "status": "resolved",
       "paper": "peps",
-      "result": "Companion Lean source, energy of the norm-maximizing nested filters",
+      "result": "Comparison with the companion Lean code, energy of the norm-maximizing nested filters",
       "issue": 8741,
       "prs": {
         "QICLean": [
@@ -444,20 +444,20 @@
         ]
       },
       "title": "Energy of the norm-maximizing nested filters at zero floor",
-      "summary": "QICLean proves the sharp one-maximizer energy estimate, PSD/eigenvalue feasibility and generic ordered-output transport. TNLean composes them with an adapted original-grid filter interface; literal source-model and geometric construction obligations remain separate.",
+      "summary": "QICLean proves the energy estimate for one norm-maximizing family of nested filters, together with the matrix characterization of the admissible filters and the ordered-output identities. The result is a standalone adaptation of a lemma of the companion Lean code; the proofs of the area law and of the polynomial PEPS approximation theorem do not use it.",
       "context": "The patch construction filters the ground state by a nested product of positive operators chosen to maximize the output norm. The energy of the normalized output then exceeds the ground energy by at most a weighted count of the interactions that cross the filtering regions.",
       "claims": "For weights 0 &lt; <i>a<sub>j</sub></i> ≤ 1 and nested regions <i>D<sub>j</sub></i> crossed by <i>b<sub>j</sub></i> edges, the selected normalized output φ satisfies |⟨φ, <i>H</i>φ⟩ − <i>E</i><sub>0</sub>| ≤ <i>q</i><sup>2</sup><i>J</i> Σ<sub><i>j</i></sub> <i>b<sub>j</sub></i><i>a<sub>j</sub></i><sup>2</sup> and Δ(1 − |⟨Ω, φ⟩|<sup>2</sup>) ≤ <i>q</i><sup>2</sup><i>J</i> Σ<sub><i>j</i></sub> <i>b<sub>j</sub></i><i>a<sub>j</sub></i><sup>2</sup>. The source takes a compact limit of regularized maximizing families and shows the limiting output is nonzero.",
       "found": "QICLean proves the sharp absolute-energy estimate for one chosen zero-floor norm maximizer on arbitrary finite sites. It characterizes floor-zero feasibility at positive weights by positive semidefiniteness and real-CFC trace-power normalization, with the equivalent eigenvalue sum, and proves exact ascending-action, reindexing and zero-safe normalized-output identities. Its output-norm comparison covers every feasible matrix competitor in both directions. TNLean's canonical physical specialization adds the original full-system gap and exact q²J crossing budget; its attributed original-grid filter adaptation transports that same selected family to PSD source-shaped bundles, including the negative-J empty-grid corner. These results do not import or identify the literal OAI Hamiltonian/filter types and do not construct geometric regions or weights.",
-      "impact": "No. The generic matrix representation and ordered-action comparisons are proved. The remaining distinction concerns literal imported source-model types and geometric construction.",
-      "plan": "Retain the remaining literal source-model and geometric obligations in issue #8741; do not select another optimizer or repeat the generic feasibility/output proofs."
+      "impact": "No. The comparison point is the companion Lean code, not the paper. The proofs of the area law and of the polynomial PEPS approximation theorem do not use this result, and the further comparison with the companion code's own types is not pursued.",
+      "plan": "None. The further comparison with the companion code's own types is not pursued; the entry is resolved because that comparison bears on no proved theorem, not because it was carried out."
     },
     {
       "id": "docs/paper-gaps/polypeps_square_zero_floor_optimizer_scope.tex",
       "repo": "TNLean",
       "kind": "narrower",
-      "status": "open",
+      "status": "resolved",
       "paper": "peps",
-      "result": "Companion Lean source, the zero-floor filter optimizer on the square grid",
+      "result": "Comparison with the companion Lean code, the zero-floor filter optimizer on the square grid",
       "issue": 8741,
       "prs": {
         "TNLean": [
@@ -465,12 +465,12 @@
         ]
       },
       "title": "Positive filter families for the original square-grid Hamiltonian",
-      "summary": "An attributed adaptation of the source filters on the original square has all-competitor maximality, exact ascending output, and the same-family original-energy and full-gap bounds, including the vacuous negative-J case.",
+      "summary": "An adaptation of the companion Lean code's positive filters to the original square-grid Hamiltonian: one norm-maximizing family, compared against every competitor, satisfies the energy and full-gap fidelity bounds, including the vacuous case of a negative interaction bound. The result is standalone; the proofs of the area law and of the polynomial PEPS approximation theorem do not use it.",
       "context": "The companion source selects positive filters on nested regions of the square grid that maximize the filtered output norm, and bounds the energy and the ground-state fidelity of the normalized output by the weighted boundary lengths of the regions.",
       "claims": "For nested regions <i>D</i><sub>0</sub> ⊆ ⋯ ⊆ <i>D</i><sub><i>m</i>−1</sub>, each edge crossing at most one region, and weights 0 &lt; <i>a<sub>j</sub></i> ≤ 1, one norm-maximizing family has nonzero output, and its normalization φ satisfies |Re⟨φ, <i>H</i>φ⟩ − <i>E</i><sub>0</sub>| ≤ <i>q</i><sup>2</sup><i>J</i> Σ<sub><i>j</i></sub> <i>a<sub>j</sub></i><sup>2</sup>|∂<i>D<sub>j</sub></i>| and Δ(1 − |⟨Ω, φ⟩|<sup>2</sup>) ≤ <i>q</i><sup>2</sup><i>J</i> Σ<sub><i>j</i></sub> <i>a<sub>j</sub></i><sup>2</sup>|∂<i>D<sub>j</sub></i>|. The source allows a real <i>J</i>, which can be negative only when there are no interaction terms.",
       "found": "TNLean adapts the source's PSD/eigenvalue-trace-normalized regional filters using its existing original-grid state and configuration types. At positive weights, bidirectional matrix conversion covers every admissible or floor-zero feasible competitor. The ascending local action and its inverse-norm normalization agree exactly with the canonical ordered output, including zero output. Pulling back the one family selected by the canonical physical theorem gives original-Hamiltonian energy and original full-system-gap fidelity estimates with each forward crossing counted once. Replacing only norm-bound proof fields by max(J,0) removes the sign premise: J < 0 forces an empty grid, and both crossing budgets vanish. The theorem does not import the literal OAI Hamiltonian, uniqueness or gap types. Supplied nested regions, the one-crossing condition and weights remain inputs.",
-      "impact": "No. This is a representation and model-scope distinction, not an error in the source. The original-coordinate and vacuous-negative-bound restrictions have been removed for the adapted interface.",
-      "plan": "If a literal OAI-type statement is required, import its model definitions and check their conversion under a compatible toolchain. Geometric region and weight construction remains separate work in issue #8741; this entry stays open."
+      "impact": "No. The comparison point is the companion Lean code, not the paper. The proofs of the area law and of the polynomial PEPS approximation theorem do not use this result.",
+      "plan": "None. The further comparison with the companion code's own types is not pursued; the entry is resolved because that comparison bears on no proved theorem, not because it was carried out."
     }
   ],
   "checked": [

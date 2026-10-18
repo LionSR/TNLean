@@ -14,11 +14,11 @@ selected square of every original gapped ground state. The constant is chosen
 before the lattice size, Hamiltonian, vector, center and scale. If `C_A` is the
 area-law constant, the choice `C_S = max 1 (16 * C_A)` suffices.
 
-**Scope restriction (conditional area law):** The square entropy area law is an
-explicit hypothesis `harea`. Its deduction from the original spectral-gap
-hypotheses remains to be supplied by the uniform finite-domain area law and its
-square specialization. This restriction is recorded in
-`docs/paper-gaps/arealaw2d_rectangular_specialization_scope.tex`.
+The theorem takes the square entropy area law as the hypothesis `harea`; it is a
+conditional step, not the source statement. That law is proved as
+`TNLean.PEPS.AreaLaw.squareEntropyAreaLaw`, and the unconditional Proposition 4.1 is
+`adaptivePatchConstraint` in `TNLean.PEPS.Approximation.PolynomialPEPSTheorem`
+(`docs/paper-gaps/arealaw2d_rectangular_specialization_scope.tex`, resolved).
 
 The state is the original ground vector in integer-domain coordinates.
 

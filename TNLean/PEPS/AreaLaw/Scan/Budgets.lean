@@ -14,10 +14,12 @@ Proposition 9.2: the transfer of the entropy input from `Ω` to `\widetilde Ω`,
 `B_sh ≤ C (n L^e + n)`, the mismatch budget `B_exc ≤ C n D`, the marginal parameter
 `𝓑 ≤ C n D (log n)^C`, and the terminal rough upper bound `≤ C W n^{1+e}`.
 
-**Scope restriction (inputs as hypotheses):** the results of this module stated over `ScanData`
-are proved from its fields, which record the conclusions of Lemma 9.1, Propositions 7.4
-and 8.1, and Lemmas 2.1 and 3.1 for one scan rather than deriving them. Documented in
-`docs/paper-gaps/arealaw2d_scanner_inputs.tex`.
+The results of this module stated over `ScanData` are proved from its fields, which record
+the conclusions of Lemma 9.1, Propositions 7.4 and 8.1, and Lemmas 2.1 and 3.1 for one scan;
+this route is auxiliary and these results are conditional steps, not source statements. The
+source statement of Proposition 9.2 is proved for the original physical system as
+`TNLean.PEPS.AreaLaw.Scan.CollarScan.scannerStatement`, without these fields as hypotheses
+(`docs/paper-gaps/arealaw2d_scanner_inputs.tex`, which records its output-coefficient convention).
 
 ## Main results
 

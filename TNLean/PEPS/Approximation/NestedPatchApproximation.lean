@@ -17,11 +17,11 @@ of the ordered regularized filter product. An explicit logarithmic regulator
 then gives polynomial-dimensional inside spaces and inverse-polynomial error.
 The exponent is chosen before the physical instance and the selected square.
 
-**Scope restriction (conditional area law):** The square entropy area law is an
-explicit hypothesis `harea`. Its deduction from the original spectral-gap
-hypotheses remains to be supplied by the uniform finite-domain area law and its
-square specialization. This restriction is recorded in
-`docs/paper-gaps/arealaw2d_rectangular_specialization_scope.tex`.
+The theorem takes the square entropy area law as the hypothesis `harea`; it is a
+conditional step, not the source statement. That law is proved as
+`TNLean.PEPS.AreaLaw.squareEntropyAreaLaw`, and the unconditional Proposition 4.1 is
+`adaptivePatchConstraint` in `TNLean.PEPS.Approximation.PolynomialPEPSTheorem`
+(`docs/paper-gaps/arealaw2d_rectangular_specialization_scope.tex`, resolved).
 
 Source: OpenAI, *Polynomial PEPS approximation of gapped square-grid ground
 states*, Proposition 4.1, `03-patches.tex`, lines 335–563,
