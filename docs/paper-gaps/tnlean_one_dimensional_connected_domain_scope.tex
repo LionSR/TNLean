@@ -59,6 +59,15 @@ $H_i-E_iI\ge\Delta(I-|\Omega_i\rangle\langle\Omega_i|)$.
 The phase is included in one normalized factor, so the product equality is
 exact and the gap does not decrease.
 
+The induced integer geometry is also established: two vertices of a subset
+of $\mathbb Z$ are connected precisely when every integer between them is
+present, and the coordinate image of every connected component is order-convex.
+\footnote{Declarations: \leanid{SimpleGraph.hasse_int_induce_reachable_iff},
+\leanid{SimpleGraph.ConnectedComponent.ordConnected_image_hasse_int_induce}.}
+This geometric statement requires no finiteness hypothesis. It does not yet
+provide the finite chain coordinate maps or the decomposition of the actual
+Hamiltonian into component Hamiltonians.
+
 For an arbitrary finite $\Lambda\subset\mathbb Z$, the identification of the
 actual Hamiltonian with a tensor sum over its connected components, and the
 transport of each component to the chain model, remain to be formalized.
