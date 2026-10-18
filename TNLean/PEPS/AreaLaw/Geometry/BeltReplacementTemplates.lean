@@ -256,6 +256,17 @@ end Stages
 
 /-! ### One scale constant for both kinds -/
 
+/-- The belt and replacement scanner coefficient `C_B = 32 C_tpl`. Auxiliary to the
+explicit constant of Theorem 1.1 (`docs/notes/arealaw2d_explicit_constant.tex`).
+Source: area-law Section 11, `10-geometry.tex`, lines 731–739 and 761–762. -/
+def beltScannerConstant (Ctpl : ℝ) : ℝ :=
+  32 * Ctpl
+
+/-- The belt scanner coefficient is positive for `C_tpl ≥ 1`. -/
+theorem beltScannerConstant_pos {Ctpl : ℝ} (hCtpl : 1 ≤ Ctpl) : 0 < beltScannerConstant Ctpl := by
+  unfold beltScannerConstant
+  linarith
+
 /-- **Belt and replacement templates with one scale constant.** For every
 `C_tpl ≥ 1` there is one constant `C_B > 0`, depending only on `C_tpl`, such
 that the following hold for every geometric datum, every lower layer index
@@ -266,8 +277,8 @@ that the following hold for every geometric datum, every lower layer index
   lattice point has a template with `s₀ = 2 u`, `n = ⌈C_B u⌉` and at most eight
   pieces.
 In both cases the template fields give `n ≥ C_tpl N₀ (s₀ + 1)` and
-`diam_∞ T ≤ n`. The constant is `C_B = 32 C_tpl`; it is fixed before `S_*` and
-`k₀`, as in the threshold order of lines 761–762.
+`diam_∞ T ≤ n`. The constant is `C_B = beltScannerConstant C_tpl = 32 C_tpl`; it is
+fixed before `S_*` and `k₀`, as in the threshold order of lines 761–762.
 Source: area-law Section 11, `10-geometry.tex`, lines 731–739 and 761–762. -/
 theorem exists_belt_replacement_templates (Ctpl : ℝ) (hCtpl : 1 ≤ Ctpl) :
     ∃ CB : ℝ, 0 < CB ∧
@@ -294,9 +305,11 @@ theorem exists_belt_replacement_templates (Ctpl : ℝ) (hCtpl : 1 ≤ Ctpl) :
               T.pieceCount ≤ 8 ∧
                 ∀ y : ℤ × ℤ, y ∈ T.points ↔
                   integerPoint y ∈ (repairStage o Λ A C k₀ hC h₀ Sstar (j + 1)).birth x := by
-  refine ⟨32 * Ctpl, by linarith, fun o k₀ Z C a b hC h₀ x s hxs w hw ↦ ?_,
+  refine ⟨beltScannerConstant Ctpl, beltScannerConstant_pos hCtpl,
+    fun o k₀ Z C a b hC h₀ x s hxs w hw ↦ ?_,
     fun o Λ A C k₀ hC h₀ Sstar hS j x m hx w hw ↦ ?_⟩
-  · exact initialBelt_exists_template Ctpl _ hCtpl (by linarith) o k₀ Z C a b hC h₀ x s hxs w hw
+  · exact initialBelt_exists_template Ctpl _ hCtpl (by unfold beltScannerConstant; linarith)
+      o k₀ Z C a b hC h₀ x s hxs w hw
   · exact repairReplacement_exists_template o Λ A C k₀ hC h₀ Sstar hS Ctpl _ hCtpl le_rfl
       j x m hx w hw
 
