@@ -253,9 +253,6 @@ theorem exists_sourceTarget_selected_actualCharge_sharp_energy_of_threshold_le
   have hinterval := fun n (hn : Real.natRpowThreshold (Exponents.scannerNu : ℝ) 4 ≤ n) =>
     Real.le_natCast_rpow_of_natRpowThreshold_le
       (by norm_num [Exponents.scannerNu] : 0 < (Exponents.scannerNu : ℝ)) hn
-  have hlog (n : ℕ) (hn : 3 ≤ n) : 1 ≤ Real.log (n : ℝ) := by
-    rw [Real.le_log_iff_exp_le (by exact_mod_cast (show 0 < n by omega))]
-    exact Real.exp_one_lt_three.le.trans (by exact_mod_cast hn)
   refine ⟨Ctr, ct, Cent, eent, Cen, een, hCtr, hct, ?_⟩
   intro Ce hCe
   have hdensity := fun n (hn : finalSelectedDensityThreshold q Ce C₁ Ct Clt ≤ n) =>
@@ -318,7 +315,7 @@ theorem exists_sourceTarget_selected_actualCharge_sharp_energy_of_threshold_le
     dsimp only [ℓ, roundedLogRadius]
     rw [hr]
   have hG : Cent * ℓ ^ eent ≤ Ct * Real.log (S.n : ℝ) ^ Clt :=
-    (hcap S.n (hlog S.n hnLog) ℓ hℓ1 hℓcap).1
+    (hcap S.n (Real.one_le_log_natCast_of_three_le hnLog) ℓ hℓ1 hℓcap).1
   let density := fun (k : ℕ) (s : Fin (S.n * S.m)) (p : ℝ) ↦
     S.actualChargeEntropyDefect hm hM s.val dims energy (a / 2) k (pre k) p /
       (S.K * S.n * S.D : ℝ)
