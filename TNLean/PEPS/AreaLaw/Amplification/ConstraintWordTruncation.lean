@@ -438,6 +438,39 @@ theorem latticeConstraintWord_truncation_of_positiveConstraints {p : ℕ} (R : �
     (fun i => (hk i).1) (fun i => (hk i).2.1)
     (fun x => by exact_mod_cast card_anchor_fiber_le a ha x) (fun i l => (htail i l).2.2) S r t
 
+/-- **Truncation of the retained constraint product for the exact positive constraints, at the
+named constants** (Lemma 10.1, `eq:amplification-product-truncation`; `09-amplification.tex`,
+lines 42–63 and 228–234, with Proposition 4.3, `03-quasilocal.tex`, lines 220–334). The bound
+of `exists_latticeConstraintWord_truncation` holds with
+`C_t = constraintWordTruncationPrefactor μ_R C₃` and `c_t = c₃ / 2`, where
+`C₃ = latticePositiveConstraintConst R J Δ p` and `c₃ = latticePositiveConstraintRate R J Δ p`. -/
+theorem latticeConstraintWord_truncation_explicit {p : ℕ} (hp : 1 ≤ p) (R : ℕ) {J Δ : ℝ}
+    (hJ : 0 ≤ J) (hΔ : 0 < Δ) :
+    ∀ {q : ℕ} [NeZero q] (Λ : Finset (ℤ × ℤ)) (h : LocalHamiltonian Λ q R J)
+      (a : AdmissibleSupport Λ R → Site Λ), (∀ X, a X ∈ X.1) →
+      ∀ (E₀ : ℝ) (Ω : StateSpace Λ q), IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+      ∀ (S : Finset (Site Λ)) (r : ℕ) (t : ℝ≥0),
+      let P := fun i : AdmissibleSupport Λ R => a i ∈ graphNeighborhood Λ r S
+      let k := fun i : {i // P i} => positiveConstraint (positiveNormalization p (Δ / 2) J)
+        (centeredFilter p (Δ / 2) h.operator Ω (h.term i))
+      let kr := fun i : {i // P i} =>
+        siteExpectation q (graphBall (domainGraph Λ) (a i) r) (k i)
+      let D := fun w : PoissonWord.Word (AdmissibleSupport Λ R) =>
+        contractionWord k (PoissonWord.partitionWords P w).1.1
+          (PoissonWord.partitionWords P w).1.2
+      let L := fun w : PoissonWord.Word (AdmissibleSupport Λ R) =>
+        contractionWord kr (PoissonWord.partitionWords P w).1.1
+          (PoissonWord.partitionWords P w).1.2
+      Integrable (fun w => ‖D w - L w‖) (PoissonWord.measure (AdmissibleSupport Λ R) t) ∧
+      (∫ w, ‖D w - L w‖ ∂PoissonWord.measure (AdmissibleSupport Λ R) t) ≤
+        constraintWordTruncationPrefactor ((2 ^ ((1 + 2 * R * (R + 1)) - 1) : ℕ) : ℝ)
+            (latticePositiveConstraintConst R J Δ p) * t * S.card * (1 + (r : ℝ)) ^ 2 *
+          Real.exp (-(latticePositiveConstraintRate R J Δ p / 2 * (r : ℝ) ^ kernelExponent p)) ∧
+      ∀ w, ‖L w‖ ≤ 1 ∧
+        L w ∈ supportedOperators q (graphNeighborhood Λ (2 * r) S : Set (Site Λ)) :=
+  latticeConstraintWord_truncation_of_positiveConstraints R
+    (latticePositiveConstraintConst_nonneg R J Δ p) (latticePositiveConstraints_explicit hp R hJ hΔ)
+
 /-- **Truncation of the retained constraint product** (Lemma 10.1,
 `lem:amplification-local-products`, `eq:amplification-product-truncation`,
 `09-amplification.tex`, lines 42–63, proof at lines 228–234).
