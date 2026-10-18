@@ -20,6 +20,13 @@ depends on axioms: [propext, Classical.choice, Quot.sound] -/
 
 open TNLean.PEPS.AreaLaw in
 /-- info:
+'TNLean.PEPS.AreaLaw.graphNeighborhood_collar_subset_of_threshold_le'
+depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms graphNeighborhood_collar_subset_of_threshold_le
+
+open TNLean.PEPS.AreaLaw in
+/-- info:
 'TNLean.PEPS.AreaLaw.exists_unitary_kronecker_sub_le_of_good_realization'
 depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
