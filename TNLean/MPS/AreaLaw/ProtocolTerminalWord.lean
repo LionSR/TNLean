@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.ProtocolTerminalCoordinates
 import TNLean.PEPS.Approximation.OriginalCircuitLift
+import TNLean.PEPS.Approximation.SiteVectorAppend
 
 /-!
 # Private realization of the terminal block coordinates
@@ -254,23 +255,7 @@ private theorem rawAppend_siteVec (a b : List (RawLabel L w))
       (appendIso (siteRegs q (rawOwner L w) a) tail).symm
         (siteVec (rawOwner L w) a c ⊗ₜ
           (Layout.memCongr ht).symm (siteVec (rawOwner L w) b c)) := by
-  subst tail
-  induction a with
-  | nil =>
-      change siteVec (rawOwner L w) b c =
-        (appendIso ([] : Layout (Party L w)) (siteRegs q (rawOwner L w) b)).symm
-          ((1 : ℂ) ⊗ₜ siteVec (rawOwner L w) b c)
-      simpa only [one_smul] using
-        (appendIso_nil_symm_tmul (siteRegs q (rawOwner L w) b) (1 : ℂ)
-          (siteVec (rawOwner L w) b c)).symm
-  | cons x a ih =>
-      let h' : siteRegs q (rawOwner L w) a ++ siteRegs q (rawOwner L w) b =
-          siteRegs q (rawOwner L w) (a ++ b) := by simp [siteRegs, List.map_append]
-      rw [← Layout.memCongr_symm h]
-      change Layout.memCongr (congrArg (⟨rawOwner L w x, euc (Fin q)⟩ :: ·) h'.symm)
-        (EuclideanSpace.single (c x) (1 : ℂ) ⊗ₜ siteVec (rawOwner L w) (a ++ b) c) = _
-      rw [Layout.memCongr_cons_tmul _ h'.symm, Layout.memCongr_symm h', ih h']
-      exact (appendIso_symm_cons_tmul _ _ _ _ _ _).symm
+  exact siteVec_append (rawOwner L w) a b tail ht h c
 
 private theorem auxiliaryRaw_siteVec (xs : List (AuxiliarySite L w))
     (h : siteRegs q (auxiliaryOwner L w) xs =

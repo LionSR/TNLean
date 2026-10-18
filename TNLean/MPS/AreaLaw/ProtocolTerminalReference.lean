@@ -9,6 +9,7 @@ import TNLean.PEPS.Approximation.SheetStackReadoutCircuit
 import QICLean.Analysis.ProductReferenceDensityError
 import Mathlib.Data.List.ProdSigma
 import Mathlib.Data.List.Nodup
+import TNLean.PEPS.Approximation.SiteVectorAppend
 
 /-!
 # The terminal sheet reference in its original copy coordinates
@@ -178,22 +179,7 @@ private theorem append_siteVec_transport {ι P : Type} (own : ι → P)
     (Layout.memCongr h).symm (siteVec own (a ++ b) c) =
       (appendIso (siteRegs q own a) tail).symm
         (siteVec own a c ⊗ₜ (Layout.memCongr ht).symm (siteVec own b c)) := by
-  subst tail
-  induction a with
-  | nil =>
-      change siteVec own b c =
-        (appendIso ([] : Layout P) (siteRegs q own b)).symm
-          ((1 : ℂ) ⊗ₜ siteVec own b c)
-      simpa only [one_smul] using
-        (appendIso_nil_symm_tmul (siteRegs q own b) (1 : ℂ) (siteVec own b c)).symm
-  | cons x a ih =>
-      let h' : siteRegs q own a ++ siteRegs q own b = siteRegs q own (a ++ b) := by
-        simp [siteRegs, List.map_append]
-      rw [← Layout.memCongr_symm h]
-      change Layout.memCongr (congrArg (⟨own x, euc (Fin q)⟩ :: ·) h'.symm)
-        (EuclideanSpace.single (c x) (1 : ℂ) ⊗ₜ siteVec own (a ++ b) c) = _
-      rw [Layout.memCongr_cons_tmul _ h'.symm, Layout.memCongr_symm h', ih h']
-      exact (appendIso_symm_cons_tmul _ _ _ _ _ _).symm
+  exact siteVec_append own a b tail ht h c
 
 private theorem append_siteVec_heq {ι P : Type} (own : ι → P)
     (a b : List ι) (c : ι → Fin q) :

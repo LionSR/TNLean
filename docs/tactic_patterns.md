@@ -24,6 +24,20 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Product-basis vectors on concatenated register lists — promoted (2026-10-18)
+
+- **Pattern:** Split a product basis vector at a list boundary, retaining the
+  specified equalities of register lists and their canonical memory maps.
+- **Seen:** Two concatenation inductions across two files: `rawAppend_siteVec`
+  in `MPS/AreaLaw/ProtocolTerminalWord.lean` and `append_siteVec_transport`
+  in `MPS/AreaLaw/ProtocolTerminalReference.lean`.
+- **Abstraction:** `TNLean.PEPS.EncodedFrame.siteVec_append` in
+  `PEPS/Approximation/SiteVectorAppend.lean`; both proofs now call it.
+- **Notes:** The identity permits repeated sites and owners. The empty list
+  contributes the scalar one. The separate mapped-label identities below
+  are not further copies of this concatenation induction; no third identical
+  occurrence is claimed.
+
 ### Unit logarithm from a threshold at least three — promoted (2026-10-18)
 
 - **Pattern:**
@@ -4633,22 +4647,19 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 
 
-### Product-basis vectors under equal register lists — candidate (2026-10-18)
+### Product-basis vectors under a map of labels — candidate (2026-10-18)
 
-- **Pattern:** Induct on a list of raw registers, transport its elementary
-  tensor along equality of the register lists, and use
-  `Layout.memCongr_cons_tmul` and `Layout.memCongr_symm` to retain the actual
-  basis coordinates.
-- **Seen:** Two occurrences in one file: `rawAppend_siteVec` and
-  `auxiliaryRaw_siteVec` in `MPS/AreaLaw/ProtocolTerminalWord.lean`.
-- **Abstraction:** The existing tensor transport lemmas are used at both
-  occurrences. If a third consumer appears in another file, consider a
-  concatenation or label-map basis identity in `PEPS/Approximation/SiteRegisters`
-  before adding another list induction.
-- **Notes:** The first identity splits an actual raw list at a specified
-  boundary; the second identifies the unchanged auxiliary labels. Neither
-  assumes an output vector or a different ownership assignment. The focused
-  area-law tactic scan found no repeated block at its three-occurrence threshold.
+- **Pattern:** Induct on a register list to identify the product basis vector
+  of its mapped labels with the vector whose owner and configuration are
+  precomposed with the same map.
+- **Seen:** Two occurrences across two files: `auxiliaryRaw_siteVec` in
+  `MPS/AreaLaw/ProtocolTerminalWord.lean` and `mapped_siteVec_heq` in
+  `MPS/AreaLaw/ProtocolTerminalReference.lean`.
+- **Abstraction:** Both use the existing canonical tensor transport lemmas.
+  A third occurrence should prompt a shared label-map identity; the present
+  two do not require another abstraction.
+- **Notes:** The mapped labels retain their actual owners. This pattern is
+  distinct from concatenation, now covered by `siteVec_append`.
 
 
 ### Partial trace under a change of discarded basis — candidate (2026-10-18)
