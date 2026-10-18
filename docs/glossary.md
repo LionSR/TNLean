@@ -3628,6 +3628,16 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
   chooses the corresponding constant before the template and scales. This is
   the conditional entropy component of Lemma 9.4, not a derivation of the
   arbitrary-exponent input or a completion marker for the full source lemma.
+- `Geometry.template_entropy_bounds_of_real_safe_box`
+  (`TemplateBoxEntropyReal.lean`) assumes the box estimate at one exponent
+  `e > 0` and for one real clearance `D₀ ≥ 1`, for every integer rectangle
+  `Q` with `dist_∞(Q, Z) > D₀ size(Q)`. It proves the core, shell and prefix
+  bounds for every template with `C_tpl ≥ 24` and `dist_∞(T, Z) > 4 D₀ s₀`,
+  with coefficients depending only on `C`, `e` and, for the partial row, `q`.
+  It matches the hypotheses of the three conditional estimates of Lemma 9.4
+  more closely than the natural-clearance family above, which it does not
+  replace. It is likewise conditional on the box estimate and is not a
+  completion marker for the full source lemma.
 
 ## Partial rectangle layer entropy
 
