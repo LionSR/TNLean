@@ -15,9 +15,9 @@ state using the same target-window trace estimate and compact collar volume.
 The actual rough endpoint theorem is then applied to the same target set and
 label sequence. No new truncated vector, target set or labels are selected.
 
-The continuity threshold precedes the finite physical system, the entropy
-coefficient and its exponent. The explicit continuity and replica errors
-are retained; no selected-density power or final absorption is asserted.
+The continuity threshold `max (truncationEntropyThreshold q g Cvol) 2` precedes the
+finite physical system, the entropy coefficient and its exponent. The explicit continuity
+and replica errors are retained; no selected-density power or final absorption is asserted.
 
 Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 `08-scanner.tex`, lines 353–357, 399–404 and 457–490, revision
@@ -101,13 +101,13 @@ theorem exists_source_actualScan_suppliedPrevector_endpoint_budget
                   (Bsh / z + (1 + 3 * (S.n : ℝ) * (S.D : ℝ) * Real.log (q : ℝ))) +
                     roughEndpointRemainder d c S.K Ci k := by
   classical
-  obtain ⟨N, hN⟩ := eventually_atTop.mp
-    (eventually_regionalEntropy_positiveDepthPrefix_le q hq g Cvol hg)
+  let N := truncationEntropyThreshold q g Cvol
   refine ⟨max N 2, le_max_right _ _, ?_⟩
   intro I _ _ Λ T hT S hn hgraph hdepth hm hM a ha hr hDpos hD L hL hrows
     Ω Ωt hΩ hΩt hcard hdist Ce e hsource E ell Bsh X β ΩX z hz d n pre ψ hpre hmass
   have hnpos : 0 < S.n := by have := (le_max_right N 2).trans hn; omega
-  have htransfer := hN S.n ((le_max_left N 2).trans hn)
+  have htransfer := regionalEntropy_positiveDepthPrefix_le_of_truncationEntropyThreshold_le
+    q hq g Cvol hg ((le_max_left N 2).trans hn)
   have hcard' : ((depthPrefix S.A S.depth (L : ℤ)).card : ℝ) ≤
       Cvol * (S.n : ℝ) ^ 2 := hcard
   have hsh : ∀ j : Fin (L + 1),

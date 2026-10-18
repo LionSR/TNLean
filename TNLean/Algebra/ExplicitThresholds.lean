@@ -214,6 +214,12 @@ theorem mul_rpow_mul_log_rpow_le_mul_rpow_of_ceil_logRpowThreshold_le {C η u v 
     C * (n : ℝ) ^ u * log (n : ℝ) ^ L ≤ η * (n : ℝ) ^ v :=
   mul_rpow_mul_log_rpow_le_mul_rpow_of_logRpowThreshold_le hC hη huv (Nat.ceil_le.mp hn)
 
+/-- Every `n` from `⌈logRpowThreshold C η u v L⌉₊` on has `1 ≤ log n`. -/
+theorem one_le_log_of_ceil_logRpowThreshold_le {C η u v L : ℝ} {n : ℕ}
+    (hn : ⌈logRpowThreshold C η u v L⌉₊ ≤ n) : 1 ≤ log (n : ℝ) := by
+  rw [le_log_iff_exp_le (by linarith [two_lt_logRpowThreshold C η u v L, Nat.ceil_le.mp hn])]
+  exact (le_max_left _ _).trans (Nat.ceil_le.mp hn)
+
 /-- Every `n` from `⌈logRpowThreshold C η u v L⌉₊` on is at least `2`. -/
 theorem two_le_of_ceil_logRpowThreshold_le {C η u v L : ℝ} {n : ℕ}
     (hn : ⌈logRpowThreshold C η u v L⌉₊ ≤ n) : 2 ≤ n := by

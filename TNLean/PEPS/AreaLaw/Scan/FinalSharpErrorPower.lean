@@ -15,9 +15,10 @@ are absorbed at that power. Its margin to the claimed collar power
 
 All coefficients are fixed before the size threshold, which precedes every
 remaining scalar datum. The logarithmic absorption threshold is given explicitly by
-`finalSharpEnvelopeThreshold`. This is conditional final-scale absorption. It does
-not construct the safe-box entropy input, the scanner, or a physical
-mutual-information inequality. Replica remainders must first be removed
+`finalSharpEnvelopeThreshold`, and the full threshold of `exists_finalSharp_error_le` is
+`max finalSharpScaleThreshold (finalSharpEnvelopeThreshold C₀ CB 32)`. This is conditional
+final-scale absorption. It does not construct the safe-box entropy input, the scanner, or a
+physical mutual-information inequality. Replica remainders must first be removed
 with the physical instance, size, total weight and fraction fixed.
 
 Source: OpenAI area-law manuscript, `08-scanner.tex`, lines 839--942,
@@ -160,15 +161,17 @@ theorem exists_finalSharp_error_le
           C * (n : ℝ) ^ (62497 / 62500 : ℝ) ∧
         finalSharpError n a C₀ B St Bsh z lq t dlog ≤
           C * (n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ)) := by
-  obtain ⟨Ca, hCa, Ns, hNs, hscale⟩ := exists_finalSharp_scale_bounds
-  let Ne := finalSharpEnvelopeThreshold C₀ CB Ca
+  let Ns := finalSharpScaleThreshold
+  let Ne := finalSharpEnvelopeThreshold C₀ CB 32
   let C := 20 * Ce + 62 + 24 * lq + 16 * Real.sqrt Ctr * (1 + Cdim)
   have hC : 0 < C := by dsimp only [C]; positivity
+  have hNs : 2 ≤ Ns := two_le_finalSharpScaleThreshold
+  have hCa : (1 : ℝ) ≤ 32 := by norm_num
   refine ⟨C, hC, max Ns Ne, hNs.trans (le_max_left _ _), ?_⟩
   intro n hn L m K D W a
   have hn2 : 2 ≤ n := hNs.trans ((le_max_left Ns Ne).trans hn)
   obtain ⟨hK, ha, haUpper, haInv, htpos, hthalf⟩ :=
-    hscale n ((le_max_left Ns Ne).trans hn)
+    finalSharp_scale_bounds_of_finalSharpScaleThreshold_le ((le_max_left Ns Ne).trans hn)
   refine ⟨hK, ha, htpos, hthalf, ?_⟩
   intro B St Bsh z t dlog hz hzupper hmass hSt hBsh hB ht hdlog
   have hL : L ≤ n := Nat.floor_le_of_le (by

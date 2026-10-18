@@ -237,6 +237,13 @@ truncation costs of Lemma 2.1 in the target and shell entropies are at most `n^{
 noncomputable def ScanConstants.truncationThreshold (κ : ScanConstants) : ℕ :=
   continuityCostThreshold (κ.C * √(1 + κ.C)) (Real.log κ.q)
 
+/-- The explicit threshold `continuityCostThreshold (max 4 C_vol √(1 + √(2 / g))) (log q)`
+beyond which the quantitative truncation `t ≤ √(2 min(n^{-1000}, g/4) / g)` costs at most
+`n^{-247}` in the entropy of every region of at most `C_vol n²` sites (`08-scanner.tex`,
+lines 399–404, and Lemma 2.1). -/
+noncomputable def truncationEntropyThreshold (q : ℕ) (g Cvol : ℝ) : ℕ :=
+  continuityCostThreshold (max 4 Cvol * √(1 + √(2 / g))) (Real.log q)
+
 namespace ScanData
 
 variable {X : ScannerExponents} {κ : ScanConstants}
