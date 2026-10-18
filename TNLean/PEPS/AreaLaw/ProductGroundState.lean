@@ -142,7 +142,6 @@ private theorem gap_left_of_kronecker_sum
   rw [← hcompress]
   exact hgap.conjTranspose_mul_mul_same V
 
-
 /-- **A gapped ground vector of `H_A ⊗ 1 + 1 ⊗ H_B` is a product vector.** -/
 private theorem exists_gapped_factors_of_gap {HA : Matrix α α ℂ} {HB : Matrix β β ℂ}
     (hA : HA.IsHermitian)
@@ -284,7 +283,11 @@ The global phase is absorbed into the first factor. No component gap is assumed.
 
 TNLean one-dimensional note, Lemma reductions, `part1_arealaw.tex`, lines 65–91,
 particularly lines 71–80; the projector-gap hypothesis is `part0_preamble.tex:191–205`.
-This is the finite-dimensional spectral step, not the full disconnected-domain reduction. -/
+**Scope restriction (binary case):** This theorem proves normalized same-gap factorization
+for two finite-dimensional tensor factors. The finite-family factorization over all connected
+components in the source is a separate statement. This restriction and the independent,
+already proved area law on arbitrary finite integer domains are recorded in
+`docs/paper-gaps/tnlean_one_dimensional_connected_domain_scope.tex`. -/
 theorem exists_isGappedGroundState_factors_of_kronecker_sum
     {HA : Matrix α α ℂ} {HB : Matrix β β ℂ} (hA : HA.IsHermitian) (hB : HB.IsHermitian)
     {E₀ Δ : ℝ} {Ω : EuclideanSpace ℂ (α × β)} (hΔ : 0 < Δ)
