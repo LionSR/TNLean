@@ -108,13 +108,27 @@ Source: `09-amplification.tex`, lines 455–461. -/
 noncomputable def amplificationRadius (C' α t : ℝ) (K n : ℕ) : ℕ :=
   ⌈(C' * (t + K * Real.log n)) ^ α⁻¹⌉₊
 
-/-- A polynomial weight is dominated by a stretched exponential: some `B ≥ 1`
-bounds `(1 + r)² e^{-c r^α}` for every `r ≥ 0`. -/
-theorem exists_one_add_sq_mul_exp_neg_rpow_le {c α : ℝ} (hc : 0 < c) (hα : 0 < α) :
-    ∃ B : ℝ, 1 ≤ B ∧ ∀ r : ℝ, 0 ≤ r → (1 + r) ^ 2 * exp (-(c * r ^ α)) ≤ B := by
+/-- The bound `B = 4 + 4 m! / c^m`, with `m = ⌈2/α⌉`, of `(1 + r)² e^{-c r^α}` over `r ≥ 0`.
+Source: `09-amplification.tex`, lines 480–489. -/
+noncomputable def polyStretchedExpBound (c α : ℝ) : ℝ :=
+  4 + 4 * ((⌈2 / α⌉₊.factorial : ℝ) / c ^ ⌈2 / α⌉₊)
+
+/-- The bound `polyStretchedExpBound c α` is at least `1` for `c > 0`. -/
+theorem one_le_polyStretchedExpBound {c : ℝ} (hc : 0 < c) (α : ℝ) :
+    1 ≤ polyStretchedExpBound c α := by
+  have : 0 ≤ (⌈2 / α⌉₊.factorial : ℝ) / c ^ ⌈2 / α⌉₊ := by positivity
+  unfold polyStretchedExpBound
+  linarith
+
+/-- A polynomial weight is dominated by a stretched exponential: for `c, α > 0` and `r ≥ 0`,
+`(1 + r)² e^{-c r^α} ≤ 4 + 4 m! / c^m` with `m = ⌈2/α⌉`. Source: `09-amplification.tex`,
+lines 480–489. -/
+theorem one_add_sq_mul_exp_neg_rpow_le_polyStretchedExpBound {c α : ℝ} (hc : 0 < c)
+    (hα : 0 < α) {r : ℝ} (hr : 0 ≤ r) :
+    (1 + r) ^ 2 * exp (-(c * r ^ α)) ≤ polyStretchedExpBound c α := by
   set m : ℕ := ⌈2 / α⌉₊
   have hfac : 0 ≤ (m.factorial : ℝ) / c ^ m := by positivity
-  refine ⟨4 + 4 * ((m.factorial : ℝ) / c ^ m), by linarith only [hfac], fun r hr ↦ ?_⟩
+  unfold polyStretchedExpBound
   have hy : 0 ≤ r ^ α := rpow_nonneg hr α
   rcases le_total r 1 with hr1 | hr1
   · have hexp : exp (-(c * r ^ α)) ≤ 1 := exp_le_one_iff.mpr (by nlinarith only [hc, hy])
@@ -142,6 +156,13 @@ theorem exists_one_add_sq_mul_exp_neg_rpow_le {c α : ℝ} (hc : 0 < c) (hα : 0
       _ ≤ 4 * ((m.factorial : ℝ) / c ^ m) := by linarith only [hkey]
       _ ≤ _ := by linarith only
 
+/-- A polynomial weight is dominated by a stretched exponential: some `B ≥ 1`
+bounds `(1 + r)² e^{-c r^α}` for every `r ≥ 0`. -/
+theorem exists_one_add_sq_mul_exp_neg_rpow_le {c α : ℝ} (hc : 0 < c) (hα : 0 < α) :
+    ∃ B : ℝ, 1 ≤ B ∧ ∀ r : ℝ, 0 ≤ r → (1 + r) ^ 2 * exp (-(c * r ^ α)) ≤ B :=
+  ⟨_, one_le_polyStretchedExpBound hc α,
+    fun _ => one_add_sq_mul_exp_neg_rpow_le_polyStretchedExpBound hc hα⟩
+
 /-- `n^{-jK}` written as an exponential. -/
 private theorem inv_pow_pow_eq_exp {n : ℕ} (hn : 0 < n) (K j : ℕ) :
     ((n : ℝ) ^ K)⁻¹ ^ j = exp (-(j * (K * Real.log n))) := by
@@ -165,33 +186,48 @@ private theorem prefactor_le {n : ℕ} (hn : 2 ≤ n) {K : ℕ} (hK : 1 ≤ K) {
         rw [← exp_add, ← exp_add]; ring_nf
     _ ≤ _ := exp_le_exp.mpr (by nlinarith only [hL, hK'])
 
-/-- **The choice of the time and radius** (`eq:amplification-time-choice`). Let
-`g, c > 0` and `v, C, C₀ ≥ 0`, and let `α > 0` and `K ≥ 1`. There are `C' > 0`
-and a threshold `N ≥ 2` such that for every `n ≥ N`, every `𝓘, w ≥ 0` and every
-`|S₀| ≤ C₀ n²`, the time `t_* = (6 / g)(𝓘 + w + K log n)` and the radius
-`r = ⌈(C' (t_* + K log n))^(1/α)⌉` give, with `M₀ = exp ((𝓘 + 3w)/2)`,
-`M₀² e^{-g t_*} ≤ n^{-6K}`, `C t_* |S₀| M₀ e^{v t_* - c r^α} ≤ n^{-3K}` and
-`C t_* |S₀| (1 + r)² M₀ e^{-c r^α} ≤ n^{-3K}`. All parameters are fixed before `C'`
-and `N`; the proof takes `C' = (g / 2 + 2 v + 12) / c`, which involves only `g`, `v`
-and `c`.
+/-- The radius constant `C' = (g / 2 + 2 v + 12) / c` of `eq:amplification-time-choice`.
 Source: `09-amplification.tex`, lines 455–461 and 480–489. -/
-theorem amplification_scale_bounds {g v c C C₀ α : ℝ} (hg : 0 < g) (hv : 0 ≤ v)
-    (hc : 0 < c) (hC : 0 ≤ C) (hC₀ : 0 ≤ C₀) (hα : 0 < α) {K : ℕ} (hK : 1 ≤ K) :
-    ∃ C' : ℝ, 0 < C' ∧ ∃ N : ℕ, 2 ≤ N ∧ ∀ n : ℕ, N ≤ n → ∀ I w : ℝ, 0 ≤ I → 0 ≤ w →
+noncomputable def amplificationRadiusConstant (g v c : ℝ) : ℝ :=
+  (g / 2 + 2 * v + 12) / c
+
+/-- The explicit threshold `max 2 ⌈C C₀ B⌉`, with `B = polyStretchedExpBound (c / 2) α`, of
+the scale choice in `eq:amplification-time-choice`. Source: `09-amplification.tex`,
+lines 480–489. -/
+noncomputable def goodRealizationThreshold (C C₀ c α : ℝ) : ℕ :=
+  max 2 ⌈C * C₀ * polyStretchedExpBound (c / 2) α⌉₊
+
+/-- **The choice of the time and radius, with explicit constants** (`eq:amplification-time-choice`).
+Let `g, c > 0` and `v, C, C₀ ≥ 0`, and let `α > 0` and `K ≥ 1`. For every
+`n ≥ goodRealizationThreshold C C₀ c α`, every `𝓘, w ≥ 0` and every `|S₀| ≤ C₀ n²`, the time
+`t_* = (6 / g)(𝓘 + w + K log n)` and the radius `r = ⌈(C' (t_* + K log n))^(1/α)⌉` with
+`C' = amplificationRadiusConstant g v c` give, with `M₀ = exp ((𝓘 + 3w)/2)`,
+`M₀² e^{-g t_*} ≤ n^{-6K}`, `C t_* |S₀| M₀ e^{v t_* - c r^α} ≤ n^{-3K}` and
+`C t_* |S₀| (1 + r)² M₀ e^{-c r^α} ≤ n^{-3K}`.
+Source: `09-amplification.tex`, lines 455–461 and 480–489. -/
+theorem amplification_scale_bounds_of_threshold_le {g v c C C₀ α : ℝ} (hg : 0 < g)
+    (hv : 0 ≤ v) (hc : 0 < c) (hC : 0 ≤ C) (hC₀ : 0 ≤ C₀) (hα : 0 < α) {K : ℕ} (hK : 1 ≤ K) :
+    ∀ n : ℕ, goodRealizationThreshold C C₀ c α ≤ n → ∀ I w : ℝ, 0 ≤ I → 0 ≤ w →
       ∀ S : ℕ, (S : ℝ) ≤ C₀ * (n : ℝ) ^ 2 →
       exp ((I + 3 * w) / 2) ^ 2 * exp (-(g * amplificationTime g I w K n)) ≤
           ((n : ℝ) ^ K)⁻¹ ^ 6 ∧
         C * amplificationTime g I w K n * S * exp ((I + 3 * w) / 2) *
             exp (v * amplificationTime g I w K n - c *
-              (amplificationRadius C' α (amplificationTime g I w K n) K n : ℝ) ^ α) ≤
+              (amplificationRadius (amplificationRadiusConstant g v c) α
+                (amplificationTime g I w K n) K n : ℝ) ^ α) ≤
           ((n : ℝ) ^ K)⁻¹ ^ 3 ∧
         C * amplificationTime g I w K n * S *
-            (1 + (amplificationRadius C' α (amplificationTime g I w K n) K n : ℝ)) ^ 2 *
+            (1 + (amplificationRadius (amplificationRadiusConstant g v c) α
+              (amplificationTime g I w K n) K n : ℝ)) ^ 2 *
             exp ((I + 3 * w) / 2) *
-            exp (-(c * (amplificationRadius C' α (amplificationTime g I w K n) K n : ℝ) ^ α)) ≤
+            exp (-(c * (amplificationRadius (amplificationRadiusConstant g v c) α
+              (amplificationTime g I w K n) K n : ℝ) ^ α)) ≤
           ((n : ℝ) ^ K)⁻¹ ^ 3 := by
-  obtain ⟨B, hB1, hB⟩ := exists_one_add_sq_mul_exp_neg_rpow_le (half_pos hc) hα
-  refine ⟨(g / 2 + 2 * v + 12) / c, by positivity, max 2 ⌈C * C₀ * B⌉₊, le_max_left _ _, ?_⟩
+  unfold amplificationRadiusConstant goodRealizationThreshold
+  set B := polyStretchedExpBound (c / 2) α
+  have hB1 : 1 ≤ B := one_le_polyStretchedExpBound (half_pos hc) α
+  have hB : ∀ r : ℝ, 0 ≤ r → (1 + r) ^ 2 * exp (-(c / 2 * r ^ α)) ≤ B := fun _ hr ↦
+    one_add_sq_mul_exp_neg_rpow_le_polyStretchedExpBound (half_pos hc) hα hr
   intro n hn I w hI hw S hS
   set L := Real.log n with hLdef
   set t := amplificationTime g I w K n with htdef
@@ -276,6 +312,88 @@ theorem amplification_scale_bounds {g v c C C₀ α : ℝ} (hg : 0 < g) (hv : 0 
           (by rw [← mul_assoc, mul_comm C₀ C]; exact hCB) (by
           nlinarith only [hM, hcr, hgt0, hvt, hgKL, hvKL, ht, hKL])
 
+/-- **The choice of the time and radius** (`eq:amplification-time-choice`). Let
+`g, c > 0` and `v, C, C₀ ≥ 0`, and let `α > 0` and `K ≥ 1`. There are `C' > 0`
+and a threshold `N ≥ 2` such that for every `n ≥ N`, every `𝓘, w ≥ 0` and every
+`|S₀| ≤ C₀ n²`, the time `t_* = (6 / g)(𝓘 + w + K log n)` and the radius
+`r = ⌈(C' (t_* + K log n))^(1/α)⌉` give, with `M₀ = exp ((𝓘 + 3w)/2)`,
+`M₀² e^{-g t_*} ≤ n^{-6K}`, `C t_* |S₀| M₀ e^{v t_* - c r^α} ≤ n^{-3K}` and
+`C t_* |S₀| (1 + r)² M₀ e^{-c r^α} ≤ n^{-3K}`. All parameters are fixed before `C'`
+and `N`; the proof takes `C' = (g / 2 + 2 v + 12) / c`, which involves only `g`, `v`
+and `c`.
+Source: `09-amplification.tex`, lines 455–461 and 480–489. -/
+theorem amplification_scale_bounds {g v c C C₀ α : ℝ} (hg : 0 < g) (hv : 0 ≤ v)
+    (hc : 0 < c) (hC : 0 ≤ C) (hC₀ : 0 ≤ C₀) (hα : 0 < α) {K : ℕ} (hK : 1 ≤ K) :
+    ∃ C' : ℝ, 0 < C' ∧ ∃ N : ℕ, 2 ≤ N ∧ ∀ n : ℕ, N ≤ n → ∀ I w : ℝ, 0 ≤ I → 0 ≤ w →
+      ∀ S : ℕ, (S : ℝ) ≤ C₀ * (n : ℝ) ^ 2 →
+      exp ((I + 3 * w) / 2) ^ 2 * exp (-(g * amplificationTime g I w K n)) ≤
+          ((n : ℝ) ^ K)⁻¹ ^ 6 ∧
+        C * amplificationTime g I w K n * S * exp ((I + 3 * w) / 2) *
+            exp (v * amplificationTime g I w K n - c *
+              (amplificationRadius C' α (amplificationTime g I w K n) K n : ℝ) ^ α) ≤
+          ((n : ℝ) ^ K)⁻¹ ^ 3 ∧
+        C * amplificationTime g I w K n * S *
+            (1 + (amplificationRadius C' α (amplificationTime g I w K n) K n : ℝ)) ^ 2 *
+            exp ((I + 3 * w) / 2) *
+            exp (-(c * (amplificationRadius C' α (amplificationTime g I w K n) K n : ℝ) ^ α)) ≤
+          ((n : ℝ) ^ K)⁻¹ ^ 3 :=
+  ⟨_, by unfold amplificationRadiusConstant; positivity, _, le_max_left _ _,
+    amplification_scale_bounds_of_threshold_le hg hv hc hC hC₀ hα hK⟩
+
+/-- **`eq:amplification-good-trajectory` with explicit constants.** Let `g, c > 0`,
+`v, C, C₀ ≥ 0`, `α > 0` and `K ≥ 1`. For every `n ≥ goodRealizationThreshold C C₀ c α`, every
+`𝓘, w ≥ 0` and every `|S₀| ≤ C₀ n²`, run the clocks for the time
+`t_* = (6 / g)(𝓘 + w + K log n)` and truncate at the radius `r = ⌈(C' (t_* + K log n))^(1/α)⌉`
+with `C' = amplificationRadiusConstant g v c`. If three real random variables satisfy the
+averaged estimates of `exists_good_realization`, then one realization has `X, Y, Z ≤ n^{-K}`.
+Source: `09-amplification.tex`, lines 453–499. -/
+theorem good_realization_of_threshold_le {g v c C C₀ α : ℝ} (hg : 0 < g) (hv : 0 ≤ v)
+    (hc : 0 < c) (hC : 0 ≤ C) (hC₀ : 0 ≤ C₀) (hα : 0 < α) {K : ℕ} (hK : 1 ≤ K) :
+    ∀ n : ℕ, goodRealizationThreshold C C₀ c α ≤ n → ∀ I w : ℝ, 0 ≤ I → 0 ≤ w →
+      ∀ S : ℕ, (S : ℝ) ≤ C₀ * (n : ℝ) ^ 2 →
+      ∀ {Ω : Type u} [MeasurableSpace Ω] (μ : Measure Ω) [IsProbabilityMeasure μ]
+        (X Y Z : Ω → ℝ), Integrable (fun ω ↦ X ω ^ 2) μ →
+        0 ≤ᵐ[μ] Y → Integrable Y μ → 0 ≤ᵐ[μ] Z → Integrable Z μ →
+        ∫ ω, X ω ^ 2 ∂μ ≤
+          exp ((I + 3 * w) / 2) ^ 2 * exp (-(g * amplificationTime g I w K n)) →
+        ∫ ω, Y ω ∂μ ≤
+          C * amplificationTime g I w K n * S * exp ((I + 3 * w) / 2) *
+            exp (v * amplificationTime g I w K n - c *
+              (amplificationRadius (amplificationRadiusConstant g v c) α
+                (amplificationTime g I w K n) K n : ℝ) ^ α) →
+        ∫ ω, Z ω ∂μ ≤
+          C * amplificationTime g I w K n * S *
+            (1 + (amplificationRadius (amplificationRadiusConstant g v c) α
+              (amplificationTime g I w K n) K n : ℝ)) ^ 2 *
+            exp ((I + 3 * w) / 2) *
+            exp (-(c * (amplificationRadius (amplificationRadiusConstant g v c) α
+              (amplificationTime g I w K n) K n : ℝ) ^ α)) →
+        ∃ ω, X ω ≤ ((n : ℝ) ^ K)⁻¹ ∧ Y ω ≤ ((n : ℝ) ^ K)⁻¹ ∧ Z ω ≤ ((n : ℝ) ^ K)⁻¹ := by
+  intro n hn I w hI hw S hS Ω _ μ _ X Y Z hXi hY0 hYi hZ0 hZi ha hb hc'
+  obtain ⟨h1, h2, h3⟩ :=
+    amplification_scale_bounds_of_threshold_le hg hv hc hC hC₀ hα hK n hn I w hI hw S hS
+  set ε : ℝ := ((n : ℝ) ^ K)⁻¹ with hεdef
+  have hn2 : 2 ≤ n := (le_max_left _ _).trans hn
+  have hn1 : (1 : ℝ) ≤ n := by exact_mod_cast (by omega : 1 ≤ n)
+  have hnK : (2 : ℝ) ≤ (n : ℝ) ^ K := by
+    have h2n : (2 : ℝ) ≤ n := by exact_mod_cast hn2
+    calc (2 : ℝ) ≤ n := h2n
+      _ = (n : ℝ) ^ 1 := (pow_one _).symm
+      _ ≤ (n : ℝ) ^ K := pow_le_pow_right₀ hn1 hK
+  have hε : 0 < ε := inv_pos.mpr (by linarith only [hnK])
+  have hεh : ε ≤ 1 / 2 := by
+    rw [hεdef, inv_eq_one_div]
+    exact one_div_le_one_div_of_le (by norm_num) hnK
+  refine exists_le_of_integral_sq_le_of_integral_le hε hXi hY0 hYi hZ0 hZi
+    (ha.trans h1) (hb.trans h2) (hc'.trans h3) ?_
+  have hε0 : ε ≠ 0 := hε.ne'
+  have e1 : ε ^ 6 / ε ^ 2 = ε ^ 4 := by field_simp
+  have e2 : ε ^ 3 / ε = ε ^ 2 := by field_simp
+  have hsq : ε ^ 2 ≤ 1 / 4 := by nlinarith only [hε, hεh]
+  have hfour : ε ^ 4 ≤ 1 / 16 := by nlinarith only [hsq, sq_nonneg ε]
+  rw [e1, e2]
+  linarith only [hsq, hfour]
+
 /-- **`eq:amplification-good-trajectory`: a good clock realization.** Let `g, c > 0`,
 `v, C, C₀ ≥ 0`, `α > 0` and `K ≥ 1`. There are `C' > 0` and a threshold `N ≥ 2`
 such that the following holds for every `n ≥ N`, every `𝓘, w ≥ 0` and every
@@ -307,29 +425,8 @@ theorem exists_good_realization {g v c C C₀ α : ℝ} (hg : 0 < g) (hv : 0 ≤
             (1 + (amplificationRadius C' α (amplificationTime g I w K n) K n : ℝ)) ^ 2 *
             exp ((I + 3 * w) / 2) *
             exp (-(c * (amplificationRadius C' α (amplificationTime g I w K n) K n : ℝ) ^ α)) →
-        ∃ ω, X ω ≤ ((n : ℝ) ^ K)⁻¹ ∧ Y ω ≤ ((n : ℝ) ^ K)⁻¹ ∧ Z ω ≤ ((n : ℝ) ^ K)⁻¹ := by
-  obtain ⟨C', hC', N, hN2, hN⟩ := amplification_scale_bounds hg hv hc hC hC₀ hα hK
-  refine ⟨C', hC', N, hN2, fun n hn I w hI hw S hS Ω _ μ _ X Y Z hXi hY0 hYi hZ0 hZi ha hb hc' ↦ ?_⟩
-  obtain ⟨h1, h2, h3⟩ := hN n hn I w hI hw S hS
-  set ε : ℝ := ((n : ℝ) ^ K)⁻¹ with hεdef
-  have hn1 : (1 : ℝ) ≤ n := by exact_mod_cast (by omega : 1 ≤ n)
-  have hnK : (2 : ℝ) ≤ (n : ℝ) ^ K := by
-    have h2n : (2 : ℝ) ≤ n := by exact_mod_cast hN2.trans hn
-    calc (2 : ℝ) ≤ n := h2n
-      _ = (n : ℝ) ^ 1 := (pow_one _).symm
-      _ ≤ (n : ℝ) ^ K := pow_le_pow_right₀ hn1 hK
-  have hε : 0 < ε := inv_pos.mpr (by linarith only [hnK])
-  have hεh : ε ≤ 1 / 2 := by
-    rw [hεdef, inv_eq_one_div]
-    exact one_div_le_one_div_of_le (by norm_num) hnK
-  refine exists_le_of_integral_sq_le_of_integral_le hε hXi hY0 hYi hZ0 hZi
-    (ha.trans h1) (hb.trans h2) (hc'.trans h3) ?_
-  have hε0 : ε ≠ 0 := hε.ne'
-  have e1 : ε ^ 6 / ε ^ 2 = ε ^ 4 := by field_simp
-  have e2 : ε ^ 3 / ε = ε ^ 2 := by field_simp
-  have hsq : ε ^ 2 ≤ 1 / 4 := by nlinarith only [hε, hεh]
-  have hfour : ε ^ 4 ≤ 1 / 16 := by nlinarith only [hsq, sq_nonneg ε]
-  rw [e1, e2]
-  linarith only [hsq, hfour]
+        ∃ ω, X ω ≤ ((n : ℝ) ^ K)⁻¹ ∧ Y ω ≤ ((n : ℝ) ^ K)⁻¹ ∧ Z ω ≤ ((n : ℝ) ^ K)⁻¹ :=
+  ⟨_, by unfold amplificationRadiusConstant; positivity, _, le_max_left _ _,
+    good_realization_of_threshold_le hg hv hc hC hC₀ hα hK⟩
 
 end TNLean.PEPS.AreaLaw
