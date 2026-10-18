@@ -265,15 +265,16 @@ theorem exists_eq_inr_of_notMem_range_protocolSquareParty {L k : ℕ} (hN : padd
 * for every change `t` of the schedule there is an original circuit `c t` from the registers of
   `st t` to those of `st (t + 1)` that is a bounded change from the reference vector of `st t` to
   that of `st (t + 1)`, with participants used by the event of the change, at most `r` pair
-  effects and at most `r` pair sources per monomial, at most `K ≤ C L ^ kK` monomials and
-  coefficient sum, and error `ε ≤ C L⁻²⁰`;
+  effects and at most `r` pair sources per monomial, at most `K ≤ C_K L ^ kK` monomials and
+  coefficient sum, and error `ε ≤ C_E L⁻²⁰`;
 * at the end of the schedule the frames are `M :: Fs`, where the raw owner of every site in the
   main frame `M` is its unit-square party and the holes of `M` are trivial, every hole of the
   other sheets satisfies the frame constraint at accuracy `L⁻⁶⁰`, and the other sheets carry at
-  most `C L³` holes.
+  most `C_E L³` holes.
 
-If `C ≥ 5042`, there is a dyadic protocol with the bounds of
-`DyadicProtocol.IsDistributionProtocol` for `Ω` and the constants `C`, `b = 64 · 189`, `kK` and
+If `C_N ≥ 5042`, there is a dyadic protocol with the bounds of
+`DyadicProtocol.IsDistributionProtocol` for `Ω`, the count constant `C_N`, the expansion constant
+`C_K`, the error constant `C_E`, and the constants `b = 64 · 189`, `kK` and
 `r`, including the bound `r` on the pair sources of each monomial. Its first change is the private
 initialization, then come the changes of the schedule, and its last change is the final
 regrouping into the physical registers.
@@ -288,7 +289,7 @@ theorem exists_isDistributionProtocol_of_frames {L q k : ℕ} [NeZero q] (hL : 2
     (holder : Frame (cellCenterPos L) q (ProtocolParty k) → ProtocolParty k)
     (hraw : ∀ F ∈ st 0, F.holes = []) (hown : ∀ F ∈ st 0, ∀ x, F.owner x = holder F)
     (c : ∀ t, OriginalCircuit (stackRegs (st t) []) (stackRegs (st (t + 1)) []))
-    {r K kK : ℕ} {C ε : ℝ}
+    {r K kK : ℕ} {C_N C_K C_E ε : ℝ}
     (hc : ∀ t (ht : t < (protocolSchedule k large).length),
       (c t).IsBoundedChange {p | EventUses ((protocolSchedule k large)[t]).1 p} r K ε
         (framesVec Ω (st t)) (framesVec Ω (st (t + 1))))
@@ -298,10 +299,10 @@ theorem exists_isDistributionProtocol_of_frames {L q k : ℕ} [NeZero q] (hL : 2
     (hfin : st (protocolSchedule k large).length = M :: Fs)
     (hMown : ∀ v, M.owner v = .inl (unitSquare hkL v)) (hM : ∀ h ∈ M.holes, h.patch.outer = ∅)
     (hε : ∀ F ∈ Fs, ∀ h ∈ F.holes, ‖act h.patch.proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹)
-    (hholes : (Fs.map fun F => (F.holes.length : ℝ)).sum ≤ C * (L : ℝ) ^ 3)
-    (hC : 5042 ≤ C) (hK : (K : ℝ) ≤ C * (L : ℝ) ^ kK) (hεC : ε ≤ C / (L : ℝ) ^ 20) :
+    (hholes : (Fs.map fun F => (F.holes.length : ℝ)).sum ≤ C_E * (L : ℝ) ^ 3)
+    (hC : 5042 ≤ C_N) (hK : (K : ℝ) ≤ C_K * (L : ℝ) ^ kK) (hεC : ε ≤ C_E / (L : ℝ) ^ 20) :
     ∃ D : DyadicProtocol L q (ProtocolParty k),
-      D.IsDistributionProtocol Ω C (64 * 189) kK r := by
+      D.IsDistributionProtocol Ω C_N C_K C_E (64 * 189) kK r := by
   classical
   set sch := protocolSchedule k large with hsch
   set n := sch.length with hn
@@ -489,7 +490,13 @@ theorem exists_isDistributionProtocol_of_frames {L q k : ℕ} [NeZero q] (hL : 2
     ⟨M, Fs, by change st (n + 2 - 1 - 1) = _; simpa using hfin, hMown⟩
   have hL1 : (1 : ℝ) ≤ L := by exact_mod_cast (by omega : 1 ≤ L)
   have hL0 : (0 : ℝ) < L := by linarith
-  have hC0 : 0 ≤ C := by linarith
+  have hC0 : 0 ≤ C_N := by linarith
+  have hCE : 0 ≤ C_E := by
+    have h0 : (0 : ℝ) ≤ (Fs.map fun F => (F.holes.length : ℝ)).sum :=
+      List.sum_nonneg fun x hx => by
+        obtain ⟨F, -, rfl⟩ := List.mem_map.1 hx
+        positivity
+    exact nonneg_of_mul_nonneg_left (h0.trans hholes) (by positivity)
   -- the gates of the protocol belong to the changes of the schedule
   have hgate : ∀ γ : D.Gate, 0 < (γ.1 : ℕ) ∧ (γ.1 : ℕ) - 1 < n := fun γ => by
     by_contra h
@@ -524,7 +531,7 @@ theorem exists_isDistributionProtocol_of_frames {L q k : ℕ} [NeZero q] (hL : 2
     nlinarith [sq_nonneg (L : ℝ)]
   · have h := length_protocolSchedule_le_cube hk2 large
     have hL3 : (1 : ℝ) ≤ (L : ℝ) ^ 3 := one_le_pow₀ hL1
-    change ((n + 2 : ℕ) : ℝ) ≤ C * (L : ℝ) ^ 3
+    change ((n + 2 : ℕ) : ℝ) ≤ C_N * (L : ℝ) ^ 3
     push_cast
     nlinarith
   · exact (card_le_card fun p hp => by
@@ -550,7 +557,7 @@ theorem exists_isDistributionProtocol_of_frames {L q k : ℕ} [NeZero q] (hL : 2
     · intro t ht
       simp [show ¬t + 1 ≤ n by omega]
     · split_ifs
-      exacts [hεC, by positivity]
+      exacts [hεC, div_nonneg hCE (by positivity)]
   · have key : e.eval (framesVec Ω (st n)) =
         (readoutCircuit d M Fs [] hd hd1).eval (stackVec Ω (M :: Fs) (1 : ℂ)) := by
       have h1 := eval_castLayouts_memCongr (readoutCircuit d M Fs [] hd hd1)

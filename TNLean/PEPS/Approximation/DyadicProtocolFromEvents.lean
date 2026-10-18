@@ -150,9 +150,11 @@ by Proposition 4.1 at accuracy `L⁻⁶⁰`, frozen auxiliary frames and future 
 copies, the following holds. Suppose that each repainting of a square of side larger than `K₀ t`,
 `t = D log L`, passes the memory from its state before to its state after by `189` bounded changes
 whose participants the repainting uses, with the bounds of the small-patch rewrites, that the holes
-of the frozen frames satisfy the frame constraint at accuracy `L⁻⁶⁰` and number at most `C₁ L³`,
-and that `C₁` dominates the counts. Then there is a dyadic protocol with the bounds of §8, with
-at most `2 b` pair effects and at most `2 b` pair sources in each monomial.
+of the frozen frames satisfy the frame constraint at accuracy `L⁻⁶⁰` and number at most
+`C_E L³`, that the count constant satisfies `C_N ≥ 5042`, that the expansion constant `C_K`
+dominates the prefactor of the small-patch rewrites, and that `C_E ≥ 2 b + 1`. Then there is a
+dyadic protocol with the bounds of §8 at the constants `C_N`, `C_K`, `C_E`, with at most `2 b`
+pair effects and at most `2 b` pair sources in each monomial.
 
 Polynomial-PEPS manuscript, Proposition 7.1 `prop:protocol`, `06-geometry.tex`, lines 12–53, and
 its proof, lines 82–241, 507–541 and 572–681. -/
@@ -165,7 +167,7 @@ theorem exists_isDistributionProtocol_of_largeRepaintings {ε₀ : ℝ} (hε : 0
         (hkL : L ≤ 2 ^ k) (hk2 : 2 ^ k < 2 * L) (hΩ : ‖Ω‖ = 1) (rank : GuideLabel → ℕ)
         (R₀ : RepaintedSquare k)
         (frozen : ProtocolEvent k × RepaintOp → Frame (cellCenterPos L) q (ProtocolParty k))
-        (auxOwner : ProtocolEvent k × RepaintOp → ProtocolParty k) {C' c' kK : ℕ} {C₁ : ℝ},
+        (auxOwner : ProtocolEvent k × RepaintOp → ProtocolParty k) {C' c' kK : ℕ} {C_N C_K C_E : ℝ},
       C ≤ C' → 1 ≤ C' → c ≤ c' →
       (∀ i (hi : i < (eventSchedule k).length) (S : DyadicSquare k),
         (eventSchedule k)[i] = .inl S → largeSquare K₀ (D * Real.log L) S = true →
@@ -183,14 +185,14 @@ theorem exists_isDistributionProtocol_of_largeRepaintings {ε₀ : ℝ} (hε : 0
       (∀ x ∈ auxIndices k (largeSquare K₀ (D * Real.log L)), ∀ h ∈ (frozen x).holes,
         ‖act h.patch.proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹) →
       (((auxIndices k (largeSquare K₀ (D * Real.log L))).map fun x =>
-        ((frozen x).holes.length : ℝ)).sum ≤ C₁ * (L : ℝ) ^ 3) →
-      5042 ≤ C₁ → (rewriteGateBound C' c' (protocolPatchBound ε₀ ν) L : ℝ) ≤ C₁ * (L : ℝ) ^ kK →
-      (2 * protocolPatchBound ε₀ ν + 1 : ℝ) ≤ C₁ →
+        ((frozen x).holes.length : ℝ)).sum ≤ C_E * (L : ℝ) ^ 3) →
+      5042 ≤ C_N → (rewriteGateBound C' c' (protocolPatchBound ε₀ ν) L : ℝ) ≤ C_K * (L : ℝ) ^ kK →
+      (2 * protocolPatchBound ε₀ ν + 1 : ℝ) ≤ C_E →
       ∃ D' : DyadicProtocol L q (ProtocolParty k),
-        D'.IsDistributionProtocol Ω C₁ (64 * 189) kK (2 * protocolPatchBound ε₀ ν) := by
+        D'.IsDistributionProtocol Ω C_N C_K C_E (64 * 189) kK (2 * protocolPatchBound ε₀ ν) := by
   obtain ⟨ν', hν', Hres⟩ := exists_resize_hasSourceBoundedChange hε hε₀
   refine ⟨ν', hν', fun ν hν hνν' {k K₀ a D B₀} hc hm {L q} _ {Ω C c} P hL hkL hk2 hΩ rank R₀
-    frozen auxOwner {C' c' kK C₁} hC hC' hcc hlarge hfε hfh hC₁ hK hεC => ?_⟩
+    frozen auxOwner {C' c' kK C_N C_K C_E} hC hC' hcc hlarge hfε hfh hC₁ hK hεC => ?_⟩
   classical
   have ht := hc.t_pos hL
   have hB := hc.hole_le hL

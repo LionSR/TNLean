@@ -116,7 +116,7 @@ theorem exists_isDistributionProtocol_of_hasSourceBoundedChange {L k : ℕ} (hL 
     (hne : ∀ t ≤ (protocolSchedule k large).length, st t ≠ [])
     (holder : Frame (cellCenterPos L) q (ProtocolParty k) → ProtocolParty k)
     (hraw : ∀ F ∈ st 0, F.holes = []) (hown : ∀ F ∈ st 0, ∀ x, F.owner x = holder F)
-    {kK : ℕ} {C : ℝ}
+    {kK : ℕ} {C_N C_K C_E : ℝ}
     (hc : ∀ t (ht : t < (protocolSchedule k large).length),
       HasSourceBoundedChange Ω (st t) (st (t + 1)) (ℓ := []) (1 : ℂ)
         {p | EventUses ((protocolSchedule k large)[t]).1 p} r K r ε)
@@ -125,11 +125,17 @@ theorem exists_isDistributionProtocol_of_hasSourceBoundedChange {L k : ℕ} (hL 
     (hfin : st (protocolSchedule k large).length = M :: Fs)
     (hMown : ∀ v, M.owner v = .inl (unitSquare hkL v)) (hM : ∀ h ∈ M.holes, h.patch.outer = ∅)
     (hε : ∀ F ∈ Fs, ∀ h ∈ F.holes, ‖act h.patch.proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹)
-    (hholes : (Fs.map fun F => (F.holes.length : ℝ)).sum ≤ C * (L : ℝ) ^ 3)
-    (hC : 5042 ≤ C) (hK : (K : ℝ) ≤ C * (L : ℝ) ^ kK) (hεC : ε ≤ C / (L : ℝ) ^ 20) :
+    (hholes : (Fs.map fun F => (F.holes.length : ℝ)).sum ≤ C_E * (L : ℝ) ^ 3)
+    (hC : 5042 ≤ C_N) (hK : (K : ℝ) ≤ C_K * (L : ℝ) ^ kK) (hεC : ε ≤ C_E / (L : ℝ) ^ 20) :
     ∃ D : DyadicProtocol L q (ProtocolParty k),
-      D.IsDistributionProtocol Ω C (64 * 189) kK r := by
+      D.IsDistributionProtocol Ω C_N C_K C_E (64 * 189) kK r := by
   classical
+  have hCE : 0 ≤ C_E := by
+    have h0 : (0 : ℝ) ≤ (Fs.map fun F => (F.holes.length : ℝ)).sum :=
+      List.sum_nonneg fun x hx => by
+        obtain ⟨F, -, rfl⟩ := List.mem_map.1 hx
+        positivity
+    exact nonneg_of_mul_nonneg_left (h0.trans hholes) (by positivity)
   set n := (protocolSchedule k large).length with hn
   set st' : ℕ → List (Frame (cellCenterPos L) q (ProtocolParty k)) := fun t => st (min t n)
   have hst' : ∀ t ≤ n, st' t = st t := fun t ht => by simp only [st', min_eq_left ht]
@@ -149,7 +155,7 @@ theorem exists_isDistributionProtocol_of_hasSourceBoundedChange {L k : ℕ} (hL 
     holder
     (by simpa [st'] using hraw) (by simpa [st'] using hown) (fun t => (hall t).choose)
     (fun t ht => ?_) (fun t ht => ?_) M Fs (by rw [hst' n le_rfl]; exact hfin) hMown hM hε
-    hholes hC hK (max_le hεC (by positivity))
+    hholes hC hK (max_le hεC (div_nonneg hCE (by positivity)))
   · have ht' : t < n := ht
     exact (hall t).choose_spec.1.mono (fun p hp => by simpa [ht'] using hp) le_rfl le_rfl le_rfl
   · exact (hall t).choose_spec.2
