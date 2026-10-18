@@ -34,15 +34,24 @@ open scoped Nat
 
 namespace TNLean.PEPS.AreaLaw
 
-/-- **Stretched exponentials beat polynomials**: for `b, α > 0` and `k : ℕ` there is `M`
-with `(u + 1)^k e^{-b u^α} ≤ M` for all `u ≥ 0`. -/
-theorem exists_one_add_pow_mul_exp_neg_rpow_le {b α : ℝ} (hb : 0 < b) (hα : 0 < α) (k : ℕ) :
-    ∃ M : ℝ, 0 ≤ M ∧ ∀ u : ℝ, 0 ≤ u → (u + 1) ^ k * Real.exp (-(b * u ^ α)) ≤ M := by
+/-- The bound `2^k max {1, m! / b^m}`, `m = ⌈k / α⌉`, on `(u + 1)^k e^{-b u^α}` for `u ≥ 0`.
+Source: area law, `03-quasilocal.tex`, lines 457–478. -/
+noncomputable def stretchedPolynomialBound (b α : ℝ) (k : ℕ) : ℝ :=
+  2 ^ k * max 1 ((⌈(k : ℝ) / α⌉₊)! / b ^ ⌈(k : ℝ) / α⌉₊)
+
+theorem stretchedPolynomialBound_nonneg (b α : ℝ) (k : ℕ) :
+    0 ≤ stretchedPolynomialBound b α k :=
+  mul_nonneg (by positivity) (zero_le_one.trans (le_max_left _ _))
+
+/-- **Stretched exponentials beat polynomials, with an explicit bound**: for `b, α > 0`,
+`k : ℕ` and `u ≥ 0`, `(u + 1)^k e^{-b u^α} ≤ stretchedPolynomialBound b α k`. -/
+theorem one_add_pow_mul_exp_neg_rpow_le {b α : ℝ} (hb : 0 < b) (hα : 0 < α) (k : ℕ) {u : ℝ}
+    (hu : 0 ≤ u) : (u + 1) ^ k * Real.exp (-(b * u ^ α)) ≤ stretchedPolynomialBound b α k := by
+  unfold stretchedPolynomialBound
   set m : ℕ := ⌈(k : ℝ) / α⌉₊
   have hm : (k : ℝ) ≤ α * m := by
     have := Nat.le_ceil ((k : ℝ) / α)
     rw [div_le_iff₀ hα] at this; linarith
-  refine ⟨2 ^ k * max 1 (m ! / b ^ m), by positivity, fun u hu => ?_⟩
   have he : 0 < Real.exp (-(b * u ^ α)) := Real.exp_pos _
   rcases le_total u 1 with h1 | h1
   · have : (u + 1) ^ k ≤ 2 ^ k := pow_le_pow_left₀ (by linarith) (by linarith) k
@@ -74,22 +83,38 @@ theorem exists_one_add_pow_mul_exp_neg_rpow_le {b α : ℝ} (hb : 0 < b) (hα : 
       _ = 2 ^ k * (m ! / b ^ m) := by field_simp
       _ ≤ 2 ^ k * max 1 (m ! / b ^ m) := by gcongr; exact le_max_right _ _
 
-/-- **The volume-free series** (`eq:quasilocal-volume-free`, `03-quasilocal.tex`,
-lines 457–478): for `0 < α ≤ 1` and `c > 0` there is `A ≥ 0`, depending only on `c` and
-`α`, such that for every `r₀` and every finite range of distances,
-`∑_{d < N} (d + 1)² e^{-c max {r₀, ⌊d/2⌋}^α} ≤ A e^{-(c/2) r₀^α}`. -/
-theorem exists_sum_shell_le {c α : ℝ} (hc : 0 < c) (hα : 0 < α) :
-    ∃ A : ℝ, 0 ≤ A ∧ ∀ r₀ N : ℕ,
-      ∑ d ∈ Finset.range N, ((d : ℝ) + 1) ^ 2 *
-          Real.exp (-(c * ((max r₀ (d / 2) : ℕ) : ℝ) ^ α)) ≤
-        A * Real.exp (-(c / 2 * (r₀ : ℝ) ^ α)) := by
-  obtain ⟨M, hM, hMb⟩ := exists_one_add_pow_mul_exp_neg_rpow_le (half_pos hc) hα 4
+/-- **Stretched exponentials beat polynomials**: for `b, α > 0` and `k : ℕ` there is `M`
+with `(u + 1)^k e^{-b u^α} ≤ M` for all `u ≥ 0`. -/
+theorem exists_one_add_pow_mul_exp_neg_rpow_le {b α : ℝ} (hb : 0 < b) (hα : 0 < α) (k : ℕ) :
+    ∃ M : ℝ, 0 ≤ M ∧ ∀ u : ℝ, 0 ≤ u → (u + 1) ^ k * Real.exp (-(b * u ^ α)) ≤ M :=
+  ⟨_, stretchedPolynomialBound_nonneg b α k, fun _ hu => one_add_pow_mul_exp_neg_rpow_le hb hα k hu⟩
+
+/-- The constant `A = 16 M ∑_d (d + 1)^{-2}`, `M = stretchedPolynomialBound (c / 2) α 4`, of
+the volume-free series (`eq:quasilocal-volume-free`, `03-quasilocal.tex`, lines 457–478). -/
+noncomputable def shellSeriesConstant (c α : ℝ) : ℝ :=
+  16 * stretchedPolynomialBound (c / 2) α 4 * ∑' d : ℕ, 1 / ((d : ℝ) + 1) ^ 2
+
+theorem shellSeriesConstant_nonneg (c α : ℝ) : 0 ≤ shellSeriesConstant c α :=
+  mul_nonneg (mul_nonneg (by norm_num) (stretchedPolynomialBound_nonneg _ _ _))
+    (tsum_nonneg fun _ => by positivity)
+
+/-- **The volume-free series, with an explicit constant** (`eq:quasilocal-volume-free`,
+`03-quasilocal.tex`, lines 457–478): for `c, α > 0`, every `r₀` and every `N`,
+`∑_{d < N} (d + 1)² e^{-c max {r₀, ⌊d/2⌋}^α} ≤ shellSeriesConstant c α · e^{-(c/2) r₀^α}`. -/
+theorem sum_shell_le {c α : ℝ} (hc : 0 < c) (hα : 0 < α) (r₀ N : ℕ) :
+    ∑ d ∈ Finset.range N, ((d : ℝ) + 1) ^ 2 *
+        Real.exp (-(c * ((max r₀ (d / 2) : ℕ) : ℝ) ^ α)) ≤
+      shellSeriesConstant c α * Real.exp (-(c / 2 * (r₀ : ℝ) ^ α)) := by
+  unfold shellSeriesConstant
+  set M := stretchedPolynomialBound (c / 2) α 4
+  have hM : 0 ≤ M := stretchedPolynomialBound_nonneg _ _ _
+  have hMb : ∀ u : ℝ, 0 ≤ u → (u + 1) ^ 4 * Real.exp (-(c / 2 * u ^ α)) ≤ M :=
+    fun _ hu => one_add_pow_mul_exp_neg_rpow_le (half_pos hc) hα 4 hu
   have hsum : Summable fun d : ℕ => 1 / ((d : ℝ) + 1) ^ 2 := by
     have := (summable_nat_add_iff 1).mpr (Real.summable_one_div_nat_pow.mpr one_lt_two)
     simpa using this
   set S := ∑' d : ℕ, 1 / ((d : ℝ) + 1) ^ 2
   have hS : 0 ≤ S := tsum_nonneg fun d : ℕ => (by positivity : (0 : ℝ) ≤ 1 / ((d : ℝ) + 1) ^ 2)
-  refine ⟨16 * M * S, by positivity, fun r₀ N => ?_⟩
   have hterm : ∀ d : ℕ, ((d : ℝ) + 1) ^ 2 * Real.exp (-(c * ((max r₀ (d / 2) : ℕ) : ℝ) ^ α)) ≤
       Real.exp (-(c / 2 * (r₀ : ℝ) ^ α)) * (16 * M * (1 / ((d : ℝ) + 1) ^ 2)) := by
     intro d
@@ -140,5 +165,16 @@ theorem exists_sum_shell_le {c α : ℝ} (hc : 0 < c) (hα : 0 < α) :
         gcongr
         exact hsum.sum_le_tsum _ fun d _ => by positivity
     _ = 16 * M * S * Real.exp (-(c / 2 * (r₀ : ℝ) ^ α)) := by ring
+
+/-- **The volume-free series** (`eq:quasilocal-volume-free`, `03-quasilocal.tex`,
+lines 457–478): for `0 < α ≤ 1` and `c > 0` there is `A ≥ 0`, depending only on `c` and
+`α`, such that for every `r₀` and every finite range of distances,
+`∑_{d < N} (d + 1)² e^{-c max {r₀, ⌊d/2⌋}^α} ≤ A e^{-(c/2) r₀^α}`. -/
+theorem exists_sum_shell_le {c α : ℝ} (hc : 0 < c) (hα : 0 < α) :
+    ∃ A : ℝ, 0 ≤ A ∧ ∀ r₀ N : ℕ,
+      ∑ d ∈ Finset.range N, ((d : ℝ) + 1) ^ 2 *
+          Real.exp (-(c * ((max r₀ (d / 2) : ℕ) : ℝ) ^ α)) ≤
+        A * Real.exp (-(c / 2 * (r₀ : ℝ) ^ α)) :=
+  ⟨_, shellSeriesConstant_nonneg c α, sum_shell_le hc hα⟩
 
 end TNLean.PEPS.AreaLaw
