@@ -109,25 +109,6 @@ theorem compressionExponent_eq_sampledNetworkExponent (r b n d u v : ℕ) (p : �
 
 end TNLean.PEPS.Approximation
 
-namespace TNLean.PEPS.PairEffect.EffectCircuit
-
-variable {P : Type}
-
-/-- Effect-count and coefficient-sum bounds are monotone in both bounds.
-Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 199–208. -/
-theorem IsExpansionBounded.mono {a b : Layout P} {w : EffectCircuit a b} {r r' : ℕ}
-    {S S' : ℝ} (h : w.IsExpansionBounded r S) (hr : r ≤ r') (hS : S ≤ S') :
-    w.IsExpansionBounded r' S' := by
-  induction w with
-  | id => trivial
-  | comp w v ihw ihv => exact ⟨ihw h.1, ihv h.2⟩
-  | localMap => trivial
-  | gate => exact ⟨fun q hq ↦ (h.1 q hq).trans hr, h.2.trans hS⟩
-  | swap => trivial
-  | frame r w ih => exact ih h
-
-end TNLean.PEPS.PairEffect.EffectCircuit
-
 namespace TNLean.PEPS.PairEffect.GateMapConstruction
 open TNLean.PEPS.Approximation
 attribute [local instance] Classical.propDecidable
