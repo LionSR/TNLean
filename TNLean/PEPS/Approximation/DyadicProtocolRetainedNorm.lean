@@ -47,7 +47,8 @@ variable {L q : ℕ} {P : Type} [Fintype P] {D : DyadicProtocol L q P} {Ω : Sta
 /-- **Retained norm and trace of the protocol.** For a protocol with the bounds of §8 on a
 square of side `L ≥ 1`, with count constant `C_N`, error constant `C_E ≥ 0` and `‖Ω‖ = 1`,
 the actual final vector `Ψ` satisfies `1 - C_E L⁻⁵⁷ - C_N C_E L⁻¹⁷ ≤ ‖Ψ‖`, and its physical
-density `ρ` satisfies `1 - Re Tr ρ ≤ 2 (C_E L⁻⁵⁷ + C_N C_E L⁻¹⁷)`. No upper bound on the losses is assumed.
+density `ρ` satisfies `1 - Re Tr ρ ≤ 2 (C_E L⁻⁵⁷ + C_N C_E L⁻¹⁷)`. No upper bound on the losses
+is assumed.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), §8.1, `eq:reference-junk` and the
 paragraph following `eq:protocol-density`, `07-assembly.tex:18–51`. -/
