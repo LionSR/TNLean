@@ -117,7 +117,8 @@ theorem exists_template_final_mutualInformation_of_boxEntropy
   obtain ⟨Ce, hCe, hentropy⟩ := exists_template_final_source_entropy_bounds_of_boxEntropy
     q R D₀ hq hD₀ hCbox hbox
   obtain ⟨C, hC, Ns, hNs, hbound⟩ := hsource Ce hCe
-  obtain ⟨Ng, _, hgeometry⟩ := exists_finalScanner_admissibility hCtr.le
+  let Ng := finalScannerAdmissibilityThreshold Ctr
+  have hgeometry := fun n (hn : Ng ≤ n) => finalScanner_admissibility_of_threshold_le hCtr.le hn
   refine ⟨C, hC, max Ns Ng, hNs.trans (le_max_left _ _), ?_⟩
   intro n s₀ hn Λ h E₀ Ω hgs A T hsep hL
   let : LinearOrder (AdmissibleSupport Λ R) :=

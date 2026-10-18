@@ -193,3 +193,4 @@ import TNLean.PEPS.AreaLaw.Geometry.TemplateRows
 import TNLean.PEPS.AreaLaw.Geometry.TemplateSafeRectangles
 import TNLean.PEPS.AreaLaw.Geometry.TemplateShellCover
 import TNLean.PEPS.AreaLaw.Geometry.Templates
+import TNLean.PEPS.AreaLaw.Geometry.TwoFamilyAssembly

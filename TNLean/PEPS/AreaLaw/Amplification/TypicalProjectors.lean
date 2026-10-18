@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.ExplicitThresholds
 import TNLean.PEPS.AreaLaw.TailParameter
 import TNLean.PEPS.AreaLaw.ZeroBoundary
 import QICLean.Entropy.TypicalDensity
@@ -17,7 +18,8 @@ surprisal lies within `w = n^(3/5)` of the regional entropy. This module constru
 them from Lemma 3.1 (`lem:tail`). A cut with at most `C₀ n` crossing edges has tail
 parameter at most a constant times `n`, so the failure probability
 `1 - tr(ρ P)` of its projection is at most `C exp(-c n^(1/10))`. For every fixed
-integer `K`, this is at most `δ = n^(-2K)` beyond a threshold.
+integer `K`, this is at most `δ = n^(-2K)` beyond the explicit threshold
+`typicalProjectionThreshold`.
 
 The constants and the threshold depend only on the local dimension, the range, the
 interaction bound, the gap, `C₀` and `K`. They are chosen before the domain, the
@@ -31,12 +33,12 @@ invertibility of a marginal is assumed.
 * `typicalProjection_failure_le_surprisalTail`: the failure probability of a typical
   projection is at most the surprisal tail, together with its projection and
   eigenvalue-window properties.
-* `exists_typicalProjection_failure_le_stretchedExp`: failure probability at most
-  `C exp(-c n^(1/10))` at width `n^(3/5)`.
-* `exists_typicalProjection_failure_le_inv_pow`: failure probability at most
-  `n^(-2K)`, `eq:amplification-typical-error`.
-* `exists_typicalProjectors_three_cuts`: the three projections of the proof, with
-  their common error `δ = n^(-2K)`.
+* `typicalProjection_failure_le_stretchedExp`: failure probability at most
+  `2 e^{e/2} exp(-c n^(1/10))` at width `n^(3/5)`, with `c = typicalFailureRate q R J Δ C₀`.
+* `typicalProjection_failure_le_inv_pow_of_threshold_le`: failure probability at most
+  `n^(-2K)`, `eq:amplification-typical-error`, from `typicalProjectionThreshold` on.
+* `typicalProjectors_three_cuts_of_threshold_le`: the three projections of the proof,
+  with their common error `δ = n^(-2K)`.
 
 ## References
 
@@ -110,30 +112,37 @@ theorem typicalProjection_failure_le_surprisalTail (Ω : StateSpace Λ q) (hΩ :
   linarith
 
 /-- The constant `c = (32 √((1 + J/Δ) C (1 + C₀)))⁻¹` of the stretched-exponential
-failure bound, with `C = tailParameterConstant q R`. -/
-private noncomputable def failureRate (q R : ℕ) (J Δ C₀ : ℝ) : ℝ :=
+failure bound, with `C = tailParameterConstant q R`. Source: `09-amplification.tex`,
+lines 304–317, and `eq:initial-local-tail-parameter`, `02-initial.tex`, lines 202–206. -/
+noncomputable def typicalFailureRate (q R : ℕ) (J Δ C₀ : ℝ) : ℝ :=
   (32 * Real.sqrt ((1 + J / Δ) * (tailParameterConstant q R * (1 + C₀))))⁻¹
 
-/-- **Failure probability of a typical projection.** There are constants `C, c > 0`,
-depending only on `q, R, J, Δ` and `C₀`, such that for every scale `n ≥ 1`, every
-gapped ground vector `Ω` of a finite-range Hamiltonian on a finite domain and every cut
-`Y` with at most `C₀ n` crossing edges, the typical projection at width `n^(3/5)` fails
-with probability at most `C exp(-c n^(1/10))`.
-Source: `09-amplification.tex`, lines 304–317, from Lemma 3.1, `02-initial.tex`,
-lines 64–69, and `eq:initial-local-tail-parameter`, lines 202–206. -/
-theorem exists_typicalProjection_failure_le_stretchedExp (hq : 1 ≤ q) (R : ℕ)
-    (hJ : 0 ≤ J) {Δ : ℝ} (hΔ : 0 < Δ) {C₀ : ℝ} (hC₀ : 0 ≤ C₀) :
-    ∃ C c : ℝ, 0 < C ∧ 0 < c ∧
-      ∀ (n : ℕ), 1 ≤ n → ∀ (Λ : Finset (ℤ × ℤ)) (h : LocalHamiltonian Λ q R J)
-        (E₀ : ℝ) (Ω : StateSpace Λ q), IsGappedGroundState Λ q h.operator E₀ Ω Δ →
-        ∀ Y : Finset (Site Λ), ((edgeBoundary Λ Y).card : ℝ) ≤ C₀ * n →
-          1 - (reducedState Λ q Ω Y *
-              typicalProjection Λ q Ω Y ((n : ℝ) ^ ((3 : ℝ) / 5))).trace.re ≤
-            C * Real.exp (-(c * (n : ℝ) ^ ((1 : ℝ) / 10))) := by
+/-- The failure rate is positive. -/
+theorem typicalFailureRate_pos (hq : 1 ≤ q) (R : ℕ) (hJ : 0 ≤ J) {Δ : ℝ} (hΔ : 0 < Δ)
+    {C₀ : ℝ} (hC₀ : 0 ≤ C₀) : 0 < typicalFailureRate q R J Δ C₀ := by
   have hT := one_le_tailParameterConstant hq R
   have hθ : 0 ≤ J / Δ := div_nonneg hJ hΔ.le
-  refine ⟨2 * Real.exp (Real.exp 1 / 2), failureRate q R J Δ C₀, by positivity,
-    by unfold failureRate; positivity, ?_⟩
+  unfold typicalFailureRate
+  positivity
+
+/-- **Failure probability of a typical projection.** For every scale `n ≥ 1`, every
+gapped ground vector `Ω` of a finite-range Hamiltonian on a finite domain and every cut
+`Y` with at most `C₀ n` crossing edges, the typical projection at width `n^(3/5)` fails
+with probability at most `2 e^{e/2} exp(-c n^(1/10))`, with
+`c = typicalFailureRate q R J Δ C₀`.
+Source: `09-amplification.tex`, lines 304–317, from Lemma 3.1, `02-initial.tex`,
+lines 64–69, and `eq:initial-local-tail-parameter`, lines 202–206. -/
+theorem typicalProjection_failure_le_stretchedExp (hq : 1 ≤ q) (R : ℕ)
+    (hJ : 0 ≤ J) {Δ : ℝ} (hΔ : 0 < Δ) {C₀ : ℝ} (hC₀ : 0 ≤ C₀) :
+    ∀ (n : ℕ), 1 ≤ n → ∀ (Λ : Finset (ℤ × ℤ)) (h : LocalHamiltonian Λ q R J)
+      (E₀ : ℝ) (Ω : StateSpace Λ q), IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+      ∀ Y : Finset (Site Λ), ((edgeBoundary Λ Y).card : ℝ) ≤ C₀ * n →
+        1 - (reducedState Λ q Ω Y *
+            typicalProjection Λ q Ω Y ((n : ℝ) ^ ((3 : ℝ) / 5))).trace.re ≤
+          2 * Real.exp (Real.exp 1 / 2) *
+            Real.exp (-(typicalFailureRate q R J Δ C₀ * (n : ℝ) ^ ((1 : ℝ) / 10))) := by
+  have hT := one_le_tailParameterConstant hq R
+  have hθ : 0 ≤ J / Δ := div_nonneg hJ hΔ.le
   intro n hn Λ h E₀ Ω hgs Y hY
   set w : ℝ := (n : ℝ) ^ ((3 : ℝ) / 5)
   have hnr : (1 : ℝ) ≤ n := by exact_mod_cast hn
@@ -159,39 +168,62 @@ theorem exists_typicalProjection_failure_le_stretchedExp (hq : 1 ≤ q) (R : ℕ
   have hpow : (n : ℝ) ^ ((1 : ℝ) / 10) * (n : ℝ) ^ ((1 : ℝ) / 2) = w := by
     rw [← Real.rpow_add hn0]; norm_num [w]
   have hpos : 0 < Real.sqrt ((1 + J / Δ) * B) := Real.sqrt_pos.mpr (by positivity)
-  rw [le_div_iff₀ (by positivity), failureRate, ← hpow]
+  rw [le_div_iff₀ (by positivity), typicalFailureRate, ← hpow]
   calc (32 * D)⁻¹ * (n : ℝ) ^ ((1 : ℝ) / 10) * (32 * Real.sqrt ((1 + J / Δ) * B))
       ≤ (32 * D)⁻¹ * (n : ℝ) ^ ((1 : ℝ) / 10) * (32 * (D * (n : ℝ) ^ ((1 : ℝ) / 2))) := by
         gcongr
     _ = (n : ℝ) ^ ((1 : ℝ) / 10) * (n : ℝ) ^ ((1 : ℝ) / 2) := by
         field_simp
 
-/-- A stretched exponential `C exp(-c n^(1/10))` is eventually at most `n^(-s)`. -/
-private theorem eventually_stretchedExp_le_rpow_neg {C c : ℝ} (hc : 0 < c) (s : ℝ) :
-    ∀ᶠ n : ℕ in atTop,
-      C * Real.exp (-(c * (n : ℝ) ^ ((1 : ℝ) / 10))) ≤ (n : ℝ) ^ (-s) := by
-  have hx : Tendsto (fun n : ℕ ↦ (n : ℝ) ^ ((1 : ℝ) / 10)) atTop atTop :=
-    (tendsto_rpow_atTop (by norm_num)).comp tendsto_natCast_atTop_atTop
-  have hlim := (tendsto_rpow_mul_exp_neg_mul_atTop_nhds_zero (10 * s) c hc).comp hx
-  have hsmall : ∀ᶠ n : ℕ in atTop,
-      ((n : ℝ) ^ ((1 : ℝ) / 10)) ^ (10 * s) * Real.exp (-c * (n : ℝ) ^ ((1 : ℝ) / 10)) ≤
-        (max C 1)⁻¹ :=
-    hlim.eventually (ge_mem_nhds (by positivity))
-  filter_upwards [hsmall, eventually_ge_atTop 1] with n hn hn1
-  have hn0 : (0 : ℝ) < n := by exact_mod_cast hn1
-  have hpow : ((n : ℝ) ^ ((1 : ℝ) / 10)) ^ (10 * s) = (n : ℝ) ^ s := by
-    rw [← Real.rpow_mul hn0.le]; ring_nf
-  rw [hpow, neg_mul] at hn
-  have hs : 0 < (n : ℝ) ^ s := Real.rpow_pos_of_pos hn0 s
-  have hC : 0 < max C 1 := lt_of_lt_of_le one_pos (le_max_right _ _)
-  set e := Real.exp (-(c * (n : ℝ) ^ ((1 : ℝ) / 10)))
-  have he : 0 ≤ e := (Real.exp_pos _).le
-  have hone : max C 1 * ((n : ℝ) ^ s * e) ≤ 1 :=
-    (mul_le_mul_of_nonneg_left hn hC.le).trans_eq (mul_inv_cancel₀ hC.ne')
-  have hCe : C * ((n : ℝ) ^ s * e) ≤ max C 1 * ((n : ℝ) ^ s * e) :=
-    mul_le_mul_of_nonneg_right (le_max_left _ _) (mul_nonneg hs.le he)
-  rw [Real.rpow_neg hn0.le, ← one_div, le_div_iff₀ hs]
-  nlinarith
+/-- **Failure probability of a typical projection.** There are constants `C, c > 0`,
+depending only on `q, R, J, Δ` and `C₀`, such that for every scale `n ≥ 1`, every
+gapped ground vector `Ω` of a finite-range Hamiltonian on a finite domain and every cut
+`Y` with at most `C₀ n` crossing edges, the typical projection at width `n^(3/5)` fails
+with probability at most `C exp(-c n^(1/10))`.
+Source: `09-amplification.tex`, lines 304–317, from Lemma 3.1, `02-initial.tex`,
+lines 64–69, and `eq:initial-local-tail-parameter`, lines 202–206. -/
+theorem exists_typicalProjection_failure_le_stretchedExp (hq : 1 ≤ q) (R : ℕ)
+    (hJ : 0 ≤ J) {Δ : ℝ} (hΔ : 0 < Δ) {C₀ : ℝ} (hC₀ : 0 ≤ C₀) :
+    ∃ C c : ℝ, 0 < C ∧ 0 < c ∧
+      ∀ (n : ℕ), 1 ≤ n → ∀ (Λ : Finset (ℤ × ℤ)) (h : LocalHamiltonian Λ q R J)
+        (E₀ : ℝ) (Ω : StateSpace Λ q), IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+        ∀ Y : Finset (Site Λ), ((edgeBoundary Λ Y).card : ℝ) ≤ C₀ * n →
+          1 - (reducedState Λ q Ω Y *
+              typicalProjection Λ q Ω Y ((n : ℝ) ^ ((3 : ℝ) / 5))).trace.re ≤
+            C * Real.exp (-(c * (n : ℝ) ^ ((1 : ℝ) / 10))) :=
+  ⟨_, _, by positivity, typicalFailureRate_pos hq R hJ hΔ hC₀,
+    typicalProjection_failure_le_stretchedExp hq R hJ hΔ hC₀⟩
+
+/-- The explicit threshold of `eq:amplification-typical-error`: from
+`⌈stretchedExpThreshold (2 e^{e/2}) c (1/10) (2K)⌉₊` on, with
+`c = typicalFailureRate q R J Δ C₀`, the stretched exponential `2 e^{e/2} e^{-c n^{1/10}}` is at
+most `n^{-2K}`. Source: `09-amplification.tex`, lines 304–318. -/
+noncomputable def typicalProjectionThreshold (q R : ℕ) (J Δ C₀ : ℝ) (K : ℕ) : ℕ :=
+  ⌈Real.stretchedExpThreshold (2 * Real.exp (Real.exp 1 / 2)) (typicalFailureRate q R J Δ C₀)
+    (1 / 10) (2 * K)⌉₊
+
+/-- The typical-projection threshold is at least `1`. -/
+theorem one_le_typicalProjectionThreshold (q R : ℕ) (J Δ C₀ : ℝ) (K : ℕ) :
+    1 ≤ typicalProjectionThreshold q R J Δ C₀ K :=
+  Nat.one_le_ceil_iff.mpr (one_pos.trans_le (Real.one_le_powerRatioThreshold _ _ _))
+
+/-- **Typical error of one cut, with an explicit threshold.** From
+`typicalProjectionThreshold q R J Δ C₀ K` on, the typical projection at width `n^(3/5)` of every
+cut with at most `C₀ n` crossing edges fails with probability at most `δ = n^(-2K)`.
+Source: `09-amplification.tex`, lines 304–318, `eq:amplification-typical-error`. -/
+theorem typicalProjection_failure_le_inv_pow_of_threshold_le (hq : 1 ≤ q) (R : ℕ)
+    (hJ : 0 ≤ J) {Δ : ℝ} (hΔ : 0 < Δ) {C₀ : ℝ} (hC₀ : 0 ≤ C₀) {K n : ℕ}
+    (hn : typicalProjectionThreshold q R J Δ C₀ K ≤ n) (Λ : Finset (ℤ × ℤ))
+    (h : LocalHamiltonian Λ q R J) (E₀ : ℝ) (Ω : StateSpace Λ q)
+    (hgs : IsGappedGroundState Λ q h.operator E₀ Ω Δ) (Y : Finset (Site Λ))
+    (hY : ((edgeBoundary Λ Y).card : ℝ) ≤ C₀ * n) :
+    1 - (reducedState Λ q Ω Y *
+        typicalProjection Λ q Ω Y ((n : ℝ) ^ ((3 : ℝ) / 5))).trace.re ≤
+      (n : ℝ) ^ (-(2 * K : ℝ)) :=
+  (typicalProjection_failure_le_stretchedExp hq R hJ hΔ hC₀ n
+    ((one_le_typicalProjectionThreshold q R J Δ C₀ K).trans hn) Λ h E₀ Ω hgs Y hY).trans
+    (Real.mul_exp_neg_le_rpow_neg_of_ceil_stretchedExpThreshold_le (by positivity)
+      (typicalFailureRate_pos hq R hJ hΔ hC₀) (by norm_num) hn)
 
 /-- **Typical error of one cut, `eq:amplification-typical-error`.** For every integer
 `K`, there is a threshold, depending only on `q, R, J, Δ, C₀` and `K`, beyond which the
@@ -206,15 +238,46 @@ theorem exists_typicalProjection_failure_le_inv_pow (hq : 1 ≤ q) (R : ℕ)
         ∀ Y : Finset (Site Λ), ((edgeBoundary Λ Y).card : ℝ) ≤ C₀ * n →
           1 - (reducedState Λ q Ω Y *
               typicalProjection Λ q Ω Y ((n : ℝ) ^ ((3 : ℝ) / 5))).trace.re ≤
-            (n : ℝ) ^ (-(2 * K : ℝ)) := by
-  obtain ⟨C, c, -, hc, hfail⟩ :=
-    exists_typicalProjection_failure_le_stretchedExp (J := J) hq R hJ hΔ hC₀
-  obtain ⟨N, hN⟩ := eventually_atTop.mp
-    ((eventually_stretchedExp_le_rpow_neg (C := C) hc (2 * K)).and (eventually_ge_atTop 1))
-  refine ⟨max N 1, le_max_right _ _, ?_⟩
-  intro n hn Λ h E₀ Ω hgs Y hY
-  obtain ⟨hle, hn1⟩ := hN n ((le_max_left _ _).trans hn)
-  exact (hfail n hn1 Λ h E₀ Ω hgs Y hY).trans hle
+            (n : ℝ) ^ (-(2 * K : ℝ)) :=
+  ⟨_, one_le_typicalProjectionThreshold q R J Δ C₀ K,
+    fun _ hn => typicalProjection_failure_le_inv_pow_of_threshold_le hq R hJ hΔ hC₀ hn⟩
+
+/-- **The three typical projectors, with an explicit threshold.** From
+`typicalProjectionThreshold q R J Δ C₀ K` on, for every gapped ground vector `Ω` of a
+finite-range Hamiltonian on a finite domain and every three cuts `X, Y, S₀` with at most
+`C₀ n` crossing edges each, the typical projections `P_X, T_Y, Q_{S₀}` at width `w = n^(3/5)`
+are orthogonal projections commuting with their regional states, their selected eigenvalues
+are positive and lie within `e^{±w}` of `e^{-S}`, and each fails with probability at most
+`δ = n^(-2K)`.
+Source: `09-amplification.tex`, lines 304–322, `eq:amplification-typical-error`. -/
+theorem typicalProjectors_three_cuts_of_threshold_le (hq : 1 ≤ q) (R : ℕ)
+    (hJ : 0 ≤ J) {Δ : ℝ} (hΔ : 0 < Δ) {C₀ : ℝ} (hC₀ : 0 ≤ C₀) (K : ℕ) :
+    ∀ (n : ℕ), typicalProjectionThreshold q R J Δ C₀ K ≤ n →
+      ∀ (Λ : Finset (ℤ × ℤ)) (h : LocalHamiltonian Λ q R J)
+        (E₀ : ℝ) (Ω : StateSpace Λ q), IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+        ∀ X Y S₀ : Finset (Site Λ),
+          ((edgeBoundary Λ X).card : ℝ) ≤ C₀ * n →
+          ((edgeBoundary Λ Y).card : ℝ) ≤ C₀ * n →
+          ((edgeBoundary Λ S₀).card : ℝ) ≤ C₀ * n →
+          ∀ Z ∈ ({X, Y, S₀} : Finset (Finset (Site Λ))),
+            let w := (n : ℝ) ^ ((3 : ℝ) / 5)
+            let p := (reducedState_isHermitian Λ q Ω Z).eigenvalues
+            let S := regionalEntropy Λ q Ω Z
+            IsStarProjection (typicalProjection Λ q Ω Z w) ∧
+              Commute (typicalProjection Λ q Ω Z w) (reducedState Λ q Ω Z) ∧
+              (∀ i ∈ Entropy.typicalSet p S w,
+                0 < p i ∧ Real.exp (-S - w) ≤ p i ∧ p i ≤ Real.exp (-S + w)) ∧
+              1 - (reducedState Λ q Ω Z * typicalProjection Λ q Ω Z w).trace.re ≤
+                (n : ℝ) ^ (-(2 * K : ℝ)) := by
+  classical
+  intro n hn Λ h E₀ Ω hgs X Y S₀ hX hY hS Z hZ
+  have hZb : ((edgeBoundary Λ Z).card : ℝ) ≤ C₀ * n := by
+    simp only [Finset.mem_insert, Finset.mem_singleton] at hZ
+    rcases hZ with rfl | rfl | rfl <;> assumption
+  obtain ⟨hproj, hcomm, hwin, -⟩ :=
+    typicalProjection_failure_le_surprisalTail Ω hgs.1 Z ((n : ℝ) ^ ((3 : ℝ) / 5))
+  exact ⟨hproj, hcomm, hwin,
+    typicalProjection_failure_le_inv_pow_of_threshold_le hq R hJ hΔ hC₀ hn Λ h E₀ Ω hgs Z hZb⟩
 
 /-- **The three typical projectors of the amplification proposition.** For every
 integer `K`, beyond a threshold depending only on `q, R, J, Δ, C₀` and `K`, the
@@ -243,16 +306,8 @@ theorem exists_typicalProjectors_three_cuts (hq : 1 ≤ q) (R : ℕ)
               (∀ i ∈ Entropy.typicalSet p S w,
                 0 < p i ∧ Real.exp (-S - w) ≤ p i ∧ p i ≤ Real.exp (-S + w)) ∧
               1 - (reducedState Λ q Ω Z * typicalProjection Λ q Ω Z w).trace.re ≤
-                (n : ℝ) ^ (-(2 * K : ℝ)) := by
-  classical
-  obtain ⟨N, hN1, hN⟩ := exists_typicalProjection_failure_le_inv_pow (J := J) hq R hJ hΔ hC₀ K
-  refine ⟨N, hN1, ?_⟩
-  intro n hn Λ h E₀ Ω hgs X Y S₀ hX hY hS Z hZ
-  have hZb : ((edgeBoundary Λ Z).card : ℝ) ≤ C₀ * n := by
-    simp only [Finset.mem_insert, Finset.mem_singleton] at hZ
-    rcases hZ with rfl | rfl | rfl <;> assumption
-  obtain ⟨hproj, hcomm, hwin, -⟩ :=
-    typicalProjection_failure_le_surprisalTail Ω hgs.1 Z ((n : ℝ) ^ ((3 : ℝ) / 5))
-  exact ⟨hproj, hcomm, hwin, hN n hn Λ h E₀ Ω hgs Z hZb⟩
+                (n : ℝ) ^ (-(2 * K : ℝ)) :=
+  ⟨_, one_le_typicalProjectionThreshold q R J Δ C₀ K,
+    typicalProjectors_three_cuts_of_threshold_le hq R hJ hΔ hC₀ K⟩
 
 end TNLean.PEPS.AreaLaw

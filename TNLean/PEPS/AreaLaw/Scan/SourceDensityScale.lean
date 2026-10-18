@@ -182,6 +182,35 @@ theorem final_principalDensity_margins :
   norm_num [Exponents.scannerNu, Exponents.boxError, Exponents.scannerMu,
     Exponents.scannerOmega, Exponents.scannerEll]
 
+/-- The explicit threshold of the final principal-density bound at rate `r`: the
+principal-density threshold of the final exponents at weight exponent `ω = 1/20000`
+(`08-scanner.tex`, lines 380--384 and 839--865). -/
+noncomputable def finalPrincipalDensityThreshold (C Cl r : ℝ) : ℕ :=
+  finalSharpScannerExponents.principalDensityThreshold C Cl (Exponents.scannerOmega : ℝ) r
+
+/-- The final principal-density threshold is at least `2`. -/
+theorem two_le_finalPrincipalDensityThreshold (C Cl r : ℝ) :
+    2 ≤ finalPrincipalDensityThreshold C Cl r :=
+  (le_max_left _ _).trans (le_max_left _ _)
+
+/-- At the final scanner exponents the principal density is at most `n^(-r)` at every `n`
+from the explicit threshold `finalPrincipalDensityThreshold C Cl r` on, whenever `r` satisfies
+both strict density margins. Source: `scanner:density-output`, `scanner:final-parameters`. -/
+theorem final_principalDensity_le_rpow_of_finalPrincipalDensityThreshold_le {C Cl r : ℝ}
+    (hC : 0 ≤ C)
+    (hm : (Exponents.boxError : ℝ) - Exponents.scannerMu + Exponents.scannerNu < -r)
+    (ha : ((Exponents.scannerOmega : ℝ) - (1 - Exponents.scannerEll - Exponents.scannerMu)) /
+      4 + Exponents.scannerNu < -r) {n : ℕ} (hthr : finalPrincipalDensityThreshold C Cl r ≤ n) :
+    let L := Nat.floor ((n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ)))
+    let m := Nat.floor ((n : ℝ) ^ (Exponents.scannerMu : ℝ))
+    let K := L / (8 * m)
+    1 ≤ K ∧ ∀ W : ℝ, 1 ≤ W → W ≤ (n : ℝ) ^ (Exponents.scannerOmega : ℝ) →
+      C * ((n : ℝ) ^ (Exponents.boxError : ℝ) / (m : ℝ) +
+        (W / (K : ℝ)) ^ (1 / 4 : ℝ) * Real.log (n : ℝ) ^ Cl) /
+          (n : ℝ) ^ (-(Exponents.scannerNu : ℝ)) ≤ (n : ℝ) ^ (-r) :=
+  (finalSharpScannerExponents.principalDensity_le_rpow_of_principalDensityThreshold_le
+    hC hm ha hthr).2
+
 /-- At the final scanner exponents the principal density is at most
 `n^(-nu)`, uniformly over the full weight interval. Both floors and the
 natural-number division are literal, and the fixed constants precede `n`
@@ -196,28 +225,11 @@ theorem exists_final_principalDensity_le_rpow {C Cl : ℝ} (hC : 0 ≤ C) :
         C * ((n : ℝ) ^ (Exponents.boxError : ℝ) / (m : ℝ) +
           (W / (K : ℝ)) ^ (1 / 4 : ℝ) * Real.log (n : ℝ) ^ Cl) /
             (n : ℝ) ^ (-(Exponents.scannerNu : ℝ)) ≤
-              (n : ℝ) ^ (-(Exponents.scannerNu : ℝ)) := by
-  let X : ScannerExponents :=
-    { ell := Exponents.scannerEll
-      kappa := Exponents.scannerKappa
-      mu := Exponents.scannerMu
-      nu := Exponents.scannerNu
-      e := Exponents.boxError
-      ell_pos := by norm_num [Exponents.scannerEll]
-      ell_lt_one := by norm_num [Exponents.scannerEll]
-      kappa_pos := by norm_num [Exponents.scannerKappa]
-      kappa_lt_mu := by norm_num [Exponents.scannerKappa, Exponents.scannerMu]
-      mu_lt_one_sub_ell := by norm_num [Exponents.scannerMu, Exponents.scannerEll]
-      nu_pos := by norm_num [Exponents.scannerNu]
-      e_pos := by norm_num [Exponents.boxError]
-      e_lt_one := by norm_num [Exponents.boxError]
-      kappa_le_e := by norm_num [Exponents.scannerKappa, Exponents.boxError] }
-  have hm : X.e - X.mu + X.nu < -X.nu := by
-    norm_num [X, Exponents.boxError, Exponents.scannerMu, Exponents.scannerNu]
-  have ha : ((Exponents.scannerOmega : ℝ) - (1 - X.ell - X.mu)) / 4 +
-      X.nu < -X.nu := by
-    norm_num [X, Exponents.scannerOmega, Exponents.scannerEll,
-      Exponents.scannerMu, Exponents.scannerNu]
-  exact X.exists_principalDensity_le_rpow (Cl := Cl) hC hm ha
+              (n : ℝ) ^ (-(Exponents.scannerNu : ℝ)) :=
+  ⟨_, two_le_finalPrincipalDensityThreshold C Cl _, fun _ =>
+    final_principalDensity_le_rpow_of_finalPrincipalDensityThreshold_le hC
+      (by norm_num [Exponents.boxError, Exponents.scannerMu, Exponents.scannerNu])
+      (by norm_num [Exponents.scannerOmega, Exponents.scannerEll, Exponents.scannerMu,
+        Exponents.scannerNu])⟩
 
 end TNLean.PEPS.AreaLaw.Scan
