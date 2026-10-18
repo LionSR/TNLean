@@ -98,9 +98,12 @@ theorem exists_sourceTarget_finalScale_mutualInformation
   have hg : 0 < g := div_pos hΔ (positiveNormalization_pos 1 (Δ / 2) J)
   have hC₀ : 0 ≤ C₀ := by dsimp only [C₀]; positivity
   have hCvol : 0 ≤ C_T + 1 := by linarith
-  obtain ⟨Nt, htarget⟩ := eventually_atTop.mp
-    (eventually_abs_regionalEntropy_sub_le_of_truncation q hq g (C_T + 1) hg)
-  obtain ⟨Nsml, hNsml, hsmall⟩ := exists_finalSharp_transport_smallness hq hCtr.le hct
+  let Nt := truncationEntropyThreshold q g (C_T + 1)
+  have htarget := fun n (hn : Nt ≤ n) =>
+    abs_regionalEntropy_sub_le_of_truncationEntropyThreshold_le q hq g (C_T + 1) hg hn
+  let Nsml := finalSharpTransportThreshold q Ctr ct
+  have hsmall := fun n (hn : Nsml ≤ n) =>
+    finalSharp_transport_smallness_of_threshold_le hq hCtr.le hct hn
   refine ⟨Ctr, hCtr, ?_⟩
   intro Ce hCe
   obtain ⟨Ns, hNs, hsourceN⟩ := hsource Ce hCe

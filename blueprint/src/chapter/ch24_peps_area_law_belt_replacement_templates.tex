@@ -121,14 +121,15 @@ restrictions are recorded in~\cite{gap:arealaw2d_belt_replacement_template_scope
     For every real $C_B$ and every $\varepsilon>0$, every sufficiently
     large $u$ satisfies
     \begin{align}
-        L=\bigl\lfloor\lceil C_Bu\rceil^{1-\ell}\bigr\rfloor & \le\varepsilon u.
+        n=\lceil C_Bu\rceil_+,\qquad
+        L=\bigl\lfloor n^{1-\ell}\bigr\rfloor & \le\varepsilon u.
     \end{align}
-    Thus $L=o(u)$ for the belt and replacement scanner scale
-    $n=\lceil C_Bu\rceil$.
+    Here $\lceil x\rceil_+=\max\{0,\lceil x\rceil\}$.
+    Thus $L=o(u)$ for the belt and replacement scanner scale $n$.
 \end{theorem}
 \begin{proof}
     \leanok
-    Put $B=\max\{C_B,0\}+1$. For $u\ge1$ we have $\lceil C_Bu\rceil\le Bu$,
+    Put $B=\max\{C_B,0\}+1$. For $u\ge1$ we have $n\le Bu$,
     so $L\le B^{1-\ell}u^{-\ell}u$. Since $\ell>0$, the factor $u^{-\ell}$ is
     eventually at most $\varepsilon/B^{1-\ell}$.
 \end{proof}
