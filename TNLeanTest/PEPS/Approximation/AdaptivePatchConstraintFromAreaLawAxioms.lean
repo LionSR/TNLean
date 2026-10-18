@@ -7,14 +7,18 @@ import TNLean.PEPS.Approximation.AdaptivePatchConstraintFromAreaLaw
 import Lean.Elab.Command
 import Lean.Util.CollectAxioms
 
-/-! Audit the adaptive patch conclusion under the square entropy area law. -/
+/-! Audit the adaptive patch constraint from the square entropy area law. -/
 
 run_cmd do
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
-  let decl := ``TNLean.PEPS.Approximation.SquareEntropyAreaLaw.adaptivePatchConstraint
-  unless (← Lean.getEnv).contains decl do
-    throwError "Missing declaration {decl}"
-  let axioms ← Lean.collectAxioms decl
-  unless axioms.all (allowed.contains ·) do
-    throwError "Unexpected axioms for {decl}: {axioms}"
-  Lean.logInfo m!"{decl}: {axioms}"
+  let env ← Lean.getEnv
+  for decl in #[``TNLean.PEPS.Approximation.adaptivePatchPrefactor_pos,
+      ``TNLean.PEPS.Approximation.adaptivePatchExponent_pos,
+      ``TNLean.PEPS.Approximation.SquareEntropyAreaLawAt.adaptivePatchSupply,
+      ``TNLean.PEPS.Approximation.SquareEntropyAreaLaw.adaptivePatchConstraint] do
+    unless env.contains decl do
+      throwError "Missing declaration {decl}"
+    let axioms ← Lean.collectAxioms decl
+    unless axioms.all (allowed.contains ·) do
+      throwError "Unexpected axioms for {decl}: {axioms}"
+    Lean.logInfo m!"{decl}: {axioms}"
