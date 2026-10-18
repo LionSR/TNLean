@@ -10,6 +10,7 @@ Authors: TNLean contributors
 
 import TNLean.Algebra
 import TNLean.Circuit
+import TNLean.Lattice
 import TNLean.MPS
 import TNLean.PEPS
 import TNLean.PiAlgebra

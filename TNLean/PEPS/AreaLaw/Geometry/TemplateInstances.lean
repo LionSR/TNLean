@@ -36,6 +36,8 @@ Three constructions show that Definition 9.3 admits the templates used later.
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
+open TNLean.Lattice
+
 namespace TNLean.PEPS.AreaLaw.Geometry
 
 /-! ### Integer rectangles -/

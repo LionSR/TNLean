@@ -38,6 +38,8 @@ open scoped BigOperators Matrix.Norms.L2Operator MatrixOrder ComplexOrder
 
 noncomputable section
 
+open TNLean.Lattice
+
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
 
 open SpectralFilter

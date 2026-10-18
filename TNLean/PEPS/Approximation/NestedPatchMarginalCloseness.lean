@@ -27,6 +27,7 @@ the marginal trace-norm estimate for the original full-system spectral gap.
 
 open Matrix
 open scoped ComplexOrder MatrixOrder Matrix.Norms.L2Operator
+open TNLean.Lattice
 
 namespace TNLean.PEPS.Approximation
 
@@ -45,49 +46,49 @@ theorem exists_uniform_nestedPatch_minimizer_marginal_closeness
         h.IsGappedGroundState E₀ Ω Δ →
         ∀ (center : ℝ × ℝ) (u b : ℝ), 4 ≤ u → 0 < b →
           let Λ := AreaLaw.rectangularDomain L L
-          letI : LinearOrder (AreaLaw.Site Λ) :=
-            (Fintype.equivFin (AreaLaw.Site Λ)).linearOrder
+          letI : LinearOrder (Lattice.Site Λ) :=
+            (Fintype.equivFin (Lattice.Site Λ)).linearOrder
           let m := AreaLaw.Geometry.nestedPatchCount u
-          let regions : Fin m → Finset (AreaLaw.Site Λ) :=
+          let regions : Fin m → Finset (Lattice.Site Λ) :=
             fun j ↦ AreaLaw.Geometry.nestedPatch Λ center u j
           let a : Fin m → ℝ := fun _ ↦ κ / (m : ℝ)
           let U := dependentGlobalConfigIsometry
-            (V := AreaLaw.Site Λ) (Out := fun _ ↦ Fin q)
+            (V := Lattice.Site Λ) (Out := fun _ ↦ Fin q)
           let Ωᵤ := U.symm (squareAreaLawState Ω)
           ∀ x : ∀ j, Matrix ((v : regions j) → Fin q) ((v : regions j) → Fin q) ℂ,
             x ∈ regularizedPatchDomain
-              (Out := fun _ : AreaLaw.Site Λ ↦ Fin q) regions →
+              (Out := fun _ : Lattice.Site Λ ↦ Fin q) regions →
             IsMinOn
-              (regularizedPatchObjective (Out := fun _ : AreaLaw.Site Λ ↦ Fin q)
+              (regularizedPatchObjective (Out := fun _ : Lattice.Site Λ ↦ Fin q)
                 regions a b Ωᵤ)
-              (regularizedPatchDomain (Out := fun _ : AreaLaw.Site Λ ↦ Fin q) regions) x →
-            ∀ R : Finset (AreaLaw.Site Λ),
+              (regularizedPatchDomain (Out := fun _ : Lattice.Site Λ ↦ Fin q) regions) x →
+            ∀ R : Finset (Lattice.Site Λ),
               (CFC.abs
                 (normalizedRegularizedPatchMarginal
-                  (Out := fun _ : AreaLaw.Site Λ ↦ Fin q) regions a b Ωᵤ x R -
-                  Entropy.regionState (n := fun _ : AreaLaw.Site Λ ↦ q) R
+                  (Out := fun _ : Lattice.Site Λ ↦ Fin q) regions a b Ωᵤ x R -
+                  Entropy.regionState (n := fun _ : Lattice.Site Λ ↦ q) R
                     (squareAreaLawState Ω))).trace.re ≤ (1 / 16 : ℝ) := by
   obtain ⟨κ, hκ, hκhalf, hsmall⟩ := Real.exists_pos_le_half_mul_sq_le_div_1024
     (C := 36 * (q : ℝ) ^ 2 * J) (by positivity) hΔ
   refine ⟨κ, hκ, hκhalf, ?_⟩
   intro L h E₀ Ω hgs center u b hu hb Λ m regions a U Ωᵤ x hx hmin R
-  let : LinearOrder (AreaLaw.Site Λ) := (Fintype.equivFin (AreaLaw.Site Λ)).linearOrder
+  let : LinearOrder (Lattice.Site Λ) := (Fintype.equivFin (Lattice.Site Λ)).linearOrder
   have henergy := (h.nestedPatch_minimizer_energy_le hJ hΔ Ω hgs center u κ b
     hu hκ (hκhalf.trans (by norm_num)) hb x hx hmin).trans hsmall
   have hnorm := norm_normalizedRegularizedPatchOutput
-    (Out := fun _ : AreaLaw.Site Λ ↦ Fin q) regions a
+    (Out := fun _ : Lattice.Site Λ ↦ Fin q) regions a
     (fun _ ↦ div_nonneg hκ.le (Nat.cast_nonneg m)) hb Ωᵤ
     ((U.symm.norm_map _).trans ((norm_squareAreaLawState Ω).trans hgs.1)) hx
   have hgap := FiniteProduct.re_trace_abs_reducedPure_sub_le_one_sixteenth_of_energy
-    (fun _ : AreaLaw.Site Λ ↦ Fin q)
+    (fun _ : Lattice.Site Λ ↦ Fin q)
     (h.isGappedGroundState_toAreaLawHamiltonian hJ hgs) hΔ
     ((U.norm_map _).trans hnorm) henergy R
   have hρ := reindex_reducedPure_eq_regionState
-    (fun _ : AreaLaw.Site Λ ↦ Equiv.refl (Fin q)) R Ωᵤ
+    (fun _ : Lattice.Site Λ ↦ Equiv.refl (Fin q)) R Ωᵤ
   simp only [dependentRegionFinEquiv, Equiv.piCongrRight_refl,
     Matrix.reindex_refl_refl] at hρ
   have hU : dependentGlobalFinIsometry
-      (fun _ : AreaLaw.Site Λ ↦ Equiv.refl (Fin q)) Ωᵤ = U Ωᵤ := rfl
+      (fun _ : Lattice.Site Λ ↦ Equiv.refl (Fin q)) Ωᵤ = U Ωᵤ := rfl
   have hΩeq : dependentGlobalConfigIsometry Ωᵤ = squareAreaLawState Ω :=
     U.apply_symm_apply _
   rw [hU, hΩeq] at hρ

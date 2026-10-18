@@ -48,6 +48,8 @@ open scoped BigOperators Matrix.Norms.L2Operator
 
 noncomputable section
 
+open TNLean.Lattice
+
 namespace TNLean.PEPS.AreaLaw.Scan
 
 /-- **Typical entropies** (`comparator:typical-entropies`, `07-comparators.tex`,

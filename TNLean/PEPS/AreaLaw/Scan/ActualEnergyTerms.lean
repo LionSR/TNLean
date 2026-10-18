@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.FiniteSetTruncationGap
-import TNLean.PEPS.AreaLaw.MarginalTails
+import TNLean.Lattice.MarginalTails
 import TNLean.PEPS.AreaLaw.Scan.DesignatedSampling
 import QICLean.Representation.ReplicaTransport.Setup
 
@@ -29,6 +29,8 @@ at `openai/math@adc7f124`.
 open scoped BigOperators Matrix Matrix.Norms.L2Operator MatrixOrder ComplexOrder Kronecker
 
 noncomputable section
+
+open TNLean.Lattice
 
 namespace TNLean.PEPS.AreaLaw.Scan
 
@@ -163,7 +165,7 @@ variable {Λ : Finset (ℤ × ℤ)} {q R : ℕ} {J Δ : ℝ}
 
 /-- The source positive constraint of the actual labelled interaction.
 Source: `03-quasilocal.tex`, lines 250–266. -/
-def _root_.TNLean.PEPS.AreaLaw.LocalHamiltonian.positiveTerm
+def _root_.TNLean.Lattice.LocalHamiltonian.positiveTerm
     (h : LocalHamiltonian Λ q R J) (Δ : ℝ) (Ω : StateSpace Λ q)
     (i : AdmissibleSupport Λ R) : Matrix (Configuration Λ q) (Configuration Λ q) ℂ :=
   positiveConstraint (positiveNormalization 1 (Δ / 2) J)

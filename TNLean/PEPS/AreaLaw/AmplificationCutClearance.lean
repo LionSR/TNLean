@@ -37,6 +37,8 @@ information bounds.
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
+open TNLean.Lattice
+
 namespace TNLean.PEPS.AreaLaw
 
 /-- **The cut-clearance clause of Proposition 10.2.** For every radius constant `C` there

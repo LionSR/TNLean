@@ -30,6 +30,8 @@ Validation and inherited-dependency scope:
 
 noncomputable section
 
+open TNLean.Lattice
+
 namespace TNLean.PEPS.AreaLaw.Scan
 
 open Classical in

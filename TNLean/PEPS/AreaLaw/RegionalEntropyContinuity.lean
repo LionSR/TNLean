@@ -25,6 +25,8 @@ Source: *A two-dimensional area law from a global spectral gap*, September 24,
 The Lean proof follows the argument of Lemma 2.1 rather than transcribing its text.
 -/
 
+open TNLean.Lattice
+
 namespace TNLean.PEPS.AreaLaw
 
 /-- Regional entropy continuity with the dimension of the actual region.

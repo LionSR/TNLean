@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.GraphInteractionDiamondCounting
-import TNLean.PEPS.AreaLaw.FiniteDomain
+import TNLean.Lattice.FiniteDomain
 import QICLean.Entropy.SupportedMarginalTails
 
 /-!
@@ -47,6 +47,8 @@ contour meet a boundary layer of `Q₀^{+d}` of width `R + 1`, which has at most
 
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
+
+open TNLean.Lattice
 
 namespace TNLean.PEPS.AreaLaw
 

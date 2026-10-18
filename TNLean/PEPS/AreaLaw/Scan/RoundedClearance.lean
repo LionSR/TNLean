@@ -25,6 +25,7 @@ Original proof from the manuscript; no upstream Lean proof text reused.
 
 open Filter
 open scoped Topology
+open TNLean.Lattice
 
 namespace TNLean.PEPS.AreaLaw.Scan
 

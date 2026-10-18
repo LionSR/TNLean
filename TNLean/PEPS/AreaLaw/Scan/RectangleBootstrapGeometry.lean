@@ -32,6 +32,8 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 
 noncomputable section
 
+open TNLean.Lattice
+
 namespace TNLean.PEPS.AreaLaw.Scan
 
 private theorem rectangleBootstrap_nonempty (Q : IntRect) : Q.toFinset.Nonempty :=

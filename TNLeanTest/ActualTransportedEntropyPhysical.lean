@@ -24,6 +24,7 @@ open Entropy (SiteConfig)
 open TNLean.PEPS.AreaLaw TNLean.PEPS.AreaLaw.Scan
 open TNLeanTest.ActualScanPhysicalSampling
 open scoped BigOperators
+open TNLean.Lattice
 
 namespace TNLeanTest.ActualTransportedEntropyPhysical
 

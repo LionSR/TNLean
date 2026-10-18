@@ -10,6 +10,8 @@ import Mathlib.Tactic.NormNum
 
 /-! Integration regressions for the common ordered, family-labelled partition. -/
 
+open TNLean.Lattice
+
 open scoped BigOperators
 open TNLean.PEPS.AreaLaw
 open TNLean.PEPS.AreaLaw.Geometry
@@ -87,7 +89,7 @@ info: 'TNLean.PEPS.AreaLaw.reducedState_eq_finiteProduct' depends on axioms:
 info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms TNLean.PEPS.AreaLaw.reducedState_eq_finiteProduct
+#print axioms TNLean.Lattice.reducedState_eq_finiteProduct
 
 /--
 info: 'TNLean.PEPS.AreaLaw.regionalEntropy_eq_finiteProduct' depends on axioms:
@@ -96,7 +98,7 @@ info: 'TNLean.PEPS.AreaLaw.regionalEntropy_eq_finiteProduct' depends on axioms:
 info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms TNLean.PEPS.AreaLaw.regionalEntropy_eq_finiteProduct
+#print axioms TNLean.Lattice.regionalEntropy_eq_finiteProduct
 
 /--
 info: 'TNLean.PEPS.AreaLaw.Geometry.OrderedTwoFamilyPartition.entropy_le_residual_add_half_sum'

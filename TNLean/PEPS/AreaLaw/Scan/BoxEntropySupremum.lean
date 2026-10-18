@@ -21,6 +21,8 @@ Validation and inherited-dependency scope:
 `docs/paper-gaps/arealaw2d_safe_box_collar_scope.tex`.
 -/
 
+open TNLean.Lattice
+
 namespace TNLean.PEPS.AreaLaw
 
 /-- A uniform positive-scale box power supplies every physical rectangle,

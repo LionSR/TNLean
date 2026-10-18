@@ -20,6 +20,8 @@ open Filter TNLean.PEPS.AreaLaw TNLean.PEPS.AreaLaw.Scan SpectralFilter
 open scoped BigOperators Matrix.Norms.L2Operator
 
 noncomputable section
+open TNLean.Lattice
+
 namespace TNLeanTest.SourceStatusMarginalMoments
 
 example (L : ℕ) : L / (8 * 0) = 0 := by simp

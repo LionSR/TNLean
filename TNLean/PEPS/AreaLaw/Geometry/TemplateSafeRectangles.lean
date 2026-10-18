@@ -24,6 +24,8 @@ The sufficient condition `D₀ ≥ 1` follows from the standing `D₀ > 2R + 10`
 in `02-initial.tex`, line 225. No upstream Lean proof text is reused.
 -/
 
+open TNLean.Lattice
+
 namespace TNLean.PEPS.AreaLaw.Geometry
 
 private theorem cast_supDist (p z : ℤ × ℤ) :

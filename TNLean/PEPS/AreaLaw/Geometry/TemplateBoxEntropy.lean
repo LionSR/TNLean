@@ -27,6 +27,8 @@ This conditional entropy component does not assert the full lemma or derive
 an arbitrary exponent from the initial existential safe-box exponent.
 -/
 
+open TNLean.Lattice
+
 namespace TNLean.PEPS.AreaLaw.Geometry
 
 /-- Core entropy from a uniform estimate on every safe native rectangle.

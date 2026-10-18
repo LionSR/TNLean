@@ -50,7 +50,7 @@ theorem SquareEntropyAreaLaw.adaptivePatchConstraint
     lt_of_lt_of_le (by positivity) (le_max_right _ _), by positivity, ?_⟩
   intro L hL h E₀ Ω hgs z u hu huL
   suffices hpatch : HasAdaptivePatch
-      (fun x : AreaLaw.Site (AreaLaw.rectangularDomain L L) ↦
+      (fun x : Lattice.Site (AreaLaw.rectangularDomain L L) ↦
         ((x.1.1 : ℝ), (x.1.2 : ℝ))) (squareAreaLawState Ω)
       (max ((q : ℝ) ^ 81) (1 + B₀ / 2)) (R₀ + 1) p L (z - (1, 1)) u by
     have ht := (hpatch.relabel (AreaLaw.rectangleSiteEquiv L L).symm).translate (1, 1)
@@ -63,24 +63,24 @@ theorem SquareEntropyAreaLaw.adaptivePatchConstraint
         Equiv.arrowCongr, Function.comp_def]
     simpa only [Equiv.symm_symm, integerCoordinates_add_one_eq_latticePos,
       sub_add_cancel, hΩ] using ht
-  let : LinearOrder (AreaLaw.Site (AreaLaw.rectangularDomain L L)) :=
-    (Fintype.equivFin (AreaLaw.Site (AreaLaw.rectangularDomain L L))).linearOrder
+  let : LinearOrder (Lattice.Site (AreaLaw.rectangularDomain L L)) :=
+    (Fintype.equivFin (Lattice.Site (AreaLaw.rectangularDomain L L))).linearOrder
   by_cases hu4 : 4 ≤ u
   · let P (regions : Fin (AreaLaw.Geometry.nestedPatchCount u) →
-        Finset (AreaLaw.Site (AreaLaw.rectangularDomain L L))) : Prop :=
+        Finset (Lattice.Site (AreaLaw.rectangularDomain L L))) : Prop :=
       ∃ (S : (j : Fin (AreaLaw.Geometry.nestedPatchCount u)) →
           Submodule ℂ ((regions j → Fin q) → ℂ))
         (v : EuclideanSpace ℂ
-          ((w : (Finset.univ : Finset (AreaLaw.Site (AreaLaw.rectangularDomain L L)))) → Fin q)),
+          ((w : (Finset.univ : Finset (Lattice.Site (AreaLaw.rectangularDomain L L)))) → Fin q)),
         (∀ j, (Module.finrank ℂ (S j) : ℝ) ≤ (L : ℝ) ^ R₀) ∧
         v.ofLp ∈ (⨆ j, dependentRegionCylinder (Out := fun _ ↦ Fin q) (regions j) (S j)) ∧
         ‖dependentGlobalConfigIsometry.symm (squareAreaLawState Ω) - v‖ ≤ (L : ℝ) ^ (-p)
     have hc : P (fun j ↦ squareSample
-        (fun x : AreaLaw.Site (AreaLaw.rectangularDomain L L) ↦
+        (fun x : Lattice.Site (AreaLaw.rectangularDomain L L) ↦
           ((x.1.1 : ℝ), (x.1.2 : ℝ))) (z - (1, 1))
         (AreaLaw.Geometry.nestedPatchRadius u j.val)) := by
       rw [show (fun j : Fin (AreaLaw.Geometry.nestedPatchCount u) ↦ squareSample
-          (fun x : AreaLaw.Site (AreaLaw.rectangularDomain L L) ↦
+          (fun x : Lattice.Site (AreaLaw.rectangularDomain L L) ↦
             ((x.1.1 : ℝ), (x.1.2 : ℝ))) (z - (1, 1))
           (AreaLaw.Geometry.nestedPatchRadius u j.val)) =
           (fun j ↦ AreaLaw.Geometry.nestedPatch (AreaLaw.rectangularDomain L L)
@@ -90,7 +90,7 @@ theorem SquareEntropyAreaLaw.adaptivePatchConstraint
     obtain ⟨S, v, hdim, hv, herr⟩ := hc
     obtain ⟨Q, _, hz, hs, _, hd, he⟩ :=
       exists_squarePatch_of_mem_iSup_dependentRegionCylinder
-        (fun x : AreaLaw.Site (AreaLaw.rectangularDomain L L) ↦
+        (fun x : Lattice.Site (AreaLaw.rectangularDomain L L) ↦
           ((x.1.1 : ℝ), (x.1.2 : ℝ))) (z - (1, 1)) hu
         (fun j : Fin (AreaLaw.Geometry.nestedPatchCount u) ↦
           AreaLaw.Geometry.nestedPatchRadius u j.val)

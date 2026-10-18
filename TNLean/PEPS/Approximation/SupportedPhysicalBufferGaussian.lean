@@ -57,20 +57,20 @@ theorem SquareHamiltonian.exists_supported_buffer_gaussian_integral
           let V := reindex (g.symm.trans (p.trans e)) (g.symm.trans (p.trans e))
             ((1 : Matrix (P × P) (P × P) ℂ) ⊗ₖ W)
           ∀ l : ℕ,
-            let B := AreaLaw.graphNeighborhood Λ l (Q.image a ∪ Z.image a)
-            ∃ U : ℝ → Matrix (AreaLaw.Configuration Λ (q * q))
-                (AreaLaw.Configuration Λ (q * q)) ℂ,
+            let B := Lattice.graphNeighborhood Λ l (Q.image a ∪ Z.image a)
+            ∃ U : ℝ → Matrix (Lattice.Configuration Λ (q * q))
+                (Lattice.Configuration Λ (q * q)) ℂ,
               U 0 = 1 ∧
               (∀ t, HasDerivAt U
                 ((Complex.I • siteExpectation (q * q) B
                   (heisenbergEvolution K' t (K' - K))) * U t) t) ∧
-              (∀ t, U t ∈ unitaryGroup (AreaLaw.Configuration Λ (q * q)) ℂ) ∧
-              (∀ t, U t ∈ supportedOperators (q * q) (B : Set (AreaLaw.Site Λ))) ∧
+              (∀ t, U t ∈ unitaryGroup (Lattice.Configuration Λ (q * q)) ℂ) ∧
+              (∀ t, U t ∈ supportedOperators (q * q) (B : Set (Lattice.Site Λ))) ∧
               ∀ (η : ℝ≥0) (T : ℝ), 0 ≤ T →
                 let M := ∫ t : ℝ in Set.Icc (-T) T,
                   siteExpectation (q * q) B (heisenbergEvolution K' t V) * U t
                     ∂gaussianReal 0 η
-                M ∈ supportedOperators (q * q) (B : Set (AreaLaw.Site Λ)) ∧
+                M ∈ supportedOperators (q * q) (B : Set (Lattice.Site Λ)) ∧
                 ‖M‖ ≤ ‖W‖ ∧
                 ‖M - GaussianFilter.gaussianIntertwinerTruncated η T K' K V‖ ≤
                   ‖W‖ * C * (L : ℝ) ^ 2 * (1 + 8 * J * (L : ℝ) ^ 2 * T) *
@@ -95,12 +95,12 @@ theorem SquareHamiltonian.exists_supported_buffer_gaussian_integral
     (EncodedFrame.reindex_physicalBuffer_eq_siteLift q R C₀ hRC W).symm ▸
       EncodedFrame.siteLift_mem_supportedOperators Q
         (reindex (sitePairConfigurationEquiv Q q q) (sitePairConfigurationEquiv Q q q) W)
-  have hV : V ∈ supportedOperators (q * q) (Q.image a : Set (AreaLaw.Site Λ)) := by
+  have hV : V ∈ supportedOperators (q * q) (Q.image a : Set (Lattice.Site Λ)) := by
     simpa only [a, V, embedOp_rectangle_eq_reindex, Finset.coe_image,
       Matrix.reindex_apply, Matrix.submatrix_submatrix] using!
       embedOp_mem_supportedOperators_image a.injective hV₀
   have hD : gH.operator - K ∈
-      supportedOperators (q * q) (Z.image a : Set (AreaLaw.Site Λ)) := by
+      supportedOperators (q * q) (Z.image a : Set (Lattice.Site Λ)) := by
     simpa only [hK', a, K', F, K, embedOp_rectangle_eq_reindex, Finset.coe_image,
       Matrix.reindex_apply, Matrix.conjTranspose_submatrix, Matrix.submatrix_sub,
       Pi.sub_apply, Matrix.submatrix_mul_equiv, Matrix.submatrix_submatrix] using!
@@ -114,7 +114,7 @@ theorem SquareHamiltonian.exists_supported_buffer_gaussian_integral
     (Matrix.l2_opNorm_reindex_equiv (g.symm.trans (p.trans e)) _).trans_le
       (Matrix.l2_opNorm_one_kronecker_rect_le W)
   have hcard : (Λ.card : ℝ) = (L : ℝ) ^ 2 := by
-    simpa only [Λ, AreaLaw.Site, SquareLatticeVertex, Fintype.card_coe,
+    simpa only [Λ, Lattice.Site, SquareLatticeVertex, Fintype.card_coe,
       Fintype.card_prod, Fintype.card_fin, Nat.cast_mul, pow_two] using
       congrArg (fun n : ℕ ↦ (n : ℝ)) (Fintype.card_congr a).symm
   obtain ⟨U, hU0, hU, hunit, hsupport, hM⟩ :=

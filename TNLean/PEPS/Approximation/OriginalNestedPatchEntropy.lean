@@ -30,6 +30,8 @@ revision
 Independently formalized from the manuscript; no upstream Lean text is reused.
 -/
 
+open TNLean.Lattice
+
 namespace TNLean.PEPS.Approximation
 
 /-- The original-state entropy of every selected nested square is at most
@@ -61,7 +63,7 @@ theorem SquareEntropyAreaLaw.exists_nestedPatch_entropy_le
   simp only [Finset.map_map, Function.Embedding.mk_trans_mk, Equiv.self_comp_symm,
     Function.Embedding.mk_id, Finset.map_refl] at hcut
   have hbound : Entropy.regionEntropy D (squareAreaLawState Ω) ≤
-      C_A * (AreaLaw.edgeBoundary (AreaLaw.rectangularDomain L L) D).card := by
+      C_A * (Lattice.edgeBoundary (AreaLaw.rectangularDomain L L) D).card := by
     simpa only [Entropy.regionEntropy_eq_entropy, squareAreaLawState,
       AreaLaw.rectangleConfigurationEquiv] using hcut
   refine (hbound.trans (mul_le_mul_of_nonneg_left

@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.PEPS.AreaLaw.InitialBuffer
 import TNLean.PEPS.AreaLaw.RotatedChainRule
 import TNLean.PEPS.AreaLaw.SafeBoxChildren
-import TNLean.PEPS.AreaLaw.EntropyDimension
+import TNLean.Lattice.EntropyDimension
 import QICLean.Analysis.ScaleRecurrence
 
 /-!
@@ -48,6 +48,8 @@ same lower bound `1/N` on the frequency of the buffer event.
 
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
+
+open TNLean.Lattice
 
 namespace TNLean.PEPS.AreaLaw
 

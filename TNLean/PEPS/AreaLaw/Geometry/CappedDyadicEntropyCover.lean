@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Geometry.LatticeDyadicRect
-import TNLean.PEPS.AreaLaw.EntropyDimension
+import TNLean.Lattice.EntropyDimension
 
 /-!
 # Entropy subadditivity on the actual capped dyadic partition
@@ -23,6 +23,7 @@ This auxiliary lemma assumes a pointwise safe-box bound and does not derive it.
 -/
 
 open scoped BigOperators
+open TNLean.Lattice
 
 namespace TNLean.PEPS.AreaLaw.Geometry
 

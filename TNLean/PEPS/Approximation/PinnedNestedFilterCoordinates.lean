@@ -61,7 +61,7 @@ private theorem extendRegions_fin (X : Fin m → Finset (Vertex L)) (j : Fin m) 
 /-- The supplied finite regions in integer-square coordinates, extended by empty
 regions only to meet the existing natural-indexed ordered-chain API. -/
 def canonicalRegions (X : Fin m → Finset (Vertex L)) (k : ℕ) :
-    Finset (AreaLaw.Site (AreaLaw.rectangularDomain L L)) :=
+    Finset (Lattice.Site (AreaLaw.rectangularDomain L L)) :=
   (extendRegions X k).map (AreaLaw.rectangleSiteEquiv L L).toEmbedding
 
 /-- The extension has exactly the supplied regions at every family index. -/
@@ -72,18 +72,18 @@ def canonicalRegions (X : Fin m → Finset (Vertex L)) (k : ℕ) :
 /-- Regional configuration coordinates, using the existing dependent equivalence. -/
 def regionEquiv (X : Fin m → Finset (Vertex L)) (j : Fin m) :
     RegionConfiguration q (X j) ≃ Entropy.RegionConfig
-      (fun _ : AreaLaw.Site (AreaLaw.rectangularDomain L L) ↦ q) (canonicalRegions X j) :=
+      (fun _ : Lattice.Site (AreaLaw.rectangularDomain L L) ↦ q) (canonicalRegions X j) :=
   Entropy.regionConfigurationEquiv (n := fun _ : Vertex L ↦ q)
-    (n' := fun _ : AreaLaw.Site (AreaLaw.rectangularDomain L L) ↦ q)
+    (n' := fun _ : Lattice.Site (AreaLaw.rectangularDomain L L) ↦ q)
     (X j) (canonicalRegions X j) (AreaLaw.rectangleSiteEquiv L L)
     (by intro v; simp) (fun _ ↦ Equiv.refl (Fin q))
 
 /-- All regional matrix families on the transported supplied regions. -/
 abbrev CanonicalFamily (q : ℕ) (X : Fin m → Finset (Vertex L)) :=
   (j : Fin m) → Matrix
-    (Entropy.RegionConfig (fun _ : AreaLaw.Site (AreaLaw.rectangularDomain L L) ↦ q)
+    (Entropy.RegionConfig (fun _ : Lattice.Site (AreaLaw.rectangularDomain L L) ↦ q)
       (canonicalRegions X j))
-    (Entropy.RegionConfig (fun _ : AreaLaw.Site (AreaLaw.rectangularDomain L L) ↦ q)
+    (Entropy.RegionConfig (fun _ : Lattice.Site (AreaLaw.rectangularDomain L L) ↦ q)
       (canonicalRegions X j)) ℂ
 
 /-- The regional matrices of a bundled family in canonical square coordinates. -/
@@ -131,7 +131,7 @@ theorem admissible_fromCanonical (a : Fin m → ℝ) (ha : ∀ j, 0 < a j)
 theorem squareAreaLawState_eq_relabelVector (Ω : State L q) :
     squareAreaLawState Ω = Entropy.relabelVector
       (n := fun _ : Vertex L ↦ q)
-      (n' := fun _ : AreaLaw.Site (AreaLaw.rectangularDomain L L) ↦ q)
+      (n' := fun _ : Lattice.Site (AreaLaw.rectangularDomain L L) ↦ q)
       (AreaLaw.rectangleSiteEquiv L L) (fun _ ↦ Equiv.refl (Fin q)) Ω := by
   ext σ
   rfl
@@ -155,12 +155,12 @@ private theorem reindex_extendedMatrices (F : FilterFamily q m X) (j : Fin m)
     reindex
         (Entropy.regionConfigurationEquiv
           (n := fun _ : Vertex L ↦ q)
-          (n' := fun _ : AreaLaw.Site (AreaLaw.rectangularDomain L L) ↦ q)
+          (n' := fun _ : Lattice.Site (AreaLaw.rectangularDomain L L) ↦ q)
           (extendRegions X j) (canonicalRegions X j)
           (AreaLaw.rectangleSiteEquiv L L) hD (fun _ ↦ Equiv.refl (Fin q)))
         (Entropy.regionConfigurationEquiv
           (n := fun _ : Vertex L ↦ q)
-          (n' := fun _ : AreaLaw.Site (AreaLaw.rectangularDomain L L) ↦ q)
+          (n' := fun _ : Lattice.Site (AreaLaw.rectangularDomain L L) ↦ q)
           (extendRegions X j) (canonicalRegions X j)
           (AreaLaw.rectangleSiteEquiv L L) hD (fun _ ↦ Equiv.refl (Fin q)))
         (extendedMatrices F j) = canonicalMatrices F j := by
@@ -190,7 +190,7 @@ theorem squareAreaLawState_output (F : FilterFamily q m X) (Ω : State L q) :
   simpa only [reindex_extendedMatrices] using
     Entropy.relabelVector_liftProd_chainList
       (n := fun _ : Vertex L ↦ q)
-      (n' := fun _ : AreaLaw.Site (AreaLaw.rectangularDomain L L) ↦ q)
+      (n' := fun _ : Lattice.Site (AreaLaw.rectangularDomain L L) ↦ q)
       (extendRegions X) (canonicalRegions X) (AreaLaw.rectangleSiteEquiv L L)
       hD (fun _ ↦ Equiv.refl (Fin q)) (extendedMatrices F) (fun _ ↦ True) Ω
 
