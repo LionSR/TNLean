@@ -307,11 +307,11 @@ vector `Ω`, the protocol satisfies:
 4. each change takes its reference vector within `C_E L⁻²⁰` of the next one, and the final
    reference vector is `Ω ⊗ Ξ` with `1 - C_E L⁻⁵⁷ ≤ ‖Ξ‖ ≤ 1`.
 
-The source states all four items with one constant `C` (`06-geometry.tex:24, 41, 44`); that is
+The source states items 2 and 4 with one constant `C` (`06-geometry.tex:25, 42, 46`); that is
 the case `C_N = C_K = C_E = C`. Every clause is monotone in each constant
-(`DyadicProtocol.IsDistributionProtocol.mono`), so the two readings give the same existential statement. The
-three roles are kept apart because the prefactor of the polynomial expansions is much larger
-than the counts and the errors (`06-geometry.tex:572–583`).
+(`DyadicProtocol.IsDistributionProtocol.mono`), so the two readings give the same existential
+statement. The three roles are kept apart because the prefactor of the polynomial expansions is
+much larger than the counts and the errors (`06-geometry.tex:572–583`).
 
 These are the consequences of the four items that the assembly of §8 uses, together with the
 pair-source bound of Theorem 5.2, item 3. Each nonprivate gate `G` equals its recorded expansion

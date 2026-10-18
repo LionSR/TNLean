@@ -9,10 +9,11 @@ import TNLean.PEPS.Approximation.DyadicProtocolConsequences
 /-!
 # Uniform polynomial PEPS approximation from Proposition 4.1
 
-The consequences of Proposition 7.1 used in §8 follow from the adaptive patch constraint of
-Proposition 4.1 (`largeSizeDyadicProtocolConsequences_of_adaptivePatchConstraint`), and §8 turns
-them into the uniform polynomial PEPS approximation
-(`polynomialPEPSApproximation_of_largeSizeDyadicProtocolConsequences`). Composing the two leaves
+The consequences of Proposition 7.1 used in §8, with separate count, expansion and error
+constants, follow from the adaptive patch constraint of Proposition 4.1
+(`largeSizeDyadicProtocolBounds_of_adaptivePatchConstraint`), and §8 turns them into the
+uniform polynomial PEPS approximation
+(`polynomialPEPSApproximation_of_largeSizeDyadicProtocolBounds`). Composing the two leaves
 Proposition 4.1 as the only hypothesis of Theorem 1.1.
 
 * `polynomialPEPSApproximation_of_adaptivePatchConstraint` : Theorem 1.1 from Proposition 4.1.
@@ -36,7 +37,7 @@ Source: Polynomial-PEPS manuscript (Sept 24 2026), Theorem 1.1 `thm:main`,
 (`06-geometry.tex:12–53, 559–681`) and its use in §8 (`07-assembly.tex:9–214`). -/
 theorem polynomialPEPSApproximation_of_adaptivePatchConstraint
     (hpatch : AdaptivePatchConstraint) : PolynomialPEPSApproximation :=
-  polynomialPEPSApproximation_of_largeSizeDyadicProtocolConsequences
-    (largeSizeDyadicProtocolConsequences_of_adaptivePatchConstraint hpatch)
+  polynomialPEPSApproximation_of_largeSizeDyadicProtocolBounds
+    (largeSizeDyadicProtocolBounds_of_adaptivePatchConstraint hpatch)
 
 end TNLean.PEPS.Approximation
