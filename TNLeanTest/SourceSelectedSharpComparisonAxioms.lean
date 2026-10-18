@@ -19,20 +19,14 @@ depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
 #print axioms exists_sourceTarget_selected_actualCharge_sharp_comparison
 
-open TNLean.PEPS.AreaLaw.Scan.CollarScan in
-/-- info:
-'TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_sourceTarget_selected_actualCharge_sharp_comparison_of_finiteFamilyTransportBound'
-depends on axioms: [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax) in
-#print axioms
-  exists_sourceTarget_selected_actualCharge_sharp_comparison_of_finiteFamilyTransportBound
-
 /-! The selected sharp comparison at the named truncation constant -/
 
+open TNLean.PEPS.AreaLaw TNLean.PEPS.AreaLaw.Scan.CollarScan in
 run_cmd do
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
   let declarations := #[
-    ``TNLean.PEPS.AreaLaw.Scan.CollarScan.sourceTarget_selected_actualCharge_sharp_comparison_explicit]
+    ``sourceTarget_selected_actualCharge_sharp_comparison_explicit,
+    ``exists_sourceTarget_selected_actualCharge_sharp_comparison_of_finiteFamilyTransportBound]
   for decl in declarations do
     unless (← Lean.getEnv).contains decl do
       throwError "Missing declaration {decl}"
