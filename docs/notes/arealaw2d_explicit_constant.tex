@@ -276,19 +276,31 @@ $C_g$ and $c_{p_{\rm a}}$ involve the $L^1$ norm of the degree-$p_{\rm a}$
 filter kernel and a few series of
 the form $\sum_n(1+n)^2e^{-cn^\alpha}$ (row~43), which are definite numbers with
 explicit upper bounds.
+The omission constants $A_o$, $v_o$ and $\gamma$ of the lattice constraint words are
+the closed forms \leanid{latticeOmissionPrefactor}, \leanid{latticeOmissionRate} and
+\leanid{latticeOmissionExponent} of the localization constants $(C,c)$ of the positive
+constraints; they are built from these series and from the row series
+$\sum_l(1+l)^4e^{-(b/2)l^\alpha}$ of the event kernel.
 
 \subsection{The collar radius threshold}
 
 The threshold $N_3$ (\src{TNLean/PEPS/AreaLaw/Amplification/RadiusScales.lean},
-line~71; row~35) requires
+line~75; row~35) requires
 $\lfloor n^{1-\eps}\rfloor+2r<n^\beta$ for every $r\le C_2n^{(1-\eps)/\alpha}$.
 The exponent gaps are fixed rationals,
 \[
     \beta-(1-\eps)=8\cdot10^{-6},\qquad
     \beta-\frac{1-\eps}{\alpha}=7.00001\cdot10^{-6},
 \]
-so $N_3=\bigl\lceil\max\{2^{1/(8\cdot10^{-6})},\,(4\max(C_2,1))^{1/(7.00001\cdot10^{-6})}\}\bigr\rceil$
-suffices. This is an explicit power bound, $N_3\approx(4C_2)^{1.43\cdot10^5}$.
+and the threshold is the closed form
+\leanid{TNLean.PEPS.AreaLaw.Exponents.collarRadiusThreshold}$(C_2,1)$,
+\[
+    N_3=\max\Bigl\{2,\,\Bigl\lceil\max\bigl\{1,\,4^{1/(8\cdot10^{-6})},\,
+    (8\max(C_2,0))^{1/(7.00001\cdot10^{-6})}\bigr\}\Bigr\rceil\Bigr\}.
+\]
+Each of the two inner terms has the form $\max\{1,(a/(\eta/4))^{1/d}\}$ with
+$\eta=1$, for the coefficients $a=1$ and $a=2\max(C_2,0)$ and the two gaps $d$
+above. This is an explicit power bound, $N_3\approx(8C_2)^{1.43\cdot10^5}$.
 
 \subsection{Proposition~11.2: the two-family decomposition}
 \label{sec:geometry}
@@ -758,7 +770,7 @@ which is doubly exponential in $m$. With $m\approx e^{2(R+1)Z}$, the box
 constant is roughly a tower of three exponentials in $Z$.
 
 The remaining steps add no further level. The collar thresholds are powers of
-$C_{\rm box}$ with exponents of order $10^5$; $N_3\approx(4C_2)^{1.43\cdot10^5}$;
+$C_{\rm box}$ with exponents of order $10^5$; $N_3\approx(8C_2)^{1.43\cdot10^5}$;
 and $\cD\gtrsim4^{k_0}\ge(n_*/C_P)^2$, together with absolute factors of order
 $(C_B^\beta/c_1)^{2\cdot10^6/\zeta}$ from the fine clearance and
 $4000^{2\cdot10^6/\zeta}$ from the removal margins, both entering through $S_*$
