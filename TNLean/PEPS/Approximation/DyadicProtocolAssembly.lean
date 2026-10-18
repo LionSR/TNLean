@@ -283,7 +283,8 @@ and its proof, lines 572–681; Theorem 5.2, item 3, `04-compression.tex`, lines
 theorem exists_isDistributionProtocol_of_frames {L q k : ℕ} [NeZero q] (hL : 2 ≤ L)
     (hkL : L ≤ 2 ^ k) (hk2 : 2 ^ k < 2 * L) (large : DyadicSquare k → Bool)
     {Ω : StateSpace L q} (hΩ : ‖Ω‖ = 1)
-    (st : ℕ → List (Frame (cellCenterPos L) q (ProtocolParty k))) (hne : st 0 ≠ [])
+    (st : ℕ → List (Frame (cellCenterPos L) q (ProtocolParty k)))
+    (hne : ∀ t ≤ (protocolSchedule k large).length, st t ≠ [])
     (holder : Frame (cellCenterPos L) q (ProtocolParty k) → ProtocolParty k)
     (hraw : ∀ F ∈ st 0, F.holes = []) (hown : ∀ F ∈ st 0, ∀ x, F.owner x = holder F)
     (c : ∀ t, OriginalCircuit (stackRegs (st t) []) (stackRegs (st (t + 1)) []))
@@ -463,7 +464,7 @@ theorem exists_isDistributionProtocol_of_frames {L q k : ℕ} [NeZero q] (hL : 2
           (D.initialSpace = fun p => framesSpace ((D.frames 0).filter fun F => holder F = p)) ∧
             ∀ [NeZero q], HEq D.initialVector
               fun p => framesVec Ω ((D.frames 0).filter fun F => holder F = p) := by
-    refine ⟨hne, holder, fun F hF => ⟨hraw F hF, hown F hF⟩, fun {inst} => ?_⟩
+    refine ⟨hne 0 (Nat.zero_le _), holder, fun F hF => ⟨hraw F hF, hown F hF⟩, fun {inst} => ?_⟩
     obtain rfl : inst = instDecidableEqSum := Subsingleton.elim _ _
     exact ⟨rfl, fun {_} => HEq.rfl⟩
   -- the intermediate reference vectors are the reference vectors of the frames
@@ -480,6 +481,9 @@ theorem exists_isDistributionProtocol_of_frames {L q k : ℕ} [NeZero q] (hL : 2
     exact ⟨fun F _ => (F.norm_refVec_le Ω).trans hΩ.le, hl,
       chainVec_succ_of_le (x₀ := (ProductInput.ofAllParties _ _ hx).vector)
         (y := fun t => framesVec Ω (st t)) (z := e.eval (framesVec Ω (st n))) hs⟩
+  -- every intermediate stage has a frame
+  have hnil : ∀ t, 0 < t → t < D.changes → D.frames t ≠ [] := fun t ht0 htn =>
+    hne (t - 1) (by change t < n + 2 at htn; omega)
   -- before the readout, the main frame is held by the parties of the sites
   have hmain : ∃ M' Fs', D.frames (D.changes - 1) = M' :: Fs' ∧ ∀ v, M'.owner v = D.site v :=
     ⟨M, Fs, by change st (n + 2 - 1 - 1) = _; simpa using hfin, hMown⟩
@@ -511,7 +515,7 @@ theorem exists_isDistributionProtocol_of_frames {L q k : ℕ} [NeZero q] (hL : 2
     fun t _ => isMonomialBounded_mono _ (hQ t).2.2.2.2.1 (Nat.le_floor (by exact_mod_cast hK)),
     fun t _ => isExpansionBounded_mono _ (hQ t).2.2.2.1 le_rfl hK, fun p => ?_,
     fun t _ g p hp p' hp' => EventUses.scale_le ((hQ t).2.2.1 g hp) ((hQ t).2.2.1 g hp'),
-    fun t _ g p hp p' hp' => ?_, hframes, hmain, fun t _ => ?_, ?_,
+    fun t _ g p hp p' hp' => ?_, hframes, hnil, hmain, fun t _ => ?_, ?_,
     fun t _ => (hQ t).2.2.2.2.2⟩⟩
   · exact fun p => ⟨((protocolPlacement_inGrid k) p).1.trans (pow_le_paddedSide hk2),
       ((protocolPlacement_inGrid k) p).2.trans (pow_le_paddedSide hk2)⟩

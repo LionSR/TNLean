@@ -1946,17 +1946,15 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     most $189$ changes for each event.
 \end{proof}
 
-\subsection{The consequences of Proposition 7.1 used in Section 8}
+\subsection{The distribution protocol of Proposition 7.1}
 \label{sec:peps_dyadic_protocol}
 
-The following definition records the consequences
+The following definition states the clauses
 of~\cite[Proposition~7.1]{OpenAI2026PolynomialPEPS} (\texttt{06-geometry.tex},
-lines 12--53) that Section~8 uses, as a statement about
-distributed constructions in the sense of
+lines 12--53) as a statement about distributed constructions in the sense of
 Definition~\ref{def:peps_distributed_construction} whose chronology is cut into
-changes. It is weaker than the proposition, whose omitted clauses are listed
-below and in~\cite{gap:polypeps_prop71_consequences_interface}. The statement
-is not proved here.
+changes; see~\cite{gap:polypeps_prop71_consequences_interface}. The existence
+of such a protocol is Proposition~\ref{prop:peps_dyadic_protocol}.
 
 \begin{definition}[Dyadic distribution protocols and the Section 8 bounds]
     \label{def:peps_dyadic_protocol}
@@ -2027,7 +2025,7 @@ is not proved here.
               the physical and private coordinates of the last memory
               $r_n=\Omega\otimes\Xi$ with $1-CL^{-57}\le\lVert\Xi\rVert\le1$.
               Every intermediate reference vector is the product over the
-              encoded frames $F$ of stage $t$,
+              encoded frames $F$ of stage $t$, at least one,
               \[
                   r_t=\bigotimes_F\Omega_F,\qquad \Omega_F=K_F\Omega,
                   \qquad \lVert\Omega_F\rVert\le1,\qquad 0<t<n,
@@ -2045,15 +2043,12 @@ is not proved here.
     and every $(H,E_0,\Omega)\in\mathcal G_{q,J,\Delta}(L)$ there is a protocol
     with these bounds.
 
-    These bounds and this assertion are the consequences
-    of~\cite[Proposition~7.1]{OpenAI2026PolynomialPEPS} used in Section~8, not
-    the proposition itself. They omit one clause: the reference vector $r_t$ has at
-    least one frame for $0<t<n$ (\texttt{06-geometry.tex}, lines 38--40); the
-    construction satisfies it, but it is not yet stated. Read per stage, being
-    the main copy carries no content beyond the designations at the first stage
-    and before the last change.
-
-    The remaining clauses of the proposition are carried. The pair-source bound
+    These bounds carry every clause
+    of~\cite[Proposition~7.1]{OpenAI2026PolynomialPEPS}. Every intermediate
+    reference vector $r_t$, $0<t<n$, has at least one frame
+    (\texttt{06-geometry.tex}, lines 38--40), and read per stage, being the
+    main copy carries no content beyond the designations at the first stage and
+    before the last change. The pair-source bound
     of~\cite[Theorem~5.2]{OpenAI2026PolynomialPEPS}, item~3
     (\texttt{04-compression.tex}, lines 143--147), is part of item~2 above, with
     the same constant $r$ as the pair effects; the recorded monomials contain no
@@ -2069,6 +2064,8 @@ is not proved here.
 
 \begin{proposition}[Distribution through a dyadic hierarchy]
     \label{prop:peps_dyadic_protocol}
+    \lean{TNLean.PEPS.Approximation.largeSizeDyadicProtocolConsequences}
+    \leanok
     \uses{def:peps_dyadic_protocol}
     For every $q\ge2$ and $J,\Delta>0$ there are constants, uniform in the
     Hamiltonian and in $L$, such that for every sufficiently large $L$ and every
@@ -2076,9 +2073,17 @@ is not proved here.
     distributes $\Omega$ through the padded dyadic hierarchy with all four items
     of~\cite[Proposition~7.1]{OpenAI2026PolynomialPEPS}, applied with patch and
     information power $60$ (\texttt{07-assembly.tex}, line 11). In particular,
-    the existence assertion of Definition~\ref{def:peps_dyadic_protocol} holds;
-    the proposition also carries the clauses listed there as omitted.
+    the existence assertion of Definition~\ref{def:peps_dyadic_protocol} holds.
 \end{proposition}
+
+\begin{proof}\leanok
+    \uses{thm:peps_protocol_from_angular_and_patch_bounds,
+        thm:peps_adaptive_patch_constraint}
+    The bounds of Definition~\ref{def:peps_dyadic_protocol} are the four items
+    of the proposition. Theorem~\ref{thm:peps_protocol_from_angular_and_patch_bounds}
+    gives a protocol with these bounds from the adaptive patch constraint of
+    Proposition~4.1, which holds by Theorem~\ref{thm:peps_adaptive_patch_constraint}.
+\end{proof}
 
 \begin{theorem}[Consequences of the Section 8 protocol bounds]
     \label{thm:peps_dyadic_protocol_consequences}
@@ -2090,10 +2095,7 @@ is not proved here.
     \uses{def:peps_dyadic_protocol, def:peps_dyadic_used_parties}
     Let a protocol satisfy the Section~8 bounds of
     Definition~\ref{def:peps_dyadic_protocol} with $C\ge0$, on a square of side
-    $L\ge1$, for a unit vector $\Omega$. These bounds omit the clause
-    of~\cite[Proposition~7.1]{OpenAI2026PolynomialPEPS} described there, that
-    every intermediate reference vector has at least one frame; it is not used
-    below. Then:
+    $L\ge1$, for a unit vector $\Omega$. Then:
     \begin{enumerate}
         \item the physical density of the final circuit vector satisfies
               $\lVert\Tr_{\rm private}|\Psi_n\rangle\langle\Psi_n|
