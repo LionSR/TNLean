@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.AreaLaw.TwoFamilies
+import TNLean.Lattice.RegionalEntropyBridge
 
 /-!
 # Entropy bounded by the number of sites
@@ -22,7 +22,7 @@ Independently proved from the mathematical argument; no OpenAI Lean proof text
 is reused. This result does not require a Hamiltonian or spectral gap.
 -/
 
-namespace TNLean.PEPS.AreaLaw
+namespace TNLean.Lattice
 
 /-- A normalized regional state's entropy is at most its site count times the
 logarithm of the local dimension. Source: area-law proof of Theorem 1.1,
@@ -40,4 +40,4 @@ theorem regionalEntropy_le_card_mul_log
       (FiniteProduct.reducedPure (fun _ : Site Λ ↦ Fin q) Ω A)))
   simpa [Nat.cast_pow, Real.log_pow] using h
 
-end TNLean.PEPS.AreaLaw
+end TNLean.Lattice

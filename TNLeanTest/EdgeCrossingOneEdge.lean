@@ -7,6 +7,8 @@ import TNLean.PEPS.AreaLaw.EdgeCrossingBudget
 
 /-! A nonempty one-edge lattice regression for the exact budget. -/
 
+open TNLean.Lattice
+
 open TNLean.PEPS TNLean.PEPS.AreaLaw
 open scoped BigOperators
 

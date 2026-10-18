@@ -62,6 +62,7 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 
 open Matrix MeasureTheory SpectralFilter QuantumCircuit
 open scoped Kronecker NNReal ComplexOrder MatrixOrder InnerProductSpace Matrix.Norms.L2Operator
+open TNLean.Lattice
 
 namespace TNLean.PEPS.AreaLaw
 

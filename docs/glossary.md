@@ -2313,9 +2313,9 @@ in `MPS/Preparation/` uses it.
 - **Caveat:** the graph theorems take the per-support size bound and the
   per-site norm budget as hypotheses. On a finite induced square-lattice domain
   they are discharged in `TNLean/PEPS/AreaLaw/GraphPropagation.lean`:
-  `TNLean.PEPS.AreaLaw.IsAdmissibleSupport.card_le` gives the size bound
+  `TNLean.Lattice.IsAdmissibleSupport.card_le` gives the size bound
   `v_R = 1 + 2R(R + 1)`,
-  `TNLean.PEPS.AreaLaw.LocalHamiltonian.sum_norm_term_containing_le` gives the
+  `TNLean.Lattice.LocalHamiltonian.sum_norm_term_containing_le` gives the
   budget `μ_R J`, and `TNLean.PEPS.AreaLaw.exists_quasilocal_lieb_robinson` is
   the resulting Lemma 4.1 of the area-law manuscript.
 
@@ -3282,8 +3282,8 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 
 | Declaration | Mathematical meaning | Source and status |
 |---|---|---|
-| `TNLean.PEPS.AreaLaw.IsAdmissibleSupport` | A nonempty support whose pairs are joined by induced-domain walks of length at most the interaction range | Area-law `eq:hamiltonian`; definition, with the extended-distance equivalence proved. |
-| `TNLean.PEPS.AreaLaw.LocalHamiltonian` | One supported, norm-bounded Hermitian term per admissible support | Area-law `eq:hamiltonian`; no unrestricted multiplicity of terms. |
+| `TNLean.Lattice.IsAdmissibleSupport` | A nonempty support whose pairs are joined by induced-domain walks of length at most the interaction range | Area-law `eq:hamiltonian`; definition, with the extended-distance equivalence proved. |
+| `TNLean.Lattice.LocalHamiltonian` | One supported, norm-bounded Hermitian term per admissible support | Area-law `eq:hamiltonian`; no unrestricted multiplicity of terms. |
 | `TNLean.PEPS.AreaLaw.exists_quasilocal_lieb_robinson` | Positive constants `C, v, c`, chosen before the domain and the Hamiltonian, giving exponential decay in induced-graph distance of commutators of evolved supported operators with on-site operators (exact zero between components), and of their distance from graph-ball partial-trace expectations | Area-law Lemma 4.1 (`lem:quasilocal-lr`); proved with the source's hypotheses, the constants depending only on `R` and `J`. |
 | `TNLean.PEPS.AreaLaw.exists_latticePositiveConstraints` | Positive contractions `kᵢ` annihilating the gapped ground vector, whose sum dominates the gap and whose graph-ball expectations converge stretched-exponentially, with constants chosen before the domain and the Hamiltonian | Area-law Proposition 4.3 (`prop:positive`) on induced lattice domains; constants depend only on `p, R, J, Δ`. |
 | `TNLean.PEPS.AreaLaw.exists_latticeQuasilocalRoots` | Square roots `(I - kᵢ)^{1/2}`, `kᵢ^{1/2}` and their graph-ball truncations, with stretched-exponential tails and the induced unital local channels | Area-law Lemma 4.4 (`lem:quasilocal-roots`) on induced lattice domains; constants depend only on `p, R, J, Δ`. |
@@ -3292,7 +3292,7 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 | `TNLean.PEPS.AreaLaw.exists_latticeCrossingBudget` | Crossing constraints of a cut are balls about their anchors, number at most `C b_X (r₀ + 1)²`, have log-dimension at most `C (r₀ + 1)²`, and the cut budget is at most `C (1 + b_X) (r₀ + 1)⁶` | Area-law `eq:quasilocal-crossing-count` and `eq:quasilocal-cut-budget`; `C` depends only on `q` and `R`. |
 | `TNLean.PEPS.AreaLaw.exists_latticeCutBudget_le_log` | The cut budget at radius `⌈C₁ (log n)²⌉` is at most `C n D (log n)¹²` when `b_X ≤ C₂ n D` | Area-law Proposition 4.5, last sentence; `C` depends only on `q, R, C₁, C₂`. |
 | `Matrix.IsGappedGroundState`, `Matrix.isGappedGroundState_iff` | Unit eigenvector `HΩ = E₀Ω` of a complex square matrix with the full-system projector-gap inequality; the characterization restates the eigen-equation as `H *ᵥ Ω = E₀ • Ω` on coordinate vectors | Shared by the area-law and polynomial-PEPS models, which specialize it. |
-| `TNLean.PEPS.AreaLaw.IsGappedGroundState` | Unit eigenvector with a full-system positive projector-gap inequality | Area-law Theorem 1.1; the checked ground/uniqueness equivalence is tracked in #8739. |
+| `TNLean.Lattice.IsGappedGroundState` | Unit eigenvector with a full-system positive projector-gap inequality | Area-law Theorem 1.1; the checked ground/uniqueness equivalence is tracked in #8739. |
 | `TNLean.PEPS.AreaLaw.relabelState` | The same physical vector in configuration coordinates transported by a site bijection | Area-law Section 2; Euclidean norm is preserved, reductions are covariant and regional entropy is invariant when the bijection preserves the cut. |
 | `TNLean.PEPS.AreaLaw.UniformAreaLaw` | A uniform boundary entropy bound over every finite induced domain and cut | Area-law Theorem 1.1; proved, with the source's hypotheses, as `TNLean.PEPS.AreaLaw.uniformAreaLaw`. |
 | `TNLean.PEPS.AreaLaw.innerBoundary` | Sites in the cut adjacent to its complement within the induced domain | Area-law Corollary 1.2; every cut has at most four crossing edges per inner-boundary site. |
@@ -3300,8 +3300,8 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 | `TNLean.PEPS.AreaLaw.UniformAreaLaw.vertex_boundary_bounds` | Inner-boundary and endpoint entropy bounds with constants four and two times the edge-boundary constant | Area-law Corollary 1.2; proved conditionally on `UniformAreaLaw`, with the same uniform quantifiers. The unconditional form is `TNLean.PEPS.AreaLaw.uniformAreaLaw_vertex_boundary_bounds`. |
 | `TNLean.PEPS.AreaLaw.regionalEntropy_eq_zero_of_edgeBoundary_eq_empty` | A cut with no crossing edge has zero regional entropy in a gapped ground vector | Area-law Lemma 2.2 (`lem:zero-boundary`), `01-preliminaries.tex`, lines 123–134; proved, using only the gapped ground-vector hypothesis with `Δ > 0`. |
 | `QuantumCircuit.graphBall` | The closed ball `N_l(a) = {x : d_G(a,x) ≤ l}` of a finite graph in the extended graph distance | Area-law `03-quasilocal.tex`, line 17; sites in other connected components are at infinite distance and never belong to a ball. Defined in `TNLean/Circuit/LiebRobinson/GraphLocalization.lean`. |
-| `TNLean.PEPS.AreaLaw.cutLogBudget` | The parameter `ℬ_A = 1 + ∑ log²(e q^{|X|})` of a cut, summed over the admissible supports meeting both `A` and its complement | Area-law Lemma 3.1 (`lem:tail`), `02-initial.tex`, lines 47–55; the lattice instance of QICLean's `Entropy.cutLogBudget`, bounded by the number of crossing supports in `cutLogBudget_le_card`. |
-| `TNLean.PEPS.AreaLaw.concentrationWidth` | The width `32 √((1 + J/Δ) ℬ_A) (M log(n+2) + e/2 + log 2)` at which the marginal tail of Lemma 3.1 is at most `(n+2)^{-M}` | Area-law `02-initial.tex`, lines 207–212; an explicit width in terms of `ℬ_A`, used in `LocalHamiltonian.one_sub_rpow_le_typicalMass_reducedState`. |
+| `TNLean.Lattice.cutLogBudget` | The parameter `ℬ_A = 1 + ∑ log²(e q^{|X|})` of a cut, summed over the admissible supports meeting both `A` and its complement | Area-law Lemma 3.1 (`lem:tail`), `02-initial.tex`, lines 47–55; the lattice instance of QICLean's `Entropy.cutLogBudget`, bounded by the number of crossing supports in `cutLogBudget_le_card`. |
+| `TNLean.Lattice.concentrationWidth` | The width `32 √((1 + J/Δ) ℬ_A) (M log(n+2) + e/2 + log 2)` at which the marginal tail of Lemma 3.1 is at most `(n+2)^{-M}` | Area-law `02-initial.tex`, lines 207–212; an explicit width in terms of `ℬ_A`, used in `LocalHamiltonian.one_sub_rpow_le_typicalMass_reducedState`. |
 | `TNLean.PEPS.AreaLaw.tailParameterConstant` | The constant `C = v_R μ_R log²(e q^{v_R})`, with `v_R = 1 + 2R(R+1)` and `μ_R = 2^{v_R - 1}`, in `ℬ_A ≤ C(1 + |∂_Λ A|)` | Area-law `eq:initial-local-tail-parameter`, `02-initial.tex`, lines 202–206; depends only on `q` and `R`, at least one for `q ≥ 1`; the bound is `cutLogBudget_le_edgeBoundary`. |
 | `TNLean.PEPS.AreaLaw.typicalWidthConstant` | The constant `C_M = 32 √((1 + J/Δ) C) (M + (e/2 + log 2)/log 2)` with `C = tailParameterConstant q R` | Area-law `02-initial.tex`, lines 207–212; depends only on `q, R, J, Δ, M`; bounds the concentration width by `C_M √(1 + |∂_Λ A|) log(n+2)` in `concentrationWidth_le`. |
 | `TNLean.PEPS.AreaLaw.IntRect` | A product `[x₀,x₁] × [y₀,y₁]` of two nonempty finite integer intervals, with `size` the larger number of sites along an axis and `dilate d` the rectangle `Q^{+d}` | Area-law `02-initial.tex`, lines 222–232; an ambient rectangle, not a set of sites of the domain. |
@@ -3702,7 +3702,7 @@ existing finite induced lattice domain, `Geometry.closedSquareSample Λ c r`
 samples the closed coordinate square at any real centre and clips it to `Λ`.
 `Geometry.nestedPatch Λ c u j` uses radius `u + 2j`, with
 `Geometry.nestedPatchCount u = floor(u / 2) + 1` for nonnegative `u`.
-These patches use `AreaLaw.domainGraph` and the unordered `AreaLaw.edgeBoundary`;
+These patches use `Lattice.domainGraph` and the unordered `Lattice.edgeBoundary`;
 they are not graph-distance balls. The crossing-edge and two-site-support
 results are geometric statements, not an energy estimate or a proof of the
 source's Proposition 4.1.

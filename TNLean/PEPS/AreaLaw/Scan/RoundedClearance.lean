@@ -24,6 +24,8 @@ and `scanner:scales` / `scanner:test-geometry`, lines 32–49, at
 Original proof from the manuscript; no upstream Lean proof text reused.
 -/
 
+open TNLean.Lattice
+
 namespace TNLean.PEPS.AreaLaw.Scan
 
 /-- The explicit threshold of the rounded clearance budgets: `s` must be at least one and

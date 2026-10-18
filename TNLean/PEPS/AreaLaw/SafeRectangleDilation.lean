@@ -20,6 +20,8 @@ This is the geometric clearance step for the rectangle bootstrap.
 Original formalization from the manuscript; no upstream Lean proof text reused.
 -/
 
+open TNLean.Lattice
+
 namespace TNLean.PEPS.AreaLaw
 
 /-- Safety passes from a parent to a rectangle in its dilation when the two
