@@ -53,9 +53,10 @@ carry two premises that the passage does not print.
 \section{Elimination}
 
 Neither premise restricts the use of these results in the proof of the
-two-family proposition. The final assembly, which is not yet formalized, will
-apply the theorems only to retained regions, which meet $A$, and with a
-stopping scale chosen at least one. It discharges both premises there, and no
+two-family proposition. The final assembly\footnote{\leanid{TNLean.PEPS.AreaLaw.twoFamilyDecomposition},
+in \path{TNLean/PEPS/AreaLaw/Geometry/TwoFamilyAssembly.lean}.}
+applies the theorems only to retained regions, which meet $A$, and with a
+stopping scale $S_*\ge2$. It discharges both premises there, and no
 unrestricted statement is needed. The unrestricted reading of the first premise
 is vacuous, because Definition~9.3 has no empty template.
 
@@ -74,7 +75,8 @@ Both discharges are now in the library. The template theorem for all actual
 births\footnote{\leanid{TNLean.PEPS.AreaLaw.Geometry.exists_uniform_repairStage_birth_templates}.}
 chooses its stopping-scale threshold $T_0\ge1$ before $S_*$. Every admissible
 $S_*\ge T_0$ therefore satisfies $S_*\ge1$, and the second premise holds
-inside that theorem. The first premise is discharged by the lattice-point lemma
+inside that theorem. The two-family assembly takes $S_*\ge\max(T_0,2)$. The
+first premise is discharged by the lattice-point lemma
 above. The restricted statements remain auxiliary; neither premise survives
 into the two-family proposition.
 
