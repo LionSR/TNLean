@@ -104,7 +104,7 @@ variable (c : (k : Fin (stageCount L w)) → (j : Fin 18) → OriginalCircuit
 variable (Ω : EuclideanSpace ℂ (Fin L → Fin q))
 
 variable (hc : ∀ k j, (c k j).IsBoundedChange (stageParticipants k j) 1 1
-    (4 * (L : ℝ) ^ (-30 : ℤ))
+    (4 * (L : ℝ) ^ (-12 : ℤ))
     (framesVec Ω (stageBoundaryFrames L w q pos k j.val))
     (framesVec Ω (stageBoundaryFrames L w q pos k (j.val + 1))) ∧
   (c k j).IsSourceBounded 1 ∧ (c k j).nonprivateCount ≤ 1 ∧
@@ -148,7 +148,7 @@ theorem exists_preparation_of_local_circuits (hL : 0 < L) (hΩ : ‖Ω‖ = 1) :
           (physicalOrder L w) (Finset.nodup_toList _) (by simp [physicalOrder])
           (privateLayout L w q) Ψ
         let Ψraw := (Layout.memCongr hT).symm (R.symm Ψ)
-        let ε := (sweepOperationCount L w : ℝ) * (4 * (L : ℝ) ^ (-30 : ℤ))
+        let ε := (sweepOperationCount L w : ℝ) * (4 * (L : ℝ) ^ (-12 : ℤ))
         (∀ p, C.participationCount p ≤ 40) ∧
           C.nonprivateCount ≤ sweepOperationCount L w ∧
           C.IsSourceBounded 1 ∧ C.IsExpansionBounded 1 1 ∧ C.IsMonomialBounded 1 ∧
@@ -192,7 +192,7 @@ theorem exists_preparation_of_local_circuits (hL : 0 < L) (hΩ : ‖Ω‖ = 1) :
   let V := familyLabelledPhysicalReadout (physicalDimension L w q)
     (physicalOrder L w) (Finset.nodup_toList _) (by simp [physicalOrder])
     (privateLayout L w q) Ψ
-  let ε := (sweepOperationCount L w : ℝ) * (4 * (L : ℝ) ^ (-30 : ℤ))
+  let ε := (sweepOperationCount L w : ℝ) * (4 * (L : ℝ) ^ (-12 : ℤ))
   have hQ : Q.nonprivateCount = 0 := finalRegroupingCircuit_nonprivateCount
   have hM := sweepMiddleCircuit_norm_and_error c Ω hc hΩ
   have hMres := sweepMiddleCircuit_resource_bounds c Ω hc

@@ -8721,3 +8721,17 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Possible next abstraction:** At a third occurrence, use a scalar lemma for
   this comparison, leaving the support-dimension estimates at the callers.
   These are two occurrences in two files; no new tactic is proposed.
+
+
+### Birth of a plain sheet among spectator frames — candidate (2026-10-18)
+
+- **Pattern:** Identify a hole-free frame with the raw frame of its owner,
+  apply the birth estimate at exponent twelve, and place the resulting
+  circuit beside unchanged spectator frames.
+- **Seen:** `OneBand.birth_liftOne` in `MPS/AreaLaw/BandDissolution.lean`
+  and `ChainSweep.stage_birth` in `MPS/AreaLaw/ProtocolSweepLocalCircuits.lean`.
+- **Existing reuse:** Both apply `birth_bounded_rpow`, Mathlib's
+  `Real.rpow_neg_ofNat`, and `hasSourceBoundedChange_liftOne`.
+- **Possible next abstraction:** A third use would justify sharing the
+  hole-free birth-and-lift lemma. There are two occurrences in two files;
+  no new tactic or promotion is introduced.

@@ -2441,8 +2441,8 @@ for an arbitrary finite set of sites and are instantiated here directly.
     Assume the hypotheses for the main endpoint in
     Theorem~\ref{thm:chain_one_band_geometry}, and suppose $A,B,C$ are
     pairwise distinct. Let $q\ge1$ and let $\Omega$ be a unit vector on the
-    original chain. Put $\delta=L^{-30}$.
-    Assume $I_\Omega(T_j:E_j)\le L^{-60}$ for each row of the following table:
+    original chain. Put $\delta=L^{-12}$.
+    Assume $I_\Omega(T_j:E_j)\le L^{-24}$ for each row of the following table:
     \begin{align}
         \begin{array}{cccc}
             j & T_j           & E_j      & \text{nonprivate participants} \\
@@ -2485,20 +2485,22 @@ for an arbitrary finite set of sites and are instantiated here directly.
     natural $L,w$ and parties $A,B$. Suppose $M$ is a hole-free frame whose
     owner is $A$ on $T_0=\lbrack 0,w)_L$, and put $M'=M[T_0\to B]$.
     For $q\ge1$, a unit vector $\Omega$, and
-    $I_\Omega(T_0:E(M',B))\le L^{-60}$, there is a circuit from $M$ to $M'$
+    $I_\Omega(T_0:E(M',B))\le L^{-24}$, there is a circuit from $M$ to $M'$
     with nonprivate participants in $\{A,B\}$ and the same bounds one on
     gates, monomials, coefficient sum, pair effects and pair sources, with
-    reference error at most $L^{-30}$. It may be placed among the same
+    reference error at most $L^{-12}$. It may be placed among the same
     arbitrary spectator frames and further registers. This boundary assertion
     imposes neither the interior margin hypotheses nor distinctness of $A,B$,
     and introduces no left auxiliary copy.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:peps_frame_birth_bounded,thm:peps_frame_exchange_bounded,
+    \uses{thm:chain_plain_birth_death,thm:chain_plain_exchange,
         thm:peps_bounded_change_closure,thm:peps_protocol_event_segments,
         thm:peps_original_produced_resource_bounds}
+    All modified frames have no holes, so they are the plain sheets of their
+    actual owner assignments. Apply the birth and death estimates at $p=12$.
     Every modified band is owned by the departing party in its actual frame.
-    Apply the homogeneous birth estimate to rows $0,1,2,6$ and its reversed
+    Apply the birth estimate to rows $0,1,2,6$ and its reversed
     death estimate to rows $4,5,7$, with the environments displayed in the
     table. For a death, changing the owner back in its after-death frame
     recovers the original frame. The exchange estimate applies to row $3$,
@@ -2968,16 +2970,16 @@ with the retained-copy correction of
         def:peps_bounded_change,def:peps_circuit_source_bound,def:peps_sheet_stack}
     Suppose $q\ge1$, $w\ge1$, $L\ge60w$ and $0\le k<m$.
     Let $\Omega$ be a unit vector on the original chain and put
-    $\delta=L^{-30}$. Assume the two before-birth bounds
+    $\delta=L^{-12}$. Assume the two before-birth bounds
     \begin{align}
-        I_\Omega(T_k^R:E(M_k,R_k))       & \le L^{-60},
+        I_\Omega(T_k^R:E(M_k,R_k))       & \le L^{-24},
         \label{eq:chain_stage_remainder_information}    \\
-        I_\Omega(T_k^P:E(M_k^{(1)},R_k)) & \le L^{-60}.
+        I_\Omega(T_k^P:E(M_k^{(1)},R_k)) & \le L^{-24}.
         \label{eq:chain_stage_block_information}
     \end{align}
     At $k=0$, assume also the after-death bound
     \begin{align}
-        I_\Omega([0,w)_L:E(M_0^{(L)},P_1)) & \le L^{-60}.
+        I_\Omega([0,w)_L:E(M_0^{(L)},P_1)) & \le L^{-24}.
         \label{eq:chain_stage_boundary_information}
     \end{align}
     For $k>0$, assume each of the eight information inequalities in the
@@ -3019,7 +3021,7 @@ with the retained-copy correction of
 \begin{proof}\leanok
     \uses{thm:chain_sweep_stage_owners,thm:chain_stage_margins,
         thm:chain_one_band_conditional_changes,thm:chain_sweep_local_boundaries,
-        thm:peps_frame_birth_bounded,thm:peps_bounded_change_closure}
+        thm:chain_plain_birth_death,thm:peps_bounded_change_closure}
     The two birth targets are held by $R_k$ in their actual before-birth
     frames. Apply the birth estimate with
     (\ref{eq:chain_stage_remainder_information}) and
@@ -3047,7 +3049,7 @@ with the retained-copy correction of
         def:peps_bounded_change,def:peps_circuit_source_bound,
         def:peps_original_chronology_composite}
     Let $q\ge1$ and let $\Omega$ be any original chain vector.
-    Write $\delta_L=L^{-30}$ for $L>0$ and $\delta_0=0$.
+    Write $\delta_L=L^{-12}$ for $L>0$ and $\delta_0=0$.
     Suppose each given circuit $c_{k,j}$ between the actual successive
     boundary lists is a bounded change from $\psi(\mathcal B_{k,j})$ to
     $\psi(\mathcal B_{k,j+1})$, with participants in $\mathcal S_{k,j}$,
@@ -3253,9 +3255,9 @@ Definition~\ref{def:chain_open_mps}.
     the local conditions in Definition~\ref{def:chain_conditional_middle_circuit}:
     they are bounded changes between the prescribed boundary references,
     with participants in $\mathcal S_{k,j}$, bounds $r=K=1$, error
-    $4L^{-30}$ and pair-source bound one; the seven first-stage padding
+    $4L^{-12}$ and pair-source bound one; the seven first-stage padding
     positions are identities with zero error and zero nonprivate count.
-    Put $N=18m$ and $\varepsilon=4NL^{-30}$.
+    Put $N=18m$ and $\varepsilon=4NL^{-12}$.
 
     Let $\mathcal F_0$ be the original ordered initial frame list.
     Its frames have constant owner; let $h(F)$ be the owner of site zero
@@ -3621,20 +3623,20 @@ The prescribed placement is $\ell(R_i)=i$ and $\ell(P_{j+1})=j$.
     complement of $Y$; the death rows use their after-death frames.
 
     Fix $q\ge1$, $R\in\mathbb N$, $J\in\mathbb R$ and $\Delta>0$.
-    There are $D_{60}>0$ and $L_0\ge1$, depending only on these fixed
+    There are $D_{24}>0$ and $L_0\ge1$, depending only on these fixed
     parameters, such that the following holds for every $L\ge L_0$,
     every Hamiltonian of range $R$ and strength bound $J$ with gapped
     ground vector $\Omega$ and energy $E_0$, every choice of parties
     and register positions, and all the ownership data just stated.
-    If $D_{60}\log L\le w$, then
+    If $D_{24}\log L\le w$, then
     \begin{align}
-        I_\Omega(T_j:E_j) & \le L^{-60},\qquad 0\le j<8.
+        I_\Omega(T_j:E_j) & \le L^{-24},\qquad 0\le j<8.
         \label{eq:chain_band_information}
     \end{align}
-    The choice of $D_{60},L_0$ precedes all chain, vector, width and
+    The choice of $D_{24},L_0$ precedes all chain, vector, width and
     ownership data. This is the logarithmic-separation argument for
     \cite[Part~II, the band dissolution lemma]{TNLean2026OneDimensional},
-    with the stated lattice convention and exponent $60$.
+    with the stated lattice convention and exponent $24$.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -3654,7 +3656,7 @@ The prescribed placement is $\ell(R_i)=i$ and $\ell(P_{j+1})=j$.
     Each $T_j$ is one lattice interval, including the actual exchange
     target. Apply the logarithmic-separation estimate of
     \cite[Part~II, the lemma on information at logarithmic separation]{TNLean2026OneDimensional}
-    with exponent $60$ and one interval. It chooses uniform constants
+    with exponent $24$ and one interval. It chooses uniform constants
     before any of the remaining data and proves
     (\ref{eq:chain_band_information}) for the original $\Omega$.
 \end{proof}
@@ -3681,10 +3683,10 @@ The prescribed placement is $\ell(R_i)=i$ and $\ell(P_{j+1})=j$.
     least $w$.
 
     For fixed $q\ge1$, $R\in\mathbb N$, $J\in\mathbb R$ and
-    $\Delta>0$, there are $D_{60}>0$ and $L_0\ge1$ before all chain,
+    $\Delta>0$, there are $D_{24}>0$ and $L_0\ge1$ before all chain,
     Hamiltonian, ground-vector, position, width and stage data, such
-    that $L\ge L_0$ and $w\ge D_{60}\log L$, with $w\ge1$, imply
-    $I_\Omega(T:E)\le L^{-60}$ for both birth pairs and, at $k=0$,
+    that $L\ge L_0$ and $w\ge D_{24}\log L$, with $w\ge1$, imply
+    $I_\Omega(T:E)\le L^{-24}$ for both birth pairs and, at $k=0$,
     for the direct-death pair. Here $\Omega$ is any gapped ground
     vector of the given Hamiltonian. These are the three main-sheet
     estimates in \cite[Part~II, proof of
@@ -3696,7 +3698,7 @@ The prescribed placement is $\ell(R_i)=i$ and $\ell(P_{j+1})=j$.
     The actual stage ownership gives (\ref{eq:chain_birth_regions})
     and the first after-death environment. Their interval endpoints
     give $|x-y|\ge w$ directly. Apply the same physical
-    logarithmic-separation estimate with exponent $60$ and one
+    logarithmic-separation estimate with exponent $24$ and one
     interval to each target. No estimate is applied to a vector
     produced during the sweep.
 \end{proof}
@@ -3708,15 +3710,15 @@ The prescribed placement is $\ell(R_i)=i$ and $\ell(P_{j+1})=j$.
     \uses{def:chain_model,def:chain_stage_participants,def:chain_sweep_frame_path,
         def:peps_bounded_change,def:peps_circuit_source_bound}
     Fix $q\ge1$, $R\in\mathbb N$, $J\in\mathbb R$ and $\Delta>0$.
-    There are $D_{60}>0$ and $L_0\ge1$ such that, for every
+    There are $D_{24}>0$ and $L_0\ge1$ such that, for every
     $L\ge L_0$, every corresponding gapped ground vector $\Omega$,
     every register-position map and every natural $w\ge1$ with
-    $D_{60}\log L\le w$, each actual stage $k<m$ admits eighteen
+    $D_{24}\log L\le w$, each actual stage $k<m$ admits eighteen
     circuits between its prescribed successive boundaries.
     For each $0\le j<18$, $c_{k,j}$ is a bounded change on
     $\mathcal S_{k,j}$ with bounds $r=K=1$, pair-source bound one,
     at most one nonprivate occurrence, and reference error at most
-    $4L^{-30}$. At $k=0$ the positions $3,\ldots,9$ are the actual
+    $4L^{-12}$. At $k=0$ the positions $3,\ldots,9$ are the actual
     identity circuits, have zero error and have no nonprivate occurrence.
     Thus these circuits satisfy the entire local conclusion of
     Theorem~\ref{thm:chain_conditional_local_circuits}, including the
@@ -3786,7 +3788,7 @@ The prescribed placement is $\ell(R_i)=i$ and $\ell(P_{j+1})=j$.
     sheet readout $\mathcal R$, and the actual standard physical/private
     readout $V$ as in Theorem~\ref{thm:chain_conditional_preparation}.
     Put $\rho=\operatorname{Tr}_{\rm private}|V\rangle\langle V|$
-    and $\varepsilon=4NL^{-30}$. Then
+    and $\varepsilon=4NL^{-12}$. Then
     \begin{align}
         \|\Xi\|                          & =1,                               &
         \|\mathcal RY-\Omega\otimes\Xi\| & \le\varepsilon\le26L^{-11},\notag   \\
@@ -3806,7 +3808,7 @@ The prescribed placement is $\ell(R_i)=i$ and $\ell(P_{j+1})=j$.
     \leanok
     \uses{thm:chain_physical_local_circuits,thm:chain_conditional_preparation,
         thm:chain_stage_arity_three,thm:chain_terminal_block_sizes}
-    Enlarge the physical local constant to $D=\max\{D_{60},1\}$.
+    Enlarge the physical local constant to $D=\max\{D_{24},1\}$.
     Enlarge the length cutoff to at least $120$ and the uniform
     logarithmic threshold at which $60D\log L\le L/2$.
     Then $w<D\log L+1$ gives $60w\le L$, and $D\log L\ge1$
@@ -3824,7 +3826,7 @@ The prescribed placement is $\ell(R_i)=i$ and $\ell(P_{j+1})=j$.
     support, together with Theorem~\ref{thm:chain_stage_arity_three},
     gives arity three. The block geometry gives the party, count and
     dimension bounds. Since $18m\le L$,
-    $\varepsilon\le4L^{-29}\le26L^{-11}$; the actual marginal bound
+    $\varepsilon\le4L^{-11}\le26L^{-11}$; the actual marginal bound
     is at most $2\varepsilon$. No normalization of $\Psi$ is made.
 \end{proof}
 

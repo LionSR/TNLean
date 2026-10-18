@@ -305,7 +305,7 @@ variable (Ω : EuclideanSpace ℂ (Fin L → Fin q))
 geometric participant conclusion is used below; no aggregate locality or
 congestion hypothesis is added. -/
 variable (hc : ∀ k j, (c k j).IsBoundedChange (stageParticipants k j) 1 1
-    (4 * (L : ℝ) ^ (-30 : ℤ))
+    (4 * (L : ℝ) ^ (-12 : ℤ))
     (framesVec Ω (stageBoundaryFrames L w q pos k j.val))
     (framesVec Ω (stageBoundaryFrames L w q pos k (j.val + 1))) ∧
   (c k j).IsSourceBounded 1 ∧ (c k j).nonprivateCount ≤ 1 ∧

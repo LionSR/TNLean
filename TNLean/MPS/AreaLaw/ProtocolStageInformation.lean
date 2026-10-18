@@ -27,9 +27,8 @@ half-open convention, recorded in
 
 Sources: the one-dimensional note, Part II, `con:sweep`, lines 330–343,
 and `prop:sweep`, proof, lines 365–374; Part II, `lem:logsep`, lines
-472–488. Exponent 60 supplies the information required by the existing
-frame primitives. This does not assert a bound for an arbitrarily fixed
-constant chosen only at exponent 24.
+472–488. The information exponent is 24, as in the source's logarithmic
+width choice.
 -/
 
 noncomputable section
@@ -86,43 +85,43 @@ Source: Part II, `lem:logsep`, lines 472–488, and Part II, `prop:sweep`,
 proof, lines 365–374. -/
 theorem birth_death_information_of_logarithmic_separation
     (q : ℕ) (hq : 1 ≤ q) (R : ℕ) (J Δ : ℝ) (hΔ : 0 < Δ) :
-    ∃ (D₆₀ : ℝ) (L₀ : ℕ), 0 < D₆₀ ∧ 1 ≤ L₀ ∧
+    ∃ (D₂₄ : ℝ) (L₀ : ℕ), 0 < D₂₄ ∧ 1 ≤ L₀ ∧
       ∀ (L : ℕ), L₀ ≤ L →
       ∀ (h : ChainHamiltonian L q R J)
         (Ω : EuclideanSpace ℂ (Fin L → Fin q)) (E₀ : ℝ),
         Matrix.IsGappedGroundState h.operator E₀ Ω Δ →
       ∀ (pos : Fin L → ℝ × ℝ) (w : ℕ), 1 ≤ w →
-        D₆₀ * Real.log (L : ℝ) ≤ (w : ℝ) →
+        D₂₄ * Real.log (L : ℝ) ≤ (w : ℝ) →
       ∀ k : Fin (stageCount L w),
         (FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω
           (remainderBirthTarget L w k)
           ((stageFrame L w q pos k.castSucc).birthEnv (.inl k.castSucc)) ≤
-            (L : ℝ) ^ (-60 : ℤ)) ∧
+            (L : ℝ) ^ (-24 : ℤ)) ∧
         (FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω
           (blockBirthTarget L w k)
           ((afterRemainderBirth L w q pos k).birthEnv (.inl k.castSucc)) ≤
-            (L : ℝ) ^ (-60 : ℤ)) ∧
+            (L : ℝ) ^ (-24 : ℤ)) ∧
         (k.val = 0 → FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω
           (leftBandTarget L w k)
           ((afterLeftTransfer L w q pos k).birthEnv (.inr k)) ≤
-            (L : ℝ) ^ (-60 : ℤ)) := by
+            (L : ℝ) ^ (-24 : ℤ)) := by
   classical
-  obtain ⟨D₆₀, L₀, hD, hL₀, hlogsep⟩ :=
+  obtain ⟨D₂₄, L₀, hD, hL₀, hlogsep⟩ :=
     ChainHamiltonian.mutualInformation_le_of_logarithmic_separation
-      q hq R J Δ hΔ 60 (by norm_num) 1 le_rfl
-  refine ⟨D₆₀, L₀, hD, hL₀, ?_⟩
+      q hq R J Δ hΔ 24 (by norm_num) 1 le_rfl
+  refine ⟨D₂₄, L₀, hD, hL₀, ?_⟩
   intro L hL h Ω E₀ hgs pos w hw hwidth k
   obtain ⟨hd₁, hd₂, hd₃⟩ := birth_death_separation (q := q) (pos := pos) hw k
   have hinterval (b c : ℕ) (E : Finset (Fin L))
       (hd : ∀ x ∈ interval L b c, ∀ y ∈ E, w ≤ Nat.dist x.val y.val) :
       FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω
-        (interval L b c) E ≤ (L : ℝ) ^ (-60 : ℤ) := by
+        (interval L b c) E ≤ (L : ℝ) ^ (-24 : ℤ) := by
     have hT : ∃ (n : ℕ) (a z : Fin n → ℕ), n ≤ 1 ∧
         interval L b c = Finset.univ.biUnion (fun i ↦ interval L (a i) (z i)) :=
       ⟨1, fun _ ↦ b, fun _ ↦ c, le_rfl, by simp⟩
     have hi := hlogsep L hL h Ω E₀ hgs (interval L b c) E hT
       (fun x hx y hy ↦ hwidth.trans (by exact_mod_cast hd x hx y hy))
-    have hexponent : -(60 : ℝ) = ((-60 : ℤ) : ℝ) := by norm_num
+    have hexponent : -(24 : ℝ) = ((-24 : ℤ) : ℝ) := by norm_num
     rw [hexponent, Real.rpow_intCast] at hi
     exact hi
   refine ⟨?_, ?_, ?_⟩

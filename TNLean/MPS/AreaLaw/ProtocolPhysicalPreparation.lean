@@ -31,8 +31,8 @@ See `docs/paper-gaps/tnlean_one_dimensional_band_sweep_corrections.tex`.
 Source: the one-dimensional note, Part II, logarithmic width at lines 245–250,
 Construction `con:sweep` at lines 330–342, Proposition `prop:sweep` and proof
 at lines 343–396, and the physical density estimate at lines 579–585. The
-constant is selected for information exponent 60 and may be enlarged; no
-assertion is made for every constant selected only at exponent 24.
+constant is selected for information exponent 24 before the physical data
+and may be enlarged to satisfy the geometric width bounds.
 -/
 
 noncomputable section
@@ -98,23 +98,21 @@ private theorem ceil_log_width_bounds (q : ℕ) (hq : 1 ≤ q) (D : ℝ) (hD : 1
         exact Real.rpow_le_rpow_of_exponent_le hL1 (Nat.le_ceil _)
   exact ⟨hw, hgeometry, hpoly⟩
 
-/-- The stronger local error exponent gives the source's total vector bound.
+/-- The local error exponent gives the source's total vector bound.
 Source: Part II, `prop:sweep`, telescoping estimate at lines 390–396. -/
 private theorem sweep_error_le {L w : ℕ} (hL : 1 ≤ L)
     (hcount : sweepOperationCount L w ≤ L) :
-    (sweepOperationCount L w : ℝ) * (4 * (L : ℝ) ^ (-30 : ℤ)) ≤
+    (sweepOperationCount L w : ℝ) * (4 * (L : ℝ) ^ (-12 : ℤ)) ≤
       26 * (L : ℝ) ^ (-11 : ℤ) := by
   have hL1 : (1 : ℝ) ≤ L := by exact_mod_cast hL
   have hL0 : (L : ℝ) ≠ 0 := ne_of_gt (zero_lt_one.trans_le hL1)
   have hcount' : (sweepOperationCount L w : ℝ) ≤ L := by exact_mod_cast hcount
   calc
-    _ ≤ (L : ℝ) * (4 * (L : ℝ) ^ (-30 : ℤ)) :=
+    _ ≤ (L : ℝ) * (4 * (L : ℝ) ^ (-12 : ℤ)) :=
       mul_le_mul_of_nonneg_right hcount' (by positivity)
-    _ = 4 * (L : ℝ) ^ (-29 : ℤ) := by
-      rw [show (-29 : ℤ) = 1 + (-30 : ℤ) by norm_num, zpow_one_add₀ hL0]
+    _ = 4 * (L : ℝ) ^ (-11 : ℤ) := by
+      rw [show (-11 : ℤ) = 1 + (-12 : ℤ) by norm_num, zpow_one_add₀ hL0]
       ring
-    _ ≤ 4 * (L : ℝ) ^ (-11 : ℤ) :=
-      mul_le_mul_of_nonneg_left (zpow_le_zpow_right₀ hL1 (by norm_num)) (by norm_num)
     _ ≤ 26 * (L : ℝ) ^ (-11 : ℤ) :=
       mul_le_mul_of_nonneg_right (by norm_num : (4 : ℝ) ≤ 26) (by positivity)
 
@@ -165,7 +163,7 @@ theorem exists_preparation_of_gappedGroundState
               (physicalOrder L w) (Finset.nodup_toList _) (by simp [physicalOrder])
               (privateLayout L w q) Ψ
             let Ψraw := (Layout.memCongr hT).symm (R.symm Ψ)
-            let ε := (sweepOperationCount L w : ℝ) * (4 * (L : ℝ) ^ (-30 : ℤ))
+            let ε := (sweepOperationCount L w : ℝ) * (4 * (L : ℝ) ^ (-12 : ℤ))
             (∀ p, C.participationCount p ≤ 40) ∧
               C.nonprivateCount ≤ sweepOperationCount L w ∧
               C.IsSourceBounded 1 ∧ C.IsExpansionBounded 1 1 ∧ C.IsMonomialBounded 1 ∧
@@ -200,9 +198,9 @@ theorem exists_preparation_of_gappedGroundState
               1 ≤ w ∧ 3 * (20 * w) ≤ L := by
   classical
   let : NeZero q := ⟨by omega⟩
-  obtain ⟨D₆₀, Nphysical, _, hNphysical, hphysical⟩ :=
+  obtain ⟨D₂₄, Nphysical, _, hNphysical, hphysical⟩ :=
     local_stage_circuits_of_logarithmic_separation q hq R J Δ hΔ
-  let D := max D₆₀ 1
+  let D := max D₂₄ 1
   let Nwidth := max 120 ⌈Real.logPowThreshold (60 * D) (1 / 2) 1 1⌉₊
   let L₀ := max Nphysical Nwidth
   have hD : 1 ≤ D := le_max_right _ _
@@ -221,7 +219,7 @@ theorem exists_preparation_of_gappedGroundState
   have hw : 1 ≤ w := hwidthData.1
   have hgeometry : 3 * (20 * w) ≤ L := hwidthData.2.1
   have hlog : 0 ≤ Real.log (L : ℝ) := Real.log_nonneg (by exact_mod_cast (show 1 ≤ L by omega))
-  have hwidth : D₆₀ * Real.log (L : ℝ) ≤ (w : ℝ) :=
+  have hwidth : D₂₄ * Real.log (L : ℝ) ≤ (w : ℝ) :=
     (mul_le_mul_of_nonneg_right (le_max_left _ _) hlog).trans (Nat.le_ceil _)
   have hfamily := hphysical L ((le_max_left _ _).trans hsize)
     h Ω E₀ hgs pos w hw hwidth
@@ -276,7 +274,7 @@ theorem exists_preparation_of_gappedGroundState
         Matrix.reindex (mainConfigurationEquiv L w q) (mainConfigurationEquiv L w q)
           (Matrix.euclideanOuterProduct Ω Ω)) ≤ 52 * (L : ℝ) ^ (-11 : ℤ) := by
     calc
-      _ ≤ 2 * ((sweepOperationCount L w : ℝ) * (4 * (L : ℝ) ^ (-30 : ℤ))) := hdensity
+      _ ≤ 2 * ((sweepOperationCount L w : ℝ) * (4 * (L : ℝ) ^ (-12 : ℤ))) := hdensity
       _ ≤ 2 * (26 * (L : ℝ) ^ (-11 : ℤ)) :=
         mul_le_mul_of_nonneg_left herror (by norm_num)
       _ = _ := by ring

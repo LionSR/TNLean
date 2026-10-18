@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.ProtocolSweepPath
+import TNLean.MPS.AreaLaw.OwnershipChanges
 import TNLean.MPS.AreaLaw.ChainStageIncidence
 
 /-!
@@ -78,16 +79,29 @@ private theorem stage_birth (F : Frame pos q (Party L w)) (T : Finset (Fin L))
     (P Q : Party L w) (hTP : ∀ x ∈ T, F.owner x = P) (hF : F.holes = [])
     {Ω : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Ω‖ = 1)
     (hI : FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω T
-      (F.birthEnv P) ≤ (L : ℝ) ^ (-60 : ℤ)) (post : List (Frame pos q (Party L w))) :
+      (F.birthEnv P) ≤ (L : ℝ) ^ (-24 : ℤ)) (post : List (Frame pos q (Party L w))) :
     HasSourceBoundedChange (ℓ := []) Ω (F :: post) (F.changeOwner T Q :: post) (1 : ℂ)
-      {P, Q} 1 1 1 ((L : ℝ) ^ (-30 : ℤ)) := by
-  have hTH : Disjoint (T : Set (Fin L)) F.outerHoles := by
-    simp [Frame.outerHoles, Frame.patches, hF, footprint]
-  obtain ⟨_, _, _, v, hv, hu, hs, _, herr⟩ := F.birth_bounded (Q := Q) hTP hTH hΩ hI
-  exact hasSourceBoundedChange_liftOne [] post
-    (Word.isBoundedChange_toOriginalCircuit hv hu hs le_rfl
-      (by simpa only [Frame.regRef] using herr))
-    (v.isSourceBounded_toOriginalCircuit hv) hΩ.le (by simp)
+      {P, Q} 1 1 1 ((L : ℝ) ^ (-12 : ℤ)) := by
+  let F₀ : Frame pos q (Party L w) := Frame.raw F.owner
+  have hraw : F₀ = F := by
+    rcases F with ⟨own, holes, hdisjoint⟩
+    dsimp [F₀] at hF ⊢
+    subst holes
+    rfl
+  have hI' : FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω T
+      (F₀.birthEnv P) ≤ (L : ℝ) ^ (-(2 * (12 : ℝ))) := by
+    simpa only [hraw, show -(2 * (12 : ℝ)) = (-24 : ℝ) by norm_num,
+      Real.rpow_neg_ofNat] using hI
+  obtain ⟨_, _, _, v, hv, hu, hs, _, herr⟩ :=
+    birth_bounded_rpow (pos := pos) F.owner T P Q hTP hΩ (12 : ℝ) hI'
+  have hop : HasSourceBoundedChange (ℓ := []) Ω (F₀ :: post)
+      (F₀.changeOwner T Q :: post) (1 : ℂ) {P, Q} 1 1 1
+        ((L : ℝ) ^ (-12 : ℤ)) :=
+    hasSourceBoundedChange_liftOne [] post
+      (Word.isBoundedChange_toOriginalCircuit hv hu hs le_rfl
+        (by convert herr using 1 <;> first | rfl | simp only [Real.rpow_neg_ofNat]))
+      (v.isSourceBounded_toOriginalCircuit hv) hΩ.le (by simp)
+  simpa only [hraw] using hop
 
 /-- The existing eight-operation construction with a uniform error bound.
 The eight hypotheses remain the actual primitive information inequalities.
@@ -101,42 +115,42 @@ private theorem band_changes (own : Fin L → Party L w) (A B C : Party L w) (a 
     {Ω : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Ω‖ = 1)
     (hI0 : FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω (interval L (a - 6 * w) (a -
       w)) ((OneBand.aux₀ (Party := Party L w) (pos := pos) (q := q) C).birthEnv C) ≤ (L : ℝ) ^
-      (-60 : ℤ))
+      (-24 : ℤ))
     (hI1 : FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω (interval L (a - 5 * w) (a - 2
       * w)) ((OneBand.aux₁ (Party := Party L w) (pos := pos) (q := q) B C a w).birthEnv B) ≤ (L : ℝ)
-      ^ (-60 : ℤ))
+      ^ (-24 : ℤ))
     (hI2 : FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω (interval L (a - 4 * w) (a - 3
       * w)) ((OneBand.aux₂ (Party := Party L w) (pos := pos) (q := q) A B C a w).birthEnv A) ≤
-      (L : ℝ) ^ (-60 : ℤ))
+      (L : ℝ) ^ (-24 : ℤ))
     (hI3 : FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω ((OneBand.exchange
       (Party := Party L w) (pos := pos) (q := q) own A B C a w).tSet C) ((OneBand.exchange
-      (Party := Party L w) (pos := pos) (q := q) own A B C a w).eSet C) ≤ (L : ℝ) ^ (-60 : ℤ))
+      (Party := Party L w) (pos := pos) (q := q) own A B C a w).eSet C) ≤ (L : ℝ) ^ (-24 : ℤ))
     (hI4 : FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω (interval L (a - 4 * w) a)
       ((OneBand.main₅ (Party := Party L w) (pos := pos) (q := q) own A B C a w).birthEnv A) ≤
-      (L : ℝ) ^ (-60 : ℤ))
+      (L : ℝ) ^ (-24 : ℤ))
     (hI5 : FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω (interval L (a - 5 * w) (a +
       w)) ((OneBand.main₆ (Party := Party L w) (pos := pos) (q := q) own A B C a w).birthEnv B) ≤
-      (L : ℝ) ^ (-60 : ℤ))
+      (L : ℝ) ^ (-24 : ℤ))
     (hI6 : FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω (interval L (a - 3 * w) a)
       ((OneBand.main₆ (Party := Party L w) (pos := pos) (q := q) own A B C a w).birthEnv B) ≤
-      (L : ℝ) ^ (-60 : ℤ))
+      (L : ℝ) ^ (-24 : ℤ))
     (hI7 : FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω (interval L (a - 6 * w) (a - 3
       * w)) ((OneBand.main₈ (Party := Party L w) (pos := pos) (q := q) own A B C a w).birthEnv C) ≤
-      (L : ℝ) ^ (-60 : ℤ))
+      (L : ℝ) ^ (-24 : ℤ))
     (post : List (Frame pos q (Party L w))) :
     ∀ j : Fin 8, HasSourceBoundedChange (ℓ := []) Ω
       (OneBand.frames (Party := Party L w) (pos := pos) (q := q) own A B C a w j.val ++ post)
       (OneBand.frames (Party := Party L w) (pos := pos) (q := q) own A B C a w (j.val + 1) ++ post)
         (1 : ℂ)
-      (OneBand.participants A B C j) 1 1 1 (4 * (L : ℝ) ^ (-30 : ℤ)) := by
+      (OneBand.participants A B C j) 1 1 1 (4 * (L : ℝ) ^ (-12 : ℤ)) := by
   obtain ⟨c, hc⟩ := OneBand.circuits_of_primitive_information (pos := pos) (q := q) (ℓ := []) own A
     B C a w
     hAB hAC hBC hw hleft hright hC hA hB hΩ
     hI0 hI1 hI2 hI3 hI4 hI5 hI6 hI7 [] post (1 : ℂ) (by simp)
   intro j
-  have he : (if j.val = 3 then 4 * (L : ℝ) ^ (-30 : ℤ)
-      else (L : ℝ) ^ (-30 : ℤ)) ≤ 4 * (L : ℝ) ^ (-30 : ℤ) := by
-    have hε : 0 ≤ (L : ℝ) ^ (-30 : ℤ) := by positivity
+  have he : (if j.val = 3 then 4 * (L : ℝ) ^ (-12 : ℤ)
+      else (L : ℝ) ^ (-12 : ℤ)) ≤ 4 * (L : ℝ) ^ (-12 : ℤ) := by
+    have hε : 0 ≤ (L : ℝ) ^ (-12 : ℤ) := by positivity
     split_ifs <;> nlinarith
   exact ⟨c j, ((hc j).1).mono (fun _ h ↦ h) le_rfl le_rfl he, (hc j).2.1⟩
 
@@ -168,27 +182,27 @@ theorem local_stage_circuits_of_primitive_information
     (Ω : EuclideanSpace ℂ (Fin L → Fin q)) (hΩ : ‖Ω‖ = 1)
     (hRem : FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω
       (remainderBirthTarget L w k) ((stageFrame L w q pos k.castSucc).birthEnv
-        (Sum.inl k.castSucc)) ≤ (L : ℝ) ^ (-60 : ℤ))
+        (Sum.inl k.castSucc)) ≤ (L : ℝ) ^ (-24 : ℤ))
     (hBlock : FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω
       (blockBirthTarget L w k) ((afterRemainderBirth L w q pos k).birthEnv
-        (Sum.inl k.castSucc)) ≤ (L : ℝ) ^ (-60 : ℤ))
+        (Sum.inl k.castSucc)) ≤ (L : ℝ) ^ (-24 : ℤ))
     (hBoundary : k.val = 0 →
       FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω
         (leftBandTarget L w k) ((afterLeftTransfer L w q pos k).birthEnv (Sum.inr k)) ≤
-          (L : ℝ) ^ (-60 : ℤ))
+          (L : ℝ) ^ (-24 : ℤ))
     (hLeft0 : ∀ hk : 0 < k.val, FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω (interval
       L ((k.val * (20 * w)) - 6 * w) ((k.val * (20 * w)) - w)) ((OneBand.aux₀ (Party := Party L w)
       (pos := pos) (q := q) (Sum.inr (⟨k.val - 1, by omega⟩ : Fin (stageCount L w)))).birthEnv
-      (Sum.inr (⟨k.val - 1, by omega⟩ : Fin (stageCount L w)))) ≤ (L : ℝ) ^ (-60 : ℤ))
+      (Sum.inr (⟨k.val - 1, by omega⟩ : Fin (stageCount L w)))) ≤ (L : ℝ) ^ (-24 : ℤ))
     (hLeft1 : ∀ hk : 0 < k.val, FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω (interval
       L ((k.val * (20 * w)) - 5 * w) ((k.val * (20 * w)) - 2 * w)) ((OneBand.aux₁
       (Party := Party L w) (pos := pos) (q := q) (Sum.inr k) (Sum.inr (⟨k.val - 1, by omega⟩ : Fin
-      (stageCount L w))) (k.val * (20 * w)) w).birthEnv (Sum.inr k)) ≤ (L : ℝ) ^ (-60 : ℤ))
+      (stageCount L w))) (k.val * (20 * w)) w).birthEnv (Sum.inr k)) ≤ (L : ℝ) ^ (-24 : ℤ))
     (hLeft2 : ∀ hk : 0 < k.val, FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω (interval
       L ((k.val * (20 * w)) - 4 * w) ((k.val * (20 * w)) - 3 * w)) ((OneBand.aux₂
       (Party := Party L w) (pos := pos) (q := q) (Sum.inl k.castSucc) (Sum.inr k) (Sum.inr (⟨k.val -
       1, by omega⟩ : Fin (stageCount L w))) (k.val * (20 * w)) w).birthEnv (Sum.inl k.castSucc)) ≤
-      (L : ℝ) ^ (-60 : ℤ))
+      (L : ℝ) ^ (-24 : ℤ))
     (hLeft3 : ∀ hk : 0 < k.val, FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω
       ((OneBand.exchange (Party := Party L w) (pos := pos) (q := q) (afterBlockBirth L w q pos
       k).owner (Sum.inl k.castSucc) (Sum.inr k) (Sum.inr (⟨k.val - 1, by omega⟩ : Fin (stageCount L
@@ -196,66 +210,66 @@ theorem local_stage_circuits_of_primitive_information
       ((OneBand.exchange (Party := Party L w) (pos := pos) (q := q) (afterBlockBirth L w q pos
       k).owner (Sum.inl k.castSucc) (Sum.inr k) (Sum.inr (⟨k.val - 1, by omega⟩ : Fin (stageCount L
       w))) (k.val * (20 * w)) w).eSet (Sum.inr (⟨k.val - 1, by omega⟩ : Fin (stageCount L w)))) ≤
-      (L : ℝ) ^ (-60 : ℤ))
+      (L : ℝ) ^ (-24 : ℤ))
     (hLeft4 : ∀ hk : 0 < k.val, FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω (interval
       L ((k.val * (20 * w)) - 4 * w) (k.val * (20 * w))) ((OneBand.main₅ (Party := Party L w)
       (pos := pos) (q := q) (afterBlockBirth L w q pos k).owner (Sum.inl k.castSucc) (Sum.inr k)
       (Sum.inr (⟨k.val - 1, by omega⟩ : Fin (stageCount L w))) (k.val * (20 * w)) w).birthEnv
-      (Sum.inl k.castSucc)) ≤ (L : ℝ) ^ (-60 : ℤ))
+      (Sum.inl k.castSucc)) ≤ (L : ℝ) ^ (-24 : ℤ))
     (hLeft5 : ∀ hk : 0 < k.val, FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω (interval
       L ((k.val * (20 * w)) - 5 * w) ((k.val * (20 * w)) + w)) ((OneBand.main₆ (Party := Party L w)
       (pos := pos) (q := q) (afterBlockBirth L w q pos k).owner (Sum.inl k.castSucc) (Sum.inr k)
       (Sum.inr (⟨k.val - 1, by omega⟩ : Fin (stageCount L w))) (k.val * (20 * w)) w).birthEnv
-      (Sum.inr k)) ≤ (L : ℝ) ^ (-60 : ℤ))
+      (Sum.inr k)) ≤ (L : ℝ) ^ (-24 : ℤ))
     (hLeft6 : ∀ hk : 0 < k.val, FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω (interval
       L ((k.val * (20 * w)) - 3 * w) (k.val * (20 * w))) ((OneBand.main₆ (Party := Party L w)
       (pos := pos) (q := q) (afterBlockBirth L w q pos k).owner (Sum.inl k.castSucc) (Sum.inr k)
       (Sum.inr (⟨k.val - 1, by omega⟩ : Fin (stageCount L w))) (k.val * (20 * w)) w).birthEnv
-      (Sum.inr k)) ≤ (L : ℝ) ^ (-60 : ℤ))
+      (Sum.inr k)) ≤ (L : ℝ) ^ (-24 : ℤ))
     (hLeft7 : ∀ hk : 0 < k.val, FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω (interval
       L ((k.val * (20 * w)) - 6 * w) ((k.val * (20 * w)) - 3 * w)) ((OneBand.main₈
       (Party := Party L w) (pos := pos) (q := q) (afterBlockBirth L w q pos k).owner (Sum.inl
       k.castSucc) (Sum.inr k) (Sum.inr (⟨k.val - 1, by omega⟩ : Fin (stageCount L w))) (k.val * (20
       * w)) w).birthEnv (Sum.inr (⟨k.val - 1, by omega⟩ : Fin (stageCount L w)))) ≤ (L : ℝ) ^
-      (-60 : ℤ))
+      (-24 : ℤ))
     (hRight0 : FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω (interval L (((k.val + 1) *
       (20 * w)) - 6 * w) (((k.val + 1) * (20 * w)) - w)) ((OneBand.aux₀ (Party := Party L w)
-      (pos := pos) (q := q) (Sum.inr k)).birthEnv (Sum.inr k)) ≤ (L : ℝ) ^ (-60 : ℤ))
+      (pos := pos) (q := q) (Sum.inr k)).birthEnv (Sum.inr k)) ≤ (L : ℝ) ^ (-24 : ℤ))
     (hRight1 : FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω (interval L (((k.val + 1) *
       (20 * w)) - 5 * w) (((k.val + 1) * (20 * w)) - 2 * w)) ((OneBand.aux₁ (Party := Party L w)
       (pos := pos) (q := q) (Sum.inl k.succ) (Sum.inr k) ((k.val + 1) * (20 * w)) w).birthEnv
-      (Sum.inl k.succ)) ≤ (L : ℝ) ^ (-60 : ℤ))
+      (Sum.inl k.succ)) ≤ (L : ℝ) ^ (-24 : ℤ))
     (hRight2 : FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω (interval L (((k.val + 1) *
       (20 * w)) - 4 * w) (((k.val + 1) * (20 * w)) - 3 * w)) ((OneBand.aux₂ (Party := Party L w)
       (pos := pos) (q := q) (Sum.inl k.castSucc) (Sum.inl k.succ) (Sum.inr k) ((k.val + 1) * (20 *
-      w)) w).birthEnv (Sum.inl k.castSucc)) ≤ (L : ℝ) ^ (-60 : ℤ))
+      w)) w).birthEnv (Sum.inl k.castSucc)) ≤ (L : ℝ) ^ (-24 : ℤ))
     (hRight3 : FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω ((OneBand.exchange
       (Party := Party L w) (pos := pos) (q := q) (leftBandMain L w q pos k).owner (Sum.inl
       k.castSucc) (Sum.inl k.succ) (Sum.inr k) ((k.val + 1) * (20 * w)) w).tSet (Sum.inr k))
       ((OneBand.exchange (Party := Party L w) (pos := pos) (q := q) (leftBandMain L w q pos k).owner
       (Sum.inl k.castSucc) (Sum.inl k.succ) (Sum.inr k) ((k.val + 1) * (20 * w)) w).eSet (Sum.inr
-      k)) ≤ (L : ℝ) ^ (-60 : ℤ))
+      k)) ≤ (L : ℝ) ^ (-24 : ℤ))
     (hRight4 : FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω (interval L (((k.val + 1) *
       (20 * w)) - 4 * w) ((k.val + 1) * (20 * w))) ((OneBand.main₅ (Party := Party L w) (pos := pos)
       (q := q) (leftBandMain L w q pos k).owner (Sum.inl k.castSucc) (Sum.inl k.succ) (Sum.inr k)
-      ((k.val + 1) * (20 * w)) w).birthEnv (Sum.inl k.castSucc)) ≤ (L : ℝ) ^ (-60 : ℤ))
+      ((k.val + 1) * (20 * w)) w).birthEnv (Sum.inl k.castSucc)) ≤ (L : ℝ) ^ (-24 : ℤ))
     (hRight5 : FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω (interval L (((k.val + 1) *
       (20 * w)) - 5 * w) (((k.val + 1) * (20 * w)) + w)) ((OneBand.main₆ (Party := Party L w)
       (pos := pos) (q := q) (leftBandMain L w q pos k).owner (Sum.inl k.castSucc) (Sum.inl k.succ)
-      (Sum.inr k) ((k.val + 1) * (20 * w)) w).birthEnv (Sum.inl k.succ)) ≤ (L : ℝ) ^ (-60 : ℤ))
+      (Sum.inr k) ((k.val + 1) * (20 * w)) w).birthEnv (Sum.inl k.succ)) ≤ (L : ℝ) ^ (-24 : ℤ))
     (hRight6 : FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω (interval L (((k.val + 1) *
       (20 * w)) - 3 * w) ((k.val + 1) * (20 * w))) ((OneBand.main₆ (Party := Party L w) (pos := pos)
       (q := q) (leftBandMain L w q pos k).owner (Sum.inl k.castSucc) (Sum.inl k.succ) (Sum.inr k)
-      ((k.val + 1) * (20 * w)) w).birthEnv (Sum.inl k.succ)) ≤ (L : ℝ) ^ (-60 : ℤ))
+      ((k.val + 1) * (20 * w)) w).birthEnv (Sum.inl k.succ)) ≤ (L : ℝ) ^ (-24 : ℤ))
     (hRight7 : FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω (interval L (((k.val + 1) *
       (20 * w)) - 6 * w) (((k.val + 1) * (20 * w)) - 3 * w)) ((OneBand.main₈ (Party := Party L w)
       (pos := pos) (q := q) (leftBandMain L w q pos k).owner (Sum.inl k.castSucc) (Sum.inl k.succ)
-      (Sum.inr k) ((k.val + 1) * (20 * w)) w).birthEnv (Sum.inr k)) ≤ (L : ℝ) ^ (-60 : ℤ))
+      (Sum.inr k) ((k.val + 1) * (20 * w)) w).birthEnv (Sum.inr k)) ≤ (L : ℝ) ^ (-24 : ℤ))
     : ∃ c : (j : Fin 18) → OriginalCircuit
         (stackRegs (stageBoundaryFrames L w q pos k j.val) [])
         (stackRegs (stageBoundaryFrames L w q pos k (j.val + 1)) []),
       ∀ j, (c j).IsBoundedChange (stageParticipants k j) 1 1
-          (4 * (L : ℝ) ^ (-30 : ℤ))
+          (4 * (L : ℝ) ^ (-12 : ℤ))
           (framesVec Ω (stageBoundaryFrames L w q pos k j.val))
           (framesVec Ω (stageBoundaryFrames L w q pos k (j.val + 1))) ∧
         (c j).IsSourceBounded 1 ∧ (c j).nonprivateCount ≤ 1 ∧
@@ -266,14 +280,14 @@ theorem local_stage_circuits_of_primitive_information
             HEq (c j) (OriginalCircuit.id
               (stackRegs (stageBoundaryFrames L w q pos k j.val) []))) := by
   classical
-  have hε : 0 ≤ (L : ℝ) ^ (-30 : ℤ) := by positivity
-  have h4ε : 0 ≤ 4 * (L : ℝ) ^ (-30 : ℤ) := by positivity
-  have hsmall : (L : ℝ) ^ (-30 : ℤ) ≤ 4 * (L : ℝ) ^ (-30 : ℤ) := by nlinarith
+  have hε : 0 ≤ (L : ℝ) ^ (-12 : ℤ) := by positivity
+  have h4ε : 0 ≤ 4 * (L : ℝ) ^ (-12 : ℤ) := by positivity
+  have hsmall : (L : ℝ) ^ (-12 : ℤ) ≤ 4 * (L : ℝ) ^ (-12 : ℤ) := by nlinarith
   have hmargin := stage_right_margin L w hL k
   have hbirth0 : HasSourceBoundedChange (ℓ := []) Ω
       (stageBoundaryFrames L w q pos k 0) (stageBoundaryFrames L w q pos k 1)
       (1 : ℂ) {Sum.inl k.castSucc, Sum.inl k.succ} 1 1 1
-      (4 * (L : ℝ) ^ (-30 : ℤ)) := by
+      (4 * (L : ℝ) ^ (-12 : ℤ)) := by
     have hop := stage_birth (stageFrame L w q pos k.castSucc)
       (remainderBirthTarget L w k) (Sum.inl k.castSucc) (Sum.inl k.succ)
       (birth_targets_owned hw k).1 rfl hΩ hRem
@@ -284,7 +298,7 @@ theorem local_stage_circuits_of_primitive_information
   have hbirth1 : HasSourceBoundedChange (ℓ := []) Ω
       (stageBoundaryFrames L w q pos k 1) (stageBoundaryFrames L w q pos k 2)
       (1 : ℂ) {Sum.inl k.castSucc, Sum.inr k} 1 1 1
-      (4 * (L : ℝ) ^ (-30 : ℤ)) := by
+      (4 * (L : ℝ) ^ (-12 : ℤ)) := by
     have hop := stage_birth (afterRemainderBirth L w q pos k)
       (blockBirthTarget L w k) (Sum.inl k.castSucc) (Sum.inr k)
       (birth_targets_owned hw k).2 rfl hΩ hBlock
@@ -295,7 +309,7 @@ theorem local_stage_circuits_of_primitive_information
       (stageBoundaryFrames L w q pos k (j.val + 2))
       (stageBoundaryFrames L w q pos k (j.val + 2 + 1)) (1 : ℂ)
       (OneBand.participants (Sum.inl k.castSucc) (Sum.inr k)
-        (Sum.inr ⟨k.val - 1, by omega⟩) j) 1 1 1 (4 * (L : ℝ) ^ (-30 : ℤ)) := by
+        (Sum.inr ⟨k.val - 1, by omega⟩) j) 1 1 1 (4 * (L : ℝ) ^ (-12 : ℤ)) := by
     have hAB : (Sum.inl k.castSucc : Party L w) ≠ Sum.inr k := by simp
     have hAC : (Sum.inl k.castSucc : Party L w) ≠ Sum.inr ⟨k.val - 1, by omega⟩ := by simp
     have hBC : (Sum.inr k : Party L w) ≠ Sum.inr ⟨k.val - 1, by omega⟩ := by
@@ -325,7 +339,7 @@ theorem local_stage_circuits_of_primitive_information
       (stageBoundaryFrames L w q pos k (j.val + 10))
       (stageBoundaryFrames L w q pos k (j.val + 10 + 1)) (1 : ℂ)
       (OneBand.participants (Sum.inl k.castSucc) (Sum.inl k.succ) (Sum.inr k) j)
-      1 1 1 (4 * (L : ℝ) ^ (-30 : ℤ)) := by
+      1 1 1 (4 * (L : ℝ) ^ (-12 : ℤ)) := by
     have hAB : (Sum.inl k.castSucc : Party L w) ≠ Sum.inl k.succ := by
       intro h
       have hv := congrArg Fin.val (Sum.inl.inj h)
@@ -358,14 +372,14 @@ theorem local_stage_circuits_of_primitive_information
   have hboundary (hk : k.val = 0) : HasSourceBoundedChange (ℓ := []) Ω
       (stageBoundaryFrames L w q pos k 2) (stageBoundaryFrames L w q pos k 3)
       (1 : ℂ) {Sum.inr k, Sum.inl k.castSucc} 1 1 1
-      (4 * (L : ℝ) ^ (-30 : ℤ)) := by
+      (4 * (L : ℝ) ^ (-12 : ℤ)) := by
     have hraw : OneBand.main₀ (pos := pos) (q := q)
         (afterBlockBirth L w q pos k).owner = afterBlockBirth L w q pos k := rfl
     have ht : leftBandTarget L w k = interval L 0 w := by simp [leftBandTarget, hk]
     have hI : FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω
         (interval L 0 w) (((OneBand.main₀ (pos := pos) (q := q)
           (afterBlockBirth L w q pos k).owner).changeOwner (interval L 0 w)
-            (Sum.inr k)).birthEnv (Sum.inr k)) ≤ (L : ℝ) ^ (-60 : ℤ) := by
+            (Sum.inr k)).birthEnv (Sum.inr k)) ≤ (L : ℝ) ^ (-24 : ℤ) := by
       simpa only [afterLeftTransfer, ht, hraw] using hBoundary hk
     have hop := OneBand.boundary_change_of_primitive_information (pos := pos) (q := q) (ℓ := [])
       (afterBlockBirth L w q pos k).owner (Sum.inl k.castSucc) (Sum.inr k) w
@@ -378,7 +392,7 @@ theorem local_stage_circuits_of_primitive_information
   have hsteps : ∀ j : Fin 18, ∃ c : OriginalCircuit
         (stackRegs (stageBoundaryFrames L w q pos k j.val) [])
         (stackRegs (stageBoundaryFrames L w q pos k (j.val + 1)) []),
-      c.IsBoundedChange (stageParticipants k j) 1 1 (4 * (L : ℝ) ^ (-30 : ℤ))
+      c.IsBoundedChange (stageParticipants k j) 1 1 (4 * (L : ℝ) ^ (-12 : ℤ))
           (framesVec Ω (stageBoundaryFrames L w q pos k j.val))
           (framesVec Ω (stageBoundaryFrames L w q pos k (j.val + 1))) ∧
         c.IsSourceBounded 1 ∧
@@ -417,7 +431,7 @@ theorem local_stage_circuits_of_primitive_information
             have hop : HasSourceBoundedChange (ℓ := []) Ω
                 (stageBoundaryFrames L w q pos k j.val)
                 (stageBoundaryFrames L w q pos k (j.val + 1)) (1 : ℂ)
-                (stageParticipants k j) 1 1 1 (4 * (L : ℝ) ^ (-30 : ℤ)) := by
+                (stageParticipants k j) 1 1 1 (4 * (L : ℝ) ^ (-12 : ℤ)) := by
               rw [hp]
               simpa only [he] using hleft hk u
             obtain ⟨c, hc, hs⟩ := hop
@@ -456,7 +470,7 @@ theorem local_stage_circuits_of_primitive_information
           have hop : HasSourceBoundedChange (ℓ := []) Ω
               (stageBoundaryFrames L w q pos k j.val)
               (stageBoundaryFrames L w q pos k (j.val + 1)) (1 : ℂ)
-              (stageParticipants k j) 1 1 1 (4 * (L : ℝ) ^ (-30 : ℤ)) := by
+              (stageParticipants k j) 1 1 1 (4 * (L : ℝ) ^ (-12 : ℤ)) := by
             rw [hp]
             simpa only [he] using hright u
           obtain ⟨c, hc, hs⟩ := hop

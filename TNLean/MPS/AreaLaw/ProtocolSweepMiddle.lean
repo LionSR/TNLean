@@ -206,7 +206,7 @@ variable (Ω : EuclideanSpace ℂ (Fin L → Fin q))
 now for every actual stage. These local circuits are the sole conditional
 construction input; no total participation or trajectory is supplied. -/
 variable (hc : ∀ k j, (c k j).IsBoundedChange (stageParticipants k j) 1 1
-    (4 * (L : ℝ) ^ (-30 : ℤ))
+    (4 * (L : ℝ) ^ (-12 : ℤ))
     (framesVec Ω (stageBoundaryFrames L w q pos k j.val))
     (framesVec Ω (stageBoundaryFrames L w q pos k (j.val + 1))) ∧
   (c k j).IsSourceBounded 1 ∧ (c k j).nonprivateCount ≤ 1 ∧
@@ -221,7 +221,7 @@ include hc
 operation is an identity with zero reference error. Source: Part II, prop:sweep. -/
 private theorem middleStep_bounded (n : ℕ) :
     (sweepMiddleStep c n).IsBoundedChange (middleParticipants L w n) 1 1
-      (if n < sweepOperationCount L w then 4 * (L : ℝ) ^ (-30 : ℤ) else 0)
+      (if n < sweepOperationCount L w then 4 * (L : ℝ) ^ (-12 : ℤ) else 0)
       (framesVec Ω (operationFrames L w q pos n))
       (framesVec Ω (operationFrames L w q pos (n + 1))) := by
   classical
@@ -356,7 +356,7 @@ theorem sweepMiddleCircuit_norm_and_error (hΩ : ‖Ω‖ = 1) :
     ‖(sweepMiddleCircuit c).eval (framesVec Ω (initialFrames L w q pos))‖ ≤ 1 ∧
       ‖(sweepMiddleCircuit c).eval (framesVec Ω (initialFrames L w q pos)) -
           framesVec Ω (terminalFrames L w q pos)‖ ≤
-        (sweepOperationCount L w : ℝ) * (4 * (L : ℝ) ^ (-30 : ℤ)) := by
+        (sweepOperationCount L w : ℝ) * (4 * (L : ℝ) ^ (-12 : ℤ)) := by
   have hnorm : ‖(sweepMiddleCircuit c).eval (framesVec Ω (initialFrames L w q pos))‖ ≤ 1 :=
     ((sweepMiddleCircuit c).norm_eval_le_norm _).trans (norm_initialFrames hΩ).le
   refine ⟨hnorm, ?_⟩
@@ -371,10 +371,10 @@ theorem sweepMiddleCircuit_norm_and_error (hΩ : ‖Ω‖ = 1) :
     TNLean.PEPS.Approximation.norm_trajectory_sub_reference_le S x ref N
       (fun n _ v ↦ (step n).norm_eval_le_norm v) rfl
       (fun n _ ↦ OriginalCircuit.eval_sequence_succ a step n (ref 0))
-  have herr' : ‖x N - ref N‖ ≤ (N : ℝ) * (4 * (L : ℝ) ^ (-30 : ℤ)) := by
+  have herr' : ‖x N - ref N‖ ≤ (N : ℝ) * (4 * (L : ℝ) ^ (-12 : ℤ)) := by
     refine herr.trans ?_
     calc
-      _ ≤ ∑ _n ∈ Finset.range N, 4 * (L : ℝ) ^ (-30 : ℤ) := by
+      _ ≤ ∑ _n ∈ Finset.range N, 4 * (L : ℝ) ^ (-12 : ℤ) := by
         apply Finset.sum_le_sum
         intro n hn
         have hb := (middleStep_bounded c Ω hc n).norm_eval_sub_le

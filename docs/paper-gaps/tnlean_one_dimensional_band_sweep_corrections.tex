@@ -114,16 +114,16 @@ and \leanid{TNLean.MPS.AreaLaw.ChainSweep.exists_protocol_isOpenMPS_norm_sub_pha
 Compression bounds only the distinguished physical outputs. Private spaces
 remain finite-dimensional without an additional numerical size bound.
 
-\paragraph{Quantitative scope.}
-The preparation selects its width from the information estimate at exponent
-$60$ and may enlarge that constant. The printed intermediate protocol uses
-exponent $24$; the formal result is not asserted for every width constant
-chosen only at that exponent. The existential constants in Theorem~B allow
-the stated preparation and compression argument. Resolution here concerns
-the two local corrections and their actual constructions. It does not
-assert all printed intermediate protocol constants or completion of the
-whole paper. The nondegenerate lattice witness and the correction to the
-all-register output assertion remain valid and are retained above.
+\paragraph{Information exponent and width.}
+The local birth and death estimates use information at exponent $24$ and
+error at exponent $12$; the exchange has error at most $4L^{-12}$.
+The width constant is chosen from logarithmic separation at exponent $24$,
+before the length and all physical data, and may be enlarged to meet the
+geometric bounds. There are at most $L$ operations, so their total vector
+error is at most $4L^{-11}\le26L^{-11}$. The same preparation and compression
+therefore give the stated existential constants in Theorem~B.
+The nondegenerate lattice witness and the correction to the all-register
+output assertion remain valid and are retained above.
 
 \begin{thebibliography}{1}
     \bibitem{TNLean2026OneDimensional}

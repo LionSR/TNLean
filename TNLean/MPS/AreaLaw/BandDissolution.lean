@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.Basic
+import TNLean.MPS.AreaLaw.OwnershipChanges
 import TNLean.PEPS.Approximation.FrameBoundedChanges
 import TNLean.PEPS.Approximation.SheetStackSourceBoundedChange
 
@@ -359,35 +360,40 @@ theorem exchange_regions (own : Fin L → Party) (A B C : Party) (a w : ℕ)
 
 variable [NeZero q]
 
-omit [NeZero q] in
-private theorem no_outerHoles (F : Frame pos q Party) (hF : F.holes = [])
-    (T : Finset (Fin L)) : Disjoint (T : Set (Fin L)) F.outerHoles := by
-  simp [Frame.outerHoles, Frame.patches, hF, footprint]
-
 private theorem birth_liftOne (F : Frame pos q Party) (T : Finset (Fin L)) (P Q : Party)
     (hTP : ∀ x ∈ T, F.owner x = P) (hF : F.holes = [])
     {Ω : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Ω‖ = 1)
     (hI : FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω T (F.birthEnv P) ≤
-      (L : ℝ) ^ (-60 : ℤ))
+      (L : ℝ) ^ (-24 : ℤ))
     (pre post : List (Frame pos q Party)) {ℓ : Layout Party} (ξ : Mem ℓ) (hξ : ‖ξ‖ ≤ 1) :
     HasSourceBoundedChange Ω (pre ++ F :: post) (pre ++ F.changeOwner T Q :: post)
-      ξ {P, Q} 1 1 1 ((L : ℝ) ^ (-30 : ℤ)) := by
+      ξ {P, Q} 1 1 1 ((L : ℝ) ^ (-12 : ℤ)) := by
+  let F₀ : Frame pos q Party := Frame.raw F.owner
+  have hraw : F₀ = F := holeFree_ext rfl hF (fun _ ↦ rfl)
+  have hI' : FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω T
+      (F₀.birthEnv P) ≤ (L : ℝ) ^ (-(2 * (12 : ℝ))) := by
+    simpa only [hraw, show -(2 * (12 : ℝ)) = (-24 : ℝ) by norm_num,
+      Real.rpow_neg_ofNat] using hI
   obtain ⟨_, _, _, v, hv, hu, hs, _, herr⟩ :=
-    F.birth_bounded (Q := Q) hTP (no_outerHoles F hF T) hΩ hI
-  exact hasSourceBoundedChange_liftOne pre post
-    (Word.isBoundedChange_toOriginalCircuit hv hu hs le_rfl (by
-      simpa only [Frame.regRef] using herr))
-    (v.isSourceBounded_toOriginalCircuit hv) hΩ.le hξ
+    birth_bounded_rpow (pos := pos) F.owner T P Q hTP hΩ (12 : ℝ) hI'
+  have hop : HasSourceBoundedChange Ω (pre ++ F₀ :: post)
+      (pre ++ F₀.changeOwner T Q :: post) ξ {P, Q} 1 1 1
+        ((L : ℝ) ^ (-12 : ℤ)) :=
+    hasSourceBoundedChange_liftOne pre post
+      (Word.isBoundedChange_toOriginalCircuit hv hu hs le_rfl (by
+        convert herr using 1 <;> first | rfl | simp only [Real.rpow_neg_ofNat]))
+      (v.isSourceBounded_toOriginalCircuit hv) hΩ.le hξ
+  simpa only [hraw] using hop
 
 /-- The MI hypothesis is explicitly evaluated AFTER the death. -/
 private theorem death_liftOne (F : Frame pos q Party) (T : Finset (Fin L)) (P Q : Party)
     (hTP : ∀ x ∈ T, F.owner x = P) (hF : F.holes = [])
     {Ω : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Ω‖ = 1)
     (hI : FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω T
-      ((F.changeOwner T Q).birthEnv Q) ≤ (L : ℝ) ^ (-60 : ℤ))
+      ((F.changeOwner T Q).birthEnv Q) ≤ (L : ℝ) ^ (-24 : ℤ))
     (pre post : List (Frame pos q Party)) {ℓ : Layout Party} (ξ : Mem ℓ) (hξ : ‖ξ‖ ≤ 1) :
     HasSourceBoundedChange Ω (pre ++ F :: post) (pre ++ F.changeOwner T Q :: post)
-      ξ {Q, P} 1 1 1 ((L : ℝ) ^ (-30 : ℤ)) := by
+      ξ {Q, P} 1 1 1 ((L : ℝ) ^ (-12 : ℤ)) := by
   let G := F.changeOwner T Q
   have hback : G.changeOwner T P = F := by
     apply holeFree_ext (F := G.changeOwner T P) (G := F) hF hF
@@ -400,12 +406,21 @@ private theorem death_liftOne (F : Frame pos q Party) (T : Finset (Fin L)) (P Q 
     intro x hx
     simp [G, hx]
   have hG : G.holes = [] := hF
+  let G₀ : Frame pos q Party := Frame.raw G.owner
+  have hraw : G₀ = G := holeFree_ext rfl hG (fun _ ↦ rfl)
+  have hI' : FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω T
+      (G₀.birthEnv Q) ≤ (L : ℝ) ^ (-(2 * (12 : ℝ))) := by
+    simpa only [hraw, show -(2 * (12 : ℝ)) = (-24 : ℝ) by norm_num,
+      Real.rpow_neg_ofNat] using hI
   obtain ⟨_, _, _, M, hM, hu, hs, he, _, herr⟩ :=
-    G.death_bounded (Q := P) hGT (no_outerHoles G hG T) hΩ hI
+    death_bounded_rpow (pos := pos) G.owner T Q P hGT hΩ (12 : ℝ) hI'
   have hc := PartyChain.isBoundedChange_toOriginalCircuit hM hu hs he le_rfl le_rfl
-    (by simpa only [Frame.regRef] using herr)
-  simpa only [hback] using hasSourceBoundedChange_liftOne pre post hc
-    (M.isSourceBounded_toOriginalCircuit hM) hΩ.le hξ
+    (by simpa only [Frame.regRef, Real.rpow_neg_ofNat] using herr)
+  have hop : HasSourceBoundedChange Ω (pre ++ G₀.changeOwner T P :: post)
+      (pre ++ G₀ :: post) ξ {Q, P} 1 1 1 ((L : ℝ) ^ (-12 : ℤ)) :=
+    hasSourceBoundedChange_liftOne pre post hc
+      (M.isSourceBounded_toOriginalCircuit hM) hΩ.le hξ
+  simpa only [hraw, hback] using hop
 
 /-- The exchange is an actual private original circuit, with no non-private gate. -/
 private theorem exchange_circuit (own : Fin L → Party) (A B C : Party) (a w : ℕ)
@@ -413,23 +428,30 @@ private theorem exchange_circuit (own : Fin L → Party) (A B C : Party) (a w : 
     (hI : FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω
       ((exchange (pos := pos) (q := q) own A B C a w).tSet C)
       ((exchange (pos := pos) (q := q) own A B C a w).eSet C) ≤
-      (L : ℝ) ^ (-60 : ℤ)) :
+      (L : ℝ) ^ (-24 : ℤ)) :
     ∃ c : OriginalCircuit
         ((main₀ (pos := pos) (q := q) own).regs ++ (aux₃ (pos := pos) (q := q) A B C a w).regs)
         ((main₄ (pos := pos) (q := q) own A B C a w).regs ++
           (aux₄ (pos := pos) (q := q) own A B C a w).regs),
-      c.IsBoundedChange {C} 1 1 (4 * (L : ℝ) ^ (-30 : ℤ))
+      c.IsBoundedChange {C} 1 1 (4 * (L : ℝ) ^ (-12 : ℤ))
         (pairRef (main₀ (pos := pos) (q := q) own) (aux₃ (pos := pos) (q := q) A B C a w) Ω)
         (pairRef (main₄ (pos := pos) (q := q) own A B C a w)
           (aux₄ (pos := pos) (q := q) own A B C a w) Ω) ∧
       c.IsSourceBounded 1 ∧ c.nonprivateCount = 0 := by
-  obtain ⟨_, _, _, _, _, _, _, v, hv, hu, hs, _, herr⟩ :=
-    TwoSheetExchange.exchange_ofFrames_bounded (main₀ own) (aux₃ A B C a w)
-      (exchangeRegion L a w) (fun _ ↦ true) _ _ C hΩ hI
+  have hI' : FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω
+      ((exchange (pos := pos) (q := q) own A B C a w).tSet C)
+      ((exchange (pos := pos) (q := q) own A B C a w).eSet C) ≤
+        (L : ℝ) ^ (-(2 * (12 : ℝ))) := by
+    simpa only [show -(2 * (12 : ℝ)) = (-24 : ℝ) by norm_num,
+      Real.rpow_neg_ofNat] using hI
+  obtain ⟨_, _, _, v, hv, hu, hs, _, herr⟩ :=
+    exchange_bounded_rpow (pos := pos) own (aux₃ (pos := pos) (q := q) A B C a w).owner
+      (exchangeRegion L a w) C hΩ (12 : ℝ) hI'
   refine ⟨v.toOriginalCircuit hv,
     Word.isBoundedChange_toOriginalCircuit hv hu (by omega) le_rfl ?_,
     v.isSourceBounded_toOriginalCircuit hv, ?_⟩
-  · simpa only [pairRef_eq_twoLayoutIso_symm, main₄, aux₄, exchange] using herr
+  · simp only [pairRef_eq_twoLayoutIso_symm]
+    convert herr using 1 <;> first | rfl | simp only [Real.rpow_neg_ofNat]
   · exact (v.nonprivateCount_toOriginalCircuit hv).trans hs
 
 /-- An INTERMEDIATE one-band construction from exactly the primitive information bounds.
@@ -445,37 +467,37 @@ theorem circuits_of_primitive_information
     {Ω : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Ω‖ = 1)
     (hI₀ : FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω
       (interval L (a - 6 * w) (a - w)) ((aux₀ (pos := pos) (q := q) C).birthEnv C) ≤
-      (L : ℝ) ^ (-60 : ℤ))
+      (L : ℝ) ^ (-24 : ℤ))
     (hI₁ : FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω
       (interval L (a - 5 * w) (a - 2 * w)) ((aux₁ (pos := pos) (q := q) B C a w).birthEnv B) ≤
-      (L : ℝ) ^ (-60 : ℤ))
+      (L : ℝ) ^ (-24 : ℤ))
     (hI₂ : FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω
       (interval L (a - 4 * w) (a - 3 * w)) ((aux₂ (pos := pos) (q := q) A B C a w).birthEnv A) ≤
-      (L : ℝ) ^ (-60 : ℤ))
+      (L : ℝ) ^ (-24 : ℤ))
     (hI₃ : FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω
       ((exchange (pos := pos) (q := q) own A B C a w).tSet C)
       ((exchange (pos := pos) (q := q) own A B C a w).eSet C) ≤
-      (L : ℝ) ^ (-60 : ℤ))
+      (L : ℝ) ^ (-24 : ℤ))
     (hI₄ : FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω
       (interval L (a - 4 * w) a) ((main₅ (pos := pos) (q := q) own A B C a w).birthEnv A) ≤
-      (L : ℝ) ^ (-60 : ℤ))
+      (L : ℝ) ^ (-24 : ℤ))
     (hI₅ : FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω
       (interval L (a - 5 * w) (a + w)) ((main₆ (pos := pos) (q := q) own A B C a w).birthEnv B) ≤
-      (L : ℝ) ^ (-60 : ℤ))
+      (L : ℝ) ^ (-24 : ℤ))
     (hI₆ : FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω
       (interval L (a - 3 * w) a) ((main₆ (pos := pos) (q := q) own A B C a w).birthEnv B) ≤
-      (L : ℝ) ^ (-60 : ℤ))
+      (L : ℝ) ^ (-24 : ℤ))
     (hI₇ : FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω
       (interval L (a - 6 * w) (a - 3 * w))
       ((main₈ (pos := pos) (q := q) own A B C a w).birthEnv C) ≤
-      (L : ℝ) ^ (-60 : ℤ))
+      (L : ℝ) ^ (-24 : ℤ))
     (pre post : List (Frame pos q Party)) {ℓ : Layout Party} (ξ : Mem ℓ) (hξ : ‖ξ‖ ≤ 1) :
     ∃ c : (j : Fin 8) →
         OriginalCircuit
           (stackRegs (pre ++ frames (pos := pos) (q := q) own A B C a w j.val ++ post) ℓ)
           (stackRegs (pre ++ frames (pos := pos) (q := q) own A B C a w (j.val + 1) ++ post) ℓ),
       ∀ j, (c j).IsBoundedChange (participants A B C j) 1 1
-          (if j.val = 3 then 4 * (L : ℝ) ^ (-30 : ℤ) else (L : ℝ) ^ (-30 : ℤ))
+          (if j.val = 3 then 4 * (L : ℝ) ^ (-12 : ℤ) else (L : ℝ) ^ (-12 : ℤ))
           (stackVec Ω (pre ++ frames (pos := pos) (q := q) own A B C a w j.val ++ post) ξ)
           (stackVec Ω (pre ++ frames (pos := pos) (q := q) own A B C a w (j.val + 1) ++ post) ξ) ∧
         (c j).IsSourceBounded 1 ∧ (j.val = 3 → (c j).nonprivateCount = 0) := by
@@ -535,7 +557,7 @@ theorem circuits_of_primitive_information
       OriginalCircuit (stackRegs (pre ++ frames own A B C a w j.val ++ post) ℓ)
         (stackRegs (pre ++ frames own A B C a w (j.val + 1) ++ post) ℓ),
       c.IsBoundedChange (participants A B C j) 1 1
-          (if j.val = 3 then 4 * (L : ℝ) ^ (-30 : ℤ) else (L : ℝ) ^ (-30 : ℤ))
+          (if j.val = 3 then 4 * (L : ℝ) ^ (-12 : ℤ) else (L : ℝ) ^ (-12 : ℤ))
           (stackVec Ω (pre ++ frames own A B C a w j.val ++ post) ξ)
           (stackVec Ω (pre ++ frames own A B C a w (j.val + 1) ++ post) ξ) ∧
         c.IsSourceBounded 1 ∧ (j.val = 3 → c.nonprivateCount = 0) := by
@@ -548,7 +570,7 @@ theorem circuits_of_primitive_information
       have hn : HasSourceBoundedChange Ω
           (pre ++ [main₀ own, aux₀ C] ++ post)
           (pre ++ [main₀ own, aux₁ B C a w] ++ post)
-          ξ {C, B} 1 1 1 ((L : ℝ) ^ (-30 : ℤ)) := by
+          ξ {C, B} 1 1 1 ((L : ℝ) ^ (-12 : ℤ)) := by
         simpa only [aux₁, List.append_assoc, List.cons_append, List.nil_append] using hop
       obtain ⟨c, hc, hs⟩ := hn
       refine ⟨c, ?_, hs, ?_⟩
@@ -561,7 +583,7 @@ theorem circuits_of_primitive_information
       have hn : HasSourceBoundedChange Ω
           (pre ++ [main₀ own, aux₁ B C a w] ++ post)
           (pre ++ [main₀ own, aux₂ A B C a w] ++ post)
-          ξ {B, A} 1 1 1 ((L : ℝ) ^ (-30 : ℤ)) := by
+          ξ {B, A} 1 1 1 ((L : ℝ) ^ (-12 : ℤ)) := by
         simpa only [aux₂, List.append_assoc, List.cons_append, List.nil_append] using hop
       obtain ⟨c, hc, hs⟩ := hn
       refine ⟨c, ?_, hs, ?_⟩
@@ -574,7 +596,7 @@ theorem circuits_of_primitive_information
       have hn : HasSourceBoundedChange Ω
           (pre ++ [main₀ own, aux₂ A B C a w] ++ post)
           (pre ++ [main₀ own, aux₃ A B C a w] ++ post)
-          ξ {A, C} 1 1 1 ((L : ℝ) ^ (-30 : ℤ)) := by
+          ξ {A, C} 1 1 1 ((L : ℝ) ^ (-12 : ℤ)) := by
         simpa only [aux₃, List.append_assoc, List.cons_append, List.nil_append] using hop
       obtain ⟨c, hc, hs⟩ := hn
       refine ⟨c, ?_, hs, ?_⟩
@@ -591,7 +613,7 @@ theorem circuits_of_primitive_information
       have hwith : ∃ c : OriginalCircuit
           (stackRegs (pre ++ main₀ own :: aux₃ A B C a w :: post) ℓ)
           (stackRegs (pre ++ main₄ own A B C a w :: aux₄ own A B C a w :: post) ℓ),
-          c.IsBoundedChange {C} 1 1 (4 * (L : ℝ) ^ (-30 : ℤ))
+          c.IsBoundedChange {C} 1 1 (4 * (L : ℝ) ^ (-12 : ℤ))
             (stackVec Ω (pre ++ main₀ own :: aux₃ A B C a w :: post) ξ)
             (stackVec Ω (pre ++ main₄ own A B C a w :: aux₄ own A B C a w :: post) ξ) ∧
           c.IsSourceBounded 1 ∧ ((3 : ℕ) = 3 → c.nonprivateCount = 0) := by
@@ -659,11 +681,11 @@ theorem boundary_change_of_primitive_information
     {Ω : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Ω‖ = 1)
     (hI : FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω
       (interval L 0 w) (((main₀ (pos := pos) (q := q) own).changeOwner
-        (interval L 0 w) B).birthEnv B) ≤ (L : ℝ) ^ (-60 : ℤ))
+        (interval L 0 w) B).birthEnv B) ≤ (L : ℝ) ^ (-24 : ℤ))
     (pre post : List (Frame pos q Party)) {ℓ : Layout Party} (ξ : Mem ℓ) (hξ : ‖ξ‖ ≤ 1) :
     HasSourceBoundedChange Ω (pre ++ main₀ own :: post)
       (pre ++ (main₀ own).changeOwner (interval L 0 w) B :: post)
-      ξ {B, A} 1 1 1 ((L : ℝ) ^ (-30 : ℤ)) :=
+      ξ {B, A} 1 1 1 ((L : ℝ) ^ (-12 : ℤ)) :=
   death_liftOne (main₀ own) (interval L 0 w) A B hA rfl hΩ hI pre post ξ hξ
 
 end TNLean.MPS.AreaLaw.OneBand

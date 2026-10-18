@@ -28,8 +28,8 @@ retained auxiliary owners are used. See
 
 Sources: the one-dimensional note, Part II, `lem:logsep`, lines 472–488;
 Part II, `con:sweep`, lines 330–343, and `prop:sweep`, lines 365–378.
-The selected constant is sufficient for information exponent 60. No claim
-is made for an arbitrary constant selected only for exponent 24.
+The selected constant gives information at exponent 24 and local circuit
+error at exponent 12.
 -/
 
 noncomputable section
@@ -47,19 +47,19 @@ using Part II, `lem:logsep`, lines 472–488. -/
 theorem local_stage_circuits_of_logarithmic_separation
     (q : ℕ) (hq : 1 ≤ q) (R : ℕ) (J Δ : ℝ) (hΔ : 0 < Δ) :
     letI : NeZero q := ⟨by omega⟩
-    ∃ (D₆₀ : ℝ) (L₀ : ℕ), 0 < D₆₀ ∧ 1 ≤ L₀ ∧
+    ∃ (D₂₄ : ℝ) (L₀ : ℕ), 0 < D₂₄ ∧ 1 ≤ L₀ ∧
       ∀ (L : ℕ), L₀ ≤ L →
       ∀ (h : ChainHamiltonian L q R J)
         (Ω : EuclideanSpace ℂ (Fin L → Fin q)) (E₀ : ℝ),
         Matrix.IsGappedGroundState h.operator E₀ Ω Δ →
       ∀ (pos : Fin L → ℝ × ℝ) (w : ℕ), 1 ≤ w →
-        D₆₀ * Real.log (L : ℝ) ≤ (w : ℝ) →
+        D₂₄ * Real.log (L : ℝ) ≤ (w : ℝ) →
       ∀ k : Fin (stageCount L w),
         ∃ c : (j : Fin 18) → OriginalCircuit
             (stackRegs (stageBoundaryFrames L w q pos k j.val) [])
             (stackRegs (stageBoundaryFrames L w q pos k (j.val + 1)) []),
           ∀ j, (c j).IsBoundedChange (stageParticipants k j) 1 1
-              (4 * (L : ℝ) ^ (-30 : ℤ))
+              (4 * (L : ℝ) ^ (-12 : ℤ))
               (framesVec Ω (stageBoundaryFrames L w q pos k j.val))
               (framesVec Ω (stageBoundaryFrames L w q pos k (j.val + 1))) ∧
             (c j).IsSourceBounded 1 ∧ (c j).nonprivateCount ≤ 1 ∧

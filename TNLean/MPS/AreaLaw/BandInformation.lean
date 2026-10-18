@@ -23,7 +23,7 @@ auxiliary retains its actual A and B owners. See
 Sources: the one-dimensional note, `part2b_mps_protocol.tex`, Construction con:band,
 lines 248–276, and Lemma lem:band, lines 287–318; `part2a_mps_information.tex`,
 Lemma lem:logsep, lines 472–488.
-The exponent 60 matches the existing frame primitives; no claim about the full sweep is made.
+The information exponent is 24, as in the source's logarithmic width choice.
 -/
 
 noncomputable section
@@ -254,7 +254,7 @@ Source: Lemma lem:band, `part2b_mps_protocol.tex`, and Lemma lem:logsep,
 `part2a_mps_information.tex`. -/
 theorem primitive_information_of_logarithmic_separation
     (q : ℕ) (hq : 1 ≤ q) (R : ℕ) (J Δ : ℝ) (hΔ : 0 < Δ) :
-    ∃ (D₆₀ : ℝ) (L₀ : ℕ), 0 < D₆₀ ∧ 1 ≤ L₀ ∧
+    ∃ (D₂₄ : ℝ) (L₀ : ℕ), 0 < D₂₄ ∧ 1 ≤ L₀ ∧
       ∀ (L : ℕ), L₀ ≤ L →
       ∀ (h : ChainHamiltonian L q R J)
         (Ω : EuclideanSpace ℂ (Fin L → Fin q)) (E₀ : ℝ),
@@ -265,36 +265,36 @@ theorem primitive_information_of_logarithmic_separation
         (∀ x ∈ interval L (a - 8 * w) a, own x = C) →
         (∀ x ∈ interval L a (a + w), own x = A) →
         (∀ x ∈ interval L (a + w) (a + 2 * w), own x = B) →
-        D₆₀ * Real.log (L : ℝ) ≤ (w : ℝ) →
+        D₂₄ * Real.log (L : ℝ) ≤ (w : ℝ) →
         (FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω
           (interval L (a - 6 * w) (a - w))
-          ((aux₀ (pos := pos) (q := q) C).birthEnv C) ≤ (L : ℝ) ^ (-60 : ℤ)) ∧
+          ((aux₀ (pos := pos) (q := q) C).birthEnv C) ≤ (L : ℝ) ^ (-24 : ℤ)) ∧
         (FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω
           (interval L (a - 5 * w) (a - 2 * w))
-          ((aux₁ (pos := pos) (q := q) B C a w).birthEnv B) ≤ (L : ℝ) ^ (-60 : ℤ)) ∧
+          ((aux₁ (pos := pos) (q := q) B C a w).birthEnv B) ≤ (L : ℝ) ^ (-24 : ℤ)) ∧
         (FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω
           (interval L (a - 4 * w) (a - 3 * w))
-          ((aux₂ (pos := pos) (q := q) A B C a w).birthEnv A) ≤ (L : ℝ) ^ (-60 : ℤ)) ∧
+          ((aux₂ (pos := pos) (q := q) A B C a w).birthEnv A) ≤ (L : ℝ) ^ (-24 : ℤ)) ∧
         (FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω
           ((exchange (pos := pos) (q := q) own A B C a w).tSet C)
-          ((exchange (pos := pos) (q := q) own A B C a w).eSet C) ≤ (L : ℝ) ^ (-60 : ℤ)) ∧
+          ((exchange (pos := pos) (q := q) own A B C a w).eSet C) ≤ (L : ℝ) ^ (-24 : ℤ)) ∧
         (FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω
           (interval L (a - 4 * w) a)
-          ((main₅ (pos := pos) (q := q) own A B C a w).birthEnv A) ≤ (L : ℝ) ^ (-60 : ℤ)) ∧
+          ((main₅ (pos := pos) (q := q) own A B C a w).birthEnv A) ≤ (L : ℝ) ^ (-24 : ℤ)) ∧
         (FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω
           (interval L (a - 5 * w) (a + w))
-          ((main₆ (pos := pos) (q := q) own A B C a w).birthEnv B) ≤ (L : ℝ) ^ (-60 : ℤ)) ∧
+          ((main₆ (pos := pos) (q := q) own A B C a w).birthEnv B) ≤ (L : ℝ) ^ (-24 : ℤ)) ∧
         (FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω
           (interval L (a - 3 * w) a)
-          ((main₆ (pos := pos) (q := q) own A B C a w).birthEnv B) ≤ (L : ℝ) ^ (-60 : ℤ)) ∧
+          ((main₆ (pos := pos) (q := q) own A B C a w).birthEnv B) ≤ (L : ℝ) ^ (-24 : ℤ)) ∧
         (FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω
           (interval L (a - 6 * w) (a - 3 * w))
-          ((main₈ (pos := pos) (q := q) own A B C a w).birthEnv C) ≤ (L : ℝ) ^ (-60 : ℤ)) := by
+          ((main₈ (pos := pos) (q := q) own A B C a w).birthEnv C) ≤ (L : ℝ) ^ (-24 : ℤ)) := by
   classical
-  obtain ⟨D₆₀, L₀, hD, hL₀, hlogsep⟩ :=
+  obtain ⟨D₂₄, L₀, hD, hL₀, hlogsep⟩ :=
     ChainHamiltonian.mutualInformation_le_of_logarithmic_separation
-      q hq R J Δ hΔ 60 (by norm_num) 1 le_rfl
-  refine ⟨D₆₀, L₀, hD, hL₀, ?_⟩
+      q hq R J Δ hΔ 24 (by norm_num) 1 le_rfl
+  refine ⟨D₂₄, L₀, hD, hL₀, ?_⟩
   intro L hL h Ω E₀ hgs Party pos own A B C a w hAC hBC hw hleft hright hC hA hB hwidth
   obtain ⟨hd₀, hd₁, hd₂, hd₃, hd₄, hd₅, hd₆, hd₇⟩ :=
     primitive_separation (pos := pos) (q := q) own A B C a w
@@ -302,13 +302,13 @@ theorem primitive_information_of_logarithmic_separation
   have hinterval (b c : ℕ) (E : Finset (Fin L))
       (hd : ∀ x ∈ interval L b c, ∀ y ∈ E, w ≤ Nat.dist x.val y.val) :
       FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω
-        (interval L b c) E ≤ (L : ℝ) ^ (-60 : ℤ) := by
+        (interval L b c) E ≤ (L : ℝ) ^ (-24 : ℤ) := by
     have hT : ∃ (n : ℕ) (a z : Fin n → ℕ), n ≤ 1 ∧
         interval L b c = Finset.univ.biUnion (fun i ↦ interval L (a i) (z i)) :=
       ⟨1, fun _ ↦ b, fun _ ↦ c, le_rfl, by simp⟩
     have hi := hlogsep L hL h Ω E₀ hgs (interval L b c) E hT
       (fun x hx y hy ↦ hwidth.trans (by exact_mod_cast hd x hx y hy))
-    have hexponent : -(60 : ℝ) = ((-60 : ℤ) : ℝ) := by norm_num
+    have hexponent : -(24 : ℝ) = ((-24 : ℤ) : ℝ) := by norm_num
     rw [hexponent, Real.rpow_intCast] at hi
     exact hi
   refine ⟨hinterval _ _ _ hd₀, hinterval _ _ _ hd₁, hinterval _ _ _ hd₂,
