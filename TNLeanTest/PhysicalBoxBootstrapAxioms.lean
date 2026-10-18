@@ -53,3 +53,23 @@ open TNLean.PEPS.AreaLaw.Scan.CollarScan in
 depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
 #print axioms exists_sourceBootstrap_entropy_improvement_of_finiteFamilyTransportBound
+
+/-! The safe-box bootstrap at named constants -/
+
+run_cmd do
+  let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
+  let declarations := #[
+    ``TNLean.PEPS.AreaLaw.Scan.CollarScan.sourceTarget_selected_actualCharge_rough_comparison_explicit,
+    ``TNLean.PEPS.AreaLaw.Scan.CollarScan.sourceBootstrap_entropy_improvement_explicit,
+    ``TNLean.PEPS.AreaLaw.Scan.uniform_boxEntropy_improvement_explicit,
+    ``TNLean.PEPS.AreaLaw.Scan.boxEntropy_le_boxError_of_initial_explicit,
+    ``TNLean.PEPS.AreaLaw.Scan.initialBoxConstantExplicit_nonneg,
+    ``TNLean.PEPS.AreaLaw.Scan.physicalBoxConstantExplicit_nonneg,
+    ``TNLean.PEPS.AreaLaw.Scan.boxEntropy_le_boxError_explicit]
+  for decl in declarations do
+    unless (← Lean.getEnv).contains decl do
+      throwError "Missing declaration {decl}"
+    let axioms ← Lean.collectAxioms decl
+    unless axioms.all (allowed.contains ·) do
+      throwError "Unexpected axioms for {decl}: {axioms}"
+    Lean.logInfo m!"{decl}: {axioms}"
