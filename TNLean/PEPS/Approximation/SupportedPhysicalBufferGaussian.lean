@@ -27,6 +27,149 @@ open scoped BigOperators Kronecker Matrix.Norms.L2Operator NNReal
 
 namespace TNLean.PEPS.Approximation
 
+/-- The localization prefactor `2 C₀(1)` for the doubled square Hamiltonian: twice the
+graph-ball prefactor at range one. Its value is `64 e^{3/2} / (1 - e^{-1/2})`
+(`squareLocalizationPrefactor_eq`).
+Source: the constant `C` of `eq:info-lr` and `eq:info-operator-localization`,
+polynomial-PEPS `02-information.tex`, lines 486–508. -/
+noncomputable def squareLocalizationPrefactor : ℝ :=
+  2 * AreaLaw.graphBallLocalizationPrefactor 1
+
+/-- The localization velocity of the doubled square Hamiltonian with interaction bound `J`:
+the graph-ball velocity at range one and term-norm bound `2J`. Its value is `320 e² J`
+(`squareLocalizationVelocity_eq`). The matching decay rate is `1/2`.
+Source: the velocity `v` of `eq:info-lr`, polynomial-PEPS `02-information.tex`,
+lines 486–496. -/
+noncomputable def squareLocalizationVelocity (J : ℝ) : ℝ :=
+  AreaLaw.graphBallLocalizationVelocity 1 (2 * J)
+
+theorem squareLocalizationPrefactor_pos : 0 < squareLocalizationPrefactor :=
+  mul_pos two_pos (AreaLaw.graphBallLocalizationPrefactor_pos 1)
+
+theorem squareLocalizationVelocity_nonneg {J : ℝ} (hJ : 0 ≤ J) :
+    0 ≤ squareLocalizationVelocity J :=
+  AreaLaw.graphBallLocalizationVelocity_nonneg 1 (by linarith)
+
+theorem squareLocalizationPrefactor_eq :
+    squareLocalizationPrefactor = 64 * Real.exp (3 / 2) / (1 - Real.exp (-(1 / 2))) := by
+  rw [show (3 / 2 : ℝ) = 1 + 1 / 2 by norm_num, Real.exp_add]
+  simp only [squareLocalizationPrefactor, AreaLaw.graphBallLocalizationPrefactor, Nat.cast_one,
+    Nat.factorial]
+  ring
+
+theorem squareLocalizationVelocity_eq (J : ℝ) :
+    squareLocalizationVelocity J = 320 * Real.exp 2 * J := by
+  simp only [squareLocalizationVelocity, AreaLaw.graphBallLocalizationVelocity]
+  norm_num
+  ring
+
+/-- **The supported Gaussian approximation of the physical buffer, with explicit
+constants.** The error of the supported integral is at most
+`‖W‖ C L² (1 + 8 J L² T) e^{v T - l/2}` with `C = squareLocalizationPrefactor` and
+`v = squareLocalizationVelocity J`, the constants of the doubled square Hamiltonian at local
+dimension `q²`, range one and term-norm bound `2J`.
+Source: polynomial-PEPS, Section 2, `eq:info-local-two-sided`, lines 513–562, with the
+constants of `eq:info-lr` (lines 486–496). -/
+theorem SquareHamiltonian.supported_buffer_gaussian_integral
+    (q : ℕ) (hq : 1 ≤ q) (J : ℝ) (hJ : 0 ≤ J) :
+    ∀ (L : ℕ) (h : SquareHamiltonian L q J)
+      (R C₀ : Finset (SquareLatticeVertex L L)) (hRC : Disjoint R C₀),
+      let Q := (R ∪ C₀)ᶜ
+      let P := Fin (Fintype.card (R → Fin q)) × Fin (Fintype.card (C₀ → Fin q))
+      let s := FiniteProduct.splitTwoRegionsEquiv
+        (fun _ : SquareLatticeVertex L L ↦ Fin q) R C₀ hRC
+      let g := (s.prodCongr s).trans (Equiv.doubledRegroup P (Q → Fin q))
+      let p := sitePairConfigurationEquiv (SquareLatticeVertex L L) q q
+      let Λ := AreaLaw.rectangularDomain L L
+      let a := AreaLaw.rectangleSiteEquiv L L
+      let e := AreaLaw.rectangleConfigurationEquiv L L (q * q)
+      let K := reindex (p.trans e) (p.trans e) (doubledHamiltonian h.operator)
+      let F := reindex (p.trans e) (p.trans e) (EncodedFrame.sheetSwapOp q R)
+      let K' := F * K * Fᴴ
+      let boundary : Finset (Edge (squareLatticeGraph L L)) :=
+        Finset.univ.filter (IsRegionBoundaryEdge R)
+      let Z := boundary.biUnion fun b ↦
+        ({b.1.1, b.1.2} : Finset (SquareLatticeVertex L L))
+      ∀ W : Matrix ((Q → Fin q) × (Q → Fin q)) ((Q → Fin q) × (Q → Fin q)) ℂ,
+        let V := reindex (g.symm.trans (p.trans e)) (g.symm.trans (p.trans e))
+          ((1 : Matrix (P × P) (P × P) ℂ) ⊗ₖ W)
+        ∀ l : ℕ,
+          let B := Lattice.graphNeighborhood Λ l (Q.image a ∪ Z.image a)
+          ∃ U : ℝ → Matrix (Lattice.Configuration Λ (q * q))
+              (Lattice.Configuration Λ (q * q)) ℂ,
+            U 0 = 1 ∧
+            (∀ t, HasDerivAt U
+              ((Complex.I • siteExpectation (q * q) B
+                (heisenbergEvolution K' t (K' - K))) * U t) t) ∧
+            (∀ t, U t ∈ unitaryGroup (Lattice.Configuration Λ (q * q)) ℂ) ∧
+            (∀ t, U t ∈ supportedOperators (q * q) (B : Set (Lattice.Site Λ))) ∧
+            ∀ (η : ℝ≥0) (T : ℝ), 0 ≤ T →
+              let M := ∫ t : ℝ in Set.Icc (-T) T,
+                siteExpectation (q * q) B (heisenbergEvolution K' t V) * U t
+                  ∂gaussianReal 0 η
+              M ∈ supportedOperators (q * q) (B : Set (Lattice.Site Λ)) ∧
+              ‖M‖ ≤ ‖W‖ ∧
+              ‖M - GaussianFilter.gaussianIntertwinerTruncated η T K' K V‖ ≤
+                ‖W‖ * squareLocalizationPrefactor * (L : ℝ) ^ 2 *
+                  (1 + 8 * J * (L : ℝ) ^ 2 * T) *
+                  Real.exp (squareLocalizationVelocity J * T - 1 / 2 * l) := by
+  classical
+  intro L h R C₀ hRC Q P s g p Λ a e K F K' boundary Z W V l B
+  have hC : 0 < squareLocalizationPrefactor := squareLocalizationPrefactor_pos
+  obtain ⟨gH, _, hgOperator⟩ := h.exists_swapped_doubled_localHamiltonian hJ R
+  have hK' : gH.operator = K' := by
+    simpa only [K', F, K, Matrix.reindex_apply, Matrix.conjTranspose_submatrix,
+      Matrix.submatrix_mul_equiv, Matrix.submatrix_submatrix] using! hgOperator
+  have hDK : (doubledHamiltonian h.operator).IsHermitian := by
+    simp only [Matrix.IsHermitian, doubledHamiltonian, Matrix.conjTranspose_add,
+      Matrix.conjTranspose_kronecker, Matrix.conjTranspose_one,
+      (show h.operator.IsHermitian from h.hermitian).eq]
+  have hV₀ : reindex (g.symm.trans p) (g.symm.trans p)
+      ((1 : Matrix (P × P) (P × P) ℂ) ⊗ₖ W) ∈
+        supportedOperators (q * q) (Q : Set (SquareLatticeVertex L L)) :=
+    (EncodedFrame.reindex_physicalBuffer_eq_siteLift q R C₀ hRC W).symm ▸
+      EncodedFrame.siteLift_mem_supportedOperators Q
+        (reindex (sitePairConfigurationEquiv Q q q) (sitePairConfigurationEquiv Q q q) W)
+  have hV : V ∈ supportedOperators (q * q) (Q.image a : Set (Lattice.Site Λ)) := by
+    simpa only [a, V, embedOp_rectangle_eq_reindex, Finset.coe_image,
+      Matrix.reindex_apply, Matrix.submatrix_submatrix] using!
+      embedOp_mem_supportedOperators_image a.injective hV₀
+  have hD : gH.operator - K ∈
+      supportedOperators (q * q) (Z.image a : Set (Lattice.Site Λ)) := by
+    simpa only [hK', a, K', F, K, embedOp_rectangle_eq_reindex, Finset.coe_image,
+      Matrix.reindex_apply, Matrix.conjTranspose_submatrix, Matrix.submatrix_sub,
+      Pi.sub_apply, Matrix.submatrix_mul_equiv, Matrix.submatrix_submatrix] using!
+      embedOp_mem_supportedOperators_image a.injective (h.swapped_doubled_boundary_bound R).1
+  have hDn : ‖K' - K‖ ≤ 8 * J * (L : ℝ) ^ 2 := by
+    simpa only [K', F, K, Matrix.reindex_apply, Matrix.conjTranspose_submatrix,
+      Matrix.submatrix_sub, Pi.sub_apply, Matrix.submatrix_mul_equiv,
+      Matrix.submatrix_submatrix] using!
+      (Matrix.l2_opNorm_reindex_equiv e _).trans_le (h.swapped_doubled_boundary_bound R).2
+  have hVn : ‖V‖ ≤ ‖W‖ :=
+    (Matrix.l2_opNorm_reindex_equiv (g.symm.trans (p.trans e)) _).trans_le
+      (Matrix.l2_opNorm_one_kronecker_rect_le W)
+  have hcard : (Λ.card : ℝ) = (L : ℝ) ^ 2 := by
+    simpa only [Λ, Lattice.Site, SquareLatticeVertex, Fintype.card_coe,
+      Fintype.card_prod, Fintype.card_fin, Nat.cast_mul, pow_two] using
+      congrArg (fun n : ℕ ↦ (n : ℝ)) (Fintype.card_congr a).symm
+  obtain ⟨U, hU0, hU, hunit, hsupport, hM⟩ :=
+    AreaLaw.supported_gaussian_integral (q * q) (Nat.mul_le_mul hq hq) 1
+      (by linarith : (0 : ℝ) ≤ 2 * J) Λ gH K V (hDK.reindex (p.trans e))
+      (Q.image a) (Z.image a) hV hD l
+  rw [hK'] at hU hM
+  refine ⟨U, hU0, hU, hunit, hsupport, fun η T hT ↦ ?_⟩
+  refine ⟨(hM η T hT).1, (hM η T hT).2.1.trans hVn, (hM η T hT).2.2.trans ?_⟩
+  simpa only [hcard, squareLocalizationPrefactor, squareLocalizationVelocity] using
+    mul_le_mul_of_nonneg_right
+      (mul_le_mul
+        (mul_le_mul_of_nonneg_right
+          (mul_le_mul_of_nonneg_right hVn hC.le) (sq_nonneg (L : ℝ)))
+        (add_le_add_right (mul_le_mul_of_nonneg_right hDn hT) 1)
+        (add_nonneg zero_le_one (mul_nonneg (norm_nonneg (K' - K)) hT))
+        (mul_nonneg (mul_nonneg (norm_nonneg W) hC.le) (sq_nonneg (L : ℝ))))
+      (Real.exp_pos _).le
+
+
 /-- The actual square Hamiltonian and grouped buffer matrix construct a
 supported Gaussian approximation. Both spatial support hypotheses are derived
 from the original interactions and coordinate maps. The constants precede all
@@ -75,62 +218,17 @@ theorem SquareHamiltonian.exists_supported_buffer_gaussian_integral
                 ‖M - GaussianFilter.gaussianIntertwinerTruncated η T K' K V‖ ≤
                   ‖W‖ * C * (L : ℝ) ^ 2 * (1 + 8 * J * (L : ℝ) ^ 2 * T) *
                     Real.exp (v * T - c * l) := by
-  classical
-  obtain ⟨C, v, c, hC, hv, hc, hgauss⟩ :=
-    AreaLaw.exists_supported_gaussian_integral (q * q)
-      (Nat.mul_le_mul hq hq) 1 (2 * J)
-  refine ⟨C, v, c, hC, hv, hc, fun L h R C₀ hRC ↦ ?_⟩
+  refine ⟨squareLocalizationPrefactor, squareLocalizationVelocity J + 1, 1 / 2,
+    squareLocalizationPrefactor_pos,
+    by linarith [squareLocalizationVelocity_nonneg hJ], one_half_pos, fun L h R C₀ hRC ↦ ?_⟩
   intro Q P s g p Λ a e K F K' boundary Z W V l B
-  obtain ⟨gH, _, hgOperator⟩ := h.exists_swapped_doubled_localHamiltonian hJ R
-  have hK' : gH.operator = K' := by
-    simpa only [K', F, K, Matrix.reindex_apply, Matrix.conjTranspose_submatrix,
-      Matrix.submatrix_mul_equiv, Matrix.submatrix_submatrix] using! hgOperator
-  have hDK : (doubledHamiltonian h.operator).IsHermitian := by
-    simp only [Matrix.IsHermitian, doubledHamiltonian, Matrix.conjTranspose_add,
-      Matrix.conjTranspose_kronecker, Matrix.conjTranspose_one,
-      (show h.operator.IsHermitian from h.hermitian).eq]
-  have hV₀ : reindex (g.symm.trans p) (g.symm.trans p)
-      ((1 : Matrix (P × P) (P × P) ℂ) ⊗ₖ W) ∈
-        supportedOperators (q * q) (Q : Set (SquareLatticeVertex L L)) :=
-    (EncodedFrame.reindex_physicalBuffer_eq_siteLift q R C₀ hRC W).symm ▸
-      EncodedFrame.siteLift_mem_supportedOperators Q
-        (reindex (sitePairConfigurationEquiv Q q q) (sitePairConfigurationEquiv Q q q) W)
-  have hV : V ∈ supportedOperators (q * q) (Q.image a : Set (Lattice.Site Λ)) := by
-    simpa only [a, V, embedOp_rectangle_eq_reindex, Finset.coe_image,
-      Matrix.reindex_apply, Matrix.submatrix_submatrix] using!
-      embedOp_mem_supportedOperators_image a.injective hV₀
-  have hD : gH.operator - K ∈
-      supportedOperators (q * q) (Z.image a : Set (Lattice.Site Λ)) := by
-    simpa only [hK', a, K', F, K, embedOp_rectangle_eq_reindex, Finset.coe_image,
-      Matrix.reindex_apply, Matrix.conjTranspose_submatrix, Matrix.submatrix_sub,
-      Pi.sub_apply, Matrix.submatrix_mul_equiv, Matrix.submatrix_submatrix] using!
-      embedOp_mem_supportedOperators_image a.injective (h.swapped_doubled_boundary_bound R).1
-  have hDn : ‖K' - K‖ ≤ 8 * J * (L : ℝ) ^ 2 := by
-    simpa only [K', F, K, Matrix.reindex_apply, Matrix.conjTranspose_submatrix,
-      Matrix.submatrix_sub, Pi.sub_apply, Matrix.submatrix_mul_equiv,
-      Matrix.submatrix_submatrix] using!
-      (Matrix.l2_opNorm_reindex_equiv e _).trans_le (h.swapped_doubled_boundary_bound R).2
-  have hVn : ‖V‖ ≤ ‖W‖ :=
-    (Matrix.l2_opNorm_reindex_equiv (g.symm.trans (p.trans e)) _).trans_le
-      (Matrix.l2_opNorm_one_kronecker_rect_le W)
-  have hcard : (Λ.card : ℝ) = (L : ℝ) ^ 2 := by
-    simpa only [Λ, Lattice.Site, SquareLatticeVertex, Fintype.card_coe,
-      Fintype.card_prod, Fintype.card_fin, Nat.cast_mul, pow_two] using
-      congrArg (fun n : ℕ ↦ (n : ℝ)) (Fintype.card_congr a).symm
   obtain ⟨U, hU0, hU, hunit, hsupport, hM⟩ :=
-    hgauss Λ gH K V (hDK.reindex (p.trans e))
-      (Q.image a) (Z.image a) hV hD l
-  rw [hK'] at hU hM
+    SquareHamiltonian.supported_buffer_gaussian_integral q hq J hJ L h R C₀ hRC W l
   refine ⟨U, hU0, hU, hunit, hsupport, fun η T hT ↦ ?_⟩
-  refine ⟨(hM η T hT).1, (hM η T hT).2.1.trans hVn, (hM η T hT).2.2.trans ?_⟩
-  simpa only [hcard] using
-    mul_le_mul_of_nonneg_right
-      (mul_le_mul
-        (mul_le_mul_of_nonneg_right
-          (mul_le_mul_of_nonneg_right hVn hC.le) (sq_nonneg (L : ℝ)))
-        (add_le_add_right (mul_le_mul_of_nonneg_right hDn hT) 1)
-        (add_nonneg zero_le_one (mul_nonneg (norm_nonneg (K' - K)) hT))
-        (mul_nonneg (mul_nonneg (norm_nonneg W) hC.le) (sq_nonneg (L : ℝ))))
-      (Real.exp_pos (v * T - c * l)).le
+  obtain ⟨hMs, hMn, hMe⟩ := hM η T hT
+  refine ⟨hMs, hMn, hMe.trans ?_⟩
+  have hC := squareLocalizationPrefactor_pos
+  gcongr
+  linarith
 
 end TNLean.PEPS.Approximation

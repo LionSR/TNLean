@@ -13,7 +13,8 @@ run_cmd do
   let names := #["primaryBirthTemplate", "primaryBirthTemplate_points",
     "card_primaryBirthTemplate_pieces_le", "exists_primaryScannerConstant",
     "primaryBirthTemplate_isSeparated", "eventually_primaryScaleLimits",
-    "le_primaryScannerScale"]
+    "le_primaryScannerScale", "primaryScaleLimits_of_primaryScaleLimitThreshold_le",
+    "le_primaryScannerScale_of_primaryScannerScaleThreshold_le"]
   let expected := #[``propext, ``Classical.choice, ``Quot.sound]
   for n in names do
     let decl := Lean.Name.str ns n

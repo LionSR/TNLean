@@ -13,7 +13,9 @@ import Lean.Util.CollectAxioms
 run_cmd do
   let declarations := #[
     ``TNLean.PEPS.AreaLaw.exists_regionalEntropy_safe_rect_le_boxError,
-    ``TNLean.PEPS.AreaLaw.sublinearCollarBound_real]
+    ``TNLean.PEPS.AreaLaw.sublinearCollarBound_real,
+    ``TNLean.PEPS.AreaLaw.sublinearCollarBound_real_of_boxEntropy,
+    ``TNLean.PEPS.AreaLaw.sublinearCollarBound_real_of_initial]
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
   for decl in declarations do
     unless (← Lean.getEnv).contains decl do
