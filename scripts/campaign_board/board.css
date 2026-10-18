@@ -60,6 +60,11 @@ details.maint[open] { display: grid; gap: 44px; }
 
 /* masthead */
 .mast { display: grid; gap: 16px; }
+/* Sibling campaigns of the same site, one tab each. */
+.tabs { display: flex; flex-wrap: wrap; gap: 4px 6px; border-bottom: 1px solid var(--line); }
+.tabs a { padding: 7px 12px 8px; margin-bottom: -1px; border: 1px solid transparent; border-radius: 6px 6px 0 0; color: var(--muted); font-weight: 500; font-size: 13.5px; }
+.tabs a:hover { color: var(--ink); text-decoration: none; background: var(--soft); }
+.tabs a[aria-current="page"] { color: var(--ink); background: var(--surface); border-color: var(--line); border-bottom-color: var(--surface); }
 .status { margin: 0; max-width: 72ch; font-size: 14.5px; line-height: 1.55; }
 .status b { font-weight: 600; }
 .stamp { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: 12.5px; color: var(--muted); }

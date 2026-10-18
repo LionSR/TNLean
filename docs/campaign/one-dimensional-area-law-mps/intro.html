@@ -1,0 +1,34 @@
+<!--
+  Campaign-specific introduction for the one-dimensional board: Theorems A and
+  B of the repository note with their explicit constants. The generic board
+  fills every `.thm[data-target]` card's <dl class="tdl"> with the status of
+  its target, an issue or the pull request that proved the theorem.
+-->
+<section>
+  <header>
+    <h2>The two theorems</h2>
+    <p>Each site of a finite set Λ of integers carries a quantum system of dimension <i>q</i>, and two sites are joined by an edge when they are consecutive integers. The Hamiltonian <i>H</i> is a sum of terms of norm at most <i>J</i>, each acting on a set of sites of diameter at most <i>R</i>. Its normalized ground state Ω is unique and separated from the rest of the spectrum by a gap Δ, so that <math><mi>H</mi><mo>−</mo><msub><mi>E</mi><mn>0</mn></msub><mo>≥</mo><mi>Δ</mi><mo stretchy="false">(</mo><mn>1</mn><mo>−</mo><mo stretchy="false">|</mo><mi>Ω</mi><mo stretchy="false">⟩⟨</mo><mi>Ω</mi><mo stretchy="false">|</mo><mo stretchy="false">)</mo></math> for the ground energy <i>E</i><sub>0</sub>. Neither theorem assumes a gap on parts of the chain, frustration-freeness, or translation invariance. Both are proved by the one-dimensional argument directly, not as consequences of the two-dimensional theorems of the other tab, and every constant is explicit.</p>
+  </header>
+  <div class="thms">
+    <article class="thm" data-target="9548">
+      <div class="eyebrow">One-dimensional note · Theorem A</div>
+      <h3>Entanglement obeys an area law</h3>
+      <p class="stmt">For every set <i>A</i> ⊆ Λ, the entanglement entropy of the ground state on <i>A</i> is at most a constant times the number of edges leaving <i>A</i>, and the constant is linear in 1 + <i>J</i>/Δ.</p>
+      <div class="formula"><math display="block"><msub><mi>S</mi><mi>Ω</mi></msub><mo stretchy="false">(</mo><mi>A</mi><mo stretchy="false">)</mo><mo>≤</mo><msub><mi>C</mi><mn>0</mn></msub><mo stretchy="false">(</mo><mi>q</mi><mo>,</mo><mi>R</mi><mo stretchy="false">)</mo><mrow><mo>(</mo><mn>1</mn><mo>+</mo><mfrac><mi>J</mi><mi>Δ</mi></mfrac><mo>)</mo></mrow><mspace width="0.2em"></mspace><mo stretchy="false">|</mo><msub><mo>∂</mo><mi>Λ</mi></msub><mi>A</mi><mo stretchy="false">|</mo></math></div>
+      <p class="defs">Here |∂<sub>Λ</sub><i>A</i>| is the number of edges of Λ with exactly one endpoint in <i>A</i>. The formalized constant is <i>C</i><sub>0</sub> = (8<i>R</i> log <i>q</i> + log 2)(5 + 32<i>N<sub>R</sub></i><i>q</i><sup>2(<i>R</i>+1)</sup> + 128<i>B<sub>R</sub></i>) + 1024 e <i>B<sub>R</sub></i>, where <i>N<sub>R</sub></i> = 2 · 4<sup><i>R</i></sup> bounds the number of interaction terms crossing a cut and <i>B<sub>R</sub></i> = 1 + <i>N<sub>R</sub></i> log<sup>2</sup>(e<i>q</i><sup><i>R</i>+1</sup>). Every interval has entropy at most an explicit <i>C</i><sub>int</sub> ≤ <i>C</i><sub>0</sub>(1 + <i>J</i>/Δ).</p>
+      <p class="why">Hastings proved the one-dimensional area law in 2007 using Lieb–Robinson bounds; later proofs use approximate ground-state projectors. This proof uses no time evolution: the gap enters only through the energy cost of reweighting the ground state, and the constant is linear in <i>J</i>/Δ.</p>
+      <dl class="tdl"></dl>
+      <button class="pillbtn trace" type="button">Trace its prerequisites on the map</button>
+    </article>
+    <article class="thm" data-target="9533">
+      <div class="eyebrow">One-dimensional note · Theorem B</div>
+      <h3>Ground states are polynomial matrix product states</h3>
+      <p class="stmt">On a chain of <i>L</i> ≥ 2 sites there is a normalized matrix product state Φ with open boundary conditions, of bond dimension polynomial in <i>L</i>, within distance 1/<i>L</i> of the ground state Ω.</p>
+      <div class="formula"><math display="block"><mo>‖</mo><mi>Φ</mi><mo>−</mo><mi>Ω</mi><mo>‖</mo><mo>≤</mo><msup><mi>L</mi><mrow><mo>−</mo><mn>1</mn></mrow></msup><mo>,</mo><mspace width="1em"></mspace><mi>D</mi><mo>≤</mo><msup><mi>e</mi><msub><mi>C</mi><mi>int</mi></msub></msup><msup><mrow><mo stretchy="false">(</mo><mn>2</mn><msub><mi>c</mi><mn>0</mn></msub><mo stretchy="false">)</mo></mrow><mrow><mn>64</mn><mi>s</mi></mrow></msup><msup><mi>L</mi><mrow><mn>128</mn><mi>s</mi></mrow></msup></math></div>
+      <p class="defs">Here <i>D</i> is the bond dimension of Φ, the largest Schmidt rank of Φ across a cut of the chain, <i>s</i> = √((1 + <i>J</i>/Δ)<i>B<sub>R</sub></i>), and <i>c</i><sub>0</sub> = √(2e<sup>e/2</sup>). The note allows a global phase and normalizes afterwards; the formal statement needs neither.</p>
+      <p class="why">Theorem A alone does not give a good matrix product state, since an entropy bound does not control the small Schmidt coefficients that a truncation discards. The marginal tail bound controls them, and truncating the cuts one after another then gives Theorem B with an exponent of order √(1 + <i>J</i>/Δ), where Hastings' construction has an exponent exponential in <i>J</i>/Δ.</p>
+      <dl class="tdl"></dl>
+      <button class="pillbtn trace" type="button">Trace its prerequisites on the map</button>
+    </article>
+  </div>
+</section>
