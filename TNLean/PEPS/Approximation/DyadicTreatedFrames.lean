@@ -206,16 +206,15 @@ theorem fiftyThree_le_protocolPatchBound {ε₀ ν : ℝ} (hε : 0 ≤ ε₀) (h
 /-- **A point treatment as a change of a sheet, at the explicit mesh ratio.** Fix
 `0 < ε₀ ≤ 1/16`. For every mesh ratio `0 < ν ≤ pointTreatmentRatio ε₀ = min(ε₀, 1) / 20000` and
 constants of the protocol the following holds. For `L ≥ 2`, `q ≥ 1` and a unit vector `Ω`, fix
-an adaptive patch supply with exponent `60`, size `L`, parameters `B₀, C, c` and any label rank. For any hierarchy depth and any set
-of already repainted blocks, let `R` be a repaintable square of side `n = 2 ^ j > K₀ t`,
-`t = D log L`, let `g` be an unmodified guide of its repainting, and let `L₀` be the new label
-or a current label of one of the nine blocks centered on `R`,
-and let `M`, `M'` be finite sets of grid corners differing at most at one corner `Q₀` of `R`.
-Then passing
-from the frame of the treated sheet with the marks `M` to that with the marks `M'` is a bounded
-change whose participants the repainting uses. For natural `C′, c′` with `C ≤ C′`, `1 ≤ C′`
-and `c ≤ c′`, its pair-effect and pair-source bounds are `2 * b`, its monomial bound is
-`rewriteGateBound C′ c′ b L`, and its error is `(2 * b + 1) * L⁻²⁰`, where
+an adaptive patch supply with exponent `60`, size `L`, parameters `B₀, C, c` and any label rank.
+For any hierarchy depth and any set of already repainted blocks, let `R` be a repaintable
+square of side `n = 2 ^ j > K₀ t`, `t = D log L`, let `g` be an unmodified guide of its
+repainting, let `L₀` be the new label or a current label of one of the nine blocks centered on
+`R`, and let `M`, `M'` be finite sets of grid corners differing at most at one corner `Q₀` of
+`R`. Then passing from the frame of the treated sheet with the marks `M` to that with the marks
+`M'` is a bounded change whose participants the repainting uses. For natural `C′, c′` with
+`C ≤ C′`, `1 ≤ C′` and `c ≤ c′`, its pair-effect and pair-source bounds are `2 * b`, its
+monomial bound is `rewriteGateBound C′ c′ b L`, and its error is `(2 * b + 1) * L⁻²⁰`, where
 `b = protocolPatchBound ε₀ ν`. The two mark sets may be equal.
 
 Polynomial-PEPS manuscript, `06-geometry.tex`, lines 328–339, 481–505, 559–570 and 572–596. -/
