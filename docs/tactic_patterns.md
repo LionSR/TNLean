@@ -8709,3 +8709,15 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Notes:** Birth and exchange use definitional equality of plain frames
   after rewriting the error bound; death uses the existing owner-change frame
   directly. No positivity assumption on the size or exponent is introduced.
+
+### Squared logarithms of bounded support dimensions — candidate (2026-10-18)
+
+- **Pattern:** From `1 ≤ d ≤ D`, compare `log (exp 1 * d)^2` and
+  `log (exp 1 * D)^2` by logarithmic monotonicity and nonnegativity.
+- **Seen:** The pointwise dimension comparisons in
+  `MPS/AreaLaw/Counting.lean`, `cutLogBudget_interval_le`, and
+  `MPS/AreaLaw/WindowCounting.lean`,
+  `ChainHamiltonian.log_surprisalMoment_interval_le_of_consecutive_terms`.
+- **Possible next abstraction:** At a third occurrence, use a scalar lemma for
+  this comparison, leaving the support-dimension estimates at the callers.
+  These are two occurrences in two files; no new tactic is proposed.

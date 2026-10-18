@@ -314,6 +314,74 @@ for an arbitrary finite set of sites and are instantiated here directly.
     bound follows from the crossing count and the dimension bound $q^{R+1}$.
 \end{proof}
 
+% Source: part1_arealaw.tex:706--709, with eq:theta and eq:mgf:152--166.
+\begin{theorem}[Consecutive-window interactions split by an interval]
+    \label{thm:chain_consecutive_window_count}
+    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.card_crossingTerms_interval_le_of_consecutive_terms}
+    \leanok
+    \uses{def:chain_model}
+    Let $L,q,R$ be natural numbers, let $J$ be real, and let
+    $H=\sum_X h_X$ be a finite-range Hamiltonian on the chain of $L$ sites.
+    Suppose that for every $X$ with $h_X\ne0$ there is a natural number $a$
+    such that $a+R+1\le L$ and $X=[a,a+R+1)$.
+    For natural numbers $l,r$, put $A=[l,r)\cap\{0,\ldots,L-1\}$. Then
+    \begin{align}
+        \bigl|\{X:h_X\ne0,\ X\cap A\ne\varnothing,
+        \ X\setminus A\ne\varnothing\}\bigr|\le2R.\notag
+    \end{align}
+    This is the consecutive-window counting refinement in the remark on
+    sharper constants of~\cite[Part~I]{TNLean2026OneDimensional}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:chain_model}
+    A full window is determined by its least site $a$. If it crosses the cut
+    at position $c$, then $a<c\le a+R$, so its start belongs to $[c-R,c)$,
+    which has at most $R$ sites. A window split by $A$ crosses at least one
+    of the cuts at $l$ and $r$. Its start therefore lies in
+    $[l-R,l)\cup[r-R,r)$, a set of at most $2R$ sites. All intervals are
+    clipped to the chain, and natural subtraction is truncated at zero.
+    When $R=0$, or when $A$ is empty, no window is split.
+\end{proof}
+
+\begin{theorem}[Marginal moments for consecutive-window interactions]
+    \label{thm:chain_consecutive_window_moment}
+    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.log_surprisalMoment_interval_le_of_consecutive_terms}
+    \leanok
+    \uses{def:chain_model}
+    Let $L,R$ be natural numbers, let $q\ge1$ be an integer, and let
+    $J\ge0$ and $\Delta>0$ be real. Let $H=\sum_X h_X$ be a
+    finite-range Hamiltonian on the chain of $L$ sites. Suppose that for
+    every $X$ with $h_X\ne0$ there is a natural number $a$ with
+    $a+R+1\le L$ and $X=[a,a+R+1)$.
+    Let $E_0$ be real and let $\Omega$ be a unit vector satisfying
+    $H\Omega=E_0\Omega$ and
+    $H-E_0\ge\Delta(1-|\Omega\rangle\langle\Omega|)$.
+    For natural numbers $l,r$, let $\rho_A$ be the reduced state on
+    $A=[l,r)\cap\{0,\ldots,L-1\}$, and let $K$ take the value $-\log p$
+    with probability $p$ over the positive eigenvalues of $\rho_A$.
+    Put $B=1+2R\log^2(e\,q^{R+1})$. For every real $u$ with
+    $|u|\le1/(32\sqrt{(1+J/\Delta)B})$,
+    \begin{align}
+        \log\mathbb E e^{uK}
+        \le uS(A)+512e\frac J\Delta B u^2.\notag
+    \end{align}
+    This is the marginal moment estimate with the consecutive-window count
+    from the remark on sharper constants of
+    \cite[Part~I]{TNLean2026OneDimensional}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:chain_model,thm:chain_consecutive_window_count,lem:chain_crossing_count,lem:chain_marginal_tail}
+    Restrict the interaction sum to $h_X\ne0$. The sum remains exactly $H$,
+    and its terms retain their supports, Hermiticity and norm bound $J$.
+    The same unit eigenvector and projector gap therefore apply.
+    The crossing count and $\dim\mathcal H_X\le q^{R+1}$ bound the budget
+    for this restricted family by $B$. Apply the marginal moment estimate
+    to that family. Since $J/\Delta\ge0$, replacing its budget by $B$
+    decreases the allowed radius and increases the quadratic error.
+\end{proof}
+
 % Source: part1_arealaw.tex:388--403, single-splitting lemma.
 \begin{theorem}[Single splitting of nested chain intervals]
     \label{thm:chain_single_splitting}
