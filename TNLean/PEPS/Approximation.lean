@@ -405,6 +405,7 @@ import TNLean.PEPS.Approximation.SelectedSourceContraction
 import TNLean.PEPS.Approximation.SelectedSourceOwnerMap
 import TNLean.PEPS.Approximation.SelectiveSourceFactorization
 import TNLean.PEPS.Approximation.SelectiveSourcePreparation
+import TNLean.PEPS.Approximation.SeparateArityCompression
 import TNLean.PEPS.Approximation.SeparatedOutputCoordinates
 import TNLean.PEPS.Approximation.SeparatedPhysicalDensity
 import TNLean.PEPS.Approximation.SeparatedSchmidtOutput

@@ -29,9 +29,8 @@ all auxiliary copies remain private at their actual owners. See
 `docs/paper-gaps/tnlean_one_dimensional_band_sweep_corrections.tex`.
 
 Source: the one-dimensional note, Part 0, `thm:B`, lines 229–238, and Part II,
-proof of `thm:B`, lines 574–615. The source's existential polynomial estimate
-allows the derived congestion constant 24960 instead of the sharper printed
-constant 1600. No theorem asserting the sharper constant is claimed here.
+proof of `thm:B`, lines 574–615. The crossing bound is at most 1280,
+and hence satisfies the printed upper bound 1600 used in the bond estimate.
 -/
 
 noncomputable section
@@ -164,12 +163,12 @@ theorem exists_protocol_isOpenMPS_norm_sub_phase_le
     (mainConfigurationEquiv (length i) (width i) q) (ground i)
   obtain ⟨Cp, α, hCp, hα, hnetwork⟩ := exists_uniform_sampled_block_column
     (fun i : ι ↦ (length i : ℝ)) hsize length width C₀
-    1 s 1 0 0 2 K 1 1 hcount hphysical
-      (fun i g ↦ (harity i g).trans (by decide)) hlifetime hmonomial htermwise
+    3 40 1600 (by decide) (by decide)
+    1 s 1 0 0 2 K 1 1 hcount hphysical harity hlifetime hmonomial htermwise
     target htarget (fun i : ι ↦ 52 * (length i : ℝ) ^ (-11 : ℤ))
     hdensity hgate 5 (by norm_num)
-  let n := max 1 (⌈40 * D * Real.log (q : ℝ)⌉₊ + 24960 * α)
-  let Clarge := (q : ℝ) ^ 40 * (Cp + 1) ^ 24960
+  let n := max 1 (⌈40 * D * Real.log (q : ℝ)⌉₊ + 1600 * α)
+  let Clarge := (q : ℝ) ^ 40 * (Cp + 1) ^ 1600
   let Cfinal := max Clarge ((q : ℝ) ^ L₀)
   have hClarge : 0 < Clarge :=
     mul_pos (pow_pos (by exact_mod_cast (show 0 < q by omega)) _)
@@ -198,7 +197,7 @@ theorem exists_protocol_isOpenMPS_norm_sub_phase_le
       ((‖ψ‖ : ℂ)⁻¹) • ψ
     let Φ : EuclideanSpace ℂ (Fin L → Fin q) :=
       WithLp.toLp 2 (fun x ↦ u (mainConfigurationEquiv L w q x))
-    let B := q ^ (40 * w) * (max 1 ⌈Cp * (L : ℝ) ^ α⌉₊) ^ 24960
+    let B := q ^ (40 * w) * (max 1 ⌈Cp * (L : ℝ) ^ α⌉₊) ^ 1600
     have hmargin : 60 * w ≤ L := by
       have hm := (hwidths i).2
       change 3 * (20 * w) ≤ L at hm
@@ -206,10 +205,10 @@ theorem exists_protocol_isOpenMPS_norm_sub_phase_le
     have hprefix (r : ℕ) (_hr : 0 < r) (_hrm : r ≤ stageCount L w) :
         (TNLean.PEPS.WholeGroup.flattening (fun y ↦ u y)
           (Finset.univ.filter fun p : Party L w ↦ partyLevel p < r)).rank ≤
-            (max 1 ⌈Cp * (L : ℝ) ^ α⌉₊) ^ 24960 := by
+            (max 1 ⌈Cp * (L : ℝ) ^ α⌉₊) ^ 1600 := by
       simpa only [u, C₀, preparationConstruction, length, width, i] using! (hranks r).2.2.2
     obtain ⟨hΦnorm, _hΦcuts, hΦmps, _hn, hB⟩ :=
-      isOpenMPS_of_polynomial_partyPrefix_bounds hq hD hCp hα hL
+      isOpenMPS_of_polynomial_partyPrefix_bounds 1600 hq hD hCp hα hL
         (show w = ⌈D * Real.log (L : ℝ)⌉₊ from rfl) hmargin u hunit hprefix
     have hΦne : Φ ≠ 0 := by
       apply norm_ne_zero_iff.mp

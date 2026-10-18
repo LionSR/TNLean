@@ -55,5 +55,7 @@ import TNLean.MPS.AreaLaw.ProtocolUniformPreparation
 import TNLean.MPS.AreaLaw.RelativeGeneratorLocalization
 import TNLean.MPS.AreaLaw.ResetSupportSeparation
 import TNLean.MPS.AreaLaw.SequentialTruncation
+import TNLean.MPS.AreaLaw.SharpChainCompression
+import TNLean.MPS.AreaLaw.SharpPhysicalCompression
 import TNLean.MPS.AreaLaw.SupportedGaussianIntegral
 import TNLean.MPS.AreaLaw.SwappedDoubledHamiltonian

@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.ProtocolSweepPlacement
-import TNLean.PEPS.Approximation.DistributedGateMapConstruction
+import TNLean.PEPS.Approximation.SeparateArityCompression
 import TNLean.PEPS.Approximation.IdentityBondCutRank
 import QICLean.Analysis.RectangularTraceNormAlgebra
 import Mathlib.Algebra.Order.BigOperators.Group.Finset
@@ -22,9 +22,10 @@ product-basis column. The same column, with its actual fixed-input endpoint tens
 has the crossing-alphabet rank bound at every party cut. Normalizing it preserves these
 ranks and gives the existing phase-error estimate.
 
-At whole-block prefixes, the actual common-original-gate conclusion and degree bound
-3120 imply at most 24960 tagged crossing links. Each actual star or sample alphabet is
-bounded by the same rounded uniform dimension, giving its 24960-th power as a block
+At whole-block prefixes, a separate arity bound a and lifetime bound b give
+degree at most 2b(a-1). The common-original-gate conclusion gives at most
+8(2b(a-1)) tagged crossing links, hence any specified upper bound χ. Each actual star or
+sample alphabet is bounded by the same rounded uniform dimension, giving its χ-th power as a block
 cut-rank bound. Scalar physical outputs, parallel links and empty cut families remain.
 
 This is an auxiliary consequence of compression and a derived placement conclusion.
@@ -152,8 +153,9 @@ private theorem card_crossing_subtype_eq_prefixCrossingLinks
 open Classical in
 /-- Uniform compression followed by one useful column and its normalized block cut ranks.
 The per-original-gate distance hypothesis is an auxiliary preparation conclusion. All
-resource and density hypotheses are those of uniform compression, specialized to
-lifetime and arity bound 40. Smallness is required only of the selected member, after
+resource and density hypotheses are those of uniform compression, with separate
+arity and lifetime bounds a and b, and a numerical upper bound χ for the derived
+crossings. Smallness is required only of the selected member, after
 the uniform constants have been chosen.
 
 Source: the one-dimensional note, Part II, proof of Theorem B, lines 587–615;
@@ -162,11 +164,12 @@ theorem exists_uniform_sampled_block_column
     {ι : Type*} (size : ι → ℝ) (hsize : ∀ i, 2 ≤ size i)
     (length width : ι → ℕ)
     (C₀ : ∀ L, DistributedConstruction (Party (length L) (width L)))
+    (a b χ : ℕ) (hab : a ≤ b) (hχ : 8 * (2 * b * (a - 1)) ≤ χ)
     (n d r u v : ℕ) (C_N C_D C_K C_C : ℝ)
     (hN₀ : ∀ L, ((C₀ L).circuit.nonprivateCount : ℝ) ≤ C_N * size L ^ n)
     (hphysical₀ : ∀ L j, ((C₀ L).physicalDimension j : ℝ) ≤ C_D * size L ^ d)
-    (harity₀ : ∀ L g, ((C₀ L).circuit.participants g).card ≤ 40)
-    (hlifetime₀ : ∀ L j, (C₀ L).circuit.participationCount j ≤ 40)
+    (harity₀ : ∀ L g, ((C₀ L).circuit.participants g).card ≤ a)
+    (hlifetime₀ : ∀ L j, (C₀ L).circuit.participationCount j ≤ b)
     (hmonomial₀ : ∀ L, ∃ K : ℕ, (C₀ L).circuit.IsMonomialBounded K ∧
       (K : ℝ) ≤ C_K * size L ^ u)
     (htermwise₀ : ∀ L, (C₀ L).circuit.IsTermwiseBounded r (C_C * size L ^ v))
@@ -201,12 +204,12 @@ theorem exists_uniform_sampled_block_column
         (∀ e : Link Finset.univ participants root,
           (Fintype.card (alphabet Finset.univ participants root Label k e) : ℝ) ≤
             C_p * size L ^ α) ∧
-        (∀ j, (incidentDistributedLinks Finset.univ participants root j).card ≤ 3120) ∧
+        (∀ j, (incidentDistributedLinks Finset.univ participants root j).card ≤ (2 * b * (a - 1))) ∧
         (∀ e : Link Finset.univ participants root,
           ∀ j l, j ∈ distributedLinkParties root e.1 → l ∈ distributedLinkParties root e.1 →
             ∃ g : (C₀ L).circuit.nonprivateLocations,
               j ∈ (C₀ L).circuit.participants g ∧ l ∈ (C₀ L).circuit.participants g) ∧
-        (∀ r', (prefixCrossingLinks Finset.univ participants root r').card ≤ 24960) ∧
+        (∀ r', (prefixCrossingLinks Finset.univ participants root r').card ≤ χ) ∧
         (∀ e : Link Finset.univ participants root,
           Fintype.card (alphabet Finset.univ participants root Label k e) ≤
             max 1 ⌈C_p * size L ^ α⌉₊) ∧
@@ -239,17 +242,18 @@ theorem exists_uniform_sampled_block_column
                 WholeGroup.IsLink (src Finset.univ participants root)
                   (tgt Finset.univ participants root) S Sᶜ e},
                 Fintype.card (alphabet Finset.univ participants root Label k e)) ≤
-                (max 1 ⌈C_p * size L ^ α⌉₊) ^ 24960 ∧
+                (max 1 ⌈C_p * size L ^ α⌉₊) ^ χ ∧
               (WholeGroup.flattening (⇑(((‖ψ‖ : ℂ)⁻¹) • ψ)) S).rank ≤
-                (max 1 ⌈C_p * size L ^ α⌉₊) ^ 24960) := by
+                (max 1 ⌈C_p * size L ^ α⌉₊) ^ χ) := by
   have hdec (L : ι) : (fun a b : Party (length L) (width L) ↦
       Classical.propDecidable (a = b)) =
       (@instDecidableEqSum _ _ (instDecidableEqFin _) (instDecidableEqFin _)) :=
     Subsingleton.elim _ _
   classical
   have hcompression :=
-    DistributedConstruction.exists_uniform_sampled_network_sub_pure_le size hsize
-      (fun L ↦ Party (length L) (width L)) C₀ 40 n d r u v C_N C_D C_K C_C
+    DistributedConstruction.exists_uniform_sampled_network_sub_pure_le_of_arity_lifetime
+      size hsize
+      (fun L ↦ Party (length L) (width L)) C₀ a b n d r u v hab C_N C_D C_K C_C
       hN₀ hphysical₀ harity₀ hlifetime₀ hmonomial₀ htermwise₀ Ω
       (by intro L; rw [hdec]; exact hΩ L) η
       (by intro L; rw [hdec]; exact hpure L) p hp
@@ -259,12 +263,14 @@ theorem exists_uniform_sampled_block_column
   rw [hdec] at hmember
   obtain ⟨Gate, _, _, participants, root, hroot, Label, _, k, c, T,
     hσ, herror, hlow, hhigh, hdim, hinc, hcommon⟩ := hmember
-  have hdegree : ∀ j, (incidentDistributedLinks Finset.univ participants root j).card ≤ 3120 := by
+  have hdegree : ∀ j,
+      (incidentDistributedLinks Finset.univ participants root j).card ≤ 2 * b * (a - 1) := by
     simpa using hinc
-  have hcross : ∀ r', (prefixCrossingLinks Finset.univ participants root r').card ≤ 24960 := by
+  have hcross : ∀ r', (prefixCrossingLinks Finset.univ participants root r').card ≤ χ := by
     intro r'
-    simpa using prefixCrossingLinks_card_le_of_originalCircuit
-      Finset.univ participants root (C₀ L).circuit (hgate L) 3120 hdegree hcommon r'
+    exact (prefixCrossingLinks_card_le_of_originalCircuit
+      Finset.univ participants root (C₀ L).circuit (hgate L)
+      (2 * b * (a - 1)) hdegree hcommon r').trans hχ
   let D : ℕ := max 1 ⌈C_p * size L ^ α⌉₊
   have hD : 1 ≤ D := le_max_left _ _
   have halphabet : ∀ e : Link Finset.univ participants root,
@@ -288,15 +294,15 @@ theorem exists_uniform_sampled_block_column
   let Ecut := {e : Link Finset.univ participants root //
     WholeGroup.IsLink (src Finset.univ participants root)
       (tgt Finset.univ participants root) S Sᶜ e}
-  have hcard : Fintype.card Ecut ≤ 24960 := by
+  have hcard : Fintype.card Ecut ≤ χ := by
     rw [card_crossing_subtype_eq_prefixCrossingLinks Finset.univ participants root r']
     exact hcross r'
   have hproduct : (∏ e : Ecut,
-      Fintype.card (alphabet Finset.univ participants root Label k e)) ≤ D ^ 24960 := by
+      Fintype.card (alphabet Finset.univ participants root Label k e)) ≤ D ^ χ := by
     calc
       _ ≤ ∏ _e : Ecut, D := Finset.prod_le_prod fun e _ ↦ halphabet e.val
       _ = D ^ Fintype.card Ecut := by simp
-      _ ≤ D ^ 24960 := pow_le_pow_right' hD hcard
+      _ ≤ D ^ χ := pow_le_pow_right' hD hcard
   dsimp only [D, Ecut] at hproduct
   exact ⟨(hrank S).1, (hrank S).2, hproduct, by
     rw [(hrank S).2]

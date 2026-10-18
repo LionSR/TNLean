@@ -24,6 +24,19 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Independent gate arity and party lifetime — promoted (2026-10-18)
+
+- **Pattern:** Count the tagged links meeting a party by summing the two link
+  kinds over its actual gate occurrences, keeping arity and lifetime separate.
+- **Seen:** The general incidence estimate and the former common-bound proof
+  in `PEPS/Approximation/DistributedLinks.lean`; its transports occur in
+  `PEPS/Approximation/SeparateArityCompression.lean`.
+- **Abstraction:** `card_incidentDistributedLinks_le_of_arity_lifetime` gives
+  `2 * lifetime * (arity - 1)`. The old common-bound theorem is its specialization,
+  and the source-circuit and replacement estimates call it.
+- **Notes:** Occurrence tags and both link kinds remain distinct. The counting
+  proof occurs once; numerical specialization does not repeat the finite union.
+
 ### Product-basis vectors on concatenated register lists — promoted (2026-10-18)
 
 - **Pattern:** Split a product basis vector at a list boundary, retaining the
@@ -8666,6 +8679,7 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Existing reuse:** `Nat.cast_mul`, `Nat.cast_pow`, `pow_ne_zero` and
   `Nat.one_le_iff_ne_zero` give the numerical steps. Explicit simplification
   of the length, width and normalized-vector definitions gives the rank
-  specialization while preserving the power 24960.
+  specialization while keeping the natural crossing exponent symbolic; the
+  physical specialization uses 1600.
 - **Notes:** These are different applications of existing lemmas, not three
   copies of one proof block. No additional scalar theorem or tactic is needed.

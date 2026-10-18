@@ -65,14 +65,15 @@ chain-sweep protocol. The latter has the following proved components:
 | Cut rank of the distributed identity-bond network | `DependentBondNetwork.rank_flattening_network_one_le`, `DistributedOperatorContraction.rank_flattening_contractedOperator_column_le` | Proved for every party partition and every actual product-basis input column. The rank is bounded by the product of the alphabets of the tagged crossing links, each counted once. Varying and empty alphabets, loops and parallel links are included; placement and crossing counts are separate. These declarations belong to the corresponding `TNLean.PEPS` namespaces. |
 | Conditional preparation including initialization and terminal readout | `ChainSweep.exists_preparation_of_local_circuits` | Proved from the actual conditional local family: one constructed product input and one full circuit, at most `18m` nonprivate gates, lifetime at most 40, expansion bounds one, norm at most one, vector error `4(18m)L^(-30)` from the retained-copy reference, and physical density error at most twice that error. Stage support and level distance at most two hold for every original nonprivate gate. |
 | Three-party stage support | `ChainSweep.card_le_three_of_subset_stageParticipants` | Proved for every finite subset of the prescribed stage participants. Together with the full preparation support, each original nonprivate gate has at most three participants. |
-| One compressed column for all cuts | `DistributedOperatorContraction.exists_useful_column_of_sub_pure_le`, `ChainSweep.exists_uniform_sampled_block_column` | Proved under the full uniform compression hypotheses and the original-gate distance bound. The polynomial alphabet constants precede all family members; for each member with error less than one, one nonzero actual column works for every prefix. Its normalized cut ranks are at most `max(1,ceil(C_p L^alpha))^24960`. The generic useful-column declaration belongs to `TNLean.PEPS.Approximation`. |
+| Separate arity and lifetime in physical compression | `Approximation.card_incidentDistributedLinks_le_of_arity_lifetime`, `PairEffect.DistributedConstruction.exists_uniform_sampled_network_sub_pure_le_of_arity_lifetime`, `ChainSweep.exists_physical_sampled_network_with_prefixCrossingLinks_le_1600` | Proved: the same sampled network retains its density error, polynomial alphabets and original-gate witnesses, with degree `2*b*(a-1)`. Physical chain data give degree 160 and at most 1280 crossing links at every prefix. No arity or crossing estimate is an additional physical hypothesis. |
+| One compressed column for all cuts | `DistributedOperatorContraction.exists_useful_column_of_sub_pure_le`, `ChainSweep.exists_uniform_sampled_block_column` | Proved under the full uniform compression hypotheses and the original-gate distance bound. The polynomial alphabet constants precede all family members; for each member with error less than one, one nonzero actual column works for every prefix. With separate arity `a`, lifetime `b`, and `8*(2*b*(a-1)) <= chi`, its normalized cut ranks are at most `max(1,ceil(C_p L^alpha))^chi`. The generic useful-column declaration belongs to `TNLean.PEPS.Approximation`. |
 | Original-site coordinates and cut ranks | `ChainSweep.rank_partyPrefix_eq_cutMatrix`, `rank_partyPrefix_last_eq_cutMatrix`, `rank_cutMatrix_le_of_partyPrefix_bounds` | Proved for the literal inverse main-coordinate vector. Under `q >= 1`, `w >= 1`, `60w <= L` and internal party-prefix ranks at most `R >= 1`, every original-site cut has rank at most `q^(40w) R`. Endpoint and scalar physical factors are retained; no vector normalization premise is needed. |
 | Eight original-state information estimates for a band | `OneBand.primitive_separation`, `primitive_information_of_logarithmic_separation` | Proved from physical logarithmic separation, with constants chosen before every chain, state, width and owner assignment. No mutual-information estimate is an input. |
 | Birth and first-death information | `ChainSweep.birth_death_separation`, `birth_death_information_of_logarithmic_separation` | Proved for the actual birth environments and the first after-death environment, for the same original ground vector. |
 | Local stage circuits from the gapped Hamiltonian | `ChainSweep.local_stage_circuits_of_logarithmic_separation` | Proved with no supplied circuit or information bound. Every actual eighteen-step stage retains the seven first-stage identity circuits. |
 | Complete physical preparation | `ChainSweep.exists_preparation_of_gappedGroundState` | Proved with constants before all physical instances: one product input and full circuit, lifetime at most 40, at most `20m <= 2L` nonprivate gates, at most three participants per nonprivate gate and level distance at most two. The vector error is at most `26 L^(-11)` and the standard physical-density error at most `52 L^(-11)`. Physical dimensions are at most `q^(80w) <= K L^s`, with `w = ceil(D log L) >= 1` and `60w <= L`. |
-| Uniform physical preparation family | `ChainSweep.preparationConstruction`, `exists_uniform_preparation_family` | Proved for the family of every admissible sufficiently large length, Hamiltonian, ground vector and position map. All compression hypotheses follow for the same circuit, normalized product input, physical order and standard physical marginal. |
-| Polynomial original-site bond dimension | `ChainSweep.polynomial_bond_bound_of_ceil_width`, `isOpenMPS_of_polynomial_partyPrefix_bounds` | Proved for the same inverse-coordinate vector. Both ceiling prefactors are retained; `q = 1` and zero compression prefactor are allowed. |
+| Uniform physical preparation family | `ChainSweep.preparationConstruction`, `exists_uniform_preparation_family` | Proved for the family of every admissible sufficiently large length, Hamiltonian, ground vector and position map. All compression hypotheses, including arity three and lifetime forty, follow for the same circuit, normalized product input, physical order and standard physical marginal. |
+| Polynomial original-site bond dimension | `ChainSweep.polynomial_bond_bound_of_ceil_width`, `isOpenMPS_of_polynomial_partyPrefix_bounds` | Proved for the same inverse-coordinate vector. For every natural `chi`, the prefactor is `q^40*(C_p+1)^chi` and the exponent is `max(1,ceil(40*D*log(q))+chi*alpha)`. Both ceiling corrections are retained; `q = 1`, zero compression prefactor and `chi = 0` are allowed. |
 | Theorem B by the physical protocol | `ChainSweep.exists_protocol_isOpenMPS_norm_sub_phase_le` | Proved for `q >= 1` and `Delta > 0`, with `C > 0` and natural `n > 0` chosen before all lengths, Hamiltonians and ground vectors. Every `L >= 2` admits a unit, nonzero open-boundary MPS of bond dimension at most `C L^n` and phase error at most `1/L`. One normalized actual column gives all cuts; shorter lengths use exact representations with the same constants. |
 
 The half-open
@@ -86,8 +87,10 @@ and the full prepared family discharges the compression hypotheses. Compression
 chooses one actual nonzero column before all cuts; its normalization and the
 inverse main-coordinate vector give the same final MPS. The auxiliary reference
 is a product by original copy, with no product requirement across final parties.
-The bound uses the derived crossing count 24960; the sharper printed count 1600
-is not asserted. The broader finite-domain forms of the Part II analytic
+The physical proof uses arity three and lifetime forty of its constructed circuit.
+For the same sampled network, the incident degree is at most 160 and every prefix
+has at most 1280 crossing links, hence satisfies the printed bound 1600.
+One column from that network gives all prefix ranks with exponent 1600. The broader finite-domain forms of the Part II analytic
 estimates remain separate from this contiguous-chain proof.
 
 ## Analytic estimates for the physical protocol
@@ -266,8 +269,8 @@ buffer lemma; Remark 6.3 of the note explains how it can be replaced by
 For the physical protocol, let `D >= 1` and `L0 >= 2` be the uniform width
 constant and length cutoff, and let `Cp >= 0` and natural `alpha > 0` be the
 uniform compression constants. The proof takes
-`n = max(1,ceil(40 D log q) + 24960 alpha)` and
-`C = max(q^40 (Cp + 1)^24960,q^L0)`.
+`n = max(1,ceil(40 D log q) + 1600 alpha)` and
+`C = max(q^40 (Cp + 1)^1600,q^L0)`.
 The second term covers the finite lengths below the cutoff. The first term
 retains the additive ones in both integer ceilings. These choices precede
 the length, Hamiltonian and ground vector.

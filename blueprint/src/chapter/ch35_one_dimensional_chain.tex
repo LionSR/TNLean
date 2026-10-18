@@ -2090,9 +2090,9 @@ for an arbitrary finite set of sites and are instantiated here directly.
     Let $M_0$ have an arbitrary owner function $o$, and let $U_0$ assign
     every site of a distinct auxiliary copy to $C$. Set
     \begin{align}
-        U_1 & =U_0[[a-6w,a-w)_L\to B],         &
-        U_2 & =U_1[[a-5w,a-2w)_L\to A],\notag    \\
-        U_3 & =U_2[[a-4w,a-3w)_L\to C],        &
+        U_1 & =U_0[\lbrack a-6w,a-w)_L\to B],        &
+        U_2 & =U_1[\lbrack a-5w,a-2w)_L\to A],\notag   \\
+        U_3 & =U_2[\lbrack a-4w,a-3w)_L\to C],       &
         Y   & =\{x:a-7w<x<a-\tfrac72w\}.\notag
     \end{align}
     Exchange the ownership assignments of $M_0,U_3$ on $Y$ to define
@@ -2100,10 +2100,10 @@ for an arbitrary finite set of sites and are instantiated here directly.
     The set $Y$ is the sample of an open real interval, also when $w$ is odd.
     Define the remaining main assignments by
     \begin{align}
-        M_5 & =M_4[[a-4w,a)_L\to A],          &
-        M_6 & =M_5[[a-5w,a+w)_L\to B],\notag    \\
-        M_7 & =M_6[[a-3w,a)_L\to C],          &
-        M_8 & =M_7[[a-6w,a-3w)_L\to C].\notag
+        M_5 & =M_4[\lbrack a-4w,a)_L\to A],          &
+        M_6 & =M_5[\lbrack a-5w,a+w)_L\to B],\notag    \\
+        M_7 & =M_6[\lbrack a-3w,a)_L\to C],          &
+        M_8 & =M_7[\lbrack a-6w,a-3w)_L\to C].\notag
     \end{align}
     The stage pairs are $(M_0,U_j)$ for $0\le j\le3$, then
     $(M_j,U_4)$ for $4\le j\le8$, and remain $(M_8,U_4)$ thereafter.
@@ -2136,7 +2136,7 @@ for an arbitrary finite set of sites and are instantiated here directly.
         \end{cases}\notag
     \end{align}
     If also $o(x)=A$ on $[a,a+w)_L$ and $o(x)=B$ on
-    $[a+w,a+2w)_L$, then $M_8=M_0[[a,a+w)_L\to B]$.
+    $\lbrack a+w,a+2w)_L$, then $M_8=M_0[\lbrack a,a+w)_L\to B]$.
     Thus the original main ownership is restored outside the initial band;
     this assertion concerns the main sheet, not the retained auxiliary registers.
 
@@ -2218,7 +2218,7 @@ for an arbitrary finite set of sites and are instantiated here directly.
 
     At the left boundary there is also a single-death version, for arbitrary
     natural $L,w$ and parties $A,B$. Suppose $M$ is a hole-free frame whose
-    owner is $A$ on $T_0=[0,w)_L$, and put $M'=M[T_0\to B]$.
+    owner is $A$ on $T_0=\lbrack 0,w)_L$, and put $M'=M[T_0\to B]$.
     For $q\ge1$, a unit vector $\Omega$, and
     $I_\Omega(T_0:E(M',B))\le L^{-60}$, there is a circuit from $M$ to $M'$
     with nonprivate participants in $\{A,B\}$ and the same bounds one on
@@ -2282,8 +2282,8 @@ The objects below are owner assignments and ordered lists of frames without hole
 
     For $0\le k<m$, set $a=kt$, $b=(k+1)t$ and define
     \begin{align}
-        T_k^R & =[b+w,L)_L, & T_k^P & =[a+w,b)_L,\notag \\
-        H_k^- & =[a,a+w)_L, & H_k^+ & =[b,b+w)_L.\notag
+        T_k^R & =\lbrack b+w,L)_L, & T_k^P & =\lbrack a+w,b)_L,\notag \\
+        H_k^- & =\lbrack a,a+w)_L, & H_k^+ & =\lbrack b,b+w)_L.\notag
     \end{align}
     Starting from $M_k$, give $T_k^R$ to $R_{k+1}$, then $T_k^P$ to
     $P_{k+1}$, obtaining frames $M_k^{(1)},M_k^{(2)}$.
@@ -2325,13 +2325,13 @@ The objects below are owner assignments and ordered lists of frames without hole
     Suppose $w\ge1$ and $0\le k<m$. Each birth target is held by $R_k$
     immediately before that birth. Its environment outside $R_k$ is
     \begin{align}
-        E(M_k,R_k)       & =[0,a)_L,                    &
-        E(M_k^{(1)},R_k) & =[0,a)_L\cup[b+w,L)_L.\notag
+        E(M_k,R_k)       & =[0,a)_L,                                  &
+        E(M_k^{(1)},R_k) & =\lbrack 0,a)_L\cup\lbrack b+w,L)_L.\notag
     \end{align}
     For $k>0$, the owners in $M_k^{(2)}$ on the three intervals
-    $[a-8w,a)_L$, $[a,a+w)_L$ and $[a+w,a+2w)_L$ are respectively
+    $\lbrack a-8w,a)_L$, $\lbrack a,a+w)_L$ and $\lbrack a+w,a+2w)_L$ are respectively
     $P_k,R_k,P_{k+1}$.
-    In $M_k^{(L)}$, the owners on $[b-8w,b)_L$, $[b,b+w)_L$ and
+    In $M_k^{(L)}$, the owners on $\lbrack b-8w,b)_L$, $\lbrack b,b+w)_L$ and
     $[b+w,b+2w)_L$ are respectively $P_{k+1},R_k,R_{k+1}$.
     When $m>0$, the environment at the first stage for the direct death, evaluated
     after that death, is $E(M_0^{(L)},P_1)=[t,L)_L$.
@@ -3146,12 +3146,15 @@ Definition~\ref{def:chain_open_mps}.
     write $W_i$ for their original circuits and $\rho_i$ for their
     unrenormalized physical densities. The index map $i\mapsto L_i$
     need not be injective.
-    Fix natural $n,d,r,u,v$ and real $C_N,C_D,C_K,C_C$, independent of $i$.
-    For each member, all parties $b$ and all original nonprivate gates $g$
+    Fix natural $a,b,\chi$ with $a\le b$ and
+    $8(2b(a-1))\le\chi$. Fix natural $n,d,r,u,v$ and real
+    $C_N,C_D,C_K,C_C$, independent of $i$.
+    Subtraction in $a-1$ is truncated at zero.
+    For each member, all parties $j$ and all original nonprivate gates $g$
     satisfy the following resource bounds:
     \begin{align}
-        N(W_i)                   & \le C_Ns_i^n, & d_{i,b}  & \le C_Ds_i^d,\notag \\
-        |\operatorname{part}(g)| & \le40,        & n_b(W_i) & \le40.\notag
+        N(W_i)                   & \le C_Ns_i^n, & d_{i,j}  & \le C_Ds_i^d,\notag \\
+        |\operatorname{part}(g)| & \le a,        & n_j(W_i) & \le b.\notag
     \end{align}
     For each $i$ there is a natural number $K_i$ bounding the number of
     recorded monomials at every original nonprivate gate, with
@@ -3183,11 +3186,11 @@ Definition~\ref{def:chain_open_mps}.
     \end{align}
     The alphabet bound in (\ref{eq:chain_uniform_compression_dimensions})
     holds for every actual tagged link $e$.
-    Every party meets at most $3120$ actual links, and the two endpoints
+    Every party meets at most $2b(a-1)$ actual links, and the two endpoints
     of each link participate in one common original nonprivate gate
     of this same $W_i$. Consequently every level prefix has at most
-    $24960$ tagged crossing links.
-    Set $B_i=\max\{1,\lceil C_ps_i^\alpha\rceil\}$, a natural number.
+    $\chi$ tagged crossing links.
+    Set $B_i=\max\{1,\lceil C_ps_i^\alpha\rceil_+\}$, a natural number.
     Every actual star or sample alphabet has size at most $B_i$.
 
     Only for a member with $\epsilon_i<1$, choose one product-basis
@@ -3195,14 +3198,14 @@ Definition~\ref{def:chain_open_mps}.
     This is the same input-fixed endpoint network, with
     $\|\widehat v_i\|=1$ and
     $\|\widehat v_i-e^{i\theta_i}\omega_i\|\le2\epsilon_i$ for some real
-    $\theta_i$. For every natural prefix index $a$, put
-    $S_a=\{b:\ell(b)<a\}$. The same column satisfies
+    $\theta_i$. For every natural prefix index $t$, put
+    $S_t=\{j:\ell(j)<t\}$. The same column satisfies
     \begin{align}
-        \operatorname{rank}F_{S_a}(v_i)
-         & \le\prod_{e\in\partial S_a}|D_e|\le B_i^{24960},
-        \label{eq:chain_uniform_column_rank}                \\
-        \operatorname{rank}F_{S_a}(\widehat v_i)
-         & =\operatorname{rank}F_{S_a}(v_i)\le B_i^{24960}.
+        \operatorname{rank}F_{S_t}(v_i)
+         & \le\prod_{e\in\partial S_t}|D_e|\le B_i^{\chi},
+        \label{eq:chain_uniform_column_rank}               \\
+        \operatorname{rank}F_{S_t}(\widehat v_i)
+         & =\operatorname{rank}F_{S_t}(v_i)\le B_i^{\chi}.
         \label{eq:chain_uniform_normalized_rank}
     \end{align}
     The constants precede every family member, its network, the
@@ -3211,18 +3214,19 @@ Definition~\ref{def:chain_open_mps}.
     \cite[Theorem~5.2, Remark~5.3 and Lemma~8.1]{OpenAI2026PolynomialPEPS}.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:peps_compression_retained_norm_network,
+    \uses{thm:peps_separate_arity_compression,
         thm:chain_tagged_link_congestion,thm:compression_useful_column_all_cuts}
-    Apply uniform compression to the whole family with the common
-    participation constant $40$. Its actual physical density is
-    $\rho_i$, giving the two errors and retained-trace bounds in
+    Apply Theorem~\ref{thm:peps_separate_arity_compression} to the
+    whole family, retaining its actual sampled tensors and tagged alphabets.
+    Its density estimates and trace bounds give
     (\ref{eq:chain_uniform_compression_error}) and
-    (\ref{eq:chain_uniform_compression_dimensions}). The degree bound
-    $2\cdot40\cdot39=3120$ and the common-original-gate conclusion give
-    $24960$ crossings by Theorem~\ref{thm:chain_tagged_link_congestion}.
+    (\ref{eq:chain_uniform_compression_dimensions}).
+    The degree bound $2b(a-1)$ and the common-original-gate witnesses
+    concern this same network. Theorem~\ref{thm:chain_tagged_link_congestion}
+    gives at most $8(2b(a-1))\le\chi$ crossings for each prefix.
     For each link, round its uniform alphabet bound upwards to $B_i$.
     Since $B_i\ge1$, the crossing product is at most
-    $B_i^{|\partial S_a|}\le B_i^{24960}$.
+    $B_i^{|\partial S_t|}\le B_i^{\chi}$.
     After fixing a member with $\epsilon_i<1$, apply
     Theorem~\ref{thm:compression_useful_column_all_cuts} once to its
     actual network. Its one choice of $z_i,v_i$ has the literal
@@ -3339,7 +3343,7 @@ The prescribed placement is $\ell(R_i)=i$ and $\ell(P_{j+1})=j$.
     \uses{def:chain_one_band_assignments,def:chain_model}
     Let $L,a,w,q$ be natural numbers, $w\ge1$, $8w\le a$ and
     $a+2w\le L$. Let the original main owner be $C$ on
-    $[a-8w,a)_L$, $A$ on $[a,a+w)_L$ and $B$ on
+    $\lbrack a-8w,a)_L$, $A$ on $\lbrack a,a+w)_L$ and $B$ on
     $[a+w,a+2w)_L$, with $A\ne C$ and $B\ne C$.
     No owner is prescribed outside these intervals, and $A=B$ is allowed.
     For all eight pairs $(T_j,E_j)$ in the table of
@@ -3401,9 +3405,9 @@ The prescribed placement is $\ell(R_i)=i$ and $\ell(P_{j+1})=j$.
     The actual target and environment pairs are
     \begin{align}
         (T_k^R,E(M_k,R_k))
-         & =([b+w,L)_L,[0,a)_L),\notag        \\
+         & =(\lbrack b+w,L)_L,\lbrack 0,a)_L),\notag               \\
         (T_k^P,E(M_k^{(1)},R_k))
-         & =([a+w,b)_L,[0,a)_L\cup[b+w,L)_L).
+         & =(\lbrack a+w,b)_L,\lbrack 0,a)_L\cup\lbrack b+w,L)_L).
         \label{eq:chain_birth_regions}
     \end{align}
     At $k=0$, the direct death has target $[0,w)_L$ and
@@ -3602,7 +3606,7 @@ The prescribed placement is $\ell(R_i)=i$ and $\ell(P_{j+1})=j$.
     With $\omega_i=U_{\chi_i}\Omega_i$, these same constructions satisfy
     \begin{align}
         L_i                      & \ge2,           & N(C_i)    & \le2L_i,            & d_{i,p} & \le KL_i^s,\notag \\
-        |\operatorname{part}(g)| & \le40,          & n_p(C_i)  & \le40,              &
+        |\operatorname{part}(g)| & \le3,           & n_p(C_i)  & \le40,              &
         \|\omega_i\|             & =1,\notag                                                                       \\
         \|\rho_i-|\omega_i\rangle\langle\omega_i|\|_1
                                  & \le52L_i^{-11}, & 1\le w_i, & \qquad60w_i\le L_i.
@@ -3614,19 +3618,20 @@ The prescribed placement is $\ell(R_i)=i$ and $\ell(P_{j+1})=j$.
     The target density is literally the coordinate reindexing of
     $|\Omega_i\rangle\langle\Omega_i|$ by $\chi_i$.
     Thus all premises of Theorem~\ref{thm:chain_uniform_compressed_block_column}
-    hold with size $L_i$, gate-count parameters $(n,C_N)=(1,2)$,
+    hold with arity $3$, lifetime $40$, crossing parameter $1600$,
+    size $L_i$, gate-count parameters $(n,C_N)=(1,2)$,
     physical-dimension parameters $(d,C_D)=(s,K)$,
     $r=1$, $u=v=0$, $C_K=C_C=1$ and $\eta_i=52L_i^{-11}$,
     using the uniform compression theorem of
     \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS}.
     No one Hamiltonian or ground vector is selected to represent a length.
 \end{theorem}
-\begin{proof}
-    \leanok
+\begin{proof}\leanok
     \uses{thm:chain_physical_preparation,def:chain_physical_construction,
         def:peps_distributed_construction_density}
     Enlarge the physical cutoff to $\max\{L_0,2\}$ and choose the
     preparation witnesses over the entire admissible tuple set.
+    Retain the derived arity-three bound of these same circuits.
     Record them without changing the circuit, input, private layout
     or standard marginal. The expansion bound $(1,1)$ supplies the
     stated termwise bound. The main-coordinate map is an isometry,
@@ -3642,27 +3647,28 @@ The prescribed placement is $\ell(R_i)=i$ and $\ell(P_{j+1})=j$.
     \label{thm:chain_protocol_polynomial_bond}
     \lean{TNLean.MPS.AreaLaw.ChainSweep.polynomial_bond_bound_of_ceil_width}
     \leanok
-    Let $q\ge1$, $D\ge1$, $C_p\ge0$ and $\alpha\in\mathbb N$
+    Let $q\ge1$, $D\ge1$, $C_p\ge0$, a natural $\chi$, and $\alpha\in\mathbb N$
     with $\alpha>0$. For $L\ge2$ and $w=\lceil D\log L\rceil_+$,
     put $A_L=\max\{1,\lceil C_pL^\alpha\rceil_+\}$ and
-    $n=\max\{1,\lceil40D\log q\rceil_++24960\alpha\}$.
+    $n=\max\{1,\lceil40D\log q\rceil_++\chi\alpha\}$.
     Then
     \begin{align}
-        q^{40w}A_L^{24960}
-         & \le q^{40}(C_p+1)^{24960}L^n.
+        q^{40w}A_L^{\chi}
+         & \le q^{40}(C_p+1)^{\chi}L^n.
         \label{eq:chain_protocol_polynomial_bond}
     \end{align}
     Both the exponent and the prefactor are independent of $L$.
-    The inequality includes $q=1$ and $C_p=0$.
+    The inequality includes $q=1$, $C_p=0$ and $\chi=0$.
 \end{theorem}
-\begin{proof}
-    \leanok
+\begin{proof}\leanok
     The ceiling estimates give
     $A_L\le(C_p+1)L^\alpha$ and
     $w\le D\log L+1$.
     Nonnegativity of $\log q$ and $\log L$ yields
     $q^{40w}\le q^{40}L^{\lceil40D\log q\rceil_+}$.
-    Multiply these bounds and increase the exponent to $n$.
+    Raise the alphabet estimate to the natural power $\chi$,
+    multiply the bounds and increase the exponent to $n$.
+    If $\chi=0$, the alphabet factor is $1$ and $n\ge1$ still holds.
     No division by $\log q$ occurs. This is the polynomial estimate
     in \cite[Part~II, end of the proof of Theorem~B]{TNLean2026OneDimensional},
     retaining both additive ceiling corrections.
@@ -3674,14 +3680,15 @@ The prescribed placement is $\ell(R_i)=i$ and $\ell(P_{j+1})=j$.
     \leanok
     \uses{def:chain_open_mps,def:chain_terminal_coordinates,
         def:chain_party_placement}
-    Retain $q,D,C_p,\alpha,L,w,A_L,n$ from
+    Retain $q,D,C_p,\alpha,\chi,L,w,A_L,n$ from
     Theorem~\ref{thm:chain_protocol_polynomial_bond} and assume
     $60w\le L$. Let $\psi$ be a unit vector in the actual physical
     party space. Suppose its coefficient flattening satisfies
-    $\operatorname{rank}F_{S_r}(\psi)\le A_L^{24960}$ for every
+    $\operatorname{rank}F_{S_r}(\psi)\le A_L^{\chi}$ for every
     $1\le r\le m$, where $S_r=\{p:\ell(p)<r\}$.
+    Write $\chi_{\rm cfg}$ for the fixed main-configuration equivalence.
     Define the literal inverse main-coordinate vector
-    $\Phi(x)=\psi(\chi(x))$ and $B=q^{40w}A_L^{24960}$.
+    $\Phi(x)=\psi(\chi_{\rm cfg}(x))$ and $B=q^{40w}A_L^{\chi}$.
     Then $\|\Phi\|=1$, every original-site cut $0\le k\le L$
     satisfies $\operatorname{rank}M_k(\Phi)\le B$, and $\Phi$
     is an open-boundary MPS of bond $B$. The polynomial bound
@@ -3691,14 +3698,13 @@ The prescribed placement is $\ell(R_i)=i$ and $\ell(P_{j+1})=j$.
     It is the block-to-site passage in
     \cite[Part~II, end of the proof of Theorem~B]{TNLean2026OneDimensional}.
 \end{theorem}
-\begin{proof}
-    \leanok
+\begin{proof}\leanok
     \uses{thm:chain_site_ranks_of_party_prefixes,thm:chain_mps_of_cut_rank,
         thm:chain_protocol_polynomial_bond}
-    Positivity of $D\log L$ gives $w\ge1$, and $A_L^{24960}\ge1$.
+    Positivity of $D\log L$ gives $w\ge1$, and $A_L^{\chi}\ge1$.
     The actual coordinate equivalence preserves the norm.
     Apply Theorem~\ref{thm:chain_site_ranks_of_party_prefixes} with
-    $R=A_L^{24960}$. It retains scalar physical parties and the
+    $R=A_L^{\chi}$. It retains scalar physical parties and the
     nonempty final remainder, and bounds every original-site cut by
     $q^{40w}R$, including when $m=0$.
     The existing internal-cut rank theorem constructs an MPS
@@ -3734,23 +3740,24 @@ The prescribed placement is $\ell(R_i)=i$ and $\ell(P_{j+1})=j$.
     information estimates, circuit data, rank bounds nor a choice
     of register positions are hypotheses of this theorem.
 \end{theorem}
-\begin{proof}
-    \leanok
+\begin{proof}\leanok
     \uses{thm:chain_uniform_physical_family,
         thm:chain_uniform_compressed_block_column,
         thm:chain_protocol_mps_of_prefix_ranks,thm:chain_mps_of_cut_rank}
-    Take the family over all admissible tuples from
-    Theorem~\ref{thm:chain_uniform_physical_family} and apply uniform
-    compression to that whole family at accuracy exponent $5$.
-    It gives $C_p\ge0$ and a natural $\alpha>0$ before any member
-    is selected. The actual tagged links have incident degree at
-    most $3120$, with both endpoints belonging to one common
-    original nonprivate gate. The derived gate distance gives at
-    most $8\cdot3120=24960$ links across each level prefix.
+    Take the entire admissible physical family from
+    Theorem~\ref{thm:chain_uniform_physical_family}, with its derived
+    arity-three bound. Apply Theorem~\ref{thm:chain_uniform_compressed_block_column}
+    to this whole family with $a=3$, $b=40$, $\chi=1600$ and
+    accuracy exponent $5$. The numerical conditions follow from
+    $3\le40$ and $8(2\cdot40(3-1))=1280\le1600$.
+    Its uniform $C_p\ge0$ and natural $\alpha>0$ precede every
+    member. Its own sampled network has degree at most $160$,
+    common-original-gate witnesses, at most $1280$ crossings, and
+    the resulting upper bound $1600$ used for its column ranks.
     Fix
     \begin{align}
-        n             & =\max\{1,\lceil40D\log q\rceil_++24960\alpha\},\notag   \\
-        C_{\rm large} & =q^{40}(C_p+1)^{24960},                               &
+        n             & =\max\{1,\lceil40D\log q\rceil_++1600\alpha\},\notag   \\
+        C_{\rm large} & =q^{40}(C_p+1)^{1600},                               &
         C             & =\max\{C_{\rm large},q^{L_0}\}.
         \label{eq:chain_protocol_uniform_constants}
     \end{align}
@@ -3764,20 +3771,21 @@ The prescribed placement is $\ell(R_i)=i$ and $\ell(P_{j+1})=j$.
     The actual operator network therefore has one nonzero
     product-basis column $v$, chosen before all cuts, whose
     normalization $u=v/\|v\|$ has unit norm and phase error at most
-    $2\epsilon$ from $U_\chi\Omega$.
+    $2\epsilon$ from $U_{\chi_{\rm cfg}}\Omega$, where
+    $\chi_{\rm cfg}$ is the actual main-configuration equivalence.
     Fixing the physical input changes only the local tensors; the
     same graph and its tagged alphabets remain. Every alphabet has
     dimension at most $A_L=\max\{1,\lceil C_pL^\alpha\rceil_+\}$,
-    so this same $u$ has all prefix ranks at most $A_L^{24960}$.
+    so this same $u$ has all prefix ranks at most $A_L^{1600}$.
     Normalization does not change those ranks.
     Apply Theorem~\ref{thm:chain_protocol_mps_of_prefix_ranks} to
     $u$. It gives the literal original-site vector
-    $\Phi(x)=u(\chi(x))$ with bond $B=q^{40w}A_L^{24960}$ and
+    $\Phi(x)=u(\chi_{\rm cfg}(x))$ with bond $B=q^{40w}A_L^{1600}$ and
     $B\le C_{\rm large}L^n\le CL^n$.
     The coordinate isometry gives, for the same phase,
     \begin{align}
         \|\Phi-e^{i\theta}\Omega\|
-         & =\|u-e^{i\theta}U_\chi\Omega\|
+         & =\|u-e^{i\theta}U_{\chi_{\rm cfg}}\Omega\|
         \le2\epsilon\le L^{-1}.\notag
     \end{align}
 
@@ -3790,4 +3798,125 @@ The prescribed placement is $\ell(R_i)=i$ and $\ell(P_{j+1})=j$.
     (\ref{eq:chain_protocol_uniform_constants}) proves
     (\ref{eq:chain_protocol_headline_bond}) and
     (\ref{eq:chain_protocol_headline_error}).
+\end{proof}
+
+\subsection{Sharper crossings for the sampled physical network}
+
+\begin{theorem}[Crossing links for a three-party chain preparation]
+    \label{thm:chain_sharp_sampled_crossings}
+    \lean{TNLean.MPS.AreaLaw.ChainSweep.exists_uniform_sampled_network_with_prefixCrossingLinks_le_1600}
+    \leanok
+    \uses{def:chain_party_placement,def:peps_distributed_construction}
+    Consider a family on the chain parties with the polynomial count,
+    physical-dimension, monomial and termwise hypotheses of
+    Theorem~\ref{thm:peps_separate_arity_compression}. Suppose its
+    original circuits have arity at most three and lifetime at most
+    forty. Let $\omega_i$ be unit physical vectors with
+    $\|\rho_i-|\omega_i\rangle\langle\omega_i|\|_1\le\eta_i$.
+    Suppose any two participants of one original nonprivate gate
+    have placement distance at most two.
+    The real size $L_i\ge2$ may be independent of the natural chain
+    length and width used to specify the party set.
+
+    For each $p>0$ there are $C_p\ge0$ and natural $\alpha>0$,
+    before all members, and for every member one actual sampled
+    network with both density estimates, retained trace bounds,
+    polynomial alphabets and common-original-gate witnesses in
+    (\ref{eq:peps_separate_arity_network})--(\ref{eq:peps_separate_arity_pure}).
+    On this same tagged network every party has degree at most
+    $160$, and every natural prefix index $r$ satisfies
+    \begin{align}
+        |\partial_r| & \le1280\le1600.
+        \label{eq:chain_sharp_sampled_crossings}
+    \end{align}
+    Here $\partial_r$ consists of the actual links crossing
+    $\{j:\ell(j)<r\}$. These are auxiliary preparation hypotheses
+    for the crossing step in
+    \cite[Part~II, proof of Theorem~B]{TNLean2026OneDimensional}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_separate_arity_compression,thm:chain_tagged_link_congestion}
+    Apply Theorem~\ref{thm:peps_separate_arity_compression} with
+    $a=3$ and $b=40$. It retains the actual network and gives
+    $2\cdot40(3-1)=160$ incident links per party.
+    Its common-original-gate witnesses and the original gate's
+    distance bound put the endpoints of each crossing link in
+    $\{j:\max\{r-2,0\}\le\ell(j)<r+2\}$.
+    There are at most four levels and two party types at each level.
+    Theorem~\ref{thm:chain_tagged_link_congestion} therefore gives
+    $|\partial_r|\le8\cdot160=1280$.
+    This counts the original tags, including parallel links, and
+    retains scalar-output parties and the final remainder $R_m$.
+    The empty endpoint prefixes and zero-stage cases are included.
+\end{proof}
+
+\begin{theorem}[The sharper network bound from physical chain data]
+    \label{thm:chain_physical_sharp_sampled_crossings}
+    \lean{TNLean.MPS.AreaLaw.ChainSweep.exists_physical_sampled_network_with_prefixCrossingLinks_le_1600}
+    \leanok
+    \uses{def:chain_model,def:chain_physical_construction,def:chain_party_placement}
+    Fix $q\in\mathbb N$ with $q\ge1$, $R\in\mathbb N$,
+    $J\in\mathbb R$ and $\Delta>0$.
+    There are $D\ge1$, $K>0$, $s\in\mathbb N$ and $L_0\ge2$
+    before all physical instances. Let $\iota$ be the entire set
+    of admissible tuples $(L,H,\Omega,E_0,\mathrm{pos})$ with
+    $L\ge L_0$, Hamiltonian parameters $q,R,J$, and gapped
+    ground vector $\Omega$ of gap $\Delta$ at energy $E_0$.
+    Set $w_i=\lceil D\log L_i\rceil_+$.
+    There are unit initial party vectors and circuits $C_i$ for
+    all $i\in\iota$ giving the constructions of
+    Definition~\ref{def:chain_physical_construction} and retaining
+    every resource, target-density and width conclusion of
+    Theorem~\ref{thm:chain_uniform_physical_family}.
+    Their arity is at most three.
+    In particular, for the same original circuits,
+    \begin{align}
+        N(C_i)                                        & \le2L_i,        & d_{i,j} & \le KL_i^s, & n_j(C_i) & \le40,\notag \\
+        |\operatorname{part}(g)|                      & \le3,           &
+        \|\rho_i-|\omega_i\rangle\langle\omega_i|\|_1 & \le52L_i^{-11},
+        \label{eq:chain_sharp_physical_inputs}
+    \end{align}
+    where $\omega_i=U_{\chi_i}\Omega_i$ is the actual unit
+    main-coordinate vector. Monomial and termwise bounds are one,
+    original-gate participant distances are at most two, and
+    $w_i\ge1$, $60w_i\le L_i$.
+
+    There are $C_p\ge0$ and natural $\alpha>0$, before every
+    member of this entire family, such that each member has one
+    sampled network $\sigma_i$ satisfying
+    \begin{align}
+        \|\sigma_i-\rho_i\|_1 & \le L_i^{-5},\notag                                                        \\
+        \|\sigma_i-|\omega_i\rangle\langle\omega_i|\|_1
+                              & \le L_i^{-5}+52L_i^{-11},\notag                                            \\
+        1-52L_i^{-11}         & \le\operatorname{Re}\operatorname{Tr}\rho_i\le1,\notag                     \\
+        |D_e|                 & \le C_pL_i^\alpha,                                     & |I_j| & \le160, &
+        |\partial_r|          & \le1280\le1600.
+        \label{eq:chain_sharp_physical_outputs}
+    \end{align}
+    The incidence and prefix bounds hold at every party and every
+    natural prefix index of this same network. Every link's
+    endpoints participate in a common original gate of $C_i$.
+    The input, circuit, physical coordinate map and unnormalized
+    density are those of the constructed preparation.
+    Only the main registers are physical: every auxiliary copy
+    remains private at its specified retained copy-site owner, as in
+    \cite{gap:tnlean_one_dimensional_band_sweep_corrections}.
+    No information, circuit, arity or crossing bound is an additional
+    physical premise. This supplies the sampled-network crossing
+    estimate in \cite[Part~II, proof of Theorem~B]{TNLean2026OneDimensional}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:chain_uniform_physical_family,thm:chain_sharp_sampled_crossings}
+    In the physical preparation family retain the derived arity-three
+    bound of the same chosen circuits. The arity follows from their
+    actual stage support and the participant table; it is independent
+    of the lifetime bound. All members, including their positions,
+    are present before sampling constants are selected.
+    Apply Theorem~\ref{thm:chain_sharp_sampled_crossings} at $p=5$,
+    with count parameters $(n,C_N)=(1,2)$, physical-dimension
+    parameters $(d,C_D)=(s,K)$, $r=1$, $u=v=0$,
+    $C_K=C_C=1$ and $\eta_i=52L_i^{-11}$.
+    Retain its witnesses and all original preparation conclusions.
+    This gives (\ref{eq:chain_sharp_physical_outputs}) on the same
+    actual tensor entries and tagged alphabets.
 \end{proof}

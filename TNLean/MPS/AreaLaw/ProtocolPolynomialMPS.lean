@@ -20,7 +20,7 @@ of this same vector, without normalization or replacement of the vector.
 
 The numerical estimate retains both ceiling errors. The logarithmic width
 contributes the prefactor q^40; the rounded alphabet bound contributes
-(Cp+1)^24960. The natural exponent and prefactor depend only on q,D,Cp,alpha,
+(Cp+1)^χ. The natural exponent and prefactor depend only on q,D,Cp,alpha and χ,
 not on the length or the vector. No division by log q is used.
 
 These are auxiliary consumers of rank bounds. No circuit, compression output,
@@ -39,15 +39,15 @@ namespace TNLean.MPS.AreaLaw.ChainSweep
 L and w. The natural alpha is the exponent of the alphabet bound.
 Source: Part II, proof of Theorem B, lines 605–615. -/
 theorem polynomial_bond_bound_of_ceil_width
-    {q : ℕ} {D Cp : ℝ} {α : ℕ}
+    {q : ℕ} {D Cp : ℝ} {α : ℕ} (χ : ℕ)
     (hq : 1 ≤ q) (hD : 1 ≤ D) (hCp : 0 ≤ Cp) (hα : 0 < α)
     {L w : ℕ} (hL : 2 ≤ L) (hw : w = ⌈D * Real.log L⌉₊) :
-    ((q ^ (40 * w) * (max 1 ⌈Cp * (L : ℝ) ^ α⌉₊) ^ 24960 : ℕ) : ℝ) ≤
-      (q : ℝ) ^ 40 * (Cp + 1) ^ 24960 *
-        (L : ℝ) ^ (max 1 (⌈40 * D * Real.log q⌉₊ + 24960 * α)) := by
+    ((q ^ (40 * w) * (max 1 ⌈Cp * (L : ℝ) ^ α⌉₊) ^ χ : ℕ) : ℝ) ≤
+      (q : ℝ) ^ 40 * (Cp + 1) ^ χ *
+        (L : ℝ) ^ (max 1 (⌈40 * D * Real.log q⌉₊ + χ * α)) := by
   let N := max 1 ⌈Cp * (L : ℝ) ^ α⌉₊
   let u := ⌈40 * D * Real.log q⌉₊
-  let n := max 1 (u + 24960 * α)
+  let n := max 1 (u + χ * α)
   have hqR : 1 ≤ (q : ℝ) := by exact_mod_cast hq
   have hLR : 1 ≤ (L : ℝ) := by exact_mod_cast (by omega : 1 ≤ L)
   have hq0 : 0 < (q : ℝ) := lt_of_lt_of_le zero_lt_one hqR
@@ -76,26 +76,26 @@ theorem polynomial_bond_bound_of_ceil_width
     apply max_le
     · nlinarith [mul_nonneg hCp (pow_nonneg hL0.le α)]
     · nlinarith
-  have hNpower := pow_le_pow_left₀ (Nat.cast_nonneg N) hN 24960
+  have hNpower := pow_le_pow_left₀ (Nat.cast_nonneg N) hN χ
   simp only [Nat.cast_mul, Nat.cast_pow]
   calc
-    (q : ℝ) ^ (40 * w) * (N : ℝ) ^ 24960
-        ≤ ((q : ℝ) ^ 40 * (L : ℝ) ^ u) * ((Cp + 1) * (L : ℝ) ^ α) ^ 24960 :=
+    (q : ℝ) ^ (40 * w) * (N : ℝ) ^ χ
+        ≤ ((q : ℝ) ^ 40 * (L : ℝ) ^ u) * ((Cp + 1) * (L : ℝ) ^ α) ^ χ :=
       mul_le_mul hqfactor hNpower (pow_nonneg (Nat.cast_nonneg N) _)
         (mul_nonneg (pow_nonneg hq0.le _) (pow_nonneg hL0.le _))
-    _ = (q : ℝ) ^ 40 * (Cp + 1) ^ 24960 * (L : ℝ) ^ (u + 24960 * α) := by
-      rw [mul_pow, ← pow_mul, Nat.mul_comm α 24960, pow_add]
+    _ = (q : ℝ) ^ 40 * (Cp + 1) ^ χ * (L : ℝ) ^ (u + χ * α) := by
+      rw [mul_pow, ← pow_mul, Nat.mul_comm α χ, pow_add]
       ac_rfl
-    _ ≤ (q : ℝ) ^ 40 * (Cp + 1) ^ 24960 * (L : ℝ) ^ n :=
+    _ ≤ (q : ℝ) ^ 40 * (Cp + 1) ^ χ * (L : ℝ) ^ n :=
       mul_le_mul_of_nonneg_left
-        (pow_le_pow_right₀ hLR (le_max_right 1 (u + 24960 * α))) (by positivity)
+        (pow_le_pow_right₀ hLR (le_max_right 1 (u + χ * α))) (by positivity)
 
 /-- A unit physical party vector with the actual polynomial block-prefix rank
 bounds gives a unit original-site MPS with an explicit polynomial bond bound.
 The party-prefix rank bounds are auxiliary inputs, not physical conclusions.
 Source: Part II, proof of Theorem B, lines 605–615. -/
 theorem isOpenMPS_of_polynomial_partyPrefix_bounds
-    {q : ℕ} {D Cp : ℝ} {α : ℕ}
+    {q : ℕ} {D Cp : ℝ} {α : ℕ} (χ : ℕ)
     (hq : 1 ≤ q) (hD : 1 ≤ D) (hCp : 0 ≤ Cp) (hα : 0 < α)
     {L w : ℕ} (hL : 2 ≤ L) (hw : w = ⌈D * Real.log L⌉₊)
     (hlarge : 60 * w ≤ L)
@@ -104,23 +104,23 @@ theorem isOpenMPS_of_polynomial_partyPrefix_bounds
     (hprefix : ∀ r : ℕ, 0 < r → r ≤ stageCount L w →
       (TNLean.PEPS.WholeGroup.flattening (fun y ↦ ψ y)
         (Finset.univ.filter fun p : Party L w ↦ partyLevel p < r)).rank ≤
-          (max 1 ⌈Cp * (L : ℝ) ^ α⌉₊) ^ 24960) :
+          (max 1 ⌈Cp * (L : ℝ) ^ α⌉₊) ^ χ) :
     let Φ : EuclideanSpace ℂ (Fin L → Fin q) :=
       WithLp.toLp 2 (fun x ↦ ψ (mainConfigurationEquiv L w q x))
-    let B := q ^ (40 * w) * (max 1 ⌈Cp * (L : ℝ) ^ α⌉₊) ^ 24960
-    let n := max 1 (⌈40 * D * Real.log q⌉₊ + 24960 * α)
+    let B := q ^ (40 * w) * (max 1 ⌈Cp * (L : ℝ) ^ α⌉₊) ^ χ
+    let n := max 1 (⌈40 * D * Real.log q⌉₊ + χ * α)
     ‖Φ‖ = 1 ∧ (∀ k : ℕ, k ≤ L → (cutMatrix Φ k).rank ≤ B) ∧
       IsOpenMPS L q B (fun x ↦ Φ x) ∧ 1 ≤ n ∧
-        (B : ℝ) ≤ (q : ℝ) ^ 40 * (Cp + 1) ^ 24960 * (L : ℝ) ^ n := by
+        (B : ℝ) ≤ (q : ℝ) ^ 40 * (Cp + 1) ^ χ * (L : ℝ) ^ n := by
   classical
   let Φ : EuclideanSpace ℂ (Fin L → Fin q) :=
     WithLp.toLp 2 (fun x ↦ ψ (mainConfigurationEquiv L w q x))
-  let R := (max 1 ⌈Cp * (L : ℝ) ^ α⌉₊) ^ 24960
+  let R := (max 1 ⌈Cp * (L : ℝ) ^ α⌉₊) ^ χ
   let B := q ^ (40 * w) * R
-  let n := max 1 (⌈40 * D * Real.log q⌉₊ + 24960 * α)
+  let n := max 1 (⌈40 * D * Real.log q⌉₊ + χ * α)
   change ‖Φ‖ = 1 ∧ (∀ k : ℕ, k ≤ L → (cutMatrix Φ k).rank ≤ B) ∧
     IsOpenMPS L q B (fun x ↦ Φ x) ∧ 1 ≤ n ∧
-      (B : ℝ) ≤ (q : ℝ) ^ 40 * (Cp + 1) ^ 24960 * (L : ℝ) ^ n
+      (B : ℝ) ≤ (q : ℝ) ^ 40 * (Cp + 1) ^ χ * (L : ℝ) ^ n
   have hw1 : 1 ≤ w := by
     rw [hw]
     apply Nat.one_le_ceil_iff.mpr
@@ -137,6 +137,6 @@ theorem isOpenMPS_of_polynomial_partyPrefix_bounds
   have hmps : IsOpenMPS L q B (fun x ↦ Φ x) :=
     isOpenMPS_of_internal_cutMatrix_rank_le Φ (fun k _ hk ↦ hcuts k hk.le)
   exact ⟨hnorm, hcuts, hmps, le_max_left _ _,
-    polynomial_bond_bound_of_ceil_width hq hD hCp hα hL hw⟩
+    polynomial_bond_bound_of_ceil_width χ hq hD hCp hα hL hw⟩
 
 end TNLean.MPS.AreaLaw.ChainSweep
