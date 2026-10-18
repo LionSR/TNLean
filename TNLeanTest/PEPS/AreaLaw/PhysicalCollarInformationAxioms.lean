@@ -27,11 +27,12 @@ run_cmd do
 
 /-! The sublinear collar bound at explicit constants -/
 
+open TNLean.PEPS.AreaLaw TNLean.PEPS.AreaLaw.Scan.CollarScan in
 run_cmd do
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
   let declarations := #[
-    ``TNLean.PEPS.AreaLaw.sublinearCollarBound_real_of_boxEntropy_explicit,
-    ``TNLean.PEPS.AreaLaw.sublinearCollarBound_real_explicit]
+    ``sublinearCollarBound_real_of_boxEntropy_explicit,
+    ``sublinearCollarBound_real_explicit]
   for decl in declarations do
     unless (← Lean.getEnv).contains decl do
       throwError "Missing declaration {decl}"
