@@ -19,3 +19,17 @@ depends on axioms: [propext, Classical.choice, Quot.sound] -/
 depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
 #print axioms TNLean.PEPS.AreaLaw.Scan.CollarScan.actualRounds_transport_domainGraph
+
+open TNLean.PEPS.AreaLaw.Scan.CollarScan in
+/-- info:
+'TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_finiteFamilyTransportBound'
+depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms exists_finiteFamilyTransportBound
+
+open TNLean.PEPS.AreaLaw.Scan.CollarScan in
+/-- info:
+'TNLean.PEPS.AreaLaw.Scan.CollarScan.actualRounds_transport_domainGraph_of_finiteFamilyTransportBound'
+depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms actualRounds_transport_domainGraph_of_finiteFamilyTransportBound
