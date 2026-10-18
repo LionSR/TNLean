@@ -41,7 +41,7 @@ TNLean, the remaining source follows these conceptual layers:
 | 4 | `MPS.FundamentalTheorem`, `MPS.Symmetry` | The single-block fundamental theorem and symmetry consequences. |
 | 5 | `MPS.BNT`, `MPS.CanonicalForm`, `MPS.Irreducible`, `MPS.Periodic`, `MPS.Structure` | Multi-block canonical forms, periodicity, and structural assembly. |
 | 5b | `MPS.RFP` | Renormalization fixed-point theory. |
-| 5c | `MPS.AreaLaw` | The one-dimensional area law and polynomial matrix product state approximation for gapped finite-range chains, stated natively on the chain of `L` sites and on finite sets of integers, and proved from the QICLean tail bound and buffered discount; it imports the two-factor gapped-ground-state lemma `Lattice.ProductGroundState` and nothing from `PEPS`. |
+| 5c | `MPS.AreaLaw` | The one-dimensional area law and polynomial matrix product state approximation for gapped finite-range chains, stated natively on the chain of `L` sites and on finite sets of integers, and proved from the QICLean tail bound and buffered discount; the entropy and approximation proofs use `Lattice.ProductGroundState` independently of the two-dimensional area law. The distributed chain protocol also uses the owner-labelled register and private-circuit constructions in `PEPS.Approximation`. |
 | 6 | `Wielandt` | Tensor-typed span-growth, primitivity, and quantum Wielandt consequences built on QICLean's channel-generic theory. |
 
 `PiAlgebra` provides related algebraic formulations. `PEPS` contains the

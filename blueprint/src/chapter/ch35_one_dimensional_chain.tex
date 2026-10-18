@@ -786,3 +786,216 @@ for an arbitrary finite set of sites and are instantiated here directly.
     Finally, $\lfloor e^{C_{\mathrm{int}}+w(L)}\rfloor
         \le e^{C_{\mathrm{int}}}(2c_0)^{64s}L^{128s}$.
 \end{proof}
+
+\section{Physical coordinates of the terminal chain registers}
+
+\begin{definition}[Terminal main and auxiliary registers]
+    \label{def:chain_terminal_registers}
+    \lean{
+        TNLean.MPS.AreaLaw.ChainSweep.stageCount,
+        TNLean.MPS.AreaLaw.ChainSweep.Party,
+        TNLean.MPS.AreaLaw.ChainSweep.AuxiliaryCopy,
+        TNLean.MPS.AreaLaw.ChainSweep.AuxiliarySite,
+        TNLean.MPS.AreaLaw.ChainSweep.RawLabel,
+        TNLean.MPS.AreaLaw.ChainSweep.mainOwner,
+        TNLean.MPS.AreaLaw.ChainSweep.auxiliaryOwner,
+        TNLean.MPS.AreaLaw.ChainSweep.rawOwner,
+        TNLean.MPS.AreaLaw.ChainSweep.MainSites,
+        TNLean.MPS.AreaLaw.ChainSweep.AuxiliarySites,
+        TNLean.MPS.AreaLaw.ChainSweep.physicalDimension
+    }
+    \leanok
+    Fix integers $L,q,w\ge1$ with $L\ge60w$, put $t=20w$ and
+    $m=\lfloor L/t\rfloor-3$, and take the distinct parties
+    $R_0,\ldots,R_m,P_1,\ldots,P_m$.
+    The main sites are $X=\{0,\ldots,L-1\}$. The owner of $x<mt$ is
+    $P_{\lfloor x/t\rfloor+1}$, and the owner of $x\ge mt$ is $R_m$.
+    There is a right auxiliary copy at each stage $0\le k<m$ and a left
+    auxiliary copy at each stage $1\le k<m$; every copy has all sites of
+    $X$. Equal centres do not identify these distinct labelled copies.
+    For a right copy let $a=(k+1)t$ and $(A,B,C)=(R_k,R_{k+1},P_{k+1})$;
+    for a left copy let $a=kt$ and $(A,B,C)=(R_k,P_{k+1},P_k)$.
+    Its auxiliary site $x$ is owned by $A$ on $[a-3w,a-2w)$, by $B$ on
+    $[a-2w,a-w)$ and by $C$ elsewhere. Write $\mathcal A$ for the set of
+    all auxiliary copy-site labels, and $M_p\subseteq X$ and
+    $\mathcal A_p\subseteq\mathcal A$ for the main and auxiliary labels
+    at party $p$.
+    The physical factor at $p$ has dimension $d_p=q^{|M_p|}$, whereas
+    every auxiliary factor remains private at its specified owner.
+    The distinction between these factors follows the corrected terminal
+    assertion in \cite{gap:tnlean_one_dimensional_band_sweep_corrections}.
+\end{definition}
+
+\begin{theorem}[Terminal block sizes and party counts]
+    \label{thm:chain_terminal_block_sizes}
+    \lean{
+        TNLean.MPS.AreaLaw.ChainSweep.terminal_length_eq,
+        TNLean.MPS.AreaLaw.ChainSweep.terminal_length_bounds,
+        TNLean.MPS.AreaLaw.ChainSweep.card_mainSites_inr_le,
+        TNLean.MPS.AreaLaw.ChainSweep.card_mainSites_inl_lt,
+        TNLean.MPS.AreaLaw.ChainSweep.twenty_mul_stageCount_le,
+        TNLean.MPS.AreaLaw.ChainSweep.card_party_le,
+        TNLean.MPS.AreaLaw.ChainSweep.physicalDimension_le
+    }
+    \leanok
+    \uses{def:chain_terminal_registers}
+    The final suffix has length in $[3t,4t)$, every completed main
+    block has at most $t$ sites, and every remainder party has fewer
+    than $4t$ main sites. In particular $d_p\le q^{4t}$ for every party.
+    Moreover $20m\le L$ and the number of parties is $2m+1\le2L$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:chain_terminal_registers}
+    Euclidean division gives $L=(m+3)t+r$ with $0\le r<t$.
+    On a fixed completed main fibre, $x\mapsto x\bmod t$ is injective,
+    since $\lfloor x/t\rfloor$ is fixed. On every remainder main fibre,
+    $x\mapsto x-mt$ is injective into the final suffix. These injections
+    give the cardinal bounds, and monotonicity of powers for $q\ge1$
+    gives the dimension estimate. Since $t\ge20$ and $mt\le L$, one
+    has $20m\le L$; the party-count bound follows.
+\end{proof}
+
+
+\begin{theorem}[Margins at the sweep stages]
+    \label{thm:chain_stage_margins}
+    \lean{
+        TNLean.MPS.AreaLaw.ChainSweep.stage_right_margin,
+        TNLean.MPS.AreaLaw.ChainSweep.stage_left_margin
+    }
+    \leanok
+    \uses{def:chain_terminal_registers}
+    For every stage $0\le k<m$, one has $(k+4)t\le L$.
+    If $k\ge1$, one also has $8w\le kt$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:chain_terminal_block_sizes}
+    Since $k+1\le m$ and $L=mt+3t+r$ with $r\ge0$,
+    $(k+4)t\le mt+3t\le L$. For $k\ge1$,
+    $kt\ge t=20w\ge8w$.
+\end{proof}
+
+\begin{theorem}[Private preparation of the initial copies]
+    \label{thm:chain_initial_copies}
+    \lean{
+        TNLean.MPS.AreaLaw.ChainSweep.initialAuxiliaryOrder,
+        TNLean.MPS.AreaLaw.ChainSweep.initialAuxiliaryHolder,
+        TNLean.MPS.AreaLaw.ChainSweep.initialFrames,
+        TNLean.MPS.AreaLaw.ChainSweep.length_initialFrames,
+        TNLean.MPS.AreaLaw.ChainSweep.mem_initialFrames,
+        TNLean.MPS.AreaLaw.ChainSweep.norm_initialFrames,
+        TNLean.MPS.AreaLaw.ChainSweep.exists_initialization
+    }
+    \leanok
+    \uses{def:chain_terminal_registers}
+    Let $\Omega$ be a unit vector on the chain. Initially place the main
+    copy at $R_0$ and each auxiliary copy at its specified party $C$.
+    There are $1+m+\max\{m-1,0\}$ copies, each held entirely by one
+    party. Take a party's private memory to be the tensor product of
+    the copies it holds, with their product reference vector. These
+    vectors have norm one. Private maps and changes of tensor-factor
+    order prepare the complete copy reference exactly, with no
+    nonprivate operation.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:chain_terminal_registers, thm:peps_sheet_raw_initialization}
+    Each right copy at stage $k$ is held by $P_{k+1}$, and each left
+    copy at stage $k+1$ is held by $P_{k+1}$. The copies remain
+    distinct even when their holders coincide. Grouping the copies
+    by their holders gives a product across parties; each grouped
+    vector has norm equal to the product of the copy norms, hence one.
+    Theorem~\ref{thm:peps_sheet_raw_initialization} splits each party's
+    private memory into its labelled copies and restores their prescribed
+    order. Every map is private, and its action on the product vector
+    is exact.
+\end{proof}
+
+\begin{definition}[Block coordinates]
+    \label{def:chain_terminal_coordinates}
+    \uses{def:chain_terminal_registers}
+    \lean{
+        TNLean.MPS.AreaLaw.ChainSweep.blockEncoding,
+        TNLean.MPS.AreaLaw.ChainSweep.mainConfigurationEquiv,
+        TNLean.MPS.AreaLaw.ChainSweep.terminalConfigurationEquiv,
+        TNLean.MPS.AreaLaw.ChainSweep.localConfigurationEquiv,
+        TNLean.MPS.AreaLaw.ChainSweep.privateLayout,
+        TNLean.MPS.AreaLaw.ChainSweep.physicalOrder,
+        TNLean.MPS.AreaLaw.ChainSweep.sheetReadout,
+        TNLean.MPS.AreaLaw.ChainSweep.terminalRegrouping
+    }
+    \leanok
+    At every party $p$, use increasing main-site order to identify
+    configurations on $M_p$ with the basis of $\mathbb C^{d_p}$.
+    Denote this identification by $\chi_p$, and put
+    $\chi(c)_p=\chi_p(c|_{M_p})$ for a main configuration $c$.
+    The terminal coordinate map sends a raw configuration $c$ to
+    $(\chi(c|_X),c|_{\mathcal A})$ and hence sends its basis vector to
+    the corresponding physical and auxiliary product-basis vector.
+    This defines a unitary identification $T$ from the actual raw
+    memory with the physical factors followed by all auxiliary factors.
+    At a party with $M_p=\varnothing$, the physical factor is
+    one-dimensional.
+\end{definition}
+
+\begin{theorem}[Locality and the terminal physical marginal]
+    \label{thm:chain_terminal_coordinates}
+    \uses{def:chain_terminal_coordinates}
+    \lean{
+        TNLean.MPS.AreaLaw.ChainSweep.localConfigurationEquiv_restrict,
+        TNLean.MPS.AreaLaw.ChainSweep.physicalDensity_terminalRegrouping
+    }
+    \leanok
+    The coordinate map at party $p$ depends precisely on the main
+    configuration on $M_p$ and the unchanged auxiliary configuration on
+    $\mathcal A_p$. For every terminal vector $\Psi$, with no product
+    or normalization assumption, its physical density after applying
+    $T$ and discarding all private registers is
+    \begin{align}
+        \operatorname{Tr}_{\rm private}|T\Psi\rangle\langle T\Psi|
+        =U_\chi\bigl(\operatorname{Tr}_{\mathcal A}
+        |\Psi\rangle\langle\Psi|\bigr)U_\chi^*,\notag
+    \end{align}
+    where the expression on the right uses the original main and
+    auxiliary sheet coordinates, and $U_\chi$ is their specified main
+    block change of coordinates.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:chain_terminal_coordinates}
+    Restriction to an owner fibre commutes with the main block
+    identification and leaves every auxiliary coordinate unchanged.
+    In product orthonormal bases, the density transforms by the actual
+    tensor product of the physical and private changes of basis.
+    If $V$ is the private change of orthonormal basis, then
+    $V^*V=1$ and $\operatorname{Tr}_{\rm private}((U_\chi\otimes V)
+        \rho(U_\chi\otimes V)^*)=U_\chi(\operatorname{Tr}_{\mathcal A}\rho)U_\chi^*$.
+    Applying this identity to $\rho=|\Psi\rangle\langle\Psi|$ gives the assertion.
+\end{proof}
+
+\begin{theorem}[Realization by private operations]
+    \label{thm:chain_terminal_private_operations}
+    \uses{def:chain_terminal_coordinates}
+    \lean{
+        TNLean.MPS.AreaLaw.ChainSweep.terminalRegroupingWord,
+        TNLean.MPS.AreaLaw.ChainSweep.terminalRegroupingWord_props,
+        TNLean.MPS.AreaLaw.ChainSweep.eval_terminalRegroupingWord
+    }
+    \leanok
+    The unitary $T$ is realized by a finite sequence of private
+    operations and changes of tensor-factor order. No nonprivate gate
+    is introduced, and the equality holds on every input vector.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:chain_terminal_coordinates}
+    First place the main owner fibres in the prescribed party order,
+    followed by the complete auxiliary list. These are precisely the
+    original labels, each occurring once. At each party apply the local
+    main-block identification, leaving all other factors fixed.
+    An empty main fibre produces its one-dimensional physical factor.
+    The resulting map agrees with $T$ on every raw product-basis
+    vector and therefore on the whole memory space by linearity.
+\end{proof}
+
+The construction of the preceding band operations, their information
+estimates and the complete sweep remains separate from these terminal
+coordinate statements.

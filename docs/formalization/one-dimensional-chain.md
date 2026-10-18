@@ -41,9 +41,25 @@ finite set of sites, instantiated here on the chain.
 | Approximation at prescribed accuracy, by the argument for Theorem B | `MPS.AreaLaw.exists_isOpenMPS_norm_sub_le_of_error` | Proved for `0 < ε ≤ 1`, with a normalized approximant and bond bound `⌊exp(C_int + 64 s log(2 L c₀ / ε))⌋`, where `s = √((1 + J/Δ) B_R)` and `c₀ = √(2 exp(e/2))`. |
 | Theorem B | `MPS.AreaLaw.exists_isOpenMPS_norm_sub_le` with `MPS.AreaLaw.chainBondDimension`; polynomial form `MPS.AreaLaw.chainBondDimension_le_mul_rpow` | Proved; the bond dimension is `⌊exp(C_int + w(L))⌋ ≤ e^{C_int} (2 c₀)^{64 s} L^{128 s}` with `s = √((1 + J/Δ) B_R)`. The approximant is normalized and within `1/L` of `Ω` itself (the note allows a phase). |
 
-The protocol route of the note (information reset, births, exchanges, the sweep
-and the compression) is not formalized; Theorem B is proved by the two-line route
-alone.
+Theorem B is proved by the sequential-truncation argument. The separate
+protocol route has the following proved intermediate results:
+
+| Protocol component | Formal statement | Status |
+|---|---|---|
+| Actual terminal main and auxiliary labels, owners and physical dimensions | `ChainSweep.mainOwner`, `auxiliaryOwner`, `physicalDimension` | Defined with every stage-and-side copy retained; scalar physical outputs occur at parties without main sites. |
+| Block sizes, stage margins and party count | `ChainSweep.terminal_length_bounds`, `stage_right_margin`, `stage_left_margin`, `physicalDimension_le`, `card_party_le` | Proved for positive local dimension and width and `L ≥ 60w`; these are geometric bounds, not a count of constructed gates. |
+| Product initialization | `ChainSweep.exists_initialization` | Proved: the actual main and auxiliary copies are prepared privately from a constructed product input, with no nonprivate gate. |
+| Private terminal regrouping and its physical marginal | `ChainSweep.eval_terminalRegroupingWord`, `physicalDensity_terminalRegrouping` | Proved for every terminal vector, without a product or normalization premise, retaining all auxiliary labels and owners. |
+
+These declarations belong to `TNLean.MPS.AreaLaw.ChainSweep`. The half-open
+lattice bands and the distinction between main physical outputs and retained
+auxiliary registers are recorded in
+[`tnlean_one_dimensional_band_sweep_corrections.tex`](../paper-gaps/tnlean_one_dimensional_band_sweep_corrections.tex).
+The actual births and band circuits, their physical information estimates,
+the complete sweep, its gate and participation counts, its accumulated error,
+and the subsequent compression remain separate obligations. The intermediate
+statements above do not establish that the sweep reaches the specified
+terminal memory.
 
 ## Constants
 
