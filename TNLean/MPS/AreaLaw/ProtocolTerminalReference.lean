@@ -173,14 +173,6 @@ private theorem mapped_siteVec_heq {ι κ P : Type} (own : κ → P) (f : ι →
       exact cons_tensor_heq ⟨own (f x), euc (Fin q)⟩ ht
         (EuclideanSpace.single (c (f x)) (1 : ℂ)) _ _ ih
 
-private theorem append_siteVec_transport {ι P : Type} (own : ι → P)
-    (a b : List ι) (tail : Layout P) (ht : tail = siteRegs q own b)
-    (h : siteRegs q own a ++ tail = siteRegs q own (a ++ b)) (c : ι → Fin q) :
-    (Layout.memCongr h).symm (siteVec own (a ++ b) c) =
-      (appendIso (siteRegs q own a) tail).symm
-        (siteVec own a c ⊗ₜ (Layout.memCongr ht).symm (siteVec own b c)) := by
-  exact siteVec_append own a b tail ht h c
-
 private theorem append_siteVec_heq {ι P : Type} (own : ι → P)
     (a b : List ι) (c : ι → Fin q) :
     HEq (siteVec own (a ++ b) c)
@@ -192,7 +184,7 @@ private theorem append_siteVec_heq {ι P : Type} (own : ι → P)
       (siteVec own (a ++ b) c) := by
     rw [← Layout.memCongr_symm h]
     exact Layout.memCongr_apply_heq _ _
-  exact ht.symm.trans (heq_of_eq (append_siteVec_transport own a b _ rfl h c))
+  exact ht.symm.trans (heq_of_eq (siteVec_append own a b _ rfl h c))
 
 private theorem inner_siteVec_regRef_raw [NeZero q] (own : Fin L → Party L w)
     (Ω : EuclideanSpace ℂ (Fin L → Fin q)) (c : Fin L → Fin q) :

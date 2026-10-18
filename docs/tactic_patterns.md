@@ -41,11 +41,13 @@ abstracted — record why, so it is not re-proposed).
 
 - **Pattern:** Split a product basis vector at a list boundary, retaining the
   specified equalities of register lists and their canonical memory maps.
-- **Seen:** Two concatenation inductions across two files: `rawAppend_siteVec`
+- **Seen:** The former concatenation inductions `rawAppend_siteVec`
   in `MPS/AreaLaw/ProtocolTerminalWord.lean` and `append_siteVec_transport`
   in `MPS/AreaLaw/ProtocolTerminalReference.lean`.
 - **Abstraction:** `TNLean.PEPS.EncodedFrame.siteVec_append` in
-  `PEPS/Approximation/SiteVectorAppend.lean`; both proofs now call it.
+  `PEPS/Approximation/SiteVectorAppend.lean`.
+- **Refactor:** `packMain_siteVec` and `append_siteVec_heq` apply the shared
+  identity directly; their two private aliases have been removed.
 - **Notes:** The identity permits repeated sites and owners. The empty list
   contributes the scalar one. The separate mapped-label identities below
   are not further copies of this concatenation induction; no third identical

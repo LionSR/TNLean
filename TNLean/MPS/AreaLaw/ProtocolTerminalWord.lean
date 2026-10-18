@@ -246,16 +246,6 @@ private theorem physicalColumns_cons (p : Party L w) (ps : List (Party L w))
     EuclideanSpace.basisFun_apply]
   rfl
 
-private theorem rawAppend_siteVec (a b : List (RawLabel L w))
-    (tail : Layout (Party L w)) (ht : tail = siteRegs q (rawOwner L w) b)
-    (h : siteRegs q (rawOwner L w) a ++ tail = siteRegs q (rawOwner L w) (a ++ b))
-    (c : RawLabel L w → Fin q) :
-    (Layout.memCongr h).symm (siteVec (rawOwner L w) (a ++ b) c) =
-      (appendIso (siteRegs q (rawOwner L w) a) tail).symm
-        (siteVec (rawOwner L w) a c ⊗ₜ
-          (Layout.memCongr ht).symm (siteVec (rawOwner L w) b c)) := by
-  exact siteVec_append (rawOwner L w) a b tail ht h c
-
 private theorem auxiliaryRaw_siteVec (xs : List (AuxiliarySite L w))
     (h : siteRegs q (auxiliaryOwner L w) xs =
       siteRegs q (rawOwner L w) (xs.map Sum.inr)) (c : RawLabel L w → Fin q) :
@@ -300,7 +290,7 @@ private theorem packMain_siteVec (ps : List (Party L w))
       exact (one_smul ℂ a).symm.trans
         (appendIso_nil_symm_tmul (privateLayout L w q) (1 : ℂ) a).symm
   | cons p ps ih =>
-      erw [rawAppend_siteVec (mainRawList p) (canonicalRawOrder ps)
+      erw [siteVec_append (rawOwner L w) (mainRawList p) (canonicalRawOrder ps)
         (mainPackedInput ps) (mainPackedInput_eq ps) (mainPackedInput_eq (p :: ps)) c]
       change (Word.frame ⟨p, euc (Fin (physicalDimension L w q p))⟩
         (packMain (q := q) ps)).eval
