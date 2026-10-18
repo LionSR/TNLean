@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.TheoremStatements
-import TNLean.PEPS.AreaLaw.ProductGroundState
+import TNLean.Lattice.ProductGroundState
 
 /-!
 # A cut with no crossing edge
@@ -49,6 +49,7 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 
 open Matrix
 open scoped ComplexOrder Kronecker
+open TNLean.Lattice
 
 namespace TNLean.PEPS.AreaLaw
 
@@ -173,7 +174,7 @@ theorem subset_or_disjoint_of_edgeBoundary_eq_empty (hA : edgeBoundary Λ A = �
     exact h ((mem_iff_of_walk_of_edgeBoundary_eq_empty hA w).mpr hyA)
 
 /-- **Every admissible support lies in one connected component.** -/
-theorem IsAdmissibleSupport.reachable {R : ℕ} {X : Finset (Site Λ)}
+theorem _root_.TNLean.Lattice.IsAdmissibleSupport.reachable {R : ℕ} {X : Finset (Site Λ)}
     (hX : IsAdmissibleSupport Λ R X) {x y : Site Λ} (hx : x ∈ X) (hy : y ∈ X) :
     (domainGraph Λ).Reachable x y :=
   let ⟨w, _⟩ := hX.2 x hx y hy

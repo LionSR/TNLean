@@ -6,6 +6,8 @@ negative coordinates, a disconnected pair, and empty and full cuts. The entropy
 examples use precisely the supplied edge-boundary inequality or uniform theorem.
 -/
 
+open TNLean.Lattice
+
 open TNLean.PEPS.AreaLaw
 
 private def crossDomain : Finset (ℤ × ℤ) :=

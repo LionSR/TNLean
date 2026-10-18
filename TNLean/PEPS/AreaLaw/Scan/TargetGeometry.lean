@@ -24,6 +24,8 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 -/
 
+open TNLean.Lattice
+
 namespace TNLean.PEPS.AreaLaw.Scan
 
 /-- Both length bounds follow from the floor scale and the source exponent range. -/

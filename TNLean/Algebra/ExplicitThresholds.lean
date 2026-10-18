@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import Mathlib.Analysis.SpecialFunctions.Pow.Real
 import Mathlib.Analysis.Complex.Exponential
+import Mathlib.Analysis.Complex.ExponentialBounds
 
 /-!
 # Explicit thresholds for elementary limits
@@ -34,6 +35,7 @@ extracted from a limit.
   `Real.natRpowThreshold y b`.
 * `Real.add_mul_rpow_le_mul_rpow_of_le`: a two-term power sum is at most
   `η x ^ b` beyond the larger of two power-ratio thresholds.
+* `Real.one_le_log_natCast_of_three_le`: `1 ≤ log n` for natural `n ≥ 3`.
 * `Nat.half_le_floor_of_one_le`: `x / 2 ≤ ⌊x⌋₊` for `x ≥ 1`.
 
 Each threshold result also has a form for natural arguments `n` with
@@ -219,6 +221,12 @@ theorem one_le_log_of_ceil_logRpowThreshold_le {C η u v L : ℝ} {n : ℕ}
     (hn : ⌈logRpowThreshold C η u v L⌉₊ ≤ n) : 1 ≤ log (n : ℝ) := by
   rw [le_log_iff_exp_le (by linarith [two_lt_logRpowThreshold C η u v L, Nat.ceil_le.mp hn])]
   exact (le_max_left _ _).trans (Nat.ceil_le.mp hn)
+
+/-- Every natural number `n ≥ 3` has `log n ≥ 1`, since `e < 3`. -/
+theorem one_le_log_natCast_of_three_le {n : ℕ} (hn : 3 ≤ n) :
+    1 ≤ Real.log n := by
+  rw [Real.le_log_iff_exp_le (by positivity)]
+  exact Real.exp_one_lt_three.le.trans (by exact_mod_cast hn)
 
 /-- Every `n` from `⌈logRpowThreshold C η u v L⌉₊` on is at least `2`. -/
 theorem two_le_of_ceil_logRpowThreshold_le {C η u v L : ℝ} {n : ℕ}

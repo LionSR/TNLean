@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.AreaLaw.FiniteDomain
+import TNLean.Lattice.FiniteDomain
 import TNLean.PEPS.AreaLaw.GraphLatticeDiamond
 import Mathlib.Data.List.Chain
 import Mathlib.Algebra.Order.BigOperators.Group.Finset
@@ -21,6 +21,8 @@ Repeated labels at a common anchor remain distinct choices.
 Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 `08-scanner.tex`, lines 291–321, at `openai/math@adc7f124`.
 -/
+
+open TNLean.Lattice
 
 namespace TNLean.PEPS.AreaLaw.Scan
 

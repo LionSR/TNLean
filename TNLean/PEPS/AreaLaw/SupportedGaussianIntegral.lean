@@ -34,6 +34,7 @@ Independently formalized; no upstream Lean proof text is reused.
 
 open MeasureTheory ProbabilityTheory QuantumCircuit
 open scoped Matrix Matrix.Norms.L2Operator NNReal
+open TNLean.Lattice
 
 namespace TNLean.PEPS.AreaLaw
 

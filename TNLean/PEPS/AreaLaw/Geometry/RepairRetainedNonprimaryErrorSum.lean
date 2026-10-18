@@ -30,6 +30,8 @@ lines 732–740, and their error contribution, lines 796–798 of
 Source revision: `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 -/
 
+open TNLean.Lattice
+
 namespace TNLean.PEPS.AreaLaw.Geometry
 
 /-- Every non-dummy actual identifier has positive characteristic length.

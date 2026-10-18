@@ -7,6 +7,8 @@ import TNLean.PEPS.AreaLaw.EdgeCrossingBudget
 
 /-! Crossing dimensions and degenerate boundary regressions. -/
 
+open TNLean.Lattice
+
 open TNLean.PEPS TNLean.PEPS.AreaLaw
 open scoped BigOperators
 

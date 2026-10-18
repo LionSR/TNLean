@@ -31,6 +31,8 @@ and the rectangle-shell entropy input in the proof of Proposition 9.5
 Original formalization from the manuscript; no upstream Lean proof text reused.
 -/
 
+open TNLean.Lattice
+
 namespace TNLean.PEPS.AreaLaw
 
 /-- One initial safe-box constant and exponent control all actual weak-rectangle

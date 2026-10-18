@@ -2,6 +2,8 @@ import TNLean.PEPS.AreaLaw.Scan.PrefixBoundary
 
 /-! Regression checks for source-row physical prefix boundaries and changed-site bounds. -/
 
+open TNLean.Lattice
+
 open TNLean.PEPS.AreaLaw TNLean.PEPS.AreaLaw.Scan
 open scoped symmDiff
 
