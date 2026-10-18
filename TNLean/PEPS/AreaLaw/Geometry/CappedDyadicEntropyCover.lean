@@ -75,6 +75,23 @@ theorem regionalEntropy_filter_le_sum_rectRegion (Λ : Finset (ℤ × ℤ)) (q :
     biUnion_rectRegion_cappedDyadicPartition] using h
 
 /-- Entropy of the physical intersection is bounded by the weighted sum of
+the actual selected squares, given a bound on each selected square.
+Source: Lemma 9.4, 08-scanner.tex, lines 651–664. -/
+theorem regionalEntropy_filter_le_weighted_cover_of_forall
+    (Λ : Finset (ℤ × ℤ)) (q : ℕ) (Ω : StateSpace Λ q) (hΩ : ‖Ω‖ = 1)
+    (A : Finset (Site Λ)) (S : Finset (ℤ × ℤ)) (K : ℕ) (e C : ℝ)
+    (hcell : ∀ c ∈ cappedDyadicPartition S K,
+      regionalEntropy Λ q Ω (rectRegion A (latticeDyadicRect c.1 c.2)) ≤
+        C * ((latticeDyadicRect c.1 c.2).size : ℝ) ^ (1 + e)) :
+    regionalEntropy Λ q Ω (A.filter fun x ↦ x.1 ∈ S) ≤
+      C * ∑ c ∈ cappedDyadicPartition S K, ((2 : ℝ) ^ c.1) ^ (1 + e) := by
+  classical
+  refine (regionalEntropy_filter_le_sum_rectRegion Λ q Ω hΩ A S K).trans ?_
+  rw [Finset.mul_sum]
+  refine Finset.sum_le_sum fun c hc ↦ ?_
+  simpa only [size_latticeDyadicRect, Nat.cast_pow, Nat.cast_ofNat] using hcell c hc
+
+/-- Entropy of the physical intersection is bounded by the weighted sum of
 the actual selected squares under a pointwise safe-box estimate.
 Source: Lemma 9.4, 08-scanner.tex, lines 651–664. -/
 theorem regionalEntropy_filter_le_weighted_cover
@@ -84,13 +101,8 @@ theorem regionalEntropy_filter_le_weighted_cover
     (hbox : ∀ Q : IntRect, IsSafe Λ A D₀ Q →
       regionalEntropy Λ q Ω (rectRegion A Q) ≤ C * (Q.size : ℝ) ^ (1 + e)) :
     regionalEntropy Λ q Ω (A.filter fun x ↦ x.1 ∈ S) ≤
-      C * ∑ c ∈ cappedDyadicPartition S K, ((2 : ℝ) ^ c.1) ^ (1 + e) := by
-  classical
-  refine (regionalEntropy_filter_le_sum_rectRegion Λ q Ω hΩ A S K).trans ?_
-  rw [Finset.mul_sum]
-  apply Finset.sum_le_sum
-  intro c hc
-  simpa only [size_latticeDyadicRect, Nat.cast_pow, Nat.cast_ofNat] using
-    hbox (latticeDyadicRect c.1 c.2) (hsafe c hc)
+      C * ∑ c ∈ cappedDyadicPartition S K, ((2 : ℝ) ^ c.1) ^ (1 + e) :=
+  regionalEntropy_filter_le_weighted_cover_of_forall Λ q Ω hΩ A S K e C
+    fun c hc ↦ hbox _ (hsafe c hc)
 
 end TNLean.PEPS.AreaLaw.Geometry

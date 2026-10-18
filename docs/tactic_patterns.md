@@ -7780,10 +7780,15 @@ spectral split → block extraction → MPV calculation → strict bounds
   pointwise rectangle estimate using the exact side length of each cell.
 - **Seen:** the template core and shell estimates in
   `Geometry/TemplateBoxEntropy.lean` (the separately developed template
-  argument), and `WeakRectangleShellEntropy.lean`.
+  argument), `WeakRectangleShellEntropy.lean`, and the real-clearance
+  template estimate in `Geometry/TemplateBoxEntropyReal.lean`.
 - **Abstraction:** the shared public theorem
-  `Geometry.regionalEntropy_filter_le_weighted_cover` in
-  `Geometry/CappedDyadicEntropyCover.lean`.
+  `Geometry.regionalEntropy_filter_le_weighted_cover_of_forall` in
+  `Geometry/CappedDyadicEntropyCover.lean`, which takes a bound on each
+  selected square. `Geometry.regionalEntropy_filter_le_weighted_cover`
+  specializes it to a safe-box estimate with natural clearance; the
+  real-clearance estimate derives each square's bound from its own
+  clearance argument and calls the general form directly.
 - **Notes:** the rectangle shell uses the shared theorem. The template
   consumers retain the same proof terms when their four physical-cover
   declarations move to this module; that extraction is coordinated with

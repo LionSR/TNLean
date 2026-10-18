@@ -3734,6 +3734,7 @@ source's Proposition 4.1.
   Geometry.biUnion_rectRegion_cappedDyadicPartition,
   Geometry.pairwiseDisjoint_rectRegion_cappedDyadicPartition,
   Geometry.regionalEntropy_filter_le_sum_rectRegion,
+  Geometry.regionalEntropy_filter_le_weighted_cover_of_forall,
   Geometry.regionalEntropy_filter_le_weighted_cover,
   IsSafe.isSafe_cappedDyadicPartition_shell, and
   IntRect.regionalEntropy_shell_le_of_safe_box, all in
