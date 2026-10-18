@@ -16,9 +16,6 @@ Neither bridge constructs the physical entropy improvement.
 Source: OpenAI area-law manuscript, `02-initial.tex`, lines 590--594, and
 `08-scanner.tex`, lines 788--803,
 revision `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
-
-Validation and inherited-dependency scope:
-`docs/paper-gaps/arealaw2d_safe_box_collar_scope.tex`.
 -/
 
 namespace TNLean.PEPS.AreaLaw

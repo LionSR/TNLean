@@ -16,9 +16,6 @@ bound or entropy improvement is an input. The threshold is given explicitly by
 
 Source: OpenAI area-law manuscript, `08-scanner.tex`, lines 492--533 and
 731--755, revision `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
-
-Validation and inherited-dependency scope:
-`docs/paper-gaps/arealaw2d_safe_box_collar_scope.tex`.
 -/
 
 namespace TNLean.PEPS.AreaLaw.Scan

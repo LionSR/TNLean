@@ -27,10 +27,9 @@ The same actual source circuit and sample count are used in the contraction
 and its resource estimates. No numerical private-dimension or Schmidt-rank
 bound is assumed.
 
-**Local fix (nonempty parties):** The original input and output data retain
-the existing nonempty-party convention in
-`docs/paper-gaps/polypeps_nonempty_parties.tex`. It supplies the party at which
-the exterior scalar is absorbed, with no division and no additional premise.
+The exterior scalar is absorbed at an existing party: the construction data carry the
+nonempty-party convention, a degenerate-case reading of the source recorded in
+`docs/paper-gaps/polypeps_nonempty_parties.tex` and marked on `DistributedConstruction`.
 
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 137–175,
 199–229, 565–588 and 590–600.
