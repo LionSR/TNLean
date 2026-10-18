@@ -69,19 +69,20 @@ theorem sourceFinalInformationConstant_pos {q : ℕ} (hq : 1 ≤ q) (g : ℝ) {C
   exact finalSharpErrorConstant_pos hCe (mul_nonneg (by linarith) hlq) hlq
 
 open Classical in
-/-- At the literal final scales, the same physical source has conditional original-state collar
-information bounded by the exact maximal error power and the paper's weaker sublinear power,
-with the explicit coefficient `sourceFinalInformationConstant` at every `S.n` from the explicit
-threshold `sourceFinalInformationThreshold` on. The truncation constant `Ctr` and the transport
-constants `ct, Cent, eent, Cen, een` remain existential. Source: `08-scanner.tex`,
-lines 868--941. -/
-theorem exists_sourceTarget_finalScale_mutualInformation_of_threshold_le
+/-- The final-scale collar information bound of
+`exists_sourceTarget_finalScale_mutualInformation_of_threshold_le` at the named truncation
+constant `Ctr = latticeTruncationRadiusConstant R J Δ (C_T + 1)`, which depends only on
+`R, J, Δ, C_T`, and at any transport constants with `0 < ct` satisfying the finite-family
+transport bound. Source: `08-scanner.tex`, lines 868--941. -/
+theorem sourceTarget_finalScale_mutualInformation_explicit
     {q : ℕ} [NeZero q] (hq : 1 ≤ q) (R : ℕ)
     {J Δ C_T C₁ : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < Δ)
     (hC_T : 0 ≤ C_T) (hC₁ : 0 < C₁) (multiplicity : ℕ)
     (hmultiplicity : 3 * (multiplicity : ℝ) ≤ C₁) (P : ℝ)
-    (hP : (Exponents.scannerNu : ℝ) ≤ P) :
-    ∃ Ctr ct Cent eent Cen een : ℝ, 0 < Ctr ∧ 0 < ct ∧
+    (hP : (Exponents.scannerNu : ℝ) ≤ P)
+    {ct Cent eent Cen een : ℝ} (hct : 0 < ct)
+    (htransport : FiniteFamilyTransportBound ct Cent eent Cen een)
+    {Ctr : ℝ} (hCtrEq : Ctr = latticeTruncationRadiusConstant R J Δ (C_T + 1)) :
       ∀ Ce : ℝ, 0 ≤ Ce →
         ∀ (Λ T : Finset (ℤ × ℤ)) [LinearOrder (AdmissibleSupport Λ R)]
           (hT : T.Nonempty) (h : LocalHamiltonian Λ q R J)
@@ -122,9 +123,10 @@ theorem exists_sourceTarget_finalScale_mutualInformation_of_threshold_le
               sourceFinalInformationConstant q (Δ / positiveNormalization 1 (Δ / 2) J) C_T Ce *
                 (S.n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ)) := by
   classical
-  obtain ⟨Ctr, ct, Cent, eent, Cen, een, hCtr, hct, hsource⟩ :=
-    exists_sourceTarget_actual_mutualInformation_bound_of_threshold_le hq R hJ hΔ hC_T
-      hC₁ multiplicity hmultiplicity P hP
+  have hsource := sourceTarget_actual_mutualInformation_bound_explicit hq R hJ hΔ hC_T
+    hC₁ multiplicity hmultiplicity P hP htransport hCtrEq
+  have hCtr : 0 < Ctr := by
+    rw [hCtrEq]; exact latticeTruncationRadiusConstant_pos R hΔ (by positivity)
   let CB := statusMarginalBudgetConstant q R Ctr
   have hCB : 0 < CB := statusMarginalBudgetConstant_pos q R hCtr.le
   let g := Δ / positiveNormalization 1 (Δ / 2) J
@@ -136,7 +138,6 @@ theorem exists_sourceTarget_finalScale_mutualInformation_of_threshold_le
     abs_regionalEntropy_sub_le_of_truncationEntropyThreshold_le q hq g (C_T + 1) hg hn
   have hsmall := fun n (hn : finalSharpTransportThreshold q Ctr ct ≤ n) =>
     finalSharp_transport_smallness_of_threshold_le hq hCtr.le hct hn
-  refine ⟨Ctr, ct, Cent, eent, Cen, een, hCtr, hct, ?_⟩
   intro Ce hCe
   have herror := fun n (hn : finalSharpErrorThreshold C₀ CB ≤ n) =>
     finalSharp_source_error_le_of_finalSharpErrorThreshold_le q hq Ce C₀ CB g (C_T + 1) hCe hC₀
@@ -214,6 +215,65 @@ theorem exists_sourceTarget_finalScale_mutualInformation_of_threshold_le
   have hscalar := hbound B St Bsh z t dlog hwindow.2.2.1 hwindow.2.2.2.1
     hwindow.2.1 hSt le_rfl hbudget htrace hdlog
   exact ⟨hMI.trans hscalar.1, hMI.trans hscalar.2⟩
+
+open Classical in
+/-- At the literal final scales, the same physical source has conditional original-state collar
+information bounded by the exact maximal error power and the paper's weaker sublinear power,
+with the explicit coefficient `sourceFinalInformationConstant` at every `S.n` from the explicit
+threshold `sourceFinalInformationThreshold` on. The truncation constant `Ctr` and the transport
+constants `ct, Cent, eent, Cen, een` remain existential. Source: `08-scanner.tex`,
+lines 868--941. -/
+theorem exists_sourceTarget_finalScale_mutualInformation_of_threshold_le
+    {q : ℕ} [NeZero q] (hq : 1 ≤ q) (R : ℕ)
+    {J Δ C_T C₁ : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < Δ)
+    (hC_T : 0 ≤ C_T) (hC₁ : 0 < C₁) (multiplicity : ℕ)
+    (hmultiplicity : 3 * (multiplicity : ℝ) ≤ C₁) (P : ℝ)
+    (hP : (Exponents.scannerNu : ℝ) ≤ P) :
+    ∃ Ctr ct Cent eent Cen een : ℝ, 0 < Ctr ∧ 0 < ct ∧
+      ∀ Ce : ℝ, 0 ≤ Ce →
+        ∀ (Λ T : Finset (ℤ × ℤ)) [LinearOrder (AdmissibleSupport Λ R)]
+          (hT : T.Nonempty) (h : LocalHamiltonian Λ q R J)
+          (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (E₀ : ℝ)
+          (Ω : StateSpace Λ q),
+          IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+          S.graph = domainGraph Λ → (∀ i, S.anchor i ∈ i.val) →
+          sourceFinalInformationThreshold q R (Δ / positiveNormalization 1 (Δ / 2) J) C_T C₁
+            multiplicity P Ce Ctr ct Cent eent Cen een ≤ S.n →
+          S.r₀ = ⌈Ctr * Real.log (S.n : ℝ) ^ 2⌉₊ →
+          S.m = ⌊(S.n : ℝ) ^ (Exponents.scannerMu : ℝ)⌋₊ →
+          S.D = ⌈(S.n : ℝ) ^ (Exponents.scannerKappa : ℝ)⌉₊ →
+          S.K = ⌊(S.n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ / (8 * S.m) →
+          S.C₁ = C₁ → (T.card : ℝ) ≤ C_T * (S.n : ℝ) ^ 2 →
+          S.depth = (fun x ↦ ambientDepth T hT x.val) →
+          (∀ r : ℕ, 1 ≤ r →
+            r ≤ ⌊(S.n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ →
+            (ambientDilation T r \ ambientDilation T (r - 1)).card ≤ S.n) →
+          (∀ x, (Finset.univ.filter fun i ↦ S.anchor i = x).card ≤ multiplicity) →
+          (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+            ((2 * ⌊(S.n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ +
+              10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z) →
+          regionalEntropy Λ q Ω (S.A.filter fun x ↦ x.val ∈ T) ≤
+            Ce * (S.n : ℝ) ^ (1 + (Exponents.boxError : ℝ)) →
+          (∀ j : ℕ, j ≤ ⌊(S.n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ →
+            regionalEntropy Λ q Ω (positiveDepthPrefix S.A S.depth (j : ℤ)) ≤
+              Ce * ((S.n : ℝ) *
+                ((⌊(S.n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ : ℕ) : ℝ) ^
+                  (Exponents.boxError : ℝ) + S.n)) →
+          2 * S.r₀ ≤ S.D → ∀ (_hDpos : 1 ≤ S.D) (_hDm : 4 * S.D ≤ S.m),
+          let L := ⌊(S.n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊
+          let X := S.A.filter fun x ↦ x.val ∈ T
+          let β := fun _ : Site Λ ↦ Fin q
+          2 * FiniteProduct.mutualInformation β Ω X (S.truncationSet L)ᶜ ≤
+              sourceFinalInformationConstant q (Δ / positiveNormalization 1 (Δ / 2) J) C_T Ce *
+                (S.n : ℝ) ^ (62497 / 62500 : ℝ) ∧
+            2 * FiniteProduct.mutualInformation β Ω X (S.truncationSet L)ᶜ ≤
+              sourceFinalInformationConstant q (Δ / positiveNormalization 1 (Δ / 2) J) C_T Ce *
+                (S.n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ)) := by
+  obtain ⟨ct, Cent, eent, Cen, een, hct, htransport⟩ := exists_finiteFamilyTransportBound
+  exact ⟨_, ct, Cent, eent, Cen, een,
+    latticeTruncationRadiusConstant_pos R hΔ (by positivity : (0 : ℝ) ≤ C_T + 1), hct,
+    sourceTarget_finalScale_mutualInformation_explicit hq R hJ hΔ hC_T hC₁ multiplicity
+      hmultiplicity P hP hct htransport rfl⟩
 
 open Classical in
 /-- At the literal final scales, the same physical source has conditional
