@@ -33,6 +33,7 @@ noncomputable section
 
 open Matrix TensorPower TensorPower.ReplicaTransport PermutationRepresentation
 open scoped BigOperators Matrix ComplexOrder MatrixOrder Matrix.Norms.L2Operator
+open TNLean.Lattice
 
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
 

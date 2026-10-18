@@ -25,6 +25,7 @@ noncomputable section
 
 open Matrix
 open scoped BigOperators
+open TNLean.Lattice
 
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
 

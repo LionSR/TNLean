@@ -50,6 +50,7 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 
 open Matrix QuantumCircuit
 open scoped Kronecker
+open TNLean.Lattice
 
 namespace QuantumCircuit
 
@@ -332,8 +333,8 @@ open square, supported on `B`, is a unitary on the two replicas, supported on bo
 of the sites of `B`. -/
 theorem reindex_rectangle_sumArrow_unitary {L q : ℕ}
     (B : Finset (Site (rectangularDomain L L)))
-    {U : Matrix (AreaLaw.Configuration (rectangularDomain L L) (q * q))
-      (AreaLaw.Configuration (rectangularDomain L L) (q * q)) ℂ}
+    {U : Matrix (Lattice.Configuration (rectangularDomain L L) (q * q))
+      (Lattice.Configuration (rectangularDomain L L) (q * q)) ℂ}
     (hUu : U ∈ unitaryGroup _ ℂ) (hUs : U ∈ supportedOperators (q * q) (B : Set _)) :
     let Pe := (Equiv.sumArrowEquivProdArrow (SquareLatticeVertex L L) (SquareLatticeVertex L L)
       (Fin q)).trans ((sitePairConfigurationEquiv (SquareLatticeVertex L L) q q).trans
@@ -409,13 +410,13 @@ theorem mutualInformation_cores_le_of_reset_unitary {L q : ℕ} (hq : 1 ≤ q)
     (hRC : Disjoint R C)
     (hR₀ : R₀ ⊆ R) (hC₀ : C₀ ⊆ C) (B : Finset (Site (rectangularDomain L L)))
     (hnot : ∀ v ∈ R₀ ∪ C₀, rectangleSiteEquiv L L v ∉ B)
-    {U : Matrix (AreaLaw.Configuration (rectangularDomain L L) (q * q))
-      (AreaLaw.Configuration (rectangularDomain L L) (q * q)) ℂ}
+    {U : Matrix (Lattice.Configuration (rectangularDomain L L) (q * q))
+      (Lattice.Configuration (rectangularDomain L L) (q * q)) ℂ}
     (hUu : U ∈ unitaryGroup _ ℂ) (hUs : U ∈ supportedOperators (q * q) (B : Set _)) {δ : ℝ} :
     let pe := (sitePairConfigurationEquiv (SquareLatticeVertex L L) q q).trans
       (rectangleConfigurationEquiv L L (q * q))
     let F := reindex pe pe (EncodedFrame.sheetSwapOp q R)
-    let ψ : AreaLaw.Configuration (rectangularDomain L L) (q * q) → ℂ := fun c ↦
+    let ψ : Lattice.Configuration (rectangularDomain L L) (q * q) → ℂ := fun c ↦
       Ω (pe.symm c).1 * Ω (pe.symm c).2
     ‖WithLp.toLp 2 ψ‖ = 1 → ‖WithLp.toLp 2 (F *ᵥ ψ)‖ = 1 →
     ‖WithLp.toLp 2 (U *ᵥ ψ) - WithLp.toLp 2 (F *ᵥ ψ)‖ ≤ δ →

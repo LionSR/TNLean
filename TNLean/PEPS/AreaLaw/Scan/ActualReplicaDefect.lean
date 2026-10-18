@@ -28,6 +28,7 @@ adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 noncomputable section
 open Matrix TensorPower TensorPower.ReplicaTransport PermutationRepresentation
 open scoped BigOperators Matrix Kronecker ComplexOrder MatrixOrder
+open TNLean.Lattice
 
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
 

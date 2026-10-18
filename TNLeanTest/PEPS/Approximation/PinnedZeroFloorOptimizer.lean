@@ -11,6 +11,7 @@ noncomputable section
 
 open Matrix
 open scoped BigOperators ComplexOrder InnerProductSpace Matrix.Norms.L2Operator
+open TNLean.Lattice
 
 namespace TNLean.PEPS.Approximation
 
@@ -101,7 +102,7 @@ example : Crosses ({(0, 0)} : Finset (Vertex 2))
     ⟨((0, 0), (1, 0)), Or.inl ⟨rfl, rfl⟩⟩ := by
   decide
 
-example : (AreaLaw.edgeBoundary (AreaLaw.rectangularDomain 2 2)
+example : (Lattice.edgeBoundary (AreaLaw.rectangularDomain 2 2)
     (({(0, 0)} : Finset (Vertex 2)).map (AreaLaw.rectangleSiteEquiv 2 2).toEmbedding)).card =
       crossingCount ({(0, 0)} : Finset (Vertex 2)) :=
   card_edgeBoundary_eq_crossingCount _

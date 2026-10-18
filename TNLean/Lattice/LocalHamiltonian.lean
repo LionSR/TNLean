@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.AreaLaw.FiniteDomain
+import TNLean.Lattice.FiniteDomain
 import TNLean.Circuit.SiteEmbedding
 import TNLean.Algebra.GappedGroundState
 import Mathlib.Analysis.CStarAlgebra.Matrix
@@ -33,7 +33,7 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 
 open scoped BigOperators Matrix Matrix.Norms.L2Operator ComplexOrder
 
-namespace TNLean.PEPS.AreaLaw
+namespace TNLean.Lattice
 
 /-- The physical Hilbert space in configuration coordinates.
 Source: area-law Section 1, the tensor product of the site spaces. -/
@@ -100,4 +100,4 @@ def IsGappedGroundState (Λ : Finset (ℤ × ℤ)) (q : ℕ)
     (E₀ : ℝ) (Ω : StateSpace Λ q) (Δ : ℝ) : Prop :=
   Matrix.IsGappedGroundState H E₀ Ω Δ
 
-end TNLean.PEPS.AreaLaw
+end TNLean.Lattice

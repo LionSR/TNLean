@@ -25,6 +25,7 @@ or entropy hypothesis is used in this operator estimate.
 
 open QuantumCircuit
 open scoped Matrix.Norms.L2Operator
+open TNLean.Lattice
 
 namespace TNLean.PEPS.AreaLaw
 
