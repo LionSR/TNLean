@@ -239,10 +239,44 @@ theorem exists_isRepairBirthSeparated_of_isUniformRepairInduction :
       (∀ j p, Sstar ≤ (repairStage o Λ A C k₀ hC h₀ Sstar j).scale p) →
       (∀ S, Sstar ≤ S → repairHalfSide S ≤ a₀ / 1000 * S) →
       IsUniformRepairInduction o Λ A C k₀ hC h₀ Sstar a₀ →
-      IsRepairBirthSeparated o Λ A C k₀ hC h₀ Sstar c₁ := by
-  obtain ⟨c₁, hc₁, hsep⟩ := exists_repairBirth_separation
-  exact ⟨c₁, hc₁, fun _ _ _ _ _ _ _ _ _ ha₀ hS1 hscale hmargin hI ↦
-    isRepairBirthSeparated_of_isUniformRepairInduction hsep ha₀ hS1 hscale hmargin hI⟩
+      IsRepairBirthSeparated o Λ A C k₀ hC h₀ Sstar c₁ :=
+  ⟨birthSeparationConstant, birthSeparationConstant_pos, fun _ _ _ _ _ _ _ _ _ ha₀ hS1 hscale
+    hmargin hI ↦
+    isRepairBirthSeparated_of_isUniformRepairInduction repairBirth_separation ha₀ hS1 hscale
+      hmargin hI⟩
+
+/-- **Birth-template separation of replacements, from Lemma 11.4, with the
+explicit constant.** If the uniform repair induction holds, there is a
+threshold `T` such that, for every stopping scale `S_* ≥ T` and every layer
+width, every sufficiently large lower layer index gives repair stages in which
+every replacement born at a parent of scale `S` has distance at least
+`birthSeparationConstant · d(S)^ρ₀`, with `birthSeparationConstant = 1/28`, from
+the final actual region of every earlier or peer identifier of its label.
+Source: area-law Section 11, `geometry:birth-separation`, lines 573–659, from
+`geometry:repair-induction`, lines 471–485. -/
+theorem exists_threshold_isRepairBirthSeparated_of_uniformRepairInductionStatement
+    (h : UniformRepairInductionStatement) :
+    ∃ T : ℝ, ∀ Sstar, T ≤ Sstar → ∀ C : ℕ, ∃ K : ℕ,
+      ∀ (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ)) (k₀ : ℕ)
+        (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀), K ≤ k₀ →
+          IsRepairBirthSeparated o Λ A C k₀ hC h₀ Sstar birthSeparationConstant := by
+  obtain ⟨a₀, ha₀, T₁, hT₁⟩ := h
+  obtain ⟨T₂, hT₂⟩ := exists_repairMetricHypotheses (a₀ := min a₀ (1 / 4))
+    (lt_min ha₀ (by norm_num)) (min_le_right _ _)
+  refine ⟨max (max T₁ T₂) 1, fun Sstar hS C ↦ ?_⟩
+  have hS₁ : T₁ ≤ Sstar := (le_max_left _ _).trans ((le_max_left _ _).trans hS)
+  have hS₂ : T₂ ≤ Sstar := (le_max_right _ _).trans ((le_max_left _ _).trans hS)
+  have hS1 : 1 ≤ Sstar := (le_max_right _ _).trans hS
+  obtain ⟨K₁, hK₁⟩ := hT₁ Sstar hS₁ C
+  obtain ⟨K₂, hK₂⟩ := hT₂ Sstar hS₂ C
+  refine ⟨max K₁ K₂, fun o Λ A k₀ hC h₀ hK ↦ ?_⟩
+  have hM := hK₂ o Λ A k₀ hC h₀ ((le_max_right _ _).trans hK)
+  refine isRepairBirthSeparated_of_isUniformRepairInduction repairBirth_separation ha₀ hS1
+    hM.le_scale (fun S hSS ↦ ?_) (hK₁ o Λ A k₀ hC h₀ ((le_max_left _ _).trans hK))
+  have := hM.margin S hSS
+  have hSpos : 0 ≤ S := by linarith
+  calc repairHalfSide S ≤ min a₀ (1 / 4) / 1000 * S := this
+    _ ≤ a₀ / 1000 * S := by gcongr; exact min_le_left _ _
 
 /-- **Birth-template separation of replacements, from Lemma 11.4.** If the
 uniform repair induction holds, there are one fixed `c₁ > 0` and a threshold
@@ -251,30 +285,15 @@ sufficiently large lower layer index gives repair stages in which every
 replacement born at a parent of scale `S` has distance at least `c₁ d(S)^ρ₀`
 from the final actual region of every earlier or peer identifier of its label.
 Source: area-law Section 11, `geometry:birth-separation`, lines 573–659, from
-`geometry:repair-induction`, lines 471–485. -/
+`geometry:repair-induction`, lines 471–485. One may take `c₁ = 1/28`
+(`exists_threshold_isRepairBirthSeparated_of_uniformRepairInductionStatement`). -/
 theorem exists_isRepairBirthSeparated_of_uniformRepairInductionStatement
     (h : UniformRepairInductionStatement) :
     ∃ c₁ > 0, ∃ T : ℝ, ∀ Sstar, T ≤ Sstar → ∀ C : ℕ, ∃ K : ℕ,
       ∀ (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ)) (k₀ : ℕ)
         (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀), K ≤ k₀ →
-          IsRepairBirthSeparated o Λ A C k₀ hC h₀ Sstar c₁ := by
-  obtain ⟨c₁, hc₁, hsep⟩ := exists_isRepairBirthSeparated_of_isUniformRepairInduction
-  obtain ⟨a₀, ha₀, T₁, hT₁⟩ := h
-  obtain ⟨T₂, hT₂⟩ := exists_repairMetricHypotheses (a₀ := min a₀ (1 / 4))
-    (lt_min ha₀ (by norm_num)) (min_le_right _ _)
-  refine ⟨c₁, hc₁, max (max T₁ T₂) 1, fun Sstar hS C ↦ ?_⟩
-  have hS₁ : T₁ ≤ Sstar := (le_max_left _ _).trans ((le_max_left _ _).trans hS)
-  have hS₂ : T₂ ≤ Sstar := (le_max_right _ _).trans ((le_max_left _ _).trans hS)
-  have hS1 : 1 ≤ Sstar := (le_max_right _ _).trans hS
-  obtain ⟨K₁, hK₁⟩ := hT₁ Sstar hS₁ C
-  obtain ⟨K₂, hK₂⟩ := hT₂ Sstar hS₂ C
-  refine ⟨max K₁ K₂, fun o Λ A k₀ hC h₀ hK ↦ ?_⟩
-  have hM := hK₂ o Λ A k₀ hC h₀ ((le_max_right _ _).trans hK)
-  refine hsep o Λ A C k₀ hC h₀ Sstar a₀ ha₀ hS1 hM.le_scale (fun S hSS ↦ ?_)
-    (hK₁ o Λ A k₀ hC h₀ ((le_max_left _ _).trans hK))
-  have := hM.margin S hSS
-  have hSpos : 0 ≤ S := by linarith
-  calc repairHalfSide S ≤ min a₀ (1 / 4) / 1000 * S := this
-    _ ≤ a₀ / 1000 * S := by gcongr; exact min_le_left _ _
+          IsRepairBirthSeparated o Λ A C k₀ hC h₀ Sstar c₁ :=
+  ⟨birthSeparationConstant, birthSeparationConstant_pos,
+    exists_threshold_isRepairBirthSeparated_of_uniformRepairInductionStatement h⟩
 
 end TNLean.PEPS.AreaLaw.Geometry

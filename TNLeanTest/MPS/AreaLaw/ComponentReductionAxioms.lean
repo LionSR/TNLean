@@ -18,8 +18,8 @@ set_option linter.hashCommand false
 run_cmd do
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
   let env ← Lean.getEnv
-  for decl in #[``TNLean.MPS.AreaLaw.regionEntropy_eq_zero_of_forall_subset_or_disjoint,
-      ``TNLean.MPS.AreaLaw.regionEntropy_symmDiff_eq_of_eq_zero,
+  for decl in #[``TNLean.Lattice.regionEntropy_eq_zero_of_forall_subset_or_disjoint,
+      ``TNLean.Lattice.regionEntropy_symmDiff_eq_of_eq_zero,
       ``TNLean.MPS.AreaLaw.card_domainBoundaryEdges,
       ``TNLean.MPS.AreaLaw.regionEntropy_le_mul_card_domainBoundaryEdges,
       ``TNLean.MPS.AreaLaw.domainAreaLaw] do

@@ -4,20 +4,18 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.Basic
+import TNLean.Lattice.RegionEntropyInequalities
 import QICLean.Entropy.ConditionalEntropy
 import QICLean.Entropy.FilterOptimizer
-import QICLean.Entropy.MovementEtaRegional
 
 /-!
 # Entropy inequalities for regions of a chain
 
-Consequences of subadditivity and purity for the regional entropies of a unit vector on the
-chain of `L` sites with local dimension `q`.
+The chain of `L` sites is the finite set `Fin L`, so subadditivity, the Araki–Lieb
+inequality `S(X) ≤ S(X ∪ T) + S(T)` and the dimension bound `S(A) ≤ |A| log q` are the
+site-generic lemmas of `TNLean.Lattice.RegionEntropyInequalities`. This module adds the
+geometry of the chain.
 
-* The Araki–Lieb inequality `S(X) ≤ S(X ∪ T) + S(T)` for disjoint regions `X` and `T` of a
-  pure state: `S(X) = S(Xᶜ)`, the complement `Xᶜ` is the disjoint union of `(X ∪ T)ᶜ` and
-  `T`, and `S((X ∪ T)ᶜ) = S(X ∪ T)` again by purity.
-* The dimension bound `S(A) ≤ |A| log q`.
 * A uniform bound `C` on the entropies of all intervals of the chain gives the area law
   `S(A) ≤ C |∂A|` for every region `A`, where `∂A` is the set of edges of the chain with
   exactly one endpoint in `A`. Every region is a disjoint union of maximal runs of
@@ -27,9 +25,6 @@ chain of `L` sites with local dimension `q`.
 
 ## Main results
 
-* `regionEntropy_union_le`: subadditivity of the regional entropy over disjoint regions.
-* `regionEntropy_le_union_add`: the Araki–Lieb inequality for regional entropies.
-* `regionEntropy_le_card_mul_log`: the dimension bound `S(A) ≤ |A| log q`.
 * `boundaryEdges`: the edges of the chain leaving a region.
 * `regionEntropy_le_mul_card_boundaryEdges_of_intervals`: interval bounds give the area
   law on a chain.
@@ -41,69 +36,11 @@ chain of `L` sites with local dimension `q`.
   law on a chain to interval regions.
 -/
 
+open TNLean.Lattice
+
 namespace TNLean.MPS.AreaLaw
 
 variable {L q : ℕ}
-
-section Purity
-
-variable {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
-
-/-- Subadditivity of the regional entropy of a unit vector over disjoint regions. -/
-theorem regionEntropy_union_le (hΩ : ‖Ω‖ = 1) {X T : Finset (Fin L)} (hXT : Disjoint X T) :
-    Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (X ∪ T) Ω ≤
-      Entropy.regionEntropy (n := fun _ : Fin L ↦ q) X Ω +
-        Entropy.regionEntropy (n := fun _ : Fin L ↦ q) T Ω := by
-  simp only [Entropy.regionEntropy_eq_entropy]
-  exact FiniteProduct.entropy_union_le _ Ω hΩ X T hXT
-
-/-- The Araki–Lieb inequality for regional entropies of a pure unit vector: for disjoint
-regions `X` and `T`, `S(X) ≤ S(X ∪ T) + S(T)`. -/
-theorem regionEntropy_le_union_add (hΩ : ‖Ω‖ = 1) {X T : Finset (Fin L)}
-    (hXT : Disjoint X T) :
-    Entropy.regionEntropy (n := fun _ : Fin L ↦ q) X Ω ≤
-      Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (X ∪ T) Ω +
-        Entropy.regionEntropy (n := fun _ : Fin L ↦ q) T Ω := by
-  have hdisj : Disjoint (X ∪ T)ᶜ T := disjoint_compl_left_iff.mpr Finset.subset_union_right
-  have hXc : Xᶜ = (X ∪ T)ᶜ ∪ T := by
-    ext v
-    have hv : v ∈ X → v ∉ T := fun hv ↦ Finset.disjoint_left.mp hXT hv
-    simp only [Finset.mem_compl, Finset.mem_union, not_or]
-    tauto
-  calc Entropy.regionEntropy (n := fun _ : Fin L ↦ q) X Ω
-      = Entropy.regionEntropy (n := fun _ : Fin L ↦ q) ((X ∪ T)ᶜ ∪ T) Ω := by
-        rw [← Entropy.regionEntropy_compl, hXc]
-    _ ≤ Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (X ∪ T)ᶜ Ω +
-          Entropy.regionEntropy (n := fun _ : Fin L ↦ q) T Ω := regionEntropy_union_le hΩ hdisj
-    _ = Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (X ∪ T) Ω +
-          Entropy.regionEntropy (n := fun _ : Fin L ↦ q) T Ω := by
-        rw [Entropy.regionEntropy_compl]
-
-/-- The empty region of a unit vector has zero entropy. -/
-theorem regionEntropy_empty (hΩ : ‖Ω‖ = 1) :
-    Entropy.regionEntropy (n := fun _ : Fin L ↦ q) ∅ Ω = 0 := by
-  rw [Entropy.regionEntropy_eq_entropy, FiniteProduct.entropy_empty _ Ω hΩ]
-
-/-- The whole chain has zero entropy for a unit vector. -/
-theorem regionEntropy_univ (hΩ : ‖Ω‖ = 1) :
-    Entropy.regionEntropy (n := fun _ : Fin L ↦ q) Finset.univ Ω = 0 := by
-  rw [Entropy.regionEntropy_eq_entropy, FiniteProduct.entropy_univ _ Ω hΩ]
-
-/-- The dimension bound `S(A) ≤ |A| log q`: the entropy of a region of a unit vector is at most
-the logarithm of the dimension of its state space. -/
-theorem regionEntropy_le_card_mul_log (hΩ : ‖Ω‖ = 1) (A : Finset (Fin L)) :
-    Entropy.regionEntropy (n := fun _ : Fin L ↦ q) A Ω ≤ (A.card : ℝ) * Real.log q := by
-  have htr : (Entropy.regionState (n := fun _ : Fin L ↦ q) A Ω).trace = 1 := by
-    rw [Entropy.trace_regionState, hΩ]
-    simp
-  have hcard : Fintype.card (Entropy.RegionConfig (fun _ : Fin L ↦ q) A) = q ^ A.card := by
-    simp [Entropy.RegionConfig, Fintype.card_pi]
-  rw [Entropy.regionEntropy]
-  refine (Entropy.vonNeumannEntropy_le_log_card (Entropy.regionState_posSemidef A Ω) htr).trans
-    (le_of_eq ?_)
-  rw [hcard, Nat.cast_pow, Real.log_pow]
-
-end Purity
 
 section Chain
 
