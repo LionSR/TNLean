@@ -24,6 +24,7 @@ The comparison is a derived auxiliary result.
 -/
 
 open scoped BigOperators
+open TNLean.Lattice
 
 namespace TNLean.PEPS.AreaLaw
 

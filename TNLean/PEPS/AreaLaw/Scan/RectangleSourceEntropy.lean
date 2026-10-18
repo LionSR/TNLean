@@ -18,10 +18,9 @@ unchanged.
 
 Source: OpenAI area-law manuscript, `08-scanner.tex`, lines 705--729,
 revision `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
-
-Validation and inherited-dependency scope:
-`docs/paper-gaps/arealaw2d_safe_box_collar_scope.tex`.
 -/
+
+open TNLean.Lattice
 
 namespace TNLean.PEPS.AreaLaw.Scan
 

@@ -22,6 +22,8 @@ open TNLean.PEPS.AreaLaw TNLean.PEPS.AreaLaw.Scan
 
 noncomputable section
 
+open TNLean.Lattice
+
 namespace TNLeanTest.ActualChargeEntropySum
 
 variable {V I : Type} [Fintype V] [DecidableEq V] [Fintype I] [LinearOrder I]

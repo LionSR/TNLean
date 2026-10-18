@@ -37,6 +37,8 @@ rectangles.
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
+open TNLean.Lattice
+
 namespace TNLean.PEPS.AreaLaw
 
 /-- Theorem 1.1 of the area-law manuscript, `00-introduction.tex`, lines 39–53:

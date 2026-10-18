@@ -23,15 +23,14 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 `08-scanner.tex`, lines 309--329, 492--520 and 693--755, revision
 `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 Original formalization from the manuscript; no upstream Lean proof text reused.
-
-Validation and inherited-dependency scope:
-`docs/paper-gaps/arealaw2d_safe_box_collar_scope.tex`.
 -/
 
 open scoped BigOperators Matrix
 open Filter MeasureTheory Set TensorPower TensorPower.ReplicaTransport Entropy
 
 noncomputable section
+
+open TNLean.Lattice
 
 namespace TNLean.PEPS.AreaLaw.Scan
 

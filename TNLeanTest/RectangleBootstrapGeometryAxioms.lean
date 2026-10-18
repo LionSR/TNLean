@@ -9,6 +9,8 @@ import Lean.Util.CollectAxioms
 
 /-! # Exact declarations and kernel dependencies of the weak-rectangle scanner -/
 
+open TNLean.Lattice
+
 run_cmd do
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
   let declarations := #[

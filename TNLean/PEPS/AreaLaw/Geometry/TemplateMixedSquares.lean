@@ -20,6 +20,8 @@ spectral gap*, September 24, 2026, at
 No upstream Lean proof text is reused. Safe clearance and entropy are separate.
 -/
 
+open TNLean.Lattice
+
 namespace TNLean.PEPS.AreaLaw.Geometry
 
 private theorem template_scale_nat {Ctpl : ℝ} {n s₀ : ℕ}

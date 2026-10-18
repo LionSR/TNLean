@@ -46,6 +46,7 @@ allows `q, R, J, Δ` (`03-quasilocal.tex`, lines 41–42).
 -/
 
 open scoped Matrix Kronecker Matrix.Norms.L2Operator MatrixOrder ComplexOrder
+open TNLean.Lattice
 
 namespace TNLean.PEPS.AreaLaw
 

@@ -46,18 +46,9 @@ attachment of its parties and a reference vector at every stage:
 its constants chosen before the size, the Hamiltonian, and the ground vector, is the statement
 `LargeSizeDyadicProtocolConsequences`. This module does not prove that statement.
 
-**Scope restriction (consequences of Proposition 7.1):** `IsDistributionProtocol` and
-`LargeSizeDyadicProtocolConsequences` are weaker than Proposition 7.1. They omit the following
-clause of the source:
-
-* `r_t` has at least one frame for `0 < t < changes` (`06-geometry.tex:38–40`); the
-  construction satisfies it, but it is not yet stated.
-
-This clause is not used by the density estimate of §8.1, the separation hypothesis of
-Lemma 8.2, or the lifetime count. Documented in
-`docs/paper-gaps/polypeps_prop71_consequences_interface.tex`. Elimination: build a richer
-construction certificate carrying the omitted clause, prove Proposition 7.1 for it, and forget
-it into this interface.
+`IsDistributionProtocol` carries every clause of Proposition 7.1 (`06-geometry.tex:12–53`); the
+former scope restriction to the consequences used in §8 is resolved in
+`docs/paper-gaps/polypeps_prop71_consequences_interface.tex`.
 
 The bound on pair sources and messages in each monomial (Theorem 5.2, item 3,
 `04-compression.tex:143–147`) is the field `IsDistributionProtocol.sourceBounded`; the gates carry
@@ -144,9 +135,8 @@ local dimension `q`, on the finite party type `P`, consists of the following.
   one elsewhere, followed by the private registers to be discarded
   (`06-geometry.tex:48–51, 669–679`).
 
-The quantitative assertions used by §8 are not part of these data; they are
-`DyadicProtocol.IsDistributionProtocol`. The data omit the clauses of Proposition 7.1 listed in
-the scope restriction of the module docstring.
+The quantitative assertions of Proposition 7.1 are not part of these data; they are
+`DyadicProtocol.IsDistributionProtocol`.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), Proposition 7.1 `prop:protocol`,
 `06-geometry.tex:12–53`, with the distributed constructions of Theorem 5.2,
@@ -318,9 +308,9 @@ These are the consequences of the four items that the assembly of §8 uses, toge
 pair-source bound of Theorem 5.2, item 3. Each nonprivate gate `G` equals its recorded expansion
 `∑ ξ, c ξ • M ξ`, so `‖G - ∑ ξ, c ξ • M ξ‖ = 0` and the expansions are accurate at every inverse
 power of `L` (`06-geometry.tex:29–30`); the monomials have no messages, since messages are
-expanded before a gate is recorded (`04-compression.tex:42–45`). The predicate
-is weaker than the conclusion of Proposition 7.1 only in the clause listed in the scope
-restriction of the module docstring.
+expanded before a gate is recorded (`04-compression.tex:42–45`). With the fields on the parties,
+the initial copies and the frames of the references, the predicate carries every clause of the
+conclusion of Proposition 7.1.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), Proposition 7.1 `prop:protocol`,
 `06-geometry.tex:17–52`; the expansions are those of Theorem 5.2, item 3,
@@ -435,6 +425,12 @@ structure IsDistributionProtocol (Ω : StateSpace L q) (C : ℝ) (b k r : ℕ) :
     (∀ F ∈ D.frames t, ‖F.refVec Ω‖ ≤ 1) ∧
       ∃ h : D.layout t = EncodedFrame.stackRegs (D.frames t) [],
         D.reference t = Layout.memCongr h.symm (EncodedFrame.framesVec Ω (D.frames t))
+  /-- Item 4: every intermediate stage has at least one encoded frame.
+
+  Source: Polynomial-PEPS manuscript (Sept 24 2026), Proposition 7.1, item 4,
+  `06-geometry.tex:38–40`: the reference vector of every stage is formed from the main encoded
+  frame and the auxiliary encoded frames. -/
+  frames_ne_nil : ∀ t, 0 < t → t < D.changes → D.frames t ≠ []
   /-- Item 4: before the readout, the raw registers of the main encoded frame are held by the
   parties of the genuine sites, so they become the physical outputs.
 
@@ -538,9 +534,8 @@ the energy, and the ground vector, such that every gapped ground vector `Ω` of 
 Hamiltonian of side `L ≥ max 2 L₀` has a dyadic distribution protocol with the bounds of
 `DyadicProtocol.IsDistributionProtocol`.
 
-This is a target statement, not a proof. It is the form in which §8 uses Proposition 7.1, and
-it is weaker than that proposition: it omits the clauses listed in the scope restriction of the
-module docstring, so it is not the source proposition.
+It carries every clause of Proposition 7.1. It is proved, without hypotheses, by
+`largeSizeDyadicProtocolConsequences`.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), Proposition 7.1 `prop:protocol`,
 `06-geometry.tex:12–53`, in the setting of Theorem 1.1, `00-introduction.tex:36–57`, applied

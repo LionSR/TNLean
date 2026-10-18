@@ -31,6 +31,8 @@ results; no such property is assumed here.
 Independently proved from the manuscript; no upstream Lean proof text is reused.
 -/
 
+open TNLean.Lattice
+
 namespace TNLean.PEPS.AreaLaw.Geometry
 
 /-- The coordinatewise floor index in the translated half-open dyadic grid.
