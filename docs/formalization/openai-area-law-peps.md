@@ -206,7 +206,7 @@ hypothesis to the printed one.
 | Amplification (Proposition 10.2) | `AmplificationBound`, `amplificationBound` | Proved. `L + 2r = o(n^β)` follows from the radius bound (`Exponents.collar_add_radius_isLittleO`). The PEPS use with `A = Λ`, `M = 1` is `coarse_mutualInformation_le_of_sublinearCollarBound`, applied with the proved collar bound. |
 | Two-family entropy cancellation (Lemma 11.1) | `OrderedTwoFamilyPartition.entropy_le_residual_add_half_sum`, `regionalEntropy_le_residual_add_half_sum` | Proved. |
 | Two families with separated birth templates (Proposition 11.2) | `TwoFamilyDecomposition`, `twoFamilyDecomposition` | Proved for all real `D₀` and `C_tpl`. |
-| PEPS Lemma 3.2, the local adaptation to a cell | `exists_cell_conditionalMutualInformation_le_square_of_sublinearCollarBound`, `cell_conditionalMutualInformation_le_square_of_sublinearCollarBoundAt` | Proved from the collar bound. The explicit form states the cell constant and exponent as functions of the collar and amplification constants. |
+| PEPS Lemma 3.2, the local adaptation to a cell | `exists_cell_conditionalMutualInformation_le_square` | Proved under the model and full-system gap alone. The conditional forms `exists_cell_conditionalMutualInformation_le_square_of_sublinearCollarBound` and `cell_conditionalMutualInformation_le_square_of_sublinearCollarBoundAt` assume the collar bound; the latter also assumes the amplification bound at fixed constants and states the cell constant and exponent as functions of those constants. |
 
 The source-labelled area-law Theorem 1.1, Corollary 1.2, PEPS Proposition 2.1
 and PEPS Theorem 1.1 carry `\leanok` marks in the blueprint.
