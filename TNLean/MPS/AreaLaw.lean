@@ -10,6 +10,7 @@ Authors: TNLean contributors
 
 import TNLean.MPS.AreaLaw.AreaLaw
 import TNLean.MPS.AreaLaw.BandDissolution
+import TNLean.MPS.AreaLaw.BandInformation
 import TNLean.MPS.AreaLaw.Basic
 import TNLean.MPS.AreaLaw.BoundaryCounting
 import TNLean.MPS.AreaLaw.BufferDiscount
@@ -33,8 +34,13 @@ import TNLean.MPS.AreaLaw.PartialSwap
 import TNLean.MPS.AreaLaw.ProtocolConditionalPreparation
 import TNLean.MPS.AreaLaw.ProtocolCutCoordinates
 import TNLean.MPS.AreaLaw.ProtocolInitialization
+import TNLean.MPS.AreaLaw.ProtocolMPSApproximation
+import TNLean.MPS.AreaLaw.ProtocolPhysicalPreparation
+import TNLean.MPS.AreaLaw.ProtocolPolynomialMPS
 import TNLean.MPS.AreaLaw.ProtocolRetiredAuxiliary
 import TNLean.MPS.AreaLaw.ProtocolStageArity
+import TNLean.MPS.AreaLaw.ProtocolStageInformation
+import TNLean.MPS.AreaLaw.ProtocolStagePhysicalCircuits
 import TNLean.MPS.AreaLaw.ProtocolSweepFrames
 import TNLean.MPS.AreaLaw.ProtocolSweepGeometry
 import TNLean.MPS.AreaLaw.ProtocolSweepHistory
@@ -45,6 +51,7 @@ import TNLean.MPS.AreaLaw.ProtocolSweepPlacement
 import TNLean.MPS.AreaLaw.ProtocolTerminalCoordinates
 import TNLean.MPS.AreaLaw.ProtocolTerminalReference
 import TNLean.MPS.AreaLaw.ProtocolTerminalWord
+import TNLean.MPS.AreaLaw.ProtocolUniformPreparation
 import TNLean.MPS.AreaLaw.RelativeGeneratorLocalization
 import TNLean.MPS.AreaLaw.ResetSupportSeparation
 import TNLean.MPS.AreaLaw.SequentialTruncation

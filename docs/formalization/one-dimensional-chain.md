@@ -44,8 +44,8 @@ finite set of sites, instantiated here on the chain.
 | Approximation at prescribed accuracy, by the argument for Theorem B | `MPS.AreaLaw.exists_isOpenMPS_norm_sub_le_of_error` | Proved for `0 < ε ≤ 1`, with a normalized approximant and bond bound `⌊exp(C_int + 64 s log(2 L c₀ / ε))⌋`, where `s = √((1 + J/Δ) B_R)` and `c₀ = √(2 exp(e/2))`. |
 | Theorem B | `MPS.AreaLaw.exists_isOpenMPS_norm_sub_le` with `MPS.AreaLaw.chainBondDimension`; polynomial form `MPS.AreaLaw.chainBondDimension_le_mul_rpow` | Proved; the bond dimension is `⌊exp(C_int + w(L))⌋ ≤ e^{C_int} (2 c₀)^{64 s} L^{128 s}` with `s = √((1 + J/Δ) B_R)`. The approximant is normalized and within `1/L` of `Ω` itself (the note allows a phase). |
 
-Theorem B is proved by the sequential-truncation argument. The separate
-protocol route has the following proved intermediate results:
+Theorem B is proved both by sequential truncation and by the physical
+chain-sweep protocol. The latter has the following proved components:
 
 | Protocol component | Formal statement | Status |
 |---|---|---|
@@ -63,12 +63,17 @@ protocol route has the following proved intermediate results:
 | Conditional chronological middle | `ChainSweep.sweepMiddleCircuit_participation_le_forty`, `sweepMiddleCircuit_nonprivateCount_le`, `sweepMiddleCircuit_resource_bounds`, `sweepMiddleCircuit_norm_and_error` | Proved from the same actual local family: lifetime at most 40, at most `18m` nonprivate occurrences, the recorded gate expansion bounds one, and error at most `4(18m)L^(-30)` for a unit original vector. Initialization and terminal readout are separate. |
 | Derived gate support and tagged-link congestion | `ChainSweep.sweepMiddleCircuit_participants_subset_stage`, `sweepMiddleCircuit_participants_level_dist_le_two`, `prefixCrossingLinks_card_le_of_originalCircuit`, `compressedMiddle_prefixCrossingLinks_card_le_24960` | Proved: the actual middle gates lie in prescribed stage participant sets and have level distance at most two. For a tagged compression graph whose links share actual original gates and whose incident degree is at most 3120, every prefix has at most 24960 crossing links. The generic original-circuit version has bound `8d`; it does not assert that physical compression hypotheses have been discharged. |
 | Cut rank of the distributed identity-bond network | `DependentBondNetwork.rank_flattening_network_one_le`, `DistributedOperatorContraction.rank_flattening_contractedOperator_column_le` | Proved for every party partition and every actual product-basis input column. The rank is bounded by the product of the alphabets of the tagged crossing links, each counted once. Varying and empty alphabets, loops and parallel links are included; placement and crossing counts are separate. These declarations belong to the corresponding `TNLean.PEPS` namespaces. |
-
-
 | Conditional preparation including initialization and terminal readout | `ChainSweep.exists_preparation_of_local_circuits` | Proved from the actual conditional local family: one constructed product input and one full circuit, at most `18m` nonprivate gates, lifetime at most 40, expansion bounds one, norm at most one, vector error `4(18m)L^(-30)` from the retained-copy reference, and physical density error at most twice that error. Stage support and level distance at most two hold for every original nonprivate gate. |
 | Three-party stage support | `ChainSweep.card_le_three_of_subset_stageParticipants` | Proved for every finite subset of the prescribed stage participants. Together with the full preparation support, each original nonprivate gate has at most three participants. |
 | One compressed column for all cuts | `DistributedOperatorContraction.exists_useful_column_of_sub_pure_le`, `ChainSweep.exists_uniform_sampled_block_column` | Proved under the full uniform compression hypotheses and the original-gate distance bound. The polynomial alphabet constants precede all family members; for each member with error less than one, one nonzero actual column works for every prefix. Its normalized cut ranks are at most `max(1,ceil(C_p L^alpha))^24960`. The generic useful-column declaration belongs to `TNLean.PEPS.Approximation`. |
 | Original-site coordinates and cut ranks | `ChainSweep.rank_partyPrefix_eq_cutMatrix`, `rank_partyPrefix_last_eq_cutMatrix`, `rank_cutMatrix_le_of_partyPrefix_bounds` | Proved for the literal inverse main-coordinate vector. Under `q >= 1`, `w >= 1`, `60w <= L` and internal party-prefix ranks at most `R >= 1`, every original-site cut has rank at most `q^(40w) R`. Endpoint and scalar physical factors are retained; no vector normalization premise is needed. |
+| Eight original-state information estimates for a band | `OneBand.primitive_separation`, `primitive_information_of_logarithmic_separation` | Proved from physical logarithmic separation, with constants chosen before every chain, state, width and owner assignment. No mutual-information estimate is an input. |
+| Birth and first-death information | `ChainSweep.birth_death_separation`, `birth_death_information_of_logarithmic_separation` | Proved for the actual birth environments and the first after-death environment, for the same original ground vector. |
+| Local stage circuits from the gapped Hamiltonian | `ChainSweep.local_stage_circuits_of_logarithmic_separation` | Proved with no supplied circuit or information bound. Every actual eighteen-step stage retains the seven first-stage identity circuits. |
+| Complete physical preparation | `ChainSweep.exists_preparation_of_gappedGroundState` | Proved with constants before all physical instances: one product input and full circuit, lifetime at most 40, at most `20m <= 2L` nonprivate gates, at most three participants per nonprivate gate and level distance at most two. The vector error is at most `26 L^(-11)` and the standard physical-density error at most `52 L^(-11)`. Physical dimensions are at most `q^(80w) <= K L^s`, with `w = ceil(D log L) >= 1` and `60w <= L`. |
+| Uniform physical preparation family | `ChainSweep.preparationConstruction`, `exists_uniform_preparation_family` | Proved for the family of every admissible sufficiently large length, Hamiltonian, ground vector and position map. All compression hypotheses follow for the same circuit, normalized product input, physical order and standard physical marginal. |
+| Polynomial original-site bond dimension | `ChainSweep.polynomial_bond_bound_of_ceil_width`, `isOpenMPS_of_polynomial_partyPrefix_bounds` | Proved for the same inverse-coordinate vector. Both ceiling prefactors are retained; `q = 1` and zero compression prefactor are allowed. |
+| Theorem B by the physical protocol | `ChainSweep.exists_protocol_isOpenMPS_norm_sub_phase_le` | Proved for `q >= 1` and `Delta > 0`, with `C > 0` and natural `n > 0` chosen before all lengths, Hamiltonians and ground vectors. Every `L >= 2` admits a unit, nonzero open-boundary MPS of bond dimension at most `C L^n` and phase error at most `1/L`. One normalized actual column gives all cuts; shorter lengths use exact representations with the same constants. |
 
 The half-open
 lattice bands and the distinction between main physical outputs and retained
@@ -76,12 +81,14 @@ auxiliary registers are recorded in
 [`tnlean_one_dimensional_band_sweep_corrections.tex`](../paper-gaps/tnlean_one_dimensional_band_sweep_corrections.tex).
 The one-band declarations belong to `TNLean.MPS.AreaLaw.OneBand`; the
 remaining protocol declarations belong to `TNLean.MPS.AreaLaw.ChainSweep`.
-Deriving the local information inequalities from the gapped Hamiltonian and
-establishing the complete family of physical compression hypotheses remain
-separate obligations. The conditional preparation already includes initialization
-and terminal readout. Compression and the conversion to original-site ranks are
-proved under their stated hypotheses; they do not yet constitute the physical
-protocol proof of Theorem B.
+The physical information estimates discharge the local information hypotheses,
+and the full prepared family discharges the compression hypotheses. Compression
+chooses one actual nonzero column before all cuts; its normalization and the
+inverse main-coordinate vector give the same final MPS. The auxiliary reference
+is a product by original copy, with no product requirement across final parties.
+The bound uses the derived crossing count 24960; the sharper printed count 1600
+is not asserted. The broader finite-domain forms of the Part II analytic
+estimates remain separate from this contiguous-chain proof.
 
 ## Analytic estimates for the physical protocol
 
@@ -137,8 +144,7 @@ at every real radius ℓ ≥ 0. Empty supports are allowed; their distance to a
 site is infinity, with decay factor zero. Only localization requires q ≥ 1.
 These are the contiguous-chain estimates needed in the matrix product state
 argument. The broader finite-domain reading of the source lemma remains
-separate, as recorded in the connected-domain scope note. The full protocol
-construction is also separate.
+separate, as recorded in the connected-domain scope note. These contiguous-chain estimates supply the physical protocol above.
 
 For an arbitrary region D of the contiguous chain,
 `MPS.AreaLaw.IsChainSupport.exists_boundary_window_of_split` places every
@@ -250,3 +256,13 @@ them:
 The polynomial factor `q^{2(R+1)}` in `m` is the crude bound of the formal
 buffer lemma; Remark 6.3 of the note explains how it can be replaced by
 `log²(e q^{R+1})` with the three-lines device, which is not carried out here.
+
+
+For the physical protocol, let `D >= 1` and `L0 >= 2` be the uniform width
+constant and length cutoff, and let `Cp >= 0` and natural `alpha > 0` be the
+uniform compression constants. The proof takes
+`n = max(1,ceil(40 D log q) + 24960 alpha)` and
+`C = max(q^40 (Cp + 1)^24960,q^L0)`.
+The second term covers the finite lengths below the cutoff. The first term
+retains the additive ones in both integer ceilings. These choices precede
+the length, Hamiltonian and ground vector.

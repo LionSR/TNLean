@@ -3314,3 +3314,480 @@ Definition~\ref{def:chain_open_mps}.
     (\ref{eq:chain_all_site_rank_bound}). If $m=0$, the prefix assumption
     is empty and this final interval is the entire chain.
 \end{proof}
+
+\section{Physical information estimates and the chain preparation}
+
+Use the chain Hamiltonians and gapped ground vectors of
+Definition~\ref{def:chain_model}, the corrected one-band assignments of
+Definition~\ref{def:chain_one_band_assignments}, and the labelled stage
+history of Definition~\ref{def:chain_sweep_frame_path}.
+All intervals below are half-open lattice intervals; the real exchange
+window remains open. The copy labels, their order and their retained
+owners are those of
+\cite{gap:tnlean_one_dimensional_band_sweep_corrections}.
+Write $I_\Omega(T:E)$ for mutual information in the same original
+chain vector $\Omega$ throughout. For a circuit $C$, write $N(C)$ for
+its number of nonprivate occurrences, $n_p(C)$ for the number involving
+$p$, and $\operatorname{part}(g)$ for a gate's participant set.
+The prescribed placement is $\ell(R_i)=i$ and $\ell(P_{j+1})=j$.
+
+\begin{theorem}[Information regions of an interior band]
+    \label{thm:chain_band_physical_information}
+    \lean{TNLean.MPS.AreaLaw.OneBand.primitive_separation,
+        TNLean.MPS.AreaLaw.OneBand.primitive_information_of_logarithmic_separation}
+    \leanok
+    \uses{def:chain_one_band_assignments,def:chain_model}
+    Let $L,a,w,q$ be natural numbers, $w\ge1$, $8w\le a$ and
+    $a+2w\le L$. Let the original main owner be $C$ on
+    $[a-8w,a)_L$, $A$ on $[a,a+w)_L$ and $B$ on
+    $[a+w,a+2w)_L$, with $A\ne C$ and $B\ne C$.
+    No owner is prescribed outside these intervals, and $A=B$ is allowed.
+    For all eight pairs $(T_j,E_j)$ in the table of
+    Theorem~\ref{thm:chain_one_band_conditional_changes},
+    \begin{align}
+        x\in T_j,\ y\in E_j & \quad\Longrightarrow\quad |x-y|\ge w.
+        \label{eq:chain_band_separation}
+    \end{align}
+    In particular the exchange uses $E=Z\setminus Y$ and not the
+    complement of $Y$; the death rows use their after-death frames.
+
+    Fix $q\ge1$, $R\in\mathbb N$, $J\in\mathbb R$ and $\Delta>0$.
+    There are $D_{60}>0$ and $L_0\ge1$, depending only on these fixed
+    parameters, such that the following holds for every $L\ge L_0$,
+    every Hamiltonian of range $R$ and strength bound $J$ with gapped
+    ground vector $\Omega$ and energy $E_0$, every choice of parties
+    and register positions, and all the ownership data just stated.
+    If $D_{60}\log L\le w$, then
+    \begin{align}
+        I_\Omega(T_j:E_j) & \le L^{-60},\qquad 0\le j<8.
+        \label{eq:chain_band_information}
+    \end{align}
+    The choice of $D_{60},L_0$ precedes all chain, vector, width and
+    ownership data. This is the logarithmic-separation argument for
+    \cite[Part~II, Lemma~\texttt{lem:band}]{TNLean2026OneDimensional},
+    with the stated lattice convention and exponent $60$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:chain_one_band_geometry,thm:chain_logarithmic_separation}
+    In a frame without holes, $E(F,P)$ consists exactly of sites not
+    owned by $P$. After the first main death the owner is $A$ on
+    $[a-5w,a+w)_L$, and after the second it is $B$ on
+    $[a-6w,a+2w)_L$. The left parts of these intervals inherit the
+    auxiliary owner through the open exchange window; the right parts
+    use only the stated $A$ and $B$ flanks. These two complete owner
+    windows give the margins for the next three moves. The auxiliary
+    births give their margins directly, and the first has empty
+    environment. The exact exchange regions in
+    Theorem~\ref{thm:chain_one_band_geometry} give its margin; the main
+    endpoint gives the last margin. This proves
+    (\ref{eq:chain_band_separation}).
+    Each $T_j$ is one lattice interval, including the actual exchange
+    target. Apply the logarithmic-separation estimate of
+    \cite[Part~II, Lemma~\texttt{lem:logsep}]{TNLean2026OneDimensional}
+    with exponent $60$ and one interval. It chooses uniform constants
+    before any of the remaining data and proves
+    (\ref{eq:chain_band_information}) for the original $\Omega$.
+\end{proof}
+
+\begin{theorem}[Information for the two births and the first death]
+    \label{thm:chain_stage_physical_information}
+    \lean{TNLean.MPS.AreaLaw.ChainSweep.birth_death_separation,
+        TNLean.MPS.AreaLaw.ChainSweep.birth_death_information_of_logarithmic_separation}
+    \leanok
+    \uses{def:chain_sweep_stage_assignments,def:chain_model}
+    For arbitrary natural $L,q$, let $w\ge1$ and $0\le k<m$.
+    Put $a=kt$ and $b=(k+1)t$, where $t=20w$.
+    The actual target and environment pairs are
+    \begin{align}
+        (T_k^R,E(M_k,R_k))
+         & =([b+w,L)_L,[0,a)_L),\notag        \\
+        (T_k^P,E(M_k^{(1)},R_k))
+         & =([a+w,b)_L,[0,a)_L\cup[b+w,L)_L).
+        \label{eq:chain_birth_regions}
+    \end{align}
+    At $k=0$, the direct death has target $[0,w)_L$ and
+    after-death environment $E(M_0^{(L)},P_1)=[t,L)_L$.
+    Every such target is separated from its stated environment by at
+    least $w$.
+
+    For fixed $q\ge1$, $R\in\mathbb N$, $J\in\mathbb R$ and
+    $\Delta>0$, there are $D_{60}>0$ and $L_0\ge1$ before all chain,
+    Hamiltonian, ground-vector, position, width and stage data, such
+    that $L\ge L_0$ and $w\ge D_{60}\log L$, with $w\ge1$, imply
+    $I_\Omega(T:E)\le L^{-60}$ for both birth pairs and, at $k=0$,
+    for the direct-death pair. Here $\Omega$ is any gapped ground
+    vector of the given Hamiltonian. These are the three main-sheet
+    estimates in \cite[Part~II, proof of
+        Proposition~\texttt{prop:sweep}]{TNLean2026OneDimensional}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:chain_sweep_stage_owners,thm:chain_logarithmic_separation}
+    The actual stage ownership gives (\ref{eq:chain_birth_regions})
+    and the first after-death environment. Their interval endpoints
+    give $|x-y|\ge w$ directly. Apply the same physical
+    logarithmic-separation estimate with exponent $60$ and one
+    interval to each target. No estimate is applied to a vector
+    produced during the sweep.
+\end{proof}
+
+\begin{theorem}[Local circuits from physical logarithmic separation]
+    \label{thm:chain_physical_local_circuits}
+    \lean{TNLean.MPS.AreaLaw.ChainSweep.local_stage_circuits_of_logarithmic_separation}
+    \leanok
+    \uses{def:chain_model,def:chain_stage_participants,def:chain_sweep_frame_path,
+        def:peps_bounded_change,def:peps_circuit_source_bound}
+    Fix $q\ge1$, $R\in\mathbb N$, $J\in\mathbb R$ and $\Delta>0$.
+    There are $D_{60}>0$ and $L_0\ge1$ such that, for every
+    $L\ge L_0$, every corresponding gapped ground vector $\Omega$,
+    every register-position map and every natural $w\ge1$ with
+    $D_{60}\log L\le w$, each actual stage $k<m$ admits eighteen
+    circuits between its prescribed successive boundaries.
+    For each $0\le j<18$, $c_{k,j}$ is a bounded change on
+    $\mathcal S_{k,j}$ with bounds $r=K=1$, pair-source bound one,
+    at most one nonprivate occurrence, and reference error at most
+    $4L^{-30}$. At $k=0$ the positions $3,\ldots,9$ are the actual
+    identity circuits, have zero error and have no nonprivate occurrence.
+    Thus these circuits satisfy the entire local conclusion of
+    Theorem~\ref{thm:chain_conditional_local_circuits}, including the
+    original copy labels and spectator order. No information estimate
+    or circuit is an additional physical premise. This gives the local
+    circuits of \cite[Part~II, Construction~\texttt{con:sweep}
+        and Proposition~\texttt{prop:sweep}]{TNLean2026OneDimensional}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:chain_band_physical_information,thm:chain_stage_physical_information,
+        thm:chain_stage_margins,thm:chain_sweep_stage_owners,
+        thm:chain_conditional_local_circuits}
+    Take the maximum of the two information constants and the maximum
+    of their length cutoffs. Since $\log L\ge0$, this common width
+    meets both original conditions. The existence of $k<m$ forces
+    $4t\le L$ and hence the required margin $3t\le L$.
+    The actual flanks permit the band estimate at
+    $(a,A,B,C)=(kt,R_k,P_{k+1},P_k)$ only for $k>0$, and at
+    $((k+1)t,R_k,R_{k+1},P_{k+1})$ at every stage.
+    Rewrite the right band's main entrance by its actual endpoint
+    identity. Together with the two births and the exceptional first
+    death, these supply precisely the nineteen written information
+    premises of Theorem~\ref{thm:chain_conditional_local_circuits}.
+    The ground-state hypothesis supplies $\|\Omega\|=1$.
+    The resulting circuits retain the seven identity positions; no
+    predecessor $P_0$ or left copy is introduced at stage zero.
+\end{proof}
+
+\begin{theorem}[Uniform physical preparation by the sweep]
+    \label{thm:chain_physical_preparation}
+    \lean{TNLean.MPS.AreaLaw.ChainSweep.exists_preparation_of_gappedGroundState}
+    \leanok
+    \uses{def:chain_model,def:chain_terminal_reference,def:chain_terminal_coordinates,
+        def:chain_stage_participants,def:chain_party_placement}
+    Fix $q\ge1$, $R\in\mathbb N$, $J\in\mathbb R$ and $\Delta>0$.
+    There are $D\ge1$, $K>0$, $s\in\mathbb N$ and $L_0\ge1$,
+    before all further physical data, with the following property.
+    For every $L\ge L_0$, Hamiltonian of these parameters, gapped
+    ground vector $\Omega$ with energy $E_0$, and register positions,
+    put $w=\lceil D\log L\rceil_+$ and $N=18m$.
+    The constructed initial party vectors $x_p$ have norm one.
+    Their product input $X=\bigotimes_p x_p$ admits a circuit $C$
+    to the specified terminal physical factors and all retained
+    private auxiliary registers, with output $\Psi=CX$.
+    For every party $p$ the same $C$ has the stated lifetime bound.
+    Every original nonprivate gate $g$ has a stage $k<m$ and position
+    $j<18$ such that
+    \begin{align}
+        N(C)                     & \le18m\le20m\le2L,         & n_p(C) & \le40, & \|\Psi\| & \le1,\notag \\
+        |\operatorname{part}(g)| & \le3,                      &
+        \operatorname{part}(g)   & \subseteq\mathcal S_{k,j}.
+        \label{eq:chain_physical_resources}
+    \end{align}
+    Every original nonprivate gate has at most one recorded monomial,
+    absolute coefficient sum at most one, and at most one normalized
+    pair effect and one normalized pair source per monomial.
+    In particular its arity is also at most $40$, and any two
+    participants have level distance at most two.
+    The geometric and dimension conclusions are
+    \begin{align}
+        1\le w,       & \qquad 60w\le L, & |\mathcal P| & \le2L,\notag \\
+        d_p=q^{|M_p|} & \le q^{80w},     & d_p          & \le KL^s.
+        \label{eq:chain_physical_dimensions}
+    \end{align}
+    Use the actual inverse terminal regrouping to form $Y$, the
+    sheet readout $\mathcal R$, and the actual standard physical/private
+    readout $V$ as in Theorem~\ref{thm:chain_conditional_preparation}.
+    Put $\rho=\operatorname{Tr}_{\rm private}|V\rangle\langle V|$
+    and $\varepsilon=4NL^{-30}$. Then
+    \begin{align}
+        \|\Xi\|                          & =1,                               &
+        \|\mathcal RY-\Omega\otimes\Xi\| & \le\varepsilon\le26L^{-11},\notag   \\
+        \|\rho-|U_\chi\Omega\rangle\langle U_\chi\Omega|\|_1
+                                         & \le2\varepsilon\le52L^{-11}.
+        \label{eq:chain_physical_errors}
+    \end{align}
+    The vector $\Xi$ is the product over the distinct original copies,
+    including the empty product. It need not be a product over parties.
+    Only the main factors have dimensions $d_p$; all auxiliary registers
+    remain private at their actual owners. This is the preparation
+    assertion of \cite[Part~II, Proposition~\texttt{prop:sweep} and
+        the density estimate in the proof of Theorem~B]{TNLean2026OneDimensional},
+    with \cite{gap:tnlean_one_dimensional_band_sweep_corrections}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:chain_physical_local_circuits,thm:chain_conditional_preparation,
+        thm:chain_stage_arity_three,thm:chain_terminal_block_sizes}
+    Enlarge the physical local constant to $D=\max\{D_{60},1\}$.
+    Enlarge the length cutoff to at least $120$ and the uniform
+    logarithmic threshold at which $60D\log L\le L/2$.
+    Then $w<D\log L+1$ gives $60w\le L$, and $D\log L\ge1$
+    gives $w\ge1$. One may take $K=q^{80}$ and
+    $s=\lceil80D\log q\rceil_+$, since
+    \begin{align}
+        q^{80w} & \le q^{80}L^{80D\log q}\le KL^s.
+        \label{eq:chain_physical_ceiling}
+    \end{align}
+    This retains the ceiling correction also at $q=1$.
+    Choose the physical local circuits at every actual stage and apply
+    Theorem~\ref{thm:chain_conditional_preparation}. This constructs
+    the private initialization, chronological middle and final private
+    regrouping with the same output and marginal. Its derived stage
+    support, together with Theorem~\ref{thm:chain_stage_arity_three},
+    gives arity three. The block geometry gives the party, count and
+    dimension bounds. Since $18m\le L$,
+    $\varepsilon\le4L^{-29}\le26L^{-11}$; the actual marginal bound
+    is at most $2\varepsilon$. No normalization of $\Psi$ is made.
+\end{proof}
+
+\begin{definition}[The distributed construction with its original input]
+    \label{def:chain_physical_construction}
+    \lean{TNLean.MPS.AreaLaw.ChainSweep.preparationConstruction}
+    \leanok
+    \uses{def:peps_distributed_construction,thm:chain_initial_copies,
+        def:chain_terminal_coordinates}
+    Let $L>0$, $q\ge1$ and $w\in\mathbb N$.
+    Given an original vector $\Omega$, register positions, the initial
+    party spaces $H_p$ and their unit vectors $x_p$ from the grouped
+    initial list, and a circuit $C$ from their product layout to the
+    specified terminal layout, take the existing distributed construction
+    with initial spaces $H_p$, initial vectors $x_p$, circuit $C$,
+    physical dimensions $q^{|M_p|}$, the prescribed party order, and
+    the full private auxiliary layout.
+    The input is exactly $X=\bigotimes_p x_p$ and its physical density
+    is the actual standard readout of $CX$ followed by the partial trace.
+    The party $R_0$ exists even if $m=0$; parties with scalar main
+    outputs and the final remainder $R_m$ are retained.
+    The definition imposes no resource or approximation bound on $C$.
+    The input and output factors follow
+    \cite[Part~II, Proposition~\texttt{prop:sweep}]{TNLean2026OneDimensional},
+    with \cite{gap:tnlean_one_dimensional_band_sweep_corrections}.
+\end{definition}
+
+\begin{theorem}[A preparation family over all physical instances]
+    \label{thm:chain_uniform_physical_family}
+    \lean{TNLean.MPS.AreaLaw.ChainSweep.exists_uniform_preparation_family}
+    \leanok
+    \uses{def:chain_physical_construction,def:chain_model,
+        def:chain_terminal_coordinates}
+    For fixed $q\ge1$, $R\in\mathbb N$, $J\in\mathbb R$ and
+    $\Delta>0$, there are $D\ge1$, $K>0$, $s\in\mathbb N$ and
+    $L_0\ge2$ before every physical instance.
+    Let $\iota$ consist of all tuples $(L,H,\Omega,E_0,\mathrm{pos})$
+    with $L\ge L_0$, $H$ a Hamiltonian of the fixed parameters and
+    $\Omega$ a gapped ground vector at energy $E_0$.
+    For every $i\in\iota$, set $w_i=\lceil D\log L_i\rceil_+$.
+    One can choose the unit initial vectors and the actual circuit
+    $C_i$ together, obtaining the construction of
+    Definition~\ref{def:chain_physical_construction} for all $i$.
+    With $\omega_i=U_{\chi_i}\Omega_i$, these same constructions satisfy
+    \begin{align}
+        L_i                      & \ge2,           & N(C_i)    & \le2L_i,            & d_{i,p} & \le KL_i^s,\notag \\
+        |\operatorname{part}(g)| & \le40,          & n_p(C_i)  & \le40,              &
+        \|\omega_i\|             & =1,\notag                                                                       \\
+        \|\rho_i-|\omega_i\rangle\langle\omega_i|\|_1
+                                 & \le52L_i^{-11}, & 1\le w_i, & \qquad60w_i\le L_i.
+        \label{eq:chain_uniform_physical_family}
+    \end{align}
+    Every gate has monomial bound one and the termwise pair-effect
+    and scalar-coefficient bounds $(1,1)$. Its original participants
+    have pairwise level distance at most two.
+    The target density is literally the coordinate reindexing of
+    $|\Omega_i\rangle\langle\Omega_i|$ by $\chi_i$.
+    Thus all premises of Theorem~\ref{thm:chain_uniform_compressed_block_column}
+    hold with size $L_i$, gate-count parameters $(n,C_N)=(1,2)$,
+    physical-dimension parameters $(d,C_D)=(s,K)$,
+    $r=1$, $u=v=0$, $C_K=C_C=1$ and $\eta_i=52L_i^{-11}$,
+    using the uniform compression theorem of
+    \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS}.
+    No one Hamiltonian or ground vector is selected to represent a length.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:chain_physical_preparation,def:chain_physical_construction,
+        def:peps_distributed_construction_density}
+    Enlarge the physical cutoff to $\max\{L_0,2\}$ and choose the
+    preparation witnesses over the entire admissible tuple set.
+    Record them without changing the circuit, input, private layout
+    or standard marginal. The expansion bound $(1,1)$ supplies the
+    stated termwise bound. The main-coordinate map is an isometry,
+    and its pure density equals the literal reindexing entry by entry.
+    Hence the physical preparation estimates give
+    (\ref{eq:chain_uniform_physical_family}) and every stated
+    compression premise for this same family.
+\end{proof}
+
+\section{Polynomial bounds and the physical approximation}
+
+\begin{theorem}[The two ceiling corrections in the bond bound]
+    \label{thm:chain_protocol_polynomial_bond}
+    \lean{TNLean.MPS.AreaLaw.ChainSweep.polynomial_bond_bound_of_ceil_width}
+    \leanok
+    Let $q\ge1$, $D\ge1$, $C_p\ge0$ and $\alpha\in\mathbb N$
+    with $\alpha>0$. For $L\ge2$ and $w=\lceil D\log L\rceil_+$,
+    put $A_L=\max\{1,\lceil C_pL^\alpha\rceil_+\}$ and
+    $n=\max\{1,\lceil40D\log q\rceil_++24960\alpha\}$.
+    Then
+    \begin{align}
+        q^{40w}A_L^{24960}
+         & \le q^{40}(C_p+1)^{24960}L^n.
+        \label{eq:chain_protocol_polynomial_bond}
+    \end{align}
+    Both the exponent and the prefactor are independent of $L$.
+    The inequality includes $q=1$ and $C_p=0$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    The ceiling estimates give
+    $A_L\le(C_p+1)L^\alpha$ and
+    $w\le D\log L+1$.
+    Nonnegativity of $\log q$ and $\log L$ yields
+    $q^{40w}\le q^{40}L^{\lceil40D\log q\rceil_+}$.
+    Multiply these bounds and increase the exponent to $n$.
+    No division by $\log q$ occurs. This is the polynomial estimate
+    in \cite[Part~II, end of the proof of Theorem~B]{TNLean2026OneDimensional},
+    retaining both additive ceiling corrections.
+\end{proof}
+
+\begin{theorem}[An MPS of the same physical vector in site coordinates]
+    \label{thm:chain_protocol_mps_of_prefix_ranks}
+    \lean{TNLean.MPS.AreaLaw.ChainSweep.isOpenMPS_of_polynomial_partyPrefix_bounds}
+    \leanok
+    \uses{def:chain_open_mps,def:chain_terminal_coordinates,
+        def:chain_party_placement}
+    Retain $q,D,C_p,\alpha,L,w,A_L,n$ from
+    Theorem~\ref{thm:chain_protocol_polynomial_bond} and assume
+    $60w\le L$. Let $\psi$ be a unit vector in the actual physical
+    party space. Suppose its coefficient flattening satisfies
+    $\operatorname{rank}F_{S_r}(\psi)\le A_L^{24960}$ for every
+    $1\le r\le m$, where $S_r=\{p:\ell(p)<r\}$.
+    Define the literal inverse main-coordinate vector
+    $\Phi(x)=\psi(\chi(x))$ and $B=q^{40w}A_L^{24960}$.
+    Then $\|\Phi\|=1$, every original-site cut $0\le k\le L$
+    satisfies $\operatorname{rank}M_k(\Phi)\le B$, and $\Phi$
+    is an open-boundary MPS of bond $B$. The polynomial bound
+    (\ref{eq:chain_protocol_polynomial_bond}) holds and $n\ge1$.
+    The prefix-rank bounds are explicit hypotheses of this auxiliary
+    assertion, rather than physical assumptions in the final theorem.
+    It is the block-to-site passage in
+    \cite[Part~II, end of the proof of Theorem~B]{TNLean2026OneDimensional}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:chain_site_ranks_of_party_prefixes,thm:chain_mps_of_cut_rank,
+        thm:chain_protocol_polynomial_bond}
+    Positivity of $D\log L$ gives $w\ge1$, and $A_L^{24960}\ge1$.
+    The actual coordinate equivalence preserves the norm.
+    Apply Theorem~\ref{thm:chain_site_ranks_of_party_prefixes} with
+    $R=A_L^{24960}$. It retains scalar physical parties and the
+    nonempty final remainder, and bounds every original-site cut by
+    $q^{40w}R$, including when $m=0$.
+    The existing internal-cut rank theorem constructs an MPS
+    representation of this very $\Phi$. Apply
+    Theorem~\ref{thm:chain_protocol_polynomial_bond} to its bond.
+\end{proof}
+
+\begin{theorem}[Polynomial MPS approximation by the physical protocol]
+    \label{thm:chain_protocol_mps_approximation}
+    \lean{TNLean.MPS.AreaLaw.ChainSweep.exists_protocol_isOpenMPS_norm_sub_phase_le}
+    \leanok
+    \uses{def:chain_model,def:chain_open_mps}
+    Fix $q\in\mathbb N$ with $q\ge1$, $R\in\mathbb N$,
+    $J\in\mathbb R$ and $\Delta>0$. There are $C>0$ and
+    $n\in\mathbb N$ with $n>0$, depending only on these fixed
+    parameters, such that the following holds for every $L\ge2$,
+    every Hamiltonian of range $R$ and strength bound $J$, and every
+    gapped ground vector $\Omega$ at energy $E_0$.
+    There are $B\in\mathbb N$ and a vector $\Phi$ on the original
+    chain with
+    \begin{align}
+        \|\Phi\| & =1, & \Phi & \ne0, & B & \le CL^n,
+        \label{eq:chain_protocol_headline_bond}
+    \end{align}
+    such that $\Phi$ is an open-boundary MPS of bond $B$, and some
+    $\theta\in\mathbb R$ satisfies
+    \begin{align}
+        \|\Phi-e^{i\theta}\Omega\| & \le L^{-1}.
+        \label{eq:chain_protocol_headline_error}
+    \end{align}
+    This is \cite[Theorem~B]{TNLean2026OneDimensional}, with a unit
+    approximant and a positive natural polynomial exponent. Neither
+    information estimates, circuit data, rank bounds nor a choice
+    of register positions are hypotheses of this theorem.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:chain_uniform_physical_family,
+        thm:chain_uniform_compressed_block_column,
+        thm:chain_protocol_mps_of_prefix_ranks,thm:chain_mps_of_cut_rank}
+    Take the family over all admissible tuples from
+    Theorem~\ref{thm:chain_uniform_physical_family} and apply uniform
+    compression to that whole family at accuracy exponent $5$.
+    It gives $C_p\ge0$ and a natural $\alpha>0$ before any member
+    is selected. The actual tagged links have incident degree at
+    most $3120$, with both endpoints belonging to one common
+    original nonprivate gate. The derived gate distance gives at
+    most $8\cdot3120=24960$ links across each level prefix.
+    Fix
+    \begin{align}
+        n             & =\max\{1,\lceil40D\log q\rceil_++24960\alpha\},\notag   \\
+        C_{\rm large} & =q^{40}(C_p+1)^{24960},                               &
+        C             & =\max\{C_{\rm large},q^{L_0}\}.
+        \label{eq:chain_protocol_uniform_constants}
+    \end{align}
+    These constants precede all $L,H,\Omega,E_0$.
+
+    For $L\ge L_0$, choose the positions internally as $x\mapsto(x,0)$
+    and select its member of the family. Put
+    $\epsilon=L^{-5}+52L^{-11}$. For every $L\ge2$,
+    $52L^{-11}\le L^{-5}$, $\epsilon<1$ and
+    $2\epsilon\le4L^{-5}\le L^{-1}$.
+    The actual operator network therefore has one nonzero
+    product-basis column $v$, chosen before all cuts, whose
+    normalization $u=v/\|v\|$ has unit norm and phase error at most
+    $2\epsilon$ from $U_\chi\Omega$.
+    Fixing the physical input changes only the local tensors; the
+    same graph and its tagged alphabets remain. Every alphabet has
+    dimension at most $A_L=\max\{1,\lceil C_pL^\alpha\rceil_+\}$,
+    so this same $u$ has all prefix ranks at most $A_L^{24960}$.
+    Normalization does not change those ranks.
+    Apply Theorem~\ref{thm:chain_protocol_mps_of_prefix_ranks} to
+    $u$. It gives the literal original-site vector
+    $\Phi(x)=u(\chi(x))$ with bond $B=q^{40w}A_L^{24960}$ and
+    $B\le C_{\rm large}L^n\le CL^n$.
+    The coordinate isometry gives, for the same phase,
+    \begin{align}
+        \|\Phi-e^{i\theta}\Omega\|
+         & =\|u-e^{i\theta}U_\chi\Omega\|
+        \le2\epsilon\le L^{-1}.\notag
+    \end{align}
+
+    If $2\le L<L_0$, instead take $\Phi=\Omega$ and $B=q^{L_0}$.
+    Each cut rank is at most its row-configuration cardinality,
+    hence at most $q^{L_0}$. The internal-cut rank theorem gives
+    an exact MPS representation. Its phase error is zero, and
+    $B\le C\le CL^n$. In both cases norm one implies $\Phi\ne0$.
+    Thus the single uniform choice
+    (\ref{eq:chain_protocol_uniform_constants}) proves
+    (\ref{eq:chain_protocol_headline_bond}) and
+    (\ref{eq:chain_protocol_headline_error}).
+\end{proof}

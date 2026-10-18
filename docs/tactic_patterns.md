@@ -8655,3 +8655,17 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Reuse:** Existing neighborhood membership and elementary distance lemmas
   suffice. A further occurrence in a second file would justify a common
   geometric statement; no new framework is introduced here.
+
+### Keeping large powers symbolic — candidate (2026-10-18)
+
+- **Pattern:** Cast polynomial rank bounds and identify their coordinate
+  expressions without expanding a large natural power.
+- **Seen:** The cast calculation and nonzero-power argument in
+  `MPS/AreaLaw/ProtocolPolynomialMPS.lean`, and specialization of the actual
+  column's prefix ranks in `MPS/AreaLaw/ProtocolMPSApproximation.lean`.
+- **Existing reuse:** `Nat.cast_mul`, `Nat.cast_pow`, `pow_ne_zero` and
+  `Nat.one_le_iff_ne_zero` give the numerical steps. Explicit simplification
+  of the length, width and normalized-vector definitions gives the rank
+  specialization while preserving the power 24960.
+- **Notes:** These are different applications of existing lemmas, not three
+  copies of one proof block. No additional scalar theorem or tactic is needed.
