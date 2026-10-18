@@ -25,25 +25,25 @@ noncomputable section
 
 namespace TNLean.PEPS.AreaLaw.Scan
 
-/-- The same actual trace-distance estimate controls the target entropy,
-uniformly over all regions of the supplied quadratic volume bound.
-Source: `08-scanner.tex`, lines 399–404. -/
-theorem eventually_abs_regionalEntropy_sub_le_of_truncation
-    (q : ℕ) (hq : 1 ≤ q) (g Cvol : ℝ) (hg : 0 < g) :
-    ∀ᶠ n : ℕ in atTop,
-      ∀ (Λ : Finset (ℤ × ℤ)) (Ω Ωt : StateSpace Λ q),
-      ‖Ω‖ = 1 → ‖Ωt‖ = 1 → ∀ X : Finset (Site Λ),
-      (X.card : ℝ) ≤ Cvol * (n : ℝ) ^ 2 →
-      Matrix.traceDistance (Matrix.vecMulVec Ωt (star Ωt))
-          (Matrix.vecMulVec Ω (star Ω)) ≤
-        Real.sqrt (2 * min ((n : ℝ) ^ (-1000 : ℝ)) (g / 4) / g) →
-      |regionalEntropy Λ q Ωt X - regionalEntropy Λ q Ω X| ≤
-        (n : ℝ) ^ (-247 : ℝ) := by
+/-- The same actual trace-distance estimate controls the target entropy, uniformly over all
+regions of the supplied quadratic volume bound, at every `n` from the explicit threshold
+`truncationEntropyThreshold q g Cvol` on. Source: `08-scanner.tex`, lines 399–404. -/
+theorem abs_regionalEntropy_sub_le_of_truncationEntropyThreshold_le
+    (q : ℕ) (hq : 1 ≤ q) (g Cvol : ℝ) (hg : 0 < g) {n : ℕ}
+    (hthr : truncationEntropyThreshold q g Cvol ≤ n) :
+    ∀ (Λ : Finset (ℤ × ℤ)) (Ω Ωt : StateSpace Λ q),
+    ‖Ω‖ = 1 → ‖Ωt‖ = 1 → ∀ X : Finset (Site Λ),
+    (X.card : ℝ) ≤ Cvol * (n : ℝ) ^ 2 →
+    Matrix.traceDistance (Matrix.vecMulVec Ωt (star Ωt))
+        (Matrix.vecMulVec Ω (star Ω)) ≤
+      Real.sqrt (2 * min ((n : ℝ) ^ (-1000 : ℝ)) (g / 4) / g) →
+    |regionalEntropy Λ q Ωt X - regionalEntropy Λ q Ω X| ≤
+      (n : ℝ) ^ (-247 : ℝ) := by
   have hlq : 0 ≤ Real.log (q : ℝ) := Real.log_nonneg (by exact_mod_cast hq)
-  have key := eventually_continuityCost_le_of_fixed_coefficient
+  have hcost := continuityCost_le_of_fixed_coefficient_of_threshold_le
     (Real.sqrt (2 / g)) (max 4 Cvol) (Real.log q)
-    (Real.sqrt_nonneg _) (le_trans (by norm_num) (le_max_left _ _)) hlq
-  filter_upwards [key] with n hcost Λ Ω Ωt hΩ hΩt X hcard hdist
+    (Real.sqrt_nonneg _) (le_trans (by norm_num) (le_max_left _ _)) hlq hthr
+  intro Λ Ω Ωt hΩ hΩt X hcard hdist
   set t := Matrix.traceDistance (Matrix.vecMulVec Ωt (star Ωt))
     (Matrix.vecMulVec Ω (star Ω)) with ht
   have hhalf : Real.sqrt ((n : ℝ) ^ (-1000 : ℝ)) = (n : ℝ) ^ (-500 : ℝ) := by
@@ -77,5 +77,22 @@ theorem eventually_abs_regionalEntropy_sub_le_of_truncation
       gcongr
       exact le_max_left 4 Cvol
     _ ≤ (n : ℝ) ^ (-247 : ℝ) := hcost t htbound
+
+/-- The same actual trace-distance estimate controls the target entropy,
+uniformly over all regions of the supplied quadratic volume bound.
+Source: `08-scanner.tex`, lines 399–404. -/
+theorem eventually_abs_regionalEntropy_sub_le_of_truncation
+    (q : ℕ) (hq : 1 ≤ q) (g Cvol : ℝ) (hg : 0 < g) :
+    ∀ᶠ n : ℕ in atTop,
+      ∀ (Λ : Finset (ℤ × ℤ)) (Ω Ωt : StateSpace Λ q),
+      ‖Ω‖ = 1 → ‖Ωt‖ = 1 → ∀ X : Finset (Site Λ),
+      (X.card : ℝ) ≤ Cvol * (n : ℝ) ^ 2 →
+      Matrix.traceDistance (Matrix.vecMulVec Ωt (star Ωt))
+          (Matrix.vecMulVec Ω (star Ω)) ≤
+        Real.sqrt (2 * min ((n : ℝ) ^ (-1000 : ℝ)) (g / 4) / g) →
+      |regionalEntropy Λ q Ωt X - regionalEntropy Λ q Ω X| ≤
+        (n : ℝ) ^ (-247 : ℝ) :=
+  eventually_atTop.2
+    ⟨_, fun _ => abs_regionalEntropy_sub_le_of_truncationEntropyThreshold_le q hq g Cvol hg⟩
 
 end TNLean.PEPS.AreaLaw.Scan

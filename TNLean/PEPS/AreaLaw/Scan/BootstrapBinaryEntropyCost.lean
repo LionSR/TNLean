@@ -28,21 +28,16 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 
 namespace TNLean.PEPS.AreaLaw.Scan
 
-/-- For fixed scanner exponents, one threshold gives positive actual band
-count, positive per-band weight, and a linear binary-entropy cost with
-absolute coefficient. The threshold precedes the auxiliary fraction and
-every physical instance. Source: `08-scanner.tex`, `scanner:scales`,
-lines 32–41, and the cost following `scanner:bootstrap-comparison`,
+/-- For fixed scanner exponents, at every `n` from the explicit threshold
+`X.scaleFactsThreshold` on, the actual band count and the per-band weight are positive and
+the binary-entropy cost is linear with absolute coefficient. Source: `08-scanner.tex`,
+`scanner:scales`, lines 32–41, and the cost following `scanner:bootstrap-comparison`,
 lines 755–787. -/
-theorem exists_bootstrap_binEntropy_cost_bound (X : ScannerExponents) :
-    ∃ N : ℕ, 1 ≤ N ∧ ∀ n : ℕ, N ≤ n →
-      1 ≤ X.K n ∧ 0 < X.a 4 n ∧ ∀ τ : ℝ,
-        Real.binEntropy τ / X.a 4 n ≤ (Real.log 2 / 4) * (n : ℝ) := by
-  obtain ⟨C₁, hscale⟩ := eventually_scaleFacts X
-  obtain ⟨N, hN⟩ := hscale.exists_forall_of_atTop
-  refine ⟨N, (le_trans (by norm_num : (1 : ℕ) ≤ 2) (hN N le_rfl).two_le_n),
-    fun n hn ↦ ?_⟩
-  have hfacts := hN n hn
+theorem bootstrap_binEntropy_cost_bound_of_scaleFactsThreshold_le (X : ScannerExponents)
+    {n : ℕ} (hthr : X.scaleFactsThreshold ≤ n) :
+    1 ≤ X.K n ∧ 0 < X.a 4 n ∧ ∀ τ : ℝ,
+      Real.binEntropy τ / X.a 4 n ≤ (Real.log 2 / 4) * (n : ℝ) := by
+  have hfacts := scaleFacts_of_scaleFactsThreshold_le X hthr
   have hKpos : (0 : ℝ) < X.K n := by
     exact_mod_cast (lt_of_lt_of_le Nat.zero_lt_one hfacts.one_le_K)
   have ha : 0 < X.a 4 n :=
@@ -64,5 +59,18 @@ theorem exists_bootstrap_binEntropy_cost_bound (X : ScannerExponents) :
           (by norm_num : (0 : ℝ) ≤ 4)) (Nat.cast_nonneg (X.K n))
     _ ≤ (Real.log 2 / 4) * (n : ℝ) :=
       mul_le_mul_of_nonneg_left hKbound hcoefficient
+
+/-- For fixed scanner exponents, one threshold gives positive actual band
+count, positive per-band weight, and a linear binary-entropy cost with
+absolute coefficient. The threshold precedes the auxiliary fraction and
+every physical instance. Source: `08-scanner.tex`, `scanner:scales`,
+lines 32–41, and the cost following `scanner:bootstrap-comparison`,
+lines 755–787. -/
+theorem exists_bootstrap_binEntropy_cost_bound (X : ScannerExponents) :
+    ∃ N : ℕ, 1 ≤ N ∧ ∀ n : ℕ, N ≤ n →
+      1 ≤ X.K n ∧ 0 < X.a 4 n ∧ ∀ τ : ℝ,
+        Real.binEntropy τ / X.a 4 n ≤ (Real.log 2 / 4) * (n : ℝ) :=
+  ⟨_, (scaleFacts_of_scaleFactsThreshold_le X le_rfl).two_le_n.trans' (by norm_num),
+    fun _ => bootstrap_binEntropy_cost_bound_of_scaleFactsThreshold_le X⟩
 
 end TNLean.PEPS.AreaLaw.Scan

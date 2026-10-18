@@ -1168,12 +1168,13 @@ restriction is resolved.
 
 [polypeps_prop71_consequences_interface.tex](polypeps_prop71_consequences_interface.tex)
 (scope restriction, open) records that Proposition 7.1 of the September 24, 2026
-polynomial PEPS manuscript is formalized only as the consequences that the
-assembly of Section 8 uses, and lists the omitted clauses: a party for every
-hierarchy square, the main and auxiliary copies of `Ω`, the frame factorization
-of the reference vectors with factors of norm at most one, the placement of
-additional parties at their repainting events, the pair-source and message
-counts before expansion, and the family of expansions of every fixed accuracy.
+polynomial PEPS manuscript was first formalized only as the consequences that
+the assembly of Section 8 uses. The formal predicate now carries a party for
+every hierarchy square, the additional parties at their repaintings, the
+private copies of `Ω`, the frame factorization of the intermediate reference
+vectors with factors of norm at most one, the pair-source and message counts,
+and the expansions of every fixed accuracy. One clause remains omitted: that
+every intermediate reference vector has at least one frame.
 
 ### Two-dimensional area law: the scanner estimate
 
@@ -1194,8 +1195,9 @@ point, because Definition 9.3 requires a nonempty template, and the stopping
 scale must satisfy `S_* ≥ 1`. The source uses these templates only for regions
 meeting the cut and chooses `S_*` large. The lattice-point premise is
 discharged for every identifier whose current region meets the cut by
-`repairStage_exists_integerPoint_mem_birth_of_oldInclusion`; the note stays
-open until the stopping-scale premise, handled in #9558, is also discharged on main.
+`repairStage_exists_integerPoint_mem_birth_of_oldInclusion`. The stopping-scale
+premise is discharged by `exists_uniform_repairStage_birth_templates`, whose
+threshold `T₀ ≥ 1` is chosen before `S_*`. The note is resolved.
 
 ### Two-dimensional area law: nondegenerate template pieces
 

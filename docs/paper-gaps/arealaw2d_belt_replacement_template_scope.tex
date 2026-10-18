@@ -17,7 +17,7 @@
 
 \begin{document}
 \maketitle
-\gapnote{scope-restriction}{wip}
+\gapnote{scope-restriction}{resolved}
 
 \section{The source passage}
 
@@ -66,10 +66,17 @@ If an identifier keeps a current region meeting $A$ at a later generation,
 then its birth, which retention leaves unchanged, contains a lattice point:
 a point of $A$ is a lattice point, and every current region lies in its
 birth. The second premise is absorbed into the stopping-scale threshold by
-taking the threshold at least one; this is done in
-\href{https://github.com/LionSR/TNLean/pull/9558}{pull request \#9558}, which
-applies the templates to all actual births. This note becomes resolved
-once both discharges are in the library.
+taking the threshold at least one.
+
+\section{Resolution}
+
+Both discharges are now in the library. The template theorem for all actual
+births\footnote{\leanid{TNLean.PEPS.AreaLaw.Geometry.exists_uniform_repairStage_birth_templates}.}
+chooses its stopping-scale threshold $T_0\ge1$ before $S_*$. Every admissible
+$S_*\ge T_0$ therefore satisfies $S_*\ge1$, and the second premise holds
+inside that theorem. The first premise is discharged by the lattice-point lemma
+above. The restricted statements remain auxiliary; neither premise survives
+into the two-family proposition.
 
 \bibliographystyle{alpha}
 \bibliography{references}

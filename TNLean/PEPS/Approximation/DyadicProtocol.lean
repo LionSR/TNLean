@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.PEPS.Approximation.AdaptivePatchSupply
 import TNLean.PEPS.Approximation.ApproximateCircuitError
 import TNLean.PEPS.Approximation.Basic
 import TNLean.PEPS.Approximation.DistributedConstruction
@@ -10,6 +11,7 @@ import TNLean.PEPS.Approximation.DyadicActiveLabelParties
 import TNLean.PEPS.Approximation.DyadicRoutingPEPS
 import TNLean.PEPS.Approximation.OriginalCircuitSourceBound
 import TNLean.PEPS.Approximation.ProtocolDensityError
+import TNLean.PEPS.Approximation.SheetStackEndpoints
 
 /-!
 # The consequences of Proposition 7.1 used in §8
@@ -46,20 +48,15 @@ its constants chosen before the size, the Hamiltonian, and the ground vector, is
 
 **Scope restriction (consequences of Proposition 7.1):** `IsDistributionProtocol` and
 `LargeSizeDyadicProtocolConsequences` are weaker than Proposition 7.1. They omit the following
-clauses of the source:
+clause of the source:
 
-* the main copy of `Ω` held by one party and the auxiliary copies initialized privately at their
-  designated parties (`06-geometry.tex:22–23`);
-* the factorization of each reference vector into the main and auxiliary encoded frames, with
-  every factor of norm at most one (`06-geometry.tex:39–41`); only the initial reference, the
-  per-change error, and the final reference are recorded;
-* the scale and address of each additional party, which are those of its repainting event
-  (`06-geometry.tex:36–37`).
+* `r_t` has at least one frame for `0 < t < changes` (`06-geometry.tex:38–40`); the
+  construction satisfies it, but it is not yet stated.
 
-None of these clauses is used by the density estimate of §8.1, the separation hypothesis of
+This clause is not used by the density estimate of §8.1, the separation hypothesis of
 Lemma 8.2, or the lifetime count. Documented in
 `docs/paper-gaps/polypeps_prop71_consequences_interface.tex`. Elimination: build a richer
-construction certificate carrying the omitted clauses, prove Proposition 7.1 for it, and forget
+construction certificate carrying the omitted clause, prove Proposition 7.1 for it, and forget
 it into this interface.
 
 The bound on pair sources and messages in each monomial (Theorem 5.2, item 3,
@@ -116,6 +113,15 @@ noncomputable section
 namespace TNLean.PEPS.Approximation
 
 open Finset TNLean.PEPS.PairEffect
+
+/-- The aligned squares of the padded dyadic hierarchy of `[0, N] ^ 2`, each given by its scale
+`j` and its block address `(x, y)`: the square
+`[2 ^ j x, 2 ^ j (x + 1)] × [2 ^ j y, 2 ^ j (y + 1)]` lies in `[0, N] ^ 2`. When `N` is a power
+of two, the root square is the one with `2 ^ j = N`.
+
+Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:64–65`. -/
+def HierarchySquare (N : ℕ) : Type :=
+  {S : ℕ × ℕ × ℕ // 2 ^ S.1 * (S.2.1 + 1) ≤ N ∧ 2 ^ S.1 * (S.2.2 + 1) ≤ N}
 
 /-- **The data of a dyadic distribution protocol.** A protocol on the square of side `L` with
 local dimension `q`, on the finite party type `P`, consists of the following.
@@ -195,15 +201,29 @@ structure DyadicProtocol (L q : ℕ) (P : Type) [Fintype P] where
   /-- The final layout: the physical registers, then the private registers. -/
   layout_changes :
     layout changes = familyPhysicalOutputLayout physicalDimension physicalOrder privateOutput
+  /-- The party assigned to each square of the padded hierarchy, including the root square.
 
-/-- The aligned squares of the padded dyadic hierarchy of `[0, N] ^ 2`, each given by its scale
-`j` and its block address `(x, y)`: the square
-`[2 ^ j x, 2 ^ j (x + 1)] × [2 ^ j y, 2 ^ j (y + 1)]` lies in `[0, N] ^ 2`. When `N` is a power
-of two, the root square is the one with `2 ^ j = N`.
+  Source: Polynomial-PEPS manuscript (Sept 24 2026), Proposition 7.1, item 1,
+  `06-geometry.tex:19–20`, and the hierarchy, `06-geometry.tex:64–67`. -/
+  squareParty : HierarchySquare (paddedSide L) → P
+  /-- The square whose repainting the change `t` belongs to, as its scale and block address, or
+  `none` when the change belongs to no repainting. A party outside the range of `squareParty` is
+  an additional party, which belongs to the repainting of a square.
 
-Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:64–65`. -/
-def HierarchySquare (N : ℕ) : Type :=
-  {S : ℕ × ℕ × ℕ // 2 ^ S.1 * (S.2.1 + 1) ≤ N ∧ 2 ^ S.1 * (S.2.2 + 1) ≤ N}
+  Source: Polynomial-PEPS manuscript (Sept 24 2026), Proposition 7.1, items 1 and 3,
+  `06-geometry.tex:19–22` (“at most a fixed number of additional parties for each repainting of a
+  square”) and `06-geometry.tex:35–37` (“additional parties have the scale and address of the
+  square to whose repainting they belong”). The construction of the protocol records here the
+  square of the scheduled repainting event of each change. -/
+  repaintingSquare : ℕ → Option (ℕ × ℕ × ℕ)
+  /-- The encoded frames of each stage, the encoded copies of `Ω`. The first frame is designated
+  as the main copy at the initial stage, by `IsDistributionProtocol.initialCopies`, and before the
+  last change, by `IsDistributionProtocol.mainFrame_owner`; at the other stages the list is not
+  labelled.
+
+  Source: Polynomial-PEPS manuscript (Sept 24 2026), Proposition 7.1, items 1 and 4,
+  `06-geometry.tex:21–23` and `06-geometry.tex:38–40`. -/
+  frames : ℕ → List (EncodedFrame.Frame (cellCenterPos L) q P)
 
 namespace DyadicProtocol
 
@@ -299,9 +319,8 @@ pair-source bound of Theorem 5.2, item 3. Each nonprivate gate `G` equals its re
 `∑ ξ, c ξ • M ξ`, so `‖G - ∑ ξ, c ξ • M ξ‖ = 0` and the expansions are accurate at every inverse
 power of `L` (`06-geometry.tex:29–30`); the monomials have no messages, since messages are
 expanded before a gate is recorded (`04-compression.tex:42–45`). The predicate
-is weaker than the conclusion of Proposition 7.1: it omits the clauses listed in the scope
-restriction of the module docstring, among them the registers of the copies of `Ω` and the frame
-factorization of the references.
+is weaker than the conclusion of Proposition 7.1 only in the clause listed in the scope
+restriction of the module docstring.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), Proposition 7.1 `prop:protocol`,
 `06-geometry.tex:17–52`; the expansions are those of Theorem 5.2, item 3,
@@ -314,13 +333,68 @@ structure IsDistributionProtocol (Ω : StateSpace L q) (C : ℝ) (b k r : ℕ) :
   /-- Item 1: a fixed number of parties for each square. -/
   blockBounded : D.placement.BlockBounded b
   /-- Item 1: a different party is assigned to each square of the padded hierarchy, including
-  the root square, at the scale and address of that square.
+  the root square.
 
   Source: Polynomial-PEPS manuscript (Sept 24 2026), Proposition 7.1, item 1,
   `06-geometry.tex:18–20`, and the hierarchy, `06-geometry.tex:64–67`: “A different party is
   assigned to each dyadic square.” -/
-  squareParty : ∃ f : HierarchySquare (paddedSide L) → P, Function.Injective f ∧
-    ∀ S, (D.placement.scale (f S), D.placement.blockX (f S), D.placement.blockY (f S)) = S.1
+  squareParty_injective : Function.Injective D.squareParty
+  /-- Item 1: the party of a square of the hierarchy is placed at the scale and address of that
+  square. Source: `06-geometry.tex:19–20, 64–67`. -/
+  placement_squareParty : ∀ S, (D.placement.scale (D.squareParty S),
+    D.placement.blockX (D.squareParty S), D.placement.blockY (D.squareParty S)) = S.1
+  /-- Item 3: every additional party, that is every party outside the range of `squareParty`,
+  belongs to the repainting of a square `S` of the hierarchy other than the root square: it has
+  the scale and address of `S`, and it participates only in changes of the repainting of `S`.
+
+  Source: Polynomial-PEPS manuscript (Sept 24 2026), Proposition 7.1, item 1,
+  `06-geometry.tex:19–22`, and item 3, `06-geometry.tex:35–37`: “additional parties have the
+  scale and address of the square to whose repainting they belong”. -/
+  additionalParty : ∀ p, p ∉ Set.range D.squareParty → ∃ S : HierarchySquare (paddedSide L),
+    2 ^ S.1.1 < paddedSide L ∧
+      (D.placement.scale p, D.placement.blockX p, D.placement.blockY p) = S.1 ∧
+      ∀ t < D.changes, ∀ g, p ∈ (D.step t).participants g → D.repaintingSquare t = some S.1
+  /-- Item 3: a change recorded as belonging to the repainting of `S` belongs to the repainting
+  of a square of the hierarchy other than the root square.
+
+  Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:19–22`, and the repainted
+  squares, `06-geometry.tex:82–84`. -/
+  repaintingSquare_mem : ∀ t, ∀ S, D.repaintingSquare t = some S →
+    ∃ S' : HierarchySquare (paddedSide L), S'.1 = S ∧ 2 ^ S.1 < paddedSide L
+  /-- Item 3: the changes recorded as belonging to the repainting of a square form one
+  contiguous segment of the schedule, the repainting of that square.
+
+  Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:19–22, 35–37`, and the
+  schedule of repaintings, `06-geometry.tex:82–87`. -/
+  repaintingSquare_segment : ∀ S, ∀ t₁ t t₂, t₁ ≤ t → t ≤ t₂ → D.repaintingSquare t₁ = some S →
+    D.repaintingSquare t₂ = some S → D.repaintingSquare t = some S
+  /-- Item 3: every party of a change of the repainting of a square `S` of scale `j` has scale
+  `j` or an adjacent scale, and its address is within `b` times the side of `S` of the address of
+  `S` in each coordinate.
+
+  Source: Polynomial-PEPS manuscript (Sept 24 2026), Proposition 7.1, item 3,
+  `06-geometry.tex:33–37`. -/
+  repaintingSquare_near : ∀ t < D.changes, ∀ S, D.repaintingSquare t = some S →
+    ∀ g, ∀ p ∈ (D.step t).participants g,
+      S.1 ≤ D.placement.scale p + 1 ∧ D.placement.scale p ≤ S.1 + 1 ∧
+        Nat.dist (D.placement.anchor p).1 (dyadicAnchor S.1 S.2.1) ≤ b * 2 ^ S.1 ∧
+        Nat.dist (D.placement.anchor p).2 (dyadicAnchor S.1 S.2.2) ≤ b * 2 ^ S.1
+  /-- Item 1: initialization is a pure product across parties of the copies of `Ω`. The initial
+  encoded frames are the main frame followed by the auxiliary frames; each is a copy of `Ω` with
+  no hole, held entirely by one party, its designated party; and the whole initial memory of each
+  party is the memory of the copies it holds, with initial vector the product of their reference
+  vectors. The party holding the first frame holds the main copy.
+
+  Source: Polynomial-PEPS manuscript (Sept 24 2026), Proposition 7.1, item 1,
+  `06-geometry.tex:21–23`: “Initialization is a pure product across parties. One party initially
+  holds the main copy of `Ω`; all auxiliary copies are initialized privately at their designated
+  parties”; and the initialization in the proof, `06-geometry.tex:658–660`. -/
+  initialCopies : D.frames 0 ≠ [] ∧ ∃ holder : EncodedFrame.Frame (cellCenterPos L) q P → P,
+    (∀ F ∈ D.frames 0, F.holes = [] ∧ ∀ x, F.owner x = holder F) ∧ ∀ [DecidableEq P],
+      (D.initialSpace = fun p =>
+          EncodedFrame.framesSpace ((D.frames 0).filter fun F => holder F = p)) ∧
+        ∀ [NeZero q], HEq D.initialVector
+          fun p => EncodedFrame.framesVec Ω ((D.frames 0).filter fun F => holder F = p)
   /-- Item 2: at most `C L³` changes. -/
   changes_le : (D.changes : ℝ) ≤ C * (L : ℝ) ^ 3
   /-- Item 2: each change has a fixed number of nonprivate gates. -/
@@ -343,6 +417,30 @@ structure IsDistributionProtocol (Ω : StateSpace L q) (C : ℝ) (b k r : ℕ) :
           b * 2 ^ D.placement.scale p ∧
         Nat.dist (D.placement.anchor p).2 (D.placement.anchor p').2 ≤
           b * 2 ^ D.placement.scale p
+  /-- Item 4: the reference vector of every intermediate stage is the product of the reference
+  vectors `K_F Ω` of the encoded frames of that stage, of the protocol's own `Ω`, an unlabelled
+  list of the encoded copies. All its factors have norm at most one. Read per stage, being the
+  main copy carries no content beyond the designations at the endpoints, which are stated by
+  `initialCopies` at the initial stage and by `mainFrame_owner` before the last change. The
+  initial stage is the product initialization of `initialCopies`, and the last stage is described
+  by `reference_changes`. In the constructed protocol the last change is the readout, which
+  rearranges the registers into the physical and discarded ones and has no counterpart in the
+  source; this is why the last stage is excluded here.
+
+  Source: Polynomial-PEPS manuscript (Sept 24 2026), Proposition 7.1, item 4,
+  `06-geometry.tex:38–40`: “There is a designated reference vector at every stage, formed from
+  the main encoded frame and the auxiliary encoded frames. All its factors have norm at most
+  one.” -/
+  reference_frames : ∀ [NeZero q], ∀ t, 0 < t → t < D.changes →
+    (∀ F ∈ D.frames t, ‖F.refVec Ω‖ ≤ 1) ∧
+      ∃ h : D.layout t = EncodedFrame.stackRegs (D.frames t) [],
+        D.reference t = Layout.memCongr h.symm (EncodedFrame.framesVec Ω (D.frames t))
+  /-- Item 4: before the readout, the raw registers of the main encoded frame are held by the
+  parties of the genuine sites, so they become the physical outputs.
+
+  Source: Polynomial-PEPS manuscript (Sept 24 2026), Proposition 7.1, item 4,
+  `06-geometry.tex:46–49`, and the end of the proof, `06-geometry.tex:668–681`. -/
+  mainFrame_owner : ∃ M Fs, D.frames (D.changes - 1) = M :: Fs ∧ ∀ v, M.owner v = D.site v
   /-- Item 4: each change keeps the reference vector within `C L⁻²⁰`. -/
   reference_step : ∀ t < D.changes,
     ‖(D.step t).eval (D.reference t) - D.reference (t + 1)‖ ≤ C / (L : ℝ) ^ 20

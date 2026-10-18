@@ -21,17 +21,14 @@ supplies the patch constants.
 **Scope restriction (consequences of Proposition 7.1):**
 `largeSizeDyadicProtocolConsequences_of_adaptivePatchConstraint` proves the weaker
 `LargeSizeDyadicProtocolConsequences` interface used in Section 8, not full Proposition 7.1.
-The interface omits the following clauses of the proposition:
+The interface omits the following clause of the proposition:
 
-* a designated party holding the main copy of `Ω` and private initialization of each auxiliary
-  copy at its designated party, rather than arbitrary normalized product initialization;
-* factorization of every intermediate reference vector into main and auxiliary encoded frames,
-  with every factor of norm at most one;
-* the repainting-event scale and grid address for each additional party.
+* `r_t` has at least one frame for `0 < t < changes`; the construction satisfies it, but it is
+  not yet stated.
 
 These omissions and the retained Section 8 consequences are recorded in
 `docs/paper-gaps/polypeps_prop71_consequences_interface.tex`. To eliminate this restriction,
-construct a certificate carrying all omitted clauses, prove full Proposition 7.1 for it, and
+construct a certificate carrying the omitted clause, prove full Proposition 7.1 for it, and
 project to the present interface. The angular-scale and dyadic-padding lemmas in this module
 are not part of this restriction.
 
