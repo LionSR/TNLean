@@ -109,9 +109,14 @@ theorem exists_sourceTarget_finalScale_mutualInformation
   refine ⟨Ctr, hCtr, ?_⟩
   intro Ce hCe
   obtain ⟨Ns, hNs, hsourceN⟩ := hsource Ce hCe
-  obtain ⟨C, hC, Ne, hNe, herror⟩ := exists_finalSharp_source_error_le
-    q hq Ce C₀ CB g (C_T + 1) hCe hC₀ hCB.le hg hCvol
-  refine ⟨C, hC, max Ns (max Ne (max Nt Nsml)), hNs.trans (le_max_left _ _), ?_⟩
+  let Ne := finalSharpErrorThreshold C₀ CB
+  have herror := fun n (hn : Ne ≤ n) =>
+    finalSharp_source_error_le_of_finalSharpErrorThreshold_le q hq Ce C₀ CB g (C_T + 1) hCe hC₀
+      hCB.le hg hCvol hn
+  have hlq : 0 ≤ Real.log (q : ℝ) := Real.log_nonneg (by exact_mod_cast hq)
+  refine ⟨_, finalSharpErrorConstant_pos (Ctr := Real.sqrt (2 / g)) hCe
+    (mul_nonneg hCvol hlq) hlq,
+    max Ns (max Ne (max Nt Nsml)), hNs.trans (le_max_left _ _), ?_⟩
   intro Λ T _ hT h S E₀ Ω hgs hgraph hanchor hn hr hmScale hDScale hKScale
     hCeq hsize hdepth hrows hmult hclear htargetEntropy hprefix hrD hDpos hDm L X β
   have hnS : Ns ≤ S.n := by omega

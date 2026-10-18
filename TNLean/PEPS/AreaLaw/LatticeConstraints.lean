@@ -208,6 +208,85 @@ theorem exists_latticeQuasilocalRoots {p : ℕ} (hp : 1 ≤ p) (R : ℕ) {J Δ :
     localRootChannel_eq_self_of_forall_commute _ (hk i).1 (hk i).2.1 hB⟩
   rw [hsq]; simp only [ε]; ring
 
+/-- The truncation constant `C₁ = finiteSetTruncationConstant C₃ c₃ (Δ / c_*) μ_R 2 C₀` of
+Proposition 4.5 on a lattice domain, with `c_* = positiveNormalization 1 (Δ / 2) J`, anchor
+multiplicity `μ_R = 2^{2R(R+1)}` and ball growth `2 (d + 1)²`. The constants `C₃, c₃` are the
+filter-locality constants of the positive constraints at `p = 1` (`03-quasilocal.tex`,
+lines 220–334 and 405–505). -/
+noncomputable def latticeFiniteSetTruncationConstant (R : ℕ) (J Δ C₀ C₃ c₃ : ℝ) : ℝ :=
+  finiteSetTruncationConstant C₃ c₃ (Δ / positiveNormalization 1 (Δ / 2) J)
+    ((2 ^ ((1 + 2 * R * (R + 1)) - 1) : ℕ) : ℝ) 2 C₀
+
+theorem latticeFiniteSetTruncationConstant_pos (R : ℕ) {J Δ C₀ C₃ c₃ : ℝ} (hΔ : 0 < Δ)
+    (hC₀ : 0 ≤ C₀) (hC₃ : 0 ≤ C₃) (hc₃ : 0 < c₃) :
+    0 < latticeFiniteSetTruncationConstant R J Δ C₀ C₃ c₃ :=
+  finiteSetTruncationConstant_pos hC₃ hc₃ (div_pos hΔ (positiveNormalization_pos 1 _ J))
+    (Nat.cast_nonneg _) zero_le_two hC₀
+
+/-- **Truncation near a finite set on a lattice domain, with an explicit constant**
+(Proposition 4.5, `prop:truncation`, first part, `03-quasilocal.tex`, lines 405–433 and
+457–505, with Proposition 4.3 at `p = 1`, lines 220–334). Let `C₃ ≥ 0`, `c₃ > 0` be the
+filter-locality constants of `latticePositiveConstraints_of_locality` at `p = 1`. Then every
+conclusion of `exists_latticeFiniteSetTruncation` holds with
+`C₁ = latticeFiniteSetTruncationConstant R J Δ C₀ C₃ c₃`. Once QICLean provides the named
+filter-locality constants, `htail` is `SpectralFilter.norm_positiveConstraint_sub_map_le`, with
+`C₃ = positiveConstraintLocalityConst 1 Δ J (localizationPrefactor R 2 2) (1 / 2)` and
+`c₃ = positiveConstraintLocalityRate 1 Δ (localizationVelocity R v_R (μ_R J)) (1 / 2)`. -/
+theorem latticeFiniteSetTruncation_of_locality (R : ℕ) {J Δ C₀ C₃ c₃ : ℝ} (hJ : 0 ≤ J)
+    (hΔ : 0 < Δ) (hC₀ : 0 ≤ C₀) (hC₃ : 0 ≤ C₃) (hc₃ : 0 < c₃)
+    (htail : ∀ {n : Type} [Fintype n] [DecidableEq n]
+      {H : Matrix n n ℂ} {Ω : EuclideanSpace ℂ n} {h : Matrix n n ℂ},
+      H.IsHermitian → ‖Ω‖ = 1 → h.IsHermitian → ‖h‖ ≤ J →
+      ∀ (L : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ), (∀ X, ‖L X‖ ≤ ‖X‖) → L 1 = 1 →
+      (∀ X, X.IsHermitian → (L X).IsHermitian) →
+      L (CFC.abs (L (centeredFilter 1 (Δ / 2) H Ω h))) =
+        CFC.abs (L (centeredFilter 1 (Δ / 2) H Ω h)) →
+      ∀ {l : ℝ}, 0 ≤ l →
+      (∀ t : ℝ, ‖Matrix.hermitianUnitaryPath H t * h * Matrix.hermitianUnitaryPath H (-t) -
+          L (Matrix.hermitianUnitaryPath H t * h * Matrix.hermitianUnitaryPath H (-t))‖ ≤
+        ‖h‖ * min 2 (localizationPrefactor R 2 2 * Real.exp (localizationVelocity R
+          (1 + 2 * R * (R + 1)) (((2 ^ ((1 + 2 * R * (R + 1)) - 1) : ℕ) : ℝ) * J) * |t| -
+            1 / 2 * l))) →
+      ‖positiveConstraint (positiveNormalization 1 (Δ / 2) J) (centeredFilter 1 (Δ / 2) H Ω h) -
+          L (positiveConstraint (positiveNormalization 1 (Δ / 2) J)
+            (centeredFilter 1 (Δ / 2) H Ω h))‖ ≤
+        C₃ * Real.exp (-(c₃ * l ^ kernelExponent 1))) :
+    ∀ {q : ℕ} [NeZero q] (Λ : Finset (ℤ × ℤ)) (h : LocalHamiltonian Λ q R J)
+      (a : AdmissibleSupport Λ R → Site Λ), (∀ X, a X ∈ X.1) →
+      ∀ (E₀ : ℝ) (Ω : StateSpace Λ q), IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+      ∀ n : ℝ, 2 ≤ n → ∀ S₀ : Finset (Site Λ), (S₀.card : ℝ) ≤ C₀ * n ^ 2 →
+      let G := domainGraph Λ
+      let cs := positiveNormalization 1 (Δ / 2) J
+      let g := Δ / cs
+      let k := fun i => positiveConstraint cs (centeredFilter 1 (Δ / 2) h.operator Ω (h.term i))
+      let r₀ := ⌈latticeFiniteSetTruncationConstant R J Δ C₀ C₃ c₃ * Real.log n ^ 2⌉₊
+      let ε := min (n ^ (-1000 : ℝ)) (g / 4)
+      let Ht := ∑ i, truncatedConstraint q G S₀ r₀ (a i) (k i)
+      (∀ i, truncatedConstraint q G S₀ r₀ (a i) (k i) ∈
+        supportedOperators q (designatedSupport G S₀ r₀ (a i) : Set (Site Λ))) ∧
+      (∀ i, 0 ≤ truncatedConstraint q G S₀ r₀ (a i) (k i) ∧
+        truncatedConstraint q G S₀ r₀ (a i) (k i) ≤ 1) ∧
+      ‖Ht - ∑ i, k i‖ ≤ ε ∧
+      ∃ (e : ℝ) (Ω₀ : StateSpace Λ q), ‖Ω₀‖ = 1 ∧
+        Ht *ᵥ WithLp.ofLp Ω₀ = (e : ℂ) • WithLp.ofLp Ω₀ ∧ 0 ≤ e ∧ e ≤ ε ∧
+        (Ht - (e : ℂ) • 1 - ((g / 2 : ℝ) : ℂ) •
+          (1 - Matrix.vecMulVec (WithLp.ofLp Ω₀) (star (WithLp.ofLp Ω₀)))).PosSemidef ∧
+        (∃ θ : ℝ, ‖Ω₀ - Complex.exp (θ * Complex.I) • Ω‖ ≤ 2 * Real.sqrt (ε / g)) ∧
+        Matrix.traceDistance (Matrix.vecMulVec (WithLp.ofLp Ω₀) (star (WithLp.ofLp Ω₀)))
+            (Matrix.vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))) ≤
+          Real.sqrt (2 * ε / g) := by
+  intro q _ Λ h a ha E₀ Ω hgs n hn S₀ hS₀
+  obtain ⟨hΩ, hHΩ, hgap⟩ := Matrix.isGappedGroundState_iff.mp hgs
+  exact finiteSetTruncation_of_locality R (1 + 2 * R * (R + 1))
+    (((2 ^ ((1 + 2 * R * (R + 1)) - 1) : ℕ) : ℝ) * J) 2 2 (Kb := 2)
+    (μ := ((2 ^ ((1 + 2 * R * (R + 1)) - 1) : ℕ) : ℝ)) hΔ zero_le_two (Nat.cast_nonneg _) hC₀ hC₃
+    hc₃ htail (q := q) (ι := Site Λ) (κ := AdmissibleSupport Λ R) (domainGraph Λ) (fun X => X.1)
+    a ha
+    h.term h.hermitian h.supported (fun X => X.2.edist_le) (fun X => X.2.card_le)
+    (h.sum_norm_term_containing_le hJ) (card_domainGraph_sphere_le Λ) card_graphBall_domainGraph_le
+    (fun x => by exact_mod_cast card_anchor_fiber_le a ha x) h.norm_le E₀ Ω hΩ hHΩ hgap n hn S₀
+    hS₀
+
 /-- **Truncation near a finite set on a lattice domain** (Proposition 4.5, `prop:truncation`,
 first part, `03-quasilocal.tex`, lines 405–433 and 457–505). Take `p = 1` in
 `exists_latticePositiveConstraints`, so `α = 1/2`, and fix `R`, `J ≥ 0`, `Δ > 0`, `C₀ ≥ 0`.
@@ -247,17 +326,11 @@ theorem exists_latticeFiniteSetTruncation (R : ℕ) {J Δ C₀ : ℝ} (hJ : 0 �
           Matrix.traceDistance (Matrix.vecMulVec (WithLp.ofLp Ω₀) (star (WithLp.ofLp Ω₀)))
               (Matrix.vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))) ≤
             Real.sqrt (2 * ε / g) := by
-  obtain ⟨C₁, hC₁, htr⟩ := exists_finiteSetTruncation_of_gap.{0, 0} R (1 + 2 * R * (R + 1))
-    (((2 ^ ((1 + 2 * R * (R + 1)) - 1) : ℕ) : ℝ) * J) 2 2 hJ hΔ (Kb := 2)
-    (μ := ((2 ^ ((1 + 2 * R * (R + 1)) - 1) : ℕ) : ℝ)) zero_le_two (Nat.cast_nonneg _) hC₀
-  refine ⟨C₁, hC₁, ?_⟩
-  intro q _ Λ h a ha E₀ Ω hgs n hn S₀ hS₀
-  obtain ⟨hΩ, hHΩ, hgap⟩ := Matrix.isGappedGroundState_iff.mp hgs
-  exact @htr q _ (Site Λ) _ _ (AdmissibleSupport Λ R) _ (domainGraph Λ) (fun X => X.1) a ha
-    h.term h.hermitian h.supported (fun X => X.2.edist_le) (fun X => X.2.card_le)
-    (h.sum_norm_term_containing_le hJ) (card_domainGraph_sphere_le Λ) card_graphBall_domainGraph_le
-    (fun x => by exact_mod_cast card_anchor_fiber_le a ha x) h.norm_le E₀ Ω hΩ hHΩ hgap n hn S₀
-    hS₀
+  obtain ⟨C₃, c₃, hC₃, hc₃, htail⟩ := exists_norm_positiveConstraint_sub_map_le (le_refl 1) hΔ hJ
+    (localizationPrefactor_nonneg R 2 2) (localizationVelocity_pos R (1 + 2 * R * (R + 1))
+      (((2 ^ ((1 + 2 * R * (R + 1)) - 1) : ℕ) : ℝ) * J)) one_half_pos
+  exact ⟨_, latticeFiniteSetTruncationConstant_pos R hΔ hC₀ hC₃ hc₃,
+    latticeFiniteSetTruncation_of_locality R hJ hΔ hC₀ hC₃ hc₃ htail⟩
 
 /-- **Truncation near a finite set on a lattice domain, with a unique ground vector**
 (Proposition 4.5, `prop:truncation`, first part, `03-quasilocal.tex`, lines 405–433 and

@@ -179,7 +179,7 @@ theorem exists_isDistributionProtocol_of_largeRepaintings {ε₀ : ℝ} (hε : 0
           ∀ j < 189, HasSourceBoundedChange Ω (seg j) (seg (j + 1)) (ℓ := []) (1 : ℂ)
             {p | EventUses (.inl S) p} (2 * protocolPatchBound ε₀ ν)
             (rewriteGateBound C' c' (protocolPatchBound ε₀ ν) L) (2 * protocolPatchBound ε₀ ν)
-            ((2 * protocolPatchBound ε₀ ν + 1) * ((L : ℝ) ^ 20)⁻¹)) →
+            ((2 * protocolPatchBound ε₀ ν + 1) * ((L : ℝ) ^ 20)⁻¹) ∧ seg (j + 1) ≠ []) →
       (∀ x ∈ auxIndices k (largeSquare K₀ (D * Real.log L)), ∀ h ∈ (frozen x).holes,
         ‖act h.patch.proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹) →
       (((auxIndices k (largeSquare K₀ (D * Real.log L))).map fun x =>
@@ -206,14 +206,18 @@ theorem exists_isDistributionProtocol_of_largeRepaintings {ε₀ : ℝ} (hε : 0
   set st := protocolState P rank R₀ hε ht hB large frozen auxOwner with hst_def
   set idle : ProtocolEvent k × RepaintOp → Frame (cellCenterPos L) q (ProtocolParty k) :=
     fun x => Frame.raw fun _ => auxOwner x
+  have hstne : ∀ i, st i ≠ [] := fun i => by
+    simp only [hst_def, protocolState]
+    exact List.cons_ne_nil _ _
   -- the changes of each event
   have hseg : ∀ i (hi : i < (eventSchedule k).length),
       ∃ seg : ℕ → List (Frame (cellCenterPos L) q (ProtocolParty k)), seg 0 = st i ∧
         seg (eventOps large ((eventSchedule k)[i])).length = st (i + 1) ∧
-        ∀ j < (eventOps large ((eventSchedule k)[i])).length,
+        (∀ j < (eventOps large ((eventSchedule k)[i])).length,
           HasSourceBoundedChange Ω (seg j) (seg (j + 1)) (ℓ := []) (1 : ℂ)
             {p | EventUses ((eventSchedule k)[i]) p} (2 * b) (rewriteGateBound C' c' b L)
-            (2 * b) ((2 * b + 1) * ((L : ℝ) ^ 20)⁻¹) := by
+            (2 * b) ((2 * b + 1) * ((L : ℝ) ^ 20)⁻¹)) ∧
+        ∀ j ≤ (eventOps large ((eventSchedule k)[i])).length, seg j ≠ [] := by
     intro i hi
     -- one change between the states before and after the event
     have hone : HasSourceBoundedChange Ω (st i) (st (i + 1)) (ℓ := []) (1 : ℂ)
@@ -222,20 +226,27 @@ theorem exists_isDistributionProtocol_of_largeRepaintings {ε₀ : ℝ} (hε : 0
         (eventOps large ((eventSchedule k)[i])).length = 1 →
         ∃ seg : ℕ → List (Frame (cellCenterPos L) q (ProtocolParty k)), seg 0 = st i ∧
           seg (eventOps large ((eventSchedule k)[i])).length = st (i + 1) ∧
-          ∀ j < (eventOps large ((eventSchedule k)[i])).length,
+          (∀ j < (eventOps large ((eventSchedule k)[i])).length,
             HasSourceBoundedChange Ω (seg j) (seg (j + 1)) (ℓ := []) (1 : ℂ)
               {p | EventUses ((eventSchedule k)[i]) p} (2 * b) (rewriteGateBound C' c' b L)
-              (2 * b) ((2 * b + 1) * ((L : ℝ) ^ 20)⁻¹) := fun h h1 =>
+              (2 * b) ((2 * b + 1) * ((L : ℝ) ^ 20)⁻¹)) ∧
+          ∀ j ≤ (eventOps large ((eventSchedule k)[i])).length, seg j ≠ [] := fun h h1 =>
       ⟨fun j => if j = 0 then st i else st (i + 1), by simp, by rw [h1]; simp, fun j hj => by
         rw [h1] at hj
         obtain rfl : j = 0 := by omega
-        simpa using h⟩
+        simpa using h, fun j _ => by dsimp only; split_ifs <;> exact hstne _⟩
     rcases he : (eventSchedule k)[i] with S | J
     · by_cases hlS : large S = true
       · obtain ⟨seg, h0, h1, h2⟩ := hlarge i hi S he hlS
-        refine ⟨seg, h0, ?_, ?_⟩
+        refine ⟨seg, h0, ?_, ?_, ?_⟩
         · simp only [eventOps, hlS, ite_true, length_largeRepaintingOps]; exact h1
-        · simp only [eventOps, hlS, ite_true, length_largeRepaintingOps]; exact h2
+        · simp only [eventOps, hlS, ite_true, length_largeRepaintingOps]
+          exact fun j hj => (h2 j hj).1
+        · simp only [eventOps, hlS, ite_true, length_largeRepaintingOps]
+          intro j hj
+          rcases j with _ | j
+          · rw [h0]; exact hstne i
+          · exact (h2 j (by omega)).2
       · have hS : (S.1 : ℕ) < k := by
           have := isScheduled_getElem hi; rw [he] at this; exact this
         have hKS : (2 : ℝ) ^ (S.1 : ℕ) ≤ K₀ * t := by
@@ -263,13 +274,15 @@ theorem exists_isDistributionProtocol_of_largeRepaintings {ε₀ : ℝ} (hε : 0
       simp only [eventMain]
       exact Hres ν hν hνν' hc hL hkL hΩ P rank R₀ J hJ0 _ hC hC' hcc _
   -- the trajectory
-  choose seg hseg0 hsegm hsegs using hseg
-  obtain ⟨tr, htr0, htrm, htrs⟩ := exists_frames_of_segments (Ω := Ω) (ℓ := []) (ξ := (1 : ℂ))
-    (fun e : ProtocolEvent k => {p | EventUses e p}) (eventOps large) (eventSchedule k) st
+  choose seg hseg0 hsegm hsegs hsegne using hseg
+  obtain ⟨tr, htr0, htrm, htrs, htrne⟩ := exists_frames_of_segments (Ω := Ω) (ℓ := [])
+    (ξ := (1 : ℂ)) (fun e : ProtocolEvent k => {p | EventUses e p}) (eventOps large)
+    (fun Fs => Fs ≠ []) (eventSchedule k) st
     (fun i => if h : i < (eventSchedule k).length then seg i h else fun _ => st i)
     (fun i => by split_ifs with h; exacts [hseg0 i h, rfl])
     (fun i hi => by simp only [hi, dite_true]; exact hsegm i hi)
-    (fun i hi j hj => by simp only [hi, dite_true]; exact hsegs i hi j hj)
+    (fun i hi j hj => by simp only [hi, dite_true]; exact hsegs i hi j hj) hstne
+    (fun i hi j hj => by simp only [hi, dite_true]; exact hsegne i hi j hj)
   -- the endpoints
   have hall : ∀ x ∈ auxIndices k large, x.1 ∈ (eventSchedule k).take (eventSchedule k).length :=
     fun x hx => by rw [List.take_length]; exact mem_eventSchedule_of_mem_auxIndices hx
@@ -285,7 +298,7 @@ theorem exists_isDistributionProtocol_of_largeRepaintings {ε₀ : ℝ} (hε : 0
   have hL0 : 0 < L := by omega
   have hε4 : 4 * ε₀ < 1 := by have := hc.ε₀_lt; linarith
   refine exists_isDistributionProtocol_of_hasSourceBoundedChange hL hkL hk2 large hΩ tr
-    (by rw [hst0]; exact List.cons_ne_nil _ _)
+    (fun t _ => htrne t)
     (fun F => F.owner (⟨0, hL0⟩, ⟨0, hL0⟩)) (fun F hF => ?_) (fun F hF x => ?_)
     (fun t ht => htrs t ht) _ _ hfin
     (finalMain_owner P rank R₀ hε ht hB hkL hε4) (finalMain_holes P rank R₀ hε ht hB hε4)
