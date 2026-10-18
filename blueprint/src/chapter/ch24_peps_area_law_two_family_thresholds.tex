@@ -1,0 +1,454 @@
+\section{Explicit thresholds for the two-family decomposition}
+\label{sec:area_law_two_family_thresholds}
+
+The proof of Proposition~11.2 of \cite{OpenAI2026AreaLaw} chooses the
+stopping scale and the lower layer index above thresholds that the source
+describes only as sufficiently large. Each of them has a closed form. The
+source asserts only that the constant of the decomposition exists, so the
+results of this section are auxiliary to it.
+
+For real $C\ge0$, $\eta>0$ and $d>0$ write
+\begin{align}
+    P(C,\eta,d) & =\max\bigl\{1,(C/\eta)^{1/d}\bigr\},
+\end{align}
+so that $Cx^a\le\eta x^{a+d}$ for every real $a$ and every $x\ge P(C,\eta,d)$.
+For real $T$ write $\lceil T\rceil_+=\max\{0,\lceil T\rceil\}$ and
+$\kappa(T)$ for the least integer $k\ge0$ with $\lceil T\rceil_+\le2^k$.
+Thus $\kappa(T)=0$ for $T\le1$ and
+$\kappa(T)=\lceil\log_2\lceil T\rceil\rceil$ for $T>1$, and $T\le2^k$ for
+every $k\ge\kappa(T)$.
+
+% Source: 10-geometry.tex, primary scale limits, lines 722--729; belt and
+% replacement scales, lines 732--740; threshold order, lines 756--774.
+% Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+\begin{definition}[Explicit scale thresholds]
+    \label{def:area_law_two_family_scale_thresholds}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.dyadicIndexThreshold,
+        TNLean.PEPS.AreaLaw.Geometry.fineScaleIndexThreshold,
+        TNLean.PEPS.AreaLaw.Geometry.primaryScaleLimitThreshold,
+        TNLean.PEPS.AreaLaw.Geometry.primaryScannerScaleThreshold,
+        TNLean.PEPS.AreaLaw.Geometry.fineClearanceThreshold,
+        TNLean.PEPS.AreaLaw.Geometry.beltReplacementScaleThreshold}
+    \leanok
+    \uses{def:area_law_fine_belt_scales,thm:area_law_exponent_gaps}
+    Put $e=1+2\delta_0$. For real $U$, $C_P$, $C_B$, $c_1$, $\varepsilon$ and
+    an integer $n_*$, put $C=\max\{C_P,0\}+1$, $B=\max\{C_B,0\}+1$, and
+    define
+    \begin{align}
+        K_\zeta(U)           & =\bigl\lceil\kappa(U)/\zeta\bigr\rceil,
+        \\
+        K_P(C_P,\varepsilon) & =\kappa\Bigl(\max\bigl\{
+        P\bigl(C^{1-\ell_{\rm geo}},\varepsilon,1-e(1-\ell_{\rm geo})\bigr),
+        P\bigl(C^\beta,\varepsilon/2,\zeta-e\beta\bigr)\bigr\}\Bigr),
+        \\
+        K_n(C_P,n_*)         & =\kappa(n_*/C_P),
+        \\
+        U_1(c_1,C_B)         & =P\bigl(2(C_B+1)^\beta,c_1/2,\rho_0-\beta\bigr),
+        \\
+        U_2(C_B,\varepsilon) & =P\bigl(B^{1-\ell_{\rm geo}},\varepsilon,\ell_{\rm geo}\bigr).
+    \end{align}
+\end{definition}
+
+\begin{theorem}[The scale inequalities above the explicit thresholds]
+    \label{thm:area_law_two_family_scale_thresholds}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.le_two_pow_of_dyadicIndexThreshold_le,
+        TNLean.PEPS.AreaLaw.Geometry.le_two_pow_fineScaleIndex_of_fineScaleIndexThreshold_le,
+        TNLean.PEPS.AreaLaw.Geometry.primaryScaleLimits_of_primaryScaleLimitThreshold_le,
+        TNLean.PEPS.AreaLaw.Geometry.le_primaryScannerScale_of_primaryScannerScaleThreshold_le,
+        TNLean.PEPS.AreaLaw.Geometry.fine_clearance_of_fineClearanceThreshold_le,
+        TNLean.PEPS.AreaLaw.Geometry.beltReplacementScaleLimit_of_beltReplacementScaleThreshold_le}
+    \leanok
+    \uses{def:area_law_two_family_scale_thresholds}
+    Let $n_k=\lceil C_P(2^k)^{1+2\delta_0}\rceil_+$ be the primary scanner scale
+    of layer $k$ and $t_k=2^{\lfloor\zeta k\rfloor}$ its fine side.
+    \begin{enumerate}
+        \item If $k\ge K_\zeta(U)$, then $U\le t_k$.
+        \item If $\varepsilon>0$ and $k\ge K_P(C_P,\varepsilon)$, then
+              $\lfloor n_k^{1-\ell_{\rm geo}}\rfloor\le\varepsilon2^k$,
+              $n_k^\beta\le\varepsilon t_k$ and $n_k^\beta\le\varepsilon2^k$.
+        \item If $C_P>0$ and $k\ge K_n(C_P,n_*)$, then $n_k\ge n_*$.
+        \item If $c_1>0$, $C_B\ge0$ and $u\ge U_1(c_1,C_B)$, then
+              $2\lceil C_Bu\rceil^\beta<c_1u^{\rho_0}$.
+        \item If $\varepsilon>0$ and $u\ge U_2(C_B,\varepsilon)$, then
+              $\lfloor\lceil C_Bu\rceil_+^{1-\ell_{\rm geo}}\rfloor\le\varepsilon u$.
+    \end{enumerate}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:area_law_two_family_scale_thresholds,thm:area_law_exponent_gaps}
+    For the first item, $k\ge\kappa(U)/\zeta$ gives
+    $\lfloor\zeta k\rfloor\ge\kappa(U)$, hence $t_k\ge2^{\kappa(U)}\ge U$.
+    For the second, $n_k\le C(2^k)^e$, and the exponent gaps give
+    $e(1-\ell_{\rm geo})<1$ and $e\beta<\zeta$; at $x=2^k\ge P$ the two power ratios
+    give $C^{1-\ell_{\rm geo}}x^{e(1-\ell_{\rm geo})}\le\varepsilon x$ and
+    $C^\beta x^{e\beta}\le(\varepsilon/2)x^\zeta$, and $x^\zeta\le2t_k$.
+    For the third, $n_k\ge C_P2^k\ge n_*$. For the fourth, $u\ge1$ gives
+    $\lceil C_Bu\rceil\le(C_B+1)u$, so
+    $2\lceil C_Bu\rceil^\beta\le2(C_B+1)^\beta u^\beta
+        \le(c_1/2)u^{\rho_0}<c_1u^{\rho_0}$. For the fifth,
+    $\lceil C_Bu\rceil_+\le Bu$ and $B^{1-\ell_{\rm geo}}u^{1-\ell_{\rm geo}}\le\varepsilon u$.
+\end{proof}
+
+% Source: 10-geometry.tex, threshold order, lines 756--774; exceptional
+% sites, lines 694--707; error sum, lines 796--802.
+% Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+\begin{definition}[The named constant of the two-family decomposition]
+    \label{def:area_law_two_family_named_constant}
+    \lean{TNLean.PEPS.AreaLaw.IsTwoFamilyDecompositionConstant,
+        TNLean.PEPS.AreaLaw.twoFamilyLengthBound,
+        TNLean.PEPS.AreaLaw.twoFamilyLayerWidth,
+        TNLean.PEPS.AreaLaw.twoFamilyLayerThreshold,
+        TNLean.PEPS.AreaLaw.twoFamilyConstant}
+    \leanok
+    \uses{def:area_law_two_family_decomposition,
+        def:area_law_two_family_scale_thresholds}
+    Call $C$ a constant of the two-family decomposition at $n_*$ if the
+    property of Definition~\ref{def:area_law_two_family_decomposition}
+    holds for $n_*$ with this $C$. For $C_P,C_B,c_1$ and $n_*$ put
+    \begin{align}
+        U(c_1,C_B,n_*)     & =\max\bigl\{U_1(c_1,C_B),U_2(C_B,1),n_*/C_B,1\bigr\},
+        \\
+        K(C_P,C_B,c_1,n_*) & =\max\bigl\{K_\zeta(U(c_1,C_B,n_*)),
+        K_P(C_P,1/8),K_n(C_P,n_*)\bigr\},
+    \end{align}
+    and let the layer width be $\lceil4D_0\rceil_++2$. For a layer width $C_0$,
+    a lower layer index $k_0$, a stopping scale $S_*$ and coefficients
+    $M_t,M_p,L_q$ put
+    \begin{align}
+        C_{\rm tf} & =\max\Bigl\{
+        2\bigl(2(C_0+1)2^{k_0}+1\bigr)^2+(2S_*+1)^2M_t(2C_0+1)^2,\,
+        (M_p+L_q)(2C_0+1)^2\Bigr\}.
+    \end{align}
+\end{definition}
+
+\begin{theorem}[Two families with a named constant]
+    \label{thm:area_law_two_family_named_constant}
+    \lean{TNLean.PEPS.AreaLaw.isTwoFamilyDecompositionConstant_twoFamilyConstant,
+        TNLean.PEPS.AreaLaw.twoFamilyDecomposition_iff}
+    \leanok
+    \uses{def:area_law_two_family_named_constant,
+        def:area_law_two_family_decomposition}
+    Let $C_P\ge1$, $C_B>0$, $c_1>0$, $n_*\ge0$, an integer layer width
+    $C_0\ge2$, a stopping scale $S_*\ge2$ with $S_*\ge U(c_1,C_B,n_*)$, and a
+    lower layer index $k_0\ge50{,}000{,}000$ with $k_0\ge K(C_P,C_B,c_1,n_*)$
+    be given. Run the repair construction at the prescribed origin with these
+    data. Suppose that for every finite domain $\Lambda$ and every cut
+    $A\subseteq\Lambda$ the following hold: the remembered birth regions have
+    the templates of Theorem~\ref{thm:area_law_repair_birth_templates} with
+    coefficients $C_P,C_B$; the metric hypotheses hold with isolation constant
+    $1/4$; both birth-separation properties hold with constant $c_1$; the
+    marks of all earlier generations number at most
+    $M_t(2C_0+1)^2|\partial_\Lambda A|$; the primary error sums are at most
+    $M_p(2C_0+1)^2|\partial_\Lambda A|$; and the error sums of the retained
+    identifiers of positive birth rank are at most
+    $L_q(2C_0+1)^2|\partial_\Lambda A|$. Then $C_{\rm tf}$ is a constant of the
+    two-family decomposition at $n_*$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:area_law_two_family_scale_thresholds,
+        thm:area_law_repair_positive_rank_length_lower_bound,
+        lem:area_law_two_family_primaries,
+        lem:area_law_two_family_exceptional_sites}
+    This is the assembly in the proof of
+    Theorem~\ref{thm:area_law_two_family_decomposition}, with every threshold
+    that the assembly itself imposes replaced by its closed form. The lower
+    bound $u\ge U(c_1,C_B,n_*)$ for the characteristic lengths of positive birth
+    rank holds since $k_0\ge K_\zeta(U)$ and $S_*\ge U$. The primary scale
+    limits with factor $1/8$ and the bound $n\ge n_*$ for primaries hold since
+    $k_0\ge K_P(C_P,1/8)$ and $k_0\ge K_n(C_P,n_*)$. The fine clearance and
+    the dilation count for the identifiers of positive birth rank hold since
+    their lengths are at least $U_1(c_1,C_B)$ and $U_2(C_B,1)$. The residual
+    set and the error sum are bounded by the two terms of $C_{\rm tf}$.
+\end{proof}
+
+In the proof of Theorem~\ref{thm:area_law_two_family_decomposition} the
+stopping scale is the largest of $U(c_1,C_B,n_*)$, $2$ and the thresholds of
+the template, isolation and separation estimates, the layer width is
+$\lceil4D_0\rceil_++2$, and the lower layer index is the largest of
+$50{,}000{,}000$, $K(C_P,C_B,c_1,n_*)$ and the layer thresholds of the
+template, isolation and separation estimates. Its constant is then
+$C_{\rm tf}$.
+
+The remaining constants of the decomposition are also explicit, except for
+the separation constant of the birth-separation lemma, which the following
+statements take as a parameter.
+
+% Source: 10-geometry.tex, geometry:descendant-count and geometry:total-repairs,
+% lines 668--692; primary and nonprimary error sums, lines 709--715 and
+% 791--800. Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+\begin{definition}[Explicit counting coefficients]
+    \label{def:area_law_two_family_counting_coefficients}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.polynomialDyadicBudget,
+        TNLean.PEPS.AreaLaw.Geometry.iterateDepthConstant,
+        TNLean.PEPS.AreaLaw.Geometry.iterateGenerationCountConstant,
+        TNLean.PEPS.AreaLaw.Geometry.repairDescendantCountConstant,
+        TNLean.PEPS.AreaLaw.Geometry.repairDescendantLayerConstant,
+        TNLean.PEPS.AreaLaw.Geometry.repairMarkCountConstant,
+        TNLean.PEPS.AreaLaw.Geometry.initialBeltCountConstant,
+        TNLean.PEPS.AreaLaw.Geometry.repairRetainedCountConstant,
+        TNLean.PEPS.AreaLaw.Geometry.primaryErrorSumConstant}
+    \leanok
+    \uses{thm:area_law_polynomial_summability}
+    For real $p$ put
+    \begin{align}
+        B(p) & =1+\sum_{k=0}^{\infty}(k+1)^p2^{-\delta_0k/2}.
+    \end{align}
+    For $0<\rho<1$, a stopping scale $S_*$ and $b\ge0$ put
+    \begin{align}
+        D_\rho(S_*)   & =\frac{|\log\log S_*|+1}{-\log\rho}+1,
+        \\
+        G_\rho(S_*,b) & =\max\bigl\{(b+2)^{D_\rho(S_*)+1},\,
+        D_\rho(S_*)\log(b+2)\bigr\}.
+    \end{align}
+    With $G=G_{\rho_0}(S_*,9)$, $E=\max\{G2^G,G\}$ and
+    $L=\max\{E(\log3+1)^E,E\}$ put
+    \begin{align}
+        M_t(S_*)     & =576\,L\,B(L),
+                     &
+        B_{\rm belt} & =512\,B(0),
+        \\
+        L_q(S_*)     & =B_{\rm belt}+8M_t(S_*),
+                     &
+        M_p(C_P)     & =32\,C_P^{-100}B(0).
+    \end{align}
+\end{definition}
+
+\begin{theorem}[The counting estimates with explicit coefficients]
+    \label{thm:area_law_two_family_counting_coefficients}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.sum_le_polynomialDyadicBudget,
+        TNLean.PEPS.AreaLaw.Geometry.iterate_depth_le,
+        TNLean.PEPS.AreaLaw.Geometry.sum_pow_le_iterateGenerationCountConstant,
+        TNLean.PEPS.AreaLaw.Geometry.sum_pow_le_repairDescendantCountConstant,
+        TNLean.PEPS.AreaLaw.Geometry.sum_pow_le_repairDescendantLayerConstant,
+        TNLean.PEPS.AreaLaw.Geometry.repairMarkAncestor_prefix_layer_le,
+        TNLean.PEPS.AreaLaw.Geometry.initialRepairStage_weighted_sum_le,
+        TNLean.PEPS.AreaLaw.Geometry.repairStage_markIndex_prefix_le,
+        TNLean.PEPS.AreaLaw.Geometry.initial_belt_card_le,
+        TNLean.PEPS.AreaLaw.Geometry.repairStage_positive_rank_prefix_le,
+        TNLean.PEPS.AreaLaw.Geometry.repairStage_retained_positive_rank_le,
+        TNLean.PEPS.AreaLaw.Geometry.repairStage_retained_positive_rank_error_sum_le,
+        TNLean.PEPS.AreaLaw.Geometry.primaryPitchIndices_error_sum_le,
+        TNLean.PEPS.AreaLaw.Geometry.repairStage_primary_error_sum_le}
+    \leanok
+    \uses{def:area_law_two_family_counting_coefficients}
+    The constants of Theorems~\ref{thm:area_law_polynomial_finite_sums},
+    \ref{thm:area_law_power_recursion_depth},
+    \ref{thm:area_law_repair_descendant_count},
+    \ref{thm:area_law_repair_root_prefix_count},
+    \ref{thm:area_law_initial_repair_weighted_sum},
+    \ref{thm:area_law_repair_total_mark_prefix_count},
+    \ref{thm:area_law_initial_belt_count},
+    \ref{thm:area_law_repair_retained_prefix_count},
+    \ref{thm:area_law_repair_retained_positive_rank_count},
+    \ref{thm:area_law_repair_retained_nonprimary_error_sum} and
+    \ref{thm:area_law_initial_primary_error_sum} may be taken as follows:
+    $B(p)$ for the finite sums at exponent $p$; $D_\rho(S_*)$ for the depth
+    and $G_\rho(S_*,b)$ for the generation count of a power-contracting
+    recursion; $E$ and, at initial scales at most $2^k$, $L$ for the
+    descendant count; $576\,c\,B(P)$ for the weighted sums with weights at
+    most $c(k+1)^P$; $M_t(S_*)$ for the marks of all earlier generations;
+    $B_{\rm belt}$ for the initial belt tiles; $L_q(S_*)$ for the retained
+    identifiers of positive birth rank and for their error sums; and
+    $M_p(C_P)$ for the primary error sums. Each bound is multiplied by
+    $(2C_0+1)^2|\partial_\Lambda A|$ where the original statement carries
+    this factor.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:area_law_polynomial_finite_sums,
+        thm:area_law_power_recursion_depth,
+        thm:area_law_repair_descendant_count,
+        thm:area_law_repair_root_prefix_count,
+        thm:area_law_initial_repair_weighted_sum,
+        thm:area_law_repair_total_mark_prefix_count,
+        thm:area_law_initial_belt_count,
+        thm:area_law_repair_retained_prefix_count,
+        thm:area_law_repair_retained_positive_rank_count,
+        thm:area_law_repair_retained_nonprimary_error_sum,
+        thm:area_law_initial_primary_error_sum}
+    These are the constants that the proofs of the cited theorems
+    construct, in the same order: the finite sums are bounded by the full
+    series; the depth bound solves $\log S_*\le\rho^n\log S$ for $n$; the
+    generation count is at most $(b+2)^{m+1}$; the descendant counts follow
+    from $\log(S+e)\le2\log(S+2)$ and $\log(S+2)\le(\log3+1)(k+1)$; and the
+    mark, belt, retained and error-sum coefficients combine these with the
+    sparse-cell coefficients $576$, $512$ and $32$.
+\end{proof}
+
+% Source: 10-geometry.tex, template coefficients, lines 716--720 and
+% 731--739; trim margins, lines 380--394; cut clearance, lines 742--750;
+% threshold order, lines 756--774.
+% Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+\begin{definition}[Template coefficients and repair thresholds]
+    \label{def:area_law_two_family_repair_thresholds}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.primaryScannerConstant,
+        TNLean.PEPS.AreaLaw.Geometry.beltScannerConstant,
+        TNLean.PEPS.AreaLaw.Geometry.repairMarginThreshold,
+        TNLean.PEPS.AreaLaw.Geometry.descendantCutClearanceThreshold,
+        TNLean.PEPS.AreaLaw.Geometry.birthTemplateLayerThreshold}
+    \leanok
+    \uses{def:area_law_two_family_scale_thresholds}
+    For a template constant $C_{\rm tpl}$, an isolation constant $a_0>0$,
+    $D_0$, $C_P$, $C_B$ and a stopping scale $S_*$ put
+    \begin{align}
+        C_P(C_{\rm tpl})     & =\max\{18C_{\rm tpl},1\},
+        \qquad
+        C_B(C_{\rm tpl})=32C_{\rm tpl},
+        \\
+        T(a_0)               & =P\bigl(1,a_0/1000,1-\rho_0\bigr),
+        \\
+        K_c(D_0,C_B)         & =\kappa\Bigl(\max\bigl\{P(2,1/2,1-\zeta\rho_0),\,
+        P(8\max\{D_0,0\},1/2,1-\zeta),
+        \\
+                             & \qquad\qquad
+        P\bigl(2(\max\{C_B,0\}+1)^\beta,1/2,1-\zeta\beta\bigr)\bigr\}\Bigr),
+        \\
+        K_T(D_0,C_P,C_B,S_*) & =\max\bigl\{K_\zeta(S_*),K_c(D_0,C_B),
+        K_P(C_P,1/4)\bigr\}.
+    \end{align}
+\end{definition}
+
+\begin{theorem}[Templates, repair induction and cut clearance above the explicit thresholds]
+    \label{thm:area_law_two_family_repair_thresholds}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.primaryScannerConstant_spec,
+        TNLean.PEPS.AreaLaw.Geometry.repairHalfSide_le_of_repairMarginThreshold_le,
+        TNLean.PEPS.AreaLaw.Geometry.repairMetricHypotheses_of_le,
+        TNLean.PEPS.AreaLaw.Geometry.isUniformRepairInduction_of_repairMetricHypotheses,
+        TNLean.PEPS.AreaLaw.Geometry.isUniformRepairInduction_of_le,
+        TNLean.PEPS.AreaLaw.Geometry.descendant_cutClearance_scales_of_le,
+        TNLean.PEPS.AreaLaw.Geometry.initialBelt_birthTemplate_cutClearance_of_le,
+        TNLean.PEPS.AreaLaw.Geometry.descendant_birthTemplate_cutClearance_of_le,
+        TNLean.PEPS.AreaLaw.Geometry.repairStage_birth_templates_of_le}
+    \leanok
+    \uses{def:area_law_two_family_repair_thresholds}
+    \begin{enumerate}
+        \item The coefficient $C_P(C_{\rm tpl})$ satisfies the conclusion of
+              Theorem~\ref{thm:area_law_primary_scanner_constant}, and for
+              $C_{\rm tpl}\ge1$ the coefficient $C_B(C_{\rm tpl})$ satisfies
+              that of Theorem~\ref{thm:area_law_belt_replacement_templates}.
+        \item If $a_0>0$ and $S\ge T(a_0)$, then $d(S)\le(a_0/1000)S$.
+        \item If $0<a_0\le1/4$, $S_*\ge T(a_0)$ and $k_0\ge K_\zeta(S_*)$,
+              the hypotheses of
+              Lemma~\ref{lem:area_law_repair_metric_invariants} hold for every
+              width $C_0$.
+        \item If $S_*\ge T(1/128)$ and $k_0\ge K_\zeta(S_*)$, the conclusion of
+              Theorem~\ref{thm:area_law_uniform_repair_induction} holds with
+              isolation constant $1/128$.
+        \item If $k\ge K_c(D_0,C_B)$, the late-layer inequalities of
+              Theorem~\ref{thm:area_law_descendant_clearance_scales} hold at
+              layer $k$; hence the conclusion of
+              Theorem~\ref{thm:area_law_belt_birth_template_clearance} holds
+              for $k_0\ge K_c(D_0,C_B)$, and that of
+              Theorem~\ref{thm:area_law_descendant_birth_template_clearance}
+              holds for $S_*\ge T(1/128)$ and
+              $k_0\ge\max\{K_\zeta(S_*),K_c(D_0,C_B)\}$.
+        \item If $C_{\rm tpl}\ge1$, $S_*\ge T(1/128)$, $C_0>4D_0$ and
+              $k_0\ge K_T(D_0,C_P(C_{\rm tpl}),C_B(C_{\rm tpl}),S_*)$, the
+              conclusion of Theorem~\ref{thm:area_law_repair_birth_templates}
+              holds with the coefficients $C_P(C_{\rm tpl})$ and
+              $C_B(C_{\rm tpl})$.
+    \end{enumerate}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:area_law_primary_scanner_constant,
+        thm:area_law_belt_replacement_templates,
+        lem:area_law_repair_metric_choice,
+        thm:area_law_uniform_repair_induction,
+        thm:area_law_descendant_clearance_scales,
+        thm:area_law_belt_birth_template_clearance,
+        thm:area_law_descendant_birth_template_clearance,
+        thm:area_law_repair_birth_templates,
+        thm:area_law_two_family_scale_thresholds}
+    The first item restates the choices in the proofs of the two cited
+    theorems. For the second, $d(S)\le S^{\rho_0}\le(a_0/1000)S$ once
+    $S^{1-\rho_0}\ge1000/a_0$. For the third, initial scales are fine sides
+    $t_k$ with $k\ge k_0$, and $t_k\ge S_*$ for $k\ge K_\zeta(S_*)$. The
+    fourth combines the third with the isolated stars of the initial stage
+    for the constant $1/128$, as in the proof of
+    Theorem~\ref{thm:area_law_uniform_repair_induction}. For the fifth, at
+    $R=2^k\ge P(M,1/2,1-a)$ one has $MR^a\le R/2<R$, which gives the three
+    inequalities with $t_k\le R^\zeta$. The last item collects the previous
+    ones with the primary scale limits at factor $1/4$.
+\end{proof}
+
+% Source: 10-geometry.tex, geometry:birth-separation, lines 573--659, with
+% the threshold order of lines 756--774 and the assembly, lines 776--802.
+% Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+\begin{definition}[Birth-separation constants and the explicit constant]
+    \label{def:area_law_two_family_explicit_constant}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.IsBirthSeparationConstant,
+        TNLean.PEPS.AreaLaw.twoFamilyStoppingScale,
+        TNLean.PEPS.AreaLaw.twoFamilyLowerLayerIndex,
+        TNLean.PEPS.AreaLaw.twoFamilyDecompositionConstant}
+    \leanok
+    \uses{def:area_law_two_family_named_constant,
+        def:area_law_two_family_counting_coefficients,
+        def:area_law_two_family_repair_thresholds}
+    Call $c_1>0$ a birth-separation constant if the birth of every initial
+    belt tile of side $u$ is at distance at least $c_1u^{\rho_0}$ from the
+    final actual region of every primary and every other initial belt tile of
+    the same label, for all data, and if the conclusion of
+    Theorem~\ref{thm:area_law_replacement_birth_separation_local} holds with
+    the constant $c_1$. For such $c_1$, real $D_0$, $C_{\rm tpl}$ and an
+    integer $n_*$, put $C_{\rm tpl}'=\max\{C_{\rm tpl},1\}$,
+    $C_P=C_P(C_{\rm tpl}')$, $C_B=C_B(C_{\rm tpl}')$, $C_0=\lceil4D_0\rceil_++2$,
+    \begin{align}
+        S_* & =\max\bigl\{T(1/128),T(1/4),2,U(c_1,C_B,n_*)\bigr\},
+        \\
+        k_0 & =\max\bigl\{50{,}000{,}000,\,K_T(D_0,C_P,C_B,S_*),\,
+        K(C_P,C_B,c_1,n_*)\bigr\},
+    \end{align}
+    and let $C_{\rm expl}(D_0,C_{\rm tpl},n_*,c_1)$ be the constant
+    $C_{\rm tf}$ of Definition~\ref{def:area_law_two_family_named_constant}
+    for $C_0$, $k_0$, $S_*$ and the coefficients $M_t(S_*)$, $M_p(C_P)$ and
+    $L_q(S_*)$.
+\end{definition}
+
+\begin{theorem}[Two families with an explicit constant]
+    \label{thm:area_law_two_family_explicit_constant}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.exists_isBirthSeparationConstant,
+        TNLean.PEPS.AreaLaw.Geometry.IsBirthSeparationConstant.birthSeparated,
+        TNLean.PEPS.AreaLaw.isTwoFamilyDecompositionConstant_of_one_le,
+        TNLean.PEPS.AreaLaw.IsTwoFamilyDecompositionConstant.ofLe,
+        TNLean.PEPS.AreaLaw.isTwoFamilyDecompositionConstant_twoFamilyDecompositionConstant}
+    \leanok
+    \uses{def:area_law_two_family_explicit_constant,
+        def:area_law_two_family_decomposition}
+    A birth-separation constant exists. If $c_1$ is one, then for all real
+    $D_0$ and $C_{\rm tpl}$ and every integer $n_*\ge0$ the number
+    $C_{\rm expl}(D_0,C_{\rm tpl},n_*,c_1)$ is a constant of the two-family
+    decomposition at $n_*$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:area_law_two_family_named_constant,
+        thm:area_law_two_family_counting_coefficients,
+        thm:area_law_two_family_repair_thresholds,
+        thm:area_law_initial_belt_birth_separation,
+        thm:area_law_replacement_birth_separation_local,
+        thm:area_law_replacement_birth_separation_conditional}
+    The smaller of the constants of
+    Theorems~\ref{thm:area_law_initial_belt_birth_separation}
+    and~\ref{thm:area_law_replacement_birth_separation_local} is a
+    birth-separation constant. For $S_*\ge T(1/128)$ and
+    $k_0\ge K_\zeta(S_*)$ the repair induction holds with isolation constant
+    $1/128$, so the separation of the replacements follows from the local
+    separation as in
+    Theorem~\ref{thm:area_law_replacement_birth_separation_conditional}.
+    With $C_{\rm tpl}\ge1$, every hypothesis of
+    Theorem~\ref{thm:area_law_two_family_named_constant} at the data of
+    Definition~\ref{def:area_law_two_family_explicit_constant} is supplied by
+    Theorems~\ref{thm:area_law_two_family_counting_coefficients}
+    and~\ref{thm:area_law_two_family_repair_thresholds}, with the metric
+    hypotheses at isolation constant $1/4$. For general $C_{\rm tpl}$, a
+    template for the constant $C_{\rm tpl}'$ is a template for $C_{\rm tpl}$,
+    since the template constant enters only the scale inequality
+    $C_{\rm tpl}N_0(s_0+1)\le n$.
+\end{proof}
