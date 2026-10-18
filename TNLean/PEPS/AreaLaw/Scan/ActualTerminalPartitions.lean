@@ -21,7 +21,7 @@ noncomputable section
 
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan.ActualTerminals
 
-variable {V I : Type} [Fintype V] [DecidableEq V] [Fintype I] [LinearOrder I]
+variable {V I : Type*} [Fintype V] [DecidableEq V] [Fintype I] [LinearOrder I]
 
 /-- Completed times range through the horizon, whereas pre-charge times are
 strictly smaller. Source: `08-scanner.tex`, lines 83–154, adc7f124. -/

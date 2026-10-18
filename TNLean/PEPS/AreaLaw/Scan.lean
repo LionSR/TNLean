@@ -31,6 +31,7 @@ import TNLean.PEPS.AreaLaw.Scan.ActualRoundTransport
 import TNLean.PEPS.AreaLaw.Scan.ActualScanMeasures
 import TNLean.PEPS.AreaLaw.Scan.ActualSharpPrevector
 import TNLean.PEPS.AreaLaw.Scan.ActualSharpUpper
+import TNLean.PEPS.AreaLaw.Scan.ActualTerminalInformation
 import TNLean.PEPS.AreaLaw.Scan.ActualTerminalPartitions
 import TNLean.PEPS.AreaLaw.Scan.ActualTransportEstimates
 import TNLean.PEPS.AreaLaw.Scan.AmbientDepth

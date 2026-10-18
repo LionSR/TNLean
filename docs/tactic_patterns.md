@@ -7502,3 +7502,20 @@ spectral split → block extraction → MPV calculation → strict bounds
   changes the mathematical input to the common signed moment interval and
   retains the actual weighted postselected entropy contribution. No custom
   tactic, reduced hypothesis, or enlarged elaboration budget is introduced.
+
+
+### Finite physical scan status partitions — candidate (2026-10-14)
+
+- **Pattern:** Reduce region membership to the three values of a physical
+  status, then combine the near-region identities and target-depth inequality
+  to prove disjointness, a cover, and the positive-depth middle identity.
+- **Seen:** The private `target_positiveNear_regions` argument in
+  `TNLean/PEPS/AreaLaw/Scan/ReceivingRegions.lean` and the leaf-partition argument
+  in `TNLean/PEPS/AreaLaw/Scan/ActualTerminalInformation.lean`.
+- **Abstraction:** A general finite-partition lemma could collect these set
+  identities if the same argument is needed again. Existing Finset membership,
+  disjointness and complement lemmas supply the individual steps.
+- **Notes:** Two related source arguments with different premises. The new
+  information theorem retains an arbitrary physical vector and every actual
+  completed/pre-charge history. Its explicit simplification and named axiom
+  fixture await verification; no new tactic or proof limit is introduced.

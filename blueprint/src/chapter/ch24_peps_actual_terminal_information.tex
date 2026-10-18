@@ -1,0 +1,52 @@
+% Auxiliary theorem; declaration and proof verification are pending.
+\begin{theorem}[Mutual information from actual terminal entropy averages]
+    \label{thm:area_law_actual_terminal_information}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.two_mutualInformation_le_actualTerminal_entropy_average}
+    \uses{def:al_scan_actual_histories,def:area_law_ground_entropy}
+    Let $\Lambda,T\subset\mathbb Z^2$ be finite, with $T\ne\varnothing$,
+    and consider the collar scan on $A\subseteq\Lambda$ with ambient depth
+    $d(x)=\operatorname{dist}_\infty(x,T)$, $K\ge1$ bands, and width parameter $m$.
+    Fix $H,L\in\mathbb N$ with $8Km\le L$, and put
+    $X=A\cap T$, $S_0=\{x\in A:d(x)\le L\}$, and $W=\Lambda\setminus S_0$.
+    Let $\mathcal J_H$ consist of the completed histories through time $H$
+    and the histories immediately before a charge at times below $H$.
+    For $j\in\mathcal J_H$ and $0\le g<K$, let
+    $N_{jg},Y_{jg},V_{jg}$ denote its near, middle, and far regions, and put
+    $U_{jg}=\{x\in N_{jg}:d(x)>0\}$ and
+    $P_{jg}=\{x\in N_{jg}\cup Y_{jg}:d(x)>0\}$.
+    For any physical vector $\Omega_t$, let
+    $S_{\Omega_t}(R)=-\operatorname{Tr}(\rho_R\log\rho_R)$, where
+    $\rho_R=\operatorname{Tr}_{R^c}|\Omega_t\rangle\langle\Omega_t|$
+    and $0\log0=0$. Define
+    \begin{align*}
+        g_{\rm pre}(j,g)
+        &=S_{\Omega_t}(N_{jg})+S_{\Omega_t}((N_{jg}\cup Y_{jg})^c)
+            -S_{\Omega_t}(Y_{jg}),\\
+        g_{\rm post}(j,g)
+        &=S_{\Omega_t}(U_{jg})+S_{\Omega_t}(P_{jg})-S_{\Omega_t}(Y_{jg}).
+    \end{align*}
+    Let $w_j$ be the terminal label weights of any finite weighted binary tree
+    with labels in $\mathcal J_H$ and internal parameters in $[0,1]$. Then
+    \begin{align*}
+        2I_{\Omega_t}(X:W)
+        \le 2S_{\Omega_t}(X)
+          +\frac1K\left(\sum_{g=0}^{K-1}\sum_{j\in\mathcal J_H}w_jg_{\rm pre}(j,g)
+            -\sum_{g=0}^{K-1}\sum_{j\in\mathcal J_H}w_jg_{\rm post}(j,g)\right).
+    \end{align*}
+    This is the deterministic entropy step in
+    \cite[proof of Proposition~9.6, Section~9, lines~900--911]{OpenAI2026AreaLaw}.
+\end{theorem}
+\begin{proof}
+    \uses{thm:al_scan_receiving_regions,thm:al_scan_nonfar_compact,
+        thm:area_law_collar_leaf_identity}
+    Each actual terminal partition has $N_{jg}=X\sqcup U_{jg}$,
+    $P_{jg}=U_{jg}\sqcup Y_{jg}$, and $W\subseteq V_{jg}$.
+    Purity therefore gives
+    \begin{align*}
+        2S_{\Omega_t}(X)+g_{\rm pre}(j,g)-g_{\rm post}(j,g)
+        &= I_{\Omega_t}(X:V_{jg})+I_{\Omega_t}(X:Y_{jg}\cup V_{jg})\\
+        &\ge 2I_{\Omega_t}(X:W).
+    \end{align*}
+    Multiply by $w_j\ge0$, sum over terminal labels and bands, and use
+    $\sum_jw_j=1$ and $K>0$.
+\end{proof}
