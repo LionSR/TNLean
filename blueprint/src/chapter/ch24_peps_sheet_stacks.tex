@@ -621,16 +621,17 @@ no holes, this is the normalization of $\Omega$.
         \item Each change of the schedule is a bounded change from the reference
               vector of its stage to that of the next stage, with participants
               used by the event of the change, at most $r$ pair effects and at most
-              $r$ pair sources in each monomial, at most $K\le CL^{k'}$ monomials
-              and coefficient sum, and error at most $CL^{-20}$.
+              $r$ pair sources in each monomial, at most $K\le C_KL^{k'}$ monomials
+              and coefficient sum, and error at most $C_EL^{-20}$.
         \item At the end of the schedule the main frame is read by the unit-square
               parties and has trivial holes, every hole of the other sheets
               satisfies the frame constraint at accuracy $L^{-60}$, and the other
-              sheets carry at most $CL^3$ holes.
+              sheets carry at most $C_EL^3$ holes.
     \end{enumerate}
-    If $C\ge5042$, the private initialization, the changes of the schedule and the
+    If $C_N\ge5042$, the private initialization, the changes of the schedule and the
     final regrouping form a protocol with the assembly bounds of
-    Definition~\ref{def:peps_dyadic_protocol} for the constants $C$,
+    Definition~\ref{def:peps_dyadic_protocol} for the count constant $C_N$, the
+    expansion constant $C_K$, the error constant $C_E$, and the constants
     $b=64\cdot189$, $k'$ and $r$, including the bound $r$ on the pair sources
     of each monomial (\texttt{06-geometry.tex}, lines 12--53 and 572--681). This is not
     Proposition~\ref{prop:peps_dyadic_protocol}: the frames along the schedule are
@@ -1111,9 +1112,10 @@ no holes, this is the normalization of $\Omega$.
     monomials and coefficient sum, error at most $(2b+1)L^{-20}$, and
     participants used by the repainting. Suppose also that the frozen frames
     satisfy the frame constraint at accuracy $L^{-60}$ and together carry at
-    most $C_1L^3$ holes. If $5042\le C_1$, $K\le C_1L^{k'}$ and $2b+1\le C_1$,
+    most $C_EL^3$ holes. If $5042\le C_N$, $K\le C_KL^{k'}$ and $2b+1\le C_E$,
     there is a protocol with the assembly bounds of
-    Definition~\ref{def:peps_dyadic_protocol} for the constants $C_1$,
+    Definition~\ref{def:peps_dyadic_protocol} for the count constant $C_N$, the
+    expansion constant $C_K$, the error constant $C_E$, and the constants
     $64\cdot189$, $k'$ and $2b$, including the bound $2b$ on the pair sources
     of each monomial. This is not
     Proposition~\ref{prop:peps_dyadic_protocol}: the large-scale repaintings are
