@@ -15,6 +15,7 @@ Each public theorem must exist and have precisely the three standard logical axi
 run_cmd do
   let names := #[
     `TNLean.PEPS.Approximation.adaptivePatchConstraint,
+    `TNLean.PEPS.Approximation.largeSizeDyadicProtocolConsequences,
     `TNLean.PEPS.Approximation.polynomialPEPSApproximation]
   let expected := #[``propext, ``Classical.choice, ``Quot.sound]
   for decl in names do

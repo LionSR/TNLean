@@ -1,0 +1,231 @@
+{
+  "slug": "one-dimensional-area-law-mps",
+  "pageTitle": "One-Dimensional Area Law · TNLean",
+  "heading": "Area law and matrix product state approximation for gapped one-dimensional ground states",
+  "lede": "For a chain of quantum spins whose Hamiltonian has a spectral gap above a unique ground state, the entanglement entropy of every region is at most a constant times the number of its boundary edges, and the ground state is close to a matrix product state whose bond dimension grows only polynomially with the length of the chain. Both theorems are proved directly on the chain by a short one-dimensional argument, written up in a note in the TNLean repository. This page tracks their Lean 4 formalization.",
+  "description": "Progress of the Lean 4 formalization of the one-dimensional area law and matrix product state approximation for gapped chains.",
+  "tabs": [
+    {
+      "slug": "openai-area-law-peps-proof",
+      "label": "Two-dimensional area law and PEPS"
+    },
+    {
+      "slug": "one-dimensional-area-law-mps",
+      "label": "One-dimensional area law and MPS"
+    }
+  ],
+  "label": "openai-math",
+  "since": "2026-10-16",
+  "scope": "tracker",
+  "repos": [
+    {
+      "name": "TNLean",
+      "slug": "LionSR/TNLean",
+      "checkout": ".",
+      "primary": true,
+      "homepage": "https://sirui-lu.com/TNLean/",
+      "description": "Tensor-network theory in Lean 4: the fundamental theorem of matrix product states, canonical forms, parent Hamiltonians, matrix-product density operators, projected entangled pair states and local circuits."
+    },
+    {
+      "name": "QICLean",
+      "slug": "LionSR/QICLean",
+      "checkout": "../QICLean",
+      "checkoutEnv": "QICLEAN_DIR",
+      "prefix": "Q",
+      "homepage": "https://sirui-lu.com/QICLean/",
+      "description": "Quantum information and channels in Lean 4, following Wolf's Quantum Channels & Operations: channel representations, Kadison–Schwarz theory, quantum Perron–Frobenius and spectral theory, GKSL semigroups and entropy."
+    }
+  ],
+  "tracker": 9547,
+  "streams": [
+    9547
+  ],
+  "streamNames": {
+    "9547": "One-dimensional chain"
+  },
+  "includePRs": {
+    "TNLean": [
+      9533
+    ]
+  },
+  "papers": {
+    "chain": {
+      "name": "One-dimensional note",
+      "stream": 9547
+    }
+  },
+  "sources": "https://github.com/LionSR/TNLean/tree/main/docs/notes/one_dimensional_note",
+  "citationPattern": "tnlean_one_dimensional|one_dimensional_note|TNLean2026OneDimensional",
+  "leanDirs": [
+    "TNLean/MPS/AreaLaw"
+  ],
+  "routes": [
+    {
+      "id": "area",
+      "paper": "chain",
+      "eyebrow": "Part I · Theorem A",
+      "heading": "How the one-dimensional area law is proved",
+      "intro": "The proof works on the chain from the start and is not deduced from the two-dimensional theorems of the other tab. It bounds the entropy of one interval of the chain by a constant independent of its length, in three steps, and then passes from intervals to arbitrary regions. The finite-dimensional estimates behind the first two steps hold for any finite set of sites and are formalized once, in the companion library QICLean, which the two-dimensional proof also uses. What is special to one dimension is the counting: every cut of a chain is crossed by a bounded number of interaction terms, so a buffer of constant width suffices.",
+      "stages": [
+        {
+          "title": "The marginal tail bound",
+          "issues": [
+            9533
+          ],
+          "results": [
+            "lem:tail"
+          ],
+          "figure": "tail",
+          "caption": "Schematic distribution of the surprisal −log <i>p</i> of the reduced state of an interval <i>X</i>. Its mean is the entropy <i>S</i>(<i>X</i>); the tail bound makes the shaded weight beyond distance <i>w</i> exponentially small in <i>w</i>.",
+          "physics": "The chain has <i>L</i> sites, each carrying a quantum system of dimension <i>q</i>. The Hamiltonian is a sum of terms of norm at most <i>J</i>, each acting on a set of sites of diameter at most <i>R</i>, and its ground state Ω is unique with spectral gap Δ. Fix an interval <i>X</i> and let ρ be the reduced density matrix of Ω on <i>X</i>. Pick an eigenvalue <i>p</i> of ρ at random with probability <i>p</i>; its surprisal −log <i>p</i> has mean <i>S</i>(<i>X</i>). Reweighting Ω inside <i>X</i> by a small power ρ<sup>−<i>u</i>/2</sup> raises the energy only through the interaction terms that act both inside and outside <i>X</i>, and the gap turns this small energy into a bound on the moment generating function of the surprisal. Hadamard's three-lines theorem, which bounds an analytic function inside a strip by its bounds on the two edges, controls the reweighted terms.",
+          "delivers": "For every interval <i>X</i> and every <i>w</i> ≥ 0, the surprisal differs from <i>S</i>(<i>X</i>) by more than <i>w</i> with probability at most 2e<sup>e/2</sup> exp(−<i>w</i>/(32<i>s</i>)), where <i>s</i> = √((1 + <i>J</i>/Δ)<i>B<sub>R</sub></i>) and <i>B<sub>R</sub></i> = 1 + <i>N<sub>R</sub></i> log<sup>2</sup>(e<i>q</i><sup><i>R</i>+1</sup>) weights the terms crossing the two ends of <i>X</i>."
+        },
+        {
+          "title": "The buffered discount",
+          "issues": [
+            9533
+          ],
+          "results": [
+            "lem:buffer"
+          ],
+          "figure": "shells",
+          "caption": "An interval <i>X</i> of the chain and the <i>m</i> nested shells <i>X</i><sub>1</sub> ⊂ … ⊂ <i>X<sub>m</sub></i> around it, each adding <i>R</i> sites on both sides. The flanks outside <i>X</i> form the buffer <i>T</i> of 2<i>mR</i> sites.",
+          "physics": "Surround <i>X</i> by <i>m</i> nested shells <i>X</i><sub>1</sub> ⊂ <i>X</i><sub>2</sub> ⊂ … ⊂ <i>X<sub>m</sub></i>, each extending the previous one by <i>R</i> sites at both ends, and call <i>T</i> the part of <i>X<sub>m</sub></i> outside <i>X</i>. Place a positive operator, a filter, on each shell, chosen to make the norm of the filtered ground state as large as possible. At the optimum, an interaction term that is cut by one shell meets only that shell's filter, since the larger filters contain it and the smaller ones act elsewhere. Each cut term therefore costs a small energy, the gap keeps the filtered vector close to Ω, and comparing the norm of the filtered vector with the tail bound of the previous stage bounds the conditional entropy of <i>X</i> given <i>T</i>.",
+          "delivers": "With <i>m</i> shells, the conditional entropy satisfies <i>S</i>(<i>X</i> ∪ <i>T</i>) − <i>S</i>(<i>T</i>) ≤ ½<i>S</i>(<i>X</i>) + <i>c</i>, where <i>m</i> and <i>c</i> depend only on <i>q</i>, <i>R</i>, <i>J</i> and Δ: the shells let <i>X</i> keep at most half of its entropy, up to a constant."
+        },
+        {
+          "title": "Counting the crossing interactions and closing the argument",
+          "issues": [
+            9533
+          ],
+          "results": [
+            "thm:A"
+          ],
+          "physics": "On a chain, at most <i>N<sub>R</sub></i> = 2 · 4<sup><i>R</i></sup> interaction terms act on both sides of any cut, whatever the length of the chain, and a support of diameter at most <i>R</i> can be cut by at most one shell when the shells have width <i>R</i>. This is what makes <i>m</i> and <i>c</i> constants. The Araki–Lieb inequality <i>S</i>(<i>X</i> ∪ <i>T</i>) ≥ <i>S</i>(<i>X</i>) − <i>S</i>(<i>T</i>) and the dimension bound <i>S</i>(<i>T</i>) ≤ 2<i>mR</i> log <i>q</i> turn the discount into <i>S</i>(<i>X</i>) ≤ ½<i>S</i>(<i>X</i>) + <i>c</i> + 4<i>mR</i> log <i>q</i>, hence <i>S</i>(<i>X</i>) ≤ 8<i>mR</i> log <i>q</i> + 2<i>c</i> for every interval. A region <i>A</i> of the chain is a union of maximal intervals, each with its own boundary edges, so subadditivity of entropy gives the bound for <i>A</i>.",
+          "delivers": "An explicit constant <i>C</i><sub>int</sub> ≤ <i>C</i><sub>0</sub>(<i>q</i>, <i>R</i>)(1 + <i>J</i>/Δ) bounding the entropy of every interval, and Theorem A on the chain: <i>S</i>(<i>A</i>) ≤ <i>C</i><sub>0</sub>(<i>q</i>, <i>R</i>)(1 + <i>J</i>/Δ)|∂<i>A</i>| for every set <i>A</i> of sites."
+        },
+        {
+          "title": "Finite subsets of the integers",
+          "issues": [
+            9548
+          ],
+          "physics": "Theorem A is stated for every finite set Λ of integers, with an edge between two consecutive integers when both lie in Λ. Such a set may have gaps. Numbering its points in increasing order turns the model into a chain whose interaction terms never act across a gap. Across a gap the ground state is a product state, so the part of the chain to the left of the gap has zero entropy. Replacing a region <i>A</i> by its symmetric difference with that left part then leaves the entropy unchanged, by the Araki–Lieb inequality and strong subadditivity, and adds or removes only the chain edge at the gap. Doing this at each gap where <i>A</i> changes produces a region with the entropy of <i>A</i> whose boundary on the chain consists exactly of the edges of Λ leaving <i>A</i>.",
+          "delivers": "Theorem A in the generality of the note: <i>S</i>(<i>A</i>) ≤ <i>C</i><sub>0</sub>(<i>q</i>, <i>R</i>)(1 + <i>J</i>/Δ)|∂<sub>Λ</sub><i>A</i>| for every finite Λ ⊂ ℤ and every <i>A</i> ⊆ Λ, with the constant of the chain. The note instead factors the ground state over the connected pieces of Λ; the formal proof avoids that factorization."
+        }
+      ]
+    },
+    {
+      "id": "mps",
+      "paper": "chain",
+      "eyebrow": "Part II · Theorem B",
+      "heading": "How the matrix product state is constructed",
+      "intro": "A bound on the entropy of every cut does not by itself give a good matrix product state, because the entropy controls only the mean of the Schmidt spectrum and not the small Schmidt coefficients that a truncation discards. The marginal tail bound controls exactly those, and on a chain the cuts can then be truncated one after another.",
+      "stages": [
+        {
+          "title": "Truncating the Schmidt decompositions cut by cut",
+          "issues": [
+            9533
+          ],
+          "results": [
+            "prop:VC",
+            "thm:Bshort",
+            "thm:B"
+          ],
+          "physics": "A matrix product state with open boundary conditions is a vector assembled from one tensor per site, contracted along the chain. Its bond dimension is the largest dimension of the contracted indices; equivalently, it is the largest Schmidt rank of the vector across a cut of the chain into a left and a right part. Cut the chain after site <i>k</i> and keep, on the left part, only the eigenvectors of its reduced density matrix with eigenvalue at least exp(−(<i>S<sub>k</sub></i> + <i>w</i>)), where <i>S<sub>k</sub></i> is the entropy of the left part and <i>w</i> ≥ 0. At most exp(<i>S<sub>k</sub></i> + <i>w</i>) eigenvectors are kept, and by the marginal tail bound the discarded weight is at most 2e<sup>e/2</sup> exp(−<i>w</i>/(32<i>s</i>)). Applying these projections at all <i>L</i> − 1 cuts gives a vector with bounded Schmidt rank at every cut, at distance from Ω at most the sum of the square roots of the discarded weights. Theorem A bounds every <i>S<sub>k</sub></i> by <i>C</i><sub>int</sub>, and the choice <i>w</i> = 64<i>s</i> log(2<i>L</i><sup>2</sup><i>c</i><sub>0</sub>) with <i>c</i><sub>0</sub> = √(2e<sup>e/2</sup>) makes the total error at most 1/<i>L</i>.",
+          "delivers": "Theorem B: a normalized matrix product state within 1/<i>L</i> of Ω whose bond dimension is at most ⌊exp(<i>C</i><sub>int</sub> + <i>w</i>)⌋ ≤ e<sup><i>C</i><sub>int</sub></sup>(2<i>c</i><sub>0</sub>)<sup>64<i>s</i></sup><i>L</i><sup>128<i>s</i></sup>, a polynomial in <i>L</i>. The note keeps a prescribed number of eigenvectors at each cut; the formal proof keeps those above a threshold, which is the form the proof of Theorem B uses.",
+          "figure": "truncation",
+          "caption": "Sequential truncation on a chain of <i>L</i> = 6 sites. At each of the <i>L</i> − 1 cuts the left part is projected onto its eigenvectors above a threshold; the bar over a cut is the number kept, at most exp(<i>S<sub>k</sub></i> + <i>w</i>), which bounds the bond dimension there."
+        },
+        {
+          "title": "Stronger forms and sharper constants",
+          "issues": [
+            9549,
+            9551,
+            9550
+          ],
+          "physics": "The same argument gives more than Theorem B states. The truncation works at any accuracy ε in (0, 1], with bond dimension at most e<sup><i>C</i><sub>int</sub></sup>(2<i>c</i><sub>0</sub>)<sup>64<i>s</i></sup>(<i>L</i>/ε)<sup>64<i>s</i></sup>, and the estimate at a single cut does not involve <i>L</i> at all: the length enters only through the number of cuts. The truncation also uses the chain only through the entropies and tail bounds at its cuts, so it applies along any ordering of the sites of any finite system; this needs no separate proof. Finally, the shell count <i>m</i> contains a factor <i>q</i><sup>2(<i>R</i>+1)</sup> from a crude bound on the energy of the reweighted state. Remark 5.2 of the note replaces it by log<sup>2</sup>(e<i>q</i><sup><i>R</i>+1</sup>), using Hadamard's three-lines theorem (which bounds an analytic function inside a strip by its bounds on the two edges), the device already used for the marginal tail bound.",
+          "delivers": "Theorem B at every accuracy and at each cut separately, and a shell count of order (1 + <i>J</i>/Δ)<i>B<sub>R</sub></i>, which makes the entropy bound of an interval of order (1 + <i>J</i>/Δ) log<sup>3</sup> <i>q</i> for nearest-neighbour interactions."
+        },
+        {
+          "title": "Strips of bounded width",
+          "issues": [
+            9552
+          ],
+          "physics": "Replace the chain by a strip of <i>L</i> columns and <i>w</i> rows with an interaction of range <i>R</i>. A cut between two columns is crossed by at most a constant times <i>w</i> interaction terms, so the three steps of the area law, run on blocks of whole columns, bound the entropy of any set of consecutive columns by <i>C</i>(<i>q</i>, <i>R</i>)(1 + <i>J</i>/Δ)<i>w</i><sup>2</sup>. This quadratic dependence on the width needs the sharper energy bound of the previous stage; with the crude bound the estimate grows exponentially in <i>w</i>. Ordering the sites column by column and truncating along that ordering then gives a matrix product state. The work is on hold until the sharper constants are formalized.",
+          "delivers": "For a strip of width <i>w</i>: the entropy of a block of columns is at most <i>C</i>(<i>q</i>, <i>R</i>)(1 + <i>J</i>/Δ)<i>w</i><sup>2</sup>, and a matrix product state within 1/<i>L</i> of Ω has bond dimension at most exp(<i>C</i>(1 + <i>J</i>/Δ)<i>w</i><sup>2</sup>) · <i>L</i><sup><i>c</i>√(1 + <i>J</i>/Δ) <i>w</i></sup>."
+        },
+        {
+          "title": "A second proof of Theorem B by a distributed construction",
+          "issues": [
+            9555
+          ],
+          "physics": "The two-dimensional PEPS manuscript cannot truncate one cut at a time, because truncations across different cuts of a grid do not fit together into one tensor network. It builds the network instead from many parties: each party holds the sites of one region of the lattice, together with private auxiliary systems, and three elementary moves change which party holds which sites. A birth hands an interval to a new party, a death returns it, and an exchange swaps the assignments between two copies of the ground state. A move changes the state very little when the sites it moves share little mutual information with the other parties. On the chain this is supplied by information at logarithmic separation: two intervals at distance a constant times log <i>L</i> share at most <i>L</i><sup>−<i>p</i></sup> of mutual information. Its proof combines Theorem A with an information reset, which exchanges a region between two copies of the ground state and undoes the exchange by a local unitary, controlled by a Lieb–Robinson bound (a bound on how fast the support of an operator grows under time evolution). A single left-to-right sweep then creates the parties one by one; on the grid this role is played by a hierarchy of squares obtained by repeated halving, which on a line would give too large a bond dimension. Finally, density compression replaces each shared resource by an average of polynomially many random product operators, and keeping one column of the resulting operator in a product basis gives the matrix product state.",
+          "delivers": "Theorem B again, with bond dimension at most <i>C L<sup>c</sup></i>, by the one-dimensional version of every step of the two-dimensional construction. The chain is the simplest setting in which all of these steps occur, which is the reason to formalize this second proof."
+        }
+      ]
+    },
+    {
+      "id": "corollary",
+      "paper": "chain",
+      "eyebrow": "Corollary of the two-dimensional area law",
+      "heading": "Matrix product states on the square grid",
+      "intro": "This statement is not part of the one-dimensional argument. It assumes the two-dimensional area law (Theorem 1.1 of the area-law manuscript, followed on the other tab) and combines it with the sequential truncation above.",
+      "stages": [
+        {
+          "title": "A snake matrix product state on the square grid",
+          "issues": [
+            9553
+          ],
+          "physics": "Order the sites of an <i>L</i> × <i>L</i> square grid row by row, reversing direction on alternate rows, so that consecutive sites are always neighbours. Every cut of this ordering into an initial and a final segment is crossed by at most <i>L</i> + 1 lattice edges, so the two-dimensional area law bounds the entropy of every initial segment by a constant times <i>L</i>, and the number of interaction terms crossing the cut is also of order <i>L</i>. Sequential truncation along the ordering then gives a matrix product state. Every ordering of the grid has a cut crossed by about <i>L</i> edges, so this argument cannot give a bond dimension polynomial in <i>L</i>; that requires the PEPS construction of the other tab. The work is on hold until the two-dimensional area law is formalized.",
+          "delivers": "Assuming the two-dimensional area law, a matrix product state along the snake ordering within 1/<i>L</i> of the ground state, with bond dimension at most exp(<i>C</i>′<i>L</i>) for a constant <i>C</i>′ depending on <i>q</i>, <i>R</i>, <i>J</i> and Δ."
+        }
+      ]
+    }
+  ],
+  "glossary": [
+    [
+      "Entanglement entropy",
+      "S(A) = −Tr ρ<sub>A</sub> log ρ<sub>A</sub> for the reduced density matrix ρ<sub>A</sub> of the ground state on the sites of A, measuring the entanglement between A and the rest of the system."
+    ],
+    [
+      "Spectral gap",
+      "The ground state Ω is unique and every other eigenvalue of the Hamiltonian H exceeds the ground energy E<sub>0</sub> by at least Δ, that is, H − E<sub>0</sub> ≥ Δ(1 − |Ω⟩⟨Ω|). No gap is assumed for parts of the system."
+    ],
+    [
+      "Boundary edges",
+      "∂<sub>Λ</sub>A, the edges {x, x + 1} of Λ with exactly one endpoint in A. On a chain, an interval away from the ends has two."
+    ],
+    [
+      "Conditional entropy",
+      "S(X | T) = S(X ∪ T) − S(T) for disjoint sets of sites X and T."
+    ],
+    [
+      "Araki–Lieb inequality",
+      "S(X ∪ T) ≥ |S(X) − S(T)| for disjoint X and T; it bounds the entropy of X by the entropy of X together with a buffer T plus twice the entropy of T."
+    ],
+    [
+      "Mutual information",
+      "I(X : Y) = S(X) + S(Y) − S(X ∪ Y), the total correlation between disjoint sets of sites X and Y."
+    ],
+    [
+      "Schmidt rank",
+      "The number of nonzero terms in the Schmidt decomposition of a vector across a cut, that is, the rank of the reduced density matrix of either side."
+    ],
+    [
+      "Matrix product state",
+      "A vector on a chain written as a contraction of one tensor per site along the chain, with open ends. Its bond dimension, the size of the contracted indices, equals the largest Schmidt rank across a cut."
+    ],
+    [
+      "Marginal tail bound",
+      "The estimate that the eigenvalues p of the reduced density matrix of an interval satisfy −log p ≈ S(X) up to deviations w with exponentially small probability in w; it uses the spectral gap."
+    ],
+    [
+      "Buffered discount",
+      "The estimate that, conditioned on a buffer of nested shells around X, the interval X keeps at most half of its entropy plus a constant."
+    ],
+    [
+      "Lieb–Robinson bound",
+      "A bound on how far, in a given time, the evolution under a local Hamiltonian can spread an operator acting on a few sites."
+    ]
+  ]
+}

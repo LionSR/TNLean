@@ -1167,23 +1167,24 @@ restriction is resolved.
 ### Polynomial PEPS approximation: the distribution protocol
 
 [polypeps_prop71_consequences_interface.tex](polypeps_prop71_consequences_interface.tex)
-(scope restriction, open) records that Proposition 7.1 of the September 24, 2026
-polynomial PEPS manuscript was first formalized only as the consequences that
-the assembly of Section 8 uses. The formal predicate now carries a party for
-every hierarchy square, the additional parties at their repaintings, the
-private copies of `Ω`, the frame factorization of the intermediate reference
-vectors with factors of norm at most one, the pair-source and message counts,
-and the expansions of every fixed accuracy. One clause remains omitted: that
-every intermediate reference vector has at least one frame.
+(scope restriction, resolved) records that Proposition 7.1 of the September 24,
+2026 polynomial PEPS manuscript was first formalized only as the consequences
+that the assembly of Section 8 uses. Every clause is now a field of the formal
+predicate, proved for the constructed protocol: a party for every hierarchy
+square, the additional parties at their repaintings, the private copies of `Ω`,
+the frame factorization of the reference vectors with factors of norm at most
+one, the pair-source and message counts, and the expansions of every fixed
+accuracy. The existence of the protocol is proved without hypotheses.
 
 ### Two-dimensional area law: the scanner estimate
 
-[arealaw2d_scanner_inputs.tex](arealaw2d_scanner_inputs.tex) records that
-Proposition 9.2 of the September 24, 2026 two-dimensional area-law manuscript
-is formalized from the conclusions of Lemma 9.1, Propositions 7.4 and 8.1, and
-Lemmas 2.1 and 2.3 for one scan, taken as the fields of one data package; the
-construction of that package from the scan geometry and the transported states
-remains open.
+[arealaw2d_scanner_inputs.tex](arealaw2d_scanner_inputs.tex) (local correction,
+resolved) records that Proposition 9.2 of the September 24, 2026
+two-dimensional area-law manuscript is proved for the original physical
+system, with the truncated ground vector, the typical set and the transport and
+norm-comparison estimates derived for the same data. The only remaining
+adjustment is the output-coefficient convention: the output constants are
+chosen after the entropy input constant rather than equal to it.
 
 ### Two-dimensional area law: belt and replacement templates
 
@@ -1210,11 +1211,11 @@ orthogonal rectangle sides, as a convention built into the permitted polygons.
 ### One-dimensional area law: connected domains
 
 [tnlean_one_dimensional_connected_domain_scope.tex](tnlean_one_dimensional_connected_domain_scope.tex)
-records that Theorem A of the repository's one-dimensional note is formalized
-on the chain of `L` consecutive sites, the connected case to which the note
-reduces the theorem in a sentence; the component reduction for a disconnected
-finite subset of the integers (the ground vector of a sum over components is a
-product, and entropy and edge boundary add over components) is not formalized.
+(scope restriction, resolved) records that Theorem A of the repository's
+one-dimensional note, first formalized on the chain of `L` consecutive sites,
+is now formalized for every finite subset of the integers. The reduction to the
+chain uses the zero entropy of the prefixes ending at the gaps of the domain in
+place of the factorization of the ground vector over components.
 
 ### One-dimensional matrix product state approximation: threshold truncation
 
@@ -1230,7 +1231,7 @@ tails; the form with an arbitrary `D` is not formalized.
 ### One-dimensional area law: the constants of the buffered discount
 
 [tnlean_one_dimensional_discount_constants.tex](tnlean_one_dimensional_discount_constants.tex)
-(local correction, open) records that the buffered discount of Lemma 4.2 of the
+(local correction, resolved) records that the buffered discount of Lemma 4.2 of the
 repository's one-dimensional note is formalized with the energy threshold
 `Δ/2` in place of the printed `Δ/4` (the formal energy estimate is twice the
 printed one at the same shell threshold), with the overlap losses `m log 2`
@@ -1243,9 +1244,11 @@ absolute constants.
 ## Polynomial PEPS: zero-floor maximizing filters
 
 - [`polypeps_square_zero_floor_optimizer_scope.tex`](polypeps_square_zero_floor_optimizer_scope.tex)
-  records the attributed positive-filter adaptation on the original square,
-  its all-competitor matrix comparison and exact ascending output, and the
-  same family's original-energy and full-system fidelity estimates. The
-  vacuous negative-interaction-bound case is included. Literal imported OAI
-  model types and geometric region/weight construction remain outside the
-  result, so the note stays open.
+  (resolved) records the attributed positive-filter adaptation on the original
+  square, its all-competitor matrix comparison and exact ascending output, and
+  the same family's original-energy and full-system fidelity estimates. The
+  vacuous negative-interaction-bound case is included. The result is a
+  standalone adaptation of a lemma of the companion Lean code; the proofs of
+  the area law and of the polynomial PEPS approximation theorem do not use it,
+  and the further comparison with the companion code's own types is not
+  pursued.

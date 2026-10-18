@@ -819,6 +819,23 @@ original open square. We state the two models separately, following
     endpoint in $A$. The constant is chosen before $L$, $H$, $\Omega$ and $A$.
 \end{definition}
 
+\begin{definition}[The square-grid entropy area law at a given constant]
+    \label{def:square_entropy_area_law_at}
+    \lean{TNLean.PEPS.Approximation.SquareEntropyAreaLawAt,
+        TNLean.PEPS.Approximation.SquareEntropyAreaLaw.exists_squareEntropyAreaLawAt}
+    \leanok
+    \uses{def:square_entropy_area_law}
+    Let $q$ be an integer and $J,\Delta,C_A$ reals. The square-grid entropy
+    area law holds at $q$, $J$, $\Delta$ with constant $C_A$ if $C_A\ge0$ and,
+    for every $L$, every Hamiltonian of the original model with interaction
+    bound $J$, every unit vector $\Omega$ and real $E_0$ satisfying
+    $H\Omega=E_0\Omega$ and $H-E_0I\ge\Delta(I-|\Omega\rangle\langle\Omega|)$,
+    and every set $A$ of sites, $S_\Omega(A)\le C_A|\partial_\Lambda A|$. The
+    square-grid entropy area law of
+    Definition~\ref{def:square_entropy_area_law} says that for $q\ge2$ and
+    $J,\Delta>0$ some constant $C_A$ has this property.
+\end{definition}
+
 \begin{theorem}[Entropy area law on the square grid]
     \label{thm:openai_square_area_law}
     \lean{TNLean.PEPS.AreaLaw.squareEntropyAreaLaw}

@@ -10,11 +10,13 @@ import Lean.Util.CollectAxioms
 /-! Audit uniform marginal approximation at an actual nested-patch minimum. -/
 
 run_cmd do
-  let decl := ``TNLean.PEPS.Approximation.exists_uniform_nestedPatch_minimizer_marginal_closeness
-  unless (← Lean.getEnv).contains decl do
-    throwError "Missing declaration {decl}"
-  let axioms ← Lean.collectAxioms decl
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
-  unless axioms.all (allowed.contains ·) do
-    throwError "Unexpected axioms for {decl}: {axioms}"
-  Lean.logInfo m!"{decl}: {axioms}"
+  let env ← Lean.getEnv
+  for decl in #[``TNLean.PEPS.Approximation.nestedPatch_minimizer_marginal_closeness,
+      ``TNLean.PEPS.Approximation.exists_uniform_nestedPatch_minimizer_marginal_closeness] do
+    unless env.contains decl do
+      throwError "Missing declaration {decl}"
+    let axioms ← Lean.collectAxioms decl
+    unless axioms.all (allowed.contains ·) do
+      throwError "Unexpected axioms for {decl}: {axioms}"
+    Lean.logInfo m!"{decl}: {axioms}"

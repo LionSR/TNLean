@@ -131,7 +131,7 @@ construct the preceding safe-box estimate.
 
 \begin{theorem}[Uniform final power absorption]
     \label{thm:arealaw-final-sharp-power}
-    \lean{TNLean.PEPS.AreaLaw.Scan.finalSharp_error_exponents,TNLean.PEPS.AreaLaw.Scan.eventually_finalSharp_log_cost_le,TNLean.PEPS.AreaLaw.Scan.eventually_finalSharp_powerEnvelope_le,TNLean.PEPS.AreaLaw.Scan.exists_finalSharp_error_le}
+    \lean{TNLean.PEPS.AreaLaw.Scan.finalSharp_error_exponents,TNLean.PEPS.AreaLaw.Scan.eventually_finalSharp_log_cost_le,TNLean.PEPS.AreaLaw.Scan.eventually_finalSharp_powerEnvelope_le,TNLean.PEPS.AreaLaw.Scan.exists_finalSharp_error_le,TNLean.PEPS.AreaLaw.Scan.finalSharpErrorThreshold,TNLean.PEPS.AreaLaw.Scan.finalSharpErrorConstant,TNLean.PEPS.AreaLaw.Scan.finalSharp_error_le_of_finalSharpErrorThreshold_le}
     \leanok
     For the fixed coefficients in (\ref{eq:final_scalar_inputs}),
     one threshold works for every remaining scalar datum at the
@@ -163,7 +163,7 @@ construct the preceding safe-box estimate.
 
 \begin{theorem}[Trace bound and smallness of the step weight]
     \label{thm:arealaw-final-sharp-source}
-    \lean{TNLean.PEPS.AreaLaw.Scan.finalSharp_traceDistance_power,TNLean.PEPS.AreaLaw.Scan.exists_finalSharp_source_error_le,TNLean.PEPS.AreaLaw.Scan.exists_finalSharp_transport_smallness}
+    \lean{TNLean.PEPS.AreaLaw.Scan.finalSharp_traceDistance_power,TNLean.PEPS.AreaLaw.Scan.exists_finalSharp_source_error_le,TNLean.PEPS.AreaLaw.Scan.finalSharp_source_error_le_of_finalSharpErrorThreshold_le,TNLean.PEPS.AreaLaw.Scan.exists_finalSharp_transport_smallness}
     \leanok
     For fixed $q\geq1$, $g>0$ and $C_{\rm vol}\geq0$, the source estimate
     \begin{align}

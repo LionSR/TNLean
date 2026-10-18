@@ -17,11 +17,11 @@ of the ordered regularized filter product. An explicit logarithmic regulator
 then gives polynomial-dimensional inside spaces and inverse-polynomial error.
 The exponent is chosen before the physical instance and the selected square.
 
-**Scope restriction (conditional area law):** The square entropy area law is an
-explicit hypothesis `harea`. Its deduction from the original spectral-gap
-hypotheses remains to be supplied by the uniform finite-domain area law and its
-square specialization. This restriction is recorded in
-`docs/paper-gaps/arealaw2d_rectangular_specialization_scope.tex`.
+The theorem takes the square entropy area law as the hypothesis `harea`; it is a
+conditional step, not the source statement. That law is proved as
+`TNLean.PEPS.AreaLaw.squareEntropyAreaLaw`, and the unconditional Proposition 4.1 is
+`adaptivePatchConstraint` in `TNLean.PEPS.Approximation.PolynomialPEPSTheorem`
+(`docs/paper-gaps/arealaw2d_rectangular_specialization_scope.tex`, resolved).
 
 Source: OpenAI, *Polynomial PEPS approximation of gapped square-grid ground
 states*, Proposition 4.1, `03-patches.tex`, lines 335–563,
@@ -34,50 +34,73 @@ open scoped BigOperators
 
 namespace TNLean.PEPS.Approximation
 
+/-- The radius exponent `R₀` of the nested cylinders, for a square area law at
+the constant `C_A`. It is the explicit radius exponent at
+`C_0 = 16 C_S + log 8` with `C_S = max 1 (16 * C_A)` and at the filter exponent
+`κ = patchFilterExponent q J Δ`.
+
+Source: polynomial-PEPS manuscript, `03-patches.tex`, lines 362–379 (`C_S` and
+`C_Q = 16 C_S`), 409–411 (`C_0 = C_Q + log 8`) and 540–547
+(`eq:patch-explicit-radius`), with `κ` from lines 338–343. -/
+noncomputable def nestedPatchRadiusExponent (q : ℕ) (J Δ B₀ p C_A : ℝ) : ℝ :=
+  regularizedPatchRadiusExponent (16 * max 1 (16 * C_A) + Real.log 8) B₀ p
+    (patchFilterExponent q J Δ)
+
+/-- The radius exponent of the nested cylinders is positive
+(`03-patches.tex`, lines 540–547). -/
+theorem nestedPatchRadiusExponent_pos {q : ℕ} {J Δ B₀ p : ℝ} (C_A : ℝ)
+    (hq : 0 < q) (hJ : 0 < J) (hΔ : 0 < Δ) (hB₀ : 0 ≤ B₀) (hp : 0 ≤ p) :
+    0 < nestedPatchRadiusExponent q J Δ B₀ p C_A := by
+  have hκ := patchFilterExponent_pos_of_pos hq hJ hΔ
+  have hC : 0 ≤ 16 * max 1 (16 * C_A) + Real.log 8 :=
+    add_nonneg (by positivity) (Real.log_nonneg (by norm_num))
+  unfold nestedPatchRadiusExponent regularizedPatchRadiusExponent
+  positivity
+
 open Classical in
-/-- The original square entropy area law gives a sum of nested regional cylinders
-with polynomially bounded inside dimensions. The exponent is chosen before the
-lattice, Hamiltonian, ground vector, center, and admissible radius. The vector
-being approximated is the original ground vector in the full-region coordinates.
+/-- A square entropy area law at the constant `C_A` gives a sum of nested
+regional cylinders with inside dimensions at most `L ^ R₀`, where
+`R₀ = nestedPatchRadiusExponent q J Δ B₀ p C_A`. The exponent depends only on
+`q`, `J`, `Δ`, `B₀`, `p` and `C_A`. The vector being approximated is the
+original ground vector in the full-region coordinates.
 
 This is the large-radius intermediate assertion of the polynomial-PEPS
 manuscript, Proposition 4.1, `03-patches.tex`, lines 484–563, especially
-`eq:patch-distance-to-cylinders`, revision
-`adc7f1241b42e322a6451854ab7e4b4c146bf78a`. The upstream area-law premise is
-explicit; this statement alone is not an unconditional proof of Proposition 4.1. -/
-theorem SquareEntropyAreaLaw.exists_uniform_nestedPatch_cylinders
-    (harea : SquareEntropyAreaLaw) {q : ℕ} (hq : 2 ≤ q)
-    {J Δ : ℝ} (hJ : 0 < J) (hΔ : 0 < Δ)
-    {B₀ p : ℝ} (hB₀ : 0 < B₀) (hp : 0 < p) :
-    ∃ R₀ : ℝ, 0 < R₀ ∧
-      ∀ (L : ℕ), 2 ≤ L →
-        ∀ (h : SquareHamiltonian L q J) (E₀ : ℝ) (Ω : StateSpace L q),
-          h.IsGappedGroundState E₀ Ω Δ →
-          ∀ (center : ℝ × ℝ) (u : ℝ), 4 ≤ u → u ≤ B₀ * Real.log L →
-            let Λ := AreaLaw.rectangularDomain L L
-            letI : LinearOrder (AreaLaw.Site Λ) :=
-              (Fintype.equivFin (AreaLaw.Site Λ)).linearOrder
-            let m := AreaLaw.Geometry.nestedPatchCount u
-            let regions : Fin m → Finset (AreaLaw.Site Λ) :=
-              fun j ↦ AreaLaw.Geometry.nestedPatch Λ center u j.val
-            let U := dependentGlobalConfigIsometry
-              (V := AreaLaw.Site Λ) (Out := fun _ ↦ Fin q)
-            let Ωᵤ := U.symm (squareAreaLawState Ω)
-            ∃ (S : (j : Fin m) → Submodule ℂ ((regions j → Fin q) → ℂ))
-              (v : EuclideanSpace ℂ
-                ((w : (Finset.univ : Finset (AreaLaw.Site Λ))) → Fin q)),
-              (∀ j, (Module.finrank ℂ (S j) : ℝ) ≤ (L : ℝ) ^ R₀) ∧
-              (v : (((w : (Finset.univ : Finset (AreaLaw.Site Λ))) → Fin q) → ℂ)) ∈
-                (⨆ j, dependentRegionCylinder
-                  (Out := fun _ : AreaLaw.Site Λ ↦ Fin q) (regions j) (S j)) ∧
-              ‖Ωᵤ - v‖ ≤ (L : ℝ) ^ (-p) := by
-  obtain ⟨κ, hκ, _, hclose⟩ :=
-    exists_uniform_nestedPatch_minimizer_marginal_closeness q hJ.le hΔ
-  obtain ⟨C, hC, hentropy⟩ := harea.exists_nestedPatch_entropy_le hq hJ hΔ
-  have hCpos : 0 < C := lt_of_lt_of_le zero_lt_one hC
-  refine ⟨regularizedPatchRadiusExponent (16 * C + Real.log 8) B₀ p κ,
-    by unfold regularizedPatchRadiusExponent; positivity, ?_⟩
+`eq:patch-explicit-radius` and `eq:patch-distance-to-cylinders`, revision
+`adc7f1241b42e322a6451854ab7e4b4c146bf78a`. -/
+theorem SquareEntropyAreaLawAt.uniform_nestedPatch_cylinders
+    {q : ℕ} {J Δ C_A : ℝ} (hA : SquareEntropyAreaLawAt q J Δ C_A) (hq : 2 ≤ q)
+    (hJ : 0 < J) (hΔ : 0 < Δ) {B₀ p : ℝ} (hB₀ : 0 < B₀) (hp : 0 < p) :
+    ∀ (L : ℕ), 2 ≤ L →
+      ∀ (h : SquareHamiltonian L q J) (E₀ : ℝ) (Ω : StateSpace L q),
+        h.IsGappedGroundState E₀ Ω Δ →
+        ∀ (center : ℝ × ℝ) (u : ℝ), 4 ≤ u → u ≤ B₀ * Real.log L →
+          let Λ := AreaLaw.rectangularDomain L L
+          letI : LinearOrder (AreaLaw.Site Λ) :=
+            (Fintype.equivFin (AreaLaw.Site Λ)).linearOrder
+          let m := AreaLaw.Geometry.nestedPatchCount u
+          let regions : Fin m → Finset (AreaLaw.Site Λ) :=
+            fun j ↦ AreaLaw.Geometry.nestedPatch Λ center u j.val
+          let U := dependentGlobalConfigIsometry
+            (V := AreaLaw.Site Λ) (Out := fun _ ↦ Fin q)
+          let Ωᵤ := U.symm (squareAreaLawState Ω)
+          ∃ (S : (j : Fin m) → Submodule ℂ ((regions j → Fin q) → ℂ))
+            (v : EuclideanSpace ℂ
+              ((w : (Finset.univ : Finset (AreaLaw.Site Λ))) → Fin q)),
+            (∀ j, (Module.finrank ℂ (S j) : ℝ) ≤
+              (L : ℝ) ^ nestedPatchRadiusExponent q J Δ B₀ p C_A) ∧
+            (v : (((w : (Finset.univ : Finset (AreaLaw.Site Λ))) → Fin q) → ℂ)) ∈
+              (⨆ j, dependentRegionCylinder
+                (Out := fun _ : AreaLaw.Site Λ ↦ Fin q) (regions j) (S j)) ∧
+            ‖Ωᵤ - v‖ ≤ (L : ℝ) ^ (-p) := by
   intro L hL h E₀ Ω hgs center u hu huL Λ m regions U Ωᵤ
+  let κ := patchFilterExponent q J Δ
+  have hκ : 0 < κ := patchFilterExponent_pos_of_pos (by omega) hJ hΔ
+  have hclose := nestedPatch_minimizer_marginal_closeness q hJ.le hΔ hκ
+    (patchFilterExponent_le_half q J Δ) (mul_patchFilterExponent_sq_le hJ.le hΔ.le)
+  let C := max 1 (16 * C_A)
+  have hentropy := hA.nestedPatch_entropy_le
+  have hCpos : 0 < C := lt_of_lt_of_le zero_lt_one (le_max_left _ _)
   let : LinearOrder (AreaLaw.Site Λ) := (Fintype.equivFin (AreaLaw.Site Λ)).linearOrder
   let a : Fin m → ℝ := fun _ ↦ κ / (m : ℝ)
   let R : ℝ := regularizedPatchRadiusExponent (16 * C + Real.log 8) B₀ p κ * Real.log L
@@ -125,5 +148,48 @@ theorem SquareEntropyAreaLaw.exists_uniform_nestedPatch_cylinders
     Real.log_rpow (by positivity), Real.log_mul (by norm_num : (2 : ℝ) ≠ 0)
       (Real.exp_ne_zero _), Real.log_exp, Real.log_rpow hpos.2]
   nlinarith only [hgrowth, hbounds.2.2]
+
+open Classical in
+/-- The original square entropy area law gives a sum of nested regional cylinders
+with polynomially bounded inside dimensions. The exponent is chosen before the
+lattice, Hamiltonian, ground vector, center, and admissible radius. It is
+`nestedPatchRadiusExponent q J Δ B₀ p C_A` for an area-law constant `C_A`, as in
+`SquareEntropyAreaLawAt.uniform_nestedPatch_cylinders`.
+
+This is the large-radius intermediate assertion of the polynomial-PEPS
+manuscript, Proposition 4.1, `03-patches.tex`, lines 484–563, especially
+`eq:patch-distance-to-cylinders`, revision
+`adc7f1241b42e322a6451854ab7e4b4c146bf78a`. The upstream area-law premise is
+explicit; this statement alone is not an unconditional proof of Proposition 4.1. -/
+theorem SquareEntropyAreaLaw.exists_uniform_nestedPatch_cylinders
+    (harea : SquareEntropyAreaLaw) {q : ℕ} (hq : 2 ≤ q)
+    {J Δ : ℝ} (hJ : 0 < J) (hΔ : 0 < Δ)
+    {B₀ p : ℝ} (hB₀ : 0 < B₀) (hp : 0 < p) :
+    ∃ R₀ : ℝ, 0 < R₀ ∧
+      ∀ (L : ℕ), 2 ≤ L →
+        ∀ (h : SquareHamiltonian L q J) (E₀ : ℝ) (Ω : StateSpace L q),
+          h.IsGappedGroundState E₀ Ω Δ →
+          ∀ (center : ℝ × ℝ) (u : ℝ), 4 ≤ u → u ≤ B₀ * Real.log L →
+            let Λ := AreaLaw.rectangularDomain L L
+            letI : LinearOrder (AreaLaw.Site Λ) :=
+              (Fintype.equivFin (AreaLaw.Site Λ)).linearOrder
+            let m := AreaLaw.Geometry.nestedPatchCount u
+            let regions : Fin m → Finset (AreaLaw.Site Λ) :=
+              fun j ↦ AreaLaw.Geometry.nestedPatch Λ center u j.val
+            let U := dependentGlobalConfigIsometry
+              (V := AreaLaw.Site Λ) (Out := fun _ ↦ Fin q)
+            let Ωᵤ := U.symm (squareAreaLawState Ω)
+            ∃ (S : (j : Fin m) → Submodule ℂ ((regions j → Fin q) → ℂ))
+              (v : EuclideanSpace ℂ
+                ((w : (Finset.univ : Finset (AreaLaw.Site Λ))) → Fin q)),
+              (∀ j, (Module.finrank ℂ (S j) : ℝ) ≤ (L : ℝ) ^ R₀) ∧
+              (v : (((w : (Finset.univ : Finset (AreaLaw.Site Λ))) → Fin q) → ℂ)) ∈
+                (⨆ j, dependentRegionCylinder
+                  (Out := fun _ : AreaLaw.Site Λ ↦ Fin q) (regions j) (S j)) ∧
+              ‖Ωᵤ - v‖ ≤ (L : ℝ) ^ (-p) := by
+  obtain ⟨C_A, hA⟩ := harea.exists_squareEntropyAreaLawAt hq hJ hΔ
+  exact ⟨nestedPatchRadiusExponent q J Δ B₀ p C_A,
+    nestedPatchRadiusExponent_pos C_A (by omega) hJ hΔ hB₀.le hp.le,
+    hA.uniform_nestedPatch_cylinders hq hJ hΔ hB₀ hp⟩
 
 end TNLean.PEPS.Approximation
