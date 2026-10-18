@@ -36,10 +36,9 @@ open TNLean.PEPS.PairEffect TNLean.PEPS.EncodedFrame ContinuousLinearMap
 
 variable {L w q : ℕ}
 
-/-! The permutation is assembled from adjacent register exchanges. Its proof is
-kept private: no additional public permutation or coordinate-map interface is
-introduced. The same construction for tag registers is already used in
-`exists_tagWord_of_perm`; here the labels are the actual raw register labels. -/
+/-! The terminal reordering is a composition of adjacent register exchanges.
+Each exchange acts on the raw register labels and preserves the corresponding
+basis coefficients. -/
 
 private theorem exists_rawReordering {a b : List (RawLabel L w)} (h : a.Perm b) :
     ∃ u : Word (siteRegs q (rawOwner L w) a) (siteRegs q (rawOwner L w) b),

@@ -17,7 +17,7 @@ across the parties using private operations alone.
 
 Source: the one-dimensional note, Part II, `part2b_mps_protocol.tex`,
 Construction `con:sweep`, lines 330–343, and Proposition `prop:sweep`,
-item 1, lines 350–353. This is the initialization of the specified copies;
+item 1, lines 349–351. This is the initialization of the specified copies;
 it does not construct the subsequent sweep or its information estimates.
 -/
 
@@ -34,14 +34,14 @@ def initialAuxiliaryOrder (L w : ℕ) : List (AuxiliaryCopy L w) :=
 
 /-- The initial holder is C of the corresponding band operation. A right copy
 at stage k is held by P_(k+1); a left copy at stage k+1 is held by P_(k+1).
-Source: Part II, `prop:sweep`, item 1, lines 350–353. -/
+Source: Part II, `prop:sweep`, item 1, lines 349–351. -/
 def initialAuxiliaryHolder (L w : ℕ) : AuxiliaryCopy L w → Party L w
   | .inl k => .inr k
   | .inr k => .inr ⟨k.val, by omega⟩
 
 /-- The main copy at R_0, followed by the distinct labelled auxiliary copies,
 initially held privately at their actual band holders.
-Source: Part II, `prop:sweep`, item 1, lines 350–353. -/
+Source: Part II, `prop:sweep`, item 1, lines 349–351. -/
 def initialFrames (L w q : ℕ) (pos : Fin L → ℝ × ℝ) :
     List (Frame pos q (Party L w)) :=
   Frame.raw (fun _ ↦ .inl (0 : Fin (stageCount L w + 1))) ::
@@ -57,7 +57,7 @@ theorem length_initialFrames (L w q : ℕ) (pos : Fin L → ℝ × ℝ) :
   omega
 
 /-- Every initial sheet is a raw copy held entirely by one party.
-Source: Part II, `prop:sweep`, item 1, lines 350–353. -/
+Source: Part II, `prop:sweep`, item 1, lines 349–351. -/
 theorem mem_initialFrames {L w q : ℕ} {pos : Fin L → ℝ × ℝ}
     {F : Frame pos q (Party L w)} (hF : F ∈ initialFrames L w q pos) :
     ∃ p : Party L w, F = Frame.raw (fun _ ↦ p) := by
@@ -67,7 +67,7 @@ theorem mem_initialFrames {L w q : ℕ} {pos : Fin L → ℝ × ℝ}
     exact ⟨_, rfl⟩
 
 /-- The actual product of all initial raw copies has norm one.
-Source: Part II, `prop:sweep`, item 1, lines 350–353. -/
+Source: Part II, `prop:sweep`, item 1, lines 349–351. -/
 theorem norm_initialFrames {L w q : ℕ} [NeZero q] {pos : Fin L → ℝ × ℝ}
     {Ω : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Ω‖ = 1) :
     ‖framesVec Ω (initialFrames L w q pos)‖ = 1 := by
@@ -79,7 +79,7 @@ theorem norm_initialFrames {L w q : ℕ} [NeZero q] {pos : Fin L → ℝ × ℝ}
 /-- The specified initial copies are prepared exactly from a product vector
 across all parties, with no nonprivate gate. The memory and vector of each
 party are constructed from the copies it holds, rather than supplied.
-Source: Part II, `prop:sweep`, item 1, lines 350–353. -/
+Source: Part II, `prop:sweep`, item 1, lines 349–351. -/
 theorem exists_initialization {L w q : ℕ} [NeZero q] {pos : Fin L → ℝ × ℝ}
     (hL : 0 < L) {Ω : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Ω‖ = 1) :
     let Fs := initialFrames L w q pos
