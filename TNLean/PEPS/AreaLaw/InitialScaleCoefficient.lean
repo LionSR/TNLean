@@ -77,4 +77,3 @@ theorem le_initialScaleCoefficient_mul_rpow {F : ℕ → ℝ} {M : ℕ} {lam K :
     _ = _ := rfl
 
 end TNLean.PEPS.AreaLaw
-
