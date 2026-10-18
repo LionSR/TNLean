@@ -364,9 +364,10 @@ following order.
           none of $q,R,J,\Delta,D_0,\Ctpl$. The source obtains it as a compactness
           minimum (``has a positive minimum \dots\ the list of rescaled
           patterns is finite'', \src{10-geometry.tex}, lines~596--631). It is
-          now explicit: polygons cut out by belt half-planes that meet only in
-          integer points are at sup distance at least $c_2=1/28$ away from
-          the open quarter-squares about those points
+          now explicit. For two polygons cut out by belt half-planes, each
+          pair of points, one from each polygon, is either at sup distance at
+          least $c_2=1/28$, or both points lie in the open quarter-square
+          about a common integer contact and satisfy the angular estimate
           (\leanid{TNLean.PEPS.AreaLaw.Geometry.birthSeparationConstant},
           \leanid{TNLean.PEPS.AreaLaw.Geometry.facetPolygon_contact_dichotomy}).
           With the angular constant $c_3=1/2$ and the normalization of belt
@@ -778,8 +779,9 @@ of Theorem~1.1 and 13 are not; 2 of kind (b); 1 of kind (c), not on the path;
 14 of kind (d); and 6 further kind (a) rows in the Lean proof of
 Proposition~11.2, now with closed-form thresholds. Rows~37--41 also have
 closed forms, and with the named template and counting coefficients the
-constant of Proposition~11.2 is explicit up to the birth-separation constant of
-rows~57--58 (Section~\ref{sec:geometry}). Every kind (a) row reduces to the
+constant of Proposition~11.2 is explicit: the two kind (b) rows~57--58 are off
+the path, replaced by the explicit birth-separation constant
+(Section~\ref{sec:geometry}). Every kind (a) row reduces to the
 shapes (P1)--(P10). By frequency on the path, the shapes are: power against a
 constant and rounded scales (P1, P7), logarithmic factors against power
 margins (P3, P4), the entropy-continuity and logarithm bounds (P8), dyadic
