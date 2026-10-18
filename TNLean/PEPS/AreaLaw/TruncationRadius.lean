@@ -36,15 +36,27 @@ theorem half_le_two_rpow {K : ℝ} (hK : 0 ≤ K) : K / 2 ≤ (2 : ℝ) ^ K := b
     have := Real.log_two_gt_d9; linarith
   nlinarith
 
-/-- **Choice of the base radius** (`03-quasilocal.tex`, lines 480–485). For `B, C₀ ≥ 0`,
-`c > 0` and `g > 0` there is `C₁ > 0` such that for every real `n ≥ 2` and every
-`0 ≤ s ≤ C₀ n²`, with `r₀ = ⌈C₁ (log n)²⌉`,
+/-- The base-radius constant `C₁ = (β / (c / 2))²` with `β = 1002 + 2 B C₀ / min {1, g / 4}`
+(`03-quasilocal.tex`, lines 480–485). -/
+noncomputable def truncationRadiusConstant (B C₀ c g : ℝ) : ℝ :=
+  ((1002 + 2 * (B * C₀) / min 1 (g / 4)) / (c / 2)) ^ 2
+
+theorem truncationRadiusConstant_pos {B C₀ c g : ℝ} (hB : 0 ≤ B) (hC₀ : 0 ≤ C₀) (hc : 0 < c)
+    (hg : 0 < g) : 0 < truncationRadiusConstant B C₀ c g := by
+  have hm : 0 < min 1 (g / 4) := lt_min one_pos (by positivity)
+  unfold truncationRadiusConstant
+  positivity
+
+/-- **Choice of the base radius, with an explicit constant** (`03-quasilocal.tex`,
+lines 480–485). For `B, C₀ ≥ 0`, `c > 0`, `g > 0`, every real `n ≥ 2` and every
+`s ≤ C₀ n²`, with `C₁ = truncationRadiusConstant B C₀ c g` and `r₀ = ⌈C₁ (log n)²⌉`,
 `B s e^{-(c/2) √r₀} ≤ min {n^{-1000}, g / 4}`. -/
-theorem exists_truncationConstant {B C₀ c g : ℝ} (hB : 0 ≤ B) (hC₀ : 0 ≤ C₀) (hc : 0 < c)
-    (hg : 0 < g) :
-    ∃ C₁ : ℝ, 0 < C₁ ∧ ∀ n : ℝ, 2 ≤ n → ∀ s : ℝ, 0 ≤ s → s ≤ C₀ * n ^ 2 →
-      B * s * Real.exp (-(c / 2 * ((⌈C₁ * Real.log n ^ 2⌉₊ : ℕ) : ℝ) ^ (1 / 2 : ℝ))) ≤
-        min (n ^ (-1000 : ℝ)) (g / 4) := by
+theorem mul_exp_neg_truncationRadiusConstant_le {B C₀ c g : ℝ} (hB : 0 ≤ B) (hC₀ : 0 ≤ C₀)
+    (hc : 0 < c) (hg : 0 < g) {n : ℝ} (hn : 2 ≤ n) {s : ℝ} (hsn : s ≤ C₀ * n ^ 2) :
+    B * s * Real.exp (-(c / 2 *
+      ((⌈truncationRadiusConstant B C₀ c g * Real.log n ^ 2⌉₊ : ℕ) : ℝ) ^ (1 / 2 : ℝ))) ≤
+      min (n ^ (-1000 : ℝ)) (g / 4) := by
+  unfold truncationRadiusConstant
   set m := min 1 (g / 4)
   have hm : 0 < m := lt_min one_pos (by positivity)
   set K := 2 * (B * C₀) / m
@@ -52,7 +64,6 @@ theorem exists_truncationConstant {B C₀ c g : ℝ} (hB : 0 ≤ B) (hC₀ : 0 �
   set β := 1002 + K
   set C₁ := (β / (c / 2)) ^ 2
   have hβ : 0 < β := by positivity
-  refine ⟨C₁, by positivity, fun n hn s hs hsn => ?_⟩
   have hn0 : 0 < n := by linarith
   have hlog : 0 < Real.log n := Real.log_pos (by linarith)
   set r₀ : ℕ := ⌈C₁ * Real.log n ^ 2⌉₊
@@ -102,5 +113,17 @@ theorem exists_truncationConstant {B C₀ c g : ℝ} (hB : 0 ≤ B) (hC₀ : 0 �
           gcongr
           · exact hBnK.trans (min_le_right _ _)
       _ = g / 4 := mul_one _
+
+/-- **Choice of the base radius** (`03-quasilocal.tex`, lines 480–485). For `B, C₀ ≥ 0`,
+`c > 0` and `g > 0` there is `C₁ > 0` such that for every real `n ≥ 2` and every
+`0 ≤ s ≤ C₀ n²`, with `r₀ = ⌈C₁ (log n)²⌉`,
+`B s e^{-(c/2) √r₀} ≤ min {n^{-1000}, g / 4}`. -/
+theorem exists_truncationConstant {B C₀ c g : ℝ} (hB : 0 ≤ B) (hC₀ : 0 ≤ C₀) (hc : 0 < c)
+    (hg : 0 < g) :
+    ∃ C₁ : ℝ, 0 < C₁ ∧ ∀ n : ℝ, 2 ≤ n → ∀ s : ℝ, 0 ≤ s → s ≤ C₀ * n ^ 2 →
+      B * s * Real.exp (-(c / 2 * ((⌈C₁ * Real.log n ^ 2⌉₊ : ℕ) : ℝ) ^ (1 / 2 : ℝ))) ≤
+        min (n ^ (-1000 : ℝ)) (g / 4) :=
+  ⟨_, truncationRadiusConstant_pos hB hC₀ hc hg, fun _ hn _ _ hsn =>
+    mul_exp_neg_truncationRadiusConstant_le hB hC₀ hc hg hn hsn⟩
 
 end TNLean.PEPS.AreaLaw

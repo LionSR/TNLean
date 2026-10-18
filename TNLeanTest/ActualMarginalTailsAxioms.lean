@@ -39,3 +39,10 @@ depends on axioms: [propext, Classical.choice, Quot.sound] -/
 depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
 #print axioms TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_truncated_reducedState_moment_tail_bounds
+
+/-- info:
+'TNLean.PEPS.AreaLaw.Scan.CollarScan.truncated_reducedState_moment_tail_bounds_of_locality'
+depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+open TNLean.PEPS.AreaLaw.Scan.CollarScan in
+#print axioms truncated_reducedState_moment_tail_bounds_of_locality
