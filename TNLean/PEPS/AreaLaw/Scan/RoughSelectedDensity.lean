@@ -19,9 +19,6 @@ is `ScannerExponents.scaleFactsThreshold`.
 
 Source: OpenAI area-law manuscript, `08-scanner.tex`, lines 457--490 and
 693--755, revision `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
-
-Validation and inherited-dependency scope:
-`docs/paper-gaps/arealaw2d_safe_box_collar_scope.tex`.
 -/
 
 noncomputable section
