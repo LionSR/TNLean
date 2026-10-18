@@ -10,7 +10,8 @@ import Lean.Util.CollectAxioms
 
 run_cmd do
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
-  for decl in #[``TNLean.PEPS.AreaLaw.one_sub_initialBoxExponent_eq,
+  for decl in #[``TNLean.PEPS.AreaLaw.one_lt_initialBoxScale,
+      ``TNLean.PEPS.AreaLaw.one_sub_initialBoxExponent_eq,
       ``TNLean.PEPS.AreaLaw.initialBoxExponent_gain_bounds] do
     unless (← Lean.getEnv).contains decl do
       throwError "Missing declaration {decl}"

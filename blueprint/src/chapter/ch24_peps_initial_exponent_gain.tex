@@ -2,7 +2,7 @@
 \label{sec:area_law_initial_exponent_gain}
 
 Write $C_{\mathrm{pad}}$ for the padding constant used in
-Theorem~\ref{thm:area_law_initial_box}. TNLean's cyclic-color recurrence uses
+Theorem~\ref{thm:area_law_initial_box}. The cyclic-color recurrence uses
 $p=1/(2(2C_{\mathrm{pad}}+1)^2)$ and $M=8(C_{\mathrm{pad}}+1)$.
 Its ratio is $\lambda=(1-p/2)M^2$, and its exponent is
 $e_0=\log\lambda/\log M-1$.
@@ -10,8 +10,8 @@ The following auxiliary estimates quantify the gain for these formalized
 recurrence constants. The manuscript instead uses
 $p_0=(2C_{\mathrm{pad}}+5)^{-2}$ and
 $\lambda=(1-p_0/4)M^2$, with $M\ge16(C_{\mathrm{pad}}+2)$;
-the numerical choices here come from TNLean's
-cyclic-color partition, as documented with its initial recurrence definitions.
+the numerical choices here come from the cyclic-color partition used
+in the initial recurrence.
 
 \begin{theorem}[Exact initial exponent gain]
     \label{thm:area_law_initial_exponent_gain}
@@ -22,13 +22,14 @@ cyclic-color partition, as documented with its initial recurrence definitions.
     \begin{align}
         1-e_0=\frac{-\log(1-p/2)}{\log M}.
     \end{align}
-    This is the logarithmic form of TNLean's exponent, following the exponent
+    This is the logarithmic form of the exponent $e_0$, following the exponent
     calculation in
     \cite[proof of Proposition~3.3, lines~651--663]{OpenAI2026AreaLaw}.
 \end{theorem}
 \begin{proof}\leanok
     \lean{TNLean.PEPS.AreaLaw.initialBoxProb_pos_and_le_half,
-        TNLean.PEPS.AreaLaw.sixteen_le_initialBoxScale}
+        TNLean.PEPS.AreaLaw.sixteen_le_initialBoxScale,
+        TNLean.PEPS.AreaLaw.one_lt_initialBoxScale}
     Since $0<p\le1/2$ and $M\ge16$,
     $\log\lambda=\log(1-p/2)+2\log M$ and $\log M>0$.
     Substitute this identity into $e_0=\log\lambda/\log M-1$.

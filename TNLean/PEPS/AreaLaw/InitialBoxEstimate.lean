@@ -440,6 +440,12 @@ theorem sixteen_le_initialBoxScale (q R : ℕ) (J Δ : ℝ) : 16 ≤ initialBoxS
   have := one_le_initialPaddingConst q R J Δ
   unfold initialBoxScale; omega
 
+/-- The real scale factor exceeds one, so its logarithm is positive. -/
+theorem one_lt_initialBoxScale (q R : ℕ) (J Δ : ℝ) :
+    (1 : ℝ) < initialBoxScale q R J Δ := by
+  exact_mod_cast (show 1 < initialBoxScale q R J Δ from
+    lt_of_lt_of_le (by norm_num) (sixteen_le_initialBoxScale q R J Δ))
+
 /-- `M < λ < M²` for the scale factor and growth ratio. Source: `02-initial.tex`,
 lines 651–656. -/
 theorem initialBoxScale_lt_initialBoxRatio_and_lt_sq (q R : ℕ) (J Δ : ℝ) :
@@ -464,9 +470,7 @@ theorem initialBoxScale_lt_initialBoxRatio_and_lt_sq (q R : ℕ) (J Δ : ℝ) :
 theorem initialBoxExponent_pos_and_lt_one (q R : ℕ) (J Δ : ℝ) :
     0 < initialBoxExponent q R J Δ ∧ initialBoxExponent q R J Δ < 1 := by
   obtain ⟨h1, h2⟩ := initialBoxScale_lt_initialBoxRatio_and_lt_sq q R J Δ
-  have hM : (1 : ℝ) < initialBoxScale q R J Δ := by
-    exact_mod_cast (show 1 < initialBoxScale q R J Δ from
-      lt_of_lt_of_le (by norm_num) (sixteen_le_initialBoxScale q R J Δ))
+  have hM := one_lt_initialBoxScale q R J Δ
   have hexp := Entropy.one_lt_log_div_log_lt_two hM h1 h2
   unfold initialBoxExponent
   constructor <;> linarith [hexp.1, hexp.2]

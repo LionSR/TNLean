@@ -35,9 +35,7 @@ theorem one_sub_initialBoxExponent_eq (q R : ℕ) (J Δ : ℝ) :
         Real.log (initialBoxScale q R J Δ) := by
   have hp := (initialBoxProb_pos_and_le_half q R J Δ).2
   have hprob : 0 < 1 - initialBoxProb q R J Δ / 2 := by linarith
-  have hM : (1 : ℝ) < initialBoxScale q R J Δ := by
-    exact_mod_cast (show 1 < initialBoxScale q R J Δ from
-      lt_of_lt_of_le (by norm_num) (sixteen_le_initialBoxScale q R J Δ))
+  have hM := one_lt_initialBoxScale q R J Δ
   have hlog : Real.log (initialBoxScale q R J Δ) ≠ 0 := (Real.log_pos hM).ne'
   rw [initialBoxExponent, initialBoxRatio,
     Real.log_mul hprob.ne' (pow_ne_zero 2 (lt_trans zero_lt_one hM).ne'),
@@ -58,9 +56,7 @@ theorem initialBoxExponent_gain_bounds (q R : ℕ) (J Δ : ℝ) :
   let p := initialBoxProb q R J Δ
   have hp : p ≤ 1 / 2 := (initialBoxProb_pos_and_le_half q R J Δ).2
   have hprob : 0 < 1 - p / 2 := by linarith
-  have hM : (1 : ℝ) < initialBoxScale q R J Δ := by
-    exact_mod_cast (show 1 < initialBoxScale q R J Δ from
-      lt_of_lt_of_le (by norm_num) (sixteen_le_initialBoxScale q R J Δ))
+  have hM := one_lt_initialBoxScale q R J Δ
   have hlog := (Real.log_pos hM).le
   have hlower : p / 2 ≤ -Real.log (1 - p / 2) := by
     linarith [Real.log_le_sub_one_of_pos hprob]
