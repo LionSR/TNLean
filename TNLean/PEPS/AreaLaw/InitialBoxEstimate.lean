@@ -504,10 +504,10 @@ lines 596–669): for every safety parameter `D₀ > 2R + 10` and every `r ≥ 1
 `e₀ = initialBoxExponent q R J Δ`.
 
 The hypothesis `hscale` is the power bound from a scale recurrence at a named constant
-`scaleConst B K λ M`, for any bound `B ≥ |F 1|`. After the QICLean pin bump, `scaleConst` is
-`Entropy.scaleRecurrenceConst` and `hscale` is `Entropy.le_scaleRecurrenceConst_mul_rpow`,
-whose conclusion carries the exponent `Entropy.scaleRecurrenceExponent M λ`, by definition
-`Real.log λ / Real.log M`. -/
+`scaleConst B K λ M`, for any bound `B ≥ |F 1|`. At `scaleConst = Entropy.scaleRecurrenceConst`,
+`hscale` is `Entropy.le_scaleRecurrenceConst_mul_rpow`, whose exponent
+`Entropy.scaleRecurrenceExponent M λ` is by definition `Real.log λ / Real.log M`; see
+`boxEntropy_le_initialBoxConstant_mul_rpow`. -/
 theorem boxEntropy_le_initialBoxConstant_mul_rpow_of_scaleRecurrence
     (scaleConst : ℝ → ℝ → ℝ → ℕ → ℝ)
     (hscale : ∀ {F : ℕ → ℝ} {M : ℕ} {lam K : ℝ}, Monotone F → 2 ≤ M → (M : ℝ) < lam →
@@ -526,6 +526,26 @@ theorem boxEntropy_le_initialBoxConstant_mul_rpow_of_scaleRecurrence
     (initialBoxScale_lt_initialBoxRatio_and_lt_sq q R J Δ).1 hK
     (fun _ hr ↦ boxEntropy_le_initialBoxRatio_mul hq hJ hΔ hD₀ hr) hF1 r hr
   rwa [initialBoxExponent, add_sub_cancel]
+
+/-- **The initial constant at the QICLean scale-recurrence constant**:
+`C₀ = initialBoxConstant Entropy.scaleRecurrenceConst q R J Δ
+= (log q + C_buf M² / (λ - M)) M^{log_M λ}`, with `C_buf = initialBufferConst q R J Δ`,
+`M = initialBoxScale q R J Δ` and `λ = initialBoxRatio q R J Δ`. It depends only on
+`q, R, J, Δ`. Source: proof of Proposition 3.3, `02-initial.tex`, lines 657–667. -/
+noncomputable def initialBoxConstantExplicit (q R : ℕ) (J Δ : ℝ) : ℝ :=
+  initialBoxConstant Entropy.scaleRecurrenceConst q R J Δ
+
+/-- **Proposition 3.3 at the named constants** (`prop:initial-box`, `02-initial.tex`,
+lines 596–669): for every safety parameter `D₀ > 2R + 10` and every `r ≥ 1`,
+`F_box(r) ≤ C₀ r^{1 + e₀}` with `C₀ = initialBoxConstantExplicit q R J Δ` and
+`e₀ = initialBoxExponent q R J Δ`. -/
+theorem boxEntropy_le_initialBoxConstant_mul_rpow (hq : 1 ≤ q) (hJ : 0 ≤ J) (hΔ : 0 < Δ)
+    (hD₀ : 2 * R + 10 < D₀) {r : ℕ} (hr : 1 ≤ r) :
+    boxEntropy q R J Δ D₀ r ≤
+      initialBoxConstantExplicit q R J Δ * (r : ℝ) ^ (1 + initialBoxExponent q R J Δ) :=
+  boxEntropy_le_initialBoxConstant_mul_rpow_of_scaleRecurrence Entropy.scaleRecurrenceConst
+    (fun hF hM hlam hK hrec _ hB s hs =>
+      Entropy.le_scaleRecurrenceConst_mul_rpow hF hM hlam hK hrec hB s hs) hq hJ hΔ hD₀ hr
 
 /-- The safe-box estimate at a fixed safety parameter. This auxiliary form follows the
 scale-recurrence argument of Proposition 3.3 (`prop:initial-box`, `02-initial.tex`,
