@@ -541,6 +541,54 @@ for an arbitrary finite set of sites and are instantiated here directly.
     The assertion about all cuts follows by restricting to internal cuts.
 \end{proof}
 
+\begin{theorem}[Growth of chain cut ranks]
+    \label{thm:chain_cut_rank_growth}
+    \lean{
+        TNLean.MPS.AreaLaw.rank_cutMatrix_add_le,
+        TNLean.MPS.AreaLaw.rank_cutMatrix_le_add,
+        TNLean.MPS.AreaLaw.rank_cutMatrix_le_pow_min_mul,
+        TNLean.MPS.AreaLaw.rank_cutMatrix_le_pow_forty_mul
+    }
+    \leanok
+    \uses{def:chain_open_mps}
+    Let $L,q$ be natural numbers and let $\psi$ be a vector on $L$ sites
+    of local dimension $q$. Write $r_k$ for the rank of its cut matrix at
+    $k$. For natural numbers $a,d$ with $a+d\leq L$, one has
+    \begin{align}
+        r_{a+d} & \leq q^d r_a,
+                & r_a           & \leq q^d r_{a+d}. \notag
+    \end{align}
+    Consequently, if $a\leq k\leq b\leq L$ and $r_a,r_b\leq R$, then
+    \begin{align}
+        r_k & \leq q^{\min\{k-a,b-k\}}R. \notag
+    \end{align}
+    If, in addition, $q\geq1$ and $b-a\leq80w$ for a natural number $w$,
+    then
+    \begin{align}
+        r_k & \leq q^{40w}R. \notag
+    \end{align}
+    These bounds apply without a normalization or nonvanishing assumption
+    on $\psi$; in particular, the first three bounds also allow $q=0$.
+    They give the internal-cut estimate used when passing from blocks to
+    sites in \cite[Part~II, proof of Theorem~B]{TNLean2026OneDimensional}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:chain_open_mps}
+    Regard the coefficients at two adjacent cuts as two flattenings of a
+    tensor with factors corresponding to the left sites, one site, and
+    the right sites. A rank factorization of the first flattening through
+    a space of dimension $r$ gives a factorization of the second through
+    a space of dimension $qr$: retain the one-site coordinate together
+    with the factorization index. Thus moving one site to the left
+    factor increases the rank by at most a factor $q$. Transposition gives
+    the same estimate when moving it to the right factor. Iterating proves
+    the first two inequalities, including zero-dimensional factors.
+    Applying them from the nearer endpoint gives the minimum-exponent
+    estimate. Finally,
+    $\min\{k-a,b-k\}\leq40w$ because the two distances sum to $b-a\leq80w$.
+    Monotonicity of $q^n$ for $q\geq1$ gives the last bound.
+\end{proof}
+
 \begin{theorem}[Sequential truncation in ordered orthonormal bases]
     \label{thm:chain_sequential_truncation_full}
     \lean{

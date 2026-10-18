@@ -4636,6 +4636,19 @@ three-plaquette output measurement, and the routed reunion measurement.
 ## Candidates
 
 
+### Restricting a cut configuration after adjoining one site — candidate (2026-10-18)
+
+- **Pattern:** The inverse of the one-site extension restricts the configuration
+  and evaluates it at the cut site. Its inverse proof separates sites before
+  the cut from the cut site and reduces subtype equality to the site value.
+- **Seen:** `prefixStepEquiv` and `suffixStepEquiv` in
+  `MPS/AreaLaw/CutMatrixGrowth.lean`.
+- **Abstraction:** Two occurrences in one file do not meet the promotion
+  threshold. The coefficient identity itself reuses the existing
+  `MPSPreparation.cutCoefficientMatrix_adjacent`; it is not reproved.
+
+
+
 ### Interval membership in the chain stage assignments — candidate (2026-10-18)
 
 - **Pattern:** Unfold a half-open target interval, separate its endpoint

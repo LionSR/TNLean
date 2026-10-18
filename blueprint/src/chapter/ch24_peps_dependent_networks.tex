@@ -80,6 +80,63 @@ linkwise matching in \cite[Definition~5.1]{Schuch2010PEPS}.
     The second expression is the change of coordinates by $R$.
 \end{definition}
 
+\begin{theorem}[Identity-bond factorization across a vertex partition]
+    \label{thm:peps_identity_cut_factorization}
+    \lean{TNLean.PEPS.DependentBondNetwork.flattening_network_one_eq_mul,
+        TNLean.PEPS.DependentBondNetwork.rank_flattening_network_one_le}
+    \leanok
+    \uses{def:peps_dependent_network,def:peps_group_contraction}
+    Let a finite directed multigraph $(V,E)$ have endpoints $t(e),h(e)$,
+    finite virtual alphabets $D_e$, and local tensors $A_v$ with physical
+    alphabet $P_v$. Let $Z$ be its contraction with identity bond matrices.
+    For $S\subseteq V$, let $\partial S$ be the tagged edges with one endpoint
+    in $S$ and one in $S^c$, and set $K_S=\prod_{e\in\partial S}D_e$.
+    Let $U_S(x,\eta)$ be the partial contraction on $S$, summing the labels
+    of all edges internal to $S$ and keeping $x\in\prod_{v\in S}P_v$ and
+    $\eta\in K_S$ open. Define $U_{S^c}$ in the same way.
+    Let $F_S$ be the matrix reshaping of $Z$, with rows indexed by the
+    physical configurations on $S$ and columns by those on $S^c$. Then
+    \begin{align}
+        F_S & =U_S U_{S^c}^{\mathsf T}.
+        \label{eq:peps_identity_cut_factor}
+    \end{align}
+    If the physical alphabets $P_v$ are finite, then
+    \begin{align}
+        \operatorname{rank}F_S
+         & \le |K_S|=\prod_{e\in\partial S}|D_e|.
+        \label{eq:peps_identity_cut_rank}
+    \end{align}
+    Thus each tagged crossing edge contributes its own alphabet once.
+    This is the finite contraction step in
+    \cite[Part~II, proof of Theorem~B]{TNLean2026OneDimensional}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:peps_dependent_network,def:peps_group_contraction}
+    Each identity bond equates its two endpoint labels. Write $\widetilde A_v$
+    for $A_v$ with the same edge label read at every endpoint incidence,
+    including both incidences of a loop. Splitting a global edge assignment
+    into its two internal parts $\alpha,\beta$ and its crossing part $\eta$
+    gives
+    \begin{align}
+        F_S(x,y)
+         & =\sum_{\eta\in K_S}
+        \left(\sum_{\alpha}\prod_{v\in S}
+        \widetilde A_v((\alpha,\eta)|_v,x_v)\right)
+        \left(\sum_{\beta}\prod_{v\in S^c}
+        \widetilde A_v((\beta,\eta)|_v,y_v)\right).
+        \label{eq:peps_identity_cut_sum}
+    \end{align}
+    These are precisely the two partial contractions, proving
+    (\ref{eq:peps_identity_cut_factor}). Matrix rank is bounded by the
+    number of columns of the left factor, namely $|K_S|$, which gives
+    (\ref{eq:peps_identity_cut_rank}). The factors pair by the ordinary transpose.
+    A loop is internal to one side. Parallel edges retain distinct labels.
+    Empty alphabets are allowed: an empty crossing alphabet makes $K_S$
+    empty and the matrix zero; with no crossing edges, $K_S$ is a singleton.
+\end{proof}
+
+
 \begin{definition}[The full cut range]%
     \label{def:peps_dependent_cut}
     \lean{TNLean.PEPS.DependentBondNetwork.CutEndpoint,

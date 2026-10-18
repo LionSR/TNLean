@@ -252,6 +252,7 @@ import TNLean.PEPS.Approximation.GuideFrameRewrite
 import TNLean.PEPS.Approximation.GuideFrameRewriteCircuit
 import TNLean.PEPS.Approximation.HoleEncoder
 import TNLean.PEPS.Approximation.HomogeneousOwnership
+import TNLean.PEPS.Approximation.IdentityBondCutRank
 import TNLean.PEPS.Approximation.IncidentGateLabels
 import TNLean.PEPS.Approximation.IncidentPureSampledPhysicalSum
 import TNLean.PEPS.Approximation.IncidentSampledEndpointComparison

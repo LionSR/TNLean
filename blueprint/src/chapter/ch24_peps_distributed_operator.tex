@@ -273,6 +273,48 @@ the finite-dimensional density application uses finite ones.
     The identity matrix on each edge forces its two endpoint labels to coincide, and reindexing the remaining diagonal assignments by one label per edge makes the endpoint reader yield $\eta_p$.
 \end{proof}
 
+\begin{theorem}[Cut ranks of distributed product-basis columns]
+    \label{thm:compression_operator_column_cut_rank}
+    \lean{TNLean.PEPS.Approximation.DistributedOperatorContraction.flattening_contractedOperator_column_eq_mul,
+        TNLean.PEPS.Approximation.DistributedOperatorContraction.rank_flattening_contractedOperator_column_le}
+    \leanok
+    \uses{def:compression_operator_operator,def:compression_operator_links,
+        def:compression_operator_alphabets,def:peps_ket_column_dependent_fix_input}
+    Let $\sigma$ be the distributed operator contraction with tagged link
+    family $\mathcal L$, virtual alphabets $D_\ell$, physical output alphabets
+    $X_p$, and input alphabets $Y_p$. For any product-basis input
+    $z\in\prod_pY_p$, fix that input locally as in
+    Definition~\ref{def:peps_ket_column_dependent_fix_input}.
+    For a party subset $S$, write $F_{S,z}$ for the coefficient matrix of
+    $x\mapsto\sigma(x,z)$ across $S\mid S^c$, and write
+    $U_{S,z},U_{S^c,z}$ for the two partial contractions of these actual
+    input-fixed local tensors. Then
+    \begin{align}
+        F_{S,z} & =U_{S,z}U_{S^c,z}^{\mathsf T}.
+        \label{eq:compression_column_cut_factor}
+    \end{align}
+    If every $X_p$ is finite, then
+    \begin{align}
+        \operatorname{rank}F_{S,z}
+         & \le\prod_{\ell\in\partial S}|D_\ell|.
+        \label{eq:compression_column_cut_rank}
+    \end{align}
+    The edge set, alphabets and identity bond matrices are unchanged by
+    fixing $z$, as in \cite[Lemma~8.1]{OpenAI2026PolynomialPEPS}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_identity_cut_factorization,
+        def:peps_ket_column_dependent_fix_input,def:compression_operator_operator}
+    The input-fixed local tensor is
+    $A_{p,z}(\eta,x_p)=A_p(\eta;(x_p,z_p))$.
+    Its identity-bond contraction is exactly $\sigma(x,z)$.
+    Apply Theorem~\ref{thm:peps_identity_cut_factorization} to these tensors
+    on the same tagged star and sample links. The local sums and the coefficient
+    at each chosen root stay inside their original tensors. No normalization
+    or injectivity condition is required.
+\end{proof}
+
 \begin{theorem}[Exact branch and sample evaluation]
     \label{thm:compression_operator_branch_sum}
     \lean{TNLean.PEPS.Approximation.DistributedOperatorContraction.contractedOperator_eq_branchSampleSum}
