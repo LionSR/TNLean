@@ -138,7 +138,11 @@ width $\lceil4D_0\rceil+2$, which equals $8R+46$ at $D_0=2R+11$, and through
 thresholds that grow logarithmically in $D_0$. The collar estimate itself uses
 the integer clearance $2R+10$ and does not depend on $D_0$ beyond $D_0>2R+10$.
 The template constant $\Ctpl=24$ enters only through the template coefficients
-$C_P=\max(18\Ctpl,1)=432$ and $C_B=32\Ctpl=768$ of Proposition~11.2.
+$C_P=\max(18\Ctpl,1)=432$ and $C_B=32\Ctpl=768$ of Proposition~11.2. These
+values are computed in the proofs, but the statements
+\leanid{TNLean.PEPS.AreaLaw.Geometry.exists_primaryScannerConstant} and
+\leanid{TNLean.PEPS.AreaLaw.Geometry.exists_belt_replacement_templates} still
+quantify over them existentially.
 
 The exponents are fixed rationals:
 \[
@@ -213,7 +217,9 @@ current bound is $C_j r^{1+e}$, the next constant is
 where $C_{\rm out}(C_j)$ is the output coefficient of the rough scanner
 (\leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_sourceBootstrap_entropy_improvement})
 and $N(C_j)=\max(N_s,N_g)$ is the largest of its thresholds and the rectangle
-geometry threshold. The term $N^2\log q$ absorbs the bounded scales by the
+geometry threshold. The rounds are iterated with threshold $1$, so each round
+adds one further $\log q$ to the right-hand side of \eqref{eq:round}. The
+term $N^2\log q$ absorbs the bounded scales by the
 volume bound $F(r)\le r^2\log q$
 (\src{TNLean/PEPS/AreaLaw/Scan/ExponentBootstrap.lean}, line~39). The threshold
 $N(C_j)$ is a maximum of kind (a) thresholds, rows~1--17 and~32--33 of
@@ -237,7 +243,9 @@ $C_w=4C_{\rm box}+4\log q+1$. The scanner (Proposition~9.2,
 \src{08-scanner.tex}, lines~349--533) and the final-scale information estimate
 give a constant $C_m$ and a threshold $N_1=\max(N_s,N_g)$
 (\leanid{TNLean.PEPS.AreaLaw.Scan.exists_template_final_mutualInformation_of_boxEntropy}),
-and $C_1=C_m/2$.
+and $C_1=\max(C_m/2,10)$
+(\leanid{TNLean.PEPS.AreaLaw.sublinearCollarBound_of_mutualInformation_le}
+replaces the constant $C_m/2$ by $\max(C_m/2,10)$).
 
 The output coefficients of the scanner are explicit expressions in the input
 coefficient, as recorded in
@@ -248,7 +256,8 @@ $20C_e+62+24\log q+16\sqrt{C_{\rm tr}}(1+C_{\rm dim})$
 (\leanid{TNLean.PEPS.AreaLaw.Scan.exists_finalSharp_error_le}). The constants
 packaged as existentials along this branch are explicit in substance: the
 scale-fact constant is $32$, the transport cap is
-$1+(2C_r+3)^2\log q$, and the marginal constants are $C_0=512e(2/g_1)$ and
+$1+(2C_r+3)^2\log q$, and the marginal constants are $C_0^{\rm m}=512e(2/g_1)$ (distinct from the
+input $C_0=\max(C_1,1)$ of Proposition~10.2) and
 $c_0=[32\sqrt{1+2/g_1}]^{-1}$. The thresholds are rows~1--31 of
 Table~\ref{tab:sites}. The relation between the safe-box estimate and the
 collar bound is recorded in \src{docs/paper-gaps/arealaw2d_safe_box_collar_scope.tex}.
@@ -310,7 +319,8 @@ fixed in lines~756--774) is assembled in the Lean proof
 \leanid{TNLean.PEPS.AreaLaw.Geometry.twoFamilyDecomposition_of_one_le}. The
 constants are fixed in the following order.
 \begin{enumerate}
-    \item The template coefficients $C_P=432$ and $C_B=768$ (explicit).
+    \item The template coefficients $C_P=432$ and $C_B=768$, computed in the
+          proofs but existential in the statements.
     \item The birth-separation constant $c_1$
           (\leanid{TNLean.PEPS.AreaLaw.Geometry.exists_birthSeparation};
           Lemma~11.5, lines~573--659). It is an absolute constant: it depends on
@@ -494,9 +504,10 @@ A (Proposition~10.2), R (the collar radius threshold $N_3$), G
 (Proposition~11.2), and ``off'' for a site whose declaration is not used in the
 proof of Theorem~1.1. A site used by the bootstrap is also used by the collar
 bound, since the latter consumes $C_{\rm box}$. Rows marked $\dagger$ belong to
-the Lean proof of Proposition~11.2 and of Theorem~1.1, which is not yet part of
-the main development; their line numbers refer to that proof as currently
-written.
+the Lean proof of Proposition~11.2 and of Theorem~1.1
+(\leanid{TNLean.PEPS.AreaLaw.Geometry.twoFamilyDecomposition_of_one_le},
+\leanid{TNLean.PEPS.AreaLaw.uniformAreaLaw}); their line numbers may have
+drifted since the table was compiled.
 
 Sites that merely read a property of an existing witness (for example the inequality $C_1=32\ge1$ read off from the witness
 of an eventual statement) are listed
@@ -682,7 +693,7 @@ line~59, which extracts nothing.
 Table~\ref{tab:sites} has 79 rows: 56 of kind (a), of which 43 are on the path
 of Theorem~1.1 and 13 are not; 2 of kind (b); 1 of kind (c), not on the path;
 14 of kind (d); and 6 further kind (a) rows in the Lean proof of
-Proposition~11.2 that is not yet merged. Every kind (a) row reduces to the
+Proposition~11.2. Every kind (a) row reduces to the
 shapes (P1)--(P10). By frequency on the path, the shapes are: power against a
 constant and rounded scales (P1, P7), logarithmic factors against power
 margins (P3, P4), the entropy-continuity and logarithm bounds (P8), dyadic
