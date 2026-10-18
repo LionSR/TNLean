@@ -52,6 +52,62 @@ namespace TNLean.PEPS.AreaLaw
 open QuantumCircuit SpectralFilter
 open Matrix (rootChannel)
 
+/-- **Positive replacement of the Hamiltonian on a lattice domain, with named constants**
+(Proposition 4.3, `prop:positive`, `03-quasilocal.tex`, lines 220–334). Let `C₃, c₃` be the
+constants of the filter-locality tail of the positive constraints for the lattice localization
+constants `C = localizationPrefactor R 2 2`, `v = localizationVelocity R v_R (μ_R J)` and
+`c = 1/2`, with `v_R = 1 + 2R(R + 1)` and `μ_R = 2^{2R(R+1)}`: the hypothesis `htail` is the
+conclusion of `SpectralFilter.exists_norm_positiveConstraint_sub_map_le` at these constants.
+Then every conclusion of `exists_latticePositiveConstraints` holds with `C = C₃`, `c = c₃`.
+Once QICLean provides the named filter-locality constants, `htail` is
+`SpectralFilter.norm_positiveConstraint_sub_map_le`, with
+`C₃ = positiveConstraintLocalityConst p Δ J (localizationPrefactor R 2 2) (1 / 2)` and
+`c₃ = positiveConstraintLocalityRate p Δ (localizationVelocity R v_R (μ_R J)) (1 / 2)`. -/
+theorem latticePositiveConstraints_of_locality {p : ℕ} (hp : 1 ≤ p) (R : ℕ) {J Δ C₃ c₃ : ℝ}
+    (hJ : 0 ≤ J) (hΔ : 0 < Δ)
+    (htail : ∀ {n : Type} [Fintype n] [DecidableEq n]
+      {H : Matrix n n ℂ} {Ω : EuclideanSpace ℂ n} {h : Matrix n n ℂ},
+      H.IsHermitian → ‖Ω‖ = 1 → h.IsHermitian → ‖h‖ ≤ J →
+      ∀ (L : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ), (∀ X, ‖L X‖ ≤ ‖X‖) → L 1 = 1 →
+      (∀ X, X.IsHermitian → (L X).IsHermitian) →
+      L (CFC.abs (L (centeredFilter p (Δ / 2) H Ω h))) =
+        CFC.abs (L (centeredFilter p (Δ / 2) H Ω h)) →
+      ∀ {l : ℝ}, 0 ≤ l →
+      (∀ t : ℝ, ‖Matrix.hermitianUnitaryPath H t * h * Matrix.hermitianUnitaryPath H (-t) -
+          L (Matrix.hermitianUnitaryPath H t * h * Matrix.hermitianUnitaryPath H (-t))‖ ≤
+        ‖h‖ * min 2 (localizationPrefactor R 2 2 * Real.exp (localizationVelocity R
+          (1 + 2 * R * (R + 1)) (((2 ^ ((1 + 2 * R * (R + 1)) - 1) : ℕ) : ℝ) * J) * |t| -
+            1 / 2 * l))) →
+      ‖positiveConstraint (positiveNormalization p (Δ / 2) J) (centeredFilter p (Δ / 2) H Ω h) -
+          L (positiveConstraint (positiveNormalization p (Δ / 2) J)
+            (centeredFilter p (Δ / 2) H Ω h))‖ ≤
+        C₃ * Real.exp (-(c₃ * l ^ kernelExponent p))) :
+    ∀ {q : ℕ} [NeZero q] (Λ : Finset (ℤ × ℤ)) (h : LocalHamiltonian Λ q R J)
+      (a : AdmissibleSupport Λ R → Site Λ), (∀ X, a X ∈ X.1) →
+      ∀ (E₀ : ℝ) (Ω : StateSpace Λ q), IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+      let cs := positiveNormalization p (Δ / 2) J
+      let k := fun i => positiveConstraint cs (centeredFilter p (Δ / 2) h.operator Ω (h.term i))
+      0 < cs ∧
+      (∀ i, 0 ≤ k i ∧ k i ≤ 1 ∧ k i *ᵥ WithLp.ofLp Ω = 0) ∧
+      cs⁻¹ • (h.operator - (E₀ : ℂ) • 1) ≤ ∑ i, k i ∧
+      ((Δ / cs : ℝ) : ℂ) • (1 - Matrix.vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))) ≤
+        cs⁻¹ • (h.operator - (E₀ : ℂ) • 1) ∧
+      ((Δ / cs : ℝ) : ℂ) • (1 - Matrix.vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))) ≤
+        ∑ i, k i ∧
+      (∀ i (l : ℕ), 0 ≤ siteExpectation q (graphBall (domainGraph Λ) (a i) l) (k i) ∧
+        siteExpectation q (graphBall (domainGraph Λ) (a i) l) (k i) ≤ 1 ∧
+        ‖k i - siteExpectation q (graphBall (domainGraph Λ) (a i) l) (k i)‖ ≤
+          C₃ * Real.exp (-(c₃ * (l : ℝ) ^ kernelExponent p))) ∧
+      (∀ i, k i ∈ supportedOperators q {x | (domainGraph Λ).Reachable (a i) x}) := by
+  intro q _ Λ h a ha E₀ Ω hgs
+  obtain ⟨hΩ, hHΩ, hgap⟩ := Matrix.isGappedGroundState_iff.mp hgs
+  obtain ⟨hk, hsum, hgapk, htail, hcomp⟩ := positiveQuasilocalConstraints_of_locality hp R
+    (1 + 2 * R * (R + 1)) (((2 ^ ((1 + 2 * R * (R + 1)) - 1) : ℕ) : ℝ) * J) 2 2 hΔ htail
+    (q := q) (ι := Site Λ) (κ := AdmissibleSupport Λ R) (domainGraph Λ) (fun X => X.1) a ha
+    h.term h.hermitian h.supported (fun X => X.2.edist_le) (fun X => X.2.card_le)
+    (h.sum_norm_term_containing_le hJ) (card_domainGraph_sphere_le Λ) h.norm_le E₀ Ω hΩ hHΩ hgap
+  exact ⟨positiveNormalization_pos p _ J, hk, hsum, hgapk, hgapk.trans hsum, htail, hcomp⟩
+
 /-- **Positive replacement of the Hamiltonian on a lattice domain** (Proposition 4.3,
 `prop:positive`, `03-quasilocal.tex`, lines 220–246). For `p ≥ 1`, `α = p / (p + 1)`,
 `R`, `J ≥ 0` and `Δ > 0` there are `C ≥ 0`, `c > 0` such that for every `q ≥ 1`, every
@@ -84,16 +140,10 @@ theorem exists_latticePositiveConstraints {p : ℕ} (hp : 1 ≤ p) (R : ℕ) {J 
           ‖k i - siteExpectation q (graphBall (domainGraph Λ) (a i) l) (k i)‖ ≤
             C * Real.exp (-(c * (l : ℝ) ^ kernelExponent p))) ∧
         (∀ i, k i ∈ supportedOperators q {x | (domainGraph Λ).Reachable (a i) x}) := by
-  obtain ⟨C, c, hC, hc, hpos⟩ := exists_positiveQuasilocalConstraints.{0, 0} hp R
-    (1 + 2 * R * (R + 1)) (((2 ^ ((1 + 2 * R * (R + 1)) - 1) : ℕ) : ℝ) * J) 2 2 hJ hΔ
-  refine ⟨C, c, hC, hc, ?_⟩
-  intro q _ Λ h a ha E₀ Ω hgs
-  obtain ⟨hΩ, hHΩ, hgap⟩ := Matrix.isGappedGroundState_iff.mp hgs
-  obtain ⟨hk, hsum, hgapk, htail, hcomp⟩ := @hpos q _ (Site Λ) _ _ (AdmissibleSupport Λ R) _
-    (domainGraph Λ) (fun X => X.1) a ha h.term h.hermitian h.supported (fun X => X.2.edist_le)
-    (fun X => X.2.card_le) (h.sum_norm_term_containing_le hJ) (card_domainGraph_sphere_le Λ)
-    h.norm_le E₀ Ω hΩ hHΩ hgap
-  exact ⟨positiveNormalization_pos p _ J, hk, hsum, hgapk, hgapk.trans hsum, htail, hcomp⟩
+  obtain ⟨C₃, c₃, hC₃, hc₃, htail⟩ := exists_norm_positiveConstraint_sub_map_le hp hΔ hJ
+    (localizationPrefactor_nonneg R 2 2) (localizationVelocity_pos R (1 + 2 * R * (R + 1))
+      (((2 ^ ((1 + 2 * R * (R + 1)) - 1) : ℕ) : ℝ) * J)) one_half_pos
+  exact ⟨C₃, c₃, hC₃, hc₃, latticePositiveConstraints_of_locality hp R hJ hΔ htail⟩
 
 /-- **Square roots and local channels on a lattice domain** (Lemma 4.4,
 `lem:quasilocal-roots`, `03-quasilocal.tex`, lines 336–389). For `p ≥ 1`, `R`, `J ≥ 0`,

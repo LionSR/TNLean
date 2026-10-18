@@ -316,6 +316,59 @@ theorem latticeConstraintWord_omission_of_positiveConstraints {p : ℕ} (hp : 1 
     (fun x => by exact_mod_cast card_anchor_fiber_le a ha x) (fun i l => (htail i l).2.2)
     Ω hΩ (fun i => (hk i).2.2) Aux S B hB ξ hξ r t
 
+/-- **Omission of distant events for the exact positive constraints, from the filter
+locality** (Lemma 10.1, `eq:amplification-product-omission`; `09-amplification.tex`,
+lines 42–72 and 188–226, with Proposition 4.3, `03-quasilocal.tex`, lines 220–334). Let
+`C₃ ≥ 0`, `c₃ > 0` be the filter-locality constants of `latticePositiveConstraints_of_locality`.
+Then the omission bound holds with `A = latticeOmissionPrefactor R C₃ c₃ p`,
+`v = latticeOmissionRate R C₃ c₃ p` and `γ = latticeOmissionExponent c₃ p`. Once QICLean
+provides the named constants, `htail` is `SpectralFilter.norm_positiveConstraint_sub_map_le`
+with `C₃ = positiveConstraintLocalityConst p Δ J (localizationPrefactor R 2 2) (1 / 2)` and
+`c₃ = positiveConstraintLocalityRate p Δ (localizationVelocity R v_R (μ_R J)) (1 / 2)`. -/
+theorem latticeConstraintWord_omission_of_locality {p : ℕ} (hp : 1 ≤ p) (R : ℕ)
+    {J Δ C₃ c₃ : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < Δ) (hC₃ : 0 ≤ C₃) (hc₃ : 0 < c₃)
+    (htail : ∀ {n : Type} [Fintype n] [DecidableEq n]
+      {H : Matrix n n ℂ} {Ω : EuclideanSpace ℂ n} {h : Matrix n n ℂ},
+      H.IsHermitian → ‖Ω‖ = 1 → h.IsHermitian → ‖h‖ ≤ J →
+      ∀ (L : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ), (∀ X, ‖L X‖ ≤ ‖X‖) → L 1 = 1 →
+      (∀ X, X.IsHermitian → (L X).IsHermitian) →
+      L (CFC.abs (L (centeredFilter p (Δ / 2) H Ω h))) =
+        CFC.abs (L (centeredFilter p (Δ / 2) H Ω h)) →
+      ∀ {l : ℝ}, 0 ≤ l →
+      (∀ t : ℝ, ‖Matrix.hermitianUnitaryPath H t * h * Matrix.hermitianUnitaryPath H (-t) -
+          L (Matrix.hermitianUnitaryPath H t * h * Matrix.hermitianUnitaryPath H (-t))‖ ≤
+        ‖h‖ * min 2 (localizationPrefactor R 2 2 * Real.exp (localizationVelocity R
+          (1 + 2 * R * (R + 1)) (((2 ^ ((1 + 2 * R * (R + 1)) - 1) : ℕ) : ℝ) * J) * |t| -
+            1 / 2 * l))) →
+      ‖positiveConstraint (positiveNormalization p (Δ / 2) J) (centeredFilter p (Δ / 2) H Ω h) -
+          L (positiveConstraint (positiveNormalization p (Δ / 2) J)
+            (centeredFilter p (Δ / 2) H Ω h))‖ ≤
+        C₃ * Real.exp (-(c₃ * l ^ kernelExponent p))) :
+    ∀ {q : ℕ} [NeZero q] (Λ : Finset (ℤ × ℤ)) (h : LocalHamiltonian Λ q R J)
+      (a : AdmissibleSupport Λ R → Site Λ), (∀ X, a X ∈ X.1) →
+      ∀ (E₀ : ℝ) (Ω : StateSpace Λ q), IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+      ∀ (Aux : Type*) [Fintype Aux] [DecidableEq Aux] (S : Finset (Site Λ))
+        (B : Matrix (Configuration Λ q × Aux) (Configuration Λ q × Aux) ℂ),
+        (∀ x y : Aux, (Matrix.of fun σ τ => B (σ, x) (τ, y)) ∈
+          supportedOperators q (S : Set (Site Λ))) →
+        ∀ (ξ : Aux → ℂ), ‖WithLp.toLp 2 ξ‖ = 1 → ∀ (r : ℕ) (t : ℝ≥0),
+          let P := fun i : AdmissibleSupport Λ R => a i ∈ graphNeighborhood Λ r S
+          let k := fun i => positiveConstraint (positiveNormalization p (Δ / 2) J)
+            (centeredFilter p (Δ / 2) h.operator Ω (h.term i))
+          let D := fun u : List (AdmissibleSupport Λ R) =>
+            ((u.reverse.map fun i => CFC.sqrt (1 - k i)).prod ⊗ₖ (1 : Matrix Aux Aux ℂ)) *ᵥ
+              (B *ᵥ fun x => WithLp.ofLp Ω x.1 * ξ x.2)
+          let F := fun w : PoissonWord.Word (AdmissibleSupport Λ R) =>
+            ‖WithLp.toLp 2 (D (List.ofFn w.2) -
+              D ((List.ofFn w.2).filter fun i => decide (P i)))‖
+          Integrable F (PoissonWord.measure (AdmissibleSupport Λ R) t) ∧
+          (∫ w, F w ∂PoissonWord.measure (AdmissibleSupport Λ R) t) ≤
+            latticeOmissionPrefactor R C₃ c₃ p * t * S.card * ‖B‖ *
+              Real.exp (latticeOmissionRate R C₃ c₃ p * t -
+                latticeOmissionExponent c₃ p * (r : ℝ) ^ kernelExponent p) :=
+  latticeConstraintWord_omission_of_positiveConstraints hp R hC₃ hc₃
+    (latticePositiveConstraints_of_locality hp R hJ hΔ htail)
+
 /-- **Omission of distant events for the exact positive constraints**
 (Lemma 10.1, `eq:amplification-product-omission`, applied to the constraints
 of `eq:amplification-positive-system`; `09-amplification.tex`, lines 17–30,
