@@ -94,6 +94,19 @@ Hamiltonian and its full-system gap. Conditional forms are stated separately.
     $D_0=13$ and $C_{\rm tpl}=24$ then yields the bound.
 \end{proof}
 
+\begin{lemma}[The coarse exponent is below one]
+    \label{lem:peps_coarse_exponent_lt_one}
+    \lean{TNLean.PEPS.Approximation.beta_lt_one}
+    \leanok
+    The exponent $\beta_0$ fixed by the amplification exponents satisfies
+    $\beta_0<1$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    This is a numerical evaluation of the amplification exponents.
+\end{proof}
+
 % Source: OpenAI2026PolynomialPEPS, proof of Proposition 3.1 (prop:coarse),
 % 02-information.tex, lines 110--146.
 \begin{definition}[Constants of the coarse information estimate]
@@ -190,7 +203,7 @@ Hamiltonian and its full-system gap. Conditional forms are stated separately.
 \begin{proof}
     \leanok
     \uses{thm:peps_coarse_information_of_collar_explicit,thm:area_law_amplification,
-        def:peps_coarse_information_constants}
+        def:peps_coarse_information_constants,lem:peps_coarse_exponent_lt_one}
     Choose a constant $C$ and a threshold $N$ for the collar bound, and by
     Theorem~\ref{thm:area_law_amplification} a constant $C_a$ and a threshold
     $N_a$ for the amplification bound at $(\max\{C,1\},1)$.
