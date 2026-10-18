@@ -4635,6 +4635,23 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 ## Candidates
 
+
+### Interval membership in the chain stage assignments — candidate (2026-10-18)
+
+- **Pattern:** Unfold a half-open target interval, separate its endpoint
+  inequalities, and use the stage index bounds to establish membership or
+  nonmembership before simplifying an owner change.
+- **Seen:** Three occurrences each of remainder-target nonmembership,
+  block-target membership and right-band-target nonmembership within
+  `MPS/AreaLaw/ProtocolSweepFrames.lean`.
+- **Abstraction:** The existing `mem_interval` and arithmetic tactics suffice
+  for these occurrences in one file. If the same inequalities recur in another
+  file, first state the common interval assertion as a lemma.
+- **Notes:** The repeated list-erasure normalization in
+  `MPS/AreaLaw/ProtocolSweepPath.lean` already uses one private lemma
+  `erase_eq_eraseP_decide`; it adds no global tactic or simp attribute.
+
+
 ### Two-frame lists in a finite family of bounded changes — candidate (2026-10-18)
 
 - **Pattern:** Before selecting a circuit witness, identify the two consecutive

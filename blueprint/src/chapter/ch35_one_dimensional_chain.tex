@@ -1111,6 +1111,555 @@ for an arbitrary finite set of sites and are instantiated here directly.
     Substituting $\|\Xi\|=1$ gives the result.
 \end{proof}
 
-The construction of the preceding band operations, their information
-estimates and the complete sweep remains separate from these terminal
-coordinate statements.
+\section{One-band dissolution}
+
+\begin{definition}[Assignments in one band dissolution]
+    \label{def:chain_one_band_assignments}
+    \lean{TNLean.MPS.AreaLaw.OneBand.main₀,
+        TNLean.MPS.AreaLaw.OneBand.aux₀,
+        TNLean.MPS.AreaLaw.OneBand.aux₁,
+        TNLean.MPS.AreaLaw.OneBand.aux₂,
+        TNLean.MPS.AreaLaw.OneBand.aux₃,
+        TNLean.MPS.AreaLaw.OneBand.exchangeRegion,
+        TNLean.MPS.AreaLaw.OneBand.exchange,
+        TNLean.MPS.AreaLaw.OneBand.main₄,
+        TNLean.MPS.AreaLaw.OneBand.aux₄,
+        TNLean.MPS.AreaLaw.OneBand.main₅,
+        TNLean.MPS.AreaLaw.OneBand.main₆,
+        TNLean.MPS.AreaLaw.OneBand.main₇,
+        TNLean.MPS.AreaLaw.OneBand.main₈,
+        TNLean.MPS.AreaLaw.OneBand.frames,
+        TNLean.MPS.AreaLaw.OneBand.participants}
+    \leanok
+    \uses{def:peps_frame,def:peps_frame_birth_partition,def:peps_frame_exchange_data}
+    Write $[u,v)_L=\{x\in\{0,\ldots,L-1\}:u\le x<v\}$.
+    Fix natural numbers $L,a,w$ with $w\ge1$ and $8w\le a$, a local
+    dimension $q\in\mathbb N$, and parties $A,B,C$.
+    A frame with no holes is specified by an owner for each site.
+    For such a frame $F$, write $F[T\to P]$ for the assignment obtained
+    by giving $T$ to $P$, and write
+    $E(F,P)=\{x:\text{the owner of }x\text{ in }F\text{ differs from }P\}$.
+    Let $M_0$ have an arbitrary owner function $o$, and let $U_0$ assign
+    every site of a distinct auxiliary copy to $C$. Set
+    \begin{align}
+        U_1 & =U_0[[a-6w,a-w)_L\to B],         &
+        U_2 & =U_1[[a-5w,a-2w)_L\to A],\notag    \\
+        U_3 & =U_2[[a-4w,a-3w)_L\to C],        &
+        Y   & =\{x:a-7w<x<a-\tfrac72w\}.\notag
+    \end{align}
+    Exchange the ownership assignments of $M_0,U_3$ on $Y$ to define
+    $M_4,U_4$, respectively; outside $Y$ retain their assignments.
+    The set $Y$ is the sample of an open real interval, also when $w$ is odd.
+    Define the remaining main assignments by
+    \begin{align}
+        M_5 & =M_4[[a-4w,a)_L\to A],          &
+        M_6 & =M_5[[a-5w,a+w)_L\to B],\notag    \\
+        M_7 & =M_6[[a-3w,a)_L\to C],          &
+        M_8 & =M_7[[a-6w,a-3w)_L\to C].\notag
+    \end{align}
+    The stage pairs are $(M_0,U_j)$ for $0\le j\le3$, then
+    $(M_j,U_4)$ for $4\le j\le8$, and remain $(M_8,U_4)$ thereafter.
+    Thus the eight transitions are
+    three auxiliary births, one exchange, two main deaths, one main birth,
+    and one main death. The auxiliary copy remains unchanged after the exchange.
+    Every copy is a distinct occurrence in the list of sheets, including
+    copies with the same geometric centre.
+    These are the half-open integer bands of
+    \cite[Part~II, Construction~\texttt{con:band}]{TNLean2026OneDimensional},
+    with the endpoint and retained-register corrections of
+    \cite{gap:tnlean_one_dimensional_band_sweep_corrections}.
+\end{definition}
+
+\begin{theorem}[Endpoints and information regions of one band]
+    \label{thm:chain_one_band_geometry}
+    \lean{TNLean.MPS.AreaLaw.OneBand.main₈_eq_changeOwner,
+        TNLean.MPS.AreaLaw.OneBand.aux₄_eq_raw,
+        TNLean.MPS.AreaLaw.OneBand.exchange_regions}
+    \leanok
+    \uses{def:chain_one_band_assignments}
+    Suppose $a+2w\le L$ and $o(x)=C$ on $[a-8w,a)_L$.
+    The retired auxiliary assignment is
+    \begin{align}
+        o_{U_4}(x) & =
+        \begin{cases}
+            A, & x\in[a-3w,a-2w)_L, \\
+            B, & x\in[a-2w,a-w)_L,  \\
+            C, & \text{otherwise}.
+        \end{cases}\notag
+    \end{align}
+    If also $o(x)=A$ on $[a,a+w)_L$ and $o(x)=B$ on
+    $[a+w,a+2w)_L$, then $M_8=M_0[[a,a+w)_L\to B]$.
+    Thus the original main ownership is restored outside the initial band;
+    this assertion concerns the main sheet, not the retained auxiliary registers.
+
+    For the exchange identities, assume only $w\ge1$, $8w\le a$,
+    $o(x)=C$ on $[a-8w,a)_L$, $A\ne C$ and $B\ne C$, and put
+    $Z=E(M_0,C)\cup E(U_3,C)$.
+    The exchange information regions $T=Z\cap Y$ and $E=Z\setminus Y$ are exactly
+    \begin{align}
+        T & =[a-6w,a-4w)_L,                   &
+        E & =[a-3w,a-w)_L\cup E(M_0,C).\notag
+    \end{align}
+    The endpoint assertions do not require the three parties to be distinct;
+    the two inequalities just stated are required for the exchange-region identities.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:chain_one_band_assignments,def:peps_frame_exchange_data}
+    Before the exchange, the auxiliary owners are $B,A,C,A,B$ on the
+    consecutive bands with endpoints $a-6w,a-5w,\ldots,a-w$, and $C$ elsewhere.
+    The open window contains $[a-6w,a-4w)_L$ and is contained in
+    $[a-7w,a-3w)_L$, where the original main owner is $C$.
+    It therefore transfers precisely the two left auxiliary bands to the main
+    sheet and restores $C$ on the auxiliary throughout the window. The two
+    right auxiliary bands are retained. Substituting the four subsequent
+    main assignments gives the main endpoint. For the information regions,
+    the sites not held by $C$ on both sheets consist of the two left
+    auxiliary bands, the two right auxiliary bands and $E(M_0,C)$.
+    The first lie in $Y$; the latter two sets avoid $Y$. This gives $T$ and $E$.
+\end{proof}
+
+\begin{theorem}[One-band changes under primitive information bounds]
+    \label{thm:chain_one_band_conditional_changes}
+    \lean{TNLean.MPS.AreaLaw.OneBand.circuits_of_primitive_information,
+        TNLean.MPS.AreaLaw.OneBand.boundary_change_of_primitive_information}
+    \leanok
+    \uses{def:chain_one_band_assignments,def:peps_bounded_change,
+        def:peps_circuit_source_bound,def:peps_sheet_stack}
+    Assume the hypotheses for the main endpoint in
+    Theorem~\ref{thm:chain_one_band_geometry}, and suppose $A,B,C$ are
+    pairwise distinct. Let $q\ge1$ and let $\Omega$ be a unit vector on the
+    original chain. Put $\delta=L^{-30}$.
+    Assume $I_\Omega(T_j:E_j)\le L^{-60}$ for each row of the following table:
+    \begin{align}
+        \begin{array}{cccc}
+            j & T_j           & E_j      & \text{nonprivate participants} \\
+            0 & [a-6w,a-w)_L  & E(U_0,C) & \{C,B\}                        \\
+            1 & [a-5w,a-2w)_L & E(U_1,B) & \{B,A\}                        \\
+            2 & [a-4w,a-3w)_L & E(U_2,A) & \{A,C\}                        \\
+            3 & T             & E        & \{C\}                          \\
+            4 & [a-4w,a)_L    & E(M_5,A) & \{C,A\}                        \\
+            5 & [a-5w,a+w)_L  & E(M_6,B) & \{A,B\}                        \\
+            6 & [a-3w,a)_L    & E(M_6,B) & \{B,C\}                        \\
+            7 & [a-6w,a-3w)_L & E(M_8,C) & \{B,C\}
+        \end{array}\notag
+    \end{align}
+    Here $T,E$ are the exact exchange regions above. In particular
+    $E(U_0,C)=\varnothing$. All information quantities concern $\Omega$,
+    not an evolving approximate vector. The environments in rows $4,5,7$
+    are evaluated after the corresponding death; row $6$ uses the frame
+    before the birth.
+
+    Place the chosen adjacent main and auxiliary occurrences between any two
+    fixed lists of spectator frames. Append any further registers with vector
+    $\xi$, where $\lVert\xi\rVert\le1$.
+    Let $\Psi_j$ be the tensor product, in this list order, of the reference
+    vectors of all the frames in stage $j$, followed by $\xi$; each frame
+    reference is formed from the same original $\Omega$.
+    There are eight circuits $c_j$ between these actual register lists with
+    at most one nonprivate gate each, its participants contained in the set
+    in row $j$. Each gate expansion has at most one monomial, coefficient
+    sum at most one, at most one normalized pair effect and at most one
+    normalized pair source per monomial. Their reference errors satisfy
+    \begin{align}
+        \lVert c_j\Psi_j-\Psi_{j+1}\rVert
+         & \le\begin{cases}4\delta,&j=3,\\ \delta,&j\ne3.\end{cases}\notag
+    \end{align}
+    The exchange circuit $c_3$ has no nonprivate gate. All spectator
+    occurrences, the retired auxiliary and the further registers are
+    retained at the stated stages and owners.
+
+    At the left boundary there is also a single-death version, for arbitrary
+    natural $L,w$ and parties $A,B$. Suppose $M$ is a hole-free frame whose
+    owner is $A$ on $T_0=[0,w)_L$, and put $M'=M[T_0\to B]$.
+    For $q\ge1$, a unit vector $\Omega$, and
+    $I_\Omega(T_0:E(M',B))\le L^{-60}$, there is a circuit from $M$ to $M'$
+    with nonprivate participants in $\{A,B\}$ and the same bounds one on
+    gates, monomials, coefficient sum, pair effects and pair sources, with
+    reference error at most $L^{-30}$. It may be placed among the same
+    arbitrary spectator frames and further registers. This boundary assertion
+    imposes neither the interior margin hypotheses nor distinctness of $A,B$,
+    and introduces no left auxiliary copy.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_frame_birth_bounded,thm:peps_frame_exchange_bounded,
+        thm:peps_bounded_change_closure,thm:peps_protocol_event_segments,
+        thm:peps_original_produced_resource_bounds}
+    Every modified band is owned by the departing party in its actual frame.
+    Apply the homogeneous birth estimate to rows $0,1,2,6$ and its reversed
+    death estimate to rows $4,5,7$, with the environments displayed in the
+    table. For a death, changing the owner back in its after-death frame
+    recovers the original frame. The exchange estimate applies to row $3$,
+    giving a private circuit with error $4\delta$.
+    The register realizations use at most one pair source and at most one
+    pair effect per monomial; the exchange uses neither. Placing these circuits beside spectator
+    frames and further registers does not increase their resource bounds or
+    their errors: the spectator references and $\xi$ have norm at most one.
+    The same death argument gives the boundary version.
+\end{proof}
+
+\section{Ownership and labelled copies during the chain sweep}
+
+The assignments follow the sweep construction in
+\cite[Part~II]{TNLean2026OneDimensional}, with the interval and
+retained-register correction of
+\cite{gap:tnlean_one_dimensional_band_sweep_corrections}.
+The objects below are owner assignments and ordered lists of frames without holes.
+
+\begin{definition}[Main-sheet assignments at a stage]
+    \label{def:chain_sweep_stage_assignments}
+    \lean{
+        TNLean.MPS.AreaLaw.ChainSweep.stageOwner,
+        TNLean.MPS.AreaLaw.ChainSweep.stageFrame,
+        TNLean.MPS.AreaLaw.ChainSweep.remainderBirthTarget,
+        TNLean.MPS.AreaLaw.ChainSweep.blockBirthTarget,
+        TNLean.MPS.AreaLaw.ChainSweep.leftBandTarget,
+        TNLean.MPS.AreaLaw.ChainSweep.rightBandTarget,
+        TNLean.MPS.AreaLaw.ChainSweep.afterRemainderBirth,
+        TNLean.MPS.AreaLaw.ChainSweep.afterBlockBirth,
+        TNLean.MPS.AreaLaw.ChainSweep.afterLeftTransfer,
+        TNLean.MPS.AreaLaw.ChainSweep.afterRightTransfer,
+        TNLean.MPS.AreaLaw.ChainSweep.leftBandMain,
+        TNLean.MPS.AreaLaw.ChainSweep.rightBandMain
+    }
+    \leanok
+    \uses{def:chain_terminal_registers,def:chain_one_band_assignments}
+    Let $L,w,q\in\mathbb N$, $X=\{0,\ldots,L-1\}$ and $t=20w$.
+    Put $m=\max\{\lfloor L/t\rfloor-3,0\}$ when $w>0$, and $m=0$
+    when $w=0$. Use the distinct parties $R_0,\ldots,R_m$ and
+    $P_1,\ldots,P_m$ and the labelled auxiliary copies of
+    Definition~\ref{def:chain_terminal_registers}.
+    For $0\le k\le m$, let $M_k$ be the frame without holes whose owner is
+    $P_{\lfloor x/t\rfloor+1}$ at $x<kt$ and $R_k$ at $x\ge kt$.
+    The first case is empty when $t=0$.
+
+    For $0\le k<m$, set $a=kt$, $b=(k+1)t$ and define
+    \begin{align}
+        T_k^R & =[b+w,L)_L, & T_k^P & =[a+w,b)_L,\notag \\
+        H_k^- & =[a,a+w)_L, & H_k^+ & =[b,b+w)_L.\notag
+    \end{align}
+    Starting from $M_k$, give $T_k^R$ to $R_{k+1}$, then $T_k^P$ to
+    $P_{k+1}$, obtaining frames $M_k^{(1)},M_k^{(2)}$.
+    Define $M_k^{(L)}$ by giving $H_k^-$ in $M_k^{(2)}$ to $P_{k+1}$,
+    and define $M_k^{(R)}$ by giving $H_k^+$ in $M_k^{(L)}$ to $R_{k+1}$.
+
+    For $k>0$, also form the main endpoint $\widehat M_k^{(L)}$ of the
+    assignments of Definition~\ref{def:chain_one_band_assignments}, with
+    initial main frame $M_k^{(2)}$, centre $a$ and
+    $(A,B,C)=(R_k,P_{k+1},P_k)$.
+    For $k=0$, instead put $\widehat M_0^{(L)}=M_0^{(L)}$; no party
+    $P_0$ or left auxiliary copy is introduced.
+    Form $\widehat M_k^{(R)}$ from initial main frame
+    $\widehat M_k^{(L)}$, centre $b$ and
+    $(A,B,C)=(R_k,R_{k+1},P_{k+1})$ by the same one-band assignments.
+    All integer-ended intervals are half-open, with the correction of
+    \cite{gap:tnlean_one_dimensional_band_sweep_corrections}.
+\end{definition}
+
+\begin{theorem}[Birth environments, band flanks and main endpoints]
+    \label{thm:chain_sweep_stage_owners}
+    \lean{
+        TNLean.MPS.AreaLaw.ChainSweep.stageOwner_zero,
+        TNLean.MPS.AreaLaw.ChainSweep.stageOwner_last,
+        TNLean.MPS.AreaLaw.ChainSweep.birth_targets_owned,
+        TNLean.MPS.AreaLaw.ChainSweep.birth_environments,
+        TNLean.MPS.AreaLaw.ChainSweep.left_band_owners,
+        TNLean.MPS.AreaLaw.ChainSweep.first_left_death_environment,
+        TNLean.MPS.AreaLaw.ChainSweep.right_band_owners,
+        TNLean.MPS.AreaLaw.ChainSweep.afterRightTransfer_eq_stageFrame,
+        TNLean.MPS.AreaLaw.ChainSweep.leftBandMain_eq_afterLeftTransfer,
+        TNLean.MPS.AreaLaw.ChainSweep.rightBandMain_eq_afterRightTransfer,
+        TNLean.MPS.AreaLaw.ChainSweep.rightBandMain_eq_stageFrame
+    }
+    \leanok
+    \uses{def:chain_sweep_stage_assignments}
+    The initial frame assigns the entire main sheet to $R_0$, and $M_m$
+    has the terminal main ownership of Definition~\ref{def:chain_terminal_registers}.
+    Suppose $w\ge1$ and $0\le k<m$. Each birth target is held by $R_k$
+    immediately before that birth. Its environment outside $R_k$ is
+    \begin{align}
+        E(M_k,R_k)       & =[0,a)_L,                    &
+        E(M_k^{(1)},R_k) & =[0,a)_L\cup[b+w,L)_L.\notag
+    \end{align}
+    For $k>0$, the owners in $M_k^{(2)}$ on the three intervals
+    $[a-8w,a)_L$, $[a,a+w)_L$ and $[a+w,a+2w)_L$ are respectively
+    $P_k,R_k,P_{k+1}$.
+    In $M_k^{(L)}$, the owners on $[b-8w,b)_L$, $[b,b+w)_L$ and
+    $[b+w,b+2w)_L$ are respectively $P_{k+1},R_k,R_{k+1}$.
+    When $m>0$, the environment at the first stage for the direct death, evaluated
+    after that death, is $E(M_0^{(L)},P_1)=[t,L)_L$.
+    The four specified owner changes give $M_k^{(R)}=M_{k+1}$.
+    If $L\ge3t$, the actual one-band main endpoints satisfy
+    $\widehat M_k^{(L)}=M_k^{(L)}$ and
+    $\widehat M_k^{(R)}=M_k^{(R)}=M_{k+1}$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:chain_sweep_stage_assignments,thm:chain_stage_margins,
+        thm:chain_one_band_geometry}
+    Membership in a completed block fixes the quotient $\lfloor x/t\rfloor$.
+    Neither birth changes an earlier completed block. The first target
+    lies beyond $b+w$, and the second lies between $a+w$ and $b$;
+    substituting their owner assignments gives the two environments.
+    The intervals required for the left flank lie in the preceding
+    completed block, and those for the right flank lie in the new block.
+    The prescribed margins permit the one-band endpoint identity at
+    each interior band. At $k=0$ the left endpoint is its direct owner
+    change by definition. Checking the completed prefix, the new block
+    and the remaining suffix gives $M_k^{(R)}=M_{k+1}$.
+\end{proof}
+
+\begin{theorem}[Retired auxiliary owners at their original labels]
+    \label{thm:chain_sweep_retired_copies}
+    \lean{
+        TNLean.MPS.AreaLaw.ChainSweep.rightRetiredAuxiliary,
+        TNLean.MPS.AreaLaw.ChainSweep.leftRetiredAuxiliary,
+        TNLean.MPS.AreaLaw.ChainSweep.rightRetiredAuxiliary_eq_raw,
+        TNLean.MPS.AreaLaw.ChainSweep.leftRetiredAuxiliary_eq_raw
+    }
+    \leanok
+    \uses{def:chain_sweep_stage_assignments,def:chain_terminal_registers}
+    Suppose $w\ge1$ and $L\ge3t$.
+    Denote the right copy at stage $k$ by $\rho_k$, for $0\le k<m$,
+    and the left copy used at stage $j+1$ by $\lambda_j$, for
+    $0\le j<m-1$. The actual retired right auxiliary comes from the
+    initial main frame $\widehat M_k^{(L)}$ and has centre $b=(k+1)t$.
+    It assigns $[b-3w,b-2w)_L$ to $R_k$,
+    $[b-2w,b-w)_L$ to $R_{k+1}$, and the remaining sites to $P_{k+1}$.
+    The actual retired left auxiliary $\lambda_j$ is formed from
+    $M_{j+1}^{(2)}$ and has centre $c=(j+1)t$.
+    It assigns $[c-3w,c-2w)_L$ to $R_{j+1}$,
+    $[c-2w,c-w)_L$ to $P_{j+2}$, and the remaining sites to $P_{j+1}$.
+    These are exactly the auxiliary owner functions of
+    Definition~\ref{def:chain_terminal_registers}, at the same original
+    copy labels. In particular $\rho_j$ and $\lambda_j$ remain distinct
+    when their centres coincide.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:chain_sweep_stage_owners,thm:chain_stage_margins,
+        thm:chain_one_band_geometry}
+    Use the derived flanks for the right band and for the positive-stage
+    left band. The one-band auxiliary endpoint retains its two right-hand
+    strips. The left margins ensure that natural subtraction in these
+    intervals equals integer subtraction, giving the stated owner
+    functions without changing either copy label.
+\end{proof}
+
+\begin{definition}[The labelled frame history]
+    \label{def:chain_sweep_labelled_history}
+    \lean{
+        TNLean.MPS.AreaLaw.ChainSweep.auxiliaryStage,
+        TNLean.MPS.AreaLaw.ChainSweep.retiredAuxiliaryFrame,
+        TNLean.MPS.AreaLaw.ChainSweep.auxiliaryFrameBefore,
+        TNLean.MPS.AreaLaw.ChainSweep.sweepFrames,
+        TNLean.MPS.AreaLaw.ChainSweep.leftAuxiliaryFrame,
+        TNLean.MPS.AreaLaw.ChainSweep.afterLeftFrames,
+        TNLean.MPS.AreaLaw.ChainSweep.afterRightFrames,
+        TNLean.MPS.AreaLaw.ChainSweep.leftCopyLabel
+    }
+    \leanok
+    \uses{def:chain_sweep_stage_assignments,thm:chain_sweep_retired_copies,
+        thm:chain_initial_copies}
+    Retain the initial ordered list $\mathcal C$ of all auxiliary copy
+    labels. Its order is fixed throughout. The activation stage is
+    $s(\rho_j)=j$ and $s(\lambda_j)=j+1$.
+    Let $U_c^\infty$ be the actual retired frame of copy $c$, and let
+    $U_c^0$ be the frame assigning that copy entirely to its initial
+    holder, namely $P_{j+1}$ for either $c=\rho_j$ or $c=\lambda_j$.
+    Before stage $k$, set
+    \begin{align}
+        U_c^{<k}                    & =
+        \begin{cases}
+            U_c^\infty, & s(c)<k,    \\
+            U_c^0,      & s(c)\ge k,
+        \end{cases} &
+        \mathcal F_k                & =(M_k,(U_c^{<k})_{c\in\mathcal C}).\notag
+    \end{align}
+    At $k>0$ the selected left label is $\lambda_{k-1}$.
+    After the left transfer, replace exactly that occurrence by
+    $U_{\lambda_{k-1}}^\infty$ and take main frame $\widehat M_k^{(L)}$;
+    denote the resulting ordered list by $\mathcal F_k^L$.
+    At $k=0$ replace no auxiliary occurrence.
+    After the right transfer replace exactly $\rho_k$ by $U_{\rho_k}^\infty$
+    and take main frame $\widehat M_k^{(R)}$, obtaining $\mathcal F_k^R$.
+\end{definition}
+
+\begin{theorem}[Initial, intermediate and terminal labelled lists]
+    \label{thm:chain_sweep_labelled_history}
+    \lean{
+        TNLean.MPS.AreaLaw.ChainSweep.auxiliaryStage_lt_stageCount,
+        TNLean.MPS.AreaLaw.ChainSweep.auxiliaryFrameBefore_zero,
+        TNLean.MPS.AreaLaw.ChainSweep.auxiliaryFrameBefore_last,
+        TNLean.MPS.AreaLaw.ChainSweep.sweepFrames_zero,
+        TNLean.MPS.AreaLaw.ChainSweep.sweepFrames_last,
+        TNLean.MPS.AreaLaw.ChainSweep.leftAuxiliaryFrame_right_unused,
+        TNLean.MPS.AreaLaw.ChainSweep.auxiliaryFrameBefore_left_unused,
+        TNLean.MPS.AreaLaw.ChainSweep.leftAuxiliaryFrame_zero,
+        TNLean.MPS.AreaLaw.ChainSweep.leftAuxiliaryFrame_eq_update,
+        TNLean.MPS.AreaLaw.ChainSweep.leftAuxiliaryFrame_spectator,
+        TNLean.MPS.AreaLaw.ChainSweep.rightAuxiliaryUpdate_eq_next,
+        TNLean.MPS.AreaLaw.ChainSweep.rightAuxiliaryUpdate_spectator,
+        TNLean.MPS.AreaLaw.ChainSweep.afterRightFrames_eq_sweepFrames,
+        TNLean.MPS.AreaLaw.ChainSweep.sweepFrames_select_auxiliary
+    }
+    \leanok
+    \uses{def:chain_sweep_labelled_history,def:chain_terminal_reference}
+    For all natural $L,w,q$, $\mathcal F_0$ is the initial main sheet
+    followed by the original unused copies, and $\mathcal F_m$ is exactly
+    the specified terminal list with all original auxiliary owners.
+    Every copy has activation stage less than $m$.
+    Before a positive-stage left transfer, its selected copy is unused;
+    after the left transfer, the current right copy is still unused.
+    At $k=0$ every auxiliary is unchanged by the left transfer.
+    At $k>0$ only $\lambda_{k-1}$ changes in that transfer, and only
+    $\rho_k$ changes in the subsequent right transfer. All other
+    occurrences retain their frames and their relative order.
+    For every $k<m$, one has $\mathcal F_k^R=\mathcal F_{k+1}$.
+    Selecting any copy $c$ gives a permutation of $\mathcal F_k$ in which
+    the selected frame and the main frame are first, followed by the
+    other copies in their original order with $c$ omitted.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:chain_sweep_labelled_history,thm:chain_sweep_retired_copies,
+        thm:chain_sweep_stage_owners}
+    Initially no activation stage is negative. Before the last boundary
+    every copy's activation stage has been passed, so the retired-frame
+    identities give the terminal auxiliary list. Comparing the two
+    activation times $j$ and $j+1$ shows that the left update changes
+    precisely $\lambda_{k-1}$ and that the right update changes precisely
+    $\rho_k$. The main endpoint identity and these single-label updates
+    give the next entire list. For any existing stage or copy, $m>0$
+    implies $w\ge1$ and $L\ge3t$; thus the endpoint comparisons require
+    no extra hypothesis here. Removing a selected label from the fixed
+    list and placing it first preserves all other occurrences and their order.
+\end{proof}
+
+\begin{definition}[Local boundaries and the chronological frame sequence]
+    \label{def:chain_sweep_frame_path}
+    \lean{
+        TNLean.MPS.AreaLaw.ChainSweep.leftBandFrames,
+        TNLean.MPS.AreaLaw.ChainSweep.rightBandFrames,
+        TNLean.MPS.AreaLaw.ChainSweep.stageBoundaryFrames,
+        TNLean.MPS.AreaLaw.ChainSweep.sweepOperationCount,
+        TNLean.MPS.AreaLaw.ChainSweep.operationFrames
+    }
+    \leanok
+    \uses{def:chain_sweep_labelled_history,def:chain_one_band_assignments}
+    For a stage $0\le k<m$ with $k>0$, let $\mathcal L_{k,r}$ consist of the $r$th left-band pair
+    from Definition~\ref{def:chain_one_band_assignments}, with original
+    label $\lambda_{k-1}$, followed by all other copies in their original
+    order and their frames before stage $k$.
+    Let $\mathcal R_{k,r}$ be the analogous right-band list with selected
+    label $\rho_k$, whose spectators have their frames after the left
+    transfer. In each list the main frame precedes the selected auxiliary.
+
+    There are nineteen boundaries $\mathcal B_{k,0},\ldots,\mathcal B_{k,18}$
+    for eighteen consecutive steps. They begin with $\mathcal F_k$,
+    followed by the first and second birth frames with the auxiliary
+    family $U^{<k}$ unchanged, at boundaries $1$ and $2$.
+    For $3\le j<10$ and $k>0$, use $\mathcal B_{k,j}=\mathcal L_{k,j-2}$.
+    At boundary $10$ use $\mathcal F_k^L$.
+    At the first stage use $\mathcal B_{0,j}=\mathcal F_0^L$ for
+    $3\le j\le10$: boundary $3$ is the direct death and the following
+    seven steps leave the frame list unchanged.
+    For $11\le j<18$ use $\mathcal B_{k,j}=\mathcal R_{k,j-10}$.
+    At and beyond boundary $18$ use $\mathcal F_k^R$.
+
+    Put $N=18m$. For a natural index $n$, define
+    \begin{align}
+        \mathcal G_n & =
+        \begin{cases}
+            \mathcal B_{\lfloor n/18\rfloor,\,n\bmod18}, & n<N,    \\
+            \mathcal F_m,                                & n\ge N.
+        \end{cases}\notag
+    \end{align}
+\end{definition}
+
+\begin{theorem}[Band entrances, exits and the exceptional first stage]
+    \label{thm:chain_sweep_local_boundaries}
+    \lean{
+        TNLean.MPS.AreaLaw.ChainSweep.stageBoundaryFrames_zero,
+        TNLean.MPS.AreaLaw.ChainSweep.stageBoundaryFrames_one,
+        TNLean.MPS.AreaLaw.ChainSweep.stageBoundaryFrames_two,
+        TNLean.MPS.AreaLaw.ChainSweep.stageBoundaryFrames_left,
+        TNLean.MPS.AreaLaw.ChainSweep.stageBoundaryFrames_first_left,
+        TNLean.MPS.AreaLaw.ChainSweep.stageBoundaryFrames_ten,
+        TNLean.MPS.AreaLaw.ChainSweep.stageBoundaryFrames_first_death,
+        TNLean.MPS.AreaLaw.ChainSweep.stageBoundaryFrames_right,
+        TNLean.MPS.AreaLaw.ChainSweep.stageBoundaryFrames_last,
+        TNLean.MPS.AreaLaw.ChainSweep.stageBoundaryFrames_eighteen,
+        TNLean.MPS.AreaLaw.ChainSweep.stageBoundaryFrames_left_entrance_perm,
+        TNLean.MPS.AreaLaw.ChainSweep.leftBandFrames_eight_perm,
+        TNLean.MPS.AreaLaw.ChainSweep.stageBoundaryFrames_right_entrance_perm,
+        TNLean.MPS.AreaLaw.ChainSweep.rightBandFrames_eight_perm
+    }
+    \leanok
+    \uses{def:chain_sweep_frame_path}
+    The first three boundaries have respectively main frames
+    $M_k,M_k^{(1)},M_k^{(2)}$, with their original ordered auxiliary
+    family. At a positive stage, $\mathcal B_{k,2}$ is a permutation of
+    $\mathcal L_{k,0}$, and $\mathcal L_{k,8}$ is a permutation of
+    $\mathcal F_k^L=\mathcal B_{k,10}$.
+    Likewise $\mathcal B_{k,10}$ is a permutation of $\mathcal R_{k,0}$,
+    and $\mathcal R_{k,8}$ is a permutation of
+    $\mathcal F_k^R=\mathcal B_{k,18}$.
+    These permutations select the original copy label and preserve the
+    order of all spectator labels; no distinctness of frame values is required.
+    At $k=0$ the transition from boundary $2$ to boundary $3$ changes
+    the main owner on $[0,w)_L$ from $R_0$ to $P_1$ and changes no
+    auxiliary. Boundaries $3,\ldots,10$ are equal.
+    For every $k<m$, $\mathcal B_{k,18}=\mathcal F_{k+1}$, and
+    $\mathcal B_{k,j}=\mathcal F_k^R$ for every $j\ge18$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:chain_sweep_frame_path,thm:chain_sweep_labelled_history,
+        thm:chain_sweep_stage_owners}
+    The interior boundaries are the specified one-band frames.
+    Before its activation the selected label still carries its initial
+    constant-owner frame. Selecting that label therefore gives the
+    correct band entrance. At its exit, replacing that one label by
+    its actual retired frame and restoring the original order gives
+    the stated permutation. For the first left transfer the defining
+    direct death replaces the entire eight-step band, with seven
+    repeated boundaries afterwards. The next-stage identity identifies
+    the eighteenth boundary.
+\end{proof}
+
+\begin{theorem}[Division into stages and the stationary terminal tail]
+    \label{thm:chain_sweep_frame_path}
+    \lean{
+        TNLean.MPS.AreaLaw.ChainSweep.operationFrames_of_le,
+        TNLean.MPS.AreaLaw.ChainSweep.operationFrames_stage,
+        TNLean.MPS.AreaLaw.ChainSweep.operationFrames_zero,
+        TNLean.MPS.AreaLaw.ChainSweep.operationFrames_last,
+        TNLean.MPS.AreaLaw.ChainSweep.operationFrames_stageBoundary,
+        TNLean.MPS.AreaLaw.ChainSweep.operationFrames_step
+    }
+    \leanok
+    \uses{def:chain_sweep_frame_path}
+    For every $0\le k\le m$, $\mathcal G_{18k}=\mathcal F_k$.
+    For every $k<m$ and $0\le j\le18$,
+    \begin{align}
+        \mathcal G_{18k+j} & =\mathcal B_{k,j}.\notag
+    \end{align}
+    In particular the two consecutive lists at step $j<18$ are
+    $\mathcal B_{k,j}$ and $\mathcal B_{k,j+1}$, including the last
+    step of every stage. The sequence starts at the original initial
+    list and equals the terminal list for every $n\ge18m$.
+    If $m=0$, the initial and terminal lists coincide and the entire
+    sequence is constant. If $m=1$, there is one eighteen-step stage,
+    with its direct first left death, seven unchanged-frame steps and
+    one right auxiliary copy, followed by the stationary terminal tail.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:chain_sweep_frame_path,thm:chain_sweep_local_boundaries,
+        thm:chain_sweep_labelled_history}
+    For $j<18$, division of $18k+j$ by $18$ gives quotient $k$ and
+    remainder $j$. At $j=18$, the eighteenth local boundary is
+    $\mathcal F_{k+1}$; the next quotient and zero remainder give that
+    same list, or the terminal branch if $k+1=m$.
+    This also identifies every complete stage boundary. Beyond $18m$
+    the sequence is constant by definition. If $m=0$, the initial and
+    terminal identities apply to the same boundary.
+\end{proof}
+
+% Physical information estimates, the complete sweep circuit, its resource
+% bounds and accumulated error, and compression are separate obligations.

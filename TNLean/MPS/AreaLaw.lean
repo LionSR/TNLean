@@ -9,6 +9,7 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.MPS.AreaLaw
 
 import TNLean.MPS.AreaLaw.AreaLaw
+import TNLean.MPS.AreaLaw.BandDissolution
 import TNLean.MPS.AreaLaw.Basic
 import TNLean.MPS.AreaLaw.BufferDiscount
 import TNLean.MPS.AreaLaw.ComponentReduction
@@ -19,7 +20,11 @@ import TNLean.MPS.AreaLaw.MPSApproximation
 import TNLean.MPS.AreaLaw.OpenMPS
 import TNLean.MPS.AreaLaw.OpenMPSRank
 import TNLean.MPS.AreaLaw.ProtocolInitialization
+import TNLean.MPS.AreaLaw.ProtocolRetiredAuxiliary
+import TNLean.MPS.AreaLaw.ProtocolSweepFrames
 import TNLean.MPS.AreaLaw.ProtocolSweepGeometry
+import TNLean.MPS.AreaLaw.ProtocolSweepHistory
+import TNLean.MPS.AreaLaw.ProtocolSweepPath
 import TNLean.MPS.AreaLaw.ProtocolTerminalCoordinates
 import TNLean.MPS.AreaLaw.ProtocolTerminalReference
 import TNLean.MPS.AreaLaw.ProtocolTerminalWord
