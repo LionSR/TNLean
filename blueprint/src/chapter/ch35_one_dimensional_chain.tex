@@ -615,6 +615,53 @@ for an arbitrary finite set of sites and are instantiated here directly.
     is at most the surprisal tail.
 \end{proof}
 
+\begin{theorem}[Matrix product state approximation at a prescribed accuracy]
+    \label{thm:chain_mps_approximation_error}
+    \lean{TNLean.MPS.AreaLaw.exists_isOpenMPS_norm_sub_le_of_error}
+    \leanok
+    \uses{def:chain_model, def:chain_open_mps}
+    Let $\Omega$ be a gapped ground vector, with gap $\Delta>0$, of a
+    finite-range Hamiltonian with term norms at most $J\ge0$ on the chain of
+    $L\ge1$ sites with local dimension $q\ge1$. Put
+    $s=\sqrt{(1+J/\Delta)B_R}$ and $c_0=\sqrt{2e^{e/2}}$.
+    For every $0<\varepsilon\le1$, there is a normalized open-boundary
+    matrix product state $\Phi$ with $\|\Phi-\Omega\|\le\varepsilon$ and
+    bond dimension at most
+    \begin{align}
+        \left\lfloor\exp\left(C_{\mathrm{int}}
+        +64s\log\frac{2Lc_0}{\varepsilon}\right)\right\rfloor. \notag
+    \end{align}
+    This is a supplementary accuracy form of the argument for Theorem~B
+    in \cite[Part~IIa]{TNLean2026OneDimensional}; the stated theorem there
+    has error $1/L$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:chain_area_law, lem:chain_marginal_tail,
+        lem:chain_sequential_truncation, thm:chain_mps_of_cut_rank,
+        lem:chain_crossing_count}
+    The entropy of each left block is at most $C_{\mathrm{int}}$, and its
+    surprisal tail beyond $w$ is at most $c_0^2e^{-w/(32s)}$.
+    Set $w=64s\log(2Lc_0/\varepsilon)$. Since $s>0$ and
+    $2Lc_0/\varepsilon>1$, the sequential truncation produces a vector
+    $\widetilde\Phi$ whose cut ranks are at most
+    $\lfloor e^{C_{\mathrm{int}}+w}\rfloor$ and for which
+    \begin{align}
+        \|\widetilde\Phi-\Omega\|
+         & \le (L-1)\sqrt{c_0^2e^{-w/(32s)}}
+        =(L-1)\frac{\varepsilon}{2L}
+        \le\frac{\varepsilon}{2}\le\frac12. \notag
+    \end{align}
+    Thus $\widetilde\Phi\ne0$. Normalize this same vector by setting
+    $\Phi=\widetilde\Phi/\|\widetilde\Phi\|$.
+    The reverse triangle inequality gives
+    $\|\Phi-\widetilde\Phi\|=|1-\|\widetilde\Phi\||
+        \le\|\widetilde\Phi-\Omega\|$, hence
+    $\|\Phi-\Omega\|\le\varepsilon$.
+    Bounded cut ranks give the matrix product representation, which is
+    preserved by this scalar normalization.
+\end{proof}
+
 \begin{theorem}[Theorem B: polynomial matrix product state approximation]
     \label{thm:chain_mps_approximation}
     \lean{
@@ -623,8 +670,6 @@ for an arbitrary finite set of sites and are instantiated here directly.
         TNLean.MPS.AreaLaw.tailPrefactorRoot_sq,
         TNLean.MPS.AreaLaw.one_lt_tailPrefactorRoot,
         TNLean.MPS.AreaLaw.chainTruncationWidth,
-        TNLean.MPS.AreaLaw.chainTruncationWidth_nonneg,
-        TNLean.MPS.AreaLaw.exp_neg_chainTruncationWidth,
         TNLean.MPS.AreaLaw.chainBondDimension,
         TNLean.MPS.AreaLaw.exists_isOpenMPS_norm_sub_le,
         TNLean.MPS.AreaLaw.chainBondDimension_le_mul_rpow
@@ -645,18 +690,10 @@ for an arbitrary finite set of sites and are instantiated here directly.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:chain_area_law, lem:chain_marginal_tail,
-        lem:chain_sequential_truncation, thm:chain_mps_of_cut_rank,
-        lem:chain_crossing_count}
-    By Theorem~\ref{thm:chain_area_law} the entropy of every left block, an
-    interval $[0,k)$, is at most $C_{\mathrm{int}}$, and by the tail bound of
-    Lemma~\ref{lem:chain_marginal_tail} with the budget $B_R$ of
-    Lemma~\ref{lem:chain_crossing_count} its surprisal tail beyond $w$ is at
-    most $2e^{e/2}e^{-w/(32s)}$. The sequential truncation of
-    Lemma~\ref{lem:chain_sequential_truncation} at width $w(L)$ gives cut
-    ranks at most $e^{C_{\mathrm{int}}+w(L)}$ and distance at most
-    $(L-1)\cdot\frac1{2L^2}\le\frac1{2L}$. Normalizing moves the vector by at
-    most the same amount, so the distance is at most $1/L$, and
-    Theorem~\ref{thm:chain_mps_of_cut_rank} exhibits the matrix product
-    structure, which survives the normalization.
+    \uses{thm:chain_mps_approximation_error}
+    Apply Theorem~\ref{thm:chain_mps_approximation_error} with
+    $\varepsilon=1/L$, which lies in $(0,1]$ because $L\ge1$.
+    The identity $2Lc_0/(1/L)=2L^2c_0$ gives exactly $D(L)$.
+    Finally, $\lfloor e^{C_{\mathrm{int}}+w(L)}\rfloor
+        \le e^{C_{\mathrm{int}}}(2c_0)^{64s}L^{128s}$.
 \end{proof}
