@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.OpenMPS
 import TNLean.Algebra.FinSpanOfFinrank
+import TNLean.MPS.Chain.VaryingBondOBC
 
 /-!
 # Matrix product states from cut ranks
@@ -158,5 +159,80 @@ theorem isOpenMPS_of_cutMatrix_rank_le {L q D : ℕ} (ψ : EuclideanSpace ℂ (F
     simp only [Pi.smul_apply, smul_eq_mul]
     rw [dotProduct_mulVec, ← key L x]
     simp [dotProduct, mul_comm]
+
+/-- Right boundary absorption in an ordered product. Source: the one-dimensional note,
+Part IIa, Proposition `prop:VC`, the open-boundary coefficient formula. -/
+private theorem prod_ofFn_mul_last {n D : ℕ}
+    (A : Fin (n + 1) → Matrix (Fin D) (Fin D) ℂ)
+    (V : Matrix (Fin D) (Fin D) ℂ) :
+    (List.ofFn fun k ↦ if k = Fin.last n then A k * V else A k).prod =
+      (List.ofFn A).prod * V := by
+  rw [List.ofFn_succ', List.ofFn_succ']
+  simp [Fin.castSucc_ne_last, List.concat_eq_append, Matrix.mul_assoc]
+
+/-- Absorbing the two boundary matrices at distinct ends of the ordered product.
+Source: the one-dimensional note, Part IIa, Proposition `prop:VC`. -/
+private theorem prod_ofFn_boundaries {n D : ℕ}
+    (A : Fin (n + 2) → Matrix (Fin D) (Fin D) ℂ)
+    (U V : Matrix (Fin D) (Fin D) ℂ) :
+    (List.ofFn fun k ↦ if k = 0 then U * A k
+      else if k = Fin.last (n + 1) then A k * V else A k).prod =
+      U * (List.ofFn A).prod * V := by
+  conv_lhs => rw [List.ofFn_succ]
+  simp only [List.prod_cons, ite_true, Fin.succ_ne_zero, ite_false,
+    ← Fin.succ_last, Fin.succ_inj]
+  rw [prod_ofFn_mul_last]
+  simp only [List.ofFn_succ, List.prod_cons, Matrix.mul_assoc]
+
+/-- A square open-boundary contraction has a rectangular realization with singleton
+endpoints when the two end sites are distinct. Source: the one-dimensional note,
+Part IIa, Proposition `prop:VC`, lines 39–62. This is the positive-bond, length-at-least-two
+case of the internal-bond representation. -/
+private theorem exists_obcChainTensor_of_square {L q D : ℕ} (hL : 2 ≤ L) (hD : 1 ≤ D)
+    (A : Fin L → Fin q → Matrix (Fin D) (Fin D) ℂ) (vL vR : Fin D → ℂ) :
+    ∃ B : OBCChainTensor q (max 1 D) L,
+      (∀ k, 0 < k.val → k.val < L → B.bondDim k ≤ D) ∧
+      ∀ x, B.coeff x = vL ⬝ᵥ ((List.ofFn fun i ↦ A i (x i)).prod *ᵥ vR) := by
+  classical
+  obtain ⟨n, rfl⟩ : ∃ n, L = n + 2 := ⟨L - 2, by omega⟩
+  let r : Fin (n + 3) → ℕ := fun k ↦ if k.val = 0 ∨ k.val = n + 2 then 1 else D
+  have hr (k : Fin (n + 3)) : r k ≤ D := by
+    dsimp only [r]
+    split_ifs <;> omega
+  rw [max_eq_right hD]
+  let B : OBCChainTensor q D (n + 2) :=
+    { bondDim := r
+      bondDim_le := hr
+      left_dim := by simp [r]
+      right_dim := by simp [r]
+      tensor := fun k s a b ↦
+        if k = 0 then (vL ᵥ* A k s) (Fin.castLE (hr k.succ) b)
+        else if k = Fin.last (n + 1) then (A k s *ᵥ vR) (Fin.castLE (hr k.castSucc) a)
+        else A k s (Fin.castLE (hr k.castSucc) a) (Fin.castLE (hr k.succ) b) }
+  refine ⟨B, fun k _ _ ↦ hr k, fun x ↦ ?_⟩
+  rw [← B.coeff_zeroPad x]
+  have : NeZero D := NeZero.of_pos hD
+  let U : Matrix (Fin D) (Fin D) ℂ := vecMulVec (Pi.single 0 1) vL
+  let V : Matrix (Fin D) (Fin D) ℂ := vecMulVec vR (Pi.single 0 1)
+  have hpad (k : Fin (n + 2)) (s : Fin q) :
+      B.zeroPad k s = if k = 0 then U * A k s
+        else if k = Fin.last (n + 1) then A k s * V else A k s := by
+    ext a b
+    by_cases hk : k = 0
+    · simp only [U, vecMulVec_mul]
+      simp [OBCChainTensor.zeroPad, Matrix.zeroPad, B, r, hk, vecMulVec, Pi.single_apply]
+    · by_cases hlast : k = Fin.last (n + 1)
+      · simp only [V, mul_vecMulVec]
+        simp [OBCChainTensor.zeroPad, Matrix.zeroPad, B, r, hlast, vecMulVec, Pi.single_apply]
+      · have hkval : k.val ≠ 0 ∧ k.val ≠ n + 1 :=
+          ⟨fun h ↦ hk (Fin.ext h), fun h ↦ hlast (Fin.ext h)⟩
+        simp [OBCChainTensor.zeroPad, Matrix.zeroPad, B, r, hk, hlast, hkval.1, hkval.2,
+          Nat.ne_of_lt k.isLt]
+  rw [MPSChainTensor.coeff, MPSChainTensor.eval, Fin.prod_eq_prod_map_finRange,
+    ← List.ofFn_eq_map]
+  simp_rw [hpad]
+  rw [prod_ofFn_boundaries]
+  simp [U, V, vecMulVec_mul, trace_vecMulVec, dotProduct_mulVec,
+    ← vecMul_vecMul, vecMul_vecMulVec]
 
 end TNLean.MPS.AreaLaw
