@@ -1,0 +1,48 @@
+% Source: polynomial-PEPS manuscript, Proposition 4.1, 03-patches.tex,
+% lines 563--603, revision adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+% Completion marks await the integrated module and imported axiom test.
+\begin{theorem}[Square patches from nested cylinder spaces]
+    \label{thm:peps_nested_cylinder_square_patch}
+    \lean{TNLean.PEPS.EncodedFrame.exists_squarePatch_of_mem_iSup_dependentRegionCylinder}
+    Let $V$ be a finite set of sites with positions $p_v\in\mathbb R^2$, and let
+    $\mathcal H_R=\mathbb C^{R\to\{0,\ldots,q-1\}}$ for $R\subseteq V$ and $q\in\mathbb N$.
+    Fix a centre $z$, a scale $u>0$, and $m\in\mathbb N$.
+    Let $(r_j)_{0\leq j<m}$ be nondecreasing, with $u\leq r_j\leq2u$ for each $j$.
+    Put $R_j=\{v\in V:\|p_v-z\|_\infty\leq r_j\}$, and let
+    $S_j\subseteq\mathcal H_{R_j}$ be subspaces.
+    Suppose $\Omega,v\in\mathcal H_V$ and
+    $v\in\sum_{j<m}\mathcal C_{R_j}(S_j)$.
+    Then there is a square patch with centre $z$, scale $u$, exactly these
+    $m$ radii, and inside dimensions $d_j$ such that
+    \begin{align}
+        \sum_{j<m}d_j   & \leq\sum_{j<m}\dim S_j, \notag \\
+        \|(I-Q)\Omega\| & \leq\|\Omega-v\|, \notag
+    \end{align}
+    where its cylinder sum is
+    \begin{align}
+        Q & =\sum_{j<m}\sum_{\ell<d_j}
+        \bigl(\lvert v_{j\ell}\rangle\langle v_{j\ell}\rvert\bigr)_{R_j}
+        \otimes I_{V\setminus R_j}. \notag
+    \end{align}
+    The sum is zero when the family is empty.
+\end{theorem}
+\begin{proof}
+    \uses{thm:peps_nested_cylinder_orthogonalization,
+        thm:peps_nested_cylinder_projector_sum,
+        thm:peps_coordinate_reset_gram,thm:peps_cylinder_projector}
+    Replace the inside spaces by their orthogonalized projected images
+    $\widetilde S_j$, and choose an orthonormal basis in each image.
+    Their cylinders are mutually orthogonal and have the same span
+    $\mathcal E=\sum_{j<m}\mathcal C_{R_j}(S_j)$.
+    Thus the lifted rank-one projectors are pairwise orthogonal, and their
+    sum is $Q=P_{\mathcal E}$.
+    The bounds $\dim\widetilde S_j\leq\dim S_j$ give the dimension estimate.
+    Since $v\in\mathcal E$, orthogonal projection onto $\mathcal E^\perp$ gives
+    \begin{align}
+        \|(I-Q)\Omega\|
+         & =\|P_{\mathcal E^\perp}(\Omega-v)\|
+        \leq\|\Omega-v\|. \notag
+    \end{align}
+    The canonical identification of configurations preserves these operators
+    and the Hilbert-space norm.
+\end{proof}

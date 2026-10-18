@@ -1,0 +1,48 @@
+% Source: OpenAI2026PolynomialPEPS, Proposition 4.1, 03-patches.tex,
+% eq:patch-variational-problem, eq:patch-clipped-eigenvalues, eq:patch-log-ratio;
+% revision adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+\begin{lemma}[Clipped inverse-power filters at a minimum]
+    \label{lem:peps_actual_patch_minimum_filter_clipping}
+    \lean{TNLean.PEPS.exists_clipped_filter_of_isMinOn_regularizedPatchObjective}
+    \uses{def:peps_regularized_patch_minimum,def:peps_patch_canonical_marginal}
+    Let $V$ be finite, with local spaces $\mathcal H_v=\C^{n_v}$, and let
+    $X_0\subseteq\cdots\subseteq X_{m-1}\subseteq V$.
+    Suppose that $a_j>0$, $b>0$, and $\|\Omega\|=1$.
+    For independent density matrices $x_j$ on $\mathcal H_{X_j}$, set
+    \begin{align}
+         & K_j=(x_j+bI_{X_j})^{-a_j/2},\qquad
+        \Psi(x)=\widehat K_{m-1}\cdots\widehat K_0\Omega, \notag
+    \end{align}
+    where each hat denotes extension by the identity outside $X_j$.
+    Suppose that $x$ minimizes $\|\Psi(x)\|$ over these density matrices,
+    and write
+    \begin{align}
+         & \phi=\frac{\Psi(x)}{\|\Psi(x)\|},\qquad
+        \rho_j=\operatorname{Tr}_{V\setminus X_j}|\phi\rangle\langle\phi|. \notag
+    \end{align}
+    Then $K_j\rho_j=\rho_jK_j$ for every $j$. There are a unitary $W_j$
+    and real families $\ell_{j,i},p_{j,i}$ such that $\ell_{j,i}>0$ and
+    \begin{align}
+         & K_j=W_j\operatorname{diag}(\ell_{j,i})W_j^*,\qquad
+        \rho_j=W_j\operatorname{diag}(p_{j,i})W_j^*. \notag
+    \end{align}
+    Whenever $p_{j,i},p_{j,k}>0$,
+    \begin{align}
+         & |\log\ell_{j,i}-\log\ell_{j,k}|
+        \leq\frac{a_j}{2}|\log p_{j,i}-\log p_{j,k}|. \notag
+    \end{align}
+    Regions may be empty or repeated. This is the logarithmic filter
+    estimate in \cite[Proposition~4.1]{OpenAI2026PolynomialPEPS}.
+\end{lemma}
+\begin{proof}
+    \uses{thm:peps_ordered_patch_marginal_coordinates}
+    At the minimum, $x_j$ and $\rho_j$ have a common unitary eigenbasis
+    with eigenvalues $s_i,p_i$ satisfying
+    $s_i+b=\max\{p_i/\lambda,b\}$ for some $\lambda>0$.
+    Functional calculus gives positive filter eigenvalues
+    $\ell_i=(s_i+b)^{-a_j/2}$ in the same basis, and hence commutation.
+    The function $t\mapsto\max\{t,\log b\}$ is $1$-Lipschitz.
+    Applying this to $\log(p_i/\lambda)$ and $\log(p_k/\lambda)$ gives
+    the displayed bound. The coordinate identity for normalized marginals
+    identifies the marginal in this argument with the stated $\rho_j$.
+\end{proof}

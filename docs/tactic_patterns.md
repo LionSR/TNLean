@@ -7993,3 +7993,10 @@ spectral split → block extraction → MPV calculation → strict bounds
   second. The mesh argument reuses `fineScaleIndex_mono` and
   `beltMarks_subset_affineMesh`, and adds no copied floor estimate or new
   mesh definition.
+
+### Bounds for ordered products from bounds on each action — candidate
+
+- **Pattern:** establish a norm inequality for each regional operator, then use list induction to multiply the bounds without changing factor order.
+- **Seen:** `regularizedPatchProduct_norm_bounds` in `TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean`; the local `htail` bound in `exists_mem_iSup_dependentRegionCylinder_norm_sub_le` in `TNLean/PEPS/AreaLaw/RegularizedPatchInverseCylinder.lean`.
+- **Possible abstraction:** a norm bound for the ordered product of linear maps from nonnegative pointwise norm bounds. The two uses have different lower-bound requirements; no additional abstraction is introduced here.
+- **Existing result:** the promoted `List.prod_ofFn_sum` expands over all choices. It does not identify the first head or its preceding tails, so it does not replace the ordered first-head identity used for the inside-cylinder range.

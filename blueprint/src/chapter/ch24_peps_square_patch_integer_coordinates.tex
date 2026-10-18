@@ -1,0 +1,31 @@
+% Source: polynomial-PEPS manuscript, 00-introduction.tex, lines 21--25,
+% and 03-patches.tex, lines 14--22 and 53--54, revision adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+% Completion marks await the integrated module and imported axiom test.
+\begin{theorem}[Square samples and integer coordinates]
+    \label{thm:peps_square_integer_coordinates}
+    \lean{
+        TNLean.PEPS.Approximation.squareSample_integerCoordinates,
+        TNLean.PEPS.Approximation.integerCoordinates_add_one_eq_latticePos
+    }
+    Let $\Lambda\subseteq\mathbb Z^2$ be finite, with each site at its integer
+    coordinates in $\mathbb R^2$. For every $z\in\mathbb R^2$ and $r\in\mathbb R$,
+    \begin{align}
+        \{x\in\Lambda:\|x-z\|_\infty\leq r\}
+         & =\{x\in\Lambda:|x_1-z_1|\leq r,\ |x_2-z_2|\leq r\}. \notag
+    \end{align}
+    For $L\in\mathbb N$, the integer embedding of the rectangular grid sends
+    $(i,j)\in\{0,\ldots,L-1\}^2$ to $(i,j)$, whereas the physical positions are
+    \begin{align}
+        p_L(i,j) & =(i,j)+(1,1)=(i+1,j+1). \notag
+    \end{align}
+    Thus these physical positions lie in $\{1,\ldots,L\}^2$, as in
+    \cite{OpenAI2026PolynomialPEPS}.
+\end{theorem}
+\begin{proof}
+    \uses{thm:area_law_domain_identifications,def:peps_frame_square_patch,
+        def:peps_adaptive_patch_constraint}
+    The sup distance is $\max(|x_1-z_1|,|x_2-z_2|)$, which is at most $r$
+    exactly when both coordinate inequalities hold.
+    The rectangular embedding preserves the integer coordinates; adding one
+    in each coordinate gives the physical position.
+\end{proof}

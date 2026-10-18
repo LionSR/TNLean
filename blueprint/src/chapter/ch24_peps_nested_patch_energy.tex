@@ -1,0 +1,100 @@
+% Source: OpenAI2026PolynomialPEPS, Proposition 4.1, 03-patches.tex,
+% eq:patch-variational-problem, eq:patch-single-crossing,
+% eq:patch-one-term-energy, and eq:patch-energy-bound;
+% 00-introduction.tex, eq:model and eq:global-gap;
+% revision adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+\begin{theorem}[Energy of a minimizing nested-patch output]
+    \label{thm:peps_nested_patch_minimum_energy}
+    \lean{TNLean.PEPS.Approximation.SquareHamiltonian.nestedPatch_minimizer_energy_le}
+    \uses{def:polynomial_peps_model,def:square_area_law_state,
+        def:square_area_law_hamiltonian,def:peps_nested_patches,
+        def:peps_regularized_patch_minimum}
+    Let $L,q\in\mathbb N$, $J\geq0$, and let
+    \begin{align}
+         & H=\sum_v h_v+\sum_e h_e \notag
+    \end{align}
+    be a Hermitian Hamiltonian on the open $L\times L$ square, with local
+    dimension $q$. Each term is supported on its designated site or
+    nearest-neighbour edge and has norm at most $J$.
+    Suppose that $\|\Omega\|=1$, $E_0\in\mathbb R$, $\Delta>0$, and
+    \begin{align}
+         & H\Omega=E_0\Omega,\qquad
+        H-E_0I\geq\Delta(I-|\Omega\rangle\langle\Omega|). \notag
+    \end{align}
+    Let $Q$ be the canonical unitary identifying the square with
+    $\Lambda=\{0,\ldots,L-1\}^2\subset\mathbb Z^2$, and put
+    $\eta=Q\Omega$ and $H_\Lambda=QHQ^*$.
+    Fix $c\in\mathbb R^2$, $u\geq4$, $0<\kappa\leq1$, and $b>0$.
+    Set
+    \begin{align}
+         & m=\lfloor u/2\rfloor+1,\qquad
+        X_j=\Lambda\cap\bigl(c+[-u-2j,u+2j]^2\bigr),\qquad
+        a_j=\frac{\kappa}{m}\quad(0\leq j<m). \notag
+    \end{align}
+    For each indexed occurrence of $X_j$, let $x_j$ be an independent
+    positive semidefinite matrix of trace one on $\mathcal H_{X_j}$, and set
+    \begin{align}
+         & K_j=(x_j+bI_{X_j})^{-a_j/2},\qquad
+        M(x)=\widehat K_{m-1}\cdots\widehat K_0, \notag
+    \end{align}
+    where each hat denotes extension by the identity outside $X_j$.
+    For every tuple $x$ minimizing $\|M(x)\eta\|$ over these densities,
+    its normalized output
+    \begin{align}
+         & \phi=\frac{M(x)\eta}{\|M(x)\eta\|} \notag
+    \end{align}
+    satisfies
+    \begin{align}
+        \operatorname{Re}\langle\phi,H_\Lambda\phi\rangle-E_0
+         & \leq36q^2J\kappa^2.
+        \label{eq:peps_nested_patch_minimum_energy}
+    \end{align}
+    The patches may be empty or repeated, with a separate density variable
+    for every index. This is the energy estimate in
+    \cite[Proposition~4.1]{OpenAI2026PolynomialPEPS}.
+\end{theorem}
+\begin{proof}
+    \uses{thm:square_hermitian_term_properties,thm:square_hermitian_term_sum,
+        thm:square_area_law_hamiltonian_operator,thm:square_area_law_ground_gap,
+        lem:peps_actual_patch_minimum_filter_clipping,
+        thm:peps_nested_patch_crossing,thm:peps_nested_patch_quadratic_sum}
+    Replace each local term $A$ by $(A+A^*)/2$. This preserves its support
+    and norm bound, and the sum remains the original $H$ because $H$ is
+    Hermitian. Work with these terms in the integer coordinates.
+
+    Every $x_j+bI_{X_j}$ is positive definite, so the filters and their
+    ordered product $M$ are invertible. Thus the displayed normalization is
+    well defined and $\|\phi\|=1$. Since $\eta$ is the corresponding ground
+    vector, the original ground equation gives
+    \begin{align}
+         & MH_\Lambda M^{-1}\phi=E_0\phi. \notag
+    \end{align}
+    At the actual minimum, the clipped-filter lemma gives
+    $[K_j,\rho_j]=0$ for the marginal $\rho_j$ of this same $\phi$.
+    In a common unitary eigenbasis, the positive eigenvalues $\ell_i$ of
+    $K_j$ and the eigenvalues $p_i$ of $\rho_j$ satisfy
+    \begin{align}
+         & |\log\ell_i-\log\ell_k|
+        \leq\frac{a_j}{2}|\log p_i-\log p_k|
+        \qquad(p_i,p_k>0). \notag
+    \end{align}
+    Here $0<a_j\leq1$. Pairing conjugate matrix entries in the expectation
+    of a Hermitian term and applying the weighted row and column estimate
+    bounds its change under conjugation across $X_j$ by $q^2J a_j^2$.
+    The factor $q^2$ counts matrix units on the single endpoint inside the
+    patch.
+
+    Each nearest-neighbour edge crosses at most one selected patch.
+    Commutation with the marginals removes containing filters from the
+    expectation, and disjoint filters commute with the term. Therefore
+    only the unique crossing filter can change that expectation; on-site
+    terms and terms crossing no patch contribute zero. Summing the bounds
+    and using the conjugated ground equation yields
+    \begin{align}
+         & \operatorname{Re}\langle\phi,H_\Lambda\phi\rangle-E_0
+        \leq q^2J\sum_{j=0}^{m-1}a_j^2|\partial_\Lambda X_j|. \notag
+    \end{align}
+    Finally, $|\partial_\Lambda X_j|\leq16u+4$ and the uniform quadratic
+    boundary sum is at most $36\kappa^2$. Multiplication by $q^2J\geq0$
+    proves the assertion.
+\end{proof}

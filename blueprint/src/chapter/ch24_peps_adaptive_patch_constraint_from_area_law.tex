@@ -1,0 +1,50 @@
+% Source: polynomial-PEPS manuscript, Proposition 4.1, 03-patches.tex,
+% lines 26--54 and 534--603, revision adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+% This conditional entry is distinct from the unrestricted source proposition.
+% Completion marks await the integrated module and imported axiom test.
+\begin{theorem}[Adaptive patches under the square entropy area law]
+    \label{thm:peps_adaptive_patch_constraint_of_area_law}
+    \lean{TNLean.PEPS.Approximation.SquareEntropyAreaLaw.adaptivePatchConstraint}
+    \uses{def:square_entropy_area_law,def:peps_adaptive_patch_constraint}
+    Assume the square entropy area law. Fix an integer $q\ge2$ and
+    real numbers $J,\Delta,B_0,p>0$. There are constants $C,c>0$ such that
+    the following holds for every $L\ge2$, every Hamiltonian of the original
+    square-grid model with interaction bound $J$, and every unit ground vector
+    $\Omega$ with full-system gap at least $\Delta$.
+    For every centre $z\in\mathbb R^2$ and every $0<u\le B_0\log L$, there
+    is a square patch of centre $z$ and scale $u$, with inside dimensions
+    $d_j$ and cylinder sum $Q$, for which
+    \begin{align}
+        \sum_j d_j & \le CL^c, & \|(I-Q)\Omega\| & \le L^{-p}. \notag
+    \end{align}
+    The constants are independent of the lattice, Hamiltonian, ground vector,
+    centre and radius. The cylinder sum is used also when a sampled square
+    is empty. This proves the conclusion of
+    \cite[Proposition~4.1]{OpenAI2026PolynomialPEPS} under the explicit square
+    entropy area-law premise; the remaining area-law question is described in
+    \cite{gap:arealaw2d_rectangular_specialization_scope}.
+\end{theorem}
+\begin{proof}
+    \uses{thm:peps_uniform_nested_cylinder_approximation,
+        thm:peps_nested_cylinder_square_patch,thm:peps_patch_radius_bounds,
+        thm:peps_bounded_radius_square_patch,thm:peps_square_integer_coordinates,
+        thm:peps_adaptive_patch_relabel,lem:peps_adaptive_patch_supply}
+    Choose the uniform exponent $R_0>0$ in the nested-cylinder approximation
+    and set $C=\max\{q^{81},1+B_0/2\}$ and $c=R_0+1$.
+    Suppose first that $u\ge4$. For $m=\lfloor u/2\rfloor+1$, the selected
+    inside spaces have dimensions at most $L^{R_0}$, and the sum of their cylinders
+    contains a vector within $L^{-p}$ of the ground vector.
+    The nested-cylinder construction gives a square patch with the same
+    error and total inside dimension at most $mL^{R_0}$.
+    Since $m\le B_0\log L/2+1$ and $L\ge2$, the logarithmic-count estimate gives
+    \begin{align}
+        \sum_j d_j & \le mL^{R_0}
+        \le (1+B_0/2)L^{R_0+1}\le CL^c. \notag
+    \end{align}
+    If $0<u<4$, the bounded-radius construction has zero error and at most
+    $q^{81}$ terms. Here $L^c\ge1$, so the same dimension bound holds.
+    Perform the construction on the zero-based integer grid with centre
+    $z-(1,1)$. Relabelling the sites and translating positions by $(1,1)$
+    gives the original physical grid and centre $z$, while preserving the
+    ground vector, dimensions and residual norm.
+\end{proof}

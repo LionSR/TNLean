@@ -1,0 +1,60 @@
+% Source: OpenAI2026PolynomialPEPS, Proposition 4.1, 03-patches.tex,
+% eq:patch-kappa-choice and eq:patch-marginal-closeness;
+% revision adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+% Proposed statement; completion marks await a checked proof.
+\begin{theorem}[Uniform marginal approximation at a nested-patch minimum]
+    \label{thm:peps_uniform_nested_patch_marginal_closeness}
+    \lean{TNLean.PEPS.Approximation.exists_uniform_nestedPatch_minimizer_marginal_closeness}
+    \uses{thm:peps_nested_patch_minimum_energy}
+    For every local dimension $q\in\mathbb N$, interaction bound $J\geq0$,
+    and gap $\Delta>0$, there exists $0<\kappa\leq1/2$ with the following
+    property. Let $L\in\mathbb N$, and let $H$ be a Hermitian Hamiltonian
+    on the open $L\times L$ square whose site and nearest-neighbour terms
+    have norm at most $J$. Suppose that
+    \begin{align}
+         & \|\Omega\|=1,\qquad H\Omega=E_0\Omega,\qquad
+        H-E_0I\geq\Delta(I-|\Omega\rangle\langle\Omega|). \notag
+    \end{align}
+    Identify the square with $\Lambda=\{0,\ldots,L-1\}^2$ by its canonical
+    unitary, and denote the image of $\Omega$ by $\eta$.
+    Fix $c\in\mathbb R^2$, $u\geq4$, and $b>0$. Set
+    \begin{align}
+         & m=\lfloor u/2\rfloor+1,\qquad
+        X_j=\Lambda\cap\bigl(c+[-u-2j,u+2j]^2\bigr),\qquad
+        a_j=\kappa/m\quad(0\leq j<m). \notag
+    \end{align}
+    For a tuple of positive semidefinite trace-one matrices $x_j$ on
+    $\mathcal H_{X_j}$, let
+    \begin{align}
+         & K_j=(x_j+bI_{X_j})^{-a_j/2},\qquad
+        M(x)=\widehat K_{m-1}\cdots\widehat K_0. \notag
+    \end{align}
+    If $x$ minimizes $\|M(x)\eta\|$ over these tuples and
+    $\phi=M(x)\eta/\|M(x)\eta\|$, then every region $A\subseteq\Lambda$
+    satisfies
+    \begin{align}
+         & \|\rho_{\phi,A}-\rho_{\eta,A}\|_1\leq\frac1{16}. \notag
+    \end{align}
+    Here $\|B\|_1=\operatorname{Tr}|B|$ is the full trace norm. The choice
+    of $\kappa$ is independent of $L,H,E_0,\Omega,c,u,b,x$, and $A$.
+    Empty or repeated patches retain their separate density variables.
+    This proves the marginal estimate in
+    \cite[Proposition~4.1]{OpenAI2026PolynomialPEPS}.
+\end{theorem}
+\begin{proof}
+    \uses{thm:peps_nested_patch_minimum_energy,
+        thm:peps_gap_marginal_one_sixteenth}
+    Put $C_E=36q^2J$. Choose $0<\kappa\leq1/2$ so that
+    $C_E\kappa^2\leq\Delta/1024$; such a choice exists also when $C_E=0$.
+    The choice involves only $q,J,\Delta$.
+    Each shifted density is positive definite, so $M(x)$ is invertible
+    and $\phi$ is a unit vector. The energy estimate gives
+    \begin{align}
+         & \operatorname{Re}\langle\phi,H_\Lambda\phi\rangle-E_0
+        \leq C_E\kappa^2\leq\Delta/1024, \notag
+    \end{align}
+    where $H_\Lambda$ is the original Hamiltonian in the integer
+    coordinates. Its ground vector is $\eta$ and its gap is $\Delta$.
+    The sufficient energy criterion for marginal approximation now gives
+    the assertion for every $A$.
+\end{proof}

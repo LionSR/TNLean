@@ -1,0 +1,27 @@
+% Source: polynomial-PEPS manuscript, Proposition 4.1, 03-patches.tex,
+% lines 53--54, revision adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+% Completion marks await the integrated module and imported axiom test.
+\begin{theorem}[Exact patches at bounded radius]
+    \label{thm:peps_bounded_radius_square_patch}
+    \lean{TNLean.PEPS.Approximation.exists_squarePatch_integerCoordinates_of_radius_le_four}
+    Let $\Lambda\subseteq\mathbb Z^2$ be finite, let $q\geq1$ be an integer,
+    and equip each site with its integer position in $\mathbb R^2$.
+    For every $z\in\mathbb R^2$, $0<u\leq4$, and
+    $\Omega\in\mathcal H_\Lambda$, there is a square patch of centre $z$
+    and scale $u$, with inside dimensions $d_j$ and cylinder sum $Q$, such that
+    \begin{align}
+        \sum_j d_j & \leq q^{81}, & \|(I-Q)\Omega\| & =0. \notag
+    \end{align}
+    The domain and the sampled square may be empty.
+\end{theorem}
+\begin{proof}
+    \uses{thm:peps_nested_cylinder_square_patch,
+        thm:peps_square_integer_coordinates,thm:peps_closed_square_card}
+    Use one radius, equal to $u$, and take the full inside space on its sample
+    $R=\{x\in\Lambda:\|x-z\|_\infty\leq u\}$.
+    Its cylinder is the whole space, so apply the nested-cylinder construction
+    with the approximating vector equal to $\Omega$.
+    The resulting residual is zero, and the number of terms is at most
+    $\dim\mathcal H_R=q^{|R|}$.
+    Since $|R|\leq81$ and $q\geq1$, this is at most $q^{81}$.
+\end{proof}
