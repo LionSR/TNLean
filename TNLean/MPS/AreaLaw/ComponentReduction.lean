@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.AreaLaw
-import TNLean.PEPS.AreaLaw.ProductGroundState
+import TNLean.Lattice.ProductGroundState
 import QICLean.Entropy.FiniteProductInformation
 import Mathlib.Combinatorics.SimpleGraph.Metric
 
@@ -149,7 +149,7 @@ theorem regionEntropy_eq_zero_of_forall_subset_or_disjoint
     convert hgap.submatrix e.symm using 1
     ext p p'
     simp [vecMulVec_apply, one_apply, hωdef, e, e.symm.injective.eq_iff]
-  exact TNLean.PEPS.AreaLaw.vonNeumannEntropy_partialTraceRight_eq_zero_of_gap hKA hKB hω1 hΔ
+  exact TNLean.Lattice.vonNeumannEntropy_partialTraceRight_eq_zero_of_gap hKA hKB hω1 hΔ
     hevω hgapω
 
 end ZeroEntropy

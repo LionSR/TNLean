@@ -34,21 +34,21 @@ theorem exists_squarePatch_integerCoordinates_of_radius_le_four
     (Λ : Finset (ℤ × ℤ)) {q : ℕ} (hq : 1 ≤ q)
     (z : ℝ × ℝ) {u : ℝ} (hu : 0 < u) (hu4 : u ≤ 4)
     (Ω : EuclideanSpace ℂ
-      ((w : (Finset.univ : Finset (AreaLaw.Site Λ))) → Fin q)) :
-    letI : LinearOrder (AreaLaw.Site Λ) :=
-      (Fintype.equivFin (AreaLaw.Site Λ)).linearOrder
+      ((w : (Finset.univ : Finset (Lattice.Site Λ))) → Fin q)) :
+    letI : LinearOrder (Lattice.Site Λ) :=
+      (Fintype.equivFin (Lattice.Site Λ)).linearOrder
     ∃ P : EncodedFrame.SquarePatch
-        (fun x : AreaLaw.Site Λ ↦ ((x.1.1 : ℝ), (x.1.2 : ℝ))) q,
+        (fun x : Lattice.Site Λ ↦ ((x.1.1 : ℝ), (x.1.2 : ℝ))) q,
       P.center = z ∧ P.scale = u ∧
       (∑ j, P.dim j) ≤ q ^ 81 ∧
       ‖EncodedFrame.act (1 - P.cylSum)
-        (dependentGlobalConfigIsometry (Out := fun _ : AreaLaw.Site Λ ↦ Fin q) Ω)‖ = 0 := by
+        (dependentGlobalConfigIsometry (Out := fun _ : Lattice.Site Λ ↦ Fin q) Ω)‖ = 0 := by
   classical
-  let : LinearOrder (AreaLaw.Site Λ) :=
-    (Fintype.equivFin (AreaLaw.Site Λ)).linearOrder
+  let : LinearOrder (Lattice.Site Λ) :=
+    (Fintype.equivFin (Lattice.Site Λ)).linearOrder
   obtain ⟨P, _, hz, hs, _, hd, he⟩ :=
     EncodedFrame.exists_squarePatch_of_mem_iSup_dependentRegionCylinder
-      (fun x : AreaLaw.Site Λ ↦ ((x.1.1 : ℝ), (x.1.2 : ℝ))) z hu
+      (fun x : Lattice.Site Λ ↦ ((x.1.1 : ℝ), (x.1.2 : ℝ))) z hu
       (fun _ : Fin 1 ↦ u) monotone_const (fun _ ↦ le_rfl) (fun _ ↦ by linarith)
       (fun _ ↦ ⊤) Ω Ω (Submodule.mem_iSup_of_mem (0 : Fin 1)
         ((mem_dependentRegionCylinder _ _ _).mpr (fun _ ↦ Submodule.mem_top)))

@@ -23,6 +23,8 @@ open Filter
 
 noncomputable section
 
+open TNLean.Lattice
+
 namespace TNLean.PEPS.AreaLaw.Scan
 
 /-- The same actual trace-distance estimate controls the target entropy, uniformly over all

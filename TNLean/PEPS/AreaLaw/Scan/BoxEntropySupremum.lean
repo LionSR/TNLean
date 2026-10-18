@@ -18,6 +18,8 @@ Source: OpenAI area-law manuscript, `02-initial.tex`, lines 590--594, and
 revision `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 -/
 
+open TNLean.Lattice
+
 namespace TNLean.PEPS.AreaLaw
 
 /-- A uniform positive-scale box power supplies every physical rectangle,

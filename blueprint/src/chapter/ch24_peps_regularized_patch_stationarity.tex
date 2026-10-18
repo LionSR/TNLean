@@ -773,6 +773,50 @@ Its marginals are those of the same final normalized vector defined in
     bounds this by $36q^2J\kappa^2$.
 \end{proof}
 
+\begin{theorem}[Marginal closeness at an admissible filter parameter]
+    \label{thm:peps_nested_patch_minimizer_marginal_closeness_explicit}
+    \lean{TNLean.PEPS.Approximation.nestedPatch_minimizer_marginal_closeness}
+    \leanok
+    \uses{def:polynomial_peps_model,def:square_area_law_state,
+        def:peps_nested_patches,def:peps_regularized_patch_objective,
+        def:peps_patch_canonical_marginal}
+    Let $q\ge0$ be an integer, $J\ge0$ and $\Delta>0$, and let $\kappa$
+    satisfy $0<\kappa\le\tfrac12$ and $36q^2J\kappa^2\le\Delta/1024$. For every
+    $L$, every original square Hamiltonian $H$ with interaction bound $J$,
+    every unit vector $\Omega$ and real $E_0$ with $H\Omega=E_0\Omega$ and
+    $H-E_0I\ge\Delta(I-|\Omega\rangle\langle\Omega|)$, every centre $c$, and
+    all reals $u\ge4$ and $b>0$, use the nested patches with equal weights
+    $a_j=\kappa/m$ and input vector $U\Omega$. If $x\in\mathcal D$ minimizes
+    $F$ on $\mathcal D$, then every region $X$ of the integer domain satisfies
+    \begin{align}
+        \|\rho_X-\rho_X^{U\Omega}\|_1 & \le\frac1{16},
+        \label{eq:peps_nested_patch_marginal_closeness_explicit}
+    \end{align}
+    where $\rho_X$ is the marginal of $\widehat\Psi(x)$. By
+    Lemma~\ref{lem:peps_patch_energy_parameter_choice}, the filter exponent
+    $\kappa(q,J,\Delta)$ of Definition~\ref{def:peps_patch_filter_exponent}
+    is such a parameter when $q\ge1$ and $J>0$. This is the marginal estimate
+    in the
+    \href{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex\#L338-L365}{proof of Proposition 4.1}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_nested_patch_minimizer_energy,
+        thm:peps_regularized_patch_minimum,
+        thm:square_area_law_ground_gap,
+        thm:peps_gap_marginal_one_sixteenth,
+        thm:peps_regional_basis_relabelling}
+    The energy bound of
+    Theorem~\ref{thm:peps_nested_patch_minimizer_energy} gives
+    $\operatorname{Re}\langle\phi,H_{\mathrm{int}}\phi\rangle-E_0\le
+        36q^2J\kappa^2\le\Delta/1024$
+    for the unit vector $\phi=\widehat\Psi(x)$. The vector $U\Omega$ is a
+    gapped ground vector of $H_{\mathrm{int}}$, so the marginal trace-norm
+    estimate of Theorem~\ref{thm:peps_gap_marginal_one_sixteenth} gives
+    (\ref{eq:peps_nested_patch_marginal_closeness_explicit}) after the
+    regional coordinate identification.
+\end{proof}
+
 \begin{theorem}[Uniform marginal closeness at a minimizing nested patch]
     \label{thm:peps_nested_patch_minimizer_marginal_closeness}
     \lean{TNLean.PEPS.Approximation.exists_uniform_nestedPatch_minimizer_marginal_closeness}
@@ -801,20 +845,78 @@ Its marginals are those of the same final normalized vector defined in
 \begin{proof}
     \leanok
     \uses{lem:peps_patch_energy_parameter_choice,
-        thm:peps_nested_patch_minimizer_energy,
-        thm:peps_regularized_patch_minimum,
-        thm:square_area_law_ground_gap,
-        thm:peps_gap_marginal_one_sixteenth,
-        thm:peps_regional_basis_relabelling}
-    Choose $\kappa$ with $0<\kappa\le\tfrac12$ and
-    $36q^2J\kappa^2\le\Delta/1024$. The energy bound of
-    Theorem~\ref{thm:peps_nested_patch_minimizer_energy} then gives
-    $\operatorname{Re}\langle\phi,H_{\mathrm{int}}\phi\rangle-E_0\le\Delta/1024$
-    for the unit vector $\phi=\widehat\Psi(x)$. The vector $U\Omega$ is a
-    gapped ground vector of $H_{\mathrm{int}}$, so the marginal trace-norm
-    estimate of Theorem~\ref{thm:peps_gap_marginal_one_sixteenth} gives
-    (\ref{eq:peps_nested_patch_marginal_closeness}) after the regional
-    coordinate identification.
+        thm:peps_nested_patch_minimizer_marginal_closeness_explicit}
+    If $36q^2J>0$, take $\kappa$ to be the filter exponent
+    $\kappa(q,J,\Delta)$, which is positive, at most $\tfrac12$ and satisfies
+    $36q^2J\kappa^2\le\Delta/1024$ by
+    Lemma~\ref{lem:peps_patch_energy_parameter_choice}. If $36q^2J=0$, take
+    $\kappa=\tfrac12$. In both cases
+    Theorem~\ref{thm:peps_nested_patch_minimizer_marginal_closeness_explicit}
+    gives (\ref{eq:peps_nested_patch_marginal_closeness}).
+\end{proof}
+
+\begin{definition}[The radius exponent at an area-law constant]
+    \label{def:peps_nested_patch_radius_exponent}
+    \lean{TNLean.PEPS.Approximation.nestedPatchRadiusExponent}
+    \leanok
+    \uses{def:peps_patch_radius_exponent,def:peps_patch_filter_exponent}
+    For an integer $q$ and reals $J,\Delta,B_0,p,C_A$, put
+    $C_S=\max\{1,16C_A\}$ and $C_0=16C_S+\log8$, and let
+    $R_0(q,J,\Delta,B_0,p,C_A)$ be the radius exponent
+    (\ref{eq:peps_patch_radius_exponent}) at the constants $C_0$, $B_0$, $p$
+    and at the filter exponent $\kappa=\kappa(q,J,\Delta)$. These are the
+    choices of $C_S$, $C_Q=16C_S$, $C_0=C_Q+\log8$ and $R_0$ in the
+    \href{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex\#L362-L411}{proof of Proposition 4.1}.
+\end{definition}
+
+\begin{theorem}[Nested cylinders at a given area-law constant]
+    \label{thm:peps_nested_patch_cylinder_approximation_explicit}
+    \lean{TNLean.PEPS.Approximation.nestedPatchRadiusExponent_pos,
+        TNLean.PEPS.Approximation.SquareEntropyAreaLawAt.uniform_nestedPatch_cylinders}
+    \leanok
+    \uses{def:square_entropy_area_law_at,def:polynomial_peps_model,
+        def:area_law_ground_entropy,def:square_area_law_state,
+        def:peps_nested_patches,def:peps_regional_cylinder,
+        def:peps_nested_patch_radius_exponent}
+    Let $q\ge2$ be an integer, $J,\Delta>0$ and $B_0,p>0$, and assume the
+    square-grid entropy area law at $q$, $J$, $\Delta$ with constant $C_A$.
+    Put $R_0=R_0(q,J,\Delta,B_0,p,C_A)$; then $R_0>0$. For every $L\ge2$,
+    every original square Hamiltonian $H$ with interaction bound $J$, every
+    unit vector $\Omega$ and real $E_0$ with $H\Omega=E_0\Omega$ and
+    $H-E_0I\ge\Delta(I-|\Omega\rangle\langle\Omega|)$, every centre $c$, and
+    every real $u$ with $4\le u\le B_0\log L$, let
+    $K_0\subseteq\dots\subseteq K_{m-1}$ be the nested patches about $c$ in the
+    integer square of side $L$. Then there are subspaces $S_j$ of the states
+    on $K_j$ with $\dim S_j\le L^{R_0}$, and a vector $v$ in the sum of the
+    cylinders $S_j\otimes\mathcal H_{K_j^c}$, such that
+    $\|U\Omega-v\|\le L^{-p}$. This is the cylinder estimate
+    \href{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex\#L484-L563}{in the proof of Proposition 4.1}
+    with all constants explicit.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_nested_patch_minimizer_marginal_closeness_explicit,
+        lem:peps_patch_energy_parameter_choice,
+        thm:peps_nested_patch_entropy_explicit,
+        thm:peps_patch_radius_bounds,
+        thm:peps_patch_minimum_growth_entropy_distance,
+        thm:peps_regularized_patch_minimum,thm:peps_patch_inverse_cylinder,
+        thm:peps_nested_patch_sizes}
+    Take $\kappa=\kappa(q,J,\Delta)$, which is admissible in
+    Theorem~\ref{thm:peps_nested_patch_minimizer_marginal_closeness_explicit}
+    by Lemma~\ref{lem:peps_patch_energy_parameter_choice}, and
+    $C_S=\max\{1,16C_A\}$ from
+    Theorem~\ref{thm:peps_nested_patch_entropy_explicit}. Positivity of $R_0$
+    follows from $\kappa>0$ and $C_0\ge0$. Set $R=R_0\log L$, $b=e^{-R}$ and
+    $a_j=\kappa/m$. The entropy bound and the marginal closeness at every
+    minimizer give the growth bound
+    $\log N(R)\le\frac\kappa2\bigl(C_0(1+u)+R/4\bigr)$. At a minimizer, the
+    first-head expansion of
+    Theorem~\ref{thm:peps_patch_inverse_cylinder} produces subspaces of
+    dimension at most $1/b=L^{R_0}$ and a vector in the sum of their
+    cylinders within $N(R)(2b)^{\kappa/2}$ of $U\Omega$. Taking logarithms,
+    the radius bounds of Theorem~\ref{thm:peps_patch_radius_bounds} turn this
+    into the error $L^{-p}$.
 \end{proof}
 
 \begin{theorem}[Uniform approximation in the selected nested cylinders]
@@ -846,23 +948,8 @@ Its marginals are those of the same final normalized vector defined in
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:peps_nested_patch_minimizer_marginal_closeness,
-        thm:peps_nested_patch_entropy,def:peps_patch_radius_exponent,
-        thm:peps_patch_radius_bounds,
-        thm:peps_patch_minimum_growth_entropy_distance,
-        thm:peps_regularized_patch_minimum,thm:peps_patch_inverse_cylinder,
-        thm:peps_nested_patch_sizes}
-    Choose $\kappa$ by
-    Theorem~\ref{thm:peps_nested_patch_minimizer_marginal_closeness} and
-    $C_S$ by Theorem~\ref{thm:peps_nested_patch_entropy}. Put
-    $C_0=16C_S+\log8$, take $R_0$ as in the explicit radius choice, and set
-    $R=R_0\log L$, $b=e^{-R}$ and $a_j=\kappa/m$. The entropy bound and the
-    marginal closeness at every minimizer give the growth bound
-    $\log N(R)\le\frac\kappa2\bigl(C_0(1+u)+R/4\bigr)$. At a minimizer, the
-    first-head expansion of
-    Theorem~\ref{thm:peps_patch_inverse_cylinder} produces subspaces of
-    dimension at most $1/b=L^{R_0}$ and a vector in the sum of their
-    cylinders within $N(R)(2b)^{\kappa/2}$ of $U\Omega$. Taking logarithms,
-    the radius bounds turn this into the estimate
-    (\ref{eq:peps_nested_patch_cylinder_approximation}).
+    \uses{thm:peps_nested_patch_cylinder_approximation_explicit}
+    The area law supplies a constant $C_A\ge0$ at $q$, $J$, $\Delta$. Take
+    $R_0=R_0(q,J,\Delta,B_0,p,C_A)$ and apply
+    Theorem~\ref{thm:peps_nested_patch_cylinder_approximation_explicit}.
 \end{proof}

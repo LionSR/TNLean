@@ -60,6 +60,7 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 
 open Matrix MeasureTheory ProbabilityTheory QuantumCircuit
 open scoped BigOperators Kronecker Matrix.Norms.L2Operator NNReal ComplexOrder
+open TNLean.Lattice
 
 namespace TNLean.PEPS.Approximation
 
@@ -412,19 +413,19 @@ theorem SquareHamiltonian.exists_reset_localized_filter (q : ℕ) (hq : 1 ≤ q)
         let a := AreaLaw.rectangleSiteEquiv L L
         let e := AreaLaw.rectangleConfigurationEquiv L L (q * q)
         let F := reindex (p.trans e) (p.trans e) (EncodedFrame.sheetSwapOp q R)
-        let ψ : AreaLaw.Configuration Λ (q * q) → ℂ := fun c ↦
+        let ψ : Lattice.Configuration Λ (q * q) → ℂ := fun c ↦
           Ω ((p.trans e).symm c).1 * Ω ((p.trans e).symm c).2
         let boundary : Finset (Edge (squareLatticeGraph L L)) :=
           Finset.univ.filter (IsRegionBoundaryEdge R)
         let Z := boundary.biUnion fun x ↦
           ({x.1.1, x.1.2} : Finset (SquareLatticeVertex L L))
-        let B := AreaLaw.graphNeighborhood Λ ⌈K * (1 + b + Real.log L)⌉₊
+        let B := Lattice.graphNeighborhood Λ ⌈K * (1 + b + Real.log L)⌉₊
           (Q.image a ∪ Z.image a)
         ‖WithLp.toLp 2 ψ‖ = 1 ∧ ‖WithLp.toLp 2 (F *ᵥ ψ)‖ = 1 ∧
-        ∃ (z : ℝ) (M : Matrix (AreaLaw.Configuration Λ (q * q))
-            (AreaLaw.Configuration Λ (q * q)) ℂ),
+        ∃ (z : ℝ) (M : Matrix (Lattice.Configuration Λ (q * q))
+            (Lattice.Configuration Λ (q * q)) ℂ),
           Real.exp (-2 * b) ≤ z ∧
-          M ∈ supportedOperators (q * q) (B : Set (AreaLaw.Site Λ)) ∧ ‖M‖ ≤ 1 ∧
+          M ∈ supportedOperators (q * q) (B : Set (Lattice.Site Λ)) ∧ ‖M‖ ≤ 1 ∧
           ‖WithLp.toLp 2 (M *ᵥ ψ) - (z : ℂ) • WithLp.toLp 2 (F *ᵥ ψ)‖ ≤
             C * Real.exp (-10 * b) * (L : ℝ) ^ (-r) ∧
           ‖WithLp.toLp 2 (Mᴴ *ᵥ (F *ᵥ ψ)) - (z : ℂ) • WithLp.toLp 2 ψ‖ ≤
@@ -505,18 +506,18 @@ theorem SquareHamiltonian.exists_reset_unitary (q : ℕ) (hq : 1 ≤ q) (J : ℝ
         let a := AreaLaw.rectangleSiteEquiv L L
         let e := AreaLaw.rectangleConfigurationEquiv L L (q * q)
         let F := reindex (p.trans e) (p.trans e) (EncodedFrame.sheetSwapOp q R)
-        let ψ : AreaLaw.Configuration Λ (q * q) → ℂ := fun c ↦
+        let ψ : Lattice.Configuration Λ (q * q) → ℂ := fun c ↦
           Ω ((p.trans e).symm c).1 * Ω ((p.trans e).symm c).2
         let boundary : Finset (Edge (squareLatticeGraph L L)) :=
           Finset.univ.filter (IsRegionBoundaryEdge R)
         let Z := boundary.biUnion fun x ↦
           ({x.1.1, x.1.2} : Finset (SquareLatticeVertex L L))
-        let B := AreaLaw.graphNeighborhood Λ ⌈K * (1 + b + Real.log L)⌉₊
+        let B := Lattice.graphNeighborhood Λ ⌈K * (1 + b + Real.log L)⌉₊
           (Q.image a ∪ Z.image a)
         ‖WithLp.toLp 2 ψ‖ = 1 ∧ ‖WithLp.toLp 2 (F *ᵥ ψ)‖ = 1 ∧
-        ∃ U : Matrix (AreaLaw.Configuration Λ (q * q)) (AreaLaw.Configuration Λ (q * q)) ℂ,
-          U ∈ unitaryGroup (AreaLaw.Configuration Λ (q * q)) ℂ ∧
-          U ∈ supportedOperators (q * q) (B : Set (AreaLaw.Site Λ)) ∧
+        ∃ U : Matrix (Lattice.Configuration Λ (q * q)) (Lattice.Configuration Λ (q * q)) ℂ,
+          U ∈ unitaryGroup (Lattice.Configuration Λ (q * q)) ℂ ∧
+          U ∈ supportedOperators (q * q) (B : Set (Lattice.Site Λ)) ∧
           ‖WithLp.toLp 2 (U *ᵥ ψ) - WithLp.toLp 2 (F *ᵥ ψ)‖ ≤ C * (L : ℝ) ^ (-r) := by
   obtain ⟨C, K, hC, hK, hfilter⟩ :=
     SquareHamiltonian.exists_reset_localized_filter q hq J hJ hΔ hr
