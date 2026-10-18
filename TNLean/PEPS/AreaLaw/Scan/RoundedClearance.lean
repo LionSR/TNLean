@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Scan.Defs
 import TNLean.PEPS.AreaLaw.WeakRectangleShellSafety
+import TNLean.Algebra.ExplicitThresholds
 import Mathlib.Analysis.SpecialFunctions.Pow.Asymptotics
 
 /-!
@@ -23,77 +24,62 @@ and `scanner:scales` / `scanner:test-geometry`, lines 32–49, at
 Original proof from the manuscript; no upstream Lean proof text reused.
 -/
 
-open Filter
-open scoped Topology
 open TNLean.Lattice
 
 namespace TNLean.PEPS.AreaLaw.Scan
 
-private theorem roundedClearance_ratio_tendsto_zero {ell : ℝ} (hell : 0 < ell)
-    (Cr : ℝ) :
-    Tendsto (fun n : ℕ ↦ (4 * (n : ℝ) ^ (1 - ell) +
-      20 * (Cr * Real.log n ^ 2 + 1)) / n) atTop (𝓝 0) := by
-  have hnat : Tendsto (fun n : ℕ ↦ (n : ℝ)) atTop atTop :=
-    tendsto_natCast_atTop_atTop
-  have hp : Tendsto (fun n : ℕ ↦ (n : ℝ) ^ (1 - ell) / n) atTop (𝓝 0) := by
-    have h := (tendsto_rpow_neg_atTop hell).comp hnat
-    refine h.congr' ?_
-    filter_upwards [eventually_ge_atTop (1 : ℕ)] with n hn
-    have hn0 : 0 < (n : ℝ) := by exact_mod_cast (lt_of_lt_of_le Nat.zero_lt_one hn)
-    simpa only [Function.comp_apply, Real.rpow_one,
-      show 1 - ell - 1 = -ell by ring] using Real.rpow_sub hn0 (1 - ell) 1
-  have hl : Tendsto (fun n : ℕ ↦ Real.log (n : ℝ) ^ 2 / n) atTop (𝓝 0) := by
-    refine ((Real.tendsto_pow_log_div_mul_add_atTop 1 0 2 one_ne_zero).comp hnat).congr ?_
-    intro n
-    simp only [Function.comp_apply, one_mul, add_zero]
-  have hi : Tendsto (fun n : ℕ ↦ (n : ℝ)⁻¹) atTop (𝓝 0) :=
-    tendsto_inv_atTop_zero.comp hnat
-  have h := ((hp.const_mul 4).add (hl.const_mul (20 * Cr))).add (hi.const_mul 20)
-  simp only [mul_zero, add_zero] at h
-  convert h using 1
-  ext n
-  ring
+/-- The explicit threshold of the rounded clearance budgets: `s` must be at least one and
+`C₂ s` must be at least `80 (C₂ + 1)` and the thresholds for `4 n^(1 - ell) ≤ η n` and
+`20 Cr (log n)² ≤ η n`, where `η = 1 / (4 (C₂ + 1))`. Source: Proposition 9.5,
+`08-scanner.tex`, lines 707–729. -/
+noncomputable def roundedClearanceThreshold (C₂ Cr ell : ℝ) : ℕ :=
+  max 1 ⌈max (Real.powerRatioThreshold 4 (1 / (4 * (C₂ + 1))) ell)
+    (max (Real.logPowThreshold (20 * Cr) (1 / (4 * (C₂ + 1))) 1 2) (80 * (C₂ + 1))) / C₂⌉₊
 
-/-- Rounded collar and truncation scales satisfy the safe-box and scanner
-clearance budgets eventually. The threshold precedes the safety parameter.
-Source: Proposition 9.5, `08-scanner.tex`, lines 707–729. -/
-theorem exists_rounded_clearance_threshold {C₂ Cr ell : ℝ}
-    (hC₂ : 0 < C₂) (hCr : 0 ≤ Cr) (hell : 0 < ell) (hell1 : ell < 1) :
-    ∃ S : ℕ, 1 ≤ S ∧ ∀ s : ℕ, S ≤ s →
-      let n := ⌈C₂ * s⌉₊
-      let L := ⌊(n : ℝ) ^ (1 - ell)⌋₊
-      let r₀ := ⌈Cr * Real.log n ^ 2⌉₊
-      1 ≤ L ∧ L ≤ s ∧ ∀ D₀ : ℕ, 1 ≤ D₀ →
-        (D₀ + 1) * L ≤ D₀ * s ∧ 2 * L + 10 * r₀ ≤ D₀ * s := by
-  have hη : 0 < 1 / (C₂ + 1) := by positivity
-  obtain ⟨N, hN⟩ := ((roundedClearance_ratio_tendsto_zero hell Cr).eventually_lt_const
-    hη).exists_forall_of_atTop
-  have hgrow : Tendsto (fun s : ℕ ↦ C₂ * (s : ℝ)) atTop atTop :=
-    Tendsto.const_mul_atTop hC₂ tendsto_natCast_atTop_atTop
-  have hlarge : ∀ᶠ s : ℕ in atTop, (max N 1 : ℝ) ≤ C₂ * s :=
-    hgrow.eventually_ge_atTop _
-  obtain ⟨S, hS⟩ := hlarge.exists_forall_of_atTop
-  refine ⟨max S 1, le_max_right _ _, ?_⟩
-  intro s hs n L r₀
-  have hs1 : 1 ≤ s := (le_max_right S 1).trans hs
-  have hnlo : (max N 1 : ℝ) ≤ n :=
-    (hS s ((le_max_left S 1).trans hs)).trans (Nat.le_ceil _)
-  have hnmax : max N 1 ≤ n := by exact_mod_cast hnlo
-  have hnN : N ≤ n := (le_max_left N 1).trans hnmax
-  have hn1 : 1 ≤ n := (le_max_right N 1).trans hnmax
-  have hn0 : 0 < (n : ℝ) := by exact_mod_cast (lt_of_lt_of_le Nat.zero_lt_one hn1)
+/-- Rounded collar and truncation scales satisfy the safe-box and scanner clearance budgets at
+every size `s` from the explicit threshold `roundedClearanceThreshold C₂ Cr ell` on, for every
+positive safety parameter. Source: Proposition 9.5, `08-scanner.tex`, lines 707–729. -/
+theorem rounded_clearance_of_threshold_le {C₂ Cr ell : ℝ}
+    (hC₂ : 0 < C₂) (hCr : 0 ≤ Cr) (hell : 0 < ell) (hell1 : ell < 1) {s : ℕ}
+    (hs : roundedClearanceThreshold C₂ Cr ell ≤ s) :
+    let n := ⌈C₂ * s⌉₊
+    let L := ⌊(n : ℝ) ^ (1 - ell)⌋₊
+    let r₀ := ⌈Cr * Real.log n ^ 2⌉₊
+    1 ≤ L ∧ L ≤ s ∧ ∀ D₀ : ℕ, 1 ≤ D₀ →
+      (D₀ + 1) * L ≤ D₀ * s ∧ 2 * L + 10 * r₀ ≤ D₀ * s := by
+  intro n L r₀
+  set η : ℝ := 1 / (4 * (C₂ + 1)) with hη_def
+  have hη : 0 < η := by positivity
+  have hs1 : 1 ≤ s := (le_max_left _ _).trans hs
+  have hscale := Nat.ceil_le.mp ((le_max_right _ _).trans hs)
+  rw [div_le_iff₀ hC₂] at hscale
+  have hx : max (Real.powerRatioThreshold 4 η ell)
+      (max (Real.logPowThreshold (20 * Cr) η 1 2) (80 * (C₂ + 1))) ≤ n :=
+    (hscale.trans_eq (mul_comm _ _)).trans (Nat.le_ceil _)
+  simp only [max_le_iff] at hx
+  obtain ⟨hxp, hxl, hx80⟩ := hx
+  have hn1 : (1 : ℝ) ≤ n := (Real.one_le_powerRatioThreshold _ _ _).trans hxp
+  have hn0 : 0 < (n : ℝ) := one_pos.trans_le hn1
+  have hpow := Real.mul_rpow_le_mul_rpow_of_powerRatioThreshold_le (C := 4) (b := 1) (x := n)
+    (by norm_num) hη (sub_lt_self 1 hell) (by rw [sub_sub_cancel]; exact hxp)
+  have hlog := Real.mul_log_pow_le_mul_rpow_of_logPowThreshold_le
+    (mul_nonneg (by norm_num) hCr) hη one_pos hxl
+  rw [Real.rpow_one] at hpow hlog
+  have h20 : 20 ≤ η * n := by
+    rw [hη_def, one_div, inv_mul_eq_div, le_div_iff₀ (by positivity)]
+    linarith
   have hnupper : (n : ℝ) ≤ (C₂ + 1) * s := by
     have h := (Nat.ceil_lt_add_one (show 0 ≤ C₂ * s by positivity)).le
     have hsreal : (1 : ℝ) ≤ s := by exact_mod_cast hs1
     dsimp [n]
     nlinarith
-  have hsmall := (div_lt_iff₀ hn0).mp (hN n hnN)
   have htotal : 4 * (n : ℝ) ^ (1 - ell) + 20 * (Cr * Real.log n ^ 2 + 1) < s := by
+    have hηn : 3 * (η * n) < (n : ℝ) / (C₂ + 1) := by
+      rw [hη_def, lt_div_iff₀ (by positivity)]
+      field_simp
+      nlinarith
     have h := (div_le_iff₀' (show 0 < C₂ + 1 by positivity)).mpr hnupper
-    calc
-      _ < (1 / (C₂ + 1)) * n := hsmall
-      _ = (n : ℝ) / (C₂ + 1) := by ring
-      _ ≤ s := h
+    linarith
   have hLupper : (L : ℝ) ≤ (n : ℝ) ^ (1 - ell) := Nat.floor_le (by positivity)
   have hrupper : (r₀ : ℝ) ≤ Cr * Real.log n ^ 2 + 1 :=
     (Nat.ceil_lt_add_one (by positivity)).le
@@ -111,6 +97,31 @@ theorem exists_rounded_clearance_threshold {C₂ Cr ell : ℝ}
   have hside : L ≤ D₀ * L := Nat.le_mul_of_pos_left L hD₀
   have hsafety : s ≤ D₀ * s := Nat.le_mul_of_pos_left s hD₀
   constructor <;> nlinarith
+
+/-- Rounded collar and truncation scales satisfy the safe-box and scanner
+clearance budgets eventually. The threshold precedes the safety parameter.
+Source: Proposition 9.5, `08-scanner.tex`, lines 707–729. -/
+theorem exists_rounded_clearance_threshold {C₂ Cr ell : ℝ}
+    (hC₂ : 0 < C₂) (hCr : 0 ≤ Cr) (hell : 0 < ell) (hell1 : ell < 1) :
+    ∃ S : ℕ, 1 ≤ S ∧ ∀ s : ℕ, S ≤ s →
+      let n := ⌈C₂ * s⌉₊
+      let L := ⌊(n : ℝ) ^ (1 - ell)⌋₊
+      let r₀ := ⌈Cr * Real.log n ^ 2⌉₊
+      1 ≤ L ∧ L ≤ s ∧ ∀ D₀ : ℕ, 1 ≤ D₀ →
+        (D₀ + 1) * L ≤ D₀ * s ∧ 2 * L + 10 * r₀ ≤ D₀ * s :=
+  ⟨_, le_max_left _ _, fun _ ↦ rounded_clearance_of_threshold_le hC₂ hCr hell hell1⟩
+
+/-- The rounded clearance budgets at the scanner's actual collar scale, at every size from the
+explicit threshold `roundedClearanceThreshold C₂ Cr X.ell` on. Source: Proposition 9.5,
+`08-scanner.tex`, lines 707–729. -/
+theorem ScannerExponents.rounded_clearance_of_threshold_le (X : ScannerExponents)
+    {C₂ Cr : ℝ} (hC₂ : 0 < C₂) (hCr : 0 ≤ Cr) {s : ℕ}
+    (hs : roundedClearanceThreshold C₂ Cr X.ell ≤ s) :
+    let n := ⌈C₂ * s⌉₊
+    let r₀ := ⌈Cr * Real.log n ^ 2⌉₊
+    1 ≤ X.L n ∧ X.L n ≤ s ∧ ∀ D₀ : ℕ, 1 ≤ D₀ →
+      (D₀ + 1) * X.L n ≤ D₀ * s ∧ 2 * X.L n + 10 * r₀ ≤ D₀ * s :=
+  Scan.rounded_clearance_of_threshold_le hC₂ hCr X.ell_pos X.ell_lt_one hs
 
 /-- The rounded clearance theorem uses the scanner's actual collar scale;
 it imposes no condition on the scanner band count. Source: Proposition 9.5,

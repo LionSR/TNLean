@@ -28,10 +28,6 @@ open TNLean.Lattice
 
 namespace TNLean.PEPS.AreaLaw.Geometry
 
-private theorem cast_supDist (p z : ℤ × ℤ) :
-    (supDist p z : ℝ) = max |(p.1 : ℝ) - z.1| |(p.2 : ℝ) - z.2| := by
-  simp only [supDist, Nat.cast_max, Nat.cast_natAbs, Int.cast_abs, Int.cast_sub]
-
 /-- Every sufficiently small native rectangle contained in a permitted dilation
 is safe, with safety derived from template separation. This is the clearance
 step of Lemma 9.4, lines 651–655, and uses no geometric regularity premise.

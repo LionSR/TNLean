@@ -96,6 +96,43 @@
     Safety inside a dilated parent rectangle gives the result.
 \end{proof}
 
+\begin{theorem}[Entropy from bounds on the selected squares]
+    \label{thm:area_law_capped_dyadic_entropy_cover_of_forall}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.regionalEntropy_filter_le_weighted_cover_of_forall}
+    \leanok
+    \uses{def:area_law_ground_entropy,def:area_law_safe_rectangle,
+        def:area_template_dyadic_rectangle,def:area_law_capped_dyadic_partition}
+    Fix a finite lattice domain $\Lambda$ with local dimension $q$,
+    a unit physical vector $\Omega$, and a region $A$.
+    Let $S$ be a finite set of lattice sites, let $K\in\N$, and let
+    $e,C\in\R$. Suppose that every square $R_{k,z}$ selected by
+    $\mathcal P_K(S)$ satisfies
+    \begin{align}
+        S_\Omega(A\cap R_{k,z}) & \le C\operatorname{size}(R_{k,z})^{1+e}.
+    \end{align}
+    Then
+    \begin{align}
+        S_\Omega(A\cap S)
+         & \le C\sum_{(k,z)\in\mathcal P_K(S)}(2^k)^{1+e}.
+    \end{align}
+    This is the conditional summation step in
+    \cite[proof of Lemma~9.4, lines~651--664]{OpenAI2026AreaLaw}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:area_template_physical_dyadic_entropy,
+        thm:area_template_dyadic_rectangle}
+    The physical regions $A\cap R_{k,z}$ are pairwise disjoint and
+    have union $A\cap S$. Each $R_{k,z}$ is an integer rectangle
+    of size $2^k$. Subadditivity and the assumed estimate give
+    \begin{align}
+        S_\Omega(A\cap S)
+         & \le\sum_{(k,z)\in\mathcal P_K(S)}S_\Omega(A\cap R_{k,z}) \\
+         & \le\sum_{(k,z)\in\mathcal P_K(S)}C(2^k)^{1+e}
+        =C\sum_{(k,z)\in\mathcal P_K(S)}(2^k)^{1+e}.
+    \end{align}
+\end{proof}
+
 \begin{theorem}[Entropy from safe selected squares]
     \label{thm:area_law_capped_dyadic_entropy_cover}
     \lean{TNLean.PEPS.AreaLaw.Geometry.regionalEntropy_filter_le_weighted_cover}
@@ -120,17 +157,9 @@
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:area_template_physical_dyadic_entropy,
-        thm:area_template_dyadic_rectangle}
-    The physical regions $A\cap R_{k,z}$ are pairwise disjoint and
-    have union $A\cap S$. Each $R_{k,z}$ is an integer rectangle
-    of size $2^k$. Subadditivity and the assumed estimate give
-    \begin{align}
-        S_\Omega(A\cap S)
-         & \le\sum_{(k,z)\in\mathcal P_K(S)}S_\Omega(A\cap R_{k,z}) \\
-         & \le\sum_{(k,z)\in\mathcal P_K(S)}C(2^k)^{1+e}
-        =C\sum_{(k,z)\in\mathcal P_K(S)}(2^k)^{1+e}.
-    \end{align}
+    \uses{thm:area_law_capped_dyadic_entropy_cover_of_forall}
+    Every selected square is safe, so the assumed estimate applies to
+    it, and the preceding theorem gives the bound.
 \end{proof}
 
 \begin{theorem}[Rectangle-shell entropy from a safe-box estimate]
