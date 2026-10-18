@@ -416,11 +416,12 @@ statements take as a parameter.
         TNLean.PEPS.AreaLaw.Geometry.IsBirthSeparationConstant.birthSeparated,
         TNLean.PEPS.AreaLaw.isTwoFamilyDecompositionConstant_of_one_le,
         TNLean.PEPS.AreaLaw.IsTwoFamilyDecompositionConstant.ofLe,
-        TNLean.PEPS.AreaLaw.isTwoFamilyDecompositionConstant_twoFamilyDecompositionConstant}
+        TNLean.PEPS.AreaLaw.isTwoFamilyDecompositionConstant_twoFamilyDecompositionConstant,
+        TNLean.PEPS.AreaLaw.Geometry.isBirthSeparationConstant_birthTemplateSeparationConstant}
     \leanok
     \uses{def:area_law_two_family_explicit_constant,
         def:area_law_two_family_decomposition}
-    A birth-separation constant exists. If $c_1$ is one, then for all real
+    The number $1/112$ is a birth-separation constant. If $c_1$ is one, then for all real
     $D_0$ and $C_{\rm tpl}$ and every integer $n_*\ge0$ the number
     $C_{\rm expl}(D_0,C_{\rm tpl},n_*,c_1)$ is a constant of the two-family
     decomposition at $n_*$.
@@ -434,9 +435,10 @@ statements take as a parameter.
         thm:area_law_initial_belt_birth_separation,
         thm:area_law_replacement_birth_separation_local,
         thm:area_law_replacement_birth_separation_conditional}
-    The smaller of the constants of
-    Theorems~\ref{thm:area_law_initial_belt_birth_separation}
-    and~\ref{thm:area_law_replacement_birth_separation_local} is a
+    Theorem~\ref{thm:area_law_initial_belt_birth_separation} separates the
+    initial belt tiles by $1/112$, and
+    Theorem~\ref{thm:area_law_replacement_birth_separation_local} separates
+    the replacement births by $1/28\ge1/112$, so $1/112$ is a
     birth-separation constant. For $S_*\ge T(1/128)$ and
     $k_0\ge K_\zeta(S_*)$ the repair induction holds with isolation constant
     $1/128$, so the separation of the replacements follows from the local
