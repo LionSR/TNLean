@@ -79,11 +79,11 @@ has regional entropy at most this constant times the number of cut edges.
 This is an auxiliary result: Theorem 1.1 of the source (`00-introduction.tex`, lines 39–53)
 asserts only that a constant exists, and `uniformAreaLaw` is that statement. Beyond the
 hypotheses of Theorem 1.1, the only remaining input is the transport bound at constants with
-`0 < c₀`; these constants are universal and do not depend on `q, R, J, Δ`. Their existence is `Scan.CollarScan.exists_finiteFamilyTransportBound`, and
-explicit values come from QICLean's `transport_finite_family_explicit` (QICLean#859, to be
-used after the QICLean bump #9712). Source: proof of Theorem 1.1, `10-geometry.tex`,
-lines 803–857; the constant is tabulated in `docs/notes/arealaw2d_explicit_constant.tex`,
-Section `sec:top`, and in issue #9535. -/
+`0 < c₀`; these constants are universal and do not depend on `q, R, J, Δ`. Their existence is
+`Scan.CollarScan.exists_finiteFamilyTransportBound`, and QICLean's finite-family transport theorem
+with explicit constants supplies explicit values. Source: proof of Theorem 1.1,
+`10-geometry.tex`, lines 803–857; the constant is tabulated in
+`docs/notes/arealaw2d_explicit_constant.tex`, Section `sec:top`. -/
 theorem uniformAreaLaw_explicit (q R : ℕ) (hq : 1 ≤ q) {J Δ : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < Δ)
     {c₀ Cent eent Cen een : ℝ} (hc₀ : 0 < c₀)
     (htr : Scan.CollarScan.FiniteFamilyTransportBound c₀ Cent eent Cen een) :
