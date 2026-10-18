@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.PEPS.AreaLaw.Geometry.DyadicScales
 import TNLean.PEPS.AreaLaw.Geometry.PrimaryFragments
 import TNLean.PEPS.AreaLaw.Geometry.Templates
+import TNLean.PEPS.AreaLaw.Geometry.TwoFamilyExplicitThresholds
 import Mathlib.Analysis.Convex.Combination
 import Mathlib.Analysis.Convex.Segment
 import Mathlib.Analysis.SpecialFunctions.Pow.Asymptotics
@@ -29,6 +30,10 @@ fragment has sup diameter at most `r`, so `s₀ = r`. The scanner scale is
 * `eventually_primaryScaleLimits`: `⌊n ^ (1 - ℓ)⌋ = o(r)`, `n ^ β = o(t_k)` and
   `n ^ β = o(r)`, as explicit thresholds in `k`, uniformly over primaries.
 * `le_primaryScannerScale`: all primary scales exceed a fixed `n_*` for large `k`.
+* `primaryScaleLimitThreshold` and `primaryScannerScaleThreshold`: the explicit
+  layers beyond which the two previous statements hold
+  (`primaryScaleLimits_of_primaryScaleLimitThreshold_le`,
+  `le_primaryScannerScale_of_primaryScannerScaleThreshold_le`).
 
 ## References
 
@@ -416,31 +421,6 @@ theorem primaryBirthTemplate_isSeparated {D₀ : ℝ} (o : ℝ × ℝ) (k ℓ p 
 
 /-! ### Scale limits -/
 
-/-- A fixed multiple of a smaller power of `2 ^ k` is eventually at most any positive
-multiple of a larger one. -/
-private theorem eventually_mul_rpow_le (M : ℝ) {ε a b : ℝ} (hε : 0 < ε) (hab : a < b) :
-    ∀ᶠ k : ℕ in atTop, M * ((2 : ℝ) ^ k) ^ a ≤ ε * ((2 : ℝ) ^ k) ^ b := by
-  have hR : Tendsto (fun k : ℕ ↦ (2 : ℝ) ^ k) atTop atTop :=
-    tendsto_pow_atTop_atTop_of_one_lt one_lt_two
-  have hlim := (tendsto_rpow_neg_atTop (sub_pos.mpr hab)).comp hR
-  set M' := max M 0 + 1 with hM'
-  have hM'0 : 0 < M' := by positivity
-  filter_upwards [hlim.eventually (ge_mem_nhds (div_pos hε hM'0))] with k hk
-  simp only [Function.comp_apply] at hk
-  set R : ℝ := (2 : ℝ) ^ k
-  have hR0 : 0 < R := by positivity
-  have hsplit : R ^ a = R ^ (-(b - a)) * R ^ b := by
-    rw [← Real.rpow_add hR0]
-    ring_nf
-  have ha : 0 ≤ R ^ a := by positivity
-  have hb : 0 ≤ R ^ b := by positivity
-  calc M * R ^ a ≤ M' * R ^ a := by
-        gcongr
-        linarith [le_max_left M 0]
-    _ = M' * R ^ (-(b - a)) * R ^ b := by rw [hsplit]; ring
-    _ ≤ M' * (ε / M') * R ^ b := by gcongr
-    _ = ε * R ^ b := by field_simp
-
 /-- The scanner scale is at most `(max C_P 0 + 1) r ^ (1 + 2 δ₀)`. -/
 private theorem primaryScannerScale_le (CP : ℝ) (k : ℕ) :
     (primaryScannerScale CP k : ℝ) ≤
@@ -453,18 +433,30 @@ private theorem primaryScannerScale_le (CP : ℝ) (k : ℕ) :
   have h₂ := Nat.ceil_lt_add_one (show 0 ≤ max CP 0 * E by positivity)
   nlinarith [le_max_right CP 0]
 
-/-- **Primary scale limits** (`geometry:primary-limits`). For every `ε > 0`, every
-sufficiently large layer index `k` has, with `n = ⌈C_P r ^ (1 + 2 δ₀)⌉`, `r = 2 ^ k`
-and `t_k = 2 ^ ⌊ζ k⌋`, the bounds `⌊n ^ (1 - ℓ)⌋ ≤ ε r`, `n ^ β ≤ ε t_k` and
-`n ^ β ≤ ε r`. The scale depends only on the layer, so the threshold is uniform
-over primaries. Source: area-law Section 11, lines 722–729 and 768–772. -/
-theorem eventually_primaryScaleLimits (CP : ℝ) {ε : ℝ} (hε : 0 < ε) :
-    ∀ᶠ k : ℕ in atTop,
-      (⌊(primaryScannerScale CP k : ℝ) ^ (1 - (Exponents.geometryEll : ℝ))⌋₊ : ℝ) ≤
-          ε * 2 ^ k ∧
-        (primaryScannerScale CP k : ℝ) ^ (Exponents.beta : ℝ) ≤ ε * 2 ^ fineScaleIndex k ∧
-        (primaryScannerScale CP k : ℝ) ^ (Exponents.beta : ℝ) ≤ ε * 2 ^ k := by
-  obtain ⟨hβζ, hζ1, hℓ, hℓβ, -, -⟩ := Exponents.geometry_gaps
+/-- The layer threshold for the primary scale limits with parameter `ε`. With
+`C_n = max C_P 0 + 1` and `e = 1 + 2 δ₀`, it is the dyadic index of the larger
+of the power-ratio thresholds for `C_n ^ (1 - ℓ) r ^ (e (1 - ℓ)) ≤ ε r` and
+`C_n ^ β r ^ (e β) ≤ (ε / 2) r ^ ζ`. -/
+def primaryScaleLimitThreshold (CP ε : ℝ) : ℕ :=
+  dyadicIndexThreshold (max
+    (Real.powerRatioThreshold ((max CP 0 + 1) ^ (1 - (Exponents.geometryEll : ℝ))) ε
+      (1 - (1 + 2 * (Exponents.geometryDelta : ℝ)) * (1 - (Exponents.geometryEll : ℝ))))
+    (Real.powerRatioThreshold ((max CP 0 + 1) ^ (Exponents.beta : ℝ)) (ε / 2)
+      ((Exponents.zeta : ℝ) -
+        (1 + 2 * (Exponents.geometryDelta : ℝ)) * (Exponents.beta : ℝ))))
+
+/-- **Explicit primary scale limits** (`geometry:primary-limits`). For `ε > 0`,
+every layer `k ≥ primaryScaleLimitThreshold C_P ε` has, with
+`n = ⌈C_P r ^ (1 + 2 δ₀)⌉`, `r = 2 ^ k` and `t_k = 2 ^ ⌊ζ k⌋`, the bounds
+`⌊n ^ (1 - ℓ)⌋ ≤ ε r`, `n ^ β ≤ ε t_k` and `n ^ β ≤ ε r`. Source: area-law
+Section 11, `10-geometry.tex`, lines 722–729 and 768–772. -/
+theorem primaryScaleLimits_of_primaryScaleLimitThreshold_le (CP : ℝ) {ε : ℝ}
+    (hε : 0 < ε) {k : ℕ} (hk : primaryScaleLimitThreshold CP ε ≤ k) :
+    (⌊(primaryScannerScale CP k : ℝ) ^ (1 - (Exponents.geometryEll : ℝ))⌋₊ : ℝ) ≤
+        ε * 2 ^ k ∧
+      (primaryScannerScale CP k : ℝ) ^ (Exponents.beta : ℝ) ≤ ε * 2 ^ fineScaleIndex k ∧
+      (primaryScannerScale CP k : ℝ) ^ (Exponents.beta : ℝ) ≤ ε * 2 ^ k := by
+  obtain ⟨hβζ, -, hℓ, -, -, -⟩ := Exponents.geometry_gaps
   have hβζ' : (1 + 2 * (Exponents.geometryDelta : ℝ)) * Exponents.beta <
       Exponents.zeta := by exact_mod_cast hβζ
   have hℓ' : (1 + 2 * (Exponents.geometryDelta : ℝ)) * (1 - Exponents.geometryEll) < 1 := by
@@ -474,10 +466,17 @@ theorem eventually_primaryScaleLimits (CP : ℝ) {ε : ℝ} (hε : 0 < ε) :
   set e : ℝ := 1 + 2 * (Exponents.geometryDelta : ℝ)
   set Cn : ℝ := max CP 0 + 1
   have hCn : 0 ≤ Cn := by positivity
-  filter_upwards [eventually_mul_rpow_le (Cn ^ (1 - (Exponents.geometryEll : ℝ))) hε hℓ',
-    eventually_mul_rpow_le (Cn ^ (Exponents.beta : ℝ)) (half_pos hε) hβζ'] with k h₁ h₂
   set R : ℝ := (2 : ℝ) ^ k
   have hR0 : 0 < R := by positivity
+  have hRT := le_two_pow_of_dyadicIndexThreshold_le hk
+  have h₁ : Cn ^ (1 - (Exponents.geometryEll : ℝ)) *
+      R ^ (e * (1 - (Exponents.geometryEll : ℝ))) ≤ ε * R ^ (1 : ℝ) :=
+    Real.mul_rpow_le_mul_rpow_of_powerRatioThreshold_le (by positivity) hε hℓ'
+      ((le_max_left _ _).trans hRT)
+  have h₂ : Cn ^ (Exponents.beta : ℝ) * R ^ (e * Exponents.beta) ≤
+      ε / 2 * R ^ (Exponents.zeta : ℝ) :=
+    Real.mul_rpow_le_mul_rpow_of_powerRatioThreshold_le (by positivity) (half_pos hε) hβζ'
+      ((le_max_right _ _).trans hRT)
   have hn := primaryScannerScale_le CP k
   have hn0 : (0 : ℝ) ≤ primaryScannerScale CP k := Nat.cast_nonneg _
   have hpow (x : ℝ) (hx : 0 ≤ x) :
@@ -490,7 +489,9 @@ theorem eventually_primaryScaleLimits (CP : ℝ) {ε : ℝ} (hε : 0 < ε) :
   have ht : R ^ (Exponents.zeta : ℝ) ≤ 2 * 2 ^ fineScaleIndex k := by
     have hf := Nat.lt_floor_add_one ((Exponents.zeta : ℝ) * (k : ℝ))
     change (Exponents.zeta : ℝ) * k < (fineScaleIndex k : ℝ) + 1 at hf
-    rw [rpow_two_pow, ← pow_succ', ← Real.rpow_natCast]
+    rw [show R ^ (Exponents.zeta : ℝ) = (2 : ℝ) ^ ((k : ℝ) * Exponents.zeta) by
+      simp only [R]; rw [← Real.rpow_natCast, ← Real.rpow_mul (by norm_num)], ← pow_succ',
+      ← Real.rpow_natCast]
     apply Real.rpow_le_rpow_of_exponent_le (by norm_num)
     push_cast
     linarith
@@ -512,20 +513,52 @@ theorem eventually_primaryScaleLimits (CP : ℝ) {ε : ℝ} (hε : 0 < ε) :
   · exact mul_le_mul_of_nonneg_left
       (pow_le_pow_right₀ (by norm_num) (fineScaleIndex_le k)) hε.le
 
-/-- **Lower scale threshold.** For `C_P > 0` and every `n_*`, all primary scanner
-scales are at least `n_*` in all sufficiently large layers.
-Source: area-law Section 11, lines 768–770. -/
-theorem le_primaryScannerScale {CP : ℝ} (hCP : 0 < CP) (nstar : ℕ) :
-    ∀ᶠ k : ℕ in atTop, nstar ≤ primaryScannerScale CP k := by
-  have hlim : Tendsto (fun k : ℕ ↦ CP * (2 : ℝ) ^ k) atTop atTop :=
-    (tendsto_pow_atTop_atTop_of_one_lt one_lt_two).const_mul_atTop hCP
-  filter_upwards [hlim.eventually_ge_atTop (nstar : ℝ)] with k hk
+/-- The layer threshold `dyadicIndexThreshold (n_* / C_P)` from which every
+primary scanner scale is at least `n_*`. -/
+def primaryScannerScaleThreshold (CP : ℝ) (nstar : ℕ) : ℕ :=
+  dyadicIndexThreshold ((nstar : ℝ) / CP)
+
+/-- **Explicit lower scale threshold.** For `C_P > 0`, every layer
+`k ≥ primaryScannerScaleThreshold C_P n_*` has primary scanner scale at least
+`n_*`. Source: area-law Section 11,
+`10-geometry.tex`, lines 768–770. -/
+theorem le_primaryScannerScale_of_primaryScannerScaleThreshold_le {CP : ℝ} (hCP : 0 < CP)
+    {nstar k : ℕ} (hk : primaryScannerScaleThreshold CP nstar ≤ k) :
+    nstar ≤ primaryScannerScale CP k := by
+  have hdiv := le_two_pow_of_dyadicIndexThreshold_le hk
+  rw [div_le_iff₀ hCP] at hdiv
   have hR : (2 : ℝ) ^ k ≤ ((2 : ℝ) ^ k) ^ (1 + 2 * (Exponents.geometryDelta : ℝ)) := by
     conv_lhs => rw [← Real.rpow_one ((2 : ℝ) ^ k)]
     exact Real.rpow_le_rpow_of_exponent_le (one_le_pow₀ (by norm_num))
       (by linarith [geometryDelta_nonneg])
-  have : (nstar : ℝ) ≤ primaryScannerScale CP k :=
-    hk.trans ((mul_le_mul_of_nonneg_left hR hCP.le).trans (Nat.le_ceil _))
+  have : (nstar : ℝ) ≤ primaryScannerScale CP k := by
+    refine hdiv.trans ?_
+    rw [mul_comm]
+    exact (mul_le_mul_of_nonneg_left hR hCP.le).trans (Nat.le_ceil _)
   exact_mod_cast this
+
+/-- **Primary scale limits** (`geometry:primary-limits`). For every `ε > 0`, every
+sufficiently large layer index `k` has, with `n = ⌈C_P r ^ (1 + 2 δ₀)⌉`, `r = 2 ^ k`
+and `t_k = 2 ^ ⌊ζ k⌋`, the bounds `⌊n ^ (1 - ℓ)⌋ ≤ ε r`, `n ^ β ≤ ε t_k` and
+`n ^ β ≤ ε r`. The scale depends only on the layer, so the threshold is uniform
+over primaries; it is `primaryScaleLimitThreshold C_P ε`.
+Source: area-law Section 11, lines 722–729 and 768–772. -/
+theorem eventually_primaryScaleLimits (CP : ℝ) {ε : ℝ} (hε : 0 < ε) :
+    ∀ᶠ k : ℕ in atTop,
+      (⌊(primaryScannerScale CP k : ℝ) ^ (1 - (Exponents.geometryEll : ℝ))⌋₊ : ℝ) ≤
+          ε * 2 ^ k ∧
+        (primaryScannerScale CP k : ℝ) ^ (Exponents.beta : ℝ) ≤ ε * 2 ^ fineScaleIndex k ∧
+        (primaryScannerScale CP k : ℝ) ^ (Exponents.beta : ℝ) ≤ ε * 2 ^ k :=
+  eventually_atTop.2 ⟨primaryScaleLimitThreshold CP ε,
+    fun _ hk ↦ primaryScaleLimits_of_primaryScaleLimitThreshold_le CP hε hk⟩
+
+/-- **Lower scale threshold.** For `C_P > 0` and every `n_*`, all primary scanner
+scales are at least `n_*` in all sufficiently large layers; the threshold is
+`primaryScannerScaleThreshold C_P n_*`.
+Source: area-law Section 11, lines 768–770. -/
+theorem le_primaryScannerScale {CP : ℝ} (hCP : 0 < CP) (nstar : ℕ) :
+    ∀ᶠ k : ℕ in atTop, nstar ≤ primaryScannerScale CP k :=
+  eventually_atTop.2 ⟨primaryScannerScaleThreshold CP nstar,
+    fun _ hk ↦ le_primaryScannerScale_of_primaryScannerScaleThreshold_le hCP hk⟩
 
 end TNLean.PEPS.AreaLaw.Geometry
