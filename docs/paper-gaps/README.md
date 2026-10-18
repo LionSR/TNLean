@@ -1210,11 +1210,11 @@ orthogonal rectangle sides, as a convention built into the permitted polygons.
 ### One-dimensional area law: connected domains
 
 [tnlean_one_dimensional_connected_domain_scope.tex](tnlean_one_dimensional_connected_domain_scope.tex)
-records that Theorem A of the repository's one-dimensional note is formalized
-on the chain of `L` consecutive sites, the connected case to which the note
-reduces the theorem in a sentence; the component reduction for a disconnected
-finite subset of the integers (the ground vector of a sum over components is a
-product, and entropy and edge boundary add over components) is not formalized.
+(scope restriction, resolved) records that Theorem A of the repository's
+one-dimensional note, first formalized on the chain of `L` consecutive sites,
+is now formalized for every finite subset of the integers. The reduction to the
+chain uses the zero entropy of the prefixes ending at the gaps of the domain in
+place of the factorization of the ground vector over components.
 
 ### One-dimensional matrix product state approximation: threshold truncation
 
