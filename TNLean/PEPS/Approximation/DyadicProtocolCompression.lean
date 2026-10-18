@@ -29,8 +29,8 @@ contraction is enumerated as a party network on the dyadic anchors of the protoc
 separation hypothesis of Lemma 8.2 follows from item 3 of Proposition 7.1, since every link joins
 two parties of a common gate.
 
-The hypothesis `LargeSizeDyadicProtocolConsequences` is not proved, so the final statement is a
-conditional form of Theorem 1.1.
+The hypothesis `LargeSizeDyadicProtocolConsequences` is Proposition 7.1, proved as
+`largeSizeDyadicProtocolConsequences`.
 
 The main theorems `largeSizeDyadicOperatorNetwork_of_largeSizeDyadicProtocolConsequences` and
 `polynomialPEPSApproximation_of_largeSizeDyadicProtocolConsequences` assume
@@ -530,8 +530,7 @@ theorem largeSizeDyadicOperatorNetwork_of_largeSizeDyadicProtocolConsequences
 squares, of dyadic distribution protocols with the bounds of §8 implies the uniform polynomial
 PEPS approximation of gapped square-grid ground states.
 
-This is a conditional form of Theorem 1.1: the hypothesis, a weakened form of Proposition 7.1,
-is not proved.
+The hypothesis is Proposition 7.1, proved as `largeSizeDyadicProtocolConsequences`.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), Theorem 1.1 `thm:main`,
 `00-introduction.tex:36–57`, and its proof in §8, `07-assembly.tex:9–214`. -/

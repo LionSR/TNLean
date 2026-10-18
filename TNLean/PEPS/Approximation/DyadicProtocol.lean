@@ -534,9 +534,8 @@ the energy, and the ground vector, such that every gapped ground vector `Ω` of 
 Hamiltonian of side `L ≥ max 2 L₀` has a dyadic distribution protocol with the bounds of
 `DyadicProtocol.IsDistributionProtocol`.
 
-This is a target statement, not a proof. It carries every clause of Proposition 7.1; it is
-proved from the adaptive patch constraint of Proposition 4.1 by
-`largeSizeDyadicProtocolConsequences_of_adaptivePatchConstraint`.
+It carries every clause of Proposition 7.1. It is proved, without hypotheses, by
+`largeSizeDyadicProtocolConsequences`.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), Proposition 7.1 `prop:protocol`,
 `06-geometry.tex:12–53`, in the setting of Theorem 1.1, `00-introduction.tex:36–57`, applied

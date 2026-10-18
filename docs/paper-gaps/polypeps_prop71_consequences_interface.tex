@@ -46,11 +46,12 @@ describe:
 
 The formal statement was first introduced as the subset of properties of
 Proposition~7.1 that the PEPS assembly of Section~8 uses; it now carries every
-clause of the proposition. It is proved from
-the adaptive patch constraint of Proposition~4.1 of
-Ref.~\cite{OpenAI2026PolynomialPEPS}, which is assumed; the angular information
-bound of Proposition~3.4 is proved.\footnote{The theorem is
-    \leanid{TNLean.PEPS.Approximation.largeSizeDyadicProtocolConsequences_of_adaptivePatchConstraint}.}
+clause of the proposition. The existence of such a protocol is proved without
+hypotheses, from the adaptive patch constraint of Proposition~4.1 and the
+angular information bound of Proposition~3.4 of
+Ref.~\cite{OpenAI2026PolynomialPEPS}, both of which are
+proved.\footnote{The theorem is
+    \leanid{TNLean.PEPS.Approximation.largeSizeDyadicProtocolConsequences}.}
 A protocol is formalized as a distributed
 construction in the sense of Theorem~5.2 of Ref.~\cite{OpenAI2026PolynomialPEPS}
 whose chronology is divided into $n$ changes, with each party attached to a
@@ -129,8 +130,7 @@ has at least one frame (\path{06-geometry.tex}, lines~38--40), is now stated
 and proved for the construction: every change of the schedule keeps the main
 sheet. Read per stage, being the main copy carries no content beyond the
 designations at the initial stage and before the readout. The formal statement
-is therefore Proposition~7.1, proved modulo the adaptive patch constraint of
-Proposition~4.1, which is a separate hypothesis.
+is therefore Proposition~7.1, and it is proved.
 
 \section{Clauses carried by the formal statement}
 
@@ -170,9 +170,8 @@ Two further clauses of Proposition~7.1 hold for the formal predicate.
 \section{Resolution}
 
 The restriction is resolved: every clause of Proposition~7.1 is a field of the
-formal predicate and is proved for the constructed protocol. What remains of
-the proposition is the adaptive patch constraint of Proposition~4.1, assumed by
-the existence theorem and not part of this note.
+formal predicate and is proved for the constructed protocol, and the existence
+of the protocol is proved without hypotheses. Nothing remains.
 
 \bibliographystyle{alpha}
 \bibliography{references}

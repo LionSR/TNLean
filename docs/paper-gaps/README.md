@@ -1174,8 +1174,7 @@ predicate, proved for the constructed protocol: a party for every hierarchy
 square, the additional parties at their repaintings, the private copies of `Ω`,
 the frame factorization of the reference vectors with factors of norm at most
 one, the pair-source and message counts, and the expansions of every fixed
-accuracy. The existence theorem still assumes the adaptive patch constraint of
-Proposition 4.1.
+accuracy. The existence of the protocol is proved without hypotheses.
 
 ### Two-dimensional area law: the scanner estimate
 

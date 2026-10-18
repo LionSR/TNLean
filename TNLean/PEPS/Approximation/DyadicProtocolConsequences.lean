@@ -20,8 +20,9 @@ supplies the patch constants.
 
 `largeSizeDyadicProtocolConsequences_of_adaptivePatchConstraint` proves
 `LargeSizeDyadicProtocolConsequences`, which carries every clause of Proposition 7.1, from the
-adaptive patch constraint of Proposition 4.1. The former scope restriction of this interface is
-resolved in `docs/paper-gaps/polypeps_prop71_consequences_interface.tex`.
+adaptive patch constraint of Proposition 4.1; with that constraint proved, it gives
+`largeSizeDyadicProtocolConsequences` without hypotheses. The former scope restriction of this
+interface is resolved in `docs/paper-gaps/polypeps_prop71_consequences_interface.tex`.
 
 * `IsAngularScale.mono` : a larger information scale and threshold are again admissible;
 * `largeSizeDyadicProtocolConsequences_of_adaptivePatchConstraint` : the consequences of

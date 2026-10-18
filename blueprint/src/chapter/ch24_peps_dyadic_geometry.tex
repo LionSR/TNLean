@@ -1954,7 +1954,7 @@ of~\cite[Proposition~7.1]{OpenAI2026PolynomialPEPS} (\texttt{06-geometry.tex},
 lines 12--53) as a statement about distributed constructions in the sense of
 Definition~\ref{def:peps_distributed_construction} whose chronology is cut into
 changes; see~\cite{gap:polypeps_prop71_consequences_interface}. The existence
-of such a protocol is not proved in this section.
+of such a protocol is Proposition~\ref{prop:peps_dyadic_protocol}.
 
 \begin{definition}[Dyadic distribution protocols and the Section 8 bounds]
     \label{def:peps_dyadic_protocol}
@@ -2064,6 +2064,8 @@ of such a protocol is not proved in this section.
 
 \begin{proposition}[Distribution through a dyadic hierarchy]
     \label{prop:peps_dyadic_protocol}
+    \lean{TNLean.PEPS.Approximation.largeSizeDyadicProtocolConsequences}
+    \leanok
     \uses{def:peps_dyadic_protocol}
     For every $q\ge2$ and $J,\Delta>0$ there are constants, uniform in the
     Hamiltonian and in $L$, such that for every sufficiently large $L$ and every
@@ -2073,6 +2075,15 @@ of such a protocol is not proved in this section.
     information power $60$ (\texttt{07-assembly.tex}, line 11). In particular,
     the existence assertion of Definition~\ref{def:peps_dyadic_protocol} holds.
 \end{proposition}
+
+\begin{proof}\leanok
+    \uses{thm:peps_protocol_from_angular_and_patch_bounds,
+        thm:peps_adaptive_patch_constraint}
+    The bounds of Definition~\ref{def:peps_dyadic_protocol} are the four items
+    of the proposition. Theorem~\ref{thm:peps_protocol_from_angular_and_patch_bounds}
+    gives a protocol with these bounds from the adaptive patch constraint of
+    Proposition~4.1, which holds by Theorem~\ref{thm:peps_adaptive_patch_constraint}.
+\end{proof}
 
 \begin{theorem}[Consequences of the Section 8 protocol bounds]
     \label{thm:peps_dyadic_protocol_consequences}
