@@ -361,7 +361,6 @@ following order.
     \item The birth-separation constant $c_1$
           (\leanid{TNLean.PEPS.AreaLaw.Geometry.exists_birthSeparation};
           Lemma~11.5, lines~573--659). It is an absolute constant: it depends on
-<<<<<<< HEAD
           none of $q,R,J,\Delta,D_0,\Ctpl$. The source obtains it as a compactness
           minimum (``has a positive minimum \dots\ the list of rescaled
           patterns is finite'', \src{10-geometry.tex}, lines~596--631). It is
@@ -376,23 +375,6 @@ following order.
           The assembly of Proposition~11.2 takes $c_1$ as an input
           (\leanid{TNLean.PEPS.AreaLaw.Geometry.IsBirthSeparationConstant}); the
           explicit form of Theorem~1.1 instantiates it at $1/112$.
-    \item The stopping scale
-          $S_*=\max\{T_0,2,T_1,T_2,U\}$ with
-          $U=\max\{U_1,U_2,n_*/C_B,1\}$. Here $U_1$ is the fine-clearance
-          threshold $2\lceil C_Bu\rceil^\beta<c_1u^{\rho_0}$, which needs
-=======
-          none of $q,R,J,\Delta,D_0,\Ctpl$. It is $\min(c_2,c_3)$, where $c_2$
-          is a compactness minimum, kind (b) (rows~57--58), mirroring the
-          source's ``has a positive minimum \dots\ the list of rescaled patterns
-          is finite'' (\src{10-geometry.tex}, lines~596--631). It is the one
-          remaining input of the explicit constant: a positive number for which
-          the initial belt tiles are separated at all data and the local
-          replacement separation holds. On \texttt{main} such a number exists by
-          \leanid{TNLean.PEPS.AreaLaw.Geometry.exists_isBirthSeparationConstant},
-          still through the two compactness minima. The explicit separation
-          constant of the belt facets, $1/28$ for the replacements and
-          $1/112$ for the initial belt tiles, supplies it once the explicit
-          birth-separation statements are on \texttt{main}.
     \item The stopping scale $S_*=\max\{T(1/128),T(1/4),2,U\}$
           (\leanid{TNLean.PEPS.AreaLaw.twoFamilyStoppingScale}), with
           $U=\max\{U_1,U_2,n_*/C_B,1\}$. Here
@@ -404,7 +386,6 @@ following order.
           hypotheses of the counting estimates; $T(1/128)$ is of order
           $128000^{10^6}$. $U_1$ is the fine-clearance threshold
           $2\lceil C_Bu\rceil^\beta<c_1u^{\rho_0}$, which needs
->>>>>>> origin/main
           $u>(2(C_B+1)^\beta/c_1)^{1/(\rho_0-\beta)}$ with
           $\rho_0-\beta=10^{-6}$, so $U_1$ is of order
           $(C_B^\beta/c_1)^{10^6}$; $U_2$ is the belt-replacement threshold
