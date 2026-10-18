@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.IntegerComponents
 
-/-! Logical-dependency checks for reachability and order-connected integer components. -/
+/-! Logical-dependency checks for integer reachability, components and finite paths. -/
 
 /--
 info: 'SimpleGraph.hasse_int_induce_reachable_iff' depends on axioms:
@@ -24,3 +24,13 @@ info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashC
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms SimpleGraph.ConnectedComponent.ordConnected_image_hasse_int_induce
+
+/--
+info: 'SimpleGraph.ConnectedComponent.nonempty_pathGraph_iso_hasse_int_induce_finset'
+depends on axioms:
+[propext, Classical.choice, Quot.sound]
+---
+info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms SimpleGraph.ConnectedComponent.nonempty_pathGraph_iso_hasse_int_induce_finset

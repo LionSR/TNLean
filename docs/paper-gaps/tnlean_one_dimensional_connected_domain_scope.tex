@@ -64,9 +64,13 @@ of $\mathbb Z$ are connected precisely when every integer between them is
 present, and the coordinate image of every connected component is order-convex.
 \footnote{Declarations: \leanid{SimpleGraph.hasse_int_induce_reachable_iff},
 \leanid{SimpleGraph.ConnectedComponent.ordConnected_image_hasse_int_induce}.}
-This geometric statement requires no finiteness hypothesis. It does not yet
-provide the finite chain coordinate maps or the decomposition of the actual
-Hamiltonian into component Hamiltonians.
+This geometric statement requires no finiteness hypothesis. For a finite
+domain, each component graph is also isomorphic to the path on its number of
+vertices.\footnote{Declaration:
+\leanid{SimpleGraph.ConnectedComponent.nonempty_pathGraph_iso_hasse_int_induce_finset}.}
+These graph isomorphisms do not yet supply the termwise transport of
+the actual Hamiltonian to the chain model or its decomposition into component
+Hamiltonians.
 
 For an arbitrary finite $\Lambda\subset\mathbb Z$, the identification of the
 actual Hamiltonian with a tensor sum over its connected components, and the
@@ -79,9 +83,10 @@ restricted to connected domains.
 Express the Hamiltonian on an arbitrary finite domain as an iterated tensor
 sum of the Hamiltonians on its connected components. Admissible supports have
 finite diameter in the induced path graph, so each support lies in one
-component. Identify each component, a finite interval, with a chain of its
-cardinality, and verify that the transported Hamiltonian has the same
-interaction range and norm bound. Apply the binary spectral theorem above
+component. Use the finite component path isomorphisms to transport the actual
+interaction terms to the chain model, verifying the support ranges, the
+operator identity and the original norm bound $J$ term by term. Apply the
+binary spectral theorem above
 repeatedly to obtain normalized component ground vectors with the same gap.
 Finally identify the actual regional reduced states under the component
 coordinate equivalence. Reuse the existing product reduced-state identity,

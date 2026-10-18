@@ -26,7 +26,8 @@ for an arbitrary finite set of sites and are instantiated here directly.
     \label{thm:chain_integer_domain_components}
     \lean{
         SimpleGraph.hasse_int_induce_reachable_iff,
-        SimpleGraph.ConnectedComponent.ordConnected_image_hasse_int_induce
+        SimpleGraph.ConnectedComponent.ordConnected_image_hasse_int_induce,
+        SimpleGraph.ConnectedComponent.nonempty_pathGraph_iso_hasse_int_induce_finset
     }
     \leanok
     Let $S\subseteq\mathbb Z$, and let $G$ be the graph on $S$ in which two
@@ -40,6 +41,11 @@ for an arbitrary finite set of sites and are instantiated here directly.
     Moreover, the coordinate image of each connected component is order-convex:
     if $x,y$ belong to that image, every integer between $x$ and $y$ belongs to
     the same image. No finiteness assumption on $S$ is needed.
+
+    If $S$ is finite, the graph induced on each connected component $C$ is
+    isomorphic to the path $P_{|C|}$ on $|C|$ vertices. Here $P_n$ has vertices
+    $0,\ldots,n-1$ and edges between consecutive vertices. This includes
+    singleton components and requires no further hypothesis on a component.
     This is the induced integer geometry used in the reduction to connected
     domains in \cite[Part~I]{TNLean2026OneDimensional}.
 \end{theorem}
@@ -61,6 +67,14 @@ for an arbitrary finite set of sites and are instantiated here directly.
     criterion places $z$ in $S$. Every integer between $x$ and $z$ is also
     between $x$ and $y$, so the reverse implication joins $x$ to $z$. Hence
     $z$ lies in that same component.
+
+    For finite $S$, give a component $C$ the order inherited from the integers.
+    Its coordinate map is an order embedding with order-convex image, so it
+    preserves and reflects the covering relation. The increasing enumeration
+    of the finite linear order $C$ is an order isomorphism from
+    $\{0,\ldots,|C|-1\}$ to $C$. In either graph, adjacency is the symmetric
+    covering relation. This enumeration is therefore a graph isomorphism
+    from $P_{|C|}$ to the graph induced on $C$.
 \end{proof}
 
 \begin{definition}[Chains, intervals and finite-range Hamiltonians]
