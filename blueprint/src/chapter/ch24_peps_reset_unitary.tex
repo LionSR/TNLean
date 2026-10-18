@@ -128,7 +128,7 @@ replicas on a region $R$.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:peps_reset_regional_coordinates}
+    \uses{thm:peps_reset_regional_coordinates,def:peps_reset_constants}
     By Theorem~\ref{thm:peps_reset_regional_coordinates}, the information bound is
     a relative-entropy bound for the regional splitting of $\Omega$. The
     overlap estimate of the purified relative entropy gives a Hermitian
@@ -222,7 +222,8 @@ replicas on a region $R$.
 \begin{proof}
     \leanok
     \uses{thm:peps_reset_regional_filter_explicit,
-        thm:peps_supported_physical_buffer_gaussian}
+        thm:peps_supported_physical_buffer_gaussian,def:peps_reset_constants,
+        def:peps_square_localization_constants}
     With $A=A(\Delta,r)$ and $T_0=T_0(\Delta,r)$ from
     Theorem~\ref{thm:peps_reset_regional_filter_explicit} in the paired site
     coordinates, let $M$ be the localized integral of
@@ -277,7 +278,8 @@ replicas on a region $R$.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:peps_reset_localized_filter_explicit,thm:peps_reset_polar_step}
+    \uses{thm:peps_reset_localized_filter_explicit,thm:peps_reset_polar_step,
+        def:peps_reset_constants}
     Combining Theorem~\ref{thm:peps_reset_localized_filter_explicit} with
     Theorem~\ref{thm:peps_reset_polar_step} for $C=C_F(J,\Delta,r)$ yields the
     supported unitary $U$ with error at most $2C_F(J,\Delta,r)L^{-r}$.
