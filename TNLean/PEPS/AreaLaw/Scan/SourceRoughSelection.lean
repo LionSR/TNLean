@@ -449,11 +449,9 @@ theorem exists_sourceTarget_selected_actualCharge_rough_comparison_of_threshold_
                           3 * (defect / τ) * max 0 (2 * Sent) -
                             roughLowerRemainder S.K cL Cf ell Sent k ≤
                               -Real.log normSq / (k : ℝ) := by
-  obtain ⟨ct, Cent, eent, Cen, een, hct, htransport⟩ := exists_finiteFamilyTransportBound
-  obtain ⟨Ctr, hCtr, hall⟩ :=
+  exact exists_of_finiteFamilyTransportBound fun _ _ _ _ _ _ htransport ↦
     exists_sourceTarget_selected_actualCharge_rough_comparison_of_finiteFamilyTransportBound
       hq R hJ hΔ hC_T hC₁ multiplicity hmultiplicity P htransport
-  exact ⟨Ctr, ct, Cent, eent, Cen, een, hCtr, hct, hall⟩
 
 open Classical in
 /-- At arbitrary fixed scanner exponents and total weight four, one actual

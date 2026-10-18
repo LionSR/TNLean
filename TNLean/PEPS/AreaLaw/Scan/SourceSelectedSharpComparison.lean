@@ -488,11 +488,9 @@ theorem exists_sourceTarget_selected_actualCharge_sharp_comparison_of_threshold_
                                 max 0 (2 * Sent + gmax) +
                               2 * Real.bellOverlapRemainder d cU S.K k / W +
                                 sharpLowerRemainder a cL Cf ell Sent k := by
-  obtain ⟨ct, Cent, eent, Cen, een, hct, htransport⟩ := exists_finiteFamilyTransportBound
-  obtain ⟨Ctr, hCtr, hall⟩ :=
+  exact exists_of_finiteFamilyTransportBound fun _ _ _ _ _ _ htransport ↦
     exists_sourceTarget_selected_actualCharge_sharp_comparison_of_finiteFamilyTransportBound
       hq R hJ hΔ hC_T hC₁ multiplicity hmultiplicity P htransport
-  exact ⟨Ctr, ct, Cent, eent, Cen, een, hCtr, hct, hall⟩
 
 open Classical in
 /-- A single truncated target window and a single physical label sequence
