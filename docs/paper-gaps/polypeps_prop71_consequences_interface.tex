@@ -15,7 +15,7 @@
 \providecommand{\gapnote}[2]{%
     \par\noindent\textbf{Verdict:} #1 (#2).\par}
 
-\title{The Consequences of the Distribution Protocol Used in the Assembly}
+\title{The Distribution Protocol of Proposition 7.1}
 \author{}
 \date{2026-10-18}
 
@@ -79,7 +79,8 @@ and exponent bounds. The retained properties are:
   without holes and held entirely by one party, and the initial memory and
   vector of each party are those of the copies it holds (\path{06-geometry.tex},
   lines~21--23); the initial product vector $r_0$ is carried by private maps
-  alone to the reference vector of these frames;
+  alone to the reference vector of these
+  frames;\footnote{\leanid{TNLean.PEPS.Approximation.DyadicProtocol.IsDistributionProtocol.exists_originalCircuit_initialCopies}.}
 \item there are at most $C L^3$ changes, each change contains at most $b$
   nonprivate gates acting on at most $b$ parties each, and each party
   participates in at most $b$ changes over its lifetime;
