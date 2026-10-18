@@ -182,9 +182,9 @@ theorem exists_sourceTarget_actual_mutualInformation_bound
       hC₁ multiplicity hmultiplicity P hP
   have hg : 0 < Δ / positiveNormalization 1 (Δ / 2) J :=
     div_pos hΔ (positiveNormalization_pos 1 (Δ / 2) J)
-  obtain ⟨Nt, hterminal⟩ := eventually_atTop.mp
-    (eventually_source_actualTerminal_preEntropy_bounds q hq
-      (Δ / positiveNormalization 1 (Δ / 2) J) (C_T + 1) hg)
+  let Nt := truncationEntropyThreshold q (Δ / positiveNormalization 1 (Δ / 2) J) (C_T + 1)
+  have hterminal := fun n (hn : Nt ≤ n) =>
+    source_actualTerminal_preEntropy_bounds_of_truncationEntropyThreshold_le q hq _ (C_T + 1) hg hn
   refine ⟨Ctr, Ctarget, CB, ct, Cent, eent, Cen, een, C, Cl,
     hCtr, hCtarget, hCB, hct, hC, hCl, ?_⟩
   intro Ce hCe
