@@ -203,7 +203,7 @@ changing the physical size.  No sharp marginal-moment estimate is used.
 
 \begin{theorem}[Original-state scanner entropy improvement]
     \label{thm:arealaw-source-bootstrap-entropy}
-    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_sourceBootstrap_entropy_improvement,TNLean.PEPS.AreaLaw.Scan.CollarScan.sourceBootstrapEntropyThreshold,TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_sourceBootstrap_entropy_improvement_of_threshold_le}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_sourceBootstrap_entropy_improvement,TNLean.PEPS.AreaLaw.Scan.CollarScan.sourceBootstrapEntropyThreshold,TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_sourceBootstrap_entropy_improvement_of_threshold_le,TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_sourceBootstrap_entropy_improvement_of_finiteFamilyTransportBound}
     \leanok
     Fix $e_*<e_0<1$, $C_e\geq0$ and the physical and geometric constants
     of the rough source theorem.  There are positive $C_r,C_{\rm out}$
@@ -350,7 +350,7 @@ changing the physical size.  No sharp marginal-moment estimate is used.
 
 \begin{theorem}[Uniform physical one-step improvement]
     \label{thm:arealaw-physical-box-step}
-    \lean{TNLean.PEPS.AreaLaw.Scan.exists_uniform_boxEntropy_improvement,TNLean.PEPS.AreaLaw.Scan.boxImprovementThreshold,TNLean.PEPS.AreaLaw.Scan.boxImprovementConstant,TNLean.PEPS.AreaLaw.Scan.exists_uniform_boxEntropy_improvement_of_threshold_le,TNLean.PEPS.AreaLaw.Scan.boxImprovementConstant_pos}
+    \lean{TNLean.PEPS.AreaLaw.Scan.exists_uniform_boxEntropy_improvement,TNLean.PEPS.AreaLaw.Scan.boxImprovementThreshold,TNLean.PEPS.AreaLaw.Scan.boxImprovementConstant,TNLean.PEPS.AreaLaw.Scan.exists_uniform_boxEntropy_improvement_of_threshold_le,TNLean.PEPS.AreaLaw.Scan.exists_uniform_boxEntropy_improvement_of_finiteFamilyTransportBound,TNLean.PEPS.AreaLaw.Scan.boxImprovementConstant_pos}
     \leanok
     Fix $q\geq1$, $R$, $J\geq0$, $\Delta>0$, $e_*<e_0<1$ and
     $C_{\rm box}\geq0$.  There is $C>0$ before every
@@ -383,7 +383,7 @@ changing the physical size.  No sharp marginal-moment estimate is used.
 
 \begin{theorem}[Physical safe-box bound at the fixed exponent]
     \label{thm:arealaw-physical-box-fixed-exponent}
-    \lean{TNLean.PEPS.AreaLaw.Scan.exists_boxEntropy_le_boxError,TNLean.PEPS.AreaLaw.Scan.physicalBoxBootstrapConstant,TNLean.PEPS.AreaLaw.Scan.exists_boxEntropy_le_boxError_of_initial}
+    \lean{TNLean.PEPS.AreaLaw.Scan.exists_boxEntropy_le_boxError,TNLean.PEPS.AreaLaw.Scan.physicalBoxBootstrapConstant,TNLean.PEPS.AreaLaw.Scan.exists_boxEntropy_le_boxError_of_initial,TNLean.PEPS.AreaLaw.Scan.exists_boxEntropy_le_boxError_of_initial_of_finiteFamilyTransportBound}
     \leanok
     For $q\geq1$, $R\in\mathbb N$, $J\geq0$ and $\Delta>0$, there is
     $C>0$ before every integer $D_0>2R+10$ and every positive integer $r$ such that
