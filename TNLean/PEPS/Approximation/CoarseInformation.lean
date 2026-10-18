@@ -284,6 +284,16 @@ theorem coarse_mutualInformation_le_of_sublinearCollarBoundAt {q R : ℕ}
 theorem beta_lt_one : (Exponents.beta : ℝ) < 1 := by
   norm_num [Exponents.beta, Exponents.boxError]
 
+/-- The amplification bound of area-law Proposition 10.2 at the collar constant `max C 1`
+and the power `M = 1`, with its constant and threshold. This is the form in which the
+existential corollaries of the named-constant theorems obtain their amplification premise
+`AmplificationBoundAt`. Source: area-law Proposition 10.2 (`prop:amplification`),
+`09-amplification.tex`, lines 261–296. -/
+theorem exists_amplificationBoundAt_max_one {q R : ℕ} {J Δ : ℝ} (hΔ : 0 < Δ) (C : ℝ) :
+    ∃ Ca : ℝ, ∃ Na : ℕ, AmplificationBoundAt q R J Δ (max C 1) 1 Ca Na :=
+  amplificationBound (q := q) (R := R) (J := J) hΔ (max C 1)
+    (lt_of_lt_of_le one_pos (le_max_right _ _)) 1 le_rfl
+
 /-- **Proposition 3.1 from the sublinear collar bound.** Fix the Hamiltonian parameters
 `q, R, J` and a gap `Δ > 0`, and assume the sublinear collar bound of area-law
 Proposition 9.6 for some template constants `D₀, Ctpl`. Fix `N₀` and `A₀`. There are
@@ -316,8 +326,7 @@ theorem coarse_mutualInformation_le_of_sublinearCollarBound {q R : ℕ} {J Δ D�
             (∀ t ∈ T, ∀ y ∈ E, u ^ β < (Scan.ambientSupDistance t y.val : ℝ)) →
             FiniteProduct.mutualInformation (fun _ : Site Λ ↦ Fin q) Ω X E ≤ C := by
   obtain ⟨C, N, hcol⟩ := hcol
-  obtain ⟨Ca, Na, hamp⟩ := amplificationBound (q := q) (R := R) (J := J) hΔ (max C 1)
-    (lt_of_lt_of_le one_pos (le_max_right _ _)) 1 le_rfl
+  obtain ⟨Ca, Na, hamp⟩ := exists_amplificationBoundAt_max_one (q := q) (R := R) (J := J) hΔ C
   exact ⟨_, beta_lt_one, _, _,
     coarse_mutualInformation_le_of_sublinearCollarBoundAt hcol hamp N₀ A₀⟩
 
