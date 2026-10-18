@@ -58,13 +58,6 @@ line 49. -/
 noncomputable def roundedLogRadiusThreshold (C ε A : ℝ) (j : ℕ) : ℕ :=
   max 3 ⌈Real.logPowThreshold (max A 0 * (C + 1) ^ j) 1 ε (2 * j)⌉₊
 
-/-- Every natural number `n ≥ 3` has `log n ≥ 1`, since `e < 3`. This is the logarithmic
-normalization used throughout `08-scanner.tex`, lines 49 and 358--359. -/
-theorem _root_.Real.one_le_log_natCast_of_three_le {n : ℕ} (hn : 3 ≤ n) :
-    1 ≤ Real.log n := by
-  rw [Real.le_log_iff_exp_le (by positivity)]
-  exact Real.exp_one_lt_three.le.trans (by exact_mod_cast hn)
-
 /-- For `n ≥ 3`, the rounded radius is at most `(C + 1) log² n`. -/
 theorem roundedLogRadius_le_mul_log_sq {C : ℝ} (hC : 0 ≤ C) {n : ℕ} (hn : 3 ≤ n) :
     (roundedLogRadius C n : ℝ) ≤ (C + 1) * Real.log n ^ 2 := by
