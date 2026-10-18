@@ -75,12 +75,12 @@ def cellInformationExponent (c Ctpl : ℝ) (N : ℕ) (Ca : ℝ) (Na : ℕ) : ℝ
 theorem cellInformationConstant_pos (q : ℕ) (c Ctpl : ℝ) (N : ℕ) (Ca : ℝ) (Na : ℕ) :
     0 < cellInformationConstant q c Ctpl N Ca Na :=
   mul_pos (lt_of_lt_of_le zero_lt_one (le_max_left _ _))
-    (CellPartition.cellPartitionConstant_pos beta_lt_one _)
+    (CellPartition.cellPartitionConstant_pos _ _)
 
 /-- The exponent of Lemma 3.2 is positive. -/
 theorem cellInformationExponent_pos (c Ctpl : ℝ) (N : ℕ) (Ca : ℝ) (Na : ℕ) :
     0 < cellInformationExponent c Ctpl N Ca Na :=
-  CellPartition.cellPartitionExponent_pos beta_lt_one _
+  CellPartition.cellPartitionExponent_pos _ _
 
 open Classical in
 /-- **Lemma 3.2 with named constants**, assuming the collar and amplification bounds at given
