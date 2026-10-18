@@ -284,6 +284,7 @@ theorem exists_isDistributionProtocol_of_frames {L q k : ℕ} [NeZero q] (hL : 2
     (hkL : L ≤ 2 ^ k) (hk2 : 2 ^ k < 2 * L) (large : DyadicSquare k → Bool)
     {Ω : StateSpace L q} (hΩ : ‖Ω‖ = 1)
     (st : ℕ → List (Frame (cellCenterPos L) q (ProtocolParty k)))
+    (hne : ∀ t ≤ (protocolSchedule k large).length, st t ≠ [])
     (holder : Frame (cellCenterPos L) q (ProtocolParty k) → ProtocolParty k)
     (hraw : ∀ F ∈ st 0, F.holes = []) (hown : ∀ F ∈ st 0, ∀ x, F.owner x = holder F)
     (c : ∀ t, OriginalCircuit (stackRegs (st t) []) (stackRegs (st (t + 1)) []))
@@ -354,7 +355,8 @@ theorem exists_isDistributionProtocol_of_frames {L q k : ℕ} [NeZero q] (hL : 2
       layout_changes := chainLayout_succ_of_lt (Nat.lt_succ_self n)
       squareParty := protocolSquareParty hN
       repaintingSquare := fun t => if h : 0 < t ∧ t - 1 < n then
-        Sum.elim (fun S => some S.toTriple) (fun _ => none) (sch[t - 1]'h.2).1 else none }
+        Sum.elim (fun S => some S.toTriple) (fun _ => none) (sch[t - 1]'h.2).1 else none
+      frames := fun t => st (t - 1) }
   -- the event of each change of the protocol
   let ev : ℕ → ProtocolEvent k := fun t =>
     if h : 0 < t ∧ t - 1 < n then (sch[t - 1]'h.2).1 else .inl (rootSquare k)
@@ -455,6 +457,36 @@ theorem exists_isDistributionProtocol_of_frames {L q k : ℕ} [NeZero q] (hL : 2
     have hpow : 6 * 2 ^ (T.1 : ℕ) ≤ 64 * 189 * 2 ^ (T.1 : ℕ) :=
       Nat.mul_le_mul_right _ (by norm_num)
     exact ⟨Nat.le_succ_of_le h1, h2, h3.le.trans hpow, h4.le.trans hpow⟩
+  -- the initial copies of `Ω`, each held privately by one party
+  have hinit : D.frames 0 ≠ [] ∧ ∃ holder : Frame (cellCenterPos L) q (ProtocolParty k) →
+      ProtocolParty k, (∀ F ∈ D.frames 0, F.holes = [] ∧ ∀ x, F.owner x = holder F) ∧
+        ∀ [DecidableEq (ProtocolParty k)],
+          (D.initialSpace = fun p => framesSpace ((D.frames 0).filter fun F => holder F = p)) ∧
+            ∀ [NeZero q], HEq D.initialVector
+              fun p => framesVec Ω ((D.frames 0).filter fun F => holder F = p) := by
+    refine ⟨hne 0 (Nat.zero_le _), holder, fun F hF => ⟨hraw F hF, hown F hF⟩, fun {inst} => ?_⟩
+    obtain rfl : inst = instDecidableEqSum := Subsingleton.elim _ _
+    exact ⟨rfl, fun {_} => HEq.rfl⟩
+  -- the intermediate reference vectors are the reference vectors of the frames
+  have hframes : ∀ [NeZero q], ∀ t, 0 < t → t < D.changes →
+      (∀ F ∈ D.frames t, ‖F.refVec Ω‖ ≤ 1) ∧
+        ∃ h : D.layout t = stackRegs (D.frames t) [],
+          D.reference t = Layout.memCongr h.symm (framesVec Ω (D.frames t)) := by
+    intro _ t ht0 htn
+    obtain ⟨s, rfl⟩ : ∃ s, t = s + 1 := ⟨t - 1, by omega⟩
+    have hs : s ≤ n := by change s + 1 < n + 2 at htn; omega
+    have hl : D.layout (s + 1) = stackRegs (st s) [] :=
+      chainLayout_succ_of_le (A := ProductInput.wholePartyLayout fun p =>
+        framesSpace ((st 0).filter fun F => holder F = p)) (B := fun t => stackRegs (st t) []) hs
+    exact ⟨fun F _ => (F.norm_refVec_le Ω).trans hΩ.le, hl,
+      chainVec_succ_of_le (x₀ := (ProductInput.ofAllParties _ _ hx).vector)
+        (y := fun t => framesVec Ω (st t)) (z := e.eval (framesVec Ω (st n))) hs⟩
+  -- every intermediate stage has a frame
+  have hnil : ∀ t, 0 < t → t < D.changes → D.frames t ≠ [] := fun t ht0 htn =>
+    hne (t - 1) (by change t < n + 2 at htn; omega)
+  -- before the readout, the main frame is held by the parties of the sites
+  have hmain : ∃ M' Fs', D.frames (D.changes - 1) = M' :: Fs' ∧ ∀ v, M'.owner v = D.site v :=
+    ⟨M, Fs, by change st (n + 2 - 1 - 1) = _; simpa using hfin, hMown⟩
   have hL1 : (1 : ℝ) ≤ L := by exact_mod_cast (by omega : 1 ≤ L)
   have hL0 : (0 : ℝ) < L := by linarith
   have hC0 : 0 ≤ C := by linarith
@@ -478,12 +510,12 @@ theorem exists_isDistributionProtocol_of_frames {L q k : ℕ} [NeZero q] (hL : 2
         ((card_nonprivateLocations _).trans_le (hQ i).1)
     rw [Subsingleton.elim g g']
   refine ⟨D, ⟨?_, ?_, fun j r s => (protocolPlacement_blockBounded k j r s).trans (by norm_num),
-    protocolSquareParty_injective hN, fun _ => rfl, hadd, hrs_mem, hrs_segment, hrs_near,
+    protocolSquareParty_injective hN, fun _ => rfl, hadd, hrs_mem, hrs_segment, hrs_near, hinit,
     ?_, fun t _ => (hQ t).1.trans (by norm_num), fun t _ g => ?_,
     fun t _ => isMonomialBounded_mono _ (hQ t).2.2.2.2.1 (Nat.le_floor (by exact_mod_cast hK)),
     fun t _ => isExpansionBounded_mono _ (hQ t).2.2.2.1 le_rfl hK, fun p => ?_,
     fun t _ g p hp p' hp' => EventUses.scale_le ((hQ t).2.2.1 g hp) ((hQ t).2.2.1 g hp'),
-    fun t _ g p hp p' hp' => ?_, fun t _ => ?_, ?_,
+    fun t _ g p hp p' hp' => ?_, hframes, hnil, hmain, fun t _ => ?_, ?_,
     fun t _ => (hQ t).2.2.2.2.2⟩⟩
   · exact fun p => ⟨((protocolPlacement_inGrid k) p).1.trans (pow_le_paddedSide hk2),
       ((protocolPlacement_inGrid k) p).2.trans (pow_le_paddedSide hk2)⟩

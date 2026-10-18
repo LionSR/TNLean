@@ -130,7 +130,6 @@ square cylinder data at the same radii.
     constraint holds. This is the implication proved in
     \cite[Proposition~4.1]{OpenAI2026PolynomialPEPS}, \texttt{03-patches.tex},
     lines 26--54 and 534--603, with the area law taken as an assumption.
-    % Status: the unconditional proposition follows once the area law is proved.
 \end{theorem}
 
 \begin{proof}
@@ -168,6 +167,27 @@ square cylinder data at the same radii.
     \end{align}
     If $u<4$, the exact patch at bounded radius has error zero and at most
     $q^{81}\le CL^c$ terms.
+\end{proof}
+
+\begin{theorem}[Adaptive patch constraint]
+    \label{thm:peps_adaptive_patch_constraint}
+    \lean{TNLean.PEPS.Approximation.adaptivePatchConstraint}
+    \leanok
+    \uses{def:peps_adaptive_patch_constraint}
+    The adaptive patch constraint of
+    Definition~\ref{def:peps_adaptive_patch_constraint} holds. This is
+    \cite[Proposition~4.1]{OpenAI2026PolynomialPEPS}, \texttt{03-patches.tex},
+    lines 26--49.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:openai_square_area_law,
+        thm:peps_adaptive_patch_constraint_of_area_law}
+    The square-grid entropy area law holds by
+    Theorem~\ref{thm:openai_square_area_law}, and
+    Theorem~\ref{thm:peps_adaptive_patch_constraint_of_area_law} turns it into
+    the adaptive patch constraint.
 \end{proof}
 
 \begin{theorem}[Polynomial approximation from the square entropy area law]

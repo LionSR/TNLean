@@ -210,21 +210,27 @@ theorem exists_sourceTarget_selected_actualCharge_sharp_energy
     exists_transport_coefficients_log_bound hq hCtr.le Cent eent Cen een
   have hg : 0 < Δ / positiveNormalization 1 (Δ / 2) J :=
     div_pos hΔ (positiveNormalization_pos 1 (Δ / 2) J)
-  obtain ⟨Ne, _, henergy⟩ := exists_final_selectedEnergy_le_rpow
-    (C := C) (Cl := Cl) (P := P) (zero_le_one.trans hC) hg hP
-  obtain ⟨Nt, htarget⟩ := eventually_atTop.mp
-    (eventually_abs_regionalEntropy_sub_le_of_truncation q hq
-      (Δ / positiveNormalization 1 (Δ / 2) J) (C_T + 1) hg)
-  obtain ⟨Ni, hinterval⟩ := eventually_atTop.mp
-    (eventually_le_natCast_rpow
-      (by norm_num [Exponents.scannerNu] : 0 < (Exponents.scannerNu : ℝ)) 4)
-  obtain ⟨Nl, hlog⟩ := eventually_atTop.mp
-    ((Real.tendsto_log_atTop.comp tendsto_natCast_atTop_atTop).eventually_ge_atTop 1)
+  let Ne := finalSelectedEnergyThreshold C Cl (Δ / positiveNormalization 1 (Δ / 2) J)
+  have henergy := fun n (hn : Ne ≤ n) =>
+    (final_selectedEnergy_le_rpow_of_finalSelectedEnergyThreshold_le (P := P)
+      (zero_le_one.trans hC) hg hP hn).2
+  let Nt := truncationEntropyThreshold q (Δ / positiveNormalization 1 (Δ / 2) J) (C_T + 1)
+  have htarget := fun n (hn : Nt ≤ n) =>
+    abs_regionalEntropy_sub_le_of_truncationEntropyThreshold_le q hq _ (C_T + 1) hg hn
+  let Ni := Real.natRpowThreshold (Exponents.scannerNu : ℝ) 4
+  have hinterval := fun n (hn : Ni ≤ n) => Real.le_natCast_rpow_of_natRpowThreshold_le
+    (by norm_num [Exponents.scannerNu] : 0 < (Exponents.scannerNu : ℝ)) hn
+  let Nl := 3
+  have hlog (n : ℕ) (hn : Nl ≤ n) : 1 ≤ Real.log (n : ℝ) := by
+    rw [Real.le_log_iff_exp_le (by exact_mod_cast (show 0 < n by omega))]
+    exact Real.exp_one_lt_three.le.trans (by exact_mod_cast hn)
   refine ⟨Ctr, Ctarget, CB, ct, Cent, eent, Cen, een, C, Cl,
     hCtr, hCtarget, hCB, hct, hC, hCl, ?_⟩
   intro Ce hCe
-  obtain ⟨Nd, _, hdensity⟩ := exists_final_selectedDensity_le_eightNu hq Ce C₁ Ct Clt
-    hCe hC₁ (zero_le_one.trans hCt)
+  let Nd := finalSelectedDensityThreshold q Ce C₁ Ct Clt
+  have hdensity := fun n (hn : Nd ≤ n) =>
+    final_selectedDensity_le_eightNu_of_finalSelectedDensityThreshold_le hq Ce C₁ Ct Clt
+      hCe hC₁ (zero_le_one.trans hCt) hn
   refine ⟨max Nb (max Nd (max Ne (max Nt (max Ni Nl)))), hNb.trans (le_max_left _ _), ?_⟩
   intro Λ T _ hT h S E₀ Ω hgs hgraph hanchor hn hr hmScale hDScale hKScale
     hCeq hsize hdepth hrows hmult hclear htargetEntropy hprefix hrD hDpos hDm

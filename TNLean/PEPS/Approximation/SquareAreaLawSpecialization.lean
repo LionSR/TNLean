@@ -20,8 +20,9 @@ in the original configuration coordinates and the boundary counted on the
 original edges. It derives the specialization from the uniform finite-domain
 area law at range one.
 
-The derivation is conditional: the uniform finite-domain area law is an
-explicit hypothesis, and this module does not prove it.
+The uniform finite-domain area law is an explicit hypothesis of the derivation.
+It is proved as `TNLean.PEPS.AreaLaw.uniformAreaLaw`, and the unconditional
+specialization is `TNLean.PEPS.AreaLaw.squareEntropyAreaLaw`.
 
 ## Main definitions and results
 

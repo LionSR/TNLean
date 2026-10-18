@@ -3458,9 +3458,9 @@ no holes, this is the normalization of $\Omega$.
     energy $E_0$ and gapped ground vector $\Omega$ with gap $\Delta$, there
     exist a finite party type and a dyadic distribution protocol with the
     assembly bounds $(C,b,\kappa,r)$ of
-    Definition~\ref{def:peps_dyadic_protocol}. This is the form in which
-    Proposition~\ref{prop:peps_dyadic_protocol} is used later, weaker than
-    that proposition (\texttt{06-geometry.tex}, lines 12--53 and 559--681).
+    Definition~\ref{def:peps_dyadic_protocol}; with the patch constraint
+    proved, this gives Proposition~\ref{prop:peps_dyadic_protocol}
+    (\texttt{06-geometry.tex}, lines 12--53 and 559--681).
 \end{theorem}
 
 \begin{proof}\leanok
@@ -3497,7 +3497,12 @@ no holes, this is the normalization of $\Omega$.
     other party is the placeholder of a non-root square $S$, placed at $S$;
     each change is recorded as belonging to the repainting of $S$ when its
     scheduled event is that repainting, and the placeholder of $S$ takes part
-    only in gates of that repainting. The events are listed without repetition
+    only in gates of that repainting. The initial encoded frames are the raw
+    copies of $\Omega$, each held by its designated party, and every
+    intermediate reference vector is that of the frames of its stage, with
+    factors of norm at most $\lVert\Omega\rVert=1$. Every change of the schedule
+    keeps the main sheet, so every intermediate list of frames is nonempty. The
+    events are listed without repetition
     and each contributes its changes in one block, so the changes of the
     repainting of $S$ form one segment; a party used by that repainting has the
     scale of $S$ or the next one and an address within $6\cdot2^j$ of the
