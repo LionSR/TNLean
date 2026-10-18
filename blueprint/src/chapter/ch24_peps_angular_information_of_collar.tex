@@ -34,20 +34,18 @@
 
 \begin{theorem}[Positivity of the cell constants]
     \label{thm:peps_cell_information_constants_pos}
-    \lean{TNLean.PEPS.Approximation.beta_lt_one,
-        TNLean.PEPS.Approximation.cellInformationConstant_pos,
+    \lean{TNLean.PEPS.Approximation.cellInformationConstant_pos,
         TNLean.PEPS.Approximation.cellInformationExponent_pos}
     \leanok
     \uses{def:peps_cell_information_constants}
-    The exponent satisfies $\beta_0<1$. For all values of the parameters, the cell
+    For all values of the parameters, the cell
     prefactor $C_{\rm cell}$ and the cell exponent $K_{\rm cell}$ are positive.
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{thm:peps_cell_partition_constants_bounds}
-    The inequality $\beta_0<1$ is a numerical evaluation of the amplification
-    exponents. The partition constants are positive by
+    The partition constants are positive by
     Theorem~\ref{thm:peps_cell_partition_constants_bounds}, and
     $\max\{1,2\log q,\max\{C_a,0\}\}\ge1$.
 \end{proof}
