@@ -18,7 +18,8 @@ The results of this module stated over `ScanData` are proved from its fields, wh
 the conclusions of Lemma 9.1, Propositions 7.4 and 8.1, and Lemmas 2.1 and 3.1 for one scan;
 this route is auxiliary and these results are conditional steps, not source statements. The
 source statement of Proposition 9.2 is proved for the original physical system as
-`TNLean.PEPS.AreaLaw.Scan.CollarScan.scannerStatement`, without these fields as hypotheses.
+`TNLean.PEPS.AreaLaw.Scan.CollarScan.scannerStatement`, without these fields as hypotheses
+(`docs/paper-gaps/arealaw2d_scanner_inputs.tex`, which records its output-coefficient convention).
 
 ## Main results
 

@@ -28,7 +28,8 @@ then gives interval integrability, which suffices for the telescope and exact av
 and 3.1 for one scan as fields; the route through `ScanData` is auxiliary, and its results
 are conditional steps, not source statements.
 The source statement of Proposition 9.2 is proved for the original physical system as
-`TNLean.PEPS.AreaLaw.Scan.CollarScan.scannerStatement`, without these fields as hypotheses.
+`TNLean.PEPS.AreaLaw.Scan.CollarScan.scannerStatement`, without these fields as hypotheses
+(`docs/paper-gaps/arealaw2d_scanner_inputs.tex`, which records its output-coefficient convention).
 
 The conclusions of Lemma 9.1 form the sub-record `HistoryFacts`, and those of Proposition 4.5
 and Lemmas 2.1 and 3.1 form the parent structure `ScanTruncation`, so that a physical

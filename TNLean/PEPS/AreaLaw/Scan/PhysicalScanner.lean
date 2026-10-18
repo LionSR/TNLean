@@ -21,7 +21,8 @@ Proposition 8.1 (`prop:comparators`) for the actual rounds as the hypothesis `Sc
 other inputs of the proof of Proposition 9.2 are derived. This conditional route is auxiliary
 and is not the source statement.
 The source statement of Proposition 9.2 is proved for the original physical system as
-`TNLean.PEPS.AreaLaw.Scan.CollarScan.scannerStatement`, without these fields as hypotheses.
+`TNLean.PEPS.AreaLaw.Scan.CollarScan.scannerStatement`, without these fields as hypotheses
+(`docs/paper-gaps/arealaw2d_scanner_inputs.tex`, which records its output-coefficient convention).
 
 ## Main results
 

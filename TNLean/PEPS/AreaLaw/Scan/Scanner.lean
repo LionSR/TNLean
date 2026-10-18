@@ -21,7 +21,8 @@ for the concrete scan are the fields of `ScanData`; this module proves the step 
 from those conclusions to Proposition 9.2. This conditional deduction is auxiliary and is not
 the source statement; the source statement of Proposition 9.2 is proved for the original
 physical system as `TNLean.PEPS.AreaLaw.Scan.CollarScan.scannerStatement`, without these
-fields as hypotheses.
+fields as hypotheses
+(`docs/paper-gaps/arealaw2d_scanner_inputs.tex`, which records its output-coefficient convention).
 
 ## Main results
 
