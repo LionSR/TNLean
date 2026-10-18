@@ -4621,6 +4621,25 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 ## Candidates
 
+### Partial trace under a change of discarded basis — candidate (2026-10-18)
+
+- **Pattern:** Apply `OrthonormalBasis.tensorProduct_rankOne_basisChange` with
+  the physical basis fixed, then
+  `Matrix.partialTraceRight_kronecker_conj_of_right_isometry`; the matrix of
+  the physical basis against itself is the identity.
+- **Seen:** Two occurrences across two files: the private
+  `partialTrace_mixed_private_basis_eq` in
+  `TNLean/PEPS/Approximation/SelectedPhysicalPrivateTrace.lean` and
+  `physicalDensity_terminalRegrouping` in
+  `TNLean/MPS/AreaLaw/ProtocolTerminalCoordinates.lean`.
+- **Abstraction:** The existing basis-change and partial-trace theorems suffice
+  for the present proofs. If a third occurrence needs this exact identity,
+  consider moving the mixed-vector statement to QICLean.
+- **Notes:** Both proofs compare the actual orthonormal bases. They do not
+  identify distinct bases by equality or add a normalization assumption.
+  Two occurrences are below the promotion threshold; no new public theorem,
+  tactic or simp attribute is introduced.
+
 ### Dyadic padding bounds — candidate (2026-10-16)
 
 - **Pattern:** Combine the lower and strict upper bounds for
