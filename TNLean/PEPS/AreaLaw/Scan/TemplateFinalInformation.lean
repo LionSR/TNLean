@@ -113,20 +113,21 @@ theorem two_le_collarThreshold (q R : ℕ) (J Δ Cbox Ctr ct Cent eent Cen een :
     2 ≤ collarThreshold q R J Δ Cbox Ctr ct Cent eent Cen een :=
   CollarScan.two_le_sourceRoundedInformationThreshold _ _ _ _ _ _ _ _ _ _ _ _ _ _
 
-/-- The literal uniform safe-box estimate at the improved exponent implies both final
-information powers for every separated template in the original gapped ground state, with the
-explicit coefficient `collarConstant q J Δ Cbox` at every `n` from the explicit threshold
-`collarThreshold q R J Δ Cbox Ctr ct Cent eent Cen een` on. The truncation constant `Ctr` and the
-transport constants `ct, Cent, eent, Cen, een` remain existential and precede the entire physical
-instance. Source: `08-scanner.tex`, lines 808--944. -/
-theorem exists_template_final_mutualInformation_of_boxEntropy_of_threshold_le
+/-- Both final information powers for every separated template in the original gapped ground
+state, as in `exists_template_final_mutualInformation_of_boxEntropy_of_threshold_le`, at the named
+truncation constant `latticeTruncationRadiusConstant R J Δ 10` (target-volume constant `9`) and at
+any transport constants with `0 < ct` satisfying the finite-family transport bound.
+Source: `08-scanner.tex`, lines 808--944. -/
+theorem template_final_mutualInformation_of_boxEntropy_explicit
     (q R D₀ : ℕ) (hq : 1 ≤ q) (hD₀ : 1 ≤ D₀)
     {J Δ Ctpl Cbox : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < Δ)
     (hCtpl : 24 ≤ Ctpl) (hCbox : 0 ≤ Cbox)
     (hbox : ∀ r : ℕ, 1 ≤ r → boxEntropy q R J Δ D₀ r ≤
-      Cbox * (r : ℝ) ^ (1 + (Exponents.boxError : ℝ))) :
-    ∃ Ctr ct Cent eent Cen een : ℝ, 0 < Ctr ∧ 0 < ct ∧
-      ∀ n s₀ : ℕ, collarThreshold q R J Δ Cbox Ctr ct Cent eent Cen een ≤ n →
+      Cbox * (r : ℝ) ^ (1 + (Exponents.boxError : ℝ)))
+    {ct Cent eent Cen een : ℝ} (hct : 0 < ct)
+    (htransport : CollarScan.FiniteFamilyTransportBound ct Cent eent Cen een) :
+      ∀ n s₀ : ℕ, collarThreshold q R J Δ Cbox (latticeTruncationRadiusConstant R J Δ 10) ct Cent
+          eent Cen een ≤ n →
         ∀ (Λ : Finset (ℤ × ℤ)) (h : LocalHamiltonian Λ q R J)
           (E₀ : ℝ) (Ω : StateSpace Λ q),
           IsGappedGroundState Λ q h.operator E₀ Ω Δ →
@@ -147,13 +148,15 @@ theorem exists_template_final_mutualInformation_of_boxEntropy_of_threshold_le
   let μ : ℕ := collarMultiplicity R
   let C₁ : ℝ := 3 * (μ : ℝ)
   have hC₁ : 0 < C₁ := by dsimp [C₁, μ, collarMultiplicity]; positivity
-  obtain ⟨Ctr, ct, Cent, eent, Cen, een, hCtr, hct, hsource⟩ :=
-    CollarScan.exists_sourceTarget_finalScale_mutualInformation_of_rounded_scales_of_threshold_le
+  set Ctr := latticeTruncationRadiusConstant R J Δ 10 with hCtrDef
+  have hCtr : 0 < Ctr := latticeTruncationRadiusConstant_pos R hΔ (by norm_num)
+  have hsource :=
+    CollarScan.sourceTarget_finalScale_mutualInformation_of_rounded_scales_explicit
       hq R hJ hΔ (by norm_num : (0 : ℝ) ≤ 9) hC₁ μ le_rfl 1
-      (by norm_num [Exponents.scannerNu])
+      (by norm_num [Exponents.scannerNu]) hct htransport (Ctr := Ctr)
+      (by norm_num [hCtrDef])
   have hentropy := template_final_source_entropy_bounds_of_boxEntropy q R D₀ hq hD₀ hCbox hbox
   have hbound := hsource _ (templateSourceEntropyConstant_nonneg q (Exponents.boxError : ℝ) Cbox)
-  refine ⟨Ctr, ct, Cent, eent, Cen, een, hCtr, hct, ?_⟩
   intro n s₀ hn Λ h E₀ Ω hgs A T hsep hL
   let : LinearOrder (AdmissibleSupport Λ R) :=
     LinearOrder.lift' (Fintype.equivFin (AdmissibleSupport Λ R))
@@ -193,6 +196,42 @@ theorem exists_template_final_mutualInformation_of_boxEntropy_of_threshold_le
   dsimp only at hinfo
   rw [htrunc] at hinfo
   simpa only [S, finalTemplateScanner, collarConstant] using hinfo
+
+/-- The literal uniform safe-box estimate at the improved exponent implies both final
+information powers for every separated template in the original gapped ground state, with the
+explicit coefficient `collarConstant q J Δ Cbox` at every `n` from the explicit threshold
+`collarThreshold q R J Δ Cbox Ctr ct Cent eent Cen een` on. The truncation constant `Ctr` and the
+transport constants `ct, Cent, eent, Cen, een` remain existential and precede the entire physical
+instance. Source: `08-scanner.tex`, lines 808--944. -/
+theorem exists_template_final_mutualInformation_of_boxEntropy_of_threshold_le
+    (q R D₀ : ℕ) (hq : 1 ≤ q) (hD₀ : 1 ≤ D₀)
+    {J Δ Ctpl Cbox : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < Δ)
+    (hCtpl : 24 ≤ Ctpl) (hCbox : 0 ≤ Cbox)
+    (hbox : ∀ r : ℕ, 1 ≤ r → boxEntropy q R J Δ D₀ r ≤
+      Cbox * (r : ℝ) ^ (1 + (Exponents.boxError : ℝ))) :
+    ∃ Ctr ct Cent eent Cen een : ℝ, 0 < Ctr ∧ 0 < ct ∧
+      ∀ n s₀ : ℕ, collarThreshold q R J Δ Cbox Ctr ct Cent eent Cen een ≤ n →
+        ∀ (Λ : Finset (ℤ × ℤ)) (h : LocalHamiltonian Λ q R J)
+          (E₀ : ℝ) (Ω : StateSpace Λ q),
+          IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+          ∀ (A : Finset (Site Λ)) (T : Template Ctpl n s₀),
+            T.IsSeparated D₀ (boundaryEndpoints Λ A) →
+            ⌊(n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ ≤ s₀ →
+            let L := ⌊(n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊
+            let X := A.filter fun x ↦ x.val ∈ T.points
+            let S₀ := A.filter fun x ↦ x.val ∈ ambientDilation T.points L
+            let β := fun _ : Site Λ ↦ Fin q
+            2 * FiniteProduct.mutualInformation β Ω X S₀ᶜ ≤
+                collarConstant q J Δ Cbox * (n : ℝ) ^ (62497 / 62500 : ℝ) ∧
+              2 * FiniteProduct.mutualInformation β Ω X S₀ᶜ ≤
+                collarConstant q J Δ Cbox *
+                  (n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ)) := by
+  obtain ⟨ct, Cent, eent, Cen, een, hct, htransport⟩ :=
+    CollarScan.exists_finiteFamilyTransportBound
+  exact ⟨_, ct, Cent, eent, Cen, een,
+    latticeTruncationRadiusConstant_pos R hΔ (by norm_num : (0 : ℝ) ≤ 10), hct,
+    template_final_mutualInformation_of_boxEntropy_explicit q R D₀ hq hD₀ hJ hΔ hCtpl hCbox hbox
+      hct htransport⟩
 
 /-- The literal uniform safe-box estimate at the improved exponent implies
 both final information powers for every separated template in the original
