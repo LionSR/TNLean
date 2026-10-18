@@ -41,13 +41,13 @@ theorem leftBlock_eq_interval (L k : ℕ) : leftBlock L k = interval L 0 k := by
   ext i
   simp
 
-/-- Scaling a matrix product state scales its right boundary vector. -/
+/-- Scaling a matrix product state multiplies its scalar endpoint cap. -/
 theorem IsOpenMPS.smul {L q D : ℕ} {ψ : (Fin L → Fin q) → ℂ} (h : IsOpenMPS L q D ψ) (c : ℂ) :
     IsOpenMPS L q D fun x ↦ c * ψ x := by
-  obtain ⟨A, vL, vR, hψ⟩ := h
-  refine ⟨A, vL, c • vR, fun x ↦ ?_⟩
+  obtain ⟨A, a, hA, hψ⟩ := h
+  refine ⟨A, c * a, hA, fun x ↦ ?_⟩
   change c * ψ x = _
-  rw [hψ x, Matrix.mulVec_smul, dotProduct_smul, smul_eq_mul]
+  rw [hψ x, mul_assoc]
 
 /-- The square root `√(2 e^{e/2})` of the prefactor of the marginal tail bound. -/
 noncomputable def tailPrefactorRoot : ℝ := Real.sqrt (2 * Real.exp (Real.exp 1 / 2))

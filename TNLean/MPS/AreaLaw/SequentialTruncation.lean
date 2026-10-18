@@ -191,27 +191,6 @@ theorem rank_cutMatrix_localLift_le (k : ℕ) (K : LeftBlockMatrix L q k)
   rw [cutMatrix_localLift]
   exact rank_mul_le_left _ _
 
-/-- The left block of the cut after zero sites is empty. -/
-instance : IsEmpty {v : Fin L // v ∈ leftBlock L 0} :=
-  ⟨fun v ↦ absurd (mem_leftBlock.mp v.2) (Nat.not_lt_zero _)⟩
-
-/-- Across the cut after zero sites the cut matrix has one row, so its rank is at most
-one. -/
-theorem rank_cutMatrix_zero_le (ψ : EuclideanSpace ℂ (Fin L → Fin q)) :
-    (cutMatrix ψ 0).rank ≤ 1 := by
-  refine (rank_le_card_height _).trans ?_
-  rw [Fintype.card_unique]
-
-/-- Across a cut at or beyond the right end the cut matrix has one column, so its rank is
-at most one. -/
-theorem rank_cutMatrix_le_one_of_le {k : ℕ} (hk : L ≤ k)
-    (ψ : EuclideanSpace ℂ (Fin L → Fin q)) :
-    (cutMatrix ψ k).rank ≤ 1 := by
-  have : IsEmpty {v : Fin L // v ∉ leftBlock L k} :=
-    ⟨fun v ↦ v.2 (mem_leftBlock.mpr (lt_of_lt_of_le v.1.2 hk))⟩
-  refine (rank_le_card_width _).trans ?_
-  rw [Fintype.card_unique]
-
 section Sequential
 
 variable (P : ∀ k : ℕ, LeftBlockMatrix L q k)

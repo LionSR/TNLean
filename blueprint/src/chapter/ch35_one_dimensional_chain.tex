@@ -471,32 +471,39 @@ for an arbitrary finite set of sites and are instantiated here directly.
 \begin{definition}[Open-boundary matrix product states and cut matrices]
     \label{def:chain_open_mps}
     \lean{
+        TNLean.MPS.AreaLaw.IsOpenMPS,
+        TNLean.MPS.AreaLaw.IsOpenMPS.smul,
         TNLean.MPS.AreaLaw.leftBlock,
         TNLean.MPS.AreaLaw.mem_leftBlock,
         TNLean.MPS.AreaLaw.leftBlock_eq_interval,
         TNLean.MPS.AreaLaw.cutMatrix,
-        TNLean.MPS.AreaLaw.cutMatrix_apply,
-        TNLean.MPS.AreaLaw.IsOpenMPS,
-        TNLean.MPS.AreaLaw.IsOpenMPS.smul
+        TNLean.MPS.AreaLaw.cutMatrix_apply
     }
     \leanok
     \uses{def:chain_model}
-    A vector $\psi$ on $L$ sites of local dimension $q$ is an
-    \emph{open-boundary matrix product state of bond dimension at most $D$}
-    when there are matrices $A_i(s)\in\mathbb C^{D\times D}$ for each site $i$
-    and value $s$ and vectors $v_L,v_R\in\mathbb C^D$ with
+    Let $L,q,D$ be natural numbers. A vector $\psi$ on $L$ sites of local
+    dimension $q$ is an \emph{open-boundary matrix product state of bond
+        dimension at most $D$} when there are natural numbers $r_0,\ldots,r_L$
+    with $r_0=r_L=1$ and $r_k\leq D$ for $0<k<L$, a scalar $c\in\mathbb C$,
+    and matrices $A_i(s)\in\mathbb C^{r_i\times r_{i+1}}$ such that
     \begin{align}
-        \psi(x_0,\ldots,x_{L-1})=v_L^{\mathsf T}A_0(x_0)\cdots A_{L-1}(x_{L-1})\,v_R .
+        \psi(x_0,\ldots,x_{L-1})
+         & =c\bigl(A_0(x_0)\cdots A_{L-1}(x_{L-1})\bigr)_{0,0}. \notag
     \end{align}
-    Scaling such a vector scales $v_R$. The \emph{left block} of $k$ sites is
-    the interval $[0,k)$, and the \emph{cut matrix} at $k$ has the
-    configurations of the left block as rows and those of the remaining sites
-    as columns; its rank is the Schmidt rank across the cut.
+    The empty product is the identity on $\mathbb C$, so at $L=0$ this
+    condition reads $\psi(\varnothing)=c$. Only the internal bond dimensions
+    are bounded by $D$. Scaling $\psi$ scales $c$.
+    The \emph{left block} of $k$ sites is the interval $[0,k)$, and the
+    \emph{cut matrix} at $k$ has the configurations of the left block as rows
+    and those of the remaining sites as columns; its rank is the Schmidt
+    rank across the cut.
 \end{definition}
 
-\begin{lemma}[Bounded cut ranks give a matrix product state]
-    \label{lem:chain_mps_of_cut_rank}
+\begin{theorem}[Bounded internal cut ranks give a matrix product state]
+    \label{thm:chain_mps_of_cut_rank}
     \lean{
+        TNLean.MPS.AreaLaw.isOpenMPS_of_internal_cutMatrix_rank_le,
+        TNLean.MPS.AreaLaw.isOpenMPS_of_cutMatrix_rank_le,
         Submodule.exists_fin_span_of_finrank_le,
         TNLean.MPS.AreaLaw.glueLeft,
         TNLean.MPS.AreaLaw.sliceMatrix,
@@ -505,24 +512,33 @@ for an arbitrary finite set of sites and are instantiated here directly.
         TNLean.MPS.AreaLaw.sliceSpace,
         TNLean.MPS.AreaLaw.finrank_sliceSpace_le,
         TNLean.MPS.AreaLaw.glueLeft_snoc,
-        TNLean.MPS.AreaLaw.slice_mem_sliceSpace,
-        TNLean.MPS.AreaLaw.isOpenMPS_of_cutMatrix_rank_le
+        TNLean.MPS.AreaLaw.slice_mem_sliceSpace
     }
     \leanok
-    \uses{def:chain_open_mps}
-    A vector all of whose cut matrices have rank at most $D$ is an
-    open-boundary matrix product state of bond dimension at most $D$.
-\end{lemma}
+    Let $L,q,D$ be natural numbers and let $\psi$ be a vector on $L$ sites
+    of local dimension $q$. If every internal cut matrix, at $0<k<L$, has
+    rank at most $D$, then $\psi$ is an open-boundary matrix product state
+    of bond dimension at most $D$. In particular, the conclusion holds
+    when every cut matrix has rank at most $D$.
+\end{theorem}
 \begin{proof}
     \leanok
     \uses{def:chain_open_mps}
-    Let $V_k$ be the span of the columns of the cut matrix at $k$, a space of
-    dimension at most $D$, and choose a spanning family $u_k$ of $D$ vectors.
-    Slicing a column of the cut matrix at $k+1$ at a fixed value of site $k$
-    gives a column of the cut matrix at $k$, so each $u_{k+1}(\alpha)$ sliced
-    at the value $s$ is a combination $\sum_\beta A_k(s)_{\beta\alpha}u_k(\beta)$.
-    By induction $u_k(\alpha)=v_L^{\mathsf T}A_0\cdots A_{k-1}$ with $v_L=u_0$,
-    and at $k=L$ the vector itself lies in $V_L$, which supplies $v_R$.
+    Suppose first that $L\geq2$ and $D\geq1$. The two boundary cut matrices
+    have rank at most $1\leq D$. Let $V_k$ be the column space of the cut
+    matrix at $k$, and choose a spanning family $u_k$ of $D$ vectors.
+    Slicing at a fixed value of site $k$ maps $V_{k+1}$ into $V_k$.
+    Expressing these slices in the chosen spanning families gives square
+    matrices $A_k(s)$ and boundary vectors $v_L,v_R$ with
+    $\psi(x)=v_L^{\mathsf T}A_0(x_0)\cdots A_{L-1}(x_{L-1})v_R$.
+    Absorb $v_L^{\mathsf T}$ into the first matrix and $v_R$ into the last;
+    these are distinct matrices because $L\geq2$. Their rectangular
+    dimensions have singleton endpoints and internal dimensions $D$.
+    If $L\geq2$ and $D=0$, the cut matrix at $1$ vanishes, hence $\psi=0$.
+    Set every internal bond dimension to zero and take zero site matrices
+    and $c=0$. If $L=0$, take $c=\psi(\varnothing)$. If $L=1$, take
+    $c=1$ and the $1\times1$ matrices $A_0(s)_{0,0}=\psi(s)$.
+    The assertion about all cuts follows by restricting to internal cuts.
 \end{proof}
 
 \begin{lemma}[Sequential truncation]
@@ -630,7 +646,7 @@ for an arbitrary finite set of sites and are instantiated here directly.
 \begin{proof}
     \leanok
     \uses{thm:chain_area_law, lem:chain_marginal_tail,
-        lem:chain_sequential_truncation, lem:chain_mps_of_cut_rank,
+        lem:chain_sequential_truncation, thm:chain_mps_of_cut_rank,
         lem:chain_crossing_count}
     By Theorem~\ref{thm:chain_area_law} the entropy of every left block, an
     interval $[0,k)$, is at most $C_{\mathrm{int}}$, and by the tail bound of
@@ -641,6 +657,6 @@ for an arbitrary finite set of sites and are instantiated here directly.
     ranks at most $e^{C_{\mathrm{int}}+w(L)}$ and distance at most
     $(L-1)\cdot\frac1{2L^2}\le\frac1{2L}$. Normalizing moves the vector by at
     most the same amount, so the distance is at most $1/L$, and
-    Lemma~\ref{lem:chain_mps_of_cut_rank} exhibits the matrix product
+    Theorem~\ref{thm:chain_mps_of_cut_rank} exhibits the matrix product
     structure, which survives the normalization.
 \end{proof}
