@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.AreaLaw.OpenMPS
+import TNLean.MPS.AreaLaw.OpenMPSRank
 import TNLean.Algebra.ToEuclideanLinApply
 import QICLean.Entropy.FilterOptimizer
 import QICLean.Entropy.RegionEntropy
@@ -21,13 +21,14 @@ rank at most `exp (S_k + w)` across every cut, and its distance to the original 
 at most the sum over the cuts of the square roots of the two-sided surprisal tails of the
 regional spectra.
 
-**Scope restriction (threshold truncation):** Proposition 7.1 of the note projects every
-cut onto the `D` largest eigenvalues of its regional state, for an arbitrary bond dimension
-`D`, with error `∑_k √ε_k(D)`. This module formalizes only the threshold form that
-Theorem B uses: the projectors onto the eigenvalues at least `exp (-(S_k + w))` at a common
-slack `w`, with cut ranks at most `max 1 (exp (S_k + w))` and error `∑_k √tail_k(w)`. The
-form with an arbitrary `D` is not formalized. Documented in
-`docs/paper-gaps/tnlean_one_dimensional_threshold_truncation.tex`.
+The arbitrary-bond form instead projects onto the first `min D n` vectors of any
+orthonormal basis at each internal cut, where `n` is the regional configuration-space
+dimension. The actual ordered product has an open-boundary matrix product representation
+of internal bond dimension at most `D`, and its error is bounded by the square roots of
+the actual discarded expectations on the original vector. Taking any marginal eigenbasis
+in decreasing eigenvalue order gives Proposition 7.1 of the note, including every choice
+within a repeated eigenspace. The statement holds for all natural `L`, `q` and `D`, and
+for arbitrary vectors. Empty and one-site chains have no internal projections.
 
 ## Main results
 
@@ -38,6 +39,9 @@ form with an arbitrary `D` is not formalized. Documented in
 * `trace_complement_spectralProjectionGE_le_surprisalTail`: the mass of a density matrix
   below the threshold `exp (-(S + w))` is at most the surprisal tail at slack `w`.
 * `sequentialTruncation`: the sequential product of the lifted projections.
+* `prefixBasisProjection`: projections onto initial spans of the chosen regional bases.
+* `isOpenMPS_sequentialTruncation_prefixBasisProjection`: the arbitrary-bond statement for
+  the actual ordered product and its discarded-expectation error.
 * `exists_sequentialTruncation`: the assembled statement.
 
 ## References
@@ -172,6 +176,61 @@ abbrev LeftBlockMatrix (L q k : ℕ) : Type :=
   Matrix (Entropy.RegionConfig (fun _ : Fin L ↦ q) (leftBlock L k))
     (Entropy.RegionConfig (fun _ : Fin L ↦ q) (leftBlock L k)) ℂ
 
+local notation "RegionalConfig" k =>
+  Entropy.RegionConfig (fun _ : Fin L ↦ q) (leftBlock L k)
+local notation "RegionalBasis" k =>
+  OrthonormalBasis (Fin (Fintype.card (RegionalConfig k))) ℂ
+    (EuclideanSpace ℂ (RegionalConfig k))
+local notation "InternalCut" => {k : ℕ // k ∈ Finset.Ico 1 L}
+
+/-- The orthogonal projection onto the first min(D,N_k) vectors of the supplied
+ordered orthonormal basis at each internal prefix cut. At unvisited cuts it is
+the identity. Source: one-dimensional note, part2a_mps_information.tex,
+prop:VC, lines39–46. The basis may be arbitrary; every source ordered
+orthonormal eigenbasis is included. -/
+noncomputable def prefixBasisProjection
+    (b : ∀ k : InternalCut, RegionalBasis k.val) (D k : ℕ) :
+    LeftBlockMatrix L q k :=
+  if hk : k ∈ Finset.Ico 1 L then
+    let W : Submodule ℂ (EuclideanSpace ℂ (RegionalConfig k)) :=
+      Submodule.span ℂ (Set.range (fun i : Fin (min D (Fintype.card (RegionalConfig k))) ↦
+        b ⟨k, hk⟩ (Fin.castLE (Nat.min_le_right D _) i)))
+    Matrix.toEuclideanLin.symm W.starProjection.toLinearMap
+  else 1
+
+/-- Internal leading-span projections have rank at most the requested bound.
+Source: one-dimensional note, Part IIa, `prop:VC`, lines 42 and 56–62. -/
+private theorem rank_prefixBasisProjection_le
+    (b : ∀ k : InternalCut, RegionalBasis k.val) (D k : ℕ)
+    (hk : k ∈ Finset.Ico 1 L) : (prefixBasisProjection b D k).rank ≤ D := by
+  classical
+  rw [prefixBasisProjection, dite_eq_left hk,
+    Matrix.rank_eq_finrank_range_toLin _
+      (EuclideanSpace.basisFun (RegionalConfig k) ℂ).toBasis
+      (EuclideanSpace.basisFun (RegionalConfig k) ℂ).toBasis]
+  rw [← Matrix.toEuclideanLin_eq_toLin_orthonormal, LinearEquiv.apply_symm_apply]
+  rw [Submodule.range_starProjection]
+  exact (finrank_range_le_card (R := ℂ)
+    (fun i : Fin (min D (Fintype.card (RegionalConfig k))) ↦
+      b ⟨k, hk⟩ (Fin.castLE (Nat.min_le_right D _) i))).trans (by simp)
+
+/-- The defined prefix family consists of orthogonal projections.
+Source: one-dimensional note, Part IIa, `prop:VC`, lines 40–46. -/
+private theorem isStarProjection_prefixBasisProjection
+    (b : ∀ k : InternalCut, RegionalBasis k.val) (D k : ℕ) :
+    IsStarProjection (prefixBasisProjection b D k) := by
+  classical
+  unfold prefixBasisProjection
+  split_ifs with hk
+  · exact (isStarProjection_starProjection (U := Submodule.span ℂ
+      (Set.range fun i : Fin (min D (Fintype.card (RegionalConfig k))) ↦
+        b ⟨k, hk⟩ (Fin.castLE (Nat.min_le_right D _) i)))).map
+      (A := EuclideanSpace ℂ (RegionalConfig k) →L[ℂ]
+        EuclideanSpace ℂ (RegionalConfig k))
+      (B := LeftBlockMatrix L q k)
+      (Matrix.toEuclideanCLM (n := RegionalConfig k) (𝕜 := ℂ)).symm.toStarAlgHom
+  · exact IsStarProjection.one _
+
 /-- A lifted operator on the left block acts on the cut matrix by left multiplication. -/
 theorem cutMatrix_localLift (k : ℕ) (K : LeftBlockMatrix L q k)
     (ψ : EuclideanSpace ℂ (Fin L → Fin q)) :
@@ -301,6 +360,36 @@ private theorem sequentialTruncation_prefix_rank_error
   obtain ⟨i, hi, rfl⟩ : ∃ i, i < L - 1 ∧ k = L - 1 - i :=
     ⟨L - 1 - k, by omega, by omega⟩
   exact rank_cutMatrix_sequentialTruncation_le P ψ hi
+
+/-- Sequential projection onto the first D vectors of arbitrary regional
+orthonormal bases gives the actual product an open MPS representation and the
+actual discarded-expectation error. Specializing to every ordered eigenbasis
+of each actual marginal is Proposition prop:VC, including all choices in ties.
+Source: one-dimensional note, part2a_mps_information.tex, prop:VC, lines39–62
+and the product-order caption at line70. The statement holds for arbitrary
+vectors, and hence for every unit vector in the source proposition. -/
+theorem isOpenMPS_sequentialTruncation_prefixBasisProjection
+    (ψ : EuclideanSpace ℂ (Fin L → Fin q)) (D : ℕ)
+    (b : ∀ k : InternalCut, RegionalBasis k.val) :
+    let P := prefixBasisProjection b D
+    let Φ := sequentialTruncation P (L - 1) ψ
+    IsOpenMPS L q D (fun x ↦ Φ x) ∧
+      ‖Φ - ψ‖ ≤ ∑ k ∈ Finset.Ico 1 L,
+        Real.sqrt ((⟪ψ, toEuclideanLin
+          (Entropy.localLift (leftBlock L k) (1 - P k)) ψ⟫_ℂ).re) := by
+  classical
+  let P := prefixBasisProjection b D
+  obtain ⟨hrank, herror⟩ := sequentialTruncation_prefix_rank_error P ψ
+    (isStarProjection_prefixBasisProjection b D)
+  refine ⟨isOpenMPS_of_internal_cutMatrix_rank_le _ (fun k hk hkL ↦
+    (hrank k hk hkL).trans (rank_prefixBasisProjection_le b D k
+      (Finset.mem_Ico.mpr ⟨hk, hkL⟩))), ?_⟩
+  rw [norm_sub_rev]
+  have hmass (k : ℕ) :
+      (((1 - P k) * Entropy.regionState (leftBlock L k) ψ).trace).re =
+        (⟪ψ, toEuclideanLin (Entropy.localLift (leftBlock L k) (1 - P k)) ψ⟫_ℂ).re := by
+    rw [Entropy.inner_localLift, Matrix.trace_mul_comm]
+  simpa only [hmass] using herror
 
 /-- **Sequential truncation.** Cutting every left block of a unit vector to the spectral
 projector of its regional state above the threshold `exp (-(S_k + w))`, from the largest

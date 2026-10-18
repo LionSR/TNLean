@@ -84,8 +84,7 @@ mass. The constants are independent of the chain length and the cut.
 Source: the one-dimensional note, `part2a_mps_information.tex`,
 `sec:shortcut`, proof of `thm:Bshort`, lines 81–94, together with the marginal
 tail estimate in `part1_arealaw.tex`, `lem:tail` and `eq:theta`.
-This is the per-cut estimate requested in issue #9549, not the arbitrary-rank
-sequential truncation proposition `prop:VC`. -/
+-/
 theorem ChainHamiltonian.spectralProjectionGE_leftBlock_bounds
     {L q R : ℕ} {J Δ : ℝ} (h : ChainHamiltonian L q R J)
     (hq : 1 ≤ q) (hJ : 0 ≤ J) (hΔ : 0 < Δ)

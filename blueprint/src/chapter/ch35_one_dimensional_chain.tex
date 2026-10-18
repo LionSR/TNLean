@@ -541,7 +541,56 @@ for an arbitrary finite set of sites and are instantiated here directly.
     The assertion about all cuts follows by restricting to internal cuts.
 \end{proof}
 
-\begin{lemma}[Sequential truncation]
+\begin{theorem}[Sequential truncation in ordered orthonormal bases]
+    \label{thm:chain_sequential_truncation_full}
+    \lean{
+        TNLean.MPS.AreaLaw.prefixBasisProjection,
+        TNLean.MPS.AreaLaw.isOpenMPS_sequentialTruncation_prefixBasisProjection
+    }
+    \leanok
+    \uses{def:chain_open_mps}
+    Let $L,q,D$ be natural numbers and let $\psi$ be a vector on the chain
+    of $L$ sites of local dimension $q$. For each internal cut $0<k<L$,
+    let $N_k=\dim\mathcal H_{[0,k)}$ and choose an ordered orthonormal basis
+    $b_{k,0},\ldots,b_{k,N_k-1}$ of $\mathcal H_{[0,k)}$. Let $\Pi_k$ be
+    the orthogonal projection onto the span of its first $\min\{D,N_k\}$
+    vectors, and put $P_k=\Pi_k\otimes1$. Define
+    \begin{align}
+        \Phi       & =P_1P_2\cdots P_{L-1}\psi, \notag                         \\
+        \epsilon_k & =\operatorname{Re}\langle\psi,(1-P_k)\psi\rangle . \notag
+    \end{align}
+    Then $\Phi$ is an open-boundary matrix product state with every internal
+    bond dimension at most $D$, and
+    \begin{align}
+        \|\Phi-\psi\|\le\sum_{k=1}^{L-1}\sqrt{\epsilon_k}. \notag
+    \end{align}
+    Empty products act as the identity, so this includes $L=0$ and $L=1$,
+    without a choice of basis at a boundary cut. If $D\ge N_k$, then
+    $\Pi_k=1$.
+
+    In particular, let $\psi$ be a unit vector and, at each internal cut,
+    choose any orthonormal eigenbasis of its reduced state, ordered
+    by nonincreasing eigenvalue. This gives Proposition~7.1 of
+    \cite[Part~IIa]{TNLean2026OneDimensional}, with $\Phi$ and
+    $\epsilon_k$ as defined above.
+    Every choice of eigenvectors in a repeated-eigenvalue space is allowed.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:chain_open_mps, thm:chain_mps_of_cut_rank}
+    Each $P_k$ is an orthogonal projection, hence a contraction. Telescoping
+    gives
+    $\Phi-\psi=\sum_k P_1\cdots P_{k-1}(P_k-1)\psi$,
+    and $\|(1-P_k)\psi\|^2=\epsilon_k$, proving the error bound.
+    At cut $k$, the vector $P_k\cdots P_{L-1}\psi$ lies in
+    $\operatorname{ran}\Pi_k\otimes\mathcal H_{[k,L)}$, so its cut rank
+    is at most $\min\{D,N_k\}\le D$. The remaining factors act on the
+    left of that cut and cannot increase this rank.
+    Theorem~\ref{thm:chain_mps_of_cut_rank} gives the stated representation
+    of $\Phi$.
+\end{proof}
+
+\begin{lemma}[Sequential truncation at an entropy threshold]
     \label{lem:chain_sequential_truncation}
     \lean{
         Matrix.schmidtCoeffMatrix_kronecker_one_mulVec,
@@ -584,12 +633,12 @@ for an arbitrary finite set of sites and are instantiated here directly.
     \begin{align}
         \|\psi-\Phi\|\le\sum_{k=1}^{L-1}\sqrt{\text{tail}_k(w)} .
     \end{align}
-    This is the threshold form of the sequential truncation, Proposition~7.1
-    of \cite{TNLean2026OneDimensional}: the note projects every cut onto its
-    $D$ largest eigenvalues, or onto all of them when the cut has fewer than
-    $D$, for an arbitrary bond dimension $D$, with the error
-    $\sum_k\sqrt{\epsilon_k(D)}$; that form is not formalized, and
-    Theorem~B uses only the threshold form; see
+    This is the entropy-threshold form used in the proof of Theorem~B
+    of \cite{TNLean2026OneDimensional}. The prescribed-dimension statement,
+    with the actual discarded masses, is stated separately in
+    Theorem~\ref{thm:chain_sequential_truncation_full}.
+    A common entropy slack and a prescribed number of retained eigenvectors
+    need not give the same projectors; see
     \cite{gap:tnlean_one_dimensional_threshold_truncation}.
 \end{lemma}
 \begin{proof}

@@ -15,7 +15,9 @@ run_cmd do
   for decl in #[``Entropy.norm_sq_toEuclideanLin_localLift_eq_trace,
       ``TNLean.MPS.AreaLaw.norm_sub_sequentialTruncation_le,
       ``TNLean.MPS.AreaLaw.rank_cutMatrix_sequentialTruncation_le,
-      ``TNLean.MPS.AreaLaw.exists_sequentialTruncation] do
+      ``TNLean.MPS.AreaLaw.exists_sequentialTruncation,
+      ``TNLean.MPS.AreaLaw.prefixBasisProjection,
+      ``TNLean.MPS.AreaLaw.isOpenMPS_sequentialTruncation_prefixBasisProjection] do
     unless (← Lean.getEnv).contains decl do
       throwError "Missing declaration {decl}"
     let axioms ← Lean.collectAxioms decl
