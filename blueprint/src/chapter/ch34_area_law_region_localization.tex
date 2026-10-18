@@ -33,11 +33,31 @@
     Taking $X=[A,e^{-tK}Be^{tK}]$ gives the claim.
 \end{proof}
 
+\begin{definition}[Constants of graph-ball localization]
+    \label{def:area_graph_ball_localization_constants}
+    \lean{TNLean.PEPS.AreaLaw.graphBallLocalizationPrefactor,
+        TNLean.PEPS.AreaLaw.graphBallLocalizationVelocity,
+        TNLean.PEPS.AreaLaw.graphBallLocalizationPrefactor_pos,
+        TNLean.PEPS.AreaLaw.graphBallLocalizationVelocity_nonneg}
+    \leanok
+    For an integer $R\geq0$ and a real number $J$, put $v_R=1+2R(R+1)$,
+    $\mu_R=2^{v_R-1}$, and
+    \begin{align*}
+        C_0(R) & =2e^R\cdot2\cdot\frac{2^2\,2!\,e^{1/2}}{1-e^{-1/2}}, &
+        v(R,J) & =2v_R\mu_RJe^{2R}.
+    \end{align*}
+    Then $C_0(R)>0$, and $v(R,J)\geq0$ when $J\geq0$. These are the prefactor
+    and velocity of the graph-ball localization estimate of
+    \cite[Lemma~4.1]{OpenAI2026AreaLaw}, whose decay rate is $1/2$.
+\end{definition}
+
 \begin{theorem}[Localization from a region]
     \label{thm:area_region_localization}
-    \lean{TNLean.PEPS.AreaLaw.exists_quasilocal_region_localization}
+    \lean{TNLean.PEPS.AreaLaw.exists_quasilocal_region_localization,
+        TNLean.PEPS.AreaLaw.quasilocal_region_localization}
     \leanok
-    \uses{def:area_law_hamiltonian,def:qc_site_expectation}
+    \uses{def:area_law_hamiltonian,def:qc_site_expectation,
+        def:area_graph_ball_localization_constants}
     To establish the operator localization estimate used in
     \cite{OpenAI2026PolynomialPEPS}, fix integers $q\geq1$ and $R\geq0$,
     and a real number $J$.
@@ -52,12 +72,16 @@
         \|\tau_t(A)-E_{N_l(S)}(\tau_t(A))\|
         \leq\|A\|\min\{2,C|\Lambda|e^{v|t|-cl}\}.
     \end{align*}
+    The same bound holds with $C=2C_0(R)$, $v=v(R,J)$ and $c=1/2$, the
+    constants of Definition~\ref{def:area_graph_ball_localization_constants}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{lem:quasilocal-lr,thm:qc_commutator_norm_bound,
         thm:qc_commutator_reverse_evolution,
         lem:qc_site_expectation_properties,lem:qc_site_expectation_commutator}
-    Let $C_0,v,c$ be the constants of Lemma~\ref{lem:quasilocal-lr}.
+    Let $C_0=C_0(R)$, $v=v(R,J)$ and $c=1/2$. By
+    Lemma~\ref{lem:quasilocal-lr}, the singleton localization estimate holds
+    with these constants.
     If $y\notin N_l(S)$, then $N_l(y)$ is disjoint from $S$.
     For an on-site unitary $U$ at $y$, the operator
     $E_{N_l(y)}(\tau_{-t}(U))$ therefore commutes with $A$. For the
@@ -83,5 +107,6 @@
         \leq2\|A\|.
     \end{align*}
     Taking the smaller of the two bounds proves the assertion with
-    $C=2C_0$.
+    $C=2C_0$, $v=v(R,J)$ and $c=1/2$. Replacing $v$ by $\max\{v,1\}$ only
+    enlarges the bound and makes the velocity positive.
 \end{proof}
