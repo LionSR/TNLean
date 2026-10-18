@@ -136,9 +136,10 @@ theorem exists_regionalEntropy_le_uniformAreaLawConstant
 
 /-- Theorem 1.1 of the area-law manuscript, `00-introduction.tex`, lines 39–53:
 the uniform boundary law for gapped ground states on finite induced domains of
-the square lattice. The constant is `uniformAreaLawConstant` at a safe-box constant and
-filter-locality constants whose existence is proved
-(`exists_regionalEntropy_le_uniformAreaLawConstant`). -/
+the square lattice. The proof chooses a safe-box constant (`Scan.exists_boxEntropy_le_boxError`)
+and filter-locality constants (`exists_norm_positiveConstraint_sub_map_le`), and
+`exists_regionalEntropy_le_uniformAreaLawConstant` then gives the bound with the constant
+`uniformAreaLawConstant` at these choices. -/
 theorem uniformAreaLaw : UniformAreaLaw := by
   intro q hq R J Δ hJ hΔ
   obtain ⟨Cbox, hCbox, hbox⟩ := Scan.exists_boxEntropy_le_boxError q R hq hJ.le hΔ

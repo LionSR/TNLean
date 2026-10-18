@@ -1,15 +1,16 @@
 \section{The constant produced by the proof of the area law}
 \label{sec:area_law_explicit_constant}
 
-Theorem~1.1 of \cite{OpenAI2026AreaLaw} asserts that a constant exists. Its
-proof produces the constant from those of Propositions~9.6, 10.2 and~11.2.
-The results of this section record that constant. They are auxiliary results:
-the source states none of them, and
-Theorem~\ref{thm:openai_uniform_area_law} is the statement of Theorem~1.1.
+The proof of Theorem~1.1 of \cite{OpenAI2026AreaLaw} produces the constant of
+the area law from the constants of Propositions~9.6, 10.2 and~11.2. This
+section records that constant.
+
+% Status: these are auxiliary results. The source asserts only that a constant
+% exists; the statement of Theorem 1.1 is thm:openai_uniform_area_law.
 
 % Source: 10-geometry.tex, proof of Theorem 1.1, lines 803--857.
 % Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
-\begin{definition}[The constant of the proof of Theorem~1.1]
+\begin{definition}[The constant in the two-dimensional area-law proof]
     \label{def:area_law_proof_constant}
     \lean{TNLean.PEPS.AreaLaw.uniformAreaLawConstantOf,
         TNLean.PEPS.AreaLaw.uniformAreaLawScale}
@@ -49,10 +50,11 @@ Theorem~\ref{thm:openai_uniform_area_law} is the statement of Theorem~1.1.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:area_law_conditional_assembly,thm:area_law_zero_boundary,
+    \uses{thm:area_law_zero_boundary,
         thm:area_law_boundary_assembly,thm:area_law_uniform_collar_threshold}
-    This is the proof of Theorem~\ref{thm:area_law_conditional_assembly} with
-    the constants fixed. The collar radius threshold $N_3\ge2$ gives
+    The argument is the proof of Theorem~1.1 of \cite{OpenAI2026AreaLaw} with
+    the constants fixed. If $|\partial_\Lambda A|=0$ the entropy vanishes by
+    Theorem~\ref{thm:area_law_zero_boundary}. The collar radius threshold $N_3\ge2$ gives
     $L_n+2r<n^\beta$ for every $n\ge N_3$ and every $r\le C_2n^{(1-\varepsilon)/\alpha}$.
     Each piece has scale $n_i\ge n_*\ge\max\{2,N_1,N_2,N_3\}$, so the collar
     and amplification bounds apply to it and give
