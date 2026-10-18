@@ -14,6 +14,7 @@ Each named theorem with explicit slope and size threshold depends on exactly the
 standard axioms used throughout the library.
 -/
 
+open TNLean.PEPS.Approximation in
 run_cmd do
   let decls := #[
     ``TNLean.PEPS.Approximation.reset_scale_polylog_le_of_resetPolylogScale_le,
@@ -21,7 +22,7 @@ run_cmd do
     ``TNLean.PEPS.Approximation.angular_reset_width_lt_of_threshold_le,
     ``TNLean.PEPS.Approximation.angular_reset_width_lt_of_cell_information,
     ``TNLean.PEPS.Approximation.angular_information_reset_of_resetThreshold_le,
-    ``TNLean.PEPS.Approximation.mutualInformation_selectedRegion_le_square_of_sublinearCollarBoundAt,
+    ``mutualInformation_selectedRegion_le_square_of_sublinearCollarBoundAt,
     ``TNLean.PEPS.Approximation.angular_single_scale_reset_of_sublinearCollarBoundAt,
     ``TNLean.PEPS.Approximation.IsAngularScale.of_sitePosition,
     ``TNLean.PEPS.Approximation.angularScale_eq,
