@@ -14,10 +14,11 @@ At a charge round every split term of a good old history is sampled with probabi
 `log N²`, and bounding the two ends by the initial floor and the terminal rough upper
 comparison gives `ScanData.IntegratedChargeBound`.
 
-**Scope restriction (inputs as hypotheses):** the results of this module stated over `ScanData`
-are proved from its fields, which record the conclusions of Lemma 9.1, Propositions 7.4
-and 8.1, and Lemmas 2.1 and 2.3 for one scan rather than deriving them. Documented in
-`docs/paper-gaps/arealaw2d_scanner_inputs.tex`.
+The results of this module stated over `ScanData` are proved from its fields, which record
+the conclusions of Lemma 9.1, Propositions 7.4 and 8.1, and Lemmas 2.1 and 3.1 for one scan;
+this route is auxiliary. The source statement of Proposition 9.2 is proved for the original
+physical system as `TNLean.PEPS.AreaLaw.Scan.CollarScan.scannerStatement`, without these
+fields as hypotheses.
 
 ## Main results
 

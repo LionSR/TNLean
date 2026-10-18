@@ -16,11 +16,11 @@ and those of Proposition 4.5 and Lemmas 2.1 and 3.1 hold for one truncated groun
 Hence Proposition 9.2 holds for the actual scan as soon as the conclusions of Propositions 7.4
 and 8.1 (`ScanInputs`) hold for its rounds, its total weight `W` and the same `Ωt`.
 
-**Scope restriction (transport and comparator inputs as hypotheses):**
 `scanner_estimate_actualScan` takes the conclusions of Proposition 7.4 (`prop:transport`) and
 Proposition 8.1 (`prop:comparators`) for the actual rounds as the hypothesis `ScanInputs`; the
-other inputs of the proof of Proposition 9.2 are derived. Documented in
-`docs/paper-gaps/arealaw2d_scanner_inputs.tex`.
+other inputs of the proof of Proposition 9.2 are derived. This route is auxiliary.
+The source statement of Proposition 9.2 is proved for the original physical system as
+`TNLean.PEPS.AreaLaw.Scan.CollarScan.scannerStatement`, without these fields as hypotheses.
 
 ## Main results
 

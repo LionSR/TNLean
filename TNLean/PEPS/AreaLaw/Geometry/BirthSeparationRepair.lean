@@ -32,10 +32,9 @@ The isolated stars, the separation of distinct marks, and the conclusion of
 the uniform repair induction enter as the explicit premise
 `IsUniformRepairInduction` (`geometry:repair-induction`).
 
-**Scope restriction (replacement births):** the theorems here treat the births
-of replacements. The births of initial belt tiles, also covered by
-`geometry:birth-separation`, are not treated. Documented in
-`docs/paper-gaps/arealaw2d_birth_separation_scope.tex`.
+The theorems here treat the births of replacements. The births of initial belt
+tiles are treated in `TNLean.PEPS.AreaLaw.Geometry.BirthSeparationInitial`, and
+`exists_birthSeparation` there combines both into `geometry:birth-separation`.
 
 Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 September 24, 2026, Section 11, `geometry:birth-separation`, lines 573–659;

@@ -27,9 +27,8 @@ then combines this absolute error with a separately proved bound `‖ρ - |Ω⟩
 `‖σ - |Ω⟩⟨Ω|‖₁ ≤ L⁻ᵖ + η` and `1 - η ≤ Re Tr ρ ≤ 1`. Nothing is renormalized, `σ` need be
 neither positive nor Hermitian, and no bound on private dimensions or Schmidt ranks enters.
 
-**Local fix (nonempty parties):** The constructions keep the nonempty-party convention of
-`docs/paper-gaps/polypeps_nonempty_parties.tex`, used by the compression theorem to absorb
-the exterior scalar.
+The exterior scalar is absorbed at an existing party, by the nonempty-party convention
+of `TNLean.PEPS.Approximation.DistributedConstruction`.
 
 ## Main results
 

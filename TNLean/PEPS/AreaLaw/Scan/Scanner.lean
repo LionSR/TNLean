@@ -15,13 +15,12 @@ Assembly of Proposition 9.2 (`prop:scanner`) from the integrated entropy balance
 selection of a low-defect charge point, the energy accounting at that point, and the
 comparator budgets.
 
-**Scope restriction (inputs as hypotheses):** the conclusions of Lemma 9.1
-(`scanner:histories`), Proposition 7.4 (`prop:transport`), Proposition 8.1
-(`prop:comparators`), Lemma 2.1 (`lem:continuity`) and Lemma 3.1 (`lem:tail`) for the concrete
-scan are the fields of `ScanData`; this module proves the step of the source from those
-conclusions to Proposition 9.2. The theorem becomes the source statement once a `ScanData` is
-constructed from the scan geometry and the transported states. Documented in
-`docs/paper-gaps/arealaw2d_scanner_inputs.tex`.
+The conclusions of Lemma 9.1 (`scanner:histories`), Proposition 7.4 (`prop:transport`),
+Proposition 8.1 (`prop:comparators`), Lemma 2.1 (`lem:continuity`) and Lemma 3.1 (`lem:tail`)
+for the concrete scan are the fields of `ScanData`; this module proves the step of the source
+from those conclusions to Proposition 9.2. This route is auxiliary. The source statement of
+Proposition 9.2 is proved for the original physical system as
+`TNLean.PEPS.AreaLaw.Scan.CollarScan.scannerStatement`, without these fields as hypotheses.
 
 ## Main results
 
