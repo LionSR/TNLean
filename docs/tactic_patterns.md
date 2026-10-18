@@ -4598,6 +4598,20 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 ## Candidates
 
+### Excluding an omitted integer — candidate (2026-10-18)
+
+- **Pattern:** A vertex belongs to the integer domain, so its coordinate differs
+  from any integer outside that domain; apply this to the two endpoints of an
+  edge or walk before comparing their positions.
+- **Seen:** Two blocks in `TNLean/MPS/AreaLaw/IntegerComponents.lean`, at lines
+  38–39 and 58–59.
+- **Abstraction:** The existing membership inequality lemma
+  `ne_of_mem_of_not_mem` is available for this elementary step. No new theorem,
+  tactic or simplification attribute is needed.
+- **Notes:** Two blocks in one file are below the promotion threshold of three
+  occurrences across two files. The longer shared arguments already use the
+  private edge-cut, walk-cut, interval-membership and ordered-path lemmas.
+
 ### Dyadic padding bounds — candidate (2026-10-16)
 
 - **Pattern:** Combine the lower and strict upper bounds for
