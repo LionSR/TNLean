@@ -45,23 +45,17 @@ for an arbitrary finite set of sites and are instantiated here directly.
 \end{theorem}
 \begin{proof}
     \leanok
-    Fix an integer $z\notin S$. If $x,y\in S$ are adjacent, neither
-    coordinate equals $z$, and adjacency gives
-    \begin{align}
-        y=x+1\quad\text{or}\quad x=y+1,
-        \qquad (x<z)\Longleftrightarrow(y<z).\notag
-    \end{align}
-    The equivalence is preserved along a walk. A walk therefore cannot join
-    vertices on opposite sides of a missing integer, which proves the forward
-    implication.
+    Fix an integer $z\notin S$. Adjacency of $x,y\in S$ gives $y=x+1$ or
+    $x=y+1$. Since neither coordinate equals $z$, it follows that
+    $(x<z)\Longleftrightarrow(y<z)$. The equivalence is preserved along a walk.
+    A walk therefore cannot join vertices on opposite sides of a missing
+    integer, which proves the forward implication.
 
     Conversely, suppose first that $x\le y$ and that every integer in $[x,y]$
     belongs to $S$. The case $x=y$ uses the constant walk. For $x<y$, integer
     successor induction appends the edge $n\longrightarrow n+1$ whenever
     $x\le n<n+1\le y$, giving the walk
-    \begin{align}
-        x\longrightarrow x+1\longrightarrow\cdots\longrightarrow y.\notag
-    \end{align}
+    $x\longrightarrow x+1\longrightarrow\cdots\longrightarrow y$.
     Reversing the walk handles $y\le x$.
 
     If $x,y$ are in one connected component and $z$ lies between them, the
