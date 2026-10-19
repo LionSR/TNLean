@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Circuit.SitewiseTensorSupport
-import TNLean.PEPS.Approximation.EncodedFrame
+import TNLean.Lattice.RegionSplit
 import QICLean.Entropy.FiniteProductSplitting
 import QICLean.Entropy.PhysicalBufferOverlap
 
@@ -25,7 +25,7 @@ September 24, 2026, `02-information.tex`, lines 498–564,
 
 open scoped Kronecker
 
-namespace TNLean.PEPS.EncodedFrame
+namespace TNLean.Lattice
 
 /-- The actual grouped buffer operator is the lift from the same physical
 complement after pairing the two copies at every site. The regional finite
@@ -80,4 +80,4 @@ theorem reindex_physicalBuffer_eq_siteLift
   simp only [hcondition, ite_mul, one_mul, zero_mul]
   rfl
 
-end TNLean.PEPS.EncodedFrame
+end TNLean.Lattice

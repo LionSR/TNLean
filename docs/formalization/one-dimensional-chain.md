@@ -141,7 +141,7 @@ estimate before bounding it by L. It applies to every real time and radius
 hypothesis. The individual crossing terms are localized before summation.
 
 The existing generic theorem
-`TNLean.PEPS.Approximation.exists_regional_physicalBuffer_filter` supplies the
+`TNLean.Lattice.exists_regional_physicalBuffer_filter` supplies the
 two-sided Gaussian-filter estimates on any finite site set. The theorem
 `MPS.AreaLaw.exists_supported_gaussian_integral` constructs a single projected
 unitary evolution near Z, before the observable and Gaussian data, and then

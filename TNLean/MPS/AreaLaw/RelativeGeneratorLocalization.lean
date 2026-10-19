@@ -31,8 +31,8 @@ This estimate does not construct a Gaussian filter or an information reset.
 -/
 
 open Matrix QuantumCircuit
-open TNLean.PEPS.EncodedFrame
 open scoped Kronecker Matrix.Norms.L2Operator
+open TNLean.Lattice (sheetSwapOp)
 
 namespace TNLean.MPS.AreaLaw
 

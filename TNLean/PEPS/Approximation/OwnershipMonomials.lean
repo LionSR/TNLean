@@ -56,6 +56,8 @@ Source text: `openai/math` at commit `adc7f1241b42e322a6451854ab7e4b4c146bf78a`,
 the manuscript; no upstream Lean proof text was reused.
 -/
 
+open TNLean.Lattice (sheetSwap sheetSwapOp)
+
 noncomputable section
 
 open Matrix ContinuousLinearMap EuclideanSpace

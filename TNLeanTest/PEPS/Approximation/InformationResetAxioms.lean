@@ -18,7 +18,7 @@ choice, and quotient soundness.
 run_cmd do
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
   let decls := #[
-    ``TNLean.PEPS.Approximation.regional_physicalBuffer_filter,
+    ``TNLean.Lattice.regional_physicalBuffer_filter,
     ``TNLean.PEPS.Approximation.SquareHamiltonian.reset_localized_filter,
     ``TNLean.PEPS.Approximation.SquareHamiltonian.reset_unitary,
     ``TNLean.PEPS.Approximation.SquareHamiltonian.information_reset_of_resetThreshold_le,
