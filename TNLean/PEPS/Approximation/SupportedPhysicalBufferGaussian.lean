@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.Approximation.PhysicalBufferCoordinates
+import TNLean.Lattice.PhysicalBufferCoordinates
 import TNLean.PEPS.Approximation.SwappedSquareHamiltonianBoundary
 import TNLean.PEPS.Approximation.SwappedSquareHamiltonianInteraction
 import TNLean.PEPS.AreaLaw.SupportedGaussianIntegral
@@ -84,7 +84,7 @@ theorem SquareHamiltonian.supported_buffer_gaussian_integral
       let a := AreaLaw.rectangleSiteEquiv L L
       let e := AreaLaw.rectangleConfigurationEquiv L L (q * q)
       let K := reindex (p.trans e) (p.trans e) (doubledHamiltonian h.operator)
-      let F := reindex (p.trans e) (p.trans e) (EncodedFrame.sheetSwapOp q R)
+      let F := reindex (p.trans e) (p.trans e) (TNLean.Lattice.sheetSwapOp q R)
       let K' := F * K * Fᴴ
       let boundary : Finset (Edge (squareLatticeGraph L L)) :=
         Finset.univ.filter (IsRegionBoundaryEdge R)
@@ -127,8 +127,8 @@ theorem SquareHamiltonian.supported_buffer_gaussian_integral
   have hV₀ : reindex (g.symm.trans p) (g.symm.trans p)
       ((1 : Matrix (P × P) (P × P) ℂ) ⊗ₖ W) ∈
         supportedOperators (q * q) (Q : Set (SquareLatticeVertex L L)) :=
-    (EncodedFrame.reindex_physicalBuffer_eq_siteLift q R C₀ hRC W).symm ▸
-      EncodedFrame.siteLift_mem_supportedOperators Q
+    (TNLean.Lattice.reindex_physicalBuffer_eq_siteLift q R C₀ hRC W).symm ▸
+      TNLean.Lattice.siteLift_mem_supportedOperators Q
         (reindex (sitePairConfigurationEquiv Q q q) (sitePairConfigurationEquiv Q q q) W)
   have hV : V ∈ supportedOperators (q * q) (Q.image a : Set (Lattice.Site Λ)) := by
     simpa only [a, V, embedOp_rectangle_eq_reindex, Finset.coe_image,
@@ -190,7 +190,7 @@ theorem SquareHamiltonian.exists_supported_buffer_gaussian_integral
         let a := AreaLaw.rectangleSiteEquiv L L
         let e := AreaLaw.rectangleConfigurationEquiv L L (q * q)
         let K := reindex (p.trans e) (p.trans e) (doubledHamiltonian h.operator)
-        let F := reindex (p.trans e) (p.trans e) (EncodedFrame.sheetSwapOp q R)
+        let F := reindex (p.trans e) (p.trans e) (TNLean.Lattice.sheetSwapOp q R)
         let K' := F * K * Fᴴ
         let boundary : Finset (Edge (squareLatticeGraph L L)) :=
           Finset.univ.filter (IsRegionBoundaryEdge R)

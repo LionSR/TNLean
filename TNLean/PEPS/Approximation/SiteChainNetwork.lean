@@ -53,6 +53,7 @@ the manuscript; no upstream Lean proof text was reused.
 
 open Matrix QuantumCircuit
 open scoped BigOperators
+open TNLean.Lattice (siteLift)
 
 noncomputable section
 

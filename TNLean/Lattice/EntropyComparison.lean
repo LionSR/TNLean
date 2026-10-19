@@ -48,7 +48,7 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 open Matrix
 open scoped Kronecker InnerProductSpace ComplexOrder MatrixOrder
 
-namespace TNLean.PEPS.AreaLaw
+namespace TNLean.Lattice
 
 /-- The trace distance of two pure states is at most the distance of the unit
 vectors representing them.
@@ -66,11 +66,11 @@ theorem traceDistance_vecMulVec_le_norm_sub {n : Type*} [Fintype n] [DecidableEq
   rw [hsq]
   nlinarith [sq_nonneg (1 - ‖⟪ψ, φ⟫_ℂ‖)]
 
-end TNLean.PEPS.AreaLaw
+end TNLean.Lattice
 
 namespace FiniteProduct
 
-open TNLean.PEPS.AreaLaw
+open TNLean.Lattice
 
 variable {V : Type*} [Fintype V] [DecidableEq V]
 variable (β : V → Type*) [∀ v, Fintype (β v)] [∀ v, DecidableEq (β v)]

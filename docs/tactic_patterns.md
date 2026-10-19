@@ -4939,10 +4939,9 @@ three-plaquette output measurement, and the routed reunion measurement.
 - **Pattern:** derive regional tensor factors from membership in the supported-operator
   space, rewrite multiplication by the sheet-swap permutation matrix, and compare
   entries using the region/complement split.
-- **Seen:** `commute_sheetSwapOp_kronecker` in
-  `PEPS/Approximation/SheetSwapCorrection.lean` and
+- **Seen:** `commute_sheetSwapOp_kronecker` and
   `sheetSwapOp_mul_kronecker_of_mem_supportedOperators` in
-  `PEPS/Approximation/SheetSwapSupported.lean`.
+  `Lattice/RegionalSwap.lean`.
 - **Abstraction:** the support decompositions, permutation-matrix products, and split
   coordinates are already public lemmas. These are the two distinct cases, for
   operators supported outside and inside the swapped region.
