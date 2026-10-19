@@ -295,7 +295,10 @@ monomial lists at the gate occurrences to vary independently.
 \begin{definition}[Constants of the compression theorem]
     \label{def:peps_compression_constants}
     \lean{TNLean.PEPS.Approximation.compressionPrefactor,
-        TNLean.PEPS.Approximation.compressionExponent}
+        TNLean.PEPS.Approximation.compressionExponent,
+        TNLean.PEPS.Approximation.sumCompressionPrefactor,
+        TNLean.PEPS.Approximation.compressionPrefactor_eq_sumCompressionPrefactor,
+        TNLean.PEPS.Approximation.compressionExponent_eq_sampledNetworkExponent}
     \leanok
     \uses{def:peps_sampled_network_constants}
     For integers $r,b,n,d,u,v\ge0$ and reals $C_N,C_D,C_K,C_C,p$, write
@@ -306,14 +309,22 @@ monomial lists at the gate occurrences to vary independently.
     $1+(C_N)_+$, physical-dimension constant $1+(C_D)_+$, monomial-count
     constant $(C_K)_+$, coefficient-sum constant $1+(C_K)_+(C_C)_+$ and
     coefficient-sum degree $s=u+v$. The prefactor is positive, and the
-    exponent is positive when $p>0$.
+    exponent is positive when $p>0$. For a coefficient-sum constant $C_S$ and
+    degree $s$, let $C_\Sigma(r,b,C_N,C_D,C_K,C_S)$ be the constant
+    $C_{\mathrm{net}}$ at gate-count constant $1+(C_N)_+$, physical-dimension
+    constant $1+(C_D)_+$, monomial-count constant $(C_K)_+$ and coefficient-sum
+    constant $1+(C_S)_+$. Then
+    $C(r,b,C_N,C_D,C_K,C_C)=C_\Sigma(r,b,C_N,C_D,C_K,(C_K)_+(C_C)_+)$, and
+    $\alpha(r,b,n,d,u,v,p)$ is $\alpha_{\mathrm{net}}$ at degree $u+v$.
 \end{definition}
 
 \begin{theorem}[Operator networks at one precision with explicit constants]
     \label{thm:peps_uniform_approximate_operator_network_of_le}
     \lean{TNLean.PEPS.Approximation.compressionPrefactor_pos,
         TNLean.PEPS.Approximation.compressionExponent_pos,
-        TNLean.PEPS.PairEffect.GateMapConstruction.uniform_approximate_sampled_network_of_le}
+        TNLean.PEPS.PairEffect.GateMapConstruction.uniform_approximate_sampled_network_of_le,
+        TNLean.PEPS.PairEffect.GateMapConstruction.uniform_approximate_sampled_network_of_sum_le,
+        TNLean.PEPS.PairEffect.EffectCircuit.IsExpansionBounded.mono}
     \leanok
     \uses{def:peps_compression_constants,def:peps_original_gate_construction}
     In the setting of
@@ -327,7 +338,10 @@ monomial lists at the gate occurrences to vary independently.
     $C_p\ge C(r,b,C_N,C_D,C_K,C_C)$ and every integer
     $\alpha_p\ge\alpha(r,b,n,d,u,v,p)$ the conclusion of
     Theorem~\ref{thm:peps_uniform_approximate_operator_network} holds with
-    $\dim\mathcal V_e\le C_pL^{\alpha_p}$.
+    $\dim\mathcal V_e\le C_pL^{\alpha_p}$. The same holds if the bound on the
+    individual coefficients is replaced by a bound $C_SL^s$ on the absolute
+    coefficient sum of every list, for every $C_p\ge C_\Sigma(r,b,C_N,C_D,C_K,C_S)$
+    and every integer $\alpha_p\ge\alpha_{\mathrm{net}}(r,b,n,d,u,s,p)$.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -336,7 +350,10 @@ monomial lists at the gate occurrences to vary independently.
     Theorem~\ref{thm:peps_uniform_approximate_operator_network} at the given
     expansion data applies
     Theorem~\ref{thm:peps_uniform_prescribed_expansion_bounds_of_le} at the
-    enlarged constants of Definition~\ref{def:peps_compression_constants}.
+    enlarged constants of Definition~\ref{def:peps_compression_constants}, with
+    the coefficient-sum bound $B=(1+(C_S)_+)L^s\ge1$. Individual coefficients
+    of modulus at most $C_CL^v$ in lists of at most $C_KL^u$ monomials have
+    absolute sum at most $(C_K)_+(C_C)_+L^{u+v}$, which gives the termwise form.
 \end{proof}
 
 \begin{theorem}[Uniform operator networks from approximate original gate expansions]

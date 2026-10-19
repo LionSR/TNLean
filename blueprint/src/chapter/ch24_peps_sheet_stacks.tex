@@ -621,16 +621,17 @@ no holes, this is the normalization of $\Omega$.
         \item Each change of the schedule is a bounded change from the reference
               vector of its stage to that of the next stage, with participants
               used by the event of the change, at most $r$ pair effects and at most
-              $r$ pair sources in each monomial, at most $K\le CL^{k'}$ monomials
-              and coefficient sum, and error at most $CL^{-20}$.
+              $r$ pair sources in each monomial, at most $K\le C_KL^{k'}$ monomials
+              and coefficient sum, and error at most $C_EL^{-20}$.
         \item At the end of the schedule the main frame is read by the unit-square
               parties and has trivial holes, every hole of the other sheets
               satisfies the frame constraint at accuracy $L^{-60}$, and the other
-              sheets carry at most $CL^3$ holes.
+              sheets carry at most $C_EL^3$ holes.
     \end{enumerate}
-    If $C\ge5042$, the private initialization, the changes of the schedule and the
+    If $C_N\ge5042$, the private initialization, the changes of the schedule and the
     final regrouping form a protocol with the assembly bounds of
-    Definition~\ref{def:peps_dyadic_protocol} for the constants $C$,
+    Definition~\ref{def:peps_dyadic_protocol} for the count constant $C_N$, the
+    expansion constant $C_K$, the error constant $C_E$, and the constants
     $b=64\cdot189$, $k'$ and $r$, including the bound $r$ on the pair sources
     of each monomial (\texttt{06-geometry.tex}, lines 12--53 and 572--681). This is not
     Proposition~\ref{prop:peps_dyadic_protocol}: the frames along the schedule are
@@ -1111,9 +1112,10 @@ no holes, this is the normalization of $\Omega$.
     monomials and coefficient sum, error at most $(2b+1)L^{-20}$, and
     participants used by the repainting. Suppose also that the frozen frames
     satisfy the frame constraint at accuracy $L^{-60}$ and together carry at
-    most $C_1L^3$ holes. If $5042\le C_1$, $K\le C_1L^{k'}$ and $2b+1\le C_1$,
+    most $C_EL^3$ holes. If $5042\le C_N$, $K\le C_KL^{k'}$ and $2b+1\le C_E$,
     there is a protocol with the assembly bounds of
-    Definition~\ref{def:peps_dyadic_protocol} for the constants $C_1$,
+    Definition~\ref{def:peps_dyadic_protocol} for the count constant $C_N$, the
+    expansion constant $C_K$, the error constant $C_E$, and the constants
     $64\cdot189$, $k'$ and $2b$, including the bound $2b$ on the pair sources
     of each monomial. This is not
     Proposition~\ref{prop:peps_dyadic_protocol}: the large-scale repaintings are
@@ -3441,6 +3443,8 @@ no holes, this is the normalization of $\Omega$.
 \begin{theorem}[The dyadic distribution protocol from the patch bound]
     \label{thm:peps_protocol_from_angular_and_patch_bounds}
     \lean{TNLean.PEPS.Approximation.largeSizeDyadicProtocolConsequences_of_adaptivePatchConstraint,
+        TNLean.PEPS.Approximation.largeSizeDyadicProtocol_of_le_of_adaptivePatchConstraint,
+        TNLean.PEPS.Approximation.largeSizeDyadicProtocolBounds_of_adaptivePatchConstraint,
         TNLean.PEPS.Approximation.HierarchySquare.lt_of_eq_pow,
         TNLean.PEPS.Approximation.protocolSquareParty,
         TNLean.PEPS.Approximation.protocolSquareParty_injective,
@@ -3458,9 +3462,12 @@ no holes, this is the normalization of $\Omega$.
     energy $E_0$ and gapped ground vector $\Omega$ with gap $\Delta$, there
     exist a finite party type and a dyadic distribution protocol with the
     assembly bounds $(C,b,\kappa,r)$ of
-    Definition~\ref{def:peps_dyadic_protocol}; with the patch constraint
-    proved, this gives Proposition~\ref{prop:peps_dyadic_protocol}
-    (\texttt{06-geometry.tex}, lines 12--53 and 559--681).
+    Definition~\ref{def:peps_dyadic_protocol} at $C_N=C_K=C_E=C$; with the patch
+    constraint proved, this gives Proposition~\ref{prop:peps_dyadic_protocol}
+    (\texttt{06-geometry.tex}, lines 12--53 and 559--681). More precisely, the
+    count, expansion and error constants may be taken as in
+    Theorem~\ref{thm:peps_dyadic_protocol_explicit_constants}, and $C$ is the
+    largest of the three.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -3487,8 +3494,11 @@ no holes, this is the normalization of $\Omega$.
     direct repaintings, the clearance $a=a_0/2$, the information scale $D$
     of Proposition~3.4 at that clearance, enlarged to at least $1$, and
     $B_0=K_0D$; Proposition~4.1 then supplies the patch constants. Choose
-    the fixed bounds $C,b,\kappa,r,L_0$ from these constants, before $L$
-    and the Hamiltonian. For $L\ge\max(2,L_0)$ take the dyadic depth
+    the count constant $C_N\ge5042$, the expansion constant $C_K\ge G$, the
+    prefactor of the small-patch rewrites, the error constant
+    $C_E\ge\max\{10080,2b_{\rm pat}+1\}$, where $b_{\rm pat}$ bounds the patches
+    of one rewrite, and $\kappa,r,L_0$ from these constants, before $L$ and the
+    Hamiltonian. For $L\ge\max(2,L_0)$ take the dyadic depth
     $d=\lceil\log_2L\rceil$ and padded side $N=2^d$, so that $L\le N<2L$.
     Every aligned square of $[0,N]^2$ of side $2^j$, including the root
     square, then has $j\le d$ and block indices below $2^{d-j}$, so it is a

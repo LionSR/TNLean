@@ -46,6 +46,18 @@ abstracted — record why, so it is not re-proposed).
   opens with the single line `obtain ⟨C, N, Ca, Na, hcol, hamp⟩ :=
   exists_sublinearCollarBoundAt_amplificationBoundAt hΔ hcol`, replacing three lines.
 
+### Real initial-box scale exceeds one — promoted (2026-10-18)
+
+- **Pattern:** cast `1 < initialBoxScale q R J Δ` from the natural bound
+  `sixteen_le_initialBoxScale` to obtain positivity of its real logarithm.
+- **Seen:** Three occurrences across `InitialBoxEstimate.lean`
+  (`initialBoxExponent_pos_and_lt_one`) and `InitialExponentGain.lean`
+  (`one_sub_initialBoxExponent_eq`, `initialBoxExponent_gain_bounds`).
+- **Abstraction:** `TNLean.PEPS.AreaLaw.one_lt_initialBoxScale` in
+  `TNLean/PEPS/AreaLaw/InitialBoxEstimate.lean`, beside `sixteen_le_initialBoxScale`.
+- **Notes:** All three call sites use the shared real-valued bound. The helper
+  retains explicit `q, R, J, Δ` parameters and requires no additional hypotheses.
+
 ### Unit logarithm from a threshold at least three — promoted (2026-10-18)
 
 - **Pattern:**
