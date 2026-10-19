@@ -28,6 +28,8 @@ The numerical estimates are independent formalizations; no upstream Lean proof
 text is reused.
 -/
 
+open TNLean.Lattice
+
 namespace TNLean.PEPS.AreaLaw
 
 /-- The initial exponent controls all sufficiently large actual rounded collars,

@@ -115,13 +115,13 @@ the composite is
 in \path{TNLean/PEPS/Approximation/DyadicProtocolPatchApproximation.lean}.}
 The restriction recorded in this note is therefore resolved.
 
-Two separate restrictions remain on the path to Theorem~1.1 and are recorded
-in their own notes. The protocol is shown to satisfy only the consequences of
-Proposition~7.1 used in Section~8, not the full
-proposition (\path{docs/paper-gaps/polypeps_prop71_consequences_interface.tex}); none of the
-omitted clauses enters the four routing properties. Theorem~1.1 is also proved
-from the adaptive patch constraint of Proposition~4.1, or from the square
-entropy area law, taken as a hypothesis; this does not concern Lemma~8.2.
+The surrounding results on the path to Theorem~1.1 hold without further
+hypotheses. The adaptive patch constraint of Proposition~4.1 is
+proved;\footnote{\leanid{TNLean.PEPS.Approximation.adaptivePatchConstraint}.}
+Theorem~1.1 is proved without
+hypotheses;\footnote{\leanid{TNLean.PEPS.Approximation.polynomialPEPSApproximation}.}
+and every clause of Proposition~7.1 is carried by the formal distribution
+protocol (\path{docs/paper-gaps/polypeps_prop71_consequences_interface.tex}).
 
 \bibliographystyle{alpha}
 \bibliography{references}

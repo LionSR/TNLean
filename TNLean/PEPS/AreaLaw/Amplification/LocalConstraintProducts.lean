@@ -43,6 +43,7 @@ Independently formalized from the manuscript; no upstream Lean text is reused.
 
 open Matrix MeasureTheory QuantumCircuit
 open scoped Kronecker NNReal Matrix.Norms.L2Operator MatrixOrder ComplexOrder
+open TNLean.Lattice
 
 namespace TNLean.PEPS.AreaLaw
 

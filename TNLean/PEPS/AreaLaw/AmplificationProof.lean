@@ -42,8 +42,12 @@ the output bound, with `K = 4(M + 2)`.
 ## Main statements
 
 * `TNLean.PEPS.AreaLaw.amplificationBound`: Proposition 10.2.
+* `TNLean.PEPS.AreaLaw.amplificationBound_of_locality`: Proposition 10.2 with the constant
+  `amplificationConstant` and the threshold `amplificationThreshold`, explicit in
+  `q, R, J, Δ, C₀, M` and the filter-locality constants `C₃, c₃` of the positive constraints.
 * `TNLean.PEPS.AreaLaw.uniformAreaLaw_of_collar_twoFamilies`: the uniform area law from
-  Propositions 9.6 and 11.2 alone. This is conditional on those two propositions.
+  Propositions 9.6 and 11.2 alone, taken as hypotheses. Both are proved, and
+  `uniformAreaLaw` is the unconditional Theorem 1.1.
 
 ## References
 
@@ -58,6 +62,7 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 
 open Matrix MeasureTheory SpectralFilter QuantumCircuit
 open scoped Kronecker NNReal ComplexOrder MatrixOrder InnerProductSpace Matrix.Norms.L2Operator
+open TNLean.Lattice
 
 namespace TNLean.PEPS.AreaLaw
 
@@ -93,20 +98,147 @@ private theorem unitary_error_le {ε : ℝ} (h0 : 0 ≤ ε) (h1 : ε ≤ 1) :
     exact Real.sqrt_le_sqrt (by nlinarith)
   nlinarith
 
-/-- **Proposition 10.2** (`prop:amplification`, `09-amplification.tex` lines 261–296, proof at
-lines 298–576), for the Hamiltonian parameters `q, R, J` and every gap `Δ > 0`. Fix `C₀ > 0`
-and an integer `M ≥ 1`. Beyond a threshold chosen before the domain,
-the Hamiltonian, the cut and the target, the collar hypotheses give an integer radius
-`r ≤ C_M n^((1-ε)/α)` such that every part of `X = A ∩ T` has mutual information at most
-`C_M n^(-M)` with every set avoiding `N_{2r}(S₀)`, and `N_{2r}(S₀) ⊆ A` under the cut clearance
-`dist_∞(T, Z) > L + n^β`. -/
-theorem amplificationBound {q R : ℕ} {J Δ : ℝ} (hΔ : 0 < Δ) : AmplificationBound q R J Δ := by
-  apply amplificationBound_of_radius_output
-  intro C₀ hC₀ M hM
+/-- The spectral gap `g_a = Δ / c_*` of the positive-constraint Hamiltonian `∑ᵢ kᵢ` at the
+power `p = 10⁶`, with `c_* = positiveNormalization p (Δ / 2) J = max 1 (J (‖f_{p,Δ/2}‖₁ + 1))`.
+It is linear in `Δ` through the numerator and decays like `1 / J` once `J (‖f‖₁ + 1) ≥ 1`; the
+filter norm `‖f_{p,Δ/2}‖₁` carries the remaining `Δ` dependence. Source:
+`eq:amplification-excited-decay`, `09-amplification.tex`, lines 237–253. -/
+noncomputable def amplificationGap (J Δ : ℝ) : ℝ :=
+  Δ / positiveNormalization Exponents.amplificationPower (Δ / 2) J
+
+/-- The common decay rate `c = min(c_t, γ)` of the truncation and omission estimates, with
+`c_t = c₃ / 2` and `γ = latticeOmissionExponent c₃ p` at `p = 10⁶`. Here `c₃` is the
+filter-locality rate of the positive constraints, which depends on `J` and `Δ` (through the
+localization velocity `localizationVelocity R v_R (μ_R J)` and the filter width `Δ / 2`).
+Source: `09-amplification.tex`, lines 42–72 and 466–476. -/
+noncomputable def amplificationDecayRate (c₃ : ℝ) : ℝ :=
+  min (c₃ / 2) (latticeOmissionExponent c₃ Exponents.amplificationPower)
+
+/-- The common prefactor `C_g = C_t + A_o` of the truncation and omission estimates, with
+`C_t = constraintWordTruncationPrefactor μ_R C₃ = 2 μ_R √C₃`, `μ_R = 2^{2R(R+1)}`, and
+`A_o = latticeOmissionPrefactor R C₃ c₃ p` at `p = 10⁶`. Source: `09-amplification.tex`,
+lines 42–72 and 466–476. -/
+noncomputable def amplificationPrefactor (R : ℕ) (C₃ c₃ : ℝ) : ℝ :=
+  constraintWordTruncationPrefactor ((2 ^ ((1 + 2 * R * (R + 1)) - 1) : ℕ) : ℝ) C₃ +
+    latticeOmissionPrefactor R C₃ c₃ Exponents.amplificationPower
+
+/-- The constant `C₂` of Proposition 10.2 at the integer `M`, for the filter-locality constants
+`C₃, c₃` of the positive constraints:
+`C₂ = max(C_rad, 8 √9 (1 + C₀ log q))`, where `K = 4 (M + 2)`, `α = p / (p + 1)` with
+`p = 10⁶`, `ε = 10⁻⁵`, `g_a = amplificationGap J Δ`, `c = amplificationDecayRate c₃`,
+`v_o = latticeOmissionRate R C₃ c₃ p`, `C' = amplificationRadiusConstant g_a v_o c
+= (g_a / 2 + 2 v_o + 12) / c` and `C_rad = amplificationRadiusCoefficient g_a C' C₀ α ε K`.
+The first term bounds the radius (`eq:amplification-radius`); through the factor `6 / g_a` of
+the clock time it behaves like `g_a^{-1/α}` as `g_a → 0`, so it carries the `J / Δ` dependence
+of the gap, together with the `J`- and `Δ`-dependence of `v_o` and `c` through `C₃, c₃`. The
+second term bounds the output information (`eq:amplification-output`) and is independent of
+`J` and `Δ`. Source: `09-amplification.tex`, lines 453–499 and 541–569. -/
+noncomputable def amplificationConstant (q R : ℕ) (J Δ C₀ C₃ c₃ : ℝ) (M : ℕ) : ℝ :=
+  max (amplificationRadiusCoefficient (amplificationGap J Δ)
+      (amplificationRadiusConstant (amplificationGap J Δ)
+        (latticeOmissionRate R C₃ c₃ Exponents.amplificationPower) (amplificationDecayRate c₃))
+      C₀ (kernelExponent Exponents.amplificationPower) (Exponents.amplificationEpsilon : ℝ)
+      (4 * (M + 2)))
+    (8 * √9 * (1 + C₀ * Real.log q))
+
+/-- The threshold `N₂ = max(N_g, N_t)` of the radius and output bounds of Proposition 10.2 at
+the integer `M`, for the filter-locality constants `C₃, c₃`: `N_g = goodRealizationThreshold
+C_g C₀ c α` selects a good clock realization, with `C_g = amplificationPrefactor R C₃ c₃` and
+`c = amplificationDecayRate c₃`, and `N_t = typicalProjectionThreshold q R J Δ C₀ K`,
+`K = 4 (M + 2)`, makes the three typical projections fail with probability at most `n^{-2K}`.
+The threshold `N_t` depends on `J / Δ` through the rate `typicalFailureRate`, which carries
+the factor `(1 + J / Δ)^{-1/2}`; `N_g` depends on `J` and `Δ` only through `C₃, c₃`. The cut
+clearance of Proposition 10.2 needs in addition `n ≥ Exponents.collarRadiusThreshold C₂ 1`.
+Source: `09-amplification.tex`, lines 304–322 and 453–499. -/
+noncomputable def amplificationThreshold (q R : ℕ) (J Δ C₀ C₃ c₃ : ℝ) (M : ℕ) : ℕ :=
+  max (goodRealizationThreshold (amplificationPrefactor R C₃ c₃) C₀ (amplificationDecayRate c₃)
+      (kernelExponent Exponents.amplificationPower))
+    (typicalProjectionThreshold q R J Δ C₀ (4 * (M + 2)))
+
+/-- The constant of Proposition 10.2 is nonnegative. -/
+theorem amplificationConstant_nonneg (q R : ℕ) (J Δ : ℝ) {C₀ : ℝ} (hC₀ : 0 ≤ C₀) (C₃ c₃ : ℝ)
+    (M : ℕ) : 0 ≤ amplificationConstant q R J Δ C₀ C₃ c₃ M :=
+  le_max_of_le_right (by have := Real.log_natCast_nonneg q; positivity)
+
+/-- **Proposition 10.2 with named constants** (`prop:amplification`, `09-amplification.tex`
+lines 261–296, proof at lines 298–576), for the Hamiltonian parameters `q, R, J`, a gap
+`Δ > 0`, `C₀ > 0` and an integer `M`. Let `C₃ ≥ 0`, `c₃ > 0` be the constants of the
+filter-locality tail of the positive constraints, in the form of
+`latticePositiveConstraints_of_locality`. Then the conclusion of `AmplificationBound` holds
+with the constant `C₂ = amplificationConstant q R J Δ C₀ C₃ c₃ M` and the threshold
+`max N₂ (Exponents.collarRadiusThreshold C₂ 1)`, `N₂ = amplificationThreshold q R J Δ C₀ C₃ c₃
+M`. At the named constants `C₃ = latticePositiveConstraintConst R J Δ p` and
+`c₃ = latticePositiveConstraintRate R J Δ p`, `p = 10⁶`, this is
+`amplificationBound_explicit`. -/
+theorem amplificationBound_of_locality {q R : ℕ} {J Δ C₀ C₃ c₃ : ℝ} (hΔ : 0 < Δ)
+    (hC₀ : 0 < C₀) (hC₃ : 0 ≤ C₃) (hc₃ : 0 < c₃)
+    (htail : ∀ {n : Type} [Fintype n] [DecidableEq n]
+      {H : Matrix n n ℂ} {Ω : EuclideanSpace ℂ n} {h : Matrix n n ℂ},
+      H.IsHermitian → ‖Ω‖ = 1 → h.IsHermitian → ‖h‖ ≤ J →
+      ∀ (L : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ), (∀ X, ‖L X‖ ≤ ‖X‖) → L 1 = 1 →
+      (∀ X, X.IsHermitian → (L X).IsHermitian) →
+      L (CFC.abs (L (centeredFilter Exponents.amplificationPower (Δ / 2) H Ω h))) =
+        CFC.abs (L (centeredFilter Exponents.amplificationPower (Δ / 2) H Ω h)) →
+      ∀ {l : ℝ}, 0 ≤ l →
+      (∀ t : ℝ, ‖Matrix.hermitianUnitaryPath H t * h * Matrix.hermitianUnitaryPath H (-t) -
+          L (Matrix.hermitianUnitaryPath H t * h * Matrix.hermitianUnitaryPath H (-t))‖ ≤
+        ‖h‖ * min 2 (localizationPrefactor R 2 2 * Real.exp (localizationVelocity R
+          (1 + 2 * R * (R + 1)) (((2 ^ ((1 + 2 * R * (R + 1)) - 1) : ℕ) : ℝ) * J) * |t| -
+            1 / 2 * l))) →
+      ‖positiveConstraint (positiveNormalization Exponents.amplificationPower (Δ / 2) J)
+          (centeredFilter Exponents.amplificationPower (Δ / 2) H Ω h) -
+          L (positiveConstraint (positiveNormalization Exponents.amplificationPower (Δ / 2) J)
+            (centeredFilter Exponents.amplificationPower (Δ / 2) H Ω h))‖ ≤
+        C₃ * Real.exp (-(c₃ * l ^ kernelExponent Exponents.amplificationPower)))
+    (M : ℕ) :
+    ∀ n : ℕ, 2 ≤ n → max (amplificationThreshold q R J Δ C₀ C₃ c₃ M)
+        (Exponents.collarRadiusThreshold (amplificationConstant q R J Δ C₀ C₃ c₃ M) 1) ≤ n →
+      ∀ Λ : Finset (ℤ × ℤ), ∀ h : LocalHamiltonian Λ q R J, ∀ E₀ : ℝ,
+        ∀ Ω : StateSpace Λ q, IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+          ∀ (A : Finset (Site Λ)) (T : Finset (ℤ × ℤ)),
+            ((A.filter fun x ↦ x.val ∈ ambientDilation T
+                ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊).card : ℝ) ≤
+              C₀ * (n : ℝ) ^ 2 →
+            ((edgeBoundary Λ (A.filter fun x ↦ x.val ∈ T)).card : ℝ) ≤ C₀ * n →
+            ((edgeBoundary Λ ((A.filter fun x ↦ x.val ∈ ambientDilation T
+                ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊) \
+                A.filter fun x ↦ x.val ∈ T)).card : ℝ) ≤ C₀ * n →
+            ((edgeBoundary Λ (A.filter fun x ↦ x.val ∈ ambientDilation T
+                ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)).card : ℝ) ≤
+              C₀ * n →
+            FiniteProduct.mutualInformation (fun _ : Site Λ ↦ Fin q) Ω
+                (A.filter fun x ↦ x.val ∈ T)
+                (A.filter fun x ↦ x.val ∈ ambientDilation T
+                  ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)ᶜ ≤
+              C₀ * (n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ)) →
+            ∃ r : ℕ, (r : ℝ) ≤ amplificationConstant q R J Δ C₀ C₃ c₃ M *
+                (n : ℝ) ^ (Exponents.radiusExponent : ℝ) ∧
+              (∀ X ⊆ A.filter (fun x ↦ x.val ∈ T), ∀ Jset : Finset (Site Λ),
+                Disjoint Jset (graphNeighborhood Λ (2 * r)
+                  (A.filter fun x ↦ x.val ∈ ambientDilation T
+                    ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)) →
+                FiniteProduct.mutualInformation (fun _ : Site Λ ↦ Fin q) Ω X Jset ≤
+                  amplificationConstant q R J Δ C₀ C₃ c₃ M * ((n : ℝ) ^ M)⁻¹) ∧
+              ((∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ A,
+                  (⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ : ℝ) +
+                      (n : ℝ) ^ (Exponents.beta : ℝ) <
+                    (Scan.ambientSupDistance t z : ℝ)) →
+                graphNeighborhood Λ (2 * r)
+                    (A.filter fun x ↦ x.val ∈ ambientDilation T
+                      ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊) ⊆ A) := by
+  intro n hn2 hnN Λ h E₀ Ω hgs A T hcard hXcut hYcut hScut hI
+  have hC₂0 := amplificationConstant_nonneg q R J Δ hC₀.le C₃ c₃ M
+  have hcol := fun r hr ↦ graphNeighborhood_collar_subset_of_threshold_le _
+    ((le_max_right _ _).trans hnN) r hr Λ A T
+  replace hnN : amplificationThreshold q R J Δ C₀ C₃ c₃ M ≤ n := (le_max_left _ _).trans hnN
   by_cases hdeg : q = 0 ∨ J < 0
   · -- With no local states, or with a negative interaction bound, a gapped ground state
     -- exists only on the empty domain, where the target is empty.
-    refine ⟨0, 0, fun n _ _ Λ h E₀ Ω hgs A T _ _ _ _ _ => ⟨0, by simp, ?_⟩⟩
+    have h0 : ((0 : ℕ) : ℝ) ≤ amplificationConstant q R J Δ C₀ C₃ c₃ M *
+        (n : ℝ) ^ (Exponents.radiusExponent : ℝ) := by
+      rw [Nat.cast_zero]
+      exact mul_nonneg hC₂0 (by positivity)
+    refine ⟨0, h0, ?_, hcol 0 h0⟩
     intro X' _ Jset _
     obtain ⟨hΩ, -, -⟩ := Matrix.isGappedGroundState_iff.mp hgs
     have hempty : IsEmpty (Site Λ) := by
@@ -128,7 +260,9 @@ theorem amplificationBound {q R : ℕ} {J Δ : ℝ} (hΔ : 0 < Δ) : Amplificati
             exact ⟨SimpleGraph.Walk.nil, Nat.zero_le _⟩⟩
         linarith [h.norm_le ⟨{v}, hadm⟩, norm_nonneg (h.term ⟨{v}, hadm⟩)]
     rw [Finset.eq_empty_of_isEmpty X']
-    simp [FiniteProduct.mutualInformation, FiniteProduct.entropy_empty _ Ω hΩ]
+    calc _ = (0 : ℝ) := by
+          simp [FiniteProduct.mutualInformation, FiniteProduct.entropy_empty _ Ω hΩ]
+      _ ≤ _ := mul_nonneg hC₂0 (by positivity)
   push Not at hdeg
   obtain ⟨hq0, hJ⟩ := hdeg
   have hqpos : 0 < q := Nat.pos_of_ne_zero hq0
@@ -142,9 +276,18 @@ theorem amplificationBound {q R : ℕ} {J Δ : ℝ} (hΔ : 0 < Δ) : Amplificati
   set K := 4 * (M + 2) with hKdef
   have hK1 : 1 ≤ K := by omega
   -- Constants of the local-products lemma, the gap and the scales.
-  obtain ⟨Ct, ct, hCt, hct, htr⟩ := exists_latticeConstraintWord_truncation hpw R hJ hΔ
-  obtain ⟨Ao, vo, γ, hAo, hvo, hγ, hom⟩ := exists_latticeConstraintWord_omission.{0} hpw R hJ hΔ
-  obtain ⟨Cpc, cpc, -, -, hpos⟩ := exists_latticePositiveConstraints hpw R hJ hΔ
+  have hμ : (0 : ℝ) ≤ ((2 ^ ((1 + 2 * R * (R + 1)) - 1) : ℕ) : ℝ) := Nat.cast_nonneg _
+  set Ct := constraintWordTruncationPrefactor ((2 ^ ((1 + 2 * R * (R + 1)) - 1) : ℕ) : ℝ) C₃
+    with hCtdef
+  have hCt : 0 ≤ Ct := constraintWordTruncationPrefactor_nonneg hμ C₃
+  set ct := c₃ / 2 with hctdef
+  have hct : 0 < ct := half_pos hc₃
+  set Ao := latticeOmissionPrefactor R C₃ c₃ pw with hAodef
+  have hAo : 0 ≤ Ao := channelOmissionPrefactor_nonneg hμ C₃ 2 c₃ _
+  set vo := latticeOmissionRate R C₃ c₃ pw with hvodef
+  have hvo : 0 < vo := channelOmissionRate_pos hμ C₃ 2 c₃ _
+  set γ := latticeOmissionExponent c₃ pw with hγdef
+  have hγ : 0 < γ := channelOmissionExponent_pos hc₃ _
   set cs := positiveNormalization pw (Δ / 2) J with hcsdef
   have hcs : 0 < cs := positiveNormalization_pos pw _ J
   set g := Δ / cs with hgdef
@@ -153,16 +296,16 @@ theorem amplificationBound {q R : ℕ} {J Δ : ℝ} (hΔ : 0 < Δ) : Amplificati
   have hc : 0 < c := lt_min hct hγ
   set Cg := Ct + Ao with hCgdef
   have hCg : 0 ≤ Cg := add_nonneg hCt hAo
-  obtain ⟨C', hC', Ng, hNg2, hgood⟩ :=
-    exists_good_realization.{0} (C₀ := C₀) hg hvo.le hc hCg hC₀.le hα hK1
-  obtain ⟨Nt, hNt1, hNt⟩ := exists_typicalProjectors_three_cuts (J := J) hq R hJ hΔ hC₀.le K
-  obtain ⟨Crad, hCrad, hrad⟩ := exists_amplificationRadius_le (ε := Exponents.amplificationEpsilon)
-    hg hC'.le hC₀.le hα (by norm_num [Exponents.amplificationEpsilon])
-    (by norm_num [Exponents.amplificationEpsilon]) K
+  set C' := amplificationRadiusConstant g vo c with hC'def
+  have hC' : 0 ≤ C' := by rw [hC'def, amplificationRadiusConstant]; positivity
   set C₂ := C₀ * Real.log q with hC₂def
   have hC₂ : 0 ≤ C₂ := mul_nonneg hC₀.le (Real.log_nonneg (by exact_mod_cast hq))
-  refine ⟨max Crad (8 * √9 * (1 + C₂)), max Ng Nt, ?_⟩
-  intro n hn2 hnN Λ h E₀ Ω hgs A T hcard hXcut hYcut hScut hI
+  have hNg : goodRealizationThreshold Cg C₀ c α ≤ n := (le_max_left _ _).trans hnN
+  have hNt : typicalProjectionThreshold q R J Δ C₀ K ≤ n := (le_max_right _ _).trans hnN
+  have hC₂eq : amplificationConstant q R J Δ C₀ C₃ c₃ M =
+      max (amplificationRadiusCoefficient g C' C₀ α (Exponents.amplificationEpsilon : ℝ) K)
+        (8 * √9 * (1 + C₂)) := rfl
+  rw [hC₂eq]
   obtain ⟨hΩ, -, -⟩ := Matrix.isGappedGroundState_iff.mp hgs
   have hn1 : 1 ≤ n := by omega
   have hn0 : (0 : ℝ) < n := by exact_mod_cast hn1
@@ -194,8 +337,12 @@ theorem amplificationBound {q R : ℕ} {J Δ : ℝ} (hΔ : 0 < Δ) : Amplificati
   set r := amplificationRadius C' α t K n with hrdef
   set M₀ := Real.exp ((I + 3 * w) / 2) with hM₀def
   have hM₀ : 1 ≤ M₀ := Real.one_le_exp (by positivity)
-  refine ⟨r, ?_, ?_⟩
-  · have hr := hrad n hn1 I hI0 hII
+  have hr : (r : ℝ) ≤ max (amplificationRadiusCoefficient g C' C₀ α
+      (Exponents.amplificationEpsilon : ℝ) K) (8 * √9 * (1 + C₂)) *
+        (n : ℝ) ^ (Exponents.radiusExponent : ℝ) := by
+    have hr := amplificationRadius_le_coefficient_mul_rpow hg hC' hC₀.le hα
+      (by norm_num [Exponents.amplificationEpsilon]) (by norm_num [Exponents.amplificationEpsilon])
+      K n hn1 I hI0 hII
     have hexp : ((Exponents.radiusExponent : ℚ) : ℝ) =
         (1 - (Exponents.amplificationEpsilon : ℝ)) / α := by
       simp only [Exponents.radiusExponent, Exponents.alpha, hαdef, kernelExponent, hpwdef]
@@ -203,9 +350,11 @@ theorem amplificationBound {q R : ℕ} {J Δ : ℝ} (hΔ : 0 < Δ) : Amplificati
       ring
     rw [hexp]
     exact hr.trans (mul_le_mul_of_nonneg_right (le_max_left _ _) (by positivity))
+  refine ⟨r, hr, ?_, hcol r hr⟩
   intro X' hX' Jset hJset
   -- The typical projections and the restoring operator, with the ancillas as spectators.
-  have hfail := hNt n ((le_max_right _ _).trans hnN) Λ h E₀ Ω hgs X Y (X ∪ Y) hXcut hYcut
+  have hfail := typicalProjectors_three_cuts_of_threshold_le hq R hJ hΔ hC₀.le K n hNt Λ h E₀ Ω
+    hgs X Y (X ∪ Y) hXcut hYcut
     (by rw [hXYS]; exact hScut)
   let x₀ : RegionalConfiguration q X := fun _ => 0
   let blank : RegionalConfiguration q X → ℂ := fun x => if x = x₀ then 1 else 0
@@ -251,7 +400,7 @@ theorem amplificationBound {q R : ℕ} {J Δ : ℝ} (hΔ : 0 < Δ) : Amplificati
   have ha : ∀ Z, a Z ∈ Z.1 := fun Z => Z.2.1.choose_spec
   let k := fun i : AdmissibleSupport Λ R =>
     positiveConstraint cs (centeredFilter pw (Δ / 2) h.operator Ω (h.term i))
-  obtain ⟨-, hk, -⟩ := hpos Λ h a ha E₀ Ω hgs
+  obtain ⟨-, hk, -⟩ := latticePositiveConstraints_of_locality hpw R hJ hΔ htail Λ h a ha E₀ Ω hgs
   have hk : ∀ i, 0 ≤ k i ∧ k i ≤ 1 ∧ k i *ᵥ WithLp.ofLp Ω = 0 := hk
   let Pr := fun i : AdmissibleSupport Λ R => a i ∈ graphNeighborhood Λ r S₀
   let tt : ℝ≥0 := ⟨t, ht0⟩
@@ -313,11 +462,14 @@ theorem amplificationBound {q R : ℕ} {J Δ : ℝ} (hΔ : 0 < Δ) : Amplificati
     hgs (WithLp.toLp 2 ζ) tt
   have hXint : Integrable (fun u => Xrv u ^ 2) μ := hXint
   have hXle : (∫ u, Xrv u ^ 2 ∂μ) ≤ Real.exp (-(Δ / cs) * t) * ‖ξe‖ ^ 2 := hXle
-  obtain ⟨hYint, hYle⟩ := hom Λ h a ha E₀ Ω hgs _ S₀ Bp hBblocks ξb hξb r tt
+  obtain ⟨hYint, hYle⟩ := latticeConstraintWord_omission_of_positiveConstraints
+    hpw R hC₃ hc₃ (latticePositiveConstraints_of_locality hpw R hJ hΔ htail) Λ h a ha E₀ Ω hgs
+    _ S₀ Bp hBblocks ξb hξb r tt
   have hYint : Integrable Yrv μ := hYint
   have hYle : (∫ u, Yrv u ∂μ) ≤ Ao * t * S₀.card * ‖Bp‖ *
       Real.exp (vo * t - γ * (r : ℝ) ^ α) := hYle
-  obtain ⟨hZint, hZle, hLt⟩ := htr Λ h a ha E₀ Ω hgs S₀ r tt
+  obtain ⟨hZint, hZle, hLt⟩ := latticeConstraintWord_truncation_of_positiveConstraints
+    R hC₃ (latticePositiveConstraints_of_locality hpw R hJ hΔ htail) Λ h a ha E₀ Ω hgs S₀ r tt
   have hZint : Integrable (fun u => ‖Dret u - Lt u‖) μ := hZint
   have hZle : (∫ u, ‖Dret u - Lt u‖ ∂μ) ≤ Ct * t * S₀.card * (1 + (r : ℝ)) ^ 2 *
       Real.exp (-(ct * (r : ℝ) ^ α)) := hZle
@@ -327,8 +479,9 @@ theorem amplificationBound {q R : ℕ} {J Δ : ℝ} (hΔ : 0 < Δ) : Amplificati
   have hrα : 0 ≤ (r : ℝ) ^ α := Real.rpow_nonneg (Nat.cast_nonneg r) α
   have hS0 : (0 : ℝ) ≤ S₀.card := Nat.cast_nonneg _
   have hM₀0 : 0 ≤ M₀ := (Real.exp_pos _).le
-  obtain ⟨u0, hXu, hYu, hZu⟩ := hgood n ((le_max_left _ _).trans hnN) I w hI0 hw0 S₀.card
-    hcard μ Xrv Yrv Zrv hXint (Filter.Eventually.of_forall fun u => norm_nonneg _) hYint
+  obtain ⟨u0, hXu, hYu, hZu⟩ := good_realization_of_threshold_le hg hvo.le hc hCg hC₀.le hα hK1
+    n hNg I w hI0 hw0 S₀.card hcard μ Xrv Yrv Zrv hXint
+    (Filter.Eventually.of_forall fun u => norm_nonneg _) hYint
     (Filter.Eventually.of_forall fun u => mul_nonneg hM₀0 (norm_nonneg _))
     (hZint.const_mul M₀)
     (by
@@ -433,6 +586,90 @@ theorem amplificationBound {q R : ℕ} {J Δ : ℝ} (hΔ : 0 < Δ) : Amplificati
   refine (mutualInformation_le_of_ancilla_unitary hΩ hXY (hXS.trans hS₀N) hJset hblank hblank
     hφ1 hη1 hU₁supp hU₁unit hn1 le_rfl hδ hdim X' hX').trans ?_
   exact mul_le_mul_of_nonneg_right (le_max_right _ _) (by positivity)
+
+/-- The constant `C₂` of Proposition 10.2 at the integer `M`, at the named filter-locality
+constants `C₃ = latticePositiveConstraintConst R J Δ p` and
+`c₃ = latticePositiveConstraintRate R J Δ p` of the positive constraints, `p = 10⁶`
+(`09-amplification.tex`, lines 453–499 and 541–569, with Proposition 4.3, `03-quasilocal.tex`,
+lines 220–334). It depends only on `q, R, J, Δ, C₀, M`. -/
+noncomputable def amplificationConstantExplicit (q R : ℕ) (J Δ C₀ : ℝ) (M : ℕ) : ℝ :=
+  amplificationConstant q R J Δ C₀
+    (latticePositiveConstraintConst R J Δ Exponents.amplificationPower)
+    (latticePositiveConstraintRate R J Δ Exponents.amplificationPower) M
+
+/-- The threshold `N₂` of Proposition 10.2 at the integer `M`, at the named filter-locality
+constants `C₃ = latticePositiveConstraintConst R J Δ p` and
+`c₃ = latticePositiveConstraintRate R J Δ p` of the positive constraints, `p = 10⁶`
+(`09-amplification.tex`, lines 304–322 and 453–499). It depends only on `q, R, J, Δ, C₀, M`. -/
+noncomputable def amplificationThresholdExplicit (q R : ℕ) (J Δ C₀ : ℝ) (M : ℕ) : ℕ :=
+  amplificationThreshold q R J Δ C₀
+    (latticePositiveConstraintConst R J Δ Exponents.amplificationPower)
+    (latticePositiveConstraintRate R J Δ Exponents.amplificationPower) M
+
+/-- **Proposition 10.2 at the named constants** (`prop:amplification`, `09-amplification.tex`
+lines 261–296, proof at lines 298–576), for the Hamiltonian parameters `q, R, J`, a gap
+`Δ > 0`, `C₀ > 0` and an integer `M`. The conclusion of `AmplificationBound` holds with the
+constant `C₂ = amplificationConstantExplicit q R J Δ C₀ M` and the threshold
+`max N₂ (Exponents.collarRadiusThreshold C₂ 1)`, `N₂ = amplificationThresholdExplicit q R J Δ C₀ M`.
+No sign condition on `J` is needed. -/
+theorem amplificationBound_explicit (q R : ℕ) {J Δ C₀ : ℝ} (hΔ : 0 < Δ) (hC₀ : 0 < C₀)
+    (M : ℕ) :
+    ∀ n : ℕ, 2 ≤ n → max (amplificationThresholdExplicit q R J Δ C₀ M)
+        (Exponents.collarRadiusThreshold (amplificationConstantExplicit q R J Δ C₀ M) 1) ≤ n →
+      ∀ Λ : Finset (ℤ × ℤ), ∀ h : LocalHamiltonian Λ q R J, ∀ E₀ : ℝ,
+        ∀ Ω : StateSpace Λ q, IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+          ∀ (A : Finset (Site Λ)) (T : Finset (ℤ × ℤ)),
+            ((A.filter fun x ↦ x.val ∈ ambientDilation T
+                ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊).card : ℝ) ≤
+              C₀ * (n : ℝ) ^ 2 →
+            ((edgeBoundary Λ (A.filter fun x ↦ x.val ∈ T)).card : ℝ) ≤ C₀ * n →
+            ((edgeBoundary Λ ((A.filter fun x ↦ x.val ∈ ambientDilation T
+                ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊) \
+                A.filter fun x ↦ x.val ∈ T)).card : ℝ) ≤ C₀ * n →
+            ((edgeBoundary Λ (A.filter fun x ↦ x.val ∈ ambientDilation T
+                ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)).card : ℝ) ≤
+              C₀ * n →
+            FiniteProduct.mutualInformation (fun _ : Site Λ ↦ Fin q) Ω
+                (A.filter fun x ↦ x.val ∈ T)
+                (A.filter fun x ↦ x.val ∈ ambientDilation T
+                  ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)ᶜ ≤
+              C₀ * (n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ)) →
+            ∃ r : ℕ, (r : ℝ) ≤ amplificationConstantExplicit q R J Δ C₀ M *
+                (n : ℝ) ^ (Exponents.radiusExponent : ℝ) ∧
+              (∀ X ⊆ A.filter (fun x ↦ x.val ∈ T), ∀ Jset : Finset (Site Λ),
+                Disjoint Jset (graphNeighborhood Λ (2 * r)
+                  (A.filter fun x ↦ x.val ∈ ambientDilation T
+                    ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)) →
+                FiniteProduct.mutualInformation (fun _ : Site Λ ↦ Fin q) Ω X Jset ≤
+                  amplificationConstantExplicit q R J Δ C₀ M * ((n : ℝ) ^ M)⁻¹) ∧
+              ((∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ A,
+                  (⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ : ℝ) +
+                      (n : ℝ) ^ (Exponents.beta : ℝ) <
+                    (Scan.ambientSupDistance t z : ℝ)) →
+                graphNeighborhood Λ (2 * r)
+                    (A.filter fun x ↦ x.val ∈ ambientDilation T
+                      ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊) ⊆ A) := by
+  have hpw : 1 ≤ Exponents.amplificationPower := by norm_num [Exponents.amplificationPower]
+  exact amplificationBound_of_locality (q := q) (R := R)
+    (C₃ := latticePositiveConstraintConst R J Δ Exponents.amplificationPower)
+    (c₃ := latticePositiveConstraintRate R J Δ Exponents.amplificationPower) hΔ hC₀
+    (latticePositiveConstraintConst_nonneg R J Δ Exponents.amplificationPower)
+    (latticePositiveConstraintRate_pos hpw R J hΔ)
+    (fun hH hΩ hh hhJ L hcontr hunit hherm hfix _ hl hτ =>
+      norm_latticePositiveConstraint_sub_map_le hpw R hΔ hH hΩ hh hhJ L hcontr hunit hherm hfix
+        hl hτ) M
+
+/-- **Proposition 10.2** (`prop:amplification`, `09-amplification.tex` lines 261–296, proof at
+lines 298–576), for the Hamiltonian parameters `q, R, J` and every gap `Δ > 0`. Fix `C₀ > 0`
+and an integer `M ≥ 1`. Beyond a threshold chosen before the domain,
+the Hamiltonian, the cut and the target, the collar hypotheses give an integer radius
+`r ≤ C_M n^((1-ε)/α)` such that every part of `X = A ∩ T` has mutual information at most
+`C_M n^(-M)` with every set avoiding `N_{2r}(S₀)`, and `N_{2r}(S₀) ⊆ A` under the cut clearance
+`dist_∞(T, Z) > L + n^β`. The constant and the threshold are those of
+`amplificationBound_explicit`. -/
+theorem amplificationBound {q R : ℕ} {J Δ : ℝ} (hΔ : 0 < Δ) : AmplificationBound q R J Δ := by
+  intro C₀ hC₀ M _
+  exact ⟨_, _, amplificationBound_explicit (J := J) q R hΔ hC₀ M⟩
 
 /-- **Theorem 1.1 from Propositions 9.6 and 11.2.** With Proposition 10.2 proved, the uniform
 area law follows from the sublinear collar bound and the two-family decomposition. This is

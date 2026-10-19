@@ -24,6 +24,8 @@ open TNLean.PEPS.AreaLaw TNLean.PEPS.AreaLaw.Scan
 open TensorPower TensorPower.ReplicaTransport
 
 noncomputable section
+open TNLean.Lattice
+
 namespace TNLeanTest.ActualRoundTransport
 
 -- Exact all-round signature; no physical input or geometric premise is replaced by a certificate.

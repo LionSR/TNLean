@@ -54,77 +54,67 @@ theorem exists_final_principalDensity_le_eightNu {C Cl : ℝ} (hC : 0 ≤ C) :
         C * ((n : ℝ) ^ (Exponents.boxError : ℝ) / (m : ℝ) +
           (W / (K : ℝ)) ^ (1 / 4 : ℝ) * Real.log (n : ℝ) ^ Cl) /
             (n : ℝ) ^ (-(Exponents.scannerNu : ℝ)) ≤
-              (n : ℝ) ^ (-(8 * (Exponents.scannerNu : ℝ))) := by
-  let X : ScannerExponents :=
-    { ell := Exponents.scannerEll
-      kappa := Exponents.scannerKappa
-      mu := Exponents.scannerMu
-      nu := Exponents.scannerNu
-      e := Exponents.boxError
-      ell_pos := by norm_num [Exponents.scannerEll]
-      ell_lt_one := by norm_num [Exponents.scannerEll]
-      kappa_pos := by norm_num [Exponents.scannerKappa]
-      kappa_lt_mu := by norm_num [Exponents.scannerKappa, Exponents.scannerMu]
-      mu_lt_one_sub_ell := by norm_num [Exponents.scannerMu, Exponents.scannerEll]
-      nu_pos := by norm_num [Exponents.scannerNu]
-      e_pos := by norm_num [Exponents.boxError]
-      e_lt_one := by norm_num [Exponents.boxError]
-      kappa_le_e := by norm_num [Exponents.scannerKappa, Exponents.boxError] }
-  have hm : X.e - X.mu + X.nu < -(8 * X.nu) := by
-    norm_num [X, Exponents.boxError, Exponents.scannerMu, Exponents.scannerNu]
-  have ha : ((Exponents.scannerOmega : ℝ) - (1 - X.ell - X.mu)) / 4 +
-      X.nu < -(8 * X.nu) := by
-    norm_num [X, Exponents.scannerOmega, Exponents.scannerEll,
-      Exponents.scannerMu, Exponents.scannerNu]
-  exact X.exists_principalDensity_le_rpow (Cl := Cl) hC hm ha
+              (n : ℝ) ^ (-(8 * (Exponents.scannerNu : ℝ))) :=
+  ⟨_, two_le_finalPrincipalDensityThreshold C Cl _, fun _ =>
+    final_principalDensity_le_rpow_of_finalPrincipalDensityThreshold_le hC
+      (by norm_num [Exponents.boxError, Exponents.scannerMu, Exponents.scannerNu])
+      (by norm_num [Exponents.scannerOmega, Exponents.scannerEll, Exponents.scannerMu,
+        Exponents.scannerNu])⟩
 
+/-- The explicit threshold of the final selected-density bound `n^(-8ν)`: the final
+principal-density threshold at rate `8ν` for the coefficient
+`2 · 2 (C₁ + 1) (6 C_e + 13 + 6 log q + 2 C_t)` (`08-scanner.tex`, lines 457–490 and
+839–865). -/
+noncomputable def finalSelectedDensityThreshold (q : ℕ) (Ce C₁ Ct Cl : ℝ) : ℕ :=
+  finalPrincipalDensityThreshold (2 * (2 * (C₁ + 1) * (6 * Ce + 13 + 6 * Real.log q + 2 * Ct)))
+    Cl (8 * Exponents.scannerNu)
 
-/-- The raw actual-selector density budget has the final source power while
-preserving all propositions attached to its original selected point. The size
-threshold precedes every physical scalar and replica remainder; the replica
-threshold is chosen afterward for that fixed physical instance.
-Source: `08-scanner.tex`, lines 457–490 and 839–865. -/
-theorem exists_final_selectedDensity_le_eightNu
+/-- The raw actual-selector density budget has the final source power at every `n` from the
+explicit threshold `finalSelectedDensityThreshold q Ce C₁ Ct Cl` on, while preserving all
+propositions attached to its original selected point. The replica threshold is chosen
+afterward for each fixed physical instance. Source: `08-scanner.tex`, lines 457–490 and
+839–865. -/
+theorem final_selectedDensity_le_eightNu_of_finalSelectedDensityThreshold_le
     {q : ℕ} (hq : 1 ≤ q) (Ce C₁ Ct Cl : ℝ)
-    (hCe : 0 ≤ Ce) (hC : 0 < C₁) (hCt : 0 ≤ Ct) :
-    ∃ N : ℕ, 2 ≤ N ∧ ∀ n : ℕ, N ≤ n →
-      let L := ⌊(n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊
-      let m := ⌊(n : ℝ) ^ (Exponents.scannerMu : ℝ)⌋₊
-      let K := L / (8 * m)
-      let D := ⌈(n : ℝ) ^ (Exponents.scannerKappa : ℝ)⌉₊
-      let e := (Exponents.boxError : ℝ)
-      ∀ W : ℝ, 1 ≤ W → W ≤ (n : ℝ) ^ (Exponents.scannerOmega : ℝ) →
-      let a := W / (K : ℝ)
-      let ε := (n : ℝ) ^ (-(Exponents.scannerNu : ℝ))
-      ∀ St logd z Bsh G : ℝ, 0 < z → 1 - (n : ℝ) ^ (-100 : ℝ) ≤ z →
-        St ≤ Ce * (n : ℝ) ^ (1 + e) + (n : ℝ) ^ (-247 : ℝ) →
-        |logd - St| ≤ (n : ℝ) ^ (3 / 5 : ℝ) - Real.log z →
-        Bsh ≤ Ce * ((n : ℝ) * (L : ℝ) ^ e + n) + (n : ℝ) ^ (-247 : ℝ) →
-        G ≤ Ct * Real.log (n : ℝ) ^ Cl →
-        let Brough := 2 * logd - Real.log z + W *
-          (Bsh / z + (1 + 3 * (n : ℝ) * D * Real.log q))
-        ∀ R : ℕ → ℝ, Tendsto R atTop (𝓝 0) →
-        ∀ {α : Type*} (density : ℕ → α → ℝ → ℝ) (keep : ℕ → α → ℝ → Prop)
-          (p₀ p₁ : ℝ),
-          (∀ᶠ k : ℕ in atTop, ∃ x : α, ∃ p ∈ Set.Icc p₀ p₁,
-            density k x p ≤ (2 * (C₁ + 1) / (W * ((n * m : ℕ) : ℝ) * ε)) *
-              (Brough + ((2 * n * m : ℕ) : ℝ) * G * W * a ^ (1 / 4 : ℝ) + R k) ∧
-                keep k x p) →
-          ∀ᶠ k : ℕ in atTop, ∃ x : α, ∃ p ∈ Set.Icc p₀ p₁,
-            density k x p ≤ (n : ℝ) ^ (-(8 * (Exponents.scannerNu : ℝ))) ∧
-              keep k x p := by
+    (hCe : 0 ≤ Ce) (hC : 0 < C₁) (hCt : 0 ≤ Ct) {n : ℕ}
+    (hthr : finalSelectedDensityThreshold q Ce C₁ Ct Cl ≤ n) :
+    let L := ⌊(n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊
+    let m := ⌊(n : ℝ) ^ (Exponents.scannerMu : ℝ)⌋₊
+    let K := L / (8 * m)
+    let D := ⌈(n : ℝ) ^ (Exponents.scannerKappa : ℝ)⌉₊
+    let e := (Exponents.boxError : ℝ)
+    ∀ W : ℝ, 1 ≤ W → W ≤ (n : ℝ) ^ (Exponents.scannerOmega : ℝ) →
+    let a := W / (K : ℝ)
+    let ε := (n : ℝ) ^ (-(Exponents.scannerNu : ℝ))
+    ∀ St logd z Bsh G : ℝ, 0 < z → 1 - (n : ℝ) ^ (-100 : ℝ) ≤ z →
+      St ≤ Ce * (n : ℝ) ^ (1 + e) + (n : ℝ) ^ (-247 : ℝ) →
+      |logd - St| ≤ (n : ℝ) ^ (3 / 5 : ℝ) - Real.log z →
+      Bsh ≤ Ce * ((n : ℝ) * (L : ℝ) ^ e + n) + (n : ℝ) ^ (-247 : ℝ) →
+      G ≤ Ct * Real.log (n : ℝ) ^ Cl →
+      let Brough := 2 * logd - Real.log z + W *
+        (Bsh / z + (1 + 3 * (n : ℝ) * D * Real.log q))
+      ∀ R : ℕ → ℝ, Tendsto R atTop (𝓝 0) →
+      ∀ {α : Type*} (density : ℕ → α → ℝ → ℝ) (keep : ℕ → α → ℝ → Prop)
+        (p₀ p₁ : ℝ),
+        (∀ᶠ k : ℕ in atTop, ∃ x : α, ∃ p ∈ Set.Icc p₀ p₁,
+          density k x p ≤ (2 * (C₁ + 1) / (W * ((n * m : ℕ) : ℝ) * ε)) *
+            (Brough + ((2 * n * m : ℕ) : ℝ) * G * W * a ^ (1 / 4 : ℝ) + R k) ∧
+              keep k x p) →
+        ∀ᶠ k : ℕ in atTop, ∃ x : α, ∃ p ∈ Set.Icc p₀ p₁,
+          density k x p ≤ (n : ℝ) ^ (-(8 * (Exponents.scannerNu : ℝ))) ∧
+            keep k x p := by
   let Cr := 6 * Ce + 13 + 6 * Real.log q
   let C := 2 * (C₁ + 1) * (Cr + 2 * Ct)
   have hlq : 0 ≤ Real.log (q : ℝ) := Real.log_nonneg (by exact_mod_cast hq)
   have hCr : 0 ≤ Cr := by dsimp only [Cr]; positivity
   have hC0 : 0 ≤ C := by dsimp only [C]; positivity
-  obtain ⟨N, hN, hprincipal⟩ :=
-    exists_final_principalDensity_le_eightNu (C := 2 * C) (Cl := Cl) (by positivity)
-  refine ⟨N, hN, ?_⟩
-  intro n hn L m K D e W hW hWupper a ε St logd z Bsh G hz hmass
+  obtain ⟨hK, hprincipalN⟩ :=
+    final_principalDensity_le_rpow_of_finalPrincipalDensityThreshold_le (C := 2 * C) (Cl := Cl)
+      (by positivity) (by linarith [final_eightNuDensity_margins.1])
+      (by linarith [final_eightNuDensity_margins.2]) hthr
+  have hn2 : 2 ≤ n := (two_le_finalPrincipalDensityThreshold _ _ _).trans hthr
+  intro L m K D e W hW hWupper a ε St logd z Bsh G hz hmass
     hSt hlogd hBsh hG Brough R hR α density keep p₀ p₁ hselected
-  obtain ⟨hK, hprincipalN⟩ := hprincipal n hn
-  have hn2 : 2 ≤ n := hN.trans hn
   have hnpos : (0 : ℝ) < n := by exact_mod_cast (show 0 < n by omega)
   have hn1 : (1 : ℝ) ≤ n := by exact_mod_cast (show 1 ≤ n by omega)
   have hm : 0 < m := by
@@ -181,5 +171,43 @@ theorem exists_final_selectedDensity_le_eightNu
         a ^ (1 / 4 : ℝ) * Real.log (n : ℝ) ^ Cl) / ε + coeff * R k :=
     hQ.trans hbudget
   linarith
+
+/-- The raw actual-selector density budget has the final source power while
+preserving all propositions attached to its original selected point. The size
+threshold precedes every physical scalar and replica remainder; the replica
+threshold is chosen afterward for that fixed physical instance.
+Source: `08-scanner.tex`, lines 457–490 and 839–865. -/
+theorem exists_final_selectedDensity_le_eightNu
+    {q : ℕ} (hq : 1 ≤ q) (Ce C₁ Ct Cl : ℝ)
+    (hCe : 0 ≤ Ce) (hC : 0 < C₁) (hCt : 0 ≤ Ct) :
+    ∃ N : ℕ, 2 ≤ N ∧ ∀ n : ℕ, N ≤ n →
+      let L := ⌊(n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊
+      let m := ⌊(n : ℝ) ^ (Exponents.scannerMu : ℝ)⌋₊
+      let K := L / (8 * m)
+      let D := ⌈(n : ℝ) ^ (Exponents.scannerKappa : ℝ)⌉₊
+      let e := (Exponents.boxError : ℝ)
+      ∀ W : ℝ, 1 ≤ W → W ≤ (n : ℝ) ^ (Exponents.scannerOmega : ℝ) →
+      let a := W / (K : ℝ)
+      let ε := (n : ℝ) ^ (-(Exponents.scannerNu : ℝ))
+      ∀ St logd z Bsh G : ℝ, 0 < z → 1 - (n : ℝ) ^ (-100 : ℝ) ≤ z →
+        St ≤ Ce * (n : ℝ) ^ (1 + e) + (n : ℝ) ^ (-247 : ℝ) →
+        |logd - St| ≤ (n : ℝ) ^ (3 / 5 : ℝ) - Real.log z →
+        Bsh ≤ Ce * ((n : ℝ) * (L : ℝ) ^ e + n) + (n : ℝ) ^ (-247 : ℝ) →
+        G ≤ Ct * Real.log (n : ℝ) ^ Cl →
+        let Brough := 2 * logd - Real.log z + W *
+          (Bsh / z + (1 + 3 * (n : ℝ) * D * Real.log q))
+        ∀ R : ℕ → ℝ, Tendsto R atTop (𝓝 0) →
+        ∀ {α : Type*} (density : ℕ → α → ℝ → ℝ) (keep : ℕ → α → ℝ → Prop)
+          (p₀ p₁ : ℝ),
+          (∀ᶠ k : ℕ in atTop, ∃ x : α, ∃ p ∈ Set.Icc p₀ p₁,
+            density k x p ≤ (2 * (C₁ + 1) / (W * ((n * m : ℕ) : ℝ) * ε)) *
+              (Brough + ((2 * n * m : ℕ) : ℝ) * G * W * a ^ (1 / 4 : ℝ) + R k) ∧
+                keep k x p) →
+          ∀ᶠ k : ℕ in atTop, ∃ x : α, ∃ p ∈ Set.Icc p₀ p₁,
+            density k x p ≤ (n : ℝ) ^ (-(8 * (Exponents.scannerNu : ℝ))) ∧
+              keep k x p :=
+  ⟨_, two_le_finalPrincipalDensityThreshold _ _ _, fun _ =>
+    final_selectedDensity_le_eightNu_of_finalSelectedDensityThreshold_le hq Ce C₁ Ct Cl
+      hCe hC hCt⟩
 
 end TNLean.PEPS.AreaLaw.Scan

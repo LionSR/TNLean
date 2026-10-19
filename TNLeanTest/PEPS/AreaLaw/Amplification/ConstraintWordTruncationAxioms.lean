@@ -17,3 +17,21 @@ info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashC
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms TNLean.PEPS.AreaLaw.exists_latticeConstraintWord_truncation
+
+/--
+info: 'TNLean.PEPS.AreaLaw.latticeConstraintWord_truncation_of_positiveConstraints'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+---
+info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms TNLean.PEPS.AreaLaw.latticeConstraintWord_truncation_of_positiveConstraints
+
+/--
+info: 'TNLean.PEPS.AreaLaw.latticeConstraintWord_truncation_explicit'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+---
+info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms TNLean.PEPS.AreaLaw.latticeConstraintWord_truncation_explicit

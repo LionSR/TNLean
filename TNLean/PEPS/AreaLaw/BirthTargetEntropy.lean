@@ -26,6 +26,7 @@ Independently formalized; no OpenAI Lean proof text is reused.
 -/
 
 open scoped BigOperators
+open TNLean.Lattice
 
 namespace TNLean.PEPS.AreaLaw
 
