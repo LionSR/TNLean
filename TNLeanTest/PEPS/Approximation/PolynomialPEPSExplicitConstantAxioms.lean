@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.PolynomialPEPSExplicitConstant
+import TNLean.PEPS.Approximation.PolynomialPEPSClosedConstant
 import Lean.Util.CollectAxioms
 
 /-!
@@ -20,7 +21,10 @@ run_cmd do
     `TNLean.PEPS.Approximation.dyadicOperatorNetworkAt_of_dyadicProtocolBoundsAt,
     `TNLean.PEPS.Approximation.hasPEPSApproximation_of_dyadicOperatorNetworkAt,
     `TNLean.PEPS.Approximation.polynomialPEPSApproximation_of_largeSizeDyadicOperatorNetwork,
-    `TNLean.PEPS.Approximation.polynomialPEPSApproximation_of_ratios]
+    `TNLean.PEPS.Approximation.polynomialPEPSApproximation_of_ratios,
+    `TNLean.PEPS.Approximation.pepsBondPrefactor_pos,
+    `TNLean.PEPS.Approximation.pepsBondExponent_pos,
+    `TNLean.PEPS.Approximation.polynomialPEPSApproximation_explicit]
   let expected := #[``propext, ``Classical.choice, ``Quot.sound]
   for decl in names do
     unless (← Lean.getEnv).contains decl do
