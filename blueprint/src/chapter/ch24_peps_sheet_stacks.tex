@@ -833,6 +833,7 @@ no holes, this is the normalization of $\Omega$.
         TNLean.PEPS.Approximation.DyadicJunction.inRoot_rootNbr,
         TNLean.PEPS.Approximation.resizeParty,
         TNLean.PEPS.Approximation.eventUses_resizeParty,
+        TNLean.PEPS.Approximation.resize_hasSourceBoundedChange_of_le,
         TNLean.PEPS.Approximation.exists_resize_hasSourceBoundedChange}
     \leanok
     \uses{def:peps_protocol_level_frame, thm:peps_protocol_constants,
@@ -870,8 +871,8 @@ no holes, this is the normalization of $\Omega$.
     monomials and coefficient sum, and error $(2b+1)L^{-20}$, with empty external
     spectator layout and scalar $1$.
 
-    For $0<\epsilon_0\le1/16$ there is $\nu'>0$ such that, for every $0<\nu\le\nu'$,
-    every hierarchy $k$ and every choice of the remaining common data, the following
+    For $0<\epsilon_0\le1/16$, let $\nu'=\min(\epsilon_0,1)/8$. For every
+    $0<\nu\le\nu'$, every hierarchy $k$ and every choice of the remaining common data, the following
     resize has the same bounds. Let $J$ be a junction of the hierarchy of scale
     $1\le j\le k$, put $n=2^{j-1}$, and take any set $A\subseteq\mathbb R^2$. At the
     end of the pass to level $2^j$, give the holes radius $h_n$ at points of $A$ and
@@ -1080,6 +1081,7 @@ no holes, this is the normalization of $\Omega$.
         TNLean.PEPS.Approximation.protocolState,
         TNLean.PEPS.Approximation.IsProtocolConstants.t_pos,
         TNLean.PEPS.Approximation.IsProtocolConstants.hole_le,
+        TNLean.PEPS.Approximation.exists_isDistributionProtocol_of_largeRepaintings_of_le,
         TNLean.PEPS.Approximation.exists_isDistributionProtocol_of_largeRepaintings}
     \leanok
     \uses{def:peps_dyadic_protocol, def:peps_adaptive_patch_constraint,
@@ -1087,8 +1089,8 @@ no holes, this is the normalization of $\Omega$.
         thm:peps_protocol_main_frame_schedule, def:peps_dyadic_protocol_schedule,
         thm:peps_protocol_event_segments, def:peps_circuit_source_bound,
         def:peps_dyadic_protocol_parties, def:peps_frame, thm:peps_protocol_level_events}
-    Fix $0<\epsilon_0\le1/16$. There is a mesh threshold $\nu'>0$ such that for
-    every $0<\nu\le\nu'$, every $k\in\N$, constants of the protocol with an
+    Fix $0<\epsilon_0\le1/16$ and let $\nu'=\min(\epsilon_0,1)/8$. For every
+    $0<\nu\le\nu'$, every $k\in\N$, constants of the protocol with an
     admissible direct-repainting ratio, $q\ge1$, $L\ge2$ with $L\le2^k<2L$,
     $\lVert\Omega\rVert=1$ and patches supplied by the adaptive patch constraint
     with constants $B_0,C,c$ at accuracy $L^{-60}$, the following holds. Put
@@ -1306,7 +1308,8 @@ no holes, this is the normalization of $\Omega$.
 
 \begin{theorem}[A point treatment as a change of a treated sheet]
     \label{thm:peps_protocol_point_treatment_change}
-    \lean{TNLean.PEPS.Approximation.exists_pointTreatment_hasSourceBoundedChange}
+    \lean{TNLean.PEPS.Approximation.pointTreatment_hasSourceBoundedChange_of_le,
+        TNLean.PEPS.Approximation.exists_pointTreatment_hasSourceBoundedChange}
     \leanok
     \uses{def:peps_adaptive_patch_constraint,
         def:peps_dyadic_block_guide,
@@ -1324,8 +1327,8 @@ no holes, this is the normalization of $\Omega$.
         thm:peps_protocol_constants,
         thm:peps_protocol_level_events,
         thm:peps_treated_radius_bounds}
-    Fix $0<\epsilon_0\le1/16$. There is a threshold $\nu'>0$, depending only on $\epsilon_0$,
-    such that the following holds for every $0<\nu\le\nu'$. Choose protocol constants, natural
+    Fix $0<\epsilon_0\le1/16$ and let $\nu'=\min(\epsilon_0,1)/20000$. The following holds for
+    every $0<\nu\le\nu'$. Choose protocol constants, natural
     $L\ge2$ and $q\ge1$, a unit vector $\Omega$, an adaptive supplied-patch family $P$ for
     $\Omega$ with parameters $B_0,C,c$, test exponent $60$ and size $L$, and any label rank.
     Let $R$ be a repaintable square of a hierarchy of any natural depth $k$, at level $j<k$,
@@ -3479,6 +3482,7 @@ no holes, this is the normalization of $\Omega$.
         thm:peps_angular_scale_exists,
         thm:peps_angular_scale_monotonicity,
         thm:peps_dyadic_direct_repainting_constants,
+        lem:peps_dyadic_protocol_mesh_ratio,
         thm:peps_dyadic_padding_bounds,
         thm:peps_dyadic_protocol_schedule_counts,
         thm:peps_protocol_constants,
@@ -3489,9 +3493,9 @@ no holes, this is the normalization of $\Omega$.
         thm:peps_protocol_point_treatment_change}
     The angular information bound of Proposition~3.4 holds by
     Theorem~\ref{thm:peps_angular_information_from_gap}. Fix the constants in
-    the order of the source: $K_0=20$, a small $\epsilon_0$, a mesh ratio
-    $\nu$ below the thresholds of the resizes, the point treatments and the
-    direct repaintings, the clearance $a=a_0/2$, the information scale $D$
+    the order of the source: $K_0=20$, a small $\epsilon_0$, the mesh ratio
+    $\nu$ of Lemma~\ref{lem:peps_dyadic_protocol_mesh_ratio}, below the
+    thresholds of the resizes, the point treatments and the direct repaintings, the clearance $a=a_0/2$, the information scale $D$
     of Proposition~3.4 at that clearance, enlarged to at least $1$, and
     $B_0=K_0D$; Proposition~4.1 then supplies the patch constants. Choose
     the count constant $C_N\ge5042$, the expansion constant $C_K\ge G$, the
