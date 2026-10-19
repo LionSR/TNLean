@@ -282,7 +282,7 @@
 \end{theorem}
 \begin{proof}\leanok
     \uses{def:peps_cell_partition_constants,lem:peps_cell_generation_invariant,
-        thm:peps_cell_generation_count}
+        thm:peps_cell_generation_count,thm:peps_cell_partition_constants_bounds}
     Iterating the recursion of Lemma~\ref{lem:peps_cell_generation_invariant}
     from the chosen cell until the side drops below $u_*$ (for which
     $1000u^{\gamma}\le u$ and $8u^{\gamma}\le u^{\gamma'}$ hold for $u\ge u_*$,
@@ -316,7 +316,7 @@
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_cell_two_family_partition_explicit,
-        def:peps_cell_partition_constants}
+        def:peps_cell_partition_constants,thm:peps_cell_partition_constants_bounds}
     Take $u_*$, $C$ and $K$ from
     Definition~\ref{def:peps_cell_partition_constants} and apply
     Theorem~\ref{thm:peps_cell_two_family_partition_explicit}.
