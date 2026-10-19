@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.ToEuclideanLinApply
 import TNLean.Circuit.RingSeparation
 import TNLean.MPS.Preparation.VarianceOfAverages
 import TNLean.MPS.Preparation.WindowOperatorSupport
@@ -115,14 +116,6 @@ theorem norm_inner_sq_sub_le {n : Type*} [Fintype n] [DecidableEq n]
         add_le_add h2 (mul_le_mul h1 h1 (norm_nonneg _) ((norm_nonneg _).trans h1))
     _ = 2 * M ^ 2 := by ring
 
-/-- Applying the product of two matrices is applying one after the other. -/
-theorem toEuclideanLin_mul_apply {n : Type*} [Fintype n] [DecidableEq n]
-    (X Y : Matrix n n ℂ) (v : EuclideanSpace ℂ n) :
-    Matrix.toEuclideanLin (X * Y) v = Matrix.toEuclideanLin X (Matrix.toEuclideanLin Y v) := by
-  change Matrix.toEuclideanCLM (n := n) (𝕜 := ℂ) (X * Y) v = _
-  rw [map_mul]
-  rfl
-
 /-- The window starting at `k Δ` lies in the ring when `k < n` and `w ≤ Δ`, `n Δ ≤ N`. -/
 theorem window_lt_and_le {w Δ n k : ℕ} (hw : 0 < w) (hwΔ : w ≤ Δ) (hn : n * Δ ≤ N)
     (hk : k < n) : k * Δ < N ∧ k * Δ + w ≤ N := by
@@ -180,7 +173,7 @@ theorem norm_sub_inner_smul_sq_le_of_isPreparedInDepth {T w Δ n : ℕ} (hw : 0 
         (chainWindowOperator_mem_supportedOperators_window (hwin l).1 (hwin l).2 X)
       have hne : l.val - k.val ≠ 0 := by have := Fin.lt_def.mp hkl; omega
       simp only [f, hne, ite_false]
-      rw [← toEuclideanLin_mul_apply, inner_toLp_toEuclideanLin, inner_toLp_toEuclideanLin,
+      rw [← Matrix.toEuclideanLin_mul_apply, inner_toLp_toEuclideanLin, inner_toLp_toEuclideanLin,
         inner_toLp_toEuclideanLin, hfac, sub_self, norm_zero])
   refine hmain.trans ?_
   gcongr

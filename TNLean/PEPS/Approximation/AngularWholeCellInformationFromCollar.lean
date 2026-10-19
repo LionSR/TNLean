@@ -25,6 +25,8 @@ Source: polynomial-PEPS manuscript, Lemma 3.2 and Proposition 3.4,
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
+open TNLean.Lattice
+
 namespace TNLean.PEPS.Approximation
 
 open AngularGrid

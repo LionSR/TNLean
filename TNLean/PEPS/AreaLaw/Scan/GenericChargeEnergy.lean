@@ -23,9 +23,6 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 `08-scanner.tex`, lines 309--329, 492--520 and 693--755, revision
 `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 Original formalization from the manuscript; no upstream Lean proof text reused.
-
-Validation and inherited-dependency scope:
-`docs/paper-gaps/arealaw2d_safe_box_collar_scope.tex`.
 -/
 
 open scoped BigOperators Matrix
@@ -33,9 +30,69 @@ open Filter MeasureTheory Set TensorPower TensorPower.ReplicaTransport Entropy
 
 noncomputable section
 
+open TNLean.Lattice
+
 namespace TNLean.PEPS.AreaLaw.Scan
 
 universe u
+
+/-- The explicit threshold at arbitrary fixed scanner exponents controlling every classical old
+history together with the split-counting margin: the generic form of
+`badOldHistoryThreshold`, the larger of the bad-history threshold and the split-counting
+threshold at `κ` and `μ` (`08-scanner.tex`, lines 309--329 and 492--520). -/
+noncomputable def ScannerExponents.badOldHistoryThreshold (F : ScannerExponents)
+    (Cr C1 Ct : ℝ) (multiplicity : ℕ) (P : ℝ) : ℕ :=
+  max (badHistoryThreshold F.kappa Cr C1 Ct multiplicity P)
+    (splitCountingThreshold Cr F.kappa F.mu)
+
+open Classical in
+/-- At arbitrary fixed scanner exponents, every classical old history is controlled and the
+split-counting margin holds at every `n` from the explicit threshold
+`F.badOldHistoryThreshold Cr C1 Ct multiplicity P` on (`08-scanner.tex`, lines 309--329 and
+492--520). -/
+theorem ScannerExponents.badOldHistory_of_badOldHistoryThreshold_le (F : ScannerExponents)
+    {Cr C1 Ct : ℝ} (hCr : 0 < Cr) (hC1 : 0 < C1) (hCt : 0 ≤ Ct)
+    (multiplicity : ℕ) (P : ℝ) {n : ℕ}
+    (hthr : F.badOldHistoryThreshold Cr C1 Ct multiplicity P ≤ n) :
+    ∀ (I : Type u) [Fintype I] [LinearOrder I]
+      (Λ T : Finset (ℤ × ℤ)) (hT : T.Nonempty) (S : CollarScan (Site Λ) I),
+      S.n = n → S.m = ⌊(n : ℝ) ^ F.mu⌋₊ →
+      S.K = ⌊(n : ℝ) ^ (1 - F.ell)⌋₊ / (8 * S.m) →
+      S.D = ⌈(n : ℝ) ^ F.kappa⌉₊ →
+      S.r₀ = roundedLogRadius Cr n → S.C₁ = C1 →
+      (T.card : ℝ) ≤ Ct * (n : ℝ) ^ 2 →
+      S.graph = domainGraph Λ → S.depth = (fun x ↦ ambientDepth T hT x.val) →
+      (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+        ((2 * ⌊(n : ℝ) ^ (1 - F.ell)⌋₊ +
+          10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z) →
+      (∀ d : ℕ, 1 ≤ d → d ≤ ⌊(n : ℝ) ^ (1 - F.ell)⌋₊ →
+        (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n) →
+      (∀ y, (Finset.univ.filter fun i ↦ S.anchor i = y).card ≤ multiplicity) →
+      2 ≤ S.n ∧ S.r₀ ≤ S.D ∧ 1 ≤ S.D ∧
+        4 * (S.D + 2 * S.r₀) ≤ S.m ∧
+        8 * S.K * S.m ≤ ⌊(n : ℝ) ^ (1 - F.ell)⌋₊ ∧
+        ∀ s : ℕ, s ≤ S.n * S.m →
+          (∑ h : History S.K S.m S.M s,
+            if S.IsGoodOldHistory h then 0 else historyWeight h) ≤ (n : ℝ) ^ (-P) := by
+  have htail := bad_history_probability_le_of_threshold_le F.ell_pos F.kappa_pos F.kappa_lt_mu
+    F.mu_lt_one_sub_ell hCr hC1 hCt multiplicity P ((le_max_left _ _).trans hthr)
+  have hscales := split_counting_scale_separation_of_threshold_le
+    (ell := F.ell) hCr.le F.kappa_pos F.kappa_lt_mu ((le_max_right _ _).trans hthr)
+  intro I _ _ Λ T hT S hSn hm hK hD hr hC ht hgraph hdepth hclear hrows hmult
+  have hM : S.M = ⌈C1 * n * S.D⌉₊ := by
+    simp only [CollarScan.M, chargeSlotCount, hC, hSn]
+  have hfull := htail I Λ T hT S hSn hm hK hD hr hM ht hgraph hdepth hclear hrows hmult
+  have hscales' : 2 ≤ S.n ∧ S.r₀ ≤ S.D ∧ 1 ≤ S.D ∧
+      4 * (S.D + 2 * S.r₀) ≤ S.m ∧
+      8 * S.K * S.m ≤ ⌊(n : ℝ) ^ (1 - F.ell)⌋₊ := by
+    simpa only [hSn, hm, hK, hD, hr] using hscales
+  refine ⟨hscales'.1, hscales'.2.1, hscales'.2.2.1, hscales'.2.2.2.1,
+    hscales'.2.2.2.2, ?_⟩
+  intro s hs
+  have hMpos : 0 < S.M :=
+    chargeSlotCount_pos (by simpa only [hC] using hC1) (by omega) hscales'.2.2.1
+  exact (S.sum_historyWeight_bad_old_le_bad_through hMpos
+    (show s ≤ n * S.m by simpa only [hSn] using hs)).trans hfull
 
 open Classical in
 private theorem exists_generic_badOldHistory_threshold (F : ScannerExponents) {Cr C1 Ct : ℝ}
@@ -60,38 +117,16 @@ private theorem exists_generic_badOldHistory_threshold (F : ScannerExponents) {C
         8 * S.K * S.m ≤ ⌊(n : ℝ) ^ (1 - F.ell)⌋₊ ∧
         ∀ s : ℕ, s ≤ S.n * S.m →
           (∑ h : History S.K S.m S.M s,
-            if S.IsGoodOldHistory h then 0 else historyWeight h) ≤ (n : ℝ) ^ (-P) := by
-  have htail := eventually_bad_history_probability_le F.ell_pos F.kappa_pos F.kappa_lt_mu
-    F.mu_lt_one_sub_ell
-    hCr hC1 hCt multiplicity P
-  have hscales := eventually_split_counting_scale_separation
-    (ell := F.ell) hCr.le F.kappa_pos F.kappa_lt_mu
-  obtain ⟨N, hN⟩ := eventually_atTop.mp (htail.and hscales)
-  refine ⟨N, ?_⟩
-  intro n hn I _ _ Λ T hT S hSn hm hK hD hr hC ht hgraph hdepth hclear hrows hmult
-  obtain ⟨htail, hscales⟩ := hN n hn
-  have hM : S.M = ⌈C1 * n * S.D⌉₊ := by
-    simp only [CollarScan.M, chargeSlotCount, hC, hSn]
-  have hfull := htail I Λ T hT S hSn hm hK hD hr hM ht hgraph hdepth hclear hrows hmult
-  have hscales' : 2 ≤ S.n ∧ S.r₀ ≤ S.D ∧ 1 ≤ S.D ∧
-      4 * (S.D + 2 * S.r₀) ≤ S.m ∧
-      8 * S.K * S.m ≤ ⌊(n : ℝ) ^ (1 - F.ell)⌋₊ := by
-    simpa only [hSn, hm, hK, hD, hr] using hscales
-  refine ⟨hscales'.1, hscales'.2.1, hscales'.2.2.1, hscales'.2.2.2.1,
-    hscales'.2.2.2.2, ?_⟩
-  intro s hs
-  have hMpos : 0 < S.M :=
-    chargeSlotCount_pos (by simpa only [hC] using hC1) (by omega) hscales'.2.2.1
-  exact (S.sum_historyWeight_bad_old_le_bad_through hMpos
-    (show s ≤ n * S.m by simpa only [hSn] using hs)).trans hfull
-
+            if S.IsGoodOldHistory h then 0 else historyWeight h) ≤ (n : ℝ) ^ (-P) :=
+  ⟨_, fun _ hn => F.badOldHistory_of_badOldHistoryThreshold_le hCr hC1 hCt multiplicity P hn⟩
 
 open Classical in
-private theorem exists_generic_actualCharge_energy_threshold
+private theorem generic_actualCharge_energy_of_threshold_le
     (F : ScannerExponents) {Cr C1 Ct : ℝ}
     (hCr : 0 < Cr) (hC1 : 0 < C1) (hCt : 0 ≤ Ct)
-    (multiplicity : ℕ) (P : ℝ) :
-    ∃ N : ℕ, ∀ n ≥ N, ∀ (Λ T : Finset (ℤ × ℤ)) (hT : T.Nonempty)
+    (multiplicity : ℕ) (P : ℝ) {n : ℕ}
+    (hthr : F.badOldHistoryThreshold Cr C1 Ct multiplicity P ≤ n) :
+    ∀ (Λ T : Finset (ℤ × ℤ)) (hT : T.Nonempty)
       (R : ℕ) [LinearOrder (AdmissibleSupport Λ R)]
       (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)),
       S.n = n → S.m = ⌊(n : ℝ) ^ F.mu⌋₊ →
@@ -128,12 +163,10 @@ private theorem exists_generic_actualCharge_energy_threshold
                   (a / 2) k (pre k) p) ^ (1 / 8 : ℝ) +
                 A * (2 * ℓ) ^ (1 / 8 : ℝ) / 2 *
                   ((1 - p) * (n : ℝ) ^ (-P) + p)) := by
-  obtain ⟨N, hN⟩ := exists_generic_badOldHistory_threshold.{0} F hCr hC1 hCt multiplicity P
-  refine ⟨N, ?_⟩
-  intro n hn Λ T hT R _ S hSn hsm hK hD hr hC ht hgraph hdepth hclear hrows hmult
+  intro Λ T hT R _ S hSn hsm hK hD hr hC ht hgraph hdepth hclear hrows hmult
   obtain ⟨hnS, hrS, hDpos, hmargin, hL, htail⟩ :=
-    hN n hn (AdmissibleSupport Λ R) Λ T hT S hSn hsm hK hD hr hC ht
-      hgraph hdepth hclear hrows hmult
+    F.badOldHistory_of_badOldHistoryThreshold_le.{0} hCr hC1 hCt multiplicity P hthr
+      (AdmissibleSupport Λ R) Λ T hT S hSn hsm hK hD hr hC ht hgraph hdepth hclear hrows hmult
   have hm : 0 < S.m := by omega
   have hCpos : 0 < S.C₁ := by simpa only [hC] using hC1
   have hM : 0 < S.M := chargeSlotCount_pos hCpos (by omega) hDpos
@@ -200,17 +233,25 @@ private theorem charge_energy_coefficient_identity
     Real.mul_rpow (by norm_num : (0 : ℝ) ≤ 2) hℓ.le, Real.rpow_add hℓ]
   field_simp [hK.ne', hm.ne']; ring
 
+/-- The explicit threshold of the actual charge-energy coefficients at arbitrary fixed scanner
+exponents: the bad-old-history threshold, the scale-facts threshold, and `n ≥ 3`, so that
+`log n ≥ 1` (`08-scanner.tex`, lines 32--42, 309--329 and 492--520). -/
+noncomputable def ScannerExponents.actualChargeEnergyThreshold (F : ScannerExponents)
+    (Cr C1 Ct : ℝ) (multiplicity : ℕ) (P : ℝ) : ℕ :=
+  max (F.badOldHistoryThreshold Cr C1 Ct multiplicity P) (max F.scaleFactsThreshold 3)
+
 open Classical in
-/-- Uniform physical charge-energy coefficients for any fixed source scanner
-exponents. The exact original history probabilities, label multiplicity and
-supplied symmetric vector are retained. There is no marginal-moment assumption.
+/-- Physical charge-energy bound at arbitrary fixed scanner exponents with the explicit
+coefficient `actualChargeEnergyCoefficient q Cr multiplicity Cen een` and logarithmic exponent
+`transportLogExponent een (een + 1 / 8)`, at every `n` from the explicit threshold
+`F.actualChargeEnergyThreshold Cr C1 Ct multiplicity P` on.
 Source: `08-scanner.tex`, lines 492--520 and the bootstrap in lines 693--755. -/
-theorem ScannerExponents.exists_actualCharge_energy_coefficients
+theorem ScannerExponents.actualCharge_energy_coefficients_of_threshold_le
     (F : ScannerExponents) (q : ℕ) [NeZero q]
     {Cr C1 Ct : ℝ} (hCr : 0 < Cr) (hC1 : 0 < C1) (hCt : 0 ≤ Ct)
-    (multiplicity : ℕ) (P Cen een : ℝ) :
-    ∃ C Cl : ℝ, 1 ≤ C ∧ 0 ≤ Cl ∧ ∃ N : ℕ,
-      ∀ n ≥ N, ∀ (Λ T : Finset (ℤ × ℤ)) (hT : T.Nonempty)
+    (multiplicity : ℕ) (P Cen een : ℝ) {n : ℕ}
+    (hthr : F.actualChargeEnergyThreshold Cr C1 Ct multiplicity P ≤ n) :
+      ∀ (Λ T : Finset (ℤ × ℤ)) (hT : T.Nonempty)
       (R : ℕ) [LinearOrder (AdmissibleSupport Λ R)]
       (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)),
       S.n = n → S.m = ⌊(n : ℝ) ^ F.mu⌋₊ →
@@ -242,28 +283,26 @@ theorem ScannerExponents.exists_actualCharge_energy_coefficients
           let ℓ := transportLogDimBound q S.r₀
           |Cen| * a ^ 2 * ℓ ^ een *
             (S.actualChargeData hm hM s).energyError E (a / 2) k (pre k) p ≤
-              C * W ^ 2 * (n : ℝ) ^ F.ell *
-                (S.D : ℝ) ^ 2 * (Real.log n) ^ Cl *
+              actualChargeEnergyCoefficient q Cr multiplicity Cen een * W ^ 2 *
+                (n : ℝ) ^ F.ell * (S.D : ℝ) ^ 2 *
+                (Real.log n) ^ transportLogExponent een (een + 1 / 8) *
                 ((1 - p) * (S.actualChargeEntropyDefect hm hM s dims E
                   (a / 2) k (pre k) p / (S.K * n * S.D : ℝ)) ^ (1 / 8 : ℝ) +
                   (1 - p) * (n : ℝ) ^ (-P) + p) := by
-  obtain ⟨Cs, hscales⟩ := eventually_scaleFacts F
-  obtain ⟨n₀, hn₀⟩ := hscales.exists
-  have hCs : 1 ≤ Cs := hn₀.one_le_C₁
-  obtain ⟨Cd, Cl, hCd, hCl, hcoeff⟩ := exists_transport_coefficients_log_bound
-    (NeZero.pos q) hCr.le
+  simp only [actualChargeEnergyThreshold, max_le_iff] at hthr
+  obtain ⟨hbad, hsf, hn3⟩ := hthr
+  obtain ⟨hCd, -, hcoeff⟩ := transport_coefficients_log_bound (NeZero.pos q) hCr.le
     (10 * (10 * (multiplicity : ℝ)) ^ (7 / 8 : ℝ) * |Cen|) een
     (50 * (multiplicity : ℝ) * (2 : ℝ) ^ (1 / 8 : ℝ) * |Cen|) (een + 1 / 8)
-  obtain ⟨Ne, hNe⟩ := exists_generic_actualCharge_energy_threshold F hCr hC1 hCt multiplicity P
-  have hlog : ∀ᶠ n : ℕ in atTop, (1 : ℝ) ≤ Real.log n :=
-    (Real.tendsto_log_atTop.comp tendsto_natCast_atTop_atTop).eventually_ge_atTop 1
-  obtain ⟨Ns, hNs⟩ := eventually_atTop.mp (hscales.and hlog)
-  refine ⟨Cs * Cd, Cl, one_le_mul_of_one_le_of_one_le hCs hCd, hCl,
-    max Ne Ns, ?_⟩
-  intro n hn Λ T hT R _ S hSn hsm hK hD hr hC ht hgraph hdepth hclear hrows hmult
-  obtain ⟨hF, hlogn⟩ := hNs n ((le_max_right Ne Ns).trans hn)
-  obtain ⟨hm, hM, henergy⟩ := hNe n ((le_max_left Ne Ns).trans hn)
-    Λ T hT R S hSn hsm hK hD hr hC ht hgraph hdepth hclear hrows hmult
+  have hF := scaleFacts_of_scaleFactsThreshold_le F hsf
+  have hlogn := Real.one_le_log_natCast_of_three_le hn3
+  rw [actualChargeEnergyCoefficient]
+  generalize transportLogCoefficient q Cr _ een _ (een + 1 / 8) = Cd at hCd hcoeff ⊢
+  generalize transportLogExponent een (een + 1 / 8) = Cl at hcoeff ⊢
+  generalize (32 : ℝ) = Cs at hF ⊢
+  intro Λ T hT R _ S hSn hsm hK hD hr hC ht hgraph hdepth hclear hrows hmult
+  obtain ⟨hm, hM, henergy⟩ := generic_actualCharge_energy_of_threshold_le F hCr hC1 hCt
+    multiplicity P hbad Λ T hT R S hSn hsm hK hD hr hC ht hgraph hdepth hclear hrows hmult
   have hmX : S.m = F.m n := hsm
   have hKX : S.K = F.K n := by
     simpa only [ScannerExponents.K, ScannerExponents.L, hmX] using hK
@@ -330,5 +369,59 @@ theorem ScannerExponents.exists_actualCharge_energy_coefficients
         (by positivity)
     _ = _ := by dsimp only [U, Z, Q, B]; ring
 
+
+open Classical in
+/-- Uniform physical charge-energy coefficients for any fixed source scanner
+exponents. The exact original history probabilities, label multiplicity and
+supplied symmetric vector are retained. There is no marginal-moment assumption.
+Source: `08-scanner.tex`, lines 492--520 and the bootstrap in lines 693--755. -/
+theorem ScannerExponents.exists_actualCharge_energy_coefficients
+    (F : ScannerExponents) (q : ℕ) [NeZero q]
+    {Cr C1 Ct : ℝ} (hCr : 0 < Cr) (hC1 : 0 < C1) (hCt : 0 ≤ Ct)
+    (multiplicity : ℕ) (P Cen een : ℝ) :
+    ∃ C Cl : ℝ, 1 ≤ C ∧ 0 ≤ Cl ∧ ∃ N : ℕ,
+      ∀ n ≥ N, ∀ (Λ T : Finset (ℤ × ℤ)) (hT : T.Nonempty)
+      (R : ℕ) [LinearOrder (AdmissibleSupport Λ R)]
+      (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)),
+      S.n = n → S.m = ⌊(n : ℝ) ^ F.mu⌋₊ →
+      S.K = ⌊(n : ℝ) ^ (1 - F.ell)⌋₊ / (8 * S.m) →
+      S.D = ⌈(n : ℝ) ^ F.kappa⌉₊ →
+      S.r₀ = roundedLogRadius Cr n → S.C₁ = C1 →
+      (T.card : ℝ) ≤ Ct * (n : ℝ) ^ 2 →
+      S.graph = domainGraph Λ → S.depth = (fun x ↦ ambientDepth T hT x.val) →
+      (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+        ((2 * ⌊(n : ℝ) ^ (1 - F.ell)⌋₊ +
+          10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z) →
+      (∀ d : ℕ, 1 ≤ d → d ≤ ⌊(n : ℝ) ^ (1 - F.ell)⌋₊ →
+        (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n) →
+      (∀ y, (Finset.univ.filter fun i ↦ S.anchor i = y).card ≤ multiplicity) →
+      ∃ (hm : 0 < S.m) (hM : 0 < S.M),
+        ∀ (aux : Bool → ℕ) [∀ b, NeZero (aux b)]
+          (J : ℝ) (h : LocalHamiltonian Λ q R J) (Ω : StateSpace Λ q) (Δ : ℝ)
+          (s : ℕ), s + 1 ≤ S.n * S.m →
+          ∀ (W : ℝ), 0 ≤ W → ∀ (k : ℕ)
+          (pre : (r : ℕ) → Config r
+            (fun v ↦ Fin (augmentedDimensions (V := Site Λ) q aux v)) → ℂ),
+          pre k ∈ symmetricSubspace k
+            (fun v ↦ Fin (augmentedDimensions (V := Site Λ) q aux v)) →
+          pre k ≠ 0 → ∀ p ∈ Ioo (0 : ℝ) 1,
+          let a := W / (S.K : ℝ)
+          let dims := augmentedDimensions (V := Site Λ) q aux
+          let E := S.actualEnergyTerms h Ω Δ
+            ⌊(n : ℝ) ^ (1 - F.ell)⌋₊ aux
+          let ℓ := transportLogDimBound q S.r₀
+          |Cen| * a ^ 2 * ℓ ^ een *
+            (S.actualChargeData hm hM s).energyError E (a / 2) k (pre k) p ≤
+              C * W ^ 2 * (n : ℝ) ^ F.ell *
+                (S.D : ℝ) ^ 2 * (Real.log n) ^ Cl *
+                ((1 - p) * (S.actualChargeEntropyDefect hm hM s dims E
+                  (a / 2) k (pre k) p / (S.K * n * S.D : ℝ)) ^ (1 / 8 : ℝ) +
+                  (1 - p) * (n : ℝ) ^ (-P) + p) :=
+  have h := transport_coefficients_log_bound (NeZero.pos q) hCr.le
+    (10 * (10 * (multiplicity : ℝ)) ^ (7 / 8 : ℝ) * |Cen|) een
+    (50 * (multiplicity : ℝ) * (2 : ℝ) ^ (1 / 8 : ℝ) * |Cen|) (een + 1 / 8)
+  ⟨_, _, one_le_mul_of_one_le_of_one_le (by norm_num) h.1, h.2.1, _,
+    fun _ hn => F.actualCharge_energy_coefficients_of_threshold_le q hCr hC1 hCt multiplicity
+      P Cen een hn⟩
 
 end TNLean.PEPS.AreaLaw.Scan

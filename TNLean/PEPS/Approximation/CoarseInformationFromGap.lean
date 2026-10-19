@@ -20,6 +20,8 @@ Source: polynomial-PEPS manuscript, Proposition 3.1 (`prop:coarse`),
 `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 -/
 
+open TNLean.Lattice
+
 namespace TNLean.PEPS.Approximation
 
 open AreaLaw
@@ -33,9 +35,9 @@ induced domains and interaction range. -/
 theorem coarse_mutualInformation_le {q R : ℕ} (hq : 1 ≤ q) {J Δ : ℝ}
     (hJ : 0 ≤ J) (hΔ : 0 < Δ) (N₀ : ℕ) (A₀ : ℝ) :
     ∃ β : ℝ, β < 1 ∧ ∃ C u₀ : ℝ, ∀ u : ℝ, u₀ ≤ u →
-      ∀ (Λ : Finset (ℤ × ℤ)) (h : AreaLaw.LocalHamiltonian Λ q R J) (E₀ : ℝ)
-        (Ω : AreaLaw.StateSpace Λ q),
-        AreaLaw.IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+      ∀ (Λ : Finset (ℤ × ℤ)) (h : Lattice.LocalHamiltonian Λ q R J) (E₀ : ℝ)
+        (Ω : Lattice.StateSpace Λ q),
+        Lattice.IsGappedGroundState Λ q h.operator E₀ Ω Δ →
         ∀ T : Finset (ℤ × ℤ), IsBoxUnion N₀ T →
           (∀ x ∈ T, ∀ y ∈ T, (Scan.ambientSupDistance x y : ℝ) ≤ A₀ * u) →
           ∀ X ⊆ Finset.univ.filter (fun x : Site Λ ↦ x.val ∈ T),

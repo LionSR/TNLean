@@ -11,7 +11,8 @@ import TNLean.PEPS.AreaLaw.AmplificationProof
 
 The physical collar and amplification theorems reduce the uniform area law to
 the two-family decomposition at common admissible template constants. This
-module proves that implication; the geometric decomposition remains a hypothesis.
+module proves that implication. The decomposition itself is
+`twoFamilyDecomposition`, and `uniformAreaLaw` applies this implication to it.
 
 Source: OpenAI, *A two-dimensional area law from a global spectral gap*, proof
 of Theorem 1.1, `10-geometry.tex`, lines 803–857, revision
@@ -25,7 +26,8 @@ admissible template constants. The collar and amplification bounds are supplied
 by their physical proofs. Source: OpenAI, *A two-dimensional area law from a
 global spectral gap*, proof of Theorem 1.1, `10-geometry.tex`, lines 803–857,
 revision `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
-This implication does not construct the decomposition of Proposition 11.2. -/
+The decomposition of Proposition 11.2 is supplied separately by
+`twoFamilyDecomposition`. -/
 theorem uniformAreaLaw_of_twoFamilies
     (htwo : ∀ R : ℕ, ∃ D₀ Ctpl : ℝ,
       2 * (R : ℝ) + 10 < D₀ ∧ 24 ≤ Ctpl ∧ TwoFamilyDecomposition D₀ Ctpl) :

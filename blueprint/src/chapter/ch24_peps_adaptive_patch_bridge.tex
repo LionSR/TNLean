@@ -121,21 +121,50 @@ square cylinder data at the same radii.
     53--54).
 \end{proof}
 
-\begin{theorem}[Adaptive patches from the square entropy area law]
-    \label{thm:peps_adaptive_patch_constraint_of_area_law}
-    \lean{TNLean.PEPS.Approximation.SquareEntropyAreaLaw.adaptivePatchConstraint}
+\begin{definition}[The constants of the adaptive patch constraint]
+    \label{def:peps_adaptive_patch_constants}
+    \lean{TNLean.PEPS.Approximation.adaptivePatchPrefactor,
+        TNLean.PEPS.Approximation.adaptivePatchExponent}
     \leanok
-    \uses{def:square_entropy_area_law, def:peps_adaptive_patch_constraint}
-    If the square-grid entropy area law holds, then the adaptive patch
-    constraint holds. This is the implication proved in
+    \uses{def:peps_nested_patch_radius_exponent}
+    For an integer $q$ and reals $J,\Delta,B_0,p,C_A$, put
+    \begin{align}
+        C(q,B_0)=\max\{q^{81},1+B_0/2\},
+        \qquad
+        c(q,J,\Delta,B_0,p,C_A)=R_0(q,J,\Delta,B_0,p,C_A)+1,
+        \label{eq:peps_adaptive_patch_constants}
+    \end{align}
+    where $R_0$ is the radius exponent of
+    Definition~\ref{def:peps_nested_patch_radius_exponent}. These are the
+    constants of
     \cite[Proposition~4.1]{OpenAI2026PolynomialPEPS}, \texttt{03-patches.tex},
-    lines 26--54 and 534--603, with the area law taken as an assumption.
-    % Status: the unconditional proposition follows once the area law is proved.
+    lines 53--55 and 595--601.
+\end{definition}
+
+\begin{theorem}[Adaptive patches at a given area-law constant]
+    \label{thm:peps_adaptive_patch_supply_of_area_law_at}
+    \lean{TNLean.PEPS.Approximation.adaptivePatchPrefactor_pos,
+        TNLean.PEPS.Approximation.adaptivePatchExponent_pos,
+        TNLean.PEPS.Approximation.SquareEntropyAreaLawAt.adaptivePatchSupply}
+    \leanok
+    \uses{def:square_entropy_area_law_at,def:peps_adaptive_patch_constants,
+        def:peps_adaptive_patch_constraint}
+    Let $q\ge2$ be an integer, $J,\Delta>0$ and $B_0,p>0$, and assume the
+    square-grid entropy area law at $q$, $J$, $\Delta$ with constant $C_A$.
+    Then the constants $C=C(q,B_0)$ and $c=c(q,J,\Delta,B_0,p,C_A)$ of
+    (\ref{eq:peps_adaptive_patch_constants}) are positive, and for every
+    $L\ge2$, every original square Hamiltonian $H$ with interaction bound $J$,
+    and every unit vector $\Omega$ and real $E_0$ with $H\Omega=E_0\Omega$ and
+    $H-E_0I\ge\Delta(I-|\Omega\rangle\langle\Omega|)$, every center and every
+    $0<u\le B_0\log L$ admit an adaptive square patch with at most $CL^c$
+    cylinder terms and error at most $L^{-p}$. This is
+    \cite[Proposition~4.1]{OpenAI2026PolynomialPEPS}, \texttt{03-patches.tex},
+    lines 26--54 and 534--603, at a given area-law constant.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    \uses{thm:peps_nested_patch_cylinder_approximation,
+    \uses{thm:peps_nested_patch_cylinder_approximation_explicit,
         thm:peps_square_patch_of_nested_cylinders,
         thm:peps_bounded_radius_square_patch,
         thm:peps_square_sample_integer_coordinates,
@@ -145,13 +174,9 @@ square cylinder data at the same radii.
         thm:peps_nested_patch_sizes,
         thm:peps_patch_count_polynomial,
         def:square_area_law_state}
-    Fix $q\ge2$, $J,\Delta>0$, $B_0>0$ and $p>0$. Let $R_0>0$ be given by
-    Theorem~\ref{thm:peps_nested_patch_cylinder_approximation}, and put
-    \begin{align}
-        C=\max\{q^{81},1+B_0/2\},
-        \qquad
-        c=R_0+1 .
-    \end{align}
+    Let $R_0=R_0(q,J,\Delta,B_0,p,C_A)$, which is positive by
+    Theorem~\ref{thm:peps_nested_patch_cylinder_approximation_explicit}, and
+    let $C$ and $c=R_0+1$ be as in (\ref{eq:peps_adaptive_patch_constants}).
     Work on the integer domain $\{0,\ldots,L-1\}^2$; relabelling its sites and
     translating by $(1,1)$ returns to the lattice positions without changing
     the conclusion. Let $0<u\le B_0\log L$. If $u\ge4$, the nested patches
@@ -168,6 +193,47 @@ square cylinder data at the same radii.
     \end{align}
     If $u<4$, the exact patch at bounded radius has error zero and at most
     $q^{81}\le CL^c$ terms.
+\end{proof}
+
+\begin{theorem}[Adaptive patches from the square entropy area law]
+    \label{thm:peps_adaptive_patch_constraint_of_area_law}
+    \lean{TNLean.PEPS.Approximation.SquareEntropyAreaLaw.adaptivePatchConstraint}
+    \leanok
+    \uses{def:square_entropy_area_law, def:peps_adaptive_patch_constraint}
+    If the square-grid entropy area law holds, then the adaptive patch
+    constraint holds. This is the implication proved in
+    \cite[Proposition~4.1]{OpenAI2026PolynomialPEPS}, \texttt{03-patches.tex},
+    lines 26--54 and 534--603, with the area law taken as an assumption.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:peps_adaptive_patch_supply_of_area_law_at}
+    The area law supplies a constant $C_A\ge0$ at $q$, $J$, $\Delta$. The
+    constants $C(q,B_0)$ and $c(q,J,\Delta,B_0,p,C_A)$ of
+    Theorem~\ref{thm:peps_adaptive_patch_supply_of_area_law_at} witness the
+    adaptive patch constraint.
+\end{proof}
+
+\begin{theorem}[Adaptive patch constraint]
+    \label{thm:peps_adaptive_patch_constraint}
+    \lean{TNLean.PEPS.Approximation.adaptivePatchConstraint}
+    \leanok
+    \uses{def:peps_adaptive_patch_constraint}
+    The adaptive patch constraint of
+    Definition~\ref{def:peps_adaptive_patch_constraint} holds. This is
+    \cite[Proposition~4.1]{OpenAI2026PolynomialPEPS}, \texttt{03-patches.tex},
+    lines 26--49.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:openai_square_area_law,
+        thm:peps_adaptive_patch_constraint_of_area_law}
+    The square-grid entropy area law holds by
+    Theorem~\ref{thm:openai_square_area_law}, and
+    Theorem~\ref{thm:peps_adaptive_patch_constraint_of_area_law} turns it into
+    the adaptive patch constraint.
 \end{proof}
 
 \begin{theorem}[Polynomial approximation from the square entropy area law]

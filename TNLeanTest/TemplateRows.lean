@@ -9,6 +9,8 @@ disconnected rows, overlapping unions, and the template interface.
 The audit records the proof dependencies of every new export.
 -/
 
+open TNLean.Lattice
+
 open scoped BigOperators
 
 open TNLean.PEPS.AreaLaw TNLean.PEPS.AreaLaw.Geometry
@@ -162,11 +164,10 @@ section AxiomChecks
 set_option linter.hashCommand false
 
 /--
-info: 'TNLean.PEPS.AreaLaw.mem_ambientDilation_iff'
-depends on axioms: [propext, Classical.choice, Quot.sound]
+info: 'TNLean.Lattice.mem_ambientDilation_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms TNLean.PEPS.AreaLaw.mem_ambientDilation_iff
+#print axioms TNLean.Lattice.mem_ambientDilation_iff
 
 /--
 info: 'TNLean.PEPS.AreaLaw.ambientDilation_mono'

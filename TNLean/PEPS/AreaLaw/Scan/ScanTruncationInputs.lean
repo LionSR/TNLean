@@ -20,10 +20,9 @@ field of `ScanTruncation`: the ground energy and gap of the truncated Hamiltonia
 marginal-tail parameter bounding the cut parameter of every status region of the scan.
 The same vector also satisfies the marginal moment bound of Lemma 3.1 at every region.
 
-**Local fix (retained trace-distance coefficient):** the source's estimate `t = O(n^(-500))`
-(`08-scanner.tex`, lines 400–403) is supplied as `t ≤ C n^(-500)` with the common scanner
-constant `C ≥ √(2/g)` rather than with coefficient one. Documented in
-`docs/paper-gaps/arealaw2d_scanner_inputs.tex`.
+The source's estimate `t = O(n^(-500))` (`08-scanner.tex`, lines 400–403) is supplied as
+`t ≤ C n^(-500)`, with the constant named explicitly as the common scanner constant
+`C ≥ √(2/g)`.
 
 ## Main results
 
@@ -47,6 +46,8 @@ open Filter Matrix
 open scoped BigOperators Matrix.Norms.L2Operator
 
 noncomputable section
+
+open TNLean.Lattice
 
 namespace TNLean.PEPS.AreaLaw.Scan
 

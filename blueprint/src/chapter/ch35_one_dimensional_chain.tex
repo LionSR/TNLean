@@ -61,6 +61,32 @@ for an arbitrary finite set of sites and are instantiated here directly.
     both $A$ and its complement; it is at least one.
 \end{definition}
 
+\begin{lemma}[Distance and spheres on a finite path]
+    \label{lem:chain_path_metric_spheres}
+    \lean{SimpleGraph.pathGraph_edist, SimpleGraph.pathGraph_card_sphere_le_two}
+    \leanok
+    Let $L$ be a natural number, and let $P_L$ be the graph on
+    $\{0,\ldots,L-1\}$ joining consecutive coordinates. For vertices $x,y$ and
+    every natural number $d$,
+    \begin{align}
+        d_{P_L}(x,y)                     & =|x-y|, \\
+        \bigl|\{y:d_{P_L}(x,y)=d\}\bigr| & \le2.
+    \end{align}
+    Thus the sphere growth bound holds with coefficient $2$ and exponent $0$,
+    independently of $L$. This concerns the contiguous chain setting of
+    Section~1 of~\cite{TNLean2026OneDimensional}.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Each edge changes the coordinate by one, so the displacement of a walk is
+    at most its length. Taking the infimum over walks gives one inequality.
+    In the other direction, successive coordinates between $x$ and $y$ stay
+    inside the chain and give a walk of length $|x-y|$. A site at distance $d$
+    from $x$ has coordinate $x-d$ or $x+d$; discarding coordinates outside the
+    chain leaves at most two sites. At $d=0$ the candidates coincide. When
+    $L=0$ there are no vertices, so the assertions are vacuous.
+\end{proof}
+
 \begin{lemma}[Marginal tail bound at a cut]
     \label{lem:chain_marginal_tail}
     \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.surprisalTail_regionState_le}
@@ -184,6 +210,35 @@ for an arbitrary finite set of sites and are instantiated here directly.
     $j'>j$, two of its sites would be at distance at least $R+1$.
 \end{proof}
 
+% Source: TNLean2026OneDimensional, eq:ham; setting before lem:LR.
+\begin{lemma}[Interaction norm budget at a site]
+    \label{lem:chain_site_norm_budget}
+    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.sum_norm_terms_containing_le}
+    \leanok
+    \uses{def:chain_model}
+    Let $L,q,R$ be natural numbers and $J\in\mathbb R$. On the chain of $L$
+    sites with local dimension $q$, let $H=\sum_X h_X$ be a finite-range
+    Hamiltonian with one term of norm at most $J$ for each nonempty support
+    $X$ of diameter at most $R$. For every site $x$,
+    \begin{align}
+        \sum_{X\ni x}\lVert h_X\rVert\le 2^{2R+1}J.
+    \end{align}
+    This is an auxiliary consequence of the Hamiltonian setting
+    in Section~1 of~\cite{TNLean2026OneDimensional}; it supplies a
+    per-site interaction estimate of the form assumed immediately before
+    the Lieb--Robinson lemma there. No spectral-gap assumption is needed.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{def:chain_model, lem:chain_crossing_count}
+    Fix a site $x$. The singleton $\{x\}$ is an admissible support, so
+    $0\le\lVert h_{\{x\}}\rVert\le J$. Every support containing $x$ lies in
+    the clipped interval $[x-R,x+R+1)$, which has at most $2R+1$ sites.
+    Counting subsets of this interval gives at most $2^{2R+1}$ such supports.
+    Summing their norm bounds and using $J\ge0$ proves the claim. If the chain
+    has no sites, the assertion is vacuous.
+\end{proof}
+
 \section{The buffered discount with a constant-width buffer}
 
 \begin{lemma}[Buffered discount on a chain]
@@ -245,11 +300,11 @@ for an arbitrary finite set of sites and are instantiated here directly.
 \begin{lemma}[Araki--Lieb and the area law from interval bounds]
     \label{lem:chain_entropy_inequalities}
     \lean{
-        TNLean.MPS.AreaLaw.regionEntropy_union_le,
-        TNLean.MPS.AreaLaw.regionEntropy_le_union_add,
-        TNLean.MPS.AreaLaw.regionEntropy_empty,
-        TNLean.MPS.AreaLaw.regionEntropy_univ,
-        TNLean.MPS.AreaLaw.regionEntropy_le_card_mul_log,
+        TNLean.Lattice.regionEntropy_union_le,
+        TNLean.Lattice.regionEntropy_le_union_add,
+        TNLean.Lattice.regionEntropy_empty,
+        TNLean.Lattice.regionEntropy_univ,
+        TNLean.Lattice.regionEntropy_le_card_mul_log,
         TNLean.MPS.AreaLaw.boundaryEdges,
         TNLean.MPS.AreaLaw.mem_boundaryEdges,
         TNLean.MPS.AreaLaw.boundaryEdges_empty,
@@ -284,7 +339,7 @@ for an arbitrary finite set of sites and are instantiated here directly.
     $I$ is then a proper nonempty subset of the chain).
 \end{proof}
 
-\begin{theorem}[Theorem A: the one-dimensional area law]
+\begin{theorem}[The one-dimensional area law on a chain]
     \label{thm:chain_area_law}
     \lean{
         TNLean.MPS.AreaLaw.chainIntervalEntropyBound,
@@ -314,10 +369,8 @@ for an arbitrary finite set of sites and are instantiated here directly.
     $S(A)\le C_{\mathrm{int}}\,|\partial A|$. Hence the constant
     $C_0(q,R)(1+J/\Delta)$, chosen before $L$, the Hamiltonian, the ground
     vector and the region, bounds $S(A)/|\partial A|$ for every gapped chain.
-    The note states Theorem~A for every finite subset of the integers and
-    reduces it to connected domains; this chapter proves the connected case,
-    the chain of $L$ sites, and the component reduction is not formalized;
-    see \cite{gap:tnlean_one_dimensional_connected_domain_scope}.
+    This is the connected case of Theorem~A; the general case is
+    Theorem~\ref{thm:domain_area_law}.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -330,6 +383,145 @@ for an arbitrary finite set of sites and are instantiated here directly.
     $m\le(5+32N_Rq^{2(R+1)}+128B_R)(1+\vartheta)$, which follows from
     $\sqrt{(1+\vartheta)B_R}\le(1+\vartheta)B_R$, and $m\ge4$. The subset
     bound is the second part of Lemma~\ref{lem:chain_entropy_inequalities}.
+\end{proof}
+
+\section{Finite sets of integers}
+
+\begin{definition}[Finite domains, supports and admissible Hamiltonians]
+    \label{def:domain_model}
+    \lean{
+        TNLean.MPS.AreaLaw.sitePos,
+        TNLean.MPS.AreaLaw.sitePos_mem,
+        TNLean.MPS.AreaLaw.exists_sitePos_eq,
+        TNLean.MPS.AreaLaw.sub_le_sitePos_sub,
+        TNLean.MPS.AreaLaw.val_eq_add_one_of_sitePos_eq_add_one,
+        TNLean.MPS.AreaLaw.domainGraph,
+        TNLean.MPS.AreaLaw.sitePos_sub_val_of_walk,
+        TNLean.MPS.AreaLaw.IsDomainSupport,
+        TNLean.MPS.AreaLaw.DomainSupport,
+        TNLean.MPS.AreaLaw.IsDomainSupport.exists_walk,
+        TNLean.MPS.AreaLaw.IsDomainSupport.isChainSupport,
+        TNLean.MPS.AreaLaw.IsDomainSupport.subset_or_disjoint_of_gap,
+        TNLean.MPS.AreaLaw.DomainHamiltonian,
+        TNLean.MPS.AreaLaw.DomainHamiltonian.operator,
+        TNLean.MPS.AreaLaw.DomainHamiltonian.toChain,
+        TNLean.MPS.AreaLaw.DomainHamiltonian.toChain_operator,
+        TNLean.MPS.AreaLaw.domainBoundaryEdges,
+        TNLean.MPS.AreaLaw.domainRegion,
+        TNLean.MPS.AreaLaw.IsDomainEdge,
+        TNLean.MPS.AreaLaw.card_domainBoundaryEdges
+    }
+    \leanok
+    \uses{def:chain_model}
+    A finite set $\Lambda\subset\mathbb Z$ carries the induced path graph, whose
+    edges join consecutive integers that both lie in $\Lambda$, and its graph
+    distance $d_\Lambda$. Its sites are labelled $0,\ldots,|\Lambda|-1$ in
+    increasing order, each carrying $\mathbb C^q$. A \emph{support of range $R$}
+    in $\Lambda$ is a nonempty set of sites of $d_\Lambda$-diameter at most $R$.
+    Along a path of the induced graph the position of a site minus its label is
+    constant, so a support lies between two consecutive gaps of $\Lambda$ and
+    is a support of range $R$ of the chain of $|\Lambda|$ sites. An
+    \emph{admissible Hamiltonian} assigns to every support $X$ of range $R$ in
+    $\Lambda$ a Hermitian term $h_X$ acting as the identity off $X$ with
+    operator norm at most $J$, zero terms allowed; with zero terms on the
+    remaining supports of the chain it is a finite-range Hamiltonian on the
+    chain with the same sum. The \emph{edge boundary} $\partial_\Lambda A$ of a
+    set $A\subseteq\mathbb Z$ is the set of edges $\{x,x+1\}\subseteq\Lambda$
+    with exactly one endpoint in $A$; these edges correspond to the boundary
+    edges, on the chain, of the sites in $A$ that join sites at consecutive
+    integers.
+\end{definition}
+
+\begin{lemma}[A cut that splits no term]
+    \label{lem:zero_entropy_cut}
+    \lean{
+        TNLean.Lattice.isSupportedOn_sum,
+        TNLean.Lattice.regionEntropy_eq_zero_of_forall_subset_or_disjoint
+    }
+    \leanok
+    Let $\Omega$ be a gapped ground vector, with gap $\Delta>0$, of a sum of
+    Hermitian terms on a finite tensor product, each supported inside a set $B$
+    of sites or inside its complement. Then $S_\Omega(B)=0$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{thm:area_law_product_ground_state}
+    In the coordinates of the cut $B\,|\,B^c$ the sum is
+    $H_1\otimes1+1\otimes H_2$ with Hermitian $H_1$ and $H_2$. With least
+    eigenvalues $a$, $b$ and unit eigenvectors $u$, $v$, the inequality
+    $H\ge a+b$ gives $E_0\ge a+b$, and the gap inequality evaluated on
+    $u\otimes v$ gives $\Delta(1-|\langle\Omega,u\otimes v\rangle|^2)\le
+        a+b-E_0\le0$. Hence $\Omega$ is a multiple of $u\otimes v$, and its
+    reduced state on $B$ is pure; this is
+    Theorem~\ref{thm:area_law_product_ground_state}.
+\end{proof}
+
+\begin{lemma}[Flipping a region of zero entropy]
+    \label{lem:zero_entropy_flip}
+    \lean{
+        TNLean.Lattice.regionEntropy_union_add_inter_le,
+        TNLean.Lattice.regionEntropy_sdiff_eq_of_eq_zero,
+        TNLean.Lattice.regionEntropy_union_eq_of_eq_zero,
+        TNLean.Lattice.regionEntropy_symmDiff_eq_of_eq_zero,
+        TNLean.MPS.AreaLaw.exists_mem_val_eq_iff,
+        TNLean.MPS.AreaLaw.boundaryEdges_symmDiff_interval,
+        TNLean.MPS.AreaLaw.exists_regionEntropy_eq_boundaryEdges_eq_symmDiff
+    }
+    \leanok
+    \uses{lem:chain_entropy_inequalities}
+    Let $\Omega$ be a unit vector on the chain of $L$ sites and $P$ a set of
+    sites with $S(P)=0$. Then $S(A\triangle P)=S(A)$ for every set of sites
+    $A$. If $P=[0,p+1)$ with $p+1<L$, the boundary edges of $A\triangle P$ are
+    those of $A$ with the edge $\{p,p+1\}$ added or removed. Consequently, if
+    $G$ is a set of edges $\{p,p+1\}$ whose prefixes $[0,p+1)$ all have zero
+    entropy, every $A$ has a set of sites $A'$ with $S(A')=S(A)$ whose boundary
+    edges are those of $A$ toggled exactly at the edges of $G$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{lem:chain_entropy_inequalities}
+    For $X\subseteq P$ the Araki--Lieb inequality gives
+    $S(X)\le S(P)+S(P\setminus X)=S(P\setminus X)$ and symmetrically, so
+    $S(X)=S(P\setminus X)$. For $X\subseteq P$ and $Y$ disjoint from $P$,
+    strong subadditivity in the form
+    $S(P\cup Y)+S(X)\le S(P)+S(X\cup Y)$ and the Araki--Lieb inequality
+    $S(Y)\le S(P\cup Y)+S(P)$ give $S(X)+S(Y)\le S(X\cup Y)$, and
+    subadditivity gives the reverse. Writing $A=(A\cap P)\cup(A\setminus P)$
+    and $A\triangle P=(P\setminus(A\cap P))\cup(A\setminus P)$, both entropies
+    equal $S(A\cap P)+S(A\setminus P)$. Flipping $[0,p+1)$ reverses membership
+    at every site up to $p$, so it changes the status of the edge
+    $\{p,p+1\}$ only. The last claim follows by induction on $G$.
+\end{proof}
+
+\begin{theorem}[Theorem A: the one-dimensional area law]
+    \label{thm:domain_area_law}
+    \lean{
+        TNLean.MPS.AreaLaw.regionEntropy_le_mul_card_domainBoundaryEdges,
+        TNLean.MPS.AreaLaw.domainAreaLaw
+    }
+    \leanok
+    \uses{def:domain_model}
+    Let $\Omega$ be a gapped ground vector, with gap $\Delta>0$, of an
+    admissible Hamiltonian with term norms at most $J\ge0$ on a finite set
+    $\Lambda\subset\mathbb Z$ with local dimension $q\ge1$. Every
+    $A\subseteq\mathbb Z$ satisfies
+    $S_\Omega(A\cap\Lambda)\le C_{\mathrm{int}}(q,R,J,\Delta)\,
+        |\partial_\Lambda A|\le C_0(q,R)\,(1+J/\Delta)\,|\partial_\Lambda A|$,
+    with the constants of Theorem~\ref{thm:chain_area_law}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:chain_area_law, lem:zero_entropy_cut, lem:zero_entropy_flip}
+    The Hamiltonian is a finite-range Hamiltonian on the chain of $|\Lambda|$
+    sites with the same sum, so Theorem~\ref{thm:chain_area_law} bounds the
+    entropy of every set of sites by $C_{\mathrm{int}}$ times its number of
+    boundary edges on the chain. At an edge $\{p,p+1\}$ of the chain whose
+    sites are at nonconsecutive integers no support crosses, so the prefix
+    $[0,p+1)$ has zero entropy by Lemma~\ref{lem:zero_entropy_cut}. Let $G$ be
+    the set of such edges that are boundary edges of the sites in $A$. By
+    Lemma~\ref{lem:zero_entropy_flip} there is a set of sites with the same
+    entropy whose boundary edges on the chain are the remaining ones, which
+    correspond to the edges of $\partial_\Lambda A$.
 \end{proof}
 
 \section{Matrix product states and sequential truncation}

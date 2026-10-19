@@ -27,10 +27,12 @@ finite set of sites, instantiated here on the chain.
 | Lemma 3.1 (marginal tail bound) at a cut | `MPS.AreaLaw.ChainHamiltonian.surprisalTail_regionState_le` with the budget `MPS.AreaLaw.cutLogBudget` | Proved, from the QICLean core. |
 | `eq:count`, `eq:BR`: split interactions and cut budget of an interval | `MPS.AreaLaw.card_crossingTerms_interval_le` (`N_R = 2·2^{2R}`), `MPS.AreaLaw.cutLogBudget_interval_le` (`B_R = 1 + N_R log²(e q^{R+1})`) | Proved; the constants are those of the note. |
 | Lemma 4.2 (buffered discount) | `MPS.AreaLaw.two_mul_condEntropy_interval_le`, with `MPS.AreaLaw.chainShellCount` (`m`) and `MPS.AreaLaw.chainDiscountConst` | Proved. Shells of width `R` as in the note; energy threshold `Δ/2` in place of the note's `Δ/4`, overlap losses `m log 2` in place of the note's `2 C_E/Δ`, and the shell count omits the note's fourth entry `4096 e (1 + ϑ) B_R`, the term `4096 e ϑ B_R / m` staying explicit in the discount: `docs/paper-gaps/tnlean_one_dimensional_discount_constants.tex`. |
-| Araki–Lieb closure, reductions (Section 2) | `MPS.AreaLaw.regionEntropy_le_union_add`, `MPS.AreaLaw.regionEntropy_le_mul_card_boundaryEdges_of_intervals` | Proved. |
+| Araki–Lieb closure, reductions (Section 2) | `Lattice.regionEntropy_le_union_add`, `MPS.AreaLaw.regionEntropy_le_mul_card_boundaryEdges_of_intervals` | Proved. |
 | Theorem A for intervals | `MPS.AreaLaw.regionEntropy_interval_le` with the explicit `MPS.AreaLaw.chainIntervalEntropyBound` | Proved; no existential constant. |
 | Theorem A, constant linear in `1 + J/Δ` | `MPS.AreaLaw.chainIntervalEntropyBound_le`, `MPS.AreaLaw.chainAreaLawConst` | Proved. |
-| Theorem A for subsets | `MPS.AreaLaw.regionEntropy_le_mul_card_boundaryEdges`, `MPS.AreaLaw.chainAreaLaw` | Proved on the chain of `L` sites (connected domains). The component reduction of the note to disconnected finite subsets of the integers is not formalized: `docs/paper-gaps/tnlean_one_dimensional_connected_domain_scope.tex`. |
+| Theorem A for subsets of the chain | `MPS.AreaLaw.regionEntropy_le_mul_card_boundaryEdges`, `MPS.AreaLaw.chainAreaLaw` | Proved on the chain of `L` sites (connected domains). |
+| Setting on a finite `Λ ⊂ ℤ` (induced path graph, `eq:ham`, `∂_Λ A`) | `MPS.AreaLaw.sitePos`, `MPS.AreaLaw.domainGraph`, `MPS.AreaLaw.IsDomainSupport`, `MPS.AreaLaw.DomainHamiltonian`, `MPS.AreaLaw.domainBoundaryEdges` | Definitions; the sites of `Λ` are labelled in increasing order. |
+| Theorem A on a finite `Λ ⊂ ℤ`; first reduction (Section 2) | `MPS.AreaLaw.regionEntropy_le_mul_card_domainBoundaryEdges`, `MPS.AreaLaw.domainAreaLaw` | Proved, with the constant `C₀(q, R)(1 + J/Δ)` of the chain. The reduction uses the zero entropy of the prefixes ending at the gaps of `Λ` (`Lattice.regionEntropy_eq_zero_of_forall_subset_or_disjoint`) and flips of the region on them (`Lattice.regionEntropy_symmDiff_eq_of_eq_zero`) in place of the factorization over components: `docs/paper-gaps/tnlean_one_dimensional_connected_domain_scope.tex` (resolved). |
 | Matrix product states, cut matrices | `MPS.AreaLaw.IsOpenMPS`, `MPS.AreaLaw.cutMatrix` | Definitions. |
 | Cut ranks bound the bond dimension | `MPS.AreaLaw.isOpenMPS_of_cutMatrix_rank_le` | Proved. |
 | Proposition 7.1 (sequential truncation) | `MPS.AreaLaw.exists_sequentialTruncation` | Threshold form proved: the projectors onto the eigenvalues at least `exp(-(S_k + w))` at a common slack `w`, with cut ranks at most `max 1 (exp(S_k + w))` and error `∑_k √tail_k(w)`. The note's form, projecting every cut onto its `D` largest eigenvalues (all of them when the cut has fewer) for an arbitrary bond dimension `D` with error `∑_k √ε_k(D)`, is not formalized; Theorem B uses only the threshold form: `docs/paper-gaps/tnlean_one_dimensional_threshold_truncation.tex`. |
@@ -39,6 +41,23 @@ finite set of sites, instantiated here on the chain.
 The protocol route of the note (information reset, births, exchanges, the sweep
 and the compression) is not formalized; Theorem B is proved by the two-line route
 alone.
+
+For the undoubled Hamiltonian on the contiguous chain,
+`MPS.AreaLaw.ChainHamiltonian.sum_norm_terms_containing_le` proves the per-site
+budget ∑_{X∋x} ‖h_X‖ ≤ 2^(2R+1) J, with the original real bound J.
+No sign assumption is added: an actual site supplies the admissible singleton
+{x}, whose norm bound implies J ≥ 0; the assertion is vacuous on an empty
+chain.
+
+The finite-path graph satisfies `SimpleGraph.pathGraph_edist`: its extended
+distance is the absolute coordinate difference. The lemma
+`SimpleGraph.pathGraph_card_sphere_le_two` bounds every distance sphere by
+two sites, giving growth coefficient 2 and exponent 0 independently of the
+chain length. These statements include the empty chain and all natural
+radii. They concern the contiguous path; coordinate distance does not replace
+graph distance across holes in a disconnected domain. Operator-support
+conversion and doubled-Hamiltonian transport needed for the protocol's
+Lieb–Robinson estimate remain separate.
 
 ## Constants
 

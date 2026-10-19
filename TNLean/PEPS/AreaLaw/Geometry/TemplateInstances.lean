@@ -36,6 +36,8 @@ Three constructions show that Definition 9.3 admits the templates used later.
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
+open TNLean.Lattice
+
 namespace TNLean.PEPS.AreaLaw.Geometry
 
 /-! ### Integer rectangles -/
@@ -189,9 +191,7 @@ theorem Template.isSeparated_ofIntRect_of_isSafe {Ctpl : ℝ} {n s₀ : ℕ} (Q 
     Sym2.mem_toFinset] at hz
   obtain ⟨w, ⟨e, he, hw⟩, rfl⟩ := hz
   have hfar := hsafe e he w hw x hx
-  have hcast : (supDist x w.1 : ℝ) = max |(x.1 : ℝ) - (w.1).1| |(x.2 : ℝ) - (w.1).2| := by
-    simp only [supDist, Nat.cast_max, Nat.cast_natAbs, Int.cast_abs, Int.cast_sub]
-  rw [← hcast]
+  rw [← cast_supDist x w.1]
   have : 4 * D₀ * s₀ < supDist x w.1 := lt_of_le_of_lt hD hfar
   exact_mod_cast this
 

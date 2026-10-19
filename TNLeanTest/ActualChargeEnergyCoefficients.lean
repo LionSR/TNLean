@@ -15,6 +15,8 @@ open TNLean.PEPS.AreaLaw TNLean.PEPS.AreaLaw.Scan
 
 noncomputable section
 
+open TNLean.Lattice
+
 namespace TNLeanTest.ActualChargeEnergyCoefficients
 
 open Classical in

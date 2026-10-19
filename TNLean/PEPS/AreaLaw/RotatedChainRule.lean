@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.AreaLaw.RegionalEntropyBridge
+import TNLean.Lattice.RegionalEntropyBridge
 import TNLean.PEPS.AreaLaw.RegionalStates
 
 /-!
@@ -35,6 +35,8 @@ least `1/N`.
 
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
+
+open TNLean.Lattice
 
 namespace TNLean.PEPS.AreaLaw
 

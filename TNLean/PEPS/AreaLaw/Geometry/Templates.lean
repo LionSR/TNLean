@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.AreaLaw.FiniteDomain
+import TNLean.Lattice.FiniteDomain
 import Mathlib.Analysis.Convex.Hull
 import Mathlib.Basic.Real.Basic
 
@@ -27,6 +27,8 @@ labels, and an order. It contains no spectral or information estimate.
 
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
+
+open TNLean.Lattice
 
 namespace TNLean.PEPS.AreaLaw.Geometry
 
