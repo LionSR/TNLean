@@ -39,6 +39,23 @@ Hermitian; individual terms need not be. The remaining conditions are
     every edge.
 \end{proof}
 
+\begin{lemma}[Removing the small sizes at a named prefactor]
+    \label{lem:peps_remove_small_sizes_named}
+    \lean{TNLean.PEPS.Approximation.hasPEPSApproximation_of_sufficiently_large_le}
+    \leanok
+    Fix integers $q\ge1$, $L\ge2$ and $L_0\ge0$, real $C$ and $c\ge0$, and a
+    unit vector $\Omega$ on the square of side $L$. If
+    $\mathcal A_{C,c}(L,\Omega)$ holds whenever $L\ge L_0$, then
+    $\mathcal A_{C',c}(L,\Omega)$ holds with $C'=\max\{C,q^{L_0^2}\}$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_exact_small_size_approximation,thm:peps_prefactor_monotone}
+    If $L<L_0$, Theorem~\ref{thm:peps_exact_small_size_approximation} gives
+    $\mathcal A_{C',c}(L,\Omega)$. Otherwise the assumed approximation
+    combines with Theorem~\ref{thm:peps_prefactor_monotone}, since $C\le C'$.
+\end{proof}
+
 \begin{theorem}[A uniform prefactor for every size]
     \label{thm:peps_remove_finite_exceptions}
     \lean{TNLean.PEPS.Approximation.exists_uniform_approximation_of_sufficiently_large}
@@ -57,13 +74,11 @@ Hermitian; individual terms need not be. The remaining conditions are
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:peps_uniform_small_size_approximation,thm:peps_prefactor_monotone}
-    Theorem~\ref{thm:peps_uniform_small_size_approximation} provides the
-    positive constant $C'=\max\{C,q^{L_0^2}\}\ge C$ covering all $2\le L<L_0$
-    and all unit vectors. When $L<L_0$, that theorem applies directly because
-    $\|\Omega\|=1$ by~(\ref{eq:peps_finite_ground}); when $L\ge L_0$, the
-    assumed approximation combines with Theorem~\ref{thm:peps_prefactor_monotone}
-    at the same prefactor $C'$.
+    \uses{lem:peps_remove_small_sizes_named}
+    Take $C'=\max\{C,q^{L_0^2}\}$, which is positive and at least $C$.
+    Since $\|\Omega\|=1$ by~(\ref{eq:peps_finite_ground}),
+    Lemma~\ref{lem:peps_remove_small_sizes_named} applies to every
+    $(H,E_0,\Omega)\in\mathcal G_{q,J,\Delta}(L)$ with $L\ge2$.
 \end{proof}
 
 \begin{theorem}[Equivalence with the sufficiently large size statement]
