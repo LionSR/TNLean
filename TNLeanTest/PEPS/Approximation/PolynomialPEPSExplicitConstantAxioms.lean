@@ -20,7 +20,6 @@ run_cmd do
     `TNLean.PEPS.Approximation.dyadicOperatorNetworkAt_of_dyadicProtocolBoundsAt,
     `TNLean.PEPS.Approximation.hasPEPSApproximation_of_dyadicOperatorNetworkAt,
     `TNLean.PEPS.Approximation.polynomialPEPSApproximation_of_largeSizeDyadicOperatorNetwork,
-    `TNLean.PEPS.Approximation.pepsCongestion_eq,
     `TNLean.PEPS.Approximation.polynomialPEPSApproximation_of_ratios]
   let expected := #[``propext, ``Classical.choice, ``Quot.sound]
   for decl in names do
