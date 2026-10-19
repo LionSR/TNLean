@@ -24,6 +24,7 @@ set_option autoImplicit false
 
 open TNLean.PEPS.AreaLaw TNLean.PEPS.AreaLaw.Scan
 open scoped BigOperators
+open TNLean.Lattice
 
 namespace TNLeanTest.PhysicalBadHistory
 

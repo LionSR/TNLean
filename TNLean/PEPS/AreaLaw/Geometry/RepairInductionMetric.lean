@@ -38,6 +38,8 @@ Written from the manuscript; no upstream Lean text is reused.
 
 noncomputable section
 
+open TNLean.Lattice
+
 namespace TNLean.PEPS.AreaLaw.Geometry
 
 /-- Each centered child offset has sup norm at most one.
@@ -449,37 +451,29 @@ theorem initialRepairStage_scale_separated (o : ℝ × ℝ) (Λ : Finset (ℤ ×
   obtain ⟨_, k, _, hk, _, _, hS⟩ := hspec.2.2.1 p
   exact ⟨k, hk, hS⟩
 
-/-- For every `0 < a₀ ≤ 1/4` there is a threshold `T` such that every
-stopping scale `S_* ≥ T` satisfies the margin `d(S) ≤ (a₀ / 1000) S` for
-`S ≥ S_*`, and, for each layer width, the initial stage has scales at least
-`S_*` once the lower layer index is large. The initial separation holds with
-constant `1/4`, hence with `a₀`.
+/-- **Explicit metric hypotheses.** For `0 < a₀ ≤ 1/4`, every stopping scale
+`S_* ≥ repairMarginThreshold a₀` satisfies the margin `d(S) ≤ (a₀ / 1000) S` for
+`S ≥ S_*`, and for every layer width and every lower layer index
+`k₀ ≥ fineScaleIndexThreshold S_*` the initial stage has scales at least `S_*`.
+The initial separation holds with constant `1/4`, hence with `a₀`.
 Source: area-law Section 11, `geometry:trim-margins`, lines 380–394, and
 `geometry:initial-stars`, lines 336–339. -/
-theorem exists_repairMetricHypotheses {a₀ : ℝ} (ha₀ : 0 < a₀) (ha₀' : a₀ ≤ 1 / 4) :
-    ∃ T : ℝ, ∀ Sstar, T ≤ Sstar → ∀ C : ℕ, ∃ K : ℕ,
-      ∀ (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ)) (k₀ : ℕ)
-        (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀), K ≤ k₀ →
-          RepairMetricHypotheses (o := o) (Λ := Λ) (A := A) (C := C) (k₀ := k₀)
-            (hC := hC) (h₀ := h₀) (Sstar := Sstar) a₀ := by
-  obtain ⟨T, hT⟩ := Filter.eventually_atTop.mp (eventually_repairHalfSide_le ha₀)
-  refine ⟨max T 1, fun Sstar hSstar C ↦ ?_⟩
-  have hSpos : 0 < Sstar := lt_of_lt_of_le one_pos ((le_max_right _ _).trans hSstar)
-  obtain ⟨m, hm⟩ := pow_unbounded_of_one_lt Sstar (one_lt_two : (1 : ℝ) < 2)
-  have hζ : (0 : ℝ) < Exponents.zeta := by
-    norm_num [Exponents.zeta, Exponents.geometryDelta]
-  refine ⟨⌈(m : ℝ) / Exponents.zeta⌉₊, fun o Λ A k₀ hC h₀ hK ↦ ?_⟩
+theorem repairMetricHypotheses_of_le {a₀ : ℝ} (ha₀ : 0 < a₀) (ha₀' : a₀ ≤ 1 / 4)
+    {Sstar : ℝ} (hSstar : repairMarginThreshold a₀ ≤ Sstar) (o : ℝ × ℝ)
+    (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ)) (C k₀ : ℕ) (hC : 2 ≤ C)
+    (h₀ : 50000000 ≤ k₀) (hK : fineScaleIndexThreshold Sstar ≤ k₀) :
+    RepairMetricHypotheses (o := o) (Λ := Λ) (A := A) (C := C) (k₀ := k₀)
+      (hC := hC) (h₀ := h₀) (Sstar := Sstar) a₀ := by
+  have hSpos : 0 < Sstar :=
+    lt_of_lt_of_le one_pos ((one_le_repairMarginThreshold a₀).trans hSstar)
   obtain ⟨hscale, hsep⟩ := initialRepairStage_scale_separated o Λ A C k₀ hC h₀
-  refine ⟨ha₀, by linarith, hSpos, fun S hS ↦ hT S ((le_max_left _ _).trans (hSstar.trans hS)),
+  refine ⟨ha₀, by linarith, hSpos,
+    fun S hS ↦ repairHalfSide_le_of_repairMarginThreshold_le ha₀ (hSstar.trans hS),
     fun p ↦ ?_, fun p q hpq ↦ ?_⟩
   · obtain ⟨k, hk, hS⟩ := hscale p
     change Sstar ≤ (initialRepairStage o Λ A C k₀ hC h₀).scale p
     rw [hS]
-    refine hm.le.trans (pow_le_pow_right₀ one_le_two ?_)
-    apply Nat.le_floor
-    have hK' : (m : ℝ) / Exponents.zeta ≤ k := (Nat.le_ceil _).trans (by exact_mod_cast hK.trans hk)
-    rw [div_le_iff₀ hζ] at hK'
-    linarith
+    exact le_two_pow_fineScaleIndex_of_fineScaleIndexThreshold_le (hK.trans hk)
   · have h1 := hsep p q hpq
     have h2 : 0 ≤ max ((initialRepairStage o Λ A C k₀ hC h₀).scale p)
         ((initialRepairStage o Λ A C k₀ hC h₀).scale q) := by
@@ -490,5 +484,22 @@ theorem exists_repairMetricHypotheses {a₀ : ℝ} (ha₀ : 0 < a₀) (ha₀' : 
       dist ((initialRepairStage o Λ A C k₀ hC h₀).location p)
         ((initialRepairStage o Λ A C k₀ hC h₀).location q)
     nlinarith
+
+/-- For every `0 < a₀ ≤ 1/4` there is a threshold `T` such that every
+stopping scale `S_* ≥ T` satisfies the margin `d(S) ≤ (a₀ / 1000) S` for
+`S ≥ S_*`, and, for each layer width, the initial stage has scales at least
+`S_*` once the lower layer index is large. The initial separation holds with
+constant `1/4`, hence with `a₀`. The thresholds are `repairMarginThreshold a₀`
+and `fineScaleIndexThreshold S_*` (`repairMetricHypotheses_of_le`).
+Source: area-law Section 11, `geometry:trim-margins`, lines 380–394, and
+`geometry:initial-stars`, lines 336–339. -/
+theorem exists_repairMetricHypotheses {a₀ : ℝ} (ha₀ : 0 < a₀) (ha₀' : a₀ ≤ 1 / 4) :
+    ∃ T : ℝ, ∀ Sstar, T ≤ Sstar → ∀ C : ℕ, ∃ K : ℕ,
+      ∀ (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ)) (k₀ : ℕ)
+        (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀), K ≤ k₀ →
+          RepairMetricHypotheses (o := o) (Λ := Λ) (A := A) (C := C) (k₀ := k₀)
+            (hC := hC) (h₀ := h₀) (Sstar := Sstar) a₀ :=
+  ⟨repairMarginThreshold a₀, fun _ hS _ ↦ ⟨fineScaleIndexThreshold _,
+    fun o Λ A _ hC h₀ hK ↦ repairMetricHypotheses_of_le ha₀ ha₀' hS o Λ A _ _ hC h₀ hK⟩⟩
 
 end TNLean.PEPS.AreaLaw.Geometry

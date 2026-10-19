@@ -106,6 +106,70 @@ the cores to an inverse power of the system size. This is Lemma~3.3 of
     $8\sqrt\delta\,N\le8\sqrt C(1+\lambda)L^{-p-3}\le L^{-p}$.
 \end{proof}
 
+\begin{definition}[Reset width and size threshold]
+    \label{def:peps_reset_width}
+    \lean{TNLean.PEPS.Approximation.resetWidth,
+        TNLean.PEPS.Approximation.resetThreshold,
+        TNLean.PEPS.Approximation.resetWidth_pos,
+        TNLean.PEPS.Approximation.resetWidth_eq}
+    \leanok
+    \uses{def:peps_reset_constants}
+    For an integer $q$ and real numbers $J,\Delta,p$, with $K$ and $C_U$ as in
+    Definition~\ref{def:peps_reset_constants}, put
+    \begin{align*}
+        C_p(J,\Delta,p)   & =K(J,\Delta,2p+10)+2,                                         \\
+        L_0(q,J,\Delta,p) & =\max\Bigl\{1,8\sqrt{C_U(J,\Delta,2p+10)}\,(1+\log q)\Bigr\}.
+    \end{align*}
+    In closed form,
+    \begin{align*}
+        C_p(J,\Delta,p) & =1280e^2\frac J\Delta(2p+40)+4p+52,
+    \end{align*}
+    and $C_p(J,\Delta,p)>0$ when $J\ge0$, $\Delta>0$ and $p>0$. The exponent
+    $2p+10$ is the error exponent $r_*$ of \cite{OpenAI2026PolynomialPEPS},
+    \texttt{02-information.tex}, lines 426--427. The source asks for
+    $C_p>K_{\mathrm{loc}}+3$ at lines 606--608; the margin $2$ suffices here
+    because the support radius $\lceil KB_*\rceil$ is less than $KB_*+1$ and
+    $B_*\ge1$.
+\end{definition}
+
+\begin{theorem}[Information reset, with explicit constants]
+    \label{thm:peps_information_reset_explicit}
+    \lean{TNLean.PEPS.Approximation.SquareHamiltonian.information_reset_of_resetThreshold_le}
+    \leanok
+    \uses{def:polynomial_peps_model,def:peps_reset_width}
+    Fix an integer $q\ge1$ and real numbers $J\ge0$, $\Delta>0$ and $p>0$, and
+    put $C_p=C_p(J,\Delta,p)$ and $L_0=L_0(q,J,\Delta,p)$ as in
+    Definition~\ref{def:peps_reset_width}. Let $L\ge L_0$ and let $\Omega$ be a
+    normalized ground vector of an open $L\times L$ square Hamiltonian with
+    interaction bound $J$ and full-system gap $\Delta$. Let $R,C$ be disjoint,
+    let $R_0\subseteq R$ and $C_0\subseteq C$, and suppose
+    $I_\Omega(R:C)\le b$ with $b\ge0$. If
+    \begin{align*}
+        \operatorname{dist}_\infty(R_0,R^c),\ \operatorname{dist}_\infty(C_0,C^c)
+         & >w=C_p(1+b+\log L),
+    \end{align*}
+    then $I_\Omega(R_0:C_0)\le L^{-p}$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_reset_unitary_explicit,thm:peps_reset_support_cores,
+        thm:peps_reset_cores_entropy,thm:peps_reset_entropy_scalar,
+        def:peps_reset_constants}
+    Take $r=2p+10$, $K=K(J,\Delta,r)$ and $C=C_U(J,\Delta,r)$ in
+    Theorem~\ref{thm:peps_reset_unitary_explicit}, so that $C_p=K+2$. Since
+    $1+b+\log L\ge1$, the radius $\ell=\lceil K(1+b+\log L)\rceil$ satisfies
+    $\ell+1\le w$. By Theorem~\ref{thm:peps_reset_support_cores}, the unitary
+    $U$ of Theorem~\ref{thm:peps_reset_unitary_explicit} is supported away from
+    both cores, so Theorem~\ref{thm:peps_reset_cores_entropy} gives
+    \begin{align*}
+        I_\Omega(R_0:C_0) & \le8\sqrt{\|U\Psi-\Phi\|}\,\log(e\,q^{|R_0|}).
+    \end{align*}
+    Only the physical dimension of the core enters. Since
+    $\|U\Psi-\Phi\|\le CL^{-r}$ and $|R_0|\le L^2$,
+    Theorem~\ref{thm:peps_reset_entropy_scalar} with $\lambda=\log q$ gives the
+    claim for $L\ge L_0=\max(1,8\sqrt C(1+\log q))$.
+\end{proof}
+
 \begin{theorem}[Information reset]
     \label{thm:peps_information_reset}
     \lean{TNLean.PEPS.Approximation.SquareHamiltonian.information_reset}
@@ -126,19 +190,7 @@ the cores to an inverse power of the system size. This is Lemma~3.3 of
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:peps_reset_unitary,thm:peps_reset_support_cores,
-        thm:peps_reset_cores_entropy,thm:peps_reset_entropy_scalar}
-    Take $r=2p+10$ and $C,K$ from Theorem~\ref{thm:peps_reset_unitary}, and
-    put $C_p=K+2$. Since $1+b+\log L\ge1$, the radius
-    $\ell=\lceil K(1+b+\log L)\rceil$ satisfies $\ell+1\le w$. By
-    Theorem~\ref{thm:peps_reset_support_cores}, the unitary $U$ of
-    Theorem~\ref{thm:peps_reset_unitary} is supported away from both cores, so
-    Theorem~\ref{thm:peps_reset_cores_entropy} gives
-    \begin{align*}
-        I_\Omega(R_0:C_0) & \le8\sqrt{\|U\Psi-\Phi\|}\,\log(e\,q^{|R_0|}).
-    \end{align*}
-    Only the physical dimension of the core enters. Since
-    $\|U\Psi-\Phi\|\le CL^{-r}$ and $|R_0|\le L^2$,
-    Theorem~\ref{thm:peps_reset_entropy_scalar} with $\lambda=\log q$ gives the
-    claim for $L\ge\max(1,8\sqrt C(1+\log q))$.
+    \uses{thm:peps_information_reset_explicit,def:peps_reset_width}
+    Take $C_p=C_p(J,\Delta,p)$, which is positive, and $L_0=L_0(q,J,\Delta,p)$
+    in Theorem~\ref{thm:peps_information_reset_explicit}.
 \end{proof}

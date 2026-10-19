@@ -11,10 +11,12 @@ import TNLean.PEPS.AreaLaw.Amplification.GoodRealization
 With the time `t_* = C (𝓘 + w + K log n)` and the radius `r = ⌈(C' (t_* + K log n))^{1/α}⌉`
 of `eq:amplification-time-choice`, the input bound `𝓘 ≤ C₀ n^{1-ε}` of
 `eq:amplification-input-information` and `w = n^{3/5}` give `r ≤ C_M n^{(1-ε)/α}`, the first
-half of `eq:amplification-radius`. The constant depends only on `g, C', C₀, K, α`.
+half of `eq:amplification-radius`. The constant depends only on `g, C', C₀, K, α`, and is
+given explicitly by `amplificationRadiusCoefficient`.
 
 ## Main statements
 
+* `TNLean.PEPS.AreaLaw.amplificationRadius_le_coefficient_mul_rpow`.
 * `TNLean.PEPS.AreaLaw.exists_amplificationRadius_le`.
 
 ## References
@@ -31,20 +33,35 @@ open Real
 
 namespace TNLean.PEPS.AreaLaw
 
-/-- **The radius bound of `eq:amplification-radius`.** For `g > 0`, `C' ≥ 0`, `C₀ ≥ 0`,
-an integer `K`, `0 < α` and `0 < ε ≤ 2/5`, there is a constant `C` such that at every
-scale `n ≥ 1` and for every input information `0 ≤ 𝓘 ≤ C₀ n^{1-ε}`, the radius chosen with
-`w = n^{3/5}` is at most `C n^{(1-ε)/α}`. Source: `09-amplification.tex`, lines 455–461 and
-563–565. -/
-theorem exists_amplificationRadius_le {g C' C₀ α ε : ℝ} (hg : 0 < g) (hC' : 0 ≤ C')
-    (hC₀ : 0 ≤ C₀) (hα : 0 < α) (hε : 0 < ε) (hε' : ε ≤ 2 / 5) (K : ℕ) :
-    ∃ C : ℝ, 0 ≤ C ∧ ∀ n : ℕ, 1 ≤ n → ∀ I : ℝ, 0 ≤ I → I ≤ C₀ * (n : ℝ) ^ (1 - ε) →
-      (amplificationRadius C' α (amplificationTime g I ((n : ℝ) ^ ((3 : ℝ) / 5)) K n) K n : ℝ) ≤
-        C * (n : ℝ) ^ ((1 - ε) / α) := by
+/-- The coefficient `C_rad = (C' B_r)^{1/α} + 1` of the radius bound, with
+`B_r = (6 / g)(C₀ + 1 + 2K / (1 - ε)) + K / (1 - ε)`. Source: `09-amplification.tex`,
+lines 455–461 and 563–565. -/
+noncomputable def amplificationRadiusCoefficient (g C' C₀ α ε : ℝ) (K : ℕ) : ℝ :=
+  (C' * (6 / g * (C₀ + 1 + 2 * K / (1 - ε)) + K / (1 - ε))) ^ α⁻¹ + 1
+
+/-- The radius coefficient is nonnegative. -/
+theorem amplificationRadiusCoefficient_nonneg {g C' C₀ ε : ℝ} (hg : 0 < g) (hC' : 0 ≤ C')
+    (hC₀ : 0 ≤ C₀) (α : ℝ) (hε : ε < 1) (K : ℕ) :
+    0 ≤ amplificationRadiusCoefficient g C' C₀ α ε K := by
+  have : 0 < 1 - ε := by linarith
+  unfold amplificationRadiusCoefficient
+  have : 0 ≤ C' * (6 / g * (C₀ + 1 + 2 * K / (1 - ε)) + K / (1 - ε)) := by positivity
+  positivity
+
+/-- **The radius bound of `eq:amplification-radius`, with an explicit constant.** For `g > 0`,
+`C' ≥ 0`, `C₀ ≥ 0`, an integer `K`, `0 < α` and `0 < ε ≤ 2/5`, at every scale `n ≥ 1` and for
+every input information `0 ≤ 𝓘 ≤ C₀ n^{1-ε}`, the radius chosen with `w = n^{3/5}` is at most
+`amplificationRadiusCoefficient g C' C₀ α ε K · n^{(1-ε)/α}`. Source: `09-amplification.tex`,
+lines 455–461 and 563–565. -/
+theorem amplificationRadius_le_coefficient_mul_rpow {g C' C₀ α ε : ℝ} (hg : 0 < g)
+    (hC' : 0 ≤ C') (hC₀ : 0 ≤ C₀) (hα : 0 < α) (hε : 0 < ε) (hε' : ε ≤ 2 / 5) (K : ℕ)
+    (n : ℕ) (hn : 1 ≤ n) (I : ℝ) (hI0 : 0 ≤ I) (hI : I ≤ C₀ * (n : ℝ) ^ (1 - ε)) :
+    (amplificationRadius C' α (amplificationTime g I ((n : ℝ) ^ ((3 : ℝ) / 5)) K n) K n : ℝ) ≤
+      amplificationRadiusCoefficient g C' C₀ α ε K * (n : ℝ) ^ ((1 - ε) / α) := by
+  unfold amplificationRadiusCoefficient
   set B : ℝ := 6 / g * (C₀ + 1 + 2 * K / (1 - ε)) + K / (1 - ε)
   have hε1 : 0 < 1 - ε := by linarith
   have hB : 0 ≤ B := by positivity
-  refine ⟨(C' * B) ^ α⁻¹ + 1, by positivity, fun n hn I hI0 hI => ?_⟩
   have hn0 : (0 : ℝ) < n := by exact_mod_cast hn
   have hn1 : (1 : ℝ) ≤ n := by exact_mod_cast hn
   set m := (n : ℝ) ^ (1 - ε) with hm
@@ -90,5 +107,18 @@ theorem exists_amplificationRadius_le {g C' C₀ α ε : ℝ} (hg : 0 < g) (hC' 
   have hceil := Nat.ceil_lt_add_one (by positivity : (0 : ℝ) ≤ (C' * (t + K * log n)) ^ α⁻¹)
   simp only [amplificationRadius]
   nlinarith
+
+/-- **The radius bound of `eq:amplification-radius`.** For `g > 0`, `C' ≥ 0`, `C₀ ≥ 0`,
+an integer `K`, `0 < α` and `0 < ε ≤ 2/5`, there is a constant `C` such that at every
+scale `n ≥ 1` and for every input information `0 ≤ 𝓘 ≤ C₀ n^{1-ε}`, the radius chosen with
+`w = n^{3/5}` is at most `C n^{(1-ε)/α}`. Source: `09-amplification.tex`, lines 455–461 and
+563–565. -/
+theorem exists_amplificationRadius_le {g C' C₀ α ε : ℝ} (hg : 0 < g) (hC' : 0 ≤ C')
+    (hC₀ : 0 ≤ C₀) (hα : 0 < α) (hε : 0 < ε) (hε' : ε ≤ 2 / 5) (K : ℕ) :
+    ∃ C : ℝ, 0 ≤ C ∧ ∀ n : ℕ, 1 ≤ n → ∀ I : ℝ, 0 ≤ I → I ≤ C₀ * (n : ℝ) ^ (1 - ε) →
+      (amplificationRadius C' α (amplificationTime g I ((n : ℝ) ^ ((3 : ℝ) / 5)) K n) K n : ℝ) ≤
+        C * (n : ℝ) ^ ((1 - ε) / α) :=
+  ⟨_, amplificationRadiusCoefficient_nonneg hg hC' hC₀ α (by linarith) K,
+    amplificationRadius_le_coefficient_mul_rpow hg hC' hC₀ hα hε hε' K⟩
 
 end TNLean.PEPS.AreaLaw

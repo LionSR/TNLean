@@ -22,6 +22,8 @@ proof text is reused. The ordered two-family construction and separation
 from the earlier pieces are further geometric inputs.
 -/
 
+open TNLean.Lattice
+
 namespace TNLean.PEPS.AreaLaw
 
 /-- A graph neighborhood of the part of an ambient target collar inside a cut

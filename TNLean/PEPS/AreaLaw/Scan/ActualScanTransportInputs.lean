@@ -64,6 +64,8 @@ open TensorPower TensorPower.ReplicaTransport Entropy
 
 noncomputable section
 
+open TNLean.Lattice
+
 namespace TNLean.PEPS.AreaLaw.Scan
 
 /-- The conclusions of Proposition 7.4 (`prop:transport`, `06-transport.tex`, lines 377–433)

@@ -33,7 +33,8 @@ allows `q, R, J, Δ` (`03-quasilocal.tex`, lines 41–42).
   truncation and ground-state part together with uniqueness of the truncated ground vector.
 * `TNLean.PEPS.AreaLaw.exists_latticeCrossingBudget`,
   `TNLean.PEPS.AreaLaw.exists_latticeCutBudget_le_log`: Proposition 4.5, crossing count and
-  cut budget.
+  cut budget; `TNLean.PEPS.AreaLaw.latticeCutBudget_le_log` gives the cut budget with the
+  explicit constant `latticeCutBudgetConstant`.
 
 ## References
 
@@ -45,11 +46,156 @@ allows `q, R, J, Δ` (`03-quasilocal.tex`, lines 41–42).
 -/
 
 open scoped Matrix Kronecker Matrix.Norms.L2Operator MatrixOrder ComplexOrder
+open TNLean.Lattice
 
 namespace TNLean.PEPS.AreaLaw
 
 open QuantumCircuit SpectralFilter
 open Matrix (rootChannel)
+
+/-- **Positive replacement of the Hamiltonian on a lattice domain, with named constants**
+(Proposition 4.3, `prop:positive`, `03-quasilocal.tex`, lines 220–334). Let `C₃, c₃` be the
+constants of the filter-locality tail of the positive constraints for the lattice localization
+constants `C = localizationPrefactor R 2 2`, `v = localizationVelocity R v_R (μ_R J)` and
+`c = 1/2`, with `v_R = 1 + 2R(R + 1)` and `μ_R = 2^{2R(R+1)}`: the hypothesis `htail` is the
+conclusion of `SpectralFilter.exists_norm_positiveConstraint_sub_map_le` at these constants.
+Then every conclusion of `exists_latticePositiveConstraints` holds with `C = C₃`, `c = c₃`.
+At `C₃ = latticePositiveConstraintConst R J Δ p` and `c₃ = latticePositiveConstraintRate R J Δ p`,
+`htail` is `norm_latticePositiveConstraint_sub_map_le`; see
+`latticePositiveConstraints_explicit`. -/
+theorem latticePositiveConstraints_of_locality {p : ℕ} (hp : 1 ≤ p) (R : ℕ) {J Δ C₃ c₃ : ℝ}
+    (hJ : 0 ≤ J) (hΔ : 0 < Δ)
+    (htail : ∀ {n : Type} [Fintype n] [DecidableEq n]
+      {H : Matrix n n ℂ} {Ω : EuclideanSpace ℂ n} {h : Matrix n n ℂ},
+      H.IsHermitian → ‖Ω‖ = 1 → h.IsHermitian → ‖h‖ ≤ J →
+      ∀ (L : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ), (∀ X, ‖L X‖ ≤ ‖X‖) → L 1 = 1 →
+      (∀ X, X.IsHermitian → (L X).IsHermitian) →
+      L (CFC.abs (L (centeredFilter p (Δ / 2) H Ω h))) =
+        CFC.abs (L (centeredFilter p (Δ / 2) H Ω h)) →
+      ∀ {l : ℝ}, 0 ≤ l →
+      (∀ t : ℝ, ‖Matrix.hermitianUnitaryPath H t * h * Matrix.hermitianUnitaryPath H (-t) -
+          L (Matrix.hermitianUnitaryPath H t * h * Matrix.hermitianUnitaryPath H (-t))‖ ≤
+        ‖h‖ * min 2 (localizationPrefactor R 2 2 * Real.exp (localizationVelocity R
+          (1 + 2 * R * (R + 1)) (((2 ^ ((1 + 2 * R * (R + 1)) - 1) : ℕ) : ℝ) * J) * |t| -
+            1 / 2 * l))) →
+      ‖positiveConstraint (positiveNormalization p (Δ / 2) J) (centeredFilter p (Δ / 2) H Ω h) -
+          L (positiveConstraint (positiveNormalization p (Δ / 2) J)
+            (centeredFilter p (Δ / 2) H Ω h))‖ ≤
+        C₃ * Real.exp (-(c₃ * l ^ kernelExponent p))) :
+    ∀ {q : ℕ} [NeZero q] (Λ : Finset (ℤ × ℤ)) (h : LocalHamiltonian Λ q R J)
+      (a : AdmissibleSupport Λ R → Site Λ), (∀ X, a X ∈ X.1) →
+      ∀ (E₀ : ℝ) (Ω : StateSpace Λ q), IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+      let cs := positiveNormalization p (Δ / 2) J
+      let k := fun i => positiveConstraint cs (centeredFilter p (Δ / 2) h.operator Ω (h.term i))
+      0 < cs ∧
+      (∀ i, 0 ≤ k i ∧ k i ≤ 1 ∧ k i *ᵥ WithLp.ofLp Ω = 0) ∧
+      cs⁻¹ • (h.operator - (E₀ : ℂ) • 1) ≤ ∑ i, k i ∧
+      ((Δ / cs : ℝ) : ℂ) • (1 - Matrix.vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))) ≤
+        cs⁻¹ • (h.operator - (E₀ : ℂ) • 1) ∧
+      ((Δ / cs : ℝ) : ℂ) • (1 - Matrix.vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))) ≤
+        ∑ i, k i ∧
+      (∀ i (l : ℕ), 0 ≤ siteExpectation q (graphBall (domainGraph Λ) (a i) l) (k i) ∧
+        siteExpectation q (graphBall (domainGraph Λ) (a i) l) (k i) ≤ 1 ∧
+        ‖k i - siteExpectation q (graphBall (domainGraph Λ) (a i) l) (k i)‖ ≤
+          C₃ * Real.exp (-(c₃ * (l : ℝ) ^ kernelExponent p))) ∧
+      (∀ i, k i ∈ supportedOperators q {x | (domainGraph Λ).Reachable (a i) x}) := by
+  intro q _ Λ h a ha E₀ Ω hgs
+  obtain ⟨hΩ, hHΩ, hgap⟩ := Matrix.isGappedGroundState_iff.mp hgs
+  obtain ⟨hk, hsum, hgapk, htail, hcomp⟩ := positiveQuasilocalConstraints_of_locality hp R
+    (1 + 2 * R * (R + 1)) (((2 ^ ((1 + 2 * R * (R + 1)) - 1) : ℕ) : ℝ) * J) 2 2 hΔ htail
+    (q := q) (ι := Site Λ) (κ := AdmissibleSupport Λ R) (domainGraph Λ) (fun X => X.1) a ha
+    h.term h.hermitian h.supported (fun X => X.2.edist_le) (fun X => X.2.card_le)
+    (h.sum_norm_term_containing_le hJ) (card_domainGraph_sphere_le Λ) h.norm_le E₀ Ω hΩ hHΩ hgap
+  exact ⟨positiveNormalization_pos p _ J, hk, hsum, hgapk, hgapk.trans hsum, htail, hcomp⟩
+
+/-- The prefactor `C₃` of the tail of the positive constraints on a lattice domain: the
+QICLean filter-locality constant at the lattice localization prefactor
+`localizationPrefactor R 2 2` and rate `c = 1/2` (Proposition 4.3, `prop:positive`,
+`eq:quasilocal-positive-tail`, `03-quasilocal.tex`, lines 240–243 and 285–334). It depends only
+on `R, J, Δ, p`. -/
+noncomputable def latticePositiveConstraintConst (R : ℕ) (J Δ : ℝ) (p : ℕ) : ℝ :=
+  positiveConstraintLocalityConst p Δ J (localizationPrefactor R 2 2) (1 / 2)
+
+/-- The rate `c₃` of the tail of the positive constraints on a lattice domain: the QICLean
+filter-locality rate at the lattice velocity `localizationVelocity R v_R (μ_R J)`, with
+`v_R = 1 + 2R(R + 1)` and `μ_R = 2^{2R(R+1)}`, and rate `c = 1/2` (Proposition 4.3,
+`prop:positive`, `eq:quasilocal-positive-tail`, `03-quasilocal.tex`, lines 240–243 and
+285–334). It depends only on `R, J, Δ, p`. -/
+noncomputable def latticePositiveConstraintRate (R : ℕ) (J Δ : ℝ) (p : ℕ) : ℝ :=
+  positiveConstraintLocalityRate p Δ
+    (localizationVelocity R (1 + 2 * R * (R + 1))
+      (((2 ^ ((1 + 2 * R * (R + 1)) - 1) : ℕ) : ℝ) * J)) (1 / 2)
+
+/-- The prefactor `latticePositiveConstraintConst R J Δ p` is nonnegative. -/
+theorem latticePositiveConstraintConst_nonneg (R : ℕ) (J Δ : ℝ) (p : ℕ) :
+    0 ≤ latticePositiveConstraintConst R J Δ p :=
+  positiveConstraintLocalityConst_nonneg p Δ J (localizationPrefactor R 2 2) (1 / 2)
+
+/-- The rate `latticePositiveConstraintRate R J Δ p` is positive for `p ≥ 1` and `Δ > 0`. -/
+theorem latticePositiveConstraintRate_pos {p : ℕ} (hp : 1 ≤ p) (R : ℕ) (J : ℝ) {Δ : ℝ}
+    (hΔ : 0 < Δ) : 0 < latticePositiveConstraintRate R J Δ p :=
+  positiveConstraintLocalityRate_pos hp hΔ (localizationVelocity_pos R (1 + 2 * R * (R + 1))
+    (((2 ^ ((1 + 2 * R * (R + 1)) - 1) : ℕ) : ℝ) * J)) one_half_pos
+
+/-- **Tail of the positive constraints on a lattice domain, at the named constants**
+(Proposition 4.3, `eq:quasilocal-positive-tail`, `03-quasilocal.tex`, lines 240–243 and
+285–334). The filter-locality estimate of the positive constraints for the lattice localization
+constants, with `C₃ = latticePositiveConstraintConst R J Δ p` and
+`c₃ = latticePositiveConstraintRate R J Δ p`. No sign condition on `J` is needed: for `J < 0`
+the hypothesis `‖h‖ ≤ J` fails. -/
+theorem norm_latticePositiveConstraint_sub_map_le {p : ℕ} (hp : 1 ≤ p) (R : ℕ) {J Δ : ℝ}
+    (hΔ : 0 < Δ) {n : Type*} [Fintype n] [DecidableEq n] {H : Matrix n n ℂ}
+    {Ω : EuclideanSpace ℂ n} {h : Matrix n n ℂ} (hH : H.IsHermitian) (hΩ : ‖Ω‖ = 1)
+    (hh : h.IsHermitian) (hhJ : ‖h‖ ≤ J) (L : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ)
+    (hcontr : ∀ X, ‖L X‖ ≤ ‖X‖) (hunit : L 1 = 1)
+    (hherm : ∀ X, X.IsHermitian → (L X).IsHermitian)
+    (hfix : L (CFC.abs (L (centeredFilter p (Δ / 2) H Ω h))) =
+      CFC.abs (L (centeredFilter p (Δ / 2) H Ω h)))
+    {l : ℝ} (hl : 0 ≤ l)
+    (hτ : ∀ t : ℝ, ‖Matrix.hermitianUnitaryPath H t * h * Matrix.hermitianUnitaryPath H (-t) -
+        L (Matrix.hermitianUnitaryPath H t * h * Matrix.hermitianUnitaryPath H (-t))‖ ≤
+      ‖h‖ * min 2 (localizationPrefactor R 2 2 * Real.exp (localizationVelocity R
+        (1 + 2 * R * (R + 1)) (((2 ^ ((1 + 2 * R * (R + 1)) - 1) : ℕ) : ℝ) * J) * |t| -
+          1 / 2 * l))) :
+    ‖positiveConstraint (positiveNormalization p (Δ / 2) J) (centeredFilter p (Δ / 2) H Ω h) -
+        L (positiveConstraint (positiveNormalization p (Δ / 2) J)
+          (centeredFilter p (Δ / 2) H Ω h))‖ ≤
+      latticePositiveConstraintConst R J Δ p *
+        Real.exp (-(latticePositiveConstraintRate R J Δ p * l ^ kernelExponent p)) := by
+  rcases le_or_gt 0 J with hJ | hJ
+  · unfold latticePositiveConstraintConst latticePositiveConstraintRate
+    exact norm_positiveConstraint_sub_map_le hp hΔ hJ (localizationPrefactor_nonneg R 2 2)
+      (localizationVelocity_pos _ _ _) one_half_pos hH hΩ hh hhJ L hcontr hunit hherm hfix hl hτ
+  · exact absurd ((norm_nonneg h).trans hhJ) (not_le.mpr hJ)
+
+/-- **Positive replacement of the Hamiltonian on a lattice domain, at the named constants**
+(Proposition 4.3, `prop:positive`, `03-quasilocal.tex`, lines 220–334). Every conclusion of
+`exists_latticePositiveConstraints` holds with `C = latticePositiveConstraintConst R J Δ p` and
+`c = latticePositiveConstraintRate R J Δ p`. -/
+theorem latticePositiveConstraints_explicit {p : ℕ} (hp : 1 ≤ p) (R : ℕ) {J Δ : ℝ}
+    (hJ : 0 ≤ J) (hΔ : 0 < Δ) :
+    ∀ {q : ℕ} [NeZero q] (Λ : Finset (ℤ × ℤ)) (h : LocalHamiltonian Λ q R J)
+      (a : AdmissibleSupport Λ R → Site Λ), (∀ X, a X ∈ X.1) →
+      ∀ (E₀ : ℝ) (Ω : StateSpace Λ q), IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+      let cs := positiveNormalization p (Δ / 2) J
+      let k := fun i => positiveConstraint cs (centeredFilter p (Δ / 2) h.operator Ω (h.term i))
+      0 < cs ∧
+      (∀ i, 0 ≤ k i ∧ k i ≤ 1 ∧ k i *ᵥ WithLp.ofLp Ω = 0) ∧
+      cs⁻¹ • (h.operator - (E₀ : ℂ) • 1) ≤ ∑ i, k i ∧
+      ((Δ / cs : ℝ) : ℂ) • (1 - Matrix.vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))) ≤
+        cs⁻¹ • (h.operator - (E₀ : ℂ) • 1) ∧
+      ((Δ / cs : ℝ) : ℂ) • (1 - Matrix.vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))) ≤
+        ∑ i, k i ∧
+      (∀ i (l : ℕ), 0 ≤ siteExpectation q (graphBall (domainGraph Λ) (a i) l) (k i) ∧
+        siteExpectation q (graphBall (domainGraph Λ) (a i) l) (k i) ≤ 1 ∧
+        ‖k i - siteExpectation q (graphBall (domainGraph Λ) (a i) l) (k i)‖ ≤
+          latticePositiveConstraintConst R J Δ p *
+            Real.exp (-(latticePositiveConstraintRate R J Δ p * (l : ℝ) ^ kernelExponent p))) ∧
+      (∀ i, k i ∈ supportedOperators q {x | (domainGraph Λ).Reachable (a i) x}) :=
+  latticePositiveConstraints_of_locality hp R hJ hΔ
+    (fun hH hΩ hh hhJ L hcontr hunit hherm hfix _ hl hτ =>
+      norm_latticePositiveConstraint_sub_map_le hp R hΔ hH hΩ hh hhJ L hcontr hunit hherm hfix
+        hl hτ)
 
 /-- **Positive replacement of the Hamiltonian on a lattice domain** (Proposition 4.3,
 `prop:positive`, `03-quasilocal.tex`, lines 220–246). For `p ≥ 1`, `α = p / (p + 1)`,
@@ -83,16 +229,8 @@ theorem exists_latticePositiveConstraints {p : ℕ} (hp : 1 ≤ p) (R : ℕ) {J 
           ‖k i - siteExpectation q (graphBall (domainGraph Λ) (a i) l) (k i)‖ ≤
             C * Real.exp (-(c * (l : ℝ) ^ kernelExponent p))) ∧
         (∀ i, k i ∈ supportedOperators q {x | (domainGraph Λ).Reachable (a i) x}) := by
-  obtain ⟨C, c, hC, hc, hpos⟩ := exists_positiveQuasilocalConstraints.{0, 0} hp R
-    (1 + 2 * R * (R + 1)) (((2 ^ ((1 + 2 * R * (R + 1)) - 1) : ℕ) : ℝ) * J) 2 2 hJ hΔ
-  refine ⟨C, c, hC, hc, ?_⟩
-  intro q _ Λ h a ha E₀ Ω hgs
-  obtain ⟨hΩ, hHΩ, hgap⟩ := Matrix.isGappedGroundState_iff.mp hgs
-  obtain ⟨hk, hsum, hgapk, htail, hcomp⟩ := @hpos q _ (Site Λ) _ _ (AdmissibleSupport Λ R) _
-    (domainGraph Λ) (fun X => X.1) a ha h.term h.hermitian h.supported (fun X => X.2.edist_le)
-    (fun X => X.2.card_le) (h.sum_norm_term_containing_le hJ) (card_domainGraph_sphere_le Λ)
-    h.norm_le E₀ Ω hΩ hHΩ hgap
-  exact ⟨positiveNormalization_pos p _ J, hk, hsum, hgapk, hgapk.trans hsum, htail, hcomp⟩
+  exact ⟨_, _, latticePositiveConstraintConst_nonneg R J Δ p,
+    latticePositiveConstraintRate_pos hp R J hΔ, latticePositiveConstraints_explicit hp R hJ hΔ⟩
 
 /-- **Square roots and local channels on a lattice domain** (Lemma 4.4,
 `lem:quasilocal-roots`, `03-quasilocal.tex`, lines 336–389). For `p ≥ 1`, `R`, `J ≥ 0`,
@@ -156,6 +294,138 @@ theorem exists_latticeQuasilocalRoots {p : ℕ} (hp : 1 ≤ p) (R : ℕ) {J Δ :
     localRootChannel_eq_self_of_forall_commute _ (hk i).1 (hk i).2.1 hB⟩
   rw [hsq]; simp only [ε]; ring
 
+/-- The truncation constant `C₁ = finiteSetTruncationConstant C₃ c₃ (Δ / c_*) μ_R 2 C₀` of
+Proposition 4.5 on a lattice domain, with `c_* = positiveNormalization 1 (Δ / 2) J`, anchor
+multiplicity `μ_R = 2^{2R(R+1)}` and ball growth `2 (d + 1)²`. The constants `C₃, c₃` are the
+filter-locality constants of the positive constraints at `p = 1` (`03-quasilocal.tex`,
+lines 220–334 and 405–505). -/
+noncomputable def latticeFiniteSetTruncationConstant (R : ℕ) (J Δ C₀ C₃ c₃ : ℝ) : ℝ :=
+  finiteSetTruncationConstant C₃ c₃ (Δ / positiveNormalization 1 (Δ / 2) J)
+    ((2 ^ ((1 + 2 * R * (R + 1)) - 1) : ℕ) : ℝ) 2 C₀
+
+theorem latticeFiniteSetTruncationConstant_pos (R : ℕ) {J Δ C₀ C₃ c₃ : ℝ} (hΔ : 0 < Δ)
+    (hC₀ : 0 ≤ C₀) (hC₃ : 0 ≤ C₃) (hc₃ : 0 < c₃) :
+    0 < latticeFiniteSetTruncationConstant R J Δ C₀ C₃ c₃ :=
+  finiteSetTruncationConstant_pos hC₃ hc₃ (div_pos hΔ (positiveNormalization_pos 1 _ J))
+    (Nat.cast_nonneg _) zero_le_two hC₀
+
+/-- **Truncation near a finite set on a lattice domain, with an explicit constant**
+(Proposition 4.5, `prop:truncation`, first part, `03-quasilocal.tex`, lines 405–433 and
+457–505, with Proposition 4.3 at `p = 1`, lines 220–334). Let `C₃ ≥ 0`, `c₃ > 0` be the
+filter-locality constants of `latticePositiveConstraints_of_locality` at `p = 1`. Then every
+conclusion of `exists_latticeFiniteSetTruncation` holds with
+`C₁ = latticeFiniteSetTruncationConstant R J Δ C₀ C₃ c₃`. At the named constants
+`C₃ = latticePositiveConstraintConst R J Δ 1` and `c₃ = latticePositiveConstraintRate R J Δ 1`
+this is `latticeFiniteSetTruncation_explicit`. -/
+theorem latticeFiniteSetTruncation_of_locality (R : ℕ) {J Δ C₀ C₃ c₃ : ℝ} (hJ : 0 ≤ J)
+    (hΔ : 0 < Δ) (hC₀ : 0 ≤ C₀) (hC₃ : 0 ≤ C₃) (hc₃ : 0 < c₃)
+    (htail : ∀ {n : Type} [Fintype n] [DecidableEq n]
+      {H : Matrix n n ℂ} {Ω : EuclideanSpace ℂ n} {h : Matrix n n ℂ},
+      H.IsHermitian → ‖Ω‖ = 1 → h.IsHermitian → ‖h‖ ≤ J →
+      ∀ (L : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ), (∀ X, ‖L X‖ ≤ ‖X‖) → L 1 = 1 →
+      (∀ X, X.IsHermitian → (L X).IsHermitian) →
+      L (CFC.abs (L (centeredFilter 1 (Δ / 2) H Ω h))) =
+        CFC.abs (L (centeredFilter 1 (Δ / 2) H Ω h)) →
+      ∀ {l : ℝ}, 0 ≤ l →
+      (∀ t : ℝ, ‖Matrix.hermitianUnitaryPath H t * h * Matrix.hermitianUnitaryPath H (-t) -
+          L (Matrix.hermitianUnitaryPath H t * h * Matrix.hermitianUnitaryPath H (-t))‖ ≤
+        ‖h‖ * min 2 (localizationPrefactor R 2 2 * Real.exp (localizationVelocity R
+          (1 + 2 * R * (R + 1)) (((2 ^ ((1 + 2 * R * (R + 1)) - 1) : ℕ) : ℝ) * J) * |t| -
+            1 / 2 * l))) →
+      ‖positiveConstraint (positiveNormalization 1 (Δ / 2) J) (centeredFilter 1 (Δ / 2) H Ω h) -
+          L (positiveConstraint (positiveNormalization 1 (Δ / 2) J)
+            (centeredFilter 1 (Δ / 2) H Ω h))‖ ≤
+        C₃ * Real.exp (-(c₃ * l ^ kernelExponent 1))) :
+    ∀ {q : ℕ} [NeZero q] (Λ : Finset (ℤ × ℤ)) (h : LocalHamiltonian Λ q R J)
+      (a : AdmissibleSupport Λ R → Site Λ), (∀ X, a X ∈ X.1) →
+      ∀ (E₀ : ℝ) (Ω : StateSpace Λ q), IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+      ∀ n : ℝ, 2 ≤ n → ∀ S₀ : Finset (Site Λ), (S₀.card : ℝ) ≤ C₀ * n ^ 2 →
+      let G := domainGraph Λ
+      let cs := positiveNormalization 1 (Δ / 2) J
+      let g := Δ / cs
+      let k := fun i => positiveConstraint cs (centeredFilter 1 (Δ / 2) h.operator Ω (h.term i))
+      let r₀ := ⌈latticeFiniteSetTruncationConstant R J Δ C₀ C₃ c₃ * Real.log n ^ 2⌉₊
+      let ε := min (n ^ (-1000 : ℝ)) (g / 4)
+      let Ht := ∑ i, truncatedConstraint q G S₀ r₀ (a i) (k i)
+      (∀ i, truncatedConstraint q G S₀ r₀ (a i) (k i) ∈
+        supportedOperators q (designatedSupport G S₀ r₀ (a i) : Set (Site Λ))) ∧
+      (∀ i, 0 ≤ truncatedConstraint q G S₀ r₀ (a i) (k i) ∧
+        truncatedConstraint q G S₀ r₀ (a i) (k i) ≤ 1) ∧
+      ‖Ht - ∑ i, k i‖ ≤ ε ∧
+      ∃ (e : ℝ) (Ω₀ : StateSpace Λ q), ‖Ω₀‖ = 1 ∧
+        Ht *ᵥ WithLp.ofLp Ω₀ = (e : ℂ) • WithLp.ofLp Ω₀ ∧ 0 ≤ e ∧ e ≤ ε ∧
+        (Ht - (e : ℂ) • 1 - ((g / 2 : ℝ) : ℂ) •
+          (1 - Matrix.vecMulVec (WithLp.ofLp Ω₀) (star (WithLp.ofLp Ω₀)))).PosSemidef ∧
+        (∃ θ : ℝ, ‖Ω₀ - Complex.exp (θ * Complex.I) • Ω‖ ≤ 2 * Real.sqrt (ε / g)) ∧
+        Matrix.traceDistance (Matrix.vecMulVec (WithLp.ofLp Ω₀) (star (WithLp.ofLp Ω₀)))
+            (Matrix.vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))) ≤
+          Real.sqrt (2 * ε / g) := by
+  intro q _ Λ h a ha E₀ Ω hgs n hn S₀ hS₀
+  obtain ⟨hΩ, hHΩ, hgap⟩ := Matrix.isGappedGroundState_iff.mp hgs
+  exact finiteSetTruncation_of_locality R (1 + 2 * R * (R + 1))
+    (((2 ^ ((1 + 2 * R * (R + 1)) - 1) : ℕ) : ℝ) * J) 2 2 (Kb := 2)
+    (μ := ((2 ^ ((1 + 2 * R * (R + 1)) - 1) : ℕ) : ℝ)) hΔ zero_le_two (Nat.cast_nonneg _) hC₀ hC₃
+    hc₃ htail (q := q) (ι := Site Λ) (κ := AdmissibleSupport Λ R) (domainGraph Λ) (fun X => X.1)
+    a ha
+    h.term h.hermitian h.supported (fun X => X.2.edist_le) (fun X => X.2.card_le)
+    (h.sum_norm_term_containing_le hJ) (card_domainGraph_sphere_le Λ) card_graphBall_domainGraph_le
+    (fun x => by exact_mod_cast card_anchor_fiber_le a ha x) h.norm_le E₀ Ω hΩ hHΩ hgap n hn S₀
+    hS₀
+
+/-- The truncation constant `C₁` of Proposition 4.5 on a lattice domain, at the named
+filter-locality constants of Proposition 4.3 with `p = 1`:
+`latticeFiniteSetTruncationConstant R J Δ C₀ C₃ c₃` with
+`C₃ = latticePositiveConstraintConst R J Δ 1` and `c₃ = latticePositiveConstraintRate R J Δ 1`.
+It depends only on `R, J, Δ, C₀`, and the base truncation radius is
+`r₀ = ⌈C₁ (log n)²⌉` (`03-quasilocal.tex`, lines 220–334 and 405–505). -/
+noncomputable def latticeTruncationRadiusConstant (R : ℕ) (J Δ C₀ : ℝ) : ℝ :=
+  latticeFiniteSetTruncationConstant R J Δ C₀ (latticePositiveConstraintConst R J Δ 1)
+    (latticePositiveConstraintRate R J Δ 1)
+
+/-- The truncation constant `latticeTruncationRadiusConstant R J Δ C₀` is positive for `Δ > 0`
+and `C₀ ≥ 0`. -/
+theorem latticeTruncationRadiusConstant_pos (R : ℕ) {J Δ C₀ : ℝ} (hΔ : 0 < Δ) (hC₀ : 0 ≤ C₀) :
+    0 < latticeTruncationRadiusConstant R J Δ C₀ :=
+  latticeFiniteSetTruncationConstant_pos R hΔ hC₀ (latticePositiveConstraintConst_nonneg R J Δ 1)
+    (latticePositiveConstraintRate_pos (le_refl 1) R J hΔ)
+
+/-- **Truncation near a finite set on a lattice domain, at the named constant**
+(Proposition 4.5, `prop:truncation`, first part, `03-quasilocal.tex`, lines 405–433 and
+457–505, with Proposition 4.3 at `p = 1`, lines 220–334). Every conclusion of
+`exists_latticeFiniteSetTruncation` holds with `C₁ = latticeTruncationRadiusConstant R J Δ C₀`,
+which depends only on `R, J, Δ, C₀`. -/
+theorem latticeFiniteSetTruncation_explicit (R : ℕ) {J Δ C₀ : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < Δ)
+    (hC₀ : 0 ≤ C₀) :
+    ∀ {q : ℕ} [NeZero q] (Λ : Finset (ℤ × ℤ)) (h : LocalHamiltonian Λ q R J)
+      (a : AdmissibleSupport Λ R → Site Λ), (∀ X, a X ∈ X.1) →
+      ∀ (E₀ : ℝ) (Ω : StateSpace Λ q), IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+      ∀ n : ℝ, 2 ≤ n → ∀ S₀ : Finset (Site Λ), (S₀.card : ℝ) ≤ C₀ * n ^ 2 →
+      let G := domainGraph Λ
+      let cs := positiveNormalization 1 (Δ / 2) J
+      let g := Δ / cs
+      let k := fun i => positiveConstraint cs (centeredFilter 1 (Δ / 2) h.operator Ω (h.term i))
+      let r₀ := ⌈latticeTruncationRadiusConstant R J Δ C₀ * Real.log n ^ 2⌉₊
+      let ε := min (n ^ (-1000 : ℝ)) (g / 4)
+      let Ht := ∑ i, truncatedConstraint q G S₀ r₀ (a i) (k i)
+      (∀ i, truncatedConstraint q G S₀ r₀ (a i) (k i) ∈
+        supportedOperators q (designatedSupport G S₀ r₀ (a i) : Set (Site Λ))) ∧
+      (∀ i, 0 ≤ truncatedConstraint q G S₀ r₀ (a i) (k i) ∧
+        truncatedConstraint q G S₀ r₀ (a i) (k i) ≤ 1) ∧
+      ‖Ht - ∑ i, k i‖ ≤ ε ∧
+      ∃ (e : ℝ) (Ω₀ : StateSpace Λ q), ‖Ω₀‖ = 1 ∧
+        Ht *ᵥ WithLp.ofLp Ω₀ = (e : ℂ) • WithLp.ofLp Ω₀ ∧ 0 ≤ e ∧ e ≤ ε ∧
+        (Ht - (e : ℂ) • 1 - ((g / 2 : ℝ) : ℂ) •
+          (1 - Matrix.vecMulVec (WithLp.ofLp Ω₀) (star (WithLp.ofLp Ω₀)))).PosSemidef ∧
+        (∃ θ : ℝ, ‖Ω₀ - Complex.exp (θ * Complex.I) • Ω‖ ≤ 2 * Real.sqrt (ε / g)) ∧
+        Matrix.traceDistance (Matrix.vecMulVec (WithLp.ofLp Ω₀) (star (WithLp.ofLp Ω₀)))
+            (Matrix.vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))) ≤
+          Real.sqrt (2 * ε / g) :=
+  latticeFiniteSetTruncation_of_locality R hJ hΔ hC₀ (latticePositiveConstraintConst_nonneg R J Δ 1)
+    (latticePositiveConstraintRate_pos (le_refl 1) R J hΔ)
+    (fun hH hΩ hh hhJ L hcontr hunit hherm hfix _ hl hτ =>
+      norm_latticePositiveConstraint_sub_map_le (le_refl 1) R hΔ hH hΩ hh hhJ L hcontr hunit
+        hherm hfix hl hτ)
+
 /-- **Truncation near a finite set on a lattice domain** (Proposition 4.5, `prop:truncation`,
 first part, `03-quasilocal.tex`, lines 405–433 and 457–505). Take `p = 1` in
 `exists_latticePositiveConstraints`, so `α = 1/2`, and fix `R`, `J ≥ 0`, `Δ > 0`, `C₀ ≥ 0`.
@@ -195,17 +465,8 @@ theorem exists_latticeFiniteSetTruncation (R : ℕ) {J Δ C₀ : ℝ} (hJ : 0 �
           Matrix.traceDistance (Matrix.vecMulVec (WithLp.ofLp Ω₀) (star (WithLp.ofLp Ω₀)))
               (Matrix.vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))) ≤
             Real.sqrt (2 * ε / g) := by
-  obtain ⟨C₁, hC₁, htr⟩ := exists_finiteSetTruncation_of_gap.{0, 0} R (1 + 2 * R * (R + 1))
-    (((2 ^ ((1 + 2 * R * (R + 1)) - 1) : ℕ) : ℝ) * J) 2 2 hJ hΔ (Kb := 2)
-    (μ := ((2 ^ ((1 + 2 * R * (R + 1)) - 1) : ℕ) : ℝ)) zero_le_two (Nat.cast_nonneg _) hC₀
-  refine ⟨C₁, hC₁, ?_⟩
-  intro q _ Λ h a ha E₀ Ω hgs n hn S₀ hS₀
-  obtain ⟨hΩ, hHΩ, hgap⟩ := Matrix.isGappedGroundState_iff.mp hgs
-  exact @htr q _ (Site Λ) _ _ (AdmissibleSupport Λ R) _ (domainGraph Λ) (fun X => X.1) a ha
-    h.term h.hermitian h.supported (fun X => X.2.edist_le) (fun X => X.2.card_le)
-    (h.sum_norm_term_containing_le hJ) (card_domainGraph_sphere_le Λ) card_graphBall_domainGraph_le
-    (fun x => by exact_mod_cast card_anchor_fiber_le a ha x) h.norm_le E₀ Ω hΩ hHΩ hgap n hn S₀
-    hS₀
+  exact ⟨_, latticeTruncationRadiusConstant_pos (J := J) R hΔ hC₀,
+    latticeFiniteSetTruncation_explicit R hJ hΔ hC₀⟩
 
 /-- **Truncation near a finite set on a lattice domain, with a unique ground vector**
 (Proposition 4.5, `prop:truncation`, first part, `03-quasilocal.tex`, lines 405–433 and
@@ -303,6 +564,53 @@ theorem exists_latticeCrossingBudget {q : ℕ} (hq : 1 ≤ q) (R : ℕ) :
       hMult).trans ?_
     gcongr
 
+/-- The explicit cut-budget coefficient `max 1 (4 μ_R (1 + 2 log q)²)` on a lattice domain,
+where `μ_R = 2^(2R(R+1))` bounds the labels per anchor and balls of radius `d` have at most
+`2 (d + 1)²` sites (`03-quasilocal.tex`, lines 434–451 and 505–518). -/
+noncomputable def latticeCutCoefficient (q R : ℕ) : ℝ :=
+  max 1 (2 * ((2 ^ ((1 + 2 * R * (R + 1)) - 1) : ℕ) : ℝ) * 2 * (1 + 2 * Real.log q) ^ 2)
+
+/-- **The cut budget on a lattice domain, with an explicit coefficient**
+(Proposition 4.5, `eq:quasilocal-cut-budget`, `03-quasilocal.tex`, lines 434–451 and
+505–518): `ℬ_X ≤ latticeCutCoefficient q R (1 + b_X) (r₀ + 1)⁶` for every `X ⊆ S₀`. -/
+theorem cutBudget_le_latticeCutCoefficient {q : ℕ} (hq : 1 ≤ q) (R : ℕ)
+    (Λ : Finset (ℤ × ℤ)) (a : AdmissibleSupport Λ R → Site Λ) (ha : ∀ X, a X ∈ X.1)
+    (S₀ : Finset (Site Λ)) (r₀ : ℕ) {X : Finset (Site Λ)} (hX : X ⊆ S₀) :
+    cutBudget q (domainGraph Λ) S₀ r₀ a X ≤
+      latticeCutCoefficient q R * (1 + (edgeBoundary Λ X).card) * ((r₀ : ℝ) + 1) ^ 6 := by
+  refine (cutBudget_le hq _ S₀ r₀ a hX zero_le_two (Nat.cast_nonneg _)
+    card_graphBall_domainGraph_le fun x => by exact_mod_cast card_anchor_fiber_le a ha x).trans ?_
+  have hb : ((cutEdges (domainGraph Λ) X).card : ℝ) ≤ (edgeBoundary Λ X).card := by
+    exact_mod_cast card_cutEdges_le_card_edgeBoundary X
+  unfold latticeCutCoefficient
+  gcongr
+
+/-- The explicit constant `latticeCutCoefficient q R (1 + C₂) (C₁ + 2 / (log 2)²)⁶` of the
+cut budget in terms of `n` (Proposition 4.5, last sentence, `03-quasilocal.tex`,
+lines 452–455 and 519–520). -/
+noncomputable def latticeCutBudgetConstant (q R : ℕ) (C₁ C₂ : ℝ) : ℝ :=
+  latticeCutCoefficient q R * (1 + C₂) * (C₁ + 2 / Real.log 2 ^ 2) ^ 6
+
+/-- The lattice cut-budget constant is nonnegative. -/
+theorem latticeCutBudgetConstant_nonneg (q R : ℕ) {C₁ C₂ : ℝ} (hC₁ : 0 ≤ C₁) (hC₂ : 0 ≤ C₂) :
+    0 ≤ latticeCutBudgetConstant q R C₁ C₂ := by
+  have : 0 ≤ latticeCutCoefficient q R := zero_le_one.trans (le_max_left _ _)
+  unfold latticeCutBudgetConstant
+  positivity
+
+/-- **The cut budget in terms of `n`, with an explicit constant** (Proposition 4.5, last
+sentence, `03-quasilocal.tex`, lines 452–455 and 519–520): with `r₀ = ⌈C₁ (log n)²⌉`, every
+`X ⊆ S₀` with `b_X ≤ C₂ n D`, `n ≥ 2` and `D ≥ 1` has
+`ℬ_X ≤ latticeCutBudgetConstant q R C₁ C₂ · n D (log n)¹²`. -/
+theorem latticeCutBudget_le_log {q : ℕ} (hq : 1 ≤ q) (R : ℕ) {C₁ C₂ : ℝ}
+    (hC₁ : 0 ≤ C₁) (hC₂ : 0 ≤ C₂) (Λ : Finset (ℤ × ℤ)) (a : AdmissibleSupport Λ R → Site Λ)
+    (ha : ∀ X, a X ∈ X.1) (S₀ X : Finset (Site Λ)) (hX : X ⊆ S₀) {n D : ℝ} (hn : 2 ≤ n)
+    (hD : 1 ≤ D) (hb : ((edgeBoundary Λ X).card : ℝ) ≤ C₂ * n * D) :
+    cutBudget q (domainGraph Λ) S₀ ⌈C₁ * Real.log n ^ 2⌉₊ a X ≤
+      latticeCutBudgetConstant q R C₁ C₂ * (n * D * Real.log n ^ 12) :=
+  le_of_cutBudget_le (zero_le_one.trans (le_max_left _ _)) hC₁ hC₂ hn hD hb
+    (cutBudget_le_latticeCutCoefficient hq R Λ a ha S₀ _ hX)
+
 /-- **The cut budget in terms of `n` on a lattice domain** (Proposition 4.5, last sentence,
 `03-quasilocal.tex`, lines 452–455 and 519–520). For `q ≥ 1`, `R`, `C₁ ≥ 0` and `C₂ ≥ 0` there
 is `C ≥ 0` such that, with `r₀ = ⌈C₁ (log n)²⌉`, every `X ⊆ S₀` with `b_X ≤ C₂ n D`, `n ≥ 2`
@@ -314,10 +622,8 @@ theorem exists_latticeCutBudget_le_log {q : ℕ} (hq : 1 ≤ q) (R : ℕ) {C₁ 
       ∀ (S₀ X : Finset (Site Λ)), X ⊆ S₀ → ∀ n D : ℝ, 2 ≤ n → 1 ≤ D →
         ((edgeBoundary Λ X).card : ℝ) ≤ C₂ * n * D →
         cutBudget q (domainGraph Λ) S₀ ⌈C₁ * Real.log n ^ 2⌉₊ a X ≤
-          C * (n * D * Real.log n ^ 12) := by
-  obtain ⟨C, hC, hcross⟩ := exists_latticeCrossingBudget hq R
-  refine ⟨C * (1 + C₂) * (C₁ + 2 / Real.log 2 ^ 2) ^ 6, by positivity, ?_⟩
-  intro Λ a ha S₀ X hX n D hn hD hb
-  exact le_of_cutBudget_le hC hC₁ hC₂ hn hD hb (hcross Λ a ha S₀ _ X hX).2.2.2
+          C * (n * D * Real.log n ^ 12) :=
+  ⟨_, latticeCutBudgetConstant_nonneg q R hC₁ hC₂, fun Λ a ha S₀ X hX _ _ hn hD hb =>
+    latticeCutBudget_le_log hq R hC₁ hC₂ Λ a ha S₀ X hX hn hD hb⟩
 
 end TNLean.PEPS.AreaLaw

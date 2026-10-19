@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.ExplicitThresholds
 import TNLean.PEPS.AreaLaw.Geometry.Exponents
 import Mathlib.Analysis.SpecialFunctions.Pow.Asymptotics
 import Mathlib.Algebra.Order.Floor.Ring
@@ -14,7 +15,8 @@ The fixed amplification parameters give a radius exponent strictly smaller
 than the geometric separation exponent. Consequently the collar width and
 twice any admissible radius are negligible compared with that separation
 scale. The large-scale threshold depends only on the radius constant and the
-desired fraction of the separation scale, not on the domain or cut.
+desired fraction of the separation scale, not on the domain or cut, and is given
+explicitly by `collarRadiusThreshold`.
 
 ## References
 
@@ -65,6 +67,40 @@ theorem collar_radius_scale_tendsto_zero (C : ℝ) :
   simpa only [add_div, mul_div_assoc, mul_zero, add_zero] using
     (tendsto_powerRatio_zero ha).add ((tendsto_powerRatio_zero hg).const_mul (2 * C))
 
+/-- The explicit collar radius threshold: the larger of `2` and the ceiling of the two
+power-ratio thresholds at `η / 4` for `n^(1-ε) ≤ (η / 4) n^β` and
+`2 max(C, 0) n^((1-ε)/α) ≤ (η / 4) n^β`. The exponent gaps are `β - (1 - ε) = 8 · 10⁻⁶` and
+`β - (1 - ε)/α = 7.00001 · 10⁻⁶`. Source: Proposition 10.2, `eq:amplification-radius`,
+`09-amplification.tex`, lines 274–278 and 566–569. -/
+noncomputable def collarRadiusThreshold (C η : ℝ) : ℕ :=
+  max 2 ⌈max (Real.powerRatioThreshold 1 (η / 4) ((beta : ℝ) - (1 - (amplificationEpsilon : ℝ))))
+    (Real.powerRatioThreshold (2 * max C 0) (η / 4) ((beta : ℝ) - (radiusExponent : ℝ)))⌉₊
+
+/-- From the explicit threshold `collarRadiusThreshold C η` on, the rounded collar width plus
+twice every radius `r ≤ C n^((1-ε)/α)` is less than `η n^β`. Source: Proposition 10.2,
+`eq:amplification-radius`, `09-amplification.tex`, lines 274–278 and 566–569. -/
+theorem collar_radius_lt_of_collarRadiusThreshold_le {C η : ℝ} (hη : 0 < η) {n : ℕ}
+    (hn : collarRadiusThreshold C η ≤ n) (r : ℕ)
+    (hr : (r : ℝ) ≤ C * (n : ℝ) ^ (radiusExponent : ℝ)) :
+    (⌊(n : ℝ) ^ (1 - (amplificationEpsilon : ℝ))⌋₊ : ℝ) + 2 * r <
+      η * (n : ℝ) ^ (beta : ℝ) := by
+  have ha : 1 - (amplificationEpsilon : ℝ) < (beta : ℝ) := by
+    exact_mod_cast radius_exponent_gaps.2.1.trans radius_exponent_gaps.2.2
+  have hg : (radiusExponent : ℝ) < (beta : ℝ) := by
+    exact_mod_cast radius_exponent_gaps.2.2
+  have hn' : 0 < (n : ℝ) := by
+    exact_mod_cast lt_of_lt_of_le (by norm_num : 0 < 2) ((le_max_left _ _).trans hn)
+  have hsum := Real.add_mul_rpow_le_mul_rpow_of_le (x := (n : ℝ)) zero_le_one
+    (by positivity : (0 : ℝ) ≤ 2 * max C 0) (half_pos hη) ha hg
+    (by rw [div_div, show (2 : ℝ) * 2 = 4 by norm_num]
+        exact Nat.ceil_le.mp ((le_max_right _ _).trans hn))
+  have hfloor := Nat.floor_le
+    (Real.rpow_nonneg (Nat.cast_nonneg n) (1 - (amplificationEpsilon : ℝ)))
+  have hrC : (r : ℝ) ≤ max C 0 * (n : ℝ) ^ (radiusExponent : ℝ) := hr.trans
+    (mul_le_mul_of_nonneg_right (le_max_left C 0) (Real.rpow_nonneg hn'.le _))
+  have hβ := Real.rpow_pos_of_pos hn' (beta : ℝ)
+  nlinarith only [hsum, hfloor, hrC, hβ, hη]
+
 /-- One threshold controls the rounded collar width and every radius with the
 given power bound. The threshold depends only on `C` and `η`. Source:
 Proposition 10.2, `eq:amplification-radius`, final paragraph of its proof. -/
@@ -72,19 +108,8 @@ theorem exists_collar_radius_threshold (C η : ℝ) (hη : 0 < η) :
     ∃ N : ℕ, 2 ≤ N ∧ ∀ n : ℕ, N ≤ n → ∀ r : ℕ,
       (r : ℝ) ≤ C * (n : ℝ) ^ (radiusExponent : ℝ) →
       (⌊(n : ℝ) ^ (1 - (amplificationEpsilon : ℝ))⌋₊ : ℝ) + 2 * r <
-        η * (n : ℝ) ^ (beta : ℝ) := by
-  have he := (collar_radius_scale_tendsto_zero C).eventually_lt_const hη
-  obtain ⟨N, hN⟩ := he.exists_forall_of_atTop
-  refine ⟨max N 2, le_max_right _ _, ?_⟩
-  intro n hn r hr
-  have hn' : 0 < (n : ℝ) := by
-    exact_mod_cast lt_of_lt_of_le (by norm_num : 0 < (2 : ℕ))
-      ((le_max_right N 2).trans hn)
-  have hscale := (div_lt_iff₀ (Real.rpow_pos_of_pos hn' (beta : ℝ))).mp
-    (hN n ((le_max_left N 2).trans hn))
-  have hfloor := Nat.floor_le
-    (Real.rpow_nonneg (Nat.cast_nonneg n) (1 - (amplificationEpsilon : ℝ)))
-  linarith only [hscale, hfloor, hr]
+        η * (n : ℝ) ^ (beta : ℝ) :=
+  ⟨_, le_max_left _ _, fun _ hn => collar_radius_lt_of_collarRadiusThreshold_le hη hn⟩
 
 /-- The rounded collar plus twice any eventually admissible radius is of smaller
 order than the separation scale. Source: Proposition 10.2,

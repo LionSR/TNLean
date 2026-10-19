@@ -12,7 +12,8 @@ import TNLean.PEPS.AreaLaw.Geometry.Exponents
 The original literal rounded radius, window, separation and band count
 satisfy all numerical scanner prerequisites at one sufficiently large
 physical size. The threshold depends on the fixed radius coefficient,
-not on the finite domain, cut, Hamiltonian, template or entropy data.
+not on the finite domain, cut, Hamiltonian, template or entropy data, and is
+given explicitly by `finalScannerAdmissibilityThreshold`.
 
 Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 `08-scanner.tex`, lines 32--58 and 839--867, revision
@@ -21,9 +22,51 @@ Independently proved from the manuscript using existing TNLean results;
 no upstream Lean proof text is reused.
 -/
 
-open Filter
-
 namespace TNLean.PEPS.AreaLaw.Scan
+
+/-- The explicit threshold of the final scanner admissibility: the status scale separation,
+`2 ⌈C_r log² n⌉ ≤ n^κ` and a positive band count at the final exponents (`08-scanner.tex`,
+lines 32--58 and 839--867). -/
+noncomputable def finalScannerAdmissibilityThreshold (Cr : ℝ) : ℕ :=
+  max (statusScaleSeparationThreshold Cr Exponents.scannerKappa Exponents.scannerMu)
+    (max (roundedLogRadiusThreshold Cr Exponents.scannerKappa 2 1)
+      (sourceBandCountThreshold Exponents.scannerEll Exponents.scannerMu))
+
+/-- The final scanner admissibility threshold is at least `2`. -/
+theorem two_le_finalScannerAdmissibilityThreshold (Cr : ℝ) :
+    2 ≤ finalScannerAdmissibilityThreshold Cr :=
+  le_trans (by simp [roundedLogRadiusThreshold]) ((le_max_left _ _).trans (le_max_right _ _))
+
+/-- All final rounded scanner scale inequalities hold, including the doubled radius needed
+for source truncation, at every `n` from the explicit threshold
+`finalScannerAdmissibilityThreshold Cr` on. Source: `08-scanner.tex`, lines 32--58 and
+839--867. -/
+theorem finalScanner_admissibility_of_threshold_le {Cr : ℝ} (hCr : 0 ≤ Cr) {n : ℕ}
+    (hthr : finalScannerAdmissibilityThreshold Cr ≤ n) :
+    let L := ⌊(n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊
+    let m := ⌊(n : ℝ) ^ (Exponents.scannerMu : ℝ)⌋₊
+    let D := ⌈(n : ℝ) ^ (Exponents.scannerKappa : ℝ)⌉₊
+    let K := L / (8 * m)
+    2 * roundedLogRadius Cr n ≤ D ∧ 1 ≤ D ∧ 4 * D ≤ m ∧
+      1 ≤ K ∧ 8 * K * m ≤ L := by
+  have hkappa : 0 < (Exponents.scannerKappa : ℝ) := by
+    norm_num [Exponents.scannerKappa]
+  have hkm : (Exponents.scannerKappa : ℝ) < (Exponents.scannerMu : ℝ) := by
+    norm_num [Exponents.scannerKappa, Exponents.scannerMu]
+  have hmu : 0 < (Exponents.scannerMu : ℝ) := hkappa.trans hkm
+  have hmuL : (Exponents.scannerMu : ℝ) < 1 - (Exponents.scannerEll : ℝ) := by
+    norm_num [Exponents.scannerMu, Exponents.scannerEll]
+  simp only [finalScannerAdmissibilityThreshold, max_le_iff] at hthr
+  obtain ⟨hs, hr, hb⟩ := hthr
+  have hscale := status_scale_separation_of_threshold_le
+    (ell := (Exponents.scannerEll : ℝ)) hCr hkappa hkm hs
+  have hradius := const_mul_roundedLogRadius_pow_le_rpow_of_threshold_le hCr hkappa 2 1 hr
+  have hband := one_le_source_bandCount_of_threshold_le hmu hmuL hb
+  rw [pow_one] at hradius
+  dsimp only at hscale hband ⊢
+  refine ⟨?_, hscale.2.2.1, hscale.2.2.2.1, hband, hscale.2.2.2.2⟩
+  exact_mod_cast hradius.trans
+    (Nat.le_ceil ((n : ℝ) ^ (Exponents.scannerKappa : ℝ)))
 
 /-- Every fixed nonnegative radius coefficient admits one threshold at which
 all final rounded scanner scale inequalities hold, including the doubled
@@ -36,25 +79,8 @@ theorem exists_finalScanner_admissibility {Cr : ℝ} (hCr : 0 ≤ Cr) :
       let D := ⌈(n : ℝ) ^ (Exponents.scannerKappa : ℝ)⌉₊
       let K := L / (8 * m)
       2 * roundedLogRadius Cr n ≤ D ∧ 1 ≤ D ∧ 4 * D ≤ m ∧
-        1 ≤ K ∧ 8 * K * m ≤ L := by
-  have hkappa : 0 < (Exponents.scannerKappa : ℝ) := by
-    norm_num [Exponents.scannerKappa]
-  have hkm : (Exponents.scannerKappa : ℝ) < (Exponents.scannerMu : ℝ) := by
-    norm_num [Exponents.scannerKappa, Exponents.scannerMu]
-  have hmu : 0 < (Exponents.scannerMu : ℝ) := hkappa.trans hkm
-  have hmuL : (Exponents.scannerMu : ℝ) < 1 - (Exponents.scannerEll : ℝ) := by
-    norm_num [Exponents.scannerMu, Exponents.scannerEll]
-  have hscales := eventually_status_scale_separation
-    (ell := (Exponents.scannerEll : ℝ)) hCr hkappa hkm
-  have hradius := eventually_const_mul_roundedLogRadius_le_rpow hCr hkappa 2
-  have hbands := eventually_one_le_source_bandCount hmu hmuL
-  obtain ⟨N, hN⟩ := eventually_atTop.mp (hscales.and (hradius.and hbands))
-  refine ⟨max N 2, le_max_right _ _, ?_⟩
-  intro n hn
-  obtain ⟨hscale, hradius, hband⟩ := hN n ((le_max_left N 2).trans hn)
-  dsimp only at hscale hband ⊢
-  refine ⟨?_, hscale.2.2.1, hscale.2.2.2.1, hband, hscale.2.2.2.2⟩
-  exact_mod_cast hradius.trans
-    (Nat.le_ceil ((n : ℝ) ^ (Exponents.scannerKappa : ℝ)))
+        1 ≤ K ∧ 8 * K * m ≤ L :=
+  ⟨_, two_le_finalScannerAdmissibilityThreshold Cr,
+    fun _ => finalScanner_admissibility_of_threshold_le hCr⟩
 
 end TNLean.PEPS.AreaLaw.Scan
