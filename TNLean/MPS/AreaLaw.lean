@@ -13,6 +13,7 @@ import TNLean.MPS.AreaLaw.Basic
 import TNLean.MPS.AreaLaw.BufferDiscount
 import TNLean.MPS.AreaLaw.ComponentReduction
 import TNLean.MPS.AreaLaw.Counting
+import TNLean.MPS.AreaLaw.DoubledHamiltonian
 import TNLean.MPS.AreaLaw.EntropyInequalities
 import TNLean.MPS.AreaLaw.Hamiltonian
 import TNLean.MPS.AreaLaw.InteractionBudget
