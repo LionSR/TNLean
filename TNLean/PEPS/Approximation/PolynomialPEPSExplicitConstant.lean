@@ -123,8 +123,9 @@ def pepsLargeSizePrefactorOf (q : ℕ) (D : ℝ) : ℝ :=
   max (pepsLinkPrefactorOf q D) 1 ^ pepsCongestion
 
 /-- The bond prefactor above the size threshold is positive (`07-assembly.tex:164–172`). -/
-theorem pepsLargeSizePrefactorOf_pos (q : ℕ) (D : ℝ) : 0 < pepsLargeSizePrefactorOf q D :=
-  pow_pos (lt_of_lt_of_le one_pos (le_max_right _ _)) _
+theorem pepsLargeSizePrefactorOf_pos (q : ℕ) (D : ℝ) : 0 < pepsLargeSizePrefactorOf q D := by
+  unfold pepsLargeSizePrefactorOf
+  positivity
 
 /-- The bond exponent is positive (`07-assembly.tex:164–172`). -/
 theorem pepsBondExponentOf_pos (q : ℕ) (J Δ C_A D : ℝ) : 0 < pepsBondExponentOf q J Δ C_A D := by
