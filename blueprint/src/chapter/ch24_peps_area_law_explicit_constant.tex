@@ -230,8 +230,8 @@ every upper bound for $C_{\rm box}$.
 % Source: 08-scanner.tex, proof of Proposition 9.5, lines 681--805; the
 % recursion is eq:round of docs/notes/arealaw2d_explicit_constant.tex.
 % Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
-\begin{lemma}[Iterates of a dominating map]
-    \label{lem:area_law_bootstrap_iterate}
+\begin{theorem}[Iterates of a dominating map]
+    \label{thm:area_law_bootstrap_iterate}
     \lean{TNLean.PEPS.AreaLaw.Scan.boxBootstrapConstant_le_iterate,
         TNLean.PEPS.AreaLaw.Scan.one_add_iterate_mul_one_add_pow_le,
         TNLean.PEPS.AreaLaw.Scan.boxBootstrapConstant_le_pow_pow}
@@ -252,7 +252,7 @@ every upper bound for $C_{\rm box}$.
               $C\ge0$, then
               $C_j\le\bigl((A+1)(1+C_0)\bigr)^{(2K)^M}$ for all $j\le M$.
     \end{enumerate}
-\end{lemma}
+\end{theorem}
 \begin{proof}
     \leanok
     For the first assertion, induction gives $C_0\le F^k(C_0)$, so $F^k(C_0)$
@@ -290,8 +290,8 @@ every upper bound for $C_{\rm box}$.
     \end{align}
 \end{definition}
 
-\begin{lemma}[One bootstrap round is at most a power]
-    \label{lem:area_law_bootstrap_step_bound}
+\begin{theorem}[One bootstrap round is at most a power]
+    \label{thm:area_law_bootstrap_step_bound}
     \lean{TNLean.PEPS.AreaLaw.Scan.boxBootstrapStep_le_boxStepPrefactor,
         TNLean.PEPS.AreaLaw.Scan.boxImprovementThreshold_le_add,
         TNLean.PEPS.AreaLaw.Scan.max_two_mul_roughSelectedDensityCoefficient_le,
@@ -305,7 +305,7 @@ every upper bound for $C_{\rm box}$.
     \begin{align}
         G(C)+\log q & \le A\,(1+C)^{2k}\qquad(C\ge0).
     \end{align}
-\end{lemma}
+\end{theorem}
 \begin{proof}
     \leanok
     The coefficient $C_{\rm out}(C)$ is affine in $C$ with nonnegative
@@ -344,12 +344,12 @@ every upper bound for $C_{\rm box}$.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{lem:area_law_bootstrap_iterate,lem:area_law_bootstrap_step_bound}
+    \uses{thm:area_law_bootstrap_iterate,thm:area_law_bootstrap_step_bound}
     The safe-box constant is $C_m$ for the recursion
     $C_{j+1}=G(C_j)+\log q$ started at $C_0$. By
-    Lemma~\ref{lem:area_law_bootstrap_step_bound} each step is at most
+    Theorem~\ref{thm:area_law_bootstrap_step_bound} each step is at most
     $A(1+C)^{2k}$ with $A\ge1$, and the third assertion of
-    Lemma~\ref{lem:area_law_bootstrap_iterate} with $K=2k$ gives the bound.
+    Theorem~\ref{thm:area_law_bootstrap_iterate} with $K=2k$ gives the bound.
 \end{proof}
 
 \begin{definition}[The constant of the area law at a bound for the safe-box constant]
