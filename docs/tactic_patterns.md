@@ -4665,6 +4665,21 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 ## Candidates
 
+### A marginal tail under an upper bound for its cut budget — candidate
+
+- **Pattern:** apply the finite-family marginal tail theorem to a reduced state,
+  then enlarge its denominator using an upper bound for the cut logarithmic budget
+  and nonnegativity of the width.
+- **Seen:** the general prefix-tail estimate and its consecutive-window version in
+  `TNLean/MPS/AreaLaw/MPSApproximation.lean`.
+- **Abstraction:** the private theorem `surprisalTail_region_le_of_family_budget`
+  performs the finite-family estimate and scalar comparison once. The two prefix
+  estimates supply their respective interaction families and budget bounds.
+- **Notes:** restricting to the nonzero interactions uses
+  `Finset.sum_eq_sum_subtype_ne_zero` and preserves the Hamiltonian and its original
+  gap. The two occurrences are in one file; no new tactic or global simp rule is
+  needed.
+
 
 ### Restricting a cut configuration after adjoining one site — candidate (2026-10-18)
 

@@ -344,6 +344,29 @@ for an arbitrary finite set of sites and are instantiated here directly.
     When $R=0$, or when $A$ is empty, no window is split.
 \end{proof}
 
+% INERT mathematical addition; association awaits integration.
+\begin{theorem}[The cut budget for consecutive-window interactions]
+    \label{thm:chain_window_cut_budget}
+    % Future association: TNLean.MPS.AreaLaw.ChainHamiltonian.cutLogBudget_interval_le_of_consecutive_terms.
+    \uses{thm:chain_consecutive_window_count}
+    Let $q\ge1$, and suppose that every nonzero interaction is assigned to
+    a full window of $R+1$ consecutive sites contained in the chain.
+    For every coordinate interval $A$, put
+    \begin{align}
+        \mathcal B(A)
+         & =1+\sum_{\substack{X:\ h_X\ne0,\ X\cap A\ne\varnothing \\
+                X\setminus A\ne\varnothing}}
+        \log^2(e q^{|X|}).\notag
+    \end{align}
+    Then $\mathcal B(A)\le1+2R\log^2(e q^{R+1})$.
+\end{theorem}
+\begin{proof}
+    \uses{thm:chain_consecutive_window_count}
+    At most $2R$ nonzero interactions are split by $A$. Each support has
+    at most $R+1$ sites. Since $q\ge1$, each summand is at most
+    $\log^2(e q^{R+1})$.
+\end{proof}
+
 \begin{theorem}[Marginal moments for consecutive-window interactions]
     \label{thm:chain_consecutive_window_moment}
     \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.log_surprisalMoment_interval_le_of_consecutive_terms}
@@ -1086,64 +1109,144 @@ for an arbitrary finite set of sites and are instantiated here directly.
     Empty cores cause no exception: their mutual information is zero.
 \end{proof}
 
-\begin{lemma}[Buffered discount on a chain]
-    \label{lem:chain_buffer_discount}
-    \lean{
-        TNLean.MPS.AreaLaw.chainEnergyThreshold,
-        TNLean.MPS.AreaLaw.chainTailThreshold,
-        TNLean.MPS.AreaLaw.chainShellCount,
-        TNLean.MPS.AreaLaw.four_le_chainShellCount,
-        TNLean.MPS.AreaLaw.chainEnergyThreshold_le_chainShellCount,
-        TNLean.MPS.AreaLaw.chainTailThreshold_le_chainShellCount,
-        TNLean.MPS.AreaLaw.chainDiscountConst,
-        TNLean.MPS.AreaLaw.chainBuffer,
-        TNLean.MPS.AreaLaw.disjoint_interval_chainBuffer,
-        TNLean.MPS.AreaLaw.card_chainBuffer_le,
-        TNLean.MPS.AreaLaw.two_mul_condEntropy_interval_le
-    }
-    \leanok
+% INERT mathematical additions; links and completion marks await integration.
+\begin{theorem}[The size of a coordinate enlargement]
+    \label{thm:chain_interval_enlargement_size}
+    % Future association: TNLean.MPS.AreaLaw.card_interval_enlargement_sdiff_le.
+    Let $I=\{0,\ldots,L-1\}$ and let $l,r,v$ be natural numbers.
+    With truncated subtraction at the left endpoint,
+    \begin{align}
+        \bigl|([l-v,r+v)\cap I)\setminus([l,r)\cap I)\bigr|
+         & \le2v.\notag
+    \end{align}
+\end{theorem}
+\begin{proof}
+    The difference lies in $([l-v,l)\cap I)\cup([r,r+v)\cap I)$.
+    Each of these two intervals contains at most $v$ sites.
+\end{proof}
+
+\begin{theorem}[Buffered discount from a common shell budget]
+    \label{thm:chain_family_budget_discount}
+    % Future association: TNLean.MPS.AreaLaw.two_mul_condEntropy_interval_le_of_family_budget.
+    Fix natural numbers $q$ and $R$, real numbers $J\ge0$ and
+    $\Delta>0$, and a real number $B\ge1$. Put $\vartheta=J/\Delta$.
+    Choose a natural number $m$ satisfying
+    \begin{align}
+        m & \ge\max\bigl\{4,\ 128eB\vartheta,
+        128\sqrt{(1+\vartheta)B},\ 4096e(1+\vartheta)B\bigr\}.
+        \notag
+    \end{align}
+    Let $H=\sum_{i\in F}h_i$ act on a chain of any finite length $L$,
+    with local spaces $\mathbb C^q$. Here $F$ is finite, each $h_i$ is Hermitian, has norm at most $J$,
+    and is supported on a set $S_i$ of diameter at most $R$.
+    Let $\Omega$ be a unit vector satisfying
+    $H\Omega=E_0\Omega$ and
+    $H-E_0\ge\Delta(1-|\Omega\rangle\langle\Omega|)$.
+    For natural endpoints $l,r$, write $I=\{0,\ldots,L-1\}$ and put
+    \begin{align}
+        X & =[l,r)\cap I,\qquad
+        D_j=[l-(j+1)R,r+(j+1)R)\cap I,\notag       \\
+        T & =([l-mR,r+mR)\cap I)\setminus X.\notag
+    \end{align}
+    All left subtractions are truncated. Suppose, for every $j<m$, that
+    \begin{align}
+        1+\sum_{\substack{i\in F:\ S_i\cap D_j\ne\varnothing \\
+                S_i\setminus D_j\ne\varnothing}}
+        \log^2(e q^{|S_i|}) & \le B.\notag
+    \end{align}
+    Then
+    \begin{align}
+        2\bigl(S_\Omega(X\cup T)-S_\Omega(T)\bigr)
+         & \le S_\Omega(X)+1+64eB\vartheta.\notag
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \uses{thm:chain_single_splitting}
+    Pad the regions $D_j$ by $I$ for $j\ge m$ and use weights $a_j=2/m$.
+    The diameter bound implies that each support is split by at most one
+    region. Put $C_E=32eBJ$. The logarithmic interaction estimate of
+    \cite[Part~I, Remark~6.3]{TNLean2026OneDimensional} bounds the energy
+    increase of every maximizing prefix by
+    \begin{align}
+        \sum_{j<m}8eJa_j^2B
+         & =\frac{32eBJ}{m}=\frac{C_E}{m}\le\frac\Delta4.
+        \label{eq:chain_log_prefix_energy}
+    \end{align}
+    The first and third thresholds give $a_j\le1/2$ and the required
+    marginal-tail radius. In the weighted entropy comparison, the
+    marginal errors sum to at most $4096e\vartheta B/m\le1$.
+    The remaining loss is bounded by
+    \begin{align}
+        -m\log\left(1-\frac{C_E}{m\Delta}\right)
+         & \le\frac{2C_E}{\Delta}=64eB\vartheta,\notag
+    \end{align}
+    since $0\le C_E/(m\Delta)\le1/4$.
+    The weights sum to two. Strong subadditivity then replaces the
+    individual buffers by $T$, giving the stated inequality.
+\end{proof}
+
+% INERT logarithmic refinement; links and marks await actual checks and published dependencies.
+\begin{theorem}[Buffered discount with logarithmic interaction energy]
+    \label{thm:chain_buffer_discount}
+    %     \lean{
+    %         TNLean.MPS.AreaLaw.chainEnergyThreshold,
+    %         TNLean.MPS.AreaLaw.chainTailThreshold,
+    %         TNLean.MPS.AreaLaw.chainShellCount,
+    %         TNLean.MPS.AreaLaw.four_le_chainShellCount,
+    %         TNLean.MPS.AreaLaw.chainEnergyThreshold_le_chainShellCount,
+    %         TNLean.MPS.AreaLaw.chainTailThreshold_le_chainShellCount,
+    %         TNLean.MPS.AreaLaw.chainDiscountConst,
+    %         TNLean.MPS.AreaLaw.chainBuffer,
+    %         TNLean.MPS.AreaLaw.disjoint_interval_chainBuffer,
+    %         TNLean.MPS.AreaLaw.card_chainBuffer_le,
+    %         TNLean.MPS.AreaLaw.two_mul_condEntropy_interval_le
+    %     }
+    %     \leanok
     \uses{def:chain_model}
     Let $\Omega$ be a gapped ground vector, with gap $\Delta>0$, of a
-    finite-range Hamiltonian with term norms at most $J\ge0$ on the chain with
-    local dimension $q\ge1$. Put $\vartheta=J/\Delta$ and
+    finite-range Hamiltonian with term norms at most $J\ge0$ on a chain
+    with local dimension $q\ge1$. Put $\vartheta=J/\Delta$ and
+    $B=B_R=1+N_R\log^2(e q^{R+1})$, where $N_R=2\cdot2^{2R}$.
+    Define
     \begin{align}
-        m=\Bigl\lceil\max\bigl\{4,\ 32N_Rq^{2(R+1)}\vartheta,\
-        128\sqrt{(1+\vartheta)B_R}\bigr\}\Bigr\rceil .
+        C_E^{\log} & =32eBJ,\label{eq:chain_log_energy}         \\
+        m          & =\Bigl\lceil\max\Bigl\{4,\ 128eB\vartheta,
+        128\sqrt{(1+\vartheta)B},\
+        4096e(1+\vartheta)B\Bigr\}\Bigr\rceil.
+        \label{eq:chain_log_shells}
     \end{align}
-    For an interval $X=[l,r)$ let $T=X^{+mR}\setminus X$ be the buffer,
-    which has at most $2mR$ sites. Then
+    Thus the second entry is $4C_E^{\log}/\Delta$.
+    Let $I=\{0,\ldots,L-1\}$. For arbitrary natural endpoints $l,r$, put
+    $X=[l,r)\cap I$ and
+    $T=([l-mR,r+mR)\cap I)\setminus X$, with truncated natural
+    subtraction at the left endpoint. Then $|T|\le2mR$ and
     \begin{align}
-        2\bigl(S(X\cup T)-S(T)\bigr)\le S(X)+
-        \frac{4096\,e\,\vartheta B_R}{m}+m\log2 .
+        2\bigl(S(X\cup T)-S(T)\bigr)
+         & \le S(X)+1+64eB\vartheta.
+        \label{eq:chain_log_discount}
     \end{align}
-    The energy threshold $\Delta/2$, the overlap losses $m\log2$ and the
-    explicit tail term, with the three-entry $m$, replace the printed
-    constants of Lemma~4.2 of \cite{TNLean2026OneDimensional}, which runs at
-    the threshold $\Delta/4$, absorbs the tail term through a fourth entry of
-    $m$ and concludes with $1+16N_Rq^{2(R+1)}\vartheta$; see
-    \cite{gap:tnlean_one_dimensional_discount_constants}.
-\end{lemma}
+    This is the logarithmic-energy refinement described in
+    \cite[Part~I, Remark~6.3]{TNLean2026OneDimensional}.
+    Its energy constant replaces the polynomial-dimension constant in
+    Lemma~4.2 of that note.
+\end{theorem}
 \begin{proof}
-    \leanok
-    \uses{lem:chain_crossing_count, def:chain_model}
-    This is the finite-dimensional buffered discount (optimized filters,
-    stationarity, the energy estimate, the prefix comparison and Schmidt
-    pinning) of Lemma~3.2 of \cite{OpenAI2026AreaLaw}, applied to the nested
-    shells $X_j=X^{+(j+1)R}$, $0\le j<m$, with the uniform weights $a_j=2/m$ of
-    total mass two. The shells are intervals, so each is split by at most $N_R$
-    supports with cut budget at most $B_R$ by
-    Lemma~\ref{lem:chain_crossing_count}, and no support is split by two of
-    them. The choice of $m$ makes the energy of the filtered vector at most
-    $\Delta/2$, each weight at most $1/2$, and each tilt $a_j/(1-a_j)$ at most
-    the tail radius $1/(32\sqrt{(1+\vartheta)B_j})$. The error terms sum to
-    $1024e\vartheta\sum_jB_ja_j^2\le4096e\vartheta B_R/m$, and the overlap
-    losses to $m\log2$.
+    % \leanok
+    \uses{lem:chain_crossing_count,thm:chain_family_budget_discount,
+        thm:chain_interval_enlargement_size,def:chain_model}
+    The crossing count and the support dimension bound give the common
+    shell budget $B_R$. The definition of $m$ in
+    (\ref{eq:chain_log_shells}) satisfies the four thresholds in
+    Theorem~\ref{thm:chain_family_budget_discount}, which gives
+    (\ref{eq:chain_log_discount}). Theorem~\ref{thm:chain_interval_enlargement_size}
+    gives $|T|\le2mR$. This includes $J=0$ and empty intervals.
 \end{proof}
 
 \section{Closing the argument}
 
 \begin{lemma}[Araki--Lieb and the area law from interval bounds]
     \label{lem:chain_entropy_inequalities}
+    % Future additional association: TNLean.MPS.AreaLaw.card_boundaryEdges_prefix_le.
     \lean{
         TNLean.Lattice.regionEntropy_union_le,
         TNLean.Lattice.regionEntropy_le_union_add,
@@ -1163,7 +1266,8 @@ for an arbitrary finite set of sites and are instantiated here directly.
     $S(X\cup T)\le S(X)+S(T)$ and $S(X)\le S(X\cup T)+S(T)$; the empty set and
     the whole chain have entropy zero, and $S(A)\le|A|\log q$. The
     \emph{boundary edges} of a set $A$ are the edges $\{p,p+1\}$ of the chain
-    with exactly one endpoint in $A$. If every interval has entropy at most
+    with exactly one endpoint in $A$. A prefix $[0,k)$ has at most one boundary edge.
+    If every interval has entropy at most
     $C\ge0$, then every subset $A$ has entropy at most $C\,|\partial A|$.
 \end{lemma}
 \begin{proof}
@@ -1203,50 +1307,224 @@ for an arbitrary finite set of sites and are instantiated here directly.
 \end{proof}
 
 
+% INERT logarithmic refinement; links and marks await actual checks and published dependencies.
 \begin{theorem}[The one-dimensional area law on a chain]
     \label{thm:chain_area_law}
-    \lean{
-        TNLean.MPS.AreaLaw.chainIntervalEntropyBound,
-        TNLean.MPS.AreaLaw.chainDiscountConst_nonneg,
-        TNLean.MPS.AreaLaw.chainIntervalEntropyBound_nonneg,
-        TNLean.MPS.AreaLaw.regionEntropy_interval_le,
-        TNLean.MPS.AreaLaw.chainShellConst,
-        TNLean.MPS.AreaLaw.chainShellCount_le,
-        TNLean.MPS.AreaLaw.chainAreaLawConst,
-        TNLean.MPS.AreaLaw.chainIntervalEntropyBound_le,
-        TNLean.MPS.AreaLaw.regionEntropy_le_mul_card_boundaryEdges,
-        TNLean.MPS.AreaLaw.chainAreaLaw
-    }
-    \leanok
+    %     \lean{
+    %         TNLean.MPS.AreaLaw.chainIntervalEntropyBound,
+    %         TNLean.MPS.AreaLaw.chainDiscountConst_nonneg,
+    %         TNLean.MPS.AreaLaw.chainIntervalEntropyBound_nonneg,
+    %         TNLean.MPS.AreaLaw.regionEntropy_interval_le,
+    %         TNLean.MPS.AreaLaw.chainShellConst,
+    %         TNLean.MPS.AreaLaw.chainShellCount_le,
+    %         TNLean.MPS.AreaLaw.chainAreaLawConst,
+    %         TNLean.MPS.AreaLaw.chainIntervalEntropyBound_le,
+    %         TNLean.MPS.AreaLaw.regionEntropy_le_mul_card_boundaryEdges,
+    %         TNLean.MPS.AreaLaw.chainAreaLaw
+    %     }
+    %     \leanok
     \uses{def:chain_model}
     Let $\Omega$ be a gapped ground vector, with gap $\Delta>0$, of a
-    finite-range Hamiltonian with term norms at most $J\ge0$ on the chain of
-    $L$ sites with local dimension $q\ge1$. Every interval $X$ satisfies
+    finite-range Hamiltonian with term norms at most $J\ge0$ on a chain
+    with local dimension $q\ge1$. Use $B$ and $m$ from
+    Theorem~\ref{thm:chain_buffer_discount} and put $\vartheta=J/\Delta$.
+    Define
     \begin{align}
-        S(X)\le C_{\mathrm{int}}(q,R,J,\Delta)
-        =8mR\log q+\frac{4096\,e\,\vartheta B_R}{m}+m\log2
-        \le C_0(q,R)\,(1+J/\Delta),
+        C_1(q,R) & =5+(128+4224e)B_R(q),\label{eq:chain_log_shell_constant} \\
+        C_0(q,R) & =8R\log q\,C_1(q,R)+1+64eB_R(q).
+        \label{eq:chain_log_area_constant}
     \end{align}
-    with
-    $C_0(q,R)=\bigl(8R\log q+\log2\bigr)\bigl(5+32N_Rq^{2(R+1)}+128B_R\bigr)
-        +1024\,e\,B_R$, and every subset $A$ of the chain satisfies
-    $S(A)\le C_{\mathrm{int}}\,|\partial A|$. Hence the constant
-    $C_0(q,R)(1+J/\Delta)$, chosen before $L$, the Hamiltonian, the ground
-    vector and the region, bounds $S(A)/|\partial A|$ for every gapped chain.
-    This is the connected case of Theorem~A; the general case is
-    Theorem~\ref{thm:domain_area_law}.
+    Every interval $X$ satisfies
+    \begin{align}
+        S(X) & \le C_{\mathrm{int}}
+        =8mR\log q+1+64eB_R(q)\vartheta
+        \le C_0(q,R)(1+\vartheta).
+        \label{eq:chain_log_interval}
+    \end{align}
+    Every set $A$ of sites satisfies
+    $S(A)\le C_{\mathrm{int}}|\partial A|
+        \le C_0(q,R)(1+\vartheta)|\partial A|$.
+    The constants $C_1,C_0$ depend only on $q,R$, before the chain length,
+    Hamiltonian, ground vector and region. This gives the chain case of
+    Theorem~A with the logarithmic-energy refinement in
+    \cite[Part~I, Remark~6.3]{TNLean2026OneDimensional}.
 \end{theorem}
 \begin{proof}
-    \leanok
-    \uses{lem:chain_buffer_discount, lem:chain_entropy_inequalities}
-    The discount of Lemma~\ref{lem:chain_buffer_discount} and the Araki--Lieb
-    inequality of Lemma~\ref{lem:chain_entropy_inequalities} give
-    $S(X)-2S(T)\le S(X\cup T)-S(T)\le\frac12S(X)+\frac12C_{\mathrm{disc}}$,
-    hence $S(X)\le4S(T)+C_{\mathrm{disc}}$, and $S(T)\le|T|\log q\le
-        2mR\log q$. The linear bound uses
-    $m\le(5+32N_Rq^{2(R+1)}+128B_R)(1+\vartheta)$, which follows from
-    $\sqrt{(1+\vartheta)B_R}\le(1+\vartheta)B_R$, and $m\ge4$. The subset
-    bound is the second part of Lemma~\ref{lem:chain_entropy_inequalities}.
+    %     \leanok
+    \uses{thm:chain_buffer_discount,lem:chain_entropy_inequalities}
+    The buffered discount and Araki--Lieb give
+    $S(X)\le4S(T)+1+64eB_R(q)\vartheta$.
+    Since $S(T)\le|T|\log q\le2mR\log q$, this proves the first bound in
+    (\ref{eq:chain_log_interval}). Bounding the four nonnegative entries
+    of~(\ref{eq:chain_log_shells}) by their sum and allowing one for the
+    ceiling gives $m\le C_1(q,R)(1+\vartheta)$: use
+    $\sqrt{(1+\vartheta)B_R}\le(1+\vartheta)B_R$ and
+    $128e+4096e=4224e$. Also
+    $1+64eB_R\vartheta\le(1+64eB_R)(1+\vartheta)$.
+    These estimates give the second bound. The interval-to-subset
+    inequality in Lemma~\ref{lem:chain_entropy_inequalities} gives the
+    stated boundary bound.
+\end{proof}
+
+% INERT: the two proposed associations have no completion marks.
+\begin{theorem}[Cubic logarithmic dependence on the local dimension]
+    \label{thm:chain_area_log_cube}
+    %     \lean{TNLean.MPS.AreaLaw.chainAreaLawConst_le_mul_log_cube,
+    %         TNLean.MPS.AreaLaw.regionEntropy_le_log_cube_mul_card_boundaryEdges}
+    \uses{thm:chain_area_law}
+    Fix the interaction range $R$ and use the coefficient $C_0(q,R)$ in
+    (\ref{eq:chain_log_area_constant}). Put
+    $K_R=C_0(2,R)/(\log2)^3$. For every integer $q\ge2$,
+    \begin{align}
+        C_0(q,R) & \le K_R(\log q)^3.
+        \label{eq:chain_log_cube_coefficient}
+    \end{align}
+    For every integer $q\ge1$, every finite-range chain Hamiltonian with
+    term norms at most $J\ge0$, every gapped ground vector with gap
+    $\Delta>0$, and every set $A$ of its sites,
+    \begin{align}
+        S(A) & \le K_R(1+J/\Delta)(\log q)^3|\partial A|.
+        \label{eq:chain_log_cube_entropy}
+    \end{align}
+    Here $K_R$ is fixed before the local dimension, chain length,
+    Hamiltonian, ground vector and region. The interaction family retains
+    the crossing count $N_R=2\cdot2^{2R}$.
+    This is the fixed-range logarithmic dependence in
+    \cite[Part~I, Remark~6.3]{TNLean2026OneDimensional}.
+\end{theorem}
+\begin{proof}
+    \uses{thm:chain_budget_log_sq,thm:chain_area_law,thm:chain_entropy_dim_one}
+    For $q\ge2$, put $t=\log q/\log2\ge1$. Theorem~\ref{thm:chain_budget_log_sq}
+    gives $B_R(q)\le B_R(2)t^2$, hence
+    $C_1(q,R)\le C_1(2,R)t^2$. In
+    (\ref{eq:chain_log_area_constant}), the first term is bounded by
+    $8R\log2\,C_1(2,R)t^3$, the constant one by $t^3$, and the final term
+    by $64eB_R(2)t^3$, since $t^2\le t^3$.
+    Their sum is $C_0(2,R)t^3$, proving
+    (\ref{eq:chain_log_cube_coefficient}). Combine this with
+    Theorem~\ref{thm:chain_area_law} to obtain
+    (\ref{eq:chain_log_cube_entropy}) for $q\ge2$.
+    At $q=1$, Theorem~\ref{thm:chain_entropy_dim_one} gives $S(A)=0$,
+    which equals the right-hand side of~(\ref{eq:chain_log_cube_entropy}).
+\end{proof}
+
+% INERT: proposed window specializations; associations await the actual proofs.
+% Source: part1_arealaw.tex:706--745, combining the count and energy refinements.
+\begin{theorem}[Area law for consecutive-window interactions]
+    \label{thm:chain_window_area_law}
+    % Future association: TNLean.MPS.AreaLaw.chainAreaLaw_of_consecutive_terms.
+    \uses{def:chain_model}
+    Fix natural numbers $q\ge1$ and $R$, and real numbers $J\ge0$ and
+    $\Delta>0$. Put $\vartheta=J/\Delta$ and define
+    \begin{align}
+        B_{\mathrm{win}}(q,R)
+         & =1+2R\log^2(e q^{R+1}),
+        \label{eq:chain_window_budget}                \\
+        C_{1,\mathrm{win}}(q,R)
+         & =5+(128+4224e)B_{\mathrm{win}}(q,R),\notag \\
+        C_{0,\mathrm{win}}(q,R)
+         & =8R\log q\,C_{1,\mathrm{win}}(q,R)
+        +1+64eB_{\mathrm{win}}(q,R).
+        \label{eq:chain_window_area_constant}
+    \end{align}
+    These constants are fixed before the chain length, Hamiltonian,
+    ground vector and region. Let $L$ be any natural number and let
+    $H=\sum_X h_X$ be a finite-range Hamiltonian on its chain, with local
+    dimension $q$ and term norms at most $J$ as in
+    Definition~\ref{def:chain_model}. Suppose that every $X$ with
+    $h_X\ne0$ has the form $X=[a,a+R+1)$ for some natural number $a$
+    satisfying $a+R+1\le L$.
+    Let $E_0$ be real and let $\Omega$ be a unit vector satisfying
+    $H\Omega=E_0\Omega$ and
+    $H-E_0\ge\Delta(1-|\Omega\rangle\langle\Omega|)$.
+    For every set $A$ of sites,
+    \begin{align}
+        S_\Omega(A)
+         & \le C_{0,\mathrm{win}}(q,R)(1+\vartheta)|\partial A|.
+        \label{eq:chain_window_area_law}
+    \end{align}
+    This combines the consecutive-window count and the logarithmic
+    interaction-energy estimate of
+    \cite[Part~I, Remark~6.3]{TNLean2026OneDimensional}.
+\end{theorem}
+\begin{proof}
+    \uses{thm:chain_window_cut_budget,thm:chain_family_budget_discount,
+        thm:chain_interval_enlargement_size,lem:chain_entropy_inequalities}
+    Restrict the interaction sum to its nonzero terms. The sum is still
+    the original $H$, and each term retains its support, Hermiticity
+    and norm bound $J$. Theorem~\ref{thm:chain_window_cut_budget} bounds
+    every interval cut budget by $B_{\mathrm{win}}$.
+    Choose $m$ by~(\ref{eq:chain_log_shells}) with
+    $B=B_{\mathrm{win}}$. Theorem~\ref{thm:chain_family_budget_discount}
+    gives $2S(X\mid T)\le S(X)+1+64eB_{\mathrm{win}}\vartheta$, where
+    $X=[l,r)\cap\{0,\ldots,L-1\}$ and
+    $T=([l-mR,r+mR)\cap\{0,\ldots,L-1\})\setminus X$.
+    Subtraction is truncated at the left endpoint.
+    Araki--Lieb and Theorem~\ref{thm:chain_interval_enlargement_size} give
+    \begin{align}
+        S(X)
+         & \le8mR\log q+1+64eB_{\mathrm{win}}\vartheta\notag \\
+         & \le C_{0,\mathrm{win}}(q,R)(1+\vartheta).\notag
+    \end{align}
+    For the second inequality, the four thresholds and the ceiling
+    give $m\le C_{1,\mathrm{win}}(q,R)(1+\vartheta)$, as in the
+    proof of Theorem~\ref{thm:chain_area_law}. The interval-to-subset
+    inequality of Lemma~\ref{lem:chain_entropy_inequalities} proves
+    (\ref{eq:chain_window_area_law}).
+\end{proof}
+
+% INERT: no declaration name or completion is asserted for the range consequence.
+\begin{theorem}[Polynomial dependence on the interaction range]
+    \label{thm:chain_window_polynomial_range}
+    \uses{thm:chain_window_area_law}
+    Put $c=\log2$ and fix the absolute constants
+    \begin{align}
+        C & =1064+33792e+\frac{1+64e}{c},\notag \\
+        K & =c^{-2}+2(c^{-1}+2)^2.\notag
+    \end{align}
+    For every natural number $R$, every integer $q\ge1$, every natural
+    chain length $L$, and every finite-range Hamiltonian $H=\sum_X h_X$
+    with term norms at most $J\ge0$, suppose that each nonzero $h_X$ is
+    assigned to a full window $X=[a,a+R+1)$ with $a+R+1\le L$.
+    For every unit ground vector $\Omega$ satisfying the original global
+    projector gap inequality with gap $\Delta>0$, and every set $A$ of
+    sites,
+    \begin{align}
+        S_\Omega(A)
+         & \le CK(1+J/\Delta)R\bigl[\log(q^R)\bigr]^3|\partial A|.
+        \label{eq:chain_window_range_entropy}
+    \end{align}
+    In particular, $C$ and $K$ are chosen before $q,R,L,J,\Delta,H,\Omega,A$.
+    This is the polynomial range dependence in
+    \cite[Part~I, Remark~6.3]{TNLean2026OneDimensional} for the
+    consecutive-window interaction family.
+\end{theorem}
+\begin{proof}
+    \uses{thm:chain_window_area_law,thm:chain_range_zero_entropy,
+        thm:chain_entropy_dim_one}
+    If $R=0$, Theorem~\ref{thm:chain_range_zero_entropy} gives
+    $S_\Omega(A)=0$.
+    If $q=1$, Theorem~\ref{thm:chain_entropy_dim_one} gives the same
+    conclusion. The right-hand side of
+    (\ref{eq:chain_window_range_entropy}) vanishes in both cases.
+
+    It remains to consider $R\ge1$ and $q\ge2$. Put $x=R\log q\ge c$
+    and abbreviate $B=B_{\mathrm{win}}(q,R)\ge1$.
+    Since $C_{1,\mathrm{win}}\le(133+4224e)B$ and
+    $1+64eB\le(1+64e)Bx/c$, formula
+    (\ref{eq:chain_window_area_constant}) gives
+    $C_{0,\mathrm{win}}\le CBx$. Also $R+1\le2R$ and
+    $1\le c^{-2}Rx^2$, so
+    \begin{align}
+        B
+         & =1+2R\bigl[1+(R+1)\log q\bigr]^2\notag       \\
+         & \le\bigl[c^{-2}+2(c^{-1}+2)^2\bigr]Rx^2
+        =KRx^2,\notag                                   \\
+        C_{0,\mathrm{win}}(q,R)
+         & \le CKRx^3=CKR\bigl[\log(q^R)\bigr]^3.\notag
+    \end{align}
+    Substitution in~(\ref{eq:chain_window_area_law}) proves
+    (\ref{eq:chain_window_range_entropy}).
 \end{proof}
 
 \section{Finite sets of integers}
@@ -1318,6 +1596,22 @@ for an arbitrary finite set of sites and are instantiated here directly.
         a+b-E_0\le0$. Hence $\Omega$ is a multiple of $u\otimes v$, and its
     reduced state on $B$ is pure; this is
     Theorem~\ref{thm:area_law_product_ground_state}.
+\end{proof}
+
+% INERT mathematical addition; association awaits integration.
+\begin{theorem}[Zero entropy for on-site interactions]
+    \label{thm:chain_range_zero_entropy}
+    % Future association: TNLean.MPS.AreaLaw.ChainHamiltonian.regionEntropy_eq_zero_of_range_zero.
+    \uses{def:chain_model,lem:zero_entropy_cut}
+    Let $\Omega$ be a gapped ground vector, with positive gap, of a
+    range-zero Hamiltonian on a finite chain. Then $S_\Omega(A)=0$
+    for every set $A$ of sites.
+\end{theorem}
+\begin{proof}
+    \uses{lem:zero_entropy_cut}
+    A nonempty support of diameter zero is a singleton. Every interaction
+    is therefore supported inside $A$ or inside its complement.
+    Lemma~\ref{lem:zero_entropy_cut} applies.
 \end{proof}
 
 \begin{lemma}[Flipping a region of zero entropy]
@@ -1874,6 +2168,67 @@ for an arbitrary finite set of sites and are instantiated here directly.
     $\|\Phi-\Omega\|\le\varepsilon$.
     Bounded cut ranks give the matrix product representation, which is
     preserved by this scalar normalization.
+\end{proof}
+
+% INERT mathematical addition. The full physical proof has not been checked.
+% Future association: TNLean.MPS.AreaLaw.exists_isOpenMPS_norm_sub_le_of_error_of_consecutive_terms.
+\begin{theorem}[Matrix product approximation for consecutive-window interactions]
+    \label{thm:chain_window_mps_error}
+    \uses{def:chain_model,def:chain_open_mps}
+    Fix natural numbers $q\ge1$ and $R$, and real numbers $J\ge0$ and
+    $\Delta>0$. With $B_{\mathrm{win}}$ and $C_{0,\mathrm{win}}$ as in
+    Theorem~\ref{thm:chain_window_area_law}, put
+    \begin{align}
+        C & =C_{0,\mathrm{win}}(q,R)(1+J/\Delta),\notag      \\
+        s & =\sqrt{(1+J/\Delta)B_{\mathrm{win}}(q,R)},\qquad
+        c_0=\sqrt{2e^{e/2}}.\notag
+    \end{align}
+    These constants are fixed before the chain length, Hamiltonian,
+    ground vector and accuracy. Let $H=\sum_Xh_X$ act on a chain of
+    $L\ge1$ sites, with self-adjoint terms $h_X$ of norm at most $J$,
+    and suppose that every
+    nonzero $h_X$ has support $X=[a,a+R+1)$ with $a+R+1\le L$.
+    Let $\Omega$ be a unit vector satisfying $H\Omega=E_0\Omega$ and
+    $H-E_0\ge\Delta(1-|\Omega\rangle\langle\Omega|)$.
+    For every $0<\varepsilon\le1$, there is a normalized open-boundary
+    matrix product state $\Phi$ such that $\|\Phi-\Omega\|\le\varepsilon$
+    and its bond dimension is at most
+    \begin{align}
+        \left\lfloor\exp\left(C+64s\log\frac{2Lc_0}{\varepsilon}\right)
+        \right\rfloor.\notag
+    \end{align}
+    This is the prescribed-accuracy consequence of the argument for
+    Theorem~B in \cite[Part~IIa]{TNLean2026OneDimensional}, with the
+    consecutive-window constants from Part~I, Remark~6.3.
+\end{theorem}
+\begin{proof}
+    \uses{thm:chain_window_area_law,thm:chain_window_cut_budget,
+        lem:chain_entropy_inequalities,lem:chain_marginal_tail,
+        lem:chain_sequential_truncation,thm:chain_mps_of_cut_rank}
+    A prefix $[0,k)$ has at most one boundary edge, so
+    Theorem~\ref{thm:chain_window_area_law} gives $S_\Omega([0,k))\le C$.
+    Restrict the interaction sum to its nonzero terms, preserving its
+    sum $H$ and the original projector gap. By
+    Theorem~\ref{thm:chain_window_cut_budget}, its actual cut budget
+    $B_k$ satisfies $1\le B_k\le B_{\mathrm{win}}$. The two-sided
+    marginal tail estimate gives, for $w\ge0$,
+    \begin{align}
+        \operatorname{tail}_k(w)
+         & \le 2e^{e/2}\exp\left(-\frac{w}{32s}\right).\notag
+    \end{align}
+    Indeed, the concentration bound with $B_k$ is at most its exponential
+    part, and replacing $B_k$ by $B_{\mathrm{win}}$ increases that part.
+    Set $w=64s\log(2Lc_0/\varepsilon)$. Sequential truncation gives a vector
+    $\widetilde\Phi$ with cut ranks at most $\lfloor e^{C+w}\rfloor$ and
+    \begin{align}
+        \|\widetilde\Phi-\Omega\|
+         & \le\sum_{k=1}^{L-1}\sqrt{\operatorname{tail}_k(w)}
+        \le(L-1)\frac{\varepsilon}{2L}\le\frac\varepsilon2.\notag
+    \end{align}
+    Thus $\widetilde\Phi\ne0$. Its normalization
+    $\Phi=\widetilde\Phi/\|\widetilde\Phi\|$ has the same cut ranks, and
+    the reverse triangle inequality gives $\|\Phi-\Omega\|\le\varepsilon$.
+    The cut-rank criterion yields the required matrix product state.
 \end{proof}
 
 \begin{theorem}[Theorem B: polynomial matrix product state approximation]

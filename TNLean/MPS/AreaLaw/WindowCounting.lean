@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
 import TNLean.MPS.AreaLaw.Counting
+import TNLean.Algebra.FinsetSubtypeSum
 
 /-!
 # Consecutive-window interactions on a chain
@@ -114,40 +115,22 @@ theorem ChainHamiltonian.card_crossingTerms_interval_le_of_consecutive_terms
     (fun X : {X : ChainSupport L R // h.term X ≠ 0} ↦ X.val)
     Subtype.val_injective (fun X ↦ hwindow X.val X.property) l r
 
-/-- The physical marginal log-moment bound for consecutive-window interactions.
-The budget is `1 + 2R log²(e q^(R+1))`, and the allowed moment radius is the
-corresponding `1 / (32 sqrt ((1 + J/Δ) B))`. No positive-length or nonempty-cut
-hypothesis is imposed.
-Source: the one-dimensional note, `rem:sharper`, lines 706–709, with
-`eq:theta` and `eq:mgf`, lines 152–166. -/
-theorem ChainHamiltonian.log_surprisalMoment_interval_le_of_consecutive_terms
-    {Δ E₀ : ℝ} (hq : 1 ≤ q) (hJ : 0 ≤ J) (hΔ : 0 < Δ)
-    (h : ChainHamiltonian L q R J)
+/-- The cut logarithmic budget of the actual nonzero consecutive-window terms.
+Source: the one-dimensional note, `rem:sharper`, lines 706–734. -/
+theorem ChainHamiltonian.cutLogBudget_interval_le_of_consecutive_terms
+    (hq : 1 ≤ q) (h : ChainHamiltonian L q R J)
     (hwindow : ∀ X : ChainSupport L R, h.term X ≠ 0 →
-      ∃ a : ℕ, a + R + 1 ≤ L ∧ X.1 = interval L a (a + R + 1))
-    {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hgs : Matrix.IsGappedGroundState h.operator E₀ Ω Δ)
-    (l r : ℕ) {u : ℝ}
-    (hu : |u| ≤ Entropy.tailRadius (J / Δ)
-      (1 + (2 * R : ℕ) * Real.log (Real.exp 1 * (q : ℝ) ^ (R + 1)) ^ 2)) :
-    Real.log (Entropy.surprisalMoment
-      (Entropy.regionState_isHermitian (n := fun _ : Fin L ↦ q)
-        (interval L l r) Ω).eigenvalues u) ≤
-      u * Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L l r) Ω +
-        512 * Real.exp 1 * (J / Δ) *
-          (1 + (2 * R : ℕ) * Real.log (Real.exp 1 * (q : ℝ) ^ (R + 1)) ^ 2) * u ^ 2 := by
+      ∃ a : ℕ, a + R + 1 ≤ L ∧ X.1 = interval L a (a + R + 1)) (l r : ℕ) :
+    Entropy.cutLogBudget
+      (Entropy.crossingTerms
+        (fun X : {X : ChainSupport L R // h.term X ≠ 0} ↦ X.val.1)
+        (interval L l r))
+      (Entropy.supportDim (fun _ : Fin L ↦ q) ∘
+        (fun X : {X : ChainSupport L R // h.term X ≠ 0} ↦ X.val.1)) ≤
+      1 + (2 * R : ℕ) * Real.log (Real.exp 1 * (q : ℝ) ^ (R + 1)) ^ 2 := by
   classical
   let A := {X : ChainSupport L R // h.term X ≠ 0}
-  let g : A → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := fun X ↦ h.term X.val
   let D : A → Finset (Fin L) := fun X ↦ X.val.1
-  have hsum : (∑ X : A, g X) = h.operator := by
-    change (∑ X : {X : ChainSupport L R // h.term X ≠ 0}, h.term X.val) = ∑ X, h.term X
-    rw [← Finset.sum_subtype (p := fun X : ChainSupport L R ↦ h.term X ≠ 0)
-      (Finset.univ.filter fun X ↦ h.term X ≠ 0) (by simp) h.term]
-    apply Finset.sum_subset (Finset.filter_subset _ _)
-    intro X _ hX
-    by_contra hn
-    exact hX (Finset.mem_filter.mpr ⟨Finset.mem_univ X, hn⟩)
   let C := Entropy.crossingTerms D (interval L l r)
   let B : ℝ := 1 + (2 * R : ℕ) * Real.log (Real.exp 1 * (q : ℝ) ^ (R + 1)) ^ 2
   let budget := Entropy.cutLogBudget C (Entropy.supportDim (fun _ : Fin L ↦ q) ∘ D)
@@ -177,6 +160,41 @@ theorem ChainHamiltonian.log_surprisalMoment_interval_le_of_consecutive_terms
     change 1 + ∑ X ∈ C, Real.log (Real.exp 1 *
       (Entropy.supportDim (fun _ : Fin L ↦ q) (D X) : ℝ)) ^ 2 ≤ B
     exact add_le_add le_rfl (hs.trans hc)
+  exact hbudget
+
+/-- The physical marginal log-moment bound for consecutive-window interactions.
+The budget is `1 + 2R log²(e q^(R+1))`, and the allowed moment radius is the
+corresponding `1 / (32 sqrt ((1 + J/Δ) B))`. No positive-length or nonempty-cut
+hypothesis is imposed.
+Source: the one-dimensional note, `rem:sharper`, lines 706–709, with
+`eq:theta` and `eq:mgf`, lines 152–166. -/
+theorem ChainHamiltonian.log_surprisalMoment_interval_le_of_consecutive_terms
+    {Δ E₀ : ℝ} (hq : 1 ≤ q) (hJ : 0 ≤ J) (hΔ : 0 < Δ)
+    (h : ChainHamiltonian L q R J)
+    (hwindow : ∀ X : ChainSupport L R, h.term X ≠ 0 →
+      ∃ a : ℕ, a + R + 1 ≤ L ∧ X.1 = interval L a (a + R + 1))
+    {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
+    (hgs : Matrix.IsGappedGroundState h.operator E₀ Ω Δ)
+    (l r : ℕ) {u : ℝ}
+    (hu : |u| ≤ Entropy.tailRadius (J / Δ)
+      (1 + (2 * R : ℕ) * Real.log (Real.exp 1 * (q : ℝ) ^ (R + 1)) ^ 2)) :
+    Real.log (Entropy.surprisalMoment
+      (Entropy.regionState_isHermitian (n := fun _ : Fin L ↦ q)
+        (interval L l r) Ω).eigenvalues u) ≤
+      u * Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L l r) Ω +
+        512 * Real.exp 1 * (J / Δ) *
+          (1 + (2 * R : ℕ) * Real.log (Real.exp 1 * (q : ℝ) ^ (R + 1)) ^ 2) * u ^ 2 := by
+  classical
+  let A := {X : ChainSupport L R // h.term X ≠ 0}
+  let g : A → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := fun X ↦ h.term X.val
+  let D : A → Finset (Fin L) := fun X ↦ X.val.1
+  have hsum : (∑ X : A, g X) = h.operator := by
+    exact (Finset.sum_eq_sum_subtype_ne_zero h.term h.term (fun _ hX ↦ hX)).symm
+  let C := Entropy.crossingTerms D (interval L l r)
+  let B : ℝ := 1 + (2 * R : ℕ) * Real.log (Real.exp 1 * (q : ℝ) ^ (R + 1)) ^ 2
+  let budget := Entropy.cutLogBudget C (Entropy.supportDim (fun _ : Fin L ↦ q) ∘ D)
+  have hbudget : budget ≤ B :=
+    h.cutLogBudget_interval_le_of_consecutive_terms hq hwindow l r
   have hθ : 0 ≤ J / Δ := div_nonneg hJ hΔ.le
   have hbudget1 : 1 ≤ budget := Entropy.one_le_cutLogBudget _ _
   have hradius : Entropy.tailRadius (J / Δ) B ≤

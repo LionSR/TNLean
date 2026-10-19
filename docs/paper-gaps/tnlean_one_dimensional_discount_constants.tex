@@ -13,11 +13,11 @@
 \section{The source statement}
 
 Lemma~4.2 of the one-dimensional note~\cite{TNLean2026OneDimensional}
-(label \texttt{lem:buffer}, file \texttt{part1\_arealaw.tex}, lines~360--364)
+(label \texttt{lem:buffer}, file \texttt{part1\_arealaw.tex}, lines~405--409)
 is the buffered discount. For an interval $X$ of the chain with the shells
 $X_j=X^{+jR}$, $1\le j\le m$, the flanks $T_j=X_j\setminus X$ and the uniform
 weights $a_j=2/m$, the note fixes the constants (equation \texttt{eq:CE},
-lines~321--328)
+lines~366--373)
 \begin{align}
     C_E
         &= 8\,N_R\,J\,q^{2(R+1)},
@@ -28,7 +28,7 @@ lines~321--328)
     \label{eq:tnlean_one_dimensional_discount_constants_source_shell_count}
 \end{align}
 with $\vartheta=J/\Delta$, notes $m\le C_1(q,R)(1+\vartheta)$
-(equation \texttt{eq:mbound}, lines~331--333), and concludes
+(equation \texttt{eq:mbound}, lines~374--378), and concludes
 (equation \texttt{eq:discount})
 \begin{align}
     S(X\,|\,T_m)
@@ -37,21 +37,26 @@ with $\vartheta=J/\Delta$, notes $m\le C_1(q,R)(1+\vartheta)$
 \end{align}
 In the proof, the energy of the filtered vector is bounded by
 $\sum_j N_R\cdot 2a_j^2q^{2(R+1)}J=C_E/m$ (equation \texttt{eq:energy},
-lines~458--463), so that by the second entry of $m$ it is at most $\Delta/4$
+lines~517--522), so that by the second entry of $m$ it is at most $\Delta/4$
 and the overlap defect $1-|\langle\Omega,\phi\rangle|^2\le C_E/(m\Delta)$ is
-at most $1/4$ (equation \texttt{eq:overlap}, lines~465--467); the overlap
+at most $1/4$ (equation \texttt{eq:overlap}, lines~523--526); the overlap
 losses of the $m$ prefixes are then summed with $-\frac12\log(1-v)\le v$ to
 $C_E/\Delta$, and the tail term
 $512\,e\,\vartheta\,\mathcal B_R\sum_ja_j^2=2048\,e\,\vartheta\,\mathcal B_R/m$
-is bounded by $\frac12$ through the fourth entry of $m$ (lines~505--516,
+is bounded by $\frac12$ through the fourth entry of $m$ (lines~560--577,
 equation \texttt{eq:lowerN}). The closing step (equation \texttt{eq:final},
-lines~606--608) then gives the interval bound
+lines~668--679) then gives the interval bound
 $C_{\mathrm{int}}=8mR\log q+1+2C_E/\Delta\le C_0(q,R)(1+J/\Delta)$ with
 $C_0(q,R)=8C_1(q,R)R\log q+1+16N_Rq^{2(R+1)}$.
 
-\section{What is proved and the deviations}
+\section{The earlier proof}
 
-The formalization proves the discount on the chain for every interval
+The following comparison records the earlier polynomial-dimension proof.
+Its three-entry shell count and overlap loss have been superseded by the
+logarithmic estimate below; they do not describe a remaining gap.
+Here the formal constants mean the earlier estimates.
+
+The earlier proof established the discount on the chain for every interval
 $X=[l,r)$ with the buffer $T=X^{+mR}\setminus X$, as an instance of the
 finite-dimensional discount of the companion library,\footnote{Declarations:
 \leanid{TNLean.MPS.AreaLaw.chainEnergyThreshold},
@@ -115,20 +120,85 @@ printed $C_0$. Every deviation is a change of absolute constants; the
 structure of the argument, its hypotheses, and the linear dependence of the
 area-law constant on $1+J/\Delta$ are those of the note.
 
-\section{Elimination plan}
+\section{The logarithmic discount}
 
-None of the deviations needs a formal change: the formal constants are valid
-in place of the printed ones, and the printed ones are not sharper in any
-respect that the note uses. A revision of the note may adopt the formal
-constants (energy threshold $\Delta/2$, overlap losses $m\log2$, the tail
-term kept explicit with the three-entry $m$), or the formalization may be
-tightened to the printed ones by proving the finite-dimensional discount with
-the sharper energy coefficient $2a_j^2$ and the inequality
-$-\frac12\log(1-v)\le v$ for the overlap losses and by adding the fourth
-entry to $m$. Until then the deviations are recorded on the module docstring
-of \texttt{TNLean/MPS/AreaLaw/BufferDiscount.lean}, in the blueprint statements of
-the buffered discount and of Theorem~A, which print the formal constants, and
-in the status table of \path{docs/formalization/one-dimensional-chain.md}.
+Remark~6.3 of the one-dimensional note~\cite{TNLean2026OneDimensional}
+(\texttt{part1\_arealaw.tex}, lines~711--734) replaces the polynomial
+support-dimension factor by a logarithmic interaction budget.
+The finite-dimensional comparison uses the same optimizing filters and
+its existing admissibility condition supplies the required smallness;
+there is no additional physical hypothesis.\footnote{Finite-dimensional
+comparison: \leanid{Entropy.two_mul_condEntropy_le_logarithmic}.}
+
+More generally, consider any finite family of Hermitian interactions of
+norm at most $J\ge0$ and diameter at most $R$ on a chain of local dimension
+$q\ge1$, with a normalized
+gapped ground vector and gap $\Delta>0$. Suppose one number $B\ge1$ bounds
+the logarithmic cut budget of every coordinate shell used in the argument.
+Put $\vartheta=J/\Delta$ and choose
+\begin{align}
+    C_E&=32eBJ,
+    \label{eq:tnlean_one_dimensional_discount_constants_log_energy}\\
+    m&=\left\lceil\max\left\{4,\frac{128eBJ}{\Delta},
+        128\sqrt{(1+\vartheta)B},4096e(1+\vartheta)B\right\}\right\rceil .
+    \label{eq:tnlean_one_dimensional_discount_constants_log_shells}
+\end{align}
+The chain statement uses the coordinate intervals
+$X_j=[l-(j+1)R,r+(j+1)R)$, clipped to the chain, with truncated subtraction
+at the left endpoint, and weights $a_j=2/m$.
+The all-support specialization takes
+$B=\mathcal B_R=1+N_R\log^2(e q^{R+1})$.\footnote{Chain declarations:
+\leanid{TNLean.MPS.AreaLaw.two_mul_condEntropy_interval_le_of_family_budget}
+and \leanid{TNLean.MPS.AreaLaw.two_mul_condEntropy_interval_le}.}
+
+For the same optimizing filters and every prefix, the energy threshold is
+$E=C_E/m\le\Delta/4$. The logarithmic overlap loss satisfies
+$-m\log(1-E/\Delta)\le2C_E/\Delta$. The fourth entry in
+(\ref{eq:tnlean_one_dimensional_discount_constants_log_shells}) bounds the marginal error by one.
+Consequently, for the final buffer $T$,
+\begin{align}
+    2S(X\mid T)&\le S(X)+1+\frac{64eBJ}{\Delta}.
+    \label{eq:tnlean_one_dimensional_discount_constants_log_discount}
+\end{align}
+This has the form of the buffered discount of the one-dimensional
+note~\cite{TNLean2026OneDimensional}
+(\texttt{part1\_arealaw.tex}, lines~405--409 and~639--645), with the
+refined energy constant of its Remark~6.3 (lines~711--734).
+The coordinate version includes empty intervals, arbitrary endpoints,
+empty chains and range zero. It is not an assertion that the coordinate
+enlargement of an empty interval is its metric neighborhood.
+
+The Araki--Lieb closing argument of the one-dimensional
+note~\cite{TNLean2026OneDimensional}
+(\texttt{part1\_arealaw.tex}, lines~668--679) gives
+\begin{align}
+    C_1(B)&=5+(128+4224e)B, &
+    C_0(q,R;B)&=8R\log q\,C_1(B)+1+64eB,
+    \label{eq:tnlean_one_dimensional_discount_constants_log_coefficients}\\
+    C_{\mathrm{int}}&=8mR\log q+1+64eB\vartheta
+        \le C_0(q,R;B)(1+\vartheta).
+    \label{eq:tnlean_one_dimensional_discount_constants_log_interval}
+\end{align}
+For fixed $R$, this gives logarithmic-cube dependence on the local
+dimension, including the zero-entropy case $q=1$. These statements retain
+the original all-support Hamiltonian.
+
+There is a separate specialization to interactions whose every nonzero
+designated support is a full window of $R+1$ consecutive sites contained
+in the chain. Only in that specialization may one replace $B$ by
+$B_{\mathrm{win}}=1+2R\log^2(e q^{R+1})$, as in
+Remark~6.3 of the one-dimensional note~\cite{TNLean2026OneDimensional}
+(\texttt{part1\_arealaw.tex}, lines~706--709). Shorter boundary supports must
+have zero terms; separately norm-bounded terms are not combined at fixed
+$J$. The same argument then gives the absolute polynomial-range bound of
+that remark~\cite{TNLean2026OneDimensional}
+(\texttt{part1\_arealaw.tex}, lines~736--748). Range zero and local dimension one have zero
+entropy separately. The finite-domain entropy reduction and the
+contiguous-chain restrictions on the Part~II estimates are unchanged.
+
+Thus the old three constant losses are historical. The logarithmic
+comparison supplies the four-entry shell count, the $\Delta/4$ threshold
+and the exact prefix-loss bound without an unresolved constant discrepancy.
 
 \bibliographystyle{alpha}
 \bibliography{references}

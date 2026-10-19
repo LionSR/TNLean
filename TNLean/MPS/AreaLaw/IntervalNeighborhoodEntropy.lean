@@ -25,6 +25,8 @@ Source: TNLean one-dimensional note, Lemma `lem:logsep`,
 `part2a_mps_information.tex`, lines 458–461 and 482–487.
 -/
 
+open TNLean.Lattice
+
 namespace TNLean.MPS.AreaLaw
 
 /-- The exact closed real-radius neighborhood of a clipped interval.

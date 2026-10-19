@@ -85,6 +85,29 @@ theorem boundaryEdges_univ : boundaryEdges L Finset.univ = ∅ := by
   intro hp
   exact ⟨fun _ ↦ ⟨⟨p + 1, hp⟩, rfl⟩, fun _ ↦ ⟨⟨p, by omega⟩, rfl⟩⟩
 
+/-- A prefix of a finite chain has at most one boundary edge, including the empty
+and whole-chain cases. Source: the one-dimensional note, Section 2, the chain setting. -/
+theorem card_boundaryEdges_prefix_le (L k : ℕ) :
+    (boundaryEdges L (interval L 0 k)).card ≤ 1 := by
+  classical
+  have hmem (u : ℕ) (hu : u < L) :
+      (∃ i ∈ interval L 0 k, i.val = u) ↔ u < k := by
+    constructor
+    · rintro ⟨i, hi, hiu⟩
+      have := (mem_interval.mp hi).2
+      omega
+    · intro huk
+      exact ⟨⟨u, hu⟩, mem_interval.mpr ⟨Nat.zero_le _, huk⟩, rfl⟩
+  have hcut (p : ℕ) (hp : p ∈ boundaryEdges L (interval L 0 k)) : p + 1 = k := by
+    obtain ⟨hpL, hp⟩ := mem_boundaryEdges.mp hp
+    rw [hmem p (by omega), hmem (p + 1) hpL] at hp
+    omega
+  apply Finset.card_le_one.mpr
+  intro p hp r hr
+  have hp' := hcut p hp
+  have hr' := hcut r hr
+  omega
+
 /-- A nonempty proper region `A` of the chain contains a nonempty interval `I` (its leftmost
 maximal run) such that the boundary of `A \ I` is a proper subset of the boundary of `A`: the
 boundary edges of `A \ I` are boundary edges of `A`, and the edge leaving the right end of the

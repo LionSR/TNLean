@@ -16,7 +16,7 @@ off its support, and a gapped ground vector in the sense of
 `Entropy.regionEntropy`. Nothing is derived from the two-dimensional lattice
 development of `TNLean/PEPS/AreaLaw/`; the two finite-dimensional cores (the
 marginal tail bound `Entropy.surprisalTail_cut_le` and the buffered discount
-`Entropy.two_mul_condEntropy_le`) are QICLean lemmas stated on an arbitrary
+`Entropy.two_mul_condEntropy_le_logarithmic`) are QICLean lemmas stated on an arbitrary
 finite set of sites, instantiated here on the chain.
 
 ## Statements
@@ -27,13 +27,16 @@ finite set of sites, instantiated here on the chain.
 | Lemma 3.1 (marginal tail bound) at a cut | `MPS.AreaLaw.ChainHamiltonian.surprisalTail_regionState_le` with the budget `MPS.AreaLaw.cutLogBudget` | Proved, from the QICLean core. |
 | Rényi entropies near one (`rem:renyi`) | `MPS.AreaLaw.ChainHamiltonian.near_one_renyi_entropy_interval_bounds` | Proved on the full closed order interval `[1-u₀, 1]`, with the linear coefficient `512e` and uniform bound `16e √((1 + J/Δ) B_R)`. The statement includes order one, zero eigenvalues and the spectral power formula. |
 | `eq:count`, `eq:BR`: split interactions and cut budget of an interval | `MPS.AreaLaw.card_crossingTerms_interval_le` (`N_R = 2·2^{2R}`), `MPS.AreaLaw.cutLogBudget_interval_le` (`B_R = 1 + N_R log²(e q^{R+1})`) | Proved; the constants are those of the note. |
-| Remark on sharper constants (`rem:sharper`, lines 706–709): full consecutive windows | `MPS.AreaLaw.ChainHamiltonian.card_crossingTerms_interval_le_of_consecutive_terms`, `MPS.AreaLaw.ChainHamiltonian.log_surprisalMoment_interval_le_of_consecutive_terms` | Proved when every nonzero term has a full `(R+1)`-site window as its designated support. Active crossing count `2R`; physical moment budget `1 + 2R log²(e q^(R+1))` for the original gapped vector. The all-support constants remain unchanged. |
+| Remark on sharper constants (`rem:sharper`, lines 706–709): full consecutive windows | `MPS.AreaLaw.ChainHamiltonian.card_crossingTerms_interval_le_of_consecutive_terms`, `MPS.AreaLaw.ChainHamiltonian.log_surprisalMoment_interval_le_of_consecutive_terms` | Proved when every nonzero term has a full `(R+1)`-site window as its designated support. Active crossing count `2R`; physical moment budget `1 + 2R log²(e q^(R+1))` for the original gapped vector. The original all-support Hamiltonian is retained; the restriction concerns every nonzero designated support and excludes shorter boundary windows unless their terms vanish. |
 | Single-splitting lemma (Part I, Section 4) | `MPS.AreaLaw.single_splitting_shells`, with `MPS.AreaLaw.not_splits_two_shells` as a corollary | Proved, including the initial index zero, later containment, earlier disjointness, and uniqueness. The coordinate-interval statement also permits arbitrary endpoints and range zero. |
-| Lemma 4.2 (buffered discount) | `MPS.AreaLaw.two_mul_condEntropy_interval_le`, with `MPS.AreaLaw.chainShellCount` (`m`) and `MPS.AreaLaw.chainDiscountConst` | Proved. Shells of width `R` as in the note; energy threshold `Δ/2` in place of the note's `Δ/4`, overlap losses `m log 2` in place of the note's `2 C_E/Δ`, and the shell count omits the note's fourth entry `4096 e (1 + ϑ) B_R`, the term `4096 e ϑ B_R / m` staying explicit in the discount: `docs/paper-gaps/tnlean_one_dimensional_discount_constants.tex`. |
+| Lemma 4.2 (buffered discount), with the logarithmic energy refinement of `rem:sharper` | `MPS.AreaLaw.two_mul_condEntropy_interval_le_of_family_budget`, `MPS.AreaLaw.two_mul_condEntropy_interval_le` | The finite-family statement uses one uniform logarithmic cut budget for every shell. With `C_E = 32 e B J`, the four-entry shell count gives energy `E = C_E/m ≤ Δ/4`, prefix loss at most `2 C_E/Δ` and marginal error at most one; hence `2 S(X∪T) - 2 S(T) ≤ S(X) + 1 + 64 e B J/Δ`. The chain specialization takes `B = B_R`. The superseded three-entry constants are recorded historically in `docs/paper-gaps/tnlean_one_dimensional_discount_constants.tex`; no unresolved discount-constant gap remains. |
 | Araki–Lieb closure, reductions (Section 2) | `Lattice.regionEntropy_le_union_add`, `MPS.AreaLaw.regionEntropy_le_mul_card_boundaryEdges_of_intervals` | Proved. |
 | Theorem A for intervals | `MPS.AreaLaw.regionEntropy_interval_le` with the explicit `MPS.AreaLaw.chainIntervalEntropyBound` | Proved; no existential constant. |
 | Theorem A, constant linear in `1 + J/Δ` | `MPS.AreaLaw.chainIntervalEntropyBound_le`, `MPS.AreaLaw.chainAreaLawConst` | Proved. |
 | Theorem A for subsets of the chain | `MPS.AreaLaw.regionEntropy_le_mul_card_boundaryEdges`, `MPS.AreaLaw.chainAreaLaw` | Proved on the chain of `L` sites (connected domains). |
+| Fixed-range logarithmic dimension dependence (`rem:sharper`, lines 711–745) | `MPS.AreaLaw.chainAreaLawConst_le_mul_log_cube`, `MPS.AreaLaw.regionEntropy_le_log_cube_mul_card_boundaryEdges` | For `q ≥ 2`, `C₀(q,R) ≤ C₀(2,R) log³q/log³2`; the physical bound holds for `q ≥ 1`, with zero entropy when `q = 1`. |
+| Full contained consecutive windows (`rem:sharper`, lines 706–748) | `MPS.AreaLaw.ChainHamiltonian.cutLogBudget_interval_le_of_consecutive_terms`, `MPS.AreaLaw.chainAreaLaw_of_consecutive_terms`, `MPS.AreaLaw.chainAreaLaw_of_consecutive_terms_polynomial_range` | For nonzero terms assigned to full `(R+1)`-site windows contained in the chain, `B_win = 1 + 2R log²(e q^(R+1))`. One constant `C = C₀,win(q,R)(1+J/Δ)` precedes all lengths, Hamiltonians, normalized gapped ground vectors and regions. An absolute positive constant, chosen before all physical data, gives `S_Ω(A) ≤ C_abs(1+J/Δ) R log³(q^R) card(∂A)`. Range zero and local dimension one give zero entropy, including the empty chain. |
+| Zero interaction range | `MPS.AreaLaw.ChainHamiltonian.regionEntropy_eq_zero_of_range_zero` | Every region of a gapped range-zero ground vector has zero entropy, without an added sign or positivity assumption on `J` or `q`. |
 | Setting on a finite `Λ ⊂ ℤ` (induced path graph, `eq:ham`, `∂_Λ A`) | `MPS.AreaLaw.sitePos`, `MPS.AreaLaw.domainGraph`, `MPS.AreaLaw.IsDomainSupport`, `MPS.AreaLaw.DomainHamiltonian`, `MPS.AreaLaw.domainBoundaryEdges` | Definitions; the sites of `Λ` are labelled in increasing order. |
 | Theorem A on a finite `Λ ⊂ ℤ`; first reduction (Section 2) | `MPS.AreaLaw.regionEntropy_le_mul_card_domainBoundaryEdges`, `MPS.AreaLaw.domainAreaLaw` | Proved, with the constant `C₀(q, R)(1 + J/Δ)` of the chain. The reduction uses the zero entropy of the prefixes ending at the gaps of `Λ` (`Lattice.regionEntropy_eq_zero_of_forall_subset_or_disjoint`) and flips of the region on them (`Lattice.regionEntropy_symmDiff_eq_of_eq_zero`) in place of the factorization over components: `docs/paper-gaps/tnlean_one_dimensional_connected_domain_scope.tex` (resolved). |
 | Part II, `lem:reset` (information reset) | `MPS.AreaLaw.ChainHamiltonian.information_reset` | Proved on the contiguous chain, with only the original full-system gap. The constants precede all system, region and information-bound data. |
@@ -45,6 +48,7 @@ finite set of sites, instantiated here on the chain.
 | Sequential truncation at an entropy threshold | `MPS.AreaLaw.exists_sequentialTruncation` | Proved, as a separate statement: eigenvalues at least `exp(-(S_k + w))` are retained, with cut ranks at most `max 1 (exp(S_k + w))` and error `∑_k √tail_k(w)`. The threshold and prescribed-dimension projectors need not coincide; see `docs/paper-gaps/tnlean_one_dimensional_threshold_truncation.tex`. |
 | Prefix-cut projection bounds in the proof of Theorem B | `MPS.AreaLaw.ChainHamiltonian.spectralProjectionGE_leftBlock_bounds` | Proved for every natural cut index and `w ≥ 0`: the actual reduced state's projection at `exp(-(C_int + w))` has rank at most `exp(C_int + w)` and discarded mass at most `2 exp(e/2) exp(-w/(32 s))`, where `s = √((1 + J/Δ) B_R)`. |
 | Approximation at prescribed accuracy, by the argument for Theorem B | `MPS.AreaLaw.exists_isOpenMPS_norm_sub_le_of_error` | Proved for `0 < ε ≤ 1`, with a normalized approximant and bond bound `⌊exp(C_int + 64 s log(2 L c₀ / ε))⌋`, where `s = √((1 + J/Δ) B_R)` and `c₀ = √(2 exp(e/2))`. |
+| Prescribed-accuracy MPS approximation for full contained consecutive windows | `MPS.AreaLaw.exists_isOpenMPS_norm_sub_le_of_error_of_consecutive_terms` | Fix `q ≥ 1`, `R`, `J ≥ 0` and `Δ > 0`. The constants `B_win` and `C = C₀,win(q,R)(1+J/Δ)` precede every `L ≥ 1`, Hamiltonian satisfying the full-window condition, normalized gapped ground vector and `0 < ε ≤ 1`. There is a normalized approximant to `Ω` itself with error at most `ε` and bond dimension at most `⌊exp(C + 64 √((1+J/Δ)B_win) log(2 L c₀/ε))⌋`, where `c₀ = √(2 exp(e/2))`. Local dimension one and range zero are admitted. |
 | Theorem B | `MPS.AreaLaw.exists_isOpenMPS_norm_sub_le` with `MPS.AreaLaw.chainBondDimension`; polynomial form `MPS.AreaLaw.chainBondDimension_le_mul_rpow` | Proved; the bond dimension is `⌊exp(C_int + w(L))⌋ ≤ e^{C_int} (2 c₀)^{64 s} L^{128 s}` with `s = √((1 + J/Δ) B_R)`. The approximant is normalized and within `1/L` of `Ω` itself (the note allows a phase). |
 
 Theorem B is proved both by sequential truncation and by the physical
@@ -258,16 +262,29 @@ them:
 |---|---|
 | `chainCrossConst R` | `N_R = 2 · 2^{2R}` |
 | `chainBudgetConst q R` | `B_R = 1 + N_R log²(e q^{R+1})` |
-| `chainShellCount q R J Δ` | `m = ⌈max {4, 32 N_R q^{2(R+1)} J/Δ, 128 √((1 + J/Δ) B_R)}⌉` |
-| `chainDiscountConst q R J Δ` | `4096 e (J/Δ) B_R / m + m log 2` |
+| `chainShellCount q R J Δ` | `m = ⌈max {4, 128 e B_R J/Δ, 128 √((1 + J/Δ) B_R), 4096 e (1 + J/Δ) B_R}⌉` |
+| `chainDiscountConst q R J Δ` | `1 + 64 e B_R J/Δ` |
 | `chainIntervalEntropyBound q R J Δ` | `C_int = 8 m R log q + chainDiscountConst` |
-| `chainAreaLawConst q R` | `C₀ = (8 R log q + log 2)(5 + 32 N_R q^{2(R+1)} + 128 B_R) + 1024 e B_R`, with `C_int ≤ C₀ (1 + J/Δ)` |
+| `chainShellConst q R` | `C₁ = 5 + (128 + 4224 e) B_R`, with `m ≤ C₁ (1 + J/Δ)` |
+| `chainAreaLawConst q R` | `C₀ = 8 R log q C₁ + 1 + 64 e B_R`, with `C_int ≤ C₀ (1 + J/Δ)` |
 | `chainTruncationWidth q R J Δ L` | `w = 64 √((1 + J/Δ) B_R) log(2 L² √(2 e^{e/2}))` |
 | `chainBondDimension q R J Δ L` | `⌊exp(C_int + w)⌋` |
 
-The polynomial factor `q^{2(R+1)}` in `m` is the crude bound of the formal
-buffer lemma; Remark 6.3 of the note explains how it can be replaced by
-`log²(e q^{R+1})` with the three-lines device, which is not carried out here.
+The logarithmic interaction-energy estimate is the three-lines refinement of
+Remark `rem:sharper` (`part1_arealaw.tex`, lines 711–734). The fourth entry of
+`m` bounds the marginal error by one; the exact prefix loss is bounded by
+`2 C_E/Δ` at `E = C_E/m ≤ Δ/4`. These replace the earlier polynomial-dimension
+energy estimate, three-entry shell count and `m log 2` loss. The historical
+comparison is retained in the discount-constants note.
+
+For the full-window specialization, replace `B_R` by
+`B_win = 1 + 2R log²(e q^(R+1))` in `C₁` and `C₀`; denote the resulting
+coefficient by `C₀,win`. The polynomial-range theorem fixes
+`C_abs = (1064 + 33792 e + (1+64e)/log 2) ((log 2)^(-2) + 2((log 2)^(-1)+2)^2)`
+before the local dimension, range, term bound, gap, chain length, Hamiltonian,
+ground vector and region. Its conclusion includes `R = 0` and `q = 1` through
+their zero-entropy statements. The full-window premise is not imposed on the
+other area-law results or on the original all-support Hamiltonian.
 
 
 For the physical protocol, let `D >= 1` and `L0 >= 2` be the uniform width

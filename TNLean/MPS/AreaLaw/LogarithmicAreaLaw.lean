@@ -1,0 +1,274 @@
+/-
+Copyright (c) 2026 TNLean contributors. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
+-/
+import TNLean.MPS.AreaLaw.ComponentReduction
+
+/-!
+# Logarithmic dimension dependence and polynomial range dependence
+
+For fixed interaction range, the logarithmic interaction-energy estimate gives
+an area-law coefficient bounded by a range-dependent multiple of `log q ^ 3`.
+The coefficient is evaluated at local dimension two and is chosen before the
+chain length, Hamiltonian, ground vector and region.
+
+Source: the TNLean one-dimensional note, `part1_arealaw.tex`, Remark `rem:sharper`,
+lines 711–745. The two general dimension-logarithmic bounds use the finite-range interaction model
+without a consecutive-window hypothesis. The polynomial-range bound additionally
+requires every nonzero interaction to occupy a full contained consecutive window.
+Its absolute coefficient is fixed before the local dimension, interaction range,
+term norm bound, gap, chain length, Hamiltonian, ground vector and region.
+Range zero and local dimension one are handled by their zero-entropy conclusions.
+-/
+
+open TNLean.Lattice
+
+namespace TNLean.MPS.AreaLaw
+
+variable {L q R : ℕ} {J Δ : ℝ}
+
+/-- The area-law coefficient grows at most cubically in the logarithm of the local
+dimension, with the range fixed. Source: the note, Remark `rem:sharper`,
+`part1_arealaw.tex`, lines 711–745. -/
+theorem chainAreaLawConst_le_mul_log_cube (hq : 2 ≤ q) :
+    chainAreaLawConst q R ≤
+      (chainAreaLawConst 2 R / Real.log 2 ^ 3) * Real.log (q : ℝ) ^ 3 := by
+  have hc : 0 < Real.log 2 := Real.log_pos (by norm_num)
+  have hcx : Real.log 2 ≤ Real.log (q : ℝ) :=
+    Real.log_le_log (by norm_num) (by exact_mod_cast hq)
+  have hx : 0 ≤ Real.log (q : ℝ) := hc.le.trans hcx
+  let t : ℝ := Real.log (q : ℝ) / Real.log 2
+  have ht : 1 ≤ t := (one_le_div hc).mpr hcx
+  have ht2 : 1 ≤ t ^ 2 := one_le_pow₀ ht
+  have ht3 : 1 ≤ t ^ 3 := one_le_pow₀ ht
+  have ht23 : t ^ 2 ≤ t ^ 3 := by
+    calc t ^ 2 = t ^ 2 * 1 := by ring
+         _ ≤ t ^ 2 * t := mul_le_mul_of_nonneg_left ht (sq_nonneg t)
+         _ = t ^ 3 := by ring
+  have hB : chainBudgetConst q R ≤ chainBudgetConst 2 R * t ^ 2 := by
+    calc chainBudgetConst q R
+        ≤ (chainBudgetConst 2 R / Real.log 2 ^ 2) * Real.log (q : ℝ) ^ 2 :=
+          chainBudgetConst_le_mul_log_sq hq
+      _ = chainBudgetConst 2 R * t ^ 2 := by simp only [t, div_pow]; ring
+  have hA : 0 ≤ 128 + 4224 * Real.exp 1 := by positivity
+  have hC : chainShellConst q R ≤ chainShellConst 2 R * t ^ 2 := by
+    unfold chainShellConst
+    calc 5 + (128 + 4224 * Real.exp 1) * chainBudgetConst q R
+        ≤ 5 * t ^ 2 + (128 + 4224 * Real.exp 1) *
+            (chainBudgetConst 2 R * t ^ 2) :=
+          add_le_add (by nlinarith only [ht2]) (mul_le_mul_of_nonneg_left hB hA)
+      _ = (5 + (128 + 4224 * Real.exp 1) * chainBudgetConst 2 R) * t ^ 2 := by ring
+  have hlog : Real.log (q : ℝ) = Real.log 2 * t := by
+    dsimp only [t]
+    field_simp [hc.ne']
+  have hfirst : 8 * R * Real.log (q : ℝ) * chainShellConst q R ≤
+      (8 * R * Real.log 2 * chainShellConst 2 R) * t ^ 3 := by
+    calc 8 * R * Real.log (q : ℝ) * chainShellConst q R
+        ≤ 8 * R * Real.log (q : ℝ) * (chainShellConst 2 R * t ^ 2) :=
+          mul_le_mul_of_nonneg_left hC (by positivity)
+      _ = (8 * R * Real.log 2 * chainShellConst 2 R) * t ^ 3 := by rw [hlog]; ring
+  have hB3 : chainBudgetConst q R ≤ chainBudgetConst 2 R * t ^ 3 :=
+    hB.trans (mul_le_mul_of_nonneg_left ht23
+      (zero_le_one.trans (one_le_chainBudgetConst 2 R)))
+  have hlast : 64 * Real.exp 1 * chainBudgetConst q R ≤
+      (64 * Real.exp 1 * chainBudgetConst 2 R) * t ^ 3 := by
+    calc 64 * Real.exp 1 * chainBudgetConst q R
+        ≤ 64 * Real.exp 1 * (chainBudgetConst 2 R * t ^ 3) :=
+          mul_le_mul_of_nonneg_left hB3 (by positivity)
+      _ = (64 * Real.exp 1 * chainBudgetConst 2 R) * t ^ 3 := by ring
+  calc chainAreaLawConst q R
+      = 8 * R * Real.log (q : ℝ) * chainShellConst q R + 1 +
+          64 * Real.exp 1 * chainBudgetConst q R := rfl
+    _ ≤ (8 * R * Real.log 2 * chainShellConst 2 R) * t ^ 3 + t ^ 3 +
+          (64 * Real.exp 1 * chainBudgetConst 2 R) * t ^ 3 :=
+        add_le_add (add_le_add hfirst ht3) hlast
+    _ = chainAreaLawConst 2 R * t ^ 3 := by
+      simp only [chainAreaLawConst, Nat.cast_ofNat]
+      ring
+    _ = (chainAreaLawConst 2 R / Real.log 2 ^ 3) * Real.log (q : ℝ) ^ 3 := by
+      simp only [t, div_pow]
+      ring
+
+/-- For fixed interaction range, the original gapped chain satisfies an area law
+with explicit coefficient proportional to `(1 + J/Δ) log³ q`.
+Source: the note, Remark `rem:sharper`, `part1_arealaw.tex`, lines 711–745. -/
+theorem regionEntropy_le_log_cube_mul_card_boundaryEdges (hq : 1 ≤ q)
+    (hJ : 0 ≤ J) (hΔ : 0 < Δ) (h : ChainHamiltonian L q R J)
+    {E₀ : ℝ} {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
+    (hgs : Matrix.IsGappedGroundState h.operator E₀ Ω Δ) (A : Finset (Fin L)) :
+    Entropy.regionEntropy (n := fun _ : Fin L ↦ q) A Ω ≤
+      (chainAreaLawConst 2 R / Real.log 2 ^ 3) * (1 + J / Δ) *
+        Real.log (q : ℝ) ^ 3 * (boundaryEdges L A).card := by
+  by_cases hq2 : 2 ≤ q
+  · have hθ : 0 ≤ 1 + J / Δ := by positivity
+    have hbound := (chainIntervalEntropyBound_le (q := q) (R := R) hq hJ hΔ).trans
+      (mul_le_mul_of_nonneg_right (chainAreaLawConst_le_mul_log_cube (R := R) hq2) hθ)
+    calc Entropy.regionEntropy (n := fun _ : Fin L ↦ q) A Ω
+        ≤ ((chainAreaLawConst 2 R / Real.log 2 ^ 3) * Real.log (q : ℝ) ^ 3 *
+            (1 + J / Δ)) * (boundaryEdges L A).card :=
+          (regionEntropy_le_mul_card_boundaryEdges hq hJ hΔ h hgs A).trans
+            (mul_le_mul_of_nonneg_right hbound (Nat.cast_nonneg _))
+      _ = (chainAreaLawConst 2 R / Real.log 2 ^ 3) * (1 + J / Δ) *
+            Real.log (q : ℝ) ^ 3 * (boundaryEdges L A).card := by ring
+  · have hqeq : q = 1 := by omega
+    subst q
+    rw [regionEntropy_eq_zero_of_localDimension_one hgs.1 A]
+    norm_num
+
+/-- Scalar window-budget bound after normalizing by a positive logarithmic lower
+bound. Source: the one-dimensional note, Remark `rem:sharper`, lines 706–745. -/
+private theorem consecutive_window_budget_le_range_log_sq (c y r : ℝ)
+    (hc : 0 < c) (hy : c ≤ y) (hr : 1 ≤ r) :
+    1 + 2 * r * (1 + (r + 1) * y) ^ 2 ≤
+      ((c⁻¹) ^ 2 + 2 * (c⁻¹ + 2) ^ 2) * r * (r * y) ^ 2 := by
+  have hy0 : 0 ≤ y := hc.le.trans hy
+  have hcx : c ≤ r * y := hy.trans (le_mul_of_one_le_left hy0 hr)
+  have hu : 1 ≤ c⁻¹ * (r * y) := by
+    simpa only [div_eq_mul_inv, mul_comm] using (one_le_div hc).mpr hcx
+  have hr0 : 0 ≤ r := zero_le_one.trans hr
+  have hlin : 1 + (r + 1) * y ≤ (c⁻¹ + 2) * (r * y) := by
+    nlinarith only [hu, mul_nonneg (sub_nonneg.mpr hr) hy0]
+  have hsq : (1 + (r + 1) * y) ^ 2 ≤ ((c⁻¹ + 2) * (r * y)) ^ 2 :=
+    (sq_le_sq₀ (by positivity) (by positivity)).mpr hlin
+  have hu2 : 1 ≤ (c⁻¹) ^ 2 * (r * y) ^ 2 := by
+    simpa only [mul_pow] using (one_le_pow₀ hu (n := 2))
+  have huR : 1 ≤ (c⁻¹) ^ 2 * r * (r * y) ^ 2 := by
+    calc 1 ≤ (c⁻¹) ^ 2 * (r * y) ^ 2 := hu2
+         _ ≤ r * ((c⁻¹) ^ 2 * (r * y) ^ 2) :=
+           le_mul_of_one_le_left (by positivity) hr
+         _ = _ := by ring
+  calc
+    _ ≤ (c⁻¹) ^ 2 * r * (r * y) ^ 2 +
+        2 * r * ((c⁻¹ + 2) * (r * y)) ^ 2 :=
+      add_le_add huR (mul_le_mul_of_nonneg_left hsq (by positivity))
+    _ = _ := by ring
+
+/-- Absorb the additive entropy coefficient using a positive lower bound on the
+range times the dimension logarithm. Source: Remark `rem:sharper`, lines 706–745. -/
+private theorem area_law_coefficient_le_budget_mul_log (c x B : ℝ) (hc : 0 < c) (hx : c ≤ x)
+    (hB : 1 ≤ B) :
+    8 * x * (5 + (128 + 4224 * Real.exp 1) * B) + 1 + 64 * Real.exp 1 * B ≤
+      (1064 + 33792 * Real.exp 1 + (1 + 64 * Real.exp 1) / c) * B * x := by
+  have hx0 : 0 ≤ x := hc.le.trans hx
+  have hB0 : 0 ≤ B := zero_le_one.trans hB
+  have hfirst : 5 + (128 + 4224 * Real.exp 1) * B ≤
+      (133 + 4224 * Real.exp 1) * B := by
+    nlinarith only [hB]
+  have htail : (1 + 64 * Real.exp 1) * B ≤
+      ((1 + 64 * Real.exp 1) / c) * B * x := by
+    calc
+      _ = ((1 + 64 * Real.exp 1) / c) * B * c := by
+        field_simp [hc.ne']
+      _ ≤ _ := mul_le_mul_of_nonneg_left hx (by positivity)
+  nlinarith only [hB, htail, mul_le_mul_of_nonneg_left hfirst (show 0 ≤ 8 * x by positivity)]
+
+/-- A scalar estimate for the consecutive-window budget. The constants are
+absolute and are fixed before the local dimension and interaction range.
+Source: the one-dimensional note, Remark rem:sharper, lines 706–745. -/
+private theorem consecutive_window_coefficient_le_range_log_cube :
+    let c : ℝ := Real.log 2
+    let C : ℝ := 1064 + 33792 * Real.exp 1 + (1 + 64 * Real.exp 1) / c
+    let K : ℝ := (c⁻¹) ^ 2 + 2 * (c⁻¹ + 2) ^ 2
+    0 < C ∧ 0 < K ∧ ∀ (q R : ℕ), 2 ≤ q → 1 ≤ R →
+      let B : ℝ := 1 + 2 * (R : ℝ) *
+        Real.log (Real.exp 1 * (q : ℝ) ^ (R + 1)) ^ 2
+      8 * (R : ℝ) * Real.log (q : ℝ) *
+          (5 + (128 + 4224 * Real.exp 1) * B) + 1 + 64 * Real.exp 1 * B ≤
+        C * K * (R : ℝ) * Real.log ((q : ℝ) ^ R) ^ 3 := by
+  dsimp only
+  have hc : 0 < Real.log 2 := Real.log_pos (by norm_num)
+  refine ⟨by positivity, by positivity, ?_⟩
+  intro q R hq hR
+  have hq0 : 0 < (q : ℝ) := by exact_mod_cast (show 0 < q by omega)
+  have hy : Real.log 2 ≤ Real.log (q : ℝ) :=
+    Real.log_le_log (by norm_num) (by exact_mod_cast hq)
+  have hr : 1 ≤ (R : ℝ) := by exact_mod_cast hR
+  have hlog : Real.log (Real.exp 1 * (q : ℝ) ^ (R + 1)) =
+      1 + ((R : ℝ) + 1) * Real.log (q : ℝ) := by
+    rw [Real.log_mul (Real.exp_ne_zero 1) (pow_ne_zero _ hq0.ne'),
+      Real.log_exp, Real.log_pow, Nat.cast_add, Nat.cast_one]
+  let B : ℝ := 1 + 2 * (R : ℝ) *
+    Real.log (Real.exp 1 * (q : ℝ) ^ (R + 1)) ^ 2
+  let C : ℝ := 1064 + 33792 * Real.exp 1 + (1 + 64 * Real.exp 1) / Real.log 2
+  let K : ℝ := ((Real.log 2)⁻¹) ^ 2 + 2 * ((Real.log 2)⁻¹ + 2) ^ 2
+  have hbudget : B ≤ K * (R : ℝ) * ((R : ℝ) * Real.log (q : ℝ)) ^ 2 := by
+    dsimp only [B, K]
+    rw [hlog]
+    exact consecutive_window_budget_le_range_log_sq (Real.log 2) (Real.log (q : ℝ)) (R : ℝ) hc hy hr
+  have hB : 1 ≤ B := by
+    dsimp only [B]
+    exact le_add_of_nonneg_right (by positivity)
+  have hx : Real.log 2 ≤ (R : ℝ) * Real.log (q : ℝ) :=
+    hy.trans (le_mul_of_one_le_left (hc.le.trans hy) hr)
+  have hcoef := area_law_coefficient_le_budget_mul_log (Real.log 2)
+    ((R : ℝ) * Real.log (q : ℝ)) B hc hx hB
+  have hcombine : C * B * ((R : ℝ) * Real.log (q : ℝ)) ≤
+      C * (K * (R : ℝ) * ((R : ℝ) * Real.log (q : ℝ)) ^ 2) *
+        ((R : ℝ) * Real.log (q : ℝ)) :=
+    mul_le_mul_of_nonneg_right
+      (mul_le_mul_of_nonneg_left hbudget (by dsimp only [C]; positivity))
+      (hc.le.trans hx)
+  calc
+    _ ≤ C * B * ((R : ℝ) * Real.log (q : ℝ)) := by
+      simpa only [B, C, mul_assoc] using hcoef
+    _ ≤ C * (K * (R : ℝ) * ((R : ℝ) * Real.log (q : ℝ)) ^ 2) *
+        ((R : ℝ) * Real.log (q : ℝ)) := hcombine
+    _ = _ := by rw [Real.log_pow]; ring
+
+/-- On-site interactions give zero entropy on every region of a gapped ground state.
+Source: the one-dimensional note, Section 2 (`sec:setting`), component reduction. -/
+theorem ChainHamiltonian.regionEntropy_eq_zero_of_range_zero
+    {L q : ℕ} {J Δ : ℝ} (h : ChainHamiltonian L q 0 J)
+    {E₀ : ℝ} {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
+    (hΔ : 0 < Δ) (hgs : Matrix.IsGappedGroundState h.operator E₀ Ω Δ)
+    (A : Finset (Fin L)) :
+    Entropy.regionEntropy (n := fun _ : Fin L ↦ q) A Ω = 0 := by
+  refine regionEntropy_eq_zero_of_forall_subset_or_disjoint
+    h.supported h.hermitian hΔ hgs A ?_
+  intro X
+  have hcard := X.property.card_le
+  grind [Finset.card_le_one_iff, Finset.disjoint_left]
+
+/-- Absolute polynomial dependence on the interaction range for full contained
+consecutive-window interactions. Source: the one-dimensional note, Remark
+`rem:sharper`, `part1_arealaw.tex`, lines 706–745. -/
+theorem chainAreaLaw_of_consecutive_terms_polynomial_range :
+    ∃ Cabs : ℝ, 0 < Cabs ∧
+      Cabs = (1064 + 33792 * Real.exp 1 + (1 + 64 * Real.exp 1) / Real.log 2) *
+        (((Real.log 2)⁻¹) ^ 2 + 2 * ((Real.log 2)⁻¹ + 2) ^ 2) ∧
+      ∀ (q R : ℕ) (J Δ : ℝ), 1 ≤ q → 0 ≤ J → 0 < Δ →
+        ∀ L : ℕ, ∀ h : ChainHamiltonian L q R J,
+          (∀ X : ChainSupport L R, h.term X ≠ 0 →
+            ∃ a : ℕ, a + R + 1 ≤ L ∧ X.1 = interval L a (a + R + 1)) →
+          ∀ E₀ : ℝ, ∀ Ω : EuclideanSpace ℂ (Fin L → Fin q),
+            Matrix.IsGappedGroundState h.operator E₀ Ω Δ →
+            ∀ A : Finset (Fin L),
+              Entropy.regionEntropy (n := fun _ : Fin L ↦ q) A Ω ≤
+                Cabs * (1 + J / Δ) * (R : ℝ) * Real.log ((q : ℝ) ^ R) ^ 3 *
+                  (boundaryEdges L A).card := by
+  obtain ⟨hC, hK, hscalar⟩ := consecutive_window_coefficient_le_range_log_cube
+  refine ⟨_, mul_pos hC hK, rfl, ?_⟩
+  intro q R J Δ hq hJ hΔ L h hwindow E₀ Ω hgs A
+  by_cases hpos : 2 ≤ q ∧ 1 ≤ R
+  · obtain ⟨Cphys, hCphys, hCeq, hbound⟩ :=
+      chainAreaLaw_of_consecutive_terms q R J Δ hq hJ hΔ
+    have hscalar' := hscalar q R hpos.1 hpos.2
+    have hphysical := hbound L h hwindow E₀ Ω hgs A
+    have hθ : 0 ≤ 1 + J / Δ := by positivity
+    have hlast := mul_le_mul_of_nonneg_right
+      (mul_le_mul_of_nonneg_right hscalar' hθ)
+      (Nat.cast_nonneg (boundaryEdges L A).card)
+    rw [hCeq] at hphysical
+    simp only [Nat.cast_mul, Nat.cast_ofNat] at hphysical
+    exact hphysical.trans (by convert hlast using 1; ring)
+  · by_cases hR0 : R = 0
+    · subst R
+      rw [h.regionEntropy_eq_zero_of_range_zero hΔ hgs A]
+      simp
+    · have hq1 : q = 1 := by omega
+      subst q
+      rw [regionEntropy_eq_zero_of_localDimension_one hgs.1 A]
+      simp
+
+end TNLean.MPS.AreaLaw
