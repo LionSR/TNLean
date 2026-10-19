@@ -1833,10 +1833,18 @@ state.
     truncation constant at the factor $10$ and these transport constants.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:area_law_sublinear_collar_named,
-        thm:arealaw-physical-box-fixed-exponent}
-    The explicit initial box estimate and the transport constants satisfy the
-    hypotheses of the second part of
-    Theorem~\ref{thm:area_law_sublinear_collar_named}, whose constant and
-    threshold are $C_1$ and $N_1$ at this safe-box constant.
+    \uses{thm:arealaw-physical-box-fixed-exponent,
+        thm:arealaw-box-clearance-comparison,
+        thm:template-final-information,
+        thm:area_law_collar_bound_of_information}
+    The bootstrap of Theorem~\ref{thm:arealaw-physical-box-fixed-exponent},
+    run from the explicit initial box estimate at the given transport
+    constants, gives $F_{\mathrm{box},2R+11}(r)\leq C_{\rm box}r^{1+e_*}$ for
+    every integer $r\geq1$, with $C_{\rm box}\geq0$. The argument of the first
+    part of Theorem~\ref{thm:area_law_sublinear_collar_named} is then run at
+    the same transport constants and the truncation constant at the factor
+    $10$: the clearance comparison passes to clearance $2R+10$, the template
+    information theorem gives the information coefficient and its threshold,
+    and Theorem~\ref{thm:area_law_collar_bound_of_information} converts them
+    into $C_1$ and $N_1$.
 \end{proof}
