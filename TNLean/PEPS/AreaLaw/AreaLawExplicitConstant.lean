@@ -201,6 +201,13 @@ noncomputable def uniformAreaLawConstantClosedAt (q R : ℕ) (J Δ B : ℝ) : �
     TensorPower.ReplicaTransport.transportEnergyConst
     TensorPower.ReplicaTransport.transportEnergyExponent
 
+/-- At the closed safe-box constant, `uniformAreaLawConstantClosedAt` is the closed constant of
+Theorem 1.1. -/
+theorem uniformAreaLawConstantClosedAt_physicalBoxConstantClosed (q R : ℕ) (J Δ : ℝ) :
+    uniformAreaLawConstantClosedAt q R J Δ (physicalBoxConstantClosed q R J Δ) =
+      uniformAreaLawConstantClosed q R J Δ :=
+  rfl
+
 /-- **The area law at any upper bound for the closed safe-box constant.** Fix `q ≥ 1`, `R`,
 `J ≥ 0` and `Δ > 0`, and let `B ≥ physicalBoxConstantClosed q R J Δ`. Then
 `uniformAreaLawConstantClosedAt q R J Δ B` is nonnegative, and every cut of every finite induced

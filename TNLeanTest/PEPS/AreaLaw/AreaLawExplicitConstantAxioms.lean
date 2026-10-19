@@ -23,6 +23,7 @@ run_cmd do
     `TNLean.PEPS.AreaLaw.uniformAreaLaw_explicit_of_le,
     `TNLean.PEPS.AreaLaw.physicalBoxConstantClosed,
     `TNLean.PEPS.AreaLaw.uniformAreaLawConstantClosedAt,
+    `TNLean.PEPS.AreaLaw.uniformAreaLawConstantClosedAt_physicalBoxConstantClosed,
     `TNLean.PEPS.AreaLaw.uniformAreaLaw_closed_of_le]
   let expected := #[``propext, ``Classical.choice, ``Quot.sound]
   for decl in names do

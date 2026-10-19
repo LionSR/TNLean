@@ -11,8 +11,8 @@ import TNLean.PEPS.AreaLaw.Scan.BootstrapIterateBound
 
 One round of the physical safe-box bootstrap sends the current constant `C` to
 `576 C_out(C) + N(C)² log q + 1 + log q` (`eq:round` of the explicit-constant note).
-Here `C_out(C)` is linear in `C`. Of the entries of the round threshold `N(C)`, only the
-principal energy entry depends on `C`, through `⌈(2 C_δ)^(1/ν)⌉` with `C_δ` linear in `C`.
+Here `C_out(C)` is affine in `C`. Of the entries of the round threshold `N(C)`, only the
+principal energy entry depends on `C`, through `⌈(2 C_δ)^(1/ν)⌉` with `C_δ` affine in `C`.
 So one round is at most `A (1 + C)^(2k)` with `k = ⌈1/ν⌉`, and `A` explicit in the round data.
 With `boxBootstrapConstant_le_pow_pow` this bounds the safe-box constant after any number
 `M` of rounds at least the round count by `((A + 1)(1 + C₀))^((4k)^M)`.
@@ -140,6 +140,11 @@ theorem boxImprovementThreshold_le_add (q R : ℕ) {e₀ : ℝ} (he₀ : 0 < e�
     bootstrapPrincipalEnergyThreshold]
   omega
 
+/-- The factor `5 + log 2 / 4` of the restored rough-budget coefficient is nonnegative. -/
+theorem restoredBudgetFactor_nonneg : 0 ≤ 5 + Real.log 2 / 4 := by
+  have := Real.log_nonneg (by norm_num : (1 : ℝ) ≤ 2)
+  linarith
+
 /-- The restored rough-budget coefficient of one round grows at most linearly in the safe-box
 constant. -/
 theorem bootstrapRestoredBudgetCoefficient_weak_le {q : ℕ} (hq : 1 ≤ q) {C : ℝ} (hC : 0 ≤ C) :
@@ -150,9 +155,7 @@ theorem bootstrapRestoredBudgetCoefficient_weak_le {q : ℕ} (hq : 1 ≤ q) {C :
   have hlq : 0 ≤ Real.log q := Real.log_nonneg (by exact_mod_cast hq)
   have hw := weakRectangleSourceEntropyCoefficient_nonneg
     (by norm_num [Exponents.boxError] : (0 : ℝ) < Exponents.boxError) zero_le_one
-  have hc : 0 ≤ 5 + Real.log 2 / 4 := by
-    have := Real.log_nonneg (by norm_num : (1 : ℝ) ≤ 2)
-    linarith
+  have hc := restoredBudgetFactor_nonneg
   unfold bootstrapRestoredBudgetCoefficient bootstrapRestoredBudgetBaseCoefficient
   rw [weakRectangleSourceEntropyCoefficient_eq_mul _ C]
   have hD : 0 ≤ (5 + Real.log 2 / 4) *
@@ -168,9 +171,7 @@ theorem bootstrapRestoredBudgetCoefficient_weak_one_nonneg {q : ℕ} (hq : 1 ≤
   have hlq : 0 ≤ Real.log q := Real.log_nonneg (by exact_mod_cast hq)
   have hw := weakRectangleSourceEntropyCoefficient_nonneg
     (by norm_num [Exponents.boxError] : (0 : ℝ) < Exponents.boxError) zero_le_one
-  have hc : 0 ≤ 5 + Real.log 2 / 4 := by
-    have := Real.log_nonneg (by norm_num : (1 : ℝ) ≤ 2)
-    linarith
+  have hc := restoredBudgetFactor_nonneg
   unfold bootstrapRestoredBudgetCoefficient bootstrapRestoredBudgetBaseCoefficient
   exact mul_nonneg (by linarith) hc
 
