@@ -46,3 +46,30 @@ depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
 open TNLean.PEPS.AreaLaw.Scan.CollarScan in
 #print axioms truncated_reducedState_moment_tail_bounds_of_locality
+
+/-- info: 'TNLean.PEPS.AreaLaw.positiveQuasilocalConstraints_explicit'
+depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms TNLean.PEPS.AreaLaw.positiveQuasilocalConstraints_explicit
+
+/-- info: 'TNLean.PEPS.AreaLaw.norm_latticePositiveConstraint_sub_map_le'
+depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms TNLean.PEPS.AreaLaw.norm_latticePositiveConstraint_sub_map_le
+
+/-- info: 'TNLean.PEPS.AreaLaw.latticePositiveConstraints_explicit'
+depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms TNLean.PEPS.AreaLaw.latticePositiveConstraints_explicit
+
+/-- info: 'TNLean.PEPS.AreaLaw.latticeFiniteSetTruncation_explicit'
+depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms TNLean.PEPS.AreaLaw.latticeFiniteSetTruncation_explicit
+
+/-- info:
+'TNLean.PEPS.AreaLaw.Scan.CollarScan.truncated_reducedState_moment_tail_bounds_explicit'
+depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+open TNLean.PEPS.AreaLaw.Scan.CollarScan in
+#print axioms truncated_reducedState_moment_tail_bounds_explicit

@@ -24,3 +24,19 @@ run_cmd do
     unless axioms.all (allowed.contains ·) do
       throwError "Unexpected axioms for {decl}: {axioms}"
     Lean.logInfo m!"{decl}: {axioms}"
+
+/-! The sublinear collar bound at explicit constants -/
+
+open TNLean.PEPS.AreaLaw TNLean.PEPS.AreaLaw.Scan.CollarScan in
+run_cmd do
+  let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
+  let declarations := #[
+    ``sublinearCollarBound_real_of_boxEntropy_explicit,
+    ``sublinearCollarBound_real_explicit]
+  for decl in declarations do
+    unless (← Lean.getEnv).contains decl do
+      throwError "Missing declaration {decl}"
+    let axioms ← Lean.collectAxioms decl
+    unless axioms.all (allowed.contains ·) do
+      throwError "Unexpected axioms for {decl}: {axioms}"
+    Lean.logInfo m!"{decl}: {axioms}"

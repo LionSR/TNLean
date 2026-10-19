@@ -37,19 +37,25 @@ run_cmd do
       throwError "Unexpected axioms for {decl}: {axioms}"
     Lean.logInfo m!"{decl}: {axioms}"
 
-set_option linter.hashCommand false in
-open TNLean.PEPS.AreaLaw.Scan.CollarScan in
-/-- info:
-'TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_sourceTarget_selected_actualCharge_rough_comparison_of_finiteFamilyTransportBound'
-depends on axioms: [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax) in
-#print axioms
-  exists_sourceTarget_selected_actualCharge_rough_comparison_of_finiteFamilyTransportBound
+/-! The safe-box bootstrap at named constants -/
 
-set_option linter.hashCommand false in
-open TNLean.PEPS.AreaLaw.Scan.CollarScan in
-/-- info:
-'TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_sourceBootstrap_entropy_improvement_of_finiteFamilyTransportBound'
-depends on axioms: [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax) in
-#print axioms exists_sourceBootstrap_entropy_improvement_of_finiteFamilyTransportBound
+open TNLean.PEPS.AreaLaw TNLean.PEPS.AreaLaw.Scan.CollarScan in
+run_cmd do
+  let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
+  let declarations := #[
+    ``sourceTarget_selected_actualCharge_rough_comparison_explicit,
+    ``sourceBootstrap_entropy_improvement_explicit,
+    ``Scan.uniform_boxEntropy_improvement_explicit,
+    ``Scan.boxEntropy_le_boxError_of_initial_explicit,
+    ``Scan.initialBoxConstantExplicit_nonneg,
+    ``Scan.physicalBoxConstantExplicit_nonneg,
+    ``Scan.boxEntropy_le_boxError_explicit,
+    ``exists_sourceTarget_selected_actualCharge_rough_comparison_of_finiteFamilyTransportBound,
+    ``exists_sourceBootstrap_entropy_improvement_of_finiteFamilyTransportBound]
+  for decl in declarations do
+    unless (← Lean.getEnv).contains decl do
+      throwError "Missing declaration {decl}"
+    let axioms ← Lean.collectAxioms decl
+    unless axioms.all (allowed.contains ·) do
+      throwError "Unexpected axioms for {decl}: {axioms}"
+    Lean.logInfo m!"{decl}: {axioms}"

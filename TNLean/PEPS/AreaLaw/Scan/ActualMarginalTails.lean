@@ -127,8 +127,9 @@ Proposition 4.3 at `p = 1`, lines 220–334; Lemma 3.1 as used in `08-scanner.te
 lines 400–414). Let `C₃ ≥ 0`, `c₃ > 0` be the filter-locality constants of
 `latticePositiveConstraints_of_locality` at `p = 1`. Then every conclusion of
 `exists_truncated_reducedState_moment_tail_bounds` holds with
-`Ctr = latticeFiniteSetTruncationConstant R J Δ C₀ C₃ c₃`. Once QICLean provides the named
-filter-locality constants, `htail` is `SpectralFilter.norm_positiveConstraint_sub_map_le`. -/
+`Ctr = latticeFiniteSetTruncationConstant R J Δ C₀ C₃ c₃`. At the named constants
+`C₃ = latticePositiveConstraintConst R J Δ 1` and `c₃ = latticePositiveConstraintRate R J Δ 1`
+this is `truncated_reducedState_moment_tail_bounds_explicit`. -/
 theorem truncated_reducedState_moment_tail_bounds_of_locality
     (R : ℕ) {J Δ C₀ C₃ c₃ : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < Δ) (hC₀ : 0 ≤ C₀) (hC₃ : 0 ≤ C₃)
     (hc₃ : 0 < c₃)
@@ -214,6 +215,52 @@ theorem truncated_reducedState_moment_tail_bounds_of_locality
   · intro X w
     exact S.surprisalTail_truncated_reducedState_le h Ω hgraph hanchor hΔ hΩ L htrgs X w
 
+/-- **Both marginal estimates for one truncated ground vector, at the named base-radius
+constant** (Proposition 4.5, `03-quasilocal.tex`, lines 405–433 and 457–505, with
+Proposition 4.3 at `p = 1`, lines 220–334; Lemma 3.1 as used in `08-scanner.tex`,
+lines 400–414). Every conclusion of `exists_truncated_reducedState_moment_tail_bounds` holds
+with `Ctr = latticeTruncationRadiusConstant R J Δ C₀`, which depends only on `R, J, Δ, C₀`. -/
+theorem truncated_reducedState_moment_tail_bounds_explicit
+    (R : ℕ) {J Δ C₀ : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < Δ) (hC₀ : 0 ≤ C₀) :
+    ∀ {q : ℕ} [NeZero q] (Λ : Finset (ℤ × ℤ))
+      (h : LocalHamiltonian Λ q R J)
+      (S : CollarScan (Site Λ) (AdmissibleSupport Λ R))
+      (E₀ : ℝ) (Ω : StateSpace Λ q),
+      IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+      S.graph = domainGraph Λ →
+      (∀ i, S.anchor i ∈ i.val) →
+      ∀ L : ℕ, 2 ≤ S.n →
+      S.r₀ = ⌈latticeTruncationRadiusConstant R J Δ C₀ * Real.log (S.n : ℝ) ^ 2⌉₊ →
+      ((S.truncationSet L).card : ℝ) ≤ C₀ * (S.n : ℝ) ^ 2 →
+      let g := Δ / positiveNormalization 1 (Δ / 2) J
+      let ε := min ((S.n : ℝ) ^ (-1000 : ℝ)) (g / 4)
+      let B : Finset (Site Λ) → ℝ :=
+        fun X => cutBudget q S.graph (S.truncationSet L) S.r₀ S.anchor X
+      ∃ (e : ℝ) (Ωt : StateSpace Λ q),
+        IsGappedGroundState Λ q (∑ i, S.truncatedEnergyTerm h Ω Δ L i) e Ωt (g / 2) ∧
+        0 ≤ e ∧ e ≤ ε ∧
+        (∃ θ : ℝ, ‖Ωt - Complex.exp (θ * Complex.I) • Ω‖ ≤ 2 * Real.sqrt (ε / g)) ∧
+        Matrix.traceDistance (Matrix.vecMulVec (WithLp.ofLp Ωt) (star (WithLp.ofLp Ωt)))
+            (Matrix.vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))) ≤
+          Real.sqrt (2 * ε / g) ∧
+        (∀ (X : Finset (Site Λ)) (u : ℝ),
+          |u| ≤ Entropy.tailRadius (2 / g) (B X) →
+          Real.log (Entropy.surprisalMoment
+            (reducedState_isHermitian Λ q Ωt X).eigenvalues u) ≤
+            u * regionalEntropy Λ q Ωt X +
+              512 * Real.exp 1 * (2 / g) * B X * u ^ 2) ∧
+        (∀ (X : Finset (Site Λ)) (w : ℝ),
+          Entropy.surprisalTail (reducedState_isHermitian Λ q Ωt X).eigenvalues
+            (regionalEntropy Λ q Ωt X) w ≤
+            min 1 (2 * Real.exp (Real.exp 1 / 2) *
+              Real.exp (-(w / (32 * Real.sqrt ((1 + 2 / g) * B X)))))) :=
+  truncated_reducedState_moment_tail_bounds_of_locality R hJ hΔ hC₀
+    (latticePositiveConstraintConst_nonneg R J Δ 1)
+    (latticePositiveConstraintRate_pos (le_refl 1) R J hΔ)
+    (fun hH hΩ hh hhJ L hcontr hunit hherm hfix _ hl hτ =>
+      norm_latticePositiveConstraint_sub_map_le (le_refl 1) R hΔ hH hΩ hh hhJ L hcontr hunit
+        hherm hfix hl hτ)
+
 /-- One physical truncated ground vector satisfies both marginal estimates for every cut.
 The constant `Ctr` depends only on `R, J, Δ, C₀` and is independent of the scanner's
 charge-slot constant `S.C₁`. The original `Ω` still centers every positive constraint;
@@ -261,10 +308,7 @@ theorem exists_truncated_reducedState_moment_tail_bounds
               (regionalEntropy Λ q Ωt X) w ≤
               min 1 (2 * Real.exp (Real.exp 1 / 2) *
                 Real.exp (-(w / (32 * Real.sqrt ((1 + 2 / g) * B X)))))) := by
-  obtain ⟨C₃, c₃, hC₃, hc₃, htail⟩ := exists_norm_positiveConstraint_sub_map_le (le_refl 1) hΔ hJ
-    (localizationPrefactor_nonneg R 2 2) (localizationVelocity_pos R (1 + 2 * R * (R + 1))
-      (((2 ^ ((1 + 2 * R * (R + 1)) - 1) : ℕ) : ℝ) * J)) one_half_pos
-  exact ⟨_, latticeFiniteSetTruncationConstant_pos R hΔ hC₀ hC₃ hc₃,
-    truncated_reducedState_moment_tail_bounds_of_locality R hJ hΔ hC₀ hC₃ hc₃ htail⟩
+  exact ⟨_, latticeTruncationRadiusConstant_pos (J := J) R hΔ hC₀,
+    truncated_reducedState_moment_tail_bounds_explicit R hJ hΔ hC₀⟩
 
 end TNLean.PEPS.AreaLaw.Scan.CollarScan
