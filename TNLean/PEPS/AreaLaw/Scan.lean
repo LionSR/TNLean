@@ -80,6 +80,7 @@ import TNLean.PEPS.AreaLaw.Scan.BootstrapComparisonBudget
 import TNLean.PEPS.AreaLaw.Scan.BootstrapParameters
 import TNLean.PEPS.AreaLaw.Scan.BootstrapPrincipalEnergyBounds
 import TNLean.PEPS.AreaLaw.Scan.BootstrapReplicaAbsorption
+import TNLean.PEPS.AreaLaw.Scan.BootstrapRoundBound
 import TNLean.PEPS.AreaLaw.Scan.BootstrapRoundedClearance
 import TNLean.PEPS.AreaLaw.Scan.BootstrapScannerExponents
 import TNLean.PEPS.AreaLaw.Scan.BootstrapSelectedEnergy

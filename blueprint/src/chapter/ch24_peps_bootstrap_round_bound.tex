@@ -1,0 +1,80 @@
+\section{An explicit budget for exponent improvement}
+\label{sec:area_law_bootstrap_round_bound}
+
+The finite iteration in the proof of Proposition~9.5
+\cite[lines~788--803]{OpenAI2026AreaLaw} contracts an initial exponent
+$e_0$ by a factor $1-\ell$ at each round. The following auxiliary estimates
+bound the number of rounds in terms of the cyclic-color initial recurrence
+parameters of Section~\ref{sec:area_law_initial_exponent_gain}.
+
+\begin{theorem}[Logarithmic round bound]
+    \label{thm:area_law_bootstrap_round_log_bound}
+    \lean{TNLean.PEPS.AreaLaw.Scan.boxBootstrapRounds_le_ceil_log_div}
+    \leanok
+    Let $0<e_0\le1$, $0<\varepsilon\le1$ and $0<\ell<1$. Then
+    \begin{align}
+        m:=\left\lceil\frac{\log(\varepsilon/e_0)}{\log(1-\ell)}\right\rceil_+
+        \le\left\lceil\frac{\log(1/\varepsilon)}{\ell}\right\rceil_+.
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    Since $\log(1-\ell)\le-\ell<0$ and $\log(1/\varepsilon)\ge0$,
+    \begin{align}
+        \frac{\log(1/\varepsilon)}{\ell}\log(1-\ell)
+        \le-\log(1/\varepsilon)=\log\varepsilon
+        \le\log(\varepsilon/e_0).
+    \end{align}
+    Divide by the negative logarithm and take nonnegative integer ceilings.
+\end{proof}
+
+\begin{definition}[Initial round budget]
+    \label{def:area_law_initial_round_budget}
+    \lean{TNLean.PEPS.AreaLaw.Scan.initialBoxBootstrapRoundBound}
+    \leanok
+    \uses{thm:area_law_initial_exponent_gain_bounds}
+    For the cyclic-color recurrence probability $p$ and scale $M$, set
+    \begin{align}
+        B:=\left\lceil\frac{400000\log M\log500000}{p}\right\rceil_+.
+    \end{align}
+    These are the recurrence constants specified above, rather than the
+    manuscript's literal numerical choices.
+\end{definition}
+
+\begin{theorem}[Bound on the physical bootstrap count]
+    \label{thm:area_law_initial_round_budget_bound}
+    \lean{TNLean.PEPS.AreaLaw.Scan.boxBootstrapRounds_initial_le}
+    \leanok
+    \uses{def:area_law_initial_round_budget}
+    For the initial exponent $0<e_0<1$, let
+    $\ell=(1-e_0)/200000$ and $\varepsilon=2\cdot10^{-6}$.
+    Then the round count $m$ above satisfies $m\le B$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_bootstrap_round_log_bound,
+        thm:area_law_initial_exponent_gain_bounds}
+    The gain bound gives
+    \begin{align}
+        \ell\ge\frac{p}{400000\log M}>0,
+        \qquad
+        \frac{\log(1/\varepsilon)}{\ell}
+        \le\frac{400000\log M\log500000}{p}.
+    \end{align}
+    Apply the logarithmic round bound and monotonicity of the ceiling.
+\end{proof}
+
+\begin{theorem}[The round budget reaches the safe-box exponent]
+    \label{thm:area_law_initial_round_budget_reaches}
+    \lean{TNLean.PEPS.AreaLaw.Scan.pow_initialBoxBootstrapRoundBound_mul_le}
+    \leanok
+    \uses{def:area_law_initial_round_budget}
+    With the same initial parameters,
+    \begin{align}
+        (1-\ell)^B e_0\le2\cdot10^{-6}.
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \lean{TNLean.PEPS.AreaLaw.Scan.pow_boxBootstrapRounds_mul_le}
+    \uses{thm:area_law_initial_round_budget_bound}
+    Since $0<1-\ell<1$ and $m\le B$,
+    $(1-\ell)^B e_0\le(1-\ell)^m e_0\le2\cdot10^{-6}$.
+\end{proof}
