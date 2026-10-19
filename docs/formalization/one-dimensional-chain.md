@@ -139,9 +139,15 @@ hypothesis. The individual crossing terms are localized before summation.
 
 The existing generic theorem
 `TNLean.PEPS.Approximation.exists_regional_physicalBuffer_filter` supplies the
-two-sided Gaussian-filter estimates on any finite site set. Constructing a supported
-approximation of that actual filter from the chain locality estimates remains
-necessary for the protocol route.
+two-sided Gaussian-filter estimates on any finite site set. The theorem
+`MPS.AreaLaw.exists_supported_gaussian_integral` constructs a single projected
+unitary evolution near Z, before the observable and Gaussian data, and then
+the actual supported integral. Its norm is at most the observable norm, and
+its error is bounded by C ‖W‖ L²(1+T) exp(vT−ℓ/2), with C,v chosen before
+q and all system data and depending only on R,J. This operator is supported on
+the exact radius-ℓ neighborhood of Q∪Z. Empty chains, zero variance and
+zero cutoff are included. The physical parameter choice, core separation,
+polar correction and final information-reset bound remain to be assembled.
 
 ## Constants
 

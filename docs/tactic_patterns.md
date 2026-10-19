@@ -4655,6 +4655,21 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 ## Candidates
 
+### Supported Gaussian averaging — candidate (2026-10-18)
+
+- **Pattern:** Factor the actual two-Hamiltonian integrand into an evolved
+  observable and relative evolution; prove support of its localized average
+  by commuting a supported-operator expectation with the integral; bound its
+  norm and error using the Gaussian measure's mass at most one.
+- **Seen:** Two occurrences, in `PEPS/AreaLaw/SupportedGaussianIntegral.lean`
+  and `MPS/AreaLaw/SupportedGaussianIntegral.lean`.
+- **Abstraction:** Both arguments already use one-parameter unitary identities,
+  `ContinuousLinearMap.integral_comp_comm` and standard integral norm bounds.
+  Assess the weakest additional finite-site lemma if a third consumer appears.
+- **Notes:** Keep the physical Hamiltonian and locality estimates at each
+  caller. The chain argument uses separate observable and generator regions
+  and retains zero variance, zero cutoff and the empty chain.
+
 ### Conjugation by a contraction — candidate (2026-10-18)
 
 - **Pattern:** Bound `‖F * A * Fᴴ‖` by a supplied bound on `‖A‖`, using
