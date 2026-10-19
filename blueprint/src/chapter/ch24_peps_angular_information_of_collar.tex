@@ -750,8 +750,8 @@
     radius threshold of $C_a(q,R,J,\Delta,C)$.
 \end{definition}
 
-\begin{lemma}[Amplification bound at the collar constant]
-    \label{lem:peps_collar_amplification_bound}
+\begin{theorem}[Amplification bound at the collar constant]
+    \label{thm:peps_collar_amplification_bound}
     \lean{TNLean.PEPS.AreaLaw.amplificationBoundAt_explicit,
         TNLean.PEPS.Approximation.amplificationBoundAt_collarAmplification}
     \leanok
@@ -760,7 +760,7 @@
     The amplification bound at the input constant $\max\{C,1\}$ and the order
     $1$ holds with constant $C_a(q,R,J,\Delta,C)$ and threshold
     $N_a(q,R,J,\Delta,C)$.
-\end{lemma}
+\end{theorem}
 \begin{proof}\leanok
     \uses{thm:area_law_amplification}
     The proof of Theorem~\ref{thm:area_law_amplification} gives the bound with
@@ -788,10 +788,10 @@
     hypothesis.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{lem:peps_collar_amplification_bound,
+    \uses{thm:peps_collar_amplification_bound,
         thm:peps_square_cell_conditional_information_of_collar_explicit,
         thm:peps_angular_information_of_collar_explicit}
-    Lemma~\ref{lem:peps_collar_amplification_bound} supplies the amplification
+    Theorem~\ref{thm:peps_collar_amplification_bound} supplies the amplification
     bound at $(\max\{C,1\},1)$ with constant $C_a$ and threshold $N_a$.
     Theorems~\ref{thm:peps_square_cell_conditional_information_of_collar_explicit}
     and~\ref{thm:peps_angular_information_of_collar_explicit} apply.

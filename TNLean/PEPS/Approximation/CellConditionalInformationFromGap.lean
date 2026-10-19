@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.SquareCellConditionalInformation
-import TNLean.PEPS.AreaLaw.AreaLawExplicitConstant
+import TNLean.PEPS.AreaLaw.PhysicalCollarInformation
 
 /-!
 # Cell information from the original spectral gap
@@ -89,6 +89,16 @@ noncomputable def cellInformationExponentClosed (q : ℕ) (J Δ c : ℝ) : ℝ :
   cellInformationExponent c 24 (collarThresholdClosed q J Δ)
     (collarAmplificationConstant q 1 J Δ (collarConstantClosed q J Δ))
     (collarAmplificationThreshold q 1 J Δ (collarConstantClosed q J Δ))
+
+/-- The closed-form prefactor of Lemma 3.2 is positive. -/
+theorem cellInformationConstantClosed_pos (q : ℕ) (J Δ c : ℝ) :
+    0 < cellInformationConstantClosed q J Δ c :=
+  cellInformationConstant_pos _ _ _ _ _ _
+
+/-- The closed-form exponent of Lemma 3.2 is positive. -/
+theorem cellInformationExponentClosed_pos (q : ℕ) (J Δ c : ℝ) :
+    0 < cellInformationExponentClosed q J Δ c :=
+  cellInformationExponent_pos _ _ _ _ _
 
 open Classical in
 /-- **Lemma 3.2 on the original open square, at closed-form constants.** For `q ≥ 1`,

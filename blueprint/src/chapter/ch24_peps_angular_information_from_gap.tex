@@ -98,6 +98,8 @@
 \begin{theorem}[Cell and angular information at closed-form constants]
     \label{thm:peps_information_from_gap_closed}
     \lean{TNLean.PEPS.Approximation.sublinearCollarBoundAt_closed,
+        TNLean.PEPS.Approximation.cellInformationConstantClosed_pos,
+        TNLean.PEPS.Approximation.cellInformationExponentClosed_pos,
         TNLean.PEPS.Approximation.cell_conditionalMutualInformation_le_square_closed,
         TNLean.PEPS.Approximation.isAngularScale_closed_le}
     \leanok
@@ -115,11 +117,14 @@
     accuracy $L^{-p}$ in the sense of Definition~\ref{def:peps_angular_scale}.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:area_law_sublinear_collar,
+    \uses{thm:area_law_sublinear_collar_explicit,
+        thm:area_law_transport_bound_explicit,
         thm:peps_information_of_collar_named_amplification}
-    The proof of the sublinear collar theorem with $R=1$, $D_0=13$ and
-    $C_{\rm tpl}=24$ gives the collar bound with constant $C$ and threshold $N$
-    at the stated transport constants, which satisfy the finite-family transport
-    bound. Theorem~\ref{thm:peps_information_of_collar_named_amplification}
-    then applies.
+    The stated transport constants satisfy the common step-error bound by
+    Theorem~\ref{thm:area_law_transport_bound_explicit}, so
+    Theorem~\ref{thm:area_law_sublinear_collar_explicit} with $R=1$, $D_0=13$
+    and $C_{\rm tpl}=24$ gives the collar bound with constant $C$ and threshold
+    $N$. The constants $C_{\rm cell}$ and $K_{\rm cell}$ are positive, and
+    Theorem~\ref{thm:peps_information_of_collar_named_amplification} gives the
+    remaining conclusions.
 \end{proof}
