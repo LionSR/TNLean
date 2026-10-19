@@ -17,10 +17,10 @@ whose total inside dimension is polynomially bounded in the side length. The
 constants are chosen before the Hamiltonian, ground vector, center, and radius.
 Bounded radii admit an exact patch with at most `q ^ 81` terms.
 
-**Scope restriction (conditional area law):** The theorem assumes the square
-entropy area law explicitly as `harea`. Its deduction from the spectral-gap
-hypotheses remains the separate area-law problem described in
-`docs/paper-gaps/arealaw2d_rectangular_specialization_scope.tex`.
+The theorem takes the square entropy area law as the hypothesis `harea`. That
+law is proved as `TNLean.PEPS.AreaLaw.squareEntropyAreaLaw`, and the
+unconditional Proposition 4.1 is `adaptivePatchConstraint` in
+`TNLean.PEPS.Approximation.PolynomialPEPSTheorem`.
 
 Source: OpenAI, *Polynomial PEPS approximation of gapped square-grid ground
 states*, Proposition 4.1, `03-patches.tex`, lines 26–54 and 534–603, revision
@@ -30,29 +30,64 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 -/
 
 open scoped BigOperators
+open TNLean.Lattice
 namespace TNLean.PEPS.Approximation
 open EncodedFrame
 
-/-- Conditional assembly of the adaptive patch constraint from the square
-entropy area law. The construction uses the same cylinder sum in the source
-statement, including when a sample is empty.
+/-- The prefactor `C = max (q ^ 81) (1 + B₀ / 2)` of the adaptive patch
+constraint. The first entry covers radii below four, the second the
+logarithmic number of nested cylinders.
+
+Source: polynomial-PEPS manuscript, Proposition 4.1, `03-patches.tex`,
+lines 53–55 and 595–601. -/
+noncomputable def adaptivePatchPrefactor (q : ℕ) (B₀ : ℝ) : ℝ :=
+  max ((q : ℝ) ^ 81) (1 + B₀ / 2)
+
+/-- The exponent `c = R₀ + 1` of the adaptive patch constraint, for a square
+area law at the constant `C_A`, where `R₀` is the radius exponent
+`nestedPatchRadiusExponent q J Δ B₀ p C_A`. The added one absorbs the
+logarithmic number of nested cylinders.
+
+Source: polynomial-PEPS manuscript, Proposition 4.1, `03-patches.tex`,
+lines 540–547 and 595–601. -/
+noncomputable def adaptivePatchExponent (q : ℕ) (J Δ B₀ p C_A : ℝ) : ℝ :=
+  nestedPatchRadiusExponent q J Δ B₀ p C_A + 1
+
+/-- The prefactor of the adaptive patch constraint is positive for `B₀ ≥ 0`
+(`03-patches.tex`, lines 595–601). -/
+theorem adaptivePatchPrefactor_pos (q : ℕ) {B₀ : ℝ} (hB₀ : 0 ≤ B₀) :
+    0 < adaptivePatchPrefactor q B₀ :=
+  lt_of_lt_of_le (by positivity) (le_max_right _ _)
+
+/-- The exponent of the adaptive patch constraint is positive
+(`03-patches.tex`, lines 540–547 and 595–601). -/
+theorem adaptivePatchExponent_pos {q : ℕ} {J Δ B₀ p : ℝ} (C_A : ℝ)
+    (hq : 0 < q) (hJ : 0 < J) (hΔ : 0 < Δ) (hB₀ : 0 ≤ B₀) (hp : 0 ≤ p) :
+    0 < adaptivePatchExponent q J Δ B₀ p C_A :=
+  add_pos (nestedPatchRadiusExponent_pos C_A hq hJ hΔ hB₀ hp) one_pos
+
+/-- A square entropy area law at the constant `C_A` supplies adaptive square
+patches with at most `C L ^ c` cylinder terms, where
+`C = adaptivePatchPrefactor q B₀` and `c = adaptivePatchExponent q J Δ B₀ p C_A`.
+The construction uses the same cylinder sum as the source statement, including
+when a sample is empty.
 
 Source: polynomial-PEPS manuscript, Proposition 4.1, `03-patches.tex`,
 lines 26–54 and 534–603, revision
-`adc7f1241b42e322a6451854ab7e4b4c146bf78a`. The area-law premise must be discharged
-before this implication can establish the unconditional source proposition. -/
-theorem SquareEntropyAreaLaw.adaptivePatchConstraint
-    (harea : SquareEntropyAreaLaw) : AdaptivePatchConstraint := by
+`adc7f1241b42e322a6451854ab7e4b4c146bf78a`. -/
+theorem SquareEntropyAreaLawAt.adaptivePatchSupply
+    {q : ℕ} {J Δ C_A : ℝ} (hA : SquareEntropyAreaLawAt q J Δ C_A) (hq : 2 ≤ q)
+    (hJ : 0 < J) (hΔ : 0 < Δ) {B₀ p : ℝ} (hB₀ : 0 < B₀) (hp : 0 < p) :
+    ∀ L : ℕ, 2 ≤ L → ∀ h : SquareHamiltonian L q J, ∀ E₀ : ℝ, ∀ Ω : StateSpace L q,
+      h.IsGappedGroundState E₀ Ω Δ →
+        AdaptivePatchSupply (latticePos L) Ω B₀ (adaptivePatchPrefactor q B₀)
+          (adaptivePatchExponent q J Δ B₀ p C_A) p L := by
   classical
-  intro q hq J Δ hJ hΔ B₀ p hB₀ hp
-  obtain ⟨R₀, hR₀, hcyl⟩ := harea.exists_uniform_nestedPatch_cylinders hq hJ hΔ hB₀ hp
-  refine ⟨max ((q : ℝ) ^ 81) (1 + B₀ / 2), R₀ + 1,
-    lt_of_lt_of_le (by positivity) (le_max_right _ _), by positivity, ?_⟩
   intro L hL h E₀ Ω hgs z u hu huL
   suffices hpatch : HasAdaptivePatch
-      (fun x : AreaLaw.Site (AreaLaw.rectangularDomain L L) ↦
+      (fun x : Lattice.Site (AreaLaw.rectangularDomain L L) ↦
         ((x.1.1 : ℝ), (x.1.2 : ℝ))) (squareAreaLawState Ω)
-      (max ((q : ℝ) ^ 81) (1 + B₀ / 2)) (R₀ + 1) p L (z - (1, 1)) u by
+      (adaptivePatchPrefactor q B₀) (adaptivePatchExponent q J Δ B₀ p C_A) p L (z - (1, 1)) u by
     have ht := (hpatch.relabel (AreaLaw.rectangleSiteEquiv L L).symm).translate (1, 1)
     have hΩ : (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
         (Equiv.arrowCongr (AreaLaw.rectangleSiteEquiv L L).symm (Equiv.refl (Fin q))))
@@ -63,34 +98,35 @@ theorem SquareEntropyAreaLaw.adaptivePatchConstraint
         Equiv.arrowCongr, Function.comp_def]
     simpa only [Equiv.symm_symm, integerCoordinates_add_one_eq_latticePos,
       sub_add_cancel, hΩ] using ht
-  let : LinearOrder (AreaLaw.Site (AreaLaw.rectangularDomain L L)) :=
-    (Fintype.equivFin (AreaLaw.Site (AreaLaw.rectangularDomain L L))).linearOrder
+  let : LinearOrder (Lattice.Site (AreaLaw.rectangularDomain L L)) :=
+    (Fintype.equivFin (Lattice.Site (AreaLaw.rectangularDomain L L))).linearOrder
   by_cases hu4 : 4 ≤ u
   · let P (regions : Fin (AreaLaw.Geometry.nestedPatchCount u) →
-        Finset (AreaLaw.Site (AreaLaw.rectangularDomain L L))) : Prop :=
+        Finset (Lattice.Site (AreaLaw.rectangularDomain L L))) : Prop :=
       ∃ (S : (j : Fin (AreaLaw.Geometry.nestedPatchCount u)) →
           Submodule ℂ ((regions j → Fin q) → ℂ))
         (v : EuclideanSpace ℂ
-          ((w : (Finset.univ : Finset (AreaLaw.Site (AreaLaw.rectangularDomain L L)))) → Fin q)),
-        (∀ j, (Module.finrank ℂ (S j) : ℝ) ≤ (L : ℝ) ^ R₀) ∧
+          ((w : (Finset.univ : Finset (Lattice.Site (AreaLaw.rectangularDomain L L)))) → Fin q)),
+        (∀ j, (Module.finrank ℂ (S j) : ℝ) ≤ (L : ℝ) ^ nestedPatchRadiusExponent q J Δ B₀ p C_A) ∧
         v.ofLp ∈ (⨆ j, dependentRegionCylinder (Out := fun _ ↦ Fin q) (regions j) (S j)) ∧
         ‖dependentGlobalConfigIsometry.symm (squareAreaLawState Ω) - v‖ ≤ (L : ℝ) ^ (-p)
     have hc : P (fun j ↦ squareSample
-        (fun x : AreaLaw.Site (AreaLaw.rectangularDomain L L) ↦
+        (fun x : Lattice.Site (AreaLaw.rectangularDomain L L) ↦
           ((x.1.1 : ℝ), (x.1.2 : ℝ))) (z - (1, 1))
         (AreaLaw.Geometry.nestedPatchRadius u j.val)) := by
       rw [show (fun j : Fin (AreaLaw.Geometry.nestedPatchCount u) ↦ squareSample
-          (fun x : AreaLaw.Site (AreaLaw.rectangularDomain L L) ↦
+          (fun x : Lattice.Site (AreaLaw.rectangularDomain L L) ↦
             ((x.1.1 : ℝ), (x.1.2 : ℝ))) (z - (1, 1))
           (AreaLaw.Geometry.nestedPatchRadius u j.val)) =
           (fun j ↦ AreaLaw.Geometry.nestedPatch (AreaLaw.rectangularDomain L L)
             (z - (1, 1)) u j.val) from
         funext (fun _ ↦ squareSample_integerCoordinates _ _ _)]
-      exact hcyl L hL h E₀ Ω hgs (z - (1, 1)) u hu4 huL
+      exact hA.uniform_nestedPatch_cylinders hq hJ hΔ hB₀ hp L hL h E₀ Ω hgs (z - (1, 1)) u hu4
+        huL
     obtain ⟨S, v, hdim, hv, herr⟩ := hc
     obtain ⟨Q, _, hz, hs, _, hd, he⟩ :=
       exists_squarePatch_of_mem_iSup_dependentRegionCylinder
-        (fun x : AreaLaw.Site (AreaLaw.rectangularDomain L L) ↦
+        (fun x : Lattice.Site (AreaLaw.rectangularDomain L L) ↦
           ((x.1.1 : ℝ), (x.1.2 : ℝ))) (z - (1, 1)) hu
         (fun j : Fin (AreaLaw.Geometry.nestedPatchCount u) ↦
           AreaLaw.Geometry.nestedPatchRadius u j.val)
@@ -101,10 +137,12 @@ theorem SquareEntropyAreaLaw.adaptivePatchConstraint
         S (dependentGlobalConfigIsometry.symm (squareAreaLawState Ω)) v hv
     refine ⟨Q, hz, hs, ?_, by simpa only [LinearIsometryEquiv.apply_symm_apply] using he.trans herr⟩
     have htotal : ((∑ j, Q.dim j : ℕ) : ℝ) ≤
-        (AreaLaw.Geometry.nestedPatchCount u : ℝ) * (L : ℝ) ^ R₀ := by
+        (AreaLaw.Geometry.nestedPatchCount u : ℝ) *
+          (L : ℝ) ^ nestedPatchRadiusExponent q J Δ B₀ p C_A := by
       calc
         _ ≤ ∑ j, (Module.finrank ℂ (S j) : ℝ) := by exact_mod_cast hd
-        _ ≤ ∑ _j : Fin (AreaLaw.Geometry.nestedPatchCount u), (L : ℝ) ^ R₀ :=
+        _ ≤ ∑ _j : Fin (AreaLaw.Geometry.nestedPatchCount u),
+            (L : ℝ) ^ nestedPatchRadiusExponent q J Δ B₀ p C_A :=
           Finset.sum_le_sum (fun j _ ↦ hdim j)
         _ = _ := by simp
     have hf : (⌊u / 2⌋₊ : ℝ) ≤ u / 2 :=
@@ -122,9 +160,28 @@ theorem SquareEntropyAreaLaw.adaptivePatchConstraint
         (lt_of_not_ge hu4).le (dependentGlobalConfigIsometry.symm (squareAreaLawState Ω))
     refine ⟨Q, hz, hs, ?_, ?_⟩
     · exact (show ((∑ j, Q.dim j : ℕ) : ℝ) ≤ (q : ℝ) ^ 81 by exact_mod_cast hd).trans
-        ((le_max_left _ _).trans (le_mul_of_one_le_right (by positivity)
-          (Real.one_le_rpow (by exact_mod_cast (show 1 ≤ L by omega)) (by positivity))))
+        ((le_max_left _ _).trans (le_mul_of_one_le_right (adaptivePatchPrefactor_pos q hB₀.le).le
+          (Real.one_le_rpow (by exact_mod_cast (show 1 ≤ L by omega))
+            (adaptivePatchExponent_pos C_A (by omega) hJ hΔ hB₀.le hp.le).le)))
     · simpa only [LinearIsometryEquiv.apply_symm_apply] using
         he.le.trans (Real.rpow_nonneg (Nat.cast_nonneg L) (-p))
+
+/-- Conditional assembly of the adaptive patch constraint from the square
+entropy area law. The constants are `adaptivePatchPrefactor q B₀` and
+`adaptivePatchExponent q J Δ B₀ p C_A` at an area-law constant `C_A`, as in
+`SquareEntropyAreaLawAt.adaptivePatchSupply`.
+
+Source: polynomial-PEPS manuscript, Proposition 4.1, `03-patches.tex`,
+lines 26–54 and 534–603, revision
+`adc7f1241b42e322a6451854ab7e4b4c146bf78a`. The area-law premise is discharged
+in `adaptivePatchConstraint`. -/
+theorem SquareEntropyAreaLaw.adaptivePatchConstraint
+    (harea : SquareEntropyAreaLaw) : AdaptivePatchConstraint := by
+  intro q hq J Δ hJ hΔ B₀ p hB₀ hp
+  obtain ⟨C_A, hA⟩ := harea.exists_squareEntropyAreaLawAt hq hJ hΔ
+  exact ⟨adaptivePatchPrefactor q B₀, adaptivePatchExponent q J Δ B₀ p C_A,
+    adaptivePatchPrefactor_pos q hB₀.le,
+    adaptivePatchExponent_pos C_A (by omega) hJ hΔ hB₀.le hp.le,
+    hA.adaptivePatchSupply hq hJ hΔ hB₀ hp⟩
 
 end TNLean.PEPS.Approximation

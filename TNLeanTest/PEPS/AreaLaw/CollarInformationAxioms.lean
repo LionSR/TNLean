@@ -51,3 +51,9 @@ depends on axioms: [propext, Classical.choice, Quot.sound] -/
 depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
 #print axioms TNLean.PEPS.AreaLaw.sublinearCollarBound_of_mutualInformation_le
+
+/-- info:
+'TNLean.PEPS.AreaLaw.sublinearCollarBound_of_mutualInformation_le_at'
+depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms TNLean.PEPS.AreaLaw.sublinearCollarBound_of_mutualInformation_le_at

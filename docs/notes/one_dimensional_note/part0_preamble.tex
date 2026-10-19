@@ -245,7 +245,8 @@ frustration-freeness, and no translation invariance are assumed.
 Theorems~\ref{thm:A} and~\ref{thm:B}, with explicit constants, are
 formalized in Lean~4 in the TNLean modules \texttt{TNLean/MPS/AreaLaw/}
 (blueprint chapter ``The one-dimensional area law and matrix product state
-approximation''), stated directly on the chain of $L$ sites. The counting
+approximation''), stated directly on the chain of $L$ sites and, for
+Theorem~\ref{thm:A}, on finite subsets of the integers. The counting
 constants $N_R$, $\ell_R$, $\cB_R$ and the shell width $R$ are those printed
 here. The buffered discount is run at the energy threshold $\Delta/2$ in
 place of $\Delta/4$, the shell count omits the last entry of \eqref{eq:CE},
@@ -253,8 +254,10 @@ and the constant $1+2C_E/\Delta$ of \eqref{eq:discount} is replaced by
 $4096\,\e\,\vartheta\,\cB_R/m+m\log 2$, which changes $C_{\mathrm{int}}$ and
 $C_0$ accordingly; these deviations are recorded in
 \nolinkurl{docs/paper-gaps/tnlean_one_dimensional_discount_constants.tex}.
-Theorem~\ref{thm:A} is formalized for connected domains, the chains, without
-the component reduction of Section~\ref{sec:setting}
+Theorem~\ref{thm:A} is formalized for every finite $\Lam\subset\Z$; the
+component reduction of Section~\ref{sec:setting} is carried out through the
+vanishing entropy of the unions of components rather than the factorization
+of $\Om$
 (\nolinkurl{docs/paper-gaps/tnlean_one_dimensional_connected_domain_scope.tex});
 Theorem~\ref{thm:B} is formalized by the two-line route of
 Section~\ref{sec:shortcut} only, with Proposition~\ref{prop:VC} in its

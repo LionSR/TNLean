@@ -256,7 +256,8 @@ with bounds `J` and every gapped unit ground vector `Ω` with gap `Δ`, every ce
 plane and every `0 < u ≤ B₀ log L` admit nested-cylinder data with radii between `u` and `2u`, at
 most `C L^c` cylinder terms, and cylinder projector `P` with `‖(1 - P)Ω‖ ≤ L^{-p}`.
 
-No proof of this proposition is asserted here; it enters the dyadic protocol as a hypothesis.
+It enters the dyadic protocol as a hypothesis here; the proposition is proved as
+`adaptivePatchConstraint` in `TNLean.PEPS.Approximation.PolynomialPEPSTheorem`.
 
 Polynomial-PEPS manuscript, Proposition 4.1 `prop:patch`, `03-patches.tex`, lines 26–49, with
 the parameters of Theorem 1.1 fixed as in `01-preliminaries.tex`, lines 3–10. -/

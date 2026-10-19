@@ -22,6 +22,8 @@ OpenAI, *A two-dimensional area law from a global spectral gap*, September 24,
 No upstream Lean proof text is reused.
 -/
 
+open TNLean.Lattice
+
 namespace TNLean.PEPS.AreaLaw.Geometry
 
 /-- The four integer supporting strips give a nearby sampled point on any

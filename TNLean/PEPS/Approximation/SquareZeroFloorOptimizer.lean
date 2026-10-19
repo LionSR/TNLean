@@ -39,6 +39,7 @@ recorded in https://sirui-lu.com/QICLean/paper-gaps/oai26_zero_floor_energy_scop
 
 open Matrix
 open scoped BigOperators InnerProductSpace Matrix.Norms.L2Operator
+open TNLean.Lattice
 
 namespace TNLean.PEPS.Approximation
 
@@ -52,23 +53,23 @@ lines 62–109, at the revision cited in the module docstring. The vectors and
 regional matrices below are in the canonical integer square coordinates. -/
 theorem SquareHamiltonian.exists_zero_floor_maximizer_energy_fidelity
     {L q m : ℕ} {J E₀ Δ : ℝ} (h : SquareHamiltonian L q J) (hJ : 0 ≤ J)
-    [LinearOrder (AreaLaw.Site (AreaLaw.rectangularDomain L L))]
+    [LinearOrder (Lattice.Site (AreaLaw.rectangularDomain L L))]
     {Ω : StateSpace L q} (hΩ : h.IsGappedGroundState E₀ Ω Δ)
-    (D : ℕ → Finset (AreaLaw.Site (AreaLaw.rectangularDomain L L)))
+    (D : ℕ → Finset (Lattice.Site (AreaLaw.rectangularDomain L L)))
     (hD : ∀ i j : Fin m, i ≤ j → D i ⊆ D j)
-    (hsingle : ∀ e : Edge (AreaLaw.domainGraph (AreaLaw.rectangularDomain L L)),
+    (hsingle : ∀ e : Edge (Lattice.domainGraph (AreaLaw.rectangularDomain L L)),
       ∀ i j : Fin m,
-        s(e.1.1, e.1.2) ∈ AreaLaw.edgeBoundary (AreaLaw.rectangularDomain L L) (D i) →
-        s(e.1.1, e.1.2) ∈ AreaLaw.edgeBoundary (AreaLaw.rectangularDomain L L) (D j) →
+        s(e.1.1, e.1.2) ∈ Lattice.edgeBoundary (AreaLaw.rectangularDomain L L) (D i) →
+        s(e.1.1, e.1.2) ∈ Lattice.edgeBoundary (AreaLaw.rectangularDomain L L) (D j) →
         i = j)
     (a : Fin m → ℝ) (ha : ∀ j, 0 < a j) (ha1 : ∀ j, a j ≤ 1) :
     ∃ K : (j : Fin m) → Matrix
-        (Entropy.RegionConfig (fun _ : AreaLaw.Site (AreaLaw.rectangularDomain L L) ↦ q) (D j))
-        (Entropy.RegionConfig (fun _ : AreaLaw.Site (AreaLaw.rectangularDomain L L) ↦ q) (D j)) ℂ,
+        (Entropy.RegionConfig (fun _ : Lattice.Site (AreaLaw.rectangularDomain L L) ↦ q) (D j))
+        (Entropy.RegionConfig (fun _ : Lattice.Site (AreaLaw.rectangularDomain L L) ↦ q) (D j)) ℂ,
       (∀ j : Fin m, Entropy.IsFeasibleFilter 0 (a j) (K j)) ∧
       (∀ K' : (j : Fin m) → Matrix
-          (Entropy.RegionConfig (fun _ : AreaLaw.Site (AreaLaw.rectangularDomain L L) ↦ q) (D j))
-          (Entropy.RegionConfig (fun _ : AreaLaw.Site (AreaLaw.rectangularDomain L L) ↦ q) (D j)) ℂ,
+          (Entropy.RegionConfig (fun _ : Lattice.Site (AreaLaw.rectangularDomain L L) ↦ q) (D j))
+          (Entropy.RegionConfig (fun _ : Lattice.Site (AreaLaw.rectangularDomain L L) ↦ q) (D j)) ℂ,
         (∀ j : Fin m, Entropy.IsFeasibleFilter 0 (a j) (K' j)) →
         ‖toEuclideanLin (Entropy.liftProd (Entropy.chainList D K' fun _ ↦ True))
             (squareAreaLawState Ω)‖ ≤
@@ -80,18 +81,18 @@ theorem SquareHamiltonian.exists_zero_floor_maximizer_energy_fidelity
       0 < ‖ψ‖ ∧ ‖φ‖ = 1 ∧
         |(⟪φ, toEuclideanLin (h.toAreaLawHamiltonian hJ).operator φ⟫_ℂ).re - E₀| ≤
           (q : ℝ) ^ 2 * J * ∑ j : Fin m,
-            a j ^ 2 * (AreaLaw.edgeBoundary (AreaLaw.rectangularDomain L L) (D j)).card ∧
+            a j ^ 2 * (Lattice.edgeBoundary (AreaLaw.rectangularDomain L L) (D j)).card ∧
         Δ * (1 - ‖⟪squareAreaLawState Ω, φ⟫_ℂ‖ ^ 2) ≤
           (q : ℝ) ^ 2 * J * ∑ j : Fin m,
-            a j ^ 2 * (AreaLaw.edgeBoundary (AreaLaw.rectangularDomain L L) (D j)).card := by
+            a j ^ 2 * (Lattice.edgeBoundary (AreaLaw.rectangularDomain L L) (D j)).card := by
   classical
   obtain ⟨T, hT, hTH, hTJ, hsum⟩ := h.exists_nearestNeighbor_terms hJ
   have hgs := h.isGappedGroundState_toAreaLawHamiltonian hJ hΩ
   have hΩ0 : squareAreaLawState Ω ≠ 0 := fun h0 ↦ by
     have hnorm := hgs.1
     simp [h0] at hnorm
-  have hsplit : ∀ i : AreaLaw.Site (AreaLaw.rectangularDomain L L) ⊕
-      Edge (AreaLaw.domainGraph (AreaLaw.rectangularDomain L L)),
+  have hsplit : ∀ i : Lattice.Site (AreaLaw.rectangularDomain L L) ⊕
+      Edge (Lattice.domainGraph (AreaLaw.rectangularDomain L L)),
       ∀ j ∈ Entropy.splitIndices (AreaLaw.nearestNeighborSupport i) D m,
       ∀ k ∈ Entropy.splitIndices (AreaLaw.nearestNeighborSupport i) D m, j = k := by
     intro i j hj k hk
@@ -116,10 +117,10 @@ theorem SquareHamiltonian.exists_zero_floor_maximizer_energy_fidelity
       (∑ j : Fin m, a j ^ 2 *
         ∑ i ∈ Entropy.crossingTerms AreaLaw.nearestNeighborSupport (D j),
           (Fintype.card (Entropy.InnerConfig
-            (fun _ : AreaLaw.Site (AreaLaw.rectangularDomain L L) ↦ q)
+            (fun _ : Lattice.Site (AreaLaw.rectangularDomain L L) ↦ q)
             (D j) (AreaLaw.nearestNeighborSupport i)) : ℝ) ^ 2 * J) =
         (q : ℝ) ^ 2 * J * ∑ j : Fin m,
-          a j ^ 2 * (AreaLaw.edgeBoundary (AreaLaw.rectangularDomain L L) (D j)).card := by
+          a j ^ 2 * (Lattice.edgeBoundary (AreaLaw.rectangularDomain L L) (D j)).card := by
     simp_rw [Entropy.card_innerConfig]
     simpa only [Finset.prod_const, Fintype.card_fun, Fintype.card_fin, Fintype.card_coe] using
       AreaLaw.nearestNeighbor_crossing_budget q J (fun j : Fin m ↦ D j) a

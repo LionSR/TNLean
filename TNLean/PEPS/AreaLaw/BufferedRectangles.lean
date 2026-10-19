@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.GraphInteractionDiamondCounting
-import TNLean.PEPS.AreaLaw.FiniteDomain
+import TNLean.Lattice.FiniteDomain
 import QICLean.Entropy.SupportedMarginalTails
 
 /-!
@@ -48,6 +48,8 @@ contour meet a boundary layer of `Q₀^{+d}` of width `R + 1`, which has at most
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
+open TNLean.Lattice
+
 namespace TNLean.PEPS.AreaLaw
 
 /-! ### Ambient distances -/
@@ -62,6 +64,12 @@ theorem latticeL1Distance_le_one_of_adj {Λ : Finset (ℤ × ℤ)} {x y : Site �
 /-- The sup-norm distance of two lattice points. Source: `02-initial.tex`, line 225,
 `dist_∞`. -/
 def supDist (a b : ℤ × ℤ) : ℕ := max (a.1 - b.1).natAbs (a.2 - b.2).natAbs
+
+/-- The real value of the lattice sup-norm distance is the maximum of the
+absolute coordinate differences. Source: `02-initial.tex`, line 225, `dist_∞`. -/
+theorem cast_supDist (p z : ℤ × ℤ) :
+    (supDist p z : ℝ) = max |(p.1 : ℝ) - z.1| |(p.2 : ℝ) - z.2| := by
+  simp only [supDist, Nat.cast_max, Nat.cast_natAbs, Int.cast_abs, Int.cast_sub]
 
 /-- The sup-norm distance is bounded by the lattice path distance. -/
 theorem supDist_le_latticeL1Distance (a b : ℤ × ℤ) : supDist a b ≤ latticeL1Distance a b := by

@@ -17,6 +17,8 @@ Original formalization of the geometric argument in manuscript Lemma 9.4;
 no upstream Lean proof text is reused.
 -/
 
+open TNLean.Lattice
+
 namespace TNLean.PEPS.AreaLaw
 
 /-- The four nearest neighbors of an integer lattice point. -/

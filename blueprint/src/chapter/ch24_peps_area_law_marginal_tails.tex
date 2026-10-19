@@ -8,7 +8,7 @@ Definition~\ref{def:area_law_hamiltonian}.
 
 \begin{definition}[Cut logarithmic parameter]
     \label{def:area_law_cut_log_budget}
-    \lean{TNLean.PEPS.AreaLaw.cutLogBudget}
+    \lean{TNLean.Lattice.cutLogBudget}
     \leanok
     \uses{def:area_law_hamiltonian}
     For a cut $A\subseteq\Lambda$ put
@@ -18,8 +18,8 @@ Definition~\ref{def:area_law_hamiltonian}.
 
 \begin{theorem}[Marginal moment and tail bounds at a lattice cut]
     \label{thm:area_law_marginal_tails}
-    \lean{TNLean.PEPS.AreaLaw.LocalHamiltonian.log_surprisalMoment_reducedState_le,
-        TNLean.PEPS.AreaLaw.LocalHamiltonian.surprisalTail_reducedState_le}
+    \lean{TNLean.Lattice.LocalHamiltonian.log_surprisalMoment_reducedState_le,
+        TNLean.Lattice.LocalHamiltonian.surprisalTail_reducedState_le}
     \leanok
     \uses{def:area_law_ground_entropy, def:area_law_cut_log_budget}
     Let $\Omega$ be a unit vector satisfying (\ref{eq:area_law_ground_vector})
@@ -47,7 +47,7 @@ Definition~\ref{def:area_law_hamiltonian}.
 
 \begin{theorem}[Regional state as a cut marginal]
     \label{thm:area_law_cut_marginal}
-    \lean{TNLean.PEPS.AreaLaw.partialTraceRight_cutVector}
+    \lean{TNLean.Lattice.partialTraceRight_cutVector}
     \leanok
     \uses{def:area_law_ground_entropy}
     Writing $\Omega$ in the coordinates of $\mathcal H_A\otimes\mathcal H_{A^c}$,
@@ -63,8 +63,8 @@ Definition~\ref{def:area_law_hamiltonian}.
 
 \begin{theorem}[Typical marginal spectrum]
     \label{thm:area_law_typical_spectrum}
-    \lean{TNLean.PEPS.AreaLaw.concentrationWidth,
-        TNLean.PEPS.AreaLaw.LocalHamiltonian.one_sub_rpow_le_typicalMass_reducedState}
+    \lean{TNLean.Lattice.concentrationWidth,
+        TNLean.Lattice.LocalHamiltonian.one_sub_rpow_le_typicalMass_reducedState}
     \leanok
     \uses{def:area_law_ground_entropy, def:area_law_cut_log_budget,
         thm:area_law_marginal_tails}
@@ -141,7 +141,7 @@ Definition~\ref{def:area_law_hamiltonian}.
     \lean{TNLean.PEPS.AreaLaw.typicalWidthConstant,
         TNLean.PEPS.AreaLaw.concentrationWidth_le,
         TNLean.PEPS.AreaLaw.typicalMass_le_typicalMass_of_le,
-        TNLean.PEPS.AreaLaw.LocalHamiltonian.one_sub_rpow_le_typicalMass_edgeBoundary}
+        TNLean.Lattice.LocalHamiltonian.one_sub_rpow_le_typicalMass_edgeBoundary}
     \leanok
     \uses{thm:area_law_typical_spectrum, thm:area_law_tail_parameter}
     Under the hypotheses and notation of

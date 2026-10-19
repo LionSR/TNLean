@@ -14,7 +14,8 @@ The literal scales `m = floor(n^mu)` and
 `C * (n^e / m + (W/K)^(1/4) * (log n)^Cl) / n^(-nu) <= n^(-r)`
 
 uniformly over `1 <= W <= n^omega`, once the two strict exponent margins
-are imposed. All constants and the threshold precede the scale and weight.
+are imposed. All constants and the threshold precede the scale and weight; the
+threshold is given explicitly by `ScannerExponents.principalDensityThreshold`.
 The final source parameters satisfy these margins with `r = nu`.
 
 Only the numerical scale theorems are used. No physical state, entropy,
@@ -30,71 +31,48 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 Independently formalized from the manuscript; no upstream Lean proof is reused.
 -/
 
-open Filter Asymptotics
+open Filter
 
 namespace TNLean.PEPS.AreaLaw.Scan
 
-/-- A fixed logarithmic power and coefficient are absorbed by any strictly
-positive power gap. The coefficient on the right can be arbitrarily small. -/
-private theorem eventually_const_mul_rpow_log_rpow_le
-    (A Cl p q b : ℝ) (hA : 0 ≤ A) (hpq : p < q) (hb : 0 < b) :
-    ∀ᶠ n : ℕ in atTop,
-      A * (n : ℝ) ^ p * Real.log (n : ℝ) ^ Cl ≤ b * (n : ℝ) ^ q := by
-  have hgap : 0 < q - p := sub_pos.mpr hpq
-  have hlog : (fun n : ℕ => A * Real.log (n : ℝ) ^ Cl) =o[atTop]
-      fun n => (n : ℝ) ^ (q - p) :=
-    (isLittleO_log_rpow_rpow_atTop Cl hgap).natCast_atTop.const_mul_left A
-  filter_upwards [eventually_ge_atTop 2, hlog.bound hb] with n hn hsmall
-  have hn1 : (1 : ℝ) ≤ n := by exact_mod_cast (show 1 ≤ n by omega)
-  have hnpos : (0 : ℝ) < n := zero_lt_one.trans_le hn1
-  have hlog0 : 0 ≤ Real.log (n : ℝ) := Real.log_nonneg hn1
-  have hsmall' : A * Real.log (n : ℝ) ^ Cl ≤ b * (n : ℝ) ^ (q - p) := by
-    simpa only [Real.norm_of_nonneg
-      (mul_nonneg hA (Real.rpow_nonneg hlog0 Cl)),
-      Real.norm_of_nonneg (Real.rpow_nonneg (Nat.cast_nonneg n) (q - p))]
-      using hsmall
-  calc
-    A * (n : ℝ) ^ p * Real.log (n : ℝ) ^ Cl =
-        (A * Real.log (n : ℝ) ^ Cl) * (n : ℝ) ^ p := by ring
-    _ ≤ (b * (n : ℝ) ^ (q - p)) * (n : ℝ) ^ p :=
-      mul_le_mul_of_nonneg_right hsmall' (by positivity)
-    _ = b * (n : ℝ) ^ q := by
-      rw [mul_assoc, ← Real.rpow_add hnpos, sub_add_cancel]
+/-- The explicit threshold of the principal density decay: the scale-facts threshold and the
+thresholds for `32 C n^(e-μ) ≤ n^(-r-ν) / 2` and
+`32^(1/4) C n^((ω-(1-ℓ-μ))/4) (log n)^Cl ≤ n^(-r-ν) / 2` (`scanner:density-output`,
+`08-scanner.tex`, lines 380--384). -/
+noncomputable def ScannerExponents.principalDensityThreshold (X : ScannerExponents)
+    (C Cl ω r : ℝ) : ℕ :=
+  max X.scaleFactsThreshold
+    (max ⌈Real.logRpowThreshold (C * 32) (1 / 2) (X.e - X.mu) (-r - X.nu) 0⌉₊
+      ⌈Real.logRpowThreshold (C * 32 ^ (1 / 4 : ℝ)) (1 / 2)
+        ((ω - (1 - X.ell - X.mu)) / 4) (-r - X.nu) Cl⌉₊)
 
-/-- The principal scanner density decays at any rate allowed by both strict
-exponent margins. The floor in `m` and natural division in `K` are retained.
-The threshold is uniform in every admissible weight, and depends only on the
-fixed exponents and constants. Source: `scanner:density-output`,
-`08-scanner.tex`, lines 380--384. -/
-theorem ScannerExponents.eventually_principalDensity_le_rpow
+/-- The principal scanner density is at most `n^(-r)` at every `n` from the explicit
+threshold `X.principalDensityThreshold C Cl ω r` on, uniformly in every admissible weight.
+The floor in `m` and natural division in `K` are retained. Source:
+`scanner:density-output`, `08-scanner.tex`, lines 380--384. -/
+theorem ScannerExponents.principalDensity_le_rpow_of_principalDensityThreshold_le
     (X : ScannerExponents) {C Cl ω r : ℝ} (hC : 0 ≤ C)
     (hmargin_m : X.e - X.mu + X.nu < -r)
-    (hmargin_a : (ω - (1 - X.ell - X.mu)) / 4 + X.nu < -r) :
-    ∀ᶠ n : ℕ in atTop, 2 ≤ n ∧ 1 ≤ X.K n ∧
+    (hmargin_a : (ω - (1 - X.ell - X.mu)) / 4 + X.nu < -r) {n : ℕ}
+    (hthr : X.principalDensityThreshold C Cl ω r ≤ n) :
+    2 ≤ n ∧ 1 ≤ X.K n ∧
       ∀ W : ℝ, 1 ≤ W → W ≤ (n : ℝ) ^ ω →
         C * ((n : ℝ) ^ X.e / (X.m n : ℝ) +
           X.a W n ^ (1 / 4 : ℝ) * Real.log (n : ℝ) ^ Cl) /
             (n : ℝ) ^ (-X.nu) ≤ (n : ℝ) ^ (-r) := by
-  obtain ⟨Cm, hscale⟩ := eventually_scaleFacts X
-  have hCm : 1 ≤ Cm := (hscale.exists).choose_spec.one_le_C₁
-  obtain ⟨CK, hCK, hK⟩ := X.exists_eventually_rpow_le_mul_K
-  have hfirst : ∀ᶠ n : ℕ in atTop,
-      (C * Cm) * (n : ℝ) ^ (X.e - X.mu) ≤
-        (1 / 2 : ℝ) * (n : ℝ) ^ (-r - X.nu) := by
+  simp only [ScannerExponents.principalDensityThreshold, max_le_iff] at hthr
+  obtain ⟨hscale, hfirst, hsecond⟩ := hthr
+  have hn := scaleFacts_of_scaleFactsThreshold_le X hscale
+  have hnK := X.rpow_le_mul_K_of_scaleFactsThreshold_le hscale
+  have hm : (C * 32) * (n : ℝ) ^ (X.e - X.mu) ≤ (1 / 2 : ℝ) * (n : ℝ) ^ (-r - X.nu) := by
     simpa only [Real.rpow_zero, mul_one] using
-      eventually_const_mul_rpow_log_rpow_le (C * Cm) 0
-        (X.e - X.mu) (-r - X.nu) (1 / 2)
-        (mul_nonneg hC (zero_le_one.trans hCm)) (by linarith) (by norm_num)
-  have hsecond : ∀ᶠ n : ℕ in atTop,
-      (C * CK ^ (1 / 4 : ℝ)) *
-          (n : ℝ) ^ ((ω - (1 - X.ell - X.mu)) / 4) *
-          Real.log (n : ℝ) ^ Cl ≤
-        (1 / 2 : ℝ) * (n : ℝ) ^ (-r - X.nu) :=
-    eventually_const_mul_rpow_log_rpow_le (C * CK ^ (1 / 4 : ℝ)) Cl
-      ((ω - (1 - X.ell - X.mu)) / 4) (-r - X.nu) (1 / 2)
-      (mul_nonneg hC (Real.rpow_nonneg (zero_le_one.trans hCK) _))
-      (by linarith) (by norm_num)
-  filter_upwards [hscale, hK, hfirst, hsecond] with n hn hnK hm ha
+      Real.mul_rpow_mul_log_rpow_le_mul_rpow_of_ceil_logRpowThreshold_le
+        (by positivity) (by norm_num) (by linarith) hfirst
+  have ha := Real.mul_rpow_mul_log_rpow_le_mul_rpow_of_ceil_logRpowThreshold_le
+    (by positivity) (by norm_num) (by linarith) hsecond
+  generalize hCm : (32 : ℝ) = Cm at hn hm
+  generalize hCK' : (32 : ℝ) = CK at hnK ha
+  have hCK : 1 ≤ CK := hCK' ▸ by norm_num
   refine ⟨hn.two_le_n, hn.one_le_K, ?_⟩
   intro W hW hWupper
   have hn1 : (1 : ℝ) ≤ n := by
@@ -161,6 +139,23 @@ theorem ScannerExponents.eventually_principalDensity_le_rpow
       rw [← Real.rpow_add hnpos]
       congr 1
 
+/-- The principal scanner density decays at any rate allowed by both strict
+exponent margins. The floor in `m` and natural division in `K` are retained.
+The threshold is uniform in every admissible weight, and depends only on the
+fixed exponents and constants. Source: `scanner:density-output`,
+`08-scanner.tex`, lines 380--384. -/
+theorem ScannerExponents.eventually_principalDensity_le_rpow
+    (X : ScannerExponents) {C Cl ω r : ℝ} (hC : 0 ≤ C)
+    (hmargin_m : X.e - X.mu + X.nu < -r)
+    (hmargin_a : (ω - (1 - X.ell - X.mu)) / 4 + X.nu < -r) :
+    ∀ᶠ n : ℕ in atTop, 2 ≤ n ∧ 1 ≤ X.K n ∧
+      ∀ W : ℝ, 1 ≤ W → W ≤ (n : ℝ) ^ ω →
+        C * ((n : ℝ) ^ X.e / (X.m n : ℝ) +
+          X.a W n ^ (1 / 4 : ℝ) * Real.log (n : ℝ) ^ Cl) /
+            (n : ℝ) ^ (-X.nu) ≤ (n : ℝ) ^ (-r) :=
+  eventually_atTop.2 ⟨_, fun _ =>
+    X.principalDensity_le_rpow_of_principalDensityThreshold_le hC hmargin_m hmargin_a⟩
+
 /-- Explicit threshold form of the uniform rounded-scale density bound. -/
 theorem ScannerExponents.exists_principalDensity_le_rpow
     (X : ScannerExponents) {C Cl ω r : ℝ} (hC : 0 ≤ C)
@@ -170,12 +165,9 @@ theorem ScannerExponents.exists_principalDensity_le_rpow
       ∀ W : ℝ, 1 ≤ W → W ≤ (n : ℝ) ^ ω →
         C * ((n : ℝ) ^ X.e / (X.m n : ℝ) +
           X.a W n ^ (1 / 4 : ℝ) * Real.log (n : ℝ) ^ Cl) /
-            (n : ℝ) ^ (-X.nu) ≤ (n : ℝ) ^ (-r) := by
-  obtain ⟨N, hN⟩ := eventually_atTop.mp
-    (X.eventually_principalDensity_le_rpow (Cl := Cl) hC hmargin_m hmargin_a)
-  refine ⟨max N 2, le_max_right _ _, ?_⟩
-  intro n hn
-  exact (hN n ((le_max_left N 2).trans hn)).2
+            (n : ℝ) ^ (-X.nu) ≤ (n : ℝ) ^ (-r) :=
+  ⟨_, (le_max_left _ _).trans (le_max_left _ _), fun _ hn =>
+    (X.principalDensity_le_rpow_of_principalDensityThreshold_le hC hmargin_m hmargin_a hn).2⟩
 
 /-- The two exact power gaps for decay at rate `nu` under the final source
 parameters. They are independent of every coefficient and logarithmic power. -/
@@ -189,6 +181,35 @@ theorem final_principalDensity_margins :
             (Exponents.scannerNu : ℝ)) = (37097 / 200000 : ℝ) := by
   norm_num [Exponents.scannerNu, Exponents.boxError, Exponents.scannerMu,
     Exponents.scannerOmega, Exponents.scannerEll]
+
+/-- The explicit threshold of the final principal-density bound at rate `r`: the
+principal-density threshold of the final exponents at weight exponent `ω = 1/20000`
+(`08-scanner.tex`, lines 380--384 and 839--865). -/
+noncomputable def finalPrincipalDensityThreshold (C Cl r : ℝ) : ℕ :=
+  finalSharpScannerExponents.principalDensityThreshold C Cl (Exponents.scannerOmega : ℝ) r
+
+/-- The final principal-density threshold is at least `2`. -/
+theorem two_le_finalPrincipalDensityThreshold (C Cl r : ℝ) :
+    2 ≤ finalPrincipalDensityThreshold C Cl r :=
+  (le_max_left _ _).trans (le_max_left _ _)
+
+/-- At the final scanner exponents the principal density is at most `n^(-r)` at every `n`
+from the explicit threshold `finalPrincipalDensityThreshold C Cl r` on, whenever `r` satisfies
+both strict density margins. Source: `scanner:density-output`, `scanner:final-parameters`. -/
+theorem final_principalDensity_le_rpow_of_finalPrincipalDensityThreshold_le {C Cl r : ℝ}
+    (hC : 0 ≤ C)
+    (hm : (Exponents.boxError : ℝ) - Exponents.scannerMu + Exponents.scannerNu < -r)
+    (ha : ((Exponents.scannerOmega : ℝ) - (1 - Exponents.scannerEll - Exponents.scannerMu)) /
+      4 + Exponents.scannerNu < -r) {n : ℕ} (hthr : finalPrincipalDensityThreshold C Cl r ≤ n) :
+    let L := Nat.floor ((n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ)))
+    let m := Nat.floor ((n : ℝ) ^ (Exponents.scannerMu : ℝ))
+    let K := L / (8 * m)
+    1 ≤ K ∧ ∀ W : ℝ, 1 ≤ W → W ≤ (n : ℝ) ^ (Exponents.scannerOmega : ℝ) →
+      C * ((n : ℝ) ^ (Exponents.boxError : ℝ) / (m : ℝ) +
+        (W / (K : ℝ)) ^ (1 / 4 : ℝ) * Real.log (n : ℝ) ^ Cl) /
+          (n : ℝ) ^ (-(Exponents.scannerNu : ℝ)) ≤ (n : ℝ) ^ (-r) :=
+  (finalSharpScannerExponents.principalDensity_le_rpow_of_principalDensityThreshold_le
+    hC hm ha hthr).2
 
 /-- At the final scanner exponents the principal density is at most
 `n^(-nu)`, uniformly over the full weight interval. Both floors and the
@@ -204,28 +225,11 @@ theorem exists_final_principalDensity_le_rpow {C Cl : ℝ} (hC : 0 ≤ C) :
         C * ((n : ℝ) ^ (Exponents.boxError : ℝ) / (m : ℝ) +
           (W / (K : ℝ)) ^ (1 / 4 : ℝ) * Real.log (n : ℝ) ^ Cl) /
             (n : ℝ) ^ (-(Exponents.scannerNu : ℝ)) ≤
-              (n : ℝ) ^ (-(Exponents.scannerNu : ℝ)) := by
-  let X : ScannerExponents :=
-    { ell := Exponents.scannerEll
-      kappa := Exponents.scannerKappa
-      mu := Exponents.scannerMu
-      nu := Exponents.scannerNu
-      e := Exponents.boxError
-      ell_pos := by norm_num [Exponents.scannerEll]
-      ell_lt_one := by norm_num [Exponents.scannerEll]
-      kappa_pos := by norm_num [Exponents.scannerKappa]
-      kappa_lt_mu := by norm_num [Exponents.scannerKappa, Exponents.scannerMu]
-      mu_lt_one_sub_ell := by norm_num [Exponents.scannerMu, Exponents.scannerEll]
-      nu_pos := by norm_num [Exponents.scannerNu]
-      e_pos := by norm_num [Exponents.boxError]
-      e_lt_one := by norm_num [Exponents.boxError]
-      kappa_le_e := by norm_num [Exponents.scannerKappa, Exponents.boxError] }
-  have hm : X.e - X.mu + X.nu < -X.nu := by
-    norm_num [X, Exponents.boxError, Exponents.scannerMu, Exponents.scannerNu]
-  have ha : ((Exponents.scannerOmega : ℝ) - (1 - X.ell - X.mu)) / 4 +
-      X.nu < -X.nu := by
-    norm_num [X, Exponents.scannerOmega, Exponents.scannerEll,
-      Exponents.scannerMu, Exponents.scannerNu]
-  exact X.exists_principalDensity_le_rpow (Cl := Cl) hC hm ha
+              (n : ℝ) ^ (-(Exponents.scannerNu : ℝ)) :=
+  ⟨_, two_le_finalPrincipalDensityThreshold C Cl _, fun _ =>
+    final_principalDensity_le_rpow_of_finalPrincipalDensityThreshold_le hC
+      (by norm_num [Exponents.boxError, Exponents.scannerMu, Exponents.scannerNu])
+      (by norm_num [Exponents.scannerOmega, Exponents.scannerEll, Exponents.scannerMu,
+        Exponents.scannerNu])⟩
 
 end TNLean.PEPS.AreaLaw.Scan

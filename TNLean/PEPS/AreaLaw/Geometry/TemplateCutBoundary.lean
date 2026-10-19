@@ -22,6 +22,8 @@ The sufficient condition `1 ≤ D₀` follows from `D₀ > 2R + 10` in
 Original formalization from the manuscript; no upstream Lean proof text reused.
 -/
 
+open TNLean.Lattice
+
 namespace TNLean.PEPS.AreaLaw.Geometry
 
 /-- Restricting a cut to a set avoiding its cut endpoints creates only ambient

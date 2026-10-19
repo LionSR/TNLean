@@ -9,6 +9,8 @@ disconnected unions, overlapping pieces, differences and selected scales.
 The actual thin-polygon fixture is reused from the template row regressions.
 -/
 
+open TNLean.Lattice
+
 open TNLean.PEPS.AreaLaw TNLean.PEPS.AreaLaw.Geometry
 
 /-- A real thin rectangle with two diagonal side directions. -/

@@ -14,6 +14,8 @@ noncomputable section
 
 set_option autoImplicit false
 
+open TNLean.Lattice
+
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
 
 open SpectralFilter

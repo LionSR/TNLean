@@ -4,7 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.BufferedRectangles
-import TNLean.PEPS.AreaLaw.RegionalEntropyBridge
+import TNLean.Lattice.RegionalEntropyBridge
+import TNLean.Lattice.RegionEntropyInequalities
 import QICLean.Entropy.BufferDiscount
 import QICLean.Analysis.HarmonicWeights
 import TNLean.Algebra.TailRadiusWeights
@@ -12,8 +13,9 @@ import TNLean.Algebra.TailRadiusWeights
 /-!
 # Conditional entropy in a buffered rectangle
 
-Lemma 3.2 of the area-law manuscript: for a gapped ground vector of a finite-range lattice
-Hamiltonian, a cut `A`, a safe rectangle `Q` and a rectangle `Q₀` of size at most `r` whose
+The integer-clearance specialization of Lemma 3.2 of the area-law manuscript: for a gapped
+ground vector of a finite-range lattice Hamiltonian, a cut `A`, a safe rectangle `Q` and a
+rectangle `Q₀` of size at most `r` whose
 padding `Q₀^{+C_pad r}` lies in `Q`, the region `X = A ∩ Q₀` and its buffer
 `T = (A ∩ Q₀^{+C_pad r}) \ X` satisfy `S(X | T) ≤ S(X)/2 + C_buf r`, with `C_pad` and `C_buf`
 depending only on `q, R, J, Δ`.
@@ -25,9 +27,15 @@ This module supplies its lattice hypotheses: the nested contours
 budgets `≤ C (r + d_j)`, the harmonic weights `a_j = 2/(Z_r (r + d_j))` of total mass two, and
 the choice of `C_pad` making `Z_r` large uniformly in `r`.
 
+The full statement for real clearance is proved by
+`exists_condEntropy_le_initialBuffer_real` in `InitialBufferReal`.
+
 ## Main results
 
-* `exists_condEntropy_le_initialBuffer`: Lemma 3.2 (`lem:initial-buffer`).
+* `condEntropy_le_initialBufferConst`: the integer-clearance specialization at the named
+  constants `initialPaddingScale`, `initialPaddingConst` and `initialBufferConst`.
+* `exists_condEntropy_le_initialBuffer`: the integer-clearance specialization of
+  Lemma 3.2 (`lem:initial-buffer`).
 
 ## References
 
@@ -41,6 +49,7 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 
 open Matrix
 open scoped Matrix.Norms.L2Operator
+open TNLean.Lattice
 
 namespace TNLean.PEPS.AreaLaw
 
@@ -63,9 +72,8 @@ theorem supportDim_le {Λ : Finset (ℤ × ℤ)} {q R : ℕ} (hq : 1 ≤ q) (X :
 /-- Every admissible support has positive Hilbert-space dimension when the local
 dimension is positive. -/
 theorem one_le_supportDim {Λ : Finset (ℤ × ℤ)} {q R : ℕ} (hq : 1 ≤ q)
-    (X : AdmissibleSupport Λ R) : 1 ≤ Entropy.supportDim (fun _ : Site Λ ↦ q) X.1 := by
-  rw [Entropy.supportDim, Finset.prod_const]
-  exact Nat.one_le_pow _ _ hq
+    (X : AdmissibleSupport Λ R) : 1 ≤ Entropy.supportDim (fun _ : Site Λ ↦ q) X.1 :=
+  one_le_supportDim_const hq X.1
 
 /-- The cut parameter of Lemma 3.1 grows at most linearly with the number of crossing
 supports: `ℬ ≤ 1 + |𝒞| log² (e q^{v_R})`. -/
@@ -379,13 +387,84 @@ theorem condEntropy_le_initialBuffer_of_constants {q R : ℕ} (hq : 1 ≤ q) {J 
   have := add_le_add herr hlog
   linarith
 
-/-- **Lemma 3.2: conditional entropy in a buffered rectangle** (area-law manuscript,
+/-! ### The constants of Lemma 3.2 -/
+
+/-- **The padding scale** `Z = max {4, 32 B_× q^{2 v_R} J/Δ, 128 √((1 + J/Δ) K_b)}`, with
+`B_× = bufferCrossConst R = 8 (R + 1) μ_R`, `μ_R = 2^{v_R - 1}`, `v_R = 1 + 2 R (R + 1)` and
+`K_b = bufferBudgetConst q R = 1 + B_× log² (e q^{v_R})`. The harmonic weights must have
+`Z_r ≥ Z`. The second entry makes the energy of the optimized vector small against the gap and
+grows linearly in `J/Δ`. The third entry is the weight range for the marginal tail, which
+grows like `√(J/Δ)`. Source: `02-initial.tex`, lines 444–459 (`eq initial-weight-range`), with
+the uniform lower bound `eq initial-harmonic-lower` of lines 322–331. -/
+noncomputable def initialPaddingScale (q R : ℕ) (J Δ : ℝ) : ℝ :=
+  max 4 (max
+    (32 * bufferCrossConst R * (q : ℝ) ^ (2 * (1 + 2 * R * (R + 1))) * J / Δ)
+    (128 * Real.sqrt ((1 + J / Δ) * bufferBudgetConst q R)))
+
+/-- **The padding constant** `C_pad = ⌈(R + 3) e^{(R+1) Z}⌉ + R + 3`, with
+`Z = initialPaddingScale q R J Δ`. It makes `(1/D) log ((C_pad + 1)/(2 + D)) ≥ Z` for
+`D = R + 1`, so `C_pad` is exponential in `Z`, and hence in `J/Δ`. Source: `02-initial.tex`,
+lines 322–333 and 444–459. -/
+noncomputable def initialPaddingConst (q R : ℕ) (J Δ : ℝ) : ℕ :=
+  ⌈(2 + ((R + 1 : ℕ) : ℝ)) * Real.exp ((R + 1 : ℕ) * initialPaddingScale q R J Δ)⌉₊ + R + 3
+
+/-- **The buffer constant** `C_buf = (1024 e (J/Δ) K_b + C_pad) / 2`, with
+`K_b = bufferBudgetConst q R` and `C_pad = initialPaddingConst q R J Δ`. It bounds the error
+`C (m + 1) ℰ` of the two norm comparisons by `C_buf r`, using `m ≤ C_pad r / D`. Through `K_b`
+it is linear in `J/Δ`, and through `C_pad` exponential in `J/Δ`.
+Source: `02-initial.tex`, lines 574–585. -/
+noncomputable def initialBufferConst (q R : ℕ) (J Δ : ℝ) : ℝ :=
+  (1024 * Real.exp 1 * (J / Δ) * bufferBudgetConst q R + initialPaddingConst q R J Δ) / 2
+
+/-- The padding constant is at least one. Source: `02-initial.tex`, lines 322–333. -/
+theorem one_le_initialPaddingConst (q R : ℕ) (J Δ : ℝ) :
+    1 ≤ initialPaddingConst q R J Δ := by
+  unfold initialPaddingConst; omega
+
+/-- The buffer constant is nonnegative. Source: `02-initial.tex`, lines 574–585. -/
+theorem initialBufferConst_nonneg (q R : ℕ) {J Δ : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < Δ) :
+    0 ≤ initialBufferConst q R J Δ := by
+  have hK : 0 ≤ bufferBudgetConst q R := zero_le_one.trans (one_le_bufferBudgetConst q R)
+  have hϑ : 0 ≤ J / Δ := div_nonneg hJ hΔ.le
+  unfold initialBufferConst; positivity
+
+/-- **Lemma 3.2 at the named constants** (integer clearance). For a gapped ground vector, a
+safe rectangle `Q` with `D₀ > 2R + 10`, `r ≥ 1` and a rectangle `Q₀` of size at most `r` with
+`Q₀^{+C_pad r} ⊆ Q`, `S(X | T) ≤ S(X)/2 + C_buf r`, where `C_pad = initialPaddingConst q R J Δ`
+and `C_buf = initialBufferConst q R J Δ`. Source: `02-initial.tex`, lines 240–256 and
+258–585. -/
+theorem condEntropy_le_initialBufferConst (q R : ℕ) (hq : 1 ≤ q) {J Δ : ℝ} (hJ : 0 ≤ J)
+    (hΔ : 0 < Δ) {D₀ : ℕ} (hD₀ : 2 * R + 10 < D₀) {Λ : Finset (ℤ × ℤ)}
+    (h : LocalHamiltonian Λ q R J) {E₀ : ℝ} {Ω : StateSpace Λ q}
+    (hgs : IsGappedGroundState Λ q h.operator E₀ Ω Δ) {A : Finset (Site Λ)} {Q : IntRect}
+    (hsafe : IsSafe Λ A D₀ Q) {r : ℕ} (hr : 1 ≤ r) {Q₀ : IntRect} (hQ₀ : Q₀.size ≤ r)
+    (hpad : (Q₀.dilate (initialPaddingConst q R J Δ * r)).toFinset ⊆ Q.toFinset) :
+    regionalEntropy Λ q Ω (rectRegion A Q₀ ∪
+        (rectRegion A (Q₀.dilate (initialPaddingConst q R J Δ * r)) \ rectRegion A Q₀)) -
+      regionalEntropy Λ q Ω
+        (rectRegion A (Q₀.dilate (initialPaddingConst q R J Δ * r)) \ rectRegion A Q₀) ≤
+    regionalEntropy Λ q Ω (rectRegion A Q₀) / 2 + initialBufferConst q R J Δ * r := by
+  set Zmin := initialPaddingScale q R J Δ
+  set Cpad := initialPaddingConst q R J Δ
+  have hCZ : (2 + ((R + 1 : ℕ) : ℝ)) * Real.exp ((R + 1 : ℕ) * Zmin) ≤ Cpad + 1 := by
+    have := Nat.le_ceil ((2 + ((R + 1 : ℕ) : ℝ)) * Real.exp ((R + 1 : ℕ) * Zmin))
+    have h0 : (0 : ℝ) ≤ R := Nat.cast_nonneg R
+    simp only [Cpad, initialPaddingConst]
+    push_cast at this ⊢
+    linarith
+  have hCR : R + 2 < Cpad := by simp only [Cpad, initialPaddingConst]; omega
+  exact condEntropy_le_initialBuffer_of_constants hq hJ hΔ (le_max_left _ _)
+    ((le_max_left _ _).trans (le_max_right _ _)) ((le_max_right _ _).trans (le_max_right _ _))
+    hCR hCZ (by omega) h hgs hsafe hr hQ₀ hpad
+
+/-- **Integer-clearance specialization of Lemma 3.2: conditional entropy in a buffered
+rectangle** (area-law manuscript,
 `lem:initial-buffer`, `02-initial.tex`, lines 240–256). For local dimension `q ≥ 1`, range
 `R`, term norm bound `J ≥ 0` and gap `Δ > 0` there are an integer `C_pad ≥ 1` and a constant
-`C_buf ≥ 0` with the following property, for every safety parameter `D₀ > 2R + 10`. Let `Ω` be a
-gapped ground vector of a finite-range Hamiltonian on a finite domain, `A` a cut, `Q` a safe
-rectangle, `r ≥ 1`, and `Q₀` a rectangle of size at most `r` with `Q₀^{+C_pad r} ⊆ Q`. Then for
-`X = A ∩ Q₀` and `T = (A ∩ Q₀^{+C_pad r}) \ X`,
+`C_buf ≥ 0` with the following property, for every natural safety parameter `D₀ > 2R + 10`.
+Let `Ω` be a gapped ground vector of a finite-range Hamiltonian on a finite domain, `A` a cut,
+`Q` a safe rectangle, `r ≥ 1`, and `Q₀` a rectangle of size at most `r` with `Q₀^{+C_pad r} ⊆ Q`.
+Then for `X = A ∩ Q₀` and `T = (A ∩ Q₀^{+C_pad r}) \ X`,
 `S(X | T) = S(X ∪ T) - S(T) ≤ S(X)/2 + C_buf r`. -/
 theorem exists_condEntropy_le_initialBuffer (q R : ℕ) (hq : 1 ≤ q) {J Δ : ℝ} (hJ : 0 ≤ J)
     (hΔ : 0 < Δ) :
@@ -399,22 +478,9 @@ theorem exists_condEntropy_le_initialBuffer (q R : ℕ) (hq : 1 ≤ q) {J Δ : �
         regionalEntropy Λ q Ω (rectRegion A Q₀ ∪
             (rectRegion A (Q₀.dilate (Cpad * r)) \ rectRegion A Q₀)) -
           regionalEntropy Λ q Ω (rectRegion A (Q₀.dilate (Cpad * r)) \ rectRegion A Q₀) ≤
-        regionalEntropy Λ q Ω (rectRegion A Q₀) / 2 + Cbuf * r := by
-  set Zmin : ℝ := max 4 (max
-    (32 * bufferCrossConst R * (q : ℝ) ^ (2 * (1 + 2 * R * (R + 1))) * J / Δ)
-    (128 * Real.sqrt ((1 + J / Δ) * bufferBudgetConst q R)))
-  set Cpad : ℕ := ⌈(2 + ((R + 1 : ℕ) : ℝ)) * Real.exp ((R + 1 : ℕ) * Zmin)⌉₊ + R + 3
-  have hCZ : (2 + ((R + 1 : ℕ) : ℝ)) * Real.exp ((R + 1 : ℕ) * Zmin) ≤ Cpad + 1 := by
-    have := Nat.le_ceil ((2 + ((R + 1 : ℕ) : ℝ)) * Real.exp ((R + 1 : ℕ) * Zmin))
-    have h0 : (0 : ℝ) ≤ R := Nat.cast_nonneg R
-    simp only [Cpad]
-    push_cast at this ⊢
-    linarith
-  have hK' := one_le_bufferBudgetConst q R
-  have hϑ : 0 ≤ J / Δ := div_nonneg hJ hΔ.le
-  refine ⟨Cpad, by omega, _, by positivity, fun D₀ hD₀ Λ h E₀ Ω hgs A Q hsafe r hr Q₀ hQ₀ hpad ↦
-    condEntropy_le_initialBuffer_of_constants hq hJ hΔ (le_max_left _ _)
-      ((le_max_left _ _).trans (le_max_right _ _)) ((le_max_right _ _).trans (le_max_right _ _))
-      (by omega) hCZ (by omega) h hgs hsafe hr hQ₀ hpad⟩
+        regionalEntropy Λ q Ω (rectRegion A Q₀) / 2 + Cbuf * r :=
+  ⟨initialPaddingConst q R J Δ, one_le_initialPaddingConst q R J Δ, initialBufferConst q R J Δ,
+    initialBufferConst_nonneg q R hJ hΔ, fun _ hD₀ _ h _ _ hgs _ _ hsafe _ hr _ hQ₀ hpad ↦
+      condEntropy_le_initialBufferConst q R hq hJ hΔ hD₀ h hgs hsafe hr hQ₀ hpad⟩
 
 end TNLean.PEPS.AreaLaw
