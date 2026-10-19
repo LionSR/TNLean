@@ -400,8 +400,9 @@ theorem two_mul_condEntropy_interval_le_of_family_budget
           linarith only [hb]
         exact mul_le_mul_of_nonneg_right hlogs hJ
       have ha : a j ^ 2 = 4 / (m : ℝ) ^ 2 := by norm_num [a, div_pow]
-      calc 8 * Real.exp 1 * a j ^ 2 * ∑ i ∈ Entropy.crossingTerms S (interval L (l - d j) (r + d j)),
-            Real.log (Real.exp 1 * Entropy.supportDim (fun _ : Fin L ↦ q) (S i)) ^ 2 * J
+      calc 8 * Real.exp 1 * a j ^ 2 *
+            ∑ i ∈ Entropy.crossingTerms S (interval L (l - d j) (r + d j)),
+              Real.log (Real.exp 1 * Entropy.supportDim (fun _ : Fin L ↦ q) (S i)) ^ 2 * J
           ≤ 8 * Real.exp 1 * a j ^ 2 * (K' * J) :=
             mul_le_mul_of_nonneg_left hsum (by positivity)
         _ = 32 * Real.exp 1 * K' * J / (m : ℝ) ^ 2 := by rw [ha]; ring
@@ -510,7 +511,8 @@ theorem two_mul_condEntropy_interval_le_polynomial
       have hj := Finset.mem_range.mp hj
       have hsum : ∑ i ∈ Entropy.crossingTerms S (interval L (l - d j) (r + d j)),
           (Entropy.supportDim (fun _ : Fin L ↦ q) (S i) : ℝ) ^ 2 * J ≤
-          (Entropy.crossingTerms S (interval L (l - d j) (r + d j))).card * ((q : ℝ) ^ (2 * (R + 1)) * J) := by
+          (Entropy.crossingTerms S (interval L (l - d j) (r + d j))).card *
+            ((q : ℝ) ^ (2 * (R + 1)) * J) := by
         rw [← nsmul_eq_mul]
         refine Finset.sum_le_card_nsmul _ _ _ fun i _ ↦ ?_
         have h2 := supportDim_le_real (R := R) hq i

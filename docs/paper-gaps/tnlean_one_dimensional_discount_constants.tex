@@ -3,6 +3,7 @@
 \usepackage{xurl}
 \usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
 \input{command}
+\setlength{\emergencystretch}{2em}
 \title{The Constants of the Buffered Discount in the One-Dimensional Area Law}
 \author{}
 \date{October 16, 2026}
@@ -13,7 +14,7 @@
 \section{The source statement}
 
 Lemma~4.2 of the one-dimensional note~\cite{TNLean2026OneDimensional}
-(label \texttt{lem:buffer}, file \texttt{part1\_arealaw.tex}, lines~405--409)
+(label \texttt{lem:buffer}, file \path{part1_arealaw.tex}, lines~405--409)
 is the buffered discount. For an interval $X$ of the chain with the shells
 $X_j=X^{+jR}$, $1\le j\le m$, the flanks $T_j=X_j\setminus X$ and the uniform
 weights $a_j=2/m$, the note fixes the constants (equation \texttt{eq:CE},
@@ -82,7 +83,10 @@ constant.
 \begin{enumerate}
     \item \emph{Energy threshold $\Delta/2$ in place of $\Delta/4$.} The
           finite-dimensional lemma bounds the energy of the filtered vector by
-          $\sum_j4a_j^2\sum_{Y\text{ split by }X_j}(\dim\mathcal H_Y)^2J$, that is by
+          \[
+              \sum_j4a_j^2\sum_{Y\text{ split by }X_j}(\dim\mathcal H_Y)^2J,
+          \]
+          that is by
           $16N_Rq^{2(R+1)}J/m=2C_E/m$, twice the printed estimate $C_E/m$. With the
           same second entry $m\ge4C_E/\Delta$ of $m$ this is at most $\Delta/2$, so the
           discount runs at the energy threshold $\Delta/2$, and the overlap defect of
@@ -120,7 +124,6 @@ printed $C_0$. Every deviation is a change of absolute constants; the
 structure of the argument, its hypotheses, and the linear dependence of the
 area-law constant on $1+J/\Delta$ are those of the note.
 
-% Future addition: adopt only after the owning-module proof checks have passed.
 \section{The original polynomial constants}
 
 The discount also holds with the original constants
@@ -137,10 +140,10 @@ $-m\log(1-E/\Delta)\le2C_E/\Delta$ bounds the prefix loss.
 Thus the original discount
 (\ref{eq:tnlean_one_dimensional_discount_constants_source_discount})
 holds with its printed buffer and additive constant.\footnote{Declarations:
-\leanid{Entropy.two_mul_condEntropy_le_quadratic} and
-\leanid{TNLean.MPS.AreaLaw.two_mul_condEntropy_interval_le_polynomial}.}
+    \leanid{Entropy.two_mul_condEntropy_le_quadratic} and
+    \leanid{TNLean.MPS.AreaLaw.two_mul_condEntropy_interval_le_polynomial}.}
 These are the constants of the one-dimensional note~\cite{TNLean2026OneDimensional},
-\texttt{part1\_arealaw.tex}, lines~366--409 and~517--645.
+\path{part1_arealaw.tex}, lines~366--409 and~517--645.
 
 The Araki--Lieb argument gives the original interval bound
 $C_{\mathrm{int}}=8mR\log q+1+2C_E/\Delta$.
@@ -150,12 +153,12 @@ nonzero matrix product state with error at most $1/L$ and bond dimension at most
 $2e^{C_{\mathrm{int}}}(32e^{e/2}L^4)^{1/u_0}$ for $L\ge2$.
 For $L\ge1$ and $0<\varepsilon\le1$, the accuracy-dependent version
 gives error at most $\varepsilon$.\footnote{Declarations:
-\leanid{TNLean.MPS.AreaLaw.regionEntropy_interval_le_polynomial},
-\leanid{TNLean.MPS.AreaLaw.exists_isOpenMPS_norm_sub_le_of_error_polynomial}, and
-\leanid{TNLean.MPS.AreaLaw.exists_isOpenMPS_norm_sub_le_polynomial}.}
+    \leanid{TNLean.MPS.AreaLaw.regionEntropy_interval_le_polynomial},
+    \leanid{TNLean.MPS.AreaLaw.exists_isOpenMPS_norm_sub_le_of_error_polynomial}, and
+    \leanid{TNLean.MPS.AreaLaw.exists_isOpenMPS_norm_sub_le_polynomial}.}
 These are the original interval constant and quantitative approximation in
-\texttt{part1\_arealaw.tex}, lines~674--679, and
-\texttt{part2a\_mps\_information.tex}, lines~73--92.
+\path{part1_arealaw.tex}, lines~674--679, and
+\path{part2a_mps_information.tex}, lines~73--92.
 The polynomial quantities are local expressions in these statements.
 The logarithmic estimate gives the separate refinement in the remark on
 sharper constants;
@@ -164,7 +167,7 @@ no numerical ordering between the two choices is asserted.
 \section{The logarithmic discount}
 
 Remark~6.3 of the one-dimensional note~\cite{TNLean2026OneDimensional}
-(\texttt{part1\_arealaw.tex}, lines~711--734) replaces the polynomial
+(\path{part1_arealaw.tex}, lines~711--734) replaces the polynomial
 support-dimension factor by a logarithmic interaction budget.
 The finite-dimensional comparison uses the same optimizing filters and
 its existing admissibility condition supplies the required smallness;
@@ -203,7 +206,7 @@ Consequently, for the final buffer $T$,
 \end{align}
 This has the form of the buffered discount of the one-dimensional
 note~\cite{TNLean2026OneDimensional}
-(\texttt{part1\_arealaw.tex}, lines~405--409 and~639--645), with the
+(\path{part1_arealaw.tex}, lines~405--409 and~639--645), with the
 refined energy constant of its Remark~6.3 (lines~711--734).
 The coordinate version includes empty intervals, arbitrary endpoints,
 empty chains and range zero. It is not an assertion that the coordinate
@@ -211,11 +214,15 @@ enlargement of an empty interval is its metric neighborhood.
 
 The Araki--Lieb closing argument of the one-dimensional
 note~\cite{TNLean2026OneDimensional}
-(\texttt{part1\_arealaw.tex}, lines~668--679) gives
+(\path{part1_arealaw.tex}, lines~668--679) gives
 \begin{align}
-    C_1(B)           & =5+(128+4224e)B,           &
-    C_0(q,R;B)       & =8R\log q\,C_1(B)+1+64eB,
-    \label{eq:tnlean_one_dimensional_discount_constants_log_coefficients} \\
+    \begin{aligned}
+        C_1(B)     & =5+(128+4224e)B, \\
+        C_0(q,R;B) & =8R\log q\,C_1(B)+1+64eB,
+    \end{aligned}
+    \label{eq:tnlean_one_dimensional_discount_constants_log_coefficients}
+\end{align}
+\begin{align}
     C_{\mathrm{int}} & =8mR\log q+1+64eB\vartheta
     \le C_0(q,R;B)(1+\vartheta).
     \label{eq:tnlean_one_dimensional_discount_constants_log_interval}
@@ -229,11 +236,11 @@ designated support is a full window of $R+1$ consecutive sites contained
 in the chain. Only in that specialization may one replace $B$ by
 $B_{\mathrm{win}}=1+2R\log^2(e q^{R+1})$, as in
 Remark~6.3 of the one-dimensional note~\cite{TNLean2026OneDimensional}
-(\texttt{part1\_arealaw.tex}, lines~706--709). Shorter boundary supports must
+(\path{part1_arealaw.tex}, lines~706--709). Shorter boundary supports must
 have zero terms; separately norm-bounded terms are not combined at fixed
 $J$. The same argument then gives the absolute polynomial-range bound of
 that remark~\cite{TNLean2026OneDimensional}
-(\texttt{part1\_arealaw.tex}, lines~736--748). Range zero and local dimension one have zero
+(\path{part1_arealaw.tex}, lines~736--748). Range zero and local dimension one have zero
 entropy separately. The finite-domain entropy reduction and the
 contiguous-chain restrictions on the Part~II estimates are unchanged.
 
@@ -248,10 +255,10 @@ Labelling the sites in increasing order preserves each interaction term,
 its norm bound $J$, the Hamiltonian sum and the global gap.
 Flipping the region on zero-entropy prefixes gives the exact same entropy
 and physical boundary cardinality, without a factor for the number of components.\footnote{Declaration:
-\leanid{TNLean.MPS.AreaLaw.domainAreaLaw_of_consecutive_terms_polynomial_range}.}
+    \leanid{TNLean.MPS.AreaLaw.domainAreaLaw_of_consecutive_terms_polynomial_range}.}
 This is the finite-domain full-window specialization in the remark on sharper
 constants of the note~\cite{TNLean2026OneDimensional},
-\texttt{part1\_arealaw.tex}, lines~706--748.
+\path{part1_arealaw.tex}, lines~706--748.
 The improvement is restricted to full designated windows.
 
 Thus the old three constant losses are historical. The logarithmic

@@ -1117,13 +1117,13 @@ for an arbitrary finite set of sites and are instantiated here directly.
     Let $I=\{0,\ldots,L-1\}$ and let $l,r,v$ be natural numbers.
     With truncated subtraction at the left endpoint,
     \begin{align}
-        \bigl|([l-v,r+v)\cap I)\setminus([l,r)\cap I)\bigr|
+        \bigl|([l-v,r+v)\cap I)\setminus(\lbrack l,r)\cap I)\bigr|
          & \le2v.\notag
     \end{align}
 \end{theorem}
 \begin{proof}
     \leanok
-    The difference lies in $([l-v,l)\cap I)\cup([r,r+v)\cap I)$.
+    The difference lies in $([l-v,l)\cap I)\cup(\lbrack r,r+v)\cap I)$.
     Each of these two intervals contains at most $v$ sites.
 \end{proof}
 
@@ -1191,11 +1191,10 @@ for an arbitrary finite set of sites and are instantiated here directly.
 
 % Source: part1_arealaw.tex, eq:CE, lem:buffer and eq:final,
 % lines 366--409, 517--645 and 674--679.
-% The new associations remain inactive pending ordinary-module checks.
 \begin{theorem}[Buffered discount with the original interaction energy]
     \label{thm:chain_polynomial_buffer_discount}
-    % \lean{TNLean.MPS.AreaLaw.two_mul_condEntropy_interval_le_polynomial}
-    % \leanok
+    \lean{TNLean.MPS.AreaLaw.two_mul_condEntropy_interval_le_polynomial}
+    \leanok
     \uses{def:chain_model}
     Let $\Omega$ be a unit gapped ground vector, with gap $\Delta>0$,
     of a range-$R$ chain Hamiltonian with local dimension $q\ge1$
@@ -1204,7 +1203,7 @@ for an arbitrary finite set of sites and are instantiated here directly.
     $B_R=1+N_R\log^2(e q^{R+1})$. Define
     \begin{align}
         C_E^{\mathrm{pol}} & =8N_RJq^{2(R+1)},\notag \\
-        m_{\mathrm{pol}} & =\Bigl\lceil\max\Bigl\{
+        m_{\mathrm{pol}}   & =\Bigl\lceil\max\Bigl\{
         4,\frac{4C_E^{\mathrm{pol}}}{\Delta},
         128\sqrt{(1+\vartheta)B_R},
         4096e(1+\vartheta)B_R\Bigr\}\Bigr\rceil.
@@ -1216,14 +1215,14 @@ for an arbitrary finite set of sites and are instantiated here directly.
     with truncated subtraction at the left endpoint. Then
     \begin{align}
         2\bigl(S_\Omega(X\cup T)-S_\Omega(T)\bigr)
-        & \le S_\Omega(X)+1+\frac{2C_E^{\mathrm{pol}}}{\Delta}.
+         & \le S_\Omega(X)+1+\frac{2C_E^{\mathrm{pol}}}{\Delta}.
         \label{eq:chain_polynomial_discount}
     \end{align}
     These are the constants in Lemma~4.2 of
     \cite{TNLean2026OneDimensional}.
 \end{theorem}
 \begin{proof}
-    % \leanok
+    \leanok
     \uses{thm:chain_single_splitting,lem:chain_crossing_count,
         lem:chain_marginal_tail}
     Use the coordinate shells of radius $(j+1)R$ and weights
@@ -1240,7 +1239,7 @@ for an arbitrary finite set of sites and are instantiated here directly.
     \begin{align}
         -m_{\mathrm{pol}}\log\left(
         1-\frac{C_E^{\mathrm{pol}}}{m_{\mathrm{pol}}\Delta}\right)
-        & \le\frac{2C_E^{\mathrm{pol}}}{\Delta},\notag
+         & \le\frac{2C_E^{\mathrm{pol}}}{\Delta},\notag
     \end{align}
     since $0\le C_E^{\mathrm{pol}}/(m_{\mathrm{pol}}\Delta)\le1/4$.
     Substituting these estimates into the weighted entropy comparison
@@ -1249,14 +1248,14 @@ for an arbitrary finite set of sites and are instantiated here directly.
 
 \begin{theorem}[The interval bound with the printed constants]
     \label{thm:chain_polynomial_interval_entropy}
-    % \lean{TNLean.MPS.AreaLaw.regionEntropy_interval_le_polynomial}
-    % \leanok
+    \lean{TNLean.MPS.AreaLaw.regionEntropy_interval_le_polynomial}
+    \leanok
     \uses{thm:chain_polynomial_buffer_discount}
     Under the hypotheses and with the constants of
     Theorem~\ref{thm:chain_polynomial_buffer_discount}, put
     \begin{align}
         C_{\mathrm{int}}^{\mathrm{pol}}
-        & =8m_{\mathrm{pol}}R\log q+1+
+         & =8m_{\mathrm{pol}}R\log q+1+
         \frac{2C_E^{\mathrm{pol}}}{\Delta}.
         \label{eq:chain_polynomial_interval_entropy}
     \end{align}
@@ -1266,7 +1265,7 @@ for an arbitrary finite set of sites and are instantiated here directly.
     \cite[Part~I]{TNLean2026OneDimensional}.
 \end{theorem}
 \begin{proof}
-    % \leanok
+    \leanok
     \uses{thm:chain_polynomial_buffer_discount,
         thm:chain_interval_enlargement_size,lem:chain_entropy_inequalities}
     The Araki--Lieb inequality gives
@@ -1750,12 +1749,10 @@ for an arbitrary finite set of sites and are instantiated here directly.
 
 % Source: the one-dimensional note, part1_arealaw.tex, lines 64--93
 % and rem:sharper, lines 706--748.
-% The three new theorem associations remain inactive pending their
-% integration into the ordinary modules and the corresponding checks.
 \begin{theorem}[A support of maximal cardinality]
     \label{thm:chain_full_support_window}
-    % \lean{TNLean.MPS.AreaLaw.IsChainSupport.exists_eq_interval_of_card_eq}
-    % \leanok
+    \lean{TNLean.MPS.AreaLaw.IsChainSupport.exists_eq_interval_of_card_eq}
+    \leanok
     \uses{def:chain_model}
     Let $L,R\in\mathbb N$ and let $X\subseteq\{0,\ldots,L-1\}$
     be nonempty, of diameter at most $R$. If $|X|=R+1$, then there
@@ -1763,7 +1760,7 @@ for an arbitrary finite set of sites and are instantiated here directly.
     $X=[a,a+R+1)\cap\mathbb Z$.
 \end{theorem}
 \begin{proof}
-    % \leanok
+    \leanok
     Put $a=\min X$. The diameter bound gives
     $X\subseteq[a,a+R]\cap\mathbb Z$. Both sets have $R+1$ elements,
     so they are equal. In particular $a+R\in X$, whence $a+R<L$.
@@ -1771,8 +1768,8 @@ for an arbitrary finite set of sites and are instantiated here directly.
 
 \begin{theorem}[Removing boundary cuts across gaps]
     \label{thm:domain_entropy_boundary_reduction}
-    % \lean{TNLean.MPS.AreaLaw.DomainHamiltonian.exists_regionEntropy_eq_card_boundaryEdges_eq}
-    % \leanok
+    \lean{TNLean.MPS.AreaLaw.DomainHamiltonian.exists_regionEntropy_eq_card_boundaryEdges_eq}
+    \leanok
     \uses{def:domain_model}
     Let $\Lambda=\{x_0<\cdots<x_{L-1}\}\subset\mathbb Z$ be finite.
     Let $\Omega$ be a unit gapped ground vector, with gap $\Delta>0$,
@@ -1780,14 +1777,14 @@ for an arbitrary finite set of sites and are instantiated here directly.
     $A\subseteq\mathbb Z$ there is a set of labels
     $A'\subseteq\{0,\ldots,L-1\}$ such that
     \begin{align}
-        S_\Omega(A') & =S_\Omega(A\cap\Lambda), &
+        S_\Omega(A')  & =S_\Omega(A\cap\Lambda), &
         |\partial A'| & =|\partial_\Lambda A|.
         \label{eq:domain_entropy_boundary_reduction}
     \end{align}
     Here $\partial A'$ is the edge boundary in the chain of labels.
 \end{theorem}
 \begin{proof}
-    % \leanok
+    \leanok
     \uses{lem:zero_entropy_cut,lem:zero_entropy_flip}
     Put $A_0=\{j:x_j\in A\}$. At a gap $x_{j+1}>x_j+1$, every
     support lies on one side of the prefix $[0,j+1)$, since its
@@ -1834,12 +1831,10 @@ for an arbitrary finite set of sites and are instantiated here directly.
 
 % Source: TNLean one-dimensional note, Part I, the remark on sharper constants,
 % part1_arealaw.tex, rem:sharper, lines 702--748; finite-domain reduction, lines 64--93.
-% Keep both Lean associations and completion marks inactive until the
-% corresponding production theorem and its compiled checks have been accepted.
 \begin{theorem}[Polynomial range dependence on a finite set of integers]
     \label{thm:domain_window_polynomial_range}
-    % \lean{TNLean.MPS.AreaLaw.domainAreaLaw_of_consecutive_terms_polynomial_range}
-    % \leanok
+    \lean{TNLean.MPS.AreaLaw.domainAreaLaw_of_consecutive_terms_polynomial_range}
+    \leanok
     \uses{def:domain_model}
     Put $c=\log2$ and fix the positive absolute constant
     \begin{align}
@@ -1877,7 +1872,7 @@ for an arbitrary finite set of sites and are instantiated here directly.
     \cite[Part~I, the remark on sharper constants]{TNLean2026OneDimensional}.
 \end{theorem}
 \begin{proof}
-    % \leanok
+    \leanok
     \uses{def:domain_model,thm:chain_full_support_window,
         thm:domain_entropy_boundary_reduction,thm:chain_window_polynomial_range}
     Order the sites of $\Lambda$ as the chain of $L$ labels. Every
@@ -1890,7 +1885,7 @@ for an arbitrary finite set of sites and are instantiated here directly.
     Choose $A'$ by Theorem~\ref{thm:domain_entropy_boundary_reduction},
     so that
     \begin{align}
-        S_\Omega(A') & =S_\Omega(A\cap\Lambda), &
+        S_\Omega(A')  & =S_\Omega(A\cap\Lambda), &
         |\partial A'| & =|\partial_\Lambda A|.
         \label{eq:domain_window_reduction}
     \end{align}
@@ -2489,11 +2484,10 @@ for an arbitrary finite set of sites and are instantiated here directly.
 
 % Source: part2a_mps_information.tex, thm:Bshort and sec:shortcut,
 % lines 73--92; part1_arealaw.tex, eq:final, lines 674--679.
-% New associations remain inactive pending ordinary-module checks.
 \begin{theorem}[Prescribed accuracy with the printed entropy constant]
     \label{thm:chain_polynomial_mps_accuracy}
-    % \lean{TNLean.MPS.AreaLaw.exists_isOpenMPS_norm_sub_le_of_error_polynomial}
-    % \leanok
+    \lean{TNLean.MPS.AreaLaw.exists_isOpenMPS_norm_sub_le_of_error_polynomial}
+    \leanok
     \uses{thm:chain_polynomial_interval_entropy,def:chain_open_mps}
     Under the Hamiltonian and ground-state hypotheses of
     Theorem~\ref{thm:chain_polynomial_interval_entropy}, suppose $L\ge1$.
@@ -2503,7 +2497,7 @@ for an arbitrary finite set of sites and are instantiated here directly.
     bond dimension at most
     \begin{align}
         D_\varepsilon
-        & =\left\lfloor\exp\left(C_{\mathrm{int}}^{\mathrm{pol}}
+         & =\left\lfloor\exp\left(C_{\mathrm{int}}^{\mathrm{pol}}
         +64s\log\frac{2Lc_0}{\varepsilon}\right)\right\rfloor.
         \label{eq:chain_polynomial_mps_accuracy}
     \end{align}
@@ -2512,7 +2506,7 @@ for an arbitrary finite set of sites and are instantiated here directly.
     The source states the case $\varepsilon=1/L$.
 \end{theorem}
 \begin{proof}
-    % \leanok
+    \leanok
     \uses{thm:chain_polynomial_interval_entropy,lem:chain_marginal_tail,
         lem:chain_sequential_truncation,thm:chain_mps_of_cut_rank}
     Every prefix entropy is at most $C_{\mathrm{int}}^{\mathrm{pol}}$.
@@ -2522,7 +2516,7 @@ for an arbitrary finite set of sites and are instantiated here directly.
     $D_\varepsilon$ and
     \begin{align}
         \|\widetilde\Phi-\Omega\|
-        & \le\frac{(L-1)\varepsilon}{2L}\le\frac\varepsilon2.\notag
+         & \le\frac{(L-1)\varepsilon}{2L}\le\frac\varepsilon2.\notag
     \end{align}
     Hence $\widetilde\Phi\ne0$. Normalization preserves its cut ranks
     and increases the error by at most another $\varepsilon/2$.
@@ -2531,8 +2525,8 @@ for an arbitrary finite set of sites and are instantiated here directly.
 
 \begin{theorem}[Theorem B with the printed constants]
     \label{thm:chain_polynomial_mps_printed_bound}
-    % \lean{TNLean.MPS.AreaLaw.exists_isOpenMPS_norm_sub_le_polynomial}
-    % \leanok
+    \lean{TNLean.MPS.AreaLaw.exists_isOpenMPS_norm_sub_le_polynomial}
+    \leanok
     \uses{thm:chain_polynomial_interval_entropy,def:chain_open_mps}
     Under the Hamiltonian and ground-state hypotheses of
     Theorem~\ref{thm:chain_polynomial_interval_entropy}, suppose $L\ge2$.
@@ -2546,8 +2540,8 @@ for an arbitrary finite set of sites and are instantiated here directly.
     There is a unit nonzero open-boundary matrix product state $\Phi$
     of bond dimension at most $D$ such that
     \begin{align}
-        \|\Phi-\Omega\| & \le L^{-1},\notag \\
-        D & \le2e^{C_{\mathrm{int}}^{\mathrm{pol}}}
+        \|\Phi-\Omega\| & \le L^{-1},\notag                       \\
+        D               & \le2e^{C_{\mathrm{int}}^{\mathrm{pol}}}
         \bigl(32e^{e/2}L^4\bigr)^{1/u_0}.
         \label{eq:chain_polynomial_mps_printed_bound}
     \end{align}
@@ -2556,7 +2550,7 @@ for an arbitrary finite set of sites and are instantiated here directly.
     and its printed interval constant.
 \end{theorem}
 \begin{proof}
-    % \leanok
+    \leanok
     \uses{thm:chain_polynomial_mps_accuracy}
     Apply Theorem~\ref{thm:chain_polynomial_mps_accuracy} with
     $\varepsilon=1/L$. To compare the bond dimensions, put

@@ -21,7 +21,6 @@ finite set of sites, instantiated here on the chain.
 
 ## Statements
 
-<!-- FUTURE additions: adopt the original-constant and finite-domain rows only after owning-module and fixture checks pass. -->
 
 | Note statement | Formal statement | Status |
 |---|---|---|
