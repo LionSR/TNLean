@@ -34,7 +34,7 @@ because the parties are attached to dyadic-block anchors (`07-assembly.tex:113â€
 `foldedRouting_card_traversal_le` and `exists_squarePEPS_of_dyadicRouting` take these four
 properties (`InGrid`, `BlockBounded`, `DegreeBounded`, `SeparationBounded`) as hypotheses on
 an arbitrary party network; they are verified for the compressed protocol network in
-`largeSizeDyadicOperatorNetwork_of_largeSizeDyadicProtocolConsequences`, as recorded in
+`dyadicOperatorNetworkAt_of_dyadicProtocolBoundsAt`, as recorded in
 `docs/paper-gaps/polypeps_routing_network_bounds.tex`.
 
 ## Main results
