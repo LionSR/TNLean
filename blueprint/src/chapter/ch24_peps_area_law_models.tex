@@ -855,7 +855,8 @@ original open square. We state the two models separately, following
 
 \begin{theorem}[The square-grid area law, assuming the uniform finite-domain area law]
     \label{thm:square_area_law_from_uniform}
-    \lean{TNLean.PEPS.AreaLaw.UniformAreaLaw.squareEntropyAreaLaw}
+    \lean{TNLean.PEPS.AreaLaw.UniformAreaLaw.squareEntropyAreaLaw,
+        TNLean.PEPS.Approximation.finiteProductEntropy_le_of_areaLawBound}
     \leanok
     \uses{def:square_entropy_area_law,def:area_law_ground_entropy}
     Assume the uniform finite-domain area-law assertion: for fixed $q\ge1$,
