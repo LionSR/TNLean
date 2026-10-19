@@ -20,6 +20,8 @@ depend on `q, R, J, Δ`, the domain, the Hamiltonian, the state or the cut.
 
 ## Main results
 
+* `uniformAreaLawConstantAt`, `uniformAreaLaw_explicit_of_le`: the constant of Theorem 1.1 at
+  any upper bound `B` for the safe-box constant of Proposition 9.5, and Theorem 1.1 with it.
 * `uniformAreaLawConstantExplicit`: the constant of Theorem 1.1 as a function of
   `q, R, J, Δ` and the transport constants.
 * `uniformAreaLaw_explicit`: Theorem 1.1 with this constant, for every tuple of transport
@@ -27,6 +29,8 @@ depend on `q, R, J, Δ`, the domain, the Hamiltonian, the state or the cut.
 * `uniformAreaLawConstantClosed`, `uniformAreaLaw_closed`: the constant at the explicit
   transport constants of the companion library, and Theorem 1.1 with it, with no hypothesis
   beyond those of Theorem 1.1.
+* `uniformAreaLawConstantClosedAt`, `uniformAreaLaw_closed_of_le`: the same at any upper bound
+  `B` for the closed safe-box constant `physicalBoxConstantClosed q R J Δ`.
 
 ## References
 
@@ -46,9 +50,8 @@ open TNLean.Lattice
 namespace TNLean.PEPS.AreaLaw
 
 /-- The constant of Theorem 1.1 at the template constants `D₀ = 2R + 11` and `C_tpl = 24`, as
-a function of the Hamiltonian parameters `q, R, J, Δ` and the transport constants
-`c₀, Cent, eent, Cen, een`:
-* `Cbox = Scan.physicalBoxConstantExplicit q R J Δ c₀ Cent eent Cen een` (Proposition 9.5);
+a function of the Hamiltonian parameters `q, R, J, Δ`, a safe-box constant `Cbox` of
+Proposition 9.5 and the transport constants `c₀, Cent, eent, Cen, een`:
 * `C₁ = sublinearCollarConstant q J Δ Cbox` and
   `N₁ = sublinearCollarThreshold q R J Δ Cbox (latticeTruncationRadiusConstant R J Δ 10) c₀
   Cent eent Cen een` (Proposition 9.6);
@@ -62,9 +65,8 @@ and the constant is `uniformAreaLawConstantOf q C₂ C₃ = c_D log q + c_M c_D 
 `c_D = max C₃ 0` and `c_M = max C₂ 0`. The source asserts only that a constant exists.
 Source: proof of Theorem 1.1, `10-geometry.tex`, lines 803–857; the constant is tabulated in
 `docs/notes/arealaw2d_explicit_constant.tex`, Section `sec:top`. -/
-noncomputable def uniformAreaLawConstantExplicit (q R : ℕ) (J Δ c₀ Cent eent Cen een : ℝ) :
+noncomputable def uniformAreaLawConstantAt (q R : ℕ) (J Δ Cbox c₀ Cent eent Cen een : ℝ) :
     ℝ :=
-  let Cbox := Scan.physicalBoxConstantExplicit q R J Δ c₀ Cent eent Cen een
   let C₀ := max (sublinearCollarConstant q J Δ Cbox) 1
   let N₁ := sublinearCollarThreshold q R J Δ Cbox (latticeTruncationRadiusConstant R J Δ 10) c₀
     Cent eent Cen een
@@ -73,6 +75,54 @@ noncomputable def uniformAreaLawConstantExplicit (q R : ℕ) (J Δ c₀ Cent een
     (Exponents.collarRadiusThreshold C₂ 1)
   uniformAreaLawConstantOf q C₂ (twoFamilyDecompositionConstant (2 * (R : ℝ) + 11) 24
     (uniformAreaLawScale N₁ N₂ C₂) Geometry.birthTemplateSeparationConstant)
+
+/-- The constant of Theorem 1.1 at the safe-box constant
+`Cbox = Scan.physicalBoxConstantExplicit q R J Δ c₀ Cent eent Cen een` of Proposition 9.5:
+`uniformAreaLawConstantAt` at this `Cbox`. Source: proof of Theorem 1.1, `10-geometry.tex`,
+lines 803–857; the constant is tabulated in `docs/notes/arealaw2d_explicit_constant.tex`,
+Section `sec:top`. -/
+noncomputable def uniformAreaLawConstantExplicit (q R : ℕ) (J Δ c₀ Cent eent Cen een : ℝ) :
+    ℝ :=
+  uniformAreaLawConstantAt q R J Δ (Scan.physicalBoxConstantExplicit q R J Δ c₀ Cent eent Cen een)
+    c₀ Cent eent Cen een
+
+/-- **The area law at any upper bound for the safe-box constant.** Fix `q ≥ 1`, `R`, `J ≥ 0`
+and `Δ > 0`, let `c₀, Cent, eent, Cen, een` be transport constants with `0 < c₀` satisfying the
+finite-family transport bound `Scan.CollarScan.FiniteFamilyTransportBound`, and let `B` be at
+least the safe-box constant `Scan.physicalBoxConstantExplicit q R J Δ c₀ Cent eent Cen een`.
+Then `uniformAreaLawConstantAt q R J Δ B c₀ Cent eent Cen een` is nonnegative, and every cut of
+every finite induced domain, for every gapped ground state of every admissible Hamiltonian,
+has regional entropy at most this constant times the number of cut edges.
+
+This is an auxiliary result: Theorem 1.1 of the source (`00-introduction.tex`, lines 39–53)
+asserts only that a constant exists. The safe-box estimate of Proposition 9.5 holds with every
+larger constant, so the proof of Theorem 1.1 runs unchanged from `B`. Source: proof of
+Theorem 1.1, `10-geometry.tex`, lines 803–857, and Proposition 9.5, `08-scanner.tex`,
+lines 681–805. -/
+theorem uniformAreaLaw_explicit_of_le (q R : ℕ) (hq : 1 ≤ q) {J Δ : ℝ} (hJ : 0 ≤ J)
+    (hΔ : 0 < Δ) {c₀ Cent eent Cen een : ℝ} (hc₀ : 0 < c₀)
+    (htr : Scan.CollarScan.FiniteFamilyTransportBound c₀ Cent eent Cen een) {B : ℝ}
+    (hB : Scan.physicalBoxConstantExplicit q R J Δ c₀ Cent eent Cen een ≤ B) :
+    0 ≤ uniformAreaLawConstantAt q R J Δ B c₀ Cent eent Cen een ∧
+      ∀ Λ : Finset (ℤ × ℤ), ∀ H : LocalHamiltonian Λ q R J, ∀ E₀ : ℝ, ∀ Ω : StateSpace Λ q,
+        IsGappedGroundState Λ q H.operator E₀ Ω Δ → ∀ A : Finset (Site Λ),
+          regionalEntropy Λ q Ω A ≤
+            uniformAreaLawConstantAt q R J Δ B c₀ Cent eent Cen een *
+              (edgeBoundary Λ A).card := by
+  have hB₀ : 0 ≤ B :=
+    (Scan.physicalBoxConstantExplicit_nonneg q R hq hJ hΔ c₀ Cent eent Cen een).trans hB
+  have hbox : ∀ r : ℕ, 1 ≤ r → boxEntropy q R J Δ (2 * R + 11) r ≤
+      B * (r : ℝ) ^ (1 + (Exponents.boxError : ℝ)) := fun r hr ↦
+    (Scan.boxEntropy_le_boxError_explicit q R hq hJ hΔ hc₀ htr _ (by omega) r hr).trans
+      (mul_le_mul_of_nonneg_right hB (Real.rpow_nonneg (Nat.cast_nonneg r) _))
+  refine ⟨uniformAreaLawConstantOf_nonneg hq _ _, ?_⟩
+  exact regionalEntropy_le_of_collar_amplification_twoFamilies_constants hq hΔ
+    (sublinearCollarBound_real_of_boxEntropy_explicit (D₀ := 2 * (R : ℝ) + 11) (Ctpl := 24) q R
+      hq hJ hΔ (by linarith) le_rfl hB₀ hbox hc₀ htr)
+    (amplificationBound_explicit (J := J) (C₀ := max (sublinearCollarConstant q J Δ B) 1)
+      q R hΔ (lt_max_of_lt_right one_pos) 100)
+    (isTwoFamilyDecompositionConstant_twoFamilyDecompositionConstant _ _ _
+      Geometry.isBirthSeparationConstant_birthTemplateSeparationConstant)
 
 /-- **The area law with an explicit constant, from the transport bound.** Fix `q ≥ 1`, `R`,
 `J ≥ 0` and `Δ > 0`, and let `c₀, Cent, eent, Cen, een` be transport constants with
@@ -97,17 +147,8 @@ theorem uniformAreaLaw_explicit (q R : ℕ) (hq : 1 ≤ q) {J Δ : ℝ} (hJ : 0 
         IsGappedGroundState Λ q H.operator E₀ Ω Δ → ∀ A : Finset (Site Λ),
           regionalEntropy Λ q Ω A ≤
             uniformAreaLawConstantExplicit q R J Δ c₀ Cent eent Cen een *
-              (edgeBoundary Λ A).card := by
-  refine ⟨uniformAreaLawConstantOf_nonneg hq _ _, ?_⟩
-  exact regionalEntropy_le_of_collar_amplification_twoFamilies_constants hq hΔ
-    (sublinearCollarBound_real_explicit (D₀ := 2 * (R : ℝ) + 11) (Ctpl := 24) q R hq hJ hΔ
-      (by linarith) le_rfl c₀ Cent eent Cen een hc₀ htr)
-    (amplificationBound_explicit (J := J)
-      (C₀ := max (sublinearCollarConstant q J Δ
-        (Scan.physicalBoxConstantExplicit q R J Δ c₀ Cent eent Cen een)) 1)
-      q R hΔ (lt_max_of_lt_right one_pos) 100)
-    (isTwoFamilyDecompositionConstant_twoFamilyDecompositionConstant _ _ _
-      Geometry.isBirthSeparationConstant_birthTemplateSeparationConstant)
+              (edgeBoundary Λ A).card :=
+  uniformAreaLaw_explicit_of_le q R hq hJ hΔ hc₀ htr le_rfl
 
 /-- The constant of Theorem 1.1 as a closed-form function of `q, R, J, Δ` alone:
 `uniformAreaLawConstantExplicit` at the explicit transport constants of the companion
@@ -138,5 +179,45 @@ theorem uniformAreaLaw_closed (q R : ℕ) (hq : 1 ≤ q) {J Δ : ℝ} (hJ : 0 �
             uniformAreaLawConstantClosed q R J Δ * (edgeBoundary Λ A).card :=
   uniformAreaLaw_explicit q R hq hJ hΔ TensorPower.ReplicaTransport.transportThreshold_pos
     Scan.CollarScan.finiteFamilyTransportBound_explicit
+
+/-- The safe-box constant of Proposition 9.5 at the explicit transport constants of the
+companion library, as a function of `q, R, J, Δ` alone. Source: Proposition 9.5,
+`08-scanner.tex`, lines 681–805. -/
+noncomputable def physicalBoxConstantClosed (q R : ℕ) (J Δ : ℝ) : ℝ :=
+  Scan.physicalBoxConstantExplicit q R J Δ TensorPower.ReplicaTransport.transportThreshold
+    TensorPower.ReplicaTransport.transportEntropyConst
+    TensorPower.ReplicaTransport.transportEntropyExponent
+    TensorPower.ReplicaTransport.transportEnergyConst
+    TensorPower.ReplicaTransport.transportEnergyExponent
+
+/-- The constant of Theorem 1.1 at a safe-box constant `B` and the explicit transport constants
+of the companion library. At `B = physicalBoxConstantClosed q R J Δ` it is
+`uniformAreaLawConstantClosed q R J Δ`. Source: proof of Theorem 1.1, `10-geometry.tex`,
+lines 803–857. -/
+noncomputable def uniformAreaLawConstantClosedAt (q R : ℕ) (J Δ B : ℝ) : ℝ :=
+  uniformAreaLawConstantAt q R J Δ B TensorPower.ReplicaTransport.transportThreshold
+    TensorPower.ReplicaTransport.transportEntropyConst
+    TensorPower.ReplicaTransport.transportEntropyExponent
+    TensorPower.ReplicaTransport.transportEnergyConst
+    TensorPower.ReplicaTransport.transportEnergyExponent
+
+/-- **The area law at any upper bound for the closed safe-box constant.** Fix `q ≥ 1`, `R`,
+`J ≥ 0` and `Δ > 0`, and let `B ≥ physicalBoxConstantClosed q R J Δ`. Then
+`uniformAreaLawConstantClosedAt q R J Δ B` is nonnegative, and every cut of every finite induced
+domain, for every gapped ground state of every admissible Hamiltonian, has regional entropy at
+most this constant times the number of cut edges.
+
+This is an auxiliary result whose only hypothesis beyond those of Theorem 1.1
+(`00-introduction.tex`, lines 39–53) is the bound on `B`. Source: proof of Theorem 1.1,
+`10-geometry.tex`, lines 803–857. -/
+theorem uniformAreaLaw_closed_of_le (q R : ℕ) (hq : 1 ≤ q) {J Δ : ℝ} (hJ : 0 ≤ J)
+    (hΔ : 0 < Δ) {B : ℝ} (hB : physicalBoxConstantClosed q R J Δ ≤ B) :
+    0 ≤ uniformAreaLawConstantClosedAt q R J Δ B ∧
+      ∀ Λ : Finset (ℤ × ℤ), ∀ H : LocalHamiltonian Λ q R J, ∀ E₀ : ℝ, ∀ Ω : StateSpace Λ q,
+        IsGappedGroundState Λ q H.operator E₀ Ω Δ → ∀ A : Finset (Site Λ),
+          regionalEntropy Λ q Ω A ≤
+            uniformAreaLawConstantClosedAt q R J Δ B * (edgeBoundary Λ A).card :=
+  uniformAreaLaw_explicit_of_le q R hq hJ hΔ TensorPower.ReplicaTransport.transportThreshold_pos
+    Scan.CollarScan.finiteFamilyTransportBound_explicit hB
 
 end TNLean.PEPS.AreaLaw

@@ -219,6 +219,196 @@ of one scanner.
     $c_0=\tfrac18>0$.
 \end{proof}
 
+The safe-box constant $C_{\rm box}$ of
+Definition~\ref{def:area_law_transport_constant} is the value of a finite
+recursion with one step per bootstrap round. The next entries bound that
+recursion by an expression without iteration, and restate the area law at
+every upper bound for $C_{\rm box}$.
+
+% Status: auxiliary results. The source fixes the number of bootstrap rounds
+% but does not bound the constants they produce.
+% Source: 08-scanner.tex, proof of Proposition 9.5, lines 681--805; the
+% recursion is eq:round of docs/notes/arealaw2d_explicit_constant.tex.
+% Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+\begin{lemma}[Iterates of a dominating map]
+    \label{lem:area_law_bootstrap_iterate}
+    \lean{TNLean.PEPS.AreaLaw.Scan.boxBootstrapConstant_le_iterate,
+        TNLean.PEPS.AreaLaw.Scan.one_add_iterate_mul_one_add_pow_le,
+        TNLean.PEPS.AreaLaw.Scan.boxBootstrapConstant_le_pow_pow}
+    \leanok
+    Let $V\ge0$ and $C_0\ge0$, let $G$ be a real function with $G(C)\ge0$
+    for $C\ge0$, let $N$ take natural values, and put
+    \begin{align}
+        C_{j+1} & =G(C_j)+V\,N(C_j)^2.
+    \end{align}
+    \begin{enumerate}
+        \item If $F$ is nondecreasing on $[0,\infty)$, $x\le F(x)$ for
+              $x\ge0$, and $G(C)+V\,N(C)^2\le F(C)$ for $C\ge0$, then
+              $C_j\le F^{M}(C_0)$ for all $j\le M$.
+        \item If $A\ge0$, $K\ge1$ is an integer and $f(y)=A(1+y)^K$, then
+              $1+f^{j}(x)\le\bigl((A+1)(1+x)\bigr)^{(2K)^j}$ for every
+              $x\ge0$ and every $j$.
+        \item If $A\ge1$, $K\ge1$ and $G(C)+V\,N(C)^2\le A(1+C)^K$ for
+              $C\ge0$, then
+              $C_j\le\bigl((A+1)(1+C_0)\bigr)^{(2K)^M}$ for all $j\le M$.
+    \end{enumerate}
+\end{lemma}
+\begin{proof}
+    \leanok
+    For the first assertion, induction gives $C_0\le F^k(C_0)$, so $F^k(C_0)$
+    is nondecreasing in $k$, and $C_{k+1}\le F(C_k)\le F(F^k(C_0))$. For the
+    second, put $b=(A+1)(1+x)\ge1$ and $u_j=1+f^j(x)\ge1$. Then $u_0\le b$
+    and
+    \begin{align}
+        u_{j+1} & =1+Au_j^K\le(A+1)u_j^K\le b\,b^{K(2K)^j}\le b^{(2K)^{j+1}},
+    \end{align}
+    since $1+Km\le2Km$ for $m\ge1$. The third assertion is the first for
+    $F(x)=A(1+x)^K$, which is nondecreasing on $[0,\infty)$ with $x\le F(x)$,
+    followed by the second.
+\end{proof}
+
+\begin{definition}[Constants of one bootstrap round]
+    \label{def:area_law_bootstrap_step_constants}
+    \lean{TNLean.PEPS.AreaLaw.Scan.boxStepExponent,
+        TNLean.PEPS.AreaLaw.Scan.boxStepScale,
+        TNLean.PEPS.AreaLaw.Scan.boxStepPrefactor}
+    \leanok
+    \uses{thm:arealaw-physical-box-step,def:area_law_bootstrap_parameters}
+    Fix $q\ge1$, $R\ge0$, $J$, $\Delta$, $0<e_0<1$ and truncation and
+    transport constants, let $\nu=(1-e_0)/2000$ be the error exponent of the
+    bootstrap parameters, and put $k=\lceil1/\nu\rceil$. For a safe-box
+    constant $C$, one round of Theorem~\ref{thm:arealaw-physical-box-step}
+    gives the constant $G(C)=576\,C_{\rm out}(C)+N(C)^2\log q+1$, where
+    $C_{\rm out}(C)$ is the restored rough-budget coefficient and $N(C)$ is
+    the threshold of the round. Let $C_\delta(C)$ be the principal density
+    coefficient at $C$, at the charge constant $3\cdot2^{2R(R+1)}$ and at the
+    transport logarithmic coefficient. Put
+    \begin{align}
+        \alpha & =128+2C_\delta(1),                                         \\
+        A      & =576\,C_{\rm out}(1)+\bigl(N(0)+2\bigr)^2\alpha^{2k}\log q
+        +1+\log q.
+    \end{align}
+\end{definition}
+
+\begin{lemma}[One bootstrap round is at most a power]
+    \label{lem:area_law_bootstrap_step_bound}
+    \lean{TNLean.PEPS.AreaLaw.Scan.boxBootstrapStep_le_boxStepPrefactor,
+        TNLean.PEPS.AreaLaw.Scan.boxImprovementThreshold_le_add,
+        TNLean.PEPS.AreaLaw.Scan.max_two_mul_roughSelectedDensityCoefficient_le,
+        TNLean.PEPS.AreaLaw.Scan.bootstrapRestoredBudgetCoefficient_weak_le,
+        TNLean.PEPS.AreaLaw.Scan.natRpowThreshold_le_pow_add_one,
+        TNLean.PEPS.AreaLaw.Scan.one_le_boxStepPrefactor}
+    \leanok
+    \uses{def:area_law_bootstrap_step_constants}
+    In the notation of
+    Definition~\ref{def:area_law_bootstrap_step_constants}, $A\ge1$ and
+    \begin{align}
+        G(C)+\log q & \le A\,(1+C)^{2k}\qquad(C\ge0).
+    \end{align}
+\end{lemma}
+\begin{proof}
+    \leanok
+    The coefficient $C_{\rm out}(C)$ is affine in $C$ with nonnegative
+    coefficients, so $C_{\rm out}(C)\le C_{\rm out}(1)(1+C)$. Of the entries
+    of the maximum defining $N(C)$, only the principal energy entry
+    $\bigl\lceil\max\bigl\{1,\max\{128,2C_\delta(C)\}^{1/\nu}\bigr\}\bigr\rceil$
+    depends on $C$, and $C_\delta$ is affine in $C$, so
+    $\max\{128,2C_\delta(C)\}\le\alpha(1+C)$. Hence
+    \begin{align}
+        N(C) & \le N(0)+\bigl(\alpha(1+C)\bigr)^k+1
+        \le\bigl(N(0)+2\bigr)\bigl(\alpha(1+C)\bigr)^k,
+    \end{align}
+    and the bound follows from $1\le1+C\le(1+C)^{2k}$.
+\end{proof}
+
+\begin{theorem}[A bound for the safe-box constant without iteration]
+    \label{thm:area_law_safe_box_power_bound}
+    \lean{TNLean.PEPS.AreaLaw.Scan.physicalBoxBootstrapConstant_le_pow_pow,
+        TNLean.PEPS.AreaLaw.Scan.physicalBoxConstantExplicit_le_pow_pow}
+    \leanok
+    \uses{def:area_law_bootstrap_step_constants,
+        thm:arealaw-physical-box-fixed-exponent}
+    Fix $q\ge1$, $R\ge0$, $J$, $\Delta$, $0<e_0<1$, truncation and transport
+    constants and an initial constant $C_0\ge0$, and let $m$ be the number of
+    bootstrap rounds from $e_0$ to $e_*=2\cdot10^{-6}$. For every integer
+    $M\ge m$, the safe-box constant $C_{\rm box}$ of
+    Theorem~\ref{thm:arealaw-physical-box-fixed-exponent} obtained from $C_0$
+    satisfies
+    \begin{align}
+        C_{\rm box} & \le\bigl((A+1)(1+C_0)\bigr)^{(4k)^M}.
+    \end{align}
+    In particular, for $J\ge0$ and $\Delta>0$ this holds for the safe-box
+    constant of Definition~\ref{def:area_law_transport_constant}, with $e_0$
+    and $C_0$ the exponent and the constant of the explicit initial box
+    estimate and with the truncation constant at the factor $2$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{lem:area_law_bootstrap_iterate,lem:area_law_bootstrap_step_bound}
+    The safe-box constant is $C_m$ for the recursion
+    $C_{j+1}=G(C_j)+\log q$ started at $C_0$. By
+    Lemma~\ref{lem:area_law_bootstrap_step_bound} each step is at most
+    $A(1+C)^{2k}$ with $A\ge1$, and the third assertion of
+    Lemma~\ref{lem:area_law_bootstrap_iterate} with $K=2k$ gives the bound.
+\end{proof}
+
+\begin{definition}[The constant of the area law at a bound for the safe-box constant]
+    \label{def:area_law_box_bound_constant}
+    \lean{TNLean.PEPS.AreaLaw.uniformAreaLawConstantAt,
+        TNLean.PEPS.AreaLaw.physicalBoxConstantClosed,
+        TNLean.PEPS.AreaLaw.uniformAreaLawConstantClosedAt}
+    \leanok
+    \uses{def:area_law_transport_constant,def:area_law_closed_constant}
+    For a real number $B$, let
+    $C_{\rm AL}(q,R,J,\Delta;B;c_0,C_{\rm ent},e_{\rm ent},C_{\rm en},e_{\rm en})$
+    be the constant of Definition~\ref{def:area_law_transport_constant} with
+    $C_{\rm box}$ replaced by $B$, and let $C_{\rm AL}^B(q,R,J,\Delta)$ be its
+    value at the transport constants of
+    Theorem~\ref{thm:area_law_transport_bound_explicit}. Let
+    $C_{\rm box}(q,R,J,\Delta)$ be the safe-box constant of
+    Definition~\ref{def:area_law_transport_constant} at these transport
+    constants. Then
+    $C_{\rm AL}(q,R,J,\Delta)=C_{\rm AL}^{C_{\rm box}(q,R,J,\Delta)}(q,R,J,\Delta)$.
+\end{definition}
+
+\begin{theorem}[The area law at any bound for the safe-box constant]
+    \label{thm:area_law_box_bound_constant}
+    \lean{TNLean.PEPS.AreaLaw.uniformAreaLaw_explicit_of_le,
+        TNLean.PEPS.AreaLaw.uniformAreaLaw_closed_of_le}
+    \leanok
+    \uses{def:area_law_box_bound_constant,def:area_law_ground_entropy,
+        def:al_scan_finite_family_transport_bound}
+    Fix $q\ge1$, $R\ge0$, $J\ge0$ and $\Delta>0$.
+    \begin{enumerate}
+        \item Under the hypotheses of
+              Theorem~\ref{thm:area_law_transport_constant}, let $B$ be at
+              least the safe-box constant $C_{\rm box}$ of
+              Definition~\ref{def:area_law_transport_constant}. Then
+              $C=C_{\rm AL}(q,R,J,\Delta;B;c_0,C_{\rm ent},e_{\rm ent},C_{\rm en},e_{\rm en})$
+              is nonnegative, and for every finite induced domain $\Lambda$,
+              every admissible Hamiltonian with a gapped ground vector
+              $\Omega$ and every $A\subseteq\Lambda$,
+              $S_\Omega(A)\le C\,|\partial_\Lambda A|$.
+        \item For every $B\ge C_{\rm box}(q,R,J,\Delta)$, the same holds with
+              $C=C_{\rm AL}^B(q,R,J,\Delta)$.
+    \end{enumerate}
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:area_law_conditional_assembly_constants,
+        thm:area_law_sublinear_collar,thm:area_law_amplification,
+        thm:area_law_two_family_explicit_constant,
+        thm:arealaw-physical-box-fixed-exponent,
+        thm:area_law_transport_bound_explicit}
+    Since $r^{1+e_*}\ge0$, the safe-box bound with the constant
+    $C_{\rm box}$ gives the safe-box bound with the constant $B$, and the
+    proof of Theorem~\ref{thm:area_law_transport_constant} runs unchanged
+    with $B$ in place of $C_{\rm box}$. The second assertion is the first at
+    the transport constants of
+    Theorem~\ref{thm:area_law_transport_bound_explicit}, for which
+    $c_0=\tfrac18>0$.
+\end{proof}
+
 % Status: auxiliary result. Proposition 2.1 of the polynomial-PEPS source
 % asserts only that a constant exists; that statement is
 % thm:openai_square_area_law.
