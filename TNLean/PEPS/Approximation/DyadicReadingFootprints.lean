@@ -44,7 +44,8 @@ argument of `TNLean.PEPS.Approximation.DyadicConicalFootprints`.
 For the block guides there is also an explicit ratio: three distinct labels of a reading of a
 block guide in a footprint of radius `δ < s / 2` come from three blocks about one grid corner, which
 is then a true vertex within `2 δ` of a footprint point, so every `δ` with `2 δ` below the hole
-radius works (`IsDisplacedReading.hasTwoOwnerFootprints_blockGuide`).
+radius works (`IsDisplacedReading.hasTwoOwnerFootprints_blockGuide`). For the resizings this gives
+every ratio `ν ≤ resizeRatio ε₀ = min(ε₀, 1) / 8` (`resizing_footprintRatio_mixed_reading_of_le`).
 
 Distances are ambient sup distances: `ℝ × ℝ` carries the maximum metric.
 
@@ -658,6 +659,68 @@ theorem exists_resizing_footprintRatio_mixed_reading {ε₀ : ℝ} (hε : 0 < ε
     mul_le_mul_of_nonneg_left (min_le_min (by linarith) le_rfl) hε.le
   exact (H hv hn hnt lab Q _ (Or.inl rfl) g' hg').of_le_radii
     (fun c _ => (hρ c).elim (fun h => h.ge) fun h => h ▸ hle) x p₁ p₂ p₃
+    (hp p₁ (by simp)) (hp p₂ (by simp)) (hp p₃ (by simp))
+
+/-! ### An explicit ratio for the resizings -/
+
+/-- **The mesh ratio of the resizings**, `ν₁ = min(ε₀, 1) / 8`. A footprint of radius
+`ν₁ (2 n)` on the guide uniform on the `2n`-blocks has `2 · ν₁ (2 n) ≤ ε₀ n / 2 < h_n` and
+`2 · ν₁ (2 n) ≤ n / 2 < 2 n` when `n < t`, which is what the explicit two-owner condition of a
+block guide needs (`IsDisplacedReading.hasTwoOwnerFootprints_blockGuide`). It replaces the
+minimum given by the compactness observation; the bound is crude, since it uses only that three
+labels meet at grid corners.
+
+Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:447–479, 529–541`. -/
+noncomputable def resizeRatio (ε₀ : ℝ) : ℝ := min ε₀ 1 / 8
+
+/-- The mesh ratio of the resizings is positive (`06-geometry.tex:559–563`). -/
+theorem resizeRatio_pos {ε₀ : ℝ} (hε : 0 < ε₀) : 0 < resizeRatio ε₀ := by
+  unfold resizeRatio; have := lt_min hε one_pos; positivity
+
+/-- The mesh ratio of the resizings is at most `1 / 8` (`06-geometry.tex:559–563`). -/
+theorem resizeRatio_le (ε₀ : ℝ) : resizeRatio ε₀ ≤ 1 / 8 := by
+  unfold resizeRatio; have := min_le_right ε₀ 1; linarith
+
+/-- The mesh ratio of the resizings is at most `ε₀ / 8` (`06-geometry.tex:529–541`). -/
+theorem resizeRatio_le_div (ε₀ : ℝ) : resizeRatio ε₀ ≤ ε₀ / 8 := by
+  unfold resizeRatio; have := min_le_left ε₀ 1; linarith
+
+/-- **Intermediate configurations of a resizing at the explicit ratio.** Fix `ε₀ > 0` and
+`ν ≤ resizeRatio ε₀ = min(ε₀, 1) / 8`. For every displacement `v`, every `0 < n < t` and every
+reading `g'` after `v` of a guide uniform on the `2n`-blocks, with holes at the true vertices of
+`g'` within `4 n` of a grid corner, each of its own radius `h_n` or `h_{2n}`, every footprint of
+radius `ν (2 n)` in the closed square of radius `2 n` about the corner meets at most two labels
+outside the holes. No genericity of `v` is used.
+
+Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:447–479, 529–541`. -/
+theorem resizing_footprintRatio_mixed_reading_of_le {ε₀ ν : ℝ} (hε : 0 < ε₀)
+    (hν : ν ≤ resizeRatio ε₀) {v : ℝ × ℝ} {ι : Type u} {n t : ℝ} (hn : 0 < n) (hnt : n < t)
+    (lab : ℤ × ℤ → ι) (Q : ℤ × ℤ) (g' : ℝ × ℝ → ι)
+    (hg' : IsDisplacedReading g' (blockGuide (2 * n) lab) v) (ρ : ℝ × ℝ → ℝ)
+    (hρ : ∀ c, ρ c = holeRadius ε₀ n t ∨ ρ c = holeRadius ε₀ (2 * n) t)
+    (x p₁ p₂ p₃ : ℝ × ℝ) (hp : ∀ p ∈ ({p₁, p₂, p₃} : Set (ℝ × ℝ)),
+      p ∈ (closedBall x (ν * (2 * n)) ∩ closedBall (blockCorner (2 * n) Q) (2 * n * 1)) \
+        ⋃ c ∈ {c | c ∈ closedBall (blockCorner (2 * n) Q) (2 * n * (1 + 1)) ∧
+          IsTrueVertex g' c}, ball c (ρ c)) :
+    g' p₁ = g' p₂ ∨ g' p₁ = g' p₃ ∨ g' p₂ = g' p₃ := by
+  have hle : holeRadius ε₀ n t ≤ holeRadius ε₀ (2 * n) t :=
+    mul_le_mul_of_nonneg_left (min_le_min (by linarith) le_rfl) hε.le
+  have hh : holeRadius ε₀ n t = ε₀ * n := by rw [holeRadius, min_eq_left hnt.le]
+  have hν8 : ν * n ≤ ε₀ / 8 * n :=
+    mul_le_mul_of_nonneg_right (hν.trans (resizeRatio_le_div ε₀)) hn.le
+  have hν1 : ν * n ≤ 1 / 8 * n := mul_le_mul_of_nonneg_right (hν.trans (resizeRatio_le ε₀)) hn.le
+  have hεn : 0 < ε₀ * n := mul_pos hε hn
+  have key : HasTwoOwnerFootprints g' (closedBall (blockCorner (2 * n) Q) (2 * n * 1))
+      {c | c ∈ closedBall (blockCorner (2 * n) Q) (2 * n * (1 + 1)) ∧ IsTrueVertex g' c}
+      (holeRadius ε₀ n t) (ν * (2 * n)) := by
+    refine hg'.hasTwoOwnerFootprints_blockGuide (by positivity) ?_ ?_ ?_
+    · intro c w hw hcw htv
+      refine ⟨?_, htv⟩
+      rw [mem_closedBall] at hw ⊢
+      linarith [dist_triangle c w (blockCorner (2 * n) Q)]
+    · rw [hh]; linarith
+    · linarith
+  exact key.of_le_radii (fun c _ => (hρ c).elim (fun h => h.ge) fun h => h ▸ hle) x p₁ p₂ p₃
     (hp p₁ (by simp)) (hp p₂ (by simp)) (hp p₃ (by simp))
 
 end TNLean.PEPS.Approximation

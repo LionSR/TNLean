@@ -27,6 +27,8 @@ interface is resolved in `docs/paper-gaps/polypeps_prop71_consequences_interface
 * `IsAngularScale.mono` : a larger information scale and threshold are again admissible;
 * `DyadicProtocol.IsDistributionProtocol.mono` : larger count, expansion and error constants are
   again admissible;
+* `protocolMeshRatio` : the mesh ratio `ν = 1 / 600000000` of the protocol, the smallest of the
+  explicit ratios of the resizings, the point treatments and the direct repaintings;
 * `protocolCountConstant`, `protocolExpansionConstant`, `protocolErrorConstant`,
   `protocolExpansionExponent`, `protocolLifetimeBound` : the named constants of the protocol, with
   the mesh ratio `ν` and the patch constants of Proposition 4.1 as parameters;
@@ -116,6 +118,62 @@ theorem LargeSizeDyadicProtocolBounds.largeSizeDyadicProtocolConsequences
 
 Polynomial-PEPS manuscript, `06-geometry.tex`, lines 102–107, 349–351 and 408–415. -/
 noncomputable def protocolHoleRatio : ℝ := 1 / 30000
+
+/-- **The mesh ratio of the protocol**, at the hole ratio `ε₀ = protocolHoleRatio` and `K₀ = 20`:
+the smaller of the point-treatment ratio `ν₂ = min(ε₀, 1) / 20000` and the direct-repainting
+ratio `ν₃ = min(ε₀ / max(K₀, 1), 1) / 4`. It is also at most the resizing ratio
+`ν₁ = min(ε₀, 1) / 8` and at most `1 / 6`, so it serves all three kinds of small-patch rewrites
+of the protocol and the smallness condition of its constants. Its value is `1 / 600000000`.
+
+Polynomial-PEPS manuscript, `06-geometry.tex`, lines 447–541 and 559–570. -/
+noncomputable def protocolMeshRatio : ℝ :=
+  min (pointTreatmentRatio protocolHoleRatio) (directRepaintingRatio 20 protocolHoleRatio)
+
+/-- The hole ratio of the protocol is positive (`06-geometry.tex:102–107`). -/
+theorem protocolHoleRatio_pos : 0 < protocolHoleRatio := by norm_num [protocolHoleRatio]
+
+/-- The mesh ratio of the protocol is positive (`06-geometry.tex:559–563`). -/
+theorem protocolMeshRatio_pos : 0 < protocolMeshRatio :=
+  lt_min (pointTreatmentRatio_pos protocolHoleRatio_pos)
+    (directRepaintingRatio_pos 20 protocolHoleRatio_pos)
+
+/-- The mesh ratio of the protocol is at most the point-treatment ratio
+(`06-geometry.tex:481–505`). -/
+theorem protocolMeshRatio_le_pointTreatmentRatio :
+    protocolMeshRatio ≤ pointTreatmentRatio protocolHoleRatio :=
+  min_le_left _ _
+
+/-- The mesh ratio of the protocol is at most the direct-repainting ratio
+(`06-geometry.tex:507–527`). -/
+theorem protocolMeshRatio_le_directRepaintingRatio :
+    protocolMeshRatio ≤ directRepaintingRatio 20 protocolHoleRatio :=
+  min_le_right _ _
+
+/-- The mesh ratio of the protocol is at most the resizing ratio (`06-geometry.tex:529–541`). -/
+theorem protocolMeshRatio_le_resizeRatio : protocolMeshRatio ≤ resizeRatio protocolHoleRatio := by
+  have h := protocolMeshRatio_le_pointTreatmentRatio
+  have h0 := lt_min protocolHoleRatio_pos one_pos
+  unfold pointTreatmentRatio at h
+  unfold resizeRatio
+  linarith
+
+/-- The mesh ratio of the protocol is at most `1 / 6` (`06-geometry.tex:559–570`). -/
+theorem protocolMeshRatio_le_one_sixth : protocolMeshRatio ≤ 1 / 6 := by
+  have := protocolMeshRatio_le_pointTreatmentRatio.trans (pointTreatmentRatio_le _)
+  linarith
+
+/-- The mesh ratio of the protocol is `1 / 600000000`: the point-treatment ratio
+`(1 / 30000) / 20000`, below the direct-repainting ratio `(1 / 30000) / 20 / 4`
+(`06-geometry.tex:481–527`). -/
+theorem protocolMeshRatio_eq : protocolMeshRatio = 1 / 600000000 := by
+  have h1 : pointTreatmentRatio protocolHoleRatio = 1 / 600000000 := by
+    rw [pointTreatmentRatio, protocolHoleRatio, min_eq_left (by norm_num : (1 / 30000 : ℝ) ≤ 1)]
+    norm_num
+  have h2 : directRepaintingRatio 20 protocolHoleRatio = 1 / 2400000 := by
+    rw [directRepaintingRatio, protocolHoleRatio, max_eq_left (by norm_num : (1 : ℝ) ≤ 20),
+      min_eq_left (by norm_num : (1 / 30000 : ℝ) / 20 ≤ 1)]
+    norm_num
+  rw [protocolMeshRatio, h1, h2, min_eq_left (by norm_num : (1 : ℝ) / 600000000 ≤ 1 / 2400000)]
 
 /-- The prefactor `G = (C' + 1) ^ (3 b) (16 b² (C' + 1) ^ (6 b) + 1) ^ (2 b)` of the bound
 `G L ^ k_K` on the number of monomials and on the coefficient sum of a small-patch rewrite with
@@ -226,15 +284,15 @@ theorem largeSizeDyadicProtocol_of_le_of_adaptivePatchConstraint
   have hε : 0 < ε₀ := by norm_num [hε₀_def, protocolHoleRatio]
   have hε16 : ε₀ ≤ 1 / 16 := by norm_num [hε₀_def, protocolHoleRatio]
   set K₀ : ℝ := 20 with hK₀_def
-  obtain ⟨ν₁, hν₁, H₁⟩ := exists_isDistributionProtocol_of_largeRepaintings hε hε16
-  obtain ⟨ν₂, hν₂, H₂⟩ := exists_pointTreatment_hasSourceBoundedChange hε hε16
-  obtain ⟨ν₃, hν₃, H₃⟩ := exists_isDirectRepaintingRatio K₀ hε
-  set ν := min (min ν₁ ν₂) (min ν₃ (1 / 6)) with hν_def
-  have hν : 0 < ν := lt_min (lt_min hν₁ hν₂) (lt_min hν₃ (by norm_num))
-  have hνν₁ : ν ≤ ν₁ := (min_le_left _ _).trans (min_le_left _ _)
-  have hνν₂ : ν ≤ ν₂ := (min_le_left _ _).trans (min_le_right _ _)
-  have hνν₃ : ν ≤ ν₃ := (min_le_right _ _).trans (min_le_left _ _)
-  have hν6 : ν ≤ 1 / 6 := (min_le_right _ _).trans (min_le_right _ _)
+  have H₁ := exists_isDistributionProtocol_of_largeRepaintings_of_le hε hε16
+  have H₂ := pointTreatment_hasSourceBoundedChange_of_le hε hε16
+  set ν := protocolMeshRatio with hν_def
+  have hν : 0 < ν := protocolMeshRatio_pos
+  have hνν₁ : ν ≤ resizeRatio ε₀ := protocolMeshRatio_le_resizeRatio
+  have hνν₂ : ν ≤ pointTreatmentRatio ε₀ := protocolMeshRatio_le_pointTreatmentRatio
+  have H₃ : IsDirectRepaintingRatio K₀ ε₀ ν :=
+    isDirectRepaintingRatio_of_le K₀ hε protocolMeshRatio_le_directRepaintingRatio
+  have hν6 : ν ≤ 1 / 6 := protocolMeshRatio_le_one_sixth
   set a : ℝ := angularConstant / 2 with ha_def
   have ha : 0 < a := by rw [ha_def, ha₀]; norm_num
   obtain ⟨D₁, L₁, hD₁⟩ :=
@@ -325,7 +383,7 @@ theorem largeSizeDyadicProtocol_of_le_of_adaptivePatchConstraint
     rw [List.length_map, nsmul_eq_mul] at hsum
     have hL3 : (0 : ℝ) ≤ (L : ℝ) ^ 3 := by positivity
     nlinarith
-  obtain ⟨D', hD'⟩ := H₁ ν hν hνν₁ hc (H₃ ν hν hνν₃) P hL hkL hk2 hΩ1 rank R₀
+  obtain ⟨D', hD'⟩ := H₁ ν hν hνν₁ hc H₃ P hL hkL hk2 hΩ1 rank R₀
     (protocolFrozen P rank hr) protocolAuxOwner (C' := C') (c' := c') (kK := kK) (C_N := C_N)
     (C_K := C_K) (C_E := C_E)
     (Nat.le_ceil C) hC' (Nat.le_ceil c) hseg
