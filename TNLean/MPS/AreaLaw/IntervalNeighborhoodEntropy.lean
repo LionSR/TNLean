@@ -84,7 +84,7 @@ theorem regionEntropy_chainNeighborhood_biUnion_intervals_le
   change Entropy.regionEntropy (N (s.biUnion (fun i ↦ interval L (a i) (z i)))) Ω ≤
     (s.card : ℝ) * c
   have hc : 0 ≤ c := by
-    simpa only [interval_eq_empty (L := L) (Nat.le_refl 0), regionEntropy_empty hΩ]
+    simpa only [interval_eq_empty (L := L) (Nat.le_refl 0), TNLean.Lattice.regionEntropy_empty hΩ]
       using hI 0 0
   have hn (X : Finset (Fin L)) :
       0 ≤ FiniteProduct.entropy (fun _ : Fin L ↦ Fin q) Ω X :=
@@ -103,13 +103,13 @@ theorem regionEntropy_chainNeighborhood_biUnion_intervals_le
     rw [hgeo]
     split_ifs
     · exact hI _ _
-    · simpa only [regionEntropy_empty hΩ] using hc
+    · simpa only [TNLean.Lattice.regionEntropy_empty hΩ] using hc
   have hNu (X Y : Finset (Fin L)) : N (X ∪ Y) = N X ∪ N Y := by
     ext y
     simp only [N, Finset.mem_filter, Finset.mem_univ, true_and, Finset.mem_union,
       or_and_right, exists_or]
   induction s using Finset.induction_on with
-  | empty => simp [N, regionEntropy_empty hΩ]
+  | empty => simp [N, TNLean.Lattice.regionEntropy_empty hΩ]
   | @insert i s hi ih =>
     rw [Finset.biUnion_insert, hNu, Finset.card_insert_of_notMem hi, Nat.cast_add, Nat.cast_one]
     nlinarith [hsub (N (interval L (a i) (z i)))
