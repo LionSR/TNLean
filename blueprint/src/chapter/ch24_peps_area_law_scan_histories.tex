@@ -2968,7 +2968,8 @@ The finite-leaf estimates below follow the charge-energy argument in
     vector and the derivative, entropy-gain and energy-error functionals of
     $\mathscr D_j$ at $t=a/2$, as in
     Theorem~\ref{thm:al_scan_actual_transport_estimates}. Let
-    $\overline H_k$ be the average over the $k$ copies of $\sum_iE_i$. Then
+    $\overline H_k$ be the average over the $k$ copies of $\sum_iE_i$ for
+    $k\ge1$, and $\overline H_0=0$. Then
     for every $0<p<1$,
     \begin{align}
         -\frac{d}{dp}\log N_{j,k,\mathrm{pre}}(p)^2
@@ -2995,6 +2996,7 @@ The finite-leaf estimates below follow the charge-energy argument in
 \begin{theorem}[Common step errors for all scan rounds]
     \label{thm:al_scan_actual_round_transport}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualRounds_transport_domainGraph,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.actualRounds_transport_domainGraph_of_finiteFamilyTransportBound,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.actualRoundHistory_length_add_one_le,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.actualRoundData_isAdmissible,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_finiteFamilyTransportBound}
