@@ -249,6 +249,7 @@ theorem boxBootstrapStep_le_boxStepPrefactor {q : ℕ} (hq : 1 ≤ q) (R : ℕ) 
   have hN' : (boxImprovementThreshold q R he₀ he₀₁ J Δ Ctr ct Cent eent Cen een C : ℝ) ≤
       ((boxImprovementThreshold q R he₀ he₀₁ J Δ Ctr ct Cent eent Cen een 0 : ℝ) + 2) *
         (boxStepScale q R Ctr Cent eent Cen een * (1 + C)) ^ boxStepExponent e₀ := by
+    have hNT := hN.trans (add_le_add le_rfl hT)
     unfold boxStepExponent at hy ⊢
     nlinarith [mul_le_mul_of_nonneg_left hy hN0]
   have hN2 : (boxImprovementThreshold q R he₀ he₀₁ J Δ Ctr ct Cent eent Cen een C : ℝ) ^ 2 ≤

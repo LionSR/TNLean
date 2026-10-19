@@ -111,3 +111,5 @@ theorem boxBootstrapConstant_le_pow_pow {V C₀ A : ℝ} {K : ℕ} {G : ℝ → 
         boxBootstrapConstant_le_iterate hV hC₀ hG hF hFx hstep hjM
     _ ≤ 1 + (fun y : ℝ ↦ A * (1 + y) ^ K)^[M] C₀ := le_add_of_nonneg_left zero_le_one
     _ ≤ _ := one_add_iterate_mul_one_add_pow_le (by linarith) hK hC₀ M
+
+end TNLean.PEPS.AreaLaw.Scan
