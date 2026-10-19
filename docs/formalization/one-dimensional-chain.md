@@ -102,9 +102,20 @@ For an arbitrary region D of the contiguous chain,
 split support in a window [p+1−R,p+1+R) about an actual boundary edge {p,p+1}.
 `MPS.AreaLaw.card_crossingTerms_le_mul_card_boundaryEdges` therefore bounds
 the number of such supports by 2^(2R)|∂D|, including zero range and empty
-boundaries. Adding the two replica labels will give the printed count
-N_R|∂D|. The partial-swap operator decomposition and its individual norm
-bounds remain to be proved.
+boundaries. The theorem
+`MPS.AreaLaw.ChainHamiltonian.partialSwap_difference_eq_sum_crossing`
+expresses the actual perturbation FĤF† − Ĥ as a sum of the two replica
+terms over these crossing supports, with at most N_R|∂D| labelled terms.
+Each difference is Hermitian, remains supported on its original support,
+and has norm at most 2J by
+`MPS.AreaLaw.ChainHamiltonian.partialSwap_term_difference_spec`.
+The theorem `MPS.AreaLaw.ChainHamiltonian.partialSwap_boundary_spec` places
+the perturbation on the actual union of crossing supports, within distance
+R of the boundary positions, and bounds its norm by 2J N_R|∂D|.
+These assertions retain the original real J and include the empty chain,
+zero local dimension and zero range. Transport of the doubled ground state
+and spectral gap, followed by the Gaussian-filter estimates, remains to be
+proved for the protocol route.
 
 ## Constants
 

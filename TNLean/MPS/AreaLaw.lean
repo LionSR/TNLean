@@ -22,4 +22,5 @@ import TNLean.MPS.AreaLaw.LiebRobinson
 import TNLean.MPS.AreaLaw.MPSApproximation
 import TNLean.MPS.AreaLaw.OpenMPS
 import TNLean.MPS.AreaLaw.OpenMPSRank
+import TNLean.MPS.AreaLaw.PartialSwap
 import TNLean.MPS.AreaLaw.SequentialTruncation
