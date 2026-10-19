@@ -294,6 +294,20 @@ theorem exists_amplificationBoundAt_max_one {q R : ℕ} {J Δ : ℝ} (hΔ : 0 < 
   amplificationBound (q := q) (R := R) (J := J) hΔ (max C 1)
     (lt_of_lt_of_le one_pos (le_max_right _ _)) 1 le_rfl
 
+/-- The constant and threshold of the sublinear collar bound of area-law Proposition 9.6,
+together with the amplification constant and threshold of Proposition 10.2 at the collar
+constant `max C 1` and the power `M = 1`. Existential corollaries of the named-constant
+theorems, which take `SublinearCollarBoundAt` and `AmplificationBoundAt`, obtain both
+premises from it. Source: area-law Propositions 9.6 (`08-scanner.tex`, lines 808–827) and
+10.2 (`09-amplification.tex`, lines 261–296). -/
+theorem exists_sublinearCollarBoundAt_amplificationBoundAt {q R : ℕ} {J Δ D₀ Ctpl : ℝ}
+    (hΔ : 0 < Δ) (hcol : SublinearCollarBound q R J Δ D₀ Ctpl) :
+    ∃ C : ℝ, ∃ N : ℕ, ∃ Ca : ℝ, ∃ Na : ℕ, SublinearCollarBoundAt q R J Δ D₀ Ctpl C N ∧
+      AmplificationBoundAt q R J Δ (max C 1) 1 Ca Na := by
+  obtain ⟨C, N, hcol⟩ := hcol
+  obtain ⟨Ca, Na, hamp⟩ := exists_amplificationBoundAt_max_one (q := q) (R := R) (J := J) hΔ C
+  exact ⟨C, N, Ca, Na, hcol, hamp⟩
+
 /-- **Proposition 3.1 from the sublinear collar bound.** Fix the Hamiltonian parameters
 `q, R, J` and a gap `Δ > 0`, and assume the sublinear collar bound of area-law
 Proposition 9.6 for some template constants `D₀, Ctpl`. Fix `N₀` and `A₀`. There are
@@ -325,8 +339,8 @@ theorem coarse_mutualInformation_le_of_sublinearCollarBound {q R : ℕ} {J Δ D�
           ∀ E : Finset (Site Λ),
             (∀ t ∈ T, ∀ y ∈ E, u ^ β < (Scan.ambientSupDistance t y.val : ℝ)) →
             FiniteProduct.mutualInformation (fun _ : Site Λ ↦ Fin q) Ω X E ≤ C := by
-  obtain ⟨C, N, hcol⟩ := hcol
-  obtain ⟨Ca, Na, hamp⟩ := exists_amplificationBoundAt_max_one (q := q) (R := R) (J := J) hΔ C
+  obtain ⟨C, N, Ca, Na, hcol, hamp⟩ :=
+    exists_sublinearCollarBoundAt_amplificationBoundAt hΔ hcol
   exact ⟨_, beta_lt_one, _, _,
     coarse_mutualInformation_le_of_sublinearCollarBoundAt hcol hamp N₀ A₀⟩
 

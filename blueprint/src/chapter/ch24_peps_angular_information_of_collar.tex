@@ -86,6 +86,7 @@
         thm:peps_coarse_information_of_collar_explicit,
         thm:peps_cell_two_family_partition_explicit,
         def:peps_cell_partition_constants,thm:peps_cell_generation_count,
+        lem:peps_coarse_exponent_lt_one,thm:peps_cell_partition_constants_bounds,
         thm:peps_two_family_partition_inverse_image,
         cor:peps_cell_information_counting_form}
     The coarse information estimate with explicit constants, for unions of at
@@ -144,7 +145,8 @@
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_cell_conditional_information_of_collar_explicit,
-        thm:area_law_amplification,def:peps_cell_information_constants}
+        thm:area_law_amplification,def:peps_cell_information_constants,
+        thm:peps_cell_information_constants_pos}
     Choose a constant $C$ and a threshold $N$ for the collar bound, and by
     Theorem~\ref{thm:area_law_amplification} a constant $C_a$ and a threshold
     $N_a$ for the range-one amplification bound at $(\max\{C,1\},1)$.
@@ -209,7 +211,8 @@
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_square_cell_conditional_information_of_collar_explicit,
-        thm:area_law_amplification,def:peps_cell_information_constants}
+        thm:area_law_amplification,def:peps_cell_information_constants,
+        thm:peps_cell_information_constants_pos}
     Choose a constant $C$ and a threshold $N$ for the collar bound, and by
     Theorem~\ref{thm:area_law_amplification} a constant $C_a$ and a threshold
     $N_a$ for the range-one amplification bound at $(\max\{C,1\},1)$.
