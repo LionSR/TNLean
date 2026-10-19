@@ -2985,9 +2985,13 @@ The finite-leaf estimates below follow the charge-energy argument in
          & \le2E_0+C_{\mathrm{en}}a^2\ell^{e_{\mathrm{en}}}
         \mathcal E_{j,k,\mathrm{pre}}(p)+\varepsilon_k;
     \end{align}
-    and for every $0\le p_0\le p_1\le1$, the integral of the left side of
-    the lower bound over $[p_0,p_1]$ is at most
-    $\log N_{j,k,\mathrm{pre}}(p_0)^2-\log N_{j,k,\mathrm{pre}}(p_1)^2$.
+    and for every $0\le p_0\le p_1\le1$,
+    \begin{align}
+        \int_{p_0}^{p_1}\Bigl(ka\mathcal G_{j,k,\mathrm{pre}}(p)
+        -C_{\mathrm{ent}}kaKa^{1/4}\ell^{e_{\mathrm{ent}}}-\beta_k\Bigr)\,dp
+         & \le\log N_{j,k,\mathrm{pre}}(p_0)^2
+        -\log N_{j,k,\mathrm{pre}}(p_1)^2.
+    \end{align}
 
     The condition involves only the five constants: it quantifies over
     every such family, and no domain, Hamiltonian, state or cut enters it.
