@@ -21,6 +21,12 @@ stay at distance at least a positive `η`. The manuscript takes `η` as a minimu
 over the finitely many pairs; since all these sets are cut out by belt facets,
 `η = birthSeparationConstant = 1/28` works for every pair.
 
+The first section below proves the existence of `η` by the manuscript's
+compactness argument (`exists_pos_le_norm_sub_away_from_intPoints`,
+`exists_pos_contact_dichotomy`, `exists_pos_forall_of_finite`). The explicit
+separation constant `1/28` gives a quantitative version of the same statement,
+and that version is the one used below and for the explicit area-law constant.
+
 *Angular estimate at marks.* Inside a quarter-square about a mark `q` the two
 sets are quarter-sectorial and meet only at `q`, so their points satisfy
 `‖x - y‖ ≥ ‖y - q‖ / 2`.
