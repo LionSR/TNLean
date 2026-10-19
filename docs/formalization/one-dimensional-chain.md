@@ -146,8 +146,13 @@ the actual supported integral. Its norm is at most the observable norm, and
 its error is bounded by C ‖W‖ L²(1+T) exp(vT−ℓ/2), with C,v chosen before
 q and all system data and depending only on R,J. This operator is supported on
 the exact radius-ℓ neighborhood of Q∪Z. Empty chains, zero variance and
-zero cutoff are included. The physical parameter choice, core separation,
-polar correction and final information-reset bound remain to be assembled.
+zero cutoff are included. The geometric lemma
+`MPS.AreaLaw.chain_reset_support_separation` proves the exact margin w−R
+from both cores, using the actual crossing witnesses. The radius-ℓ
+neighborhood of Q∪Z is disjoint from the cores whenever ℓ+R≤w. This
+geometric statement allows empty cores and all real margins and radii,
+without a quantum-state assumption. The physical parameter choice, polar
+correction and final information-reset bound remain to be assembled.
 
 ## Constants
 
