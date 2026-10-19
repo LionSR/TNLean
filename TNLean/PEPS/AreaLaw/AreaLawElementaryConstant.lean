@@ -38,6 +38,8 @@ Section `sec:top`. Source revision: `openai/math@adc7f1241b42e322a6451854ab7e4b4
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
+open TNLean.Lattice
+
 namespace TNLean.PEPS.AreaLaw
 
 open Scan
