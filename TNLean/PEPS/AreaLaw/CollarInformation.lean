@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.BoundaryTheorem
-import TNLean.PEPS.AreaLaw.Amplification.EntropyComparison
+import TNLean.Lattice.EntropyComparison
 import TNLean.PEPS.AreaLaw.Geometry.TemplateCutBoundary
 import TNLean.PEPS.AreaLaw.Geometry.TemplateLayers
 import TNLean.PEPS.AreaLaw.Scan.CompactCollarCounting

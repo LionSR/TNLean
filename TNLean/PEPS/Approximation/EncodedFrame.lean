@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Algebra.MatrixL2Contraction
 import TNLean.Circuit.SiteEmbedding
+import TNLean.Lattice.RegionSplit
 import TNLean.PEPS.Approximation.HoleEncoder
 import TNLean.PEPS.Approximation.MatrixAction
 
@@ -14,7 +15,7 @@ import TNLean.PEPS.Approximation.MatrixAction
 A *sheet* has one raw register `ℂ^q` at every site of a finite lattice `Λ`, and an owner for
 every register. Its raw configurations are the functions `Λ → Fin q`, and a vector on the
 sheet is a vector of `EuclideanSpace ℂ (Λ → Fin q)`. An operator `X` on the sites of a set
-`D ⊆ Λ` acts on the sheet as `X ⊗ 1` (`siteLift`).
+`D ⊆ Λ` acts on the sheet as `X ⊗ 1` (`TNLean.Lattice.siteLift`).
 
 Around a center `c` in the plane and at scale `h > 0`, the inner and outer squares
 `Q^±(c, h)` are the closed sup-norm balls of radii `h` and `2h`; their physical samples are the
@@ -37,7 +38,6 @@ encoders; its reference vector is `Ω_F = K_F Ω`. Disjoint holes commute, so
 
 ## Main definitions
 
-* `EncodedFrame.siteLift`: the operator `X_D ⊗ 1_{Λ ∖ D}`.
 * `EncodedFrame.squareSample`: the physical sample of a closed square.
 * `EncodedFrame.SquarePatch`: the nested-cylinder data of `eq:hole-projector`.
 * `EncodedFrame.SquarePatch.proj`, `EncodedFrame.SquarePatch.encoder`: the projector
@@ -79,6 +79,7 @@ disjointness of their physical samples, which it implies; `Frame` records the la
 
 open Matrix QuantumCircuit
 open scoped BigOperators Matrix.Norms.L2Operator
+open TNLean.Lattice (siteLift siteLift_conjTranspose siteLift_mem_supportedOperators siteLift_mul)
 
 noncomputable section
 
@@ -173,27 +174,6 @@ theorem norm_act_list_prod_sub_le [DecidableEq n] :
 end Euclidean
 
 /-! ### Operators on a set of sites -/
-
-/-- The operator `X_D ⊗ 1_{Λ ∖ D}` on the raw registers of a sheet, for an operator `X` on the
-sites of `D`. -/
-def siteLift (D : Finset ι) (X : Matrix (D → Fin q) (D → Fin q) ℂ) :
-    Matrix (ι → Fin q) (ι → Fin q) ℂ :=
-  embedOp (Subtype.val : D → ι) X
-
-theorem siteLift_mul (D : Finset ι) (X Y : Matrix (D → Fin q) (D → Fin q) ℂ) :
-    siteLift D X * siteLift D Y = siteLift D (X * Y) :=
-  embedOp_mul Subtype.val_injective X Y
-
-theorem siteLift_conjTranspose (D : Finset ι) (X : Matrix (D → Fin q) (D → Fin q) ℂ) :
-    (siteLift D X)ᴴ = siteLift D Xᴴ :=
-  embedOp_conjTranspose _ X
-
-/-- An operator lifted from `D` acts on the sites of `D`. -/
-theorem siteLift_mem_supportedOperators (D : Finset ι)
-    (X : Matrix (D → Fin q) (D → Fin q) ℂ) :
-    siteLift D X ∈ supportedOperators q (D : Set ι) := by
-  have h := embedOp_mem_supportedOperators (d := q) (Subtype.val_injective (p := (· ∈ D))) X
-  rwa [Subtype.range_coe_subtype] at h
 
 /-- The rank-one projector `|v⟩⟨v|`. -/
 def rankOne {α : Type*} [Fintype α] (v : EuclideanSpace ℂ α) : Matrix α α ℂ :=

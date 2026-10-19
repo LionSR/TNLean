@@ -22,6 +22,7 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 -/
 
 open scoped BigOperators Matrix
+open TNLean.Lattice (siteLift)
 
 namespace TNLean.PEPS.EncodedFrame
 
@@ -101,7 +102,7 @@ theorem HasAdaptivePatch.relabel {pos : V → ℝ × ℝ}
   have hsum : ∑ j, P.dim j = ∑ j, P'.dim j :=
     Fintype.sum_equiv (finCongr hn.symm) _ _ (fun j ↦ (hdim j).symm)
   refine ⟨P', hz'.trans hz, hu'.trans hu, hsum ▸ hd, ?_⟩
-  have hnorm := Approximation.norm_reindex_mulVec_sub
+  have hnorm := TNLean.Lattice.norm_reindex_mulVec_sub
     (Equiv.arrowCongr e (Equiv.refl (Fin q))) P.cylSum (⇑Ω) (⇑Ω)
   rw [act_sub, act_one, norm_sub_rev] at he ⊢
   have hΩ : LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ

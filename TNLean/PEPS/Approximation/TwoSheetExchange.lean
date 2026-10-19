@@ -71,6 +71,10 @@ the manuscript; no upstream Lean proof text was reused.
 open Matrix QuantumCircuit
 open EuclideanSpace (vecKron)
 open scoped BigOperators Kronecker Matrix.Norms.L2Operator
+open TNLean.Lattice (apply_eq_submatrix_apply commute_sheetSwapOp_kronecker
+  exists_kronecker_one_of_mem_supportedOperators exists_one_kronecker_of_mem_supportedOperators
+  mul_submatrix_sheetSplit norm_sheetSwapOp_le_one sheetSplit sheetSplit_sheetSwap_fst
+  sheetSplit_sheetSwap_snd sheetSwap sheetSwapOp sheetSwapOp_mul_sheetSwapOp sheetSwap_symm)
 
 noncomputable section
 

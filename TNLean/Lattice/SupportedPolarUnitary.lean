@@ -5,7 +5,8 @@ Authors: TNLean contributors
 -/
 import QICLean.Analysis.PolarUnitaryCorrectionKronecker
 import QICLean.Algebra.MatrixReindexUnitary
-import TNLean.PEPS.AreaLaw.Amplification.SupportedPolarCorrection
+import TNLean.Algebra.MatrixKroneckerContraction
+import TNLean.Lattice.RegionSplit
 
 /-!
 # A supported unitary polar correction
@@ -53,7 +54,7 @@ theorem exists_supported_unitary_polar_correction (S : Finset ι)
           ‖WithLp.toLp 2 (D *ᵥ x) - WithLp.toLp 2 y‖ +
             ‖WithLp.toLp 2 (Dᴴ *ᵥ y) - WithLp.toLp 2 x‖ := by
   set e := FiniteProduct.splitEquiv (fun _ : ι => Fin q) S with he
-  obtain ⟨D', hD'⟩ := TNLean.PEPS.EncodedFrame.exists_kronecker_one_of_mem_supportedOperators hD
+  obtain ⟨D', hD'⟩ := TNLean.Lattice.exists_kronecker_one_of_mem_supportedOperators hD
   have hDe : D.submatrix e.symm e.symm =
       D' ⊗ₖ (1 : Matrix (↥Sᶜ → Fin q) (↥Sᶜ → Fin q) ℂ) := hD'
   obtain ⟨U', hpolar, -, -⟩ := exists_unitary_polar_correction D'

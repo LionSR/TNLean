@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.ApproximationFromSquareAreaLaw
 import TNLean.PEPS.AreaLaw.AreaLawTheorem
+import TNLean.PEPS.Approximation.PolynomialPEPSClosedConstant
 
 /-!
 # Polynomial PEPS approximation of gapped square-grid ground states
@@ -93,8 +94,10 @@ lines 36–57: gapped ground states of nearest-neighbor Hamiltonians on the
 dimension, up to a global phase,
 with constants depending only on `q`, `J` and `Δ`. The square entropy area law
 of Proposition 2.1 (`01-preliminaries.tex`, lines 39–58) is supplied by the
-two-dimensional area law. -/
+two-dimensional area law. The constants are those of `polynomialPEPSApproximation_explicit`. -/
 theorem polynomialPEPSApproximation : PolynomialPEPSApproximation :=
-  polynomialPEPSApproximation_of_squareEntropyAreaLaw AreaLaw.squareEntropyAreaLaw
+  fun q hq J Δ hJ hΔ ↦ ⟨pepsBondPrefactor q J Δ, pepsBondExponent q J Δ,
+    pepsBondPrefactor_pos q J Δ, pepsBondExponent_pos q J Δ,
+    polynomialPEPSApproximation_explicit hq hJ hΔ⟩
 
 end TNLean.PEPS.Approximation

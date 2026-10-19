@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.GappedGroundState
-import TNLean.PEPS.AreaLaw.Amplification.EntropyComparison
+import TNLean.Lattice.EntropyComparison
 
 /-!
 # Marginal trace norm from the original full-system gap
