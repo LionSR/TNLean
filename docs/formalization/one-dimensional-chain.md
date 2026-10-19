@@ -97,6 +97,15 @@ argument. The broader finite-domain reading of the source lemma remains
 separate, as recorded in the connected-domain scope note. The full protocol
 construction is also separate.
 
+For an arbitrary region D of the contiguous chain,
+`MPS.AreaLaw.IsChainSupport.exists_boundary_window_of_split` places every
+split support in a window [p+1−R,p+1+R) about an actual boundary edge {p,p+1}.
+`MPS.AreaLaw.card_crossingTerms_le_mul_card_boundaryEdges` therefore bounds
+the number of such supports by 2^(2R)|∂D|, including zero range and empty
+boundaries. Adding the two replica labels will give the printed count
+N_R|∂D|. The partial-swap operator decomposition and its individual norm
+bounds remain to be proved.
+
 ## Constants
 
 Every constant in the chain area-law and sequential-truncation bounds is a
