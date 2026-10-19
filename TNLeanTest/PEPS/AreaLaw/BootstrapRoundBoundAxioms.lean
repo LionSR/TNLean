@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.AreaLaw.Scan.BootstrapRoundBound
+import TNLean.PEPS.AreaLaw.Scan.PhysicalBoxRoundBound
 import Lean.Util.CollectAxioms
 
 /-! # Kernel dependencies of the explicit bootstrap round budget -/
@@ -13,7 +13,8 @@ run_cmd do
   for decl in #[``TNLean.PEPS.AreaLaw.Scan.boxBootstrapRounds_le_ceil_log_div,
       ``TNLean.PEPS.AreaLaw.Scan.initialBoxBootstrapRoundBound,
       ``TNLean.PEPS.AreaLaw.Scan.boxBootstrapRounds_initial_le,
-      ``TNLean.PEPS.AreaLaw.Scan.pow_initialBoxBootstrapRoundBound_mul_le] do
+      ``TNLean.PEPS.AreaLaw.Scan.pow_initialBoxBootstrapRoundBound_mul_le,
+      ``TNLean.PEPS.AreaLaw.Scan.exists_boxEntropy_le_boxError_bounded_rounds] do
     unless (← Lean.getEnv).contains decl do
       throwError "Missing declaration {decl}"
     let axioms ← Lean.collectAxioms decl
