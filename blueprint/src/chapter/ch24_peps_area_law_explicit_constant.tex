@@ -215,8 +215,8 @@ state and cut.
 % Source: 06-transport.tex, Proposition 7.4, lines 377--434, applied in
 % 08-scanner.tex, lines 83--154.
 % Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
-\begin{lemma}[The transport bound at explicit constants]
-    \label{lem:area_law_transport_bound_explicit}
+\begin{theorem}[The transport bound at explicit constants]
+    \label{thm:area_law_transport_bound_explicit}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.finiteFamilyTransportBound_explicit}
     \leanok
     The common step-error bound of
@@ -232,7 +232,7 @@ state and cut.
         \qquad
         e_{\rm en}=4.
     \end{align}
-\end{lemma}
+\end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:al_scan_actual_round_transport}
@@ -252,7 +252,7 @@ state and cut.
         3\bigl(18\pi^2+6144\,e^{\pi^2+1}\bigr),4\bigr),
     \end{align}
     the constant of Definition~\ref{def:area_law_transport_constant} at the
-    transport constants of Lemma~\ref{lem:area_law_transport_bound_explicit}.
+    transport constants of Theorem~\ref{thm:area_law_transport_bound_explicit}.
 \end{definition}
 
 \begin{theorem}[The area law with an explicit constant]
@@ -270,8 +270,8 @@ state and cut.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:area_law_transport_constant,lem:area_law_transport_bound_explicit}
+    \uses{thm:area_law_transport_constant,thm:area_law_transport_bound_explicit}
     Apply Theorem~\ref{thm:area_law_transport_constant} with the transport
-    constants of Lemma~\ref{lem:area_law_transport_bound_explicit}, for which
+    constants of Theorem~\ref{thm:area_law_transport_bound_explicit}, for which
     $c_0=\tfrac18>0$.
 \end{proof}
