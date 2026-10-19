@@ -713,9 +713,10 @@ theorem resizing_footprintRatio_mixed_reading_of_le {ε₀ ν : ℝ} (hε : 0 < 
   have key : HasTwoOwnerFootprints g' (closedBall (blockCorner (2 * n) Q) (2 * n * 1))
       {c | c ∈ closedBall (blockCorner (2 * n) Q) (2 * n * (1 + 1)) ∧ IsTrueVertex g' c}
       (holeRadius ε₀ n t) (ν * (2 * n)) := by
-    refine hg'.hasTwoOwnerFootprints_blockGuide (by positivity)
-      (fun c w hw hcw htv => ⟨?_, htv⟩) ?_ ?_
-    · rw [mem_closedBall] at hw ⊢
+    refine hg'.hasTwoOwnerFootprints_blockGuide (by positivity) ?_ ?_ ?_
+    · intro c w hw hcw htv
+      refine ⟨?_, htv⟩
+      rw [mem_closedBall] at hw ⊢
       linarith [dist_triangle c w (blockCorner (2 * n) Q)]
     · rw [hh]; linarith
     · linarith
