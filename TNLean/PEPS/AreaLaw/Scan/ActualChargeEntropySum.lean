@@ -31,6 +31,8 @@ open Matrix Set Filter Topology MeasureTheory PermutationRepresentation Entropy
 
 noncomputable section
 
+open TNLean.Lattice
+
 namespace TensorPower.ReplicaTransport.TransportData
 
 variable {V : Type*} [Fintype V] [DecidableEq V] {K : ℕ}
@@ -152,6 +154,68 @@ theorem sum_actualCharge_integral_le_sum_actualRounds_entropyGain_domainGraph
     (fun s _ => hstep s) (fun j _ _ =>
       intervalIntegral.integral_nonneg_of_forall zero_le_one (hG0 j))
 
+/-- The integrated bound for all actual charge stages at any constants `c₀, C_ent, e_ent, C_en,
+e_en` satisfying the finite-family transport bound, such as QICLean's universal transport
+constants, which depend on none of `q, R, J, Δ`. Source: `08-scanner.tex`, lines 442–479. -/
+theorem actualCharges_integral_bound_domainGraph_of_finiteFamilyTransportBound
+    {c₀ Cent eent Cen een : ℝ} (htransport : FiniteFamilyTransportBound c₀ Cent eent Cen een) :
+    ∀ {Λ T : Finset (ℤ × ℤ)} {q R : ℕ} {J Δ : ℝ}
+      [NeZero q] [LinearOrder (AdmissibleSupport Λ R)]
+      (aux : Bool → ℕ) [∀ b, NeZero (aux b)]
+      (h : LocalHamiltonian Λ q R J) (Ω : StateSpace Λ q)
+      (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (hT : T.Nonempty),
+      S.graph = domainGraph Λ →
+      S.depth = (fun x => ambientDepth T hT x.val) →
+      (∀ i, S.anchor i ∈ i.val) → 0 < Δ → ‖Ω‖ = 1 →
+      ∀ {L μ : ℕ} (hn : 2 ≤ S.n), 2 * S.r₀ ≤ S.D →
+      ∀ (hDpos : 1 ≤ S.D) (hD : 4 * S.D ≤ S.m),
+      8 * S.K * S.m ≤ L → ∀ (hCpos : 0 < S.C₁), 3 * (μ : ℝ) ≤ S.C₁ →
+      (∀ d : ℕ, 1 ≤ d → d ≤ L →
+        (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n) →
+      (∀ x, (Finset.univ.filter fun i => S.anchor i = x).card ≤ μ) →
+      (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+        ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z) →
+      ∀ {a : ℝ}, 0 < a → a * transportLogDimBound q S.r₀ ≤ c₀ →
+      let hm : 0 < S.m := by omega
+      let hM : 0 < S.M := chargeSlotCount_pos hCpos (Nat.le_trans (by decide) hn) hDpos
+      let n := augmentedDimensions (V := Site Λ) q aux
+      let E := S.actualEnergyTerms h Ω Δ L aux
+      let ℓ := transportLogDimBound q S.r₀
+      ∃ (β : ℕ → ℝ) (Cβ : ℝ), 0 ≤ Cβ ∧
+        (∀ k, 0 ≤ β k) ∧ (∀ k, β k ≤ Cβ * Real.log (k + 2)) ∧
+        ∀ (k : ℕ) (pre : Config k (fun v => Fin (n v)) → ℂ),
+          pre ∈ symmetricSubspace k (fun v => Fin (n v)) → pre ≠ 0 →
+          ∀ p₀ p₁ : ℝ, 0 ≤ p₀ → p₀ ≤ p₁ → p₁ ≤ 1 →
+            (k : ℝ) * a * ((1 / (2 * (S.C₁ + 1))) / ((S.n : ℝ) * S.D)) *
+                (∑ s : Fin (S.n * S.m),
+                  ∫ p in p₀..p₁,
+                    S.actualChargeEntropyDefect hm hM s.val n E (a / 2) k pre p) ≤
+              Real.log (Transport.filteredNormSq
+                ((S.actualFillData hm hM 0).rootPath n (a / 2) k 0) pre) -
+                Real.log (Transport.filteredNormSq
+                  ((S.actualFillData hm hM (S.n * S.m)).rootPath n (a / 2) k 0) pre) +
+                (2 * S.n * S.m : ℕ) *
+                  (Cent * k * a * S.K * a ^ (1 / 4 : ℝ) * ℓ ^ eent + β k) := by
+  classical
+  intro Λ T q R J Δ _ _ aux _ h Ω S hT hgraph hdepth hanchor hΔ hΩ
+    L μ hn hr hDpos hD hL hCpos hC hrows hmult hclear a ha haℓ
+  let hm : 0 < S.m := by omega
+  let hM : 0 < S.M := chargeSlotCount_pos hCpos (Nat.le_trans (by decide) hn) hDpos
+  let n := augmentedDimensions (V := Site Λ) q aux
+  let E := S.actualEnergyTerms h Ω Δ L aux
+  obtain ⟨β, Cβ, hCβ, hβ0, hβ, hround⟩ :=
+    actualRounds_entropy_integral_le_domainGraph_of_finiteFamilyTransportBound htransport aux h Ω
+      S hT hgraph hdepth hanchor hΔ hΩ (by omega) (by omega) hDpos hD hL
+      hCpos hrows hclear ha haℓ
+  refine ⟨β, Cβ, hCβ, hβ0, hβ, ?_⟩
+  intro k pre hpre hne p₀ p₁ h0 h01 h1
+  have hcharge := S.sum_actualCharge_integral_le_sum_actualRounds_entropyGain_domainGraph
+    hT hgraph hdepth hm hM n E (fun _ => rfl) hn (by omega) hr hD hDpos hL hC
+    hrows hmult hclear (half_pos ha).le k pre hne h0 h01 h1
+  have hscaled := mul_le_mul_of_nonneg_left hcharge (mul_nonneg (Nat.cast_nonneg k) ha.le)
+  rw [← _root_.mul_assoc] at hscaled
+  exact hscaled.trans (hround k pre hpre hne)
+
 /-- Actual charge sampling and the common-error telescope bound all charge
 stages on any closed subinterval of `[0, 1]` (`08-scanner.tex`, lines 442–479).
 The error is paid for every complete fill and charge round, independently of
@@ -196,25 +260,8 @@ theorem actualCharges_integral_bound_domainGraph :
                     ((S.actualFillData hm hM (S.n * S.m)).rootPath n (a / 2) k 0) pre) +
                   (2 * S.n * S.m : ℕ) *
                     (Cent * k * a * S.K * a ^ (1 / 4 : ℝ) * ℓ ^ eent + β k) := by
-  classical
-  obtain ⟨c₀, Cent, eent, hc₀, hbound⟩ := actualRounds_entropy_integral_le_domainGraph
-  refine ⟨c₀, Cent, eent, hc₀, ?_⟩
-  intro Λ T q R J Δ _ _ aux _ h Ω S hT hgraph hdepth hanchor hΔ hΩ
-    L μ hn hr hDpos hD hL hCpos hC hrows hmult hclear a ha haℓ
-  let hm : 0 < S.m := by omega
-  let hM : 0 < S.M := chargeSlotCount_pos hCpos (Nat.le_trans (by decide) hn) hDpos
-  let n := augmentedDimensions (V := Site Λ) q aux
-  let E := S.actualEnergyTerms h Ω Δ L aux
-  obtain ⟨β, Cβ, hCβ, hβ0, hβ, hround⟩ :=
-    hbound aux h Ω S hT hgraph hdepth hanchor hΔ hΩ (by omega) (by omega) hDpos hD hL
-      hCpos hrows hclear ha haℓ
-  refine ⟨β, Cβ, hCβ, hβ0, hβ, ?_⟩
-  intro k pre hpre hne p₀ p₁ h0 h01 h1
-  have hcharge := S.sum_actualCharge_integral_le_sum_actualRounds_entropyGain_domainGraph
-    hT hgraph hdepth hm hM n E (fun _ => rfl) hn (by omega) hr hD hDpos hL hC
-    hrows hmult hclear (half_pos ha).le k pre hne h0 h01 h1
-  have hscaled := mul_le_mul_of_nonneg_left hcharge (mul_nonneg (Nat.cast_nonneg k) ha.le)
-  rw [← _root_.mul_assoc] at hscaled
-  exact hscaled.trans (hround k pre hpre hne)
+  obtain ⟨c₀, Cent, eent, Cen, een, hc₀, htransport⟩ := exists_finiteFamilyTransportBound
+  exact ⟨c₀, Cent, eent, hc₀,
+    actualCharges_integral_bound_domainGraph_of_finiteFamilyTransportBound htransport⟩
 
 end TNLean.PEPS.AreaLaw.Scan.CollarScan

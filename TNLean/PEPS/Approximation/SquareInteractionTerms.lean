@@ -26,13 +26,13 @@ singleton and nearest-neighbor supports in the integer rectangle.
 Source: polynomial-PEPS `eq:model` and `03-patches.tex`, lines 213–336. -/
 theorem SquareHamiltonian.exists_nearestNeighbor_terms {L q : ℕ} {J : ℝ}
     (h : SquareHamiltonian L q J) (hJ : 0 ≤ J)
-    [LinearOrder (AreaLaw.Site (AreaLaw.rectangularDomain L L))] :
-    ∃ T : (AreaLaw.Site (AreaLaw.rectangularDomain L L) ⊕
-        Edge (AreaLaw.domainGraph (AreaLaw.rectangularDomain L L))) →
-        Matrix (AreaLaw.Configuration (AreaLaw.rectangularDomain L L) q)
-          (AreaLaw.Configuration (AreaLaw.rectangularDomain L L) q) ℂ,
+    [LinearOrder (Lattice.Site (AreaLaw.rectangularDomain L L))] :
+    ∃ T : (Lattice.Site (AreaLaw.rectangularDomain L L) ⊕
+        Edge (Lattice.domainGraph (AreaLaw.rectangularDomain L L))) →
+        Matrix (Lattice.Configuration (AreaLaw.rectangularDomain L L) q)
+          (Lattice.Configuration (AreaLaw.rectangularDomain L L) q) ℂ,
       (∀ i, Entropy.IsSupportedOn
-        (n := fun _ : AreaLaw.Site (AreaLaw.rectangularDomain L L) ↦ q)
+        (n := fun _ : Lattice.Site (AreaLaw.rectangularDomain L L) ↦ q)
         (T i) (AreaLaw.nearestNeighborSupport i)) ∧
       (∀ i, (T i).IsHermitian) ∧ (∀ i, ‖T i‖ ≤ J) ∧
       (∑ i, T i) = (h.toAreaLawHamiltonian hJ).operator := by

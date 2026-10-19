@@ -428,6 +428,30 @@ contraction of local tensors is a separate assertion.
     the input and the retained registers are unchanged.
 \end{proof}
 
+\begin{theorem}[Compression of a family of distributed constructions with explicit constants]
+    \label{thm:peps_distributed_construction_compression_of_le}
+    \lean{TNLean.PEPS.PairEffect.DistributedConstruction.uniform_sampled_network_of_le}
+    \leanok
+    \uses{def:peps_compression_constants}
+    Under the hypotheses of
+    Theorem~\ref{thm:peps_distributed_construction_compression}, let $p$ be
+    real. For every $C_p\ge C(r,b,C_N,C_D,C_K,C_C)$ and every integer
+    $\alpha_p\ge\alpha(r,b,n,d,u,v,p)$, with the constants of
+    Definition~\ref{def:peps_compression_constants}, every member admits an
+    operator tensor network $\sigma_L$ as in
+    Theorem~\ref{thm:peps_distributed_construction_compression} with
+    $\dim\mathcal V_e\le C_pL^{\alpha_p}$.
+    % Source: 04-compression.tex, lines 137--175 and 565--588.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_uniform_approximate_operator_network_of_le,thm:peps_distributed_construction_gate_maps_density}
+    The argument of
+    Theorem~\ref{thm:peps_distributed_construction_compression} applies
+    Theorem~\ref{thm:peps_uniform_approximate_operator_network_of_le} to the
+    exact recorded expansions.
+\end{proof}
+
 \begin{theorem}[Compression of a family of distributed constructions]
     \label{thm:peps_distributed_construction_compression}
     \lean{TNLean.PEPS.PairEffect.DistributedConstruction.exists_uniform_sampled_network}
@@ -457,7 +481,11 @@ contraction of local tensors is a separate assertion.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:peps_uniform_approximate_operator_network,thm:peps_distributed_construction_gate_maps_density}
+    \uses{thm:peps_distributed_construction_compression_of_le,def:peps_compression_constants}
+    Take $C_p=C(r,b,C_N,C_D,C_K,C_C)$ and
+    $\alpha_p=\alpha(r,b,n,d,u,v,p)$, the positive constants of
+    Definition~\ref{def:peps_compression_constants}, in
+    Theorem~\ref{thm:peps_distributed_construction_compression_of_le}.
     Reading every member with the operators of its own expansions, the recorded
     expansions approximate these operators with error zero, hence at every
     inverse-power accuracy, and keep the original monomial counts,

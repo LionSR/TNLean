@@ -25,6 +25,8 @@ an explicit hypothesis; this module does not prove that theorem.
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
+open TNLean.Lattice
+
 namespace TNLean.PEPS.AreaLaw
 
 /-- The inner-boundary formulation follows from the edge-boundary inequality.

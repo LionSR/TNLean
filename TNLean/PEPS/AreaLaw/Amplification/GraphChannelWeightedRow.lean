@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Amplification.GraphChannelEventKernel
-import TNLean.PEPS.AreaLaw.TruncationSeries
+import QICLean.Analysis.StretchedExponentialSummability
 
 /-!
 # Uniform weighted rows of the actual graph-ball incidence kernel
@@ -14,7 +14,7 @@ weighted row estimate for the finite event kernel. The constant is chosen
 before the graph, its site and label types, and the cutoff. Labels with the
 same anchor remain distinct. Balls use extended graph distance, so incidences
 between disconnected components vanish before natural distance is used in the
-weight. The analytic estimate reuses the volume-free truncation series.
+weight. The row constant is the explicit series `graphChannelRowConstant`.
 
 ## References
 
@@ -207,48 +207,38 @@ theorem sum_graphChannelEventKernel_mul_exp_le
       intro l _
       ring
 
-private theorem exists_sum_fourth_pow_mul_exp_neg_rpow_le {b α : ℝ}
-    (hb : 0 < b) (hα : 0 < α) :
-    ∃ A : ℝ, 0 ≤ A ∧ ∀ N : ℕ,
-      ∑ l ∈ Finset.range (N + 1), ((l : ℝ) + 1) ^ 4 *
-        Real.exp (-(b / 2 * (l : ℝ) ^ α)) ≤ A := by
-  obtain ⟨M, hM, hMb⟩ :=
-    exists_one_add_pow_mul_exp_neg_rpow_le (b := b / 4) (by positivity) hα 2
-  obtain ⟨S, hS, hSb⟩ := exists_sum_shell_le (c := b / 4) (by positivity) hα
-  refine ⟨M * S, mul_nonneg hM hS, fun N => ?_⟩
-  have hterm (l : ℕ) :
-      ((l : ℝ) + 1) ^ 4 * Real.exp (-(b / 2 * (l : ℝ) ^ α)) ≤
-        M * (((l : ℝ) + 1) ^ 2 *
-          Real.exp (-(b / 4 * ((l / 2 : ℕ) : ℝ) ^ α))) := by
-    have hfloor : ((l / 2 : ℕ) : ℝ) ^ α ≤ (l : ℝ) ^ α :=
-      Real.rpow_le_rpow (by positivity)
-        (by exact_mod_cast Nat.div_le_self l 2) hα.le
-    have hexp : Real.exp (-(b / 4 * (l : ℝ) ^ α)) ≤
-        Real.exp (-(b / 4 * ((l / 2 : ℕ) : ℝ) ^ α)) := by
-      apply Real.exp_le_exp.mpr
-      exact neg_le_neg (mul_le_mul_of_nonneg_left hfloor (by positivity))
-    calc
-      ((l : ℝ) + 1) ^ 4 * Real.exp (-(b / 2 * (l : ℝ) ^ α)) =
-          (((l : ℝ) + 1) ^ 2 * Real.exp (-(b / 4 * (l : ℝ) ^ α))) *
-          (((l : ℝ) + 1) ^ 2 * Real.exp (-(b / 4 * (l : ℝ) ^ α))) := by
-        rw [show -(b / 2 * (l : ℝ) ^ α) =
-          -(b / 4 * (l : ℝ) ^ α) + -(b / 4 * (l : ℝ) ^ α) by ring, Real.exp_add]
-        ring
-      _ ≤ M * (((l : ℝ) + 1) ^ 2 * Real.exp (-(b / 4 * (l : ℝ) ^ α))) :=
-        mul_le_mul_of_nonneg_right (hMb l (by positivity)) (by positivity)
-      _ ≤ M * (((l : ℝ) + 1) ^ 2 * Real.exp (-(b / 4 * ((l / 2 : ℕ) : ℝ) ^ α))) :=
-        mul_le_mul_of_nonneg_left
-          (mul_le_mul_of_nonneg_left hexp (by positivity)) hM
-  have hsum : ∑ l ∈ Finset.range (N + 1), ((l : ℝ) + 1) ^ 2 *
-      Real.exp (-(b / 4 * ((l / 2 : ℕ) : ℝ) ^ α)) ≤ S := by
-    simpa [Real.zero_rpow (ne_of_gt hα)] using hSb 0 (N + 1)
-  calc
-    _ ≤ ∑ l ∈ Finset.range (N + 1), M * (((l : ℝ) + 1) ^ 2 *
-        Real.exp (-(b / 4 * ((l / 2 : ℕ) : ℝ) ^ α))) :=
-      Finset.sum_le_sum fun l _ => hterm l
-    _ = M * ∑ l ∈ Finset.range (N + 1), ((l : ℝ) + 1) ^ 2 *
-        Real.exp (-(b / 4 * ((l / 2 : ℕ) : ℝ) ^ α)) := by rw [Finset.mul_sum]
-    _ ≤ M * S := mul_le_mul_of_nonneg_left hsum hM
+/-- The row constant `D μ K² ∑ₗ (1 + l)⁴ e^{-(b/2) l^α}` of the finite graph-ball event
+kernel. The series converges for `b, α > 0`. Source: area law, `09-amplification.tex`,
+lines 146–160. -/
+noncomputable def graphChannelRowConstant (D K μ b α : ℝ) : ℝ :=
+  D * μ * K ^ 2 * ∑' l : ℕ, (1 + (l : ℝ)) ^ 4 * Real.exp (-(b / 2) * (l : ℝ) ^ α)
+
+/-- The row constant is nonnegative. -/
+theorem graphChannelRowConstant_nonneg {D K μ : ℝ} (hD : 0 ≤ D) (hμ : 0 ≤ μ) (b α : ℝ) :
+    0 ≤ graphChannelRowConstant D K μ b α :=
+  mul_nonneg (by positivity) (tsum_nonneg fun _ => by positivity)
+
+/-- **Weighted rows with an explicit constant.** Every weighted row of the finite graph-ball
+event kernel is at most `graphChannelRowConstant D K μ b α`, for every graph, anchoring and
+cutoff with quadratic ball growth and anchor fibers bounded by `μ`. Source: area law,
+`09-amplification.tex`, lines 146–160. -/
+theorem sum_graphChannelEventKernel_mul_exp_le_graphChannelRowConstant
+    (G : SimpleGraph ι) (a : κ → ι) {D K μ b α : ℝ}
+    (hD : 0 ≤ D) (hK : 0 ≤ K) (hμ : 0 ≤ μ) (hb : 0 < b) (hα : 0 < α)
+    (hball : ∀ x l, ((graphBall G x l).card : ℝ) ≤ K * ((l : ℝ) + 1) ^ 2)
+    (hfiber : ∀ x, ((Finset.univ.filter fun i : κ => a i = x).card : ℝ) ≤ μ)
+    (N : ℕ) (y : ι) :
+    (∑ z, graphChannelEventKernel G a D b α N y z *
+      Real.exp (b / (2 * (2 : ℝ) ^ α) * (G.dist y z : ℝ) ^ α)) ≤
+      graphChannelRowConstant D K μ b α := by
+  have hsum : ∑ l ∈ Finset.range (N + 1), ((l : ℝ) + 1) ^ 4 *
+      Real.exp (-(b / 2 * (l : ℝ) ^ α)) ≤
+      ∑' l : ℕ, (1 + (l : ℝ)) ^ 4 * Real.exp (-(b / 2) * (l : ℝ) ^ α) := by
+    simpa only [add_comm (1 : ℝ), neg_mul] using
+      (Real.summable_nat_pow_mul_exp_neg_mul_rpow 4 (half_pos hb) hα).sum_le_tsum
+        (Finset.range (N + 1)) fun _ _ => by positivity
+  exact (sum_graphChannelEventKernel_mul_exp_le G a hD hK hμ hb hα hball hfiber N y).trans
+    (mul_le_mul_of_nonneg_left hsum (by positivity))
 
 /-- A volume- and cutoff-independent weighted row bound for the actual
 finite graph-ball incidence kernel. The witness depends only on
@@ -263,12 +253,10 @@ theorem exists_graphChannelEventKernel_weighted_row_le {D K μ b α : ℝ}
       (∀ x, ((Finset.univ.filter fun i : κ => a i = x).card : ℝ) ≤ μ) →
       ∀ (N : ℕ) (y : ι),
         (∑ z, graphChannelEventKernel G a D b α N y z *
-          Real.exp (b / (2 * (2 : ℝ) ^ α) * (G.dist y z : ℝ) ^ α)) ≤ C := by
-  obtain ⟨A, hA, hbound⟩ := exists_sum_fourth_pow_mul_exp_neg_rpow_le hb hα
-  refine ⟨D * μ * K ^ 2 * A, by positivity, ?_⟩
-  intro ι κ _ _ _ G a hball hfiber N y
-  exact (sum_graphChannelEventKernel_mul_exp_le G a hD hK hμ hb hα hball hfiber N y).trans
-    (mul_le_mul_of_nonneg_left (hbound N) (by positivity))
+          Real.exp (b / (2 * (2 : ℝ) ^ α) * (G.dist y z : ℝ) ^ α)) ≤ C :=
+  ⟨_, graphChannelRowConstant_nonneg hD hμ b α, fun _ _ _ _ _ G a hball hfiber N y =>
+    sum_graphChannelEventKernel_mul_exp_le_graphChannelRowConstant G a hD hK hμ hb hα hball
+      hfiber N y⟩
 
 variable {q : ℕ} [NeZero q] {Aux : Type*} [Fintype Aux] [DecidableEq Aux]
 
@@ -295,6 +283,61 @@ theorem sum_siteOscillation_spectatorRootChannel_sub_le_graphChannelEventKernel
   convert h using 1
   simp only [graphChannelEventKernel, mul_assoc, Finset.sum_mul, Finset.mul_sum]
   rw [Finset.sum_comm]
+
+/-- The row constant `graphChannelRowConstant (2 A) K μ (c / 2) α` with
+`A = 2 + 8 √C e^{c/2}`, which bounds the weighted rows of the event kernel generated by
+effects with localization tails `C e^{-c l^α}`. It is also the growth rate of the physical
+oscillation. Source: area law, `09-amplification.tex`, lines 139–160. -/
+noncomputable def channelEventRowConstant (C K μ c α : ℝ) : ℝ :=
+  graphChannelRowConstant (2 * (2 + 8 * Real.sqrt C * Real.exp (c / 2))) K μ (c / 2) α
+
+/-- The channel event row constant is nonnegative. -/
+theorem channelEventRowConstant_nonneg {μ : ℝ} (hμ : 0 ≤ μ) (C K c α : ℝ) :
+    0 ≤ channelEventRowConstant C K μ c α :=
+  graphChannelRowConstant_nonneg (by positivity) hμ _ _
+
+/-- **Uniform weighted rows and channel-increment domination, with an explicit row
+constant.** For an actual finite family of component-supported effects, the weighted rows of
+the event kernel are at most `channelEventRowConstant C K μ c α`, and the summed channel
+increments are dominated by the kernel. Source: area law, `09-amplification.tex`,
+lines 139–160. -/
+theorem graphChannelEventKernel_bounds_of_component_support {C K μ c α : ℝ}
+    (hC : 0 ≤ C) (hK : 0 ≤ K) (hμ : 0 ≤ μ)
+    (hc : 0 < c) (hα : 0 < α) (hα₁ : α ≤ 1) :
+    ∀ (ι κ Aux : Type*) [Fintype ι] [DecidableEq ι] [Fintype κ]
+      [Fintype Aux] [DecidableEq Aux] (q : ℕ) [NeZero q]
+      (G : SimpleGraph ι) (a : κ → ι) (k : κ → Matrix (ι → Fin q) (ι → Fin q) ℂ),
+      (∀ i, 0 ≤ k i) → (∀ i, k i ≤ 1) →
+      (∀ i, k i ∈ supportedOperators q {x | G.Reachable (a i) x}) →
+      (∀ x l, ((graphBall G x l).card : ℝ) ≤ K * ((l : ℝ) + 1) ^ 2) →
+      (∀ x, ((Finset.univ.filter fun i : κ => a i = x).card : ℝ) ≤ μ) →
+      ∀ (N : ℕ), (∀ i, Finset.univ.sup (G.dist (a i)) ≤ N) →
+      (∀ i l, l ≤ N → ‖k i - siteExpectation q (graphBall G (a i) l) (k i)‖ ≤
+        C * Real.exp (-(c * (l : ℝ) ^ α))) →
+      (∀ y, (∑ z,
+        graphChannelEventKernel G a (2 * (2 + 8 * Real.sqrt C * Real.exp (c / 2)))
+          (c / 2) α N y z * Real.exp (c / (4 * (2 : ℝ) ^ α) *
+            (G.dist y z : ℝ) ^ α)) ≤
+        channelEventRowConstant C K μ c α) ∧
+      (∀ (y : ι) (B : Matrix ((ι → Fin q) × Aux) ((ι → Fin q) × Aux) ℂ),
+        (∑ i, (siteOscillation q y (spectatorRootChannel (k i) B) -
+          siteOscillation q y B)) ≤
+        ∑ z,
+          graphChannelEventKernel G a (2 * (2 + 8 * Real.sqrt C * Real.exp (c / 2)))
+            (c / 2) α N y z * siteOscillation q z B) := by
+  intro ι κ Aux _ _ _ _ _ q _ G a k hk₀ hk₁ hk hball hfiber N hN hε
+  constructor
+  · intro y
+    unfold channelEventRowConstant
+    convert sum_graphChannelEventKernel_mul_exp_le_graphChannelRowConstant G a
+      (D := 2 * (2 + 8 * Real.sqrt C * Real.exp (c / 2))) (by positivity) hK hμ
+      (half_pos hc) hα hball hfiber N y using 1
+    congr 1
+    ext z
+    congr 2
+    ring
+  · exact sum_siteOscillation_spectatorRootChannel_sub_le_graphChannelEventKernel
+      G a k hk₀ hk₁ hk hC hc hα hα₁ N hN hε
 
 /-- Uniform weighted rows and literal channel-increment domination for an
 actual finite family of component-supported effects. If
@@ -326,20 +369,8 @@ theorem exists_graphChannelEventKernel_bounds_of_component_support {C K μ c α 
             siteOscillation q y B)) ≤
           ∑ z,
             graphChannelEventKernel G a (2 * (2 + 8 * Real.sqrt C * Real.exp (c / 2)))
-              (c / 2) α N y z * siteOscillation q z B) := by
-  obtain ⟨R, hR, hrows⟩ := exists_graphChannelEventKernel_weighted_row_le
-    (D := 2 * (2 + 8 * Real.sqrt C * Real.exp (c / 2)))
-    (by positivity) hK hμ (half_pos hc) hα
-  refine ⟨R, hR, ?_⟩
-  intro ι κ Aux _ _ _ _ _ q _ G a k hk₀ hk₁ hk hball hfiber N hN hε
-  constructor
-  · intro y
-    convert hrows ι κ G a hball hfiber N y using 1
-    congr 1
-    ext z
-    congr 2
-    ring
-  · exact sum_siteOscillation_spectatorRootChannel_sub_le_graphChannelEventKernel
-      G a k hk₀ hk₁ hk hC hc hα hα₁ N hN hε
+              (c / 2) α N y z * siteOscillation q z B) :=
+  ⟨_, channelEventRowConstant_nonneg hμ C K c α,
+    graphChannelEventKernel_bounds_of_component_support hC hK hμ hc hα hα₁⟩
 
 end TNLean.PEPS.AreaLaw

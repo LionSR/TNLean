@@ -24,6 +24,41 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Real initial-box scale exceeds one — promoted (2026-10-18)
+
+- **Pattern:** cast `1 < initialBoxScale q R J Δ` from the natural bound
+  `sixteen_le_initialBoxScale` to obtain positivity of its real logarithm.
+- **Seen:** Three occurrences across `InitialBoxEstimate.lean`
+  (`initialBoxExponent_pos_and_lt_one`) and `InitialExponentGain.lean`
+  (`one_sub_initialBoxExponent_eq`, `initialBoxExponent_gain_bounds`).
+- **Abstraction:** `TNLean.PEPS.AreaLaw.one_lt_initialBoxScale` in
+  `TNLean/PEPS/AreaLaw/InitialBoxEstimate.lean`, beside `sixteen_le_initialBoxScale`.
+- **Notes:** All three call sites use the shared real-valued bound. The helper
+  retains explicit `q, R, J, Δ` parameters and requires no additional hypotheses.
+
+### Unit logarithm from a threshold at least three — promoted (2026-10-18)
+
+- **Pattern:**
+
+  ```lean
+  have hlogn : 1 ≤ Real.log n := by
+    rw [Real.le_log_iff_exp_le (by positivity)]
+    exact Real.exp_one_lt_three.le.trans (by exact_mod_cast hn3)
+  ```
+
+- **Seen:** Four occurrences across four files: `Scan/RadiusAsymptotics.lean`,
+  `Scan/FixedWeightTransportSmallness.lean`, `Scan/SourceSelectedSharpEnergy.lean`
+  and `Scan/GenericChargeEnergy.lean`.
+- **Abstraction:** `Real.one_le_log_natCast_of_three_le {n : ℕ} (hn : 3 ≤ n) :
+  1 ≤ Real.log n` in `TNLean/Algebra/ExplicitThresholds.lean`, next to
+  `Real.one_le_log_of_ceil_logRpowThreshold_le`, which covers only thresholds of
+  the form `⌈logRpowThreshold C η u v L⌉₊`.
+- **Notes:** `RadiusAsymptotics.lean`, `FixedWeightTransportSmallness.lean` and
+  `GenericChargeEnergy.lean` call the lemma, as do the later
+  `ActualChargeEnergyCoefficients.lean` and `SourceBootstrapEntropy.lean`. The
+  inline proof in `SourceSelectedSharpEnergy.lean` is replaced by the open
+  pull request that names that file's thresholds.
+
 ### Labels introduced by the edge operations — promoted (2026-10-16)
 
 - **Pattern:** the case analysis showing that one of the seven births and deaths of an
@@ -911,8 +946,8 @@ abstracted — record why, so it is not re-proposed).
 - **Seen:** `subset_of_isSafe` in `TNLean/PEPS/AreaLaw/BufferedRectangles.lean`,
   `card_crossingTerms_le_edgeBoundary` in `TNLean/PEPS/AreaLaw/TailParameter.lean`, and
   `TNLean/PEPS/AreaLaw/Scan/SupportLocalization.lean`.
-- **Abstraction:** the lemma `TNLean.PEPS.AreaLaw.exists_edgeBoundary_of_walk` in
-  `TNLean/PEPS/AreaLaw/FiniteDomain.lean` returns the boundary edge, its endpoint in the
+- **Abstraction:** the lemma `TNLean.Lattice.exists_edgeBoundary_of_walk` in
+  `TNLean/Lattice/FiniteDomain.lean` returns the boundary edge, its endpoint in the
   region and the shortened walk; the three call sites use it.
 - **Notes:** `exists_cut_edge_near` in `TNLean/PEPS/AreaLaw/CrossingBudget.lean` is the
   analogue for an arbitrary graph in the extended graph distance.
@@ -7794,10 +7829,15 @@ spectral split → block extraction → MPV calculation → strict bounds
   pointwise rectangle estimate using the exact side length of each cell.
 - **Seen:** the template core and shell estimates in
   `Geometry/TemplateBoxEntropy.lean` (the separately developed template
-  argument), and `WeakRectangleShellEntropy.lean`.
+  argument), `WeakRectangleShellEntropy.lean`, and the real-clearance
+  template estimate in `Geometry/TemplateBoxEntropyReal.lean`.
 - **Abstraction:** the shared public theorem
-  `Geometry.regionalEntropy_filter_le_weighted_cover` in
-  `Geometry/CappedDyadicEntropyCover.lean`.
+  `Geometry.regionalEntropy_filter_le_weighted_cover_of_forall` in
+  `Geometry/CappedDyadicEntropyCover.lean`, which takes a bound on each
+  selected square. `Geometry.regionalEntropy_filter_le_weighted_cover`
+  specializes it to a safe-box estimate with natural clearance; the
+  real-clearance estimate derives each square's bound from its own
+  clearance argument and calls the general form directly.
 - **Notes:** the rectangle shell uses the shared theorem. The template
   consumers retain the same proof terms when their four physical-cover
   declarations move to this module; that extraction is coordinated with
@@ -8129,6 +8169,24 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Notes:** Two occurrences in two modules, below the promotion threshold.
   The coefficient is chosen before every real clearance and finite instance.
 
+### Passing from real clearance to integer clearance — candidate (2026-10-17)
+
+- **Pattern:** Multiply a comparison between clearance parameters by a
+  nonnegative rectangle size, combine it with the strict distance bound, and
+  use `exact_mod_cast` to obtain integer safety.
+- **Seen:** `exists_condEntropy_le_initialBuffer_real` in
+  `PEPS/AreaLaw/InitialBufferReal.lean` and
+  `exists_regionalEntropy_safe_rect_le_boxError` in
+  `PEPS/AreaLaw/PhysicalSafeBox.lean`. The separation comparison in
+  `sublinearCollarBound_real` in `PEPS/AreaLaw/PhysicalCollarInformation.lean`
+  uses the same multiplication and strict-inequality argument over the reals.
+- **Abstraction:** The two integer-safety proofs already use
+  `mul_le_mul_of_nonneg_right`. A common clearance comparison lemma could
+  combine that argument with the cast when another integer-safety use arises.
+- **Notes:** Two integer-safety occurrences in two modules, with a related
+  real-separation argument in a third module. The separation argument has no
+  integer cast, so a shared statement should distinguish these conclusions.
+
 ### Relabeling finite-product information through regional entropies — candidate (2026-10-15)
 
 - **Pattern:** Expand mutual or conditional mutual information, move finite-region
@@ -8320,3 +8378,44 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Seen:** The symmetric-window comparison occurs in `MPS/AreaLaw/Counting.lean`, `card_crossingTerms_interval_le`, and `MPS/AreaLaw/BoundaryCounting.lean`, `card_crossingTerms_le_mul_card_boundaryEdges`. `InteractionBudget.lean` has the related window of width `2R + 1`.
 - **Existing abstractions:** `card_filter_subset_le`, `Nat.pow_le_pow_right`, and `card_interval_le` already contain the common counting and monotonicity arguments. The finite union uses `Finset.card_biUnion_le_card_mul` directly.
 - **Notes:** No powerset injection or finite-union proof is duplicated. There are two exact symmetric-window comparisons; their remaining arithmetic is a single `omega` call. No further lemma or tactic is needed at present.
+
+### Real value of the lattice sup-norm distance — promoted lemma
+
+- **Pattern:** Express the natural-valued lattice sup-norm distance, viewed
+  as a real number, as the maximum of the absolute coordinate differences.
+- **Occurrences:** The former private helper in
+  `TNLean/PEPS/AreaLaw/Geometry/TemplateSafeRectangles.lean`, the local
+  calculation in `Geometry/TemplateInstances.lean`, the dyadic-cell
+  clearance proof in `Geometry/TemplateClearance.lean`, and the real
+  clearance argument in `Geometry/TemplateBoxEntropyReal.lean`.
+- **Promotion:** `TNLean.PEPS.AreaLaw.cast_supDist`, beside
+  `supDist` in `BufferedRectangles.lean`, replaces the three occurrences
+  whose modules already import its defining module.
+  Its proof is the existing cast calculation. The private helper and the
+  repeated local calculation are removed. `TemplateClearance` instead
+  converts a primitive maximum of natural absolute differences. Its single
+  Mathlib cast calculation is retained: the module does not import the
+  lattice-distance definition, and importing it would introduce the
+  analytic dependencies of `BufferedRectangles` into this geometric module.
+- **Verification:** The defining module, its three consumers and the older
+  entropy module passed ordinary package builds. The literal imported
+  check of the refactored template entropy theorem found exactly
+  `propext`, `Classical.choice` and `Quot.sound`. No tactic, global simp
+  attribute, additional hypothesis or import is introduced.
+
+### Uniform padding constants for buffered rectangles — candidate
+
+- **Pattern:** Choose a real threshold as the maximum of the normalization,
+  energy, and tail thresholds. Choose the padding constant by taking the
+  natural ceiling of an exponential expression, then obtain the entropy
+  constant from the same choices before introducing the clearance parameter
+  and the physical data.
+- **Occurrences:** `exists_condEntropy_le_initialBuffer` in
+  `TNLean/PEPS/AreaLaw/InitialBuffer.lean` and
+  `exists_condEntropy_le_initialBuffer_real` in
+  `TNLean/PEPS/AreaLaw/InitialBufferReal.lean`.
+- **Possible next abstraction:** If a third proof needs the same choices,
+  first consider an existence lemma for the numerical padding and entropy
+  constants and their inequalities. The constants must remain uniform in
+  the clearance and physical data. These are two occurrences across two
+  files; no promotion or proof refactor is proposed.

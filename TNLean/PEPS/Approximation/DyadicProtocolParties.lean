@@ -360,8 +360,11 @@ theorem participation_le_of_schedule {k : ℕ} {large : DyadicSquare k → Bool}
 /-! ### Locality of the parties of an event -/
 
 /-- A party used by the repainting of the square `S` of scale `j'` has scale `j'` or `j' + 1`,
-and in each coordinate its anchor is within `6 · 2 ^ j'` of the anchor of `S`. -/
-private theorem near_of_eventUses_repaint {k : ℕ} {S : DyadicSquare k} {p : ProtocolParty k}
+and in each coordinate its anchor is within `6 · 2 ^ j'` of the anchor of `S`.
+
+Source: Polynomial-PEPS manuscript (Sept 24 2026), Proposition 7.1, item 3,
+`06-geometry.tex, lines 33–37`. -/
+theorem near_of_eventUses_repaint {k : ℕ} {S : DyadicSquare k} {p : ProtocolParty k}
     (h : EventUses (.inl S) p) :
     (S.1 : ℕ) ≤ (protocolPlacement k).scale p ∧ (protocolPlacement k).scale p ≤ S.1 + 1 ∧
       Nat.dist ((protocolPlacement k).anchor p).1 (dyadicAnchor S.1 S.2.1) < 6 * 2 ^ (S.1 : ℕ) ∧
