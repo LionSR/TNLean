@@ -21,6 +21,8 @@ open TNLeanTest.ActualBandGeometryData
 
 noncomputable section
 
+open TNLean.Lattice
+
 namespace TNLeanTest.ActualSubsystemDimension
 
 example (g : Fin 2) :

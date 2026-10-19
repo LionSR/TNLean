@@ -519,17 +519,71 @@ outer sample.
     and the tag holders within $t$ of it are specified parties.
 \end{proof}
 
+\begin{theorem}[An explicit footprint ratio near a mark]
+    \label{thm:peps_guide_frame_mark_ratio}
+    \lean{TNLean.PEPS.Approximation.pointTreatmentRatio,
+        TNLean.PEPS.Approximation.pointTreatmentRatio_pos,
+        TNLean.PEPS.Approximation.pointTreatmentRatio_le,
+        TNLean.PEPS.Approximation.IsWallDirection,
+        TNLean.PEPS.Approximation.wallSlopes,
+        TNLean.PEPS.Approximation.le_abs_sub_of_mem_wallSlopes,
+        TNLean.PEPS.Approximation.eventually_eq_of_not_isWallDirection,
+        TNLean.PEPS.Approximation.exists_isWallChart,
+        TNLean.PEPS.Approximation.eq_or_eq_or_eq_of_conical,
+        TNLean.PEPS.Approximation.exists_wall_near_of_conical,
+        TNLean.PEPS.Approximation.hasTwoOwnerFootprints_reading_pointTreated,
+        TNLean.PEPS.Approximation.hasTwoOwnerFootprints_reading_footprintTemplate,
+        TNLean.PEPS.Approximation.template_footprintRatio_reading_of_le}
+    \leanok
+    \uses{thm:peps_dyadic_sampled_ratio}
+    Let $\epsilon_0>0$ and $\nu_2=\min(\epsilon_0,1)/20000$. In units of $t$
+    about a mark, every reading after a generic displacement of a template of
+    the point treatment, treated or not, has the two-owner condition with
+    working set the closed square of radius $2$, holes of radius $\epsilon_0$
+    at its true vertices within $3$, and every footprint radius at most
+    $\nu_2$. Hence the ratio of
+    Theorem~\ref{thm:peps_dyadic_sampled_ratio} for the guides near a mark can
+    be taken equal to $\nu_2$, in place of the minimum given by the compactness
+    observation of \cite[Section~7]{OpenAI2026PolynomialPEPS}, lines 447--479
+    and 481--505.
+\end{theorem}
+
+\begin{proof}\leanok
+    Near the mark a template is constant along the rays from the mark, and
+    its walls lie on lines with normals $(\pm\theta,1000)$ and
+    $(1000,\pm\theta)$, where $\theta$ is an integer with $|\theta|\le8$. Such a
+    guide is locally constant off the lines through the mark with these
+    normals. One of four isometries, each exchanging or reversing the
+    coordinate axes, carries a given point into the cone $|y|\le x$. There the
+    guide is a function of the slope $y/x$, and the wall slopes are multiples
+    of $1/1000$. Let three points of a footprint of radius at most $\nu_2$
+    carry three labels. Move them by the displacement, by less than $\nu_2$,
+    off every wall direction. The moved points are pairwise within $2\nu_2$
+    of each other. If they lie at distance at least $\rho$ from the mark with
+    $3001\cdot2\nu_2<\rho$, their slopes lie in a window of length less than
+    $1/1000$, which contains at most one wall slope, so they carry at most two
+    labels. If the mark is not treated, it is a true vertex, so the footprint
+    points lie at distance at least $\epsilon_0$ from it and $\rho=\epsilon_0-\nu_2$
+    applies. If the mark is treated and no moved point lies in the treated
+    square, then $\rho=1$ applies. If exactly one lies in the treated square,
+    the other two labels are separated by one wall. That wall meets the rim of
+    the square at a point within $10\nu_2$ of a moved point, and this point is a
+    true vertex. The corresponding footprint point lies within
+    $11\nu_2<\epsilon_0$ of it, and so in its hole.
+\end{proof}
+
 \begin{theorem}[Resizes and point treatments with one footprint ratio]
     \label{thm:peps_guide_frame_reading_gates}
     \lean{TNLean.PEPS.Approximation.exists_resize_step_reading,
         TNLean.PEPS.Approximation.homogenize_iUnion_eq_of_notMem,
-        TNLean.PEPS.Approximation.exists_pointTreatment_footprintRatio_homogenize_reading,
-        TNLean.PEPS.Approximation.exists_pointTreatment_step_reading}
+        TNLean.PEPS.Approximation.pointTreatment_footprintRatio_homogenize_reading_of_le,
+        TNLean.PEPS.Approximation.pointTreatment_step_reading_of_le}
     \leanok
     \uses{thm:peps_guide_frame_resize_treatment_gates,
-        thm:peps_dyadic_sampled_ratio}
+        thm:peps_dyadic_sampled_ratio, thm:peps_guide_frame_mark_ratio}
     Fix $0<\epsilon_0\le\tfrac1{16}$. Each of the following two statements
-    holds with its own threshold $\nu'>0$, independent of the scales: for
+    holds with its own threshold $\nu'>0$, independent of the scales, and for
+    the second the threshold is $\nu'=\min(\epsilon_0,1)/20000$: for
     every ratio $0<\nu\le\nu'$ and every generic small displacement, with
     the bounds on the holes and the patches of
     Theorem~\ref{thm:peps_guide_frame_resize_treatment_gates} and every $b$
@@ -554,7 +608,9 @@ outer sample.
 \begin{proof}\leanok
     The compactness observation gives one footprint ratio for the readings of
     block guides at every intermediate radius, and one for the readings of the
-    temporary guides near a corner of the block. Near a corner that is not a
+    temporary guides near a corner of the block; by
+    Theorem~\ref{thm:peps_guide_frame_mark_ratio} the latter is
+    $\min(\epsilon_0,1)/20000$. Near a corner that is not a
     mark, the homogenization about the marks changes nothing, since the other
     marks are at distance at least $n>8t$. Every smaller ratio, at most
     $\tfrac14$, keeps the two-owner condition and gives the separations required
@@ -572,7 +628,7 @@ outer sample.
         TNLean.PEPS.EncodedFrame.suppliedPatch_congr,
         TNLean.PEPS.EncodedFrame.suppliedPatch_data,
         TNLean.PEPS.Approximation.exists_resize_step_supplied,
-        TNLean.PEPS.Approximation.exists_pointTreatment_step_supplied}
+        TNLean.PEPS.Approximation.pointTreatment_step_supplied_of_le}
     \leanok
     \uses{thm:peps_guide_frame_reading_gates, lem:peps_guide_frame_patch_data}
     Assume the conclusion of Proposition~4.1 at test exponent $60$ on the sheet,

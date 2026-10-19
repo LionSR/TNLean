@@ -4,31 +4,47 @@
 The patch energy estimate has the form
 $\langle\phi,H\phi\rangle-E_0\le C_E\kappa^2$, where
 $C_E=36q^2J$ depends only on the fixed physical parameters.
-The following scalar choice is made before the regions, radius and minimizing
-densities are chosen. It does not establish the energy estimate itself.
+The following scalar choice depends only on $q$, $J$ and $\Delta$, and is
+made before the regions, radius and minimizing densities are chosen. It does
+not establish the energy estimate itself.
+
+\begin{definition}[The filter exponent]
+    \label{def:peps_patch_filter_exponent}
+    \lean{TNLean.PEPS.patchFilterExponent}
+    \leanok
+    For an integer $q\ge0$ and reals $J,\Delta$, put $C_E=36q^2J$ and
+    \begin{align}
+        \kappa(q,J,\Delta)=\min\left\{\frac12,
+        \sqrt{\frac{\Delta}{1024C_E}}\right\},
+        \label{eq:peps_patch_filter_exponent}
+    \end{align}
+    where the square root is read as zero when $C_E=0$.
+\end{definition}
 
 \begin{lemma}[A uniformly small energy parameter]
     \label{lem:peps_patch_energy_parameter_choice}
-    \lean{Real.exists_pos_le_half_mul_sq_le_div_1024}
+    \lean{TNLean.PEPS.patchFilterExponent_le_half,
+        TNLean.PEPS.patchFilterExponent_pos,
+        TNLean.PEPS.patchFilterExponent_pos_of_pos,
+        TNLean.PEPS.mul_sq_le_div_1024_of_le_patchFilterExponent,
+        TNLean.PEPS.mul_patchFilterExponent_sq_le}
     \leanok
-    Let $C_E\ge0$ and $\Delta>0$. There exists $\kappa>0$ such that
+    \uses{def:peps_patch_filter_exponent}
+    Let $J\ge0$ and $\Delta\ge0$, and let $\kappa=\kappa(q,J,\Delta)$ be the
+    filter exponent (\ref{eq:peps_patch_filter_exponent}). Then
+    $\kappa\le1/2$, and every $0\le\kappa'\le\kappa$ satisfies
     \begin{align}
-        \kappa\le\frac12,
-        \qquad C_E\kappa^2\le\frac{\Delta}{1024}.\notag
+        C_E\kappa'^2\le\frac{\Delta}{1024}.\notag
     \end{align}
-    The choice depends only on $C_E$ and $\Delta$.
+    If $C_E>0$ and $\Delta>0$, in particular if $q\ge1$ and $J,\Delta>0$, then
+    $\kappa>0$.
 \end{lemma}
 \begin{proof}
     \leanok
-    If $C_E=0$, take $\kappa=1/2$.
-    If $C_E>0$, take
-    \begin{align}
-        \kappa=\min\left\{\frac12,
-        \sqrt{\frac{\Delta}{1024C_E}}\right\}.\notag
-    \end{align}
-    Both entries of the minimum are positive. The first gives
-    $\kappa\le1/2$, and the second gives
-    $C_E\kappa^2\le\Delta/1024$.
+    The first entry of the minimum gives $\kappa\le1/2$. If $C_E=0$, the
+    energy bound reads $0\le\Delta/1024$. If $C_E>0$, then
+    $\kappa'^2\le\kappa^2\le\Delta/(1024C_E)$ by the second entry. Both
+    entries are positive when $C_E,\Delta>0$.
 \end{proof}
 
 This is the parameter choice in

@@ -14,12 +14,11 @@ selected density to the principal expression used by the bootstrap energy
 estimate. Its coefficient and scale threshold precede the current entropy
 exponent and every physical scalar. Only the replica threshold depends on
 that fixed instance. All conclusions attached to the selected point survive.
+The coefficient is given explicitly by `roughSelectedDensityCoefficient`, and the threshold
+is `ScannerExponents.scaleFactsThreshold`.
 
 Source: OpenAI area-law manuscript, `08-scanner.tex`, lines 457--490 and
 693--755, revision `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
-
-Validation and inherited-dependency scope:
-`docs/paper-gaps/arealaw2d_safe_box_collar_scope.tex`.
 -/
 
 noncomputable section
@@ -28,51 +27,56 @@ open scoped Topology
 
 namespace TNLean.PEPS.AreaLaw.Scan
 
-/-- The actual rough selection numerator gives the bootstrap principal density,
-with no sharp-margin condition. The current exponent is only required to
-control the fixed separation exponent. Source: `08-scanner.tex`, lines 480--490
-and 731--755. -/
-theorem ScannerExponents.exists_rough_selectedDensity_principal
+/-- The explicit coefficient `4 · 2 (C₁ + 1) (6 C_e + 13 + 6 log q + 2 C_t)` of the bootstrap
+principal density (`08-scanner.tex`, lines 480--490 and 731--755). -/
+noncomputable def roughSelectedDensityCoefficient (q : ℕ) (Ce C₁ Ct : ℝ) : ℝ :=
+  4 * (2 * (C₁ + 1) * (6 * Ce + 13 + 6 * Real.log q + 2 * Ct))
+
+/-- The actual rough selection numerator gives the bootstrap principal density with the
+explicit coefficient `roughSelectedDensityCoefficient q Ce C₁ Ct`, at every `n` from the
+explicit threshold `F.scaleFactsThreshold` on. Source: `08-scanner.tex`,
+lines 480--490 and 731--755. -/
+theorem ScannerExponents.rough_selectedDensity_principal_of_threshold_le
     (F : ScannerExponents) {q : ℕ} (hq : 1 ≤ q) (Ce C₁ Ct Cl : ℝ)
-    (hCe : 0 ≤ Ce) (hC : 0 < C₁) (hCt : 0 ≤ Ct) :
-    ∃ Cδ : ℝ, 0 < Cδ ∧ ∃ N : ℕ, 2 ≤ N ∧ ∀ n : ℕ, N ≤ n →
-      let L := F.L n
-      let m := F.m n
-      let K := F.K n
-      let D := F.D n
-      let a := 4 / (K : ℝ)
-      let ε := (n : ℝ) ^ (-F.nu)
-      ∀ e : ℝ, F.kappa ≤ e →
-      let δ := Cδ * ε⁻¹ *
-        ((n : ℝ) ^ (e - F.mu) + a ^ (1 / 4 : ℝ) * Real.log (n : ℝ) ^ Cl)
-      ∀ St logd z Bsh G : ℝ, 0 < z → 1 - (n : ℝ) ^ (-100 : ℝ) ≤ z →
-        St ≤ Ce * (n : ℝ) ^ (1 + e) + (n : ℝ) ^ (-247 : ℝ) →
-        |logd - St| ≤ (n : ℝ) ^ (3 / 5 : ℝ) - Real.log z →
-        Bsh ≤ Ce * ((n : ℝ) * (L : ℝ) ^ e + n) + (n : ℝ) ^ (-247 : ℝ) →
-        G ≤ Ct * Real.log (n : ℝ) ^ Cl →
-        let Brough := 2 * logd - Real.log z + 4 *
-          (Bsh / z + (1 + 3 * (n : ℝ) * D * Real.log q))
-        ∀ R : ℕ → ℝ, Tendsto R atTop (𝓝 0) →
-        ∀ {α : Type*} (density : ℕ → α → ℝ → ℝ) (keep : ℕ → α → ℝ → Prop)
-          (p₀ p₁ : ℝ),
-          (∀ᶠ k : ℕ in atTop, ∃ x : α, ∃ p ∈ Set.Icc p₀ p₁,
-            density k x p ≤ (2 * (C₁ + 1) / (4 * ((n * m : ℕ) : ℝ) * ε)) *
-              (Brough + ((2 * n * m : ℕ) : ℝ) * G * 4 * a ^ (1 / 4 : ℝ) + R k) ∧
-                keep k x p) →
-          ∀ᶠ k : ℕ in atTop, ∃ x : α, ∃ p ∈ Set.Icc p₀ p₁,
-            density k x p ≤ δ ∧ keep k x p := by
+    (hCe : 0 ≤ Ce) (hC : 0 < C₁) (hCt : 0 ≤ Ct) {n : ℕ}
+    (hthr : F.scaleFactsThreshold ≤ n) :
+    let L := F.L n
+    let m := F.m n
+    let K := F.K n
+    let D := F.D n
+    let a := 4 / (K : ℝ)
+    let ε := (n : ℝ) ^ (-F.nu)
+    ∀ e : ℝ, F.kappa ≤ e →
+    let δ := roughSelectedDensityCoefficient q Ce C₁ Ct * ε⁻¹ *
+      ((n : ℝ) ^ (e - F.mu) + a ^ (1 / 4 : ℝ) * Real.log (n : ℝ) ^ Cl)
+    ∀ St logd z Bsh G : ℝ, 0 < z → 1 - (n : ℝ) ^ (-100 : ℝ) ≤ z →
+      St ≤ Ce * (n : ℝ) ^ (1 + e) + (n : ℝ) ^ (-247 : ℝ) →
+      |logd - St| ≤ (n : ℝ) ^ (3 / 5 : ℝ) - Real.log z →
+      Bsh ≤ Ce * ((n : ℝ) * (L : ℝ) ^ e + n) + (n : ℝ) ^ (-247 : ℝ) →
+      G ≤ Ct * Real.log (n : ℝ) ^ Cl →
+      let Brough := 2 * logd - Real.log z + 4 *
+        (Bsh / z + (1 + 3 * (n : ℝ) * D * Real.log q))
+      ∀ R : ℕ → ℝ, Tendsto R atTop (𝓝 0) →
+      ∀ {α : Type*} (density : ℕ → α → ℝ → ℝ) (keep : ℕ → α → ℝ → Prop)
+        (p₀ p₁ : ℝ),
+        (∀ᶠ k : ℕ in atTop, ∃ x : α, ∃ p ∈ Set.Icc p₀ p₁,
+          density k x p ≤ (2 * (C₁ + 1) / (4 * ((n * m : ℕ) : ℝ) * ε)) *
+            (Brough + ((2 * n * m : ℕ) : ℝ) * G * 4 * a ^ (1 / 4 : ℝ) + R k) ∧
+              keep k x p) →
+        ∀ᶠ k : ℕ in atTop, ∃ x : α, ∃ p ∈ Set.Icc p₀ p₁,
+          density k x p ≤ δ ∧ keep k x p := by
   let Cr := 6 * Ce + 13 + 6 * Real.log q
   let C := 2 * (C₁ + 1) * (Cr + 2 * Ct)
   have hlq : 0 ≤ Real.log (q : ℝ) := Real.log_nonneg (by exact_mod_cast hq)
   have hCr : 0 < Cr := by dsimp only [Cr]; positivity
   have hC0 : 0 < C := by dsimp only [C]; positivity
-  obtain ⟨_, hscale⟩ := eventually_scaleFacts F
-  obtain ⟨N, hN⟩ := eventually_atTop.mp
-    (hscale.and (eventually_le_natCast_rpow (F.kappa_pos.trans F.kappa_lt_mu) 2))
-  refine ⟨4 * C, by positivity, N, (hN N le_rfl).1.two_le_n, ?_⟩
-  intro n hn L m K D a ε e he δ St logd z Bsh G hz hmass hSt hlogd hBsh hG
+  have hf := scaleFacts_of_scaleFactsThreshold_le F hthr
+  simp only [ScannerExponents.scaleFactsThreshold, max_le_iff] at hthr
+  have hmu := Real.le_natCast_rpow_of_natRpowThreshold_le
+    (F.kappa_pos.trans F.kappa_lt_mu) hthr.2.1
+  rw [show roughSelectedDensityCoefficient q Ce C₁ Ct = 4 * C from rfl]
+  intro L m K D a ε e he δ St logd z Bsh G hz hmass hSt hlogd hBsh hG
     Brough R hR α density keep p₀ p₁ hselected
-  have hf := (hN n hn).1
   have hn2 := hf.two_le_n
   have hn1 : (1 : ℝ) ≤ n := by exact_mod_cast (show 1 ≤ n by omega)
   have hnpos : (0 : ℝ) < n := zero_lt_one.trans_le hn1
@@ -89,7 +93,7 @@ theorem ScannerExponents.exists_rough_selectedDensity_principal
   have hrough : Brough ≤ Cr * 4 * (n : ℝ) ^ (1 + e) :=
     roughBudget_le_source_power hn2 hq he0 hCe (by norm_num) hf.L_le_n
       hf.one_le_D hDpower hz hmass hSt hlogd hBsh
-  have hfloor : (n : ℝ) ^ F.mu / 2 ≤ m := half_le_floor (hN n hn).2
+  have hfloor : (n : ℝ) ^ F.mu / 2 ≤ m := half_le_floor hmu
   have hquot : (n : ℝ) ^ e / (m : ℝ) ≤ 2 * (n : ℝ) ^ (e - F.mu) := by
     rw [Real.rpow_sub hnpos, div_le_iff₀ hmr]
     have hpow : 0 ≤ (n : ℝ) ^ e / (n : ℝ) ^ F.mu := by positivity
@@ -125,5 +129,42 @@ theorem ScannerExponents.exists_rough_selectedDensity_principal
   change density k x p ≤ C * ((n : ℝ) ^ e / (m : ℝ) +
     a ^ (1 / 4 : ℝ) * Real.log (n : ℝ) ^ Cl) / ε + coeff * R k at hbound
   linarith
+
+/-- The actual rough selection numerator gives the bootstrap principal density,
+with no sharp-margin condition. The current exponent is only required to
+control the fixed separation exponent. Source: `08-scanner.tex`, lines 480--490
+and 731--755. -/
+theorem ScannerExponents.exists_rough_selectedDensity_principal
+    (F : ScannerExponents) {q : ℕ} (hq : 1 ≤ q) (Ce C₁ Ct Cl : ℝ)
+    (hCe : 0 ≤ Ce) (hC : 0 < C₁) (hCt : 0 ≤ Ct) :
+    ∃ Cδ : ℝ, 0 < Cδ ∧ ∃ N : ℕ, 2 ≤ N ∧ ∀ n : ℕ, N ≤ n →
+      let L := F.L n
+      let m := F.m n
+      let K := F.K n
+      let D := F.D n
+      let a := 4 / (K : ℝ)
+      let ε := (n : ℝ) ^ (-F.nu)
+      ∀ e : ℝ, F.kappa ≤ e →
+      let δ := Cδ * ε⁻¹ *
+        ((n : ℝ) ^ (e - F.mu) + a ^ (1 / 4 : ℝ) * Real.log (n : ℝ) ^ Cl)
+      ∀ St logd z Bsh G : ℝ, 0 < z → 1 - (n : ℝ) ^ (-100 : ℝ) ≤ z →
+        St ≤ Ce * (n : ℝ) ^ (1 + e) + (n : ℝ) ^ (-247 : ℝ) →
+        |logd - St| ≤ (n : ℝ) ^ (3 / 5 : ℝ) - Real.log z →
+        Bsh ≤ Ce * ((n : ℝ) * (L : ℝ) ^ e + n) + (n : ℝ) ^ (-247 : ℝ) →
+        G ≤ Ct * Real.log (n : ℝ) ^ Cl →
+        let Brough := 2 * logd - Real.log z + 4 *
+          (Bsh / z + (1 + 3 * (n : ℝ) * D * Real.log q))
+        ∀ R : ℕ → ℝ, Tendsto R atTop (𝓝 0) →
+        ∀ {α : Type*} (density : ℕ → α → ℝ → ℝ) (keep : ℕ → α → ℝ → Prop)
+          (p₀ p₁ : ℝ),
+          (∀ᶠ k : ℕ in atTop, ∃ x : α, ∃ p ∈ Set.Icc p₀ p₁,
+            density k x p ≤ (2 * (C₁ + 1) / (4 * ((n * m : ℕ) : ℝ) * ε)) *
+              (Brough + ((2 * n * m : ℕ) : ℝ) * G * 4 * a ^ (1 / 4 : ℝ) + R k) ∧
+                keep k x p) →
+          ∀ᶠ k : ℕ in atTop, ∃ x : α, ∃ p ∈ Set.Icc p₀ p₁,
+            density k x p ≤ δ ∧ keep k x p :=
+  ⟨_, by unfold roughSelectedDensityCoefficient; positivity, _,
+    (scaleFacts_of_scaleFactsThreshold_le F le_rfl).two_le_n,
+    fun _ => F.rough_selectedDensity_principal_of_threshold_le hq Ce C₁ Ct Cl hCe hC hCt⟩
 
 end TNLean.PEPS.AreaLaw.Scan

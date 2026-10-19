@@ -78,10 +78,16 @@
     else i.status = "blocked";
   }
   const leaves = D.issues.filter(i => i.stream);
+  // Work delivered without an issue (such as a result proved before its campaign started) is
+  // cited by its pull request of the primary repository; issue and pull-request numbers never collide.
+  const prOfNum = new Map(D.prs.filter(p => p.repo === PRIMARY.name).map(p => [p.number, p]));
+  const PR_STATUS = { merged: "done", review: "review", draft: "draft", closed: null };
+  const workStatus = n => byNum.has(n) ? byNum.get(n).status : prOfNum.has(n) ? PR_STATUS[prOfNum.get(n).kind] : null;
+  const workState = n => byNum.has(n) ? byNum.get(n).state : prOfNum.has(n) ? (prOfNum.get(n).kind === "merged" ? "CLOSED" : "OPEN") : null;
   /** Least advanced status among the issues; a result or stage with no collected issue is untracked, never done. */
   const leastStatus = nums => {
-    const known = nums.map(n => byNum.get(n)).filter(Boolean);
-    return known.length ? known.reduce((a, i) => RANK[i.status] < RANK[a] ? i.status : a, "done") : "untracked";
+    const known = nums.map(workStatus).filter(Boolean);
+    return known.length ? known.reduce((a, s) => RANK[s] < RANK[a] ? s : a, "done") : "untracked";
   };
   /** Open gap entries, other than conventions, whose result field begins with this paper result, as "Lemma 8.2, ...". */
   const gapsOf = r => (((D.gaps || {}).entries || []).filter(g => g.paper === r.paper && (g.status || "open") === "open" && g.kind !== "convention"
@@ -179,16 +185,24 @@
   for (const card of document.querySelectorAll(".thm[data-target]")) {
     const n = +card.dataset.target, target = byNum.get(n);
     const dl = card.querySelector(".tdl");
+    const pr = !target && prOfNum.get(n);
+    if (pr && dl) {
+      // A theorem delivered by one pull request has no prerequisites to trace.
+      dl.append(el("dt", { text: "Proved in Lean" }), el("dd", { text: pr.kind === "merged" ? "Yes" : "Not yet" }),
+        el("dt", { text: "Pull request" }), el("dd", {}, prChip(pr)));
+      const trace = card.querySelector(".trace");
+      if (trace) trace.remove();
+    }
     if (!target || !dl) continue;
     const all = [...[...closure(n, preds)].map(k => byNum.get(k)), target];
     dl.before(meter(all));
-    dl.append(
+    dl.append(...[
       el("dt", { text: "Proved in Lean" }), el("dd", { text: target.state === "CLOSED" ? "Yes" : "Not yet" }),
       el("dt", { text: "Prerequisites" }), el("dd", { text: `${all.length} issues: ${countLine(all)}` }),
       el("dt", { text: "Longest open chain" }), el("dd", { text: `${openChain(n).length} issues in sequence` }),
       statementPR ? el("dt", { text: "Lean statement" }) : null,
       statementPR ? el("dd", {}, prChip(statementPR), ` ${statementPR.kind === "merged" ? "merged" : statementPR.kind === "draft" ? "is a draft" : "is in review"}${statementPR.attention ? " and needs a fix" : ""}`) : null
-    );
+    ].filter(Boolean));
     const trace = card.querySelector(".trace");
     if (trace) trace.addEventListener("click", () => { $("maint").open = true; select(n); $("map").scrollIntoView({ behavior: "smooth", block: "center" }); });
   }
@@ -252,12 +266,20 @@
     return a;
   };
   // The proof stage that owns an issue, for placing a gap or a badge in the walkthrough.
+  const stageAt = (route, idx) => ({ route, idx, stage: route.stages[idx], anchor: `stage-${route.id}-${idx + 1}` });
   const stageOf = n => {
     for (const route of C.routes) {
       const idx = route.stages.findIndex(st => st.issues.includes(n));
-      if (idx >= 0) return { route, idx, stage: route.stages[idx], anchor: `stage-${route.id}-${idx + 1}` };
+      if (idx >= 0) return stageAt(route, idx);
     }
     return null;
+  };
+  // A gap entry sits at the stage it names as `stage` ("routeId:n"), else at the stage owning its issue.
+  const gapStage = g => {
+    const [id, k] = (g.stage || "").split(":");
+    const route = g.stage && C.routes.find(r => r.id === id);
+    const idx = route ? +k - 1 : -1;
+    return route && route.stages[idx] ? stageAt(route, idx) : stageOf(g.issue);
   };
   // Notes in different repositories may share a file name, so the anchor names the repository too.
   const gapAnchor = g => `gap-${g.repo || PRIMARY.name}-${g.id.split("/").pop().replace(/\.tex$/, "")}`;
@@ -270,7 +292,7 @@
     ? `${plural(openCount("error"), "open error")} and ${plural(openCount("missing-step"), "open missing step")} in the papers.`
     : pending.length
       ? `No open errors or missing steps among the classified notes. ${plural(pending.length, "new note")} still to be classified.`
-      : "No open errors or missing steps in either paper.";
+      : `No open errors or missing steps in ${Object.keys(C.papers).length === 1 ? "the source" : "either paper"}.`;
   // Gap entries as the page shows them: open ones first, then by kind.
   const GAP_ORDER = { error: 0, "missing-step": 1, narrower: 2, "local-correction": 3, convention: 4 };
   const gapsInOrder = () => [...G.entries].sort((a, b) => (isOpenGap(b) - isOpenGap(a)) || GAP_ORDER[a.kind] - GAP_ORDER[b.kind]);
@@ -331,7 +353,7 @@
       const [statusName, statusCls] = GAP_STATUS[g.status || "open"];
       // Each entry is read on its own: where it sits in the proof, a one-line verdict, what the
       // step does, then the claim, the finding, the risk and the next step.
-      const at = stageOf(g.issue);
+      const at = gapStage(g);
       const place = at ? el("a", { href: "#" + at.anchor, text: `${at.route.paper ? (C.papers[at.route.paper] || {}).name : "Shared foundations"}, stage ${at.idx + 1}: ${at.stage.title}` })
         : el("span", { text: (C.papers[g.paper] || {}).name || "" });
       list.append(el("article", { class: "gap", id: gapAnchor(g) },
@@ -371,8 +393,8 @@
 
   /* ---------- one-line status under the lede ---------- */
   (function renderStatus() {
-    const targets = [...document.querySelectorAll(".thm[data-target]")].map(c => byNum.get(+c.dataset.target)).filter(Boolean);
-    const provedT = targets.filter(t => t.state === "CLOSED").length;
+    const targets = [...document.querySelectorAll(".thm[data-target]")].map(c => workState(+c.dataset.target)).filter(Boolean);
+    const provedT = targets.filter(t => t === "CLOSED").length;
     const theorems = !targets.length ? ""
       : provedT === targets.length ? (targets.length === 1 ? "The main theorem is proved in Lean." : "Both main theorems are proved in Lean.")
       : provedT === 0 ? (targets.length === 1 ? "The main theorem is not yet proved in Lean." : targets.length === 2 ? "Neither main theorem is proved in Lean yet." : "No main theorem is proved in Lean yet.")
@@ -392,16 +414,21 @@
         container));
       route.stages.forEach((st, idx) => {
         const items = st.issues.map(n => byNum.get(n)).filter(Boolean);
+        const direct = st.issues.filter(n => !byNum.has(n)).map(n => prOfNum.get(n)).filter(Boolean);
         const status = leastStatus(st.issues);
-        const furthest = items.length ? items.reduce((a, i) => RANK[i.status] > RANK[a] ? i.status : a, "blocked") : "untracked";
-        const results = D.results.filter(r => r.paper === route.paper && !assigned.has(r.paper + r.label) && r.issues.some(n => st.issues.includes(n)));
-        results.forEach(r => assigned.add(r.paper + r.label));
-        const sections = [...new Set(results.map(r => +r.num.split(".")[0]))].sort((a, b) => a - b);
-        const prs = [...new Set(items.flatMap(i => i.prs))];
+        const statuses = st.issues.map(workStatus).filter(Boolean);
+        const furthest = statuses.length ? statuses.reduce((a, s) => RANK[s] > RANK[a] ? s : a, "blocked") : "untracked";
+        // A stage takes the results that share an issue with it, restricted to its `results`
+        // labels when it lists them; each result row is shown once.
+        const results = D.results.filter(r => r.paper === route.paper && !assigned.has(r) && r.issues.some(n => st.issues.includes(n))
+          && (!st.results || st.results.includes(r.label)));
+        results.forEach(r => assigned.add(r));
+        const sections = [...new Set(results.map(r => +r.num.split(".")[0]).filter(Number.isFinite))].sort((a, b) => a - b);
+        const prs = [...new Set([...items.flatMap(i => i.prs), ...direct])];
         // Dependency bumps and CI changes are not part of the stage's mathematics.
         const landed = prs.filter(p => p.kind === "merged" && !ROUTINE.test(p.title)).sort((a, b) => new Date(a.mergedAt) - new Date(b.mergedAt));
         const inflight = prs.filter(p => p.open);
-        const gapBadges = G.entries.filter(g => st.issues.includes(g.issue) && g.kind !== "convention" && isOpenGap(g))
+        const gapBadges = G.entries.filter(g => (gapStage(g) || {}).stage === st && g.kind !== "convention" && isOpenGap(g))
           .map(g => { const a = el("a", { href: "#" + gapAnchor(g), class: "pill k-" + g.kind, text: `${GAP_KIND[g.kind][0]}: ${g.result.split(",")[0]}` }); a.title = (g.summary || g.title).replace(/<[^>]+>|\{\{(tn|cite):[^}]+\}\}/g, ""); return a; });
 
         const resultList = el("ul", { class: "results" }, ...results.map(r => {
@@ -460,6 +487,7 @@
                 el("div", { class: "box" }, el("h4", { text: `Landed (${landed.length})` }), landedList)),
               el("div", { class: "foot" }, el("span", { text: `${items.length} issue${items.length === 1 ? "" : "s"}:` }),
                 ...items.map(i => { const a = issueRef(i.number); a.classList.add("chip", "st-" + i.status); return a; }),
+                ...direct.map(prChip),
                 inflight.length ? el("span", { text: `· ${inflight.length} PR${inflight.length === 1 ? "" : "s"} open` }) : null)))));
       });
     }

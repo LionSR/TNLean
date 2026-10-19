@@ -36,6 +36,8 @@ open Matrix Set Filter Topology MeasureTheory PermutationRepresentation Entropy
 
 noncomputable section
 
+open TNLean.Lattice
+
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
 
 open TensorPower TensorPower.ReplicaTransport
@@ -136,61 +138,122 @@ theorem actualRoundData_isAdmissible (hm : 0 < S.m) (hM : 0 < S.M)
 
 end Family
 
-/-- A single nonnegative error pair works for every actual fill and charge round.
-The logarithmic bound holds at every replica count, including zero. The energy
-hypothesis occurs only within its own clause; the integrated entropy estimate includes
-both endpoints. All physical support, commutation and dimension premises are derived. -/
-theorem actualRounds_transport_domainGraph :
-    ∃ c₀ Cent eent Cen een : ℝ, 0 < c₀ ∧
-      ∀ {Λ T : Finset (ℤ × ℤ)} {q R : ℕ} {J Δ : ℝ}
-        [NeZero q] [LinearOrder (AdmissibleSupport Λ R)]
-        (aux : Bool → ℕ) [∀ b, NeZero (aux b)]
-        (h : LocalHamiltonian Λ q R J) (Ω : StateSpace Λ q)
-        (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (hT : T.Nonempty),
-        S.graph = domainGraph Λ →
-        S.depth = (fun x => ambientDepth T hT x.val) →
-        (∀ i, S.anchor i ∈ i.val) → 0 < Δ → ‖Ω‖ = 1 →
-        ∀ {L : ℕ} (hn : 0 < S.n), S.r₀ ≤ S.D →
-        ∀ (hDpos : 1 ≤ S.D) (hD : 4 * S.D ≤ S.m),
-        8 * S.K * S.m ≤ L → ∀ (hC : 0 < S.C₁),
-        (∀ d : ℕ, 1 ≤ d → d ≤ L →
-          (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n) →
-        (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
-          ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z) →
-        ∀ {a : ℝ}, 0 < a → a * transportLogDimBound q S.r₀ ≤ c₀ →
-        let hm : 0 < S.m := by omega
-        let hM : 0 < S.M := chargeSlotCount_pos hC (Nat.succ_le_iff.mpr hn) hDpos
-        let n := augmentedDimensions (V := Site Λ) q aux
-        let D := S.actualRoundData hm hM
-        let E := S.actualEnergyTerms h Ω Δ L aux
-        let ℓ := transportLogDimBound q S.r₀
-        let Hbar := fun k => copyMean n k
-          (augmentOperator q aux (∑ i, S.truncatedEnergyTerm h Ω Δ L i))
-        ∃ (β rem : ℕ → ℝ) (Cβ : ℝ), 0 ≤ Cβ ∧
-          (∀ k, 0 ≤ β k) ∧ (∀ k, 0 ≤ rem k) ∧
-          (∀ k, β k ≤ Cβ * Real.log (k + 2)) ∧ Tendsto rem atTop (𝓝 0) ∧
-          ∀ (j : Fin (2 * S.n * S.m)) (k : ℕ) (pre : Config k (fun v => Fin (n v)) → ℂ),
-            pre ∈ symmetricSubspace k (fun v => Fin (n v)) → pre ≠ 0 →
-            (∀ p ∈ Ioo (0 : ℝ) 1,
-              HasDerivAt
-                (fun p' => -Real.log (Transport.filteredNormSq ((D j).rootPath n (a / 2) k p') pre))
-                ((D j).exactDerivative n (a / 2) k pre p) p ∧
-              (k : ℝ) * a * (D j).entropyGain n (a / 2) k pre p -
-                  Cent * k * a * S.K * a ^ (1 / 4 : ℝ) * ℓ ^ eent - β k ≤
-                (D j).exactDerivative n (a / 2) k pre p ∧
-              ∀ E₀ : ℝ, Hbar k *ᵥ pre = (E₀ : ℂ) • pre →
-                let v := Transport.filteredVector ((D j).rootPath n (a / 2) k p) pre
-                (star v ⬝ᵥ (Hbar k *ᵥ v)).re ≤
-                  2 * E₀ + Cen * a ^ 2 * ℓ ^ een *
-                    (D j).energyError E (a / 2) k pre p + rem k) ∧
-            ∀ p₀ p₁ : ℝ, 0 ≤ p₀ → p₀ ≤ p₁ → p₁ ≤ 1 →
-              ∫ p in p₀..p₁, ((k : ℝ) * a * (D j).entropyGain n (a / 2) k pre p -
-                  Cent * k * a * S.K * a ^ (1 / 4 : ℝ) * ℓ ^ eent - β k) ≤
-                Real.log (Transport.filteredNormSq ((D j).rootPath n (a / 2) k p₀) pre) -
-                  Real.log (Transport.filteredNormSq ((D j).rootPath n (a / 2) k p₁) pre) := by
+/-- The conclusion of the finite-family transport theorem
+`TensorPower.ReplicaTransport.transport_finite_family` at the constants `c₀, C_ent, e_ent, C_en,
+e_en`, with every type in the lowest universe: transport errors `C_ent k a K a^{1/4} ℓ^{e_ent}`
+and `C_en a² ℓ^{e_en}` whenever `a ℓ ≤ c₀`. `exists_finiteFamilyTransportBound` supplies such
+constants with `0 < c₀`, chosen before any physical data. Source: Proposition 7.4,
+`06-transport.tex`, lines 377–434, applied in `08-scanner.tex`, lines 83–154. -/
+def FiniteFamilyTransportBound (c₀ Cent eent Cen een : ℝ) : Prop :=
+  ∀ {V : Type} [Fintype V] [DecidableEq V] (n : V → ℕ) [∀ v, NeZero (n v)]
+    {K : ℕ} {J : Type} [Fintype J] {H : J → Type}
+    [∀ j, Fintype (H j)] [∀ j, DecidableEq (H j)] {C : (j : J) → H j → Type}
+    [∀ j h, Fintype (C j h)] [∀ j h, DecidableEq (C j h)]
+    (D : ∀ j, TransportData V K (H j) (C j))
+    {ι : Type} [Fintype ι] (E : EnergyTerms V n ι),
+    (∀ j, (D j).IsAdmissible) → (∀ i, 0 ≤ E.term i) → (∀ i, E.term i ≤ 1) →
+    (∀ i, IsSupportedOn (E.term i) (E.support i)) →
+    (∀ j, (D j).SupportCompatible E) →
+    ∀ {a ℓ : ℝ}, 0 < a → 1 ≤ ℓ → a * ℓ ≤ c₀ →
+    (∀ j k, (D j).CrossBandCommute n (a / 2) k) →
+    (∀ j h c g, logDim n ((D j).move h c g).subsystem ≤ ℓ) →
+    (∀ j i, ((D j).splitLeaves E i).Nonempty → logDim n (E.support i) ≤ ℓ) →
+    ∃ (β r : ℕ → ℝ) (Cβ : ℝ), 0 ≤ Cβ ∧
+      (∀ k, 0 ≤ β k) ∧ (∀ k, 0 ≤ r k) ∧
+      (∀ k, β k ≤ Cβ * Real.log (k + 2)) ∧ Tendsto r atTop (𝓝 0) ∧
+      ∀ (j : J) (k : ℕ) (pre : Config k (fun v => Fin (n v)) → ℂ),
+        pre ∈ symmetricSubspace k (fun v => Fin (n v)) → pre ≠ 0 →
+        (∀ p ∈ Ioo (0 : ℝ) 1,
+          HasDerivAt
+            (fun q => -Real.log
+              (Transport.filteredNormSq ((D j).rootPath n (a / 2) k q) pre))
+            ((D j).exactDerivative n (a / 2) k pre p) p ∧
+          (k : ℝ) * a * (D j).entropyGain n (a / 2) k pre p -
+              Cent * k * a * K * a ^ (1 / 4 : ℝ) * ℓ ^ eent - β k ≤
+            (D j).exactDerivative n (a / 2) k pre p ∧
+          ∀ E₀ : ℝ, E.replicaEnergy k *ᵥ pre = (E₀ : ℂ) • pre →
+            let v := Transport.filteredVector ((D j).rootPath n (a / 2) k p) pre
+            (star v ⬝ᵥ (E.replicaEnergy k *ᵥ v)).re ≤
+              2 * E₀ + Cen * a ^ 2 * ℓ ^ een *
+                (D j).energyError E (a / 2) k pre p + r k) ∧
+        ∀ p₀ p₁ : ℝ, 0 ≤ p₀ → p₀ ≤ p₁ → p₁ ≤ 1 →
+          ∫ p in p₀..p₁, ((k : ℝ) * a * (D j).entropyGain n (a / 2) k pre p -
+              Cent * k * a * K * a ^ (1 / 4 : ℝ) * ℓ ^ eent - β k) ≤
+            Real.log (Transport.filteredNormSq ((D j).rootPath n (a / 2) k p₀) pre) -
+              Real.log (Transport.filteredNormSq ((D j).rootPath n (a / 2) k p₁) pre)
+
+/-- QICLean's finite-family transport theorem supplies constants with `0 < c₀` satisfying
+`FiniteFamilyTransportBound`. Source: Proposition 7.4, `06-transport.tex`, lines 377–434,
+applied in `08-scanner.tex`, lines 83–154. -/
+theorem exists_finiteFamilyTransportBound :
+    ∃ c₀ Cent eent Cen een : ℝ, 0 < c₀ ∧ FiniteFamilyTransportBound c₀ Cent eent Cen een :=
+  transport_finite_family
+
+/-- Recover an existential statement over the truncation constant `Ctr` and the transport
+constants from its form at every choice of transport constants satisfying
+`FiniteFamilyTransportBound`, which leaves only `Ctr` existential. Source: `08-scanner.tex`,
+lines 83–154. -/
+theorem exists_of_finiteFamilyTransportBound {P : ℝ → ℝ → ℝ → ℝ → ℝ → ℝ → Prop}
+    (h : ∀ ct Cent eent Cen een : ℝ, 0 < ct → FiniteFamilyTransportBound ct Cent eent Cen een →
+      ∃ Ctr : ℝ, 0 < Ctr ∧ P Ctr ct Cent eent Cen een) :
+    ∃ Ctr ct Cent eent Cen een : ℝ, 0 < Ctr ∧ 0 < ct ∧ P Ctr ct Cent eent Cen een := by
+  obtain ⟨ct, Cent, eent, Cen, een, hct, htransport⟩ := exists_finiteFamilyTransportBound
+  obtain ⟨Ctr, hCtr, hP⟩ := h ct Cent eent Cen een hct htransport
+  exact ⟨Ctr, ct, Cent, eent, Cen, een, hCtr, hct, hP⟩
+
+/-- A single nonnegative error pair works for every actual fill and charge round, at any
+constants `c₀, C_ent, e_ent, C_en, e_en` satisfying the finite-family transport bound, such as
+QICLean's universal transport constants, which depend on none of `q, R, J, Δ`. Source:
+`08-scanner.tex`, lines 83–154. -/
+theorem actualRounds_transport_domainGraph_of_finiteFamilyTransportBound
+    {c₀ Cent eent Cen een : ℝ} (htransport : FiniteFamilyTransportBound c₀ Cent eent Cen een) :
+    ∀ {Λ T : Finset (ℤ × ℤ)} {q R : ℕ} {J Δ : ℝ}
+      [NeZero q] [LinearOrder (AdmissibleSupport Λ R)]
+      (aux : Bool → ℕ) [∀ b, NeZero (aux b)]
+      (h : LocalHamiltonian Λ q R J) (Ω : StateSpace Λ q)
+      (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (hT : T.Nonempty),
+      S.graph = domainGraph Λ →
+      S.depth = (fun x => ambientDepth T hT x.val) →
+      (∀ i, S.anchor i ∈ i.val) → 0 < Δ → ‖Ω‖ = 1 →
+      ∀ {L : ℕ} (hn : 0 < S.n), S.r₀ ≤ S.D →
+      ∀ (hDpos : 1 ≤ S.D) (hD : 4 * S.D ≤ S.m),
+      8 * S.K * S.m ≤ L → ∀ (hC : 0 < S.C₁),
+      (∀ d : ℕ, 1 ≤ d → d ≤ L →
+        (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n) →
+      (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+        ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z) →
+      ∀ {a : ℝ}, 0 < a → a * transportLogDimBound q S.r₀ ≤ c₀ →
+      let hm : 0 < S.m := by omega
+      let hM : 0 < S.M := chargeSlotCount_pos hC (Nat.succ_le_iff.mpr hn) hDpos
+      let n := augmentedDimensions (V := Site Λ) q aux
+      let D := S.actualRoundData hm hM
+      let E := S.actualEnergyTerms h Ω Δ L aux
+      let ℓ := transportLogDimBound q S.r₀
+      let Hbar := fun k => copyMean n k
+        (augmentOperator q aux (∑ i, S.truncatedEnergyTerm h Ω Δ L i))
+      ∃ (β rem : ℕ → ℝ) (Cβ : ℝ), 0 ≤ Cβ ∧
+        (∀ k, 0 ≤ β k) ∧ (∀ k, 0 ≤ rem k) ∧
+        (∀ k, β k ≤ Cβ * Real.log (k + 2)) ∧ Tendsto rem atTop (𝓝 0) ∧
+        ∀ (j : Fin (2 * S.n * S.m)) (k : ℕ) (pre : Config k (fun v => Fin (n v)) → ℂ),
+          pre ∈ symmetricSubspace k (fun v => Fin (n v)) → pre ≠ 0 →
+          (∀ p ∈ Ioo (0 : ℝ) 1,
+            HasDerivAt
+              (fun p' => -Real.log (Transport.filteredNormSq ((D j).rootPath n (a / 2) k p') pre))
+              ((D j).exactDerivative n (a / 2) k pre p) p ∧
+            (k : ℝ) * a * (D j).entropyGain n (a / 2) k pre p -
+                Cent * k * a * S.K * a ^ (1 / 4 : ℝ) * ℓ ^ eent - β k ≤
+              (D j).exactDerivative n (a / 2) k pre p ∧
+            ∀ E₀ : ℝ, Hbar k *ᵥ pre = (E₀ : ℂ) • pre →
+              let v := Transport.filteredVector ((D j).rootPath n (a / 2) k p) pre
+              (star v ⬝ᵥ (Hbar k *ᵥ v)).re ≤
+                2 * E₀ + Cen * a ^ 2 * ℓ ^ een *
+                  (D j).energyError E (a / 2) k pre p + rem k) ∧
+          ∀ p₀ p₁ : ℝ, 0 ≤ p₀ → p₀ ≤ p₁ → p₁ ≤ 1 →
+            ∫ p in p₀..p₁, ((k : ℝ) * a * (D j).entropyGain n (a / 2) k pre p -
+                Cent * k * a * S.K * a ^ (1 / 4 : ℝ) * ℓ ^ eent - β k) ≤
+              Real.log (Transport.filteredNormSq ((D j).rootPath n (a / 2) k p₀) pre) -
+                Real.log (Transport.filteredNormSq ((D j).rootPath n (a / 2) k p₁) pre) := by
   classical
-  obtain ⟨c₀, Cent, eent, Cen, een, hc₀, htransport⟩ := transport_finite_family
-  refine ⟨c₀, Cent, eent, Cen, een, hc₀, ?_⟩
   intro Λ T q R J Δ _ _ aux _ h Ω S hT hgraph hdepth hanchor hΔ hΩ
     L hn hr hDpos hD hL hC hrows hclear a ha haℓ
   let hm : 0 < S.m := by omega
@@ -263,5 +326,61 @@ theorem actualRounds_transport_domainGraph :
     S.replicaEnergy_actualEnergyTerms h Ω Δ L aux k
   refine ⟨β, rem, Cβ, hCβ, hβ0, hrem0, hβ, hrem, ?_⟩
   simpa only [henergy] using hresult
+
+/-- A single nonnegative error pair works for every actual fill and charge round.
+The logarithmic bound holds at every replica count, including zero. The energy
+hypothesis occurs only within its own clause; the integrated entropy estimate includes
+both endpoints. All physical support, commutation and dimension premises are derived. -/
+theorem actualRounds_transport_domainGraph :
+    ∃ c₀ Cent eent Cen een : ℝ, 0 < c₀ ∧
+      ∀ {Λ T : Finset (ℤ × ℤ)} {q R : ℕ} {J Δ : ℝ}
+        [NeZero q] [LinearOrder (AdmissibleSupport Λ R)]
+        (aux : Bool → ℕ) [∀ b, NeZero (aux b)]
+        (h : LocalHamiltonian Λ q R J) (Ω : StateSpace Λ q)
+        (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (hT : T.Nonempty),
+        S.graph = domainGraph Λ →
+        S.depth = (fun x => ambientDepth T hT x.val) →
+        (∀ i, S.anchor i ∈ i.val) → 0 < Δ → ‖Ω‖ = 1 →
+        ∀ {L : ℕ} (hn : 0 < S.n), S.r₀ ≤ S.D →
+        ∀ (hDpos : 1 ≤ S.D) (hD : 4 * S.D ≤ S.m),
+        8 * S.K * S.m ≤ L → ∀ (hC : 0 < S.C₁),
+        (∀ d : ℕ, 1 ≤ d → d ≤ L →
+          (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n) →
+        (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+          ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z) →
+        ∀ {a : ℝ}, 0 < a → a * transportLogDimBound q S.r₀ ≤ c₀ →
+        let hm : 0 < S.m := by omega
+        let hM : 0 < S.M := chargeSlotCount_pos hC (Nat.succ_le_iff.mpr hn) hDpos
+        let n := augmentedDimensions (V := Site Λ) q aux
+        let D := S.actualRoundData hm hM
+        let E := S.actualEnergyTerms h Ω Δ L aux
+        let ℓ := transportLogDimBound q S.r₀
+        let Hbar := fun k => copyMean n k
+          (augmentOperator q aux (∑ i, S.truncatedEnergyTerm h Ω Δ L i))
+        ∃ (β rem : ℕ → ℝ) (Cβ : ℝ), 0 ≤ Cβ ∧
+          (∀ k, 0 ≤ β k) ∧ (∀ k, 0 ≤ rem k) ∧
+          (∀ k, β k ≤ Cβ * Real.log (k + 2)) ∧ Tendsto rem atTop (𝓝 0) ∧
+          ∀ (j : Fin (2 * S.n * S.m)) (k : ℕ) (pre : Config k (fun v => Fin (n v)) → ℂ),
+            pre ∈ symmetricSubspace k (fun v => Fin (n v)) → pre ≠ 0 →
+            (∀ p ∈ Ioo (0 : ℝ) 1,
+              HasDerivAt
+                (fun p' => -Real.log (Transport.filteredNormSq ((D j).rootPath n (a / 2) k p') pre))
+                ((D j).exactDerivative n (a / 2) k pre p) p ∧
+              (k : ℝ) * a * (D j).entropyGain n (a / 2) k pre p -
+                  Cent * k * a * S.K * a ^ (1 / 4 : ℝ) * ℓ ^ eent - β k ≤
+                (D j).exactDerivative n (a / 2) k pre p ∧
+              ∀ E₀ : ℝ, Hbar k *ᵥ pre = (E₀ : ℂ) • pre →
+                let v := Transport.filteredVector ((D j).rootPath n (a / 2) k p) pre
+                (star v ⬝ᵥ (Hbar k *ᵥ v)).re ≤
+                  2 * E₀ + Cen * a ^ 2 * ℓ ^ een *
+                    (D j).energyError E (a / 2) k pre p + rem k) ∧
+            ∀ p₀ p₁ : ℝ, 0 ≤ p₀ → p₀ ≤ p₁ → p₁ ≤ 1 →
+              ∫ p in p₀..p₁, ((k : ℝ) * a * (D j).entropyGain n (a / 2) k pre p -
+                  Cent * k * a * S.K * a ^ (1 / 4 : ℝ) * ℓ ^ eent - β k) ≤
+                Real.log (Transport.filteredNormSq ((D j).rootPath n (a / 2) k p₀) pre) -
+                  Real.log (Transport.filteredNormSq ((D j).rootPath n (a / 2) k p₁) pre) := by
+  obtain ⟨c₀, Cent, eent, Cen, een, hc₀, htransport⟩ := exists_finiteFamilyTransportBound
+  exact ⟨c₀, Cent, eent, Cen, een, hc₀,
+    actualRounds_transport_domainGraph_of_finiteFamilyTransportBound htransport⟩
 
 end TNLean.PEPS.AreaLaw.Scan.CollarScan

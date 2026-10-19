@@ -36,6 +36,8 @@ identifies the eigenspace of `H'` at `e₀` with the line spanned by `Ω₀`.
 
 open scoped Matrix Matrix.Norms.L2Operator MatrixOrder ComplexOrder
 
+universe u
+
 namespace TNLean.PEPS.AreaLaw
 
 open QuantumCircuit
@@ -49,6 +51,71 @@ theorem truncatedConstraint_mem_Icc {q : ℕ} [NeZero q] {ι : Type*} [Fintype �
   split_ifs
   · exact ⟨hk₀, hk₁⟩
   · exact ⟨siteExpectation_nonneg _ hk₀, siteExpectation_le_one _ hk₁⟩
+
+/-- The truncation constant `C₁ = truncationRadiusConstant (C μ K_b A) C₀ c g` of
+Proposition 4.5, with `A = shellSeriesConstant c (1/2)` the constant of the volume-free
+series (`03-quasilocal.tex`, lines 457–485). -/
+noncomputable def finiteSetTruncationConstant (C c g μ Kb C₀ : ℝ) : ℝ :=
+  truncationRadiusConstant (C * μ * Kb * shellSeriesConstant c (1 / 2)) C₀ c g
+
+theorem finiteSetTruncationConstant_pos {C c g μ Kb C₀ : ℝ} (hC : 0 ≤ C) (hc : 0 < c)
+    (hg : 0 < g) (hμ : 0 ≤ μ) (hKb : 0 ≤ Kb) (hC₀ : 0 ≤ C₀) :
+    0 < finiteSetTruncationConstant C c g μ Kb C₀ :=
+  truncationRadiusConstant_pos (mul_nonneg (by positivity) (shellSeriesConstant_nonneg c _)) hC₀
+    hc hg
+
+/-- **Truncation near a finite set, with an explicit constant** (Proposition 4.5,
+`prop:truncation`, first part, `03-quasilocal.tex`, lines 405–433 and 457–505). Every
+conclusion of `exists_finiteSetTruncation` holds with
+`C₁ = finiteSetTruncationConstant C c g μ K_b C₀`. -/
+theorem finiteSetTruncation {C c g μ Kb C₀ : ℝ} (hC : 0 ≤ C) (hc : 0 < c) (hg : 0 < g)
+    (hμ : 0 ≤ μ) (hKb : 0 ≤ Kb) (hC₀ : 0 ≤ C₀) :
+    ∀ {q : ℕ} [NeZero q] {ι : Type*} [Fintype ι] [DecidableEq ι] {κ : Type*} [Fintype κ]
+      (G : SimpleGraph ι) (a : κ → ι) (k : κ → Matrix (ι → Fin q) (ι → Fin q) ℂ)
+      (Ω : EuclideanSpace ℂ (ι → Fin q)), ‖Ω‖ = 1 →
+      (∀ i, 0 ≤ k i ∧ k i ≤ 1 ∧ k i *ᵥ WithLp.ofLp Ω = 0) →
+      ((∑ i, k i) - (g : ℂ) •
+        (1 - Matrix.vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω)))).PosSemidef →
+      (∀ i (l : ℕ), ‖k i - siteExpectation q (graphBall G (a i) l) (k i)‖ ≤
+        C * Real.exp (-(c * (l : ℝ) ^ (1 / 2 : ℝ)))) →
+      (∀ x (d : ℕ), ((graphBall G x d).card : ℝ) ≤ Kb * ((d : ℝ) + 1) ^ 2) →
+      (∀ x, ((Finset.univ.filter fun i => a i = x).card : ℝ) ≤ μ) →
+      ∀ n : ℝ, 2 ≤ n → ∀ S₀ : Finset ι, (S₀.card : ℝ) ≤ C₀ * n ^ 2 →
+      let r₀ := ⌈finiteSetTruncationConstant C c g μ Kb C₀ * Real.log n ^ 2⌉₊
+      let ε := min (n ^ (-1000 : ℝ)) (g / 4)
+      let Ht := ∑ i, truncatedConstraint q G S₀ r₀ (a i) (k i)
+      (∀ i, 0 ≤ truncatedConstraint q G S₀ r₀ (a i) (k i) ∧
+        truncatedConstraint q G S₀ r₀ (a i) (k i) ≤ 1) ∧
+      ‖Ht - ∑ i, k i‖ ≤ ε ∧
+      ∃ (e : ℝ) (Ω₀ : EuclideanSpace ℂ (ι → Fin q)), ‖Ω₀‖ = 1 ∧
+        Ht *ᵥ WithLp.ofLp Ω₀ = (e : ℂ) • WithLp.ofLp Ω₀ ∧ 0 ≤ e ∧ e ≤ ε ∧
+        (Ht - (e : ℂ) • 1 - ((g / 2 : ℝ) : ℂ) •
+          (1 - Matrix.vecMulVec (WithLp.ofLp Ω₀) (star (WithLp.ofLp Ω₀)))).PosSemidef ∧
+        (∃ θ : ℝ, ‖Ω₀ - Complex.exp (θ * Complex.I) • Ω‖ ≤ 2 * Real.sqrt (ε / g)) ∧
+        Matrix.traceDistance (Matrix.vecMulVec (WithLp.ofLp Ω₀) (star (WithLp.ofLp Ω₀)))
+            (Matrix.vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))) ≤
+          Real.sqrt (2 * ε / g) := by
+  set A := shellSeriesConstant c (1 / 2)
+  have hA0 : 0 ≤ A := shellSeriesConstant_nonneg c _
+  have hA := sum_shell_le hc (by norm_num : (0 : ℝ) < 1 / 2)
+  intro q _ ι _ _ κ _ G a k Ω hΩ hk hgap htail hBall hMult n hn S₀ hS₀ r₀ ε Ht
+  have hHt := truncatedConstraint_mem_Icc (q := q) G S₀ r₀
+  have herr : ‖Ht - ∑ i, k i‖ ≤ ε := by
+    refine (norm_sum_truncatedConstraint_sub_le G S₀ a k hC hKb hμ htail hBall hMult hA r₀).trans
+      ?_
+    have := mul_exp_neg_truncationRadiusConstant_le (B := C * μ * Kb * A) (by positivity) hC₀ hc
+      hg hn hS₀
+    calc C * μ * Kb * S₀.card * A * Real.exp (-(c / 2 * (r₀ : ℝ) ^ (1 / 2 : ℝ)))
+        = C * μ * Kb * A * S₀.card * Real.exp (-(c / 2 * (r₀ : ℝ) ^ (1 / 2 : ℝ))) := by ring
+      _ ≤ ε := this
+  refine ⟨fun i => hHt (a i) (hk i).1 (hk i).2.1, herr, ?_⟩
+  have hHtpsd : Ht.PosSemidef := by
+    rw [← Matrix.nonneg_iff_posSemidef]
+    exact Finset.sum_nonneg fun i _ => (hHt (a i) (hk i).1 (hk i).2.1).1
+  have hHFΩ : (∑ i, k i) *ᵥ WithLp.ofLp Ω = 0 := by
+    rw [Matrix.sum_mulVec]; exact Finset.sum_eq_zero fun i _ => (hk i).2.2
+  have hε : ε ≤ g / 4 := min_le_right _ _
+  exact Matrix.exists_posSemidef_gap_of_norm_sub_le hΩ hg hε hgap hHFΩ hHtpsd herr
 
 /-- **Truncation near a finite set** (Proposition 4.5, `prop:truncation`, first part,
 `03-quasilocal.tex`, lines 405–433), for constraints with the conclusions of Proposition 4.3
@@ -89,31 +156,102 @@ theorem exists_finiteSetTruncation {C c g μ Kb C₀ : ℝ} (hC : 0 ≤ C) (hc :
           (∃ θ : ℝ, ‖Ω₀ - Complex.exp (θ * Complex.I) • Ω‖ ≤ 2 * Real.sqrt (ε / g)) ∧
           Matrix.traceDistance (Matrix.vecMulVec (WithLp.ofLp Ω₀) (star (WithLp.ofLp Ω₀)))
               (Matrix.vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))) ≤
-            Real.sqrt (2 * ε / g) := by
-  obtain ⟨A, hA0, hA⟩ := exists_sum_shell_le hc (by norm_num : (0 : ℝ) < 1 / 2)
-  obtain ⟨C₁, hC₁, hrad⟩ := exists_truncationConstant (B := C * μ * Kb * A) (C₀ := C₀)
-    (by positivity) hC₀ hc hg
-  refine ⟨C₁, hC₁, ?_⟩
-  intro q _ ι _ _ κ _ G a k Ω hΩ hk hgap htail hBall hMult n hn S₀ hS₀ r₀ ε Ht
-  have hHt := truncatedConstraint_mem_Icc (q := q) G S₀ r₀
-  have herr : ‖Ht - ∑ i, k i‖ ≤ ε := by
-    refine (norm_sum_truncatedConstraint_sub_le G S₀ a k hC hKb hμ htail hBall hMult hA r₀).trans
-      ?_
-    have := hrad n hn S₀.card (Nat.cast_nonneg _) hS₀
-    calc C * μ * Kb * S₀.card * A * Real.exp (-(c / 2 * (r₀ : ℝ) ^ (1 / 2 : ℝ)))
-        = C * μ * Kb * A * S₀.card * Real.exp (-(c / 2 * (r₀ : ℝ) ^ (1 / 2 : ℝ))) := by ring
-      _ ≤ ε := this
-  refine ⟨fun i => hHt (a i) (hk i).1 (hk i).2.1, herr, ?_⟩
-  have hHtpsd : Ht.PosSemidef := by
-    rw [← Matrix.nonneg_iff_posSemidef]
-    exact Finset.sum_nonneg fun i _ => (hHt (a i) (hk i).1 (hk i).2.1).1
-  have hHFΩ : (∑ i, k i) *ᵥ WithLp.ofLp Ω = 0 := by
-    rw [Matrix.sum_mulVec]; exact Finset.sum_eq_zero fun i _ => (hk i).2.2
-  have hε : ε ≤ g / 4 := min_le_right _ _
-  exact Matrix.exists_posSemidef_gap_of_norm_sub_le hΩ hg hε hgap hHFΩ hHtpsd herr
+            Real.sqrt (2 * ε / g) :=
+  ⟨_, finiteSetTruncationConstant_pos hC hc hg hμ hKb hC₀, finiteSetTruncation hC hc hg hμ hKb hC₀⟩
 
 theorem kernelExponent_one : SpectralFilter.kernelExponent 1 = 1 / 2 := by
   norm_num [SpectralFilter.kernelExponent]
+
+/-- **Truncation near a finite set, from the global gap, with an explicit constant**
+(Proposition 4.5, first part, `03-quasilocal.tex`, lines 405–433 and 457–505, with
+Proposition 4.3 at `p = 1`, lines 220–334). Let `C₃ ≥ 0`, `c₃ > 0` be the filter-locality
+constants of `positiveQuasilocalConstraints_of_locality` at `p = 1`. Then every conclusion of
+`exists_finiteSetTruncation_of_gap` holds with
+`C₁ = finiteSetTruncationConstant C₃ c₃ (Δ / c_*) μ K_b C₀`. Once QICLean provides the named
+filter-locality constants, `htail` is `SpectralFilter.norm_positiveConstraint_sub_map_le`, with
+`C₃ = positiveConstraintLocalityConst 1 Δ J (localizationPrefactor R K_g k_g) (1 / 2)` and
+`c₃ = positiveConstraintLocalityRate 1 Δ (localizationVelocity R v_R b₀) (1 / 2)`. -/
+theorem finiteSetTruncation_of_locality (R vR : ℕ) (b₀ Kg : ℝ) (kg : ℕ)
+    {J Δ Kb μ C₀ C₃ c₃ : ℝ} (hΔ : 0 < Δ) (hKb : 0 ≤ Kb) (hμ : 0 ≤ μ) (hC₀ : 0 ≤ C₀)
+    (hC₃ : 0 ≤ C₃) (hc₃ : 0 < c₃)
+    (htail : ∀ {n : Type u} [Fintype n] [DecidableEq n]
+      {H : Matrix n n ℂ} {Ω : EuclideanSpace ℂ n} {h : Matrix n n ℂ},
+      H.IsHermitian → ‖Ω‖ = 1 → h.IsHermitian → ‖h‖ ≤ J →
+      ∀ (L : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ), (∀ X, ‖L X‖ ≤ ‖X‖) → L 1 = 1 →
+      (∀ X, X.IsHermitian → (L X).IsHermitian) →
+      L (CFC.abs (L (SpectralFilter.centeredFilter 1 (Δ / 2) H Ω h))) =
+        CFC.abs (L (SpectralFilter.centeredFilter 1 (Δ / 2) H Ω h)) →
+      ∀ {l : ℝ}, 0 ≤ l →
+      (∀ t : ℝ, ‖Matrix.hermitianUnitaryPath H t * h * Matrix.hermitianUnitaryPath H (-t) -
+          L (Matrix.hermitianUnitaryPath H t * h * Matrix.hermitianUnitaryPath H (-t))‖ ≤
+        ‖h‖ * min 2 (localizationPrefactor R Kg kg *
+          Real.exp (localizationVelocity R vR b₀ * |t| - 1 / 2 * l))) →
+      ‖SpectralFilter.positiveConstraint (SpectralFilter.positiveNormalization 1 (Δ / 2) J)
+          (SpectralFilter.centeredFilter 1 (Δ / 2) H Ω h) -
+          L (SpectralFilter.positiveConstraint (SpectralFilter.positiveNormalization 1 (Δ / 2) J)
+            (SpectralFilter.centeredFilter 1 (Δ / 2) H Ω h))‖ ≤
+        C₃ * Real.exp (-(c₃ * l ^ SpectralFilter.kernelExponent 1))) :
+    ∀ {q : ℕ} [NeZero q] {ι : Type u} [Fintype ι] [DecidableEq ι] {κ : Type*} [Fintype κ]
+      (G : SimpleGraph ι) (X : κ → Finset ι) (a : κ → ι), (∀ k, a k ∈ X k) →
+      ∀ (h : κ → Matrix (ι → Fin q) (ι → Fin q) ℂ), (∀ k, (h k).IsHermitian) →
+      (∀ k, h k ∈ supportedOperators q (X k : Set ι)) →
+      (∀ k, ∀ x ∈ X k, ∀ z ∈ X k, G.edist x z ≤ R) →
+      (∀ k, (X k).card ≤ vR) →
+      (∀ x, ∑ j ∈ Finset.univ.filter (fun j => x ∈ X j), ‖h j‖ ≤ b₀) →
+      (∀ x (d : ℕ),
+        ((Finset.univ.filter fun y => G.edist x y = d).card : ℝ) ≤ Kg * ((d : ℝ) + 1) ^ kg) →
+      (∀ x (d : ℕ), ((graphBall G x d).card : ℝ) ≤ Kb * ((d : ℝ) + 1) ^ 2) →
+      (∀ x, ((Finset.univ.filter fun i => a i = x).card : ℝ) ≤ μ) →
+      (∀ k, ‖h k‖ ≤ J) →
+      ∀ (E₀ : ℝ) (Ω : EuclideanSpace ℂ (ι → Fin q)), ‖Ω‖ = 1 →
+      (∑ k, h k) *ᵥ WithLp.ofLp Ω = (E₀ : ℂ) • WithLp.ofLp Ω →
+      ((∑ k, h k) - (E₀ : ℂ) • 1 -
+        (Δ : ℂ) • (1 - Matrix.vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω)))).PosSemidef →
+      ∀ n : ℝ, 2 ≤ n → ∀ S₀ : Finset ι, (S₀.card : ℝ) ≤ C₀ * n ^ 2 →
+      let cs := SpectralFilter.positiveNormalization 1 (Δ / 2) J
+      let g := Δ / cs
+      let k := fun i =>
+        SpectralFilter.positiveConstraint cs
+          (SpectralFilter.centeredFilter 1 (Δ / 2) (∑ j, h j) Ω (h i))
+      let r₀ := ⌈finiteSetTruncationConstant C₃ c₃ g μ Kb C₀ * Real.log n ^ 2⌉₊
+      let ε := min (n ^ (-1000 : ℝ)) (g / 4)
+      let Ht := ∑ i, truncatedConstraint q G S₀ r₀ (a i) (k i)
+      (∀ i, truncatedConstraint q G S₀ r₀ (a i) (k i) ∈
+        supportedOperators q (designatedSupport G S₀ r₀ (a i) : Set ι)) ∧
+      (∀ i, 0 ≤ truncatedConstraint q G S₀ r₀ (a i) (k i) ∧
+        truncatedConstraint q G S₀ r₀ (a i) (k i) ≤ 1) ∧
+      ‖Ht - ∑ i, k i‖ ≤ ε ∧
+      ∃ (e : ℝ) (Ω₀ : EuclideanSpace ℂ (ι → Fin q)), ‖Ω₀‖ = 1 ∧
+        Ht *ᵥ WithLp.ofLp Ω₀ = (e : ℂ) • WithLp.ofLp Ω₀ ∧ 0 ≤ e ∧ e ≤ ε ∧
+        (Ht - (e : ℂ) • 1 - ((g / 2 : ℝ) : ℂ) •
+          (1 - Matrix.vecMulVec (WithLp.ofLp Ω₀) (star (WithLp.ofLp Ω₀)))).PosSemidef ∧
+        (∃ θ : ℝ, ‖Ω₀ - Complex.exp (θ * Complex.I) • Ω‖ ≤ 2 * Real.sqrt (ε / g)) ∧
+        Matrix.traceDistance (Matrix.vecMulVec (WithLp.ofLp Ω₀) (star (WithLp.ofLp Ω₀)))
+            (Matrix.vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))) ≤
+          Real.sqrt (2 * ε / g) := by
+  set cs := SpectralFilter.positiveNormalization 1 (Δ / 2) J
+  have hcs : 0 < cs := SpectralFilter.positiveNormalization_pos 1 (Δ / 2) J
+  intro q _ ι _ _ κ _ G X a ha h hHerm hSupport hDiam hCard hBudget hGrowth hBall hMult hJh
+    E₀ Ω hΩ hHΩ hgap n hn S₀ hS₀n
+  obtain ⟨hk, hsum, hgapk, htailk, hcomp⟩ := positiveQuasilocalConstraints_of_locality (le_refl 1)
+    R vR b₀ Kg kg hΔ htail G X a ha h hHerm hSupport hDiam hCard hBudget hGrowth hJh E₀ Ω hΩ hHΩ
+    hgap
+  have hgapF : ((∑ i, SpectralFilter.positiveConstraint cs
+      (SpectralFilter.centeredFilter 1 (Δ / 2) (∑ j, h j) Ω (h i))) -
+        ((Δ / cs : ℝ) : ℂ) •
+          (1 - Matrix.vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω)))).PosSemidef := by
+    rw [← Matrix.le_iff]; exact hgapk.trans hsum
+  have htail' : ∀ i (l : ℕ), ‖SpectralFilter.positiveConstraint cs
+      (SpectralFilter.centeredFilter 1 (Δ / 2) (∑ j, h j) Ω (h i)) -
+        siteExpectation q (graphBall G (a i) l) (SpectralFilter.positiveConstraint cs
+          (SpectralFilter.centeredFilter 1 (Δ / 2) (∑ j, h j) Ω (h i)))‖ ≤
+        C₃ * Real.exp (-(c₃ * (l : ℝ) ^ (1 / 2 : ℝ))) := by
+    intro i l
+    have := (htailk i l).2.2
+    rwa [kernelExponent_one] at this
+  exact ⟨fun i => truncatedConstraint_mem_supportedOperators G S₀ _ (a i) (hcomp i),
+    finiteSetTruncation hC₃ hc₃ (div_pos hΔ hcs) hμ hKb hC₀ G a _ Ω hΩ hk hgapF htail' hBall hMult n
+      hn S₀ hS₀n⟩
 
 /-- **Truncation near a finite set, from the global gap** (Proposition 4.5, first part,
 `03-quasilocal.tex`, lines 405–433): Proposition 4.3 with `p = 1` followed by
@@ -164,30 +302,12 @@ theorem exists_finiteSetTruncation_of_gap (R vR : ℕ) (b₀ Kg : ℝ) (kg : ℕ
           Matrix.traceDistance (Matrix.vecMulVec (WithLp.ofLp Ω₀) (star (WithLp.ofLp Ω₀)))
               (Matrix.vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))) ≤
             Real.sqrt (2 * ε / g) := by
-  obtain ⟨C, c, hC, hc, hpos⟩ :=
-    exists_positiveQuasilocalConstraints (le_refl 1) R vR b₀ Kg kg hJ hΔ
-  set cs := SpectralFilter.positiveNormalization 1 (Δ / 2) J
-  have hcs : 0 < cs := SpectralFilter.positiveNormalization_pos 1 (Δ / 2) J
-  obtain ⟨C₁, hC₁, htr⟩ := exists_finiteSetTruncation hC hc (div_pos hΔ hcs) hμ hKb hC₀
-  refine ⟨C₁, hC₁, ?_⟩
-  intro q _ ι _ _ κ _ G X a ha h hHerm hSupport hDiam hCard hBudget hGrowth hBall hMult hJh
-    E₀ Ω hΩ hHΩ hgap n hn S₀ hS₀n
-  obtain ⟨hk, hsum, hgapk, htail, hcomp⟩ := hpos G X a ha h hHerm hSupport hDiam hCard hBudget
-    hGrowth hJh E₀ Ω hΩ hHΩ hgap
-  have hgapF : ((∑ i, SpectralFilter.positiveConstraint cs
-      (SpectralFilter.centeredFilter 1 (Δ / 2) (∑ j, h j) Ω (h i))) -
-        ((Δ / cs : ℝ) : ℂ) •
-          (1 - Matrix.vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω)))).PosSemidef := by
-    rw [← Matrix.le_iff]; exact hgapk.trans hsum
-  have htail' : ∀ i (l : ℕ), ‖SpectralFilter.positiveConstraint cs
-      (SpectralFilter.centeredFilter 1 (Δ / 2) (∑ j, h j) Ω (h i)) -
-        siteExpectation q (graphBall G (a i) l) (SpectralFilter.positiveConstraint cs
-          (SpectralFilter.centeredFilter 1 (Δ / 2) (∑ j, h j) Ω (h i)))‖ ≤
-        C * Real.exp (-(c * (l : ℝ) ^ (1 / 2 : ℝ))) := by
-    intro i l
-    have := (htail i l).2.2
-    rwa [kernelExponent_one] at this
-  exact ⟨fun i => truncatedConstraint_mem_supportedOperators G S₀ _ (a i) (hcomp i),
-    htr G a _ Ω hΩ hk hgapF htail' hBall hMult n hn S₀ hS₀n⟩
+  obtain ⟨C₃, c₃, hC₃, hc₃, htail⟩ := SpectralFilter.exists_norm_positiveConstraint_sub_map_le
+    (le_refl 1) hΔ hJ (localizationPrefactor_nonneg R Kg kg) (localizationVelocity_pos R vR b₀)
+    one_half_pos
+  exact ⟨finiteSetTruncationConstant C₃ c₃ (Δ / SpectralFilter.positiveNormalization 1 (Δ / 2) J)
+    μ Kb C₀, finiteSetTruncationConstant_pos hC₃ hc₃
+    (div_pos hΔ (SpectralFilter.positiveNormalization_pos 1 (Δ / 2) J)) hμ hKb hC₀,
+    finiteSetTruncation_of_locality R vR b₀ Kg kg hΔ hKb hμ hC₀ hC₃ hc₃ htail⟩
 
 end TNLean.PEPS.AreaLaw

@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.Basic
 import TNLean.PEPS.Approximation.SquareGridContraction
-import TNLean.PEPS.AreaLaw.MarginalTails
+import TNLean.Lattice.MarginalTails
 import QICLean.Algebra.HermitianPartSum
 import Mathlib.Analysis.Complex.Basic
 
@@ -27,6 +27,8 @@ open Matrix ComplexStarModule
 open scoped Matrix.Norms.L2Operator
 
 noncomputable section
+
+open TNLean.Lattice
 
 namespace TNLean.PEPS.Approximation
 
