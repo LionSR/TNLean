@@ -729,10 +729,32 @@
     The explicit one-scale reset with cell-count bound
     $M=N_{\rm cell}(a,A_0,m_0)$ applies at every slope $D\ge D_{\rm ang}$ and
     every size $L\ge L_0\ge L_{\rm ang}\ge e$, so $t=D\log L\ge D\ge1>0$.
-    The finite annular induction then proceeds exactly as in the proof of
-    Theorem~\ref{thm:peps_angular_information_of_collar}. For an integer
-    accuracy, translating the marked points with the sites gives the slope and
-    threshold for every common translation of $\Lambda_L$.
+    The inequality $t\le n$ yields a dyadic cutoff with
+    $s_j=2^{-j}n$ and $t\le s_m<2t$. Every processed scale $s_j$, with
+    $j\le m$, satisfies $s_j\ge t$, so the same reset constants apply
+    at each scale. Process the layers from farthest to nearest the
+    marked points, and write $A_j$ for the cumulative processed set.
+
+    At scale $s_j$, the old selected cell group and the enlarged exterior
+    lie inside the two cores controlled at the preceding scale.
+    The first old group is empty. The number of new cells is at most $M$,
+    and cumulative angular separation gives
+    $\operatorname{dist}_\infty(A_j,E)\ge as_j/2$.
+    The one-scale reset estimate therefore restores
+    \begin{align}
+        I_\Omega\bigl(\Lambda_L\cap A_j^{+a's_j}:
+        \Lambda_L\cap E^{+a's_j}\bigr) & \le L^{-p}.
+        \notag
+    \end{align}
+    Here $F^{+r}$ denotes the ambient $\ell_\infty$ enlargement of $F$.
+    The same bound is restored at each step; it is not summed over the
+    scales. The last cumulative set is $A_m=X$.
+    Monotonicity of mutual information on both regions removes the final
+    padding and gives the result. The empty marked set and the case of one
+    layer are included in the same induction.
+    For an integer accuracy, translating the marked points with the sites
+    gives the slope and threshold for every common translation of
+    $\Lambda_L$.
 \end{proof}
 
 \begin{definition}[Amplification constants at the collar constant]
@@ -834,41 +856,9 @@
     \uses{thm:peps_angular_information_of_collar_explicit,
         thm:area_law_amplification,def:peps_angular_information_constants}
     The collar bound holds with some constant $C$ and threshold $N_{\rm col}$,
-    and the amplification bound at $(\max\{C,1\},1)$ holds with some constant
-    $C_a$ and threshold $N_a$. Then
-    Theorem~\ref{thm:peps_angular_information_of_collar_explicit} applies with
-    $D=D_{\rm ang}(J,\Delta,a,p)$ and $L_0=L_{\rm ang}$. In more detail:
-    set $a'=\min\{a,1\}/200$ and $d=a'/8$, and put
-    \begin{align}
-        N & =(m_0+1)
-        \left(2\left\lceil\frac{\max\{A_0,2\}+3a'/2}{d}\right\rceil_{+}
-        +3\right)^2.
-        \notag
-    \end{align}
-    The one-scale reset estimate chooses $D\ge1$ and $L_0\ge e$
-    for these fixed geometric data, this cell-count bound and the accuracy
-    exponent $p$. In particular, $t=D\log L>0$ for $L\ge L_0$.
-    The inequality $t\le n$ yields a dyadic cutoff with
-    $s_j=2^{-j}n$ and $t\le s_m<2t$. Every processed scale $s_j$, with
-    $j\le m$, satisfies $s_j\ge t$, so the same reset constants apply
-    at each scale. Process the layers from farthest to nearest the
-    marked points, and write $A_j$ for the cumulative processed set.
-
-    At scale $s_j$, the old selected cell group and the enlarged exterior
-    lie inside the two cores controlled at the preceding scale.
-    The first old group is empty. The number of new cells is at most $N$,
-    and cumulative angular separation gives
-    $\operatorname{dist}_\infty(A_j,E)\ge as_j/2$.
-    The one-scale reset estimate therefore restores
-    \begin{align}
-        I_\Omega\bigl(\Lambda_L\cap A_j^{+a's_j}:
-        \Lambda_L\cap E^{+a's_j}\bigr) & \le L^{-p}.
-        \notag
-    \end{align}
-    Here $F^{+r}$ denotes the ambient $\ell_\infty$ enlargement of $F$.
-    The same bound is restored at each step; it is not summed over the
-    scales. The last cumulative set is $A_m=X$.
-    Monotonicity of mutual information on both regions removes the final
-    padding and gives the result. The empty marked set and the case of one
-    layer are included in the same induction.
+    and by Theorem~\ref{thm:area_law_amplification} the amplification bound at
+    $(\max\{C,1\},1)$ holds with some constant $C_a$ and threshold $N_a$.
+    Theorem~\ref{thm:peps_angular_information_of_collar_explicit} then applies
+    with $D=D_{\rm ang}(J,\Delta,a,p)$ and $L_0=L_{\rm ang}$ at these
+    constants.
 \end{proof}
