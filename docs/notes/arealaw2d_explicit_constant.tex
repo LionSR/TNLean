@@ -117,26 +117,18 @@ In Lean, \eqref{eq:top} is \leanid{TNLean.PEPS.AreaLaw.uniformAreaLawConstantOf}
 and $n_*$ is \leanid{TNLean.PEPS.AreaLaw.uniformAreaLawScale}; the proof of
 Theorem~1.1 at given $C_1,N_1,C_2,N_2,C_3$ is
 \leanid{TNLean.PEPS.AreaLaw.regionalEntropy_le_of_collar_amplification_twoFamilies_constants}.
-The constant at the named constants of the three propositions, with $D_0=2R+11$
-and $\Ctpl=24$, is \leanid{TNLean.PEPS.AreaLaw.uniformAreaLawConstant}, and
-\leanid{TNLean.PEPS.AreaLaw.exists_regionalEntropy_le_uniformAreaLawConstant}
-proves the bound with it. The proof of the source statement,
+The proof of the source statement,
 \leanid{TNLean.PEPS.AreaLaw.uniformAreaLaw}
-(\src{TNLean/PEPS/AreaLaw/AreaLawTheorem.lean}, line~143), applies this theorem
-to inputs taken from existential statements (Section~\ref{sec:open}): the
-safe-box constant $C_{\rm box}$ with its entropy bound, from
-\leanid{TNLean.PEPS.AreaLaw.Scan.exists_boxEntropy_le_boxError}, and the
-filter-locality constants $(C,c)$ of the positive constraints, from
-\leanid{SpectralFilter.exists_norm_positiveConstraint_sub_map_le}. Inside the
-first, the initial constant, the truncation constant $C_{\rm tr}$ and the five
-transport constants of the scanner are existential, but their witnesses are
-the named constants below; only the pair $(C,c)$ is genuinely chosen. The
+(\src{TNLean/PEPS/AreaLaw/AreaLawTheorem.lean}, line~51), is a corollary of
+\leanid{TNLean.PEPS.AreaLaw.uniformAreaLaw_closed} below, with the constant
+\leanid{TNLean.PEPS.AreaLaw.uniformAreaLawConstantClosed}; no input on its path
+is taken from an existential statement. The
 birth-separation constant is $c_1=1/112$
 (\leanid{TNLean.PEPS.AreaLaw.Geometry.isBirthSeparationConstant_birthTemplateSeparationConstant}).
 
 These inputs are pinned in
 \leanid{TNLean.PEPS.AreaLaw.uniformAreaLawConstantExplicit}
-(\src{TNLean/PEPS/AreaLaw/AreaLawExplicitConstant.lean}, line~62). There
+(\src{TNLean/PEPS/AreaLaw/AreaLawExplicitConstant.lean}, line~65). There
 $C_{\rm box}$ is the bootstrapped safe-box constant started from the explicit
 initial box estimate, the truncation constants are the explicit functions
 \leanid{TNLean.PEPS.AreaLaw.latticeTruncationRadiusConstant} of $R,J,\Delta$,
@@ -147,7 +139,7 @@ constraints. The remaining argument is one tuple
 $(c_0,C_{\rm ent},e_{\rm ent},C_{\rm en},e_{\rm en})$ of transport constants
 satisfying the finite-family transport bound; these are universal and do not
 depend on $q,R,J,\Delta$.
-\leanid{TNLean.PEPS.AreaLaw.uniformAreaLaw_explicit} (line~89) proves the area
+\leanid{TNLean.PEPS.AreaLaw.uniformAreaLaw_explicit} (line~92) proves the area
 law with this constant for every such tuple with $c_0>0$.
 
 The transport constants have a proved closed form. The finite-family transport
@@ -172,14 +164,13 @@ QICLean's \leanid{TensorPower.ReplicaTransport.transport_finite_family_explicit}
 (\src{QICLean/Representation/ReplicaTransport/FiniteFamily.lean}, line~40).
 At these values the constant of Theorem~1.1 is
 \leanid{TNLean.PEPS.AreaLaw.uniformAreaLawConstantClosed}
-(\src{TNLean/PEPS/AreaLaw/AreaLawExplicitConstant.lean}, line~113), a closed
+(\src{TNLean/PEPS/AreaLaw/AreaLawExplicitConstant.lean}, line~116), a closed
 expression in $q,R,J,\Delta$ alone, and
-\leanid{TNLean.PEPS.AreaLaw.uniformAreaLaw_closed} (line~130) proves the area
+\leanid{TNLean.PEPS.AreaLaw.uniformAreaLaw_closed} (line~133) proves the area
 law with it under the hypotheses $q\ge1$, $J\ge0$ and $\Delta>0$, which are no
 stronger than those of Theorem~1.1. This is the explicit statement asked for at
-the start of this note. It is a separate result: the source-statement theorem
-\leanid{TNLean.PEPS.AreaLaw.uniformAreaLaw} is still proved by the path above,
-not as a corollary of it.
+the start of this note. The source-statement theorem
+\leanid{TNLean.PEPS.AreaLaw.uniformAreaLaw} is proved as its corollary.
 
 \paragraph{Dependence on the parameters.}
 The parameters $q,R,J,\Delta$ enter through four explicit quantities:
@@ -291,11 +282,11 @@ constant is a parameter, evaluated at the QICLean definition
 Proposition~3.3 with $C_{\rm init}$ and $e_0$ and no further hypothesis, by
 discharging that parameter with QICLean's
 \leanid{Entropy.le_scaleRecurrenceConst_mul_rpow}. The bootstrap of
-\leanid{TNLean.PEPS.AreaLaw.uniformAreaLaw_closed} starts from this named
-form. The proof of \leanid{TNLean.PEPS.AreaLaw.uniformAreaLaw} starts from the
+\leanid{TNLean.PEPS.AreaLaw.uniformAreaLaw_closed}, and hence of
+\leanid{TNLean.PEPS.AreaLaw.uniformAreaLaw}, starts from this named form. The
 existential form \leanid{TNLean.PEPS.AreaLaw.exists_boxEntropy_le_rpow}
-(\src{TNLean/PEPS/AreaLaw/InitialBoxEstimate.lean}, line~561), whose witnesses
-are $C_{\rm init}$ and $e_0$.
+(\src{TNLean/PEPS/AreaLaw/InitialBoxEstimate.lean}, line~561) has the witnesses
+$C_{\rm init}$ and $e_0$.
 
 The values of $M$, $\lambda$ and $p$ above are those of the Lean proof, not of
 the source. The source (\src{02-initial.tex}, lines~614--656) orders the
@@ -355,9 +346,8 @@ a tuple of transport constants it is
 entropy bound
 \leanid{TNLean.PEPS.AreaLaw.Scan.boxEntropy_le_boxError_explicit}, so at the
 closed-form transport constants of Section~\ref{sec:top} it is explicit.
-\leanid{TNLean.PEPS.AreaLaw.Scan.exists_boxEntropy_le_boxError}, used by
-\leanid{TNLean.PEPS.AreaLaw.uniformAreaLaw}, states these arguments
-existentially, with the named constants as witnesses (Section~\ref{sec:open}).
+\leanid{TNLean.PEPS.AreaLaw.Scan.exists_boxEntropy_le_boxError} states these
+arguments existentially, with the named constants as witnesses.
 
 \subsection{Proposition~9.6: the sublinear collar bound}
 
@@ -453,11 +443,9 @@ Proposition~10.2 at them, with
 \leanid{TNLean.PEPS.AreaLaw.amplificationBound} is its corollary.
 \leanid{TNLean.PEPS.AreaLaw.uniformAreaLaw_explicit}, and hence
 \leanid{TNLean.PEPS.AreaLaw.uniformAreaLaw_closed}, applies
-\leanid{TNLean.PEPS.AreaLaw.amplificationBound_explicit}. The proof of
-Theorem~1.1 in \leanid{TNLean.PEPS.AreaLaw.uniformAreaLaw} still takes $(C,c)$
-from the existential QICLean statement
-\leanid{SpectralFilter.exists_norm_positiveConstraint_sub_map_le}
-(Section~\ref{sec:open}).
+\leanid{TNLean.PEPS.AreaLaw.amplificationBound_explicit}, and so does the proof
+of Theorem~1.1 in \leanid{TNLean.PEPS.AreaLaw.uniformAreaLaw}, its
+corollary.
 The typical-projector threshold $N_t$ (row~34) is kind (a): it compares a
 stretched exponential $Ce^{-cn^{1/10}}$ with $n^{-2K}$. The constants $c$, $v$,
 $C_g$ and $c_{p_{\rm a}}$ involve the $L^1$ norm of the degree-$p_{\rm a}$
@@ -1017,9 +1005,9 @@ filter constants are named definitions, and so are the locality constants
 \leanid{SpectralFilter.positiveConstraintLocalityConst} and
 \leanid{SpectralFilter.positiveConstraintLocalityRate} of the positive constraints
 (\src{QICLean/Analysis/SpectralFilter/FilterLocality.lean}, lines~366 and~372);
-the proof of \leanid{TNLean.PEPS.AreaLaw.uniformAreaLaw} still uses the
-existential form
-\leanid{SpectralFilter.exists_norm_positiveConstraint_sub_map_le} (line~459).
+the existential form
+\leanid{SpectralFilter.exists_norm_positiveConstraint_sub_map_le} (line~459) is
+no longer on the path of \leanid{TNLean.PEPS.AreaLaw.uniformAreaLaw}.
 The replica transport estimate holds at named constants with proved values,
 \leanid{TensorPower.ReplicaTransport.transport_finite_family_explicit}
 (\src{QICLean/Representation/ReplicaTransport/FiniteFamily.lean}, line~40), at
@@ -1090,9 +1078,8 @@ constant. The constant is not explicit as written, and it is enormous.
           constants and thresholds with a theorem at the named values, through
           the scanner (Propositions~9.2, 9.5, 9.6), amplification
           (Proposition~10.2) and geometry (Proposition~11.2); rows~1--35 and
-          74--79 of Table~\ref{tab:sites} name them. The one input that the
-          proof of the source statement still chooses existentially is
-          described below.
+          74--79 of Table~\ref{tab:sites} name them. The proof of the source
+          statement chooses no input existentially.
     \item[4.] \emph{An explicit birth-separation constant.} Done: the two
           compactness minima (rows~57--58) are replaced by $c_2=1/28$, from an
           error bound for polygons cut out by belt half-planes, which gives
@@ -1116,39 +1103,19 @@ on its path every input is a closed form, including the transport constants
 $(c_0,C_{\rm ent},e_{\rm ent},C_{\rm en},e_{\rm en})=(1/8,\,200000,\,2,\,
 3(18\pi^2+6144e^{\pi^2+1}),\,4)$ of
 \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.finiteFamilyTransportBound_explicit}.
-What remains open concerns only the proof of the source statement
-\leanid{TNLean.PEPS.AreaLaw.uniformAreaLaw}, which asserts only that a constant
-exists and is not yet proved as a corollary of
-\leanid{TNLean.PEPS.AreaLaw.uniformAreaLaw_closed}; that change is tracked in
-issue \#9744. Its constant is a named function of inputs taken from existential
-statements. For three of them the witnesses are the named constants that the
-explicit theorem uses.
-\begin{itemize}
-    \item The transport constants of the scanner:
-          \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_finiteFamilyTransportBound}
-          (\src{TNLean/PEPS/AreaLaw/Scan/ActualRoundTransport.lean}, line~201)
-          returns
-          \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.finiteFamilyTransportBound_explicit}.
-          They enter $C_{\rm box}$ and $N_1$.
-    \item The initial constant $C_{\rm init}$ and exponent $e_0$:
-          \leanid{TNLean.PEPS.AreaLaw.exists_boxEntropy_le_rpow} returns
-          \leanid{TNLean.PEPS.AreaLaw.initialBoxConstantExplicit} and
-          \leanid{TNLean.PEPS.AreaLaw.initialBoxExponent}. They enter
-          $C_{\rm box}$.
-    \item The truncation constant $C_{\rm tr}$: the existential forms of the
-          scanner, bootstrap and collar theorems return
-          \leanid{TNLean.PEPS.AreaLaw.latticeTruncationRadiusConstant}. It
-          enters $C_{\rm box}$ and $N_1$.
-\end{itemize}
-Only the tail constants $(C,c)$ of the positive constraints in
-Proposition~10.2 are genuinely existential: the proof of
-\leanid{TNLean.PEPS.AreaLaw.uniformAreaLaw} takes them from QICLean's
-\leanid{SpectralFilter.exists_norm_positiveConstraint_sub_map_le}
-(\src{TNLean/PEPS/AreaLaw/AreaLawTheorem.lean}, line~146). Their
-closed forms are \leanid{TNLean.PEPS.AreaLaw.latticePositiveConstraintConst}
-and \leanid{TNLean.PEPS.AreaLaw.latticePositiveConstraintRate}, and
-\leanid{TNLean.PEPS.AreaLaw.amplificationBound_explicit} proves
-Proposition~10.2 at them. They enter $C_2$ and $N_2$. None of this affects the
-explicit theorem, which already uses all four closed forms.
+The source statement \leanid{TNLean.PEPS.AreaLaw.uniformAreaLaw}, which
+asserts only that a constant exists, is proved as a corollary of
+\leanid{TNLean.PEPS.AreaLaw.uniformAreaLaw_closed}, with the constant
+\leanid{TNLean.PEPS.AreaLaw.uniformAreaLawConstantClosed}. No input on its path
+is existential: the transport constants, the initial constant $C_{\rm init}$
+and exponent $e_0$, the truncation constant $C_{\rm tr}$ and the tail constants
+$(C,c)$ of the positive constraints in Proposition~10.2 all enter through
+their closed forms
+\leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.finiteFamilyTransportBound_explicit},
+\leanid{TNLean.PEPS.AreaLaw.initialBoxConstantExplicit},
+\leanid{TNLean.PEPS.AreaLaw.initialBoxExponent},
+\leanid{TNLean.PEPS.AreaLaw.latticeTruncationRadiusConstant},
+\leanid{TNLean.PEPS.AreaLaw.latticePositiveConstraintConst} and
+\leanid{TNLean.PEPS.AreaLaw.latticePositiveConstraintRate}.
 
 \end{document}
