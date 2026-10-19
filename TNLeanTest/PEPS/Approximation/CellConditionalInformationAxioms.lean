@@ -17,11 +17,14 @@ choice, and quotient soundness.
 
 run_cmd do
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
-  let decl :=
-    ``TNLean.PEPS.Approximation.exists_cell_conditionalMutualInformation_le_of_sublinearCollarBound
-  unless (← Lean.getEnv).contains decl do
-    throwError "Missing declaration {decl}"
-  let axioms ← Lean.collectAxioms decl
-  unless axioms.all (allowed.contains ·) do
-    throwError "Unexpected axioms for {decl}: {axioms}"
-  Lean.logInfo m!"{decl}: {axioms}"
+  let decls := #[
+    ``TNLean.PEPS.Approximation.coarse_mutualInformation_le_of_sublinearCollarBoundAt,
+    ``TNLean.PEPS.Approximation.cell_conditionalMutualInformation_le_of_sublinearCollarBoundAt,
+    ``TNLean.PEPS.Approximation.exists_cell_conditionalMutualInformation_le_of_sublinearCollarBound]
+  for decl in decls do
+    unless (← Lean.getEnv).contains decl do
+      throwError "Missing declaration {decl}"
+    let axioms ← Lean.collectAxioms decl
+    unless axioms.all (allowed.contains ·) do
+      throwError "Unexpected axioms for {decl}: {axioms}"
+    Lean.logInfo m!"{decl}: {axioms}"

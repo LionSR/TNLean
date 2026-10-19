@@ -1166,7 +1166,9 @@ original open square. We state the two models separately, following
 
 \begin{definition}[The sublinear collar bound]
     \label{def:area_law_collar_bound}
-    \lean{TNLean.PEPS.AreaLaw.SublinearCollarBound}
+    \lean{TNLean.PEPS.AreaLaw.SublinearCollarBound,
+        TNLean.PEPS.AreaLaw.SublinearCollarBoundAt,
+        TNLean.PEPS.AreaLaw.sublinearCollarBound_iff_exists_sublinearCollarBoundAt}
     \leanok
     \uses{def:area_law_ground_entropy,def:area_law_template,thm:area_law_exponent_gaps}
     Fix $q,R,J,\Delta$ and the template constants $D_0,C_{\rm tpl}$. For
@@ -1185,12 +1187,16 @@ original open square. We state the two models separately, following
         \qquad |S_0|\le Cn^2,
     \end{align*}
     and each of the cuts $X$, $S_0$ and $S_0\setminus X$ has at most $Cn$
-    crossing edges.
+    crossing edges. When this property holds for a given pair $(C,N)$, we say
+    that the sublinear collar bound holds with constant $C$ and threshold $N$;
+    the sublinear collar bound is the existence of such a pair.
 \end{definition}
 
 \begin{definition}[The amplification bound]
     \label{def:area_law_amplification_bound}
-    \lean{TNLean.PEPS.AreaLaw.AmplificationBound}
+    \lean{TNLean.PEPS.AreaLaw.AmplificationBound,
+        TNLean.PEPS.AreaLaw.AmplificationBoundAt,
+        TNLean.PEPS.AreaLaw.amplificationBound_iff_forall_exists_amplificationBoundAt}
     \leanok
     \uses{def:area_law_ground_entropy,def:area_law_radius_exponent}
     Fix $q,R,J,\Delta$. The amplification bound of Proposition~10.2 of
@@ -1213,6 +1219,9 @@ original open square. We state the two models separately, following
     set of endpoints of the cut edges, then $N_{2r}^\Lambda(S_0)\subseteq A$;
     its further assertion $L+2r=o(n^\beta)$ follows from the radius bound by
     Theorem~\ref{thm:area_law_uniform_collar_threshold}.
+    When this property holds for given $C_0$, $M$ and a given pair $(C_M,N)$,
+    we say that the amplification bound holds at $(C_0,M)$ with constant $C_M$
+    and threshold $N$.
 \end{definition}
 
 \begin{definition}[The two-family decomposition]

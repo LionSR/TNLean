@@ -3,6 +3,117 @@
 
 % These entries state conditional consequences of the sublinear collar bound.
 % The unrestricted source Lemma 3.2 remains a separate assertion.
+% Source: OpenAI2026PolynomialPEPS, proof of Lemma 3.2 (lem:cell-cmi),
+% 02-information.tex, lines 180--316.
+\begin{definition}[Constants of the cell information estimate]
+    \label{def:peps_cell_information_constants}
+    \lean{TNLean.PEPS.Approximation.cellInformationScale,
+        TNLean.PEPS.Approximation.cellInformationConstant,
+        TNLean.PEPS.Approximation.cellInformationExponent}
+    \leanok
+    \uses{def:peps_coarse_information_constants,def:peps_cell_partition_constants,
+        thm:peps_cell_generation_count}
+    Fix $q\in\mathbb N$, $c>0$, a template constant $C_{\rm tpl}$, a collar
+    threshold $N$, an amplification constant $C_a$ and an amplification
+    threshold $N_a$, and recall $\beta_0<1$. Let
+    $u_0=u_0(C_{\rm tpl},66^2,1,N,C_a,N_a)$ be the coarse threshold of
+    Definition~\ref{def:peps_coarse_information_constants} and
+    $u_1=U(2/c,\beta_0,1)$ the power threshold of
+    Theorem~\ref{thm:peps_cell_generation_count}, so that
+    $2u^{\beta_0}\le cu$ for $u\ge u_1$. The lower tile scale is
+    $u_{\rm cell}=\max\{u_0,u_1\}$. With the partition constants of
+    Definition~\ref{def:peps_cell_partition_constants}, the cell prefactor and
+    exponent are
+    \begin{align}
+        C_{\rm cell}             & =\max\{1,2\log q,\max\{C_a,0\}\}\,
+        C(\beta_0,u_{\rm cell}), &
+        K_{\rm cell}             & =K(\beta_0,u_{\rm cell}).
+        \notag
+    \end{align}
+\end{definition}
+
+\begin{theorem}[Positivity of the cell constants]
+    \label{thm:peps_cell_information_constants_pos}
+    \lean{TNLean.PEPS.Approximation.cellInformationConstant_pos,
+        TNLean.PEPS.Approximation.cellInformationExponent_pos}
+    \leanok
+    \uses{def:peps_cell_information_constants}
+    For all values of the parameters, the cell
+    prefactor $C_{\rm cell}$ and the cell exponent $K_{\rm cell}$ are positive.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:peps_cell_partition_constants_bounds}
+    The partition constants are positive by
+    Theorem~\ref{thm:peps_cell_partition_constants_bounds}, and
+    $\max\{1,2\log q,\max\{C_a,0\}\}\ge1$.
+\end{proof}
+
+\begin{theorem}[Cell information with explicit constants]
+    \label{thm:peps_cell_conditional_information_of_collar_explicit}
+    \lean{TNLean.PEPS.Approximation.cell_conditionalMutualInformation_le_of_sublinearCollarBoundAt}
+    \leanok
+    \uses{def:area_law_collar_bound,def:area_law_amplification_bound,
+        def:area_law_ground_entropy,def:peps_cell_information_constants}
+    In the conditional form of \cite[Lemma~3.2]{OpenAI2026PolynomialPEPS}
+    (with the explicit collar hypothesis discussed in
+    \cite{gap:polypeps_angular_annular_geometry_scope}), fix
+    $q\in\mathbb N$, $J,\Delta\in\mathbb R$ and template constants
+    $D_0,C_{\rm tpl}$. Suppose that the range-one sublinear collar bound holds
+    with constant $C$ and threshold $N$, and that the range-one amplification
+    bound holds at $(\max\{C,1\},1)$ with constant $C_a$ and threshold $N_a$.
+    Fix $c>0$, and let $C_{\rm cell},K_{\rm cell}$ be the constants of
+    Definition~\ref{def:peps_cell_information_constants}.
+    Let $s\ge1$, let $o\in\mathbb R^2$ be a grid origin, and set
+    $Q_i=o+si+[0,s)^2$ for $i\in\mathbb Z^2$.
+    Choose an index $i_0$ and any set of indices $A$ with $i_0\notin A$.
+    On any finite integer domain $\Lambda$, let $H$ be a range-one Hamiltonian
+    with interaction bound $J$, and let $\Omega$ be a unit ground vector with
+    full-system gap $\Delta$.
+    Put $G=\Lambda\cap Q_{i_0}$ and
+    $B=\Lambda\cap\bigcup_{i\in A}Q_i$.
+    If $E\subseteq\Lambda\setminus(G\cup B)$ and
+    $\operatorname{dist}_\infty(x,y)\ge cs$ for every
+    $x\in\overline{Q_{i_0}}$ and $y\in E$, then
+    \begin{align}
+        I_\Omega(G:E\mid B) & \le C_{\rm cell}(1+\log s)^{K_{\rm cell}}.
+        \notag
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:peps_cell_information_constants,
+        thm:peps_coarse_information_of_collar_explicit,
+        thm:peps_cell_two_family_partition_explicit,
+        def:peps_cell_partition_constants,thm:peps_cell_generation_count,
+        lem:peps_coarse_exponent_lt_one,thm:peps_cell_partition_constants_bounds,
+        thm:peps_two_family_partition_inverse_image,
+        cor:peps_cell_information_counting_form}
+    The coarse information estimate with explicit constants, for unions of at
+    most $66^2$ boxes of diameter at most the scale, gives the tile bound
+    $C_2=\max\{C_a,0\}$ at every scale $u\ge u_0$ and separation
+    $u^{\beta_0}$. The partition with explicit constants at the exponent
+    $\beta_0$ and the lower bound $u_{\rm cell}$ has all tile scales at least
+    $u_{\rm cell}$, so both $u\ge u_0$ and $2u^{\beta_0}\le cu$ hold at every
+    tile scale. Giving the cells indexed by $A$ colour zero and the other
+    exterior cells colour one, and restricting the ordered partition to
+    $\Lambda$, retains its order and families without increasing its residual
+    cardinality. The separation of tiles of one family from their predecessors
+    and from the corresponding exterior cells gives the two coarse
+    information bounds. For the first family, the additional separation from
+    $E$ follows from $u^{\beta_0}<cs$ and the closed-cell hypothesis.
+    If $N_{\rm t}$ is the number of tiles and $D$ the residual, the counting
+    form of the two-family inequality gives
+    \begin{align}
+        I_\Omega(G:E\mid B)
+         & \le 2|D|\log q+N_{\rm t}C_2
+        \le M(N_{\rm t}+|D|)
+        \le MC(\beta_0,u_{\rm cell})(1+\log s)^{K(\beta_0,u_{\rm cell})},
+        \notag
+    \end{align}
+    where $M=\max\{1,2\log q,C_2\}$, which is the stated bound.
+\end{proof}
+
 \begin{theorem}[Cell information under the sublinear collar bound]
     \label{thm:peps_cell_conditional_information_of_collar}
     \lean{TNLean.PEPS.Approximation.exists_cell_conditionalMutualInformation_le_of_sublinearCollarBound}
@@ -33,33 +144,51 @@
     ground vector.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:peps_coarse_information_of_collar,
-        thm:peps_cell_two_family_partition,
-        thm:peps_two_family_partition_inverse_image,
-        cor:peps_cell_information_counting_form}
-    The coarse information estimate gives an exponent $\beta<1$ and a
-    uniform bound $C_2$ for tiles that are unions of at most $66^2$ rectangles.
-    Selecting the partition threshold large enough that
-    $2u^\beta\le cu$ at every tile scale $u$,
-    giving the cells indexed by $A$ colour zero and the other exterior cells
-    colour one, and restricting the ordered partition to $\Lambda$
-    retains its order and families without increasing its residual
-    cardinality. The separation of tiles of one family from their predecessors
-    and from the corresponding exterior cells gives the two coarse
-    information bounds. For the first family, the additional separation from
-    $E$ follows from $u^\beta<cs$ and the closed-cell hypothesis.
-    If $N$ is the number of tiles and $D$ the residual, the counting form of
-    the two-family inequality gives
-    \begin{align}
-        I_\Omega(G:E\mid B)
-         & \le 2|D|\log q+NC_2
-        \le M(N+|D|)
-        \le MC_{\rm part}(1+\log s)^{K_{\rm part}},
-        \notag
-    \end{align}
-    where $M=\max\{1,2\log q,C_2\}$.
-    Setting $C_1=MC_{\rm part}$ and $K=\max\{K_{\rm part},0\}$ completes the
-    bound; the last exponent can be enlarged because $1+\log s\ge1$.
+    \uses{thm:peps_cell_conditional_information_of_collar_explicit,
+        thm:area_law_amplification,def:peps_cell_information_constants,
+        thm:peps_cell_information_constants_pos}
+    Choose a constant $C$ and a threshold $N$ for the collar bound, and by
+    Theorem~\ref{thm:area_law_amplification} a constant $C_a$ and a threshold
+    $N_a$ for the range-one amplification bound at $(\max\{C,1\},1)$.
+    Theorem~\ref{thm:peps_cell_conditional_information_of_collar_explicit}
+    gives the claim with $C_1=C_{\rm cell}>0$ and $K=K_{\rm cell}>0$.
+\end{proof}
+
+\begin{theorem}[Square-grid cell information with explicit constants]
+    \label{thm:peps_square_cell_conditional_information_of_collar_explicit}
+    \lean{TNLean.PEPS.Approximation.cell_conditionalMutualInformation_le_square_of_sublinearCollarBoundAt}
+    \leanok
+    \uses{def:area_law_collar_bound,def:area_law_amplification_bound,
+        def:polynomial_peps_model,def:peps_cell_information_constants}
+    Fix $q\in\mathbb N$, $J\ge0$, $\Delta\in\mathbb R$ and template constants
+    $D_0,C_{\rm tpl}$. Suppose that the range-one sublinear collar bound holds
+    with constant $C$ and threshold $N$, and that the range-one amplification
+    bound holds at $(\max\{C,1\},1)$ with constant $C_a$ and threshold $N_a$.
+    Fix $c>0$. The conclusion of
+    Theorem~\ref{thm:peps_cell_conditional_information_of_collar_explicit}
+    holds with the same constants $C_{\rm cell},K_{\rm cell}$ of
+    Definition~\ref{def:peps_cell_information_constants} for the original open
+    square $\Lambda_L=\{1,\ldots,L\}^2$, every Hamiltonian of the square-grid
+    model with interaction bound $J$, and every unit ground vector with
+    full-system gap $\Delta$. The regions $G,B,E$ are the same physical cell,
+    conditioning union and exterior region, and the separation hypothesis
+    concerns the full closed ambient cell.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_cell_conditional_information_of_collar_explicit,
+        thm:finite_product_entropy_relabel,thm:square_area_law_ground_gap}
+    Relabeling the square sites by the integer rectangle
+    $\{0,\ldots,L-1\}^2$ and replacing the grid origin $o$ by $o-(1,1)$
+    sends the chosen half-open cell and its closure
+    to the original cell and closure under translation by $(1,1)$, while
+    preserving distances.
+    The relabeling preserves the Hamiltonian, ground-state equation and
+    full-system gap, and carries both cell samples and the conditioning
+    union to the original physical regions.
+    Theorem~\ref{thm:peps_cell_conditional_information_of_collar_explicit} then
+    applies, and because relabeling preserves each of the four regional
+    entropies in $I_\Omega(G:E\mid B)$, the stated bound holds for the same
+    vector $\Omega$.
 \end{proof}
 
 \begin{theorem}[Square-grid cell information under the collar bound]
@@ -81,20 +210,14 @@
     \cite{gap:polypeps_angular_annular_geometry_scope}.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:peps_cell_conditional_information_of_collar,
-        thm:finite_product_entropy_relabel,thm:square_area_law_ground_gap}
-    Relabeling the square sites by the integer rectangle
-    $\{0,\ldots,L-1\}^2$ and replacing the grid origin $o$ by $o-(1,1)$
-    sends the chosen half-open cell and its closure
-    to the original cell and closure under translation by $(1,1)$, while
-    preserving distances.
-    The relabeling preserves the Hamiltonian, ground-state equation and
-    full-system gap, and carries both cell samples and the conditioning
-    union to the original physical regions.
-    Theorem~\ref{thm:peps_cell_conditional_information_of_collar} then
-    applies, and because relabeling preserves each of the four regional
-    entropies in $I_\Omega(G:E\mid B)$, the stated bound holds for the same
-    vector $\Omega$.
+    \uses{thm:peps_square_cell_conditional_information_of_collar_explicit,
+        thm:area_law_amplification,def:peps_cell_information_constants,
+        thm:peps_cell_information_constants_pos}
+    Choose a constant $C$ and a threshold $N$ for the collar bound, and by
+    Theorem~\ref{thm:area_law_amplification} a constant $C_a$ and a threshold
+    $N_a$ for the range-one amplification bound at $(\max\{C,1\},1)$.
+    Theorem~\ref{thm:peps_square_cell_conditional_information_of_collar_explicit}
+    gives the claim with $C_1=C_{\rm cell}>0$ and $K=K_{\rm cell}>0$.
 \end{proof}
 
 \begin{theorem}[Information gained by adjoining selected cells]
