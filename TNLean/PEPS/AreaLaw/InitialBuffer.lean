@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.BufferedRectangles
 import TNLean.Lattice.RegionalEntropyBridge
+import TNLean.Lattice.RegionEntropyInequalities
 import QICLean.Entropy.BufferDiscount
 import QICLean.Analysis.HarmonicWeights
 import TNLean.Algebra.TailRadiusWeights
@@ -71,9 +72,8 @@ theorem supportDim_le {Λ : Finset (ℤ × ℤ)} {q R : ℕ} (hq : 1 ≤ q) (X :
 /-- Every admissible support has positive Hilbert-space dimension when the local
 dimension is positive. -/
 theorem one_le_supportDim {Λ : Finset (ℤ × ℤ)} {q R : ℕ} (hq : 1 ≤ q)
-    (X : AdmissibleSupport Λ R) : 1 ≤ Entropy.supportDim (fun _ : Site Λ ↦ q) X.1 := by
-  rw [Entropy.supportDim, Finset.prod_const]
-  exact Nat.one_le_pow _ _ hq
+    (X : AdmissibleSupport Λ R) : 1 ≤ Entropy.supportDim (fun _ : Site Λ ↦ q) X.1 :=
+  one_le_supportDim_const hq X.1
 
 /-- The cut parameter of Lemma 3.1 grows at most linearly with the number of crossing
 supports: `ℬ ≤ 1 + |𝒞| log² (e q^{v_R})`. -/

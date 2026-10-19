@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.AreaLaw.Basic
 import TNLean.Algebra.GappedGroundState
 import QICLean.Entropy.LocalLift
+import TNLean.Lattice.RegionEntropyInequalities
 
 /-!
 # Finite-range Hamiltonians on the chain of `L` sites
@@ -103,9 +104,8 @@ theorem supportDim_le (hq : 1 ≤ q) (X : ChainSupport L R) :
 
 /-- The Hilbert-space dimension of a support is at least one when `q ≥ 1`. -/
 theorem one_le_supportDim (hq : 1 ≤ q) (X : ChainSupport L R) :
-    1 ≤ Entropy.supportDim (fun _ : Fin L ↦ q) X.1 := by
-  rw [Entropy.supportDim, Finset.prod_const]
-  exact Nat.one_le_pow _ _ hq
+    1 ≤ Entropy.supportDim (fun _ : Fin L ↦ q) X.1 :=
+  TNLean.Lattice.one_le_supportDim_const hq X.1
 
 /-- A finite-range Hamiltonian on the chain of `L` sites with local dimension `q`: one
 term per support of range `R`, acting as the identity off its support, Hermitian, and of
