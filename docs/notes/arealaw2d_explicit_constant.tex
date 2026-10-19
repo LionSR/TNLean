@@ -87,7 +87,7 @@ The source proof of Theorem~1.1 (\src{10-geometry.tex}, lines~803--857) combines
 Proposition~9.6 (the sublinear collar bound), Proposition~10.2 (amplification)
 and Proposition~11.2 (the two-family decomposition). The Lean assembly
 \leanid{TNLean.PEPS.AreaLaw.uniformAreaLaw_of_collar_amplification_twoFamilies}
-(\src{TNLean/PEPS/AreaLaw/BoundaryTheorem.lean}, line~374) fixes the constants in
+(\src{TNLean/PEPS/AreaLaw/BoundaryTheorem.lean}, line~463) fixes the constants in
 the following order.
 
 \begin{enumerate}
@@ -117,38 +117,60 @@ In Lean, \eqref{eq:top} is \leanid{TNLean.PEPS.AreaLaw.uniformAreaLawConstantOf}
 and $n_*$ is \leanid{TNLean.PEPS.AreaLaw.uniformAreaLawScale}; the proof of
 Theorem~1.1 at given $C_1,N_1,C_2,N_2,C_3$ is
 \leanid{TNLean.PEPS.AreaLaw.regionalEntropy_le_of_collar_amplification_twoFamilies_constants}.
-The constant at the named constants of the three propositions, with $D_0=2R+11$
-and $\Ctpl=24$, is \leanid{TNLean.PEPS.AreaLaw.uniformAreaLawConstant}, and
-\leanid{TNLean.PEPS.AreaLaw.exists_regionalEntropy_le_uniformAreaLawConstant}
-proves the bound with it. Its inputs that are not yet closed forms on the
-path are listed in Section~\ref{sec:open}: the safe-box constant $C_{\rm box}$
-with its entropy bound, which \leanid{TNLean.PEPS.AreaLaw.uniformAreaLaw} takes
-from the existential \leanid{TNLean.PEPS.AreaLaw.Scan.exists_boxEntropy_le_boxError};
-the truncation constant $C_{\rm tr}$, whose closed form
-\leanid{TNLean.PEPS.AreaLaw.latticeTruncationRadiusConstant} is not yet
-substituted, and the five transport constants of the scanner, which have no
-closed form yet; and the filter-locality constants $(C,c)$ of the positive
-constraints, which \leanid{TNLean.PEPS.AreaLaw.uniformAreaLaw} still chooses
-existentially although their closed forms are
-\leanid{TNLean.PEPS.AreaLaw.latticePositiveConstraintConst} and
-\leanid{TNLean.PEPS.AreaLaw.latticePositiveConstraintRate}. The birth-separation constant
-is $c_1=1/112$
+The proof of the source statement,
+\leanid{TNLean.PEPS.AreaLaw.uniformAreaLaw}
+(\src{TNLean/PEPS/AreaLaw/AreaLawTheorem.lean}, line~51), is a corollary of
+\leanid{TNLean.PEPS.AreaLaw.uniformAreaLaw_closed} below, with the constant
+\leanid{TNLean.PEPS.AreaLaw.uniformAreaLawConstantClosed}; no input on its path
+is taken from an existential statement. The
+birth-separation constant is $c_1=1/112$
 (\leanid{TNLean.PEPS.AreaLaw.Geometry.isBirthSeparationConstant_birthTemplateSeparationConstant}).
 
 These inputs are pinned in
 \leanid{TNLean.PEPS.AreaLaw.uniformAreaLawConstantExplicit}
-(\src{TNLean/PEPS/AreaLaw/AreaLawExplicitConstant.lean}). There $C_{\rm box}$ is
-the bootstrapped safe-box constant started from the explicit initial box
-estimate, the truncation constants are explicit functions of $R,J,\Delta$, and
-the filter-locality constants are those of the positive constraints. The only
-remaining input is one tuple $(c_0,C_{\rm ent},e_{\rm ent},C_{\rm en},e_{\rm en})$
-of transport constants satisfying the finite-family transport bound; these are
-universal and do not depend on $q,R,J,\Delta$.
-\leanid{TNLean.PEPS.AreaLaw.uniformAreaLaw_explicit} proves the area law with
-this constant for every such tuple with $c_0>0$. Explicit values of the
-transport constants come from QICLean's
-\leanid{transport_finite_family_explicit}, after which the constant of
-Theorem~1.1 is a closed expression in $q,R,J,\Delta$.
+(\src{TNLean/PEPS/AreaLaw/AreaLawExplicitConstant.lean}, line~65). There
+$C_{\rm box}$ is the bootstrapped safe-box constant started from the explicit
+initial box estimate, the truncation constants are the explicit functions
+\leanid{TNLean.PEPS.AreaLaw.latticeTruncationRadiusConstant} of $R,J,\Delta$,
+and the filter-locality constants are the closed forms
+\leanid{TNLean.PEPS.AreaLaw.latticePositiveConstraintConst} and
+\leanid{TNLean.PEPS.AreaLaw.latticePositiveConstraintRate} of the positive
+constraints. The remaining argument is one tuple
+$(c_0,C_{\rm ent},e_{\rm ent},C_{\rm en},e_{\rm en})$ of transport constants
+satisfying the finite-family transport bound; these are universal and do not
+depend on $q,R,J,\Delta$.
+\leanid{TNLean.PEPS.AreaLaw.uniformAreaLaw_explicit} (line~92) proves the area
+law with this constant for every such tuple with $c_0>0$.
+
+The transport constants have a proved closed form. The finite-family transport
+bound holds at
+\[
+    c_0=\tfrac18,\qquad
+    C_{\rm ent}=200000,\qquad
+    e_{\rm ent}=2,\qquad
+    C_{\rm en}=3\bigl(18\pi^2+6144\,e^{\pi^2+1}\bigr),\qquad
+    e_{\rm en}=4
+\]
+(\leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.finiteFamilyTransportBound_explicit},
+\src{TNLean/PEPS/AreaLaw/Scan/ActualRoundTransport.lean}, line~190). These are the QICLean constants
+\leanid{TensorPower.ReplicaTransport.transportThreshold},
+\leanid{TensorPower.ReplicaTransport.transportEntropyConst},
+\leanid{TensorPower.ReplicaTransport.transportEntropyExponent},
+\leanid{TensorPower.ReplicaTransport.transportEnergyConst} and
+\leanid{TensorPower.ReplicaTransport.transportEnergyExponent}
+(\src{QICLean/Representation/ReplicaTransport/Transport.lean}, lines~41--60),
+whose values are proved in lines~63--86 of the same file, and the bound is
+QICLean's \leanid{TensorPower.ReplicaTransport.transport_finite_family_explicit}
+(\src{QICLean/Representation/ReplicaTransport/FiniteFamily.lean}, line~40).
+At these values the constant of Theorem~1.1 is
+\leanid{TNLean.PEPS.AreaLaw.uniformAreaLawConstantClosed}
+(\src{TNLean/PEPS/AreaLaw/AreaLawExplicitConstant.lean}, line~116), a closed
+expression in $q,R,J,\Delta$ alone, and
+\leanid{TNLean.PEPS.AreaLaw.uniformAreaLaw_closed} (line~133) proves the area
+law with it under the hypotheses $q\ge1$, $J\ge0$ and $\Delta>0$, which are no
+stronger than those of Theorem~1.1. This is the explicit statement asked for at
+the start of this note. The source-statement theorem
+\leanid{TNLean.PEPS.AreaLaw.uniformAreaLaw} is proved as its corollary.
 
 \paragraph{Dependence on the parameters.}
 The parameters $q,R,J,\Delta$ enter through four explicit quantities:
@@ -217,13 +239,13 @@ polynomially.
 Proposition~9.5 (\src{08-scanner.tex}, lines~681--805) bounds the safe-box
 entropy by $C_{\rm box}\,r^{1+e_*}$ at every scale $r\ge1$
 (\leanid{TNLean.PEPS.AreaLaw.Scan.exists_boxEntropy_le_boxError},
-\src{TNLean/PEPS/AreaLaw/Scan/PhysicalBoxBootstrap.lean}, line~293). It has two
+\src{TNLean/PEPS/AreaLaw/Scan/PhysicalBoxBootstrap.lean}, line~335). It has two
 stages.
 
 \paragraph{Initial estimate (Proposition~3.3).}
 The initial estimate (\src{02-initial.tex}, lines~596--669;
 \leanid{TNLean.PEPS.AreaLaw.boxEntropy_le_initialBoxConstant_mul_rpow},
-\src{TNLean/PEPS/AreaLaw/InitialBoxEstimate.lean}, line~542) is explicit. With
+\src{TNLean/PEPS/AreaLaw/InitialBoxEstimate.lean}, line~546) is explicit. With
 the explicit contour constants $B_{\rm cross}(R)$ and
 $K_{\rm budget}(q,R)=1+B_{\rm cross}(R)\log\bigl(e\,q^{1+2R(R+1)}\bigr)^2$
 (\leanid{TNLean.PEPS.AreaLaw.bufferCrossConst},
@@ -250,11 +272,21 @@ $\Cpad^{-2}/\log\Cpad$. These quantities are named:
 \leanid{TNLean.PEPS.AreaLaw.initialBoxScale} ($M$),
 \leanid{TNLean.PEPS.AreaLaw.initialBoxRatio} ($\lambda$),
 \leanid{TNLean.PEPS.AreaLaw.initialBoxExponent} ($e_0$) and
-\leanid{TNLean.PEPS.AreaLaw.initialBoxConstantExplicit} ($C_{\rm init}$), the
-value of \leanid{TNLean.PEPS.AreaLaw.initialBoxConstant} at the QICLean constant
-\leanid{Entropy.scaleRecurrenceConst}. The bootstrap on the path of
-Theorem~1.1 does not use this named form yet: it starts from the existential
-form \leanid{TNLean.PEPS.AreaLaw.exists_boxEntropy_le_rpow} (issue \#9677).
+\leanid{TNLean.PEPS.AreaLaw.initialBoxConstantExplicit} ($C_{\rm init}$,
+line~539). The last is defined as
+\leanid{TNLean.PEPS.AreaLaw.initialBoxConstant}, whose scale-recurrence
+constant is a parameter, evaluated at the QICLean definition
+\leanid{Entropy.scaleRecurrenceConst}
+(\src{QICLean/Analysis/ScaleRecurrence.lean}, line~69).
+\leanid{TNLean.PEPS.AreaLaw.boxEntropy_le_initialBoxConstant_mul_rpow} proves
+Proposition~3.3 with $C_{\rm init}$ and $e_0$ and no further hypothesis, by
+discharging that parameter with QICLean's
+\leanid{Entropy.le_scaleRecurrenceConst_mul_rpow}. The bootstrap of
+\leanid{TNLean.PEPS.AreaLaw.uniformAreaLaw_closed}, and hence of
+\leanid{TNLean.PEPS.AreaLaw.uniformAreaLaw}, starts from this named form. The
+existential form \leanid{TNLean.PEPS.AreaLaw.exists_boxEntropy_le_rpow}
+(\src{TNLean/PEPS/AreaLaw/InitialBoxEstimate.lean}, line~561) has the witnesses
+$C_{\rm init}$ and $e_0$.
 
 The values of $M$, $\lambda$ and $p$ above are those of the Lean proof, not of
 the source. The source (\src{02-initial.tex}, lines~614--656) orders the
@@ -306,14 +338,22 @@ exactly these $m$ rounds, and $C_{\rm box}$ is
 \leanid{TNLean.PEPS.AreaLaw.Scan.physicalBoxBootstrapConstant}
 (\leanid{TNLean.PEPS.AreaLaw.Scan.exists_boxEntropy_le_boxError_of_initial}).
 Its arguments include the truncation constant $C_{\rm tr}$ and the transport
-constants of the scanner, which are not yet closed forms on the path
-(Section~\ref{sec:open}), so $C_{\rm box}$ is not yet explicit in Lean.
+constants of the scanner. At $C_{\rm init}$, $e_0$, the truncation constant
+\leanid{TNLean.PEPS.AreaLaw.latticeTruncationRadiusConstant}$(R,J,\Delta,2)$ and
+a tuple of transport constants it is
+\leanid{TNLean.PEPS.AreaLaw.Scan.physicalBoxConstantExplicit}
+(\src{TNLean/PEPS/AreaLaw/Scan/PhysicalBoxBootstrap.lean}, line~365), with the
+entropy bound
+\leanid{TNLean.PEPS.AreaLaw.Scan.boxEntropy_le_boxError_explicit}, so at the
+closed-form transport constants of Section~\ref{sec:top} it is explicit.
+\leanid{TNLean.PEPS.AreaLaw.Scan.exists_boxEntropy_le_boxError} states these
+arguments existentially, with the named constants as witnesses.
 
 \subsection{Proposition~9.6: the sublinear collar bound}
 
 Proposition~9.6 (\src{08-scanner.tex}, lines~808--827 and 942--943;
 \leanid{TNLean.PEPS.AreaLaw.sublinearCollarBound_real},
-\src{TNLean/PEPS/AreaLaw/PhysicalCollarInformation.lean}, line~201) applies the
+\src{TNLean/PEPS/AreaLaw/PhysicalCollarInformation.lean}, line~243) applies the
 scanner at the final exponents, with entropy input coefficient
 $C_w=4C_{\rm box}+4\log q+1$. The scanner (Proposition~9.2,
 \src{08-scanner.tex}, lines~349--533) and the final-scale information estimate
@@ -332,9 +372,16 @@ $C_w$. The theorem
 Proposition~9.6 with this $C_1$ and $N_1$ for every safe-box constant
 $C_{\rm box}$, and
 \leanid{TNLean.PEPS.AreaLaw.sublinearCollarBound_real_of_initial} does so at
-$C_{\rm box}$ given by the bootstrap. Both still state the truncation constant
-$C_{\rm tr}$ and the transport constants existentially, and $N_1$ depends on
-them (Section~\ref{sec:open}).
+$C_{\rm box}$ given by the bootstrap. Both state the truncation constant
+$C_{\rm tr}$ and the transport constants existentially, with the named
+constants as witnesses, and $N_1$ depends on them (Section~\ref{sec:open}).
+\leanid{TNLean.PEPS.AreaLaw.sublinearCollarBound_real_explicit}
+(same file, line~265) proves Proposition~9.6 with these arguments named: the truncation
+constant \leanid{TNLean.PEPS.AreaLaw.latticeTruncationRadiusConstant}$(R,J,\Delta,10)$,
+$C_{\rm box}$ given by
+\leanid{TNLean.PEPS.AreaLaw.Scan.physicalBoxConstantExplicit}, and any tuple
+of transport constants satisfying the transport bound with $c_0>0$; this is the
+form used by \leanid{TNLean.PEPS.AreaLaw.uniformAreaLaw_explicit}.
 
 The output coefficients of the scanner are explicit expressions in the input
 coefficient, as recorded in
@@ -393,11 +440,12 @@ constants \leanid{SpectralFilter.positiveConstraintLocalityConst} and
 Proposition~10.2 at them, with
 \leanid{TNLean.PEPS.AreaLaw.amplificationConstantExplicit} and
 \leanid{TNLean.PEPS.AreaLaw.amplificationThresholdExplicit}, and
-\leanid{TNLean.PEPS.AreaLaw.amplificationBound} is its corollary. The proof of
-Theorem~1.1 in \leanid{TNLean.PEPS.AreaLaw.uniformAreaLaw} still takes $(C,c)$
-from the existential QICLean statement
-\leanid{SpectralFilter.exists_norm_positiveConstraint_sub_map_le}
-(Section~\ref{sec:open}).
+\leanid{TNLean.PEPS.AreaLaw.amplificationBound} is its corollary.
+\leanid{TNLean.PEPS.AreaLaw.uniformAreaLaw_explicit}, and hence
+\leanid{TNLean.PEPS.AreaLaw.uniformAreaLaw_closed}, applies
+\leanid{TNLean.PEPS.AreaLaw.amplificationBound_explicit}, and so does the proof
+of Theorem~1.1 in \leanid{TNLean.PEPS.AreaLaw.uniformAreaLaw}, its
+corollary.
 The typical-projector threshold $N_t$ (row~34) is kind (a): it compares a
 stretched exponential $Ce^{-cn^{1/10}}$ with $n^{-2K}$. The constants $c$, $v$,
 $C_g$ and $c_{p_{\rm a}}$ involve the $L^1$ norm of the degree-$p_{\rm a}$
@@ -467,8 +515,9 @@ following order.
           The assembly of Proposition~11.2 takes $c_1$ as an input
           (\leanid{TNLean.PEPS.AreaLaw.Geometry.IsBirthSeparationConstant}), and
           \leanid{TNLean.PEPS.AreaLaw.Geometry.isBirthSeparationConstant_birthTemplateSeparationConstant}
-          shows that $1/112$ is one. The proof of Theorem~1.1 in
-          \leanid{TNLean.PEPS.AreaLaw.uniformAreaLaw} uses $c_1=1/112$; the
+          shows that $1/112$ is one. The proofs of Theorem~1.1 in
+          \leanid{TNLean.PEPS.AreaLaw.uniformAreaLaw} and of
+          \leanid{TNLean.PEPS.AreaLaw.uniformAreaLaw_closed} use $c_1=1/112$; the
           stand-alone \leanid{TNLean.PEPS.AreaLaw.twoFamilyDecomposition_of_one_le}
           still takes $c_1$ from the existential
           \leanid{TNLean.PEPS.AreaLaw.Geometry.exists_isBirthSeparationConstant}.
@@ -648,7 +697,7 @@ Declaration (file:line)                                          & Elementary in
 \leanid{ScannerExponents.eventually_bandCount_le_rpow}
 (\src{Scan/FinalSharpScalarBounds.lean}:116)                     & $2\le n^\mu$                                                                       & P1, P7 \\
 \leanid{rounded_clearance_of_threshold_le}
-(\src{Scan/RoundedClearance.lean}:40)                            & $4n^{1-\ell}\le\eta n$ and $20C_r(\log n)^2\le\eta n$, $\eta=1/(4(C_2+1))$, from \leanid{roundedClearanceThreshold} on & P2, P3 \\
+(\src{Scan/RoundedClearance.lean}:42)                            & the clearance budgets $(D_0+1)L\le D_0s$ and $2L+10r_0\le D_0s$ for $s$ from \leanid{roundedClearanceThreshold} on, via $4n^{1-\ell}\le\eta n$ and $20C_r(\log n)^2\le\eta n$, $\eta=1/(4(C_2+1))$ & P2, P3 \\
 \leanid{collar_radius_scale_tendsto_zero}
 (\src{Amplification/RadiusScales.lean}:58)                       & $(n^{1-\eps}+2Cn^{(1-\eps)/\alpha})/n^\beta\to0$                                   & P2    \\
 \leanid{typicalProjectionThreshold}
@@ -685,7 +734,7 @@ bound, since the latter consumes $C_{\rm box}$. Rows marked $\dagger$ belong to
 the Lean proof of Proposition~11.2 and of Theorem~1.1
 (\leanid{TNLean.PEPS.AreaLaw.twoFamilyDecomposition_of_one_le},
 \leanid{TNLean.PEPS.AreaLaw.uniformAreaLaw}). Line numbers are those of the
-main branch on 2026-10-18. Rows~1--31 and~33--35 cite the existential statement
+main branch on 2026-10-19. Rows~1--31 and~33--35 cite the existential statement
 and, after ``named'', the closed-form threshold from which it is now proved; the
 existential form is kept as a corollary of the named one. Row~32 cites the round
 count itself. Each $\dagger$ row now uses a closed-form
@@ -731,16 +780,16 @@ line~59, which extracts nothing.
 \leanid{exists_bootstrap_comparison_loss_threshold}         & $n^{-\nu/4}<\frac12$ and $C(1+C_e)n^{-\nu/4}<1$; named \leanid{bootstrapComparisonLossThreshold}  & a    & B      & P1     \\
 4   & \src{Scan/BootstrapBinaryEntropyCost.lean}:69
 \leanid{exists_bootstrap_binEntropy_cost_bound}             & scale facts; named \leanid{ScannerExponents.scaleFactsThreshold}  & a    & B      & P1, P7 \\
-5   & \src{Scan/SourceBootstrapEntropy.lean}:448
+5   & \src{Scan/SourceBootstrapEntropy.lean}:497
 \leanid{exists_sourceBootstrap_entropy_improvement}         & target entropy continuity cost; named \leanid{CollarScan.sourceBootstrapEntropyThreshold}  & a    & B      & P8     \\
-6   & \src{Scan/SourceBootstrapEntropy.lean}:448 (same)          & $4\le n^\nu$                                                                 & a    & B      & P1     \\
-7   & \src{Scan/SourceBootstrapEntropy.lean}:448 (same)          & $\log n\ge1$                                                                 & a    & B      & P8     \\
+6   & \src{Scan/SourceBootstrapEntropy.lean}:497 (same)          & $4\le n^\nu$                                                                 & a    & B      & P1     \\
+7   & \src{Scan/SourceBootstrapEntropy.lean}:497 (same)          & $\log n\ge1$                                                                 & a    & B      & P8     \\
 8   & \src{Scan/ScannerRoundedAdmissibility.lean}:58
 \leanid{ScannerExponents.exists_rounded_admissibility}      & status scale separation, $2\lceil C_r(\log n)^2\rceil\le n^\kappa$, $K\ge8$; named \leanid{ScannerExponents.roundedAdmissibilityThreshold}  & a    & B      & P1, P4 \\
 9   & \src{Scan/FixedWeightTransportSmallness.lean}:85
 \leanid{ScannerExponents.exists_fixedWeightFour_transport_smallness} & $n^{1-\ell-\mu}\le CK$, $\log n\ge1$, $4CC_d(\log n)^4\le c_t n^{1-\ell-\mu}$, $K\ge8$; named \leanid{ScannerExponents.fixedWeightTransportThreshold}  & a & B & P3, P7 \\
 10  & \src{Scan/RoundedClearance.lean}:104
-\leanid{exists_rounded_clearance_threshold}                 & $(4n^{1-\ell}+20(C_r(\log n)^2+1))/n<1/(C_2+1)$; named \leanid{roundedClearanceThreshold}  & a    & B      & P2, P3 \\
+\leanid{exists_rounded_clearance_threshold}                 & $4n^{1-\ell}\le\eta n$, $20C_r(\log n)^2\le\eta n$ and $n\ge80(C_2+1)$, $\eta=1/(4(C_2+1))$; named \leanid{roundedClearanceThreshold}, proved by \leanid{rounded_clearance_of_threshold_le}  & a    & B      & P2, P3 \\
 11  & \src{Scan/RoundedClearance.lean}:104 (same)                 & $C_2s\ge\max(N,1)$                                                           & a    & B      & P1     \\
 12  & \src{Scan/BadOldHistoryDecay.lean}:185
 \leanid{exists_badOldHistory_threshold}                     & bad-history tail at most $n^{-P}$; split-counting scales; named \leanid{badOldHistoryThreshold}  & a    & B      & P1, P4 \\
@@ -750,24 +799,24 @@ line~59, which extracts nothing.
 \leanid{ScannerExponents.exists_actualCharge_energy_coefficients} & scale facts and $\log n\ge1$; named \leanid{ScannerExponents.actualChargeEnergyThreshold}  & a    & B      & P7, P8 \\
 15  & \src{Scan/ActualChargeEnergyCoefficients.lean}:272
 \leanid{exists_actualCharge_energy_coefficients}            & scale facts and $\log n\ge1$; named \leanid{finalActualChargeEnergyThreshold}  & a    & B      & P7, P8 \\
-16  & \src{Scan/SourceRoughSelection.lean}:462
+16  & \src{Scan/SourceRoughSelection.lean}:598
 \leanid{exists_sourceTarget_selected_actualCharge_rough_comparison} & prefix entropy continuity cost; named \leanid{ScannerExponents.sourceRoughSelectionThreshold}  & a    & B      & P8     \\
-17  & \src{Scan/SourceRoughSelection.lean}:462 (same)            & scale facts and $K\ge8$                                                      & a    & B      & P1, P7 \\
+17  & \src{Scan/SourceRoughSelection.lean}:598 (same)            & scale facts and $K\ge8$                                                      & a    & B      & P1, P7 \\
 18  & \src{Scan/SharpMomentScale.lean}:247
 \leanid{ScannerExponents.exists_a_le_moment_radius}         & $(\log n)^6$ against $n^\delta$; named \leanid{ScannerExponents.momentRadiusThreshold}  & a    & S      & P3     \\
 19  & \src{Scan/SourceDensityScale.lean}:160
 \leanid{ScannerExponents.exists_principalDensity_le_rpow}   & principal density at most $n^{-r}$; named \leanid{ScannerExponents.principalDensityThreshold}  & a    & S      & P3     \\
 20  & \src{Scan/SourceEndpointRoughBudget.lean}:129
 \leanid{exists_source_actualScan_suppliedPrevector_endpoint_budget} & prefix entropy continuity cost; named \leanid{truncationEntropyThreshold}  & a    & S      & P8     \\
-21  & \src{Scan/SourceSelectedSharpEnergy.lean}:393
+21  & \src{Scan/SourceSelectedSharpEnergy.lean}:562
 \leanid{exists_sourceTarget_selected_actualCharge_sharp_energy} & target entropy continuity cost; named \leanid{sourceSelectedSharpEnergyThreshold}  & a    & S      & P8     \\
-22  & \src{Scan/SourceSelectedSharpEnergy.lean}:393 (same)       & $4\le n^{\nu_{\rm sc}}$                                                      & a    & S      & P1     \\
-23  & \src{Scan/SourceSelectedSharpEnergy.lean}:393 (same)       & $\log n\ge1$                                                                 & a    & S      & P8     \\
-24  & \src{Scan/SourceActualInformation.lean}:273
+22  & \src{Scan/SourceSelectedSharpEnergy.lean}:562 (same)       & $4\le n^{\nu_{\rm sc}}$                                                      & a    & S      & P1     \\
+23  & \src{Scan/SourceSelectedSharpEnergy.lean}:562 (same)       & $\log n\ge1$                                                                 & a    & S      & P8     \\
+24  & \src{Scan/SourceActualInformation.lean}:415
 \leanid{exists_sourceTarget_actual_mutualInformation_bound} & terminal entropy continuity cost; named \leanid{sourceSelectedSharpEnergyThreshold}  & a    & S      & P8     \\
-25  & \src{Scan/SourceFinalInformation.lean}:227
+25  & \src{Scan/SourceFinalInformation.lean}:287
 \leanid{exists_sourceTarget_finalScale_mutualInformation}   & target entropy continuity cost; named \leanid{sourceFinalInformationThreshold}  & a    & S      & P8     \\
-26  & \src{Scan/SourceTargetSharpMoments.lean}:240
+26  & \src{Scan/SourceTargetSharpMoments.lean}:336
 \leanid{exists_truncated_target_sharp_moments}              & status scale separation; named \leanid{targetSharpMomentThreshold}  & a    & S      & P1, P4 \\
 27  & \src{Scan/FinalSharpScalarBounds.lean}:186
 \leanid{exists_finalSharp_scale_bounds}                     & $n^{0.74999}\le C_aK\le C_an^{0.74999}$, $2\le n^{1/4000}$; named \leanid{finalSharpScaleThreshold}  & a    & S      & P1, P7 \\
@@ -830,9 +879,9 @@ line~59, which extracts nothing.
 56  & \src{Geometry/ScaleSeparation.lean}:70
 \leanid{exists_dyadicScale_side_ratios}                     & least $d$ with $2^d>M$                                                       & a    & off    & P9     \\
 \multicolumn{6}{l}{\emph{Compactness minima}}                                                                                                                   \\
-57  & \src{Geometry/BirthSeparationAtoms.lean}:567
+57  & \src{Geometry/BirthSeparationAtoms.lean}:575
 \leanid{exists_pos_common_contact_dichotomy}                & minimum of $\|x-y\|$ on a compact set of pairs of points of two sectorial polygons away from their common lattice contacts; replaced on the path by $c_2=1/28$ & b & off & -- \\
-58  & \src{Geometry/BirthSeparationReplacement.lean}:73
+58  & \src{Geometry/BirthSeparationReplacement.lean}:79
 \leanid{exists_pos_le_norm_sub_away_from_intPoints}         & minimum of $\|x-y\|$ on a compact set of pairs away from common integer points; replaced on the path by $c_2=1/28$ & b  & off    & --     \\
 \multicolumn{6}{l}{\emph{Replica limits}}                                                                                                                       \\
 59  & \src{Scan/ActualRoughLowerRemainder.lean}:135
@@ -860,9 +909,9 @@ line~59, which extracts nothing.
 \leanid{terminates}                                         & finite termination of each repair branch                                     & d    & G      & --     \\
 70  & \src{Geometry/RepairTermination.lean}:45
 \leanid{RepairMetricHypotheses.exists_isEmpty_markIndex}    & finite termination of the repair stages                                      & d    & G      & --     \\
-71  & \src{Geometry/BirthSeparationAtoms.lean}:72
+71  & \src{Geometry/BirthSeparationAtoms.lean}:80
 \leanid{lt_of_mem_interior_intHalfPlane}                    & a point of a neighborhood                                                    & d    & G      & --     \\
-72  & \src{Geometry/BirthSeparationAtoms.lean}:274
+72  & \src{Geometry/BirthSeparationAtoms.lean}:282
 \leanid{exists_mem_of_finite_cover_ray}                     & a point of a neighborhood                                                    & d    & G      & --     \\
 73  & \src{RegularizedPatchMinimum.lean}:132
 \leanid{exists_isMinOn_regularizedPatchObjective}           & a minimizing filter on a compact domain (callers at \src{RegularizedPatchLogMinimum.lean}:38, \src{RegularizedPatchMinimum.lean}:240, 317, \src{RegularizedPatchMinimumGrowth.lean}:79) & d & off & -- \\
@@ -926,15 +975,15 @@ Declaration (file:line)                                                         
 Declaration (file:line)                                                              & Limit used                                                    \\
 \midrule
 \endhead
-\leanid{entropy_le_of_replica_comparisons} (\src{BootstrapReplicaAbsorption.lean}:42) & passage to the limit in the bootstrap comparison              \\
+\leanid{entropy_le_of_replica_comparisons} (\src{BootstrapReplicaAbsorption.lean}:44) & passage to the limit in the bootstrap comparison              \\
 \leanid{restored_entropy_le_of_selected_rough_comparisons}
-(\src{SourceBootstrapEntropy.lean}:47)                                               & the same for the restored entropy                             \\
+(\src{SourceBootstrapEntropy.lean}:49)                                               & the same for the restored entropy                             \\
 \leanid{regionalEntropy_le_of_rough_typical_comparisons}
-(\src{TypicalReplicaAbsorption.lean}:47)                                             & the same for the typical comparison                           \\
+(\src{TypicalReplicaAbsorption.lean}:48)                                             & the same for the typical comparison                           \\
 \leanid{information_le_of_eventually_sharpInformationBound}
 (\src{SharpInformationScalar.lean}:68)                                               & the same for the sharp information bound                      \\
-\leanid{tendsto_log_div_nat} (\src{Selection.lean}:64)                               & $\log(k+2)/k\to0$                                             \\
-\leanid{tendsto_roughEndpointRemainder} (\src{ActualEndpointRoughBudget.lean}:40)    & Bell overlap remainder and $C\log(k+2)/k\to0$                 \\
+\leanid{tendsto_log_div_nat} (\src{Selection.lean}:66)                               & $\log(k+2)/k\to0$                                             \\
+\leanid{tendsto_roughEndpointRemainder} (\src{ActualEndpointRoughBudget.lean}:42)    & Bell overlap remainder and $C\log(k+2)/k\to0$                 \\
 \leanid{tendsto_roughLowerRemainderAtWeight_of_label_dimension},
 \leanid{tendsto_roughLowerRemainder_of_label_dimension}
 (\src{ActualRoughLowerRemainder.lean}:62, 116)                                       & label-dimension defect $o(k)$ divided by $k$                  \\
@@ -948,7 +997,7 @@ Declaration (file:line)                                                         
 \subsection{Dependencies outside this directory}
 
 Five ingredients on the path live in QICLean, at the revision
-\texttt{6e5aa9b5} pinned in \src{lake-manifest.json}. The scale-recurrence
+\texttt{23ca41f0} pinned in \src{lake-manifest.json}. The scale-recurrence
 constant $(|F(1)|+K/(\lambda-M))M^{\log\lambda/\log M}$ is the named definition
 \leanid{Entropy.scaleRecurrenceConst}
 (\src{QICLean/Analysis/ScaleRecurrence.lean}, line~69). The quasi-local
@@ -956,19 +1005,24 @@ filter constants are named definitions, and so are the locality constants
 \leanid{SpectralFilter.positiveConstraintLocalityConst} and
 \leanid{SpectralFilter.positiveConstraintLocalityRate} of the positive constraints
 (\src{QICLean/Analysis/SpectralFilter/FilterLocality.lean}, lines~366 and~372);
-the proof of Theorem~1.1 still uses the existential form
-\leanid{SpectralFilter.exists_norm_positiveConstraint_sub_map_le} (line~459).
-The replica transport estimate
+the existential form
+\leanid{SpectralFilter.exists_norm_positiveConstraint_sub_map_le} (line~459) is
+no longer on the path of \leanid{TNLean.PEPS.AreaLaw.uniformAreaLaw}.
+The replica transport estimate holds at named constants with proved values,
+\leanid{TensorPower.ReplicaTransport.transport_finite_family_explicit}
+(\src{QICLean/Representation/ReplicaTransport/FiniteFamily.lean}, line~40), at
+the constants of \src{QICLean/Representation/ReplicaTransport/Transport.lean},
+lines~41--60 (Section~\ref{sec:top}); the existential form
 \leanid{TensorPower.ReplicaTransport.transport_finite_family}
-(\src{QICLean/Representation/ReplicaTransport/FiniteFamily.lean}, line~39)
-supplies the transport constants of the scanner existentially. The typical-tail
+(\src{QICLean/Representation/ReplicaTransport/FiniteFamily.lean}, line~130) is
+no longer used in TNLean. The typical-tail
 threshold
 \leanid{Entropy.exists_typical_tail_bound_of_log_pow_twelve_budget}
 (\src{QICLean/Analysis/TypicalTailScales.lean}, line~169) extracts a
 threshold from a stretched exponential against $n^{-100}$ and from
 $(\log n)^6$ against a power, shapes (P5) and (P3). The inventory above is
-restricted to \src{TNLean/PEPS/AreaLaw}; a complete explicit constant also
-needs the QICLean thresholds on the path, which have the same shapes.
+restricted to \src{TNLean/PEPS/AreaLaw}; the QICLean thresholds on the path
+have the same shapes.
 
 \section{Size of the constant (heuristic)}
 
@@ -1024,57 +1078,44 @@ constant. The constant is not explicit as written, and it is enormous.
           constants and thresholds with a theorem at the named values, through
           the scanner (Propositions~9.2, 9.5, 9.6), amplification
           (Proposition~10.2) and geometry (Proposition~11.2); rows~1--35 and
-          74--79 of Table~\ref{tab:sites} name them. The inputs that are not
-          yet closed forms on the path are listed below.
+          74--79 of Table~\ref{tab:sites} name them. The proof of the source
+          statement chooses no input existentially.
     \item[4.] \emph{An explicit birth-separation constant.} Done: the two
           compactness minima (rows~57--58) are replaced by $c_2=1/28$, from an
           error bound for polygons cut out by belt half-planes, which gives
           $c_1=1/112$. The compactness lemmas of rows~57--58 remain in the
           library but no proof on the path of Theorem~1.1 uses them.
-    \item[5.] \emph{The explicit theorem.} State Theorem~1.1 with
-          $C=C_{\rm expl}(q,R,J,\Delta)$ and give it its own blueprint entry,
-          now that Proposition~11.2 and Theorem~1.1 are proved on main. A
-          recursively defined computable $C_{\rm expl}$ needs, besides
-          substituting the existing closed forms listed below, explicit
-          values of the transport constants of the scanner, which are still
-          existential. An elementary closed form additionally needs a
-          bound for the bootstrap recursion \eqref{eq:round}.
 \end{enumerate}
-Apart from item~4, now done, the new quantitative mathematics is explicit
-transport constants and the closed-form bound for the recursion; the rest is
-restatement.
+The explicit theorem itself is proved: Theorem~1.1 holds with the constant
+$C_{\rm expl}(q,R,J,\Delta)$ of
+\leanid{TNLean.PEPS.AreaLaw.uniformAreaLawConstantClosed}, by
+\leanid{TNLean.PEPS.AreaLaw.uniformAreaLaw_closed}
+(Section~\ref{sec:top}). This constant is a finite recursion of explicit
+operations. An elementary closed form, one that does not iterate the bootstrap
+recursion \eqref{eq:round}, still needs a bound for that recursion; this is
+the remaining new quantitative mathematics.
 
 \paragraph{Open dependencies.}
 \label{sec:open}
-The following inputs of $C$ are not yet closed forms on the path of
-Theorem~1.1. Until they are, $C_{\rm box}$, $N_1$, $C_2$ and $N_2$ are named
-functions of existentially chosen arguments, not explicit numbers.
-\begin{itemize}
-    \item The transport constants $(c_t,C_{\rm ent},e_{\rm ent},C_{\rm en},e_{\rm en})$
-          of the scanner, which satisfy
-          \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.FiniteFamilyTransportBound}
-          and are obtained from the QICLean transport estimate through
-          \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_finiteFamilyTransportBound}.
-          No closed form is available yet (issue \#9703). They enter
-          $C_{\rm box}$ and $N_1$.
-    \item The truncation constant $C_{\rm tr}$. Its closed form is
-          \leanid{TNLean.PEPS.AreaLaw.latticeTruncationRadiusConstant}, but the
-          scanner, bootstrap and collar theorems still state it
-          existentially (issue \#9705). It enters $C_{\rm box}$ and $N_1$.
-    \item The tail constants $(C,c)$ of the positive constraints in
-          Proposition~10.2. Their closed forms are
-          \leanid{TNLean.PEPS.AreaLaw.latticePositiveConstraintConst} and
-          \leanid{TNLean.PEPS.AreaLaw.latticePositiveConstraintRate}, and
-          \leanid{TNLean.PEPS.AreaLaw.amplificationBound_explicit} proves
-          Proposition~10.2 at them (pull request \#9711), but
-          \leanid{TNLean.PEPS.AreaLaw.uniformAreaLaw} still chooses them
-          existentially. They enter $C_2$ and $N_2$.
-    \item The initial constant $C_{\rm init}$. Its closed form is
-          \leanid{TNLean.PEPS.AreaLaw.initialBoxConstantExplicit}, but the
-          bootstrap on the path still starts from the existential form
-          (issue \#9677). It enters $C_{\rm box}$.
-\end{itemize}
-Of these, only the transport constants lack a closed form; the other three
-need only the substitution of an existing definition.
+The explicit constant is proved
+(\leanid{TNLean.PEPS.AreaLaw.uniformAreaLaw_closed}, Section~\ref{sec:top}):
+on its path every input is a closed form, including the transport constants
+$(c_0,C_{\rm ent},e_{\rm ent},C_{\rm en},e_{\rm en})=(1/8,\,200000,\,2,\,
+3(18\pi^2+6144e^{\pi^2+1}),\,4)$ of
+\leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.finiteFamilyTransportBound_explicit}.
+The source statement \leanid{TNLean.PEPS.AreaLaw.uniformAreaLaw}, which
+asserts only that a constant exists, is proved as a corollary of
+\leanid{TNLean.PEPS.AreaLaw.uniformAreaLaw_closed}, with the constant
+\leanid{TNLean.PEPS.AreaLaw.uniformAreaLawConstantClosed}. No input on its path
+is existential: the transport constants, the initial constant $C_{\rm init}$
+and exponent $e_0$, the truncation constant $C_{\rm tr}$ and the tail constants
+$(C,c)$ of the positive constraints in Proposition~10.2 all enter through
+their closed forms
+\leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.finiteFamilyTransportBound_explicit},
+\leanid{TNLean.PEPS.AreaLaw.initialBoxConstantExplicit},
+\leanid{TNLean.PEPS.AreaLaw.initialBoxExponent},
+\leanid{TNLean.PEPS.AreaLaw.latticeTruncationRadiusConstant},
+\leanid{TNLean.PEPS.AreaLaw.latticePositiveConstraintConst} and
+\leanid{TNLean.PEPS.AreaLaw.latticePositiveConstraintRate}.
 
 \end{document}

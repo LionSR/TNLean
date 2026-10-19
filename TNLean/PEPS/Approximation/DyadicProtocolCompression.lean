@@ -65,29 +65,6 @@ noncomputable section
 
 open scoped Matrix
 
-namespace TNLean.PEPS.PairEffect.OriginalCircuit
-
-variable {P : Type} {a b : Layout P}
-
-/-- An absolute coefficient sum at most `S` bounds every individual coefficient by any `S' ≥ S`,
-and the pair-effect count of every monomial is unchanged.
-Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 143–149. -/
-theorem IsExpansionBounded.isTermwiseBounded {w : OriginalCircuit a b} {r : ℕ} {S S' : ℝ}
-    (h : w.IsExpansionBounded r S) (hS : S ≤ S') : w.IsTermwiseBounded r S' := by
-  induction w with
-  | id => trivial
-  | comp w v ihw ihv => exact ⟨ihw h.1, ihv h.2⟩
-  | privateMap => trivial
-  | nonprivateGate owner hC L hL hG tail =>
-      refine fun term hterm ↦ ⟨h.1 term hterm, (h.2.trans hS).trans' ?_⟩
-      exact List.single_le_sum (fun x hx ↦ by
-        obtain ⟨y, -, rfl⟩ := List.mem_map.mp hx
-        exact norm_nonneg _) _ (List.mem_map_of_mem hterm)
-  | swap => trivial
-  | frame r w ih => exact ih h
-
-end TNLean.PEPS.PairEffect.OriginalCircuit
-
 namespace TNLean.PEPS.Approximation.DyadicProtocol
 
 open Finset TNLean.PEPS.PairEffect
@@ -182,14 +159,14 @@ theorem exists_participants_toDistributedConstruction_circuit (hL : 0 < L)
 
 namespace IsDistributionProtocol
 
-variable {D} {Ω : StateSpace L q} {C : ℝ} {b k r : ℕ}
+variable {D} {Ω : StateSpace L q} {C_N C_K C_E : ℝ} {b k r : ℕ}
 
 /-- The protocol circuit has at most `T b` nonprivate gates, for `T` changes with at most `b`
 nonprivate gates each; repeated occurrences of one gate are counted separately.
 Source: Polynomial-PEPS manuscript (Sept 24 2026), Proposition 7.1, item 2,
 `06-geometry.tex:25–32`. -/
 theorem nonprivateCount_toDistributedConstruction_circuit_le
-    (h : D.IsDistributionProtocol Ω C b k r) (hL : 0 < L) :
+    (h : D.IsDistributionProtocol Ω C_N C_K C_E b k r) (hL : 0 < L) :
     (D.toDistributedConstruction hL).circuit.nonprivateCount ≤ D.changes * b := by
   have hcount : (D.toDistributedConstruction hL).circuit.nonprivateCount =
       (D.chain D.changes).nonprivateCount :=
@@ -202,29 +179,29 @@ theorem nonprivateCount_toDistributedConstruction_circuit_le
 Source: Polynomial-PEPS manuscript (Sept 24 2026), Proposition 7.1, item 2,
 `06-geometry.tex:31–32`. -/
 theorem participationCount_toDistributedConstruction_circuit_le
-    (h : D.IsDistributionProtocol Ω C b k r) (hL : 0 < L) (p : P) :
+    (h : D.IsDistributionProtocol Ω C_N C_K C_E b k r) (hL : 0 < L) (p : P) :
     (D.toDistributedConstruction hL).circuit.participationCount p ≤ b :=
   D.toDistributedConstruction_circuit_induction hL (fun _ _ w ↦ w.participationCount p ≤ b) <| by
     rw [DyadicProtocol.participationCount_chain]
     exact h.participation_le p
 
-/-- Every nonprivate gate of the protocol circuit has at most `⌊C L^k⌋` monomials.
+/-- Every nonprivate gate of the protocol circuit has at most `⌊C_K L^k⌋` monomials.
 Source: Polynomial-PEPS manuscript (Sept 24 2026), Proposition 7.1, item 2,
 `06-geometry.tex:29–30`. -/
 theorem isMonomialBounded_toDistributedConstruction_circuit
-    (h : D.IsDistributionProtocol Ω C b k r) (hL : 0 < L) :
-    (D.toDistributedConstruction hL).circuit.IsMonomialBounded ⌊C * (L : ℝ) ^ k⌋₊ :=
+    (h : D.IsDistributionProtocol Ω C_N C_K C_E b k r) (hL : 0 < L) :
+    (D.toDistributedConstruction hL).circuit.IsMonomialBounded ⌊C_K * (L : ℝ) ^ k⌋₊ :=
   D.toDistributedConstruction_circuit_induction hL (fun _ _ w ↦ w.IsMonomialBounded _)
     (D.isMonomialBounded_chain _ h.monomialBounded)
 
 /-- In the protocol circuit, every monomial has at most `r` pair effects and every gate has
-absolute coefficient sum at most `C L^k`.
+absolute coefficient sum at most `C_K L^k`.
 Source: Polynomial-PEPS manuscript (Sept 24 2026), Proposition 7.1, item 2,
 `06-geometry.tex:29–30`, with the expansions of Theorem 5.2, item 3,
 `04-compression.tex:143–147`. -/
 theorem isExpansionBounded_toDistributedConstruction_circuit
-    (h : D.IsDistributionProtocol Ω C b k r) (hL : 0 < L) :
-    (D.toDistributedConstruction hL).circuit.IsExpansionBounded r (C * (L : ℝ) ^ k) :=
+    (h : D.IsDistributionProtocol Ω C_N C_K C_E b k r) (hL : 0 < L) :
+    (D.toDistributedConstruction hL).circuit.IsExpansionBounded r (C_K * (L : ℝ) ^ k) :=
   D.toDistributedConstruction_circuit_induction hL (fun _ _ w ↦ w.IsExpansionBounded r _)
     (D.isExpansionBounded_chain _ h.expansionBounded)
 
@@ -319,13 +296,15 @@ density of the protocol, with link alphabets of size at most `C₁ L ^ α`, at m
 each party, and links only between parties of a common nonprivate gate. Enumerating its
 alphabets gives an operator party network on the dyadic anchors of the protocol with these
 bounds, the separation constant `b` of the protocol, and
-`‖σ - |Ω⟩⟨Ω|‖₁ ≤ ε + (2 C² + 2 C) L⁻¹⁰`.
+`‖σ - |Ω⟩⟨Ω|‖₁ ≤ ε + (2 C_N C_E + 2 C_E) L⁻¹⁰`, for the count constant `C_N` and the error
+constant `C_E` of the protocol.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), the conclusion of Theorem 5.2,
 `04-compression.tex:150–175`, applied in §8.1, `07-assembly.tex:53–63`, with the density
 estimate `eq:protocol-density`, `07-assembly.tex:33–41`. -/
-theorem exists_partyNetwork_of_contractedOperator (hL : 0 < L) {Ω : StateSpace L q} {C : ℝ}
-    {b k r : ℕ} (h : D.IsDistributionProtocol Ω C b k r) (hC : 0 ≤ C) (hΩ : ‖Ω‖ = 1)
+theorem exists_partyNetwork_of_contractedOperator (hL : 0 < L) {Ω : StateSpace L q}
+    {C_N C_K C_E : ℝ} {b k r : ℕ} (h : D.IsDistributionProtocol Ω C_N C_K C_E b k r)
+    (hC : 0 ≤ C_E) (hΩ : ‖Ω‖ = 1)
     {_ : DecidableEq P} {Gate : Type} {_ : DecidableEq Gate} (gates : Finset Gate)
     (participants : Gate → Finset P) (root : Gate → P)
     (hroot : ∀ g ∈ gates, root g ∈ participants g) (Label : Gate → Type)
@@ -350,7 +329,7 @@ theorem exists_partyNetwork_of_contractedOperator (hL : 0 < L) {Ω : StateSpace 
       (∀ ℓ, (N.dim ℓ : ℝ) ≤ C₁ * (L : ℝ) ^ α) ∧
       Matrix.rectangularTraceNorm
         (N.operatorCoeff (fun p ↦ foldVertex hL (D.placement.anchor p)) -
-          Matrix.euclideanOuterProduct Ω Ω) ≤ ε + (2 * (C * C) + 2 * C) / (L : ℝ) ^ 10 := by
+          Matrix.euclideanOuterProduct Ω Ω) ≤ ε + (2 * (C_N * C_E) + 2 * C_E) / (L : ℝ) ^ 10 := by
   classical
   subst hρ
   set e := D.physicalConfigEquiv
@@ -406,7 +385,7 @@ together with its unit target vector. These instances form the family of constru
 Theorem 5.2 is applied.
 Source: Polynomial-PEPS manuscript (Sept 24 2026), `04-compression.tex:137–139` and
 `07-assembly.tex:45–49`. -/
-private structure ProtocolInstance (q : ℕ) (C : ℝ) (b k r : ℕ) where
+private structure ProtocolInstance (q : ℕ) (C_N C_K C_E : ℝ) (b k r : ℕ) where
   size : ℕ
   two_le : 2 ≤ size
   Party : Type
@@ -414,7 +393,7 @@ private structure ProtocolInstance (q : ℕ) (C : ℝ) (b k r : ℕ) where
   protocol : DyadicProtocol size q Party
   target : StateSpace size q
   norm_target : ‖target‖ = 1
-  isDistributionProtocol : protocol.IsDistributionProtocol target C b k r
+  isDistributionProtocol : protocol.IsDistributionProtocol target C_N C_K C_E b k r
 
 attribute [local instance] ProtocolInstance.fintype
 
@@ -425,44 +404,51 @@ private theorem natCast_floor_le_max (x : ℝ) : (⌊x⌋₊ : ℝ) ≤ max x 0 
   · rw [Nat.floor_eq_zero.mpr (hx.trans_lt one_pos)]
     simp
 
-/-- **The compressed dyadic operator network from the consequences of Proposition 7.1.** If,
-for every `q ≥ 2` and `J, Δ > 0`, every gapped ground vector of a square Hamiltonian of large
-side `L` has a dyadic distribution protocol with the bounds of §8, with constants chosen before
-`L`, the Hamiltonian, and the ground vector, then the compressed dyadic operator network of
-§8.1 exists for all large squares.
+/-- **The compressed dyadic operator network from the consequences of Proposition 7.1, for one
+model.** If every gapped ground vector of a square Hamiltonian of side `L ≥ max 2 L₀` has a dyadic
+distribution protocol with the bounds of §8 at the count constant `C_N`, the expansion constant
+`C_K`, the error constant `C_E`, the bound `b`, the exponent `k` and `r` pair effects, then the
+compressed dyadic operator network of §8.1 exists at the same threshold, with
+
+* network error constant `1 + 2 C_N C_E + 2 C_E`, free of the expansion constant;
+* link prefactor `sumCompressionPrefactor r b (max C_N 0 * b) q (max C_K 0) C_K` and link
+  exponent `sampledNetworkExponent r b 3 0 k k 5` of Theorem 5.2 at accuracy `L⁻⁵`;
+* at most `b` parties per block, at most `2 b (b - 1)` links per party and link separations at
+  most `b` times either endpoint scale.
 
 The protocols for all sizes, Hamiltonians, and ground vectors form one family of distributed
 constructions with uniformly polynomial gate counts, constant arity and lifetime participation,
-physical dimensions at most `q`, and exact polynomial gate expansions. Theorem 5.2 at accuracy
-`L⁻⁵` gives one operator network per protocol, with constants fixed before the family member;
-the link dimensions are polynomial, every link joins two parties of a common gate, and the
-density error adds to the protocol estimate `‖ρ - |Ω⟩⟨Ω|‖₁ ≤ C L⁻¹⁰`. The separation hypothesis
-of Lemma 8.2 follows from item 3 of Proposition 7.1.
+physical dimensions at most `q`, and exact polynomial gate expansions; Theorem 5.2 is applied to
+this family, and the density error adds to the protocol estimate
+`‖ρ - |Ω⟩⟨Ω|‖₁ ≤ (2 C_N C_E + 2 C_E) L⁻¹⁰`. The separation hypothesis of Lemma 8.2 follows from
+item 3 of Proposition 7.1.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), §8.1, `07-assembly.tex:9–63`, with
 Theorem 5.2 `thm:compression`, `04-compression.tex:137–175`, and the order of constants of
 `07-assembly.tex:179–203`. -/
-theorem largeSizeDyadicOperatorNetwork_of_largeSizeDyadicProtocolConsequences
-    (hprot : LargeSizeDyadicProtocolConsequences) : LargeSizeDyadicOperatorNetwork := by
-  intro q hq J Δ hJ hΔ
-  obtain ⟨C, b, k, r, L₀, hall⟩ := hprot q hq J Δ hJ hΔ
-  let size : ProtocolInstance q C b k r → ℝ := fun i ↦ i.size
+theorem dyadicOperatorNetworkAt_of_dyadicProtocolBoundsAt {q : ℕ} (hq : 2 ≤ q) {J Δ : ℝ}
+    {C_N C_K C_E : ℝ} {b k r L₀ : ℕ} (hall : DyadicProtocolBoundsAt q J Δ C_N C_K C_E b k r L₀) :
+    DyadicOperatorNetworkAt q J Δ (1 + (2 * (C_N * C_E) + 2 * C_E))
+      (sumCompressionPrefactor r b (max C_N 0 * b) q (max C_K 0) C_K)
+      (sampledNetworkExponent r b 3 0 k k 5) b (2 * b * (b - 1)) b L₀ := by
+  let size : ProtocolInstance q C_N C_K C_E b k r → ℝ := fun i ↦ i.size
   have hsize : ∀ i, 2 ≤ size i := fun i ↦ by
     change (2 : ℝ) ≤ (i.size : ℝ)
     exact_mod_cast i.two_le
-  let C₀ : ∀ i : ProtocolInstance q C b k r, DistributedConstruction i.Party := fun i ↦
+  let C₀ : ∀ i : ProtocolInstance q C_N C_K C_E b k r, DistributedConstruction i.Party :=
+    fun i ↦
     i.protocol.toDistributedConstruction (by have := i.two_le; omega)
-  have hN₀ : ∀ i, ((C₀ i).circuit.nonprivateCount : ℝ) ≤ (max C 0 * b) * size i ^ 3 := by
+  have hN₀ : ∀ i, ((C₀ i).circuit.nonprivateCount : ℝ) ≤ (max C_N 0 * b) * size i ^ 3 := by
     intro i
     have hD := i.isDistributionProtocol
     have hcount : (C₀ i).circuit.nonprivateCount ≤ i.protocol.changes * b :=
       hD.nonprivateCount_toDistributedConstruction_circuit_le _
     calc ((C₀ i).circuit.nonprivateCount : ℝ)
         ≤ (i.protocol.changes : ℝ) * b := by exact_mod_cast hcount
-      _ ≤ (max C 0 * size i ^ 3) * b := by
+      _ ≤ (max C_N 0 * size i ^ 3) * b := by
           gcongr
           exact hD.changes_le.trans (by gcongr; exact le_max_left _ _)
-      _ = (max C 0 * b) * size i ^ 3 := by ring
+      _ = (max C_N 0 * b) * size i ^ 3 := by ring
   have hphysical₀ : ∀ i j, ((C₀ i).physicalDimension j : ℝ) ≤ q * size i ^ 0 := by
     intro i j
     change (i.protocol.physicalDimension j : ℝ) ≤ _
@@ -478,33 +464,36 @@ theorem largeSizeDyadicOperatorNetwork_of_largeSizeDyadicProtocolConsequences
       (i.isDistributionProtocol.card_participants_le t ht g')
   have hlifetime₀ : ∀ i j, (C₀ i).circuit.participationCount j ≤ b := fun i j ↦
     i.isDistributionProtocol.participationCount_toDistributedConstruction_circuit_le _ j
-  have hpow : ∀ i, C * size i ^ k ≤ max C 0 * size i ^ k := fun i ↦
-    mul_pow_le_max_zero_mul_pow C (by linarith [hsize i]) k
+  have hpow : ∀ i, C_K * size i ^ k ≤ max C_K 0 * size i ^ k := fun i ↦
+    mul_pow_le_max_zero_mul_pow C_K (by linarith [hsize i]) k
   have hmonomial₀ : ∀ i, ∃ K : ℕ, (C₀ i).circuit.IsMonomialBounded K ∧
-      (K : ℝ) ≤ max C 0 * size i ^ k := fun i ↦
-    ⟨⌊C * size i ^ k⌋₊,
+      (K : ℝ) ≤ max C_K 0 * size i ^ k := fun i ↦
+    ⟨⌊C_K * size i ^ k⌋₊,
       i.isDistributionProtocol.isMonomialBounded_toDistributedConstruction_circuit _,
       (natCast_floor_le_max _).trans (max_le (hpow i)
         (mul_nonneg (le_max_right _ _) (pow_nonneg (by linarith [hsize i]) _)))⟩
-  have htermwise₀ : ∀ i, (C₀ i).circuit.IsTermwiseBounded r (max C 0 * size i ^ k) := fun i ↦
-    (i.isDistributionProtocol.isExpansionBounded_toDistributedConstruction_circuit
-      (by have := i.two_le; omega)).isTermwiseBounded (hpow i)
-  obtain ⟨C_p, α, hCp, hα, hfam⟩ :=
-    DistributedConstruction.exists_uniform_sampled_network size hsize (fun i ↦ i.Party) C₀
-      b 3 0 r k k (max C 0 * b) q (max C 0) (max C 0)
-      hN₀ hphysical₀ harity₀ hlifetime₀ hmonomial₀ htermwise₀ 5 (by norm_num)
-  refine ⟨1 + (2 * (C * C) + 2 * C), C_p, α, b, 2 * b * (b - 1), b, L₀, ?_⟩
+  have hexpansion₀ : ∀ i, (C₀ i).circuit.IsExpansionBounded r (C_K * size i ^ k) := fun i ↦
+    i.isDistributionProtocol.isExpansionBounded_toDistributedConstruction_circuit
+      (by have := i.two_le; omega)
+  have hfam := DistributedConstruction.uniform_sampled_network_of_sum_le size hsize
+    (fun i ↦ i.Party) C₀ b 3 0 r k k (max C_N 0 * b) q (max C_K 0) C_K hN₀ hphysical₀ harity₀
+    hlifetime₀ hmonomial₀ hexpansion₀ 5 le_rfl le_rfl
   intro L hL hL₀ H E₀ Ω hΩ
   obtain ⟨P, hP, D, hD⟩ := hall L hL hL₀ H E₀ Ω hΩ
-  let i : ProtocolInstance q C b k r := ⟨L, hL, P, D, Ω, hΩ.1, hD⟩
+  let i : ProtocolInstance q C_N C_K C_E b k r := ⟨L, hL, P, D, Ω, hΩ.1, hD⟩
   obtain ⟨_, _, _, _, _, _, _, _, _, _, T, herr, hdim, hinc, hloc⟩ := hfam i
   have hL0 : 0 < L := by omega
-  have hC : 0 ≤ C := by
+  have hCN : 0 ≤ C_N := by
     have h1 : (1 : ℝ) ≤ Fintype.card P := by
       exact_mod_cast Fintype.card_pos_iff.mpr ⟨D.site (⟨0, hL0⟩, ⟨0, hL0⟩)⟩
     by_contra hneg
     have := mul_nonpos_of_nonpos_of_nonneg (not_le.mp hneg).le (sq_nonneg (L : ℝ))
     linarith [hD.card_le]
+  have hC : 0 ≤ C_E := by
+    obtain ⟨Ξ, hΞ, hlower, -⟩ := hD.reference_changes
+    by_contra hneg
+    have := div_neg_of_neg_of_pos (not_le.mp hneg) (by positivity : (0 : ℝ) < (L : ℝ) ^ 57)
+    linarith
   classical
   obtain ⟨Λ, _, _, N, hdeg, hsep, hdimN, hnorm⟩ :=
     D.exists_partyNetwork_of_contractedOperator hL0 hD hC hΩ.1 _ _ _ _ _ _ _ T
@@ -523,8 +512,61 @@ theorem largeSizeDyadicOperatorNetwork_of_largeSizeDyadicProtocolConsequences
   change (L : ℝ) ^ (-(5 : ℝ)) + _ ≤ _
   rw [hpow, add_div (1 : ℝ)]
   have h10 : (L : ℝ) ^ 5 ≤ (L : ℝ) ^ 10 := pow_le_pow_right₀ (by linarith) (by norm_num)
-  have hnn : 0 ≤ 2 * (C * C) + 2 * C := by positivity
+  have hnn : 0 ≤ 2 * (C_N * C_E) + 2 * C_E := by positivity
   exact add_le_add le_rfl (div_le_div_of_nonneg_left hnn hx5 h10)
+
+/-- **The compressed dyadic operator network from the consequences of Proposition 7.1, with
+separate constants.** If,
+for every `q ≥ 2` and `J, Δ > 0`, every gapped ground vector of a square Hamiltonian of large
+side `L` has a dyadic distribution protocol with the bounds of §8, with a count constant `C_N`,
+an expansion constant `C_K` and an error constant `C_E` chosen before `L`, the Hamiltonian, and
+the ground vector, then the compressed dyadic operator network of
+§8.1 exists for all large squares.
+
+The protocols for all sizes, Hamiltonians, and ground vectors form one family of distributed
+constructions with uniformly polynomial gate counts, constant arity and lifetime participation,
+physical dimensions at most `q`, and exact polynomial gate expansions. Theorem 5.2 at accuracy
+`L⁻⁵`, applied to the coefficient sums `C_K L ^ k` of the gates, gives one operator network per
+protocol, with the link prefactor `sumCompressionPrefactor r b (max C_N 0 * b) q (max C_K 0) C_K`
+and the link exponent `sampledNetworkExponent r b 3 0 k k 5`;
+the link dimensions are polynomial, every link joins two parties of a common gate, and the
+density error adds to the protocol estimate `‖ρ - |Ω⟩⟨Ω|‖₁ ≤ (2 C_N C_E + 2 C_E) L⁻¹⁰`, so the
+error constant of the network is `1 + 2 C_N C_E + 2 C_E`, free of the expansion constant. The
+separation hypothesis of Lemma 8.2 follows from item 3 of Proposition 7.1.
+
+Source: Polynomial-PEPS manuscript (Sept 24 2026), §8.1, `07-assembly.tex:9–63`, with
+Theorem 5.2 `thm:compression`, `04-compression.tex:137–175`, and the order of constants of
+`07-assembly.tex:179–203`. -/
+theorem largeSizeDyadicOperatorNetwork_of_largeSizeDyadicProtocolBounds
+    (hprot : LargeSizeDyadicProtocolBounds) : LargeSizeDyadicOperatorNetwork := by
+  intro q hq J Δ hJ hΔ
+  obtain ⟨C_N, C_K, C_E, b, k, r, L₀, hall⟩ := hprot q hq J Δ hJ hΔ
+  exact ⟨1 + (2 * (C_N * C_E) + 2 * C_E),
+    sumCompressionPrefactor r b (max C_N 0 * b) q (max C_K 0) C_K,
+    sampledNetworkExponent r b 3 0 k k 5, b, 2 * b * (b - 1), b, L₀,
+    dyadicOperatorNetworkAt_of_dyadicProtocolBoundsAt hq hall⟩
+
+/-- **The compressed dyadic operator network from the consequences of Proposition 7.1.** The
+single-constant form of `largeSizeDyadicOperatorNetwork_of_largeSizeDyadicProtocolBounds`.
+
+Source: Polynomial-PEPS manuscript (Sept 24 2026), §8.1, `07-assembly.tex:9–63`, with
+Theorem 5.2 `thm:compression`, `04-compression.tex:137–175`. -/
+theorem largeSizeDyadicOperatorNetwork_of_largeSizeDyadicProtocolConsequences
+    (hprot : LargeSizeDyadicProtocolConsequences) : LargeSizeDyadicOperatorNetwork :=
+  largeSizeDyadicOperatorNetwork_of_largeSizeDyadicProtocolBounds
+    hprot.largeSizeDyadicProtocolBounds
+
+/-- **Theorem 1.1 from the consequences of Proposition 7.1, with separate constants.** The
+existence, for all large squares, of dyadic distribution protocols with the bounds of §8 at a
+count constant, an expansion constant and an error constant implies the uniform polynomial PEPS
+approximation of gapped square-grid ground states.
+
+Source: Polynomial-PEPS manuscript (Sept 24 2026), Theorem 1.1 `thm:main`,
+`00-introduction.tex:36–57`, and its proof in §8, `07-assembly.tex:9–214`. -/
+theorem polynomialPEPSApproximation_of_largeSizeDyadicProtocolBounds
+    (h : LargeSizeDyadicProtocolBounds) : PolynomialPEPSApproximation :=
+  polynomialPEPSApproximation_of_largeSizeDyadicOperatorNetwork
+    (largeSizeDyadicOperatorNetwork_of_largeSizeDyadicProtocolBounds h)
 
 /-- **Theorem 1.1 from the consequences of Proposition 7.1.** The existence, for all large
 squares, of dyadic distribution protocols with the bounds of §8 implies the uniform polynomial
@@ -536,7 +578,6 @@ Source: Polynomial-PEPS manuscript (Sept 24 2026), Theorem 1.1 `thm:main`,
 `00-introduction.tex:36–57`, and its proof in §8, `07-assembly.tex:9–214`. -/
 theorem polynomialPEPSApproximation_of_largeSizeDyadicProtocolConsequences
     (h : LargeSizeDyadicProtocolConsequences) : PolynomialPEPSApproximation :=
-  polynomialPEPSApproximation_of_largeSizeDyadicOperatorNetwork
-    (largeSizeDyadicOperatorNetwork_of_largeSizeDyadicProtocolConsequences h)
+  polynomialPEPSApproximation_of_largeSizeDyadicProtocolBounds h.largeSizeDyadicProtocolBounds
 
 end TNLean.PEPS.Approximation

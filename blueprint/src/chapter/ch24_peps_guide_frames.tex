@@ -574,16 +574,18 @@ outer sample.
 
 \begin{theorem}[Resizes and point treatments with one footprint ratio]
     \label{thm:peps_guide_frame_reading_gates}
-    \lean{TNLean.PEPS.Approximation.exists_resize_step_reading,
+    \lean{TNLean.PEPS.Approximation.resize_step_reading_of_le,
         TNLean.PEPS.Approximation.homogenize_iUnion_eq_of_notMem,
         TNLean.PEPS.Approximation.pointTreatment_footprintRatio_homogenize_reading_of_le,
         TNLean.PEPS.Approximation.pointTreatment_step_reading_of_le}
     \leanok
     \uses{thm:peps_guide_frame_resize_treatment_gates,
-        thm:peps_dyadic_sampled_ratio, thm:peps_guide_frame_mark_ratio}
+        thm:peps_dyadic_sampled_ratio, thm:peps_guide_frame_mark_ratio,
+        thm:peps_dyadic_block_reading_ratio}
     Fix $0<\epsilon_0\le\tfrac1{16}$. Each of the following two statements
-    holds with its own threshold $\nu'>0$, independent of the scales, and for
-    the second the threshold is $\nu'=\min(\epsilon_0,1)/20000$: for
+    holds with its own threshold $\nu'>0$, independent of the scales: for the
+    first the threshold is $\nu'=\min(\epsilon_0,1)/8$, and for the second it
+    is $\nu'=\min(\epsilon_0,1)/20000$. For
     every ratio $0<\nu\le\nu'$ and every generic small displacement, with
     the bounds on the holes and the patches of
     Theorem~\ref{thm:peps_guide_frame_resize_treatment_gates} and every $b$
@@ -609,6 +611,8 @@ outer sample.
     The compactness observation gives one footprint ratio for the readings of
     block guides at every intermediate radius, and one for the readings of the
     temporary guides near a corner of the block; by
+    Theorem~\ref{thm:peps_dyadic_block_reading_ratio} the former is
+    $\min(\epsilon_0,1)/8$, and by
     Theorem~\ref{thm:peps_guide_frame_mark_ratio} the latter is
     $\min(\epsilon_0,1)/20000$. Near a corner that is not a
     mark, the homogenization about the marks changes nothing, since the other
@@ -627,7 +631,7 @@ outer sample.
         TNLean.PEPS.EncodedFrame.isSuppliedPatch_suppliedPatch,
         TNLean.PEPS.EncodedFrame.suppliedPatch_congr,
         TNLean.PEPS.EncodedFrame.suppliedPatch_data,
-        TNLean.PEPS.Approximation.exists_resize_step_supplied,
+        TNLean.PEPS.Approximation.resize_step_supplied_of_le,
         TNLean.PEPS.Approximation.pointTreatment_step_supplied_of_le}
     \leanok
     \uses{thm:peps_guide_frame_reading_gates, lem:peps_guide_frame_patch_data}

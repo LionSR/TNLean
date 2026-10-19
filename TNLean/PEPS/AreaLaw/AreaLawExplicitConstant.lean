@@ -3,7 +3,10 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.AreaLaw.AreaLawTheorem
+import TNLean.PEPS.AreaLaw.BoundaryTheoremFromTwoFamilies
+import TNLean.PEPS.AreaLaw.Geometry.TwoFamilyAssembly
+import TNLean.PEPS.AreaLaw.RectangularSpecialization
+import TNLean.PEPS.AreaLaw.VertexBoundaryCorollaries
 
 /-!
 # The two-dimensional area law with an explicit constant
@@ -21,6 +24,9 @@ depend on `q, R, J, Δ`, the domain, the Hamiltonian, the state or the cut.
   `q, R, J, Δ` and the transport constants.
 * `uniformAreaLaw_explicit`: Theorem 1.1 with this constant, for every tuple of transport
   constants satisfying the transport bound.
+* `uniformAreaLawConstantClosed`, `uniformAreaLaw_closed`: the constant at the explicit
+  transport constants of the companion library, and Theorem 1.1 with it, with no hypothesis
+  beyond those of Theorem 1.1.
 
 ## References
 
@@ -79,10 +85,9 @@ has regional entropy at most this constant times the number of cut edges.
 This is an auxiliary result: Theorem 1.1 of the source (`00-introduction.tex`, lines 39–53)
 asserts only that a constant exists, and `uniformAreaLaw` is that statement. Beyond the
 hypotheses of Theorem 1.1, the only remaining input is the transport bound at constants with
-`0 < c₀`; these constants are universal and do not depend on `q, R, J, Δ`. Their existence is
-`Scan.CollarScan.exists_finiteFamilyTransportBound`, and QICLean's finite-family transport theorem
-with explicit constants supplies explicit values. Source: proof of Theorem 1.1,
-`10-geometry.tex`, lines 803–857; the constant is tabulated in
+`0 < c₀`; these constants are universal and do not depend on `q, R, J, Δ`, and
+`Scan.CollarScan.finiteFamilyTransportBound_explicit` supplies explicit values. Source: proof
+of Theorem 1.1, `10-geometry.tex`, lines 803–857; the constant is tabulated in
 `docs/notes/arealaw2d_explicit_constant.tex`, Section `sec:top`. -/
 theorem uniformAreaLaw_explicit (q R : ℕ) (hq : 1 ≤ q) {J Δ : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < Δ)
     {c₀ Cent eent Cen een : ℝ} (hc₀ : 0 < c₀)
@@ -103,5 +108,35 @@ theorem uniformAreaLaw_explicit (q R : ℕ) (hq : 1 ≤ q) {J Δ : ℝ} (hJ : 0 
       q R hΔ (lt_max_of_lt_right one_pos) 100)
     (isTwoFamilyDecompositionConstant_twoFamilyDecompositionConstant _ _ _
       Geometry.isBirthSeparationConstant_birthTemplateSeparationConstant)
+
+/-- The constant of Theorem 1.1 as a closed-form function of `q, R, J, Δ` alone:
+`uniformAreaLawConstantExplicit` at the explicit transport constants of the companion
+library. Source: proof of Theorem 1.1, `10-geometry.tex`, lines 803–857; the constant is
+tabulated in `docs/notes/arealaw2d_explicit_constant.tex`, Section `sec:top`. -/
+noncomputable def uniformAreaLawConstantClosed (q R : ℕ) (J Δ : ℝ) : ℝ :=
+  uniformAreaLawConstantExplicit q R J Δ TensorPower.ReplicaTransport.transportThreshold
+    TensorPower.ReplicaTransport.transportEntropyConst
+    TensorPower.ReplicaTransport.transportEntropyExponent
+    TensorPower.ReplicaTransport.transportEnergyConst
+    TensorPower.ReplicaTransport.transportEnergyExponent
+
+/-- **The area law with an explicit constant.** Fix `q ≥ 1`, `R`, `J ≥ 0` and `Δ > 0`. Then
+`uniformAreaLawConstantClosed q R J Δ` is nonnegative, and every cut of every finite induced
+domain, for every gapped ground state of every admissible Hamiltonian, has regional entropy
+at most this constant times the number of cut edges.
+
+This is an auxiliary result with no hypothesis beyond those of Theorem 1.1
+(`00-introduction.tex`, lines 39–53), which asserts only that a constant exists;
+`uniformAreaLaw` is that statement. Source: proof of Theorem 1.1, `10-geometry.tex`,
+lines 803–857; the constant is tabulated in `docs/notes/arealaw2d_explicit_constant.tex`,
+Section `sec:top`. -/
+theorem uniformAreaLaw_closed (q R : ℕ) (hq : 1 ≤ q) {J Δ : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < Δ) :
+    0 ≤ uniformAreaLawConstantClosed q R J Δ ∧
+      ∀ Λ : Finset (ℤ × ℤ), ∀ H : LocalHamiltonian Λ q R J, ∀ E₀ : ℝ, ∀ Ω : StateSpace Λ q,
+        IsGappedGroundState Λ q H.operator E₀ Ω Δ → ∀ A : Finset (Site Λ),
+          regionalEntropy Λ q Ω A ≤
+            uniformAreaLawConstantClosed q R J Δ * (edgeBoundary Λ A).card :=
+  uniformAreaLaw_explicit q R hq hJ hΔ TensorPower.ReplicaTransport.transportThreshold_pos
+    Scan.CollarScan.finiteFamilyTransportBound_explicit
 
 end TNLean.PEPS.AreaLaw

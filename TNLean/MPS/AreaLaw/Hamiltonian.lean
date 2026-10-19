@@ -121,6 +121,15 @@ structure ChainHamiltonian (L q R : ℕ) (J : ℝ) where
   /-- Each term has operator norm at most `J`. -/
   norm_le : ∀ X, ‖term X‖ ≤ J
 
+/-- The interaction bound is nonnegative whenever the chain contains a site.
+The singleton interaction supplies the inequality.
+Source: TNLean note, Section 1, `eq:ham`. -/
+lemma ChainHamiltonian.norm_bound_nonneg (h : ChainHamiltonian L q R J) (x : Fin L) :
+    0 ≤ J := by
+  classical
+  let X : ChainSupport L R := ⟨{x}, by simp [IsChainSupport]⟩
+  exact (norm_nonneg (h.term X)).trans (h.norm_le X)
+
 /-- The Hamiltonian `H = ∑_X h_X`. TNLean note, Section 1, `eq:ham`. -/
 noncomputable def ChainHamiltonian.operator (h : ChainHamiltonian L q R J) :
     Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=

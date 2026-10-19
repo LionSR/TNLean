@@ -14,7 +14,6 @@ Each public theorem must exist and have precisely the three standard logical axi
 
 run_cmd do
   let names := #[
-    `TNLean.PEPS.AreaLaw.exists_regionalEntropy_le_uniformAreaLawConstant,
     `TNLean.PEPS.AreaLaw.uniformAreaLaw,
     `TNLean.PEPS.AreaLaw.uniformAreaLaw_vertex_boundary_bounds,
     `TNLean.PEPS.AreaLaw.rectangularEntropyAreaLaw,
