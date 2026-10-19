@@ -172,6 +172,15 @@ def intro_html(campaign_dir: pathlib.Path) -> str:
     return DIAGRAM_SLOT.sub(image, intro.read_text())
 
 
+def tabs_html(config: dict) -> str:
+    """The tab bar linking the sibling campaigns listed in `tabs`, the current one marked."""
+    links = []
+    for tab in config.get("tabs", []):
+        current = ' aria-current="page"' if tab["slug"] == config["slug"] else ""
+        links.append(f'<a href="../{html.escape(tab["slug"])}/"{current}>{html.escape(tab["label"])}</a>')
+    return f'<nav class="tabs" aria-label="Campaigns">{"".join(links)}</nav>' if links else ""
+
+
 def render(campaign_dir: pathlib.Path, snapshot_path: pathlib.Path, out_dir: pathlib.Path) -> pathlib.Path:
     config = json.loads((campaign_dir / "config.json").read_text())
     gaps_path = campaign_dir / "gaps.json"
@@ -193,6 +202,7 @@ def render(campaign_dir: pathlib.Path, snapshot_path: pathlib.Path, out_dir: pat
         "{{TITLE}}": html.escape(config["pageTitle"]),
         "{{DESCRIPTION}}": html.escape(config.get("description", "")),
         "{{CSS}}": (HERE / "board.css").read_text(),
+        "{{TABS}}": tabs_html(config),
         "{{INTRO}}": intro_html(campaign_dir),
         "{{FIGURES}}": figures.read_text() if figures.exists() else "",
         "{{JS}}": (HERE / "board.js").read_text(),

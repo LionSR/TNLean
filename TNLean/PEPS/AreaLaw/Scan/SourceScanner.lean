@@ -71,6 +71,8 @@ open TensorPower TensorPower.ReplicaTransport Entropy
 
 noncomputable section
 
+open TNLean.Lattice
+
 namespace TNLean.PEPS.AreaLaw.Scan
 
 namespace CollarScan

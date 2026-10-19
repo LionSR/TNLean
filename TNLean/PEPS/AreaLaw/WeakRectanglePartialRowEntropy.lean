@@ -24,6 +24,8 @@ This is the partial-layer auxiliary estimate.
 Original formalization from the manuscript; no upstream Lean proof text reused.
 -/
 
+open TNLean.Lattice
+
 namespace TNLean.PEPS.AreaLaw
 
 /-- An arbitrary part of a rectangle dilation layer has entropy cost at most

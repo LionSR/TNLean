@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.AreaLaw.TheoremStatements
+import TNLean.Lattice.RegionalEntropy
 import TNLean.Circuit.EntropySupport
 import QICLean.Entropy.SupportedMarginalTails
 import QICLean.Analysis.TypicalSet
@@ -24,11 +24,11 @@ cut.
 
 * `QuantumCircuit.isSupportedOn_of_mem_supportedOperators`: supported operators act
   as the identity outside their support.
-* `TNLean.PEPS.AreaLaw.LocalHamiltonian.log_surprisalMoment_reducedState_le`:
+* `TNLean.Lattice.LocalHamiltonian.log_surprisalMoment_reducedState_le`:
   `eq:initial-tail-mgf` for the regional state.
-* `TNLean.PEPS.AreaLaw.LocalHamiltonian.surprisalTail_reducedState_le`:
+* `TNLean.Lattice.LocalHamiltonian.surprisalTail_reducedState_le`:
   `eq:initial-tail-probability` for the regional state.
-* `TNLean.PEPS.AreaLaw.LocalHamiltonian.one_sub_rpow_le_typicalMass_reducedState`: the
+* `TNLean.Lattice.LocalHamiltonian.one_sub_rpow_le_typicalMass_reducedState`: the
   typical marginal spectrum at the concentration width `concentrationWidth`.
 
 ## References
@@ -45,7 +45,7 @@ open Matrix
 open scoped ComplexOrder Matrix.Norms.L2Operator
 
 
-namespace TNLean.PEPS.AreaLaw
+namespace TNLean.Lattice
 
 variable {Λ : Finset (ℤ × ℤ)} {q R : ℕ} {J : ℝ}
 
@@ -167,4 +167,4 @@ theorem LocalHamiltonian.one_sub_rpow_le_typicalMass_reducedState
   rw [hexp] at h2
   linarith
 
-end TNLean.PEPS.AreaLaw
+end TNLean.Lattice

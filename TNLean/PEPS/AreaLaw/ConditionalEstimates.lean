@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.AreaLaw.RegionalEntropyBridge
+import TNLean.Lattice.RegionalEntropyBridge
 import QICLean.Entropy.ConditionalMovementRegional
 import QICLean.Representation.ReplicaEtaForms
 
@@ -42,6 +42,7 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 
 open Matrix
 open scoped ComplexOrder MatrixOrder
+open TNLean.Lattice
 
 namespace TNLean.PEPS.AreaLaw
 

@@ -171,11 +171,11 @@ filter, and rank arguments remain separate obligations.
 |---|---|---|
 | Area-law `eq:hamiltonian` | Model defined | Local counting and analytic consequences. |
 | Area-law `sec:prelim` | Regional positivity, squared-norm trace, unit trace, entropy nonnegativity, empty/full entropy, and norm/entropy invariance under site relabelling proved | Complementary entropy, continuity conventions, and the native Hamiltonian transport. |
-| Area-law `thm:area` | Target proposition defined; proved assuming `prop:collar` and `prop:two-families` (`uniformAreaLaw_of_collar_twoFamilies`) | Faithful full proof, #8759 and its prerequisites. |
+| Area-law `thm:area` | Proved (`uniformAreaLaw`), with the source hypotheses `q ≥ 1`, `R ≥ 0`, `J > 0`, `Δ > 0` and no assumption on the domain | None. |
 | Area-law `prop:positive` | Proved on induced lattice domains (`exists_latticePositiveConstraints`), with anchor multiplicity bounded by `card_anchor_fiber_le` | None. |
-| Area-law `prop:collar` | Statement defined (`SublinearCollarBound`); size and crossing-edge assertions proved for `C_tpl ≥ 24` and `D₀ ≥ 1` (implied by the source's standing choices), reducing it to its information inequality (`sublinearCollarBound_of_mutualInformation_le`) | The information inequality of the scanner. |
+| Area-law `prop:collar` | Proved (`sublinearCollarBound_real`) for every real `D₀ > 2R + 10` and `C_tpl ≥ 24`, the source's standing choices | None. |
 | Area-law `prop:amplification` | Proved (`amplificationBound`) for every gap `Δ > 0`, with `α = p/(p+1)`, `p = 10⁶` | None. |
-| Area-law `cor:rectangles` | Graph and configuration identification and vertex-boundary comparisons proved; vertex entropy bounds proved assuming the uniform edge area law | Hamiltonian and entropy transport and the unconditional area-law theorem. |
+| Area-law `cor:rectangles` | Proved (`uniformAreaLaw_vertex_boundary_bounds`, `rectangularEntropyAreaLaw`) | None. |
 | Area-law `scanner:template` | Template area bound, depth-layer bound, and mixed dyadic-square counts proved for the actual polygon model | Entropy bounds, #8758. |
 | Area-law `geometry:cancellation` | Proved for a pure state on any finite tensor product, with its finite-domain lattice specialization | None. |
 | Area-law `geometry:exponent-gaps` | Exact arithmetic proved | Applications at uniform thresholds. |
@@ -183,10 +183,10 @@ filter, and rank arguments remain separate obligations.
 | Area-law `geometry:total-repairs` | Polynomial absorption, summability, and a uniform numerical bound on finite scale sums proved as auxiliary results | Descendant bounds, the repair construction, and comparison of actual repairs with this series. |
 | Area-law `geometry:layer-distance` | Lower and upper endpoint-distance bounds for actual layer closures proved | Use in the later region construction. |
 | Area-law `geometry:nonadjacent` | Pointwise separation of actual layer closures proved | Use in contact and repair estimates. |
-| Area-law `prop:two-families` | Translated dyadic cells, nested neighborhoods, exact layer unions, closure formulas, uniform cell counts, exhaustion, endpoint-distance bounds, nonadjacent-layer separation, primary regions, belts, cell contacts, side matching, cell fans, and initial regions proved | Simultaneous repairs, birth separation, and the full partition. |
-| PEPS `prop:area-law` | Proved assuming `UniformAreaLaw` (`UniformAreaLaw.squareEntropyAreaLaw`), through the Hermitian-part reduction | The uniform area law. |
+| Area-law `prop:two-families` | Proved (`twoFamilyDecomposition`) for all real `D₀` and `C_tpl`, with no further hypothesis | None. |
+| PEPS `prop:area-law` | Proved (`AreaLaw.squareEntropyAreaLaw`), through the Hermitian-part reduction | None. |
 | PEPS `app:companion` | Each listed companion statement compared with its formal statement; see below | As in the rows for the area-law labels. |
-| PEPS `thm:main` | Target proposition defined | Faithful tensor construction and error bounds, #8773 and its prerequisites. |
+| PEPS `thm:main` | Proved (`polynomialPEPSApproximation`), with Proposition 4.1 proved as `adaptivePatchConstraint`; the existential phase agrees with the printed minimum (`hasPEPSApproximation_iff_iInf`) | The formal statement of Proposition 7.1 is narrower than the source (#8772); Theorem 1.1 uses only the proved part. |
 
 ### Appendix A companion statements
 
@@ -198,19 +198,18 @@ hypothesis to the printed one.
 | Appendix A statement | Formal statement | Status on `main` |
 |---|---|---|
 | Model: domain, range-`R` Hermitian terms, unit ground vector with projector gap, natural logarithms | `LocalHamiltonian`, `IsGappedGroundState`, `regionalEntropy`; uniqueness by `Matrix.IsGappedGroundState.eigenspace_eq_span` | Definitions; uniqueness proved. |
-| Area-law Theorem 1.1 and Corollary 1.2 | `UniformAreaLaw`, `RectangularEntropyAreaLaw` | Assumed. Proved conditionally on Propositions 9.6 and 11.2 (`uniformAreaLaw_of_collar_twoFamilies`). |
-| Proposition 2.1 at `Γ = Λ_L`, `R = 1` | `SquareEntropyAreaLaw`, `UniformAreaLaw.squareEntropyAreaLaw`, `RectangularEntropyAreaLaw.squareEntropyAreaLaw`, `SquareHamiltonian.sum_hermitianTerm` | Specialization proved; the area law itself assumed. |
+| Area-law Theorem 1.1 and Corollary 1.2 | `UniformAreaLaw`, `RectangularEntropyAreaLaw` | Proved (`uniformAreaLaw`, `rectangularEntropyAreaLaw`, `uniformAreaLaw_vertex_boundary_bounds`). |
+| Proposition 2.1 at `Γ = Λ_L`, `R = 1` | `SquareEntropyAreaLaw`, `UniformAreaLaw.squareEntropyAreaLaw`, `RectangularEntropyAreaLaw.squareEntropyAreaLaw`, `SquareHamiltonian.sum_hermitianTerm` | Proved (`AreaLaw.squareEntropyAreaLaw`). |
 | Positive replacement (area-law Proposition 4.3) | `exists_latticePositiveConstraints`, `card_anchor_fiber_le` | Proved; constants depend on `p, R, J, Δ` only, and `J ≥ 0` suffices. |
 | Template (Definition 9.3) | `Geometry.Template`, `Template.IsSeparated` | Definition. Polygons are read as nondegenerate ([paper-gap note](../paper-gaps/arealaw2d_nondegenerate_templates.tex)). |
-| Sublinear collar bound (Proposition 9.6) | `SublinearCollarBound` | Assumed. Size and crossing-edge parts proved for `C_tpl ≥ 24`, `D₀ ≥ 1` (`Template.collar_cut_card_le`); the information inequality is open. |
-| Amplification (Proposition 10.2) | `AmplificationBound`, `amplificationBound` | Proved. `L + 2r = o(n^β)` follows from the radius bound (`Exponents.collar_add_radius_isLittleO`). The PEPS use with `A = Λ`, `M = 1` is `coarse_mutualInformation_le_of_sublinearCollarBound`, conditional on the collar bound. |
+| Sublinear collar bound (Proposition 9.6) | `SublinearCollarBound`, `sublinearCollarBound_real` | Proved for every real `D₀ > 2R + 10` and `C_tpl ≥ 24`. |
+| Amplification (Proposition 10.2) | `AmplificationBound`, `amplificationBound` | Proved. `L + 2r = o(n^β)` follows from the radius bound (`Exponents.collar_add_radius_isLittleO`). The PEPS use with `A = Λ`, `M = 1` is `coarse_mutualInformation_le_of_sublinearCollarBound`, applied with the proved collar bound. |
 | Two-family entropy cancellation (Lemma 11.1) | `OrderedTwoFamilyPartition.entropy_le_residual_add_half_sum`, `regionalEntropy_le_residual_add_half_sum` | Proved. |
-| Two families with separated birth templates (Proposition 11.2) | `TwoFamilyDecomposition` | Assumed. |
+| Two families with separated birth templates (Proposition 11.2) | `TwoFamilyDecomposition`, `twoFamilyDecomposition` | Proved for all real `D₀` and `C_tpl`. |
 | PEPS Lemma 3.2, the local adaptation to a cell | `regionalEntropy_conditional_le_residual_add_sum`, `CellPartition.exists_cell_twoFamily_partition` | Both ingredients proved; their combination into the printed lemma is not yet stated. |
 
-Defining a target proposition does not prove the corresponding theorem. The
-source-labelled area-law and PEPS approximation headline theorems have no
-`\leanok` marks in the blueprint.
+The source-labelled area-law Theorem 1.1, Corollary 1.2, PEPS Proposition 2.1
+and PEPS Theorem 1.1 carry `\leanok` marks in the blueprint.
 Neither statement assumes an area law, a PEPS approximation, a subregion gap,
 frustration freedom, commutativity, or translation invariance.
 

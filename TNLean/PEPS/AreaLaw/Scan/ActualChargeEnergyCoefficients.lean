@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Scan.ActualChargeEnergyDecay
 import TNLean.PEPS.AreaLaw.Scan.Budgets
+import TNLean.PEPS.AreaLaw.Scan.SharpMomentScale
 import TNLean.PEPS.AreaLaw.Scan.SubsystemDimensionScale
 
 /-!
@@ -19,7 +20,8 @@ The two remaining physical dimension factors have one logarithmic-power cap.
 All constants and the threshold precede the physical scanner, round, auxiliary
 dimensions, supplied vector, nonnegative weight and interpolation parameter.
 Zero weight, zero anchor multiplicity, one-dimensional physical sites and zero
-replicas remain allowed. No charge round or entropy defect is selected.
+replicas remain allowed. No charge round or entropy defect is selected. The coefficient is
+`actualChargeEnergyCoefficient` and the threshold is `finalActualChargeEnergyThreshold`.
 
 Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 `08-scanner.tex`, lines 492–520 and `scanner:final-parameters`, at
@@ -31,6 +33,8 @@ open scoped BigOperators Matrix
 open Filter MeasureTheory Set TensorPower TensorPower.ReplicaTransport Entropy
 
 noncomputable section
+
+open TNLean.Lattice
 
 namespace TNLean.PEPS.AreaLaw.Scan
 
@@ -99,16 +103,35 @@ private theorem charge_energy_coefficient_identity
     Real.mul_rpow (by norm_num : (0 : ℝ) ≤ 2) hℓ.le, Real.rpow_add hℓ]
   field_simp [hK.ne', hm.ne']; ring
 
+/-- The explicit coefficient `32 C_d` of the actual charge-energy bound: the scale-facts
+constant `32` times the common logarithmic-power coefficient `C_d` of the two transport
+factors `10 (10 M)^{7/8} |C_en| ℓ^{e_en}` and `50 M 2^{1/8} |C_en| ℓ^{e_en + 1/8}`, where `M`
+is the anchor multiplicity (`08-scanner.tex`, lines 492--520 and 693--755). -/
+noncomputable def actualChargeEnergyCoefficient (q : ℕ) (Cr : ℝ) (multiplicity : ℕ)
+    (Cen een : ℝ) : ℝ :=
+  32 * transportLogCoefficient q Cr (10 * (10 * (multiplicity : ℝ)) ^ (7 / 8 : ℝ) * |Cen|) een
+    (50 * (multiplicity : ℝ) * (2 : ℝ) ^ (1 / 8 : ℝ) * |Cen|) (een + 1 / 8)
+
+/-- The explicit threshold of the actual charge-energy coefficients at the final scanner
+exponents: the bad-old-history threshold, the scale-facts threshold of
+`finalSharpScannerExponents`, and `n ≥ 3`, so that `log n ≥ 1` (`08-scanner.tex`,
+lines 32--42, 309--329, 492--520 and `scanner:final-parameters`). -/
+noncomputable def finalActualChargeEnergyThreshold (Cr C1 Ct : ℝ) (multiplicity : ℕ)
+    (P : ℝ) : ℕ :=
+  max (badOldHistoryThreshold Cr C1 Ct multiplicity P)
+    (max finalSharpScannerExponents.scaleFactsThreshold 3)
+
 open Classical in
-/-- The actual charge error has uniform logarithmic coefficients at the fixed
-rounded scales. The density is the same literal defect divided by `KnD`;
-its sign and the positivity of K follow internally. The real coefficient and
-exponent may have either sign. Source: `08-scanner.tex`, lines 492–520. -/
-theorem exists_actualCharge_energy_coefficients (q : ℕ) [NeZero q]
+/-- Physical charge-energy bound at the final scanner exponents with the explicit coefficient
+`actualChargeEnergyCoefficient q Cr multiplicity Cen een` and logarithmic exponent
+`transportLogExponent een (een + 1 / 8)`, at every `n` from the explicit threshold
+`finalActualChargeEnergyThreshold Cr C1 Ct multiplicity P` on.
+Source: `08-scanner.tex`, lines 492–520 and `scanner:final-parameters`. -/
+theorem actualCharge_energy_coefficients_of_threshold_le (q : ℕ) [NeZero q]
     {Cr C1 Ct : ℝ} (hCr : 0 < Cr) (hC1 : 0 < C1) (hCt : 0 ≤ Ct)
-    (multiplicity : ℕ) (P Cen een : ℝ) :
-    ∃ C Cl : ℝ, 1 ≤ C ∧ 0 ≤ Cl ∧ ∃ N : ℕ,
-      ∀ n ≥ N, ∀ (Λ T : Finset (ℤ × ℤ)) (hT : T.Nonempty)
+    (multiplicity : ℕ) (P Cen een : ℝ) {n : ℕ}
+    (hthr : finalActualChargeEnergyThreshold Cr C1 Ct multiplicity P ≤ n) :
+      ∀ (Λ T : Finset (ℤ × ℤ)) (hT : T.Nonempty)
       (R : ℕ) [LinearOrder (AdmissibleSupport Λ R)]
       (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)),
       S.n = n → S.m = ⌊(n : ℝ) ^ (Exponents.scannerMu : ℝ)⌋₊ →
@@ -140,8 +163,9 @@ theorem exists_actualCharge_energy_coefficients (q : ℕ) [NeZero q]
           let ℓ := transportLogDimBound q S.r₀
           |Cen| * a ^ 2 * ℓ ^ een *
             (S.actualChargeData hm hM s).energyError E (a / 2) k (pre k) p ≤
-              C * W ^ 2 * (n : ℝ) ^ (Exponents.scannerEll : ℝ) *
-                (S.D : ℝ) ^ 2 * (Real.log n) ^ Cl *
+              actualChargeEnergyCoefficient q Cr multiplicity Cen een * W ^ 2 *
+                (n : ℝ) ^ (Exponents.scannerEll : ℝ) * (S.D : ℝ) ^ 2 *
+                (Real.log n) ^ transportLogExponent een (een + 1 / 8) *
                 ((1 - p) * (S.actualChargeEntropyDefect hm hM s dims E
                   (a / 2) k (pre k) p / (S.K * n * S.D : ℝ)) ^ (1 / 8 : ℝ) +
                   (1 - p) * (n : ℝ) ^ (-P) + p) := by
@@ -160,23 +184,20 @@ theorem exists_actualCharge_energy_coefficients (q : ℕ) [NeZero q]
       e_pos := by norm_num [Exponents.boxError]
       e_lt_one := by norm_num [Exponents.boxError]
       kappa_le_e := by norm_num [Exponents.scannerKappa, Exponents.boxError] }
-  obtain ⟨Cs, hscales⟩ := eventually_scaleFacts X
-  obtain ⟨n₀, hn₀⟩ := hscales.exists
-  have hCs : 1 ≤ Cs := hn₀.one_le_C₁
-  obtain ⟨Cd, Cl, hCd, hCl, hcoeff⟩ := exists_transport_coefficients_log_bound
-    (NeZero.pos q) hCr.le
+  simp only [finalActualChargeEnergyThreshold, max_le_iff] at hthr
+  obtain ⟨hbad, hsf, hn3⟩ := hthr
+  obtain ⟨hCd, -, hcoeff⟩ := transport_coefficients_log_bound (NeZero.pos q) hCr.le
     (10 * (10 * (multiplicity : ℝ)) ^ (7 / 8 : ℝ) * |Cen|) een
     (50 * (multiplicity : ℝ) * (2 : ℝ) ^ (1 / 8 : ℝ) * |Cen|) (een + 1 / 8)
-  obtain ⟨Ne, hNe⟩ := exists_actualCharge_energy_threshold hCr hC1 hCt multiplicity P
-  have hlog : ∀ᶠ n : ℕ in atTop, (1 : ℝ) ≤ Real.log n :=
-    (Real.tendsto_log_atTop.comp tendsto_natCast_atTop_atTop).eventually_ge_atTop 1
-  obtain ⟨Ns, hNs⟩ := eventually_atTop.mp (hscales.and hlog)
-  refine ⟨Cs * Cd, Cl, one_le_mul_of_one_le_of_one_le hCs hCd, hCl,
-    max Ne Ns, ?_⟩
-  intro n hn Λ T hT R _ S hSn hsm hK hD hr hC ht hgraph hdepth hclear hrows hmult
-  obtain ⟨hF, hlogn⟩ := hNs n ((le_max_right Ne Ns).trans hn)
-  obtain ⟨hm, hM, henergy⟩ := hNe n ((le_max_left Ne Ns).trans hn)
-    Λ T hT R S hSn hsm hK hD hr hC ht hgraph hdepth hclear hrows hmult
+  have hF : ScaleFacts X n 32 := scaleFacts_of_scaleFactsThreshold_le X hsf
+  have hlogn := Real.one_le_log_natCast_of_three_le hn3
+  rw [actualChargeEnergyCoefficient]
+  generalize transportLogCoefficient q Cr _ een _ (een + 1 / 8) = Cd at hCd hcoeff ⊢
+  generalize transportLogExponent een (een + 1 / 8) = Cl at hcoeff ⊢
+  generalize (32 : ℝ) = Cs at hF ⊢
+  intro Λ T hT R _ S hSn hsm hK hD hr hC ht hgraph hdepth hclear hrows hmult
+  obtain ⟨hm, hM, henergy⟩ := actualCharge_energy_of_badOldHistoryThreshold_le hCr hC1 hCt
+    multiplicity P hbad Λ T hT R S hSn hsm hK hD hr hC ht hgraph hdepth hclear hrows hmult
   have hmX : S.m = X.m n := hsm
   have hKX : S.K = X.K n := by
     simpa only [ScannerExponents.K, ScannerExponents.L, hmX] using hK
@@ -242,5 +263,58 @@ theorem exists_actualCharge_energy_coefficients (q : ℕ) [NeZero q]
       mul_le_mul_of_nonneg_right (mul_le_mul_of_nonneg_left hscale (sq_nonneg W))
         (by positivity)
     _ = _ := by dsimp only [U, Z, Q, B]; ring
+
+open Classical in
+/-- The actual charge error has uniform logarithmic coefficients at the fixed
+rounded scales. The density is the same literal defect divided by `KnD`;
+its sign and the positivity of K follow internally. The real coefficient and
+exponent may have either sign. Source: `08-scanner.tex`, lines 492–520. -/
+theorem exists_actualCharge_energy_coefficients (q : ℕ) [NeZero q]
+    {Cr C1 Ct : ℝ} (hCr : 0 < Cr) (hC1 : 0 < C1) (hCt : 0 ≤ Ct)
+    (multiplicity : ℕ) (P Cen een : ℝ) :
+    ∃ C Cl : ℝ, 1 ≤ C ∧ 0 ≤ Cl ∧ ∃ N : ℕ,
+      ∀ n ≥ N, ∀ (Λ T : Finset (ℤ × ℤ)) (hT : T.Nonempty)
+      (R : ℕ) [LinearOrder (AdmissibleSupport Λ R)]
+      (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)),
+      S.n = n → S.m = ⌊(n : ℝ) ^ (Exponents.scannerMu : ℝ)⌋₊ →
+      S.K = ⌊(n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ / (8 * S.m) →
+      S.D = ⌈(n : ℝ) ^ (Exponents.scannerKappa : ℝ)⌉₊ →
+      S.r₀ = roundedLogRadius Cr n → S.C₁ = C1 →
+      (T.card : ℝ) ≤ Ct * (n : ℝ) ^ 2 →
+      S.graph = domainGraph Λ → S.depth = (fun x ↦ ambientDepth T hT x.val) →
+      (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+        ((2 * ⌊(n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ +
+          10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z) →
+      (∀ d : ℕ, 1 ≤ d → d ≤ ⌊(n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ →
+        (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n) →
+      (∀ y, (Finset.univ.filter fun i ↦ S.anchor i = y).card ≤ multiplicity) →
+      ∃ (hm : 0 < S.m) (hM : 0 < S.M),
+        ∀ (aux : Bool → ℕ) [∀ b, NeZero (aux b)]
+          (J : ℝ) (h : LocalHamiltonian Λ q R J) (Ω : StateSpace Λ q) (Δ : ℝ)
+          (s : ℕ), s + 1 ≤ S.n * S.m →
+          ∀ (W : ℝ), 0 ≤ W → ∀ (k : ℕ)
+          (pre : (r : ℕ) → Config r
+            (fun v ↦ Fin (augmentedDimensions (V := Site Λ) q aux v)) → ℂ),
+          pre k ∈ symmetricSubspace k
+            (fun v ↦ Fin (augmentedDimensions (V := Site Λ) q aux v)) →
+          pre k ≠ 0 → ∀ p ∈ Ioo (0 : ℝ) 1,
+          let a := W / (S.K : ℝ)
+          let dims := augmentedDimensions (V := Site Λ) q aux
+          let E := S.actualEnergyTerms h Ω Δ
+            ⌊(n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ aux
+          let ℓ := transportLogDimBound q S.r₀
+          |Cen| * a ^ 2 * ℓ ^ een *
+            (S.actualChargeData hm hM s).energyError E (a / 2) k (pre k) p ≤
+              C * W ^ 2 * (n : ℝ) ^ (Exponents.scannerEll : ℝ) *
+                (S.D : ℝ) ^ 2 * (Real.log n) ^ Cl *
+                ((1 - p) * (S.actualChargeEntropyDefect hm hM s dims E
+                  (a / 2) k (pre k) p / (S.K * n * S.D : ℝ)) ^ (1 / 8 : ℝ) +
+                  (1 - p) * (n : ℝ) ^ (-P) + p) :=
+  have h := transport_coefficients_log_bound (NeZero.pos q) hCr.le
+    (10 * (10 * (multiplicity : ℝ)) ^ (7 / 8 : ℝ) * |Cen|) een
+    (50 * (multiplicity : ℝ) * (2 : ℝ) ^ (1 / 8 : ℝ) * |Cen|) (een + 1 / 8)
+  ⟨_, _, one_le_mul_of_one_le_of_one_le (by norm_num) h.1, h.2.1, _,
+    fun _ hn => actualCharge_energy_coefficients_of_threshold_le q hCr hC1 hCt multiplicity
+      P Cen een hn⟩
 
 end TNLean.PEPS.AreaLaw.Scan

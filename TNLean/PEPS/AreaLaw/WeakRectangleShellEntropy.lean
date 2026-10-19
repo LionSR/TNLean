@@ -23,6 +23,8 @@ or Proposition 9.5 itself.
 Original formalization from the manuscript; no upstream Lean proof text reused.
 -/
 
+open TNLean.Lattice
+
 namespace TNLean.PEPS.AreaLaw
 
 /-- The actual shell entropy under a pointwise estimate on safe rectangles.

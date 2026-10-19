@@ -33,7 +33,7 @@ Neither connectedness nor the absence of holes is assumed.
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
-namespace TNLean.PEPS.AreaLaw
+namespace TNLean.Lattice
 
 /-- Sites of a finite induced domain. Source: area-law Theorem 1.1. -/
 abbrev Site (Λ : Finset (ℤ × ℤ)) := ↥Λ
@@ -187,4 +187,4 @@ theorem exists_edgeBoundary_of_walk {Λ : Finset (ℤ × ℤ)} {A : Finset (Site
 @[simp] theorem ambientDilation_zero (T : Finset (ℤ × ℤ)) : ambientDilation T 0 = T := by
   simp [ambientDilation]
 
-end TNLean.PEPS.AreaLaw
+end TNLean.Lattice

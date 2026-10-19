@@ -19,6 +19,24 @@ info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashC
 #print axioms TNLean.PEPS.AreaLaw.amplificationBound
 
 /--
+info: 'TNLean.PEPS.AreaLaw.amplificationBound_of_locality'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+---
+info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms TNLean.PEPS.AreaLaw.amplificationBound_of_locality
+
+/--
+info: 'TNLean.PEPS.AreaLaw.amplificationConstant_nonneg'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+---
+info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms TNLean.PEPS.AreaLaw.amplificationConstant_nonneg
+
+/--
 info: 'TNLean.PEPS.AreaLaw.uniformAreaLaw_of_collar_twoFamilies'
 depends on axioms: [propext, Classical.choice, Quot.sound]
 ---
@@ -152,3 +170,12 @@ info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashC
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms Matrix.conjTranspose_contractionWord_mulVec_self
+
+/--
+info: 'TNLean.PEPS.AreaLaw.amplificationBound_explicit'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+---
+info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms TNLean.PEPS.AreaLaw.amplificationBound_explicit
