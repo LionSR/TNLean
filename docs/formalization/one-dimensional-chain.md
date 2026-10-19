@@ -42,6 +42,23 @@ The protocol route of the note (information reset, births, exchanges, the sweep
 and the compression) is not formalized; Theorem B is proved by the two-line route
 alone.
 
+For the undoubled Hamiltonian on the contiguous chain,
+`MPS.AreaLaw.ChainHamiltonian.sum_norm_terms_containing_le` proves the per-site
+budget ∑_{X∋x} ‖h_X‖ ≤ 2^(2R+1) J, with the original real bound J.
+No sign assumption is added: an actual site supplies the admissible singleton
+{x}, whose norm bound implies J ≥ 0; the assertion is vacuous on an empty
+chain.
+
+The finite-path graph satisfies `SimpleGraph.pathGraph_edist`: its extended
+distance is the absolute coordinate difference. The lemma
+`SimpleGraph.pathGraph_card_sphere_le_two` bounds every distance sphere by
+two sites, giving growth coefficient 2 and exponent 0 independently of the
+chain length. These statements include the empty chain and all natural
+radii. They concern the contiguous path; coordinate distance does not replace
+graph distance across holes in a disconnected domain. Operator-support
+conversion and doubled-Hamiltonian transport needed for the protocol's
+Lieb–Robinson estimate remain separate.
+
 ## Constants
 
 Every constant is a definition of `(q, R, J, Δ)` and, for the bond dimension,
