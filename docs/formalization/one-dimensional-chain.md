@@ -38,9 +38,9 @@ finite set of sites, instantiated here on the chain.
 | Proposition 7.1 (sequential truncation) | `MPS.AreaLaw.exists_sequentialTruncation` | Threshold form proved: the projectors onto the eigenvalues at least `exp(-(S_k + w))` at a common slack `w`, with cut ranks at most `max 1 (exp(S_k + w))` and error `∑_k √tail_k(w)`. The note's form, projecting every cut onto its `D` largest eigenvalues (all of them when the cut has fewer) for an arbitrary bond dimension `D` with error `∑_k √ε_k(D)`, is not formalized; Theorem B uses only the threshold form: `docs/paper-gaps/tnlean_one_dimensional_threshold_truncation.tex`. |
 | Theorem B | `MPS.AreaLaw.exists_isOpenMPS_norm_sub_le` with `MPS.AreaLaw.chainBondDimension`; polynomial form `MPS.AreaLaw.chainBondDimension_le_mul_rpow` | Proved; the bond dimension is `⌊exp(C_int + w(L))⌋ ≤ e^{C_int} (2 c₀)^{64 s} L^{128 s}` with `s = √((1 + J/Δ) B_R)`. The approximant is normalized and within `1/L` of `Ω` itself (the note allows a phase). |
 
-The protocol route of the note (information reset, births, exchanges, the sweep
-and the compression) is not formalized; Theorem B is proved by the two-line route
-alone.
+Information reset is proved on the contiguous chain. Births, exchanges, the
+sweep and the protocol compression remain unformalized; Theorem B is proved
+by the two-line route alone.
 
 For the commutator estimate in Part II, Lemma `lem:LR`,
 `QuantumCircuit.norm_heisenberg_commutator_le_graphDistance_finset` proves
@@ -151,8 +151,20 @@ zero cutoff are included. The geometric lemma
 from both cores, using the actual crossing witnesses. The radius-ℓ
 neighborhood of Q∪Z is disjoint from the cores whenever ℓ+R≤w. This
 geometric statement allows empty cores and all real margins and radii,
-without a quantum-state assumption. The physical parameter choice, polar
-correction and final information-reset bound remain to be assembled.
+without a quantum-state assumption.
+
+The theorem `MPS.AreaLaw.ChainHamiltonian.information_reset` completes the
+contiguous-chain information-reset argument. For every p > 0, it chooses
+Cₚ > 0 and a natural L₀ ≥ 1 before the length, Hamiltonian, ground vector,
+regions and mutual-information bound b. If D,C are disjoint, R₀ ⊆ D,
+C₀ ⊆ C, I(D:C) ≤ b, and both cores have distance greater than
+w = Cₚ(1+b+log L) from the corresponding complements, then
+I(R₀:C₀) ≤ L^(−p) for L ≥ L₀. The proof derives b ≥ 0 and constructs the
+Gaussian filter, its supported approximation, a unitary on the same support
+and the product marginal after the actual regional replica swap. Only the
+original full-system ground-state gap is assumed. The additive constant in
+log(e q^|R₀|) is retained, including q = 1. The broader finite-domain reading
+of the source remains open, as recorded in the connected-domain scope note.
 
 ## Constants
 

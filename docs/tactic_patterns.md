@@ -8472,6 +8472,28 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Existing abstractions:** `card_filter_subset_le`, `Nat.pow_le_pow_right`, and `card_interval_le` already contain the common counting and monotonicity arguments. The finite union uses `Finset.card_biUnion_le_card_mul` directly.
 - **Notes:** No powerset injection or finite-union proof is duplicated. There are two exact symmetric-window comparisons; their remaining arithmetic is a single `omega` call. No further lemma or tactic is needed at present.
 
+
+### Core information after a regional replica swap — candidate (2026-10-18)
+
+- **Pattern:** Transport a supported unitary and its vector error from paired
+  coordinates to two replicas, derive the vanishing mutual information of the
+  actual swapped cores, and apply supported-unitary entropy continuity.
+- **Seen:** The local comparison in `MPS/AreaLaw/InformationReset.lean` and
+  `mutualInformation_cores_le_of_reset_unitary` in
+  `PEPS/Approximation/InformationReset.lean`.
+- **Existing reuse:** The coordinate isometry, support transport, replica-swap
+  marginal identity and entropy continuity theorem are shared already.
+  A third consumer would justify a single finite-site comparison theorem.
+
+### Absorbing a localization coefficient with spare decay — candidate (2026-10-18)
+
+- **Pattern:** Reserve one quarter of the spatial exponential to absorb
+  P = C(1+T₀), while the other quarter controls the polynomial factors.
+- **Seen:** `MPS/AreaLaw/InformationReset.lean`, once.
+- **Existing reuse:** The proof applies the Gaussian localization parameter
+  estimate and Mathlib's `Real.mul_exp_neg_le_exp_neg_one`; no new scalar
+  theorem or tactic is needed for this occurrence.
+
 ### Real value of the lattice sup-norm distance — promoted lemma
 
 - **Pattern:** Express the natural-valued lattice sup-norm distance, viewed

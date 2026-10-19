@@ -772,6 +772,108 @@ for an arbitrary finite set of sites and are instantiated here directly.
     $w-R<|a-z|\le\ell\le w-R$, a contradiction.
 \end{proof}
 
+\begin{theorem}[Information reset on a contiguous chain]
+    \label{thm:chain_information_reset}
+    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.information_reset}
+    \leanok
+    \uses{def:chain_model}
+    Fix a natural local dimension $q\ge1$, a natural range $R$, a real
+    interaction bound $J$, a gap $\Delta>0$, and an exponent $p>0$.
+    There are $C_p>0$ and a natural number $L_0\ge1$, depending only on
+    these fixed parameters, with the following property.
+    For every $L\ge L_0$, let $H$ be a range-$R$ Hamiltonian with
+    interaction bound $J$ on the contiguous chain $I=\{0,\ldots,L-1\}$.
+    Let $\Omega$ be a normalized ground vector, with ground energy $E_0$
+    and full-system gap at least $\Delta$.
+    Let $D,C\subseteq I$ be disjoint, let $R_0\subseteq D$ and
+    $C_0\subseteq C$, and let $b\in\mathbb R$ satisfy
+    $I_\Omega(D:C)\le b$.
+    Put $w=C_p(1+b+\log L)$ and suppose that
+    \begin{align}
+        w & <|x-y| &  & (x\in R_0,\ y\in I\setminus D),\notag \\
+        w & <|x-y| &  & (x\in C_0,\ y\in I\setminus C).
+    \end{align}
+    Then
+    \begin{align}
+        I_\Omega(R_0:C_0)\le L^{-p}.
+    \end{align}
+    The constants $C_p,L_0$ precede the length, Hamiltonian, state,
+    regions and information bound. Only the original full-system gap
+    is assumed. This is the contiguous-chain form of the information-reset
+    lemma in Part~II of~\cite{TNLean2026OneDimensional},
+    lines 319--435; the domain distinction
+    is recorded in~\cite{gap:tnlean_one_dimensional_connected_domain_scope}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_reset_regional_filter,thm:chain_supported_gaussian_integral,
+        thm:peps_reset_polar_step,lem:chain_reset_support_separation,
+        thm:peps_reset_paired_support,thm:peps_reset_exchanged_cores,
+        thm:al_amp_entropy_comparison,thm:peps_reset_entropy_scalar}
+    Set $r=2p+10$. Choose the Gaussian constants $A,T_0>0$ from
+    Theorem~\ref{thm:peps_reset_regional_filter} once, and choose the locality
+    constants $C,v>0$ from Theorem~\ref{thm:chain_supported_gaussian_integral}.
+    Put
+    \begin{align}
+        P                & =C(1+T_0),\notag       \\
+        K_{\mathrm{loc}} & =4(vT_0+15+r+P),\notag \\
+        C_p              & =K_{\mathrm{loc}}+R+4.
+    \end{align}
+    Choose a natural $L_0\ge\max\{1,8\sqrt8(1+\log q)\}$.
+    All these choices precede the instance data.
+    Nonnegativity of mutual information gives $b\ge0$. Hence, for
+    $B_*=1+b+\log L$, one has $B_*\ge1$.
+
+    Put $Q=I\setminus(D\cup C)$, let $Z$ be the union of the supports
+    crossing $D$, and put $\Psi=\Omega\otimes\Omega$, $\Phi=F_D\Psi$.
+    The regional Gaussian theorem constructs the actual buffer contraction
+    $W$ and a real overlap $z\ge e^{-2b}$; its truncated two-sided integral
+    $M_T$, of variance $AB_*$ and cutoff $T=T_0B_*$, satisfies
+    \begin{align}
+        \|M_T\Psi-z\Phi\|,\quad\|M_T^*\Phi-z\Psi\|
+        \le3\varepsilon,\qquad
+        \varepsilon=e^{-10b}L^{-r}.
+    \end{align}
+    Take $\ell=\lceil K_{\mathrm{loc}}B_*\rceil$.
+    Theorem~\ref{thm:chain_supported_gaussian_integral} gives its actual
+    supported approximation $M_{\mathrm{loc}}$ on
+    $S=N_\ell(Q\cup Z)$.
+    The elementary exponential estimate, reserving a factor
+    $e^{-\ell/4}$ to absorb $P$, gives
+    \begin{align}
+        \|M_{\mathrm{loc}}-M_T\|
+         & \le C L^2(1+T_0B_*)e^{vT_0B_*-\ell/2}
+        \le\varepsilon.
+    \end{align}
+    Indeed $\ell/4\ge P$, $P e^{-P}\le1$, and the remaining quarter-decay
+    absorbs $L^4(1+T_0B_*)$, with coefficient $P$; here $L^2\le L^4$.
+    The two normalized ground vectors therefore have residuals at most
+    $4\varepsilon$ for $M_{\mathrm{loc}}$.
+    The same-support polar correction of
+    Theorem~\ref{thm:peps_reset_polar_step} constructs a unitary $V$ on $S$
+    satisfying
+    \begin{align}
+        \delta:=\|V\Psi-\Phi\|\le8L^{-r}.
+    \end{align}
+
+    The ceiling bound and $B_*\ge1$ give
+    $\ell+R<C_pB_*=w$.
+    Lemma~\ref{lem:chain_reset_support_separation} makes $S$ disjoint from
+    both cores, so $V$ acts trivially on their joint marginal in each
+    replica. By Theorem~\ref{thm:peps_reset_exchanged_cores}, the two cores
+    of the first replica of $\Phi$ are uncorrelated. Transporting paired
+    coordinates to the two replicas and applying the finite-site entropy
+    comparison yields
+    \begin{align}
+        I_\Omega(R_0:C_0)
+         & \le8\sqrt\delta\,\log(e q^{|R_0|})\notag \\
+         & \le8\sqrt\delta\,(1+L\log q).
+    \end{align}
+    Since $L\ge L_0$, Theorem~\ref{thm:peps_reset_entropy_scalar}, with
+    $r=2p+10$, bounds the last expression by $L^{-p}$.
+    Empty cores cause no exception: their mutual information is zero.
+\end{proof}
+
 \begin{lemma}[Buffered discount on a chain]
     \label{lem:chain_buffer_discount}
     \lean{
