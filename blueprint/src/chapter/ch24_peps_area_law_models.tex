@@ -324,10 +324,11 @@ original open square. We state the two models separately, following
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{def:area_law_template,def:area_law_two_family_partition,
-        thm:area_law_conditional_two_families,thm:area_law_sublinear_collar,
-        thm:area_law_amplification,thm:area_law_two_family_decomposition,
-        thm:area_law_closed_constant}
+    \uses{thm:area_law_closed_constant}
+    Theorem~\ref{thm:area_law_closed_constant} has the same hypotheses and gives
+    the bound with $C=C_{\rm AL}(q,R,J,\Delta)$. That constant is assembled
+    along the following argument.
+
     For disjoint $B,C\subseteq\Lambda$ write
     $I_\Omega(B:C)=S_\Omega(B)+S_\Omega(C)-S_\Omega(B\cup C)$, and let $Z$ be the
     set of endpoints of the edges in $\partial_\Lambda A$. Empty and full cuts
@@ -414,9 +415,7 @@ original open square. We state the two models separately, following
         \label{eq:area_law_final_bound}
     \end{align}
     Every threshold and constant above depends only on $q,R,J,\Delta$, and is
-    chosen before the domain and the cut. With the explicit constants of every
-    step, this is Theorem~\ref{thm:area_law_closed_constant}, which gives the
-    constant $C=C_{\rm AL}(q,R,J,\Delta)$.
+    chosen before the domain and the cut.
 \end{proof}
 
 \begin{definition}[Open-square Hamiltonian and PEPS approximation]
