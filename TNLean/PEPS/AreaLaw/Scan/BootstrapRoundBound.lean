@@ -47,7 +47,7 @@ theorem boxBootstrapRounds_le_ceil_log_div {e₀ ε ℓ : ℝ}
       mul_le_mul_of_nonneg_left hlogBound (div_nonneg hnonneg hℓ.le)
     _ = Real.log ε := by
       rw [one_div, Real.log_inv]
-      field_simp [hℓ.ne'] <;> ring
+      field_simp [hℓ.ne']
     _ ≤ Real.log (ε / e₀) :=
       Real.log_le_log hε ((le_div_iff₀ he₀).2 (mul_le_of_le_one_right hε.le he₀₁))
 
@@ -83,8 +83,8 @@ theorem boxBootstrapRounds_initial_le (q R : ℕ) (J Δ : ℝ) :
   have h := div_le_div_of_nonneg_left
     (Real.log_nonneg (by norm_num : (1 : ℝ) ≤ 500000)) hden hell
   norm_num [Exponents.boxError]
-  convert h using 1 <;> field_simp [hp.ne', hlog.ne'] <;> ring
-
+  convert h using 1
+  field_simp [hp.ne', hlog.ne']
 
 /-- Contracting the initial exponent for the explicit round budget reaches the safe-box
 exponent `2 · 10⁻⁶`. Source: the finite iteration in Proposition 9.5,
