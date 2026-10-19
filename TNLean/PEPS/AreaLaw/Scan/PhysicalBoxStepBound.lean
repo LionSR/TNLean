@@ -125,6 +125,11 @@ theorem max_two_mul_roughSelectedDensityCoefficient_le {q : ℕ} (hq : 1 ≤ q) 
     mul_nonneg (by linarith) (add_nonneg (by linarith) (mul_nonneg hC (by linarith)))
   exact max_le (by nlinarith [mul_nonneg hP hC]) (by nlinarith [mul_nonneg hP hC])
 
+/-- Two maxima of natural numbers differ by at most `t` when their entries do. -/
+theorem max_le_max_add {a b a' b' t : ℕ} (ha : a ≤ a' + t) (hb : b ≤ b' + t) :
+    max a b ≤ max a' b' + t := by
+  omega
+
 /-- The threshold of one round exceeds its value at the safe-box constant `0` by at most the
 principal energy entry, the only entry that depends on the safe-box constant. -/
 theorem boxImprovementThreshold_le_add (q R : ℕ) {e₀ : ℝ} (he₀ : 0 < e₀) (he₀₁ : e₀ < 1)
@@ -138,7 +143,10 @@ theorem boxImprovementThreshold_le_add (q R : ℕ) {e₀ : ℝ} (he₀ : 0 < e�
             (transportLogCoefficient q Ctr Cent eent Cen een))) := by
   simp only [boxImprovementThreshold, CollarScan.sourceBootstrapEntropyThreshold,
     bootstrapPrincipalEnergyThreshold]
-  omega
+  repeat' first
+    | with_reducible exact Nat.le_add_right _ _
+    | with_reducible exact Nat.le_add_left _ _
+    | apply max_le_max_add
 
 /-- The factor `5 + log 2 / 4` of the restored rough-budget coefficient is nonnegative. -/
 theorem restoredBudgetFactor_nonneg : 0 ≤ 5 + Real.log 2 / 4 := by
@@ -242,7 +250,7 @@ theorem boxBootstrapStep_le_boxStepPrefactor {q : ℕ} (hq : 1 ≤ q) (R : ℕ) 
       ((boxImprovementThreshold q R he₀ he₀₁ J Δ Ctr ct Cent eent Cen een 0 : ℝ) + 2) *
         (boxStepScale q R Ctr Cent eent Cen een * (1 + C)) ^ boxStepExponent e₀ := by
     unfold boxStepExponent at hy ⊢
-    nlinarith
+    nlinarith [mul_le_mul_of_nonneg_left hy hN0]
   have hN2 : (boxImprovementThreshold q R he₀ he₀₁ J Δ Ctr ct Cent eent Cen een C : ℝ) ^ 2 ≤
       ((boxImprovementThreshold q R he₀ he₀₁ J Δ Ctr ct Cent eent Cen een 0 : ℝ) + 2) ^ 2 *
         boxStepScale q R Ctr Cent eent Cen een ^ (2 * boxStepExponent e₀) *
