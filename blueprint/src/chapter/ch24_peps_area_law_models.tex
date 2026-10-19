@@ -324,9 +324,11 @@ original open square. We state the two models separately, following
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{def:area_law_template,def:area_law_two_family_partition,
-        thm:area_law_conditional_two_families,thm:area_law_sublinear_collar,
-        thm:area_law_amplification,thm:area_law_two_family_decomposition}
+    \uses{thm:area_law_closed_constant}
+    Theorem~\ref{thm:area_law_closed_constant} has the same hypotheses and gives
+    the bound with $C=C_{\rm AL}(q,R,J,\Delta)$. That constant is assembled
+    along the following argument.
+
     For disjoint $B,C\subseteq\Lambda$ write
     $I_\Omega(B:C)=S_\Omega(B)+S_\Omega(C)-S_\Omega(B\cup C)$, and let $Z$ be the
     set of endpoints of the edges in $\partial_\Lambda A$. Empty and full cuts
@@ -855,7 +857,8 @@ original open square. We state the two models separately, following
 
 \begin{theorem}[The square-grid area law, assuming the uniform finite-domain area law]
     \label{thm:square_area_law_from_uniform}
-    \lean{TNLean.PEPS.AreaLaw.UniformAreaLaw.squareEntropyAreaLaw}
+    \lean{TNLean.PEPS.AreaLaw.UniformAreaLaw.squareEntropyAreaLaw,
+        TNLean.PEPS.Approximation.finiteProductEntropy_le_of_areaLawBound}
     \leanok
     \uses{def:square_entropy_area_law,def:area_law_ground_entropy}
     Assume the uniform finite-domain area-law assertion: for fixed $q\ge1$,

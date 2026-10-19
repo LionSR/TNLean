@@ -24,6 +24,21 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Nonnegative interaction bound at a site — promoted (2026-10-18)
+
+- **Pattern:** At an actual site, use its admissible singleton support and
+  `norm_nonneg` followed by the interaction norm bound to derive `0 ≤ J`.
+- **Seen:** `ChainHamiltonian.sum_norm_terms_containing_le` in
+  `MPS/AreaLaw/InteractionBudget.lean`, the nonempty-chain branch of
+  `ChainHamiltonian.partialSwap_boundary_spec` in
+  `MPS/AreaLaw/PartialSwap.lean`, and the logarithmic-separation proof in
+  `MPS/AreaLaw/LogarithmicSeparation.lean`.
+- **Abstraction:** `ChainHamiltonian.norm_bound_nonneg` in
+  `MPS/AreaLaw/Hamiltonian.lean`; all three arguments use this lemma.
+- **Notes:** An actual site is essential. The empty-chain branch retains
+  the original real interaction bound. No positivity hypothesis on the
+  interaction bound is added to the logarithmic-separation theorem.
+
 ### Collar and amplification constants from the existential collar bound — promoted (2026-10-18)
 
 - **Pattern:**
@@ -4656,6 +4671,135 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 ## Candidates
 
+### Coordinate distance from an ordered diameter bound — candidate (2026-10-18)
+
+- **Pattern:** Use the two ordered support inequalities, unfold `Nat.dist`,
+  and apply `omega` to bound the coordinate distance by the interaction range.
+- **Seen:** Two occurrences: `chainSupport_edist_le` in
+  `MPS/AreaLaw/LiebRobinson.lean` and the common local margin argument in
+  `MPS/AreaLaw/ResetSupportSeparation.lean`.
+- **Abstraction:** Consider a minimal `IsChainSupport` distance lemma if a
+  third consumer appears; no additional helper is needed at two occurrences.
+- **Notes:** The geometric reset argument uses one local margin proof for both
+  crossing witnesses. A boundary-endpoint summary can lose an extra site and
+  does not replace the direct diameter estimate.
+
+### Supported Gaussian averaging — candidate (2026-10-18)
+
+- **Pattern:** Factor the actual two-Hamiltonian integrand into an evolved
+  observable and relative evolution; prove support of its localized average
+  by commuting a supported-operator expectation with the integral; bound its
+  norm and error using the Gaussian measure's mass at most one.
+- **Seen:** Two occurrences, in `PEPS/AreaLaw/SupportedGaussianIntegral.lean`
+  and `MPS/AreaLaw/SupportedGaussianIntegral.lean`.
+- **Abstraction:** Both arguments already use one-parameter unitary identities,
+  `ContinuousLinearMap.integral_comp_comm` and standard integral norm bounds.
+  Assess the weakest additional finite-site lemma if a third consumer appears.
+- **Notes:** Keep the physical Hamiltonian and locality estimates at each
+  caller. The chain argument uses separate observable and generator regions
+  and retains zero variance, zero cutoff and the empty chain.
+
+### Conjugation by a contraction — candidate (2026-10-18)
+
+- **Pattern:** Bound `‖F * A * Fᴴ‖` by a supplied bound on `‖A‖`, using
+  `‖F‖ ≤ 1`, invariance of the norm under adjoints, and two applications
+  of `norm_mul_le_of_le`.
+- **Seen:** Two chain occurrences: the common local argument in
+  `ChainHamiltonian.partialSwap_term_difference_spec` in
+  `MPS/AreaLaw/PartialSwap.lean`, and the norm field of
+  `ChainHamiltonian.swappedDoubled` in `MPS/AreaLaw/SwappedDoubledHamiltonian.lean`.
+- **Abstraction:** The standard norm inequalities suffice for these short
+  arguments; no new lemma or tactic is introduced at two occurrences.
+- **Notes:** Contraction is enough for the local norm estimate; spectral
+  transport uses the actual unitarity of the same swap.
+
+### Coordinate changes in projector-gap inequalities — candidate (2026-10-18)
+
+- **Pattern:** Transport a positive projector defect along a configuration
+  bijection and identify the resulting scalar, identity and rank-one terms.
+- **Seen:** The complete gap passages in the companion library's
+  `Analysis/GaussianFilter/PhysicalBuffer.lean`, `PEPS/Approximation/ResetUnitary.lean`
+  and `MPS/AreaLaw/SwappedDoubledHamiltonian.lean`. A related rank-one-only
+  calculation occurs in the companion `Analysis/ReplicaLowDefectCoordinateCovariance.lean`.
+- **Abstraction:** Positivity already uses `Matrix.PosSemidef.submatrix`.
+  The new chain proof uses the existing `Matrix.reindexAlgEquiv` with
+  `map_sub`, `map_smul` and `map_one` to normalize the whole defect; the
+  rank-one equality is then definitional. It adds no entrywise proof.
+- **Notes:** Two complete legacy gap arguments still normalize entries
+  directly. They, together with the related covariance calculation, should
+  use algebraic reindexing when those companion and regional modules are
+  next revised. No new spectral theorem or tactic is required.
+
+### Reversal of time in graph commutator bounds — candidate (2026-10-17)
+
+- **Pattern:** Apply the nonnegative-time estimate to the interaction family
+  `fun k ↦ -h k` at time `-t`, preserve its Hermiticity, supports and norm
+  budget, and rewrite with `heisenbergCommutatorNorm_neg_time`.
+- **Seen:** Two occurrences in `Circuit/LiebRobinson/GraphPropagation.lean`,
+  in `heisenbergCommutatorNorm_le_graphDistance` and
+  `heisenbergCommutatorNorm_le_graphDistance_finset`.
+- **Abstraction:** The common identity is already the public lemma
+  `heisenbergCommutatorNorm_neg_time`. The two applications have different
+  support and distance hypotheses. Keep their short arguments explicit until
+  the pattern occurs in a second file and meets the promotion threshold.
+
+
+### Exact commutation across an infinite graph distance — candidate (2026-10-19)
+
+- **Pattern:** Derive reachability inside each interaction support from the
+  diameter bound, take a reachability-closed set `C` on one side of the
+  separation, show that every support lies in `C` or is disjoint from it,
+  and close with `commute_heisenbergEvolution_of_closed`:
+
+  ```lean
+  have hReach : ∀ k, ∀ x ∈ X k, ∀ z ∈ X k, G.Reachable x z :=
+    fun k x hx z hz => SimpleGraph.reachable_of_edist_ne_top
+      (ne_top_of_le_ne_top (ENat.natCast_ne_top R) (hDiam k x hx z hz))
+  have hClosed (k : κ) : (X k : Set ι) ⊆ C ∨ Disjoint (X k : Set ι) C := ...
+  have hCy : Disjoint C ({y} : Set ι) := Set.disjoint_singleton_right.mpr ...
+  exact commute_heisenbergEvolution_of_closed h (fun k => (X k : Set ι))
+    hSupport C {y} hClosed hCy ...
+  ```
+
+- **Seen:** Two occurrences in two files:
+  `Circuit/LiebRobinson/GraphPropagation.lean`,
+  `heisenberg_commutator_eq_zero_of_edist_eq_top`, with
+  `C = {x | G.Reachable (a i) x}`; and
+  `Circuit/LiebRobinson/GraphLocalization.lean`, the infinite-distance branch
+  of `norm_heisenberg_commutator_le_graph_kernel_sum`, with
+  `C = {x | ¬G.Reachable x y}`.
+- **Possible abstraction:** A lemma stating that a reachability-closed set
+  separates finite-diameter supports, parameterized by which side of the
+  separation defines `C`, so that both proofs reduce to one call before
+  `commute_heisenbergEvolution_of_closed`.
+- **Notes:** Below the rule of three; the two closed sets are dual. Promote at
+  a third use.
+
+
+### Chain neighborhood of a region — candidate (2026-10-19)
+
+- **Pattern:** The radius-`ρ` neighborhood of a set of chain sites written
+  inline as a local `let`:
+
+  ```lean
+  let N := Finset.univ.filter
+    (fun y : Fin L ↦ ∃ x ∈ S, (Nat.dist x.val y.val : ℝ) ≤ ρ)
+  ```
+
+  with `dsimp only` or `change` steps to match the `let` of a statement with
+  the one in its proof.
+- **Seen:** At least thirteen occurrences in six files of `MPS/AreaLaw/`:
+  `IntervalNeighborhoodEntropy.lean` (four), `RelativeGeneratorLocalization.lean`
+  (four), `LiebRobinson.lean` (two), `InformationReset.lean`,
+  `LogarithmicSeparation.lean` and `SupportedGaussianIntegral.lean`.
+- **Possible abstraction:** One definition
+  `chainNeighborhood (L : ℕ) (ρ : ℝ) (S : Finset (Fin L)) : Finset (Fin L)`
+  with a `mem_chainNeighborhood` simp lemma, used in every statement.
+- **Notes:** Past the promotion threshold. The refactor changes theorem
+  statements across the chain layer, so it needs its own pull request with a
+  build; it was not done in the review round that recorded it.
+
+
 ### Dyadic padding bounds — candidate (2026-10-16)
 
 - **Pattern:** Combine the lower and strict upper bounds for
@@ -8366,6 +8510,49 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Seen:** `TNLean/PEPS/AreaLaw/Geometry/RepairRankZeroAncestry.lean`, in `repairStage_color_oldInclusion` and `repairStageCharacteristicLength_oldInclusion`, and `TNLean/PEPS/AreaLaw/Geometry/RepairBirthLatticePoint.lean`, in `repairStage_birth_oldInclusion`.
 - **Abstraction:** The existing natural-number recursor already expresses the shared induction in one line. No further helper or tactic is proposed.
 - **Notes:** Each occurrence is a one-line induction, so a shared lemma would not shorten the proofs.
+
+### Agreement outside a finite support — candidate (2026-10-17)
+
+- **Pattern:** Identify agreement outside a finite support with agreement off its subtype inclusion when comparing two local lifts.
+- **Seen:** Two proofs, in `Circuit/EntropySupport.lean`, `mem_supportedOperators_of_isSupportedOn`, and `PEPS/AreaLaw/RegionalEntropyBridge.lean`, `localLift_eq_entropyLocalLift`.
+- **Possible abstraction:** A lemma identifying these two agreement conditions if a third use appears. The current two occurrences do not require a new public lemma.
+- **Notes:** Both comparisons reuse the existing local-lift entry formula. The Circuit result imports no PEPS or MPS module.
+
+### Choosing sites in nonempty interaction supports — candidate (2026-10-17)
+
+- **Pattern:** Choose a site in each nonempty interaction support and retain its membership proof.
+- **Seen:** The two proofs in `MPS/AreaLaw/LiebRobinson.lean`.
+- **Possible abstraction:** A support-choice lemma if a third substantive use appears. The diameter comparison is already a shared private lemma; two choices in one file do not warrant another abstraction.
+- **Notes:** The choices remain internal to the proofs and add no premise to either theorem.
+
+### Counting supports in short windows — candidate (2026-10-17)
+
+- **Pattern:** Bound the number of supports in a window by the size of its powerset, then increase the exponent using a bound on the window length.
+- **Seen:** The symmetric-window comparison occurs in `MPS/AreaLaw/Counting.lean`, `card_crossingTerms_interval_le`, and `MPS/AreaLaw/BoundaryCounting.lean`, `card_crossingTerms_le_mul_card_boundaryEdges`. `InteractionBudget.lean` has the related window of width `2R + 1`.
+- **Existing abstractions:** `card_filter_subset_le`, `Nat.pow_le_pow_right`, and `card_interval_le` already contain the common counting and monotonicity arguments. The finite union uses `Finset.card_biUnion_le_card_mul` directly.
+- **Notes:** No powerset injection or finite-union proof is duplicated. There are two exact symmetric-window comparisons; their remaining arithmetic is a single `omega` call. No further lemma or tactic is needed at present.
+
+
+### Core information after a regional replica swap — candidate (2026-10-18)
+
+- **Pattern:** Transport a supported unitary and its vector error from paired
+  coordinates to two replicas, derive the vanishing mutual information of the
+  actual swapped cores, and apply supported-unitary entropy continuity.
+- **Seen:** The local comparison in `MPS/AreaLaw/InformationReset.lean` and
+  `mutualInformation_cores_le_of_reset_unitary` in
+  `PEPS/Approximation/InformationReset.lean`.
+- **Existing reuse:** The coordinate isometry, support transport, replica-swap
+  marginal identity and entropy continuity theorem are shared already.
+  A third consumer would justify a single finite-site comparison theorem.
+
+### Absorbing a localization coefficient with spare decay — candidate (2026-10-18)
+
+- **Pattern:** Reserve one quarter of the spatial exponential to absorb
+  P = C(1+T₀), while the other quarter controls the polynomial factors.
+- **Seen:** `MPS/AreaLaw/InformationReset.lean`, once.
+- **Existing reuse:** The proof applies the Gaussian localization parameter
+  estimate and Mathlib's `Real.mul_exp_neg_le_exp_neg_one`; no new scalar
+  theorem or tactic is needed for this occurrence.
 
 ### Real value of the lattice sup-norm distance — promoted lemma
 
