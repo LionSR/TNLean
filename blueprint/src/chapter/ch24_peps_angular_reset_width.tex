@@ -15,6 +15,48 @@ in the September 24, 2026 polynomial-PEPS manuscript.
 The source has nonnegative coefficients and exponent; the analytic bounds
 allow arbitrary fixed real values.
 
+\begin{definition}[Polylogarithmic scale and size threshold]
+    \label{def:peps_angular_reset_width_constants}
+    \lean{TNLean.PEPS.Approximation.resetPolylogScale,
+        TNLean.PEPS.Approximation.one_le_resetPolylogScale,
+        TNLean.PEPS.Approximation.angularResetWidthThreshold,
+        TNLean.PEPS.Approximation.two_le_angularResetWidthThreshold,
+        TNLean.PEPS.Approximation.angularResetWidthThreshold_anti}
+    \leanok
+    Let $k=\lceil K\rceil_+=\max\{0,\lceil K\rceil\}$, and put
+    \begin{align}
+        L_* & =\max\Bigl\{e,\Bigl(\frac{2e\max\{C_3,0\}\,(2k+2)^k}{c}\Bigr)^2\Bigr\},
+        \notag
+    \end{align}
+    the explicit threshold beyond which
+    $\max\{C_3,0\}(\log x)^K\le\frac{c}{2e}x$.
+    The polylogarithmic scale and, for a slope $D$, the size threshold are
+    \begin{align}
+        S(K,C_3,c)           & =\frac{L_*}{e},                                   \notag                 \\
+        L_{\rm w}(K,C_3,c,D) & =\max\bigl\{2,\exp\bigl(\max\{S(K,C_3,c),e^{\max(K,1)}\}/D\bigr)\bigr\}.
+        \notag
+    \end{align}
+    Then $S(K,C_3,c)\ge1$ and $L_{\rm w}(K,C_3,c,D)\ge2$. For $0<D\le D'$ one has
+    $L_{\rm w}(K,C_3,c,D')\le L_{\rm w}(K,C_3,c,D)$.
+\end{definition}
+
+\begin{theorem}[Sublinear polylogarithmic width, with an explicit scale]
+    \label{thm:peps_reset_polylog_width_explicit}
+    \lean{TNLean.PEPS.Approximation.reset_scale_polylog_le_of_resetPolylogScale_le}
+    \leanok
+    \uses{def:peps_angular_reset_width_constants}
+    Let $K,C_3\in\mathbb R$ and $c>0$. For every $s\ge S(K,C_3,c)$, the bound
+    (\ref{eq:peps_reset_polylog_width}) holds.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:peps_angular_reset_width_constants}
+    Put $x=es$, so that $x\ge L_*$ and $\log x=1+\log s\ge1$. The explicit
+    comparison of a real power of the logarithm with a larger power gives
+    $\max\{C_3,0\}(1+\log s)^K\le\frac{c}{2e}\,es=\frac c2s$, and
+    $C_3\le\max\{C_3,0\}$.
+\end{proof}
+
 \begin{theorem}[Sublinear polylogarithmic width]
     \label{thm:peps_reset_polylog_width}
     \lean{TNLean.PEPS.Approximation.exists_reset_scale_polylog_le}
@@ -27,12 +69,34 @@ allow arbitrary fixed real values.
 \end{theorem}
 \begin{proof}
     \leanok
-    For every fixed real $K$, $(\log x)^K/x$ tends to zero as
-    $x$ tends to infinity. Substituting $x=es$ and using
-    $\log(es)=1+\log s$ proves the same limit for
-    $(1+\log s)^K/s$. Multiplication by the fixed coefficient and
-    the positive tolerance $c/2$ give one threshold valid for all larger
-    scales.
+    \uses{thm:peps_reset_polylog_width_explicit,def:peps_angular_reset_width_constants}
+    Take $S=S(K,C_3,c)\ge1$ in
+    Theorem~\ref{thm:peps_reset_polylog_width_explicit}.
+\end{proof}
+
+\begin{theorem}[Uniform width at every scale, with an explicit threshold]
+    \label{thm:peps_angular_reset_uniform_width_explicit}
+    \lean{TNLean.PEPS.Approximation.angular_reset_width_bound_of_threshold_le}
+    \leanok
+    \uses{def:peps_angular_reset_width_constants}
+    Fix $D>0$ with $D\ge4C_4/c$. For every real $L\ge L_{\rm w}(K,C_3,c,D)$ one has
+    $e^{\max(K,1)}\le D\log L$, and for every real $s\ge D\log L$,
+    \begin{align}
+        B(L,s)\le\frac{3c}{4}s<cs.
+        \notag
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_reset_polylog_width_explicit,def:peps_angular_reset_width_constants}
+    Set $T=\max\{S(K,C_3,c),e^{\max(K,1)}\}$. Since $L\ge e^{T/D}$ and $L\ge2$,
+    $D\log L\ge T$, so every $s\ge D\log L$ satisfies $s\ge S(K,C_3,c)$ and,
+    by Theorem~\ref{thm:peps_reset_polylog_width_explicit}, its
+    polylogarithmic term is at most $cs/2$.
+    The assumption $D\ge 4C_4/c$ and $\log L\ge0$ give
+    $C_4\log L\le(c/4)D\log L\le cs/4$.
+    Adding the two bounds proves the first inequality, and the second is strict because
+    $c>0$ and $s\ge1$.
 \end{proof}
 
 \begin{theorem}[Uniform width at every scale]
@@ -55,15 +119,26 @@ allow arbitrary fixed real values.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:peps_reset_polylog_width}
-    Take $S$ from Theorem~\ref{thm:peps_reset_polylog_width}.
-    Set $T=\max\{S,e^{\max(K,1)}\}$ and
-    $L_0=\max\{2,e^{T/D}\}$. Then $D\log L\ge T$ for all $L\ge L_0$, so every
-    $s\ge D\log L$ satisfies $s\ge S$ and its polylogarithmic term is at most $cs/2$.
-    The assumption $D\ge 4C_4/c$ and $\log L\ge0$ give
-    $C_4\log L\le(c/4)D\log L\le cs/4$.
-    Adding the two bounds proves the first inequality, and the second is strict because
-    $c>0$ and $s\ge1$.
+    \uses{thm:peps_angular_reset_uniform_width_explicit,
+        def:peps_angular_reset_width_constants}
+    Take $L_0=L_{\rm w}(K,C_3,c,D)\ge2$ in
+    Theorem~\ref{thm:peps_angular_reset_uniform_width_explicit}; for the second
+    statement take $D=\max\{1,4C_4/c\}$.
+\end{proof}
+
+\begin{corollary}[Fitting an upper-bounded reset width, with an explicit threshold]
+    \label{cor:peps_angular_reset_width_fits_explicit}
+    \lean{TNLean.PEPS.Approximation.angular_reset_width_lt_of_threshold_le}
+    \leanok
+    \uses{def:peps_angular_reset_width_constants}
+    Fix $D>0$ with $D\ge4C_4/c$. For every real $L\ge L_{\rm w}(K,C_3,c,D)$, every real
+    $s\ge D\log L$ and every real $w\le B(L,s)$, one has $w<cs$.
+\end{corollary}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_angular_reset_uniform_width_explicit}
+    Theorem~\ref{thm:peps_angular_reset_uniform_width_explicit} gives
+    $w\le B(L,s)\le\frac{3c}{4}s<cs$.
 \end{proof}
 
 \begin{corollary}[Fitting an upper-bounded reset width]
@@ -75,7 +150,8 @@ allow arbitrary fixed real values.
 \end{corollary}
 \begin{proof}
     \leanok
-    \uses{thm:peps_angular_reset_uniform_width}
-    If $w(L,s)\le B(L,s)$, then (\ref{eq:peps_angular_reset_uniform_width})
-    gives $w(L,s)\le B(L,s)\le\frac{3c}{4}s<cs$.
+    \uses{cor:peps_angular_reset_width_fits_explicit,
+        def:peps_angular_reset_width_constants}
+    Take $L_0=L_{\rm w}(K,C_3,c,D)\ge2$ in
+    Corollary~\ref{cor:peps_angular_reset_width_fits_explicit}.
 \end{proof}

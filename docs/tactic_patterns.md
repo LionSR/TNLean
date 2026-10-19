@@ -39,6 +39,28 @@ abstracted — record why, so it is not re-proposed).
   the original real interaction bound. No positivity hypothesis on the
   interaction bound is added to the logarithmic-separation theorem.
 
+### Collar and amplification constants from the existential collar bound — promoted (2026-10-18)
+
+- **Pattern:**
+
+  ```lean
+  obtain ⟨C, N, hcol⟩ := hcol
+  obtain ⟨Ca, Na, hamp⟩ := amplificationBound (q := q) (R := 1) (J := J) hΔ (max C 1)
+    (lt_of_lt_of_le one_pos (le_max_right _ _)) 1 le_rfl
+  ```
+
+- **Seen:** Six occurrences across six files: `TNLean/PEPS/Approximation/CoarseInformation.lean`,
+  `CellConditionalInformation.lean`, `SquareCellConditionalInformation.lean`,
+  `AngularWholeCellInformationFromCollar.lean`, `AngularSingleScaleReset.lean` and
+  `AngularInformationFromCollar.lean`.
+- **Abstraction:** `TNLean.PEPS.Approximation.exists_sublinearCollarBoundAt_amplificationBoundAt
+  (hΔ : 0 < Δ) (hcol : SublinearCollarBound q R J Δ D₀ Ctpl) : ∃ C N Ca Na,
+  SublinearCollarBoundAt q R J Δ D₀ Ctpl C N ∧ AmplificationBoundAt q R J Δ (max C 1) 1 Ca Na`
+  in `CoarseInformation.lean`, built on `exists_amplificationBoundAt_max_one` in the same file.
+- **Refactor:** each of the six existential corollaries of a named-constant theorem now
+  opens with the single line `obtain ⟨C, N, Ca, Na, hcol, hamp⟩ :=
+  exists_sublinearCollarBoundAt_amplificationBoundAt hΔ hcol`, replacing three lines.
+
 ### Real initial-box scale exceeds one — promoted (2026-10-18)
 
 - **Pattern:** cast `1 < initialBoxScale q R J Δ` from the natural bound

@@ -138,10 +138,11 @@ The constants above still depend on truncation and transport constants of the
 scanner, which the previous theorem supplies only as an existence statement.
 The next two entries pin these constants: the truncation constants are explicit
 functions of $R,J,\Delta$, and the only remaining input is one tuple of
-transport constants satisfying the common step-error bound of
-Theorem~\ref{thm:al_scan_actual_round_transport}. That bound has universal
-constants, independent of $q,R,J,\Delta$ and of every domain, Hamiltonian,
-state and cut.
+transport constants satisfying the finite-family transport bound of
+Definition~\ref{def:al_scan_finite_family_transport_bound}. That condition
+involves only the five constants, independent of $q,R,J,\Delta$ and of every
+domain, Hamiltonian, state and cut; Theorem~\ref{thm:al_scan_actual_round_transport}
+specializes it to the rounds of one scanner.
 
 % Status: auxiliary results. The source asserts only that a constant exists;
 % the statement of Theorem 1.1 is thm:openai_uniform_area_law.
@@ -178,11 +179,12 @@ state and cut.
     \label{thm:area_law_transport_constant}
     \lean{TNLean.PEPS.AreaLaw.uniformAreaLaw_explicit}
     \leanok
-    \uses{def:area_law_transport_constant,def:area_law_ground_entropy}
-    Fix $q\ge1$, $R\ge0$, $J\ge0$ and $\Delta>0$. Assume that the common
-    step-error bound of Theorem~\ref{thm:al_scan_actual_round_transport}
-    holds for the constants $c_0,C_{\rm ent},e_{\rm ent},C_{\rm en},e_{\rm en}$,
-    with $c_0>0$. Then the constant
+    \uses{def:area_law_transport_constant,def:area_law_ground_entropy,
+        def:al_scan_finite_family_transport_bound}
+    Fix $q\ge1$, $R\ge0$, $J\ge0$ and $\Delta>0$. Assume that the
+    constants $c_0,C_{\rm ent},e_{\rm ent},C_{\rm en},e_{\rm en}$, with
+    $c_0>0$, satisfy the finite-family transport bound of
+    Definition~\ref{def:al_scan_finite_family_transport_bound}. Then the constant
     $C=C_{\rm AL}(q,R,J,\Delta;c_0,C_{\rm ent},e_{\rm ent},C_{\rm en},e_{\rm en})$
     of Definition~\ref{def:area_law_transport_constant} is nonnegative, and
     for every finite induced domain $\Lambda$, every admissible Hamiltonian
@@ -219,9 +221,9 @@ state and cut.
     \label{thm:area_law_transport_bound_explicit}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.finiteFamilyTransportBound_explicit}
     \leanok
-    \uses{thm:al_scan_actual_round_transport}
-    The common step-error bound of
-    Theorem~\ref{thm:al_scan_actual_round_transport} holds for
+    \uses{def:al_scan_finite_family_transport_bound}
+    The finite-family transport bound of
+    Definition~\ref{def:al_scan_finite_family_transport_bound} holds for
     \begin{align}
         c_0         & =\tfrac18,                               \\
         C_{\rm ent} & =200000,                                 \\
@@ -236,7 +238,7 @@ state and cut.
     \cite[Proposition~7.4]{OpenAI2026AreaLaw} holds with the threshold $\tfrac18$, the entropy constant $200000$
     and exponent $2$, and the energy constant
     $3\bigl(18\pi^2+6144\,e^{\pi^2+1}\bigr)$ and exponent $4$. Its
-    conclusion is the common step-error bound at these constants.
+    conclusion is the finite-family transport bound at these constants.
 \end{proof}
 
 \begin{definition}[The explicit constant of the area law]
@@ -273,4 +275,31 @@ state and cut.
     Apply Theorem~\ref{thm:area_law_transport_constant} with the transport
     constants of Theorem~\ref{thm:area_law_transport_bound_explicit}, for which
     $c_0=\tfrac18>0$.
+\end{proof}
+
+% Status: auxiliary result. Proposition 2.1 of the polynomial-PEPS source
+% asserts only that a constant exists; that statement is
+% thm:openai_square_area_law.
+% Source: polynomial-PEPS 01-preliminaries.tex, Proposition 2.1, lines 39--58;
+% area-law 10-geometry.tex, proof of Theorem 1.1, lines 803--857.
+% Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+\begin{theorem}[The square-grid area law at the closed-form constant]
+    \label{thm:square_area_law_closed_constant}
+    \lean{TNLean.PEPS.AreaLaw.squareEntropyAreaLawAt_closed}
+    \leanok
+    \uses{def:square_entropy_area_law_at,def:area_law_closed_constant}
+    Fix $q\ge1$, $J\ge0$ and $\Delta>0$. Then the square-grid entropy area
+    law of Definition~\ref{def:square_entropy_area_law_at} holds at $q$, $J$,
+    $\Delta$ with the constant $C_{\rm AL}(q,1,J,\Delta)$ of
+    Definition~\ref{def:area_law_closed_constant}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:area_law_closed_constant,thm:square_area_law_from_uniform}
+    Theorem~\ref{thm:area_law_closed_constant} at range $R=1$ bounds the
+    entropy of every cut of every finite induced domain by
+    $C_{\rm AL}(q,1,J,\Delta)$ times the number of cut edges. Placing a
+    square-grid Hamiltonian on the integer square, as in the proof of
+    Theorem~\ref{thm:square_area_law_from_uniform}, transports this bound to
+    every region of the square grid with the same constant.
 \end{proof}
