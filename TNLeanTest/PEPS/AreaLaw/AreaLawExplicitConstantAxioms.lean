@@ -15,7 +15,10 @@ Each public declaration must exist and have precisely the three standard logical
 run_cmd do
   let names := #[
     `TNLean.PEPS.AreaLaw.uniformAreaLawConstantExplicit,
-    `TNLean.PEPS.AreaLaw.uniformAreaLaw_explicit]
+    `TNLean.PEPS.AreaLaw.uniformAreaLaw_explicit,
+    `TNLean.PEPS.AreaLaw.Scan.CollarScan.finiteFamilyTransportBound_explicit,
+    `TNLean.PEPS.AreaLaw.uniformAreaLawConstantClosed,
+    `TNLean.PEPS.AreaLaw.uniformAreaLaw_closed]
   let expected := #[``propext, ``Classical.choice, ``Quot.sound]
   for decl in names do
     unless (← Lean.getEnv).contains decl do
