@@ -284,19 +284,34 @@ theorem coarse_mutualInformation_le_of_sublinearCollarBoundAt {q R : ℕ}
 theorem beta_lt_one : (Exponents.beta : ℝ) < 1 := by
   norm_num [Exponents.beta, Exponents.boxError]
 
-/-- The amplification bound of area-law Proposition 10.2 at the collar constant `max C 1`
-and the power `M = 1`, with its constant and threshold. This is the form in which the
-existential corollaries of the named-constant theorems obtain their amplification premise
-`AmplificationBoundAt`. Source: area-law Proposition 10.2 (`prop:amplification`),
-`09-amplification.tex`, lines 261–296. -/
-theorem exists_amplificationBoundAt_max_one {q R : ℕ} {J Δ : ℝ} (hΔ : 0 < Δ) (C : ℝ) :
-    ∃ Ca : ℝ, ∃ Na : ℕ, AmplificationBoundAt q R J Δ (max C 1) 1 Ca Na :=
-  amplificationBound (q := q) (R := R) (J := J) hΔ (max C 1)
-    (lt_of_lt_of_le one_pos (le_max_right _ _)) 1 le_rfl
+/-- The amplification constant of area-law Proposition 10.2 at the input constant `max C 1`
+and the power `M = 1`, at the named filter-locality constants:
+`amplificationConstantExplicit q R J Δ (max C 1) 1`. Source: area-law Proposition 10.2
+(`prop:amplification`), `09-amplification.tex`, lines 261–296 and 453–569. -/
+noncomputable def collarAmplificationConstant (q R : ℕ) (J Δ C : ℝ) : ℝ :=
+  amplificationConstantExplicit q R J Δ (max C 1) 1
+
+/-- The amplification threshold of area-law Proposition 10.2 at the input constant `max C 1`
+and the power `M = 1`: the larger of `amplificationThresholdExplicit q R J Δ (max C 1) 1` and
+the radius threshold of `collarAmplificationConstant q R J Δ C`. Source: area-law
+Proposition 10.2 (`prop:amplification`), `09-amplification.tex`, lines 261–322 and 453–499. -/
+noncomputable def collarAmplificationThreshold (q R : ℕ) (J Δ C : ℝ) : ℕ :=
+  max (amplificationThresholdExplicit q R J Δ (max C 1) 1)
+    (Exponents.collarRadiusThreshold (collarAmplificationConstant q R J Δ C) 1)
+
+/-- The amplification bound of area-law Proposition 10.2 at the input constant `max C 1`
+and the power `M = 1` holds with the constant `collarAmplificationConstant q R J Δ C` and the
+threshold `collarAmplificationThreshold q R J Δ C`. Source: area-law Proposition 10.2
+(`prop:amplification`), `09-amplification.tex`, lines 261–296. -/
+theorem amplificationBoundAt_collarAmplification {q R : ℕ} {J Δ : ℝ} (hΔ : 0 < Δ) (C : ℝ) :
+    AmplificationBoundAt q R J Δ (max C 1) 1 (collarAmplificationConstant q R J Δ C)
+      (collarAmplificationThreshold q R J Δ C) :=
+  amplificationBoundAt_explicit (J := J) q R hΔ (lt_of_lt_of_le one_pos (le_max_right _ _)) 1
 
 /-- The constant and threshold of the sublinear collar bound of area-law Proposition 9.6,
 together with the amplification constant and threshold of Proposition 10.2 at the collar
-constant `max C 1` and the power `M = 1`. Existential corollaries of the named-constant
+constant `max C 1` and the power `M = 1`, which are `collarAmplificationConstant` and
+`collarAmplificationThreshold`. Existential corollaries of the named-constant
 theorems, which take `SublinearCollarBoundAt` and `AmplificationBoundAt`, obtain both
 premises from it. Source: area-law Propositions 9.6 (`08-scanner.tex`, lines 808–827) and
 10.2 (`09-amplification.tex`, lines 261–296). -/
@@ -305,8 +320,7 @@ theorem exists_sublinearCollarBoundAt_amplificationBoundAt {q R : ℕ} {J Δ D�
     ∃ C : ℝ, ∃ N : ℕ, ∃ Ca : ℝ, ∃ Na : ℕ, SublinearCollarBoundAt q R J Δ D₀ Ctpl C N ∧
       AmplificationBoundAt q R J Δ (max C 1) 1 Ca Na := by
   obtain ⟨C, N, hcol⟩ := hcol
-  obtain ⟨Ca, Na, hamp⟩ := exists_amplificationBoundAt_max_one (q := q) (R := R) (J := J) hΔ C
-  exact ⟨C, N, Ca, Na, hcol, hamp⟩
+  exact ⟨C, N, _, _, hcol, amplificationBoundAt_collarAmplification hΔ C⟩
 
 /-- **Proposition 3.1 from the sublinear collar bound.** Fix the Hamiltonian parameters
 `q, R, J` and a gap `Δ > 0`, and assume the sublinear collar bound of area-law

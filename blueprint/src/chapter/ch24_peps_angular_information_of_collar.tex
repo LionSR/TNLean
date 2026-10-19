@@ -735,6 +735,68 @@
     threshold for every common translation of $\Lambda_L$.
 \end{proof}
 
+\begin{definition}[Amplification constants at the collar constant]
+    \label{def:peps_collar_amplification_constants}
+    \lean{TNLean.PEPS.Approximation.collarAmplificationConstant,
+        TNLean.PEPS.Approximation.collarAmplificationThreshold}
+    \leanok
+    \uses{def:area_law_amplification_bound}
+    For $q,R\in\mathbb N$ and $J,\Delta,C\in\mathbb R$, let
+    $C_a(q,R,J,\Delta,C)$ be the constant of the amplification bound of
+    \cite[Proposition~10.2]{OpenAI2026AreaLaw} at the input constant
+    $\max\{C,1\}$ and the order $M=1$, with the locality constant and rate of
+    the positive constraints at the power $p=10^6$. Let
+    $N_a(q,R,J,\Delta,C)$ be the larger of the threshold of that bound and the
+    radius threshold of $C_a(q,R,J,\Delta,C)$.
+\end{definition}
+
+\begin{theorem}[Amplification bound at the collar constant]
+    \label{thm:peps_collar_amplification_bound}
+    \lean{TNLean.PEPS.Approximation.amplificationBoundAt_collarAmplification}
+    \leanok
+    \uses{def:area_law_amplification_bound,def:peps_collar_amplification_constants}
+    Let $q,R\in\mathbb N$, $J\in\mathbb R$, $\Delta>0$ and $C\in\mathbb R$.
+    The amplification bound at the input constant $\max\{C,1\}$ and the order
+    $1$ holds with constant $C_a(q,R,J,\Delta,C)$ and threshold
+    $N_a(q,R,J,\Delta,C)$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_amplification_explicit}
+    Theorem~\ref{thm:area_law_amplification_explicit} at the input constant
+    $\max\{C,1\}\ge1>0$ and the order $1$ gives the bound with these
+    constant and threshold.
+\end{proof}
+
+\begin{theorem}[Cell and angular information at the named amplification constants]
+    \label{thm:peps_information_of_collar_named_amplification}
+    \lean{TNLean.PEPS.Approximation.cell_conditionalMutualInformation_le_square_of_sublinearCollarBoundAt_explicit,
+        TNLean.PEPS.Approximation.isAngularScale_of_sublinearCollarBoundAt_le_explicit}
+    \leanok
+    \uses{def:area_law_collar_bound,def:polynomial_peps_model,
+        def:peps_cell_information_constants,def:peps_angular_information_constants,
+        def:peps_angular_scale,def:peps_collar_amplification_constants}
+    Fix $q\in\mathbb N$, $J\ge0$, $\Delta>0$ and template constants
+    $D_0,C_{\rm tpl}$, and suppose that the range-one sublinear collar bound
+    holds with constant $C$ and threshold $N$. Put $C_a=C_a(q,1,J,\Delta,C)$
+    and $N_a=N_a(q,1,J,\Delta,C)$. Then the conclusion of
+    Theorem~\ref{thm:peps_square_cell_conditional_information_of_collar_explicit}
+    holds with these $C_a,N_a$ for every $c>0$. If moreover $q\ge1$, then for
+    $a>0$, $A_0\in\mathbb R$, $m_0\in\mathbb N$ and an integer $p>0$, every
+    $D\ge D_{\rm ang}(J,\Delta,a,p)$ and every $L_0\ge L_{\rm ang}$ at these
+    $C_a,N_a$ form a slope and a threshold at accuracy $L^{-p}$ in the sense of
+    Definition~\ref{def:peps_angular_scale}. The collar bound remains a
+    hypothesis.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_collar_amplification_bound,
+        thm:peps_square_cell_conditional_information_of_collar_explicit,
+        thm:peps_angular_information_of_collar_explicit}
+    Theorem~\ref{thm:peps_collar_amplification_bound} supplies the amplification
+    bound at $(\max\{C,1\},1)$ with constant $C_a$ and threshold $N_a$.
+    Theorems~\ref{thm:peps_square_cell_conditional_information_of_collar_explicit}
+    and~\ref{thm:peps_angular_information_of_collar_explicit} apply.
+\end{proof}
+
 \begin{theorem}[Angular information under the sublinear collar bound]
     \label{thm:peps_angular_information_of_collar}
     \lean{TNLean.PEPS.Approximation.angularInformationBound_of_sublinearCollarBound}

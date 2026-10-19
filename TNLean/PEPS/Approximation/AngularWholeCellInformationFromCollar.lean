@@ -79,8 +79,8 @@ scale, grid, ambient sets, physical Hamiltonian, ground vector and exterior.
 The old information estimate is retained as the induction input. The constants
 are `cellInformationConstant` and `cellInformationExponent`
 (`mutualInformation_selectedRegion_le_square_of_sublinearCollarBoundAt`), at the collar
-constant and threshold and at the amplification constant and threshold supplied by
-`amplificationBound`.
+constant and threshold and at the amplification constant and threshold
+`collarAmplificationConstant` and `collarAmplificationThreshold`.
 
 Source: polynomial-PEPS manuscript, Lemma 3.2 and Proposition 3.4,
 `02-information.tex`, lines 163–311 and 692–732. The sublinear collar bound is

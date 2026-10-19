@@ -198,11 +198,32 @@ theorem isAngularScale_of_sublinearCollarBoundAt_le {q : ℕ} (hq : 1 ≤ q)
     (angularInformationBound_of_sublinearCollarBoundAt_le hq hJ hΔ hcol hamp ha m₀
       (by exact_mod_cast hp) hD hL₀)
 
+/-- **Proposition 3.4 at an integer accuracy, at the named amplification constants.** Under
+the range-one sublinear collar bound with constant `C` and threshold `N`, every slope
+`D ≥ angularScale J Δ a p` and every threshold `L₀` at least `angularThreshold` at the
+amplification constant `collarAmplificationConstant q 1 J Δ C` and threshold
+`collarAmplificationThreshold q 1 J Δ C` form an angular scale. The collar bound remains a
+premise until its constant and threshold are named.
+
+Source: polynomial-PEPS manuscript, Proposition 3.4 (`prop:angular`), `02-information.tex`,
+lines 635–785; area-law Proposition 10.2 (`prop:amplification`), `09-amplification.tex`,
+lines 261–296. -/
+theorem isAngularScale_of_sublinearCollarBoundAt_le_explicit {q : ℕ} (hq : 1 ≤ q)
+    {J Δ D₀ Ctpl C : ℝ} {N : ℕ} (hJ : 0 ≤ J) (hΔ : 0 < Δ)
+    (hcol : AreaLaw.SublinearCollarBoundAt q 1 J Δ D₀ Ctpl C N)
+    {a A₀ : ℝ} (ha : 0 < a) (m₀ : ℕ) {p : ℕ} (hp : 0 < p) {D L₀ : ℝ}
+    (hD : angularScale J Δ a p ≤ D)
+    (hL₀ : angularThreshold q J Δ a A₀ m₀ p Ctpl N (collarAmplificationConstant q 1 J Δ C)
+      (collarAmplificationThreshold q 1 J Δ C) ≤ L₀) :
+    IsAngularScale q J Δ a A₀ m₀ p D L₀ :=
+  isAngularScale_of_sublinearCollarBoundAt_le hq hJ hΔ hcol
+    (amplificationBoundAt_collarAmplification hΔ C) ha m₀ hp hD hL₀
+
 /-- The sublinear collar estimate at interaction range one implies angular
 information decay with all constants uniform over the subsequent physical
 systems, marked points, regions, and annular scales. The constants are
 `angularScale J Δ a p` and `angularThreshold`, at the collar constants and at the
-amplification constants supplied by `amplificationBound`
+amplification constants `collarAmplificationConstant` and `collarAmplificationThreshold`
 (`angularInformationBound_of_sublinearCollarBoundAt_le`).
 
 Source: polynomial-PEPS manuscript, `02-information.tex`, lines 635–785. -/

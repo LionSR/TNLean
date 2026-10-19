@@ -1816,3 +1816,38 @@ state.
     Theorem~\ref{thm:arealaw-physical-box-fixed-exponent} gives $C_b$
     from the initial bound, and the first part applies.
 \end{proof}
+
+\begin{theorem}[Sublinear collar bound at given transport constants]
+    \label{thm:area_law_sublinear_collar_explicit}
+    \lean{TNLean.PEPS.AreaLaw.sublinearCollarBound_real_explicit}
+    \leanok
+    \uses{def:area_law_collar_bound}
+    Fix the data $q,R,J,\Delta,D_0,C_{\mathrm{tpl}}$ of
+    Theorem~\ref{thm:area_law_sublinear_collar}, and real numbers
+    $c_0,C_{\rm ent},e_{\rm ent},C_{\rm en},e_{\rm en}$ with $c_0>0$ for
+    which the common step-error bound of
+    Theorem~\ref{thm:al_scan_actual_round_transport} holds. Let $C_{\rm box}$
+    be the safe-box constant of the bootstrap of
+    Theorem~\ref{thm:arealaw-physical-box-fixed-exponent} started from the
+    explicit initial box estimate, with the truncation constant at the factor
+    $2$ and these transport constants. Then the conclusions of
+    Theorem~\ref{thm:area_law_sublinear_collar} hold with the constant $C_1$
+    and the threshold $N_1$ of the collar bound at $C_{\rm box}$, the
+    truncation constant at the factor $10$ and these transport constants.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:arealaw-physical-box-fixed-exponent,
+        thm:arealaw-box-clearance-comparison,
+        thm:template-final-information,
+        thm:area_law_collar_bound_of_information}
+    The bootstrap of Theorem~\ref{thm:arealaw-physical-box-fixed-exponent},
+    run from the explicit initial box estimate at the given transport
+    constants, gives $F_{\mathrm{box},2R+11}(r)\leq C_{\rm box}r^{1+e_*}$ for
+    every integer $r\geq1$, with $C_{\rm box}\geq0$. The argument of the first
+    part of Theorem~\ref{thm:area_law_sublinear_collar_named} is then run at
+    the same transport constants and the truncation constant at the factor
+    $10$: the clearance comparison passes to clearance $2R+10$, the template
+    information theorem gives the information coefficient and its threshold,
+    and Theorem~\ref{thm:area_law_collar_bound_of_information} converts them
+    into $C_1$ and $N_1$.
+\end{proof}
