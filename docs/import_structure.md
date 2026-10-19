@@ -41,7 +41,7 @@ TNLean, the remaining source follows these conceptual layers:
 | 4 | `MPS.FundamentalTheorem`, `MPS.Symmetry` | The single-block fundamental theorem and symmetry consequences. |
 | 5 | `MPS.BNT`, `MPS.CanonicalForm`, `MPS.Irreducible`, `MPS.Periodic`, `MPS.Structure` | Multi-block canonical forms, periodicity, and structural assembly. |
 | 5b | `MPS.RFP` | Renormalization fixed-point theory. |
-| 5c | `MPS.AreaLaw` | The one-dimensional area law and polynomial matrix product state approximation for gapped finite-range chains, stated natively on the chain of `L` sites and on finite sets of integers, and proved from the QICLean tail bound and buffered discount; it imports the site-generic entropy lemmas `Lattice.RegionEntropyInequalities` and `Lattice.ZeroEntropy` and nothing from `PEPS`. |
+| 5c | `MPS.AreaLaw` | The one-dimensional area law and polynomial matrix product state approximation for gapped finite-range chains, stated natively on the chain of `L` sites and on finite sets of integers, and proved from the QICLean tail bound and buffered discount; it imports the site-generic entropy lemmas `Lattice.RegionEntropyInequalities` and `Lattice.ZeroEntropy`. The chain layer currently also imports two `PEPS.Approximation` modules, `SheetSwapConjugateSupport` and `InformationReset`, for dimension-independent regional-swap, paired-site and entropy-comparison lemmas; these modules import parts of `PEPS.AreaLaw` in turn. The regional-swap and paired-site lemmas are to move to the lattice layer (#9721). |
 | 6 | `Wielandt` | Tensor-typed span-growth, primitivity, and quantum Wielandt consequences built on QICLean's channel-generic theory. |
 
 `PiAlgebra` provides related algebraic formulations. `PEPS` contains the

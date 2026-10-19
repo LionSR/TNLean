@@ -10,7 +10,7 @@ import TNLean.PEPS.Approximation.SheetSwapSiteSupport
 # Support of a swapped tensor product
 
 Pair the two physical values at each site. Conjugating a tensor product of
-operators with common support by the actual regional sheet swap preserves
+operators with common support by the regional sheet swap preserves
 that support. The doubled-interaction statement follows by addition of its
 two replica terms.
 
@@ -64,7 +64,7 @@ theorem reindex_sheetSwapOp_conj_kronecker_mem_supportedOperators
     mul_mem_supportedOperators
       (mul_mem_supportedOperators (star_mem_supportedOperators hF) hT) hF
 
-/-- The actual swapped doubled interaction acts on its original support in
+/-- The swapped doubled interaction acts on its original support in
 the paired-site coordinates. Empty regions and zero local dimension are
 included; no Hermiticity hypothesis is needed.
 

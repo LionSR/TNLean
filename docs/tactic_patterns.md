@@ -4721,6 +4721,62 @@ three-plaquette output measurement, and the routed reunion measurement.
   the pattern occurs in a second file and meets the promotion threshold.
 
 
+### Exact commutation across an infinite graph distance — candidate (2026-10-19)
+
+- **Pattern:** Derive reachability inside each interaction support from the
+  diameter bound, take a reachability-closed set `C` on one side of the
+  separation, show that every support lies in `C` or is disjoint from it,
+  and close with `commute_heisenbergEvolution_of_closed`:
+
+  ```lean
+  have hReach : ∀ k, ∀ x ∈ X k, ∀ z ∈ X k, G.Reachable x z :=
+    fun k x hx z hz => SimpleGraph.reachable_of_edist_ne_top
+      (ne_top_of_le_ne_top (ENat.natCast_ne_top R) (hDiam k x hx z hz))
+  have hClosed (k : κ) : (X k : Set ι) ⊆ C ∨ Disjoint (X k : Set ι) C := ...
+  have hCy : Disjoint C ({y} : Set ι) := Set.disjoint_singleton_right.mpr ...
+  exact commute_heisenbergEvolution_of_closed h (fun k => (X k : Set ι))
+    hSupport C {y} hClosed hCy ...
+  ```
+
+- **Seen:** Two occurrences in two files:
+  `Circuit/LiebRobinson/GraphPropagation.lean`,
+  `heisenberg_commutator_eq_zero_of_edist_eq_top`, with
+  `C = {x | G.Reachable (a i) x}`; and
+  `Circuit/LiebRobinson/GraphLocalization.lean`, the infinite-distance branch
+  of `norm_heisenberg_commutator_le_graph_kernel_sum`, with
+  `C = {x | ¬G.Reachable x y}`.
+- **Possible abstraction:** A lemma stating that a reachability-closed set
+  separates finite-diameter supports, parameterized by which side of the
+  separation defines `C`, so that both proofs reduce to one call before
+  `commute_heisenbergEvolution_of_closed`.
+- **Notes:** Below the rule of three; the two closed sets are dual. Promote at
+  a third use.
+
+
+### Chain neighborhood of a region — candidate (2026-10-19)
+
+- **Pattern:** The radius-`ρ` neighborhood of a set of chain sites written
+  inline as a local `let`:
+
+  ```lean
+  let N := Finset.univ.filter
+    (fun y : Fin L ↦ ∃ x ∈ S, (Nat.dist x.val y.val : ℝ) ≤ ρ)
+  ```
+
+  with `dsimp only` or `change` steps to match the `let` of a statement with
+  the one in its proof.
+- **Seen:** At least thirteen occurrences in six files of `MPS/AreaLaw/`:
+  `IntervalNeighborhoodEntropy.lean` (four), `RelativeGeneratorLocalization.lean`
+  (four), `LiebRobinson.lean` (two), `InformationReset.lean`,
+  `LogarithmicSeparation.lean` and `SupportedGaussianIntegral.lean`.
+- **Possible abstraction:** One definition
+  `chainNeighborhood (L : ℕ) (ρ : ℝ) (S : Finset (Fin L)) : Finset (Fin L)`
+  with a `mem_chainNeighborhood` simp lemma, used in every statement.
+- **Notes:** Past the promotion threshold. The refactor changes theorem
+  statements across the chain layer, so it needs its own pull request with a
+  build; it was not done in the review round that recorded it.
+
+
 ### Dyadic padding bounds — candidate (2026-10-16)
 
 - **Pattern:** Combine the lower and strict upper bounds for

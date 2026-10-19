@@ -206,7 +206,7 @@ for an arbitrary finite set of sites and are instantiated here directly.
     (\ref{eq:chain_swapped_doubled_operator}).
 \end{proof}
 
-\begin{theorem}[The actual ground vectors of the doubled and swapped chains]
+\begin{theorem}[The ground vectors of the doubled and swapped chains]
     \label{thm:chain_doubled_swapped_ground_gap}
     \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.doubled_swappedDoubled_isGappedGroundState}
     \leanok
@@ -231,7 +231,7 @@ for an arbitrary finite set of sites and are instantiated here directly.
         \widehat H'-2E_0\mathbb 1
                         & \ge\Delta(\mathbb 1-|\Phi\rangle\langle\Phi|).
     \end{align}
-    In particular, these actual vectors give the ground lines of the two
+    In particular, these vectors give the ground lines of the two
     Hamiltonians, with common ground energy $2E_0$ and gap at least
     $\Delta$. This is the contiguous-chain assertion in the paragraph
     ``Two-sided Gaussian filtering'' of~\cite{TNLean2026OneDimensional},
@@ -252,12 +252,26 @@ for an arbitrary finite set of sites and are instantiated here directly.
          & =G\otimes\mathbb 1+\mathbb 1\otimes G+\Delta Q\otimes Q
         \ge0.
     \end{align}
-    The tensor-square vector has norm one and eigenvalue $2E_0$.
+    The tensor-square vector satisfies
+    \begin{align}
+        (H\otimes\mathbb 1+\mathbb 1\otimes H)(\Omega\otimes\Omega)
+         & =2E_0\,\Omega\otimes\Omega,
+         &
+        \|\Omega\otimes\Omega\|
+         & =\|\Omega\|^2=1.
+    \end{align}
     Pairing coordinates is unitary, so the same norm, eigen-equation and
     positive defect hold for $\Psi$ and $\widehat H$.
     The regional swap is a permutation matrix; after pairing it remains
-    unitary. Therefore $\Phi=F\Psi$ has norm one and eigenvalue $2E_0$
-    for $\widehat H'$. Moreover,
+    unitary, $F^\dagger F=\mathbb 1$. Since $\widehat H'=F\widehat HF^\dagger$,
+    \begin{align}
+        \widehat H'\Phi
+         & =F\widehat HF^\dagger F\Psi=F\widehat H\Psi=2E_0\Phi,
+         &
+        \|\Phi\|
+         & =\|F\Psi\|=\|\Psi\|=1,
+    \end{align}
+    and
     \begin{align}
          & \widehat H'-2E_0\mathbb 1
         -\Delta(\mathbb 1-|\Phi\rangle\langle\Phi|)\notag \\
@@ -325,8 +339,8 @@ for an arbitrary finite set of sites and are instantiated here directly.
         W_p=I\cap[\max\{0,p+1-R\},\,p+1+R).
     \end{align}
     If a nonempty support $X\subseteq I$ of diameter at most $R$ meets
-    both $D$ and $I\setminus D$, then $X\subseteq W_p$ for some actual
-    boundary edge $p\in\partial D$. Consequently,
+    both $D$ and $I\setminus D$, then $X\subseteq W_p$ for some boundary
+    edge $p\in\partial D$. Consequently,
     \begin{align}
         \#\{X\subseteq I:\ X\ne\varnothing,\ \operatorname{diam}X\le R,
         \ X\cap D\ne\varnothing,\ X\setminus D\ne\varnothing\}
@@ -384,16 +398,16 @@ for an arbitrary finite set of sites and are instantiated here directly.
     Every $K_{X,b}$ is Hermitian, is supported on the original set $X$,
     and satisfies $\|K_{X,b}\|\le2J$. Let $\mathcal C$ be the set of
     original supports meeting both $D$ and $I\setminus D$, and let
-    $N_R=2\cdot2^{2R}$. For the actual doubled operator $\widehat H$,
+    $N_R=2\cdot2^{2R}$. For the doubled operator $\widehat H$,
     \begin{align}
         F\widehat H F^\dagger-\widehat H
                       & =\sum_{X\in\mathcal C}\sum_{b\in\{0,1\}}K_{X,b},\notag \\
         2|\mathcal C| & \le N_R|\partial D|.
     \end{align}
-    Let $Z=\bigcup_{X\in\mathcal C}X$ be the actual union of crossing
+    Let $Z=\bigcup_{X\in\mathcal C}X$ be the union of crossing
     supports and put $\Delta H=F\widehat H F^\dagger-\widehat H$.
     The operator $\Delta H$ is supported on $Z$. For every $z\in Z$ there
-    is an actual boundary position $a\in\partial D$ with $|z-a|\le R$,
+    is a boundary position $a\in\partial D$ with $|z-a|\le R$,
     and
     \begin{align}
         \|\Delta H\|\le 2J N_R|\partial D|.
@@ -424,9 +438,15 @@ for an arbitrary finite set of sites and are instantiated here directly.
         \|K_{X,b}\|           & \le J+J=2J.
     \end{align}
 
-    If $X$ lies inside $D$, swapping exchanges the two replica terms;
-    if $X$ is disjoint from $D$, each replica term commutes with the swap.
-    Thus, for every support outside $\mathcal C$,
+    Swapping exchanges the two replica terms of a support inside $D$ and
+    fixes those of a support disjoint from $D$:
+    \begin{align}
+        FT_{X,0}F^\dagger & =T_{X,1},\quad FT_{X,1}F^\dagger=T_{X,0}
+        \qquad(X\subseteq D),\notag                                  \\
+        FT_{X,b}F^\dagger & =T_{X,b}\qquad(X\cap D=\varnothing).
+    \end{align}
+    Adding the two replica terms gives, for every support
+    outside $\mathcal C$,
     \begin{align}
         F(T_{X,0}+T_{X,1})F^\dagger=T_{X,0}+T_{X,1}.
     \end{align}
@@ -441,11 +461,11 @@ for an arbitrary finite set of sites and are instantiated here directly.
     Each term in the resulting expansion is supported on some
     $X\subseteq Z$, so their finite sum is supported on $Z$. If $z\in Z$,
     choose a crossing support $X$ containing it. The boundary-window
-    inclusion gives $a+1-R\le z<a+1+R$ for an actual boundary position
+    inclusion gives $a+1-R\le z<a+1+R$ for a boundary position
     $a$, whence $|z-a|\le R$.
     If $L=0$, the boundary and the crossing family are empty and
     $\Delta H=0$. Otherwise, a singleton interaction implies
-    $0\le\|h_{\{x\}}\|\le J$ at an actual site $x$, so $J\ge0$.
+    $0\le\|h_{\{x\}}\|\le J$ at a site $x$, so $J\ge0$.
     The triangle inequality and the bound on the number of replica labels
     now give
     \begin{align}
@@ -628,7 +648,7 @@ for an arbitrary finite set of sites and are instantiated here directly.
         \le4|J|a(R+1)^2e^{v|t|-\ell/2}.
     \end{align}
     Conjugation and the expectation are linear. Summing this estimate
-    over the actual crossing replica labels and using their cardinality
+    over the crossing replica labels and using their cardinality
     bound proves the assertion. An empty crossing family gives the zero
     generator; the same nonnegative estimates include $J=0$.
 \end{proof}
@@ -658,7 +678,7 @@ for an arbitrary finite set of sites and are instantiated here directly.
     and let $\eta\ge0$ and $T\ge0$ be real.
     Let $\gamma_\eta$ be the centred Gaussian measure of variance $\eta$,
     with $\gamma_0$ the point mass at zero. Put $B=N(Q\cup Z)$ and
-    define the actual operators
+    define the operators
     \begin{align}
         M_{\mathrm{loc}} & =\int_{[-T,T]}
         E_{N(Q)}\bigl(e^{itK'}We^{-itK'}\bigr)U(t)\,d\gamma_\eta(t),\notag   \\
@@ -758,7 +778,7 @@ for an arbitrary finite set of sites and are instantiated here directly.
     \uses{def:chain_model}
     If $z\in Q$, the two margin inequalities apply directly; weakening
     the lower bound from $w$ to $w-R$ is permitted since $R\ge0$.
-    If $z\in Z$, choose an actual crossing support $X$ containing $z$,
+    If $z\in Z$, choose a crossing support $X$ containing $z$,
     together with $y\in X\setminus D$ and $x\in X\cap D$.
     The diameter bound gives $|z-y|,|z-x|\le R$.
     For $r\in R_0$, the first margin and the triangle inequality give
@@ -811,7 +831,7 @@ for an arbitrary finite set of sites and are instantiated here directly.
     \uses{thm:peps_reset_regional_filter,thm:chain_supported_gaussian_integral,
         thm:peps_reset_polar_step,lem:chain_reset_support_separation,
         thm:peps_reset_paired_support,thm:peps_reset_exchanged_cores,
-        thm:al_amp_entropy_comparison,thm:peps_reset_entropy_scalar}
+        thm:peps_reset_cores_entropy,thm:peps_reset_entropy_scalar}
     Set $r=2p+10$. Choose the Gaussian constants $A,T_0>0$ from
     Theorem~\ref{thm:peps_reset_regional_filter} once, and choose the locality
     constants $C,v>0$ from Theorem~\ref{thm:chain_supported_gaussian_integral}.
@@ -828,7 +848,7 @@ for an arbitrary finite set of sites and are instantiated here directly.
 
     Put $Q=I\setminus(D\cup C)$, let $Z$ be the union of the supports
     crossing $D$, and put $\Psi=\Omega\otimes\Omega$, $\Phi=F_D\Psi$.
-    The regional Gaussian theorem constructs the actual buffer contraction
+    The regional Gaussian theorem constructs the buffer contraction
     $W$ and a real overlap $z\ge e^{-2b}$; its truncated two-sided integral
     $M_T$, of variance $AB_*$ and cutoff $T=T_0B_*$, satisfies
     \begin{align}
@@ -837,8 +857,8 @@ for an arbitrary finite set of sites and are instantiated here directly.
         \varepsilon=e^{-10b}L^{-r}.
     \end{align}
     Take $\ell=\lceil K_{\mathrm{loc}}B_*\rceil$.
-    Theorem~\ref{thm:chain_supported_gaussian_integral} gives its actual
-    supported approximation $M_{\mathrm{loc}}$ on
+    Theorem~\ref{thm:chain_supported_gaussian_integral} gives its supported
+    approximation $M_{\mathrm{loc}}$ on
     $S=N_\ell(Q\cup Z)$.
     The elementary exponential estimate, reserving a factor
     $e^{-\ell/4}$ to absorb $P$, gives
@@ -864,8 +884,8 @@ for an arbitrary finite set of sites and are instantiated here directly.
     both cores, so $V$ acts trivially on their joint marginal in each
     replica. By Theorem~\ref{thm:peps_reset_exchanged_cores}, the two cores
     of the first replica of $\Phi$ are uncorrelated. Transporting paired
-    coordinates to the two replicas and applying the finite-site entropy
-    comparison yields
+    coordinates to the two replicas and applying the entropy comparison of
+    Theorem~\ref{thm:peps_reset_cores_entropy} yields
     \begin{align}
         I_\Omega(R_0:C_0)
          & \le8\sqrt\delta\,\log(e q^{|R_0|})\notag \\
@@ -1122,7 +1142,7 @@ for an arbitrary finite set of sites and are instantiated here directly.
 \begin{proof}
     \leanok
     \uses{thm:chain_information_reset,thm:chain_area_law,
-        lem:chain_entropy_inequalities,thm:chain_interval_neighborhood_entropy}
+        thm:chain_interval_neighborhood_entropy}
     Put $\overline C=\max\{0,C_{\mathrm{int}}(q,R,J,\Delta)\}$ and
     $b=4k_0\overline C$. Choose $C_p$ and the length threshold from
     Theorem~\ref{thm:chain_information_reset}, and set
@@ -1131,7 +1151,7 @@ for an arbitrary finite set of sites and are instantiated here directly.
     \end{align}
     Enlarge the threshold so that $\log L\ge1$.
     These choices use only the fixed parameters.
-    In any such chain there is an actual site, and its singleton term
+    In any such chain there is a site, and its singleton term
     has $0\le\|h_{\{x\}}\|\le J$. Thus $J\ge0$ is derived from the
     model, rather than imposed as a further hypothesis, and
     Theorem~\ref{thm:chain_area_law} applies.
@@ -1145,7 +1165,7 @@ for an arbitrary finite set of sites and are instantiated here directly.
     \begin{align}
         N_\rho(T)=\{y\in I:\ \exists x\in T,\ |x-y|\le\rho\}.
     \end{align}
-    Choose the actual regions
+    Choose the regions
     \begin{align}
         D=N_{w+1}(T),\qquad C=I\setminus N_{2w+2}(T),
         \qquad R_0=T,\quad C_0=E.

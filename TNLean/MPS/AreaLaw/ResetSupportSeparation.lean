@@ -9,16 +9,16 @@ import Mathlib.Data.Nat.Dist
 /-!
 # Separation of the reset support from the chain cores
 
-The complement of two disjoint outer regions and the actual crossing supports
+The complement of two disjoint outer regions and the crossing supports
 remain farther than `w - R` from the two cores. Their radius-`ℓ` neighborhood
 is therefore disjoint from the cores whenever `ℓ + R ≤ w`. Crossing supports
-are treated using their actual witnesses on opposite sides of the cut, so the
+are treated using their witnesses on opposite sides of the cut, so the
 loss is exactly the interaction range.
 
 ## Main result
 
 * `chain_reset_support_separation`: the strict core margin and disjointness of
-  the exact real-radius neighborhood of the actual reset support.
+  the exact real-radius neighborhood of the reset support.
 
 **Scope restriction (contiguous chains):** The physical sites are `Fin L`.
 The broader source domain may have gaps; see
@@ -30,7 +30,7 @@ This is a geometric support statement, without a quantum-state assumption.
 
 namespace TNLean.MPS.AreaLaw
 
-/-- The actual localized reset region avoids both cores under the strict
+/-- The localized reset region avoids both cores under the strict
 core-to-complement margins. Source: TNLean note,
 `part2a_mps_information.tex`, lines 419–425. -/
 lemma chain_reset_support_separation
