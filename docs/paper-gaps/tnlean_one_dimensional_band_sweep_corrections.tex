@@ -14,8 +14,33 @@
 \paragraph{Source.}
 The one-dimensional note~\cite{TNLean2026OneDimensional}, Part~II,
 Construction \texttt{con:band} and Proposition \texttt{prop:sweep}
-(\path{part2b_mps_protocol.tex}, lines~248--276 and 349--360),
+(\path{part2b_mps_protocol.tex} at revision
+\href{https://github.com/LionSR/TNLean/blob/65a8026e8489243b870c70daf872eed5c5f6cfc6/docs/notes/one_dimensional_note/part2b_mps_protocol.tex}{65a8026},
+lines~248--276 and 349--360),
 requires two local corrections. Neither introduces a new hypothesis.
+
+\paragraph{Setting.}
+We recall the terms of the source (lines~31--44 and 67--80). The chain
+$\Lambda=\{1,\dots,L\}$ carries site registers $\mathbb C^q$ and a
+normalised ground vector $\Omega$. A \emph{party} is a holder of a
+collection of registers; a map acting only on the registers of one party
+is private. A \emph{sheet} is a complete copy
+$\bigotimes_{x\in\Lambda}\mathbb C^q$ of the chain registers together
+with an assignment of an owning party to each site; its reference vector is
+a copy of $\Omega$ on those registers. The construction has one
+distinguished \emph{main sheet}, and each band dissolution prepares one
+\emph{auxiliary sheet}, a fresh copy of $\Omega$ held privately by one
+party. A \emph{birth} hands a set $T$ of sites of a sheet from its owner
+$P$ to another party $Q$, under the condition that $T$ has small mutual
+information in $\Omega$ with the sites not owned by $P$. A \emph{death}
+is the reverse transfer, returning $T$ to $P$, under the same condition
+imposed after the move. A \emph{two-sheet exchange} inside an interval $Y$
+interchanges the ownership assignments of two sheets on $Y$ without moving
+any register between parties. A \emph{band} is an interval of $w$
+consecutive sites being dissolved, and for a band starting at $a$ the scaled
+coordinate of a site $y$ is $(y-a)/w$. Finally, $\Xi$ denotes the tensor
+product of the retired auxiliary copies of $\Omega$ in their final
+registers (lines~356--358), so that $\|\Xi\|=1$.
 
 \paragraph{Lattice interfaces.}
 The source fixes an integer width $w\ge1$ and initially specifies
@@ -57,23 +82,17 @@ party, and leaves all auxiliary registers private at their actual owners.
 One must then identify the physical density with the partial trace over
 those auxiliary registers. Once this identification is established,
 $\|\Xi\|=1$ gives
-\begin{equation*}
-    \operatorname{Tr}_{\rm aux}
-    \bigl|\Omega\otimes\Xi\bigr\rangle
-    \bigl\langle\Omega\otimes\Xi\bigr|
-    =|\Omega\rangle\langle\Omega|.
-\end{equation*}
+\begin{align}
+    \operatorname{Tr}_{\rm aux}\bigl|\Omega\otimes\Xi\bigr\rangle\bigl\langle\Omega\otimes\Xi\bigr|
+        &= |\Omega\rangle\langle\Omega|.
+    \label{eq:tnlean_one_dimensional_band_sweep_corrections_partial_trace}
+\end{align}
 The downstream compression statement bounds only intended physical
 outputs; private spaces remain finite-dimensional without a numerical
 size bound (lines~423--424, 439--442, 459--461). This does not prove the
 required regrouping or partial-trace identity for the actual construction.
 No completion of the full sweep or compression argument is asserted.
 
-\begin{thebibliography}{1}
-    \bibitem{TNLean2026OneDimensional}
-    TNLean contributors,
-    \emph{A one-dimensional area law and matrix product state approximation
-        from a global gap}, Part~II,
-    \href{https://github.com/LionSR/TNLean/blob/65a8026e8489243b870c70daf872eed5c5f6cfc6/docs/notes/one_dimensional_note/part2b_mps_protocol.tex}{source at revision 65a8026} (2026).
-\end{thebibliography}
+\bibliographystyle{alpha}
+\bibliography{references}
 \end{document}
