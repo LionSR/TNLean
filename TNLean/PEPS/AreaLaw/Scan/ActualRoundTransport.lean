@@ -182,12 +182,26 @@ def FiniteFamilyTransportBound (c₀ Cent eent Cen een : ℝ) : Prop :=
             Real.log (Transport.filteredNormSq ((D j).rootPath n (a / 2) k p₀) pre) -
               Real.log (Transport.filteredNormSq ((D j).rootPath n (a / 2) k p₁) pre)
 
-/-- QICLean's finite-family transport theorem supplies constants with `0 < c₀` satisfying
-`FiniteFamilyTransportBound`. Source: Proposition 7.4, `06-transport.tex`, lines 377–434,
-applied in `08-scanner.tex`, lines 83–154. -/
+/-- The finite-family transport bound holds at the explicit transport constants: threshold
+`1/8`, entropy constant `200000` with exponent `2`, and energy constant
+`3 (18 π² + 6144 e^{π² + 1})` with exponent `4`.
+Source: Proposition 7.4, `06-transport.tex`, lines 377–434, applied in `08-scanner.tex`,
+lines 83–154. -/
+theorem finiteFamilyTransportBound_explicit :
+    FiniteFamilyTransportBound TensorPower.ReplicaTransport.transportThreshold
+      TensorPower.ReplicaTransport.transportEntropyConst
+      TensorPower.ReplicaTransport.transportEntropyExponent
+      TensorPower.ReplicaTransport.transportEnergyConst
+      TensorPower.ReplicaTransport.transportEnergyExponent :=
+  @TensorPower.ReplicaTransport.transport_finite_family_explicit
+
+/-- There are constants with `0 < c₀` satisfying `FiniteFamilyTransportBound`, namely the
+explicit ones of `finiteFamilyTransportBound_explicit`. Source: Proposition 7.4,
+`06-transport.tex`, lines 377–434, applied in `08-scanner.tex`, lines 83–154. -/
 theorem exists_finiteFamilyTransportBound :
     ∃ c₀ Cent eent Cen een : ℝ, 0 < c₀ ∧ FiniteFamilyTransportBound c₀ Cent eent Cen een :=
-  transport_finite_family
+  ⟨_, _, _, _, _, TensorPower.ReplicaTransport.transportThreshold_pos,
+    finiteFamilyTransportBound_explicit⟩
 
 /-- Recover an existential statement over the truncation constant `Ctr` and the transport
 constants from its form at every choice of transport constants satisfying

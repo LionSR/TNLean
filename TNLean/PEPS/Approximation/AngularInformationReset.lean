@@ -26,36 +26,36 @@ open TNLean.Lattice
 namespace TNLean.PEPS.Approximation
 
 open Classical in
-/-- The original-gap information reset applied to the actual padded annular
-regions. The reset constant and size threshold precede every region, scale,
-grid, Hamiltonian and ground vector.
+/-- **The information reset for the padded annular regions, with explicit constants.** The
+original-gap information reset applies to the actual padded annular regions with the reset
+width `C_p = resetWidth J Δ p` and the size threshold `L₀ = resetThreshold q J Δ p` of
+Lemma 3.3.
 
-Source: polynomial-PEPS manuscript, `02-information.tex`, lines 729–745. -/
-theorem exists_angular_information_reset (q : ℕ) (hq : 1 ≤ q)
+Source: polynomial-PEPS manuscript, `02-information.tex`, lines 736–745, with the constants
+of Lemma 3.3 at lines 606–608 and 612–630. -/
+theorem angular_information_reset_of_resetThreshold_le (q : ℕ) (hq : 1 ≤ q)
     (J : ℝ) (hJ : 0 ≤ J) {Δ p : ℝ} (hΔ : 0 < Δ) (hp : 0 < p) :
-    ∃ Cp L₀ : ℝ, 0 < Cp ∧
-      ∀ L : ℕ, L₀ ≤ L →
-        ∀ (h : SquareHamiltonian L q J) (E₀ : ℝ) (Ω : StateSpace L q),
-          h.IsGappedGroundState E₀ Ω Δ →
-          ∀ (o : ℝ × ℝ) (A E : Set (ℝ × ℝ)) (a' d s : ℝ),
-            0 ≤ a' → 0 < d → 0 < s →
-            let R : Finset (SquareLatticeVertex L L) := Finset.univ.filter
-              (fun v ↦ sitePosition L v ∈
-                AngularGrid.selectedRegion o (d * s) ((3 / 2) * a' * s) A)
-            let C : Finset (SquareLatticeVertex L L) := Finset.univ.filter
-              (fun v ↦ sitePosition L v ∈ AngularGrid.near ((3 / 2) * a' * s) E)
-            let R₀ : Finset (SquareLatticeVertex L L) := Finset.univ.filter
-              (fun v ↦ sitePosition L v ∈ AngularGrid.near (a' * s) A)
-            let C₀ : Finset (SquareLatticeVertex L L) := Finset.univ.filter
-              (fun v ↦ sitePosition L v ∈ AngularGrid.near (a' * s) E)
-            Disjoint R C → ∀ b : ℝ, 0 ≤ b →
-              FiniteProduct.mutualInformation (fun _ ↦ Fin q) Ω R C ≤ b →
-              Cp * (1 + b + Real.log L) ≤ a' * s / 2 →
-              FiniteProduct.mutualInformation (fun _ ↦ Fin q) Ω R₀ C₀ ≤
-                (L : ℝ) ^ (-p) := by
-  obtain ⟨Cp, L₀, hCp, hreset⟩ :=
-    SquareHamiltonian.information_reset q hq J hJ (Δ := Δ) (p := p) hΔ hp
-  refine ⟨Cp, L₀, hCp, ?_⟩
+    ∀ L : ℕ, resetThreshold q J Δ p ≤ L →
+      ∀ (h : SquareHamiltonian L q J) (E₀ : ℝ) (Ω : StateSpace L q),
+        h.IsGappedGroundState E₀ Ω Δ →
+        ∀ (o : ℝ × ℝ) (A E : Set (ℝ × ℝ)) (a' d s : ℝ),
+          0 ≤ a' → 0 < d → 0 < s →
+          let R : Finset (SquareLatticeVertex L L) := Finset.univ.filter
+            (fun v ↦ sitePosition L v ∈
+              AngularGrid.selectedRegion o (d * s) ((3 / 2) * a' * s) A)
+          let C : Finset (SquareLatticeVertex L L) := Finset.univ.filter
+            (fun v ↦ sitePosition L v ∈ AngularGrid.near ((3 / 2) * a' * s) E)
+          let R₀ : Finset (SquareLatticeVertex L L) := Finset.univ.filter
+            (fun v ↦ sitePosition L v ∈ AngularGrid.near (a' * s) A)
+          let C₀ : Finset (SquareLatticeVertex L L) := Finset.univ.filter
+            (fun v ↦ sitePosition L v ∈ AngularGrid.near (a' * s) E)
+          Disjoint R C → ∀ b : ℝ, 0 ≤ b →
+            FiniteProduct.mutualInformation (fun _ ↦ Fin q) Ω R C ≤ b →
+            resetWidth J Δ p * (1 + b + Real.log L) ≤ a' * s / 2 →
+            FiniteProduct.mutualInformation (fun _ ↦ Fin q) Ω R₀ C₀ ≤
+              (L : ℝ) ^ (-p) := by
+  have hreset :=
+    SquareHamiltonian.information_reset_of_resetThreshold_le q hq J hJ (Δ := Δ) (p := p) hΔ hp
   intro L hL h E₀ Ω hΩ o A E a' d s ha' hd hs R C R₀ C₀ hRC b hb hI hw
   have hsub := AngularGrid.angular_core_subsets (o := o) Set.univ A E ha' hd hs
   have hR₀ : R₀ ⊆ R := fun v hv ↦
@@ -82,5 +82,37 @@ theorem exists_angular_information_reset (q : ℕ) (hq : 1 ≤ q)
       ⟨Set.mem_univ _, fun hmem ↦
         hy (Finset.mem_filter.mpr ⟨Finset.mem_univ y, hmem⟩)⟩
     simpa only [dist_sitePosition_eq_supDist] using hw.trans_lt hdist
+
+open Classical in
+/-- The original-gap information reset applied to the actual padded annular
+regions. The reset constant and size threshold precede every region, scale,
+grid, Hamiltonian and ground vector. They are `resetWidth J Δ p` and
+`resetThreshold q J Δ p` (`angular_information_reset_of_resetThreshold_le`).
+
+Source: polynomial-PEPS manuscript, `02-information.tex`, lines 729–745. -/
+theorem exists_angular_information_reset (q : ℕ) (hq : 1 ≤ q)
+    (J : ℝ) (hJ : 0 ≤ J) {Δ p : ℝ} (hΔ : 0 < Δ) (hp : 0 < p) :
+    ∃ Cp L₀ : ℝ, 0 < Cp ∧
+      ∀ L : ℕ, L₀ ≤ L →
+        ∀ (h : SquareHamiltonian L q J) (E₀ : ℝ) (Ω : StateSpace L q),
+          h.IsGappedGroundState E₀ Ω Δ →
+          ∀ (o : ℝ × ℝ) (A E : Set (ℝ × ℝ)) (a' d s : ℝ),
+            0 ≤ a' → 0 < d → 0 < s →
+            let R : Finset (SquareLatticeVertex L L) := Finset.univ.filter
+              (fun v ↦ sitePosition L v ∈
+                AngularGrid.selectedRegion o (d * s) ((3 / 2) * a' * s) A)
+            let C : Finset (SquareLatticeVertex L L) := Finset.univ.filter
+              (fun v ↦ sitePosition L v ∈ AngularGrid.near ((3 / 2) * a' * s) E)
+            let R₀ : Finset (SquareLatticeVertex L L) := Finset.univ.filter
+              (fun v ↦ sitePosition L v ∈ AngularGrid.near (a' * s) A)
+            let C₀ : Finset (SquareLatticeVertex L L) := Finset.univ.filter
+              (fun v ↦ sitePosition L v ∈ AngularGrid.near (a' * s) E)
+            Disjoint R C → ∀ b : ℝ, 0 ≤ b →
+              FiniteProduct.mutualInformation (fun _ ↦ Fin q) Ω R C ≤ b →
+              Cp * (1 + b + Real.log L) ≤ a' * s / 2 →
+              FiniteProduct.mutualInformation (fun _ ↦ Fin q) Ω R₀ C₀ ≤
+                (L : ℝ) ^ (-p) :=
+  ⟨resetWidth J Δ p, resetThreshold q J Δ p, resetWidth_pos hJ hΔ hp,
+    angular_information_reset_of_resetThreshold_le q hq J hJ hΔ hp⟩
 
 end TNLean.PEPS.Approximation
