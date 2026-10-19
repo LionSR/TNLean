@@ -106,8 +106,8 @@ theorem exists_mutualInformation_selectedRegion_le_square_of_sublinearCollarBoun
                   (fun v ↦ sitePosition L v ∈ selectedRegion o s r A)) E ≤
                 b₀ + (S.card : ℝ) * (C₁ * (1 + Real.log s) ^ K)
  := by
-  obtain ⟨C, N, hcol⟩ := hcol
-  obtain ⟨Ca, Na, hamp⟩ := exists_amplificationBoundAt_max_one (q := q) (R := 1) (J := J) hΔ C
+  obtain ⟨C, N, Ca, Na, hcol, hamp⟩ :=
+    exists_sublinearCollarBoundAt_amplificationBoundAt hΔ hcol
   exact ⟨_, _, cellInformationConstant_pos q c Ctpl N Ca Na,
     (cellInformationExponent_pos c Ctpl N Ca Na).le,
     mutualInformation_selectedRegion_le_square_of_sublinearCollarBoundAt hJ hcol hamp hc⟩

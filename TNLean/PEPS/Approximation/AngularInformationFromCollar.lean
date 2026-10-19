@@ -211,8 +211,8 @@ theorem angularInformationBound_of_sublinearCollarBound {q : ℕ} (hq : 1 ≤ q)
     (hcol : AreaLaw.SublinearCollarBound q 1 J Δ D₀ Ctpl) :
     AngularInformationBound q J Δ := by
   intro a A₀ ha _hA₀ m₀ p hp
-  obtain ⟨C, N, hcol⟩ := hcol
-  obtain ⟨Ca, Na, hamp⟩ := exists_amplificationBoundAt_max_one (q := q) (R := 1) (J := J) hΔ C
+  obtain ⟨C, N, Ca, Na, hcol, hamp⟩ :=
+    exists_sublinearCollarBoundAt_amplificationBoundAt hΔ hcol
   exact ⟨_, _, angularInformationBound_of_sublinearCollarBoundAt_le hq hJ hΔ hcol hamp ha m₀ hp
     le_rfl le_rfl⟩
 
