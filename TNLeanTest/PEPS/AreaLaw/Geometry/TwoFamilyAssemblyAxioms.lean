@@ -17,6 +17,7 @@ run_cmd do
     `TNLean.PEPS.AreaLaw.Geometry.exists_primaryLayer_of_repairStageBirthRank_eq_zero,
     `TNLean.PEPS.AreaLaw.Geometry.exists_uniform_repairStage_primary_error_sum_bound,
     `TNLean.PEPS.AreaLaw.Geometry.card_repairStageExceptionalSites_le_of_isEmpty,
+    `TNLean.PEPS.AreaLaw.isTwoFamilyDecompositionConstant_twoFamilyConstant,
     `TNLean.PEPS.AreaLaw.twoFamilyDecomposition_of_one_le,
     `TNLean.PEPS.AreaLaw.twoFamilyDecomposition]
   let expected := #[``propext, ``Classical.choice, ``Quot.sound]

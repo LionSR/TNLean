@@ -38,43 +38,38 @@ open TNLean.Lattice
 
 namespace TNLean.PEPS.AreaLaw
 
-/-- The actual projected relative evolution constructs a supported
-approximation to every truncated two-Hamiltonian Gaussian filter.
-The same path works for all variances and nonnegative time cutoffs.
-Source: polynomial-PEPS, Section 2, eq:info-local-two-sided,
-lines 513–562. -/
-theorem exists_supported_gaussian_integral (q : ℕ) (hq : 1 ≤ q)
-    (R : ℕ) (J : ℝ) :
-    ∃ C v c : ℝ, 0 < C ∧ 0 < v ∧ 0 < c ∧
-      ∀ (Λ : Finset (ℤ × ℤ)) (g : LocalHamiltonian Λ q R J)
-        (H W : Matrix (Configuration Λ q) (Configuration Λ q) ℂ),
-        H.IsHermitian →
-        ∀ Q Z : Finset (Site Λ),
-          W ∈ supportedOperators q (Q : Set (Site Λ)) →
-          g.operator - H ∈ supportedOperators q (Z : Set (Site Λ)) →
-          ∀ l : ℕ,
-            let B := graphNeighborhood Λ l (Q ∪ Z)
-            ∃ U : ℝ → Matrix (Configuration Λ q) (Configuration Λ q) ℂ,
-              U 0 = 1 ∧
-              (∀ t, HasDerivAt U
-                ((Complex.I • siteExpectation q B
-                  (heisenbergEvolution g.operator t (g.operator - H))) * U t) t) ∧
-              (∀ t, U t ∈ Matrix.unitaryGroup (Configuration Λ q) ℂ) ∧
-              (∀ t, U t ∈ supportedOperators q (B : Set (Site Λ))) ∧
-              ∀ (η : ℝ≥0) (T : ℝ), 0 ≤ T →
-                let M := ∫ t : ℝ in Set.Icc (-T) T,
-                  siteExpectation q B (heisenbergEvolution g.operator t W) * U t
-                    ∂gaussianReal 0 η
-                M ∈ supportedOperators q (B : Set (Site Λ)) ∧
-                ‖M‖ ≤ ‖W‖ ∧
-                ‖M - GaussianFilter.gaussianIntertwinerTruncated η T g.operator H W‖ ≤
-                  ‖W‖ * C * (Λ.card : ℝ) * (1 + ‖g.operator - H‖ * T) *
-                    Real.exp (v * T - c * l) := by
+/-- The supported Gaussian approximation from a region localization bound with constants
+`C, v ≥ 0` and decay `c`, for one finite-range Hamiltonian `g`. The constants of the
+localization bound pass unchanged to the approximation error. -/
+private theorem supported_gaussian_integral_of_localization {q : ℕ} (hq : 1 ≤ q) {R : ℕ}
+    {J C v c : ℝ} (hC : 0 ≤ C) (hv : 0 ≤ v) {Λ : Finset (ℤ × ℤ)} (g : LocalHamiltonian Λ q R J)
+    (hlocal : ∀ (S : Finset (Site Λ)) (A : Matrix (Configuration Λ q) (Configuration Λ q) ℂ),
+      A ∈ supportedOperators q (S : Set (Site Λ)) → ∀ (l : ℕ) (t : ℝ),
+      ‖heisenbergEvolution g.operator t A -
+          siteExpectation q (graphNeighborhood Λ l S) (heisenbergEvolution g.operator t A)‖ ≤
+        ‖A‖ * min 2 (C * (Λ.card : ℝ) * Real.exp (v * |t| - c * l)))
+    (H W : Matrix (Configuration Λ q) (Configuration Λ q) ℂ) (hH : H.IsHermitian)
+    (Q Z : Finset (Site Λ)) (hW : W ∈ supportedOperators q (Q : Set (Site Λ)))
+    (hD : g.operator - H ∈ supportedOperators q (Z : Set (Site Λ))) (l : ℕ) :
+    let B := graphNeighborhood Λ l (Q ∪ Z)
+    ∃ U : ℝ → Matrix (Configuration Λ q) (Configuration Λ q) ℂ,
+      U 0 = 1 ∧
+      (∀ t, HasDerivAt U
+        ((Complex.I • siteExpectation q B
+          (heisenbergEvolution g.operator t (g.operator - H))) * U t) t) ∧
+      (∀ t, U t ∈ Matrix.unitaryGroup (Configuration Λ q) ℂ) ∧
+      (∀ t, U t ∈ supportedOperators q (B : Set (Site Λ))) ∧
+      ∀ (η : ℝ≥0) (T : ℝ), 0 ≤ T →
+        let M := ∫ t : ℝ in Set.Icc (-T) T,
+          siteExpectation q B (heisenbergEvolution g.operator t W) * U t
+            ∂gaussianReal 0 η
+        M ∈ supportedOperators q (B : Set (Site Λ)) ∧
+        ‖M‖ ≤ ‖W‖ ∧
+        ‖M - GaussianFilter.gaussianIntertwinerTruncated η T g.operator H W‖ ≤
+          ‖W‖ * C * (Λ.card : ℝ) * (1 + ‖g.operator - H‖ * T) *
+            Real.exp (v * T - c * l) := by
   classical
-  obtain ⟨C, v, c, hC, hv, hc, hlocal⟩ :=
-    exists_quasilocal_region_localization q hq R J
-  refine ⟨C, v, c, hC, hv, hc, ?_⟩
-  intro Λ g H W hH Q Z hW hD l B
+  intro B
   have : NeZero q := ⟨by omega⟩
   obtain ⟨U, hU0, hU, hunit, hsupport, huniq, hcompare⟩ :=
     exists_supported_projected_relative_evolution q B g.operator_isHermitian hH
@@ -117,13 +112,13 @@ theorem exists_supported_gaussian_integral (q : ℕ) (hq : 1 ≤ q)
       ‖heisenbergEvolution g.operator t A -
         siteExpectation q B (heisenbergEvolution g.operator t A)‖ ≤
         ‖A‖ * (C * (Λ.card : ℝ) * Real.exp (v * T - c * l)) :=
-    (hlocal Λ g (Q ∪ Z) A hA l t).trans
+    (hlocal (Q ∪ Z) A hA l t).trans
       (mul_le_mul_of_nonneg_left
         ((min_le_right _ _).trans
           (mul_le_mul_of_nonneg_left
             (Real.exp_le_exp.mpr
-              (sub_le_sub_right (mul_le_mul_of_nonneg_left ht hv.le) _))
-            (mul_nonneg hC.le (Nat.cast_nonneg _))))
+              (sub_le_sub_right (mul_le_mul_of_nonneg_left ht hv) _))
+            (mul_nonneg hC (Nat.cast_nonneg _))))
         (norm_nonneg A))
   have hrelative (t : ℝ) (ht : |t| ≤ T) :
       ‖Matrix.hermitianUnitaryPath g.operator t * Matrix.hermitianUnitaryPath H (-t) -
@@ -168,7 +163,7 @@ theorem exists_supported_gaussian_integral (q : ℕ) (hq : 1 ≤ q)
       (mul_le_mul_of_nonneg_left
         (mul_le_mul_of_nonneg_left ht
           (mul_nonneg (norm_nonneg (g.operator - H))
-            (mul_nonneg (mul_nonneg hC.le (Nat.cast_nonneg Λ.card))
+            (mul_nonneg (mul_nonneg hC (Nat.cast_nonneg Λ.card))
               (Real.exp_pos (v * T - c * l)).le)))
         (norm_nonneg W))).trans_eq ?_
     ring
@@ -179,5 +174,77 @@ theorem exists_supported_gaussian_integral (q : ℕ) (hq : 1 ≤ q)
   exact (norm_setIntegral_le_of_norm_le_const (measure_lt_top _ _)
     (fun t ht ↦ hpoint t (abs_le.mpr ht))).trans
       (mul_le_of_le_one_right (by positivity) measureReal_le_one)
+
+
+/-- **The supported Gaussian approximation, with explicit constants.** For a Hamiltonian of
+range `R` and term-norm bound `J ≥ 0`, the approximation error of the supported Gaussian
+integral is at most `‖W‖ 2 C₀(R) |Λ| (1 + ‖D‖ T) e^{v(R, J) T - l/2}`, with
+`C₀(R) = graphBallLocalizationPrefactor R` and `v(R, J) = graphBallLocalizationVelocity R J`
+the constants of `TNLean.PEPS.AreaLaw.quasilocal_region_localization`.
+Source: polynomial-PEPS, Section 2, eq:info-local-two-sided, lines 513–562. -/
+theorem supported_gaussian_integral (q : ℕ) (hq : 1 ≤ q) (R : ℕ) {J : ℝ} (hJ : 0 ≤ J)
+    (Λ : Finset (ℤ × ℤ)) (g : LocalHamiltonian Λ q R J)
+    (H W : Matrix (Configuration Λ q) (Configuration Λ q) ℂ) (hH : H.IsHermitian)
+    (Q Z : Finset (Site Λ)) (hW : W ∈ supportedOperators q (Q : Set (Site Λ)))
+    (hD : g.operator - H ∈ supportedOperators q (Z : Set (Site Λ))) (l : ℕ) :
+    let B := graphNeighborhood Λ l (Q ∪ Z)
+    ∃ U : ℝ → Matrix (Configuration Λ q) (Configuration Λ q) ℂ,
+      U 0 = 1 ∧
+      (∀ t, HasDerivAt U
+        ((Complex.I • siteExpectation q B
+          (heisenbergEvolution g.operator t (g.operator - H))) * U t) t) ∧
+      (∀ t, U t ∈ Matrix.unitaryGroup (Configuration Λ q) ℂ) ∧
+      (∀ t, U t ∈ supportedOperators q (B : Set (Site Λ))) ∧
+      ∀ (η : ℝ≥0) (T : ℝ), 0 ≤ T →
+        let M := ∫ t : ℝ in Set.Icc (-T) T,
+          siteExpectation q B (heisenbergEvolution g.operator t W) * U t
+            ∂gaussianReal 0 η
+        M ∈ supportedOperators q (B : Set (Site Λ)) ∧
+        ‖M‖ ≤ ‖W‖ ∧
+        ‖M - GaussianFilter.gaussianIntertwinerTruncated η T g.operator H W‖ ≤
+          ‖W‖ * (2 * graphBallLocalizationPrefactor R) * (Λ.card : ℝ) *
+            (1 + ‖g.operator - H‖ * T) *
+            Real.exp (graphBallLocalizationVelocity R J * T - 1 / 2 * l) :=
+  supported_gaussian_integral_of_localization hq
+    (mul_pos two_pos (graphBallLocalizationPrefactor_pos R)).le
+    (graphBallLocalizationVelocity_nonneg R hJ) g
+    (quasilocal_region_localization q hq R J Λ g) H W hH Q Z hW hD l
+
+/-- The actual projected relative evolution constructs a supported
+approximation to every truncated two-Hamiltonian Gaussian filter.
+The same path works for all variances and nonnegative time cutoffs.
+Source: polynomial-PEPS, Section 2, eq:info-local-two-sided,
+lines 513–562. -/
+theorem exists_supported_gaussian_integral (q : ℕ) (hq : 1 ≤ q)
+    (R : ℕ) (J : ℝ) :
+    ∃ C v c : ℝ, 0 < C ∧ 0 < v ∧ 0 < c ∧
+      ∀ (Λ : Finset (ℤ × ℤ)) (g : LocalHamiltonian Λ q R J)
+        (H W : Matrix (Configuration Λ q) (Configuration Λ q) ℂ),
+        H.IsHermitian →
+        ∀ Q Z : Finset (Site Λ),
+          W ∈ supportedOperators q (Q : Set (Site Λ)) →
+          g.operator - H ∈ supportedOperators q (Z : Set (Site Λ)) →
+          ∀ l : ℕ,
+            let B := graphNeighborhood Λ l (Q ∪ Z)
+            ∃ U : ℝ → Matrix (Configuration Λ q) (Configuration Λ q) ℂ,
+              U 0 = 1 ∧
+              (∀ t, HasDerivAt U
+                ((Complex.I • siteExpectation q B
+                  (heisenbergEvolution g.operator t (g.operator - H))) * U t) t) ∧
+              (∀ t, U t ∈ Matrix.unitaryGroup (Configuration Λ q) ℂ) ∧
+              (∀ t, U t ∈ supportedOperators q (B : Set (Site Λ))) ∧
+              ∀ (η : ℝ≥0) (T : ℝ), 0 ≤ T →
+                let M := ∫ t : ℝ in Set.Icc (-T) T,
+                  siteExpectation q B (heisenbergEvolution g.operator t W) * U t
+                    ∂gaussianReal 0 η
+                M ∈ supportedOperators q (B : Set (Site Λ)) ∧
+                ‖M‖ ≤ ‖W‖ ∧
+                ‖M - GaussianFilter.gaussianIntertwinerTruncated η T g.operator H W‖ ≤
+                  ‖W‖ * C * (Λ.card : ℝ) * (1 + ‖g.operator - H‖ * T) *
+                    Real.exp (v * T - c * l)  := by
+  obtain ⟨C, v, c, hC, hv, hc, hlocal⟩ :=
+    exists_quasilocal_region_localization q hq R J
+  exact ⟨C, v, c, hC, hv, hc, fun Λ g H W hH Q Z hW hD l ↦
+    supported_gaussian_integral_of_localization hq hC.le hv.le g (hlocal Λ g) H W hH Q Z hW hD l⟩
 
 end TNLean.PEPS.AreaLaw

@@ -11,7 +11,8 @@ import Lean.Util.CollectAxioms
 
 run_cmd do
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
-  let decls := #[``TNLean.PEPS.AreaLaw.exists_supported_gaussian_integral]
+  let decls := #[``TNLean.PEPS.AreaLaw.exists_supported_gaussian_integral,
+    ``TNLean.PEPS.AreaLaw.supported_gaussian_integral]
   for decl in decls do
     unless (← Lean.getEnv).contains decl do
       throwError "Missing declaration {decl}"

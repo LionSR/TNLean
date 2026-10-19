@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.AreaLaw.OpenMPSRank
 import TNLean.Algebra.ToEuclideanLinApply
 import QICLean.Entropy.FilterOptimizer
+import TNLean.Lattice.RegionEntropyInequalities
 import QICLean.Entropy.RegionEntropy
 import QICLean.Entropy.SpectralTail
 
@@ -114,13 +115,6 @@ theorem norm_toEuclideanLin_localLift_le {D : Finset V}
   rcases (norm_nonneg v).eq_or_lt with hv | hv
   · rw [← hv]; exact norm_nonneg ψ
   · nlinarith
-
-/-- The trace of a regional state is the squared norm of the vector; a unit vector has a
-trace-one regional state. -/
-theorem trace_regionState_eq_one {D : Finset V} {ψ : EuclideanSpace ℂ (SiteConfig n)}
-    (hψ : ‖ψ‖ = 1) : (regionState D ψ).trace = 1 := by
-  rw [trace_regionState, hψ]
-  simp
 
 end Entropy
 

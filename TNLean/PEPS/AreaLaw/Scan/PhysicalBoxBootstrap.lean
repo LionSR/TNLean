@@ -31,45 +31,98 @@ open TNLean.Lattice
 
 namespace TNLean.PEPS.AreaLaw.Scan
 
+/-- The explicit threshold of one physical bootstrap round at current safe-box coefficient
+`Cbox`: the larger of the rough-scanner threshold `sourceBootstrapEntropyThreshold`, with
+multiplicity `2^(2R(R+1))`, charge constant `3` times the multiplicity, target-size
+coefficient `1` and entropy input `weakRectangleSourceEntropyCoefficient e_* Cbox`, and the
+rectangle geometry threshold `roundedClearanceThreshold 24 Ctr ℓ`. Source: `08-scanner.tex`,
+lines 693--796. -/
+noncomputable def boxImprovementThreshold (q R : ℕ) {e₀ : ℝ} (he₀ : 0 < e₀) (he₀₁ : e₀ < 1)
+    (J Δ Ctr ct Cent eent Cen een Cbox : ℝ) : ℕ :=
+  let multiplicity : ℕ := 2 ^ ((1 + 2 * R * (R + 1)) - 1)
+  max (CollarScan.sourceBootstrapEntropyThreshold q R he₀ he₀₁ Ctr ct Cent eent Cen een
+      (Δ / SpectralFilter.positiveNormalization 1 (Δ / 2) J) (3 * (multiplicity : ℝ)) 1
+      (weakRectangleSourceEntropyCoefficient (Exponents.boxError : ℝ) Cbox) multiplicity)
+    (roundedClearanceThreshold 24 Ctr (BootstrapParameters.ell e₀))
+
+/-- The explicit constant of one physical bootstrap round at current safe-box coefficient `Cbox`:
+`576 C_out + N² log q + 1`, where `C_out` is the restored rough-budget coefficient of the input
+`weakRectangleSourceEntropyCoefficient e_* Cbox` and `N = boxImprovementThreshold`.
+Source: `08-scanner.tex`, lines 693--796. -/
+noncomputable def boxImprovementConstant (q R : ℕ) {e₀ : ℝ} (he₀ : 0 < e₀) (he₀₁ : e₀ < 1)
+    (J Δ Ctr ct Cent eent Cen een Cbox : ℝ) : ℝ :=
+  576 * bootstrapRestoredBudgetCoefficient q
+      (weakRectangleSourceEntropyCoefficient (Exponents.boxError : ℝ) Cbox) +
+    (boxImprovementThreshold q R he₀ he₀₁ J Δ Ctr ct Cent eent Cen een Cbox : ℝ) ^ 2 *
+      Real.log q + 1
+
+/-- The constant of one physical bootstrap round is positive. Source: `08-scanner.tex`,
+lines 693--796. -/
+theorem boxImprovementConstant_pos {q : ℕ} (hq : 1 ≤ q) (R : ℕ) {e₀ : ℝ} (he₀ : 0 < e₀)
+    (he₀₁ : e₀ < 1) (J Δ Ctr ct Cent eent Cen een : ℝ) {Cbox : ℝ} (hCbox : 0 ≤ Cbox) :
+    0 < boxImprovementConstant q R he₀ he₀₁ J Δ Ctr ct Cent eent Cen een Cbox := by
+  have hlq : 0 ≤ Real.log (q : ℝ) := Real.log_nonneg (by exact_mod_cast hq)
+  have hCe := weakRectangleSourceEntropyCoefficient_nonneg
+    (by norm_num [Exponents.boxError] : (0 : ℝ) < Exponents.boxError) hCbox
+  have hCout : 0 ≤ bootstrapRestoredBudgetCoefficient q
+      (weakRectangleSourceEntropyCoefficient (Exponents.boxError : ℝ) Cbox) :=
+    mul_nonneg (by unfold bootstrapRestoredBudgetBaseCoefficient; linarith) (by positivity)
+  exact add_pos_of_nonneg_of_pos
+    (add_nonneg (mul_nonneg (by norm_num) hCout) (mul_nonneg (sq_nonneg _) hlq)) one_pos
+
 open Classical in
-/-- The genuine physical one-step improvement, uniformly in the current
-exponent and safety parameter. Its input is only the current safe-box power;
-its output has exponent multiplied by the single fixed bootstrap contraction.
-All coefficients precede every finite domain, state, cut and rectangle in the
-literal box supremum. Source: `08-scanner.tex`, lines 693--796. -/
-theorem exists_uniform_boxEntropy_improvement
-    (q R : ℕ) (hq : 1 ≤ q) {J Δ e₀ Cbox : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < Δ)
-    (he₀ : (Exponents.boxError : ℝ) < e₀) (he₀₁ : e₀ < 1) (hCbox : 0 ≤ Cbox) :
-    ∃ C : ℝ, 0 < C ∧
+/-- The physical one-step improvement of
+`exists_uniform_boxEntropy_improvement_of_finiteFamilyTransportBound` at the named truncation
+constant `latticeTruncationRadiusConstant R J Δ 2` (target-size coefficient `1`), which depends
+only on `R, J, Δ`. Source: `08-scanner.tex`, lines 693--796. -/
+theorem uniform_boxEntropy_improvement_explicit
+    (q R : ℕ) (hq : 1 ≤ q) {J Δ e₀ : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < Δ)
+    (he₀ : (Exponents.boxError : ℝ) < e₀) (he₀₁ : e₀ < 1)
+    {ct Cent eent Cen een : ℝ} (hct : 0 < ct)
+    (htransport : CollarScan.FiniteFamilyTransportBound ct Cent eent Cen een) :
+    let he₀pos : 0 < e₀ := lt_trans (by norm_num [Exponents.boxError]) he₀
+      ∀ Cbox : ℝ, 0 ≤ Cbox →
       ∀ e : ℝ, (Exponents.boxError : ℝ) < e → e ≤ e₀ →
       ∀ D₀ : ℕ, 1 ≤ D₀ →
         (∀ r : ℕ, 1 ≤ r → boxEntropy q R J Δ D₀ r ≤ Cbox * (r : ℝ) ^ (1 + e)) →
         ∀ r : ℕ, 1 ≤ r → boxEntropy q R J Δ D₀ r ≤
-          C * (r : ℝ) ^ (1 + (1 - BootstrapParameters.ell e₀) * e) := by
+          boxImprovementConstant q R he₀pos he₀₁ J Δ (latticeTruncationRadiusConstant R J Δ 2) ct
+              Cent eent Cen een Cbox *
+            (r : ℝ) ^ (1 + (1 - BootstrapParameters.ell e₀) * e) := by
+  intro he₀pos
   classical
   let : NeZero q := ⟨by omega⟩
-  have he₀pos : 0 < e₀ := lt_trans (by norm_num [Exponents.boxError]) he₀
   let F := BootstrapParameters.scannerExponents e₀ he₀pos he₀₁
   let multiplicity : ℕ := 2 ^ ((1 + 2 * R * (R + 1)) - 1)
   let C₁ : ℝ := 3 * (multiplicity : ℝ)
   have hC₁ : 0 < C₁ := by dsimp only [C₁, multiplicity]; positivity
-  obtain ⟨Ce, hCe, hentropy⟩ := exists_weakRectangle_source_entropy_bounds
-    (Exponents.boxError : ℝ) Cbox (by norm_num [Exponents.boxError]) hCbox
-  obtain ⟨Ctr, Cout, hCtr, hCout, Ns, hNs, hsource⟩ :=
-    CollarScan.exists_sourceBootstrap_entropy_improvement hq R hJ hΔ
-      (by norm_num : (0 : ℝ) ≤ 1) hC₁ multiplicity le_rfl he₀ he₀₁ hCe
-  obtain ⟨Ng, _, hgeometry⟩ := exists_rectangleBootstrapScanner_geometry F hCtr.le
+  set Ctr := latticeTruncationRadiusConstant R J Δ 2 with hCtrDef
+  have hCtr : 0 < Ctr := latticeTruncationRadiusConstant_pos R hΔ (by norm_num)
+  have hsource := CollarScan.sourceBootstrap_entropy_improvement_explicit hq R hJ hΔ
+    (by norm_num : (0 : ℝ) ≤ 1) hC₁ multiplicity le_rfl he₀ he₀₁ hct htransport (Ctr := Ctr)
+    (by norm_num [hCtrDef])
+  intro Cbox hCbox
+  have hb : (0 : ℝ) < Exponents.boxError := by norm_num [Exponents.boxError]
+  let Ce := weakRectangleSourceEntropyCoefficient (Exponents.boxError : ℝ) Cbox
+  have hentropy := weakRectangle_source_entropy_bounds _ Cbox hb hCbox
+  have hsource := hsource Ce (weakRectangleSourceEntropyCoefficient_nonneg hb hCbox)
+  let Ns := CollarScan.sourceBootstrapEntropyThreshold q R he₀pos he₀₁ Ctr ct Cent eent Cen een
+    (Δ / SpectralFilter.positiveNormalization 1 (Δ / 2) J) C₁ 1 Ce multiplicity
+  let Ng := roundedClearanceThreshold 24 Ctr F.ell
   let N := max Ns Ng
+  let Cout := bootstrapRestoredBudgetCoefficient q Ce
+  have hCout : 0 ≤ Cout := mul_nonneg (by
+    have := weakRectangleSourceEntropyCoefficient_nonneg hb hCbox
+    have hlq : 0 ≤ Real.log (q : ℝ) := Real.log_nonneg (by exact_mod_cast hq)
+    unfold bootstrapRestoredBudgetBaseCoefficient; linarith) (by positivity)
   let Crect := 576 * Cout
   have hCrect : 0 ≤ Crect := by dsimp only [Crect]; positivity
-  have hlq : 0 ≤ Real.log (q : ℝ) := Real.log_nonneg (by exact_mod_cast hq)
-  refine ⟨Crect + (N : ℝ) ^ 2 * Real.log q + 1, by positivity, ?_⟩
   intro e he hee₀ D₀ hD₀ hbox
   have hepos : 0 < e := lt_trans (by norm_num [Exponents.boxError]) he
   have hp : 0 ≤ 1 + (1 - BootstrapParameters.ell e₀) * e := by
     have hθ : 0 < 1 - BootstrapParameters.ell e₀ := sub_pos.mpr F.ell_lt_one
     positivity
-  apply boxEntropy_power_le_of_large_rectangles hq hCrect hp N
+  refine boxEntropy_power_le_of_large_rectangles (C := Crect) hq hCrect hp N ?_
   intro Λ h E₀ Ω hgs A Q hsafe hQN
   let : LinearOrder (AdmissibleSupport Λ R) :=
     LinearOrder.lift' (Fintype.equivFin (AdmissibleSupport Λ R))
@@ -79,7 +132,7 @@ theorem exists_uniform_boxEntropy_improvement
   have hQNg : Ng ≤ Q.size := (le_max_right Ns Ng).trans hQN
   obtain ⟨hT, hgraph, hA, hn24, hsn, hdepth, hanchor, hmult, hcard,
       hLpos, hL, hbudget, hrows, hclear, hregion, _, _⟩ :=
-    hgeometry A Q R C₁ D₀ hD₀ hQNg hsafe
+    rectangleBootstrapScanner_geometry_of_threshold_le F hCtr.le A Q R C₁ hD₀ hQNg hsafe
   have hnS : Ns ≤ S.n := hQNs.trans hsn
   have hphysical : ∀ Q' : IntRect, IsSafe Λ A D₀ Q' →
       regionalEntropy Λ q Ω (rectRegion A Q') ≤ Cbox * (Q'.size : ℝ) ^ (1 + e) :=
@@ -111,9 +164,168 @@ theorem exists_uniform_boxEntropy_improvement
       rw [hn24, Nat.cast_mul, Nat.cast_ofNat, Real.mul_rpow (by norm_num) (Nat.cast_nonneg _)]
     _ ≤ Cout * (576 * (Q.size : ℝ) ^ (1 + (1 - BootstrapParameters.ell e₀) * e)) :=
       mul_le_mul_of_nonneg_left
-        (mul_le_mul_of_nonneg_right hbase (Real.rpow_nonneg (Nat.cast_nonneg Q.size) _)) hCout.le
+        (mul_le_mul_of_nonneg_right hbase (Real.rpow_nonneg (Nat.cast_nonneg Q.size) _)) hCout
     _ = Crect * (Q.size : ℝ) ^ (1 + (1 - BootstrapParameters.ell e₀) * e) := by
       dsimp only [Crect]; ring
+
+open Classical in
+/-- The genuine physical one-step improvement of
+`exists_uniform_boxEntropy_improvement_of_threshold_le` at any transport constants
+`ct, C_ent, e_ent, C_en, e_en` with `0 < ct` satisfying the finite-family transport bound, such as
+QICLean's universal transport constants, which depend on none of `q, R, J, Δ`. Only the
+truncation constant `Ctr` remains existential, chosen before `Cbox`. Source: `08-scanner.tex`,
+lines 693--796. -/
+theorem exists_uniform_boxEntropy_improvement_of_finiteFamilyTransportBound
+    (q R : ℕ) (hq : 1 ≤ q) {J Δ e₀ : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < Δ)
+    (he₀ : (Exponents.boxError : ℝ) < e₀) (he₀₁ : e₀ < 1)
+    {ct Cent eent Cen een : ℝ} (hct : 0 < ct)
+    (htransport : CollarScan.FiniteFamilyTransportBound ct Cent eent Cen een) :
+    let he₀pos : 0 < e₀ := lt_trans (by norm_num [Exponents.boxError]) he₀
+    ∃ Ctr : ℝ, 0 < Ctr ∧
+      ∀ Cbox : ℝ, 0 ≤ Cbox →
+      ∀ e : ℝ, (Exponents.boxError : ℝ) < e → e ≤ e₀ →
+      ∀ D₀ : ℕ, 1 ≤ D₀ →
+        (∀ r : ℕ, 1 ≤ r → boxEntropy q R J Δ D₀ r ≤ Cbox * (r : ℝ) ^ (1 + e)) →
+        ∀ r : ℕ, 1 ≤ r → boxEntropy q R J Δ D₀ r ≤
+          boxImprovementConstant q R he₀pos he₀₁ J Δ Ctr ct Cent eent Cen een Cbox *
+            (r : ℝ) ^ (1 + (1 - BootstrapParameters.ell e₀) * e) := by
+  intro he₀pos
+  exact ⟨_, latticeTruncationRadiusConstant_pos R hΔ (by norm_num : (0 : ℝ) ≤ 2),
+    uniform_boxEntropy_improvement_explicit q R hq hJ hΔ he₀ he₀₁ hct htransport⟩
+
+/-- The genuine physical one-step improvement with the explicit constant
+`boxImprovementConstant`, uniformly in the current exponent, the current coefficient `Cbox` and
+the safety parameter. The truncation constant `Ctr` and the transport constants
+`ct, Cent, eent, Cen, een` remain existential and are chosen before `Cbox`.
+Source: `08-scanner.tex`, lines 693--796. -/
+theorem exists_uniform_boxEntropy_improvement_of_threshold_le
+    (q R : ℕ) (hq : 1 ≤ q) {J Δ e₀ : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < Δ)
+    (he₀ : (Exponents.boxError : ℝ) < e₀) (he₀₁ : e₀ < 1) :
+    let he₀pos : 0 < e₀ := lt_trans (by norm_num [Exponents.boxError]) he₀
+    ∃ Ctr ct Cent eent Cen een : ℝ, 0 < Ctr ∧ 0 < ct ∧
+      ∀ Cbox : ℝ, 0 ≤ Cbox →
+      ∀ e : ℝ, (Exponents.boxError : ℝ) < e → e ≤ e₀ →
+      ∀ D₀ : ℕ, 1 ≤ D₀ →
+        (∀ r : ℕ, 1 ≤ r → boxEntropy q R J Δ D₀ r ≤ Cbox * (r : ℝ) ^ (1 + e)) →
+        ∀ r : ℕ, 1 ≤ r → boxEntropy q R J Δ D₀ r ≤
+          boxImprovementConstant q R he₀pos he₀₁ J Δ Ctr ct Cent eent Cen een Cbox *
+            (r : ℝ) ^ (1 + (1 - BootstrapParameters.ell e₀) * e) := by
+  intro he₀pos
+  exact CollarScan.exists_of_finiteFamilyTransportBound fun _ _ _ _ _ hct htransport ↦
+    exists_uniform_boxEntropy_improvement_of_finiteFamilyTransportBound
+      q R hq hJ hΔ he₀ he₀₁ hct htransport
+
+/-- The genuine physical one-step improvement, uniformly in the current
+exponent and safety parameter. Its input is only the current safe-box power;
+its output has exponent multiplied by the single fixed bootstrap contraction.
+All coefficients precede every finite domain, state, cut and rectangle in the
+literal box supremum. Source: `08-scanner.tex`, lines 693--796. -/
+theorem exists_uniform_boxEntropy_improvement
+    (q R : ℕ) (hq : 1 ≤ q) {J Δ e₀ Cbox : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < Δ)
+    (he₀ : (Exponents.boxError : ℝ) < e₀) (he₀₁ : e₀ < 1) (hCbox : 0 ≤ Cbox) :
+    ∃ C : ℝ, 0 < C ∧
+      ∀ e : ℝ, (Exponents.boxError : ℝ) < e → e ≤ e₀ →
+      ∀ D₀ : ℕ, 1 ≤ D₀ →
+        (∀ r : ℕ, 1 ≤ r → boxEntropy q R J Δ D₀ r ≤ Cbox * (r : ℝ) ^ (1 + e)) →
+        ∀ r : ℕ, 1 ≤ r → boxEntropy q R J Δ D₀ r ≤
+          C * (r : ℝ) ^ (1 + (1 - BootstrapParameters.ell e₀) * e) := by
+  obtain ⟨Ctr, ct, Cent, eent, Cen, een, _, _, hall⟩ :=
+    exists_uniform_boxEntropy_improvement_of_threshold_le q R hq hJ hΔ he₀ he₀₁
+  exact ⟨_, boxImprovementConstant_pos hq R _ he₀₁ J Δ Ctr ct Cent eent Cen een hCbox,
+    hall Cbox hCbox⟩
+
+/-- The safe-box constant `C_box` of Proposition 9.5 from an initial safe-box bound
+`C₀ r^(1 + e₀)`: the bootstrap constant `boxBootstrapConstant (log q) G (fun _ ↦ 1) C₀ m`
+after `m = boxBootstrapRounds e₀ e_* ℓ` rounds, where `ℓ = (1 - e₀) / 200000` and
+`G = boxImprovementConstant` is the constant of one physical round. Source: `08-scanner.tex`,
+lines 788--803. -/
+noncomputable def physicalBoxBootstrapConstant (q R : ℕ) {e₀ : ℝ} (he₀ : 0 < e₀)
+    (he₀₁ : e₀ < 1) (J Δ Ctr ct Cent eent Cen een C₀ : ℝ) : ℝ :=
+  boxBootstrapConstant (Real.log q)
+    (boxImprovementConstant q R he₀ he₀₁ J Δ Ctr ct Cent eent Cen een) (fun _ ↦ 1) C₀
+    (boxBootstrapRounds e₀ (Exponents.boxError : ℝ) (BootstrapParameters.ell e₀))
+
+/-- The physical safe-box estimate of
+`exists_boxEntropy_le_boxError_of_initial_of_finiteFamilyTransportBound` at the named truncation
+constant `latticeTruncationRadiusConstant R J Δ 2`, which depends only on `R, J, Δ`. The
+constant is `physicalBoxBootstrapConstant` at this truncation constant and at the given
+transport constants. Source: Proposition 9.5, `08-scanner.tex`, lines 681--805. -/
+theorem boxEntropy_le_boxError_of_initial_explicit
+    (q R : ℕ) (hq : 1 ≤ q) {J Δ C₀ e₀ : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < Δ) (hC₀ : 0 ≤ C₀)
+    (he₀ : 0 < e₀) (he₀₁ : e₀ < 1)
+    (hinitial : ∀ D₀ : ℕ, 2 * R + 10 < D₀ →
+      ∀ r : ℕ, 1 ≤ r → boxEntropy q R J Δ D₀ r ≤ C₀ * (r : ℝ) ^ (1 + e₀))
+    {ct Cent eent Cen een : ℝ} (hct : 0 < ct)
+    (htransport : CollarScan.FiniteFamilyTransportBound ct Cent eent Cen een) :
+      ∀ D₀ : ℕ, 2 * R + 10 < D₀ → ∀ r : ℕ, 1 ≤ r → boxEntropy q R J Δ D₀ r ≤
+        physicalBoxBootstrapConstant q R he₀ he₀₁ J Δ (latticeTruncationRadiusConstant R J Δ 2) ct
+            Cent eent Cen een C₀ *
+          (r : ℝ) ^ (1 + (Exponents.boxError : ℝ)) := by
+  have hε : (0 : ℝ) < Exponents.boxError := by norm_num [Exponents.boxError]
+  obtain ⟨_, _, hℓ, hℓ₁, _⟩ := BootstrapParameters.parameter_bounds he₀ he₀₁
+  set Ctr := latticeTruncationRadiusConstant R J Δ 2
+  have himprove :
+      ∀ Cbox : ℝ, 0 ≤ Cbox →
+      ∀ e : ℝ, (Exponents.boxError : ℝ) < e → e ≤ e₀ →
+      ∀ D₀ : ℕ, 1 ≤ D₀ →
+        (∀ r : ℕ, 1 ≤ r → boxEntropy q R J Δ D₀ r ≤ Cbox * (r : ℝ) ^ (1 + e)) →
+        ∀ r : ℕ, 1 ≤ r → boxEntropy q R J Δ D₀ r ≤
+          boxImprovementConstant q R he₀ he₀₁ J Δ Ctr ct Cent eent Cen een Cbox *
+            (r : ℝ) ^ (1 + (1 - BootstrapParameters.ell e₀) * e) := by
+    by_cases h : (Exponents.boxError : ℝ) < e₀
+    · exact uniform_boxEntropy_improvement_explicit q R hq hJ hΔ h he₀₁ hct htransport
+    · exact fun _ _ e he hee₀ ↦ absurd (he.trans_le hee₀) h
+  intro D₀ hD₀ r hr
+  let I := {D₀ : ℕ // 2 * R + 10 < D₀}
+  let B := fun (i : I) (r : ℕ) ↦ boxEntropy q R J Δ i.val r
+  have hvolume : ∀ i r, 1 ≤ r → B i r ≤ Real.log q * (r : ℝ) ^ 2 := by
+    intro i r _
+    simpa only [mul_comm] using boxEntropy_le_sq_mul_log (R := R) (J := J) (Δ := Δ)
+      (D₀ := i.val) hq r
+  exact uniform_power_bound_of_boxBootstrapRounds (F := B) (N := fun _ ↦ 1)
+    (Real.log_nonneg (by exact_mod_cast hq)) he₀ hε hℓ hℓ₁ hC₀
+    (fun _ hC ↦ (boxImprovementConstant_pos hq R he₀ he₀₁ J Δ Ctr ct Cent eent Cen een hC).le)
+    hvolume (fun i r hr ↦ hinitial i.val i.property r hr)
+    (fun e C he hee₀ hC hcurrent i r hr ↦
+      himprove C hC e he hee₀ i.val (by have := i.property; omega) (hcurrent i) r hr)
+    ⟨D₀, hD₀⟩ r hr
+
+/-- The physical safe-box estimate of `exists_boxEntropy_le_boxError_of_initial` at any transport
+constants `ct, C_ent, e_ent, C_en, e_en` with `0 < ct` satisfying the finite-family transport
+bound, such as QICLean's universal transport constants, which depend on none of `q, R, J, Δ`.
+The constant is `physicalBoxBootstrapConstant` at these values; only the truncation constant
+`Ctr` remains existential. Source: Proposition 9.5, `08-scanner.tex`, lines 681--805. -/
+theorem exists_boxEntropy_le_boxError_of_initial_of_finiteFamilyTransportBound
+    (q R : ℕ) (hq : 1 ≤ q) {J Δ C₀ e₀ : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < Δ) (hC₀ : 0 ≤ C₀)
+    (he₀ : 0 < e₀) (he₀₁ : e₀ < 1)
+    (hinitial : ∀ D₀ : ℕ, 2 * R + 10 < D₀ →
+      ∀ r : ℕ, 1 ≤ r → boxEntropy q R J Δ D₀ r ≤ C₀ * (r : ℝ) ^ (1 + e₀))
+    {ct Cent eent Cen een : ℝ} (hct : 0 < ct)
+    (htransport : CollarScan.FiniteFamilyTransportBound ct Cent eent Cen een) :
+    ∃ Ctr : ℝ, 0 < Ctr ∧
+      ∀ D₀ : ℕ, 2 * R + 10 < D₀ → ∀ r : ℕ, 1 ≤ r → boxEntropy q R J Δ D₀ r ≤
+        physicalBoxBootstrapConstant q R he₀ he₀₁ J Δ Ctr ct Cent eent Cen een C₀ *
+          (r : ℝ) ^ (1 + (Exponents.boxError : ℝ)) := by
+  exact ⟨_, latticeTruncationRadiusConstant_pos R hΔ (by norm_num : (0 : ℝ) ≤ 2),
+    boxEntropy_le_boxError_of_initial_explicit q R hq hJ hΔ hC₀ he₀ he₀₁ hinitial hct htransport⟩
+
+/-- The physical safe-box estimate at the fixed source exponent with the explicit constant
+`physicalBoxBootstrapConstant`, from any initial safe-box bound `C₀ r^(1 + e₀)` with
+`0 ≤ C₀` and `0 < e₀ < 1`, uniform over safety parameters `D₀ > 2R + 10`. The truncation
+constant `Ctr` and the transport constants `ct, Cent, eent, Cen, een` remain existential.
+Source: Proposition 9.5, `08-scanner.tex`, lines 681--805. -/
+theorem exists_boxEntropy_le_boxError_of_initial
+    (q R : ℕ) (hq : 1 ≤ q) {J Δ C₀ e₀ : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < Δ) (hC₀ : 0 ≤ C₀)
+    (he₀ : 0 < e₀) (he₀₁ : e₀ < 1)
+    (hinitial : ∀ D₀ : ℕ, 2 * R + 10 < D₀ →
+      ∀ r : ℕ, 1 ≤ r → boxEntropy q R J Δ D₀ r ≤ C₀ * (r : ℝ) ^ (1 + e₀)) :
+    ∃ Ctr ct Cent eent Cen een : ℝ, 0 < Ctr ∧ 0 < ct ∧
+      ∀ D₀ : ℕ, 2 * R + 10 < D₀ → ∀ r : ℕ, 1 ≤ r → boxEntropy q R J Δ D₀ r ≤
+        physicalBoxBootstrapConstant q R he₀ he₀₁ J Δ Ctr ct Cent eent Cen een C₀ *
+          (r : ℝ) ^ (1 + (Exponents.boxError : ℝ)) := by
+  exact CollarScan.exists_of_finiteFamilyTransportBound fun _ _ _ _ _ hct htransport ↦
+    exists_boxEntropy_le_boxError_of_initial_of_finiteFamilyTransportBound
+      q R hq hJ hΔ hC₀ he₀ he₀₁ hinitial hct htransport
 
 /-- The physical safe-box estimate at the fixed source exponent, with one
 constant before every safety parameter, finite system and positive scale.
@@ -126,31 +338,62 @@ theorem exists_boxEntropy_le_boxError
       ∀ r : ℕ, 1 ≤ r → boxEntropy q R J Δ D₀ r ≤
         C * (r : ℝ) ^ (1 + (Exponents.boxError : ℝ)) := by
   obtain ⟨C₀, e₀, he₀, he₀₁, hinitial⟩ := exists_boxEntropy_le_rpow q R hq hJ hΔ
-  let I := {D₀ : ℕ // 2 * R + 10 < D₀}
-  let B := fun (i : I) (r : ℕ) ↦ boxEntropy q R J Δ i.val r
-  have hvolume : ∀ i r, 1 ≤ r → B i r ≤ Real.log q * (r : ℝ) ^ 2 := by
-    intro i r _
-    simpa only [mul_comm] using boxEntropy_le_sq_mul_log (R := R) (J := J) (Δ := Δ)
-      (D₀ := i.val) hq r
-  have hinitial' : ∃ C : ℝ, 0 < C ∧ ∀ i r, 1 ≤ r → B i r ≤ C * (r : ℝ) ^ (1 + e₀) := by
-    refine ⟨max 1 C₀, lt_of_lt_of_le zero_lt_one (le_max_left _ _), ?_⟩
-    intro i r hr
-    exact (hinitial i.val i.property r hr).trans
-      (mul_le_mul_of_nonneg_right (le_max_right 1 C₀) (Real.rpow_nonneg (Nat.cast_nonneg r) _))
-  have himprove : ∀ e : ℝ, (Exponents.boxError : ℝ) < e → e ≤ e₀ →
-      (∃ C : ℝ, 0 < C ∧ ∀ i r, 1 ≤ r → B i r ≤ C * (r : ℝ) ^ (1 + e)) →
-      ∃ C : ℝ, 0 < C ∧ ∃ N : ℕ, ∀ i r, N ≤ r →
-        B i r ≤ C * (r : ℝ) ^ (1 + (1 - BootstrapParameters.ell e₀) * e) := by
-    intro e he hee₀ hcurrent
-    obtain ⟨C, hC, hcurrent⟩ := hcurrent
-    obtain ⟨C', hC', hstep⟩ := exists_uniform_boxEntropy_improvement q R hq hJ hΔ
-      (he.trans_le hee₀) he₀₁ hC.le
-    refine ⟨C', hC', 1, ?_⟩
-    intro i r hr
-    exact hstep e he hee₀ i.val (by have := i.property; omega) (hcurrent i) r hr
-  obtain ⟨C, hC, hfinal⟩ := exists_uniform_boxError_bound_of_eventual_improvement
-    (F := B) (V := Real.log q) (Real.log_nonneg (by exact_mod_cast hq))
-    he₀ he₀₁ hvolume hinitial' himprove
-  exact ⟨C, hC, fun D₀ hD₀ r hr ↦ hfinal ⟨D₀, hD₀⟩ r hr⟩
+  obtain ⟨Ctr, ct, Cent, eent, Cen, een, _, _, hbox⟩ :=
+    exists_boxEntropy_le_boxError_of_initial q R hq hJ hΔ (zero_le_one.trans (le_max_left 1 C₀))
+      he₀ he₀₁ fun D₀ hD₀ r hr ↦ (hinitial D₀ hD₀ r hr).trans
+        (mul_le_mul_of_nonneg_right (le_max_right 1 C₀) (Real.rpow_nonneg (Nat.cast_nonneg r) _))
+  exact ⟨_, boxBootstrapConstant_pos (Real.log_nonneg (by exact_mod_cast hq))
+    (one_pos.trans_le (le_max_left 1 C₀))
+    (fun _ hC ↦ boxImprovementConstant_pos hq R he₀ he₀₁ J Δ Ctr ct Cent eent Cen een hC) _, hbox⟩
+
+/-- The initial safe-box constant `initialBoxConstantExplicit q R J Δ` is nonnegative, since it
+bounds the nonnegative safe-box entropy at scale one. It is the initial constant of the bootstrap
+in Proposition 9.5, `08-scanner.tex`, lines 681--805. -/
+theorem initialBoxConstantExplicit_nonneg (q R : ℕ) (hq : 1 ≤ q) {J Δ : ℝ} (hJ : 0 ≤ J)
+    (hΔ : 0 < Δ) : 0 ≤ initialBoxConstantExplicit q R J Δ := by
+  have h := boxEntropy_le_initialBoxConstant_mul_rpow (q := q) (R := R) (D₀ := 2 * R + 11) hq hJ
+    hΔ (by omega) (le_refl 1)
+  rw [Nat.cast_one, Real.one_rpow, mul_one] at h
+  exact (boxEntropy_nonneg 1).trans h
+
+/-- The safe-box constant `C_box` of Proposition 9.5 at named constants:
+`physicalBoxBootstrapConstant q R he₀ he₀₁ J Δ Ctr ct Cent eent Cen een C₀` at the initial
+constant `C₀ = initialBoxConstantExplicit q R J Δ`, the initial exponent
+`e₀ = initialBoxExponent q R J Δ` and the truncation constant
+`Ctr = latticeTruncationRadiusConstant R J Δ 2`, for transport constants `ct, Cent, eent, Cen, een`.
+Source: `08-scanner.tex`, lines 681--805. -/
+noncomputable def physicalBoxConstantExplicit (q R : ℕ) (J Δ ct Cent eent Cen een : ℝ) : ℝ :=
+  physicalBoxBootstrapConstant q R (initialBoxExponent_pos_and_lt_one q R J Δ).1
+    (initialBoxExponent_pos_and_lt_one q R J Δ).2 J Δ (latticeTruncationRadiusConstant R J Δ 2)
+    ct Cent eent Cen een (initialBoxConstantExplicit q R J Δ)
+
+/-- The named safe-box constant `physicalBoxConstantExplicit` is nonnegative. Source:
+`08-scanner.tex`, lines 788--803. -/
+theorem physicalBoxConstantExplicit_nonneg (q R : ℕ) (hq : 1 ≤ q) {J Δ : ℝ} (hJ : 0 ≤ J)
+    (hΔ : 0 < Δ) (ct Cent eent Cen een : ℝ) :
+    0 ≤ physicalBoxConstantExplicit q R J Δ ct Cent eent Cen een := by
+  unfold physicalBoxConstantExplicit physicalBoxBootstrapConstant
+  exact boxBootstrapConstant_nonneg (Real.log_nonneg (by exact_mod_cast hq))
+    (initialBoxConstantExplicit_nonneg q R hq hJ hΔ)
+    (fun _ hC ↦ (boxImprovementConstant_pos hq R _ _ J Δ _ ct Cent eent Cen een hC).le) _
+
+/-- **Proposition 9.5 at named constants.** For every safety parameter `D₀ > 2R + 10` and every
+`r ≥ 1`, the safe-box entropy is at most `C_box r^(1 + ε_box)` with
+`C_box = physicalBoxConstantExplicit q R J Δ ct Cent eent Cen een`, for any transport constants
+with `0 < ct` satisfying the finite-family transport bound, such as QICLean's universal transport
+constants. The initial box estimate is Proposition 3.3 at `initialBoxConstantExplicit q R J Δ` and
+`initialBoxExponent q R J Δ`, and the truncation constant is
+`latticeTruncationRadiusConstant R J Δ 2`. Source: Proposition 9.5, `08-scanner.tex`,
+lines 681--805. -/
+theorem boxEntropy_le_boxError_explicit (q R : ℕ) (hq : 1 ≤ q) {J Δ : ℝ} (hJ : 0 ≤ J)
+    (hΔ : 0 < Δ) {ct Cent eent Cen een : ℝ} (hct : 0 < ct)
+    (htransport : CollarScan.FiniteFamilyTransportBound ct Cent eent Cen een) :
+    ∀ D₀ : ℕ, 2 * R + 10 < D₀ → ∀ r : ℕ, 1 ≤ r → boxEntropy q R J Δ D₀ r ≤
+      physicalBoxConstantExplicit q R J Δ ct Cent eent Cen een *
+        (r : ℝ) ^ (1 + (Exponents.boxError : ℝ)) :=
+  boxEntropy_le_boxError_of_initial_explicit q R hq hJ hΔ
+    (initialBoxConstantExplicit_nonneg q R hq hJ hΔ) (initialBoxExponent_pos_and_lt_one q R J Δ).1
+    (initialBoxExponent_pos_and_lt_one q R J Δ).2
+    (fun _ hD₀ _ hr ↦ boxEntropy_le_initialBoxConstant_mul_rpow hq hJ hΔ hD₀ hr) hct htransport
 
 end TNLean.PEPS.AreaLaw.Scan

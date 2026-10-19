@@ -337,6 +337,73 @@ theorem Template.collar_cut_card_le {Ctpl D₀ : ℝ} {n s₀ : ℕ}
 
 end Geometry
 
+/-- **Proposition 9.6 from its mutual-information inequality, at a named constant and
+threshold.** If `I_Ω(X : Λ ∖ S₀) ≤ C n^(1-ε)` holds for every separated template from the
+scale `N` on, then every assertion of the sublinear collar bound holds from the same scale `N`
+on, with the constant `max C 10`. The cut and size assertions use only the template geometry.
+The hypotheses `24 ≤ Ctpl` and `1 ≤ D₀` are the standing sufficient choices of the template
+constant and of the clearance constant `D₀ > 2R + 10`.
+
+This is a reduction, not a proof of Proposition 9.6: the information inequality is
+assumed. Source: `08-scanner.tex`, lines 808–827 and 942–943. -/
+theorem sublinearCollarBound_of_mutualInformation_le_at {q R : ℕ} {J Δ D₀ Ctpl : ℝ}
+    (hC : 24 ≤ Ctpl) (hD : 1 ≤ D₀) (C : ℝ) (N : ℕ)
+    (hI : ∀ n s₀ : ℕ, N ≤ n →
+      ∀ Λ : Finset (ℤ × ℤ), ∀ h : LocalHamiltonian Λ q R J, ∀ E₀ : ℝ,
+        ∀ Ω : StateSpace Λ q, IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+          ∀ A : Finset (Site Λ), ∀ T : Geometry.Template Ctpl n s₀,
+            T.IsSeparated D₀ (Geometry.boundaryEndpoints Λ A) →
+            ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ ≤ s₀ →
+            FiniteProduct.mutualInformation (fun _ : Site Λ ↦ Fin q) Ω
+                (A.filter fun x ↦ x.val ∈ T.points)
+                (A.filter fun x ↦ x.val ∈ ambientDilation T.points
+                  ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)ᶜ ≤
+              C * (n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))) :
+    ∀ n s₀ : ℕ, N ≤ n →
+      ∀ Λ : Finset (ℤ × ℤ), ∀ h : LocalHamiltonian Λ q R J, ∀ E₀ : ℝ,
+        ∀ Ω : StateSpace Λ q, IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+          ∀ A : Finset (Site Λ), ∀ T : Geometry.Template Ctpl n s₀,
+            T.IsSeparated D₀ (Geometry.boundaryEndpoints Λ A) →
+            ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ ≤ s₀ →
+            FiniteProduct.mutualInformation (fun _ : Site Λ ↦ Fin q) Ω
+                (A.filter fun x ↦ x.val ∈ T.points)
+                (A.filter fun x ↦ x.val ∈ ambientDilation T.points
+                  ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)ᶜ ≤
+              max C 10 * (n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ)) ∧
+            ((edgeBoundary Λ (A.filter fun x ↦ x.val ∈ T.points)).card : ℝ) ≤ max C 10 * n ∧
+            ((edgeBoundary Λ (A.filter fun x ↦ x.val ∈ ambientDilation T.points
+                ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)).card : ℝ) ≤
+              max C 10 * n ∧
+            ((edgeBoundary Λ ((A.filter fun x ↦ x.val ∈ ambientDilation T.points
+                ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊) \
+                A.filter fun x ↦ x.val ∈ T.points)).card : ℝ) ≤ max C 10 * n ∧
+            ((A.filter fun x ↦ x.val ∈ ambientDilation T.points
+                ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊).card : ℝ) ≤
+              max C 10 * (n : ℝ) ^ 2 := by
+  intro n s₀ hn Λ h E₀ Ω hΩ A T hsep hL
+  obtain ⟨hX, hS, hY, hcard⟩ := T.collar_cut_card_le hC Λ A hsep hD hL
+  have hn0 : (0 : ℝ) ≤ n := Nat.cast_nonneg n
+  have hC10 : (10 : ℝ) ≤ max C 10 := le_max_right _ _
+  refine ⟨(hI n s₀ hn Λ h E₀ Ω hΩ A T hsep hL).trans
+    (mul_le_mul_of_nonneg_right (le_max_left _ _) (by positivity)), ?_, ?_, ?_, ?_⟩
+  · have : ((edgeBoundary Λ (A.filter fun x ↦ x.val ∈ T.points)).card : ℝ) ≤ 4 * n := by
+      exact_mod_cast hX
+    nlinarith
+  · have : ((edgeBoundary Λ (A.filter fun x ↦ x.val ∈ ambientDilation T.points
+        ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)).card : ℝ) ≤ 4 * n := by
+      exact_mod_cast hS
+    nlinarith
+  · have : ((edgeBoundary Λ ((A.filter fun x ↦ x.val ∈ ambientDilation T.points
+        ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊) \
+        A.filter fun x ↦ x.val ∈ T.points)).card : ℝ) ≤ 8 * n := by
+      exact_mod_cast hY
+    nlinarith
+  · have : ((A.filter fun x ↦ x.val ∈ ambientDilation T.points
+        ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊).card : ℝ) ≤
+        10 * (n : ℝ) ^ 2 := by
+      exact_mod_cast hcard
+    nlinarith [sq_nonneg (n : ℝ)]
+
 /-- **Proposition 9.6 from its mutual-information inequality.** The cut and size
 assertions of the sublinear collar bound hold for every separated template, so the
 proposition follows from the inequality `I_Ω(X : Λ ∖ S₀) ≤ C n^(1-ε)` alone, with the
@@ -361,28 +428,6 @@ theorem sublinearCollarBound_of_mutualInformation_le {q R : ℕ} {J Δ D₀ Ctpl
               C * (n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))) :
     SublinearCollarBound q R J Δ D₀ Ctpl := by
   obtain ⟨C, N, hI⟩ := hinfo
-  refine ⟨max C 10, N, fun n s₀ hn Λ h E₀ Ω hΩ A T hsep hL ↦ ?_⟩
-  obtain ⟨hX, hS, hY, hcard⟩ := T.collar_cut_card_le hC Λ A hsep hD hL
-  have hn0 : (0 : ℝ) ≤ n := Nat.cast_nonneg n
-  have hC10 : (10 : ℝ) ≤ max C 10 := le_max_right _ _
-  refine ⟨(hI n s₀ hn Λ h E₀ Ω hΩ A T hsep hL).trans
-    (mul_le_mul_of_nonneg_right (le_max_left _ _) (by positivity)), ?_, ?_, ?_, ?_⟩
-  · have : ((edgeBoundary Λ (A.filter fun x ↦ x.val ∈ T.points)).card : ℝ) ≤ 4 * n := by
-      exact_mod_cast hX
-    nlinarith
-  · have : ((edgeBoundary Λ (A.filter fun x ↦ x.val ∈ ambientDilation T.points
-        ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)).card : ℝ) ≤ 4 * n := by
-      exact_mod_cast hS
-    nlinarith
-  · have : ((edgeBoundary Λ ((A.filter fun x ↦ x.val ∈ ambientDilation T.points
-        ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊) \
-        A.filter fun x ↦ x.val ∈ T.points)).card : ℝ) ≤ 8 * n := by
-      exact_mod_cast hY
-    nlinarith
-  · have : ((A.filter fun x ↦ x.val ∈ ambientDilation T.points
-        ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊).card : ℝ) ≤
-        10 * (n : ℝ) ^ 2 := by
-      exact_mod_cast hcard
-    nlinarith [sq_nonneg (n : ℝ)]
+  exact ⟨max C 10, N, sublinearCollarBound_of_mutualInformation_le_at hC hD C N hI⟩
 
 end TNLean.PEPS.AreaLaw

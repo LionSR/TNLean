@@ -39,6 +39,23 @@ Hermitian; individual terms need not be. The remaining conditions are
     every edge.
 \end{proof}
 
+\begin{lemma}[Removing the small sizes at a named prefactor]
+    \label{lem:peps_remove_small_sizes_named}
+    \lean{TNLean.PEPS.Approximation.hasPEPSApproximation_of_sufficiently_large_le}
+    \leanok
+    Fix integers $q\ge1$, $L\ge2$ and $L_0\ge0$, real $C$ and $c\ge0$, and a
+    unit vector $\Omega$ on the square of side $L$. If
+    $\mathcal A_{C,c}(L,\Omega)$ holds whenever $L\ge L_0$, then
+    $\mathcal A_{C',c}(L,\Omega)$ holds with $C'=\max\{C,q^{L_0^2}\}$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_exact_small_size_approximation,thm:peps_prefactor_monotone}
+    If $L<L_0$, Theorem~\ref{thm:peps_exact_small_size_approximation} gives
+    $\mathcal A_{C',c}(L,\Omega)$. Otherwise the assumed approximation
+    combines with Theorem~\ref{thm:peps_prefactor_monotone}, since $C\le C'$.
+\end{proof}
+
 \begin{theorem}[A uniform prefactor for every size]
     \label{thm:peps_remove_finite_exceptions}
     \lean{TNLean.PEPS.Approximation.exists_uniform_approximation_of_sufficiently_large}
@@ -57,13 +74,11 @@ Hermitian; individual terms need not be. The remaining conditions are
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:peps_uniform_small_size_approximation,thm:peps_prefactor_monotone}
-    Theorem~\ref{thm:peps_uniform_small_size_approximation} provides the
-    positive constant $C'=\max\{C,q^{L_0^2}\}\ge C$ covering all $2\le L<L_0$
-    and all unit vectors. When $L<L_0$, that theorem applies directly because
-    $\|\Omega\|=1$ by~(\ref{eq:peps_finite_ground}); when $L\ge L_0$, the
-    assumed approximation combines with Theorem~\ref{thm:peps_prefactor_monotone}
-    at the same prefactor $C'$.
+    \uses{lem:peps_remove_small_sizes_named}
+    Take $C'=\max\{C,q^{L_0^2}\}$, which is positive and at least $C$.
+    Since $\|\Omega\|=1$ by~(\ref{eq:peps_finite_ground}),
+    Lemma~\ref{lem:peps_remove_small_sizes_named} applies to every
+    $(H,E_0,\Omega)\in\mathcal G_{q,J,\Delta}(L)$ with $L\ge2$.
 \end{proof}
 
 \begin{theorem}[Equivalence with the sufficiently large size statement]
@@ -131,7 +146,8 @@ Theorem~\ref{thm:openai_polynomial_peps}, not that theorem.
 
 \begin{definition}[Compressed dyadic operator networks for large sizes]
     \label{def:peps_large_size_dyadic_operator_network}
-    \lean{TNLean.PEPS.Approximation.LargeSizeDyadicOperatorNetwork}
+    \lean{TNLean.PEPS.Approximation.DyadicOperatorNetworkAt,
+        TNLean.PEPS.Approximation.LargeSizeDyadicOperatorNetwork}
     \leanok
     \uses{def:peps_dyadic_hv_routing, def:peps_party_operator_fix_input}
     Capturing the conclusion of~\cite[Section~8.1]{OpenAI2026PolynomialPEPS}
@@ -157,7 +173,8 @@ Theorem~\ref{thm:openai_polynomial_peps}, not that theorem.
 
 \begin{theorem}[Uniform approximation from compressed dyadic operator networks]
     \label{thm:peps_ground_state_approximation_conditional}
-    \lean{TNLean.PEPS.Approximation.polynomialPEPSApproximation_of_largeSizeDyadicOperatorNetwork}
+    \lean{TNLean.PEPS.Approximation.hasPEPSApproximation_of_dyadicOperatorNetworkAt,
+        TNLean.PEPS.Approximation.polynomialPEPSApproximation_of_largeSizeDyadicOperatorNetwork}
     \leanok
     \uses{def:peps_large_size_dyadic_operator_network}
     Following~\cite[Section~8]{OpenAI2026PolynomialPEPS}
@@ -203,8 +220,9 @@ Proposition~\ref{prop:peps_dyadic_protocol}.
     \uses{def:peps_dyadic_protocol, def:peps_dyadic_hv_routing,
         def:compression_operator_finite_coordinates}
     Let a protocol satisfy the bounds of
-    Definition~\ref{def:peps_dyadic_protocol} with $C\ge0$ on a square of side
-    $L\ge1$, for a unit vector $\Omega$. Composing its changes gives one
+    Definition~\ref{def:peps_dyadic_protocol} with count constant $C_N$ and error
+    constant $C_E\ge0$ on a square of side $L\ge1$, for a unit vector $\Omega$.
+    Composing its changes gives one
     distributed construction, with the recorded expansions of its gates, whose
     physical density is that of the final vector, the
     physical configurations of the parties being identified with the
@@ -218,7 +236,7 @@ Proposition~\ref{prop:peps_dyadic_protocol}.
     and, with the physical pair of each party read at the fold of its anchor,
     \begin{align}
         \bigl\lVert\sigma-|\Omega\rangle\langle\Omega|\bigr\rVert_1
-         & \le\varepsilon+(2C^2+2C)L^{-10}.
+         & \le\varepsilon+(2C_NC_E+2C_E)L^{-10}.
     \end{align}
 \end{lemma}
 \begin{proof}
@@ -251,11 +269,11 @@ Proposition~\ref{prop:peps_dyadic_protocol}.
     occurrences of one gate are counted separately. Every nonprivate gate of $W$
     has the set of participating parties of a nonprivate gate of some $W_t$ with
     $t<T$. If the protocol satisfies the bounds of
-    Definition~\ref{def:peps_dyadic_protocol} with constants $C,b,k,r$, then $W$
-    has at most $Tb$ nonprivate gates, every party participates in at most $b$ of
-    them, and every nonprivate gate of $W$ has at most $\lfloor CL^k\rfloor$
-    monomials, at most $r$ pair effects in each monomial, and absolute coefficient
-    sum at most $CL^k$.
+    Definition~\ref{def:peps_dyadic_protocol} with expansion constant $C_K$ and
+    constants $b,k,r$, then $W$ has at most $Tb$ nonprivate gates, every party
+    participates in at most $b$ of them, and every nonprivate gate of $W$ has at
+    most $\lfloor C_KL^k\rfloor$ monomials, at most $r$ pair effects in each
+    monomial, and absolute coefficient sum at most $C_KL^k$.
 \end{lemma}
 \begin{proof}
     \leanok
@@ -272,7 +290,8 @@ Proposition~\ref{prop:peps_dyadic_protocol}.
 \begin{theorem}[Compressed dyadic operator networks from the protocol assertion]
     \label{thm:peps_large_size_network_from_protocol}
     \lean{TNLean.PEPS.Approximation.largeSizeDyadicOperatorNetwork_of_largeSizeDyadicProtocolConsequences,
-        TNLean.PEPS.PairEffect.OriginalCircuit.IsExpansionBounded.isTermwiseBounded}
+        TNLean.PEPS.Approximation.largeSizeDyadicOperatorNetwork_of_largeSizeDyadicProtocolBounds,
+        TNLean.PEPS.Approximation.dyadicOperatorNetworkAt_of_dyadicProtocolBoundsAt}
     \leanok
     \uses{def:peps_dyadic_protocol, def:peps_large_size_dyadic_operator_network}
     If the protocol assertion of Definition~\ref{def:peps_dyadic_protocol} holds,
@@ -281,19 +300,24 @@ Proposition~\ref{prop:peps_dyadic_protocol}.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:peps_distributed_construction_compression, lem:peps_protocol_compressed_party_network,
+    \uses{thm:peps_distributed_construction_compression_of_le, def:peps_compression_constants,
+        lem:peps_protocol_compressed_party_network,
         lem:peps_protocol_circuit_bounds}
-    For fixed $q,J,\Delta$ and the constants $C,b,k,r,L_0$ of the assertion, the
+    By the equivalence in Definition~\ref{def:peps_dyadic_protocol}, the assertion
+    gives count, expansion and error constants $C_N,C_K,C_E$ and constants
+    $b,k,r,L_0$. For fixed $q,J,\Delta$, the
     protocols across all sides $L\ge\max\{2,L_0\}$, Hamiltonians, and ground
     vectors form a single family of distributed constructions indexed by their
     size. In this
-    family the number of nonprivate gates is at most $bCL^3$, each gate involves
+    family the number of nonprivate gates is at most $bC_NL^3$, each gate involves
     at most $b$ parties, each party participates in at most $b$ gates, every
     physical dimension is at most $q$, and every gate is exactly the sum of its
-    recorded expansion, with at most $CL^k$ monomials, coefficients of modulus at
-    most $CL^k$, since their absolute values sum to at most $CL^k$, and at most $r$
-    pair effects per monomial. Theorem~\ref{thm:peps_distributed_construction_compression}
-    with $p=5$ then gives constants $C_p,\alpha$, chosen before the family member,
+    recorded expansion, with at most $C_KL^k$ monomials, absolute coefficient sum
+    at most $C_KL^k$, and at most $r$ pair effects per monomial.
+    Theorem~\ref{thm:peps_distributed_construction_compression_of_le} in its
+    coefficient-sum form, with $p=5$ and coefficient-sum degree $s=k$, then gives
+    constants $C_p=C_\Sigma(r,b,bC_N,q,C_K,C_K)$ and
+    $\alpha=\alpha_{\mathrm{net}}(r,b,3,0,k,k,5)$, chosen before the family member,
     and for each protocol a distributed operator contraction within $L^{-5}$ of its
     physical density, with link alphabets of size at most $C_pL^\alpha$, at most
     $2b(b-1)$ links at each party, and links only between parties of a common
@@ -302,14 +326,17 @@ Proposition~\ref{prop:peps_dyadic_protocol}.
     separation constant $b$, link dimensions at most $C_pL^\alpha$, and
     \begin{align}
         \bigl\lVert\sigma-|\Omega\rangle\langle\Omega|\bigr\rVert_1
-         & \le L^{-5}+(2C^2+2C)L^{-10}\le(1+2C^2+2C)L^{-5}.
+         & \le L^{-5}+(2C_NC_E+2C_E)L^{-10}\le(1+2C_NC_E+2C_E)L^{-5}.
     \end{align}
-    Here $C\ge0$, since there are at least one and at most $CL^2$ parties.
+    Here $C_N\ge0$, since there are at least one and at most $C_NL^2$ parties,
+    and $C_E\ge0$, since $1-C_EL^{-57}\le\lVert\Xi\rVert\le1$. The error constant
+    $1+2C_NC_E+2C_E$ does not involve the expansion constant.
 \end{proof}
 
 \begin{corollary}[Uniform approximation from the protocol assertion]
     \label{cor:peps_ground_state_approximation_from_protocol}
-    \lean{TNLean.PEPS.Approximation.polynomialPEPSApproximation_of_largeSizeDyadicProtocolConsequences}
+    \lean{TNLean.PEPS.Approximation.polynomialPEPSApproximation_of_largeSizeDyadicProtocolConsequences,
+        TNLean.PEPS.Approximation.polynomialPEPSApproximation_of_largeSizeDyadicProtocolBounds}
     \leanok
     \uses{def:peps_dyadic_protocol}
     If the protocol assertion of Definition~\ref{def:peps_dyadic_protocol} holds,

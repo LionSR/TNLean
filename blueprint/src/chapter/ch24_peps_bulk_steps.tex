@@ -86,6 +86,29 @@ Definition~\ref{def:peps_capped_mark_distance}.
     marked points.
 \end{proof}
 
+\begin{lemma}[Slopes and thresholds from the sites of the open square]
+    \label{lem:peps_angular_scale_of_site_position}
+    \lean{TNLean.PEPS.Approximation.IsAngularScale.of_sitePosition}
+    \leanok
+    \uses{def:peps_angular_information_bound,def:peps_angular_scale,
+        lem:peps_angular_separation_checks}
+    Let $p$ be an integer and $D,L_0$ real numbers. Suppose that for every
+    $L\ge L_0$, every Hamiltonian of the model on the open square of side $L$
+    with a unit ground vector $\Omega$ and full-system gap $\Delta$, every set
+    $\mathcal V$ of at most $m_0$ marked points, every pair of disjoint sets
+    $X,E\subseteq\Lambda_L$ and every scale $n$ with $D\log L\le n\le A_0L$ and
+    $\operatorname{diam}_\infty X\le A_0n$, the angular separation condition
+    (\ref{eq:peps_angular_separation}) with constant $a$ and floor $t=D\log L$
+    implies $I_\Omega(X:E)\le L^{-p}$. Then $(D,L_0)$ is a slope and a
+    threshold at accuracy $L^{-p}$.
+\end{lemma}
+
+\begin{proof}\leanok
+    For sites placed at $\Lambda_L+c$, translating the marked points by $-c$
+    leaves all distances, the diameter of $X$, and the separation condition
+    unchanged.
+\end{proof}
+
 \begin{theorem}[Slopes and thresholds from information under angular separation]
     \label{thm:peps_angular_scale_exists}
     \lean{TNLean.PEPS.Approximation.AngularInformationBound.exists_isAngularScale}
@@ -99,9 +122,9 @@ Definition~\ref{def:peps_capped_mark_distance}.
 \end{theorem}
 
 \begin{proof}\leanok
-    With $D$ and $L_0$ taken from the statement with exponent $p$, translating
-    the marked points by $-c$ for sites placed at $\Lambda_L+c$ leaves all
-    distances, the diameter of $X$, and the separation condition unchanged.
+    \uses{lem:peps_angular_scale_of_site_position}
+    Take $D$ and $L_0$ from the statement with exponent $p$ and apply
+    Lemma~\ref{lem:peps_angular_scale_of_site_position}.
 \end{proof}
 
 \begin{theorem}[Uniform slopes above prescribed lower bounds]

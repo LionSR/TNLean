@@ -87,7 +87,7 @@ The source proof of Theorem~1.1 (\src{10-geometry.tex}, lines~803--857) combines
 Proposition~9.6 (the sublinear collar bound), Proposition~10.2 (amplification)
 and Proposition~11.2 (the two-family decomposition). The Lean assembly
 \leanid{TNLean.PEPS.AreaLaw.uniformAreaLaw_of_collar_amplification_twoFamilies}
-(\src{TNLean/PEPS/AreaLaw/BoundaryTheorem.lean}, line~186) fixes the constants in
+(\src{TNLean/PEPS/AreaLaw/BoundaryTheorem.lean}, line~463) fixes the constants in
 the following order.
 
 \begin{enumerate}
@@ -112,6 +112,65 @@ the following order.
 The formula \eqref{eq:top} is explicit. The constant is therefore explicit as
 soon as $C_1,N_1,C_2,N_2,N_3$ and $C_3$ are, and the rest of the note concerns
 these six numbers.
+
+In Lean, \eqref{eq:top} is \leanid{TNLean.PEPS.AreaLaw.uniformAreaLawConstantOf}
+and $n_*$ is \leanid{TNLean.PEPS.AreaLaw.uniformAreaLawScale}; the proof of
+Theorem~1.1 at given $C_1,N_1,C_2,N_2,C_3$ is
+\leanid{TNLean.PEPS.AreaLaw.regionalEntropy_le_of_collar_amplification_twoFamilies_constants}.
+The proof of the source statement,
+\leanid{TNLean.PEPS.AreaLaw.uniformAreaLaw}
+(\src{TNLean/PEPS/AreaLaw/AreaLawTheorem.lean}, line~51), is a corollary of
+\leanid{TNLean.PEPS.AreaLaw.uniformAreaLaw_closed} below, with the constant
+\leanid{TNLean.PEPS.AreaLaw.uniformAreaLawConstantClosed}; no input on its path
+is taken from an existential statement. The
+birth-separation constant is $c_1=1/112$
+(\leanid{TNLean.PEPS.AreaLaw.Geometry.isBirthSeparationConstant_birthTemplateSeparationConstant}).
+
+These inputs are pinned in
+\leanid{TNLean.PEPS.AreaLaw.uniformAreaLawConstantExplicit}
+(\src{TNLean/PEPS/AreaLaw/AreaLawExplicitConstant.lean}, line~65). There
+$C_{\rm box}$ is the bootstrapped safe-box constant started from the explicit
+initial box estimate, the truncation constants are the explicit functions
+\leanid{TNLean.PEPS.AreaLaw.latticeTruncationRadiusConstant} of $R,J,\Delta$,
+and the filter-locality constants are the closed forms
+\leanid{TNLean.PEPS.AreaLaw.latticePositiveConstraintConst} and
+\leanid{TNLean.PEPS.AreaLaw.latticePositiveConstraintRate} of the positive
+constraints. The remaining argument is one tuple
+$(c_0,C_{\rm ent},e_{\rm ent},C_{\rm en},e_{\rm en})$ of transport constants
+satisfying the finite-family transport bound; these are universal and do not
+depend on $q,R,J,\Delta$.
+\leanid{TNLean.PEPS.AreaLaw.uniformAreaLaw_explicit} (line~92) proves the area
+law with this constant for every such tuple with $c_0>0$.
+
+The transport constants have a proved closed form. The finite-family transport
+bound holds at
+\[
+    c_0=\tfrac18,\qquad
+    C_{\rm ent}=200000,\qquad
+    e_{\rm ent}=2,\qquad
+    C_{\rm en}=3\bigl(18\pi^2+6144\,e^{\pi^2+1}\bigr),\qquad
+    e_{\rm en}=4
+\]
+(\leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.finiteFamilyTransportBound_explicit},
+\src{TNLean/PEPS/AreaLaw/Scan/ActualRoundTransport.lean}, line~190). These are the QICLean constants
+\leanid{TensorPower.ReplicaTransport.transportThreshold},
+\leanid{TensorPower.ReplicaTransport.transportEntropyConst},
+\leanid{TensorPower.ReplicaTransport.transportEntropyExponent},
+\leanid{TensorPower.ReplicaTransport.transportEnergyConst} and
+\leanid{TensorPower.ReplicaTransport.transportEnergyExponent}
+(\src{QICLean/Representation/ReplicaTransport/Transport.lean}, lines~41--60),
+whose values are proved in lines~63--86 of the same file, and the bound is
+QICLean's \leanid{TensorPower.ReplicaTransport.transport_finite_family_explicit}
+(\src{QICLean/Representation/ReplicaTransport/FiniteFamily.lean}, line~40).
+At these values the constant of Theorem~1.1 is
+\leanid{TNLean.PEPS.AreaLaw.uniformAreaLawConstantClosed}
+(\src{TNLean/PEPS/AreaLaw/AreaLawExplicitConstant.lean}, line~116), a closed
+expression in $q,R,J,\Delta$ alone, and
+\leanid{TNLean.PEPS.AreaLaw.uniformAreaLaw_closed} (line~133) proves the area
+law with it under the hypotheses $q\ge1$, $J\ge0$ and $\Delta>0$, which are no
+stronger than those of Theorem~1.1. This is the explicit statement asked for at
+the start of this note. The source-statement theorem
+\leanid{TNLean.PEPS.AreaLaw.uniformAreaLaw} is proved as its corollary.
 
 \paragraph{Dependence on the parameters.}
 The parameters $q,R,J,\Delta$ enter through four explicit quantities:
@@ -139,10 +198,9 @@ thresholds that grow logarithmically in $D_0$. The collar estimate itself uses
 the integer clearance $2R+10$ and does not depend on $D_0$ beyond $D_0>2R+10$.
 The template constant $\Ctpl=24$ enters only through the template coefficients
 $C_P=\max(18\Ctpl,1)=432$ and $C_B=32\Ctpl=768$ of Proposition~11.2. These
-values are computed in the proofs, but the statements
-\leanid{TNLean.PEPS.AreaLaw.Geometry.exists_primaryScannerConstant} and
-\leanid{TNLean.PEPS.AreaLaw.Geometry.exists_belt_replacement_templates} still
-quantify over them existentially.
+are the named definitions
+\leanid{TNLean.PEPS.AreaLaw.Geometry.primaryScannerConstant} and
+\leanid{TNLean.PEPS.AreaLaw.Geometry.beltScannerConstant}.
 
 The exponents are fixed rationals:
 \[
@@ -181,14 +239,17 @@ polynomially.
 Proposition~9.5 (\src{08-scanner.tex}, lines~681--805) bounds the safe-box
 entropy by $C_{\rm box}\,r^{1+e_*}$ at every scale $r\ge1$
 (\leanid{TNLean.PEPS.AreaLaw.Scan.exists_boxEntropy_le_boxError},
-\src{TNLean/PEPS/AreaLaw/Scan/PhysicalBoxBootstrap.lean}, line~141). It has two
+\src{TNLean/PEPS/AreaLaw/Scan/PhysicalBoxBootstrap.lean}, line~335). It has two
 stages.
 
 \paragraph{Initial estimate (Proposition~3.3).}
 The initial estimate (\src{02-initial.tex}, lines~596--669;
-\src{TNLean/PEPS/AreaLaw/InitialBoxEstimate.lean}, line~437) is explicit. With
+\leanid{TNLean.PEPS.AreaLaw.boxEntropy_le_initialBoxConstant_mul_rpow},
+\src{TNLean/PEPS/AreaLaw/InitialBoxEstimate.lean}, line~546) is explicit. With
 the explicit contour constants $B_{\rm cross}(R)$ and
-$K_{\rm budget}(q,R)=1+B_{\rm cross}(R)\log\bigl(e\,q^{1+2R(R+1)}\bigr)^2$,
+$K_{\rm budget}(q,R)=1+B_{\rm cross}(R)\log\bigl(e\,q^{1+2R(R+1)}\bigr)^2$
+(\leanid{TNLean.PEPS.AreaLaw.bufferCrossConst},
+\leanid{TNLean.PEPS.AreaLaw.bufferBudgetConst}),
 \begin{align*}
     Z      & =\max\Bigl\{4,\;32B_{\rm cross}(R)\,q^{2(1+2R(R+1))}\frac{J}{\Delta},\;
     128\sqrt{(1+J/\Delta)K_{\rm budget}(q,R)}\Bigr\},                                  \\
@@ -207,9 +268,25 @@ $\Cpad^{-2}/\log\Cpad$. These quantities are named:
 \leanid{TNLean.PEPS.AreaLaw.initialPaddingScale} ($Z$),
 \leanid{TNLean.PEPS.AreaLaw.initialPaddingConst} ($\Cpad$),
 \leanid{TNLean.PEPS.AreaLaw.initialBufferConst} ($\Cbuf$),
+\leanid{TNLean.PEPS.AreaLaw.initialBoxProb} ($p$),
+\leanid{TNLean.PEPS.AreaLaw.initialBoxScale} ($M$),
+\leanid{TNLean.PEPS.AreaLaw.initialBoxRatio} ($\lambda$),
 \leanid{TNLean.PEPS.AreaLaw.initialBoxExponent} ($e_0$) and
-\leanid{TNLean.PEPS.AreaLaw.initialBoxConstant} ($C_{\rm init}$, through the
-QICLean constant \leanid{Entropy.scaleRecurrenceConst}).
+\leanid{TNLean.PEPS.AreaLaw.initialBoxConstantExplicit} ($C_{\rm init}$,
+line~539). The last is defined as
+\leanid{TNLean.PEPS.AreaLaw.initialBoxConstant}, whose scale-recurrence
+constant is a parameter, evaluated at the QICLean definition
+\leanid{Entropy.scaleRecurrenceConst}
+(\src{QICLean/Analysis/ScaleRecurrence.lean}, line~69).
+\leanid{TNLean.PEPS.AreaLaw.boxEntropy_le_initialBoxConstant_mul_rpow} proves
+Proposition~3.3 with $C_{\rm init}$ and $e_0$ and no further hypothesis, by
+discharging that parameter with QICLean's
+\leanid{Entropy.le_scaleRecurrenceConst_mul_rpow}. The bootstrap of
+\leanid{TNLean.PEPS.AreaLaw.uniformAreaLaw_closed}, and hence of
+\leanid{TNLean.PEPS.AreaLaw.uniformAreaLaw}, starts from this named form. The
+existential form \leanid{TNLean.PEPS.AreaLaw.exists_boxEntropy_le_rpow}
+(\src{TNLean/PEPS/AreaLaw/InitialBoxEstimate.lean}, line~561) has the witnesses
+$C_{\rm init}$ and $e_0$.
 
 The values of $M$, $\lambda$ and $p$ above are those of the Lean proof, not of
 the source. The source (\src{02-initial.tex}, lines~614--656) orders the
@@ -225,19 +302,27 @@ The exponent is improved from $e$ to $(1-\ell)e$ in each round
 \leanid{TNLean.PEPS.AreaLaw.Scan.exists_uniform_boxEntropy_improvement}). If the
 current bound is $C_j r^{1+e}$, the next constant is
 \begin{equation}
-    C_{j+1}=576\,C_{\rm out}(C_j)+N(C_j)^2\log q+1,
+    C_{j+1}=576\,C_{\rm out}(C_j)+N(C_j)^2\log q+1+\log q,
     \label{eq:round}
 \end{equation}
 where $C_{\rm out}(C_j)$ is the output coefficient of the rough scanner
-(\leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_sourceBootstrap_entropy_improvement})
-and $N(C_j)=\max(N_s,N_g)$ is the largest of its thresholds and the rectangle
-geometry threshold (\leanid{TNLean.PEPS.AreaLaw.Scan.roundedClearanceThreshold}). The
+(\leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_sourceBootstrap_entropy_improvement};
+named \leanid{TNLean.PEPS.AreaLaw.Scan.bootstrapRestoredBudgetCoefficient} at the
+input \leanid{TNLean.PEPS.AreaLaw.Scan.weakRectangleSourceEntropyCoefficient})
+and $N(C_j)=\max(N_s,N_g)$ is the largest of its thresholds
+(\leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.sourceBootstrapEntropyThreshold}) and the
+rectangle geometry threshold
+(\leanid{TNLean.PEPS.AreaLaw.Scan.roundedClearanceThreshold}). The large-scale
+constant $576\,C_{\rm out}(C_j)+N(C_j)^2\log q+1$ of a round is
+\leanid{TNLean.PEPS.AreaLaw.Scan.boxImprovementConstant}, with threshold
+\leanid{TNLean.PEPS.AreaLaw.Scan.boxImprovementThreshold}; the extension of the
+improved bound to all scales adds the last term $\log q$ of \eqref{eq:round}. The
 recursion is the named sequence
 \leanid{TNLean.PEPS.AreaLaw.Scan.boxBootstrapConstant}, and the round count is
 \leanid{TNLean.PEPS.AreaLaw.Scan.boxBootstrapRounds}, the least $m$ with
-$(1-\ell)^m e_0\le e_*$. The rounds are iterated with threshold $1$, so each round
-adds one further $\log q$ to the right-hand side of \eqref{eq:round}. The
-term $N^2\log q$ absorbs the bounded scales by the
+$(1-\ell)^m e_0\le e_*$. The last term $\log q$ appears because the rounds
+are iterated with threshold $1$: extending the improved bound from scale $1$ on costs the volume
+bound once more. The term $N^2\log q$ absorbs the bounded scales by the
 volume bound $F(r)\le r^2\log q$
 (\src{TNLean/PEPS/AreaLaw/Scan/ExponentBootstrap.lean}, line~39). The threshold
 $N(C_j)$ is a maximum of kind (a) thresholds, rows~1--17 and~32--33 of
@@ -247,15 +332,28 @@ scanner. The number of rounds is the explicit integer
     m=\Bigl\lceil\frac{\log(e_0/e_*)}{-\log(1-\ell)}\Bigr\rceil,
 \]
 which is row~32. The constant $C_{\rm box}=C_m$ is therefore a finite recursion
-of explicit operations and kind (a) thresholds. The by-contradiction form of the
-Lean iteration only shortcuts the case in which the target exponent is reached
-early; running all $m$ rounds gives the same kind of bound.
+of explicit operations and kind (a) thresholds. The Lean iteration
+\leanid{TNLean.PEPS.AreaLaw.Scan.uniform_power_bound_of_boxBootstrapRounds} runs
+exactly these $m$ rounds, and $C_{\rm box}$ is
+\leanid{TNLean.PEPS.AreaLaw.Scan.physicalBoxBootstrapConstant}
+(\leanid{TNLean.PEPS.AreaLaw.Scan.exists_boxEntropy_le_boxError_of_initial}).
+Its arguments include the truncation constant $C_{\rm tr}$ and the transport
+constants of the scanner. At $C_{\rm init}$, $e_0$, the truncation constant
+\leanid{TNLean.PEPS.AreaLaw.latticeTruncationRadiusConstant}$(R,J,\Delta,2)$ and
+a tuple of transport constants it is
+\leanid{TNLean.PEPS.AreaLaw.Scan.physicalBoxConstantExplicit}
+(\src{TNLean/PEPS/AreaLaw/Scan/PhysicalBoxBootstrap.lean}, line~365), with the
+entropy bound
+\leanid{TNLean.PEPS.AreaLaw.Scan.boxEntropy_le_boxError_explicit}, so at the
+closed-form transport constants of Section~\ref{sec:top} it is explicit.
+\leanid{TNLean.PEPS.AreaLaw.Scan.exists_boxEntropy_le_boxError} states these
+arguments existentially, with the named constants as witnesses.
 
 \subsection{Proposition~9.6: the sublinear collar bound}
 
 Proposition~9.6 (\src{08-scanner.tex}, lines~808--827 and 942--943;
 \leanid{TNLean.PEPS.AreaLaw.sublinearCollarBound_real},
-\src{TNLean/PEPS/AreaLaw/PhysicalCollarInformation.lean}, line~41) applies the
+\src{TNLean/PEPS/AreaLaw/PhysicalCollarInformation.lean}, line~243) applies the
 scanner at the final exponents, with entropy input coefficient
 $C_w=4C_{\rm box}+4\log q+1$. The scanner (Proposition~9.2,
 \src{08-scanner.tex}, lines~349--533) and the final-scale information estimate
@@ -263,7 +361,27 @@ give a constant $C_m$ and a threshold $N_1=\max(N_s,N_g)$
 (\leanid{TNLean.PEPS.AreaLaw.Scan.exists_template_final_mutualInformation_of_boxEntropy}),
 and $C_1=\max(C_m/2,10)$
 (\leanid{TNLean.PEPS.AreaLaw.sublinearCollarBound_of_mutualInformation_le}
-replaces the constant $C_m/2$ by $\max(C_m/2,10)$).
+replaces the constant $C_m/2$ by $\max(C_m/2,10)$). In Lean these are
+\leanid{TNLean.PEPS.AreaLaw.collarBoxConstant} ($C_w$),
+\leanid{TNLean.PEPS.AreaLaw.sublinearCollarConstant} ($C_1$) and
+\leanid{TNLean.PEPS.AreaLaw.sublinearCollarThreshold} ($N_1$), with $C_m$ and
+$N_1$ given by \leanid{TNLean.PEPS.AreaLaw.Scan.collarConstant} and
+\leanid{TNLean.PEPS.AreaLaw.Scan.collarThreshold} at $C_{\rm box}$ replaced by
+$C_w$. The theorem
+\leanid{TNLean.PEPS.AreaLaw.sublinearCollarBound_real_of_boxEntropy} proves
+Proposition~9.6 with this $C_1$ and $N_1$ for every safe-box constant
+$C_{\rm box}$, and
+\leanid{TNLean.PEPS.AreaLaw.sublinearCollarBound_real_of_initial} does so at
+$C_{\rm box}$ given by the bootstrap. Both state the truncation constant
+$C_{\rm tr}$ and the transport constants existentially, with the named
+constants as witnesses, and $N_1$ depends on them (Section~\ref{sec:open}).
+\leanid{TNLean.PEPS.AreaLaw.sublinearCollarBound_real_explicit}
+(same file, line~265) proves Proposition~9.6 with these arguments named: the truncation
+constant \leanid{TNLean.PEPS.AreaLaw.latticeTruncationRadiusConstant}$(R,J,\Delta,10)$,
+$C_{\rm box}$ given by
+\leanid{TNLean.PEPS.AreaLaw.Scan.physicalBoxConstantExplicit}, and any tuple
+of transport constants satisfying the transport bound with $c_0>0$; this is the
+form used by \leanid{TNLean.PEPS.AreaLaw.uniformAreaLaw_explicit}.
 
 The output coefficients of the scanner are explicit expressions in the input
 coefficient, as recorded in
@@ -271,7 +389,8 @@ coefficient, as recorded in
 $C_*=\max\{C_e^{\rm in},1\}$, $C_{\rm rough}=6C_*+13+6\log q$,
 $C_{\delta,0}=4(C_1+1)(C_{\rm rough}+2C_t)C_s$, and the final sharp coefficient
 $20C_e+62+24\log q+16\sqrt{C_{\rm tr}}(1+C_{\rm dim})$
-(\leanid{TNLean.PEPS.AreaLaw.Scan.exists_finalSharp_error_le}). The constants
+(\leanid{TNLean.PEPS.AreaLaw.Scan.exists_finalSharp_error_le}; named
+\leanid{TNLean.PEPS.AreaLaw.Scan.finalSharpErrorConstant}). The constants
 packaged as existentials along this branch are explicit in substance: the
 scale-fact constant is $32$, the transport cap is
 $1+(2C_r+3)^2\log q$, and the marginal constants are $C_0^{\rm m}=512e(2/g_1)$ (distinct from the
@@ -284,7 +403,7 @@ collar bound is recorded in \src{docs/paper-gaps/arealaw2d_safe_box_collar_scope
 
 Proposition~10.2 (\src{09-amplification.tex}, lines~261--576;
 \leanid{TNLean.PEPS.AreaLaw.amplificationBound},
-\src{TNLean/PEPS/AreaLaw/AmplificationProof.lean}, line~103) is explicit
+\src{TNLean/PEPS/AreaLaw/AmplificationProof.lean}, line~670) is explicit
 formulas packaged as existentials, except for one threshold. With $K=4(M+2)$
 and the filter constants $c$, $v$ and $C_g$ of the lattice constraint words,
 \begin{align*}
@@ -296,12 +415,37 @@ and the filter constants $c$, $v$ and $C_g$ of the lattice constraint words,
     N_2=\max\bigl\{2,\lceil C_gC_0B\rceil,N_t\bigr\}.
 \end{align*}
 These are \leanid{TNLean.PEPS.AreaLaw.amplificationConstant} and
-\leanid{TNLean.PEPS.AreaLaw.amplificationThreshold}. The cut-clearance clause of
+\leanid{TNLean.PEPS.AreaLaw.amplificationThreshold}, built from
+\leanid{TNLean.PEPS.AreaLaw.amplificationGap} ($g_{\rm a}$),
+\leanid{TNLean.PEPS.AreaLaw.amplificationDecayRate} ($c$),
+\leanid{TNLean.PEPS.AreaLaw.amplificationPrefactor} ($C_g$),
+\leanid{TNLean.PEPS.AreaLaw.amplificationRadiusConstant} ($C'$),
+\leanid{TNLean.PEPS.AreaLaw.amplificationRadiusCoefficient} ($C_{\rm rad}$),
+\leanid{TNLean.PEPS.AreaLaw.polyStretchedExpBound} ($B$),
+\leanid{TNLean.PEPS.AreaLaw.goodRealizationThreshold} ($\max\{2,\lceil C_gC_0B\rceil\}$)
+and \leanid{TNLean.PEPS.AreaLaw.typicalProjectionThreshold} ($N_t$). The
+cut-clearance clause of
 Proposition~10.2 needs in addition $n\ge N_3$, the collar radius threshold at
 $C_2$, so the full conclusion holds for $n\ge\max(N_2,N_3)$. This costs
 nothing in Theorem~1.1, whose lower scale $n_*$ already contains $N_3$.
 The quasi-local filter constants are named definitions in QICLean
 (\leanid{kernelDecayConst}$(\delta)=2\delta e/\pi$ and \leanid{kernelDecayRate}).
+The constants $C_2$ and $N_2$ take the tail constants $(C,c)$ of the positive
+constraints as arguments. These have the closed forms
+\leanid{TNLean.PEPS.AreaLaw.latticePositiveConstraintConst} and
+\leanid{TNLean.PEPS.AreaLaw.latticePositiveConstraintRate}, built from the QICLean
+constants \leanid{SpectralFilter.positiveConstraintLocalityConst} and
+\leanid{SpectralFilter.positiveConstraintLocalityRate}.
+\leanid{TNLean.PEPS.AreaLaw.amplificationBound_explicit} proves
+Proposition~10.2 at them, with
+\leanid{TNLean.PEPS.AreaLaw.amplificationConstantExplicit} and
+\leanid{TNLean.PEPS.AreaLaw.amplificationThresholdExplicit}, and
+\leanid{TNLean.PEPS.AreaLaw.amplificationBound} is its corollary.
+\leanid{TNLean.PEPS.AreaLaw.uniformAreaLaw_explicit}, and hence
+\leanid{TNLean.PEPS.AreaLaw.uniformAreaLaw_closed}, applies
+\leanid{TNLean.PEPS.AreaLaw.amplificationBound_explicit}, and so does the proof
+of Theorem~1.1 in \leanid{TNLean.PEPS.AreaLaw.uniformAreaLaw}, its
+corollary.
 The typical-projector threshold $N_t$ (row~34) is kind (a): it compares a
 stretched exponential $Ce^{-cn^{1/10}}$ with $n^{-2K}$. The constants $c$, $v$,
 $C_g$ and $c_{p_{\rm a}}$ involve the $L^1$ norm of the degree-$p_{\rm a}$
@@ -339,36 +483,91 @@ above. This is an explicit power bound, $N_3\approx(8C_2)^{1.43\cdot10^5}$.
 
 Proposition~11.2 (\src{10-geometry.tex}, lines~98--140, with the constants
 fixed in lines~756--774) is assembled in the Lean proof
-\leanid{TNLean.PEPS.AreaLaw.Geometry.twoFamilyDecomposition_of_one_le}. The
-constants are fixed in the following order.
+\leanid{TNLean.PEPS.AreaLaw.isTwoFamilyDecompositionConstant_of_one_le}, and
+every constant except the birth-separation constant $c_1$ is a named
+definition. The function
+\leanid{TNLean.PEPS.AreaLaw.twoFamilyDecompositionConstant}$(D_0,\Ctpl,n_*,c_1)$
+is a constant of the decomposition at $n_*$ for every $c_1$ satisfying
+\leanid{TNLean.PEPS.AreaLaw.Geometry.IsBirthSeparationConstant}
+(\leanid{TNLean.PEPS.AreaLaw.isTwoFamilyDecompositionConstant_twoFamilyDecompositionConstant});
+for $\Ctpl<1$ it uses $\max(\Ctpl,1)$. The constants are fixed in the
+following order.
 \begin{enumerate}
-    \item The template coefficients $C_P=432$ and $C_B=768$, computed in the
-          proofs but existential in the statements.
+    \item The template coefficients $C_P=\max(18\Ctpl,1)=432$ and
+          $C_B=32\Ctpl=768$
+          (\leanid{TNLean.PEPS.AreaLaw.Geometry.primaryScannerConstant},
+          \leanid{TNLean.PEPS.AreaLaw.Geometry.beltScannerConstant}).
     \item The birth-separation constant $c_1$
           (\leanid{TNLean.PEPS.AreaLaw.Geometry.exists_birthSeparation};
           Lemma~11.5, lines~573--659). It is an absolute constant: it depends on
-          none of $q,R,J,\Delta,D_0,\Ctpl$. It is $\min(c_2,c_3)$, where $c_2$
-          is a compactness minimum, kind (b) (rows~57--58), mirroring the
-          source's ``has a positive minimum \dots\ the list of rescaled patterns
-          is finite'' (\src{10-geometry.tex}, lines~596--631).
-    \item The stopping scale
-          $S_*=\max\{T_0,2,T_1,T_2,U\}$ with
-          $U=\max\{U_1,U_2,n_*/C_B,1\}$. Here $U_1$ is the fine-clearance
-          threshold $2\lceil C_Bu\rceil^\beta<c_1u^{\rho_0}$, which needs
-          $u>(2(C_B+1)^\beta/c_1)^{1/(\rho_0-\beta)}$ with
-          $\rho_0-\beta=10^{-6}$, so $U_1$ is of order
-          $(C_B^\beta/c_1)^{10^6}$; $U_2$ is the belt-replacement threshold
-          $\lfloor\lceil C_Bu\rceil^{1-\ell_{\rm geo}}\rfloor\le u$; and $T_1$
-          is the removal-margin threshold, of order $4000^{10^6}$ (row~39).
+          none of $q,R,J,\Delta,D_0,\Ctpl$. The source obtains it as a compactness
+          minimum (``has a positive minimum \dots\ the list of rescaled
+          patterns is finite'', \src{10-geometry.tex}, lines~596--631). It is
+          now explicit. For two polygons cut out by belt half-planes, each
+          pair of points, one from each polygon, is either at sup distance at
+          least $c_2=1/28$, or both points lie in the open quarter-square
+          about a common integer contact and satisfy the angular estimate
+          (\leanid{TNLean.PEPS.AreaLaw.Geometry.birthSeparationConstant},
+          \leanid{TNLean.PEPS.AreaLaw.Geometry.facetPolygon_contact_dichotomy}).
+          With the angular constant $c_3=1/2$ and the normalization of belt
+          cells to side $4$, this gives $c_1=1/112$
+          (\leanid{TNLean.PEPS.AreaLaw.Geometry.birthTemplateSeparationConstant}).
+          The assembly of Proposition~11.2 takes $c_1$ as an input
+          (\leanid{TNLean.PEPS.AreaLaw.Geometry.IsBirthSeparationConstant}), and
+          \leanid{TNLean.PEPS.AreaLaw.Geometry.isBirthSeparationConstant_birthTemplateSeparationConstant}
+          shows that $1/112$ is one. The proofs of Theorem~1.1 in
+          \leanid{TNLean.PEPS.AreaLaw.uniformAreaLaw} and of
+          \leanid{TNLean.PEPS.AreaLaw.uniformAreaLaw_closed} use $c_1=1/112$; the
+          stand-alone \leanid{TNLean.PEPS.AreaLaw.twoFamilyDecomposition_of_one_le}
+          still takes $c_1$ from the existential
+          \leanid{TNLean.PEPS.AreaLaw.Geometry.exists_isBirthSeparationConstant}.
+    \item The stopping scale $S_*=\max\{T(1/128),T(1/4),2,U\}$
+          (\leanid{TNLean.PEPS.AreaLaw.twoFamilyStoppingScale}), with
+          $U=\max\{U_1,U_2,n_*/C_B,1\}$. Here
+          $T(a_0)=\max\{1,(1000/a_0)^{1/(1-\rho_0)}\}$
+          (\leanid{TNLean.PEPS.AreaLaw.Geometry.repairMarginThreshold}) is the
+          removal-margin threshold $d(S)\le(a_0/1000)S$ (row~39). The isolation
+          constant $1/128$ of the initial stars enters the templates and the
+          separation through the repair induction, and $1/4$ enters the metric
+          hypotheses of the counting estimates; $T(1/128)$ is of order
+          $128000^{10^6}$, the larger of the two margin thresholds. $U_1$ is the fine-clearance threshold
+          $2\lceil C_Bu\rceil^\beta<c_1u^{\rho_0}$. The Lean proof takes
+          $U_1=\max\{1,(4(C_B+1)^\beta/c_1)^{1/(\rho_0-\beta)}\}$
+          (\leanid{TNLean.PEPS.AreaLaw.Geometry.fineClearanceThreshold}), the
+          power-ratio threshold for
+          $2(C_B+1)^\beta u^\beta\le(c_1/2)u^{\rho_0}$, with
+          $\rho_0-\beta=10^{-6}$. At $C_B=768$ and $c_1=1/112$ its base is
+          about $3076/c_1$, so $U_1$ is of order $(3076/c_1)^{10^6}$; $U_2$
+          is the belt-replacement threshold
+          $\lfloor\lceil C_Bu\rceil^{1-\ell_{\rm geo}}\rfloor\le u$
+          (\leanid{TNLean.PEPS.AreaLaw.Geometry.beltReplacementScaleThreshold}),
+          and $U$ is \leanid{TNLean.PEPS.AreaLaw.twoFamilyLengthBound}.
     \item The layer width $C=\lceil4D_0\rceil+2$.
     \item The lower layer index
-          $k_0=\max\{5\cdot10^7,K_T,K_M,K_B,K_U,K_P,K_n\}$. Each $K_\bullet$ is
-          a dyadic threshold of the form ``$M(2^k)^a<2^k$'' or
-          ``$C_P2^k\ge n_*$'' (rows~37--40 and~74--79), hence logarithmic in
-          its data.
-    \item The counting constants $M_t$, $M_p$ and $L_q$, which are explicit
-          multiples of the series value
-          $1+\sum_k(k+1)^P2^{-\delta_0k/2}$ (row~41).
+          \leanid{TNLean.PEPS.AreaLaw.twoFamilyLowerLayerIndex}
+          $k_0=\max\{5\cdot10^7,K_T,K_U,K_P,K_n\}$, where
+          $K_T=\max\{K_\zeta(S_*),K_c,K_P(C_P,1/4)\}$
+          (\leanid{TNLean.PEPS.AreaLaw.Geometry.birthTemplateLayerThreshold})
+          collects the template, metric and separation thresholds. The metric
+          and separation thresholds are both $K_\zeta(S_*)$, the least layer
+          whose fine side reaches $S_*$ (row~40), and $K_c$
+          (\leanid{TNLean.PEPS.AreaLaw.Geometry.descendantCutClearanceThreshold})
+          is the cut-clearance layer of rows~37--38: the dyadic index of the
+          power-ratio thresholds for $2R^{\zeta\rho_0}$,
+          $8\max(D_0,0)R^\zeta$ and $2(\max(C_B,0)+1)^\beta R^{\zeta\beta}$
+          against $R/2$. Each is logarithmic in its data.
+    \item The counting constants, named definitions in terms of the series
+          value $B(p)=1+\sum_k(k+1)^p2^{-\delta_0k/2}$
+          (\leanid{TNLean.PEPS.AreaLaw.Geometry.polynomialDyadicBudget},
+          row~41): $M_t=576\,L\,B(L)$
+          (\leanid{TNLean.PEPS.AreaLaw.Geometry.repairMarkCountConstant}),
+          where $L$ is the descendant-count exponent built from the depth
+          constant $D=(|\log\log S_*|+1)/(-\log\rho_0)+1$ through
+          $G=\max\{11^{D+1},D\log11\}$, $E=\max\{G2^G,G\}$ and
+          $L=\max\{E(\log3+1)^E,E\}$; $M_p=32\,C_P^{-100}B(0)$
+          (\leanid{TNLean.PEPS.AreaLaw.Geometry.primaryErrorSumConstant}); and
+          $L_q=512\,B(0)+8M_t$
+          (\leanid{TNLean.PEPS.AreaLaw.Geometry.repairRetainedCountConstant}).
 \end{enumerate}
 The constant is then
 \begin{align*}
@@ -376,7 +575,11 @@ The constant is then
     \Cres & =2\bigl(2(C+1)2^{k_0}+1\bigr)^2+(2S_*+1)^2M_t(2C+1)^2,\qquad
     \Csum=(M_p+L_q)(2C+1)^2.
 \end{align*}
-It is explicit in $C$, $S_*$ and $k_0$, and $\cD\gtrsim4^{k_0}$.
+It is explicit in $C$, $S_*$ and $k_0$, and $\cD\gtrsim4^{k_0}$. The
+descendant-count exponent is very large, roughly $L\approx2^{G2^G}$ with
+$G\approx(\log S_*)^{2.4\cdot10^6}$, and $B(L)$ grows like
+$L!\,(2/(\delta_0\log2))^{L}$, so $M_t$ is by far the largest factor of
+$C_3$. This affects the size of the constant, not its explicitness.
 
 \section{Inventory of extraction sites}
 \label{sec:inventory}
@@ -405,7 +608,7 @@ $x\ge1$, $A\ge0$, $b>0$ and $u<v$.
           $m=\lceil(s+1)/\gamma\rceil$, it holds for
           $n\ge(Cm!/c^m)^{1/(\gamma m-s)}$. The same device already appears with
           an explicit constant in
-          \leanid{TNLean.PEPS.AreaLaw.Amplification.exists_one_add_sq_mul_exp_neg_rpow_le}
+          \leanid{TNLean.PEPS.AreaLaw.exists_one_add_sq_mul_exp_neg_rpow_le}
           and \leanid{TNLean.PEPS.AreaLaw.exists_one_add_pow_mul_exp_neg_rpow_le}.
     \item[(P6)] \emph{Dyadic layer index}: $M(2^k)^a<2^k$ for
           $k>\log_2\max(M,1)/(1-a)$; $M(2^k)^a\le\eps(2^k)^b$ for
@@ -434,7 +637,8 @@ $x\ge1$, $A\ge0$, $b>0$ and $u<v$.
 
 Table~\ref{tab:leaves} lists the statements ``for all sufficiently large $n$''
 from which the thresholds are extracted, with their shape. Each is proved by a
-limit of an explicit elementary function.
+limit of an explicit elementary function. Where the threshold is now a named
+closed form, the row cites that definition, or the theorem stated from it on.
 
 {\small
 \begin{longtable}{>{\raggedright}p{6.2cm}>{\raggedright}p{6.4cm}p{1.6cm}}
@@ -448,70 +652,70 @@ Declaration (file:line)                                          & Elementary in
 Declaration (file:line)                                          & Elementary inequality                                                              & Shape \\
 \midrule
 \endhead
-\leanid{eventually_le_natCast_rpow} (\src{Scan/Budgets.lean}:42) & $b\le n^y$                                                                         & P1    \\
-\leanid{eventually_scaleFacts} (\src{Scan/Budgets.lean}:53)
+\leanid{eventually_le_natCast_rpow} (\src{Scan/Budgets.lean}:51) & $b\le n^y$                                                                         & P1    \\
+\leanid{eventually_scaleFacts} (\src{Scan/Budgets.lean}:150)
                                                                  & $n\ge2$, $2\le n^\mu$, $2\le n^{1-\ell}$, $48\le n^{1-\ell-\mu}$; constant $32$    & P1, P7 \\
-\leanid{eventually_le_K} (\src{Scan/BandCountGrowth.lean}:31)    & $B\le\lfloor\lfloor n^{1-\ell}\rfloor/(8\lfloor n^\mu\rfloor)\rfloor$              & P7    \\
+\leanid{eventually_le_K} (\src{Scan/BandCountGrowth.lean}:69)    & $B\le\lfloor\lfloor n^{1-\ell}\rfloor/(8\lfloor n^\mu\rfloor)\rfloor$              & P7    \\
 \leanid{eventually_continuityCost_le},
 \leanid{eventually_continuityCost_le_of_fixed_coefficient}
-(\src{Scan/Budgets.lean}:134, 165)                               & $C\sqrt t(1+Cn^2\log q)\le n^{-247}$ for $t\le An^{-500}$                          & P8    \\
+(\src{Scan/Budgets.lean}:194, 229)                               & $C\sqrt t(1+Cn^2\log q)\le n^{-247}$ for $t\le An^{-500}$                          & P8    \\
 \leanid{eventually_abs_regionalEntropy_sub_le_of_truncation}
-(\src{Scan/TargetEntropyTransfer.lean}:31),
+(\src{Scan/TargetEntropyTransfer.lean}:86),
 \leanid{eventually_regionalEntropy_positiveDepthPrefix_le}
-(\src{Scan/PositivePrefixEntropyTransfer.lean}:44),
+(\src{Scan/PositivePrefixEntropyTransfer.lean}:141),
 \leanid{eventually_source_actualTerminal_preEntropy_bounds}
-(\src{Scan/SourceActualTerminalEntropy.lean}:37)                 & continuity cost with $C=\max(4,C_{\rm vol})$ and $A=\sqrt{2/g_1}$                   & P8    \\
+(\src{Scan/SourceActualTerminalEntropy.lean}:95)                 & continuity cost with $C=\max(4,C_{\rm vol})$ and $A=\sqrt{2/g_1}$                   & P8    \\
 \leanid{eventually_status_scale_separation},
 \leanid{eventually_one_le_source_bandCount}
-(\src{Scan/StatusScaleSeparation.lean}:51, 76)                   & $\lceil C_r(\log n)^2\rceil\le n^\kappa$, $8\le n^{\mu-\kappa}$, $8\le n^{1-\ell-\mu}$ & P1, P4 \\
+(\src{Scan/StatusScaleSeparation.lean}:83, 129)                   & $\lceil C_r(\log n)^2\rceil\le n^\kappa$, $8\le n^{\mu-\kappa}$, $8\le n^{1-\ell-\mu}$ & P1, P4 \\
 \leanid{eventually_split_counting_scale_separation}
-(\src{Scan/BadOldHistoryDecay.lean}:73)                          & the same and $24\le n^{\mu-\kappa}$                                               & P1, P4 \\
+(\src{Scan/BadOldHistoryDecay.lean}:103)                          & the same and $24\le n^{\mu-\kappa}$                                               & P1, P4 \\
 \leanid{eventually_const_mul_roundedLogRadius_le_rpow},
 \leanid{eventually_roundedLogRadius_le_rpow},
 \leanid{eventually_const_mul_roundedLogRadius_cube_le_rpow},
 \leanid{eventually_one_le_roundedLogRadius}
-(\src{Scan/RadiusAsymptotics.lean}:53, 65, 71, 89)               & $A\lceil C(\log n)^2\rceil^j\le n^\eps$, $j\in\{1,3\}$; $n\ge2$                    & P4    \\
+(\src{Scan/RadiusAsymptotics.lean}:91, 99, 105, 119)               & $A\lceil C(\log n)^2\rceil^j\le n^\eps$, $j\in\{1,3\}$; $n\ge2$                    & P4    \\
 \leanid{eventually_badHistory_bound_le_rpow}
-(\src{Scan/BadHistoryAsymptotics.lean}:31),
+(\src{Scan/BadHistoryAsymptotics.lean}:119),
 \leanid{eventually_bad_history_probability_le}
-(\src{Scan/PhysicalBadHistoryDecay.lean}:35),
+(\src{Scan/PhysicalBadHistoryDecay.lean}:92),
 \leanid{eventually_historyProperties}
-(\src{Scan/ScanHistories.lean}:342)                              & geometric bad-history tail at most $n^{-p}$, via radius powers and $n\ge8(C_t+1)$ & P4, P9 \\
+(\src{Scan/ScanHistories.lean}:343)                              & geometric bad-history tail at most $n^{-p}$, via radius powers and $n\ge8(C_t+1)$ & P4, P9 \\
 \leanid{eventually_transportLogDimBound_roundedLogRadius_le}
 (\src{Scan/SubsystemDimensionScale.lean}:57)                     & $\log n\ge1$                                                                       & P8    \\
 \leanid{ScannerExponents.eventually_mul_a_sqrt_budget_le}
-(\src{Scan/SharpMomentScale.lean}:128)                           & $A\,C\sqrt{2C_B}(\log n)^6\le c\,n^\delta$                                         & P3    \\
-\leanid{eventually_const_mul_rpow_log_rpow_le},
+(\src{Scan/SharpMomentScale.lean}:214)                           & $A\,C\sqrt{2C_B}(\log n)^6\le c\,n^\delta$                                         & P3    \\
+\leanid{ScannerExponents.principalDensityThreshold},
 \leanid{ScannerExponents.eventually_principalDensity_le_rpow}
-(\src{Scan/SourceDensityScale.lean}:39, 69)                      & $An^u(\log n)^L\le bn^v$                                                           & P3    \\
-\leanid{eventually_energy_const_mul_rpow_log_rpow_le},
+(\src{Scan/SourceDensityScale.lean}:42, 147)                     & $An^u(\log n)^L\le bn^v$                                                           & P3    \\
+\leanid{finalSelectedEnergyThreshold},
 \leanid{eventually_final_selectedEnergy_le_rpow}
-(\src{Scan/SourceSelectedEnergyPower.lean}:69, 202)              & $16Cn^{-111/125000}(\log n)^{C_l}\le\frac g4n^{-1/2000}$; $n^{-1000}\le\frac g4n^{-1/2000}$ & P3 \\
+(\src{Scan/SourceSelectedEnergyPower.lean}:174, 215)             & $16Cn^{-111/125000}(\log n)^{C_l}\le\frac g4n^{-1/2000}$; $n^{-1000}\le\frac g4n^{-1/2000}$ & P3 \\
 \leanid{eventually_finalSharp_log_cost_le},
 \leanid{eventually_finalSharp_powerEnvelope_le}
-(\src{Scan/FinalSharpErrorPower.lean}:56, 81)                    & $An^u(\log n)^L\le n^v$, with $v=62497/62500$                                      & P3    \\
+(\src{Scan/FinalSharpErrorPower.lean}:59, 124)                    & $An^u(\log n)^L\le n^v$, with $v=62497/62500$                                      & P3    \\
 \leanid{ScannerExponents.eventually_bandCount_le_rpow}
-(\src{Scan/FinalSharpScalarBounds.lean}:94)                      & $2\le n^\mu$                                                                       & P1, P7 \\
-\leanid{roundedClearanceThreshold}
-(\src{Scan/RoundedClearance.lean}:33)                            & $(4n^{1-\ell}+20(C_r(\log n)^2+1))/n\to0$                                          & P2, P3 \\
+(\src{Scan/FinalSharpScalarBounds.lean}:116)                     & $2\le n^\mu$                                                                       & P1, P7 \\
+\leanid{rounded_clearance_of_threshold_le}
+(\src{Scan/RoundedClearance.lean}:42)                            & the clearance budgets $(D_0+1)L\le D_0s$ and $2L+10r_0\le D_0s$ for $s$ from \leanid{roundedClearanceThreshold} on, via $4n^{1-\ell}\le\eta n$ and $20C_r(\log n)^2\le\eta n$, $\eta=1/(4(C_2+1))$ & P2, P3 \\
 \leanid{collar_radius_scale_tendsto_zero}
-(\src{Amplification/RadiusScales.lean}:56)                       & $(n^{1-\eps}+2Cn^{(1-\eps)/\alpha})/n^\beta\to0$                                   & P2    \\
-\leanid{eventually_stretchedExp_le_rpow_neg}
-(\src{Amplification/TypicalProjectors.lean}:170)                 & $Ce^{-cn^{1/10}}\le n^{-s}$                                                         & P5    \\
-\leanid{eventually_mul_rpow_lt},
+(\src{Amplification/RadiusScales.lean}:58)                       & $(n^{1-\eps}+2Cn^{(1-\eps)/\alpha})/n^\beta\to0$                                   & P2    \\
+\leanid{typicalProjectionThreshold}
+(\src{Amplification/TypicalProjectors.lean}:202)                 & $Ce^{-cn^{1/10}}\le n^{-s}$                                                         & P5    \\
+\leanid{descendantCutClearanceThreshold},
 \leanid{eventually_descendant_cutClearance_scales}
-(\src{Geometry/DescendantCutClearance.lean}:80, 108)             & $M(2^k)^a<2^k$ for $a\in\{\zeta\rho_0,\zeta,\zeta\beta\}$                           & P6    \\
-\leanid{eventually_mul_rpow_le},
+(\src{Geometry/DescendantCutClearance.lean}:95, 179)            & $M(2^k)^a<2^k$ for $a\in\{\zeta\rho_0,\zeta,\zeta\beta\}$                           & P6    \\
+\leanid{primaryScaleLimitThreshold},
 \leanid{eventually_primaryScaleLimits},
 \leanid{le_primaryScannerScale}
-(\src{Geometry/PrimaryBirthTemplates.lean}:421, 461, 518)        & $M(2^k)^a\le\eps(2^k)^b$; $C_P2^k\ge n_*$                                          & P6    \\
-\leanid{eventually_fine_clearance} (\src{Geometry/RepairDepth.lean}:204)
+(\src{Geometry/PrimaryBirthTemplates.lean}:461, 567, 580)       & $M(2^k)^a\le\eps(2^k)^b$; $C_P2^k\ge n_*$                                          & P6    \\
+\leanid{eventually_fine_clearance} (\src{Geometry/RepairDepth.lean}:270)
                                                                  & $2\lceil C_Bu\rceil^\beta<c_1u^{\rho_0}$, gap $\rho_0-\beta=10^{-6}$               & P2    \\
 \leanid{eventually_repairHalfSide_le},
 \leanid{eventually_repairHalfSide_margins}
-(\src{Geometry/SimultaneousRepair.lean}:90, 106)                 & $S^{\rho_0}\le(a_0/1000)S$, gap $1-\rho_0=10^{-6}$                                 & P2    \\
+(\src{Geometry/SimultaneousRepair.lean}:114, 123)                & $S^{\rho_0}\le(a_0/1000)S$, gap $1-\rho_0=10^{-6}$                                 & P2    \\
 \leanid{eventually_beltReplacementScaleLimit}
-(\src{Geometry/BeltReplacementTemplates.lean}:308)               & $\lfloor\lceil C_Bu\rceil^{1-\ell}\rfloor\le\eps u$, gap $\ell=10^{-5}$            & P2, P7 \\
+(\src{Geometry/BeltReplacementTemplates.lean}:326)               & $\lfloor\lceil C_Bu\rceil^{1-\ell}\rfloor\le\eps u$, gap $\ell=10^{-5}$            & P2, P7 \\
 \bottomrule
 \end{longtable}
 }
@@ -528,13 +732,26 @@ A (Proposition~10.2), R (the collar radius threshold $N_3$), G
 proof of Theorem~1.1. A site used by the bootstrap is also used by the collar
 bound, since the latter consumes $C_{\rm box}$. Rows marked $\dagger$ belong to
 the Lean proof of Proposition~11.2 and of Theorem~1.1
-(\leanid{TNLean.PEPS.AreaLaw.Geometry.twoFamilyDecomposition_of_one_le},
-\leanid{TNLean.PEPS.AreaLaw.uniformAreaLaw}); their line numbers may have
-drifted since the table was compiled.
+(\leanid{TNLean.PEPS.AreaLaw.twoFamilyDecomposition_of_one_le},
+\leanid{TNLean.PEPS.AreaLaw.uniformAreaLaw}). Line numbers are those of the
+main branch on 2026-10-19. Rows~1--31 and~33--35 cite the existential statement
+and, after ``named'', the closed-form threshold from which it is now proved; the
+existential form is kept as a corollary of the named one. Row~32 cites the round
+count itself. Each $\dagger$ row now uses a closed-form
+threshold, defined in \src{Geometry/TwoFamilyExplicitThresholds.lean} or, for
+the primary scanner scale, in \src{Geometry/PrimaryBirthTemplates.lean}, and
+named in its row; \leanid{isTwoFamilyDecompositionConstant_twoFamilyConstant} states
+the constant of Proposition~11.2 as \leanid{twoFamilyConstant} of these
+thresholds and of the constants of the template, isolation, separation and
+counting estimates. Those constants are now named as well (Section~\ref{sec:geometry}),
+and rows~37--41 of the geometry block have closed forms; the remaining
+input of \leanid{twoFamilyDecompositionConstant}, the birth-separation
+constant of rows~57--58, is $c_1=1/112$ on the path of Theorem~1.1.
 
 Sites that merely read a property of an existing witness (for example the inequality $C_1=32\ge1$ read off from the witness
 of an eventual statement) are listed
-as kind (d). Not listed are the five uses of uniqueness witnesses in
+as kind (d); rows~60--63 no longer read anything, since $C_1=32$ is now
+passed directly, and are kept so that the row numbers stay fixed. Not listed are the five uses of uniqueness witnesses in
 \src{Geometry/ElementarySideReciprocity.lean}, \src{Geometry/InitialSectorRuns.lean},
 \src{Geometry/BeltFanColors.lean}, \src{Geometry/RepairLatticeCoverage.lean} and
 \src{Geometry/InitialActiveRays.lean}, which select the unique opponent of a
@@ -555,159 +772,159 @@ line~59, which extracts nothing.
 \midrule
 \endhead
 \multicolumn{6}{l}{\emph{Scanner and bootstrap thresholds}}                                                                                                    \\
-1   & \src{Scan/RoughSelectedDensity.lean}:70
-\leanid{exists_rough_selectedDensity_principal}             & scale facts and $2\le n^\mu$                                                 & a    & B      & P1, P7 \\
-2   & \src{Scan/BootstrapPrincipalEnergyBounds.lean}:92
-\leanid{exists_bootstrap_principal_energy_bound}            & scale facts, $4C_1\le n^\nu$, $2C_\delta\le n^\nu$, $(\log n)^{C_l}$ against a power of $n$ & a & B & P1, P3 \\
-3   & \src{Scan/BootstrapReplicaAbsorption.lean}:104
-\leanid{exists_bootstrap_comparison_loss_threshold}         & $n^{-\nu/4}<\frac12$ and $C(1+C_e)n^{-\nu/4}<1$                              & a    & B      & P1     \\
-4   & \src{Scan/BootstrapBinaryEntropyCost.lean}:42
-\leanid{exists_bootstrap_binEntropy_cost_bound}             & scale facts                                                                  & a    & B      & P1, P7 \\
-5   & \src{Scan/SourceBootstrapEntropy.lean}:159
-\leanid{exists_sourceBootstrap_entropy_improvement}         & target entropy continuity cost                                               & a    & B      & P8     \\
-6   & \src{Scan/SourceBootstrapEntropy.lean}:168 (same)          & $4\le n^\nu$                                                                 & a    & B      & P1     \\
-7   & \src{Scan/SourceBootstrapEntropy.lean}:169 (same)          & $\log n\ge1$                                                                 & a    & B      & P8     \\
-8   & \src{Scan/ScannerRoundedAdmissibility.lean}:41
-\leanid{ScannerExponents.exists_rounded_admissibility}      & status scale separation, $2\lceil C_r(\log n)^2\rceil\le n^\kappa$, $K\ge8$ & a    & B      & P1, P4 \\
-9   & \src{Scan/FixedWeightTransportSmallness.lean}:47
-\leanid{ScannerExponents.exists_fixedWeightFour_transport_smallness} & $n^{1-\ell-\mu}\le CK$, $\log n\ge1$, $4CC_d(\log n)^4\le c_t n^{1-\ell-\mu}$, $K\ge8$ & a & B & P3, P7 \\
-10  & \src{Scan/RoundedClearance.lean}:69
-\leanid{exists_rounded_clearance_threshold}                 & $(4n^{1-\ell}+20(C_r(\log n)^2+1))/n<1/(C_2+1)$                             & a    & B      & P2, P3 \\
-11  & \src{Scan/RoundedClearance.lean}:74 (same)                 & $C_2s\ge\max(N,1)$                                                           & a    & B      & P1     \\
-12  & \src{Scan/BadOldHistoryDecay.lean}:133
-\leanid{exists_badOldHistory_threshold}                     & bad-history tail at most $n^{-P}$; split-counting scales                     & a    & B      & P1, P4 \\
-13  & \src{Scan/GenericChargeEnergy.lean}:69
-\leanid{exists_generic_badOldHistory_threshold}             & the same at general exponents                                                & a    & B      & P1, P4 \\
-14  & \src{Scan/GenericChargeEnergy.lean}:260
-\leanid{ScannerExponents.exists_actualCharge_energy_coefficients} & scale facts and $\log n\ge1$                                           & a    & B      & P7, P8 \\
-15  & \src{Scan/ActualChargeEnergyCoefficients.lean}:173
-\leanid{exists_actualCharge_energy_coefficients}            & scale facts and $\log n\ge1$                                                 & a    & B      & P7, P8 \\
-16  & \src{Scan/SourceRoughSelection.lean}:187
-\leanid{exists_sourceTarget_selected_actualCharge_rough_comparison} & prefix entropy continuity cost                                       & a    & B      & P8     \\
-17  & \src{Scan/SourceRoughSelection.lean}:195 (same)            & scale facts and $K\ge8$                                                      & a    & B      & P1, P7 \\
-18  & \src{Scan/SharpMomentScale.lean}:204
-\leanid{ScannerExponents.exists_a_le_moment_radius}         & $(\log n)^6$ against $n^\delta$                                              & a    & S      & P3     \\
-19  & \src{Scan/SourceDensityScale.lean}:174
-\leanid{ScannerExponents.exists_principalDensity_le_rpow}   & principal density at most $n^{-r}$                                           & a    & S      & P3     \\
-20  & \src{Scan/SourceEndpointRoughBudget.lean}:104
-\leanid{exists_source_actualScan_suppliedPrevector_endpoint_budget} & prefix entropy continuity cost                                       & a    & S      & P8     \\
-21  & \src{Scan/SourceSelectedSharpEnergy.lean}:215
-\leanid{exists_sourceTarget_selected_actualCharge_sharp_energy} & target entropy continuity cost                                           & a    & S      & P8     \\
-22  & \src{Scan/SourceSelectedSharpEnergy.lean}:218 (same)       & $4\le n^{\nu_{\rm sc}}$                                                      & a    & S      & P1     \\
-23  & \src{Scan/SourceSelectedSharpEnergy.lean}:221 (same)       & $\log n\ge1$                                                                 & a    & S      & P8     \\
-24  & \src{Scan/SourceActualInformation.lean}:185
-\leanid{exists_sourceTarget_actual_mutualInformation_bound} & terminal entropy continuity cost                                             & a    & S      & P8     \\
-25  & \src{Scan/SourceFinalInformation.lean}:101
-\leanid{exists_sourceTarget_finalScale_mutualInformation}   & target entropy continuity cost                                               & a    & S      & P8     \\
-26  & \src{Scan/SourceTargetSharpMoments.lean}:148
-\leanid{exists_truncated_target_sharp_moments}              & status scale separation                                                      & a    & S      & P1, P4 \\
-27  & \src{Scan/FinalSharpScalarBounds.lean}:154
-\leanid{exists_finalSharp_scale_bounds}                     & $n^{0.74999}\le C_aK\le C_an^{0.74999}$, $2\le n^{1/4000}$                  & a    & S      & P1, P7 \\
-28  & \src{Scan/FinalSharpTransportSmallness.lean}:45
-\leanid{exists_finalSharp_transport_smallness}              & $\log n\ge1$; $(C_aC_d/c_t)n^{-37497/50000}(\log n)^4\le1$                  & a    & S      & P3, P8 \\
-29  & \src{Scan/FinalSharpErrorPower.lean}:155
-\leanid{exists_finalSharp_error_le}                         & power envelope at most $n^{62497/62500}$                                     & a    & S      & P3     \\
-30  & \src{Scan/SourceSelectedEnergyPower.lean}:247
-\leanid{exists_final_selectedEnergy_le_rpow}                & selected energy at most $n^{-1/2000}$                                        & a    & S      & P3     \\
-31  & \src{Scan/FinalScannerAdmissibility.lean}:51
-\leanid{exists_finalScanner_admissibility}                  & status scale separation, radius, band count                                  & a    & S      & P1, P4 \\
+1   & \src{Scan/RoughSelectedDensity.lean}:137
+\leanid{exists_rough_selectedDensity_principal}             & scale facts and $2\le n^\mu$; named \leanid{ScannerExponents.scaleFactsThreshold}  & a    & B      & P1, P7 \\
+2   & \src{Scan/BootstrapPrincipalEnergyBounds.lean}:241
+\leanid{exists_bootstrap_principal_energy_bound}            & scale facts, $4C_1\le n^\nu$, $2C_\delta\le n^\nu$, $(\log n)^{C_l}$ against a power of $n$; named \leanid{bootstrapPrincipalEnergyThreshold}  & a & B & P1, P3 \\
+3   & \src{Scan/BootstrapReplicaAbsorption.lean}:125
+\leanid{exists_bootstrap_comparison_loss_threshold}         & $n^{-\nu/4}<\frac12$ and $C(1+C_e)n^{-\nu/4}<1$; named \leanid{bootstrapComparisonLossThreshold}  & a    & B      & P1     \\
+4   & \src{Scan/BootstrapBinaryEntropyCost.lean}:69
+\leanid{exists_bootstrap_binEntropy_cost_bound}             & scale facts; named \leanid{ScannerExponents.scaleFactsThreshold}  & a    & B      & P1, P7 \\
+5   & \src{Scan/SourceBootstrapEntropy.lean}:497
+\leanid{exists_sourceBootstrap_entropy_improvement}         & target entropy continuity cost; named \leanid{CollarScan.sourceBootstrapEntropyThreshold}  & a    & B      & P8     \\
+6   & \src{Scan/SourceBootstrapEntropy.lean}:497 (same)          & $4\le n^\nu$                                                                 & a    & B      & P1     \\
+7   & \src{Scan/SourceBootstrapEntropy.lean}:497 (same)          & $\log n\ge1$                                                                 & a    & B      & P8     \\
+8   & \src{Scan/ScannerRoundedAdmissibility.lean}:58
+\leanid{ScannerExponents.exists_rounded_admissibility}      & status scale separation, $2\lceil C_r(\log n)^2\rceil\le n^\kappa$, $K\ge8$; named \leanid{ScannerExponents.roundedAdmissibilityThreshold}  & a    & B      & P1, P4 \\
+9   & \src{Scan/FixedWeightTransportSmallness.lean}:85
+\leanid{ScannerExponents.exists_fixedWeightFour_transport_smallness} & $n^{1-\ell-\mu}\le CK$, $\log n\ge1$, $4CC_d(\log n)^4\le c_t n^{1-\ell-\mu}$, $K\ge8$; named \leanid{ScannerExponents.fixedWeightTransportThreshold}  & a & B & P3, P7 \\
+10  & \src{Scan/RoundedClearance.lean}:104
+\leanid{exists_rounded_clearance_threshold}                 & $4n^{1-\ell}\le\eta n$, $20C_r(\log n)^2\le\eta n$ and $n\ge80(C_2+1)$, $\eta=1/(4(C_2+1))$; named \leanid{roundedClearanceThreshold}, proved by \leanid{rounded_clearance_of_threshold_le}  & a    & B      & P2, P3 \\
+11  & \src{Scan/RoundedClearance.lean}:104 (same)                 & $C_2s\ge\max(N,1)$                                                           & a    & B      & P1     \\
+12  & \src{Scan/BadOldHistoryDecay.lean}:185
+\leanid{exists_badOldHistory_threshold}                     & bad-history tail at most $n^{-P}$; split-counting scales; named \leanid{badOldHistoryThreshold}  & a    & B      & P1, P4 \\
+13  & \src{Scan/GenericChargeEnergy.lean}:98
+\leanid{exists_generic_badOldHistory_threshold}             & the same at general exponents; named \leanid{ScannerExponents.badOldHistoryThreshold}  & a    & B      & P1, P4 \\
+14  & \src{Scan/GenericChargeEnergy.lean}:378
+\leanid{ScannerExponents.exists_actualCharge_energy_coefficients} & scale facts and $\log n\ge1$; named \leanid{ScannerExponents.actualChargeEnergyThreshold}  & a    & B      & P7, P8 \\
+15  & \src{Scan/ActualChargeEnergyCoefficients.lean}:272
+\leanid{exists_actualCharge_energy_coefficients}            & scale facts and $\log n\ge1$; named \leanid{finalActualChargeEnergyThreshold}  & a    & B      & P7, P8 \\
+16  & \src{Scan/SourceRoughSelection.lean}:598
+\leanid{exists_sourceTarget_selected_actualCharge_rough_comparison} & prefix entropy continuity cost; named \leanid{ScannerExponents.sourceRoughSelectionThreshold}  & a    & B      & P8     \\
+17  & \src{Scan/SourceRoughSelection.lean}:598 (same)            & scale facts and $K\ge8$                                                      & a    & B      & P1, P7 \\
+18  & \src{Scan/SharpMomentScale.lean}:247
+\leanid{ScannerExponents.exists_a_le_moment_radius}         & $(\log n)^6$ against $n^\delta$; named \leanid{ScannerExponents.momentRadiusThreshold}  & a    & S      & P3     \\
+19  & \src{Scan/SourceDensityScale.lean}:160
+\leanid{ScannerExponents.exists_principalDensity_le_rpow}   & principal density at most $n^{-r}$; named \leanid{ScannerExponents.principalDensityThreshold}  & a    & S      & P3     \\
+20  & \src{Scan/SourceEndpointRoughBudget.lean}:129
+\leanid{exists_source_actualScan_suppliedPrevector_endpoint_budget} & prefix entropy continuity cost; named \leanid{truncationEntropyThreshold}  & a    & S      & P8     \\
+21  & \src{Scan/SourceSelectedSharpEnergy.lean}:562
+\leanid{exists_sourceTarget_selected_actualCharge_sharp_energy} & target entropy continuity cost; named \leanid{sourceSelectedSharpEnergyThreshold}  & a    & S      & P8     \\
+22  & \src{Scan/SourceSelectedSharpEnergy.lean}:562 (same)       & $4\le n^{\nu_{\rm sc}}$                                                      & a    & S      & P1     \\
+23  & \src{Scan/SourceSelectedSharpEnergy.lean}:562 (same)       & $\log n\ge1$                                                                 & a    & S      & P8     \\
+24  & \src{Scan/SourceActualInformation.lean}:415
+\leanid{exists_sourceTarget_actual_mutualInformation_bound} & terminal entropy continuity cost; named \leanid{sourceSelectedSharpEnergyThreshold}  & a    & S      & P8     \\
+25  & \src{Scan/SourceFinalInformation.lean}:287
+\leanid{exists_sourceTarget_finalScale_mutualInformation}   & target entropy continuity cost; named \leanid{sourceFinalInformationThreshold}  & a    & S      & P8     \\
+26  & \src{Scan/SourceTargetSharpMoments.lean}:336
+\leanid{exists_truncated_target_sharp_moments}              & status scale separation; named \leanid{targetSharpMomentThreshold}  & a    & S      & P1, P4 \\
+27  & \src{Scan/FinalSharpScalarBounds.lean}:186
+\leanid{exists_finalSharp_scale_bounds}                     & $n^{0.74999}\le C_aK\le C_an^{0.74999}$, $2\le n^{1/4000}$; named \leanid{finalSharpScaleThreshold}  & a    & S      & P1, P7 \\
+28  & \src{Scan/FinalSharpTransportSmallness.lean}:82
+\leanid{exists_finalSharp_transport_smallness}              & $\log n\ge1$; $(C_aC_d/c_t)n^{-37497/50000}(\log n)^4\le1$; named \leanid{finalSharpTransportThreshold}  & a    & S      & P3, P8 \\
+29  & \src{Scan/FinalSharpErrorPower.lean}:217
+\leanid{exists_finalSharp_error_le}                         & power envelope at most $n^{62497/62500}$; named \leanid{finalSharpErrorThreshold}  & a    & S      & P3     \\
+30  & \src{Scan/SourceSelectedEnergyPower.lean}:232
+\leanid{exists_final_selectedEnergy_le_rpow}                & selected energy at most $n^{-1/2000}$; named \leanid{finalSelectedEnergyThreshold}  & a    & S      & P3     \\
+31  & \src{Scan/FinalScannerAdmissibility.lean}:75
+\leanid{exists_finalScanner_admissibility}                  & status scale separation, radius, band count; named \leanid{finalScannerAdmissibilityThreshold}  & a    & S      & P1, P4 \\
 \multicolumn{6}{l}{\emph{Archimedean counts}}                                                                                                                   \\
-32  & \src{Scan/ExponentBootstrap.lean}:87
-\leanid{exists_uniform_power_bound_of_eventual_improvement} & $(1-\ell)^m<e_*/e_0$                                                         & a    & B      & P9     \\
-33  & \src{Scan/BadHistoryAsymptotics.lean}:43
-\leanid{eventually_badHistory_bound_le_rpow}                & $J\ge(p+8)/(\kappa/2)$                                                       & a    & B      & P9     \\
+32  & \src{Scan/ExponentBootstrap.lean}:84
+\leanid{boxBootstrapRounds}                                 & least $m$ with $(1-\ell)^me_0\le e_*$, a closed form                         & a    & B      & P9     \\
+33  & \src{Scan/BadHistoryAsymptotics.lean}:119
+\leanid{eventually_badHistory_bound_le_rpow}                & $J\ge(p+8)/(\kappa/2)$; named \leanid{badHistoryThreshold}  & a    & B      & P9     \\
 \multicolumn{6}{l}{\emph{Amplification and the collar radius}}                                                                                                  \\
-34  & \src{Amplification/TypicalProjectors.lean}:212
-\leanid{exists_typicalProjection_failure_le_inv_pow}        & $Ce^{-cn^{1/10}}\le n^{-2K}$                                                 & a    & A      & P5     \\
-35  & \src{Amplification/RadiusScales.lean}:77
-\leanid{Exponents.exists_collar_radius_threshold}           & $(n^{1-\eps}+2Cn^{(1-\eps)/\alpha})/n^\beta<\eta$                            & a    & R      & P2     \\
+34  & \src{Amplification/TypicalProjectors.lean}:234
+\leanid{exists_typicalProjection_failure_le_inv_pow}        & $Ce^{-cn^{1/10}}\le n^{-2K}$; named \leanid{typicalProjectionThreshold}  & a    & A      & P5     \\
+35  & \src{Amplification/RadiusScales.lean}:107
+\leanid{Exponents.exists_collar_radius_threshold}           & $(n^{1-\eps}+2Cn^{(1-\eps)/\alpha})/n^\beta<\eta$; named \leanid{Exponents.collarRadiusThreshold}  & a    & R      & P2     \\
 \multicolumn{6}{l}{\emph{Geometry}}                                                                                                                             \\
 36  & \src{Geometry/PolynomialBudget.lean}:61
 \leanid{exists_polynomial_dyadic_absorption}                & $(k+1)^pe^{-ak}<1$, $a=\delta_0\log2/4$                                      & a    & G      & P6     \\
-37  & \src{Geometry/DescendantCutClearance.lean}:337
-\leanid{initialBelt_birthTemplate_cutClearance}             & late-layer scale inequalities                                                & a    & G      & P6     \\
-38  & \src{Geometry/DescendantCutClearance.lean}:398
-\leanid{descendant_birthTemplate_cutClearance}              & late-layer scale inequalities                                                & a    & G      & P6     \\
-39  & \src{Geometry/RepairInductionMetric.lean}:465
-\leanid{exists_repairMetricHypotheses}                      & $S^{\rho_0}\le(a_0/1000)S$                                                   & a    & G      & P2     \\
-40  & \src{Geometry/RepairInductionMetric.lean}:468 (same)       & least $m$ with $2^m>S_*$; then $K=\lceil m/\zeta\rceil$                     & a    & G      & P9     \\
+37  & \src{Geometry/DescendantCutClearance.lean}:389
+\leanid{initialBelt_birthTemplate_cutClearance}             & late-layer scale inequalities; explicit layer \leanid{descendantCutClearanceThreshold} & a & G & P6 \\
+38  & \src{Geometry/DescendantCutClearance.lean}:466
+\leanid{descendant_birthTemplate_cutClearance}              & late-layer scale inequalities; explicit layer \leanid{descendantCutClearanceThreshold} & a & G & P6 \\
+39  & \src{Geometry/RepairInductionMetric.lean}:502
+\leanid{exists_repairMetricHypotheses}                      & $S^{\rho_0}\le(a_0/1000)S$; explicit scale \leanid{repairMarginThreshold} & a & G & P2 \\
+40  & \src{Geometry/RepairInductionMetric.lean}:502 (same)       & least $m$ with $2^m\ge S_*$; then $K=\lceil m/\zeta\rceil$; explicit layer \leanid{fineScaleIndexThreshold} & a & G & P9 \\
 \multicolumn{6}{l}{\emph{Series values}}                                                                                                                        \\
-41  & \src{Geometry/PolynomialBudget.lean}:112
-\leanid{exists_uniform_polynomial_dyadic_sum_bound}         & $1+\sum_k(k+1)^p2^{-\delta_0k/2}$                                            & a    & G      & P10    \\
-42  & \src{TruncationSeries.lean}:90
-\leanid{exists_sum_shell_le}                                & $\sum_d(d+1)^{-2}=\pi^2/6$                                                   & a    & B, S, A & P10   \\
-43  & \src{Amplification/GraphOmittedAnchorTail.lean}:283
-\leanid{exists_sum_omitted_graphBall_exponentialDistanceProfile_le} & $\sum_n(1+n)^2e^{-cn^\alpha}$ (also in the statements at lines~56 and~227) & a & A & P10 \\
+41  & \src{Geometry/PolynomialBudget.lean}:131
+\leanid{exists_uniform_polynomial_dyadic_sum_bound}         & $1+\sum_k(k+1)^p2^{-\delta_0k/2}$; named \leanid{polynomialDyadicBudget} & a & G & P10 \\
+42  & \src{TruncationSeries.lean}:116
+\leanid{sum_shell_le}                                & $\sum_d(d+1)^{-2}=\pi^2/6$; named \leanid{shellSeriesConstant}  & a    & B, S, A & P10   \\
+43  & \src{Amplification/GraphOmittedAnchorTail.lean}:353
+\leanid{exists_sum_omitted_graphBall_exponentialDistanceProfile_le} & $\sum_n(1+n)^2e^{-cn^\alpha}$ (also in the statements at lines~56 and~227); named \leanid{omittedAnchorTailConstant}  & a & A & P10 \\
 \multicolumn{6}{l}{\emph{Thresholds not used in the proof of Theorem~1.1}}                                                                                      \\
-44  & \src{Scan/SourceStatusMarginalMoments.lean}:103
+44  & \src{Scan/SourceStatusMarginalMoments.lean}:105
 \leanid{exists_source_statusMarginal_moment_bounds}         & status scale separation, band count                                          & a    & off    & P1, P4 \\
-45  & \src{Scan/SourceChargeSelection.lean}:186
+45  & \src{Scan/SourceChargeSelection.lean}:188
 \leanid{exists_sourceTarget_selected_actualCharge_density_energy} & prefix entropy continuity cost                                         & a    & off    & P8     \\
-46  & \src{Scan/SourceChargeSelection.lean}:194 (same)           & scale facts and $K\ge8$                                                      & a    & off    & P1, P7 \\
-47  & \src{Scan/SourceSelectedSharpDensity.lean}:210
+46  & \src{Scan/SourceChargeSelection.lean}:196 (same)           & scale facts and $K\ge8$                                                      & a    & off    & P1, P7 \\
+47  & \src{Scan/SourceSelectedSharpDensity.lean}:212
 \leanid{exists_sourceTarget_selected_actualCharge_sharp_density} & target entropy continuity cost                                          & a    & off    & P8     \\
-48  & \src{Scan/SourceSelectedSharpDensity.lean}:213 (same)      & $4\le n^{\nu_{\rm sc}}$                                                      & a    & off    & P1     \\
-49  & \src{Scan/SourceSelectedSharpDensity.lean}:216 (same)      & $\log n\ge1$                                                                 & a    & off    & P8     \\
-50  & \src{Scan/SourceTargetSharpUpper.lean}:182
-\leanid{exists_truncated_target_actualSharpUpper}           & status scale separation                                                      & a    & off    & P1, P4 \\
-51  & \src{Scan/SourceSelectedDensity.lean}:205
+48  & \src{Scan/SourceSelectedSharpDensity.lean}:215 (same)      & $4\le n^{\nu_{\rm sc}}$                                                      & a    & off    & P1     \\
+49  & \src{Scan/SourceSelectedSharpDensity.lean}:218 (same)      & $\log n\ge1$                                                                 & a    & off    & P8     \\
+50  & \src{Scan/SourceTargetSharpUpper.lean}:186
+\leanid{exists_truncated_target_actualSharpUpper}           & status scale separation; named \leanid{statusScaleSeparationThreshold}  & a    & off    & P1, P4 \\
+51  & \src{Scan/SourceSelectedDensity.lean}:207
 \leanid{exists_sourceTarget_selected_actualCharge_source_density} & scale facts                                                            & a    & off    & P1, P7 \\
-52  & \src{Scan/SourceSelectedDensity.lean}:207 (same)           & radius at least $1$, $\log n\ge1$, continuity cost                           & a    & off    & P4, P8 \\
-53  & \src{Scan/SourceSelectedEnergy.lean}:206
+52  & \src{Scan/SourceSelectedDensity.lean}:209 (same)           & radius at least $1$, $\log n\ge1$, continuity cost                           & a    & off    & P4, P8 \\
+53  & \src{Scan/SourceSelectedEnergy.lean}:208
 \leanid{exists_sourceTarget_selected_actualCharge_source_density_energy} & $\log n\ge1$                                                    & a    & off    & P8     \\
-54  & \src{Scan/SourceScanner.lean}:317
+54  & \src{Scan/SourceScanner.lean}:319
 \leanid{scannerStatement}                                   & prefix entropy continuity cost                                               & a    & off    & P8     \\
 55  & \src{Scan/BootstrapRoundedClearance.lean}:50
 \leanid{exists_two_mul_floor_rpow_ceil_mul_le}              & $2(C_2+1)^\eta\le s^{1-\eta}$                                               & a    & off    & P1     \\
 56  & \src{Geometry/ScaleSeparation.lean}:70
 \leanid{exists_dyadicScale_side_ratios}                     & least $d$ with $2^d>M$                                                       & a    & off    & P9     \\
 \multicolumn{6}{l}{\emph{Compactness minima}}                                                                                                                   \\
-57  & \src{Geometry/BirthSeparationAtoms.lean}:631
-\leanid{exists_pos_common_contact_dichotomy}                & minimum of $\|x-y\|$ on a compact set of pairs of points of two sectorial polygons away from their common lattice contacts & b & G & -- \\
-58  & \src{Geometry/BirthSeparationReplacement.lean}:84
-\leanid{exists_pos_le_norm_sub_away_from_intPoints}         & minimum of $\|x-y\|$ on a compact set of pairs away from common integer points & b  & G      & --     \\
+57  & \src{Geometry/BirthSeparationAtoms.lean}:575
+\leanid{exists_pos_common_contact_dichotomy}                & minimum of $\|x-y\|$ on a compact set of pairs of points of two sectorial polygons away from their common lattice contacts; replaced on the path by $c_2=1/28$ & b & off & -- \\
+58  & \src{Geometry/BirthSeparationReplacement.lean}:79
+\leanid{exists_pos_le_norm_sub_away_from_intPoints}         & minimum of $\|x-y\|$ on a compact set of pairs away from common integer points; replaced on the path by $c_2=1/28$ & b  & off    & --     \\
 \multicolumn{6}{l}{\emph{Replica limits}}                                                                                                                       \\
 59  & \src{Scan/ActualRoughLowerRemainder.lean}:135
 \leanid{exists_roughLowerRemainder_threshold}               & rough lower remainder below $\eps_{\rm rep}$ for large $k$                   & c    & off    & --     \\
 \multicolumn{6}{l}{\emph{Optimizers and choices}}                                                                                                               \\
-60  & \src{Scan/SharpMomentScale.lean}:43
-\leanid{ScannerExponents.exists_eventually_rpow_le_mul_K}   & reads $C_1=32\ge1$ from a witness                                            & d    & B      & --     \\
-61  & \src{Scan/SourceDensityScale.lean}:79
-\leanid{ScannerExponents.eventually_principalDensity_le_rpow} & reads $C_1=32\ge1$ from a witness                                          & d    & S      & --     \\
-62  & \src{Scan/GenericChargeEnergy.lean}:251
-\leanid{ScannerExponents.exists_actualCharge_energy_coefficients} & reads $C_1=32\ge1$ from a witness                                      & d    & B      & --     \\
-63  & \src{Scan/ActualChargeEnergyCoefficients.lean}:164
-\leanid{exists_actualCharge_energy_coefficients}            & reads $C_1=32\ge1$ from a witness                                            & d    & B      & --     \\
-64  & \src{Geometry/InitialMarkFamily.lean}:45
+60  & \src{Scan/SharpMomentScale.lean}:93
+\leanid{ScannerExponents.exists_eventually_rpow_le_mul_K}   & $C_1=32$, now written directly; no witness is read                                            & d    & B      & --     \\
+61  & \src{Scan/SourceDensityScale.lean}:147
+\leanid{ScannerExponents.eventually_principalDensity_le_rpow} & no longer reads $C_1$ from a witness                                          & d    & S      & --     \\
+62  & \src{Scan/GenericChargeEnergy.lean}:378
+\leanid{ScannerExponents.exists_actualCharge_energy_coefficients} & no longer reads $C_1$ from a witness                                      & d    & B      & --     \\
+63  & \src{Scan/ActualChargeEnergyCoefficients.lean}:272
+\leanid{exists_actualCharge_energy_coefficients}            & no longer reads $C_1$ from a witness                                            & d    & B      & --     \\
+64  & \src{Geometry/InitialMarkFamily.lean}:46
 \leanid{finite_support_of_summable_nat_counts}              & a summable count sequence has finite support                                 & d    & G      & --     \\
-65  & \src{Geometry/InitialMarkFamily.lean}:168
+65  & \src{Geometry/InitialMarkFamily.lean}:169
 \leanid{exists_least_incident_scales}                       & least incident belt scale of a mark                                          & d    & G      & --     \\
 66  & \src{Geometry/LayerPartition.lean}:78
 \leanid{exists_unique_layer_of_not_mem_dyadicNeighborhood}  & least layer containing a point                                               & d    & G      & --     \\
 67  & \src{Geometry/CappedDyadicPartition.lean}:132
 \leanid{exists_mem_cappedDyadicPartition}                   & largest contained dyadic scale up to the cap                                 & d    & B      & --     \\
-68  & \src{Geometry/DyadicExhaustion.lean}:31
+68  & \src{Geometry/DyadicExhaustion.lean}:33
 \leanid{exists_mem_dyadicNeighborhood}                      & a dyadic neighborhood containing a given point                               & d    & G      & --     \\
-69  & \src{Geometry/RepairInductionMetric.lean}:378
+69  & \src{Geometry/RepairInductionMetric.lean}:380
 \leanid{terminates}                                         & finite termination of each repair branch                                     & d    & G      & --     \\
-70  & \src{Geometry/RepairTermination.lean}:43
+70  & \src{Geometry/RepairTermination.lean}:45
 \leanid{RepairMetricHypotheses.exists_isEmpty_markIndex}    & finite termination of the repair stages                                      & d    & G      & --     \\
-71  & \src{Geometry/BirthSeparationAtoms.lean}:122
+71  & \src{Geometry/BirthSeparationAtoms.lean}:80
 \leanid{lt_of_mem_interior_intHalfPlane}                    & a point of a neighborhood                                                    & d    & G      & --     \\
-72  & \src{Geometry/BirthSeparationAtoms.lean}:324
+72  & \src{Geometry/BirthSeparationAtoms.lean}:282
 \leanid{exists_mem_of_finite_cover_ray}                     & a point of a neighborhood                                                    & d    & G      & --     \\
 73  & \src{RegularizedPatchMinimum.lean}:132
 \leanid{exists_isMinOn_regularizedPatchObjective}           & a minimizing filter on a compact domain (callers at \src{RegularizedPatchLogMinimum.lean}:38, \src{RegularizedPatchMinimum.lean}:240, 317, \src{RegularizedPatchMinimumGrowth.lean}:79) & d & off & -- \\
 \multicolumn{6}{l}{\emph{Proposition~11.2 and Theorem~1.1 assembly}}                                                                                            \\
-74$\dagger$ & \src{Geometry/RepairActualBirthTemplates.lean}:74
-\leanid{exists_uniform_repairStage_birth_templates}         & primary scale limits with $\eps=1/4$                                         & a    & G      & P6     \\
-75$\dagger$ & \src{Geometry/RepairCharacteristicLengthLowerBound.lean}:54
-\leanid{exists_uniform_repairStage_positive_rank_length_lower_bound} & $2^{\lfloor\zeta k\rfloor}\ge U$                                    & a    & G      & P6     \\
-76$\dagger$ & \src{Geometry/TwoFamilyAssembly.lean}:278
-\leanid{twoFamilyDecomposition_of_one_le}                   & fine clearance $U_1$                                                         & a    & G      & P2     \\
-77$\dagger$ & \src{Geometry/TwoFamilyAssembly.lean}:279 (same)           & belt-replacement scale $U_2$                                                 & a    & G      & P2, P7 \\
-78$\dagger$ & \src{Geometry/TwoFamilyAssembly.lean}:305 (same)           & primary scale limits with $\eps=1/8$, giving $K_P$                           & a    & G      & P6     \\
-79$\dagger$ & \src{Geometry/TwoFamilyAssembly.lean}:307 (same)           & $C_P2^k\ge n_*$, giving $K_n$                                                & a    & G      & P6     \\
+74$\dagger$ & \src{Geometry/RepairActualBirthTemplates.lean}:78
+\leanid{repairStage_birth_templates_of_le}         & primary scale limits with $\eps=1/4$; explicit layer \leanid{primaryScaleLimitThreshold} & a & G & P6 \\
+75$\dagger$ & \src{Geometry/RepairCharacteristicLengthLowerBound.lean}:55
+\leanid{repairStage_positive_rank_length_lower_bound}       & $2^{\lfloor\zeta k\rfloor}\ge U$; explicit layer \leanid{fineScaleIndexThreshold} & a & G & P6 \\
+76$\dagger$ & \src{Geometry/TwoFamilyAssembly.lean}:658
+\leanid{isTwoFamilyDecompositionConstant_twoFamilyConstant} & fine clearance $U_1$; explicit scale \leanid{fineClearanceThreshold} & a & G & P2 \\
+77$\dagger$ & \src{Geometry/TwoFamilyAssembly.lean}:592 (same)           & belt-replacement scale $U_2$; explicit scale \leanid{beltReplacementScaleThreshold} & a & G & P2, P7 \\
+78$\dagger$ & \src{Geometry/TwoFamilyAssembly.lean}:486 (same)           & primary scale limits with $\eps=1/8$, giving $K_P$; explicit layer \leanid{primaryScaleLimitThreshold} & a & G & P6 \\
+79$\dagger$ & \src{Geometry/TwoFamilyAssembly.lean}:609 (same)           & $C_P2^k\ge n_*$, giving $K_n$; explicit layer \leanid{primaryScannerScaleThreshold} & a & G & P6 \\
 \bottomrule
 \end{longtable}
 }
@@ -716,16 +933,23 @@ line~59, which extracts nothing.
 Table~\ref{tab:sites} has 79 rows: 56 of kind (a), of which 43 are on the path
 of Theorem~1.1 and 13 are not; 2 of kind (b); 1 of kind (c), not on the path;
 14 of kind (d); and 6 further kind (a) rows in the Lean proof of
-Proposition~11.2. Every kind (a) row reduces to the
+Proposition~11.2, now with closed-form thresholds. Rows~37--41 also have
+closed forms, and with the named template and counting coefficients the
+constant of Proposition~11.2 is explicit: the two kind (b) rows~57--58 are off
+the path, replaced by the explicit birth-separation constant
+(Section~\ref{sec:geometry}). Every kind (a) row reduces to the
 shapes (P1)--(P10). By frequency on the path, the shapes are: power against a
 constant and rounded scales (P1, P7), logarithmic factors against power
 margins (P3, P4), the entropy-continuity and logarithm bounds (P8), dyadic
 layer indices (P6), power ratios with tiny gaps (P2), Archimedean counts (P9),
-series values (P10), and a single stretched exponential (P5). A companion set
-of explicit-threshold lemmas should therefore target, in this order: (P3) with
-its corollary (P4); (P1) with the rounding facts (P7); (P6); (P2); and (P5),
-for which the factorial device is already proved twice with explicit
-constants.
+series values (P10), and a single stretched exponential (P5). The companion
+explicit-threshold lemmas are in \src{TNLean/Algebra/ExplicitThresholds.lean}:
+\leanid{Real.powerRatioThreshold} (P2),
+\leanid{Real.natRpowThreshold} (P1),
+\leanid{Real.logPowThreshold} and \leanid{Real.logRpowThreshold} (P3, P4) and
+\leanid{Real.stretchedExpThreshold} (P5); the dyadic indices (P6) are
+\leanid{TNLean.PEPS.AreaLaw.Geometry.dyadicIndexThreshold} and
+\leanid{TNLean.PEPS.AreaLaw.Geometry.fineScaleIndexThreshold}.
 
 \subsection{Replica limits}
 
@@ -751,15 +975,15 @@ Declaration (file:line)                                                         
 Declaration (file:line)                                                              & Limit used                                                    \\
 \midrule
 \endhead
-\leanid{entropy_le_of_replica_comparisons} (\src{BootstrapReplicaAbsorption.lean}:42) & passage to the limit in the bootstrap comparison              \\
+\leanid{entropy_le_of_replica_comparisons} (\src{BootstrapReplicaAbsorption.lean}:44) & passage to the limit in the bootstrap comparison              \\
 \leanid{restored_entropy_le_of_selected_rough_comparisons}
-(\src{SourceBootstrapEntropy.lean}:47)                                               & the same for the restored entropy                             \\
+(\src{SourceBootstrapEntropy.lean}:49)                                               & the same for the restored entropy                             \\
 \leanid{regionalEntropy_le_of_rough_typical_comparisons}
-(\src{TypicalReplicaAbsorption.lean}:47)                                             & the same for the typical comparison                           \\
+(\src{TypicalReplicaAbsorption.lean}:48)                                             & the same for the typical comparison                           \\
 \leanid{information_le_of_eventually_sharpInformationBound}
 (\src{SharpInformationScalar.lean}:68)                                               & the same for the sharp information bound                      \\
-\leanid{tendsto_log_div_nat} (\src{Selection.lean}:64)                               & $\log(k+2)/k\to0$                                             \\
-\leanid{tendsto_roughEndpointRemainder} (\src{ActualEndpointRoughBudget.lean}:40)    & Bell overlap remainder and $C\log(k+2)/k\to0$                 \\
+\leanid{tendsto_log_div_nat} (\src{Selection.lean}:66)                               & $\log(k+2)/k\to0$                                             \\
+\leanid{tendsto_roughEndpointRemainder} (\src{ActualEndpointRoughBudget.lean}:42)    & Bell overlap remainder and $C\log(k+2)/k\to0$                 \\
 \leanid{tendsto_roughLowerRemainderAtWeight_of_label_dimension},
 \leanid{tendsto_roughLowerRemainder_of_label_dimension}
 (\src{ActualRoughLowerRemainder.lean}:62, 116)                                       & label-dimension defect $o(k)$ divided by $k$                  \\
@@ -772,15 +996,33 @@ Declaration (file:line)                                                         
 
 \subsection{Dependencies outside this directory}
 
-Three ingredients on the path live in QICLean. The scale-recurrence constant
-$(|F(1)|+K/(\lambda-M))M^{\log\lambda/\log M}$ is explicit. The quasi-local
-filter constants are named definitions. The typical-tail threshold
+Five ingredients on the path live in QICLean, at the revision
+\texttt{23ca41f0} pinned in \src{lake-manifest.json}. The scale-recurrence
+constant $(|F(1)|+K/(\lambda-M))M^{\log\lambda/\log M}$ is the named definition
+\leanid{Entropy.scaleRecurrenceConst}
+(\src{QICLean/Analysis/ScaleRecurrence.lean}, line~69). The quasi-local
+filter constants are named definitions, and so are the locality constants
+\leanid{SpectralFilter.positiveConstraintLocalityConst} and
+\leanid{SpectralFilter.positiveConstraintLocalityRate} of the positive constraints
+(\src{QICLean/Analysis/SpectralFilter/FilterLocality.lean}, lines~366 and~372);
+the existential form
+\leanid{SpectralFilter.exists_norm_positiveConstraint_sub_map_le} (line~459) is
+no longer on the path of \leanid{TNLean.PEPS.AreaLaw.uniformAreaLaw}.
+The replica transport estimate holds at named constants with proved values,
+\leanid{TensorPower.ReplicaTransport.transport_finite_family_explicit}
+(\src{QICLean/Representation/ReplicaTransport/FiniteFamily.lean}, line~40), at
+the constants of \src{QICLean/Representation/ReplicaTransport/Transport.lean},
+lines~41--60 (Section~\ref{sec:top}); the existential form
+\leanid{TensorPower.ReplicaTransport.transport_finite_family}
+(\src{QICLean/Representation/ReplicaTransport/FiniteFamily.lean}, line~130) is
+no longer used in TNLean. The typical-tail
+threshold
 \leanid{Entropy.exists_typical_tail_bound_of_log_pow_twelve_budget}
-(QICLean, \src{QICLean/Analysis/TypicalTailScales.lean}, line~189) extracts a
+(\src{QICLean/Analysis/TypicalTailScales.lean}, line~169) extracts a
 threshold from a stretched exponential against $n^{-100}$ and from
 $(\log n)^6$ against a power, shapes (P5) and (P3). The inventory above is
-restricted to \src{TNLean/PEPS/AreaLaw}; a complete explicit constant also
-needs the QICLean thresholds on the path, which have the same shapes.
+restricted to \src{TNLean/PEPS/AreaLaw}; the QICLean thresholds on the path
+have the same shapes.
 
 \section{Size of the constant (heuristic)}
 
@@ -806,9 +1048,9 @@ constant is roughly a tower of three exponentials in $Z$.
 The remaining steps add no further level. The collar thresholds are powers of
 $C_{\rm box}$ with exponents of order $10^5$; $N_3\approx(8C_2)^{1.43\cdot10^5}$;
 and $\cD\gtrsim4^{k_0}\ge(n_*/C_P)^2$, together with absolute factors of order
-$(C_B^\beta/c_1)^{2\cdot10^6/\zeta}$ from the fine clearance and
-$4000^{2\cdot10^6/\zeta}$ from the removal margins, both entering through $S_*$
-and $k_0$. Altogether $C$ is roughly a tower of a few
+$(3076/c_1)^{2\cdot10^6/\zeta}$ from the fine clearance $U_1$ and
+$128000^{2\cdot10^6/\zeta}$ from the dominant removal margin
+$T(1/128)\approx128000^{10^6}$, both entering through $S_*$ and $k_0$. Altogether $C$ is roughly a tower of a few
 exponentials in $q^{O(R^2)}J/\Delta$. The tower comes from the bootstrap: its
 round count is exponential in $Z$ and each round raises the constant to a large
 power.
@@ -827,29 +1069,53 @@ constant. The constant is not explicit as written, and it is enormous.
 
 \paragraph{Work plan.}
 \begin{enumerate}
-    \item[2.] \emph{Explicit-threshold lemmas.} State explicit thresholds for
-          the shapes (P1)--(P6): power ratios with logarithmic factors,
-          stretched exponentials against powers, dyadic indices, and
-          ceilings and floors of powers. About five to ten elementary lemmas.
-    \item[3.] \emph{Named witnesses.} Restate each statement of the form ``there
-          are $C$ and $N$ with $P(C,N)$'' along the path as a definition
-          together with a theorem, and thread the definitions upward through the
-          scanner (Propositions~9.2, 9.5, 9.6), amplification
-          (Proposition~10.2) and geometry (Proposition~11.2). This is on the
-          order of a hundred statements and is mechanical.
-    \item[4.] \emph{An explicit birth-separation constant.} Replace the two
-          compactness minima (rows~57--58) by an explicit lower bound for the
-          distance between polygons with vertices on the quarter mesh and four
-          slopes, following \src{10-geometry.tex}, lines~351--363. This is
-          elementary but new geometry.
-    \item[5.] \emph{The explicit theorem.} State Theorem~1.1 with
-          $C=C_{\rm expl}(q,R,J,\Delta)$ and give it its own blueprint entry,
-          after Proposition~11.2 and Theorem~1.1 are proved in the main
-          development. A recursively defined computable $C_{\rm expl}$ needs no
-          further mathematics. An elementary closed form additionally needs a
-          bound for the bootstrap recursion \eqref{eq:round}.
+    \item[2.] \emph{Explicit-threshold lemmas.} Done: the thresholds for the
+          shapes (P1)--(P5) are in \src{TNLean/Algebra/ExplicitThresholds.lean}
+          (Section~\ref{sec:inventory}), and the dyadic indices (P6) in
+          \src{TNLean/PEPS/AreaLaw/Geometry/TwoFamilyExplicitThresholds.lean}.
+    \item[3.] \emph{Named witnesses.} Largely done. The statements of the form
+          ``there are $C$ and $N$ with $P(C,N)$'' along the path now have named
+          constants and thresholds with a theorem at the named values, through
+          the scanner (Propositions~9.2, 9.5, 9.6), amplification
+          (Proposition~10.2) and geometry (Proposition~11.2); rows~1--35 and
+          74--79 of Table~\ref{tab:sites} name them. The proof of the source
+          statement chooses no input existentially.
+    \item[4.] \emph{An explicit birth-separation constant.} Done: the two
+          compactness minima (rows~57--58) are replaced by $c_2=1/28$, from an
+          error bound for polygons cut out by belt half-planes, which gives
+          $c_1=1/112$. The compactness lemmas of rows~57--58 remain in the
+          library but no proof on the path of Theorem~1.1 uses them.
 \end{enumerate}
-Only item~4 and the closed-form bound for the recursion are new quantitative
-mathematics; the rest is restatement.
+The explicit theorem itself is proved: Theorem~1.1 holds with the constant
+$C_{\rm expl}(q,R,J,\Delta)$ of
+\leanid{TNLean.PEPS.AreaLaw.uniformAreaLawConstantClosed}, by
+\leanid{TNLean.PEPS.AreaLaw.uniformAreaLaw_closed}
+(Section~\ref{sec:top}). This constant is a finite recursion of explicit
+operations. An elementary closed form, one that does not iterate the bootstrap
+recursion \eqref{eq:round}, still needs a bound for that recursion; this is
+the remaining new quantitative mathematics.
+
+\paragraph{Open dependencies.}
+\label{sec:open}
+The explicit constant is proved
+(\leanid{TNLean.PEPS.AreaLaw.uniformAreaLaw_closed}, Section~\ref{sec:top}):
+on its path every input is a closed form, including the transport constants
+$(c_0,C_{\rm ent},e_{\rm ent},C_{\rm en},e_{\rm en})=(1/8,\,200000,\,2,\,
+3(18\pi^2+6144e^{\pi^2+1}),\,4)$ of
+\leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.finiteFamilyTransportBound_explicit}.
+The source statement \leanid{TNLean.PEPS.AreaLaw.uniformAreaLaw}, which
+asserts only that a constant exists, is proved as a corollary of
+\leanid{TNLean.PEPS.AreaLaw.uniformAreaLaw_closed}, with the constant
+\leanid{TNLean.PEPS.AreaLaw.uniformAreaLawConstantClosed}. No input on its path
+is existential: the transport constants, the initial constant $C_{\rm init}$
+and exponent $e_0$, the truncation constant $C_{\rm tr}$ and the tail constants
+$(C,c)$ of the positive constraints in Proposition~10.2 all enter through
+their closed forms
+\leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.finiteFamilyTransportBound_explicit},
+\leanid{TNLean.PEPS.AreaLaw.initialBoxConstantExplicit},
+\leanid{TNLean.PEPS.AreaLaw.initialBoxExponent},
+\leanid{TNLean.PEPS.AreaLaw.latticeTruncationRadiusConstant},
+\leanid{TNLean.PEPS.AreaLaw.latticePositiveConstraintConst} and
+\leanid{TNLean.PEPS.AreaLaw.latticePositiveConstraintRate}.
 
 \end{document}

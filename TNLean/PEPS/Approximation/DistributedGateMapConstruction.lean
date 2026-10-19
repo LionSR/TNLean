@@ -148,6 +148,19 @@ theorem isTermwiseBounded_reexpand_expansionGateLists (w : OriginalCircuit a b) 
   | swap => trivial
   | frame r w ih => exact ih h
 
+/-- The recorded expansions keep the original effect-count and coefficient-sum bounds.
+Source: polynomial-PEPS Theorem 5.2, item 3, `04-compression.tex`, lines 143–149 and 199–208. -/
+theorem isExpansionBounded_reexpand_expansionGateLists (w : OriginalCircuit a b) {r : ℕ}
+    {S : ℝ} (h : w.IsExpansionBounded r S) :
+    (w.produce.reexpand w.produce.expansionGateLists).IsExpansionBounded r S := by
+  induction w with
+  | id => trivial
+  | comp w v ihw ihv => exact ⟨ihw h.1, ihv h.2⟩
+  | privateMap => trivial
+  | nonprivateGate => exact h
+  | swap => trivial
+  | frame r w ih => exact ih h
+
 /-- The recorded expansions keep the original monomial counts.
 Source: polynomial-PEPS Theorem 5.2, item 3, `04-compression.tex`, lines 143–149. -/
 theorem monomialCount_reexpand_expansionGateLists_le (w : OriginalCircuit a b) {K : ℕ}
@@ -209,6 +222,152 @@ namespace TNLean.PEPS.PairEffect.DistributedConstruction
 open TNLean.PEPS.Approximation
 attribute [local instance] Classical.propDecidable
 
+/-- **Theorem 5.2 without messages, from coefficient-sum bounds.** Under the hypotheses of
+`exists_uniform_sampled_network`, with the termwise coefficient bound replaced by the absolute
+coefficient-sum bound `C_S * size L ^ s` at every nonprivate gate, every member of the family
+admits a literal operator tensor network within `size L ^ (-p)` of its physical density, whose
+link alphabets are at most `C_p * size L ^ α` for every
+`C_p ≥ sumCompressionPrefactor r b C_N C_D C_K C_S` and every
+`α ≥ sampledNetworkExponent r b n d u s p`. The incidence and link-locality bounds are those of
+the compression theorem.
+Source: polynomial-PEPS Theorem 5.2 (`thm:compression`), `04-compression.tex`, lines
+137–175, 199–208 and 565–588. -/
+theorem uniform_sampled_network_of_sum_le
+    {ι : Type*} (size : ι → ℝ) (hsize : ∀ i, 2 ≤ size i)
+    (P : ι → Type) [∀ L, Fintype (P L)]
+    (C₀ : ∀ L, DistributedConstruction (P L))
+    (b n d r u s : ℕ) (C_N C_D C_K C_S : ℝ)
+    (hN₀ : ∀ L, ((C₀ L).circuit.nonprivateCount : ℝ) ≤ C_N * size L ^ n)
+    (hphysical₀ : ∀ L j, ((C₀ L).physicalDimension j : ℝ) ≤ C_D * size L ^ d)
+    (harity₀ : ∀ L g, ((C₀ L).circuit.participants g).card ≤ b)
+    (hlifetime₀ : ∀ L j, (C₀ L).circuit.participationCount j ≤ b)
+    (hmonomial₀ : ∀ L, ∃ K : ℕ, (C₀ L).circuit.IsMonomialBounded K ∧
+      (K : ℝ) ≤ C_K * size L ^ u)
+    (hexpansion₀ : ∀ L, (C₀ L).circuit.IsExpansionBounded r (C_S * size L ^ s))
+    (p : ℝ) {C_p : ℝ} {α : ℕ}
+    (hC : sumCompressionPrefactor r b C_N C_D C_K C_S ≤ C_p)
+    (hα : sampledNetworkExponent r b n d u s p ≤ α) :
+    ∀ L,
+    ∃ (Gate : Type) (_ : Fintype Gate) (_ : DecidableEq Gate)
+      (participants : Gate → Finset (P L)) (root : Gate → P L)
+      (hroot : ∀ g ∈ (Finset.univ : Finset Gate), root g ∈ participants g)
+      (Label : Gate → Type) (_ : ∀ g, Fintype (Label g)) (k : ℕ)
+      (c : (g : Gate) → Label g → ℂ)
+      (T : (j : P L) → DistributedOperatorContraction.GateLabelsAt
+          (Finset.univ : Finset Gate) participants Label j →
+        (DistributedOperatorContraction.SampleAt (Finset.univ : Finset Gate)
+          participants j → Fin k) →
+        Matrix (Fin ((C₀ L).physicalDimension j)) (Fin ((C₀ L).physicalDimension j)) ℂ),
+      Matrix.rectangularTraceNorm
+          (DistributedOperatorContraction.contractedOperator Finset.univ participants root
+            hroot Label k c T - (C₀ L).physicalDensity) ≤ size L ^ (-p) ∧
+        (∀ e : DistributedOperatorContraction.Link Finset.univ participants root,
+          (Fintype.card (DistributedOperatorContraction.alphabet Finset.univ participants
+            root Label k e) : ℝ) ≤ C_p * size L ^ α) ∧
+        (∀ j, (incidentDistributedLinks Finset.univ participants root j).card ≤
+          2 * b * (b - 1)) ∧
+        (∀ e : DistributedOperatorContraction.Link Finset.univ participants root,
+          ∀ j l, j ∈ distributedLinkParties root e.1 → l ∈ distributedLinkParties root e.1 →
+            ∃ g : (C₀ L).circuit.nonprivateLocations,
+              j ∈ (C₀ L).circuit.participants g ∧ l ∈ (C₀ L).circuit.participants g) := by
+  have hsize0 : ∀ L, 0 ≤ size L := fun L ↦ (by norm_num : (0 : ℝ) ≤ 2).trans (hsize L)
+  have hfamily :=
+    GateMapConstruction.uniform_approximate_sampled_network_of_sum_le size hsize P
+      (fun L ↦ (C₀ L).toGateMapConstruction) b n d C_N C_D
+      (fun L ↦ by
+        change ((C₀ L).circuit.produce.expandedGateCount : ℝ) ≤ _
+        rw [OriginalCircuit.expandedGateCount_produce]
+        exact hN₀ L)
+      hphysical₀
+      (fun L g ↦ by
+        change ((C₀ L).circuit.produce.participants g).card ≤ b
+        rw [← (C₀ L).circuit.produceLocationsEquiv.apply_symm_apply g,
+          OriginalCircuit.participants_produce]
+        exact harity₀ L _)
+      (fun L j ↦ by
+        change Nat.card {g : (C₀ L).circuit.produce.gateLocations //
+          j ∈ (C₀ L).circuit.produce.participants g} ≤ b
+        rw [OriginalCircuit.natCard_participation_produce]
+        exact hlifetime₀ L j)
+      r C_K C_S u s p
+      (fun L ↦ by
+        obtain ⟨K, hK, hKb⟩ := hmonomial₀ L
+        exact ⟨(C₀ L).circuit.produce.expansionGateLists, K,
+          (C₀ L).circuit.isExpansionBounded_reexpand_expansionGateLists (hexpansion₀ L),
+          (C₀ L).circuit.monomialCount_reexpand_expansionGateLists_le hK, hKb,
+          (C₀ L).circuit.isGateApproximation_reexpand_expansionGateLists
+            (inv_nonneg.mpr (pow_nonneg (hsize0 L) _))⟩)
+      hC hα
+  intro L
+  obtain ⟨lists, B, hB, hb, happrox, T, herror, hdim, hinc, hlocal⟩ := hfamily L
+  rw [physicalDensity_toGateMapConstruction] at herror
+  refine ⟨_, _, _, _, _, _, _, _, _, _, T, herror, hdim, hinc, ?_⟩
+  intro e j l hj hl
+  obtain ⟨g, hjg, hlg⟩ := hlocal e j l hj hl
+  change (C₀ L).circuit.produce.gateLocations at g
+  change j ∈ (C₀ L).circuit.produce.participants g at hjg
+  change l ∈ (C₀ L).circuit.produce.participants g at hlg
+  refine ⟨(C₀ L).circuit.produceLocationsEquiv.symm g, ?_⟩
+  rw [← OriginalCircuit.participants_produce, Equiv.apply_symm_apply]
+  exact ⟨hjg, hlg⟩
+
+/-- **Theorem 5.2 without messages, with explicit constants.** Under the hypotheses of
+`exists_uniform_sampled_network`, every member of the family admits a literal operator tensor
+network within `size L ^ (-p)` of its physical density, whose link alphabets are at most
+`C_p * size L ^ α` for every `C_p ≥ compressionPrefactor r b C_N C_D C_K C_C` and every
+`α ≥ compressionExponent r b n d u v p`. The incidence and link-locality bounds are those of
+the compression theorem.
+Source: polynomial-PEPS Theorem 5.2 (`thm:compression`), `04-compression.tex`, lines
+137–175 and 565–588. -/
+theorem uniform_sampled_network_of_le
+    {ι : Type*} (size : ι → ℝ) (hsize : ∀ i, 2 ≤ size i)
+    (P : ι → Type) [∀ L, Fintype (P L)]
+    (C₀ : ∀ L, DistributedConstruction (P L))
+    (b n d r u v : ℕ) (C_N C_D C_K C_C : ℝ)
+    (hN₀ : ∀ L, ((C₀ L).circuit.nonprivateCount : ℝ) ≤ C_N * size L ^ n)
+    (hphysical₀ : ∀ L j, ((C₀ L).physicalDimension j : ℝ) ≤ C_D * size L ^ d)
+    (harity₀ : ∀ L g, ((C₀ L).circuit.participants g).card ≤ b)
+    (hlifetime₀ : ∀ L j, (C₀ L).circuit.participationCount j ≤ b)
+    (hmonomial₀ : ∀ L, ∃ K : ℕ, (C₀ L).circuit.IsMonomialBounded K ∧
+      (K : ℝ) ≤ C_K * size L ^ u)
+    (htermwise₀ : ∀ L, (C₀ L).circuit.IsTermwiseBounded r (C_C * size L ^ v))
+    (p : ℝ) {C_p : ℝ} {α : ℕ}
+    (hC : compressionPrefactor r b C_N C_D C_K C_C ≤ C_p)
+    (hα : compressionExponent r b n d u v p ≤ α) :
+    ∀ L,
+    ∃ (Gate : Type) (_ : Fintype Gate) (_ : DecidableEq Gate)
+      (participants : Gate → Finset (P L)) (root : Gate → P L)
+      (hroot : ∀ g ∈ (Finset.univ : Finset Gate), root g ∈ participants g)
+      (Label : Gate → Type) (_ : ∀ g, Fintype (Label g)) (k : ℕ)
+      (c : (g : Gate) → Label g → ℂ)
+      (T : (j : P L) → DistributedOperatorContraction.GateLabelsAt
+          (Finset.univ : Finset Gate) participants Label j →
+        (DistributedOperatorContraction.SampleAt (Finset.univ : Finset Gate)
+          participants j → Fin k) →
+        Matrix (Fin ((C₀ L).physicalDimension j)) (Fin ((C₀ L).physicalDimension j)) ℂ),
+      Matrix.rectangularTraceNorm
+          (DistributedOperatorContraction.contractedOperator Finset.univ participants root
+            hroot Label k c T - (C₀ L).physicalDensity) ≤ size L ^ (-p) ∧
+        (∀ e : DistributedOperatorContraction.Link Finset.univ participants root,
+          (Fintype.card (DistributedOperatorContraction.alphabet Finset.univ participants
+            root Label k e) : ℝ) ≤ C_p * size L ^ α) ∧
+        (∀ j, (incidentDistributedLinks Finset.univ participants root j).card ≤
+          2 * b * (b - 1)) ∧
+        (∀ e : DistributedOperatorContraction.Link Finset.univ participants root,
+          ∀ j l, j ∈ distributedLinkParties root e.1 → l ∈ distributedLinkParties root e.1 →
+            ∃ g : (C₀ L).circuit.nonprivateLocations,
+              j ∈ (C₀ L).circuit.participants g ∧ l ∈ (C₀ L).circuit.participants g) :=
+  uniform_sampled_network_of_sum_le size hsize P C₀ b n d r u (u + v) C_N C_D C_K
+    (max C_K 0 * max C_C 0) hN₀ hphysical₀ harity₀ hlifetime₀ hmonomial₀
+    (fun L ↦ by
+      obtain ⟨K, hK, hKb⟩ := hmonomial₀ L
+      have hL0 : 0 ≤ size L := by linarith [hsize L]
+      exact (C₀ L).circuit.isExpansionBounded_of_termwise_power_bounds (size L) (max C_K 0)
+        (max C_C 0) u v hL0 (le_max_right _ _) hK
+        ((htermwise₀ L).mono (mul_pow_le_max_zero_mul_pow C_C hL0 v))
+        (hKb.trans (mul_pow_le_max_zero_mul_pow C_K hL0 u)))
+    p (by rwa [compressionPrefactor_eq_sumCompressionPrefactor] at hC) hα
+
 /-- **Theorem 5.2 without messages, for distributed constructions.** Consider a
 family of distributed constructions, indexed by `ι` with sizes `size L ≥ 2`, whose nonprivate
 gate count and physical dimensions are uniformly polynomial, whose nonprivate gates have at
@@ -221,7 +380,9 @@ ket and bra legs of that party, satisfying `‖σ - ρ‖₁ ≤ size L ^ (-p)` 
 density `ρ`. Its link alphabets are uniformly polynomial, each party meets at most
 `2 b (b - 1)` links, and each link joins two parties of a common original nonprivate gate.
 
-The actual expansions are exact, so they serve at every inverse-power accuracy.
+The actual expansions are exact, so they serve at every inverse-power accuracy. The constants
+are `compressionPrefactor r b C_N C_D C_K C_C` and `compressionExponent r b n d u v p`, as in
+`uniform_sampled_network_of_le`.
 Source: polynomial-PEPS Theorem 5.2 (`thm:compression`), `04-compression.tex`, lines
 137–175. -/
 theorem exists_uniform_sampled_network
@@ -259,46 +420,11 @@ theorem exists_uniform_sampled_network
           (∀ e : DistributedOperatorContraction.Link Finset.univ participants root,
             ∀ j l, j ∈ distributedLinkParties root e.1 → l ∈ distributedLinkParties root e.1 →
               ∃ g : (C₀ L).circuit.nonprivateLocations,
-                j ∈ (C₀ L).circuit.participants g ∧ l ∈ (C₀ L).circuit.participants g) := by
-  have hsize0 : ∀ L, 0 ≤ size L := fun L ↦ (by norm_num : (0 : ℝ) ≤ 2).trans (hsize L)
-  obtain ⟨r', C_p, α, hC, hα, hfamily⟩ :=
-    GateMapConstruction.exists_uniform_approximate_sampled_network size hsize P
-      (fun L ↦ (C₀ L).toGateMapConstruction) b n d C_N C_D
-      (fun L ↦ by
-        change ((C₀ L).circuit.produce.expandedGateCount : ℝ) ≤ _
-        rw [OriginalCircuit.expandedGateCount_produce]
-        exact hN₀ L)
-      hphysical₀
-      (fun L g ↦ by
-        change ((C₀ L).circuit.produce.participants g).card ≤ b
-        rw [← (C₀ L).circuit.produceLocationsEquiv.apply_symm_apply g,
-          OriginalCircuit.participants_produce]
-        exact harity₀ L _)
-      (fun L j ↦ by
-        change Nat.card {g : (C₀ L).circuit.produce.gateLocations //
-          j ∈ (C₀ L).circuit.produce.participants g} ≤ b
-        rw [OriginalCircuit.natCard_participation_produce]
-        exact hlifetime₀ L j)
-      (fun _ ↦ ⟨r, C_K, C_C, u, v, fun L ↦ by
-        obtain ⟨K, hK, hKb⟩ := hmonomial₀ L
-        exact ⟨(C₀ L).circuit.produce.expansionGateLists, K,
-          (C₀ L).circuit.isTermwiseBounded_reexpand_expansionGateLists (htermwise₀ L),
-          (C₀ L).circuit.monomialCount_reexpand_expansionGateLists_le hK, hKb,
-          (C₀ L).circuit.isGateApproximation_reexpand_expansionGateLists
-            (inv_nonneg.mpr (pow_nonneg (hsize0 L) _))⟩⟩)
-      p hp
-  refine ⟨C_p, α, hC, hα, fun L ↦ ?_⟩
-  obtain ⟨lists, B, hB, hb, happrox, T, herror, hdim, hinc, hlocal⟩ := hfamily L
-  rw [physicalDensity_toGateMapConstruction] at herror
-  refine ⟨_, _, _, _, _, _, _, _, _, _, T, herror, hdim, hinc, ?_⟩
-  intro e j l hj hl
-  obtain ⟨g, hjg, hlg⟩ := hlocal e j l hj hl
-  change (C₀ L).circuit.produce.gateLocations at g
-  change j ∈ (C₀ L).circuit.produce.participants g at hjg
-  change l ∈ (C₀ L).circuit.produce.participants g at hlg
-  refine ⟨(C₀ L).circuit.produceLocationsEquiv.symm g, ?_⟩
-  rw [← OriginalCircuit.participants_produce, Equiv.apply_symm_apply]
-  exact ⟨hjg, hlg⟩
+                j ∈ (C₀ L).circuit.participants g ∧ l ∈ (C₀ L).circuit.participants g) :=
+  ⟨compressionPrefactor r b C_N C_D C_K C_C, compressionExponent r b n d u v p,
+    (compressionPrefactor_pos r b C_N C_D C_K C_C).le, compressionExponent_pos r b n d u v hp,
+    uniform_sampled_network_of_le size hsize P C₀ b n d r u v C_N C_D C_K C_C hN₀ hphysical₀
+      harity₀ hlifetime₀ hmonomial₀ htermwise₀ p le_rfl le_rfl⟩
 
 /-- **Remark 5.3 for a family of distributed constructions.** Under the hypotheses of the
 compression theorem, suppose that the actual physical density `ρ_L` of every member lies within

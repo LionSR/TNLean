@@ -123,6 +123,17 @@ gates.\footnote{The protocol predicate is
     the large-size existence hypothesis is
     \leanid{TNLean.PEPS.Approximation.LargeSizeDyadicProtocolConsequences}.}
 
+The formal predicate carries three constants in place of $C$: a count constant
+for the parties and changes, an expansion constant for the monomial counts and
+coefficient sums, and an error constant for
+(\ref{eq:prop71_step_error}) and (\ref{eq:prop71_junk_norm}). The source's
+reading is the case where all three equal $C$. Every clause is monotone in
+each constant, so the existence statement with one constant and the one with
+three constants are equivalent. Keeping them apart lets the error constant of
+Section~8 avoid the prefactor of the small-patch
+rewrites.\footnote{\leanid{TNLean.PEPS.Approximation.LargeSizeDyadicProtocolBounds}
+    and \leanid{TNLean.PEPS.Approximation.largeSizeDyadicProtocol_of_le}.}
+
 \section{Omitted clauses}
 
 No clause of Proposition~7.1 is omitted from the formal predicate. The last

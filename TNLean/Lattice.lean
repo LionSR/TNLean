@@ -13,5 +13,7 @@ import TNLean.Lattice.FiniteDomain
 import TNLean.Lattice.LocalHamiltonian
 import TNLean.Lattice.MarginalTails
 import TNLean.Lattice.ProductGroundState
+import TNLean.Lattice.RegionEntropyInequalities
 import TNLean.Lattice.RegionalEntropy
 import TNLean.Lattice.RegionalEntropyBridge
+import TNLean.Lattice.ZeroEntropy

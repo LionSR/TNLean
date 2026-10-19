@@ -170,3 +170,12 @@ info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashC
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms Matrix.conjTranspose_contractionWord_mulVec_self
+
+/--
+info: 'TNLean.PEPS.AreaLaw.amplificationBound_explicit'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+---
+info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms TNLean.PEPS.AreaLaw.amplificationBound_explicit

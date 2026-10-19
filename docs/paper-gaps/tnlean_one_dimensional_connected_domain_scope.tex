@@ -76,6 +76,69 @@ yields a region with the entropy of $A$ whose chain boundary edges are the
 edges of $\partial_\Lambda A$. The full factorization of the ground vector
 over the components is therefore not needed.
 
+\section{Locality in the matrix product state argument}
+
+Part~II of the note applies its Lieb--Robinson lemma on the contiguous chain
+of Theorem~B, namely $\Lambda=\{1,\ldots,L\}$. A formulation on this chain
+therefore suffices for that application. The printed local lemma
+(\texttt{part2a\_mps\_information.tex}, lines~260--309) does not separately
+reset the standing notation for $\Lambda$, however, so its broader reading
+also includes arbitrary finite induced-path domains. The contiguous
+formulation is not a formalization of that unrestricted reading.
+
+For an arbitrary finite $\Lambda\subset\mathbb Z$, the additional geometric
+argument is to identify distances inside each component, bound each distance
+sphere by two vertices, and bound a support of graph diameter at most $R$ by
+$R+1$ sites. Supports of finite graph diameter lie in one component; operators
+at infinite separation commute exactly. These facts allow the general graph
+estimates to be applied with the same uniform constants. This extension of
+the local estimates does not require the product decomposition of ground
+vectors needed for the entropy argument above.
+
+\section{Information reset on the contiguous chain}
+
+Part~II, Lemma~\texttt{lem:reset}
+(\texttt{part2a\_mps\_information.tex}, lines~319--435), is proved on the
+contiguous chain with the source hypotheses. For every $p>0$ there are
+$C_p>0$ and a natural $L_0\ge1$, chosen before all system and region data,
+such that the following holds for $L\ge L_0$. If $D,C$ are disjoint,
+$R_0\subseteq D$, $C_0\subseteq C$, $I_\Omega(D:C)\le b$, and both
+cores have distance greater than $w=C_p(1+b+\log L)$ from their respective
+outer-region complements, then $I_\Omega(R_0:C_0)\le L^{-p}$.
+Nonnegativity of $b$ is derived, and only the original full-system gap is
+assumed. The Gaussian filter, supported approximation, polar unitary and
+independence after the regional replica swap are constructed within the
+proof.\footnote{Declaration:
+\leanid{TNLean.MPS.AreaLaw.ChainHamiltonian.information_reset}.}
+
+As with the local propagation lemma, the broader reading on an arbitrary
+finite induced-path domain remains unformalized. The missing step is the
+extension of locality and support geometry to those domains described above;
+no additional spectral or product-marginal hypothesis should be imposed.
+The blueprint marks only the explicitly contiguous-chain statement as
+proved, rather than the unrestricted reading of the source lemma.
+
+\section{Information at logarithmic separation}
+
+Part~II, Lemma~\texttt{lem:logsep}
+(\texttt{part2a\_mps\_information.tex}, lines~472--488), is also proved on
+the contiguous chain. For fixed $p>0$ and $k_0\ge1$, positive $D_p$ and a
+natural cutoff are chosen before all system data. If $T$ is a union of at
+most $k_0$ intervals and every pair $x\in T$, $y\in E$ satisfies
+$|x-y|\ge D_p\log L$, then $I_\Omega(T:E)\le L^{-p}$ for sufficiently
+large $L$. The interval family may overlap or contain empty members.
+Neither disjointness nor a sign hypothesis on the original real $J$ is
+added. The sign needed for the interval area law follows from the norm
+bound of an actual singleton interaction.\footnote{Declaration:
+\leanid{TNLean.MPS.AreaLaw.ChainHamiltonian.mutualInformation_le_of_logarithmic_separation}.}
+
+The proof combines the contiguous interval area law, exact real-radius
+neighborhoods of intervals, and the contiguous reset theorem. It therefore
+does not establish the broader reading on arbitrary finite induced-path
+domains. That extension still requires the component reduction and the
+corresponding locality and support geometry described above. No completion
+of the full preparation protocol is asserted by this result.
+
 \bibliographystyle{alpha}
 \bibliography{references}
 \end{document}

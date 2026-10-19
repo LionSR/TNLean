@@ -16,7 +16,9 @@ Fix `γ < 1`. The plane is tiled by half-open squares of side `s ≥ 1`; one cel
 chosen and every other cell receives a forbidden colour. Running the recursion with
 `t₀ = u ^ γ` until the side drops below a fixed threshold `u_*` gives the tiles of
 all generations, in creation order, and the remaining allowed sites as the
-remainder. `exists_cell_twoFamily_partition` proves:
+remainder. `cell_twoFamily_partition` proves, with the named stopping scale
+`u_* = cellStopScale γ u₀`, prefactor `C = cellPartitionConstant γ u₀` and exponent
+`K = cellPartitionExponent γ u₀` (`exists_cell_twoFamily_partition` is its existential form):
 
 * every tile has a scale `u` with `u_* ≤ u ≤ s`, is a union of at most `66 ^ 2`
   closed lattice rectangles, and has sup diameter at most `u`;
@@ -46,25 +48,75 @@ namespace TNLean.PEPS.Approximation.CellPartition
 open TNLean.PEPS.AreaLaw.Geometry
 
 /-- For `γ < δ` and `K > 0` there is a threshold `U > 1` above which
-`K u ^ γ ≤ u ^ δ`. Source: Lemma 3.2, `02-information.tex`, lines 238–240 and
-304–307. -/
+`K u ^ γ ≤ u ^ δ`, namely `cellPowerThreshold K γ δ = max 2 (K ^ (1 / (δ - γ)))`.
+Source: Lemma 3.2, `02-information.tex`, lines 238–240 and 304–307. -/
 theorem exists_const_mul_rpow_le_rpow {K γ δ : ℝ} (hK : 0 < K) (hγδ : γ < δ) :
-    ∃ U : ℝ, 1 < U ∧ ∀ u, U ≤ u → K * u ^ γ ≤ u ^ δ := by
-  have hε : 0 < δ - γ := sub_pos.mpr hγδ
-  refine ⟨max 2 (K ^ (δ - γ)⁻¹), lt_max_of_lt_left one_lt_two, fun u hu ↦ ?_⟩
-  have hu0 : 0 < u := lt_of_lt_of_le two_pos (le_of_max_le_left hu)
-  have hK' : K ≤ u ^ (δ - γ) := by
-    calc K = (K ^ (δ - γ)⁻¹) ^ (δ - γ) := by
-          rw [← Real.rpow_mul hK.le, inv_mul_cancel₀ hε.ne', Real.rpow_one]
-      _ ≤ u ^ (δ - γ) := Real.rpow_le_rpow (by positivity) (le_of_max_le_right hu) hε.le
-  calc K * u ^ γ ≤ u ^ (δ - γ) * u ^ γ := by gcongr
-    _ = u ^ δ := by rw [← Real.rpow_add hu0]; ring_nf
+    ∃ U : ℝ, 1 < U ∧ ∀ u, U ≤ u → K * u ^ γ ≤ u ^ δ :=
+  ⟨cellPowerThreshold K γ δ, one_lt_cellPowerThreshold K γ δ,
+    fun _ hu ↦ const_mul_rpow_le_rpow_of_cellPowerThreshold_le hK hγδ hu⟩
 
-/-- **The two-family partition of a cell.** Fix `γ < 1` and a lower bound `u₀`.
-There are a threshold `u_* ≥ u₀` and constants `C, K` such that, for every grid of
-squares of side `s ≥ 1` with origin `o`, every chosen cell `m₀` and every colouring
-`c` of the other cells, the lattice sample of the chosen cell has an ordered
-two-family partition in which every piece `i` has a scale `u_i ∈ [u_*, s]` with
+/-- The intermediate exponent `γ' = (max γ 0 + 1) / 2` of the cell recursion: for `γ < 1`
+it satisfies `γ < γ'`, `0 < γ' < 1`, and children of side `8 u ^ γ` shrink below `u ^ γ'`.
+Source: Lemma 3.2, `02-information.tex`, lines 224–227. -/
+def cellIntermediateExponent (γ : ℝ) : ℝ := (max γ 0 + 1) / 2
+
+/-- The stopping scale `u_* = max (max U₁ U₂) (max u₀ 2)` of the cell recursion for the
+lower bound `u₀`, where `U₁ = cellPowerThreshold 1000 γ 1` makes `1000 u ^ γ ≤ u` and
+`U₂ = cellPowerThreshold 8 γ γ'`, `γ' = cellIntermediateExponent γ`, makes
+`8 u ^ γ ≤ u ^ γ'` for `u ≥ u_*`. Source: Lemma 3.2, `02-information.tex`, lines 238–240
+and 302–307. -/
+def cellStopScale (γ u₀ : ℝ) : ℝ :=
+  max (max (cellPowerThreshold 1000 γ 1) (cellPowerThreshold 8 γ (cellIntermediateExponent γ)))
+    (max u₀ 2)
+
+/-- The exponent `K = cellGenerationCountConstant γ' u_* 25` of the two-family partition
+count, the tile-count constant of the cell recursion at the intermediate exponent
+`γ' = cellIntermediateExponent γ`, the stopping scale `u_* = cellStopScale γ u₀` and
+branching bound `25`. Source: Lemma 3.2, `02-information.tex`, lines 302–311. -/
+def cellPartitionExponent (γ u₀ : ℝ) : ℝ :=
+  cellGenerationCountConstant (cellIntermediateExponent γ) (cellStopScale γ u₀) 25
+
+/-- The prefactor `C = (2 + (u_* + 1) ^ 2) K` of the two-family partition count, with
+`u_* = cellStopScale γ u₀` and `K = cellPartitionExponent γ u₀`: each active square carries
+two tiles and each terminal square at most `(u_* + 1) ^ 2` remainder sites.
+Source: Lemma 3.2, `02-information.tex`, lines 302–311. -/
+def cellPartitionConstant (γ u₀ : ℝ) : ℝ :=
+  (2 + (cellStopScale γ u₀ + 1) ^ 2) * cellPartitionExponent γ u₀
+
+/-- The stopping scale is at least the prescribed lower bound. -/
+theorem le_cellStopScale (γ u₀ : ℝ) : u₀ ≤ cellStopScale γ u₀ :=
+  (le_max_left _ _).trans (le_max_right _ _)
+
+/-- The stopping scale exceeds one. -/
+theorem one_lt_cellStopScale (γ u₀ : ℝ) : 1 < cellStopScale γ u₀ :=
+  lt_of_lt_of_le one_lt_two ((le_max_right _ _).trans (le_max_right _ _))
+
+/-- The intermediate exponent lies strictly between `max γ 0` and `1` for `γ < 1`. -/
+theorem cellIntermediateExponent_bounds {γ : ℝ} (hγ : γ < 1) :
+    γ < cellIntermediateExponent γ ∧ 0 < cellIntermediateExponent γ ∧
+      cellIntermediateExponent γ < 1 := by
+  unfold cellIntermediateExponent
+  have h1 := le_max_left γ 0
+  have h2 := le_max_right γ 0
+  have h3 : max γ 0 < 1 := max_lt hγ one_pos
+  refine ⟨?_, ?_, ?_⟩ <;> linarith
+
+/-- The exponent of the partition count is positive. -/
+theorem cellPartitionExponent_pos (γ u₀ : ℝ) :
+    0 < cellPartitionExponent γ u₀ :=
+  cellGenerationCountConstant_pos _ _ (by norm_num)
+
+/-- The prefactor of the partition count is positive. -/
+theorem cellPartitionConstant_pos (γ u₀ : ℝ) :
+    0 < cellPartitionConstant γ u₀ :=
+  mul_pos (by positivity) (cellPartitionExponent_pos γ u₀)
+
+/-- **The two-family partition of a cell, with named constants.** Fix `γ < 1` and a lower
+bound `u₀`, and put `u_* = cellStopScale γ u₀`, `C = cellPartitionConstant γ u₀` and
+`K = cellPartitionExponent γ u₀`. For every grid of squares of side `s ≥ 1` with origin `o`,
+every chosen cell `m₀` and every colouring `c` of the other cells, the lattice sample of the
+chosen cell has an ordered two-family partition in which every piece `i` has a scale
+`u_i ∈ [u_*, s]` with
 
 * the piece a union of at most `66 ^ 2` closed lattice rectangles, of sup
   diameter at most `u_i`;
@@ -73,44 +125,42 @@ two-family partition in which every piece `i` has a scale `u_i ∈ [u_*, s]` wit
 * the same clearance from every earlier piece of the same family;
 
 and the pieces and remainder sites number at most `C (1 + log s) ^ K` in total.
+The stopping scale is fixed by the two power thresholds and `u₀`; the exponent `K` by the
+generation count of the recursion at that scale; the prefactor `C` by the tile and
+remainder count per generation.
 Source: Lemma 3.2 (`lem:cell-cmi`), `02-information.tex`, lines 181–196
 (colours and families) and 224–311 (the recursion and its count). -/
-theorem exists_cell_twoFamily_partition {γ : ℝ} (hγ : γ < 1) (u₀ : ℝ) :
-    ∃ ustar : ℝ, u₀ ≤ ustar ∧ 1 < ustar ∧ ∃ C K : ℝ, 0 < C ∧
-      ∀ s : ℝ, 1 ≤ s → ∀ (o : ℝ × ℝ) (m₀ : ℤ × ℤ) (c : ℤ × ℤ → Fin 2),
-        ∃ (P : OrderedTwoFamilyPartition (cellSample o s m₀))
-          (scale : Fin P.pieceCount → ℝ),
-          (∀ i, ustar ≤ scale i ∧ scale i ≤ s) ∧
-          (∀ i, IsRectUnion (66 * 66) (P.piece i)) ∧
-          (∀ i, ∀ x ∈ P.piece i, ∀ y ∈ P.piece i,
-            dist (integerPoint x) (integerPoint y) ≤ scale i) ∧
-          (∀ i, ∀ x ∈ P.piece i, ∀ y : ℤ × ℤ, cellIndex o s (integerPoint y) ≠ m₀ →
-            c (cellIndex o s (integerPoint y)) = P.family i →
-              scale i ^ γ < dist (integerPoint x) (integerPoint y)) ∧
-          (∀ i, ∀ x ∈ P.piece i, ∀ y ∈ P.earlierSameFamily i,
+theorem cell_twoFamily_partition {γ : ℝ} (hγ : γ < 1) (u₀ : ℝ) :
+    ∀ s : ℝ, 1 ≤ s → ∀ (o : ℝ × ℝ) (m₀ : ℤ × ℤ) (c : ℤ × ℤ → Fin 2),
+      ∃ (P : OrderedTwoFamilyPartition (cellSample o s m₀))
+        (scale : Fin P.pieceCount → ℝ),
+        (∀ i, cellStopScale γ u₀ ≤ scale i ∧ scale i ≤ s) ∧
+        (∀ i, IsRectUnion (66 * 66) (P.piece i)) ∧
+        (∀ i, ∀ x ∈ P.piece i, ∀ y ∈ P.piece i,
+          dist (integerPoint x) (integerPoint y) ≤ scale i) ∧
+        (∀ i, ∀ x ∈ P.piece i, ∀ y : ℤ × ℤ, cellIndex o s (integerPoint y) ≠ m₀ →
+          c (cellIndex o s (integerPoint y)) = P.family i →
             scale i ^ γ < dist (integerPoint x) (integerPoint y)) ∧
-          (P.pieceCount : ℝ) + P.residual.card ≤ C * (1 + Real.log s) ^ K := by
+        (∀ i, ∀ x ∈ P.piece i, ∀ y ∈ P.earlierSameFamily i,
+          scale i ^ γ < dist (integerPoint x) (integerPoint y)) ∧
+        (P.pieceCount : ℝ) + P.residual.card ≤
+          cellPartitionConstant γ u₀ * (1 + Real.log s) ^ cellPartitionExponent γ u₀ := by
   classical
+  unfold cellPartitionConstant
   -- exponents and the stopping threshold
-  set γ' : ℝ := (max γ 0 + 1) / 2 with hγ'def
-  have hmax1 : max γ 0 < 1 := max_lt hγ one_pos
-  have hγγ' : γ < γ' := by have := le_max_left γ 0; linarith
-  have hγ'0 : 0 < γ' := by have := le_max_right γ 0; linarith
-  have hγ'1 : γ' < 1 := by linarith
-  obtain ⟨U₁, hU₁, h₁⟩ := exists_const_mul_rpow_le_rpow (K := 1000) (by norm_num) hγ
-  obtain ⟨U₂, hU₂, h₂⟩ := exists_cellChildSide_le_rpow hγγ'
-  set ustar := max (max U₁ U₂) (max u₀ 2) with hustar
-  have hU1 : U₁ ≤ ustar := (le_max_left _ _).trans (le_max_left _ _)
-  have hU2 : U₂ ≤ ustar := (le_max_right _ _).trans (le_max_left _ _)
-  have hu0 : u₀ ≤ ustar := (le_max_left _ _).trans (le_max_right _ _)
-  have hone : 1 < ustar := lt_of_lt_of_le one_lt_two ((le_max_right _ _).trans (le_max_right _ _))
+  set γ' : ℝ := cellIntermediateExponent γ
+  obtain ⟨hγγ', hγ'0, hγ'1⟩ := cellIntermediateExponent_bounds hγ
+  set ustar := cellStopScale γ u₀
+  have hone : 1 < ustar := one_lt_cellStopScale γ u₀
   have hlarge : ∀ u, ustar ≤ u → 1000 * u ^ γ ≤ u := fun u hu ↦ by
-    simpa using h₁ u (hU1.trans hu)
-  have hthr : ∀ u, ustar ≤ u → cellChildSide γ u ≤ u ^ γ' := fun u hu ↦ h₂ u (hU2.trans hu)
+    simpa using const_mul_rpow_le_rpow_of_cellPowerThreshold_le (K := 1000) (by norm_num) hγ
+      (((le_max_left _ _).trans (le_max_left _ _)).trans hu)
+  have hthr : ∀ u, ustar ≤ u → cellChildSide γ u ≤ u ^ γ' := fun u hu ↦
+    const_mul_rpow_le_rpow_of_cellPowerThreshold_le (by norm_num) hγγ'
+      (((le_max_right _ _).trans (le_max_left _ _)).trans hu)
   obtain ⟨Cg, -, hgen⟩ := exists_cell_generation_bound hγ'0 hγ'1 hone hthr
-  obtain ⟨Cc, hCc, hcount⟩ :=
-    exists_cell_generation_count_bound hγ'0 hγ'1 hone hthr (b := 25) (by norm_num)
-  refine ⟨ustar, hu0, hone, (2 + (ustar + 1) ^ 2) * Cc, Cc, by positivity, ?_⟩
+  have hcount := cell_generation_count_bound hγ'0 hγ'1 hone hthr (b := 25) (by norm_num)
+  set Cc := cellPartitionExponent γ u₀
   intro s hs o m₀ c
   have hs0 : 0 < s := by linarith
   set S₀ := initialGeneration o s m₀ c with hS₀def
@@ -278,7 +328,8 @@ theorem exists_cell_twoFamily_partition {γ : ℝ} (hγ : γ < 1) (u₀ : ℝ) :
         _ ≤ (25 : ℝ) ^ m * (ustar + 1) ^ 2 := by
             gcongr
             exact_mod_cast (List.toFinset_card_le _).trans hsq
-    have hC := hcount s hs m fun i hi ↦ hside i ▸ hm i hi
+    have hC : ∑ j ∈ Finset.range (m + 1), (25 : ℝ) ^ j ≤ Cc * (1 + Real.log s) ^ Cc :=
+      hcount s hs m fun i hi ↦ hside i ▸ hm i hi
     have hsum : ∑ j ∈ Finset.range m, 2 * (25 : ℝ) ^ j + (25 : ℝ) ^ m * (ustar + 1) ^ 2 ≤
         (2 + (ustar + 1) ^ 2) * ∑ j ∈ Finset.range (m + 1), (25 : ℝ) ^ j := by
       rw [Finset.sum_range_succ, ← Finset.mul_sum]
@@ -294,5 +345,41 @@ theorem exists_cell_twoFamily_partition {γ : ℝ} (hγ : γ < 1) (u₀ : ℝ) :
       _ ≤ (2 + (ustar + 1) ^ 2) * ∑ j ∈ Finset.range (m + 1), (25 : ℝ) ^ j := hsum
       _ ≤ (2 + (ustar + 1) ^ 2) * (Cc * (1 + Real.log s) ^ Cc) := by gcongr
       _ = (2 + (ustar + 1) ^ 2) * Cc * (1 + Real.log s) ^ Cc := by ring
+
+/-- **The two-family partition of a cell.** Fix `γ < 1` and a lower bound `u₀`.
+There are a threshold `u_* ≥ u₀` and constants `C, K` such that, for every grid of
+squares of side `s ≥ 1` with origin `o`, every chosen cell `m₀` and every colouring
+`c` of the other cells, the lattice sample of the chosen cell has an ordered
+two-family partition in which every piece `i` has a scale `u_i ∈ [u_*, s]` with
+
+* the piece a union of at most `66 ^ 2` closed lattice rectangles, of sup
+  diameter at most `u_i`;
+* every point of the piece at sup distance greater than `u_i ^ γ` from every
+  lattice site of an exterior cell of colour equal to the family of the piece;
+* the same clearance from every earlier piece of the same family;
+
+and the pieces and remainder sites number at most `C (1 + log s) ^ K` in total.
+The constants are `u_* = cellStopScale γ u₀`, `C = cellPartitionConstant γ u₀` and
+`K = cellPartitionExponent γ u₀` (`cell_twoFamily_partition`).
+Source: Lemma 3.2 (`lem:cell-cmi`), `02-information.tex`, lines 181–196
+(colours and families) and 224–311 (the recursion and its count). -/
+theorem exists_cell_twoFamily_partition {γ : ℝ} (hγ : γ < 1) (u₀ : ℝ) :
+    ∃ ustar : ℝ, u₀ ≤ ustar ∧ 1 < ustar ∧ ∃ C K : ℝ, 0 < C ∧
+      ∀ s : ℝ, 1 ≤ s → ∀ (o : ℝ × ℝ) (m₀ : ℤ × ℤ) (c : ℤ × ℤ → Fin 2),
+        ∃ (P : OrderedTwoFamilyPartition (cellSample o s m₀))
+          (scale : Fin P.pieceCount → ℝ),
+          (∀ i, ustar ≤ scale i ∧ scale i ≤ s) ∧
+          (∀ i, IsRectUnion (66 * 66) (P.piece i)) ∧
+          (∀ i, ∀ x ∈ P.piece i, ∀ y ∈ P.piece i,
+            dist (integerPoint x) (integerPoint y) ≤ scale i) ∧
+          (∀ i, ∀ x ∈ P.piece i, ∀ y : ℤ × ℤ, cellIndex o s (integerPoint y) ≠ m₀ →
+            c (cellIndex o s (integerPoint y)) = P.family i →
+              scale i ^ γ < dist (integerPoint x) (integerPoint y)) ∧
+          (∀ i, ∀ x ∈ P.piece i, ∀ y ∈ P.earlierSameFamily i,
+            scale i ^ γ < dist (integerPoint x) (integerPoint y)) ∧
+          (P.pieceCount : ℝ) + P.residual.card ≤ C * (1 + Real.log s) ^ K :=
+  ⟨cellStopScale γ u₀, le_cellStopScale γ u₀, one_lt_cellStopScale γ u₀,
+    cellPartitionConstant γ u₀, cellPartitionExponent γ u₀, cellPartitionConstant_pos γ u₀,
+    cell_twoFamily_partition hγ u₀⟩
 
 end TNLean.PEPS.Approximation.CellPartition

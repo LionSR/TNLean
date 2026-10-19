@@ -54,6 +54,11 @@ set_option linter.hashCommand false
 #guard_msgs (whitespace := lax) in
 #print axioms TNLean.PEPS.Approximation.HasPEPSApproximation.mono_prefactor
 
+/-- info: 'TNLean.PEPS.Approximation.hasPEPSApproximation_of_sufficiently_large_le' depends on axioms:
+[propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms TNLean.PEPS.Approximation.hasPEPSApproximation_of_sufficiently_large_le
+
 /-- info: 'TNLean.PEPS.Approximation.exists_uniform_approximation_of_sufficiently_large' depends on axioms:
 [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in

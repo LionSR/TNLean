@@ -12,6 +12,7 @@ import TNLean.PEPS.AreaLaw.Geometry.ActualSideMatching
 import TNLean.PEPS.AreaLaw.Geometry.AdjacentScales
 import TNLean.PEPS.AreaLaw.Geometry.AllowedSlopeAffineLine
 import TNLean.PEPS.AreaLaw.Geometry.AmbientBoundary
+import TNLean.PEPS.AreaLaw.Geometry.BeltFacetSeparation
 import TNLean.PEPS.AreaLaw.Geometry.BeltFanColors
 import TNLean.PEPS.AreaLaw.Geometry.BeltMarks
 import TNLean.PEPS.AreaLaw.Geometry.BeltReplacementTemplates
@@ -194,3 +195,4 @@ import TNLean.PEPS.AreaLaw.Geometry.TemplateSafeRectangles
 import TNLean.PEPS.AreaLaw.Geometry.TemplateShellCover
 import TNLean.PEPS.AreaLaw.Geometry.Templates
 import TNLean.PEPS.AreaLaw.Geometry.TwoFamilyAssembly
+import TNLean.PEPS.AreaLaw.Geometry.TwoFamilyExplicitThresholds

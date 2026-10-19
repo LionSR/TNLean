@@ -128,6 +128,8 @@ import TNLean.PEPS.Approximation.DyadicBulkSteps
 import TNLean.PEPS.Approximation.DyadicCentralBirthChange
 import TNLean.PEPS.Approximation.DyadicChamberSampling
 import TNLean.PEPS.Approximation.DyadicChangeChains
+import TNLean.PEPS.Approximation.DyadicConicalFootprints
+import TNLean.PEPS.Approximation.DyadicConicalGuides
 import TNLean.PEPS.Approximation.DyadicDirectRepaintingConstants
 import TNLean.PEPS.Approximation.DyadicDirectRepaintingRewrite
 import TNLean.PEPS.Approximation.DyadicDirectRepaintingStep
@@ -196,6 +198,7 @@ import TNLean.PEPS.Approximation.DyadicTreatedFrames
 import TNLean.PEPS.Approximation.DyadicTreatedTrueVertices
 import TNLean.PEPS.Approximation.DyadicTrueVertices
 import TNLean.PEPS.Approximation.DyadicUnmodifiedVertices
+import TNLean.PEPS.Approximation.DyadicWallSlopes
 import TNLean.PEPS.Approximation.EffectCircuitDensity
 import TNLean.PEPS.Approximation.EffectCircuitError
 import TNLean.PEPS.Approximation.EffectCircuitLocations
@@ -368,6 +371,8 @@ import TNLean.PEPS.Approximation.PinnedNestedFilters
 import TNLean.PEPS.Approximation.PinnedRegionalState
 import TNLean.PEPS.Approximation.PinnedZeroFloorOptimizer
 import TNLean.PEPS.Approximation.PointwiseChoiceCoefficient
+import TNLean.PEPS.Approximation.PolynomialPEPSClosedConstant
+import TNLean.PEPS.Approximation.PolynomialPEPSExplicitConstant
 import TNLean.PEPS.Approximation.PolynomialPEPSTheorem
 import TNLean.PEPS.Approximation.PreparedMatrixNorm
 import TNLean.PEPS.Approximation.PreparedPartyMaps

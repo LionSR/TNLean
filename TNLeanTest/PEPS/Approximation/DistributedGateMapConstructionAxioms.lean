@@ -75,6 +75,18 @@ info: 'TNLean.PEPS.PairEffect.DistributedConstruction.physicalDensity_toGateMapC
 #print axioms TNLean.PEPS.PairEffect.DistributedConstruction.physicalDensity_toGateMapConstruction
 
 /--
+info: 'TNLean.PEPS.PairEffect.DistributedConstruction.uniform_sampled_network_of_sum_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms TNLean.PEPS.PairEffect.DistributedConstruction.uniform_sampled_network_of_sum_le
+
+/--
+info: 'TNLean.PEPS.PairEffect.DistributedConstruction.uniform_sampled_network_of_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms TNLean.PEPS.PairEffect.DistributedConstruction.uniform_sampled_network_of_le
+
+/--
 info: 'TNLean.PEPS.PairEffect.DistributedConstruction.exists_uniform_sampled_network' depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
