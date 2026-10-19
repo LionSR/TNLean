@@ -18,9 +18,9 @@ full-system gap and conditioning regions are preserved, and so are the named con
 
 **Scope restriction (sublinear collar bound):** The sublinear collar bound is an
 explicit premise of the results of this module; the named-constant form also takes
-the amplification bound at given constants as a premise, which `amplificationBound`
-supplies. This is a conditional step toward polynomial-PEPS Lemma 3.2;
-it does not supply the collar estimate. See
+the amplification bound at given constants as a premise, which
+`amplificationBoundAt_collarAmplification` supplies at named constants. This is a
+conditional step toward polynomial-PEPS Lemma 3.2; it does not supply the collar estimate. See
 `docs/paper-gaps/polypeps_angular_annular_geometry_scope.tex`.
 
 Source: polynomial-PEPS manuscript, `02-information.tex`, Lemma 3.2,
@@ -134,14 +134,48 @@ theorem cell_conditionalMutualInformation_le_square_of_sublinearCollarBoundAt
     finiteProductEntropy_relabel] using hfinal
 
 open Classical in
+/-- **Lemma 3.2 on the original open square, at the named amplification constants.** Under
+the range-one sublinear collar bound with constant `C` and threshold `N`, the conclusion of
+`cell_conditionalMutualInformation_le_square_of_sublinearCollarBoundAt` holds with the
+amplification constant `collarAmplificationConstant q 1 J Δ C` and threshold
+`collarAmplificationThreshold q 1 J Δ C`. The collar bound remains a premise until its
+constant and threshold are named.
+
+Source: polynomial-PEPS Lemma 3.2 (`lem:cell-cmi`), `02-information.tex`,
+lines 161–178; area-law Proposition 10.2 (`prop:amplification`), `09-amplification.tex`,
+lines 261–296. -/
+theorem cell_conditionalMutualInformation_le_square_of_sublinearCollarBoundAt_explicit
+    {q : ℕ} {J Δ D₀ Ctpl C : ℝ} {N : ℕ} (hJ : 0 ≤ J) (hΔ : 0 < Δ)
+    (hcol : AreaLaw.SublinearCollarBoundAt q 1 J Δ D₀ Ctpl C N) {c : ℝ} (hc : 0 < c) :
+    ∀ s : ℝ, 1 ≤ s → ∀ (o : ℝ × ℝ) (m₀ : ℤ × ℤ) (A : Set (ℤ × ℤ)),
+      m₀ ∉ A →
+      ∀ (L : ℕ) (h : SquareHamiltonian L q J) (E₀ : ℝ) (Ω : StateSpace L q),
+        h.IsGappedGroundState E₀ Ω Δ →
+        let G : Finset (Vertex L) :=
+          Finset.univ.filter (fun v ↦ sitePosition L v ∈ AngularGrid.cell o s m₀)
+        let B : Finset (Vertex L) := Finset.univ.filter
+          (fun v ↦ AngularGrid.owner o s (sitePosition L v) ∈ A)
+        ∀ E : Finset (Vertex L), E ⊆ (G ∪ B)ᶜ →
+          (∀ x ∈ closure (AngularGrid.cell o s m₀),
+            ∀ y ∈ E, c * s ≤ dist x (sitePosition L y)) →
+          FiniteProduct.conditionalMutualInformation (fun _ : Vertex L ↦ Fin q)
+            Ω G E B ≤ cellInformationConstant q c Ctpl N (collarAmplificationConstant q 1 J Δ C)
+              (collarAmplificationThreshold q 1 J Δ C) *
+              (1 + Real.log s) ^ cellInformationExponent c Ctpl N
+                (collarAmplificationConstant q 1 J Δ C)
+                (collarAmplificationThreshold q 1 J Δ C) :=
+  cell_conditionalMutualInformation_le_square_of_sublinearCollarBoundAt hJ hcol
+    (amplificationBoundAt_collarAmplification hΔ C) hc
+
+open Classical in
 /-- The cell conditional-information bound on the original open square, with
 sites at `(i + 1, j + 1)`. The same ground vector, full-system gap and arbitrary
 union of conditioning cells are retained. A common translation identifies this
 placement with the integer-domain placement. The constants are
 `cellInformationConstant` and `cellInformationExponent`
 (`cell_conditionalMutualInformation_le_square_of_sublinearCollarBoundAt`), at the collar
-constant and threshold and at the amplification constant and threshold supplied by
-`amplificationBound`.
+constant and threshold and at the amplification constant and threshold
+`collarAmplificationConstant` and `collarAmplificationThreshold`.
 
 Source: polynomial-PEPS Lemma 3.2 (`lem:cell-cmi`), `02-information.tex`,
 lines 163–178, and its application in Proposition 3.4, lines 688–737. -/

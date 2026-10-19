@@ -28,9 +28,9 @@ Source: polynomial-PEPS manuscript, Lemma 3.2 (`lem:cell-cmi`),
 lines 688–737, source revision `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 **Scope restriction (conditional collar bound):** The sublinear collar bound
 is an explicit premise of the results of this module; the named-constant form also takes
-the amplification bound at given constants as a premise, which `amplificationBound`
-supplies. For positive local dimension,
-nonnegative interaction bound and positive spectral gap, the physical collar theorem
+the amplification bound at given constants as a premise, which
+`amplificationBoundAt_collarAmplification` supplies at named constants. For positive local
+dimension, nonnegative interaction bound and positive spectral gap, the physical collar theorem
 supplies the range-one estimate with clearance 13 and template constant 24. See
 `docs/paper-gaps/polypeps_angular_annular_geometry_scope.tex`.
 
@@ -238,8 +238,8 @@ ambient cell. The constants precede the side length, origin, conditioning cells,
 finite domain and Hamiltonian. No nonempty-region or local-dimension assumption
 is imposed. The constants are `cellInformationConstant` and `cellInformationExponent`
 (`cell_conditionalMutualInformation_le_of_sublinearCollarBoundAt`), at the collar constant
-and threshold and at the amplification constant and threshold supplied by
-`amplificationBound`.
+and threshold and at the amplification constant and threshold
+`collarAmplificationConstant` and `collarAmplificationThreshold`.
 
 Source: polynomial-PEPS Lemma 3.2 (`lem:cell-cmi`), `02-information.tex`,
 lines 163–222 and 302–311; the coarse tile estimate is Proposition 3.1. -/

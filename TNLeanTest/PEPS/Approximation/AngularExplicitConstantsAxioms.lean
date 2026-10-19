@@ -4,14 +4,16 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.AngularInformationFromCollar
+import TNLean.PEPS.Approximation.SquareCellConditionalInformation
 import Lean.Elab.Command
 import Lean.Util.CollectAxioms
 
 /-!
 # Axiom check for the explicit constants of Proposition 3.4
 
-Each named theorem with explicit slope and size threshold depends on exactly the three
-standard axioms used throughout the library.
+Each named theorem with explicit slope and size threshold, and each statement at the named
+amplification constants, depends on exactly the three standard axioms used throughout the
+library.
 -/
 
 open TNLean.PEPS.Approximation in
@@ -27,7 +29,11 @@ run_cmd do
     ``TNLean.PEPS.Approximation.IsAngularScale.of_sitePosition,
     ``TNLean.PEPS.Approximation.angularScale_eq,
     ``TNLean.PEPS.Approximation.angularInformationBound_of_sublinearCollarBoundAt_le,
-    ``TNLean.PEPS.Approximation.isAngularScale_of_sublinearCollarBoundAt_le]
+    ``TNLean.PEPS.Approximation.isAngularScale_of_sublinearCollarBoundAt_le,
+    ``TNLean.PEPS.AreaLaw.amplificationBoundAt_explicit,
+    ``TNLean.PEPS.Approximation.amplificationBoundAt_collarAmplification,
+    ``cell_conditionalMutualInformation_le_square_of_sublinearCollarBoundAt_explicit,
+    ``TNLean.PEPS.Approximation.isAngularScale_of_sublinearCollarBoundAt_le_explicit]
   let expected := #[``propext, ``Classical.choice, ``Quot.sound]
   for decl in decls do
     unless (← Lean.getEnv).contains decl do
