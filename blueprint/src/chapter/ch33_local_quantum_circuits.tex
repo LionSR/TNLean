@@ -67,6 +67,63 @@ preparation of matrix product states.
     $N$ sites is the case $I=\{1,\dots,N\}$.
 \end{definition}
 
+\begin{theorem}[Matrix entries of a supported operator]
+    \label{thm:area_law_supported_identity}
+    \lean{QuantumCircuit.isSupportedOn_of_mem_supportedOperators,
+        QuantumCircuit.mem_supportedOperators_of_isSupportedOn}
+    \leanok
+    \uses{def:qc_local_circuit}
+    Let $I$ be a finite set, let $q$ be a natural number and let $S\subseteq I$.
+    Write $\mathcal C=\{0,\ldots,q-1\}^I$ for the configurations, and let
+    $A$ be a complex matrix indexed by $\mathcal C$. Then $A$ belongs to the
+    span of the products $\bigotimes_{i\in I}m_i$ with $m_i=\mathbb 1$ for
+    $i\notin S$ if and only if the following two conditions hold:
+    \begin{enumerate}
+        \item For configurations $\sigma,\tau$ with
+              $\sigma|_{S^c}\ne\tau|_{S^c}$, one has $A_{\sigma\tau}=0$.
+        \item For configurations $\sigma,\tau,\sigma',\tau'$ satisfying
+              \begin{align}
+                  \sigma|_S      & =\sigma'|_S,   & \tau|_S & =\tau'|_S, \\
+                  \sigma|_{S^c}  & =\tau|_{S^c},  &
+                  \sigma'|_{S^c} & =\tau'|_{S^c},
+              \end{align}
+              one has $A_{\sigma\tau}=A_{\sigma'\tau'}$.
+    \end{enumerate}
+    The complement is taken in $I$. This criterion expresses the designated
+    support condition in~\cite[Lemma~3.1]{OpenAI2026AreaLaw},
+    \texttt{02-initial.tex}, line~39, for an arbitrary finite tensor product.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:qc_local_circuit}
+    For a product $A=\bigotimes_i m_i$ with $m_i=\mathbb 1$ outside $S$,
+    \begin{align}
+        A_{\sigma\tau}
+         & =\prod_{i\in S}(m_i)_{\sigma_i\tau_i}
+        \prod_{i\notin S}\delta_{\sigma_i\tau_i}.
+    \end{align}
+    This has both stated properties, which are preserved by sums and scalar
+    multiples. Conversely, if there are no configurations, $A$ is the zero
+    matrix. Otherwise fix $\rho\in\mathcal C$. For configurations $a,b$ of
+    $S$, write $a\rho$ for the configuration equal to $a$ on $S$ and to $\rho$
+    on $S^c$, and set $K_{ab}=A_{a\rho,\,b\rho}$. The two conditions give
+    \begin{align}
+        A_{\sigma\tau}
+         & =K_{\sigma|_S\,\tau|_S}\,\delta_{\sigma|_{S^c}\,\tau|_{S^c}},
+    \end{align}
+    that is, $A=K\otimes\mathbb 1$ in the coordinates of $S$ and $S^c$.
+    Writing $e_{ab}$ for the matrix units on the configurations of $S$,
+    \begin{align}
+        A
+         & =\sum_{a,b}K_{ab}\,(e_{ab}\otimes\mathbb 1),
+         &
+        e_{ab}\otimes\mathbb 1
+         & =\bigotimes_{i\in S}e_{a_ib_i}\otimes
+        \bigotimes_{i\notin S}\mathbb 1,
+    \end{align}
+    so $A$ is a combination of products of the stated form.
+\end{proof}
+
 \begin{definition}[Pairing local coordinates]
     \label{def:qc_site_pair_coordinates}
     \lean{QuantumCircuit.sitePairConfigurationEquiv}
