@@ -404,32 +404,33 @@ private theorem natCast_floor_le_max (x : ℝ) : (⌊x⌋₊ : ℝ) ≤ max x 0 
   · rw [Nat.floor_eq_zero.mpr (hx.trans_lt one_pos)]
     simp
 
-/-- **The compressed dyadic operator network from the consequences of Proposition 7.1, with
-separate constants.** If,
-for every `q ≥ 2` and `J, Δ > 0`, every gapped ground vector of a square Hamiltonian of large
-side `L` has a dyadic distribution protocol with the bounds of §8, with a count constant `C_N`,
-an expansion constant `C_K` and an error constant `C_E` chosen before `L`, the Hamiltonian, and
-the ground vector, then the compressed dyadic operator network of
-§8.1 exists for all large squares.
+/-- **The compressed dyadic operator network from the consequences of Proposition 7.1, for one
+model.** If every gapped ground vector of a square Hamiltonian of side `L ≥ max 2 L₀` has a dyadic
+distribution protocol with the bounds of §8 at the count constant `C_N`, the expansion constant
+`C_K`, the error constant `C_E`, the bound `b`, the exponent `k` and `r` pair effects, then the
+compressed dyadic operator network of §8.1 exists at the same threshold, with
+
+* network error constant `1 + 2 C_N C_E + 2 C_E`, free of the expansion constant;
+* link prefactor `sumCompressionPrefactor r b (max C_N 0 * b) q (max C_K 0) C_K` and link
+  exponent `sampledNetworkExponent r b 3 0 k k 5` of Theorem 5.2 at accuracy `L⁻⁵`;
+* at most `b` parties per block, at most `2 b (b - 1)` links per party and link separations at
+  most `b` times either endpoint scale.
 
 The protocols for all sizes, Hamiltonians, and ground vectors form one family of distributed
 constructions with uniformly polynomial gate counts, constant arity and lifetime participation,
-physical dimensions at most `q`, and exact polynomial gate expansions. Theorem 5.2 at accuracy
-`L⁻⁵`, applied to the coefficient sums `C_K L ^ k` of the gates, gives one operator network per
-protocol, with the link prefactor `sumCompressionPrefactor r b (max C_N 0 * b) q (max C_K 0) C_K`
-and the link exponent `sampledNetworkExponent r b 3 0 k k 5`;
-the link dimensions are polynomial, every link joins two parties of a common gate, and the
-density error adds to the protocol estimate `‖ρ - |Ω⟩⟨Ω|‖₁ ≤ (2 C_N C_E + 2 C_E) L⁻¹⁰`, so the
-error constant of the network is `1 + 2 C_N C_E + 2 C_E`, free of the expansion constant. The
-separation hypothesis of Lemma 8.2 follows from item 3 of Proposition 7.1.
+physical dimensions at most `q`, and exact polynomial gate expansions; Theorem 5.2 is applied to
+this family, and the density error adds to the protocol estimate
+`‖ρ - |Ω⟩⟨Ω|‖₁ ≤ (2 C_N C_E + 2 C_E) L⁻¹⁰`. The separation hypothesis of Lemma 8.2 follows from
+item 3 of Proposition 7.1.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), §8.1, `07-assembly.tex:9–63`, with
 Theorem 5.2 `thm:compression`, `04-compression.tex:137–175`, and the order of constants of
 `07-assembly.tex:179–203`. -/
-theorem largeSizeDyadicOperatorNetwork_of_largeSizeDyadicProtocolBounds
-    (hprot : LargeSizeDyadicProtocolBounds) : LargeSizeDyadicOperatorNetwork := by
-  intro q hq J Δ hJ hΔ
-  obtain ⟨C_N, C_K, C_E, b, k, r, L₀, hall⟩ := hprot q hq J Δ hJ hΔ
+theorem dyadicOperatorNetworkAt_of_dyadicProtocolBoundsAt {q : ℕ} (hq : 2 ≤ q) {J Δ : ℝ}
+    {C_N C_K C_E : ℝ} {b k r L₀ : ℕ} (hall : DyadicProtocolBoundsAt q J Δ C_N C_K C_E b k r L₀) :
+    DyadicOperatorNetworkAt q J Δ (1 + (2 * (C_N * C_E) + 2 * C_E))
+      (sumCompressionPrefactor r b (max C_N 0 * b) q (max C_K 0) C_K)
+      (sampledNetworkExponent r b 3 0 k k 5) b (2 * b * (b - 1)) b L₀ := by
   let size : ProtocolInstance q C_N C_K C_E b k r → ℝ := fun i ↦ i.size
   have hsize : ∀ i, 2 ≤ size i := fun i ↦ by
     change (2 : ℝ) ≤ (i.size : ℝ)
@@ -477,9 +478,6 @@ theorem largeSizeDyadicOperatorNetwork_of_largeSizeDyadicProtocolBounds
   have hfam := DistributedConstruction.uniform_sampled_network_of_sum_le size hsize
     (fun i ↦ i.Party) C₀ b 3 0 r k k (max C_N 0 * b) q (max C_K 0) C_K hN₀ hphysical₀ harity₀
     hlifetime₀ hmonomial₀ hexpansion₀ 5 le_rfl le_rfl
-  refine ⟨1 + (2 * (C_N * C_E) + 2 * C_E),
-    sumCompressionPrefactor r b (max C_N 0 * b) q (max C_K 0) C_K,
-    sampledNetworkExponent r b 3 0 k k 5, b, 2 * b * (b - 1), b, L₀, ?_⟩
   intro L hL hL₀ H E₀ Ω hΩ
   obtain ⟨P, hP, D, hD⟩ := hall L hL hL₀ H E₀ Ω hΩ
   let i : ProtocolInstance q C_N C_K C_E b k r := ⟨L, hL, P, D, Ω, hΩ.1, hD⟩
@@ -516,6 +514,37 @@ theorem largeSizeDyadicOperatorNetwork_of_largeSizeDyadicProtocolBounds
   have h10 : (L : ℝ) ^ 5 ≤ (L : ℝ) ^ 10 := pow_le_pow_right₀ (by linarith) (by norm_num)
   have hnn : 0 ≤ 2 * (C_N * C_E) + 2 * C_E := by positivity
   exact add_le_add le_rfl (div_le_div_of_nonneg_left hnn hx5 h10)
+
+/-- **The compressed dyadic operator network from the consequences of Proposition 7.1, with
+separate constants.** If,
+for every `q ≥ 2` and `J, Δ > 0`, every gapped ground vector of a square Hamiltonian of large
+side `L` has a dyadic distribution protocol with the bounds of §8, with a count constant `C_N`,
+an expansion constant `C_K` and an error constant `C_E` chosen before `L`, the Hamiltonian, and
+the ground vector, then the compressed dyadic operator network of
+§8.1 exists for all large squares.
+
+The protocols for all sizes, Hamiltonians, and ground vectors form one family of distributed
+constructions with uniformly polynomial gate counts, constant arity and lifetime participation,
+physical dimensions at most `q`, and exact polynomial gate expansions. Theorem 5.2 at accuracy
+`L⁻⁵`, applied to the coefficient sums `C_K L ^ k` of the gates, gives one operator network per
+protocol, with the link prefactor `sumCompressionPrefactor r b (max C_N 0 * b) q (max C_K 0) C_K`
+and the link exponent `sampledNetworkExponent r b 3 0 k k 5`;
+the link dimensions are polynomial, every link joins two parties of a common gate, and the
+density error adds to the protocol estimate `‖ρ - |Ω⟩⟨Ω|‖₁ ≤ (2 C_N C_E + 2 C_E) L⁻¹⁰`, so the
+error constant of the network is `1 + 2 C_N C_E + 2 C_E`, free of the expansion constant. The
+separation hypothesis of Lemma 8.2 follows from item 3 of Proposition 7.1.
+
+Source: Polynomial-PEPS manuscript (Sept 24 2026), §8.1, `07-assembly.tex:9–63`, with
+Theorem 5.2 `thm:compression`, `04-compression.tex:137–175`, and the order of constants of
+`07-assembly.tex:179–203`. -/
+theorem largeSizeDyadicOperatorNetwork_of_largeSizeDyadicProtocolBounds
+    (hprot : LargeSizeDyadicProtocolBounds) : LargeSizeDyadicOperatorNetwork := by
+  intro q hq J Δ hJ hΔ
+  obtain ⟨C_N, C_K, C_E, b, k, r, L₀, hall⟩ := hprot q hq J Δ hJ hΔ
+  exact ⟨1 + (2 * (C_N * C_E) + 2 * C_E),
+    sumCompressionPrefactor r b (max C_N 0 * b) q (max C_K 0) C_K,
+    sampledNetworkExponent r b 3 0 k k 5, b, 2 * b * (b - 1), b, L₀,
+    dyadicOperatorNetworkAt_of_dyadicProtocolBoundsAt hq hall⟩
 
 /-- **The compressed dyadic operator network from the consequences of Proposition 7.1.** The
 single-constant form of `largeSizeDyadicOperatorNetwork_of_largeSizeDyadicProtocolBounds`.

@@ -3,7 +3,10 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.AreaLaw.AreaLawTheorem
+import TNLean.PEPS.AreaLaw.BoundaryTheoremFromTwoFamilies
+import TNLean.PEPS.AreaLaw.Geometry.TwoFamilyAssembly
+import TNLean.PEPS.AreaLaw.RectangularSpecialization
+import TNLean.PEPS.AreaLaw.VertexBoundaryCorollaries
 
 /-!
 # The two-dimensional area law with an explicit constant
@@ -82,10 +85,9 @@ has regional entropy at most this constant times the number of cut edges.
 This is an auxiliary result: Theorem 1.1 of the source (`00-introduction.tex`, lines 39–53)
 asserts only that a constant exists, and `uniformAreaLaw` is that statement. Beyond the
 hypotheses of Theorem 1.1, the only remaining input is the transport bound at constants with
-`0 < c₀`; these constants are universal and do not depend on `q, R, J, Δ`. Their existence is
-`Scan.CollarScan.exists_finiteFamilyTransportBound`, and QICLean's finite-family transport theorem
-with explicit constants supplies explicit values. Source: proof of Theorem 1.1,
-`10-geometry.tex`, lines 803–857; the constant is tabulated in
+`0 < c₀`; these constants are universal and do not depend on `q, R, J, Δ`, and
+`Scan.CollarScan.finiteFamilyTransportBound_explicit` supplies explicit values. Source: proof
+of Theorem 1.1, `10-geometry.tex`, lines 803–857; the constant is tabulated in
 `docs/notes/arealaw2d_explicit_constant.tex`, Section `sec:top`. -/
 theorem uniformAreaLaw_explicit (q R : ℕ) (hq : 1 ≤ q) {J Δ : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < Δ)
     {c₀ Cent eent Cen een : ℝ} (hc₀ : 0 < c₀)
@@ -106,19 +108,6 @@ theorem uniformAreaLaw_explicit (q R : ℕ) (hq : 1 ≤ q) {J Δ : ℝ} (hJ : 0 
       q R hΔ (lt_max_of_lt_right one_pos) 100)
     (isTwoFamilyDecompositionConstant_twoFamilyDecompositionConstant _ _ _
       Geometry.isBirthSeparationConstant_birthTemplateSeparationConstant)
-
-/-- The finite-family transport bound holds at the explicit transport constants of the
-companion library: threshold `1/8`, entropy constant `200000` with exponent `2`, and energy
-constant `3 (18 π² + 6144 e^{π² + 1})` with exponent `4`.
-Source: Proposition 7.4, `06-transport.tex`, lines 377–434, applied in `08-scanner.tex`,
-lines 83–154. -/
-theorem Scan.CollarScan.finiteFamilyTransportBound_explicit :
-    Scan.CollarScan.FiniteFamilyTransportBound TensorPower.ReplicaTransport.transportThreshold
-      TensorPower.ReplicaTransport.transportEntropyConst
-      TensorPower.ReplicaTransport.transportEntropyExponent
-      TensorPower.ReplicaTransport.transportEnergyConst
-      TensorPower.ReplicaTransport.transportEnergyExponent :=
-  @TensorPower.ReplicaTransport.transport_finite_family_explicit
 
 /-- The constant of Theorem 1.1 as a closed-form function of `q, R, J, Δ` alone:
 `uniformAreaLawConstantExplicit` at the explicit transport constants of the companion

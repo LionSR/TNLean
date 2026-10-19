@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.AngularInformationFromCollar
-import TNLean.PEPS.AreaLaw.PhysicalCollarInformation
+import TNLean.PEPS.Approximation.CellConditionalInformationFromGap
 
 /-!
 # Angular information from the original spectral gap
@@ -12,7 +12,9 @@ import TNLean.PEPS.AreaLaw.PhysicalCollarInformation
 The original full-system gap gives angular information decay uniformly in the Hamiltonian,
 ground vector, marked points and physical regions. The physical sublinear collar theorem
 at range one, clearance 13 and template constant 24 supplies the premise of the conditional
-angular information theorem. No area-law or collar estimate is assumed.
+angular information theorem. No area-law or collar estimate is assumed. At the transport
+constants of the companion library, the slope `angularScale J Δ a p` and the size threshold
+`angularThresholdClosed q J Δ a A₀ m₀ p` are closed-form functions of the parameters.
 
 Source: polynomial-PEPS manuscript, Proposition 3.4, `02-information.tex`, lines 635–785,
 revision `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
@@ -34,6 +36,29 @@ theorem angularInformationBound {q : ℕ} (hq : 1 ≤ q)
   have hcol : AreaLaw.SublinearCollarBound q 1 J Δ 13 24 :=
     AreaLaw.sublinearCollarBound_real q 1 hq hJ hΔ (by norm_num) (by norm_num)
   exact angularInformationBound_of_sublinearCollarBound hq hJ hΔ hcol
+
+/-- The size threshold of Proposition 3.4 at closed-form constants: `angularThreshold` at the
+template constant `24`, the collar threshold `collarThresholdClosed q J Δ`, and the
+amplification constant and threshold at the collar constant `collarConstantClosed q J Δ`.
+Source: polynomial-PEPS manuscript, Proposition 3.4 (`prop:angular`), `02-information.tex`,
+lines 635–785. -/
+noncomputable def angularThresholdClosed (q : ℕ) (J Δ a A₀ : ℝ) (m₀ : ℕ) (p : ℝ) : ℝ :=
+  angularThreshold q J Δ a A₀ m₀ p 24 (collarThresholdClosed q J Δ)
+    (collarAmplificationConstant q 1 J Δ (collarConstantClosed q J Δ))
+    (collarAmplificationThreshold q 1 J Δ (collarConstantClosed q J Δ))
+
+/-- **Proposition 3.4 at an integer accuracy, at closed-form constants.** For `q ≥ 1`,
+`J ≥ 0`, `Δ > 0`, `a > 0`, `m₀ ∈ ℕ` and an integer `p > 0`, every slope
+`D ≥ angularScale J Δ a p` and every threshold `L₀ ≥ angularThresholdClosed q J Δ a A₀ m₀ p`
+form an angular scale. There is no collar or amplification premise.
+Source: polynomial-PEPS manuscript, Proposition 3.4 (`prop:angular`), `02-information.tex`,
+lines 635–785; `06-geometry.tex`, lines 62–63 and 440–445. -/
+theorem isAngularScale_closed_le {q : ℕ} (hq : 1 ≤ q) {J Δ : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < Δ)
+    {a A₀ : ℝ} (ha : 0 < a) (m₀ : ℕ) {p : ℕ} (hp : 0 < p) {D L₀ : ℝ}
+    (hD : angularScale J Δ a p ≤ D) (hL₀ : angularThresholdClosed q J Δ a A₀ m₀ p ≤ L₀) :
+    IsAngularScale q J Δ a A₀ m₀ p D L₀ :=
+  isAngularScale_of_sublinearCollarBoundAt_le_explicit hq hJ hΔ
+    (sublinearCollarBoundAt_closed hq hJ hΔ) ha m₀ hp hD hL₀
 
 /-- Uniform angular slopes and thresholds can exceed any prescribed lower bounds.
 The positive slope and threshold are chosen before every finite physical instance,

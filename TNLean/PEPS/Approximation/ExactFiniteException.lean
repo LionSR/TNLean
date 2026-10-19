@@ -36,9 +36,24 @@ theorem HasPEPSApproximation.mono_prefactor {C C' c : ℝ} {L q : ℕ}
   exact (hbound e).trans
     (mul_le_mul_of_nonneg_right hC (Real.rpow_nonneg (Nat.cast_nonneg L) c))
 
+/-- **Removing the small sizes at a named prefactor.** If a unit vector on a square of side
+`L ≥ 2` has a PEPS approximation with prefactor `C` whenever `L₀ ≤ L`, then it has one with
+prefactor `max C (q ^ (L₀ * L₀))` and the same exponent `c ≥ 0`: below `L₀` the exact
+representation of `hasPEPSApproximation_of_small_size` applies. Source: manuscript, assembly,
+lines 203–214. -/
+theorem hasPEPSApproximation_of_sufficiently_large_le {q L L₀ : ℕ} {C c : ℝ}
+    (hq : 0 < q) (hL : 2 ≤ L) (hc : 0 ≤ c) {Ω : StateSpace L q} (hΩ : ‖Ω‖ = 1)
+    (hlarge : L₀ ≤ L → HasPEPSApproximation C c L q Ω) :
+    HasPEPSApproximation (max C (q ^ (L₀ * L₀) : ℕ)) c L q Ω := by
+  by_cases hsize : L < L₀
+  · exact hasPEPSApproximation_of_small_size hq (by omega) hsize.le C c hc Ω hΩ
+  · exact (hlarge (Nat.le_of_not_gt hsize)).mono_prefactor (le_max_left _ _)
+
 /-- A uniform approximation above a fixed threshold extends to every square
-of side length at least two, with the same exponent and a single positive
-enlarged prefactor. Source: manuscript, assembly, lines 203–214. -/
+of side length at least two, with the same exponent and the single positive
+enlarged prefactor `max C (q ^ (L₀ * L₀))` of
+`hasPEPSApproximation_of_sufficiently_large_le`. Source: manuscript, assembly,
+lines 203–214. -/
 theorem exists_uniform_approximation_of_sufficiently_large {q L₀ : ℕ}
     {J Δ C c : ℝ} (hq : 0 < q) (hc : 0 ≤ c)
     (hlarge : ∀ L : ℕ, 2 ≤ L → L₀ ≤ L → ∀ h : SquareHamiltonian L q J,
@@ -48,13 +63,11 @@ theorem exists_uniform_approximation_of_sufficiently_large {q L₀ : ℕ}
       ∀ L : ℕ, 2 ≤ L → ∀ h : SquareHamiltonian L q J,
         ∀ E₀ : ℝ, ∀ Ω : StateSpace L q,
           h.IsGappedGroundState E₀ Ω Δ → HasPEPSApproximation C' c L q Ω := by
-  obtain ⟨C', hC', hCC', hsmall⟩ :=
-    exists_uniform_small_size_approximation (L₀ := L₀) hq C c hc
-  refine ⟨C', hC', hCC', ?_⟩
-  intro L hL h E₀ Ω hΩ
-  by_cases hsize : L < L₀
-  · exact hsmall L hL hsize Ω hΩ.1
-  · exact (hlarge L hL (Nat.le_of_not_gt hsize) h E₀ Ω hΩ).mono_prefactor hCC'
+  refine ⟨max C (q ^ (L₀ * L₀) : ℕ), ?_, le_max_left _ _, fun L hL h E₀ Ω hΩ ↦
+    hasPEPSApproximation_of_sufficiently_large_le hq hL hc hΩ.1
+      (fun hL₀ ↦ hlarge L hL hL₀ h E₀ Ω hΩ)⟩
+  exact (show (0 : ℝ) < (q ^ (L₀ * L₀) : ℕ) by exact_mod_cast pow_pos hq _).trans_le
+    (le_max_right _ _)
 
 /-- The uniform polynomial approximation statement is equivalent to the same
 statement for all sufficiently large squares. Both constants and the threshold

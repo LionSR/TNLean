@@ -2026,6 +2026,7 @@ of such a protocol is Proposition~\ref{prop:peps_dyadic_protocol}.
         TNLean.PEPS.Approximation.DyadicProtocol.IsDistributionProtocol,
         TNLean.PEPS.Approximation.DyadicProtocol.IsDistributionProtocol.exists_originalCircuit_initialCopies,
         TNLean.PEPS.Approximation.LargeSizeDyadicProtocolConsequences,
+        TNLean.PEPS.Approximation.DyadicProtocolBoundsAt,
         TNLean.PEPS.Approximation.LargeSizeDyadicProtocolBounds,
         TNLean.PEPS.Approximation.LargeSizeDyadicProtocolConsequences.largeSizeDyadicProtocolBounds,
         TNLean.PEPS.Approximation.LargeSizeDyadicProtocolBounds.largeSizeDyadicProtocolConsequences,
@@ -2192,15 +2193,21 @@ of such a protocol is Proposition~\ref{prop:peps_dyadic_protocol}.
         TNLean.PEPS.Approximation.protocolLifetimeBound,
         TNLean.PEPS.Approximation.protocolExpansionConstant,
         TNLean.PEPS.Approximation.protocolExpansionExponent,
-        TNLean.PEPS.Approximation.protocolErrorConstant}
+        TNLean.PEPS.Approximation.protocolErrorConstant,
+        TNLean.PEPS.Approximation.protocolPatchBound_protocolMeshRatio}
     \leanok
-    \uses{def:peps_dyadic_protocol}
-    Fix $q\ge2$ and $J,\Delta>0$, and let $\epsilon_0=1/30000$. There are a mesh
-    ratio $0<\nu\le1/6$, an information scale $D\ge1$, constants $C,c>0$ with
-    which Proposition~4.1 supplies adaptive patches at the radius constant
-    $B_0=20D$ and power $60$, and a threshold $L_1$, with the following property.
-    Let $b=\max\{18,\lceil((4+8\epsilon_0+2\nu)/\nu+1)^2\rceil\}$, $C'=\lceil C\rceil$
-    and $c'=\lceil c\rceil$, and put
+    \uses{def:peps_dyadic_protocol,lem:peps_dyadic_protocol_mesh_ratio}
+    Fix $q\ge2$ and $J,\Delta>0$, let $\epsilon_0=1/30000$, and let
+    $\nu=1/600000000$ be the mesh ratio of
+    Lemma~\ref{lem:peps_dyadic_protocol_mesh_ratio}. There are an information
+    scale $D\ge1$, constants $C,c>0$ with which Proposition~4.1 supplies
+    adaptive patches at the radius constant $B_0=20D$ and power $60$, and a
+    threshold $L_1$, with the following property. Let
+    \begin{align}
+        b=\max\{18,\lceil((4+8\epsilon_0+2\nu)/\nu+1)^2\rceil\}
+        =2400160003^2=5760768040000960009,
+    \end{align}
+    $C'=\lceil C\rceil$ and $c'=\lceil c\rceil$, and put
     \begin{align}
         G   & =(C'+1)^{3b}\bigl(16b^2(C'+1)^{6b}+1\bigr)^{2b}, &
         k_K & =3bc'+4b(3bc'+30).

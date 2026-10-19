@@ -371,6 +371,8 @@ import TNLean.PEPS.Approximation.PinnedNestedFilters
 import TNLean.PEPS.Approximation.PinnedRegionalState
 import TNLean.PEPS.Approximation.PinnedZeroFloorOptimizer
 import TNLean.PEPS.Approximation.PointwiseChoiceCoefficient
+import TNLean.PEPS.Approximation.PolynomialPEPSClosedConstant
+import TNLean.PEPS.Approximation.PolynomialPEPSExplicitConstant
 import TNLean.PEPS.Approximation.PolynomialPEPSTheorem
 import TNLean.PEPS.Approximation.PreparedMatrixNorm
 import TNLean.PEPS.Approximation.PreparedPartyMaps

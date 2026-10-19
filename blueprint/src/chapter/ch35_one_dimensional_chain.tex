@@ -113,6 +113,177 @@ for an arbitrary finite set of sites and are instantiated here directly.
     hypotheses.
 \end{proof}
 
+\begin{definition}[Doubled chain Hamiltonian]
+    \label{def:chain_doubled_hamiltonian}
+    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.doubled}
+    \leanok
+    \uses{def:chain_model,def:qc_site_pair_coordinates}
+    Let $L,q,R$ be natural numbers, let $J$ be real, and let
+    $H=\sum_X h_X$ be a range-$R$ chain Hamiltonian with local dimension $q$
+    and $\|h_X\|\le J$. Pair the two copies at each original site by the
+    bijection $p$ of Definition~\ref{def:qc_site_pair_coordinates}, with
+    $p(\sigma,\tau)(i)=q\sigma(i)+\tau(i)$. Write $p_*M$ for simultaneous
+    relabelling of the rows and columns of a matrix $M$ by $p$. The
+    \emph{doubled Hamiltonian} has local dimension $q^2$ and interactions
+    \begin{align}
+        \widehat h_X=p_*(h_X\otimes\mathbb 1+\mathbb 1\otimes h_X).
+    \end{align}
+    Each $\widehat h_X$ is Hermitian, is supported on the same set $X$, and
+    satisfies $\|\widehat h_X\|\le2J$. Thus the range remains $R$.
+    This is the two-copy construction in the paragraph ``Two-sided Gaussian
+    filtering'' of \cite{TNLean2026OneDimensional}.
+\end{definition}
+\begin{proof}
+    \leanok
+    \uses{def:qc_local_circuit,thm:area_law_supported_identity,thm:qc_site_pair_tensor_support}
+    By the matrix-entry characterization, $h_X$ belongs to the algebra
+    supported on $X$; the identity belongs to that algebra as well. The tensor-product support identity,
+    applied to each summand, gives support on $X\cup X=X$, and the
+    matrix-entry characterization gives the required support condition.
+    Taking adjoints preserves each summand and commutes with relabelling.
+    Relabelling preserves the operator norm, and tensoring with an identity
+    does not increase it. Hence
+    \begin{align}
+        \|\widehat h_X\|
+        \le\|h_X\otimes\mathbb 1\|+\|\mathbb 1\otimes h_X\|
+        \le\|h_X\|+\|h_X\|\le2J.
+    \end{align}
+\end{proof}
+
+\begin{lemma}[Operator of the doubled Hamiltonian]
+    \label{lem:chain_doubled_operator}
+    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.doubled_operator}
+    \leanok
+    \uses{def:chain_doubled_hamiltonian}
+    Under the hypotheses of Definition~\ref{def:chain_doubled_hamiltonian},
+    the sum of the doubled interactions satisfies
+    \begin{align}
+        \widehat H=\sum_X\widehat h_X
+        =p_*(H\otimes\mathbb 1+\mathbb 1\otimes H).
+    \end{align}
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{def:chain_doubled_hamiltonian}
+    Sum the defining interaction identity over the original supports $X$.
+    Relabelling is linear, and the tensor product is linear in each factor.
+\end{proof}
+
+\begin{definition}[Regionally swapped doubled Hamiltonian]
+    \label{def:chain_swapped_doubled_hamiltonian}
+    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.swappedDoubled,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.swappedDoubled_operator}
+    \leanok
+    \uses{def:chain_doubled_hamiltonian,def:peps_frame_sheet_swap}
+    Let $H=\sum_Xh_X$ be a range-$R$ Hamiltonian on the contiguous chain
+    $I=\{0,\ldots,L-1\}$, with local dimension $q$ and
+    $\|h_X\|\le J$, where $L,q,R$ are natural numbers and $J$ is real.
+    For any $D\subseteq I$, let $F=p_*F_D$ in the paired coordinates of
+    Definition~\ref{def:chain_doubled_hamiltonian}. The regionally swapped
+    doubled Hamiltonian has interactions and sum
+    \begin{align}
+        \widehat h'_X & =F\widehat h_XF^\dagger,\notag              \\
+        \widehat H'   & =\sum_X\widehat h'_X=F\widehat H F^\dagger.
+        \label{eq:chain_swapped_doubled_operator}
+    \end{align}
+    Each $\widehat h'_X$ is Hermitian, is supported on the same set $X$,
+    and has norm at most $2J$. Thus this is a range-$R$ chain Hamiltonian
+    with local dimension $q^2$ and interaction bound $2J$, also when
+    $q=0$ or $L=0$.
+\end{definition}
+\begin{proof}
+    \leanok
+    \uses{def:chain_doubled_hamiltonian,thm:area_law_supported_identity,
+        thm:peps_sheet_swap_conjugate_support,thm:peps_frame_sheet_swap_norm}
+    The support identity for the conjugated doubled interaction gives
+    support on $X$, and taking adjoints preserves Hermiticity.
+    Since $\|F\|\le1$, the doubled interaction estimate gives
+    \begin{align}
+        \|F\widehat h_XF^\dagger\|
+        \le\|\widehat h_X\|\le2J.
+    \end{align}
+    Distributing left and right multiplication over the finite sum proves
+    (\ref{eq:chain_swapped_doubled_operator}).
+\end{proof}
+
+\begin{theorem}[The ground vectors of the doubled and swapped chains]
+    \label{thm:chain_doubled_swapped_ground_gap}
+    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.doubled_swappedDoubled_isGappedGroundState}
+    \leanok
+    \uses{def:chain_model,def:chain_swapped_doubled_hamiltonian}
+    In the setting of Definition~\ref{def:chain_swapped_doubled_hamiltonian},
+    let $E_0,\Delta$ be real with $\Delta>0$, and suppose the original
+    vector $\Omega$ satisfies
+    \begin{align}
+        \|\Omega\|     & =1,\notag                                          \\
+        H\Omega        & =E_0\Omega,\notag                                  \\
+        H-E_0\mathbb 1 & \ge\Delta(\mathbb 1-|\Omega\rangle\langle\Omega|).
+    \end{align}
+    Define the vectors in the paired physical coordinates by
+    $\Psi(p(\sigma,\tau))=\Omega(\sigma)\Omega(\tau)$ and
+    $\Phi=F\Psi$. Then
+    \begin{align}
+        \|\Psi\|        & =\|\Phi\|=1,\notag                                   \\
+        \widehat H\Psi  & =2E_0\Psi,\notag                                     \\
+        \widehat H'\Phi & =2E_0\Phi,\notag                                     \\
+        \widehat H-2E_0\mathbb 1
+                        & \ge\Delta(\mathbb 1-|\Psi\rangle\langle\Psi|),\notag \\
+        \widehat H'-2E_0\mathbb 1
+                        & \ge\Delta(\mathbb 1-|\Phi\rangle\langle\Phi|).
+    \end{align}
+    In particular, these vectors give the ground lines of the two
+    Hamiltonians, with common ground energy $2E_0$ and gap at least
+    $\Delta$. This is the contiguous-chain assertion in the paragraph
+    ``Two-sided Gaussian filtering'' of~\cite{TNLean2026OneDimensional},
+    before the filtering construction; the distinction from arbitrary
+    finite induced domains is recorded
+    in~\cite{gap:tnlean_one_dimensional_connected_domain_scope}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{lem:chain_doubled_operator,def:chain_swapped_doubled_hamiltonian,
+        thm:permutation_matrix_unitary,thm:mpu_reindex_unitary}
+    Put $P=|\Omega\rangle\langle\Omega|$, $Q=\mathbb 1-P$ and
+    $G=H-E_0\mathbb 1-\Delta Q\ge0$. Normalization gives $Q\ge0$.
+    Before pairing coordinates, the doubled defect is
+    \begin{align}
+        H\otimes\mathbb 1+\mathbb 1\otimes H-2E_0\mathbb 1
+        -\Delta(\mathbb 1-P\otimes P)
+         & =G\otimes\mathbb 1+\mathbb 1\otimes G+\Delta Q\otimes Q
+        \ge0.
+    \end{align}
+    The tensor-square vector satisfies
+    \begin{align}
+        (H\otimes\mathbb 1+\mathbb 1\otimes H)(\Omega\otimes\Omega)
+         & =2E_0\,\Omega\otimes\Omega,
+         &
+        \|\Omega\otimes\Omega\|
+         & =\|\Omega\|^2=1.
+    \end{align}
+    Pairing coordinates is unitary, so the same norm, eigen-equation and
+    positive defect hold for $\Psi$ and $\widehat H$.
+    The regional swap is a permutation matrix; after pairing it remains
+    unitary, $F^\dagger F=\mathbb 1$. Since $\widehat H'=F\widehat HF^\dagger$,
+    \begin{align}
+        \widehat H'\Phi
+         & =F\widehat HF^\dagger F\Psi=F\widehat H\Psi=2E_0\Phi,
+         &
+        \|\Phi\|
+         & =\|F\Psi\|=\|\Psi\|=1,
+    \end{align}
+    and
+    \begin{align}
+         & \widehat H'-2E_0\mathbb 1
+        -\Delta(\mathbb 1-|\Phi\rangle\langle\Phi|)\notag \\
+         & \qquad=F\bigl(\widehat H-2E_0\mathbb 1
+        -\Delta(\mathbb 1-|\Psi\rangle\langle\Psi|)\bigr)F^\dagger
+        \ge0.
+    \end{align}
+    Finally, a positive projector gap forces every vector at the ground
+    energy to lie in the span of the displayed unit vector, giving the
+    asserted ground lines.
+\end{proof}
+
 \begin{lemma}[Interactions split by an interval]
     \label{lem:chain_crossing_count}
     \lean{
@@ -155,10 +326,159 @@ for an arbitrary finite set of sites and are instantiated here directly.
     $j'>j$, two of its sites would be at distance at least $R+1$.
 \end{proof}
 
+\begin{lemma}[Supports split by an arbitrary region of a chain]
+    \label{lem:chain_boundary_crossing_count}
+    \lean{TNLean.MPS.AreaLaw.IsChainSupport.exists_boundary_window_of_split,
+        TNLean.MPS.AreaLaw.card_crossingTerms_le_mul_card_boundaryEdges}
+    \leanok
+    \uses{def:chain_model,lem:chain_entropy_inequalities}
+    Let $L,R$ be natural numbers, let $I=\{0,\ldots,L-1\}$ be the
+    contiguous chain, and let $D\subseteq I$. Write $\partial D$ for the
+    positions $p$ with $p+1<L$ such that exactly one of $p,p+1$ belongs
+    to $D$. For $p\in\partial D$ put
+    \begin{align}
+        W_p=I\cap[\max\{0,p+1-R\},\,p+1+R).
+    \end{align}
+    If a nonempty support $X\subseteq I$ of diameter at most $R$ meets
+    both $D$ and $I\setminus D$, then $X\subseteq W_p$ for some boundary
+    edge $p\in\partial D$. Consequently,
+    \begin{align}
+        \#\{X\subseteq I:\ X\ne\varnothing,\ \operatorname{diam}X\le R,
+        \ X\cap D\ne\varnothing,\ X\setminus D\ne\varnothing\}
+        \le 2^{2R}|\partial D|.
+    \end{align}
+    No interval assumption on $D$ is needed. The conclusions include the
+    empty chain and $R=0$; in either case there is no split support.
+    This is the boundary-window count underlying the interval estimate
+    in Section~2, equation~\textup{(count)}, and the boundary count in the
+    paragraph ``Two-sided Gaussian filtering'' of
+    \cite{TNLean2026OneDimensional}.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{def:chain_model,lem:chain_entropy_inequalities,
+        lem:chain_crossing_count}
+    Choose two sites of $X$ with different membership in $D$, and order
+    their coordinates as $a<b$. Along the integer interval from $a$ to
+    $b$, the indicator of $D$ must change at two consecutive sites
+    $p,p+1$. Thus $a\le p<p+1\le b<L$ and $p\in\partial D$.
+
+    For every $x\in X$, the diameter bound gives
+    $x\le a+R$ and $b\le x+R$. Hence
+    \begin{align}
+        \max\{0,p+1-R\}\le x<p+1+R,
+    \end{align}
+    proving $X\subseteq W_p$. Each window has at most $2R$ sites, so
+    contains at most $2^{2R}$ subsets. Cover the split supports by the
+    families of subsets of $W_p$, one family for each $p\in\partial D$,
+    and bound the cardinality of the finite union by the sum of their
+    cardinalities. This proves the stated bound, including the case of
+    an empty boundary.
+\end{proof}
+
+\begin{theorem}[The boundary perturbation of a doubled chain]
+    \label{thm:chain_partial_swap_boundary}
+    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.partialSwap_term_difference_spec,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.partialSwap_difference_eq_sum_crossing,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.partialSwap_boundary_spec}
+    \leanok
+    \uses{def:chain_model,def:chain_doubled_hamiltonian,
+        def:qc_site_pair_coordinates,def:peps_frame_sheet_swap,
+        lem:chain_boundary_crossing_count}
+    Let $L,q,R$ be natural numbers, let $J\in\mathbb R$, and let
+    $H=\sum_Xh_X$ be a range-$R$ Hamiltonian on the contiguous chain
+    $I=\{0,\ldots,L-1\}$, with local dimension $q$ and
+    $\|h_X\|\le J$. Let $D\subseteq I$ be arbitrary. In the paired
+    coordinates $p$ of Definition~\ref{def:chain_doubled_hamiltonian}, put
+    \begin{align}
+        F       & =p_*F_D,\notag                                \\
+        T_{X,0} & =p_*(h_X\otimes\mathbb 1),\notag              \\
+        T_{X,1} & =p_*(\mathbb 1\otimes h_X),\notag             \\
+        K_{X,b} & =FT_{X,b}F^\dagger-T_{X,b}\quad(b\in\{0,1\}).
+    \end{align}
+    Every $K_{X,b}$ is Hermitian, is supported on the original set $X$,
+    and satisfies $\|K_{X,b}\|\le2J$. Let $\mathcal C$ be the set of
+    original supports meeting both $D$ and $I\setminus D$, and let
+    $N_R=2\cdot2^{2R}$. For the doubled operator $\widehat H$,
+    \begin{align}
+        F\widehat H F^\dagger-\widehat H
+                      & =\sum_{X\in\mathcal C}\sum_{b\in\{0,1\}}K_{X,b},\notag \\
+        2|\mathcal C| & \le N_R|\partial D|.
+    \end{align}
+    Let $Z=\bigcup_{X\in\mathcal C}X$ be the union of crossing
+    supports and put $\Delta H=F\widehat H F^\dagger-\widehat H$.
+    The operator $\Delta H$ is supported on $Z$. For every $z\in Z$ there
+    is a boundary position $a\in\partial D$ with $|z-a|\le R$,
+    and
+    \begin{align}
+        \|\Delta H\|\le 2J N_R|\partial D|.
+    \end{align}
+    These assertions include $q=0$, the empty chain, and empty or full
+    $D$. They give the boundary decomposition on a contiguous chain used
+    in the paragraph ``Two-sided Gaussian filtering'' of
+    \cite{TNLean2026OneDimensional}; the distinction from arbitrary finite
+    induced domains is recorded
+    in~\cite{gap:tnlean_one_dimensional_connected_domain_scope}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:chain_doubled_hamiltonian,thm:qc_site_pair_tensor_support,
+        thm:area_law_supported_identity,thm:peps_sheet_swap_conjugate_support,
+        thm:peps_frame_sheet_swap_norm,
+        thm:peps_sheet_swap_doubled_cancellation,
+        lem:chain_boundary_crossing_count}
+    The support reduction for a conjugated tensor product in paired
+    coordinates shows that $FT_{X,b}F^\dagger$ is supported on $X$.
+    The same is true of $T_{X,b}$, so subtraction preserves its support.
+    Taking adjoints proves Hermiticity. Pairing coordinates preserves
+    the operator norm, and the regional swap satisfies $\|F\|\le1$.
+    Tensoring with an identity does not increase the operator norm, hence
+    \begin{align}
+        \|T_{X,b}\|           & \le\|h_X\|\le J,\notag \\
+        \|FT_{X,b}F^\dagger\| & \le J,\notag           \\
+        \|K_{X,b}\|           & \le J+J=2J.
+    \end{align}
+
+    Swapping exchanges the two replica terms of a support inside $D$ and
+    fixes those of a support disjoint from $D$:
+    \begin{align}
+        FT_{X,0}F^\dagger & =T_{X,1},\quad FT_{X,1}F^\dagger=T_{X,0}
+        \qquad(X\subseteq D),\notag                                  \\
+        FT_{X,b}F^\dagger & =T_{X,b}\qquad(X\cap D=\varnothing).
+    \end{align}
+    Adding the two replica terms gives, for every support
+    outside $\mathcal C$,
+    \begin{align}
+        F(T_{X,0}+T_{X,1})F^\dagger=T_{X,0}+T_{X,1}.
+    \end{align}
+    By definition, each doubled interaction is $T_{X,0}+T_{X,1}$.
+    Summing these identities expresses $\widehat H$ as the sum of these
+    pairs. Distributing conjugation and subtraction over the finite sum
+    cancels each pair outside $\mathcal C$, leaving exactly the sum over
+    the crossing supports. Finally, Lemma~\ref{lem:chain_boundary_crossing_count}
+    gives $|\mathcal C|\le2^{2R}|\partial D|$; counting the two replica
+    labels for each support gives the stated bound.
+
+    Each term in the resulting expansion is supported on some
+    $X\subseteq Z$, so their finite sum is supported on $Z$. If $z\in Z$,
+    choose a crossing support $X$ containing it. The boundary-window
+    inclusion gives $a+1-R\le z<a+1+R$ for a boundary position
+    $a$, whence $|z-a|\le R$.
+    If $L=0$, the boundary and the crossing family are empty and
+    $\Delta H=0$. Otherwise, a singleton interaction implies
+    $0\le\|h_{\{x\}}\|\le J$ at a site $x$, so $J\ge0$.
+    The triangle inequality and the bound on the number of replica labels
+    now give
+    \begin{align}
+        \|\Delta H\|\le 2J(2|\mathcal C|)\le 2J N_R|\partial D|.
+    \end{align}
+\end{proof}
+
 % Source: TNLean2026OneDimensional, eq:ham; setting before lem:LR.
 \begin{lemma}[Interaction norm budget at a site]
     \label{lem:chain_site_norm_budget}
-    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.sum_norm_terms_containing_le}
+    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.sum_norm_terms_containing_le,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.norm_bound_nonneg}
     \leanok
     \uses{def:chain_model}
     Let $L,q,R$ be natural numbers and $J\in\mathbb R$. On the chain of $L$
@@ -168,6 +488,7 @@ for an arbitrary finite set of sites and are instantiated here directly.
     \begin{align}
         \sum_{X\ni x}\lVert h_X\rVert\le 2^{2R+1}J.
     \end{align}
+    The presence of a site also forces $J\ge0$.
     This is an auxiliary consequence of the Hamiltonian setting
     in Section~1 of~\cite{TNLean2026OneDimensional}; it supplies a
     per-site interaction estimate of the form assumed immediately before
@@ -184,7 +505,397 @@ for an arbitrary finite set of sites and are instantiated here directly.
     has no sites, the assertion is vacuous.
 \end{proof}
 
+\section{Locality on a contiguous chain}
+
+\begin{theorem}[Lieb--Robinson estimates on a contiguous chain]
+    \label{thm:chain_lieb_robinson}
+    \lean{TNLean.MPS.AreaLaw.norm_heisenberg_commutator_le_chainDistance,
+        TNLean.MPS.AreaLaw.norm_heisenberg_sub_siteExpectation_chainNeighborhood_le}
+    \leanok
+    \uses{def:chain_model,def:qc_site_expectation}
+    Let $L,q,R$ be natural numbers. Let $K$ be a finite set of interaction
+    labels, and for each $k\in K$ let $X_k$ be a nonempty support of diameter
+    at most $R$ in the contiguous chain $I=\{0,\ldots,L-1\}$.
+    Let $h_k$ be Hermitian operators supported on $X_k$, and suppose that
+    $b_0\in\mathbb R$ satisfies
+    \begin{align}
+        \sum_{k:\,x\in X_k}\|h_k\|\le b_0
+    \end{align}
+    for every site $x$. Put $H=\sum_{k\in K}h_k$ and
+    $\tau_t(A)=e^{itH}Ae^{-itH}$, and set
+    \begin{align}
+        C_0 & =2+4|b_0|e^{2R},\notag      \\
+        v   & =2(R+1)|b_0|e^{2R}+1,\notag \\
+        \mu & =\tfrac12,\qquad
+        C'=\frac{2C_0e}{1-e^{-1/2}}.\notag
+    \end{align}
+    These constants are independent of $L,q$, the interaction family, and
+    the observable support. For $S\subseteq I$ let
+    $d(S,y)=\min_{x\in S}|x-y|$, with $d(\varnothing,y)=\infty$ and
+    $e^{-\mu\infty}=0$. For every operator $A$ supported on $S$, every site
+    $y$, every operator $B_y$ supported on $\{y\}$, and every real $t$,
+    \begin{align}
+        \|[\tau_t(A),B_y]\|
+        \le C_0|S|\|A\|\|B_y\|e^{v|t|}e^{-d(S,y)/2}.
+    \end{align}
+    This estimate allows every natural local dimension $q$.
+    If $q\ge1$, define, for every real $\ell\ge0$,
+    $N_\ell(S)=\{y\in I:\exists x\in S,\ |x-y|\le\ell\}$.
+    The normalized partial-trace expectation $E_{N_\ell(S)}$ then satisfies
+    \begin{align}
+        \|\tau_t(A)-E_{N_\ell(S)}(\tau_t(A))\|
+        \le C'|S|^2\|A\|e^{v|t|-\ell/2}.
+    \end{align}
+    Both estimates allow $S=\varnothing$. This is the contiguous-chain case
+    of the lemma ``Lieb--Robinson bound on a chain'' in Part~II
+    of~\cite{TNLean2026OneDimensional}, as used for its Theorem~B;
+    the distinction from the broader finite-domain reading is recorded
+    in~\cite{gap:tnlean_one_dimensional_connected_domain_scope}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{lem:chain_path_metric_spheres,thm:area_law_supported_identity,
+        thm:qc_graph_lieb_robinson_finset,
+        thm:qc_graph_neighborhood_localization}
+    Use the path graph on $I$. Its distance is $|x-y|$, each $X_k$ has
+    graph diameter at most $R$ and at most $R+1$ sites, and its nonemptiness
+    permits a choice of an anchor in $X_k$. The matrix-entry characterization
+    of support supplies the hypotheses on the supported algebras.
+    Apply the arbitrary-support graph commutator estimate with decay
+    parameter $1$ and support-size bound $R+1$. If $S$ is nonempty,
+    its least distance to $y$ is a finite nonnegative integer $d$, and
+    $e^{-d}\le e^{-d/2}$. For $S=\varnothing$, the factor $|S|$ makes
+    the commutator bound zero without selecting a point of $S$.
+
+    For localization assume $q\ge1$ and put $m=\lfloor\ell\rfloor$.
+    Every distance sphere of the path has at most two sites, so the graph
+    localization estimate applies with $K_g=2$ and growth exponent zero.
+    Since path distances are integers, the union of graph balls of radius
+    $m$ about $S$ is exactly $N_\ell(S)$. The tail constant and the rounding
+    bound are
+    \begin{align}
+        T_0      & =\frac{e^{1/2}}{1-e^{-1/2}},\notag \\
+        e^{-m/2} & \le e^{1/2}e^{-\ell/2}.\notag
+    \end{align}
+    Thus the graph coefficient $2C_0T_0$, multiplied by the rounding factor
+    $e^{1/2}$, is $C'$. Empty unions and the zero factor $|S|^2$ cover
+    $S=\varnothing$ as well.
+\end{proof}
+
 \section{The buffered discount with a constant-width buffer}
+
+\begin{theorem}[Localization of the relative-evolution generator]
+    \label{thm:chain_relative_generator_localization}
+    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.norm_relativeGenerator_sub_siteExpectation_le}
+    \leanok
+    \uses{def:chain_swapped_doubled_hamiltonian,thm:chain_partial_swap_boundary,
+        def:qc_site_expectation}
+    Let $H$ be a range-$R$ Hamiltonian on the contiguous chain
+    $I=\{0,\ldots,L-1\}$ with local dimension $q\ge1$ and interaction
+    bound $J\in\mathbb R$. Let $D\subseteq I$, and let
+    $K=\widehat H$ and $K'=\widehat H'$ be its doubled and regionally
+    swapped doubled operators. Write $\mathcal C_D$ for the original
+    supports meeting both $D$ and its complement, and put
+    $Z=\bigcup_{X\in\mathcal C_D}X$.
+    For every real $\ell\ge0$ and $t\in\mathbb R$, define
+    \begin{align}
+        B    & =N_\ell(Z),\notag         \\
+        G(t) & =e^{itK'}(K'-K)e^{-itK'}.
+    \end{align}
+    Set
+    \begin{align}
+        b_0 & =2^{2R+1}(2J),\notag                          \\
+        a   & =\frac{2(2+4|b_0|e^{2R})e}{1-e^{-1/2}},\notag \\
+        v   & =2(R+1)|b_0|e^{2R}+1,\notag                   \\
+        N_R & =2\cdot2^{2R}.
+    \end{align}
+    Then the normalized expectation on the paired physical sites satisfies
+    \begin{align}
+        \|G(t)-E_B(G(t))\|
+        \le4|J|a(R+1)^2N_R L\,e^{v|t|-\ell/2}.
+    \end{align}
+    No nonemptiness of the chain or of $\mathcal C_D$, sign condition on
+    $J$, or spectral-gap hypothesis is required. This is the intermediate
+    generator estimate in the localization paragraph of the proof of the
+    information-reset lemma in Part~II of~\cite{TNLean2026OneDimensional},
+    on a contiguous chain; the domain distinction is recorded
+    in~\cite{gap:tnlean_one_dimensional_connected_domain_scope}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:chain_swapped_doubled_hamiltonian,thm:chain_partial_swap_boundary,
+        lem:chain_site_norm_budget,thm:chain_lieb_robinson,
+        lem:qc_site_expectation_properties}
+    The swapped doubled interactions have range $R$ and bound $2J$.
+    Their per-site norm sum is at most $b_0$. The chain localization
+    estimate therefore has constants $a,v$ as displayed.
+    By Theorem~\ref{thm:chain_partial_swap_boundary},
+    \begin{align}
+        K'-K            & =\sum_{X\in\mathcal C_D}\sum_{b\in\{0,1\}}A_{X,b},\notag \\
+        \|A_{X,b}\|     & \le2J\le2|J|,\notag                                      \\
+        2|\mathcal C_D| & \le N_R|\partial D|\le N_R L.
+    \end{align}
+    Each $A_{X,b}$ is supported on $X$, with $|X|\le R+1$.
+    For one such term put $A=e^{itK'}A_{X,b}e^{-itK'}$ and
+    $A_0=E_{N_\ell(X)}(A)$. The chain estimate gives
+    \begin{align}
+        \|A-A_0\|\le2|J|a(R+1)^2e^{v|t|-\ell/2}.
+    \end{align}
+    Since $X\subseteq Z$, the operator $A_0$ is supported on $B$ and is
+    fixed by $E_B$. Hence
+    \begin{align}
+        A-E_B(A)     & =(A-A_0)-E_B(A-A_0),\notag \\
+        \|A-E_B(A)\| & \le2\|A-A_0\|
+        \le4|J|a(R+1)^2e^{v|t|-\ell/2}.
+    \end{align}
+    Conjugation and the expectation are linear. Summing this estimate
+    over the crossing replica labels and using their cardinality
+    bound proves the assertion. An empty crossing family gives the zero
+    generator; the same nonnegative estimates include $J=0$.
+\end{proof}
+
+\begin{theorem}[A supported Gaussian integral on a contiguous chain]
+    \label{thm:chain_supported_gaussian_integral}
+    \lean{TNLean.MPS.AreaLaw.exists_supported_gaussian_integral}
+    \leanok
+    \uses{def:chain_swapped_doubled_hamiltonian,thm:chain_partial_swap_boundary,
+        def:qc_site_expectation}
+    For every natural number $R$ and real $J$, there are positive constants
+    $C,v$, depending only on $R,J$, with the following property.
+    Let $q\ge1$ and $L$ be natural numbers, let $H$ be a range-$R$
+    Hamiltonian with interaction bound $J$ on the contiguous chain
+    $I=\{0,\ldots,L-1\}$, let $D\subseteq I$, and let $\ell\ge0$ be real.
+    Put $K=\widehat H$, $K'=\widehat H'$ and
+    $Z=\bigcup_{X\in\mathcal C_D}X$, where $\mathcal C_D$ is the set of
+    original supports crossing $D$. Write $N(S)=N_\ell(S)$.
+    There is a differentiable unitary path $U$, supported on $N(Z)$ at
+    every real time, such that
+    \begin{align}
+        U(0)  & =\mathbb 1,\notag                                  \\
+        U'(t) & =iE_{N(Z)}\bigl(e^{itK'}(K'-K)e^{-itK'}\bigr)U(t).
+    \end{align}
+    The same path is chosen before all the following data.
+    Let $Q\subseteq I$, let $W$ be any operator supported on $Q$,
+    and let $\eta\ge0$ and $T\ge0$ be real.
+    Let $\gamma_\eta$ be the centred Gaussian measure of variance $\eta$,
+    with $\gamma_0$ the point mass at zero. Put $B=N(Q\cup Z)$ and
+    define the operators
+    \begin{align}
+        M_{\mathrm{loc}} & =\int_{[-T,T]}
+        E_{N(Q)}\bigl(e^{itK'}We^{-itK'}\bigr)U(t)\,d\gamma_\eta(t),\notag   \\
+        M_T              & =\int_{[-T,T]}e^{itK'}We^{-itK}\,d\gamma_\eta(t).
+    \end{align}
+    Then $M_{\mathrm{loc}}$ is supported on $B$ and
+    \begin{align}
+        \|M_{\mathrm{loc}}\| & \le\|W\|,\notag                  \\
+        \|M_{\mathrm{loc}}-M_T\|
+                             & \le\|W\|C L^2(1+T)e^{vT-\ell/2}.
+    \end{align}
+    These assertions include the empty chain and empty supports.
+    This is the localized integral in the localization paragraph of the
+    information-reset proof in Part~II of~\cite{TNLean2026OneDimensional},
+    on a contiguous chain; the domain distinction is recorded
+    in~\cite{gap:tnlean_one_dimensional_connected_domain_scope}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:chain_swapped_doubled_hamiltonian,
+        thm:chain_relative_generator_localization,thm:chain_lieb_robinson,
+        lem:chain_site_norm_budget,thm:area_law_supported_identity,
+        thm:qc_supported_projected_relative_evolution,
+        lem:qc_site_expectation_properties}
+    Let $a,v$ be the constants in
+    Theorem~\ref{thm:chain_relative_generator_localization}, and put
+    $d=4|J|a(R+1)^2N_R$ and $C=a+d>0$.
+    Construct the supported projected relative evolution on $N(Z)$.
+    Its equation uses only $K,K'$ and $N(Z)$, so this choice precedes
+    $Q,W,\eta,T$.
+    For $|t|\le T$, the generator estimate and the evolution comparison give
+    \begin{align}
+        \|e^{itK'}e^{-itK}-U(t)\|
+        \le dL|t|e^{vT-\ell/2}.
+    \end{align}
+    The separately localized observable has error at most
+    $a|Q|^2\|W\|e^{vT-\ell/2}$.
+    Using the exact factorization
+    \begin{align}
+        \bigl(e^{itK'}We^{-itK'}\bigr)
+        \bigl(e^{itK'}e^{-itK}\bigr)=e^{itK'}We^{-itK},
+    \end{align}
+    insert $e^{itK'}We^{-itK'}U(t)$ between the two integrands.
+    Unitarity of $U(t)$, invariance of the observable norm under evolution,
+    and the two estimates bound their difference by
+    \begin{align}
+        \|W\|\bigl(a|Q|^2+dL|t|\bigr)e^{vT-\ell/2}
+         & \le\|W\|(a+d)L^2(1+T)e^{vT-\ell/2}.
+    \end{align}
+    Here $|Q|\le L$ and $L\le L^2$ for every natural $L$; the latter is
+    zero at $L=0$ and follows from $1\le L$ otherwise.
+
+    Both factors of the localized integrand act on $B$, and its norm is
+    at most $\|W\|$. The integrands are continuous and bounded, hence
+    integrable for every $\gamma_\eta$. Since the expectation $E_B$ is
+    continuous and linear, commutes with integration, and fixes the
+    localized integrand, it also fixes $M_{\mathrm{loc}}$.
+    This proves its support. Finally,
+    $\gamma_\eta([-T,T])\le1$ gives both the contraction bound and,
+    upon integrating the pointwise difference, the asserted error.
+    The Gaussian mass is not renormalized.
+\end{proof}
+
+\begin{lemma}[Separation of the reset support from the cores]
+    \label{lem:chain_reset_support_separation}
+    \lean{TNLean.MPS.AreaLaw.chain_reset_support_separation}
+    \leanok
+    \uses{def:chain_model}
+    Let $I=\{0,\ldots,L-1\}$ be a contiguous chain, let $R$ be a
+    natural number, and let $D,C,R_0,C_0\subseteq I$, with $D\cap C=\varnothing$.
+    Suppose that a real number $w$ satisfies
+    \begin{align}
+        w & <|r-y| &  & (r\in R_0,\ y\in I\setminus D),\notag \\
+        w & <|c-x| &  & (c\in C_0,\ x\in I\setminus C).
+    \end{align}
+    Put $Q=I\setminus(D\cup C)$. Let $\mathcal C_D$ consist of all
+    nonempty supports $X\subseteq I$ of diameter at most $R$ that meet
+    both $D$ and its complement, and put $Z=\bigcup_{X\in\mathcal C_D}X$.
+    Then
+    \begin{align}
+        w-R & <|a-z| &  & (z\in Q\cup Z,\ a\in R_0\cup C_0).
+    \end{align}
+    Consequently, for every real $\ell$ with $\ell+R\le w$,
+    \begin{align}
+        \{y\in I:\ \exists z\in Q\cup Z,\ |z-y|\le\ell\}
+        \cap(R_0\cup C_0)=\varnothing.
+    \end{align}
+    Empty chains and empty sets are allowed. No sign assumption on
+    $w$ or $\ell$, or containment of the cores in the outer regions,
+    is needed beyond the displayed hypotheses.
+    This is the support-separation step in Part~II
+    of~\cite{TNLean2026OneDimensional}, lines 419--425, on a contiguous
+    chain; see~\cite{gap:tnlean_one_dimensional_connected_domain_scope}.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{def:chain_model}
+    If $z\in Q$, the two margin inequalities apply directly; weakening
+    the lower bound from $w$ to $w-R$ is permitted since $R\ge0$.
+    If $z\in Z$, choose a crossing support $X$ containing $z$,
+    together with $y\in X\setminus D$ and $x\in X\cap D$.
+    The diameter bound gives $|z-y|,|z-x|\le R$.
+    For $r\in R_0$, the first margin and the triangle inequality give
+    \begin{align}
+        w<|r-y|\le|r-z|+R.
+    \end{align}
+    Since $D$ and $C$ are disjoint, $x\notin C$; the second margin
+    gives the same conclusion for every $c\in C_0$.
+    This proves the first assertion with the exact loss $R$.
+    If a core site $a$ also belonged to the displayed neighborhood,
+    there would be $z\in Q\cup Z$ with $|z-a|\le\ell$.
+    Symmetry of distance would then give
+    $w-R<|a-z|\le\ell\le w-R$, a contradiction.
+\end{proof}
+
+\begin{theorem}[Information reset on a contiguous chain]
+    \label{thm:chain_information_reset}
+    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.information_reset}
+    \leanok
+    \uses{def:chain_model}
+    Fix a natural local dimension $q\ge1$, a natural range $R$, a real
+    interaction bound $J$, a gap $\Delta>0$, and an exponent $p>0$.
+    There are $C_p>0$ and a natural number $L_0\ge1$, depending only on
+    these fixed parameters, with the following property.
+    For every $L\ge L_0$, let $H$ be a range-$R$ Hamiltonian with
+    interaction bound $J$ on the contiguous chain $I=\{0,\ldots,L-1\}$.
+    Let $\Omega$ be a normalized ground vector, with ground energy $E_0$
+    and full-system gap at least $\Delta$.
+    Let $D,C\subseteq I$ be disjoint, let $R_0\subseteq D$ and
+    $C_0\subseteq C$, and let $b\in\mathbb R$ satisfy
+    $I_\Omega(D:C)\le b$.
+    Put $w=C_p(1+b+\log L)$ and suppose that
+    \begin{align}
+        w & <|x-y| &  & (x\in R_0,\ y\in I\setminus D),\notag \\
+        w & <|x-y| &  & (x\in C_0,\ y\in I\setminus C).
+    \end{align}
+    Then
+    \begin{align}
+        I_\Omega(R_0:C_0)\le L^{-p}.
+    \end{align}
+    The constants $C_p,L_0$ precede the length, Hamiltonian, state,
+    regions and information bound. Only the original full-system gap
+    is assumed. This is the contiguous-chain form of the information-reset
+    lemma in Part~II of~\cite{TNLean2026OneDimensional},
+    lines 319--435; the domain distinction
+    is recorded in~\cite{gap:tnlean_one_dimensional_connected_domain_scope}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_reset_regional_filter,thm:chain_supported_gaussian_integral,
+        thm:peps_reset_polar_step,lem:chain_reset_support_separation,
+        thm:peps_reset_paired_support,thm:peps_reset_exchanged_cores,
+        thm:peps_reset_cores_entropy,thm:peps_reset_entropy_scalar}
+    Set $r=2p+10$. Choose the Gaussian constants $A,T_0>0$ from
+    Theorem~\ref{thm:peps_reset_regional_filter} once, and choose the locality
+    constants $C,v>0$ from Theorem~\ref{thm:chain_supported_gaussian_integral}.
+    Put
+    \begin{align}
+        P                & =C(1+T_0),\notag       \\
+        K_{\mathrm{loc}} & =4(vT_0+15+r+P),\notag \\
+        C_p              & =K_{\mathrm{loc}}+R+4.
+    \end{align}
+    Choose a natural $L_0\ge\max\{1,8\sqrt8(1+\log q)\}$.
+    All these choices precede the instance data.
+    Nonnegativity of mutual information gives $b\ge0$. Hence, for
+    $B_*=1+b+\log L$, one has $B_*\ge1$.
+
+    Put $Q=I\setminus(D\cup C)$, let $Z$ be the union of the supports
+    crossing $D$, and put $\Psi=\Omega\otimes\Omega$, $\Phi=F_D\Psi$.
+    The regional Gaussian theorem constructs the buffer contraction
+    $W$ and a real overlap $z\ge e^{-2b}$; its truncated two-sided integral
+    $M_T$, of variance $AB_*$ and cutoff $T=T_0B_*$, satisfies
+    \begin{align}
+        \|M_T\Psi-z\Phi\|,\quad\|M_T^*\Phi-z\Psi\|
+        \le3\varepsilon,\qquad
+        \varepsilon=e^{-10b}L^{-r}.
+    \end{align}
+    Take $\ell=\lceil K_{\mathrm{loc}}B_*\rceil$.
+    Theorem~\ref{thm:chain_supported_gaussian_integral} gives its supported
+    approximation $M_{\mathrm{loc}}$ on
+    $S=N_\ell(Q\cup Z)$.
+    The elementary exponential estimate, reserving a factor
+    $e^{-\ell/4}$ to absorb $P$, gives
+    \begin{align}
+        \|M_{\mathrm{loc}}-M_T\|
+         & \le C L^2(1+T_0B_*)e^{vT_0B_*-\ell/2}
+        \le\varepsilon.
+    \end{align}
+    Indeed $\ell/4\ge P$, $P e^{-P}\le1$, and the remaining quarter-decay
+    absorbs $L^4(1+T_0B_*)$, with coefficient $P$; here $L^2\le L^4$.
+    The two normalized ground vectors therefore have residuals at most
+    $4\varepsilon$ for $M_{\mathrm{loc}}$.
+    The same-support polar correction of
+    Theorem~\ref{thm:peps_reset_polar_step} constructs a unitary $V$ on $S$
+    satisfying
+    \begin{align}
+        \delta:=\|V\Psi-\Phi\|\le8L^{-r}.
+    \end{align}
+
+    The ceiling bound and $B_*\ge1$ give
+    $\ell+R<C_pB_*=w$.
+    Lemma~\ref{lem:chain_reset_support_separation} makes $S$ disjoint from
+    both cores, so $V$ acts trivially on their joint marginal in each
+    replica. By Theorem~\ref{thm:peps_reset_exchanged_cores}, the two cores
+    of the first replica of $\Phi$ are uncorrelated. Transporting paired
+    coordinates to the two replicas and applying the entropy comparison of
+    Theorem~\ref{thm:peps_reset_cores_entropy} yields
+    \begin{align}
+        I_\Omega(R_0:C_0)
+         & \le8\sqrt\delta\,\log(e q^{|R_0|})\notag \\
+         & \le8\sqrt\delta\,(1+L\log q).
+    \end{align}
+    Since $L\ge L_0$, Theorem~\ref{thm:peps_reset_entropy_scalar}, with
+    $r=2p+10$, bounds the last expression by $L^{-p}$.
+    Empty cores cause no exception: their mutual information is zero.
+\end{proof}
 
 \begin{lemma}[Buffered discount on a chain]
     \label{lem:chain_buffer_discount}
@@ -342,6 +1053,160 @@ for an arbitrary finite set of sites and are instantiated here directly.
     $m\le(5+E_R+128B_R)(1+\vartheta)$, which follows from
     $\sqrt{(1+\vartheta)B_R}\le(1+\vartheta)B_R$, and $m\ge4$. The subset
     bound is the second part of Lemma~\ref{lem:chain_entropy_inequalities}.
+\end{proof}
+
+\begin{theorem}[Neighborhoods of intervals and their entropy]
+    \label{thm:chain_interval_neighborhood_entropy}
+    \lean{TNLean.MPS.AreaLaw.chainNeighborhood_interval_eq,
+        TNLean.MPS.AreaLaw.regionEntropy_chainNeighborhood_biUnion_intervals_le}
+    \leanok
+    \uses{def:chain_model}
+    Let $I=\{0,\ldots,L-1\}$ be a contiguous chain. Write
+    $[a,z)_I=\{x\in I:a\le x<z\}$ for natural endpoints $a,z$, and
+    for a real $\rho\ge0$ put
+    \begin{align}
+        N_\rho(A)=\{y\in I:\ \exists x\in A,\ |x-y|\le\rho\},
+        \qquad d=\lfloor\rho\rfloor.
+    \end{align}
+    Then the exact interval neighborhood is
+    \begin{align}
+        N_\rho([a,z)_I)=
+        \begin{cases}
+            \lbrack\max\{0,a-d\},z+d)_I, & \lbrack a,z)_I\ne\varnothing, \\
+            \varnothing,                 & [a,z)_I=\varnothing.
+        \end{cases}
+    \end{align}
+    There is no condition $z\le L$ on the original endpoint.
+
+    Let $q$ be any natural number and let $\Omega$ be a normalized
+    vector on the $L$ sites with local dimension $q$.
+    Suppose a real number $c$ bounds the entropy of every interval:
+    \begin{align}
+        S_\Omega([a,z)_I)\le c\qquad(a,z\in\mathbb N).
+    \end{align}
+    For any finite index set $s$ and natural endpoint families $a_i,z_i$,
+    put $T=\bigcup_{i\in s}[a_i,z_i)_I$. Then
+    \begin{align}
+        S_\Omega(N_\rho(T))\le |s|c.
+    \end{align}
+    Empty intervals and empty families are included, and the intervals
+    may overlap or repeat. No nonnegativity assumption on $c$ is added,
+    and no Hamiltonian, gap or positive local dimension is assumed.
+    These are the interval-neighborhood and entropy steps in Part~II
+    of~\cite{TNLean2026OneDimensional}, lines 458--461 and 482--487.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:chain_model,lem:chain_entropy_inequalities}
+    Coordinate distances are integers, so $|x-y|\le\rho$ is equivalent
+    to $|x-y|\le d$. If the interval is nonempty, its first and last
+    sites are $a$ and $\min\{z,L\}-1$. A site lies within distance $d$
+    of it precisely when it belongs to the displayed clipped interval;
+    one may choose the nearer endpoint when the site lies outside, or
+    the site itself when it lies inside. If the interval is empty,
+    its neighborhood is empty by definition. This explains why an
+    empty interval must not be enlarged by its endpoints.
+
+    The entropy of the empty interval is zero, so the interval bound
+    at $[0,0)_I$ gives $c\ge0$.
+    Each interval neighborhood has entropy at most $c$: it is either
+    an interval or the empty set. Moreover,
+    \begin{align}
+        N_\rho\Bigl(\bigcup_{i\in s}[a_i,z_i)_I\Bigr)
+        =\bigcup_{i\in s}N_\rho([a_i,z_i)_I).
+    \end{align}
+    Entropy submodularity and nonnegativity imply
+    $S_\Omega(A\cup B)\le S_\Omega(A)+S_\Omega(B)$ even when $A,B$
+    overlap. Induction on the finite index set therefore bounds the
+    entropy of this union by the sum of its component entropies,
+    which is at most $|s|c$. The empty-family case is $S_\Omega(\varnothing)=0$.
+\end{proof}
+
+\begin{theorem}[Information at logarithmic separation on a contiguous chain]
+    \label{thm:chain_logarithmic_separation}
+    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.mutualInformation_le_of_logarithmic_separation}
+    \leanok
+    \uses{def:chain_model}
+    Fix a natural local dimension $q\ge1$, a natural range $R$, a real
+    interaction bound $J$, a gap $\Delta>0$, an exponent $p>0$, and a
+    natural number $k_0\ge1$.
+    There are $D_p>0$ and a natural number $L_0\ge1$, depending only on
+    these fixed parameters, with the following property.
+    For every $L\ge L_0$, let $H$ be a range-$R$ Hamiltonian with
+    interaction bound $J$ on the contiguous chain $I=\{0,\ldots,L-1\}$,
+    and let $\Omega$ be a normalized ground vector with full-system gap
+    at least $\Delta$.
+    Let $T\subseteq I$ be a union of at most $k_0$ intervals, and let
+    $E\subseteq I$ satisfy
+    \begin{align}
+        D_p\log L\le|x-y|\qquad(x\in T,\ y\in E).
+    \end{align}
+    Then
+    \begin{align}
+        I_\Omega(T:E)\le L^{-p}.
+    \end{align}
+    Empty intervals, empty $T$ or $E$, and overlapping interval
+    representations are allowed. No additional disjointness assumption
+    is imposed. The constants precede the length, Hamiltonian, state,
+    regions and interval representation.
+    This is the contiguous-chain form of the logarithmic-separation
+    lemma in Part~II of~\cite{TNLean2026OneDimensional}, lines 454--488;
+    see~\cite{gap:tnlean_one_dimensional_connected_domain_scope} for the
+    domain distinction.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:chain_information_reset,thm:chain_area_law,
+        thm:chain_interval_neighborhood_entropy}
+    Put $\overline C=\max\{0,C_{\mathrm{int}}(q,R,J,\Delta)\}$ and
+    $b=4k_0\overline C$. Choose $C_p$ and the length threshold from
+    Theorem~\ref{thm:chain_information_reset}, and set
+    \begin{align}
+        D_p=3C_p(2+b)+3.
+    \end{align}
+    Enlarge the threshold so that $\log L\ge1$.
+    These choices use only the fixed parameters.
+    In any such chain there is a site, and its singleton term
+    has $0\le\|h_{\{x\}}\|\le J$. Thus $J\ge0$ is derived from the
+    model, rather than imposed as a further hypothesis, and
+    Theorem~\ref{thm:chain_area_law} applies.
+    Put $s=\log L$ and $w=C_p(1+b+s)>0$. Then
+    \begin{align}
+        D_p s-(3w+3)
+        =\bigl(3C_p(1+b)+3\bigr)(s-1)\ge0.
+    \end{align}
+
+    For a real $\rho\ge0$, write
+    \begin{align}
+        N_\rho(T)=\{y\in I:\ \exists x\in T,\ |x-y|\le\rho\}.
+    \end{align}
+    Choose the regions
+    \begin{align}
+        D=N_{w+1}(T),\qquad C=I\setminus N_{2w+2}(T),
+        \qquad R_0=T,\quad C_0=E.
+    \end{align}
+    The regions $D,C$ are disjoint, $T\subseteq D$, and $E\subseteq C$.
+    If $y\notin D$, then $|x-y|>w+1>w$ for every $x\in T$.
+    If $y\notin C$, choose $x\in T$ with $|x-y|\le2w+2$.
+    For every $e\in E$, the separation hypothesis and the triangle
+    inequality give
+    \begin{align}
+        |e-y|\ge D_p\log L-(2w+2)\ge w+1>w.
+    \end{align}
+    These are the two strict margins required by the reset theorem.
+
+    The interval area law bounds every interval entropy by
+    $\overline C$. Theorem~\ref{thm:chain_interval_neighborhood_entropy},
+    applied at radius $w+1$, therefore gives $S(D)\le k_0\overline C$.
+    Its empty-component alternative retains empty interval labels,
+    and its union estimate requires no disjointness of the enlarged intervals.
+    The Araki--Lieb inequality now gives
+    \begin{align}
+        I_\Omega(D:C)\le2S(D)\le2k_0\overline C\le b.
+    \end{align}
+    Applying Theorem~\ref{thm:chain_information_reset} to these regions
+    and cores proves the assertion. All pairwise conditions involving
+    an empty set are vacuous, so no nonemptiness condition is needed.
 \end{proof}
 
 \section{Finite sets of integers}
