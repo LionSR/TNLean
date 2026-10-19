@@ -1176,20 +1176,74 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     the finitely many templates.
 \end{proof}
 
+\begin{theorem}[Explicit footprint ratios for the readings of block guides]
+    \label{thm:peps_dyadic_block_reading_ratio}
+    \lean{TNLean.PEPS.Approximation.IsDisplacedReading.blockGuide_eq_of_mem,
+        TNLean.PEPS.Approximation.IsDisplacedReading.blockCorner_mem_closure,
+        TNLean.PEPS.Approximation.floor_div_adjacent,
+        TNLean.PEPS.Approximation.IsDisplacedReading.hasTwoOwnerFootprints_blockGuide,
+        TNLean.PEPS.Approximation.resizeRatio,
+        TNLean.PEPS.Approximation.resizeRatio_pos,
+        TNLean.PEPS.Approximation.resizeRatio_le,
+        TNLean.PEPS.Approximation.resizeRatio_le_div,
+        TNLean.PEPS.Approximation.resizing_footprintRatio_mixed_reading_of_le}
+    \leanok
+    \uses{def:peps_dyadic_block_guide, lem:peps_dyadic_readings_exist}
+    Let $g'$ be a labelling that reads, after any displacement, the guide uniform
+    on the blocks of side $s>0$, and let every true vertex of $g'$ within $s$ of
+    the working set $W$ be a hole center. Then every footprint radius $\delta$
+    with $2\delta<r$ and $2\delta<s$ gives the two-owner condition with working
+    set $W$ and inner radius $r$.
+
+    In particular, let $\epsilon_0>0$, $\nu_1=\min(\epsilon_0,1)/8$ and
+    $\nu\le\nu_1$. For $0<n<t$, every reading of a guide uniform on the
+    $2n$-blocks satisfies the two-owner condition with working set the closed
+    square of radius $2n$ about a grid corner, holes at its true vertices within
+    $4n$ of that corner, each of radius $h_n$ or $h_{2n}$, and footprint radius
+    $2\nu n$. Hence the ratio of Theorem~\ref{thm:peps_dyadic_sampled_ratio} for
+    the resizings can be taken equal to $\nu_1$, in place of the minimum given by
+    the compactness observation of~\cite[Section~7]{OpenAI2026PolynomialPEPS},
+    lines 447--479 and 529--541.
+\end{theorem}
+
+\begin{proof}\leanok
+    A reading of a block guide carries the label of a block on the open interior
+    of that block, so a grid corner lies in the closure of the label of each of
+    its four blocks. Let three points of a footprint outside the holes carry
+    three labels. Move them by the displacement, by less than
+    $\min(r-2\delta,s-2\delta)/4$; the moved points are pairwise closer than $s$,
+    so their block indices differ by at most one in each coordinate. Three
+    distinct labels need three distinct blocks among the four blocks about one
+    grid corner, and two of them are diagonal to each other. That corner is a
+    true vertex, and it lies within $2\delta$ plus the displacement of a
+    footprint point, hence within $r$ and within $s$ of it. So the corner is a
+    hole center and the footprint point lies in its hole, a contradiction. For
+    the resizings, $s=2n$ and the smallest radius is $h_n=\epsilon_0n$, so
+    $\nu\le\nu_1$ gives $2\cdot2\nu n\le\epsilon_0n/2<h_n$ and
+    $2\cdot2\nu n\le n/2<2n$. A true vertex within $2n$ of the working set lies
+    within $4n$ of the corner. Holes of radius $h_{2n}\ge h_n$ only enlarge the
+    excluded set.
+\end{proof}
+
 \begin{theorem}[The direct repainting at the constants of the protocol]
     \label{thm:peps_dyadic_direct_repainting_constants}
     \lean{TNLean.PEPS.Approximation.IsDirectRepaintingRatio,
+        TNLean.PEPS.Approximation.directRepaintingRatio,
+        TNLean.PEPS.Approximation.directRepaintingRatio_pos,
+        TNLean.PEPS.Approximation.isDirectRepaintingRatio_of_le,
+        TNLean.PEPS.Approximation.isDirectRepaintingRatio_directRepaintingRatio,
         TNLean.PEPS.Approximation.exists_isDirectRepaintingRatio,
         TNLean.PEPS.Approximation.exists_isProtocolConstants_isDirectRepaintingRatio,
         TNLean.PEPS.Approximation.IsDirectRepaintingRatio.hasTwoOwnerFootprints,
         TNLean.PEPS.Approximation.directRepainting_step_of_protocolSeparations,
         TNLean.PEPS.Approximation.IsProtocolConstants.directRepainting_step}
     \leanok
-    \uses{thm:peps_dyadic_sampled_ratio, thm:peps_guide_frame_rewrite_events,
+    \uses{thm:peps_dyadic_block_reading_ratio, thm:peps_guide_frame_rewrite_events,
         thm:peps_protocol_constants}
-    For $\epsilon_0>0$ and any $K_0$ there is $\nu'>0$ such that every
-    $\nu\in(0,\nu']$ serves as the ratio of Theorem~\ref{thm:peps_dyadic_sampled_ratio}
-    for the direct repaintings at levels $n\le K_0t$. This is a smallness condition on
+    For $\epsilon_0>0$ and any $K_0$, let
+    $\nu_3=\min(\epsilon_0/\max(K_0,1),1)/4$. Every $\nu\in(0,\nu_3]$ serves as
+    the ratio of Theorem~\ref{thm:peps_dyadic_sampled_ratio} for the direct
+    repaintings at levels $n\le K_0t$. This is a smallness condition on
     $\nu$ given $K_0$ and $\epsilon_0$, so the constants of
     Theorem~\ref{thm:peps_protocol_constants} can be chosen in the order
     of~\cite[Section~7]{OpenAI2026PolynomialPEPS}, \texttt{06-geometry.tex}, lines
@@ -1210,12 +1264,15 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:peps_dyadic_sampled_ratio,
-        lem:peps_dyadic_footprint_uniform,
+    \uses{thm:peps_dyadic_block_reading_ratio,
+        lem:peps_dyadic_small_radius,
         thm:peps_protocol_constants,
         thm:peps_frame_small_rewrite_gate_sources}
-    With $\nu'$ equal to the ratio of Theorem~\ref{thm:peps_dyadic_sampled_ratio} for the direct
-    repaintings, the two-owner condition survives shrinking the footprint. The
+    The hole radius satisfies $h_n\ge\epsilon_0n/\max(K_0,1)$ by
+    Lemma~\ref{lem:peps_dyadic_small_radius}, so $\nu\le\nu_3$ gives
+    $2\nu n\le h_n/2<h_n$ and $2\nu n\le n/2<n$, and
+    Theorem~\ref{thm:peps_dyadic_block_reading_ratio} gives the two-owner
+    condition with footprint radius $\nu n$. The
     separation $3u+4r<n$, the patch count and $18\le b$ are those of
     Theorem~\ref{thm:peps_protocol_constants}.
     The source-bounded rewrite gives the same circuit with at most $2b$ pair sources
@@ -2093,6 +2150,34 @@ of such a protocol is Proposition~\ref{prop:peps_dyadic_protocol}.
     of the proposition. Theorem~\ref{thm:peps_protocol_from_angular_and_patch_bounds}
     gives a protocol with these bounds from the adaptive patch constraint of
     Proposition~4.1, which holds by Theorem~\ref{thm:peps_adaptive_patch_constraint}.
+\end{proof}
+
+\begin{lemma}[The mesh ratio of the distribution protocol]
+    \label{lem:peps_dyadic_protocol_mesh_ratio}
+    \lean{TNLean.PEPS.Approximation.protocolMeshRatio,
+        TNLean.PEPS.Approximation.protocolHoleRatio_pos,
+        TNLean.PEPS.Approximation.protocolMeshRatio_pos,
+        TNLean.PEPS.Approximation.protocolMeshRatio_le_pointTreatmentRatio,
+        TNLean.PEPS.Approximation.protocolMeshRatio_le_directRepaintingRatio,
+        TNLean.PEPS.Approximation.protocolMeshRatio_le_resizeRatio,
+        TNLean.PEPS.Approximation.protocolMeshRatio_le_one_sixth,
+        TNLean.PEPS.Approximation.protocolMeshRatio_eq}
+    \leanok
+    \uses{thm:peps_dyadic_block_reading_ratio,
+        thm:peps_dyadic_direct_repainting_constants,
+        thm:peps_guide_frame_mark_ratio}
+    Let $\epsilon_0=1/30000$ and $K_0=20$, and let $\nu$ be the smaller of
+    $\nu_2=\min(\epsilon_0,1)/20000$ and
+    $\nu_3=\min(\epsilon_0/\max(K_0,1),1)/4$. Then $\nu=1/600000000$, and
+    $0<\nu\le\nu_1=\min(\epsilon_0,1)/8$ and $\nu\le1/6$. So $\nu$ serves the
+    resizings, the point treatments and the direct repaintings of the protocol
+    at once, and satisfies the smallness condition of the constants
+    (\texttt{06-geometry.tex}, lines 447--541 and 559--570).
+\end{lemma}
+
+\begin{proof}\leanok
+    Here $\nu_2=1/600000000$ and $\nu_3=1/2400000$. Since $\nu_2\le\nu_1$ and
+    $\nu_2\le1/20000$, both bounds hold.
 \end{proof}
 
 \begin{theorem}[The constants of the distribution protocol]
