@@ -46,6 +46,8 @@ registers of the frames, one register per site and per tag, each held by its own
   allowed monomials, `04-compression.tex`, lines 32–35.
 -/
 
+open TNLean.Lattice (sheetSwapOp)
+
 noncomputable section
 
 open Matrix ContinuousLinearMap EuclideanSpace

@@ -12,7 +12,7 @@ import TNLean.PEPS.AreaLaw.Amplification.LatticeExcitedDecay
 import TNLean.PEPS.AreaLaw.Amplification.LatticeAncillaSites
 import TNLean.PEPS.AreaLaw.Amplification.SupportedPolarCorrection
 import TNLean.PEPS.AreaLaw.Amplification.RadiusBound
-import TNLean.PEPS.AreaLaw.Amplification.EntropyComparison
+import TNLean.Lattice.EntropyComparison
 import TNLean.PEPS.AreaLaw.Geometry.TemplateRows
 
 /-!

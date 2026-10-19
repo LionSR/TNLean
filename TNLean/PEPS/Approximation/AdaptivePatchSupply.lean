@@ -53,6 +53,7 @@ here are formalized independently from the manuscript; no upstream Lean text was
 -/
 
 open Matrix
+open TNLean.Lattice (siteLift)
 
 noncomputable section
 
