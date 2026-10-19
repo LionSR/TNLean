@@ -56,7 +56,8 @@ abstracted — record why, so it is not re-proposed).
 - **Abstraction:** `TNLean.PEPS.Approximation.exists_sublinearCollarBoundAt_amplificationBoundAt
   (hΔ : 0 < Δ) (hcol : SublinearCollarBound q R J Δ D₀ Ctpl) : ∃ C N Ca Na,
   SublinearCollarBoundAt q R J Δ D₀ Ctpl C N ∧ AmplificationBoundAt q R J Δ (max C 1) 1 Ca Na`
-  in `CoarseInformation.lean`, built on `exists_amplificationBoundAt_max_one` in the same file.
+  in `CoarseInformation.lean`, built on `amplificationBoundAt_collarAmplification` in the same
+  file.
 - **Refactor:** each of the six existential corollaries of a named-constant theorem now
   opens with the single line `obtain ⟨C, N, Ca, Na, hcol, hamp⟩ :=
   exists_sublinearCollarBoundAt_amplificationBoundAt hΔ hcol`, replacing three lines.

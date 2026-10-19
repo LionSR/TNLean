@@ -659,6 +659,18 @@ theorem amplificationBound_explicit (q R : ℕ) {J Δ C₀ : ℝ} (hΔ : 0 < Δ)
       norm_latticePositiveConstraint_sub_map_le hpw R hΔ hH hΩ hh hhJ L hcontr hunit hherm hfix
         hl hτ) M
 
+/-- **Proposition 10.2 at the named constants, as `AmplificationBoundAt`**
+(`prop:amplification`, `09-amplification.tex` lines 261–296). For `Δ > 0`, `C₀ > 0` and an
+integer `M`, the amplification bound holds with the constant
+`C₂ = amplificationConstantExplicit q R J Δ C₀ M` and the threshold
+`max N₂ (Exponents.collarRadiusThreshold C₂ 1)` of `amplificationBound_explicit`. -/
+theorem amplificationBoundAt_explicit (q R : ℕ) {J Δ C₀ : ℝ} (hΔ : 0 < Δ) (hC₀ : 0 < C₀)
+    (M : ℕ) :
+    AmplificationBoundAt q R J Δ C₀ M (amplificationConstantExplicit q R J Δ C₀ M)
+      (max (amplificationThresholdExplicit q R J Δ C₀ M)
+        (Exponents.collarRadiusThreshold (amplificationConstantExplicit q R J Δ C₀ M) 1)) :=
+  amplificationBound_explicit (J := J) q R hΔ hC₀ M
+
 /-- **Proposition 10.2** (`prop:amplification`, `09-amplification.tex` lines 261–296, proof at
 lines 298–576), for the Hamiltonian parameters `q, R, J` and every gap `Δ > 0`. Fix `C₀ > 0`
 and an integer `M ≥ 1`. Beyond a threshold chosen before the domain,
