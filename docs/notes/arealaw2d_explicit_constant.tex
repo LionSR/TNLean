@@ -135,6 +135,21 @@ existentially although their closed forms are
 is $c_1=1/112$
 (\leanid{TNLean.PEPS.AreaLaw.Geometry.isBirthSeparationConstant_birthTemplateSeparationConstant}).
 
+These inputs are pinned in
+\leanid{TNLean.PEPS.AreaLaw.uniformAreaLawConstantExplicit}
+(\src{TNLean/PEPS/AreaLaw/AreaLawExplicitConstant.lean}). There $C_{\rm box}$ is
+the bootstrapped safe-box constant started from the explicit initial box
+estimate, the truncation constants are explicit functions of $R,J,\Delta$, and
+the filter-locality constants are those of the positive constraints. The only
+remaining input is one tuple $(c_0,C_{\rm ent},e_{\rm ent},C_{\rm en},e_{\rm en})$
+of transport constants satisfying the finite-family transport bound; these are
+universal and do not depend on $q,R,J,\Delta$.
+\leanid{TNLean.PEPS.AreaLaw.uniformAreaLaw_explicit} proves the area law with
+this constant for every such tuple with $c_0>0$. Explicit values of the
+transport constants come from QICLean's
+\leanid{transport_finite_family_explicit}, after which the constant of
+Theorem~1.1 is a closed expression in $q,R,J,\Delta$.
+
 \paragraph{Dependence on the parameters.}
 The parameters $q,R,J,\Delta$ enter through four explicit quantities:
 \begin{itemize}

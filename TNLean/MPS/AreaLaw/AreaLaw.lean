@@ -315,4 +315,33 @@ theorem chainAreaLaw_of_consecutive_terms
       (fun a b ↦ h.cutLogBudget_interval_le_of_consecutive_terms hq hwindow a b) hgs' a b
   exact regionEntropy_le_mul_card_boundaryEdges_of_intervals hgs.1 hC hI A
 
+/-- The interval entropy estimate with the original polynomial source constants.
+Source: one-dimensional note, part1_arealaw.tex, eq:final, lines674–679. -/
+theorem regionEntropy_interval_le_polynomial
+    (hq : 1 ≤ q) (hJ : 0 ≤ J) (hΔ : 0 < Δ)
+    (h : ChainHamiltonian L q R J) {E₀ : ℝ} {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
+    (hgs : Matrix.IsGappedGroundState h.operator E₀ Ω Δ) (l r : ℕ) :
+    let C_E : ℝ := 8 * chainCrossConst R * (q : ℝ) ^ (2 * (R + 1)) * J
+    let m : ℕ :=
+      ⌈max (max (max 4 (4 * C_E / Δ))
+        (128 * Real.sqrt ((1 + J / Δ) * chainBudgetConst q R)))
+        (4096 * Real.exp 1 * (1 + J / Δ) * chainBudgetConst q R)⌉₊
+    Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L l r) Ω ≤
+      8 * (m : ℝ) * R * Real.log q + 1 + 2 * C_E / Δ := by
+  intro C_E m
+  let T := interval L (l - m * R) (r + m * R) \ interval L l r
+  have hdisc := two_mul_condEntropy_interval_le_polynomial hq hJ hΔ h hgs l r
+  change 2 * (Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L l r ∪ T) Ω -
+      Entropy.regionEntropy (n := fun _ : Fin L ↦ q) T Ω) ≤
+    Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L l r) Ω +
+      1 + 2 * C_E / Δ at hdisc
+  have hAL := regionEntropy_le_union_add hgs.1 (Finset.disjoint_sdiff :
+    Disjoint (interval L l r) T)
+  have hT := regionEntropy_le_card_mul_log hgs.1 T
+  have hcard : (T.card : ℝ) ≤ 2 * ((m : ℝ) * R) := by
+    exact_mod_cast card_interval_enlargement_sdiff_le L l r (m * R)
+  have hlog : 0 ≤ Real.log (q : ℝ) := Real.log_nonneg (by exact_mod_cast hq)
+  have hTbound := hT.trans (mul_le_mul_of_nonneg_right hcard hlog)
+  linarith
+
 end TNLean.MPS.AreaLaw

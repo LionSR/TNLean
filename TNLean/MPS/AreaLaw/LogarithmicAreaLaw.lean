@@ -271,4 +271,55 @@ theorem chainAreaLaw_of_consecutive_terms_polynomial_range :
       rw [regionEntropy_eq_zero_of_localDimension_one hgs.1 A]
       simp
 
+/-- Full physical windows remain full windows after increasing relabelling.
+Source: the one-dimensional note, part1_arealaw.tex, lines 64–93 and 706–748. -/
+private theorem DomainHamiltonian.toChain_consecutive_terms
+    {Λ : Finset ℤ} {q R : ℕ} {J : ℝ}
+    (h : DomainHamiltonian Λ q R J) (hJ : 0 ≤ J)
+    (hwindow : ∀ X : DomainSupport Λ R, h.term X ≠ 0 →
+      ∃ a : ℤ, X.1.image (sitePos Λ) = Finset.Ico a (a + (R : ℤ) + 1)) :
+    ∀ Y : ChainSupport Λ.card R, (h.toChain hJ).term Y ≠ 0 →
+      ∃ a : ℕ, a + R + 1 ≤ Λ.card ∧ Y.1 = interval Λ.card a (a + R + 1) := by
+  classical
+  intro Y hY
+  change (if hdom : IsDomainSupport Λ R Y.1 then h.term ⟨Y.1, hdom⟩ else 0) ≠ 0 at hY
+  split_ifs at hY with hdom
+  · obtain ⟨a, ha⟩ := hwindow ⟨Y.1, hdom⟩ hY
+    have hc := congrArg Finset.card ha
+    rw [Finset.card_image_of_injective _ (sitePos Λ).injective, Int.card_Ico] at hc
+    have hlen : a + (R : ℤ) + 1 - a = ((R + 1 : ℕ) : ℤ) := by omega
+    rw [hlen, Int.toNat_natCast] at hc
+    exact Y.2.exists_eq_interval_of_card_eq hc
+  · exact (hY rfl).elim
+
+/-- The absolute polynomial-range bound on a finite subset of the integers.
+Only nonzero interactions are required to be full contained windows in the original sites.
+Source: the one-dimensional note, part1_arealaw.tex, lines 64–93 and 706–748. -/
+theorem domainAreaLaw_of_consecutive_terms_polynomial_range :
+    ∃ Cabs : ℝ, 0 < Cabs ∧
+      Cabs = (1064 + 33792 * Real.exp 1 + (1 + 64 * Real.exp 1) / Real.log 2) *
+        (((Real.log 2)⁻¹) ^ 2 + 2 * ((Real.log 2)⁻¹ + 2) ^ 2) ∧
+      ∀ (q R : ℕ) (J Δ : ℝ), 1 ≤ q → 0 ≤ J → 0 < Δ →
+        ∀ Λ : Finset ℤ, ∀ h : DomainHamiltonian Λ q R J,
+          (∀ X : DomainSupport Λ R, h.term X ≠ 0 →
+            ∃ a : ℤ,
+              X.1.image (sitePos Λ) = Finset.Ico a (a + (R : ℤ) + 1)) →
+          ∀ E₀ : ℝ, ∀ Ω : EuclideanSpace ℂ (Fin Λ.card → Fin q),
+            Matrix.IsGappedGroundState h.operator E₀ Ω Δ →
+            ∀ A : Finset ℤ,
+              Entropy.regionEntropy (n := fun _ : Fin Λ.card ↦ q)
+                (domainRegion Λ A) Ω ≤
+                Cabs * (1 + J / Δ) * (R : ℝ) * Real.log ((q : ℝ) ^ R) ^ 3 *
+                  (domainBoundaryEdges Λ A).card := by
+  obtain ⟨Cabs, hCabs, hCeq, hchain⟩ :=
+    chainAreaLaw_of_consecutive_terms_polynomial_range
+  refine ⟨Cabs, hCabs, hCeq, ?_⟩
+  intro q R J Δ hq hJ hΔ Λ h hwindow E₀ Ω hgs A
+  obtain ⟨A', hS, hB⟩ := h.exists_regionEntropy_eq_card_boundaryEdges_eq hΔ hgs A
+  have hgs' : Matrix.IsGappedGroundState (h.toChain hJ).operator E₀ Ω Δ := by
+    rwa [DomainHamiltonian.toChain_operator]
+  have hbound := hchain q R J Δ hq hJ hΔ Λ.card (h.toChain hJ)
+    (h.toChain_consecutive_terms hJ hwindow) E₀ Ω hgs' A'
+  simpa only [hS, hB] using hbound
+
 end TNLean.MPS.AreaLaw

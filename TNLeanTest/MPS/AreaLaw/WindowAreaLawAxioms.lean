@@ -44,7 +44,14 @@ run_cmd do
     ``TNLean.MPS.AreaLaw.ChainHamiltonian.regionEntropy_eq_zero_of_range_zero,
     ``TNLean.MPS.AreaLaw.chainAreaLaw_of_consecutive_terms_polynomial_range,
     ``TNLean.MPS.AreaLaw.card_boundaryEdges_prefix_le,
-    ``TNLean.MPS.AreaLaw.exists_isOpenMPS_norm_sub_le_of_error_of_consecutive_terms] do
+    ``TNLean.MPS.AreaLaw.exists_isOpenMPS_norm_sub_le_of_error_of_consecutive_terms,
+    ``TNLean.MPS.AreaLaw.IsChainSupport.exists_eq_interval_of_card_eq,
+    ``TNLean.MPS.AreaLaw.DomainHamiltonian.exists_regionEntropy_eq_card_boundaryEdges_eq,
+    ``TNLean.MPS.AreaLaw.domainAreaLaw_of_consecutive_terms_polynomial_range,
+    ``TNLean.MPS.AreaLaw.two_mul_condEntropy_interval_le_polynomial,
+    ``TNLean.MPS.AreaLaw.regionEntropy_interval_le_polynomial,
+    ``TNLean.MPS.AreaLaw.exists_isOpenMPS_norm_sub_le_of_error_polynomial,
+    ``TNLean.MPS.AreaLaw.exists_isOpenMPS_norm_sub_le_polynomial] do
     unless (← Lean.getEnv).contains decl do
       throwError "Missing declaration {decl}"
     let axioms ← Lean.collectAxioms decl

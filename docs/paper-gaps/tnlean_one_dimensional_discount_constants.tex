@@ -20,11 +20,11 @@ weights $a_j=2/m$, the note fixes the constants (equation \texttt{eq:CE},
 lines~366--373)
 \begin{align}
     C_E
-        &= 8\,N_R\,J\,q^{2(R+1)},
-    \label{eq:tnlean_one_dimensional_discount_constants_source_energy_constant}\\
+     & = 8\,N_R\,J\,q^{2(R+1)},
+    \label{eq:tnlean_one_dimensional_discount_constants_source_energy_constant}                \\
     m
-        &= \Bigl\lceil\max\Bigl\{4,\ \frac{4C_E}{\Delta},\ 128\sqrt{(1+\vartheta)\mathcal B_R},\
-        4096\,e\,(1+\vartheta)\,\mathcal B_R\Bigr\}\Bigr\rceil,
+     & = \Bigl\lceil\max\Bigl\{4,\ \frac{4C_E}{\Delta},\ 128\sqrt{(1+\vartheta)\mathcal B_R},\
+    4096\,e\,(1+\vartheta)\,\mathcal B_R\Bigr\}\Bigr\rceil,
     \label{eq:tnlean_one_dimensional_discount_constants_source_shell_count}
 \end{align}
 with $\vartheta=J/\Delta$, notes $m\le C_1(q,R)(1+\vartheta)$
@@ -32,7 +32,7 @@ with $\vartheta=J/\Delta$, notes $m\le C_1(q,R)(1+\vartheta)$
 (equation \texttt{eq:discount})
 \begin{align}
     S(X\,|\,T_m)
-        &\le \tfrac12\,S(X)+\tfrac12+\frac{C_E}{\Delta}.
+     & \le \tfrac12\,S(X)+\tfrac12+\frac{C_E}{\Delta}.
     \label{eq:tnlean_one_dimensional_discount_constants_source_discount}
 \end{align}
 In the proof, the energy of the filtered vector is bounded by
@@ -59,19 +59,19 @@ Here the formal constants mean the earlier estimates.
 The earlier proof established the discount on the chain for every interval
 $X=[l,r)$ with the buffer $T=X^{+mR}\setminus X$, as an instance of the
 finite-dimensional discount of the companion library,\footnote{Declarations:
-\leanid{TNLean.MPS.AreaLaw.chainEnergyThreshold},
-\leanid{TNLean.MPS.AreaLaw.chainTailThreshold},
-\leanid{TNLean.MPS.AreaLaw.chainShellCount},
-\leanid{TNLean.MPS.AreaLaw.chainDiscountConst},
-\leanid{TNLean.MPS.AreaLaw.two_mul_condEntropy_interval_le}; the
-finite-dimensional lemma is \leanid{Entropy.two_mul_condEntropy_le} of
-QICLean.} in the form
+    \leanid{TNLean.MPS.AreaLaw.chainEnergyThreshold},
+    \leanid{TNLean.MPS.AreaLaw.chainTailThreshold},
+    \leanid{TNLean.MPS.AreaLaw.chainShellCount},
+    \leanid{TNLean.MPS.AreaLaw.chainDiscountConst},
+    \leanid{TNLean.MPS.AreaLaw.two_mul_condEntropy_interval_le}; the
+    finite-dimensional lemma is \leanid{Entropy.two_mul_condEntropy_le} of
+    QICLean.} in the form
 \begin{align}
     2\bigl(S(X\cup T)-S(T)\bigr)
-        &\le S(X)+\frac{4096\,e\,\vartheta\,\mathcal B_R}{m}+m\log2,
-    \label{eq:tnlean_one_dimensional_discount_constants_formal_discount}\\
+     & \le S(X)+\frac{4096\,e\,\vartheta\,\mathcal B_R}{m}+m\log2,
+    \label{eq:tnlean_one_dimensional_discount_constants_formal_discount}                                         \\
     m
-        &= \Bigl\lceil\max\Bigl\{4,\ \frac{4C_E}{\Delta},\ 128\sqrt{(1+\vartheta)\mathcal B_R}\Bigr\}\Bigr\rceil .
+     & = \Bigl\lceil\max\Bigl\{4,\ \frac{4C_E}{\Delta},\ 128\sqrt{(1+\vartheta)\mathcal B_R}\Bigr\}\Bigr\rceil .
     \label{eq:tnlean_one_dimensional_discount_constants_formal_shell_count}
 \end{align}
 The shells, the flanks, the weights, the crossing count $N_R$ and the cut
@@ -80,38 +80,38 @@ printed ones in three connected places, each at the level of an absolute
 constant.
 
 \begin{enumerate}
-\item \emph{Energy threshold $\Delta/2$ in place of $\Delta/4$.} The
-finite-dimensional lemma bounds the energy of the filtered vector by
-$\sum_j4a_j^2\sum_{Y\text{ split by }X_j}(\dim\mathcal H_Y)^2J$, that is by
-$16N_Rq^{2(R+1)}J/m=2C_E/m$, twice the printed estimate $C_E/m$. With the
-same second entry $m\ge4C_E/\Delta$ of $m$ this is at most $\Delta/2$, so the
-discount runs at the energy threshold $\Delta/2$, and the overlap defect of
-every prefix is at most $1/2$ rather than $1/4$.
-\item \emph{Overlap losses $m\log2$ in place of $2C_E/\Delta$.} The
-finite-dimensional lemma keeps the overlap losses of the $m$ prefixes as
-$-m\log(1-E/\Delta)$ with $E$ the energy threshold; at $E=\Delta/2$ this is
-$m\log2$. The note instead uses $-\frac12\log(1-v)\le v$ at
-$v=C_E/(m\Delta)\le\frac14$ and sums to $C_E/\Delta$ in $\log N$, that is
-$2C_E/\Delta$ in the discount. Since $m\ge4C_E/\Delta$, the formal term
-$m\log2$ dominates the printed $2C_E/\Delta$, and both are at most a
-constant times $1+\vartheta$.
-\item \emph{The tail term stays explicit and the fourth entry of $m$ is
-omitted.} The error terms of the tail bound sum to
-$\sum_j1024\,e\,\vartheta\,\mathcal B_ja_j^2\le4096\,e\,\vartheta\,\mathcal B_R/m$
-in the discount, which is twice the printed $2048\,e\,\vartheta\,\mathcal B_R/m$
-of $\log N$. The note bounds this by $1$ (that is, $\frac12$ in $\log N$)
-through the fourth entry $m\ge4096\,e\,(1+\vartheta)\mathcal B_R$; the
-formalization keeps the term $4096\,e\,\vartheta\,\mathcal B_R/m$ in the
-discount constant and omits the fourth entry from $m$, so its $m$ is at most
-the printed one.
+    \item \emph{Energy threshold $\Delta/2$ in place of $\Delta/4$.} The
+          finite-dimensional lemma bounds the energy of the filtered vector by
+          $\sum_j4a_j^2\sum_{Y\text{ split by }X_j}(\dim\mathcal H_Y)^2J$, that is by
+          $16N_Rq^{2(R+1)}J/m=2C_E/m$, twice the printed estimate $C_E/m$. With the
+          same second entry $m\ge4C_E/\Delta$ of $m$ this is at most $\Delta/2$, so the
+          discount runs at the energy threshold $\Delta/2$, and the overlap defect of
+          every prefix is at most $1/2$ rather than $1/4$.
+    \item \emph{Overlap losses $m\log2$ in place of $2C_E/\Delta$.} The
+          finite-dimensional lemma keeps the overlap losses of the $m$ prefixes as
+          $-m\log(1-E/\Delta)$ with $E$ the energy threshold; at $E=\Delta/2$ this is
+          $m\log2$. The note instead uses $-\frac12\log(1-v)\le v$ at
+          $v=C_E/(m\Delta)\le\frac14$ and sums to $C_E/\Delta$ in $\log N$, that is
+          $2C_E/\Delta$ in the discount. Since $m\ge4C_E/\Delta$, the formal term
+          $m\log2$ dominates the printed $2C_E/\Delta$, and both are at most a
+          constant times $1+\vartheta$.
+    \item \emph{The tail term stays explicit and the fourth entry of $m$ is
+              omitted.} The error terms of the tail bound sum to
+          $\sum_j1024\,e\,\vartheta\,\mathcal B_ja_j^2\le4096\,e\,\vartheta\,\mathcal B_R/m$
+          in the discount, which is twice the printed $2048\,e\,\vartheta\,\mathcal B_R/m$
+          of $\log N$. The note bounds this by $1$ (that is, $\frac12$ in $\log N$)
+          through the fourth entry $m\ge4096\,e\,(1+\vartheta)\mathcal B_R$; the
+          formalization keeps the term $4096\,e\,\vartheta\,\mathcal B_R/m$ in the
+          discount constant and omits the fourth entry from $m$, so its $m$ is at most
+          the printed one.
 \end{enumerate}
 
 Consequently the formal interval bound of Theorem~A
 is\footnote{Declarations:
-\leanid{TNLean.MPS.AreaLaw.chainIntervalEntropyBound},
-\leanid{TNLean.MPS.AreaLaw.chainShellConst},
-\leanid{TNLean.MPS.AreaLaw.chainAreaLawConst},
-\leanid{TNLean.MPS.AreaLaw.chainIntervalEntropyBound_le}.}
+    \leanid{TNLean.MPS.AreaLaw.chainIntervalEntropyBound},
+    \leanid{TNLean.MPS.AreaLaw.chainShellConst},
+    \leanid{TNLean.MPS.AreaLaw.chainAreaLawConst},
+    \leanid{TNLean.MPS.AreaLaw.chainIntervalEntropyBound_le}.}
 $C_{\mathrm{int}}=8mR\log q+4096\,e\,\vartheta\,\mathcal B_R/m+m\log2$ in
 place of the printed $8mR\log q+1+2C_E/\Delta$, with the explicit
 $C_1(q,R)=5+32N_Rq^{2(R+1)}+128\mathcal B_R$ in \texttt{eq:mbound} and
@@ -119,6 +119,47 @@ $C_0(q,R)=(8R\log q+\log2)\,C_1(q,R)+1024\,e\,\mathcal B_R$ in place of the
 printed $C_0$. Every deviation is a change of absolute constants; the
 structure of the argument, its hypotheses, and the linear dependence of the
 area-law constant on $1+J/\Delta$ are those of the note.
+
+% Future addition: adopt only after the owning-module proof checks have passed.
+\section{The original polynomial constants}
+
+The discount also holds with the original constants
+(\ref{eq:tnlean_one_dimensional_discount_constants_source_energy_constant})--
+(\ref{eq:tnlean_one_dimensional_discount_constants_source_shell_count}).
+For the chain $I=[0,L)\cap\mathbb Z$ and natural endpoints $l,r$,
+put $X=[l,r)\cap I$ and use
+$T=([l-mR,r+mR)\cap I)\setminus X$, with truncated subtraction
+at the left endpoint. This includes arbitrary endpoints and empty intervals.
+For the weights $a_j=2/m$, the quadratic energy comparison with coefficient
+$2$ gives an energy bound $E=C_E/m\le\Delta/4$.
+The fourth entry of $m$ bounds the marginal error by one, and
+$-m\log(1-E/\Delta)\le2C_E/\Delta$ bounds the prefix loss.
+Thus the original discount
+(\ref{eq:tnlean_one_dimensional_discount_constants_source_discount})
+holds with its printed buffer and additive constant.\footnote{Declarations:
+\leanid{Entropy.two_mul_condEntropy_le_quadratic} and
+\leanid{TNLean.MPS.AreaLaw.two_mul_condEntropy_interval_le_polynomial}.}
+These are the constants of the one-dimensional note~\cite{TNLean2026OneDimensional},
+\texttt{part1\_arealaw.tex}, lines~366--409 and~517--645.
+
+The Araki--Lieb argument gives the original interval bound
+$C_{\mathrm{int}}=8mR\log q+1+2C_E/\Delta$.
+Put $u_0=(32\sqrt{(1+\vartheta)\mathcal B_R})^{-1}$.
+The same marginal-tail estimate and sequential truncation then give a unit,
+nonzero matrix product state with error at most $1/L$ and bond dimension at most
+$2e^{C_{\mathrm{int}}}(32e^{e/2}L^4)^{1/u_0}$ for $L\ge2$.
+For $L\ge1$ and $0<\varepsilon\le1$, the accuracy-dependent version
+gives error at most $\varepsilon$.\footnote{Declarations:
+\leanid{TNLean.MPS.AreaLaw.regionEntropy_interval_le_polynomial},
+\leanid{TNLean.MPS.AreaLaw.exists_isOpenMPS_norm_sub_le_of_error_polynomial}, and
+\leanid{TNLean.MPS.AreaLaw.exists_isOpenMPS_norm_sub_le_polynomial}.}
+These are the original interval constant and quantitative approximation in
+\texttt{part1\_arealaw.tex}, lines~674--679, and
+\texttt{part2a\_mps\_information.tex}, lines~73--92.
+The polynomial quantities are local expressions in these statements.
+The logarithmic estimate gives the separate refinement in the remark on
+sharper constants;
+no numerical ordering between the two choices is asserted.
 
 \section{The logarithmic discount}
 
@@ -128,7 +169,7 @@ support-dimension factor by a logarithmic interaction budget.
 The finite-dimensional comparison uses the same optimizing filters and
 its existing admissibility condition supplies the required smallness;
 there is no additional physical hypothesis.\footnote{Finite-dimensional
-comparison: \leanid{Entropy.two_mul_condEntropy_le_logarithmic}.}
+    comparison: \leanid{Entropy.two_mul_condEntropy_le_logarithmic}.}
 
 More generally, consider any finite family of Hermitian interactions of
 norm at most $J\ge0$ and diameter at most $R$ on a chain of local dimension
@@ -137,10 +178,10 @@ gapped ground vector and gap $\Delta>0$. Suppose one number $B\ge1$ bounds
 the logarithmic cut budget of every coordinate shell used in the argument.
 Put $\vartheta=J/\Delta$ and choose
 \begin{align}
-    C_E&=32eBJ,
-    \label{eq:tnlean_one_dimensional_discount_constants_log_energy}\\
-    m&=\left\lceil\max\left\{4,\frac{128eBJ}{\Delta},
-        128\sqrt{(1+\vartheta)B},4096e(1+\vartheta)B\right\}\right\rceil .
+    C_E & =32eBJ,
+    \label{eq:tnlean_one_dimensional_discount_constants_log_energy} \\
+    m   & =\left\lceil\max\left\{4,\frac{128eBJ}{\Delta},
+    128\sqrt{(1+\vartheta)B},4096e(1+\vartheta)B\right\}\right\rceil .
     \label{eq:tnlean_one_dimensional_discount_constants_log_shells}
 \end{align}
 The chain statement uses the coordinate intervals
@@ -148,8 +189,8 @@ $X_j=[l-(j+1)R,r+(j+1)R)$, clipped to the chain, with truncated subtraction
 at the left endpoint, and weights $a_j=2/m$.
 The all-support specialization takes
 $B=\mathcal B_R=1+N_R\log^2(e q^{R+1})$.\footnote{Chain declarations:
-\leanid{TNLean.MPS.AreaLaw.two_mul_condEntropy_interval_le_of_family_budget}
-and \leanid{TNLean.MPS.AreaLaw.two_mul_condEntropy_interval_le}.}
+    \leanid{TNLean.MPS.AreaLaw.two_mul_condEntropy_interval_le_of_family_budget}
+    and \leanid{TNLean.MPS.AreaLaw.two_mul_condEntropy_interval_le}.}
 
 For the same optimizing filters and every prefix, the energy threshold is
 $E=C_E/m\le\Delta/4$. The logarithmic overlap loss satisfies
@@ -157,7 +198,7 @@ $-m\log(1-E/\Delta)\le2C_E/\Delta$. The fourth entry in
 (\ref{eq:tnlean_one_dimensional_discount_constants_log_shells}) bounds the marginal error by one.
 Consequently, for the final buffer $T$,
 \begin{align}
-    2S(X\mid T)&\le S(X)+1+\frac{64eBJ}{\Delta}.
+    2S(X\mid T) & \le S(X)+1+\frac{64eBJ}{\Delta}.
     \label{eq:tnlean_one_dimensional_discount_constants_log_discount}
 \end{align}
 This has the form of the buffered discount of the one-dimensional
@@ -172,11 +213,11 @@ The Araki--Lieb closing argument of the one-dimensional
 note~\cite{TNLean2026OneDimensional}
 (\texttt{part1\_arealaw.tex}, lines~668--679) gives
 \begin{align}
-    C_1(B)&=5+(128+4224e)B, &
-    C_0(q,R;B)&=8R\log q\,C_1(B)+1+64eB,
-    \label{eq:tnlean_one_dimensional_discount_constants_log_coefficients}\\
-    C_{\mathrm{int}}&=8mR\log q+1+64eB\vartheta
-        \le C_0(q,R;B)(1+\vartheta).
+    C_1(B)           & =5+(128+4224e)B,           &
+    C_0(q,R;B)       & =8R\log q\,C_1(B)+1+64eB,
+    \label{eq:tnlean_one_dimensional_discount_constants_log_coefficients} \\
+    C_{\mathrm{int}} & =8mR\log q+1+64eB\vartheta
+    \le C_0(q,R;B)(1+\vartheta).
     \label{eq:tnlean_one_dimensional_discount_constants_log_interval}
 \end{align}
 For fixed $R$, this gives logarithmic-cube dependence on the local
@@ -195,6 +236,23 @@ that remark~\cite{TNLean2026OneDimensional}
 (\texttt{part1\_arealaw.tex}, lines~736--748). Range zero and local dimension one have zero
 entropy separately. The finite-domain entropy reduction and the
 contiguous-chain restrictions on the Part~II estimates are unchanged.
+
+The full-window polynomial-range bound also holds on every finite
+$\Lambda\subset\mathbb Z$, with the same absolute constant chosen before
+$q,R,J,\Delta,\Lambda$ and all Hamiltonian, ground-vector and region data.
+For every finite $A\subseteq\mathbb Z$, the bound is
+$S_\Omega(A\cap\Lambda)\le C_{\mathrm{abs}}(1+J/\Delta)R\log^3(q^R)|\partial_\Lambda A|$.
+Here every nonzero designated support must be a full interval
+$[a,a+R+1)\cap\mathbb Z$ contained in $\Lambda$.
+Labelling the sites in increasing order preserves each interaction term,
+its norm bound $J$, the Hamiltonian sum and the global gap.
+Flipping the region on zero-entropy prefixes gives the exact same entropy
+and physical boundary cardinality, without a factor for the number of components.\footnote{Declaration:
+\leanid{TNLean.MPS.AreaLaw.domainAreaLaw_of_consecutive_terms_polynomial_range}.}
+This is the finite-domain full-window specialization in the remark on sharper
+constants of the note~\cite{TNLean2026OneDimensional},
+\texttt{part1\_arealaw.tex}, lines~706--748.
+The improvement is restricted to full designated windows.
 
 Thus the old three constant losses are historical. The logarithmic
 comparison supplies the four-entry shell count, the $\Delta/4$ threshold

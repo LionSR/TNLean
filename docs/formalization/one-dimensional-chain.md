@@ -21,6 +21,8 @@ finite set of sites, instantiated here on the chain.
 
 ## Statements
 
+<!-- FUTURE additions: adopt the original-constant and finite-domain rows only after owning-module and fixture checks pass. -->
+
 | Note statement | Formal statement | Status |
 |---|---|---|
 | Setting: the chain of `L` sites, intervals, supports, Hamiltonians (`eq:ham`, `eq:gap`) | `MPS.AreaLaw.interval`, `MPS.AreaLaw.IsChainSupport`, `MPS.AreaLaw.ChainHamiltonian`, `Matrix.IsGappedGroundState` | Definitions. |
@@ -30,6 +32,10 @@ finite set of sites, instantiated here on the chain.
 | Remark on sharper constants (`rem:sharper`, lines 706–709): full consecutive windows | `MPS.AreaLaw.ChainHamiltonian.card_crossingTerms_interval_le_of_consecutive_terms`, `MPS.AreaLaw.ChainHamiltonian.log_surprisalMoment_interval_le_of_consecutive_terms` | Proved when every nonzero term has a full `(R+1)`-site window as its designated support. Active crossing count `2R`; physical moment budget `1 + 2R log²(e q^(R+1))` for the original gapped vector. The original all-support Hamiltonian is retained; the restriction concerns every nonzero designated support and excludes shorter boundary windows unless their terms vanish. |
 | Single-splitting lemma (Part I, Section 4) | `MPS.AreaLaw.single_splitting_shells`, with `MPS.AreaLaw.not_splits_two_shells` as a corollary | Proved, including the initial index zero, later containment, earlier disjointness, and uniqueness. The coordinate-interval statement also permits arbitrary endpoints and range zero. |
 | Lemma 4.2 (buffered discount), with the logarithmic energy refinement of `rem:sharper` | `MPS.AreaLaw.two_mul_condEntropy_interval_le_of_family_budget`, `MPS.AreaLaw.two_mul_condEntropy_interval_le` | The finite-family statement uses one uniform logarithmic cut budget for every shell. With `C_E = 32 e B J`, the four-entry shell count gives energy `E = C_E/m ≤ Δ/4`, prefix loss at most `2 C_E/Δ` and marginal error at most one; hence `2 S(X∪T) - 2 S(T) ≤ S(X) + 1 + 64 e B J/Δ`. The chain specialization takes `B = B_R`. The superseded three-entry constants are recorded historically in `docs/paper-gaps/tnlean_one_dimensional_discount_constants.tex`; no unresolved discount-constant gap remains. |
+| Lemma 4.2 with the original polynomial constants (`eq:CE`, `eq:discount`) | `MPS.AreaLaw.two_mul_condEntropy_interval_le_polynomial` | Proved for the printed four-entry shell count and `C_E = 8 N_R J q^(2(R+1))`: `2 S(X∪T) - 2 S(T) ≤ S(X) + 1 + 2 C_E/Δ`. The coefficient-two quadratic comparison gives `E = C_E/m ≤ Δ/4`; the fourth threshold absorbs the tail error. The polynomial constants are local expressions. |
+| Original interval constant (`eq:final`) | `MPS.AreaLaw.regionEntropy_interval_le_polynomial` | Proved with `C_int = 8 m R log q + 1 + 2 C_E/Δ`, using the same original `C_E` and four-entry `m`, for every clipped coordinate interval. |
+| Prescribed accuracy with the original interval constant | `MPS.AreaLaw.exists_isOpenMPS_norm_sub_le_of_error_polynomial` | Proved for `L ≥ 1` and `0 < ε ≤ 1`: a unit MPS has error at most `ε` and bond dimension at most `⌊exp(C_int + 64 s log(2 L c₀/ε))⌋`, with `s = √((1 + J/Δ) B_R)` and `c₀ = √(2 exp(e/2))`, using the original printed `C_int`. |
+| Quantitative two-line MPS bound (`thm:Bshort`) with the original constants | `MPS.AreaLaw.exists_isOpenMPS_norm_sub_le_polynomial` | Proved for every `L ≥ 2`: a unit nonzero open MPS has error at most `1/L`, explicit integer bond dimension `⌊exp(C_int + 64 s log(2 L² c₀))⌋`, and the printed upper bound `2 exp(C_int) (32 exp(e/2) L⁴)^(1/u₀)`, where `u₀ = 1/(32 s)`. Normalization and phase adjustment follow with phase zero. |
 | Araki–Lieb closure, reductions (Section 2) | `Lattice.regionEntropy_le_union_add`, `MPS.AreaLaw.regionEntropy_le_mul_card_boundaryEdges_of_intervals` | Proved. |
 | Theorem A for intervals | `MPS.AreaLaw.regionEntropy_interval_le` with the explicit `MPS.AreaLaw.chainIntervalEntropyBound` | Proved; no existential constant. |
 | Theorem A, constant linear in `1 + J/Δ` | `MPS.AreaLaw.chainIntervalEntropyBound_le`, `MPS.AreaLaw.chainAreaLawConst` | Proved. |
@@ -39,6 +45,7 @@ finite set of sites, instantiated here on the chain.
 | Zero interaction range | `MPS.AreaLaw.ChainHamiltonian.regionEntropy_eq_zero_of_range_zero` | Every region of a gapped range-zero ground vector has zero entropy, without an added sign or positivity assumption on `J` or `q`. |
 | Setting on a finite `Λ ⊂ ℤ` (induced path graph, `eq:ham`, `∂_Λ A`) | `MPS.AreaLaw.sitePos`, `MPS.AreaLaw.domainGraph`, `MPS.AreaLaw.IsDomainSupport`, `MPS.AreaLaw.DomainHamiltonian`, `MPS.AreaLaw.domainBoundaryEdges` | Definitions; the sites of `Λ` are labelled in increasing order. |
 | Theorem A on a finite `Λ ⊂ ℤ`; first reduction (Section 2) | `MPS.AreaLaw.regionEntropy_le_mul_card_domainBoundaryEdges`, `MPS.AreaLaw.domainAreaLaw` | Proved, with the constant `C₀(q, R)(1 + J/Δ)` of the chain. The reduction uses the zero entropy of the prefixes ending at the gaps of `Λ` (`Lattice.regionEntropy_eq_zero_of_forall_subset_or_disjoint`) and flips of the region on them (`Lattice.regionEntropy_symmDiff_eq_of_eq_zero`) in place of the factorization over components: `docs/paper-gaps/tnlean_one_dimensional_connected_domain_scope.tex` (resolved). |
+| Polynomial-range full-window area law on finite domains | `MPS.AreaLaw.domainAreaLaw_of_consecutive_terms_polynomial_range` | Proved on every finite `Λ ⊂ ℤ` when every nonzero designated physical support is a full `(R+1)`-site interval contained in `Λ`. The same absolute `C_abs`, fixed before all physical data, gives `S_Ω(A∩Λ) ≤ C_abs (1+J/Δ) R log³(q^R) card(∂_Λ A)`, including range zero, local dimension one and the empty domain. Sorted labelling preserves the original terms, `J`, sum and global gap; zero-entropy prefix flips preserve entropy and the exact physical boundary cardinality, with no component factor. |
 | Part II, `lem:reset` (information reset) | `MPS.AreaLaw.ChainHamiltonian.information_reset` | Proved on the contiguous chain, with only the original full-system gap. The constants precede all system, region and information-bound data. |
 | Part II, `lem:logsep` (information at logarithmic separation) | `MPS.AreaLaw.ChainHamiltonian.mutualInformation_le_of_logarithmic_separation` | Proved on the contiguous chain for a union of at most k₀ intervals and an arbitrary region at distance at least Dₚ log L, including empty or overlapping interval components. |
 | Matrix product states, cut matrices | `MPS.AreaLaw.IsOpenMPS`, `MPS.AreaLaw.cutMatrix` | Definitions. |
@@ -269,6 +276,11 @@ them:
 | `chainAreaLawConst q R` | `C₀ = 8 R log q C₁ + 1 + 64 e B_R`, with `C_int ≤ C₀ (1 + J/Δ)` |
 | `chainTruncationWidth q R J Δ L` | `w = 64 √((1 + J/Δ) B_R) log(2 L² √(2 e^{e/2}))` |
 | `chainBondDimension q R J Δ L` | `⌊exp(C_int + w)⌋` |
+
+The four original-polynomial statements write their printed `C_E`, four-entry
+`m` and `C_int` as local expressions. The table gives the separate logarithmic
+constants; the original-constant statements retain the formulas of `eq:CE`
+and `eq:final` of the note.
 
 The logarithmic interaction-energy estimate is the three-lines refinement of
 Remark `rem:sharper` (`part1_arealaw.tex`, lines 711–734). The fourth entry of

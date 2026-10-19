@@ -141,12 +141,10 @@ private theorem neg_log_one_sub_le_two_mul {v : ℝ} (hv : 0 ≤ v) (hvhalf : v 
       nlinarith [mul_nonneg hv (show 0 ≤ 1 - 2 * v by linarith)])
   linarith
 
-/-- The buffered discount for an arbitrary finite family with a common shell budget.
-The budget is fixed before the chain length, terms and ground vector.
-Source: the one-dimensional note, Lemma 4.2 and Remark `rem:sharper`,
-`part1_arealaw.tex`, lines 355–645 and 711–734. -/
-theorem two_mul_condEntropy_interval_le_of_family_budget
-    (q R : ℕ) (B : ℝ) (hB : 1 ≤ B) {J Δ : ℝ}
+/-- Uniform coordinate shells with either proved interaction-energy estimate.
+Source: one-dimensional note, part1_arealaw.tex, lines 355–645 and 711–737. -/
+private theorem two_mul_condEntropy_interval_le_of_energy_estimate
+    (q R : ℕ) (B C_E : ℝ) (hB : 1 ≤ B) (hCE : 0 ≤ C_E) {J Δ : ℝ}
     (hJ : 0 ≤ J) (hΔ : 0 < Δ) {L : ℕ} {ι : Type*} [Fintype ι]
     (g : ι → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (S : ι → Finset (Fin L))
@@ -154,9 +152,8 @@ theorem two_mul_condEntropy_interval_le_of_family_budget
     (hherm : ∀ i, (g i).IsHermitian)
     (hnorm : ∀ i, ‖g i‖ ≤ J)
     (hdiam : ∀ i, ∀ x ∈ S i, ∀ y ∈ S i, y.val ≤ x.val + R)
-    (m l r : ℕ)
-    (hm4 : 4 ≤ m)
-    (hmE : 128 * Real.exp 1 * B * J / Δ ≤ (m : ℝ))
+    (m l r : ℕ) (hm4 : 4 ≤ m)
+    (hmE : 4 * C_E / Δ ≤ (m : ℝ))
     (hmT : 128 * Real.sqrt ((1 + J / Δ) * B) ≤ (m : ℝ))
     (hmF : 4096 * Real.exp 1 * (1 + J / Δ) * B ≤ (m : ℝ))
     (hbudget : ∀ j < m,
@@ -164,14 +161,23 @@ theorem two_mul_condEntropy_interval_le_of_family_budget
         (Entropy.crossingTerms S
           (interval L (l - (j + 1) * R) (r + (j + 1) * R)))
         (Entropy.supportDim (fun _ : Fin L ↦ q) ∘ S) ≤ B)
+    (henergy :
+      (∑ j ∈ Finset.range m, 2 * (2 / (m : ℝ)) ^ 2 *
+        ∑ i ∈ Entropy.crossingTerms S
+          (interval L (l - (j + 1) * R) (r + (j + 1) * R)),
+          (Entropy.supportDim (fun _ : Fin L ↦ q) (S i) : ℝ) ^ 2 * J ≤ C_E / m) ∨
+      (∑ j ∈ Finset.range m, 8 * Real.exp 1 * (2 / (m : ℝ)) ^ 2 *
+        ∑ i ∈ Entropy.crossingTerms S
+          (interval L (l - (j + 1) * R) (r + (j + 1) * R)),
+          Real.log (Real.exp 1 * Entropy.supportDim (fun _ : Fin L ↦ q) (S i)) ^ 2 * J ≤
+            C_E / m))
     {E₀ : ℝ} {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
     (hgs : Matrix.IsGappedGroundState (∑ i, g i) E₀ Ω Δ) :
     let X := interval L l r
     let T := interval L (l - m * R) (r + m * R) \ X
     2 * (Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (X ∪ T) Ω -
         Entropy.regionEntropy (n := fun _ : Fin L ↦ q) T Ω) ≤
-      Entropy.regionEntropy (n := fun _ : Fin L ↦ q) X Ω +
-        1 + 64 * Real.exp 1 * B * J / Δ := by
+      Entropy.regionEntropy (n := fun _ : Fin L ↦ q) X Ω + 1 + 2 * C_E / Δ := by
   classical
   obtain ⟨hΩ, heig, hgap⟩ := hgs
   replace heig : toEuclideanLin (∑ i, g i) Ω = (E₀ : ℂ) • Ω := by
@@ -247,46 +253,9 @@ theorem two_mul_condEntropy_interval_le_of_family_budget
     rw [hXT j' hj'] at h2
     have heq := (single_splitting_shells (hdiam i) h1).2.2 (j' + 1) h2
     omega
-  set C_E : ℝ := 32 * Real.exp 1 * K' * J
-  have hCE0 : 0 ≤ C_E := by
-    dsimp only [C_E]
-    exact mul_nonneg (mul_nonneg (by positivity) (zero_le_one.trans hK')) hJ
-  have hE : ∑ j ∈ Finset.range m, 8 * Real.exp 1 * a j ^ 2 *
-      ∑ i ∈ Entropy.crossingTerms S (X ∪ T j),
-        Real.log (Real.exp 1 * Entropy.supportDim (fun _ : Fin L ↦ q) (S i)) ^ 2 * J ≤
-      C_E / m := by
-    have hterm : ∀ j ∈ Finset.range m, 8 * Real.exp 1 * a j ^ 2 *
-        ∑ i ∈ Entropy.crossingTerms S (X ∪ T j),
-          Real.log (Real.exp 1 * Entropy.supportDim (fun _ : Fin L ↦ q) (S i)) ^ 2 * J ≤
-        32 * Real.exp 1 * K' * J / (m : ℝ) ^ 2 := by
-      intro j hj
-      have hj := Finset.mem_range.mp hj
-      have hsum : ∑ i ∈ Entropy.crossingTerms S (X ∪ T j),
-          Real.log (Real.exp 1 * Entropy.supportDim (fun _ : Fin L ↦ q) (S i)) ^ 2 * J ≤
-          K' * J := by
-        rw [← Finset.sum_mul]
-        have hlogs : ∑ i ∈ Entropy.crossingTerms S (X ∪ T j),
-            Real.log (Real.exp 1 * Entropy.supportDim (fun _ : Fin L ↦ q) (S i)) ^ 2 ≤ K' := by
-          have hb := hB j hj
-          simp only [Entropy.cutLogBudget, Function.comp_apply] at hb
-          linarith only [hb]
-        exact mul_le_mul_of_nonneg_right hlogs hJ
-      have ha : a j ^ 2 = 4 / (m : ℝ) ^ 2 := by norm_num [a, div_pow]
-      calc 8 * Real.exp 1 * a j ^ 2 * ∑ i ∈ Entropy.crossingTerms S (X ∪ T j),
-            Real.log (Real.exp 1 * Entropy.supportDim (fun _ : Fin L ↦ q) (S i)) ^ 2 * J
-          ≤ 8 * Real.exp 1 * a j ^ 2 * (K' * J) :=
-            mul_le_mul_of_nonneg_left hsum (by positivity)
-        _ = 32 * Real.exp 1 * K' * J / (m : ℝ) ^ 2 := by rw [ha]; ring
-    refine (Finset.sum_le_sum hterm).trans_eq ?_
-    simp only [Finset.sum_const, Finset.card_range, nsmul_eq_mul]
-    dsimp only [C_E]
-    field_simp
   have hquarter : C_E / (m : ℝ) / Δ ≤ 1 / 4 := by
     have hthr : 4 * C_E ≤ (m : ℝ) * Δ := by
-      have hthr : 128 * Real.exp 1 * K' * J / Δ ≤ m := hmE
-      rw [div_le_iff₀ hΔ] at hthr
-      dsimp only [C_E]
-      nlinarith only [hthr]
+      exact (div_le_iff₀ hΔ).mp hmE
     rw [div_div, div_le_div_iff₀ (mul_pos hmpos hΔ) (by norm_num : (0 : ℝ) < 4)]
     nlinarith only [hthr]
   have hEΔ : C_E / (m : ℝ) < Δ :=
@@ -307,11 +276,30 @@ theorem two_mul_condEntropy_interval_le_of_family_budget
     have : d j ≤ d (m - 1) := Nat.mul_le_mul_right _ (by omega)
     exact Finset.sdiff_subset_sdiff (interval_mono (by omega) (by omega)) le_rfl
   -- the finite-dimensional discount
-  have key := Entropy.two_mul_condEntropy_le_logarithmic
-    (n := fun _ : Fin L ↦ q) X T hT hdisj a ha0 ha2
-    hΩ g S hsupp hherm hJ hnorm hsingle hΔ heig hgap
-    (E := C_E / m) hEΔ hE hu hmass
-    (show Disjoint X Tbuf from Finset.disjoint_sdiff) hTbuf
+  have key :
+      2 * (Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (X ∪ Tbuf) Ω -
+          Entropy.regionEntropy (n := fun _ : Fin L ↦ q) Tbuf Ω) ≤
+        Entropy.regionEntropy (n := fun _ : Fin L ↦ q) X Ω +
+          ∑ j ∈ Finset.range m, 1024 * Real.exp 1 * (J / Δ) *
+            Entropy.cutLogBudget (Entropy.crossingTerms S (X ∪ T j))
+              (Entropy.supportDim (fun _ : Fin L ↦ q) ∘ S) * a j ^ 2 -
+          m * Real.log (1 - C_E / m / Δ) := by
+    rcases henergy with hpoly | hlog
+    · refine Entropy.two_mul_condEntropy_le_quadratic
+        (n := fun _ : Fin L ↦ q) X T hT hdisj a ha0 ha2
+        hΩ g S hsupp hherm hJ hnorm hsingle hΔ heig hgap
+        (κ := 2) (by norm_num) (E := C_E / m) hEΔ ?_ hu hmass
+        (show Disjoint X Tbuf from Finset.disjoint_sdiff) hTbuf
+      convert hpoly using 1
+      refine Finset.sum_congr rfl fun j hj ↦ ?_
+      rw [hXT j (Finset.mem_range.mp hj)]
+    · refine Entropy.two_mul_condEntropy_le_logarithmic
+        (n := fun _ : Fin L ↦ q) X T hT hdisj a ha0 ha2
+        hΩ g S hsupp hherm hJ hnorm hsingle hΔ heig hgap
+        (E := C_E / m) hEΔ ?_ hu hmass
+        (show Disjoint X Tbuf from Finset.disjoint_sdiff) hTbuf
+      convert hlog using 1
+      exact Finset.sum_congr rfl fun j hj ↦ by rw [hXT j (Finset.mem_range.mp hj)]
   -- the error terms
   have herr : ∑ j ∈ Finset.range m, 1024 * Real.exp 1 * (J / Δ) *
       Entropy.cutLogBudget (Entropy.crossingTerms S (X ∪ T j))
@@ -339,7 +327,7 @@ theorem two_mul_condEntropy_interval_le_of_family_budget
       mul_nonneg (by positivity) (zero_le_one.trans hK')
     nlinarith only [hmF, hcoef]
   have hv0 : 0 ≤ C_E / (m : ℝ) / Δ :=
-    div_nonneg (div_nonneg hCE0 hmpos.le) hΔ.le
+    div_nonneg (div_nonneg hCE hmpos.le) hΔ.le
   have hlog : -(m : ℝ) * Real.log (1 - C_E / (m : ℝ) / Δ) ≤ 2 * C_E / Δ := by
     have hscalar := neg_log_one_sub_le_two_mul hv0
       (hquarter.trans (by norm_num : (1 : ℝ) / 4 ≤ 1 / 2))
@@ -348,10 +336,88 @@ theorem two_mul_condEntropy_interval_le_of_family_budget
       _ ≤ (m : ℝ) * (2 * (C_E / (m : ℝ) / Δ)) :=
         mul_le_mul_of_nonneg_left hscalar hmpos.le
       _ = 2 * C_E / Δ := by field_simp
-  have hdiscount : 1 + 64 * Real.exp 1 * B * J / Δ = 1 + 2 * C_E / Δ := by
-    simp only [C_E, K']
+  linarith only [key, herrone, hlog]
+
+/-- The buffered discount for an arbitrary finite family with a common shell budget.
+The budget is fixed before the chain length, terms and ground vector.
+Source: the one-dimensional note, Lemma 4.2 and Remark `rem:sharper`,
+`part1_arealaw.tex`, lines 355–645 and 711–734. -/
+theorem two_mul_condEntropy_interval_le_of_family_budget
+    (q R : ℕ) (B : ℝ) (hB : 1 ≤ B) {J Δ : ℝ}
+    (hJ : 0 ≤ J) (hΔ : 0 < Δ) {L : ℕ} {ι : Type*} [Fintype ι]
+    (g : ι → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
+    (S : ι → Finset (Fin L))
+    (hsupp : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (g i) (S i))
+    (hherm : ∀ i, (g i).IsHermitian)
+    (hnorm : ∀ i, ‖g i‖ ≤ J)
+    (hdiam : ∀ i, ∀ x ∈ S i, ∀ y ∈ S i, y.val ≤ x.val + R)
+    (m l r : ℕ)
+    (hm4 : 4 ≤ m)
+    (hmE : 128 * Real.exp 1 * B * J / Δ ≤ (m : ℝ))
+    (hmT : 128 * Real.sqrt ((1 + J / Δ) * B) ≤ (m : ℝ))
+    (hmF : 4096 * Real.exp 1 * (1 + J / Δ) * B ≤ (m : ℝ))
+    (hbudget : ∀ j < m,
+      Entropy.cutLogBudget
+        (Entropy.crossingTerms S
+          (interval L (l - (j + 1) * R) (r + (j + 1) * R)))
+        (Entropy.supportDim (fun _ : Fin L ↦ q) ∘ S) ≤ B)
+    {E₀ : ℝ} {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
+    (hgs : Matrix.IsGappedGroundState (∑ i, g i) E₀ Ω Δ) :
+    let X := interval L l r
+    let T := interval L (l - m * R) (r + m * R) \ X
+    2 * (Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (X ∪ T) Ω -
+        Entropy.regionEntropy (n := fun _ : Fin L ↦ q) T Ω) ≤
+      Entropy.regionEntropy (n := fun _ : Fin L ↦ q) X Ω +
+        1 + 64 * Real.exp 1 * B * J / Δ := by
+  classical
+  set K' : ℝ := B
+  have hK' : 1 ≤ K' := hB
+  have hmpos : (0 : ℝ) < m := by exact_mod_cast (show 0 < m by omega)
+  set d : ℕ → ℕ := fun j ↦ (j + 1) * R
+  set a : ℕ → ℝ := fun _ ↦ 2 / m
+  set C_E : ℝ := 32 * Real.exp 1 * K' * J
+  have hCE0 : 0 ≤ C_E := by
+    dsimp only [C_E]
+    exact mul_nonneg (mul_nonneg (by positivity) (zero_le_one.trans hK')) hJ
+  have hE : ∑ j ∈ Finset.range m, 8 * Real.exp 1 * a j ^ 2 *
+      ∑ i ∈ Entropy.crossingTerms S (interval L (l - d j) (r + d j)),
+        Real.log (Real.exp 1 * Entropy.supportDim (fun _ : Fin L ↦ q) (S i)) ^ 2 * J ≤
+      C_E / m := by
+    have hterm : ∀ j ∈ Finset.range m, 8 * Real.exp 1 * a j ^ 2 *
+        ∑ i ∈ Entropy.crossingTerms S (interval L (l - d j) (r + d j)),
+          Real.log (Real.exp 1 * Entropy.supportDim (fun _ : Fin L ↦ q) (S i)) ^ 2 * J ≤
+        32 * Real.exp 1 * K' * J / (m : ℝ) ^ 2 := by
+      intro j hj
+      have hj := Finset.mem_range.mp hj
+      have hsum : ∑ i ∈ Entropy.crossingTerms S (interval L (l - d j) (r + d j)),
+          Real.log (Real.exp 1 * Entropy.supportDim (fun _ : Fin L ↦ q) (S i)) ^ 2 * J ≤
+          K' * J := by
+        rw [← Finset.sum_mul]
+        have hlogs : ∑ i ∈ Entropy.crossingTerms S (interval L (l - d j) (r + d j)),
+            Real.log (Real.exp 1 * Entropy.supportDim (fun _ : Fin L ↦ q) (S i)) ^ 2 ≤ K' := by
+          have hb := hbudget j hj
+          simp only [Entropy.cutLogBudget, Function.comp_apply] at hb
+          linarith only [hb]
+        exact mul_le_mul_of_nonneg_right hlogs hJ
+      have ha : a j ^ 2 = 4 / (m : ℝ) ^ 2 := by norm_num [a, div_pow]
+      calc 8 * Real.exp 1 * a j ^ 2 * ∑ i ∈ Entropy.crossingTerms S (interval L (l - d j) (r + d j)),
+            Real.log (Real.exp 1 * Entropy.supportDim (fun _ : Fin L ↦ q) (S i)) ^ 2 * J
+          ≤ 8 * Real.exp 1 * a j ^ 2 * (K' * J) :=
+            mul_le_mul_of_nonneg_left hsum (by positivity)
+        _ = 32 * Real.exp 1 * K' * J / (m : ℝ) ^ 2 := by rw [ha]; ring
+    refine (Finset.sum_le_sum hterm).trans_eq ?_
+    simp only [Finset.sum_const, Finset.card_range, nsmul_eq_mul]
+    dsimp only [C_E]
+    field_simp
+  have hmE' : 4 * C_E / Δ ≤ (m : ℝ) := by
+    convert hmE using 1; dsimp only [C_E, K']; ring
+  have key := two_mul_condEntropy_interval_le_of_energy_estimate
+    q R B C_E hB hCE0 hJ hΔ g S hsupp hherm hnorm hdiam
+    m l r hm4 hmE' hmT hmF hbudget (Or.inr hE) hgs
+  have hcoef : 64 * Real.exp 1 * K' * J / Δ = 2 * C_E / Δ := by
+    dsimp only [C_E]
     ring
-  linarith only [key, herrone, hlog, hdiscount]
+  simpa only [hcoef] using key
 
 /-- **The buffered discount on a chain.** For a gapped ground vector `Ω` of a finite-range
 Hamiltonian on the chain, put `X = [l, r)` and `T = [l - mR, r + mR) \ X`.
@@ -378,5 +444,98 @@ theorem two_mul_condEntropy_interval_le (hq : 1 ≤ q) (hJ : 0 ≤ J) (hΔ : 0 <
       (chainTailThreshold_le_chainShellCount q R J Δ)
       ((le_max_right _ _).trans (Nat.le_ceil _))
       (fun j _ ↦ cutLogBudget_interval_le hq (l - (j + 1) * R) (r + (j + 1) * R)) hgs
+
+/-- The source-exact polynomial discount, with shared shells.
+Source: one-dimensional note, part1_arealaw.tex, eq:CE and eq:discount,
+lines 366–409 and 517–645. -/
+theorem two_mul_condEntropy_interval_le_polynomial
+    (hq : 1 ≤ q) (hJ : 0 ≤ J) (hΔ : 0 < Δ)
+    (h : ChainHamiltonian L q R J) {E₀ : ℝ} {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
+    (hgs : Matrix.IsGappedGroundState h.operator E₀ Ω Δ) (l r : ℕ) :
+    let C_E : ℝ := 8 * chainCrossConst R * (q : ℝ) ^ (2 * (R + 1)) * J
+    let m : ℕ :=
+      ⌈max (max (max 4 (4 * C_E / Δ))
+        (128 * Real.sqrt ((1 + J / Δ) * chainBudgetConst q R)))
+        (4096 * Real.exp 1 * (1 + J / Δ) * chainBudgetConst q R)⌉₊
+    let T := interval L (l - m * R) (r + m * R) \ interval L l r
+    2 * (Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L l r ∪ T) Ω -
+        Entropy.regionEntropy (n := fun _ : Fin L ↦ q) T Ω) ≤
+      Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L l r) Ω +
+        1 + 2 * C_E / Δ := by
+  intro C_E m Tbuf
+  classical
+  set N : ℕ := chainCrossConst R
+  set K' : ℝ := chainBudgetConst q R
+  have hK' : 1 ≤ K' := one_le_chainBudgetConst q R
+  -- the shells
+  have hm4 : 4 ≤ m := by
+    have h : (4 : ℝ) ≤
+        max (max (max 4 (4 * C_E / Δ))
+          (128 * Real.sqrt ((1 + J / Δ) * K')))
+          (4096 * Real.exp 1 * (1 + J / Δ) * K') :=
+      ((le_max_left _ _).trans (le_max_left _ _)).trans (le_max_left _ _)
+    have hc := Nat.le_ceil
+      (max (max (max 4 (4 * C_E / Δ))
+        (128 * Real.sqrt ((1 + J / Δ) * K')))
+        (4096 * Real.exp 1 * (1 + J / Δ) * K'))
+    exact_mod_cast h.trans hc
+  have hm4' : (4 : ℝ) ≤ m := by exact_mod_cast hm4
+  have hmpos : (0 : ℝ) < m := by linarith
+  have hmE : 4 * C_E / Δ ≤ m :=
+    (((le_max_right _ _).trans (le_max_left _ _)).trans (le_max_left _ _)).trans
+      (Nat.le_ceil _)
+  have hmT : 128 * Real.sqrt ((1 + J / Δ) * K') ≤ m :=
+    ((le_max_right _ _).trans (le_max_left _ _)).trans (Nat.le_ceil _)
+  set d : ℕ → ℕ := fun j ↦ (j + 1) * R
+  set a : ℕ → ℝ := fun _ ↦ 2 / m
+  set S : ChainSupport L R → Finset (Fin L) := fun X ↦ X.1
+  have hcross : ∀ j < m,
+      ((Entropy.crossingTerms S (interval L (l - d j) (r + d j))).card : ℝ) ≤ N :=
+    fun j _ ↦ by
+      exact_mod_cast card_crossingTerms_interval_le (L := L) (R := R) (l - d j) (r + d j)
+  have hB : ∀ j < m,
+      Entropy.cutLogBudget (Entropy.crossingTerms S (interval L (l - d j) (r + d j)))
+        (Entropy.supportDim (fun _ : Fin L ↦ q) ∘ S) ≤ K' :=
+    fun j _ ↦ cutLogBudget_interval_le hq (l - d j) (r + d j)
+  have hCE0 : 0 ≤ C_E := by dsimp only [C_E, N]; positivity
+  have hE : ∑ j ∈ Finset.range m, 2 * a j ^ 2 *
+      ∑ i ∈ Entropy.crossingTerms S (interval L (l - d j) (r + d j)),
+        (Entropy.supportDim (fun _ : Fin L ↦ q) (S i) : ℝ) ^ 2 * J ≤ C_E / m := by
+    have hqJ : 0 ≤ (q : ℝ) ^ (2 * (R + 1)) * J := by positivity
+    have hterm : ∀ j ∈ Finset.range m, 2 * a j ^ 2 *
+        ∑ i ∈ Entropy.crossingTerms S (interval L (l - d j) (r + d j)),
+          (Entropy.supportDim (fun _ : Fin L ↦ q) (S i) : ℝ) ^ 2 * J ≤
+        8 * N * ((q : ℝ) ^ (2 * (R + 1)) * J) / (m : ℝ) ^ 2 := by
+      intro j hj
+      have hj := Finset.mem_range.mp hj
+      have hsum : ∑ i ∈ Entropy.crossingTerms S (interval L (l - d j) (r + d j)),
+          (Entropy.supportDim (fun _ : Fin L ↦ q) (S i) : ℝ) ^ 2 * J ≤
+          (Entropy.crossingTerms S (interval L (l - d j) (r + d j))).card * ((q : ℝ) ^ (2 * (R + 1)) * J) := by
+        rw [← nsmul_eq_mul]
+        refine Finset.sum_le_card_nsmul _ _ _ fun i _ ↦ ?_
+        have h2 := supportDim_le_real (R := R) hq i
+        have h0 : (0 : ℝ) ≤ Entropy.supportDim (fun _ : Fin L ↦ q) (S i) := by positivity
+        calc (Entropy.supportDim (fun _ : Fin L ↦ q) (S i) : ℝ) ^ 2 * J ≤
+            ((q : ℝ) ^ (R + 1)) ^ 2 * J := mul_le_mul_of_nonneg_right (pow_le_pow_left₀ h0 h2 2) hJ
+          _ = (q : ℝ) ^ (2 * (R + 1)) * J := by
+            rw [← pow_mul, mul_comm (R + 1) 2]
+      have hcard := hcross j hj
+      have ha : a j ^ 2 = 4 / (m : ℝ) ^ 2 := by norm_num [a, div_pow]
+      calc 2 * a j ^ 2 * ∑ i ∈ Entropy.crossingTerms S (interval L (l - d j) (r + d j)),
+            (Entropy.supportDim (fun _ : Fin L ↦ q) (S i) : ℝ) ^ 2 * J
+          ≤ 2 * a j ^ 2 * ((Entropy.crossingTerms S (interval L (l - d j) (r + d j))).card *
+              ((q : ℝ) ^ (2 * (R + 1)) * J)) := by gcongr
+        _ ≤ 2 * a j ^ 2 * (N * ((q : ℝ) ^ (2 * (R + 1)) * J)) := by gcongr
+        _ = 8 * N * ((q : ℝ) ^ (2 * (R + 1)) * J) / (m : ℝ) ^ 2 := by rw [ha]; ring
+    refine (Finset.sum_le_sum hterm).trans_eq ?_
+    simp only [Finset.sum_const, Finset.card_range, nsmul_eq_mul]
+    dsimp only [C_E, N]
+    field_simp
+  have hmF : 4096 * Real.exp 1 * (1 + J / Δ) * K' ≤ (m : ℝ) := by
+    dsimp only [m]
+    exact (le_max_right _ _).trans (Nat.le_ceil _)
+  exact two_mul_condEntropy_interval_le_of_energy_estimate
+    q R K' C_E hK' hCE0 hJ hΔ h.term S h.supported h.hermitian h.norm_le
+    (fun X ↦ X.property.2) m l r hm4 hmE hmT hmF hB (Or.inl hE) hgs
 
 end TNLean.MPS.AreaLaw

@@ -24,6 +24,18 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Real initial-box scale exceeds one — promoted (2026-10-18)
+
+- **Pattern:** cast `1 < initialBoxScale q R J Δ` from the natural bound
+  `sixteen_le_initialBoxScale` to obtain positivity of its real logarithm.
+- **Seen:** Three occurrences across `InitialBoxEstimate.lean`
+  (`initialBoxExponent_pos_and_lt_one`) and `InitialExponentGain.lean`
+  (`one_sub_initialBoxExponent_eq`, `initialBoxExponent_gain_bounds`).
+- **Abstraction:** `TNLean.PEPS.AreaLaw.one_lt_initialBoxScale` in
+  `TNLean/PEPS/AreaLaw/InitialBoxEstimate.lean`, beside `sixteen_le_initialBoxScale`.
+- **Notes:** All three call sites use the shared real-valued bound. The helper
+  retains explicit `q, R, J, Δ` parameters and requires no additional hypotheses.
+
 ### Independent gate arity and party lifetime — promoted (2026-10-18)
 
 - **Pattern:** Count the tagged links meeting a party by summing the two link
@@ -3685,6 +3697,20 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 ## Completed refactors
 
+### Common coordinate shells for polynomial and logarithmic discounts — completed cleanup
+
+- **Pattern:** The logarithmic finite-family discount and the source-exact polynomial
+  discount use the same nested clipped coordinate shells, single-splitting argument,
+  uniform weights, tail admissibility and scalar error bounds.
+- **Cleanup:** A single private mathematical lemma,
+  `two_mul_condEntropy_interval_le_of_energy_estimate` in
+  `TNLean/MPS/AreaLaw/BufferDiscount.lean`, contains this common proof. Its two explicit
+  energy alternatives invoke the existing QIC quadratic comparison at coefficient two
+  or the logarithmic comparison. Each public theorem derives its own original energy
+  estimate before applying the lemma.
+- **Scope:** Both public theorems retain their own energy constants and physical
+  hypotheses. The logarithmic constants remain those of the existing definitions.
+
 ### Literal one- and two-bond assignment specialization — resolved (2026-10-02)
 
 - **Pattern:** specialize the literal-to-tree-cycle assignment identity at
@@ -4664,6 +4690,15 @@ three-plaquette output measurement, and the routed reunion measurement.
   `isReordering_comp_iff`; apply `IsReordering.comp` as a term instead.
 
 ## Candidates
+
+### A maximal finite support fills its coordinate interval — candidate
+
+The minimum-coordinate image argument occurs twice in `Hamiltonian.lean`, in
+`IsChainSupport.card_le` and `IsChainSupport.exists_eq_interval_of_card_eq`. Both map
+site labels injectively to natural coordinates and compare with the same closed
+interval. The latter additionally uses equality of cardinalities to identify the
+whole interval. These are two occurrences in one file, below the promotion threshold;
+no additional helper is proposed.
 
 ### A marginal tail under an upper bound for its cut budget — candidate
 
@@ -6701,6 +6736,19 @@ spectral split → block extraction → MPV calculation → strict bounds
   tactic or global simplification rule is introduced.
 
 ## Rejected
+
+### Lower bound for a logarithmic cut budget — rejected (2026-10-19)
+
+- **Pattern:** unfold a local expression `B = 1 + t` and prove `1 ≤ B` from
+  `0 ≤ t`.
+- **Seen:** three occurrences in `MPS/AreaLaw/AreaLaw.lean`,
+  `MPS/AreaLaw/LogarithmicAreaLaw.lean`, and
+  `MPS/AreaLaw/MPSApproximation.lean`.
+- **Abstraction:** all three arguments already apply Mathlib's
+  `le_add_of_nonneg_right`; positivity supplies the nonnegative summand.
+- **Notes:** the repeated lines instantiate an existing order lemma after
+  unfolding a local abbreviation. A second local lemma or tactic would merely
+  repeat that lemma, so no additional abstraction is introduced.
 
 ### Axiom allow-list fixtures — rejected (2026-10-12)
 

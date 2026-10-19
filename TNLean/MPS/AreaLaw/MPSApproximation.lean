@@ -439,6 +439,45 @@ theorem exists_isOpenMPS_norm_sub_le_of_error_of_consecutive_terms
     intro hw k _
     exact surprisalTail_leftBlock_le_of_consecutive_terms hq hJ hΔ h hwindow hgs k _ hw
 
+/-- Accuracy-dependent MPS approximation with the original printed interval constant.
+Source: one-dimensional note, part1_arealaw.tex, eq:final, lines674–679, and
+part2a_mps_information.tex, sec:shortcut, thm:Bshort, lines80–92. -/
+theorem exists_isOpenMPS_norm_sub_le_of_error_polynomial
+    (hq : 1 ≤ q) (hJ : 0 ≤ J) (hΔ : 0 < Δ) {L : ℕ}
+    (hL : 1 ≤ L) (h : ChainHamiltonian L q R J) {E₀ : ℝ}
+    {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
+    (hgs : Matrix.IsGappedGroundState h.operator E₀ Ω Δ)
+    {ε : ℝ} (hε : 0 < ε) (hε1 : ε ≤ 1) :
+    let C_E : ℝ := 8 * chainCrossConst R * (q : ℝ) ^ (2 * (R + 1)) * J
+    let m : ℕ :=
+      ⌈max (max (max 4 (4 * C_E / Δ))
+        (128 * Real.sqrt ((1 + J / Δ) * chainBudgetConst q R)))
+        (4096 * Real.exp 1 * (1 + J / Δ) * chainBudgetConst q R)⌉₊
+    let C_int := 8 * (m : ℝ) * R * Real.log q + 1 + 2 * C_E / Δ
+    ∃ Φ : EuclideanSpace ℂ (Fin L → Fin q), ‖Φ‖ = 1 ∧
+      IsOpenMPS L q
+        ⌊Real.exp (C_int + 64 * Real.sqrt ((1 + J / Δ) * chainBudgetConst q R) *
+          Real.log (2 * (L : ℝ) * tailPrefactorRoot / ε))⌋₊
+        (fun x ↦ Φ x) ∧ ‖Φ - Ω‖ ≤ ε := by
+  intro C_E m C_int
+  have hϑ : 0 ≤ J / Δ := div_nonneg hJ hΔ.le
+  have hK := one_le_chainBudgetConst q R
+  have hs : 0 < Real.sqrt ((1 + J / Δ) * chainBudgetConst q R) :=
+    Real.sqrt_pos.mpr (by nlinarith)
+  have hC : 0 ≤ C_int := by
+    have hlog : 0 ≤ Real.log (q : ℝ) := Real.log_nonneg (by exact_mod_cast hq)
+    have hCE : 0 ≤ C_E := by dsimp only [C_E]; positivity
+    dsimp only [C_int]
+    positivity
+  refine exists_isOpenMPS_norm_sub_le_of_prefix_bounds
+    hC hs hL hgs.1 hε hε1 ?_ ?_
+  · intro k
+    rw [leftBlock_eq_interval]
+    exact regionEntropy_interval_le_polynomial hq hJ hΔ h hgs _ _
+  · dsimp only
+    intro hw k _
+    exact surprisalTail_leftBlock_le hq hJ hΔ h hgs k _ hw
+
 /-- **Theorem B: polynomial matrix product state approximation on a chain.** For a gapped
 ground vector `Ω` of a finite-range Hamiltonian on the chain of `L ≥ 1` sites there is a
 normalized open-boundary matrix product state `Φ` of bond dimension at most
@@ -487,5 +526,77 @@ theorem chainBondDimension_le_mul_rpow {L : ℕ} (hL : 1 ≤ L) :
     ring
   refine (Nat.floor_le (Real.exp_pos _).le).trans (le_of_eq ?_)
   rw [Real.exp_add, hexpw, mul_assoc]
+
+/-- Scalar comparison for the printed MPS bond bound.
+Source: one-dimensional note, part2a_mps_information.tex, thm:Bshort, lines80–92. -/
+private theorem polynomial_floor_exp_le {C s y b : ℝ} (hs : 0 ≤ s)
+    (hy : 0 < y) (hyb : y ^ 2 ≤ b) :
+    (⌊Real.exp (C + 64 * s * Real.log y)⌋₊ : ℝ) ≤
+      Real.exp C * b ^ (32 * s) := by
+  have hb : 0 < b := (sq_pos_of_pos hy).trans_le hyb
+  have hlog : 2 * Real.log y ≤ Real.log b := by
+    simpa only [Real.log_pow, Nat.cast_ofNat] using
+      Real.log_le_log (sq_pos_of_pos hy) hyb
+  have hmult : 64 * s * Real.log y ≤ 32 * s * Real.log b := by
+    nlinarith [mul_le_mul_of_nonneg_left hlog (show 0 ≤ 32 * s by positivity)]
+  refine (Nat.floor_le (Real.exp_pos _).le).trans ?_
+  refine (Real.exp_le_exp.mpr (show C + 64 * s * Real.log y ≤
+    C + 32 * s * Real.log b by linarith only [hmult])).trans_eq ?_
+  rw [Real.exp_add, Real.rpow_def_of_pos hb, mul_comm (Real.log b) (32 * s)]
+
+/-- The quantitative two-line MPS approximation with the original printed C_int.
+Source: one-dimensional note, part1_arealaw.tex, eq:final, lines674–679, and
+part2a_mps_information.tex, thm:Bshort and sec:shortcut, lines73–92.
+The unit approximant gives the normalized phase conclusion with phase zero. -/
+theorem exists_isOpenMPS_norm_sub_le_polynomial
+    (hq : 1 ≤ q) (hJ : 0 ≤ J) (hΔ : 0 < Δ) {L : ℕ}
+    (hL : 2 ≤ L) (h : ChainHamiltonian L q R J) {E₀ : ℝ}
+    {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
+    (hgs : Matrix.IsGappedGroundState h.operator E₀ Ω Δ) :
+    let C_E : ℝ := 8 * chainCrossConst R * (q : ℝ) ^ (2 * (R + 1)) * J
+    let m : ℕ :=
+      ⌈max (max (max 4 (4 * C_E / Δ))
+        (128 * Real.sqrt ((1 + J / Δ) * chainBudgetConst q R)))
+        (4096 * Real.exp 1 * (1 + J / Δ) * chainBudgetConst q R)⌉₊
+    let C_int := 8 * (m : ℝ) * R * Real.log q + 1 + 2 * C_E / Δ
+    let s := Real.sqrt ((1 + J / Δ) * chainBudgetConst q R)
+    let u₀ := 1 / (32 * s)
+    let D := ⌊Real.exp (C_int + 64 * s *
+      Real.log (2 * (L : ℝ) ^ 2 * tailPrefactorRoot))⌋₊
+    ∃ Φ : EuclideanSpace ℂ (Fin L → Fin q), ‖Φ‖ = 1 ∧ Φ ≠ 0 ∧
+      IsOpenMPS L q D (fun x ↦ Φ x) ∧ ‖Φ - Ω‖ ≤ 1 / (L : ℝ) ∧
+      (D : ℝ) ≤ 2 * Real.exp C_int *
+        (32 * Real.exp (Real.exp 1 / 2) * (L : ℝ) ^ 4) ^ (1 / u₀) := by
+  intro C_E m C_int s u₀ D
+  have hL1 : 1 ≤ L := by omega
+  have hL' : (1 : ℝ) ≤ L := by exact_mod_cast hL1
+  have hLpos : (0 : ℝ) < L := by linarith
+  have hε : 0 < 1 / (L : ℝ) := by positivity
+  have hε1 : 1 / (L : ℝ) ≤ 1 := (div_le_one hLpos).2 hL'
+  have hy : 2 * (L : ℝ) * tailPrefactorRoot / (1 / (L : ℝ)) =
+      2 * (L : ℝ) ^ 2 * tailPrefactorRoot := by
+    field_simp
+  obtain ⟨Φ, hΦ, hMPS, herror⟩ :=
+    exists_isOpenMPS_norm_sub_le_of_error_polynomial hq hJ hΔ hL1 h hgs hε hε1
+  refine ⟨Φ, hΦ, norm_ne_zero_iff.mp (by simp [hΦ]),
+    ?_, herror, ?_⟩
+  · simpa only [hy] using hMPS
+  · have hyb : (2 * (L : ℝ) ^ 2 * tailPrefactorRoot) ^ 2 ≤
+        32 * Real.exp (Real.exp 1 / 2) * (L : ℝ) ^ 4 := by
+      calc
+        _ = (4 * (L : ℝ) ^ 4) * tailPrefactorRoot ^ 2 := by ring
+        _ = 8 * Real.exp (Real.exp 1 / 2) * (L : ℝ) ^ 4 := by
+          rw [tailPrefactorRoot_sq]
+          ring
+        _ ≤ 32 * Real.exp (Real.exp 1 / 2) * (L : ℝ) ^ 4 := by
+          gcongr
+          norm_num
+    have hdim : (D : ℝ) ≤ Real.exp C_int *
+        (32 * Real.exp (Real.exp 1 / 2) * (L : ℝ) ^ 4) ^ (32 * s) :=
+      polynomial_floor_exp_le (C := C_int) (s := s)
+        (Real.sqrt_nonneg _) (by have hroot := tailPrefactorRoot_pos; positivity) hyb
+    simp only [u₀, one_div_one_div]
+    nlinarith only [hdim, show 0 ≤ Real.exp C_int *
+      (32 * Real.exp (Real.exp 1 / 2) * (L : ℝ) ^ 4) ^ (32 * s) by positivity]
 
 end TNLean.MPS.AreaLaw
