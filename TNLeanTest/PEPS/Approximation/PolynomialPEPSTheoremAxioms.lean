@@ -16,6 +16,9 @@ run_cmd do
   let names := #[
     `TNLean.PEPS.Approximation.adaptivePatchConstraint,
     `TNLean.PEPS.Approximation.largeSizeDyadicProtocolConsequences,
+    `TNLean.PEPS.Approximation.largeSizeDyadicProtocol_of_le,
+    `TNLean.PEPS.Approximation.largeSizeDyadicProtocolBounds,
+    `TNLean.PEPS.Approximation.largeSizeDyadicOperatorNetwork_of_largeSizeDyadicProtocolBounds,
     `TNLean.PEPS.Approximation.polynomialPEPSApproximation]
   let expected := #[``propext, ``Classical.choice, ``Quot.sound]
   for decl in names do

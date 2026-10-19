@@ -31,6 +31,8 @@ two-family entropy cancellation and the regional dimension bound.
 * `SublinearCollarBound`: Proposition 9.6 (`prop:collar`).
 * `AmplificationBound`: Proposition 10.2 (`prop:amplification`).
 * `TwoFamilyDecomposition`: Proposition 11.2 (`prop:two-families`).
+* `SublinearCollarBoundAt`, `AmplificationBoundAt`: Propositions 9.6 and 10.2 at a given
+  constant and threshold.
 
 ## Main statements
 
@@ -133,6 +135,93 @@ def AmplificationBound (q R : ℕ) (J Δ : ℝ) : Prop :=
                 graphNeighborhood Λ (2 * r)
                     (A.filter fun x ↦ x.val ∈ ambientDilation T
                       ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊) ⊆ A)
+
+/-- **Proposition 9.6 at a given constant and threshold** (`prop:collar`, `08-scanner.tex`
+lines 808–827). The assertion of `SublinearCollarBound` with its constant `C` and threshold
+`N` fixed: for every template `T` with parameters `(n, s₀)`, `n ≥ N`, separated from the cut,
+with `L = ⌊n^(1-ε)⌋ ≤ s₀`, `X = A ∩ T` and `S₀ = A ∩ T_L`, one has
+`I_Ω(X : Λ ∖ S₀) ≤ C n^(1-ε)`, the cuts of `X`, `S₀` and `S₀ ∖ X` have at most `C n` edges,
+and `|S₀| ≤ C n²`. -/
+def SublinearCollarBoundAt (q R : ℕ) (J Δ D₀ Ctpl C : ℝ) (N : ℕ) : Prop :=
+  ∀ n s₀ : ℕ, N ≤ n →
+    ∀ Λ : Finset (ℤ × ℤ), ∀ h : LocalHamiltonian Λ q R J, ∀ E₀ : ℝ,
+      ∀ Ω : StateSpace Λ q, IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+        ∀ A : Finset (Site Λ), ∀ T : Geometry.Template Ctpl n s₀,
+          T.IsSeparated D₀ (Geometry.boundaryEndpoints Λ A) →
+          ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ ≤ s₀ →
+          FiniteProduct.mutualInformation (fun _ : Site Λ ↦ Fin q) Ω
+              (A.filter fun x ↦ x.val ∈ T.points)
+              (A.filter fun x ↦ x.val ∈ ambientDilation T.points
+                ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)ᶜ ≤
+            C * (n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ)) ∧
+          ((edgeBoundary Λ (A.filter fun x ↦ x.val ∈ T.points)).card : ℝ) ≤ C * n ∧
+          ((edgeBoundary Λ (A.filter fun x ↦ x.val ∈ ambientDilation T.points
+              ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)).card : ℝ) ≤
+            C * n ∧
+          ((edgeBoundary Λ ((A.filter fun x ↦ x.val ∈ ambientDilation T.points
+              ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊) \
+              A.filter fun x ↦ x.val ∈ T.points)).card : ℝ) ≤ C * n ∧
+          ((A.filter fun x ↦ x.val ∈ ambientDilation T.points
+              ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊).card : ℝ) ≤
+            C * (n : ℝ) ^ 2
+
+/-- The sublinear collar bound is the existence of a constant and a threshold at which it
+holds. Source: `08-scanner.tex`, lines 808–827. -/
+theorem sublinearCollarBound_iff_exists_sublinearCollarBoundAt {q R : ℕ} {J Δ D₀ Ctpl : ℝ} :
+    SublinearCollarBound q R J Δ D₀ Ctpl ↔
+      ∃ C : ℝ, ∃ N : ℕ, SublinearCollarBoundAt q R J Δ D₀ Ctpl C N :=
+  Iff.rfl
+
+/-- **Proposition 10.2 at a given input constant, order, constant and threshold**
+(`prop:amplification`, `09-amplification.tex` lines 261–296). The assertion of
+`AmplificationBound` for the input constant `C₀` and the integer `M`, with its constant `C` and
+threshold `N` fixed: at every scale `n ≥ max 2 N`, under the size, cut and information
+hypotheses with constant `C₀`, there is a radius `r ≤ C n^((1-ε)/α)` such that every subset of
+`X` has mutual information at most `C n^(-M)` with every set avoiding `N_{2r}(S₀)`, and
+`N_{2r}(S₀) ⊆ A` when `dist_∞(T, Z) > L + n^β`. -/
+def AmplificationBoundAt (q R : ℕ) (J Δ C₀ : ℝ) (M : ℕ) (C : ℝ) (N : ℕ) : Prop :=
+  ∀ n : ℕ, 2 ≤ n → N ≤ n →
+    ∀ Λ : Finset (ℤ × ℤ), ∀ h : LocalHamiltonian Λ q R J, ∀ E₀ : ℝ,
+      ∀ Ω : StateSpace Λ q, IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+        ∀ (A : Finset (Site Λ)) (T : Finset (ℤ × ℤ)),
+          ((A.filter fun x ↦ x.val ∈ ambientDilation T
+              ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊).card : ℝ) ≤
+            C₀ * (n : ℝ) ^ 2 →
+          ((edgeBoundary Λ (A.filter fun x ↦ x.val ∈ T)).card : ℝ) ≤ C₀ * n →
+          ((edgeBoundary Λ ((A.filter fun x ↦ x.val ∈ ambientDilation T
+              ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊) \
+              A.filter fun x ↦ x.val ∈ T)).card : ℝ) ≤ C₀ * n →
+          ((edgeBoundary Λ (A.filter fun x ↦ x.val ∈ ambientDilation T
+              ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)).card : ℝ) ≤
+            C₀ * n →
+          FiniteProduct.mutualInformation (fun _ : Site Λ ↦ Fin q) Ω
+              (A.filter fun x ↦ x.val ∈ T)
+              (A.filter fun x ↦ x.val ∈ ambientDilation T
+                ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)ᶜ ≤
+            C₀ * (n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ)) →
+          ∃ r : ℕ, (r : ℝ) ≤ C * (n : ℝ) ^ (Exponents.radiusExponent : ℝ) ∧
+            (∀ X ⊆ A.filter (fun x ↦ x.val ∈ T), ∀ Jset : Finset (Site Λ),
+              Disjoint Jset (graphNeighborhood Λ (2 * r)
+                (A.filter fun x ↦ x.val ∈ ambientDilation T
+                  ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)) →
+              FiniteProduct.mutualInformation (fun _ : Site Λ ↦ Fin q) Ω X Jset ≤
+                C * ((n : ℝ) ^ M)⁻¹) ∧
+            ((∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ A,
+                (⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ : ℝ) +
+                    (n : ℝ) ^ (Exponents.beta : ℝ) <
+                  (Scan.ambientSupDistance t z : ℝ)) →
+              graphNeighborhood Λ (2 * r)
+                  (A.filter fun x ↦ x.val ∈ ambientDilation T
+                    ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊) ⊆ A)
+
+/-- The amplification bound is, for every admissible input constant and order, the existence
+of a constant and a threshold at which it holds. Source: `09-amplification.tex`,
+lines 261–296. -/
+theorem amplificationBound_iff_forall_exists_amplificationBoundAt {q R : ℕ} {J Δ : ℝ} :
+    AmplificationBound q R J Δ ↔
+      ∀ C₀ : ℝ, 0 < C₀ → ∀ M : ℕ, 1 ≤ M →
+        ∃ C : ℝ, ∃ N : ℕ, AmplificationBoundAt q R J Δ C₀ M C N :=
+  Iff.rfl
 
 /-- **Proposition 11.2** (`prop:two-families`, `10-geometry.tex` lines 98–140),
 for the template constants `D₀, Ctpl` of Definition 9.3. For every lower scale

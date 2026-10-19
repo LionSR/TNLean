@@ -18,10 +18,12 @@ from these changes and from the changes of the large-scale repaintings, which ar
 
 * `auxIndices`, `auxState`, `protocolState` : the auxiliary indices, the auxiliary frames before
   each event, and the memory before each event;
-* `exists_isDistributionProtocol_of_largeRepaintings` : if every large-scale repainting passes the
-  memory from its state before to its state after by `189` bounded changes whose participants the
-  repainting uses, and the frozen frames satisfy the frame constraint and carry at most `C L³`
-  holes, then there is a protocol with the bounds of §8.
+* `exists_isDistributionProtocol_of_largeRepaintings_of_le` : for every mesh ratio
+  `ν ≤ resizeRatio ε₀ = min(ε₀, 1) / 8`, if every large-scale repainting passes the memory from
+  its state before to its state after by `189` bounded changes whose participants the repainting
+  uses, and the frozen frames satisfy the frame constraint and carry at most `C L³` holes, then
+  there is a protocol with the bounds of §8;
+* `exists_isDistributionProtocol_of_largeRepaintings` : the same with an existential threshold.
 
 ## References
 
@@ -143,29 +145,31 @@ theorem IsProtocolConstants.hole_le {K₀ ε₀ ν a D B₀ : ℝ} (hc : IsProto
   rw [← mul_assoc]
   exact mul_le_mul_of_nonneg_right (h1.trans hc.B₀_ge) hℓ.le
 
-/-- **The dyadic protocol from its large-scale repaintings.** Fix `0 < ε₀ ≤ 1/16`. There is a
-threshold `ν' > 0` such that for every mesh ratio `0 < ν ≤ ν'`, constants of the protocol with an
-admissible direct-repainting ratio, `L ≥ 2` with `L ≤ 2 ^ k < 2 L`, `‖Ω‖ = 1`, patches supplied
-by Proposition 4.1 at accuracy `L⁻⁶⁰`, frozen auxiliary frames and future owners of the auxiliary
-copies, the following holds. Suppose that each repainting of a square of side larger than `K₀ t`,
-`t = D log L`, passes the memory from its state before to its state after by `189` bounded changes
-whose participants the repainting uses, with the bounds of the small-patch rewrites, that the holes
-of the frozen frames satisfy the frame constraint at accuracy `L⁻⁶⁰` and number at most `C₁ L³`,
-and that `C₁` dominates the counts. Then there is a dyadic protocol with the bounds of §8, with
-at most `2 b` pair effects and at most `2 b` pair sources in each monomial.
+/-- **The dyadic protocol from its large-scale repaintings, at the explicit mesh ratio.** Fix
+`0 < ε₀ ≤ 1/16`. For every mesh ratio `0 < ν ≤ resizeRatio ε₀ = min(ε₀, 1) / 8`, constants of
+the protocol with an admissible direct-repainting ratio, `L ≥ 2` with `L ≤ 2 ^ k < 2 L`,
+`‖Ω‖ = 1`, patches supplied by Proposition 4.1 at accuracy `L⁻⁶⁰`, frozen auxiliary frames and
+future owners of the auxiliary copies, the following holds. Suppose that each repainting of a
+square of side larger than `K₀ t`, `t = D log L`, passes the memory from its state before to its
+state after by `189` bounded changes whose participants the repainting uses, with the bounds of
+the small-patch rewrites, that the holes of the frozen frames satisfy the frame constraint at
+accuracy `L⁻⁶⁰` and number at most `C_E L³`, that the count constant satisfies `C_N ≥ 5042`,
+that the expansion constant `C_K` dominates the prefactor of the small-patch rewrites, and that
+`C_E ≥ 2 b + 1`. Then there is a dyadic protocol with the bounds of §8 at the constants `C_N`,
+`C_K`, `C_E`, with at most `2 b` pair effects and at most `2 b` pair sources in each monomial.
 
 Polynomial-PEPS manuscript, Proposition 7.1 `prop:protocol`, `06-geometry.tex`, lines 12–53, and
 its proof, lines 82–241, 507–541 and 572–681. -/
-theorem exists_isDistributionProtocol_of_largeRepaintings {ε₀ : ℝ} (hε : 0 < ε₀)
+theorem exists_isDistributionProtocol_of_largeRepaintings_of_le {ε₀ : ℝ} (hε : 0 < ε₀)
     (hε₀ : ε₀ ≤ 1 / 16) :
-    ∃ ν' > 0, ∀ ν : ℝ, 0 < ν → ν ≤ ν' → ∀ {k : ℕ} {K₀ a D B₀ : ℝ},
+    ∀ ν : ℝ, 0 < ν → ν ≤ resizeRatio ε₀ → ∀ {k : ℕ} {K₀ a D B₀ : ℝ},
       ∀ hc : IsProtocolConstants K₀ ε₀ ν a D B₀, IsDirectRepaintingRatio K₀ ε₀ ν →
       ∀ {L q : ℕ} [NeZero q] {Ω : StateSpace L q} {C c : ℝ}
         (P : AdaptivePatchSupply (cellCenterPos L) Ω B₀ C c 60 L) (hL : 2 ≤ L)
         (hkL : L ≤ 2 ^ k) (hk2 : 2 ^ k < 2 * L) (hΩ : ‖Ω‖ = 1) (rank : GuideLabel → ℕ)
         (R₀ : RepaintedSquare k)
         (frozen : ProtocolEvent k × RepaintOp → Frame (cellCenterPos L) q (ProtocolParty k))
-        (auxOwner : ProtocolEvent k × RepaintOp → ProtocolParty k) {C' c' kK : ℕ} {C₁ : ℝ},
+        (auxOwner : ProtocolEvent k × RepaintOp → ProtocolParty k) {C' c' kK : ℕ} {C_N C_K C_E : ℝ},
       C ≤ C' → 1 ≤ C' → c ≤ c' →
       (∀ i (hi : i < (eventSchedule k).length) (S : DyadicSquare k),
         (eventSchedule k)[i] = .inl S → largeSquare K₀ (D * Real.log L) S = true →
@@ -183,14 +187,14 @@ theorem exists_isDistributionProtocol_of_largeRepaintings {ε₀ : ℝ} (hε : 0
       (∀ x ∈ auxIndices k (largeSquare K₀ (D * Real.log L)), ∀ h ∈ (frozen x).holes,
         ‖act h.patch.proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹) →
       (((auxIndices k (largeSquare K₀ (D * Real.log L))).map fun x =>
-        ((frozen x).holes.length : ℝ)).sum ≤ C₁ * (L : ℝ) ^ 3) →
-      5042 ≤ C₁ → (rewriteGateBound C' c' (protocolPatchBound ε₀ ν) L : ℝ) ≤ C₁ * (L : ℝ) ^ kK →
-      (2 * protocolPatchBound ε₀ ν + 1 : ℝ) ≤ C₁ →
+        ((frozen x).holes.length : ℝ)).sum ≤ C_E * (L : ℝ) ^ 3) →
+      5042 ≤ C_N → (rewriteGateBound C' c' (protocolPatchBound ε₀ ν) L : ℝ) ≤ C_K * (L : ℝ) ^ kK →
+      (2 * protocolPatchBound ε₀ ν + 1 : ℝ) ≤ C_E →
       ∃ D' : DyadicProtocol L q (ProtocolParty k),
-        D'.IsDistributionProtocol Ω C₁ (64 * 189) kK (2 * protocolPatchBound ε₀ ν) := by
-  obtain ⟨ν', hν', Hres⟩ := exists_resize_hasSourceBoundedChange hε hε₀
-  refine ⟨ν', hν', fun ν hν hνν' {k K₀ a D B₀} hc hm {L q} _ {Ω C c} P hL hkL hk2 hΩ rank R₀
-    frozen auxOwner {C' c' kK C₁} hC hC' hcc hlarge hfε hfh hC₁ hK hεC => ?_⟩
+        D'.IsDistributionProtocol Ω C_N C_K C_E (64 * 189) kK (2 * protocolPatchBound ε₀ ν) := by
+  have Hres := resize_hasSourceBoundedChange_of_le hε hε₀
+  refine fun ν hν hνν' {k K₀ a D B₀} hc hm {L q} _ {Ω C c} P hL hkL hk2 hΩ rank R₀
+    frozen auxOwner {C' c' kK C_N C_K C_E} hC hC' hcc hlarge hfε hfh hCN hK hεC => ?_
   classical
   have ht := hc.t_pos hL
   have hB := hc.hole_le hL
@@ -302,7 +306,7 @@ theorem exists_isDistributionProtocol_of_largeRepaintings {ε₀ : ℝ} (hε : 0
     (fun F => F.owner (⟨0, hL0⟩, ⟨0, hL0⟩)) (fun F hF => ?_) (fun F hF x => ?_)
     (fun t ht => htrs t ht) _ _ hfin
     (finalMain_owner P rank R₀ hε ht hB hkL hε4) (finalMain_holes P rank R₀ hε ht hB hε4)
-    (fun F hF h hh => ?_) (by simpa [List.map_map, Function.comp_def] using hfh) hC₁ hK
+    (fun F hF h hh => ?_) (by simpa [List.map_map, Function.comp_def] using hfh) hCN hK
     (by rw [div_eq_mul_inv]; gcongr)
   · rw [hst0] at hF
     rcases List.mem_cons.1 hF with rfl | hF
@@ -314,5 +318,47 @@ theorem exists_isDistributionProtocol_of_largeRepaintings {ε₀ : ℝ} (hε : 0
     · obtain ⟨x, -, rfl⟩ := List.mem_map.1 hF; rfl
   · obtain ⟨x, hx, rfl⟩ := List.mem_map.1 hF
     exact hfε x hx h hh
+
+/-- **The dyadic protocol from its large-scale repaintings.** Fix `0 < ε₀ ≤ 1/16`. There is a
+threshold `ν' > 0` such that for every mesh ratio `0 < ν ≤ ν'` the conclusion of
+`exists_isDistributionProtocol_of_largeRepaintings_of_le` holds; the threshold
+`ν' = resizeRatio ε₀` serves.
+
+Polynomial-PEPS manuscript, Proposition 7.1 `prop:protocol`, `06-geometry.tex`, lines 12–53, and
+its proof, lines 82–241, 507–541 and 572–681. -/
+theorem exists_isDistributionProtocol_of_largeRepaintings {ε₀ : ℝ} (hε : 0 < ε₀)
+    (hε₀ : ε₀ ≤ 1 / 16) :
+    ∃ ν' > 0, ∀ ν : ℝ, 0 < ν → ν ≤ ν' → ∀ {k : ℕ} {K₀ a D B₀ : ℝ},
+      ∀ hc : IsProtocolConstants K₀ ε₀ ν a D B₀, IsDirectRepaintingRatio K₀ ε₀ ν →
+      ∀ {L q : ℕ} [NeZero q] {Ω : StateSpace L q} {C c : ℝ}
+        (P : AdaptivePatchSupply (cellCenterPos L) Ω B₀ C c 60 L) (hL : 2 ≤ L)
+        (hkL : L ≤ 2 ^ k) (hk2 : 2 ^ k < 2 * L) (hΩ : ‖Ω‖ = 1) (rank : GuideLabel → ℕ)
+        (R₀ : RepaintedSquare k)
+        (frozen : ProtocolEvent k × RepaintOp → Frame (cellCenterPos L) q (ProtocolParty k))
+        (auxOwner : ProtocolEvent k × RepaintOp → ProtocolParty k) {C' c' kK : ℕ} {C_N C_K C_E : ℝ},
+      C ≤ C' → 1 ≤ C' → c ≤ c' →
+      (∀ i (hi : i < (eventSchedule k).length) (S : DyadicSquare k),
+        (eventSchedule k)[i] = .inl S → largeSquare K₀ (D * Real.log L) S = true →
+        ∃ seg : ℕ → List (Frame (cellCenterPos L) q (ProtocolParty k)),
+          seg 0 = protocolState P rank R₀ hε (hc.t_pos hL) (hc.hole_le hL)
+            (largeSquare K₀ (D * Real.log L)) frozen
+            auxOwner i ∧
+          seg 189 = protocolState P rank R₀ hε (hc.t_pos hL) (hc.hole_le hL)
+            (largeSquare K₀ (D * Real.log L)) frozen
+            auxOwner (i + 1) ∧
+          ∀ j < 189, HasSourceBoundedChange Ω (seg j) (seg (j + 1)) (ℓ := []) (1 : ℂ)
+            {p | EventUses (.inl S) p} (2 * protocolPatchBound ε₀ ν)
+            (rewriteGateBound C' c' (protocolPatchBound ε₀ ν) L) (2 * protocolPatchBound ε₀ ν)
+            ((2 * protocolPatchBound ε₀ ν + 1) * ((L : ℝ) ^ 20)⁻¹) ∧ seg (j + 1) ≠ []) →
+      (∀ x ∈ auxIndices k (largeSquare K₀ (D * Real.log L)), ∀ h ∈ (frozen x).holes,
+        ‖act h.patch.proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹) →
+      (((auxIndices k (largeSquare K₀ (D * Real.log L))).map fun x =>
+        ((frozen x).holes.length : ℝ)).sum ≤ C_E * (L : ℝ) ^ 3) →
+      5042 ≤ C_N → (rewriteGateBound C' c' (protocolPatchBound ε₀ ν) L : ℝ) ≤ C_K * (L : ℝ) ^ kK →
+      (2 * protocolPatchBound ε₀ ν + 1 : ℝ) ≤ C_E →
+      ∃ D' : DyadicProtocol L q (ProtocolParty k),
+        D'.IsDistributionProtocol Ω C_N C_K C_E (64 * 189) kK (2 * protocolPatchBound ε₀ ν) :=
+  ⟨resizeRatio ε₀, resizeRatio_pos hε,
+    exists_isDistributionProtocol_of_largeRepaintings_of_le hε hε₀⟩
 
 end TNLean.PEPS.Approximation
