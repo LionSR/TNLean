@@ -24,6 +24,8 @@ Written from the manuscript; no upstream Lean text is reused.
 
 noncomputable section
 
+open TNLean.Lattice
+
 namespace TNLean.PEPS.AreaLaw.Geometry
 
 section Stages

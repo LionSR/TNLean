@@ -27,6 +27,8 @@ open TNLean.PEPS.AreaLaw TNLean.PEPS.AreaLaw.Scan SpectralFilter
 open scoped BigOperators Matrix.Norms.L2Operator MatrixOrder ComplexOrder
 
 noncomputable section
+open TNLean.Lattice
+
 namespace TNLeanTest.ActualMarginalTails
 
 section Budgets

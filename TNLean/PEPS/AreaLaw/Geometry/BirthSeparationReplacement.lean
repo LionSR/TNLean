@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.PEPS.AreaLaw.Geometry.BeltFacetSeparation
 import TNLean.PEPS.AreaLaw.Geometry.BirthSeparationFan
 
 /-!
@@ -13,11 +14,12 @@ region compared with its closed birth `B` near the parent mark lies either in
 the exterior trapezoid of a wedge of the opposite exterior label, or in the
 birth of a distinct run with the same exterior label at the same parent.
 
-*Compactness away from marks.* For each of the finitely many pairs of a
-triangle of `B` and one such comparison piece, the two compact sets meet only
-at integer marks. Pairs of points not lying together in an open quarter-square
-about one mark therefore stay at distance at least a positive `η`, uniformly
-over the finitely many pairs.
+*Separation away from marks.* For each pair of a triangle of `B` and one such
+comparison piece, the two compact sets meet only at integer marks. Pairs of
+points not lying together in an open quarter-square about one mark therefore
+stay at distance at least a positive `η`. The manuscript takes `η` as a minimum
+over the finitely many pairs; since all these sets are cut out by belt facets,
+`η = birthSeparationConstant = 1/28` works for every pair.
 
 *Angular estimate at marks.* Inside a quarter-square about a mark `q` the two
 sets are quarter-sectorial and meet only at `q`, so their points satisfy
@@ -28,8 +30,8 @@ generation. Its removal square, of half-side `d(u) ≥ u^ρ₀ / 2`, is cut from
 every compared region. A remaining point near a mark is hence at distance at
 least `u^ρ₀ / 2` from it, which with the angular estimate gives `u^ρ₀ / 4`.
 
-The resulting statement fixes one constant `c₁ > 0` before any repair data and
-gives `dist(B, Y) ≥ c₁ u^ρ₀` for every set `Y` satisfying the local bound near
+The resulting statement fixes the constant `c₁ = 1/28` before any repair data
+and gives `dist(B, Y) ≥ c₁ u^ρ₀` for every set `Y` satisfying the local bound near
 the parent and avoiding the nine following removal squares. These two
 properties of the final actual regions are supplied by the repair induction.
 
@@ -44,19 +46,6 @@ noncomputable section
 namespace TNLean.PEPS.AreaLaw.Geometry
 
 /-! ### Compactness away from integer marks -/
-
-private theorem eq_of_norm_sub_intPoint_le {i j i' j' : ℤ}
-    (h : ‖((i : ℝ), (j : ℝ)) - ((i' : ℝ), (j' : ℝ))‖ ≤ 1 / 4) : i = i' ∧ j = j' := by
-  rw [Prod.norm_def, Real.norm_eq_abs, Real.norm_eq_abs, max_le_iff] at h
-  simp only [Prod.fst_sub, Prod.snd_sub] at h
-  obtain ⟨h₁, h₂⟩ := h
-  have a₁ : |((i - i' : ℤ) : ℝ)| < 1 := by push_cast; linarith
-  have a₂ : |((j - j' : ℤ) : ℝ)| < 1 := by push_cast; linarith
-  rw [← Int.cast_abs] at a₁ a₂
-  have b₁ : |i - i'| < 1 := by exact_mod_cast a₁
-  have b₂ : |j - j'| < 1 := by exact_mod_cast a₂
-  constructor <;> [skip; skip] <;>
-    first | (have := abs_lt.mp b₁; omega) | (have := abs_lt.mp b₂; omega)
 
 /-- **Separation of two compact contact patterns away from marks.** Let two
 compact sets meet only in integer points. Then pairs of their points not lying
@@ -120,7 +109,7 @@ theorem exists_pos_contact_dichotomy {X Y : Set (ℝ × ℝ)}
       z = ((i : ℝ), (j : ℝ)) := by
     intro z hzX hzY hz
     obtain ⟨i', j', rfl⟩ := hXY z hzX hzY
-    obtain ⟨rfl, rfl⟩ := eq_of_norm_sub_intPoint_le hz
+    obtain ⟨rfl, rfl⟩ := eq_of_norm_sub_intPoint_le_quarter hz
     rfl
   have := half_max_le_norm_sub_of_isQuarterSectorial (hXs i j) (hYs i j) hcontact hx hy
     hxq.le hyq.le
@@ -177,52 +166,69 @@ theorem repairExteriorColor_eq_of_mem_supp {ι : Type*} {ξ : ι → Fin 2}
   subst hs
   rfl
 
-/-- **Normalized replacement dichotomy.** There is a fixed `η ∈ (0, 1]` such
-that for every exterior labelling, every run `C` and every point `y` of the
-same-label bound, each point `x` of the normalized birth of `C` is at distance
-at least `η` from `y`, or both lie in an open quarter-square about an integer
-point `q` with `‖x - y‖ ≥ ‖y - q‖ / 2`.
+/-- The outer facet at level `L` and the two radial facets of the triangle of
+slot `s`.
+Source: area-law Section 11, lines 404–417 and 573–659. -/
+def repairTriangleFacets (L : ℤ) (s : RepairFanSlot) : Set (ℤ × ℤ × ℤ) :=
+  {((repairSlotFacets s).1.1, (repairSlotFacets s).1.2, L),
+    ((repairSlotFacets s).2.1.1, (repairSlotFacets s).2.1.2, 0),
+    ((repairSlotFacets s).2.2.1, (repairSlotFacets s).2.2.2, 0)}
+
+theorem repairNormTriangle_eq_facetPolygon (L : ℤ) (s : RepairFanSlot) :
+    repairNormTriangle L s = facetPolygon (repairTriangleFacets L s) := by
+  ext x
+  simp [repairNormTriangle, mem_facetPolygon, repairTriangleFacets, intHalfPlane, and_assoc]
+
+theorem repairExteriorTrapezoid_eq_facetPolygon (s : RepairFanSlot) :
+    repairExteriorTrapezoid s = facetPolygon (insert
+      (-(repairSlotFacets s).1.1, -(repairSlotFacets s).1.2, -1) (repairTriangleFacets 2 s)) := by
+  ext x
+  simp [repairExteriorTrapezoid, repairNormTriangle, mem_facetPolygon, repairTriangleFacets,
+    intHalfPlane]
+  tauto
+
+/-- The facets of the normalized fan triangles and exterior trapezoids are belt
+facets: axis outer normals at integer levels and radial facets at level `0`.
+Source: area-law Section 11, lines 404–417, with `geometry:initial-stars`,
+lines 352–359. -/
+theorem isBeltFacet_of_mem_repairTriangleFacets {L : ℤ} {s : RepairFanSlot}
+    {f : ℤ × ℤ × ℤ} (hf : f ∈ repairTriangleFacets L s) : IsBeltFacet f := by
+  rcases s with ⟨k, j⟩
+  rcases hf with rfl | rfl | rfl <;> fin_cases k <;> fin_cases j <;>
+    simp [repairSlotFacets, IsBeltFacet]
+
+theorem isBeltFacet_of_mem_repairTrapezoidFacets {s : RepairFanSlot} {f : ℤ × ℤ × ℤ}
+    (hf : f ∈ insert (-(repairSlotFacets s).1.1, -(repairSlotFacets s).1.2, -1)
+      (repairTriangleFacets 2 s)) : IsBeltFacet f := by
+  rcases hf with rfl | hf
+  · rcases s with ⟨k, j⟩
+    fin_cases k <;> fin_cases j <;> simp [repairSlotFacets, IsBeltFacet]
+  · exact isBeltFacet_of_mem_repairTriangleFacets hf
+
+/-- **Explicit normalized replacement dichotomy.** For every exterior labelling,
+every run `C` and every point `y` of the same-label bound, each point `x` of the
+normalized birth of `C` is at distance at least `birthSeparationConstant = 1/28`
+from `y`, or both lie in an open quarter-square about an integer point `q` with
+`‖x - y‖ ≥ ‖y - q‖ / 2`.
 Source: area-law Section 11, `geometry:birth-separation`, lines 606–645. -/
-theorem exists_repairSameLabel_dichotomy :
-    ∃ η > 0, η ≤ 1 ∧ ∀ {ι : Type*} (ξ : ι → Fin 2) (σ : RepairFanSlot → ι)
-      (C : RepairFanRun ξ σ), ∀ x ∈ repairNormRunRegion ξ σ C,
-      ∀ y ∈ repairSameLabelBound ξ σ C, η ≤ ‖x - y‖ ∨ ∃ i j : ℤ,
+theorem repairSameLabel_dichotomy {ι : Type*} (ξ : ι → Fin 2) (σ : RepairFanSlot → ι)
+    (C : RepairFanRun ξ σ) : ∀ x ∈ repairNormRunRegion ξ σ C,
+      ∀ y ∈ repairSameLabelBound ξ σ C, birthSeparationConstant ≤ ‖x - y‖ ∨ ∃ i j : ℤ,
         ‖x - ((i : ℝ), (j : ℝ))‖ < 1 / 4 ∧ ‖y - ((i : ℝ), (j : ℝ))‖ < 1 / 4 ∧
           ‖y - ((i : ℝ), (j : ℝ))‖ / 2 ≤ ‖x - y‖ := by
-  let Y : RepairFanSlot × RepairFanSlot × Bool → Set (ℝ × ℝ) := fun p ↦
-    if p.2.2 then repairExteriorTrapezoid p.2.1 else repairNormTriangle 1 p.2.1
-  let V : RepairFanSlot × RepairFanSlot × Bool → Prop := fun p ↦
-    if p.2.2 then p.1 ≠ p.2.1 else p.1 ≠ p.2.1 ∧ ¬ RepairSlotConsecutive p.1 p.2.1
-  let P : RepairFanSlot × RepairFanSlot × Bool → ℝ → Prop := fun p η ↦ V p →
-    ∀ x ∈ repairNormTriangle 1 p.1, ∀ y ∈ Y p, η ≤ ‖x - y‖ ∨ ∃ i j : ℤ,
-      ‖x - ((i : ℝ), (j : ℝ))‖ < 1 / 4 ∧ ‖y - ((i : ℝ), (j : ℝ))‖ < 1 / 4 ∧
-        ‖y - ((i : ℝ), (j : ℝ))‖ / 2 ≤ ‖x - y‖
-  have hP : ∀ p, ∃ η > 0, ∀ η' > 0, η' ≤ η → P p η' := by
-    rintro ⟨s, t, b⟩
-    by_cases hV : V (s, t, b)
-    · have hYc : IsCompact (Y (s, t, b)) := by
-        cases b
-        · exact isCompact_repairNormTriangle 1 t
-        · exact isCompact_repairExteriorTrapezoid t
-      have hYs : ∀ i j : ℤ, IsQuarterSectorial ((i : ℝ), (j : ℝ)) (Y (s, t, b)) := by
-        cases b
-        · exact isQuarterSectorial_repairNormTriangle 1 t
-        · exact isQuarterSectorial_repairExteriorTrapezoid t
-      have hXY : ∀ z ∈ repairNormTriangle 1 s, z ∈ Y (s, t, b) →
-          ∃ i j : ℤ, z = ((i : ℝ), (j : ℝ)) := by
-        intro z hz hz'
-        cases b
-        · exact ⟨0, 0, by rw [repairNormTriangle_inter_eq_zero hV.1 hV.2 hz hz']; ext <;> simp⟩
-        · exact repairNormTriangle_inter_exteriorTrapezoid hV hz hz'
-      obtain ⟨η, hη, h⟩ := exists_pos_contact_dichotomy (isCompact_repairNormTriangle 1 s)
-        hYc (isQuarterSectorial_repairNormTriangle 1 s) hYs hXY
-      refine ⟨η, hη, fun η' _ hη' _ x hx y hy ↦ ?_⟩
-      rcases h x hx y hy with h | h
-      · exact Or.inl (hη'.trans h)
-      · exact Or.inr h
-    · exact ⟨1, one_pos, fun _ _ _ hV' ↦ (hV hV').elim⟩
-  obtain ⟨η, hη, hη1, h⟩ := exists_pos_forall_of_finite hP
-  refine ⟨η, hη, hη1, fun ξ σ C x hx y hy ↦ ?_⟩
+  have h (s : RepairFanSlot) (T : Set (ℤ × ℤ × ℤ)) (hT : ∀ f ∈ T, IsBeltFacet f)
+      (hXY : ∀ z ∈ repairNormTriangle 1 s, z ∈ facetPolygon T → ∃ i j : ℤ, z = ((i : ℝ), (j : ℝ)))
+      (x : ℝ × ℝ) (hx : x ∈ repairNormTriangle 1 s) (y : ℝ × ℝ) (hy : y ∈ facetPolygon T) :
+      birthSeparationConstant ≤ ‖x - y‖ ∨ ∃ i j : ℤ,
+        ‖x - ((i : ℝ), (j : ℝ))‖ < 1 / 4 ∧ ‖y - ((i : ℝ), (j : ℝ))‖ < 1 / 4 ∧
+          ‖y - ((i : ℝ), (j : ℝ))‖ / 2 ≤ ‖x - y‖ := by
+    rw [repairNormTriangle_eq_facetPolygon] at hx hXY
+    rcases facetPolygon_contact_dichotomy (fun _ ↦ isBeltFacet_of_mem_repairTriangleFacets) hT
+      hXY hx hy with hd | ⟨q, hq, hxq, hyq, hang⟩
+    · exact .inl hd
+    · obtain ⟨i, j, rfl⟩ := hXY q hq.1 hq.2
+      exact .inr ⟨i, j, hxq, hyq, hang⟩
+  intro x hx y hy
   obtain ⟨s, hs, hxs⟩ : ∃ s ∈ C.supp, x ∈ repairNormTriangle 1 s := by
     simp only [repairNormRunRegion, cellFanRunRegion, Set.mem_iUnion] at hx
     obtain ⟨s, hs, hx⟩ := hx
@@ -232,7 +238,10 @@ theorem exists_repairSameLabel_dichotomy :
   · simp only [Set.mem_iUnion] at hy
     obtain ⟨t, ht, hy⟩ := hy
     have hst : s ≠ t := by rintro rfl; exact ht hcs
-    exact h (s, t, true) hst x hxs y hy
+    rw [repairExteriorTrapezoid_eq_facetPolygon] at hy
+    refine h s _ (fun _ ↦ isBeltFacet_of_mem_repairTrapezoidFacets) (fun z hz hz' ↦ ?_) x hxs y hy
+    rw [← repairExteriorTrapezoid_eq_facetPolygon] at hz'
+    exact repairNormTriangle_inter_exteriorTrapezoid hst hz hz'
   · simp only [Set.mem_iUnion] at hy
     obtain ⟨C', ⟨hC', hcol⟩, hy⟩ := hy
     simp only [repairNormRunRegion, cellFanRunRegion, Set.mem_iUnion] at hy
@@ -245,8 +254,27 @@ theorem exists_repairSameLabel_dichotomy :
       refine cellFanRun_adjacent_colors_ne (-1, -1) 1 (0, 0) repairFanSplit _ s t hadj
         (fun he ↦ hC' (ht.symm.trans (he.symm.trans hs))) ?_
       rw [hcs, hct, hcol]
-    exact h (s, t, false) ⟨hst, hcons⟩ x hxs y
-      (cellFanPolygon_region_subset_repairNormTriangle t hyt)
+    have hyt' := cellFanPolygon_region_subset_repairNormTriangle t hyt
+    rw [repairNormTriangle_eq_facetPolygon] at hyt'
+    refine h s _ (fun _ ↦ isBeltFacet_of_mem_repairTriangleFacets) (fun z hz hz' ↦ ?_) x hxs y hyt'
+    rw [← repairNormTriangle_eq_facetPolygon] at hz'
+    exact ⟨0, 0, by rw [repairNormTriangle_inter_eq_zero hst hcons hz hz']; ext <;> simp⟩
+
+/-- **Normalized replacement dichotomy.** There is a fixed `η ∈ (0, 1]` such
+that for every exterior labelling, every run `C` and every point `y` of the
+same-label bound, each point `x` of the normalized birth of `C` is at distance
+at least `η` from `y`, or both lie in an open quarter-square about an integer
+point `q` with `‖x - y‖ ≥ ‖y - q‖ / 2`. One may take `η = 1/28`
+(`repairSameLabel_dichotomy`).
+Source: area-law Section 11, `geometry:birth-separation`, lines 606–645. -/
+theorem exists_repairSameLabel_dichotomy :
+    ∃ η > 0, η ≤ 1 ∧ ∀ {ι : Type*} (ξ : ι → Fin 2) (σ : RepairFanSlot → ι)
+      (C : RepairFanRun ξ σ), ∀ x ∈ repairNormRunRegion ξ σ C,
+      ∀ y ∈ repairSameLabelBound ξ σ C, η ≤ ‖x - y‖ ∨ ∃ i j : ℤ,
+        ‖x - ((i : ℝ), (j : ℝ))‖ < 1 / 4 ∧ ‖y - ((i : ℝ), (j : ℝ))‖ < 1 / 4 ∧
+          ‖y - ((i : ℝ), (j : ℝ))‖ / 2 ≤ ‖x - y‖ :=
+  ⟨birthSeparationConstant, birthSeparationConstant_pos, birthSeparationConstant_le_one,
+    repairSameLabel_dichotomy⟩
 
 /-! ### Separation after the following trim -/
 
@@ -278,26 +306,26 @@ private theorem intPoint_mem_childOffsets {x : ℝ × ℝ} (hx : ‖x‖ ≤ 1) 
     have : (((j + 1).toNat : ℕ) : ℝ) = j + 1 := by exact_mod_cast h
     linarith
 
-/-- **Birth separation of a replacement from its local comparison regions.**
-There is one fixed `c₁ > 0` with the following property. Let a replacement run
-`C` be born in the removal square of half-side `u ≥ 1` about `v`, and let `Y`
-be any set satisfying the two properties of a final actual region of an older
-or peer identifier of the same label: near the parent, in the open square of
-half-side `2u`, its rescaled points lie in the same-label bound; and it avoids
-the removal squares of the nine following marks `v + u q`, each of half-side
-`d(u)`. Then every point of the closed birth is at distance at least
-`c₁ u^ρ₀` from `Y`.
+/-- **Birth separation of a replacement from its local comparison regions,
+with the explicit constant.** Let a replacement run `C` be born in the removal
+square of half-side `u ≥ 1` about `v`, and let `Y` be any set satisfying the two
+properties of a final actual region of an older or peer identifier of the same
+label: near the parent, in the open square of half-side `2u`, its rescaled
+points lie in the same-label bound; and it avoids the removal squares of the
+nine following marks `v + u q`, each of half-side `d(u)`. Then every point of the
+closed birth is at distance at least `c₁ u^ρ₀` from `Y`, with
+`c₁ = birthSeparationConstant = 1/28`.
 Source: area-law Section 11, `geometry:birth-separation`, lines 573–659. -/
-theorem exists_repairBirth_separation :
-    ∃ c₁ > 0, ∀ {ι : Type*} (ξ : ι → Fin 2) (σ : RepairFanSlot → ι)
-      (C : RepairFanRun ξ σ) (v : ℝ × ℝ) {u : ℝ}, 1 ≤ u → ∀ Y : Set (ℝ × ℝ),
-      (∀ y ∈ Y, ‖y - v‖ < 2 * u → u⁻¹ • (y - v) ∈ repairSameLabelBound ξ σ C) →
-      (∀ y ∈ Y, ∀ p : Fin 3 × Fin 3, y ∉ repairSquare (v + u • repairChildOffset p) u) →
-      ∀ x ∈ (fun z ↦ v + u • z) '' repairNormRunRegion ξ σ C, ∀ y ∈ Y,
-        c₁ * u ^ (Exponents.rho : ℝ) ≤ ‖x - y‖ := by
-  obtain ⟨η, hη, hη1, h⟩ := exists_repairSameLabel_dichotomy
-  refine ⟨min η (1 / 4), lt_min hη (by norm_num), ?_⟩
-  intro ι ξ σ C v u hu Y hloc htrim x hx y hy
+theorem repairBirth_separation {ι : Type*} (ξ : ι → Fin 2) (σ : RepairFanSlot → ι)
+    (C : RepairFanRun ξ σ) (v : ℝ × ℝ) {u : ℝ} (hu : 1 ≤ u) (Y : Set (ℝ × ℝ))
+    (hloc : ∀ y ∈ Y, ‖y - v‖ < 2 * u → u⁻¹ • (y - v) ∈ repairSameLabelBound ξ σ C)
+    (htrim : ∀ y ∈ Y, ∀ p : Fin 3 × Fin 3, y ∉ repairSquare (v + u • repairChildOffset p) u) :
+    ∀ x ∈ (fun z ↦ v + u • z) '' repairNormRunRegion ξ σ C, ∀ y ∈ Y,
+      birthSeparationConstant * u ^ (Exponents.rho : ℝ) ≤ ‖x - y‖ := by
+  have h := repairSameLabel_dichotomy ξ σ C
+  have hη := birthSeparationConstant_pos
+  have hη4 := birthSeparationConstant_le_quarter
+  intro x hx y hy
   obtain ⟨x', hx', rfl⟩ := hx
   have hu0 : 0 < u := by linarith
   have hρ : u ^ (Exponents.rho : ℝ) ≤ u := by
@@ -305,7 +333,7 @@ theorem exists_repairBirth_separation :
           Real.rpow_le_rpow_of_exponent_le hu rho_pos_lt_one.2.le
       _ = u := Real.rpow_one u
   have hρ0 : 0 ≤ u ^ (Exponents.rho : ℝ) := Real.rpow_nonneg hu0.le _
-  have hc : min η (1 / 4) ≤ 1 := (min_le_left _ _).trans hη1
+  have hc := birthSeparationConstant_le_one
   have hx'n : ‖x'‖ ≤ 1 := by
     simp only [repairNormRunRegion, cellFanRunRegion, Set.mem_iUnion] at hx'
     obtain ⟨s, -, hs⟩ := hx'
@@ -326,10 +354,10 @@ theorem exists_repairBirth_separation :
   have hxy : v + u • x' - y = u • (x' - y') := by rw [hyy, smul_sub]; abel
   have hnorm : ‖v + u • x' - y‖ = u * ‖x' - y'‖ := by
     rw [hxy, norm_smul, Real.norm_eq_abs, abs_of_pos hu0]
-  rcases h ξ σ C x' hx' y' (hloc y hy hfar) with hd | ⟨i, j, hxq, hyq, hang⟩
+  rcases h x' hx' y' (hloc y hy hfar) with hd | ⟨i, j, hxq, hyq, hang⟩
   · rw [hnorm]
-    calc min η (1 / 4) * u ^ (Exponents.rho : ℝ) ≤ η * u :=
-          mul_le_mul (min_le_left _ _) hρ hρ0 hη.le
+    calc birthSeparationConstant * u ^ (Exponents.rho : ℝ) ≤ birthSeparationConstant * u :=
+          mul_le_mul_of_nonneg_left hρ hη.le
       _ ≤ ‖x' - y'‖ * u := mul_le_mul_of_nonneg_right hd hu0.le
       _ = u * ‖x' - y'‖ := mul_comm _ _
   · obtain ⟨p, hp⟩ := intPoint_mem_childOffsets hx'n hxq
@@ -342,6 +370,25 @@ theorem exists_repairBirth_separation :
     rw [hnorm]
     have : u * (‖y' - ((i : ℝ), (j : ℝ))‖ / 2) ≤ u * ‖x' - y'‖ :=
       mul_le_mul_of_nonneg_left hang hu0.le
-    nlinarith [min_le_right η (1 / 4)]
+    nlinarith
+
+/-- **Birth separation of a replacement from its local comparison regions.**
+There is one fixed `c₁ > 0` with the following property. Let a replacement run
+`C` be born in the removal square of half-side `u ≥ 1` about `v`, and let `Y`
+be any set satisfying the two properties of a final actual region of an older
+or peer identifier of the same label: near the parent, in the open square of
+half-side `2u`, its rescaled points lie in the same-label bound; and it avoids
+the removal squares of the nine following marks `v + u q`, each of half-side
+`d(u)`. Then every point of the closed birth is at distance at least
+`c₁ u^ρ₀` from `Y`. One may take `c₁ = 1/28` (`repairBirth_separation`).
+Source: area-law Section 11, `geometry:birth-separation`, lines 573–659. -/
+theorem exists_repairBirth_separation :
+    ∃ c₁ > 0, ∀ {ι : Type*} (ξ : ι → Fin 2) (σ : RepairFanSlot → ι)
+      (C : RepairFanRun ξ σ) (v : ℝ × ℝ) {u : ℝ}, 1 ≤ u → ∀ Y : Set (ℝ × ℝ),
+      (∀ y ∈ Y, ‖y - v‖ < 2 * u → u⁻¹ • (y - v) ∈ repairSameLabelBound ξ σ C) →
+      (∀ y ∈ Y, ∀ p : Fin 3 × Fin 3, y ∉ repairSquare (v + u • repairChildOffset p) u) →
+      ∀ x ∈ (fun z ↦ v + u • z) '' repairNormRunRegion ξ σ C, ∀ y ∈ Y,
+        c₁ * u ^ (Exponents.rho : ℝ) ≤ ‖x - y‖ :=
+  ⟨birthSeparationConstant, birthSeparationConstant_pos, repairBirth_separation⟩
 
 end TNLean.PEPS.AreaLaw.Geometry

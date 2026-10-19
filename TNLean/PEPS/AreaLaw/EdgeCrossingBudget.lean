@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.Defs
-import TNLean.PEPS.AreaLaw.FiniteDomain
+import TNLean.Lattice.FiniteDomain
 import QICLean.Entropy.SupportedMarginalTails
 
 /-!
@@ -22,6 +22,7 @@ Independently formalized from the manuscript; no upstream Lean proof text reused
 -/
 
 open scoped BigOperators
+open TNLean.Lattice
 
 namespace TNLean.PEPS.AreaLaw
 

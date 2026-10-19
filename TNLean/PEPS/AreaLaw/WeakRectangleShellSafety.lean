@@ -20,6 +20,8 @@ The scalar clearance condition is stated explicitly for this auxiliary lemma.
 Original formalization from the manuscript; no upstream Lean proof text reused.
 -/
 
+open TNLean.Lattice
+
 namespace TNLean.PEPS.AreaLaw
 
 /-- Every selected square is safe when the cap and dilation radii fit in the

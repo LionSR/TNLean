@@ -30,31 +30,47 @@ Source revision: `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 
 noncomputable section
 
+open TNLean.Lattice
+
 namespace TNLean.PEPS.AreaLaw.Geometry
 
-/-- The inverse hundredth powers of the prescribed primary scales have a
-uniform boundary-weighted sum over every finite set of layers. The constant
-may depend on the positive scale coefficient, but precedes the origin,
-domain, cut, width, residues, and layers. No repair or boundary-positivity
-hypothesis is needed.
+/-- The primary error-sum coefficient `32 (C_P ^ 100)⁻¹ B₀` with
+`B₀ = polynomialDyadicBudget 0`. It is the coefficient `M_p` of the two-family
+decomposition. Auxiliary to the explicit constant of Theorem 1.1
+(`docs/notes/arealaw2d_explicit_constant.tex`).
 Source: area-law Section 11, `geometry:primary-scale`, line 714, and the
 primary error contribution, lines 791–795. -/
-theorem exists_uniform_primaryPitchIndices_error_sum_bound {C_P : ℝ}
-    (hC_P : 0 < C_P) :
-    ∃ M : ℝ, 0 < M ∧
-      ∀ (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ))
-        (C : ℕ) (a b : ℕ → ℤ) (F : Finset ℕ),
-        let n : ℕ → ℕ := fun k ↦
-          ⌈C_P * ((2 : ℝ) ^ k) ^ (1 + 2 * (Exponents.geometryDelta : ℝ))⌉₊
-        ∑ k ∈ F,
-            ((primaryPitchIndices o k (fineScaleIndex k) (pitchScaleIndex k)
-              (boundaryEndpoints Λ A) C (a k) (b k)).card : ℝ) *
-              (((n k : ℝ) ^ 100)⁻¹) ≤
-          M * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary Λ A).card := by
+def primaryErrorSumConstant (C_P : ℝ) : ℝ :=
+  32 * (C_P ^ 100)⁻¹ * polynomialDyadicBudget 0
+
+/-- The primary error-sum coefficient is positive for `C_P > 0`. -/
+theorem primaryErrorSumConstant_pos {C_P : ℝ} (hC_P : 0 < C_P) :
+    0 < primaryErrorSumConstant C_P := by
+  have := polynomialDyadicBudget_pos 0
+  unfold primaryErrorSumConstant
+  positivity
+
+/-- **Primary error sum with an explicit coefficient.** The inverse hundredth
+powers of the prescribed primary scales have boundary-weighted sum at most
+`primaryErrorSumConstant C_P (2 C₀ + 1) ^ 2 |∂A|` over every finite set of layers.
+Source: area-law Section 11, `geometry:primary-scale`, line 714, and the
+primary error contribution, lines 791–795. -/
+theorem primaryPitchIndices_error_sum_le {C_P : ℝ} (hC_P : 0 < C_P)
+    (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ))
+    (C : ℕ) (a b : ℕ → ℤ) (F : Finset ℕ) :
+    let n : ℕ → ℕ := fun k ↦
+      ⌈C_P * ((2 : ℝ) ^ k) ^ (1 + 2 * (Exponents.geometryDelta : ℝ))⌉₊
+    ∑ k ∈ F,
+        ((primaryPitchIndices o k (fineScaleIndex k) (pitchScaleIndex k)
+          (boundaryEndpoints Λ A) C (a k) (b k)).card : ℝ) *
+          (((n k : ℝ) ^ 100)⁻¹) ≤
+      primaryErrorSumConstant C_P * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary Λ A).card := by
   classical
-  obtain ⟨B, hBpos, hB⟩ := exists_uniform_polynomial_dyadic_sum_bound 0
-  refine ⟨32 * (C_P ^ 100)⁻¹ * B, by positivity, ?_⟩
-  intro o Λ A C a b F n
+  unfold primaryErrorSumConstant
+  intro n
+  set B := polynomialDyadicBudget 0
+  have hBpos : 0 < B := polynomialDyadicBudget_pos 0
+  have hB := sum_le_polynomialDyadicBudget 0
   have hn (k : ℕ) : C_P * (2 : ℝ) ^ k ≤ (n k : ℝ) :=
     (mul_le_mul_of_nonneg_left
       (Real.self_le_rpow_of_one_le (one_le_pow₀ (by norm_num))
@@ -92,5 +108,27 @@ theorem exists_uniform_primaryPitchIndices_error_sum_bound {C_P : ℝ}
         (by simpa only [Real.rpow_zero, one_mul] using hB F) (by positivity))
         (by positivity)
     _ = _ := by ring
+
+/-- The inverse hundredth powers of the prescribed primary scales have a
+uniform boundary-weighted sum over every finite set of layers. The constant
+may depend on the positive scale coefficient, but precedes the origin,
+domain, cut, width, residues, and layers. No repair or boundary-positivity
+hypothesis is needed. The constant is `primaryErrorSumConstant C_P`
+(`primaryPitchIndices_error_sum_le`).
+Source: area-law Section 11, `geometry:primary-scale`, line 714, and the
+primary error contribution, lines 791–795. -/
+theorem exists_uniform_primaryPitchIndices_error_sum_bound {C_P : ℝ}
+    (hC_P : 0 < C_P) :
+    ∃ M : ℝ, 0 < M ∧
+      ∀ (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ))
+        (C : ℕ) (a b : ℕ → ℤ) (F : Finset ℕ),
+        let n : ℕ → ℕ := fun k ↦
+          ⌈C_P * ((2 : ℝ) ^ k) ^ (1 + 2 * (Exponents.geometryDelta : ℝ))⌉₊
+        ∑ k ∈ F,
+            ((primaryPitchIndices o k (fineScaleIndex k) (pitchScaleIndex k)
+              (boundaryEndpoints Λ A) C (a k) (b k)).card : ℝ) *
+              (((n k : ℝ) ^ 100)⁻¹) ≤
+          M * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary Λ A).card :=
+  ⟨_, primaryErrorSumConstant_pos hC_P, primaryPitchIndices_error_sum_le hC_P⟩
 
 end TNLean.PEPS.AreaLaw.Geometry

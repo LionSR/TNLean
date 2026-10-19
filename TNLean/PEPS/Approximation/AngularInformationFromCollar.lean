@@ -19,7 +19,9 @@ system size, Hamiltonian, marked points, regions, and scale.
 **Scope restriction (sublinear collar bound):** The sublinear collar
 estimate remains an explicit premise. This is the corresponding implication
 in Proposition 3.4, not a derivation of the collar estimate. See
-`docs/paper-gaps/polypeps_angular_annular_geometry_scope.tex`.
+`docs/paper-gaps/polypeps_angular_annular_geometry_scope.tex`. The unconditional
+Proposition 3.4 is `angularInformationBound` in
+`TNLean.PEPS.Approximation.AngularInformationFromGap`.
 
 Source: polynomial-PEPS manuscript, Proposition 3.4 (`prop:angular`),
 `02-information.tex`, lines 635–785, revision

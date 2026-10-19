@@ -38,6 +38,7 @@ disconnected components included, from the ambient diamond count `eq:ball-count`
 -/
 
 open scoped Matrix.Norms.L2Operator
+open TNLean.Lattice
 
 namespace TNLean.PEPS.AreaLaw
 

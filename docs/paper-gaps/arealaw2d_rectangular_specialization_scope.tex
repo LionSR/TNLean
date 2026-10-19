@@ -8,7 +8,7 @@
 \date{October 14, 2026}
 \begin{document}
 \maketitle
-\gapnote{scope-restriction}{open}
+\gapnote{scope-restriction}{resolved}
 
 \section{The source statement}
 
@@ -78,14 +78,31 @@ Setting $w=h=L$ recovers the square-grid area-law statement used by the
 polynomial-PEPS construction without further assumptions.\footnote{Declaration:
 \leanid{TNLean.PEPS.AreaLaw.RectangularEntropyAreaLaw.squareEntropyAreaLaw}.}
 
-\section{Effect on the paper and what remains}
+\section{Effect on the paper}
 
 This note records a stage of the formalization, not a flaw in the paper: the
-deduction of Corollary~1.2 from Theorem~1.1 is complete and introduces no
-extra geometric or physical conditions. What remains is to complete the
-formal proof of the uniform finite-domain area law (Theorem~1.1) from the
-spectral-gap hypotheses, including the region construction and collar
-amplification.
+deduction of Corollary~1.2 from Theorem~1.1 introduces no extra geometric or
+physical conditions.
+
+\section{Resolution}
+
+The uniform finite-domain area law of Theorem~1.1 is now proved from the
+spectral-gap hypotheses alone. Its proof combines the sublinear collar bound
+(Proposition~9.6), its amplification (Proposition~10.2) and the two-family
+decomposition with separated birth templates
+(Proposition~11.2).\footnote{Declarations:
+\leanid{TNLean.PEPS.AreaLaw.sublinearCollarBound_real},
+\leanid{TNLean.PEPS.AreaLaw.amplificationBound},
+\leanid{TNLean.PEPS.AreaLaw.twoFamilyDecomposition}, and
+\leanid{TNLean.PEPS.AreaLaw.uniformAreaLaw}.}
+Applying the reduction above to it discharges the explicit hypothesis, so
+Corollary~1.2 holds unconditionally in all three forms of
+(\ref{eq:rectangular_scope_bounds}), on rectangles and, for the two vertex
+forms, on every finite induced domain. The square-grid statement used by the
+polynomial-PEPS construction follows at $w=h=L$.\footnote{Declarations:
+\leanid{TNLean.PEPS.AreaLaw.rectangularEntropyAreaLaw},
+\leanid{TNLean.PEPS.AreaLaw.uniformAreaLaw_vertex_boundary_bounds}, and
+\leanid{TNLean.PEPS.AreaLaw.squareEntropyAreaLaw}.}
 
 \bibliographystyle{alpha}
 \bibliography{references}

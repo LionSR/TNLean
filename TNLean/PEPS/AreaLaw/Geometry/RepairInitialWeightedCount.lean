@@ -30,28 +30,29 @@ Source revision: `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 noncomputable section
 
 open scoped BigOperators
+open TNLean.Lattice
 
 namespace TNLean.PEPS.AreaLaw.Geometry
 
-/-- A numerical budget for weighted sums over the actual initial roots,
-chosen before the coefficient and all geometric data. The weight hypothesis
-uses the actual root scale and applies at every admissible upper layer.
+/-- **Weighted sums over the actual initial roots, with an explicit budget.**
+The weight hypothesis uses the actual root scale and applies at every
+admissible upper layer; the budget is `polynomialDyadicBudget P`.
 Source: area-law Section 11, lines 212–233 and 325–363;
 `geometry:total-repairs`, lines 668–692, especially 683–692. -/
-theorem exists_uniform_initialRepairStage_weighted_sum_bound (P : ℝ) :
-    ∃ B : ℝ, 0 < B ∧ ∀ (c : ℝ), 0 ≤ c →
-      ∀ (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ))
-        (C k₀ : ℕ) (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀),
-        let D := initialRepairStage o Λ A C k₀ hC h₀
-        ∀ (w : D.markIndex → ℝ),
-          (∀ (p : D.markIndex) (k : ℕ), k₀ ≤ k →
-            D.scale p ≤ (2 : ℝ) ^ k → w p ≤ c * ((k : ℝ) + 1) ^ P) →
-          (∑ᶠ p : D.markIndex, w p) ≤
-            576 * c * B * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary Λ A).card := by
+theorem initialRepairStage_weighted_sum_le (P : ℝ) {c : ℝ} (hc : 0 ≤ c)
+    (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ))
+    (C k₀ : ℕ) (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀) :
+    let D := initialRepairStage o Λ A C k₀ hC h₀
+    ∀ (w : D.markIndex → ℝ),
+      (∀ (p : D.markIndex) (k : ℕ), k₀ ≤ k →
+        D.scale p ≤ (2 : ℝ) ^ k → w p ≤ c * ((k : ℝ) + 1) ^ P) →
+      (∑ᶠ p : D.markIndex, w p) ≤
+        576 * c * polynomialDyadicBudget P * (2 * (C : ℝ) + 1) ^ 2 *
+          (edgeBoundary Λ A).card := by
   classical
-  obtain ⟨B, hB, hbudget⟩ := exists_uniform_polynomial_dyadic_sum_bound P
-  refine ⟨B, hB, ?_⟩
-  intro c hc o Λ A C k₀ hC h₀ D w hw
+  intro D w hw
+  set B := polynomialDyadicBudget P
+  have hbudget := sum_le_polynomialDyadicBudget P
   let : Fintype D.markIndex := by
     dsimp only [D, initialRepairStage]
     infer_instance
@@ -124,5 +125,23 @@ theorem exists_uniform_initialRepairStage_weighted_sum_bound (P : ℝ) :
     (show 0 ≤ 576 * c * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary Λ A).card by
       positivity) using 1
   ring
+
+/-- A numerical budget for weighted sums over the actual initial roots,
+chosen before the coefficient and all geometric data. The weight hypothesis
+uses the actual root scale and applies at every admissible upper layer. The
+budget is `polynomialDyadicBudget P` (`initialRepairStage_weighted_sum_le`).
+Source: area-law Section 11, lines 212–233 and 325–363;
+`geometry:total-repairs`, lines 668–692, especially 683–692. -/
+theorem exists_uniform_initialRepairStage_weighted_sum_bound (P : ℝ) :
+    ∃ B : ℝ, 0 < B ∧ ∀ (c : ℝ), 0 ≤ c →
+      ∀ (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ))
+        (C k₀ : ℕ) (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀),
+        let D := initialRepairStage o Λ A C k₀ hC h₀
+        ∀ (w : D.markIndex → ℝ),
+          (∀ (p : D.markIndex) (k : ℕ), k₀ ≤ k →
+            D.scale p ≤ (2 : ℝ) ^ k → w p ≤ c * ((k : ℝ) + 1) ^ P) →
+          (∑ᶠ p : D.markIndex, w p) ≤
+            576 * c * B * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary Λ A).card :=
+  ⟨_, polynomialDyadicBudget_pos P, fun _ hc ↦ initialRepairStage_weighted_sum_le P hc⟩
 
 end TNLean.PEPS.AreaLaw.Geometry

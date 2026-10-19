@@ -31,6 +31,8 @@ also proves that the endpoint set is nonempty.
 Independently proved from the manuscript; no upstream Lean proof text is reused.
 -/
 
+open TNLean.Lattice
+
 namespace TNLean.PEPS.AreaLaw.Geometry
 private theorem interval_dist_le {o r u v C x y : ℝ} (hr : 0 ≤ r)
     (huv : |u - v| ≤ C)

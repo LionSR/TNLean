@@ -31,6 +31,7 @@ noncomputable section
 
 open Matrix MeasureTheory SpectralFilter
 open scoped Kronecker NNReal MatrixOrder ComplexOrder Matrix.Norms.L2Operator
+open TNLean.Lattice
 
 namespace TNLean.PEPS.AreaLaw
 

@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.SquareHamiltonianHermitianTerms
 import TNLean.PEPS.AreaLaw.RectangularDomain
-import TNLean.PEPS.AreaLaw.LocalHamiltonian
+import TNLean.Lattice.LocalHamiltonian
 import QICLean.Algebra.L2OpNormReindex
 
 /-!
@@ -32,6 +32,8 @@ open Matrix
 open scoped BigOperators Matrix.Norms.L2Operator ComplexOrder
 
 noncomputable section
+
+open TNLean.Lattice
 
 namespace TNLean.PEPS.Approximation
 
@@ -100,13 +102,13 @@ private theorem squareInteractionSupport_injective (L : ℕ) :
 range-one support in the integer rectangle. Source: area-law Corollary 1.2
 and polynomial-PEPS `eq:model`. -/
 def squareAreaLawSupport (L : ℕ) (i : SquareInteraction L) :
-    AreaLaw.AdmissibleSupport (AreaLaw.rectangularDomain L L) 1 := by
+    Lattice.AdmissibleSupport (AreaLaw.rectangularDomain L L) 1 := by
   classical
   refine ⟨(squareInteractionSupport i).image (AreaLaw.rectangleSiteEquiv L L), ?_⟩
   cases i with
   | inl v =>
     simpa only [squareInteractionSupport, Finset.image_singleton] using
-      AreaLaw.isAdmissibleSupport_singleton (AreaLaw.rectangularDomain L L) 1
+      Lattice.isAdmissibleSupport_singleton (AreaLaw.rectangularDomain L L) 1
         (AreaLaw.rectangleSiteEquiv L L v)
   | inr e =>
     simpa only [squareInteractionSupport, Finset.image_insert, Finset.image_singleton,
@@ -126,7 +128,7 @@ theorem squareAreaLawSupport_injective (L : ℕ) :
 /-- The original vector in the actual integer-domain coordinates.
 Source: area-law Corollary 1.2, finite tensor factors. -/
 def squareAreaLawState {L q : ℕ} (Ω : StateSpace L q) :
-    AreaLaw.StateSpace (AreaLaw.rectangularDomain L L) q :=
+    Lattice.StateSpace (AreaLaw.rectangularDomain L L) q :=
   LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
     (AreaLaw.rectangleConfigurationEquiv L L q) Ω
 
@@ -156,7 +158,7 @@ range-one supports and zero at unused supports. The interaction bound is
 unchanged. Source: area-law Corollary 1.2 and polynomial-PEPS `eq:model`. -/
 def SquareHamiltonian.toAreaLawHamiltonian {L q : ℕ} {J : ℝ}
     (h : SquareHamiltonian L q J) (hJ : 0 ≤ J) :
-    AreaLaw.LocalHamiltonian (AreaLaw.rectangularDomain L L) q 1 J := by
+    Lattice.LocalHamiltonian (AreaLaw.rectangularDomain L L) q 1 J := by
   classical
   let e := AreaLaw.rectangleConfigurationEquiv L L q
   let T := fun i : SquareInteraction L => Matrix.reindex e e (h.hermitianTerm i)
@@ -200,7 +202,7 @@ theorem SquareHamiltonian.toAreaLawHamiltonian_operator {L q : ℕ} {J : ℝ}
   let T := fun i : SquareInteraction L => Matrix.reindex e e (h.hermitianTerm i)
   let f := Function.extend (squareAreaLawSupport L) T 0
   have hsum : (∑ i : SquareInteraction L, T i) =
-      ∑ X : AreaLaw.AdmissibleSupport (AreaLaw.rectangularDomain L L) 1, f X := by
+      ∑ X : Lattice.AdmissibleSupport (AreaLaw.rectangularDomain L L) 1, f X := by
     apply Finset.sum_of_injOn (squareAreaLawSupport L)
       (squareAreaLawSupport_injective L).injOn (fun _ _ => Finset.mem_univ _)
     · intro X _ hX
@@ -220,7 +222,7 @@ the actual conversion. Source: area-law Corollary 1.2 and polynomial-PEPS
 theorem SquareHamiltonian.isGappedGroundState_toAreaLawHamiltonian
     {L q : ℕ} {J : ℝ} (h : SquareHamiltonian L q J) (hJ : 0 ≤ J)
     {E₀ Δ : ℝ} {Ω : StateSpace L q} (hΩ : h.IsGappedGroundState E₀ Ω Δ) :
-    AreaLaw.IsGappedGroundState (AreaLaw.rectangularDomain L L) q
+    Lattice.IsGappedGroundState (AreaLaw.rectangularDomain L L) q
       (h.toAreaLawHamiltonian hJ).operator E₀ (squareAreaLawState Ω) Δ := by
   classical
   let e := AreaLaw.rectangleConfigurationEquiv L L q

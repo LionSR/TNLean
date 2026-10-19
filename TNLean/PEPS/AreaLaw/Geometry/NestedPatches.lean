@@ -31,6 +31,8 @@ or Proposition 4.1: no Hamiltonian, unitary, or state is involved.
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
+open TNLean.Lattice
+
 namespace TNLean.PEPS.AreaLaw.Geometry
 
 open scoped BigOperators

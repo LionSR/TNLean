@@ -21,6 +21,8 @@ These independently written manuscript proofs are extracted unchanged from
 TemplateSafeRectangles.lean.
 -/
 
+open TNLean.Lattice
+
 namespace TNLean.PEPS.AreaLaw.Geometry
 
 /-- The integer rectangle of a lattice dyadic cell, with closed integer

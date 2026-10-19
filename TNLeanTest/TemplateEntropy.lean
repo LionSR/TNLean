@@ -8,6 +8,8 @@ Normalized basis vectors exercise empty domains, empty increments, the unit loca
 alphabet, and the final depth. No abstract entropy functional is supplied.
 -/
 
+open TNLean.Lattice
+
 open TNLean.PEPS.AreaLaw TNLean.PEPS.AreaLaw.Geometry
 
 private noncomputable def basisState (Λ : Finset (ℤ × ℤ)) (q : ℕ)
@@ -54,11 +56,10 @@ example (Λ : Finset (ℤ × ℤ)) (Ω : StateSpace Λ 2) (hΩ : ‖Ω‖ = 1)
 set_option linter.hashCommand false
 
 /--
-info: 'TNLean.PEPS.AreaLaw.regionalEntropy_le_card_mul_log'
-depends on axioms: [propext, Classical.choice, Quot.sound]
+info: 'TNLean.Lattice.regionalEntropy_le_card_mul_log' depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms TNLean.PEPS.AreaLaw.regionalEntropy_le_card_mul_log
+#print axioms TNLean.Lattice.regionalEntropy_le_card_mul_log
 /--
 info: 'TNLean.PEPS.AreaLaw.abs_regionalEntropy_union_sub_le'
 depends on axioms: [propext, Classical.choice, Quot.sound]

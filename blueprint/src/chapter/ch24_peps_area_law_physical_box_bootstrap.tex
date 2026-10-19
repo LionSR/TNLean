@@ -70,7 +70,7 @@ changing the physical size.  No sharp marginal-moment estimate is used.
 
 \begin{theorem}[One physical rough comparison source]
     \label{thm:arealaw-source-rough-comparison}
-    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_sourceTarget_selected_actualCharge_rough_comparison}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_sourceTarget_selected_actualCharge_rough_comparison,TNLean.PEPS.AreaLaw.Scan.ScannerExponents.sourceRoughSelectionThreshold,TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_sourceTarget_selected_actualCharge_rough_comparison_of_threshold_le}
     \leanok
     Fix $q\geq1$, range $R$, $J\geq0$, $\Delta>0$, the nonnegative
     target-volume coefficient and positive charge constant with its
@@ -203,7 +203,7 @@ changing the physical size.  No sharp marginal-moment estimate is used.
 
 \begin{theorem}[Original-state scanner entropy improvement]
     \label{thm:arealaw-source-bootstrap-entropy}
-    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_sourceBootstrap_entropy_improvement}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_sourceBootstrap_entropy_improvement,TNLean.PEPS.AreaLaw.Scan.CollarScan.sourceBootstrapEntropyThreshold,TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_sourceBootstrap_entropy_improvement_of_threshold_le}
     \leanok
     Fix $e_*<e_0<1$, $C_e\geq0$ and the physical and geometric constants
     of the rough source theorem.  There are positive $C_r,C_{\rm out}$
@@ -242,10 +242,11 @@ changing the physical size.  No sharp marginal-moment estimate is used.
 
 \begin{theorem}[Weak-rectangle source entropy]
     \label{thm:arealaw-weak-rectangle-source-entropy}
-    \lean{TNLean.PEPS.AreaLaw.Scan.exists_weakRectangle_source_entropy_bounds}
+    \lean{TNLean.PEPS.AreaLaw.Scan.exists_weakRectangle_source_entropy_bounds,TNLean.PEPS.AreaLaw.Scan.weakRectangleSourceEntropyCoefficient,TNLean.PEPS.AreaLaw.Scan.weakRectangle_source_entropy_bounds,TNLean.PEPS.AreaLaw.Scan.weakRectangleSourceEntropyCoefficient_nonneg}
     \leanok
     Fix $b>0$ and $C_{\rm box}\geq0$.
-    One nonnegative $C_e$ precedes every finite state, weakly safe
+    One nonnegative $C_e$ precedes every integer safety parameter $D_0\geq0$,
+    finite state, weakly safe
     rectangle, row scale $n\geq s$, collar $1\leq L\leq s$, and current
     exponent $e\geq b$.
     If $(D_0+1)L\leq D_0s$ and the same unit vector obeys the pointwise
@@ -349,11 +350,11 @@ changing the physical size.  No sharp marginal-moment estimate is used.
 
 \begin{theorem}[Uniform physical one-step improvement]
     \label{thm:arealaw-physical-box-step}
-    \lean{TNLean.PEPS.AreaLaw.Scan.exists_uniform_boxEntropy_improvement}
+    \lean{TNLean.PEPS.AreaLaw.Scan.exists_uniform_boxEntropy_improvement,TNLean.PEPS.AreaLaw.Scan.boxImprovementThreshold,TNLean.PEPS.AreaLaw.Scan.boxImprovementConstant,TNLean.PEPS.AreaLaw.Scan.exists_uniform_boxEntropy_improvement_of_threshold_le,TNLean.PEPS.AreaLaw.Scan.boxImprovementConstant_pos}
     \leanok
     Fix $q\geq1$, $R$, $J\geq0$, $\Delta>0$, $e_*<e_0<1$ and
     $C_{\rm box}\geq0$.  There is $C>0$ before every
-    $e_*<e\leq e_0$ and every $D_0\geq1$ such that
+    $e_*<e\leq e_0$ and every integer $D_0\geq1$ such that
     \begin{align}
         F_{\rm box}(r) & \leq C_{\rm box}r^{1+e}\quad(r\geq1)
         \quad\Longrightarrow\quad
@@ -382,7 +383,7 @@ changing the physical size.  No sharp marginal-moment estimate is used.
 
 \begin{theorem}[Physical safe-box bound at the fixed exponent]
     \label{thm:arealaw-physical-box-fixed-exponent}
-    \lean{TNLean.PEPS.AreaLaw.Scan.exists_boxEntropy_le_boxError}
+    \lean{TNLean.PEPS.AreaLaw.Scan.exists_boxEntropy_le_boxError,TNLean.PEPS.AreaLaw.Scan.physicalBoxBootstrapConstant}
     \leanok
     For $q\geq1$, $R\in\mathbb N$, $J\geq0$ and $\Delta>0$, there is
     $C>0$ before every integer $D_0>2R+10$ and every positive integer $r$ such that
@@ -399,7 +400,7 @@ changing the physical size.  No sharp marginal-moment estimate is used.
         thm:arealaw-physical-box-step}
     Once the genuine initial exponent $0<e_0<1$ is obtained uniformly in the
     safety parameter, the established finite exponent iteration applies to
-    the family indexed by $D_0>2R+10$, using the quadratic volume estimate
+    the family indexed by integers $D_0>2R+10$, using the quadratic volume estimate
     and the preceding physical one-step theorem.  The latter is invoked
     only when a current exponent above $e_*$ occurs.  No fixed-exponent
     box estimate is an input of this argument.
@@ -483,6 +484,12 @@ uniformly in $D_0$. Conversely, the supremum estimate at
 $r=\operatorname{size}(Q)\geq1$ bounds each admissible rectangle
 entropy and gives (\ref{eq:arealaw-physical-real-box}). Thus the two
 formulations have exactly the same uniformity and hypotheses.
+
+Since $e_*=2\cdot10^{-6}\in(0,1)$, the same bound also proves
+\cite[Proposition~3.3]{OpenAI2026AreaLaw} with $e_0=e_*$.
+Its constant is chosen before every real $D_0>2R+10$ and every finite
+physical instance. This recovers the full real-clearance conclusion of
+that proposition, without extending the integer-clearance recurrence.
 
 The immutable source is
 \href{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex#L681-L805}{Proposition 9.5 and its proof, lines 681--805}.
