@@ -24,11 +24,9 @@ The sufficient condition `D₀ ≥ 1` follows from the standing `D₀ > 2R + 10`
 in `02-initial.tex`, line 225. No upstream Lean proof text is reused.
 -/
 
-namespace TNLean.PEPS.AreaLaw.Geometry
+open TNLean.Lattice
 
-private theorem cast_supDist (p z : ℤ × ℤ) :
-    (supDist p z : ℝ) = max |(p.1 : ℝ) - z.1| |(p.2 : ℝ) - z.2| := by
-  simp only [supDist, Nat.cast_max, Nat.cast_natAbs, Int.cast_abs, Int.cast_sub]
+namespace TNLean.PEPS.AreaLaw.Geometry
 
 /-- Every sufficiently small native rectangle contained in a permitted dilation
 is safe, with safety derived from template separation. This is the clearance

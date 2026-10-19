@@ -32,28 +32,27 @@ Source revision: `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 
 noncomputable section
 
+open TNLean.Lattice
+
 namespace TNLean.PEPS.AreaLaw.Geometry
 
-/-- The ambient identifiers of positive birth rank are finite at every
-generation. Their number is bounded by the uniform initial belt estimate
-plus eight times the preceding actual mark count. No metric or termination
-hypothesis is required.
+/-- **Positive-rank prefix count with an explicit coefficient.** The identifiers
+of positive birth rank at generation `N` form a finite set, of size at most
+`initialBeltCountConstant (2 C₀ + 1) ^ 2 |∂A|` plus eight times the preceding
+actual mark count.
 Source: area-law Section 11, birth classes, lines 565–568, and
 `geometry:total-repairs`, lines 685–692. -/
-theorem exists_uniform_repairStage_positive_rank_prefix_bound :
-    ∃ B : ℝ, 0 < B ∧
-      ∀ (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ))
-        (C k₀ : ℕ) (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀) (Sstar : ℝ) (N : ℕ),
-        let I : Type := {i : (repairStage o Λ A C k₀ hC h₀ Sstar N).regionIndex //
-          0 < repairStageBirthRank o Λ A C k₀ hC h₀ Sstar N i}
-        Finite I ∧ (Nat.card I : ℝ) ≤
-          B * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary Λ A).card +
-            8 * ∑ j ∈ Finset.range N,
-              (Nat.card (repairStage o Λ A C k₀ hC h₀ Sstar j).markIndex : ℝ) := by
+theorem repairStage_positive_rank_prefix_le (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ))
+    (A : Finset (Site Λ)) (C k₀ : ℕ) (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀) (Sstar : ℝ) (N : ℕ) :
+    let I : Type := {i : (repairStage o Λ A C k₀ hC h₀ Sstar N).regionIndex //
+      0 < repairStageBirthRank o Λ A C k₀ hC h₀ Sstar N i}
+    Finite I ∧ (Nat.card I : ℝ) ≤
+      initialBeltCountConstant * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary Λ A).card +
+        8 * ∑ j ∈ Finset.range N,
+          (Nat.card (repairStage o Λ A C k₀ hC h₀ Sstar j).markIndex : ℝ) := by
   classical
-  obtain ⟨B, hB, hbelt⟩ := exists_uniform_initial_belt_card_bound
-  refine ⟨B, hB, ?_⟩
-  intro o Λ A C k₀ hC h₀ Sstar N
+  set B := initialBeltCountConstant
+  have hbelt := initial_belt_card_le
   induction N with
   | zero =>
     obtain ⟨hfinite, hcard⟩ := hbelt o Λ A C k₀ hC h₀
@@ -123,30 +122,62 @@ theorem exists_uniform_repairStage_positive_rank_prefix_bound :
     simpa only [D, Finset.sum_range_succ, mul_add, add_assoc] using
       hstep.trans (_root_.add_le_add ih.2 le_rfl)
 
-/-- A coefficient chosen before all geometric data bounds the retained
-sampled identifiers of positive birth rank at every generation. Finiteness
-is established for the actual subtype, and the metric hypotheses are exactly
-those of the uniform mark estimate. No empty generation is assumed.
+/-- The ambient identifiers of positive birth rank are finite at every
+generation. Their number is bounded by the uniform initial belt estimate
+plus eight times the preceding actual mark count. No metric or termination
+hypothesis is required. The coefficient is `initialBeltCountConstant`
+(`repairStage_positive_rank_prefix_le`).
+Source: area-law Section 11, birth classes, lines 565–568, and
+`geometry:total-repairs`, lines 685–692. -/
+theorem exists_uniform_repairStage_positive_rank_prefix_bound :
+    ∃ B : ℝ, 0 < B ∧
+      ∀ (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ))
+        (C k₀ : ℕ) (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀) (Sstar : ℝ) (N : ℕ),
+        let I : Type := {i : (repairStage o Λ A C k₀ hC h₀ Sstar N).regionIndex //
+          0 < repairStageBirthRank o Λ A C k₀ hC h₀ Sstar N i}
+        Finite I ∧ (Nat.card I : ℝ) ≤
+          B * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary Λ A).card +
+            8 * ∑ j ∈ Finset.range N,
+              (Nat.card (repairStage o Λ A C k₀ hC h₀ Sstar j).markIndex : ℝ) :=
+  ⟨_, initialBeltCountConstant_pos, repairStage_positive_rank_prefix_le⟩
+
+/-- The retained positive-rank count coefficient `B + 8 M_t`, where
+`B = initialBeltCountConstant` and `M_t = repairMarkCountConstant S_*`. It is
+the coefficient `L_q` of the two-family decomposition. Auxiliary to the
+explicit constant of Theorem 1.1 (`docs/notes/arealaw2d_explicit_constant.tex`).
+Source: area-law Section 11, `geometry:total-repairs`, lines 685–692, and the
+nonprimary error contribution, lines 796–798. -/
+def repairRetainedCountConstant (Sstar : ℝ) : ℝ :=
+  initialBeltCountConstant + 8 * repairMarkCountConstant Sstar
+
+/-- The retained positive-rank count coefficient is positive. -/
+theorem repairRetainedCountConstant_pos (Sstar : ℝ) :
+    0 < repairRetainedCountConstant Sstar :=
+  add_pos initialBeltCountConstant_pos (mul_pos (by norm_num) (repairMarkCountConstant_pos _))
+
+/-- **Retained positive-rank count with an explicit coefficient.** Under the
+metric hypotheses, the retained sampled identifiers of positive birth rank at
+every generation form a finite set of size at most
+`repairRetainedCountConstant S_* (2 C₀ + 1) ^ 2 |∂A|`.
 Source: area-law Section 11, `geometry:total-repairs`, lines 685–692, and
 the nonprimary error contribution, lines 796–798. -/
-theorem exists_uniform_repairStage_retained_positive_rank_bound {Sstar : ℝ}
-    (hSstar : 1 < Sstar) :
-    ∃ L : ℝ, 0 < L ∧
-      ∀ (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ))
-        (C k₀ : ℕ) (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀) (a₀ : ℝ),
-        RepairMetricHypotheses (o := o) (Λ := Λ) (A := A) (C := C) (k₀ := k₀)
-          (hC := hC) (h₀ := h₀) (Sstar := Sstar) a₀ →
-        ∀ N : ℕ,
-          let I : Type :=
-            {i : (repairStage o Λ A C k₀ hC h₀ Sstar N).RetainedRegionIndex Λ A //
-              0 < repairStageBirthRank o Λ A C k₀ hC h₀ Sstar N i.val}
-          Finite I ∧ (Nat.card I : ℝ) ≤
-            L * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary Λ A).card := by
+theorem repairStage_retained_positive_rank_le {Sstar : ℝ} (hSstar : 1 < Sstar)
+    (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ))
+    (C k₀ : ℕ) (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀) (a₀ : ℝ)
+    (h : RepairMetricHypotheses (o := o) (Λ := Λ) (A := A) (C := C) (k₀ := k₀)
+      (hC := hC) (h₀ := h₀) (Sstar := Sstar) a₀) (N : ℕ) :
+    let I : Type :=
+      {i : (repairStage o Λ A C k₀ hC h₀ Sstar N).RetainedRegionIndex Λ A //
+        0 < repairStageBirthRank o Λ A C k₀ hC h₀ Sstar N i.val}
+    Finite I ∧ (Nat.card I : ℝ) ≤
+      repairRetainedCountConstant Sstar * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary Λ A).card := by
   classical
-  obtain ⟨B, hB, hprefix⟩ := exists_uniform_repairStage_positive_rank_prefix_bound
-  obtain ⟨M, hM, hmark⟩ := exists_uniform_repairStage_markIndex_prefix_bound hSstar
-  refine ⟨B + 8 * M, by positivity, ?_⟩
-  intro o Λ A C k₀ hC h₀ a₀ h N I
+  unfold repairRetainedCountConstant
+  intro I
+  set B := initialBeltCountConstant
+  set M := repairMarkCountConstant Sstar
+  have hprefix := repairStage_positive_rank_prefix_le
+  have hmark := repairStage_markIndex_prefix_le hSstar
   let R := {i : (repairStage o Λ A C k₀ hC h₀ Sstar N).regionIndex //
     0 < repairStageBirthRank o Λ A C k₀ hC h₀ Sstar N i}
   obtain ⟨hfinite, hcount⟩ := hprefix o Λ A C k₀ hC h₀ Sstar N
@@ -166,5 +197,27 @@ theorem exists_uniform_repairStage_retained_positive_rank_bound {Sstar : ℝ}
       _root_.add_le_add le_rfl (mul_le_mul_of_nonneg_left
         (hmark o Λ A C k₀ hC h₀ a₀ h N) (by norm_num))
     _ = _ := by ring
+
+/-- A coefficient chosen before all geometric data bounds the retained
+sampled identifiers of positive birth rank at every generation. Finiteness
+is established for the actual subtype, and the metric hypotheses are exactly
+those of the uniform mark estimate. No empty generation is assumed. The coefficient
+is `repairRetainedCountConstant S_*` (`repairStage_retained_positive_rank_le`).
+Source: area-law Section 11, `geometry:total-repairs`, lines 685–692, and
+the nonprimary error contribution, lines 796–798. -/
+theorem exists_uniform_repairStage_retained_positive_rank_bound {Sstar : ℝ}
+    (hSstar : 1 < Sstar) :
+    ∃ L : ℝ, 0 < L ∧
+      ∀ (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ))
+        (C k₀ : ℕ) (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀) (a₀ : ℝ),
+        RepairMetricHypotheses (o := o) (Λ := Λ) (A := A) (C := C) (k₀ := k₀)
+          (hC := hC) (h₀ := h₀) (Sstar := Sstar) a₀ →
+        ∀ N : ℕ,
+          let I : Type :=
+            {i : (repairStage o Λ A C k₀ hC h₀ Sstar N).RetainedRegionIndex Λ A //
+              0 < repairStageBirthRank o Λ A C k₀ hC h₀ Sstar N i.val}
+          Finite I ∧ (Nat.card I : ℝ) ≤
+            L * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary Λ A).card :=
+  ⟨_, repairRetainedCountConstant_pos Sstar, repairStage_retained_positive_rank_le hSstar⟩
 
 end TNLean.PEPS.AreaLaw.Geometry

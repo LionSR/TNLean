@@ -19,6 +19,8 @@ open TNLean.PEPS.AreaLaw TNLean.PEPS.AreaLaw.Scan SpectralFilter
 open scoped BigOperators Matrix.Norms.L2Operator
 
 noncomputable section
+open TNLean.Lattice
+
 namespace TNLeanTest.StatusMarginalGeometry
 
 example {V I : Type*} [Fintype V] [DecidableEq V] [Fintype I] [LinearOrder I]

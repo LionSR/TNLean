@@ -21,6 +21,8 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 at `openai/math@adc7f124`.
 -/
 
+open TNLean.Lattice
+
 namespace TNLean.PEPS.AreaLaw.Scan
 
 variable {V : Type*} [Fintype V] [DecidableEq V]
@@ -72,36 +74,46 @@ private theorem statusMarginalRegions_boundary {Λ : Finset (ℤ × ℤ)}
 
 namespace CollarScan
 
-/-- A single coefficient bounds all five actual cut budgets, at every completed
-and pre-charge status. The lower bound by one also holds when there are no bands.
-The literal scale inequalities are geometric premises; no asymptotic premise,
-cut-containment certificate or cut-edge estimate is supplied. -/
-theorem exists_statusMarginal_cutBudget_le_log {q : ℕ} (hq : 1 ≤ q) (R : ℕ)
+/-- The explicit coefficient `latticeCutBudgetConstant q R Cr 40 + 1` of the five status
+cut budgets (`08-scanner.tex`, lines 32–58 and 400–414). -/
+noncomputable def statusMarginalBudgetConstant (q R : ℕ) (Cr : ℝ) : ℝ :=
+  latticeCutBudgetConstant q R Cr 40 + 1
+
+/-- The status-marginal budget coefficient is positive. -/
+theorem statusMarginalBudgetConstant_pos (q R : ℕ) {Cr : ℝ} (hCr : 0 ≤ Cr) :
+    0 < statusMarginalBudgetConstant q R Cr := by
+  unfold statusMarginalBudgetConstant
+  linarith [latticeCutBudgetConstant_nonneg q R hCr (show (0 : ℝ) ≤ 40 by norm_num)]
+
+/-- The explicit coefficient `statusMarginalBudgetConstant q R Cr` bounds all five actual cut
+budgets, at every completed and pre-charge status (`08-scanner.tex`, lines 32–58 and
+400–414; `07-comparators.tex`, lines 70–85). -/
+theorem statusMarginal_cutBudget_le_log {q : ℕ} (hq : 1 ≤ q) (R : ℕ)
     {Cr : ℝ} (hCr : 0 ≤ Cr) :
-    ∃ CB : ℝ, 0 < CB ∧
-      ∀ (Λ T : Finset (ℤ × ℤ)) [LinearOrder (AdmissibleSupport Λ R)] (hT : T.Nonempty)
-        (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)),
-        S.graph = domainGraph Λ →
-        S.depth = (fun x ↦ ambientDepth T hT x.val) →
-        (∀ i, S.anchor i ∈ i.val) →
-        ∀ L : ℕ, 2 ≤ S.n →
-        S.r₀ = ⌈Cr * Real.log (S.n : ℝ) ^ 2⌉₊ →
-        S.r₀ ≤ S.D → 1 ≤ S.D → 4 * S.D ≤ S.m → 8 * S.K * S.m ≤ L →
-        (∀ d : ℕ, 1 ≤ d → d ≤ L →
-          (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n) →
-        (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
-          ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z) →
-        let B := CB * ((S.n : ℝ) * S.D * Real.log (S.n : ℝ) ^ 12)
-        1 ≤ B ∧ ∀ (k : ℕ) (h : History S.K S.m S.M k) (g : Fin S.K),
-          (k ≤ S.n * S.m → ∀ Q ∈ statusMarginalRegions S.depth (S.state h g),
-            cutBudget q S.graph (S.truncationSet L) S.r₀ S.anchor Q ≤ B) ∧
-          (k + 1 ≤ S.n * S.m →
-            ∀ Q ∈ statusMarginalRegions S.depth (S.oldChargeState h g),
-              cutBudget q S.graph (S.truncationSet L) S.r₀ S.anchor Q ≤ B) := by
+    ∀ (Λ T : Finset (ℤ × ℤ)) [LinearOrder (AdmissibleSupport Λ R)] (hT : T.Nonempty)
+      (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)),
+      S.graph = domainGraph Λ →
+      S.depth = (fun x ↦ ambientDepth T hT x.val) →
+      (∀ i, S.anchor i ∈ i.val) →
+      ∀ L : ℕ, 2 ≤ S.n →
+      S.r₀ = ⌈Cr * Real.log (S.n : ℝ) ^ 2⌉₊ →
+      S.r₀ ≤ S.D → 1 ≤ S.D → 4 * S.D ≤ S.m → 8 * S.K * S.m ≤ L →
+      (∀ d : ℕ, 1 ≤ d → d ≤ L →
+        (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n) →
+      (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+        ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z) →
+      let B := statusMarginalBudgetConstant q R Cr *
+        ((S.n : ℝ) * S.D * Real.log (S.n : ℝ) ^ 12)
+      1 ≤ B ∧ ∀ (k : ℕ) (h : History S.K S.m S.M k) (g : Fin S.K),
+        (k ≤ S.n * S.m → ∀ Q ∈ statusMarginalRegions S.depth (S.state h g),
+          cutBudget q S.graph (S.truncationSet L) S.r₀ S.anchor Q ≤ B) ∧
+        (k + 1 ≤ S.n * S.m →
+          ∀ Q ∈ statusMarginalRegions S.depth (S.oldChargeState h g),
+            cutBudget q S.graph (S.truncationSet L) S.r₀ S.anchor Q ≤ B) := by
   classical
-  obtain ⟨C, hC, hbudget⟩ := exists_latticeCutBudget_le_log hq R hCr
-    (show (0 : ℝ) ≤ 40 by norm_num)
-  refine ⟨C + 1, by positivity, ?_⟩
+  have hbudget := latticeCutBudget_le_log hq R hCr (show (0 : ℝ) ≤ 40 by norm_num)
+  have hC := latticeCutBudgetConstant_nonneg q R hCr (show (0 : ℝ) ≤ 40 by norm_num)
+  set C := latticeCutBudgetConstant q R Cr 40
   intro Λ T _ hT S hgraph hdepth hanchor L hn hradius hr hDpos hD hL hrows hclear
   dsimp only
   have hnR : (2 : ℝ) ≤ S.n := by exact_mod_cast hn
@@ -112,7 +124,7 @@ theorem exists_statusMarginal_cutBudget_le_log {q : ℕ} (hq : 1 ≤ q) (R : ℕ
         (C + 1) * ((S.n : ℝ) * S.D * Real.log (S.n : ℝ) ^ 12) := by
     rw [hgraph, hradius]
     refine (hbudget Λ S.anchor hanchor (S.truncationSet L) Q hQ
-      S.n S.D hnR hDR (by exact_mod_cast hcut)).trans ?_
+      hnR hDR (by exact_mod_cast hcut)).trans ?_
     exact mul_le_mul_of_nonneg_right (by linarith) (by positivity)
   have hboundEither (Q : Finset (Site Λ))
       (hQ : Q ⊆ S.truncationSet L ∨ Qᶜ ⊆ S.truncationSet L)
@@ -141,6 +153,34 @@ theorem exists_statusMarginal_cutBudget_le_log {q : ℕ} (hq : 1 ≤ q) (R : ℕ
       (statusMarginalRegions_boundary S.depth (S.oldChargeState h g)
         (oldChargeState_cut_bounds_domainGraph hT S hgraph hdepth h g (by omega) hk
           hr hDpos hD hL hrows hclear) hQ)
+
+/-- A single coefficient bounds all five actual cut budgets, at every completed
+and pre-charge status. The lower bound by one also holds when there are no bands.
+The literal scale inequalities are geometric premises; no asymptotic premise,
+cut-containment certificate or cut-edge estimate is supplied. -/
+theorem exists_statusMarginal_cutBudget_le_log {q : ℕ} (hq : 1 ≤ q) (R : ℕ)
+    {Cr : ℝ} (hCr : 0 ≤ Cr) :
+    ∃ CB : ℝ, 0 < CB ∧
+      ∀ (Λ T : Finset (ℤ × ℤ)) [LinearOrder (AdmissibleSupport Λ R)] (hT : T.Nonempty)
+        (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)),
+        S.graph = domainGraph Λ →
+        S.depth = (fun x ↦ ambientDepth T hT x.val) →
+        (∀ i, S.anchor i ∈ i.val) →
+        ∀ L : ℕ, 2 ≤ S.n →
+        S.r₀ = ⌈Cr * Real.log (S.n : ℝ) ^ 2⌉₊ →
+        S.r₀ ≤ S.D → 1 ≤ S.D → 4 * S.D ≤ S.m → 8 * S.K * S.m ≤ L →
+        (∀ d : ℕ, 1 ≤ d → d ≤ L →
+          (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n) →
+        (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+          ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z) →
+        let B := CB * ((S.n : ℝ) * S.D * Real.log (S.n : ℝ) ^ 12)
+        1 ≤ B ∧ ∀ (k : ℕ) (h : History S.K S.m S.M k) (g : Fin S.K),
+          (k ≤ S.n * S.m → ∀ Q ∈ statusMarginalRegions S.depth (S.state h g),
+            cutBudget q S.graph (S.truncationSet L) S.r₀ S.anchor Q ≤ B) ∧
+          (k + 1 ≤ S.n * S.m →
+            ∀ Q ∈ statusMarginalRegions S.depth (S.oldChargeState h g),
+              cutBudget q S.graph (S.truncationSet L) S.r₀ S.anchor Q ≤ B) :=
+  ⟨_, statusMarginalBudgetConstant_pos q R hCr, statusMarginal_cutBudget_le_log hq R hCr⟩
 
 end CollarScan
 end TNLean.PEPS.AreaLaw.Scan

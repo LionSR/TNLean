@@ -20,7 +20,7 @@ their errors on `Ω` and the existence of a tag. This file chooses these familie
 
 * `EncodedFrame.suppliedPatch` : the supplied patch at every center, with a radius depending on
   the center, and its center, scale, tag count, error and tag.
-* `exists_resize_step_supplied`, `exists_pointTreatment_step_supplied` : the resize of a hole and
+* `exists_resize_step_supplied`, `pointTreatment_step_supplied_of_le` : the resize of a hole and
   the point treatment, or its removal, as gates, with the hole and net patches supplied and at
   most `2 b` pair sources in each monomial.
 
@@ -156,7 +156,7 @@ theorem exists_resize_step_supplied {ε₀ : ℝ} (hε : 0 < ε₀) (hε₀ : ε
     (by omega) hcOld hcNew hcPatch hb hb9 hΩ.le hεPatch hεOld htagOld
 
 /-- **The point treatments as gates, with supplied patches.** In the setting of
-`exists_pointTreatment_step_reading`, let the hole patches, of radius `ε₀ t`, and the net patches,
+`pointTreatment_step_reading_of_le`, let the hole patches, of radius `ε₀ t`, and the net patches,
 of radius `ν t / 2`, be supplied by Proposition 4.1 at test exponent `60`
 (`EncodedFrame.suppliedPatch`). Then, for `‖Ω‖ = 1`, `L ≥ 2` and natural `C' ≥ max 1 C`,
 `c' ≥ c`, the point treatment, or its removal, is a circuit as in `pointTreatment_step` with
@@ -164,8 +164,8 @@ constants `C'` and `c'`.
 
 Polynomial-PEPS manuscript, `03-patches.tex`, lines 26–49, and `06-geometry.tex`, lines 109–118,
 328–339, 481–505 and 574–583. -/
-theorem exists_pointTreatment_step_supplied {ε₀ : ℝ} (hε : 0 < ε₀) (hε₀ : ε₀ ≤ 1 / 16) :
-    ∃ ν' > 0, ∀ ν : ℝ, 0 < ν → ν ≤ ν' → ∀ {v : ℝ × ℝ}, IsGenericDisplacement v →
+theorem pointTreatment_step_supplied_of_le {ε₀ : ℝ} (hε : 0 < ε₀) (hε₀ : ε₀ ≤ 1 / 16) :
+    ∀ ν : ℝ, 0 < ν → ν ≤ pointTreatmentRatio ε₀ → ∀ {v : ℝ × ℝ}, IsGenericDisplacement v →
       ∀ {ι : Type} [Fintype ι] [DecidableEq ι] {q : ℕ} [NeZero q] {pos : ι → ℝ × ℝ}
       {κ Party : Type} {n t : ℝ} (hn : 0 < n), 0 < t → 8 * t < n →
       ∀ {lab : ℤ × ℤ → κ} {S : ℤ × ℤ} {B : κ} {g : ℝ × ℝ → κ},
@@ -204,10 +204,10 @@ theorem exists_pointTreatment_step_supplied {ε₀ : ℝ} (hε : 0 < ε₀) (hε
           (guideFrame pos q g₂ own ph rank V' (suppliedPatch P _ hr) hpV').regRef Ω‖ ≤
           (2 * b + 1) * ((L : ℝ) ^ 20)⁻¹ ∧
         w.IsSourceBounded (2 * b) := by
-  obtain ⟨ν', hν', H⟩ := exists_pointTreatment_step_reading_isSourceBounded hε hε₀
-  refine ⟨ν', hν', fun ν hν hνν' {v} hv {ι _ _ q _ pos κ Party n t} hn ht htn {lab S B g} hg
+  have H := pointTreatment_step_reading_isSourceBounded_of_le hε hε₀
+  refine fun ν hν hνν' {v} hv {ι _ _ q _ pos κ Party n t} hn ht htn {lab S B g} hg
     {M₁ M₂} Q₀ hQ₀ hM L₀ hL₀ {g₁ g₂} hg₁ hg₂ own ph rank {V V'} hV hV' hVc hVc' hVV'
-    {Ω B₀ C c L} P hΩ hL hr hu hpV hpV' {C' c' b} hC hC' hc hb hb53 => ?_⟩
+    {Ω B₀ C c L} P hΩ hL hr hu hpV hpV' {C' c' b} hC hC' hc hb hb53 => ?_
   obtain ⟨hcHole, hεHole, htag⟩ := suppliedPatch_data hr P hΩ hL hC hC' hc
   obtain ⟨hcPatch, hεPatch, -⟩ := suppliedPatch_data hu P hΩ hL hC hC' hc
   exact H ν hν hνν' hv hn ht htn hg Q₀ hQ₀ hM L₀ hL₀ hg₁ hg₂ own ph rank hV hV' hVc hVc' hVV'

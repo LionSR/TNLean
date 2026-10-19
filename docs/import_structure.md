@@ -35,12 +35,13 @@ TNLean, the remaining source follows these conceptual layers:
 | --- | --- | --- |
 | 0 | `Algebra` | Tensor-network-facing algebra and compatibility results not owned by QICLean. |
 | 1 | `Circuit` | Local quantum circuits on qudit chains: supported operators, layers and light cones, two-site universality, measurement protocols, teleportation and long-range gates, and local channel circuits. It imports nothing from `MPS`, so it could move to QICLean. |
+| 2 | `Lattice` | Finite lattice domains, local Hamiltonians, and regional entropy, shared by the one- and two-dimensional area laws, together with the entropy inequalities and the zero-entropy lemma for a cut splitting no term, stated on any finite set of sites. It imports `Algebra`, `Circuit` and QICLean, and nothing from `MPS` or `PEPS`. |
 | 3 | `MPS.Chain`, `MPS.Core`, `MPS.Overlap` | Matrix-product tensor definitions, finite-Kraus compatibility wrappers, words, blocking, transfer matrices, and overlaps. |
 | 3b | `MPS.MPDO` | MPO, MPDO, and LPDO foundations. |
 | 4 | `MPS.FundamentalTheorem`, `MPS.Symmetry` | The single-block fundamental theorem and symmetry consequences. |
 | 5 | `MPS.BNT`, `MPS.CanonicalForm`, `MPS.Irreducible`, `MPS.Periodic`, `MPS.Structure` | Multi-block canonical forms, periodicity, and structural assembly. |
 | 5b | `MPS.RFP` | Renormalization fixed-point theory. |
-| 5c | `MPS.AreaLaw` | The one-dimensional area law and polynomial matrix product state approximation for gapped finite-range chains, stated natively on the chain of `L` sites (independent of `PEPS.AreaLaw`) and proved from the QICLean tail bound and buffered discount. |
+| 5c | `MPS.AreaLaw` | The one-dimensional area law and polynomial matrix product state approximation for gapped finite-range chains, stated natively on the chain of `L` sites and on finite sets of integers, and proved from the QICLean tail bound and buffered discount; it imports the site-generic entropy lemmas `Lattice.RegionEntropyInequalities` and `Lattice.ZeroEntropy` and nothing from `PEPS`. |
 | 6 | `Wielandt` | Tensor-typed span-growth, primitivity, and quantum Wielandt consequences built on QICLean's channel-generic theory. |
 
 `PiAlgebra` provides related algebraic formulations. `PEPS` contains the

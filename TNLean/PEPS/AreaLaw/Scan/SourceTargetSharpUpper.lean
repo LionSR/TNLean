@@ -38,6 +38,8 @@ open Matrix TensorPower PermutationRepresentation Filter
 open scoped BigOperators Matrix Kronecker ComplexOrder MatrixOrder
   Matrix.Norms.L2Operator Topology
 
+open TNLean.Lattice
+
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
 
 open SpectralFilter ActualTerminals
@@ -177,11 +179,13 @@ theorem exists_truncated_target_actualSharpUpper {q : ℕ} [NeZero q]
       (1 + 2 / (Δ / positiveNormalization 1 (Δ / 2) J))) := by positivity
   refine ⟨Ctr, Ctarget, CB, hCtr, hCtarget, hCB, ?_⟩
   intro F ω hmargin
-  obtain ⟨Na, _, hNa⟩ := F.exists_a_le_moment_radius (A := 6) hmargin hCB.le
-    (by norm_num) (lt_min hc₀ zero_lt_one)
-  obtain ⟨Ns, hNs⟩ := eventually_atTop.mp
-    (eventually_status_scale_separation (ell := F.ell) hCtr.le
-      F.kappa_pos F.kappa_lt_mu)
+  let Na := F.momentRadiusThreshold ω CB 6
+    (min (1 / (32 * Real.sqrt (1 + 2 / (Δ / positiveNormalization 1 (Δ / 2) J)))) 1)
+  have hNa := fun n (hn : Na ≤ n) => F.a_le_moment_radius_of_momentRadiusThreshold_le
+    (A := 6) hmargin hCB.le (by norm_num) (lt_min hc₀ zero_lt_one) hn
+  let Ns := statusScaleSeparationThreshold Ctr F.kappa F.mu
+  have hNs := fun n (hn : Ns ≤ n) => status_scale_separation_of_threshold_le
+    (ell := F.ell) hCtr.le F.kappa_pos F.kappa_lt_mu hn
   refine ⟨max Nt (max Na Ns), hNt.trans (le_max_left _ _), ?_⟩
   intro Λ T _ hT h S hM E₀ Ω hgs hgraph hanchor hn hr hm hD hK hsize hdepth
     hrows hclear L X g ε w δ B C₀ c₀
