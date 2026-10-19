@@ -219,25 +219,24 @@ state and cut.
     \label{thm:area_law_transport_bound_explicit}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.finiteFamilyTransportBound_explicit}
     \leanok
+    \uses{thm:al_scan_actual_round_transport}
     The common step-error bound of
     Theorem~\ref{thm:al_scan_actual_round_transport} holds for
     \begin{align}
-        c_0 & =\tfrac18,
-        \qquad
-        C_{\rm ent}=200000,
-        \qquad
-        e_{\rm ent}=2,
-        \qquad
-        C_{\rm en}=3\bigl(18\pi^2+6144\,e^{\pi^2+1}\bigr),
-        \qquad
-        e_{\rm en}=4.
+        c_0         & =\tfrac18,                               \\
+        C_{\rm ent} & =200000,                                 \\
+        e_{\rm ent} & =2,                                      \\
+        C_{\rm en}  & =3\bigl(18\pi^2+6144\,e^{\pi^2+1}\bigr), \\
+        e_{\rm en}  & =4.
     \end{align}
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:al_scan_actual_round_transport}
-    These are the constants for which the finite-family transport estimate of
-    the companion library is proved.
+    The finite-family transport estimate of
+    \cite[Proposition~7.4]{OpenAI2026AreaLaw} holds with the threshold $\tfrac18$, the entropy constant $200000$
+    and exponent $2$, and the energy constant
+    $3\bigl(18\pi^2+6144\,e^{\pi^2+1}\bigr)$ and exponent $4$. Its
+    conclusion is the common step-error bound at these constants.
 \end{proof}
 
 \begin{definition}[The explicit constant of the area law]
