@@ -561,6 +561,76 @@ for an arbitrary finite set of sites and are instantiated here directly.
 
 \section{The buffered discount with a constant-width buffer}
 
+\begin{theorem}[Localization of the relative-evolution generator]
+    \label{thm:chain_relative_generator_localization}
+    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.norm_relativeGenerator_sub_siteExpectation_le}
+    \leanok
+    \uses{def:chain_swapped_doubled_hamiltonian,thm:chain_partial_swap_boundary,
+        def:qc_site_expectation}
+    Let $H$ be a range-$R$ Hamiltonian on the contiguous chain
+    $I=\{0,\ldots,L-1\}$ with local dimension $q\ge1$ and interaction
+    bound $J\in\mathbb R$. Let $D\subseteq I$, and let
+    $K=\widehat H$ and $K'=\widehat H'$ be its doubled and regionally
+    swapped doubled operators. Write $\mathcal C_D$ for the original
+    supports meeting both $D$ and its complement, and put
+    $Z=\bigcup_{X\in\mathcal C_D}X$.
+    For every real $\ell\ge0$ and $t\in\mathbb R$, define
+    \begin{align}
+        B    & =N_\ell(Z),\notag         \\
+        G(t) & =e^{itK'}(K'-K)e^{-itK'}.
+    \end{align}
+    Set
+    \begin{align}
+        b_0 & =2^{2R+1}(2J),\notag                          \\
+        a   & =\frac{2(2+4|b_0|e^{2R})e}{1-e^{-1/2}},\notag \\
+        v   & =2(R+1)|b_0|e^{2R}+1,\notag                   \\
+        N_R & =2\cdot2^{2R}.
+    \end{align}
+    Then the normalized expectation on the paired physical sites satisfies
+    \begin{align}
+        \|G(t)-E_B(G(t))\|
+        \le4|J|a(R+1)^2N_R L\,e^{v|t|-\ell/2}.
+    \end{align}
+    No nonemptiness of the chain or of $\mathcal C_D$, sign condition on
+    $J$, or spectral-gap hypothesis is required. This is the intermediate
+    generator estimate in the localization paragraph of the proof of the
+    information-reset lemma in Part~II of~\cite{TNLean2026OneDimensional},
+    on a contiguous chain; the domain distinction is recorded
+    in~\cite{gap:tnlean_one_dimensional_connected_domain_scope}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:chain_swapped_doubled_hamiltonian,thm:chain_partial_swap_boundary,
+        lem:chain_site_norm_budget,thm:chain_lieb_robinson,
+        lem:qc_site_expectation_properties}
+    The swapped doubled interactions have range $R$ and bound $2J$.
+    Their per-site norm sum is at most $b_0$. The chain localization
+    estimate therefore has constants $a,v$ as displayed.
+    By Theorem~\ref{thm:chain_partial_swap_boundary},
+    \begin{align}
+        K'-K            & =\sum_{X\in\mathcal C_D}\sum_{b\in\{0,1\}}A_{X,b},\notag \\
+        \|A_{X,b}\|     & \le2J\le2|J|,\notag                                      \\
+        2|\mathcal C_D| & \le N_R|\partial D|\le N_R L.
+    \end{align}
+    Each $A_{X,b}$ is supported on $X$, with $|X|\le R+1$.
+    For one such term put $A=e^{itK'}A_{X,b}e^{-itK'}$ and
+    $A_0=E_{N_\ell(X)}(A)$. The chain estimate gives
+    \begin{align}
+        \|A-A_0\|\le2|J|a(R+1)^2e^{v|t|-\ell/2}.
+    \end{align}
+    Since $X\subseteq Z$, the operator $A_0$ is supported on $B$ and is
+    fixed by $E_B$. Hence
+    \begin{align}
+        A-E_B(A)     & =(A-A_0)-E_B(A-A_0),\notag \\
+        \|A-E_B(A)\| & \le2\|A-A_0\|
+        \le4|J|a(R+1)^2e^{v|t|-\ell/2}.
+    \end{align}
+    Conjugation and the expectation are linear. Summing this estimate
+    over the actual crossing replica labels and using their cardinality
+    bound proves the assertion. An empty crossing family gives the zero
+    generator; the same nonnegative estimates include $J=0$.
+\end{proof}
+
 \begin{lemma}[Buffered discount on a chain]
     \label{lem:chain_buffer_discount}
     \lean{

@@ -126,6 +126,17 @@ square Ψ and its swap image Φ. Both vectors are normalized, have energy
 2E₀ and inherit the lower gap Δ from the original ground-state predicate
 and Δ > 0. No additional positivity or nonemptiness assumption is imposed.
 
+The theorem
+`MPS.AreaLaw.ChainHamiltonian.norm_relativeGenerator_sub_siteExpectation_le`
+localizes the actual relative-evolution generator
+G(t) = exp(itK′)(K′−K)exp(−itK′) onto the exact radius-ℓ neighborhood of Z.
+Its error is bounded by 4|J| a (R+1)² N_R L exp(v|t|−ℓ/2), where a and v
+are the explicit chain locality coefficients at per-site budget
+b₀ = 2^(2R+1)(2J). The proof retains the sharper boundary-cardinality
+estimate before bounding it by L. It applies to every real time and radius
+ℓ ≥ 0, with q ≥ 1 for the normalized expectation, and needs no spectral
+hypothesis. The individual crossing terms are localized before summation.
+
 The existing generic theorem
 `TNLean.PEPS.Approximation.exists_regional_physicalBuffer_filter` supplies the
 two-sided Gaussian-filter estimates on any finite site set. Constructing a supported
