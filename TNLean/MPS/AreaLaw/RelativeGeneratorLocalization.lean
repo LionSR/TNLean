@@ -11,7 +11,7 @@ import TNLean.MPS.AreaLaw.InteractionBudget
 /-!
 # Localization of the relative-evolution generator on a chain
 
-The actual relative-evolution generator is localized term by term over crossing
+The relative-evolution generator is localized term by term over crossing
 replica differences. Its projection error is bounded by a constant depending
 only on the range and interaction bound, times the chain length and an
 exponential in time and distance. The sharper boundary cardinality is retained
@@ -20,7 +20,7 @@ in the proof; no factor quadratic in the full crossing zone is used.
 ## Main result
 
 * `ChainHamiltonian.norm_relativeGenerator_sub_siteExpectation_le`: localization
-  of the actual generator with explicit constants and an error linear in `L`.
+  of the generator with explicit constants and an error linear in `L`.
 
 **Scope restriction (contiguous chains):** The physical sites are `Fin L`.
 The broader source domain may have gaps; see
@@ -36,7 +36,7 @@ open scoped Kronecker Matrix.Norms.L2Operator
 
 namespace TNLean.MPS.AreaLaw
 
-/-- The actual relative-evolution generator is exponentially close to its
+/-- The relative-evolution generator is exponentially close to its
 expectation on the neighborhood of the crossing supports, with error linear
 in the chain length. Source: TNLean note, `part2a_mps_information.tex`, lines 380–400. -/
 theorem ChainHamiltonian.norm_relativeGenerator_sub_siteExpectation_le

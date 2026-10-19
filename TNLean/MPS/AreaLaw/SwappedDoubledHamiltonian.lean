@@ -11,7 +11,7 @@ import TNLean.PEPS.Approximation.SheetSwapConjugateSupport
 
 Conjugating each doubled interaction by the regional sheet swap preserves its
 support and the bound `2 * J`. The normalized tensor square of the original
-ground vector and its actual swap image have energy `2 * E₀` and lower gap `Δ`.
+ground vector and its swap image have energy `2 * E₀` and lower gap `Δ`.
 
 ## Main results
 
@@ -34,7 +34,7 @@ open scoped Kronecker Matrix.Norms.L2Operator ComplexOrder
 
 namespace TNLean.MPS.AreaLaw
 
-/-- The doubled interactions conjugated by the actual regional sheet swap.
+/-- The doubled interactions conjugated by the regional sheet swap.
 Source: TNLean note, `part2a_mps_information.tex`, lines 355–363. -/
 noncomputable def ChainHamiltonian.swappedDoubled
     {L q R : ℕ} {J : ℝ} (h : ChainHamiltonian L q R J) (D : Finset (Fin L)) :
@@ -70,7 +70,7 @@ lemma ChainHamiltonian.swappedDoubled_operator
   simp only [ChainHamiltonian.operator, ChainHamiltonian.swappedDoubled,
     Matrix.sum_mul, Matrix.mul_sum]
 
-/-- The actual paired tensor-square ground vector and its regional swap image
+/-- The paired tensor-square ground vector and its regional swap image
 have doubled energy and the original positive lower-gap bound.
 Source: TNLean note, `part2a_mps_information.tex`, lines 355–363. -/
 theorem ChainHamiltonian.doubled_swappedDoubled_isGappedGroundState

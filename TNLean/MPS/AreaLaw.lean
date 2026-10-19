@@ -19,7 +19,9 @@ import TNLean.MPS.AreaLaw.EntropyInequalities
 import TNLean.MPS.AreaLaw.Hamiltonian
 import TNLean.MPS.AreaLaw.InformationReset
 import TNLean.MPS.AreaLaw.InteractionBudget
+import TNLean.MPS.AreaLaw.IntervalNeighborhoodEntropy
 import TNLean.MPS.AreaLaw.LiebRobinson
+import TNLean.MPS.AreaLaw.LogarithmicSeparation
 import TNLean.MPS.AreaLaw.MPSApproximation
 import TNLean.MPS.AreaLaw.OpenMPS
 import TNLean.MPS.AreaLaw.OpenMPSRank

@@ -33,12 +33,15 @@ finite set of sites, instantiated here on the chain.
 | Theorem A for subsets of the chain | `MPS.AreaLaw.regionEntropy_le_mul_card_boundaryEdges`, `MPS.AreaLaw.chainAreaLaw` | Proved on the chain of `L` sites (connected domains). |
 | Setting on a finite `Λ ⊂ ℤ` (induced path graph, `eq:ham`, `∂_Λ A`) | `MPS.AreaLaw.sitePos`, `MPS.AreaLaw.domainGraph`, `MPS.AreaLaw.IsDomainSupport`, `MPS.AreaLaw.DomainHamiltonian`, `MPS.AreaLaw.domainBoundaryEdges` | Definitions; the sites of `Λ` are labelled in increasing order. |
 | Theorem A on a finite `Λ ⊂ ℤ`; first reduction (Section 2) | `MPS.AreaLaw.regionEntropy_le_mul_card_domainBoundaryEdges`, `MPS.AreaLaw.domainAreaLaw` | Proved, with the constant `C₀(q, R)(1 + J/Δ)` of the chain. The reduction uses the zero entropy of the prefixes ending at the gaps of `Λ` (`Lattice.regionEntropy_eq_zero_of_forall_subset_or_disjoint`) and flips of the region on them (`Lattice.regionEntropy_symmDiff_eq_of_eq_zero`) in place of the factorization over components: `docs/paper-gaps/tnlean_one_dimensional_connected_domain_scope.tex` (resolved). |
+| Part II, `lem:reset` (information reset) | `MPS.AreaLaw.ChainHamiltonian.information_reset` | Proved on the contiguous chain, with only the original full-system gap. The constants precede all system, region and information-bound data. |
+| Part II, `lem:logsep` (information at logarithmic separation) | `MPS.AreaLaw.ChainHamiltonian.mutualInformation_le_of_logarithmic_separation` | Proved on the contiguous chain for a union of at most k₀ intervals and an arbitrary region at distance at least Dₚ log L, including empty or overlapping interval components. |
 | Matrix product states, cut matrices | `MPS.AreaLaw.IsOpenMPS`, `MPS.AreaLaw.cutMatrix` | Definitions. |
 | Cut ranks bound the bond dimension | `MPS.AreaLaw.isOpenMPS_of_cutMatrix_rank_le` | Proved. |
 | Proposition 7.1 (sequential truncation) | `MPS.AreaLaw.exists_sequentialTruncation` | Threshold form proved: the projectors onto the eigenvalues at least `exp(-(S_k + w))` at a common slack `w`, with cut ranks at most `max 1 (exp(S_k + w))` and error `∑_k √tail_k(w)`. The note's form, projecting every cut onto its `D` largest eigenvalues (all of them when the cut has fewer) for an arbitrary bond dimension `D` with error `∑_k √ε_k(D)`, is not formalized; Theorem B uses only the threshold form: `docs/paper-gaps/tnlean_one_dimensional_threshold_truncation.tex`. |
 | Theorem B | `MPS.AreaLaw.exists_isOpenMPS_norm_sub_le` with `MPS.AreaLaw.chainBondDimension`; polynomial form `MPS.AreaLaw.chainBondDimension_le_mul_rpow` | Proved; the bond dimension is `⌊exp(C_int + w(L))⌋ ≤ e^{C_int} (2 c₀)^{64 s} L^{128 s}` with `s = √((1 + J/Δ) B_R)`. The approximant is normalized and within `1/L` of `Ω` itself (the note allows a phase). |
 
-Information reset is proved on the contiguous chain. Births, exchanges, the
+Information reset and information decay at logarithmic separation are proved
+on the contiguous chain. Births, exchanges, the
 sweep and the protocol compression remain unformalized; Theorem B is proved
 by the two-line route alone.
 
@@ -165,6 +168,26 @@ and the product marginal after the actual regional replica swap. Only the
 original full-system ground-state gap is assumed. The additive constant in
 log(e q^|R₀|) is retained, including q = 1. The broader finite-domain reading
 of the source remains open, as recorded in the connected-domain scope note.
+
+The theorem
+`MPS.AreaLaw.ChainHamiltonian.mutualInformation_le_of_logarithmic_separation`
+proves the contiguous-chain form of `lem:logsep`. For fixed p > 0 and
+k₀ ≥ 1, it chooses Dₚ > 0 and a natural L₀ before all system data.
+If T is a union of at most k₀ intervals and E is at pairwise coordinate
+distance at least Dₚ log L from T, then I(T:E) ≤ L^(−p) for L ≥ L₀.
+No disjointness, nonempty-region or sign hypothesis on J is added.
+The exact neighborhood of each nonempty clipped interval expands its
+endpoints by floor(ρ); empty intervals retain empty neighborhoods.
+`MPS.AreaLaw.regionEntropy_chainNeighborhood_biUnion_intervals_le` bounds
+the entropy of the actual enlarged union by the number of intervals times
+the uniform interval bound, including overlaps. With c̄ = max(0,C_int),
+b = 4k₀c̄ and w = Cₚ(1+b+log L), the proof uses the actual regions
+D = N_(w+1)(T) and C = complement N_(2w+2)(T). Their mutual information
+is at most 2S(D) ≤ b, and Dₚ = 3Cₚ(2+b)+3 gives both strict reset
+margins once log L ≥ 1. `MPS.AreaLaw.ChainHamiltonian.norm_bound_nonneg`
+supplies the sign of J from an actual singleton interaction.
+The disconnected-domain extension and the full preparation protocol remain
+separate.
 
 ## Constants
 

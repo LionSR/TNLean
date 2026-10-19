@@ -22,7 +22,7 @@ where `N_R = 2 * 2^(2R)`. Zero local dimension and empty boundaries are included
   and the `2J` bound for each separately labelled replica difference.
 * `ChainHamiltonian.partialSwap_difference_eq_sum_crossing`: the exact global
   decomposition and the number of retained labels.
-* `ChainHamiltonian.partialSwap_boundary_spec`: support near actual boundary
+* `ChainHamiltonian.partialSwap_boundary_spec`: support near boundary
   edges and the global norm bound with the original interaction coefficient.
 
 **Scope restriction (contiguous chains):** The physical sites are `Fin L`.
@@ -92,7 +92,7 @@ theorem ChainHamiltonian.partialSwap_term_difference_spec
       rw [conjTranspose_kronecker, h.hermitian X, conjTranspose_one]
     · exact (Matrix.l2_opNorm_one_kronecker_le _).trans (h.norm_le X)
 
-/-- The actual partial-swap perturbation is the sum of its crossing replica
+/-- The partial-swap perturbation is the sum of its crossing replica
 differences, with the printed boundary count. Source: TNLean note,
 `part2a_mps_information.tex`, lines 355–363. -/
 theorem ChainHamiltonian.partialSwap_difference_eq_sum_crossing
@@ -165,8 +165,8 @@ theorem ChainHamiltonian.partialSwap_difference_eq_sum_crossing
         unfold chainCrossConst
         ring
 
-/-- The actual perturbation is supported in the union of crossing supports,
-which lies within range of an actual boundary edge, with the original `J`
+/-- The perturbation is supported in the union of crossing supports,
+which lies within range of a boundary edge, with the original `J`
 coefficient in its norm bound. Source: TNLean note,
 `part2a_mps_information.tex`, lines 355–363. -/
 theorem ChainHamiltonian.partialSwap_boundary_spec
@@ -237,8 +237,7 @@ theorem ChainHamiltonian.partialSwap_boundary_spec
       omega
     simpa only [hc, Nat.cast_zero, zero_mul, hb, Finset.card_empty, mul_zero] using hnorm
   · let x : Fin L := ⟨0, Nat.pos_of_ne_zero hL⟩
-    let X₀ : ChainSupport L R := ⟨{x}, by simp [IsChainSupport]⟩
-    have hJ : 0 ≤ J := (norm_nonneg (h.term X₀)).trans (h.norm_le X₀)
+    have hJ : 0 ≤ J := h.norm_bound_nonneg x
     have hc : (C.card : ℝ) * 2 ≤
         (chainCrossConst R : ℝ) * ((boundaryEdges L D).card : ℝ) := by
       exact_mod_cast hcount

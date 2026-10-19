@@ -118,6 +118,27 @@ no additional spectral or product-marginal hypothesis should be imposed.
 The blueprint marks only the explicitly contiguous-chain statement as
 proved, rather than the unrestricted reading of the source lemma.
 
+\section{Information at logarithmic separation}
+
+Part~II, Lemma~\texttt{lem:logsep}
+(\texttt{part2a\_mps\_information.tex}, lines~472--488), is also proved on
+the contiguous chain. For fixed $p>0$ and $k_0\ge1$, positive $D_p$ and a
+natural cutoff are chosen before all system data. If $T$ is a union of at
+most $k_0$ intervals and every pair $x\in T$, $y\in E$ satisfies
+$|x-y|\ge D_p\log L$, then $I_\Omega(T:E)\le L^{-p}$ for sufficiently
+large $L$. The interval family may overlap or contain empty members.
+Neither disjointness nor a sign hypothesis on the original real $J$ is
+added. The sign needed for the interval area law follows from the norm
+bound of an actual singleton interaction.\footnote{Declaration:
+\leanid{TNLean.MPS.AreaLaw.ChainHamiltonian.mutualInformation_le_of_logarithmic_separation}.}
+
+The proof combines the contiguous interval area law, exact real-radius
+neighborhoods of intervals, and the contiguous reset theorem. It therefore
+does not establish the broader reading on arbitrary finite induced-path
+domains. That extension still requires the component reduction and the
+corresponding locality and support geometry described above. No completion
+of the full preparation protocol is asserted by this result.
+
 \bibliographystyle{alpha}
 \bibliography{references}
 \end{document}

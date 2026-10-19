@@ -19,7 +19,7 @@ the interaction range and norm bound.
 
 ## Main result
 
-* `exists_supported_gaussian_integral`: one supported path and its actual
+* `exists_supported_gaussian_integral`: one supported path and its
   Gaussian averages, with constants uniform in all chain and observable data.
 
 **Scope restriction (contiguous chains):** The physical sites are `Fin L`.
@@ -35,7 +35,7 @@ open scoped Matrix Matrix.Norms.L2Operator NNReal
 
 namespace TNLean.MPS.AreaLaw
 
-/-- A single supported unitary path yields the actual localized truncated
+/-- A single supported unitary path yields the localized truncated
 Gaussian integrals for every supported observable, variance and cutoff.
 Source: TNLean note, `part2a_mps_information.tex`, lines 381–402. -/
 theorem exists_supported_gaussian_integral (R : ℕ) (J : ℝ) :

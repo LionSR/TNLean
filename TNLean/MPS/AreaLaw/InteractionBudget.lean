@@ -32,9 +32,7 @@ lemma ChainHamiltonian.sum_norm_terms_containing_le
     (∑ X ∈ Finset.univ.filter (fun X : ChainSupport L R ↦ x ∈ X.1),
       ‖h.term X‖) ≤ ((2 ^ (2 * R + 1) : ℕ) : ℝ) * J := by
   classical
-  have hJ : 0 ≤ J :=
-    let X₀ : ChainSupport L R := ⟨{x}, by simp [IsChainSupport]⟩
-    (norm_nonneg (h.term X₀)).trans (h.norm_le X₀)
+  have hJ : 0 ≤ J := h.norm_bound_nonneg x
   let W := interval L (x.val - R) (x.val + R + 1)
   have hcover : (Finset.univ.filter fun X : ChainSupport L R ↦ x ∈ X.1) ⊆
       Finset.univ.filter (fun X : ChainSupport L R ↦ X.1 ⊆ W) := by
