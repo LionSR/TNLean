@@ -131,7 +131,8 @@ Theorem~\ref{thm:openai_polynomial_peps}, not that theorem.
 
 \begin{definition}[Compressed dyadic operator networks for large sizes]
     \label{def:peps_large_size_dyadic_operator_network}
-    \lean{TNLean.PEPS.Approximation.LargeSizeDyadicOperatorNetwork}
+    \lean{TNLean.PEPS.Approximation.DyadicOperatorNetworkAt,
+        TNLean.PEPS.Approximation.LargeSizeDyadicOperatorNetwork}
     \leanok
     \uses{def:peps_dyadic_hv_routing, def:peps_party_operator_fix_input}
     Capturing the conclusion of~\cite[Section~8.1]{OpenAI2026PolynomialPEPS}
@@ -157,7 +158,8 @@ Theorem~\ref{thm:openai_polynomial_peps}, not that theorem.
 
 \begin{theorem}[Uniform approximation from compressed dyadic operator networks]
     \label{thm:peps_ground_state_approximation_conditional}
-    \lean{TNLean.PEPS.Approximation.polynomialPEPSApproximation_of_largeSizeDyadicOperatorNetwork}
+    \lean{TNLean.PEPS.Approximation.hasPEPSApproximation_of_dyadicOperatorNetworkAt,
+        TNLean.PEPS.Approximation.polynomialPEPSApproximation_of_largeSizeDyadicOperatorNetwork}
     \leanok
     \uses{def:peps_large_size_dyadic_operator_network}
     Following~\cite[Section~8]{OpenAI2026PolynomialPEPS}
@@ -273,7 +275,8 @@ Proposition~\ref{prop:peps_dyadic_protocol}.
 \begin{theorem}[Compressed dyadic operator networks from the protocol assertion]
     \label{thm:peps_large_size_network_from_protocol}
     \lean{TNLean.PEPS.Approximation.largeSizeDyadicOperatorNetwork_of_largeSizeDyadicProtocolConsequences,
-        TNLean.PEPS.Approximation.largeSizeDyadicOperatorNetwork_of_largeSizeDyadicProtocolBounds}
+        TNLean.PEPS.Approximation.largeSizeDyadicOperatorNetwork_of_largeSizeDyadicProtocolBounds,
+        TNLean.PEPS.Approximation.dyadicOperatorNetworkAt_of_dyadicProtocolBoundsAt}
     \leanok
     \uses{def:peps_dyadic_protocol, def:peps_large_size_dyadic_operator_network}
     If the protocol assertion of Definition~\ref{def:peps_dyadic_protocol} holds,
