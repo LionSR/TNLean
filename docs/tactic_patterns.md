@@ -4655,6 +4655,37 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 ## Candidates
 
+### Conjugation by a contraction — candidate (2026-10-18)
+
+- **Pattern:** Bound `‖F * A * Fᴴ‖` by a supplied bound on `‖A‖`, using
+  `‖F‖ ≤ 1`, invariance of the norm under adjoints, and two applications
+  of `norm_mul_le_of_le`.
+- **Seen:** Two chain occurrences: the common local argument in
+  `ChainHamiltonian.partialSwap_term_difference_spec` in
+  `MPS/AreaLaw/PartialSwap.lean`, and the norm field of
+  `ChainHamiltonian.swappedDoubled` in `MPS/AreaLaw/SwappedDoubledHamiltonian.lean`.
+- **Abstraction:** The standard norm inequalities suffice for these short
+  arguments; no new lemma or tactic is introduced at two occurrences.
+- **Notes:** Contraction is enough for the local norm estimate; spectral
+  transport uses the actual unitarity of the same swap.
+
+### Coordinate changes in projector-gap inequalities — candidate (2026-10-18)
+
+- **Pattern:** Transport a positive projector defect along a configuration
+  bijection and identify the resulting scalar, identity and rank-one terms.
+- **Seen:** The complete gap passages in the companion library's
+  `Analysis/GaussianFilter/PhysicalBuffer.lean`, `PEPS/Approximation/ResetUnitary.lean`
+  and `MPS/AreaLaw/SwappedDoubledHamiltonian.lean`. A related rank-one-only
+  calculation occurs in the companion `Analysis/ReplicaLowDefectCoordinateCovariance.lean`.
+- **Abstraction:** Positivity already uses `Matrix.PosSemidef.submatrix`.
+  The new chain proof uses the existing `Matrix.reindexAlgEquiv` with
+  `map_sub`, `map_smul` and `map_one` to normalize the whole defect; the
+  rank-one equality is then definitional. It adds no entrywise proof.
+- **Notes:** Two complete legacy gap arguments still normalize entries
+  directly. They, together with the related covariance calculation, should
+  use algebraic reindexing when those companion and regional modules are
+  next revised. No new spectral theorem or tactic is required.
+
 ### Nonnegative interaction bound at a site — candidate (2026-10-18)
 
 - **Pattern:** At an actual site, use its admissible singleton support and

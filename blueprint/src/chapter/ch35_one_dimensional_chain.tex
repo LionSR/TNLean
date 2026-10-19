@@ -169,6 +169,107 @@ for an arbitrary finite set of sites and are instantiated here directly.
     Relabelling is linear, and the tensor product is linear in each factor.
 \end{proof}
 
+\begin{definition}[Regionally swapped doubled Hamiltonian]
+    \label{def:chain_swapped_doubled_hamiltonian}
+    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.swappedDoubled,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.swappedDoubled_operator}
+    \leanok
+    \uses{def:chain_doubled_hamiltonian,def:peps_frame_sheet_swap}
+    Let $H=\sum_Xh_X$ be a range-$R$ Hamiltonian on the contiguous chain
+    $I=\{0,\ldots,L-1\}$, with local dimension $q$ and
+    $\|h_X\|\le J$, where $L,q,R$ are natural numbers and $J$ is real.
+    For any $D\subseteq I$, let $F=p_*F_D$ in the paired coordinates of
+    Definition~\ref{def:chain_doubled_hamiltonian}. The regionally swapped
+    doubled Hamiltonian has interactions and sum
+    \begin{align}
+        \widehat h'_X & =F\widehat h_XF^\dagger,\notag              \\
+        \widehat H'   & =\sum_X\widehat h'_X=F\widehat H F^\dagger.
+        \label{eq:chain_swapped_doubled_operator}
+    \end{align}
+    Each $\widehat h'_X$ is Hermitian, is supported on the same set $X$,
+    and has norm at most $2J$. Thus this is a range-$R$ chain Hamiltonian
+    with local dimension $q^2$ and interaction bound $2J$, also when
+    $q=0$ or $L=0$.
+\end{definition}
+\begin{proof}
+    \leanok
+    \uses{def:chain_doubled_hamiltonian,thm:area_law_supported_identity,
+        thm:peps_sheet_swap_conjugate_support,thm:peps_frame_sheet_swap_norm}
+    The support identity for the conjugated doubled interaction gives
+    support on $X$, and taking adjoints preserves Hermiticity.
+    Since $\|F\|\le1$, the doubled interaction estimate gives
+    \begin{align}
+        \|F\widehat h_XF^\dagger\|
+        \le\|\widehat h_X\|\le2J.
+    \end{align}
+    Distributing left and right multiplication over the finite sum proves
+    (\ref{eq:chain_swapped_doubled_operator}).
+\end{proof}
+
+\begin{theorem}[The actual ground vectors of the doubled and swapped chains]
+    \label{thm:chain_doubled_swapped_ground_gap}
+    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.doubled_swappedDoubled_isGappedGroundState}
+    \leanok
+    \uses{def:chain_model,def:chain_swapped_doubled_hamiltonian}
+    In the setting of Definition~\ref{def:chain_swapped_doubled_hamiltonian},
+    let $E_0,\Delta$ be real with $\Delta>0$, and suppose the original
+    vector $\Omega$ satisfies
+    \begin{align}
+        \|\Omega\|     & =1,\notag                                          \\
+        H\Omega        & =E_0\Omega,\notag                                  \\
+        H-E_0\mathbb 1 & \ge\Delta(\mathbb 1-|\Omega\rangle\langle\Omega|).
+    \end{align}
+    Define the vectors in the paired physical coordinates by
+    $\Psi(p(\sigma,\tau))=\Omega(\sigma)\Omega(\tau)$ and
+    $\Phi=F\Psi$. Then
+    \begin{align}
+        \|\Psi\|        & =\|\Phi\|=1,\notag                                   \\
+        \widehat H\Psi  & =2E_0\Psi,\notag                                     \\
+        \widehat H'\Phi & =2E_0\Phi,\notag                                     \\
+        \widehat H-2E_0\mathbb 1
+                        & \ge\Delta(\mathbb 1-|\Psi\rangle\langle\Psi|),\notag \\
+        \widehat H'-2E_0\mathbb 1
+                        & \ge\Delta(\mathbb 1-|\Phi\rangle\langle\Phi|).
+    \end{align}
+    In particular, these actual vectors give the ground lines of the two
+    Hamiltonians, with common ground energy $2E_0$ and gap at least
+    $\Delta$. This is the contiguous-chain assertion in the paragraph
+    ``Two-sided Gaussian filtering'' of~\cite{TNLean2026OneDimensional},
+    before the filtering construction; the distinction from arbitrary
+    finite induced domains is recorded
+    in~\cite{gap:tnlean_one_dimensional_connected_domain_scope}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{lem:chain_doubled_operator,def:chain_swapped_doubled_hamiltonian,
+        thm:permutation_matrix_unitary,thm:mpu_reindex_unitary}
+    Put $P=|\Omega\rangle\langle\Omega|$, $Q=\mathbb 1-P$ and
+    $G=H-E_0\mathbb 1-\Delta Q\ge0$. Normalization gives $Q\ge0$.
+    Before pairing coordinates, the doubled defect is
+    \begin{align}
+        H\otimes\mathbb 1+\mathbb 1\otimes H-2E_0\mathbb 1
+        -\Delta(\mathbb 1-P\otimes P)
+         & =G\otimes\mathbb 1+\mathbb 1\otimes G+\Delta Q\otimes Q
+        \ge0.
+    \end{align}
+    The tensor-square vector has norm one and eigenvalue $2E_0$.
+    Pairing coordinates is unitary, so the same norm, eigen-equation and
+    positive defect hold for $\Psi$ and $\widehat H$.
+    The regional swap is a permutation matrix; after pairing it remains
+    unitary. Therefore $\Phi=F\Psi$ has norm one and eigenvalue $2E_0$
+    for $\widehat H'$. Moreover,
+    \begin{align}
+         & \widehat H'-2E_0\mathbb 1
+        -\Delta(\mathbb 1-|\Phi\rangle\langle\Phi|)\notag \\
+         & \qquad=F\bigl(\widehat H-2E_0\mathbb 1
+        -\Delta(\mathbb 1-|\Psi\rangle\langle\Psi|)\bigr)F^\dagger
+        \ge0.
+    \end{align}
+    Finally, a positive projector gap forces every vector at the ground
+    energy to lie in the span of the displayed unit vector, giving the
+    asserted ground lines.
+\end{proof}
+
 \begin{lemma}[Interactions split by an interval]
     \label{lem:chain_crossing_count}
     \lean{
