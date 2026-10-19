@@ -36,7 +36,8 @@ parameters of Section~\ref{sec:area_law_initial_exponent_gain}.
     \begin{align}
         B:=\left\lceil\frac{400000\log M\log500000}{p}\right\rceil_+.
     \end{align}
-    These are the recurrence constants specified above, rather than the
+    These are the recurrence constants of
+    Section~\ref{sec:area_law_initial_exponent_gain}, rather than the
     manuscript's literal numerical choices.
 \end{definition}
 
@@ -47,7 +48,8 @@ parameters of Section~\ref{sec:area_law_initial_exponent_gain}.
     \uses{def:area_law_initial_round_budget}
     For the initial exponent $0<e_0<1$, let
     $\ell=(1-e_0)/200000$ and $\varepsilon=2\cdot10^{-6}$.
-    Then the round count $m$ above satisfies $m\le B$.
+    Then the round count $m$ of
+    Theorem~\ref{thm:area_law_bootstrap_round_log_bound} satisfies $m\le B$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:area_law_bootstrap_round_log_bound,
@@ -106,8 +108,9 @@ parameters of Section~\ref{sec:area_law_initial_exponent_gain}.
     \uses{thm:area_law_initial_round_budget_bound}
     Take the logarithmic round count in the named physical safe-box estimate
     of Proposition~9.5 \cite[lines~788--805]{OpenAI2026AreaLaw}.
-    The preceding bound gives $m\le B$, and the physical estimate gives the
-    entropy inequality with its recurrence coefficient $C_m$.
+    Theorem~\ref{thm:area_law_initial_round_budget_bound} gives $m\le B$, and
+    the physical estimate gives the entropy inequality with its recurrence
+    coefficient $C_m$.
     This is an auxiliary quantitative deduction using the cyclic-color
     initial constants.
 \end{proof}
