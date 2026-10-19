@@ -21,6 +21,8 @@ open TNLean.PEPS.AreaLaw TNLean.PEPS.AreaLaw.Scan
 open TensorPower TensorPower.ReplicaTransport
 
 noncomputable section
+open TNLean.Lattice
+
 namespace TNLeanTest.ActualRoundEntropy
 
 -- Exact source-facing statement: one error before every replica count and vector.

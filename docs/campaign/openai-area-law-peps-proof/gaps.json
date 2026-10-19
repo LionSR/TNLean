@@ -220,7 +220,7 @@
       "claims": "The links of the party network constructed in Proposition 7.1 can be routed on the <i>L</i> × <i>L</i> grid with constant congestion while keeping every physical site fixed.",
       "found": "The paper's proof uses four properties of the party network: each party sits at a site of the grid enlarged to a power-of-two side length; each dyadic square has at most <i>B</i> parties; each party has at most <i>K</i> incident links; and linked parties lie within distance <i>c</i> times their dyadic scale. The formalization proves Lemma 8.2 for every network satisfying these four properties: each grid edge carries at most 8(2<i>c</i> + 1)<i>BK</i> routed links, and if every link has dimension at most <i>D</i>, the resulting grid PEPS has bond dimension at most max(<i>D</i>, 1)<sup>8(2<i>c</i>+1)<i>BK</i></sup>. In the proof of Theorem 1.1 the four properties are verified for the network that the constructed protocol produces after density compression: its parties sit at the anchors of the dyadic squares, at most <i>b</i> per square, each party meets at most 2<i>b</i>(<i>b</i> − 1) links, and linked parties share a gate, so their separation is at most <i>b</i> times their scale, with <i>b</i> independent of <i>L</i> and the Hamiltonian.",
       "impact": "No. The paper's lemma is the specialization to the network of Proposition 7.1, and that specialization is now proved.",
-      "plan": "Nothing remains for Lemma 8.2. The protocol is shown to satisfy only the consequences of Proposition 7.1 used in Section 8, recorded in a separate entry."
+      "plan": "Nothing remains for Lemma 8.2. Proposition 4.1 and Theorem 1.1 are proved, and the protocol satisfies every clause of Proposition 7.1."
     },
     {
       "id": "docs/paper-gaps/polypeps_product_reference_column.tex",
@@ -246,7 +246,7 @@
       "claims": "Section 8.1 constructs Ψ and Ξ satisfying ‖Ψ‖ ≤ 1, 1 − <i>CL</i><sup>−57</sup> ≤ ‖Ξ‖ ≤ 1, and ‖Ψ − Ω ⊗ Ξ‖ ≤ <i>CL</i><sup>−17</sup>, with <i>C</i> independent of the grid side <i>L</i> and the Hamiltonian. Lemma 8.1 extracts a nonzero column of the compressed operator whose normalization is close to Ω up to a global phase; Lemma 8.2 then routes the resulting vector network onto the grid.",
       "found": "The formalization proves Lemma 8.1 for general states: if ‖Ξ‖ ≥ 1 − δ, ‖Ψ − Ω ⊗ Ξ‖ ≤ ε, and an operator network σ (not assumed positive or Hermitian) lies within trace distance κ of the reduced state of Ψ with α = κ + 2ε + 2δ &lt; 1, then some product-basis input configuration gives a nonzero column ket whose normalization lies within 2α of Ω up to a phase. Fixing that column on the party network and routing the resulting ket onto the grid preserves the contracted state and bounds the grid bond dimension by max(<i>D</i>, 1)<sup>χ</sup>. In the proof of Theorem 1.1 these bounds are verified for the constructed protocol: Ψ is its final vector, of norm at most 1 because every change is a contraction; Ξ is the auxiliary vector of its final reference vector, with 1 − <i>CL</i><sup>−57</sup> ≤ ‖Ξ‖ ≤ 1; at most <i>CL</i><sup>3</sup> changes of step error <i>CL</i><sup>−20</sup> give ‖Ψ − Ω ⊗ Ξ‖ ≤ <i>C</i><sup>2</sup><i>L</i><sup>−17</sup>; density compression at accuracy <i>L</i><sup>−5</sup> gives κ; and the routing hypotheses hold for the compressed network, all with constants independent of <i>L</i> and the Hamiltonian.",
       "impact": "No. The paper's step is the specialization to the vectors and network constructed in Section 8.1, and that specialization is now proved.",
-      "plan": "Nothing remains for this step. The protocol is shown to satisfy only the consequences of Proposition 7.1 used in Section 8, recorded in a separate entry."
+      "plan": "Nothing remains for this step. Proposition 4.1 and Theorem 1.1 are proved, and the protocol satisfies every clause of Proposition 7.1."
     },
     {
       "id": "docs/paper-gaps/oai26_transport_crossband_commutation.tex",
@@ -295,7 +295,7 @@
       "id": "docs/paper-gaps/arealaw2d_rectangular_specialization_scope.tex",
       "repo": "TNLean",
       "kind": "narrower",
-      "status": "open",
+      "status": "resolved",
       "paper": "area",
       "result": "Corollary 1.2, rectangular and vertex-boundary area laws",
       "issue": 9339,
@@ -305,12 +305,12 @@
         ]
       },
       "title": "Reducing the rectangular area law to the uniform finite-domain theorem",
-      "summary": "The deduction of Corollary 1.2 from Theorem 1.1 is proved; Theorem 1.1 itself remains an explicit hypothesis.",
+      "summary": "Corollary 1.2 is proved in all three forms with the paper's hypotheses: Theorem 1.1, at first an explicit hypothesis of the reduction, is now proved.",
       "context": "Corollary 1.2 specializes the finite-domain area law of Theorem 1.1 to an open rectangular grid and deduces vertex-boundary forms of the bound, including the square-grid area law used in the PEPS construction.",
       "claims": "Fix a local dimension <i>q</i> ≥ 1, an interaction norm bound <i>J</i> &gt; 0, and a spectral gap Δ &gt; 0. On the rectangular grid <i>V</i> = {0, …, <i>w</i> − 1} × {0, …, <i>h</i> − 1} with open nearest-neighbor edge set <i>E</i>, let <i>H</i> = Σ<sub><i>v</i>∈<i>V</i></sub> <i>h<sub>v</sub></i> + Σ<sub><i>e</i>∈<i>E</i></sub> <i>h<sub>e</sub></i> be a Hermitian Hamiltonian whose site and edge terms have operator norm at most <i>J</i>, and let Ω be a unit ground state with ground energy <i>E</i><sub>0</sub> satisfying <i>H</i> − <i>E</i><sub>0</sub><i>I</i> ≥ Δ(<i>I</i> − |Ω⟩⟨Ω|). For any region <i>A</i> ⊆ <i>V</i>, let <i>S</i><sub>Ω</sub>(<i>A</i>) be the von Neumann entropy of the reduced state on <i>A</i>, ∂<sub><i>V</i></sub><i>A</i> the set of edges in <i>E</i> between <i>A</i> and <i>V</i> ∖ <i>A</i>, ∂<sub>in</sub><i>A</i> the set of vertices in <i>A</i> adjacent to <i>V</i> ∖ <i>A</i>, and <i>Z<sub>A</sub></i> the set of vertices incident to ∂<sub><i>V</i></sub><i>A</i>. There is a constant <i>C</i> = <i>C</i>(<i>q</i>, 1, <i>J</i>, Δ), chosen before <i>w</i>, <i>h</i>, the terms <i>h<sub>v</sub></i>, <i>h<sub>e</sub></i>, Ω, and <i>A</i>, such that <i>S</i><sub>Ω</sub>(<i>A</i>) ≤ <i>C</i>|∂<sub><i>V</i></sub><i>A</i>|, <i>S</i><sub>Ω</sub>(<i>A</i>) ≤ 4<i>C</i>|∂<sub>in</sub><i>A</i>|, and <i>S</i><sub>Ω</sub>(<i>A</i>) ≤ 2<i>C</i>|<i>Z<sub>A</sub></i>|.",
-      "found": "The formalization proves that Theorem 1.1 implies Corollary 1.2, taking the uniform area law of Theorem 1.1 as an explicit hypothesis. It embeds <i>V</i> into ℤ<sup>2</sup>, replaces each site and edge term by its Hermitian part on the corresponding singleton or pair support in ℤ<sup>2</sup>, and sets the interaction to zero on all other supports. Under the configuration isometry <i>U</i> between the two Hilbert spaces, the embedded Hamiltonian equals <i>UHU</i><sup>*</sup>, and <i>U</i> preserves the unit ground vector, the spectral gap Δ, the regional entropy <i>S</i><sub>Ω</sub>(<i>A</i>), and the cardinalities of ∂<sub><i>V</i></sub><i>A</i>, ∂<sub>in</sub><i>A</i>, and <i>Z<sub>A</sub></i>. The vertex-boundary bounds follow from the degree bound of the rectangular grid, and setting <i>w</i> = <i>h</i> = <i>L</i> gives the square-grid area law used in the PEPS construction. Still assumed: the uniform finite-domain area law of Theorem 1.1.",
+      "found": "The formalization proves that Theorem 1.1 implies Corollary 1.2, taking the uniform area law of Theorem 1.1 as an explicit hypothesis. It embeds <i>V</i> into ℤ<sup>2</sup>, replaces each site and edge term by its Hermitian part on the corresponding singleton or pair support in ℤ<sup>2</sup>, and sets the interaction to zero on all other supports. Under the configuration isometry <i>U</i> between the two Hilbert spaces, the embedded Hamiltonian equals <i>UHU</i><sup>*</sup>, and <i>U</i> preserves the unit ground vector, the spectral gap Δ, the regional entropy <i>S</i><sub>Ω</sub>(<i>A</i>), and the cardinalities of ∂<sub><i>V</i></sub><i>A</i>, ∂<sub>in</sub><i>A</i>, and <i>Z<sub>A</sub></i>. The vertex-boundary bounds follow from the degree bound of the rectangular grid, and setting <i>w</i> = <i>h</i> = <i>L</i> gives the square-grid area law used in the PEPS construction. The uniform finite-domain area law of Theorem 1.1, at first a hypothesis of this reduction, is now proved from the spectral-gap hypotheses, so the corollary holds unconditionally.",
       "impact": "No. The deduction of Corollary 1.2 from Theorem 1.1 introduces no extra geometric or physical hypotheses.",
-      "plan": "Complete the proof of Theorem 1.1 from the spectral-gap hypotheses."
+      "plan": "None for this corollary. Its square-grid case supplies Proposition 2.1 of the PEPS manuscript."
     },
     {
       "id": "docs/paper-gaps/polypeps_angular_annular_geometry_scope.tex",
@@ -341,7 +341,7 @@
       "id": "docs/paper-gaps/polypeps_prop71_consequences_interface.tex",
       "repo": "TNLean",
       "kind": "narrower",
-      "status": "open",
+      "status": "resolved",
       "paper": "peps",
       "result": "Proposition 7.1, the dyadic distribution protocol",
       "issue": 8772,
@@ -351,12 +351,12 @@
         ]
       },
       "title": "Properties of the dyadic protocol used in the final assembly",
-      "summary": "The deductions in Section 8 from the quantitative output bounds of Proposition 7.1 are proved; the construction of the protocol in Proposition 7.1 remains open.",
+      "summary": "Every clause of Proposition 7.1 is a field of the formal protocol predicate and is proved for the constructed protocol; the existence of the protocol is proved without hypotheses.",
       "context": "Proposition 7.1 constructs the dyadic protocol that distributes the ground state Ω across parties attached to dyadic squares, and Section 8 compresses and routes the resulting network onto the square grid.",
       "claims": "For all sufficiently large grid side lengths <i>L</i>, with constants uniform in the Hamiltonian and in <i>L</i>, there exists a protocol that distributes the ground vector Ω through the padded dyadic hierarchy. Proposition 7.1 specifies the parties and their product initialization, the division of the chronology into changes and the bounded lifetime participation of each party, the dyadic scales and grid addresses of the parties acted on by each gate, and the intermediate reference vectors ending at Ω ⊗ Ξ with an auxiliary vector Ξ.",
-      "found": "Proposition 7.1 is not yet proved. Instead, the formalization states the subset of its conclusions used in Section 8: a distributed construction of <i>n</i> changes with parties attached to squares of the padded hierarchy and reference vectors <i>r<sub>t</sub></i> for 0 ≤ <i>t</i> ≤ <i>n</i> starting from a product vector <i>r</i><sub>0</sub>, such that for constants <i>C</i> &gt; 0 and <i>b</i>, <i>k</i>, <i>r</i> ∈ ℕ there are at most <i>CL</i><sup>2</sup> parties in total and at most <i>b</i> per square, with a different party at each square of the padded hierarchy, including the root; at most <i>CL</i><sup>3</sup> changes, each with at most <i>b</i> nonprivate gates on at most <i>b</i> parties, and at most <i>b</i> changes per party over its lifetime; each gate is a sum of at most <i>CL<sup>k</sup></i> monomials with absolute coefficient sum at most <i>CL<sup>k</sup></i> and at most <i>r</i> pair effects per monomial; any two parties in a gate have equal or adjacent dyadic scales and grid addresses separated by at most <i>b</i> times either scale; and the contractions <i>W<sub>t</sub></i> satisfy ‖<i>W<sub>t</sub>r<sub>t</sub></i> − <i>r</i><sub><i>t</i>+1</sub>‖ ≤ <i>CL</i><sup>−20</sup>, <i>r<sub>n</sub></i> = Ω ⊗ Ξ, and 1 − <i>CL</i><sup>−57</sup> ≤ ‖Ξ‖ ≤ 1. From these bounds, the formalization proves the gate-density estimate of Section 8.1, the link-separation hypothesis of Lemma 8.2, and the lifetime bound of at most 64<i>G</i> gates per block party when each change has at most <i>G</i> gates. Five further clauses of Proposition 7.1 not needed in Section 8 — such as explicit frame factorization and unit-norm bounds on intermediate <i>r<sub>t</sub></i>, and pre-expansion pair-source and message counts for arbitrary inverse-power accuracy — are omitted from this consequence predicate. Still assumed: Proposition 7.1 itself.",
-      "impact": "No. The five omitted clauses are not used in Section 8, and proving Proposition 7.1 will give the stated bounds.",
-      "plan": "Formalize and prove the full statement of Proposition 7.1 and deduce the Section 8 hypothesis by projection."
+      "found": "The formalization first stated the subset of the conclusions of Proposition 7.1 used in Section 8: a distributed construction of <i>n</i> changes with parties attached to squares of the padded hierarchy and reference vectors <i>r<sub>t</sub></i> for 0 ≤ <i>t</i> ≤ <i>n</i> starting from a product vector <i>r</i><sub>0</sub>, such that for constants <i>C</i> &gt; 0 and <i>b</i>, <i>k</i>, <i>r</i> ∈ ℕ there are at most <i>CL</i><sup>2</sup> parties in total and at most <i>b</i> per square, with a different party at each square of the padded hierarchy, including the root, and every other party placed at a non-root square and acting only in changes of the repainting of that square; at most <i>CL</i><sup>3</sup> changes, each with at most <i>b</i> nonprivate gates on at most <i>b</i> parties, and at most <i>b</i> changes per party over its lifetime; each gate is a sum of at most <i>CL<sup>k</sup></i> monomials with absolute coefficient sum at most <i>CL<sup>k</sup></i> and at most <i>r</i> pair effects per monomial; any two parties in a gate have equal or adjacent dyadic scales and grid addresses separated by at most <i>b</i> times either scale; and the contractions <i>W<sub>t</sub></i> satisfy ‖<i>W<sub>t</sub>r<sub>t</sub></i> − <i>r</i><sub><i>t</i>+1</sub>‖ ≤ <i>CL</i><sup>−20</sup>, <i>r<sub>n</sub></i> = Ω ⊗ Ξ, and 1 − <i>CL</i><sup>−57</sup> ≤ ‖Ξ‖ ≤ 1. From these bounds, the formalization proves the gate-density estimate of Section 8.1, the link-separation hypothesis of Lemma 8.2, and the lifetime bound of at most 64<i>G</i> gates per block party when each change has at most <i>G</i> gates. The predicate also records the initial copies of Ω, each held privately by its designated party, and the factorization of every intermediate <i>r<sub>t</sub></i> into the reference vectors of the main and auxiliary encoded frames, each of norm at most one. Every intermediate <i>r<sub>t</sub></i> has at least one frame, so the predicate carries every clause of Proposition 7.1, and its existence is proved without hypotheses.",
+      "impact": "No. The predicate carries every clause of Proposition 7.1, and its existence is proved.",
+      "plan": "Nothing remains."
     },
     {
       "id": "docs/paper-gaps/arealaw2d_safe_box_collar_scope.tex",
@@ -410,8 +410,8 @@
     {
       "id": "docs/paper-gaps/arealaw2d_belt_replacement_template_scope.tex",
       "repo": "TNLean",
-      "kind": "convention",
-      "status": "open",
+      "kind": "narrower",
+      "status": "resolved",
       "paper": "area",
       "result": "Proposition 11.2, templates for belt tiles and replacements",
       "issue": 8758,
@@ -421,20 +421,20 @@
         ]
       },
       "title": "Lattice points and the stopping scale in belt and replacement templates",
-      "summary": "The templates of belt tiles and replacements are built as the paper describes, for regions that contain a lattice point and with a stopping scale at least one. The final assembly of Proposition 11.2, which will discharge both premises, is not yet formalized.",
+      "summary": "The templates of belt tiles and replacements are built as the paper describes. The proof of Proposition 11.2 applies them only to regions that contain a lattice point and with a stopping scale at least one, so both premises are discharged.",
       "context": "The two-family construction of Proposition 11.2 attaches a template to each region it produces, so that the scanner estimates apply to it. A belt tile of side <i>u</i> = <i>t<sub>k</sub></i> gets <i>s</i><sub>0</sub> = <i>u</i>, and a replacement with removal half-side <i>u</i> gets <i>s</i><sub>0</sub> = 2<i>u</i>; both get <i>n</i> = ⌈<i>C<sub>B</sub></i><i>u</i>⌉.",
       "claims": "Each region is a union of at most eight closed triangles, and <i>C<sub>B</sub></i> can be chosen so that every such template satisfies <i>n</i> ≥ <i>C</i><sub>tpl</sub><i>N</i><sub>0</sub>(<i>s</i><sub>0</sub> + 1) and diam<sub>∞</sub> <i>T</i> ≤ <i>n</i>.",
       "found": "Two premises are not printed in the passage. First, the region contains a lattice point: Definition 9.3 requires a template to be nonempty, and the paper uses these templates only for regions that meet the cut <i>A</i>. Second, for replacements, the stopping scale <i>S</i><sub>*</sub> is at least one, so every nonterminal removal half-side is a power of two and <i>s</i><sub>0</sub> = 2<i>u</i> is a positive integer. The paper chooses <i>S</i><sub>*</sub> sufficiently large, which implies this.",
-      "impact": "No. The final assembly will apply these templates only to retained regions, which meet <i>A</i>, and with a stopping scale at least one.",
-      "plan": "Formalize the final assembly of Proposition 11.2, which discharges both premises (issue #8758)."
+      "impact": "No. Proposition 11.2 applies these templates only to retained regions, which meet <i>A</i>, and with a stopping scale at least one.",
+      "plan": "None. Proposition 11.2 is proved with both premises discharged."
     },
     {
       "id": "docs/paper-gaps/oai26_zero_floor_energy_scope.tex",
       "repo": "QICLean",
       "kind": "narrower",
-      "status": "open",
+      "status": "resolved",
       "paper": "peps",
-      "result": "Companion Lean source, energy of the norm-maximizing nested filters",
+      "result": "Comparison with the companion Lean code, energy of the norm-maximizing nested filters",
       "issue": 8741,
       "prs": {
         "QICLean": [
@@ -444,20 +444,20 @@
         ]
       },
       "title": "Energy of the norm-maximizing nested filters at zero floor",
-      "summary": "QICLean proves the sharp one-maximizer energy estimate, PSD/eigenvalue feasibility and generic ordered-output transport. TNLean composes them with an adapted original-grid filter interface; literal source-model and geometric construction obligations remain separate.",
+      "summary": "QICLean proves the energy estimate for one norm-maximizing family of nested filters, together with the matrix characterization of the admissible filters and the ordered-output identities. The result is a standalone adaptation of a lemma of the companion Lean code; the proofs of the area law and of the polynomial PEPS approximation theorem do not use it.",
       "context": "The patch construction filters the ground state by a nested product of positive operators chosen to maximize the output norm. The energy of the normalized output then exceeds the ground energy by at most a weighted count of the interactions that cross the filtering regions.",
       "claims": "For weights 0 &lt; <i>a<sub>j</sub></i> ≤ 1 and nested regions <i>D<sub>j</sub></i> crossed by <i>b<sub>j</sub></i> edges, the selected normalized output φ satisfies |⟨φ, <i>H</i>φ⟩ − <i>E</i><sub>0</sub>| ≤ <i>q</i><sup>2</sup><i>J</i> Σ<sub><i>j</i></sub> <i>b<sub>j</sub></i><i>a<sub>j</sub></i><sup>2</sup> and Δ(1 − |⟨Ω, φ⟩|<sup>2</sup>) ≤ <i>q</i><sup>2</sup><i>J</i> Σ<sub><i>j</i></sub> <i>b<sub>j</sub></i><i>a<sub>j</sub></i><sup>2</sup>. The source takes a compact limit of regularized maximizing families and shows the limiting output is nonzero.",
       "found": "QICLean proves the sharp absolute-energy estimate for one chosen zero-floor norm maximizer on arbitrary finite sites. It characterizes floor-zero feasibility at positive weights by positive semidefiniteness and real-CFC trace-power normalization, with the equivalent eigenvalue sum, and proves exact ascending-action, reindexing and zero-safe normalized-output identities. Its output-norm comparison covers every feasible matrix competitor in both directions. TNLean's canonical physical specialization adds the original full-system gap and exact q²J crossing budget; its attributed original-grid filter adaptation transports that same selected family to PSD source-shaped bundles, including the negative-J empty-grid corner. These results do not import or identify the literal OAI Hamiltonian/filter types and do not construct geometric regions or weights.",
-      "impact": "No. The generic matrix representation and ordered-action comparisons are proved. The remaining distinction concerns literal imported source-model types and geometric construction.",
-      "plan": "Retain the remaining literal source-model and geometric obligations in issue #8741; do not select another optimizer or repeat the generic feasibility/output proofs."
+      "impact": "No. The comparison point is the companion Lean code, not the paper. The proofs of the area law and of the polynomial PEPS approximation theorem do not use this result, and the further comparison with the companion code's own types is not pursued.",
+      "plan": "None. The further comparison with the companion code's own types is not pursued; the entry is resolved because that comparison bears on no proved theorem, not because it was carried out."
     },
     {
       "id": "docs/paper-gaps/polypeps_square_zero_floor_optimizer_scope.tex",
       "repo": "TNLean",
       "kind": "narrower",
-      "status": "open",
+      "status": "resolved",
       "paper": "peps",
-      "result": "Companion Lean source, the zero-floor filter optimizer on the square grid",
+      "result": "Comparison with the companion Lean code, the zero-floor filter optimizer on the square grid",
       "issue": 8741,
       "prs": {
         "TNLean": [
@@ -465,12 +465,12 @@
         ]
       },
       "title": "Positive filter families for the original square-grid Hamiltonian",
-      "summary": "An attributed adaptation of the source filters on the original square has all-competitor maximality, exact ascending output, and the same-family original-energy and full-gap bounds, including the vacuous negative-J case.",
+      "summary": "An adaptation of the companion Lean code's positive filters to the original square-grid Hamiltonian: one norm-maximizing family, compared against every competitor, satisfies the energy and full-gap fidelity bounds, including the vacuous case of a negative interaction bound. The result is standalone; the proofs of the area law and of the polynomial PEPS approximation theorem do not use it.",
       "context": "The companion source selects positive filters on nested regions of the square grid that maximize the filtered output norm, and bounds the energy and the ground-state fidelity of the normalized output by the weighted boundary lengths of the regions.",
       "claims": "For nested regions <i>D</i><sub>0</sub> ⊆ ⋯ ⊆ <i>D</i><sub><i>m</i>−1</sub>, each edge crossing at most one region, and weights 0 &lt; <i>a<sub>j</sub></i> ≤ 1, one norm-maximizing family has nonzero output, and its normalization φ satisfies |Re⟨φ, <i>H</i>φ⟩ − <i>E</i><sub>0</sub>| ≤ <i>q</i><sup>2</sup><i>J</i> Σ<sub><i>j</i></sub> <i>a<sub>j</sub></i><sup>2</sup>|∂<i>D<sub>j</sub></i>| and Δ(1 − |⟨Ω, φ⟩|<sup>2</sup>) ≤ <i>q</i><sup>2</sup><i>J</i> Σ<sub><i>j</i></sub> <i>a<sub>j</sub></i><sup>2</sup>|∂<i>D<sub>j</sub></i>|. The source allows a real <i>J</i>, which can be negative only when there are no interaction terms.",
       "found": "TNLean adapts the source's PSD/eigenvalue-trace-normalized regional filters using its existing original-grid state and configuration types. At positive weights, bidirectional matrix conversion covers every admissible or floor-zero feasible competitor. The ascending local action and its inverse-norm normalization agree exactly with the canonical ordered output, including zero output. Pulling back the one family selected by the canonical physical theorem gives original-Hamiltonian energy and original full-system-gap fidelity estimates with each forward crossing counted once. Replacing only norm-bound proof fields by max(J,0) removes the sign premise: J < 0 forces an empty grid, and both crossing budgets vanish. The theorem does not import the literal OAI Hamiltonian, uniqueness or gap types. Supplied nested regions, the one-crossing condition and weights remain inputs.",
-      "impact": "No. This is a representation and model-scope distinction, not an error in the source. The original-coordinate and vacuous-negative-bound restrictions have been removed for the adapted interface.",
-      "plan": "If a literal OAI-type statement is required, import its model definitions and check their conversion under a compatible toolchain. Geometric region and weight construction remains separate work in issue #8741; this entry stays open."
+      "impact": "No. The comparison point is the companion Lean code, not the paper. The proofs of the area law and of the polynomial PEPS approximation theorem do not use this result.",
+      "plan": "None. The further comparison with the companion code's own types is not pursued; the entry is resolved because that comparison bears on no proved theorem, not because it was carried out."
     }
   ],
   "checked": [

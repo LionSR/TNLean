@@ -71,7 +71,8 @@ theorem isStepChain_largeRepainting (hD : IsAngularScale q J Δ a A₀ m₀ 60 D
     (hA : ∀ e, A (xs e) = Frame.raw fun _ => labelParty R ((repaintBaseline R done).nbrLabel e))
     (L₁ L₂ : GuideLabel) :
     IsStepChain (fun Fs Fs' => HasSourceBoundedChange Ω Fs Fs' (ℓ := []) (1 : ℂ)
-        {p | EventUses (.inl R.1) p} (2 * b) K (2 * b) ((2 * b + 1) * ((L : ℝ) ^ 20)⁻¹)) 189
+        {p | EventUses (.inl R.1) p} (2 * b) K (2 * b) ((2 * b + 1) * ((L : ℝ) ^ 20)⁻¹) ∧
+          Fs' ≠ []) 189
       (treatedFrame (q := q) P rank R hr ∅ L₁ (repaintBaseline R done).guide :: l.map A)
       (treatedFrame P rank R hr ∅ L₂ ((repaintBaseline R done).completedGuide
           [.left, .top, .right, .bottom]) ::

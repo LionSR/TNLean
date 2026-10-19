@@ -13,7 +13,8 @@ Fix an initial exponent between the final box exponent and one. The parameters
 of the scan are chosen from this initial exponent. One large-scale threshold,
 chosen before the current exponent and the auxiliary fraction, bounds the sum
 of the shell, separation, typical-window and binary-entropy costs by the
-improved power, with absolute coefficient `5 + log 2 / 4`.
+improved power, with absolute coefficient `5 + log 2 / 4`. The threshold is given
+explicitly by `bootstrapComparisonBudgetThreshold`.
 
 Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 September 24, 2026, `08-scanner.tex`, `scanner:scales`, lines 32–41,
@@ -27,26 +28,33 @@ text is reused.
 
 namespace TNLean.PEPS.AreaLaw.Scan
 
-/-- The complete numerical comparison budget is bounded at one threshold
-depending on the initial exponent, before the current exponent or auxiliary
-fraction is selected. The floors, ceiling and band weight are the scales of
-`scanner:scales`; the separation exponent is fixed throughout the bootstrap.
-Source: `08-scanner.tex`, lines 32–41, 693–703 and 755–787. -/
-theorem exists_bootstrap_comparison_budget_bound {e₀ : ℝ}
-    (he₀ : (Exponents.boxError : ℝ) < e₀) (he₀₁ : e₀ < 1) :
-    ∃ N : ℕ, 1 ≤ N ∧ ∀ n : ℕ, N ≤ n →
-      let η : ℝ := 1 - BootstrapParameters.ell e₀
-      let L : ℕ := Nat.floor ((n : ℝ) ^ η)
-      let m : ℕ := Nat.floor ((n : ℝ) ^ BootstrapParameters.mu e₀)
-      let K : ℕ := L / (8 * m)
-      let D : ℕ := Nat.ceil ((n : ℝ) ^ BootstrapParameters.kappa e₀)
-      let a : ℝ := 4 / (K : ℝ)
-      1 ≤ K ∧ 0 < a ∧
-        ∀ e : ℝ, (Exponents.boxError : ℝ) < e → e ≤ e₀ →
-          ∀ τ : ℝ,
-            (n : ℝ) * (L : ℝ) ^ e + (n : ℝ) * (D : ℝ) +
-                (n : ℝ) ^ (3 / 5 : ℝ) + Real.binEntropy τ / a + 1 ≤
-              (5 + Real.log 2 / 4) * (n : ℝ) ^ (1 + η * e) := by
+/-- The explicit threshold of the bootstrap comparison budget: the scale-facts threshold at
+the fixed bootstrap scales, the least `n ≥ 2` with `n ^ μ ≥ 2`, `n ^ (1 - ℓ) ≥ 2` and
+`n ^ (1 - ℓ - μ) ≥ 48`, where `ℓ = ℓ(e₀)` and `μ = μ(e₀)` (`08-scanner.tex`, lines 32–41
+and 693–703). -/
+noncomputable def bootstrapComparisonBudgetThreshold (e₀ : ℝ) : ℕ :=
+  max 2 (max (Real.natRpowThreshold (BootstrapParameters.mu e₀) 2)
+    (max (Real.natRpowThreshold (1 - BootstrapParameters.ell e₀) 2)
+      (Real.natRpowThreshold (1 - BootstrapParameters.ell e₀ - BootstrapParameters.mu e₀) 48)))
+
+/-- The complete numerical comparison budget is bounded at every `n` from the explicit
+threshold `bootstrapComparisonBudgetThreshold e₀` on, uniformly in the current exponent and
+the auxiliary fraction. Source: `08-scanner.tex`, lines 32–41, 693–703 and 755–787. -/
+theorem bootstrap_comparison_budget_bound_of_threshold_le {e₀ : ℝ}
+    (he₀ : (Exponents.boxError : ℝ) < e₀) (he₀₁ : e₀ < 1) {n : ℕ}
+    (hthr : bootstrapComparisonBudgetThreshold e₀ ≤ n) :
+    let η : ℝ := 1 - BootstrapParameters.ell e₀
+    let L : ℕ := Nat.floor ((n : ℝ) ^ η)
+    let m : ℕ := Nat.floor ((n : ℝ) ^ BootstrapParameters.mu e₀)
+    let K : ℕ := L / (8 * m)
+    let D : ℕ := Nat.ceil ((n : ℝ) ^ BootstrapParameters.kappa e₀)
+    let a : ℝ := 4 / (K : ℝ)
+    1 ≤ K ∧ 0 < a ∧
+      ∀ e : ℝ, (Exponents.boxError : ℝ) < e → e ≤ e₀ →
+        ∀ τ : ℝ,
+          (n : ℝ) * (L : ℝ) ^ e + (n : ℝ) * (D : ℝ) +
+              (n : ℝ) ^ (3 / 5 : ℝ) + Real.binEntropy τ / a + 1 ≤
+            (5 + Real.log 2 / 4) * (n : ℝ) ^ (1 + η * e) := by
   have he₀pos : 0 < e₀ := lt_trans (by norm_num [Exponents.boxError]) he₀
   obtain ⟨hg₀, hg₀half, hℓ, hℓ₁, hκ⟩ :=
     BootstrapParameters.parameter_bounds he₀pos he₀₁
@@ -78,10 +86,12 @@ theorem exists_bootstrap_comparison_budget_bound {e₀ : ℝ}
             (Exponents.boxError : ℝ) / 4 from min_le_right _ _).trans
           ((show (Exponents.boxError : ℝ) / 4 ≤
               (Exponents.boxError : ℝ) by norm_num [Exponents.boxError]).trans he₀.le) }
-  obtain ⟨N, hN, hcost⟩ := exists_bootstrap_binEntropy_cost_bound X
-  refine ⟨N, hN, fun n hn ↦ ?_⟩
-  refine ⟨(hcost n hn).1, (hcost n hn).2.1, fun e he hee₀ τ ↦ ?_⟩
-  have hn1 : (1 : ℝ) ≤ n := by exact_mod_cast hN.trans hn
+  have hcost : 1 ≤ X.K n ∧ 0 < X.a 4 n ∧ ∀ τ : ℝ,
+      Real.binEntropy τ / X.a 4 n ≤ (Real.log 2 / 4) * (n : ℝ) :=
+    bootstrap_binEntropy_cost_bound_of_scaleFactsThreshold_le X hthr
+  refine ⟨hcost.1, hcost.2.1, fun e he hee₀ τ ↦ ?_⟩
+  have hn1 : (1 : ℝ) ≤ n := by
+    exact_mod_cast (by norm_num : 1 ≤ 2).trans ((le_max_left _ _).trans hthr)
   have hnpos : (0 : ℝ) < n := lt_of_lt_of_le zero_lt_one hn1
   have hepos : 0 < e := lt_trans (by norm_num [Exponents.boxError]) he
   -- Everything is compared against the improved power `n ^ (1 + (1 - ℓ) e)`.
@@ -131,10 +141,33 @@ theorem exists_bootstrap_comparison_budget_bound {e₀ : ℝ}
     div_nonneg (Real.log_nonneg (by norm_num)) (by norm_num)
   have ht4 : Real.binEntropy τ / X.a 4 n
       ≤ (Real.log 2 / 4) * (n : ℝ) ^ (1 + (1 - X.ell) * e) :=
-    ((hcost n hn).2.2 τ).trans (mul_le_mul_of_nonneg_left hPn hlog0)
+    (hcost.2.2 τ).trans (mul_le_mul_of_nonneg_left hPn hlog0)
   have hdistrib : (5 + Real.log 2 / 4) * (n : ℝ) ^ (1 + (1 - X.ell) * e)
       = 5 * (n : ℝ) ^ (1 + (1 - X.ell) * e)
         + (Real.log 2 / 4) * (n : ℝ) ^ (1 + (1 - X.ell) * e) := by ring
   linarith [ht1, ht2, ht3, ht4, hP1, hdistrib]
+
+/-- The complete numerical comparison budget is bounded at one threshold
+depending on the initial exponent, before the current exponent or auxiliary
+fraction is selected. The floors, ceiling and band weight are the scales of
+`scanner:scales`; the separation exponent is fixed throughout the bootstrap.
+Source: `08-scanner.tex`, lines 32–41, 693–703 and 755–787. -/
+theorem exists_bootstrap_comparison_budget_bound {e₀ : ℝ}
+    (he₀ : (Exponents.boxError : ℝ) < e₀) (he₀₁ : e₀ < 1) :
+    ∃ N : ℕ, 1 ≤ N ∧ ∀ n : ℕ, N ≤ n →
+      let η : ℝ := 1 - BootstrapParameters.ell e₀
+      let L : ℕ := Nat.floor ((n : ℝ) ^ η)
+      let m : ℕ := Nat.floor ((n : ℝ) ^ BootstrapParameters.mu e₀)
+      let K : ℕ := L / (8 * m)
+      let D : ℕ := Nat.ceil ((n : ℝ) ^ BootstrapParameters.kappa e₀)
+      let a : ℝ := 4 / (K : ℝ)
+      1 ≤ K ∧ 0 < a ∧
+        ∀ e : ℝ, (Exponents.boxError : ℝ) < e → e ≤ e₀ →
+          ∀ τ : ℝ,
+            (n : ℝ) * (L : ℝ) ^ e + (n : ℝ) * (D : ℝ) +
+                (n : ℝ) ^ (3 / 5 : ℝ) + Real.binEntropy τ / a + 1 ≤
+              (5 + Real.log 2 / 4) * (n : ℝ) ^ (1 + η * e) :=
+  ⟨_, (by norm_num : 1 ≤ 2).trans (le_max_left _ _),
+    fun _ => bootstrap_comparison_budget_bound_of_threshold_le he₀ he₀₁⟩
 
 end TNLean.PEPS.AreaLaw.Scan

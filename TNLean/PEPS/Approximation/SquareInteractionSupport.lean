@@ -25,7 +25,7 @@ namespace TNLean.PEPS.Approximation
 nearest-neighbor supports in the integer rectangle.
 Source: polynomial-PEPS `eq:model` and `03-patches.tex`, lines 213–336. -/
 theorem squareAreaLawSupport_val_eq_nearestNeighborSupport (L : ℕ)
-    [LinearOrder (AreaLaw.Site (AreaLaw.rectangularDomain L L))]
+    [LinearOrder (Lattice.Site (AreaLaw.rectangularDomain L L))]
     (i : SquareInteraction L) :
     let e := Equiv.sumCongr (AreaLaw.rectangleSiteEquiv L L)
       ((forwardSquareEdgeEquiv L).trans

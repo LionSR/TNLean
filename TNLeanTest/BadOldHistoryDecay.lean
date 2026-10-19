@@ -12,6 +12,7 @@ set_option autoImplicit false
 open Filter
 open scoped BigOperators
 open TNLean.PEPS.AreaLaw TNLean.PEPS.AreaLaw.Scan
+open TNLean.Lattice
 
 namespace TNLeanTest.BadOldHistoryDecay
 

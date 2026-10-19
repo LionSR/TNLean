@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.AreaLaw.FiniteDomain
+import TNLean.Lattice.FiniteDomain
 import TNLean.PEPS.SquareLatticeGraph
 
 /-!
@@ -23,6 +23,8 @@ both coordinates by one gives the convention of the polynomial-PEPS manuscript.
 
 Independently formalized from the manuscripts; no upstream Lean proof text is reused.
 -/
+
+open TNLean.Lattice
 
 namespace TNLean.PEPS.AreaLaw
 

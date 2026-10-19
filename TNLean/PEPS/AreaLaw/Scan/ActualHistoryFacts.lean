@@ -50,6 +50,8 @@ open TensorPower TensorPower.ReplicaTransport Entropy
 
 noncomputable section
 
+open TNLean.Lattice
+
 namespace TensorPower.ReplicaTransport
 
 variable {V : Type*} [Fintype V] [DecidableEq V] (n : V → ℕ) [∀ v, NeZero (n v)]

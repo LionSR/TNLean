@@ -30,8 +30,8 @@ the cut.
 
 ## Main results
 
-* `TNLean.PEPS.AreaLaw.exists_eq_mul_of_gap`: the ground vector is a product.
-* `TNLean.PEPS.AreaLaw.vonNeumannEntropy_partialTraceRight_eq_zero_of_gap`: its
+* `TNLean.Lattice.exists_eq_mul_of_gap`: the ground vector is a product.
+* `TNLean.Lattice.vonNeumannEntropy_partialTraceRight_eq_zero_of_gap`: its
   reduced state on the first factor has zero entropy.
 
 ## References
@@ -47,7 +47,7 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 open Matrix
 open scoped ComplexOrder MatrixOrder Matrix.Norms.L2Operator Kronecker
 
-namespace TNLean.PEPS.AreaLaw
+namespace TNLean.Lattice
 
 variable {α β : Type*} [Fintype α] [DecidableEq α] [Fintype β] [DecidableEq β]
 
@@ -166,4 +166,4 @@ theorem vonNeumannEntropy_partialTraceRight_eq_zero_of_gap {HA : Matrix α α �
   rw [hred]
   exact rank_vecMulVec_le _ _
 
-end TNLean.PEPS.AreaLaw
+end TNLean.Lattice

@@ -85,6 +85,25 @@ theorem exists_originalCircuit_initial [DecidableEq P] [NeZero q] {ι : Type} [F
     LinearIsometryEquiv.symm_apply_apply]
   exact h4
 
+/-- **The two descriptions of the initial reference vector agree.** For a protocol with the
+bounds of §8 and `‖Ω‖ = 1`, the initial product vector `r_0` across the parties is carried by one
+private map per party followed by a reordering, with no nonprivate gate, exactly to the reference
+vector of the initial encoded frames: the main copy of `Ω` followed by the auxiliary copies.
+
+Polynomial-PEPS manuscript, Proposition 7.1 `prop:protocol`, item 1, `06-geometry.tex`,
+lines 21–23, and item 4, lines 38–40. -/
+theorem IsDistributionProtocol.exists_originalCircuit_initialCopies [NeZero q]
+    {Ω : StateSpace L q} {C : ℝ} {b k r : ℕ} (h : D.IsDistributionProtocol Ω C b k r)
+    (hΩ : ‖Ω‖ = 1) :
+    ∃ c : OriginalCircuit (D.layout 0) (stackRegs (D.frames 0) []),
+      c.nonprivateCount = 0 ∧ c.eval (D.reference 0) = framesVec Ω (D.frames 0) := by
+  classical
+  obtain ⟨-, holder, hF, hsv⟩ := h.initialCopies
+  obtain ⟨hs, hv⟩ := hsv
+  obtain ⟨c, h0, -, -, -, hc⟩ := D.exists_originalCircuit_initial hΩ (D.frames 0) holder
+    (fun F hF' => (hF F hF').1) (fun F hF' => (hF F hF').2) hs hv
+  exact ⟨c, h0, hc⟩
+
 end DyadicProtocol
 
 /-! ### The raw copies of the dyadic protocol -/

@@ -13,12 +13,15 @@ set_option linter.hashCommand false
 open TNLean.PEPS.PairEffect.GateMapConstruction
 
 run_cmd do
-  let decl := ``exists_uniform_approximate_sampled_network
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
   let env ← Lean.getEnv
-  unless env.contains decl do
-    throwError "Missing declaration {decl}"
-  let axioms ← Lean.collectAxioms decl
-  unless axioms.all (allowed.contains ·) do
-    throwError "Unexpected axioms for {decl}: {axioms}"
-  Lean.logInfo m!"{decl}: {axioms}"
+  for decl in #[``TNLean.PEPS.Approximation.compressionPrefactor_pos,
+      ``TNLean.PEPS.Approximation.compressionExponent_pos,
+      ``uniform_approximate_sampled_network_of_le,
+      ``exists_uniform_approximate_sampled_network] do
+    unless env.contains decl do
+      throwError "Missing declaration {decl}"
+    let axioms ← Lean.collectAxioms decl
+    unless axioms.all (allowed.contains ·) do
+      throwError "Unexpected axioms for {decl}: {axioms}"
+    Lean.logInfo m!"{decl}: {axioms}"

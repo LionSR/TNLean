@@ -273,31 +273,39 @@ theorem sum_graphBall_exponentialDistanceProfile_le
           (fun _ _ => by positivity)) (by positivity)
     _ = _ := by dsimp [M]; ring
 
-/-- Omitted anchor-shell weights have a uniform stretched-exponential tail.
-The constants depend only on `K, μ, b, β, α`, and precede the graph, finite
-site and event types, omitted labels, target support, cutoff and radius.
-The exponent is `(min b β) / 2`; empty supports, empty omitted sets and
-arbitrary disconnected graphs require no special hypotheses.
-Source: area law, `09-amplification.tex`, lines 188–215. -/
-theorem exists_sum_omitted_graphBall_exponentialDistanceProfile_le
+/-- The constant `μ K² M(b/2) M(β/2)` of the omitted anchor-shell tail, where
+`M(c) = ∑ₙ (1 + n)² e^{-c n^α}` is the graph series of quadratic ball growth. The two series
+converge for `b, β, α > 0`. Source: area law, `09-amplification.tex`, lines 188–215. -/
+noncomputable def omittedAnchorTailConstant (K μ b β α : ℝ) : ℝ :=
+  μ * K ^ 2 * (∑' n : ℕ, (1 + (n : ℝ)) ^ 2 * Real.exp (-(b / 2) * (n : ℝ) ^ α)) *
+    ∑' n : ℕ, (1 + (n : ℝ)) ^ 2 * Real.exp (-(β / 2) * (n : ℝ) ^ α)
+
+/-- The omitted anchor-shell tail constant is nonnegative. -/
+theorem omittedAnchorTailConstant_nonneg {μ : ℝ} (hμ : 0 ≤ μ) (K b β α : ℝ) :
+    0 ≤ omittedAnchorTailConstant K μ b β α :=
+  mul_nonneg (mul_nonneg (by positivity) (tsum_nonneg fun _ => by positivity))
+    (tsum_nonneg fun _ => by positivity)
+
+/-- **Omitted anchor-shell weights, with an explicit constant.** For every graph with
+quadratic ball growth and anchor fibers bounded by `μ`, the omitted anchor-shell weights
+beyond radius `r` sum to at most `omittedAnchorTailConstant K μ b β α · |S| · e^{-γ r^α}`
+with `γ = (min b β) / 2`. Source: area law, `09-amplification.tex`, lines 188–215. -/
+theorem sum_omitted_graphBall_exponentialDistanceProfile_le
     {K μ b β α : ℝ} (hK : 0 ≤ K) (hμ : 0 ≤ μ)
     (hb : 0 < b) (hβ : 0 < β) (hα : 0 < α) (hα₁ : α ≤ 1) :
-    ∃ C γ : ℝ, 0 ≤ C ∧ 0 < γ ∧ γ = (min b β) / 2 ∧
-      ∀ (ι κ : Type*) [Fintype ι] [DecidableEq ι] [Fintype κ]
-        (G : SimpleGraph ι) (a : κ → ι),
-        (∀ x l, ((graphBall G x l).card : ℝ) ≤ K * ((l : ℝ) + 1) ^ 2) →
-        (∀ x, ((Finset.univ.filter fun i : κ => a i = x).card : ℝ) ≤ μ) →
-        ∀ (E : Finset κ) (S : Finset ι) (N : ℕ) (r : ℝ), 0 ≤ r →
-          (∀ i ∈ E, ∀ s ∈ S, ENNReal.ofReal r < (G.edist (a i) s : ℝ≥0∞)) →
-          letI := graphPseudoEMetricSpace G
-          (∑ i ∈ E, ∑ l ∈ Finset.range (N + 1), Real.exp (-b * (l : ℝ) ^ α) *
-            ∑ z ∈ graphBall G (a i) l,
-              Metric.exponentialDistanceProfile (S : Set ι) β α z) ≤
-            C * S.card * Real.exp (-γ * r ^ α) := by
+    ∀ (ι κ : Type*) [Fintype ι] [DecidableEq ι] [Fintype κ]
+      (G : SimpleGraph ι) (a : κ → ι),
+      (∀ x l, ((graphBall G x l).card : ℝ) ≤ K * ((l : ℝ) + 1) ^ 2) →
+      (∀ x, ((Finset.univ.filter fun i : κ => a i = x).card : ℝ) ≤ μ) →
+      ∀ (E : Finset κ) (S : Finset ι) (N : ℕ) (r : ℝ), 0 ≤ r →
+        (∀ i ∈ E, ∀ s ∈ S, ENNReal.ofReal r < (G.edist (a i) s : ℝ≥0∞)) →
+        letI := graphPseudoEMetricSpace G
+        (∑ i ∈ E, ∑ l ∈ Finset.range (N + 1), Real.exp (-b * (l : ℝ) ^ α) *
+          ∑ z ∈ graphBall G (a i) l,
+            Metric.exponentialDistanceProfile (S : Set ι) β α z) ≤
+          omittedAnchorTailConstant K μ b β α * S.card *
+            Real.exp (-((min b β) / 2) * r ^ α) := by
   let M (c : ℝ) := ∑' n : ℕ, (1 + (n : ℝ)) ^ 2 * Real.exp (-c * (n : ℝ) ^ α)
-  have hM (c : ℝ) : 0 ≤ M c := tsum_nonneg fun _ => by positivity
-  refine ⟨μ * K ^ 2 * M (b / 2) * M (β / 2), (min b β) / 2,
-    by positivity, by positivity, rfl, ?_⟩
   intro ι κ _ _ _ G a hball hfiber E S N r hr hfar
   classical
   let := graphPseudoEMetricSpace G
@@ -334,6 +342,30 @@ theorem exists_sum_omitted_graphBall_exponentialDistanceProfile_le
     _ ≤ Real.exp (-((min b β) / 2) * r ^ α) *
         (μ * K ^ 2 * M (b / 2) * M (β / 2) * S.card) :=
       mul_le_mul_of_nonneg_left hfull (Real.exp_pos _).le
-    _ = _ := by ring
+    _ = _ := by dsimp only [M, omittedAnchorTailConstant]; ring
+
+/-- Omitted anchor-shell weights have a uniform stretched-exponential tail.
+The constants depend only on `K, μ, b, β, α`, and precede the graph, finite
+site and event types, omitted labels, target support, cutoff and radius.
+The exponent is `(min b β) / 2`; empty supports, empty omitted sets and
+arbitrary disconnected graphs require no special hypotheses.
+Source: area law, `09-amplification.tex`, lines 188–215. -/
+theorem exists_sum_omitted_graphBall_exponentialDistanceProfile_le
+    {K μ b β α : ℝ} (hK : 0 ≤ K) (hμ : 0 ≤ μ)
+    (hb : 0 < b) (hβ : 0 < β) (hα : 0 < α) (hα₁ : α ≤ 1) :
+    ∃ C γ : ℝ, 0 ≤ C ∧ 0 < γ ∧ γ = (min b β) / 2 ∧
+      ∀ (ι κ : Type*) [Fintype ι] [DecidableEq ι] [Fintype κ]
+        (G : SimpleGraph ι) (a : κ → ι),
+        (∀ x l, ((graphBall G x l).card : ℝ) ≤ K * ((l : ℝ) + 1) ^ 2) →
+        (∀ x, ((Finset.univ.filter fun i : κ => a i = x).card : ℝ) ≤ μ) →
+        ∀ (E : Finset κ) (S : Finset ι) (N : ℕ) (r : ℝ), 0 ≤ r →
+          (∀ i ∈ E, ∀ s ∈ S, ENNReal.ofReal r < (G.edist (a i) s : ℝ≥0∞)) →
+          letI := graphPseudoEMetricSpace G
+          (∑ i ∈ E, ∑ l ∈ Finset.range (N + 1), Real.exp (-b * (l : ℝ) ^ α) *
+            ∑ z ∈ graphBall G (a i) l,
+              Metric.exponentialDistanceProfile (S : Set ι) β α z) ≤
+            C * S.card * Real.exp (-γ * r ^ α) :=
+  ⟨_, _, omittedAnchorTailConstant_nonneg hμ K b β α, by positivity, rfl,
+    sum_omitted_graphBall_exponentialDistanceProfile_le hK hμ hb hβ hα hα₁⟩
 
 end TNLean.PEPS.AreaLaw

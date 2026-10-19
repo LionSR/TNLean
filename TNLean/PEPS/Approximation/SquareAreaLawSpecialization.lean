@@ -7,6 +7,7 @@ import QICLean.Entropy.MovementEtaRegional
 import QICLean.Entropy.RegionCovariance
 import TNLean.PEPS.Approximation.SquareAreaLawHamiltonian
 import TNLean.PEPS.AreaLaw.EdgeBoundaryCalculus
+import TNLean.PEPS.AreaLaw.TheoremStatements
 import TNLean.PEPS.AreaLaw.TwoFamilies
 import TNLean.PEPS.RegionBlock.Basic
 
@@ -20,8 +21,9 @@ in the original configuration coordinates and the boundary counted on the
 original edges. It derives the specialization from the uniform finite-domain
 area law at range one.
 
-The derivation is conditional: the uniform finite-domain area law is an
-explicit hypothesis, and this module does not prove it.
+The uniform finite-domain area law is an explicit hypothesis of the derivation.
+It is proved as `TNLean.PEPS.AreaLaw.uniformAreaLaw`, and the unconditional
+specialization is `TNLean.PEPS.AreaLaw.squareEntropyAreaLaw`.
 
 ## Main definitions and results
 
@@ -51,13 +53,15 @@ open scoped BigOperators ComplexOrder
 
 noncomputable section
 
+open TNLean.Lattice
+
 namespace TNLean.PEPS.Approximation
 
 /-- Every designated support is a nonempty set of induced graph diameter at
 most one in the integer rectangle. Source: polynomial-PEPS `eq:model`
 (`00-introduction.tex`, lines 40–45) and area-law Corollary 1.2. -/
 theorem squareAreaLawSupport_isAdmissibleSupport (L : ℕ) (i : SquareInteraction L) :
-    AreaLaw.IsAdmissibleSupport (AreaLaw.rectangularDomain L L) 1
+    Lattice.IsAdmissibleSupport (AreaLaw.rectangularDomain L L) 1
       (squareAreaLawSupport L i).1 :=
   (squareAreaLawSupport L i).2
 
@@ -90,13 +94,13 @@ edges of the transported cut in the integer rectangle. Source: polynomial-PEPS
 `01-preliminaries.tex`, lines 47–50, definition of `∂_Λ A`, and area-law
 Section 1. -/
 theorem card_edgeBoundary_rectangle {L : ℕ} (A : Finset (Vertex L)) :
-    (AreaLaw.edgeBoundary (AreaLaw.rectangularDomain L L)
+    (Lattice.edgeBoundary (AreaLaw.rectangularDomain L L)
         (A.map (AreaLaw.rectangleSiteEquiv L L).toEmbedding)).card =
       Fintype.card {e : Edge (squareLatticeGraph L L) // IsRegionBoundaryEdge A e} := by
   classical
   let σ := AreaLaw.rectangleSiteEquiv L L
   have hadj : ∀ a b : Vertex L,
-      (AreaLaw.domainGraph (AreaLaw.rectangularDomain L L)).Adj (σ a) (σ b) ↔
+      (Lattice.domainGraph (AreaLaw.rectangularDomain L L)).Adj (σ a) (σ b) ↔
         (squareLatticeGraph L L).Adj a b :=
     fun a b ↦ (AreaLaw.rectangleGraphIso L L).map_rel_iff
   have hmem : ∀ a : Vertex L, σ a ∈ A.map σ.toEmbedding ↔ a ∈ A := fun a ↦ by simp [σ]
@@ -173,7 +177,7 @@ theorem _root_.TNLean.PEPS.AreaLaw.UniformAreaLaw.squareEntropyAreaLaw
   have hgap := h.isGappedGroundState_toAreaLawHamiltonian hJ.le hΩ
   have := hbound (AreaLaw.rectangularDomain L L) (h.toAreaLawHamiltonian hJ.le) E₀
     (squareAreaLawState Ω) hgap (A.map (AreaLaw.rectangleSiteEquiv L L).toEmbedding)
-  rw [AreaLaw.regionalEntropy_eq_finiteProduct, card_edgeBoundary_rectangle] at this
+  rw [Lattice.regionalEntropy_eq_finiteProduct, card_edgeBoundary_rectangle] at this
   exact (finiteProductEntropy_relabel (AreaLaw.rectangleSiteEquiv L L) q Ω A).symm.trans_le
     this
 

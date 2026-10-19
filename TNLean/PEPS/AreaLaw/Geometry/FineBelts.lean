@@ -25,6 +25,8 @@ The estimate does not require an entropy inequality or an assumed partition.
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
+open TNLean.Lattice
+
 namespace TNLean.PEPS.AreaLaw.Geometry
 
 private theorem dyadic_scale_ratio (ℓ k p : ℕ) (hℓk : ℓ ≤ k) (hℓp : ℓ ≤ p) :
