@@ -42,10 +42,34 @@ The protocol route of the note (information reset, births, exchanges, the sweep
 and the compression) is not formalized; Theorem B is proved by the two-line route
 alone.
 
+For the commutator estimate in Part II, Lemma `lem:LR`,
+`QuantumCircuit.norm_heisenberg_commutator_le_graphDistance_finset` proves
+graph propagation from an arbitrary finite support S, with prefactor |S| and
+constants independent of its diameter, the number of sites and the local
+dimension. Its restricted-norm version is
+`QuantumCircuit.heisenbergCommutatorNorm_le_graphDistance_finset`.
+For support diameter R, support cardinality bound v_R and per-site norm budget
+b₀, the explicit constants are C = 2 + 4|b₀| exp(2μR) and
+v = 2v_R|b₀| exp(2μR) + 1, for μ ≥ 0.
+
+For localization, under polynomial sphere growth K_g(d + 1)^k,
+`QuantumCircuit.norm_heisenberg_sub_siteExpectation_graphNeighborhood_le`
+bounds the error of the normalized partial trace onto the union of the radius-ℓ
+balls about S by C |S|² ‖A‖ K_g T_k exp(v|t| − ℓ/2), for natural ℓ. Here
+C and v are the preceding constants at μ = 1, and
+T_k = 2^k k! exp(1/2) / (1 − exp(−1/2)). The pure graph tail estimate is
+`QuantumCircuit.sum_exp_neg_edist_compl_graphBall_le`.
+Neither result requires a diameter bound or nonemptiness assumption on S.
+These are graph ingredients of the note's lemma; the chain metric and
+interaction-budget conversion and the doubled Hamiltonian remain to be
+proved before the full lemma can be marked complete. The passage to real
+radii also requires the separate rounding estimate.
+
 ## Constants
 
-Every constant is a definition of `(q, R, J, Δ)` and, for the bond dimension,
-`L`; no statement carries an existential constant. In the order the proof fixes
+Every constant in the chain area-law and sequential-truncation bounds is a
+definition of `(q, R, J, Δ)` and, for the bond dimension, `L`; these statements
+carry no existential constant. In the order the proof fixes
 them:
 
 | Name | Value |
