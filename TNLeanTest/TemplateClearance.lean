@@ -2,6 +2,8 @@ import TNLean.PEPS.AreaLaw.Geometry.TemplateClearance
 
 /-! Strict template-clearance and dyadic interval regressions. -/
 
+open TNLean.Lattice
+
 open TNLean.PEPS.AreaLaw TNLean.PEPS.AreaLaw.Geometry
 
 -- Negative-coordinate cells use the same closed integer intervals.

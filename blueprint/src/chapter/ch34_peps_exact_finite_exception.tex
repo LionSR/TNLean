@@ -189,9 +189,8 @@ The compressed network itself comes from the protocol of
 \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS}. The following statements carry out
 this step of~\cite[Section~8.1]{OpenAI2026PolynomialPEPS}
 (\texttt{07-assembly.tex}, lines 45--63) from the protocol assertion of
-Definition~\ref{def:peps_dyadic_protocol}. That assertion is weaker than
-Proposition~7.1 and is not proved, so the final statement remains a
-conditional form of Theorem~\ref{thm:openai_polynomial_peps}.
+Definition~\ref{def:peps_dyadic_protocol}, which is
+Proposition~\ref{prop:peps_dyadic_protocol}.
 
 \begin{lemma}[Operator party networks from compressed protocol densities]
     \label{lem:peps_protocol_compressed_party_network}
@@ -237,6 +236,39 @@ conditional form of Theorem~\ref{thm:openai_polynomial_peps}.
     lies on at most $\Delta_0$ links.
 \end{proof}
 
+\begin{lemma}[Bounds on the composed protocol circuit]
+    \label{lem:peps_protocol_circuit_bounds}
+    \lean{TNLean.PEPS.Approximation.DyadicProtocol.exists_participants_toDistributedConstruction_circuit,
+        TNLean.PEPS.Approximation.DyadicProtocol.IsDistributionProtocol.nonprivateCount_toDistributedConstruction_circuit_le,
+        TNLean.PEPS.Approximation.DyadicProtocol.IsDistributionProtocol.participationCount_toDistributedConstruction_circuit_le,
+        TNLean.PEPS.Approximation.DyadicProtocol.IsDistributionProtocol.isMonomialBounded_toDistributedConstruction_circuit,
+        TNLean.PEPS.Approximation.DyadicProtocol.IsDistributionProtocol.isExpansionBounded_toDistributedConstruction_circuit}
+    \leanok
+    \uses{def:peps_dyadic_protocol}
+    Let $W$ be the circuit obtained by composing the $T$ changes
+    $W_0,\ldots,W_{T-1}$ of a protocol, with its initial and final register
+    layouts identified with the input and output layouts of the protocol. Repeated
+    occurrences of one gate are counted separately. Every nonprivate gate of $W$
+    has the set of participating parties of a nonprivate gate of some $W_t$ with
+    $t<T$. If the protocol satisfies the bounds of
+    Definition~\ref{def:peps_dyadic_protocol} with constants $C,b,k,r$, then $W$
+    has at most $Tb$ nonprivate gates, every party participates in at most $b$ of
+    them, and every nonprivate gate of $W$ has at most $\lfloor CL^k\rfloor$
+    monomials, at most $r$ pair effects in each monomial, and absolute coefficient
+    sum at most $CL^k$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Identifying equal layouts changes neither the gates nor their participating
+    sets, so it suffices to treat the composite of the changes. Its nonprivate
+    gates are those of the changes, listed in order. Write $N(X)$ for the number of
+    nonprivate gates of a circuit $X$ and $n_p(X)$ for the number of them in which
+    the party $p$ participates. Hence $N(W)=\sum_{t<T}N(W_t)\le Tb$, and
+    $n_p(W)=\sum_{t<T}n_p(W_t)\le b$ is the lifetime bound of the protocol. The monomial
+    and expansion bounds hold for every change and therefore for every gate of
+    the composite.
+\end{proof}
+
 \begin{theorem}[Compressed dyadic operator networks from the protocol assertion]
     \label{thm:peps_large_size_network_from_protocol}
     \lean{TNLean.PEPS.Approximation.largeSizeDyadicOperatorNetwork_of_largeSizeDyadicProtocolConsequences,
@@ -249,7 +281,8 @@ conditional form of Theorem~\ref{thm:openai_polynomial_peps}.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:peps_distributed_construction_compression, lem:peps_protocol_compressed_party_network}
+    \uses{thm:peps_distributed_construction_compression, lem:peps_protocol_compressed_party_network,
+        lem:peps_protocol_circuit_bounds}
     For fixed $q,J,\Delta$ and the constants $C,b,k,r,L_0$ of the assertion, the
     protocols across all sides $L\ge\max\{2,L_0\}$, Hamiltonians, and ground
     vectors form a single family of distributed constructions indexed by their

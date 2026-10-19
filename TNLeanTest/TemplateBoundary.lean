@@ -9,6 +9,8 @@ The private thin-real-polygon fixture is preserved from the original regression
 at TNLean commit 06cfc12e5ce3bc1c7e16553af44ded6da1e71223.
 -/
 
+open TNLean.Lattice
+
 open TNLean.PEPS.AreaLaw TNLean.PEPS.AreaLaw.Geometry
 
 example : ambientBoundary ∅ = ∅ := ambientBoundary_empty

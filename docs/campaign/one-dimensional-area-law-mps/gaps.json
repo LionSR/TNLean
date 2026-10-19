@@ -1,0 +1,68 @@
+{
+ "reviewedAt": "2026-10-18T06:00:00Z",
+ "checked": [],
+ "entries": [
+  {
+   "id": "docs/paper-gaps/tnlean_one_dimensional_discount_constants.tex",
+   "kind": "local-correction",
+   "status": "resolved",
+   "paper": "chain",
+   "result": "Lemma 4.2, constants of the buffered discount",
+   "issue": 9533,
+   "prs": {
+    "TNLean": [
+     9533
+    ]
+   },
+   "title": "Constants of the buffered discount",
+   "summary": "The argument of the note stands; the formal proof uses slightly different absolute constants, and the area-law constant stays linear in 1 + <i>J</i>/Δ.",
+   "context": "Lemma 4.2 surrounds an interval <i>X</i> by <i>m</i> nested shells of width <i>R</i> and shows that, conditioned on these shells, <i>X</i> keeps at most half of its entropy plus a constant. This constant and <i>m</i> enter the entropy bound of Theorem A.",
+   "claims": "The note fixes an energy constant <i>C<sub>E</sub></i> = 8<i>N<sub>R</sub>Jq</i><sup>2(<i>R</i>+1)</sup>, where <i>N<sub>R</sub></i> bounds the number of terms crossing a cut, takes <i>m</i> as the least integer above four quantities, and bounds the energy of the reweighted state by Δ/4, so that the conditional entropy is at most ½<i>S</i>(<i>X</i>) + ½ + <i>C<sub>E</sub></i>/Δ.",
+   "found": "The finite-dimensional estimate used in the formalization bounds the energy by twice the printed amount, so the argument runs with the energy bound Δ/2. The losses from the overlap with the ground state then sum to <i>m</i> log 2 instead of 2<i>C<sub>E</sub></i>/Δ, and an error term of order (<i>J</i>/Δ)<i>B<sub>R</sub></i>/<i>m</i> is kept explicitly instead of being absorbed by a fourth condition on <i>m</i>, which is dropped. The structure of the argument and its hypotheses are those of the note.",
+   "impact": "No. Only absolute constants change, the formal constants are explicit, and Theorem A holds with a constant <i>C</i><sub>0</sub>(<i>q</i>, <i>R</i>)(1 + <i>J</i>/Δ) as stated.",
+   "plan": "Either revise the note to the formal constants, or prove the finite-dimensional discount with the sharper energy coefficient and restore the printed constants. Neither is needed for any later step.",
+   "stage": "area:2"
+  },
+  {
+   "id": "docs/paper-gaps/tnlean_one_dimensional_threshold_truncation.tex",
+   "kind": "narrower",
+   "status": "open",
+   "paper": "chain",
+   "result": "Proposition 7.1, sequential truncation in threshold form",
+   "issue": 9533,
+   "prs": {
+    "TNLean": [
+     9533
+    ]
+   },
+   "title": "Sequential truncation by an eigenvalue threshold",
+   "summary": "Theorem B is proved as stated; the truncation lemma behind it is formalized in the form its proof uses, which differs from the printed form.",
+   "context": "Proposition 7.1 builds a matrix product state from a vector on the chain by projecting, at each cut, the left part onto a few eigenvectors of its reduced density matrix. The proof of Theorem B applies it with the eigenvalue bounds of the marginal tail bound.",
+   "claims": "For every bond dimension <i>D</i>, keeping the <i>D</i> largest eigenvalues at every cut gives a matrix product state of bond dimension at most <i>D</i> whose distance from the vector is at most the sum over the cuts of the square roots of the discarded weights.",
+   "found": "The formal lemma keeps, at each cut, the eigenvalues at least exp(−(<i>S<sub>k</sub></i> + <i>w</i>)), where <i>S<sub>k</sub></i> is the entropy of the left part and <i>w</i> a common slack. It proves that at most exp(<i>S<sub>k</sub></i> + <i>w</i>) eigenvalues are kept and bounds the error by the tail weights beyond <i>w</i>. The bond dimension is then an output of the lemma instead of a free parameter, so the printed statement for an arbitrary <i>D</i> is not formalized.",
+   "impact": "No. The proof of Theorem B in the note uses exactly the threshold form, and Theorem B is formalized without extra hypotheses.",
+   "plan": "Either formalize the printed proposition with the projection onto the <i>D</i> largest eigenvalues, reusing the existing product of projections and its error and rank bounds, or restate the proposition in threshold form.",
+   "stage": "mps:1"
+  },
+  {
+   "id": "docs/paper-gaps/tnlean_one_dimensional_connected_domain_scope.tex",
+   "kind": "narrower",
+   "status": "resolved",
+   "paper": "chain",
+   "result": "Theorem A, finite subsets of the integers",
+   "issue": 9548,
+   "prs": {
+    "TNLean": [
+     9616
+    ]
+   },
+   "title": "Domains with gaps in the one-dimensional area law",
+   "summary": "Theorem A is formalized for every finite set of integers, as the note states it, with the constant of the chain.",
+   "context": "Theorem A allows any finite set Λ of integers, which may consist of several separated intervals, with edges between consecutive integers in Λ. Its proof first reduces to a single interval of consecutive sites.",
+   "claims": "The note reduces to one interval by writing the Hamiltonian as a sum over the separated pieces of Λ, factoring the gapped ground state as a product over the pieces, and adding entropies and boundaries over the pieces.",
+   "found": "The formal proof first treated only a chain of consecutive sites. It now covers every finite Λ by a shorter argument: across a gap of Λ the part to the left has zero entropy, and replacing a region by its symmetric difference with that part changes neither its entropy nor its boundary edges in Λ, so the chain theorem applies without factoring the ground state.",
+   "impact": "No. The theorem is proved with the hypotheses of the note.",
+   "plan": "Nothing remains."
+  }
+ ]
+}

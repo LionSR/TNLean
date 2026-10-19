@@ -22,6 +22,8 @@ Section 11, replacement instructions, lines 398–409, termination, lines
 
 noncomputable section
 
+open TNLean.Lattice
+
 namespace TNLean.PEPS.AreaLaw.Geometry
 
 /-- An empty mark family has empty removal union.

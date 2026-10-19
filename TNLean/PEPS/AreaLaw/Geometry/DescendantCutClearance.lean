@@ -61,6 +61,8 @@ open Filter
 
 noncomputable section
 
+open TNLean.Lattice
+
 namespace TNLean.PEPS.AreaLaw.Geometry
 
 /-! ### Scalar estimates -/
@@ -76,40 +78,38 @@ theorem two_pow_fineScaleIndex_le_rpow (k : ℕ) :
   rw [mul_comm]
   exact Nat.floor_le (mul_nonneg hζ (Nat.cast_nonneg k))
 
-/-- A fixed multiple of a power `a < 1` of `2 ^ k` is eventually smaller than `2 ^ k`. -/
-private theorem eventually_mul_rpow_lt (M : ℝ) {a : ℝ} (ha : a < 1) :
-    ∀ᶠ k : ℕ in atTop, M * ((2 : ℝ) ^ k) ^ a < (2 : ℝ) ^ k := by
-  have hR : Tendsto (fun k : ℕ ↦ (2 : ℝ) ^ k) atTop atTop :=
-    tendsto_pow_atTop_atTop_of_one_lt one_lt_two
-  have hlim := (tendsto_rpow_neg_atTop (sub_pos.mpr ha)).comp hR
-  set M' := max M 0 + 1 with hM'
-  have hM'0 : 0 < M' := by positivity
-  filter_upwards [hlim.eventually (gt_mem_nhds (inv_pos.mpr hM'0))] with k hk
-  simp only [Function.comp_apply] at hk
-  set R : ℝ := (2 : ℝ) ^ k
-  have hR0 : 0 < R := by positivity
-  have hsplit : R ^ (-(1 - a)) * R = R ^ a := by
-    rw [← Real.rpow_add_one hR0.ne']
-    congr 1
-    ring
-  have hpos : 0 < R ^ a := Real.rpow_pos_of_pos hR0 a
-  calc M * R ^ a ≤ M' * R ^ a :=
-        mul_le_mul_of_nonneg_right ((le_max_left M 0).trans (by linarith)) hpos.le
-    _ = M' * (R ^ (-(1 - a)) * R) := by rw [hsplit]
-    _ < M' * (M'⁻¹ * R) := mul_lt_mul_of_pos_left (mul_lt_mul_of_pos_right hk hR0) hM'0
-    _ = R := by field_simp
+/-- Beyond the power-ratio threshold `P(M, 1/2, 1 - a)`, `M R ^ a < R`. -/
+private theorem mul_rpow_lt_of_powerRatioThreshold_le {M a R : ℝ} (hM : 0 ≤ M) (ha : a < 1)
+    (hR : Real.powerRatioThreshold M (1 / 2) (1 - a) ≤ R) : M * R ^ a < R := by
+  have hR0 : 0 < R := one_pos.trans_le ((Real.one_le_powerRatioThreshold _ _ _).trans hR)
+  have h := Real.mul_rpow_le_mul_rpow_of_powerRatioThreshold_le hM (by norm_num) ha hR
+  rw [Real.rpow_one] at h
+  linarith
 
-/-- **The scale inequalities for late layers.** For every `D₀` and `C_B`, every
-sufficiently late layer `k` satisfies `2 t_k ^ ρ₀ ≤ 2 ^ k`,
-`4 D₀ (2 t_k) < 2 ^ k` and `2 ⌈C_B t_k⌉ ^ β < 2 ^ k`, because
-`t_k ≤ (2 ^ k) ^ ζ` with `ζ < 1`, `ρ₀ < 1` and `β < 1`.
-Source: area-law Section 11, lines 742–750 (`2 t_k ^ ρ₀ = o(t_k)`, side scales
-`≤ 2 t_k = o(r)`), with the scanner scales `n = ⌈C_B u⌉` of lines 732–737. -/
-theorem eventually_descendant_cutClearance_scales (D₀ CB : ℝ) :
-    ∀ᶠ k : ℕ in atTop,
-      2 * ((2 : ℝ) ^ fineScaleIndex k) ^ (Exponents.rho : ℝ) ≤ (2 : ℝ) ^ k ∧
+/-- The layer threshold for the descendant cut-clearance scale inequalities: the
+dyadic index of the largest of the power-ratio thresholds for
+`2 R ^ (ζ ρ₀) ≤ R / 2`, `8 max(D₀, 0) R ^ ζ ≤ R / 2` and
+`2 (max C_B 0 + 1) ^ β R ^ (ζ β) ≤ R / 2`, at `R = 2 ^ k`. Auxiliary to the
+explicit constant of Theorem 1.1 (`docs/notes/arealaw2d_explicit_constant.tex`,
+rows 37–38). -/
+def descendantCutClearanceThreshold (D₀ CB : ℝ) : ℕ :=
+  dyadicIndexThreshold (max
+    (Real.powerRatioThreshold 2 (1 / 2) (1 - (Exponents.zeta : ℝ) * Exponents.rho))
+    (max (Real.powerRatioThreshold (8 * max D₀ 0) (1 / 2) (1 - (Exponents.zeta : ℝ)))
+      (Real.powerRatioThreshold (2 * (max CB 0 + 1) ^ (Exponents.beta : ℝ)) (1 / 2)
+        (1 - (Exponents.zeta : ℝ) * Exponents.beta))))
+
+/-- **The scale inequalities for late layers, explicitly.** Every layer
+`k ≥ descendantCutClearanceThreshold D₀ C_B` satisfies `2 t_k ^ ρ₀ ≤ 2 ^ k`,
+`4 D₀ (2 t_k) < 2 ^ k` and `2 ⌈C_B t_k⌉ ^ β < 2 ^ k`.
+Source: area-law Section 11, lines 742–750, with the scanner scales of
+lines 732–737. -/
+theorem descendant_cutClearance_scales_of_le {D₀ CB : ℝ} {k : ℕ}
+    (hk : descendantCutClearanceThreshold D₀ CB ≤ k) :
+    2 * ((2 : ℝ) ^ fineScaleIndex k) ^ (Exponents.rho : ℝ) ≤ (2 : ℝ) ^ k ∧
       4 * D₀ * (2 * (2 : ℝ) ^ fineScaleIndex k) < (2 : ℝ) ^ k ∧
-      2 * (⌈CB * (2 : ℝ) ^ fineScaleIndex k⌉₊ : ℝ) ^ (Exponents.beta : ℝ) < (2 : ℝ) ^ k := by
+      2 * (⌈CB * (2 : ℝ) ^ fineScaleIndex k⌉₊ : ℝ) ^ (Exponents.beta : ℝ) <
+        (2 : ℝ) ^ k := by
   have hζ0 : (0 : ℝ) ≤ (Exponents.zeta : ℝ) := by
     norm_num [Exponents.zeta, Exponents.geometryDelta]
   have hζ1 : (Exponents.zeta : ℝ) < 1 := by exact_mod_cast Exponents.geometry_gaps.2.1
@@ -127,8 +127,13 @@ theorem eventually_descendant_cutClearance_scales (D₀ CB : ℝ) :
     lt_of_le_of_lt (mul_le_of_le_one_right hζ0 hβ1.le) hζ1
   set B := max CB 0 + 1 with hB
   have hB1 : 1 ≤ B := by have := le_max_right CB 0; linarith
-  filter_upwards [eventually_mul_rpow_lt 2 hzρ, eventually_mul_rpow_lt (8 * max D₀ 0) hζ1,
-    eventually_mul_rpow_lt (2 * B ^ (Exponents.beta : ℝ)) hzβ] with k h₁ h₂ h₃
+  have hRT := le_two_pow_of_dyadicIndexThreshold_le hk
+  have h₁ := mul_rpow_lt_of_powerRatioThreshold_le (by norm_num) hzρ
+    ((le_max_left _ _).trans hRT)
+  have h₂ := mul_rpow_lt_of_powerRatioThreshold_le (by positivity) hζ1
+    (((le_max_left _ _).trans (le_max_right _ _)).trans hRT)
+  have h₃ := mul_rpow_lt_of_powerRatioThreshold_le (by positivity) hzβ
+    (((le_max_right _ _).trans (le_max_right _ _)).trans hRT)
   set R : ℝ := (2 : ℝ) ^ k
   set t : ℝ := (2 : ℝ) ^ fineScaleIndex k
   have hR0 : 0 ≤ R := by positivity
@@ -163,6 +168,21 @@ theorem eventually_descendant_cutClearance_scales (D₀ CB : ℝ) :
           gcongr
           exact hpow _ hβ0
       _ < R := h₃
+
+/-- **The scale inequalities for late layers.** For every `D₀` and `C_B`, every
+sufficiently late layer `k` satisfies `2 t_k ^ ρ₀ ≤ 2 ^ k`,
+`4 D₀ (2 t_k) < 2 ^ k` and `2 ⌈C_B t_k⌉ ^ β < 2 ^ k`, because
+`t_k ≤ (2 ^ k) ^ ζ` with `ζ < 1`, `ρ₀ < 1` and `β < 1`. The threshold is
+`descendantCutClearanceThreshold D₀ C_B`.
+Source: area-law Section 11, lines 742–750 (`2 t_k ^ ρ₀ = o(t_k)`, side scales
+`≤ 2 t_k = o(r)`), with the scanner scales `n = ⌈C_B u⌉` of lines 732–737. -/
+theorem eventually_descendant_cutClearance_scales (D₀ CB : ℝ) :
+    ∀ᶠ k : ℕ in atTop,
+      2 * ((2 : ℝ) ^ fineScaleIndex k) ^ (Exponents.rho : ℝ) ≤ (2 : ℝ) ^ k ∧
+      4 * D₀ * (2 * (2 : ℝ) ^ fineScaleIndex k) < (2 : ℝ) ^ k ∧
+      2 * (⌈CB * (2 : ℝ) ^ fineScaleIndex k⌉₊ : ℝ) ^ (Exponents.beta : ℝ) < (2 : ℝ) ^ k :=
+  eventually_atTop.2 ⟨descendantCutClearanceThreshold D₀ CB,
+    fun _ hk ↦ descendant_cutClearance_scales_of_le hk⟩
 
 /-- A repair half-side of a scale at least one is at least one. -/
 private theorem one_le_repairHalfSide {S : ℝ} (hS : 1 ≤ S) : 1 ≤ repairHalfSide S :=
@@ -311,31 +331,28 @@ end Stages
 
 /-! ### Cut clearance of belt and descendant templates -/
 
-/-- **Cut clearance of initial belt birth templates.** For every `D₀` and `C_B`
-there is a threshold such that, for every lower layer index `k₀` beyond it, the
-following holds for every belt tile of a layer `k ≥ k₀`. Its birth region has
-endpoint distance at least `C₀ 2 ^ k`. Every template whose points lie in that
-birth region, with piece size `s₀ ≤ 2 t_k` and scanner scale `n ≤ ⌈C_B t_k⌉`
-(in particular the belt choice `s₀ = u = t_k`, `n = ⌈C_B u⌉`), satisfies
+/-- **Cut clearance of initial belt birth templates, with an explicit layer
+threshold.** For every lower layer index `k₀ ≥ descendantCutClearanceThreshold D₀ C_B`,
+every belt tile of a layer `k ≥ k₀` has birth region at endpoint distance at least
+`C₀ 2 ^ k`, and every template whose points lie in that birth region, with piece
+size `s₀ ≤ 2 t_k` and scanner scale `n ≤ ⌈C_B t_k⌉`, satisfies
 `dist_∞(T, Z) > 4 D₀ s₀` and `dist_∞(T, Z) > 2 n ^ β`.
 Source: area-law Section 11, lines 742–744 and 748–750, with the belt scanner
-scales of lines 732–733, `geometry:layer-distance` (lines 179–189), and the
-choice of `k₀` after `C₀` and `C_B` (lines 756–774). -/
-theorem initialBelt_birthTemplate_cutClearance (D₀ CB : ℝ) :
-    ∃ K : ℕ, ∀ (o : ℝ × ℝ) (k₀ : ℕ) (Z : Finset (ℤ × ℤ)) (C : ℕ)
-      (a b : (k : ℕ) → Fin (2 ^ (pitchScaleIndex k - fineScaleIndex k)))
-      (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀), K ≤ k₀ →
-      ∀ (x : InitialRegionIndex o k₀ Z C a b hC h₀) s, x = Sum.inr (Sum.inr s) →
-        (∀ y ∈ initialBirthRegion o k₀ Z C a b hC h₀ x, ∀ w ∈ Z,
-          (C : ℝ) * 2 ^ s.1.val ≤ dist y (integerPoint w)) ∧
-        ∀ {Ctpl : ℝ} {n s₀ : ℕ} (T : Template Ctpl n s₀),
-          (∀ t ∈ T.points, integerPoint t ∈ initialBirthRegion o k₀ Z C a b hC h₀ x) →
-          (s₀ : ℝ) ≤ 2 * (2 : ℝ) ^ fineScaleIndex s.1.val →
-          n ≤ ⌈CB * (2 : ℝ) ^ fineScaleIndex s.1.val⌉₊ →
-          T.IsSeparated D₀ Z ∧ ∀ t ∈ T.points, ∀ w ∈ Z,
-            2 * (n : ℝ) ^ (Exponents.beta : ℝ) < (Scan.ambientSupDistance t w : ℝ) := by
-  obtain ⟨K, hK⟩ := eventually_atTop.mp (eventually_descendant_cutClearance_scales D₀ CB)
-  refine ⟨K, fun o k₀ Z C a b hC h₀ hK₀ x s hxs ↦ ?_⟩
+scales of lines 732–733 and `geometry:layer-distance` (lines 179–189). -/
+theorem initialBelt_birthTemplate_cutClearance_of_le {D₀ CB : ℝ} (o : ℝ × ℝ) (k₀ : ℕ)
+    (Z : Finset (ℤ × ℤ)) (C : ℕ)
+    (a b : (k : ℕ) → Fin (2 ^ (pitchScaleIndex k - fineScaleIndex k)))
+    (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀) (hK₀ : descendantCutClearanceThreshold D₀ CB ≤ k₀) :
+    ∀ (x : InitialRegionIndex o k₀ Z C a b hC h₀) s, x = Sum.inr (Sum.inr s) →
+      (∀ y ∈ initialBirthRegion o k₀ Z C a b hC h₀ x, ∀ w ∈ Z,
+        (C : ℝ) * 2 ^ s.1.val ≤ dist y (integerPoint w)) ∧
+      ∀ {Ctpl : ℝ} {n s₀ : ℕ} (T : Template Ctpl n s₀),
+        (∀ t ∈ T.points, integerPoint t ∈ initialBirthRegion o k₀ Z C a b hC h₀ x) →
+        (s₀ : ℝ) ≤ 2 * (2 : ℝ) ^ fineScaleIndex s.1.val →
+        n ≤ ⌈CB * (2 : ℝ) ^ fineScaleIndex s.1.val⌉₊ →
+        T.IsSeparated D₀ Z ∧ ∀ t ∈ T.points, ∀ w ∈ Z,
+          2 * (n : ℝ) ^ (Exponents.beta : ℝ) < (Scan.ambientSupDistance t w : ℝ) := by
+  intro x s hxs
   obtain ⟨⟨k, hk⟩, ⟨z, hz⟩, R⟩ := s
   subst hxs
   have hfar : ∀ y ∈ initialBirthRegion o k₀ Z C a b hC h₀ (.inr (.inr ⟨⟨k, hk⟩, ⟨z, hz⟩, R⟩)),
@@ -348,7 +365,7 @@ theorem initialBelt_birthTemplate_cutClearance (D₀ CB : ℝ) :
       (closure_mono (dyadicCell_subset_dyadicLayer_of_mem_fineLayerIndices o k
         (fineScaleIndex k) Z C z (fineScaleIndex_le k) (Finset.mem_filter.mp hz).1) hcell) w hw
   refine ⟨hfar, fun T hT hs hn ↦ ?_⟩
-  obtain ⟨-, hk₁, hk₂⟩ := hK k (hK₀.trans hk)
+  obtain ⟨-, hk₁, hk₂⟩ := descendant_cutClearance_scales_of_le (hK₀.trans hk)
   have hu₀ : (0 : ℝ) ≤ (2 : ℝ) ^ fineScaleIndex k := by positivity
   refine T.cutClearance_of_endpoint_dist_ge hC hk₁ hk₂ hu₀ le_rfl
     (fun t ht w hw ↦ ?_) (by linarith) hn
@@ -356,6 +373,78 @@ theorem initialBelt_birthTemplate_cutClearance (D₀ CB : ℝ) :
     have : (0 : ℝ) ≤ 2 ^ k := by positivity
     nlinarith
   exact this.trans (hfar _ (hT t ht) w hw)
+
+/-- **Cut clearance of initial belt birth templates.** For every `D₀` and `C_B`
+there is a threshold such that, for every lower layer index `k₀` beyond it, the
+following holds for every belt tile of a layer `k ≥ k₀`. Its birth region has
+endpoint distance at least `C₀ 2 ^ k`. Every template whose points lie in that
+birth region, with piece size `s₀ ≤ 2 t_k` and scanner scale `n ≤ ⌈C_B t_k⌉`
+(in particular the belt choice `s₀ = u = t_k`, `n = ⌈C_B u⌉`), satisfies
+`dist_∞(T, Z) > 4 D₀ s₀` and `dist_∞(T, Z) > 2 n ^ β`.
+Source: area-law Section 11, lines 742–744 and 748–750, with the belt scanner
+scales of lines 732–733, `geometry:layer-distance` (lines 179–189), and the
+choice of `k₀` after `C₀` and `C_B` (lines 756–774). The threshold is
+`descendantCutClearanceThreshold D₀ C_B`
+(`initialBelt_birthTemplate_cutClearance_of_le`). -/
+theorem initialBelt_birthTemplate_cutClearance (D₀ CB : ℝ) :
+    ∃ K : ℕ, ∀ (o : ℝ × ℝ) (k₀ : ℕ) (Z : Finset (ℤ × ℤ)) (C : ℕ)
+      (a b : (k : ℕ) → Fin (2 ^ (pitchScaleIndex k - fineScaleIndex k)))
+      (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀), K ≤ k₀ →
+      ∀ (x : InitialRegionIndex o k₀ Z C a b hC h₀) s, x = Sum.inr (Sum.inr s) →
+        (∀ y ∈ initialBirthRegion o k₀ Z C a b hC h₀ x, ∀ w ∈ Z,
+          (C : ℝ) * 2 ^ s.1.val ≤ dist y (integerPoint w)) ∧
+        ∀ {Ctpl : ℝ} {n s₀ : ℕ} (T : Template Ctpl n s₀),
+          (∀ t ∈ T.points, integerPoint t ∈ initialBirthRegion o k₀ Z C a b hC h₀ x) →
+          (s₀ : ℝ) ≤ 2 * (2 : ℝ) ^ fineScaleIndex s.1.val →
+          n ≤ ⌈CB * (2 : ℝ) ^ fineScaleIndex s.1.val⌉₊ →
+          T.IsSeparated D₀ Z ∧ ∀ t ∈ T.points, ∀ w ∈ Z,
+            2 * (n : ℝ) ^ (Exponents.beta : ℝ) < (Scan.ambientSupDistance t w : ℝ) :=
+  ⟨_, fun o k₀ Z C a b hC h₀ hK₀ ↦
+    initialBelt_birthTemplate_cutClearance_of_le o k₀ Z C a b hC h₀ hK₀⟩
+
+/-- **Cut clearance of descendant birth templates, with explicit thresholds.**
+For every stopping scale `S_* ≥ repairMarginThreshold (1/128)`, every layer
+width `C₀`, every template constant `D₀`, every belt scale constant `C_B` and
+every lower layer index `k₀` at least `fineScaleIndexThreshold S_*` and
+`descendantCutClearanceThreshold D₀ C_B`, the conclusion of
+`descendant_birthTemplate_cutClearance` holds for every replacement.
+Source: area-law Section 11, lines 742–750, with the replacement scanner scales
+of lines 735–737 and Lemma 11.4 (`geometry:repair-induction`, lines 471–485). -/
+theorem descendant_birthTemplate_cutClearance_of_le {Sstar : ℝ}
+    (hS : repairMarginThreshold (1 / 128) ≤ Sstar) (C : ℕ) (D₀ CB : ℝ) (o : ℝ × ℝ)
+    (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ)) (k₀ : ℕ) (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀)
+    (hK : max (fineScaleIndexThreshold Sstar) (descendantCutClearanceThreshold D₀ CB) ≤ k₀) :
+    ∀ (j : ℕ) (x : (repairStage o Λ A C k₀ hC h₀ Sstar (j + 1)).regionIndex)
+      (m : (repairStage o Λ A C k₀ hC h₀ Sstar j).markIndex),
+      repairRegionParent o Λ A C k₀ hC h₀ Sstar j x = some m →
+      ∃ k, k₀ ≤ k ∧
+        repairHalfSide ((repairStage o Λ A C k₀ hC h₀ Sstar j).scale m) ≤
+          (2 : ℝ) ^ fineScaleIndex k ∧
+        (∀ y ∈ (repairStage o Λ A C k₀ hC h₀ Sstar (j + 1)).birth x,
+          ∀ z ∈ boundaryEndpoints Λ A,
+            ((C : ℝ) - 1) * 2 ^ k ≤ dist y (integerPoint z)) ∧
+        ∀ {Ctpl : ℝ} {n s₀ : ℕ} (T : Template Ctpl n s₀),
+          (∀ t ∈ T.points,
+            integerPoint t ∈ (repairStage o Λ A C k₀ hC h₀ Sstar (j + 1)).birth x) →
+          (s₀ : ℝ) ≤ 2 * repairHalfSide ((repairStage o Λ A C k₀ hC h₀ Sstar j).scale m) →
+          n ≤ ⌈CB * repairHalfSide ((repairStage o Λ A C k₀ hC h₀ Sstar j).scale m)⌉₊ →
+          T.IsSeparated D₀ (boundaryEndpoints Λ A) ∧
+            ∀ t ∈ T.points, ∀ z ∈ boundaryEndpoints Λ A,
+              2 * (n : ℝ) ^ (Exponents.beta : ℝ) < (Scan.ambientSupDistance t z : ℝ) := by
+  intro j x m hx
+  have hU := isUniformRepairInduction_of_le hS o Λ A C k₀ hC h₀ (le_of_max_le_left hK)
+  obtain ⟨k, hk, hu, hdist⟩ :=
+    repairStage_birth_endpoint_dist_ge o Λ A C k₀ hC h₀ Sstar hU j x m hx
+  obtain ⟨hk₀, hk₁, hk₂⟩ := descendant_cutClearance_scales_of_le ((le_of_max_le_right hK).trans hk)
+  have hd : 2 * repairHalfSide ((2 : ℝ) ^ fineScaleIndex k) ≤ (2 : ℝ) ^ k :=
+    (mul_le_mul_of_nonneg_left (repairHalfSide_le_rpow (by positivity)) (by norm_num)).trans hk₀
+  have hfar : ∀ y ∈ (repairStage o Λ A C k₀ hC h₀ Sstar (j + 1)).birth x,
+      ∀ z ∈ boundaryEndpoints Λ A, ((C : ℝ) - 1) * 2 ^ k ≤ dist y (integerPoint z) := by
+    intro y hy z hz
+    linarith [hdist y hy z hz]
+  refine ⟨k, hk, hu, hfar, fun T hT hs hn ↦ ?_⟩
+  exact T.cutClearance_of_endpoint_dist_ge hC hk₁ hk₂ (repairHalfSide_pos _).le hu
+    (fun t ht z hz ↦ hfar _ (hT t ht) z hz) hs hn
 
 /-- **Cut clearance of descendant birth templates.** There is a stopping-scale
 threshold such that, for every stopping scale `S_*` beyond it, every layer
@@ -370,7 +459,10 @@ scanner scale `n ≤ ⌈C_B u⌉` (in particular the replacement choice `s₀ = 
 `n = ⌈C_B u⌉`), satisfies `dist_∞(T, Z) > 4 D₀ s₀` and `dist_∞(T, Z) > 2 n ^ β`.
 Source: area-law Section 11, lines 742–750, with the replacement scanner scales
 of lines 735–737, Lemma 11.4 (`geometry:repair-induction`, lines 471–485), and
-the choice of `S_*` and then `k₀` after `C₀` and `C_B` (lines 756–774). -/
+the choice of `S_*` and then `k₀` after `C₀` and `C_B` (lines 756–774). The
+thresholds are `repairMarginThreshold (1/128)` and the larger of
+`fineScaleIndexThreshold S_*` and `descendantCutClearanceThreshold D₀ C_B`
+(`descendant_birthTemplate_cutClearance_of_le`). -/
 theorem descendant_birthTemplate_cutClearance :
     ∃ T₀ : ℝ, ∀ Sstar : ℝ, T₀ ≤ Sstar → ∀ (C : ℕ) (D₀ CB : ℝ), ∃ K : ℕ,
       ∀ (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ)) (k₀ : ℕ)
@@ -391,24 +483,7 @@ theorem descendant_birthTemplate_cutClearance :
               n ≤ ⌈CB * repairHalfSide ((repairStage o Λ A C k₀ hC h₀ Sstar j).scale m)⌉₊ →
               T.IsSeparated D₀ (boundaryEndpoints Λ A) ∧
                 ∀ t ∈ T.points, ∀ z ∈ boundaryEndpoints Λ A,
-                  2 * (n : ℝ) ^ (Exponents.beta : ℝ) < (Scan.ambientSupDistance t z : ℝ) := by
-  obtain ⟨a₀, -, T₀, hT₀⟩ := uniformRepairInductionStatement_holds
-  refine ⟨T₀, fun Sstar hS C D₀ CB ↦ ?_⟩
-  obtain ⟨K₁, hK₁⟩ := hT₀ Sstar hS C
-  obtain ⟨K₂, hK₂⟩ := eventually_atTop.mp (eventually_descendant_cutClearance_scales D₀ CB)
-  refine ⟨max K₁ K₂, fun o Λ A k₀ hC h₀ hK j x m hx ↦ ?_⟩
-  have hU := hK₁ o Λ A k₀ hC h₀ (le_of_max_le_left hK)
-  obtain ⟨k, hk, hu, hdist⟩ :=
-    repairStage_birth_endpoint_dist_ge o Λ A C k₀ hC h₀ Sstar hU j x m hx
-  obtain ⟨hk₀, hk₁, hk₂⟩ := hK₂ k ((le_of_max_le_right hK).trans hk)
-  have hd : 2 * repairHalfSide ((2 : ℝ) ^ fineScaleIndex k) ≤ (2 : ℝ) ^ k :=
-    (mul_le_mul_of_nonneg_left (repairHalfSide_le_rpow (by positivity)) (by norm_num)).trans hk₀
-  have hfar : ∀ y ∈ (repairStage o Λ A C k₀ hC h₀ Sstar (j + 1)).birth x,
-      ∀ z ∈ boundaryEndpoints Λ A, ((C : ℝ) - 1) * 2 ^ k ≤ dist y (integerPoint z) := by
-    intro y hy z hz
-    linarith [hdist y hy z hz]
-  refine ⟨k, hk, hu, hfar, fun T hT hs hn ↦ ?_⟩
-  exact T.cutClearance_of_endpoint_dist_ge hC hk₁ hk₂ (repairHalfSide_pos _).le hu
-    (fun t ht z hz ↦ hfar _ (hT t ht) z hz) hs hn
+                  2 * (n : ℝ) ^ (Exponents.beta : ℝ) < (Scan.ambientSupDistance t z : ℝ) :=
+  ⟨_, fun _ hS C D₀ CB ↦ ⟨_, descendant_birthTemplate_cutClearance_of_le hS C D₀ CB⟩⟩
 
 end TNLean.PEPS.AreaLaw.Geometry

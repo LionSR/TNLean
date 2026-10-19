@@ -26,6 +26,8 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 `08-scanner.tex`, lines 212–219 and 331–337, at `openai/math@adc7f124`.
 -/
 
+open TNLean.Lattice
+
 namespace TNLean.PEPS.AreaLaw.Scan
 
 open scoped BigOperators

@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.PEPS.AreaLaw.Geometry.FanRunTemplate
 import TNLean.PEPS.AreaLaw.Geometry.IsolatedStars
 import TNLean.PEPS.AreaLaw.Geometry.RepairDescendants
+import TNLean.PEPS.AreaLaw.Geometry.TwoFamilyExplicitThresholds
 
 /-!
 # Templates for belt tiles and replacements
@@ -36,7 +37,8 @@ and the replacement statements assume `S_* ≥ 1`. The source applies these temp
 to regions meeting the cut and chooses `S_*` large. The lattice-point premise is
 discharged for every belt tile or replacement whose current region at some later
 generation meets the cut by `repairStage_exists_integerPoint_mem_birth_of_oldInclusion`
-(`RepairBirthLatticePoint.lean`); the premise `S_* ≥ 1` remains here. Documented in
+(`RepairBirthLatticePoint.lean`), and the premise `S_* ≥ 1` by the choice `S_* ≥ 2`
+in `twoFamilyDecomposition` (`TwoFamilyAssembly.lean`). Documented in
 `docs/paper-gaps/arealaw2d_belt_replacement_template_scope.tex`.
 
 ## Main statements
@@ -64,6 +66,8 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 open Filter
 
 noncomputable section
+
+open TNLean.Lattice
 
 namespace TNLean.PEPS.AreaLaw.Geometry
 
@@ -252,6 +256,17 @@ end Stages
 
 /-! ### One scale constant for both kinds -/
 
+/-- The belt and replacement scanner coefficient `C_B = 32 C_tpl`. Auxiliary to the
+explicit constant of Theorem 1.1 (`docs/notes/arealaw2d_explicit_constant.tex`).
+Source: area-law Section 11, `10-geometry.tex`, lines 731–739 and 761–762. -/
+def beltScannerConstant (Ctpl : ℝ) : ℝ :=
+  32 * Ctpl
+
+/-- The belt scanner coefficient is positive for `C_tpl ≥ 1`. -/
+theorem beltScannerConstant_pos {Ctpl : ℝ} (hCtpl : 1 ≤ Ctpl) : 0 < beltScannerConstant Ctpl := by
+  unfold beltScannerConstant
+  linarith
+
 /-- **Belt and replacement templates with one scale constant.** For every
 `C_tpl ≥ 1` there is one constant `C_B > 0`, depending only on `C_tpl`, such
 that the following hold for every geometric datum, every lower layer index
@@ -262,8 +277,8 @@ that the following hold for every geometric datum, every lower layer index
   lattice point has a template with `s₀ = 2 u`, `n = ⌈C_B u⌉` and at most eight
   pieces.
 In both cases the template fields give `n ≥ C_tpl N₀ (s₀ + 1)` and
-`diam_∞ T ≤ n`. The constant is `C_B = 32 C_tpl`; it is fixed before `S_*` and
-`k₀`, as in the threshold order of lines 761–762.
+`diam_∞ T ≤ n`. The constant is `C_B = beltScannerConstant C_tpl = 32 C_tpl`; it is
+fixed before `S_*` and `k₀`, as in the threshold order of lines 761–762.
 Source: area-law Section 11, `10-geometry.tex`, lines 731–739 and 761–762. -/
 theorem exists_belt_replacement_templates (Ctpl : ℝ) (hCtpl : 1 ≤ Ctpl) :
     ∃ CB : ℝ, 0 < CB ∧
@@ -290,9 +305,11 @@ theorem exists_belt_replacement_templates (Ctpl : ℝ) (hCtpl : 1 ≤ Ctpl) :
               T.pieceCount ≤ 8 ∧
                 ∀ y : ℤ × ℤ, y ∈ T.points ↔
                   integerPoint y ∈ (repairStage o Λ A C k₀ hC h₀ Sstar (j + 1)).birth x := by
-  refine ⟨32 * Ctpl, by linarith, fun o k₀ Z C a b hC h₀ x s hxs w hw ↦ ?_,
+  refine ⟨beltScannerConstant Ctpl, beltScannerConstant_pos hCtpl,
+    fun o k₀ Z C a b hC h₀ x s hxs w hw ↦ ?_,
     fun o Λ A C k₀ hC h₀ Sstar hS j x m hx w hw ↦ ?_⟩
-  · exact initialBelt_exists_template Ctpl _ hCtpl (by linarith) o k₀ Z C a b hC h₀ x s hxs w hw
+  · exact initialBelt_exists_template Ctpl _ hCtpl (by unfold beltScannerConstant; linarith)
+      o k₀ Z C a b hC h₀ x s hxs w hw
   · exact repairReplacement_exists_template o Λ A C k₀ hC h₀ Sstar hS Ctpl _ hCtpl le_rfl
       j x m hx w hw
 
@@ -304,35 +321,12 @@ statement `L = ⌊n ^ (1 - ℓ)⌋ = o(u)` for the belt and replacement scanner 
 `n = ⌈C_B u⌉`, with `u = t_k` for a belt tile and `u` the removal half-side for
 a replacement.
 Source: area-law Section 11, `10-geometry.tex`, line 740, with
-`L = ⌊n ^ (1 - ℓ)⌋` as in `geometry:primary-limits` (lines 725–729). -/
+`L = ⌊n ^ (1 - ℓ)⌋` as in `geometry:primary-limits` (lines 725–729). The threshold is
+`beltReplacementScaleThreshold C_B ε`. -/
 theorem eventually_beltReplacementScaleLimit (CB : ℝ) {ε : ℝ} (hε : 0 < ε) :
     ∀ᶠ u : ℝ in atTop,
-      (⌊(⌈CB * u⌉₊ : ℝ) ^ (1 - (Exponents.geometryEll : ℝ))⌋₊ : ℝ) ≤ ε * u := by
-  have hℓ : (0 : ℝ) < Exponents.geometryEll := by norm_num [Exponents.geometryEll]
-  have hℓ1 : (0 : ℝ) ≤ 1 - Exponents.geometryEll := by norm_num [Exponents.geometryEll]
-  set e : ℝ := 1 - (Exponents.geometryEll : ℝ)
-  set B : ℝ := max CB 0 + 1
-  have hB : 0 < B := by positivity
-  have hBe : 0 < B ^ e := Real.rpow_pos_of_pos hB e
-  have hlim := tendsto_rpow_neg_atTop hℓ
-  filter_upwards [hlim.eventually (ge_mem_nhds (div_pos hε hBe)), eventually_ge_atTop 1]
-    with u hu hu1
-  have hu0 : 0 < u := by linarith
-  have hceil : (⌈CB * u⌉₊ : ℝ) ≤ B * u := by
-    have hmono : (⌈CB * u⌉₊ : ℝ) ≤ ⌈max CB 0 * u⌉₊ := by
-      exact_mod_cast Nat.ceil_mono (mul_le_mul_of_nonneg_right (le_max_left CB 0) hu0.le)
-    have hlt := Nat.ceil_lt_add_one (mul_nonneg (le_max_right CB 0) hu0.le)
-    nlinarith
-  have hsplit : u ^ e = u ^ (-(Exponents.geometryEll : ℝ)) * u := by
-    rw [← Real.rpow_add_one hu0.ne']
-    congr 1
-    ring
-  calc (⌊(⌈CB * u⌉₊ : ℝ) ^ e⌋₊ : ℝ) ≤ (⌈CB * u⌉₊ : ℝ) ^ e :=
-        Nat.floor_le (Real.rpow_nonneg (Nat.cast_nonneg _) e)
-    _ ≤ (B * u) ^ e := Real.rpow_le_rpow (Nat.cast_nonneg _) hceil hℓ1
-    _ = B ^ e * (u ^ (-(Exponents.geometryEll : ℝ)) * u) := by
-        rw [Real.mul_rpow hB.le hu0.le, hsplit]
-    _ ≤ B ^ e * (ε / B ^ e * u) := by gcongr
-    _ = ε * u := by field_simp
+      (⌊(⌈CB * u⌉₊ : ℝ) ^ (1 - (Exponents.geometryEll : ℝ))⌋₊ : ℝ) ≤ ε * u :=
+  eventually_atTop.2 ⟨beltReplacementScaleThreshold CB ε,
+    fun _ hu ↦ beltReplacementScaleLimit_of_beltReplacementScaleThreshold_le CB hε hu⟩
 
 end TNLean.PEPS.AreaLaw.Geometry

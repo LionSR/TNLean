@@ -28,3 +28,10 @@ open TNLean.PEPS.AreaLaw.Scan.CollarScan in
 depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
 #print axioms actualCharges_integral_bound_domainGraph
+
+open TNLean.PEPS.AreaLaw.Scan.CollarScan in
+/-- info:
+'TNLean.PEPS.AreaLaw.Scan.CollarScan.actualCharges_integral_bound_domainGraph_of_finiteFamilyTransportBound'
+depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms actualCharges_integral_bound_domainGraph_of_finiteFamilyTransportBound

@@ -23,48 +23,53 @@ initial fan runs, lines 299–318; and the initial-belt contribution to
 Source revision: `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 -/
 
+open TNLean.Lattice
+
 namespace TNLean.PEPS.AreaLaw.Geometry
 
-/-- The carrier of the actual initial belt regions is finite, and its
-cardinality is bounded by one constant times the edge boundary and the
-squared layer-width factor. The constant precedes all geometric data.
-The carrier is the literal belt summand of the existing initial region
-index, with the jointly chosen residues used by the actual initial stage.
+/-- The initial belt count coefficient `512 B₀` with
+`B₀ = polynomialDyadicBudget 0`. Auxiliary to the explicit constant of
+Theorem 1.1 (`docs/notes/arealaw2d_explicit_constant.tex`).
+Source: area-law Section 11, `geometry:belt-count`, lines 220–233, and
+`geometry:total-repairs`, lines 685–692. -/
+noncomputable def initialBeltCountConstant : ℝ :=
+  512 * polynomialDyadicBudget 0
 
-The intended argument restricts to the finite support of the selected belt
-layers, counts at most eight connected fan runs per cell, and applies the
-uniform selected-cell estimate with coefficient 64. If `B₀` bounds the
-numerical dyadic sum at exponent zero, the intended choice is `B = 512 * B₀`.
+/-- The initial belt count coefficient is positive. -/
+theorem initialBeltCountConstant_pos : 0 < initialBeltCountConstant :=
+  mul_pos (by norm_num) (polynomialDyadicBudget_pos 0)
 
+/-- **Initial belt count with an explicit coefficient.** The carrier of the
+actual initial belt regions is finite, and its cardinality is at most
+`initialBeltCountConstant (2 C₀ + 1) ^ 2 |∂A|`.
 Source: area-law Section 11, `geometry:belt-count`, lines 220–233;
-initial fan runs, lines 299–318; and `geometry:total-repairs`, lines 685–692,
-at `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`. -/
-theorem exists_uniform_initial_belt_card_bound :
-    ∃ B : ℝ, 0 < B ∧
-      ∀ (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ))
-        (C k₀ : ℕ) (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀),
-        let h := (Classical.choose_spec exists_uniform_separated_initial_marks).2
-          o Λ A C k₀ hC h₀
-        let a := Classical.choose h
-        let hb := Classical.choose_spec h
-        let b := Classical.choose hb
-        let F := fun k => beltCellIndices
-          (fineLayerIndices o k (fineScaleIndex k) (boundaryEndpoints Λ A) C)
-          (2 ^ (pitchScaleIndex k - fineScaleIndex k)) (a k) (b k)
-        let I : Type :=
-          Σ k : {k : ℕ // k₀ ≤ k},
-            Σ z : {z : ℤ × ℤ // z ∈ F k.val},
-              CellFanRun o (fineScaleIndex k.val) z.val
-                (fineLayerSplitMask o k₀ k.val (boundaryEndpoints Λ A) C z.val)
-                (beltCellFanColor o k₀ (boundaryEndpoints Λ A) C a b k.val z.val
-                  hC h₀ k.property z.property)
-        Finite I ∧
-          (Nat.card I : ℝ) ≤
-            B * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary Λ A).card := by
+initial fan runs, lines 299–318; and `geometry:total-repairs`, lines 685–692. -/
+theorem initial_belt_card_le (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ))
+    (C k₀ : ℕ) (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀) :
+    let h := (Classical.choose_spec exists_uniform_separated_initial_marks).2
+      o Λ A C k₀ hC h₀
+    let a := Classical.choose h
+    let hb := Classical.choose_spec h
+    let b := Classical.choose hb
+    let F := fun k => beltCellIndices
+      (fineLayerIndices o k (fineScaleIndex k) (boundaryEndpoints Λ A) C)
+      (2 ^ (pitchScaleIndex k - fineScaleIndex k)) (a k) (b k)
+    let I : Type :=
+      Σ k : {k : ℕ // k₀ ≤ k},
+        Σ z : {z : ℤ × ℤ // z ∈ F k.val},
+          CellFanRun o (fineScaleIndex k.val) z.val
+            (fineLayerSplitMask o k₀ k.val (boundaryEndpoints Λ A) C z.val)
+            (beltCellFanColor o k₀ (boundaryEndpoints Λ A) C a b k.val z.val
+              hC h₀ k.property z.property)
+    Finite I ∧
+      (Nat.card I : ℝ) ≤
+        initialBeltCountConstant * (2 * (C : ℝ) + 1) ^ 2 *
+          (edgeBoundary Λ A).card := by
   classical
-  obtain ⟨B₀, hB₀, hbudget⟩ := exists_uniform_polynomial_dyadic_sum_bound 0
-  refine ⟨512 * B₀, mul_pos (by norm_num) hB₀, ?_⟩
-  intro o Λ A C k₀ hC h₀ h a hb b F I
+  unfold initialBeltCountConstant
+  intro h a hb b F I
+  set B₀ := polynomialDyadicBudget 0
+  have hbudget := sum_le_polynomialDyadicBudget 0
   obtain ⟨hFcard, hFfinite, _, _, _, _⟩ :=
     initialRepairStage_mark_spec o Λ A C k₀ hC h₀
   let K : Finset ℕ := hFfinite.toFinset.filter (k₀ ≤ ·)
@@ -118,5 +123,45 @@ theorem exists_uniform_initial_belt_card_bound :
     (show 0 ≤ 512 * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary Λ A).card by
       positivity) using 1
   ring
+
+/-- The carrier of the actual initial belt regions is finite, and its
+cardinality is bounded by one constant times the edge boundary and the
+squared layer-width factor. The constant precedes all geometric data.
+The carrier is the literal belt summand of the existing initial region
+index, with the jointly chosen residues used by the actual initial stage.
+
+The intended argument restricts to the finite support of the selected belt
+layers, counts at most eight connected fan runs per cell, and applies the
+uniform selected-cell estimate with coefficient 64. If `B₀` bounds the
+numerical dyadic sum at exponent zero, the intended choice is `B = 512 * B₀`;
+with `B₀ = polynomialDyadicBudget 0` this is `initialBeltCountConstant`
+(`initial_belt_card_le`).
+
+Source: area-law Section 11, `geometry:belt-count`, lines 220–233;
+initial fan runs, lines 299–318; and `geometry:total-repairs`, lines 685–692,
+at `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`. -/
+theorem exists_uniform_initial_belt_card_bound :
+    ∃ B : ℝ, 0 < B ∧
+      ∀ (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ))
+        (C k₀ : ℕ) (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀),
+        let h := (Classical.choose_spec exists_uniform_separated_initial_marks).2
+          o Λ A C k₀ hC h₀
+        let a := Classical.choose h
+        let hb := Classical.choose_spec h
+        let b := Classical.choose hb
+        let F := fun k => beltCellIndices
+          (fineLayerIndices o k (fineScaleIndex k) (boundaryEndpoints Λ A) C)
+          (2 ^ (pitchScaleIndex k - fineScaleIndex k)) (a k) (b k)
+        let I : Type :=
+          Σ k : {k : ℕ // k₀ ≤ k},
+            Σ z : {z : ℤ × ℤ // z ∈ F k.val},
+              CellFanRun o (fineScaleIndex k.val) z.val
+                (fineLayerSplitMask o k₀ k.val (boundaryEndpoints Λ A) C z.val)
+                (beltCellFanColor o k₀ (boundaryEndpoints Λ A) C a b k.val z.val
+                  hC h₀ k.property z.property)
+        Finite I ∧
+          (Nat.card I : ℝ) ≤
+            B * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary Λ A).card :=
+  ⟨_, initialBeltCountConstant_pos, initial_belt_card_le⟩
 
 end TNLean.PEPS.AreaLaw.Geometry

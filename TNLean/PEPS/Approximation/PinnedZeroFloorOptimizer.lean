@@ -34,6 +34,7 @@ noncomputable section
 
 open Matrix
 open scoped BigOperators InnerProductSpace Matrix.Norms.L2Operator
+open TNLean.Lattice
 
 namespace TNLean.PEPS.Approximation
 
@@ -42,7 +43,7 @@ open Pinned.NestedFilter Pinned.NestedFilter.Energy
 /-- Exact once-counted cardinality, using the two existing count transports. -/
 theorem Pinned.NestedFilter.Energy.card_edgeBoundary_eq_crossingCount {L : ℕ}
     (A : Finset (Vertex L)) :
-    (AreaLaw.edgeBoundary (AreaLaw.rectangularDomain L L)
+    (Lattice.edgeBoundary (AreaLaw.rectangularDomain L L)
       (A.map (AreaLaw.rectangleSiteEquiv L L).toEmbedding)).card =
       crossingCount A := by
   classical
@@ -56,18 +57,18 @@ theorem Pinned.NestedFilter.Energy.card_edgeBoundary_eq_crossingCount {L : ℕ}
 
 /-- The existing source/native bijection followed by graph-isomorphism transport. -/
 private def rectangleForwardEdgeEquiv (L : ℕ)
-    [LinearOrder (AreaLaw.Site (AreaLaw.rectangularDomain L L))] :
-    ForwardEdge L ≃ Edge (AreaLaw.domainGraph (AreaLaw.rectangularDomain L L)) :=
+    [LinearOrder (Lattice.Site (AreaLaw.rectangularDomain L L))] :
+    ForwardEdge L ≃ Edge (Lattice.domainGraph (AreaLaw.rectangularDomain L L)) :=
   (forwardSquareEdgeEquiv L).trans (Edge.equiv (AreaLaw.rectangleGraphIso L L))
 
 /-- The crossing predicate is insensitive to the endpoint swap caused by the
 chosen target order. No order compatibility of rectangleSiteEquiv is assumed. -/
 private theorem rectangleForwardEdge_crosses_iff {L : ℕ}
-    [LinearOrder (AreaLaw.Site (AreaLaw.rectangularDomain L L))]
+    [LinearOrder (Lattice.Site (AreaLaw.rectangularDomain L L))]
     (A : Finset (Vertex L)) (e : ForwardEdge L) :
     s((rectangleForwardEdgeEquiv L e).1.1,
       (rectangleForwardEdgeEquiv L e).1.2) ∈
-        AreaLaw.edgeBoundary (AreaLaw.rectangularDomain L L)
+        Lattice.edgeBoundary (AreaLaw.rectangularDomain L L)
           (A.map (AreaLaw.rectangleSiteEquiv L L).toEmbedding) ↔
       Crosses A e := by
   classical
@@ -93,15 +94,15 @@ private theorem rectangleForwardEdge_crosses_iff {L : ℕ}
 
 /-- Every canonical edge inherits the original one-crossing condition. -/
 private theorem rectangle_singleCrossing {L m : ℕ}
-    [LinearOrder (AreaLaw.Site (AreaLaw.rectangularDomain L L))]
+    [LinearOrder (Lattice.Site (AreaLaw.rectangularDomain L L))]
     (X : Fin m → Finset (Vertex L))
     (hsingle : ∀ e : ForwardEdge L, ∀ i j : Fin m,
       Crosses (X i) e → Crosses (X j) e → i = j) :
-    ∀ e : Edge (AreaLaw.domainGraph (AreaLaw.rectangularDomain L L)),
+    ∀ e : Edge (Lattice.domainGraph (AreaLaw.rectangularDomain L L)),
       ∀ i j : Fin m,
-        s(e.1.1, e.1.2) ∈ AreaLaw.edgeBoundary (AreaLaw.rectangularDomain L L)
+        s(e.1.1, e.1.2) ∈ Lattice.edgeBoundary (AreaLaw.rectangularDomain L L)
           ((X i).map (AreaLaw.rectangleSiteEquiv L L).toEmbedding) →
-        s(e.1.1, e.1.2) ∈ AreaLaw.edgeBoundary (AreaLaw.rectangularDomain L L)
+        s(e.1.1, e.1.2) ∈ Lattice.edgeBoundary (AreaLaw.rectangularDomain L L)
           ((X j).map (AreaLaw.rectangleSiteEquiv L L).toEmbedding) →
         i = j := by
   intro e i j hi hj
@@ -155,7 +156,7 @@ private theorem canonicalCrossingBudget_eq_original {L q m : ℕ} {J : ℝ}
     (h : SquareHamiltonian L q J) (X : Fin m → Finset (Vertex L))
     (a : Fin m → ℝ) :
     (q : ℝ) ^ 2 * max J 0 * ∑ j : Fin m, a j ^ 2 *
-      (AreaLaw.edgeBoundary (AreaLaw.rectangularDomain L L)
+      (Lattice.edgeBoundary (AreaLaw.rectangularDomain L L)
         ((X j).map (AreaLaw.rectangleSiteEquiv L L).toEmbedding)).card =
     (q : ℝ) ^ 2 * J * ∑ j : Fin m,
       (crossingCount (X j) : ℝ) * a j ^ 2 := by
@@ -240,24 +241,24 @@ theorem SquareHamiltonian.exists_pinned_maximizer_energy_fidelity
       Δ * (1 - ‖⟪Ω, normalizedOutput F Ω⟫_ℂ‖ ^ 2) ≤
         (q : ℝ) ^ 2 * J * ∑ j : Fin m, (crossingCount (X j) : ℝ) * a j ^ 2 := by
   classical
-  let : LinearOrder (AreaLaw.Site (AreaLaw.rectangularDomain L L)) :=
+  let : LinearOrder (Lattice.Site (AreaLaw.rectangularDomain L L)) :=
     LinearOrder.lift' (AreaLaw.rectangleSiteEquiv L L).symm
       (AreaLaw.rectangleSiteEquiv L L).symm.injective
   have hD : ∀ i j : Fin m, i ≤ j → canonicalRegions X i ⊆ canonicalRegions X j := by
     intro i j hij
     simpa only [canonicalRegions_fin, Finset.map_subset_map] using hX hij
-  have hsep : ∀ e : Edge (AreaLaw.domainGraph (AreaLaw.rectangularDomain L L)),
+  have hsep : ∀ e : Edge (Lattice.domainGraph (AreaLaw.rectangularDomain L L)),
       ∀ i j : Fin m,
-        s(e.1.1, e.1.2) ∈ AreaLaw.edgeBoundary (AreaLaw.rectangularDomain L L)
+        s(e.1.1, e.1.2) ∈ Lattice.edgeBoundary (AreaLaw.rectangularDomain L L)
           (canonicalRegions X i) →
-        s(e.1.1, e.1.2) ∈ AreaLaw.edgeBoundary (AreaLaw.rectangularDomain L L)
+        s(e.1.1, e.1.2) ∈ Lattice.edgeBoundary (AreaLaw.rectangularDomain L L)
           (canonicalRegions X j) → i = j := by
     simpa only [canonicalRegions_fin] using rectangle_singleCrossing X hsingle
   obtain ⟨K, hK, hmax, hresult⟩ :=
     (nonnegativeBoundHamiltonian h).exists_zero_floor_maximizer_energy_fidelity
       (le_max_right J 0) hΩ (canonicalRegions X) hD hsep a ha ha1
   have hbudget : (q : ℝ) ^ 2 * max J 0 * ∑ j : Fin m, a j ^ 2 *
-      (AreaLaw.edgeBoundary (AreaLaw.rectangularDomain L L) (canonicalRegions X j)).card =
+      (Lattice.edgeBoundary (AreaLaw.rectangularDomain L L) (canonicalRegions X j)).card =
       (q : ℝ) ^ 2 * J * ∑ j : Fin m, (crossingCount (X j) : ℝ) * a j ^ 2 := by
     simpa only [canonicalRegions_fin] using canonicalCrossingBudget_eq_original h X a
   dsimp only at hresult
