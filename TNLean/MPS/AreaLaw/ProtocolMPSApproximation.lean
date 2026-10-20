@@ -144,21 +144,19 @@ theorem exists_protocol_isOpenMPS_norm_sub_phase_le
                 (B : ℝ) ≤ C * (L : ℝ) ^ n ∧
                 ∃ θ : ℝ, ‖Φ - Complex.exp (θ * Complex.I) • Ω‖ ≤ 1 / (L : ℝ) := by
   classical
-  let : NeZero q := ⟨by omega⟩
   obtain ⟨D, K, s, L₀, hL₀, hD, _hK, hfamily⟩ :=
     exists_uniform_preparation_family q hq R J Δ hΔ
   let ι := {a : Σ L : ℕ, ChainHamiltonian L q R J ×
-      EuclideanSpace ℂ (Fin L → Fin q) × ℝ × (Fin L → ℝ × ℝ) //
-    L₀ ≤ a.1 ∧ Matrix.IsGappedGroundState a.2.1.operator a.2.2.2.1 a.2.2.1 Δ}
+      EuclideanSpace ℂ (Fin L → Fin q) × ℝ //
+    L₀ ≤ a.1 ∧ Matrix.IsGappedGroundState a.2.1.operator a.2.2.2 a.2.2.1 Δ}
   let length := fun i : ι ↦ i.val.1
   let width := fun i : ι ↦ ⌈D * Real.log (length i : ℝ)⌉₊
   let ground := fun i : ι ↦ i.val.2.2.1
-  let positions := fun i : ι ↦ i.val.2.2.2.2
   let hLpos := fun i : ι ↦ Nat.lt_of_lt_of_le (by omega : 0 < L₀) i.property.1
   obtain ⟨hx, circuits, hsize, hcount, hphysical, harity, hlifetime,
       hmonomial, htermwise, htarget, hdensity, hgate, _houter, hwidths⟩ := hfamily
   let C₀ := fun i : ι ↦
-    preparationConstruction (ground i) (positions i) (hLpos i) (hx i) (circuits i)
+    preparationConstruction (w := width i) (ground i) (hLpos i) (hx i) (circuits i)
   let target := fun i : ι ↦ LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
     (mainConfigurationEquiv (length i) (width i) q) (ground i)
   obtain ⟨Cp, α, hCp, hα, hnetwork⟩ := exists_uniform_sampled_block_column
@@ -179,8 +177,7 @@ theorem exists_protocol_isOpenMPS_norm_sub_phase_le
   intro L hL h Ω E₀ hgs
   have hLreal : (1 : ℝ) ≤ L := by exact_mod_cast (show 1 ≤ L by omega)
   by_cases hlarge : L₀ ≤ L
-  · let pos : Fin L → ℝ × ℝ := fun x ↦ ((x.val : ℝ), 0)
-    let i : ι := ⟨⟨L, h, Ω, E₀, pos⟩, hlarge, hgs⟩
+  · let i : ι := ⟨⟨L, h, Ω, E₀⟩, hlarge, hgs⟩
     let w := ⌈D * Real.log (L : ℝ)⌉₊
     have herrors := protocol_error_bounds hL
     obtain ⟨Gate, hGateFinite, hGateDecidable, participants, root, hroot,
