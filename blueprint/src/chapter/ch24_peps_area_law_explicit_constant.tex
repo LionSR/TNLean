@@ -481,9 +481,7 @@ every upper bound for $C_{\rm box}$.
 % Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 \begin{definition}[Ground states of range-$R$ Hamiltonians on the square]
     \label{def:square_range_ground_states}
-    \lean{TNLean.PEPS.Approximation.IsRangeSquareGroundState,
-        TNLean.PEPS.Approximation.IsRangeSquareGroundState.norm_eq_one,
-        TNLean.PEPS.Approximation.IsSquareGroundState.isRangeSquareGroundState}
+    \lean{TNLean.PEPS.Approximation.IsRangeSquareGroundState}
     \leanok
     \uses{def:area_law_hamiltonian,def:square_entropy_area_law_at}
     Fix integers $q\ge1$ and $R\ge0$ and reals $J\ge0$ and $\Delta>0$. The
@@ -493,10 +491,29 @@ every upper bound for $C_{\rm box}$.
     whose terms are supported on sets of diameter at most $R$ and have norm
     at most $J$, together with some real $E_0$, satisfies $\|\Omega\|=1$,
     $H\Omega=E_0\Omega$ and $H-E_0I\ge\Delta(I-|\Omega\rangle\langle\Omega|)$.
-    Every ground state of the model at $J$ and $\Delta$ is a ground state at
-    range one: the Hermitian parts of its site and edge terms are supported
-    on sets of diameter at most one.
 \end{definition}
+
+\begin{lemma}[Ground states of the model are ground states at range one]
+    \label{lem:square_ground_states_range_one}
+    \lean{TNLean.PEPS.Approximation.IsRangeSquareGroundState.norm_eq_one,
+        TNLean.PEPS.Approximation.IsSquareGroundState.isRangeSquareGroundState}
+    \leanok
+    \uses{def:square_range_ground_states,def:square_entropy_area_law_at}
+    Every ground state at range $R$ is a unit vector. For $J\ge0$, every
+    ground state of the model at $J$ and $\Delta$ is a ground state at range
+    one.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The first claim is the normalization in
+    Definition~\ref{def:square_range_ground_states}, since the identification
+    of the grid with $\Lambda$ preserves norms. For the second, place the
+    Hermitian parts of the site and edge terms of the Hamiltonian on their
+    supports in $\Lambda$, which have diameter at most one, and the zero
+    operator on every other support. The terms keep the norm bound $J$, their
+    sum is the original Hamiltonian, and the ground vector and the gap are
+    carried along the identification.
+\end{proof}
 
 % Status: auxiliary result. Proposition 2.1 of the polynomial-PEPS source
 % concerns nearest-neighbour interactions and asserts only that a constant
@@ -546,8 +563,7 @@ every upper bound for $C_{\rm box}$.
     \label{thm:square_area_law_closed_constant}
     \lean{TNLean.PEPS.AreaLaw.squareEntropyAreaLawAt_closed}
     \leanok
-    \uses{def:square_entropy_area_law_at,def:area_law_closed_constant,
-        def:square_range_ground_states}
+    \uses{def:square_entropy_area_law_at,def:area_law_closed_constant}
     Fix $q\ge1$, $J\ge0$ and $\Delta>0$. Then the square-grid entropy area
     law of Definition~\ref{def:square_entropy_area_law_at} holds for the
     ground states of the model at $J$ and $\Delta$ with the constant $C_{\rm AL}(q,1,J,\Delta)$ of
@@ -555,9 +571,13 @@ every upper bound for $C_{\rm box}$.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:square_area_law_range_constant}
+    \uses{thm:square_area_law_range_constant,
+        lem:square_ground_states_range_one,
+        lem:square_entropy_area_law_at_mono}
     Every ground state of the model at $J$ and $\Delta$ is a ground state at
-    range one by Definition~\ref{def:square_range_ground_states}, so this is
+    range one by Lemma~\ref{lem:square_ground_states_range_one}, and the law
+    passes to smaller families by
+    Lemma~\ref{lem:square_entropy_area_law_at_mono}, so this is
     the case $R=1$ of Theorem~\ref{thm:square_area_law_range_constant} with
     the constant $C_{\rm AL}(q,1,J,\Delta)$.
 \end{proof}
