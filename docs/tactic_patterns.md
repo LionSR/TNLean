@@ -4660,8 +4660,9 @@ three-plaquette output measurement, and the routed reunion measurement.
   `IsReordering.isAllowed`, `IsReordering.usesOnly` and
   `IsReordering.sourceCount_eq`, in
   `TNLean/Lattice/PartyCircuit/SiteRegisters.lean`.
-- **Call sites:** `SiteRegisters.lean`, `RegisterReordering.lean`,
-  `FrameRegisters.lean`, `TwoSheetRegisters.lean` and
+- **Call sites:** `SiteRegisters.lean`, `Lattice/Sheet/Reordering.lean`,
+  `Lattice/Sheet/Registers.lean`, `Lattice/Sheet/TwoRegisters.lean`,
+  `RegisterReordering.lean`, `TwoSheetRegisters.lean` and
   `FrameBoundedChanges.lean` (2026-10-09). A composite of reorderings closes
   by `simp [w]`; a word with local maps passes the projections to `simp` as
   conditional rewrites.
