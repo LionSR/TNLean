@@ -70,25 +70,16 @@
 
 \begin{definition}[Closed-form cell and angular constants]
     \label{def:peps_closed_information_constants}
-    \lean{TNLean.PEPS.Approximation.collarBoxConstantClosed,
-        TNLean.PEPS.Approximation.collarConstantClosed,
-        TNLean.PEPS.Approximation.collarThresholdClosed,
-        TNLean.PEPS.Approximation.cellInformationConstantClosed,
+    \lean{TNLean.PEPS.Approximation.cellInformationConstantClosed,
         TNLean.PEPS.Approximation.cellInformationExponentClosed,
         TNLean.PEPS.Approximation.angularThresholdClosed}
     \leanok
-    \uses{def:area_law_collar_bound,def:peps_cell_information_constants,
+    \uses{def:peps_closed_collar_constants,def:peps_cell_information_constants,
         def:peps_angular_information_constants,
         def:peps_collar_amplification_constants}
-    For $q\in\mathbb N$ and $J,\Delta\in\mathbb R$, let $C_{\rm box}(q,J,\Delta)$
-    be the safe-box constant of \cite[Proposition~9.5]{OpenAI2026AreaLaw} at
-    range one, at the transport constants with threshold $1/8$, entropy constant
-    $200000$ with exponent $2$, and energy constant
-    $3(18\pi^2+6144e^{\pi^2+1})$ with exponent $4$. Let $C(q,J,\Delta)$ and
-    $N(q,J,\Delta)$ be the constant and threshold of the range-one sublinear
-    collar bound of \cite[Proposition~9.6]{OpenAI2026AreaLaw} at this safe-box
-    constant, the truncation constant at the factor $10$ and these transport
-    constants. With $C_a=C_a(q,1,J,\Delta,C)$ and
+    For $q\in\mathbb N$ and $J,\Delta\in\mathbb R$, let $C=C(q,1,J,\Delta)$
+    and $N=N(q,1,J,\Delta)$ be the closed-form collar constant and threshold
+    at range one of Definition~\ref{def:peps_closed_collar_constants}. With $C_a=C_a(q,1,J,\Delta,C)$ and
     $N_a=N_a(q,1,J,\Delta,C)$, let $C_{\rm cell}(q,J,\Delta,c)$ and
     $K_{\rm cell}(q,J,\Delta,c)$ be the cell constants at the template constant
     $24$, the threshold $N$ and $(C_a,N_a)$, and let
@@ -98,17 +89,14 @@
 
 \begin{theorem}[Cell and angular information at closed-form constants]
     \label{thm:peps_information_from_gap_closed}
-    \lean{TNLean.PEPS.Approximation.sublinearCollarBoundAt_closed,
-        TNLean.PEPS.Approximation.cellInformationConstantClosed_pos,
+    \lean{TNLean.PEPS.Approximation.cellInformationConstantClosed_pos,
         TNLean.PEPS.Approximation.cellInformationExponentClosed_pos,
         TNLean.PEPS.Approximation.cell_conditionalMutualInformation_le_square_closed,
         TNLean.PEPS.Approximation.isAngularScale_closed_le}
     \leanok
-    \uses{def:area_law_collar_bound,def:polynomial_peps_model,def:peps_angular_scale,
+    \uses{def:polynomial_peps_model,def:peps_angular_scale,
         def:peps_closed_information_constants}
-    Fix $q\in\mathbb N$ with $q\ge1$, $J\ge0$ and $\Delta>0$. The range-one
-    sublinear collar bound with clearance $13$ and template constant $24$ holds
-    with constant $C(q,J,\Delta)$ and threshold $N(q,J,\Delta)$. For every
+    Fix $q\in\mathbb N$ with $q\ge1$, $J\ge0$ and $\Delta>0$. For every
     $c>0$, the conclusion of
     Theorem~\ref{thm:peps_cell_conditional_information_from_gap} holds with
     $C_1=C_{\rm cell}(q,J,\Delta,c)$ and $K=K_{\rm cell}(q,J,\Delta,c)$. For
@@ -118,14 +106,10 @@
     accuracy $L^{-p}$ in the sense of Definition~\ref{def:peps_angular_scale}.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:area_law_sublinear_collar_explicit,
-        thm:area_law_transport_bound_explicit,
+    \uses{thm:peps_collar_closed,
         thm:peps_information_of_collar_named_amplification}
-    The stated transport constants satisfy the common step-error bound by
-    Theorem~\ref{thm:area_law_transport_bound_explicit}, so
-    Theorem~\ref{thm:area_law_sublinear_collar_explicit} with $R=1$, $D_0=13$
-    and $C_{\rm tpl}=24$ gives the collar bound with constant $C$ and threshold
-    $N$. The constants $C_{\rm cell}$ and $K_{\rm cell}$ are positive, and
+    Theorem~\ref{thm:peps_collar_closed} with $R=1$ and $D_0=13$ gives the
+    collar bound with template constant $24$, constant $C$ and threshold $N$. The constants $C_{\rm cell}$ and $K_{\rm cell}$ are positive, and
     Theorem~\ref{thm:peps_information_of_collar_named_amplification} gives the
     remaining conclusions.
 \end{proof}
