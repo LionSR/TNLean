@@ -89,6 +89,20 @@ def IsMonomialBounded (K : ℕ) : {a b : Layout P} → OriginalCircuit a b → P
   | _, _, @OriginalCircuit.nonprivateGate _ _ _ _ _ _ _ L _ _ _ => L.length ≤ K
   | _, _, .swap .. => True
   | _, _, .frame _ w => w.IsMonomialBounded K
+
+/-- Increasing a monomial-count bound preserves the original expansion condition.
+Source: polynomial-PEPS, `04-compression.tex`, lines 137–151. -/
+theorem isMonomialBounded_mono {a b : Layout P} (w : OriginalCircuit a b)
+    {K K' : ℕ} (h : w.IsMonomialBounded K) (hKK : K ≤ K') :
+    w.IsMonomialBounded K' := by
+  induction w with
+  | id => trivial
+  | comp w v ihw ihv => exact ⟨ihw h.1, ihv h.2⟩
+  | privateMap => trivial
+  | nonprivateGate => exact h.trans hKK
+  | swap => trivial
+  | frame r w ih => exact ih h
+
 /-- Every gate of the actual source-only replacement has at most `K m^r`
 monomials and coefficient sum at most the original bound `S`. Both bounds are
 derived from the original circuit data; inserted exchanges add no gate expansions.

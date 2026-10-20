@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Lattice.PartyCircuit.OriginalCircuitSequence
 import TNLean.PEPS.Approximation.OriginalCircuitGateMaps
-import TNLean.PEPS.Approximation.OriginalProducerResources
+import TNLean.Lattice.PartyCircuit.OriginalProducerResources
 import TNLean.PEPS.Approximation.SheetStackChange
 import Lean.Util.CollectAxioms
 

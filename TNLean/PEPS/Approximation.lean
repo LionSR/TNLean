@@ -63,12 +63,8 @@ import TNLean.PEPS.Approximation.AngularWholeCellInformation
 import TNLean.PEPS.Approximation.AngularWholeCellInformationFromCollar
 import TNLean.PEPS.Approximation.ApproximateCircuitBudget
 import TNLean.PEPS.Approximation.ApproximateCircuitDensity
-import TNLean.PEPS.Approximation.ApproximateCircuitError
 import TNLean.PEPS.Approximation.ApproximateCircuitPolynomial
 import TNLean.PEPS.Approximation.ApproximateCircuitRealAccuracy
-import TNLean.PEPS.Approximation.ApproximateCircuitResources
-import TNLean.PEPS.Approximation.ApproximateGateEvaluation
-import TNLean.PEPS.Approximation.ApproximateGateRescaling
 import TNLean.PEPS.Approximation.ApproximateSampledNetworkApproximation
 import TNLean.PEPS.Approximation.ApproximateSourceSampling
 import TNLean.PEPS.Approximation.AuxiliaryRegisterFiniteness
@@ -243,7 +239,6 @@ import TNLean.PEPS.Approximation.IncidentSourceWord
 import TNLean.PEPS.Approximation.IncidentSourceWordComparison
 import TNLean.PEPS.Approximation.InformationReset
 import TNLean.PEPS.Approximation.JointSourceSumReindex
-import TNLean.PEPS.Approximation.LayoutEqualityCoordinates
 import TNLean.PEPS.Approximation.LayoutExcludedOwners
 import TNLean.PEPS.Approximation.LayoutPartitionWord
 import TNLean.PEPS.Approximation.LocalGateLabelCompatibility
@@ -274,11 +269,9 @@ import TNLean.PEPS.Approximation.NonemptyGateLabels
 import TNLean.PEPS.Approximation.NonincidentAllGateRestriction
 import TNLean.PEPS.Approximation.OrderedGateLabelPairSum
 import TNLean.PEPS.Approximation.OriginalCircuitGateMaps
-import TNLean.PEPS.Approximation.OriginalCircuitSourceBound
 import TNLean.PEPS.Approximation.OriginalCoefficientMajorant
 import TNLean.PEPS.Approximation.OriginalGateSamplePhysicalSum
 import TNLean.PEPS.Approximation.OriginalNestedPatchEntropy
-import TNLean.PEPS.Approximation.OriginalProducerResources
 import TNLean.PEPS.Approximation.OutputPartitionCoordinates
 import TNLean.PEPS.Approximation.OwnerMemoryTransport
 import TNLean.PEPS.Approximation.OwnerOutputCoordinates

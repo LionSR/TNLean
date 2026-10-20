@@ -9,6 +9,10 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.Lattice.PartyCircuit
 
 import TNLean.Lattice.PartyCircuit.AffectedOwners
+import TNLean.Lattice.PartyCircuit.ApproximateCircuitError
+import TNLean.Lattice.PartyCircuit.ApproximateCircuitResources
+import TNLean.Lattice.PartyCircuit.ApproximateGateEvaluation
+import TNLean.Lattice.PartyCircuit.ApproximateGateRescaling
 import TNLean.Lattice.PartyCircuit.CommonPairSources
 import TNLean.Lattice.PartyCircuit.CommonPartyMaps
 import TNLean.Lattice.PartyCircuit.CommonSourcePreparation
@@ -28,6 +32,7 @@ import TNLean.Lattice.PartyCircuit.FiniteSourceGate
 import TNLean.Lattice.PartyCircuit.FiniteSourcePreparation
 import TNLean.Lattice.PartyCircuit.FrontRegisters
 import TNLean.Lattice.PartyCircuit.GroupedBlockMap
+import TNLean.Lattice.PartyCircuit.LayoutEqualityCoordinates
 import TNLean.Lattice.PartyCircuit.LayoutOwnerMap
 import TNLean.Lattice.PartyCircuit.LocalPairSource
 import TNLean.Lattice.PartyCircuit.MatrixAction
@@ -35,6 +40,8 @@ import TNLean.Lattice.PartyCircuit.OriginalCircuit
 import TNLean.Lattice.PartyCircuit.OriginalCircuitChain
 import TNLean.Lattice.PartyCircuit.OriginalCircuitLift
 import TNLean.Lattice.PartyCircuit.OriginalCircuitSequence
+import TNLean.Lattice.PartyCircuit.OriginalCircuitSourceBound
+import TNLean.Lattice.PartyCircuit.OriginalProducerResources
 import TNLean.Lattice.PartyCircuit.PairEffectElimination
 import TNLean.Lattice.PartyCircuit.PairEffectSourcePreparation
 import TNLean.Lattice.PartyCircuit.PairSourceCombination

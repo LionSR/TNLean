@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.PartyPartitionAppend
 import TNLean.Lattice.PartyCircuit.LayoutOwnerMap
-import TNLean.PEPS.Approximation.LayoutEqualityCoordinates
+import TNLean.Lattice.PartyCircuit.LayoutEqualityCoordinates
 
 /-!
 # Physical and discarded coordinates adapted to a party partition
