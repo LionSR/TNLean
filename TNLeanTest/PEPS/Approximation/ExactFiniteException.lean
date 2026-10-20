@@ -21,14 +21,13 @@ example {L q : ℕ} {C c : ℝ} {Ω : StateSpace L q}
   h.mono_prefactor (le_max_left _ _)
 
 example {q L₀ : ℕ} {J Δ C c : ℝ} (hq : 2 ≤ q) (hc : 0 < c)
-    (hlarge : ∀ L : ℕ, 2 ≤ L → L₀ ≤ L → ∀ h : SquareHamiltonian L q J,
-      ∀ E₀ : ℝ, ∀ Ω : StateSpace L q,
-        h.IsGappedGroundState E₀ Ω Δ → HasPEPSApproximation C c L q Ω) :
+    (hlarge : ∀ L : ℕ, 2 ≤ L → L₀ ≤ L → ∀ Ω : StateSpace L q,
+      IsSquareGroundState q J Δ L Ω → HasPEPSApproximation C c L q Ω) :
     ∃ C' : ℝ, 0 < C' ∧ C ≤ C' ∧
-      ∀ L : ℕ, 2 ≤ L → ∀ h : SquareHamiltonian L q J,
-        ∀ E₀ : ℝ, ∀ Ω : StateSpace L q,
-          h.IsGappedGroundState E₀ Ω Δ → HasPEPSApproximation C' c L q Ω :=
-  exists_uniform_approximation_of_sufficiently_large (by omega) hc.le hlarge
+      ∀ L : ℕ, 2 ≤ L → ∀ Ω : StateSpace L q,
+        IsSquareGroundState q J Δ L Ω → HasPEPSApproximation C' c L q Ω :=
+  exists_uniform_approximation_of_sufficiently_large (fun _ _ hΩ ↦ hΩ.norm_eq_one)
+    (by omega) hc.le hlarge
 
 example
     (hlarge : ∀ q : ℕ, 2 ≤ q → ∀ J Δ : ℝ, 0 < J → 0 < Δ →

@@ -54,12 +54,12 @@ theorem RepaintingBaseline.central_treated_ne_subset {ι : Type*} (R : Repaintin
 
 section Changes
 
-variable {k q : ℕ} [NeZero q] {J Δ a A₀ D L₀' : ℝ} {m₀ : ℕ} {L : ℕ}
-  {h : SquareHamiltonian L q J} {E₀ : ℝ} {Ω : StateSpace L q} {K₀ ε₀ ν B₀ C c : ℝ}
+variable {k q : ℕ} [NeZero q] {a A₀ D L₀' : ℝ} {m₀ : ℕ} {L : ℕ}
+  {G : ∀ L : ℕ, StateSpace L q → Prop} {Ω : StateSpace L q} {K₀ ε₀ ν B₀ C c : ℝ}
 
-/-- **The central birth for the frames of sampled guides.** Assume `q ≥ 1`, a gapped ground state,
-and the exponent-`60` angular-scale condition with `L₀' ≤ L`, `m₀ ≥ 4`, `A₀ ≥ 1` and
-`a ≤ angularConstant / 2`. Take any guide-label repainting baseline `Bl`, translation `d`,
+/-- **The central birth for the frames of sampled guides.** Assume `q ≥ 1`, a unit state of the
+family `G`, and the exponent-`60` angular-scale condition with `L₀' ≤ L`, `m₀ ≥ 4`, `A₀ ≥ 1`
+and `a ≤ angularConstant / 2`. Take any guide-label repainting baseline `Bl`, translation `d`,
 `0 < t = D log L ≤ Bl.n ≤ A₀ * L`, and `2 * ε₀ ≤ angularConstant / 2`. Let `fb, fa` read the
 translated starting and central guides, homogenized to the old label on the four corner squares.
 Use their exact finite true-vertex sets, an exponent-`60` adaptive patch supply, and radius
@@ -70,8 +70,8 @@ the old and final owners, error `L⁻³⁰`, arbitrary natural pair-effect bound
 Both the monomial count and absolute coefficient sum are bounded by `K`; one pair source suffices.
 
 Polynomial-PEPS manuscript, `06-geometry.tex`, lines 155–160, 328–387 and 440–445. -/
-theorem centralBirth_hasFrameChange_of (hD : IsAngularScale q J Δ a A₀ m₀ 60 D L₀')
-    (hLL : L₀' ≤ L) (hΩ : h.IsGappedGroundState E₀ Ω Δ) (hm₀ : 4 ≤ m₀) (hA₀ : 1 ≤ A₀)
+theorem centralBirth_hasFrameChange_of (hD : IsAngularScale q G a A₀ m₀ 60 D L₀')
+    (hLL : L₀' ≤ L) (hΩ : G L Ω) (hΩ₁ : ‖Ω‖ = 1) (hm₀ : 4 ≤ m₀) (hA₀ : 1 ≤ A₀)
     (ha : a ≤ angularConstant / 2) (Bl : RepaintingBaseline GuideLabel) (d : ℝ × ℝ) {t : ℝ}
     (ht : 0 < t) (htD : t = D * Real.log L) (htn : t ≤ Bl.n) (hnL : Bl.n ≤ A₀ * L)
     (hε2 : 2 * ε₀ ≤ angularConstant / 2) {fb fa : ℝ × ℝ → GuideLabel}
@@ -141,7 +141,7 @@ theorem centralBirth_hasFrameChange_of (hD : IsAngularScale q J Δ a A₀ m₀ 6
   obtain ⟨w, hw, hu, hs, herr⟩ := centralBirth_step_guideFrame (L := L)
     (hole := suppliedPatch P _ hr)
     (V := Vb) (hV := hdb) (own := own) (ph := guidePlaceholder) (rank := rank)
-    hD hLL hΩ (fun v => cellCenterPos_eq_sitePosition_add v) hm₀ ha Bl d
+    hD hLL hΩ hΩ₁ (fun v => cellCenterPos_eq_sitePosition_add v) hm₀ ha Bl d
     ((1 : ℝ), (1 : ℝ)) ht.le htn hnL hε2 hfb hfa (fun z hz => (hmb z).1 hz)
     (fun z _ => ⟨suppliedPatch_center P hr z, by simp⟩) (T := T)
     (Q := own Bl.finalLabel)
@@ -165,8 +165,8 @@ theorem centralBirth_hasFrameChange_of (hD : IsAngularScale q J Δ a A₀ m₀ 6
   exacts [hPS, hQS]
 
 /-- **The central birth as a change of the main sheet, conditional on Proposition 3.4.** Assume
-`q ≥ 1`, a gapped ground state, and the exponent-`60` angular-scale condition with `L₀' ≤ L`,
-`m₀ ≥ 4` and `A₀ ≥ 1`. At the protocol constants, take `L ≥ 2`, `2 ^ k < 2 * L`, an
+`q ≥ 1`, a unit state of the family `G`, and the exponent-`60` angular-scale condition with
+`L₀' ≤ L`, `m₀ ≥ 4` and `A₀ ≥ 1`. At the protocol constants, take `L ≥ 2`, `2 ^ k < 2 * L`, an
 exponent-`60` adaptive patch supply, any rank and any already-repainted set. For a repaintable
 square `R` of side `n = 2 ^ j > K₀ t`, where `t = D log L`, pass from its starting frame to its
 central frame, both treated with the old label about the four corners. This has participants
@@ -177,8 +177,8 @@ already-repainted set.
 
 Polynomial-PEPS manuscript, `06-geometry.tex`, lines 155–160, 328–387 and 440–445; Lemma 6.5
 `lem:birth`, `05-frames.tex`. -/
-theorem centralBirth_hasFrameChange (hD : IsAngularScale q J Δ a A₀ m₀ 60 D L₀') (hLL : L₀' ≤ L)
-    (hΩ : h.IsGappedGroundState E₀ Ω Δ) (hm₀ : 4 ≤ m₀) (hA₀ : 1 ≤ A₀)
+theorem centralBirth_hasFrameChange (hD : IsAngularScale q G a A₀ m₀ 60 D L₀') (hLL : L₀' ≤ L)
+    (hΩ : G L Ω) (hΩ₁ : ‖Ω‖ = 1) (hm₀ : 4 ≤ m₀) (hA₀ : 1 ≤ A₀)
     (hc : IsProtocolConstants K₀ ε₀ ν a D B₀) (hL : 2 ≤ L) (hk2 : 2 ^ k < 2 * L)
     (P : AdaptivePatchSupply (cellCenterPos L) Ω B₀ C c 60 L) (rank : GuideLabel → ℕ)
     (R : RepaintedSquare k) (hlarge : K₀ * (D * Real.log L) < (2 : ℝ) ^ (R.1.1 : ℕ))
@@ -210,7 +210,7 @@ theorem centralBirth_hasFrameChange (hD : IsAngularScale q J Δ a A₀ m₀ 60 D
     (Or.inr (Or.inl rfl)) (cornerBlocks R.1.index) (protocolLevelLabels k R.1.1 done R.1.index)
   rw [homogenize_cornerBlocks] at hfb hfa
   rw [hFb, hFa]
-  exact centralBirth_hasFrameChange_of hD hLL hΩ hm₀ hA₀ hc.a_le
+  exact centralBirth_hasFrameChange_of hD hLL hΩ hΩ₁ hm₀ hA₀ hc.a_le
     (blockBaseline (n := (2 : ℝ) ^ (R.1.1 : ℕ)) (by positivity)
       (protocolLevelLabels k R.1.1 done) R.1.index (newParty Sum.inl R.1.1 R.1.index))
     (blockCorner ((2 : ℝ) ^ (R.1.1 : ℕ)) R.1.index) ht rfl

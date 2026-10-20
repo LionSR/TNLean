@@ -246,13 +246,13 @@ end PairChanges
 
 section Exchange
 
-variable {k q : ℕ} [NeZero q] {J Δ a A₀ D L₀' : ℝ} {m₀ : ℕ} {L : ℕ}
-  {h : SquareHamiltonian L q J} {E₀ : ℝ} {Ω : StateSpace L q} {ε₀ B₀ C c : ℝ}
+variable {k q : ℕ} [NeZero q] {a A₀ D L₀' : ℝ} {m₀ : ℕ} {L : ℕ}
+  {G : ∀ L : ℕ, StateSpace L q → Prop} {Ω : StateSpace L q} {ε₀ B₀ C c : ℝ}
 
 /-- **The lens exchange for sampled guides, conditional on Proposition 3.4.** Assume `q ≥ 1`, a
-gapped ground state, and the exponent-`60` angular-scale condition with `L₀' ≤ L`, `m₀ ≥ 2`,
-`A₀ ≥ 1` and `a ≤ angularConstant / 2`. Take any guide-label repainting baseline, edge list,
-edge and translation, with `0 < t = D log L ≤ n ≤ A₀ * L` and
+unit state of the family `G`, and the exponent-`60` angular-scale condition with `L₀' ≤ L`,
+`m₀ ≥ 2`, `A₀ ≥ 1` and `a ≤ angularConstant / 2`. Take any guide-label repainting baseline,
+edge list, edge and translation, with `0 < t = D log L ≤ n ≤ A₀ * L` and
 `2 * ε₀ * (angularConstant + 1) ≤ angularConstant / 2`. Read the four translated endpoint-treated
 guides: starting main and auxiliary before, first main and exchanged auxiliary after. Use their
 exact finite true-vertex sets, an exponent-`60` adaptive supply and radius
@@ -264,8 +264,8 @@ being exchanged.
 
 Polynomial-PEPS manuscript, `06-geometry.tex`, lines 183–221, 389–430 and 440–445; Lemma 6.6
 `lem:exchange`, `05-frames.tex`. -/
-theorem edgeExchange_hasPairChange_of (hD : IsAngularScale q J Δ a A₀ m₀ 60 D L₀')
-    (hLL : L₀' ≤ L) (hΩ : h.IsGappedGroundState E₀ Ω Δ) (hm₀ : 2 ≤ m₀) (hA₀ : 1 ≤ A₀)
+theorem edgeExchange_hasPairChange_of (hD : IsAngularScale q G a A₀ m₀ 60 D L₀')
+    (hLL : L₀' ≤ L) (hΩ : G L Ω) (hΩ₁ : ‖Ω‖ = 1) (hm₀ : 2 ≤ m₀) (hA₀ : 1 ≤ A₀)
     (ha : a ≤ angularConstant / 2) (Bl : RepaintingBaseline GuideLabel) (E : List SquareEdge)
     (e : SquareEdge) (d : ℝ × ℝ) (ht : 0 < D * Real.log L) (htn : D * Real.log L ≤ Bl.n)
     (hnL : Bl.n ≤ A₀ * L) (hε : 2 * ε₀ * (angularConstant + 1) ≤ angularConstant / 2)
@@ -388,7 +388,7 @@ theorem edgeExchange_hasPairChange_of (hD : IsAngularScale q J Δ a A₀ m₀ 60
     have hs' : closedBall (z - d) (2 * ε₀ * t) ⊆ Y := hs.resolve_right fun h => h (hcen z) hz
     rw [hpz]
     exact fun x hx => Finset.mem_coe.2 ((mem_lensSample x).2 (hs' (hball z x hx)))
-  obtain ⟨w, hw, hu, hs, herr⟩ := edgeExchange_step_guideFrame hD hLL hΩ
+  obtain ⟨w, hw, hu, hs, herr⟩ := edgeExchange_step_guideFrame hD hLL hΩ hΩ₁
     (fun v => cellCenterPos_eq_sitePosition_add v) hm₀ ha Bl E e d ((1 : ℝ), (1 : ℝ)) ht htn
     hnL hε hfm hfa (V₁ := Vm) (V₂ := Va) (hV₁ := hdm) (hV₂ := hda) (fun z hz => (hVm z).1 hz)
     (fun z hz => (hVa z).1 hz) (fun z _ => ⟨suppliedPatch_center P hr z, by simp⟩)
@@ -436,8 +436,8 @@ theorem edgeExchange_hasPairChange_of (hD : IsAngularScale q J Δ a A₀ m₀ 60
     exact guideFrame_exchange_holes_perm hU'o hYU' hfaU hfmU hVa hVm (hga'' ▸ hWa) out hout'
 
 /-- **The lens exchange as a change of two treated sheets, conditional on Proposition 3.4.** Assume
-`q ≥ 1`, a gapped ground state, and the exponent-`60` angular-scale condition with `L₀' ≤ L`,
-`m₀ ≥ 2` and `A₀ ≥ 1`. At the protocol constants, take `L ≥ 2`, `2 ^ k < 2 * L`, an
+`q ≥ 1`, a unit state of the family `G`, and the exponent-`60` angular-scale condition with
+`L₀' ≤ L`, `m₀ ≥ 2` and `A₀ ≥ 1`. At the protocol constants, take `L ≥ 2`, `2 ^ k < 2 * L`, an
 exponent-`60` adaptive patch supply, any rank, any already-repainted set and a repaintable square
 `R` of side `n = 2 ^ j > K₀ t`, where `t = D log L`. For any edge list and edge `e`, treat all
 four guides with the neighboring label about the endpoints of `e`: starting main and auxiliary
@@ -448,8 +448,8 @@ or contain `e`, and there is no premise that `R` is absent from the already-repa
 
 Polynomial-PEPS manuscript, `06-geometry.tex`, lines 183–221, 328–339, 389–430 and 440–445;
 Lemma 6.6 `lem:exchange`, `05-frames.tex`. -/
-theorem edgeExchange_hasPairChange (hD : IsAngularScale q J Δ a A₀ m₀ 60 D L₀') (hLL : L₀' ≤ L)
-    (hΩ : h.IsGappedGroundState E₀ Ω Δ) (hm₀ : 2 ≤ m₀) (hA₀ : 1 ≤ A₀) {K₀ ν : ℝ}
+theorem edgeExchange_hasPairChange (hD : IsAngularScale q G a A₀ m₀ 60 D L₀') (hLL : L₀' ≤ L)
+    (hΩ : G L Ω) (hΩ₁ : ‖Ω‖ = 1) (hm₀ : 2 ≤ m₀) (hA₀ : 1 ≤ A₀) {K₀ ν : ℝ}
     (hc : IsProtocolConstants K₀ ε₀ ν a D B₀) (hL : 2 ≤ L) (hk2 : 2 ^ k < 2 * L)
     (P : AdaptivePatchSupply (cellCenterPos L) Ω B₀ C c 60 L) (rank : GuideLabel → ℕ)
     (R : RepaintedSquare k) (hlarge : K₀ * (D * Real.log L) < (2 : ℝ) ^ (R.1.1 : ℕ))
@@ -493,7 +493,7 @@ theorem edgeExchange_hasPairChange (hD : IsAngularScale q J Δ a A₀ m₀ 60 D 
       (auxWordExchanged Bl.oldLabel Bl.finalLabel (Bl.nbrLabel e)))
   rw [homogenize_endpointBlocks] at hfm hfa hgm hga
   rw [hFm, hFa, hFm', hFa']
-  exact edgeExchange_hasPairChange_of hD hLL hΩ hm₀ hA₀ hc.a_le Bl E e
+  exact edgeExchange_hasPairChange_of hD hLL hΩ hΩ₁ hm₀ hA₀ hc.a_le Bl E e
     (blockCorner ((2 : ℝ) ^ (R.1.1 : ℕ)) R.1.index) ht
     (by change D * Real.log L ≤ (2 : ℝ) ^ (R.1.1 : ℕ); nlinarith [hc.twenty_le_K₀, hlarge, ht])
     (le_mul_of_one_le_left (by positivity) hA₀ |>.trans' (R.side_le hk2))

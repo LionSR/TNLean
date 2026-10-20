@@ -33,9 +33,10 @@ Source: polynomial-PEPS Proposition 2.1 (`01-preliminaries.tex`, lines 39–58),
 constant of the proof of area-law Theorem 1.1 (`10-geometry.tex`, lines 803–857). -/
 theorem squareEntropyAreaLawAt_closed {q : ℕ} (hq : 1 ≤ q) {J Δ : ℝ} (hJ : 0 ≤ J)
     (hΔ : 0 < Δ) :
-    Approximation.SquareEntropyAreaLawAt q J Δ (uniformAreaLawConstantClosed q 1 J Δ) := by
+    Approximation.SquareEntropyAreaLawAt q (Approximation.IsSquareGroundState q J Δ)
+      (uniformAreaLawConstantClosed q 1 J Δ) := by
   obtain ⟨hC, hbound⟩ := uniformAreaLaw_closed q 1 hq hJ hΔ
-  exact ⟨hC, fun _ h _ _ hΩ A ↦
+  exact ⟨hC, fun _ _ ⟨h, _, hΩ⟩ A ↦
     Approximation.finiteProductEntropy_le_of_areaLawBound hJ hbound h hΩ A⟩
 
 end TNLean.PEPS.AreaLaw
