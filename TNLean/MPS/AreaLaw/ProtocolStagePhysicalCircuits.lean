@@ -13,7 +13,7 @@ import TNLean.MPS.AreaLaw.ProtocolSweepLocalCircuits
 A uniform logarithmic width supplies every primitive information estimate
 needed by the existing eighteen-operation stage construction. The two
 information constants and length cutoffs are enlarged before the chain,
-Hamiltonian, ground state, position map, width and stage are introduced.
+Hamiltonian, ground state, width and stage are introduced.
 All estimates concern the same original ground-state vector.
 
 It constructs circuits only for one actual stage. Chronological composition,

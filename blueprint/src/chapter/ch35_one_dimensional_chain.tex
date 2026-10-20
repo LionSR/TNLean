@@ -3,8 +3,8 @@
 
 % The chain specialization of the 2026 area-law and PEPS manuscripts, following the
 % TNLean note docs/notes/one_dimensional_note. Every constant is explicit. The model is
-% stated natively on the chain of L sites; nothing is derived from the two-dimensional
-% lattice development.
+% stated natively on the chain of L sites. The chain proof uses only the site-generic
+% layer TNLean/Lattice and QICLean; no module of TNLean/MPS/AreaLaw imports TNLean.PEPS.
 
 The chain of $L$ sites carries a local dimension $q$, a finite-range Hamiltonian
 with one Hermitian term of norm at most $J$ per support of diameter at most $R$,
@@ -2838,7 +2838,7 @@ for an arbitrary finite set of sites and are instantiated here directly.
     vectors associated with $\Omega$ in this specified memory. Enumerate the
     main labels first, followed
     by every copy-site label in the prescribed copy order. Each original
-    raw label occurs once, and flattening the frame list gives exactly
+    raw label occurs once, and flattening the sheet list gives exactly
     this register list. Denote by $\mathcal R$ the existing main/auxiliary
     sheet readout transported along that register-list equality.
 \end{definition}
@@ -2919,10 +2919,10 @@ for an arbitrary finite set of sites and are instantiated here directly.
 
 \begin{theorem}[Birth and death of a plain sheet]
     \label{thm:chain_plain_birth_death}
-    \lean{TNLean.MPS.AreaLaw.birth_bounded_rpow,
-        TNLean.MPS.AreaLaw.death_bounded_rpow}
+    \lean{TNLean.Lattice.Sheet.birth_bounded,
+        TNLean.Lattice.Sheet.death_bounded}
     \leanok
-    \uses{def:chain_model,def:peps_bounded_change}
+    \uses{def:chain_model,def:lattice_sheet,def:peps_bounded_change}
     Let $L,q\ge1$ be integers, let $p\in\mathbb R$, and let $\Omega$ be a
     unit vector on the chain. A plain sheet has one register $\mathbb C^q$
     per site and an owner assignment $o$. Write $\Omega_o$ for $\Omega$
@@ -2950,24 +2950,18 @@ for an arbitrary finite set of sites and are instantiated here directly.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{lem:peps_frame_splitting,thm:peps_frame_birth_bounded}
-    Apply the full bounded birth and death constructions to the sheets
-    with these owner assignments and with no holes. Their environment is
-    exactly $E$, so no hole condition remains. In those constructions
-    choose the real size parameter $s=L^{p/30}$. Then
-    \begin{align}
-        s^{-60}=L^{-2p},\qquad s^{-30}=L^{-p}.\notag
-    \end{align}
-    Each construction retains its splitting data and constructed monomial
-    together with all owner, resource and error conclusions. The reversed construction uses
+    \uses{thm:lattice_sheet_birth_bounded}
+    This is Theorem~\ref{thm:lattice_sheet_birth_bounded} on the chain of
+    $L$ sites, with the real parameter $L\ge0$ and the exponent $p$. The
+    environment of a sheet is exactly $E$. The reversed construction uses
     the information environment after the death.
 \end{proof}
 
 \begin{theorem}[Exchange of two plain sheets]
     \label{thm:chain_plain_exchange}
-    \lean{TNLean.MPS.AreaLaw.exchange_bounded_rpow}
+    \lean{TNLean.Lattice.Sheet.exchange_bounded}
     \leanok
-    \uses{def:chain_model,def:peps_bounded_change}
+    \uses{def:chain_model,def:lattice_sheet,def:peps_bounded_change}
     Let $L,q\ge1$ be integers, let $p\in\mathbb R$, and let $\Omega$ be a
     unit vector on the chain. Consider two labelled copies of the sheet with
     owner assignments $o_1,o_2$, a set of sites $Y$, and a party $P$. Put
@@ -2994,13 +2988,11 @@ for an arbitrary finite set of sites and are instantiated here directly.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{lem:peps_frame_splitting,thm:peps_frame_exchange_bounded}
-    Construct the exchange from the two plain sheets. All hole lists are
-    empty, and its environment is precisely $Z$, so its splitting regions
-    are $T,E$. Apply the full bounded exchange construction with real size
-    parameter $L^{p/30}$. Its error is $4(L^{p/30})^{-30}=4L^{-p}$.
-    The returned monomial retains the same register reordering and private
-    correction at $P$, and uses no pair resource.
+    \uses{thm:lattice_sheet_exchange_bounded}
+    This is Theorem~\ref{thm:lattice_sheet_exchange_bounded} on the chain of
+    $L$ sites, with the real parameter $L\ge0$ and the exponent $p$. Its
+    splitting regions are $T,E$. The returned monomial consists of the register
+    reordering and the private correction at $P$, and uses no pair resource.
 \end{proof}
 
 
@@ -3014,7 +3006,8 @@ for an arbitrary finite set of sites and are instantiated here directly.
         TNLean.MPS.AreaLaw.OneBand.aux₂,
         TNLean.MPS.AreaLaw.OneBand.aux₃,
         TNLean.MPS.AreaLaw.OneBand.exchangeRegion,
-        TNLean.MPS.AreaLaw.OneBand.exchange,
+        TNLean.MPS.AreaLaw.OneBand.exchangeTSet,
+        TNLean.MPS.AreaLaw.OneBand.exchangeESet,
         TNLean.MPS.AreaLaw.OneBand.main₄,
         TNLean.MPS.AreaLaw.OneBand.aux₄,
         TNLean.MPS.AreaLaw.OneBand.main₅,
@@ -3024,12 +3017,12 @@ for an arbitrary finite set of sites and are instantiated here directly.
         TNLean.MPS.AreaLaw.OneBand.frames,
         TNLean.MPS.AreaLaw.OneBand.participants}
     \leanok
-    \uses{def:peps_frame,def:peps_frame_birth_partition,def:peps_frame_exchange_data}
+    \uses{def:lattice_sheet}
     Write $[u,v)_L=\{x\in\{0,\ldots,L-1\}:u\le x<v\}$.
     Fix natural numbers $L,a,w$ with $w\ge1$ and $8w\le a$, a local
     dimension $q\in\mathbb N$, and parties $A,B,C$.
-    A frame with no holes is specified by an owner for each site.
-    For such a frame $F$, write $F[T\to P]$ for the assignment obtained
+    A sheet is specified by an owner for each site.
+    For such a sheet $F$, write $F[T\to P]$ for the assignment obtained
     by giving $T$ to $P$, and write
     $E(F,P)=\{x:\text{the owner of }x\text{ in }F\text{ differs from }P\}$.
     Let $M_0$ have an arbitrary owner function $o$, and let $U_0$ assign
@@ -3097,7 +3090,7 @@ for an arbitrary finite set of sites and are instantiated here directly.
     the two inequalities just stated are required for the exchange-region identities.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{def:chain_one_band_assignments,def:peps_frame_exchange_data}
+    \uses{def:chain_one_band_assignments,def:lattice_sheet}
     Before the exchange, the auxiliary owners are $B,A,C,A,B$ on the
     consecutive bands with endpoints $a-6w,a-5w,\ldots,a-w$, and $C$ elsewhere.
     The open window contains $[a-6w,a-4w)_L$ and is contained in
@@ -3117,7 +3110,7 @@ for an arbitrary finite set of sites and are instantiated here directly.
         TNLean.MPS.AreaLaw.OneBand.boundary_change_of_primitive_information}
     \leanok
     \uses{def:chain_one_band_assignments,def:peps_bounded_change,
-        def:peps_circuit_source_bound,def:peps_sheet_stack}
+        def:peps_circuit_source_bound,def:lattice_sheet_stack}
     Assume the hypotheses for the main endpoint in
     Theorem~\ref{thm:chain_one_band_geometry}, and suppose $A,B,C$ are
     pairwise distinct. Let $q\ge1$ and let $\Omega$ be a unit vector on the
@@ -3139,14 +3132,14 @@ for an arbitrary finite set of sites and are instantiated here directly.
     Here $T,E$ are the exact exchange regions above. In particular
     $E(U_0,C)=\varnothing$. All information quantities concern $\Omega$,
     not an evolving approximate vector. The environments in rows $4,5,7$
-    are evaluated after the corresponding death; row $6$ uses the frame
+    are evaluated after the corresponding death; row $6$ uses the sheet
     before the birth.
 
     Place the chosen adjacent main and auxiliary occurrences between any two
-    fixed lists of spectator frames. Append any further registers with vector
+    fixed lists of spectator sheets. Append any further registers with vector
     $\xi$, where $\lVert\xi\rVert\le1$.
     Let $\Psi_j$ be the tensor product, in this list order, of the reference
-    vectors of all the frames in stage $j$, followed by $\xi$; each frame
+    vectors of all the sheets in stage $j$, followed by $\xi$; each sheet
     reference is formed from the same original $\Omega$.
     There are eight circuits $c_j$ between these actual register lists with
     at most one nonprivate gate each, its participants contained in the set
@@ -3162,32 +3155,31 @@ for an arbitrary finite set of sites and are instantiated here directly.
     retained at the stated stages and owners.
 
     At the left boundary there is also a single-death version, for arbitrary
-    natural $L,w$ and parties $A,B$. Suppose $M$ is a hole-free frame whose
+    natural $L,w$ and parties $A,B$. Suppose $M$ is a sheet whose
     owner is $A$ on $T_0=\lbrack 0,w)_L$, and put $M'=M[T_0\to B]$.
     For $q\ge1$, a unit vector $\Omega$, and
     $I_\Omega(T_0:E(M',B))\le L^{-24}$, there is a circuit from $M$ to $M'$
     with nonprivate participants in $\{A,B\}$ and the same bounds one on
     gates, monomials, coefficient sum, pair effects and pair sources, with
     reference error at most $L^{-12}$. It may be placed among the same
-    arbitrary spectator frames and further registers. This boundary assertion
+    arbitrary spectator sheets and further registers. This boundary assertion
     imposes neither the interior margin hypotheses nor distinctness of $A,B$,
     and introduces no left auxiliary copy.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:chain_plain_birth_death,thm:chain_plain_exchange,
         thm:peps_bounded_change_closure,thm:peps_protocol_event_segments,
-        thm:peps_original_produced_resource_bounds}
-    All modified frames have no holes, so they are the plain sheets of their
-    actual owner assignments. Apply the birth and death estimates at $p=12$.
-    Every modified band is owned by the departing party in its actual frame.
+        thm:peps_original_produced_resource_bounds,def:lattice_sheet_stack}
+    Apply the birth and death estimates at $p=12$.
+    Every modified band is owned by the departing party in its actual sheet.
     Apply the birth estimate to rows $0,1,2,6$ and its reversed
     death estimate to rows $4,5,7$, with the environments displayed in the
-    table. For a death, changing the owner back in its after-death frame
-    recovers the original frame. The exchange estimate applies to row $3$,
+    table. For a death, changing the owner back in its after-death sheet
+    recovers the original sheet. The exchange estimate applies to row $3$,
     giving a private circuit with error $4\delta$.
     The register realizations use at most one pair source and at most one
     pair effect per monomial; the exchange uses neither. Placing these circuits beside spectator
-    frames and further registers does not increase their resource bounds or
+    sheets and further registers does not increase their resource bounds or
     their errors: the spectator references and $\xi$ have norm at most one.
     The same death argument gives the boundary version.
 \end{proof}
@@ -3198,7 +3190,7 @@ The assignments follow the sweep construction in
 \cite[Part~II]{TNLean2026OneDimensional}, with the interval and
 retained-register correction of
 \cite{gap:tnlean_one_dimensional_band_sweep_corrections}.
-The objects below are owner assignments and ordered lists of frames without holes.
+The objects below are owner assignments and ordered lists of sheets.
 
 \begin{definition}[Main-sheet assignments at a stage]
     \label{def:chain_sweep_stage_assignments}
@@ -3223,7 +3215,7 @@ The objects below are owner assignments and ordered lists of frames without hole
     when $w=0$. Use the distinct parties $R_0,\ldots,R_m$ and
     $P_1,\ldots,P_m$ and the labelled auxiliary copies of
     Definition~\ref{def:chain_terminal_registers}.
-    For $0\le k\le m$, let $M_k$ be the frame without holes whose owner is
+    For $0\le k\le m$, let $M_k$ be the sheet whose owner is
     $P_{\lfloor x/t\rfloor+1}$ at $x<kt$ and $R_k$ at $x\ge kt$.
     The first case is empty when $t=0$.
 
@@ -3233,17 +3225,17 @@ The objects below are owner assignments and ordered lists of frames without hole
         H_k^- & =\lbrack a,a+w)_L, & H_k^+ & =\lbrack b,b+w)_L.\notag
     \end{align}
     Starting from $M_k$, give $T_k^R$ to $R_{k+1}$, then $T_k^P$ to
-    $P_{k+1}$, obtaining frames $M_k^{(1)},M_k^{(2)}$.
+    $P_{k+1}$, obtaining sheets $M_k^{(1)},M_k^{(2)}$.
     Define $M_k^{(L)}$ by giving $H_k^-$ in $M_k^{(2)}$ to $P_{k+1}$,
     and define $M_k^{(R)}$ by giving $H_k^+$ in $M_k^{(L)}$ to $R_{k+1}$.
 
     For $k>0$, also form the main endpoint $\widehat M_k^{(L)}$ of the
     assignments of Definition~\ref{def:chain_one_band_assignments}, with
-    initial main frame $M_k^{(2)}$, centre $a$ and
+    initial main sheet $M_k^{(2)}$, centre $a$ and
     $(A,B,C)=(R_k,P_{k+1},P_k)$.
     For $k=0$, instead put $\widehat M_0^{(L)}=M_0^{(L)}$; no party
     $P_0$ or left auxiliary copy is introduced.
-    Form $\widehat M_k^{(R)}$ from initial main frame
+    Form $\widehat M_k^{(R)}$ from initial main sheet
     $\widehat M_k^{(L)}$, centre $b$ and
     $(A,B,C)=(R_k,R_{k+1},P_{k+1})$ by the same one-band assignments.
     All integer-ended intervals are half-open, with the correction of
@@ -3267,7 +3259,7 @@ The objects below are owner assignments and ordered lists of frames without hole
     }
     \leanok
     \uses{def:chain_sweep_stage_assignments}
-    The initial frame assigns the entire main sheet to $R_0$, and $M_m$
+    The initial sheet assigns the entire main sheet to $R_0$, and $M_m$
     has the terminal main ownership of Definition~\ref{def:chain_terminal_registers}.
     Suppose $w\ge1$ and $0\le k<m$. Each birth target is held by $R_k$
     immediately before that birth. Its environment outside $R_k$ is
@@ -3316,7 +3308,7 @@ The objects below are owner assignments and ordered lists of frames without hole
     Denote the right copy at stage $k$ by $\rho_k$, for $0\le k<m$,
     and the left copy used at stage $j+1$ by $\lambda_j$, for
     $0\le j<m-1$. The actual retired right auxiliary comes from the
-    initial main frame $\widehat M_k^{(L)}$ and has centre $b=(k+1)t$.
+    initial main sheet $\widehat M_k^{(L)}$ and has centre $b=(k+1)t$.
     It assigns $[b-3w,b-2w)_L$ to $R_k$,
     $[b-2w,b-w)_L$ to $R_{k+1}$, and the remaining sites to $P_{k+1}$.
     The actual retired left auxiliary $\lambda_j$ is formed from
@@ -3338,7 +3330,7 @@ The objects below are owner assignments and ordered lists of frames without hole
     functions without changing either copy label.
 \end{proof}
 
-\begin{definition}[The labelled frame history]
+\begin{definition}[The labelled sheet history]
     \label{def:chain_sweep_labelled_history}
     \lean{
         TNLean.MPS.AreaLaw.ChainSweep.auxiliaryStage,
@@ -3356,8 +3348,8 @@ The objects below are owner assignments and ordered lists of frames without hole
     Retain the initial ordered list $\mathcal C$ of all auxiliary copy
     labels. Its order is fixed throughout. The activation stage is
     $s(\rho_j)=j$ and $s(\lambda_j)=j+1$.
-    Let $U_c^\infty$ be the actual retired frame of copy $c$, and let
-    $U_c^0$ be the frame assigning that copy entirely to its initial
+    Let $U_c^\infty$ be the actual retired sheet of copy $c$, and let
+    $U_c^0$ be the sheet assigning that copy entirely to its initial
     holder, namely $P_{j+1}$ for either $c=\rho_j$ or $c=\lambda_j$.
     Before stage $k$, set
     \begin{align}
@@ -3370,11 +3362,11 @@ The objects below are owner assignments and ordered lists of frames without hole
     \end{align}
     At $k>0$ the selected left label is $\lambda_{k-1}$.
     After the left transfer, replace exactly that occurrence by
-    $U_{\lambda_{k-1}}^\infty$ and take main frame $\widehat M_k^{(L)}$;
+    $U_{\lambda_{k-1}}^\infty$ and take main sheet $\widehat M_k^{(L)}$;
     denote the resulting ordered list by $\mathcal F_k^L$.
     At $k=0$ replace no auxiliary occurrence.
     After the right transfer replace exactly $\rho_k$ by $U_{\rho_k}^\infty$
-    and take main frame $\widehat M_k^{(R)}$, obtaining $\mathcal F_k^R$.
+    and take main sheet $\widehat M_k^{(R)}$, obtaining $\mathcal F_k^R$.
 \end{definition}
 
 \begin{theorem}[Initial, intermediate and terminal labelled lists]
@@ -3406,17 +3398,17 @@ The objects below are owner assignments and ordered lists of frames without hole
     At $k=0$ every auxiliary is unchanged by the left transfer.
     At $k>0$ only $\lambda_{k-1}$ changes in that transfer, and only
     $\rho_k$ changes in the subsequent right transfer. All other
-    occurrences retain their frames and their relative order.
+    occurrences retain their sheets and their relative order.
     For every $k<m$, one has $\mathcal F_k^R=\mathcal F_{k+1}$.
     Selecting any copy $c$ gives a permutation of $\mathcal F_k$ in which
-    the selected frame and the main frame are first, followed by the
+    the selected sheet and the main sheet are first, followed by the
     other copies in their original order with $c$ omitted.
 \end{theorem}
 \begin{proof}\leanok
     \uses{def:chain_sweep_labelled_history,thm:chain_sweep_retired_copies,
         thm:chain_sweep_stage_owners}
     Initially no activation stage is negative. Before the last boundary
-    every copy's activation stage has been passed, so the retired-frame
+    every copy's activation stage has been passed, so the retired-sheet
     identities give the terminal auxiliary list. Comparing the two
     activation times $j$ and $j+1$ shows that the left update changes
     precisely $\lambda_{k-1}$ and that the right update changes precisely
@@ -3427,7 +3419,7 @@ The objects below are owner assignments and ordered lists of frames without hole
     list and placing it first preserves all other occurrences and their order.
 \end{proof}
 
-\begin{definition}[Local boundaries and the chronological frame sequence]
+\begin{definition}[Local boundaries and the chronological sheet sequence]
     \label{def:chain_sweep_frame_path}
     \lean{
         TNLean.MPS.AreaLaw.ChainSweep.leftBandFrames,
@@ -3441,20 +3433,20 @@ The objects below are owner assignments and ordered lists of frames without hole
     For a stage $0\le k<m$ with $k>0$, let $\mathcal L_{k,r}$ consist of the $r$th left-band pair
     from Definition~\ref{def:chain_one_band_assignments}, with original
     label $\lambda_{k-1}$, followed by all other copies in their original
-    order and their frames before stage $k$.
+    order and their sheets before stage $k$.
     Let $\mathcal R_{k,r}$ be the analogous right-band list with selected
-    label $\rho_k$, whose spectators have their frames after the left
-    transfer. In each list the main frame precedes the selected auxiliary.
+    label $\rho_k$, whose spectators have their sheets after the left
+    transfer. In each list the main sheet precedes the selected auxiliary.
 
     There are nineteen boundaries $\mathcal B_{k,0},\ldots,\mathcal B_{k,18}$
     for eighteen consecutive steps. They begin with $\mathcal F_k$,
-    followed by the first and second birth frames with the auxiliary
+    followed by the first and second birth sheets with the auxiliary
     family $U^{<k}$ unchanged, at boundaries $1$ and $2$.
     For $3\le j<10$ and $k>0$, use $\mathcal B_{k,j}=\mathcal L_{k,j-2}$.
     At boundary $10$ use $\mathcal F_k^L$.
     At the first stage use $\mathcal B_{0,j}=\mathcal F_0^L$ for
     $3\le j\le10$: boundary $3$ is the direct death and the following
-    seven steps leave the frame list unchanged.
+    seven steps leave the sheet list unchanged.
     For $11\le j<18$ use $\mathcal B_{k,j}=\mathcal R_{k,j-10}$.
     At and beyond boundary $18$ use $\mathcal F_k^R$.
 
@@ -3488,7 +3480,7 @@ The objects below are owner assignments and ordered lists of frames without hole
     }
     \leanok
     \uses{def:chain_sweep_frame_path}
-    The first three boundaries have respectively main frames
+    The first three boundaries have respectively main sheets
     $M_k,M_k^{(1)},M_k^{(2)}$, with their original ordered auxiliary
     family. At a positive stage, $\mathcal B_{k,2}$ is a permutation of
     $\mathcal L_{k,0}$, and $\mathcal L_{k,8}$ is a permutation of
@@ -3497,7 +3489,7 @@ The objects below are owner assignments and ordered lists of frames without hole
     and $\mathcal R_{k,8}$ is a permutation of
     $\mathcal F_k^R=\mathcal B_{k,18}$.
     These permutations select the original copy label and preserve the
-    order of all spectator labels; no distinctness of frame values is required.
+    order of all spectator labels; no distinctness of sheet values is required.
     At $k=0$ the transition from boundary $2$ to boundary $3$ changes
     the main owner on $[0,w)_L$ from $R_0$ to $P_1$ and changes no
     auxiliary. Boundaries $3,\ldots,10$ are equal.
@@ -3507,11 +3499,11 @@ The objects below are owner assignments and ordered lists of frames without hole
 \begin{proof}\leanok
     \uses{def:chain_sweep_frame_path,thm:chain_sweep_labelled_history,
         thm:chain_sweep_stage_owners}
-    The interior boundaries are the specified one-band frames.
+    The interior boundaries are the specified one-band sheets.
     Before its activation the selected label still carries its initial
-    constant-owner frame. Selecting that label therefore gives the
+    constant-owner sheet. Selecting that label therefore gives the
     correct band entrance. At its exit, replacing that one label by
-    its actual retired frame and restoring the original order gives
+    its actual retired sheet and restoring the original order gives
     the stated permutation. For the first left transfer the defining
     direct death replaces the entire eight-step band, with seven
     repeated boundaries afterwards. The next-stage identity identifies
@@ -3541,7 +3533,7 @@ The objects below are owner assignments and ordered lists of frames without hole
     list and equals the terminal list for every $n\ge18m$.
     If $m=0$, the initial and terminal lists coincide and the entire
     sequence is constant. If $m=1$, there is one eighteen-step stage,
-    with its direct first left death, seven unchanged-frame steps and
+    with its direct first left death, seven unchanged-sheet steps and
     one right auxiliary copy, followed by the stationary terminal tail.
 \end{theorem}
 \begin{proof}\leanok
@@ -3647,7 +3639,7 @@ with the retained-copy correction of
     \lean{TNLean.MPS.AreaLaw.ChainSweep.local_stage_circuits_of_primitive_information}
     \leanok
     \uses{def:chain_stage_participants,def:chain_sweep_frame_path,
-        def:peps_bounded_change,def:peps_circuit_source_bound,def:peps_sheet_stack}
+        def:peps_bounded_change,def:peps_circuit_source_bound,def:lattice_sheet_stack}
     Suppose $q\ge1$, $w\ge1$, $L\ge60w$ and $0\le k<m$.
     Let $\Omega$ be a unit vector on the original chain and put
     $\delta=L^{-12}$. Assume the two before-birth bounds
@@ -3679,7 +3671,7 @@ with the retained-copy correction of
     In particular rows $4,5,7$ use their actual after-death environments,
     and row $6$ uses its before-birth environment.
 
-    Let $\psi(\mathcal F)$ denote the tensor product of the frame references
+    Let $\psi(\mathcal F)$ denote the tensor product of the sheet references
     formed from $\Omega$ in the order of the list $\mathcal F$.
     There exist circuits
     $c_{k,j}:\mathcal H_{\mathcal B_{k,j}}\to
@@ -3703,7 +3695,7 @@ with the retained-copy correction of
         thm:chain_one_band_conditional_changes,thm:chain_sweep_local_boundaries,
         thm:chain_plain_birth_death,thm:peps_bounded_change_closure}
     The two birth targets are held by $R_k$ in their actual before-birth
-    frames. Apply the birth estimate with
+    sheets. Apply the birth estimate with
     (\ref{eq:chain_stage_remainder_information}) and
     (\ref{eq:chain_stage_block_information}). The derived band flanks and
     margins permit the two substitutions
@@ -3939,10 +3931,10 @@ Definition~\ref{def:chain_open_mps}.
     positions are identities with zero error and zero nonprivate count.
     Put $N=18m$ and $\varepsilon=4NL^{-12}$.
 
-    Let $\mathcal F_0$ be the original ordered initial frame list.
-    Its frames have constant owner; let $h(F)$ be the owner of site zero
-    in frame $F$. For each party $a$, define $H_a$ as the tensor product,
-    in the original order, of the frame spaces with $h(F)=a$, and let
+    Let $\mathcal F_0$ be the original ordered initial sheet list.
+    Its sheets have constant owner; let $h(F)$ be the owner of site zero
+    in sheet $F$. For each party $a$, define $H_a$ as the tensor product,
+    in the original order, of the sheet spaces with $h(F)=a$, and let
     $x_a$ be the product of their $\Omega$-reference vectors. Then
     $\|x_a\|=1$, including an empty product. From the constructed product
     input $X=\bigotimes_a x_a$ there is an original circuit $C$ to the
@@ -3964,7 +3956,7 @@ Definition~\ref{def:chain_open_mps}.
     In particular its arity is at most $40$ and its participant levels
     have pairwise distance at most two.
 
-    Let $J$ be the prescribed identification of the terminal frame stack
+    Let $J$ be the prescribed identification of the terminal sheet stack
     with its raw register list, and let $T$ be the existing private
     terminal regrouping. Put $Y=J^{-1}T^{-1}\Psi$.
     With the sheet readout $\mathcal R$ and copy-labelled vector $\Xi$
@@ -4300,14 +4292,14 @@ The prescribed placement is $\ell(R_i)=i$ and $\ell(P_{j+1})=j$.
         \label{eq:chain_band_separation}
     \end{align}
     In particular the exchange uses $E=Z\setminus Y$ and not the
-    complement of $Y$; the death rows use their after-death frames.
+    complement of $Y$; the death rows use their after-death sheets.
 
     Fix $q\ge1$, $R\in\mathbb N$, $J\in\mathbb R$ and $\Delta>0$.
     There are $D_{24}>0$ and $L_0\ge1$, depending only on these fixed
     parameters, such that the following holds for every $L\ge L_0$,
     every Hamiltonian of range $R$ and strength bound $J$ with gapped
-    ground vector $\Omega$ and energy $E_0$, every choice of parties
-    and register positions, and all the ownership data just stated.
+    ground vector $\Omega$ and energy $E_0$, every choice of parties,
+    and all the ownership data just stated.
     If $D_{24}\log L\le w$, then
     \begin{align}
         I_\Omega(T_j:E_j) & \le L^{-24},\qquad 0\le j<8.
@@ -4321,7 +4313,7 @@ The prescribed placement is $\ell(R_i)=i$ and $\ell(P_{j+1})=j$.
 \begin{proof}
     \leanok
     \uses{thm:chain_one_band_geometry,thm:chain_logarithmic_separation}
-    In a frame without holes, $E(F,P)$ consists exactly of sites not
+    In a sheet, $E(F,P)$ consists exactly of sites not
     owned by $P$. After the first main death the owner is $A$ on
     $[a-5w,a+w)_L$, and after the second it is $B$ on
     $[a-6w,a+2w)_L$. The left parts of these intervals inherit the
@@ -4364,7 +4356,7 @@ The prescribed placement is $\ell(R_i)=i$ and $\ell(P_{j+1})=j$.
 
     For fixed $q\ge1$, $R\in\mathbb N$, $J\in\mathbb R$ and
     $\Delta>0$, there are $D_{24}>0$ and $L_0\ge1$ before all chain,
-    Hamiltonian, ground-vector, position, width and stage data, such
+    Hamiltonian, ground-vector, width and stage data, such
     that $L\ge L_0$ and $w\ge D_{24}\log L$, with $w\ge1$, imply
     $I_\Omega(T:E)\le L^{-24}$ for both birth pairs and, at $k=0$,
     for the direct-death pair. Here $\Omega$ is any gapped ground
@@ -4391,8 +4383,8 @@ The prescribed placement is $\ell(R_i)=i$ and $\ell(P_{j+1})=j$.
         def:peps_bounded_change,def:peps_circuit_source_bound}
     Fix $q\ge1$, $R\in\mathbb N$, $J\in\mathbb R$ and $\Delta>0$.
     There are $D_{24}>0$ and $L_0\ge1$ such that, for every
-    $L\ge L_0$, every corresponding gapped ground vector $\Omega$,
-    every register-position map and every natural $w\ge1$ with
+    $L\ge L_0$, every corresponding gapped ground vector $\Omega$
+    and every natural $w\ge1$ with
     $D_{24}\log L\le w$, each actual stage $k<m$ admits eighteen
     circuits between its prescribed successive boundaries.
     For each $0\le j<18$, $c_{k,j}$ is a bounded change on
@@ -4438,7 +4430,7 @@ The prescribed placement is $\ell(R_i)=i$ and $\ell(P_{j+1})=j$.
     There are $D\ge1$, $K>0$, $s\in\mathbb N$ and $L_0\ge1$,
     before all further physical data, with the following property.
     For every $L\ge L_0$, Hamiltonian of these parameters, gapped
-    ground vector $\Omega$ with energy $E_0$, and register positions,
+    ground vector $\Omega$ with energy $E_0$,
     put $w=\lceil D\log L\rceil_+$ and $N=18m$.
     The constructed initial party vectors $x_p$ have norm one.
     Their product input $X=\bigotimes_p x_p$ admits a circuit $C$
@@ -4517,7 +4509,7 @@ The prescribed placement is $\ell(R_i)=i$ and $\ell(P_{j+1})=j$.
     \uses{def:peps_distributed_construction,thm:chain_initial_copies,
         def:chain_terminal_coordinates}
     Let $L>0$, $q\ge1$ and $w\in\mathbb N$.
-    Given an original vector $\Omega$, register positions, the initial
+    Given an original vector $\Omega$, the initial
     party spaces $H_p$ and their unit vectors $x_p$ from the grouped
     initial list, and a circuit $C$ from their product layout to the
     specified terminal layout, take the existing distributed construction
@@ -4684,8 +4676,8 @@ The prescribed placement is $\ell(R_i)=i$ and $\ell(P_{j+1})=j$.
     \end{align}
     This is \cite[Theorem~B]{TNLean2026OneDimensional}, with a unit
     approximant and a positive natural polynomial exponent. Neither
-    information estimates, circuit data, rank bounds nor a choice
-    of register positions are hypotheses of this theorem.
+    information estimates, circuit data nor rank bounds are hypotheses
+    of this theorem.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:chain_uniform_physical_family,
@@ -4710,8 +4702,8 @@ The prescribed placement is $\ell(R_i)=i$ and $\ell(P_{j+1})=j$.
     \end{align}
     These constants precede all $L,H,\Omega,E_0$.
 
-    For $L\ge L_0$, choose the positions internally as $x\mapsto(x,0)$
-    and select its member of the family. Put
+    For $L\ge L_0$, select the member of the family given by the chain,
+    Hamiltonian, ground vector and energy. Put
     $\epsilon=L^{-5}+52L^{-11}$. For every $L\ge2$,
     $52L^{-11}\le L^{-5}$, $\epsilon<1$ and
     $2\epsilon\le4L^{-5}\le L^{-1}$.
@@ -4857,8 +4849,8 @@ The prescribed placement is $\ell(R_i)=i$ and $\ell(P_{j+1})=j$.
     In the physical preparation family retain the derived arity-three
     bound of the same chosen circuits. The arity follows from their
     actual stage support and the participant table; it is independent
-    of the lifetime bound. All members, including their positions,
-    are present before sampling constants are selected.
+    of the lifetime bound. All members are present before sampling
+    constants are selected.
     Apply Theorem~\ref{thm:chain_sharp_sampled_crossings} at $p=5$,
     with count parameters $(n,C_N)=(1,2)$, physical-dimension
     parameters $(d,C_D)=(s,K)$, $r=1$, $u=v=0$,

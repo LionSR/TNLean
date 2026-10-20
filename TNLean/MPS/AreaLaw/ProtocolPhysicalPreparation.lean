@@ -13,7 +13,7 @@ import TNLean.Algebra.ExplicitThresholds
 # Physical preparation by a logarithmic-width chain sweep
 
 The width constant, polynomial dimension bound and length cutoff are chosen
-before the chain, Hamiltonian, ground state and register positions. The actual
+before the chain, Hamiltonian and ground state. The actual
 local circuits are obtained from the physical information estimates and are
 then composed with the constructed private initialization and terminal word.
 No circuit family, information estimate, output or resource bound is supplied
