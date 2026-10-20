@@ -95,6 +95,7 @@ import TNLean.PEPS.Approximation.CorrectedSchmidtInput
 import TNLean.PEPS.Approximation.CorrectedSchmidtOutput
 import TNLean.PEPS.Approximation.CorrectedSourceFrames
 import TNLean.PEPS.Approximation.CorrectedSourcePartition
+import TNLean.PEPS.Approximation.DependentNetworkColumn
 import TNLean.PEPS.Approximation.DistributedConstruction
 import TNLean.PEPS.Approximation.DistributedConstructionData
 import TNLean.PEPS.Approximation.DistributedContractionScalar
@@ -294,6 +295,7 @@ import TNLean.PEPS.Approximation.PartyGateSourceBound
 import TNLean.PEPS.Approximation.PartyGroupedBasis
 import TNLean.PEPS.Approximation.PartyGroupingTransport
 import TNLean.PEPS.Approximation.PartyLabelledCoordinates
+import TNLean.PEPS.Approximation.PartyNetwork
 import TNLean.PEPS.Approximation.PartyOutputCoordinates
 import TNLean.PEPS.Approximation.PartyPartitionAppend
 import TNLean.PEPS.Approximation.PartyPhysicalCoordinates

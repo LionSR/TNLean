@@ -1587,9 +1587,9 @@ no holes, this is the normalization of $\Omega$.
         thm:peps_protocol_bounded_changes,
         thm:peps_protocol_constants,
         thm:peps_treated_radius_bounds}
-    Let $q\ge1$ and let $\Omega$ be a $\Delta$-gapped ground state, at energy $E_0$, of the
-    square Hamiltonian with local norm bound $J$. Assume that $D$ is an angular scale as in
-    Definition~\ref{def:peps_angular_scale} with parameters $q,J,\Delta,a,A_0,m_0$, test
+    Let $q\ge1$, fix a family of states, and let $\Omega$ be a unit vector of the family.
+    Assume that $D$ is an angular scale as in Definition~\ref{def:peps_angular_scale} for
+    the family with parameters $q,a,A_0,m_0$, test
     exponent $60$ and threshold $L_0'$, where $m_0\ge2$ and $A_0\ge1$. Choose protocol
     constants and natural $L\ge\max(2,L_0')$ and $k$ with $2^k<2L$. Fix an adaptive
     supplied-patch family $P$ for $\Omega$ with parameters $B_0,C,c$, test exponent $60$ and
@@ -1655,9 +1655,9 @@ no holes, this is the normalization of $\Omega$.
         thm:peps_protocol_bounded_changes,
         thm:peps_protocol_constants,
         thm:peps_treated_radius_bounds}
-    Let $q\ge1$ and let $\Omega$ be a $\Delta$-gapped ground state, at energy $E_0$, of the
-    square Hamiltonian with local norm bound $J$. Assume that $D$ is an angular scale as in
-    Definition~\ref{def:peps_angular_scale} with parameters $q,J,\Delta,a,A_0,m_0$, test
+    Let $q\ge1$, fix a family of states, and let $\Omega$ be a unit vector of the family.
+    Assume that $D$ is an angular scale as in Definition~\ref{def:peps_angular_scale} for
+    the family with parameters $q,a,A_0,m_0$, test
     exponent $60$ and threshold $L_0'$, where $m_0\ge2$ and $A_0\ge1$. Choose protocol
     constants and natural $L\ge\max(2,L_0')$ and $k$ with $2^k<2L$. Fix an adaptive
     supplied-patch family $P$ for $\Omega$ with parameters $B_0,C,c$, test exponent $60$ and
@@ -1747,10 +1747,9 @@ no holes, this is the normalization of $\Omega$.
         thm:peps_protocol_constants,
         thm:peps_treated_radius_bounds}
     For the sampled-guide change, let $k,L,q$ be natural numbers with $q\ge1$,
-    let $h$ be a square Hamiltonian on the $L\times L$ system with interaction
-    bound $J$, and assume that $\Omega$ is a gapped ground state of energy
-    $E_0$ and gap $\Delta$. Assume the exponent-$60$ angular-scale condition
-    with parameters $q,J,\Delta,a,A_0,m_0,D,L'_0$, with natural $m_0$, where
+    fix a family of states, and let $\Omega$ be a unit vector of the family on
+    the $L\times L$ system. Assume the exponent-$60$ angular-scale condition
+    for the family with parameters $q,a,A_0,m_0,D,L'_0$, with natural $m_0$, where
     $L'_0\le L$, $m_0\ge4$, $A_0\ge1$ and $a\le a_0/2$.
     Here $a_0$ is the angular constant. Take any repainting baseline on the
     protocol guide labels, any translation $d$, and real $t,\epsilon_0$ with
@@ -1771,8 +1770,8 @@ no holes, this is the normalization of $\Omega$.
     condition bounds both the number of monomials and the sum of absolute
     coefficients by $K$; at most one pair source is needed.
 
-    For the protocol specialization, assume the same square-Hamiltonian,
-    gapped-state and exponent-$60$ angular-scale data with $q\ge1$,
+    For the protocol specialization, assume the same family, unit state and
+    exponent-$60$ angular-scale data with $q\ge1$,
     $L'_0\le L$, $m_0\ge4$ and $A_0\ge1$. Assume the protocol constants
     $K_0,\epsilon_0,\nu,a,D,B_0$, $L\ge2$ and $2^k<2L$, and take the
     exponent-$60$ adaptive supply and any label rank as above. Let $R$ be
@@ -1998,10 +1997,9 @@ no holes, this is the normalization of $\Omega$.
         thm:peps_protocol_constants,
         thm:peps_treated_radius_bounds}
     For the sampled-guide exchange, let $k,L,q$ be natural with $q\ge1$,
-    let $h$ be a square Hamiltonian on the $L\times L$ system with bound
-    $J$, and suppose $\Omega$ is a gapped ground state of energy $E_0$ and
-    gap $\Delta$. Assume the exponent-$60$ angular-scale condition with
-    parameters $q,J,\Delta,a,A_0,m_0,D,L'_0$, with natural $m_0$, where
+    fix a family of states, and suppose $\Omega$ is a unit vector of the
+    family on the $L\times L$ system. Assume the exponent-$60$ angular-scale
+    condition for the family with parameters $q,a,A_0,m_0,D,L'_0$, with natural $m_0$, where
     $L'_0\le L$, $m_0\ge2$, $A_0\ge1$ and $a\le a_0/2$, with $a_0$ the angular
     constant. Take any repainting baseline on protocol guide labels, any
     edge list $E$, edge $e$ and translation $d$. Require
@@ -2024,8 +2022,8 @@ no holes, this is the normalization of $\Omega$.
     participants in any set containing the owner of $C_e$, for every
     natural $r,K,r_s$, including zero.
 
-    For the protocol specialization, assume the square-Hamiltonian,
-    gapped-state and exponent-$60$ angular-scale data just stated, with
+    For the protocol specialization, assume the family, unit state and
+    exponent-$60$ angular-scale data just stated, with
     $q\ge1$, $L'_0\le L$, $m_0\ge2$ and $A_0\ge1$. Assume the protocol
     constants $K_0,\epsilon_0,\nu,a,D,B_0$, $L\ge2$, $2^k<2L$, the
     exponent-$60$ adaptive supply, and any label rank. Let $R$ be any
@@ -2653,10 +2651,9 @@ no holes, this is the normalization of $\Omega$.
         lem:peps_adaptive_patch_supply,
         thm:peps_protocol_constants}
     Let $k,m_0,L,b,K,q\in\mathbb N$ with $q\ge1$, and let all the scale
-    constants below be real. Assume the angular-scale condition with parameters
-    $q,J,\Delta,a,A_0,m_0,60,D,L_*$ and $L_*\le L$. Let $h$ be a square
-    Hamiltonian with parameters $L,q,J$, and let $\Omega$ be its gapped ground
-    state with energy $E_0$ and gap $\Delta$. Assume $m_0\ge4$,
+    constants below be real. Fix a family of states and assume the angular-scale
+    condition for it with parameters $q,a,A_0,m_0,60,D,L_*$ and $L_*\le L$. Let
+    $\Omega$ be a unit vector of the family on the square of side $L$. Assume $m_0\ge4$,
     $A_0\ge1$, the protocol-constant condition on $K_0,\epsilon_0,\nu,a,D,B_0$,
     $L\ge2$ and $2^k<2L$. Set $t=D\log L$. Fix an adaptive patch supply
     $P$ at the cell-center positions for $\Omega$ with parameters
@@ -2717,10 +2714,9 @@ no holes, this is the normalization of $\Omega$.
         thm:peps_dyadic_no_changed_vertex,
         thm:peps_protocol_constants}
     Let $k,m_0,L,b,K,q\in\mathbb N$ with $q\ge1$, and let all the scale
-    constants below be real. Assume the angular-scale condition with parameters
-    $q,J,\Delta,a,A_0,m_0,60,D,L_*$ and $L_*\le L$. Let $h$ be a square
-    Hamiltonian with parameters $L,q,J$, and let $\Omega$ be its gapped ground
-    state with energy $E_0$ and gap $\Delta$. Assume $m_0\ge2$,
+    constants below be real. Fix a family of states and assume the angular-scale
+    condition for it with parameters $q,a,A_0,m_0,60,D,L_*$ and $L_*\le L$. Let
+    $\Omega$ be a unit vector of the family on the square of side $L$. Assume $m_0\ge2$,
     $A_0\ge1$, the protocol-constant condition on $K_0,\epsilon_0,\nu,a,D,B_0$,
     $L\ge2$ and $2^k<2L$. Set $t=D\log L$. Fix an adaptive patch supply
     $P$ at the cell-center positions for $\Omega$ with parameters
@@ -2789,10 +2785,9 @@ no holes, this is the normalization of $\Omega$.
         lem:peps_adaptive_patch_supply,
         thm:peps_protocol_constants}
     Let $k,m_0,L,b,K,q\in\mathbb N$ with $q\ge1$, and let all the scale
-    constants below be real. Assume the angular-scale condition with parameters
-    $q,J,\Delta,a,A_0,m_0,60,D,L_*$ and $L_*\le L$. Let $h$ be a square
-    Hamiltonian with parameters $L,q,J$, and let $\Omega$ be its gapped ground
-    state with energy $E_0$ and gap $\Delta$. Assume $m_0\ge2$,
+    constants below be real. Fix a family of states and assume the angular-scale
+    condition for it with parameters $q,a,A_0,m_0,60,D,L_*$ and $L_*\le L$. Let
+    $\Omega$ be a unit vector of the family on the square of side $L$. Assume $m_0\ge2$,
     $A_0\ge1$, the protocol-constant condition on $K_0,\epsilon_0,\nu,a,D,B_0$,
     $L\ge2$ and $2^k<2L$. Set $t=D\log L$. Fix an adaptive patch supply
     $P$ at the cell-center positions for $\Omega$ with parameters
@@ -2851,10 +2846,9 @@ no holes, this is the normalization of $\Omega$.
         lem:peps_adaptive_patch_supply,
         thm:peps_protocol_constants}
     Let $k,m_0,L,b,K,q\in\mathbb N$ with $q\ge1$, and let all the scale
-    constants below be real. Assume the angular-scale condition with parameters
-    $q,J,\Delta,a,A_0,m_0,60,D,L_*$ and $L_*\le L$. Let $h$ be a square
-    Hamiltonian with parameters $L,q,J$, and let $\Omega$ be its gapped ground
-    state with energy $E_0$ and gap $\Delta$. Assume $m_0\ge2$,
+    constants below be real. Fix a family of states and assume the angular-scale
+    condition for it with parameters $q,a,A_0,m_0,60,D,L_*$ and $L_*\le L$. Let
+    $\Omega$ be a unit vector of the family on the square of side $L$. Assume $m_0\ge2$,
     $A_0\ge1$, the protocol-constant condition on $K_0,\epsilon_0,\nu,a,D,B_0$,
     $L\ge2$ and $2^k<2L$. Set $t=D\log L$. Fix an adaptive patch supply
     $P$ at the cell-center positions for $\Omega$ with parameters
@@ -2917,10 +2911,9 @@ no holes, this is the normalization of $\Omega$.
         thm:peps_protocol_constants,
         thm:peps_protocol_event_segments}
     Let $k,m_0,L,b,K,q\in\mathbb N$ with $q\ge1$, and let all the scale
-    constants below be real. Assume the angular-scale condition with parameters
-    $q,J,\Delta,a,A_0,m_0,60,D,L_*$ and $L_*\le L$. Let $h$ be a square
-    Hamiltonian with parameters $L,q,J$, and let $\Omega$ be its gapped ground
-    state with energy $E_0$ and gap $\Delta$. Assume $m_0\ge2$,
+    constants below be real. Fix a family of states and assume the angular-scale
+    condition for it with parameters $q,a,A_0,m_0,60,D,L_*$ and $L_*\le L$. Let
+    $\Omega$ be a unit vector of the family on the square of side $L$. Assume $m_0\ge2$,
     $A_0\ge1$, the protocol-constant condition on $K_0,\epsilon_0,\nu,a,D,B_0$,
     $L\ge2$ and $2^k<2L$. Set $t=D\log L$. Fix an adaptive patch supply
     $P$ at the cell-center positions for $\Omega$ with parameters
@@ -3006,10 +2999,9 @@ no holes, this is the normalization of $\Omega$.
         thm:peps_protocol_constants,
         thm:peps_protocol_event_segments}
     Let $k,m_0,L,b,K,q\in\mathbb N$ with $q\ge1$, and let all the scale
-    constants below be real. Assume the angular-scale condition with parameters
-    $q,J,\Delta,a,A_0,m_0,60,D,L_*$ and $L_*\le L$. Let $h$ be a square
-    Hamiltonian with parameters $L,q,J$, and let $\Omega$ be its gapped ground
-    state with energy $E_0$ and gap $\Delta$. Assume $m_0\ge2$,
+    constants below be real. Fix a family of states and assume the angular-scale
+    condition for it with parameters $q,a,A_0,m_0,60,D,L_*$ and $L_*\le L$. Let
+    $\Omega$ be a unit vector of the family on the square of side $L$. Assume $m_0\ge2$,
     $A_0\ge1$, the protocol-constant condition on $K_0,\epsilon_0,\nu,a,D,B_0$,
     $L\ge2$ and $2^k<2L$. Set $t=D\log L$. Fix an adaptive patch supply
     $P$ at the cell-center positions for $\Omega$ with parameters
@@ -3170,12 +3162,11 @@ no holes, this is the normalization of $\Omega$.
         thm:peps_protocol_constants,
         thm:peps_protocol_event_segments}
     Let $k,L,q\in\mathbb N$ with $q\ge1$ and $L\ge2$. Fix real
-    $J,\Delta,a,A_0,D,L'_0,K_0,\epsilon_0,\nu,B_0,C,c$, and $m_0\in\mathbb N$.
-    Assume the angular-scale condition with parameters
-    $(q,J,\Delta,a,A_0,m_0,60,D,L'_0)$, $L'_0\le L$, $m_0\ge4$, $A_0\ge1$,
+    $a,A_0,D,L'_0,K_0,\epsilon_0,\nu,B_0,C,c$, $m_0\in\mathbb N$ and a family
+    of states. Assume the angular-scale condition for the family with parameters
+    $(q,a,A_0,m_0,60,D,L'_0)$, $L'_0\le L$, $m_0\ge4$, $A_0\ge1$,
     and the protocol-constant condition for $(K_0,\epsilon_0,\nu,a,D,B_0)$.
-    Let $\Omega$ be a gapped ground vector with gap $\Delta$ and ground energy
-    $E_0$ of a square Hamiltonian with parameters $(L,q,J)$.
+    Let $\Omega$ be a unit vector of the family on the square of side $L$.
     Assume only the upper padding bound $2^k<2L$.
 
     Fix a patch supply with parameters $B_0,C,c,60,L$ for $\Omega$ at the
@@ -3215,8 +3206,8 @@ no holes, this is the normalization of $\Omega$.
         thm:peps_protocol_central_birth_chain,
         thm:peps_protocol_edge_construction_chain,
         thm:peps_protocol_treated_frame_congruence}
-    The gapped-ground-state hypothesis gives $\|\Omega\|=1$, so the central
-    birth lifts to the memory without an additional norm assumption.
+    Since $\|\Omega\|=1$, the central birth lifts to the memory without an
+    additional norm assumption.
     Concatenate its $9$ changes with the $45$ changes on each edge, in the
     order bottom, right, top, left. The distinct auxiliary indices ensure
     that each previous update leaves the next idle copy unchanged. Thus
@@ -3243,11 +3234,11 @@ no holes, this is the normalization of $\Omega$.
         thm:peps_protocol_event_segments,
         thm:peps_protocol_from_large_repaintings,
         thm:peps_protocol_main_frame_schedule}
-    Fix $k,L,q\in\mathbb N$, with $q\ge1$ and $L\ge2$, and the real
-    angular-scale parameters $(J,\Delta,a,A_0,D,L'_0)$ with $m_0\in\mathbb N$.
-    Assume the angular-scale condition at power $60$, $L'_0\le L$,
-    $m_0\ge4$, $A_0\ge1$, and let $\Omega$ be a gapped ground vector of
-    a square Hamiltonian with parameters $(L,q,J)$ and gap $\Delta$.
+    Fix $k,L,q\in\mathbb N$, with $q\ge1$ and $L\ge2$, a family of states,
+    and the real angular-scale parameters $(a,A_0,D,L'_0)$ with
+    $m_0\in\mathbb N$. Assume the angular-scale condition for the family at
+    power $60$, $L'_0\le L$, $m_0\ge4$, $A_0\ge1$, and let $\Omega$ be a
+    unit vector of the family on the square of side $L$.
     Fix protocol constants $(K_0,\epsilon_0,\nu,a,D,B_0)$, a patch supply
     with parameters $B_0,C,c,60,L$, a rank on guide labels, and a reference
     repaintable square $R_0$. Assume $L\le2^k<2L$, and explicitly supply
@@ -3414,12 +3405,12 @@ no holes, this is the normalization of $\Omega$.
     \lean{TNLean.PEPS.Approximation.IsAngularScale.mono}
     \leanok
     \uses{def:peps_angular_scale}
-    For arbitrary $q,m_0,p\in\mathbb N$ and real $J,\Delta,a,A_0,D,L_0,D'$,
-    assume the angular-scale condition with parameters
-    $(q,J,\Delta,a,A_0,m_0,p,D,L_0)$, $a\ge0$ and $D\le D'$.
+    For arbitrary $q,m_0,p\in\mathbb N$, real $a,A_0,D,L_0,D'$ and a family of
+    states, assume the angular-scale condition for the family with parameters
+    $(q,a,A_0,m_0,p,D,L_0)$, $a\ge0$ and $D\le D'$.
     The angular-scale condition then holds with scale $D'$ and threshold
     $\max(L_0,1)$, with all other parameters unchanged. No positivity of
-    $J$, $\Delta$, $A_0$ or $D$ is an additional premise.
+    $A_0$ or $D$ is an additional premise.
 \end{theorem}
 
 \begin{proof}\leanok

@@ -827,15 +827,18 @@ original open square. We state the two models separately, following
         TNLean.PEPS.Approximation.SquareEntropyAreaLaw.exists_squareEntropyAreaLawAt}
     \leanok
     \uses{def:square_entropy_area_law}
-    Let $q$ be an integer and $J,\Delta,C_A$ reals. The square-grid entropy
-    area law holds at $q$, $J$, $\Delta$ with constant $C_A$ if $C_A\ge0$ and,
-    for every $L$, every Hamiltonian of the original model with interaction
-    bound $J$, every unit vector $\Omega$ and real $E_0$ satisfying
-    $H\Omega=E_0\Omega$ and $H-E_0I\ge\Delta(I-|\Omega\rangle\langle\Omega|)$,
-    and every set $A$ of sites, $S_\Omega(A)\le C_A|\partial_\Lambda A|$. The
-    square-grid entropy area law of
-    Definition~\ref{def:square_entropy_area_law} says that for $q\ge2$ and
-    $J,\Delta>0$ some constant $C_A$ has this property.
+    Let $q$ be an integer, $C_A$ a real number, and fix a family of states,
+    consisting for each $L$ of some vectors on the grid of side $L$ with local
+    dimension $q$. The square-grid entropy area law holds for the family with
+    constant $C_A$ if $C_A\ge0$ and, for every $L$, every state $\Omega$ of
+    the family and every set $A$ of sites, $S_\Omega(A)\le C_A|\partial_\Lambda A|$.
+    The ground states of the model at $J$ and $\Delta$ form the family of unit
+    vectors $\Omega$ for which some Hamiltonian of the original model with
+    interaction bound $J$ and some real $E_0$ satisfy $H\Omega=E_0\Omega$ and
+    $H-E_0I\ge\Delta(I-|\Omega\rangle\langle\Omega|)$. The square-grid
+    entropy area law of Definition~\ref{def:square_entropy_area_law} says that
+    for $q\ge2$ and $J,\Delta>0$ some constant $C_A$ has this property for
+    that family.
 \end{definition}
 
 \begin{theorem}[Entropy area law on the square grid]
