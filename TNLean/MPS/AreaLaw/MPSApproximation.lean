@@ -395,9 +395,11 @@ theorem exists_isOpenMPS_norm_sub_le_of_error_of_consecutive_terms
     (q R : ℕ) (J Δ : ℝ) (hq : 1 ≤ q) (hJ : 0 ≤ J) (hΔ : 0 < Δ) :
     let B : ℝ :=
       1 + (2 * R : ℕ) * Real.log (Real.exp 1 * (q : ℝ) ^ (R + 1)) ^ 2
-    let C₁ : ℝ := 5 + (128 + 4224 * Real.exp 1) * B
+    let C₁ : ℝ := 5 + min (32 * (2 * R : ℕ) * (q : ℝ) ^ (2 * (R + 1)))
+      (64 * Real.exp 1 * (2 * R : ℕ) * Real.log (Real.exp 1 * (q : ℝ) ^ (R + 1)) ^ 2) +
+        128 * B
     let C : ℝ :=
-      (8 * R * Real.log (q : ℝ) * C₁ + 1 + 64 * Real.exp 1 * B) * (1 + J / Δ)
+      ((8 * R * Real.log (q : ℝ) + Real.log 2) * C₁ + 1024 * Real.exp 1 * B) * (1 + J / Δ)
     ∀ L : ℕ, 1 ≤ L → ∀ h : ChainHamiltonian L q R J,
       (∀ X : ChainSupport L R, h.term X ≠ 0 →
         ∃ a : ℕ, a + R + 1 ≤ L ∧ X.1 = interval L a (a + R + 1)) →
