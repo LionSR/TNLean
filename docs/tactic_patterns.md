@@ -169,11 +169,13 @@ abstracted — record why, so it is not re-proposed).
   `liftOne` or `liftTwo`: transport the nonprivate count, participants, expansion
   bound, monomial bound and error estimate through untouched spectator sheets.
 - **Seen:** `hasBoundedChange_liftOne`, `hasBoundedChange_liftTwo`
-  (`SheetStackChange.lean`) and their source-bounded forms
-  (`SheetStackSourceBoundedChange.lean`).
-- **Abstraction:** `TNLean.PEPS.EncodedFrame.isBoundedChange_liftOne` and
-  `isBoundedChange_liftTwo` in `SheetStackChange.lean`, stated for the fixed lifted
-  circuit; all four results now use them.
+  (`Lattice/Sheet/StackChange.lean`) and their source-bounded forms
+  (`Lattice/Sheet/StackSourceBoundedChange.lean`).
+- **Abstraction:** `TNLean.Lattice.isBoundedChange_liftOne` and
+  `isBoundedChange_liftTwo` in `Lattice/Sheet/StackChange.lean`, stated for the fixed
+  lifted circuit over any type of sheets; all four results now use them, and the
+  encoded-frame forms in `PEPS/Approximation/SheetStackChange.lean` read them at the
+  frames.
 
 ### Positive part of a polynomial constant — promoted (2026-10-16)
 
@@ -7810,7 +7812,7 @@ spectral split → block extraction → MPV calculation → strict bounds
   source circuit, preserving the sum tags under composition and retaining
   the same occurrence under framing.
 - **Seen:** `SourceCircuit.sourcePairEquiv` and its endpoint identity in
-  `TNLean/PEPS/Approximation/SourceSampleIndices.lean`.
+  `TNLean/Lattice/Compression/SourceSampleIndices.lean`.
 - **Abstraction:** The slot enumeration reuses `SourceInventory.pairIndexEquiv`;
   Mathlib's injective map on unordered pairs supplies the participant image.
   The global source/sample identification reuses this occurrencewise equivalence.
@@ -7918,9 +7920,9 @@ spectral split → block extraction → MPV calculation → strict bounds
   selector using exclusion from the owner map. The no-party theorem then
   gives the identity on the empty memory.
 - **Seen:** `Word.restrict_mapOwner_eval_eq_id_of_disjoint` in
-  `TNLean/PEPS/Approximation/WordOwnerRestriction.lean` and
+  `TNLean/Lattice/Compression/WordOwnerRestriction.lean` and
   `Word.restrict_localPart_mapOwner_eval_heq_id_of_disjoint` in
-  `TNLean/PEPS/Approximation/SourceWordParties.lean` (two occurrences).
+  `TNLean/Lattice/Compression/SourceWordParties.lean` (two occurrences).
 - **Abstraction:** At a third occurrence, share the restriction lemma for
   a party absent from the original participating-party set, before applying
   the relabelling identities.
@@ -8015,7 +8017,7 @@ spectral split → block extraction → MPV calculation → strict bounds
   with `clm_ext_tmul` and apply congruence to the original identity.
 - **Seen:** The private `tensor_factorization` helper in
   `TNLean/Lattice/PartyCircuit/PartyLocalMaps.lean` and
-  `TNLean/PEPS/Approximation/CanonicalPartyFactorization.lean` (two occurrences).
+  `TNLean/Lattice/Compression/CanonicalPartyFactorization.lean` (two occurrences).
 - **Abstraction:** At a third occurrence, share the operator identity in a
   lower-level tensor-map module, or use Mathlib's `TensorProduct.mapL_comp`.
 - **Notes:** The new theorem identifies the actual singleton restrictions
@@ -8030,9 +8032,9 @@ spectral split → block extraction → MPV calculation → strict bounds
   selector using exclusion from the owner map. The no-party theorem then
   gives the identity on the empty memory.
 - **Seen:** `Word.restrict_mapOwner_eval_eq_id_of_disjoint` in
-  `TNLean/PEPS/Approximation/WordOwnerRestriction.lean` and
+  `TNLean/Lattice/Compression/WordOwnerRestriction.lean` and
   `Word.restrict_localPart_mapOwner_eval_heq_id_of_disjoint` in
-  `TNLean/PEPS/Approximation/SourceWordParties.lean` (two occurrences).
+  `TNLean/Lattice/Compression/SourceWordParties.lean` (two occurrences).
 - **Abstraction:** At a third occurrence, share the restriction lemma for
   a party absent from the original participating-party set, before applying
   the relabelling identities.
@@ -8043,7 +8045,7 @@ spectral split → block extraction → MPV calculation → strict bounds
 ### Selecting the exterior owner — promoted (2026-10-11)
 
 - **Helper:** `partySelector_none` in
-  `TNLean/PEPS/Approximation/PartySelector.lean` identifies selection of the
+  `TNLean/Lattice/Compression/PartySelector.lean` identifies selection of the
   exterior owner with `Option.isNone`.
 - **Use:** Rewrite the selector in an already inferred restriction identity,
   then compose the resulting heterogeneous equalities.
@@ -8066,7 +8068,7 @@ spectral split → block extraction → MPV calculation → strict bounds
 ### Matrices of actual maps in orthonormal coordinates — promoted (2026-10-11)
 
 - **Helper:** `matrix_repr_eval_eq_toMatrix` in
-  `TNLean/PEPS/Approximation/BasisMatrixOperator.lean` identifies the matrix
+  `TNLean/Lattice/Compression/BasisMatrixOperator.lean` identifies the matrix
   formed from the coordinate entries with the linear map's matrix.
 - **Use:** Apply the identity before multiplying, summing or changing bases,
   rather than repeatedly comparing entries and simplifying the two basis

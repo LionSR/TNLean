@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Lattice.Sheet.TwoRegisters
+import TNLean.Lattice.Sheet.FrontChanges
 import TNLean.PEPS.Approximation.FrameRegisters
 import TNLean.PEPS.Approximation.RegisterReordering
 
@@ -20,7 +20,9 @@ both on the registers of the frames:
   tags of each frame are split into those of the holes outside and inside `Y`, the raw registers
   of the sites in `Y` of each sheet are moved next to its inside tags, these blocks are exchanged
   between the sheets, and everything is merged back. No register changes its party. Its operator
-  in canonical coordinates is `ℛ` (`twoLayoutIso_renameWord`).
+  in canonical coordinates is `ℛ` (`twoLayoutIso_renameWord`). Between the splitting and the
+  merging of the tags it is the word `blockRenameWord` of `TNLean.Lattice.Sheet.FrontChanges`,
+  stated there for any blocks of front registers outside and inside `Y`.
 * `correctionLayoutWord` moves the raw registers of `U` of both sheets to the front, applies a
   matrix `W` to them as one private contraction at `P∘`, and moves them back; its operator is
   `1_tags ⊗ (1_{T E} ⊗ W)` (`twoLayoutIso_correctionLayoutWord`). It is the word
@@ -211,46 +213,17 @@ register of the second new frame at that site, whose owner is the old owner on t
 
 Polynomial-PEPS manuscript, proof of Lemma 6.6, `05-frames.tex`, lines 485–490. -/
 def renameWord : Word (X.frame₁.regs ++ X.frame₂.regs) (X.newFrame₁.regs ++ X.newFrame₂.regs) :=
-  let pY : ι → Bool := fun x => decide (x ∈ X.region)
-  let o₁ := tagRegs X.out₁
-  let i₁ := tagRegs X.in₁
-  let o₂ := tagRegs X.out₂
-  let i₂ := tagRegs X.in₂
-  let Y₁ := siteRegs q X.owner₁ X.sitesY
-  let N₁ := siteRegs q X.owner₁ X.sitesN
-  let Y₂ := siteRegs q X.owner₂ X.sitesY
-  let N₂ := siteRegs q X.owner₂ X.sitesN
-  let Y₁' := siteRegs q X.newFrame₁.owner X.sitesY
-  let N₁' := siteRegs q X.newFrame₁.owner X.sitesN
-  let Y₂' := siteRegs q X.newFrame₂.owner X.sitesY
   .comp (Word.assocWord (tagRegs (X.out₁ ++ X.in₁)) (siteRegs q X.owner₁ (sites ι))
     X.frame₂.regs) <|
   .comp (tagSplit X.out₁ X.in₁ (siteRegs q X.owner₁ (sites ι) ++ X.frame₂.regs)) <|
-  .comp (Word.frameList o₁ (Word.frameList i₁ (partWordApp X.owner₁ pY X.frame₂.regs
-    (sites ι)))) <|
-  .comp (Word.frameList o₁ (Word.frameList i₁ (Word.frameList Y₁ (Word.frameList N₁
-    (tagSplit X.out₂ X.in₂ (siteRegs q X.owner₂ (sites ι))))))) <|
-  .comp (Word.frameList o₁ (Word.frameList i₁ (Word.frameList Y₁ (Word.frameList N₁
-    (Word.frameList o₂ (Word.frameList i₂ (partWord X.owner₂ pY (sites ι)))))))) <|
-  .comp (Word.frameList o₁ (Word.swapPairs i₁ Y₁ N₁ o₂ i₂ Y₂ N₂)) <|
-  .comp (Word.frameList o₁ (Word.frameList i₂ (relabelSitesApp X.owner₂ X.newFrame₁.owner
-    (N₁ ++ (o₂ ++ (i₁ ++ (Y₁ ++ N₂)))) X.sitesY fun x hx => by
-      simp [(mem_listT mem_sites x).mp hx]))) <|
-  .comp (Word.frameList o₁ (Word.frameList i₂ (Word.frameList Y₁' (relabelSitesApp X.owner₁
-    X.newFrame₁.owner (o₂ ++ (i₁ ++ (Y₁ ++ N₂))) X.sitesN fun x hx => by
-      simp [(mem_listR mem_sites x).mp hx])))) <|
-  .comp (Word.frameList o₁ (Word.frameList i₂ (Word.frameList Y₁' (Word.frameList N₁'
-    (Word.frameList o₂ (Word.frameList i₁ (relabelSitesApp X.owner₁ X.newFrame₂.owner N₂
-      X.sitesY fun x hx => by simp [(mem_listT mem_sites x).mp hx]))))))) <|
-  .comp (Word.frameList o₁ (Word.frameList i₂ (Word.frameList Y₁' (Word.frameList N₁'
-    (Word.frameList o₂ (Word.frameList i₁ (Word.frameList Y₂' (relabelSites X.owner₂
-      X.newFrame₂.owner X.sitesN fun x hx => by simp [(mem_listR mem_sites x).mp hx])))))))) <|
-  .comp (Word.frameList o₁ (Word.frameList i₂ (Word.frameList Y₁' (Word.frameList N₁'
-    (Word.frameList o₂ (Word.frameList i₁ (unpartWord X.newFrame₂.owner pY (sites ι)))))))) <|
-  .comp (Word.frameList o₁ (Word.frameList i₂ (Word.frameList Y₁' (Word.frameList N₁'
-    (tagMerge X.out₂ X.in₁ (siteRegs q X.newFrame₂.owner (sites ι))))))) <|
-  .comp (Word.frameList o₁ (Word.frameList i₂ (unpartWordApp X.newFrame₁.owner pY
-    X.newFrame₂.regs (sites ι)))) <|
+  .comp (Word.frameList (tagRegs X.out₁) (Word.frameList (tagRegs X.in₁)
+    (Word.frameList (siteRegs q X.owner₁ (sites ι))
+      (tagSplit X.out₂ X.in₂ (siteRegs q X.owner₂ (sites ι)))))) <|
+  .comp (blockRenameWord (tagRegs X.out₁) (tagRegs X.in₁) (tagRegs X.out₂) (tagRegs X.in₂)
+    X.owner₁ X.owner₂ X.region) <|
+  .comp (Word.frameList (tagRegs X.out₁) (Word.frameList (tagRegs X.in₂)
+    (Word.frameList (siteRegs q X.newFrame₁.owner (sites ι))
+      (tagMerge X.out₂ X.in₁ (siteRegs q X.newFrame₂.owner (sites ι)))))) <|
   .comp (tagMerge X.out₁ X.in₂ (siteRegs q X.newFrame₁.owner (sites ι) ++ X.newFrame₂.regs)) <|
   Word.unassocWord (tagRegs (X.out₁ ++ X.in₂)) (siteRegs q X.newFrame₁.owner (sites ι))
     X.newFrame₂.regs
@@ -271,22 +244,11 @@ theorem eval_renameWord (τ₁ : TagSpace (X.out₁ ++ X.in₁)) (c₁ : ι → 
             ((tagAppendEquiv X.out₂ X.in₁).symm
               ((tagAppendEquiv X.out₂ X.in₂ τ₂).1, (tagAppendEquiv X.out₁ X.in₁ τ₁).2))
             (fun x => if x ∈ X.region then c₁ x else c₂ x)) := by
-  set c₁' : ι → Fin q := fun x => if x ∈ X.region then c₂ x else c₁ x
-  set c₂' : ι → Fin q := fun x => if x ∈ X.region then c₁ x else c₂ x
-  have hY₁ : siteVec X.owner₁ X.sitesY c₁ = siteVec X.owner₁ X.sitesY c₂' :=
-    siteVec_congr _ _ fun x hx => by simp [c₂', (mem_listT mem_sites x).mp hx]
-  have hN₁ : siteVec X.owner₁ X.sitesN c₁ = siteVec X.owner₁ X.sitesN c₁' :=
-    siteVec_congr _ _ fun x hx => by simp [c₁', (mem_listR mem_sites x).mp hx]
-  have hY₂ : siteVec X.owner₂ X.sitesY c₂ = siteVec X.owner₂ X.sitesY c₁' :=
-    siteVec_congr _ _ fun x hx => by simp [c₁', (mem_listT mem_sites x).mp hx]
-  have hN₂ : siteVec X.owner₂ X.sitesN c₂ = siteVec X.owner₂ X.sitesN c₂' :=
-    siteVec_congr _ _ fun x hx => by simp [c₂', (mem_listR mem_sites x).mp hx]
-  simp only [renameWord, layoutVec, Word.eval_comp, ContinuousLinearMap.comp_apply]
-  simp only [Word.eval_assocWord_appendIso_symm, eval_tagSplit, Word.eval_frameList_appendIso_symm,
-    eval_partWordApp, hY₁, hN₁]
-  rw [eval_tagSplit]
-  simp only [Word.eval_frameList_appendIso_symm, eval_partWord, hY₂, hN₂, Word.eval_swapPairs,
-    eval_relabelSitesApp, eval_relabelSites, eval_unpartWord, eval_tagMerge, eval_unpartWordApp,
+  simp only [renameWord, layoutVec, Word.eval_comp, ContinuousLinearMap.comp_apply,
+    Word.eval_assocWord_appendIso_symm, eval_tagSplit]
+  rw [Word.eval_frameList_appendIso_symm, Word.eval_frameList_appendIso_symm,
+    Word.eval_frameList_appendIso_symm, eval_tagSplit, eval_blockRenameWord]
+  simp only [Word.eval_frameList_appendIso_symm, eval_tagMerge,
     Word.eval_unassocWord_appendIso_symm]
 
 /-- **The renaming in canonical coordinates** is the renaming `ℛ` of `TwoSheetExchange.rename`. -/

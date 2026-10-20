@@ -333,6 +333,27 @@ theorem exists_sheetSplitting_zpow {Ω : EuclideanSpace ℂ (ι → Fin q)} (hΩ
   rw [← Real.sqrt_sq (Even.zpow_nonneg ⟨-15, by norm_num⟩ L), ← hsq]
   exact Real.sqrt_le_sqrt hI
 
+/-- **Splitting at a polynomially small mutual information, any exponent** (Lemma 6.4
+`lem:splitting`, last sentence, and the splitting step of Lemmas `lem:birth` and `lem:exchange` of
+the one-dimensional note, `part2b_mps_protocol.tex`, lines 70–158). For `0 ≤ L` and any real
+exponent `p`, if `I_Ω(T:E) ≤ L^{-2p}`, the splitting error is at most `L^{-p}`.
+
+Polynomial-PEPS manuscript, Lemma 6.4 `lem:splitting`, `05-frames.tex`, lines 366–367, there
+with `p = 30`. -/
+theorem exists_sheetSplitting_rpow {Ω : EuclideanSpace ℂ (ι → Fin q)} (hΩ : ‖Ω‖ = 1)
+    {L p : ℝ} (hL : 0 ≤ L)
+    (hI : FiniteProduct.mutualInformation (fun _ : ι => Fin q) Ω T E ≤ L ^ (-(2 * p))) :
+    ∃ σ : SplittingData q T E, σ.error h Ω ≤ L ^ (-p) := by
+  obtain ⟨σ, h₁, h₂⟩ := exists_sheetSplitting h hΩ
+  refine ⟨σ, h₁.trans (h₂.trans ?_)⟩
+  have hsq : L ^ (-(2 * p)) = (L ^ (-p)) ^ 2 := by
+    rw [← Real.rpow_natCast, ← Real.rpow_mul hL]
+    congr 1
+    push_cast
+    ring
+  rw [← Real.sqrt_sq (Real.rpow_nonneg hL _), ← hsq]
+  exact Real.sqrt_le_sqrt hI
+
 end Splitting
 
 end TNLean.PEPS.EncodedFrame
