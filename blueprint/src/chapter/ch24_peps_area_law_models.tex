@@ -824,7 +824,8 @@ original open square. We state the two models separately, following
 \begin{definition}[The square-grid entropy area law at a given constant]
     \label{def:square_entropy_area_law_at}
     \lean{TNLean.PEPS.Approximation.SquareEntropyAreaLawAt,
-        TNLean.PEPS.Approximation.SquareEntropyAreaLaw.exists_squareEntropyAreaLawAt}
+        TNLean.PEPS.Approximation.SquareEntropyAreaLaw.exists_squareEntropyAreaLawAt,
+        TNLean.PEPS.Approximation.SquareEntropyAreaLawAt.mono}
     \leanok
     \uses{def:square_entropy_area_law}
     Let $q$ be an integer, $C_A$ a real number, and fix a family of states,
@@ -838,7 +839,8 @@ original open square. We state the two models separately, following
     $H-E_0I\ge\Delta(I-|\Omega\rangle\langle\Omega|)$. The square-grid
     entropy area law of Definition~\ref{def:square_entropy_area_law} says that
     for $q\ge2$ and $J,\Delta>0$ some constant $C_A$ has this property for
-    that family.
+    that family. If the law holds for a family with constant $C_A$, it
+    holds with the same constant for every smaller family.
 \end{definition}
 
 \begin{theorem}[Entropy area law on the square grid]
