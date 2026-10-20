@@ -246,7 +246,7 @@ theorem eval_renameWord (τ₁ : TagSpace (X.out₁ ++ X.in₁)) (c₁ : ι → 
             (fun x => if x ∈ X.region then c₁ x else c₂ x)) := by
   simp only [renameWord, layoutVec, Word.eval_comp, ContinuousLinearMap.comp_apply,
     Word.eval_assocWord_appendIso_symm, eval_tagSplit]
-  erw [Word.eval_frameList_appendIso_symm, Word.eval_frameList_appendIso_symm,
+  rw [Word.eval_frameList_appendIso_symm, Word.eval_frameList_appendIso_symm,
     Word.eval_frameList_appendIso_symm, eval_tagSplit, eval_blockRenameWord]
   simp only [Word.eval_frameList_appendIso_symm, eval_tagMerge,
     Word.eval_unassocWord_appendIso_symm]

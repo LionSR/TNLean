@@ -1462,7 +1462,11 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
         TNLean.PEPS.EncodedFrame.twoSheetPlace,
         TNLean.PEPS.EncodedFrame.sum_single_merge₂,
         TNLean.PEPS.EncodedFrame.twoLayoutIso_correctionLayoutWord,
-        TNLean.PEPS.EncodedFrame.correctionLayoutWord_props}
+        TNLean.PEPS.EncodedFrame.correctionLayoutWord_props,
+        TNLean.PEPS.EncodedFrame.frontCorrectionWord,
+        TNLean.PEPS.EncodedFrame.eval_frontCorrectionWord,
+        TNLean.PEPS.EncodedFrame.twoFrontLayoutIso_frontCorrectionWord,
+        TNLean.PEPS.EncodedFrame.frontCorrectionWord_props}
     \leanok
     \uses{lem:peps_register_reorderings,lem:peps_two_frame_registers,
         lem:peps_frame_exchange_correction_monomial}
@@ -1556,16 +1560,17 @@ three owners meet and no encoded holes are needed.
         TNLean.Lattice.Sheet.swapIn,
         TNLean.Lattice.Sheet.exchangeEnv,
         TNLean.Lattice.Sheet.exchangeOp,
-        TNLean.Lattice.Sheet.toFrame,
-        TNLean.Lattice.Sheet.toFrame_regRef}
+        TNLean.Lattice.unitProdIso₂_act_liftFront,
+        TNLean.Lattice.Sheet.regIso_eq_frontLayoutIso,
+        TNLean.Lattice.Sheet.twoRegIso_eq_twoFrontLayoutIso}
     \leanok
     \uses{def:peps_frame_registers,def:peps_frame_sheet_swap,
         def:peps_frame_buffer_correction}
     A sheet on $\Lambda$ is an owner for each site; its registers are one
     register $\C^q$ per site, held by its owner, identified with
     $\mathcal H_\Lambda$ in product coordinates, and its reference vector is
-    $\Omega$. It is the encoded frame without holes with the same owners, with
-    the same registers and reference vector. For a party $P_\circ$ let $E$ be
+    $\Omega$. These coordinates are those of the empty block of registers in
+    front of the site registers. For a party $P_\circ$ let $E$ be
     the set of sites not owned by $P_\circ$. For two sheets and a region $Y$,
     the exchange gives the first sheet the owners of the second inside $Y$ and
     conversely; with $Z$ the set of sites whose two owners are not both
@@ -1573,10 +1578,33 @@ three owners meet and no encoded holes are needed.
     implemented map is $C=D_UF_AF_Y$.
 \end{definition}
 
+\begin{lemma}[Sheets as encoded frames without holes]
+    \label{lem:lattice_sheet_frame}
+    \lean{TNLean.Lattice.Sheet.toFrame,
+        TNLean.Lattice.Sheet.toFrame_regs,
+        TNLean.Lattice.Sheet.toFrame_regIso,
+        TNLean.Lattice.Sheet.toFrame_regRef,
+        TNLean.Lattice.Sheet.toFrame_changeOwner}
+    \leanok
+    \uses{def:lattice_sheet,def:peps_frame_registers}
+    Placed in the plane, a sheet is the encoded frame without holes with the
+    same owners. Its registers are those of the frame, its product coordinates
+    are those of the frame without the trivial tag coordinate, and handing a set
+    of sites to another party commutes with the passage to frames. For $q\ge1$,
+    where the reference vector of an encoded frame is defined, the two
+    reference vectors agree.
+\end{lemma}
+
+\begin{proof}\leanok
+    With no holes the encoder is the identity, so the frame places $\Omega$ in
+    the site registers.
+\end{proof}
+
 \begin{theorem}[Birth and death of sheets: bounded change]
     \label{thm:lattice_sheet_birth_bounded}
     \lean{TNLean.Lattice.Sheet.birth_bounded,
-        TNLean.Lattice.Sheet.death_bounded}
+        TNLean.Lattice.Sheet.death_bounded,
+        TNLean.Lattice.Sheet.changeOwner_birth_owners}
     \leanok
     \uses{def:lattice_sheet,lem:peps_frame_splitting,def:peps_frame_birth_map,
         lem:peps_frame_birth_map,def:peps_monomial_parties}
@@ -1596,10 +1624,10 @@ three owners meet and no encoded holes are needed.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:peps_frame_birth_bounded_grouped,
-        lem:peps_grouped_monomial_placement,
-        thm:peps_monomial_composition_counts}
-    The monomials of Theorem~\ref{thm:peps_frame_birth_bounded}, placed behind the
+    \uses{lem:peps_frame_splitting,thm:peps_frame_birth_bounded}
+    Every site outside $T\cup E$ is owned by $P_\circ$ before and after the
+    birth, and the sites of $E$ keep their owners. The monomials of
+    Theorem~\ref{thm:peps_frame_birth_bounded}, placed behind the
     empty block of registers, act in product coordinates as $B$, and
     $\lVert(B-\id)\Omega\rVert$ is at most the splitting error, at most
     $L^{-p}$ by Lemma~\ref{lem:peps_frame_splitting}.
@@ -1629,7 +1657,8 @@ three owners meet and no encoded holes are needed.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:peps_exchange_renaming_word,lem:peps_exchange_correction_word,
+    \uses{lem:peps_frame_splitting,lem:peps_exchange_renaming_word,
+        lem:peps_exchange_correction_word,
         lem:peps_frame_exchange_correction_monomial,lem:peps_frame_exchange_error,
         lem:peps_register_reorderings}
     The renaming of Lemma~\ref{lem:peps_exchange_renaming_word} with empty
@@ -1637,4 +1666,38 @@ three owners meet and no encoded holes are needed.
     so its operator is $F_Y$; the corrections act as $D_UF_A$. Since $Y$ is
     the disjoint union of $T$ and $A$, the product is $D_UF_T$, and
     Lemma~\ref{lem:peps_frame_exchange_error} bounds the reference error.
+\end{proof}
+
+\begin{definition}[Stacks of sheets]
+    \label{def:lattice_sheet_stack}
+    \lean{TNLean.Lattice.Sheet.refFamily,
+        TNLean.Lattice.Sheet.HasBoundedChange,
+        TNLean.Lattice.Sheet.HasSourceBoundedChange}
+    \leanok
+    \uses{def:lattice_sheet,def:peps_sheet_stack,def:peps_bounded_change}
+    The memory of a list of sheets and its reference vector are those of
+    Definition~\ref{def:peps_sheet_stack}, with the reference vector $\Omega$ of
+    each sheet placed in its site registers. A bounded change of a list of
+    sheets is a bounded change, in the sense of
+    Definition~\ref{def:peps_bounded_change}, between these reference vectors;
+    the variant with bounded pair sources also bounds the number of normalized
+    pair sources.
+\end{definition}
+
+\begin{lemma}[Reference vectors of stacks of sheets]
+    \label{lem:lattice_sheet_stack_reference}
+    \lean{TNLean.Lattice.Sheet.norm_refFamily_le,
+        TNLean.Lattice.Sheet.norm_framesVec,
+        TNLean.Lattice.Sheet.pairRef_eq_twoRegIso_symm}
+    \leanok
+    \uses{def:lattice_sheet_stack}
+    If $\lVert\Omega\rVert\le1$, the reference vector of every sheet has norm at
+    most one; if $\lVert\Omega\rVert=1$, the reference vector of a list of sheets
+    without further registers has norm one. The reference vector of two adjacent
+    sheets is $\Omega\otimes\Omega$ in the product coordinates of the two sheets.
+\end{lemma}
+
+\begin{proof}\leanok
+    The reference vector of a sheet is the image of $\Omega$ under an isometry,
+    and the norm of a tensor product of vectors is the product of their norms.
 \end{proof}
