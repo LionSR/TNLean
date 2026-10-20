@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Lattice.Compression.OutputPartitionCoordinates
 import TNLean.Lattice.Compression.SourceInputPartition
+
 /-!
 # Physical coordinates after successive owner identifications
 

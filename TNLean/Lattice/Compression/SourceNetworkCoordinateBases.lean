@@ -7,6 +7,7 @@ import TNLean.Lattice.Compression.ActualSourceRegisters
 import TNLean.Lattice.Compression.AuxiliaryRegisterFiniteness
 import TNLean.Lattice.PartyCircuit.PartyTensorMaps
 import TNLean.Lattice.Compression.SourcePreparationCoordinates
+
 /-!
 # Finite orthonormal coordinates for the source and discarded memories
 

@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.Lattice.Compression.ApproximateSourceSampling
 import TNLean.Lattice.Compression.ActualSampledDistributedContraction
 import TNLean.Lattice.Compression.SourceNetworkCoordinateBases
+
 /-!
 # Sampled distributed approximation from local gate expansions
 

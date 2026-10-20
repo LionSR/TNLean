@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Lattice.Compression.CanonicalPartyFactorization
 import TNLean.Lattice.Compression.PartyGroupedBasis
+
 /-! # Party coordinates of source-free chronological words
 
 The canonical grouping isometry transports the product of the literal local register bases to

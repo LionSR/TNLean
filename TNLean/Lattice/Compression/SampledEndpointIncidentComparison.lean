@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Lattice.Compression.IncidentSampledEndpointRepresentation
 import TNLean.Lattice.Compression.WordEvalComparison
+
 /-!
 # Restricted sampled endpoint words and incident data
 

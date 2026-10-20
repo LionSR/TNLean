@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Lattice.Compression.SourceCorrectedSlots
 import TNLean.Lattice.Compression.SelectedSourceContraction
+
 /-!
 # Source contractions of actual corrected circuit terms
 

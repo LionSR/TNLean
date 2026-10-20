@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.Lattice.Compression.PhysicalFirstReadout
 import TNLean.Lattice.Compression.EffectReplacementSources
 import TNLean.Lattice.Compression.EffectReplacementPolynomial
+
 /-!
 # Polynomial resources of the actual physical-first replacement
 

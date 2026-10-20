@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Lattice.Compression.FrameListRestriction
 import TNLean.Lattice.Compression.WordPermutationRestriction
+
 /-!
 # Composition of selected remaining operations
 

@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Lattice.Compression.SourceGaussianLaw
 import TNLean.Lattice.Compression.SourcePhysicalDensity
+
 /-!
 # Physical density for the actual Gaussian source replacements
 

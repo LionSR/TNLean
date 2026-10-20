@@ -7,6 +7,7 @@ import TNLean.Lattice.Compression.OriginalGateSamplePhysicalSum
 import TNLean.Lattice.Compression.SourceSampleCount
 import TNLean.Lattice.Compression.SourceGateRoot
 import TNLean.Lattice.Compression.UnivDensityPairContraction
+
 /-! # The exact distributed contraction of the sampled physical density
 
 At every original nonempty gate occurrence, choose one of its participants

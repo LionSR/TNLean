@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.Lattice.Compression.ApproximateCircuitBudget
 import TNLean.Lattice.Compression.ApproximateSampledNetworkApproximation
 import TNLean.Lattice.Compression.ActualNetworkResourceCoupling
+
 /-!
 # Uniform bounds for sampled approximations supplied at a fixed precision
 

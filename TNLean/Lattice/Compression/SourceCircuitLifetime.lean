@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Lattice.Compression.SourceCircuitChoiceProduct
 import TNLean.Lattice.Compression.CorrectedPositionCost
+
 /-! # Lifetime bounds for the actual corrected source positions of a circuit -/
 
 /-!

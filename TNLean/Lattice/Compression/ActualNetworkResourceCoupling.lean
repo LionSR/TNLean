@@ -7,6 +7,7 @@ import TNLean.Lattice.Compression.PhysicalFirstLinkPolynomial
 import TNLean.Lattice.Compression.PhysicalFirstNetworkResources
 import TNLean.Lattice.Compression.SourceNetworkDimensions
 import TNLean.Lattice.Compression.SourceNetworkIncidence
+
 /-!
 # Original resource bounds for the actual sampled contraction
 

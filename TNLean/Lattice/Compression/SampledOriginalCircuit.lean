@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.Lattice.Compression.ActualSourceSampling
 import TNLean.Lattice.Compression.PhysicalFirstReadout
 import TNLean.Lattice.Compression.AuxiliaryRegisterFiniteness
+
 /-!
 # Sampling the actual replacement of an original circuit
 

@@ -7,6 +7,7 @@ import TNLean.Lattice.Compression.SampledOriginalCircuit
 import TNLean.Lattice.PartyCircuit.ApproximateCircuitResources
 import TNLean.Lattice.Compression.ApproximateCircuitDensity
 import TNLean.Lattice.Compression.FiniteInputMemory
+
 /-!
 # An actual sample for approximate original gates
 

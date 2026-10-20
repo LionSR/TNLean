@@ -7,6 +7,7 @@ import TNLean.Lattice.Compression.EndpointMatrixAverage
 import TNLean.Lattice.Compression.SampledEndpointFactors
 import TNLean.Lattice.Compression.ActualSourceInputBasis
 import TNLean.Lattice.Compression.AllSourceSlots
+
 /-! # Actual sampled endpoint words
 
 The endpoint maps associated with each sampled source matrix form an actual source-free word on

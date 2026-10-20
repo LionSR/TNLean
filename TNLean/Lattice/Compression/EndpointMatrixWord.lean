@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Lattice.Compression.BasisMatrixOperator
 import TNLean.Lattice.Compression.EndpointOperatorCoordinates
+
 /-! # The endpoint word of specified endpoint matrices
 
 The literal endpoint word is built from one matrix at each endpoint of every

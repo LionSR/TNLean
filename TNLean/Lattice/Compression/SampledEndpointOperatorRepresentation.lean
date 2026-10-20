@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Lattice.Compression.ActualSampledEndpointInputWord
 import TNLean.Lattice.Compression.SelectedPartialSourceSlots
+
 /-!
 # Original sampled endpoint operators and their ordered word
 

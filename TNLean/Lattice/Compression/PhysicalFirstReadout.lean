@@ -9,6 +9,7 @@ import TNLean.Lattice.PartyCircuit.SourceOnlyReduction
 import TNLean.Lattice.Compression.SourcePhysicalDensity
 import TNLean.Lattice.Compression.PhysicalFirstExchange
 import TNLean.Lattice.Compression.PhysicalDensityPureInput
+
 /-! # Physical output after exchanging retained auxiliary registers
 
 The effect replacement produces the auxiliary registers before the original

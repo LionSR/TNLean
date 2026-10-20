@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Lattice.Compression.SourceCircuitSubstitution
 import TNLean.Lattice.Compression.SourceResidualCoordinates
+
 /-!
 # Independence of the remaining operations from surviving source vectors
 

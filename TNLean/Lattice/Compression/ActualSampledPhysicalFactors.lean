@@ -8,6 +8,7 @@ import TNLean.Lattice.Compression.RestrictedMixedPhysicalTrace
 import TNLean.Lattice.Compression.ActualSampledPartyPartialTrace
 import TNLean.Lattice.Compression.SelectedPhysicalPrivateBasis
 import TNLean.Lattice.Compression.SelectedPhysicalPartyGrouping
+
 /-! # Actual sampled factors in the original physical coordinates
 
 Choose the local output bases obtained from the original physical registers

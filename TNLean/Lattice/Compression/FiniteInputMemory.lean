@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Lattice.PartyCircuit.OriginalCircuit
 import TNLean.Lattice.Compression.FiniteRegisterMemories
+
 /-!
 # Finite coordinates of the original product input
 

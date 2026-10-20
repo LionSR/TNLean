@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Lattice.PartyCircuit.LayoutEqualityCoordinates
 import TNLean.Lattice.Compression.OwnerMemoryTransport
+
 /-!
 # Partitioning registers after changing their owners
 

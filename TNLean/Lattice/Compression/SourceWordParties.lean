@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Lattice.PartyCircuit.WordOwnerMap
 import TNLean.Lattice.Compression.PartySelector
+
 /-! # Participating parties after pair preparations have been moved to the beginning
 
 Moving pair preparations to the beginning preserves the participating parties of

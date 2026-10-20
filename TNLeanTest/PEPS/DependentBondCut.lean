@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Lattice.Compression.DependentBondCut
+
 /-! # Regressions for unequal-dimensional labelled bonds and joint boundaries -/
 
 noncomputable section

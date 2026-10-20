@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Lattice.Compression.ActualPureSampledPhysicalSum
 import TNLean.Lattice.Compression.IncidentSampledPhysicalFactor
+
 /-! # Replacing sampled party factors by their incident constructions
 
 Each local factor is constructed from the two original incident gate-label

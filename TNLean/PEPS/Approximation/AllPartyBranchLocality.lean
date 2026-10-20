@@ -7,6 +7,7 @@ import TNLean.Lattice.Compression.IncidentGateLabels
 import TNLean.Lattice.Compression.SourceResidualCoordinates
 import TNLean.Lattice.Compression.LocalPartRestrictionCongruence
 import TNLean.Lattice.Compression.NonincidentAllGateRestriction
+
 /-!
 # Dependence of an actual branch on incident gate choices
 

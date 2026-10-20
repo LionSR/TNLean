@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Lattice.Compression.OwnerOutputCoordinates
 import TNLean.Lattice.Compression.SeparatedPhysicalDensity
+
 /-!
 # Actual output coordinates of the separated source calculation
 

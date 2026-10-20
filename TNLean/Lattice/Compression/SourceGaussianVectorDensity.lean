@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Lattice.Compression.SourceGaussianContraction
 import TNLean.Lattice.Compression.PreparedSourceVectorDensity
+
 /-!
 # Actual vectors in the Gaussian corrected density
 

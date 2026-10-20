@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.Lattice.Compression.SourceInputSchmidtFrames
 import TNLean.Lattice.Compression.CorrectedSchmidtInput
 import TNLean.Lattice.Compression.LocalSchmidtOutput
+
 /-!
 # The actual partial output in corrected-source Schmidt coordinates
 

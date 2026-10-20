@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Lattice.PartyCircuit.DistributedSourceComposition
 import TNLean.Lattice.Compression.SourceWordParties
+
 /-! # The exterior restriction of a touched all-party gate
 
 When every original party is selected, a gate with a participating party is

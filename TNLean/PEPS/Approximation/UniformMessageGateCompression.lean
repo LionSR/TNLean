@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.Algebra.CeilScaling
 import TNLean.Lattice.Compression.UniformApproximateSampledNetwork
 import TNLean.Lattice.Compression.MessageGateLists
+
 /-!
 # Uniform compression of original gates containing bounded messages
 

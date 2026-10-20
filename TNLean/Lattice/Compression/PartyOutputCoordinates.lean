@@ -9,6 +9,7 @@ import TNLean.Lattice.Compression.PartyGroupingTransport
 import TNLean.Lattice.PartyCircuit.FamilyPhysicalReadout
 import TNLean.Lattice.PartyCircuit.UnitMemoryCoordinates
 import TNLean.Lattice.Compression.PartitionOwnerNaturality
+
 /-!
 # Grouping physical and private output coordinates by party
 

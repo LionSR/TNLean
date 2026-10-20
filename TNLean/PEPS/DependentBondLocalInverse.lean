@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.Lattice.Compression.DependentBondCut
 import TNLean.PEPS.DependentBondProjectorExpansion
 import TNLean.Lattice.Compression.DependentPhysicalProductRangeSupport
+
 /-!
 # Local inverses with dependent virtual and physical dimensions
 

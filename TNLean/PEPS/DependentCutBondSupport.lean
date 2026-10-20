@@ -7,6 +7,7 @@ import TNLean.PEPS.DependentBondCoefficients
 import TNLean.Lattice.Compression.DependentBondCut
 import TNLean.PEPS.DependentBondProjectorExpansion
 import TNLean.Lattice.Compression.DependentPhysicalProductRangeSupport
+
 /-!
 # Coherent bond expansions forced by complementary cuts
 

@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Lattice.Compression.PhysicalFirstPolynomial
 import TNLean.Lattice.Compression.SourceAlphabetPolynomial
+
 /-!
 # Polynomial link dimensions from original gate resources
 

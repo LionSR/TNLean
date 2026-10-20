@@ -7,6 +7,7 @@ import TNLean.Lattice.Compression.IncidentSampledEndpointWord
 import TNLean.Lattice.Compression.SampledEndpointOperatorRepresentation
 import TNLean.Lattice.Compression.EndpointSelectedRegisterComparison
 import TNLean.Lattice.Compression.EndpointRegisterOwnerTransport
+
 /-!
 # Incident sampled endpoint data and original labels
 

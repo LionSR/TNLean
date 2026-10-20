@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.Lattice.Compression.SourceSampleIndices
 import TNLean.Lattice.Compression.PartialSourcePreparation
 import TNLean.Lattice.Compression.IncidentGateLabels
+
 /-!
 # Local sample indices in the original source order
 

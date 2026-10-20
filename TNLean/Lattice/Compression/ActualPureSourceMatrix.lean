@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.Lattice.Compression.PurePreparedContraction
 import TNLean.Lattice.Compression.ActualSourceColumnCoordinates
 import TNLean.Lattice.Compression.PartialSourceWordEvaluation
+
 /-! # Chronological source columns on a recorded product input
 
 The source coordinates are the Euclidean endpoint bases of the original slots.

@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Lattice.Compression.ActualSourceSampling
 import TNLean.Lattice.Compression.SourceSamplingPolynomial
+
 /-!
 # Polynomial sample count for an actual circuit
 

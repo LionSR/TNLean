@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.Lattice.Compression.SourceCorrectedContractionIdentity
 import TNLean.Lattice.Compression.PreparedSourceCorrections
 import TNLean.Lattice.Compression.AllSourceSlots
+
 /-!
 # Source replacements and the global corrected-subset identity
 

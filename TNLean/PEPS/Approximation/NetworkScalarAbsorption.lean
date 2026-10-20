@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Lattice.Compression.DependentBondNetwork
+
 /-! # Absorbing a scalar into one party tensor
 
 Multiplying one local tensor multiplies the network contraction by the same

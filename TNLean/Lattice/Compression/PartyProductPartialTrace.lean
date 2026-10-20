@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Channel.PartialTrace
 import TNLean.Lattice.Compression.DependentPhysicalProductRangeSupport
+
 /-! # Partial trace of a product of party matrices
 
 The private coordinates are summed within each party. No private coordinate

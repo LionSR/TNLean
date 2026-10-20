@@ -7,6 +7,7 @@ import TNLean.Lattice.Compression.WordEvalComparison
 import TNLean.Lattice.Compression.IncidentSourceWord
 import TNLean.Lattice.Compression.AllPartySingletonCircuitComparison
 import TNLean.Lattice.Compression.WordStructuralCongruence
+
 /-!
 # The prepared source operator determined by incident labels
 

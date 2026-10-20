@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Lattice.Compression.NonemptyGateLabels
+
 /-! # A participant root at each original nonempty gate occurrence
 
 Each nonempty original gate occurrence carries a proof that its participant

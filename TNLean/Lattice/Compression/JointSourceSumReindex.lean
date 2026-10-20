@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Lattice.Compression.PointwiseChoiceCoefficient
 import TNLean.Lattice.Compression.SourceSampleAssignmentIndices
+
 /-! # Original gate labels and common samples in the same physical sum
 
 The ket and bra labels are reindexed independently by their original gate

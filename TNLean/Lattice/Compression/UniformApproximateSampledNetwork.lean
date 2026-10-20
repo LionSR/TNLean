@@ -8,6 +8,7 @@ import TNLean.Lattice.Compression.UniformApproximateNetworkBounds
 import TNLean.Lattice.Compression.EffectCircuitTermwiseCoefficientBounds
 import TNLean.Lattice.Compression.DistributedContractionScalar
 import TNLean.Lattice.Compression.MessageGateLists
+
 /-!
 # Uniform operator networks from approximate expansions of original gates
 

@@ -7,6 +7,7 @@ import TNLean.Lattice.Compression.IncidentGateLabels
 import TNLean.Lattice.Compression.WordSelectedOwnerLocalPart
 import TNLean.Lattice.Compression.NonincidentAllGateRestriction
 import TNLean.Lattice.Compression.WordOwnerEvaluation
+
 /-!
 # A gate in the singleton and all-party partial expansions
 

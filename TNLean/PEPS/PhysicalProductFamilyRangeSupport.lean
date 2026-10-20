@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.PhysicalProductRangeSupport
 import TNLean.Lattice.Compression.DependentPhysicalProductRangeSupport
+
 /-!
 # Ranges of site-dependent products of physical maps
 

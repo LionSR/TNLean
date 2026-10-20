@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Lattice.Compression.ActualSampledEndpointWord
 import TNLean.Lattice.Compression.SourceColumnContraction
+
 /-! # Sampled endpoint matrices on the actual source input
 
 The literal endpoint word is transported to the input of the recorded private

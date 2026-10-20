@@ -9,6 +9,7 @@ import TNLean.Lattice.Compression.AllPartialGate
 import TNLean.Lattice.Compression.NoneResidualOperations
 import TNLean.Lattice.Compression.NoneResidualGate
 import TNLean.Lattice.Compression.EmptyGateScalar
+
 /-!
 # The scalar factor of the all-selected chronological residual
 

@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Lattice.Compression.GroupTruncation
 import TNLean.Lattice.Compression.DependentBondNetwork
+
 /-!
 # Whole-group contractions as edge-dependent networks
 

@@ -7,6 +7,7 @@ import TNLean.Lattice.Compression.ActualCorrectedSourceBound
 import TNLean.Lattice.Compression.ExteriorPhysicalDimension
 import TNLean.Lattice.Compression.FiniteRegisterMemories
 import TNLean.Lattice.Compression.SourceCircuitResourceBounds
+
 /-!
 # The corrected-term estimate from the original circuit resources
 

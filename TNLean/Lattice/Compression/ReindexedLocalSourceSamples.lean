@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Lattice.Compression.LocalSourceSampleIndices
 import TNLean.Lattice.Compression.SourceSampleAssignmentIndices
+
 /-! # Restricting a reindexed common sample assignment
 
 After the common assignment is reindexed by original gate-pair occurrences,

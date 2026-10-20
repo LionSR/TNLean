@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.Lattice.PartyCircuit.EffectReplacementExpansion
 import TNLean.Lattice.PartyCircuit.EffectCircuitResources
 import TNLean.Lattice.Compression.DistributedLifetime
+
 /-!
 # Gate bounds at actual source-circuit occurrences
 

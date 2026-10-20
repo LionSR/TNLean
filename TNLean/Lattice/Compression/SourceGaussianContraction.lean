@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.Lattice.Compression.PreparedSourceTransport
 import TNLean.Lattice.Compression.SourceCorrectedContractionIdentity
 import TNLean.Lattice.Compression.SourceGaussianDensity
+
 /-!
 # Actual corrected terms in Gaussian Schmidt coordinates
 

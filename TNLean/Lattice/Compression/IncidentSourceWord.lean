@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Lattice.Compression.SelectedPartialSourceSlots
 import TNLean.Lattice.Compression.SourcePrivatePreparation
+
 /-!
 # The source-to-output word determined by incident labels
 

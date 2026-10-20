@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Lattice.Compression.ActualSourceRegisters
 import TNLean.Lattice.Compression.SourceSlotBasis
+
 /-! # Coordinates of the actual chronological source input
 
 The source slots and their endpoint dimensions are fixed by the original

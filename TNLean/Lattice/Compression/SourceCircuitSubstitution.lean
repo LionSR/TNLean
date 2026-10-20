@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.Lattice.Compression.SourceCircuitChoiceAt
 import TNLean.Lattice.PartyCircuit.SourceOwnerSupport
 import TNLean.Lattice.Compression.PartialSourceEvaluation
+
 /-!
 # Source substitutions and aggregation of untouched gates
 

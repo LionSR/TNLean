@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Lattice.Compression.ActualSourceLifetimeBound
 import TNLean.Lattice.Compression.SourceSampleChoice
+
 /-!
 # Gaussian approximation of an actual source-only circuit
 

@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.Lattice.Compression.SourceGateRoot
 import TNLean.Lattice.Compression.SourceCircuitResourceBounds
 import TNLean.Lattice.Compression.DistributedLinks
+
 /-! # Incidence of the actual sampled density network
 
 Removing gate occurrences with empty participant sets preserves the full

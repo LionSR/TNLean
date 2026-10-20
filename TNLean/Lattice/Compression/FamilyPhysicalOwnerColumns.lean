@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Lattice.PartyCircuit.FamilyPhysicalReadout
 import TNLean.Lattice.Compression.OwnerMemoryTransport
+
 /-!
 # Physical tensor columns under dimension-preserving owner relabelling
 

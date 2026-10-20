@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.Lattice.Compression.ActualPurePhysicalSourceReplacement
 import TNLean.Lattice.Compression.ActualSourceColumnPhysicalTrace
 import TNLean.Lattice.Compression.ActualSampledPhysicalScalar
+
 /-! # The actual sampled physical sum on the recorded product input
 
 The original physical source-replaced operator is the double chronological

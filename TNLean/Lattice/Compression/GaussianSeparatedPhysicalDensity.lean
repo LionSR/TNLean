@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.Lattice.Compression.GaussianPhysicalSource
 import TNLean.Lattice.Compression.SeparatedPhysicalDensity
 import TNLean.Lattice.Compression.GaussianSourceIntegrability
+
 /-!
 # Expected full physical error of separated source terms
 

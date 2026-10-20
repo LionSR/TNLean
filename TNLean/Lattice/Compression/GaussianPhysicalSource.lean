@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.Lattice.Compression.SourceGaussianCoefficients
 import TNLean.Lattice.Compression.WeightedPhysicalSource
 import TNLean.Lattice.Compression.SourceCircuitSourceOrder
+
 /-!
 # Physical source errors under the actual global Gaussian law
 

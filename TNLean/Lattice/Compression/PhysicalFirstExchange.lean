@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.Lattice.PartyCircuit.EffectCircuitResources
 import TNLean.Lattice.PartyCircuit.EffectReplacementExpansion
 import TNLean.Lattice.Compression.SourceCircuitChoiceAt
+
 /-!
 # Source-free exchange of the physical output block
 

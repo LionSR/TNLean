@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.Lattice.Compression.SelectedPhysicalConfigurations
 import TNLean.Lattice.Compression.FamilyPhysicalOwnerColumns
 import TNLean.Lattice.Compression.EmptyHeadGrouping
+
 /-!
 # Grouping the original physical coordinates after selecting all parties
 

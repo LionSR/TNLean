@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.Lattice.Compression.NonemptyGateLabels
 import TNLean.Lattice.Compression.DistributedOperatorContraction
 import TNLean.Lattice.Compression.PartySelector
+
 /-! # Gate labels visible at one party
 
 For the all-party grouping, the occurrences touched by the grouped owner of an

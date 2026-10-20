@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.Lattice.PartyCircuit.DistributedSourceComposition
 import TNLean.Lattice.Compression.LocalPartSpectatorOwnerExclusion
 import TNLean.Lattice.Compression.WordOwnerAppendTailTransport
+
 /-!
 # The restriction of a gate away from its participating parties
 

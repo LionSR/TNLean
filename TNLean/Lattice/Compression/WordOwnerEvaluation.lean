@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Lattice.PartyCircuit.WordOwnerMap
 import TNLean.Lattice.Compression.OwnerMemoryTransport
+
 /-! # Evaluation under relabelling of owners
 
 Owner labels do not change the ordered memory spaces. Their canonical

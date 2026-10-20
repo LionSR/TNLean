@@ -7,6 +7,7 @@ import TNLean.Lattice.Compression.SourcePrivatePreparation
 import TNLean.Lattice.Compression.FrameListRestriction
 import TNLean.Lattice.Compression.ActualSourceEmptyOwner
 import TNLean.Lattice.Compression.WordOwnerRestriction
+
 /-!
 # The exterior restriction of the recorded private preparation
 

@@ -7,6 +7,7 @@ import TNLean.Lattice.Compression.SourcePairIndex
 import TNLean.Lattice.PartyCircuit.SourceCircuitLocations
 import TNLean.Lattice.Compression.NonemptyGateLabels
 import TNLean.Lattice.Compression.DistributedOperatorContraction
+
 /-!
 # Original source positions and distributed sample links
 

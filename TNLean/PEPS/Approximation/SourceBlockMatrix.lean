@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.PreparedMatrixNorm
 import TNLean.Lattice.Compression.SourceSlotBasis
+
 /-!
 # Joint contraction of free source inputs
 

@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Lattice.Compression.ColumnSelection
 import TNLean.Lattice.Compression.DependentBondNetwork
+
 /-!
 # Extracting one ket column from an edge-dependent operator network
 

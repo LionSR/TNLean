@@ -7,6 +7,7 @@ import TNLean.Lattice.Compression.CorrectedSchmidtOutput
 import TNLean.Lattice.Compression.SeparatedOutputCoordinates
 import TNLean.Lattice.Compression.SourceGaussianBranchReindex
 import TNLean.Lattice.Compression.GaussianSeparatedPhysicalDensity
+
 /-!
 # Expected physical norm of an actual partial branch
 

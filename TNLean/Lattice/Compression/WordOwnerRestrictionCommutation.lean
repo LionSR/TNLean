@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.Lattice.PartyCircuit.WordOwnerMap
 import TNLean.Lattice.Compression.OwnerMemoryTransport
 import TNLean.Lattice.Compression.WordStructuralCongruence
+
 /-!
 # Restriction after changing owners
 

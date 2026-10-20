@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import QICLean.Analysis.ProductReferenceDensityError
 import TNLean.Lattice.Compression.ColumnSelection
 import TNLean.Lattice.Compression.PartyNetwork
+
 /-!
 # A product-basis input column of a party network
 

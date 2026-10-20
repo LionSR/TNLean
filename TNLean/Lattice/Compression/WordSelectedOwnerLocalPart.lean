@@ -9,6 +9,7 @@ import TNLean.Lattice.Compression.WordOwnerRestrictionCommutation
 import TNLean.Lattice.Compression.WordOwnerEvaluation
 import TNLean.Lattice.Compression.SourceFreeLocalPart
 import TNLean.Lattice.Compression.WordPermutationRestriction
+
 /-!
 # Remaining operations at an owner with a singleton fibre
 

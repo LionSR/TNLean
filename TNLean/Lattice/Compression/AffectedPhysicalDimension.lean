@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.Lattice.PartyCircuit.FamilyPhysicalReadout
 import TNLean.Lattice.PartyCircuit.AffectedOwners
 import TNLean.Lattice.Compression.OwnerMemoryTransport
+
 /-!
 # Physical dimensions after the affected-party identifications
 

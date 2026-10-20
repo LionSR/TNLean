@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Lattice.PartyCircuit.WordRestriction
 import TNLean.Lattice.Compression.SourcePreparationCoordinates
+
 /-! # Locality of the actual endpoint operators
 
 The source inventory records the owner and order of each endpoint. The literal

@@ -7,6 +7,7 @@ import TNLean.Lattice.PartyCircuit.WordAppendTail
 import TNLean.Lattice.Compression.WordPermutationRestriction
 import TNLean.Lattice.PartyCircuit.WordEvaluationTransport
 import TNLean.Lattice.Compression.FrameListRestriction
+
 /-!
 # Restriction beside retained spectator registers
 

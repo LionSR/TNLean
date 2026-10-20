@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Lattice.Compression.DistributedConstruction
 import TNLean.Lattice.Compression.SelectedPhysicalPrivateTrace
+
 /-! # The original physical density in the actual grouped coordinates
 
 The original circuit output may be expressed in the actual grouped

@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.Lattice.PartyCircuit.WordAppendTail
 import TNLean.Lattice.PartyCircuit.WordOwnerMap
 import TNLean.Lattice.Compression.WordStructuralCongruence
+
 /-!
 # Relabelling a composition beside spectator registers
 

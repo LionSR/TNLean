@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.Lattice.Compression.SourceCircuitLifetime
 import TNLean.Lattice.Compression.SourceResidualCoordinates
 import TNLean.Lattice.Compression.SelectiveSourceFactorization
+
 /-!
 # Local factors on the corrected and crossing source registers
 

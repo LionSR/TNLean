@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.Lattice.Compression.SelectedPartialSourceSlots
 import TNLean.Lattice.Compression.ActualSampledEndpointInputWord
 import TNLean.Lattice.Compression.EndpointRegisterRestriction
+
 /-!
 # Sampled endpoint operations determined by incident labels
 

@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Lattice.Compression.SourceSamplingPolynomial
 import TNLean.Lattice.Compression.SourceCircuitResourceBounds
+
 /-!
 # Uniform polynomial bounds for effect elimination
 

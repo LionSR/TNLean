@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Lattice.Compression.PartySelector
 import TNLean.Lattice.Compression.WordStructuralCongruence
+
 /-! # Successive restrictions of source-free words
 
 The statements concern the explicitly constructed words, their register order,

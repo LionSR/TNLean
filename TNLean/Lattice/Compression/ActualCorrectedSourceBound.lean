@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Lattice.Compression.ActualGaussianBranch
 import TNLean.Lattice.Compression.SourcePhysicalBasisInvariance
+
 /-!
 # Expected norm of the actual corrected source term
 

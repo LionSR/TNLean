@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Lattice.Compression.SourcePreparationVectors
 import TNLean.Lattice.Compression.CorrectedInputReordering
+
 /-!
 # Corrected input vectors and their actual prepared words
 

@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Lattice.Compression.ActualMixedSourceMatrix
 import TNLean.Lattice.Compression.ActualSampledEndpointInputWord
+
 /-! # Actual sampled source contraction in party coordinates
 
 The literal sampled source matrix is expanded as a sum of endpoint-word

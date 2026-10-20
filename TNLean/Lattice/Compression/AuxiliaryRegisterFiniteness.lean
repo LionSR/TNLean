@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Lattice.PartyCircuit.EffectCircuitDensity
 import TNLean.Lattice.Compression.FiniteRegisterMemories
+
 /-!
 # Finite-dimensional registers retained by pair-effect replacement
 

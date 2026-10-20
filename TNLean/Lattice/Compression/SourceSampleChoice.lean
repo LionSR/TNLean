@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Lattice.Compression.SourceGaussianPhysicalIntegrability
 import TNLean.Lattice.Compression.SourceSamplingCount
+
 /-!
 # An actual sample at the prescribed source count
 

@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Lattice.Compression.PureSourceMatrix
 import TNLean.Lattice.Compression.SourceColumnContraction
+
 /-!
 # Contraction of pure prepared source coefficients
 

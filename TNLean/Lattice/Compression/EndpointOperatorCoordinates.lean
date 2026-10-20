@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Lattice.Compression.EndpointWordEvaluation
 import TNLean.Lattice.Compression.SourceSlotCoordinates
+
 /-! # Slot-basis coordinates of an endpoint word
 
 The matrix of an endpoint word built from arbitrary continuous linear maps at

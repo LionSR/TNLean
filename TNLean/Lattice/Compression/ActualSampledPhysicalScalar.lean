@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Lattice.Compression.ActualSampledPhysicalFactors
 import TNLean.Lattice.Compression.ActualSampledExteriorScalar
+
 /-!
 # The common exterior scalar in the sampled physical sum
 

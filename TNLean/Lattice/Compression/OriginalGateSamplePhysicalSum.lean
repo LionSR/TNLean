@@ -7,6 +7,7 @@ import TNLean.Lattice.Compression.IncidentPureSampledPhysicalSum
 import TNLean.Lattice.Compression.JointSourceSumReindex
 import TNLean.Lattice.Compression.LocalGateLabelCompatibility
 import TNLean.Lattice.Compression.ReindexedLocalSourceSamples
+
 /-! # The actual physical sum in original distributed indices
 
 The density sum is indexed by the two original gate-label functions and one

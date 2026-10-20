@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Lattice.Compression.SourceCompressedDensity
 import TNLean.Lattice.Compression.ActualPureSourceMatrix
+
 /-! # Source replacement on the recorded product input
 
 The source-replaced output on the original product input is a finite sum of

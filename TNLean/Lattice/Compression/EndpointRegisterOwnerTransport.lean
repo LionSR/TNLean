@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Lattice.Compression.EndpointRegisterRestriction
 import TNLean.Lattice.Compression.WordOwnerEvaluation
+
 /-!
 # Owner and layout identification of an arbitrary endpoint-register word
 

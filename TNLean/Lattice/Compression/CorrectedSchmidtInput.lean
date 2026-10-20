@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Lattice.Compression.SourceGaussianVectorDensity
 import TNLean.Lattice.Compression.CorrectedInputVectorIdentity
+
 /-!
 # Corrected endpoint columns in the actual prepared input
 

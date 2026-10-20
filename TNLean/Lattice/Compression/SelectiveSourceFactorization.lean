@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Lattice.Compression.SelectiveSourcePreparation
 import TNLean.Lattice.Compression.PartyCoarseningFactorization
+
 /-!
 # Local factors after selective source preparation
 

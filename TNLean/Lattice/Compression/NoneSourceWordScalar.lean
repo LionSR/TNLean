@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.Lattice.Compression.NoneResidualScalar
 import TNLean.Lattice.Compression.SourcePrivatePreparationRestriction
 import TNLean.Lattice.Compression.LayoutExcludedOwners
+
 /-! # The auxiliary scalar after preparation of the original private input
 
 The recorded private preparation contributes the identity at the exterior owner.

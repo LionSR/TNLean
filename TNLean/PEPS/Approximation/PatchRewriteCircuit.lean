@@ -7,6 +7,7 @@ import TNLean.PEPS.Approximation.MonomialFixesOutside
 import TNLean.PEPS.Approximation.PartyGateSourceBound
 import TNLean.PEPS.Approximation.PatchRewriteMonomials
 import TNLean.Lattice.Compression.SampledOriginalCircuit
+
 /-!
 # The small-patch rewrite as one gate of the specified parties
 

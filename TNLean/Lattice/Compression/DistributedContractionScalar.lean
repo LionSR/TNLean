@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Lattice.Compression.DistributedOperatorContraction
 import TNLean.Lattice.Compression.PartyProductScalar
+
 /-!
 # Absorbing a scalar into a distributed local matrix
 

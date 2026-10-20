@@ -7,6 +7,7 @@ import TNLean.Lattice.Compression.WordEvalComparison
 import TNLean.Lattice.Compression.ActualSampledPhysicalFactors
 import TNLean.Lattice.Compression.IncidentSourceWordComparison
 import TNLean.Lattice.Compression.IncidentSampledEndpointComparison
+
 /-! # The sampled physical matrix determined by incident labels
 
 Two independent assignments of original incident gate labels determine a local

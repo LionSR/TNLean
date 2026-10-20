@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Lattice.PartyCircuit.SourceCircuitLocations
 import TNLean.Lattice.Compression.DistributedOperatorContraction
+
 /-!
 # Polynomial dimensions of the actual source-network alphabets
 

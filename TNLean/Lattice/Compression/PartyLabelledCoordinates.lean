@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Lattice.Compression.PartyTensorCoordinates
+
 /-! # Party-labelled coordinates of local tensor maps
 
 An exhaustive order identifies the tensor-basis coordinates with functions on

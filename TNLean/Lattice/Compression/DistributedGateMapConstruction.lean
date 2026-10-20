@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Lattice.Compression.CompressionRetainedNorm
 import TNLean.Lattice.Compression.UniformApproximateSampledNetwork
+
 /-!
 # Compression of the actual density of a distributed construction
 

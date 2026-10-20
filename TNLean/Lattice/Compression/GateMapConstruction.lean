@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.Lattice.Compression.DistributedConstructionData
 import TNLean.Lattice.Compression.GateReexpansion
 import TNLean.Lattice.Compression.ApproximateCircuitDensity
+
 /-!
 # An original distributed construction with prescribed gate operators
 

@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Lattice.Compression.ActualPureSourceReplacement
 import TNLean.Lattice.Compression.SourcePhysicalDensity
+
 /-! # Physical source replacement on the recorded product input
 
 Tracing the original private registers in the prepared-column expansion gives

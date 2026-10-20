@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.Lattice.Compression.PhysicalFirstReadout
 import TNLean.Lattice.Compression.SourceCircuitResourceBounds
 import TNLean.Lattice.Compression.DistributedLinks
+
 /-!
 # Original incidence bounds for the physical-first network
 

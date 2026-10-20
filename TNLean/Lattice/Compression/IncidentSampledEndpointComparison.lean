@@ -11,6 +11,7 @@ import TNLean.Lattice.PartyCircuit.PartyTensorMaps
 import Mathlib.Data.List.OfFn
 
 import TNLean.Lattice.Compression.SampledEndpointIncidentComparison
+
 /-! # Comparing the actual sampled endpoint word with its incident construction
 
 After restriction to one original party, the all-party endpoint word and the

@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Lattice.Compression.SourceGaussianVectorDensity
 import TNLean.Lattice.Compression.SourceGaussianPhysicalIntegrability
+
 /-!
 # Summing the actual Gaussian partial branches
 

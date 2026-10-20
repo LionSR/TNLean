@@ -7,6 +7,7 @@ import TNLean.Lattice.Compression.SourceCorrectedTerm
 import TNLean.Lattice.Compression.SourceSubstitutionInventory
 import TNLean.Lattice.Compression.SourcePreparationCoordinates
 import TNLean.Lattice.Compression.SourceGateDensity
+
 /-!
 # Original source labels in a corrected density contraction
 

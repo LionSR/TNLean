@@ -7,6 +7,7 @@ import TNLean.Lattice.Compression.CorrectedSourcePartition
 import TNLean.Lattice.PartyCircuit.LayoutEqualityCoordinates
 import TNLean.Lattice.Compression.SourceRegisterPermutation
 import TNLean.Lattice.Compression.TensorSchmidtIsometries
+
 /-!
 # Corrected and crossing source input registers
 

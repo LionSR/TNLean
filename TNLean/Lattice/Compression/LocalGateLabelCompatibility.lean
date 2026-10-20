@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Lattice.Compression.IncidentGateLabels
+
 /-! # Incident labels after reindexing all-party choices
 
 The original labels visible at a party agree with restriction of the supplied

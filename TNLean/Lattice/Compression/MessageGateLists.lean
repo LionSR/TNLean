@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.Lattice.Compression.GateReexpansion
 import TNLean.Lattice.Compression.MessageGateExpansion
 import TNLean.Lattice.Compression.EffectCircuitTermwiseCoefficientBounds
+
 /-!
 # Message expansions on one fixed original chronology
 

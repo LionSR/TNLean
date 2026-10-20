@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.Lattice.Compression.ActualSampledEndpointInputWord
 import TNLean.Lattice.Compression.PartialSourcePreparation
 import TNLean.Lattice.Compression.EndpointWordRestriction
+
 /-! # Exterior restriction of the actual sampled endpoint word
 
 Every endpoint register of the all-party source inventory belongs to an

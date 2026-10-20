@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.Lattice.Compression.SourceResidualCoordinates
 import TNLean.Lattice.Compression.ZeroPartyGates
 import TNLean.Lattice.Compression.LayoutExcludedOwners
+
 /-!
 # The exterior restriction of an empty-party gate
 

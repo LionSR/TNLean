@@ -7,6 +7,7 @@ import TNLean.Lattice.Compression.AllPartySingletonComparison
 import TNLean.Lattice.Compression.SelectedPartialSourceSlots
 import TNLean.Lattice.Compression.SourceResidualCoordinates
 import TNLean.Lattice.Compression.LocalPartRestrictionCongruence
+
 /-!
 # A selected party in the singleton and all-party expansions
 

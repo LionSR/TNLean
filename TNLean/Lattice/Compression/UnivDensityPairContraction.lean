@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.Lattice.Compression.DistributedOperatorContraction
 import TNLean.Lattice.Compression.ActiveGateLabelSum
 import TNLean.Lattice.Compression.WeightedGateLabelPairSum
+
 /-! # The density contraction over all original gate occurrences
 
 When all recorded gate occurrences are active, the contraction of the ordered

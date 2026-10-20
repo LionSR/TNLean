@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Lattice.Compression.WordPartyCoordinates
 import TNLean.Lattice.Compression.PartyProductConjugation
+
 /-!
 # Mixed chronological products in party coordinates
 

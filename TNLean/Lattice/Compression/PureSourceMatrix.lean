@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Lattice.Compression.PreparedSourceVectorDensity
 import TNLean.Lattice.Compression.SourceSlotBasis
+
 /-! # Pure-input coordinates of prepared source vectors
 
 The columns of the source-to-output matrix are the prepared output vectors
