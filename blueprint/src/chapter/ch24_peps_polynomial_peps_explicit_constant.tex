@@ -20,14 +20,16 @@ choice is a fixed number.
     \uses{def:peps_dyadic_protocol,def:peps_angular_scale,
         lem:peps_adaptive_patch_supply,
         lem:peps_dyadic_protocol_mesh_ratio}
-    Fix $q\ge2$ and reals $J,\Delta$. Let $\epsilon_0=1/30000$,
+    Fix $q\ge2$ and a family of unit states, consisting for each side $L$ of
+    some unit vectors on the square of side $L$. Let $\epsilon_0=1/30000$,
     $\nu=1/600000000$, $a_0=1/5000$ and
     $b=\max\{18,\lceil((4+8\epsilon_0+2\nu)/\nu+1)^2\rceil\}$. Let $D\ge1$ and
     $L_{\rm ang}$ be a slope and a threshold at accuracy $L^{-60}$ for the
-    clearance $a_0/2$, the diameter ratio $1$ and at most $4$ marked points. Let
-    $C>0$ and $c$ be constants with which Proposition~4.1 supplies adaptive
-    patches on the cell-center sites at the radius constant $B_0=20D$ and power
-    $60$, for every gapped ground vector of side $L\ge2$. Put $C'=\lceil C\rceil$,
+    family, the clearance $a_0/2$, the diameter ratio $1$ and at most $4$ marked
+    points. Let $C>0$ and $c$ be constants with which adaptive patches, in the
+    sense of Proposition~4.1, are supplied on the cell-center sites at the
+    radius constant $B_0=20D$ and power $60$, for every state of the family of
+    side $L\ge2$. Put $C'=\lceil C\rceil$,
     $c'=\lceil c\rceil$,
     \begin{align}
         G   & =(C'+1)^{3b}\bigl(16b^2(C'+1)^{6b}+1\bigr)^{2b}, &
@@ -35,8 +37,8 @@ choice is a fixed number.
     \end{align}
     Then for every count constant $C_N\ge5042$, expansion constant $C_K\ge G$
     and error constant $C_E\ge\max\{10080,2b+1\}$, every $L\ge2$ with
-    $L\ge\lceil\max\{L_{\rm ang},1\}\rceil$ and every
-    $(H,E_0,\Omega)\in\mathcal G_{q,J,\Delta}(L)$, there is a protocol with
+    $L\ge\lceil\max\{L_{\rm ang},1\}\rceil$ and every state $\Omega$ of the
+    family of side $L$, there is a protocol with
     the Section~8 bounds of Definition~\ref{def:peps_dyadic_protocol} at the
     constants $C_N$, $C_K$, $C_E$, the bound $64\cdot189$, the exponent $k_K$
     and $2b$ pair effects.
@@ -127,8 +129,9 @@ choice is a fixed number.
     \uses{def:polynomial_peps_explicit_constants,def:polynomial_peps_model,
         def:square_entropy_area_law_at,def:peps_angular_scale}
     Fix an integer $q\ge2$ and reals $J,\Delta>0$. Assume the square-grid
-    entropy area law at $q$, $J$, $\Delta$ with constant $C_A$, and let $D\ge1$
-    and $L_{\rm ang}$ be a slope and a threshold at accuracy $L^{-60}$ for the
+    entropy area law for the ground states of the model at $J$ and $\Delta$
+    with constant $C_A$, and let $D\ge1$ and $L_{\rm ang}$ be a slope and a
+    threshold at accuracy $L^{-60}$ for these ground states, the
     clearance $a_0/2$, $a_0=1/5000$, the diameter ratio $1$ and at most $4$
     marked points. Let $c_{\rm PEPS}$, $C_{\rm large}$ and $L_0$ be the
     constants of Definition~\ref{def:polynomial_peps_explicit_constants}. Then
