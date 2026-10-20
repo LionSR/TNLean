@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Analysis.ProductReferenceDensityError
 import TNLean.PEPS.Approximation.ColumnSelection
-import TNLean.PEPS.Approximation.RoutedContraction
+import TNLean.PEPS.Approximation.PartyNetwork
 
 /-!
 # A product-basis input column of a party network
