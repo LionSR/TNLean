@@ -21,7 +21,9 @@ cells and the original gapped ground state.
 named prefactor `cellInformationConstant` and exponent `cellInformationExponent`, as
 functions of the collar and amplification constants and thresholds and of the clearance
 coefficient; `exists_cell_conditionalMutualInformation_le_of_sublinearCollarBound` is its
-existential form.
+existential form. Both hold at every interaction range `R`; the source states Lemma 3.2 only
+for site and nearest-neighbour terms (range one), so the range-`R` statements extend it. The
+proof uses the Hamiltonian only through the coarse tile bound of Proposition 3.1.
 
 Source: polynomial-PEPS manuscript, Lemma 3.2 (`lem:cell-cmi`),
 `02-information.tex`, lines 163–311; its use in Proposition 3.4,
@@ -31,7 +33,7 @@ is an explicit premise of the results of this module; the named-constant form al
 the amplification bound at given constants as a premise, which
 `amplificationBoundAt_collarAmplification` supplies at named constants. For positive local
 dimension, nonnegative interaction bound and positive spectral gap, the physical collar theorem
-supplies the range-one estimate with clearance 13 and template constant 24. See
+supplies the range-`R` estimate with any clearance above `2R + 10` and template constant 24. See
 `docs/paper-gaps/polypeps_angular_annular_geometry_scope.tex`.
 
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
@@ -84,8 +86,8 @@ theorem cellInformationExponent_pos (c Ctpl : ℝ) (N : ℕ) (Ca : ℝ) (Na : �
 
 open Classical in
 /-- **Lemma 3.2 with named constants**, assuming the collar and amplification bounds at given
-constants. Let the range-one sublinear collar bound hold with constant `C` and threshold `N`,
-and the range-one amplification bound at the input constant `max(C, 1)` and order `1` with
+constants. Let the range-`R` sublinear collar bound hold with constant `C` and threshold `N`,
+and the range-`R` amplification bound at the input constant `max(C, 1)` and order `1` with
 constant `C_a` and threshold `N_a`. Fix the clearance coefficient `c > 0`. Then the
 conditional information of one physical cell, given the physical sample of an arbitrary union
 of other cells, with any region `E` at distance at least `c s` from the closed ambient cell, is
@@ -103,12 +105,12 @@ Source: polynomial-PEPS Lemma 3.2 (`lem:cell-cmi`), `02-information.tex`,
 lines 161–178 (statement) and 180–316 (proof); the coarse tile estimate is Proposition 3.1,
 lines 90–146. -/
 theorem cell_conditionalMutualInformation_le_of_sublinearCollarBoundAt
-    {q : ℕ} {J Δ D₀ Ctpl C Ca : ℝ} {N Na : ℕ}
-    (hcol : SublinearCollarBoundAt q 1 J Δ D₀ Ctpl C N)
-    (hamp : AmplificationBoundAt q 1 J Δ (max C 1) 1 Ca Na) {c : ℝ} (hc : 0 < c) :
+    {q R : ℕ} {J Δ D₀ Ctpl C Ca : ℝ} {N Na : ℕ}
+    (hcol : SublinearCollarBoundAt q R J Δ D₀ Ctpl C N)
+    (hamp : AmplificationBoundAt q R J Δ (max C 1) 1 Ca Na) {c : ℝ} (hc : 0 < c) :
     ∀ s : ℝ, 1 ≤ s → ∀ (o : ℝ × ℝ) (m₀ : ℤ × ℤ) (A : Set (ℤ × ℤ)),
       m₀ ∉ A →
-      ∀ (Λ : Finset (ℤ × ℤ)) (h : Lattice.LocalHamiltonian Λ q 1 J)
+      ∀ (Λ : Finset (ℤ × ℤ)) (h : Lattice.LocalHamiltonian Λ q R J)
         (E₀ : ℝ) (Ω : Lattice.StateSpace Λ q),
         Lattice.IsGappedGroundState Λ q h.operator E₀ Ω Δ →
         let G : Finset (Site Λ) :=
@@ -244,12 +246,12 @@ and threshold and at the amplification constant and threshold
 Source: polynomial-PEPS Lemma 3.2 (`lem:cell-cmi`), `02-information.tex`,
 lines 163–222 and 302–311; the coarse tile estimate is Proposition 3.1. -/
 theorem exists_cell_conditionalMutualInformation_le_of_sublinearCollarBound
-    {q : ℕ} {J Δ D₀ Ctpl : ℝ} (hΔ : 0 < Δ)
-    (hcol : SublinearCollarBound q 1 J Δ D₀ Ctpl) {c : ℝ} (hc : 0 < c) :
+    {q R : ℕ} {J Δ D₀ Ctpl : ℝ} (hΔ : 0 < Δ)
+    (hcol : SublinearCollarBound q R J Δ D₀ Ctpl) {c : ℝ} (hc : 0 < c) :
     ∃ C₁ K : ℝ, 0 < C₁ ∧ 0 ≤ K ∧
       ∀ s : ℝ, 1 ≤ s → ∀ (o : ℝ × ℝ) (m₀ : ℤ × ℤ) (A : Set (ℤ × ℤ)),
         m₀ ∉ A →
-        ∀ (Λ : Finset (ℤ × ℤ)) (h : Lattice.LocalHamiltonian Λ q 1 J)
+        ∀ (Λ : Finset (ℤ × ℤ)) (h : Lattice.LocalHamiltonian Λ q R J)
           (E₀ : ℝ) (Ω : Lattice.StateSpace Λ q),
           Lattice.IsGappedGroundState Λ q h.operator E₀ Ω Δ →
           let G : Finset (Site Λ) :=
