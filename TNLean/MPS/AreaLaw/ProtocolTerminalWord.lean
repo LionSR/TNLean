@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.ProtocolTerminalCoordinates
 import TNLean.PEPS.Approximation.OriginalCircuitLift
-import TNLean.PEPS.Approximation.SiteVectorAppend
+import TNLean.Lattice.PartyCircuit.SiteVectorAppend
 
 /-!
 # Private realization of the terminal block coordinates

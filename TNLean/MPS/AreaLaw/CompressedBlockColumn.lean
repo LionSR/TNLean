@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.ProtocolSweepPlacement
-import TNLean.PEPS.Approximation.SeparateArityCompression
-import TNLean.PEPS.Approximation.IdentityBondCutRank
+import TNLean.Lattice.Compression.SeparateArityCompression
+import TNLean.Lattice.Compression.IdentityBondCutRank
 import QICLean.Analysis.RectangularTraceNormAlgebra
 import Mathlib.Algebra.Order.BigOperators.Group.Finset
 import Mathlib.Algebra.Order.Floor.Semiring

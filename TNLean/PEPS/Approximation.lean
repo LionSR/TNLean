@@ -145,7 +145,6 @@ import TNLean.PEPS.Approximation.GuideFrameRewrite
 import TNLean.PEPS.Approximation.GuideFrameRewriteCircuit
 import TNLean.PEPS.Approximation.HoleEncoder
 import TNLean.PEPS.Approximation.HomogeneousOwnership
-import TNLean.PEPS.Approximation.IdentityBondCutRank
 import TNLean.PEPS.Approximation.InformationReset
 import TNLean.PEPS.Approximation.LayoutPartitionWord
 import TNLean.PEPS.Approximation.LocalGuideRewrite
@@ -191,7 +190,6 @@ import TNLean.PEPS.Approximation.RegionalStates
 import TNLean.PEPS.Approximation.RegisterReordering
 import TNLean.PEPS.Approximation.ResetUnitary
 import TNLean.PEPS.Approximation.RoutedContraction
-import TNLean.PEPS.Approximation.SeparateArityCompression
 import TNLean.PEPS.Approximation.SheetFrame
 import TNLean.PEPS.Approximation.SheetSplitting
 import TNLean.PEPS.Approximation.SheetStack
@@ -206,7 +204,6 @@ import TNLean.PEPS.Approximation.SheetSwapDoubledTermNorm
 import TNLean.PEPS.Approximation.SiteChainMonomials
 import TNLean.PEPS.Approximation.SiteChainNetwork
 import TNLean.PEPS.Approximation.SiteChainTruncation
-import TNLean.PEPS.Approximation.SiteVectorAppend
 import TNLean.PEPS.Approximation.SourceApproximation
 import TNLean.PEPS.Approximation.SourceBlockMatrix
 import TNLean.PEPS.Approximation.SourceFrameMatrix

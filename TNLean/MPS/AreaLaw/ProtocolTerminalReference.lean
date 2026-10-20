@@ -9,7 +9,7 @@ import TNLean.PEPS.Approximation.SheetStackReadoutCircuit
 import QICLean.Analysis.ProductReferenceDensityError
 import Mathlib.Data.List.ProdSigma
 import Mathlib.Data.List.Nodup
-import TNLean.PEPS.Approximation.SiteVectorAppend
+import TNLean.Lattice.PartyCircuit.SiteVectorAppend
 
 /-!
 # The terminal sheet reference in its original copy coordinates
