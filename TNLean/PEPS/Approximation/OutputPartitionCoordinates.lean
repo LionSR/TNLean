@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.PartyPartitionAppend
-import TNLean.PEPS.Approximation.LayoutOwnerMap
-import TNLean.PEPS.Approximation.LayoutEqualityCoordinates
+import TNLean.Lattice.PartyCircuit.LayoutOwnerMap
+import TNLean.Lattice.PartyCircuit.LayoutEqualityCoordinates
 
 /-!
 # Physical and discarded coordinates adapted to a party partition

@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.PEPS.Approximation.SelectedPartialSourceSlots
 import TNLean.PEPS.Approximation.EndpointRegisterRestriction
 import TNLean.PEPS.Approximation.WordOwnerEvaluation
-import TNLean.PEPS.Approximation.PartyTensorMaps
+import TNLean.Lattice.PartyCircuit.PartyTensorMaps
 import Mathlib.Data.List.OfFn
 
 /-!

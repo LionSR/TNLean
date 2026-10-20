@@ -7,7 +7,7 @@ import TNLean.PEPS.Approximation.WordEvalComparison
 import TNLean.PEPS.Approximation.IncidentSampledEndpointWord
 import TNLean.PEPS.Approximation.EndpointRegisterRestriction
 import TNLean.PEPS.Approximation.WordOwnerEvaluation
-import TNLean.PEPS.Approximation.PartyTensorMaps
+import TNLean.Lattice.PartyCircuit.PartyTensorMaps
 import Mathlib.Data.List.OfFn
 
 import TNLean.PEPS.Approximation.SampledEndpointIncidentComparison

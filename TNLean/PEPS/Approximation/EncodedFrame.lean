@@ -7,7 +7,7 @@ import TNLean.Algebra.MatrixL2Contraction
 import TNLean.Circuit.SiteEmbedding
 import TNLean.Lattice.RegionSplit
 import TNLean.PEPS.Approximation.HoleEncoder
-import TNLean.PEPS.Approximation.MatrixAction
+import TNLean.Lattice.PartyCircuit.MatrixAction
 
 /-!
 # Encoded frames

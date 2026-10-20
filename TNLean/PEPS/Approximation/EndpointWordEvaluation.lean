@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.EndpointOperatorWord
-import TNLean.PEPS.Approximation.UnitMemoryCoordinates
+import TNLean.Lattice.PartyCircuit.UnitMemoryCoordinates
 
 /-! # Evaluation of the literal source-endpoint word
 
