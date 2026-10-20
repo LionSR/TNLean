@@ -81,8 +81,8 @@ this word is the prescribed coordinate isometry. For every terminal vector,
 its physical density is exactly the partial trace over the original
 auxiliary labels, expressed in the main-block coordinates. This identity
 requires neither normalization nor a product assumption on that vector.\footnote{
-Declarations \leanid{TNLean.MPS.AreaLaw.ChainSweep.eval_terminalRegroupingWord}
-and \leanid{TNLean.MPS.AreaLaw.ChainSweep.physicalDensity_terminalRegrouping}.}
+    Declarations \leanid{TNLean.MPS.AreaLaw.ChainSweep.eval_terminalRegroupingWord}
+    and \leanid{TNLean.MPS.AreaLaw.ChainSweep.physicalDensity_terminalRegrouping}.}
 
 For $q\ge1$, the specified reference has the exact readout
 $\Omega\otimes\Xi$, where
@@ -97,7 +97,7 @@ $\Omega$ gives $\|\Xi\|=1$, including the empty family of copies. Thus
 \end{align}
 The normalization and this identity are proved for the constructed reference,
 without requiring a product across final parties.\footnote{Declaration
-\leanid{TNLean.MPS.AreaLaw.ChainSweep.partialTrace_terminalStackReference}.}
+    \leanid{TNLean.MPS.AreaLaw.ChainSweep.partialTrace_terminalStackReference}.}
 
 \paragraph{Physical preparation and compression.}
 For fixed $q,R,J,\Delta$ with $q\ge1$ and $\Delta>0$, the full physical
@@ -107,18 +107,18 @@ Above that cutoff, the original full-system gapped-ground-state assumption
 constructs the actual private initialization, local operations, chronological
 composition and terminal regrouping. No circuit family, marginal identity,
 or information bound is supplied as an additional physical hypothesis.\footnote{
-Declaration \leanid{TNLean.MPS.AreaLaw.ChainSweep.exists_preparation_of_gappedGroundState}.}
+    Declaration \leanid{TNLean.MPS.AreaLaw.ChainSweep.exists_preparation_of_gappedGroundState}.}
 In the specified main/auxiliary coordinates the prepared vector obeys
 \begin{align}
- \|\widehat\Psi-\Omega\otimes\Xi\|&\le26L^{-11}.
- \label{eq:band_sweep_vector_error}
+    \|\widehat\Psi-\Omega\otimes\Xi\| & \le26L^{-11}.
+    \label{eq:band_sweep_vector_error}
 \end{align}
 If $U$ is the fixed identification of the original main sites with the
 physical blocks, the actual physical density satisfies
 \begin{align}
- \bigl\|\rho_{\rm phys}-|U\Omega\rangle\langle U\Omega|\bigr\|_1
- &\le52L^{-11}.
- \label{eq:band_sweep_density_error}
+    \bigl\|\rho_{\rm phys}-|U\Omega\rangle\langle U\Omega|\bigr\|_1
+     & \le52L^{-11}.
+    \label{eq:band_sweep_density_error}
 \end{align}
 The underlying prepared vector has norm at most one. The circuit has
 participation at most forty, at most three parties per nonprivate gate,
@@ -133,8 +133,8 @@ ground vector, its bond dimension is at most $CL^n$ and its phase error is
 at most $1/L$ for every $L\ge2$. The finitely many lengths below the
 preparation cutoff have exact representations and are absorbed into the
 same constant.\footnote{Declarations
-\leanid{TNLean.MPS.AreaLaw.ChainSweep.exists_uniform_sampled_block_column}
-and \leanid{TNLean.MPS.AreaLaw.ChainSweep.exists_protocol_isOpenMPS_norm_sub_phase_le}.}
+    \leanid{TNLean.MPS.AreaLaw.ChainSweep.exists_uniform_sampled_block_column}
+    and \leanid{TNLean.MPS.AreaLaw.ChainSweep.exists_protocol_isOpenMPS_norm_sub_phase_le}.}
 Compression bounds only the distinguished physical outputs. Private spaces
 remain finite-dimensional without an additional numerical size bound.
 

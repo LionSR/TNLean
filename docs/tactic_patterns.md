@@ -4786,10 +4786,10 @@ no additional helper is proposed.
   `erase_eq_eraseP_decide`; it adds no global tactic or simp attribute.
 
 
-### Two-frame lists in a finite family of bounded changes — candidate (2026-10-18)
+### Two-sheet lists in a finite family of bounded changes — candidate (2026-10-18)
 
 - **Pattern:** Before selecting a circuit witness, identify the two consecutive
-  frame lists with the explicit lists used by the one-sheet or two-sheet lift.
+  sheet lists with the explicit lists used by the one-sheet or two-sheet lift.
   Associate list append while the statement is still a bounded-change
   proposition; then extract the circuit and its bounds.
 - **Seen:** The eight cases of
@@ -4798,7 +4798,7 @@ no additional helper is proposed.
   two-element-list and spectator-list identification in the source and target.
 - **Existing tools:** The construction uses `hasSourceBoundedChange_liftOne`,
   `isBoundedChange_liftTwo` and their source-count lemmas. The repeated part is
-  only the equality of the ordered frame lists.
+  only the equality of the ordered sheet lists.
 - **Next step:** This occurs in one file. If a second file needs the same list
   identification, first seek a list lemma or a bounded-change transport lemma;
   no new tactic is warranted by the present occurrences alone.
@@ -8897,21 +8897,6 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Abstraction:** Below the promotion threshold. The common geometric
   argument is already factored into the local two-radius containment lemma.
 
-### Changing the size parameter in ownership estimates — candidate (2026-10-18)
-
-- **Pattern:** Specialize a fixed-error ownership construction at `L^(p/30)`,
-  rewrite its integer powers as real powers, and retain all map and resource
-  conclusions from that one application.
-- **Seen:** The birth, death and exchange proofs in
-  `MPS/AreaLaw/OwnershipChanges.lean`; two scalar normalizations use
-  `Real.rpow_intCast` followed by `Real.rpow_mul` and exponent arithmetic.
-- **Abstraction:** The two private power identities are shared by all three
-  constructions. No tactic is proposed: the remaining applications are short,
-  and the pattern occurs in only one file.
-- **Notes:** Birth and exchange use definitional equality of plain frames
-  after rewriting the error bound; death uses the existing owner-change frame
-  directly. No positivity assumption on the size or exponent is introduced.
-
 ### Squared logarithms of bounded support dimensions — candidate (2026-10-18)
 
 - **Pattern:** From `1 ≤ d ≤ D`, compare `log (exp 1 * d)^2` and
@@ -8925,15 +8910,15 @@ spectral split → block extraction → MPV calculation → strict bounds
   These are two occurrences in two files; no new tactic is proposed.
 
 
-### Birth of a plain sheet among spectator frames — candidate (2026-10-18)
+### Birth of a sheet among spectator sheets — shared lemma (2026-10-20)
 
-- **Pattern:** Identify a hole-free frame with the raw frame of its owner,
-  apply the birth estimate at exponent twelve, and place the resulting
-  circuit beside unchanged spectator frames.
-- **Seen:** `OneBand.birth_liftOne` in `MPS/AreaLaw/BandDissolution.lean`
-  and `ChainSweep.stage_birth` in `MPS/AreaLaw/ProtocolSweepLocalCircuits.lean`.
-- **Existing reuse:** Both apply `birth_bounded_rpow`, Mathlib's
-  `Real.rpow_neg_ofNat`, and `hasSourceBoundedChange_liftOne`.
-- **Possible next abstraction:** A third use would justify sharing the
-  hole-free birth-and-lift lemma. There are two occurrences in two files;
-  no new tactic or promotion is introduced.
+- **Pattern:** Apply the sheet birth estimate at exponent twelve and place the
+  resulting circuit beside unchanged spectator sheets.
+- **Seen:** The births of `OneBand.circuits_of_primitive_information` in
+  `MPS/AreaLaw/BandDissolution.lean` and the two stage births of
+  `ChainSweep.local_stage_circuits_of_primitive_information` in
+  `MPS/AreaLaw/ProtocolSweepLocalCircuits.lean`.
+- **Abstraction:** `OneBand.birth_liftOne` in `MPS/AreaLaw/BandDissolution.lean`,
+  built on `Lattice.Sheet.birth_bounded`, `Real.rpow_neg_ofNat` and
+  `Lattice.hasSourceBoundedChange_liftOne`. The stage births call it with an
+  empty prefix and the scalar idle vector; the former private copy is removed.
