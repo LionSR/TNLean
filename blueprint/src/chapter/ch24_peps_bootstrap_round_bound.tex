@@ -54,7 +54,8 @@ parameters of Section~\ref{sec:area_law_initial_exponent_gain}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:area_law_bootstrap_round_log_bound,
-        thm:area_law_initial_exponent_gain_bounds}
+        thm:area_law_initial_exponent_gain_bounds,
+        thm:area_law_bootstrap_margins}
     The gain bound gives
     \begin{align}
         \ell                     & \ge\frac{p}{400000\log M}>0,         \\
@@ -106,7 +107,8 @@ parameters of Section~\ref{sec:area_law_initial_exponent_gain}.
 \end{theorem}
 \begin{proof}\leanok
     \lean{TNLean.PEPS.AreaLaw.Scan.boxEntropy_le_boxError_explicit}
-    \uses{thm:area_law_initial_round_budget_bound}
+    \uses{thm:area_law_initial_round_budget_bound,
+        thm:arealaw-physical-box-fixed-exponent}
     Take the logarithmic round count in the named physical safe-box estimate
     of Proposition~9.5 \cite[lines~788--805]{OpenAI2026AreaLaw}.
     Theorem~\ref{thm:area_law_initial_round_budget_bound} gives $m\le B$, and
