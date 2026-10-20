@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.ProtocolTerminalCoordinates
-import TNLean.PEPS.Approximation.OriginalCircuitLift
+import TNLean.Lattice.PartyCircuit.OriginalCircuitLift
 import TNLean.Lattice.PartyCircuit.SiteVectorAppend
 
 /-!

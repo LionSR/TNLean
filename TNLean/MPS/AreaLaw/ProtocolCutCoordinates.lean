@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.AreaLaw.ProtocolSweepPlacement
 import TNLean.MPS.AreaLaw.ProtocolSweepGeometry
 import TNLean.MPS.AreaLaw.CutMatrixGrowth
-import TNLean.PEPS.Approximation.WholeGroupContraction
+import TNLean.Lattice.Compression.WholeGroupContraction
 
 /-!
 # Original-site cuts of the actual terminal physical coordinates

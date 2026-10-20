@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.ProtocolTerminalCoordinates
 import TNLean.MPS.AreaLaw.BandDissolution
-import TNLean.PEPS.Approximation.OriginalCircuitSequence
+import TNLean.Lattice.PartyCircuit.OriginalCircuitSequence
 import Mathlib.Data.Finset.Prod
 import Mathlib.Algebra.BigOperators.Ring.Finset
 import Mathlib.Data.Fintype.BigOperators

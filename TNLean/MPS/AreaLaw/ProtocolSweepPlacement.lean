@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.ProtocolSweepMiddle
-import TNLean.PEPS.Approximation.DistributedOperatorContraction
-import TNLean.PEPS.Approximation.OriginalCircuitChain
+import TNLean.Lattice.Compression.DistributedOperatorContraction
+import TNLean.Lattice.PartyCircuit.OriginalCircuitChain
 import Mathlib.Data.Nat.Dist
 import Mathlib.Data.Fintype.Card
 import Mathlib.Tactic.NormNum
