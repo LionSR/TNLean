@@ -5,7 +5,6 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.ProtocolInitialization
 import TNLean.Algebra.CyclicInsertion
-import TNLean.PEPS.Approximation.SheetStackReadoutCircuit
 import QICLean.Analysis.ProductReferenceDensityError
 import Mathlib.Data.List.ProdSigma
 import Mathlib.Data.List.Nodup
@@ -14,7 +13,7 @@ import TNLean.Lattice.PartyCircuit.SiteVectorAppend
 /-!
 # The terminal sheet reference in its original copy coordinates
 
-The specified terminal frames retain the main owner and every labelled
+The specified terminal sheets retain the main owner and every labelled
 auxiliary copy at its prescribed retired owners. Their raw register list is
 identified with the existing main-plus-auxiliary labels, in the same copy order
 as the initialization. In these coordinates the reference is the main vector
@@ -22,7 +21,7 @@ and the product of its labelled auxiliary copies.
 
 This constructs the auxiliary vector and its normalization. It does not assume
 that the auxiliary state is a product across parties. The actual sweep must
-still be shown to end at the specified list of frames.
+still be shown to end at the specified list of sheets.
 
 Source: the one-dimensional note, Part II, Proposition `prop:sweep`,
 `part2b_mps_protocol.tex`, lines 356–359, and the physical trace in the proof of
@@ -38,7 +37,7 @@ open scoped TensorProduct
 
 namespace TNLean.MPS.AreaLaw.ChainSweep
 
-open TNLean.PEPS.PairEffect TNLean.PEPS.EncodedFrame
+open TNLean.Lattice TNLean.PEPS.PairEffect TNLean.PEPS.EncodedFrame
 
 variable {L w q : ℕ}
 
@@ -103,14 +102,14 @@ theorem mem_terminalRawOrder (r : RawLabel L w) : r ∈ terminalRawOrder L w := 
       exact List.mem_append_right _
         (List.mem_map.2 ⟨a, mem_terminalAuxiliarySiteOrder a, rfl⟩)
 
-/-- The specified retired auxiliary frames, in the same copy order used at
+/-- The specified retired auxiliary sheets, in the same copy order used at
 initialization. Source: Part II, `prop:sweep`, lines 357–359. -/
 def terminalAuxiliaryFrames (L w : ℕ) :
     List (Sheet (Fin L) (Party L w)) :=
   (initialAuxiliaryOrder L w).map fun c ↦
     Sheet.mk (fun x ↦ auxiliaryOwner L w (c, x))
 
-/-- The specified terminal main frame followed by all retired auxiliary frames.
+/-- The specified terminal main sheet followed by all retired auxiliary sheets.
 This definition does not assert that a sweep has reached it.
 Source: Part II, `prop:sweep`, lines 357–360. -/
 def terminalFrames (L w : ℕ) :
@@ -118,26 +117,26 @@ def terminalFrames (L w : ℕ) :
   Sheet.mk (mainOwner L w) :: terminalAuxiliaryFrames L w
 
 private theorem stackRegs_auxiliaryCopies (cs : List (AuxiliaryCopy L w)) :
-    stackRegs (cs.map fun c ↦
+    stackRegs (Sheet.regs q) (cs.map fun c ↦
       (Sheet.mk (fun x ↦ auxiliaryOwner L w (c, x)) : Sheet (Fin L) (Party L w))) [] =
       siteRegs q (auxiliaryOwner L w) (cs.product (sites (Fin L))) := by
   induction cs with
   | nil => rfl
   | cons c cs ih =>
       change siteRegs q (fun x ↦ auxiliaryOwner L w (c, x)) (sites (Fin L)) ++
-        stackRegs (cs.map fun c ↦
+        stackRegs (Sheet.regs q) (cs.map fun c ↦
           (Sheet.mk (fun x ↦ auxiliaryOwner L w (c, x)) : Sheet (Fin L) (Party L w))) [] = _
       rw [ih]
       simp [siteRegs, List.product, List.flatMap_cons, List.map_append,
         List.map_map, Function.comp_def]
 
-/-- Flattening the specified terminal frames retains exactly the original raw
+/-- Flattening the specified terminal sheets retains exactly the original raw
 labels and owners. Source: Part II, `prop:sweep`, lines 357–360. -/
 theorem stackRegs_terminalFrames (L w : ℕ) :
-    stackRegs (terminalFrames L w) [] =
+    stackRegs (Sheet.regs q) (terminalFrames L w) [] =
       siteRegs q (rawOwner L w) (terminalRawOrder L w) := by
   change siteRegs q (mainOwner L w) (sites (Fin L)) ++
-    stackRegs ((initialAuxiliaryOrder L w).map fun c ↦
+    stackRegs (Sheet.regs q) ((initialAuxiliaryOrder L w).map fun c ↦
       (Sheet.mk (fun x ↦ auxiliaryOwner L w (c, x)) : Sheet (Fin L) (Party L w))) [] = _
   rw [stackRegs_auxiliaryCopies]
   simp [terminalRawOrder, terminalAuxiliarySiteOrder, siteRegs, List.map_append,
@@ -186,44 +185,24 @@ private theorem append_siteVec_heq {ι P : Type} (own : ι → P)
     exact Layout.memCongr_apply_heq _ _
   exact ht.symm.trans (heq_of_eq (siteVec_append own a b _ rfl h c))
 
-private theorem inner_siteVec_regRef_raw [NeZero q] (own : Fin L → Party L w)
+private theorem inner_siteVec_regRef_raw (own : Fin L → Party L w)
     (Ω : EuclideanSpace ℂ (Fin L → Fin q)) (c : Fin L → Fin q) :
     inner ℂ (siteVec own (sites (Fin L)) c)
       ((Sheet.mk own : Sheet (Fin L) (Party L w)).regRef Ω) = Ω c := by
-  let g := groupIso (q := q) own (sites (Fin L)) (sitesEquiv (Fin L))
-  have hb (b : Fin L → Fin q) :
-      inner ℂ (siteVec own (sites (Fin L)) c) (siteVec own (sites (Fin L)) b) =
-        if b = c then 1 else 0 := by
-    rw [← g.inner_map_map]
-    rw [groupIso_siteVec own _ _ id (fun _ ↦ rfl) c,
-      groupIso_siteVec own _ _ id (fun _ ↦ rfl) b]
-    simp [EuclideanSpace.inner_single_left, eq_comm]
-  rw [Frame.regRef_of_outer_eq_empty _ (by simp [Sheet.mk]) Ω]
-  change inner ℂ (siteVec own (sites (Fin L)) c)
-    (∑ b, Ω b • (appendIso ([] : Layout (Party L w))
-      (siteRegs q own (sites (Fin L)))).symm
-        ((1 : ℂ) ⊗ₜ siteVec own (sites (Fin L)) b)) = Ω c
-  have he (b : Fin L → Fin q) :
-      (appendIso ([] : Layout (Party L w)) (siteRegs q own (sites (Fin L)))).symm
-        ((1 : ℂ) ⊗ₜ siteVec own (sites (Fin L)) b) =
-        siteVec own (sites (Fin L)) b := by
-    exact (appendIso_nil_symm_tmul _ (1 : ℂ) _).trans (one_smul ℂ _)
-  have hs : (∑ b, Ω b • (appendIso ([] : Layout (Party L w))
-      (siteRegs q own (sites (Fin L)))).symm
-        ((1 : ℂ) ⊗ₜ siteVec own (sites (Fin L)) b)) =
-      ∑ b, Ω b • siteVec own (sites (Fin L)) b :=
-    Finset.sum_congr rfl fun b _ ↦ congrArg (Ω b • ·) (he b)
-  exact (congrArg (inner ℂ (siteVec own (sites (Fin L)) c)) hs).trans
-    (by simp only [inner_sum, inner_smul_right, hb]; simp)
+  have h : (Sheet.mk own : Sheet (Fin L) (Party L w)).regIso q (siteVec own (sites (Fin L)) c) =
+      EuclideanSpace.single c (1 : ℂ) := Sheet.regIso_siteVec q _ c
+  rw [Sheet.regRef, ← LinearIsometryEquiv.inner_map_map
+    ((Sheet.mk own : Sheet (Fin L) (Party L w)).regIso q), LinearIsometryEquiv.apply_symm_apply, h]
+  simp [EuclideanSpace.inner_single_left]
 
 private def auxiliaryReferenceBasis (a : AuxiliarySite L w → Fin q) :
     (cs : List (AuxiliaryCopy L w)) →
-      Mem (stackRegs (cs.map fun c ↦
+      Mem (stackRegs (Sheet.regs q) (cs.map fun c ↦
         (Sheet.mk (fun x ↦ auxiliaryOwner L w (c, x)) : Sheet (Fin L) (Party L w))) [])
   | [] => (1 : ℂ)
   | c :: cs =>
       (appendIso (siteRegs q (fun x ↦ auxiliaryOwner L w (c, x)) (sites (Fin L)))
-        (stackRegs (cs.map fun c ↦
+        (stackRegs (Sheet.regs q) (cs.map fun c ↦
           (Sheet.mk (fun x ↦ auxiliaryOwner L w (c, x)) : Sheet (Fin L) (Party L w)))
             [])).symm
         (siteVec (fun x ↦ auxiliaryOwner L w (c, x)) (sites (Fin L))
@@ -256,7 +235,7 @@ private theorem auxiliaryReferenceBasis_inner [NeZero q]
     (Ω : EuclideanSpace ℂ (Fin L → Fin q)) (a : AuxiliarySite L w → Fin q)
     (cs : List (AuxiliaryCopy L w)) :
     inner ℂ (auxiliaryReferenceBasis a cs)
-      (framesVec Ω (cs.map fun c ↦
+      (framesVec (Sheet.refFamily Ω) (cs.map fun c ↦
         (Sheet.mk (fun x ↦ auxiliaryOwner L w (c, x)) : Sheet (Fin L) (Party L w)))) =
       (cs.map fun c ↦ Ω (fun x ↦ a (c, x))).prod := by
   induction cs with
@@ -266,37 +245,37 @@ private theorem auxiliaryReferenceBasis_inner [NeZero q]
   | cons c cs ih =>
       exact (inner_appendIso_symm_tmul
         (siteRegs q (fun x ↦ auxiliaryOwner L w (c, x)) (sites (Fin L)))
-        (stackRegs (cs.map fun c ↦
+        (stackRegs (Sheet.regs q) (cs.map fun c ↦
           (Sheet.mk (fun x ↦ auxiliaryOwner L w (c, x)) : Sheet (Fin L) (Party L w))) [])
         (siteVec (fun x ↦ auxiliaryOwner L w (c, x)) (sites (Fin L)) (fun x ↦ a (c, x)))
         ((Sheet.mk (fun x ↦ auxiliaryOwner L w (c, x)) : Sheet (Fin L) (Party L w)).regRef Ω)
-        (auxiliaryReferenceBasis a cs) (framesVec Ω _)).trans
+        (auxiliaryReferenceBasis a cs) (framesVec (Sheet.refFamily Ω) _)).trans
         (congrArg₂ (· * ·) (inner_siteVec_regRef_raw _ Ω _) ih)
 
 /-- The actual stack memory in the already specified main/auxiliary coordinates.
 No terminal readout or factorization is supplied as a hypothesis.
 Source: Part II, `prop:sweep`, lines 357–360. -/
 def terminalStackReadout (L w : ℕ) :
-    Mem (stackRegs (terminalFrames L w) []) ≃ₗᵢ[ℂ]
+    Mem (stackRegs (Sheet.regs q) (terminalFrames L w) []) ≃ₗᵢ[ℂ]
       EuclideanSpace ℂ ((Fin L → Fin q) × (AuxiliarySite L w → Fin q)) :=
   (Layout.memCongr (stackRegs_terminalFrames L w)).trans
     (sheetReadout (terminalRawOrder L w) (terminalRawOrder_nodup L w)
       mem_terminalRawOrder)
 
-/-- The specified frame product has the exact original main vector and the
+/-- The specified sheet product has the exact original main vector and the
 constructed auxiliary product in the literal copy coordinates.
 Source: Part II, `prop:sweep`, lines 357–359. -/
 theorem terminalStackReadout_framesVec [NeZero q]
     (Ω : EuclideanSpace ℂ (Fin L → Fin q)) :
-    terminalStackReadout L w (framesVec Ω (terminalFrames L w)) =
+    terminalStackReadout L w (framesVec (Sheet.refFamily Ω) (terminalFrames L w)) =
       Matrix.euclideanTensorVector Ω (auxiliaryReference L w q Ω) := by
   classical
   ext z
   rcases z with ⟨b, a⟩
   let cs := initialAuxiliaryOrder L w
-  let ξ : Mem (stackRegs (terminalFrames L w) []) :=
+  let ξ : Mem (stackRegs (Sheet.regs q) (terminalFrames L w) []) :=
     (appendIso (siteRegs q (mainOwner L w) (sites (Fin L)))
-      (stackRegs (terminalAuxiliaryFrames L w) [])).symm
+      (stackRegs (Sheet.regs q) (terminalAuxiliaryFrames L w) [])).symm
       (siteVec (mainOwner L w) (sites (Fin L)) b ⊗ₜ
         auxiliaryReferenceBasis a cs)
   have hflat : HEq ξ
@@ -304,7 +283,7 @@ theorem terminalStackReadout_framesVec [NeZero q]
     have hh : siteRegs q (mainOwner L w) (sites (Fin L)) =
         siteRegs q (rawOwner L w) ((sites (Fin L)).map Sum.inl) := by
       simp [siteRegs, List.map_map, Function.comp_def, rawOwner]
-    have ht : stackRegs (terminalAuxiliaryFrames L w) [] =
+    have ht : stackRegs (Sheet.regs q) (terminalAuxiliaryFrames L w) [] =
         siteRegs q (rawOwner L w) ((terminalAuxiliarySiteOrder L w).map Sum.inr) := by
       exact (stackRegs_auxiliaryCopies (q := q) cs).trans
         (by simp [cs, terminalAuxiliarySiteOrder, siteRegs, List.map_map,
@@ -339,19 +318,19 @@ theorem terminalStackReadout_framesVec [NeZero q]
       EuclideanSpace.piLpCongrLeft_single]
     rfl
   calc
-    terminalStackReadout L w (framesVec Ω (terminalFrames L w)) (b, a) =
+    terminalStackReadout L w (framesVec (Sheet.refFamily Ω) (terminalFrames L w)) (b, a) =
         inner ℂ (EuclideanSpace.single (b, a) (1 : ℂ))
-          (terminalStackReadout L w (framesVec Ω (terminalFrames L w))) := by
+          (terminalStackReadout L w (framesVec (Sheet.refFamily Ω) (terminalFrames L w))) := by
       simp [EuclideanSpace.inner_single_left]
-    _ = inner ℂ ξ (framesVec Ω (terminalFrames L w)) := by
+    _ = inner ℂ ξ (framesVec (Sheet.refFamily Ω) (terminalFrames L w)) := by
       rw [← hread, LinearIsometryEquiv.inner_map_map]
     _ = Ω b * (cs.map fun c ↦ Ω (fun x ↦ a (c, x))).prod := by
       exact (inner_appendIso_symm_tmul
         (siteRegs q (mainOwner L w) (sites (Fin L)))
-        (stackRegs (terminalAuxiliaryFrames L w) [])
+        (stackRegs (Sheet.regs q) (terminalAuxiliaryFrames L w) [])
         (siteVec (mainOwner L w) (sites (Fin L)) b)
         ((Sheet.mk (mainOwner L w) : Sheet (Fin L) (Party L w)).regRef Ω)
-        (auxiliaryReferenceBasis a cs) (framesVec Ω _)).trans
+        (auxiliaryReferenceBasis a cs) (framesVec (Sheet.refFamily Ω) _)).trans
         (congrArg₂ (· * ·) (inner_siteVec_regRef_raw _ Ω _)
           (auxiliaryReferenceBasis_inner Ω a cs))
     _ = Matrix.euclideanTensorVector Ω (auxiliaryReference L w q Ω) (b, a) := by
@@ -363,8 +342,8 @@ pure main density. Source: Part II, Theorem B, lines 575–583. -/
 theorem partialTrace_terminalStackReference [NeZero q]
     (Ω : EuclideanSpace ℂ (Fin L → Fin q)) (hΩ : ‖Ω‖ = 1) :
     Matrix.partialTraceRight (Matrix.euclideanOuterProduct
-      (terminalStackReadout L w (framesVec Ω (terminalFrames L w)))
-      (terminalStackReadout L w (framesVec Ω (terminalFrames L w)))) =
+      (terminalStackReadout L w (framesVec (Sheet.refFamily Ω) (terminalFrames L w)))
+      (terminalStackReadout L w (framesVec (Sheet.refFamily Ω) (terminalFrames L w)))) =
         Matrix.euclideanOuterProduct Ω Ω := by
   rw [terminalStackReadout_framesVec, Matrix.partialTraceRight_tensorVector_eq_smul,
     norm_auxiliaryReference Ω hΩ]
@@ -376,8 +355,8 @@ Source: Part II, Theorem B, lines 575–583. This conditional error lemma does
 not construct a sweep vector or prove its vector-error bound. -/
 theorem rectangularTraceNorm_terminalStackReadout_sub_le [NeZero q]
     (Ω : EuclideanSpace ℂ (Fin L → Fin q)) (hΩ : ‖Ω‖ = 1)
-    (Ψ : Mem (stackRegs (terminalFrames L w) [])) (hΨ : ‖Ψ‖ ≤ 1)
-    {ε : ℝ} (herror : ‖Ψ - framesVec Ω (terminalFrames L w)‖ ≤ ε) :
+    (Ψ : Mem (stackRegs (Sheet.regs q) (terminalFrames L w) [])) (hΨ : ‖Ψ‖ ≤ 1)
+    {ε : ℝ} (herror : ‖Ψ - framesVec (Sheet.refFamily Ω) (terminalFrames L w)‖ ≤ ε) :
     Matrix.rectangularTraceNorm
       (Matrix.partialTraceRight (Matrix.euclideanOuterProduct
         (terminalStackReadout L w Ψ) (terminalStackReadout L w Ψ)) -
