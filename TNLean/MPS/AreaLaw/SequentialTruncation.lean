@@ -180,7 +180,7 @@ local notation "InternalCut" => {k : ℕ // k ∈ Finset.Ico 1 L}
 /-- The orthogonal projection onto the first min(D,N_k) vectors of the supplied
 ordered orthonormal basis at each internal prefix cut. At unvisited cuts it is
 the identity. Source: one-dimensional note, part2a_mps_information.tex,
-prop:VC, lines39–46. The basis may be arbitrary; every source ordered
+prop:VC, lines 39–46. The basis may be arbitrary; every source ordered
 orthonormal eigenbasis is included. -/
 noncomputable def prefixBasisProjection
     (b : ∀ k : InternalCut, RegionalBasis k.val) (D k : ℕ) :
@@ -359,8 +359,8 @@ private theorem sequentialTruncation_prefix_rank_error
 orthonormal bases gives the actual product an open MPS representation and the
 actual discarded-expectation error. Specializing to every ordered eigenbasis
 of each actual marginal is Proposition prop:VC, including all choices in ties.
-Source: one-dimensional note, part2a_mps_information.tex, prop:VC, lines39–62
-and the product-order caption at line70. The statement holds for arbitrary
+Source: one-dimensional note, part2a_mps_information.tex, prop:VC, lines 39–62
+and the product-order caption at line 70. The statement holds for arbitrary
 vectors, and hence for every unit vector in the source proposition. -/
 theorem isOpenMPS_sequentialTruncation_prefixBasisProjection
     (ψ : EuclideanSpace ℂ (Fin L → Fin q)) (D : ℕ)
