@@ -273,6 +273,90 @@ the finite-dimensional density application uses finite ones.
     The identity matrix on each edge forces its two endpoint labels to coincide, and reindexing the remaining diagonal assignments by one label per edge makes the endpoint reader yield $\eta_p$.
 \end{proof}
 
+\begin{theorem}[Identity-bond factorization across a vertex partition]
+    \label{thm:peps_identity_cut_factorization}
+    \lean{TNLean.PEPS.DependentBondNetwork.flattening_network_one_eq_mul,
+        TNLean.PEPS.DependentBondNetwork.rank_flattening_network_one_le}
+    \leanok
+    \uses{def:peps_dependent_network,def:peps_group_contraction}
+    Let a finite directed multigraph $(V,E)$ have endpoints $t(e),h(e)$,
+    finite virtual alphabets $D_e$, and local tensors $A_v$ with physical
+    alphabet $P_v$. Let $Z$ be its contraction with identity bond matrices.
+    For $S\subseteq V$, let $\partial S$ be the tagged edges with one endpoint
+    in $S$ and one in $S^c$, and set $K_S=\prod_{e\in\partial S}D_e$.
+    Let $U_S(x,\eta)$ be the partial contraction on $S$, summing the labels
+    of all edges internal to $S$ and keeping $x\in\prod_{v\in S}P_v$ and
+    $\eta\in K_S$ open. Define $U_{S^c}$ in the same way.
+    Let $F_S$ be the matrix reshaping of $Z$, with rows indexed by the
+    physical configurations on $S$ and columns by those on $S^c$. Then
+    \begin{align}
+        F_S & =U_S U_{S^c}^{\mathsf T}.
+        \label{eq:peps_identity_cut_factor}
+    \end{align}
+    If the physical alphabets $P_v$ are finite, then
+    \begin{align}
+        \operatorname{rank}F_S
+         & \le |K_S|=\prod_{e\in\partial S}|D_e|.
+        \label{eq:peps_identity_cut_rank}
+    \end{align}
+    Thus each tagged crossing edge contributes its own alphabet once.
+    This is the finite contraction step in
+    \cite[Part~II, proof of Theorem~B]{TNLean2026OneDimensional}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{cor:peps_group_tensor_network,thm:peps_group_contraction_nuclear}
+    With every bond matrix equal to the identity, the network is the plain
+    contraction of the local tensors (Corollary~\ref{cor:peps_group_tensor_network}).
+    The factorization of its flattening across $S$
+    (Theorem~\ref{thm:peps_group_contraction_nuclear}) sums over the labels of the
+    crossing edges, which gives (\ref{eq:peps_identity_cut_factor}). Matrix rank is
+    bounded by the number of columns of the left factor, namely $|K_S|$, which gives
+    (\ref{eq:peps_identity_cut_rank}).
+\end{proof}
+
+\begin{theorem}[Cut ranks of distributed product-basis columns]
+    \label{thm:compression_operator_column_cut_rank}
+    \lean{TNLean.PEPS.Approximation.DistributedOperatorContraction.flattening_contractedOperator_column_eq_mul,
+        TNLean.PEPS.Approximation.DistributedOperatorContraction.rank_flattening_contractedOperator_column_le}
+    \leanok
+    \uses{def:compression_operator_operator,def:compression_operator_links,
+        def:compression_operator_alphabets,def:peps_ket_column_dependent_fix_input}
+    Let $\sigma$ be the distributed operator contraction with tagged link
+    family $\mathcal L$, virtual alphabets $D_\ell$, physical output alphabets
+    $X_p$, and input alphabets $Y_p$. For any product-basis input
+    $z\in\prod_pY_p$, fix that input locally as in
+    Definition~\ref{def:peps_ket_column_dependent_fix_input}.
+    For a party subset $S$, write $F_{S,z}$ for the coefficient matrix of
+    $x\mapsto\sigma(x,z)$ across $S\mid S^c$, and write
+    $U_{S,z},U_{S^c,z}$ for the two partial contractions of these actual
+    input-fixed local tensors. Then
+    \begin{align}
+        F_{S,z} & =U_{S,z}U_{S^c,z}^{\mathsf T}.
+        \label{eq:compression_column_cut_factor}
+    \end{align}
+    If every $X_p$ is finite, then
+    \begin{align}
+        \operatorname{rank}F_{S,z}
+         & \le\prod_{\ell\in\partial S}|D_\ell|.
+        \label{eq:compression_column_cut_rank}
+    \end{align}
+    The edge set, alphabets and identity bond matrices are unchanged by
+    fixing $z$, as in \cite[Lemma~8.1]{OpenAI2026PolynomialPEPS}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_identity_cut_factorization,
+        def:peps_ket_column_dependent_fix_input,def:compression_operator_operator}
+    The input-fixed local tensor is
+    $A_{p,z}(\eta,x_p)=A_p(\eta;(x_p,z_p))$.
+    Its identity-bond contraction is exactly $\sigma(x,z)$.
+    Apply Theorem~\ref{thm:peps_identity_cut_factorization} to these tensors
+    on the same tagged star and sample links. The local sums and the coefficient
+    at each chosen root stay inside their original tensors. No normalization
+    or injectivity condition is required.
+\end{proof}
+
 \begin{theorem}[Exact branch and sample evaluation]
     \label{thm:compression_operator_branch_sum}
     \lean{TNLean.PEPS.Approximation.DistributedOperatorContraction.contractedOperator_eq_branchSampleSum}
