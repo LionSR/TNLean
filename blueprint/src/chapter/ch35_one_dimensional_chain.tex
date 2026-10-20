@@ -1553,14 +1553,21 @@ for an arbitrary finite set of sites and are instantiated here directly.
     \leanok
     \uses{def:chain_open_mps, thm:chain_mps_of_cut_rank,
         lem:chain_sequential_truncation}
-    Order an orthonormal eigenbasis of $\rho_k$ by nonincreasing eigenvalue.
-    The projection onto its first $\min\{D,N_k\}$ vectors has rank
+    Each $\Pi_k$ is an orthogonal projection of rank
     $\min\{D,N_k\}\le D$, and the trace of $(1-\Pi_k)\rho_k$ is
-    $\operatorname{tr}\rho_k$ minus the sum of the $D$ largest eigenvalues,
-    that is $\epsilon_k(D)$, since $\operatorname{tr}\rho_k=\|\psi\|^2=1$.
-    This trace equals $\langle\psi,(1-P_k)\psi\rangle$, so
-    Theorem~\ref{thm:chain_sequential_truncation_full} gives both
-    assertions.
+    $\operatorname{tr}\rho_k$ minus the sum of the $\min\{D,N_k\}$ largest
+    eigenvalues, that is $\epsilon_k(D)$, since
+    $\operatorname{tr}\rho_k=\|\psi\|^2=1$. The estimates of
+    Lemma~\ref{lem:chain_sequential_truncation} hold for any orthogonal
+    projections on the first $k$ sites: the cut rank of $\Phi$ at cut $k$ is
+    at most the rank of $\Pi_k$, and
+    $\|\Phi-\psi\|\le\sum_k\sqrt{\operatorname{tr}((1-\Pi_k)\rho_k)}$,
+    because $\|(1-P_k)\psi\|^2=\operatorname{tr}((1-\Pi_k)\rho_k)$.
+    Theorem~\ref{thm:chain_mps_of_cut_rank} turns the rank bound into the
+    stated representation, and substituting $\epsilon_k(D)$ for each trace
+    gives the error bound. The argument is the proof of
+    Theorem~\ref{thm:chain_sequential_truncation_full}, applied to the
+    eigenprojections directly.
 \end{proof}
 
 \begin{lemma}[Sequential truncation at an entropy threshold]
