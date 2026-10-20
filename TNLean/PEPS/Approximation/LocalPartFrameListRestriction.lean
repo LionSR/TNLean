@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.WordPermutationRestriction
-import TNLean.PEPS.Approximation.WordEvaluationTransport
+import TNLean.Lattice.PartyCircuit.WordEvaluationTransport
 
 /-!
 # Restriction of framed local parts

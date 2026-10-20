@@ -631,12 +631,12 @@ abstracted — record why, so it is not re-proposed).
   use `Word.eval_mapPair_source` to transform the first pair vector, and compose
   the identity on the right with the unchanged tail preparation.
 - **Seen:** former private proofs `pair_cons_mapIsometry_expands` in
-  `TNLean/PEPS/Approximation/FiniteSourcePreparation.lean` and
+  `TNLean/Lattice/PartyCircuit/FiniteSourcePreparation.lean` and
   `common_pair_cons_expands` in
-  `TNLean/PEPS/Approximation/CommonSourcePreparation.lean`.
+  `TNLean/Lattice/PartyCircuit/CommonSourcePreparation.lean`.
 - **Abstraction:** the theorem
   `TNLean.PEPS.PairEffect.SourceInventory.Expands.cons_mapL` in
-  [SourcePairMaps.lean](../TNLean/PEPS/Approximation/SourcePairMaps.lean) takes the two
+  [SourcePairMaps.lean](../TNLean/Lattice/PartyCircuit/SourcePairMaps.lean) takes the two
   continuous linear maps and their operator-norm bounds. Issue #8973 requests
   the common lemma; the two private copies are removed, rather than retained
   as aliases. Both existing family theorem statements remain unchanged.
@@ -785,7 +785,7 @@ abstracted — record why, so it is not re-proposed).
 - **Seen:** a public copy in `UnitMemoryCoordinates.lean` and private copies in
   `GroupedBlockMap.lean` and `WordOwnerMap.lean`.
 - **Abstraction:** `TNLean.PEPS.PairEffect.Layout.memCongr_symm`, moved next to
-  `memCongr` in `TNLean/PEPS/Approximation/PartyPartition.lean`; the duplicates
+  `memCongr` in `TNLean/Lattice/PartyCircuit/PartyPartition.lean`; the duplicates
   are deleted.
 - **Notes:** the full name is unchanged, so the existing blueprint reference
   still resolves.
@@ -4659,7 +4659,7 @@ three-plaquette output measurement, and the routed reunion measurement.
   `isReordering_frame_iff`, `isReordering_frameList_iff` and the projections
   `IsReordering.isAllowed`, `IsReordering.usesOnly` and
   `IsReordering.sourceCount_eq`, in
-  `TNLean/PEPS/Approximation/SiteRegisters.lean`.
+  `TNLean/Lattice/PartyCircuit/SiteRegisters.lean`.
 - **Call sites:** `SiteRegisters.lean`, `RegisterReordering.lean`,
   `FrameRegisters.lean`, `TwoSheetRegisters.lean` and
   `FrameBoundedChanges.lean` (2026-10-09). A composite of reorderings closes
@@ -6635,7 +6635,7 @@ spectral split → block extraction → MPV calculation → strict bounds
   the preceding bound and the last stage's bound.
 - **Seen:** `OriginalCircuit.isExpansionBounded_sequence` and
   `OriginalCircuit.isMonomialBounded_sequence` in
-  `TNLean/PEPS/Approximation/OriginalCircuitSequence.lean`, and formerly
+  `TNLean/Lattice/PartyCircuit/OriginalCircuitSequence.lean`, and formerly
   `DyadicProtocol.isExpansionBounded_chain` and
   `DyadicProtocol.isMonomialBounded_chain` in
   `TNLean/PEPS/Approximation/DyadicProtocolCompression.lean`: four
@@ -7187,9 +7187,9 @@ spectral split → block extraction → MPV calculation → strict bounds
   vectors to pure tensors by two tensor-product inductions. Linearity handles
   the additive cases; tensor associators and exchanges then evaluate explicitly.
 - **Seen:** `eval_combineSources` in
-  `TNLean/PEPS/Approximation/PartyLayout.lean` and
+  `TNLean/Lattice/PartyCircuit/PartyLayout.lean` and
   `eval_expandCombinedPair` in
-  `TNLean/PEPS/Approximation/PairSourceExpansion.lean` (two occurrences).
+  `TNLean/Lattice/PartyCircuit/PairSourceExpansion.lean` (two occurrences).
 - **Abstraction:** At the next occurrence, consider a bilinear extensionality
   lemma for maps on two tensor products. The existing `clm_ext_tmul` and
   `clm_ext_tmul₃` already handle identities between continuous linear maps
@@ -7398,7 +7398,7 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Pattern:** If no participant of a placed gate is affected, every register
   in its transported layout has the exterior owner.
 - **Helper:** `Layout.affectedOwner_mapOwner_eq_none` in
-  `TNLean/PEPS/Approximation/SourceOwnerSupport.lean`, using
+  `TNLean/Lattice/PartyCircuit/SourceOwnerSupport.lean`, using
   `List.mem_map` and the existing pointwise `affectedOwner_eq_none`.
 - **Refactored occurrences:** The private proof in
   `DistributedSourceComposition.lean` is removed; its gate constructor,
@@ -7742,7 +7742,7 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Pattern:** Apply a word whose input and output register lists have been
   identified to a vector identified with the original input.
 - **Reuse:** `Word.eval_castLayouts_apply_heq` in
-  `TNLean/PEPS/Approximation/WordEvaluationTransport.lean` is the existing checked
+  `TNLean/Lattice/PartyCircuit/WordEvaluationTransport.lean` is the existing checked
   public proof from `SourceRegisterPermutation`. Its lower import position makes
   it available to `SourceSlotMaps`, `SelectiveSourcePreparation`,
   `SourceRegisterPermutation`, and `EffectCircuitPreparation`.
@@ -8013,7 +8013,7 @@ spectral split → block extraction → MPV calculation → strict bounds
   tensoring it with a fixed map on another memory. Compare elementary tensors
   with `clm_ext_tmul` and apply congruence to the original identity.
 - **Seen:** The private `tensor_factorization` helper in
-  `TNLean/PEPS/Approximation/PartyLocalMaps.lean` and
+  `TNLean/Lattice/PartyCircuit/PartyLocalMaps.lean` and
   `TNLean/PEPS/Approximation/CanonicalPartyFactorization.lean` (two occurrences).
 - **Abstraction:** At a third occurrence, share the operator identity in a
   lower-level tensor-map module, or use Mathlib's `TensorProduct.mapL_comp`.

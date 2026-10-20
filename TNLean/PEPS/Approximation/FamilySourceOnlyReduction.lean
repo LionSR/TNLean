@@ -3,8 +3,8 @@ Copyright (c) 2026 Sirui Lu. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
-import TNLean.PEPS.Approximation.FamilyPhysicalReadout
-import TNLean.PEPS.Approximation.SourceOnlyReduction
+import TNLean.Lattice.PartyCircuit.FamilyPhysicalReadout
+import TNLean.Lattice.PartyCircuit.SourceOnlyReduction
 
 /-! # Source-only physical density with original local dimensions
 

@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.SelectiveSourcePreparation
-import TNLean.PEPS.Approximation.WordEvaluationTransport
+import TNLean.Lattice.PartyCircuit.WordEvaluationTransport
 
 /-!
 # Reordering source registers before their vectors are supplied

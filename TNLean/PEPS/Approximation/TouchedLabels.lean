@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.SourceCircuitChoiceAt
-import TNLean.PEPS.Approximation.DistributedSourceComposition
+import TNLean.Lattice.PartyCircuit.DistributedSourceComposition
 
 /-! # Partial choices as labels at touched occurrences
 

@@ -13,6 +13,7 @@ import TNLean.Lattice.EntropyDimension
 import TNLean.Lattice.FiniteDomain
 import TNLean.Lattice.LocalHamiltonian
 import TNLean.Lattice.MarginalTails
+import TNLean.Lattice.PartyCircuit
 import TNLean.Lattice.PhysicalBufferCoordinates
 import TNLean.Lattice.ProductGroundState
 import TNLean.Lattice.RegionEntropyInequalities

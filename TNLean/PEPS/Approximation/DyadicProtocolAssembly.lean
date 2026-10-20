@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.DyadicProtocolFinalReadout
 import TNLean.PEPS.Approximation.DyadicProtocolInitialStep
-import TNLean.PEPS.Approximation.OriginalCircuitChain
+import TNLean.Lattice.PartyCircuit.OriginalCircuitChain
 import TNLean.PEPS.Approximation.OriginalCircuitSourceBound
 import TNLean.PEPS.Approximation.SheetStackChange
 

@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.PEPS.Approximation.PartyOutputCoordinates
 import TNLean.PEPS.Approximation.OwnerMemoryTransport
 import TNLean.PEPS.Approximation.LayoutExcludedOwners
-import TNLean.PEPS.Approximation.AffectedOwners
+import TNLean.Lattice.PartyCircuit.AffectedOwners
 
 /-! # Physical party bases after selecting every original party
 

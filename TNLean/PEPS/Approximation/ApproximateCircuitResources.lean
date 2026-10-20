@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.ApproximateGateRescaling
-import TNLean.PEPS.Approximation.EffectReplacementExpansion
-import TNLean.PEPS.Approximation.EffectCircuitResources
+import TNLean.Lattice.PartyCircuit.EffectReplacementExpansion
+import TNLean.Lattice.PartyCircuit.EffectCircuitResources
 
 /-!
 # Preservation of gate resources under coefficient rescaling

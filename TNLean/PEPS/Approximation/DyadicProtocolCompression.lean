@@ -7,8 +7,8 @@ import TNLean.PEPS.Approximation.DistributedGateMapConstruction
 import TNLean.PEPS.Approximation.DistributedPartyNetwork
 import TNLean.PEPS.Approximation.DyadicProtocol
 import TNLean.PEPS.Approximation.GroundStateApproximation
-import TNLean.PEPS.Approximation.OriginalCircuitChain
-import TNLean.PEPS.Approximation.OriginalCircuitSequence
+import TNLean.Lattice.PartyCircuit.OriginalCircuitChain
+import TNLean.Lattice.PartyCircuit.OriginalCircuitSequence
 
 /-!
 # Compression of the dyadic distribution protocol

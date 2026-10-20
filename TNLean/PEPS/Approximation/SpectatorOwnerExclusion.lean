@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.PEPS.Approximation.WordOwnerRestriction
 import TNLean.PEPS.Approximation.WordAppendTailRestriction
 import TNLean.PEPS.Approximation.LayoutExcludedOwners
-import TNLean.PEPS.Approximation.PartyTensorMaps
+import TNLean.Lattice.PartyCircuit.PartyTensorMaps
 
 /-!
 # Spectators at an excluded owner

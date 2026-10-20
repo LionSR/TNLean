@@ -391,7 +391,7 @@ normalizations.
 
 #### `TNLean.PEPS.PairEffect.SourceInventory.IsNormalized`
 
-- **Defined in:** `TNLean/PEPS/Approximation/SourcePreparation.lean`.
+- **Defined in:** `TNLean/Lattice/PartyCircuit/SourcePreparation.lean`.
 - **Meaning:** every recorded pair-source vector has norm one. The list records
   source occurrences separately, including repeated pairs of parties.
 - **Source:** polynomial-PEPS manuscript, September 24, 2026, Lemma 5.1,
@@ -402,7 +402,7 @@ normalizations.
 
 #### `TNLean.PEPS.PairEffect.SourceInventory.Expands`
 
-- **Defined in:** `TNLean/PEPS/Approximation/PairSourceGrouping.lean`.
+- **Defined in:** `TNLean/Lattice/PartyCircuit/PairSourceGrouping.lean`.
 - **Meaning:** `G.Expands S` means that, beside any spectator registers,
   allowed local operations and register exchanges containing no pair-source
   preparations take the preparation of `G` exactly to the preparation of `S`.
