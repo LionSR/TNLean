@@ -24,7 +24,7 @@ part2b_mps_protocol.tex:587–614 and order of constants:626–632.
 
 noncomputable section
 namespace TNLean.MPS.AreaLaw.ChainSweep
-open QuantumCircuit TNLean.PEPS TNLean.PEPS.PairEffect TNLean.PEPS.EncodedFrame
+open QuantumCircuit TNLean.Lattice TNLean.PEPS TNLean.PEPS.PairEffect TNLean.PEPS.EncodedFrame
 open TNLean.PEPS.Approximation
 
 /-- The physical hypotheses alone give uniformly polynomial sampled networks
@@ -33,33 +33,26 @@ All preparation resource bounds are retained for the same actual circuit.
 Source: Part II, thm:B, part2b_mps_protocol.tex:587–614. -/
 theorem exists_physical_sampled_network_with_prefixCrossingLinks_le_1600
     (q : ℕ) (hq : 1 ≤ q) (R : ℕ) (J Δ : ℝ) (hΔ : 0 < Δ) :
-    letI : NeZero q := ⟨by omega⟩
     ∃ (D K : ℝ) (s L₀ : ℕ) (hL₀ : 2 ≤ L₀), 1 ≤ D ∧ 0 < K ∧
       let ι := {a : Σ L : ℕ, ChainHamiltonian L q R J ×
-          EuclideanSpace ℂ (Fin L → Fin q) × ℝ × (Fin L → ℝ × ℝ) //
-        L₀ ≤ a.1 ∧ Matrix.IsGappedGroundState a.2.1.operator a.2.2.2.1 a.2.2.1 Δ}
+          EuclideanSpace ℂ (Fin L → Fin q) × ℝ //
+        L₀ ≤ a.1 ∧ Matrix.IsGappedGroundState a.2.1.operator a.2.2.2 a.2.2.1 Δ}
       let length := fun i : ι ↦ i.val.1
       let width := fun i : ι ↦ ⌈D * Real.log (length i : ℝ)⌉₊
       let ground := fun i : ι ↦ i.val.2.2.1
-      let pos := fun i : ι ↦ i.val.2.2.2.2
       let hL := fun i : ι ↦
         Nat.lt_of_lt_of_le (by omega : 0 < L₀) i.property.1
-      let Fs := fun i : ι ↦ initialFrames (length i) (width i) q (pos i)
-      let holder := fun (i : ι) (F : Frame (pos i) q (Party (length i) (width i))) ↦
+      let Fs := fun i : ι ↦ initialFrames (length i) (width i)
+      let holder := fun (i : ι) (F : Sheet (Fin (length i)) (Party (length i) (width i))) ↦
         F.owner ⟨0, hL i⟩
-      let H := fun (i : ι) p ↦ framesSpace ((Fs i).filter fun F ↦ holder i F = p)
+      let H := fun (i : ι) p ↦ framesSpace (Sheet.regs q) ((Fs i).filter fun F ↦ holder i F = p)
       ∃ hx : ∀ (i : ι) p,
-          ‖@framesVec (Fin (length i)) (Fin.fintype (length i))
-            (instDecidableEqFin (length i)) q (Party (length i) (width i)) (pos i)
-            ⟨Nat.ne_of_gt (lt_of_lt_of_le Nat.zero_lt_one hq)⟩
-            (ground i) ((Fs i).filter fun F ↦ holder i F = p)‖ = 1,
+          ‖framesVec (Sheet.refFamily (ground i)) ((Fs i).filter fun F ↦ holder i F = p)‖ = 1,
         ∃ C : ∀ i : ι, OriginalCircuit (ProductInput.wholePartyLayout (H i))
             (familyPhysicalOutputLayout (physicalDimension (length i) (width i) q)
               (physicalOrder (length i) (width i)) (privateLayout (length i) (width i) q)),
           let C₀ := fun i : ι ↦
-            @preparationConstruction (length i) (width i) q
-              ⟨Nat.ne_of_gt (lt_of_lt_of_le Nat.zero_lt_one hq)⟩
-              (ground i) (pos i) (hL i) (hx i) (C i)
+            preparationConstruction (w := width i) (ground i) (hL i) (hx i) (C i)
           let target := fun i : ι ↦
             LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
               (mainConfigurationEquiv (length i) (width i) q) (ground i)
@@ -134,11 +127,10 @@ theorem exists_physical_sampled_network_with_prefixCrossingLinks_le_1600
                   (∀ r', (prefixCrossingLinks Finset.univ participants root r').card ≤ 1280) ∧
                   (∀ r', (prefixCrossingLinks Finset.univ participants root r').card ≤ 1600) := by
   classical
-  let : NeZero q := ⟨by omega⟩
   obtain ⟨D, K, s, L₀, hL₀, hD, hK, hfamily⟩ :=
     exists_uniform_preparation_family q hq R J Δ hΔ
   refine ⟨D, K, s, L₀, hL₀, hD, hK, ?_⟩
-  intro ι length width ground pos hL Fs holder H
+  intro ι length width ground hL Fs holder H
   obtain ⟨hx, C, hresources⟩ := hfamily
   refine ⟨hx, C, ?_⟩
   intro C₀ target
