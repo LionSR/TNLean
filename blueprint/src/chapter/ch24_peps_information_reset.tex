@@ -63,14 +63,35 @@ the cores to an inverse power of the system size. This is Lemma~3.3 of
     has no mutual information with a region of the first.
 \end{proof}
 
+\begin{lemma}[A supported unitary and the mutual information of untouched sets]
+    \label{lem:lattice_supported_unitary_entropy}
+    \lean{TNLean.Lattice.mutualInformation_le_of_supported_unitary,
+        TNLean.Lattice.exists_one_kronecker_unitary_of_mem_supportedOperators}
+    \leanok
+    Let $q\ge1$, let $X,Y$ be disjoint sets of sites, and let $\Psi$ and $\Phi$ be
+    unit vectors on a finite set of sites containing them, the sites of $X$ having
+    dimension $q$. If a unitary $U$ supported away from $X\cup Y$ satisfies
+    $\|U\Psi-\Phi\|\le\delta$, then
+    \begin{align*}
+        |I_\Psi(X:Y)-I_\Phi(X:Y)| & \le8\sqrt\delta\,\log(e\,q^{|X|}).
+    \end{align*}
+    An operator supported on a set $S$ is, in the coordinates in which the sites
+    outside $S$ come first, the identity tensored with an operator on $S$, and it
+    is unitary exactly when that operator is.
+\end{lemma}
+
+\begin{proof}\leanok
+    A unitary supported away from $X\cup Y$ does not change the joint marginal of
+    $X\cup Y$, so $I_{U\Psi}(X:Y)=I_\Psi(X:Y)$. Continuity of mutual information
+    in the vector, with only the dimension $q^{|X|}$ of $X$, gives the bound.
+\end{proof}
+
 \begin{theorem}[The entropy comparison of the reset]
     \label{thm:peps_reset_cores_entropy}
     \lean{TNLean.PEPS.Approximation.reindex_rectangle_sumArrow_unitary,
-        TNLean.PEPS.Approximation.mutualInformation_cores_le_of_reset_unitary,
-        TNLean.Lattice.mutualInformation_le_of_supported_unitary,
-        TNLean.Lattice.exists_one_kronecker_unitary_of_mem_supportedOperators}
+        TNLean.PEPS.Approximation.mutualInformation_cores_le_of_reset_unitary}
     \leanok
-    \uses{def:peps_frame_sheet_swap}
+    \uses{def:peps_frame_sheet_swap,lem:lattice_supported_unitary_entropy}
     Let $q\ge1$, let $\Omega$ be a unit vector on the open square, let $R,C$ be
     disjoint, and let $R_0\subseteq R$, $C_0\subseteq C$. Let $U$ be a unitary
     on the paired sites, supported on a set containing no site of

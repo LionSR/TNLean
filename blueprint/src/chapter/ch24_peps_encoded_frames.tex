@@ -221,20 +221,37 @@ norm of matrices, rectangular ones included.
     with the telescoping lemma.
 \end{proof}
 
-\begin{definition}[Registers of a frame]
-    \label{def:peps_frame_registers}
+\begin{definition}[Site registers]
+    \label{def:lattice_site_registers}
     \lean{TNLean.PEPS.EncodedFrame.siteRegs,
-        TNLean.PEPS.EncodedFrame.tagRegs,
         TNLean.PEPS.EncodedFrame.sites,
         TNLean.PEPS.EncodedFrame.nodup_sites,
         TNLean.PEPS.EncodedFrame.mem_sites,
         TNLean.PEPS.EncodedFrame.sitesEquiv,
-        TNLean.PEPS.EncodedFrame.owner_siteRegs,
+        TNLean.PEPS.EncodedFrame.owner_siteRegs}
+    \leanok
+    \uses{def:peps_party_layout}
+    For an owner $o$ of each site of a finite set $\Lambda$ and a list $\ell$ of
+    sites, the site registers of $\ell$ are one register $\C^q$ for each entry
+    of $\ell$, held by the owner of that site, in the order of $\ell$. A fixed
+    list of the sites of $\Lambda$ contains every site exactly once, so taking
+    the site at a position gives a bijection from its positions to $\Lambda$.
+    If every site of a list has owner $p$, every site register of the list is
+    held by $p$.
+\end{definition}
+
+\begin{proof}\leanok
+    Immediate from the definitions.
+\end{proof}
+
+\begin{definition}[Registers of a frame]
+    \label{def:peps_frame_registers}
+    \lean{TNLean.PEPS.EncodedFrame.tagRegs,
         TNLean.PEPS.EncodedFrame.layoutRegs,
         TNLean.PEPS.EncodedFrame.Frame.regs,
         TNLean.PEPS.EncodedFrame.Frame.map_owner_regs}
     \leanok
-    \uses{def:peps_frame,def:peps_party_layout}
+    \uses{def:peps_frame,def:peps_party_layout,def:lattice_site_registers}
     The registers of a frame $\mathcal F$ are one register $\C^{\mathcal
             J_a}$ for each hole $a$, held by the party holding its tag, listed in
     the order of the holes, followed by one site register $\C^q$ for each site
@@ -250,16 +267,36 @@ norm of matrices, rectangular ones included.
     sense of Theorem~5.2 of \cite{OpenAI2026PolynomialPEPS}.
 \end{definition}
 
-\begin{lemma}[Canonical coordinates of the registers]
-    \label{lem:peps_frame_registers_coordinates}
+\begin{lemma}[Canonical coordinates of site registers]
+    \label{lem:lattice_site_register_coordinates}
     \lean{TNLean.PEPS.EncodedFrame.siteVec,
         TNLean.PEPS.EncodedFrame.siteVec_append,
         TNLean.PEPS.EncodedFrame.siteVec_congr,
         TNLean.PEPS.EncodedFrame.siteIsoList,
         TNLean.PEPS.EncodedFrame.siteIsoList_siteVec,
         TNLean.PEPS.EncodedFrame.groupIso,
-        TNLean.PEPS.EncodedFrame.groupIso_siteVec,
-        TNLean.PEPS.EncodedFrame.tagVec,
+        TNLean.PEPS.EncodedFrame.groupIso_siteVec}
+    \leanok
+    \uses{def:lattice_site_registers}
+    For a list $\ell$ of sites, including lists with repetitions, write
+    $\ket c_\ell$ for the product basis vector of a configuration $c$ on the
+    site registers of $\ell$. If $c(x)=c'(x)$ for every site in $\ell$, then
+    $\ket c_\ell=\ket{c'}_\ell$. The site registers of a list of distinct sites
+    enumerating a set $A$ are identified, by a unitary, with $\C^{[q]^A}$,
+    sending $\ket c_\ell$ to $\ket c$. Under the canonical unitary for
+    concatenating register lists, $\ket c_{\ell_1\ell_2}$ is identified with
+    $\ket c_{\ell_1}\otimes\ket c_{\ell_2}$; the empty list contributes the
+    scalar one.
+\end{lemma}
+
+\begin{proof}\leanok
+    By induction on the list of registers, identifying $\C^\alpha\otimes\C^\beta$
+    with $\C^{\alpha\times\beta}$ at each step.
+\end{proof}
+
+\begin{lemma}[Canonical coordinates of the registers]
+    \label{lem:peps_frame_registers_coordinates}
+    \lean{TNLean.PEPS.EncodedFrame.tagVec,
         TNLean.PEPS.EncodedFrame.tagIso,
         TNLean.PEPS.EncodedFrame.tagIso_tagVec,
         TNLean.PEPS.EncodedFrame.layoutVec,
@@ -268,7 +305,7 @@ norm of matrices, rectangular ones included.
         TNLean.PEPS.EncodedFrame.layoutIso_symm_single,
         TNLean.PEPS.EncodedFrame.Frame.regIso}
     \leanok
-    \uses{def:peps_frame_registers}
+    \uses{def:peps_frame_registers,lem:lattice_site_register_coordinates}
     The tensor product of the registers of a frame is identified, by a
     unitary, with $\C^{\mathcal J\times[q]^\Lambda}$, the space of the tags
     and the sheet on which the encoding $K_{\mathcal F}$ and its operators
