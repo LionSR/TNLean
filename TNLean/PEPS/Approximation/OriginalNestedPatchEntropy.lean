@@ -35,19 +35,18 @@ open TNLean.Lattice
 
 namespace TNLean.PEPS.Approximation
 
-/-- The square-grid entropy area law at fixed local dimension `q`, interaction
-bound `J` and gap `Δ`, with the given constant `C_A ≥ 0`: the entropy of every
-region of every unit gapped ground vector of every open-square Hamiltonian is
-at most `C_A` times the number of original edges crossing the cut.
-`SquareEntropyAreaLaw` asserts that some such constant exists for all
+/-- The square-grid entropy area law at fixed local dimension `q` for the family of states `G`,
+with the given constant `C_A ≥ 0`: the entropy of every region of every state of the family `G`
+is at most `C_A` times the number of original edges crossing the cut. Proposition 2.1
+concerns the family `IsSquareGroundState q J Δ` of unit gapped ground vectors.
+`SquareEntropyAreaLaw` asserts that some such constant exists for that family for all
 `q ≥ 2` and `J, Δ > 0`.
 
 Source: polynomial-PEPS Proposition 2.1 (`prop:area-law`),
 `01-preliminaries.tex`, lines 39–52. -/
-def SquareEntropyAreaLawAt (q : ℕ) (J Δ C_A : ℝ) : Prop :=
+def SquareEntropyAreaLawAt (q : ℕ) (G : ∀ L : ℕ, StateSpace L q → Prop) (C_A : ℝ) : Prop :=
   0 ≤ C_A ∧
-    ∀ L : ℕ, ∀ h : SquareHamiltonian L q J, ∀ E₀ : ℝ, ∀ Ω : StateSpace L q,
-      h.IsGappedGroundState E₀ Ω Δ → ∀ A : Finset (Vertex L),
+    ∀ L : ℕ, ∀ Ω : StateSpace L q, G L Ω → ∀ A : Finset (Vertex L),
         FiniteProduct.entropy (fun _ : Vertex L ↦ Fin q) Ω A ≤
           C_A * Fintype.card {e : Edge (squareLatticeGraph L L) // IsRegionBoundaryEdge A e}
 
@@ -56,29 +55,30 @@ and `Δ` (`01-preliminaries.tex`, lines 39–52). -/
 theorem SquareEntropyAreaLaw.exists_squareEntropyAreaLawAt
     (harea : SquareEntropyAreaLaw) {q : ℕ} (hq : 2 ≤ q)
     {J Δ : ℝ} (hJ : 0 < J) (hΔ : 0 < Δ) :
-    ∃ C_A : ℝ, SquareEntropyAreaLawAt q J Δ C_A :=
-  harea q hq J Δ hJ hΔ
+    ∃ C_A : ℝ, SquareEntropyAreaLawAt q (IsSquareGroundState q J Δ) C_A := by
+  obtain ⟨C_A, hC_A, hall⟩ := harea q hq J Δ hJ hΔ
+  exact ⟨C_A, hC_A, fun L Ω ⟨h, E₀, hΩ⟩ ↦ hall L h E₀ Ω hΩ⟩
 
 /-- The original-state entropy of every selected nested square is at most
-`C_S * (1 + u)` with `C_S = max 1 (16 * C_A)`, for a square entropy area law at
-the constant `C_A`. Empty sampled squares, repeated samples, zero lattice size,
-and `u = 0` are included.
+`C_S * (1 + u)` with `C_S = max 1 (16 * C_A)`, for every state of a family `G` obeying the
+square entropy area law at the constant `C_A`. Empty sampled squares, repeated samples, zero
+lattice size, and `u = 0` are included.
 
 Source: polynomial-PEPS manuscript, `03-patches.tex`, lines 362–368; the square
 entropy area law at `C_A` is the explicit premise supplied by Proposition 2.1. -/
 theorem SquareEntropyAreaLawAt.nestedPatch_entropy_le
-    {q : ℕ} {J Δ C_A : ℝ} (hA : SquareEntropyAreaLawAt q J Δ C_A) :
-    ∀ (L : ℕ) (h : SquareHamiltonian L q J) (E₀ : ℝ) (Ω : StateSpace L q),
-      h.IsGappedGroundState E₀ Ω Δ →
+    {q : ℕ} {G : ∀ L : ℕ, StateSpace L q → Prop} {C_A : ℝ}
+    (hA : SquareEntropyAreaLawAt q G C_A) :
+    ∀ (L : ℕ) (Ω : StateSpace L q), G L Ω →
       ∀ (z : ℝ × ℝ) (u : ℝ), 0 ≤ u →
         ∀ j : Fin (AreaLaw.Geometry.nestedPatchCount u),
           Entropy.regionEntropy
             (AreaLaw.Geometry.nestedPatch (AreaLaw.rectangularDomain L L) z u j.val)
             (squareAreaLawState Ω) ≤ max 1 (16 * C_A) * (1 + u) := by
-  intro L h E₀ Ω hgs z u hu j
+  intro L Ω hΩ z u hu j
   obtain ⟨hCA, hA⟩ := hA
   let D := AreaLaw.Geometry.nestedPatch (AreaLaw.rectangularDomain L L) z u j.val
-  have hcut := hA L h E₀ Ω hgs
+  have hcut := hA L Ω hΩ
     (D.map (AreaLaw.rectangleSiteEquiv L L).symm.toEmbedding)
   rw [← finiteProductEntropy_relabel (AreaLaw.rectangleSiteEquiv L L) q Ω,
     ← card_edgeBoundary_rectangle] at hcut
@@ -105,8 +105,7 @@ theorem SquareEntropyAreaLaw.exists_nestedPatch_entropy_le
     (harea : SquareEntropyAreaLaw) {q : ℕ} (hq : 2 ≤ q)
     {J Δ : ℝ} (hJ : 0 < J) (hΔ : 0 < Δ) :
     ∃ C_S : ℝ, 1 ≤ C_S ∧
-      ∀ (L : ℕ) (h : SquareHamiltonian L q J) (E₀ : ℝ) (Ω : StateSpace L q),
-        h.IsGappedGroundState E₀ Ω Δ →
+      ∀ (L : ℕ) (Ω : StateSpace L q), IsSquareGroundState q J Δ L Ω →
         ∀ (z : ℝ × ℝ) (u : ℝ), 0 ≤ u →
           ∀ j : Fin (AreaLaw.Geometry.nestedPatchCount u),
             Entropy.regionEntropy

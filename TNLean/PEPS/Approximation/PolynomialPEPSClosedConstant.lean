@@ -76,14 +76,14 @@ theorem polynomialPEPSApproximation_explicit {q : ℕ} (hq : 2 ≤ q) {J Δ : �
       h.IsGappedGroundState E₀ Ω Δ →
         HasPEPSApproximation (pepsBondPrefactor q J Δ) (pepsBondExponent q J Δ) L q Ω := by
   have hA := AreaLaw.squareEntropyAreaLawAt_closed (q := q) (by omega) hJ.le hΔ
-  have hD : IsAngularScale q J Δ (angularConstant / 2) 1 4 60 (pepsAngularScale J Δ)
-      (pepsAngularThreshold q J Δ) :=
+  have hD : IsAngularScale q (IsSquareGroundState q J Δ) (angularConstant / 2) 1 4 60
+      (pepsAngularScale J Δ) (pepsAngularThreshold q J Δ) :=
     isAngularScale_closed_le (by omega) hJ.le hΔ (p := 60) (by norm_num [angularConstant]) 4
       (by norm_num) le_rfl le_rfl
   have hlarge := polynomialPEPSApproximation_of_ratios hq hJ hΔ hA
     (one_le_angularScale _ _ _ _) hD
   intro L hL h E₀ Ω hΩ
   exact hasPEPSApproximation_of_sufficiently_large_le (by omega) hL
-    (pepsBondExponent_pos q J Δ).le hΩ.1 (fun hL₀ ↦ hlarge L hL hL₀ h E₀ Ω hΩ)
+    (pepsBondExponent_pos q J Δ).le hΩ.1 (fun hL₀ ↦ hlarge L hL hL₀ Ω ⟨h, E₀, hΩ⟩)
 
 end TNLean.PEPS.Approximation
