@@ -154,7 +154,7 @@ theorem exists_protocol_isOpenMPS_norm_sub_phase_le
   let ground := fun i : ι ↦ i.val.2.2.1
   let hLpos := fun i : ι ↦ Nat.lt_of_lt_of_le (by omega : 0 < L₀) i.property.1
   obtain ⟨hx, circuits, hsize, hcount, hphysical, harity, hlifetime,
-      hmonomial, htermwise, htarget, hdensity, hgate, _houter, hwidths⟩ := hfamily
+      hmonomial, hexpansion, htarget, hdensity, hgate, _houter, hwidths⟩ := hfamily
   let C₀ := fun i : ι ↦
     preparationConstruction (w := width i) (ground i) (hLpos i) (hx i) (circuits i)
   let target := fun i : ι ↦ LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
@@ -162,7 +162,7 @@ theorem exists_protocol_isOpenMPS_norm_sub_phase_le
   obtain ⟨Cp, α, hCp, hα, hnetwork⟩ := exists_uniform_sampled_block_column
     (fun i : ι ↦ (length i : ℝ)) hsize length width C₀
     3 40 1600 (by decide) (by decide)
-    1 s 1 0 0 2 K 1 1 hcount hphysical harity hlifetime hmonomial htermwise
+    1 s 1 0 0 2 K 1 1 hcount hphysical harity hlifetime hmonomial hexpansion
     target htarget (fun i : ι ↦ 52 * (length i : ℝ) ^ (-11 : ℤ))
     hdensity hgate 5 (by norm_num)
   let n := max 1 (⌈40 * D * Real.log (q : ℝ)⌉₊ + 1600 * α)

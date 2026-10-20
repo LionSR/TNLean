@@ -3058,7 +3058,7 @@ for an arbitrary finite set of sites and are instantiated here directly.
         TNLean.MPS.AreaLaw.OneBand.exchange_regions}
     \leanok
     \uses{def:chain_one_band_assignments}
-    Suppose $a+2w\le L$ and $o(x)=C$ on $[a-8w,a)_L$.
+    Suppose $o(x)=C$ on $[a-8w,a)_L$.
     The retired auxiliary assignment is
     \begin{align}
         o_{U_4}(x) & =
@@ -3068,8 +3068,8 @@ for an arbitrary finite set of sites and are instantiated here directly.
             C, & \text{otherwise}.
         \end{cases}\notag
     \end{align}
-    If also $o(x)=A$ on $[a,a+w)_L$ and $o(x)=B$ on
-    $\lbrack a+w,a+2w)_L$, then $M_8=M_0[\lbrack a,a+w)_L\to B]$.
+    Moreover $M_8=M_0[\lbrack a,a+w)_L\to B]$, with no assumption on the
+    original owners in $\lbrack a,a+2w)_L$.
     Thus the original main ownership is restored outside the initial band;
     this assertion concerns the main sheet, not the retained auxiliary registers.
 
@@ -3106,9 +3106,8 @@ for an arbitrary finite set of sites and are instantiated here directly.
     \leanok
     \uses{def:chain_one_band_assignments,def:lattice_bounded_change,
         def:peps_circuit_source_bound,def:lattice_sheet_stack}
-    Assume the hypotheses for the main endpoint in
-    Theorem~\ref{thm:chain_one_band_geometry}, and suppose $A,B,C$ are
-    pairwise distinct. Let $q\ge1$ and let $\Omega$ be a unit vector on the
+    Assume $o(x)=C$ on $[a-8w,a)_L$ and $o(x)=A$ on $[a,a+w)_L$; the
+    parties $A,B,C$ need not be distinct. Let $q\ge1$ and let $\Omega$ be a unit vector on the
     original chain. Put $\delta=L^{-12}$.
     Assume $I_\Omega(T_j:E_j)\le L^{-24}$ for each row of the following table:
     \begin{align}
@@ -3299,7 +3298,7 @@ The objects below are owner assignments and ordered lists of sheets.
     }
     \leanok
     \uses{def:chain_sweep_stage_assignments,def:chain_terminal_registers}
-    Suppose $w\ge1$ and $L\ge3t$.
+    Suppose $w\ge1$.
     Denote the right copy at stage $k$ by $\rho_k$, for $0\le k<m$,
     and the left copy used at stage $j+1$ by $\lambda_j$, for
     $0\le j<m-1$. The actual retired right auxiliary comes from the
@@ -3635,7 +3634,7 @@ with the retained-copy correction of
     \leanok
     \uses{def:chain_stage_participants,def:chain_sweep_frame_path,
         def:lattice_bounded_change,def:peps_circuit_source_bound,def:lattice_sheet_stack}
-    Suppose $q\ge1$, $w\ge1$, $L\ge60w$ and $0\le k<m$.
+    Suppose $q\ge1$, $w\ge1$ and $0\le k<m$.
     Let $\Omega$ be a unit vector on the original chain and put
     $\delta=L^{-12}$. Assume the two before-birth bounds
     \begin{align}
@@ -4082,7 +4081,7 @@ Definition~\ref{def:chain_open_mps}.
     need not be injective.
     Fix natural $a,b,\chi$ with $a\le b$ and
     $8(2b(a-1))\le\chi$. Fix natural $n,d,r,u,v$ and real
-    $C_N,C_D,C_K,C_C$, independent of $i$.
+    $C_N,C_D,C_K,C_S$, independent of $i$.
     Subtraction in $a-1$ is truncated at zero.
     For each member, all parties $j$ and all original nonprivate gates $g$
     satisfy the following resource bounds:
@@ -4093,7 +4092,8 @@ Definition~\ref{def:chain_open_mps}.
     For each $i$ there is a natural number $K_i$ bounding the number of
     recorded monomials at every original nonprivate gate, with
     $K_i\le C_Ks_i^u$. Every recorded monomial has at most $r$ pair
-    effects, and its scalar coefficient has modulus at most $C_Cs_i^v$.
+    effects, and at every original nonprivate gate the moduli of the
+    recorded coefficients sum to at most $C_Ss_i^v$.
     Let $\omega_i$ be unit vectors in the actual physical output spaces,
     and let $\eta_i\in\mathbb R$ satisfy
     \begin{align}
@@ -4546,8 +4546,9 @@ The prescribed placement is $\ell(R_i)=i$ and $\ell(P_{j+1})=j$.
                                  & \le52L_i^{-11}, & 1\le w_i, & \qquad60w_i\le L_i.
         \label{eq:chain_uniform_physical_family}
     \end{align}
-    Every gate has monomial bound one and the termwise pair-effect
-    and scalar-coefficient bounds $(1,1)$. Its original participants
+    Every gate has monomial bound one, every recorded monomial has at
+    most one pair effect, and the coefficient moduli at each gate sum to
+    at most one. Its original participants
     have pairwise level distance at most two.
     The target density is literally the coordinate reindexing of
     $|\Omega_i\rangle\langle\Omega_i|$ by $\chi_i$.
@@ -4555,7 +4556,7 @@ The prescribed placement is $\ell(R_i)=i$ and $\ell(P_{j+1})=j$.
     hold with arity $3$, lifetime $40$, crossing parameter $1600$,
     size $L_i$, gate-count parameters $(n,C_N)=(1,2)$,
     physical-dimension parameters $(d,C_D)=(s,K)$,
-    $r=1$, $u=v=0$, $C_K=C_C=1$ and $\eta_i=52L_i^{-11}$,
+    $r=1$, $u=v=0$, $C_K=C_S=1$ and $\eta_i=52L_i^{-11}$,
     using the uniform compression theorem of
     \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS}.
     No one Hamiltonian or ground vector is selected to represent a length.
@@ -4567,8 +4568,8 @@ The prescribed placement is $\ell(R_i)=i$ and $\ell(P_{j+1})=j$.
     preparation witnesses over the entire admissible tuple set.
     Retain the derived arity-three bound of these same circuits.
     Record them without changing the circuit, input, private layout
-    or standard marginal. The expansion bound $(1,1)$ supplies the
-    stated termwise bound. The main-coordinate map is an isometry,
+    or standard marginal. The pair-effect and coefficient-sum bounds
+    are the expansion bound $(1,1)$ of the preparation. The main-coordinate map is an isometry,
     and its pure density equals the literal reindexing entry by entry.
     Hence the physical preparation estimates give
     (\ref{eq:chain_uniform_physical_family}) and every stated
@@ -4742,7 +4743,7 @@ The prescribed placement is $\ell(R_i)=i$ and $\ell(P_{j+1})=j$.
     \leanok
     \uses{def:chain_party_placement,def:peps_distributed_construction}
     Consider a family on the chain parties with the polynomial count,
-    physical-dimension, monomial and termwise hypotheses of
+    physical-dimension, monomial and coefficient-sum hypotheses of
     Theorem~\ref{thm:peps_separate_arity_compression}. Suppose its
     original circuits have arity at most three and lifetime at most
     forty. Let $\omega_i$ be unit physical vectors with
@@ -4811,7 +4812,7 @@ The prescribed placement is $\ell(R_i)=i$ and $\ell(P_{j+1})=j$.
         \label{eq:chain_sharp_physical_inputs}
     \end{align}
     where $\omega_i=U_{\chi_i}\Omega_i$ is the actual unit
-    main-coordinate vector. Monomial and termwise bounds are one,
+    main-coordinate vector. Monomial and coefficient-sum bounds are one,
     original-gate participant distances are at most two, and
     $w_i\ge1$, $60w_i\le L_i$.
 
@@ -4849,7 +4850,7 @@ The prescribed placement is $\ell(R_i)=i$ and $\ell(P_{j+1})=j$.
     Apply Theorem~\ref{thm:chain_sharp_sampled_crossings} at $p=5$,
     with count parameters $(n,C_N)=(1,2)$, physical-dimension
     parameters $(d,C_D)=(s,K)$, $r=1$, $u=v=0$,
-    $C_K=C_C=1$ and $\eta_i=52L_i^{-11}$.
+    $C_K=C_S=1$ and $\eta_i=52L_i^{-11}$.
     Retain its witnesses and all original preparation conclusions.
     This gives (\ref{eq:chain_sharp_physical_outputs}) on the same
     actual tensor entries and tagged alphabets.

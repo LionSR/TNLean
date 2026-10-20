@@ -227,8 +227,7 @@ theorem primitive_separation
       hownerB (by omega) (by omega)
   · have hownerC : ∀ y ∈ interval L (a - 8 * w) a,
         (main₈ own A B C a w).owner y = C := by
-      rw [main₈_eq_changeOwner own A B C a w
-        hw hleft hright hC hA hB]
+      rw [main₈_eq_changeOwner own A B C a w hw hleft hC]
       intro y hy
       have hout : y ∉ interval L a (a + w) := by
         simp only [mem_interval] at hy ⊢

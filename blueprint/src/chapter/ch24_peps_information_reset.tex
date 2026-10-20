@@ -68,22 +68,23 @@ the cores to an inverse power of the system size. This is Lemma~3.3 of
     \lean{TNLean.Lattice.mutualInformation_le_of_supported_unitary,
         TNLean.Lattice.exists_one_kronecker_unitary_of_mem_supportedOperators}
     \leanok
-    Let $q\ge1$, let $X,Y$ be disjoint sets of sites, and let $\Psi$ and $\Phi$ be
-    unit vectors on a finite set of sites containing them, the sites of $X$ having
-    dimension $q$. If a unitary $U$ supported away from $X\cup Y$ satisfies
-    $\|U\Psi-\Phi\|\le\delta$, then
+    Let $X,J$ be disjoint sets of sites of a finite set $\Lambda$, each site
+    carrying $\C^q$, and let $\varphi$ and $\eta$ be unit vectors with
+    $I_\eta(X:J)=0$. If $U$ is a unitary supported on a set $S$ disjoint from
+    $X\cup J$, then
     \begin{align*}
-        |I_\Psi(X:Y)-I_\Phi(X:Y)| & \le8\sqrt\delta\,\log(e\,q^{|X|}).
+        I_\varphi(X:J) & \le8\sqrt{\lVert U\varphi-\eta\rVert}\,\log(e\,q^{|X|}).
     \end{align*}
-    An operator supported on a set $S$ is, in the coordinates in which the sites
-    outside $S$ come first, the identity tensored with an operator on $S$, and it
-    is unitary exactly when that operator is.
+    Moreover, if the configuration space is nonempty, a unitary supported on a set
+    disjoint from $X$ is, in the coordinates of $X$ and of its complement,
+    $\id\otimes U_2$ for a unitary $U_2$ on the complement.
 \end{lemma}
 
 \begin{proof}\leanok
-    A unitary supported away from $X\cup Y$ does not change the joint marginal of
-    $X\cup Y$, so $I_{U\Psi}(X:Y)=I_\Psi(X:Y)$. Continuity of mutual information
-    in the vector, with only the dimension $q^{|X|}$ of $X$, gives the bound.
+    Write $U=\id\otimes U_2$ as in the second assertion. Then $U_2$ acts on the
+    complement of $X$, and the continuity of mutual information under a unitary
+    acting away from $X$, with only the dimension $q^{|X|}$ of $X$, gives the
+    bound.
 \end{proof}
 
 \begin{theorem}[The entropy comparison of the reset]

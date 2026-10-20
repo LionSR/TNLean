@@ -71,24 +71,6 @@ def preparationConstruction {L w q : ℕ}
     infer_instance
   circuit := C
 
-/-- An absolute coefficient sum at most `S` bounds every individual coefficient by any `S' ≥ S`,
-and the pair-effect count of every monomial is unchanged.
-Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 143–149. -/
-private theorem isTermwiseBounded_of_isExpansionBounded {P : Type} {a b : Layout P}
-    {w : OriginalCircuit a b} {r : ℕ} {S S' : ℝ}
-    (h : w.IsExpansionBounded r S) (hS : S ≤ S') : w.IsTermwiseBounded r S' := by
-  induction w with
-  | id => trivial
-  | comp w v ihw ihv => exact ⟨ihw h.1, ihv h.2⟩
-  | privateMap => trivial
-  | nonprivateGate owner hC L hL hG tail =>
-      refine fun term hterm ↦ ⟨h.1 term hterm, (h.2.trans hS).trans' ?_⟩
-      exact List.single_le_sum (fun x hx ↦ by
-        obtain ⟨y, -, rfl⟩ := List.mem_map.mp hx
-        exact norm_nonneg _) _ (List.mem_map_of_mem hterm)
-  | swap => trivial
-  | frame r w ih => exact ih h
-
 /-- The main-coordinate equivalence transports the literal pure density.
 Source: Part II, main-block readout at lines 355–360 and 579–585. -/
 private theorem outerProduct_mainCoordinates (L w q : ℕ)
@@ -140,7 +122,7 @@ theorem exists_uniform_preparation_family
             (∀ (i : ι) p, (C₀ i).circuit.participationCount p ≤ 40) ∧
             (∀ i : ι, ∃ M : ℕ, (C₀ i).circuit.IsMonomialBounded M ∧
               (M : ℝ) ≤ 1 * (length i : ℝ) ^ (0 : ℕ)) ∧
-            (∀ i : ι, (C₀ i).circuit.IsTermwiseBounded 1
+            (∀ i : ι, (C₀ i).circuit.IsExpansionBounded 1
               (1 * (length i : ℝ) ^ (0 : ℕ))) ∧
             (∀ i : ι, ‖target i‖ = 1) ∧
             (∀ i : ι, Matrix.rectangularTraceNorm
@@ -191,9 +173,8 @@ theorem exists_uniform_preparation_family
     simpa only [pow_one] using
       (show ((C i).nonprivateCount : ℝ) ≤ 2 * (length i : ℝ) by exact_mod_cast hcount)
   · exact ⟨1, hmono, by simp⟩
-  · change (C i).IsTermwiseBounded 1 (1 * (length i : ℝ) ^ (0 : ℕ))
-    simpa only [pow_zero, mul_one] using
-      isTermwiseBounded_of_isExpansionBounded hexp (le_refl (1 : ℝ))
+  · change (C i).IsExpansionBounded 1 (1 * (length i : ℝ) ^ (0 : ℕ))
+    simpa only [pow_zero, mul_one] using hexp
   · exact ((LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
       (mainConfigurationEquiv (length i) (width i) q)).norm_map (ground i)).trans
         i.property.2.1

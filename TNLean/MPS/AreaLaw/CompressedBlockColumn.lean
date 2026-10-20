@@ -165,14 +165,14 @@ theorem exists_uniform_sampled_block_column
     (length width : ι → ℕ)
     (C₀ : ∀ L, DistributedConstruction (Party (length L) (width L)))
     (a b χ : ℕ) (hab : a ≤ b) (hχ : 8 * (2 * b * (a - 1)) ≤ χ)
-    (n d r u v : ℕ) (C_N C_D C_K C_C : ℝ)
+    (n d r u v : ℕ) (C_N C_D C_K C_S : ℝ)
     (hN₀ : ∀ L, ((C₀ L).circuit.nonprivateCount : ℝ) ≤ C_N * size L ^ n)
     (hphysical₀ : ∀ L j, ((C₀ L).physicalDimension j : ℝ) ≤ C_D * size L ^ d)
     (harity₀ : ∀ L g, ((C₀ L).circuit.participants g).card ≤ a)
     (hlifetime₀ : ∀ L j, (C₀ L).circuit.participationCount j ≤ b)
     (hmonomial₀ : ∀ L, ∃ K : ℕ, (C₀ L).circuit.IsMonomialBounded K ∧
       (K : ℝ) ≤ C_K * size L ^ u)
-    (htermwise₀ : ∀ L, (C₀ L).circuit.IsTermwiseBounded r (C_C * size L ^ v))
+    (hexpansion₀ : ∀ L, (C₀ L).circuit.IsExpansionBounded r (C_S * size L ^ v))
     (Ω : ∀ L, EuclideanSpace ℂ
       ((j : Party (length L) (width L)) → Fin ((C₀ L).physicalDimension j)))
     (hΩ : ∀ L, ‖Ω L‖ = 1) (η : ι → ℝ)
@@ -253,8 +253,8 @@ theorem exists_uniform_sampled_block_column
   have hcompression :=
     DistributedConstruction.exists_uniform_sampled_network_sub_pure_le_of_arity_lifetime
       size hsize
-      (fun L ↦ Party (length L) (width L)) C₀ a b n d r u v hab C_N C_D C_K C_C
-      hN₀ hphysical₀ harity₀ hlifetime₀ hmonomial₀ htermwise₀ Ω
+      (fun L ↦ Party (length L) (width L)) C₀ a b n d r u v hab C_N C_D C_K C_S
+      hN₀ hphysical₀ harity₀ hlifetime₀ hmonomial₀ hexpansion₀ Ω
       (by intro L; rw [hdec]; exact hΩ L) η
       (by intro L; rw [hdec]; exact hpure L) p hp
   obtain ⟨C_p, α, hC, hα, hfamily⟩ := hcompression

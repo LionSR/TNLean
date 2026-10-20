@@ -52,7 +52,7 @@ theorem birth_death_separation (hw : 1 ≤ w) (k : Fin (stageCount L w)) :
       (k.val = 0 → ∀ x ∈ leftBandTarget L w k,
         ∀ y ∈ (afterLeftTransfer L w k).birthEnv (.inr k),
           w ≤ Nat.dist x.val y.val) := by
-  obtain ⟨hE₁, hE₂⟩ := birth_environments hw k
+  obtain ⟨hE₁, hE₂⟩ := birth_environments k
   have hb : (k.val + 1) * (20 * w) = k.val * (20 * w) + 20 * w := by ring
   refine ⟨?_, ?_, ?_⟩
   · intro x hx y hy
@@ -72,7 +72,7 @@ theorem birth_death_separation (hw : 1 ≤ w) (k : Fin (stageCount L w)) :
       have hdist := Nat.dist_tri_left x.val y.val
       omega
   · intro hk x hx y hy
-    rw [first_left_death_environment hw k hk] at hy
+    rw [first_left_death_environment k hk] at hy
     simp only [leftBandTarget, mem_interval, hk, zero_mul, zero_add] at hx
     simp only [mem_interval] at hy
     have hdist := Nat.dist_tri_left x.val y.val

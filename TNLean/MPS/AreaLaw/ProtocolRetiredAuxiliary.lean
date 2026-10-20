@@ -61,12 +61,12 @@ private comparison lemma, not a second retired-owner definition.
 Source: Part II, con:band, lines 271–272, with the half-open correction. -/
 private theorem aux₄_eq_raw_integer
     (own : Fin L → Party L w) (A B C : Party L w) (a : ℕ)
-    (hw : 1 ≤ w) (hleft : 8 * w ≤ a) (hright : a + 2 * w ≤ L)
+    (hw : 1 ≤ w) (hleft : 8 * w ≤ a)
     (hC : ∀ x ∈ interval L (a - 8 * w) a, own x = C) :
     OneBand.aux₄ own A B C a w = Sheet.mk (fun x ↦
       if (a : ℤ) - 3 * w ≤ x.val ∧ (x.val : ℤ) < (a : ℤ) - 2 * w then A
       else if (a : ℤ) - 2 * w ≤ x.val ∧ (x.val : ℤ) < (a : ℤ) - w then B else C) := by
-  rw [OneBand.aux₄_eq_raw own A B C a w hw hleft hright hC]
+  rw [OneBand.aux₄_eq_raw own A B C a w hw hleft hC]
   apply congrArg (Sheet.mk)
   funext x
   have h32 := mem_interval_nat_sub_iff_int a (3 * w) (2 * w) (by omega) (by omega) x
@@ -77,16 +77,12 @@ private theorem aux₄_eq_raw_integer
 /-- The actual right-band auxiliary has precisely its existing right-copy owner.
 No desired auxiliary endpoint is assumed. Source: Part II, con:band, lines 271–272,
 and con:sweep, move (4), lines 339–340. -/
-theorem rightRetiredAuxiliary_eq_raw (hw : 1 ≤ w) (hL : 3 * (20 * w) ≤ L)
-    (k : Fin (stageCount L w)) :
+theorem rightRetiredAuxiliary_eq_raw (hw : 1 ≤ w) (k : Fin (stageCount L w)) :
     rightRetiredAuxiliary L w k =
       Sheet.mk (fun x ↦ auxiliaryOwner L w (Sum.inl k, x)) := by
-  have hmargin := stage_right_margin L w hL k
   have hleft : 8 * w ≤ (k.val + 1) * (20 * w) :=
     stage_left_margin w (k.val + 1) (by omega)
-  have hright : (k.val + 1) * (20 * w) + 2 * w ≤ L := by
-    nlinarith
-  have hC := (right_band_owners hw k).1
+  have hC := (right_band_owners k).1
   change OneBand.aux₄ (leftBandMain L w k).owner
       (.inl k.castSucc) (.inl k.succ) (.inr k) ((k.val + 1) * (20 * w)) w =
     Sheet.mk (fun x ↦
@@ -96,21 +92,18 @@ theorem rightRetiredAuxiliary_eq_raw (hw : 1 ≤ w) (hL : 3 * (20 * w) ≤ L)
       else if (((k.val + 1) * (20 * w) : ℕ) : ℤ) - 2 * w ≤ x.val ∧
           (x.val : ℤ) < (((k.val + 1) * (20 * w) : ℕ) : ℤ) - w
         then Sum.inl k.succ else Sum.inr k)
-  rw [leftBandMain_eq_afterLeftTransfer hw hL k]
-  exact aux₄_eq_raw_integer _ _ _ _ _ hw hleft hright hC
+  rw [leftBandMain_eq_afterLeftTransfer hw k]
+  exact aux₄_eq_raw_integer _ _ _ _ _ hw hleft hC
 
 /-- The actual positive-stage left-band auxiliary has its original left-copy owner.
 The index j labels the copy; its activation stage is j+1. Source: Part II, con:band,
 lines 271–272, and con:sweep, move (3), lines 336–338. -/
-theorem leftRetiredAuxiliary_eq_raw (hw : 1 ≤ w) (hL : 3 * (20 * w) ≤ L)
-    (j : Fin (stageCount L w - 1)) :
+theorem leftRetiredAuxiliary_eq_raw (hw : 1 ≤ w) (j : Fin (stageCount L w - 1)) :
     leftRetiredAuxiliary L w j =
       Sheet.mk (fun x ↦ auxiliaryOwner L w (Sum.inr j, x)) := by
   let k : Fin (stageCount L w) := ⟨j.val + 1, by omega⟩
   have hk : 0 < k.val := by simp [k]
-  have hmargin := stage_right_margin L w hL k
   have hleft : 8 * w ≤ k.val * (20 * w) := stage_left_margin w k.val (by omega)
-  have hright : k.val * (20 * w) + 2 * w ≤ L := by nlinarith
   have hC : ∀ x ∈ interval L (k.val * (20 * w) - 8 * w) (k.val * (20 * w)),
       (afterBlockBirth L w k).owner x =
         Sum.inr (⟨j.val, by omega⟩ : Fin (stageCount L w)) := by
@@ -125,6 +118,6 @@ theorem leftRetiredAuxiliary_eq_raw (hw : 1 ≤ w) (hL : 3 * (20 * w) ≤ L)
       else if ((k.val * (20 * w) : ℕ) : ℤ) - 2 * w ≤ x.val ∧
           (x.val : ℤ) < ((k.val * (20 * w) : ℕ) : ℤ) - w
         then Sum.inr k else Sum.inr (⟨j.val, by omega⟩ : Fin (stageCount L w)))
-  exact aux₄_eq_raw_integer _ _ _ _ _ hw hleft hright hC
+  exact aux₄_eq_raw_integer _ _ _ _ _ hw hleft hC
 
 end TNLean.MPS.AreaLaw.ChainSweep

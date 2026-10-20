@@ -175,7 +175,7 @@ theorem birth_targets_owned (hw : 1 ≤ w) (k : Fin (stageCount L w)) :
 
 /-- The environments are computed from the actual before-birth sheets, rather
 than supplied as hypotheses. Source: Part II, `prop:sweep`, lines 365–369. -/
-theorem birth_environments (_hw : 1 ≤ w) (k : Fin (stageCount L w)) :
+theorem birth_environments (k : Fin (stageCount L w)) :
     (stageFrame L w k.castSucc).birthEnv (.inl k.castSucc) =
         interval L 0 (k.val * (20 * w)) ∧
       (afterRemainderBirth L w k).birthEnv (.inl k.castSucc) =
@@ -245,7 +245,7 @@ theorem left_band_owners (hw : 1 ≤ w) (k : Fin (stageCount L w)) (hk : 0 < k.v
 
 /-- The exceptional first left transfer is a direct death whose after-death
 environment is the rest of the chain. Source: Part II, `prop:sweep`, lines 373–374. -/
-theorem first_left_death_environment (_hw : 1 ≤ w) (k : Fin (stageCount L w))
+theorem first_left_death_environment (k : Fin (stageCount L w))
     (hk : k.val = 0) :
     (afterLeftTransfer L w k).birthEnv (.inr k) = interval L (20 * w) L := by
   ext x
@@ -263,7 +263,7 @@ theorem first_left_death_environment (_hw : 1 ≤ w) (k : Fin (stageCount L w))
 
 /-- After the left transfer the new completed block supplies the full left
 flank of the right band. Source: Part II, `prop:sweep`, lines 374–376. -/
-theorem right_band_owners (_hw : 1 ≤ w) (k : Fin (stageCount L w)) :
+theorem right_band_owners (k : Fin (stageCount L w)) :
     let b := (k.val + 1) * (20 * w)
     (∀ x ∈ interval L (b - 8 * w) b,
       (afterLeftTransfer L w k).owner x = Sum.inr k) ∧
@@ -390,50 +390,43 @@ def rightBandMain (L w : ℕ) (k : Fin (stageCount L w)) : Sheet (Fin L) (Party 
 /-- The actual left-band sheet has the specified transfer endpoint. The band
 margins and owner hypotheses are derived from the constructed stage.
 Source: Part II, `prop:sweep`, lines 370–374. -/
-theorem leftBandMain_eq_afterLeftTransfer (hw : 1 ≤ w)
-    (hL : 3 * (20 * w) ≤ L) (k : Fin (stageCount L w)) :
+theorem leftBandMain_eq_afterLeftTransfer (hw : 1 ≤ w) (k : Fin (stageCount L w)) :
     leftBandMain L w k = afterLeftTransfer L w k := by
   unfold leftBandMain
   split_ifs with hk
   · rfl
   · have hkpos : 0 < k.val := by omega
-    obtain ⟨hC, hA, hB⟩ := left_band_owners hw k hkpos
+    have hC := (left_band_owners hw k hkpos).1
     have hleft : 8 * w ≤ k.val * (20 * w) := stage_left_margin w k.val (by omega)
-    have hmargin := stage_right_margin L w hL k
-    have hright : k.val * (20 * w) + 2 * w ≤ L := by nlinarith
     have he := OneBand.main₈_eq_changeOwner
       (afterBlockBirth L w k).owner
       (.inl k.castSucc) (.inr k)
       (.inr ⟨k.val - 1, Nat.lt_of_le_of_lt (Nat.sub_le _ _) k.isLt⟩)
-      (k.val * (20 * w)) w hw hleft hright hC hA hB
+      (k.val * (20 * w)) w hw hleft hC
     simpa only [OneBand.main₀, afterLeftTransfer, leftBandTarget] using he
 
 /-- The actual right-band sheet has the specified transfer endpoint. No final
 ownership identity or band hypothesis is supplied as an additional premise.
 Source: Part II, `prop:sweep`, lines 374–376. -/
-theorem rightBandMain_eq_afterRightTransfer (hw : 1 ≤ w)
-    (hL : 3 * (20 * w) ≤ L) (k : Fin (stageCount L w)) :
+theorem rightBandMain_eq_afterRightTransfer (hw : 1 ≤ w) (k : Fin (stageCount L w)) :
     rightBandMain L w k = afterRightTransfer L w k := by
   unfold rightBandMain
-  rw [leftBandMain_eq_afterLeftTransfer hw hL k]
-  obtain ⟨hC, hA, hB⟩ := right_band_owners hw k
+  rw [leftBandMain_eq_afterLeftTransfer hw k]
+  have hC := (right_band_owners k).1
   have hleft : 8 * w ≤ (k.val + 1) * (20 * w) :=
     stage_left_margin w (k.val + 1) (by omega)
-  have hmargin := stage_right_margin L w hL k
-  have hright : (k.val + 1) * (20 * w) + 2 * w ≤ L := by nlinarith
   have he := OneBand.main₈_eq_changeOwner
     (afterLeftTransfer L w k).owner
     (.inl k.castSucc) (.inl k.succ) (.inr k) ((k.val + 1) * (20 * w)) w
-    hw hleft hright hC hA hB
+    hw hleft hC
   simpa only [OneBand.main₀, afterRightTransfer, rightBandTarget] using he
 
 /-- The actual corrected band sheets complete the next main-sheet stage,
 including the exceptional first stage. This is a sheet identity, not yet the
 construction of its quantum circuit or information bounds.
 Source: Part II, `prop:sweep`, lines 375–376. -/
-theorem rightBandMain_eq_stageFrame (hw : 1 ≤ w)
-    (hL : 3 * (20 * w) ≤ L) (k : Fin (stageCount L w)) :
+theorem rightBandMain_eq_stageFrame (hw : 1 ≤ w) (k : Fin (stageCount L w)) :
     rightBandMain L w k = stageFrame L w k.succ := by
-  rw [rightBandMain_eq_afterRightTransfer hw hL k, afterRightTransfer_eq_stageFrame hw k]
+  rw [rightBandMain_eq_afterRightTransfer hw k, afterRightTransfer_eq_stageFrame hw k]
 
 end TNLean.MPS.AreaLaw.ChainSweep

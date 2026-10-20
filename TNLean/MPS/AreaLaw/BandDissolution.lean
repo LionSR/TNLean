@@ -211,10 +211,8 @@ private theorem main₄_owner_normal_form (own : Fin L → Party) (A B C : Party
 
 /-- The main ownership identity, with no restriction on ownership away from the local window. -/
 theorem main₈_eq_changeOwner (own : Fin L → Party) (A B C : Party) (a w : ℕ)
-    (hw : 1 ≤ w) (hleft : 8 * w ≤ a) (_hright : a + 2 * w ≤ L)
-    (hC : ∀ x ∈ interval L (a - 8 * w) a, own x = C)
-    (_hA : ∀ x ∈ interval L a (a + w), own x = A)
-    (_hB : ∀ x ∈ interval L (a + w) (a + 2 * w), own x = B) :
+    (hw : 1 ≤ w) (hleft : 8 * w ≤ a)
+    (hC : ∀ x ∈ interval L (a - 8 * w) a, own x = C) :
     main₈ own A B C a w =
       (main₀ own).changeOwner (interval L a (a + w)) B := by
   classical
@@ -233,7 +231,7 @@ theorem main₈_eq_changeOwner (own : Fin L → Party) (A B C : Party) (a w : �
 
 /-- The retired auxiliary retains A and B registers, even after A loses its main band. -/
 theorem aux₄_eq_raw (own : Fin L → Party) (A B C : Party) (a w : ℕ)
-    (hw : 1 ≤ w) (hleft : 8 * w ≤ a) (_hright : a + 2 * w ≤ L)
+    (hw : 1 ≤ w) (hleft : 8 * w ≤ a)
     (hC : ∀ x ∈ interval L (a - 8 * w) a, own x = C) :
     aux₄ own A B C a w = ⟨fun x ↦
       if x ∈ interval L (a - 3 * w) (a - 2 * w) then A
@@ -413,11 +411,9 @@ It constructs every map; no circuit, output vector or evolving-state information
 The eventual source theorem must derive the eight estimates from logarithmic separation. -/
 theorem circuits_of_primitive_information
     (own : Fin L → Party) (A B C : Party) (a w : ℕ)
-    (_hAB : A ≠ B) (_hAC : A ≠ C) (_hBC : B ≠ C)
-    (hw : 1 ≤ w) (hleft : 8 * w ≤ a) (_hright : a + 2 * w ≤ L)
+    (hw : 1 ≤ w) (hleft : 8 * w ≤ a)
     (hC : ∀ x ∈ interval L (a - 8 * w) a, own x = C)
     (hA : ∀ x ∈ interval L a (a + w), own x = A)
-    (_hB : ∀ x ∈ interval L (a + w) (a + 2 * w), own x = B)
     {Ω : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Ω‖ = 1)
     (hI₀ : FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω
       (interval L (a - 6 * w) (a - w)) ((aux₀ C).birthEnv C) ≤

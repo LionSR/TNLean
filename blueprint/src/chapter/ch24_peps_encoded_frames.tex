@@ -281,9 +281,13 @@ norm of matrices, rectangular ones included.
     For a list $\ell$ of sites, including lists with repetitions, write
     $\ket c_\ell$ for the product basis vector of a configuration $c$ on the
     site registers of $\ell$. If $c(x)=c'(x)$ for every site in $\ell$, then
-    $\ket c_\ell=\ket{c'}_\ell$. The site registers of a list of distinct sites
-    enumerating a set $A$ are identified, by a unitary, with $\C^{[q]^A}$,
-    sending $\ket c_\ell$ to $\ket c$. Under the canonical unitary for
+    $\ket c_\ell=\ket{c'}_\ell$. If $\ell$ has length $n$, a unitary identifies
+    its site registers with $\C^{[q]^n}$ and sends $\ket c_\ell$ to the basis
+    vector of the configuration $k\mapsto c(\ell_k)$ read along the list. More
+    generally, for a bijection $e$ from the positions of $\ell$ to a finite set $K$
+    and a map $f:K\to\Lambda$ with $\ell_k=f(e(k))$ for every position $k$, the
+    grouping along $e$ is a unitary onto $\C^{[q]^K}$ sending $\ket c_\ell$ to
+    $\ket{c\circ f}$. Under the canonical unitary for
     concatenating register lists, $\ket c_{\ell_1\ell_2}$ is identified with
     $\ket c_{\ell_1}\otimes\ket c_{\ell_2}$; the empty list contributes the
     scalar one.

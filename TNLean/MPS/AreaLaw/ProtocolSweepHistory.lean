@@ -136,12 +136,12 @@ Source: Part II, `con:band`, lines 271–272, and `prop:sweep`, lines 356–359.
 theorem auxiliaryFrameBefore_last (c : AuxiliaryCopy L w) :
     auxiliaryFrameBefore L w (stageCount L w) c =
       Sheet.mk (fun x ↦ auxiliaryOwner L w (c, x)) := by
-  obtain ⟨hw, hL⟩ := geometry_of_stageCount_pos
+  obtain ⟨hw, -⟩ := geometry_of_stageCount_pos
     ((Nat.zero_le (auxiliaryStage L w c)).trans_lt (auxiliaryStage_lt_stageCount c))
   rw [auxiliaryFrameBefore, ite_eq_left (auxiliaryStage_lt_stageCount c)]
   cases c with
-  | inl j => exact rightRetiredAuxiliary_eq_raw hw hL j
-  | inr j => exact leftRetiredAuxiliary_eq_raw hw hL j
+  | inl j => exact rightRetiredAuxiliary_eq_raw hw j
+  | inr j => exact leftRetiredAuxiliary_eq_raw hw j
 
 /-- The complete initial list is derived from the actual stage-zero owner
 and the unused labelled copies. Source: Part II, `prop:sweep`, lines 350–353. -/
@@ -257,8 +257,8 @@ stage list, including the first stage. This is not a circuit hypothesis.
 Source: Part II, `prop:sweep`, proof, lines 375–378. -/
 theorem afterRightFrames_eq_sweepFrames (k : Fin (stageCount L w)) :
     afterRightFrames L w k = sweepFrames L w k.succ := by
-  obtain ⟨hw, hL⟩ := geometry_of_stageCount_pos ((Nat.zero_le k.val).trans_lt k.isLt)
-  rw [afterRightFrames, rightBandMain_eq_stageFrame hw hL k,
+  obtain ⟨hw, -⟩ := geometry_of_stageCount_pos ((Nat.zero_le k.val).trans_lt k.isLt)
+  rw [afterRightFrames, rightBandMain_eq_stageFrame hw k,
     rightAuxiliaryUpdate_eq_next]
   rfl
 

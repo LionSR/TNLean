@@ -33,14 +33,14 @@ theorem exists_uniform_sampled_network_with_prefixCrossingLinks_le_1600
     {ι : Type*} (size : ι → ℝ) (hsize : ∀ i, 2 ≤ size i)
     (length width : ι → ℕ)
     (C₀ : ∀ L, DistributedConstruction (Party (length L) (width L)))
-    (n d r u v : ℕ) (C_N C_D C_K C_C : ℝ)
+    (n d r u v : ℕ) (C_N C_D C_K C_S : ℝ)
     (hN₀ : ∀ L, ((C₀ L).circuit.nonprivateCount : ℝ) ≤ C_N * size L ^ n)
     (hphysical₀ : ∀ L j, ((C₀ L).physicalDimension j : ℝ) ≤ C_D * size L ^ d)
     (harity₀ : ∀ L g, ((C₀ L).circuit.participants g).card ≤ 3)
     (hlifetime₀ : ∀ L j, (C₀ L).circuit.participationCount j ≤ 40)
     (hmonomial₀ : ∀ L, ∃ K : ℕ, (C₀ L).circuit.IsMonomialBounded K ∧
       (K : ℝ) ≤ C_K * size L ^ u)
-    (htermwise₀ : ∀ L, (C₀ L).circuit.IsTermwiseBounded r (C_C * size L ^ v))
+    (hexpansion₀ : ∀ L, (C₀ L).circuit.IsExpansionBounded r (C_S * size L ^ v))
     (Ω : ∀ L, EuclideanSpace ℂ
       ((j : Party (length L) (width L)) → Fin ((C₀ L).physicalDimension j)))
     (hΩ : ∀ L, ‖Ω L‖ = 1) (η : ι → ℝ)
@@ -90,8 +90,8 @@ theorem exists_uniform_sampled_network_with_prefixCrossingLinks_le_1600
   obtain ⟨C_p, α, hC, hα, hfamily⟩ :=
     DistributedConstruction.exists_uniform_sampled_network_sub_pure_le_of_arity_lifetime
       size hsize (fun L ↦ Party (length L) (width L)) C₀
-      3 40 n d r u v (by decide) C_N C_D C_K C_C
-      hN₀ hphysical₀ harity₀ hlifetime₀ hmonomial₀ htermwise₀ Ω
+      3 40 n d r u v (by decide) C_N C_D C_K C_S
+      hN₀ hphysical₀ harity₀ hlifetime₀ hmonomial₀ hexpansion₀ Ω
       (by intro L; rw [hdec]; exact hΩ L) η
       (by intro L; rw [hdec]; exact hpure L) p hp
   refine ⟨C_p, α, hC, hα, fun L ↦ ?_⟩

@@ -73,11 +73,9 @@ private theorem right_boundary_perm (k : Fin (stageCount L w)) (j : Fin 9) :
 The eight hypotheses remain the actual primitive information inequalities.
 Source: Part II, `con:band`, lines 260–276. -/
 private theorem band_changes (own : Fin L → Party L w) (A B C : Party L w) (a : ℕ)
-    (hAB : A ≠ B) (hAC : A ≠ C) (hBC : B ≠ C)
-    (hw : 1 ≤ w) (hleft : 8 * w ≤ a) (hright : a + 2 * w ≤ L)
+    (hw : 1 ≤ w) (hleft : 8 * w ≤ a)
     (hC : ∀ x ∈ interval L (a - 8 * w) a, own x = C)
     (hA : ∀ x ∈ interval L a (a + w), own x = A)
-    (hB : ∀ x ∈ interval L (a + w) (a + 2 * w), own x = B)
     {Ω : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Ω‖ = 1)
     (hI0 : FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω (interval L (a - 6 * w) (a -
       w)) ((OneBand.aux₀ (Party := Party L w) C).birthEnv C) ≤ (L : ℝ) ^
@@ -111,7 +109,7 @@ private theorem band_changes (own : Fin L → Party L w) (A B C : Party L w) (a 
       (OneBand.participants A B C j) 1 1 1 (4 * (L : ℝ) ^ (-12 : ℤ)) := by
   obtain ⟨c, hc⟩ := OneBand.circuits_of_primitive_information (ℓ := []) own A
     B C a w
-    hAB hAC hBC hw hleft hright hC hA hB hΩ
+    hw hleft hC hA hΩ
     hI0 hI1 hI2 hI3 hI4 hI5 hI6 hI7 [] post (1 : ℂ) (by simp)
   intro j
   have he : (if j.val = 3 then 4 * (L : ℝ) ^ (-12 : ℤ)
@@ -143,7 +141,7 @@ are actual identities with zero error and no nonprivate gate.
 This is an intermediate statement, not the physical information theorem.
 Source: Part II, `con:sweep`, lines 330–343, and `prop:sweep`, lines 365–378. -/
 theorem local_stage_circuits_of_primitive_information
-    (hw : 1 ≤ w) (hL : 3 * (20 * w) ≤ L) (k : Fin (stageCount L w))
+    (hw : 1 ≤ w) (k : Fin (stageCount L w))
     (Ω : EuclideanSpace ℂ (Fin L → Fin q)) (hΩ : ‖Ω‖ = 1)
     (hRem : FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω
       (remainderBirthTarget L w k) ((stageFrame L w k.castSucc).birthEnv
@@ -245,7 +243,6 @@ theorem local_stage_circuits_of_primitive_information
   have hε : 0 ≤ (L : ℝ) ^ (-12 : ℤ) := by positivity
   have h4ε : 0 ≤ 4 * (L : ℝ) ^ (-12 : ℤ) := by positivity
   have hsmall : (L : ℝ) ^ (-12 : ℤ) ≤ 4 * (L : ℝ) ^ (-12 : ℤ) := by nlinarith
-  have hmargin := stage_right_margin L w hL k
   have hbirth0 : Sheet.HasSourceBoundedChange (ℓ := []) Ω
       (stageBoundaryFrames L w k 0) (stageBoundaryFrames L w k 1)
       (1 : ℂ) {Sum.inl k.castSucc, Sum.inl k.succ} 1 1 1
@@ -273,18 +270,10 @@ theorem local_stage_circuits_of_primitive_information
       (stageBoundaryFrames L w k (j.val + 2 + 1)) (1 : ℂ)
       (OneBand.participants (Sum.inl k.castSucc) (Sum.inr k)
         (Sum.inr ⟨k.val - 1, by omega⟩) j) 1 1 1 (4 * (L : ℝ) ^ (-12 : ℤ)) := by
-    have hAB : (Sum.inl k.castSucc : Party L w) ≠ Sum.inr k := by simp
-    have hAC : (Sum.inl k.castSucc : Party L w) ≠ Sum.inr ⟨k.val - 1, by omega⟩ := by simp
-    have hBC : (Sum.inr k : Party L w) ≠ Sum.inr ⟨k.val - 1, by omega⟩ := by
-      intro h
-      have hv := congrArg Fin.val (Sum.inr.inj h)
-      change k.val = k.val - 1 at hv
-      omega
-    obtain ⟨hC, hA, hB⟩ := left_band_owners hw k hk
+    obtain ⟨hC, hA, -⟩ := left_band_owners hw k hk
     have hb := band_changes (afterBlockBirth L w k).owner
       (Sum.inl k.castSucc) (Sum.inr k) (Sum.inr ⟨k.val - 1, by omega⟩)
-      (k.val * (20 * w)) hAB hAC hBC hw (stage_left_margin w k.val (by omega))
-      (by nlinarith [hmargin]) hC hA hB hΩ
+      (k.val * (20 * w)) hw (stage_left_margin w k.val (by omega)) hC hA hΩ
       (hLeft0 hk) (hLeft1 hk) (hLeft2 hk) (hLeft3 hk)
       (hLeft4 hk) (hLeft5 hk) (hLeft6 hk) (hLeft7 hk)
       (((initialAuxiliaryOrder L w).erase (leftCopyLabel L w k hk)).map
@@ -303,24 +292,16 @@ theorem local_stage_circuits_of_primitive_information
       (stageBoundaryFrames L w k (j.val + 10 + 1)) (1 : ℂ)
       (OneBand.participants (Sum.inl k.castSucc) (Sum.inl k.succ) (Sum.inr k) j)
       1 1 1 (4 * (L : ℝ) ^ (-12 : ℤ)) := by
-    have hAB : (Sum.inl k.castSucc : Party L w) ≠ Sum.inl k.succ := by
-      intro h
-      have hv := congrArg Fin.val (Sum.inl.inj h)
-      simp only [Fin.val_castSucc, Fin.val_succ] at hv
-      omega
-    have hAC : (Sum.inl k.castSucc : Party L w) ≠ Sum.inr k := by simp
-    have hBC : (Sum.inl k.succ : Party L w) ≠ Sum.inr k := by simp
-    obtain ⟨hC, hA, hB⟩ := right_band_owners hw k
+    obtain ⟨hC, hA, -⟩ := right_band_owners k
     have howners : leftBandMain L w k = afterLeftTransfer L w k :=
-      leftBandMain_eq_afterLeftTransfer hw hL k
+      leftBandMain_eq_afterLeftTransfer hw k
     have hlow : 8 * w ≤ (k.val + 1) * (20 * w) := by
       have ht := Nat.mul_le_mul_right (20 * w) (show 1 ≤ k.val + 1 by omega)
       nlinarith
     have hb := band_changes (leftBandMain L w k).owner
       (Sum.inl k.castSucc) (Sum.inl k.succ) (Sum.inr k)
-      ((k.val + 1) * (20 * w)) hAB hAC hBC hw hlow (by nlinarith [hmargin])
-      (by simpa only [howners] using hC) (by simpa only [howners] using hA)
-      (by simpa only [howners] using hB) hΩ
+      ((k.val + 1) * (20 * w)) hw hlow
+      (by simpa only [howners] using hC) (by simpa only [howners] using hA) hΩ
       hRight0 hRight1 hRight2 hRight3 hRight4 hRight5 hRight6 hRight7
       (((initialAuxiliaryOrder L w).erase (Sum.inl k)).map (leftAuxiliaryFrame L w k))
     intro j

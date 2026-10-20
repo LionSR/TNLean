@@ -65,7 +65,7 @@ theorem exists_physical_sampled_network_with_prefixCrossingLinks_le_1600
             (∀ (i : ι) p, (C₀ i).circuit.participationCount p ≤ 40) ∧
             (∀ i : ι, ∃ M : ℕ, (C₀ i).circuit.IsMonomialBounded M ∧
               (M : ℝ) ≤ 1 * (length i : ℝ) ^ (0 : ℕ)) ∧
-            (∀ i : ι, (C₀ i).circuit.IsTermwiseBounded 1
+            (∀ i : ι, (C₀ i).circuit.IsExpansionBounded 1
               (1 * (length i : ℝ) ^ (0 : ℕ))) ∧
             (∀ i : ι, ‖target i‖ = 1) ∧
             (∀ i : ι, Matrix.rectangularTraceNorm
@@ -135,11 +135,11 @@ theorem exists_physical_sampled_network_with_prefixCrossingLinks_le_1600
   refine ⟨hx, C, ?_⟩
   intro C₀ target
   refine ⟨hresources, ?_⟩
-  obtain ⟨hsize, hcount, hphysical, harity, hlifetime, hmonomial, htermwise,
+  obtain ⟨hsize, hcount, hphysical, harity, hlifetime, hmonomial, hexpansion,
     htarget, hdensity, hgate, _houter, _hwidth⟩ := hresources
   exact exists_uniform_sampled_network_with_prefixCrossingLinks_le_1600
     (fun i : ι ↦ (length i : ℝ)) hsize length width C₀
-    1 s 1 0 0 2 K 1 1 hcount hphysical harity hlifetime hmonomial htermwise
+    1 s 1 0 0 2 K 1 1 hcount hphysical harity hlifetime hmonomial hexpansion
     target htarget (fun i : ι ↦ 52 * (length i : ℝ) ^ (-11 : ℤ))
     hdensity hgate 5 (by norm_num)
 

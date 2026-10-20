@@ -108,8 +108,8 @@ theorem local_stage_circuits_of_logarithmic_separation
         omega)
       hw (stage_left_margin w k.val (by omega)) (by nlinarith [hmargin])
       (hleftOwners hk).1 (hleftOwners hk).2.1 (hleftOwners hk).2.2 hwidthBand
-  have hrightOwners := right_band_owners hw k
-  rw [← leftBandMain_eq_afterLeftTransfer hw hgeometry k]
+  have hrightOwners := right_band_owners k
+  rw [← leftBandMain_eq_afterLeftTransfer hw k]
     at hrightOwners
   have hright :=
     hband L hLb h Ω E₀ hgs (Party L w)
@@ -119,7 +119,7 @@ theorem local_stage_circuits_of_logarithmic_separation
       hw (stage_left_margin w (k.val + 1) (by omega)) (by nlinarith [hmargin])
       hrightOwners.1 hrightOwners.2.1 hrightOwners.2.2 hwidthBand
   exact local_stage_circuits_of_primitive_information (q := q)
-    hw hgeometry k Ω hgs.1 hRem hBlock hBoundary
+    hw k Ω hgs.1 hRem hBlock hBoundary
     (fun hk ↦ (hleft hk).1) (fun hk ↦ (hleft hk).2.1)
     (fun hk ↦ (hleft hk).2.2.1) (fun hk ↦ (hleft hk).2.2.2.1)
     (fun hk ↦ (hleft hk).2.2.2.2.1) (fun hk ↦ (hleft hk).2.2.2.2.2.1)
