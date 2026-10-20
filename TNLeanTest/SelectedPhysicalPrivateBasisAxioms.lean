@@ -3,10 +3,10 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.Approximation.SelectedPhysicalPrivateBasis
-import TNLean.PEPS.Approximation.SelectedPhysicalConfigurations
-import TNLean.PEPS.Approximation.SelectedPhysicalPartyGrouping
-import TNLean.PEPS.Approximation.SelectedPhysicalPrivateGrouping
+import TNLean.Lattice.Compression.SelectedPhysicalPrivateBasis
+import TNLean.Lattice.Compression.SelectedPhysicalConfigurations
+import TNLean.Lattice.Compression.SelectedPhysicalPartyGrouping
+import TNLean.Lattice.Compression.SelectedPhysicalPrivateGrouping
 import Lean.Elab.Command
 import Lean.Util.CollectAxioms
 

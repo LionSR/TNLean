@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Lattice.PartyCircuit.ApproximateCircuitError
 import TNLean.Lattice.PartyCircuit.OriginalProducerResources
-import TNLean.PEPS.Approximation.SampledOriginalCircuit
+import TNLean.Lattice.Compression.SampledOriginalCircuit
 import TNLean.PEPS.Approximation.SheetStackReadoutCircuit
 import TNLean.PEPS.Approximation.TwoSheetRegisters
 
