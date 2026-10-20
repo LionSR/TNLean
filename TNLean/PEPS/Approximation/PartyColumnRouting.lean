@@ -14,17 +14,12 @@ import TNLean.PEPS.Approximation.DyadicRoutingPEPS
 
 This file follows the source order of Section 8: Lemma 8.1 fixes one product-basis input
 column of the operator network on the party graph, and Lemma 8.2 then routes the resulting
-ket network onto the open `L × L` square.
-
-An operator party network has the physical alphabet `Fin (q * q)` at every party, read as
-output-input pairs through `finProdFinEquiv`. Its operator has rows indexed by output
-configurations and columns by input configurations; each party reads its pair at its site.
-Fixing the input `z` sitewise gives a ket party network with the same links and link
-dimensions, whose coefficients are the column `σ|z⟩`. If `‖σ - |Ω⟩⟨Ω|‖₁ ≤ η < 1`, a column
-is nonzero and within `2 η` of `Ω` after normalization, up to a phase. Routing that ket
-network on dyadic anchors gives a PEPS with the same contraction, positive bond dimensions,
-and every bond dimension at most `(C₁ L ^ k) ^ χ` when every link dimension is at most
-`C₁ L ^ k`; this is equation `eq:final-bond`.
+ket network onto the open `L × L` square. The column itself, for an arbitrary finite set of
+parties, is in `TNLean.PEPS.Approximation.PartyColumnInput`: if `‖σ - |Ω⟩⟨Ω|‖₁ ≤ η < 1`, a
+column `σ|z⟩` is nonzero and within `2 η` of `Ω` after normalization, up to a phase.
+Routing that ket network on dyadic anchors gives a PEPS with the same contraction, positive
+bond dimensions, and every bond dimension at most `(C₁ L ^ k) ^ χ` when every link dimension
+is at most `C₁ L ^ k`; this is equation `eq:final-bond`.
 
 The column may also be selected from the product-reference estimates of Section 8.1, with
 the compression error measured against the physical density of the same joint vector.
@@ -40,11 +35,6 @@ the protocol and the compression theorem in
 
 ## Main results
 
-* `TNLean.PEPS.Approximation.PartyNetwork.operatorCoeff`,
-  `TNLean.PEPS.Approximation.PartyNetwork.fixInput`: the operator of an operator party
-  network and its input-fixed ket network.
-* `TNLean.PEPS.Approximation.PartyNetwork.exists_fixInput_of_rectangularTraceNorm_sub_pure_le`:
-  Lemma 8.1 on the party network.
 * `TNLean.PEPS.Approximation.exists_squarePEPS_of_fixInput_dyadicRouting`: the selected
   column, routed onto the square, is a nonzero PEPS with bonds at most `(max D 1) ^ χ`.
 * `TNLean.PEPS.Approximation.exists_squarePEPS_of_product_reference_dyadicRouting`: the

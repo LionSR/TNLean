@@ -31,6 +31,7 @@ the square is in `TNLean.PEPS.Approximation.PartyColumnRouting`.
 
 * Polynomial-PEPS manuscript (Sept 24 2026), §8.1, Lemma 8.1 `lem:columns`,
   `07-assembly.tex:21–99`, immutable revision `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
+  These are original proofs; no OpenAI Lean code is copied or adapted.
 -/
 
 noncomputable section
