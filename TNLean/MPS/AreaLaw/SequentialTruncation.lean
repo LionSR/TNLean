@@ -9,6 +9,7 @@ import QICLean.Entropy.FilterOptimizer
 import TNLean.Lattice.RegionEntropyInequalities
 import QICLean.Entropy.RegionEntropy
 import QICLean.Entropy.SpectralTail
+import QICLean.Analysis.KyFanNorm
 
 /-!
 # Sequential truncation of a chain vector
@@ -43,6 +44,9 @@ for arbitrary vectors. Empty and one-site chains have no internal projections.
 * `prefixBasisProjection`: projections onto initial spans of the chosen regional bases.
 * `isOpenMPS_sequentialTruncation_prefixBasisProjection`: the arbitrary-bond statement for
   the actual ordered product and its discarded-expectation error.
+* `isOpenMPS_sequentialTruncation_leadingEigenprojection`: Proposition 7.1, projecting
+  onto the leading eigenvectors of each regional state, with the discarded eigenvalue mass
+  as the error.
 * `exists_sequentialTruncation`: the assembled statement.
 
 ## References
@@ -358,9 +362,9 @@ theorem sequentialTruncation_prefix_rank_error
 /-- Sequential projection onto the first D vectors of arbitrary regional
 orthonormal bases gives the actual product an open MPS representation and the
 actual discarded-expectation error. Proposition prop:VC is the instance of an
-eigenbasis of each marginal ordered by nonincreasing eigenvalue; identifying
-the leading span with the top eigenprojector and the error with the discarded
-eigenvalue mass is not proved here.
+eigenbasis of each marginal ordered by nonincreasing eigenvalue, proved with the
+discarded eigenvalue mass as the error in
+`isOpenMPS_sequentialTruncation_leadingEigenprojection`.
 Source: one-dimensional note, part2a_mps_information.tex, prop:VC, lines 39–62
 and the product-order caption at line 70. The statement holds for arbitrary
 vectors, and hence for every unit vector in the source proposition. -/
@@ -386,6 +390,38 @@ theorem isOpenMPS_sequentialTruncation_prefixBasisProjection
         (⟪ψ, toEuclideanLin (Entropy.localLift (leftBlock L k) (1 - P k)) ψ⟫_ℂ).re := by
     rw [Entropy.inner_localLift, Matrix.trace_mul_comm]
   simpa only [hmass] using herror
+
+/-- **Proposition 7.1 (sequential truncation onto leading eigenvectors).** For a unit
+vector `ψ` and a bond dimension `D`, project the left block of every internal cut `k` onto
+the span of the `D` leading eigenvectors of its regional state `ρ_k` (onto all of them when
+there are fewer than `D`), from the largest block to the smallest. The product is an
+open-boundary matrix product state with internal bond dimensions at most `D`, and its
+distance to `ψ` is at most `∑_k √ε_k(D)`, where `ε_k(D) = 1 - S_D(ρ_k)` is the sum of the
+discarded eigenvalues and `S_D` the sum of the `D` largest ones.
+Source: one-dimensional note, part2a_mps_information.tex, prop:VC, lines 39–62. Within a
+repeated eigenvalue the eigenvectors are those of the chosen eigenbasis; every other choice
+is covered by `isOpenMPS_sequentialTruncation_prefixBasisProjection`. -/
+theorem isOpenMPS_sequentialTruncation_leadingEigenprojection
+    (ψ : EuclideanSpace ℂ (Fin L → Fin q)) (hψ : ‖ψ‖ = 1) (D : ℕ) :
+    let P : ∀ k : ℕ, LeftBlockMatrix L q k := fun k ↦
+      (Entropy.regionState_isHermitian (n := fun _ : Fin L ↦ q) (leftBlock L k)
+        ψ).leadingEigenprojection D
+    let Φ := sequentialTruncation P (L - 1) ψ
+    IsOpenMPS L q D (fun x ↦ Φ x) ∧
+      ‖Φ - ψ‖ ≤ ∑ k ∈ Finset.Ico 1 L, Real.sqrt (1 -
+        (Entropy.regionState_isHermitian (n := fun _ : Fin L ↦ q) (leftBlock L k)
+          ψ).kyFanNorm D) := by
+  intro P Φ
+  have hspec (k : ℕ) := (Entropy.regionState_isHermitian (n := fun _ : Fin L ↦ q)
+    (leftBlock L k) ψ).leadingEigenprojection_spec D
+  obtain ⟨hrank, herror⟩ := sequentialTruncation_prefix_rank_error P ψ fun k ↦
+    ⟨(hspec k).2.1, Matrix.isHermitian_iff_isSelfAdjoint.mp (hspec k).1⟩
+  refine ⟨isOpenMPS_of_internal_cutMatrix_rank_le _ fun k hk hkL ↦
+    (hrank k hk hkL).trans ((hspec k).2.2.2.1.trans_le (min_le_left _ _)), ?_⟩
+  rw [norm_sub_rev]
+  refine herror.trans_eq (Finset.sum_congr rfl fun k _ ↦ congrArg Real.sqrt ?_)
+  refine (hspec k).2.2.2.2.2.trans ?_
+  rw [Entropy.trace_regionState_eq_one hψ, Complex.one_re]
 
 /-- **Sequential truncation.** Cutting every left block of a unit vector to the spectral
 projector of its regional state above the threshold `exp (-(S_k + w))`, from the largest

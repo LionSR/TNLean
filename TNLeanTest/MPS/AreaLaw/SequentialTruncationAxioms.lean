@@ -8,7 +8,7 @@ import Lean.Elab.Command
 import Lean.Util.CollectAxioms
 
 /-! Axiom audits for the projection mass identity, sequential rank and error estimates,
-and their spectral threshold consequence. -/
+their spectral threshold consequence, and the leading-eigenvector truncation. -/
 
 run_cmd do
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
@@ -17,7 +17,8 @@ run_cmd do
       ``TNLean.MPS.AreaLaw.rank_cutMatrix_sequentialTruncation_le,
       ``TNLean.MPS.AreaLaw.exists_sequentialTruncation,
       ``TNLean.MPS.AreaLaw.prefixBasisProjection,
-      ``TNLean.MPS.AreaLaw.isOpenMPS_sequentialTruncation_prefixBasisProjection] do
+      ``TNLean.MPS.AreaLaw.isOpenMPS_sequentialTruncation_prefixBasisProjection,
+      ``TNLean.MPS.AreaLaw.isOpenMPS_sequentialTruncation_leadingEigenprojection] do
     unless (← Lean.getEnv).contains decl do
       throwError "Missing declaration {decl}"
     let axioms ← Lean.collectAxioms decl
