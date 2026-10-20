@@ -55,5 +55,4 @@ theorem siteVec_append {ι P : Type} (own : ι → P)
       rw [Layout.memCongr_cons_tmul _ h'.symm, Layout.memCongr_symm h', ih h']
       exact (appendIso_symm_cons_tmul _ _ _ _ _ _).symm
 
-
 end TNLean.PEPS.EncodedFrame

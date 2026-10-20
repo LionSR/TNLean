@@ -305,28 +305,14 @@ the finite-dimensional density application uses finite ones.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:peps_dependent_network,def:peps_group_contraction}
-    Each identity bond equates its two endpoint labels. Write $\widetilde A_v$
-    for $A_v$ with the same edge label read at every endpoint incidence,
-    including both incidences of a loop. Splitting a global edge assignment
-    into its two internal parts $\alpha,\beta$ and its crossing part $\eta$
-    gives
-    \begin{align}
-        F_S(x,y)
-         & =\sum_{\eta\in K_S}
-        \left(\sum_{\alpha}\prod_{v\in S}
-        \widetilde A_v((\alpha,\eta)|_v,x_v)\right)
-        \left(\sum_{\beta}\prod_{v\in S^c}
-        \widetilde A_v((\beta,\eta)|_v,y_v)\right).
-        \label{eq:peps_identity_cut_sum}
-    \end{align}
-    These are precisely the two partial contractions, proving
-    (\ref{eq:peps_identity_cut_factor}). Matrix rank is bounded by the
-    number of columns of the left factor, namely $|K_S|$, which gives
-    (\ref{eq:peps_identity_cut_rank}). The factors pair by the ordinary transpose.
-    A loop is internal to one side. Parallel edges retain distinct labels.
-    Empty alphabets are allowed: an empty crossing alphabet makes $K_S$
-    empty and the matrix zero; with no crossing edges, $K_S$ is a singleton.
+    \uses{cor:peps_group_tensor_network,thm:peps_group_contraction_nuclear}
+    With every bond matrix equal to the identity, the network is the plain
+    contraction of the local tensors (Corollary~\ref{cor:peps_group_tensor_network}).
+    The factorization of its flattening across $S$
+    (Theorem~\ref{thm:peps_group_contraction_nuclear}) sums over the labels of the
+    crossing edges, which gives (\ref{eq:peps_identity_cut_factor}). Matrix rank is
+    bounded by the number of columns of the left factor, namely $|K_S|$, which gives
+    (\ref{eq:peps_identity_cut_rank}).
 \end{proof}
 
 \begin{theorem}[Cut ranks of distributed product-basis columns]
