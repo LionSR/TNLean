@@ -5,8 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.TorusBondFlatConnection
 import TNLean.PEPS.TorusBondClosureSeamMovement
-import TNLean.PEPS.DependentBondCut
-
+import TNLean.Lattice.Compression.DependentBondCut
 /-!
 # The native labelled bonds and four seam cuts
 

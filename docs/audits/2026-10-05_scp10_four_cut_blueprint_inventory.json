@@ -17,7 +17,7 @@
       "sha256": "6ebaaa09a803f7b4aa9d8a8401c394b44ef555d4151f63d2eb6c67247c128c7a"
     },
     {
-      "path": "TNLean/PEPS/DependentBondCut.lean",
+      "path": "TNLean/Lattice/Compression/DependentBondCut.lean",
       "sha256": "3e75ff1b71dcf86562a1c218a28723415e2639ea9c54e721aafee591fc5e127c"
     },
     {
@@ -25,7 +25,7 @@
       "sha256": "6f7ee423281baf340cae8faa907893df5dfcf1c5b43b8ad9bca8b75f0fd54016"
     },
     {
-      "path": "TNLean/PEPS/DependentBondNetwork.lean",
+      "path": "TNLean/Lattice/Compression/DependentBondNetwork.lean",
       "sha256": "981c4ea7348285ea0da3abf65ce183b7fe235a942230ffe4fc6ef1308b4b71a8"
     },
     {
@@ -41,7 +41,7 @@
       "sha256": "c971a077eec89e2784bc3e4d6fca071639ef16d686dc9e1c64fe60d8704f0552"
     },
     {
-      "path": "TNLean/PEPS/DependentPhysicalProductRangeSupport.lean",
+      "path": "TNLean/Lattice/Compression/DependentPhysicalProductRangeSupport.lean",
       "sha256": "b87aeb4d5e412858d729e68655dbf98cbdf142488008f46c54301332ad888f6a"
     },
     {
@@ -244,7 +244,7 @@
     {
       "declaration": "TNLean.PEPS.DependentBondNetwork.CutEndpoint",
       "kind": "abbrev",
-      "source": "TNLean/PEPS/DependentBondCut.lean",
+      "source": "TNLean/Lattice/Compression/DependentBondCut.lean",
       "line": 30,
       "owner": "def:peps_dependent_cut",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_networks.tex"
@@ -252,7 +252,7 @@
     {
       "declaration": "TNLean.PEPS.DependentBondNetwork.CutConfig",
       "kind": "abbrev",
-      "source": "TNLean/PEPS/DependentBondCut.lean",
+      "source": "TNLean/Lattice/Compression/DependentBondCut.lean",
       "line": 33,
       "owner": "def:peps_dependent_cut",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_networks.tex"
@@ -260,7 +260,7 @@
     {
       "declaration": "TNLean.PEPS.DependentBondNetwork.cutRestriction",
       "kind": "def",
-      "source": "TNLean/PEPS/DependentBondCut.lean",
+      "source": "TNLean/Lattice/Compression/DependentBondCut.lean",
       "line": 37,
       "owner": "def:peps_dependent_cut",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_networks.tex"
@@ -268,7 +268,7 @@
     {
       "declaration": "TNLean.PEPS.DependentBondNetwork.cutInteriorWeight",
       "kind": "def",
-      "source": "TNLean/PEPS/DependentBondCut.lean",
+      "source": "TNLean/Lattice/Compression/DependentBondCut.lean",
       "line": 45,
       "owner": "def:peps_dependent_cut",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_networks.tex"
@@ -276,7 +276,7 @@
     {
       "declaration": "TNLean.PEPS.DependentBondNetwork.cutCoeff",
       "kind": "def",
-      "source": "TNLean/PEPS/DependentBondCut.lean",
+      "source": "TNLean/Lattice/Compression/DependentBondCut.lean",
       "line": 49,
       "owner": "def:peps_dependent_cut",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_networks.tex"
@@ -284,7 +284,7 @@
     {
       "declaration": "TNLean.PEPS.DependentBondNetwork.cutMap",
       "kind": "def",
-      "source": "TNLean/PEPS/DependentBondCut.lean",
+      "source": "TNLean/Lattice/Compression/DependentBondCut.lean",
       "line": 56,
       "owner": "def:peps_dependent_cut",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_networks.tex"
@@ -292,7 +292,7 @@
     {
       "declaration": "TNLean.PEPS.DependentBondNetwork.cutMap_apply",
       "kind": "theorem",
-      "source": "TNLean/PEPS/DependentBondCut.lean",
+      "source": "TNLean/Lattice/Compression/DependentBondCut.lean",
       "line": 67,
       "owner": "def:peps_dependent_cut",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_networks.tex"
@@ -300,7 +300,7 @@
     {
       "declaration": "TNLean.PEPS.DependentBondNetwork.cutSpace",
       "kind": "def",
-      "source": "TNLean/PEPS/DependentBondCut.lean",
+      "source": "TNLean/Lattice/Compression/DependentBondCut.lean",
       "line": 72,
       "owner": "def:peps_dependent_cut",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_networks.tex"
@@ -308,7 +308,7 @@
     {
       "declaration": "TNLean.PEPS.DependentBondNetwork.mem_cutSpace_iff",
       "kind": "theorem",
-      "source": "TNLean/PEPS/DependentBondCut.lean",
+      "source": "TNLean/Lattice/Compression/DependentBondCut.lean",
       "line": 77,
       "owner": "def:peps_dependent_cut",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_networks.tex"
@@ -316,7 +316,7 @@
     {
       "declaration": "TNLean.PEPS.DependentBondNetwork.cutMap_eq_sum_single",
       "kind": "theorem",
-      "source": "TNLean/PEPS/DependentBondCut.lean",
+      "source": "TNLean/Lattice/Compression/DependentBondCut.lean",
       "line": 89,
       "owner": "thm:peps_dependent_cut_basis",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_networks.tex"
@@ -324,7 +324,7 @@
     {
       "declaration": "TNLean.PEPS.DependentBondNetwork.cutSpace_eq_span_single",
       "kind": "theorem",
-      "source": "TNLean/PEPS/DependentBondCut.lean",
+      "source": "TNLean/Lattice/Compression/DependentBondCut.lean",
       "line": 102,
       "owner": "thm:peps_dependent_cut_basis",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_networks.tex"
@@ -332,7 +332,7 @@
     {
       "declaration": "TNLean.PEPS.DependentBondNetwork.cutBondBoundary",
       "kind": "def",
-      "source": "TNLean/PEPS/DependentBondCut.lean",
+      "source": "TNLean/Lattice/Compression/DependentBondCut.lean",
       "line": 116,
       "owner": "thm:peps_dependent_cut_basis",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_networks.tex"
@@ -340,7 +340,7 @@
     {
       "declaration": "TNLean.PEPS.DependentBondNetwork.cutBondBoundary_restriction",
       "kind": "theorem",
-      "source": "TNLean/PEPS/DependentBondCut.lean",
+      "source": "TNLean/Lattice/Compression/DependentBondCut.lean",
       "line": 122,
       "owner": "thm:peps_dependent_cut_basis",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_networks.tex"
@@ -348,7 +348,7 @@
     {
       "declaration": "TNLean.PEPS.DependentBondNetwork.cutCoeff_bondBoundary",
       "kind": "theorem",
-      "source": "TNLean/PEPS/DependentBondCut.lean",
+      "source": "TNLean/Lattice/Compression/DependentBondCut.lean",
       "line": 132,
       "owner": "thm:peps_dependent_cut_basis",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_networks.tex"
@@ -356,7 +356,7 @@
     {
       "declaration": "TNLean.PEPS.DependentBondNetwork.cutBondUnits",
       "kind": "def",
-      "source": "TNLean/PEPS/DependentBondCut.lean",
+      "source": "TNLean/Lattice/Compression/DependentBondCut.lean",
       "line": 147,
       "owner": "thm:peps_dependent_cut_basis",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_networks.tex"
@@ -364,7 +364,7 @@
     {
       "declaration": "TNLean.PEPS.DependentBondNetwork.cutBondBoundary_units",
       "kind": "theorem",
-      "source": "TNLean/PEPS/DependentBondCut.lean",
+      "source": "TNLean/Lattice/Compression/DependentBondCut.lean",
       "line": 153,
       "owner": "thm:peps_dependent_cut_basis",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_networks.tex"
@@ -372,7 +372,7 @@
     {
       "declaration": "TNLean.PEPS.DependentBondNetwork.cutMap_single_eq_network",
       "kind": "theorem",
-      "source": "TNLean/PEPS/DependentBondCut.lean",
+      "source": "TNLean/Lattice/Compression/DependentBondCut.lean",
       "line": 173,
       "owner": "thm:peps_dependent_cut_basis",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_networks.tex"
@@ -500,7 +500,7 @@
     {
       "declaration": "TNLean.PEPS.DependentBondNetwork.Endpoint",
       "kind": "abbrev",
-      "source": "TNLean/PEPS/DependentBondNetwork.lean",
+      "source": "TNLean/Lattice/Compression/DependentBondNetwork.lean",
       "line": 35,
       "owner": "def:peps_dependent_incidence",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_networks.tex"
@@ -508,7 +508,7 @@
     {
       "declaration": "TNLean.PEPS.DependentBondNetwork.endpointVertex",
       "kind": "def",
-      "source": "TNLean/PEPS/DependentBondNetwork.lean",
+      "source": "TNLean/Lattice/Compression/DependentBondNetwork.lean",
       "line": 38,
       "owner": "def:peps_dependent_incidence",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_networks.tex"
@@ -516,7 +516,7 @@
     {
       "declaration": "TNLean.PEPS.DependentBondNetwork.IncidentEndpoint",
       "kind": "abbrev",
-      "source": "TNLean/PEPS/DependentBondNetwork.lean",
+      "source": "TNLean/Lattice/Compression/DependentBondNetwork.lean",
       "line": 42,
       "owner": "def:peps_dependent_incidence",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_networks.tex"
@@ -524,7 +524,7 @@
     {
       "declaration": "TNLean.PEPS.DependentBondNetwork.EndpointConfig",
       "kind": "abbrev",
-      "source": "TNLean/PEPS/DependentBondNetwork.lean",
+      "source": "TNLean/Lattice/Compression/DependentBondNetwork.lean",
       "line": 46,
       "owner": "def:peps_dependent_incidence",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_networks.tex"
@@ -532,7 +532,7 @@
     {
       "declaration": "TNLean.PEPS.DependentBondNetwork.LocalConfig",
       "kind": "abbrev",
-      "source": "TNLean/PEPS/DependentBondNetwork.lean",
+      "source": "TNLean/Lattice/Compression/DependentBondNetwork.lean",
       "line": 49,
       "owner": "def:peps_dependent_incidence",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_networks.tex"
@@ -540,7 +540,7 @@
     {
       "declaration": "TNLean.PEPS.DependentBondNetwork.endpointSiteEquiv",
       "kind": "def",
-      "source": "TNLean/PEPS/DependentBondNetwork.lean",
+      "source": "TNLean/Lattice/Compression/DependentBondNetwork.lean",
       "line": 55,
       "owner": "def:peps_dependent_incidence",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_networks.tex"
@@ -548,7 +548,7 @@
     {
       "declaration": "TNLean.PEPS.DependentBondNetwork.endpointSiteEquiv_apply",
       "kind": "theorem",
-      "source": "TNLean/PEPS/DependentBondNetwork.lean",
+      "source": "TNLean/Lattice/Compression/DependentBondNetwork.lean",
       "line": 66,
       "owner": "def:peps_dependent_incidence",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_networks.tex"
@@ -556,7 +556,7 @@
     {
       "declaration": "TNLean.PEPS.DependentBondNetwork.endpointSiteEquiv_symm_apply",
       "kind": "theorem",
-      "source": "TNLean/PEPS/DependentBondNetwork.lean",
+      "source": "TNLean/Lattice/Compression/DependentBondNetwork.lean",
       "line": 70,
       "owner": "def:peps_dependent_incidence",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_networks.tex"
@@ -564,7 +564,7 @@
     {
       "declaration": "TNLean.PEPS.DependentBondNetwork.endpointPairEquiv",
       "kind": "def",
-      "source": "TNLean/PEPS/DependentBondNetwork.lean",
+      "source": "TNLean/Lattice/Compression/DependentBondNetwork.lean",
       "line": 76,
       "owner": "def:peps_dependent_incidence",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_networks.tex"
@@ -572,7 +572,7 @@
     {
       "declaration": "TNLean.PEPS.DependentBondNetwork.endpointPairEquiv_apply",
       "kind": "theorem",
-      "source": "TNLean/PEPS/DependentBondNetwork.lean",
+      "source": "TNLean/Lattice/Compression/DependentBondNetwork.lean",
       "line": 86,
       "owner": "def:peps_dependent_incidence",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_networks.tex"
@@ -580,7 +580,7 @@
     {
       "declaration": "TNLean.PEPS.DependentBondNetwork.prod_incident_eq_prod_endpoint",
       "kind": "theorem",
-      "source": "TNLean/PEPS/DependentBondNetwork.lean",
+      "source": "TNLean/Lattice/Compression/DependentBondNetwork.lean",
       "line": 93,
       "owner": "thm:peps_dependent_incidence_sums",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_networks.tex"
@@ -588,7 +588,7 @@
     {
       "declaration": "TNLean.PEPS.DependentBondNetwork.prod_endpoint_eq_prod_edge",
       "kind": "theorem",
-      "source": "TNLean/PEPS/DependentBondNetwork.lean",
+      "source": "TNLean/Lattice/Compression/DependentBondNetwork.lean",
       "line": 100,
       "owner": "thm:peps_dependent_incidence_sums",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_networks.tex"
@@ -596,7 +596,7 @@
     {
       "declaration": "TNLean.PEPS.DependentBondNetwork.prod_incident_eq_prod_edge",
       "kind": "theorem",
-      "source": "TNLean/PEPS/DependentBondNetwork.lean",
+      "source": "TNLean/Lattice/Compression/DependentBondNetwork.lean",
       "line": 107,
       "owner": "thm:peps_dependent_incidence_sums",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_networks.tex"
@@ -604,7 +604,7 @@
     {
       "declaration": "TNLean.PEPS.DependentBondNetwork.sum_endpoint_prod_eq_prod_sum",
       "kind": "theorem",
-      "source": "TNLean/PEPS/DependentBondNetwork.lean",
+      "source": "TNLean/Lattice/Compression/DependentBondNetwork.lean",
       "line": 115,
       "owner": "thm:peps_dependent_incidence_sums",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_networks.tex"
@@ -612,7 +612,7 @@
     {
       "declaration": "TNLean.PEPS.DependentBondNetwork.bondWeight",
       "kind": "def",
-      "source": "TNLean/PEPS/DependentBondNetwork.lean",
+      "source": "TNLean/Lattice/Compression/DependentBondNetwork.lean",
       "line": 128,
       "owner": "def:peps_dependent_network",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_networks.tex"
@@ -620,7 +620,7 @@
     {
       "declaration": "TNLean.PEPS.DependentBondNetwork.network",
       "kind": "def",
-      "source": "TNLean/PEPS/DependentBondNetwork.lean",
+      "source": "TNLean/Lattice/Compression/DependentBondNetwork.lean",
       "line": 132,
       "owner": "def:peps_dependent_network",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_networks.tex"
@@ -628,7 +628,7 @@
     {
       "declaration": "TNLean.PEPS.DependentBondNetwork.network_eq_sum_site",
       "kind": "theorem",
-      "source": "TNLean/PEPS/DependentBondNetwork.lean",
+      "source": "TNLean/Lattice/Compression/DependentBondNetwork.lean",
       "line": 138,
       "owner": "def:peps_dependent_network",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_networks.tex"
@@ -932,7 +932,7 @@
     {
       "declaration": "TNLean.PEPS.dependentPhysicalProductFamilyMatrix",
       "kind": "def",
-      "source": "TNLean/PEPS/DependentPhysicalProductRangeSupport.lean",
+      "source": "TNLean/Lattice/Compression/DependentPhysicalProductRangeSupport.lean",
       "line": 36,
       "owner": "def:peps_dependent_physical_product",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_networks.tex"
@@ -940,7 +940,7 @@
     {
       "declaration": "TNLean.PEPS.dependentPhysicalProductFamilyMap",
       "kind": "def",
-      "source": "TNLean/PEPS/DependentPhysicalProductRangeSupport.lean",
+      "source": "TNLean/Lattice/Compression/DependentPhysicalProductRangeSupport.lean",
       "line": 41,
       "owner": "def:peps_dependent_physical_product",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_networks.tex"
@@ -948,7 +948,7 @@
     {
       "declaration": "TNLean.PEPS.dependentPhysicalProductFamilyMap_apply",
       "kind": "theorem",
-      "source": "TNLean/PEPS/DependentPhysicalProductRangeSupport.lean",
+      "source": "TNLean/Lattice/Compression/DependentPhysicalProductRangeSupport.lean",
       "line": 47,
       "owner": "def:peps_dependent_physical_product",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_networks.tex"
@@ -956,7 +956,7 @@
     {
       "declaration": "TNLean.PEPS.dependentPhysicalProductFamilyMatrix_mul",
       "kind": "theorem",
-      "source": "TNLean/PEPS/DependentPhysicalProductRangeSupport.lean",
+      "source": "TNLean/Lattice/Compression/DependentPhysicalProductRangeSupport.lean",
       "line": 54,
       "owner": "thm:peps_dependent_product_calculus",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_networks.tex"
@@ -964,7 +964,7 @@
     {
       "declaration": "TNLean.PEPS.dependentPhysicalProductFamilyMap_comp",
       "kind": "theorem",
-      "source": "TNLean/PEPS/DependentPhysicalProductRangeSupport.lean",
+      "source": "TNLean/Lattice/Compression/DependentPhysicalProductRangeSupport.lean",
       "line": 63,
       "owner": "thm:peps_dependent_product_calculus",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_networks.tex"
@@ -972,7 +972,7 @@
     {
       "declaration": "TNLean.PEPS.dependentPhysicalProductFamilyMatrix_one",
       "kind": "theorem",
-      "source": "TNLean/PEPS/DependentPhysicalProductRangeSupport.lean",
+      "source": "TNLean/Lattice/Compression/DependentPhysicalProductRangeSupport.lean",
       "line": 73,
       "owner": "thm:peps_dependent_product_calculus",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_networks.tex"
@@ -980,7 +980,7 @@
     {
       "declaration": "TNLean.PEPS.dependentPhysicalProductFamilyMap_one",
       "kind": "theorem",
-      "source": "TNLean/PEPS/DependentPhysicalProductRangeSupport.lean",
+      "source": "TNLean/Lattice/Compression/DependentPhysicalProductRangeSupport.lean",
       "line": 80,
       "owner": "thm:peps_dependent_product_calculus",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_networks.tex"
@@ -988,7 +988,7 @@
     {
       "declaration": "TNLean.PEPS.dependentPhysicalProductFamilyMap_oneCoordinate_apply",
       "kind": "theorem",
-      "source": "TNLean/PEPS/DependentPhysicalProductRangeSupport.lean",
+      "source": "TNLean/Lattice/Compression/DependentPhysicalProductRangeSupport.lean",
       "line": 88,
       "owner": "thm:peps_dependent_product_calculus",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_networks.tex"
@@ -996,7 +996,7 @@
     {
       "declaration": "TNLean.PEPS.dependentPhysicalProductFamilyMap_fixed_of_slices_fixed",
       "kind": "theorem",
-      "source": "TNLean/PEPS/DependentPhysicalProductRangeSupport.lean",
+      "source": "TNLean/Lattice/Compression/DependentPhysicalProductRangeSupport.lean",
       "line": 137,
       "owner": "thm:peps_dependent_product_calculus",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_networks.tex"
@@ -1004,7 +1004,7 @@
     {
       "declaration": "TNLean.PEPS.dependentPhysicalProductFamilyMap_slice_mem_range",
       "kind": "theorem",
-      "source": "TNLean/PEPS/DependentPhysicalProductRangeSupport.lean",
+      "source": "TNLean/Lattice/Compression/DependentPhysicalProductRangeSupport.lean",
       "line": 174,
       "owner": "thm:peps_dependent_product_range",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_networks.tex"
@@ -1012,7 +1012,7 @@
     {
       "declaration": "TNLean.PEPS.mem_range_dependentPhysicalProductFamilyMap_iff",
       "kind": "theorem",
-      "source": "TNLean/PEPS/DependentPhysicalProductRangeSupport.lean",
+      "source": "TNLean/Lattice/Compression/DependentPhysicalProductRangeSupport.lean",
       "line": 210,
       "owner": "thm:peps_dependent_product_range",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_networks.tex"

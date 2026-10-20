@@ -4,8 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.PreparedMatrixNorm
-import TNLean.PEPS.Approximation.SourceSlotBasis
-
+import TNLean.Lattice.Compression.SourceSlotBasis
 /-!
 # Joint contraction of free source inputs
 

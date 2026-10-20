@@ -4,10 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.DependentBondCoefficients
-import TNLean.PEPS.DependentBondCut
+import TNLean.Lattice.Compression.DependentBondCut
 import TNLean.PEPS.DependentBondProjectorExpansion
-import TNLean.PEPS.DependentPhysicalProductRangeSupport
-
+import TNLean.Lattice.Compression.DependentPhysicalProductRangeSupport
 /-!
 # Coherent bond expansions forced by complementary cuts
 

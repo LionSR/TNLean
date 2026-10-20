@@ -8,6 +8,7 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.Lattice
 
+import TNLean.Lattice.Compression
 import TNLean.Lattice.EntropyComparison
 import TNLean.Lattice.EntropyDimension
 import TNLean.Lattice.FiniteDomain
