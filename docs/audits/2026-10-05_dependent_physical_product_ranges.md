@@ -2,7 +2,7 @@
 
 ## Mathematical scope
 
-`TNLean/PEPS/DependentPhysicalProductRangeSupport.lean` proves the product-range
+`TNLean/Lattice/Compression/DependentPhysicalProductRangeSupport.lean` proves the product-range
 criterion for a finite site type and rectangular matrices
 `F v : Matrix (Out v) (In v) ℂ`, with both alphabets depending on the site.
 A global coefficient belongs to the product map's range if and only if every

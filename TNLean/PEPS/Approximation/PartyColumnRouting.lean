@@ -5,8 +5,8 @@ Authors: TNLean contributors
 -/
 import QICLean.Analysis.ProductReferenceDensityError
 import TNLean.PEPS.Approximation.Basic
-import TNLean.PEPS.Approximation.ColumnSelection
-import TNLean.PEPS.Approximation.PartyColumnInput
+import TNLean.Lattice.Compression.ColumnSelection
+import TNLean.Lattice.Compression.PartyColumnInput
 import TNLean.PEPS.Approximation.DyadicRoutingPEPS
 
 /-!
@@ -15,7 +15,7 @@ import TNLean.PEPS.Approximation.DyadicRoutingPEPS
 This file follows the source order of Section 8: Lemma 8.1 fixes one product-basis input
 column of the operator network on the party graph, and Lemma 8.2 then routes the resulting
 ket network onto the open `L × L` square. The column itself, for an arbitrary finite set of
-parties, is in `TNLean.PEPS.Approximation.PartyColumnInput`: if `‖σ - |Ω⟩⟨Ω|‖₁ ≤ η < 1`, a
+parties, is in `TNLean.Lattice.Compression.PartyColumnInput`: if `‖σ - |Ω⟩⟨Ω|‖₁ ≤ η < 1`, a
 column `σ|z⟩` is nonzero and within `2 η` of `Ω` after normalization, up to a phase.
 Routing that ket network on dyadic anchors gives a PEPS with the same contraction, positive
 bond dimensions, and every bond dimension at most `(C₁ L ^ k) ^ χ` when every link dimension

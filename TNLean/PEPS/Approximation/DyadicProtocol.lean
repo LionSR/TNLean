@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.PEPS.Approximation.AdaptivePatchSupply
 import TNLean.Lattice.PartyCircuit.ApproximateCircuitError
 import TNLean.PEPS.Approximation.Basic
-import TNLean.PEPS.Approximation.DistributedConstruction
+import TNLean.Lattice.Compression.DistributedConstruction
 import TNLean.PEPS.Approximation.DyadicActiveLabelParties
 import TNLean.PEPS.Approximation.DyadicRoutingPEPS
 import TNLean.Lattice.PartyCircuit.OriginalCircuitSourceBound

@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.Approximation.PartyProductConjugation
-import TNLean.PEPS.Approximation.PartyProductScalar
+import TNLean.Lattice.Compression.PartyProductConjugation
+import TNLean.Lattice.Compression.PartyProductScalar
 import Lean.Elab.Command
 import Lean.Util.CollectAxioms
 
