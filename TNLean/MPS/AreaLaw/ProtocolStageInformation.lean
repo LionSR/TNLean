@@ -35,9 +35,9 @@ noncomputable section
 
 namespace TNLean.MPS.AreaLaw.ChainSweep
 
-open TNLean.PEPS.EncodedFrame
+open TNLean.Lattice
 
-variable {L w q : ℕ}
+variable {L w : ℕ}
 
 /-- Exact separations for the two births and the exceptional first death.
 The third environment is evaluated after that death.
@@ -52,7 +52,7 @@ theorem birth_death_separation (hw : 1 ≤ w) (k : Fin (stageCount L w)) :
       (k.val = 0 → ∀ x ∈ leftBandTarget L w k,
         ∀ y ∈ (afterLeftTransfer L w k).birthEnv (.inr k),
           w ≤ Nat.dist x.val y.val) := by
-  obtain ⟨hE₁, hE₂⟩ := birth_environments (q := q) hw k
+  obtain ⟨hE₁, hE₂⟩ := birth_environments hw k
   have hb : (k.val + 1) * (20 * w) = k.val * (20 * w) + 20 * w := by ring
   refine ⟨?_, ?_, ?_⟩
   · intro x hx y hy
@@ -80,7 +80,7 @@ theorem birth_death_separation (hw : 1 ≤ w) (k : Fin (stageCount L w)) :
 
 /-- The original ground state's information bounds for the actual two birth
 targets and first-stage death follow from physical logarithmic separation.
-The constants precede every chain, state, position, width and stage.
+The constants precede every chain, state, width and stage.
 Source: Part II, `lem:logsep`, lines 472–488, and Part II, `prop:sweep`,
 proof, lines 365–374. -/
 theorem birth_death_information_of_logarithmic_separation
@@ -90,7 +90,7 @@ theorem birth_death_information_of_logarithmic_separation
       ∀ (h : ChainHamiltonian L q R J)
         (Ω : EuclideanSpace ℂ (Fin L → Fin q)) (E₀ : ℝ),
         Matrix.IsGappedGroundState h.operator E₀ Ω Δ →
-      ∀ (pos : Fin L → ℝ × ℝ) (w : ℕ), 1 ≤ w →
+      ∀ (w : ℕ), 1 ≤ w →
         D₂₄ * Real.log (L : ℝ) ≤ (w : ℝ) →
       ∀ k : Fin (stageCount L w),
         (FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω
@@ -110,8 +110,8 @@ theorem birth_death_information_of_logarithmic_separation
     ChainHamiltonian.mutualInformation_le_of_logarithmic_separation
       q hq R J Δ hΔ 24 (by norm_num) 1 le_rfl
   refine ⟨D₂₄, L₀, hD, hL₀, ?_⟩
-  intro L hL h Ω E₀ hgs pos w hw hwidth k
-  obtain ⟨hd₁, hd₂, hd₃⟩ := birth_death_separation (q := q) hw k
+  intro L hL h Ω E₀ hgs w hw hwidth k
+  obtain ⟨hd₁, hd₂, hd₃⟩ := birth_death_separation hw k
   have hinterval (b c : ℕ) (E : Finset (Fin L))
       (hd : ∀ x ∈ interval L b c, ∀ y ∈ E, w ≤ Nat.dist x.val y.val) :
       FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω

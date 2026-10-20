@@ -36,7 +36,7 @@ noncomputable section
 
 namespace TNLean.MPS.AreaLaw.ChainSweep
 
-open TNLean.PEPS.PairEffect TNLean.PEPS.EncodedFrame
+open TNLean.Lattice TNLean.PEPS.PairEffect TNLean.PEPS.EncodedFrame
 
 /-- The physical assumptions imply the actual eighteen local circuits at
 every stage, including the seven identity operations after the first direct
@@ -46,38 +46,36 @@ Source: Part II, `prop:sweep`, construction and geometric proof, lines 365–378
 using Part II, `lem:logsep`, lines 472–488. -/
 theorem local_stage_circuits_of_logarithmic_separation
     (q : ℕ) (hq : 1 ≤ q) (R : ℕ) (J Δ : ℝ) (hΔ : 0 < Δ) :
-    letI : NeZero q := ⟨by omega⟩
     ∃ (D₂₄ : ℝ) (L₀ : ℕ), 0 < D₂₄ ∧ 1 ≤ L₀ ∧
       ∀ (L : ℕ), L₀ ≤ L →
       ∀ (h : ChainHamiltonian L q R J)
         (Ω : EuclideanSpace ℂ (Fin L → Fin q)) (E₀ : ℝ),
         Matrix.IsGappedGroundState h.operator E₀ Ω Δ →
-      ∀ (pos : Fin L → ℝ × ℝ) (w : ℕ), 1 ≤ w →
+      ∀ (w : ℕ), 1 ≤ w →
         D₂₄ * Real.log (L : ℝ) ≤ (w : ℝ) →
       ∀ k : Fin (stageCount L w),
         ∃ c : (j : Fin 18) → OriginalCircuit
-            (stackRegs (stageBoundaryFrames L w k j.val) [])
-            (stackRegs (stageBoundaryFrames L w k (j.val + 1)) []),
+            (stackRegs (Sheet.regs q) (stageBoundaryFrames L w k j.val) [])
+            (stackRegs (Sheet.regs q) (stageBoundaryFrames L w k (j.val + 1)) []),
           ∀ j, (c j).IsBoundedChange (stageParticipants k j) 1 1
               (4 * (L : ℝ) ^ (-12 : ℤ))
-              (framesVec Ω (stageBoundaryFrames L w k j.val))
-              (framesVec Ω (stageBoundaryFrames L w k (j.val + 1))) ∧
+              (framesVec (Sheet.refFamily Ω) (stageBoundaryFrames L w k j.val))
+              (framesVec (Sheet.refFamily Ω) (stageBoundaryFrames L w k (j.val + 1))) ∧
             (c j).IsSourceBounded 1 ∧ (c j).nonprivateCount ≤ 1 ∧
             ((k.val = 0 ∧ 3 ≤ j.val ∧ j.val < 10) →
               (c j).nonprivateCount = 0 ∧
-                ‖(c j).eval (framesVec Ω (stageBoundaryFrames L w k j.val)) -
-                  framesVec Ω (stageBoundaryFrames L w k (j.val + 1))‖ = 0 ∧
+                ‖(c j).eval (framesVec (Sheet.refFamily Ω) (stageBoundaryFrames L w k j.val)) -
+                  framesVec (Sheet.refFamily Ω) (stageBoundaryFrames L w k (j.val + 1))‖ = 0 ∧
                 HEq (c j) (OriginalCircuit.id
-                  (stackRegs (stageBoundaryFrames L w k j.val) []))) := by
+                  (stackRegs (Sheet.regs q) (stageBoundaryFrames L w k j.val) []))) := by
   classical
-  let : NeZero q := ⟨by omega⟩
   obtain ⟨Dstage, Nstage, hDstage, hNstage, hstage⟩ :=
     birth_death_information_of_logarithmic_separation q hq R J Δ hΔ
   obtain ⟨Dband, Nband, _, _, hband⟩ :=
     OneBand.primitive_information_of_logarithmic_separation q hq R J Δ hΔ
   refine ⟨max Dstage Dband, max Nstage Nband,
     hDstage.trans_le (le_max_left _ _), hNstage.trans (le_max_left _ _), ?_⟩
-  intro L hL h Ω E₀ hgs pos w hw hwidth k
+  intro L hL h Ω E₀ hgs w hw hwidth k
   have hLs : Nstage ≤ L := (le_max_left _ _).trans hL
   have hLb : Nband ≤ L := (le_max_right _ _).trans hL
   have hlog : 0 ≤ Real.log (L : ℝ) :=
@@ -95,10 +93,10 @@ theorem local_stage_circuits_of_logarithmic_separation
   have hgeometry : 3 * (20 * w) ≤ L := by omega
   have hmargin := stage_right_margin L w hgeometry k
   obtain ⟨hRem, hBlock, hBoundary⟩ :=
-    hstage L hLs h Ω E₀ hgs pos w hw hwidthStage k
-  have hleftOwners := left_band_owners (q := q) hw k
+    hstage L hLs h Ω E₀ hgs w hw hwidthStage k
+  have hleftOwners := left_band_owners hw k
   have hleft (hk : 0 < k.val) :=
-    hband L hLb h Ω E₀ hgs (Party L w) pos
+    hband L hLb h Ω E₀ hgs (Party L w)
       (afterBlockBirth L w k).owner
       (Sum.inl k.castSucc) (Sum.inr k)
       (Sum.inr (⟨k.val - 1, by omega⟩ : Fin (stageCount L w)))
@@ -110,11 +108,11 @@ theorem local_stage_circuits_of_logarithmic_separation
         omega)
       hw (stage_left_margin w k.val (by omega)) (by nlinarith [hmargin])
       (hleftOwners hk).1 (hleftOwners hk).2.1 (hleftOwners hk).2.2 hwidthBand
-  have hrightOwners := right_band_owners (q := q) hw k
-  rw [← leftBandMain_eq_afterLeftTransfer (q := q) hw hgeometry k]
+  have hrightOwners := right_band_owners hw k
+  rw [← leftBandMain_eq_afterLeftTransfer hw hgeometry k]
     at hrightOwners
   have hright :=
-    hband L hLb h Ω E₀ hgs (Party L w) pos
+    hband L hLb h Ω E₀ hgs (Party L w)
       (leftBandMain L w k).owner
       (Sum.inl k.castSucc) (Sum.inl k.succ) (Sum.inr k)
       ((k.val + 1) * (20 * w)) w (by simp) (by simp)
