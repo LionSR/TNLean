@@ -12,6 +12,7 @@ import TNLean.PEPS.AreaLaw.Amplification
 import TNLean.PEPS.AreaLaw.AmplificationCutClearance
 import TNLean.PEPS.AreaLaw.AmplificationProof
 import TNLean.PEPS.AreaLaw.AmplificationProofSteps
+import TNLean.PEPS.AreaLaw.AreaLawElementaryConstant
 import TNLean.PEPS.AreaLaw.AreaLawExplicitConstant
 import TNLean.PEPS.AreaLaw.AreaLawTheorem
 import TNLean.PEPS.AreaLaw.BirthTargetEntropy
