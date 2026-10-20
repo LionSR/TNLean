@@ -91,7 +91,6 @@ theorem local_stage_circuits_of_logarithmic_separation
   have hfour : 4 * (20 * w) ≤ L :=
     (Nat.le_div_iff_mul_le (by omega : 0 < 20 * w)).1 hdiv
   have hgeometry : 3 * (20 * w) ≤ L := by omega
-  have hmargin := stage_right_margin L w hgeometry k
   obtain ⟨hRem, hBlock, hBoundary⟩ :=
     hstage L hLs h Ω E₀ hgs w hw hwidthStage k
   have hleftOwners := left_band_owners hw k
@@ -106,7 +105,7 @@ theorem local_stage_circuits_of_logarithmic_separation
         have hv := congrArg Fin.val (Sum.inr.inj he)
         change k.val = k.val - 1 at hv
         omega)
-      hw (stage_left_margin w k.val (by omega)) (by nlinarith [hmargin])
+      hw (stage_left_margin w k.val (by omega))
       (hleftOwners hk).1 (hleftOwners hk).2.1 (hleftOwners hk).2.2 hwidthBand
   have hrightOwners := right_band_owners k
   rw [← leftBandMain_eq_afterLeftTransfer hw k]
@@ -116,7 +115,7 @@ theorem local_stage_circuits_of_logarithmic_separation
       (leftBandMain L w k).owner
       (Sum.inl k.castSucc) (Sum.inl k.succ) (Sum.inr k)
       ((k.val + 1) * (20 * w)) w (by simp) (by simp)
-      hw (stage_left_margin w (k.val + 1) (by omega)) (by nlinarith [hmargin])
+      hw (stage_left_margin w (k.val + 1) (by omega))
       hrightOwners.1 hrightOwners.2.1 hrightOwners.2.2 hwidthBand
   exact local_stage_circuits_of_primitive_information (q := q)
     hw k Ω hgs.1 hRem hBlock hBoundary

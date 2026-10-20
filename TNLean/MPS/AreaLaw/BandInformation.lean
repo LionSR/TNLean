@@ -167,7 +167,7 @@ Source: Part II, Lemma lem:band, lines 300–318. -/
 theorem primitive_separation
     (own : Fin L → Party) (A B C : Party) (a w : ℕ)
     (hAC : A ≠ C) (hBC : B ≠ C)
-    (hw : 1 ≤ w) (hleft : 8 * w ≤ a) (hright : a + 2 * w ≤ L)
+    (hw : 1 ≤ w) (hleft : 8 * w ≤ a)
     (hC : ∀ x ∈ interval L (a - 8 * w) a, own x = C)
     (hA : ∀ x ∈ interval L a (a + w), own x = A)
     (hB : ∀ x ∈ interval L (a + w) (a + 2 * w), own x = B) :
@@ -251,7 +251,7 @@ theorem primitive_information_of_logarithmic_separation
         Matrix.IsGappedGroundState h.operator E₀ Ω Δ →
       ∀ (Party : Type)
         (own : Fin L → Party) (A B C : Party) (a w : ℕ),
-        A ≠ C → B ≠ C → 1 ≤ w → 8 * w ≤ a → a + 2 * w ≤ L →
+        A ≠ C → B ≠ C → 1 ≤ w → 8 * w ≤ a →
         (∀ x ∈ interval L (a - 8 * w) a, own x = C) →
         (∀ x ∈ interval L a (a + w), own x = A) →
         (∀ x ∈ interval L (a + w) (a + 2 * w), own x = B) →
@@ -285,10 +285,10 @@ theorem primitive_information_of_logarithmic_separation
     ChainHamiltonian.mutualInformation_le_of_logarithmic_separation
       q hq R J Δ hΔ 24 (by norm_num) 1 le_rfl
   refine ⟨D₂₄, L₀, hD, hL₀, ?_⟩
-  intro L hL h Ω E₀ hgs Party own A B C a w hAC hBC hw hleft hright hC hA hB hwidth
+  intro L hL h Ω E₀ hgs Party own A B C a w hAC hBC hw hleft hC hA hB hwidth
   obtain ⟨hd₀, hd₁, hd₂, hd₃, hd₄, hd₅, hd₆, hd₇⟩ :=
     primitive_separation own A B C a w
-      hAC hBC hw hleft hright hC hA hB
+      hAC hBC hw hleft hC hA hB
   have hinterval (b c : ℕ) (E : Finset (Fin L))
       (hd : ∀ x ∈ interval L b c, ∀ y ∈ E, w ≤ Nat.dist x.val y.val) :
       FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω
