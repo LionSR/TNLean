@@ -327,7 +327,10 @@ theorem exchange_regions (own : Fin L → Party) (A B C : Party) (a w : ℕ)
 
 /-! ## Reusing the existing primitive circuits and stack lifts -/
 
-private theorem birth_liftOne (F : Sheet (Fin L) Party) (T : Finset (Fin L)) (P Q : Party)
+/-- A birth on one sheet among spectator sheets, at information exponent twenty-four and
+error exponent twelve. One-dimensional note, Lemma `lem:birth`, `part2b_mps_protocol.tex`,
+lines 70–94. -/
+theorem birth_liftOne (F : Sheet (Fin L) Party) (T : Finset (Fin L)) (P Q : Party)
     (hTP : ∀ x ∈ T, F.owner x = P)
     {Ω : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Ω‖ = 1)
     (hI : FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω T (F.birthEnv P) ≤
