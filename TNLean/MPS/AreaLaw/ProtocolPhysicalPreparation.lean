@@ -39,7 +39,7 @@ noncomputable section
 
 namespace TNLean.MPS.AreaLaw.ChainSweep
 
-open TNLean.PEPS.PairEffect TNLean.PEPS.EncodedFrame ContinuousLinearMap
+open TNLean.Lattice TNLean.PEPS.PairEffect TNLean.PEPS.EncodedFrame ContinuousLinearMap
 
 /-- An explicit uniform length cutoff controls the rounded logarithmic width
 and its physical dimensions. The prefactor retains the ceiling's additive one.
@@ -124,7 +124,6 @@ Source: Part II, `con:sweep`, `prop:sweep` and proof, lines 330–396, with the
 physical density consequence at lines 579–585. -/
 theorem exists_preparation_of_gappedGroundState
     (q : ℕ) (hq : 1 ≤ q) (R : ℕ) (J Δ : ℝ) (hΔ : 0 < Δ) :
-    letI : NeZero q := ⟨by omega⟩
     ∃ (D K : ℝ) (s L₀ : ℕ) (hL₀ : 1 ≤ L₀), 1 ≤ D ∧ 0 < K ∧
       ∀ (L : ℕ) (hsize : L₀ ≤ L),
         let w := ⌈D * Real.log (L : ℝ)⌉₊
@@ -132,32 +131,25 @@ theorem exists_preparation_of_gappedGroundState
         ∀ (h : ChainHamiltonian L q R J)
           (Ω : EuclideanSpace ℂ (Fin L → Fin q)) (E₀ : ℝ),
           Matrix.IsGappedGroundState h.operator E₀ Ω Δ →
-        ∀ (pos : Fin L → ℝ × ℝ),
         let Fs := initialFrames L w
         let holder : Sheet (Fin L) (Party L w) → Party L w := fun F ↦ F.owner ⟨0, hL⟩
-        let H := fun p ↦ framesSpace (Fs.filter fun F ↦ holder F = p)
+        let H := fun p ↦ framesSpace (Sheet.regs q) (Fs.filter fun F ↦ holder F = p)
         let rs := terminalRawOrder L w
         let hn := terminalRawOrder_nodup L w
         let hr := mem_terminalRawOrder (L := L) (w := w)
         let R := terminalRegrouping (q := q) rs hn hr
-        let hT := stackRegs_terminalFrames L w
+        let hT := stackRegs_terminalFrames (q := q) L w
         let A : Mem (privateLayout L w q) ≃ₗᵢ[ℂ]
             EuclideanSpace ℂ (AuxiliarySite L w → Fin q) :=
           groupIso (auxiliaryOwner L w) Finset.univ.toList
             (List.Nodup.getEquivOfForallMemList _ (Finset.nodup_toList _) (by simp))
         letI := A.symm.toLinearEquiv.finiteDimensional
-        ∃ hx : ∀ p, ‖@framesVec (Fin L) (Fin.fintype L) (instDecidableEqFin L)
-              q (Party L w) pos
-              ⟨Nat.ne_of_gt (lt_of_lt_of_le Nat.zero_lt_one hq)⟩
-              Ω (Fs.filter fun F ↦ holder F = p)‖ = 1,
+        ∃ hx : ∀ p, ‖framesVec (Sheet.refFamily Ω) (Fs.filter fun F ↦ holder F = p)‖ = 1,
           ∃ C : OriginalCircuit (ProductInput.wholePartyLayout H)
               (familyPhysicalOutputLayout (physicalDimension L w q)
                 (physicalOrder L w) (privateLayout L w q)),
             let X := ProductInput.ofAllParties H
-              (fun p ↦ @framesVec (Fin L) (Fin.fintype L) (instDecidableEqFin L)
-              q (Party L w) pos
-              ⟨Nat.ne_of_gt (lt_of_lt_of_le Nat.zero_lt_one hq)⟩
-              Ω (Fs.filter fun F ↦ holder F = p)) hx
+              (fun p ↦ framesVec (Sheet.refFamily Ω) (Fs.filter fun F ↦ holder F = p)) hx
             let Ψ := C.eval X.vector
             let V := familyLabelledPhysicalReadout (physicalDimension L w q)
               (physicalOrder L w) (Finset.nodup_toList _) (by simp [physicalOrder])
@@ -197,7 +189,6 @@ theorem exists_preparation_of_gappedGroundState
               (∀ g : C.nonprivateLocations, (C.participants g).card ≤ 3) ∧
               1 ≤ w ∧ 3 * (20 * w) ≤ L := by
   classical
-  let : NeZero q := ⟨by omega⟩
   obtain ⟨D₂₄, Nphysical, _, hNphysical, hphysical⟩ :=
     local_stage_circuits_of_logarithmic_separation q hq R J Δ hΔ
   let D := max D₂₄ 1
@@ -210,7 +201,7 @@ theorem exists_preparation_of_gappedGroundState
   refine ⟨D, (q : ℝ) ^ 80, ⌈80 * D * Real.log (q : ℝ)⌉₊, L₀, hL₀, hD, hK, ?_⟩
   intro L hsize
   dsimp only
-  intro h Ω E₀ hgs pos
+  intro h Ω E₀ hgs
   let w := ⌈D * Real.log (L : ℝ)⌉₊
   have hL : 0 < L := Nat.lt_of_lt_of_le Nat.zero_lt_one (hL₀.trans hsize)
   have hwidthCut : max 120 ⌈Real.logPowThreshold (60 * D) (1 / 2) 1 1⌉₊ ≤ L :=
@@ -222,16 +213,16 @@ theorem exists_preparation_of_gappedGroundState
   have hwidth : D₂₄ * Real.log (L : ℝ) ≤ (w : ℝ) :=
     (mul_le_mul_of_nonneg_right (le_max_left _ _) hlog).trans (Nat.le_ceil _)
   have hfamily := hphysical L ((le_max_left _ _).trans hsize)
-    h Ω E₀ hgs pos w hw hwidth
+    h Ω E₀ hgs w hw hwidth
   choose c hc using hfamily
   let Fs := initialFrames L w
   let holder : Sheet (Fin L) (Party L w) → Party L w := fun F ↦ F.owner ⟨0, hL⟩
-  let H := fun p ↦ framesSpace (Fs.filter fun F ↦ holder F = p)
+  let H := fun p ↦ framesSpace (Sheet.regs q) (Fs.filter fun F ↦ holder F = p)
   let rs := terminalRawOrder L w
   let hn := terminalRawOrder_nodup L w
   let hr := mem_terminalRawOrder (L := L) (w := w)
   let R := terminalRegrouping (q := q) rs hn hr
-  let hT := stackRegs_terminalFrames L w
+  let hT := stackRegs_terminalFrames (q := q) L w
   let A : Mem (privateLayout L w q) ≃ₗᵢ[ℂ]
       EuclideanSpace ℂ (AuxiliarySite L w → Fin q) :=
     groupIso (auxiliaryOwner L w) Finset.univ.toList
@@ -241,7 +232,7 @@ theorem exists_preparation_of_gappedGroundState
       hdensity, hsupport, harity, hlocality⟩ :=
     exists_preparation_of_local_circuits c Ω hc hL hgs.1
   let X := ProductInput.ofAllParties H
-    (fun p ↦ framesVec Ω (Fs.filter fun F ↦ holder F = p)) hx
+    (fun p ↦ framesVec (Sheet.refFamily Ω) (Fs.filter fun F ↦ holder F = p)) hx
   let Ψ := C.eval X.vector
   let V := familyLabelledPhysicalReadout (physicalDimension L w q)
     (physicalOrder L w) (Finset.nodup_toList _) (by simp [physicalOrder])
