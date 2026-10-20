@@ -96,7 +96,7 @@ has regional entropy at most this constant times the number of cut edges.
 
 This is an auxiliary result: Theorem 1.1 of the source (`00-introduction.tex`, lines 39–53)
 asserts only that a constant exists. The safe-box estimate of Proposition 9.5 holds with every
-larger constant, so the proof of Theorem 1.1 runs unchanged from `B`. Source: proof of
+larger constant, so the proof of Theorem 1.1 goes through unchanged from `B`. Source: proof of
 Theorem 1.1, `10-geometry.tex`, lines 803–857, and Proposition 9.5, `08-scanner.tex`,
 lines 681–805. -/
 theorem uniformAreaLaw_explicit_of_le (q R : ℕ) (hq : 1 ≤ q) {J Δ : ℝ} (hJ : 0 ≤ J)

@@ -356,8 +356,7 @@ every upper bound for $C_{\rm box}$.
     \label{def:area_law_box_bound_constant}
     \lean{TNLean.PEPS.AreaLaw.uniformAreaLawConstantAt,
         TNLean.PEPS.AreaLaw.physicalBoxConstantClosed,
-        TNLean.PEPS.AreaLaw.uniformAreaLawConstantClosedAt,
-        TNLean.PEPS.AreaLaw.uniformAreaLawConstantClosedAt_physicalBoxConstantClosed}
+        TNLean.PEPS.AreaLaw.uniformAreaLawConstantClosedAt}
     \leanok
     \uses{def:area_law_transport_constant,def:area_law_closed_constant}
     For a real number $B$, let
@@ -368,9 +367,24 @@ every upper bound for $C_{\rm box}$.
     Theorem~\ref{thm:area_law_transport_bound_explicit}. Let
     $C_{\rm box}(q,R,J,\Delta)$ be the safe-box constant of
     Definition~\ref{def:area_law_transport_constant} at these transport
-    constants. Then
-    $C_{\rm AL}(q,R,J,\Delta)=C_{\rm AL}^{C_{\rm box}(q,R,J,\Delta)}(q,R,J,\Delta)$.
+    constants.
 \end{definition}
+
+\begin{theorem}[The closed constant at the safe-box constant]
+    \label{thm:area_law_box_bound_constant_at_box}
+    \lean{TNLean.PEPS.AreaLaw.uniformAreaLawConstantClosedAt_physicalBoxConstantClosed}
+    \leanok
+    \uses{def:area_law_box_bound_constant,def:area_law_closed_constant}
+    For all $q$, $R$, $J$ and $\Delta$,
+    $C_{\rm AL}(q,R,J,\Delta)=C_{\rm AL}^{C_{\rm box}(q,R,J,\Delta)}(q,R,J,\Delta)$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Both sides are the constant of
+    Definition~\ref{def:area_law_transport_constant} at the safe-box constant
+    and the transport constants of
+    Theorem~\ref{thm:area_law_transport_bound_explicit}.
+\end{proof}
 
 \begin{theorem}[The area law at any bound for the safe-box constant]
     \label{thm:area_law_box_bound_constant}
@@ -403,7 +417,7 @@ every upper bound for $C_{\rm box}$.
         thm:area_law_transport_bound_explicit}
     Since $r^{1+e_*}\ge0$, the safe-box bound with the constant
     $C_{\rm box}$ gives the safe-box bound with the constant $B$, and the
-    proof of Theorem~\ref{thm:area_law_transport_constant} runs unchanged
+    proof of Theorem~\ref{thm:area_law_transport_constant} goes through unchanged
     with $B$ in place of $C_{\rm box}$. The second assertion is the first at
     the transport constants of
     Theorem~\ref{thm:area_law_transport_bound_explicit}, for which
