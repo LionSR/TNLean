@@ -56,7 +56,7 @@ lines 635–785; `06-geometry.tex`, lines 62–63 and 440–445. -/
 theorem isAngularScale_closed_le {q : ℕ} (hq : 1 ≤ q) {J Δ : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < Δ)
     {a A₀ : ℝ} (ha : 0 < a) (m₀ : ℕ) {p : ℕ} (hp : 0 < p) {D L₀ : ℝ}
     (hD : angularScale J Δ a p ≤ D) (hL₀ : angularThresholdClosed q J Δ a A₀ m₀ p ≤ L₀) :
-    IsAngularScale q J Δ a A₀ m₀ p D L₀ :=
+    IsAngularScale q (IsSquareGroundState q J Δ) a A₀ m₀ p D L₀ :=
   isAngularScale_of_sublinearCollarBoundAt_le_explicit hq hJ hΔ
     (sublinearCollarBoundAt_closed hq hJ hΔ) ha m₀ hp hD hL₀
 
@@ -73,12 +73,12 @@ theorem exists_isAngularScale_ge
     (hA₀ : 1 ≤ A₀) (m₀ : ℕ) {p : ℕ} (hp : 0 < p)
     (Dmin Lmin : ℝ) :
     ∃ D L₀ : ℝ, max Dmin 1 ≤ D ∧ max Lmin 2 ≤ L₀ ∧
-      IsAngularScale q J Δ a A₀ m₀ p D L₀ := by
+      IsAngularScale q (IsSquareGroundState q J Δ) a A₀ m₀ p D L₀ := by
   obtain ⟨D₁, L₁, hscale⟩ :=
     (angularInformationBound hq hJ hΔ).exists_isAngularScale ha hA₀ m₀ hp
   refine ⟨max D₁ (max Dmin 1), max L₁ (max Lmin 2),
     le_max_right _ _, le_max_right _ _, ?_⟩
-  intro L hL h E₀ Ω hΩ pos c hpos V hV X E hXE n hn hnL hdiam hsep
+  intro L hL Ω hΩ pos c hpos V hV X E hXE n hn hnL hdiam hsep
   have hlog : 0 ≤ Real.log (L : ℝ) := Real.log_nonneg (by
     have h2 := (le_max_right Lmin 2).trans
       ((le_max_right L₁ (max Lmin 2)).trans hL)
@@ -86,7 +86,7 @@ theorem exists_isAngularScale_ge
   have hfloor : D₁ * Real.log (L : ℝ) ≤
       max D₁ (max Dmin 1) * Real.log (L : ℝ) :=
     mul_le_mul_of_nonneg_right (le_max_left _ _) hlog
-  exact hscale L ((le_max_left _ _).trans hL) h E₀ Ω hΩ
+  exact hscale L ((le_max_left _ _).trans hL) Ω hΩ
     pos c hpos V hV X E hXE n (hfloor.trans hn) hnL hdiam
     (fun x hx y hy ↦
       (mul_le_mul_of_nonneg_left

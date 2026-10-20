@@ -31,8 +31,8 @@ open EncodedFrame PairEffect
 
 /-! ### The chains of one sheet along an edge -/
 
-variable {k q : ℕ} [NeZero q] {J Δ a A₀ D L₀' : ℝ} {m₀ : ℕ} {L : ℕ}
-  {h : SquareHamiltonian L q J} {E₀ : ℝ} {Ω : StateSpace L q} {K₀ ε₀ ν B₀ C c : ℝ}
+variable {k q : ℕ} [NeZero q] {a A₀ D L₀' : ℝ} {m₀ : ℕ} {L : ℕ}
+  {G : ∀ L : ℕ, StateSpace L q → Prop} {Ω : StateSpace L q} {K₀ ε₀ ν B₀ C c : ℝ}
 
 /-- **The three auxiliary births, conditional on Proposition 3.4.** At the constants of the
 protocol, in the repainting of a square `R` of side `n = 2 ^ j > K₀ t`, the auxiliary sheet of an
@@ -41,8 +41,8 @@ edge `e` passes from the uniform guide `C_e` to the auxiliary guide with the wor
 frames at both ends are treated at no mark.
 
 Polynomial-PEPS manuscript, `06-geometry.tex`, lines 187–197 and 328–339. -/
-theorem isStepChain_auxBirths (hD : IsAngularScale q J Δ a A₀ m₀ 60 D L₀') (hLL : L₀' ≤ L)
-    (hΩ : h.IsGappedGroundState E₀ Ω Δ) (hm₀ : 2 ≤ m₀) (hA₀ : 1 ≤ A₀)
+theorem isStepChain_auxBirths (hD : IsAngularScale q G a A₀ m₀ 60 D L₀') (hLL : L₀' ≤ L)
+    (hΩ : G L Ω) (hΩ₁ : ‖Ω‖ = 1) (hm₀ : 2 ≤ m₀) (hA₀ : 1 ≤ A₀)
     (hc : IsProtocolConstants K₀ ε₀ ν a D B₀) (hL : 2 ≤ L) (hk2 : 2 ^ k < 2 * L)
     (P : AdaptivePatchSupply (cellCenterPos L) Ω B₀ C c 60 L) (rank : GuideLabel → ℕ)
     (R : RepaintedSquare k) (hlarge : K₀ * (D * Real.log L) < (2 : ℝ) ^ (R.1.1 : ℕ))
@@ -65,17 +65,17 @@ theorem isStepChain_auxBirths (hD : IsAngularScale q J Δ a A₀ m₀ 60 D L₀'
   have hU : ∀ W ∈ auxWords Bl.oldLabel Bl.finalLabel (Bl.nbrLabel e),
       Bl.IsUnmodifiedGuide (Bl.auxGuide e W) := fun W hW =>
     Or.inr (Or.inr (Or.inr (Or.inr ⟨e, W, hW, rfl⟩)))
-  have h₁ := isStepChain_bandOperation hD hLL hΩ hm₀ hA₀ hc hL hk2 P rank R hlarge done
+  have h₁ := isStepChain_bandOperation hD hLL hΩ hΩ₁ hm₀ hA₀ hc hL hk2 P rank R hlarge done
     (auxBirthB_insertsOne Bl.finalLabel (Bl.nbrLabel e)) hC hB e
     (g₀ := fun _ => Bl.nbrLabel e) (hU _ (Or.inl rfl))
     (hU _ (Or.inr (Or.inl rfl))) hr hb
     hK hpt
-  have h₂ := isStepChain_bandOperation hD hLL hΩ hm₀ hA₀ hc hL hk2 P rank R hlarge done
+  have h₂ := isStepChain_bandOperation hD hLL hΩ hΩ₁ hm₀ hA₀ hc hL hk2 P rank R hlarge done
     (auxBirthA_insertsOne Bl.oldLabel Bl.finalLabel (Bl.nbrLabel e)) hB hA e
     (g₀ := fun _ => Bl.nbrLabel e) (hU _ (Or.inr (Or.inl rfl)))
     (hU _ (Or.inr (Or.inr (Or.inl rfl)))) hr hb
     hK hpt
-  have h₃ := isStepChain_bandOperation hD hLL hΩ hm₀ hA₀ hc hL hk2 P rank R hlarge done
+  have h₃ := isStepChain_bandOperation hD hLL hΩ hΩ₁ hm₀ hA₀ hc hL hk2 P rank R hlarge done
     (auxBirthC_insertsOne Bl.oldLabel Bl.finalLabel (Bl.nbrLabel e)) hA hC e
     (g₀ := fun _ => Bl.nbrLabel e) (hU _ (Or.inr (Or.inr (Or.inl rfl))))
     (hU _ (Or.inr (Or.inr (Or.inr (Or.inl rfl))))) hr hb
@@ -90,8 +90,8 @@ to the guide with `e` completed by `20` bounded changes with the bounds of the s
 rewrites; its frames at both ends are treated at no mark.
 
 Polynomial-PEPS manuscript, `06-geometry.tex`, lines 207–221 and 328–339. -/
-theorem isStepChain_mainSteps (hD : IsAngularScale q J Δ a A₀ m₀ 60 D L₀') (hLL : L₀' ≤ L)
-    (hΩ : h.IsGappedGroundState E₀ Ω Δ) (hm₀ : 2 ≤ m₀) (hA₀ : 1 ≤ A₀)
+theorem isStepChain_mainSteps (hD : IsAngularScale q G a A₀ m₀ 60 D L₀') (hLL : L₀' ≤ L)
+    (hΩ : G L Ω) (hΩ₁ : ‖Ω‖ = 1) (hm₀ : 2 ≤ m₀) (hA₀ : 1 ≤ A₀)
     (hc : IsProtocolConstants K₀ ε₀ ν a D B₀) (hL : 2 ≤ L) (hk2 : 2 ^ k < 2 * L)
     (P : AdaptivePatchSupply (cellCenterPos L) Ω B₀ C c 60 L) (rank : GuideLabel → ℕ)
     (R : RepaintedSquare k) (hlarge : K₀ * (D * Real.log L) < (2 : ℝ) ^ (R.1.1 : ℕ))
@@ -113,22 +113,22 @@ theorem isStepChain_mainSteps (hD : IsAngularScale q J Δ a A₀ m₀ 60 D L₀'
   have hU : ∀ W ∈ mainWords Bl.oldLabel Bl.finalLabel (Bl.nbrLabel e),
       Bl.IsUnmodifiedGuide (Bl.mainGuide E e W) := fun W hW =>
     Or.inr (Or.inr (Or.inr (Or.inl ⟨E, e, W, hW, rfl⟩)))
-  have h₁ := isStepChain_bandOperation hD hLL hΩ hm₀ hA₀ hc hL hk2 P rank R hlarge done
+  have h₁ := isStepChain_bandOperation hD hLL hΩ hΩ₁ hm₀ hA₀ hc hL hk2 P rank R hlarge done
     (mainDeathC_insertsOne Bl.oldLabel Bl.finalLabel (Bl.nbrLabel e)) hA hC e
     (g₀ := Bl.completedGuide E) (hU _ (Or.inr (Or.inl rfl)))
     (hU _ (Or.inr (Or.inr (Or.inl rfl)))) hr hb
     hK hpt
-  have h₂ := isStepChain_bandOperation hD hLL hΩ hm₀ hA₀ hc hL hk2 P rank R hlarge done
+  have h₂ := isStepChain_bandOperation hD hLL hΩ hΩ₁ hm₀ hA₀ hc hL hk2 P rank R hlarge done
     (mainDeathA_insertsOne Bl.oldLabel Bl.finalLabel (Bl.nbrLabel e)) hB hA e
     (g₀ := Bl.completedGuide E) (hU _ (Or.inr (Or.inr (Or.inl rfl))))
     (hU _ (Or.inr (Or.inr (Or.inr (Or.inl rfl))))) hr hb
     hK hpt
-  have h₃ := isStepChain_bandOperation hD hLL hΩ hm₀ hA₀ hc hL hk2 P rank R hlarge done
+  have h₃ := isStepChain_bandOperation hD hLL hΩ hΩ₁ hm₀ hA₀ hc hL hk2 P rank R hlarge done
     (mainBirthC_insertsOne Bl.finalLabel (Bl.nbrLabel e)) hB hC e
     (g₀ := Bl.completedGuide E) (hU _ (Or.inr (Or.inr (Or.inr (Or.inl rfl)))))
     (hU _ (Or.inr (Or.inr (Or.inr (Or.inr (Or.inl rfl)))))) hr hb
     hK hpt
-  have h₄ := isStepChain_bandOperation hD hLL hΩ hm₀ hA₀ hc hL hk2 P rank R hlarge done
+  have h₄ := isStepChain_bandOperation hD hLL hΩ hΩ₁ hm₀ hA₀ hc hL hk2 P rank R hlarge done
     (mainDeathB_insertsOne Bl.finalLabel (Bl.nbrLabel e)) hC hB e
     (g₀ := Bl.completedGuide E) (hU _ (Or.inr (Or.inr (Or.inr (Or.inr (Or.inl rfl))))))
     (hU _ (Or.inr (Or.inr (Or.inr (Or.inr (Or.inr rfl)))))) hr hb

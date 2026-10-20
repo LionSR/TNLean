@@ -70,8 +70,8 @@ manuscript, Proposition 4.1, `03-patches.tex`, lines 484–563, especially
 `eq:patch-explicit-radius` and `eq:patch-distance-to-cylinders`, revision
 `adc7f1241b42e322a6451854ab7e4b4c146bf78a`. -/
 theorem SquareEntropyAreaLawAt.uniform_nestedPatch_cylinders
-    {q : ℕ} {J Δ C_A : ℝ} (hA : SquareEntropyAreaLawAt q J Δ C_A) (hq : 2 ≤ q)
-    (hJ : 0 < J) (hΔ : 0 < Δ) {B₀ p : ℝ} (hB₀ : 0 < B₀) (hp : 0 < p) :
+    {q : ℕ} {J Δ C_A : ℝ} (hA : SquareEntropyAreaLawAt q (IsSquareGroundState q J Δ) C_A)
+    (hq : 2 ≤ q) (hJ : 0 < J) (hΔ : 0 < Δ) {B₀ p : ℝ} (hB₀ : 0 < B₀) (hp : 0 < p) :
     ∀ (L : ℕ), 2 ≤ L →
       ∀ (h : SquareHamiltonian L q J) (E₀ : ℝ) (Ω : StateSpace L q),
         h.IsGappedGroundState E₀ Ω Δ →
@@ -117,7 +117,7 @@ theorem SquareEntropyAreaLawAt.uniform_nestedPatch_cylinders
     U.apply_symm_apply _
   have hS (j : Fin m) : Entropy.regionEntropy (n := fun _ : Lattice.Site Λ ↦ q) (regions j)
       (dependentGlobalConfigIsometry Ωᵤ) ≤ C * (1 + u) := by
-    simpa only [hΩeq] using hentropy L h E₀ Ω hgs center u (by linarith) j
+    simpa only [hΩeq] using hentropy L Ω ⟨h, E₀, hgs⟩ center u (by linarith) j
   have hgrowth := log_regularizedPatchMinimum_exp_neg_le_of_entropy_distance
     (n := fun _ : Lattice.Site Λ ↦ q) regions hdata.2.2 a ha.1 Ωᵤ hdata.2.1
     hCpos (by linarith : 0 ≤ u) hbounds.2.1 hS

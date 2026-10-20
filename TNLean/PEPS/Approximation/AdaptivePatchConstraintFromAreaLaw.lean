@@ -76,14 +76,13 @@ Source: polynomial-PEPS manuscript, Proposition 4.1, `03-patches.tex`,
 lines 26–54 and 534–603, revision
 `adc7f1241b42e322a6451854ab7e4b4c146bf78a`. -/
 theorem SquareEntropyAreaLawAt.adaptivePatchSupply
-    {q : ℕ} {J Δ C_A : ℝ} (hA : SquareEntropyAreaLawAt q J Δ C_A) (hq : 2 ≤ q)
-    (hJ : 0 < J) (hΔ : 0 < Δ) {B₀ p : ℝ} (hB₀ : 0 < B₀) (hp : 0 < p) :
-    ∀ L : ℕ, 2 ≤ L → ∀ h : SquareHamiltonian L q J, ∀ E₀ : ℝ, ∀ Ω : StateSpace L q,
-      h.IsGappedGroundState E₀ Ω Δ →
+    {q : ℕ} {J Δ C_A : ℝ} (hA : SquareEntropyAreaLawAt q (IsSquareGroundState q J Δ) C_A)
+    (hq : 2 ≤ q) (hJ : 0 < J) (hΔ : 0 < Δ) {B₀ p : ℝ} (hB₀ : 0 < B₀) (hp : 0 < p) :
+    ∀ L : ℕ, 2 ≤ L → ∀ Ω : StateSpace L q, IsSquareGroundState q J Δ L Ω →
         AdaptivePatchSupply (latticePos L) Ω B₀ (adaptivePatchPrefactor q B₀)
           (adaptivePatchExponent q J Δ B₀ p C_A) p L := by
   classical
-  intro L hL h E₀ Ω hgs z u hu huL
+  intro L hL Ω ⟨h, E₀, hgs⟩ z u hu huL
   suffices hpatch : HasAdaptivePatch
       (fun x : Lattice.Site (AreaLaw.rectangularDomain L L) ↦
         ((x.1.1 : ℝ), (x.1.2 : ℝ))) (squareAreaLawState Ω)
