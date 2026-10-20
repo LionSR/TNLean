@@ -99,7 +99,7 @@ namespace TNLean.MPS.AreaLaw.ChainSweep
 
 open TNLean.PEPS.PairEffect TNLean.PEPS.EncodedFrame
 
-variable {L w q : ℕ} {pos : Fin L → ℝ × ℝ}
+variable {L w q : ℕ}
 
 /-- The existing Mathlib finite-product equivalence, in Path's chronological
 order. Source: Part II, con:sweep, lines 330–343. -/
@@ -123,16 +123,16 @@ private theorem middleSlotEquiv_recompose (n : Fin (sweepOperationCount L w)) :
 /-- This is precisely the existing Path boundary identity at the selected
 stage and slot, including its final slot. Source: Part II, prop:sweep, lines 375–378. -/
 private theorem middleSlot_boundaries (n : Fin (sweepOperationCount L w)) :
-    operationFrames L w q pos n.val = stageBoundaryFrames L w q pos
+    operationFrames L w n.val = stageBoundaryFrames L w
         (middleSlotEquiv L w n).1 (middleSlotEquiv L w n).2.val ∧
-      operationFrames L w q pos (n.val + 1) = stageBoundaryFrames L w q pos
+      operationFrames L w (n.val + 1) = stageBoundaryFrames L w
         (middleSlotEquiv L w n).1 ((middleSlotEquiv L w n).2.val + 1) := by
-  have h := operationFrames_step (q := q) (pos := pos)
+  have h := operationFrames_step (q := q)
     (middleSlotEquiv L w n).1 (middleSlotEquiv L w n).2
   simpa only [middleSlotEquiv_recompose] using h
 
 private abbrev middleLayout (n : ℕ) : Layout (Party L w) :=
-  stackRegs (operationFrames L w q pos n) []
+  stackRegs (operationFrames L w n) []
 
 /-- Only a reindexing of the existing prescribed participant sets; after the
 last actual operation the allowed set is empty. Source: Part II, con:sweep. -/
@@ -142,44 +142,44 @@ private def middleParticipants (L w : ℕ) (n : ℕ) : Set (Party L w) :=
   else ∅
 
 variable (c : (k : Fin (stageCount L w)) → (j : Fin 18) → OriginalCircuit
-  (stackRegs (stageBoundaryFrames L w q pos k j.val) [])
-  (stackRegs (stageBoundaryFrames L w q pos k (j.val + 1)) []))
+  (stackRegs (stageBoundaryFrames L w k j.val) [])
+  (stackRegs (stageBoundaryFrames L w k (j.val + 1)) []))
 
 /-- Extend the exact local family on the already defined operationFrames.
 The tail is an identity; casts use only Path's derived frame equalities.
 Source: Part II, con:sweep, lines 330–343. -/
 def sweepMiddleStep (n : ℕ) : OriginalCircuit
-    (middleLayout (L := L) (w := w) (q := q) (pos := pos) n)
-    (middleLayout (L := L) (w := w) (q := q) (pos := pos) (n + 1)) :=
+    (middleLayout (L := L) (w := w) (q := q) n)
+    (middleLayout (L := L) (w := w) (q := q) (n + 1)) :=
   if hn : n < sweepOperationCount L w then
     (c (middleSlotEquiv L w ⟨n, hn⟩).1 (middleSlotEquiv L w ⟨n, hn⟩).2).castLayouts
       (congrArg (fun Fs ↦ stackRegs Fs [])
-        (middleSlot_boundaries (q := q) (pos := pos) ⟨n, hn⟩).1.symm)
+        (middleSlot_boundaries (q := q) ⟨n, hn⟩).1.symm)
       (congrArg (fun Fs ↦ stackRegs Fs [])
-        (middleSlot_boundaries (q := q) (pos := pos) ⟨n, hn⟩).2.symm)
+        (middleSlot_boundaries (q := q) ⟨n, hn⟩).2.symm)
   else
-    (OriginalCircuit.id (middleLayout (L := L) (w := w) (q := q) (pos := pos) n)).castLayouts rfl
+    (OriginalCircuit.id (middleLayout (L := L) (w := w) (q := q) n)).castLayouts rfl
       (congrArg (fun Fs ↦ stackRegs Fs [])
-        ((operationFrames_of_le (q := q) (pos := pos)
+        ((operationFrames_of_le (q := q)
           (by omega : sweepOperationCount L w ≤ n)).trans
-          (operationFrames_of_le (q := q) (pos := pos)
+          (operationFrames_of_le (q := q)
             (by omega : sweepOperationCount L w ≤ n + 1)).symm))
 
 /-- The middle is the existing chronological sequence, with its proven initial
 and terminal frame lists. No trajectory or endpoint is supplied.
 Source: Part II, prop:sweep, lines 365–378. -/
 def sweepMiddleCircuit : OriginalCircuit
-    (stackRegs (initialFrames L w q pos) []) (stackRegs (terminalFrames L w q pos) []) :=
+    (stackRegs (initialFrames L w) []) (stackRegs (terminalFrames L w) []) :=
   (OriginalCircuit.sequence
-    (middleLayout (L := L) (w := w) (q := q) (pos := pos)) (sweepMiddleStep c)
+    (middleLayout (L := L) (w := w) (q := q)) (sweepMiddleStep c)
     (sweepOperationCount L w)).castLayouts
-      (congrArg (fun Fs ↦ stackRegs Fs []) (operationFrames_zero L w q pos))
+      (congrArg (fun Fs ↦ stackRegs Fs []) (operationFrames_zero L w))
       (congrArg (fun Fs ↦ stackRegs Fs []) (operationFrames_last (L := L) (w := w)
-        (q := q) (pos := pos)))
+        (q := q)))
 
 variable [NeZero q]
 
-private theorem castFrames_bounded {F G F' G' : List (Frame pos q (Party L w))}
+private theorem castFrames_bounded {F G F' G' : List (Sheet (Fin L) (Party L w))}
     (d : OriginalCircuit (stackRegs F []) (stackRegs G [])) (hF : F = F') (hG : G = G')
     {S : Set (Party L w)} {r K : ℕ} {ε : ℝ} (Ω : EuclideanSpace ℂ (Fin L → Fin q))
     (h : d.IsBoundedChange S r K ε (framesVec Ω F) (framesVec Ω G)) :
@@ -190,7 +190,7 @@ private theorem castFrames_bounded {F G F' G' : List (Frame pos q (Party L w))}
   cases hG
   exact h
 
-private theorem castFrames_error {F G F' G' : List (Frame pos q (Party L w))}
+private theorem castFrames_error {F G F' G' : List (Sheet (Fin L) (Party L w))}
     (d : OriginalCircuit (stackRegs F []) (stackRegs G [])) (hF : F = F') (hG : G = G')
     (Ω : EuclideanSpace ℂ (Fin L → Fin q)) :
     ‖(d.castLayouts (congrArg (fun Fs ↦ stackRegs Fs []) hF)
@@ -207,13 +207,13 @@ now for every actual stage. These local circuits are the sole conditional
 construction input; no total participation or trajectory is supplied. -/
 variable (hc : ∀ k j, (c k j).IsBoundedChange (stageParticipants k j) 1 1
     (4 * (L : ℝ) ^ (-12 : ℤ))
-    (framesVec Ω (stageBoundaryFrames L w q pos k j.val))
-    (framesVec Ω (stageBoundaryFrames L w q pos k (j.val + 1))) ∧
+    (framesVec Ω (stageBoundaryFrames L w k j.val))
+    (framesVec Ω (stageBoundaryFrames L w k (j.val + 1))) ∧
   (c k j).IsSourceBounded 1 ∧ (c k j).nonprivateCount ≤ 1 ∧
   ((k.val = 0 ∧ 3 ≤ j.val ∧ j.val < 10) → (c k j).nonprivateCount = 0 ∧
-    ‖(c k j).eval (framesVec Ω (stageBoundaryFrames L w q pos k j.val)) -
-      framesVec Ω (stageBoundaryFrames L w q pos k (j.val + 1))‖ = 0 ∧
-    HEq (c k j) (OriginalCircuit.id (stackRegs (stageBoundaryFrames L w q pos k j.val) []))))
+    ‖(c k j).eval (framesVec Ω (stageBoundaryFrames L w k j.val)) -
+      framesVec Ω (stageBoundaryFrames L w k (j.val + 1))‖ = 0 ∧
+    HEq (c k j) (OriginalCircuit.id (stackRegs (stageBoundaryFrames L w k j.val) []))))
 
 include hc
 
@@ -222,18 +222,18 @@ operation is an identity with zero reference error. Source: Part II, prop:sweep.
 private theorem middleStep_bounded (n : ℕ) :
     (sweepMiddleStep c n).IsBoundedChange (middleParticipants L w n) 1 1
       (if n < sweepOperationCount L w then 4 * (L : ℝ) ^ (-12 : ℤ) else 0)
-      (framesVec Ω (operationFrames L w q pos n))
-      (framesVec Ω (operationFrames L w q pos (n + 1))) := by
+      (framesVec Ω (operationFrames L w n))
+      (framesVec Ω (operationFrames L w (n + 1))) := by
   classical
   by_cases hn : n < sweepOperationCount L w
   · simp only [sweepMiddleStep, middleParticipants, dite_eq_left hn, ite_eq_left hn]
     exact castFrames_bounded _
-      (middleSlot_boundaries (q := q) (pos := pos) ⟨n, hn⟩).1.symm
-      (middleSlot_boundaries (q := q) (pos := pos) ⟨n, hn⟩).2.symm Ω (hc _ _).1
+      (middleSlot_boundaries (q := q) ⟨n, hn⟩).1.symm
+      (middleSlot_boundaries (q := q) ⟨n, hn⟩).2.symm Ω (hc _ _).1
   · simp only [sweepMiddleStep, middleParticipants, dite_eq_right hn, ite_eq_right hn]
     exact castFrames_bounded _ rfl
-      ((operationFrames_of_le (q := q) (pos := pos) (Nat.le_of_not_gt hn)).trans
-        (operationFrames_of_le (q := q) (pos := pos)
+      ((operationFrames_of_le (q := q) (Nat.le_of_not_gt hn)).trans
+        (operationFrames_of_le (q := q)
           (by omega : sweepOperationCount L w ≤ n + 1)).symm) Ω
       (OriginalCircuit.isBoundedChange_id ∅ 1 1 le_rfl _)
 
@@ -250,7 +250,7 @@ omit hc [NeZero q] in
 Source: Part II, con:sweep, end of the stage loop. -/
 theorem sweepMiddleStep_tail_identity (n : ℕ) (hn : sweepOperationCount L w ≤ n) :
     HEq (sweepMiddleStep c n)
-      (OriginalCircuit.id (middleLayout (L := L) (w := w) (q := q) (pos := pos) n)) := by
+      (OriginalCircuit.id (middleLayout (L := L) (w := w) (q := q) n)) := by
   simp only [sweepMiddleStep, dite_eq_right (not_lt.mpr hn)]
   exact OriginalCircuit.castLayouts_id_heq _ _ _ HEq.rfl
 
@@ -259,7 +259,7 @@ Source: Part II, con:sweep, exceptional left transfer, lines 337–338. -/
 theorem sweepMiddleStep_first_padding (k : Fin (stageCount L w)) (j : Fin 18)
     (hk : k.val = 0) (hj : 3 ≤ j.val ∧ j.val < 10) :
     HEq (sweepMiddleStep c (18 * k.val + j.val))
-      (OriginalCircuit.id (middleLayout (L := L) (w := w) (q := q) (pos := pos)
+      (OriginalCircuit.id (middleLayout (L := L) (w := w) (q := q)
         (18 * k.val + j.val))) := by
   have hn : 18 * k.val + j.val < sweepOperationCount L w := by
     have hki := k.isLt
@@ -275,7 +275,7 @@ theorem sweepMiddleStep_first_padding (k : Fin (stageCount L w)) (j : Fin 18)
   simp only [sweepMiddleStep, dite_eq_left hn]
   have hid := (hc k j).2.2.2 ⟨hk, hj.1, hj.2⟩
   have hid' : HEq (c (middleSlotEquiv L w n).1 (middleSlotEquiv L w n).2)
-      (OriginalCircuit.id (stackRegs (stageBoundaryFrames L w q pos
+      (OriginalCircuit.id (stackRegs (stageBoundaryFrames L w
         (middleSlotEquiv L w n).1 (middleSlotEquiv L w n).2.val) [])) := by
     rw [he]
     exact hid.2.2
@@ -308,7 +308,7 @@ theorem sweepMiddleCircuit_participation_le_forty (p : Party L w) :
   unfold sweepMiddleCircuit
   rw [OriginalCircuit.participationCount_castLayouts]
   exact (OriginalCircuit.participationCount_sequence_le_indicators
-    (middleLayout (L := L) (w := w) (q := q) (pos := pos)) (sweepMiddleStep c)
+    (middleLayout (L := L) (w := w) (q := q)) (sweepMiddleStep c)
     (sweepOperationCount L w) (fun n _ ↦ middleStep_bounded c Ω hc n) p).trans
       ((middleIndicators_eq_scheduled (L := L) (w := w) p).le.trans
         (scheduledParticipationCount_le_forty p))
@@ -325,7 +325,7 @@ theorem sweepMiddleCircuit_nonprivateCount_le :
     _ = _ := by simp
 
 private theorem middleSequence_sourceBounded (n : ℕ) :
-    (OriginalCircuit.sequence (middleLayout (L := L) (w := w) (q := q) (pos := pos))
+    (OriginalCircuit.sequence (middleLayout (L := L) (w := w) (q := q))
       (sweepMiddleStep c) n).IsSourceBounded 1 := by
   induction n with
   | zero => trivial
@@ -353,17 +353,17 @@ sum-bound obtained from the existing contraction-trajectory theorem.
 No actual output, error or trajectory is supplied as a hypothesis.
 Source: Part II, prop:sweep, vector error assertion, lines 355–359. -/
 theorem sweepMiddleCircuit_norm_and_error (hΩ : ‖Ω‖ = 1) :
-    ‖(sweepMiddleCircuit c).eval (framesVec Ω (initialFrames L w q pos))‖ ≤ 1 ∧
-      ‖(sweepMiddleCircuit c).eval (framesVec Ω (initialFrames L w q pos)) -
-          framesVec Ω (terminalFrames L w q pos)‖ ≤
+    ‖(sweepMiddleCircuit c).eval (framesVec Ω (initialFrames L w))‖ ≤ 1 ∧
+      ‖(sweepMiddleCircuit c).eval (framesVec Ω (initialFrames L w)) -
+          framesVec Ω (terminalFrames L w)‖ ≤
         (sweepOperationCount L w : ℝ) * (4 * (L : ℝ) ^ (-12 : ℤ)) := by
-  have hnorm : ‖(sweepMiddleCircuit c).eval (framesVec Ω (initialFrames L w q pos))‖ ≤ 1 :=
+  have hnorm : ‖(sweepMiddleCircuit c).eval (framesVec Ω (initialFrames L w))‖ ≤ 1 :=
     ((sweepMiddleCircuit c).norm_eval_le_norm _).trans (norm_initialFrames hΩ).le
   refine ⟨hnorm, ?_⟩
-  let a := middleLayout (L := L) (w := w) (q := q) (pos := pos)
+  let a := middleLayout (L := L) (w := w) (q := q)
   let step := sweepMiddleStep c
   let N := sweepOperationCount L w
-  let ref : (n : ℕ) → Mem (a n) := fun n ↦ framesVec Ω (operationFrames L w q pos n)
+  let ref : (n : ℕ) → Mem (a n) := fun n ↦ framesVec Ω (operationFrames L w n)
   let x : (n : ℕ) → Mem (a n) := fun n ↦
     (OriginalCircuit.sequence a step n).eval (ref 0)
   let S : (n : ℕ) → Mem (a n) →ₗ[ℂ] Mem (a (n + 1)) := fun n ↦ (step n).eval.toLinearMap
@@ -382,8 +382,8 @@ theorem sweepMiddleCircuit_norm_and_error (hΩ : ‖Ω‖ = 1) :
         simpa only [S, step, ref, ContinuousLinearMap.coe_coe, ite_eq_left hn'] using hb
       _ = _ := by simp
   unfold sweepMiddleCircuit
-  rw [castFrames_error _ (operationFrames_zero L w q pos)
-    (operationFrames_last (L := L) (w := w) (q := q) (pos := pos)) Ω]
+  rw [castFrames_error _ (operationFrames_zero L w)
+    (operationFrames_last (L := L) (w := w) (q := q)) Ω]
   exact herr'
 
 end TNLean.MPS.AreaLaw.ChainSweep

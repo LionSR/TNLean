@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.ProtocolTerminalCoordinates
-import TNLean.PEPS.Approximation.SheetStackRawInitial
+import TNLean.Lattice.Sheet.SheetStack
 
 /-!
 # Private initialization of the chain sheets
@@ -25,7 +25,7 @@ noncomputable section
 
 namespace TNLean.MPS.AreaLaw.ChainSweep
 
-open TNLean.PEPS.PairEffect TNLean.PEPS.EncodedFrame
+open TNLean.Lattice TNLean.PEPS.PairEffect
 
 /-- All auxiliary copy labels, each occurring once, in a fixed order.
 Source: Part II, `con:band`, lines 265–272, and `con:sweep`, lines 336–340. -/
@@ -42,63 +42,58 @@ def initialAuxiliaryHolder (L w : ℕ) : AuxiliaryCopy L w → Party L w
 /-- The main copy at R_0, followed by the distinct labelled auxiliary copies,
 initially held privately at their actual band holders.
 Source: Part II, `prop:sweep`, item 1, lines 349–351. -/
-def initialFrames (L w q : ℕ) (pos : Fin L → ℝ × ℝ) :
-    List (Frame pos q (Party L w)) :=
-  Frame.raw (fun _ ↦ .inl (0 : Fin (stageCount L w + 1))) ::
+def initialFrames (L w : ℕ) :
+    List (Sheet (Fin L) (Party L w)) :=
+  Sheet.mk (fun _ ↦ .inl (0 : Fin (stageCount L w + 1))) ::
     (initialAuxiliaryOrder L w).map fun c ↦
-      Frame.raw (fun _ ↦ initialAuxiliaryHolder L w c)
+      Sheet.mk (fun _ ↦ initialAuxiliaryHolder L w c)
 
 /-- There is one main copy, m right copies and m−1 left copies, with truncated
 subtraction when m=0. Source: Part II, `con:sweep`, lines 330–343. -/
-theorem length_initialFrames (L w q : ℕ) (pos : Fin L → ℝ × ℝ) :
-    (initialFrames L w q pos).length =
+theorem length_initialFrames (L w : ℕ) :
+    (initialFrames L w).length =
       1 + stageCount L w + (stageCount L w - 1) := by
   simp [initialFrames, initialAuxiliaryOrder, AuxiliaryCopy, Fintype.card_sum]
   omega
 
-/-- Every initial sheet is a raw copy held entirely by one party.
+/-- Every initial sheet is held entirely by one party.
 Source: Part II, `prop:sweep`, item 1, lines 349–351. -/
-theorem mem_initialFrames {L w q : ℕ} {pos : Fin L → ℝ × ℝ}
-    {F : Frame pos q (Party L w)} (hF : F ∈ initialFrames L w q pos) :
-    ∃ p : Party L w, F = Frame.raw (fun _ ↦ p) := by
+theorem mem_initialFrames {L w : ℕ}
+    {F : Sheet (Fin L) (Party L w)} (hF : F ∈ initialFrames L w) :
+    ∃ p : Party L w, F = Sheet.mk (fun _ ↦ p) := by
   rcases List.mem_cons.1 (by simpa only [initialFrames] using hF) with rfl | hF
   · exact ⟨_, rfl⟩
   · obtain ⟨c, _, rfl⟩ := List.mem_map.1 hF
     exact ⟨_, rfl⟩
 
-/-- The actual product of all initial raw copies has norm one.
+/-- The actual product of all initial copies has norm one.
 Source: Part II, `prop:sweep`, item 1, lines 349–351. -/
-theorem norm_initialFrames {L w q : ℕ} [NeZero q] {pos : Fin L → ℝ × ℝ}
+theorem norm_initialFrames {L w q : ℕ}
     {Ω : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Ω‖ = 1) :
-    ‖framesVec Ω (initialFrames L w q pos)‖ = 1 := by
-  apply norm_framesVec_of_holes_eq_nil hΩ
-  intro F hF
-  obtain ⟨p, rfl⟩ := mem_initialFrames hF
-  rfl
+    ‖framesVec (Sheet.refFamily Ω) (initialFrames L w)‖ = 1 :=
+  Sheet.norm_framesVec hΩ _
 
 /-- The specified initial copies are prepared exactly from a product vector
 across all parties, with no nonprivate gate. The memory and vector of each
 party are constructed from the copies it holds, rather than supplied.
 Source: Part II, `prop:sweep`, item 1, lines 349–351. -/
-theorem exists_initialization {L w q : ℕ} [NeZero q] {pos : Fin L → ℝ × ℝ}
+theorem exists_initialization {L w q : ℕ}
     (hL : 0 < L) {Ω : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Ω‖ = 1) :
-    let Fs := initialFrames L w q pos
-    let holder : Frame pos q (Party L w) → Party L w := fun F ↦ F.owner ⟨0, hL⟩
-    ∃ hx : ∀ p, ‖framesVec Ω (Fs.filter fun F ↦ holder F = p)‖ = 1,
+    let Fs := initialFrames L w
+    let holder : Sheet (Fin L) (Party L w) → Party L w := fun F ↦ F.owner ⟨0, hL⟩
+    ∃ hx : ∀ p, ‖framesVec (Sheet.refFamily Ω) (Fs.filter fun F ↦ holder F = p)‖ = 1,
       ∃ c : OriginalCircuit
-          (ProductInput.wholePartyLayout fun p ↦ framesSpace (Fs.filter fun F ↦ holder F = p))
-          (stackRegs Fs []),
+          (ProductInput.wholePartyLayout fun p ↦
+            framesSpace (Sheet.regs q) (Fs.filter fun F ↦ holder F = p))
+          (stackRegs (Sheet.regs q) Fs []),
         c.nonprivateCount = 0 ∧
         (∀ (S : Set (Party L w)) g, (↑(c.participants g) : Set (Party L w)) ⊆ S) ∧
         (∀ r s, c.IsExpansionBounded r s) ∧ (∀ K, c.IsMonomialBounded K) ∧
-        c.eval (ProductInput.ofAllParties _ _ hx).vector = framesVec Ω Fs := by
+        c.eval (ProductInput.ofAllParties _ _ hx).vector = framesVec (Sheet.refFamily Ω) Fs := by
   classical
-  apply exists_originalCircuit_initial_of_holes_eq_nil hΩ
-  · intro F hF
-    obtain ⟨p, rfl⟩ := mem_initialFrames hF
-    rfl
-  · intro F hF x
-    obtain ⟨p, rfl⟩ := mem_initialFrames hF
-    rfl
+  apply Sheet.exists_originalCircuit_initial_of_owner hΩ
+  intro F hF x
+  obtain ⟨p, rfl⟩ := mem_initialFrames hF
+  rfl
 
 end TNLean.MPS.AreaLaw.ChainSweep

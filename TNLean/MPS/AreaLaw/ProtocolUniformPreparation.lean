@@ -43,21 +43,21 @@ def preparationConstruction {L w q : ℕ} [NeZero q]
     (Ω : EuclideanSpace ℂ (Fin L → Fin q))
     (pos : Fin L → ℝ × ℝ) (hL : 0 < L)
     (hx : ∀ p : Party L w,
-      ‖framesVec Ω ((initialFrames L w q pos).filter
+      ‖framesVec Ω ((initialFrames L w).filter
         fun F ↦ F.owner ⟨0, hL⟩ = p)‖ = 1)
     (C : OriginalCircuit
       (ProductInput.wholePartyLayout fun p : Party L w ↦
-        framesSpace ((initialFrames L w q pos).filter
+        framesSpace ((initialFrames L w).filter
           fun F ↦ F.owner ⟨0, hL⟩ = p))
       (familyPhysicalOutputLayout (physicalDimension L w q)
         (physicalOrder L w) (privateLayout L w q))) :
     DistributedConstruction (Party L w) where
   nonemptyParties := ⟨.inl (0 : Fin (stageCount L w + 1))⟩
-  initialSpace := fun p ↦ framesSpace ((initialFrames L w q pos).filter
+  initialSpace := fun p ↦ framesSpace ((initialFrames L w).filter
     fun F ↦ F.owner ⟨0, hL⟩ = p)
   finite_initialSpace := fun p ↦ Layout.finiteDimensional_mem_of_registers _
     (TNLean.PEPS.Approximation.finiteDimensional_of_mem_stackRegs _)
-  initialVector := fun p ↦ framesVec Ω ((initialFrames L w q pos).filter
+  initialVector := fun p ↦ framesVec Ω ((initialFrames L w).filter
     fun F ↦ F.owner ⟨0, hL⟩ = p)
   norm_initialVector := hx
   physicalDimension := physicalDimension L w q

@@ -6,11 +6,11 @@ Authors: TNLean contributors
 import TNLean.MPS.AreaLaw.ProtocolSweepFrames
 
 /-!
-# Retired auxiliary frames at their original copy labels
+# Retired auxiliary sheets at their original copy labels
 
-The actual corrected one-band auxiliary frame is instantiated at each right or
-positive-stage left band. The endpoint is the raw
-frame of the existing terminal auxiliary owner, with the original copy label unchanged.
+The actual corrected one-band auxiliary sheet is instantiated at each right or
+positive-stage left band. The endpoint is the sheet of the existing terminal auxiliary owner,
+with the original copy label unchanged.
 No circuit, memory trajectory or final auxiliary endpoint is supplied as a hypothesis.
 
 **Local fix (terminal auxiliary registers):** A retired copy retains its A and B strips and
@@ -27,24 +27,24 @@ noncomputable section
 
 namespace TNLean.MPS.AreaLaw.ChainSweep
 
-open TNLean.PEPS.EncodedFrame
+open TNLean.Lattice
 
-variable {L w q : ℕ} {pos : Fin L → ℝ × ℝ}
+variable {L w : ℕ}
 
-/-- A right copy uses the actual main frame produced by the preceding left transfer.
+/-- A right copy uses the actual main sheet produced by the preceding left transfer.
 Source: Part II, con:sweep, move (4), lines 339–340. -/
-def rightRetiredAuxiliary (L w q : ℕ) (pos : Fin L → ℝ × ℝ)
-    (k : Fin (stageCount L w)) : Frame pos q (Party L w) :=
-  OneBand.aux₄ (leftBandMain L w q pos k).owner
+def rightRetiredAuxiliary (L w : ℕ)
+    (k : Fin (stageCount L w)) : Sheet (Fin L) (Party L w) :=
+  OneBand.aux₄ (leftBandMain L w k).owner
     (.inl k.castSucc) (.inl k.succ) (.inr k) ((k.val + 1) * (20 * w)) w
 
 /-- Left copy j is used at stage j+1. Its existence supplies the positive-stage guard;
 no left copy or predecessor party is introduced at stage zero.
 Source: Part II, con:sweep, move (3), lines 336–338. -/
-def leftRetiredAuxiliary (L w q : ℕ) (pos : Fin L → ℝ × ℝ)
-    (j : Fin (stageCount L w - 1)) : Frame pos q (Party L w) :=
+def leftRetiredAuxiliary (L w : ℕ)
+    (j : Fin (stageCount L w - 1)) : Sheet (Fin L) (Party L w) :=
   let k : Fin (stageCount L w) := ⟨j.val + 1, by omega⟩
-  OneBand.aux₄ (afterBlockBirth L w q pos k).owner
+  OneBand.aux₄ (afterBlockBirth L w k).owner
     (.inl k.castSucc) (.inr k) (.inr ⟨j.val, by omega⟩) ((j.val + 1) * (20 * w)) w
 
 /-- Under the actual left margin, truncated natural subtraction is ordinary integer
@@ -63,11 +63,11 @@ private theorem aux₄_eq_raw_integer
     (own : Fin L → Party L w) (A B C : Party L w) (a : ℕ)
     (hw : 1 ≤ w) (hleft : 8 * w ≤ a) (hright : a + 2 * w ≤ L)
     (hC : ∀ x ∈ interval L (a - 8 * w) a, own x = C) :
-    OneBand.aux₄ (pos := pos) (q := q) own A B C a w = Frame.raw (fun x ↦
+    OneBand.aux₄ own A B C a w = Sheet.mk (fun x ↦
       if (a : ℤ) - 3 * w ≤ x.val ∧ (x.val : ℤ) < (a : ℤ) - 2 * w then A
       else if (a : ℤ) - 2 * w ≤ x.val ∧ (x.val : ℤ) < (a : ℤ) - w then B else C) := by
   rw [OneBand.aux₄_eq_raw own A B C a w hw hleft hright hC]
-  apply congrArg (Frame.raw (pos := pos) (q := q))
+  apply congrArg (Sheet.mk)
   funext x
   have h32 := mem_interval_nat_sub_iff_int a (3 * w) (2 * w) (by omega) (by omega) x
   have h21 := mem_interval_nat_sub_iff_int a (2 * w) w (by omega) (by omega) x
@@ -79,17 +79,17 @@ No desired auxiliary endpoint is assumed. Source: Part II, con:band, lines 271�
 and con:sweep, move (4), lines 339–340. -/
 theorem rightRetiredAuxiliary_eq_raw (hw : 1 ≤ w) (hL : 3 * (20 * w) ≤ L)
     (k : Fin (stageCount L w)) :
-    rightRetiredAuxiliary L w q pos k =
-      Frame.raw (fun x ↦ auxiliaryOwner L w (Sum.inl k, x)) := by
+    rightRetiredAuxiliary L w k =
+      Sheet.mk (fun x ↦ auxiliaryOwner L w (Sum.inl k, x)) := by
   have hmargin := stage_right_margin L w hL k
   have hleft : 8 * w ≤ (k.val + 1) * (20 * w) :=
     stage_left_margin w (k.val + 1) (by omega)
   have hright : (k.val + 1) * (20 * w) + 2 * w ≤ L := by
     nlinarith
-  have hC := (right_band_owners (pos := pos) (q := q) hw k).1
-  change OneBand.aux₄ (leftBandMain L w q pos k).owner
+  have hC := (right_band_owners hw k).1
+  change OneBand.aux₄ (leftBandMain L w k).owner
       (.inl k.castSucc) (.inl k.succ) (.inr k) ((k.val + 1) * (20 * w)) w =
-    Frame.raw (fun x ↦
+    Sheet.mk (fun x ↦
       if (((k.val + 1) * (20 * w) : ℕ) : ℤ) - 3 * w ≤ x.val ∧
           (x.val : ℤ) < (((k.val + 1) * (20 * w) : ℕ) : ℤ) - 2 * w
         then Sum.inl k.castSucc
@@ -104,21 +104,21 @@ The index j labels the copy; its activation stage is j+1. Source: Part II, con:b
 lines 271–272, and con:sweep, move (3), lines 336–338. -/
 theorem leftRetiredAuxiliary_eq_raw (hw : 1 ≤ w) (hL : 3 * (20 * w) ≤ L)
     (j : Fin (stageCount L w - 1)) :
-    leftRetiredAuxiliary L w q pos j =
-      Frame.raw (fun x ↦ auxiliaryOwner L w (Sum.inr j, x)) := by
+    leftRetiredAuxiliary L w j =
+      Sheet.mk (fun x ↦ auxiliaryOwner L w (Sum.inr j, x)) := by
   let k : Fin (stageCount L w) := ⟨j.val + 1, by omega⟩
   have hk : 0 < k.val := by simp [k]
   have hmargin := stage_right_margin L w hL k
   have hleft : 8 * w ≤ k.val * (20 * w) := stage_left_margin w k.val (by omega)
   have hright : k.val * (20 * w) + 2 * w ≤ L := by nlinarith
   have hC : ∀ x ∈ interval L (k.val * (20 * w) - 8 * w) (k.val * (20 * w)),
-      (afterBlockBirth L w q pos k).owner x =
+      (afterBlockBirth L w k).owner x =
         Sum.inr (⟨j.val, by omega⟩ : Fin (stageCount L w)) := by
     simpa only [k, Nat.add_sub_cancel] using
-      (left_band_owners (pos := pos) (q := q) hw k hk).1
-  change OneBand.aux₄ (afterBlockBirth L w q pos k).owner
+      (left_band_owners hw k hk).1
+  change OneBand.aux₄ (afterBlockBirth L w k).owner
       (.inl k.castSucc) (.inr k) (.inr ⟨j.val, by omega⟩) (k.val * (20 * w)) w =
-    Frame.raw (fun x ↦
+    Sheet.mk (fun x ↦
       if ((k.val * (20 * w) : ℕ) : ℤ) - 3 * w ≤ x.val ∧
           (x.val : ℤ) < ((k.val * (20 * w) : ℕ) : ℤ) - 2 * w
         then Sum.inl k.castSucc

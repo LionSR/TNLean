@@ -37,7 +37,7 @@ namespace TNLean.MPS.AreaLaw.ChainSweep
 
 open TNLean.PEPS.EncodedFrame
 
-variable {L w q : ℕ} {pos : Fin L → ℝ × ℝ}
+variable {L w q : ℕ}
 
 /-- The stage of the original labelled copy's band operation.
 Source: Part II, `con:sweep`, moves (3)–(4), lines 336–340. -/
@@ -47,51 +47,51 @@ def auxiliaryStage (L w : ℕ) : AuxiliaryCopy L w → ℕ
 
 /-- The actual band auxiliary endpoint at its original copy label.
 Source: Part II, `con:band`, lines 271–272, and `con:sweep`, lines 336–340. -/
-def retiredAuxiliaryFrame (L w q : ℕ) (pos : Fin L → ℝ × ℝ) :
-    AuxiliaryCopy L w → Frame pos q (Party L w)
-  | .inl j => rightRetiredAuxiliary L w q pos j
-  | .inr j => leftRetiredAuxiliary L w q pos j
+def retiredAuxiliaryFrame (L w : ℕ) :
+    AuxiliaryCopy L w → Sheet (Fin L) (Party L w)
+  | .inl j => rightRetiredAuxiliary L w j
+  | .inr j => leftRetiredAuxiliary L w j
 
 /-- Before stage s, only copies whose own band stage is earlier have retired.
 The other copies remain the original raw sheets at their initial holders.
 Source: Part II, `con:sweep`, lines 330–340, and `prop:sweep`, lines 350–359. -/
-def auxiliaryFrameBefore (L w q : ℕ) (pos : Fin L → ℝ × ℝ) (s : ℕ)
-    (c : AuxiliaryCopy L w) : Frame pos q (Party L w) :=
-  if auxiliaryStage L w c < s then retiredAuxiliaryFrame L w q pos c
-  else Frame.raw (fun _ ↦ initialAuxiliaryHolder L w c)
+def auxiliaryFrameBefore (L w : ℕ) (s : ℕ)
+    (c : AuxiliaryCopy L w) : Sheet (Fin L) (Party L w) :=
+  if auxiliaryStage L w c < s then retiredAuxiliaryFrame L w c
+  else Sheet.mk (fun _ ↦ initialAuxiliaryHolder L w c)
 
 /-- The main frame and all original auxiliary occurrences before a stage.
 Source: Part II, `prop:sweep`, proof, lines 365–378. -/
-def sweepFrames (L w q : ℕ) (pos : Fin L → ℝ × ℝ)
-    (k : Fin (stageCount L w + 1)) : List (Frame pos q (Party L w)) :=
-  stageFrame L w q pos k ::
-    (initialAuxiliaryOrder L w).map (auxiliaryFrameBefore L w q pos k.val)
+def sweepFrames (L w : ℕ)
+    (k : Fin (stageCount L w + 1)) : List (Sheet (Fin L) (Party L w)) :=
+  stageFrame L w k ::
+    (initialAuxiliaryOrder L w).map (auxiliaryFrameBefore L w k.val)
 
 /-- After the left transfer, its positive-stage left copy has retired and
 the current right copy has not yet been used.
 Source: Part II, `con:sweep`, move (3), lines 336–338. -/
-def leftAuxiliaryFrame (L w q : ℕ) (pos : Fin L → ℝ × ℝ)
-    (k : Fin (stageCount L w)) : AuxiliaryCopy L w → Frame pos q (Party L w)
-  | .inl j => auxiliaryFrameBefore L w q pos k.val (.inl j)
+def leftAuxiliaryFrame (L w : ℕ)
+    (k : Fin (stageCount L w)) : AuxiliaryCopy L w → Sheet (Fin L) (Party L w)
+  | .inl j => auxiliaryFrameBefore L w k.val (.inl j)
   | .inr j =>
-      if j.val + 1 ≤ k.val then leftRetiredAuxiliary L w q pos j
-      else Frame.raw (fun _ ↦ initialAuxiliaryHolder L w (.inr j))
+      if j.val + 1 ≤ k.val then leftRetiredAuxiliary L w j
+      else Sheet.mk (fun _ ↦ initialAuxiliaryHolder L w (.inr j))
 
 /-- The actual main endpoint and the same labelled list after the left transfer.
 Source: Part II, `con:sweep`, move (3), lines 336–338. -/
-def afterLeftFrames (L w q : ℕ) (pos : Fin L → ℝ × ℝ)
-    (k : Fin (stageCount L w)) : List (Frame pos q (Party L w)) :=
-  leftBandMain L w q pos k ::
-    (initialAuxiliaryOrder L w).map (leftAuxiliaryFrame L w q pos k)
+def afterLeftFrames (L w : ℕ)
+    (k : Fin (stageCount L w)) : List (Sheet (Fin L) (Party L w)) :=
+  leftBandMain L w k ::
+    (initialAuxiliaryOrder L w).map (leftAuxiliaryFrame L w k)
 
 /-- The right transfer changes its actual copy occurrence in that same list.
 Source: Part II, `con:sweep`, move (4), lines 339–340. -/
-def afterRightFrames (L w q : ℕ) (pos : Fin L → ℝ × ℝ)
-    (k : Fin (stageCount L w)) : List (Frame pos q (Party L w)) :=
-  rightBandMain L w q pos k ::
+def afterRightFrames (L w : ℕ)
+    (k : Fin (stageCount L w)) : List (Sheet (Fin L) (Party L w)) :=
+  rightBandMain L w k ::
     (initialAuxiliaryOrder L w).map
-      (Function.update (leftAuxiliaryFrame L w q pos k) (.inl k)
-        (rightRetiredAuxiliary L w q pos k))
+      (Function.update (leftAuxiliaryFrame L w k) (.inl k)
+        (rightRetiredAuxiliary L w k))
 
 /-- The left copy exists only at a positive stage. Its index is k−1, while
 its actual band stage is k. Source: Part II, `con:sweep`, lines 336–338. -/
@@ -127,16 +127,16 @@ private theorem geometry_of_stageCount_pos (hm : 0 < stageCount L w) :
 /-- Initially no auxiliary copy has been used.
 Source: Part II, `prop:sweep`, item (1), lines 350–353. -/
 theorem auxiliaryFrameBefore_zero (c : AuxiliaryCopy L w) :
-    auxiliaryFrameBefore L w q pos 0 c =
-      Frame.raw (fun _ ↦ initialAuxiliaryHolder L w c) := by
+    auxiliaryFrameBefore L w 0 c =
+      Sheet.mk (fun _ ↦ initialAuxiliaryHolder L w c) := by
   simp [auxiliaryFrameBefore]
 
 /-- The last boundary retains every actual retired auxiliary endpoint in
 the previously specified raw copy coordinates. No endpoint identity is assumed.
 Source: Part II, `con:band`, lines 271–272, and `prop:sweep`, lines 356–359. -/
 theorem auxiliaryFrameBefore_last (c : AuxiliaryCopy L w) :
-    auxiliaryFrameBefore L w q pos (stageCount L w) c =
-      Frame.raw (fun x ↦ auxiliaryOwner L w (c, x)) := by
+    auxiliaryFrameBefore L w (stageCount L w) c =
+      Sheet.mk (fun x ↦ auxiliaryOwner L w (c, x)) := by
   obtain ⟨hw, hL⟩ := geometry_of_stageCount_pos
     ((Nat.zero_le (auxiliaryStage L w c)).trans_lt (auxiliaryStage_lt_stageCount c))
   rw [auxiliaryFrameBefore, ite_eq_left (auxiliaryStage_lt_stageCount c)]
@@ -146,37 +146,37 @@ theorem auxiliaryFrameBefore_last (c : AuxiliaryCopy L w) :
 
 /-- The complete initial list is derived from the actual stage-zero owner
 and the unused labelled copies. Source: Part II, `prop:sweep`, lines 350–353. -/
-theorem sweepFrames_zero (L w q : ℕ) (pos : Fin L → ℝ × ℝ) :
-    sweepFrames L w q pos 0 = initialFrames L w q pos := by
+theorem sweepFrames_zero (L w : ℕ) :
+    sweepFrames L w 0 = initialFrames L w := by
   simp [sweepFrames, stageFrame, stageOwner_zero, auxiliaryFrameBefore_zero,
     initialFrames]
 
 /-- The complete terminal list follows from the derived main and auxiliary
 endpoints. Source: Part II, `prop:sweep`, lines 355–360. -/
 theorem sweepFrames_last :
-    sweepFrames L w q pos (Fin.last (stageCount L w)) = terminalFrames L w q pos := by
+    sweepFrames L w (Fin.last (stageCount L w)) = terminalFrames L w := by
   simp [sweepFrames, stageFrame, stageOwner_last, terminalFrames,
     terminalAuxiliaryFrames, auxiliaryFrameBefore_last]
 
 /-- The current right copy is unused before its right-band operation.
 Source: Part II, `con:sweep`, move (4), lines 339–340. -/
 theorem leftAuxiliaryFrame_right_unused (k : Fin (stageCount L w)) :
-    leftAuxiliaryFrame L w q pos k (.inl k) =
-      Frame.raw (fun _ ↦ initialAuxiliaryHolder L w (.inl k)) := by
+    leftAuxiliaryFrame L w k (.inl k) =
+      Sheet.mk (fun _ ↦ initialAuxiliaryHolder L w (.inl k)) := by
   simp [leftAuxiliaryFrame, auxiliaryFrameBefore, auxiliaryStage]
 
 /-- The selected positive-stage left copy is still unused before its operation.
 Source: Part II, `con:sweep`, move (3), lines 336–338. -/
 theorem auxiliaryFrameBefore_left_unused (k : Fin (stageCount L w)) (hk : 0 < k.val) :
-    auxiliaryFrameBefore L w q pos k.val (leftCopyLabel L w k hk) =
-      Frame.raw (fun _ ↦ initialAuxiliaryHolder L w (leftCopyLabel L w k hk)) := by
+    auxiliaryFrameBefore L w k.val (leftCopyLabel L w k hk) =
+      Sheet.mk (fun _ ↦ initialAuxiliaryHolder L w (leftCopyLabel L w k hk)) := by
   have he : k.val - 1 + 1 = k.val := by omega
   simp [auxiliaryFrameBefore, leftCopyLabel, auxiliaryStage, he]
 
 /-- The exceptional first left transfer retires no auxiliary copy.
 Source: Part II, `con:sweep`, move (3), lines 337–338. -/
 theorem leftAuxiliaryFrame_zero (k : Fin (stageCount L w)) (hk : k.val = 0) :
-    leftAuxiliaryFrame L w q pos k = auxiliaryFrameBefore L w q pos k.val := by
+    leftAuxiliaryFrame L w k = auxiliaryFrameBefore L w k.val := by
   funext c
   cases c with
   | inl j => rfl
@@ -185,9 +185,9 @@ theorem leftAuxiliaryFrame_zero (k : Fin (stageCount L w)) (hk : k.val = 0) :
 /-- At a positive stage, precisely its original left-copy occurrence changes.
 Source: Part II, `con:sweep`, move (3), lines 336–338. -/
 theorem leftAuxiliaryFrame_eq_update (k : Fin (stageCount L w)) (hk : 0 < k.val) :
-    leftAuxiliaryFrame L w q pos k =
-      Function.update (auxiliaryFrameBefore L w q pos k.val) (leftCopyLabel L w k hk)
-        (retiredAuxiliaryFrame L w q pos (leftCopyLabel L w k hk)) := by
+    leftAuxiliaryFrame L w k =
+      Function.update (auxiliaryFrameBefore L w k.val) (leftCopyLabel L w k hk)
+        (retiredAuxiliaryFrame L w (leftCopyLabel L w k hk)) := by
   funext c
   cases c with
   | inl j => simp [leftAuxiliaryFrame, leftCopyLabel]
@@ -217,15 +217,15 @@ theorem leftAuxiliaryFrame_eq_update (k : Fin (stageCount L w)) (hk : 0 < k.val)
 Source: Part II, `con:sweep`, move (3), lines 336–338. -/
 theorem leftAuxiliaryFrame_spectator (k : Fin (stageCount L w)) (hk : 0 < k.val)
     (c : AuxiliaryCopy L w) (hc : c ≠ leftCopyLabel L w k hk) :
-    leftAuxiliaryFrame L w q pos k c = auxiliaryFrameBefore L w q pos k.val c := by
+    leftAuxiliaryFrame L w k c = auxiliaryFrameBefore L w k.val c := by
   rw [leftAuxiliaryFrame_eq_update k hk, Function.update_of_ne hc]
 
 /-- Retiring the current right copy gives exactly the next boundary's entire
 auxiliary family. Source: Part II, `con:sweep`, move (4), lines 339–342. -/
 theorem rightAuxiliaryUpdate_eq_next (k : Fin (stageCount L w)) :
-    Function.update (leftAuxiliaryFrame L w q pos k) (.inl k)
-        (rightRetiredAuxiliary L w q pos k) =
-      auxiliaryFrameBefore L w q pos (k.val + 1) := by
+    Function.update (leftAuxiliaryFrame L w k) (.inl k)
+        (rightRetiredAuxiliary L w k) =
+      auxiliaryFrameBefore L w (k.val + 1) := by
   funext c
   cases c with
   | inl j =>
@@ -249,15 +249,15 @@ theorem rightAuxiliaryUpdate_eq_next (k : Fin (stageCount L w)) :
 by its retirement. Source: Part II, `con:sweep`, move (4), lines 339–340. -/
 theorem rightAuxiliaryUpdate_spectator (k : Fin (stageCount L w))
     (c : AuxiliaryCopy L w) (hc : c ≠ Sum.inl k) :
-    Function.update (leftAuxiliaryFrame L w q pos k) (.inl k)
-        (rightRetiredAuxiliary L w q pos k) c = leftAuxiliaryFrame L w q pos k c :=
+    Function.update (leftAuxiliaryFrame L w k) (.inl k)
+        (rightRetiredAuxiliary L w k) c = leftAuxiliaryFrame L w k c :=
   Function.update_of_ne hc _ _
 
 /-- Both actual main and auxiliary frame endpoints give the complete next
 stage list, including the first stage. This is not a circuit hypothesis.
 Source: Part II, `prop:sweep`, proof, lines 375–378. -/
 theorem afterRightFrames_eq_sweepFrames (k : Fin (stageCount L w)) :
-    afterRightFrames L w q pos k = sweepFrames L w q pos k.succ := by
+    afterRightFrames L w k = sweepFrames L w k.succ := by
   obtain ⟨hw, hL⟩ := geometry_of_stageCount_pos ((Nat.zero_le k.val).trans_lt k.isLt)
   rw [afterRightFrames, rightBandMain_eq_stageFrame hw hL k,
     rightAuxiliaryUpdate_eq_next]
@@ -268,14 +268,14 @@ coincide. The other occurrences retain their order.
 Source: Part II, `con:sweep`, lines 336–340. -/
 theorem sweepFrames_select_auxiliary (k : Fin (stageCount L w + 1))
     (c : AuxiliaryCopy L w) :
-    (sweepFrames L w q pos k).Perm
-      (auxiliaryFrameBefore L w q pos k.val c :: stageFrame L w q pos k ::
-        ((initialAuxiliaryOrder L w).erase c).map (auxiliaryFrameBefore L w q pos k.val)) := by
+    (sweepFrames L w k).Perm
+      (auxiliaryFrameBefore L w k.val c :: stageFrame L w k ::
+        ((initialAuxiliaryOrder L w).erase c).map (auxiliaryFrameBefore L w k.val)) := by
   have hc : c ∈ initialAuxiliaryOrder L w := by
     simp [initialAuxiliaryOrder]
   simpa only [sweepFrames, List.erase_eq_eraseP, Bool.beq_eq_decide_eq] using
-    (perm_map_cons (X := AuxiliaryCopy L w) (stageFrame L w q pos k)
+    (perm_map_cons (X := AuxiliaryCopy L w) (stageFrame L w k)
       (l := initialAuxiliaryOrder L w) (x := c) hc
-      (auxiliaryFrameBefore L w q pos k.val))
+      (auxiliaryFrameBefore L w k.val))
 
 end TNLean.MPS.AreaLaw.ChainSweep

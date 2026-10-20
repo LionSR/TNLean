@@ -37,22 +37,22 @@ namespace TNLean.MPS.AreaLaw.ChainSweep
 
 open TNLean.PEPS.EncodedFrame
 
-variable {L w q : ℕ} {pos : Fin L → ℝ × ℝ}
+variable {L w q : ℕ}
 
 /-- Exact separations for the two births and the exceptional first death.
 The third environment is evaluated after that death.
 Source: Part II, `prop:sweep`, proof, lines 365–374. -/
 theorem birth_death_separation (hw : 1 ≤ w) (k : Fin (stageCount L w)) :
     (∀ x ∈ remainderBirthTarget L w k,
-      ∀ y ∈ (stageFrame L w q pos k.castSucc).birthEnv (.inl k.castSucc),
+      ∀ y ∈ (stageFrame L w k.castSucc).birthEnv (.inl k.castSucc),
         w ≤ Nat.dist x.val y.val) ∧
       (∀ x ∈ blockBirthTarget L w k,
-        ∀ y ∈ (afterRemainderBirth L w q pos k).birthEnv (.inl k.castSucc),
+        ∀ y ∈ (afterRemainderBirth L w k).birthEnv (.inl k.castSucc),
           w ≤ Nat.dist x.val y.val) ∧
       (k.val = 0 → ∀ x ∈ leftBandTarget L w k,
-        ∀ y ∈ (afterLeftTransfer L w q pos k).birthEnv (.inr k),
+        ∀ y ∈ (afterLeftTransfer L w k).birthEnv (.inr k),
           w ≤ Nat.dist x.val y.val) := by
-  obtain ⟨hE₁, hE₂⟩ := birth_environments (q := q) (pos := pos) hw k
+  obtain ⟨hE₁, hE₂⟩ := birth_environments (q := q) hw k
   have hb : (k.val + 1) * (20 * w) = k.val * (20 * w) + 20 * w := by ring
   refine ⟨?_, ?_, ?_⟩
   · intro x hx y hy
@@ -95,15 +95,15 @@ theorem birth_death_information_of_logarithmic_separation
       ∀ k : Fin (stageCount L w),
         (FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω
           (remainderBirthTarget L w k)
-          ((stageFrame L w q pos k.castSucc).birthEnv (.inl k.castSucc)) ≤
+          ((stageFrame L w k.castSucc).birthEnv (.inl k.castSucc)) ≤
             (L : ℝ) ^ (-24 : ℤ)) ∧
         (FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω
           (blockBirthTarget L w k)
-          ((afterRemainderBirth L w q pos k).birthEnv (.inl k.castSucc)) ≤
+          ((afterRemainderBirth L w k).birthEnv (.inl k.castSucc)) ≤
             (L : ℝ) ^ (-24 : ℤ)) ∧
         (k.val = 0 → FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω
           (leftBandTarget L w k)
-          ((afterLeftTransfer L w q pos k).birthEnv (.inr k)) ≤
+          ((afterLeftTransfer L w k).birthEnv (.inr k)) ≤
             (L : ℝ) ^ (-24 : ℤ)) := by
   classical
   obtain ⟨D₂₄, L₀, hD, hL₀, hlogsep⟩ :=
@@ -111,7 +111,7 @@ theorem birth_death_information_of_logarithmic_separation
       q hq R J Δ hΔ 24 (by norm_num) 1 le_rfl
   refine ⟨D₂₄, L₀, hD, hL₀, ?_⟩
   intro L hL h Ω E₀ hgs pos w hw hwidth k
-  obtain ⟨hd₁, hd₂, hd₃⟩ := birth_death_separation (q := q) (pos := pos) hw k
+  obtain ⟨hd₁, hd₂, hd₃⟩ := birth_death_separation (q := q) hw k
   have hinterval (b c : ℕ) (E : Finset (Fin L))
       (hd : ∀ x ∈ interval L b c, ∀ y ∈ E, w ≤ Nat.dist x.val y.val) :
       FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω

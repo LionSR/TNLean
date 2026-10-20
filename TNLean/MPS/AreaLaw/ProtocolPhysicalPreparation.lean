@@ -133,14 +133,14 @@ theorem exists_preparation_of_gappedGroundState
           (Ω : EuclideanSpace ℂ (Fin L → Fin q)) (E₀ : ℝ),
           Matrix.IsGappedGroundState h.operator E₀ Ω Δ →
         ∀ (pos : Fin L → ℝ × ℝ),
-        let Fs := initialFrames L w q pos
-        let holder : Frame pos q (Party L w) → Party L w := fun F ↦ F.owner ⟨0, hL⟩
+        let Fs := initialFrames L w
+        let holder : Sheet (Fin L) (Party L w) → Party L w := fun F ↦ F.owner ⟨0, hL⟩
         let H := fun p ↦ framesSpace (Fs.filter fun F ↦ holder F = p)
         let rs := terminalRawOrder L w
         let hn := terminalRawOrder_nodup L w
         let hr := mem_terminalRawOrder (L := L) (w := w)
         let R := terminalRegrouping (q := q) rs hn hr
-        let hT := stackRegs_terminalFrames L w q pos
+        let hT := stackRegs_terminalFrames L w
         let A : Mem (privateLayout L w q) ≃ₗᵢ[ℂ]
             EuclideanSpace ℂ (AuxiliarySite L w → Fin q) :=
           groupIso (auxiliaryOwner L w) Finset.univ.toList
@@ -168,7 +168,7 @@ theorem exists_preparation_of_gappedGroundState
               C.nonprivateCount ≤ sweepOperationCount L w ∧
               C.IsSourceBounded 1 ∧ C.IsExpansionBounded 1 1 ∧ C.IsMonomialBounded 1 ∧
               ‖Ψ‖ ≤ 1 ∧ ‖auxiliaryReference L w q Ω‖ = 1 ∧
-              ‖terminalStackReadout L w q pos Ψraw -
+              ‖terminalStackReadout L w Ψraw -
                 Matrix.euclideanTensorVector Ω (auxiliaryReference L w q Ω)‖ ≤ ε ∧
               Matrix.rectangularTraceNorm
                 (Matrix.partialTraceRight (Matrix.euclideanOuterProduct V V) -
@@ -187,7 +187,7 @@ theorem exists_preparation_of_gappedGroundState
               (∀ p : Party L w, physicalDimension L w q p ≤ q ^ (80 * w)) ∧
               (∀ p : Party L w,
                 (physicalDimension L w q p : ℝ) ≤ K * (L : ℝ) ^ s) ∧
-              ‖terminalStackReadout L w q pos Ψraw -
+              ‖terminalStackReadout L w Ψraw -
                 Matrix.euclideanTensorVector Ω (auxiliaryReference L w q Ω)‖ ≤
                   26 * (L : ℝ) ^ (-11 : ℤ) ∧
               Matrix.rectangularTraceNorm
@@ -224,14 +224,14 @@ theorem exists_preparation_of_gappedGroundState
   have hfamily := hphysical L ((le_max_left _ _).trans hsize)
     h Ω E₀ hgs pos w hw hwidth
   choose c hc using hfamily
-  let Fs := initialFrames L w q pos
-  let holder : Frame pos q (Party L w) → Party L w := fun F ↦ F.owner ⟨0, hL⟩
+  let Fs := initialFrames L w
+  let holder : Sheet (Fin L) (Party L w) → Party L w := fun F ↦ F.owner ⟨0, hL⟩
   let H := fun p ↦ framesSpace (Fs.filter fun F ↦ holder F = p)
   let rs := terminalRawOrder L w
   let hn := terminalRawOrder_nodup L w
   let hr := mem_terminalRawOrder (L := L) (w := w)
   let R := terminalRegrouping (q := q) rs hn hr
-  let hT := stackRegs_terminalFrames L w q pos
+  let hT := stackRegs_terminalFrames L w
   let A : Mem (privateLayout L w q) ≃ₗᵢ[ℂ]
       EuclideanSpace ℂ (AuxiliarySite L w → Fin q) :=
     groupIso (auxiliaryOwner L w) Finset.univ.toList
@@ -266,7 +266,7 @@ theorem exists_preparation_of_gappedGroundState
       _ ≤ _ := hwidthData.2.2
   have herror := sweep_error_le (by omega : 1 ≤ L) (hoperation.trans htwenty)
   have hsplit' :
-      ‖terminalStackReadout L w q pos Ψraw -
+      ‖terminalStackReadout L w Ψraw -
         Matrix.euclideanTensorVector Ω (auxiliaryReference L w q Ω)‖ ≤
           26 * (L : ℝ) ^ (-11 : ℤ) := hsplit.trans herror
   have hdensity' : Matrix.rectangularTraceNorm

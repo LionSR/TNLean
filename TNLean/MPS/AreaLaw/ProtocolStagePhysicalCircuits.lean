@@ -56,19 +56,19 @@ theorem local_stage_circuits_of_logarithmic_separation
         D₂₄ * Real.log (L : ℝ) ≤ (w : ℝ) →
       ∀ k : Fin (stageCount L w),
         ∃ c : (j : Fin 18) → OriginalCircuit
-            (stackRegs (stageBoundaryFrames L w q pos k j.val) [])
-            (stackRegs (stageBoundaryFrames L w q pos k (j.val + 1)) []),
+            (stackRegs (stageBoundaryFrames L w k j.val) [])
+            (stackRegs (stageBoundaryFrames L w k (j.val + 1)) []),
           ∀ j, (c j).IsBoundedChange (stageParticipants k j) 1 1
               (4 * (L : ℝ) ^ (-12 : ℤ))
-              (framesVec Ω (stageBoundaryFrames L w q pos k j.val))
-              (framesVec Ω (stageBoundaryFrames L w q pos k (j.val + 1))) ∧
+              (framesVec Ω (stageBoundaryFrames L w k j.val))
+              (framesVec Ω (stageBoundaryFrames L w k (j.val + 1))) ∧
             (c j).IsSourceBounded 1 ∧ (c j).nonprivateCount ≤ 1 ∧
             ((k.val = 0 ∧ 3 ≤ j.val ∧ j.val < 10) →
               (c j).nonprivateCount = 0 ∧
-                ‖(c j).eval (framesVec Ω (stageBoundaryFrames L w q pos k j.val)) -
-                  framesVec Ω (stageBoundaryFrames L w q pos k (j.val + 1))‖ = 0 ∧
+                ‖(c j).eval (framesVec Ω (stageBoundaryFrames L w k j.val)) -
+                  framesVec Ω (stageBoundaryFrames L w k (j.val + 1))‖ = 0 ∧
                 HEq (c j) (OriginalCircuit.id
-                  (stackRegs (stageBoundaryFrames L w q pos k j.val) []))) := by
+                  (stackRegs (stageBoundaryFrames L w k j.val) []))) := by
   classical
   let : NeZero q := ⟨by omega⟩
   obtain ⟨Dstage, Nstage, hDstage, hNstage, hstage⟩ :=
@@ -96,10 +96,10 @@ theorem local_stage_circuits_of_logarithmic_separation
   have hmargin := stage_right_margin L w hgeometry k
   obtain ⟨hRem, hBlock, hBoundary⟩ :=
     hstage L hLs h Ω E₀ hgs pos w hw hwidthStage k
-  have hleftOwners := left_band_owners (q := q) (pos := pos) hw k
+  have hleftOwners := left_band_owners (q := q) hw k
   have hleft (hk : 0 < k.val) :=
     hband L hLb h Ω E₀ hgs (Party L w) pos
-      (afterBlockBirth L w q pos k).owner
+      (afterBlockBirth L w k).owner
       (Sum.inl k.castSucc) (Sum.inr k)
       (Sum.inr (⟨k.val - 1, by omega⟩ : Fin (stageCount L w)))
       (k.val * (20 * w)) w (by simp)
@@ -110,17 +110,17 @@ theorem local_stage_circuits_of_logarithmic_separation
         omega)
       hw (stage_left_margin w k.val (by omega)) (by nlinarith [hmargin])
       (hleftOwners hk).1 (hleftOwners hk).2.1 (hleftOwners hk).2.2 hwidthBand
-  have hrightOwners := right_band_owners (q := q) (pos := pos) hw k
-  rw [← leftBandMain_eq_afterLeftTransfer (q := q) (pos := pos) hw hgeometry k]
+  have hrightOwners := right_band_owners (q := q) hw k
+  rw [← leftBandMain_eq_afterLeftTransfer (q := q) hw hgeometry k]
     at hrightOwners
   have hright :=
     hband L hLb h Ω E₀ hgs (Party L w) pos
-      (leftBandMain L w q pos k).owner
+      (leftBandMain L w k).owner
       (Sum.inl k.castSucc) (Sum.inl k.succ) (Sum.inr k)
       ((k.val + 1) * (20 * w)) w (by simp) (by simp)
       hw (stage_left_margin w (k.val + 1) (by omega)) (by nlinarith [hmargin])
       hrightOwners.1 hrightOwners.2.1 hrightOwners.2.2 hwidthBand
-  exact local_stage_circuits_of_primitive_information (q := q) (pos := pos)
+  exact local_stage_circuits_of_primitive_information (q := q)
     hw hgeometry k Ω hgs.1 hRem hBlock hBoundary
     (fun hk ↦ (hleft hk).1) (fun hk ↦ (hleft hk).2.1)
     (fun hk ↦ (hleft hk).2.2.1) (fun hk ↦ (hleft hk).2.2.2.1)

@@ -41,7 +41,7 @@ namespace TNLean.MPS.AreaLaw.ChainSweep
 open TNLean.PEPS.PairEffect TNLean.PEPS.EncodedFrame
 open TNLean.PEPS.Approximation
 
-variable {L w q : ℕ} {pos : Fin L → ℝ × ℝ}
+variable {L w q : ℕ}
 
 /-- Natural block position of each actual party. The completed party indexed
 by j is P_(j+1) in the source. Source: Part II, con:sweep, lines 329–342. -/
@@ -296,8 +296,8 @@ private theorem forall_participants_castLayouts {P : Type}
 section Middle
 
 variable (c : (k : Fin (stageCount L w)) → (j : Fin 18) → OriginalCircuit
-  (stackRegs (stageBoundaryFrames L w q pos k j.val) [])
-  (stackRegs (stageBoundaryFrames L w q pos k (j.val + 1)) []))
+  (stackRegs (stageBoundaryFrames L w k j.val) [])
+  (stackRegs (stageBoundaryFrames L w k (j.val + 1)) []))
 variable [NeZero q]
 variable (Ω : EuclideanSpace ℂ (Fin L → Fin q))
 
@@ -306,13 +306,13 @@ geometric participant conclusion is used below; no aggregate locality or
 congestion hypothesis is added. -/
 variable (hc : ∀ k j, (c k j).IsBoundedChange (stageParticipants k j) 1 1
     (4 * (L : ℝ) ^ (-12 : ℤ))
-    (framesVec Ω (stageBoundaryFrames L w q pos k j.val))
-    (framesVec Ω (stageBoundaryFrames L w q pos k (j.val + 1))) ∧
+    (framesVec Ω (stageBoundaryFrames L w k j.val))
+    (framesVec Ω (stageBoundaryFrames L w k (j.val + 1))) ∧
   (c k j).IsSourceBounded 1 ∧ (c k j).nonprivateCount ≤ 1 ∧
   ((k.val = 0 ∧ 3 ≤ j.val ∧ j.val < 10) → (c k j).nonprivateCount = 0 ∧
-    ‖(c k j).eval (framesVec Ω (stageBoundaryFrames L w q pos k j.val)) -
-      framesVec Ω (stageBoundaryFrames L w q pos k (j.val + 1))‖ = 0 ∧
-    HEq (c k j) (OriginalCircuit.id (stackRegs (stageBoundaryFrames L w q pos k j.val) []))))
+    ‖(c k j).eval (framesVec Ω (stageBoundaryFrames L w k j.val)) -
+      framesVec Ω (stageBoundaryFrames L w k (j.val + 1))‖ = 0 ∧
+    HEq (c k j) (OriginalCircuit.id (stackRegs (stageBoundaryFrames L w k j.val) []))))
 
 include hc
 
