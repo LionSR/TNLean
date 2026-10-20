@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.DependentBondNetwork
 import Mathlib.Logic.Equiv.Prod
+import Mathlib.Data.Matrix.Diagonal
 
 /-!
 # Open coefficients on labelled bonds

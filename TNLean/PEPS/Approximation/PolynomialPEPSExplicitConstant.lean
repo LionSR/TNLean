@@ -154,24 +154,26 @@ with Proposition 2.1 (`01-preliminaries.tex:39–58`), Proposition 3.4
 (`02-information.tex:635–658`), Proposition 4.1 (`03-patches.tex:26–49`) and Proposition 7.1
 (`06-geometry.tex:12–53`). -/
 theorem polynomialPEPSApproximation_of_ratios {q : ℕ} (hq : 2 ≤ q) {J Δ : ℝ}
-    (hJ : 0 < J) (hΔ : 0 < Δ) {C_A D L_ang : ℝ} (hA : SquareEntropyAreaLawAt q J Δ C_A)
-    (hD1 : 1 ≤ D) (hD : IsAngularScale q J Δ (angularConstant / 2) 1 4 60 D L_ang) :
-    ∀ L : ℕ, 2 ≤ L → pepsSizeThresholdOf L_ang ≤ L → ∀ h : SquareHamiltonian L q J,
-      ∀ E₀ : ℝ, ∀ Ω : StateSpace L q, h.IsGappedGroundState E₀ Ω Δ →
+    (hJ : 0 < J) (hΔ : 0 < Δ) {C_A D L_ang : ℝ}
+    (hA : SquareEntropyAreaLawAt q (IsSquareGroundState q J Δ) C_A) (hD1 : 1 ≤ D)
+    (hD : IsAngularScale q (IsSquareGroundState q J Δ) (angularConstant / 2) 1 4 60 D L_ang) :
+    ∀ L : ℕ, 2 ≤ L → pepsSizeThresholdOf L_ang ≤ L → ∀ Ω : StateSpace L q,
+      IsSquareGroundState q J Δ L Ω →
         HasPEPSApproximation (pepsLargeSizePrefactorOf q D) (pepsBondExponentOf q J Δ C_A D)
           L q Ω := by
   have hB₀ : (0 : ℝ) < 20 * D := mul_pos (by norm_num) (lt_of_lt_of_le one_pos hD1)
-  have hsupply : ∀ L : ℕ, 2 ≤ L → ∀ h : SquareHamiltonian L q J, ∀ E₀ : ℝ,
-      ∀ Ω : StateSpace L q, h.IsGappedGroundState E₀ Ω Δ →
-        AdaptivePatchSupply (cellCenterPos L) Ω (20 * D) (adaptivePatchPrefactor q (20 * D))
-          (adaptivePatchExponent q J Δ (20 * D) 60 C_A) 60 L :=
-    fun L hL h E₀ Ω hΩ ↦ AdaptivePatchSupply.cellCenterPos
-      (hA.adaptivePatchSupply hq hJ hΔ (B₀ := 20 * D) (p := 60) hB₀ (by norm_num) L hL h E₀ Ω hΩ)
-  have hnet := dyadicOperatorNetworkAt_of_dyadicProtocolBoundsAt hq
-    (largeSizeDyadicProtocol_of_angularScale hq hD1 hD (adaptivePatchPrefactor_pos q hB₀.le)
-      hsupply le_rfl le_rfl le_rfl)
-  intro L hL hL₀ h E₀ Ω hΩ
-  have H := hasPEPSApproximation_of_dyadicOperatorNetworkAt hnet L hL hL₀ h E₀ Ω hΩ
+  have hunit : ∀ L (Ω : StateSpace L q), IsSquareGroundState q J Δ L Ω → ‖Ω‖ = 1 :=
+    fun _ _ hΩ ↦ hΩ.norm_eq_one
+  have hsupply : ∀ L : ℕ, 2 ≤ L → ∀ Ω : StateSpace L q, IsSquareGroundState q J Δ L Ω →
+      AdaptivePatchSupply (cellCenterPos L) Ω (20 * D) (adaptivePatchPrefactor q (20 * D))
+        (adaptivePatchExponent q J Δ (20 * D) 60 C_A) 60 L :=
+    fun L hL Ω hΩ ↦ AdaptivePatchSupply.cellCenterPos
+      (hA.adaptivePatchSupply hq hJ hΔ (B₀ := 20 * D) (p := 60) hB₀ (by norm_num) L hL Ω hΩ)
+  have hnet := dyadicOperatorNetworkAt_of_dyadicProtocolBoundsAt hq hunit
+    (largeSizeDyadicProtocol_of_angularScale hq hunit hD1 hD
+      (adaptivePatchPrefactor_pos q hB₀.le) hsupply le_rfl le_rfl le_rfl)
+  intro L hL hL₀ Ω hΩ
+  have H := hasPEPSApproximation_of_dyadicOperatorNetworkAt hunit hnet L hL hL₀ Ω hΩ
   have hk : max ((pepsLinkExponentOf q J Δ C_A D : ℕ) : ℝ) 0 = pepsLinkExponentOf q J Δ C_A D :=
     max_eq_left (Nat.cast_nonneg _)
   rw [pepsBondExponentOf, ← hk]

@@ -43,19 +43,6 @@ private theorem rectangularTraceNorm_sub_le_sum {ι : Type} [Fintype ι] [Decida
 
 namespace OriginalCircuit
 
-/-- Increasing a monomial-count bound preserves the original expansion condition.
-Source: polynomial-PEPS, `04-compression.tex`, lines 137–151. -/
-theorem isMonomialBounded_mono {a b : Layout P} (w : OriginalCircuit a b)
-    {K K' : ℕ} (h : w.IsMonomialBounded K) (hKK : K ≤ K') :
-    w.IsMonomialBounded K' := by
-  induction w with
-  | id => trivial
-  | comp w v ihw ihv => exact ⟨ihw h.1, ihv h.2⟩
-  | privateMap => trivial
-  | nonprivateGate => exact h.trans hKK
-  | swap => trivial
-  | frame r w ih => exact ih h
-
 /-- The finite original chronology has some finite monomial-count bound.
 This bound is derived from its original gate lists, without an additional
 hypothesis. Source: polynomial-PEPS, `04-compression.tex`, lines 137–151. -/

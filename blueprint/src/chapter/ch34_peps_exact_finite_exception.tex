@@ -23,6 +23,11 @@ Hermitian; individual terms need not be. The remaining conditions are
     H\Omega    & =E_0\Omega,\notag                                          \\
     H-E_0I     & \ge\Delta\bigl(I-|\Omega\rangle\langle\Omega|\bigr).\notag
 \end{align}
+Several statements below hold for an arbitrary family of unit states
+$\mathcal F$, which assigns to every $L$ a set $\mathcal F(L)$ of unit vectors
+on the open $L\times L$ square. The ground vectors of the model form the family
+$\mathcal F_{q,J,\Delta}$, where $\Omega\in\mathcal F_{q,J,\Delta}(L)$ if
+$(H,E_0,\Omega)\in\mathcal G_{q,J,\Delta}(L)$ for some $H$ and $E_0$.
 
 \begin{theorem}[Increasing the polynomial prefactor]
     \label{thm:peps_prefactor_monotone}
@@ -63,22 +68,23 @@ Hermitian; individual terms need not be. The remaining conditions are
     Following the finite-size argument
     in~\cite[Section~8]{OpenAI2026PolynomialPEPS}
     (\texttt{07-assembly.tex}, lines 203--214), fix integers $q\ge1$ and
-    $L_0\ge0$, real $J,\Delta,C$, and $c\ge0$.
+    $L_0\ge0$, a family of unit states $\mathcal F$, real $C$, and $c\ge0$.
     Suppose $\mathcal A_{C,c}(L,\Omega)$ holds for every integer
-    $L\ge\max\{2,L_0\}$ and every
-    $(H,E_0,\Omega)\in\mathcal G_{q,J,\Delta}(L)$.
+    $L\ge\max\{2,L_0\}$ and every $\Omega\in\mathcal F(L)$.
     There is one $C'>0$ with $C'\ge C$ such that
     $\mathcal A_{C',c}(L,\Omega)$ holds for every integer $L\ge2$ and every
-    $(H,E_0,\Omega)\in\mathcal G_{q,J,\Delta}(L)$.
-    The exponent $c$ is unchanged, and $C'$ is independent of $L,H,E_0,\Omega$.
+    $\Omega\in\mathcal F(L)$.
+    The exponent $c$ is unchanged, and $C'$ is independent of $L$ and $\Omega$.
+    For the family $\mathcal F_{q,J,\Delta}$, $C'$ is independent of the
+    Hamiltonian and the ground energy as well.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{lem:peps_remove_small_sizes_named}
     Take $C'=\max\{C,q^{L_0^2}\}$, which is positive and at least $C$.
-    Since $\|\Omega\|=1$ by~(\ref{eq:peps_finite_ground}),
+    Since every member of the family is a unit vector,
     Lemma~\ref{lem:peps_remove_small_sizes_named} applies to every
-    $(H,E_0,\Omega)\in\mathcal G_{q,J,\Delta}(L)$ with $L\ge2$.
+    $\Omega\in\mathcal F(L)$ with $L\ge2$.
 \end{proof}
 
 \begin{theorem}[Equivalence with the sufficiently large size statement]
@@ -152,11 +158,11 @@ Theorem~\ref{thm:openai_polynomial_peps}, not that theorem.
     Capturing the conclusion of~\cite[Section~8.1]{OpenAI2026PolynomialPEPS}
     (\texttt{07-assembly.tex}, lines 53--63), together with the anchors of
     lines 102--114 and the network properties of Proposition~7.1 used in the
-    proof of Lemma~8.2 (lines 128--131), fix an integer $q\ge2$, reals
-    $J,\Delta>0$, reals $C,C_1,k$ and natural numbers $B,\Delta_0,c,L_0$.
-    Compressed dyadic operator networks exist at these constants if for every
-    integer $L\ge\max\{2,L_0\}$ and every
-    $(H,E_0,\Omega)\in\mathcal G_{q,J,\Delta}(L)$ there is an operator party
+    proof of Lemma~8.2 (lines 128--131), fix an integer $q\ge2$, a family of
+    states $\mathcal F$, reals $C,C_1,k$ and natural numbers $B,\Delta_0,c,L_0$.
+    Compressed dyadic operator networks exist for $\mathcal F$ at these
+    constants if for every integer $L\ge\max\{2,L_0\}$ and every
+    $\Omega\in\mathcal F(L)$ there is an operator party
     network with the following properties. Every party is attached to a dyadic
     block inside the padded square, with at most $B$ parties per block; every
     party has at most $\Delta_0$ links; the two anchors of every link differ in
@@ -176,13 +182,14 @@ Theorem~\ref{thm:openai_polynomial_peps}, not that theorem.
     \uses{def:peps_large_size_dyadic_operator_network}
     Following~\cite[Section~8]{OpenAI2026PolynomialPEPS}
     (\texttt{07-assembly.tex}, lines 53--206) once the compressed network has
-    been obtained, if compressed dyadic operator networks exist at the constants
+    been obtained, let $\mathcal F$ be a family of unit states. If compressed
+    dyadic operator networks exist for $\mathcal F$ at the constants
     $C,C_1,k,B,\Delta_0,c,L_0$ in the sense of
     Definition~\ref{def:peps_large_size_dyadic_operator_network}, and
     $\chi=8(2c+1)B\Delta_0$, then
     $\mathcal A_{\max\{C_1,1\}^\chi,\max\{k,0\}\chi+1}(L,\Omega)$ for every
     $L\ge2$ with $L\ge\max\{L_0,\lceil2C\rceil\}$ and every
-    $(H,E_0,\Omega)\in\mathcal G_{q,J,\Delta}(L)$.
+    $\Omega\in\mathcal F(L)$.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -287,13 +294,13 @@ Proposition~\ref{prop:peps_dyadic_protocol} supplies.
     \lean{TNLean.PEPS.Approximation.dyadicOperatorNetworkAt_of_dyadicProtocolBoundsAt}
     \leanok
     \uses{def:peps_dyadic_protocol, def:peps_large_size_dyadic_operator_network}
-    Fix $q\ge2$, $J,\Delta>0$, a count constant $C_N$, an expansion constant
-    $C_K$, an error constant $C_E$ and constants $b,k,r,L_0$. Suppose that for
-    every $L\ge\max\{2,L_0\}$ and every
-    $(H,E_0,\Omega)\in\mathcal G_{q,J,\Delta}(L)$ there is a protocol
+    Fix $q\ge2$, a family of unit states $\mathcal F$, a count constant $C_N$,
+    an expansion constant $C_K$, an error constant $C_E$ and constants
+    $b,k,r,L_0$. Suppose that for every $L\ge\max\{2,L_0\}$ and every
+    $\Omega\in\mathcal F(L)$ there is a protocol
     satisfying the Section~8 bounds of
     Definition~\ref{def:peps_dyadic_protocol} with these constants. Then
-    compressed dyadic operator networks exist, in the sense of
+    compressed dyadic operator networks exist for $\mathcal F$, in the sense of
     Definition~\ref{def:peps_large_size_dyadic_operator_network}, at the error
     constant $1+2C_NC_E+2C_E$, the link prefactor
     $C_\Sigma(r,b,\max\{C_N,0\}b,q,\max\{C_K,0\},C_K)$, the link exponent
@@ -305,9 +312,9 @@ Proposition~\ref{prop:peps_dyadic_protocol} supplies.
     \uses{thm:peps_distributed_construction_compression_of_le, def:peps_compression_constants,
         lem:peps_protocol_compressed_party_network,
         lem:peps_protocol_circuit_bounds}
-    For fixed $q,J,\Delta$, the
-    protocols across all sides $L\ge\max\{2,L_0\}$, Hamiltonians, and ground
-    vectors form a single family of distributed constructions indexed by their
+    For fixed $q$ and $\mathcal F$, the
+    protocols across all sides $L\ge\max\{2,L_0\}$ and all states of the
+    family form a single family of distributed constructions indexed by their
     size. In this
     family the number of nonprivate gates is at most $bC_NL^3$, each gate involves
     at most $b$ parties, each party participates in at most $b$ gates, every

@@ -4,6 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.DependentBondNetwork
+import Mathlib.Data.Matrix.Basis
+import Mathlib.LinearAlgebra.Span.Basic
 
 /-!
 # Arbitrary joint cut boundaries with edge-dependent dimensions

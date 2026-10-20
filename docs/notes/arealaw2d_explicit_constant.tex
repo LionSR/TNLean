@@ -1091,9 +1091,16 @@ $C_{\rm expl}(q,R,J,\Delta)$ of
 \leanid{TNLean.PEPS.AreaLaw.uniformAreaLawConstantClosed}, by
 \leanid{TNLean.PEPS.AreaLaw.uniformAreaLaw_closed}
 (Section~\ref{sec:top}). This constant is a finite recursion of explicit
-operations. An elementary closed form, one that does not iterate the bootstrap
-recursion \eqref{eq:round}, still needs a bound for that recursion; this is
-the remaining new quantitative mathematics.
+operations. It is also proved at a constant that does not iterate the
+bootstrap recursion \eqref{eq:round}: the safe-box constant is at most
+$((A+1)(1+C_0))^{(4k)^B}$, where $A$ is the prefactor of one round, $C_0$ the
+initial constant, $k=\lceil1/\nu\rceil$, and
+$B=\lceil400000\log M\log500000/p\rceil$ bounds the number of rounds, with
+$M$ and $p$ the scale and probability of the initial box estimate, by
+\leanid{TNLean.PEPS.AreaLaw.physicalBoxConstantClosed_le_elementary}, and
+Theorem~1.1 holds with the constant
+\leanid{TNLean.PEPS.AreaLaw.uniformAreaLawConstantElementary} by
+\leanid{TNLean.PEPS.AreaLaw.uniformAreaLaw_elementary}.
 
 \paragraph{Open dependencies.}
 \label{sec:open}

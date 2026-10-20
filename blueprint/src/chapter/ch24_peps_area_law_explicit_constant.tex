@@ -424,6 +424,55 @@ every upper bound for $C_{\rm box}$.
     $c_0=\tfrac18>0$.
 \end{proof}
 
+\begin{definition}[A safe-box bound without iteration]
+    \label{def:area_law_elementary_constant}
+    \lean{TNLean.PEPS.AreaLaw.physicalBoxConstantElementary,
+        TNLean.PEPS.AreaLaw.uniformAreaLawConstantElementary}
+    \leanok
+    \uses{def:area_law_bootstrap_step_constants,
+        def:area_law_initial_round_budget,def:area_law_box_bound_constant}
+    Fix $q$, $R$, $J$ and $\Delta$. Let $e_0$ and $C_0$ be the exponent and
+    the constant of the explicit initial box estimate, let $A$ and $k$ be the
+    constants of Definition~\ref{def:area_law_bootstrap_step_constants} at
+    $e_0$, at the truncation constant at the factor $2$ and at the transport
+    constants of Theorem~\ref{thm:area_law_transport_bound_explicit}, and let
+    $M_*$ be the round budget of
+    Definition~\ref{def:area_law_initial_round_budget}. Put
+    \begin{align}
+        B_*(q,R,J,\Delta) & =\bigl((A+1)(1+C_0)\bigr)^{(4k)^{M_*}},
+    \end{align}
+    and let $C_{\rm AL}^*(q,R,J,\Delta)=C_{\rm AL}^{B_*}(q,R,J,\Delta)$ in
+    the notation of Definition~\ref{def:area_law_box_bound_constant}.
+\end{definition}
+
+% Status: auxiliary result. Theorem 1.1 of the area-law source asserts only
+% that a constant exists; that statement is thm:openai_uniform_area_law.
+\begin{theorem}[The area law with a constant that iterates no recursion]
+    \label{thm:area_law_elementary_constant}
+    \lean{TNLean.PEPS.AreaLaw.physicalBoxConstantClosed_le_elementary,
+        TNLean.PEPS.AreaLaw.uniformAreaLaw_elementary}
+    \leanok
+    \uses{def:area_law_elementary_constant,def:area_law_ground_entropy}
+    Fix $q\ge1$, $R\ge0$, $J\ge0$ and $\Delta>0$. Then
+    $C_{\rm box}(q,R,J,\Delta)\le B_*(q,R,J,\Delta)$. Consequently
+    $C=C_{\rm AL}^*(q,R,J,\Delta)$ is nonnegative, and for every finite
+    induced domain $\Lambda$, every admissible Hamiltonian with a gapped
+    ground vector $\Omega$ and every $A\subseteq\Lambda$,
+    $S_\Omega(A)\le C\,|\partial_\Lambda A|$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:area_law_safe_box_power_bound,
+        thm:area_law_initial_round_budget_bound,
+        thm:area_law_box_bound_constant}
+    By Theorem~\ref{thm:area_law_initial_round_budget_bound}, the number of
+    bootstrap rounds from $e_0$ is at most $M_*$, so
+    Theorem~\ref{thm:area_law_safe_box_power_bound} with $M=M_*$ gives
+    $C_{\rm box}(q,R,J,\Delta)\le B_*(q,R,J,\Delta)$. The second assertion of
+    Theorem~\ref{thm:area_law_box_bound_constant} with $B=B_*$ gives the
+    area law.
+\end{proof}
+
 % Status: auxiliary result. Proposition 2.1 of the polynomial-PEPS source
 % asserts only that a constant exists; that statement is
 % thm:openai_square_area_law.
@@ -436,8 +485,8 @@ every upper bound for $C_{\rm box}$.
     \leanok
     \uses{def:square_entropy_area_law_at,def:area_law_closed_constant}
     Fix $q\ge1$, $J\ge0$ and $\Delta>0$. Then the square-grid entropy area
-    law of Definition~\ref{def:square_entropy_area_law_at} holds at $q$, $J$,
-    $\Delta$ with the constant $C_{\rm AL}(q,1,J,\Delta)$ of
+    law of Definition~\ref{def:square_entropy_area_law_at} holds for the
+    ground states of the model at $J$ and $\Delta$ with the constant $C_{\rm AL}(q,1,J,\Delta)$ of
     Definition~\ref{def:area_law_closed_constant}.
 \end{theorem}
 \begin{proof}

@@ -8,7 +8,7 @@ import TNLean.Lattice.ReplicaSwap
 import TNLean.Lattice.SupportedUnitaryEntropy
 import TNLean.Circuit.SitewiseTensorSupport
 import TNLean.PEPS.AreaLaw.BufferedRectangles
-import TNLean.PEPS.Approximation.SheetSwapCorrection
+import TNLean.Lattice.Sheet.SwapCorrection
 
 /-!
 # The information reset

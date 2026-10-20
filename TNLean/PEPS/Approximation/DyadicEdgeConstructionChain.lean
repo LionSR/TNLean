@@ -31,8 +31,8 @@ namespace TNLean.PEPS.Approximation
 
 open EncodedFrame PairEffect
 
-variable {k q : ℕ} [NeZero q] {J Δ a A₀ D L₀' : ℝ} {m₀ : ℕ} {L : ℕ}
-  {h : SquareHamiltonian L q J} {E₀ : ℝ} {Ω : StateSpace L q} {K₀ ε₀ ν B₀ C c : ℝ}
+variable {k q : ℕ} [NeZero q] {a A₀ D L₀' : ℝ} {m₀ : ℕ} {L : ℕ}
+  {G : ∀ L : ℕ, StateSpace L q → Prop} {Ω : StateSpace L q} {K₀ ε₀ ν B₀ C c : ℝ}
   {X : Type*} [DecidableEq X]
 
 /-- **The lens exchange with its point treatments, conditional on Proposition 3.4.** At the
@@ -43,8 +43,8 @@ The point treatments of both sheets about the endpoints of `e`, the lens exchang
 of the treatments are `9` bounded changes of the memory, with the small-patch rewrite bounds.
 
 Polynomial-PEPS manuscript, `06-geometry.tex`, lines 198–212, 328–339 and 389–430. -/
-theorem isStepChain_lensExchange (hD : IsAngularScale q J Δ a A₀ m₀ 60 D L₀') (hLL : L₀' ≤ L)
-    (hΩ : h.IsGappedGroundState E₀ Ω Δ) (hm₀ : 2 ≤ m₀) (hA₀ : 1 ≤ A₀)
+theorem isStepChain_lensExchange (hD : IsAngularScale q G a A₀ m₀ 60 D L₀') (hLL : L₀' ≤ L)
+    (hΩ : G L Ω) (hΩ₁ : ‖Ω‖ = 1) (hm₀ : 2 ≤ m₀) (hA₀ : 1 ≤ A₀)
     (hc : IsProtocolConstants K₀ ε₀ ν a D B₀) (hL : 2 ≤ L) (hk2 : 2 ^ k < 2 * L)
     (P : AdaptivePatchSupply (cellCenterPos L) Ω B₀ C c 60 L) (rank : GuideLabel → ℕ)
     (R : RepaintedSquare k) (hlarge : K₀ * (D * Real.log L) < (2 : ℝ) ^ (R.1.1 : ℕ))
@@ -67,7 +67,7 @@ theorem isStepChain_lensExchange (hD : IsAngularScale q J Δ a A₀ m₀ 60 D L�
           (Bl.mainGuide E e (mainWordOne Bl.oldLabel Bl.finalLabel (Bl.nbrLabel e))) ::
         l.map (Function.update A x (treatedFrame P rank R hr ∅ (Bl.nbrLabel e)
           (Bl.auxGuide e (auxWordExchanged Bl.oldLabel Bl.finalLabel (Bl.nbrLabel e)))))) := by
-  have hΩ1 : ‖Ω‖ ≤ 1 := hΩ.1.le
+  have hΩ1 : ‖Ω‖ ≤ 1 := hΩ₁.le
   intro Bl
   classical
   set Ce := Bl.nbrLabel e
@@ -101,7 +101,7 @@ theorem isStepChain_lensExchange (hD : IsAngularScale q J Δ a A₀ m₀ 60 D L�
       hpt hg Q (hms Q hQ) (fun Q' hQ' => (hdiff M Q Q' hQ').symm) Ce hC
   have hlen : ms.length = 2 := by cases e <;> rfl
   -- the lens exchange on the treated sheets
-  have hpair := (edgeExchange_hasPairChange hD hLL hΩ hm₀ hA₀ hc hL hk2 P rank R hlarge done E e
+  have hpair := (edgeExchange_hasPairChange hD hLL hΩ hΩ₁ hm₀ hA₀ hc hL hk2 P rank R hlarge done E e
     (S := {p | EventUses (.inl R.1) p}) hC.eventUses (r := 2 * b) (K := K) (rs := 2 * b)).mono_error
     (four_mul_zpow_neg_thirty_le (by omega) hb)
   rw [← e.toFinset_endpointList] at hpair
@@ -132,8 +132,8 @@ with the bounds of the small-patch rewrites. They complete `e` on the main sheet
 auxiliary sheet of `e` with the exchanged auxiliary word.
 
 Polynomial-PEPS manuscript, `06-geometry.tex`, lines 183–221, 328–339 and 572–583. -/
-theorem isStepChain_edgeConstruction (hD : IsAngularScale q J Δ a A₀ m₀ 60 D L₀')
-    (hLL : L₀' ≤ L) (hΩ : h.IsGappedGroundState E₀ Ω Δ) (hm₀ : 2 ≤ m₀)
+theorem isStepChain_edgeConstruction (hD : IsAngularScale q G a A₀ m₀ 60 D L₀')
+    (hLL : L₀' ≤ L) (hΩ : G L Ω) (hΩ₁ : ‖Ω‖ = 1) (hm₀ : 2 ≤ m₀)
     (hA₀ : 1 ≤ A₀) (hc : IsProtocolConstants K₀ ε₀ ν a D B₀) (hL : 2 ≤ L) (hk2 : 2 ^ k < 2 * L)
     (P : AdaptivePatchSupply (cellCenterPos L) Ω B₀ C c 60 L) (rank : GuideLabel → ℕ)
     (R : RepaintedSquare k) (hlarge : K₀ * (D * Real.log L) < (2 : ℝ) ^ (R.1.1 : ℕ))
@@ -154,7 +154,7 @@ theorem isStepChain_edgeConstruction (hD : IsAngularScale q J Δ a A₀ m₀ 60 
       (treatedFrame P rank R hr ∅ L₂ (Bl.completedGuide (e :: E)) ::
         l.map (Function.update A x (treatedFrame P rank R hr ∅ (Bl.nbrLabel e)
           (Bl.auxGuide e (auxWordExchanged Bl.oldLabel Bl.finalLabel (Bl.nbrLabel e)))))) := by
-  have hΩ1 : ‖Ω‖ ≤ 1 := hΩ.1.le
+  have hΩ1 : ‖Ω‖ ≤ 1 := hΩ₁.le
   intro Bl
   set Ce := Bl.nbrLabel e
   have hε0 : (0 : ℝ) ≤ (2 * b + 1) * ((L : ℝ) ^ 20)⁻¹ := by positivity
@@ -171,13 +171,13 @@ theorem isStepChain_edgeConstruction (hD : IsAngularScale q J Δ a A₀ m₀ 60 
     rw [haux0, Function.update_eq_self, treatedFrame_empty_congr P rank R L₁ Ce]
     exact IsStepChain.single ⟨hasSourceBoundedChange_refl _ _ _ _ _ _ hε0, List.cons_ne_nil _ _⟩
   have c₁ := isStepChain_aux (treatedFrame (q := q) P rank R hr ∅ Ce (Bl.completedGuide E)) hl
-    hx A hΩ1 (isStepChain_auxBirths hD hLL hΩ hm₀ hA₀ hc hL hk2 P rank R hlarge done e hr
+    hx A hΩ1 (isStepChain_auxBirths hD hLL hΩ hΩ₁ hm₀ hA₀ hc hL hk2 P rank R hlarge done e hr
       (by omega) hK hpt Ce)
-  have c₂ := isStepChain_lensExchange hD hLL hΩ hm₀ hA₀ hc hL hk2 P rank R hlarge done E e hr
+  have c₂ := isStepChain_lensExchange hD hLL hΩ hΩ₁ hm₀ hA₀ hc hL hk2 P rank R hlarge done E e hr
     hb hpt hl hx A
   have c₃ := isStepChain_main l (Function.update A x (treatedFrame P rank R hr ∅ Ce
     (Bl.auxGuide e (auxWordExchanged Bl.oldLabel Bl.finalLabel Ce)))) hΩ1
-    (isStepChain_mainSteps hD hLL hΩ hm₀ hA₀ hc hL hk2 P rank R hlarge done E e hr (by omega) hK
+    (isStepChain_mainSteps hD hLL hΩ hΩ₁ hm₀ hA₀ hc hL hk2 P rank R hlarge done E e hr (by omega) hK
       hpt Ce)
   dsimp only at c₂
   rw [← hstart] at c₂

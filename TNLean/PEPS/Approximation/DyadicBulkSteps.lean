@@ -21,7 +21,9 @@ reference-vector error `L^{-30}` (birth and death) or `4 L^{-30}` (exchange).
 The sites are the sites of the open square, placed at a common translation of `Λ_L`, such as the
 cell centers of Section 7. Proposition 3.4 enters only through `IsAngularScale`, which
 `AngularInformationBound.exists_isAngularScale` derives from it; the step lemmas are therefore
-conditional on Proposition 3.4 and do not prove it.
+conditional on Proposition 3.4 and do not prove it. The state is any unit vector of a family
+of states `G` for which the angular scale holds; the ground vectors of the model are the family
+`IsSquareGroundState q J Δ`.
 
 ## Main results
 
@@ -49,23 +51,23 @@ namespace TNLean.PEPS.Approximation
 open Set EncodedFrame PairEffect
 open EuclideanSpace (vecKron)
 
-variable {q : ℕ} [NeZero q] {J Δ a A₀ D L₀ : ℝ} {m₀ : ℕ} {L : ℕ}
-  {h : SquareHamiltonian L q J} {E₀ : ℝ} {Ω : StateSpace L q}
+variable {q : ℕ} [NeZero q] {a A₀ D L₀ : ℝ} {m₀ : ℕ} {L : ℕ}
+  {G : ∀ L : ℕ, StateSpace L q → Prop} {Ω : StateSpace L q}
   {pos : SquareLatticeVertex L L → ℝ × ℝ} {c : ℝ × ℝ} {Party : Type}
   {V : Finset (ℝ × ℝ)} {n : ℝ}
 
 omit [NeZero q] in
 /-- The information premise of Lemmas 6.5 and 6.6 from Proposition 3.4. -/
 private theorem mutualInformation_le_of_isAngularScale
-    (hD : IsAngularScale q J Δ a A₀ m₀ 60 D L₀) (hL : L₀ ≤ L)
-    (hΩ : h.IsGappedGroundState E₀ Ω Δ) (hpos : ∀ v, pos v = sitePosition L v + c)
+    (hD : IsAngularScale q G a A₀ m₀ 60 D L₀) (hL : L₀ ≤ L)
+    (hΩ : G L Ω) (hpos : ∀ v, pos v = sitePosition L v + c)
     (hV : V.card ≤ m₀) {T E : Finset (SquareLatticeVertex L L)} (hTE : Disjoint T E)
     (hn : D * Real.log L ≤ n) (hnL : n ≤ A₀ * L)
     (hdiam : ∀ x ∈ T, ∀ y ∈ T, dist (pos x) (pos y) ≤ A₀ * n)
     (hsep : AngularSeparation (pos '' T) (pos '' E) n (D * Real.log L) a V) :
     FiniteProduct.mutualInformation (fun _ : SquareLatticeVertex L L ↦ Fin q) Ω T E ≤
       (L : ℝ) ^ (-60 : ℤ) := by
-  simpa using hD L hL h E₀ Ω hΩ pos c hpos V hV T E hTE n hn hnL hdiam hsep
+  simpa using hD L hL Ω hΩ pos c hpos V hV T E hTE n hn hnL hdiam hsep
 
 /-- **Bulk birth, conditional on Proposition 3.4.** Let `D`, `L₀` be a slope and a threshold for
 Proposition 3.4 at accuracy `L^{-60}` with constants `a`, `A₀`, `m₀`, and let `L ≥ L₀`. In an
@@ -79,8 +81,8 @@ error at most `L^{-30}`.
 
 Source: `06-geometry.tex`, lines 357–387 and 440–445, applying Lemma 6.5 `lem:birth`
 (`05-frames.tex`, lines 396–407) with Proposition 3.4 at accuracy `L^{-60}`. -/
-theorem bulkBirth_step (hD : IsAngularScale q J Δ a A₀ m₀ 60 D L₀) (hL : L₀ ≤ L)
-    (hΩ : h.IsGappedGroundState E₀ Ω Δ) (hpos : ∀ v, pos v = sitePosition L v + c)
+theorem bulkBirth_step (hD : IsAngularScale q G a A₀ m₀ 60 D L₀) (hL : L₀ ≤ L)
+    (hΩ : G L Ω) (hΩ₁ : ‖Ω‖ = 1) (hpos : ∀ v, pos v = sitePosition L v + c)
     (F : Frame pos q Party) {T : Finset (SquareLatticeVertex L L)} {P Q : Party}
     (hTP : ∀ x ∈ T, F.owner x = P) (hTH : Disjoint (T : Set _) F.outerHoles)
     (hV : V.card ≤ m₀) (hn : D * Real.log L ≤ n) (hnL : n ≤ A₀ * L)
@@ -91,7 +93,7 @@ theorem bulkBirth_step (hD : IsAngularScale q J Δ a A₀ m₀ 60 D L₀) (hL : 
       ‖w.eval (F.regIso.symm (F.refVec Ω)) -
         (F.changeOwner T Q).regIso.symm ((F.changeOwner T Q).refVec Ω)‖ ≤
           (L : ℝ) ^ (-30 : ℤ) := by
-  obtain ⟨-, -, -, w, hA, hU, hS, -, herr⟩ := F.birth_bounded (Q := Q) hTP hTH hΩ.1
+  obtain ⟨-, -, -, w, hA, hU, hS, -, herr⟩ := F.birth_bounded (Q := Q) hTP hTH hΩ₁
     (mutualInformation_le_of_isAngularScale hD hL hΩ hpos hV (F.disjoint_birthEnv hTP hTH) hn
       hnL hdiam hsep)
   exact ⟨w, hA, hU, hS, herr⟩
@@ -103,8 +105,8 @@ most one pair effect and reference-vector error at most `L^{-30}`.
 
 Source: `06-geometry.tex`, lines 357–387 and 440–445, applying the reverse form of Lemma 6.5
 `lem:birth` (`05-frames.tex`, lines 407–410) with Proposition 3.4 at accuracy `L^{-60}`. -/
-theorem bulkDeath_step (hD : IsAngularScale q J Δ a A₀ m₀ 60 D L₀) (hL : L₀ ≤ L)
-    (hΩ : h.IsGappedGroundState E₀ Ω Δ) (hpos : ∀ v, pos v = sitePosition L v + c)
+theorem bulkDeath_step (hD : IsAngularScale q G a A₀ m₀ 60 D L₀) (hL : L₀ ≤ L)
+    (hΩ : G L Ω) (hΩ₁ : ‖Ω‖ = 1) (hpos : ∀ v, pos v = sitePosition L v + c)
     (F : Frame pos q Party) {T : Finset (SquareLatticeVertex L L)} {P Q : Party}
     (hTP : ∀ x ∈ T, F.owner x = P) (hTH : Disjoint (T : Set _) F.outerHoles)
     (hV : V.card ≤ m₀) (hn : D * Real.log L ≤ n) (hnL : n ≤ A₀ * L)
@@ -114,7 +116,7 @@ theorem bulkDeath_step (hD : IsAngularScale q J Δ a A₀ m₀ 60 D L₀) (hL : 
       M.IsAllowed ∧ M.UsesOnly {P, Q} ∧ M.sourceCount = 0 ∧ M.toEffectChain.effectCount ≤ 1 ∧
       ‖M.toEffectChain.eval ((F.changeOwner T Q).regIso.symm ((F.changeOwner T Q).refVec Ω)) -
         F.regIso.symm (F.refVec Ω)‖ ≤ (L : ℝ) ^ (-30 : ℤ) := by
-  obtain ⟨-, -, -, M, hA, hU, hS, hE, -, herr⟩ := F.death_bounded (Q := Q) hTP hTH hΩ.1
+  obtain ⟨-, -, -, M, hA, hU, hS, hE, -, herr⟩ := F.death_bounded (Q := Q) hTP hTH hΩ₁
     (mutualInformation_le_of_isAngularScale hD hL hΩ hpos hV (F.disjoint_birthEnv hTP hTH) hn
       hnL hdiam hsep)
   exact ⟨M, hA, hU, hS, hE, herr⟩
@@ -129,8 +131,8 @@ resources, with reference-vector error at most `4 L^{-30}`.
 
 Source: `06-geometry.tex`, lines 389–430 and 440–445, applying Lemma 6.6 `lem:exchange`
 (`05-frames.tex`, lines 460–479) with Proposition 3.4 at accuracy `L^{-60}`. -/
-theorem lensExchange_step (hD : IsAngularScale q J Δ a A₀ m₀ 60 D L₀) (hL : L₀ ≤ L)
-    (hΩ : h.IsGappedGroundState E₀ Ω Δ) (hpos : ∀ v, pos v = sitePosition L v + c)
+theorem lensExchange_step (hD : IsAngularScale q G a A₀ m₀ 60 D L₀) (hL : L₀ ≤ L)
+    (hΩ : G L Ω) (hΩ₁ : ‖Ω‖ = 1) (hpos : ∀ v, pos v = sitePosition L v + c)
     (F₁ F₂ : Frame pos q Party) (Y : Finset (SquareLatticeVertex L L))
     (out : Hole pos q Party → Bool)
     (hout : ∀ h ∈ F₁.holes ++ F₂.holes, out h = true →
@@ -155,7 +157,7 @@ theorem lensExchange_step (hD : IsAngularScale q J Δ a A₀ m₀ 60 D L₀) (hL
             ((TwoSheetExchange.ofFrames F₁ F₂ Y out hout hin).newFrame₂.refVec Ω))‖ ≤
         4 * (L : ℝ) ^ (-30 : ℤ) := by
   obtain ⟨-, -, -, -, -, -, -, w, hA, hU, hS, -, herr⟩ :=
-    TwoSheetExchange.exchange_ofFrames_bounded F₁ F₂ Y out hout hin C hΩ.1
+    TwoSheetExchange.exchange_ofFrames_bounded F₁ F₂ Y out hout hin C hΩ₁
       (mutualInformation_le_of_isAngularScale hD hL hΩ hpos hV
         ((TwoSheetExchange.ofFrames F₁ F₂ Y out hout hin).disjoint_tSet_eSet C) hn hnL hdiam
         hsep)
@@ -169,8 +171,8 @@ from a point of `T` to a point of `E` crosses the boundary. The exchange is then
 using only `C`, without pair resources, with reference-vector error at most `4 L^{-30}`.
 
 Source: `06-geometry.tex`, lines 389–430 and 440–445. -/
-theorem lensExchange_step_of_frontier (hD : IsAngularScale q J Δ a A₀ m₀ 60 D L₀)
-    (hL : L₀ ≤ L) (hΩ : h.IsGappedGroundState E₀ Ω Δ) (hpos : ∀ v, pos v = sitePosition L v + c)
+theorem lensExchange_step_of_frontier (hD : IsAngularScale q G a A₀ m₀ 60 D L₀)
+    (hL : L₀ ≤ L) (hΩ : G L Ω) (hΩ₁ : ‖Ω‖ = 1) (hpos : ∀ v, pos v = sitePosition L v + c)
     (F₁ F₂ : Frame pos q Party) (Y : Finset (SquareLatticeVertex L L))
     (out : Hole pos q Party → Bool)
     (hout : ∀ h ∈ F₁.holes ++ F₂.holes, out h = true →
@@ -196,7 +198,7 @@ theorem lensExchange_step_of_frontier (hD : IsAngularScale q J Δ a A₀ m₀ 60
           (vecKron ((TwoSheetExchange.ofFrames F₁ F₂ Y out hout hin).newFrame₁.refVec Ω)
             ((TwoSheetExchange.ofFrames F₁ F₂ Y out hout hin).newFrame₂.refVec Ω))‖ ≤
         4 * (L : ℝ) ^ (-30 : ℤ) := by
-  refine lensExchange_step hD hL hΩ hpos F₁ F₂ Y out hout hin C hV hn hnL hdiam
+  refine lensExchange_step hD hL hΩ hΩ₁ hpos F₁ F₂ Y out hout hin C hV hn hnL hdiam
     (angularSeparation_of_frontier (K := K) (Or.inl ⟨?_, ?_⟩) ?_)
   · rintro _ ⟨x, hx, rfl⟩
     exact (hY x).1 (Finset.mem_inter.1 hx).2

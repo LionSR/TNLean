@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.Approximation.EffectReplacementExpansion
-import TNLean.PEPS.Approximation.EffectCircuitResources
+import TNLean.Lattice.PartyCircuit.EffectReplacementExpansion
+import TNLean.Lattice.PartyCircuit.EffectCircuitResources
 import TNLean.PEPS.Approximation.DistributedLifetime
 
 /-!
