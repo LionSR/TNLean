@@ -97,6 +97,7 @@ import TNLean.Lattice.Compression.GaussianPhysicalSource
 import TNLean.Lattice.Compression.GaussianSeparatedPhysicalDensity
 import TNLean.Lattice.Compression.GaussianSourceIntegrability
 import TNLean.Lattice.Compression.GroupTruncation
+import TNLean.Lattice.Compression.IdentityBondCutRank
 import TNLean.Lattice.Compression.IncidentGateLabels
 import TNLean.Lattice.Compression.IncidentPureSampledPhysicalSum
 import TNLean.Lattice.Compression.IncidentSampledEndpointComparison
@@ -180,6 +181,7 @@ import TNLean.Lattice.Compression.SelectedSourceContraction
 import TNLean.Lattice.Compression.SelectedSourceOwnerMap
 import TNLean.Lattice.Compression.SelectiveSourceFactorization
 import TNLean.Lattice.Compression.SelectiveSourcePreparation
+import TNLean.Lattice.Compression.SeparateArityCompression
 import TNLean.Lattice.Compression.SeparatedOutputCoordinates
 import TNLean.Lattice.Compression.SeparatedPhysicalDensity
 import TNLean.Lattice.Compression.SeparatedSchmidtOutput

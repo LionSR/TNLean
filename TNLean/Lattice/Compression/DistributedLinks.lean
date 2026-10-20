@@ -26,6 +26,8 @@ and source Schmidt ranks do not enter these finite incidence results.
 - `gateLinkLabels`: star-link and sample-link labels at one gate.
 - `distributedLinks`: the actual finite gate-tagged link family.
 - `distributedLinkParties_subset`: both ends belong to the original owner gate.
+- `card_incidentDistributedLinks_le_of_arity_lifetime`: link incidence from separate bounds on
+  gate arity and lifetime participation.
 - `card_incidentDistributedLinks_le`: bounded link incidence from lifetime participation.
 
 ## References
@@ -300,6 +302,32 @@ theorem incidentDistributedLinks_subset (gates : Finset Gate)
     ⟨hg, distributedLinkParties_subset gates participants root hroot hl hp⟩,
     Finset.mem_filter.mpr ⟨(mem_linksAtGate _ _ _ _).mpr ⟨rfl, hlabel⟩, hp⟩⟩
 
+/-- A separate bound on the number of participants and on each party's
+number of gate occurrences bounds the actual tagged links. Parallel star
+and sample links are counted separately.
+Theorem 5.2, `04-compression.tex:565–588`. -/
+theorem card_incidentDistributedLinks_le_of_arity_lifetime
+    (gates : Finset Gate) (participants : Gate → Finset Party)
+    (root : Gate → Party) (arity lifetime : ℕ)
+    (hroot : ∀ g ∈ gates, root g ∈ participants g)
+    (harity : ∀ g ∈ gates, (participants g).card ≤ arity) (p : Party)
+    (hlifetime : (incidentGates gates participants p).card ≤ lifetime) :
+    (incidentDistributedLinks gates participants root p).card ≤
+      2 * lifetime * (arity - 1) := by
+  calc
+    _ ≤ ((incidentGates gates participants p).biUnion
+        (incidentLinksAtGate participants root p)).card :=
+      Finset.card_le_card (incidentDistributedLinks_subset gates participants root hroot p)
+    _ ≤ (incidentGates gates participants p).card * (2 * (arity - 1)) := by
+      apply Finset.card_biUnion_le_card_mul
+      intro g hg
+      have hgg := (mem_incidentGates _ _ _ _).mp hg
+      rw [card_incidentLinksAtGate]
+      exact (card_incidentGateLinkLabels_le _ _ _ (hroot g hgg.1) hgg.2).trans
+        (Nat.mul_le_mul_left 2 (Nat.sub_le_sub_right (harity g hgg.1) 1))
+    _ ≤ lifetime * (2 * (arity - 1)) := Nat.mul_le_mul_right _ hlifetime
+    _ = 2 * lifetime * (arity - 1) := by ac_rfl
+
 /-- Gate arity at most `b` and whole-lifetime participation at most `b` give
 bounded virtual-link incidence. Parallel links are counted separately. The
 constant is obtained by counting each party's star and sample links separately.
@@ -310,19 +338,8 @@ theorem card_incidentDistributedLinks_le (gates : Finset Gate)
     (harity : ∀ g ∈ gates, (participants g).card ≤ b) (p : Party)
     (hlifetime : (incidentGates gates participants p).card ≤ b) :
     (incidentDistributedLinks gates participants root p).card ≤
-      2 * b * (b - 1) := by
-  calc
-    _ ≤ ((incidentGates gates participants p).biUnion
-        (incidentLinksAtGate participants root p)).card :=
-      Finset.card_le_card (incidentDistributedLinks_subset gates participants root hroot p)
-    _ ≤ (incidentGates gates participants p).card * (2 * (b - 1)) := by
-      apply Finset.card_biUnion_le_card_mul
-      intro g hg
-      have hgg := (mem_incidentGates _ _ _ _).mp hg
-      rw [card_incidentLinksAtGate]
-      exact (card_incidentGateLinkLabels_le _ _ _ (hroot g hgg.1) hgg.2).trans
-        (Nat.mul_le_mul_left 2 (Nat.sub_le_sub_right (harity g hgg.1) 1))
-    _ ≤ b * (2 * (b - 1)) := Nat.mul_le_mul_right _ hlifetime
-    _ = 2 * b * (b - 1) := by ac_rfl
+      2 * b * (b - 1) :=
+  card_incidentDistributedLinks_le_of_arity_lifetime gates participants root b b
+    hroot harity p hlifetime
 
 end TNLean.PEPS.Approximation

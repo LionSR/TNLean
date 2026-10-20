@@ -61,6 +61,7 @@ import TNLean.Lattice.PartyCircuit.PreparedPartyMaps
 import TNLean.Lattice.PartyCircuit.PreparedSourceGate
 import TNLean.Lattice.PartyCircuit.ProtocolDensityError
 import TNLean.Lattice.PartyCircuit.SiteRegisters
+import TNLean.Lattice.PartyCircuit.SiteVectorAppend
 import TNLean.Lattice.PartyCircuit.SourceCircuitLocations
 import TNLean.Lattice.PartyCircuit.SourceOnlyReduction
 import TNLean.Lattice.PartyCircuit.SourceOwnerMap
