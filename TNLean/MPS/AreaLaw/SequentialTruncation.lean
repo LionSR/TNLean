@@ -398,9 +398,12 @@ there are fewer than `D`), from the largest block to the smallest. The product i
 open-boundary matrix product state with internal bond dimensions at most `D`, and its
 distance to `ψ` is at most `∑_k √ε_k(D)`, where `ε_k(D) = 1 - S_D(ρ_k)` is the sum of the
 discarded eigenvalues and `S_D` the sum of the `D` largest ones.
-Source: one-dimensional note, part2a_mps_information.tex, prop:VC, lines 39–62. Within a
-repeated eigenvalue the eigenvectors are those of the chosen eigenbasis; every other choice
-is covered by `isOpenMPS_sequentialTruncation_prefixBasisProjection`. -/
+Source: one-dimensional note, part2a_mps_information.tex, prop:VC, lines 39–62.
+
+**Scope restriction (fixed eigenbasis):** Within a repeated eigenvalue the eigenvectors are
+those of the chosen eigenbasis; every other choice is covered by
+`isOpenMPS_sequentialTruncation_prefixBasisProjection`. See
+`docs/paper-gaps/tnlean_one_dimensional_threshold_truncation.tex`. -/
 theorem isOpenMPS_sequentialTruncation_leadingEigenprojection
     (ψ : EuclideanSpace ℂ (Fin L → Fin q)) (hψ : ‖ψ‖ = 1) (D : ℕ) :
     let P : ∀ k : ℕ, LeftBlockMatrix L q k := fun k ↦
