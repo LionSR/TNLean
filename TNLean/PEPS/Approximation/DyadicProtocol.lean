@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.PEPS.Approximation.AdaptivePatchSupply
 import TNLean.Lattice.PartyCircuit.ApproximateCircuitError
 import TNLean.PEPS.Approximation.Basic
-import TNLean.PEPS.Approximation.DistributedConstruction
+import TNLean.Lattice.Compression.DistributedConstruction
 import TNLean.PEPS.Approximation.DyadicActiveLabelParties
 import TNLean.PEPS.Approximation.DyadicRoutingPEPS
 import TNLean.Lattice.PartyCircuit.OriginalCircuitSourceBound
@@ -79,7 +79,7 @@ Three consequences are proved for every protocol satisfying the bounds:
 * `TNLean.PEPS.Approximation.DyadicProtocol.IsDistributionProtocol`: the bounds of
   Proposition 7.1 consumed by §8, for given constants.
 * `TNLean.PEPS.Approximation.DyadicProtocolBoundsAt`: a protocol with these bounds for every
-  large gapped ground vector of one model, at given constants and threshold.
+  state of a family on a large square, at given constants and threshold.
 * `TNLean.PEPS.Approximation.LargeSizeDyadicProtocolBounds`: the same existence statement with
   separate count, expansion and error constants.
 * `TNLean.PEPS.Approximation.LargeSizeDyadicProtocolConsequences`: the existence of a protocol
@@ -556,28 +556,28 @@ with patch and information power `60` (`07-assembly.tex:11`). -/
 def LargeSizeDyadicProtocolConsequences : Prop :=
   ∀ q : ℕ, 2 ≤ q → ∀ J Δ : ℝ, 0 < J → 0 < Δ →
     ∃ (C : ℝ) (b k r L₀ : ℕ),
-      ∀ L : ℕ, 2 ≤ L → L₀ ≤ L → ∀ h : SquareHamiltonian L q J,
-        ∀ E₀ : ℝ, ∀ Ω : StateSpace L q, h.IsGappedGroundState E₀ Ω Δ →
-          ∃ (P : Type) (_ : Fintype P) (D : DyadicProtocol L q P),
-            D.IsDistributionProtocol Ω C C C b k r
+      ∀ L : ℕ, 2 ≤ L → L₀ ≤ L → ∀ Ω : StateSpace L q, IsSquareGroundState q J Δ L Ω →
+        ∃ (P : Type) (_ : Fintype P) (D : DyadicProtocol L q P),
+          D.IsDistributionProtocol Ω C C C b k r
 
-/-- **The consequences of Proposition 7.1 for one model, at given constants.** Every gapped
-ground vector `Ω` of a square Hamiltonian with parameters `(L, q, J)` and gap `Δ`, of side
-`L ≥ max 2 L₀`, has a dyadic distribution protocol with the bounds of
-`DyadicProtocol.IsDistributionProtocol` at the count constant `C_N`, the expansion constant
-`C_K`, the error constant `C_E`, the bound `b`, the exponent `k` and `r` pair effects.
+/-- **The consequences of Proposition 7.1 for a family of states, at given constants.** Every
+state `Ω` of the family `G` on the square of side `L ≥ max 2 L₀` has a dyadic distribution
+protocol with the bounds of `DyadicProtocol.IsDistributionProtocol` at the count constant `C_N`,
+the expansion constant `C_K`, the error constant `C_E`, the bound `b`, the exponent `k` and `r`
+pair effects. The statement of Proposition 7.1 is the family `IsSquareGroundState q J Δ` of
+gapped ground vectors of the model.
 
-`LargeSizeDyadicProtocolBounds` asserts that such constants exist for every `q ≥ 2` and
-`J, Δ > 0`.
+`LargeSizeDyadicProtocolBounds` asserts that such constants exist for that family for every
+`q ≥ 2` and `J, Δ > 0`.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), Proposition 7.1 `prop:protocol`,
 `06-geometry.tex:12–53`, applied with patch and information power `60`
 (`07-assembly.tex:11`). -/
-def DyadicProtocolBoundsAt (q : ℕ) (J Δ C_N C_K C_E : ℝ) (b k r L₀ : ℕ) : Prop :=
-  ∀ L : ℕ, 2 ≤ L → L₀ ≤ L → ∀ h : SquareHamiltonian L q J,
-    ∀ E₀ : ℝ, ∀ Ω : StateSpace L q, h.IsGappedGroundState E₀ Ω Δ →
-      ∃ (P : Type) (_ : Fintype P) (D : DyadicProtocol L q P),
-        D.IsDistributionProtocol Ω C_N C_K C_E b k r
+def DyadicProtocolBoundsAt (q : ℕ) (G : ∀ L : ℕ, StateSpace L q → Prop) (C_N C_K C_E : ℝ)
+    (b k r L₀ : ℕ) : Prop :=
+  ∀ L : ℕ, 2 ≤ L → L₀ ≤ L → ∀ Ω : StateSpace L q, G L Ω →
+    ∃ (P : Type) (_ : Fintype P) (D : DyadicProtocol L q P),
+      D.IsDistributionProtocol Ω C_N C_K C_E b k r
 
 /-- **The consequences of Proposition 7.1, with separate constants.** For every `q ≥ 2` and
 `J, Δ > 0` there are a count constant `C_N`, an expansion constant `C_K`, an error constant
@@ -595,7 +595,8 @@ Source: Polynomial-PEPS manuscript (Sept 24 2026), Proposition 7.1 `prop:protoco
 with patch and information power `60` (`07-assembly.tex:11`). -/
 def LargeSizeDyadicProtocolBounds : Prop :=
   ∀ q : ℕ, 2 ≤ q → ∀ J Δ : ℝ, 0 < J → 0 < Δ →
-    ∃ (C_N C_K C_E : ℝ) (b k r L₀ : ℕ), DyadicProtocolBoundsAt q J Δ C_N C_K C_E b k r L₀
+    ∃ (C_N C_K C_E : ℝ) (b k r L₀ : ℕ),
+      DyadicProtocolBoundsAt q (IsSquareGroundState q J Δ) C_N C_K C_E b k r L₀
 
 /-- The single-constant consequences of Proposition 7.1 give the consequences with separate
 constants, all equal to the single constant (`06-geometry.tex:12–53`). -/

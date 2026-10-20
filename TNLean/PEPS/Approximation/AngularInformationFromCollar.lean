@@ -193,10 +193,10 @@ theorem isAngularScale_of_sublinearCollarBoundAt_le {q : ℕ} (hq : 1 ≤ q)
     {a A₀ : ℝ} (ha : 0 < a) (m₀ : ℕ) {p : ℕ} (hp : 0 < p) {D L₀ : ℝ}
     (hD : angularScale J Δ a p ≤ D)
     (hL₀ : angularThreshold q J Δ a A₀ m₀ p Ctpl N Ca Na ≤ L₀) :
-    IsAngularScale q J Δ a A₀ m₀ p D L₀ :=
-  IsAngularScale.of_sitePosition
-    (angularInformationBound_of_sublinearCollarBoundAt_le hq hJ hΔ hcol hamp ha m₀
-      (by exact_mod_cast hp) hD hL₀)
+    IsAngularScale q (IsSquareGroundState q J Δ) a A₀ m₀ p D L₀ :=
+  IsAngularScale.of_sitePosition fun L hL Ω ⟨h, E₀, hΩ⟩ ↦
+    angularInformationBound_of_sublinearCollarBoundAt_le hq hJ hΔ hcol hamp ha m₀
+      (by exact_mod_cast hp) hD hL₀ L hL h E₀ Ω hΩ
 
 /-- **Proposition 3.4 at an integer accuracy, at the named amplification constants.** Under
 the range-one sublinear collar bound with constant `C` and threshold `N`, every slope
@@ -215,7 +215,7 @@ theorem isAngularScale_of_sublinearCollarBoundAt_le_explicit {q : ℕ} (hq : 1 �
     (hD : angularScale J Δ a p ≤ D)
     (hL₀ : angularThreshold q J Δ a A₀ m₀ p Ctpl N (collarAmplificationConstant q 1 J Δ C)
       (collarAmplificationThreshold q 1 J Δ C) ≤ L₀) :
-    IsAngularScale q J Δ a A₀ m₀ p D L₀ :=
+    IsAngularScale q (IsSquareGroundState q J Δ) a A₀ m₀ p D L₀ :=
   isAngularScale_of_sublinearCollarBoundAt_le hq hJ hΔ hcol
     (amplificationBoundAt_collarAmplification hΔ C) ha m₀ hp hD hL₀
 
