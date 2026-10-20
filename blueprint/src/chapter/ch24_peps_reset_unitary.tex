@@ -35,9 +35,9 @@ replicas on a region $R$.
 
 \begin{theorem}[Regional coordinates of the replica exchange]
     \label{thm:peps_reset_regional_coordinates}
-    \lean{TNLean.PEPS.Approximation.splitTwoRegions_sheetSwap,
-        TNLean.PEPS.Approximation.submatrix_partialSwap_kronecker_one_eq_sheetSwapOp,
-        TNLean.PEPS.Approximation.quantumRelativeEntropy_splitTwoRegionsState_eq_mutualInformation}
+    \lean{TNLean.Lattice.splitTwoRegions_sheetSwap,
+        TNLean.Lattice.submatrix_partialSwap_kronecker_one_eq_sheetSwapOp,
+        TNLean.Lattice.quantumRelativeEntropy_splitTwoRegionsState_eq_mutualInformation}
     \leanok
     Let $R,C$ be disjoint regions of a finite set of sites, and put
     $Q=(R\cup C)^c$. In the coordinates
@@ -56,15 +56,15 @@ replicas on a region $R$.
 
 \begin{definition}[The constants of the information reset]
     \label{def:peps_reset_constants}
-    \lean{TNLean.PEPS.Approximation.resetVariance,
-        TNLean.PEPS.Approximation.resetCutoff,
+    \lean{TNLean.Lattice.resetVariance,
+        TNLean.Lattice.resetCutoff,
         TNLean.PEPS.Approximation.resetRadius,
         TNLean.PEPS.Approximation.resetFilterPrefactor,
         TNLean.PEPS.Approximation.resetUnitaryPrefactor,
-        TNLean.PEPS.Approximation.resetVariance_pos,
-        TNLean.PEPS.Approximation.resetCutoff_pos,
-        TNLean.PEPS.Approximation.resetVariance_mul_sq_div_two,
-        TNLean.PEPS.Approximation.resetCutoff_sq_div,
+        TNLean.Lattice.resetVariance_pos,
+        TNLean.Lattice.resetCutoff_pos,
+        TNLean.Lattice.resetVariance_mul_sq_div_two,
+        TNLean.Lattice.resetCutoff_sq_div,
         TNLean.PEPS.Approximation.resetRadius_pos,
         TNLean.PEPS.Approximation.resetFilterPrefactor_pos,
         TNLean.PEPS.Approximation.resetUnitaryPrefactor_pos,
@@ -102,7 +102,7 @@ replicas on a region $R$.
 
 \begin{theorem}[The two-sided Gaussian filter, with explicit constants]
     \label{thm:peps_reset_regional_filter_explicit}
-    \lean{TNLean.PEPS.Approximation.regional_physicalBuffer_filter}
+    \lean{TNLean.Lattice.regional_physicalBuffer_filter}
     \leanok
     \uses{def:peps_reset_constants}
     Fix $\Delta>0$ and $r\geq0$, and put $A=A(\Delta,r)$ and
@@ -147,7 +147,7 @@ replicas on a region $R$.
 
 \begin{theorem}[The two-sided Gaussian filter of the physical buffer]
     \label{thm:peps_reset_regional_filter}
-    \lean{TNLean.PEPS.Approximation.exists_regional_physicalBuffer_filter}
+    \lean{TNLean.Lattice.exists_regional_physicalBuffer_filter}
     \leanok
     Fix $\Delta>0$ and $r\ge0$. There are constants $A,T_0>0$ with the
     following property. Let $H$ be a Hamiltonian on a finite set of sites
@@ -181,7 +181,7 @@ replicas on a region $R$.
 
 \begin{theorem}[The polar step of the information reset]
     \label{thm:peps_reset_polar_step}
-    \lean{TNLean.PEPS.Approximation.exists_supported_unitary_of_two_sided}
+    \lean{TNLean.Lattice.exists_supported_unitary_of_two_sided}
     \leanok
     Let $M$ be supported on $S$, let $b\ge0$, $C\ge0$, $\varepsilon\ge0$, and
     let $z\ge e^{-2b}$ be real with

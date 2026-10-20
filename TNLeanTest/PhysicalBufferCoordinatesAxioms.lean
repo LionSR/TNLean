@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.Approximation.PhysicalBufferCoordinates
+import TNLean.Lattice.PhysicalBufferCoordinates
 import Lean.Elab.Command
 import Lean.Util.CollectAxioms
 
@@ -11,7 +11,7 @@ import Lean.Util.CollectAxioms
 
 run_cmd do
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
-  let decls := #[``TNLean.PEPS.EncodedFrame.reindex_physicalBuffer_eq_siteLift]
+  let decls := #[``TNLean.Lattice.reindex_physicalBuffer_eq_siteLift]
   for decl in decls do
     unless (← Lean.getEnv).contains decl do
       throwError "Missing declaration {decl}"

@@ -17,7 +17,11 @@ norm `J` and the gap `Δ`, linear in `1 + J/Δ`.
 
 The finite-dimensional argument (optimized filters, stationarity, the energy estimate, the
 prefix norm comparison and Schmidt pinning) is `Entropy.two_mul_condEntropy_le` in QICLean,
-stated for an arbitrary finite set of sites. This module supplies its hypotheses on the
+stated for an arbitrary finite set of sites, with the energy of a filtered vector bounded
+through the squared dimension `d_Y²` of each split support. Its variant
+`Entropy.two_mul_condEntropy_le_logarithmic` bounds the same energy through `8 e log² (e d_Y)`
+by the three-lines estimate of Remark 6.3 of the note (`rem:sharper`). The shell count uses
+whichever of the two energy thresholds is smaller. This module supplies its hypotheses on the
 chain: the nested shells `X_j = X^{+(j+1)R}`, which are intervals, the single-split
 property of shells `R` apart, the constant crossing count `N_R` and cut budget `B_R` of
 `TNLean.MPS.AreaLaw.Counting`, and the uniform weights `a_j = 2/m` of total mass two.
@@ -25,16 +29,20 @@ property of shells `R` apart, the constant crossing count `N_R` and cut budget `
 **Local fix (discount constants):** Lemma 4.2 of the note (`lem:buffer`, with the
 constants of `eq:CE`) bounds the energy of the filtered vector by `C_E/m ≤ Δ/4` with
 `C_E = 8 N_R J q^{2(R+1)}`, takes `m` with the fourth entry `4096 e (1 + ϑ) B_R`, and
-concludes `2 S(X | T) ≤ S(X) + 1 + 2 C_E/Δ`. The finite-dimensional lemma bounds the energy
-by `2 C_E/m ≤ Δ/2` (twice the note's estimate, at the note's own shell threshold
-`4 C_E/Δ`), keeps the overlap losses as `m log 2` in place of the note's `2 C_E/Δ`, and
-keeps the tail term `4096 e ϑ B_R / m` explicit instead of absorbing it into `1` by the
-fourth entry, which is therefore omitted from `m`. The deviations are changes of absolute
+concludes `2 S(X | T) ≤ S(X) + 1 + 2 C_E/Δ`. Here the energy is at most `Δ/2`, either by the
+squared-dimension estimate `2 C_E/m` (twice the note's estimate, at the note's own shell
+threshold `4 C_E/Δ`) or by the estimate `32 e N_R ℓ_R² J/m` of Remark 6.3, with
+`ℓ_R = log (e q^{R+1})`, at the threshold `64 e N_R ℓ_R² J/Δ`; `m` takes the smaller of the
+two thresholds. The overlap losses are kept as `m log 2` in place of the note's `2 C_E/Δ`,
+and the tail term `4096 e ϑ B_R / m` is kept explicit instead of being absorbed into `1` by
+the fourth entry, which is therefore omitted from `m`. The deviations are changes of absolute
 constants and propagate to `C_int` and `C₀` in `TNLean.MPS.AreaLaw.AreaLaw`. Documented in
 `docs/paper-gaps/tnlean_one_dimensional_discount_constants.tex`.
 
 ## Main results
 
+* `chainEnergyThreshold`: the smaller of the squared-dimension and logarithmic energy
+  thresholds.
 * `chainShellCount`: the number of shells `m`.
 * `chainDiscountConst`: the constant `4096 e (J/Δ) B_R / m + m log 2`.
 * `two_mul_condEntropy_interval_le`: the discount `2 S(X | T) ≤ S(X) + C`.
@@ -43,7 +51,8 @@ constants and propagate to `C_int` and `C₀` in `TNLean.MPS.AreaLaw.AreaLaw`. D
 
 * TNLean note, *A one-dimensional area law and matrix product state approximation from a
   global gap* (`docs/notes/one_dimensional_note`), Section 4, Lemma 4.2 (`lem:buffer`),
-  with the constants of the local fix above.
+  with the constants of the local fix above, and Remark 6.3 (`rem:sharper`) for the
+  logarithmic energy estimate.
 -/
 
 open Matrix
@@ -53,15 +62,28 @@ namespace TNLean.MPS.AreaLaw
 
 variable {L q R : ℕ} {J Δ : ℝ}
 
-/-- The energy threshold `32 N_R q^{2(R + 1)} J / Δ` for the number of shells. -/
-noncomputable def chainEnergyThreshold (q R : ℕ) (J Δ : ℝ) : ℝ :=
+/-- The energy threshold `32 N_R q^{2(R + 1)} J / Δ` of the squared-dimension energy
+estimate. -/
+noncomputable def chainQuadraticEnergyThreshold (q R : ℕ) (J Δ : ℝ) : ℝ :=
   32 * chainCrossConst R * (q : ℝ) ^ (2 * (R + 1)) * J / Δ
+
+/-- The energy threshold `64 e N_R log² (e q^{R + 1}) J / Δ` of the logarithmic energy
+estimate. TNLean note, Remark 6.3 (`rem:sharper`). -/
+noncomputable def chainLogEnergyThreshold (q R : ℕ) (J Δ : ℝ) : ℝ :=
+  64 * Real.exp 1 * chainCrossConst R * Real.log (Real.exp 1 * (q : ℝ) ^ (R + 1)) ^ 2 * J / Δ
+
+/-- The energy threshold for the number of shells, the smaller of the squared-dimension and
+logarithmic thresholds. -/
+noncomputable def chainEnergyThreshold (q R : ℕ) (J Δ : ℝ) : ℝ :=
+  min (chainQuadraticEnergyThreshold q R J Δ) (chainLogEnergyThreshold q R J Δ)
 
 /-- The tail threshold `128 √((1 + J/Δ) B_R)` for the number of shells. -/
 noncomputable def chainTailThreshold (q R : ℕ) (J Δ : ℝ) : ℝ :=
   128 * Real.sqrt ((1 + J / Δ) * chainBudgetConst q R)
 
-/-- The number of shells `m = ⌈max {4, 32 N_R q^{2(R + 1)} J/Δ, 128 √((1 + J/Δ) B_R)}⌉`. -/
+/-- The number of shells
+`m = ⌈max {4, min {32 N_R q^{2(R + 1)}, 64 e N_R log² (e q^{R + 1})} J/Δ, 128 √((1 + J/Δ) B_R)}⌉`.
+-/
 noncomputable def chainShellCount (q R : ℕ) (J Δ : ℝ) : ℕ :=
   ⌈max (max 4 (chainEnergyThreshold q R J Δ)) (chainTailThreshold q R J Δ)⌉₊
 
@@ -211,7 +233,8 @@ theorem two_mul_condEntropy_interval_le (hq : 1 ≤ q) (hJ : 0 ≤ J) (hΔ : 0 <
     · exact (not_splits_two_shells i.2 hjj h1 h2).elim
     · exact hjj
     · exact (not_splits_two_shells i.2 hjj h2 h1).elim
-  have hE : ∑ j ∈ Finset.range m, 4 * a j ^ 2 *
+  have hEquad (hthr : chainQuadraticEnergyThreshold q R J Δ ≤ m) :
+      ∑ j ∈ Finset.range m, 4 * a j ^ 2 *
       ∑ i ∈ Entropy.crossingTerms S (X ∪ T j),
         (Entropy.supportDim (fun _ : Fin L ↦ q) (S i) : ℝ) ^ 2 * J ≤ Δ / 2 := by
     have hqJ : 0 ≤ (q : ℝ) ^ (2 * (R + 1)) * J := by positivity
@@ -241,11 +264,49 @@ theorem two_mul_condEntropy_interval_le (hq : 1 ≤ q) (hJ : 0 ≤ J) (hΔ : 0 <
         _ = 16 * N * ((q : ℝ) ^ (2 * (R + 1)) * J) / (m : ℝ) ^ 2 := by rw [ha]; ring
     refine (Finset.sum_le_sum hterm).trans ?_
     simp only [Finset.sum_const, Finset.card_range, nsmul_eq_mul]
-    have hthr : 32 * N * (q : ℝ) ^ (2 * (R + 1)) * J / Δ ≤ m := hmE
+    have hthr : 32 * N * (q : ℝ) ^ (2 * (R + 1)) * J / Δ ≤ m := hthr
     rw [div_le_iff₀ hΔ] at hthr
     have hN : (0 : ℝ) ≤ N := Nat.cast_nonneg N
     rw [show (m : ℝ) * (16 * N * ((q : ℝ) ^ (2 * (R + 1)) * J) / (m : ℝ) ^ 2) =
       16 * N * ((q : ℝ) ^ (2 * (R + 1)) * J) / m by field_simp]
+    rw [div_le_div_iff₀ hmpos two_pos]
+    nlinarith
+  have hElog (hthr : chainLogEnergyThreshold q R J Δ ≤ m) :
+      ∑ j ∈ Finset.range m, 8 * Real.exp 1 * a j ^ 2 *
+        ∑ i ∈ Entropy.crossingTerms S (X ∪ T j),
+          Real.log (Real.exp 1 * (Entropy.supportDim (fun _ : Fin L ↦ q) (S i) : ℝ)) ^ 2 * J ≤
+        Δ / 2 := by
+    set ℓ : ℝ := Real.log (Real.exp 1 * (q : ℝ) ^ (R + 1))
+    have hℓJ : 0 ≤ ℓ ^ 2 * J := by positivity
+    have hterm : ∀ j ∈ Finset.range m, 8 * Real.exp 1 * a j ^ 2 *
+        ∑ i ∈ Entropy.crossingTerms S (X ∪ T j),
+          Real.log (Real.exp 1 * (Entropy.supportDim (fun _ : Fin L ↦ q) (S i) : ℝ)) ^ 2 * J ≤
+        32 * Real.exp 1 * N * (ℓ ^ 2 * J) / (m : ℝ) ^ 2 := by
+      intro j hj
+      have hj := Finset.mem_range.mp hj
+      have hsum : ∑ i ∈ Entropy.crossingTerms S (X ∪ T j),
+          Real.log (Real.exp 1 * (Entropy.supportDim (fun _ : Fin L ↦ q) (S i) : ℝ)) ^ 2 * J ≤
+          (Entropy.crossingTerms S (X ∪ T j)).card * (ℓ ^ 2 * J) := by
+        rw [← nsmul_eq_mul]
+        exact Finset.sum_le_card_nsmul _ _ _ fun i _ ↦
+          mul_le_mul_of_nonneg_right (log_sq_supportDim_le hq i) hJ
+      have hcard := hcross j hj
+      have ha : a j ^ 2 = 4 / (m : ℝ) ^ 2 := by norm_num [a, div_pow]
+      have he : 0 ≤ 8 * Real.exp 1 * a j ^ 2 := by positivity
+      calc 8 * Real.exp 1 * a j ^ 2 * ∑ i ∈ Entropy.crossingTerms S (X ∪ T j),
+            Real.log (Real.exp 1 * (Entropy.supportDim (fun _ : Fin L ↦ q) (S i) : ℝ)) ^ 2 * J
+          ≤ 8 * Real.exp 1 * a j ^ 2 *
+              ((Entropy.crossingTerms S (X ∪ T j)).card * (ℓ ^ 2 * J)) :=
+            mul_le_mul_of_nonneg_left hsum he
+        _ ≤ 8 * Real.exp 1 * a j ^ 2 * (N * (ℓ ^ 2 * J)) := by gcongr
+        _ = 32 * Real.exp 1 * N * (ℓ ^ 2 * J) / (m : ℝ) ^ 2 := by rw [ha]; ring
+    refine (Finset.sum_le_sum hterm).trans ?_
+    simp only [Finset.sum_const, Finset.card_range, nsmul_eq_mul]
+    have hthr : 64 * Real.exp 1 * N * ℓ ^ 2 * J / Δ ≤ m := hthr
+    rw [div_le_iff₀ hΔ] at hthr
+    have hN : (0 : ℝ) ≤ N := Nat.cast_nonneg N
+    rw [show (m : ℝ) * (32 * Real.exp 1 * N * (ℓ ^ 2 * J) / (m : ℝ) ^ 2) =
+      32 * Real.exp 1 * N * (ℓ ^ 2 * J) / m by field_simp]
     rw [div_le_div_iff₀ hmpos two_pos]
     nlinarith
   have hu : ∀ j < m, a j / (1 - a j) ≤ Entropy.tailRadius (J / Δ)
@@ -263,10 +324,6 @@ theorem two_mul_condEntropy_interval_le (hq : 1 ≤ q) (hJ : 0 ≤ J) (hΔ : 0 <
     simp only [T, hj, ↓reduceIte]
     have : d j ≤ d (m - 1) := Nat.mul_le_mul_right _ (by omega)
     exact Finset.sdiff_subset_sdiff (interval_mono (by omega) (by omega)) le_rfl
-  -- the finite-dimensional discount
-  have key := Entropy.two_mul_condEntropy_le (n := fun _ : Fin L ↦ q) X T hT hdisj a ha0 ha2
-    hΩ h.term S h.supported h.hermitian hJ h.norm_le hsingle hΔ heig hgap (E := Δ / 2)
-    (by linarith) hE hu hmass (disjoint_interval_chainBuffer L q R J Δ l r) hTbuf
   -- the error terms
   have herr : ∑ j ∈ Finset.range m, 1024 * Real.exp 1 * (J / Δ) *
       Entropy.cutLogBudget (Entropy.crossingTerms S (X ∪ T j))
@@ -289,9 +346,24 @@ theorem two_mul_condEntropy_interval_le (hq : 1 ≤ q) (hJ : 0 ≤ J) (hΔ : 0 <
   have hlog : (m : ℝ) * Real.log (1 - Δ / 2 / Δ) = -(m * Real.log 2) := by
     have h12 : 1 - Δ / 2 / Δ = (2 : ℝ)⁻¹ := by field_simp; norm_num
     rw [h12, Real.log_inv, mul_neg]
-  -- conclusion
-  rw [hlog] at key
+  -- the finite-dimensional discount, with the smaller of the two energy thresholds
   simp only [chainDiscountConst]
-  linarith
+  rcases min_choice (chainQuadraticEnergyThreshold q R J Δ) (chainLogEnergyThreshold q R J Δ)
+    with hmin | hmin
+  · have hthr : chainQuadraticEnergyThreshold q R J Δ ≤ m := by
+      rw [← hmin]; exact hmE
+    have key := Entropy.two_mul_condEntropy_le (n := fun _ : Fin L ↦ q) X T hT hdisj a ha0 ha2
+      hΩ h.term S h.supported h.hermitian hJ h.norm_le hsingle hΔ heig hgap (E := Δ / 2)
+      (by linarith) (hEquad hthr) hu hmass (disjoint_interval_chainBuffer L q R J Δ l r) hTbuf
+    rw [hlog] at key
+    linarith
+  · have hthr : chainLogEnergyThreshold q R J Δ ≤ m := by
+      rw [← hmin]; exact hmE
+    have key := Entropy.two_mul_condEntropy_le_logarithmic (n := fun _ : Fin L ↦ q) X T hT hdisj
+      a ha0 ha2 hΩ h.term S h.supported h.hermitian hJ h.norm_le hsingle hΔ heig hgap
+      (E := Δ / 2) (by linarith) (hElog hthr) hu hmass
+      (disjoint_interval_chainBuffer L q R J Δ l r) hTbuf
+    rw [hlog] at key
+    linarith
 
 end TNLean.MPS.AreaLaw

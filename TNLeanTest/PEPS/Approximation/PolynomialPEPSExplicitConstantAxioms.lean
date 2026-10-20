@@ -20,7 +20,6 @@ run_cmd do
     `TNLean.PEPS.Approximation.largeSizeDyadicProtocol_of_le_of_adaptivePatchConstraint,
     `TNLean.PEPS.Approximation.dyadicOperatorNetworkAt_of_dyadicProtocolBoundsAt,
     `TNLean.PEPS.Approximation.hasPEPSApproximation_of_dyadicOperatorNetworkAt,
-    `TNLean.PEPS.Approximation.polynomialPEPSApproximation_of_largeSizeDyadicOperatorNetwork,
     `TNLean.PEPS.Approximation.polynomialPEPSApproximation_of_ratios,
     `TNLean.PEPS.Approximation.pepsBondPrefactor_pos,
     `TNLean.PEPS.Approximation.pepsBondExponent_pos,

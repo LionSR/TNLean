@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.MatrixKroneckerContraction
+import TNLean.Lattice.RegionSplit
 import TNLean.PEPS.Approximation.PatchRewrite
 import QICLean.Entropy.FiniteProduct
 import QICLean.Entropy.PurificationSplitting
@@ -15,12 +16,12 @@ The changes of ownership of §6.4 of the polynomial-PEPS manuscript act on a she
 are partitioned into three regions `T`, `E` and `U = Λ ∖ (T ∪ E)`. This file provides the
 coordinates of such a partition and the splitting consequence of Lemma 6.4 in them.
 
-* `EncodedFrame.sheetSplit S` identifies the raw configurations of the sheet with pairs of
-  configurations on `S` and on its complement, and `EncodedFrame.threeSplit T E` with triples
-  `((t, e), u)` of configurations on `T`, `E` and `(T ∪ E)ᶜ`.
-* An operator acting on a set of sites has a product form in these coordinates: an operator on
-  `S` is `A' ⊗ 1`, an operator on a set disjoint from `S` is `1 ⊗ A'`, an operator on `T ∪ E`
-  is `A' ⊗ 1_U`, and an operator on a subset of `E` is `(1_T ⊗ A') ⊗ 1_U`.
+* `EncodedFrame.threeSplit T E` identifies the raw configurations of the sheet with triples
+  `((t, e), u)` of configurations on `T`, `E` and `(T ∪ E)ᶜ`. It refines the two-region
+  coordinates `TNLean.Lattice.sheetSplit`, in which an operator on `S` is `A' ⊗ 1` and an
+  operator on a set disjoint from `S` is `1 ⊗ A'`.
+* An operator acting on `T ∪ E` is `A' ⊗ 1_U` in these coordinates, and an operator on a subset
+  of `E` is `(1_T ⊗ A') ⊗ 1_U`.
 * `EncodedFrame.exists_sheetSplitting`: Lemma 6.4 `lem:splitting` for the regional mutual
   information `I_Ω(T:E)` of a unit vector `Ω` on the sheet: if `I_Ω(T:E) ≤ L^{-60}` there are an
   isometry `V` on the configurations of `U` and unit vectors `s`, `s'` with
@@ -42,6 +43,7 @@ the manuscript; no upstream Lean proof text was reused.
 
 open Matrix QuantumCircuit
 open scoped BigOperators Kronecker Matrix.Norms.L2Operator ComplexOrder
+open TNLean.Lattice (sheetSplit)
 
 noncomputable section
 
@@ -104,78 +106,6 @@ theorem norm_act_one_kronecker_refVec_sub_le [NeZero q] {pos : ι → ℝ × ℝ
       act_sub_right]
   rw [h]
   exact norm_act_le_of_norm_le_one F.norm_encoder_le_one _
-
-/-! ### Two regions -/
-
-/-- The raw configurations of a sheet as pairs of configurations on `S` and on `Sᶜ`. -/
-abbrev sheetSplit (q : ℕ) (S : Finset ι) : (ι → Fin q) ≃ (S → Fin q) × (↥Sᶜ → Fin q) :=
-  FiniteProduct.splitEquiv (fun _ : ι => Fin q) S
-
-/-- A product operator in the coordinates of `sheetSplit S` is the Kronecker product of its
-restrictions to `S` and to `Sᶜ`. -/
-theorem rectKronecker_submatrix_sheetSplit (S : Finset ι) (m : ι → Matrix (Fin q) (Fin q) ℂ) :
-    (rectKronecker m).submatrix (sheetSplit q S).symm (sheetSplit q S).symm =
-      rectKronecker (fun v : S => m v) ⊗ₖ rectKronecker (fun v : ↥Sᶜ => m v) := by
-  ext ⟨a, c⟩ ⟨a', c'⟩
-  simp only [submatrix_apply, rectKronecker_apply, kroneckerMap_apply]
-  rw [← Finset.prod_mul_prod_compl S, ← Finset.prod_coe_sort S, ← Finset.prod_coe_sort Sᶜ]
-  congr 1
-  · refine Finset.prod_congr rfl fun v _ => ?_
-    simp [FiniteProduct.splitEquiv_symm_apply_of_mem _ S _ _ _ v.2]
-  · refine Finset.prod_congr rfl fun v _ => ?_
-    simp [FiniteProduct.splitEquiv_symm_apply_of_notMem _ S _ _ _ (Finset.mem_compl.mp v.2)]
-
-/-- An operator acting on `S` is `A' ⊗ 1` in the coordinates of `sheetSplit S`. -/
-theorem exists_kronecker_one_of_mem_supportedOperators {S : Finset ι}
-    {A : Matrix (ι → Fin q) (ι → Fin q) ℂ} (hA : A ∈ supportedOperators q (S : Set ι)) :
-    ∃ A' : Matrix (S → Fin q) (S → Fin q) ℂ,
-      A.submatrix (sheetSplit q S).symm (sheetSplit q S).symm =
-        A' ⊗ₖ (1 : Matrix (↥Sᶜ → Fin q) (↥Sᶜ → Fin q) ℂ) := by
-  induction hA using Submodule.span_induction with
-  | mem x hx =>
-    obtain ⟨m, hm, rfl⟩ := hx
-    refine ⟨rectKronecker fun v : S => m v, ?_⟩
-    rw [rectKronecker_submatrix_sheetSplit]
-    congr 1
-    rw [← rectKronecker_one (ν := ↥Sᶜ) (ι := Fin q)]
-    congr 1
-    funext v
-    exact hm v (Finset.mem_compl.mp v.2)
-  | zero => exact ⟨0, by simp⟩
-  | add x y _ _ hx hy =>
-    obtain ⟨X, hX⟩ := hx
-    obtain ⟨Y, hY⟩ := hy
-    exact ⟨X + Y, by rw [add_kronecker, ← hX, ← hY]; rfl⟩
-  | smul c x _ hx =>
-    obtain ⟨X, hX⟩ := hx
-    exact ⟨c • X, by rw [smul_kronecker, ← hX]; rfl⟩
-
-/-- An operator acting on a set disjoint from `S` is `1 ⊗ A'` in the coordinates of
-`sheetSplit S`. -/
-theorem exists_one_kronecker_of_mem_supportedOperators {S : Finset ι} {D : Set ι}
-    (hD : Disjoint D (S : Set ι)) {A : Matrix (ι → Fin q) (ι → Fin q) ℂ}
-    (hA : A ∈ supportedOperators q D) :
-    ∃ A' : Matrix (↥Sᶜ → Fin q) (↥Sᶜ → Fin q) ℂ,
-      A.submatrix (sheetSplit q S).symm (sheetSplit q S).symm =
-        (1 : Matrix (S → Fin q) (S → Fin q) ℂ) ⊗ₖ A' := by
-  induction hA using Submodule.span_induction with
-  | mem x hx =>
-    obtain ⟨m, hm, rfl⟩ := hx
-    refine ⟨rectKronecker fun v : ↥Sᶜ => m v, ?_⟩
-    rw [rectKronecker_submatrix_sheetSplit]
-    congr 1
-    rw [← rectKronecker_one (ν := ↥S) (ι := Fin q)]
-    congr 1
-    funext v
-    exact hm v fun hv => Set.disjoint_left.mp hD hv v.2
-  | zero => exact ⟨0, by simp⟩
-  | add x y _ _ hx hy =>
-    obtain ⟨X, hX⟩ := hx
-    obtain ⟨Y, hY⟩ := hy
-    exact ⟨X + Y, by rw [kronecker_add, ← hX, ← hY]; rfl⟩
-  | smul c x _ hx =>
-    obtain ⟨X, hX⟩ := hx
-    exact ⟨c • X, by rw [kronecker_smul, ← hX]; rfl⟩
 
 /-! ### Three regions -/
 

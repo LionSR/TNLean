@@ -22,14 +22,14 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 
 \begin{lemma}[Operators on parts of a sheet]
     \label{lem:peps_frame_split_forms}
-    \lean{TNLean.PEPS.EncodedFrame.sheetSplit,
+    \lean{TNLean.Lattice.sheetSplit,
         TNLean.PEPS.EncodedFrame.threeSplit,
         TNLean.PEPS.EncodedFrame.threeSplit_fst,
         TNLean.PEPS.EncodedFrame.threeSplit_snd,
-        TNLean.PEPS.EncodedFrame.rectKronecker_submatrix_sheetSplit,
+        TNLean.Lattice.rectKronecker_submatrix_sheetSplit,
         TNLean.PEPS.EncodedFrame.rectKronecker_submatrix_threeSplit,
-        TNLean.PEPS.EncodedFrame.exists_kronecker_one_of_mem_supportedOperators,
-        TNLean.PEPS.EncodedFrame.exists_one_kronecker_of_mem_supportedOperators,
+        TNLean.Lattice.exists_kronecker_one_of_mem_supportedOperators,
+        TNLean.Lattice.exists_one_kronecker_of_mem_supportedOperators,
         TNLean.PEPS.EncodedFrame.exists_threeSplit_eq_kronecker_one,
         TNLean.PEPS.EncodedFrame.exists_threeSplit_eq_one_kronecker_kronecker_one}
     \leanok
@@ -763,8 +763,8 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 
 \begin{definition}[Swapping two sheets]
     \label{def:peps_frame_sheet_swap}
-    \lean{TNLean.PEPS.EncodedFrame.sheetSwap,
-        TNLean.PEPS.EncodedFrame.sheetSwapOp}
+    \lean{TNLean.Lattice.sheetSwap,
+        TNLean.Lattice.sheetSwapOp}
     \leanok
     For $S\subseteq\Lambda$, $F_S$ is the unitary swapping the two sheets
     at the positions in $S$ (\texttt{05-frames.tex}, lines 476--477).
@@ -785,7 +785,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 
 \begin{theorem}[Sheet swaps are contractions]
     \label{thm:peps_frame_sheet_swap_norm}
-    \lean{TNLean.PEPS.EncodedFrame.norm_sheetSwapOp_le_one}
+    \lean{TNLean.Lattice.norm_sheetSwapOp_le_one}
     \leanok
     \uses{def:peps_frame_sheet_swap}
     $\|F_S\|\leq1$.
@@ -799,8 +799,8 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 
 \begin{lemma}[Composing and commuting sheet swaps]
     \label{lem:peps_frame_sheet_swap_compose}
-    \lean{TNLean.PEPS.EncodedFrame.sheetSwapOp_mul_sheetSwapOp,
-        TNLean.PEPS.EncodedFrame.commute_sheetSwapOp_kronecker}
+    \lean{TNLean.Lattice.sheetSwapOp_mul_sheetSwapOp,
+        TNLean.Lattice.commute_sheetSwapOp_kronecker}
     \leanok
     \uses{def:peps_frame_sheet_swap}
     If $Y$ is the disjoint union of $T$ and $A$, then $F_AF_Y=F_T$. The swap
@@ -819,7 +819,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 
 \begin{theorem}[Exchanging supported operators]
     \label{thm:peps_sheet_swap_supported_exchange}
-    \lean{TNLean.PEPS.EncodedFrame.sheetSwapOp_mul_kronecker_of_mem_supportedOperators}
+    \lean{TNLean.Lattice.sheetSwapOp_mul_kronecker_of_mem_supportedOperators}
     \leanok
     \uses{def:peps_frame_sheet_swap}
     Let $R\subseteq\Lambda$, and let $A$ and $B$ be operators on
@@ -846,7 +846,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 
 \begin{theorem}[Cancellation of a noncrossing doubled interaction]
     \label{thm:peps_sheet_swap_doubled_cancellation}
-    \lean{TNLean.PEPS.EncodedFrame.sheetSwapOp_conj_doubledHamiltonian_eq_of_mem_supportedOperators}
+    \lean{TNLean.Lattice.sheetSwapOp_conj_doubledHamiltonian_eq_of_mem_supportedOperators}
     \leanok
     \uses{def:peps_frame_sheet_swap}
     Let $q\geq0$ be a local dimension and $R,S\subseteq\Lambda$. Let $A$
@@ -877,8 +877,8 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 
 \begin{theorem}[Restricting a swap to an interaction support]
     \label{thm:peps_sheet_swap_interaction_restriction}
-    \lean{TNLean.PEPS.EncodedFrame.sheetSwapOp_conj_kronecker_eq_inter,
-        TNLean.PEPS.EncodedFrame.sheetSwapOp_conj_doubledHamiltonian_eq_inter}
+    \lean{TNLean.Lattice.sheetSwapOp_conj_kronecker_eq_inter,
+        TNLean.Lattice.sheetSwapOp_conj_doubledHamiltonian_eq_inter}
     \leanok
     \uses{def:peps_frame_sheet_swap}
     Let $q$ be a natural local dimension, let $\Lambda$ be a finite set of
@@ -970,7 +970,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 
 \begin{theorem}[Support of the swap in paired coordinates]
     \label{thm:peps_sheet_swap_paired_site_support}
-    \lean{TNLean.PEPS.EncodedFrame.reindex_sheetSwapOp_mem_supportedOperators}
+    \lean{TNLean.Lattice.reindex_sheetSwapOp_mem_supportedOperators}
     \leanok
     \uses{def:qc_site_pair_coordinates,def:peps_frame_sheet_swap}
     Let $q\geq0$ be a local dimension and $R\subseteq\Lambda$. Identify two configurations of local dimension $q$
@@ -996,8 +996,8 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 
 \begin{theorem}[Support of a swapped tensor product]
     \label{thm:peps_sheet_swap_conjugate_support}
-    \lean{TNLean.PEPS.EncodedFrame.reindex_sheetSwapOp_conj_kronecker_mem_supportedOperators,
-        TNLean.PEPS.EncodedFrame.reindex_sheetSwapOp_conj_doubledHamiltonian_mem_supportedOperators}
+    \lean{TNLean.Lattice.reindex_sheetSwapOp_conj_kronecker_mem_supportedOperators,
+        TNLean.Lattice.reindex_sheetSwapOp_conj_doubledHamiltonian_mem_supportedOperators}
     \leanok
     \uses{def:qc_site_pair_coordinates,def:peps_frame_sheet_swap}
     Let $\Lambda$ be a finite site set, let $q$ be a natural local dimension,
@@ -1113,9 +1113,9 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     \lean{TNLean.PEPS.EncodedFrame.TwoSheetExchange.rename_mul_encoder,
         TNLean.PEPS.EncodedFrame.TwoSheetExchange.exists_out_form,
         TNLean.PEPS.EncodedFrame.TwoSheetExchange.exists_in_form,
-        TNLean.PEPS.EncodedFrame.sheetSplit_sheetSwap_fst,
-        TNLean.PEPS.EncodedFrame.sheetSplit_sheetSwap_snd,
-        TNLean.PEPS.EncodedFrame.mul_submatrix_sheetSplit}
+        TNLean.Lattice.sheetSplit_sheetSwap_fst,
+        TNLean.Lattice.sheetSplit_sheetSwap_snd,
+        TNLean.Lattice.mul_submatrix_sheetSplit}
     \leanok
     \uses{def:peps_frame_exchange_data,lem:peps_frame_split_forms,
         lem:peps_frame_commute}

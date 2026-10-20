@@ -294,6 +294,7 @@ for an arbitrary finite set of sites and are instantiated here directly.
         TNLean.MPS.AreaLaw.chainBudgetConst,
         TNLean.MPS.AreaLaw.one_le_chainBudgetConst,
         TNLean.MPS.AreaLaw.supportDim_le_real,
+        TNLean.MPS.AreaLaw.log_sq_supportDim_le,
         TNLean.MPS.AreaLaw.cutLogBudget_interval_le,
         TNLean.MPS.AreaLaw.not_splits_two_shells
     }
@@ -899,6 +900,8 @@ for an arbitrary finite set of sites and are instantiated here directly.
 \begin{lemma}[Buffered discount on a chain]
     \label{lem:chain_buffer_discount}
     \lean{
+        TNLean.MPS.AreaLaw.chainQuadraticEnergyThreshold,
+        TNLean.MPS.AreaLaw.chainLogEnergyThreshold,
         TNLean.MPS.AreaLaw.chainEnergyThreshold,
         TNLean.MPS.AreaLaw.chainTailThreshold,
         TNLean.MPS.AreaLaw.chainShellCount,
@@ -915,9 +918,11 @@ for an arbitrary finite set of sites and are instantiated here directly.
     \uses{def:chain_model}
     Let $\Omega$ be a gapped ground vector, with gap $\Delta>0$, of a
     finite-range Hamiltonian with term norms at most $J\ge0$ on the chain with
-    local dimension $q\ge1$. Put $\vartheta=J/\Delta$ and
+    local dimension $q\ge1$. Put $\vartheta=J/\Delta$,
+    $\ell_R=\log(e\,q^{R+1})$,
+    $E_R=\min\{32N_Rq^{2(R+1)},\ 64\,e\,N_R\ell_R^2\}$ and
     \begin{align}
-        m=\Bigl\lceil\max\bigl\{4,\ 32N_Rq^{2(R+1)}\vartheta,\
+        m=\Bigl\lceil\max\bigl\{4,\ E_R\vartheta,\
         128\sqrt{(1+\vartheta)B_R}\bigr\}\Bigr\rceil .
     \end{align}
     For an interval $X=[l,r)$ let $T=X^{+mR}\setminus X$ be the buffer,
@@ -931,7 +936,11 @@ for an arbitrary finite set of sites and are instantiated here directly.
     constants of Lemma~4.2 of \cite{TNLean2026OneDimensional}, which runs at
     the threshold $\Delta/4$, absorbs the tail term through a fourth entry of
     $m$ and concludes with $1+16N_Rq^{2(R+1)}\vartheta$; see
-    \cite{gap:tnlean_one_dimensional_discount_constants}.
+    \cite{gap:tnlean_one_dimensional_discount_constants}. The second entry
+    $64\,e\,N_R\ell_R^2$ of $E_R$ is the logarithmic energy estimate of
+    Remark~6.3 of \cite{TNLean2026OneDimensional}. Since $E_R$ is at most
+    either entry, this $m$ is at most the shell count obtained from either
+    estimate alone, and in particular it satisfies the bound of that remark.
 \end{lemma}
 \begin{proof}
     \leanok
@@ -943,8 +952,13 @@ for an arbitrary finite set of sites and are instantiated here directly.
     total mass two. The shells are intervals, so each is split by at most $N_R$
     supports with cut budget at most $B_R$ by
     Lemma~\ref{lem:chain_crossing_count}, and no support is split by two of
-    them. The choice of $m$ makes the energy of the filtered vector at most
-    $\Delta/2$, each weight at most $1/2$, and each tilt $a_j/(1-a_j)$ at most
+    them. The energy of the filtered vector is at most
+    $\sum_j4a_j^2\sum_Y(\dim\mathcal H_Y)^2J\le16N_Rq^{2(R+1)}J/m$, the sum
+    running over the supports $Y$ split by $X_j$, and also at most
+    $\sum_j8e\,a_j^2\sum_Y\log^2(e\dim\mathcal H_Y)\,J\le32\,e\,N_R\ell_R^2J/m$
+    by the three-lines estimate of Remark~6.3 of
+    \cite{TNLean2026OneDimensional}. The choice of $m$ makes the smaller of
+    the two bounds at most $\Delta/2$, each weight at most $1/2$, and each tilt $a_j/(1-a_j)$ at most
     the tail radius $1/(32\sqrt{(1+\vartheta)B_j})$. The error terms sum to
     $1024e\vartheta\sum_jB_ja_j^2\le4096e\vartheta B_R/m$, and the overlap
     losses to $m\log2$.
@@ -1019,8 +1033,9 @@ for an arbitrary finite set of sites and are instantiated here directly.
         \le C_0(q,R)\,(1+J/\Delta),
     \end{align}
     with
-    $C_0(q,R)=\bigl(8R\log q+\log2\bigr)\bigl(5+32N_Rq^{2(R+1)}+128B_R\bigr)
-        +1024\,e\,B_R$, and every subset $A$ of the chain satisfies
+    $C_0(q,R)=\bigl(8R\log q+\log2\bigr)\bigl(5+E_R+128B_R\bigr)
+        +1024\,e\,B_R$, where
+    $E_R=\min\{32N_Rq^{2(R+1)},\ 64\,e\,N_R\log^2(e\,q^{R+1})\}$, and every subset $A$ of the chain satisfies
     $S(A)\le C_{\mathrm{int}}\,|\partial A|$. Hence the constant
     $C_0(q,R)(1+J/\Delta)$, chosen before $L$, the Hamiltonian, the ground
     vector and the region, bounds $S(A)/|\partial A|$ for every gapped chain.
@@ -1035,7 +1050,7 @@ for an arbitrary finite set of sites and are instantiated here directly.
     $S(X)-2S(T)\le S(X\cup T)-S(T)\le\frac12S(X)+\frac12C_{\mathrm{disc}}$,
     hence $S(X)\le4S(T)+C_{\mathrm{disc}}$, and $S(T)\le|T|\log q\le
         2mR\log q$. The linear bound uses
-    $m\le(5+32N_Rq^{2(R+1)}+128B_R)(1+\vartheta)$, which follows from
+    $m\le(5+E_R+128B_R)(1+\vartheta)$, which follows from
     $\sqrt{(1+\vartheta)B_R}\le(1+\vartheta)B_R$, and $m\ge4$. The subset
     bound is the second part of Lemma~\ref{lem:chain_entropy_inequalities}.
 \end{proof}

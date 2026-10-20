@@ -26,7 +26,7 @@ finite set of sites, instantiated here on the chain.
 | Setting: the chain of `L` sites, intervals, supports, Hamiltonians (`eq:ham`, `eq:gap`) | `MPS.AreaLaw.interval`, `MPS.AreaLaw.IsChainSupport`, `MPS.AreaLaw.ChainHamiltonian`, `Matrix.IsGappedGroundState` | Definitions. |
 | Lemma 3.1 (marginal tail bound) at a cut | `MPS.AreaLaw.ChainHamiltonian.surprisalTail_regionState_le` with the budget `MPS.AreaLaw.cutLogBudget` | Proved, from the QICLean core. |
 | `eq:count`, `eq:BR`: split interactions and cut budget of an interval | `MPS.AreaLaw.card_crossingTerms_interval_le` (`N_R = 2·2^{2R}`), `MPS.AreaLaw.cutLogBudget_interval_le` (`B_R = 1 + N_R log²(e q^{R+1})`) | Proved; the constants are those of the note. |
-| Lemma 4.2 (buffered discount) | `MPS.AreaLaw.two_mul_condEntropy_interval_le`, with `MPS.AreaLaw.chainShellCount` (`m`) and `MPS.AreaLaw.chainDiscountConst` | Proved. Shells of width `R` as in the note; energy threshold `Δ/2` in place of the note's `Δ/4`, overlap losses `m log 2` in place of the note's `2 C_E/Δ`, and the shell count omits the note's fourth entry `4096 e (1 + ϑ) B_R`, the term `4096 e ϑ B_R / m` staying explicit in the discount: `docs/paper-gaps/tnlean_one_dimensional_discount_constants.tex`. |
+| Lemma 4.2 (buffered discount) | `MPS.AreaLaw.two_mul_condEntropy_interval_le`, with `MPS.AreaLaw.chainShellCount` (`m`) and `MPS.AreaLaw.chainDiscountConst` | Proved. Shells of width `R` as in the note; the shell count uses the smaller of the note's energy threshold and the logarithmic one of Remark 6.3 (`Entropy.two_mul_condEntropy_le_logarithmic` in QICLean); energy threshold `Δ/2` in place of the note's `Δ/4`, overlap losses `m log 2` in place of the note's `2 C_E/Δ`, and the shell count omits the note's fourth entry `4096 e (1 + ϑ) B_R`, the term `4096 e ϑ B_R / m` staying explicit in the discount: `docs/paper-gaps/tnlean_one_dimensional_discount_constants.tex`. |
 | Araki–Lieb closure, reductions (Section 2) | `Lattice.regionEntropy_le_union_add`, `MPS.AreaLaw.regionEntropy_le_mul_card_boundaryEdges_of_intervals` | Proved. |
 | Theorem A for intervals | `MPS.AreaLaw.regionEntropy_interval_le` with the explicit `MPS.AreaLaw.chainIntervalEntropyBound` | Proved; no existential constant. |
 | Theorem A, constant linear in `1 + J/Δ` | `MPS.AreaLaw.chainIntervalEntropyBound_le`, `MPS.AreaLaw.chainAreaLawConst` | Proved. |
@@ -141,7 +141,7 @@ estimate before bounding it by L. It applies to every real time and radius
 hypothesis. The individual crossing terms are localized before summation.
 
 The existing generic theorem
-`TNLean.PEPS.Approximation.exists_regional_physicalBuffer_filter` supplies the
+`TNLean.Lattice.exists_regional_physicalBuffer_filter` supplies the
 two-sided Gaussian-filter estimates on any finite site set. The theorem
 `MPS.AreaLaw.exists_supported_gaussian_integral` constructs a single projected
 unitary evolution near Z, before the observable and Gaussian data, and then
@@ -200,13 +200,17 @@ them:
 |---|---|
 | `chainCrossConst R` | `N_R = 2 · 2^{2R}` |
 | `chainBudgetConst q R` | `B_R = 1 + N_R log²(e q^{R+1})` |
-| `chainShellCount q R J Δ` | `m = ⌈max {4, 32 N_R q^{2(R+1)} J/Δ, 128 √((1 + J/Δ) B_R)}⌉` |
+| `chainEnergyThreshold q R J Δ` | `E_R J/Δ` with `E_R = min {32 N_R q^{2(R+1)}, 64 e N_R log²(e q^{R+1})}` |
+| `chainShellCount q R J Δ` | `m = ⌈max {4, E_R J/Δ, 128 √((1 + J/Δ) B_R)}⌉` |
 | `chainDiscountConst q R J Δ` | `4096 e (J/Δ) B_R / m + m log 2` |
 | `chainIntervalEntropyBound q R J Δ` | `C_int = 8 m R log q + chainDiscountConst` |
-| `chainAreaLawConst q R` | `C₀ = (8 R log q + log 2)(5 + 32 N_R q^{2(R+1)} + 128 B_R) + 1024 e B_R`, with `C_int ≤ C₀ (1 + J/Δ)` |
+| `chainAreaLawConst q R` | `C₀ = (8 R log q + log 2)(5 + E_R + 128 B_R) + 1024 e B_R`, with `C_int ≤ C₀ (1 + J/Δ)` |
 | `chainTruncationWidth q R J Δ L` | `w = 64 √((1 + J/Δ) B_R) log(2 L² √(2 e^{e/2}))` |
 | `chainBondDimension q R J Δ L` | `⌊exp(C_int + w)⌋` |
 
-The polynomial factor `q^{2(R+1)}` in `m` is the crude bound of the formal
-buffer lemma; Remark 6.3 of the note explains how it can be replaced by
-`log²(e q^{R+1})` with the three-lines device, which is not carried out here.
+The energy constant `E_R` takes the smaller of two estimates of the energy of
+the filtered vector: the squared-dimension bound, which gives the polynomial
+factor `q^{2(R+1)}`, and the three-lines bound of Remark 6.3 of the note,
+which replaces it by `2 e log²(e q^{R+1})`. The second is smaller once
+`q^{R+1}` is moderately large, and makes `m` and `C₀` of order
+`(1 + J/Δ) B_R` and `R log q (1 + J/Δ) B_R`.
