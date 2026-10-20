@@ -27,9 +27,9 @@ are assumed, and the operator network is already on the open square.
 The source selects a column on the party network before routing it.
 The present statement takes the square network first and preserves its
 individual edge dimensions. For the protocol, the estimates are verified in
-`largeSizeDyadicOperatorNetwork_of_largeSizeDyadicProtocolConsequences`, and the
+`dyadicOperatorNetworkAt_of_dyadicProtocolBoundsAt`, and the
 source order of column selection then routing is carried out in
-`polynomialPEPSApproximation_of_largeSizeDyadicOperatorNetwork`; see
+`hasPEPSApproximation_of_dyadicOperatorNetworkAt`; see
 `docs/paper-gaps/polypeps_product_reference_column.tex`.
 
 Source: *Polynomial PEPS approximation of gapped square-grid ground states*,

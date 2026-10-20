@@ -34,7 +34,7 @@ dyadic placement, the bounds of Lemma 8.2 (`InGrid`,
 `BlockBounded`, `DegreeBounded`, `SeparationBounded`), and the trace-norm estimate are
 hypotheses on an arbitrary network here. They are verified for the network constructed from
 the protocol and the compression theorem in
-`largeSizeDyadicOperatorNetwork_of_largeSizeDyadicProtocolConsequences`, as recorded in
+`dyadicOperatorNetworkAt_of_dyadicProtocolBoundsAt`, as recorded in
 `docs/paper-gaps/polypeps_routing_network_bounds.tex` and
 `docs/paper-gaps/polypeps_product_reference_column.tex`.
 

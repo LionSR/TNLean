@@ -104,15 +104,15 @@ in \path{TNLean/PEPS/Approximation/DyadicProtocol.lean}, applied in
 in \path{TNLean/PEPS/Approximation/DyadicProtocolCompression.lean}.}
 Here $b$ is a fixed constant of the protocol, independent of $L$ and the
 Hamiltonian. The resulting network with these four bounds is passed to the
-routing lemma in the proof of Theorem~1.1.\footnote{\leanid{TNLean.PEPS.Approximation.largeSizeDyadicOperatorNetwork_of_largeSizeDyadicProtocolConsequences}
+routing lemma in the proof of Theorem~1.1.\footnote{\leanid{TNLean.PEPS.Approximation.dyadicOperatorNetworkAt_of_dyadicProtocolBoundsAt}
 in \path{TNLean/PEPS/Approximation/DyadicProtocolCompression.lean} supplies the
 bounds;
-\leanid{TNLean.PEPS.Approximation.polynomialPEPSApproximation_of_largeSizeDyadicOperatorNetwork}
+\leanid{TNLean.PEPS.Approximation.hasPEPSApproximation_of_dyadicOperatorNetworkAt}
 in \path{TNLean/PEPS/Approximation/GroundStateApproximation.lean} applies
 \leanid{TNLean.PEPS.Approximation.hasPEPSApproximation_of_fixInput_dyadicRouting};
 the composite is
-\leanid{TNLean.PEPS.Approximation.polynomialPEPSApproximation_of_adaptivePatchConstraint}
-in \path{TNLean/PEPS/Approximation/DyadicProtocolPatchApproximation.lean}.}
+\leanid{TNLean.PEPS.Approximation.polynomialPEPSApproximation_of_ratios}
+in \path{TNLean/PEPS/Approximation/PolynomialPEPSExplicitConstant.lean}.}
 The restriction recorded in this note is therefore resolved.
 
 The surrounding results on the path to Theorem~1.1 hold without further

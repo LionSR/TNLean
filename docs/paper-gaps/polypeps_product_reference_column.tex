@@ -124,14 +124,17 @@ in \path{TNLean/PEPS/Approximation/PartyColumnRouting.lean}.}
 
 Finally, the output of Section~8.1 for sufficiently large $L$---the existence
 of a compressed dyadic operator network within trace distance $CL^{-5}$ of
-$|\Omega\rangle\langle\Omega|$ with polynomial link dimensions and constants
-chosen before $L$ and the Hamiltonian---is formulated as a hypothesis, and
-Theorem~1.1 is proved from that hypothesis by combining the routed column for
-large $L$ with the exact PEPS representation for bounded $L$.\footnote{The
-hypothesis is \leanid{TNLean.PEPS.Approximation.LargeSizeDyadicOperatorNetwork}
+$|\Omega\rangle\langle\Omega|$ with polynomial link dimensions, at constants
+and a threshold fixed before $L$ and the Hamiltonian---is formulated as a
+hypothesis, and the approximation for large $L$ is proved from that hypothesis
+by the routed column.\footnote{The
+hypothesis is \leanid{TNLean.PEPS.Approximation.DyadicOperatorNetworkAt}
 and the implication is
-\leanid{TNLean.PEPS.Approximation.polynomialPEPSApproximation_of_largeSizeDyadicOperatorNetwork}
+\leanid{TNLean.PEPS.Approximation.hasPEPSApproximation_of_dyadicOperatorNetworkAt}
 in \path{TNLean/PEPS/Approximation/GroundStateApproximation.lean}.}
+Theorem~1.1 combines it with the exact PEPS representation for bounded
+$L$.\footnote{\leanid{TNLean.PEPS.Approximation.polynomialPEPSApproximation_explicit}
+in \path{TNLean/PEPS/Approximation/PolynomialPEPSClosedConstant.lean}.}
 
 \section{Resolution}
 
@@ -175,15 +178,15 @@ is the hypothesis $\eta<1$ of the column extraction for large $L$; the same
 network satisfies the four routing hypotheses of Lemma~8.2 with $B=b$,
 $\Delta=2b(b-1)$, and $c=b$.\footnote{\leanid{TNLean.PEPS.Approximation.DyadicProtocol.exists_partyNetwork_of_contractedOperator}
 and
-\leanid{TNLean.PEPS.Approximation.largeSizeDyadicOperatorNetwork_of_largeSizeDyadicProtocolConsequences}
+\leanid{TNLean.PEPS.Approximation.dyadicOperatorNetworkAt_of_dyadicProtocolBoundsAt}
 in \path{TNLean/PEPS/Approximation/DyadicProtocolCompression.lean}.} The
 proof of Theorem~1.1 from this network extracts the column and routes it as
-described above.\footnote{\leanid{TNLean.PEPS.Approximation.polynomialPEPSApproximation_of_largeSizeDyadicOperatorNetwork}
+described above.\footnote{\leanid{TNLean.PEPS.Approximation.hasPEPSApproximation_of_dyadicOperatorNetworkAt}
 in \path{TNLean/PEPS/Approximation/GroundStateApproximation.lean}, through
 \leanid{TNLean.PEPS.Approximation.hasPEPSApproximation_of_fixInput_dyadicRouting};
 the composite is
-\leanid{TNLean.PEPS.Approximation.polynomialPEPSApproximation_of_adaptivePatchConstraint}
-in \path{TNLean/PEPS/Approximation/DyadicProtocolPatchApproximation.lean}.}
+\leanid{TNLean.PEPS.Approximation.polynomialPEPSApproximation_of_ratios}
+in \path{TNLean/PEPS/Approximation/PolynomialPEPSExplicitConstant.lean}.}
 Thus the three product-reference bounds, the compression error, and the routing
 hypotheses are all verified for the protocol with constants uniform in $L$ and
 the Hamiltonian, and the restriction recorded in this note is resolved.

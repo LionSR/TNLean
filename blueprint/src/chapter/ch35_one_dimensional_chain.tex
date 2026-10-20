@@ -294,6 +294,7 @@ for an arbitrary finite set of sites and are instantiated here directly.
         TNLean.MPS.AreaLaw.chainBudgetConst,
         TNLean.MPS.AreaLaw.one_le_chainBudgetConst,
         TNLean.MPS.AreaLaw.supportDim_le_real,
+        TNLean.MPS.AreaLaw.log_sq_supportDim_le,
         TNLean.MPS.AreaLaw.cutLogBudget_interval_le,
         TNLean.MPS.AreaLaw.not_splits_two_shells
     }
@@ -324,6 +325,40 @@ for an arbitrary finite set of sites and are instantiated here directly.
     a support met the shell with index $j$ and left the shell with index
     $j'>j$, two of its sites would be at distance at least $R+1$.
 \end{proof}
+
+\begin{theorem}[Logarithmic dependence of the interval cut budget]
+    \label{thm:chain_budget_log_sq}
+    \lean{TNLean.MPS.AreaLaw.chainBudgetConst_le_mul_log_sq}
+    \leanok
+    \uses{lem:chain_crossing_count}
+    Let $R$ be a nonnegative integer and put $N_R=2\cdot2^{2R}$ and
+    $B_R(q)=1+N_R\log^2(e q^{R+1})$. For every integer $q\ge2$,
+    \begin{align}
+        B_R(q)\le\frac{B_R(2)}{(\log2)^2}(\log q)^2.
+    \end{align}
+    Here $N_R$ is the interval crossing bound for the
+    family of all admissible supports, as in the cut-budget definition of
+    \cite[Part~I]{TNLean2026OneDimensional}.
+    The remark on sharper constants in that part describes its application
+    to the logarithmic dependence of the area-law constant.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{lem:chain_crossing_count}
+    Put $c=\log2>0$ and $t=\log q\ge c$. The identity
+    $\log(e q^{R+1})=1+(R+1)t$ gives
+    $c(1+(R+1)t)\le t(1+(R+1)c)$.
+    Both sides are nonnegative. Squaring, multiplying by $N_R$ and adding
+    $c^2\le t^2$ yields
+    \begin{align}
+        c^2 B_R(q)
+         & =c^2+N_R\bigl(c(1+(R+1)t)\bigr)^2 \notag \\
+         & \le t^2+N_R\bigl(t(1+(R+1)c)\bigr)^2
+        =t^2 B_R(2). \notag
+    \end{align}
+    Divide by $c^2>0$.
+\end{proof}
+
 
 \begin{lemma}[Supports split by an arbitrary region of a chain]
     \label{lem:chain_boundary_crossing_count}
@@ -899,6 +934,8 @@ for an arbitrary finite set of sites and are instantiated here directly.
 \begin{lemma}[Buffered discount on a chain]
     \label{lem:chain_buffer_discount}
     \lean{
+        TNLean.MPS.AreaLaw.chainQuadraticEnergyThreshold,
+        TNLean.MPS.AreaLaw.chainLogEnergyThreshold,
         TNLean.MPS.AreaLaw.chainEnergyThreshold,
         TNLean.MPS.AreaLaw.chainTailThreshold,
         TNLean.MPS.AreaLaw.chainShellCount,
@@ -915,9 +952,11 @@ for an arbitrary finite set of sites and are instantiated here directly.
     \uses{def:chain_model}
     Let $\Omega$ be a gapped ground vector, with gap $\Delta>0$, of a
     finite-range Hamiltonian with term norms at most $J\ge0$ on the chain with
-    local dimension $q\ge1$. Put $\vartheta=J/\Delta$ and
+    local dimension $q\ge1$. Put $\vartheta=J/\Delta$,
+    $\ell_R=\log(e\,q^{R+1})$,
+    $E_R=\min\{32N_Rq^{2(R+1)},\ 64\,e\,N_R\ell_R^2\}$ and
     \begin{align}
-        m=\Bigl\lceil\max\bigl\{4,\ 32N_Rq^{2(R+1)}\vartheta,\
+        m=\Bigl\lceil\max\bigl\{4,\ E_R\vartheta,\
         128\sqrt{(1+\vartheta)B_R}\bigr\}\Bigr\rceil .
     \end{align}
     For an interval $X=[l,r)$ let $T=X^{+mR}\setminus X$ be the buffer,
@@ -931,7 +970,11 @@ for an arbitrary finite set of sites and are instantiated here directly.
     constants of Lemma~4.2 of \cite{TNLean2026OneDimensional}, which runs at
     the threshold $\Delta/4$, absorbs the tail term through a fourth entry of
     $m$ and concludes with $1+16N_Rq^{2(R+1)}\vartheta$; see
-    \cite{gap:tnlean_one_dimensional_discount_constants}.
+    \cite{gap:tnlean_one_dimensional_discount_constants}. The second entry
+    $64\,e\,N_R\ell_R^2$ of $E_R$ is the logarithmic energy estimate of
+    Remark~6.3 of \cite{TNLean2026OneDimensional}. Since $E_R$ is at most
+    either entry, this $m$ is at most the shell count obtained from either
+    estimate alone, and in particular it satisfies the bound of that remark.
 \end{lemma}
 \begin{proof}
     \leanok
@@ -943,8 +986,13 @@ for an arbitrary finite set of sites and are instantiated here directly.
     total mass two. The shells are intervals, so each is split by at most $N_R$
     supports with cut budget at most $B_R$ by
     Lemma~\ref{lem:chain_crossing_count}, and no support is split by two of
-    them. The choice of $m$ makes the energy of the filtered vector at most
-    $\Delta/2$, each weight at most $1/2$, and each tilt $a_j/(1-a_j)$ at most
+    them. The energy of the filtered vector is at most
+    $\sum_j4a_j^2\sum_Y(\dim\mathcal H_Y)^2J\le16N_Rq^{2(R+1)}J/m$, the sum
+    running over the supports $Y$ split by $X_j$, and also at most
+    $\sum_j8e\,a_j^2\sum_Y\log^2(e\dim\mathcal H_Y)\,J\le32\,e\,N_R\ell_R^2J/m$
+    by the three-lines estimate of Remark~6.3 of
+    \cite{TNLean2026OneDimensional}. The choice of $m$ makes the smaller of
+    the two bounds at most $\Delta/2$, each weight at most $1/2$, and each tilt $a_j/(1-a_j)$ at most
     the tail radius $1/(32\sqrt{(1+\vartheta)B_j})$. The error terms sum to
     $1024e\vartheta\sum_jB_ja_j^2\le4096e\vartheta B_R/m$, and the overlap
     losses to $m\log2$.
@@ -994,6 +1042,25 @@ for an arbitrary finite set of sites and are instantiated here directly.
     $I$ is then a proper nonempty subset of the chain).
 \end{proof}
 
+\begin{theorem}[Entropy at local dimension one]
+    \label{thm:chain_entropy_dim_one}
+    \lean{TNLean.MPS.AreaLaw.regionEntropy_eq_zero_of_localDimension_one}
+    \leanok
+    \uses{def:chain_model}
+    Let $\Omega$ be a unit vector on a finite chain with one-dimensional
+    local spaces. For every set $A$ of sites, $S_\Omega(A)=0$. This is the
+    dimension-one case of the entropy dimension bound used in
+    \cite[Part~I]{TNLean2026OneDimensional}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{lem:rank_one_entropy_zero}
+    The reduced state on $A$ is positive semidefinite with trace one.
+    Its space has dimension one, so its rank is at most one and its
+    von Neumann entropy vanishes.
+\end{proof}
+
+
 \begin{theorem}[The one-dimensional area law on a chain]
     \label{thm:chain_area_law}
     \lean{
@@ -1019,8 +1086,9 @@ for an arbitrary finite set of sites and are instantiated here directly.
         \le C_0(q,R)\,(1+J/\Delta),
     \end{align}
     with
-    $C_0(q,R)=\bigl(8R\log q+\log2\bigr)\bigl(5+32N_Rq^{2(R+1)}+128B_R\bigr)
-        +1024\,e\,B_R$, and every subset $A$ of the chain satisfies
+    $C_0(q,R)=\bigl(8R\log q+\log2\bigr)\bigl(5+E_R+128B_R\bigr)
+        +1024\,e\,B_R$, where
+    $E_R=\min\{32N_Rq^{2(R+1)},\ 64\,e\,N_R\log^2(e\,q^{R+1})\}$, and every subset $A$ of the chain satisfies
     $S(A)\le C_{\mathrm{int}}\,|\partial A|$. Hence the constant
     $C_0(q,R)(1+J/\Delta)$, chosen before $L$, the Hamiltonian, the ground
     vector and the region, bounds $S(A)/|\partial A|$ for every gapped chain.
@@ -1035,7 +1103,7 @@ for an arbitrary finite set of sites and are instantiated here directly.
     $S(X)-2S(T)\le S(X\cup T)-S(T)\le\frac12S(X)+\frac12C_{\mathrm{disc}}$,
     hence $S(X)\le4S(T)+C_{\mathrm{disc}}$, and $S(T)\le|T|\log q\le
         2mR\log q$. The linear bound uses
-    $m\le(5+32N_Rq^{2(R+1)}+128B_R)(1+\vartheta)$, which follows from
+    $m\le(5+E_R+128B_R)(1+\vartheta)$, which follows from
     $\sqrt{(1+\vartheta)B_R}\le(1+\vartheta)B_R$, and $m\ge4$. The subset
     bound is the second part of Lemma~\ref{lem:chain_entropy_inequalities}.
 \end{proof}
@@ -1338,32 +1406,39 @@ for an arbitrary finite set of sites and are instantiated here directly.
 \begin{definition}[Open-boundary matrix product states and cut matrices]
     \label{def:chain_open_mps}
     \lean{
+        TNLean.MPS.AreaLaw.IsOpenMPS,
+        TNLean.MPS.AreaLaw.IsOpenMPS.smul,
         TNLean.MPS.AreaLaw.leftBlock,
         TNLean.MPS.AreaLaw.mem_leftBlock,
         TNLean.MPS.AreaLaw.leftBlock_eq_interval,
         TNLean.MPS.AreaLaw.cutMatrix,
-        TNLean.MPS.AreaLaw.cutMatrix_apply,
-        TNLean.MPS.AreaLaw.IsOpenMPS,
-        TNLean.MPS.AreaLaw.IsOpenMPS.smul
+        TNLean.MPS.AreaLaw.cutMatrix_apply
     }
     \leanok
     \uses{def:chain_model}
-    A vector $\psi$ on $L$ sites of local dimension $q$ is an
-    \emph{open-boundary matrix product state of bond dimension at most $D$}
-    when there are matrices $A_i(s)\in\mathbb C^{D\times D}$ for each site $i$
-    and value $s$ and vectors $v_L,v_R\in\mathbb C^D$ with
+    Let $L,q,D$ be natural numbers. A vector $\psi$ on $L$ sites of local
+    dimension $q$ is an \emph{open-boundary matrix product state of bond
+        dimension at most $D$} when there are natural numbers $r_0,\ldots,r_L$
+    with $r_0=r_L=1$ and $r_k\leq D$ for $0<k<L$, a scalar $c\in\mathbb C$,
+    and matrices $A_i(s)\in\mathbb C^{r_i\times r_{i+1}}$ such that
     \begin{align}
-        \psi(x_0,\ldots,x_{L-1})=v_L^{\mathsf T}A_0(x_0)\cdots A_{L-1}(x_{L-1})\,v_R .
+        \psi(x_0,\ldots,x_{L-1})
+         & =c\bigl(A_0(x_0)\cdots A_{L-1}(x_{L-1})\bigr)_{0,0}. \notag
     \end{align}
-    Scaling such a vector scales $v_R$. The \emph{left block} of $k$ sites is
-    the interval $[0,k)$, and the \emph{cut matrix} at $k$ has the
-    configurations of the left block as rows and those of the remaining sites
-    as columns; its rank is the Schmidt rank across the cut.
+    The empty product is the identity on $\mathbb C$, so at $L=0$ this
+    condition reads $\psi(\varnothing)=c$. Only the internal bond dimensions
+    are bounded by $D$. Scaling $\psi$ scales $c$.
+    The \emph{left block} of $k$ sites is the interval $[0,k)$, and the
+    \emph{cut matrix} at $k$ has the configurations of the left block as rows
+    and those of the remaining sites as columns; its rank is the Schmidt
+    rank across the cut.
 \end{definition}
 
-\begin{lemma}[Bounded cut ranks give a matrix product state]
-    \label{lem:chain_mps_of_cut_rank}
+\begin{theorem}[Bounded internal cut ranks give a matrix product state]
+    \label{thm:chain_mps_of_cut_rank}
     \lean{
+        TNLean.MPS.AreaLaw.isOpenMPS_of_internal_cutMatrix_rank_le,
+        TNLean.MPS.AreaLaw.isOpenMPS_of_cutMatrix_rank_le,
         Submodule.exists_fin_span_of_finrank_le,
         TNLean.MPS.AreaLaw.glueLeft,
         TNLean.MPS.AreaLaw.sliceMatrix,
@@ -1372,27 +1447,88 @@ for an arbitrary finite set of sites and are instantiated here directly.
         TNLean.MPS.AreaLaw.sliceSpace,
         TNLean.MPS.AreaLaw.finrank_sliceSpace_le,
         TNLean.MPS.AreaLaw.glueLeft_snoc,
-        TNLean.MPS.AreaLaw.slice_mem_sliceSpace,
-        TNLean.MPS.AreaLaw.isOpenMPS_of_cutMatrix_rank_le
+        TNLean.MPS.AreaLaw.slice_mem_sliceSpace
     }
     \leanok
-    \uses{def:chain_open_mps}
-    A vector all of whose cut matrices have rank at most $D$ is an
-    open-boundary matrix product state of bond dimension at most $D$.
-\end{lemma}
+    Let $L,q,D$ be natural numbers and let $\psi$ be a vector on $L$ sites
+    of local dimension $q$. If every internal cut matrix, at $0<k<L$, has
+    rank at most $D$, then $\psi$ is an open-boundary matrix product state
+    of bond dimension at most $D$. In particular, the conclusion holds
+    when every cut matrix has rank at most $D$.
+\end{theorem}
 \begin{proof}
     \leanok
     \uses{def:chain_open_mps}
-    Let $V_k$ be the span of the columns of the cut matrix at $k$, a space of
-    dimension at most $D$, and choose a spanning family $u_k$ of $D$ vectors.
-    Slicing a column of the cut matrix at $k+1$ at a fixed value of site $k$
-    gives a column of the cut matrix at $k$, so each $u_{k+1}(\alpha)$ sliced
-    at the value $s$ is a combination $\sum_\beta A_k(s)_{\beta\alpha}u_k(\beta)$.
-    By induction $u_k(\alpha)=v_L^{\mathsf T}A_0\cdots A_{k-1}$ with $v_L=u_0$,
-    and at $k=L$ the vector itself lies in $V_L$, which supplies $v_R$.
+    Suppose first that $L\geq2$ and $D\geq1$. The two boundary cut matrices
+    have rank at most $1\leq D$. Let $V_k$ be the column space of the cut
+    matrix at $k$, and choose a spanning family $u_k$ of $D$ vectors.
+    Slicing at a fixed value of site $k$ maps $V_{k+1}$ into $V_k$.
+    Expressing these slices in the chosen spanning families gives square
+    matrices $A_k(s)$ and boundary vectors $v_L,v_R$ with
+    $\psi(x)=v_L^{\mathsf T}A_0(x_0)\cdots A_{L-1}(x_{L-1})v_R$.
+    Absorb $v_L^{\mathsf T}$ into the first matrix and $v_R$ into the last;
+    these are distinct matrices because $L\geq2$. Their rectangular
+    dimensions have singleton endpoints and internal dimensions $D$.
+    If $L\geq2$ and $D=0$, the cut matrix at $1$ vanishes, hence $\psi=0$.
+    Set every internal bond dimension to zero and take zero site matrices
+    and $c=0$. If $L=0$, take $c=\psi(\varnothing)$. If $L=1$, take
+    $c=1$ and the $1\times1$ matrices $A_0(s)_{0,0}=\psi(s)$.
+    The assertion about all cuts follows by restricting to internal cuts.
 \end{proof}
 
-\begin{lemma}[Sequential truncation]
+\begin{theorem}[Sequential truncation in ordered orthonormal bases]
+    \label{thm:chain_sequential_truncation_full}
+    \lean{
+        TNLean.MPS.AreaLaw.prefixBasisProjection,
+        TNLean.MPS.AreaLaw.isOpenMPS_sequentialTruncation_prefixBasisProjection
+    }
+    \leanok
+    \uses{def:chain_open_mps}
+    Let $L,q,D$ be natural numbers and let $\psi$ be a vector on the chain
+    of $L$ sites of local dimension $q$. For each internal cut $0<k<L$,
+    let $N_k=\dim\mathcal H_{[0,k)}$ and choose an ordered orthonormal basis
+    $b_{k,0},\ldots,b_{k,N_k-1}$ of $\mathcal H_{[0,k)}$. Let $\Pi_k$ be
+    the orthogonal projection onto the span of its first $\min\{D,N_k\}$
+    vectors, and put $P_k=\Pi_k\otimes1$. Define
+    \begin{align}
+        \Phi       & =P_1P_2\cdots P_{L-1}\psi, \notag                         \\
+        \epsilon_k & =\operatorname{Re}\langle\psi,(1-P_k)\psi\rangle . \notag
+    \end{align}
+    Then $\Phi$ is an open-boundary matrix product state with every internal
+    bond dimension at most $D$, and
+    \begin{align}
+        \|\Phi-\psi\|\le\sum_{k=1}^{L-1}\sqrt{\epsilon_k}. \notag
+    \end{align}
+    Empty products act as the identity, so this includes $L=0$ and $L=1$,
+    without a choice of basis at a boundary cut. If $D\ge N_k$, then
+    $\Pi_k=1$.
+
+    This statement holds for every choice of ordered orthonormal bases.
+    Proposition~7.1 of \cite[Part~IIa]{TNLean2026OneDimensional} is the
+    instance in which $\psi$ is a unit vector and each basis is an
+    eigenbasis of the reduced state at its cut, ordered by nonincreasing
+    eigenvalue, with any choice of eigenvectors in a repeated-eigenvalue
+    space. That instance, namely the choice of such a basis and the
+    identification of $\epsilon_k$ with the sum of the discarded
+    eigenvalues, is not formalized here.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:chain_open_mps, thm:chain_mps_of_cut_rank,
+        lem:chain_sequential_truncation}
+    Each $P_k$ is an orthogonal projection, hence a contraction. Telescoping
+    gives
+    $\Phi-\psi=\sum_k P_1\cdots P_{k-1}(P_k-1)\psi$,
+    and $\|(1-P_k)\psi\|^2=\epsilon_k$, proving the error bound.
+    At cut $k$, the vector $P_k\cdots P_{L-1}\psi$ lies in
+    $\operatorname{ran}\Pi_k\otimes\mathcal H_{[k,L)}$, so its cut rank
+    is at most $\min\{D,N_k\}\le D$. The remaining factors act on the
+    left of that cut and cannot increase this rank.
+    Theorem~\ref{thm:chain_mps_of_cut_rank} gives the stated representation
+    of $\Phi$.
+\end{proof}
+
+\begin{lemma}[Sequential truncation at an entropy threshold]
     \label{lem:chain_sequential_truncation}
     \lean{
         Matrix.schmidtCoeffMatrix_kronecker_one_mulVec,
@@ -1435,12 +1571,12 @@ for an arbitrary finite set of sites and are instantiated here directly.
     \begin{align}
         \|\psi-\Phi\|\le\sum_{k=1}^{L-1}\sqrt{\text{tail}_k(w)} .
     \end{align}
-    This is the threshold form of the sequential truncation, Proposition~7.1
-    of \cite{TNLean2026OneDimensional}: the note projects every cut onto its
-    $D$ largest eigenvalues, or onto all of them when the cut has fewer than
-    $D$, for an arbitrary bond dimension $D$, with the error
-    $\sum_k\sqrt{\epsilon_k(D)}$; that form is not formalized, and
-    Theorem~B uses only the threshold form; see
+    This is the entropy-threshold form used in the proof of Theorem~B
+    of \cite{TNLean2026OneDimensional}. The prescribed-dimension statement,
+    with the actual discarded masses, is stated separately in
+    Theorem~\ref{thm:chain_sequential_truncation_full}.
+    A common entropy slack and a prescribed number of retained eigenvectors
+    need not give the same projectors; see
     \cite{gap:tnlean_one_dimensional_threshold_truncation}.
 \end{lemma}
 \begin{proof}
@@ -1466,6 +1602,93 @@ for an arbitrary finite set of sites and are instantiated here directly.
     is at most the surprisal tail.
 \end{proof}
 
+\begin{theorem}[Spectral truncation at a prefix cut]
+    \label{thm:chain_prefix_spectral_bounds}
+    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.spectralProjectionGE_leftBlock_bounds}
+    \leanok
+    \uses{def:chain_model}
+    Let $\Omega$ be a gapped ground vector, with gap $\Delta>0$, of a
+    finite-range Hamiltonian with term norms at most $J\ge0$ on a chain of
+    $L\ge0$ sites with local dimension $q\ge1$.
+    For any natural number $k$, let $X$ be the sites $i$ with $0\le i<k$,
+    let $\rho_X$ be the reduced state, and put
+    $s=\sqrt{(1+J/\Delta)B_R}$.
+    For $w\ge0$, let $P$ be the spectral projection of $\rho_X$ onto
+    eigenvalues at least $e^{-(C_{\mathrm{int}}+w)}$. Then $P$ is an
+    orthogonal projection and
+    \begin{align}
+        \operatorname{rank}P
+         & \le e^{C_{\mathrm{int}}+w}, \notag                  \\
+        \operatorname{Tr}((1-P)\rho_X)
+         & \le 2e^{e/2}\exp\left(-\frac{w}{32s}\right). \notag
+    \end{align}
+    The constants are independent of $L$ and $k$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:chain_area_law, lem:chain_marginal_tail,
+        lem:chain_crossing_count, lem:chain_sequential_truncation}
+    The eigenvalues retained by $P$ are at least
+    $e^{-(C_{\mathrm{int}}+w)}$, and their sum is at most
+    $\operatorname{Tr}\rho_X=1$, giving the rank bound.
+    Write $S=S(X)\le C_{\mathrm{int}}$ and
+    $v=C_{\mathrm{int}}+w-S\ge w\ge0$.
+    The discarded mass is at most the surprisal tail beyond $v$ centred
+    at $S$, because $S+v=C_{\mathrm{int}}+w$.
+    The marginal tail estimate with the uniform interval budget $B_R$ gives
+    $\operatorname{Tr}((1-P)\rho_X)\le2e^{e/2}e^{-v/(32s)}
+        \le2e^{e/2}e^{-w/(32s)}$.
+    This is the prefix-cut estimate used in the argument for Theorem~B
+    of \cite[Part~IIa]{TNLean2026OneDimensional}.
+\end{proof}
+
+\begin{theorem}[Matrix product state approximation at a prescribed accuracy]
+    \label{thm:chain_mps_approximation_error}
+    \lean{TNLean.MPS.AreaLaw.exists_isOpenMPS_norm_sub_le_of_error}
+    \leanok
+    \uses{def:chain_model, def:chain_open_mps}
+    Let $\Omega$ be a gapped ground vector, with gap $\Delta>0$, of a
+    finite-range Hamiltonian with term norms at most $J\ge0$ on the chain of
+    $L\ge1$ sites with local dimension $q\ge1$. Put
+    $s=\sqrt{(1+J/\Delta)B_R}$ and $c_0=\sqrt{2e^{e/2}}$.
+    For every $0<\varepsilon\le1$, there is a normalized open-boundary
+    matrix product state $\Phi$ with $\|\Phi-\Omega\|\le\varepsilon$ and
+    bond dimension at most
+    \begin{align}
+        \left\lfloor\exp\left(C_{\mathrm{int}}
+        +64s\log\frac{2Lc_0}{\varepsilon}\right)\right\rfloor. \notag
+    \end{align}
+    This is a supplementary accuracy form of the argument for Theorem~B
+    in \cite[Part~IIa]{TNLean2026OneDimensional}; the stated theorem there
+    has error $1/L$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:chain_area_law, lem:chain_marginal_tail,
+        lem:chain_sequential_truncation, thm:chain_mps_of_cut_rank,
+        lem:chain_crossing_count}
+    The entropy of each left block is at most $C_{\mathrm{int}}$, and its
+    surprisal tail beyond $w$ is at most $c_0^2e^{-w/(32s)}$.
+    Set $w=64s\log(2Lc_0/\varepsilon)$. Since $s>0$ and
+    $2Lc_0/\varepsilon>1$, the sequential truncation produces a vector
+    $\widetilde\Phi$ whose cut ranks are at most
+    $\lfloor e^{C_{\mathrm{int}}+w}\rfloor$ and for which
+    \begin{align}
+        \|\widetilde\Phi-\Omega\|
+         & \le (L-1)\sqrt{c_0^2e^{-w/(32s)}}
+        =(L-1)\frac{\varepsilon}{2L}
+        \le\frac{\varepsilon}{2}\le\frac12. \notag
+    \end{align}
+    Thus $\widetilde\Phi\ne0$. Normalize this same vector by setting
+    $\Phi=\widetilde\Phi/\|\widetilde\Phi\|$.
+    The reverse triangle inequality gives
+    $\|\Phi-\widetilde\Phi\|=|1-\|\widetilde\Phi\||
+        \le\|\widetilde\Phi-\Omega\|$, hence
+    $\|\Phi-\Omega\|\le\varepsilon$.
+    Bounded cut ranks give the matrix product representation, which is
+    preserved by this scalar normalization.
+\end{proof}
+
 \begin{theorem}[Theorem B: polynomial matrix product state approximation]
     \label{thm:chain_mps_approximation}
     \lean{
@@ -1474,8 +1697,6 @@ for an arbitrary finite set of sites and are instantiated here directly.
         TNLean.MPS.AreaLaw.tailPrefactorRoot_sq,
         TNLean.MPS.AreaLaw.one_lt_tailPrefactorRoot,
         TNLean.MPS.AreaLaw.chainTruncationWidth,
-        TNLean.MPS.AreaLaw.chainTruncationWidth_nonneg,
-        TNLean.MPS.AreaLaw.exp_neg_chainTruncationWidth,
         TNLean.MPS.AreaLaw.chainBondDimension,
         TNLean.MPS.AreaLaw.exists_isOpenMPS_norm_sub_le,
         TNLean.MPS.AreaLaw.chainBondDimension_le_mul_rpow
@@ -1496,18 +1717,10 @@ for an arbitrary finite set of sites and are instantiated here directly.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:chain_area_law, lem:chain_marginal_tail,
-        lem:chain_sequential_truncation, lem:chain_mps_of_cut_rank,
-        lem:chain_crossing_count}
-    By Theorem~\ref{thm:chain_area_law} the entropy of every left block, an
-    interval $[0,k)$, is at most $C_{\mathrm{int}}$, and by the tail bound of
-    Lemma~\ref{lem:chain_marginal_tail} with the budget $B_R$ of
-    Lemma~\ref{lem:chain_crossing_count} its surprisal tail beyond $w$ is at
-    most $2e^{e/2}e^{-w/(32s)}$. The sequential truncation of
-    Lemma~\ref{lem:chain_sequential_truncation} at width $w(L)$ gives cut
-    ranks at most $e^{C_{\mathrm{int}}+w(L)}$ and distance at most
-    $(L-1)\cdot\frac1{2L^2}\le\frac1{2L}$. Normalizing moves the vector by at
-    most the same amount, so the distance is at most $1/L$, and
-    Lemma~\ref{lem:chain_mps_of_cut_rank} exhibits the matrix product
-    structure, which survives the normalization.
+    \uses{thm:chain_mps_approximation_error}
+    Apply Theorem~\ref{thm:chain_mps_approximation_error} with
+    $\varepsilon=1/L$, which lies in $(0,1]$ because $L\ge1$.
+    The identity $2Lc_0/(1/L)=2L^2c_0$ gives exactly $D(L)$.
+    Finally, $\lfloor e^{C_{\mathrm{int}}+w(L)}\rfloor
+        \le e^{C_{\mathrm{int}}}(2c_0)^{64s}L^{128s}$.
 \end{proof}

@@ -18,7 +18,13 @@ run_cmd do
     `TNLean.PEPS.AreaLaw.uniformAreaLaw_explicit,
     `TNLean.PEPS.AreaLaw.Scan.CollarScan.finiteFamilyTransportBound_explicit,
     `TNLean.PEPS.AreaLaw.uniformAreaLawConstantClosed,
-    `TNLean.PEPS.AreaLaw.uniformAreaLaw_closed]
+    `TNLean.PEPS.AreaLaw.uniformAreaLaw_closed,
+    `TNLean.PEPS.AreaLaw.uniformAreaLawConstantAt,
+    `TNLean.PEPS.AreaLaw.uniformAreaLaw_explicit_of_le,
+    `TNLean.PEPS.AreaLaw.physicalBoxConstantClosed,
+    `TNLean.PEPS.AreaLaw.uniformAreaLawConstantClosedAt,
+    `TNLean.PEPS.AreaLaw.uniformAreaLawConstantClosedAt_physicalBoxConstantClosed,
+    `TNLean.PEPS.AreaLaw.uniformAreaLaw_closed_of_le]
   let expected := #[``propext, ``Classical.choice, ``Quot.sound]
   for decl in names do
     unless (← Lean.getEnv).contains decl do
