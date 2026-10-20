@@ -484,7 +484,7 @@ every upper bound for $C_{\rm box}$.
     \lean{TNLean.PEPS.Approximation.IsRangeSquareGroundState}
     \leanok
     \uses{def:area_law_hamiltonian}
-    Fix integers $q\ge1$ and $R\ge0$ and reals $J\ge0$ and $\Delta>0$. The
+    Fix integers $q$ and $R$ and reals $J$ and $\Delta$. The
     ground states at range $R$ form the family of vectors $\Omega$ on the
     grid of side $L$, identified with vectors on the integer square
     $\Lambda=\{0,\ldots,L-1\}^2$, for which some Hamiltonian on $\Lambda$
@@ -493,8 +493,8 @@ every upper bound for $C_{\rm box}$.
     $H\Omega=E_0\Omega$ and $H-E_0I\ge\Delta(I-|\Omega\rangle\langle\Omega|)$.
 \end{definition}
 
-\begin{lemma}[Ground states of the model are ground states at range one]
-    \label{lem:square_ground_states_range_one}
+\begin{theorem}[Ground states of the model are ground states at range one]
+    \label{thm:square_ground_states_range_one}
     \lean{TNLean.PEPS.Approximation.IsRangeSquareGroundState.norm_eq_one,
         TNLean.PEPS.Approximation.IsSquareGroundState.isRangeSquareGroundState}
     \leanok
@@ -502,7 +502,7 @@ every upper bound for $C_{\rm box}$.
     Every ground state at range $R$ is a unit vector. For $J\ge0$, every
     ground state of the model at $J$ and $\Delta$ is a ground state at range
     one.
-\end{lemma}
+\end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:norm_square_area_law_state,def:square_area_law_hamiltonian,
@@ -602,12 +602,12 @@ every upper bound for $C_{\rm box}$.
 \begin{proof}
     \leanok
     \uses{thm:square_area_law_range_constant,
-        lem:square_ground_states_range_one,
-        lem:square_entropy_area_law_at_mono}
+        thm:square_ground_states_range_one,
+        thm:square_entropy_area_law_at_mono}
     Every ground state of the model at $J$ and $\Delta$ is a ground state at
-    range one by Lemma~\ref{lem:square_ground_states_range_one}, and the law
+    range one by Theorem~\ref{thm:square_ground_states_range_one}, and the law
     passes to smaller families by
-    Lemma~\ref{lem:square_entropy_area_law_at_mono}, so this is
+    Theorem~\ref{thm:square_entropy_area_law_at_mono}, so this is
     the case $R=1$ of Theorem~\ref{thm:square_area_law_range_constant} with
     the constant $C_{\rm AL}(q,1,J,\Delta)$.
 \end{proof}
