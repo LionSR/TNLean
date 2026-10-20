@@ -505,7 +505,8 @@ every upper bound for $C_{\rm box}$.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{def:square_area_law_hamiltonian,thm:square_area_law_ground_gap}
+    \uses{thm:norm_square_area_law_state,def:square_area_law_hamiltonian,
+        thm:square_area_law_ground_gap}
     The first claim is the normalization in
     Definition~\ref{def:square_range_ground_states}, since the identification
     of the grid with $\Lambda$ preserves norms. For the second, place the
@@ -516,6 +517,37 @@ every upper bound for $C_{\rm box}$.
     carried along the identification.
 \end{proof}
 
+% Status: auxiliary result. The polynomial-PEPS source treats only
+% nearest-neighbour interactions.
+% Source: polynomial-PEPS 01-preliminaries.tex, Proposition 2.1, lines 39--58;
+% area-law Theorem 1.1 and Corollary 1.2.
+% Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+\begin{theorem}[The square-grid area law at range $R$ from a finite-domain bound]
+    \label{thm:square_area_law_range_from_bound}
+    \lean{TNLean.PEPS.Approximation.squareEntropyAreaLawAt_range_of_areaLawBound}
+    \leanok
+    \uses{def:square_range_ground_states,def:square_entropy_area_law_at,
+        def:area_law_ground_entropy}
+    Fix integers $q$ and $R$ and reals $J$, $\Delta$ and $C\ge0$. Suppose
+    that $S_\Omega(A)\le C\,|\partial_\Lambda A|$ for every finite induced
+    domain $\Lambda$, every Hamiltonian on $\Lambda$ whose terms are
+    supported on sets of diameter at most $R$ and have norm at most $J$,
+    every gapped ground vector $\Omega$ of it with gap at least $\Delta$ and
+    every $A\subseteq\Lambda$. Then the square-grid entropy area law of
+    Definition~\ref{def:square_entropy_area_law_at} holds for the ground
+    states at range $R$ of Definition~\ref{def:square_range_ground_states}
+    with the constant $C$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:finite_product_entropy_relabel,thm:square_edge_boundary_card}
+    Apply the hypothesis on the integer square $\Lambda$. Relabelling the
+    sites along the identification of the grid with $\Lambda$ preserves the
+    entropy of every region, and it maps the edges of the grid crossing a
+    cut bijectively onto the edges of $\Lambda$ crossing the image of the
+    cut.
+\end{proof}
+
 % Status: auxiliary result. Proposition 2.1 of the polynomial-PEPS source
 % concerns nearest-neighbour interactions and asserts only that a constant
 % exists; that statement is thm:openai_square_area_law.
@@ -524,8 +556,7 @@ every upper bound for $C_{\rm box}$.
 % Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 \begin{theorem}[The square-grid area law at range $R$ with explicit constants]
     \label{thm:square_area_law_range_constant}
-    \lean{TNLean.PEPS.Approximation.squareEntropyAreaLawAt_range_of_areaLawBound,
-        TNLean.PEPS.AreaLaw.squareEntropyAreaLawAt_range_closed,
+    \lean{TNLean.PEPS.AreaLaw.squareEntropyAreaLawAt_range_closed,
         TNLean.PEPS.AreaLaw.squareEntropyAreaLawAt_range_elementary}
     \leanok
     \uses{def:square_range_ground_states,def:square_entropy_area_law_at,
@@ -541,17 +572,15 @@ every upper bound for $C_{\rm box}$.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:area_law_closed_constant,thm:area_law_elementary_constant}
+    \uses{thm:square_area_law_range_from_bound,thm:area_law_closed_constant,
+        thm:area_law_elementary_constant}
     Let $C$ be either constant. By
     Theorem~\ref{thm:area_law_closed_constant} or
     Theorem~\ref{thm:area_law_elementary_constant}, $C\ge0$ and $C$ bounds
     the entropy of every cut of every finite induced domain by $C$ times the
     number of cut edges, for every gapped ground vector of every Hamiltonian
-    of range $R$. Apply this on the integer square $\Lambda$. Relabelling the
-    sites along the identification of the grid with $\Lambda$ preserves the
-    entropy of every region, and it maps the edges of the grid crossing a
-    cut bijectively onto the edges of $\Lambda$ crossing the image of the
-    cut.
+    of range $R$. Theorem~\ref{thm:square_area_law_range_from_bound} then
+    gives the square-grid law with the constant $C$.
 \end{proof}
 
 % Status: auxiliary result. Proposition 2.1 of the polynomial-PEPS source
