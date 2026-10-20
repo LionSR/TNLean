@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.Approximation.DistributedConstruction
-import TNLean.PEPS.Approximation.GateMapConstruction
+import TNLean.Lattice.Compression.DistributedConstruction
+import TNLean.Lattice.Compression.GateMapConstruction
 import Lean.Elab.Command
 import Lean.Util.CollectAxioms
 

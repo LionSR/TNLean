@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.CeilScaling
-import TNLean.PEPS.Approximation.UniformApproximateSampledNetwork
-import TNLean.PEPS.Approximation.MessageGateLists
+import TNLean.Lattice.Compression.UniformApproximateSampledNetwork
+import TNLean.Lattice.Compression.MessageGateLists
 
 /-!
 # Uniform compression of original gates containing bounded messages

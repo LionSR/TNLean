@@ -3354,7 +3354,7 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 ### Equality of selected remaining operations
 
 - **Declaration:** `TNLean.PEPS.PairEffect.Word.IsSelectedLocalPartComparison`.
-- **Defined in:** `TNLean/PEPS/Approximation/AllPartySingletonComparison.lean`.
+- **Defined in:** `TNLean/Lattice/Compression/AllPartySingletonComparison.lean`.
 - **Meaning:** For a Boolean owner selector and two chronological words, the
   predicate is the heterogeneous equality of their remaining evaluations after
   restriction to the selected owners. Each word's local part keeps its actual
@@ -3380,7 +3380,7 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 
 - **Declarations:** `TNLean.PEPS.Approximation.sourceEndpoints`, `correctedParties`,
   `incidentGates` and `gatesTouching` in the same namespace.
-- **Defined in:** `TNLean/PEPS/Approximation/DistributedLifetime.lean`.
+- **Defined in:** `TNLean/Lattice/Compression/DistributedLifetime.lean`.
 - **Meaning:** A source position has two party endpoints. For a finite set `S`
   of corrected positions, `correctedParties` is their endpoint union. The gate
   identifiers distinguish occurrences; repeated uses of an identical operation
@@ -3408,7 +3408,7 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 - **Declarations:** `TNLean.PEPS.Approximation.pairSampleLabels`, `gateLinkLabels`,
   `gateLinkParties`, `linksAtGate`, `distributedLinks`, `distributedLinkParties`,
   `incidentDistributedLinks`, `incidentGateLinkLabels` and `incidentLinksAtGate`.
-- **Defined in:** `TNLean/PEPS/Approximation/DistributedLinks.lean`.
+- **Defined in:** `TNLean/Lattice/Compression/DistributedLinks.lean`.
 - **Meaning:** Each gate has a star rooted at a chosen participant and a sample
   link for every unordered pair of distinct participants. Summand tags keep
   star and sample links distinct, while gate-occurrence tags preserve parallel
@@ -3435,7 +3435,7 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 
 - **Declarations:** `TNLean.PEPS.Approximation.ketBraCoefficientCost` and
   `correctedPositionChoiceCost`.
-- **Defined in:** `TNLean/PEPS/Approximation/CorrectedPositionCost.lean`.
+- **Defined in:** `TNLean/Lattice/Compression/CorrectedPositionCost.lean`.
 - **Meaning:** `ketBraCoefficientCost` is the square of the sum of nonnegative
   absolute coefficient weights. `correctedPositionChoiceCost` multiplies these
   quantities over affected gates and the squares of intended physical
@@ -3461,7 +3461,7 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 ### Individual coefficients and pair-effect counts
 
 - **Declaration:** `TNLean.PEPS.PairEffect.EffectCircuit.IsTermwiseBounded r C`.
-- **Defined in:** `TNLean/PEPS/Approximation/EffectCircuitTermwiseCoefficientBounds.lean`.
+- **Defined in:** `TNLean/Lattice/Compression/EffectCircuitTermwiseCoefficientBounds.lean`.
 - **Meaning:** Every monomial in each prescribed nonprivate gate expansion has
   at most $r$ pair effects and scalar coefficient of norm at most $C$.
   Composition combines these conditions on the two chronological subcircuits;
@@ -3482,7 +3482,7 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 
 - **Declaration:**
   `TNLean.PEPS.PairEffect.EffectCircuit.IsMessageGateApproximation δ lists G`.
-- **Defined in:** `TNLean/PEPS/Approximation/MessageGateLists.lean`.
+- **Defined in:** `TNLean/Lattice/Compression/MessageGateLists.lean`.
 - **Meaning:** Each original private map and each prescribed original gate is
   a contraction. At a nonprivate gate occurrence the participant index has
   cardinality different from one, every listed message monomial is allowed,
@@ -3503,7 +3503,7 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 
 - **Declaration:**
   `TNLean.PEPS.PairEffect.EffectCircuit.IsMessageResourceBounded r m K D C lists`.
-- **Defined in:** `TNLean/PEPS/Approximation/MessageGateLists.lean`.
+- **Defined in:** `TNLean/Lattice/Compression/MessageGateLists.lean`.
 - **Meaning:** Each original nonprivate gate list has at most $K$ monomials.
   Each term has at most $r$ pair effects, a scalar coefficient of norm at
   most $C$, and at most $m$ message occurrences, each transferring an actual
@@ -3844,7 +3844,7 @@ source's Proposition 4.1.
 ### Comparison of chronological word evaluations
 
 - **Declaration:** `TNLean.PEPS.PairEffect.Word.IsEvalComparison`.
-- **Defined in:** `TNLean/PEPS/Approximation/WordEvalComparison.lean`.
+- **Defined in:** `TNLean/Lattice/Compression/WordEvalComparison.lean`.
 - **Meaning:** For two chronological words, possibly with different owner types
   and register lists, the predicate is literally heterogeneous equality of
   their evaluations. Each word retains its actual input and output space.

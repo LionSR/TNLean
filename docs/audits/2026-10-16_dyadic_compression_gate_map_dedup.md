@@ -3,7 +3,7 @@
 This audit records the public declarations removed from
 `TNLean/PEPS/Approximation/DyadicProtocolCompression.lean`. That module now reads a dyadic
 protocol as a distributed construction and applies the general compression theorem for
-distributed constructions in `TNLean/PEPS/Approximation/DistributedGateMapConstruction.lean`.
+distributed constructions in `TNLean/Lattice/Compression/DistributedGateMapConstruction.lean`.
 This is the audit note required by `docs/project_conventions.md` §Style. Every non-`Archive` use
 on `main` has been migrated, and no open pull request uses the removed names. Blueprint
 `\lean{...}` tags now cite the replacements, and no compatibility alias is kept.
