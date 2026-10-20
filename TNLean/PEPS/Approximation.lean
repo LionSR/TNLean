@@ -329,6 +329,7 @@ import TNLean.PEPS.Approximation.PartyChain
 import TNLean.PEPS.Approximation.PartyChainComposition
 import TNLean.PEPS.Approximation.PartyChainRestriction
 import TNLean.PEPS.Approximation.PartyCoarseningFactorization
+import TNLean.PEPS.Approximation.PartyColumnInput
 import TNLean.PEPS.Approximation.PartyColumnRouting
 import TNLean.PEPS.Approximation.PartyFactorization
 import TNLean.PEPS.Approximation.PartyGateCircuit
@@ -507,6 +508,7 @@ import TNLean.PEPS.Approximation.SquareZeroFloorOptimizer
 import TNLean.PEPS.Approximation.SupportedPhysicalBufferGaussian
 import TNLean.PEPS.Approximation.SwappedSquareHamiltonianBoundary
 import TNLean.PEPS.Approximation.SwappedSquareHamiltonianInteraction
+import TNLean.PEPS.Approximation.TagRegisters
 import TNLean.PEPS.Approximation.TensorSchmidtIsometries
 import TNLean.PEPS.Approximation.TouchedLabels
 import TNLean.PEPS.Approximation.TransferGateExpansion

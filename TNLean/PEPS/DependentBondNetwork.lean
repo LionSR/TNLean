@@ -3,8 +3,12 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.TorusCutBoundaryBasis
-import Mathlib.Logic.Equiv.Basic
+import Mathlib.Algebra.BigOperators.Pi
+import Mathlib.Algebra.BigOperators.Ring.Finset
+import Mathlib.Basic.Complex.Basic
+import Mathlib.Data.Fintype.BigOperators
+import Mathlib.Data.Fintype.Pi
+import Mathlib.LinearAlgebra.Matrix.Defs
 
 /-!
 # Edge-dependent contractions on directed multigraphs

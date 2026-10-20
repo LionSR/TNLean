@@ -9,6 +9,7 @@ import Mathlib.Algebra.BigOperators.GroupWithZero.Finset
 import Mathlib.Algebra.BigOperators.Ring.Finset
 import Mathlib.Algebra.Order.BigOperators.Group.Finset
 import Mathlib.Data.Fintype.Pi
+import Mathlib.Data.Matrix.Diagonal
 
 /-!
 # Routing a party network through a graph

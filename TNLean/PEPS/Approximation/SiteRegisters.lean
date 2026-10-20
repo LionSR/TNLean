@@ -3,15 +3,14 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.Approximation.OwnershipMonomials
+import TNLean.PEPS.Approximation.FrontRegisters
 import TNLean.PEPS.Approximation.WordPermutation
 
 /-!
-# Raw registers of sites and tag registers of holes
+# Raw registers of sites
 
-The source has one raw register `ℂ^q` at every site of a sheet and one tag register for every
-hole of an encoded frame, each held by a specified party (`05-frames.tex`, lines 13–20 and
-Definition 6.1). This file lists such registers on a party layout
+The source has one raw register `ℂ^q` at every site of a sheet, held by a specified party
+(`05-frames.tex`, lines 13–20 and Definition 6.1). This file lists such registers on a party layout
 (`TNLean.PEPS.Approximation.PartyWord`) and provides the words of exchanges of tensor factors
 that move them; the layout of a whole frame is `TNLean.PEPS.Approximation.FrameRegisters`.
 
@@ -27,8 +26,8 @@ that move them; the layout of a whole frame is `TNLean.PEPS.Approximation.FrameR
   of further registers `tail`, which are untouched; `partWord`, `unpartWord` and `relabelSites`
   are the same words with no further registers, read through `Word.appendNil` and
   `Word.dropNil`.
-* `tagRegs l` lists one register `ℂ^{Tag}` for each hole of `l`, held by its tag owner, with
-  basis vectors `tagVec` and the identification `tagIso` with `ℂ^{TagSpace l}`.
+* The tag registers of the holes of an encoded frame are in
+  `TNLean.PEPS.Approximation.TagRegisters`.
 
 Every word built here is a reordering (`PairEffect.Word.IsReordering`): it is allowed, uses no
 party and no pair source.
@@ -43,12 +42,10 @@ party and no pair source.
 * `EncodedFrame.relabelHead`, `EncodedFrame.relabelSitesApp`, `EncodedFrame.relabelSites`.
 * `EncodedFrame.partSites`, `EncodedFrame.partWordApp`, `EncodedFrame.unpartWordApp`,
   `EncodedFrame.partWord`, `EncodedFrame.unpartWord`.
-* `EncodedFrame.tagRegs`, `EncodedFrame.tagVec`, `EncodedFrame.tagIso`.
 
 ## Main results
 
-* `EncodedFrame.groupIso_siteVec`, `EncodedFrame.tagIso_tagVec`: the identifications on basis
-  vectors.
+* `EncodedFrame.groupIso_siteVec`: the identification on basis vectors.
 * `EncodedFrame.eval_partWordApp`, `EncodedFrame.eval_unpartWordApp`,
   `EncodedFrame.eval_relabelSitesApp`, `EncodedFrame.eval_partWord`,
   `EncodedFrame.eval_unpartWord`, `EncodedFrame.eval_relabelSites`: the operators of the words on
@@ -569,60 +566,5 @@ theorem siteVec_congr (own : ι → Party) {c c' : ι → Fin q} :
           siteVec own S c'
       rw [h x List.mem_cons_self,
         siteVec_congr own S fun y hy => h y (List.mem_cons_of_mem x hy)]
-
-/-! ### Tag registers -/
-
-section Tags
-
-variable [Fintype ι] [DecidableEq ι] {pos : ι → ℝ × ℝ}
-
-/-- The tag registers of a list of holes, in the order of the list, the tag of a hole held by
-its tag owner. -/
-def tagRegs : List (Hole pos q Party) → Layout Party
-  | [] => []
-  | h :: l => ⟨h.tagOwner, euc h.patch.Tag⟩ :: tagRegs l
-
-/-- The basis vector `⊗_a |τ_a⟩` of the tag registers. -/
-def tagVec : (l : List (Hole pos q Party)) → TagSpace l → Mem (tagRegs l)
-  | [], _ => (1 : ℂ)
-  | h :: l, τ => (EuclideanSpace.single τ.1 (1 : ℂ) : EuclideanSpace ℂ h.patch.Tag) ⊗ₜ
-      tagVec l τ.2
-
-/-- The tag registers identified with `ℂ^{TagSpace l}`. -/
-def tagIso : (l : List (Hole pos q Party)) → Mem (tagRegs l) ≃ₗᵢ[ℂ] EuclideanSpace ℂ (TagSpace l)
-  | [] => (OrthonormalBasis.singleton Unit ℂ).repr
-  | h :: l => ((tagIso l).lTensor (EuclideanSpace ℂ h.patch.Tag)).trans
-      (pairIso h.patch.Tag (TagSpace l))
-
-/-- The tag registers on basis vectors: `⊗_a |τ_a⟩ ↦ |τ⟩`. -/
-theorem tagIso_tagVec : (l : List (Hole pos q Party)) → (τ : TagSpace l) →
-    tagIso l (tagVec l τ) = EuclideanSpace.single τ (1 : ℂ)
-  | [], τ => by
-      change (OrthonormalBasis.singleton Unit ℂ).repr (1 : ℂ) = _
-      ext u
-      rw [OrthonormalBasis.singleton_repr]
-      erw [PiLp.single_apply]
-      split_ifs with hu
-      · rfl
-      · exact absurd rfl hu
-  | h :: l, τ => by
-      change pairIso h.patch.Tag (TagSpace l) ((tagIso l).lTensor (EuclideanSpace ℂ h.patch.Tag)
-        ((EuclideanSpace.single τ.1 (1 : ℂ) : EuclideanSpace ℂ h.patch.Tag) ⊗ₜ
-          tagVec l τ.2)) = _
-      ext i
-      rw [LinearIsometryEquiv.lTensor_tmul, tagIso_tagVec l τ.2, pairIso_tmul_apply]
-      change (EuclideanSpace.single τ.1 (1 : ℂ) : EuclideanSpace ℂ h.patch.Tag) i.1 *
-          (EuclideanSpace.single τ.2 (1 : ℂ) : EuclideanSpace ℂ (TagSpace l)) i.2 =
-        (EuclideanSpace.single (τ : h.patch.Tag × TagSpace l) (1 : ℂ) :
-          EuclideanSpace ℂ (h.patch.Tag × TagSpace l)) i
-      simp only [PiLp.single_apply, ite_zero_mul_ite_zero, one_mul]
-      erw [PiLp.single_apply]
-      split_ifs with h₁ h₂ h₂
-      · rfl
-      · exact absurd (Prod.ext h₁.1 h₁.2) h₂
-      · exact absurd ⟨congrArg Prod.fst h₂, congrArg Prod.snd h₂⟩ h₁
-      · rfl
-
-end Tags
 
 end TNLean.PEPS.EncodedFrame
