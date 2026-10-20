@@ -10,8 +10,8 @@ import Lean.Util.CollectAxioms
 /-!
 # Presence and axiom audits for the conditional one-band construction
 
-The five endpoint, information-environment and conditional circuit declarations are present,
-and their proofs use only the permitted standard axioms.
+The six endpoint, information-environment, birth and conditional circuit declarations are
+present, and their proofs use only the permitted standard axioms.
 -/
 
 run_cmd do
@@ -19,6 +19,7 @@ run_cmd do
   for decl in #[``TNLean.MPS.AreaLaw.OneBand.main₈_eq_changeOwner,
       ``TNLean.MPS.AreaLaw.OneBand.aux₄_eq_raw,
       ``TNLean.MPS.AreaLaw.OneBand.exchange_regions,
+      ``TNLean.MPS.AreaLaw.OneBand.birth_liftOne,
       ``TNLean.MPS.AreaLaw.OneBand.circuits_of_primitive_information,
       ``TNLean.MPS.AreaLaw.OneBand.boundary_change_of_primitive_information] do
     unless (← Lean.getEnv).contains decl do
