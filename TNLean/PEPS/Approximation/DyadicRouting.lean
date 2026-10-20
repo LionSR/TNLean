@@ -42,7 +42,7 @@ block bound, the degree bound and the separation bound. Here `load_horizontal_le
 `load_vertical_le` take these three bounds (`BlockBounded`, `DegreeBounded`,
 `SeparationBounded`) as hypotheses on an arbitrary placement; they are verified for the
 compressed protocol network in
-`largeSizeDyadicOperatorNetwork_of_largeSizeDyadicProtocolConsequences`, as recorded in
+`dyadicOperatorNetworkAt_of_dyadicProtocolBoundsAt`, as recorded in
 `docs/paper-gaps/polypeps_routing_network_bounds.tex`.
 
 ## Main results

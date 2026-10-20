@@ -17,22 +17,17 @@ Lemma 8.2 routes it onto the square with bond dimensions at most `(C₁ L ^ k) ^
 (`eq:final-bond`). Finally, the finitely many sizes below the threshold are covered by exact
 spanning-tree PEPS and one enlarged prefactor.
 
-`LargeSizeDyadicOperatorNetwork` states the output of the first step as a proposition: the
-constants and the threshold are chosen before the size, Hamiltonian, energy, and ground
+`DyadicOperatorNetworkAt` states the output of the first step for one model as a proposition:
+the constants and the threshold are fixed before the size, Hamiltonian, energy, and ground
 vector, and the network meets the hypotheses of Lemma 8.2. The theorem
-`polynomialPEPSApproximation_of_largeSizeDyadicOperatorNetwork` derives the uniform
-approximation `PolynomialPEPSApproximation` from it by the last two steps.
-
-The proposition is not proved here. It packages Proposition 7.1, the error estimates of §8.1,
-and the compression theorem, which are not formalized. The derived statement is therefore a
-conditional form of Theorem 1.1, not the theorem itself.
+`hasPEPSApproximation_of_dyadicOperatorNetworkAt` derives the large-size approximation from it by
+the routing step. The small sizes and the final constants are handled in
+`polynomialPEPSApproximation_of_ratios`, and Theorem 1.1 is `polynomialPEPSApproximation`.
 
 ## Main definitions
 
 * `TNLean.PEPS.Approximation.DyadicOperatorNetworkAt`: the compressed dyadic operator network
   for one model, at given constants and threshold.
-* `TNLean.PEPS.Approximation.LargeSizeDyadicOperatorNetwork`: the compressed dyadic operator
-  network for all sufficiently large squares.
 
 ## Main results
 
@@ -40,8 +35,6 @@ conditional form of Theorem 1.1, not the theorem itself.
   preserves an approximation when `L ≥ 1`.
 * `TNLean.PEPS.Approximation.hasPEPSApproximation_of_dyadicOperatorNetworkAt`: the large-size
   approximation at the bond constants `max(C₁, 1) ^ χ` and `max(k, 0) χ + 1`.
-* `TNLean.PEPS.Approximation.polynomialPEPSApproximation_of_largeSizeDyadicOperatorNetwork`:
-  the conditional assembly of Theorem 1.1.
 
 ## References
 
@@ -99,25 +92,6 @@ def DyadicOperatorNetworkAt (q : ℕ) (J Δ C C₁ k : ℝ) (B deg c L₀ : ℕ)
           (N.operatorCoeff (fun p ↦ foldVertex (lt_of_lt_of_le two_pos hL) (A.anchor p)) -
             Matrix.euclideanOuterProduct Ω Ω) ≤ C / (L : ℝ) ^ 5
 
-/-- **Compressed dyadic operator network for large squares.** For every `q ≥ 2` and
-`J, Δ > 0` there are constants `C, C₁, k`, routing bounds `B, deg, c`, and a threshold `L₀`,
-chosen before the size, Hamiltonian, energy, and ground vector, such that
-`DyadicOperatorNetworkAt q J Δ C C₁ k B deg c L₀` holds: every gapped unit ground vector of a
-square Hamiltonian of side `L ≥ max 2 L₀` is approximated by an operator party network on dyadic
-anchors with at most `B` parties per block, at most `deg` links per party, link separations at
-most `c` times either endpoint scale, link dimensions at most `C₁ L ^ k`, and trace-norm error
-at most `C / L ^ 5`.
-
-Source: Polynomial-PEPS manuscript (Sept 24 2026), `eq:compressed-density` and the
-paragraph containing it, `07-assembly.tex:53–63`, with the dyadic anchors of
-`07-assembly.tex:102–114`, the hypotheses of Lemma 8.2 `lem:routing` supplied by
-Proposition 7.1 `prop:protocol` (`07-assembly.tex:128–131`), and the polynomial link
-dimensions `C₁ L ^ r` of `07-assembly.tex:164–170`; the order of constants is that of
-`07-assembly.tex:181–203`. -/
-def LargeSizeDyadicOperatorNetwork : Prop :=
-  ∀ q : ℕ, 2 ≤ q → ∀ J Δ : ℝ, 0 < J → 0 < Δ →
-    ∃ C C₁ k : ℝ, ∃ B deg c L₀ : ℕ, DyadicOperatorNetworkAt q J Δ C C₁ k B deg c L₀
-
 /-- On a square of side `L ≥ 2` with `2 C ≤ L`, the error `C / L ^ 5` is less than one and at
 most half of `L⁻¹`.
 
@@ -172,27 +146,5 @@ theorem hasPEPSApproximation_of_dyadicOperatorNetworkAt {q : ℕ} {J Δ C C₁ k
   exact (hasPEPSApproximation_of_fixInput_dyadicRouting _ N A hgrid hB hdeg hsep
     (le_max_right _ _) (le_max_right _ _) hdim' Ω hΩ.1 hσ hη hηL).mono_exponent
     (by positivity) (by omega) (by linarith)
-
-/-- **Theorem 1.1 from the compressed dyadic operator network.** The compressed dyadic
-operator network for all sufficiently large squares implies the uniform polynomial PEPS
-approximation: fixing `q ≥ 2` and `J, Δ > 0`, there are `C', c' > 0` such that every gapped
-unit ground vector of every square Hamiltonian of side `L ≥ 2` has a nonzero PEPS
-approximation with bond dimensions at most `C' L ^ c'` and phase-normalized error at most
-`L⁻¹`. For large `L` the column of Lemma 8.1 is routed by Lemma 8.2, with bonds at most
-`(C₁ L ^ k) ^ χ` (`hasPEPSApproximation_of_dyadicOperatorNetworkAt`); the finitely many smaller
-sizes use the exact spanning-tree PEPS.
-
-This is a conditional form of Theorem 1.1: the hypothesis is not proved.
-
-Source: Polynomial-PEPS manuscript (Sept 24 2026), Theorem 1.1 `thm:main`,
-`00-introduction.tex:36–57`, and its proof in §8, `07-assembly.tex:53–214`. -/
-theorem polynomialPEPSApproximation_of_largeSizeDyadicOperatorNetwork
-    (hnet : LargeSizeDyadicOperatorNetwork) : PolynomialPEPSApproximation := by
-  rw [polynomialPEPSApproximation_iff_sufficiently_large]
-  intro q hq J Δ hJ hΔ
-  obtain ⟨C, C₁, k, B, deg, c, L₀, hall⟩ := hnet q hq J Δ hJ hΔ
-  exact ⟨max C₁ 1 ^ (8 * (2 * c + 1) * B * deg),
-    max k 0 * ((8 * (2 * c + 1) * B * deg : ℕ) : ℝ) + 1, by positivity, by positivity,
-    max L₀ ⌈2 * C⌉₊, hasPEPSApproximation_of_dyadicOperatorNetworkAt hall⟩
 
 end TNLean.PEPS.Approximation

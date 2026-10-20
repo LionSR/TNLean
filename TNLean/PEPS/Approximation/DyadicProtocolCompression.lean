@@ -32,11 +32,10 @@ two parties of a common gate.
 The hypothesis `LargeSizeDyadicProtocolConsequences` is Proposition 7.1, proved as
 `largeSizeDyadicProtocolConsequences`.
 
-The main theorems `largeSizeDyadicOperatorNetwork_of_largeSizeDyadicProtocolConsequences` and
-`polynomialPEPSApproximation_of_largeSizeDyadicProtocolConsequences` assume
-`LargeSizeDyadicProtocolConsequences`, which carries every clause of Proposition 7.1
-(`06-geometry.tex:12–53`). Each nonprivate gate `G` equals its recorded expansion
-`∑ ξ, c ξ • M ξ`, so the error `‖G - ∑ ξ, c ξ • M ξ‖ = 0` meets every accuracy of Theorem 5.2.
+The main theorem `dyadicOperatorNetworkAt_of_dyadicProtocolBoundsAt` assumes the protocol bounds
+of Proposition 7.1 (`06-geometry.tex:12–53`) for one model at given constants. Each nonprivate
+gate `G` equals its recorded expansion `∑ ξ, c ξ • M ξ`, so the error `‖G - ∑ ξ, c ξ • M ξ‖ = 0`
+meets every accuracy of Theorem 5.2.
 The former scope restriction is resolved in
 `docs/paper-gaps/polypeps_prop71_consequences_interface.tex`.
 
@@ -48,10 +47,9 @@ The former scope restriction is resolved in
 * `TNLean.PEPS.Approximation.DyadicProtocol.exists_partyNetwork_of_contractedOperator`: a
   compressed density on the parties of a protocol gives an operator party network on dyadic
   anchors with the hypotheses of Lemma 8.2.
-* `TNLean.PEPS.Approximation.largeSizeDyadicOperatorNetwork_of_largeSizeDyadicProtocolConsequences`:
-  the compressed dyadic operator network from the consequences of Proposition 7.1.
-* `TNLean.PEPS.Approximation.polynomialPEPSApproximation_of_largeSizeDyadicProtocolConsequences`:
-  Theorem 1.1 conditional on those consequences.
+* `TNLean.PEPS.Approximation.dyadicOperatorNetworkAt_of_dyadicProtocolBoundsAt`: the compressed
+  dyadic operator network for one model from the consequences of Proposition 7.1 at given
+  constants.
 
 ## References
 
@@ -514,70 +512,5 @@ theorem dyadicOperatorNetworkAt_of_dyadicProtocolBoundsAt {q : ℕ} (hq : 2 ≤ 
   have h10 : (L : ℝ) ^ 5 ≤ (L : ℝ) ^ 10 := pow_le_pow_right₀ (by linarith) (by norm_num)
   have hnn : 0 ≤ 2 * (C_N * C_E) + 2 * C_E := by positivity
   exact add_le_add le_rfl (div_le_div_of_nonneg_left hnn hx5 h10)
-
-/-- **The compressed dyadic operator network from the consequences of Proposition 7.1, with
-separate constants.** If,
-for every `q ≥ 2` and `J, Δ > 0`, every gapped ground vector of a square Hamiltonian of large
-side `L` has a dyadic distribution protocol with the bounds of §8, with a count constant `C_N`,
-an expansion constant `C_K` and an error constant `C_E` chosen before `L`, the Hamiltonian, and
-the ground vector, then the compressed dyadic operator network of
-§8.1 exists for all large squares.
-
-The protocols for all sizes, Hamiltonians, and ground vectors form one family of distributed
-constructions with uniformly polynomial gate counts, constant arity and lifetime participation,
-physical dimensions at most `q`, and exact polynomial gate expansions. Theorem 5.2 at accuracy
-`L⁻⁵`, applied to the coefficient sums `C_K L ^ k` of the gates, gives one operator network per
-protocol, with the link prefactor `sumCompressionPrefactor r b (max C_N 0 * b) q (max C_K 0) C_K`
-and the link exponent `sampledNetworkExponent r b 3 0 k k 5`;
-the link dimensions are polynomial, every link joins two parties of a common gate, and the
-density error adds to the protocol estimate `‖ρ - |Ω⟩⟨Ω|‖₁ ≤ (2 C_N C_E + 2 C_E) L⁻¹⁰`, so the
-error constant of the network is `1 + 2 C_N C_E + 2 C_E`, free of the expansion constant. The
-separation hypothesis of Lemma 8.2 follows from item 3 of Proposition 7.1.
-
-Source: Polynomial-PEPS manuscript (Sept 24 2026), §8.1, `07-assembly.tex:9–63`, with
-Theorem 5.2 `thm:compression`, `04-compression.tex:137–175`, and the order of constants of
-`07-assembly.tex:179–203`. -/
-theorem largeSizeDyadicOperatorNetwork_of_largeSizeDyadicProtocolBounds
-    (hprot : LargeSizeDyadicProtocolBounds) : LargeSizeDyadicOperatorNetwork := by
-  intro q hq J Δ hJ hΔ
-  obtain ⟨C_N, C_K, C_E, b, k, r, L₀, hall⟩ := hprot q hq J Δ hJ hΔ
-  exact ⟨1 + (2 * (C_N * C_E) + 2 * C_E),
-    sumCompressionPrefactor r b (max C_N 0 * b) q (max C_K 0) C_K,
-    sampledNetworkExponent r b 3 0 k k 5, b, 2 * b * (b - 1), b, L₀,
-    dyadicOperatorNetworkAt_of_dyadicProtocolBoundsAt hq hall⟩
-
-/-- **The compressed dyadic operator network from the consequences of Proposition 7.1.** The
-single-constant form of `largeSizeDyadicOperatorNetwork_of_largeSizeDyadicProtocolBounds`.
-
-Source: Polynomial-PEPS manuscript (Sept 24 2026), §8.1, `07-assembly.tex:9–63`, with
-Theorem 5.2 `thm:compression`, `04-compression.tex:137–175`. -/
-theorem largeSizeDyadicOperatorNetwork_of_largeSizeDyadicProtocolConsequences
-    (hprot : LargeSizeDyadicProtocolConsequences) : LargeSizeDyadicOperatorNetwork :=
-  largeSizeDyadicOperatorNetwork_of_largeSizeDyadicProtocolBounds
-    hprot.largeSizeDyadicProtocolBounds
-
-/-- **Theorem 1.1 from the consequences of Proposition 7.1, with separate constants.** The
-existence, for all large squares, of dyadic distribution protocols with the bounds of §8 at a
-count constant, an expansion constant and an error constant implies the uniform polynomial PEPS
-approximation of gapped square-grid ground states.
-
-Source: Polynomial-PEPS manuscript (Sept 24 2026), Theorem 1.1 `thm:main`,
-`00-introduction.tex:36–57`, and its proof in §8, `07-assembly.tex:9–214`. -/
-theorem polynomialPEPSApproximation_of_largeSizeDyadicProtocolBounds
-    (h : LargeSizeDyadicProtocolBounds) : PolynomialPEPSApproximation :=
-  polynomialPEPSApproximation_of_largeSizeDyadicOperatorNetwork
-    (largeSizeDyadicOperatorNetwork_of_largeSizeDyadicProtocolBounds h)
-
-/-- **Theorem 1.1 from the consequences of Proposition 7.1.** The existence, for all large
-squares, of dyadic distribution protocols with the bounds of §8 implies the uniform polynomial
-PEPS approximation of gapped square-grid ground states.
-
-The hypothesis is Proposition 7.1, proved as `largeSizeDyadicProtocolConsequences`.
-
-Source: Polynomial-PEPS manuscript (Sept 24 2026), Theorem 1.1 `thm:main`,
-`00-introduction.tex:36–57`, and its proof in §8, `07-assembly.tex:9–214`. -/
-theorem polynomialPEPSApproximation_of_largeSizeDyadicProtocolConsequences
-    (h : LargeSizeDyadicProtocolConsequences) : PolynomialPEPSApproximation :=
-  polynomialPEPSApproximation_of_largeSizeDyadicProtocolBounds h.largeSizeDyadicProtocolBounds
 
 end TNLean.PEPS.Approximation
