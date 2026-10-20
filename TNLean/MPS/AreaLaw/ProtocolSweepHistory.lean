@@ -5,18 +5,17 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.ProtocolRetiredAuxiliary
 import TNLean.MPS.AreaLaw.ProtocolTerminalReference
-import TNLean.PEPS.Approximation.DyadicProtocolStack
 
 /-!
-# The labelled auxiliary frames at successive chain stages
+# The labelled auxiliary sheets at successive chain stages
 
-The main frame is followed by every original auxiliary copy in its initial
+The main sheet is followed by every original auxiliary copy in its initial
 label order. A copy remains at its initial holder until its prescribed band
-operation, and then retains the actual auxiliary frame of that operation.
+operation, and then retains the actual auxiliary sheet of that operation.
 Right copy j is used at stage j; left copy j is used at stage j+1. Stage zero
 has no left copy. Equal band centres never identify the two copy labels.
 
-These are identities of actual frame lists and single-label replacements.
+These are identities of actual sheet lists and single-label replacements.
 They do not construct the gates or establish a vector-error estimate. The
 terminal list identity uses the previously specified one-band auxiliary
 endpoints; it does not assume that a circuit has reached that list.
@@ -25,7 +24,7 @@ Source: the one-dimensional note, Part II, `part2b_mps_protocol.tex`,
 Construction `con:sweep`, lines 330–343, and Proposition `prop:sweep`,
 lines 350–378.
 
-**Local fix (terminal auxiliary registers):** Retired auxiliary frames retain
+**Local fix (terminal auxiliary registers):** Retired auxiliary sheets retain
 their actual A and B strips and their C-owned exterior. The existing
 half-open convention and physical/private distinction are recorded in
 `docs/paper-gaps/tnlean_one_dimensional_band_sweep_corrections.tex`.
@@ -35,9 +34,9 @@ noncomputable section
 
 namespace TNLean.MPS.AreaLaw.ChainSweep
 
-open TNLean.PEPS.EncodedFrame
+open TNLean.Lattice
 
-variable {L w q : ℕ}
+variable {L w : ℕ}
 
 /-- The stage of the original labelled copy's band operation.
 Source: Part II, `con:sweep`, moves (3)–(4), lines 336–340. -/
@@ -53,14 +52,14 @@ def retiredAuxiliaryFrame (L w : ℕ) :
   | .inr j => leftRetiredAuxiliary L w j
 
 /-- Before stage s, only copies whose own band stage is earlier have retired.
-The other copies remain the original raw sheets at their initial holders.
+The other copies remain the original sheets at their initial holders.
 Source: Part II, `con:sweep`, lines 330–340, and `prop:sweep`, lines 350–359. -/
 def auxiliaryFrameBefore (L w : ℕ) (s : ℕ)
     (c : AuxiliaryCopy L w) : Sheet (Fin L) (Party L w) :=
   if auxiliaryStage L w c < s then retiredAuxiliaryFrame L w c
   else Sheet.mk (fun _ ↦ initialAuxiliaryHolder L w c)
 
-/-- The main frame and all original auxiliary occurrences before a stage.
+/-- The main sheet and all original auxiliary occurrences before a stage.
 Source: Part II, `prop:sweep`, proof, lines 365–378. -/
 def sweepFrames (L w : ℕ)
     (k : Fin (stageCount L w + 1)) : List (Sheet (Fin L) (Party L w)) :=
@@ -132,7 +131,7 @@ theorem auxiliaryFrameBefore_zero (c : AuxiliaryCopy L w) :
   simp [auxiliaryFrameBefore]
 
 /-- The last boundary retains every actual retired auxiliary endpoint in
-the previously specified raw copy coordinates. No endpoint identity is assumed.
+the previously specified copy coordinates. No endpoint identity is assumed.
 Source: Part II, `con:band`, lines 271–272, and `prop:sweep`, lines 356–359. -/
 theorem auxiliaryFrameBefore_last (c : AuxiliaryCopy L w) :
     auxiliaryFrameBefore L w (stageCount L w) c =
@@ -253,7 +252,7 @@ theorem rightAuxiliaryUpdate_spectator (k : Fin (stageCount L w))
         (rightRetiredAuxiliary L w k) c = leftAuxiliaryFrame L w k c :=
   Function.update_of_ne hc _ _
 
-/-- Both actual main and auxiliary frame endpoints give the complete next
+/-- Both actual main and auxiliary sheet endpoints give the complete next
 stage list, including the first stage. This is not a circuit hypothesis.
 Source: Part II, `prop:sweep`, proof, lines 375–378. -/
 theorem afterRightFrames_eq_sweepFrames (k : Fin (stageCount L w)) :
@@ -263,7 +262,7 @@ theorem afterRightFrames_eq_sweepFrames (k : Fin (stageCount L w)) :
     rightAuxiliaryUpdate_eq_next]
   rfl
 
-/-- Selecting a copy occurrence uses its original label, even if frame values
+/-- Selecting a copy occurrence uses its original label, even if sheet values
 coincide. The other occurrences retain their order.
 Source: Part II, `con:sweep`, lines 336–340. -/
 theorem sweepFrames_select_auxiliary (k : Fin (stageCount L w + 1))
