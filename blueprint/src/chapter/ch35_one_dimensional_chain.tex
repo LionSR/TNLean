@@ -1157,62 +1157,49 @@ for an arbitrary finite set of sites and are instantiated here directly.
     \label{thm:chain_family_budget_discount}
     \lean{TNLean.MPS.AreaLaw.two_mul_condEntropy_interval_le_of_family_budget}
     \leanok
-    Fix natural numbers $q$ and $R$, real numbers $J\ge0$ and
-    $\Delta>0$, and a real number $B\ge1$. Put $\vartheta=J/\Delta$.
-    Choose a natural number $m$ satisfying
+    \uses{thm:chain_single_splitting,lem:chain_crossing_count}
+    Fix natural numbers $q\ge1$, $R$ and $N$, real numbers $J\ge0$ and
+    $\Delta>0$, and a real number $B\ge1$. Put $\vartheta=J/\Delta$ and
+    $\ell_R=\log(e\,q^{R+1})$. Let $H=\sum_{i\in F}h_i$ act on a chain of any
+    finite length $L$, with local spaces $\mathbb C^q$. Here $F$ is finite,
+    each $h_i$ is Hermitian, has norm at most $J$, and is supported on a set
+    $S_i$ of diameter at most $R$. Suppose that every interval
+    $D=[u,v)\cap I$, where $I=\{0,\ldots,L-1\}$, is split by at most $N$ of
+    the sets $S_i$ and that
     \begin{align}
-        m & \ge\max\bigl\{4,\ 128eB\vartheta,
-        128\sqrt{(1+\vartheta)B},\ 4096e(1+\vartheta)B\bigr\}.
-        \notag
-    \end{align}
-    Let $H=\sum_{i\in F}h_i$ act on a chain of any finite length $L$,
-    with local spaces $\mathbb C^q$. Here $F$ is finite, each $h_i$ is Hermitian, has norm at most $J$,
-    and is supported on a set $S_i$ of diameter at most $R$.
-    Let $\Omega$ be a unit vector satisfying
-    $H\Omega=E_0\Omega$ and
-    $H-E_0\ge\Delta(1-|\Omega\rangle\langle\Omega|)$.
-    For natural endpoints $l,r$, write $I=\{0,\ldots,L-1\}$ and put
-    \begin{align}
-        X & =[l,r)\cap I,\qquad
-        D_j=[l-(j+1)R,r+(j+1)R)\cap I,\notag       \\
-        T & =([l-mR,r+mR)\cap I)\setminus X.\notag
-    \end{align}
-    All left subtractions are truncated. Suppose, for every $j<m$, that
-    \begin{align}
-        1+\sum_{\substack{i\in F:\ S_i\cap D_j\ne\varnothing \\
-                S_i\setminus D_j\ne\varnothing}}
+        1+\sum_{\substack{i\in F:\ S_i\cap D\ne\varnothing \\
+                S_i\setminus D\ne\varnothing}}
         \log^2(e q^{|S_i|}) & \le B.\notag
     \end{align}
-    Then
+    Choose a natural number $m$ satisfying
+    \begin{align}
+        m & \ge\max\bigl\{4,\
+        \min\{32Nq^{2(R+1)},\ 64\,e\,N\ell_R^2\}\vartheta,\
+        128\sqrt{(1+\vartheta)B}\bigr\}.
+        \notag
+    \end{align}
+    Let $\Omega$ be a unit vector satisfying $H\Omega=E_0\Omega$ and
+    $H-E_0\ge\Delta(1-|\Omega\rangle\langle\Omega|)$. For natural endpoints
+    $l,r$ put $X=[l,r)\cap I$ and $T=([l-mR,r+mR)\cap I)\setminus X$, with
+    truncated subtraction at the left endpoint. Then
     \begin{align}
         2\bigl(S_\Omega(X\cup T)-S_\Omega(T)\bigr)
-         & \le S_\Omega(X)+1+64eB\vartheta.\notag
+         & \le S_\Omega(X)+\frac{4096\,e\,\vartheta B}{m}+m\log2.\notag
     \end{align}
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:chain_single_splitting}
-    Pad the regions $D_j$ by $I$ for $j\ge m$ and use weights $a_j=2/m$.
-    The diameter bound implies that each support is split by at most one
-    region. Put $C_E=32eBJ$. The logarithmic interaction estimate of
-    \cite[Part~I, Remark~6.3]{TNLean2026OneDimensional} bounds the energy
-    increase of every maximizing prefix by
-    \begin{align}
-        \sum_{j<m}8eJa_j^2B
-         & =\frac{32eBJ}{m}=\frac{C_E}{m}\le\frac\Delta4.
-        \label{eq:chain_log_prefix_energy}
-    \end{align}
-    The first and third thresholds give $a_j\le1/2$ and the required
-    marginal-tail radius. In the weighted entropy comparison, the
-    marginal errors sum to at most $4096e\vartheta B/m\le1$.
-    The remaining loss is bounded by
-    \begin{align}
-        -m\log\left(1-\frac{C_E}{m\Delta}\right)
-         & \le\frac{2C_E}{\Delta}=64eB\vartheta,\notag
-    \end{align}
-    since $0\le C_E/(m\Delta)\le1/4$.
-    The weights sum to two. Strong subadditivity then replaces the
-    individual buffers by $T$, giving the stated inequality.
+    This is the argument of Lemma~\ref{lem:chain_buffer_discount}, with the
+    crossing count $N_R$ and the cut budget $B_R$ replaced by $N$ and $B$.
+    Use the nested shells $X_j=[l-(j+1)R,r+(j+1)R)\cap I$, $0\le j<m$, and
+    the uniform weights $a_j=2/m$. The diameter bound implies that each
+    support is split by at most one shell. The energy of the filtered vector
+    is at most $16Nq^{2(R+1)}J/m$ by the squared-dimension estimate and at
+    most $32\,e\,N\ell_R^2J/m$ by the logarithmic estimate of
+    \cite[Part~I, Remark~6.3]{TNLean2026OneDimensional}; the choice of $m$
+    makes the smaller of the two bounds at most $\Delta/2$. The error terms
+    sum to at most $4096e\vartheta B/m$, and the overlap losses to $m\log2$.
 \end{proof}
 
 % Source: part1_arealaw.tex, eq:CE, lem:buffer and eq:final,
@@ -1302,9 +1289,11 @@ for an arbitrary finite set of sites and are instantiated here directly.
     (\ref{eq:chain_polynomial_discount}) proves the assertion.
 \end{proof}
 
-\begin{theorem}[Buffered discount with logarithmic interaction energy]
-    \label{thm:chain_buffer_discount}
+\begin{lemma}[Buffered discount on a chain]
+    \label{lem:chain_buffer_discount}
     \lean{
+        TNLean.MPS.AreaLaw.chainQuadraticEnergyThreshold,
+        TNLean.MPS.AreaLaw.chainLogEnergyThreshold,
         TNLean.MPS.AreaLaw.chainEnergyThreshold,
         TNLean.MPS.AreaLaw.chainTailThreshold,
         TNLean.MPS.AreaLaw.chainShellCount,
@@ -1320,42 +1309,52 @@ for an arbitrary finite set of sites and are instantiated here directly.
     \leanok
     \uses{def:chain_model}
     Let $\Omega$ be a gapped ground vector, with gap $\Delta>0$, of a
-    finite-range Hamiltonian with term norms at most $J\ge0$ on a chain
-    with local dimension $q\ge1$. Put $\vartheta=J/\Delta$ and
-    $B=B_R=1+N_R\log^2(e q^{R+1})$, where $N_R=2\cdot2^{2R}$.
-    Define
+    finite-range Hamiltonian with term norms at most $J\ge0$ on the chain with
+    local dimension $q\ge1$. Put $\vartheta=J/\Delta$,
+    $\ell_R=\log(e\,q^{R+1})$,
+    $E_R=\min\{32N_Rq^{2(R+1)},\ 64\,e\,N_R\ell_R^2\}$ and
     \begin{align}
-        C_E^{\log} & =32eBJ,\label{eq:chain_log_energy}         \\
-        m          & =\Bigl\lceil\max\Bigl\{4,\ 128eB\vartheta,
-        128\sqrt{(1+\vartheta)B},\
-        4096e(1+\vartheta)B\Bigr\}\Bigr\rceil.
-        \label{eq:chain_log_shells}
+        m=\Bigl\lceil\max\bigl\{4,\ E_R\vartheta,\
+        128\sqrt{(1+\vartheta)B_R}\bigr\}\Bigr\rceil .
     \end{align}
-    Thus the second entry is $4C_E^{\log}/\Delta$.
-    Let $I=\{0,\ldots,L-1\}$. For arbitrary natural endpoints $l,r$, put
-    $X=[l,r)\cap I$ and
-    $T=([l-mR,r+mR)\cap I)\setminus X$, with truncated natural
-    subtraction at the left endpoint. Then $|T|\le2mR$ and
+    For an interval $X=[l,r)$ let $T=X^{+mR}\setminus X$ be the buffer,
+    which has at most $2mR$ sites. Then
     \begin{align}
-        2\bigl(S(X\cup T)-S(T)\bigr)
-         & \le S(X)+1+64eB\vartheta.
-        \label{eq:chain_log_discount}
+        2\bigl(S(X\cup T)-S(T)\bigr)\le S(X)+
+        \frac{4096\,e\,\vartheta B_R}{m}+m\log2 .
     \end{align}
-    This is the logarithmic-energy refinement described in
-    \cite[Part~I, Remark~6.3]{TNLean2026OneDimensional}.
-    Its energy constant replaces the polynomial-dimension constant in
-    Lemma~4.2 of that note.
-\end{theorem}
+    The energy threshold $\Delta/2$, the overlap losses $m\log2$ and the
+    explicit tail term, with the three-entry $m$, replace the printed
+    constants of Lemma~4.2 of \cite{TNLean2026OneDimensional}, which runs at
+    the threshold $\Delta/4$, absorbs the tail term through a fourth entry of
+    $m$ and concludes with $1+16N_Rq^{2(R+1)}\vartheta$; see
+    \cite{gap:tnlean_one_dimensional_discount_constants}. The second entry
+    $64\,e\,N_R\ell_R^2$ of $E_R$ is the logarithmic energy estimate of
+    Remark~6.3 of \cite{TNLean2026OneDimensional}. Since $E_R$ is at most
+    either entry, this $m$ is at most the shell count obtained from either
+    estimate alone, and in particular it satisfies the bound of that remark.
+\end{lemma}
 \begin{proof}
     \leanok
-    \uses{lem:chain_crossing_count,thm:chain_family_budget_discount,
-        thm:chain_interval_enlargement_size,def:chain_model}
-    The crossing count and the support dimension bound give the common
-    shell budget $B_R$. The definition of $m$ in
-    (\ref{eq:chain_log_shells}) satisfies the four thresholds in
-    Theorem~\ref{thm:chain_family_budget_discount}, which gives
-    (\ref{eq:chain_log_discount}). Theorem~\ref{thm:chain_interval_enlargement_size}
-    gives $|T|\le2mR$. This includes $J=0$ and empty intervals.
+    \uses{lem:chain_crossing_count, def:chain_model, thm:chain_family_budget_discount}
+    This is Theorem~\ref{thm:chain_family_budget_discount} for all supports, with
+    $N=N_R$, $B=B_R$ and the stated $m$. It is the finite-dimensional buffered discount (optimized filters,
+    stationarity, the energy estimate, the prefix comparison and Schmidt
+    pinning) of Lemma~3.2 of \cite{OpenAI2026AreaLaw}, applied to the nested
+    shells $X_j=X^{+(j+1)R}$, $0\le j<m$, with the uniform weights $a_j=2/m$ of
+    total mass two. The shells are intervals, so each is split by at most $N_R$
+    supports with cut budget at most $B_R$ by
+    Lemma~\ref{lem:chain_crossing_count}, and no support is split by two of
+    them. The energy of the filtered vector is at most
+    $\sum_j4a_j^2\sum_Y(\dim\mathcal H_Y)^2J\le16N_Rq^{2(R+1)}J/m$, the sum
+    running over the supports $Y$ split by $X_j$, and also at most
+    $\sum_j8e\,a_j^2\sum_Y\log^2(e\dim\mathcal H_Y)\,J\le32\,e\,N_R\ell_R^2J/m$
+    by the three-lines estimate of Remark~6.3 of
+    \cite{TNLean2026OneDimensional}. The choice of $m$ makes the smaller of
+    the two bounds at most $\Delta/2$, each weight at most $1/2$, and each tilt $a_j/(1-a_j)$ at most
+    the tail radius $1/(32\sqrt{(1+\vartheta)B_j})$. The error terms sum to
+    $1024e\vartheta\sum_jB_ja_j^2\le4096e\vartheta B_R/m$, and the overlap
+    losses to $m\log2$.
 \end{proof}
 
 \section{Closing the argument}
@@ -1440,45 +1439,34 @@ for an arbitrary finite set of sites and are instantiated here directly.
     \leanok
     \uses{def:chain_model}
     Let $\Omega$ be a gapped ground vector, with gap $\Delta>0$, of a
-    finite-range Hamiltonian with term norms at most $J\ge0$ on a chain
-    with local dimension $q\ge1$. Use $B$ and $m$ from
-    Theorem~\ref{thm:chain_buffer_discount} and put $\vartheta=J/\Delta$.
-    Define
+    finite-range Hamiltonian with term norms at most $J\ge0$ on the chain of
+    $L$ sites with local dimension $q\ge1$. Every interval $X$ satisfies
     \begin{align}
-        C_1(q,R) & =5+(128+4224e)B_R(q),\label{eq:chain_log_shell_constant} \\
-        C_0(q,R) & =8R\log q\,C_1(q,R)+1+64eB_R(q).
-        \label{eq:chain_log_area_constant}
+        S(X)\le C_{\mathrm{int}}(q,R,J,\Delta)
+        =8mR\log q+\frac{4096\,e\,\vartheta B_R}{m}+m\log2
+        \le C_0(q,R)\,(1+J/\Delta),
     \end{align}
-    Every interval $X$ satisfies
-    \begin{align}
-        S(X) & \le C_{\mathrm{int}}
-        =8mR\log q+1+64eB_R(q)\vartheta
-        \le C_0(q,R)(1+\vartheta).
-        \label{eq:chain_log_interval}
-    \end{align}
-    Every set $A$ of sites satisfies
-    $S(A)\le C_{\mathrm{int}}|\partial A|
-        \le C_0(q,R)(1+\vartheta)|\partial A|$.
-    The constants $C_1,C_0$ depend only on $q,R$, before the chain length,
-    Hamiltonian, ground vector and region. This gives the chain case of
-    Theorem~A with the logarithmic-energy refinement in
-    \cite[Part~I, Remark~6.3]{TNLean2026OneDimensional}.
+    with
+    $C_0(q,R)=\bigl(8R\log q+\log2\bigr)\bigl(5+E_R+128B_R\bigr)
+        +1024\,e\,B_R$, where
+    $E_R=\min\{32N_Rq^{2(R+1)},\ 64\,e\,N_R\log^2(e\,q^{R+1})\}$, and every subset $A$ of the chain satisfies
+    $S(A)\le C_{\mathrm{int}}\,|\partial A|$. Hence the constant
+    $C_0(q,R)(1+J/\Delta)$, chosen before $L$, the Hamiltonian, the ground
+    vector and the region, bounds $S(A)/|\partial A|$ for every gapped chain.
+    This is the connected case of Theorem~A; the general case is
+    Theorem~\ref{thm:domain_area_law}.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:chain_buffer_discount,lem:chain_entropy_inequalities}
-    The buffered discount and Araki--Lieb give
-    $S(X)\le4S(T)+1+64eB_R(q)\vartheta$.
-    Since $S(T)\le|T|\log q\le2mR\log q$, this proves the first bound in
-    (\ref{eq:chain_log_interval}). Bounding the four nonnegative entries
-    of~(\ref{eq:chain_log_shells}) by their sum and allowing one for the
-    ceiling gives $m\le C_1(q,R)(1+\vartheta)$: use
-    $\sqrt{(1+\vartheta)B_R}\le(1+\vartheta)B_R$ and
-    $128e+4096e=4224e$. Also
-    $1+64eB_R\vartheta\le(1+64eB_R)(1+\vartheta)$.
-    These estimates give the second bound. The interval-to-subset
-    inequality in Lemma~\ref{lem:chain_entropy_inequalities} gives the
-    stated boundary bound.
+    \uses{lem:chain_buffer_discount, lem:chain_entropy_inequalities}
+    The discount of Lemma~\ref{lem:chain_buffer_discount} and the Araki--Lieb
+    inequality of Lemma~\ref{lem:chain_entropy_inequalities} give
+    $S(X)-2S(T)\le S(X\cup T)-S(T)\le\frac12S(X)+\frac12C_{\mathrm{disc}}$,
+    hence $S(X)\le4S(T)+C_{\mathrm{disc}}$, and $S(T)\le|T|\log q\le
+        2mR\log q$. The linear bound uses
+    $m\le(5+E_R+128B_R)(1+\vartheta)$, which follows from
+    $\sqrt{(1+\vartheta)B_R}\le(1+\vartheta)B_R$, and $m\ge4$. The subset
+    bound is the second part of Lemma~\ref{lem:chain_entropy_inequalities}.
 \end{proof}
 
 \begin{theorem}[Cubic logarithmic dependence on the local dimension]
@@ -1489,9 +1477,14 @@ for an arbitrary finite set of sites and are instantiated here directly.
     }
     \leanok
     \uses{thm:chain_area_law}
-    Fix the interaction range $R$ and use the coefficient $C_0(q,R)$ in
-    (\ref{eq:chain_log_area_constant}). Put
-    $K_R=C_0(2,R)/(\log2)^3$. For every integer $q\ge2$,
+    Fix the interaction range $R$, use the coefficient $C_0(q,R)$ of
+    Theorem~\ref{thm:chain_area_law}, and put
+    \begin{align}
+        K_R & =\frac{(8R\log2+\log2)\bigl(5+64\,e\,N_R\log^2(e\,2^{R+1})
+            +128B_R(2)\bigr)+1024\,e\,B_R(2)}{(\log2)^3},\notag
+    \end{align}
+    which is $C_0(2,R)/(\log 2)^3$ with the energy entry $E_R$ replaced by its
+    logarithmic entry. For every integer $q\ge2$,
     \begin{align}
         C_0(q,R) & \le K_R(\log q)^3.
         \label{eq:chain_log_cube_coefficient}
@@ -1512,14 +1505,14 @@ for an arbitrary finite set of sites and are instantiated here directly.
 \begin{proof}
     \leanok
     \uses{thm:chain_budget_log_sq,thm:chain_area_law,thm:chain_entropy_dim_one}
-    For $q\ge2$, put $t=\log q/\log2\ge1$. Theorem~\ref{thm:chain_budget_log_sq}
-    gives $B_R(q)\le B_R(2)t^2$, hence
-    $C_1(q,R)\le C_1(2,R)t^2$. In
-    (\ref{eq:chain_log_area_constant}), the first term is bounded by
-    $8R\log2\,C_1(2,R)t^3$, the constant one by $t^3$, and the final term
-    by $64eB_R(2)t^3$, since $t^2\le t^3$.
-    Their sum is $C_0(2,R)t^3$, proving
-    (\ref{eq:chain_log_cube_coefficient}). Combine this with
+    For $q\ge2$, put $t=\log q/\log2\ge1$. Since
+    $\log(e\,q^{R+1})=1+(R+1)\log q\le t\log(e\,2^{R+1})$, the energy entry
+    satisfies $E_R(q)\le64\,e\,N_R\log^2(e\,q^{R+1})\le
+        64\,e\,N_R\log^2(e\,2^{R+1})\,t^2$, and
+    Theorem~\ref{thm:chain_budget_log_sq} gives $B_R(q)\le B_R(2)t^2$. Hence
+    $C_1(q,R)$ is at most $t^2$ times the bracket in $K_R$. Also
+    $8R\log q+\log2\le(8R\log2+\log2)t$ and $B_R(q)\le B_R(2)t^3$. Summing
+    proves (\ref{eq:chain_log_cube_coefficient}). Combine this with
     Theorem~\ref{thm:chain_area_law} to obtain
     (\ref{eq:chain_log_cube_entropy}) for $q\ge2$.
     At $q=1$, Theorem~\ref{thm:chain_entropy_dim_one} gives $S(A)=0$,
@@ -1533,22 +1526,26 @@ for an arbitrary finite set of sites and are instantiated here directly.
     \leanok
     \uses{def:chain_model}
     Fix natural numbers $q\ge1$ and $R$, and real numbers $J\ge0$ and
-    $\Delta>0$. Put $\vartheta=J/\Delta$ and define
+    $\Delta>0$. Put $\vartheta=J/\Delta$, $\ell_R=\log(e\,q^{R+1})$ and
+    define
     \begin{align}
         B_{\mathrm{win}}(q,R)
-         & =1+2R\log^2(e q^{R+1}),
-        \label{eq:chain_window_budget}                \\
+         & =1+2R\ell_R^2,
+        \label{eq:chain_window_budget}                  \\
         C_{1,\mathrm{win}}(q,R)
-         & =5+(128+4224e)B_{\mathrm{win}}(q,R),\notag \\
+         & =5+\min\{64Rq^{2(R+1)},\ 128\,e\,R\ell_R^2\}
+        +128B_{\mathrm{win}}(q,R),\notag                \\
         C_{0,\mathrm{win}}(q,R)
-         & =8R\log q\,C_{1,\mathrm{win}}(q,R)
-        +1+64eB_{\mathrm{win}}(q,R).
+         & =(8R\log q+\log2)\,C_{1,\mathrm{win}}(q,R)
+        +1024\,e\,B_{\mathrm{win}}(q,R).
         \label{eq:chain_window_area_constant}
     \end{align}
-    These constants are fixed before the chain length, Hamiltonian,
-    ground vector and region. Let $L$ be any natural number and let
-    $H=\sum_X h_X$ be a finite-range Hamiltonian on its chain, with local
-    dimension $q$ and term norms at most $J$ as in
+    These are the constants $C_1(q,R)$ and $C_0(q,R)$ of
+    Theorem~\ref{thm:chain_area_law} with the crossing count $N_R$ replaced by
+    $2R$ and the cut budget $B_R$ by $B_{\mathrm{win}}$; they are fixed before
+    the chain length, Hamiltonian, ground vector and region. Let $L$ be any
+    natural number and let $H=\sum_X h_X$ be a finite-range Hamiltonian on
+    its chain, with local dimension $q$ and term norms at most $J$ as in
     Definition~\ref{def:chain_model}. Suppose that every $X$ with
     $h_X\ne0$ has the form $X=[a,a+R+1)$ for some natural number $a$
     satisfying $a+R+1\le L$.
@@ -1561,9 +1558,9 @@ for an arbitrary finite set of sites and are instantiated here directly.
          & \le C_{0,\mathrm{win}}(q,R)(1+\vartheta)|\partial A|.
         \label{eq:chain_window_area_law}
     \end{align}
-    This combines the consecutive-window count and the logarithmic
-    interaction-energy estimate of
-    \cite[Part~I, Remark~6.3]{TNLean2026OneDimensional}.
+    This combines the consecutive-window count of
+    \cite[Part~I, Remark~6.3]{TNLean2026OneDimensional} with the constants of
+    Theorem~\ref{thm:chain_area_law}.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -1571,23 +1568,20 @@ for an arbitrary finite set of sites and are instantiated here directly.
         thm:chain_interval_enlargement_size,lem:chain_entropy_inequalities}
     Restrict the interaction sum to its nonzero terms. The sum is still
     the original $H$, and each term retains its support, Hermiticity
-    and norm bound $J$. Theorem~\ref{thm:chain_window_cut_budget} bounds
-    every interval cut budget by $B_{\mathrm{win}}$.
-    Choose $m$ by~(\ref{eq:chain_log_shells}) with
-    $B=B_{\mathrm{win}}$. Theorem~\ref{thm:chain_family_budget_discount}
-    gives $2S(X\mid T)\le S(X)+1+64eB_{\mathrm{win}}\vartheta$, where
-    $X=[l,r)\cap\{0,\ldots,L-1\}$ and
-    $T=([l-mR,r+mR)\cap\{0,\ldots,L-1\})\setminus X$.
-    Subtraction is truncated at the left endpoint.
-    Araki--Lieb and Theorem~\ref{thm:chain_interval_enlargement_size} give
+    and norm bound $J$. At most $2R$ nonzero terms cross an interval, and
+    Theorem~\ref{thm:chain_window_cut_budget} bounds every interval cut budget
+    by $B_{\mathrm{win}}$. Choose
+    $m=\lceil\max\{4,\min\{64Rq^{2(R+1)},128\,e\,R\ell_R^2\}\vartheta,
+        128\sqrt{(1+\vartheta)B_{\mathrm{win}}}\}\rceil$.
+    Theorem~\ref{thm:chain_family_budget_discount}, Araki--Lieb and
+    Theorem~\ref{thm:chain_interval_enlargement_size} give
     \begin{align}
         S(X)
-         & \le8mR\log q+1+64eB_{\mathrm{win}}\vartheta\notag \\
-         & \le C_{0,\mathrm{win}}(q,R)(1+\vartheta).\notag
+         & \le8mR\log q+\frac{4096\,e\,\vartheta B_{\mathrm{win}}}{m}+m\log2\notag \\
+         & \le C_{0,\mathrm{win}}(q,R)(1+\vartheta)\notag
     \end{align}
-    For the second inequality, the four thresholds and the ceiling
-    give $m\le C_{1,\mathrm{win}}(q,R)(1+\vartheta)$, as in the
-    proof of Theorem~\ref{thm:chain_area_law}. The interval-to-subset
+    for every interval $X$, as in the proof of
+    Theorem~\ref{thm:chain_area_law}. The interval-to-subset
     inequality of Lemma~\ref{lem:chain_entropy_inequalities} proves
     (\ref{eq:chain_window_area_law}).
 \end{proof}
@@ -1599,7 +1593,7 @@ for an arbitrary finite set of sites and are instantiated here directly.
     \uses{thm:chain_window_area_law}
     Put $c=\log2$ and fix the absolute constants
     \begin{align}
-        C & =1064+33792e+\frac{1+64e}{c},\notag \\
+        C & =1197+576e+\frac{1024e}{c},\notag \\
         K & =c^{-2}+2(c^{-1}+2)^2.\notag
     \end{align}
     For every natural number $R$, every integer $q\ge1$, every natural
@@ -1631,9 +1625,10 @@ for an arbitrary finite set of sites and are instantiated here directly.
 
     It remains to consider $R\ge1$ and $q\ge2$. Put $x=R\log q\ge c$
     and abbreviate $B=B_{\mathrm{win}}(q,R)\ge1$.
-    Since $C_{1,\mathrm{win}}\le(133+4224e)B$ and
-    $1+64eB\le(1+64e)Bx/c$, formula
-    (\ref{eq:chain_window_area_constant}) gives
+    The energy entry of $C_{1,\mathrm{win}}$ is at most
+    $128\,e\,R\ell_R^2\le64eB$, so $C_{1,\mathrm{win}}\le(133+64e)B$; also
+    $8x+c\le9x$ and $1024eB\le(1024e/c)Bx$. Formula
+    (\ref{eq:chain_window_area_constant}) therefore gives
     $C_{0,\mathrm{win}}\le CBx$. Also $R+1\le2R$ and
     $1\le c^{-2}Rx^2$, so
     \begin{align}
@@ -1865,7 +1860,7 @@ for an arbitrary finite set of sites and are instantiated here directly.
     Put $c=\log2$ and fix the positive absolute constant
     \begin{align}
         C_{\mathrm{abs}}
-         & =\left(1064+33792e+\frac{1+64e}{c}\right)
+         & =\left(1197+576e+\frac{1024e}{c}\right)
         \left[c^{-2}+2(c^{-1}+2)^2\right].
         \label{eq:domain_window_constant}
     \end{align}

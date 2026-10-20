@@ -45,7 +45,13 @@ constants and propagate to `C_int` and `C₀` in `TNLean.MPS.AreaLaw.AreaLaw`. D
   thresholds.
 * `chainShellCount`: the number of shells `m`.
 * `chainDiscountConst`: the constant `4096 e (J/Δ) B_R / m + m log 2`.
+* `two_mul_condEntropy_interval_le_of_family_budget`: the same discount for any finite family
+  of supports of range `R` with crossing count `N` and cut budget `B`.
 * `two_mul_condEntropy_interval_le`: the discount `2 S(X | T) ≤ S(X) + C`.
+* `card_interval_enlargement_sdiff_le`: a clipped coordinate interval enlarged by `v` adds at
+  most `2 v` sites.
+* `two_mul_condEntropy_interval_le_polynomial`: the discount with the printed constants of
+  `eq:CE` and `eq:discount`, including the fourth entry of `m`.
 
 ## References
 
