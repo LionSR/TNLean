@@ -8,7 +8,7 @@
 \date{October 18, 2026}
 \begin{document}
 \maketitle
-\gapnote{scope-restriction}{resolved}
+\gapnote{scope-restriction}{open}
 
 \section{The source statement}
 
@@ -40,9 +40,9 @@ tail bound and taking $D=\lceil e^{C_{\mathrm{int}}+w}\rceil$, so that the
 eigenvalues at least $e^{-(S(X)+w)}$ are among the $D$ largest and
 $\epsilon_k(D)$ is at most the surprisal tail beyond $w$.
 
-\section{The former threshold restriction}
+\section{The threshold form}
 
-The earlier formalization established only the \emph{threshold form} of the sequential
+The formalization first established the \emph{threshold form} of the sequential
 truncation.\footnote{Declarations:
     \leanid{TNLean.MPS.AreaLaw.sequentialTruncation},
     \leanid{TNLean.MPS.AreaLaw.norm_sub_sequentialTruncation_le},
@@ -66,7 +66,7 @@ what the two-line route to Theorem~B uses, and Theorem~B is proved from
 it.\footnote{Declaration:
     \leanid{TNLean.MPS.AreaLaw.exists_isOpenMPS_norm_sub_le}.}
 
-The former restriction concerned the choice of projectors. The source projects onto a
+The restriction concerns the choice of projectors. The source projects onto a
 prescribed number $D$ of Schmidt vectors at every cut and quantifies over
 $D$; the threshold statement projects onto the eigenvalues above a threshold
 fixed by the entropy of the cut and a common slack $w$, and quantifies over
@@ -77,7 +77,7 @@ The threshold form is
 stronger in one respect, the rank bound $e^{S_k+w}$ is exhibited rather than
 assumed, and weaker in the other, the bond dimension is not a free parameter.
 
-\section{Resolution by ordered-span truncation}
+\section{Ordered-span truncation}
 
 The completion treats arbitrary ordered orthonormal bases at the internal
 cuts. For each cut $k$, let $N_k=\dim\mathcal H_{[1,k]}$, choose an ordered
@@ -99,11 +99,15 @@ natural $L,q,D$.\footnote{Declarations:
     \leanid{TNLean.MPS.AreaLaw.isOpenMPS_sequentialTruncation_prefixBasisProjection}.}
 For $L\le1$ the product is empty, so $\Phi=\psi$ and the error sum is zero.
 
-In particular, choose a unit vector and any orthonormal eigenbasis of each
-marginal, ordered by nonincreasing eigenvalue. These leading spans are the
-source spans, including every permissible choice within a repeated
-eigenspace, and the displayed expectations are $\epsilon_k(D)$. This
-specialization proves Proposition~7.1 and resolves the former restriction.
+Proposition~7.1 is the instance in which the vector is a unit vector and each
+basis is an orthonormal eigenbasis of the marginal at its cut, ordered by
+nonincreasing eigenvalue, with any permissible choice within a repeated
+eigenspace. For that instance the leading spans are the source spans and the
+displayed expectations are $\epsilon_k(D)$. The instantiation itself, namely
+the choice of such a basis and the identification of $\epsilon_k(D)$ with the
+sum of the discarded eigenvalues, is not yet formalized; it is tracked in
+TNLean pull request \#9752. Until it lands, the general-basis form above is
+the formalized statement and this note stays open.
 The note is retained to distinguish the two truncation statements. The
 threshold theorem continues to supply the argument for Theorem~B; its
 projectors and the prescribed-dimension projectors need not coincide.

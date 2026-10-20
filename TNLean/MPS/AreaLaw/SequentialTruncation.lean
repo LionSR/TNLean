@@ -325,7 +325,7 @@ projections and error bounded by the square roots of their discarded masses
 on the same original vector. Source: one-dimensional note,
 part2a_mps_information.tex, prop:VC, proof of the sequential truncation estimate.
 No spectral selection or normalization assertion is included. -/
-private theorem sequentialTruncation_prefix_rank_error
+theorem sequentialTruncation_prefix_rank_error
     (P : ∀ k : ℕ, LeftBlockMatrix L q k)
     (ψ : EuclideanSpace ℂ (Fin L → Fin q))
     (hP : ∀ k, IsStarProjection (P k)) :
