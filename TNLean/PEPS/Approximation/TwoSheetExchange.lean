@@ -19,7 +19,7 @@ buffer correction `D_U = (V^{⊗2})ᴴ F_{B_T} V^{⊗2}` on the two copies of `U
 error at most `4 L^{-30}`.
 
 The swaps `F_S` of the two sheets and the buffer correction `D_U` are constructed in
-`TNLean.PEPS.Approximation.SheetSwapCorrection`.
+`TNLean.Lattice.Sheet.SwapCorrection`.
 
 ## Main definitions
 
