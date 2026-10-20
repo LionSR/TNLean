@@ -5,7 +5,10 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.SupportedGaussianIntegral
 import TNLean.MPS.AreaLaw.ResetSupportSeparation
-import TNLean.PEPS.Approximation.InformationReset
+import TNLean.Lattice.PhysicalBufferCoordinates
+import TNLean.Lattice.RegionalReset
+import TNLean.Lattice.ReplicaSwap
+import TNLean.Lattice.SupportedUnitaryEntropy
 
 /-!
 # Information reset on a contiguous chain
@@ -30,8 +33,12 @@ Source: TNLean one-dimensional note, Lemma `lem:reset`,
 -/
 
 open Matrix QuantumCircuit MeasureTheory ProbabilityTheory
-open TNLean.PEPS.Approximation TNLean.PEPS.EncodedFrame
 open scoped Kronecker Matrix.Norms.L2Operator NNReal
+open TNLean.Lattice (doubledVector_comp_sumArrow exists_regional_physicalBuffer_filter
+  exists_supported_unitary_of_two_sided mutualInformation_relabelSites_replicaSwap_eq_zero
+  norm_reindex_mulVec_sub norm_two_sided_le_of_norm_sub_le reindex_physicalBuffer_eq_siteLift
+  replicaSwap reset_entropy_scalar sheetSwap sheetSwapOp sheetSwapOp_mulVec_comp_sumArrow
+  siteLift_mem_supportedOperators)
 
 namespace TNLean.MPS.AreaLaw
 
@@ -121,7 +128,7 @@ theorem ChainHamiltonian.information_reset (q : ℕ) (hq : 1 ≤ q)
       · simp at hv'
     have hprod := mutualInformation_relabelSites_replicaSwap_eq_zero hΩ hR₀
       (Finset.disjoint_of_subset_left hC₀ hDC.symm)
-    have hent := TNLean.PEPS.AreaLaw.mutualInformation_le_of_supported_unitary
+    have hent := TNLean.Lattice.mutualInformation_le_of_supported_unitary
       hΨn hΦn hXJ hSsum hU's hU'u hprod
     rw [FiniteProduct.mutualInformation_sumSitesProduct_inl hΩ hΩ] at hent
     have hcard : Fintype.card (FiniteProduct.Configuration

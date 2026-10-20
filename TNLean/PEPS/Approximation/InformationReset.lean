@@ -4,10 +4,11 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.ResetUnitary
-import TNLean.PEPS.AreaLaw.Amplification.AncillaSiteEntropy
+import TNLean.Lattice.ReplicaSwap
+import TNLean.Lattice.SupportedUnitaryEntropy
 import TNLean.Circuit.SitewiseTensorSupport
 import TNLean.PEPS.AreaLaw.BufferedRectangles
-import TNLean.PEPS.Approximation.SheetSwapCorrection
+import TNLean.Lattice.Sheet.SwapCorrection
 
 /-!
 # The information reset
@@ -29,9 +30,8 @@ physical dimension `q^(L^2)` of a core.
 
 ## Main statements
 
-* `QuantumCircuit.reindex_sumArrow_sitePair_embedOp`,
-  `QuantumCircuit.reindex_sumArrow_sitePair_mem_supportedOperators`: an operator on paired
-  sites acts on both replicas of the same sites.
+* `TNLean.PEPS.Approximation.reindex_rectangle_sumArrow_unitary`: the reset unitary on paired
+  sites of the open square, read on the two replicas.
 * `TNLean.PEPS.Approximation.resetWidth`, `TNLean.PEPS.Approximation.resetThreshold`: the
   width `C_p` and the size threshold `L₀`, with the closed form
   `C_p = 1280 e² (J/Δ)(2p + 40) + 4p + 52` (`TNLean.PEPS.Approximation.resetWidth_eq`).
@@ -51,87 +51,6 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 open Matrix QuantumCircuit
 open scoped Kronecker
 open TNLean.Lattice
-
-namespace QuantumCircuit
-
-variable {κ ι : Type*} [Fintype κ] [Fintype ι] [DecidableEq ι]
-
-/-- The configurations of two replicas of the sites `ι`, as paired configurations. -/
-def sumArrowSitePair (ι : Type*) (q : ℕ) : (ι ⊕ ι → Fin q) ≃ (ι → Fin (q * q)) :=
-  (Equiv.sumArrowEquivProdArrow ι ι (Fin q)).trans (sitePairConfigurationEquiv ι q q)
-
-omit [Fintype ι] [DecidableEq ι] in
-theorem sumArrowSitePair_apply (q : ℕ) (x : ι ⊕ ι → Fin q) (i : ι) :
-    sumArrowSitePair ι q x i = finProdFinEquiv (x (Sum.inl i), x (Sum.inr i)) :=
-  rfl
-
-/-- An operator placed on paired sites along `e` is the operator placed on both replicas
-along `e ⊕ e`. -/
-theorem reindex_sumArrow_sitePair_embedOp (q : ℕ) (e : κ → ι)
-    (X : Matrix (κ → Fin (q * q)) (κ → Fin (q * q)) ℂ) :
-    reindex (sumArrowSitePair ι q).symm (sumArrowSitePair ι q).symm (embedOp e X) =
-      embedOp (Sum.map e e)
-        (reindex (sumArrowSitePair κ q).symm (sumArrowSitePair κ q).symm X) := by
-  ext x y
-  simp only [reindex_apply, submatrix_apply, Equiv.symm_symm, embedOp_apply]
-  have hcomp (z : ι ⊕ ι → Fin q) :
-      sumArrowSitePair ι q z ∘ e = sumArrowSitePair κ q (z ∘ Sum.map e e) := rfl
-  have hagree : AgreeOff e (sumArrowSitePair ι q x) (sumArrowSitePair ι q y) ↔
-      AgreeOff (Sum.map e e) x y := by
-    constructor
-    · intro h i hi
-      rcases i with i | i
-      · have h' := congrArg finProdFinEquiv.symm
-          (h i fun j hj ↦ hi (Sum.inl j) (by simp [hj]))
-        simpa [sumArrowSitePair_apply] using congrArg Prod.fst h'
-      · have h' := congrArg finProdFinEquiv.symm
-          (h i fun j hj ↦ hi (Sum.inr j) (by simp [hj]))
-        simpa [sumArrowSitePair_apply] using congrArg Prod.snd h'
-    · intro h i hi
-      rw [sumArrowSitePair_apply, sumArrowSitePair_apply,
-        h (Sum.inl i) (fun j hj ↦ by
-          rcases j with j | j
-          · exact hi j (Sum.inl_injective hj)
-          · simp at hj),
-        h (Sum.inr i) (fun j hj ↦ by
-          rcases j with j | j
-          · simp at hj
-          · exact hi j (Sum.inr_injective hj))]
-  simp only [hagree, hcomp]
-
-omit [DecidableEq ι] in
-/-- **An operator on paired sites acts on both replicas of the same sites.**
-Source: `02-information.tex`, lines 416–424 and 597–609. -/
-theorem reindex_sumArrow_sitePair_mem_supportedOperators (q : ℕ) {S : Finset ι}
-    {A : Matrix (ι → Fin (q * q)) (ι → Fin (q * q)) ℂ}
-    (hA : A ∈ supportedOperators (q * q) (S : Set ι)) :
-    reindex (sumArrowSitePair ι q).symm (sumArrowSitePair ι q).symm A ∈
-      supportedOperators q ((S.disjSum S : Finset (ι ⊕ ι)) : Set (ι ⊕ ι)) := by
-  classical
-  obtain ⟨A', hA'⟩ := TNLean.PEPS.EncodedFrame.exists_kronecker_one_of_mem_supportedOperators hA
-  have hAeq : A = embedOp (fun x : S ↦ x.val) A' := by
-    rw [embedOp_val_eq_kronecker_one_submatrix, ← hA']
-    simp
-  rw [hAeq, reindex_sumArrow_sitePair_embedOp q Subtype.val]
-  have hrange : Set.range (Sum.map (fun x : S ↦ x.val) (fun x : S ↦ x.val)) =
-      ((S.disjSum S : Finset (ι ⊕ ι)) : Set (ι ⊕ ι)) := by
-    ext z
-    rcases z with z | z <;> simp
-  rw [← hrange]
-  exact embedOp_mem_supportedOperators (Sum.map_injective.mpr
-    ⟨Subtype.val_injective, Subtype.val_injective⟩) _
-
-/-- Placing along a bijection of sites is the transport of configurations. -/
-theorem embedOp_equiv_eq_reindex {q : ℕ} (σ : κ ≃ ι)
-    (X : Matrix (κ → Fin q) (κ → Fin q) ℂ) :
-    embedOp σ X = reindex (Equiv.arrowCongr σ (Equiv.refl (Fin q)))
-      (Equiv.arrowCongr σ (Equiv.refl (Fin q))) X := by
-  ext x y
-  have hag : AgreeOff σ x y := fun i hi ↦ absurd (σ.apply_symm_apply i) (hi (σ.symm i))
-  simp only [embedOp_apply, hag, ite_true]
-  rfl
-
-end QuantumCircuit
 
 namespace TNLean.PEPS.Approximation
 
@@ -237,95 +156,6 @@ theorem notMem_resetSupport {L : ℕ} {R C R₀ C₀ : Finset (SquareLatticeVert
 
 end Geometry
 
-section Replicas
-
-variable {V : Type*} [Fintype V] [DecidableEq V] {q : ℕ}
-
-/-- The exchange of the two replicas at the sites of `R`, as a permutation of `V ⊕ V`. -/
-def replicaSwapFun (R : Finset V) : V ⊕ V → V ⊕ V
-  | Sum.inl v => if v ∈ R then Sum.inr v else Sum.inl v
-  | Sum.inr v => if v ∈ R then Sum.inl v else Sum.inr v
-
-omit [Fintype V] in
-theorem replicaSwapFun_involutive (R : Finset V) : Function.Involutive (replicaSwapFun R) := by
-  intro x
-  rcases x with v | v <;> by_cases hv : v ∈ R <;> simp [replicaSwapFun, hv]
-
-/-- The exchange of the two replicas at the sites of `R`. -/
-def replicaSwap (R : Finset V) : Equiv.Perm (V ⊕ V) :=
-  (replicaSwapFun_involutive R).toPerm _
-
-omit [Fintype V] [DecidableEq V] in
-/-- In the doubled vector, the two replicas carry the product `Ω ⊗ Ω`.
-Source: `02-information.tex`, lines 356–360. -/
-theorem doubledVector_comp_sumArrow {N : Type*} (t : (V → Fin q) × (V → Fin q) ≃ N)
-    (Ω : EuclideanSpace ℂ (V → Fin q)) :
-    (fun c ↦ Ω (t.symm c).1 * Ω (t.symm c).2) ∘
-        ((Equiv.sumArrowEquivProdArrow V V (Fin q)).trans t) =
-      WithLp.ofLp (FiniteProduct.sumSitesProduct Ω Ω) := by
-  funext x
-  simp [FiniteProduct.sumSitesProduct]
-  rfl
-
-/-- **The exchanged vector relabels the replicas.** `F_R (Ω ⊗ Ω)` is `Ω ⊗ Ω` read through the
-exchange of the replicas on `R`.
-Source: `02-information.tex`, lines 356–365 and 612–616. -/
-theorem sheetSwapOp_mulVec_comp_sumArrow {N : Type*} [Fintype N]
-    (t : (V → Fin q) × (V → Fin q) ≃ N) (R : Finset V) (Ω : EuclideanSpace ℂ (V → Fin q)) :
-    (reindex t t (EncodedFrame.sheetSwapOp q R) *ᵥ
-        fun c ↦ Ω (t.symm c).1 * Ω (t.symm c).2) ∘
-        ((Equiv.sumArrowEquivProdArrow V V (Fin q)).trans t) =
-      WithLp.ofLp (FiniteProduct.relabelSites (replicaSwap R)
-        (FiniteProduct.sumSitesProduct Ω Ω)) := by
-  funext x
-  rw [reindex_apply, submatrix_mulVec_equiv, EncodedFrame.sheetSwapOp,
-    PEquiv.toMatrix_toPEquiv_mulVec]
-  have h₁ : (EncodedFrame.sheetSwap q R (x ∘ Sum.inl, x ∘ Sum.inr)).1 =
-      (x ∘ (replicaSwap R).symm) ∘ Sum.inl := by
-    funext v
-    by_cases hv : v ∈ R <;>
-      simp [EncodedFrame.sheetSwap, replicaSwap, replicaSwapFun, hv]
-  have h₂ : (EncodedFrame.sheetSwap q R (x ∘ Sum.inl, x ∘ Sum.inr)).2 =
-      (x ∘ (replicaSwap R).symm) ∘ Sum.inr := by
-    funext v
-    by_cases hv : v ∈ R <;>
-      simp [EncodedFrame.sheetSwap, replicaSwap, replicaSwapFun, hv]
-  simp [FiniteProduct.relabelSites, FiniteProduct.sumSitesProduct, ← h₁, ← h₂]
-  rfl
-
-/-- **The cores of the exchanged vector are uncorrelated.** In `F_R (Ω ⊗ Ω)` the core
-`R₀ ⊆ R` of the first replica comes from the second replica, and the core `C₀`, disjoint from
-`R`, comes from the first replica.
-Source: `02-information.tex`, lines 612–616. -/
-theorem mutualInformation_relabelSites_replicaSwap_eq_zero {Ω : EuclideanSpace ℂ (V → Fin q)}
-    (hΩ : ‖Ω‖ = 1) {R R₀ C₀ : Finset V} (hR₀ : R₀ ⊆ R) (hC₀ : Disjoint C₀ R) :
-    FiniteProduct.mutualInformation (fun _ : V ⊕ V ↦ Fin q)
-      (FiniteProduct.relabelSites (replicaSwap R) (FiniteProduct.sumSitesProduct Ω Ω))
-      (R₀.disjSum ∅) (C₀.disjSum ∅) = 0 := by
-  rw [FiniteProduct.mutualInformation_relabelSites]
-  have hs : (replicaSwap R).symm = replicaSwap R := Equiv.ext fun _ ↦ rfl
-  have hX : (R₀.disjSum (∅ : Finset V)).map (replicaSwap R).toEmbedding =
-      (∅ : Finset V).disjSum R₀ := by
-    ext z
-    rw [Finset.mem_map_equiv, hs]
-    rcases z with v | v <;> by_cases hv : v ∈ R
-    · simp [replicaSwap, replicaSwapFun, hv]
-    · have hv₀ : v ∉ R₀ := fun h ↦ hv (hR₀ h)
-      simp [replicaSwap, replicaSwapFun, hv, hv₀]
-    · simp [replicaSwap, replicaSwapFun, hv]
-    · have hv₀ : v ∉ R₀ := fun h ↦ hv (hR₀ h)
-      simp [replicaSwap, replicaSwapFun, hv, hv₀]
-  have hJ : (C₀.disjSum (∅ : Finset V)).map (replicaSwap R).toEmbedding =
-      C₀.disjSum ∅ := by
-    ext z
-    rw [Finset.mem_map_equiv, hs]
-    rcases z with v | v <;> by_cases hv : v ∈ R <;>
-      simp [replicaSwap, replicaSwapFun, hv, Finset.disjoint_right.mp hC₀]
-  rw [hX, hJ]
-  exact FiniteProduct.mutualInformation_sumSitesProduct_inr_inl hΩ hΩ R₀ C₀
-
-end Replicas
-
 section Transport
 
 /-- **The reset unitary on two replicas of the square.** A unitary on the paired sites of the
@@ -362,44 +192,6 @@ theorem reindex_rectangle_sumArrow_unitary {L q : ℕ}
 
 end Transport
 
-section Scalar
-
-/-- **The entropy cost of the reset.** With `r = 2 p + 10`, a unitary error `δ ≤ C L^(-r)` and
-a core of log-dimension at most `L² log q` give `8 √δ log (e dim) ≤ L^(-p)` once
-`L ≥ 8 √C (1 + log q)`.
-Source: `02-information.tex`, lines 612–630. -/
-theorem reset_entropy_scalar {C p lq L δ N : ℝ} (hC : 0 ≤ C)
-    (hL1 : 1 ≤ L) (hL : 8 * √C * (1 + lq) ≤ L)
-    (hδ : δ ≤ C * L ^ (-(2 * p + 10))) (hN0 : 0 ≤ N) (hN : N ≤ 1 + L ^ 2 * lq) :
-    8 * √δ * N ≤ L ^ (-p) := by
-  have hL0 : 0 < L := zero_lt_one.trans_le hL1
-  have hsqrt : √δ ≤ √C * L ^ (-(p + 5)) := by
-    calc √δ ≤ √(C * L ^ (-(2 * p + 10))) := Real.sqrt_le_sqrt hδ
-      _ = √C * L ^ (-(p + 5)) := by
-        rw [Real.sqrt_mul hC, Real.sqrt_eq_rpow (L ^ _), ← Real.rpow_mul hL0.le]
-        ring_nf
-  have hL2 : (1 : ℝ) ≤ L ^ 2 := one_le_pow₀ hL1
-  have hN' : N ≤ L ^ 2 * (1 + lq) := by nlinarith
-  have hpow : L ^ (-(p + 5)) * L ^ 2 = L ^ (-(p + 3)) := by
-    rw [← Real.rpow_natCast, ← Real.rpow_add hL0]
-    norm_num
-    ring_nf
-  have hL3 : L ≤ L ^ 3 := by
-    calc L = L * 1 := (mul_one L).symm
-      _ ≤ L * L ^ 2 := by gcongr
-      _ = L ^ 3 := by ring
-  have hfinal : L ^ 3 * L ^ (-(p + 3)) = L ^ (-p) := by
-    rw [← Real.rpow_natCast, ← Real.rpow_add hL0]
-    norm_num
-  have hS : 0 ≤ √C * L ^ (-(p + 5)) := by positivity
-  calc 8 * √δ * N ≤ 8 * (√C * L ^ (-(p + 5))) * (L ^ 2 * (1 + lq)) := by gcongr
-    _ = (8 * √C * (1 + lq)) * (L ^ (-(p + 5)) * L ^ 2) := by ring
-    _ = (8 * √C * (1 + lq)) * L ^ (-(p + 3)) := by rw [hpow]
-    _ ≤ L ^ 3 * L ^ (-(p + 3)) := by gcongr; exact hL.trans hL3
-    _ = L ^ (-p) := hfinal
-
-end Scalar
-
 /-- **The entropy comparison of the reset.** Let `U` be a unitary on the paired sites of the
 open square, supported on a set `B` containing no site of the cores `R₀ ⊆ R`, `C₀ ⊆ C`, with
 `‖U Ψ - Φ‖ ≤ δ` for `Ψ = Ω ⊗ Ω` and `Φ = F_R Ψ`. Then
@@ -415,7 +207,7 @@ theorem mutualInformation_cores_le_of_reset_unitary {L q : ℕ} (hq : 1 ≤ q)
     (hUu : U ∈ unitaryGroup _ ℂ) (hUs : U ∈ supportedOperators (q * q) (B : Set _)) {δ : ℝ} :
     let pe := (sitePairConfigurationEquiv (SquareLatticeVertex L L) q q).trans
       (rectangleConfigurationEquiv L L (q * q))
-    let F := reindex pe pe (EncodedFrame.sheetSwapOp q R)
+    let F := reindex pe pe (TNLean.Lattice.sheetSwapOp q R)
     let ψ : Lattice.Configuration (rectangularDomain L L) (q * q) → ℂ := fun c ↦
       Ω (pe.symm c).1 * Ω (pe.symm c).2
     ‖WithLp.toLp 2 ψ‖ = 1 → ‖WithLp.toLp 2 (F *ᵥ ψ)‖ = 1 →
@@ -465,7 +257,7 @@ theorem mutualInformation_cores_le_of_reset_unitary {L q : ℕ} (hq : 1 ≤ q)
     · simp at hv'
   have hprod := mutualInformation_relabelSites_replicaSwap_eq_zero (q := q) hΩ hR₀
     (Finset.disjoint_of_subset_left hC₀ hRC.symm)
-  have hent := AreaLaw.mutualInformation_le_of_supported_unitary hΨn hΦn hXJ hS hU's hU'u hprod
+  have hent := mutualInformation_le_of_supported_unitary hΨn hΦn hXJ hS hU's hU'u hprod
   rw [hΨdef, FiniteProduct.mutualInformation_sumSitesProduct_inl hΩ hΩ] at hent
   refine hent.trans ?_
   have hcard : Fintype.card (FiniteProduct.Configuration

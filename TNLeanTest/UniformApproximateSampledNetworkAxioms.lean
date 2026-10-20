@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.Approximation.UniformApproximateSampledNetwork
+import TNLean.Lattice.Compression.UniformApproximateSampledNetwork
 import Lean.Elab.Command
 import Lean.Util.CollectAxioms
 
@@ -17,6 +17,9 @@ run_cmd do
   let env ← Lean.getEnv
   for decl in #[``TNLean.PEPS.Approximation.compressionPrefactor_pos,
       ``TNLean.PEPS.Approximation.compressionExponent_pos,
+      ``TNLean.PEPS.Approximation.compressionPrefactor_eq_sumCompressionPrefactor,
+      ``TNLean.PEPS.PairEffect.EffectCircuit.IsExpansionBounded.mono,
+      ``uniform_approximate_sampled_network_of_sum_le,
       ``uniform_approximate_sampled_network_of_le,
       ``exists_uniform_approximate_sampled_network] do
     unless env.contains decl do

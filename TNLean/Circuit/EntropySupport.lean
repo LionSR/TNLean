@@ -26,6 +26,8 @@ equivalence includes empty configuration spaces and zero local dimension.
 Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 Lemma 3.1, designated supports in `02-initial.tex`, line 39, revision
 `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
+
+Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
 open Matrix

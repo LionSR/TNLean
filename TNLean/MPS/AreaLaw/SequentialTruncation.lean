@@ -180,8 +180,8 @@ local notation "InternalCut" => {k : ℕ // k ∈ Finset.Ico 1 L}
 /-- The orthogonal projection onto the first min(D,N_k) vectors of the supplied
 ordered orthonormal basis at each internal prefix cut. At unvisited cuts it is
 the identity. Source: one-dimensional note, part2a_mps_information.tex,
-prop:VC, lines39–46. The basis may be arbitrary; every source ordered
-orthonormal eigenbasis is included. -/
+prop:VC, lines 39–46. The basis may be arbitrary; the source takes an
+eigenbasis of the marginal ordered by nonincreasing eigenvalue. -/
 noncomputable def prefixBasisProjection
     (b : ∀ k : InternalCut, RegionalBasis k.val) (D k : ℕ) :
     LeftBlockMatrix L q k :=
@@ -325,7 +325,7 @@ projections and error bounded by the square roots of their discarded masses
 on the same original vector. Source: one-dimensional note,
 part2a_mps_information.tex, prop:VC, proof of the sequential truncation estimate.
 No spectral selection or normalization assertion is included. -/
-private theorem sequentialTruncation_prefix_rank_error
+theorem sequentialTruncation_prefix_rank_error
     (P : ∀ k : ℕ, LeftBlockMatrix L q k)
     (ψ : EuclideanSpace ℂ (Fin L → Fin q))
     (hP : ∀ k, IsStarProjection (P k)) :
@@ -357,10 +357,12 @@ private theorem sequentialTruncation_prefix_rank_error
 
 /-- Sequential projection onto the first D vectors of arbitrary regional
 orthonormal bases gives the actual product an open MPS representation and the
-actual discarded-expectation error. Specializing to every ordered eigenbasis
-of each actual marginal is Proposition prop:VC, including all choices in ties.
-Source: one-dimensional note, part2a_mps_information.tex, prop:VC, lines39–62
-and the product-order caption at line70. The statement holds for arbitrary
+actual discarded-expectation error. Proposition prop:VC is the instance of an
+eigenbasis of each marginal ordered by nonincreasing eigenvalue; identifying
+the leading span with the top eigenprojector and the error with the discarded
+eigenvalue mass is not proved here.
+Source: one-dimensional note, part2a_mps_information.tex, prop:VC, lines 39–62
+and the product-order caption at line 70. The statement holds for arbitrary
 vectors, and hence for every unit vector in the source proposition. -/
 theorem isOpenMPS_sequentialTruncation_prefixBasisProjection
     (ψ : EuclideanSpace ℂ (Fin L → Fin q)) (D : ℕ)

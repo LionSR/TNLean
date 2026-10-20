@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.Approximation.DistributedGateMapConstruction
+import TNLean.Lattice.Compression.DistributedGateMapConstruction
 
 /-!
 # Axiom checks for the compression of distributed constructions
@@ -73,6 +73,12 @@ info: 'TNLean.PEPS.PairEffect.DistributedConstruction.physicalDensity_toGateMapC
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms TNLean.PEPS.PairEffect.DistributedConstruction.physicalDensity_toGateMapConstruction
+
+/--
+info: 'TNLean.PEPS.PairEffect.DistributedConstruction.uniform_sampled_network_of_sum_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms TNLean.PEPS.PairEffect.DistributedConstruction.uniform_sampled_network_of_sum_le
 
 /--
 info: 'TNLean.PEPS.PairEffect.DistributedConstruction.uniform_sampled_network_of_le' depends on axioms: [propext, Classical.choice, Quot.sound]

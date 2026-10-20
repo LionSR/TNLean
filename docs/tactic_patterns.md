@@ -24,6 +24,44 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Nonnegative interaction bound at a site — promoted (2026-10-18)
+
+- **Pattern:** At an actual site, use its admissible singleton support and
+  `norm_nonneg` followed by the interaction norm bound to derive `0 ≤ J`.
+- **Seen:** `ChainHamiltonian.sum_norm_terms_containing_le` in
+  `MPS/AreaLaw/InteractionBudget.lean`, the nonempty-chain branch of
+  `ChainHamiltonian.partialSwap_boundary_spec` in
+  `MPS/AreaLaw/PartialSwap.lean`, and the logarithmic-separation proof in
+  `MPS/AreaLaw/LogarithmicSeparation.lean`.
+- **Abstraction:** `ChainHamiltonian.norm_bound_nonneg` in
+  `MPS/AreaLaw/Hamiltonian.lean`; all three arguments use this lemma.
+- **Notes:** An actual site is essential. The empty-chain branch retains
+  the original real interaction bound. No positivity hypothesis on the
+  interaction bound is added to the logarithmic-separation theorem.
+
+### Collar and amplification constants from the existential collar bound — promoted (2026-10-18)
+
+- **Pattern:**
+
+  ```lean
+  obtain ⟨C, N, hcol⟩ := hcol
+  obtain ⟨Ca, Na, hamp⟩ := amplificationBound (q := q) (R := 1) (J := J) hΔ (max C 1)
+    (lt_of_lt_of_le one_pos (le_max_right _ _)) 1 le_rfl
+  ```
+
+- **Seen:** Six occurrences across six files: `TNLean/PEPS/Approximation/CoarseInformation.lean`,
+  `CellConditionalInformation.lean`, `SquareCellConditionalInformation.lean`,
+  `AngularWholeCellInformationFromCollar.lean`, `AngularSingleScaleReset.lean` and
+  `AngularInformationFromCollar.lean`.
+- **Abstraction:** `TNLean.PEPS.Approximation.exists_sublinearCollarBoundAt_amplificationBoundAt
+  (hΔ : 0 < Δ) (hcol : SublinearCollarBound q R J Δ D₀ Ctpl) : ∃ C N Ca Na,
+  SublinearCollarBoundAt q R J Δ D₀ Ctpl C N ∧ AmplificationBoundAt q R J Δ (max C 1) 1 Ca Na`
+  in `CoarseInformation.lean`, built on `amplificationBoundAt_collarAmplification` in the same
+  file.
+- **Refactor:** each of the six existential corollaries of a named-constant theorem now
+  opens with the single line `obtain ⟨C, N, Ca, Na, hcol, hamp⟩ :=
+  exists_sublinearCollarBoundAt_amplificationBoundAt hΔ hcol`, replacing three lines.
+
 ### Real initial-box scale exceeds one — promoted (2026-10-18)
 
 - **Pattern:** cast `1 < initialBoxScale q R J Δ` from the natural bound
@@ -175,11 +213,13 @@ abstracted — record why, so it is not re-proposed).
   `liftOne` or `liftTwo`: transport the nonprivate count, participants, expansion
   bound, monomial bound and error estimate through untouched spectator sheets.
 - **Seen:** `hasBoundedChange_liftOne`, `hasBoundedChange_liftTwo`
-  (`SheetStackChange.lean`) and their source-bounded forms
-  (`SheetStackSourceBoundedChange.lean`).
-- **Abstraction:** `TNLean.PEPS.EncodedFrame.isBoundedChange_liftOne` and
-  `isBoundedChange_liftTwo` in `SheetStackChange.lean`, stated for the fixed lifted
-  circuit; all four results now use them.
+  (`Lattice/Sheet/StackChange.lean`) and their source-bounded forms
+  (`Lattice/Sheet/StackSourceBoundedChange.lean`).
+- **Abstraction:** `TNLean.Lattice.isBoundedChange_liftOne` and
+  `isBoundedChange_liftTwo` in `Lattice/Sheet/StackChange.lean`, stated for the fixed
+  lifted circuit over any type of sheets; all four results now use them, and the
+  encoded-frame forms in `PEPS/Approximation/SheetStackChange.lean` read them at the
+  frames.
 
 ### Positive part of a polynomial constant — promoted (2026-10-16)
 
@@ -637,12 +677,12 @@ abstracted — record why, so it is not re-proposed).
   use `Word.eval_mapPair_source` to transform the first pair vector, and compose
   the identity on the right with the unchanged tail preparation.
 - **Seen:** former private proofs `pair_cons_mapIsometry_expands` in
-  `TNLean/PEPS/Approximation/FiniteSourcePreparation.lean` and
+  `TNLean/Lattice/PartyCircuit/FiniteSourcePreparation.lean` and
   `common_pair_cons_expands` in
-  `TNLean/PEPS/Approximation/CommonSourcePreparation.lean`.
+  `TNLean/Lattice/PartyCircuit/CommonSourcePreparation.lean`.
 - **Abstraction:** the theorem
   `TNLean.PEPS.PairEffect.SourceInventory.Expands.cons_mapL` in
-  [SourcePairMaps.lean](../TNLean/PEPS/Approximation/SourcePairMaps.lean) takes the two
+  [SourcePairMaps.lean](../TNLean/Lattice/PartyCircuit/SourcePairMaps.lean) takes the two
   continuous linear maps and their operator-norm bounds. Issue #8973 requests
   the common lemma; the two private copies are removed, rather than retained
   as aliases. Both existing family theorem statements remain unchanged.
@@ -791,7 +831,7 @@ abstracted — record why, so it is not re-proposed).
 - **Seen:** a public copy in `UnitMemoryCoordinates.lean` and private copies in
   `GroupedBlockMap.lean` and `WordOwnerMap.lean`.
 - **Abstraction:** `TNLean.PEPS.PairEffect.Layout.memCongr_symm`, moved next to
-  `memCongr` in `TNLean/PEPS/Approximation/PartyPartition.lean`; the duplicates
+  `memCongr` in `TNLean/Lattice/PartyCircuit/PartyPartition.lean`; the duplicates
   are deleted.
 - **Notes:** the full name is unchanged, so the existing blueprint reference
   still resolves.
@@ -4679,9 +4719,10 @@ three-plaquette output measurement, and the routed reunion measurement.
   `isReordering_frame_iff`, `isReordering_frameList_iff` and the projections
   `IsReordering.isAllowed`, `IsReordering.usesOnly` and
   `IsReordering.sourceCount_eq`, in
-  `TNLean/PEPS/Approximation/SiteRegisters.lean`.
-- **Call sites:** `SiteRegisters.lean`, `RegisterReordering.lean`,
-  `FrameRegisters.lean`, `TwoSheetRegisters.lean` and
+  `TNLean/Lattice/PartyCircuit/SiteRegisters.lean`.
+- **Call sites:** `SiteRegisters.lean`, `Lattice/Sheet/Reordering.lean`,
+  `Lattice/Sheet/Registers.lean`, `Lattice/Sheet/TwoRegisters.lean`,
+  `RegisterReordering.lean`, `TwoSheetRegisters.lean` and
   `FrameBoundedChanges.lean` (2026-10-09). A composite of reorderings closes
   by `simp [w]`; a word with local maps passes the projections to `simp` as
   conditional rewrites.
@@ -4882,6 +4923,62 @@ no additional helper is proposed.
   the pattern occurs in a second file and meets the promotion threshold.
 
 
+### Exact commutation across an infinite graph distance — candidate (2026-10-19)
+
+- **Pattern:** Derive reachability inside each interaction support from the
+  diameter bound, take a reachability-closed set `C` on one side of the
+  separation, show that every support lies in `C` or is disjoint from it,
+  and close with `commute_heisenbergEvolution_of_closed`:
+
+  ```lean
+  have hReach : ∀ k, ∀ x ∈ X k, ∀ z ∈ X k, G.Reachable x z :=
+    fun k x hx z hz => SimpleGraph.reachable_of_edist_ne_top
+      (ne_top_of_le_ne_top (ENat.natCast_ne_top R) (hDiam k x hx z hz))
+  have hClosed (k : κ) : (X k : Set ι) ⊆ C ∨ Disjoint (X k : Set ι) C := ...
+  have hCy : Disjoint C ({y} : Set ι) := Set.disjoint_singleton_right.mpr ...
+  exact commute_heisenbergEvolution_of_closed h (fun k => (X k : Set ι))
+    hSupport C {y} hClosed hCy ...
+  ```
+
+- **Seen:** Two occurrences in two files:
+  `Circuit/LiebRobinson/GraphPropagation.lean`,
+  `heisenberg_commutator_eq_zero_of_edist_eq_top`, with
+  `C = {x | G.Reachable (a i) x}`; and
+  `Circuit/LiebRobinson/GraphLocalization.lean`, the infinite-distance branch
+  of `norm_heisenberg_commutator_le_graph_kernel_sum`, with
+  `C = {x | ¬G.Reachable x y}`.
+- **Possible abstraction:** A lemma stating that a reachability-closed set
+  separates finite-diameter supports, parameterized by which side of the
+  separation defines `C`, so that both proofs reduce to one call before
+  `commute_heisenbergEvolution_of_closed`.
+- **Notes:** Below the rule of three; the two closed sets are dual. Promote at
+  a third use.
+
+
+### Chain neighborhood of a region — candidate (2026-10-19)
+
+- **Pattern:** The radius-`ρ` neighborhood of a set of chain sites written
+  inline as a local `let`:
+
+  ```lean
+  let N := Finset.univ.filter
+    (fun y : Fin L ↦ ∃ x ∈ S, (Nat.dist x.val y.val : ℝ) ≤ ρ)
+  ```
+
+  with `dsimp only` or `change` steps to match the `let` of a statement with
+  the one in its proof.
+- **Seen:** At least thirteen occurrences in six files of `MPS/AreaLaw/`:
+  `IntervalNeighborhoodEntropy.lean` (four), `RelativeGeneratorLocalization.lean`
+  (four), `LiebRobinson.lean` (two), `InformationReset.lean`,
+  `LogarithmicSeparation.lean` and `SupportedGaussianIntegral.lean`.
+- **Possible abstraction:** One definition
+  `chainNeighborhood (L : ℕ) (ρ : ℝ) (S : Finset (Fin L)) : Finset (Fin L)`
+  with a `mem_chainNeighborhood` simp lemma, used in every statement.
+- **Notes:** Past the promotion threshold. The refactor changes theorem
+  statements across the chain layer, so it needs its own pull request with a
+  build; it was not done in the review round that recorded it.
+
+
 ### Dyadic padding bounds — candidate (2026-10-16)
 
 - **Pattern:** Combine the lower and strict upper bounds for
@@ -5021,10 +5118,9 @@ no additional helper is proposed.
 - **Pattern:** derive regional tensor factors from membership in the supported-operator
   space, rewrite multiplication by the sheet-swap permutation matrix, and compare
   entries using the region/complement split.
-- **Seen:** `commute_sheetSwapOp_kronecker` in
-  `PEPS/Approximation/SheetSwapCorrection.lean` and
+- **Seen:** `commute_sheetSwapOp_kronecker` and
   `sheetSwapOp_mul_kronecker_of_mem_supportedOperators` in
-  `PEPS/Approximation/SheetSwapSupported.lean`.
+  `Lattice/RegionalSwap.lean`.
 - **Abstraction:** the support decompositions, permutation-matrix products, and split
   coordinates are already public lemmas. These are the two distinct cases, for
   operators supported outside and inside the swapped region.
@@ -6718,7 +6814,7 @@ spectral split → block extraction → MPV calculation → strict bounds
   the preceding bound and the last stage's bound.
 - **Seen:** `OriginalCircuit.isExpansionBounded_sequence` and
   `OriginalCircuit.isMonomialBounded_sequence` in
-  `TNLean/PEPS/Approximation/OriginalCircuitSequence.lean`, and formerly
+  `TNLean/Lattice/PartyCircuit/OriginalCircuitSequence.lean`, and formerly
   `DyadicProtocol.isExpansionBounded_chain` and
   `DyadicProtocol.isMonomialBounded_chain` in
   `TNLean/PEPS/Approximation/DyadicProtocolCompression.lean`: four
@@ -7283,9 +7379,9 @@ spectral split → block extraction → MPV calculation → strict bounds
   vectors to pure tensors by two tensor-product inductions. Linearity handles
   the additive cases; tensor associators and exchanges then evaluate explicitly.
 - **Seen:** `eval_combineSources` in
-  `TNLean/PEPS/Approximation/PartyLayout.lean` and
+  `TNLean/Lattice/PartyCircuit/PartyLayout.lean` and
   `eval_expandCombinedPair` in
-  `TNLean/PEPS/Approximation/PairSourceExpansion.lean` (two occurrences).
+  `TNLean/Lattice/PartyCircuit/PairSourceExpansion.lean` (two occurrences).
 - **Abstraction:** At the next occurrence, consider a bilinear extensionality
   lemma for maps on two tensor products. The existing `clm_ext_tmul` and
   `clm_ext_tmul₃` already handle identities between continuous linear maps
@@ -7501,7 +7597,7 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Pattern:** If no participant of a placed gate is affected, every register
   in its transported layout has the exterior owner.
 - **Helper:** `Layout.affectedOwner_mapOwner_eq_none` in
-  `TNLean/PEPS/Approximation/SourceOwnerSupport.lean`, using
+  `TNLean/Lattice/PartyCircuit/SourceOwnerSupport.lean`, using
   `List.mem_map` and the existing pointwise `affectedOwner_eq_none`.
 - **Refactored occurrences:** The private proof in
   `DistributedSourceComposition.lean` is removed; its gate constructor,
@@ -7845,7 +7941,7 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Pattern:** Apply a word whose input and output register lists have been
   identified to a vector identified with the original input.
 - **Reuse:** `Word.eval_castLayouts_apply_heq` in
-  `TNLean/PEPS/Approximation/WordEvaluationTransport.lean` is the existing checked
+  `TNLean/Lattice/PartyCircuit/WordEvaluationTransport.lean` is the existing checked
   public proof from `SourceRegisterPermutation`. Its lower import position makes
   it available to `SourceSlotMaps`, `SelectiveSourcePreparation`,
   `SourceRegisterPermutation`, and `EffectCircuitPreparation`.
@@ -7912,7 +8008,7 @@ spectral split → block extraction → MPV calculation → strict bounds
   source circuit, preserving the sum tags under composition and retaining
   the same occurrence under framing.
 - **Seen:** `SourceCircuit.sourcePairEquiv` and its endpoint identity in
-  `TNLean/PEPS/Approximation/SourceSampleIndices.lean`.
+  `TNLean/Lattice/Compression/SourceSampleIndices.lean`.
 - **Abstraction:** The slot enumeration reuses `SourceInventory.pairIndexEquiv`;
   Mathlib's injective map on unordered pairs supplies the participant image.
   The global source/sample identification reuses this occurrencewise equivalence.
@@ -8020,9 +8116,9 @@ spectral split → block extraction → MPV calculation → strict bounds
   selector using exclusion from the owner map. The no-party theorem then
   gives the identity on the empty memory.
 - **Seen:** `Word.restrict_mapOwner_eval_eq_id_of_disjoint` in
-  `TNLean/PEPS/Approximation/WordOwnerRestriction.lean` and
+  `TNLean/Lattice/Compression/WordOwnerRestriction.lean` and
   `Word.restrict_localPart_mapOwner_eval_heq_id_of_disjoint` in
-  `TNLean/PEPS/Approximation/SourceWordParties.lean` (two occurrences).
+  `TNLean/Lattice/Compression/SourceWordParties.lean` (two occurrences).
 - **Abstraction:** At a third occurrence, share the restriction lemma for
   a party absent from the original participating-party set, before applying
   the relabelling identities.
@@ -8116,8 +8212,8 @@ spectral split → block extraction → MPV calculation → strict bounds
   tensoring it with a fixed map on another memory. Compare elementary tensors
   with `clm_ext_tmul` and apply congruence to the original identity.
 - **Seen:** The private `tensor_factorization` helper in
-  `TNLean/PEPS/Approximation/PartyLocalMaps.lean` and
-  `TNLean/PEPS/Approximation/CanonicalPartyFactorization.lean` (two occurrences).
+  `TNLean/Lattice/PartyCircuit/PartyLocalMaps.lean` and
+  `TNLean/Lattice/Compression/CanonicalPartyFactorization.lean` (two occurrences).
 - **Abstraction:** At a third occurrence, share the operator identity in a
   lower-level tensor-map module, or use Mathlib's `TensorProduct.mapL_comp`.
 - **Notes:** The new theorem identifies the actual singleton restrictions
@@ -8132,9 +8228,9 @@ spectral split → block extraction → MPV calculation → strict bounds
   selector using exclusion from the owner map. The no-party theorem then
   gives the identity on the empty memory.
 - **Seen:** `Word.restrict_mapOwner_eval_eq_id_of_disjoint` in
-  `TNLean/PEPS/Approximation/WordOwnerRestriction.lean` and
+  `TNLean/Lattice/Compression/WordOwnerRestriction.lean` and
   `Word.restrict_localPart_mapOwner_eval_heq_id_of_disjoint` in
-  `TNLean/PEPS/Approximation/SourceWordParties.lean` (two occurrences).
+  `TNLean/Lattice/Compression/SourceWordParties.lean` (two occurrences).
 - **Abstraction:** At a third occurrence, share the restriction lemma for
   a party absent from the original participating-party set, before applying
   the relabelling identities.
@@ -8145,7 +8241,7 @@ spectral split → block extraction → MPV calculation → strict bounds
 ### Selecting the exterior owner — promoted (2026-10-11)
 
 - **Helper:** `partySelector_none` in
-  `TNLean/PEPS/Approximation/PartySelector.lean` identifies selection of the
+  `TNLean/Lattice/Compression/PartySelector.lean` identifies selection of the
   exterior owner with `Option.isNone`.
 - **Use:** Rewrite the selector in an already inferred restriction identity,
   then compose the resulting heterogeneous equalities.
@@ -8168,7 +8264,7 @@ spectral split → block extraction → MPV calculation → strict bounds
 ### Matrices of actual maps in orthonormal coordinates — promoted (2026-10-11)
 
 - **Helper:** `matrix_repr_eval_eq_toMatrix` in
-  `TNLean/PEPS/Approximation/BasisMatrixOperator.lean` identifies the matrix
+  `TNLean/Lattice/Compression/BasisMatrixOperator.lean` identifies the matrix
   formed from the coordinate entries with the linear map's matrix.
 - **Use:** Apply the identity before multiplying, summing or changing bases,
   rather than repeatedly comparing entries and simplifying the two basis
@@ -8612,6 +8708,49 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Seen:** `TNLean/PEPS/AreaLaw/Geometry/RepairRankZeroAncestry.lean`, in `repairStage_color_oldInclusion` and `repairStageCharacteristicLength_oldInclusion`, and `TNLean/PEPS/AreaLaw/Geometry/RepairBirthLatticePoint.lean`, in `repairStage_birth_oldInclusion`.
 - **Abstraction:** The existing natural-number recursor already expresses the shared induction in one line. No further helper or tactic is proposed.
 - **Notes:** Each occurrence is a one-line induction, so a shared lemma would not shorten the proofs.
+
+### Agreement outside a finite support — candidate (2026-10-17)
+
+- **Pattern:** Identify agreement outside a finite support with agreement off its subtype inclusion when comparing two local lifts.
+- **Seen:** Two proofs, in `Circuit/EntropySupport.lean`, `mem_supportedOperators_of_isSupportedOn`, and `PEPS/AreaLaw/RegionalEntropyBridge.lean`, `localLift_eq_entropyLocalLift`.
+- **Possible abstraction:** A lemma identifying these two agreement conditions if a third use appears. The current two occurrences do not require a new public lemma.
+- **Notes:** Both comparisons reuse the existing local-lift entry formula. The Circuit result imports no PEPS or MPS module.
+
+### Choosing sites in nonempty interaction supports — candidate (2026-10-17)
+
+- **Pattern:** Choose a site in each nonempty interaction support and retain its membership proof.
+- **Seen:** The two proofs in `MPS/AreaLaw/LiebRobinson.lean`.
+- **Possible abstraction:** A support-choice lemma if a third substantive use appears. The diameter comparison is already a shared private lemma; two choices in one file do not warrant another abstraction.
+- **Notes:** The choices remain internal to the proofs and add no premise to either theorem.
+
+### Counting supports in short windows — candidate (2026-10-17)
+
+- **Pattern:** Bound the number of supports in a window by the size of its powerset, then increase the exponent using a bound on the window length.
+- **Seen:** The symmetric-window comparison occurs in `MPS/AreaLaw/Counting.lean`, `card_crossingTerms_interval_le`, and `MPS/AreaLaw/BoundaryCounting.lean`, `card_crossingTerms_le_mul_card_boundaryEdges`. `InteractionBudget.lean` has the related window of width `2R + 1`.
+- **Existing abstractions:** `card_filter_subset_le`, `Nat.pow_le_pow_right`, and `card_interval_le` already contain the common counting and monotonicity arguments. The finite union uses `Finset.card_biUnion_le_card_mul` directly.
+- **Notes:** No powerset injection or finite-union proof is duplicated. There are two exact symmetric-window comparisons; their remaining arithmetic is a single `omega` call. No further lemma or tactic is needed at present.
+
+
+### Core information after a regional replica swap — candidate (2026-10-18)
+
+- **Pattern:** Transport a supported unitary and its vector error from paired
+  coordinates to two replicas, derive the vanishing mutual information of the
+  actual swapped cores, and apply supported-unitary entropy continuity.
+- **Seen:** The local comparison in `MPS/AreaLaw/InformationReset.lean` and
+  `mutualInformation_cores_le_of_reset_unitary` in
+  `PEPS/Approximation/InformationReset.lean`.
+- **Existing reuse:** The coordinate isometry, support transport, replica-swap
+  marginal identity and entropy continuity theorem are shared already.
+  A third consumer would justify a single finite-site comparison theorem.
+
+### Absorbing a localization coefficient with spare decay — candidate (2026-10-18)
+
+- **Pattern:** Reserve one quarter of the spatial exponential to absorb
+  P = C(1+T₀), while the other quarter controls the polynomial factors.
+- **Seen:** `MPS/AreaLaw/InformationReset.lean`, once.
+- **Existing reuse:** The proof applies the Gaussian localization parameter
+  estimate and Mathlib's `Real.mul_exp_neg_le_exp_neg_one`; no new scalar
+  theorem or tactic is needed for this occurrence.
 
 ### Real value of the lattice sup-norm distance — promoted lemma
 

@@ -22,14 +22,14 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 
 \begin{lemma}[Operators on parts of a sheet]
     \label{lem:peps_frame_split_forms}
-    \lean{TNLean.PEPS.EncodedFrame.sheetSplit,
+    \lean{TNLean.Lattice.sheetSplit,
         TNLean.PEPS.EncodedFrame.threeSplit,
         TNLean.PEPS.EncodedFrame.threeSplit_fst,
         TNLean.PEPS.EncodedFrame.threeSplit_snd,
-        TNLean.PEPS.EncodedFrame.rectKronecker_submatrix_sheetSplit,
+        TNLean.Lattice.rectKronecker_submatrix_sheetSplit,
         TNLean.PEPS.EncodedFrame.rectKronecker_submatrix_threeSplit,
-        TNLean.PEPS.EncodedFrame.exists_kronecker_one_of_mem_supportedOperators,
-        TNLean.PEPS.EncodedFrame.exists_one_kronecker_of_mem_supportedOperators,
+        TNLean.Lattice.exists_kronecker_one_of_mem_supportedOperators,
+        TNLean.Lattice.exists_one_kronecker_of_mem_supportedOperators,
         TNLean.PEPS.EncodedFrame.exists_threeSplit_eq_kronecker_one,
         TNLean.PEPS.EncodedFrame.exists_threeSplit_eq_one_kronecker_kronecker_one}
     \leanok
@@ -58,7 +58,8 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
         TNLean.PEPS.EncodedFrame.partialTraceRight_splitVec,
         TNLean.PEPS.EncodedFrame.quantumRelativeEntropy_splitVec_eq_mutualInformation,
         TNLean.PEPS.EncodedFrame.exists_sheetSplitting,
-        TNLean.PEPS.EncodedFrame.exists_sheetSplitting_zpow}
+        TNLean.PEPS.EncodedFrame.exists_sheetSplitting_zpow,
+        TNLean.PEPS.EncodedFrame.exists_sheetSplitting_rpow}
     \leanok
     \uses{lem:peps_frame_split_forms}
     Let $T,E\subseteq\Lambda$ be disjoint, $U=\Lambda\setminus(T\cup E)$,
@@ -73,7 +74,9 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     \end{align}
     In particular, for the sheet splitting of
     \cite[Lemma~6.4]{OpenAI2026PolynomialPEPS} (\texttt{05-frames.tex},
-    lines 352--368), $b\le L^{-60}$ gives an error of at most $L^{-30}$.
+    lines 352--368), $b\le L^{-60}$ gives an error of at most $L^{-30}$; more
+    generally, for $L\ge0$ and real $p$, $b\le L^{-2p}$ gives an error of at
+    most $L^{-p}$.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -718,7 +721,9 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 \begin{theorem}[Homogeneous birth and death: bounded change]
     \label{thm:peps_frame_birth_bounded}
     \lean{TNLean.PEPS.EncodedFrame.Frame.birth_bounded,
-        TNLean.PEPS.EncodedFrame.Frame.death_bounded}
+        TNLean.PEPS.EncodedFrame.Frame.death_bounded,
+        TNLean.PEPS.EncodedFrame.exists_frontBirthWord,
+        TNLean.PEPS.EncodedFrame.exists_frontDeathChain}
     \leanok
     \uses{thm:peps_frame_birth,def:peps_frame_registers,
         lem:peps_frame_registers_coordinates,def:peps_monomial_parties}
@@ -763,8 +768,8 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 
 \begin{definition}[Swapping two sheets]
     \label{def:peps_frame_sheet_swap}
-    \lean{TNLean.PEPS.EncodedFrame.sheetSwap,
-        TNLean.PEPS.EncodedFrame.sheetSwapOp}
+    \lean{TNLean.Lattice.sheetSwap,
+        TNLean.Lattice.sheetSwapOp}
     \leanok
     For $S\subseteq\Lambda$, $F_S$ is the unitary swapping the two sheets
     at the positions in $S$ (\texttt{05-frames.tex}, lines 476--477).
@@ -785,7 +790,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 
 \begin{theorem}[Sheet swaps are contractions]
     \label{thm:peps_frame_sheet_swap_norm}
-    \lean{TNLean.PEPS.EncodedFrame.norm_sheetSwapOp_le_one}
+    \lean{TNLean.Lattice.norm_sheetSwapOp_le_one}
     \leanok
     \uses{def:peps_frame_sheet_swap}
     $\|F_S\|\leq1$.
@@ -799,8 +804,8 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 
 \begin{lemma}[Composing and commuting sheet swaps]
     \label{lem:peps_frame_sheet_swap_compose}
-    \lean{TNLean.PEPS.EncodedFrame.sheetSwapOp_mul_sheetSwapOp,
-        TNLean.PEPS.EncodedFrame.commute_sheetSwapOp_kronecker}
+    \lean{TNLean.Lattice.sheetSwapOp_mul_sheetSwapOp,
+        TNLean.Lattice.commute_sheetSwapOp_kronecker}
     \leanok
     \uses{def:peps_frame_sheet_swap}
     If $Y$ is the disjoint union of $T$ and $A$, then $F_AF_Y=F_T$. The swap
@@ -819,7 +824,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 
 \begin{theorem}[Exchanging supported operators]
     \label{thm:peps_sheet_swap_supported_exchange}
-    \lean{TNLean.PEPS.EncodedFrame.sheetSwapOp_mul_kronecker_of_mem_supportedOperators}
+    \lean{TNLean.Lattice.sheetSwapOp_mul_kronecker_of_mem_supportedOperators}
     \leanok
     \uses{def:peps_frame_sheet_swap}
     Let $R\subseteq\Lambda$, and let $A$ and $B$ be operators on
@@ -846,7 +851,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 
 \begin{theorem}[Cancellation of a noncrossing doubled interaction]
     \label{thm:peps_sheet_swap_doubled_cancellation}
-    \lean{TNLean.PEPS.EncodedFrame.sheetSwapOp_conj_doubledHamiltonian_eq_of_mem_supportedOperators}
+    \lean{TNLean.Lattice.sheetSwapOp_conj_doubledHamiltonian_eq_of_mem_supportedOperators}
     \leanok
     \uses{def:peps_frame_sheet_swap}
     Let $q\geq0$ be a local dimension and $R,S\subseteq\Lambda$. Let $A$
@@ -877,14 +882,14 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 
 \begin{theorem}[Restricting a swap to an interaction support]
     \label{thm:peps_sheet_swap_interaction_restriction}
-    \lean{TNLean.PEPS.EncodedFrame.sheetSwapOp_conj_kronecker_eq_inter,
-        TNLean.PEPS.EncodedFrame.sheetSwapOp_conj_doubledHamiltonian_eq_inter}
+    \lean{TNLean.Lattice.sheetSwapOp_conj_kronecker_eq_inter,
+        TNLean.Lattice.sheetSwapOp_conj_doubledHamiltonian_eq_inter}
     \leanok
     \uses{def:peps_frame_sheet_swap}
     Let $q$ be a natural local dimension, let $\Lambda$ be a finite set of
     sites, and let $R,S\subseteq\Lambda$. Suppose that $A$ and $B$ are
-    operators supported on $S$. If $F_D$ exchanges the two copies at the
-    sites in $D$, then
+    operators supported on $S$. If $F_R$ exchanges the two copies at the
+    sites in $R$, then
     \begin{align}
         F_R(A\otimes B)F_R^\dagger
         =F_{R\cap S}^\dagger(A\otimes B)F_{R\cap S}.
@@ -970,7 +975,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 
 \begin{theorem}[Support of the swap in paired coordinates]
     \label{thm:peps_sheet_swap_paired_site_support}
-    \lean{TNLean.PEPS.EncodedFrame.reindex_sheetSwapOp_mem_supportedOperators}
+    \lean{TNLean.Lattice.reindex_sheetSwapOp_mem_supportedOperators}
     \leanok
     \uses{def:qc_site_pair_coordinates,def:peps_frame_sheet_swap}
     Let $q\geq0$ be a local dimension and $R\subseteq\Lambda$. Identify two configurations of local dimension $q$
@@ -996,8 +1001,8 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 
 \begin{theorem}[Support of a swapped tensor product]
     \label{thm:peps_sheet_swap_conjugate_support}
-    \lean{TNLean.PEPS.EncodedFrame.reindex_sheetSwapOp_conj_kronecker_mem_supportedOperators,
-        TNLean.PEPS.EncodedFrame.reindex_sheetSwapOp_conj_doubledHamiltonian_mem_supportedOperators}
+    \lean{TNLean.Lattice.reindex_sheetSwapOp_conj_kronecker_mem_supportedOperators,
+        TNLean.Lattice.reindex_sheetSwapOp_conj_doubledHamiltonian_mem_supportedOperators}
     \leanok
     \uses{def:qc_site_pair_coordinates,def:peps_frame_sheet_swap}
     Let $\Lambda$ be a finite site set, let $q$ be a natural local dimension,
@@ -1005,10 +1010,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     on $S$. Express the two-copy operators in paired-site coordinates,
     and write $\widetilde F_R$ and $\widetilde M$ for the matrices of
     $F_R$ and $A\otimes B$ in these coordinates. Then
-    \begin{align}
-        \widetilde F_R\widetilde M\widetilde F_R^\dagger
-        \quad\text{is supported on }S.
-    \end{align}
+    $\widetilde F_R\widetilde M\widetilde F_R^\dagger$ is supported on $S$.
     In particular this holds for the paired matrix of
     $T(A)=A\otimes I+I\otimes A$, as used in the boundary perturbation
     argument of \cite{OpenAI2026PolynomialPEPS}. Zero local dimension
@@ -1116,9 +1118,9 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     \lean{TNLean.PEPS.EncodedFrame.TwoSheetExchange.rename_mul_encoder,
         TNLean.PEPS.EncodedFrame.TwoSheetExchange.exists_out_form,
         TNLean.PEPS.EncodedFrame.TwoSheetExchange.exists_in_form,
-        TNLean.PEPS.EncodedFrame.sheetSplit_sheetSwap_fst,
-        TNLean.PEPS.EncodedFrame.sheetSplit_sheetSwap_snd,
-        TNLean.PEPS.EncodedFrame.mul_submatrix_sheetSplit}
+        TNLean.Lattice.sheetSplit_sheetSwap_fst,
+        TNLean.Lattice.sheetSplit_sheetSwap_snd,
+        TNLean.Lattice.mul_submatrix_sheetSplit}
     \leanok
     \uses{def:peps_frame_exchange_data,lem:peps_frame_split_forms,
         lem:peps_frame_commute}
@@ -1196,7 +1198,8 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
         TNLean.PEPS.EncodedFrame.act_tbSwap_vecKron_tensorPurification,
         TNLean.PEPS.EncodedFrame.norm_toLp_tensorPurification,
         TNLean.PEPS.EncodedFrame.norm_bufferCorrection_le_one,
-        TNLean.PEPS.EncodedFrame.norm_act_bufferCorrection_mul_tSwap_sub_le}
+        TNLean.PEPS.EncodedFrame.norm_act_bufferCorrection_mul_tSwap_sub_le,
+        TNLean.PEPS.EncodedFrame.norm_act_sheetBufferCorrection_mul_sheetSwapOp_sub_le}
     \leanok
     \uses{lem:peps_frame_exchange_net_map}
     For a unit vector $\omega$ and $\delta=\lVert\mathcal V\omega-s\otimes
@@ -1385,7 +1388,10 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
         TNLean.PEPS.EncodedFrame.TwoSheetExchange.renameWord,
         TNLean.PEPS.EncodedFrame.TwoSheetExchange.eval_renameWord,
         TNLean.PEPS.EncodedFrame.TwoSheetExchange.twoLayoutIso_renameWord,
-        TNLean.PEPS.EncodedFrame.TwoSheetExchange.isReordering_renameWord}
+        TNLean.PEPS.EncodedFrame.TwoSheetExchange.isReordering_renameWord,
+        TNLean.PEPS.EncodedFrame.blockRenameWord,
+        TNLean.PEPS.EncodedFrame.eval_blockRenameWord,
+        TNLean.PEPS.EncodedFrame.isReordering_blockRenameWord}
     \leanok
     \uses{def:peps_frame_exchange_data,lem:peps_register_reorderings,
         lem:peps_two_frame_registers}
@@ -1456,7 +1462,11 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
         TNLean.PEPS.EncodedFrame.twoSheetPlace,
         TNLean.PEPS.EncodedFrame.sum_single_merge₂,
         TNLean.PEPS.EncodedFrame.twoLayoutIso_correctionLayoutWord,
-        TNLean.PEPS.EncodedFrame.correctionLayoutWord_props}
+        TNLean.PEPS.EncodedFrame.correctionLayoutWord_props,
+        TNLean.PEPS.EncodedFrame.frontCorrectionWord,
+        TNLean.PEPS.EncodedFrame.eval_frontCorrectionWord,
+        TNLean.PEPS.EncodedFrame.twoFrontLayoutIso_frontCorrectionWord,
+        TNLean.PEPS.EncodedFrame.frontCorrectionWord_props}
     \leanok
     \uses{lem:peps_register_reorderings,lem:peps_two_frame_registers,
         lem:peps_frame_exchange_correction_monomial}
@@ -1526,4 +1536,168 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     The reference error is that of Theorems~\ref{thm:peps_frame_exchange}
     and~\ref{thm:peps_frame_exchange_any_order}, read through the unitary
     identification of the registers.
+\end{proof}
+
+\subsection{Sheets without holes}
+
+None of the monomials above acts on the tag registers: the birth and death
+monomials and the renaming of the sites act behind the tag registers, which may be
+replaced by any block of registers in front of the site registers. With the
+empty block they act on a sheet without holes, an owner for each site of a
+finite set $\Lambda$, whose reference vector is $\Omega$ placed in the site
+registers. This is the setting of the one-dimensional protocol, where no
+three owners meet and no encoded holes are needed.
+
+\begin{definition}[Sheets without holes]
+    \label{def:lattice_sheet}
+    \lean{TNLean.Lattice.Sheet,
+        TNLean.Lattice.Sheet.regs,
+        TNLean.Lattice.Sheet.regIso,
+        TNLean.Lattice.Sheet.regRef,
+        TNLean.Lattice.Sheet.twoRegIso,
+        TNLean.Lattice.Sheet.changeOwner,
+        TNLean.Lattice.Sheet.birthEnv,
+        TNLean.Lattice.Sheet.swapIn,
+        TNLean.Lattice.Sheet.exchangeEnv,
+        TNLean.Lattice.Sheet.exchangeOp,
+        TNLean.Lattice.unitProdIso₂_act_liftFront,
+        TNLean.Lattice.Sheet.regIso_eq_frontLayoutIso,
+        TNLean.Lattice.Sheet.twoRegIso_eq_twoFrontLayoutIso}
+    \leanok
+    \uses{def:peps_frame_registers,def:peps_frame_sheet_swap,
+        def:peps_frame_buffer_correction}
+    A sheet on $\Lambda$ is an owner for each site; its registers are one
+    register $\C^q$ per site, held by its owner, identified with
+    $\mathcal H_\Lambda$ in product coordinates, and its reference vector is
+    $\Omega$. These coordinates are those of the empty block of registers in
+    front of the site registers. For a party $P_\circ$ let $E$ be
+    the set of sites not owned by $P_\circ$. For two sheets and a region $Y$,
+    the exchange gives the first sheet the owners of the second inside $Y$ and
+    conversely; with $Z$ the set of sites whose two owners are not both
+    $P_\circ$, $T=Z\cap Y$, $E=Z\setminus Y$ and $A=Y\setminus Z$, the
+    implemented map is $C=D_UF_AF_Y$.
+\end{definition}
+
+\begin{lemma}[Sheets as encoded frames without holes]
+    \label{lem:lattice_sheet_frame}
+    \lean{TNLean.Lattice.Sheet.toFrame,
+        TNLean.Lattice.Sheet.toFrame_regs,
+        TNLean.Lattice.Sheet.toFrame_regIso,
+        TNLean.Lattice.Sheet.toFrame_regRef,
+        TNLean.Lattice.Sheet.toFrame_changeOwner}
+    \leanok
+    \uses{def:lattice_sheet,def:peps_frame_registers}
+    Placed in the plane, a sheet is the encoded frame without holes with the
+    same owners. Its registers are those of the frame, its product coordinates
+    are those of the frame without the trivial tag coordinate, and handing a set
+    of sites to another party commutes with the passage to frames. For $q\ge1$,
+    where the reference vector of an encoded frame is defined, the two
+    reference vectors agree.
+\end{lemma}
+
+\begin{proof}\leanok
+    With no holes the encoder is the identity, so the frame places $\Omega$ in
+    the site registers.
+\end{proof}
+
+\begin{theorem}[Birth and death of sheets: bounded change]
+    \label{thm:lattice_sheet_birth_bounded}
+    \lean{TNLean.Lattice.Sheet.birth_bounded,
+        TNLean.Lattice.Sheet.death_bounded,
+        TNLean.Lattice.Sheet.changeOwner_birth_owners}
+    \leanok
+    \uses{def:lattice_sheet,lem:peps_frame_splitting,def:peps_frame_birth_map,
+        lem:peps_frame_birth_map,def:peps_monomial_parties}
+    In a sheet, let $T$ be a set of sites owned by $P_\circ$, let $E$ be the set
+    of sites not owned by $P_\circ$, let $\lVert\Omega\rVert=1$, let $L\ge0$ and
+    let $p$ be real, and suppose $I_\Omega(T:E)\le L^{-2p}$. There are splitting data and an allowed
+    monomial from the registers of the sheet to those of the sheet in which $T$
+    is owned by $Q_\circ$, using only $P_\circ$ and $Q_\circ$ and at most one
+    normalized pair source, whose operator in product coordinates is the birth
+    map $B$, and which maps the reference vector within $L^{-p}$ of the
+    reference vector of the new sheet. The reversed death obeys the same bound
+    when these conditions hold in the sheet after the death, using one
+    normalized pair effect and no pair source. For $p=30$ this is the case
+    without holes of \cite[Lemma~6.5]{OpenAI2026PolynomialPEPS}
+    (\texttt{05-frames.tex}, lines 396--410); in one dimension the exponent is
+    a free parameter, used for instance with $2p=24$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:peps_frame_splitting,thm:peps_frame_birth_bounded}
+    Every site outside $T\cup E$ is owned by $P_\circ$ before and after the
+    birth, and the sites of $E$ keep their owners. The monomials of
+    Theorem~\ref{thm:peps_frame_birth_bounded}, placed behind the
+    empty block of registers, act in product coordinates as $B$, and
+    $\lVert(B-\id)\Omega\rVert$ is at most the splitting error, at most
+    $L^{-p}$ by Lemma~\ref{lem:peps_frame_splitting}.
+\end{proof}
+
+\begin{theorem}[Exchange of two sheets: bounded change]
+    \label{thm:lattice_sheet_exchange_bounded}
+    \lean{TNLean.Lattice.Sheet.exchange_bounded,
+        TNLean.Lattice.Sheet.renameWord,
+        TNLean.Lattice.Sheet.twoRegIso_renameWord,
+        TNLean.Lattice.Sheet.exchangeOp_eq}
+    \leanok
+    \uses{def:lattice_sheet,lem:peps_frame_splitting,
+        lem:peps_frame_exchange_net_map,def:peps_monomial_parties}
+    For two sheets, a region $Y$, a party $P_\circ$ with $Z$, $T$, $E$, $U$ as
+    above, $\lVert\Omega\rVert=1$, $L\ge0$ and real $p$ with
+    $I_\Omega(T:E)\le L^{-2p}$, there
+    are splitting data and an allowed monomial from the registers of the two
+    sheets to those of the two exchanged sheets, consisting of exchanges of
+    tensor factors and one private contraction at $P_\circ$, so using only
+    $P_\circ$ and no pair resource, whose operator in product coordinates is
+    $C=D_UF_AF_Y=D_UF_T$, and which maps $\Omega\otimes\Omega$ within
+    $4L^{-p}$ of $\Omega\otimes\Omega$. For $p=30$ this is the case without
+    holes of \cite[Lemma~6.6]{OpenAI2026PolynomialPEPS} (\texttt{05-frames.tex},
+    lines 460--479), where the renaming acts in product coordinates as $F_Y$;
+    in one dimension the exponent is a free parameter.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:peps_frame_splitting,lem:peps_exchange_renaming_word,
+        lem:peps_exchange_correction_word,
+        lem:peps_frame_exchange_correction_monomial,lem:peps_frame_exchange_error,
+        lem:peps_register_reorderings}
+    The renaming of Lemma~\ref{lem:peps_exchange_renaming_word} with empty
+    blocks of tags exchanges the configurations of the two sheets inside $Y$,
+    so its operator is $F_Y$; the corrections act as $D_UF_A$. Since $Y$ is
+    the disjoint union of $T$ and $A$, the product is $D_UF_T$, and
+    Lemma~\ref{lem:peps_frame_exchange_error} bounds the reference error.
+\end{proof}
+
+\begin{definition}[Stacks of sheets]
+    \label{def:lattice_sheet_stack}
+    \lean{TNLean.Lattice.Sheet.refFamily,
+        TNLean.Lattice.Sheet.HasBoundedChange,
+        TNLean.Lattice.Sheet.HasSourceBoundedChange}
+    \leanok
+    \uses{def:lattice_sheet,def:peps_sheet_stack,def:peps_bounded_change}
+    The memory of a list of sheets and its reference vector are those of
+    Definition~\ref{def:peps_sheet_stack}, with the reference vector $\Omega$ of
+    each sheet placed in its site registers. A bounded change of a list of
+    sheets is a bounded change, in the sense of
+    Definition~\ref{def:peps_bounded_change}, between these reference vectors;
+    the variant with bounded pair sources also bounds the number of normalized
+    pair sources.
+\end{definition}
+
+\begin{lemma}[Reference vectors of stacks of sheets]
+    \label{lem:lattice_sheet_stack_reference}
+    \lean{TNLean.Lattice.Sheet.norm_refFamily_le,
+        TNLean.Lattice.Sheet.norm_framesVec,
+        TNLean.Lattice.Sheet.pairRef_eq_twoRegIso_symm}
+    \leanok
+    \uses{def:lattice_sheet_stack}
+    If $\lVert\Omega\rVert\le1$, the reference vector of every sheet has norm at
+    most one; if $\lVert\Omega\rVert=1$, the reference vector of a list of sheets
+    without further registers has norm one. The reference vector of two adjacent
+    sheets is $\Omega\otimes\Omega$ in the product coordinates of the two sheets.
+\end{lemma}
+
+\begin{proof}\leanok
+    The reference vector of a sheet is the image of $\Omega$ under an isometry,
+    and the norm of a tensor product of vectors is the product of their norms.
 \end{proof}

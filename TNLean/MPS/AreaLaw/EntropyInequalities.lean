@@ -42,6 +42,8 @@ namespace TNLean.MPS.AreaLaw
 
 variable {L q : ℕ}
 
+section LocalDimensionOne
+
 /-- Every region of a normalized chain state with one-dimensional local spaces
 has zero entropy. This is the q=1 case of the dimension bound used in the
 TNLean note, part1_arealaw.tex, eq:final (lines 673–675). -/
@@ -57,6 +59,8 @@ theorem regionEntropy_eq_zero_of_localDimension_one
     _ ≤ Fintype.card (Entropy.RegionConfig (fun _ : Fin L ↦ 1) A) :=
       Matrix.rank_le_card_width _
     _ = 1 := by simp [Entropy.RegionConfig]
+
+end LocalDimensionOne
 
 section Chain
 

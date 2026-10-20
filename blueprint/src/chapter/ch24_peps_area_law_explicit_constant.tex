@@ -74,74 +74,17 @@ section records that constant.
     $c_D\log q+c_Mc_D/2$.
 \end{proof}
 
-% Source: 10-geometry.tex, proof of Theorem 1.1, lines 803--857, at the
-% template constants D_0 = 2R + 11 and C_tpl = 24.
-% Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
-\begin{definition}[The constant of the area law from the named constants]
-    \label{def:area_law_named_constant}
-    \lean{TNLean.PEPS.AreaLaw.uniformAreaLawConstant}
-    \leanok
-    \uses{def:area_law_proof_constant,def:area_law_two_family_explicit_constant}
-    Fix $q\ge1$, $R\ge0$, $J$ and $\Delta$. Let $C_{\rm box}$ be a safe-box
-    constant at safety parameter $2R+11$, let
-    $C_{\rm tr},c_t,C_{\rm ent},e_{\rm ent},C_{\rm en},e_{\rm en}$ be
-    truncation and transport constants of the scanner, let
-    $C_{\rm loc},c_{\rm loc}$ be filter-locality constants of the positive
-    constraints, and put $c_1=1/112$. Let $C_1$ and
-    $N_1$ be the constant and the threshold of the sublinear collar bound at
-    these data, put $C_0=\max\{C_1,1\}$, let $C_2$ and $N_2'$ be the constant
-    and the threshold of the amplification bound at $C_0$ and the order
-    $M=100$, and let $N_2=\max\{N_2',N_3\}$ with $N_3$ the collar radius
-    threshold at $C_2$ and the factor $1$. With
-    $n_*=n_*(N_1,N_2,C_2)$ and the two-family constant
-    $C_3=C_{\rm expl}(2R+11,24,n_*,c_1)$, the constant of the area law is
-    $C(q,C_2,C_3)$.
-\end{definition}
-
-\begin{theorem}[The area law with the named constant, from its inputs]
-    \label{thm:area_law_named_constant}
-    \lean{TNLean.PEPS.AreaLaw.exists_regionalEntropy_le_uniformAreaLawConstant}
-    \leanok
-    \uses{def:area_law_named_constant,def:area_law_box_entropy,
-        def:area_law_ground_entropy}
-    Fix $q\ge1$, $R\ge0$, $J\ge0$ and $\Delta>0$. Assume that
-    $C_{\rm box}\ge0$ satisfies $F_{\rm box}(r)\le C_{\rm box}r^{1+e_*}$ at
-    safety parameter $2R+11$ for every $r\ge1$; that $C_{\rm loc}\ge0$ and
-    $c_{\rm loc}>0$ are filter-locality constants of the positive constraints
-    used in the proof of Proposition~10.2. Then there are truncation and transport
-    constants of the scanner, with $C_{\rm tr},c_t>0$, such that the constant
-    $C$ of Definition~\ref{def:area_law_named_constant} at these data is
-    nonnegative, and for every finite induced domain $\Lambda$, every
-    admissible Hamiltonian with a gapped ground vector $\Omega$ and every
-    $A\subseteq\Lambda$,
-    \begin{align}
-        S_\Omega(A) & \le C\,|\partial_\Lambda A|.
-    \end{align}
-\end{theorem}
-\begin{proof}
-    \leanok
-    \uses{thm:area_law_conditional_assembly_constants,
-        thm:area_law_sublinear_collar,thm:area_law_amplification,
-        thm:area_law_two_family_explicit_constant}
-    The safe-box bound gives truncation and transport constants for which the
-    sublinear collar bound holds with the constant $C_1$ from the threshold
-    $N_1$ on, at $D_0=2R+11>2R+10$ and $C_{\rm tpl}=24$. The filter-locality
-    constants give the amplification bound at the input constant $C_0$ and
-    the order $100$ with the constant $C_2$ from the threshold
-    $\max\{N_2',N_3\}$ on. Since $1/112$ is a birth-separation constant,
-    $C_{\rm expl}(2R+11,24,n_*,1/112)$ is a constant of the two-family
-    decomposition at $n_*$. Theorem~\ref{thm:area_law_conditional_assembly_constants}
-    then gives the bound.
-\end{proof}
-
-The constants above still depend on truncation and transport constants of the
-scanner, which the previous theorem supplies only as an existence statement.
-The next two entries pin these constants: the truncation constants are explicit
-functions of $R,J,\Delta$, and the only remaining input is one tuple of
-transport constants satisfying the common step-error bound of
-Theorem~\ref{thm:al_scan_actual_round_transport}. That bound has universal
-constants, independent of $q,R,J,\Delta$ and of every domain, Hamiltonian,
-state and cut.
+The constants of Theorem~\ref{thm:area_law_conditional_assembly_constants}
+depend, through the sublinear collar bound, on truncation and transport
+constants of the scanner. The next two entries pin these constants: the
+truncation constants are explicit functions of $R,J,\Delta$, and the only
+remaining input is one tuple of transport constants satisfying the
+finite-family transport bound of
+Definition~\ref{def:al_scan_finite_family_transport_bound}. That condition
+involves only the five constants, independent of $q,R,J,\Delta$ and of every
+domain, Hamiltonian, state and cut;
+Theorem~\ref{thm:al_scan_actual_round_transport} specializes it to the rounds
+of one scanner.
 
 % Status: auxiliary results. The source asserts only that a constant exists;
 % the statement of Theorem 1.1 is thm:openai_uniform_area_law.
@@ -178,11 +121,12 @@ state and cut.
     \label{thm:area_law_transport_constant}
     \lean{TNLean.PEPS.AreaLaw.uniformAreaLaw_explicit}
     \leanok
-    \uses{def:area_law_transport_constant,def:area_law_ground_entropy}
-    Fix $q\ge1$, $R\ge0$, $J\ge0$ and $\Delta>0$. Assume that the common
-    step-error bound of Theorem~\ref{thm:al_scan_actual_round_transport}
-    holds for the constants $c_0,C_{\rm ent},e_{\rm ent},C_{\rm en},e_{\rm en}$,
-    with $c_0>0$. Then the constant
+    \uses{def:area_law_transport_constant,def:area_law_ground_entropy,
+        def:al_scan_finite_family_transport_bound}
+    Fix $q\ge1$, $R\ge0$, $J\ge0$ and $\Delta>0$. Assume that the
+    constants $c_0,C_{\rm ent},e_{\rm ent},C_{\rm en},e_{\rm en}$, with
+    $c_0>0$, satisfy the finite-family transport bound of
+    Definition~\ref{def:al_scan_finite_family_transport_bound}. Then the constant
     $C=C_{\rm AL}(q,R,J,\Delta;c_0,C_{\rm ent},e_{\rm ent},C_{\rm en},e_{\rm en})$
     of Definition~\ref{def:area_law_transport_constant} is nonnegative, and
     for every finite induced domain $\Lambda$, every admissible Hamiltonian
@@ -208,4 +152,462 @@ state and cut.
     decomposition at $n_*$.
     Theorem~\ref{thm:area_law_conditional_assembly_constants} then gives the
     bound.
+\end{proof}
+
+% Status: auxiliary results with no hypothesis beyond those of Theorem 1.1,
+% whose statement is thm:openai_uniform_area_law.
+% Source: 06-transport.tex, Proposition 7.4, lines 377--434, applied in
+% 08-scanner.tex, lines 83--154.
+% Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+\begin{theorem}[The transport bound at explicit constants]
+    \label{thm:area_law_transport_bound_explicit}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.finiteFamilyTransportBound_explicit}
+    \leanok
+    \uses{def:al_scan_finite_family_transport_bound}
+    The finite-family transport bound of
+    Definition~\ref{def:al_scan_finite_family_transport_bound} holds for
+    \begin{align}
+        c_0         & =\tfrac18,                               \\
+        C_{\rm ent} & =200000,                                 \\
+        e_{\rm ent} & =2,                                      \\
+        C_{\rm en}  & =3\bigl(18\pi^2+6144\,e^{\pi^2+1}\bigr), \\
+        e_{\rm en}  & =4.
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \leanok
+    The finite-family transport estimate of
+    \cite[Proposition~7.4]{OpenAI2026AreaLaw} holds with the threshold $\tfrac18$, the entropy constant $200000$
+    and exponent $2$, and the energy constant
+    $3\bigl(18\pi^2+6144\,e^{\pi^2+1}\bigr)$ and exponent $4$. Its
+    conclusion is the finite-family transport bound at these constants.
+\end{proof}
+
+\begin{definition}[The explicit constant of the area law]
+    \label{def:area_law_closed_constant}
+    \lean{TNLean.PEPS.AreaLaw.uniformAreaLawConstantClosed}
+    \leanok
+    \uses{def:area_law_transport_constant}
+    For $q\ge1$, $R\ge0$, $J$ and $\Delta$, put
+    \begin{align}
+        C_{\rm AL}(q,R,J,\Delta)
+         & =C_{\rm AL}\bigl(q,R,J,\Delta;\tfrac18,200000,2,
+        3\bigl(18\pi^2+6144\,e^{\pi^2+1}\bigr),4\bigr),
+    \end{align}
+    the constant of Definition~\ref{def:area_law_transport_constant} at the
+    transport constants of Theorem~\ref{thm:area_law_transport_bound_explicit}.
+\end{definition}
+
+\begin{theorem}[The area law with an explicit constant]
+    \label{thm:area_law_closed_constant}
+    \lean{TNLean.PEPS.AreaLaw.uniformAreaLaw_closed}
+    \leanok
+    \uses{def:area_law_closed_constant,def:area_law_ground_entropy}
+    Fix $q\ge1$, $R\ge0$, $J\ge0$ and $\Delta>0$. Then
+    $C=C_{\rm AL}(q,R,J,\Delta)$ is nonnegative, and for every finite induced
+    domain $\Lambda$, every admissible Hamiltonian with a gapped ground vector
+    $\Omega$ and every $A\subseteq\Lambda$,
+    \begin{align}
+        S_\Omega(A) & \le C\,|\partial_\Lambda A|.
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:area_law_transport_constant,thm:area_law_transport_bound_explicit}
+    Apply Theorem~\ref{thm:area_law_transport_constant} with the transport
+    constants of Theorem~\ref{thm:area_law_transport_bound_explicit}, for which
+    $c_0=\tfrac18>0$.
+\end{proof}
+
+The safe-box constant $C_{\rm box}$ of
+Definition~\ref{def:area_law_transport_constant} is the value of a finite
+recursion with one step per bootstrap round. The next entries bound that
+recursion by an expression without iteration, and restate the area law at
+every upper bound for $C_{\rm box}$.
+
+% Status: auxiliary results. The source fixes the number of bootstrap rounds
+% but does not bound the constants they produce.
+% Source: 08-scanner.tex, proof of Proposition 9.5, lines 681--805; the
+% recursion is eq:round of docs/notes/arealaw2d_explicit_constant.tex.
+% Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+\begin{theorem}[Iterates of a dominating map]
+    \label{thm:area_law_bootstrap_iterate}
+    \lean{TNLean.PEPS.AreaLaw.Scan.boxBootstrapConstant_le_iterate,
+        TNLean.PEPS.AreaLaw.Scan.one_add_iterate_mul_one_add_pow_le,
+        TNLean.PEPS.AreaLaw.Scan.boxBootstrapConstant_le_pow_pow}
+    \leanok
+    Let $V\ge0$ and $C_0\ge0$, let $G$ be a real function with $G(C)\ge0$
+    for $C\ge0$, let $N$ take natural values, and put
+    \begin{align}
+        C_{j+1} & =G(C_j)+V\,N(C_j)^2.
+    \end{align}
+    \begin{enumerate}
+        \item If $F$ is nondecreasing on $[0,\infty)$, $x\le F(x)$ for
+              $x\ge0$, and $G(C)+V\,N(C)^2\le F(C)$ for $C\ge0$, then
+              $C_j\le F^{M}(C_0)$ for all $j\le M$.
+        \item If $A\ge0$, $K\ge1$ is an integer and $f(y)=A(1+y)^K$, then
+              $1+f^{j}(x)\le\bigl((A+1)(1+x)\bigr)^{(2K)^j}$ for every
+              $x\ge0$ and every $j$.
+        \item If $A\ge1$, $K\ge1$ and $G(C)+V\,N(C)^2\le A(1+C)^K$ for
+              $C\ge0$, then
+              $C_j\le\bigl((A+1)(1+C_0)\bigr)^{(2K)^M}$ for all $j\le M$.
+    \end{enumerate}
+\end{theorem}
+\begin{proof}
+    \leanok
+    For the first assertion, induction gives $C_0\le F^k(C_0)$, so $F^k(C_0)$
+    is nondecreasing in $k$, and $C_{k+1}\le F(C_k)\le F(F^k(C_0))$. For the
+    second, put $b=(A+1)(1+x)\ge1$ and $u_j=1+f^j(x)\ge1$. Then $u_0\le b$
+    and
+    \begin{align}
+        u_{j+1} & =1+Au_j^K\le(A+1)u_j^K\le b\,b^{K(2K)^j}\le b^{(2K)^{j+1}},
+    \end{align}
+    since $1+Km\le2Km$ for $m\ge1$. The third assertion is the first for
+    $F(x)=A(1+x)^K$, which is nondecreasing on $[0,\infty)$ with $x\le F(x)$,
+    followed by the second.
+\end{proof}
+
+\begin{definition}[Constants of one bootstrap round]
+    \label{def:area_law_bootstrap_step_constants}
+    \lean{TNLean.PEPS.AreaLaw.Scan.boxStepExponent,
+        TNLean.PEPS.AreaLaw.Scan.boxStepScale,
+        TNLean.PEPS.AreaLaw.Scan.boxStepPrefactor}
+    \leanok
+    \uses{thm:arealaw-physical-box-step,def:area_law_bootstrap_parameters}
+    Fix $q\ge1$, $R\ge0$, $J$, $\Delta$, $0<e_0<1$ and truncation and
+    transport constants, let $\nu=(1-e_0)/2000$ be the error exponent of the
+    bootstrap parameters, and put $k=\lceil1/\nu\rceil$. For a safe-box
+    constant $C$, one round of Theorem~\ref{thm:arealaw-physical-box-step}
+    gives the constant $G(C)=576\,C_{\rm out}(C)+N(C)^2\log q+1$, where
+    $C_{\rm out}(C)$ is the restored rough-budget coefficient and $N(C)$ is
+    the threshold of the round. Let $C_\delta(C)$ be the principal density
+    coefficient at $C$, at the charge constant $3\cdot2^{2R(R+1)}$ and at the
+    transport logarithmic coefficient. Put
+    \begin{align}
+        \alpha & =128+2C_\delta(1),                                         \\
+        A      & =576\,C_{\rm out}(1)+\bigl(N(0)+2\bigr)^2\alpha^{2k}\log q
+        +1+\log q.
+    \end{align}
+\end{definition}
+
+\begin{theorem}[One bootstrap round is at most a power]
+    \label{thm:area_law_bootstrap_step_bound}
+    \lean{TNLean.PEPS.AreaLaw.Scan.boxBootstrapStep_le_boxStepPrefactor,
+        TNLean.PEPS.AreaLaw.Scan.boxImprovementThreshold_le_add,
+        TNLean.PEPS.AreaLaw.Scan.max_two_mul_roughSelectedDensityCoefficient_le,
+        TNLean.PEPS.AreaLaw.Scan.bootstrapRestoredBudgetCoefficient_weak_le,
+        TNLean.PEPS.AreaLaw.Scan.natRpowThreshold_le_pow_add_one,
+        TNLean.PEPS.AreaLaw.Scan.one_le_boxStepPrefactor}
+    \leanok
+    \uses{def:area_law_bootstrap_step_constants}
+    In the notation of
+    Definition~\ref{def:area_law_bootstrap_step_constants}, $A\ge1$ and
+    \begin{align}
+        G(C)+\log q & \le A\,(1+C)^{2k}\qquad(C\ge0).
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \leanok
+    The coefficient $C_{\rm out}(C)$ is affine in $C$ with nonnegative
+    coefficients, so $C_{\rm out}(C)\le C_{\rm out}(1)(1+C)$. Of the entries
+    of the maximum defining $N(C)$, only the principal energy entry
+    $\bigl\lceil\max\bigl\{1,\max\{128,2C_\delta(C)\}^{1/\nu}\bigr\}\bigr\rceil$
+    depends on $C$, and $C_\delta$ is affine in $C$, so
+    $\max\{128,2C_\delta(C)\}\le\alpha(1+C)$. Hence
+    \begin{align}
+        N(C) & \le N(0)+\bigl(\alpha(1+C)\bigr)^k+1
+        \le\bigl(N(0)+2\bigr)\bigl(\alpha(1+C)\bigr)^k,
+    \end{align}
+    and the bound follows from $1\le1+C\le(1+C)^{2k}$.
+\end{proof}
+
+\begin{theorem}[A bound for the safe-box constant without iteration]
+    \label{thm:area_law_safe_box_power_bound}
+    \lean{TNLean.PEPS.AreaLaw.Scan.physicalBoxBootstrapConstant_le_pow_pow,
+        TNLean.PEPS.AreaLaw.Scan.physicalBoxConstantExplicit_le_pow_pow}
+    \leanok
+    \uses{def:area_law_bootstrap_step_constants,
+        thm:arealaw-physical-box-fixed-exponent}
+    Fix $q\ge1$, $R\ge0$, $J$, $\Delta$, $0<e_0<1$, truncation and transport
+    constants and an initial constant $C_0\ge0$, and let $m$ be the number of
+    bootstrap rounds from $e_0$ to $e_*=2\cdot10^{-6}$. For every integer
+    $M\ge m$, the safe-box constant $C_{\rm box}$ of
+    Theorem~\ref{thm:arealaw-physical-box-fixed-exponent} obtained from $C_0$
+    satisfies
+    \begin{align}
+        C_{\rm box} & \le\bigl((A+1)(1+C_0)\bigr)^{(4k)^M}.
+    \end{align}
+    In particular, for $J\ge0$ and $\Delta>0$ this holds for the safe-box
+    constant of Definition~\ref{def:area_law_transport_constant}, with $e_0$
+    and $C_0$ the exponent and the constant of the explicit initial box
+    estimate and with the truncation constant at the factor $2$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:area_law_bootstrap_iterate,thm:area_law_bootstrap_step_bound}
+    The safe-box constant is $C_m$ for the recursion
+    $C_{j+1}=G(C_j)+\log q$ started at $C_0$. By
+    Theorem~\ref{thm:area_law_bootstrap_step_bound} each step is at most
+    $A(1+C)^{2k}$ with $A\ge1$, and the third assertion of
+    Theorem~\ref{thm:area_law_bootstrap_iterate} with $K=2k$ gives the bound.
+\end{proof}
+
+\begin{definition}[The constant of the area law at a bound for the safe-box constant]
+    \label{def:area_law_box_bound_constant}
+    \lean{TNLean.PEPS.AreaLaw.uniformAreaLawConstantAt,
+        TNLean.PEPS.AreaLaw.physicalBoxConstantClosed,
+        TNLean.PEPS.AreaLaw.uniformAreaLawConstantClosedAt}
+    \leanok
+    \uses{def:area_law_transport_constant,def:area_law_closed_constant}
+    For a real number $B$, let
+    $C_{\rm AL}(q,R,J,\Delta;B;c_0,C_{\rm ent},e_{\rm ent},C_{\rm en},e_{\rm en})$
+    be the constant of Definition~\ref{def:area_law_transport_constant} with
+    $C_{\rm box}$ replaced by $B$, and let $C_{\rm AL}^B(q,R,J,\Delta)$ be its
+    value at the transport constants of
+    Theorem~\ref{thm:area_law_transport_bound_explicit}. Let
+    $C_{\rm box}(q,R,J,\Delta)$ be the safe-box constant of
+    Definition~\ref{def:area_law_transport_constant} at these transport
+    constants.
+\end{definition}
+
+\begin{theorem}[The closed constant at the safe-box constant]
+    \label{thm:area_law_box_bound_constant_at_box}
+    \lean{TNLean.PEPS.AreaLaw.uniformAreaLawConstantClosedAt_physicalBoxConstantClosed}
+    \leanok
+    \uses{def:area_law_box_bound_constant,def:area_law_closed_constant}
+    For all $q$, $R$, $J$ and $\Delta$,
+    $C_{\rm AL}(q,R,J,\Delta)=C_{\rm AL}^{C_{\rm box}(q,R,J,\Delta)}(q,R,J,\Delta)$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Both sides are the constant of
+    Definition~\ref{def:area_law_transport_constant} at the safe-box constant
+    and the transport constants of
+    Theorem~\ref{thm:area_law_transport_bound_explicit}.
+\end{proof}
+
+\begin{theorem}[The area law at any bound for the safe-box constant]
+    \label{thm:area_law_box_bound_constant}
+    \lean{TNLean.PEPS.AreaLaw.uniformAreaLaw_explicit_of_le,
+        TNLean.PEPS.AreaLaw.uniformAreaLaw_closed_of_le}
+    \leanok
+    \uses{def:area_law_box_bound_constant,def:area_law_ground_entropy,
+        def:al_scan_finite_family_transport_bound}
+    Fix $q\ge1$, $R\ge0$, $J\ge0$ and $\Delta>0$.
+    \begin{enumerate}
+        \item Under the hypotheses of
+              Theorem~\ref{thm:area_law_transport_constant}, let $B$ be at
+              least the safe-box constant $C_{\rm box}$ of
+              Definition~\ref{def:area_law_transport_constant}. Then
+              $C=C_{\rm AL}(q,R,J,\Delta;B;c_0,C_{\rm ent},e_{\rm ent},C_{\rm en},e_{\rm en})$
+              is nonnegative, and for every finite induced domain $\Lambda$,
+              every admissible Hamiltonian with a gapped ground vector
+              $\Omega$ and every $A\subseteq\Lambda$,
+              $S_\Omega(A)\le C\,|\partial_\Lambda A|$.
+        \item For every $B\ge C_{\rm box}(q,R,J,\Delta)$, the same holds with
+              $C=C_{\rm AL}^B(q,R,J,\Delta)$.
+    \end{enumerate}
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:area_law_conditional_assembly_constants,
+        thm:area_law_sublinear_collar,thm:area_law_amplification,
+        thm:area_law_two_family_explicit_constant,
+        thm:arealaw-physical-box-fixed-exponent,
+        thm:area_law_transport_bound_explicit}
+    Since $r^{1+e_*}\ge0$, the safe-box bound with the constant
+    $C_{\rm box}$ gives the safe-box bound with the constant $B$, and the
+    proof of Theorem~\ref{thm:area_law_transport_constant} goes through unchanged
+    with $B$ in place of $C_{\rm box}$. The second assertion is the first at
+    the transport constants of
+    Theorem~\ref{thm:area_law_transport_bound_explicit}, for which
+    $c_0=\tfrac18>0$.
+\end{proof}
+
+\begin{definition}[A safe-box bound without iteration]
+    \label{def:area_law_elementary_constant}
+    \lean{TNLean.PEPS.AreaLaw.physicalBoxConstantElementary,
+        TNLean.PEPS.AreaLaw.uniformAreaLawConstantElementary}
+    \leanok
+    \uses{def:area_law_bootstrap_step_constants,
+        def:area_law_initial_round_budget,def:area_law_box_bound_constant}
+    Fix $q$, $R$, $J$ and $\Delta$. Let $e_0$ and $C_0$ be the exponent and
+    the constant of the explicit initial box estimate, let $A$ and $k$ be the
+    constants of Definition~\ref{def:area_law_bootstrap_step_constants} at
+    $e_0$, at the truncation constant at the factor $2$ and at the transport
+    constants of Theorem~\ref{thm:area_law_transport_bound_explicit}, and let
+    $M_*$ be the round budget of
+    Definition~\ref{def:area_law_initial_round_budget}. Put
+    \begin{align}
+        B_*(q,R,J,\Delta) & =\bigl((A+1)(1+C_0)\bigr)^{(4k)^{M_*}},
+    \end{align}
+    and let $C_{\rm AL}^*(q,R,J,\Delta)=C_{\rm AL}^{B_*}(q,R,J,\Delta)$ in
+    the notation of Definition~\ref{def:area_law_box_bound_constant}.
+\end{definition}
+
+% Status: auxiliary result. Theorem 1.1 of the area-law source asserts only
+% that a constant exists; that statement is thm:openai_uniform_area_law.
+\begin{theorem}[The area law with a constant that iterates no recursion]
+    \label{thm:area_law_elementary_constant}
+    \lean{TNLean.PEPS.AreaLaw.physicalBoxConstantClosed_le_elementary,
+        TNLean.PEPS.AreaLaw.uniformAreaLaw_elementary}
+    \leanok
+    \uses{def:area_law_elementary_constant,def:area_law_ground_entropy}
+    Fix $q\ge1$, $R\ge0$, $J\ge0$ and $\Delta>0$. Then
+    $C_{\rm box}(q,R,J,\Delta)\le B_*(q,R,J,\Delta)$. Consequently
+    $C=C_{\rm AL}^*(q,R,J,\Delta)$ is nonnegative, and for every finite
+    induced domain $\Lambda$, every admissible Hamiltonian with a gapped
+    ground vector $\Omega$ and every $A\subseteq\Lambda$,
+    $S_\Omega(A)\le C\,|\partial_\Lambda A|$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:area_law_safe_box_power_bound,
+        thm:area_law_initial_round_budget_bound,
+        thm:area_law_box_bound_constant}
+    By Theorem~\ref{thm:area_law_initial_round_budget_bound}, the number of
+    bootstrap rounds from $e_0$ is at most $M_*$, so
+    Theorem~\ref{thm:area_law_safe_box_power_bound} with $M=M_*$ gives
+    $C_{\rm box}(q,R,J,\Delta)\le B_*(q,R,J,\Delta)$. The second assertion of
+    Theorem~\ref{thm:area_law_box_bound_constant} with $B=B_*$ gives the
+    area law.
+\end{proof}
+
+% Status: auxiliary definition. The polynomial-PEPS source treats only site
+% and nearest-neighbour interactions; this family reads its model with
+% interactions of range R.
+% Source: polynomial-PEPS 00-introduction.tex, eq:model and eq:global-gap,
+% lines 36--49; area-law Theorem 1.1 and Corollary 1.2.
+% Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+\begin{definition}[Ground states of range-$R$ Hamiltonians on the square]
+    \label{def:square_range_ground_states}
+    \lean{TNLean.PEPS.Approximation.IsRangeSquareGroundState}
+    \leanok
+    \uses{def:area_law_hamiltonian}
+    Fix natural numbers $q$ and $R$ and reals $J$ and $\Delta$. The
+    ground states at range $R$ form the family of vectors $\Omega$ on the
+    grid of side $L$, identified with vectors on the integer square
+    $\Lambda=\{0,\ldots,L-1\}^2$, for which some Hamiltonian on $\Lambda$
+    whose terms are supported on sets of diameter at most $R$ and have norm
+    at most $J$, together with some real $E_0$, satisfies $\|\Omega\|=1$,
+    $H\Omega=E_0\Omega$ and $H-E_0I\ge\Delta(I-|\Omega\rangle\langle\Omega|)$.
+\end{definition}
+
+\begin{theorem}[Ground states of the model are ground states at range one]
+    \label{thm:square_ground_states_range_one}
+    \lean{TNLean.PEPS.Approximation.IsRangeSquareGroundState.norm_eq_one,
+        TNLean.PEPS.Approximation.IsSquareGroundState.isRangeSquareGroundState}
+    \leanok
+    \uses{def:square_range_ground_states,def:square_entropy_area_law_at}
+    Every ground state at range $R$ is a unit vector. For $J\ge0$, every
+    ground state of the model at $J$ and $\Delta$ is a ground state at range
+    one.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:norm_square_area_law_state,def:square_area_law_hamiltonian,
+        thm:square_area_law_ground_gap}
+    The first claim is the normalization in
+    Definition~\ref{def:square_range_ground_states}, since the identification
+    of the grid with $\Lambda$ preserves norms. For the second, place the
+    Hermitian parts of the site and edge terms of the Hamiltonian on their
+    supports in $\Lambda$, which have diameter at most one, and the zero
+    operator on every other support. The terms keep the norm bound $J$, their
+    sum is the original Hamiltonian, and the ground vector and the gap are
+    carried along the identification.
+\end{proof}
+
+% Status: auxiliary result. The polynomial-PEPS source treats only
+% nearest-neighbour interactions.
+% Source: polynomial-PEPS 01-preliminaries.tex, Proposition 2.1, lines 39--58;
+% area-law Theorem 1.1 and Corollary 1.2.
+% Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+\begin{theorem}[The square-grid area law at range $R$ from a finite-domain bound]
+    \label{thm:square_area_law_range_from_bound}
+    \lean{TNLean.PEPS.Approximation.squareEntropyAreaLawAt_range_of_areaLawBound}
+    \leanok
+    \uses{def:square_range_ground_states,def:square_entropy_area_law_at,
+        def:area_law_hamiltonian,def:area_law_ground_entropy}
+    Fix natural numbers $q$ and $R$ and reals $J$, $\Delta$ and $C\ge0$. Suppose
+    that $S_\Omega(A)\le C\,|\partial_\Lambda A|$ for every finite induced
+    domain $\Lambda$, every Hamiltonian on $\Lambda$ whose terms are
+    supported on sets of diameter at most $R$ and have norm at most $J$,
+    every gapped ground vector $\Omega$ of it with gap at least $\Delta$ and
+    every $A\subseteq\Lambda$. Then the square-grid entropy area law of
+    Definition~\ref{def:square_entropy_area_law_at} holds for the ground
+    states at range $R$ of Definition~\ref{def:square_range_ground_states}
+    with the constant $C$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:finite_product_entropy_relabel,thm:square_edge_boundary_card}
+    Apply the hypothesis on the integer square $\Lambda$. Relabelling the
+    sites along the identification of the grid with $\Lambda$ preserves the
+    entropy of every region, and it maps the edges of the grid crossing a
+    cut bijectively onto the edges of $\Lambda$ crossing the image of the
+    cut.
+\end{proof}
+
+% Status: auxiliary result. Proposition 2.1 of the polynomial-PEPS source
+% concerns nearest-neighbour interactions and asserts only that a constant
+% exists; that statement is thm:openai_square_area_law.
+% Source: polynomial-PEPS 01-preliminaries.tex, Proposition 2.1, lines 39--58;
+% area-law 10-geometry.tex, proof of Theorem 1.1, lines 803--857.
+% Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+\begin{theorem}[The square-grid area law at range $R$ with explicit constants]
+    \label{thm:square_area_law_range_constant}
+    \lean{TNLean.PEPS.AreaLaw.squareEntropyAreaLawAt_range_closed,
+        TNLean.PEPS.AreaLaw.squareEntropyAreaLawAt_range_elementary}
+    \leanok
+    \uses{def:square_range_ground_states,def:square_entropy_area_law_at,
+        def:area_law_closed_constant,def:area_law_elementary_constant}
+    Fix $q\ge1$, $R\ge0$, $J\ge0$ and $\Delta>0$. Then the square-grid
+    entropy area law of Definition~\ref{def:square_entropy_area_law_at} holds
+    for the ground states at range $R$ of
+    Definition~\ref{def:square_range_ground_states} with the constant
+    $C_{\rm AL}(q,R,J,\Delta)$ of
+    Definition~\ref{def:area_law_closed_constant}, and also with the constant
+    $C_{\rm AL}^*(q,R,J,\Delta)$ of
+    Definition~\ref{def:area_law_elementary_constant}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:square_area_law_range_from_bound,thm:area_law_closed_constant,
+        thm:area_law_elementary_constant}
+    Let $C$ be either constant. By
+    Theorem~\ref{thm:area_law_closed_constant} or
+    Theorem~\ref{thm:area_law_elementary_constant}, $C\ge0$ and $C$ bounds
+    the entropy of every cut of every finite induced domain by $C$ times the
+    number of cut edges, for every gapped ground vector of every Hamiltonian
+    of range $R$. Theorem~\ref{thm:square_area_law_range_from_bound} then
+    gives the square-grid law with the constant $C$.
+\end{proof}
+
+% Status: auxiliary result. Proposition 2.1 of the polynomial-PEPS source
+% asserts only that a constant exists; that statement is
+% thm:openai_square_area_law.
+% Source: polynomial-PEPS 01-preliminaries.tex, Proposition 2.1, lines 39--58;
+% area-law 10-geometry.tex, proof of Theorem 1.1, lines 803--857.
+% Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+\begin{theorem}[The square-grid area law at the closed-form constant]
+    \label{thm:square_area_law_closed_constant}
+    \lean{TNLean.PEPS.AreaLaw.squareEntropyAreaLawAt_closed}
+    \leanok
+    \uses{def:square_entropy_area_law_at,def:area_law_closed_constant}
+    Fix $q\ge1$, $J\ge0$ and $\Delta>0$. Then the square-grid entropy area
+    law of Definition~\ref{def:square_entropy_area_law_at} holds for the
+    ground states of the model at $J$ and $\Delta$ with the constant $C_{\rm AL}(q,1,J,\Delta)$ of
+    Definition~\ref{def:area_law_closed_constant}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:square_area_law_range_constant,
+        thm:square_ground_states_range_one,
+        thm:square_entropy_area_law_at_mono}
+    Every ground state of the model at $J$ and $\Delta$ is a ground state at
+    range one by Theorem~\ref{thm:square_ground_states_range_one}, and the law
+    passes to smaller families by
+    Theorem~\ref{thm:square_entropy_area_law_at_mono}, so this is
+    the case $R=1$ of Theorem~\ref{thm:square_area_law_range_constant} with
+    the constant $C_{\rm AL}(q,1,J,\Delta)$.
 \end{proof}

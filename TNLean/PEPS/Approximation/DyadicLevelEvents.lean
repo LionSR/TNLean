@@ -15,7 +15,8 @@ only the main frame of a level, by one small-patch rewrite (`06-geometry.tex`, l
 
 * the direct repainting of a square of side `n ≤ K₀ t` (`directRepainting_hasSourceBoundedChange`);
 * the resize of the hole at a grid corner, entering a level, from the radius `h_{2n}` to the
-  radius `h_n` (`exists_resize_hasSourceBoundedChange`). When the two radii agree, or the corner
+  radius `h_n` (`resize_hasSourceBoundedChange_of_le`, for every mesh ratio
+  `ν ≤ resizeRatio ε₀ = min(ε₀, 1) / 8`). When the two radii agree, or the corner
   is not a true vertex, the resize is the identity change.
 
 In both cases the change of the memory is a bounded change with at most `2 b` pair sources in
@@ -248,8 +249,9 @@ theorem eventUses_resizeParty (R₀ : RepaintedSquare k) (J : DyadicJunction k) 
     simp only [resizeParty, he, ite_true]
     exact eventUses_labelParty_protocolLevelLabels_junction R₀ J hd J.rootNbr_mem J.inRoot_rootNbr
 
-/-- **A resize as a change of the protocol.** Fix `0 < ε₀ ≤ 1/16`. There is a threshold `ν' > 0`
-such that for every mesh ratio `0 < ν ≤ ν'` and constants of the protocol the following holds.
+/-- **A resize as a change of the protocol, at the explicit mesh ratio.** Fix `0 < ε₀ ≤ 1/16`.
+For every mesh ratio `0 < ν ≤ resizeRatio ε₀ = min(ε₀, 1) / 8` and constants of the protocol the
+following holds.
 Entering the level `n = 2 ^ (j - 1)`, with the main guide uniform on the `2 n`-blocks, let the
 holes at the grid corners of `A` already have radius `h_n` and the others radius `h_{2n}`. Then
 resizing the hole at the corner of the junction `J` of scale `j ≥ 1` is a change of the memory,
@@ -260,8 +262,8 @@ When the two radii agree or the corner is not a true vertex, the frame does not 
 change is the identity.
 
 Polynomial-PEPS manuscript, `06-geometry.tex`, lines 102–133, 529–541, 559–570 and 572–596. -/
-theorem exists_resize_hasSourceBoundedChange {ε₀ : ℝ} (hε : 0 < ε₀) (hε₀ : ε₀ ≤ 1 / 16) :
-    ∃ ν' > 0, ∀ ν : ℝ, 0 < ν → ν ≤ ν' → ∀ {k : ℕ} {K₀ a D B₀ : ℝ},
+theorem resize_hasSourceBoundedChange_of_le {ε₀ : ℝ} (hε : 0 < ε₀) (hε₀ : ε₀ ≤ 1 / 16) :
+    ∀ ν : ℝ, 0 < ν → ν ≤ resizeRatio ε₀ → ∀ {k : ℕ} {K₀ a D B₀ : ℝ},
       ∀ hc : IsProtocolConstants K₀ ε₀ ν a D B₀, ∀ {L q : ℕ} [NeZero q] {Ω : StateSpace L q}
       {C c : ℝ}, ∀ hL : 2 ≤ L, L ≤ 2 ^ k → ‖Ω‖ = 1 →
       ∀ (P : AdaptivePatchSupply (cellCenterPos L) Ω B₀ C c 60 L) (rank : GuideLabel → ℕ)
@@ -278,9 +280,9 @@ theorem exists_resize_hasSourceBoundedChange {ε₀ : ℝ} (hε : 0 < ε₀) (h�
         (ℓ := []) (1 : ℂ) {p | EventUses (.inr J) p} (2 * protocolPatchBound ε₀ ν)
         (rewriteGateBound C' c' (protocolPatchBound ε₀ ν) L) (2 * protocolPatchBound ε₀ ν)
         ((2 * protocolPatchBound ε₀ ν + 1) * ((L : ℝ) ^ 20)⁻¹) := by
-  obtain ⟨ν', hν', H⟩ := exists_resize_step_supplied hε hε₀
-  refine ⟨ν', hν', fun ν hν hνν' {k K₀ a D B₀} hc {L q} _ {Ω C c} hL hkL hΩ P rank R₀ J hJ A
-    {C' c'} hC hC' hcc Fs => ?_⟩
+  have H := resize_step_supplied_of_le hε hε₀
+  refine fun ν hν hνν' {k K₀ a D B₀} hc {L q} _ {Ω C c} hL hkL hΩ P rank R₀ J hJ A
+    {C' c'} hC hC' hcc Fs => ?_
   have hρ := hc.resizeRadius_bounds hL (n := (2 : ℝ) ^ ((J.1 : ℕ) - 1)) (by positivity) A
   have hρ' := hc.resizeRadius_bounds hL (n := (2 : ℝ) ^ ((J.1 : ℕ) - 1)) (by positivity)
     (insert (blockCorner ((2 : ℝ) ^ (J.1 : ℕ)) J.index) A)
@@ -383,5 +385,30 @@ theorem exists_resize_hasSourceBoundedChange {ε₀ : ℝ} (hε : 0 < ε₀) (h�
   refine hasSourceBoundedChange_main Fs ⟨h₁, fun γ x hx => ?_, h₃, h₄, h₅⟩ h₆ hΩ.le (by simp)
   obtain ⟨R', hR', rfl⟩ := hP' x (h₂ γ hx)
   exact eventUses_resizeParty R₀ J hR'
+
+/-- **A resize as a change of the protocol.** Fix `0 < ε₀ ≤ 1/16`. There is a threshold `ν' > 0`
+such that for every mesh ratio `0 < ν ≤ ν'` the conclusion of
+`resize_hasSourceBoundedChange_of_le` holds; the threshold `ν' = resizeRatio ε₀` serves.
+
+Polynomial-PEPS manuscript, `06-geometry.tex`, lines 102–133, 529–541, 559–570 and 572–596. -/
+theorem exists_resize_hasSourceBoundedChange {ε₀ : ℝ} (hε : 0 < ε₀) (hε₀ : ε₀ ≤ 1 / 16) :
+    ∃ ν' > 0, ∀ ν : ℝ, 0 < ν → ν ≤ ν' → ∀ {k : ℕ} {K₀ a D B₀ : ℝ},
+      ∀ hc : IsProtocolConstants K₀ ε₀ ν a D B₀, ∀ {L q : ℕ} [NeZero q] {Ω : StateSpace L q}
+      {C c : ℝ}, ∀ hL : 2 ≤ L, L ≤ 2 ^ k → ‖Ω‖ = 1 →
+      ∀ (P : AdaptivePatchSupply (cellCenterPos L) Ω B₀ C c 60 L) (rank : GuideLabel → ℕ)
+        (R₀ : RepaintedSquare k) (J : DyadicJunction k), 0 < (J.1 : ℕ) →
+      ∀ (A : Set (ℝ × ℝ))
+        {C' c' : ℕ}, C ≤ C' → 1 ≤ C' → c ≤ c' →
+      ∀ Fs : List (Frame (cellCenterPos L) q (ProtocolParty k)),
+      HasSourceBoundedChange Ω
+        (levelFrame P rank R₀ J.1 univ _
+          (hc.resizeRadius_bounds hL (n := (2 : ℝ) ^ ((J.1 : ℕ) - 1)) (by positivity) A) :: Fs)
+        (levelFrame P rank R₀ J.1 univ _
+          (hc.resizeRadius_bounds hL (n := (2 : ℝ) ^ ((J.1 : ℕ) - 1)) (by positivity)
+            (insert (blockCorner ((2 : ℝ) ^ (J.1 : ℕ)) J.index) A)) :: Fs)
+        (ℓ := []) (1 : ℂ) {p | EventUses (.inr J) p} (2 * protocolPatchBound ε₀ ν)
+        (rewriteGateBound C' c' (protocolPatchBound ε₀ ν) L) (2 * protocolPatchBound ε₀ ν)
+        ((2 * protocolPatchBound ε₀ ν + 1) * ((L : ℝ) ^ 20)⁻¹) :=
+  ⟨resizeRatio ε₀, resizeRatio_pos hε, resize_hasSourceBoundedChange_of_le hε hε₀⟩
 
 end TNLean.PEPS.Approximation

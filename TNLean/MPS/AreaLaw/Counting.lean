@@ -118,6 +118,19 @@ theorem supportDim_le_real (hq : 1 ≤ q) (X : ChainSupport L R) :
     (Entropy.supportDim (fun _ : Fin L ↦ q) X.1 : ℝ) ≤ (q : ℝ) ^ (R + 1) := by
   exact_mod_cast supportDim_le hq X
 
+/-- The logarithmic size `log² (e d_X)` of a support of range `R` is at most
+`log² (e q^{R + 1})`. -/
+theorem log_sq_supportDim_le (hq : 1 ≤ q) (X : ChainSupport L R) :
+    Real.log (Real.exp 1 * (Entropy.supportDim (fun _ : Fin L ↦ q) X.1 : ℝ)) ^ 2 ≤
+      Real.log (Real.exp 1 * (q : ℝ) ^ (R + 1)) ^ 2 := by
+  have h1 : (1 : ℝ) ≤ Entropy.supportDim (fun _ : Fin L ↦ q) X.1 := by
+    exact_mod_cast one_le_supportDim hq X
+  have h2 := supportDim_le_real hq X
+  have := Real.log_le_log (by positivity) (mul_le_mul_of_nonneg_left h2 (Real.exp_pos 1).le)
+  have h0 : 0 ≤ Real.log (Real.exp 1 * (Entropy.supportDim (fun _ : Fin L ↦ q) X.1 : ℝ)) :=
+    Real.log_nonneg (by nlinarith [Real.add_one_le_exp (1 : ℝ)])
+  exact pow_le_pow_left₀ h0 this 2
+
 /-- **The cut budget of an interval is bounded by a constant.** The parameter `ℬ` of the
 marginal tail bound at an interval cut is at most `B_R`. -/
 theorem cutLogBudget_interval_le (hq : 1 ≤ q) (a b : ℕ) :
@@ -130,16 +143,8 @@ theorem cutLogBudget_interval_le (hq : 1 ≤ q) (a b : ℕ) :
   have hbound : ∀ X ∈ Cr,
       Real.log (Real.exp 1 * ((Entropy.supportDim (fun _ : Fin L ↦ q) ∘
         fun X : ChainSupport L R ↦ X.1) X : ℝ)) ^ 2 ≤
-        Real.log (Real.exp 1 * (q : ℝ) ^ (R + 1)) ^ 2 := by
-    intro X _
-    have h1 : (1 : ℝ) ≤ Entropy.supportDim (fun _ : Fin L ↦ q) X.1 := by
-      exact_mod_cast one_le_supportDim hq X
-    have h2 := supportDim_le_real hq X
-    simp only [Function.comp_apply]
-    have := Real.log_le_log (by positivity) (mul_le_mul_of_nonneg_left h2 (Real.exp_pos 1).le)
-    have h0 : 0 ≤ Real.log (Real.exp 1 * (Entropy.supportDim (fun _ : Fin L ↦ q) X.1 : ℝ)) :=
-      Real.log_nonneg (by nlinarith [Real.add_one_le_exp (1 : ℝ)])
-    exact pow_le_pow_left₀ h0 this 2
+        Real.log (Real.exp 1 * (q : ℝ) ^ (R + 1)) ^ 2 := fun X _ ↦ by
+    simpa only [Function.comp_apply] using log_sq_supportDim_le hq X
   have hsum := Finset.sum_le_card_nsmul Cr _ _ hbound
   rw [nsmul_eq_mul] at hsum
   have hcard : (Cr.card : ℝ) ≤ chainCrossConst R := by

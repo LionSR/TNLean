@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.SheetSwapBoundaryExpansion
-import TNLean.PEPS.Approximation.SheetSwapConjugateSupport
+import TNLean.Lattice.RegionalSwapSupport
 import TNLean.PEPS.Approximation.SheetSwapDoubledTermNorm
 import TNLean.PEPS.SquareLatticeEdgeCount
 import QICLean.Algebra.L2OpNormReindex
@@ -44,7 +44,7 @@ theorem SquareHamiltonian.swapped_doubled_boundary_bound
     (R : Finset (SquareLatticeVertex L L)) :
     let p := sitePairConfigurationEquiv (SquareLatticeVertex L L) q q
     let K := Matrix.reindex p p (Matrix.doubledHamiltonian h.operator)
-    let F := Matrix.reindex p p (EncodedFrame.sheetSwapOp q R)
+    let F := Matrix.reindex p p (TNLean.Lattice.sheetSwapOp q R)
     let boundary : Finset (Edge (squareLatticeGraph L L)) :=
       Finset.univ.filter (IsRegionBoundaryEdge R)
     let Z := boundary.biUnion fun e ↦ ({e.1.1, e.1.2} : Finset (SquareLatticeVertex L L))
@@ -64,8 +64,8 @@ theorem SquareHamiltonian.swapped_doubled_boundary_bound
     simpa only [Matrix.reindex_apply, Matrix.submatrix_sub, Pi.sub_apply,
       ← Matrix.submatrix_mul_equiv (e₂ := p.symm), ← Matrix.conjTranspose_submatrix] using!
       (Matrix.l2_opNorm_reindex_equiv p
-        (EncodedFrame.sheetSwapOp q R * doubledHamiltonian A *
-          (EncodedFrame.sheetSwapOp q R)ᴴ - doubledHamiltonian A)).trans_le
+        (TNLean.Lattice.sheetSwapOp q R * doubledHamiltonian A *
+          (TNLean.Lattice.sheetSwapOp q R)ᴴ - doubledHamiltonian A)).trans_le
         (EncodedFrame.norm_sheetSwapOp_conj_doubledHamiltonian_sub_le R A)
   have hplain (S : Finset (SquareLatticeVertex L L))
       {A : Matrix (Configuration L q) (Configuration L q) ℂ}
@@ -74,9 +74,9 @@ theorem SquareHamiltonian.swapped_doubled_boundary_bound
         supportedOperators (q * q) (S : Set (SquareLatticeVertex L L)) := by
     simpa only [Matrix.conjTranspose_submatrix, Matrix.reindex_apply,
       Matrix.submatrix_mul_equiv,
-      EncodedFrame.sheetSwapOp_conj_doubledHamiltonian_eq_of_mem_supportedOperators
+      TNLean.Lattice.sheetSwapOp_conj_doubledHamiltonian_eq_of_mem_supportedOperators
         (R := ∅) hA (Or.inr (by simp))] using!
-      EncodedFrame.reindex_sheetSwapOp_conj_doubledHamiltonian_mem_supportedOperators ∅ S hA
+      TNLean.Lattice.reindex_sheetSwapOp_conj_doubledHamiltonian_mem_supportedOperators ∅ S hA
   have hlocal (S : Finset (SquareLatticeVertex L L))
       {A : Matrix (Configuration L q) (Configuration L q) ℂ}
       (hA : A ∈ supportedOperators q (S : Set (SquareLatticeVertex L L))) :
@@ -84,7 +84,7 @@ theorem SquareHamiltonian.swapped_doubled_boundary_bound
           Matrix.reindex p p (doubledHamiltonian A) ∈
         supportedOperators (q * q) (S : Set (SquareLatticeVertex L L)) :=
     (supportedOperators (q * q) (S : Set (SquareLatticeVertex L L))).sub_mem
-      (EncodedFrame.reindex_sheetSwapOp_conj_doubledHamiltonian_mem_supportedOperators R S hA)
+      (TNLean.Lattice.reindex_sheetSwapOp_conj_doubledHamiltonian_mem_supportedOperators R S hA)
       (hplain S hA)
   have hsupport : F * K * Fᴴ - K ∈
       supportedOperators (q * q) (Z : Set (SquareLatticeVertex L L)) :=

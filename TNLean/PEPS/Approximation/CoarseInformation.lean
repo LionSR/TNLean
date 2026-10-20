@@ -36,6 +36,9 @@ Proposition 3.4 of the polynomial-PEPS manuscript.
 
 ## Main statements
 
+* `coarse_mutualInformation_le_of_sublinearCollarBoundAt`: Proposition 3.1 with the named
+  exponent `β₀`, constant `max(C_a, 0)` and threshold `coarseInformationThreshold`, from the
+  collar bound and the amplification bound at given constants and thresholds.
 * `coarse_mutualInformation_le_of_sublinearCollarBound`: Proposition 3.1 on every
   finite induced domain, for every subset of `Λ ∩ T` in the first argument, assuming
   the sublinear collar bound.
@@ -80,26 +83,53 @@ private theorem mutualInformation_empty_left {V : Type*} [Fintype V] [DecidableE
     FiniteProduct.entropy_empty _ Ω hΩ]
   ring
 
-/-- **Proposition 3.1 from the sublinear collar bound.** Fix the Hamiltonian parameters
-`q, R, J` and a gap `Δ > 0`, and assume the sublinear collar bound of area-law
-Proposition 9.6 for some template constants `D₀, Ctpl`. Fix `N₀` and `A₀`. There are
-`β < 1`, `C` and `u₀` such that for every scale `u ≥ u₀`, every finite induced domain
-`Λ`, every Hamiltonian of range `R` and bound `J` with a unit ground vector `Ω` and
-full-system gap `Δ`, every union `T` of at most `N₀` lattice boxes with
+/-- The scale factor `K = (max(C_tpl, 0) + 1)(N₀ + 1)(max(A₀, 1) + 4)` of Proposition 3.1: the
+template scale `n = ⌈c₁(A u + 3)⌉` with `c₁ = (max(C_tpl, 0) + 1)(N₀ + 1)` and `A = max(A₀, 1)`
+satisfies `u ≤ n ≤ K u` for `u ≥ 2`. It is fixed by the template constant `C_tpl`, the box
+count `N₀` and the diameter ratio `A₀`. Source: polynomial-PEPS proof of Proposition 3.1,
+`02-information.tex` lines 110–146. -/
+noncomputable def coarseScaleFactor (Ctpl : ℝ) (N₀ : ℕ) (A₀ : ℝ) : ℝ :=
+  (max Ctpl 0 + 1) * (N₀ + 1) * (max A₀ 1 + 4)
+
+/-- The scale threshold `u₀` of Proposition 3.1 for the collar threshold `N` and the
+amplification constant and threshold `C_a, N_a` (at the input constant `max(C, 1)` and order
+`M = 1`): with `K = coarseScaleFactor C_tpl N₀ A₀`, `β = β₀` and `ε = 10⁻⁵`,
+`u₀ = max(max(N, N_a, N_r, 2), K^(1/ε))`, where `N_r = collarRadiusThreshold C_a K^(-β)` makes
+`⌊n^(1-ε)⌋ + 2r < K^(-β) n^β` for every amplification radius `r ≤ C_a n^((1-ε)/α)`. The term
+`K^(1/ε)` makes the collar width `⌊n^(1-ε)⌋` at most the template parameter `s₀`. Source:
+polynomial-PEPS proof of Proposition 3.1, `02-information.tex` lines 110–146. -/
+noncomputable def coarseInformationThreshold (Ctpl : ℝ) (N₀ : ℕ) (A₀ : ℝ) (N : ℕ) (Ca : ℝ)
+    (Na : ℕ) : ℝ :=
+  max ((max (max N Na) (max (Exponents.collarRadiusThreshold Ca
+      (coarseScaleFactor Ctpl N₀ A₀ ^ (Exponents.beta : ℝ))⁻¹) 2) : ℕ) : ℝ)
+    (coarseScaleFactor Ctpl N₀ A₀ ^ (Exponents.amplificationEpsilon : ℝ)⁻¹)
+
+/-- **Proposition 3.1 with named constants.** Fix the Hamiltonian parameters `q, R, J, Δ`
+and template constants `D₀, C_tpl`. Assume the sublinear collar bound with constant `C` and
+threshold `N`, and the amplification bound at the input constant `max(C, 1)` and order
+`M = 1` with constant `C_a` and threshold `N_a`. Fix `N₀` and `A₀`. Then with the exponent
+`β = β₀ = 1 - 2·10⁻⁶` (fixed by the amplification exponents), the constant `max(C_a, 0)`
+(fixed by the amplification step) and the threshold
+`u₀ = coarseInformationThreshold C_tpl N₀ A₀ N C_a N_a` (fixed by the template scales, the
+collar threshold and the amplification threshold and radius), for every scale `u ≥ u₀`, every
+finite induced domain `Λ`, every Hamiltonian of range `R` and bound `J` with a unit ground
+vector `Ω` and full-system gap `Δ`, every union `T` of at most `N₀` lattice boxes with
 `diam_∞ T ≤ A₀ u`, every subset `X` of `Λ ∩ T` and every physical set `E` with
-`dist_∞(E, T) > u^β`, one has `I_Ω(X : E) ≤ C`. The constants are chosen before `u`,
-the domain, the Hamiltonian, `T`, `X` and `E`.
+`dist_∞(E, T) > u^β`, one has `I_Ω(X : E) ≤ max(C_a, 0)`.
 
-Every rectangle with arbitrary open or closed sides has a box as lattice sample
-(`isBoxUnion_of_ordConnected`), and an empty `T` is allowed. A common translation of
-the coordinates gives another domain, so it is covered as well.
+At the filter-locality constants `C₃, c₃` of the positive constraints,
+`amplificationBound_of_locality` supplies `C_a = amplificationConstant q R J Δ (max C 1) C₃ c₃ 1`
+and `N_a = max (amplificationThreshold q R J Δ (max C 1) C₃ c₃ 1)
+(collarRadiusThreshold C_a 1)`; these carry the dependence on `J` and `Δ`.
 
-This is a reduction: the sublinear collar bound is assumed, while the amplification
-proposition is the proved `amplificationBound`. Source: polynomial-PEPS
-Proposition 3.1, `02-information.tex` lines 91–145. -/
-theorem coarse_mutualInformation_le_of_sublinearCollarBound {q R : ℕ} {J Δ D₀ Ctpl : ℝ}
-    (hΔ : 0 < Δ) (hcol : SublinearCollarBound q R J Δ D₀ Ctpl) (N₀ : ℕ) (A₀ : ℝ) :
-    ∃ β : ℝ, β < 1 ∧ ∃ C u₀ : ℝ, ∀ u : ℝ, u₀ ≤ u →
+This is a reduction: the collar and amplification bounds are assumed. Source:
+polynomial-PEPS Proposition 3.1 (`prop:coarse`), `02-information.tex` lines 90–108
+(statement) and 110–146 (proof). -/
+theorem coarse_mutualInformation_le_of_sublinearCollarBoundAt {q R : ℕ}
+    {J Δ D₀ Ctpl C Ca : ℝ} {N Na : ℕ}
+    (hcol : SublinearCollarBoundAt q R J Δ D₀ Ctpl C N)
+    (hamp : AmplificationBoundAt q R J Δ (max C 1) 1 Ca Na) (N₀ : ℕ) (A₀ : ℝ) :
+    ∀ u : ℝ, coarseInformationThreshold Ctpl N₀ A₀ N Ca Na ≤ u →
       ∀ (Λ : Finset (ℤ × ℤ)) (h : Lattice.LocalHamiltonian Λ q R J) (E₀ : ℝ)
         (Ω : Lattice.StateSpace Λ q),
         Lattice.IsGappedGroundState Λ q h.operator E₀ Ω Δ →
@@ -107,14 +137,13 @@ theorem coarse_mutualInformation_le_of_sublinearCollarBound {q R : ℕ} {J Δ D�
           (∀ x ∈ T, ∀ y ∈ T, (Scan.ambientSupDistance x y : ℝ) ≤ A₀ * u) →
           ∀ X ⊆ Finset.univ.filter (fun x : Site Λ ↦ x.val ∈ T),
           ∀ E : Finset (Site Λ),
-            (∀ t ∈ T, ∀ y ∈ E, u ^ β < (Scan.ambientSupDistance t y.val : ℝ)) →
-            FiniteProduct.mutualInformation (fun _ : Site Λ ↦ Fin q) Ω X E ≤ C := by
+            (∀ t ∈ T, ∀ y ∈ E,
+              u ^ (Exponents.beta : ℝ) < (Scan.ambientSupDistance t y.val : ℝ)) →
+            FiniteProduct.mutualInformation (fun _ : Site Λ ↦ Fin q) Ω X E ≤ max Ca 0 := by
   classical
-  obtain ⟨C₁, N₁, hcoll⟩ := hcol
-  set C₀ : ℝ := max C₁ 1 with hC₀
+  unfold coarseInformationThreshold coarseScaleFactor
+  set C₀ : ℝ := max C 1 with hC₀
   have hC₀pos : 0 < C₀ := lt_of_lt_of_le one_pos (le_max_right _ _)
-  obtain ⟨C₂, N₂, hamp⟩ :=
-    amplificationBound (q := q) (R := R) (J := J) hΔ C₀ hC₀pos 1 le_rfl
   set ε : ℝ := (Exponents.amplificationEpsilon : ℝ) with hε
   set β₀ : ℝ := (Exponents.beta : ℝ) with hβ₀
   have hε0 : 0 < ε := by norm_num [hε, Exponents.amplificationEpsilon]
@@ -133,14 +162,17 @@ theorem coarse_mutualInformation_le_of_sublinearCollarBound {q R : ℕ} {J Δ D�
   have hK0 : 0 < K := by linarith
   set η : ℝ := (K ^ β₀)⁻¹ with hη
   have hηpos : 0 < η := inv_pos.mpr (Real.rpow_pos_of_pos hK0 _)
-  obtain ⟨N₃, -, hN₃⟩ := Exponents.exists_collar_radius_threshold C₂ η hηpos
-  refine ⟨β₀, hβ₀1, max C₂ 0,
-    max ((max (max N₁ N₂) (max N₃ 2) : ℕ) : ℝ) (K ^ ε⁻¹), ?_⟩
+  set N₃ := Exponents.collarRadiusThreshold Ca η
+  have hN₃ : ∀ n : ℕ, N₃ ≤ n → ∀ r : ℕ,
+      (r : ℝ) ≤ Ca * (n : ℝ) ^ (Exponents.radiusExponent : ℝ) →
+      (⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ : ℝ) + 2 * r <
+        η * (n : ℝ) ^ (Exponents.beta : ℝ) :=
+    fun _ hn r hr ↦ Exponents.collar_radius_lt_of_collarRadiusThreshold_le hηpos hn r hr
   intro u hu Λ h E₀ Ω hΩ T hT hdiam X hX E hE
-  have huN : ((max (max N₁ N₂) (max N₃ 2) : ℕ) : ℝ) ≤ u := (le_max_left _ _).trans hu
+  have huN : ((max (max N Na) (max N₃ 2) : ℕ) : ℝ) ≤ u := (le_max_left _ _).trans hu
   have huK : K ^ ε⁻¹ ≤ u := (le_max_right _ _).trans hu
   have hu2 : (2 : ℝ) ≤ u := le_trans (by exact_mod_cast (by omega :
-    2 ≤ max (max N₁ N₂) (max N₃ 2))) huN
+    2 ≤ max (max N Na) (max N₃ 2))) huN
   have hu0 : 0 ≤ u := by linarith
   have hnorm : ‖Ω‖ = 1 := hΩ.1
   -- An empty target forces an empty first system.
@@ -166,7 +198,7 @@ theorem coarse_mutualInformation_le_of_sublinearCollarBound {q R : ℕ} {J Δ D�
   have hnu : u ≤ n := by nlinarith
   have hn0 : 0 < n := by exact_mod_cast (show (0 : ℝ) < n by linarith)
   have hn2 : 2 ≤ n := by exact_mod_cast (show (2 : ℝ) ≤ n by linarith)
-  have hnN : max (max N₁ N₂) (max N₃ 2) ≤ n := by exact_mod_cast huN.trans hnu
+  have hnN : max (max N Na) (max N₃ 2) ≤ n := by exact_mod_cast huN.trans hnu
   -- The template with point set `T`.
   obtain ⟨Tt, hTt⟩ := hT.exists_template hTne (Ctpl := Ctpl) (n := n) (s₀ := s₀)
     (D := A * u)
@@ -206,10 +238,10 @@ theorem coarse_mutualInformation_le_of_sublinearCollarBound {q R : ℕ} {J Δ D�
     rw [boundaryEndpoints_univ] at hz
     simp at hz
   obtain ⟨hI, hXcut, hScut, hYcut, hcard⟩ :=
-    hcoll n s₀ ((le_max_left _ _).trans ((le_max_left _ _).trans hnN)) Λ h E₀ Ω hΩ
+    hcol n s₀ ((le_max_left _ _).trans ((le_max_left _ _).trans hnN)) Λ h E₀ Ω hΩ
       Finset.univ Tt hsep hℓ
   have hn0' : (0 : ℝ) ≤ n := Nat.cast_nonneg n
-  have hle (x : ℝ) (hx : 0 ≤ x) : C₁ * x ≤ C₀ * x :=
+  have hle (x : ℝ) (hx : 0 ≤ x) : C * x ≤ C₀ * x :=
     mul_le_mul_of_nonneg_right (le_max_left _ _) hx
   -- Amplification.
   obtain ⟨r, hr, hout, -⟩ :=
@@ -243,10 +275,88 @@ theorem coarse_mutualInformation_le_of_sublinearCollarBound {q R : ℕ} {J Δ D�
     rw [pow_one]
     exact ⟨inv_nonneg.mpr hn0', inv_le_one_of_one_le₀ (by linarith)⟩
   calc FiniteProduct.mutualInformation (fun _ : Site Λ ↦ Fin q) Ω X E
-      ≤ C₂ * ((n : ℝ) ^ (1 : ℕ))⁻¹ := hfinal
-    _ ≤ max C₂ 0 * ((n : ℝ) ^ (1 : ℕ))⁻¹ :=
+      ≤ Ca * ((n : ℝ) ^ (1 : ℕ))⁻¹ := hfinal
+    _ ≤ max Ca 0 * ((n : ℝ) ^ (1 : ℕ))⁻¹ :=
         mul_le_mul_of_nonneg_right (le_max_left _ _) hninv.1
-    _ ≤ max C₂ 0 := mul_le_of_le_one_right (le_max_right _ _) hninv.2
+    _ ≤ max Ca 0 := mul_le_of_le_one_right (le_max_right _ _) hninv.2
+
+/-- The exponent `β₀` of Proposition 3.1 is less than one. -/
+theorem beta_lt_one : (Exponents.beta : ℝ) < 1 := by
+  norm_num [Exponents.beta, Exponents.boxError]
+
+/-- The amplification constant of area-law Proposition 10.2 at the input constant `max C 1`
+and the power `M = 1`, at the named filter-locality constants:
+`amplificationConstantExplicit q R J Δ (max C 1) 1`. Source: area-law Proposition 10.2
+(`prop:amplification`), `09-amplification.tex`, lines 261–296 and 453–569. -/
+noncomputable def collarAmplificationConstant (q R : ℕ) (J Δ C : ℝ) : ℝ :=
+  amplificationConstantExplicit q R J Δ (max C 1) 1
+
+/-- The amplification threshold of area-law Proposition 10.2 at the input constant `max C 1`
+and the power `M = 1`: the larger of `amplificationThresholdExplicit q R J Δ (max C 1) 1` and
+the radius threshold of `collarAmplificationConstant q R J Δ C`. Source: area-law
+Proposition 10.2 (`prop:amplification`), `09-amplification.tex`, lines 261–322 and 453–499. -/
+noncomputable def collarAmplificationThreshold (q R : ℕ) (J Δ C : ℝ) : ℕ :=
+  max (amplificationThresholdExplicit q R J Δ (max C 1) 1)
+    (Exponents.collarRadiusThreshold (collarAmplificationConstant q R J Δ C) 1)
+
+/-- The amplification bound of area-law Proposition 10.2 at the input constant `max C 1`
+and the power `M = 1` holds with the constant `collarAmplificationConstant q R J Δ C` and the
+threshold `collarAmplificationThreshold q R J Δ C`. Source: area-law Proposition 10.2
+(`prop:amplification`), `09-amplification.tex`, lines 261–296. -/
+theorem amplificationBoundAt_collarAmplification {q R : ℕ} {J Δ : ℝ} (hΔ : 0 < Δ) (C : ℝ) :
+    AmplificationBoundAt q R J Δ (max C 1) 1 (collarAmplificationConstant q R J Δ C)
+      (collarAmplificationThreshold q R J Δ C) :=
+  amplificationBoundAt_explicit (J := J) q R hΔ (lt_of_lt_of_le one_pos (le_max_right _ _)) 1
+
+/-- The constant and threshold of the sublinear collar bound of area-law Proposition 9.6,
+together with the amplification constant and threshold of Proposition 10.2 at the collar
+constant `max C 1` and the power `M = 1`, which are `collarAmplificationConstant` and
+`collarAmplificationThreshold`. Existential corollaries of the named-constant
+theorems, which take `SublinearCollarBoundAt` and `AmplificationBoundAt`, obtain both
+premises from it. Source: area-law Propositions 9.6 (`08-scanner.tex`, lines 808–827) and
+10.2 (`09-amplification.tex`, lines 261–296). -/
+theorem exists_sublinearCollarBoundAt_amplificationBoundAt {q R : ℕ} {J Δ D₀ Ctpl : ℝ}
+    (hΔ : 0 < Δ) (hcol : SublinearCollarBound q R J Δ D₀ Ctpl) :
+    ∃ C : ℝ, ∃ N : ℕ, ∃ Ca : ℝ, ∃ Na : ℕ, SublinearCollarBoundAt q R J Δ D₀ Ctpl C N ∧
+      AmplificationBoundAt q R J Δ (max C 1) 1 Ca Na := by
+  obtain ⟨C, N, hcol⟩ := hcol
+  exact ⟨C, N, _, _, hcol, amplificationBoundAt_collarAmplification hΔ C⟩
+
+/-- **Proposition 3.1 from the sublinear collar bound.** Fix the Hamiltonian parameters
+`q, R, J` and a gap `Δ > 0`, and assume the sublinear collar bound of area-law
+Proposition 9.6 for some template constants `D₀, Ctpl`. Fix `N₀` and `A₀`. There are
+`β < 1`, `C` and `u₀` such that for every scale `u ≥ u₀`, every finite induced domain
+`Λ`, every Hamiltonian of range `R` and bound `J` with a unit ground vector `Ω` and
+full-system gap `Δ`, every union `T` of at most `N₀` lattice boxes with
+`diam_∞ T ≤ A₀ u`, every subset `X` of `Λ ∩ T` and every physical set `E` with
+`dist_∞(E, T) > u^β`, one has `I_Ω(X : E) ≤ C`. The constants are chosen before `u`,
+the domain, the Hamiltonian, `T`, `X` and `E`.
+
+Every rectangle with arbitrary open or closed sides has a box as lattice sample
+(`isBoxUnion_of_ordConnected`), and an empty `T` is allowed. A common translation of
+the coordinates gives another domain, so it is covered as well. The constants are those of
+`coarse_mutualInformation_le_of_sublinearCollarBoundAt`, at the collar constant and threshold
+and at the amplification constant and threshold supplied by `amplificationBound`.
+
+This is a reduction: the sublinear collar bound is assumed, while the amplification
+proposition is the proved `amplificationBound`. Source: polynomial-PEPS
+Proposition 3.1, `02-information.tex` lines 91–145. -/
+theorem coarse_mutualInformation_le_of_sublinearCollarBound {q R : ℕ} {J Δ D₀ Ctpl : ℝ}
+    (hΔ : 0 < Δ) (hcol : SublinearCollarBound q R J Δ D₀ Ctpl) (N₀ : ℕ) (A₀ : ℝ) :
+    ∃ β : ℝ, β < 1 ∧ ∃ C u₀ : ℝ, ∀ u : ℝ, u₀ ≤ u →
+      ∀ (Λ : Finset (ℤ × ℤ)) (h : Lattice.LocalHamiltonian Λ q R J) (E₀ : ℝ)
+        (Ω : Lattice.StateSpace Λ q),
+        Lattice.IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+        ∀ T : Finset (ℤ × ℤ), IsBoxUnion N₀ T →
+          (∀ x ∈ T, ∀ y ∈ T, (Scan.ambientSupDistance x y : ℝ) ≤ A₀ * u) →
+          ∀ X ⊆ Finset.univ.filter (fun x : Site Λ ↦ x.val ∈ T),
+          ∀ E : Finset (Site Λ),
+            (∀ t ∈ T, ∀ y ∈ E, u ^ β < (Scan.ambientSupDistance t y.val : ℝ)) →
+            FiniteProduct.mutualInformation (fun _ : Site Λ ↦ Fin q) Ω X E ≤ C := by
+  obtain ⟨C, N, Ca, Na, hcol, hamp⟩ :=
+    exists_sublinearCollarBoundAt_amplificationBoundAt hΔ hcol
+  exact ⟨_, beta_lt_one, _, _,
+    coarse_mutualInformation_le_of_sublinearCollarBoundAt hcol hamp N₀ A₀⟩
 
 /-- Mutual information is unchanged by relabeling the sites along a bijection, once both
 regions are relabeled. Source: polynomial-PEPS `01-preliminaries.tex`, lines 23–31. -/

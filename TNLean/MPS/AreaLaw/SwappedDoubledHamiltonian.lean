@@ -4,14 +4,14 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.DoubledHamiltonian
-import TNLean.PEPS.Approximation.SheetSwapConjugateSupport
+import TNLean.Lattice.RegionalSwapSupport
 
 /-!
 # The swapped doubled Hamiltonian on a chain
 
 Conjugating each doubled interaction by the regional sheet swap preserves its
 support and the bound `2 * J`. The normalized tensor square of the original
-ground vector and its actual swap image have energy `2 * E₀` and lower gap `Δ`.
+ground vector and its swap image have energy `2 * E₀` and lower gap `Δ`.
 
 ## Main results
 
@@ -29,12 +29,13 @@ No equality of spectral gaps or Gaussian-filter construction is asserted.
 -/
 
 open Matrix QuantumCircuit
-open TNLean.PEPS.EncodedFrame
 open scoped Kronecker Matrix.Norms.L2Operator ComplexOrder
+open TNLean.Lattice (norm_sheetSwapOp_le_one
+  reindex_sheetSwapOp_conj_doubledHamiltonian_mem_supportedOperators sheetSwap sheetSwapOp)
 
 namespace TNLean.MPS.AreaLaw
 
-/-- The doubled interactions conjugated by the actual regional sheet swap.
+/-- The doubled interactions conjugated by the regional sheet swap.
 Source: TNLean note, `part2a_mps_information.tex`, lines 355–363. -/
 noncomputable def ChainHamiltonian.swappedDoubled
     {L q R : ℕ} {J : ℝ} (h : ChainHamiltonian L q R J) (D : Finset (Fin L)) :
@@ -65,12 +66,12 @@ lemma ChainHamiltonian.swappedDoubled_operator
     {L q R : ℕ} {J : ℝ} (h : ChainHamiltonian L q R J)
     (D : Finset (Fin L)) :
     let e := QuantumCircuit.sitePairConfigurationEquiv (Fin L) q q
-    let F := Matrix.reindex e e (TNLean.PEPS.EncodedFrame.sheetSwapOp q D)
+    let F := Matrix.reindex e e (TNLean.Lattice.sheetSwapOp q D)
     (h.swappedDoubled D).operator = F * h.doubled.operator * Fᴴ := by
   simp only [ChainHamiltonian.operator, ChainHamiltonian.swappedDoubled,
     Matrix.sum_mul, Matrix.mul_sum]
 
-/-- The actual paired tensor-square ground vector and its regional swap image
+/-- The paired tensor-square ground vector and its regional swap image
 have doubled energy and the original positive lower-gap bound.
 Source: TNLean note, `part2a_mps_information.tex`, lines 355–363. -/
 theorem ChainHamiltonian.doubled_swappedDoubled_isGappedGroundState
@@ -78,7 +79,7 @@ theorem ChainHamiltonian.doubled_swappedDoubled_isGappedGroundState
     (D : Finset (Fin L)) {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
     (hgs : Matrix.IsGappedGroundState h.operator E₀ Ω Δ) (hΔ : 0 < Δ) :
     let e := QuantumCircuit.sitePairConfigurationEquiv (Fin L) q q
-    let F := Matrix.reindex e e (TNLean.PEPS.EncodedFrame.sheetSwapOp q D)
+    let F := Matrix.reindex e e (TNLean.Lattice.sheetSwapOp q D)
     let ψ₀ := Matrix.doubledVector (WithLp.ofLp Ω)
     let Ψ : EuclideanSpace ℂ (Fin L → Fin (q * q)) :=
       WithLp.toLp 2 (ψ₀ ∘ e.symm)

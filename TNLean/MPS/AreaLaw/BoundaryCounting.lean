@@ -11,14 +11,14 @@ import Mathlib.Data.Nat.Order.Lemmas
 # Interactions crossing an arbitrary chain region
 
 A finite-range support meeting both sides of a region lies in a window of
-`2R` sites about an actual boundary edge. Counting the possible subsets of
+`2R` sites about a boundary edge. Counting the possible subsets of
 these windows gives at most `2^(2R)` crossing supports per boundary edge.
 The region need not be an interval. The estimates include zero range and an
 empty boundary, with no additional assumptions.
 
 ## Main results
 
-* `IsChainSupport.exists_boundary_window_of_split`: a window about an actual
+* `IsChainSupport.exists_boundary_window_of_split`: a window about a
   boundary edge contains every site of a split support.
 * `card_crossingTerms_le_mul_card_boundaryEdges`: the crossing count with
   coefficient `2^(2R)` per edge.
@@ -34,7 +34,7 @@ geometric and does not assert a partial-swap operator decomposition.
 
 namespace TNLean.MPS.AreaLaw
 
-/-- A support split by a region lies in a window about one of its actual
+/-- A support split by a region lies in a window about one of its
 boundary edges. Source: TNLean note, `eq:count`, and
 `part2a_mps_information.tex`, lines 359–363. -/
 lemma IsChainSupport.exists_boundary_window_of_split

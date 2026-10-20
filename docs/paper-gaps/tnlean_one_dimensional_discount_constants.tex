@@ -75,6 +75,14 @@ finite-dimensional discount of the companion library,\footnote{Declarations:
      & = \Bigl\lceil\max\Bigl\{4,\ \frac{4C_E}{\Delta},\ 128\sqrt{(1+\vartheta)\mathcal B_R}\Bigr\}\Bigr\rceil .
     \label{eq:tnlean_one_dimensional_discount_constants_formal_shell_count}
 \end{align}
+The first entry of $E_R$ is $4C_E/J$, the note's second entry of $m$ divided
+by $\vartheta$. The second comes from the logarithmic energy estimate of
+Remark~6.3 of the note (label \texttt{rem:sharper}, \texttt{part1\_arealaw.tex},
+lines~711--734): the three-lines device bounds the energy change of one split
+interaction by $8e\,a_j^2\log^2(e\dim\mathcal H_Y)\,J$, so the energy of the
+filtered vector is at most $32\,e\,N_R\ell_R^2J/m$. Taking the smaller entry
+is never worse than the note's choice, and is smaller once $q^{R+1}$ is
+moderately large.
 The shells, the flanks, the weights, the crossing count $N_R$ and the cut
 budget $\mathcal B_R$ are those of the note. The constants deviate from the
 printed ones in three connected places, each at the level of an absolute
@@ -118,7 +126,7 @@ is\footnote{Declarations:
     \leanid{TNLean.MPS.AreaLaw.chainIntervalEntropyBound_le}.}
 $C_{\mathrm{int}}=8mR\log q+4096\,e\,\vartheta\,\mathcal B_R/m+m\log2$ in
 place of the printed $8mR\log q+1+2C_E/\Delta$, with the explicit
-$C_1(q,R)=5+32N_Rq^{2(R+1)}+128\mathcal B_R$ in \texttt{eq:mbound} and
+$C_1(q,R)=5+E_R+128\mathcal B_R$ in \texttt{eq:mbound} and
 $C_0(q,R)=(8R\log q+\log2)\,C_1(q,R)+1024\,e\,\mathcal B_R$ in place of the
 printed $C_0$. Every deviation is a change of absolute constants; the
 structure of the argument, its hypotheses, and the linear dependence of the

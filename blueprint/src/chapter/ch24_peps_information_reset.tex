@@ -46,9 +46,9 @@ the cores to an inverse power of the system size. This is Lemma~3.3 of
 
 \begin{theorem}[The exchanged cores are uncorrelated]
     \label{thm:peps_reset_exchanged_cores}
-    \lean{TNLean.PEPS.Approximation.doubledVector_comp_sumArrow,
-        TNLean.PEPS.Approximation.sheetSwapOp_mulVec_comp_sumArrow,
-        TNLean.PEPS.Approximation.mutualInformation_relabelSites_replicaSwap_eq_zero}
+    \lean{TNLean.Lattice.doubledVector_comp_sumArrow,
+        TNLean.Lattice.sheetSwapOp_mulVec_comp_sumArrow,
+        TNLean.Lattice.mutualInformation_relabelSites_replicaSwap_eq_zero}
     \leanok
     Let $\Omega$ be a unit vector, $R_0\subseteq R$, and $C_0$ disjoint from
     $R$. In $\Phi=F_R(\Omega\otimes\Omega)$, the cores $R_0$ and $C_0$ of the
@@ -67,8 +67,8 @@ the cores to an inverse power of the system size. This is Lemma~3.3 of
     \label{thm:peps_reset_cores_entropy}
     \lean{TNLean.PEPS.Approximation.reindex_rectangle_sumArrow_unitary,
         TNLean.PEPS.Approximation.mutualInformation_cores_le_of_reset_unitary,
-        TNLean.PEPS.AreaLaw.mutualInformation_le_of_supported_unitary,
-        TNLean.PEPS.AreaLaw.exists_one_kronecker_unitary_of_mem_supportedOperators}
+        TNLean.Lattice.mutualInformation_le_of_supported_unitary,
+        TNLean.Lattice.exists_one_kronecker_unitary_of_mem_supportedOperators}
     \leanok
     \uses{def:peps_frame_sheet_swap}
     Let $q\ge1$, let $\Omega$ be a unit vector on the open square, let $R,C$ be
@@ -94,7 +94,7 @@ the cores to an inverse power of the system size. This is Lemma~3.3 of
 
 \begin{theorem}[The entropy cost of the reset]
     \label{thm:peps_reset_entropy_scalar}
-    \lean{TNLean.PEPS.Approximation.reset_entropy_scalar}
+    \lean{TNLean.Lattice.reset_entropy_scalar}
     \leanok
     Let $C\ge0$, $p$ real, $L\ge\max(1,8\sqrt C(1+\lambda))$,
     $\delta\le CL^{-(2p+10)}$ and $0\le N\le1+L^2\lambda$. Then

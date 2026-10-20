@@ -34,7 +34,15 @@ of the birth-separation lemma:
 * two points of atoms meeting only in integer points are at distance at least
   `birthSeparationConstant = 1/28`, or both lie within `1/4` of a common point
   `q` of the two atoms and satisfy the angular estimate. The atoms are cut out
-  by belt facets, so this explicit constant replaces the compactness minimum.
+  by belt facets, so this explicit constant can be used instead of the
+  compactness minimum.
+
+The manuscript's contact dichotomy for two compact sets that are
+quarter-sectorial at integer points and meet only there
+(`exists_pos_common_contact_dichotomy`) is proved by compactness and gives a
+positive `η` without a value. The explicit separation constant
+`birthSeparationConstant = 1/28` gives a quantitative version for atoms; the
+birth-separation estimate and the explicit area-law constant use that version.
 
 Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 September 24, 2026, Section 11, `geometry:birth-separation`, lines 573–659,

@@ -150,7 +150,8 @@ square cylinder data at the same radii.
     \uses{def:square_entropy_area_law_at,def:peps_adaptive_patch_constants,
         def:peps_adaptive_patch_constraint}
     Let $q\ge2$ be an integer, $J,\Delta>0$ and $B_0,p>0$, and assume the
-    square-grid entropy area law at $q$, $J$, $\Delta$ with constant $C_A$.
+    square-grid entropy area law for the ground states of the model at $J$ and
+    $\Delta$ with constant $C_A$.
     Then the constants $C=C(q,B_0)$ and $c=c(q,J,\Delta,B_0,p,C_A)$ of
     (\ref{eq:peps_adaptive_patch_constants}) are positive, and for every
     $L\ge2$, every original square Hamiltonian $H$ with interaction bound $J$,
@@ -234,24 +235,4 @@ square cylinder data at the same radii.
     Theorem~\ref{thm:openai_square_area_law}, and
     Theorem~\ref{thm:peps_adaptive_patch_constraint_of_area_law} turns it into
     the adaptive patch constraint.
-\end{proof}
-
-\begin{theorem}[Polynomial approximation from the square entropy area law]
-    \label{thm:peps_approximation_of_square_area_law}
-    \lean{TNLean.PEPS.Approximation.polynomialPEPSApproximation_of_squareEntropyAreaLaw}
-    \leanok
-    \uses{def:square_entropy_area_law, def:polynomial_peps_model}
-    If the square-grid entropy area law holds, then the uniform polynomial
-    approximation assertion of \cite[Theorem~1.1]{OpenAI2026PolynomialPEPS}
-    holds.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    \uses{thm:peps_adaptive_patch_constraint_of_area_law,
-        thm:peps_ground_state_approximation_from_patch_bound}
-    Theorem~\ref{thm:peps_adaptive_patch_constraint_of_area_law} gives the
-    adaptive patch constraint, and
-    Theorem~\ref{thm:peps_ground_state_approximation_from_patch_bound} turns it
-    into the approximation assertion.
 \end{proof}
