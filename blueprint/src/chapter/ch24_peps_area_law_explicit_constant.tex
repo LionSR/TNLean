@@ -473,6 +473,116 @@ every upper bound for $C_{\rm box}$.
     area law.
 \end{proof}
 
+% Status: auxiliary definition. The polynomial-PEPS source treats only site
+% and nearest-neighbour interactions; this family reads its model with
+% interactions of range R.
+% Source: polynomial-PEPS 00-introduction.tex, eq:model and eq:global-gap,
+% lines 36--49; area-law Theorem 1.1 and Corollary 1.2.
+% Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+\begin{definition}[Ground states of range-$R$ Hamiltonians on the square]
+    \label{def:square_range_ground_states}
+    \lean{TNLean.PEPS.Approximation.IsRangeSquareGroundState}
+    \leanok
+    \uses{def:area_law_hamiltonian}
+    Fix natural numbers $q$ and $R$ and reals $J$ and $\Delta$. The
+    ground states at range $R$ form the family of vectors $\Omega$ on the
+    grid of side $L$, identified with vectors on the integer square
+    $\Lambda=\{0,\ldots,L-1\}^2$, for which some Hamiltonian on $\Lambda$
+    whose terms are supported on sets of diameter at most $R$ and have norm
+    at most $J$, together with some real $E_0$, satisfies $\|\Omega\|=1$,
+    $H\Omega=E_0\Omega$ and $H-E_0I\ge\Delta(I-|\Omega\rangle\langle\Omega|)$.
+\end{definition}
+
+\begin{theorem}[Ground states of the model are ground states at range one]
+    \label{thm:square_ground_states_range_one}
+    \lean{TNLean.PEPS.Approximation.IsRangeSquareGroundState.norm_eq_one,
+        TNLean.PEPS.Approximation.IsSquareGroundState.isRangeSquareGroundState}
+    \leanok
+    \uses{def:square_range_ground_states,def:square_entropy_area_law_at}
+    Every ground state at range $R$ is a unit vector. For $J\ge0$, every
+    ground state of the model at $J$ and $\Delta$ is a ground state at range
+    one.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:norm_square_area_law_state,def:square_area_law_hamiltonian,
+        thm:square_area_law_ground_gap}
+    The first claim is the normalization in
+    Definition~\ref{def:square_range_ground_states}, since the identification
+    of the grid with $\Lambda$ preserves norms. For the second, place the
+    Hermitian parts of the site and edge terms of the Hamiltonian on their
+    supports in $\Lambda$, which have diameter at most one, and the zero
+    operator on every other support. The terms keep the norm bound $J$, their
+    sum is the original Hamiltonian, and the ground vector and the gap are
+    carried along the identification.
+\end{proof}
+
+% Status: auxiliary result. The polynomial-PEPS source treats only
+% nearest-neighbour interactions.
+% Source: polynomial-PEPS 01-preliminaries.tex, Proposition 2.1, lines 39--58;
+% area-law Theorem 1.1 and Corollary 1.2.
+% Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+\begin{theorem}[The square-grid area law at range $R$ from a finite-domain bound]
+    \label{thm:square_area_law_range_from_bound}
+    \lean{TNLean.PEPS.Approximation.squareEntropyAreaLawAt_range_of_areaLawBound}
+    \leanok
+    \uses{def:square_range_ground_states,def:square_entropy_area_law_at,
+        def:area_law_hamiltonian,def:area_law_ground_entropy}
+    Fix natural numbers $q$ and $R$ and reals $J$, $\Delta$ and $C\ge0$. Suppose
+    that $S_\Omega(A)\le C\,|\partial_\Lambda A|$ for every finite induced
+    domain $\Lambda$, every Hamiltonian on $\Lambda$ whose terms are
+    supported on sets of diameter at most $R$ and have norm at most $J$,
+    every gapped ground vector $\Omega$ of it with gap at least $\Delta$ and
+    every $A\subseteq\Lambda$. Then the square-grid entropy area law of
+    Definition~\ref{def:square_entropy_area_law_at} holds for the ground
+    states at range $R$ of Definition~\ref{def:square_range_ground_states}
+    with the constant $C$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:finite_product_entropy_relabel,thm:square_edge_boundary_card}
+    Apply the hypothesis on the integer square $\Lambda$. Relabelling the
+    sites along the identification of the grid with $\Lambda$ preserves the
+    entropy of every region, and it maps the edges of the grid crossing a
+    cut bijectively onto the edges of $\Lambda$ crossing the image of the
+    cut.
+\end{proof}
+
+% Status: auxiliary result. Proposition 2.1 of the polynomial-PEPS source
+% concerns nearest-neighbour interactions and asserts only that a constant
+% exists; that statement is thm:openai_square_area_law.
+% Source: polynomial-PEPS 01-preliminaries.tex, Proposition 2.1, lines 39--58;
+% area-law 10-geometry.tex, proof of Theorem 1.1, lines 803--857.
+% Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+\begin{theorem}[The square-grid area law at range $R$ with explicit constants]
+    \label{thm:square_area_law_range_constant}
+    \lean{TNLean.PEPS.AreaLaw.squareEntropyAreaLawAt_range_closed,
+        TNLean.PEPS.AreaLaw.squareEntropyAreaLawAt_range_elementary}
+    \leanok
+    \uses{def:square_range_ground_states,def:square_entropy_area_law_at,
+        def:area_law_closed_constant,def:area_law_elementary_constant}
+    Fix $q\ge1$, $R\ge0$, $J\ge0$ and $\Delta>0$. Then the square-grid
+    entropy area law of Definition~\ref{def:square_entropy_area_law_at} holds
+    for the ground states at range $R$ of
+    Definition~\ref{def:square_range_ground_states} with the constant
+    $C_{\rm AL}(q,R,J,\Delta)$ of
+    Definition~\ref{def:area_law_closed_constant}, and also with the constant
+    $C_{\rm AL}^*(q,R,J,\Delta)$ of
+    Definition~\ref{def:area_law_elementary_constant}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:square_area_law_range_from_bound,thm:area_law_closed_constant,
+        thm:area_law_elementary_constant}
+    Let $C$ be either constant. By
+    Theorem~\ref{thm:area_law_closed_constant} or
+    Theorem~\ref{thm:area_law_elementary_constant}, $C\ge0$ and $C$ bounds
+    the entropy of every cut of every finite induced domain by $C$ times the
+    number of cut edges, for every gapped ground vector of every Hamiltonian
+    of range $R$. Theorem~\ref{thm:square_area_law_range_from_bound} then
+    gives the square-grid law with the constant $C$.
+\end{proof}
+
 % Status: auxiliary result. Proposition 2.1 of the polynomial-PEPS source
 % asserts only that a constant exists; that statement is
 % thm:openai_square_area_law.
@@ -491,11 +601,13 @@ every upper bound for $C_{\rm box}$.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:area_law_closed_constant,thm:square_area_law_from_uniform}
-    Theorem~\ref{thm:area_law_closed_constant} at range $R=1$ bounds the
-    entropy of every cut of every finite induced domain by
-    $C_{\rm AL}(q,1,J,\Delta)$ times the number of cut edges. Placing a
-    square-grid Hamiltonian on the integer square, as in the proof of
-    Theorem~\ref{thm:square_area_law_from_uniform}, transports this bound to
-    every region of the square grid with the same constant.
+    \uses{thm:square_area_law_range_constant,
+        thm:square_ground_states_range_one,
+        thm:square_entropy_area_law_at_mono}
+    Every ground state of the model at $J$ and $\Delta$ is a ground state at
+    range one by Theorem~\ref{thm:square_ground_states_range_one}, and the law
+    passes to smaller families by
+    Theorem~\ref{thm:square_entropy_area_law_at_mono}, so this is
+    the case $R=1$ of Theorem~\ref{thm:square_area_law_range_constant} with
+    the constant $C_{\rm AL}(q,1,J,\Delta)$.
 \end{proof}
