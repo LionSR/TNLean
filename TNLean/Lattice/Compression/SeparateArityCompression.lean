@@ -22,7 +22,6 @@ part2b_mps_protocol.tex:594–614.
 noncomputable section
 open scoped Matrix NNReal
 
-
 namespace TNLean.PEPS.PairEffect
 open TNLean.PEPS.Approximation
 variable {P : Type} {input output : Layout P}
@@ -254,6 +253,5 @@ theorem exists_uniform_sampled_network_sub_pure_le_of_arity_lifetime
     _ (Ω L) (hΩ L) herror (hpure L)
   exact ⟨Gate, _, _, participants, root, hroot, Label, _, k, c, T,
     hσ, herror, hlow, hhigh, hdim, hinc, hlocal⟩
-
 
 end TNLean.PEPS.PairEffect.DistributedConstruction
