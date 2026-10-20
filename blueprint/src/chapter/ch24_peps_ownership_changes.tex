@@ -58,7 +58,8 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
         TNLean.PEPS.EncodedFrame.partialTraceRight_splitVec,
         TNLean.PEPS.EncodedFrame.quantumRelativeEntropy_splitVec_eq_mutualInformation,
         TNLean.PEPS.EncodedFrame.exists_sheetSplitting,
-        TNLean.PEPS.EncodedFrame.exists_sheetSplitting_zpow}
+        TNLean.PEPS.EncodedFrame.exists_sheetSplitting_zpow,
+        TNLean.PEPS.EncodedFrame.exists_sheetSplitting_rpow}
     \leanok
     \uses{lem:peps_frame_split_forms}
     Let $T,E\subseteq\Lambda$ be disjoint, $U=\Lambda\setminus(T\cup E)$,
@@ -73,7 +74,9 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     \end{align}
     In particular, for the sheet splitting of
     \cite[Lemma~6.4]{OpenAI2026PolynomialPEPS} (\texttt{05-frames.tex},
-    lines 352--368), $b\le L^{-60}$ gives an error of at most $L^{-30}$.
+    lines 352--368), $b\le L^{-60}$ gives an error of at most $L^{-30}$; more
+    generally, for $L\ge0$ and real $p$, $b\le L^{-2p}$ gives an error of at
+    most $L^{-p}$.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -1578,17 +1581,18 @@ three owners meet and no encoded holes are needed.
     \uses{def:lattice_sheet,lem:peps_frame_splitting,def:peps_frame_birth_map,
         lem:peps_frame_birth_map,def:peps_monomial_parties}
     In a sheet, let $T$ be a set of sites owned by $P_\circ$, let $E$ be the set
-    of sites not owned by $P_\circ$, let $\lVert\Omega\rVert=1$, and suppose
-    $I_\Omega(T:E)\le L^{-60}$. There are splitting data and an allowed
+    of sites not owned by $P_\circ$, let $\lVert\Omega\rVert=1$, let $L\ge0$ and
+    let $p$ be real, and suppose $I_\Omega(T:E)\le L^{-2p}$. There are splitting data and an allowed
     monomial from the registers of the sheet to those of the sheet in which $T$
     is owned by $Q_\circ$, using only $P_\circ$ and $Q_\circ$ and at most one
     normalized pair source, whose operator in product coordinates is the birth
-    map $B$, and which maps the reference vector within $L^{-30}$ of the
+    map $B$, and which maps the reference vector within $L^{-p}$ of the
     reference vector of the new sheet. The reversed death obeys the same bound
     when these conditions hold in the sheet after the death, using one
-    normalized pair effect and no pair source. This is the case without holes
-    of \cite[Lemma~6.5]{OpenAI2026PolynomialPEPS} (\texttt{05-frames.tex},
-    lines 396--410).
+    normalized pair effect and no pair source. For $p=30$ this is the case
+    without holes of \cite[Lemma~6.5]{OpenAI2026PolynomialPEPS}
+    (\texttt{05-frames.tex}, lines 396--410); in one dimension the exponent is
+    a free parameter, used for instance with $2p=24$.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -1598,7 +1602,7 @@ three owners meet and no encoded holes are needed.
     The monomials of Theorem~\ref{thm:peps_frame_birth_bounded}, placed behind the
     empty block of registers, act in product coordinates as $B$, and
     $\lVert(B-\id)\Omega\rVert$ is at most the splitting error, at most
-    $L^{-30}$ by Lemma~\ref{lem:peps_frame_splitting}.
+    $L^{-p}$ by Lemma~\ref{lem:peps_frame_splitting}.
 \end{proof}
 
 \begin{theorem}[Exchange of two sheets: bounded change]
@@ -1611,15 +1615,17 @@ three owners meet and no encoded holes are needed.
     \uses{def:lattice_sheet,lem:peps_frame_splitting,
         lem:peps_frame_exchange_net_map,def:peps_monomial_parties}
     For two sheets, a region $Y$, a party $P_\circ$ with $Z$, $T$, $E$, $U$ as
-    above, and $\lVert\Omega\rVert=1$ with $I_\Omega(T:E)\le L^{-60}$, there
+    above, $\lVert\Omega\rVert=1$, $L\ge0$ and real $p$ with
+    $I_\Omega(T:E)\le L^{-2p}$, there
     are splitting data and an allowed monomial from the registers of the two
     sheets to those of the two exchanged sheets, consisting of exchanges of
     tensor factors and one private contraction at $P_\circ$, so using only
     $P_\circ$ and no pair resource, whose operator in product coordinates is
     $C=D_UF_AF_Y=D_UF_T$, and which maps $\Omega\otimes\Omega$ within
-    $4L^{-30}$ of $\Omega\otimes\Omega$. This is the case without holes of
-    \cite[Lemma~6.6]{OpenAI2026PolynomialPEPS} (\texttt{05-frames.tex},
-    lines 460--479), where the renaming acts in product coordinates as $F_Y$.
+    $4L^{-p}$ of $\Omega\otimes\Omega$. For $p=30$ this is the case without
+    holes of \cite[Lemma~6.6]{OpenAI2026PolynomialPEPS} (\texttt{05-frames.tex},
+    lines 460--479), where the renaming acts in product coordinates as $F_Y$;
+    in one dimension the exponent is a free parameter.
 \end{theorem}
 
 \begin{proof}\leanok

@@ -30,7 +30,9 @@ The words of the birth and the death do not act on the tag registers. They are
 `exists_frontBirthWord` and `exists_frontDeathChain` of `TNLean.Lattice.Sheet.FrontChanges`,
 stated for any block of registers in front of the raw registers and read here with the tag
 registers of the holes in front; read with the empty front block they give the bounds for
-sheets without holes, `Lattice.Sheet.birth_bounded` and `Lattice.Sheet.death_bounded`. The
+sheets without holes, `Lattice.Sheet.birth_bounded` and `Lattice.Sheet.death_bounded`, which
+are stated for any exponent: `I_Ω(T:E) ≤ L^{-2p}` gives error `L^{-p}`; the frame bounds here are
+the manuscript's case `p = 30`. The
 reference error of the exchange is bounded on the sheets by
 `norm_act_sheetBufferCorrection_mul_sheetSwapOp_sub_le`, shared with
 `Lattice.Sheet.exchange_bounded`.

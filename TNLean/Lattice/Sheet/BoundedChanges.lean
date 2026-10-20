@@ -14,14 +14,18 @@ changes: allowed monomials on a bounded number of parties, with small reference-
 These are Lemmas 6.5 and 6.6 of the polynomial-PEPS manuscript read on sheets without encoded
 holes; in one dimension no holes are needed (remark following `lem:exchange` in the note).
 
-* `Sheet.birth_bounded`: if `T` is owned by `P∘` and `I_Ω(T:E) ≤ L^{-60}`, handing `T` to `Q∘`
+* `Sheet.birth_bounded`: if `T` is owned by `P∘` and `I_Ω(T:E) ≤ L^{-2p}`, handing `T` to `Q∘`
   is an allowed word using only `P∘` and `Q∘`, with at most one normalized pair source, whose
   operator in canonical coordinates is the canonical map `B` of the splitting data, with
-  reference-vector error at most `L^{-30}`.
+  reference-vector error at most `L^{-p}`.
 * `Sheet.death_bounded`: the reverse change, with one normalized pair effect instead.
 * `Sheet.exchange_bounded`: the exchange is an allowed word using only `P∘` and no pair
   resource, whose operator is `C = D_U F_A F_Y = D_U F_T`, with reference-vector error at most
-  `4 L^{-30}` between the products of the old and new reference vectors.
+  `4 L^{-p}` between the products of the old and new reference vectors.
+
+As in the note, the exponent is a free real parameter `p` (the information hypothesis is
+`I_Ω(T:E) ≤ L^{-2p}`, the error `L^{-p}`, for `0 ≤ L`); the polynomial-PEPS manuscript takes
+`p = 30`, and the chain protocol of the note uses `2p = 24`.
 
 The words are those of `TNLean.Lattice.Sheet.FrontChanges` behind the empty front block; the
 same words, behind the tag registers of the holes, give the bounds for encoded frames.
@@ -58,33 +62,34 @@ variable (S : Sheet ι Party) {T : Finset ι} {P Q : Party}
 
 /-- **Lemma `lem:birth` (birth): the birth is a bounded change involving only `P∘` and `Q∘`.**
 In a sheet `S`, let `T` be a set of sites owned by `P∘`, `E` the set of sites not owned by
-`P∘`, and `U = Λ ∖ (T ∪ E)`. If `I_Ω(T:E) ≤ L^{-60}` for a unit vector `Ω`, there are splitting
-data and an allowed monomial `w` from the registers of `S` to those of the sheet in which `T` is
-owned by `Q∘`, such that:
+`P∘`, and `U = Λ ∖ (T ∪ E)`. Let `0 ≤ L` and let `p` be real. If `I_Ω(T:E) ≤ L^{-2p}` for a
+unit vector `Ω`, there are splitting data and an allowed monomial `w` from the registers of `S`
+to those of the sheet in which `T` is owned by `Q∘`, such that:
 
 * `w` uses only `P∘` and `Q∘` and at most one normalized pair source;
 * in canonical coordinates the operator of `w` is the canonical map `B` of the splitting data;
-* the reference-vector error is at most `L^{-30}`.
+* the reference-vector error is at most `L^{-p}`.
 
 The monomial constructed in the proof groups the registers of `T` and of `U` at `P∘`, applies,
 for `Q∘ ≠ P∘`, the private contraction `⟨s| (1_T ⊗ V)` at `P∘`, prepares the pair state `s` on
 `T` held by `Q∘` and `B_T` held by `P∘`, applies `Vᴴ` at `P∘`, and ungroups.
 
 One-dimensional note, Lemma `lem:birth`, `part2b_mps_protocol.tex`, lines 70–79; proof
-lines 80–94. Polynomial-PEPS manuscript, Lemma 6.5, `05-frames.tex`, lines 396–437. -/
+lines 80–94. Polynomial-PEPS manuscript, Lemma 6.5, `05-frames.tex`, lines 396–437, there with
+`p = 30`. -/
 theorem birth_bounded (hTP : ∀ x ∈ T, S.owner x = P) {Ω : EuclideanSpace ℂ (ι → Fin q)}
-    (hΩ : ‖Ω‖ = 1) {L : ℝ}
+    (hΩ : ‖Ω‖ = 1) {L p : ℝ} (hL : 0 ≤ L)
     (hI : FiniteProduct.mutualInformation (fun _ : ι => Fin q) Ω T (S.birthEnv P) ≤
-      L ^ (-60 : ℤ)) :
+      L ^ (-(2 * p))) :
     ∃ σ : SplittingData q T (S.birthEnv P),
-      σ.error (S.disjoint_birthEnv hTP) Ω ≤ L ^ (-30 : ℤ) ∧
+      σ.error (S.disjoint_birthEnv hTP) Ω ≤ L ^ (-p) ∧
       ∃ w : Word (S.regs q) ((S.changeOwner T Q).regs q),
         w.IsAllowed ∧ w.UsesOnly {P, Q} ∧ w.sourceCount ≤ 1 ∧
         (∀ z, (S.changeOwner T Q).regIso q (w.eval z) =
           act (sheetBirthOp (S.disjoint_birthEnv hTP) σ) (S.regIso q z)) ∧
-        ‖w.eval (S.regRef Ω) - (S.changeOwner T Q).regRef Ω‖ ≤ L ^ (-30 : ℤ) := by
+        ‖w.eval (S.regRef Ω) - (S.changeOwner T Q).regRef Ω‖ ≤ L ^ (-p) := by
   set h := S.disjoint_birthEnv hTP
-  obtain ⟨σ, hσ⟩ := exists_sheetSplitting_zpow h hΩ hI
+  obtain ⟨σ, hσ⟩ := exists_sheetSplitting_rpow h hΩ hL hI
   obtain ⟨hB, hA', hB', hE⟩ := S.changeOwner_birth_owners (Q := Q) hTP
   obtain ⟨w, hwA, hwU, hwS, hw⟩ := exists_frontBirthWord [] nilFrontIso S.owner
     (S.changeOwner T Q).owner h hTP hB hA' hB' hE σ
@@ -99,32 +104,32 @@ theorem birth_bounded (hTP : ∀ x ∈ T, S.owner x = P) {Ω : EuclideanSpace �
 
 /-- **Lemma `lem:birth` (death): the death is a bounded change involving only `P∘` and `Q∘`.**
 Let `S` be the sheet *after* the death, in which `T` is owned by `P∘`, and let the sheet before
-the death be the one in which `T` is owned by `Q∘`. If `I_Ω(T:E) ≤ L^{-60}` for `E` computed in
-`S`, there are splitting data and an allowed monomial from the registers of the sheet before
-the death to those of `S`, using only `P∘` and `Q∘`, without pair sources and with at most one
-normalized pair effect, whose operator in canonical coordinates is the canonical map `B`, with
-reference-vector error at most `L^{-30}`. The monomial constructed in the proof groups the
-registers of `T` at `Q∘` and of `U` at `P∘`, then, for `Q∘ ≠ P∘`, applies `V` at `P∘`, contracts
-`T` and `B_T` with the pair effect `⟨s|` held by `Q∘` and `P∘`, reinserts `s` and applies `Vᴴ` at
-`P∘`, and ungroups at `P∘`.
+the death be the one in which `T` is owned by `Q∘`. Let `0 ≤ L` and let `p` be real. If
+`I_Ω(T:E) ≤ L^{-2p}` for `E` computed in `S`, there are splitting data and an allowed monomial
+from the registers of the sheet before the death to those of `S`, using only `P∘` and `Q∘`,
+without pair sources and with at most one normalized pair effect, whose operator in canonical
+coordinates is the canonical map `B`, with reference-vector error at most `L^{-p}`. The monomial
+constructed in the proof groups the registers of `T` at `Q∘` and of `U` at `P∘`, then, for
+`Q∘ ≠ P∘`, applies `V` at `P∘`, contracts `T` and `B_T` with the pair effect `⟨s|` held by `Q∘`
+and `P∘`, reinserts `s` and applies `Vᴴ` at `P∘`, and ungroups at `P∘`.
 
 One-dimensional note, Lemma `lem:birth`, `part2b_mps_protocol.tex`, lines 75–79; proof
 lines 91–93. Polynomial-PEPS manuscript, Lemma 6.5, `05-frames.tex`, lines 407–410 and
 439–446. -/
 theorem death_bounded (hTP : ∀ x ∈ T, S.owner x = P) {Ω : EuclideanSpace ℂ (ι → Fin q)}
-    (hΩ : ‖Ω‖ = 1) {L : ℝ}
+    (hΩ : ‖Ω‖ = 1) {L p : ℝ} (hL : 0 ≤ L)
     (hI : FiniteProduct.mutualInformation (fun _ : ι => Fin q) Ω T (S.birthEnv P) ≤
-      L ^ (-60 : ℤ)) :
+      L ^ (-(2 * p))) :
     ∃ σ : SplittingData q T (S.birthEnv P),
-      σ.error (S.disjoint_birthEnv hTP) Ω ≤ L ^ (-30 : ℤ) ∧
+      σ.error (S.disjoint_birthEnv hTP) Ω ≤ L ^ (-p) ∧
       ∃ M : PartyChain ((S.changeOwner T Q).regs q) (S.regs q),
         M.IsAllowed ∧ M.UsesOnly {P, Q} ∧ M.sourceCount = 0 ∧ M.toEffectChain.effectCount ≤ 1 ∧
         (∀ z, S.regIso q (M.toEffectChain.eval z) =
           act (sheetBirthOp (S.disjoint_birthEnv hTP) σ) ((S.changeOwner T Q).regIso q z)) ∧
         ‖M.toEffectChain.eval ((S.changeOwner T Q).regRef Ω) - S.regRef Ω‖ ≤
-          L ^ (-30 : ℤ) := by
+          L ^ (-p) := by
   set h := S.disjoint_birthEnv hTP
-  obtain ⟨σ, hσ⟩ := exists_sheetSplitting_zpow h hΩ hI
+  obtain ⟨σ, hσ⟩ := exists_sheetSplitting_rpow h hΩ hL hI
   obtain ⟨hB', hA, hB, hE⟩ := S.changeOwner_birth_owners (Q := Q) hTP
   obtain ⟨M, hMA, hMU, hMS, hMe, hM⟩ := exists_frontDeathChain [] nilFrontIso
     (S.changeOwner T Q).owner S.owner h hA hB hTP hB' (fun x hx => (hE x hx).symm) σ
@@ -184,25 +189,28 @@ theorem twoRegIso_renameWord (z : Mem (S₁.regs q ++ S₂.regs q)) :
 /-- **Lemma `lem:exchange` (two-sheet exchange): the exchange is a bounded change involving only
 `P∘`.** Consider two sheets and a region `Y`. Inside `Y`, exchange the two ownership
 assignments; outside `Y`, keep both. Let `P∘` be a party, `Z` the set of sites whose two owners
-are not both `P∘`, `T = Z ∩ Y`, `E = Z ∖ Y` and `U = Λ ∖ Z`. If `I_Ω(T:E) ≤ L^{-60}` for a unit
-vector `Ω`, there are splitting data and an allowed monomial `w` from the registers of the two
-sheets to the registers of the two sheets after the exchange, such that:
+are not both `P∘`, `T = Z ∩ Y`, `E = Z ∖ Y` and `U = Λ ∖ Z`. Let `0 ≤ L` and let `p` be real.
+If `I_Ω(T:E) ≤ L^{-2p}` for a unit vector `Ω`, there are splitting data and an allowed monomial
+`w` from the registers of the two sheets to the registers of the two sheets after the exchange,
+such that:
 
 * `w` uses only `P∘` and no pair resource; the monomial constructed in the proof is the renaming
   `ℛ`, a word of exchanges of tensor factors that keeps every register at its party, followed by
   one private contraction at `P∘` on the raw registers of `U` of both sheets (the corrections
   `D_U F_A`);
 * in canonical coordinates its operator is the map `C = D_U F_A F_Y`, and `C = D_U F_T`;
-* the reference-vector error is at most `4 L^{-30}`: `‖w (Ω ⊗ Ω) - Ω ⊗ Ω‖ ≤ 4 L^{-30}`, read on
+* the reference-vector error is at most `4 L^{-p}`: `‖w (Ω ⊗ Ω) - Ω ⊗ Ω‖ ≤ 4 L^{-p}`, read on
   the registers of the sheets before and after the exchange.
 
 One-dimensional note, Lemma `lem:exchange`, `part2b_mps_protocol.tex`, lines 112–124; proof
-lines 125–158. Polynomial-PEPS manuscript, Lemma 6.6, `05-frames.tex`, lines 460–561. -/
-theorem exchange_bounded {Ω : EuclideanSpace ℂ (ι → Fin q)} (hΩ : ‖Ω‖ = 1) {L : ℝ}
+lines 125–158. Polynomial-PEPS manuscript, Lemma 6.6, `05-frames.tex`, lines 460–561, there
+with `p = 30`. -/
+theorem exchange_bounded {Ω : EuclideanSpace ℂ (ι → Fin q)} (hΩ : ‖Ω‖ = 1) {L p : ℝ}
+    (hL : 0 ≤ L)
     (hI : FiniteProduct.mutualInformation (fun _ : ι => Fin q) Ω (tSet S₁ S₂ Y P)
-      (eSet S₁ S₂ Y P) ≤ L ^ (-60 : ℤ)) :
+      (eSet S₁ S₂ Y P) ≤ L ^ (-(2 * p))) :
     ∃ σ : SplittingData q (tSet S₁ S₂ Y P) (eSet S₁ S₂ Y P),
-      σ.error (disjoint_tSet_eSet S₁ S₂ Y P) Ω ≤ L ^ (-30 : ℤ) ∧
+      σ.error (disjoint_tSet_eSet S₁ S₂ Y P) Ω ≤ L ^ (-p) ∧
       exchangeOp S₁ S₂ Y P σ =
         sheetBufferCorrection (disjoint_tSet_eSet S₁ S₂ Y P) σ * sheetSwapOp q (tSet S₁ S₂ Y P) ∧
       ∃ w : Word (S₁.regs q ++ S₂.regs q) ((swapIn S₁ S₂ Y).regs q ++ (swapIn S₂ S₁ Y).regs q),
@@ -211,9 +219,9 @@ theorem exchange_bounded {Ω : EuclideanSpace ℂ (ι → Fin q)} (hΩ : ‖Ω�
           act (exchangeOp S₁ S₂ Y P σ) (twoRegIso q S₁ S₂ z)) ∧
         ‖w.eval ((twoRegIso q S₁ S₂).symm (vecKron Ω Ω)) -
           (twoRegIso q (swapIn S₁ S₂ Y) (swapIn S₂ S₁ Y)).symm (vecKron Ω Ω)‖ ≤
-            4 * L ^ (-30 : ℤ) := by
+            4 * L ^ (-p) := by
   set h := disjoint_tSet_eSet S₁ S₂ Y P
-  obtain ⟨σ, hσ⟩ := exists_sheetSplitting_zpow h hΩ hI
+  obtain ⟨σ, hσ⟩ := exists_sheetSplitting_rpow h hΩ hL hI
   have hU : ∀ x ∈ (tSet S₁ S₂ Y P ∪ eSet S₁ S₂ Y P)ᶜ,
       (swapIn S₁ S₂ Y).owner x = P ∧ (swapIn S₂ S₁ Y).owner x = P := fun x hx =>
     swapIn_owner_eq_of_mem_compl S₁ S₂ Y P hx
