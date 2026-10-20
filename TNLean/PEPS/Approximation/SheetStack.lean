@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.FrameRegisters
-import TNLean.PEPS.Approximation.LayoutEqualityCoordinates
+import TNLean.Lattice.PartyCircuit.LayoutEqualityCoordinates
 import TNLean.Lattice.PartyCircuit.OriginalCircuitLift
 
 /-!

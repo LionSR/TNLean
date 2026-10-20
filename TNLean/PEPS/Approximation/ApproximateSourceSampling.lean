@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.SampledOriginalCircuit
-import TNLean.PEPS.Approximation.ApproximateCircuitResources
+import TNLean.Lattice.PartyCircuit.ApproximateCircuitResources
 import TNLean.PEPS.Approximation.ApproximateCircuitDensity
 import TNLean.PEPS.Approximation.FiniteInputMemory
 

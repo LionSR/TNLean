@@ -4,12 +4,12 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.AdaptivePatchSupply
-import TNLean.PEPS.Approximation.ApproximateCircuitError
+import TNLean.Lattice.PartyCircuit.ApproximateCircuitError
 import TNLean.PEPS.Approximation.Basic
 import TNLean.PEPS.Approximation.DistributedConstruction
 import TNLean.PEPS.Approximation.DyadicActiveLabelParties
 import TNLean.PEPS.Approximation.DyadicRoutingPEPS
-import TNLean.PEPS.Approximation.OriginalCircuitSourceBound
+import TNLean.Lattice.PartyCircuit.OriginalCircuitSourceBound
 import TNLean.Lattice.PartyCircuit.ProtocolDensityError
 import TNLean.PEPS.Approximation.SheetStackEndpoints
 

@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.GateCoefficientBounds
-import TNLean.PEPS.Approximation.ApproximateCircuitResources
+import TNLean.Lattice.PartyCircuit.ApproximateCircuitResources
 
 /-!
 # Coefficient sums from termwise bounds on approximate gate lists
