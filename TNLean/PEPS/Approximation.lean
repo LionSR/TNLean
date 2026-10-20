@@ -334,6 +334,7 @@ import TNLean.PEPS.Approximation.ProductReferenceColumn
 import TNLean.PEPS.Approximation.PurePhysicalCoefficient
 import TNLean.PEPS.Approximation.PurePreparedContraction
 import TNLean.PEPS.Approximation.PureSourceMatrix
+import TNLean.PEPS.Approximation.RangeSquareGroundState
 import TNLean.PEPS.Approximation.RankOneBlocks
 import TNLean.PEPS.Approximation.RegionalStates
 import TNLean.PEPS.Approximation.RegisterReordering
