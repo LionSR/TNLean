@@ -262,3 +262,92 @@ Hamiltonian and its full-system gap. Conditional forms are stated separately.
     given by the whole physical domain, whose crossing-edge endpoint set is
     empty.
 \end{proof}
+
+\begin{definition}[Closed-form collar constants at range $R$]
+    \label{def:peps_closed_collar_constants}
+    \lean{TNLean.PEPS.Approximation.collarBoxConstantClosed,
+        TNLean.PEPS.Approximation.collarConstantClosed,
+        TNLean.PEPS.Approximation.collarThresholdClosed}
+    \leanok
+    \uses{def:area_law_collar_bound}
+    For $q,R\in\mathbb N$ and $J,\Delta\in\mathbb R$, let
+    $C_{\rm box}(q,R,J,\Delta)$ be the safe-box constant of
+    \cite[Proposition~9.5]{OpenAI2026AreaLaw} at range $R$, at the transport
+    constants with threshold $1/8$, entropy constant $200000$ with exponent
+    $2$, and energy constant $3(18\pi^2+6144e^{\pi^2+1})$ with exponent $4$.
+    Let $C(q,R,J,\Delta)$ and $N(q,R,J,\Delta)$ be the constant and threshold
+    of the sublinear collar bound of \cite[Proposition~9.6]{OpenAI2026AreaLaw}
+    at range $R$, at this safe-box constant, the truncation constant at the
+    factor $10$ and these transport constants.
+\end{definition}
+
+\begin{theorem}[The sublinear collar bound at range $R$ at closed-form constants]
+    \label{thm:peps_collar_closed}
+    \lean{TNLean.PEPS.Approximation.sublinearCollarBoundAt_closed}
+    \leanok
+    \uses{def:area_law_collar_bound,def:peps_closed_collar_constants}
+    Fix $q,R\in\mathbb N$ with $q\ge1$, $J\ge0$, $\Delta>0$ and $D_0>2R+10$.
+    The sublinear collar bound at range $R$, clearance $D_0$ and template
+    constant $24$ holds with constant $C(q,R,J,\Delta)$ and threshold
+    $N(q,R,J,\Delta)$. Neither depends on $D_0$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:area_law_sublinear_collar_explicit,
+        thm:area_law_transport_bound_explicit}
+    The stated transport constants satisfy the common step-error bound by
+    Theorem~\ref{thm:area_law_transport_bound_explicit}, and
+    Theorem~\ref{thm:area_law_sublinear_collar_explicit} at these constants
+    and $C_{\rm tpl}=24$ gives the collar bound with constant $C$ and
+    threshold $N$.
+\end{proof}
+
+\begin{definition}[Closed-form coarse constants at range $R$]
+    \label{def:peps_closed_coarse_constants}
+    \lean{TNLean.PEPS.Approximation.coarseInformationConstantClosed,
+        TNLean.PEPS.Approximation.coarseInformationThresholdClosed}
+    \leanok
+    \uses{def:peps_closed_collar_constants,
+        def:peps_collar_amplification_constants,
+        def:peps_coarse_information_constants}
+    For $q,R,N_0\in\mathbb N$ and $J,\Delta,A_0\in\mathbb R$, put
+    $C=C(q,R,J,\Delta)$ and $N=N(q,R,J,\Delta)$, and let
+    $C_a=C_a(q,R,J,\Delta,C)$ and $N_a=N_a(q,R,J,\Delta,C)$ be the
+    amplification constants at the collar constant. The closed coarse constant
+    is $C_{\rm coarse}(q,R,J,\Delta)=\max\{C_a,0\}$, and the closed coarse
+    threshold $u_0(q,R,J,\Delta,N_0,A_0)$ is the coarse threshold at the
+    template constant $24$, the threshold $N$ and $(C_a,N_a)$.
+\end{definition}
+
+% Status: auxiliary result. Proposition 3.1 of the polynomial-PEPS source
+% asserts only that constants exist, on the original square at range one; that
+% statement is thm:peps_coarse_information_square.
+% Source: polynomial-PEPS 02-information.tex, Proposition 3.1, lines 91--145.
+% Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+\begin{theorem}[Coarse information at range $R$ at closed-form constants]
+    \label{thm:peps_coarse_information_closed}
+    \lean{TNLean.PEPS.Approximation.coarse_mutualInformation_le_closed}
+    \leanok
+    \uses{def:peps_box_union,def:area_law_hamiltonian,
+        def:peps_closed_coarse_constants}
+    Fix $q,R,N_0\in\mathbb N$ with $q\ge1$, real numbers $J\ge0$, $\Delta>0$
+    and $A_0$, and put $u_0=u_0(q,R,J,\Delta,N_0,A_0)$. Let $u\ge u_0$, let
+    $\Lambda$ be a finite induced domain, and let $\Omega$ be a normalized
+    ground vector with full-system gap $\Delta$ of an admissible Hamiltonian
+    of range $R$ and bound $J$ on $\Lambda$. Let $T$ be a union of at most
+    $N_0$ lattice boxes with $\operatorname{diam}_\infty T\le A_0u$. Then
+    $I_\Omega(X:E)\le C_{\rm coarse}(q,R,J,\Delta)$ whenever
+    $X\subseteq\Lambda\cap T$, $E\subseteq\Lambda$ and
+    $\operatorname{dist}_\infty(T,E)>u^{\beta_0}$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_coarse_information_of_collar_explicit,thm:peps_collar_closed,
+        thm:peps_collar_amplification_bound}
+    By Theorem~\ref{thm:peps_collar_closed} at the clearance $2R+11$, the
+    collar bound holds with constant $C$ and threshold $N$, and by
+    Theorem~\ref{thm:peps_collar_amplification_bound} the amplification bound
+    at $(\max\{C,1\},1)$ holds with constant $C_a$ and threshold $N_a$.
+    Theorem~\ref{thm:peps_coarse_information_of_collar_explicit} then gives
+    the claim.
+\end{proof}
