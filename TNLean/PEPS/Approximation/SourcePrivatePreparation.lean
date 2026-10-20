@@ -4,9 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.ActualSourceRegisters
-import TNLean.PEPS.Approximation.EffectCircuitPreparation
+import TNLean.Lattice.PartyCircuit.EffectCircuitPreparation
 import TNLean.PEPS.Approximation.SourceResidualCoordinates
-import TNLean.PEPS.Approximation.SiteRegisters
+import TNLean.Lattice.PartyCircuit.SiteRegisters
 
 /-! # Preparation of the original private product input
 

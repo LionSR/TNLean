@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.PartySelector
-import TNLean.PEPS.Approximation.WordOwnerMap
+import TNLean.Lattice.PartyCircuit.WordOwnerMap
 
 /-! # Party restrictions of relabelled source-free words
 

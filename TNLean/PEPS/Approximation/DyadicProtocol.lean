@@ -10,7 +10,7 @@ import TNLean.PEPS.Approximation.DistributedConstruction
 import TNLean.PEPS.Approximation.DyadicActiveLabelParties
 import TNLean.PEPS.Approximation.DyadicRoutingPEPS
 import TNLean.PEPS.Approximation.OriginalCircuitSourceBound
-import TNLean.PEPS.Approximation.ProtocolDensityError
+import TNLean.Lattice.PartyCircuit.ProtocolDensityError
 import TNLean.PEPS.Approximation.SheetStackEndpoints
 
 /-!

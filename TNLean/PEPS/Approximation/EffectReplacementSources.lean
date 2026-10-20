@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
 import Mathlib.Data.Sym.Card
-import TNLean.PEPS.Approximation.EffectCircuitResources
+import TNLean.Lattice.PartyCircuit.EffectCircuitResources
 
 /-! # Actual pair-source positions in replacement circuits
 

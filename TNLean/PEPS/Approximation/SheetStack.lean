@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.FrameRegisters
 import TNLean.PEPS.Approximation.LayoutEqualityCoordinates
-import TNLean.PEPS.Approximation.OriginalCircuitLift
+import TNLean.Lattice.PartyCircuit.OriginalCircuitLift
 
 /-!
 # The memory of several sheets

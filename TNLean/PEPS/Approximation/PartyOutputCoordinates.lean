@@ -6,8 +6,8 @@ Authors: TNLean contributors
 import TNLean.PEPS.Approximation.PartyGroupedBasis
 import TNLean.PEPS.Approximation.OutputPartitionCoordinates
 import TNLean.PEPS.Approximation.PartyGroupingTransport
-import TNLean.PEPS.Approximation.FamilyPhysicalReadout
-import TNLean.PEPS.Approximation.UnitMemoryCoordinates
+import TNLean.Lattice.PartyCircuit.FamilyPhysicalReadout
+import TNLean.Lattice.PartyCircuit.UnitMemoryCoordinates
 import TNLean.PEPS.Approximation.PartitionOwnerNaturality
 
 /-!

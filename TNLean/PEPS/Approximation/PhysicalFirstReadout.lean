@@ -3,9 +3,9 @@ Copyright (c) 2026 Sirui Lu. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
-import TNLean.PEPS.Approximation.FamilyPhysicalReadout
-import TNLean.PEPS.Approximation.EffectCircuitDensity
-import TNLean.PEPS.Approximation.SourceOnlyReduction
+import TNLean.Lattice.PartyCircuit.FamilyPhysicalReadout
+import TNLean.Lattice.PartyCircuit.EffectCircuitDensity
+import TNLean.Lattice.PartyCircuit.SourceOnlyReduction
 import TNLean.PEPS.Approximation.SourcePhysicalDensity
 import TNLean.PEPS.Approximation.PhysicalFirstExchange
 import TNLean.PEPS.Approximation.PhysicalDensityPureInput

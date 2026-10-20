@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.EndpointOperatorWord
 import TNLean.PEPS.Approximation.WordStructuralCongruence
-import TNLean.PEPS.Approximation.WordEvaluationTransport
+import TNLean.Lattice.PartyCircuit.WordEvaluationTransport
 
 /-! # The retained endpoint maps in their original order
 

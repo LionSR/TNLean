@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.OwnershipMonomials
-import TNLean.PEPS.Approximation.SiteRegisters
+import TNLean.Lattice.PartyCircuit.SiteRegisters
 
 /-!
 # Tag registers of holes

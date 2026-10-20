@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.FiniteInputMemory
-import TNLean.PEPS.Approximation.FamilyPhysicalReadout
+import TNLean.Lattice.PartyCircuit.FamilyPhysicalReadout
 
 /-!
 # Original input and output data of a distributed construction
