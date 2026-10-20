@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.Approximation.DependentNetworkColumn
+import TNLean.Lattice.Compression.DependentNetworkColumn
 import TNLean.PEPS.Defs
 
 /-!
@@ -22,7 +22,7 @@ of `Ω` up to a phase.
 
 The extraction for the edge-dependent networks of
 `TNLean.PEPS.DependentBondNetwork` is in
-`TNLean.PEPS.Approximation.DependentNetworkColumn`. This file treats the
+`TNLean.Lattice.Compression.DependentNetworkColumn`. This file treats the
 tensors `TNLean.PEPS.Tensor` on a finite simple graph with edge-dependent bond
 dimensions, where an operator tensor has the physical alphabet `Fin (d * d)`
 read as output-input pairs. No positivity or Hermiticity of the contracted

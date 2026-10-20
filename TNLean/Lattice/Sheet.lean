@@ -9,11 +9,19 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.Lattice.Sheet
 
 import TNLean.Lattice.Sheet.Birth
+import TNLean.Lattice.Sheet.BoundedChanges
 import TNLean.Lattice.Sheet.Composition
+import TNLean.Lattice.Sheet.Defs
+import TNLean.Lattice.Sheet.FrontChanges
 import TNLean.Lattice.Sheet.Monomials
 import TNLean.Lattice.Sheet.Operators
 import TNLean.Lattice.Sheet.Registers
 import TNLean.Lattice.Sheet.Reordering
+import TNLean.Lattice.Sheet.SheetStack
 import TNLean.Lattice.Sheet.Splitting
+import TNLean.Lattice.Sheet.Stack
+import TNLean.Lattice.Sheet.StackChange
+import TNLean.Lattice.Sheet.StackEndpoints
+import TNLean.Lattice.Sheet.StackSourceBoundedChange
 import TNLean.Lattice.Sheet.SwapCorrection
 import TNLean.Lattice.Sheet.TwoRegisters
