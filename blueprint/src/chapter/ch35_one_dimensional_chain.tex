@@ -1508,9 +1508,8 @@ for an arbitrary finite set of sites and are instantiated here directly.
     instance in which $\psi$ is a unit vector and each basis is an
     eigenbasis of the reduced state at its cut, ordered by nonincreasing
     eigenvalue, with any choice of eigenvectors in a repeated-eigenvalue
-    space. That instance, namely the choice of such a basis and the
-    identification of $\epsilon_k$ with the sum of the discarded
-    eigenvalues, is not formalized here.
+    space. That instance, with $\epsilon_k$ identified as the sum of the
+    discarded eigenvalues, is Theorem~\ref{thm:chain_sequential_truncation_eigen}.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -1526,6 +1525,49 @@ for an arbitrary finite set of sites and are instantiated here directly.
     left of that cut and cannot increase this rank.
     Theorem~\ref{thm:chain_mps_of_cut_rank} gives the stated representation
     of $\Phi$.
+\end{proof}
+
+\begin{theorem}[Sequential truncation onto leading eigenvectors]
+    \label{thm:chain_sequential_truncation_eigen}
+    \lean{TNLean.MPS.AreaLaw.isOpenMPS_sequentialTruncation_leadingEigenprojection}
+    \leanok
+    \uses{def:chain_open_mps}
+    Let $L,q,D$ be natural numbers and let $\psi$ be a unit vector on the
+    chain of $L$ sites of local dimension $q$. For each internal cut
+    $0<k<L$, let $\rho_k$ be the reduced state of $\psi$ on
+    $\mathcal H_{[0,k)}$, let $\Pi_k$ be the projection onto the span of
+    the eigenvectors of $\rho_k$ belonging to its $\min\{D,N_k\}$ largest
+    eigenvalues, counted with multiplicity, and let $\epsilon_k(D)$ be the
+    sum of the remaining eigenvalues. With $P_k=\Pi_k\otimes1$, the vector
+    $\Phi=P_1P_2\cdots P_{L-1}\psi$ is an open-boundary matrix product state
+    with every internal bond dimension at most $D$, and
+    \begin{align}
+        \|\Phi-\psi\|\le\sum_{k=1}^{L-1}\sqrt{\epsilon_k(D)}. \notag
+    \end{align}
+    This is Proposition~7.1 of \cite[Part~IIa]{TNLean2026OneDimensional}.
+    Within a repeated eigenvalue the eigenvectors are taken from one fixed
+    orthonormal eigenbasis; every other choice is covered by
+    Theorem~\ref{thm:chain_sequential_truncation_full}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:chain_open_mps, thm:chain_mps_of_cut_rank,
+        lem:chain_sequential_truncation}
+    Each $\Pi_k$ is an orthogonal projection of rank
+    $\min\{D,N_k\}\le D$, and the trace of $(1-\Pi_k)\rho_k$ is
+    $\operatorname{tr}\rho_k$ minus the sum of the $\min\{D,N_k\}$ largest
+    eigenvalues, that is $\epsilon_k(D)$, since
+    $\operatorname{tr}\rho_k=\|\psi\|^2=1$. The estimates of
+    Lemma~\ref{lem:chain_sequential_truncation} hold for any orthogonal
+    projections on the first $k$ sites: the cut rank of $\Phi$ at cut $k$ is
+    at most the rank of $\Pi_k$, and
+    $\|\Phi-\psi\|\le\sum_k\sqrt{\operatorname{tr}((1-\Pi_k)\rho_k)}$,
+    because $\|(1-P_k)\psi\|^2=\operatorname{tr}((1-\Pi_k)\rho_k)$.
+    Theorem~\ref{thm:chain_mps_of_cut_rank} turns the rank bound into the
+    stated representation, and substituting $\epsilon_k(D)$ for each trace
+    gives the error bound. The argument is the proof of
+    Theorem~\ref{thm:chain_sequential_truncation_full}, applied to the
+    eigenprojections directly.
 \end{proof}
 
 \begin{lemma}[Sequential truncation at an entropy threshold]
