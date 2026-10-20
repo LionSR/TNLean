@@ -81,6 +81,7 @@ import TNLean.PEPS.AreaLaw.Scan.BootstrapIterateBound
 import TNLean.PEPS.AreaLaw.Scan.BootstrapParameters
 import TNLean.PEPS.AreaLaw.Scan.BootstrapPrincipalEnergyBounds
 import TNLean.PEPS.AreaLaw.Scan.BootstrapReplicaAbsorption
+import TNLean.PEPS.AreaLaw.Scan.BootstrapRoundBound
 import TNLean.PEPS.AreaLaw.Scan.BootstrapRoundedClearance
 import TNLean.PEPS.AreaLaw.Scan.BootstrapScannerExponents
 import TNLean.PEPS.AreaLaw.Scan.BootstrapSelectedEnergy
@@ -131,6 +132,7 @@ import TNLean.PEPS.AreaLaw.Scan.OriginalTruncation
 import TNLean.PEPS.AreaLaw.Scan.PhysicalBadHistoryDecay
 import TNLean.PEPS.AreaLaw.Scan.PhysicalBandCommutation
 import TNLean.PEPS.AreaLaw.Scan.PhysicalBoxBootstrap
+import TNLean.PEPS.AreaLaw.Scan.PhysicalBoxRoundBound
 import TNLean.PEPS.AreaLaw.Scan.PhysicalBoxStepBound
 import TNLean.PEPS.AreaLaw.Scan.PhysicalChargeAncestry
 import TNLean.PEPS.AreaLaw.Scan.PhysicalInformationDimension
