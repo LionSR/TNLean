@@ -1551,7 +1551,8 @@ for an arbitrary finite set of sites and are instantiated here directly.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:chain_sequential_truncation_full}
+    \uses{def:chain_open_mps, thm:chain_mps_of_cut_rank,
+        lem:chain_sequential_truncation}
     Order an orthonormal eigenbasis of $\rho_k$ by nonincreasing eigenvalue.
     The projection onto its first $\min\{D,N_k\}$ vectors has rank
     $\min\{D,N_k\}\le D$, and the trace of $(1-\Pi_k)\rho_k$ is
