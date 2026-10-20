@@ -3,9 +3,9 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.Approximation.FrontRegisters
-import TNLean.PEPS.Approximation.PartyPartition
-import TNLean.PEPS.Approximation.OriginalCircuitLift
+import TNLean.Lattice.PartyCircuit.FrontRegisters
+import TNLean.Lattice.PartyCircuit.PartyPartition
+import TNLean.Lattice.PartyCircuit.OriginalCircuitLift
 
 /-!
 # Collecting the selected registers in front

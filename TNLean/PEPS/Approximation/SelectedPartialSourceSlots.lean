@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.ActualSourceRegisters
 import TNLean.PEPS.Approximation.IncidentGateLabels
-import TNLean.PEPS.Approximation.PartyTensorMaps
+import TNLean.Lattice.PartyCircuit.PartyTensorMaps
 
 /-! # Selected source slots in the singleton and all-party groupings
 

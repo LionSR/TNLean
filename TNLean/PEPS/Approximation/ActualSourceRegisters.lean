@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.PartialSourcePreparation
-import TNLean.PEPS.Approximation.CommonSourcePreparation
+import TNLean.Lattice.PartyCircuit.CommonSourcePreparation
 
 /-!
 # Fixed source registers of the all-party preparation

@@ -114,8 +114,8 @@ end Values
 
 section Changes
 
-variable {k q : ℕ} [NeZero q] {J Δ a A₀ D L₀' : ℝ} {m₀ : ℕ} {L : ℕ}
-  {h : SquareHamiltonian L q J} {E₀ : ℝ} {Ω : StateSpace L q} {K₀ ε₀ ν B₀ C c : ℝ}
+variable {k q : ℕ} [NeZero q] {a A₀ D L₀' : ℝ} {m₀ : ℕ} {L : ℕ}
+  {G : ∀ L : ℕ, StateSpace L q → Prop} {Ω : StateSpace L q} {K₀ ε₀ ν B₀ C c : ℝ}
 
 /-- **The sites of a treated birth or death.** In the setting of `bandBirth_hasFrameChange`, at a
 point where the readings of the treated guides before and after an elementary birth or death that
@@ -197,9 +197,9 @@ theorem BandOperation.treated_frame_facts {op : BandOperation GuideLabel} {Q : G
     rwa [dist_sub_right] at this
 
 /-- **A birth along an edge as a change of a treated sheet, conditional on Proposition 3.4.** Assume
-`q ≥ 1` and the ground-state and angular-scale hypotheses with `m₀ ≥ 2`, `A₀ ≥ 1`,
-`L ≥ max 2 L₀′` and `2 ^ k < 2 * L`. Fix an adaptive patch supply of exponent `60`, size `L`
-and parameters `B₀, C, c`, and any label rank. At the constants of the protocol, in the
+`q ≥ 1`, a unit state of the family `G`, and the angular-scale hypothesis with `m₀ ≥ 2`,
+`A₀ ≥ 1`, `L ≥ max 2 L₀′` and `2 ^ k < 2 * L`. Fix an adaptive patch supply of exponent `60`,
+size `L` and parameters `B₀, C, c`, and any label rank. At the constants of the protocol, in the
 repainting of a square `R`
 of side `n = 2 ^ j > K₀ t`,
 `t = D log L`, let an elementary birth inserting the label `Q` change the guide
@@ -214,8 +214,8 @@ arbitrary for this birth.
 
 Polynomial-PEPS manuscript, `06-geometry.tex`, lines 183–221, 328–387 and 440–445; Lemma 6.5
 `lem:birth`, `05-frames.tex`. -/
-theorem bandBirth_hasFrameChange (hD : IsAngularScale q J Δ a A₀ m₀ 60 D L₀') (hLL : L₀' ≤ L)
-    (hΩ : h.IsGappedGroundState E₀ Ω Δ) (hm₀ : 2 ≤ m₀) (hA₀ : 1 ≤ A₀)
+theorem bandBirth_hasFrameChange (hD : IsAngularScale q G a A₀ m₀ 60 D L₀') (hLL : L₀' ≤ L)
+    (hΩ : G L Ω) (hΩ₁ : ‖Ω‖ = 1) (hm₀ : 2 ≤ m₀) (hA₀ : 1 ≤ A₀)
     (hc : IsProtocolConstants K₀ ε₀ ν a D B₀) (hL : 2 ≤ L) (hk2 : 2 ^ k < 2 * L)
     (P : AdaptivePatchSupply (cellCenterPos L) Ω B₀ C c 60 L) (rank : GuideLabel → ℕ)
     (R : RepaintedSquare k) (hlarge : K₀ * (D * Real.log L) < (2 : ℝ) ^ (R.1.1 : ℕ))
@@ -282,7 +282,7 @@ theorem bandBirth_hasFrameChange (hD : IsAngularScale q J Δ a A₀ m₀ 60 D L�
   rw [hFb, hFa, hafter]
   obtain ⟨w, hw, hu, hs, herr⟩ := bandBirth_step_guideFrame (L := L) (hole := suppliedPatch P _ hr)
     (V := Vb) (hV := hdb) (own := labelParty R) (ph := guidePlaceholder) (rank := rank)
-    hD hLL hΩ (fun v => cellCenterPos_eq_sitePosition_add v) hm₀ hc.a_le op e g₀ d
+    hD hLL hΩ hΩ₁ (fun v => cellCenterPos_eq_sitePosition_add v) hm₀ hc.a_le op e g₀ d
     ((1 : ℝ), (1 : ℝ)) ht.le htn
     (le_mul_of_one_le_left (by positivity) hA₀ |>.trans' (R.side_le hk2))
     hε2 hfs hfb hfa (fun z hz => (hmb z).1 hz)
@@ -307,9 +307,9 @@ theorem bandBirth_hasFrameChange (hD : IsAngularScale q J Δ a A₀ m₀ 60 D L�
   exacts [hPS, hQS]
 
 /-- **A death along an edge as a change of a treated sheet, conditional on Proposition 3.4.** Assume
-`q ≥ 1` and the ground-state and angular-scale hypotheses with `m₀ ≥ 2`, `A₀ ≥ 1`,
-`L ≥ max 2 L₀′` and `2 ^ k < 2 * L`. Fix an adaptive patch supply of exponent `60`, size `L`
-and parameters `B₀, C, c`, and any label rank. At the constants of the protocol, in the
+`q ≥ 1`, a unit state of the family `G`, and the angular-scale hypothesis with `m₀ ≥ 2`,
+`A₀ ≥ 1`, `L ≥ max 2 L₀′` and `2 ^ k < 2 * L`. Fix an adaptive patch supply of exponent `60`,
+size `L` and parameters `B₀, C, c`, and any label rank. At the constants of the protocol, in the
 repainting of a square `R`
 of side `n = 2 ^ j > K₀ t`,
 `t = D log L`, let an elementary death removing the label `Q` change the guide
@@ -324,8 +324,8 @@ required to satisfy `r ≥ 1` for this death.
 
 Polynomial-PEPS manuscript, `06-geometry.tex`, lines 183–221, 328–387 and 440–445; Lemma 6.5
 `lem:birth`, `05-frames.tex`. -/
-theorem bandDeath_hasFrameChange (hD : IsAngularScale q J Δ a A₀ m₀ 60 D L₀') (hLL : L₀' ≤ L)
-    (hΩ : h.IsGappedGroundState E₀ Ω Δ) (hm₀ : 2 ≤ m₀) (hA₀ : 1 ≤ A₀)
+theorem bandDeath_hasFrameChange (hD : IsAngularScale q G a A₀ m₀ 60 D L₀') (hLL : L₀' ≤ L)
+    (hΩ : G L Ω) (hΩ₁ : ‖Ω‖ = 1) (hm₀ : 2 ≤ m₀) (hA₀ : 1 ≤ A₀)
     (hc : IsProtocolConstants K₀ ε₀ ν a D B₀) (hL : 2 ≤ L) (hk2 : 2 ^ k < 2 * L)
     (P : AdaptivePatchSupply (cellCenterPos L) Ω B₀ C c 60 L) (rank : GuideLabel → ℕ)
     (R : RepaintedSquare k) (hlarge : K₀ * (D * Real.log L) < (2 : ℝ) ^ (R.1.1 : ℕ))
@@ -393,7 +393,7 @@ theorem bandDeath_hasFrameChange (hD : IsAngularScale q J Δ a A₀ m₀ 60 D L�
   obtain ⟨M, hM, hu, hs, hf, herr⟩ := bandDeath_step_guideFrame (L := L)
     (hole := suppliedPatch P _ hr)
     (V := Va) (hV := hda) (own := labelParty R) (ph := guidePlaceholder) (rank := rank)
-    hD hLL hΩ (fun v => cellCenterPos_eq_sitePosition_add v) hm₀ hc.a_le op e g₀ d
+    hD hLL hΩ hΩ₁ (fun v => cellCenterPos_eq_sitePosition_add v) hm₀ hc.a_le op e g₀ d
     ((1 : ℝ), (1 : ℝ)) ht.le htn
     (le_mul_of_one_le_left (by positivity) hA₀ |>.trans' (R.side_le hk2))
     hε2 hfs hfb hfa (fun z hz => (hma z).1 hz)

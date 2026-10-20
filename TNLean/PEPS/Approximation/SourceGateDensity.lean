@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.MatrixDensitySum
-import TNLean.PEPS.Approximation.FiniteSourceGate
+import TNLean.Lattice.PartyCircuit.FiniteSourceGate
 import TNLean.PEPS.Approximation.SourcePreparationCoordinates
 import Mathlib.LinearAlgebra.Matrix.ConjTranspose
 import Mathlib.Data.Fintype.Pi

@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.Approximation.CommonSourcePreparation
-import TNLean.PEPS.Approximation.LayoutEqualityCoordinates
+import TNLean.Lattice.PartyCircuit.CommonSourcePreparation
+import TNLean.Lattice.PartyCircuit.LayoutEqualityCoordinates
 import Mathlib.LinearAlgebra.Multilinear.Curry
 
 /-!

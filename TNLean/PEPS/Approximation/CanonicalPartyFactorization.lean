@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.AbsorbedRestriction
-import TNLean.PEPS.Approximation.PartyFactorization
-import TNLean.PEPS.Approximation.PartyGrouping
+import TNLean.Lattice.PartyCircuit.PartyFactorization
+import TNLean.Lattice.PartyCircuit.PartyGrouping
 
 /-! # Tensor factorization by actual singleton restrictions
 

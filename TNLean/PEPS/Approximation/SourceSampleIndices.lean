@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.SourcePairIndex
-import TNLean.PEPS.Approximation.SourceCircuitLocations
+import TNLean.Lattice.PartyCircuit.SourceCircuitLocations
 import TNLean.PEPS.Approximation.NonemptyGateLabels
 import TNLean.PEPS.Approximation.DistributedOperatorContraction
 

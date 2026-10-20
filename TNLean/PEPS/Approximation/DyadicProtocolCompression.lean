@@ -7,8 +7,8 @@ import TNLean.PEPS.Approximation.DistributedGateMapConstruction
 import TNLean.PEPS.Approximation.DistributedPartyNetwork
 import TNLean.PEPS.Approximation.DyadicProtocol
 import TNLean.PEPS.Approximation.GroundStateApproximation
-import TNLean.PEPS.Approximation.OriginalCircuitChain
-import TNLean.PEPS.Approximation.OriginalCircuitSequence
+import TNLean.Lattice.PartyCircuit.OriginalCircuitChain
+import TNLean.Lattice.PartyCircuit.OriginalCircuitSequence
 
 /-!
 # Compression of the dyadic distribution protocol
@@ -22,7 +22,7 @@ polynomial link dimensions and `‖σ - |Ω⟩⟨Ω|‖₁ ≤ C L⁻⁵` (`eq:c
 The changes of a protocol are composed into one chronology, and the protocol is read as a
 distributed construction of Theorem 5.2 with the recorded monomial expansions of its gates. Its
 physical density is the physical density of the actual final vector.
-All protocols, over all sizes, Hamiltonians, and ground vectors, form one family with uniform
+All protocols, over all sizes and all states of the family, form one family with uniform
 polynomial bounds, so the constants of Theorem 5.2 are chosen before the family member, as in
 the order of constants of `07-assembly.tex:179–203`. The resulting distributed operator
 contraction is enumerated as a party network on the dyadic anchors of the protocol; the
@@ -33,9 +33,9 @@ The hypothesis `LargeSizeDyadicProtocolConsequences` is Proposition 7.1, proved 
 `largeSizeDyadicProtocolConsequences`.
 
 The main theorem `dyadicOperatorNetworkAt_of_dyadicProtocolBoundsAt` assumes the protocol bounds
-of Proposition 7.1 (`06-geometry.tex:12–53`) for one model at given constants. Each nonprivate
-gate `G` equals its recorded expansion `∑ ξ, c ξ • M ξ`, so the error `‖G - ∑ ξ, c ξ • M ξ‖ = 0`
-meets every accuracy of Theorem 5.2.
+of Proposition 7.1 (`06-geometry.tex:12–53`) for a family of unit states at given constants.
+Each nonprivate gate `G` equals its recorded expansion `∑ ξ, c ξ • M ξ`, so the error
+`‖G - ∑ ξ, c ξ • M ξ‖ = 0` meets every accuracy of Theorem 5.2.
 The former scope restriction is resolved in
 `docs/paper-gaps/polypeps_prop71_consequences_interface.tex`.
 
@@ -402,11 +402,12 @@ private theorem natCast_floor_le_max (x : ℝ) : (⌊x⌋₊ : ℝ) ≤ max x 0 
   · rw [Nat.floor_eq_zero.mpr (hx.trans_lt one_pos)]
     simp
 
-/-- **The compressed dyadic operator network from the consequences of Proposition 7.1, for one
-model.** If every gapped ground vector of a square Hamiltonian of side `L ≥ max 2 L₀` has a dyadic
-distribution protocol with the bounds of §8 at the count constant `C_N`, the expansion constant
-`C_K`, the error constant `C_E`, the bound `b`, the exponent `k` and `r` pair effects, then the
-compressed dyadic operator network of §8.1 exists at the same threshold, with
+/-- **The compressed dyadic operator network from the consequences of Proposition 7.1, for a
+family of unit states.** If every state of a family `G` of unit vectors on the square of side
+`L ≥ max 2 L₀` has a dyadic distribution protocol with the bounds of §8 at the count constant
+`C_N`, the expansion constant `C_K`, the error constant `C_E`, the bound `b`, the exponent `k`
+and `r` pair effects, then the compressed dyadic operator network of §8.1 exists at the same
+threshold, with
 
 * network error constant `1 + 2 C_N C_E + 2 C_E`, free of the expansion constant;
 * link prefactor `sumCompressionPrefactor r b (max C_N 0 * b) q (max C_K 0) C_K` and link
@@ -414,7 +415,7 @@ compressed dyadic operator network of §8.1 exists at the same threshold, with
 * at most `b` parties per block, at most `2 b (b - 1)` links per party and link separations at
   most `b` times either endpoint scale.
 
-The protocols for all sizes, Hamiltonians, and ground vectors form one family of distributed
+The protocols for all sizes and all states of `G` form one family of distributed
 constructions with uniformly polynomial gate counts, constant arity and lifetime participation,
 physical dimensions at most `q`, and exact polynomial gate expansions; Theorem 5.2 is applied to
 this family, and the density error adds to the protocol estimate
@@ -424,9 +425,10 @@ item 3 of Proposition 7.1.
 Source: Polynomial-PEPS manuscript (Sept 24 2026), §8.1, `07-assembly.tex:9–63`, with
 Theorem 5.2 `thm:compression`, `04-compression.tex:137–175`, and the order of constants of
 `07-assembly.tex:179–203`. -/
-theorem dyadicOperatorNetworkAt_of_dyadicProtocolBoundsAt {q : ℕ} (hq : 2 ≤ q) {J Δ : ℝ}
-    {C_N C_K C_E : ℝ} {b k r L₀ : ℕ} (hall : DyadicProtocolBoundsAt q J Δ C_N C_K C_E b k r L₀) :
-    DyadicOperatorNetworkAt q J Δ (1 + (2 * (C_N * C_E) + 2 * C_E))
+theorem dyadicOperatorNetworkAt_of_dyadicProtocolBoundsAt {q : ℕ} (hq : 2 ≤ q)
+    {G : ∀ L : ℕ, StateSpace L q → Prop} (hG : ∀ L Ω, G L Ω → ‖Ω‖ = 1)
+    {C_N C_K C_E : ℝ} {b k r L₀ : ℕ} (hall : DyadicProtocolBoundsAt q G C_N C_K C_E b k r L₀) :
+    DyadicOperatorNetworkAt q G (1 + (2 * (C_N * C_E) + 2 * C_E))
       (sumCompressionPrefactor r b (max C_N 0 * b) q (max C_K 0) C_K)
       (sampledNetworkExponent r b 3 0 k k 5) b (2 * b * (b - 1)) b L₀ := by
   let size : ProtocolInstance q C_N C_K C_E b k r → ℝ := fun i ↦ i.size
@@ -476,9 +478,10 @@ theorem dyadicOperatorNetworkAt_of_dyadicProtocolBoundsAt {q : ℕ} (hq : 2 ≤ 
   have hfam := DistributedConstruction.uniform_sampled_network_of_sum_le size hsize
     (fun i ↦ i.Party) C₀ b 3 0 r k k (max C_N 0 * b) q (max C_K 0) C_K hN₀ hphysical₀ harity₀
     hlifetime₀ hmonomial₀ hexpansion₀ 5 le_rfl le_rfl
-  intro L hL hL₀ H E₀ Ω hΩ
-  obtain ⟨P, hP, D, hD⟩ := hall L hL hL₀ H E₀ Ω hΩ
-  let i : ProtocolInstance q C_N C_K C_E b k r := ⟨L, hL, P, D, Ω, hΩ.1, hD⟩
+  intro L hL hL₀ Ω hΩ
+  have hΩ₁ : ‖Ω‖ = 1 := hG L Ω hΩ
+  obtain ⟨P, hP, D, hD⟩ := hall L hL hL₀ Ω hΩ
+  let i : ProtocolInstance q C_N C_K C_E b k r := ⟨L, hL, P, D, Ω, hΩ₁, hD⟩
   obtain ⟨_, _, _, _, _, _, _, _, _, _, T, herr, hdim, hinc, hloc⟩ := hfam i
   have hL0 : 0 < L := by omega
   have hCN : 0 ≤ C_N := by
@@ -494,7 +497,7 @@ theorem dyadicOperatorNetworkAt_of_dyadicProtocolBoundsAt {q : ℕ} (hq : 2 ≤ 
     linarith
   classical
   obtain ⟨Λ, _, _, N, hdeg, hsep, hdimN, hnorm⟩ :=
-    D.exists_partyNetwork_of_contractedOperator hL0 hD hC hΩ.1 _ _ _ _ _ _ _ T
+    D.exists_partyNetwork_of_contractedOperator hL0 hD hC hΩ₁ _ _ _ _ _ _ _ T
       (D.physicalDensity_toDistributedConstruction hL0) herr hdim hinc fun e j l hj hl ↦ by
         obtain ⟨g, hjg, hlg⟩ := hloc e j l hj hl
         obtain ⟨t, ht, g', hg'⟩ := D.exists_participants_toDistributedConstruction_circuit hL0 g

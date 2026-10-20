@@ -7,9 +7,9 @@ import TNLean.PEPS.Approximation.LocalPartFrameListRestriction
 import TNLean.PEPS.Approximation.SourceFreeLocalPart
 import TNLean.PEPS.Approximation.WordAppendTailRestriction
 import TNLean.PEPS.Approximation.SourceWordParties
-import TNLean.PEPS.Approximation.PartyTensorMaps
+import TNLean.Lattice.PartyCircuit.PartyTensorMaps
 import TNLean.PEPS.Approximation.LayoutExcludedOwners
-import TNLean.PEPS.Approximation.WordEvaluationTransport
+import TNLean.Lattice.PartyCircuit.WordEvaluationTransport
 
 /-!
 # Spectators at an owner excluded from the remaining operations

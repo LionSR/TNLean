@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.SourcePrivatePreparation
 import TNLean.PEPS.Approximation.ActualSourceInputBasis
-import TNLean.PEPS.Approximation.UnitMemoryCoordinates
+import TNLean.Lattice.PartyCircuit.UnitMemoryCoordinates
 
 /-!
 # Coordinates of actual source-to-output columns
