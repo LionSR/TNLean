@@ -235,23 +235,3 @@ square cylinder data at the same radii.
     Theorem~\ref{thm:peps_adaptive_patch_constraint_of_area_law} turns it into
     the adaptive patch constraint.
 \end{proof}
-
-\begin{theorem}[Polynomial approximation from the square entropy area law]
-    \label{thm:peps_approximation_of_square_area_law}
-    \lean{TNLean.PEPS.Approximation.polynomialPEPSApproximation_of_squareEntropyAreaLaw}
-    \leanok
-    \uses{def:square_entropy_area_law, def:polynomial_peps_model}
-    If the square-grid entropy area law holds, then the uniform polynomial
-    approximation assertion of \cite[Theorem~1.1]{OpenAI2026PolynomialPEPS}
-    holds.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    \uses{thm:peps_adaptive_patch_constraint_of_area_law,
-        thm:peps_ground_state_approximation_from_patch_bound}
-    Theorem~\ref{thm:peps_adaptive_patch_constraint_of_area_law} gives the
-    adaptive patch constraint, and
-    Theorem~\ref{thm:peps_ground_state_approximation_from_patch_bound} turns it
-    into the approximation assertion.
-\end{proof}

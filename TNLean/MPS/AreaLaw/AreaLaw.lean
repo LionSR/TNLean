@@ -96,9 +96,13 @@ theorem regionEntropy_interval_le (hq : 1 ≤ q) (hJ : 0 ≤ J) (hΔ : 0 < Δ)
   unfold chainIntervalEntropyBound
   linarith
 
-/-- The constant `C₁(q, R) = 5 + 32 N_R q^{2(R + 1)} + 128 B_R` bounding `m / (1 + J/Δ)`. -/
+/-- The constant
+`C₁(q, R) = 5 + min {32 N_R q^{2(R + 1)}, 64 e N_R log² (e q^{R + 1})} + 128 B_R`
+bounding `m / (1 + J/Δ)`. -/
 noncomputable def chainShellConst (q R : ℕ) : ℝ :=
-  5 + 32 * chainCrossConst R * (q : ℝ) ^ (2 * (R + 1)) + 128 * chainBudgetConst q R
+  5 + min (32 * chainCrossConst R * (q : ℝ) ^ (2 * (R + 1)))
+      (64 * Real.exp 1 * chainCrossConst R * Real.log (Real.exp 1 * (q : ℝ) ^ (R + 1)) ^ 2) +
+    128 * chainBudgetConst q R
 
 /-- The number of shells is at most `C₁(q, R) (1 + J/Δ)`. -/
 theorem chainShellCount_le (hJ : 0 ≤ J) (hΔ : 0 < Δ) :
@@ -109,11 +113,17 @@ theorem chainShellCount_le (hJ : 0 ≤ J) (hΔ : 0 < Δ) :
   have hqv : (0 : ℝ) ≤ (q : ℝ) ^ (2 * (R + 1)) := by positivity
   set E := chainEnergyThreshold q R J Δ
   set Tt := chainTailThreshold q R J Δ
-  have hE : E ≤ 32 * chainCrossConst R * (q : ℝ) ^ (2 * (R + 1)) * (1 + J / Δ) := by
-    simp only [E, chainEnergyThreshold]
-    rw [mul_div_assoc]
-    have h0 : 0 ≤ 32 * (chainCrossConst R : ℝ) * (q : ℝ) ^ (2 * (R + 1)) := by positivity
-    nlinarith
+  have hE : E ≤ min (32 * chainCrossConst R * (q : ℝ) ^ (2 * (R + 1)))
+      (64 * Real.exp 1 * chainCrossConst R * Real.log (Real.exp 1 * (q : ℝ) ^ (R + 1)) ^ 2) *
+        (1 + J / Δ) := by
+    simp only [E, chainEnergyThreshold, chainQuadraticEnergyThreshold, chainLogEnergyThreshold]
+    have h1ϑ : (0 : ℝ) ≤ 1 + J / Δ := by linarith
+    rw [min_mul_of_nonneg _ _ h1ϑ]
+    refine min_le_min ?_ ?_
+    · rw [mul_div_assoc]
+      exact mul_le_mul_of_nonneg_left (by linarith) (by positivity)
+    · rw [mul_div_assoc]
+      exact mul_le_mul_of_nonneg_left (by linarith) (by positivity)
   have hTt : Tt ≤ 128 * chainBudgetConst q R * (1 + J / Δ) := by
     simp only [Tt, chainTailThreshold]
     have h1 : 1 ≤ (1 + J / Δ) * chainBudgetConst q R := by nlinarith
@@ -129,7 +139,10 @@ theorem chainShellCount_le (hJ : 0 ≤ J) (hΔ : 0 < Δ) :
     simp only [chainShellCount]
     exact (Nat.ceil_lt_add_one (by positivity)).le
   have hmax : max (max 4 E) Tt ≤ 4 + E + Tt := by
-    have hE0 : 0 ≤ E := by simp only [E, chainEnergyThreshold]; positivity
+    have hE0 : 0 ≤ E := by
+      simp only [E, chainEnergyThreshold, chainQuadraticEnergyThreshold,
+        chainLogEnergyThreshold]
+      positivity
     have hT0 : 0 ≤ Tt := by simp only [Tt, chainTailThreshold]; positivity
     exact max_le (max_le (by linarith) (by linarith)) (by linarith)
   unfold chainShellConst
