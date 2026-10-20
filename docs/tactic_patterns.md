@@ -169,11 +169,13 @@ abstracted — record why, so it is not re-proposed).
   `liftOne` or `liftTwo`: transport the nonprivate count, participants, expansion
   bound, monomial bound and error estimate through untouched spectator sheets.
 - **Seen:** `hasBoundedChange_liftOne`, `hasBoundedChange_liftTwo`
-  (`SheetStackChange.lean`) and their source-bounded forms
-  (`SheetStackSourceBoundedChange.lean`).
-- **Abstraction:** `TNLean.PEPS.EncodedFrame.isBoundedChange_liftOne` and
-  `isBoundedChange_liftTwo` in `SheetStackChange.lean`, stated for the fixed lifted
-  circuit; all four results now use them.
+  (`Lattice/Sheet/StackChange.lean`) and their source-bounded forms
+  (`Lattice/Sheet/StackSourceBoundedChange.lean`).
+- **Abstraction:** `TNLean.Lattice.isBoundedChange_liftOne` and
+  `isBoundedChange_liftTwo` in `Lattice/Sheet/StackChange.lean`, stated for the fixed
+  lifted circuit over any type of sheets; all four results now use them, and the
+  encoded-frame forms in `PEPS/Approximation/SheetStackChange.lean` read them at the
+  frames.
 
 ### Positive part of a polynomial constant — promoted (2026-10-16)
 

@@ -15,5 +15,9 @@ import TNLean.Lattice.Sheet.Operators
 import TNLean.Lattice.Sheet.Registers
 import TNLean.Lattice.Sheet.Reordering
 import TNLean.Lattice.Sheet.Splitting
+import TNLean.Lattice.Sheet.Stack
+import TNLean.Lattice.Sheet.StackChange
+import TNLean.Lattice.Sheet.StackEndpoints
+import TNLean.Lattice.Sheet.StackSourceBoundedChange
 import TNLean.Lattice.Sheet.SwapCorrection
 import TNLean.Lattice.Sheet.TwoRegisters
