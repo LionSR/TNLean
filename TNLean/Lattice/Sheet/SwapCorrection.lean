@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Algebra.MatrixKroneckerContraction
 import TNLean.Lattice.RegionalSwap
-import TNLean.PEPS.Approximation.HomogeneousOwnership
+import TNLean.Lattice.Sheet.Birth
 
 /-!
 # Swapping two sheets and the buffer correction

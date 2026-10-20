@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.SquareAreaLawHamiltonian
-import TNLean.PEPS.Approximation.SheetSwapCorrection
+import TNLean.Lattice.Sheet.SwapCorrection
 import TNLean.Lattice.RegionalSwapSupport
 import TNLean.Circuit.SitewiseTensorSupport
 import QICLean.Analysis.DoubledSystemGap

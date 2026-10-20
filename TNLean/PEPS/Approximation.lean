@@ -367,7 +367,6 @@ import TNLean.PEPS.Approximation.SheetStackReadout
 import TNLean.PEPS.Approximation.SheetStackReadoutCircuit
 import TNLean.PEPS.Approximation.SheetStackSourceBoundedChange
 import TNLean.PEPS.Approximation.SheetSwapBoundaryExpansion
-import TNLean.PEPS.Approximation.SheetSwapCorrection
 import TNLean.PEPS.Approximation.SheetSwapDoubledTermNorm
 import TNLean.PEPS.Approximation.SiteChainMonomials
 import TNLean.PEPS.Approximation.SiteChainNetwork
