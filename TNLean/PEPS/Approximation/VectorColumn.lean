@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.ColumnSelection
 import TNLean.PEPS.DependentBondNetwork
+import TNLean.PEPS.Defs
 
 /-!
 # Extracting one ket column from an operator tensor network
