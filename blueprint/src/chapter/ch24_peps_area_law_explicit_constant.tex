@@ -484,7 +484,7 @@ every upper bound for $C_{\rm box}$.
     \lean{TNLean.PEPS.Approximation.IsRangeSquareGroundState}
     \leanok
     \uses{def:area_law_hamiltonian}
-    Fix integers $q$ and $R$ and reals $J$ and $\Delta$. The
+    Fix natural numbers $q$ and $R$ and reals $J$ and $\Delta$. The
     ground states at range $R$ form the family of vectors $\Omega$ on the
     grid of side $L$, identified with vectors on the integer square
     $\Lambda=\{0,\ldots,L-1\}^2$, for which some Hamiltonian on $\Lambda$
@@ -527,8 +527,8 @@ every upper bound for $C_{\rm box}$.
     \lean{TNLean.PEPS.Approximation.squareEntropyAreaLawAt_range_of_areaLawBound}
     \leanok
     \uses{def:square_range_ground_states,def:square_entropy_area_law_at,
-        def:area_law_ground_entropy}
-    Fix integers $q$ and $R$ and reals $J$, $\Delta$ and $C\ge0$. Suppose
+        def:area_law_hamiltonian,def:area_law_ground_entropy}
+    Fix natural numbers $q$ and $R$ and reals $J$, $\Delta$ and $C\ge0$. Suppose
     that $S_\Omega(A)\le C\,|\partial_\Lambda A|$ for every finite induced
     domain $\Lambda$, every Hamiltonian on $\Lambda$ whose terms are
     supported on sets of diameter at most $R$ and have norm at most $J$,
