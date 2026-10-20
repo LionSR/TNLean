@@ -4,15 +4,15 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.ProtocolPhysicalPreparation
-import TNLean.PEPS.Approximation.DyadicProtocolAssembly
-import TNLean.PEPS.Approximation.DyadicProtocolCompression
+import TNLean.Lattice.Compression.DistributedConstruction
+import TNLean.Lattice.Compression.GateCoefficientBounds
 
 /-!
 # Uniform physical families for chain compression
 
 The constants are chosen before every physical instance. The family contains
 all admissible sufficiently large chains, Hamiltonians, ground vectors,
-ground energies and register positions. The actual preparation circuits and
+and ground energies. The actual preparation circuits and
 normalized product inputs are chosen from the physical preparation theorem.
 They give the existing distributed constructions without changing the circuit
 or the standard physical and private readout. The target vector is precisely
@@ -34,30 +34,29 @@ noncomputable section
 
 namespace TNLean.MPS.AreaLaw.ChainSweep
 
-open TNLean.PEPS.PairEffect TNLean.PEPS.EncodedFrame
+open TNLean.Lattice TNLean.PEPS.PairEffect TNLean.PEPS.EncodedFrame
 
 /-- The constructed chain sweep, with its original normalized product input,
 actual main physical dimensions and retained auxiliary registers.
 Source: Part II, `prop:sweep`, lines 350–396 and 579–585. -/
-def preparationConstruction {L w q : ℕ} [NeZero q]
-    (Ω : EuclideanSpace ℂ (Fin L → Fin q))
-    (pos : Fin L → ℝ × ℝ) (hL : 0 < L)
+def preparationConstruction {L w q : ℕ}
+    (Ω : EuclideanSpace ℂ (Fin L → Fin q)) (hL : 0 < L)
     (hx : ∀ p : Party L w,
-      ‖framesVec Ω ((initialFrames L w).filter
+      ‖framesVec (Sheet.refFamily Ω) ((initialFrames L w).filter
         fun F ↦ F.owner ⟨0, hL⟩ = p)‖ = 1)
     (C : OriginalCircuit
       (ProductInput.wholePartyLayout fun p : Party L w ↦
-        framesSpace ((initialFrames L w).filter
+        framesSpace (Sheet.regs q) ((initialFrames L w).filter
           fun F ↦ F.owner ⟨0, hL⟩ = p))
       (familyPhysicalOutputLayout (physicalDimension L w q)
         (physicalOrder L w) (privateLayout L w q))) :
     DistributedConstruction (Party L w) where
   nonemptyParties := ⟨.inl (0 : Fin (stageCount L w + 1))⟩
-  initialSpace := fun p ↦ framesSpace ((initialFrames L w).filter
+  initialSpace := fun p ↦ framesSpace (Sheet.regs q) ((initialFrames L w).filter
     fun F ↦ F.owner ⟨0, hL⟩ = p)
   finite_initialSpace := fun p ↦ Layout.finiteDimensional_mem_of_registers _
-    (TNLean.PEPS.Approximation.finiteDimensional_of_mem_stackRegs _)
-  initialVector := fun p ↦ framesVec Ω ((initialFrames L w).filter
+    (Sheet.finiteDimensional_of_mem_stackRegs _)
+  initialVector := fun p ↦ framesVec (Sheet.refFamily Ω) ((initialFrames L w).filter
     fun F ↦ F.owner ⟨0, hL⟩ = p)
   norm_initialVector := hx
   physicalDimension := physicalDimension L w q
@@ -71,6 +70,24 @@ def preparationConstruction {L w q : ℕ} [NeZero q]
     change FiniteDimensional ℂ (EuclideanSpace ℂ (Fin q))
     infer_instance
   circuit := C
+
+/-- An absolute coefficient sum at most `S` bounds every individual coefficient by any `S' ≥ S`,
+and the pair-effect count of every monomial is unchanged.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 143–149. -/
+private theorem isTermwiseBounded_of_isExpansionBounded {P : Type} {a b : Layout P}
+    {w : OriginalCircuit a b} {r : ℕ} {S S' : ℝ}
+    (h : w.IsExpansionBounded r S) (hS : S ≤ S') : w.IsTermwiseBounded r S' := by
+  induction w with
+  | id => trivial
+  | comp w v ihw ihv => exact ⟨ihw h.1, ihv h.2⟩
+  | privateMap => trivial
+  | nonprivateGate owner hC L hL hG tail =>
+      refine fun term hterm ↦ ⟨h.1 term hterm, (h.2.trans hS).trans' ?_⟩
+      exact List.single_le_sum (fun x hx ↦ by
+        obtain ⟨y, -, rfl⟩ := List.mem_map.mp hx
+        exact norm_nonneg _) _ (List.mem_map_of_mem hterm)
+  | swap => trivial
+  | frame r w ih => exact ih h
 
 /-- The main-coordinate equivalence transports the literal pure density.
 Source: Part II, main-block readout at lines 355–360 and 579–585. -/
@@ -91,33 +108,26 @@ Source: Part II, `prop:sweep`, lines 350–396 and 579–585; Theorem B,
 lines 587–615; polynomial-PEPS Theorem 5.2, `04-compression.tex:137–175`. -/
 theorem exists_uniform_preparation_family
     (q : ℕ) (hq : 1 ≤ q) (R : ℕ) (J Δ : ℝ) (hΔ : 0 < Δ) :
-    letI : NeZero q := ⟨by omega⟩
     ∃ (D K : ℝ) (s L₀ : ℕ) (hL₀ : 2 ≤ L₀), 1 ≤ D ∧ 0 < K ∧
       let ι := {a : Σ L : ℕ, ChainHamiltonian L q R J ×
-          EuclideanSpace ℂ (Fin L → Fin q) × ℝ × (Fin L → ℝ × ℝ) //
-        L₀ ≤ a.1 ∧ Matrix.IsGappedGroundState a.2.1.operator a.2.2.2.1 a.2.2.1 Δ}
+          EuclideanSpace ℂ (Fin L → Fin q) × ℝ //
+        L₀ ≤ a.1 ∧ Matrix.IsGappedGroundState a.2.1.operator a.2.2.2 a.2.2.1 Δ}
       let length := fun i : ι ↦ i.val.1
       let width := fun i : ι ↦ ⌈D * Real.log (length i : ℝ)⌉₊
       let ground := fun i : ι ↦ i.val.2.2.1
-      let pos := fun i : ι ↦ i.val.2.2.2.2
       let hL := fun i : ι ↦
         Nat.lt_of_lt_of_le (by omega : 0 < L₀) i.property.1
-      let Fs := fun i : ι ↦ initialFrames (length i) (width i) q (pos i)
-      let holder := fun (i : ι) (F : Frame (pos i) q (Party (length i) (width i))) ↦
+      let Fs := fun i : ι ↦ initialFrames (length i) (width i)
+      let holder := fun (i : ι) (F : Sheet (Fin (length i)) (Party (length i) (width i))) ↦
         F.owner ⟨0, hL i⟩
-      let H := fun (i : ι) p ↦ framesSpace ((Fs i).filter fun F ↦ holder i F = p)
+      let H := fun (i : ι) p ↦ framesSpace (Sheet.regs q) ((Fs i).filter fun F ↦ holder i F = p)
       ∃ hx : ∀ (i : ι) p,
-          ‖@framesVec (Fin (length i)) (Fin.fintype (length i))
-            (instDecidableEqFin (length i)) q (Party (length i) (width i)) (pos i)
-            ⟨Nat.ne_of_gt (lt_of_lt_of_le Nat.zero_lt_one hq)⟩
-            (ground i) ((Fs i).filter fun F ↦ holder i F = p)‖ = 1,
+          ‖framesVec (Sheet.refFamily (ground i)) ((Fs i).filter fun F ↦ holder i F = p)‖ = 1,
         ∃ C : ∀ i : ι, OriginalCircuit (ProductInput.wholePartyLayout (H i))
             (familyPhysicalOutputLayout (physicalDimension (length i) (width i) q)
               (physicalOrder (length i) (width i)) (privateLayout (length i) (width i) q)),
           let C₀ := fun i : ι ↦
-            @preparationConstruction (length i) (width i) q
-              ⟨Nat.ne_of_gt (lt_of_lt_of_le Nat.zero_lt_one hq)⟩
-              (ground i) (pos i) (hL i) (hx i) (C i)
+            preparationConstruction (w := width i) (ground i) (hL i) (hx i) (C i)
           let target := fun i : ι ↦
             LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
               (mainConfigurationEquiv (length i) (width i) q) (ground i)
@@ -153,22 +163,20 @@ theorem exists_uniform_preparation_family
                   (Matrix.euclideanOuterProduct (ground i) (ground i))) ∧
             (∀ i : ι, 1 ≤ width i ∧ 3 * (20 * width i) ≤ length i) := by
   classical
-  let : NeZero q := ⟨by omega⟩
   obtain ⟨D, K, s, N, _, hD, hK, hprepare⟩ :=
     exists_preparation_of_gappedGroundState q hq R J Δ hΔ
   let L₀ := max N 2
   have hL₀ : 2 ≤ L₀ := le_max_right _ _
   refine ⟨D, K, s, L₀, hL₀, hD, hK, ?_⟩
   let ι := {a : Σ L : ℕ, ChainHamiltonian L q R J ×
-      EuclideanSpace ℂ (Fin L → Fin q) × ℝ × (Fin L → ℝ × ℝ) //
-    L₀ ≤ a.1 ∧ Matrix.IsGappedGroundState a.2.1.operator a.2.2.2.1 a.2.2.1 Δ}
+      EuclideanSpace ℂ (Fin L → Fin q) × ℝ //
+    L₀ ≤ a.1 ∧ Matrix.IsGappedGroundState a.2.1.operator a.2.2.2 a.2.2.1 Δ}
   let length := fun i : ι ↦ i.val.1
   let width := fun i : ι ↦ ⌈D * Real.log (length i : ℝ)⌉₊
   let ground := fun i : ι ↦ i.val.2.2.1
-  let pos := fun i : ι ↦ i.val.2.2.2.2
   have hfamily := fun i : ι ↦
     hprepare (length i) ((le_max_left N 2).trans i.property.1)
-      i.val.2.1 (ground i) i.val.2.2.2.1 i.property.2 (pos i)
+      i.val.2.1 (ground i) i.val.2.2.2 i.property.2
   choose hx C hp using hfamily
   refine ⟨hx, C, ?_⟩
   dsimp only
@@ -185,7 +193,7 @@ theorem exists_uniform_preparation_family
   · exact ⟨1, hmono, by simp⟩
   · change (C i).IsTermwiseBounded 1 (1 * (length i : ℝ) ^ (0 : ℕ))
     simpa only [pow_zero, mul_one] using
-      hexp.isTermwiseBounded (le_refl (1 : ℝ))
+      isTermwiseBounded_of_isExpansionBounded hexp (le_refl (1 : ℝ))
   · exact ((LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
       (mainConfigurationEquiv (length i) (width i) q)).norm_map (ground i)).trans
         i.property.2.1
