@@ -47,6 +47,8 @@ it acts on, when every reference vector has norm at most one
   factors.
 * `Lattice.norm_eval_liftOne_stackVec_sub_le`, `Lattice.norm_eval_liftTwo_stackVec_sub_le` : the
   reference error of a lifted change.
+* `Lattice.perm_map_cons`, `Lattice.perm_map_update_cons` : moving the sheet of one index of a
+  family to the front of the list of sheets.
 
 ## References
 
@@ -280,5 +282,34 @@ theorem norm_eval_liftTwo_stackVec_sub_le {F₁ F₂ F₁' F₂' : κ} (post : L
         (norm_eval_liftTwo_stackVec_sub_le post c href hξ pre)
 
 end Reference
+
+/-! ### Moving one sheet of an indexed family to the front -/
+
+section Reordering
+
+variable {X : Type*} [DecidableEq X]
+
+/-- Updating the auxiliary value at a selected index in a duplicate-free list lets that value
+move before the main value, leaving the other auxiliary values in their original order. -/
+theorem perm_map_update_cons {Y : Type*} (M : Y) {l : List X} (hl : l.Nodup) {x : X} (hx : x ∈ l)
+    (A : X → Y) (F : Y) :
+    (M :: l.map (Function.update A x F)).Perm (F :: M :: (l.erase x).map A) := by
+  have hp := (List.perm_cons_erase hx).map (Function.update A x F)
+  rw [List.map_cons, Function.update_self] at hp
+  have he : (l.erase x).map (Function.update A x F) = (l.erase x).map A :=
+    List.map_congr_left fun y hy => Function.update_of_ne
+      (fun h => (hl.mem_erase_iff.1 (h ▸ hy)).1 rfl) _ _
+  rw [he] at hp
+  exact (hp.cons M).trans (List.Perm.swap _ _ _)
+
+/-- A selected auxiliary value may move before the main value, leaving the values of the index
+list with the selected index erased once. -/
+theorem perm_map_cons {Y : Type*} (M : Y) {l : List X} {x : X} (hx : x ∈ l) (A : X → Y) :
+    (M :: l.map A).Perm (A x :: M :: (l.erase x).map A) := by
+  have hp := (List.perm_cons_erase hx).map A
+  rw [List.map_cons] at hp
+  exact (hp.cons M).trans (List.Perm.swap _ _ _)
+
+end Reordering
 
 end TNLean.Lattice

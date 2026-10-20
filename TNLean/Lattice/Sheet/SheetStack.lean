@@ -24,6 +24,10 @@ registers, and records that this reference vector has the norm of `Ω`.
   unit vector.
 * `Sheet.pairRef_eq_twoRegIso_symm`: the reference vector of two adjacent sheets is `Ω ⊗ Ω` in
   the canonical coordinates of the two sheets, the vector compared in `Sheet.exchange_bounded`.
+* `Sheet.finiteDimensional_of_mem_stackRegs`: every register of a stack of sheets is
+  finite-dimensional.
+* `Sheet.exists_originalCircuit_initial_of_owner`: the initial step of the protocol, when every
+  sheet is held entirely by one party.
 
 These are original proofs; no OpenAI Lean code is copied or adapted.
 
@@ -84,6 +88,44 @@ theorem norm_framesVec {Ω : EuclideanSpace ℂ (ι → Fin q)} (hΩ : ‖Ω‖ 
 theorem pairRef_eq_twoRegIso_symm (S₁ S₂ : Sheet ι Party) (Ω : EuclideanSpace ℂ (ι → Fin q)) :
     pairRef (refFamily Ω) S₁ S₂ = (twoRegIso q S₁ S₂).symm (vecKron Ω Ω) :=
   appendIso_symm_regRef q S₁ S₂ Ω
+
+omit [DecidableEq ι] in
+/-- Every register of a stack of sheets is `ℂ^q`, hence finite-dimensional. -/
+theorem finiteDimensional_of_mem_stackRegs :
+    ∀ (Ss : List (Sheet ι Party)), ∀ r ∈ stackRegs (Sheet.regs q) Ss [],
+      FiniteDimensional ℂ r.space
+  | [], r, hr => absurd hr List.not_mem_nil
+  | S :: Ss, r, hr => by
+    rcases List.mem_append.1 hr with hr | hr
+    · obtain ⟨x, -, rfl⟩ := List.mem_map.1 hr
+      change FiniteDimensional ℂ (EuclideanSpace ℂ (Fin q))
+      infer_instance
+    · exact finiteDimensional_of_mem_stackRegs Ss r hr
+
+/-- **The initial step from sheets held by one party each.** Let `‖Ω‖ = 1`, and let every sheet
+`S` of the list `Ss` be held entirely by the party `holder S`. Take as the whole initial memory of
+each party the memory of its sheets and as its initial vector the product of their reference
+vectors. These initial vectors have norm one, and one private map per party followed by a
+reordering carries the initial product vector exactly to the reference vector of `Ss`, with no
+nonprivate gate.
+
+One-dimensional note, `part2b_mps_protocol.tex`, lines 67–68; polynomial-PEPS manuscript,
+`06-geometry.tex`, lines 21–23 and 658–667. -/
+theorem exists_originalCircuit_initial_of_owner [Fintype Party] [DecidableEq Party]
+    {Ω : EuclideanSpace ℂ (ι → Fin q)} (hΩ : ‖Ω‖ = 1) (Ss : List (Sheet ι Party))
+    (holder : Sheet ι Party → Party) (hown : ∀ S ∈ Ss, ∀ x, S.owner x = holder S) :
+    ∃ hx : ∀ p, ‖framesVec (refFamily Ω) (Ss.filter fun S => holder S = p)‖ = 1,
+      ∃ c : OriginalCircuit
+          (ProductInput.wholePartyLayout fun p =>
+            framesSpace (Sheet.regs q) (Ss.filter fun S => holder S = p))
+          (stackRegs (Sheet.regs q) Ss []),
+        c.nonprivateCount = 0 ∧ (∀ (T : Set Party) g, (↑(c.participants g) : Set Party) ⊆ T) ∧
+        (∀ r s, c.IsExpansionBounded r s) ∧ (∀ K, c.IsMonomialBounded K) ∧
+        c.eval (ProductInput.ofAllParties _ _ hx).vector = framesVec (refFamily Ω) Ss := by
+  have hx : ∀ p, ‖framesVec (refFamily Ω) (Ss.filter fun S => holder S = p)‖ = 1 := fun _ =>
+    norm_framesVec hΩ _
+  exact ⟨hx, exists_originalCircuit_initial (refFamily Ω) Ss holder
+    (fun S hS => owner_siteRegs fun x _ => hown S hS x) hx⟩
 
 end Sheet
 
