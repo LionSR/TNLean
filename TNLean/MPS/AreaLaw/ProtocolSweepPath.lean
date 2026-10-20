@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.AreaLaw.ProtocolSweepHistory
 
 /-!
-# The frame lists between the operations of the chain sweep
+# The sheet lists between the operations of the chain sweep
 
 Each stage has eighteen operations and nineteen boundaries: two births,
 eight left-band operations and eight right-band operations. At stage zero
@@ -15,10 +15,10 @@ Every auxiliary occurrence retains its original label. During a band the
 selected occurrence is next to the main sheet; at the band endpoint the
 original order is restored by a private permutation.
 
-The definitions use the actual intermediate one-band frames, rather than
+The definitions use the actual intermediate one-band sheets, rather than
 only their desired owners. The natural-number sequence is obtained from
 the stage and local boundary by division with remainder. Its initial and
-terminal identities follow from the previously derived frame history.
+terminal identities follow from the previously derived sheet history.
 This file does not construct the circuits or assume a trajectory or its
 error estimate.
 
@@ -35,29 +35,15 @@ noncomputable section
 
 namespace TNLean.MPS.AreaLaw.ChainSweep
 
-open TNLean.PEPS.EncodedFrame
+open TNLean.Lattice
 
-variable {L w q : ℕ}
+variable {L w : ℕ}
 
 /-- Erasing a label uses its equality predicate under any lawful equality test. -/
 private theorem erase_eq_eraseP_decide {X : Type*} [BEq X] [LawfulBEq X]
     [DecidableEq X] (l : List X) (c : X) :
     l.erase c = l.eraseP (fun y ↦ decide (c = y)) := by
   simp only [List.erase_eq_eraseP, Bool.beq_eq_decide_eq]
-
-/-- A frame without holes is the raw frame of its actual owner. -/
-private theorem raw_owner_eq (F : Sheet (Fin L) (Party L w)) (hF : F.holes = []) :
-    Sheet.mk F.owner = F := by
-  cases F with
-  | mk owner holes disjoint => cases hF; rfl
-
-/-- The actual left endpoint has no holes, in either the direct-death or
-the band branch. Source: Part II, `con:sweep`, move (3), lines 336–338. -/
-private theorem raw_leftBandMain (k : Fin (stageCount L w)) :
-    Sheet.mk (leftBandMain L w k).owner = leftBandMain L w k := by
-  apply raw_owner_eq
-  unfold leftBandMain
-  split_ifs <;> rfl
 
 /-- The selected left label denotes precisely the actual auxiliary endpoint
 of the current left band. The predecessor is introduced only under hk.
@@ -100,7 +86,7 @@ def rightBandFrames (L w : ℕ)
       (.inl k.castSucc) (.inl k.succ) (.inr k) ((k.val + 1) * (20 * w)) w j ++
     ((initialAuxiliaryOrder L w).erase (.inl k)).map (leftAuxiliaryFrame L w k)
 
-/-- The nineteen actual frame boundaries of one stage. Values beyond the
+/-- The nineteen actual sheet boundaries of one stage. Values beyond the
 eighteenth boundary stay at that stage's endpoint. The seven identity
 operations at the first left transfer introduce no fictitious copy.
 Source: Part II, `con:sweep`, lines 330–343, and `prop:sweep`, lines 373–378. -/
@@ -125,7 +111,7 @@ Identity operations in the exceptional first stage are included.
 Source: Part II, `prop:sweep`, proof, lines 376–378. -/
 def sweepOperationCount (L w : ℕ) : ℕ := 18 * stageCount L w
 
-/-- The complete sequence of frame lists. After its last actual operation
+/-- The complete sequence of sheet lists. After its last actual operation
 the sequence remains at the specified terminal list. The connection to the
 last actual stage is derived below, rather than assumed.
 Source: Part II, `prop:sweep`, proof, lines 365–378. -/
@@ -219,7 +205,7 @@ theorem stageBoundaryFrames_eighteen (k : Fin (stageCount L w)) :
   rw [stageBoundaryFrames_last k le_rfl, afterRightFrames_eq_sweepFrames]
 
 /-- The first left-band operation may bring forward its unused original
-copy by a private permutation. Selection is by label, not by frame value.
+copy by a private permutation. Selection is by label, not by sheet value.
 Source: Part II, `con:sweep`, move (3), lines 336–338. -/
 theorem stageBoundaryFrames_left_entrance_perm (k : Fin (stageCount L w))
     (hk : 0 < k.val) :
@@ -229,7 +215,7 @@ theorem stageBoundaryFrames_left_entrance_perm (k : Fin (stageCount L w))
     (Sheet.mk (afterBlockBirth L w k).owner ::
       Sheet.mk (fun _ ↦ Sum.inr
         (⟨k.val - 1, Nat.lt_of_le_of_lt (Nat.sub_le _ _) k.isLt⟩ : Fin (stageCount L w))) :: _)
-  rw [raw_owner_eq (afterBlockBirth L w k) rfl]
+  rw [show Sheet.mk (afterBlockBirth L w k).owner = afterBlockBirth L w k from rfl]
   have haux : Sheet.mk
       (fun _ ↦ Sum.inr
         (⟨k.val - 1, Nat.lt_of_le_of_lt (Nat.sub_le _ _) k.isLt⟩ : Fin (stageCount L w))) =
@@ -251,7 +237,7 @@ theorem stageBoundaryFrames_left_entrance_perm (k : Fin (stageCount L w))
       (auxiliaryFrameBefore L w k.val)).trans (List.Perm.swap _ _ _)
 
 /-- The last left-band operation restores the original list order with
-precisely its own copy retired. No distinctness of frame values is needed.
+precisely its own copy retired. No distinctness of sheet values is needed.
 Source: Part II, `con:sweep`, move (3), lines 336–338. -/
 theorem leftBandFrames_eight_perm (k : Fin (stageCount L w)) (hk : 0 < k.val) :
     (leftBandFrames L w k hk 8).Perm (afterLeftFrames L w k) := by
@@ -275,7 +261,7 @@ theorem stageBoundaryFrames_right_entrance_perm (k : Fin (stageCount L w)) :
   rw [stageBoundaryFrames_ten]
   change (_ :: _).Perm
     (Sheet.mk (leftBandMain L w k).owner :: Sheet.mk (fun _ ↦ Sum.inr k) :: _)
-  rw [raw_leftBandMain k]
+  rw [show Sheet.mk (leftBandMain L w k).owner = leftBandMain L w k from rfl]
   have haux : Sheet.mk (fun _ ↦ Sum.inr k) =
       leftAuxiliaryFrame L w k (.inl k) := by
     rw [leftAuxiliaryFrame_right_unused]
@@ -339,12 +325,12 @@ theorem operationFrames_stage (k : Fin (stageCount L w + 1)) :
       omega
     rw [operationFrames_of_le hn, he, sweepFrames_last]
 
-/-- The initial frame list is derived even when there are no stages.
+/-- The initial sheet list is derived even when there are no stages.
 Source: Part II, `prop:sweep`, item (1), lines 350–353. -/
 theorem operationFrames_zero (L w : ℕ) :
     operationFrames L w 0 = initialFrames L w := by
   simpa only [Fin.val_zero, mul_zero, sweepFrames_zero] using
-    (operationFrames_stage (L := L) (w := w) (q := q) 0)
+    (operationFrames_stage (L := L) (w := w) 0)
 
 /-- The actual last operation has the already specified terminal list.
 Source: Part II, `prop:sweep`, item (3), lines 355–360. -/
@@ -389,6 +375,6 @@ theorem operationFrames_step (k : Fin (stageCount L w)) (j : Fin 18) :
   constructor
   · exact operationFrames_stageBoundary k j.castSucc
   · simpa only [Fin.val_succ, Nat.add_assoc] using
-      (operationFrames_stageBoundary (q := q) k j.succ)
+      (operationFrames_stageBoundary k j.succ)
 
 end TNLean.MPS.AreaLaw.ChainSweep
