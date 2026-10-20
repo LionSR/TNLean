@@ -190,6 +190,7 @@ import TNLean.PEPS.Approximation.RegionalStates
 import TNLean.PEPS.Approximation.RegisterReordering
 import TNLean.PEPS.Approximation.ResetUnitary
 import TNLean.PEPS.Approximation.RoutedContraction
+import TNLean.PEPS.Approximation.SheetFrame
 import TNLean.PEPS.Approximation.SheetSplitting
 import TNLean.PEPS.Approximation.SheetStack
 import TNLean.PEPS.Approximation.SheetStackChange
