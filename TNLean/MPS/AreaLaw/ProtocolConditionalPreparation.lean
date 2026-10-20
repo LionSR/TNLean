@@ -44,7 +44,7 @@ noncomputable section
 
 namespace TNLean.MPS.AreaLaw.ChainSweep
 
-open TNLean.PEPS.PairEffect TNLean.PEPS.EncodedFrame ContinuousLinearMap
+open TNLean.Lattice TNLean.PEPS.PairEffect TNLean.PEPS.EncodedFrame ContinuousLinearMap
 
 variable {L w q : ℕ}
 
@@ -57,10 +57,10 @@ private theorem participation_zero {P : Type} {a b : Layout P}
   exact Nat.card_eq_zero.mpr (Or.inl inferInstance)
 
 /-- The verified terminal word, with its source layout identified with the
-actual terminal frame stack. No operation is added by this equality transport.
+actual terminal sheet stack. No operation is added by this equality transport.
 Source: Part II, `prop:sweep`, lines 355–360. -/
 private def finalRegroupingCircuit (L w : ℕ) :
-    OriginalCircuit (stackRegs (terminalFrames L w) [])
+    OriginalCircuit (stackRegs (Sheet.regs q) (terminalFrames L w) [])
       (familyPhysicalOutputLayout (physicalDimension L w q)
         (physicalOrder L w) (privateLayout L w q)) :=
   ((terminalRegroupingWord (q := q) (terminalRawOrder L w)
@@ -70,14 +70,14 @@ private def finalRegroupingCircuit (L w : ℕ) :
           (stackRegs_terminalFrames L w).symm rfl
 
 private theorem finalRegroupingCircuit_nonprivateCount :
-    (finalRegroupingCircuit L w).nonprivateCount = 0 := by
+    (finalRegroupingCircuit (q := q) L w).nonprivateCount = 0 := by
   unfold finalRegroupingCircuit
   rw [OriginalCircuit.nonprivateCount_castLayouts, Word.nonprivateCount_toOriginalCircuit]
   exact (terminalRegroupingWord_props (q := q) (terminalRawOrder L w)
     (terminalRawOrder_nodup L w) mem_terminalRawOrder).2.2
 
 private theorem eval_finalRegroupingCircuit
-    (y : Mem (stackRegs (terminalFrames L w) [])) :
+    (y : Mem (stackRegs (Sheet.regs q) (terminalFrames L w) [])) :
     (finalRegroupingCircuit L w).eval y =
       terminalRegrouping (q := q) (terminalRawOrder L w)
         (terminalRawOrder_nodup L w) mem_terminalRawOrder
@@ -95,23 +95,23 @@ private theorem eval_finalRegroupingCircuit
   exact eval_terminalRegroupingWord (q := q) (terminalRawOrder L w)
     (terminalRawOrder_nodup L w) mem_terminalRawOrder x
 
-variable [NeZero q]
 
 variable (c : (k : Fin (stageCount L w)) → (j : Fin 18) → OriginalCircuit
-  (stackRegs (stageBoundaryFrames L w k j.val) [])
-  (stackRegs (stageBoundaryFrames L w k (j.val + 1)) []))
+  (stackRegs (Sheet.regs q) (stageBoundaryFrames L w k j.val) [])
+  (stackRegs (Sheet.regs q) (stageBoundaryFrames L w k (j.val + 1)) []))
 
 variable (Ω : EuclideanSpace ℂ (Fin L → Fin q))
 
 variable (hc : ∀ k j, (c k j).IsBoundedChange (stageParticipants k j) 1 1
     (4 * (L : ℝ) ^ (-12 : ℤ))
-    (framesVec Ω (stageBoundaryFrames L w k j.val))
-    (framesVec Ω (stageBoundaryFrames L w k (j.val + 1))) ∧
+    (framesVec (Sheet.refFamily Ω) (stageBoundaryFrames L w k j.val))
+    (framesVec (Sheet.refFamily Ω) (stageBoundaryFrames L w k (j.val + 1))) ∧
   (c k j).IsSourceBounded 1 ∧ (c k j).nonprivateCount ≤ 1 ∧
   ((k.val = 0 ∧ 3 ≤ j.val ∧ j.val < 10) → (c k j).nonprivateCount = 0 ∧
-    ‖(c k j).eval (framesVec Ω (stageBoundaryFrames L w k j.val)) -
-      framesVec Ω (stageBoundaryFrames L w k (j.val + 1))‖ = 0 ∧
-    HEq (c k j) (OriginalCircuit.id (stackRegs (stageBoundaryFrames L w k j.val) []))))
+    ‖(c k j).eval (framesVec (Sheet.refFamily Ω) (stageBoundaryFrames L w k j.val)) -
+      framesVec (Sheet.refFamily Ω) (stageBoundaryFrames L w k (j.val + 1))‖ = 0 ∧
+    HEq (c k j) (OriginalCircuit.id (stackRegs (Sheet.regs q)
+      (stageBoundaryFrames L w k j.val) []))))
 
 include hc
 
@@ -126,23 +126,23 @@ argument, lines 330–384 and 575–603. -/
 theorem exists_preparation_of_local_circuits (hL : 0 < L) (hΩ : ‖Ω‖ = 1) :
     let Fs := initialFrames L w
     let holder : Sheet (Fin L) (Party L w) → Party L w := fun F ↦ F.owner ⟨0, hL⟩
-    let H := fun p ↦ framesSpace (Fs.filter fun F ↦ holder F = p)
+    let H := fun p ↦ framesSpace (Sheet.regs q) (Fs.filter fun F ↦ holder F = p)
     let rs := terminalRawOrder L w
     let hn := terminalRawOrder_nodup L w
     let hr := mem_terminalRawOrder (L := L) (w := w)
     let R := terminalRegrouping (q := q) rs hn hr
-    let hT := stackRegs_terminalFrames L w
+    let hT := stackRegs_terminalFrames (q := q) L w
     let A : Mem (privateLayout L w q) ≃ₗᵢ[ℂ]
         EuclideanSpace ℂ (AuxiliarySite L w → Fin q) :=
       groupIso (auxiliaryOwner L w) Finset.univ.toList
         (List.Nodup.getEquivOfForallMemList _ (Finset.nodup_toList _) (by simp))
     letI := A.symm.toLinearEquiv.finiteDimensional
-    ∃ hx : ∀ p, ‖framesVec Ω (Fs.filter fun F ↦ holder F = p)‖ = 1,
+    ∃ hx : ∀ p, ‖framesVec (Sheet.refFamily Ω) (Fs.filter fun F ↦ holder F = p)‖ = 1,
       ∃ C : OriginalCircuit (ProductInput.wholePartyLayout H)
           (familyPhysicalOutputLayout (physicalDimension L w q)
             (physicalOrder L w) (privateLayout L w q)),
         let X := ProductInput.ofAllParties H
-          (fun p ↦ framesVec Ω (Fs.filter fun F ↦ holder F = p)) hx
+          (fun p ↦ framesVec (Sheet.refFamily Ω) (Fs.filter fun F ↦ holder F = p)) hx
         let Ψ := C.eval X.vector
         let V := familyLabelledPhysicalReadout (physicalDimension L w q)
           (physicalOrder L w) (Finset.nodup_toList _) (by simp [physicalOrder])
@@ -169,12 +169,12 @@ theorem exists_preparation_of_local_circuits (hL : 0 < L) (hΩ : ‖Ω‖ = 1) :
   classical
   let Fs := initialFrames L w
   let holder : Sheet (Fin L) (Party L w) → Party L w := fun F ↦ F.owner ⟨0, hL⟩
-  let H := fun p ↦ framesSpace (Fs.filter fun F ↦ holder F = p)
+  let H := fun p ↦ framesSpace (Sheet.regs q) (Fs.filter fun F ↦ holder F = p)
   let rs := terminalRawOrder L w
   let hn := terminalRawOrder_nodup L w
   let hr := mem_terminalRawOrder (L := L) (w := w)
   let R := terminalRegrouping (q := q) rs hn hr
-  let hT := stackRegs_terminalFrames L w
+  let hT := stackRegs_terminalFrames (q := q) L w
   let A : Mem (privateLayout L w q) ≃ₗᵢ[ℂ]
       EuclideanSpace ℂ (AuxiliarySite L w → Fin q) :=
     groupIso (auxiliaryOwner L w) Finset.univ.toList
@@ -183,11 +183,11 @@ theorem exists_preparation_of_local_circuits (hL : 0 < L) (hΩ : ‖Ω‖ = 1) :
   obtain ⟨hx, c₀, h₀count, _, h₀exp, h₀mono, h₀eval⟩ :=
     exists_initialization (w := w) (q := q) hL hΩ
   let X := ProductInput.ofAllParties H
-    (fun p ↦ framesVec Ω (Fs.filter fun F ↦ holder F = p)) hx
+    (fun p ↦ framesVec (Sheet.refFamily Ω) (Fs.filter fun F ↦ holder F = p)) hx
   let M := sweepMiddleCircuit c
-  let Q := finalRegroupingCircuit L w
+  let Q := finalRegroupingCircuit (q := q) L w
   let C := (c₀.comp M).comp Q
-  let y := M.eval (framesVec Ω Fs)
+  let y := M.eval (framesVec (Sheet.refFamily Ω) Fs)
   let Ψ := C.eval X.vector
   let V := familyLabelledPhysicalReadout (physicalDimension L w q)
     (physicalOrder L w) (Finset.nodup_toList _) (by simp [physicalOrder])

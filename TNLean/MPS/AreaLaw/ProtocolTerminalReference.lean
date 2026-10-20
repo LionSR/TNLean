@@ -231,7 +231,7 @@ private theorem inner_appendIso_symm_tmul (a b : Layout (Party L w))
       ((appendIso a b).symm (x' ⊗ₜ y')) = inner ℂ x x' * inner ℂ y y' := by
   rw [LinearIsometryEquiv.inner_map_map, TensorProduct.inner_tmul]
 
-private theorem auxiliaryReferenceBasis_inner [NeZero q]
+private theorem auxiliaryReferenceBasis_inner
     (Ω : EuclideanSpace ℂ (Fin L → Fin q)) (a : AuxiliarySite L w → Fin q)
     (cs : List (AuxiliaryCopy L w)) :
     inner ℂ (auxiliaryReferenceBasis a cs)
@@ -265,7 +265,7 @@ def terminalStackReadout (L w : ℕ) :
 /-- The specified sheet product has the exact original main vector and the
 constructed auxiliary product in the literal copy coordinates.
 Source: Part II, `prop:sweep`, lines 357–359. -/
-theorem terminalStackReadout_framesVec [NeZero q]
+theorem terminalStackReadout_framesVec
     (Ω : EuclideanSpace ℂ (Fin L → Fin q)) :
     terminalStackReadout L w (framesVec (Sheet.refFamily Ω) (terminalFrames L w)) =
       Matrix.euclideanTensorVector Ω (auxiliaryReference L w q Ω) := by
@@ -339,7 +339,7 @@ theorem terminalStackReadout_framesVec [NeZero q]
 
 /-- The reference density after tracing all auxiliary labels is the original
 pure main density. Source: Part II, Theorem B, lines 575–583. -/
-theorem partialTrace_terminalStackReference [NeZero q]
+theorem partialTrace_terminalStackReference
     (Ω : EuclideanSpace ℂ (Fin L → Fin q)) (hΩ : ‖Ω‖ = 1) :
     Matrix.partialTraceRight (Matrix.euclideanOuterProduct
       (terminalStackReadout L w (framesVec (Sheet.refFamily Ω) (terminalFrames L w)))
@@ -353,7 +353,7 @@ theorem partialTrace_terminalStackReference [NeZero q]
 stack readout. The norm of the auxiliary reference is derived, not assumed.
 Source: Part II, Theorem B, lines 575–583. This conditional error lemma does
 not construct a sweep vector or prove its vector-error bound. -/
-theorem rectangularTraceNorm_terminalStackReadout_sub_le [NeZero q]
+theorem rectangularTraceNorm_terminalStackReadout_sub_le
     (Ω : EuclideanSpace ℂ (Fin L → Fin q)) (hΩ : ‖Ω‖ = 1)
     (Ψ : Mem (stackRegs (Sheet.regs q) (terminalFrames L w) [])) (hΨ : ‖Ψ‖ ≤ 1)
     {ε : ℝ} (herror : ‖Ψ - framesVec (Sheet.refFamily Ω) (terminalFrames L w)‖ ≤ ε) :
