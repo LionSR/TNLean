@@ -97,7 +97,7 @@ end TNLean.PEPS.PairEffect.OriginalCircuit
 
 namespace TNLean.MPS.AreaLaw.ChainSweep
 
-open TNLean.PEPS.PairEffect TNLean.PEPS.EncodedFrame
+open TNLean.Lattice TNLean.PEPS.PairEffect TNLean.PEPS.EncodedFrame
 
 variable {L w q : ℕ}
 
@@ -127,12 +127,12 @@ private theorem middleSlot_boundaries (n : Fin (sweepOperationCount L w)) :
         (middleSlotEquiv L w n).1 (middleSlotEquiv L w n).2.val ∧
       operationFrames L w (n.val + 1) = stageBoundaryFrames L w
         (middleSlotEquiv L w n).1 ((middleSlotEquiv L w n).2.val + 1) := by
-  have h := operationFrames_step (q := q)
+  have h := operationFrames_step
     (middleSlotEquiv L w n).1 (middleSlotEquiv L w n).2
   simpa only [middleSlotEquiv_recompose] using h
 
 private abbrev middleLayout (n : ℕ) : Layout (Party L w) :=
-  stackRegs (operationFrames L w n) []
+  stackRegs (Sheet.regs q) (operationFrames L w n) []
 
 /-- Only a reindexing of the existing prescribed participant sets; after the
 last actual operation the allowed set is empty. Source: Part II, con:sweep. -/
@@ -142,60 +142,62 @@ private def middleParticipants (L w : ℕ) (n : ℕ) : Set (Party L w) :=
   else ∅
 
 variable (c : (k : Fin (stageCount L w)) → (j : Fin 18) → OriginalCircuit
-  (stackRegs (stageBoundaryFrames L w k j.val) [])
-  (stackRegs (stageBoundaryFrames L w k (j.val + 1)) []))
+  (stackRegs (Sheet.regs q) (stageBoundaryFrames L w k j.val) [])
+  (stackRegs (Sheet.regs q) (stageBoundaryFrames L w k (j.val + 1)) []))
 
 /-- Extend the exact local family on the already defined operationFrames.
-The tail is an identity; casts use only Path's derived frame equalities.
+The tail is an identity; casts use only Path's derived sheet equalities.
 Source: Part II, con:sweep, lines 330–343. -/
 def sweepMiddleStep (n : ℕ) : OriginalCircuit
     (middleLayout (L := L) (w := w) (q := q) n)
     (middleLayout (L := L) (w := w) (q := q) (n + 1)) :=
   if hn : n < sweepOperationCount L w then
     (c (middleSlotEquiv L w ⟨n, hn⟩).1 (middleSlotEquiv L w ⟨n, hn⟩).2).castLayouts
-      (congrArg (fun Fs ↦ stackRegs Fs [])
-        (middleSlot_boundaries (q := q) ⟨n, hn⟩).1.symm)
-      (congrArg (fun Fs ↦ stackRegs Fs [])
-        (middleSlot_boundaries (q := q) ⟨n, hn⟩).2.symm)
+      (congrArg (fun Fs ↦ stackRegs (Sheet.regs q) Fs [])
+        (middleSlot_boundaries ⟨n, hn⟩).1.symm)
+      (congrArg (fun Fs ↦ stackRegs (Sheet.regs q) Fs [])
+        (middleSlot_boundaries ⟨n, hn⟩).2.symm)
   else
     (OriginalCircuit.id (middleLayout (L := L) (w := w) (q := q) n)).castLayouts rfl
-      (congrArg (fun Fs ↦ stackRegs Fs [])
-        ((operationFrames_of_le (q := q)
+      (congrArg (fun Fs ↦ stackRegs (Sheet.regs q) Fs [])
+        ((operationFrames_of_le
           (by omega : sweepOperationCount L w ≤ n)).trans
-          (operationFrames_of_le (q := q)
+          (operationFrames_of_le
             (by omega : sweepOperationCount L w ≤ n + 1)).symm))
 
 /-- The middle is the existing chronological sequence, with its proven initial
-and terminal frame lists. No trajectory or endpoint is supplied.
+and terminal sheet lists. No trajectory or endpoint is supplied.
 Source: Part II, prop:sweep, lines 365–378. -/
 def sweepMiddleCircuit : OriginalCircuit
-    (stackRegs (initialFrames L w) []) (stackRegs (terminalFrames L w) []) :=
+    (stackRegs (Sheet.regs q) (initialFrames L w) []) (stackRegs (Sheet.regs q)
+      (terminalFrames L w) []) :=
   (OriginalCircuit.sequence
     (middleLayout (L := L) (w := w) (q := q)) (sweepMiddleStep c)
     (sweepOperationCount L w)).castLayouts
-      (congrArg (fun Fs ↦ stackRegs Fs []) (operationFrames_zero L w))
-      (congrArg (fun Fs ↦ stackRegs Fs []) (operationFrames_last (L := L) (w := w)
-        (q := q)))
-
-variable [NeZero q]
+      (congrArg (fun Fs ↦ stackRegs (Sheet.regs q) Fs []) (operationFrames_zero L w))
+      (congrArg (fun Fs ↦ stackRegs (Sheet.regs q) Fs []) (operationFrames_last (L := L) (w := w)))
 
 private theorem castFrames_bounded {F G F' G' : List (Sheet (Fin L) (Party L w))}
-    (d : OriginalCircuit (stackRegs F []) (stackRegs G [])) (hF : F = F') (hG : G = G')
+    (d : OriginalCircuit (stackRegs (Sheet.regs q) F []) (stackRegs (Sheet.regs q) G []))
+      (hF : F = F') (hG : G = G')
     {S : Set (Party L w)} {r K : ℕ} {ε : ℝ} (Ω : EuclideanSpace ℂ (Fin L → Fin q))
-    (h : d.IsBoundedChange S r K ε (framesVec Ω F) (framesVec Ω G)) :
-    (d.castLayouts (congrArg (fun Fs ↦ stackRegs Fs []) hF)
-      (congrArg (fun Fs ↦ stackRegs Fs []) hG)).IsBoundedChange S r K ε
-        (framesVec Ω F') (framesVec Ω G') := by
+    (h : d.IsBoundedChange S r K ε (framesVec (Sheet.refFamily Ω) F)
+      (framesVec (Sheet.refFamily Ω) G)) :
+    (d.castLayouts (congrArg (fun Fs ↦ stackRegs (Sheet.regs q) Fs []) hF)
+      (congrArg (fun Fs ↦ stackRegs (Sheet.regs q) Fs []) hG)).IsBoundedChange S r K ε
+        (framesVec (Sheet.refFamily Ω) F') (framesVec (Sheet.refFamily Ω) G') := by
   cases hF
   cases hG
   exact h
 
 private theorem castFrames_error {F G F' G' : List (Sheet (Fin L) (Party L w))}
-    (d : OriginalCircuit (stackRegs F []) (stackRegs G [])) (hF : F = F') (hG : G = G')
+    (d : OriginalCircuit (stackRegs (Sheet.regs q) F []) (stackRegs (Sheet.regs q) G []))
+      (hF : F = F') (hG : G = G')
     (Ω : EuclideanSpace ℂ (Fin L → Fin q)) :
-    ‖(d.castLayouts (congrArg (fun Fs ↦ stackRegs Fs []) hF)
-        (congrArg (fun Fs ↦ stackRegs Fs []) hG)).eval (framesVec Ω F') - framesVec Ω G'‖ =
-      ‖d.eval (framesVec Ω F) - framesVec Ω G‖ := by
+    ‖(d.castLayouts (congrArg (fun Fs ↦ stackRegs (Sheet.regs q) Fs []) hF)
+        (congrArg (fun Fs ↦ stackRegs (Sheet.regs q) Fs []) hG)).eval (framesVec
+          (Sheet.refFamily Ω) F') - framesVec (Sheet.refFamily Ω) G'‖ =
+      ‖d.eval (framesVec (Sheet.refFamily Ω) F) - framesVec (Sheet.refFamily Ω) G‖ := by
   cases hF
   cases hG
   rfl
@@ -207,13 +209,14 @@ now for every actual stage. These local circuits are the sole conditional
 construction input; no total participation or trajectory is supplied. -/
 variable (hc : ∀ k j, (c k j).IsBoundedChange (stageParticipants k j) 1 1
     (4 * (L : ℝ) ^ (-12 : ℤ))
-    (framesVec Ω (stageBoundaryFrames L w k j.val))
-    (framesVec Ω (stageBoundaryFrames L w k (j.val + 1))) ∧
+    (framesVec (Sheet.refFamily Ω) (stageBoundaryFrames L w k j.val))
+    (framesVec (Sheet.refFamily Ω) (stageBoundaryFrames L w k (j.val + 1))) ∧
   (c k j).IsSourceBounded 1 ∧ (c k j).nonprivateCount ≤ 1 ∧
   ((k.val = 0 ∧ 3 ≤ j.val ∧ j.val < 10) → (c k j).nonprivateCount = 0 ∧
-    ‖(c k j).eval (framesVec Ω (stageBoundaryFrames L w k j.val)) -
-      framesVec Ω (stageBoundaryFrames L w k (j.val + 1))‖ = 0 ∧
-    HEq (c k j) (OriginalCircuit.id (stackRegs (stageBoundaryFrames L w k j.val) []))))
+    ‖(c k j).eval (framesVec (Sheet.refFamily Ω) (stageBoundaryFrames L w k j.val)) -
+      framesVec (Sheet.refFamily Ω) (stageBoundaryFrames L w k (j.val + 1))‖ = 0 ∧
+    HEq (c k j) (OriginalCircuit.id (stackRegs (Sheet.regs q)
+      (stageBoundaryFrames L w k j.val) []))))
 
 include hc
 
@@ -222,18 +225,18 @@ operation is an identity with zero reference error. Source: Part II, prop:sweep.
 private theorem middleStep_bounded (n : ℕ) :
     (sweepMiddleStep c n).IsBoundedChange (middleParticipants L w n) 1 1
       (if n < sweepOperationCount L w then 4 * (L : ℝ) ^ (-12 : ℤ) else 0)
-      (framesVec Ω (operationFrames L w n))
-      (framesVec Ω (operationFrames L w (n + 1))) := by
+      (framesVec (Sheet.refFamily Ω) (operationFrames L w n))
+      (framesVec (Sheet.refFamily Ω) (operationFrames L w (n + 1))) := by
   classical
   by_cases hn : n < sweepOperationCount L w
   · simp only [sweepMiddleStep, middleParticipants, dite_eq_left hn, ite_eq_left hn]
     exact castFrames_bounded _
-      (middleSlot_boundaries (q := q) ⟨n, hn⟩).1.symm
-      (middleSlot_boundaries (q := q) ⟨n, hn⟩).2.symm Ω (hc _ _).1
+      (middleSlot_boundaries ⟨n, hn⟩).1.symm
+      (middleSlot_boundaries ⟨n, hn⟩).2.symm Ω (hc _ _).1
   · simp only [sweepMiddleStep, middleParticipants, dite_eq_right hn, ite_eq_right hn]
     exact castFrames_bounded _ rfl
-      ((operationFrames_of_le (q := q) (Nat.le_of_not_gt hn)).trans
-        (operationFrames_of_le (q := q)
+      ((operationFrames_of_le (Nat.le_of_not_gt hn)).trans
+        (operationFrames_of_le
           (by omega : sweepOperationCount L w ≤ n + 1)).symm) Ω
       (OriginalCircuit.isBoundedChange_id ∅ 1 1 le_rfl _)
 
@@ -245,7 +248,7 @@ private theorem middleStep_sourceBounded (n : ℕ) : (sweepMiddleStep c n).IsSou
   · simp only [sweepMiddleStep, dite_eq_right hn]
     exact OriginalCircuit.isSourceBounded_castLayouts _ _ _ trivial
 
-omit hc [NeZero q] in
+omit hc in
 /-- No additional operation is introduced beyond the fixed Path length.
 Source: Part II, con:sweep, end of the stage loop. -/
 theorem sweepMiddleStep_tail_identity (n : ℕ) (hn : sweepOperationCount L w ≤ n) :
@@ -275,7 +278,7 @@ theorem sweepMiddleStep_first_padding (k : Fin (stageCount L w)) (j : Fin 18)
   simp only [sweepMiddleStep, dite_eq_left hn]
   have hid := (hc k j).2.2.2 ⟨hk, hj.1, hj.2⟩
   have hid' : HEq (c (middleSlotEquiv L w n).1 (middleSlotEquiv L w n).2)
-      (OriginalCircuit.id (stackRegs (stageBoundaryFrames L w
+      (OriginalCircuit.id (stackRegs (Sheet.regs q) (stageBoundaryFrames L w
         (middleSlotEquiv L w n).1 (middleSlotEquiv L w n).2.val) [])) := by
     rw [he]
     exact hid.2.2
@@ -353,17 +356,18 @@ sum-bound obtained from the existing contraction-trajectory theorem.
 No actual output, error or trajectory is supplied as a hypothesis.
 Source: Part II, prop:sweep, vector error assertion, lines 355–359. -/
 theorem sweepMiddleCircuit_norm_and_error (hΩ : ‖Ω‖ = 1) :
-    ‖(sweepMiddleCircuit c).eval (framesVec Ω (initialFrames L w))‖ ≤ 1 ∧
-      ‖(sweepMiddleCircuit c).eval (framesVec Ω (initialFrames L w)) -
-          framesVec Ω (terminalFrames L w)‖ ≤
+    ‖(sweepMiddleCircuit c).eval (framesVec (Sheet.refFamily Ω) (initialFrames L w))‖ ≤ 1 ∧
+      ‖(sweepMiddleCircuit c).eval (framesVec (Sheet.refFamily Ω) (initialFrames L w)) -
+          framesVec (Sheet.refFamily Ω) (terminalFrames L w)‖ ≤
         (sweepOperationCount L w : ℝ) * (4 * (L : ℝ) ^ (-12 : ℤ)) := by
-  have hnorm : ‖(sweepMiddleCircuit c).eval (framesVec Ω (initialFrames L w))‖ ≤ 1 :=
+  have hnorm : ‖(sweepMiddleCircuit c).eval (framesVec (Sheet.refFamily Ω)
+    (initialFrames L w))‖ ≤ 1 :=
     ((sweepMiddleCircuit c).norm_eval_le_norm _).trans (norm_initialFrames hΩ).le
   refine ⟨hnorm, ?_⟩
   let a := middleLayout (L := L) (w := w) (q := q)
   let step := sweepMiddleStep c
   let N := sweepOperationCount L w
-  let ref : (n : ℕ) → Mem (a n) := fun n ↦ framesVec Ω (operationFrames L w n)
+  let ref : (n : ℕ) → Mem (a n) := fun n ↦ framesVec (Sheet.refFamily Ω) (operationFrames L w n)
   let x : (n : ℕ) → Mem (a n) := fun n ↦
     (OriginalCircuit.sequence a step n).eval (ref 0)
   let S : (n : ℕ) → Mem (a n) →ₗ[ℂ] Mem (a (n + 1)) := fun n ↦ (step n).eval.toLinearMap
@@ -383,7 +387,7 @@ theorem sweepMiddleCircuit_norm_and_error (hΩ : ‖Ω‖ = 1) :
       _ = _ := by simp
   unfold sweepMiddleCircuit
   rw [castFrames_error _ (operationFrames_zero L w)
-    (operationFrames_last (L := L) (w := w) (q := q)) Ω]
+    (operationFrames_last (L := L) (w := w)) Ω]
   exact herr'
 
 end TNLean.MPS.AreaLaw.ChainSweep
