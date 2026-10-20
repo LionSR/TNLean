@@ -1688,16 +1688,39 @@ three owners meet and no encoded holes are needed.
     \label{lem:lattice_sheet_stack_reference}
     \lean{TNLean.Lattice.Sheet.norm_refFamily_le,
         TNLean.Lattice.Sheet.norm_framesVec,
-        TNLean.Lattice.Sheet.pairRef_eq_twoRegIso_symm}
+        TNLean.Lattice.Sheet.pairRef_eq_twoRegIso_symm,
+        TNLean.Lattice.Sheet.finiteDimensional_of_mem_stackRegs}
     \leanok
     \uses{def:lattice_sheet_stack}
     If $\lVert\Omega\rVert\le1$, the reference vector of every sheet has norm at
     most one; if $\lVert\Omega\rVert=1$, the reference vector of a list of sheets
     without further registers has norm one. The reference vector of two adjacent
     sheets is $\Omega\otimes\Omega$ in the product coordinates of the two sheets.
+    Every register of a list of sheets is $\C^q$, so it is finite-dimensional.
 \end{lemma}
 
 \begin{proof}\leanok
     The reference vector of a sheet is the image of $\Omega$ under an isometry,
     and the norm of a tensor product of vectors is the product of their norms.
+\end{proof}
+
+\begin{theorem}[The initial step for sheets]
+    \label{thm:lattice_sheet_initialization}
+    \lean{TNLean.Lattice.Sheet.exists_originalCircuit_initial_of_owner}
+    \leanok
+    \uses{lem:lattice_sheet_stack_reference,thm:peps_sheet_initialization}
+    Let $\lVert\Omega\rVert=1$ and let every sheet of a list be held entirely by
+    one party. Then the product of the reference vectors of the sheets of every
+    party has norm one, and one private map per party followed by a reordering
+    carries the product of these vectors exactly to the reference vector of the
+    list, with no nonprivate gate. This is the case without holes of
+    Theorem~\ref{thm:peps_sheet_initialization}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:lattice_sheet_stack_reference,thm:peps_sheet_initialization}
+    Every register of a sheet held by one party belongs to that party, and the
+    reference vector of every list of sheets has norm one by
+    Lemma~\ref{lem:lattice_sheet_stack_reference}. Apply
+    Theorem~\ref{thm:peps_sheet_initialization}.
 \end{proof}

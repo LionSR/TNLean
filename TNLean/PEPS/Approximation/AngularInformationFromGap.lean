@@ -38,14 +38,14 @@ theorem angularInformationBound {q : ℕ} (hq : 1 ≤ q)
   exact angularInformationBound_of_sublinearCollarBound hq hJ hΔ hcol
 
 /-- The size threshold of Proposition 3.4 at closed-form constants: `angularThreshold` at the
-template constant `24`, the collar threshold `collarThresholdClosed q J Δ`, and the
-amplification constant and threshold at the collar constant `collarConstantClosed q J Δ`.
+template constant `24`, the collar threshold `collarThresholdClosed q 1 J Δ`, and the
+amplification constant and threshold at the collar constant `collarConstantClosed q 1 J Δ`.
 Source: polynomial-PEPS manuscript, Proposition 3.4 (`prop:angular`), `02-information.tex`,
 lines 635–785. -/
 noncomputable def angularThresholdClosed (q : ℕ) (J Δ a A₀ : ℝ) (m₀ : ℕ) (p : ℝ) : ℝ :=
-  angularThreshold q J Δ a A₀ m₀ p 24 (collarThresholdClosed q J Δ)
-    (collarAmplificationConstant q 1 J Δ (collarConstantClosed q J Δ))
-    (collarAmplificationThreshold q 1 J Δ (collarConstantClosed q J Δ))
+  angularThreshold q J Δ a A₀ m₀ p 24 (collarThresholdClosed q 1 J Δ)
+    (collarAmplificationConstant q 1 J Δ (collarConstantClosed q 1 J Δ))
+    (collarAmplificationThreshold q 1 J Δ (collarConstantClosed q 1 J Δ))
 
 /-- **Proposition 3.4 at an integer accuracy, at closed-form constants.** For `q ≥ 1`,
 `J ≥ 0`, `Δ > 0`, `a > 0`, `m₀ ∈ ℕ` and an integer `p > 0`, every slope
@@ -58,7 +58,7 @@ theorem isAngularScale_closed_le {q : ℕ} (hq : 1 ≤ q) {J Δ : ℝ} (hJ : 0 �
     (hD : angularScale J Δ a p ≤ D) (hL₀ : angularThresholdClosed q J Δ a A₀ m₀ p ≤ L₀) :
     IsAngularScale q (IsSquareGroundState q J Δ) a A₀ m₀ p D L₀ :=
   isAngularScale_of_sublinearCollarBoundAt_le_explicit hq hJ hΔ
-    (sublinearCollarBoundAt_closed hq hJ hΔ) ha m₀ hp hD hL₀
+    (sublinearCollarBoundAt_closed (R := 1) (D₀ := 13) hq hJ hΔ (by norm_num)) ha m₀ hp hD hL₀
 
 /-- Uniform angular slopes and thresholds can exceed any prescribed lower bounds.
 The positive slope and threshold are chosen before every finite physical instance,
