@@ -50,6 +50,28 @@ source of that version and opening the named file.
 | [arXiv:2504.16985v3](https://arxiv.org/abs/2504.16985v3) | Anomalous matrix product operator symmetries and 1D mixed-state phases | Xiao-Qi Sun | `References/2504.16985/main.tex` | Link only; [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
 | [arXiv:2509.03600v1](https://arxiv.org/abs/2509.03600v1) | Trading Mathematical for Physical Simplicity: Bialgebraic Structures in Matrix Product Operator Symmetries | Yuhan Liu, András Molnár, Xiao-Qi Sun, Frank Verstraete, Kohtaro Kato, Laurens Lootens | `References/2509.03600/main.tex` | Link only; [arXiv non-exclusive distribution license 1.0](https://arxiv.org/licenses/nonexclusive-distrib/1.0/) |
 
+## Sources used for the one-dimensional area-law comparison
+
+These sources are not vendored, for the same reason as the preceding section:
+both are posted under the arXiv non-exclusive distribution license, which grants
+no downstream redistribution right. Issues and docstrings cite them by file and
+line range as `References/<arXiv ID>/...`, a local mirror of the arXiv source
+of the exact version linked below, excluded from the repository by
+`.gitignore`. A reader reproduces a cited line range by downloading the arXiv
+source of that version and opening the named file.
+
+- [arXiv:0705.2024v4](https://arxiv.org/abs/0705.2024v4): M. B. Hastings,
+  *An Area Law for One Dimensional Quantum Systems*. Mirrored file
+  `References/0705.2024/law16.tex`, with the figure `exp.eps`. Link only;
+  [arXiv non-exclusive distribution license 1.0][nonexclusive].
+- [arXiv:1307.5143v1](https://arxiv.org/abs/1307.5143v1): Zeph Landau, Umesh
+  Vazirani, Thomas Vidick, *A polynomial-time algorithm for the ground state of
+  1D gapped local Hamiltonians*. Mirrored file `References/1307.5143/algo53.tex`,
+  with the bibliography `algo53.bbl`. Link only;
+  [arXiv non-exclusive distribution license 1.0][nonexclusive].
+
+[nonexclusive]: https://arxiv.org/licenses/nonexclusive-distrib/1.0/
+
 ## Other paper sources in this directory
 
 | arXiv ID | Title | Authors | arXiv license |
