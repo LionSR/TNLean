@@ -348,7 +348,6 @@ theorem vonNeumannEntropy_partialTraceRight_eq_zero_of_gap {HA : Matrix α α �
   rw [hred]
   exact rank_vecMulVec_le _ _
 
-
 section Family
 
 /-- The matrix of `h` acting on the factor `i` of the configuration space `∀ j, σ j`, with the
@@ -398,7 +397,7 @@ theorem isGappedGroundState_submatrix {m n : Type*} [Fintype m] [DecidableEq m] 
 /-- Under the splitting `∀ i, σ i ≃ σ 0 × ∀ j, σ (succ j)`, a sum of factor operators becomes
 `H_0 ⊗ 1 + 1 ⊗ ∑_j H_{j+1}`. -/
 theorem submatrix_consEquiv_sum_factorOperator {n : ℕ} {σ : Fin (n + 1) → Type*}
-    [∀ i, Fintype (σ i)] [∀ i, DecidableEq (σ i)] (H : ∀ i, Matrix (σ i) (σ i) ℂ) :
+    [∀ i, DecidableEq (σ i)] (H : ∀ i, Matrix (σ i) (σ i) ℂ) :
     (∑ i, factorOperator i (H i)).submatrix (Fin.consEquiv σ) (Fin.consEquiv σ) =
       H 0 ⊗ₖ (1 : Matrix (∀ j : Fin n, σ j.succ) (∀ j : Fin n, σ j.succ) ℂ) +
         (1 : Matrix (σ 0) (σ 0) ℂ) ⊗ₖ
