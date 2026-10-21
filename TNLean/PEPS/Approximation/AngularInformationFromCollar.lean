@@ -55,6 +55,20 @@ noncomputable def angularMargin (a : ℝ) : ℝ := min a 1 / 200
 Source: polynomial-PEPS manuscript, `02-information.tex`, lines 663–664. -/
 noncomputable def angularCellSide (a : ℝ) : ℝ := angularMargin a / 8
 
+/-- For `a > 0`, the margin `a' = angularMargin a` and the cell side `d = angularCellSide a`
+satisfy `0 < a' < a / 100` and `0 < d < a' / 4`, with `d ≤ 1`.
+
+Source: polynomial-PEPS manuscript, `02-information.tex`, lines 662–664. -/
+theorem angularMargin_cellSide_bounds {a : ℝ} (ha : 0 < a) :
+    0 < angularMargin a ∧ angularMargin a < a / 100 ∧ 0 < angularCellSide a ∧
+      angularCellSide a < angularMargin a / 4 ∧ angularCellSide a ≤ 1 := by
+  have ha' : 0 < angularMargin a := div_pos (lt_min ha zero_lt_one) (by norm_num)
+  have ha'1 : angularMargin a ≤ 1 / 200 :=
+    div_le_div_of_nonneg_right (min_le_right a 1) (by norm_num)
+  exact ⟨ha', show min a 1 / 200 < a / 100 by linarith [min_le_left a 1],
+    div_pos ha' (by norm_num), div_lt_div_of_pos_left ha' (by norm_num) (by norm_num),
+    show angularMargin a / 8 ≤ 1 by linarith⟩
+
 /-- The bound `(m₀ + 1)(2 ⌈(max(A₀, 2) + 3a'/2) / d⌉ + 3)²` on the number of new cells at one
 annular scale, with `a' = angularMargin a` and `d = angularCellSide a`.
 
@@ -151,15 +165,7 @@ theorem angularInformation_of_bounds {q : ℕ} {G : ∀ L : ℕ, StateSpace L q 
         FiniteProduct.mutualInformation (fun _ : SquareLatticeVertex L L ↦ Fin q) Ω X E ≤
           (L : ℝ) ^ (-p) := by
   classical
-  have ha' : 0 < angularMargin a := div_pos (lt_min ha zero_lt_one) (by norm_num)
-  have ha'a : angularMargin a < a / 100 :=
-    show min a 1 / 200 < a / 100 by linarith [min_le_left a 1]
-  have ha'1 : angularMargin a ≤ 1 / 200 :=
-    div_le_div_of_nonneg_right (min_le_right a 1) (by norm_num)
-  have hd : 0 < angularCellSide a := div_pos ha' (by norm_num)
-  have hda' : angularCellSide a < angularMargin a / 4 :=
-    div_lt_div_of_pos_left ha' (by norm_num) (by norm_num)
-  have hd1 : angularCellSide a ≤ 1 := show angularMargin a / 8 ≤ 1 by linarith
+  obtain ⟨ha', ha'a, hd, hda', hd1⟩ := angularMargin_cellSide_bounds ha
   have hreset' := angular_single_scale_reset_of_bounds hcell hreset hC₁ hK hCp ha' ha'a hd hda'
     hd1 hp (angularCellCount a A₀ m₀) hD
   have hD1 : 1 ≤ D := (one_le_angularCellResetSlope _ _ _).trans hD
@@ -229,12 +235,7 @@ theorem angularInformationBound_of_sublinearCollarBoundAt_le {q : ℕ} (hq : 1 �
           AngularSeparation (sitePosition L '' X) (sitePosition L '' E) n (D * Real.log L) a V →
           FiniteProduct.mutualInformation (fun _ : SquareLatticeVertex L L ↦ Fin q) Ω X E ≤
             (L : ℝ) ^ (-p) := by
-  have ha' : 0 < angularMargin a := div_pos (lt_min ha zero_lt_one) (by norm_num)
-  have ha'a : angularMargin a < a / 100 :=
-    show min a 1 / 200 < a / 100 by linarith [min_le_left a 1]
-  have hd : 0 < angularCellSide a := div_pos ha' (by norm_num)
-  have hda' : angularCellSide a < angularMargin a / 4 :=
-    div_lt_div_of_pos_left ha' (by norm_num) (by norm_num)
+  obtain ⟨ha', ha'a, hd, hda', -⟩ := angularMargin_cellSide_bounds ha
   set c := angularClearance a (angularMargin a) (angularCellSide a)
   have hc : 0 < c := div_pos (AngularGrid.angular_clearance_pos ha' ha'a hda') hd
   have hcell : SquareCellInformationBound q (IsSquareGroundState q J Δ) c

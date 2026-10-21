@@ -185,12 +185,7 @@ theorem isAngularScale_range_closed_le {q R : ℕ} (hq : 1 ≤ q) {J Δ : ℝ} (
     (hL₀ : rangeAngularThreshold q R J Δ a A₀ m₀ p ≤ L₀) :
     IsAngularScale q (IsRangeSquareGroundState q R J Δ) a A₀ m₀ p D L₀ := by
   have hp' : (0 : ℝ) < p := by exact_mod_cast hp
-  have ha' : 0 < angularMargin a := div_pos (lt_min ha zero_lt_one) (by norm_num)
-  have ha'a : angularMargin a < a / 100 :=
-    show min a 1 / 200 < a / 100 by linarith [min_le_left a 1]
-  have hd : 0 < angularCellSide a := div_pos ha' (by norm_num)
-  have hda' : angularCellSide a < angularMargin a / 4 :=
-    div_lt_div_of_pos_left ha' (by norm_num) (by norm_num)
+  obtain ⟨ha', ha'a, hd, hda', -⟩ := angularMargin_cellSide_bounds ha
   have hc : 0 < angularClearance a (angularMargin a) (angularCellSide a) :=
     div_pos (angular_clearance_pos ha' ha'a hda') hd
   exact isAngularScale_of_bounds (fun _ _ hΩ ↦ hΩ.norm_eq_one) ha m₀ hp
