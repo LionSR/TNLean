@@ -13,5 +13,5 @@ from `PEPS/Approximation/SwappedLocalHamiltonian.lean` to `Lattice/CrossingSuppo
 
 | Removed | Replacement |
 |---|---|
-| `TNLean.Lattice.crossingSupports` | `QICLean.Entropy.crossingTerms (fun X : AdmissibleSupport Λ R ↦ X.1) A` |
+| `TNLean.Lattice.crossingSupports` | `Entropy.crossingTerms (fun X : AdmissibleSupport Λ R ↦ X.1) A` |
 | `TNLean.Lattice.mem_crossingSupports` | unfolding `Entropy.crossingTerms` with `Finset.mem_filter` |
