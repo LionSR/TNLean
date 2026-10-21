@@ -89,8 +89,8 @@ lemma card_crossingTerms_le_mul_card_boundaryEdges
     obtain ⟨p, hp, hsub⟩ := X.2.exists_boundary_window_of_split hX
     exact Finset.mem_biUnion.mpr ⟨p, hp, Finset.mem_filter.mpr ⟨Finset.mem_univ _, hsub⟩⟩
   have hcard (p : ℕ) : (F p).card ≤ 2 ^ (2 * R) :=
-    (card_filter_subset_le (W p)).trans
-      (Nat.pow_le_pow_right (by norm_num) ((card_interval_le _ _).trans (by omega)))
+    card_filter_subset_le_pow_of_card_le
+      ((card_interval_le _ _).trans (by omega))
   exact (Finset.card_le_card hcover).trans
     ((Finset.card_biUnion_le_card_mul (boundaryEdges L D) F (2 ^ (2 * R))
       (fun p _ ↦ hcard p)).trans_eq (Nat.mul_comm _ _))

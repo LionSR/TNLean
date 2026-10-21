@@ -9,7 +9,7 @@
 \date{October 18, 2026}
 \begin{document}
 \maketitle
-\gapnote{local-correction}{open}
+\gapnote{local-correction}{resolved}
 
 \paragraph{Source.}
 The one-dimensional note~\cite{TNLean2026OneDimensional}, Part~II,
@@ -41,7 +41,6 @@ consecutive sites being dissolved, and for a band starting at $a$ the scaled
 coordinate of a site $y$ is $(y-a)/w$. Finally, $\Xi$ denotes the tensor
 product of the retired auxiliary copies of $\Omega$ in their final
 registers (lines~356--358), so that $\|\Xi\|=1$.
-
 \paragraph{Lattice interfaces.}
 The source fixes an integer width $w\ge1$ and initially specifies
 $[a,a+w)$, but writes the subsequent scaled bands as open intervals.
@@ -73,25 +72,82 @@ $q^{|B_i|}\le q^{4t}$ to the distinguished main sheet. Retain every
 auxiliary register at its actual owner. Their reference factor $\Xi$ is a
 tensor product across copies, not necessarily across parties.
 
-\paragraph{Remaining construction.}
-The ownership and separation calculation alone supplies neither physical
-gates nor the terminal output identification. One must construct the
-party-private coordinate regrouping which selects the main blocks as
-physical outputs, assigns a one-dimensional physical output to each other
-party, and leaves all auxiliary registers private at their actual owners.
-One must then identify the physical density with the partial trace over
-those auxiliary registers. Once this identification is established,
-$\|\Xi\|=1$ gives
+\paragraph{Constructed terminal readout.}
+The terminal regrouping is implemented by a word of party-private operations.
+At each owner it encodes the main registers into the physical block, gives
+a scalar physical output when that block is empty, and retains every
+auxiliary copy-site label privately at its actual owner. The evaluation of
+this word is the prescribed coordinate isometry. For every terminal vector,
+its physical density is exactly the partial trace over the original
+auxiliary labels, expressed in the main-block coordinates. This identity
+requires neither normalization nor a product assumption on that vector.\footnote{
+    Declarations \leanid{TNLean.MPS.AreaLaw.ChainSweep.eval_terminalRegroupingWord}
+    and \leanid{TNLean.MPS.AreaLaw.ChainSweep.physicalDensity_terminalRegrouping}.}
+
+For $q\ge1$, the specified reference has the exact readout
+$\Omega\otimes\Xi$, where
+$\Xi$ is the product of the original labelled auxiliary copies. A unit
+$\Omega$ gives $\|\Xi\|=1$, including the empty family of copies. Thus
 \begin{align}
-    \operatorname{Tr}_{\rm aux}\bigl|\Omega\otimes\Xi\bigr\rangle\bigl\langle\Omega\otimes\Xi\bigr|
-        &= |\Omega\rangle\langle\Omega|.
-    \label{eq:tnlean_one_dimensional_band_sweep_corrections_partial_trace}
+    \operatorname{Tr}_{\rm aux}
+    \bigl|\Omega\otimes\Xi\bigr\rangle
+    \bigl\langle\Omega\otimes\Xi\bigr|
+     & =|\Omega\rangle\langle\Omega|.
+    \label{eq:tnlean_one_dimensional_band_sweep_corrections_reference_partial_trace}
 \end{align}
-The downstream compression statement bounds only intended physical
-outputs; private spaces remain finite-dimensional without a numerical
-size bound (lines~423--424, 439--442, 459--461). This does not prove the
-required regrouping or partial-trace identity for the actual construction.
-No completion of the full sweep or compression argument is asserted.
+The normalization and this identity are proved for the constructed reference,
+without requiring a product across final parties.\footnote{Declaration
+    \leanid{TNLean.MPS.AreaLaw.ChainSweep.partialTrace_terminalStackReference}.}
+
+\paragraph{Physical preparation and compression.}
+For fixed $q,R,J,\Delta$ with $q\ge1$ and $\Delta>0$, the full physical
+preparation chooses its logarithmic width constant and a length cutoff
+before the length, Hamiltonian and ground vector.
+Above that cutoff, the original full-system gapped-ground-state assumption
+constructs the actual private initialization, local operations, chronological
+composition and terminal regrouping. No circuit family, marginal identity,
+or information bound is supplied as an additional physical hypothesis.\footnote{
+    Declaration \leanid{TNLean.MPS.AreaLaw.ChainSweep.exists_preparation_of_gappedGroundState}.}
+In the specified main/auxiliary coordinates the prepared vector obeys
+\begin{align}
+    \|\widehat\Psi-\Omega\otimes\Xi\| & \le26L^{-11}.
+    \label{eq:tnlean_one_dimensional_band_sweep_corrections_vector_error}
+\end{align}
+If $U$ is the fixed identification of the original main sites with the
+physical blocks, the actual physical density satisfies
+\begin{align}
+    \bigl\|\rho_{\rm phys}-|U\Omega\rangle\langle U\Omega|\bigr\|_1
+     & \le52L^{-11}.
+    \label{eq:tnlean_one_dimensional_band_sweep_corrections_density_error}
+\end{align}
+The underlying prepared vector has norm at most one. The circuit has
+participation at most forty, at most three parties per nonprivate gate,
+and polynomially bounded physical dimensions, uniformly in the instance.
+
+These constructions form one uniform family to which compression applies.
+One actual nonzero product-basis column is chosen before all cuts; its
+normalization gives the simultaneous block-prefix rank bounds. The inverse
+main-coordinate map then gives one unit, nonzero open-boundary matrix
+product state. With constants chosen before the length, Hamiltonian and
+ground vector, its bond dimension is at most $CL^n$ and its phase error is
+at most $1/L$ for every $L\ge2$. The finitely many lengths below the
+preparation cutoff have exact representations and are absorbed into the
+same constant.\footnote{Declarations
+    \leanid{TNLean.MPS.AreaLaw.ChainSweep.exists_uniform_sampled_block_column}
+    and \leanid{TNLean.MPS.AreaLaw.ChainSweep.exists_protocol_isOpenMPS_norm_sub_phase_le}.}
+Compression bounds only the distinguished physical outputs. Private spaces
+remain finite-dimensional without an additional numerical size bound.
+
+\paragraph{Information exponent and width.}
+The local birth and death estimates use information at exponent $24$ and
+error at exponent $12$; the exchange has error at most $4L^{-12}$.
+The width constant is chosen from logarithmic separation at exponent $24$,
+before the length and all physical data, and may be enlarged to meet the
+geometric bounds. There are at most $L$ operations, so their total vector
+error is at most $4L^{-11}\le26L^{-11}$. The same preparation and compression
+therefore give the stated existential constants in Theorem~B.
+The nondegenerate lattice witness and the correction to the all-register
+output assertion remain valid and are retained above.
 
 \bibliographystyle{alpha}
 \bibliography{references}
