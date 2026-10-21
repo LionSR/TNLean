@@ -9,11 +9,13 @@ and, where applicable, their publishers.
 **The paper source files are not covered by the repository's license.** The
 top-level `LICENSE` (Apache License 2.0) applies to the Lean code, the blueprint,
 and the other original content of this repository, including this notice; it
-does not apply to the paper source files. Entries marked
+does not apply to the paper source files. Vendored files whose arXiv license is
 `non-exclusive-distrib 1.0` or `assumed 1991-2003` are present under author
 permissions specific to this repository; the arXiv licenses alone grant no
 downstream redistribution right, and that permission is not inferred for
-additional works. Entries marked `CC BY 4.0` are redistributed under the linked
+additional works. Entries marked link only carry no such permission: their
+arXiv license is recorded for reference, and their files are not redistributed.
+Entries marked `CC BY 4.0` are redistributed under the linked
 Creative Commons license. The version of record for each paper is the arXiv
 posting or the journal publication.
 
@@ -49,6 +51,49 @@ source of that version and opening the named file.
 | [arXiv:2307.02534v3](https://arxiv.org/abs/2307.02534v3) | Majorana chain and Ising model -- (non-invertible) translations, anomalies, and emanant symmetries | Nathan Seiberg, Shu-Heng Shao | `References/2307.02534/source/Majoranadraft.tex` | Link only; [arXiv non-exclusive distribution license 1.0](https://arxiv.org/licenses/nonexclusive-distrib/1.0/) |
 | [arXiv:2504.16985v3](https://arxiv.org/abs/2504.16985v3) | Anomalous matrix product operator symmetries and 1D mixed-state phases | Xiao-Qi Sun | `References/2504.16985/main.tex` | Link only; [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
 | [arXiv:2509.03600v1](https://arxiv.org/abs/2509.03600v1) | Trading Mathematical for Physical Simplicity: Bialgebraic Structures in Matrix Product Operator Symmetries | Yuhan Liu, András Molnár, Xiao-Qi Sun, Frank Verstraete, Kohtaro Kato, Laurens Lootens | `References/2509.03600/main.tex` | Link only; [arXiv non-exclusive distribution license 1.0](https://arxiv.org/licenses/nonexclusive-distrib/1.0/) |
+
+## Sources used for the one-dimensional area-law comparison
+
+These sources are not vendored. As in the preceding section, the arXiv license of each
+grants no downstream redistribution right, and no author permission has been recorded
+for them. Issues and docstrings cite them by file and
+line range as `References/<arXiv ID>/...`, a local mirror of the arXiv source
+of the exact version linked below, excluded from the repository by
+`.gitignore`. A reader reproduces a cited line range by downloading the arXiv
+source of that version and opening the named file.
+
+- [arXiv:0705.2024v4](https://arxiv.org/abs/0705.2024v4): M. B. Hastings,
+  *An Area Law for One Dimensional Quantum Systems*. Mirrored file
+  `References/0705.2024/law16.tex`, with the figure `exp.eps`. Link only;
+  [arXiv non-exclusive distribution license 1.0][nonexclusive].
+- [arXiv:1307.5143v1](https://arxiv.org/abs/1307.5143v1): Zeph Landau, Umesh
+  Vazirani, Thomas Vidick, *A polynomial-time algorithm for the ground state of
+  1D gapped local Hamiltonians*. Mirrored file `References/1307.5143/algo53.tex`,
+  with the bibliography `algo53.bbl`. Link only;
+  [arXiv non-exclusive distribution license 1.0][nonexclusive].
+- [arXiv:1301.1162v1](https://arxiv.org/abs/1301.1162v1): Itai Arad, Alexei Kitaev,
+  Zeph Landau, Umesh Vazirani, *An area law and sub-exponential algorithm for 1D
+  systems*. Mirrored file `References/1301.1162/1dfrustrated34.tex`, with the
+  bibliography `1dfrustrated34.bbl` and the figure `1dline.pdf`. Link only;
+  [arXiv non-exclusive distribution license 1.0][nonexclusive].
+- [arXiv:1602.08828v2](https://arxiv.org/abs/1602.08828v2): Itai Arad, Zeph Landau,
+  Umesh Vazirani, Thomas Vidick, *Rigorous RG algorithms and area laws for low
+  energy eigenstates in 1D*. Mirrored file `References/1602.08828/local_alg_arxiv_v2.tex`,
+  with the bibliography `local_alg_arxiv_v2.bbl` and the figures `rg1step.pdf`,
+  `rgtree.pdf` and `transmission.pdf`. Link only;
+  [arXiv non-exclusive distribution license 1.0][nonexclusive].
+- [arXiv:cond-mat/0508554v3](https://arxiv.org/abs/cond-mat/0508554v3): M. B. Hastings,
+  *Solving Gapped Hamiltonians Locally*, Phys. Rev. B 73, 085115 (2006). Mirrored file
+  `References/cond-mat_0508554/proj3new.tex`, with the figures `figAct.eps` and
+  `figIt.eps`. Link only;
+  [arXiv non-exclusive distribution license 1.0][nonexclusive].
+- [arXiv:0705.0292v2](https://arxiv.org/abs/0705.0292v2): Norbert Schuch, Michael M. Wolf,
+  Frank Verstraete, J. Ignacio Cirac, *Entropy scaling and simulability by Matrix Product
+  States*, Phys. Rev. Lett. 100, 030504 (2008). Mirrored file
+  `References/0705.0292/paper_v2.tex`, with the figure `map.eps`. Link only; arXiv lists
+  the license as assumed 1991-2003.
+
+[nonexclusive]: https://arxiv.org/licenses/nonexclusive-distrib/1.0/
 
 ## Other paper sources in this directory
 

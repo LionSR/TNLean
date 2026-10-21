@@ -16,10 +16,10 @@ edge, the same canonical maximizing family gives an adapted bundled source
 maximum, positive output norm, unit normalized output, and the original energy
 and full-gap fidelity bounds. Each physical crossing is counted once.
 
-The interaction bound may have either sign. A negative bound forces the grid to
-be empty by its site-term norm field. Rebounding only the norm-proof fields to
-`max J 0` therefore preserves both the operator and the exact crossing budget.
-This removes a vacuous-corner assumption, not an analytic estimate.
+The interaction bound may have either sign. The canonical physical theorem
+applies directly to the original Hamiltonian, including the empty grid with a
+negative vacuous bound. Its once-counted crossing budget is transported without
+changing the interaction bound or the maximizing family.
 
 Source: openai/math revision `adc7f1241b42e322a6451854ab7e4b4c146bf78a`,
 `lean/OAI/MathematicalPhysics/PEPSFilters/EnergyOptimizer.lean`,
@@ -111,51 +111,12 @@ private theorem rectangle_singleCrossing {L m : ℕ}
     ((rectangleForwardEdge_crosses_iff (X i) f).mp hi)
     ((rectangleForwardEdge_crosses_iff (X j) f).mp hj)
 
-/-- Merely rebinds the norm-bound proof fields, retaining every operator. -/
-private def nonnegativeBoundHamiltonian {L q : ℕ} {J : ℝ}
-    (h : SquareHamiltonian L q J) : SquareHamiltonian L q (max J 0) where
-  siteTerm := h.siteTerm
-  edgeTerm := h.edgeTerm
-  site_supported := h.site_supported
-  edge_supported := h.edge_supported
-  site_norm_le := fun v => (h.site_norm_le v).trans (le_max_left J 0)
-  edge_norm_le := fun e => (h.edge_norm_le e).trans (le_max_left J 0)
-  hermitian := h.hermitian
-
-/-- Negative local bounds force an empty grid, including q = 0. -/
-private theorem gridSize_eq_zero_of_negative_bound {L q : ℕ} {J : ℝ}
-    (h : SquareHamiltonian L q J) (hJ : J < 0) : L = 0 := by
-  by_contra hL
-  have hpos : 0 < L := Nat.pos_of_ne_zero hL
-  let v : SquareLatticeVertex L L := (⟨0, hpos⟩, ⟨0, hpos⟩)
-  exact (not_lt_of_ge ((norm_nonneg (h.siteTerm v)).trans (h.site_norm_le v))) hJ
-
-private theorem crossingCount_emptyGrid (A : Finset (Vertex 0)) :
-    crossingCount A = 0 := by
-  classical
-  let : IsEmpty (ForwardEdge 0) := ⟨fun e => Fin.elim0 e.val.1.1⟩
-  simp [crossingCount]
-
-/-- The norm-bound rebound preserves the original exact budget. -/
-private theorem crossingBudget_nonnegativeBound {L q m : ℕ} {J : ℝ}
-    (h : SquareHamiltonian L q J) (X : Fin m → Finset (Vertex L))
-    (a : Fin m → ℝ) :
-    (q : ℝ) ^ 2 * max J 0 *
-        ∑ j : Fin m, (crossingCount (X j) : ℝ) * a j ^ 2 =
-      (q : ℝ) ^ 2 * J *
-        ∑ j : Fin m, (crossingCount (X j) : ℝ) * a j ^ 2 := by
-  by_cases hJ : 0 ≤ J
-  · rw [max_eq_left hJ]
-  · have hL := gridSize_eq_zero_of_negative_bound h (lt_of_not_ge hJ)
-    subst L
-    simp [crossingCount_emptyGrid]
-
 /-- Converts the canonical theorem's a² * boundary-card convention to the
-source's crossingCount * a² convention and restores its original J. -/
-private theorem canonicalCrossingBudget_eq_original {L q m : ℕ} {J : ℝ}
-    (h : SquareHamiltonian L q J) (X : Fin m → Finset (Vertex L))
+source's crossingCount * a² convention at the original interaction bound. -/
+private theorem canonicalCrossingBudget_eq_original {L q m : ℕ}
+    (J : ℝ) (X : Fin m → Finset (Vertex L))
     (a : Fin m → ℝ) :
-    (q : ℝ) ^ 2 * max J 0 * ∑ j : Fin m, a j ^ 2 *
+    (q : ℝ) ^ 2 * J * ∑ j : Fin m, a j ^ 2 *
       (Lattice.edgeBoundary (AreaLaw.rectangularDomain L L)
         ((X j).map (AreaLaw.rectangleSiteEquiv L L).toEmbedding)).card =
     (q : ℝ) ^ 2 * J * ∑ j : Fin m,
@@ -167,7 +128,6 @@ private theorem canonicalCrossingBudget_eq_original {L q m : ℕ} {J : ℝ}
     intro j _
     exact mul_comm _ _
   rw [hs]
-  exact crossingBudget_nonnegativeBound h X a
 
 private theorem squareAreaLawState_inner {L q : ℕ} (φ ψ : StateSpace L q) :
     ⟪squareAreaLawState φ, squareAreaLawState ψ⟫_ℂ = ⟪φ, ψ⟫_ℂ :=
@@ -186,7 +146,7 @@ private theorem squareAreaLawState_operator {L q : ℕ}
 /-- Transport supplied canonical conclusions for the explicitly pulled-back
 family. This helper makes no optimizer choice. -/
 private theorem fromCanonical_physical_estimates
-    {L q m : ℕ} {J E₀ Δ B : ℝ} (h : SquareHamiltonian L q J) (hJ : 0 ≤ J)
+    {L q m : ℕ} {J E₀ Δ B : ℝ} (h : SquareHamiltonian L q J)
     {Ω : StateSpace L q} {X : Fin m → Finset (Vertex L)}
     (a : Fin m → ℝ) (ha : ∀ j, 0 < a j)
     (K : CanonicalFamily q X) (hK : ∀ j, Entropy.IsFeasibleFilter 0 (a j) (K j))
@@ -201,7 +161,7 @@ private theorem fromCanonical_physical_estimates
         (Entropy.chainList (canonicalRegions X) K fun _ ↦ True)) (squareAreaLawState Ω)
       let φ := ((‖ψ‖⁻¹ : ℝ) : ℂ) • ψ
       0 < ‖ψ‖ ∧ ‖φ‖ = 1 ∧
-        |(⟪φ, toEuclideanLin (h.toAreaLawHamiltonian hJ).operator φ⟫_ℂ).re - E₀| ≤ B ∧
+        |(⟪φ, toEuclideanLin h.toAreaLawHamiltonian.operator φ⟫_ℂ).re - E₀| ≤ B ∧
         Δ * (1 - ‖⟪squareAreaLawState Ω, φ⟫_ℂ‖ ^ 2) ≤ B) :
     IsMaximizer Ω a (fromCanonical K hK) ∧
       0 < ‖output (fromCanonical K hK) Ω‖ ∧
@@ -213,7 +173,7 @@ private theorem fromCanonical_physical_estimates
   have hnorm := squareAreaLawState_normalizedOutput (fromCanonical K hK) Ω
   rw [canonicalMatrices_fromCanonical] at hout hnorm
   dsimp only at hnorm hresult
-  rw [← hnorm, ← hout, h.toAreaLawHamiltonian_operator hJ,
+  rw [← hnorm, ← hout, h.toAreaLawHamiltonian_operator,
     ← squareAreaLawState_operator] at hresult
   simp only [norm_squareAreaLawState, squareAreaLawState_inner] at hresult
   refine ⟨?_, hresult⟩
@@ -255,16 +215,14 @@ theorem SquareHamiltonian.exists_pinned_maximizer_energy_fidelity
           (canonicalRegions X j) → i = j := by
     simpa only [canonicalRegions_fin] using rectangle_singleCrossing X hsingle
   obtain ⟨K, hK, hmax, hresult⟩ :=
-    (nonnegativeBoundHamiltonian h).exists_zero_floor_maximizer_energy_fidelity
-      (le_max_right J 0) hΩ (canonicalRegions X) hD hsep a ha ha1
-  have hbudget : (q : ℝ) ^ 2 * max J 0 * ∑ j : Fin m, a j ^ 2 *
+    h.exists_zero_floor_maximizer_energy_fidelity hΩ (canonicalRegions X) hD hsep a ha ha1
+  have hbudget : (q : ℝ) ^ 2 * J * ∑ j : Fin m, a j ^ 2 *
       (Lattice.edgeBoundary (AreaLaw.rectangularDomain L L) (canonicalRegions X j)).card =
       (q : ℝ) ^ 2 * J * ∑ j : Fin m, (crossingCount (X j) : ℝ) * a j ^ 2 := by
-    simpa only [canonicalRegions_fin] using canonicalCrossingBudget_eq_original h X a
+    simpa only [canonicalRegions_fin] using canonicalCrossingBudget_eq_original (q := q) J X a
   dsimp only at hresult
   rw [hbudget] at hresult
   exact ⟨fromCanonical K hK,
-    fromCanonical_physical_estimates (nonnegativeBoundHamiltonian h) (le_max_right J 0)
-      a ha K hK hmax hresult⟩
+    fromCanonical_physical_estimates h a ha K hK hmax hresult⟩
 
 end TNLean.PEPS.Approximation
