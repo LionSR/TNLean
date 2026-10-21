@@ -495,13 +495,14 @@ contraction of local tensors is a separate assertion.
     without messages. Let $(\mathcal C_i)_{i\in I}$ be an arbitrary
     family of distributed constructions with real sizes $L_i\ge2$.
     Fix natural $a,b,n,d,r,u,v$ with $a\le b$ and real
-    $C_N,C_D,C_K,C_C$, before all members. Suppose every member has
+    $C_N,C_D,C_K,C_S$, before all members. Suppose every member has
     at most $C_NL_i^n$ original nonprivate gates and physical
     dimensions at most $C_DL_i^d$. Each such gate has at most $a$
     participants, each party participates in at most $b$ gates, and
     there is a natural monomial bound $K_i\le C_KL_i^u$.
-    Every recorded monomial has at most $r$ pair effects and a
-    coefficient of modulus at most $C_CL_i^v$.
+    Every recorded monomial has at most $r$ pair effects, and at every
+    original nonprivate gate the moduli of the recorded coefficients sum
+    to at most $C_SL_i^v$.
 
     For every $p>0$, there are $C_p\ge0$ and a natural $\alpha>0$
     before all members, such that each member admits actual finite
@@ -532,7 +533,7 @@ contraction of local tensors is a separate assertion.
     normalization of $\sigma_i$ is asserted.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:peps_uniform_approximate_operator_network,
+    \uses{thm:peps_uniform_approximate_operator_network_of_le,
         thm:peps_distributed_construction_gate_maps_density,
         thm:peps_separate_arity_incidence,thm:peps_compression_retained_norm}
     Use each gate's own recorded expansion. It gives its original
