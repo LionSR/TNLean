@@ -76,12 +76,9 @@ theorem exists_supported_gaussian_integral_domain (R : ℕ) (J : ℝ) :
   intro q hq Λ h D m K K' crossing Z N
   have hqq : 1 ≤ q * q := by nlinarith
   have : NeZero (q * q) := ⟨by omega⟩
-  have hHerm {q' : ℕ} {J' : ℝ} (g : DomainHamiltonian Λ q' R J') :
-      g.operator.IsHermitian :=
-    (isSelfAdjoint_sum Finset.univ (fun X _ ↦ (g.hermitian X).isSelfAdjoint)).isHermitian
   obtain ⟨U, hU0, hU, hunit, hsupport, haverage⟩ :=
     exists_supported_gaussian_integral_of_projection_bounds (q * q)
-      (hHerm (h.swappedDoubled D)) (hHerm h.doubled) (N Z)
+      (h.swappedDoubled D).operator_isHermitian h.doubled.operator_isHermitian (N Z)
   refine ⟨U, hU0, hU, hunit, hsupport, ?_⟩
   intro Q W hW η T hT B M
   have hgen (s : ℝ) (hs : |s| ≤ T) :

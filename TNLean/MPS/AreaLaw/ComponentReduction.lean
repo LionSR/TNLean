@@ -283,6 +283,12 @@ noncomputable def DomainHamiltonian.operator (h : DomainHamiltonian Λ q R J) :
     Matrix (Fin Λ.card → Fin q) (Fin Λ.card → Fin q) ℂ :=
   ∑ X, h.term X
 
+/-- The finite sum of domain interaction terms is Hermitian.
+TNLean note, `part0_preamble.tex`, `eq:ham`. -/
+theorem DomainHamiltonian.operator_isHermitian (h : DomainHamiltonian Λ q R J) :
+    h.operator.IsHermitian :=
+  (isSelfAdjoint_sum Finset.univ (fun X _ ↦ (h.hermitian X).isSelfAdjoint)).isHermitian
+
 /-- An admissible Hamiltonian on `Λ` as a finite-range Hamiltonian on the chain of `|Λ|`
 sites, with zero terms on the chain supports that straddle a gap of `Λ`. -/
 noncomputable def DomainHamiltonian.toChain (h : DomainHamiltonian Λ q R J) (hJ : 0 ≤ J) :

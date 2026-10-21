@@ -1653,6 +1653,7 @@ for an arbitrary finite set of sites and are instantiated here directly.
         TNLean.MPS.AreaLaw.IsDomainSupport.subset_or_disjoint_of_gap,
         TNLean.MPS.AreaLaw.DomainHamiltonian,
         TNLean.MPS.AreaLaw.DomainHamiltonian.operator,
+        TNLean.MPS.AreaLaw.DomainHamiltonian.operator_isHermitian,
         TNLean.MPS.AreaLaw.DomainHamiltonian.toChain,
         TNLean.MPS.AreaLaw.DomainHamiltonian.toChain_operator,
         TNLean.MPS.AreaLaw.domainBoundaryEdges,
@@ -1674,7 +1675,7 @@ for an arbitrary finite set of sites and are instantiated here directly.
     $\Lambda$ a Hermitian term $h_X$ acting as the identity off $X$ with
     operator norm at most $J$, zero terms allowed; with zero terms on the
     remaining supports of the chain it is a finite-range Hamiltonian on the
-    chain with the same sum. The \emph{edge boundary} $\partial_\Lambda A$ of a
+    chain with the same Hermitian sum. The \emph{edge boundary} $\partial_\Lambda A$ of a
     set $A\subseteq\mathbb Z$ is the set of edges $\{x,x+1\}\subseteq\Lambda$
     with exactly one endpoint in $A$; these edges correspond to the boundary
     edges, on the chain, of the sites in $A$ that join sites at consecutive
@@ -1885,14 +1886,24 @@ for an arbitrary finite set of sites and are instantiated here directly.
     are Hermitian because their terms are Hermitian.
     Theorem~\ref{thm:qc_supported_gaussian_projection_bounds} constructs $U$
     before the observable and averaging data.
+    Put
+    \begin{align*}
+        \varepsilon_g=d|\Lambda|e^{vT-m/2}, \\
+        \varepsilon_o=a|\Lambda|^2e^{vT-m/2}.
+    \end{align*}
     On $|t|\le T$, the observable projection error is at most
-    $\|W\|a|\Lambda|^2e^{vT-m/2}$ and the generator projection error is at most
-    $d|\Lambda|e^{vT-m/2}$.
-    Both projection regions lie in $N_m(Q\cup Z)$.
-    The common averaging theorem gives support, contraction and the sum of
-    the observable error and $T$ times the generator error. Since
-    $|\Lambda|\le|\Lambda|^2$ for every finite domain, this is bounded by
-    the stated expression. The restricted Gaussian measure is not renormalized.
+    $\|W\|\varepsilon_o$ and the generator projection error is at most
+    $\varepsilon_g$. Both projection regions lie in $N_m(Q\cup Z)$.
+    The common averaging theorem gives support, contraction and
+    \begin{align*}
+        \|M-M_0\|\le\|W\|(\varepsilon_o+T\varepsilon_g).
+    \end{align*}
+    Since $|\Lambda|\le|\Lambda|^2$ for every finite domain and $a,d,T\ge0$,
+    \begin{align*}
+        a|\Lambda|^2+d|\Lambda|T\le(a+d)|\Lambda|^2(1+T).
+    \end{align*}
+    This proves the stated estimate with $C=a+d$.
+    The restricted Gaussian measure is not renormalized.
 \end{proof}
 
 \begin{theorem}[Intrinsic neighborhoods of order intervals]
