@@ -5,13 +5,7 @@
     \leanok
     \uses{def:peps_three_plaquette_geometry,
         def:peps_torus_charge_string_edge}
-    For $v=(x,y)$, take the translated four-column, two-row strip with
-    lower-left vertex $(x-1,y+1)$. Its charge bond joins
-    $(x+1,y+1)$ to $(x+2,y+1)$ on the lower row.
-    Its leftmost plaquette contains the endpoint of the initial flux string,
-    and in this auxiliary geometry for the charge--flux figure of
-    \cite{Schuch2010PEPS}, lines 2560--2581, the tree consists of all
-    horizontal bonds and the rightmost vertical bond.
+    For $v=(x,y)$, let $R_v$ be the translated $4\times 2$ strip with lower-left vertex $(x-1,y+1)$, charge bond $e_c$ joining $(x+1,y+1)$ to $(x+2,y+1)$, initial flux-string endpoint in its leftmost plaquette, and spanning tree consisting of all six horizontal bonds and the rightmost vertical bond (\cite{Schuch2010PEPS}, lines 2560--2581).
 \end{definition}
 
 \begin{theorem}[A physical charge crossing beside the flux endpoint]
@@ -22,35 +16,14 @@
     \uses{def:peps_torus_charge_flux_crossing_strip,
         thm:peps_regular_charge_flux_physical_transport,
         thm:peps_torus_swept_string_transport}
-    Let $G$ be finite, let the periods satisfy $w\geq5$ and $H\geq4$, and
-    let the native four-leg tensor be regular $G$-isometric. For each
-    translated strip there is an original-spin unitary, chosen before the
-    flux $k$, the scalar function $\chi$, the parameter $p$, and every
-    crossing configuration. On the open contraction with the
-    initial flux string, it changes the charge weight by
-    \[
-        \chi(p\eta_c)\longmapsto\chi(pk^{-1}\eta_c).
-    \]
-    The same construction is uniform in an unsummed partner reference $q$:
-    \[
-        \chi(pq^{-1}\eta_c)\longmapsto\chi(pq^{-1}k^{-1}\eta_c).
-    \]
-    Thus correlation is retained in the stated order. These statements
-    include strips crossing either periodic seam and require no prior
-    tree gauge, Gram identity, or state hypothesis.
-
-    This auxiliary physical operation beside a flux endpoint does not
-    identify the complete prescribed braid or the reunion experiment of
-    \cite{Schuch2010PEPS}, lines 2560--2615.
+    For finite $G$, torus periods $w\ge 5$ and $H\ge 4$, and a regular $G$-isometric four-leg tensor, on each translated strip $R_v$ of Definition~\ref{def:peps_torus_charge_flux_crossing_strip} (including across either seam, without prior tree-gauge, Gram, or state hypotheses) there exists an original-spin unitary $W_R$ (chosen before $k\in G$, scalar function $\chi$, $p,q\in G$, and crossing labels $\theta$) acting on the open contraction with initial flux string $u^{(0)}_k$ to transform the single and partner-correlated charge weights via
+    \begin{align}
+        \chi(p\eta_c)\longmapsto\chi(pk^{-1}\eta_c),\qquad
+        \chi(pq^{-1}\eta_c)\longmapsto\chi(pq^{-1}k^{-1}\eta_c). \label{eq:torus_charge_flux_crossing}
+    \end{align}
+    This auxiliary local operation does not identify the complete braid or reunion experiment of \cite{Schuch2010PEPS}, lines 2560--2615.
 \end{theorem}
 \begin{proof}\leanok
-    The seven tree operators are the identity except for the
-    rightmost upward operator $k$. The normalized tree gauge is therefore
-    the identity on the lower row and $k$ on the upper row, while the charge
-    tail has trivial gauge and the leftmost cycle residual is $k^{-1}$ in the
-    usual native order and $k$ when the upward bond reverses at the seam.
-    Applying the original-spin reference-cycle unitary (using its adjoint
-    in the first orientation) gives the single-charge formula, and uniformity
-    in the coefficient function yields the correlated formula upon
-    substituting $t\mapsto\chi(pq^{-1}t)$.
+    Under $u^{(0)}_k$ (Theorem~\ref{thm:peps_torus_swept_string_transport}), the seven tree bonds carry $1$ except the rightmost upward bond $k$, so the normalized tree gauge is $1$ on the lower row (including $t(e_c)$) and $k$ on the upper row, and the leftmost chord residual is $k^{-1}$ (or $k$ when reversed at a seam).
+    Applying Theorem~\ref{thm:peps_regular_charge_flux_physical_transport} (or its adjoint) gives the first map in (\ref{eq:torus_charge_flux_crossing}), and substituting $\chi(\cdot)\mapsto\chi(pq^{-1}\cdot)$ gives the second.
 \end{proof}

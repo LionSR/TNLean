@@ -5,13 +5,7 @@
         TNLean.PEPS.torusPlaquetteChargeMotionBond_ne}
     \leanok
     \uses{def:peps_torus_plaquette_flux_geometry}
-    On a finite torus with both periods at least three, the motion square
-    based at $v=(x,y)$ has the four sites $(x,y),(x+1,y),(x+1,y+1),(x,y+1)$.
-    Its distinct upper and lower charge bonds are the native right edges based at
-    $(x,y+1)$ and $(x,y)$, respectively. Both ordered endpoints lie in
-    the four-site region, including at either periodic seam.
-    This is the charge-motion diagram of \cite{Schuch2010PEPS}, lines
-    2489--2507.
+    On a finite torus with periods $L_x,L_y\ge 3$, the four-site plaquette square $R_v=\{(x,y),(x+1,y),(x+1,y+1),(x,y+1)\}$ at $v=(x,y)$ (\cite{Schuch2010PEPS}, lines 2489--2507) has distinct upper and lower internal horizontal bonds $e_{\mathrm{up}}\neq e_{\mathrm{low}}$ based at $(x,y+1)$ and $(x,y)$ (including across either periodic seam).
 \end{definition}
 
 \begin{theorem}[Charge motion on the four original spins]
@@ -20,25 +14,13 @@
     \leanok
     \uses{def:peps_torus_charge_motion_bonds,
         thm:peps_regular_untwisted_physical_charge_motion}
-    Let the original four-leg tensor be $G$-isometric for the regular action.
-    At every translated position, one unitary on the four original spins
-    moves the explicit diagonal charge from the upper horizontal bond to
-    the lower horizontal bond, retaining its character, internal parameter,
-    and all boundary labels. It is chosen before these data.
-    All spanning-tree and root choices are derived internally.
-
-    This is the finite-torus specialization of the charge-motion diagram in
-    \cite{Schuch2010PEPS}, lines 2489--2507, with both periods at least three.
-    The source proof further factors the operation into independent unitaries
-    on the two columns; that factorization is not asserted here. No statement
-    about energies or the parent Hamiltonian is made. The broader geometric
-    scope remains separate in \cite{gap:rmp_peps_quantum_double_g_isometry}.
+    For a regular $G$-isometric four-leg tensor on a torus with $L_x,L_y\ge 3$, at every position $v$ there exists a four-spin unitary $W_v$ on $R_v$ (chosen before the character $\chi$, parameter $p\in G$, and boundary configuration $\theta$, with spanning-tree and root choices derived internally) that moves the diagonal charge weight $\operatorname{diag}\chi(p\cdot)$ from $e_{\mathrm{up}}$ to $e_{\mathrm{low}}$:
+    \begin{align}
+        W_v\Psi_{R_v}^{e_{\mathrm{up}},\chi,p}(\theta)=\Psi_{R_v}^{e_{\mathrm{low}},\chi,p}(\theta). \notag
+    \end{align}
+    This is the four-spin finite-torus specialization of \cite{Schuch2010PEPS}, lines 2489--2507 (without asserting the two-column factorization, parent-Hamiltonian energies, or the unrestricted lattice scope of \cite{gap:rmp_peps_quantum_double_g_isometry}).
 \end{theorem}
 \begin{proof}\leanok
-    The plaquette walk establishes connectivity of its induced four-site
-    graph. The selected upper and lower edges belong to this region.
-    Transfer the given four-leg local isometry to the incident-bond
-    coordinates and apply the preceding original-spin motion theorem.
-    At a seam the two endpoints are merely sorted differently: the identity
-    bond retains the same shared charge label at both ends.
+    The plaquette walk of Definition~\ref{def:peps_torus_plaquette_flux_geometry} connects $R_v$ and contains $e_{\mathrm{up}}\neq e_{\mathrm{low}}$ of Definition~\ref{def:peps_torus_charge_motion_bonds} (with seam sorting preserving the shared bond label).
+    Passing the four-leg $G$-isometry to incident-edge coordinates and applying Theorem~\ref{thm:peps_regular_untwisted_physical_charge_motion} yields $W_v$.
 \end{proof}

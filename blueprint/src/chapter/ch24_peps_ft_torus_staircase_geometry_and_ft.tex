@@ -15,30 +15,25 @@
     corner-stripping step of
     \cite[proof sketch, lines~2320--2445]{Molnar2018NormalPEPS}, fix a
     horizontal reference edge and write the staircase corner as
-    $s=(a,b)$. For coordinate intervals write
-    $I(u,v)=\{t\mid u\le t<v\}$.
-    The two end windows of the overlapping-window chain are
+    $s=(a,b)$ and $I(u,v)=\{t\mid u\le t<v\}$. The two end windows, their end
+    pair $S$, the staircase patch $P$, the corner $C$, and the completed
+    $L\times K$ corner $\widehat C$ are
     \begin{align}
         W_{\mathrm{left}}
-         & =I(a,a+L)\times I(b,b+K), \notag    \\
+                   & =I(a,a+L)\times I(b,b+K),
+                   &
         W_{\mathrm{right}}
-         & =I(a+L,a+2L)\times I(b+K-1,b+2K-1).
+                   & =I(a+L,a+2L)\times I(b+K-1,b+2K-1),
+        \notag                                                                           \\
+        S          & =W_{\mathrm{left}}\cup W_{\mathrm{right}},
+                   &
+        C          & =I(a,a+L)\times I(b+K,b+2K-1),
+        \notag                                                                           \\
+        \widehat C & =I(a,a+L)\times I(b+K,b+2K),
+                   &
+        P          & =(I(a,a+2L)\times I(b+K-1,b+2K-1))\cup(I(a,a+L)\times I(b,b+2K-1)).
         \notag
     \end{align}
-    Their end pair is $S=W_{\mathrm{left}}\cup W_{\mathrm{right}}$. The
-    staircase patch is the union
-    \begin{align}
-        P
-         & =
-        (I(a,a+2L)\times I(b+K-1,b+2K-1))
-        \cup
-        (I(a,a+L)\times I(b,b+2K-1)),
-        \notag
-    \end{align}
-    and the corner cut out by the two end windows is
-    $C=I(a,a+L)\times I(b+K,b+2K-1)$.
-    Completing $C$ by one row gives the $L\times K$ rectangle
-    $\widehat C=I(a,a+L)\times I(b+K,b+2K)$.
 \end{definition}
 
 \begin{lemma}[The staircase end windows are disjoint]
@@ -46,13 +41,12 @@
     \lean{TNLean.PEPS.horizontalStaircaseEndPair_disjoint}
     \leanok
     \uses{def:peps_horizontal_staircase_patch}
-    If $2L\le W$, then the two end windows of the horizontal staircase are
-    disjoint: $W_{\mathrm{left}}\cap W_{\mathrm{right}}=\varnothing$.
+    If $2L\le W$, then $W_{\mathrm{left}}\cap W_{\mathrm{right}}=\varnothing$.
 \end{lemma}
 \begin{proof}
     \leanok
-    Their horizontal coordinate intervals are $I(a,a+L)$ and $I(a+L,a+2L)$.
-    The bound $2L\le W$ prevents wraparound overlap.
+    For $2L\le W$, the horizontal intervals $I(a,a+L)$ and $I(a+L,a+2L)$ are
+    disjoint modulo $W$.
 \end{proof}
 
 \begin{lemma}[Injectivity of the staircase end windows and completed corner]
@@ -62,14 +56,15 @@
     \lean{TNLean.PEPS.NormalTorusArcWindowInjectivityHypotheses.horizontalStaircaseCompletedCorner_injective}
     \leanok
     \uses{def:peps_horizontal_staircase_patch}
-    Under the one-orientation $L\times K$ torus-window injectivity hypotheses,
-    the three regions $W_{\mathrm{left}}$, $W_{\mathrm{right}}$, and
-    $\widehat C$ are injective.
+    Under the $L\times K$ torus-window injectivity hypotheses,
+    $\inj(W_{\mathrm{left}})$, $\inj(W_{\mathrm{right}})$, and
+    $\inj(\widehat C)$.
 \end{lemma}
 \begin{proof}
     \leanok
-    Each of the three regions is an $L\times K$ cyclic rectangle, so the
-    window-injectivity hypothesis applies directly.
+    By Definition~\ref{def:peps_horizontal_staircase_patch}, each of
+    $W_{\mathrm{left}}$, $W_{\mathrm{right}}$, and $\widehat C$ is an
+    $L\times K$ cyclic rectangle.
 \end{proof}
 
 \begin{lemma}[Patch decomposition by the end pair and the corner]
@@ -79,16 +74,15 @@
     \lean{TNLean.PEPS.horizontalStaircasePatch_sdiff_endPair}
     \leanok
     \uses{def:peps_horizontal_staircase_patch, lem:peps_horizontal_staircase_end_pair_disjoint}
-    If $L,K>0$, $2L\le W$, and $2K\le H$, then the corner is disjoint from
-    the end pair and the patch decomposes as $P=S\cup C$, with
-    $P\setminus S=C$.
+    If $L,K>0$, $2L\le W$, and $2K\le H$, then $C\cap S=\varnothing$,
+    $P=S\cup C$, and $P\setminus S=C$.
 \end{lemma}
 \begin{proof}
     \leanok
-    In the no-wraparound rectangle, the rows and columns of the two end
-    windows and the corner are the displayed intervals above. The interval
-    calculation gives the disjointness and identifies every point of $P$ with
-    either an end-window point or a corner point.
+    Under $2L\le W$ and $2K\le H$, expanding the coordinate intervals of
+    Definition~\ref{def:peps_horizontal_staircase_patch} shows
+    $C\cap W_{\mathrm{left}}=C\cap W_{\mathrm{right}}=\varnothing$ and
+    $P=W_{\mathrm{left}}\cup W_{\mathrm{right}}\cup C=S\cup C$.
 \end{proof}
 
 \begin{definition}[Torus rectangular injectivity hypotheses]%
@@ -96,11 +90,11 @@
     \lean{TNLean.PEPS.NormalTorusRectangleInjectivityHypotheses}
     \leanok
     \uses{def:peps_regionInjectivityData, def:peps_torus_geometry_translation}
-    On the discrete torus, the rectangular injectivity hypotheses, the torus
-    counterpart of the square-lattice rectangular injectivity hypotheses,
-    assert that every contiguous $2\times3$ and every contiguous $3\times2$
-    coordinate rectangle is injective for the given region-injectivity
-    assignment.
+    On the discrete $n\times m$ torus
+    (Definition~\ref{def:peps_torus_geometry_translation}), the \emph{torus
+        rectangular injectivity hypotheses} for $\inj$
+    (Definition~\ref{def:peps_regionInjectivityData}) assert $\inj(R)$ for
+    every contiguous $2\times 3$ and $3\times 2$ coordinate rectangle $R$.
 \end{definition}
 
 \begin{definition}[Normal torus tensor with injective rectangles]%
@@ -108,14 +102,12 @@
     \lean{TNLean.PEPS.IsNormalTorusRectanglePEPS}
     \leanok
     \uses{def:peps_torusRectangleInjectivityHypotheses, def:peps_regionInjectivityDataOf}
-    A PEPS tensor on the discrete torus is
-    \emph{normal with injective rectangles} when its family of injective
-    regions satisfies the torus rectangular injectivity hypotheses and every
-    virtual bond space is nonzero. This is the hypothesis on each tensor in
-    \cite[Theorem~3]{Molnar2018NormalPEPS}. The nonzero bond spaces are the
-    standing convention of that section; region injectivity does not imply
-    them, and the convention is recorded in
-    \cite{gap:peps_injective_ft_section3_route}.
+    A PEPS tensor $A$ on the discrete torus is \emph{normal with injective
+        rectangles} if $\inj_A$ (Definition~\ref{def:peps_regionInjectivityDataOf})
+    satisfies Definition~\ref{def:peps_torusRectangleInjectivityHypotheses} and
+    $D_A(e)>0$ for every edge $e$ \cite[Theorem~3]{Molnar2018NormalPEPS}
+    (with bond positivity recorded explicitly
+    \cite{gap:peps_injective_ft_section3_route}).
 \end{definition}
 
 \begin{lemma}[Torus reference-edge blocking data]%
@@ -128,30 +120,29 @@
     \lean{TNLean.PEPS.isCrossingEdge_torusVerticalRectangleBlockingDatum}
     \leanok
     \uses{def:peps_torusRectangleInjectivityHypotheses, def:peps_regionInjectivityData, def:peps_torus_geometry_translation}
-    At a frame origin $(x_0,y_0)$ with at least two columns and one row of
-    margin below and to the left (one column and two rows in the rotated
-    case), and with the removed blocks either touching the seam
-    ($x_0+5=n$, $y_0+5=m$) or keeping a further margin of at least two, the
-    horizontal reference edge $e_h$ is the right edge leaving
-    $(x_0+1,y_0+2)$, and the vertical reference edge $e_v$ is the up edge
-    leaving $(x_0+2,y_0+1)$. Around each reference edge the rectangular
-    injectivity hypotheses and union closure give the one-edge blocking
-    datum: the red block, the blue block, and the complement are injective,
-    and the reference edge is the only edge crossing between the red and
-    blue blocks,
+    At a frame origin $(x_0,y_0)$ with $2\le x_0$, $1\le y_0$ (or $1\le x_0$,
+    $2\le y_0$ vertically) and either $x_0+5=n$, $y_0+5=m$ or $x_0+7\le n$,
+    $y_0+7\le m$, let $e_h=e_{\mathrm R}(x_0+1,y_0+2)$ and
+    $e_v=e_{\mathrm U}(x_0+2,y_0+1)$. Under
+    Definition~\ref{def:peps_torusRectangleInjectivityHypotheses} and union
+    closure (Definition~\ref{def:peps_regionInjectivityData}), the frames at
+    $e_h$ and $e_v$ yield one-edge blocking data $(R_{e_h},B_{e_h},C_{e_h})$
+    and $(R_{e_v},B_{e_v},C_{e_v})$ satisfying
     \begin{align}
-        \{\,g:\ \text{$g$ joins the red block to the blue block}\,\}
-        =\{e_h\},
+        \{\,g\in E:\text{$g$ joins $R_{e_h}$ and $B_{e_h}$}\,\}
+         & =\{e_h\},
+         &
+        \{\,g\in E:\text{$g$ joins $R_{e_v}$ and $B_{e_v}$}\,\}
+         & =\{e_v\}.
         \notag
     \end{align}
-    and similarly with $e_v$ at the rotated frame.
 \end{lemma}
 \begin{proof}
     \leanok
-    The red and blue blocks are the removed edge blocks of the frame, so
-    rectangular injectivity covers them; union closure then gives the
-    injectivity of the remaining complement. The crossing-edge identity
-    enumerates the edges joining the two blocks.
+    Rectangular injectivity gives $\inj(R_{e_h}),\inj(B_{e_h})$ and
+    $\inj(R_{e_v}),\inj(B_{e_v})$, union closure gives $\inj(C_{e_h})$ and
+    $\inj(C_{e_v})$ from their rectangular band decompositions, and direct
+    coordinate enumeration verifies the unique-crossing identities.
 \end{proof}
 
 \begin{theorem}[Bond-dimension equality from normal torus rectangular injectivity]%
@@ -160,23 +151,13 @@
     \leanok
     \uses{def:peps_torus_translation_invariant, def:peps_same_state,
         def:peps_normalTorusRectanglePEPS}
-    Let $A$ and $B$ be translationally invariant PEPS tensors on the
-    $n\times m$ torus with $n,m\geq 7$ and positive physical dimension
-    $d>0$, generating the same state. Suppose both tensors are normal with
-    injective rectangles
-    (Definition~\ref{def:peps_normalTorusRectanglePEPS}): every contiguous
-    $2\times3$ and $3\times2$ torus rectangle is injective, and every virtual
-    bond space is nonzero. Then the bond dimensions of $A$ and $B$ agree on every edge:
-    \begin{align}
-        D_A = D_B.
-        \notag
-    \end{align}
-    The equality is derived from the one-edge blocking data built from the
-    rectangular injectivity, namely the source's Lemma \emph{inj\_isomorph}
-    (\cite[Section~3, lines~560--583 and
-        1407--1500]{Molnar2018NormalPEPS}),
-    together with the translation invariance and same-state assumptions; the
-    bond dimension is not assumed as a hypothesis.
+    Let $A$ and $B$ be translationally invariant PEPS tensors
+    (Definition~\ref{def:peps_torus_translation_invariant}) on the $n\times m$
+    torus with $n,m\ge 7$ and $d>0$, generating the same state
+    (Definition~\ref{def:peps_same_state}), and both normal with injective
+    rectangles (Definition~\ref{def:peps_normalTorusRectanglePEPS}). Then
+    $D_A=D_B$ \cite[Section~3, Lemma \emph{inj\_isomorph}, lines~560--583 and
+        1407--1500]{Molnar2018NormalPEPS}.
     \begin{proof}
         \leanok
         \uses{lem:peps_injectiveRegion_union_pos,
@@ -184,36 +165,18 @@
             thm:peps_bondDim_eq_of_normalBlocking,
             thm:peps_torusUniformBondDim_of_translationInvariant,
             def:peps_torus_geometry_translation}
-        The nonzero bond spaces give union closure of injective regions for
-        each tensor (Lemma~\ref{lem:peps_injectiveRegion_union_pos}).
-        Placing the frame at $(x_0,y_0)=(n-5,m-5)$, since $n,m\geq 7$ the
-        margins hold with the touching-seam alternative. Let $e_h$ and $e_v$
-        be the horizontal and vertical reference edges of
-        Lemma~\ref{lem:peps_torusRectangleReferenceBlockingData} at this
-        frame. The blocking data built from $A$ and from $B$ around $e_h$
-        share the same red and blue blocks, so the one-edge comparison of
-        Theorem~\ref{thm:peps_bondDim_eq_of_normalBlocking} applies at the
-        unique crossing edge and gives
-        \begin{align}
-            D_A(e_h)=D_B(e_h),
-            \notag
-        \end{align}
-        and the rotated datum at $e_v$ gives
-        \begin{align}
-            D_A(e_v)=D_B(e_v).
-            \notag
-        \end{align}
-        Every torus edge $e$ is horizontal or vertical. A horizontal $e$ is
-        the right edge leaving some vertex $p$, and with the translation
-        $\tau$ carrying the reference vertex to $p$, translation invariance
-        (Theorem~\ref{thm:peps_torusUniformBondDim_of_translationInvariant})
+        By Lemma~\ref{lem:peps_injectiveRegion_union_pos}, $D_A,D_B>0$ gives
+        union closure for $\inj_A$ and $\inj_B$. At $(x_0,y_0)=(n-5,m-5)$
+        ($n,m\ge 7$), Lemma~\ref{lem:peps_torusRectangleReferenceBlockingData}
+        and the one-edge form of Theorem~\ref{thm:peps_bondDim_eq_of_normalBlocking}
+        at $e_h$ and $e_v$ give $D_A(e_h)=D_B(e_h)$ and $D_A(e_v)=D_B(e_v)$.
+        For any horizontal edge $e=\tau e_h$ (and similarly any vertical edge
+        $e=\tau e_v$), Theorem~\ref{thm:peps_torusUniformBondDim_of_translationInvariant}
         gives
         \begin{align}
-            D_A(e)=D_A(\tau e_h)=D_A(e_h),
+            D_A(e)=D_A(\tau e_h)=D_A(e_h)=D_B(e_h)=D_B(\tau e_h)=D_B(e).
             \notag
         \end{align}
-        and the same for $B$; hence $D_A(e)=D_B(e)$. A vertical $e$ is
-        treated through $e_v$, and the equality $D_A=D_B$ follows.
     \end{proof}
 \end{theorem}
 
@@ -221,27 +184,18 @@
     \label{thm:fundamentalTheorem_normalTorusPEPS}
     \leanok
     \uses{thm:fundamentalTheorem_normalSquarePEPS, thm:peps_oneVertexComplementComparison, def:peps_torus_translation_invariant, thm:peps_torusUniformBondDim_of_translationInvariant, def:GaugeEquivPEPS, thm:fundamentalTheorem_normalTorusPEPS_unconditional, thm:torusAbsorbedGauge_unique_scalar, thm:torusCovariantAbsorbedGauge_unique_classScalar, thm:torusGauge_unique_scalar_of_perVertex}
-    Let $A$ and $B$ be translationally invariant normal PEPS on the discrete
-    torus such that every $2\times 3$ and $3\times 2$ region is injective. If
-    they generate the same state on an $n\times m$ region with $n,m\geq 7$, then
-    they are related by horizontal and vertical gauges $X,Y$, up to a scalar
-    $\lambda$ satisfying $\lambda^{nm}=1$, and $X$ and $Y$ are unique up to a
-    multiplicative constant. This is
-    \cite[Theorem~3]{Molnar2018NormalPEPS} on the torus geometry, where every
-    edge is interior and translation acts freely.
-    Theorem~\ref{thm:fundamentalTheorem_normalTorusPEPS_unconditional} proves
-    this at the source's sizes $n,m\geq 7$ with the gauge family described
-    by its translation covariance, and the uniqueness of $X$ and $Y$ up to a
-    multiplicative constant is proved at the same sizes in
-    Theorem~\ref{thm:torusAbsorbedGauge_unique_scalar} per edge,
-    Theorem~\ref{thm:torusCovariantAbsorbedGauge_unique_classScalar} on the
-    two orientation classes, and
-    Theorem~\ref{thm:torusGauge_unique_scalar_of_perVertex} against the
-    per-vertex relation. In the torus
-    edge convention the two class matrices $X$ and $Y$ are read through this
-    translation-covariant family: seam edges carry the transposed inverse of
-    the corresponding class matrix, so this is the orientation-faithful form
-    of the source's horizontal and vertical gauges.
+    Let $A$ and $B$ be translationally invariant normal PEPS on the $n\times m$
+    torus ($n,m\ge 7$) whose $2\times 3$ and $3\times 2$ regions are injective.
+    If $A$ and $B$ generate the same state, then they are related by horizontal
+    and vertical gauges $X,Y$ (unique up to scalar) and a scalar $\lambda$ with
+    $\lambda^{nm}=1$ \cite[Theorem~3]{Molnar2018NormalPEPS}.
+    This is proved in translation-covariant form in
+    Theorem~\ref{thm:fundamentalTheorem_normalTorusPEPS_unconditional} (where
+    seam edges carry the transposed inverse of the class matrix), with gauge
+    uniqueness proved in Theorem~\ref{thm:torusAbsorbedGauge_unique_scalar} (per
+    edge), Theorem~\ref{thm:torusCovariantAbsorbedGauge_unique_classScalar} (per
+    orientation class), and Theorem~\ref{thm:torusGauge_unique_scalar_of_perVertex}
+    (from the per-vertex relation).
 \end{theorem}
 
 \begin{theorem}[Fundamental Theorem for normal PEPS on the torus,
@@ -255,70 +209,45 @@
         thm:peps_torusUniformBondDim_of_translationInvariant,
         def:peps_normalTorusRectanglePEPS, def:GaugeEquivPEPS}
     Let $A$ and $B$ be translationally invariant PEPS tensors on the discrete
-    $n\times m$ torus with $n,m\geq 7$, with positive physical dimension,
-    generating the same state, and both normal with injective rectangles
-    (Definition~\ref{def:peps_normalTorusRectanglePEPS}). Then the
-    bond dimensions of $A$ and $B$ agree on every edge, and there
-    are a family of invertible matrices, one on each edge, carried onto each
-    edge by the torus translations from a single matrix on a reference
-    horizontal edge and a single matrix on a reference vertical edge, and a
-    single scalar $\lambda$ with $\lambda^{nm}=1$, such that at every site the
-    tensor $A$ equals $\lambda$ times the gauge action of the family on $B$.
-    The family also realizes the absorbed inserted-coefficient equality at
-    every edge: inserting any matrix on an edge of $A$ gives the same
-    coefficient as inserting it on the corresponding edge of the gauge-absorbed
-    $B$.
-    This is \cite[Theorem~3]{Molnar2018NormalPEPS} on the torus at the source's
-    sizes $n,m\geq 7$, with the horizontal and vertical gauges $X$, $Y$
-    described by translation covariance: the stored orientation of a
-    wraparound edge is reversed, so on the seam the family carries the
-    transposed inverse of the class matrix, and a family consisting of a single unmodified
-    matrix per orientation class cannot realize the absorbed equality there.
-    The translation covariance of the family, with the scalar $\lambda$ kept
-    separate rather than absorbed, realizes the remark of
-    \cite{Molnar2018NormalPEPS} following the general normal theorem: for a
-    translationally invariant system the gauges are also translationally
-    invariant, provided the proportionality constants are not absorbed into
-    the gauges.
-    The uniqueness of $X$ and $Y$ up to a multiplicative constant is not part
-    of this statement; the uniqueness clause is
-    Theorem~\ref{thm:torusAbsorbedGauge_unique_scalar} (per edge, against the
-    absorbed equality), Theorem~\ref{thm:torusCovariantAbsorbedGauge_unique_classScalar}
-    (one constant per orientation class), and
-    Theorem~\ref{thm:torusGauge_unique_scalar_of_perVertex} (against the
-    per-vertex relation itself).
+    $n\times m$ torus ($n,m\ge 7$) with $d>0$, generating the same state, and
+    both normal with injective rectangles
+    (Definition~\ref{def:peps_normalTorusRectanglePEPS}). Then $D_A=D_B$, and
+    there exist a translation-covariant family of invertible edge matrices
+    $X=(X_e)_{e\in E}$ (generated from one horizontal reference matrix
+    $X_{e_h}$ and one vertical reference matrix $X_{e_v}$, taking the
+    transposed inverse on wraparound seam edges where the stored endpoint order
+    is reversed) and a scalar $\lambda\in\C$ with $\lambda^{nm}=1$ such that,
+    with $\widetilde B=B^X$:
+    \begin{align}
+        A_v             & =\lambda\widetilde B_v,
+                        &
+        C_A(e,M;\sigma) & =C_{\widetilde B}(e,M;\sigma),
+        \label{eq:peps_torus_ft_relations}
+    \end{align}
+    for all $v\in V$, $e\in E$, $M$, and $\sigma$.
+    Keeping $\lambda$ separate from $X$ realizes the translation-invariance
+    remark of \cite[Section~4]{Molnar2018NormalPEPS}; uniqueness of $X$ up to
+    scalar is given in
+    Theorems~\ref{thm:torusAbsorbedGauge_unique_scalar}--\ref{thm:torusGauge_unique_scalar_of_perVertex}.
     \begin{proof}
         \leanok
         \uses{lem:peps_injectiveRegion_union_pos, thm:peps_bondDim_eq_of_normalTorusRectangularInjectivity}
-        The union closure of injective regions follows from the nonzero bond
-        spaces and Lemma~\ref{lem:peps_injectiveRegion_union_pos}, and
-        the bond-dimension equality $D_A=D_B$ is derived from the rectangular
-        injectivity hypotheses and the same-state hypothesis by
-        Theorem~\ref{thm:peps_bondDim_eq_of_normalTorusRectangularInjectivity};
-        neither is assumed. The
-        reference blockings are anchored against the far seam: the removed
-        blocks keep a margin of at least two rows and columns below and to
-        the left and end exactly at the seam above and to the right, so the
-        complementary region decomposes into wraparound-free rectangular
-        bands on every torus with $n,m\geq 7$. The
-        coherent blocking frames at every edge produce per-edge gauges, whose
-        absorption into $B$ gives the absorbed inserted-coefficient equality at
-        every edge; the absorbing family is built by translating one reference
-        gauge per orientation class, so it commutes with the torus
-        translations. A gauge preserves blocked-region linear independence, so
-        the region comparison applies to the gauge-absorbed tensor: comparing
-        the corner region with its one-site completion yields proportionality
-        scalars $c_R$ and $c_S$ such that, with $\lambda=c_S/c_R$,
-        \begin{align}
-            A_v(\eta,\sigma)
-             & =
-            \lambda
-            (\text{gauge action of }X\text{ on }B)_v(\eta,\sigma).
-            \notag
-        \end{align}
-        Translation covariance carries the same scalars to every site. Taking
-        the product over all vertices and using the invariance of the closed
-        state coefficient gives $\lambda^{nm}=1$.
+        Lemma~\ref{lem:peps_injectiveRegion_union_pos} gives union closure of
+        injective regions, and
+        Theorem~\ref{thm:peps_bondDim_eq_of_normalTorusRectangularInjectivity}
+        gives $D_A=D_B$. Anchoring the reference blocking frames against the
+        far seam ($(x_0,y_0)=(n-5,m-5)$) decomposes their complements into
+        wraparound-free rectangular bands for $n,m\ge 7$. Translating the
+        reference gauges $X_{e_h}$ and $X_{e_v}$ produces a
+        translation-covariant family $X$ whose absorption $\widetilde B=B^X$
+        satisfies $C_A(e,M;\sigma)=C_{\widetilde B}(e,M;\sigma)$ at every
+        $e\in E$. Since gauge absorption preserves region injectivity, the
+        one-site comparison (Theorem~\ref{thm:peps_oneVertexComplementComparison})
+        between the punctured $3\times 3$ square and its completion yields
+        scalars $c_R,c_S\in\C^\times$ and $\lambda=c_S/c_R$ satisfying
+        $A_v=\lambda\widetilde B_v$ in (\ref{eq:peps_torus_ft_relations}),
+        carried to every $v\in V$ by translation covariance. Contracting over
+        all $nm$ sites against the nonzero state gives $\lambda^{nm}=1$.
     \end{proof}
 \end{theorem}
 
@@ -327,42 +256,27 @@
     \lean{TNLean.PEPS.lambda_pow_card_torus_eq_one_of_twoBlockProportional}
     \leanok
     \uses{cor:peps_component_eq_gaugeVertex_of_twoBlockProportional}
-    Let $A$ and $B$ be PEPS tensors on the discrete $n\times m$ torus with $n,m>1$,
-    with equal bond dimensions and positive bond dimensions, generating the same
-    state, and let $X$ be a family of invertible matrices, one on each edge. Suppose
-    that at every site $v$ there is a region $R_v$ not containing $v$ together with
-    the two two-block scalar proportionalities of the blocked weights of $A$ and of
-    the gauge-absorbed second tensor over $R_v$ and over $R_v\cup\{v\}$, with ratios
-    $c_R(v)$ and $c_S(v)$ satisfying $c_R(v)\ne 0$ and whose quotient
-    $c_S(v)/c_R(v)$ is a single scalar $\lambda$ independent of $v$, and with the
-    gauge-absorbed region block linearly independent. If, in addition, a single
-    comparison region whose block and complement block are both blocked-tensor
-    injective is given, then $\lambda$ raised to the number of torus sites is one:
-    $\lambda^{nm}=1$.
+    Let $A$ and $B$ be PEPS tensors on the $n\times m$ torus ($n,m>1$) with
+    $D_A=D_B>0$, generating the same state, and let $X$ be a family of
+    invertible edge matrices with $\widetilde B=B^X$. Suppose at each $v\in V$
+    there is a region $R_v\not\ni v$ with $\inj_{\widetilde B}(R_v)$ such that
+    the two-block proportionalities hold on $R_v$ and $S_v=R_v\cup\{v\}$ with
+    ratios $c_R(v)\ne 0$ and $c_S(v)$ satisfying $c_S(v)/c_R(v)=\lambda$
+    independently of $v$. If there exists a region $R_0$ with $\inj_A(R_0)$ and
+    $\inj_A(V\setminus R_0)$, then $\lambda^{nm}=1$.
 \end{corollary}
 \begin{proof}\leanok
-    At each of the $nm$ sites $v$ the inserted-site scalar extraction of
-    Corollary~\ref{cor:peps_component_eq_gaugeVertex_of_twoBlockProportional} turns
-    the two two-block proportionalities into the per-vertex gauge relation
+    By Corollary~\ref{cor:peps_component_eq_gaugeVertex_of_twoBlockProportional},
+    $A_v(\eta,\sigma)=\lambda\widetilde B_v(\eta,\sigma)$ at each of the $nm$
+    sites $v$. Contracting over the torus yields
     \begin{align}
-        A_v(\eta,\sigma)
+        \Coeff_A(\sigma)
          & =
-        \lambda\,\widetilde B_v(\eta,\sigma),
+        \lambda^{nm}\Coeff_{\widetilde B}(\sigma)
+        =\lambda^{nm}\Coeff_A(\sigma).
         \notag
     \end{align}
-    where $\widetilde B_v$ is the gauge action of $X$ on $B$ at $v$. Contracting
-    both sides over the whole torus pulls one factor of $\lambda$ out of each of
-    the $nm$ sites, so the closed torus contractions of $A$ and of $\widetilde B$
-    satisfy
-    \begin{align}
-        \langle A\rangle_{\mathrm{torus}}
-         & =
-        \lambda^{nm} \langle \widetilde B\rangle_{\mathrm{torus}}.
-        \notag
-    \end{align}
-    The single comparison region and its complement being injective makes this
-    common torus contraction nonzero; by hypothesis the quotient
-    $c_S(v)/c_R(v)$ is the same scalar $\lambda$ at every site, so
+    Since $\inj_A(R_0)$ and $\inj_A(V\setminus R_0)$ imply $\Coeff_A\ne 0$,
     $\lambda^{nm}=1$.
 \end{proof}
 
@@ -371,48 +285,36 @@
     \lean{TNLean.PEPS.torusAbsorbedGauge_unique_scalar}
     \leanok
     \uses{def:applyGauge, def:peps_edgeInsertedCoeff, def:peps_normalTorusRectanglePEPS}
-    For the uniqueness clause of \cite[Theorem~3]{Molnar2018NormalPEPS} read at
-    one edge at the source's sizes $n,m\geq 7$ as in
-    Theorem~\ref{thm:fundamentalTheorem_normalTorusPEPS_unconditional} (which
-    the source proves through the determinacy of the conjugator in the
-    isomorphism lemma, whose realizing matrix is unique up to a multiplicative
-    constant), let $A$ and $B$ be translationally invariant PEPS tensors on the
-    discrete $n\times m$ torus with $n,m\geq 7$, both normal with injective
-    rectangles (Definition~\ref{def:peps_normalTorusRectanglePEPS}), with
-    positive physical dimension and equal bond dimensions, generating the same
-    state. Let $X$ and $X'$ be two families of invertible matrices, one
-    on each edge of the torus, and let $e$ be an edge at which both families
-    realize the absorbed inserted-coefficient equality: inserting any matrix
-    on the edge $e$ of $A$ gives the same coefficient as inserting it on the
-    edge $e$ of the gauge-absorbed $B$, for every physical configuration.
-    Then the two families are proportional at $e$: $X'_e=c\cdot X_e$ for a
-    nonzero scalar $c$.
+    Let $A$ and $B$ be translationally invariant PEPS tensors on the $n\times m$
+    torus ($n,m\ge 7$) with $d>0$ and $D_A=D_B$, generating the same state, and
+    both normal with injective rectangles
+    (Definition~\ref{def:peps_normalTorusRectanglePEPS}). If two families of
+    invertible edge matrices $X,X'$ both satisfy the absorbed insertion
+    equality $C_A(e,M;\sigma)=C_{B^X}(e,M;\sigma)=C_{B^{X'}}(e,M;\sigma)$ at an
+    edge $e$ for all $M$ and $\sigma$
+    (Definitions~\ref{def:applyGauge} and~\ref{def:peps_edgeInsertedCoeff}),
+    then there exists $c\in\C^\times$ such that $X'_e=c X_e$
+    \cite[Theorem~3]{Molnar2018NormalPEPS}.
     \begin{proof}
         \leanok
         \uses{lem:peps_injectiveRegion_union_pos}
-        The rectangle hypotheses produce, along the orientation class of $e$,
-        a comparison region having $e$ as its single boundary edge on which
-        the second tensor and its complement are injective; the union closure
-        of injective regions follows from the nonzero bond spaces and
-        Lemma~\ref{lem:peps_injectiveRegion_union_pos}. The bare-edge
-        absorbed equality of each family lifts to the region
-        inserted-coefficient identity over this region, with the inserted
-        matrix conjugated by the orientation-adapted absorption of the
-        family's matrix at $e$. The region-insertion transfer map is
-        determined by this identity, so both orientation-adapted absorbing
-        matrices induce the same conjugation on every bond matrix. Thus, for
-        every bond matrix $N$,
+        By Lemma~\ref{lem:peps_injectiveRegion_union_pos} and rectangular
+        injectivity, there is a region $R_1$ with $\inj_B(R_1)$,
+        $\inj_B(V\setminus R_1)$, and $e$ as its unique crossing edge to the
+        adjacent block. Lifting the bare-edge insertion equalities to $R_1$
+        shows that the orientation-adapted absorbing matrices
+        $X_{\mathrm{abs}},X'_{\mathrm{abs}}$ induce the same conjugation on
+        $\MN{D_A(e)}$:
         \begin{align}
             X_{\mathrm{abs}}\,N\,X_{\mathrm{abs}}^{-1}
              & =
             X'_{\mathrm{abs}}\,N
-            (X'_{\mathrm{abs}})^{-1}.
+            (X'_{\mathrm{abs}})^{-1}
             \notag
         \end{align}
-        A matrix commuting with the full bond matrix algebra is a scalar
-        multiple of the identity, so $X'_{\mathrm{abs}}=c\,X_{\mathrm{abs}}$
-        for some $c\ne0$. Unwinding the orientation adaptation gives
-        $X'_e=c\cdot X_e$.
+        for every $N\in\MN{D_A(e)}$. Hence
+        $X'_{\mathrm{abs}}=c X_{\mathrm{abs}}$ for some $c\in\C^\times$, and
+        unwinding the orientation adaptation gives $X'_e=c X_e$.
     \end{proof}
 \end{theorem}
 
@@ -421,53 +323,38 @@
     \lean{TNLean.PEPS.torusCovariantAbsorbedGauge_unique_classScalar}
     \leanok
     \uses{def:applyGauge, def:peps_edgeInsertedCoeff}
-    For the class form of the uniqueness clause of
-    \cite[Theorem~3]{Molnar2018NormalPEPS}, let $A$, $B$, $X$, $X'$ be as in
-    Theorem~\ref{thm:torusAbsorbedGauge_unique_scalar}, with both families
-    realizing the absorbed inserted-coefficient equality at every edge, and
-    suppose in addition that both families are translation covariant: the matrix
-    at any translate of an edge is the matrix at the edge, transposed-inverted
-    exactly when the translation swaps the stored endpoint order. Then there
-    are nonzero scalars $c_h$ and $c_v$ such that on every horizontal edge
-    stored in the natural cyclic order (the stored second endpoint is the
-    cyclic right neighbour of the first) $X'_e=c_h\cdot X_e$, on every
-    horizontal edge wrapping the seam (stored with swapped endpoints)
-    $X'_e=c_h^{-1}\cdot X_e$, and likewise on the vertical class with $c_v$.
-    The inversion on the seam is forced by the ordered-edge convention: the
-    covariance carries the transposed inverse of the class matrix onto a seam
-    edge, and the transposed inverse of a proportionality inverts its
-    constant, so a single constant on the whole class is not the true
-    statement in this convention.
+    In the setting of Theorem~\ref{thm:torusAbsorbedGauge_unique_scalar},
+    suppose $X$ and $X'$ realize $C_A(e,M;\sigma)=C_{B^X}(e,M;\sigma)=C_{B^{X'}}(e,M;\sigma)$
+    at every $e\in E$ and are both translation covariant (meaning $X_{\tau e}=X_e$
+    when $\tau$ preserves the stored endpoint order and $X_{\tau e}=X_e^{-\top}$
+    when $\tau$ swaps it on the seam). Then there exist $c_h,c_v\in\C^\times$
+    such that $X'_e=c_h X_e$ on interior horizontal edges ($e_{1,x}+1=e_{2,x}$),
+    $X'_e=c_h^{-1}X_e$ on seam horizontal edges, and analogously with $c_v$ on
+    interior and seam vertical edges \cite[Theorem~3]{Molnar2018NormalPEPS}.
     \begin{proof}
         \leanok
         \uses{thm:torusAbsorbedGauge_unique_scalar}
-        The constants are the per-edge scalars of
-        Theorem~\ref{thm:torusAbsorbedGauge_unique_scalar} at the two
-        reference edges. Every edge of a class is the translate of its
-        reference edge by a unique translation $\tau$. At an interior edge,
-        covariance gives $X_e=\tau\cdot X_{\mathrm{ref}}$, hence
+        Let $c_h,c_v\in\C^\times$ be the scalars of
+        Theorem~\ref{thm:torusAbsorbedGauge_unique_scalar} at the reference
+        edges $e_h,e_v$, so $X'_{e_h}=c_h X_{e_h}$ and $X'_{e_v}=c_v X_{e_v}$.
+        For any horizontal edge $e=\tau e_h$, translation covariance gives
         \begin{align}
             X'_e
-             & =
-            \tau\cdot X'_{\mathrm{ref}}
-            =\tau\cdot(c_h\,X_{\mathrm{ref}})
-            =c_h\,(\tau\cdot X_{\mathrm{ref}})
-            =c_h\,X_e.
+             & =\tau\cdot X'_{e_h}
+            =\tau\cdot(c_h X_{e_h})
+            =c_h X_e
             \notag
         \end{align}
-        At a seam edge, covariance gives
-        $X_e=(X_{\mathrm{ref}})^{-\top}$, hence
+        when $e_{1,x}+1=e_{2,x}$, and on a seam edge
         \begin{align}
             X'_e
-             & =
-            (X'_{\mathrm{ref}})^{-\top}
-            =(c_h\,X_{\mathrm{ref}})^{-\top}
-            =c_h^{-1}(X_{\mathrm{ref}})^{-\top}
-            =c_h^{-1}X_e.
+             & =(X'_{e_h})^{-\top}
+            =(c_h X_{e_h})^{-\top}
+            =c_h^{-1}(X_{e_h})^{-\top}
+            =c_h^{-1}X_e,
             \notag
         \end{align}
-        The marker $e_{1,x}+1=e_{2,x}$ distinguishes the two branches, and the
-        vertical class is identical with $c_v$ in place of $c_h$.
+        and identically for the vertical class with $c_v$.
     \end{proof}
 \end{theorem}
 
@@ -476,29 +363,22 @@
     \lean{TNLean.PEPS.torusGauge_unique_scalar_of_perVertex}
     \leanok
     \uses{def:gaugeVertex, def:applyGauge, def:peps_normalTorusRectanglePEPS}
-    For the uniqueness clause of \cite[Theorem~3]{Molnar2018NormalPEPS} read
-    against the displayed relation $B=\lambda\cdot(X,Y)A$ itself at the
-    source's sizes $n,m\geq 7$, let $A$ and $B$ be translationally invariant
-    PEPS tensors on the discrete $n\times m$ torus with $n,m\geq 7$, both
-    normal with injective rectangles
-    (Definition~\ref{def:peps_normalTorusRectanglePEPS}), with positive
-    physical dimension and equal bond dimensions, generating the same state.
-    Suppose the families $X$ and $X'$ of invertible matrices, one
-    on each edge, each realize the per-vertex relation of
-    Theorem~\ref{thm:fundamentalTheorem_normalTorusPEPS_unconditional}: at
-    every site the tensor $A$ equals $\lambda$ (respectively $\lambda'$)
-    times the gauge action of the family on $B$, with $\lambda^{nm}=1$
-    (respectively $\lambda'^{nm}=1$). Then the two families are
-    proportional at every edge: $X'_e=c\cdot X_e$ for a nonzero scalar $c$
-    depending on the edge.
+    Let $A$ and $B$ be as in
+    Theorem~\ref{thm:torusAbsorbedGauge_unique_scalar}. If two families of
+    invertible edge matrices $X,X'$ and scalars $\lambda,\lambda'$ with
+    $\lambda^{nm}={\lambda'}^{nm}=1$ satisfy
+    $A_v=\lambda(B^X)_v=\lambda'(B^{X'})_v$ at every $v\in V$
+    (Definitions~\ref{def:gaugeVertex} and~\ref{def:applyGauge}), then for
+    every $e\in E$ there exists $c_e\in\C^\times$ such that $X'_e=c_e X_e$
+    \cite[Theorem~3]{Molnar2018NormalPEPS}.
     \begin{proof}
         \leanok
         \uses{thm:torusAbsorbedGauge_unique_scalar, def:peps_edgeInsertedCoeff}
-        The inserted-edge coefficient is multilinear in the site tensors, one
-        factor per site, so the per-vertex relation scales every inserted
-        coefficient by $\lambda^{nm}=1$: each family realizes the absorbed
-        inserted-coefficient equality at every edge.
-        Theorem~\ref{thm:torusAbsorbedGauge_unique_scalar} then gives the
-        proportionality at each edge.
+        By multilinearity of $C_A(e,M;\sigma)$
+        (Definition~\ref{def:peps_edgeInsertedCoeff}) over the $nm$ sites and
+        $\lambda^{nm}={\lambda'}^{nm}=1$,
+        $C_A(e,M;\sigma)=\lambda^{nm}C_{B^X}(e,M;\sigma)=C_{B^X}(e,M;\sigma)$
+        and similarly $C_A(e,M;\sigma)=C_{B^{X'}}(e,M;\sigma)$; apply
+        Theorem~\ref{thm:torusAbsorbedGauge_unique_scalar}.
     \end{proof}
 \end{theorem}

@@ -6,28 +6,27 @@
     \leanok
     \uses{def:area_law_ground_entropy, def:area_law_two_family_partition}
     Let $\Omega$ be a normalized pure state on a finite domain, and let $G,B,C$
-    be pairwise-disjoint regions. Suppose an ordered two-family partition of $G$
-    has remainder $D$, pieces $X_i$ and family labels $f_i\in\{0,1\}$.
-    Put $P_i=\bigcup_{j<i,\,f_j=f_i}X_j$.
-    Assume $I_\Omega(X_i:C\cup B\cup P_i)\le\varepsilon_i$ when $f_i=0$ and
-    $I_\Omega(X_i:(G\cup B)^c\cup P_i)\le\varepsilon_i$ when $f_i=1$.
-    Then, as in the entropy estimate preceding the geometric counting argument
-    in \cite[Lemma~3.2]{OpenAI2026PolynomialPEPS},
+    be pairwise-disjoint regions. Suppose an ordered two-family partition
+    (Definition~\ref{def:area_law_two_family_partition}) of $G$ has remainder $D$,
+    pieces $X_i$, family labels $f_i\in\{0,1\}$, and preceding family unions
+    $P_i=\bigcup_{j<i,\,f_j=f_i}X_j$.
+    If $I_\Omega(X_i:C\cup B\cup P_i)\le\varepsilon_i$ when $f_i=0$ and
+    $I_\Omega(X_i:(G\cup B)^c\cup P_i)\le\varepsilon_i$ when $f_i=1$, then
+    (\cite[Lemma~3.2]{OpenAI2026PolynomialPEPS})
     \begin{align}
         S_\Omega(G\cup B)+S_\Omega(C\cup B)-S_\Omega(B)-S_\Omega(G\cup C\cup B)
         \le 2S_\Omega(D)+\sum_i\varepsilon_i.
-        \notag
+        \label{eq:peps_labelled_conditional_entropy}
     \end{align}
 \end{theorem}
 \begin{proof}\leanok
-    Filtering the common order by the two labels identifies each family's
-    preceding union with $P_i$. Since $C$ is disjoint from $G\cup B$,
-    $C\cup(G\cup B\cup C)^c=(G\cup B)^c$, giving the second-family hypothesis
-    the required complementary-exterior form; the generic pure-state
-    conditional two-family bound and the combined disjoint index sums then
-    yield the displayed inequality.
-    The finite-domain regional entropies agree with the corresponding generic
-    finite-product reduced-state entropies.
+    Filtering the common order by $f_i\in\{0,1\}$ identifies each family's
+    preceding union with $P_i$. Since $C\cap(G\cup B)=\varnothing$,
+    $C\cup(G\cup B\cup C)^c=(G\cup B)^c$, giving the $f_i=1$ hypothesis
+    the complementary-exterior form; the generic pure-state
+    conditional two-family bound and disjoint index sums then yield
+    (\ref{eq:peps_labelled_conditional_entropy}), as finite-domain regional entropies
+    (Definition~\ref{def:area_law_ground_entropy}) agree with generic reduced-state entropies.
 \end{proof}
 
 % Source: OpenAI2026PolynomialPEPS, Lemma 3.2 (lem:cell-cmi), 02-information.tex,
@@ -37,19 +36,18 @@
     \lean{TNLean.PEPS.AreaLaw.regionalEntropy_conditional_le_card_residual_add_pieceCount}
     \leanok
     \uses{thm:peps_labelled_conditional_entropy}
-    In the setting of Theorem~\ref{thm:peps_labelled_conditional_entropy}, let
-    the local dimension be $q$ and suppose that every piece obeys the
-    hypothesis with the same bound $\varepsilon_i=C_2$. If the partition has
-    $N$ pieces, then
+    In the setting of Theorem~\ref{thm:peps_labelled_conditional_entropy}, if
+    the local dimension is $q$, the partition has $N$ pieces, and
+    $\varepsilon_i=C_2$ for all $i$, then
     \begin{align}
         S_\Omega(G\cup B)+S_\Omega(C\cup B)-S_\Omega(B)-S_\Omega(G\cup C\cup B)
         \le 2\lvert D\rvert\log q+NC_2.
-        \notag
+        \label{eq:peps_cell_information_counting_form}
     \end{align}
 \end{corollary}
 \begin{proof}\leanok
-    The sum of the bounds is $NC_2$, and $S_\Omega(D)\le\lvert D\rvert\log q$
-    because the reduced state of $D$ has rank at most $q^{\lvert D\rvert}$.
+    Substitute $\sum_{i=1}^N\varepsilon_i=NC_2$ and $S_\Omega(D)\le\lvert D\rvert\log q$
+    (from $\operatorname{rank}\Omega_D\le q^{\lvert D\rvert}$) into (\ref{eq:peps_labelled_conditional_entropy}).
 \end{proof}
 
 % Source: OpenAI2026PolynomialPEPS, Lemma 3.2 (lem:cell-cmi), 02-information.tex,
@@ -68,8 +66,7 @@
     \end{align}
 \end{corollary}
 \begin{proof}\leanok
-    Applying Corollary~\ref{cor:peps_cell_information_counting_form} to the
-    partition of $G$ with no pieces and remainder $G$ gives the stated bound.
+    Apply Corollary~\ref{cor:peps_cell_information_counting_form} with $N=0$ pieces and $D=G$.
 \end{proof}
 
 % Source: OpenAI2026PolynomialPEPS, Lemma 3.2 (lem:cell-cmi), 02-information.tex,
@@ -99,13 +96,12 @@
     generations $0,\dots,m-1$ are at least $u_*$,
     \begin{align}
         m & \le C+C\log\log(s+e).
-        \notag
+        \label{eq:peps_cell_generation_depth}
     \end{align}
-    For every branching bound $b\ge0$ there is also $C>0$ such that, under
-    the same condition and with $s\ge1$,
+    Moreover, for every $b\ge0$ there exists $C>0$ such that, under the same condition with $s\ge1$,
     \begin{align}
         \sum_{j=0}^{m}b^{j} & \le C(1+\log s)^{C}.
-        \notag
+        \label{eq:peps_cell_generation_sum}
     \end{align}
     One may take $C=\max\{C_g2^{C_g},C_g\}$, where $C_g$ is the
     generation-count constant of
@@ -113,13 +109,10 @@
     $S_*=u_*$ and branching bound $b$.
 \end{theorem}
 \begin{proof}\leanok
-    For $u\ge u_*$, the inequality $8u^{\gamma}\le u^{\gamma'}$ amounts to
-    $u^{\gamma'-\gamma}\ge8$, which holds once $u\ge8^{1/(\gamma'-\gamma)}$.
-    The child map is therefore positive and at most $u^{\gamma'}$ above the
-    threshold, and Theorem~\ref{thm:area_law_power_recursion_depth} applies
-    with $\rho=\gamma'$. For $s\ge1$,
-    $\log(s+e)\le\log(e^{2}s)=2+\log s\le2(1+\log s)$, which converts the
-    count in $\log(s+e)$ into one in $1+\log s$.
+    For $u\ge u_*\ge8^{1/(\gamma'-\gamma)}$, $8u^{\gamma}\le u^{\gamma'}$, so
+    $0<u'\le u^{\gamma'}$ and Theorem~\ref{thm:area_law_power_recursion_depth} with $\rho=\gamma'$
+    yields (\ref{eq:peps_cell_generation_depth}). For $s\ge1$,
+    $\log(s+e)\le\log(e^{2}s)=2+\log s\le2(1+\log s)$, yielding (\ref{eq:peps_cell_generation_sum}).
 \end{proof}
 
 % Source: OpenAI2026PolynomialPEPS, Lemma 3.2 (lem:cell-cmi), 02-information.tex,
@@ -134,46 +127,34 @@
         TNLean.PEPS.Approximation.CellPartition.IsChamberSquare.isRectUnion_tileSample,
         TNLean.PEPS.Approximation.CellPartition.IsChamberSquare.isChamberSquare_child}
     \leanok
-    Label every point of the plane as allowed or as forbidden of colour $0$
-    or $1$; boundaries of chambers and squares follow one common half-open
-    convention. Let $Q$ be a square of side $u$ with at most five vertical and
-    five horizontal lines, including its sides, distinct parallel lines at
-    least $u/8$ apart, such that the labels are constant on their chambers in
-    the radius-$u$ neighbourhood of $Q$. Let $t>0$ with $1000t\le u$. Reserve
-    the square of radius $4t$ about every line intersection within distance
-    $10t$ of $Q$. Then:
+    Label every point of $\mathbb R^2$ as allowed or forbidden of colour $c\in\{0,1\}$,
+    with chambers and squares following one half-open boundary convention.
+    Let $Q$ be a square of side $u$ with at most $5$ vertical and $5$ horizontal lines
+    (including $\partial Q$), with distinct parallel lines separated by $\ge u/8$,
+    such that labels are constant on their chambers in the $u$-neighbourhood of $Q$.
+    For $0<t\le u/1000$, reserve the radius-$4t$ square about every line intersection
+    within distance $10t$ of $Q$, and let $Q^\circ$ be the unreserved part of $Q$. Then:
     \begin{enumerate}
-        \item a point of $Q$ outside the reserved squares sees within distance
-              $t$ at most one label different from its own;
-        \item let the tile of family $1$ consist of the allowed points of $Q$
-              outside the reserved squares within distance $t$ of colour $0$,
-              and the tile of family $0$ of the remaining such points; every
-              point of the tile of family $i$ is at distance greater than $t$
-              from every point of colour $i$;
-        \item the lattice points of each tile form a union of at most $66^2$
+        \item every $p\in Q^\circ$ sees within distance $t$ at most one label different from its own;
+        \item setting tile $T_1=\{p\in Q^\circ:\text{$p$ allowed},\,\operatorname{dist}(p,\text{colour }0)\le t\}$
+              and $T_0=\{p\in Q^\circ:\text{$p$ allowed}\}\setminus T_1$, every
+              $p\in T_i$ satisfies $\operatorname{dist}(p,\text{colour }i)>t$;
+        \item for $i\in\{0,1\}$, $T_i\cap\mathbb Z^2$ is a union of at most $66^2$
               closed lattice rectangles;
-        \item each reserved square, with the lines at offsets
-              $0,\pm t,\pm4t$ from its centre, again satisfies the hypothesis
-              on $Q$ with side $8t$, for the labels obtained by giving each
-              tile the colour of its family.
+        \item each reserved square, with lines at offsets $0,\pm t,\pm4t$ from its centre,
+              satisfies the same hypothesis with side $8t$ once each $T_i$ is relabelled with colour $i$.
     \end{enumerate}
 \end{lemma}
 \begin{proof}\leanok
-    A label change between two points within distance $t$ of a point $p$ is
-    caused by a line within distance $t$ of $p$. Two distinct parallel such
-    lines would be at most $2t<u/8$ apart, and lines of both orientations
-    would meet within distance $t$ of $p$, inside a reserved square. Hence all
-    label changes near $p$ come from one line, which gives the first claim,
-    and the second follows from it. If two points lie in one chamber of the
-    lines shifted by $\pm t$, clamping a point near the first into the
-    $t$-neighbourhood of the second keeps its chamber; so the distance test is
-    constant on chambers of the old lines, their translates by $\pm t$, and
-    the sides of the reserved squares, and a set constant on chambers inside a
-    half-open square has a rectangular lattice sample. In the radius-$12t$
-    neighbourhood of a reserved square, the only old lines are the two
-    through its centre and no other reserved square appears, so the new
-    labels there are constant on the chambers of the lines at offsets
-    $0,\pm t,\pm4t$.
+    A label change within distance $t$ of $p\in Q^\circ$ requires a line within distance $t$ of $p$.
+    Two distinct parallel lines within $t$ of $p$ would be $\le 2t<u/8$ apart, while orthogonal lines
+    would intersect within $t$ of $p$, placing $p$ inside a radius-$4t$ reserved square. Thus at most one
+    line lies within $t$ of $p$, proving (1) and hence (2). Clamping a point near $p$ into the
+    $t$-ball of $q$ preserves chambers whenever $p,q$ share a chamber of the lines shifted by $\pm t$;
+    hence the distance test in (2) is constant on chambers of the old lines, their $\pm t$-shifts,
+    and reserved-square sides, yielding (3). Within $12t$ of a reserved square, only the two lines
+    through its centre and no other reserved square appear, so the updated labels are constant on
+    chambers of the lines at offsets $0,\pm t,\pm4t$, proving (4).
 \end{proof}
 
 % Source: OpenAI2026PolynomialPEPS, Lemma 3.2 (lem:cell-cmi), 02-information.tex,
@@ -188,29 +169,23 @@
     \leanok
     \uses{lem:peps_cell_active_square}
     A generation consists of a common side $u$, finitely many active squares of
-    side $u$ at mutual distance greater than $10u$, each satisfying the
-    hypothesis of Lemma~\ref{lem:peps_cell_active_square}, and labels for which
-    every allowed point lies in an active square. Initially the only active
-    square is one cell of a grid of side $s$, which is allowed, while every
-    other cell carries a forbidden colour; this is a generation for every
-    choice of exterior colours. If $1000u^{\gamma}\le u$, giving every tile
-    built with $t=u^{\gamma}$ the colour of its family and taking the reserved
-    squares as active squares of side $8u^{\gamma}$ yields again a generation.
-    Listing the tiles by generation and then by active square, they are
-    pairwise disjoint, and every point of a tile is at distance greater than
-    $u^{\gamma}$ of its generation from every earlier tile of its family.
+    side $u$ at mutual distance $>10u$ satisfying the hypothesis of
+    Lemma~\ref{lem:peps_cell_active_square}, and labels such that every allowed point
+    lies in an active square. Initially, a single allowed grid cell of side $s$ with
+    all exterior cells forbidden of colour $0$ or $1$ forms a generation.
+    If $1000u^{\gamma}\le u$, colouring each tile $T_i$ (at $t=u^{\gamma}$) with $i\in\{0,1\}$
+    and taking the reserved squares as active squares of side $u'=8u^{\gamma}$ produces
+    a valid next generation. Ordered by generation and then by active square, the tiles
+    are pairwise disjoint, and every $p\in T_i$ has distance $>u^{\gamma}$ from every
+    earlier tile of family $i$.
 \end{lemma}
 \begin{proof}\leanok
-    Children of one parent are centred at intersections at least $u/8$ apart in
-    one coordinate, and children of different parents lie within $14u^{\gamma}$
-    of parents more than $10u$ apart; both separations exceed $80u^{\gamma}$.
-    The chamber invariant passes to the children by
-    Lemma~\ref{lem:peps_cell_active_square}, since near a parent only that
-    parent's tiles change labels. An allowed point left in an active square
-    lies in no tile, hence in a reserved square. A tile keeps the colour of its
-    family afterwards, so later tiles of the same family clear it by the
-    second claim of Lemma~\ref{lem:peps_cell_active_square}; tiles of one
-    generation in different active squares are more than $10u$ apart.
+    Children of one parent have centres $\ge u/8>80u^{\gamma}$ apart, while children of distinct
+    parents lie within $14u^{\gamma}$ of parents $>10u$ apart, so child separation exceeds $10u'=80u^{\gamma}$.
+    Lemma~\ref{lem:peps_cell_active_square}(4) preserves the chamber invariant since only a parent's own tiles
+    change labels near it, and remaining allowed points lie in reserved squares. Once coloured $i$,
+    a tile $T_i$ is avoided by later family-$i$ tiles by Lemma~\ref{lem:peps_cell_active_square}(2),
+    while same-generation tiles in distinct active squares are $>10u>u^{\gamma}$ apart.
 \end{proof}
 
 % Source: OpenAI2026PolynomialPEPS, Lemma 3.2 (lem:cell-cmi), 02-information.tex,
