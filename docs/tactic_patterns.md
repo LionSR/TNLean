@@ -24,6 +24,18 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Monotone range-R patch radii — promoted (2026-10-21)
+
+- **Pattern:** cast `i ≤ j` to `ℝ`, note `0 ≤ s_R`, unfold the radius
+  `u + s_R j` and close with `nlinarith`.
+- **Seen:** 3 occurrences across 2 files (`rangeNestedPatch_mono` in
+  `TNLean/PEPS/AreaLaw/Geometry/RangeNestedPatches.lean`, and
+  `uniform_rangeNestedPatch_cylinders` and `rangeAdaptivePatchSupply` in
+  `TNLean/PEPS/Approximation/RangeNestedPatchApproximation.lean`).
+- **Abstraction:** `TNLean.PEPS.AreaLaw.Geometry.rangeNestedPatchRadius_mono`.
+- **Notes:** each call site is now one line; on `Fin m` indices write
+  `fun _ _ hij ↦ rangeNestedPatchRadius_mono R u hij`.
+
 ### Nonnegative interaction bound at a site — promoted (2026-10-18)
 
 - **Pattern:** At an actual site, use its admissible singleton support and

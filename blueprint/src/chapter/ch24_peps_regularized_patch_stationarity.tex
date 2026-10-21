@@ -1015,6 +1015,38 @@ $\mu_R=2^{v_R-1}$.
     \href{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex\#L362-L411}{proof of Proposition 4.1}.
 \end{definition}
 
+\begin{lemma}[Nested cylinders from marginal closeness and entropy]
+    \label{lem:peps_closed_square_cylinder_core}
+    \lean{TNLean.PEPS.Approximation.exists_closedSquare_cylinders_of_marginal_closeness}
+    \leanok
+    \uses{def:peps_closed_square_sample,def:peps_regularized_patch_objective,
+        def:peps_patch_canonical_marginal,def:peps_regional_cylinder,
+        def:peps_patch_radius_exponent}
+    Let $\Lambda$ be a finite induced lattice domain, $L\ge2$, $B_0,p,\kappa,C>0$,
+    $\Psi$ a unit vector, $c$ a centre, $0\le u\le B_0\log L$, and
+    $r_0\le\dots\le r_{m-1}$ with $m\ge1$. Put $X_j=K(c,r_j)$ and
+    $a_j=\kappa/m$. Assume $S_\Psi(X_j)\le C(1+u)$ for every $j$, and that for
+    every $b>0$ every minimizer of $F$ on $\mathcal D$ has all marginals
+    within trace distance $\tfrac1{16}$ of those of $\Psi$. Then there are
+    subspaces $S_j$ of the states on $X_j$ with $\dim S_j\le L^{R_0}$, where
+    $R_0$ is the radius exponent at $C_0=16C+\log8$, and a vector $v$ in the
+    sum of the cylinders $S_j\otimes\mathcal H_{X_j^c}$ with
+    $\|\Psi-v\|\le L^{-p}$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_patch_radius_bounds,
+        thm:peps_patch_minimum_growth_entropy_distance,
+        thm:peps_regularized_patch_minimum,thm:peps_patch_inverse_cylinder}
+    Set $R=R_0\log L$ and $b=e^{-R}$. The entropy bound and the marginal
+    closeness give $\log N(R)\le\frac\kappa2\bigl(C_0(1+u)+R/4\bigr)$. At a
+    minimizer, the first-head expansion of
+    Theorem~\ref{thm:peps_patch_inverse_cylinder} produces subspaces of
+    dimension at most $1/b=L^{R_0}$ and a vector in the sum of their
+    cylinders within $N(R)(2b)^{\kappa/2}$ of $\Psi$, and the radius bounds of
+    Theorem~\ref{thm:peps_patch_radius_bounds} turn this into $L^{-p}$.
+\end{proof}
+
 \begin{theorem}[Nested cylinders at a given area-law constant]
     \label{thm:peps_nested_patch_cylinder_approximation_explicit}
     \lean{TNLean.PEPS.Approximation.nestedPatchRadiusExponent_pos,
@@ -1042,28 +1074,19 @@ $\mu_R=2^{v_R-1}$.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:peps_nested_patch_minimizer_marginal_closeness_explicit,
+    \uses{lem:peps_closed_square_cylinder_core,
+        thm:peps_nested_patch_minimizer_marginal_closeness_explicit,
         lem:peps_patch_energy_parameter_choice,
         thm:peps_nested_patch_entropy_explicit,
-        thm:peps_patch_radius_bounds,
-        thm:peps_patch_minimum_growth_entropy_distance,
-        thm:peps_regularized_patch_minimum,thm:peps_patch_inverse_cylinder,
         thm:peps_nested_patch_sizes}
     Take $\kappa=\kappa(q,J,\Delta)$, which is admissible in
     Theorem~\ref{thm:peps_nested_patch_minimizer_marginal_closeness_explicit}
     by Lemma~\ref{lem:peps_patch_energy_parameter_choice}, and
     $C_S=\max\{1,16C_A\}$ from
     Theorem~\ref{thm:peps_nested_patch_entropy_explicit}. Positivity of $R_0$
-    follows from $\kappa>0$ and $C_0\ge0$. Set $R=R_0\log L$, $b=e^{-R}$ and
-    $a_j=\kappa/m$. The entropy bound and the marginal closeness at every
-    minimizer give the growth bound
-    $\log N(R)\le\frac\kappa2\bigl(C_0(1+u)+R/4\bigr)$. At a minimizer, the
-    first-head expansion of
-    Theorem~\ref{thm:peps_patch_inverse_cylinder} produces subspaces of
-    dimension at most $1/b=L^{R_0}$ and a vector in the sum of their
-    cylinders within $N(R)(2b)^{\kappa/2}$ of $U\Omega$. Taking logarithms,
-    the radius bounds of Theorem~\ref{thm:peps_patch_radius_bounds} turn this
-    into the error $L^{-p}$.
+    follows from $\kappa>0$ and $C_0\ge0$. The radii are nondecreasing, so
+    Lemma~\ref{lem:peps_closed_square_cylinder_core} applies to the vector
+    $U\Omega$.
 \end{proof}
 
 \begin{theorem}[Uniform approximation in the selected nested cylinders]
