@@ -289,9 +289,11 @@ contains any given site sum to at most $b_0$.
 \begin{theorem}[Vanishing between connected components]
     \label{thm:qc_graph_lieb_robinson_zero}
     \lean{QuantumCircuit.heisenberg_commutator_eq_zero_of_edist_eq_top}\leanok
-    \uses{thm:qc_graph_lieb_robinson,thm:qc_graph_lieb_robinson_zero_finset}
-    In the setting of Theorem~\ref{thm:qc_graph_lieb_robinson}, if
-    $d_G(a_i,y)=\infty$ then $[\tau_t(A),B]=0$ for every $t$.
+    \uses{thm:qc_graph_lieb_robinson_zero_finset}
+    Let $H=\sum_kh_k$ be a finite sum, with each $h_k$ supported on a set
+    $X_k$ of graph diameter at most $R$, and choose anchors $a_k\in X_k$.
+    Let $A$ be supported on $X_i$ and $B$ at $y$.
+    If $d_G(a_i,y)=\infty$, then $[\tau_t(A),B]=0$ for every real $t$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:qc_graph_lieb_robinson_zero_finset}
