@@ -78,15 +78,26 @@ over the components is therefore not needed.
 
 \section{Locality in the matrix product state argument}
 
-Part~II of the note applies its Lieb--Robinson lemma on the contiguous chain
-of Theorem~B, namely $\Lambda=\{1,\ldots,L\}$. A formulation on this chain
-therefore suffices for that application. The printed local lemma
-(\path{part2a_mps_information.tex}, lines~260--309) does not separately
-reset the standing notation for $\Lambda$, however, so its broader reading
-also includes arbitrary finite induced-path domains. The contiguous
-formulation is not a formalization of that unrestricted reading.
+The note first allows an arbitrary finite $\Lambda\subset\mathbb Z$
+(\texttt{part0\_preamble.tex}, lines~191--215). After reducing Theorem~A to
+connected domains, it states explicitly: ``From now on
+$\Lambda=\{1,\ldots,N\}$'' (\texttt{part1\_arealaw.tex}, lines~91--93).
+Part~II develops Theorem~B, whose statement already specifies
+$\Lambda=\{1,\ldots,L\}$. Its locality lemma is titled ``Lieb--Robinson
+bound on a chain'' (\path{part2a_mps_information.tex}, lines~260--309).
+Neither that lemma nor the subsequent reset and separation lemmas explicitly
+returns to quantification over arbitrary finite domains.
 
-Both estimates are now proved for arbitrary finite induced integer domains,
+The proved contiguous-chain estimates have the domain required by the source
+argument. The following commutator and localization estimates extend them to
+arbitrary finite induced integer domains. The information-reset and
+logarithmic-separation extensions are established below. Neither headline
+theorem gains a hypothesis: Theorem~A holds on every finite domain, and
+Theorem~B is stated on a chain in the source.
+
+\subsection{Finite-domain locality estimates}
+
+Both estimates are proved for arbitrary finite induced integer domains,
 with the same uniform constants as on the contiguous chain. Put
 \begin{align}
     C   & = 2+4|b_0|e^{2R}, & v  & = 2(R+1)|b_0|e^{2R}+1, \notag \\
@@ -117,9 +128,8 @@ zero. Passing from the natural radius $\lfloor\ell\rfloor$ to $\ell$
 contributes the factor $e^{1/2}$ in the coefficient $C'$ of
 (\ref{eq:tnlean_one_dimensional_connected_domain_scope_domain_constants}). Operators at
 infinite separation commute exactly; infinite distances are not replaced
-by coordinate distances across a missing integer. This resolves the broader
-reading of the local propagation and localization lemma without using any
-ground-state decomposition.
+by coordinate distances across a missing integer. This proves the finite-domain extensions of the propagation and localization
+estimates without using a ground-state decomposition.
 
 \section{Information reset on the contiguous chain}
 
@@ -192,9 +202,9 @@ For a finite intrinsic distance, a shortest walk bounds the physical
  and hence $I_\Omega(D:C)$. The finite-domain reset theorem then gives
  $I_\Omega(T:E)\le L^{-p}$.
 
-These results resolve the broader finite-domain readings of the two local
- information lemmas. They do not assert completion of the separate
- preparation protocol.
+These results extend the two chain information lemmas to arbitrary finite
+ integer domains. The chain preparation protocol is established separately
+ and uses only the chain versions.
 
 \bibliographystyle{alpha}
 \bibliography{references}

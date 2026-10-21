@@ -15,7 +15,7 @@ neighborhoods provide the two outer regions used in information reset; their
 entropy is bounded by the interval area law. The constants are uniform over
 the domain, Hamiltonian, global ground state and the chosen regions.
 
-Source: TNLean one-dimensional note, Lemma `lem:logsep`,
+Extension of the chain lemma in the TNLean one-dimensional note, `lem:logsep`,
 `part2a_mps_information.tex`, lines 472–488, in the finite-domain setting of
 `part0_preamble.tex`, lines 191–215.
 -/
@@ -41,7 +41,8 @@ private theorem abs_sitePos_sub_le_of_edist_le
 
 /-- A union of at most k₀ relative intervals has polynomially small mutual
 information with a region separated in the original physical integer positions.
-Source: TNLean note, Lemma lem:logsep, part2a_mps_information.tex, lines 472–488,
+This extends the chain lemma in the TNLean note, Lemma lem:logsep,
+part2a_mps_information.tex, lines 472–488,
 in the finite-domain setting of part0_preamble.tex, lines 191–215. -/
 theorem DomainHamiltonian.mutualInformation_le_of_logarithmic_separation
     (q : ℕ) (hq : 1 ≤ q) (R : ℕ) (J Δ : ℝ) (hΔ : 0 < Δ)

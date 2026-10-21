@@ -725,40 +725,28 @@
     $D$.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:peps_angular_single_scale_reset_of_collar_explicit,
-        thm:peps_annular_information_induction,thm:peps_annular_cutoff,
-        thm:peps_annular_separation,lem:peps_angular_scale_of_site_position,
+    \uses{thm:peps_angular_information_of_bounds,
+        thm:peps_square_cell_conditional_information_of_collar_explicit,
+        thm:peps_information_reset_explicit,def:peps_family_cell_reset_bounds,
+        lem:peps_angular_scale_of_site_position,
         def:peps_angular_information_constants}
-    With $a'=a'(a)$ and $d=d(a)$ one has $0<a'<a/100$, $0<d<a'/4$ and $d\le1$.
-    The explicit one-scale reset with cell-count bound
-    $M=N_{\rm cell}(a,A_0,m_0)$ applies at every slope $D\ge D_{\rm ang}$ and
-    every size $L\ge L_0\ge L_{\rm ang}\ge e$, so $t=D\log L\ge D\ge1>0$.
-    The inequality $t\le n$ yields a dyadic cutoff with
-    $s_j=2^{-j}n$ and $t\le s_m<2t$. Every processed scale $s_j$, with
-    $j\le m$, satisfies $s_j\ge t$, so the same reset constants apply
-    at each scale. Process the layers from farthest to nearest the
-    marked points, and write $A_j$ for the cumulative processed set.
-
-    At scale $s_j$, the old selected cell group and the enlarged exterior
-    lie inside the two cores controlled at the preceding scale.
-    The first old group is empty. The number of new cells is at most $M$,
-    and cumulative angular separation gives
-    $\operatorname{dist}_\infty(A_j,E)\ge as_j/2$.
-    The one-scale reset estimate therefore restores
-    \begin{align}
-        I_\Omega\bigl(\Lambda_L\cap A_j^{+a's_j}:
-        \Lambda_L\cap E^{+a's_j}\bigr) & \le L^{-p}.
-        \notag
-    \end{align}
-    Here $F^{+r}$ denotes the ambient $\ell_\infty$ enlargement of $F$.
-    The same bound is restored at each step; it is not summed over the
-    scales. The last cumulative set is $A_m=X$.
-    Monotonicity of mutual information on both regions removes the final
-    padding and gives the result. The empty marked set and the case of one
-    layer are included in the same induction.
-    For an integer accuracy, translating the marked points with the sites
-    gives the slope and threshold for every common translation of
-    $\Lambda_L$.
+    The normalized ground vectors of the open $L\times L$ square Hamiltonians
+    with interaction bound $J$ and full-system gap $\Delta$ are unit vectors.
+    With $a'=a'(a)$ and $d=d(a)$, the clearance coefficient
+    $c_{\rm ang}(a,a',d)$ is positive, so by
+    Theorem~\ref{thm:peps_square_cell_conditional_information_of_collar_explicit}
+    these states satisfy the cell bound at $c_{\rm ang}(a,a',d)$ with
+    $C_1=C_{\rm cell}>0$ and $K=K_{\rm cell}>0$, in the sense of
+    Definition~\ref{def:peps_family_cell_reset_bounds}. By
+    Theorem~\ref{thm:peps_information_reset_explicit} they satisfy the reset
+    bound with width $C_p(J,\Delta,p)>0$ and threshold $L_0(q,J,\Delta,p)$. For
+    these constants $D_{\rm cell}(C_p(J,\Delta,p),a',d)=D_{\rm ang}(J,\Delta,a,p)$,
+    and the threshold of
+    Theorem~\ref{thm:peps_angular_information_of_bounds} with
+    $M=N_{\rm cell}(a,A_0,m_0)$ is $L_{\rm one}=L_{\rm ang}$. The bound of that
+    theorem, which its proof gives at every accuracy $p>0$, is the claim. For an
+    integer accuracy, translating the marked points with the sites gives the
+    slope and threshold for every common translation of $\Lambda_L$.
 \end{proof}
 
 \begin{definition}[Amplification constants at the collar constant]

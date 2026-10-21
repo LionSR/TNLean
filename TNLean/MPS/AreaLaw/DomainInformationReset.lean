@@ -16,7 +16,7 @@ regional replica swap imply polynomially small mutual information between
 sufficiently deep cores. Distances are intrinsic extended graph distances;
 distinct connected components require no finite distance bound.
 
-Source: TNLean one-dimensional note, Lemma `lem:reset`,
+Extension of the chain lemma in the TNLean one-dimensional note, `lem:reset`,
 `part2a_mps_information.tex`, lines 319–435, in the finite-domain setting of
 `part0_preamble.tex`, lines 191–215.
 -/
@@ -32,8 +32,9 @@ open TNLean.Lattice (doubledVector_comp_sumArrow exists_regional_physicalBuffer_
 namespace TNLean.MPS.AreaLaw
 
 /-- Information reset on an actual finite induced integer domain, using its
-intrinsic extended graph distance. Source: TNLean note, Lemma lem:reset,
-part2a_mps_information.tex, lines 319–435, in the finite-domain setting of
+intrinsic extended graph distance. This extends the chain lemma in the TNLean
+note, Lemma lem:reset,
+part2a_mps_information.tex, lines 319–435, to the finite domains defined in
 part0_preamble.tex, lines 191–215. Infinite distances impose no finite margin
 condition. No restricted spectral gap or product marginal is assumed. -/
 theorem DomainHamiltonian.information_reset (q : ℕ) (hq : 1 ≤ q)
