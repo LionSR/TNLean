@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.EntropyInequalities
+import TNLean.MPS.AreaLaw.ChainNeighborhood
 import QICLean.Entropy.FiniteProductInformation
 import Mathlib.Algebra.Order.Floor.Semiring
 import Mathlib.Data.Nat.Dist
@@ -33,18 +34,14 @@ namespace TNLean.MPS.AreaLaw
 Source: TNLean note, Lemma `lem:logsep`, `part2a_mps_information.tex:482–483`. -/
 theorem chainNeighborhood_interval_eq {L : ℕ} (a z : ℕ)
     (ρ : ℝ) (hρ : 0 ≤ ρ) :
-    let N := fun S : Finset (Fin L) ↦
-      Finset.univ.filter (fun y : Fin L ↦
-        ∃ x ∈ S, (Nat.dist x.val y.val : ℝ) ≤ ρ)
-    N (interval L a z) =
+    chainNeighborhood (interval L a z) ρ =
       if (interval L a z).Nonempty then
         interval L (a - Nat.floor ρ) (z + Nat.floor ρ)
       else ∅ := by
   classical
-  dsimp only
   split_ifs with hI
   · ext y
-    simp only [Finset.mem_filter, Finset.mem_univ, true_and, mem_interval,
+    simp only [mem_chainNeighborhood, mem_interval,
       ← Nat.le_floor_iff hρ]
     constructor
     · rintro ⟨x, hx, hdist⟩
@@ -75,14 +72,10 @@ theorem regionEntropy_chainNeighborhood_biUnion_intervals_le
       Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L a z) Ω ≤ c)
     (s : Finset κ) (a z : κ → ℕ) (ρ : ℝ) (hρ : 0 ≤ ρ) :
     let T := s.biUnion (fun i ↦ interval L (a i) (z i))
-    let N := fun S : Finset (Fin L) ↦
-      Finset.univ.filter (fun y : Fin L ↦
-        ∃ x ∈ S, (Nat.dist x.val y.val : ℝ) ≤ ρ)
-    Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (N T) Ω ≤
+    Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (chainNeighborhood T ρ) Ω ≤
       (s.card : ℝ) * c := by
   classical
-  let N := fun S : Finset (Fin L) ↦ Finset.univ.filter (fun y : Fin L ↦
-    ∃ x ∈ S, (Nat.dist x.val y.val : ℝ) ≤ ρ)
+  let N := fun S : Finset (Fin L) ↦ chainNeighborhood S ρ
   change Entropy.regionEntropy (N (s.biUnion (fun i ↦ interval L (a i) (z i)))) Ω ≤
     (s.card : ℝ) * c
   have hc : 0 ≤ c := by
@@ -98,17 +91,14 @@ theorem regionEntropy_chainNeighborhood_biUnion_intervals_le
     linarith [FiniteProduct.entropy_submodular (fun _ : Fin L ↦ Fin q) Ω X Y, hn (X ∩ Y)]
   have hNi (i : κ) : Entropy.regionEntropy (N (interval L (a i) (z i))) Ω ≤ c := by
     change Entropy.regionEntropy
-      (Finset.univ.filter (fun y : Fin L ↦
-        ∃ x ∈ interval L (a i) (z i), (Nat.dist x.val y.val : ℝ) ≤ ρ)) Ω ≤ c
-    have hgeo := chainNeighborhood_interval_eq (L := L) (a i) (z i) ρ hρ
-    dsimp only at hgeo
-    rw [hgeo]
+      (chainNeighborhood (interval L (a i) (z i)) ρ) Ω ≤ c
+    rw [chainNeighborhood_interval_eq (L := L) (a i) (z i) ρ hρ]
     split_ifs
     · exact hI _ _
     · simpa only [TNLean.Lattice.regionEntropy_empty hΩ] using hc
   have hNu (X Y : Finset (Fin L)) : N (X ∪ Y) = N X ∪ N Y := by
     ext y
-    simp only [N, Finset.mem_filter, Finset.mem_univ, true_and, Finset.mem_union,
+    simp only [N, mem_chainNeighborhood, Finset.mem_union,
       or_and_right, exists_or]
   induction s using Finset.induction_on with
   | empty => simp [N, TNLean.Lattice.regionEntropy_empty hΩ]

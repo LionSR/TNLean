@@ -3770,6 +3770,23 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 ## Completed refactors
 
+### Chain neighborhood of a region — completed (2026-10-21)
+
+- **Pattern:** The radius-`ρ` neighbourhood of a set of chain sites, written
+  inline as `Finset.univ.filter (fun y : Fin L ↦ ∃ x ∈ S, (Nat.dist x.val y.val : ℝ) ≤ ρ)`,
+  often under a local `let` with `dsimp only` or `change` steps to match the
+  `let` of a statement with the one in its proof.
+- **Seen:** Fourteen occurrences in seven files of `MPS/AreaLaw/`:
+  `IntervalNeighborhoodEntropy.lean` (four), `RelativeGeneratorLocalization.lean`
+  (four), `LiebRobinson.lean` (two), `InformationReset.lean`,
+  `LogarithmicSeparation.lean`, `ResetSupportSeparation.lean` and
+  `SupportedGaussianIntegral.lean`.
+- **Abstraction:** `chainNeighborhood S ρ` in
+  `TNLean/MPS/AreaLaw/ChainNeighborhood.lean`, with the simp lemmas
+  `mem_chainNeighborhood` and `chainNeighborhood_empty`. Statements name it
+  directly; membership proofs use `mem_chainNeighborhood` in place of
+  `Finset.mem_filter, Finset.mem_univ, true_and`.
+
 ### Common coordinate shells for polynomial and logarithmic discounts — completed cleanup
 
 - **Pattern:** The logarithmic finite-family discount and the source-exact polynomial
@@ -5006,30 +5023,6 @@ no additional helper is proposed.
   `commute_heisenbergEvolution_of_closed`.
 - **Notes:** Below the rule of three; the two closed sets are dual. Promote at
   a third use.
-
-
-### Chain neighborhood of a region — candidate (2026-10-19)
-
-- **Pattern:** The radius-`ρ` neighborhood of a set of chain sites written
-  inline as a local `let`:
-
-  ```lean
-  let N := Finset.univ.filter
-    (fun y : Fin L ↦ ∃ x ∈ S, (Nat.dist x.val y.val : ℝ) ≤ ρ)
-  ```
-
-  with `dsimp only` or `change` steps to match the `let` of a statement with
-  the one in its proof.
-- **Seen:** At least thirteen occurrences in six files of `MPS/AreaLaw/`:
-  `IntervalNeighborhoodEntropy.lean` (four), `RelativeGeneratorLocalization.lean`
-  (four), `LiebRobinson.lean` (two), `InformationReset.lean`,
-  `LogarithmicSeparation.lean` and `SupportedGaussianIntegral.lean`.
-- **Possible abstraction:** One definition
-  `chainNeighborhood (L : ℕ) (ρ : ℝ) (S : Finset (Fin L)) : Finset (Fin L)`
-  with a `mem_chainNeighborhood` simp lemma, used in every statement.
-- **Notes:** Past the promotion threshold. The refactor changes theorem
-  statements across the chain layer, so it needs its own pull request with a
-  build; it was not done in the review round that recorded it.
 
 
 ### Dyadic padding bounds — candidate (2026-10-16)
