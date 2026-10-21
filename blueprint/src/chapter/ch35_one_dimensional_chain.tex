@@ -1790,8 +1790,11 @@ for an arbitrary finite set of sites and are instantiated here directly.
         thm:peps_sheet_swap_doubled_cancellation,lem:domain_crossing_count}
     The per-replica support, Hermiticity and norm estimates follow from
     the corresponding chain estimates at the same original support.
-    If $X$ does not cross $D$, the regional swap fixes the paired sum
-    $T_{X,0}+T_{X,1}$. Its contribution to the operator difference is zero.
+    If $X\subseteq D$ or $X\cap D=\varnothing$, then
+    \begin{align*}
+        F(T_{X,0}+T_{X,1})F^\dagger=T_{X,0}+T_{X,1}.
+    \end{align*}
+    Thus $K_{X,0}+K_{X,1}=0$ for every noncrossing support.
     Restrict the finite sum to crossing supports, then distribute conjugation
     over the two replica terms. Lemma~\ref{lem:domain_crossing_count} gives
     the displayed count.
