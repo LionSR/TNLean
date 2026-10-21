@@ -17,8 +17,14 @@ import QICLean.Analysis.ScaleRecurrence
 domains with gapped ground vectors, all cuts `A`, and all safe rectangles `Q` of size at most
 `r`, at fixed `q, R, J, Δ` and safety parameter `D₀`. Proposition 3.3 of the area-law
 manuscript bounds it by `C r^{1 + e₀}` with `e₀ ∈ (0, 1)`. The constants depend only
-on `q, R, J, Δ` and work for every admissible safety parameter: the entropy decreases
-as `D₀` increases, so the estimate at `D₀ = 2 * R + 11` suffices.
+on `q, R, J, Δ` and work for every natural-number safety parameter `D₀ > 2 R + 10`: the
+entropy decreases as `D₀` increases, so the estimate at `D₀ = 2 * R + 11` suffices.
+
+**Scope restriction (integer safety parameter):** the theorems of this file take `D₀ : ℕ`,
+whereas the source allows every real `D₀ > 2 R + 10`. The real case is the clearance transfer
+`boxEntropy_power_le_of_succ_clearance` and `exists_regionalEntropy_safe_rect_le_boxError`,
+recorded in `docs/paper-gaps/arealaw2d_safe_box_collar_scope.tex`, section "Arbitrary real
+clearance".
 
 A safe parent of size at most `M r` is partitioned into at most `M²` children of size at most
 `r`. With `P = 2 C_pad + 1`, color the children by their chunk positions modulo `P`; the
