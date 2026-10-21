@@ -14,7 +14,8 @@ does not apply to the paper source files. Vendored files whose arXiv license is
 permissions specific to this repository; the arXiv licenses alone grant no
 downstream redistribution right, and that permission is not inferred for
 additional works. Entries marked link only carry no such permission: their
-arXiv license is recorded for reference, and their files are not redistributed. Entries marked `CC BY 4.0` are redistributed under the linked
+arXiv license is recorded for reference, and their files are not redistributed.
+Entries marked `CC BY 4.0` are redistributed under the linked
 Creative Commons license. The version of record for each paper is the arXiv
 posting or the journal publication.
 
