@@ -30,8 +30,9 @@ physical dimension `q^(L^2)` of a core.
 
 ## Main statements
 
-* `TNLean.PEPS.Approximation.reindex_rectangle_sumArrow_unitary`: the reset unitary on paired
-  sites of the open square, read on the two replicas.
+* `TNLean.PEPS.Approximation.mutualInformation_cores_le_of_sites_reset_unitary`: the entropy
+  comparison of the reset on the paired sites of any finite set; the square version
+  `TNLean.PEPS.Approximation.mutualInformation_cores_le_of_reset_unitary` follows by relabelling.
 * `TNLean.PEPS.Approximation.resetWidth`, `TNLean.PEPS.Approximation.resetThreshold`: the
   width `C_p` and the size threshold `L₀`, with the closed form
   `C_p = 1280 e² (J/Δ)(2p + 40) + 4p + 52` (`TNLean.PEPS.Approximation.resetWidth_eq`).
@@ -156,41 +157,76 @@ theorem notMem_resetSupport {L : ℕ} {R C R₀ C₀ : Finset (SquareLatticeVert
 
 end Geometry
 
-section Transport
-
-/-- **The reset unitary on two replicas of the square.** A unitary on the paired sites of the
-open square, supported on `B`, is a unitary on the two replicas, supported on both replicas
-of the sites of `B`. -/
-theorem reindex_rectangle_sumArrow_unitary {L q : ℕ}
-    (B : Finset (Site (rectangularDomain L L)))
-    {U : Matrix (Lattice.Configuration (rectangularDomain L L) (q * q))
-      (Lattice.Configuration (rectangularDomain L L) (q * q)) ℂ}
-    (hUu : U ∈ unitaryGroup _ ℂ) (hUs : U ∈ supportedOperators (q * q) (B : Set _)) :
-    let Pe := (Equiv.sumArrowEquivProdArrow (SquareLatticeVertex L L) (SquareLatticeVertex L L)
-      (Fin q)).trans ((sitePairConfigurationEquiv (SquareLatticeVertex L L) q q).trans
-        (rectangleConfigurationEquiv L L (q * q)))
-    let S := B.image (rectangleSiteEquiv L L).symm
-    reindex Pe.symm Pe.symm U ∈ supportedOperators q ((S.disjSum S : Finset _) : Set _) ∧
-      (reindex Pe.symm Pe.symm U)ᴴ * reindex Pe.symm Pe.symm U = 1 := by
-  intro Pe S
-  set a := rectangleSiteEquiv L L
-  set e := rectangleConfigurationEquiv L L (q * q)
-  have hU'eq : reindex Pe.symm Pe.symm U =
-      reindex (sumArrowSitePair (SquareLatticeVertex L L) q).symm
-        (sumArrowSitePair (SquareLatticeVertex L L) q).symm (reindex e.symm e.symm U) := by
-    ext x y
-    rfl
-  have hU₀ : reindex e.symm e.symm U ∈ supportedOperators (q * q) (S : Set _) := by
-    have h₀ : reindex e.symm e.symm U = embedOp a.symm U := by
-      rw [embedOp_equiv_eq_reindex]
-      rfl
-    rw [h₀, Finset.coe_image]
-    exact embedOp_mem_supportedOperators_image a.symm.injective hUs
-  refine ⟨?_, (Matrix.mem_unitaryGroup_iff').mp (reindex_mem_unitaryGroup Pe.symm U hUu)⟩
-  rw [hU'eq]
-  exact reindex_sumArrow_sitePair_mem_supportedOperators q hU₀
-
-end Transport
+/-- **The entropy comparison of the reset on any finite set of sites.** Let `U` be a unitary on
+the paired sites of a finite set `V`, supported on a set `B` containing no site of the cores
+`A₀ ⊆ A`, `C₀ ⊆ C`, with `‖U Ψ - Φ‖ ≤ δ` for `Ψ = Ω ⊗ Ω` and `Φ = F_A Ψ`. Then
+`I_Ω(A₀ : C₀) ≤ 8 √δ log (e q^|A₀|)`. The statement on the open square,
+`mutualInformation_cores_le_of_reset_unitary`, follows by relabelling the sites.
+Source: `02-information.tex`, lines 612–630. -/
+theorem mutualInformation_cores_le_of_sites_reset_unitary {V : Type*} [Fintype V]
+    [DecidableEq V] {q : ℕ} (hq : 1 ≤ q) {Ω : EuclideanSpace ℂ (V → Fin q)} (hΩ : ‖Ω‖ = 1)
+    {A C A₀ C₀ : Finset V} (hAC : Disjoint A C) (hA₀ : A₀ ⊆ A) (hC₀ : C₀ ⊆ C)
+    (B : Finset V) (hnot : ∀ v ∈ A₀ ∪ C₀, v ∉ B)
+    {U : Matrix (V → Fin (q * q)) (V → Fin (q * q)) ℂ}
+    (hUu : U ∈ unitaryGroup _ ℂ) (hUs : U ∈ supportedOperators (q * q) (B : Set V)) {δ : ℝ} :
+    let p := sitePairConfigurationEquiv V q q
+    let F := reindex p p (sheetSwapOp q A)
+    let ψ : (V → Fin (q * q)) → ℂ := fun c ↦ Ω (p.symm c).1 * Ω (p.symm c).2
+    ‖WithLp.toLp 2 ψ‖ = 1 → ‖WithLp.toLp 2 (F *ᵥ ψ)‖ = 1 →
+    ‖WithLp.toLp 2 (U *ᵥ ψ) - WithLp.toLp 2 (F *ᵥ ψ)‖ ≤ δ →
+    FiniteProduct.mutualInformation (fun _ ↦ Fin q) Ω A₀ C₀ ≤
+      8 * √δ * Real.log (Real.exp 1 * ((q : ℝ) ^ A₀.card)) := by
+  intro p F ψ hψn hφn hUerr
+  set Pe := (Equiv.sumArrowEquivProdArrow V V (Fin q)).trans p with hPe
+  set U' := reindex Pe.symm Pe.symm U with hU'
+  have hU's : U' ∈ supportedOperators q ((B.disjSum B : Finset (V ⊕ V)) : Set (V ⊕ V)) :=
+    reindex_sumArrow_sitePair_mem_supportedOperators q hUs
+  have hU'u : U'ᴴ * U' = 1 :=
+    (Matrix.mem_unitaryGroup_iff').mp (reindex_mem_unitaryGroup Pe.symm U hUu)
+  set Ψ := FiniteProduct.sumSitesProduct Ω Ω with hΨdef
+  set Φ := FiniteProduct.relabelSites (replicaSwap A) Ψ with hΦdef
+  have hΨ : Ψ = WithLp.toLp 2 (ψ ∘ Pe) := by
+    apply WithLp.ofLp_injective 2
+    exact (doubledVector_comp_sumArrow p Ω).symm
+  have hΦ : Φ = WithLp.toLp 2 ((F *ᵥ ψ) ∘ Pe) := by
+    apply WithLp.ofLp_injective 2
+    exact (sheetSwapOp_mulVec_comp_sumArrow p A Ω).symm
+  have hΨn : ‖Ψ‖ = 1 := by rw [hΨ, EuclideanSpace.norm_toLp_comp_equiv]; exact hψn
+  have hΦn : ‖Φ‖ = 1 := by rw [hΦ, EuclideanSpace.norm_toLp_comp_equiv]; exact hφn
+  have hδ : ‖WithLp.toLp 2 (U' *ᵥ WithLp.ofLp Ψ) - Φ‖ ≤ δ := by
+    have h₁ := norm_reindex_mulVec_sub Pe.symm U ψ (F *ᵥ ψ)
+    rw [Equiv.symm_symm] at h₁
+    rw [hΨ, hΦ, hU', WithLp.ofLp_toLp, h₁]
+    exact hUerr
+  have hXJ : Disjoint (A₀.disjSum (∅ : Finset V)) (C₀.disjSum ∅) := by
+    rw [Finset.disjoint_left]
+    rintro (v | v) hv hv'
+    · simp only [Finset.inl_mem_disjSum] at hv hv'
+      exact Finset.disjoint_left.mp hAC (hA₀ hv) (hC₀ hv')
+    · simp at hv
+  have hS : Disjoint ((B.disjSum B : Finset (V ⊕ V)) : Set (V ⊕ V))
+      ((A₀.disjSum ∅ ∪ C₀.disjSum ∅ : Finset (V ⊕ V)) : Set (V ⊕ V)) := by
+    rw [Set.disjoint_left]
+    rintro (v | v) hv hv'
+    · simp only [Finset.mem_coe, Finset.inl_mem_disjSum] at hv
+      have hmem : v ∈ A₀ ∪ C₀ := by
+        simpa [Finset.mem_union, Finset.inl_mem_disjSum] using hv'
+      exact hnot v hmem hv
+    · simp at hv'
+  have hprod := mutualInformation_relabelSites_replicaSwap_eq_zero (q := q) hΩ hA₀
+    (Finset.disjoint_of_subset_left hC₀ hAC.symm)
+  have hent := mutualInformation_le_of_supported_unitary hΨn hΦn hXJ hS hU's hU'u hprod
+  rw [hΨdef, FiniteProduct.mutualInformation_sumSitesProduct_inl hΩ hΩ] at hent
+  refine hent.trans ?_
+  have hcard : Fintype.card (FiniteProduct.Configuration (fun _ : V ⊕ V ↦ Fin q)
+      (A₀.disjSum ∅)) = q ^ A₀.card := by
+    simp only [FiniteProduct.Configuration, Fintype.card_fun, Fintype.card_fin,
+      Fintype.card_coe, Finset.card_disjSum, Finset.card_empty, add_zero]
+  rw [hcard]
+  push_cast
+  have hcard1 : (1 : ℝ) ≤ (q : ℝ) ^ A₀.card := one_le_pow₀ (by exact_mod_cast hq)
+  gcongr
+  exact Real.log_nonneg (one_le_mul_of_one_le_of_one_le (Real.one_le_exp zero_le_one) hcard1)
 
 /-- **The entropy comparison of the reset.** Let `U` be a unitary on the paired sites of the
 open square, supported on a set `B` containing no site of the cores `R₀ ⊆ R`, `C₀ ⊆ C`, with
@@ -215,61 +251,43 @@ theorem mutualInformation_cores_le_of_reset_unitary {L q : ℕ} (hq : 1 ≤ q)
     FiniteProduct.mutualInformation (fun _ ↦ Fin q) Ω R₀ C₀ ≤
       8 * √δ * Real.log (Real.exp 1 * ((q : ℝ) ^ R₀.card)) := by
   intro pe F ψ hψn hφn hUerr
-  set Pe := (Equiv.sumArrowEquivProdArrow (SquareLatticeVertex L L) (SquareLatticeVertex L L)
-    (Fin q)).trans pe with hPe
-  obtain ⟨hU's, hU'u⟩ := reindex_rectangle_sumArrow_unitary B hUu hUs
-  set U' := reindex Pe.symm Pe.symm U with hU'
-  set Ψ := FiniteProduct.sumSitesProduct Ω Ω with hΨdef
-  set Φ := FiniteProduct.relabelSites (replicaSwap R) Ψ with hΦdef
-  have hΨ : Ψ = WithLp.toLp 2 (ψ ∘ Pe) := by
-    apply WithLp.ofLp_injective 2
-    exact (doubledVector_comp_sumArrow pe Ω).symm
-  have hΦ : Φ = WithLp.toLp 2 ((F *ᵥ ψ) ∘ Pe) := by
-    apply WithLp.ofLp_injective 2
-    exact (sheetSwapOp_mulVec_comp_sumArrow pe R Ω).symm
-  have hΨn : ‖Ψ‖ = 1 := by rw [hΨ, EuclideanSpace.norm_toLp_comp_equiv]; exact hψn
-  have hΦn : ‖Φ‖ = 1 := by rw [hΦ, EuclideanSpace.norm_toLp_comp_equiv]; exact hφn
-  have hδ : ‖WithLp.toLp 2 (U' *ᵥ WithLp.ofLp Ψ) - Φ‖ ≤ δ := by
-    have h₁ := norm_reindex_mulVec_sub Pe.symm U ψ (F *ᵥ ψ)
-    rw [Equiv.symm_symm] at h₁
-    rw [hΨ, hΦ, hU', WithLp.ofLp_toLp, h₁]
+  set a := rectangleSiteEquiv L L
+  set e := rectangleConfigurationEquiv L L (q * q)
+  set S := B.image a.symm
+  have hU₀s : reindex e.symm e.symm U ∈ supportedOperators (q * q) (S : Set _) := by
+    have h₀ : reindex e.symm e.symm U = embedOp a.symm U := by
+      rw [embedOp_equiv_eq_reindex]
+      rfl
+    rw [h₀, Finset.coe_image]
+    exact embedOp_mem_supportedOperators_image a.symm.injective hUs
+  have hnot' : ∀ v ∈ R₀ ∪ C₀, v ∉ S := by
+    intro v hv hvS
+    obtain ⟨u, hu, huv⟩ := Finset.mem_image.mp hvS
+    exact hnot v hv (by rw [← huv]; simpa using hu)
+  have hψ : (fun c ↦ Ω ((sitePairConfigurationEquiv (SquareLatticeVertex L L) q q).symm c).1 *
+      Ω ((sitePairConfigurationEquiv (SquareLatticeVertex L L) q q).symm c).2) = ψ ∘ e := by
+    funext c
+    simp [ψ, pe, e]
+  have hF : reindex (sitePairConfigurationEquiv (SquareLatticeVertex L L) q q)
+      (sitePairConfigurationEquiv (SquareLatticeVertex L L) q q)
+      (TNLean.Lattice.sheetSwapOp q R) = F.submatrix e e := by
+    ext x y
+    simp [F, pe, e]
+  have hU₀ : reindex e.symm e.symm U = U.submatrix e e := by
+    ext x y
+    simp
+  refine mutualInformation_cores_le_of_sites_reset_unitary hq hΩ hRC hR₀ hC₀ S hnot'
+    (reindex_mem_unitaryGroup e.symm U hUu) hU₀s ?_ ?_ ?_
+  · simp only [hψ, EuclideanSpace.norm_toLp_comp_equiv]
+    exact hψn
+  · simp only [hψ, hF, Matrix.submatrix_mulVec_equiv, Function.comp_assoc,
+      Equiv.self_comp_symm, Function.comp_id, EuclideanSpace.norm_toLp_comp_equiv]
+    exact hφn
+  · simp only [hψ, hF, hU₀, Matrix.submatrix_mulVec_equiv, Function.comp_assoc,
+      Equiv.self_comp_symm, Function.comp_id, ← WithLp.toLp_sub]
+    rw [show (U *ᵥ ψ) ∘ e - (F *ᵥ ψ) ∘ e = (U *ᵥ ψ - F *ᵥ ψ) ∘ e from rfl,
+      EuclideanSpace.norm_toLp_comp_equiv, WithLp.toLp_sub]
     exact hUerr
-  have hXJ : Disjoint (R₀.disjSum (∅ : Finset (SquareLatticeVertex L L))) (C₀.disjSum ∅) := by
-    rw [Finset.disjoint_left]
-    rintro (v | v) hv hv'
-    · simp only [Finset.inl_mem_disjSum] at hv hv'
-      exact Finset.disjoint_left.mp hRC (hR₀ hv) (hC₀ hv')
-    · simp at hv
-  have hS : Disjoint
-      (((B.image (rectangleSiteEquiv L L).symm).disjSum (B.image (rectangleSiteEquiv L L).symm) :
-        Finset (SquareLatticeVertex L L ⊕ SquareLatticeVertex L L)) :
-          Set (SquareLatticeVertex L L ⊕ SquareLatticeVertex L L))
-      ((R₀.disjSum ∅ ∪ C₀.disjSum ∅ : Finset (SquareLatticeVertex L L ⊕ SquareLatticeVertex L L)) :
-        Set (SquareLatticeVertex L L ⊕ SquareLatticeVertex L L)) := by
-    rw [Set.disjoint_left]
-    rintro (v | v) hv hv'
-    · simp only [Finset.mem_coe, Finset.inl_mem_disjSum,
-        Finset.mem_image] at hv
-      obtain ⟨u, hu, rfl⟩ := hv
-      have hmem : (rectangleSiteEquiv L L).symm u ∈ R₀ ∪ C₀ := by
-        simpa [Finset.mem_union, Finset.inl_mem_disjSum] using hv'
-      exact hnot _ hmem (by simpa using hu)
-    · simp at hv'
-  have hprod := mutualInformation_relabelSites_replicaSwap_eq_zero (q := q) hΩ hR₀
-    (Finset.disjoint_of_subset_left hC₀ hRC.symm)
-  have hent := mutualInformation_le_of_supported_unitary hΨn hΦn hXJ hS hU's hU'u hprod
-  rw [hΨdef, FiniteProduct.mutualInformation_sumSitesProduct_inl hΩ hΩ] at hent
-  refine hent.trans ?_
-  have hcard : Fintype.card (FiniteProduct.Configuration
-      (fun _ : SquareLatticeVertex L L ⊕ SquareLatticeVertex L L ↦ Fin q)
-      (R₀.disjSum ∅)) = q ^ R₀.card := by
-    simp only [FiniteProduct.Configuration, Fintype.card_fun, Fintype.card_fin,
-      Fintype.card_coe, Finset.card_disjSum, Finset.card_empty, add_zero]
-  rw [hcard]
-  push_cast
-  have hcard1 : (1 : ℝ) ≤ (q : ℝ) ^ R₀.card := one_le_pow₀ (by exact_mod_cast hq)
-  gcongr
-  exact Real.log_nonneg (one_le_mul_of_one_le_of_one_le (Real.one_le_exp zero_le_one) hcard1)
 
 /-- The reset width `C_p = K + 2` of Lemma 3.3, where `K = resetRadius J Δ (2p + 10)` is the
 localization radius coefficient at the error exponent `r = 2p + 10`. The cores are required
