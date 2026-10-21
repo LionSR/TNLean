@@ -88,12 +88,11 @@ formulation is not a formalization of that unrestricted reading.
 
 Both estimates are now proved for arbitrary finite induced integer domains,
 with the same uniform constants as on the contiguous chain. Put
-\[
-    C=2+4|b_0|e^{2R},\qquad
-    v=2(R+1)|b_0|e^{2R}+1,\qquad
-    \mu=\tfrac12,\qquad
-    C'=\frac{2Ce}{1-e^{-1/2}}.
-\]
+\begin{align}
+    C   & = 2+4|b_0|e^{2R}, & v  & = 2(R+1)|b_0|e^{2R}+1, \notag \\
+    \mu & = \tfrac12,       & C' & = \frac{2Ce}{1-e^{-1/2}}.
+    \label{eq:tnlean_one_dimensional_connected_domain_scope_domain_constants}
+\end{align}
 For every finite labelled family of Hermitian terms on nonempty supports
 of induced-graph diameter at most $R$, with per-site norm sum at most $b_0$,
 the commutator bound holds on every finite initial support $S$. The
@@ -115,7 +114,8 @@ $R+1$ sites.\footnote{Declarations:
     \leanid{TNLean.MPS.AreaLaw.domainGraph_card_sphere_le_two}.}
 The general graph estimates apply with sphere coefficient $2$ and exponent
 zero. Passing from the natural radius $\lfloor\ell\rfloor$ to $\ell$
-contributes the factor $e^{1/2}$ already present in $C'$. Operators at
+contributes the factor $e^{1/2}$ in the coefficient $C'$ of
+(\ref{eq:tnlean_one_dimensional_connected_domain_scope_domain_constants}). Operators at
 infinite separation commute exactly; infinite distances are not replaced
 by coordinate distances across a missing integer. This resolves the broader
 reading of the local propagation and localization lemma without using any
