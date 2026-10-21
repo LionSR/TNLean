@@ -10,7 +10,7 @@ import TNLean.PEPS.AreaLaw.Geometry.NestedPatches
 
 The polynomial-PEPS manuscript selects the nested radii `u + 2 j` for nearest-neighbour
 interactions. For interactions of range `R` we space the radii by
-`s_R = 2 ⌈R / 2⌉`, which is `2` for `R ≤ 2` and lies between `R` and `R + 1`.
+`s_R = 2 ⌈R / 2⌉`, which is `2` for `1 ≤ R ≤ 2` and lies between `R` and `R + 1`.
 
 The sup-norm distance from the center changes by at most one along an edge, so the
 sites of a support of graph range `R` have radial distances in an interval of length `R`.
