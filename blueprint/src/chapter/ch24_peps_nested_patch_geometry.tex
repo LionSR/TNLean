@@ -274,9 +274,9 @@ Definition~\ref{def:peps_nested_patches}.
     }
     \leanok
     \uses{def:peps_closed_square_sample}
-    For a nonnegative integer $R$, put $s_R=2\lceil R/2\rceil$. For
-    $u\in\mathbb R$, put $m_R=\lfloor u/s_R\rfloor+1$, and for
-    $0\le j<m_R$ define
+    For a nonnegative integer $R$, put $s_R=2\lceil R/2\rceil$. For $R\ge1$
+    and $u\ge0$, put $m_R=\lfloor u/s_R\rfloor+1$, and for $0\le j<m_R$
+    define
     \begin{align}
         r_j & =u+s_Rj,\qquad K_j=K(c,r_j).
         \label{eq:peps_range_nested_patches}
@@ -387,7 +387,7 @@ Definition~\ref{def:peps_nested_patches}.
     \lean{TNLean.PEPS.AreaLaw.Geometry.rangeNestedPatch_quadratic_budget}
     \leanok
     \uses{def:peps_range_nested_patches}
-    Let $R\ge1$, $u,\kappa\in\mathbb R$, and assign each patch of
+    Let $R\ge1$, $u\ge0$ and $\kappa\in\mathbb R$, and assign each patch of
     Definition~\ref{def:peps_range_nested_patches} the weight
     $t_j=\kappa/m_R$. Then
     \begin{align}
