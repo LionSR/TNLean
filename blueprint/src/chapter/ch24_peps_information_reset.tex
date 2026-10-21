@@ -63,6 +63,30 @@ the cores to an inverse power of the system size. This is Lemma~3.3 of
     has no mutual information with a region of the first.
 \end{proof}
 
+\begin{lemma}[A supported unitary and the mutual information of untouched sets]
+    \label{lem:lattice_supported_unitary_entropy}
+    \lean{TNLean.Lattice.mutualInformation_le_of_supported_unitary,
+        TNLean.Lattice.exists_one_kronecker_unitary_of_mem_supportedOperators}
+    \leanok
+    Let $X,J$ be disjoint sets of sites of a finite set $\Lambda$, each site
+    carrying $\C^q$, and let $\varphi$ and $\eta$ be unit vectors with
+    $I_\eta(X:J)=0$. If $U$ is a unitary supported on a set $S$ disjoint from
+    $X\cup J$, then
+    \begin{align*}
+        I_\varphi(X:J) & \le8\sqrt{\lVert U\varphi-\eta\rVert}\,\log(e\,q^{|X|}).
+    \end{align*}
+    Moreover, if the configuration space is nonempty, a unitary supported on a set
+    disjoint from $X$ is, in the coordinates of $X$ and of its complement,
+    $\id\otimes U_2$ for a unitary $U_2$ on the complement.
+\end{lemma}
+
+\begin{proof}\leanok
+    Write $U=\id\otimes U_2$ as in the second assertion. Then $U_2$ acts on the
+    complement of $X$, and the continuity of mutual information under a unitary
+    acting away from $X$, with only the dimension $q^{|X|}$ of $X$, gives the
+    bound.
+\end{proof}
+
 \begin{theorem}[The entropy comparison of the reset on any finite set of sites]
     \label{thm:peps_reset_cores_entropy_sites}
     \lean{TNLean.PEPS.Approximation.mutualInformation_cores_le_of_sites_reset_unitary}
@@ -79,7 +103,8 @@ the cores to an inverse power of the system size. This is Lemma~3.3 of
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:peps_reset_paired_support,thm:peps_reset_exchanged_cores}
+    \uses{thm:peps_reset_paired_support,thm:peps_reset_exchanged_cores,
+        lem:lattice_supported_unitary_entropy}
     By Theorem~\ref{thm:peps_reset_paired_support}, $U$ is a unitary on the two
     replicas acting away from the cores of the first replica, so $U\Psi$ and
     $\Psi$ have the same joint core marginal, with mutual information
@@ -91,9 +116,7 @@ the cores to an inverse power of the system size. This is Lemma~3.3 of
 
 \begin{theorem}[The entropy comparison of the reset]
     \label{thm:peps_reset_cores_entropy}
-    \lean{TNLean.PEPS.Approximation.mutualInformation_cores_le_of_reset_unitary,
-        TNLean.Lattice.mutualInformation_le_of_supported_unitary,
-        TNLean.Lattice.exists_one_kronecker_unitary_of_mem_supportedOperators}
+    \lean{TNLean.PEPS.Approximation.mutualInformation_cores_le_of_reset_unitary}
     \leanok
     \uses{def:peps_frame_sheet_swap}
     Let $q\ge1$, let $\Omega$ be a unit vector on the open square, let $R,C$ be
