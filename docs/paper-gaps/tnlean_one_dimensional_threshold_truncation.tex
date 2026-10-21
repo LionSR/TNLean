@@ -5,10 +5,10 @@
 \input{command}
 \title{Threshold Truncation in the One-Dimensional Matrix Product State Approximation}
 \author{}
-\date{October 18, 2026}
+\date{October 20, 2026}
 \begin{document}
 \maketitle
-\gapnote{scope-restriction}{open}
+\gapnote{scope-restriction}{resolved}
 
 \section{The source statement}
 
@@ -103,11 +103,16 @@ Proposition~7.1 is the instance in which the vector is a unit vector and each
 basis is an orthonormal eigenbasis of the marginal at its cut, ordered by
 nonincreasing eigenvalue, with any permissible choice within a repeated
 eigenspace. For that instance the leading spans are the source spans and the
-displayed expectations are $\epsilon_k(D)$. The instantiation itself, namely
-the choice of such a basis and the identification of $\epsilon_k(D)$ with the
-sum of the discarded eigenvalues, is not yet formalized; it is tracked in
-TNLean pull request \#9752. Until it lands, the general-basis form above is
-the formalized statement and this note stays open.
+displayed expectations are $\epsilon_k(D)$. This instance is formalized
+for the leading eigenvectors of a fixed orthonormal eigenbasis of each
+marginal, with $\epsilon_k(D)=1-S_D(\rho_{[1,k]})$, where $S_D$ is the sum of
+the $D$ largest eigenvalues, so the error is the source's
+$\sum_k\sqrt{\epsilon_k(D)}$.\footnote{Declarations:
+    \leanid{Matrix.IsHermitian.leadingEigenprojection} (QICLean),
+    \leanid{TNLean.MPS.AreaLaw.isOpenMPS_sequentialTruncation_leadingEigenprojection}.}
+Any other choice of eigenvectors within a repeated eigenvalue is covered by
+the general-basis form. Proposition~7.1 is therefore formalized and the
+restriction is resolved.
 The note is retained to distinguish the two truncation statements. The
 threshold theorem continues to supply the argument for Theorem~B; its
 projectors and the prescribed-dimension projectors need not coincide.
