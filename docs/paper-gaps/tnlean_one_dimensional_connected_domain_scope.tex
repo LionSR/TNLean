@@ -137,14 +137,26 @@ independence after the regional replica swap are constructed within the
 proof.\footnote{Declaration:
     \leanid{TNLean.MPS.AreaLaw.ChainHamiltonian.information_reset}.}
 
-The broader reading of reset on an arbitrary finite induced-path domain
-remains unformalized. The propagation and localization estimates on those
-domains are now available as above. Extending reset still requires their use in the Gaussian-filter,
-supported-approximation and polar-unitary argument on the finite domain,
-together with its support geometry; no additional spectral or product-marginal
-hypothesis should be imposed.
-The blueprint marks only the explicitly contiguous-chain statement as
-proved, rather than the unrestricted reading of the source lemma.
+\section{Resolution: information reset on finite domains}
+
+The information-reset lemma is now proved on every finite induced integer
+ domain, with the same hypothesis set. The gap remains the original global
+ gap, and the proof constructs the physical buffer, Gaussian approximation
+ and supported polar unitary for the actual doubled and regionally swapped
+ domain operators. No factorization or product-marginal hypothesis is added.
+ The constants $C_p,L_0$ precede the domain and all instance data.\footnote{
+ Declaration: \leanid{TNLean.MPS.AreaLaw.DomainHamiltonian.information_reset}.}
+
+Distances in the margins are intrinsic extended graph distances. Equivalently,
+ every finite distance $d$ from a core to its outer-region complement must
+ satisfy $w<d$; infinite distances impose no condition. For the chosen natural
+ localization radius $\ell$, the inequality $\ell+R<w$ places closed graph
+ balls of radius $\ell+R$ inside the two outer regions. Since each original
+ interaction support has diameter at most $R$, its crossing contribution
+ cannot reach a core after enlargement by $\ell$. The supported unitary
+ therefore acts away from both cores. The regional swap itself yields the
+ required product marginal, and entropy continuity completes the proof.\footnote{
+ Declaration: \leanid{TNLean.Lattice.mutualInformation_cores_le_of_reset_unitary}.}
 
 \section{Information at logarithmic separation}
 
@@ -160,13 +172,29 @@ added. The sign needed for the interval area law follows from the norm
 bound of an actual singleton interaction.\footnote{Declaration:
     \leanid{TNLean.MPS.AreaLaw.ChainHamiltonian.mutualInformation_le_of_logarithmic_separation}.}
 
-The proof combines the contiguous interval area law, exact real-radius
-neighborhoods of intervals, and the contiguous reset theorem. It therefore
-does not establish the broader reading on arbitrary finite induced-path
-domains. That extension still requires the finite-domain reset theorem and the
-corresponding geometry of interval neighborhoods, beyond the propagation
-and localization estimates established above. No completion
-of the full preparation protocol is asserted by this result.
+\section{Resolution: logarithmic separation on finite domains}
+
+The logarithmic-separation lemma is also proved on arbitrary finite induced
+ integer domains. Relative intervals are intervals in their increasing
+ order, while separation is measured in the original integer positions,
+ not in compressed labels. All constants precede the domain and instance
+ data; no sign condition on $J$ is added.\footnote{Declaration:
+ \leanid{TNLean.MPS.AreaLaw.DomainHamiltonian.mutualInformation_le_of_logarithmic_separation}.}
+
+For a finite intrinsic distance, a shortest walk bounds the physical
+ coordinate difference by that distance. Take $n=\lceil w+1\rceil$,
+ $D=N_n(T)$ and $C=\Lambda\setminus N_{2n}(T)$, using intrinsic graph
+ neighborhoods. The coefficient $D_p=3C_p(2+b)+4$ ensures
+ $2n+w<D_p\log L$ once $\log L\ge1$. The coordinate comparison and triangle
+ inequality give the core inclusions and strict reset margins.
+ Each intrinsic neighborhood of a relative interval is again a relative
+ interval. Subadditivity and the interval area law bound $S_\Omega(D)$,
+ and hence $I_\Omega(D:C)$. The finite-domain reset theorem then gives
+ $I_\Omega(T:E)\le L^{-p}$.
+
+These results resolve the broader finite-domain readings of the two local
+ information lemmas. They do not assert completion of the separate
+ preparation protocol.
 
 \bibliographystyle{alpha}
 \bibliography{references}

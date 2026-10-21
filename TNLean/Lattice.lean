@@ -22,6 +22,7 @@ import TNLean.Lattice.RegionSplit
 import TNLean.Lattice.RegionalEntropy
 import TNLean.Lattice.RegionalEntropyBridge
 import TNLean.Lattice.RegionalReset
+import TNLean.Lattice.RegionalResetEntropy
 import TNLean.Lattice.RegionalSwap
 import TNLean.Lattice.RegionalSwapSupport
 import TNLean.Lattice.ReplicaSwap

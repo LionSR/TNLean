@@ -24,6 +24,13 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Replica-swap entropy comparison — promoted (2026-10-21)
+
+- **Pattern:** Two identical normalized replicas, a regional swap, and a unitary supported away from two cores imply a mutual-information bound from the vector approximation error.
+- **Defined in:** `Lattice/RegionalResetEntropy.lean`, `TNLean.Lattice.mutualInformation_cores_le_of_reset_unitary`.
+- **Refactored occurrences:** Both the contiguous-chain and arbitrary finite-domain information-reset proofs use the shared finite-site theorem. The former loses its repeated 80-line local entropy argument.
+- **Notes:** Replica normalization and the product marginal after the swap are proved internally. No product-marginal hypothesis is supplied by either caller. The theorem is independent of a Hamiltonian, gap, dimension of the underlying lattice, and connectedness.
+
 ### Regional expectation compared with a supported approximant — promoted (2026-10-21)
 
 - **Pattern:** For a contractive regional expectation fixing a supported approximant, rewrite the projection error as the difference between the approximation error and its expectation.
