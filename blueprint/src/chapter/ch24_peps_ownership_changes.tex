@@ -446,8 +446,8 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     $\mathcal H_T\otimes\mathcal H_U$, and $B=\id_E\otimes K^\dagger K$.
 \end{proof}
 
-\begin{lemma}[Reordering registers]
-    \label{lem:peps_register_reorderings}
+\begin{lemma}[Reorderings of site registers]
+    \label{lem:lattice_register_reorderings}
     \lean{TNLean.PEPS.EncodedFrame.relabelHead,
         TNLean.PEPS.EncodedFrame.relabelSites,
         TNLean.PEPS.EncodedFrame.eval_relabelSites,
@@ -474,11 +474,6 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
         TNLean.PEPS.EncodedFrame.eval_unpartWordApp,
         TNLean.PEPS.EncodedFrame.relabelSitesApp,
         TNLean.PEPS.EncodedFrame.eval_relabelSitesApp,
-        TNLean.PEPS.EncodedFrame.tagSplit,
-        TNLean.PEPS.EncodedFrame.tagMerge,
-        TNLean.PEPS.EncodedFrame.eval_tagSplit,
-        TNLean.PEPS.EncodedFrame.eval_tagMerge,
-        TNLean.PEPS.EncodedFrame.exists_tagWord_of_perm,
         TNLean.PEPS.PairEffect.Word.isAllowed_frameList_iff,
         TNLean.PEPS.PairEffect.Word.usesOnly_frameList_iff,
         TNLean.PEPS.PairEffect.Word.sourceCount_frameList,
@@ -517,12 +512,44 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
         TNLean.PEPS.EncodedFrame.isReordering_relabelSitesApp,
         TNLean.PEPS.EncodedFrame.isReordering_relabelSites,
         TNLean.PEPS.EncodedFrame.isReordering_partWord,
-        TNLean.PEPS.EncodedFrame.isReordering_unpartWord,
+        TNLean.PEPS.EncodedFrame.isReordering_unpartWord}
+    \leanok
+    \uses{def:lattice_site_registers,lem:lattice_site_register_coordinates}
+    For a list $\ell$ of sites and a condition $f$, let $\ell_+$ and $\ell_-$
+    retain the sites satisfying $f$ and not satisfying it, in their original
+    order; if $\ell$ has no repeated site, neither part has one. The following
+    compositions of exchanges of adjacent tensor factors use no party and no pair
+    resource, and each sends product basis vectors to the indicated product basis
+    vectors: moving the site registers of the sites satisfying a condition in front
+    of the others, keeping the order within both parts, and back; reassociating and
+    interchanging blocks of registers; adjoining or removing an empty trailing list;
+    renaming a register with an equal owner label. They may be performed before
+    arbitrary untouched registers. Adjoining untouched registers before a
+    composition without pair effects preserves whether it is allowed, whether it
+    uses only the parties of a given set, and its number of pair sources, and its
+    operator becomes the identity on the added registers tensored with the original
+    operator.
+\end{lemma}
+
+\begin{proof}\leanok
+    Each composition is built by induction on the lists: one step of the
+    partition leaves a selected register first and moves an unselected one past
+    the selected list. Adjoining untouched registers changes none of the
+    operations, so induction on the added list preserves each property.
+\end{proof}
+
+\begin{lemma}[Reordering registers]
+    \label{lem:peps_register_reorderings}
+    \lean{TNLean.PEPS.EncodedFrame.tagSplit,
+        TNLean.PEPS.EncodedFrame.tagMerge,
+        TNLean.PEPS.EncodedFrame.eval_tagSplit,
+        TNLean.PEPS.EncodedFrame.eval_tagMerge,
+        TNLean.PEPS.EncodedFrame.exists_tagWord_of_perm,
         TNLean.PEPS.EncodedFrame.isReordering_tagSplit,
         TNLean.PEPS.EncodedFrame.isReordering_tagMerge}
     \leanok
-    \uses{def:peps_frame_registers,lem:peps_frame_registers_coordinates,
-        def:peps_monomial_parties}
+    \uses{def:peps_frame_registers,lem:peps_frame_registers_coordinates,def:peps_monomial_parties,
+        lem:lattice_register_reorderings}
     For a list of sites $\ell$ and a condition $f$, let $\ell_+$ and
     $\ell_-$ retain the sites satisfying $f$ and not satisfying $f$,
     respectively, in their original order. Thus $x\in\ell_+$ exactly when
@@ -718,15 +745,41 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     $\id_{\rm tags}\otimes(\id_E\otimes M)$, and both sides are linear.
 \end{proof}
 
+\begin{lemma}[A birth and a death behind front registers]
+    \label{lem:lattice_front_births}
+    \lean{TNLean.PEPS.EncodedFrame.exists_frontBirthWord,
+        TNLean.PEPS.EncodedFrame.exists_frontDeathChain}
+    \leanok
+    \uses{def:lattice_site_registers,lem:lattice_site_register_coordinates}
+    Let $\sigma$ be splitting data for disjoint sets $T,E$ of sites, with canonical
+    map $B$, and let $U$ be the complement of $T\cup E$. Let the owners before the
+    change hold $T$ and $U$ at $P_\circ$, and the owners after it hold $T$ at
+    $Q_\circ$ and $U$ at $P_\circ$, the two agreeing on $E$. For any block of front
+    registers, identified with $\C^\kappa$, there is an allowed word from this block
+    followed by the site registers with the first owners to the same block followed
+    by the site registers with the second owners, using only $P_\circ$ and $Q_\circ$
+    and at most one normalized pair source, whose operator in canonical coordinates
+    is the identity on the front block tensored with $B$. With the roles of the two
+    owner functions reversed, the death is an allowed monomial with the same
+    properties, but without pair sources and with at most one normalized pair
+    effect.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:lattice_register_reorderings}
+    Group the site registers of $T\cup U$ at $P_\circ$, apply the birth or death
+    monomial on the grouped registers, and ungroup at the new owners; the
+    reorderings are exchanges of tensor factors and the grouping maps are
+    unitary.
+\end{proof}
+
 \begin{theorem}[Homogeneous birth and death: bounded change]
     \label{thm:peps_frame_birth_bounded}
     \lean{TNLean.PEPS.EncodedFrame.Frame.birth_bounded,
-        TNLean.PEPS.EncodedFrame.Frame.death_bounded,
-        TNLean.PEPS.EncodedFrame.exists_frontBirthWord,
-        TNLean.PEPS.EncodedFrame.exists_frontDeathChain}
+        TNLean.PEPS.EncodedFrame.Frame.death_bounded}
     \leanok
-    \uses{thm:peps_frame_birth,def:peps_frame_registers,
-        lem:peps_frame_registers_coordinates,def:peps_monomial_parties}
+    \uses{thm:peps_frame_birth,def:peps_frame_registers,lem:peps_frame_registers_coordinates,
+        def:peps_monomial_parties,lem:lattice_front_births}
     In an encoded frame $\mathcal F$, let $T$ be a set of sites owned by
     $P_\circ$ and disjoint from every outer hole footprint, let $E$ and $U$ be
     as in the birth partition, let $\lVert\Omega\rVert=1$, and suppose
@@ -837,7 +890,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:peps_frame_split_forms,lem:peps_frame_exchange_intertwining}
+    \uses{lem:peps_frame_split_forms,lem:lattice_sheet_split_swap}
     Splitting each sheet into $R$ and its complement expresses
     $A=A_R\otimes I$ and $B=B_R\otimes I$ by the support assumptions. The swap interchanges the two
     copies of $R$ and fixes the complementary factors. Writing each
@@ -1113,17 +1166,31 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     of the holes inside $Y$; every register keeps its party.
 \end{definition}
 
+\begin{lemma}[Swapping two sheets on a set in split coordinates]
+    \label{lem:lattice_sheet_split_swap}
+    \lean{TNLean.Lattice.sheetSplit_sheetSwap_fst,
+        TNLean.Lattice.sheetSplit_sheetSwap_snd,
+        TNLean.Lattice.mul_submatrix_sheetSplit}
+    \leanok
+    For a set $S$ of sites, in the coordinates $\mathcal H_S\otimes\mathcal
+        H_{S^c}$ of both sheets, swapping the two sheets at $S$ exchanges the
+    $S$-parts and keeps the others. The product of an operator acting off $S$ and
+    an operator acting on $S$ is, in these coordinates, the tensor product of the
+    two restricted operators.
+\end{lemma}
+
+\begin{proof}\leanok
+    Both statements are checked on product basis vectors.
+\end{proof}
+
 \begin{lemma}[Exact intertwining of the renaming]
     \label{lem:peps_frame_exchange_intertwining}
     \lean{TNLean.PEPS.EncodedFrame.TwoSheetExchange.rename_mul_encoder,
         TNLean.PEPS.EncodedFrame.TwoSheetExchange.exists_out_form,
-        TNLean.PEPS.EncodedFrame.TwoSheetExchange.exists_in_form,
-        TNLean.Lattice.sheetSplit_sheetSwap_fst,
-        TNLean.Lattice.sheetSplit_sheetSwap_snd,
-        TNLean.Lattice.mul_submatrix_sheetSplit}
+        TNLean.PEPS.EncodedFrame.TwoSheetExchange.exists_in_form}
     \leanok
-    \uses{def:peps_frame_exchange_data,lem:peps_frame_split_forms,
-        lem:peps_frame_commute}
+    \uses{def:peps_frame_exchange_data,lem:peps_frame_split_forms,lem:peps_frame_commute,
+        lem:lattice_sheet_split_swap}
     With $K_{\rm in}=K_{\mathcal F_1}\otimes K_{\mathcal F_2}$ and
     $K_{\rm out}=K_{\mathcal F_1'}\otimes K_{\mathcal F_2'}$,
     \begin{align}
@@ -1162,18 +1229,39 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     503--510). It acts as the identity on the two copies of $T\cup E$.
 \end{definition}
 
-\begin{lemma}[Net map of the corrections]
-    \label{lem:peps_frame_exchange_net_map}
+\begin{lemma}[The net map of the corrections of an exchange]
+    \label{lem:lattice_exchange_net_map}
     \lean{TNLean.PEPS.EncodedFrame.tSwapW_toMatrix,
         TNLean.PEPS.EncodedFrame.tbSwap_toMatrix,
-        Matrix.kronecker_kronecker_eq_submatrix,
+        TNLean.PEPS.EncodedFrame.bufferCorrection_mul_tSwap,
+        TNLean.PEPS.EncodedFrame.sheetSwapOp_eq_submatrix}
+    \leanok
+    Let $V:\mathcal H_U\to\mathcal B_T\otimes\mathcal B_E$ be any linear map, put
+    $\mathcal V=\id_{TE}\otimes V$, and let $D_U=(V^{\otimes2})^\dagger
+        F_{\mathcal B_T}V^{\otimes2}$ act on the two copies of $\mathcal H_U$. In the
+    coordinates in which the two copies of $\mathcal H_T\otimes\mathcal H_E$ come
+    first, $F_T=F_T\otimes\id$ and $F_{T\mathcal B_T}=F_T\otimes F_{\mathcal B_T}$,
+    and
+    \begin{align*}
+        D_UF_T & =(\mathcal V^{\otimes2})^\dagger F_{T\mathcal B_T}\mathcal V^{\otimes2}.
+    \end{align*}
+    In the coordinates of $T$, $E$ and $U$ on both sheets, swapping two sheets at $T$
+    exchanges the $T$-components.
+\end{lemma}
+
+\begin{proof}\leanok
+    In these coordinates $\mathcal V^{\otimes2}=\id\otimes V^{\otimes2}$, so both
+    sides equal $F_T\otimes D_U$.
+\end{proof}
+
+\begin{lemma}[Net map of the corrections]
+    \label{lem:peps_frame_exchange_net_map}
+    \lean{Matrix.kronecker_kronecker_eq_submatrix,
         Matrix.toMatrix_toPEquiv_prodCongr,
         Matrix.toMatrix_toPEquiv_submatrix,
-        TNLean.PEPS.EncodedFrame.bufferCorrection_mul_tSwap,
-        TNLean.PEPS.EncodedFrame.sheetSwapOp_eq_submatrix,
         TNLean.PEPS.EncodedFrame.TwoSheetExchange.sheetBufferCorrection_mul_sheetSwapOp}
     \leanok
-    \uses{def:peps_frame_buffer_correction,def:peps_frame_sheet_swap}
+    \uses{def:peps_frame_buffer_correction,def:peps_frame_sheet_swap,lem:lattice_exchange_net_map}
     With $\mathcal V=\id_{TE}\otimes V$,
     \begin{align}
         D_UF_T=(\mathcal V^{\otimes2})^\dagger F_{T\mathcal B_T}
@@ -1201,7 +1289,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
         TNLean.PEPS.EncodedFrame.norm_act_bufferCorrection_mul_tSwap_sub_le,
         TNLean.PEPS.EncodedFrame.norm_act_sheetBufferCorrection_mul_sheetSwapOp_sub_le}
     \leanok
-    \uses{lem:peps_frame_exchange_net_map}
+    \uses{lem:lattice_exchange_net_map}
     For a unit vector $\omega$ and $\delta=\lVert\mathcal V\omega-s\otimes
         s'\rVert$,
     \begin{align}
@@ -1329,18 +1417,41 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     composing with $G$ completes the proof.
 \end{proof}
 
-\begin{lemma}[Exchange corrections as one private contraction]
-    \label{lem:peps_frame_exchange_correction_monomial}
+\begin{lemma}[The corrections of an exchange on the two copies of the remainder]
+    \label{lem:lattice_exchange_correction_matrix}
     \lean{TNLean.PEPS.EncodedFrame.partSwap,
         TNLean.PEPS.EncodedFrame.correctionMatrix,
         TNLean.PEPS.EncodedFrame.norm_correctionMatrix_le_one,
         TNLean.PEPS.EncodedFrame.sheetSwapOp_eq_submatrix_of_subset,
         TNLean.PEPS.EncodedFrame.sheetBufferCorrection_mul_sheetSwapOp_eq,
-        TNLean.PEPS.EncodedFrame.correctionWord,
-        TNLean.PEPS.EncodedFrame.TwoSheetExchange.exchange_correction_monomial}
+        TNLean.PEPS.EncodedFrame.correctionWord}
     \leanok
-    \uses{def:peps_frame_exchange_map,lem:peps_frame_exchange_owners,
-        lem:peps_front_registers,def:peps_monomial_parties}
+    \uses{lem:lattice_site_register_coordinates}
+    Let $\sigma$ be splitting data for disjoint sets $T,E$ of sites, with isometry
+    $V$, let $U$ be the complement of $T\cup E$, and let $A\subseteq U$. Write $F_A$
+    for the exchange of two copies of the configurations at the sites of $A$ and
+    $D_U$ for the buffer correction. In the coordinates of $T$, $E$ and $U$ on both
+    sheets, $F_A$ is the identity on the two copies of
+    $\mathcal H_T\otimes\mathcal H_E$ tensored with the exchange of the $A$-parts of
+    the two copies of $\mathcal H_U$, and $D_UF_A=\id\otimes W$ with
+    $W=(V^{\otimes2})^\dagger F_{\mathcal B_T}V^{\otimes2}F_A$ acting on the two
+    copies of $\mathcal H_U$ and $\lVert W\rVert\le1$. On two registers
+    $\mathcal H_U$ held by $P_\circ$, followed by any further registers, $W$ is
+    applied by one private map at $P_\circ$.
+\end{lemma}
+
+\begin{proof}\leanok
+    Since $A\subseteq U$, the exchange $F_A$ moves only the $A$-parts of the two
+    copies of $\mathcal H_U$. Each factor of $W$ is a contraction: $V^{\otimes2}$
+    is an isometry and the two exchanges are permutation matrices.
+\end{proof}
+
+\begin{lemma}[Exchange corrections as one private contraction]
+    \label{lem:peps_frame_exchange_correction_monomial}
+    \lean{TNLean.PEPS.EncodedFrame.TwoSheetExchange.exchange_correction_monomial}
+    \leanok
+    \uses{def:peps_frame_exchange_map,lem:peps_frame_exchange_owners,lem:peps_front_registers,
+        def:peps_monomial_parties,lem:lattice_exchange_correction_matrix}
     In the setting of the exchange partition, the corrections are
     $D_UF_A=\id\otimes W$ in the coordinates in which the two copies of
     $\mathcal H_T\otimes\mathcal H_E$ come first, where
@@ -1381,6 +1492,28 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     standard basis yields both claims.
 \end{proof}
 
+\begin{lemma}[The renaming of two sheets behind front blocks]
+    \label{lem:lattice_block_renaming_word}
+    \lean{TNLean.PEPS.EncodedFrame.blockRenameWord,
+        TNLean.PEPS.EncodedFrame.eval_blockRenameWord,
+        TNLean.PEPS.EncodedFrame.isReordering_blockRenameWord}
+    \leanok
+    \uses{def:lattice_site_registers,lem:lattice_register_reorderings}
+    Let each of two sheets carry a block of front registers for the outside of a
+    region $Y$, a block for its inside, and its site registers. Moving the site
+    registers of the sites of $Y$ of each sheet next to its inside block,
+    exchanging these pairs of blocks between the two sheets, and merging back is a
+    composition of exchanges of tensor factors that uses no party and no pair
+    resource. Every register keeps its party, and on product basis vectors the
+    configurations inside $Y$ and the inside blocks of the two sheets change
+    places.
+\end{lemma}
+
+\begin{proof}\leanok
+    Each step is an exchange of adjacent tensor factors, and the moved site
+    registers carry their owners to the new sheet.
+\end{proof}
+
 \begin{lemma}[The renaming as reorderings]
     \label{lem:peps_exchange_renaming_word}
     \lean{TNLean.PEPS.EncodedFrame.TwoSheetExchange.sitesY,
@@ -1388,13 +1521,10 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
         TNLean.PEPS.EncodedFrame.TwoSheetExchange.renameWord,
         TNLean.PEPS.EncodedFrame.TwoSheetExchange.eval_renameWord,
         TNLean.PEPS.EncodedFrame.TwoSheetExchange.twoLayoutIso_renameWord,
-        TNLean.PEPS.EncodedFrame.TwoSheetExchange.isReordering_renameWord,
-        TNLean.PEPS.EncodedFrame.blockRenameWord,
-        TNLean.PEPS.EncodedFrame.eval_blockRenameWord,
-        TNLean.PEPS.EncodedFrame.isReordering_blockRenameWord}
+        TNLean.PEPS.EncodedFrame.TwoSheetExchange.isReordering_renameWord}
     \leanok
-    \uses{def:peps_frame_exchange_data,lem:peps_register_reorderings,
-        lem:peps_two_frame_registers}
+    \uses{def:peps_frame_exchange_data,lem:peps_register_reorderings,lem:peps_two_frame_registers,
+        lem:lattice_block_renaming_word}
     The renaming $\mathcal R$ is the operator of a composition of exchanges
     of tensor factors from the registers of the two frames to the registers
     of the two exchanged frames, using no party and no pair resource. It
@@ -1455,21 +1585,41 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     inverse formula.
 \end{proof}
 
-\begin{lemma}[The corrections on the registers of two frames]
-    \label{lem:peps_exchange_correction_word}
-    \lean{TNLean.PEPS.EncodedFrame.correctionLayoutWord,
-        TNLean.PEPS.EncodedFrame.eval_correctionLayoutWord,
-        TNLean.PEPS.EncodedFrame.twoSheetPlace,
-        TNLean.PEPS.EncodedFrame.sum_single_merge₂,
-        TNLean.PEPS.EncodedFrame.twoLayoutIso_correctionLayoutWord,
-        TNLean.PEPS.EncodedFrame.correctionLayoutWord_props,
+\begin{lemma}[Corrections on two sheets as one private contraction]
+    \label{lem:lattice_front_correction_word}
+    \lean{TNLean.PEPS.EncodedFrame.twoSheetPlace,
         TNLean.PEPS.EncodedFrame.frontCorrectionWord,
         TNLean.PEPS.EncodedFrame.eval_frontCorrectionWord,
         TNLean.PEPS.EncodedFrame.twoFrontLayoutIso_frontCorrectionWord,
         TNLean.PEPS.EncodedFrame.frontCorrectionWord_props}
     \leanok
+    \uses{def:lattice_site_registers,lem:lattice_register_reorderings}
+    Let $T,E$ be disjoint sets of sites, let $U$ be the complement of $T\cup E$, and
+    let two sheets each consist of a block of front registers followed by their site
+    registers, those of $U$ held by $P_\circ$ on both. Moving the site registers of
+    $U$ of both sheets to the front, applying an operator $W$ of norm at most one on
+    the two copies of $\mathcal H_U$ as one private contraction at $P_\circ$, and
+    moving them back is an allowed word using only $P_\circ$ and no pair source,
+    whose operator in product coordinates is the identity on the front blocks and on
+    the two copies of $T\cup E$, tensored with $W$.
+\end{lemma}
+
+\begin{proof}\leanok
+    On a product basis vector the moved registers carry the two configurations on
+    $U$, the contraction gives the column of $W$, and moving back replaces these
+    configurations; the configurations on $T\cup E$ are unchanged.
+\end{proof}
+
+\begin{lemma}[The corrections on the registers of two frames]
+    \label{lem:peps_exchange_correction_word}
+    \lean{TNLean.PEPS.EncodedFrame.correctionLayoutWord,
+        TNLean.PEPS.EncodedFrame.eval_correctionLayoutWord,
+        TNLean.PEPS.EncodedFrame.sum_single_merge₂,
+        TNLean.PEPS.EncodedFrame.twoLayoutIso_correctionLayoutWord,
+        TNLean.PEPS.EncodedFrame.correctionLayoutWord_props}
+    \leanok
     \uses{lem:peps_register_reorderings,lem:peps_two_frame_registers,
-        lem:peps_frame_exchange_correction_monomial}
+        lem:peps_frame_exchange_correction_monomial,lem:lattice_front_correction_word}
     Let $T,E\subseteq\Lambda$ be disjoint and let the site registers of
     $U=\Lambda\setminus(T\cup E)$ be held by $P_\circ$ on both frames. Moving
     the site registers of $U$ of both sheets to the front, applying a
@@ -1564,8 +1714,7 @@ three owners meet and no encoded holes are needed.
         TNLean.Lattice.Sheet.regIso_eq_frontLayoutIso,
         TNLean.Lattice.Sheet.twoRegIso_eq_twoFrontLayoutIso}
     \leanok
-    \uses{def:peps_frame_registers,def:peps_frame_sheet_swap,
-        def:peps_frame_buffer_correction}
+    \uses{def:lattice_site_registers,def:peps_frame_sheet_swap,def:peps_frame_buffer_correction}
     A sheet on $\Lambda$ is an owner for each site; its registers are one
     register $\C^q$ per site, held by its owner, identified with
     $\mathcal H_\Lambda$ in product coordinates, and its reference vector is
@@ -1579,7 +1728,7 @@ three owners meet and no encoded holes are needed.
 \end{definition}
 
 \begin{lemma}[Sheets as encoded frames without holes]
-    \label{lem:lattice_sheet_frame}
+    \label{lem:peps_sheet_frame}
     \lean{TNLean.Lattice.Sheet.toFrame,
         TNLean.Lattice.Sheet.toFrame_regs,
         TNLean.Lattice.Sheet.toFrame_regIso,
@@ -1624,10 +1773,10 @@ three owners meet and no encoded holes are needed.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:peps_frame_splitting,thm:peps_frame_birth_bounded}
+    \uses{lem:peps_frame_splitting,lem:lattice_front_births}
     Every site outside $T\cup E$ is owned by $P_\circ$ before and after the
     birth, and the sites of $E$ keep their owners. The monomials of
-    Theorem~\ref{thm:peps_frame_birth_bounded}, placed behind the
+    Theorem~\ref{lem:lattice_front_births}, placed behind the
     empty block of registers, act in product coordinates as $B$, and
     $\lVert(B-\id)\Omega\rVert$ is at most the splitting error, at most
     $L^{-p}$ by Lemma~\ref{lem:peps_frame_splitting}.
@@ -1640,8 +1789,8 @@ three owners meet and no encoded holes are needed.
         TNLean.Lattice.Sheet.twoRegIso_renameWord,
         TNLean.Lattice.Sheet.exchangeOp_eq}
     \leanok
-    \uses{def:lattice_sheet,lem:peps_frame_splitting,
-        lem:peps_frame_exchange_net_map,def:peps_monomial_parties}
+    \uses{def:lattice_sheet,lem:peps_frame_splitting,lem:lattice_exchange_net_map,
+        def:peps_monomial_parties}
     For two sheets, a region $Y$, a party $P_\circ$ with $Z$, $T$, $E$, $U$ as
     above, $\lVert\Omega\rVert=1$, $L\ge0$ and real $p$ with
     $I_\Omega(T:E)\le L^{-2p}$, there
@@ -1657,15 +1806,178 @@ three owners meet and no encoded holes are needed.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:peps_frame_splitting,lem:peps_exchange_renaming_word,
-        lem:peps_exchange_correction_word,
-        lem:peps_frame_exchange_correction_monomial,lem:peps_frame_exchange_error,
-        lem:peps_register_reorderings}
-    The renaming of Lemma~\ref{lem:peps_exchange_renaming_word} with empty
+    \uses{lem:peps_frame_splitting,lem:lattice_block_renaming_word,
+        lem:lattice_front_correction_word,lem:lattice_exchange_correction_matrix,
+        lem:peps_frame_exchange_error,lem:lattice_register_reorderings}
+    The renaming of Lemma~\ref{lem:lattice_block_renaming_word} with empty
     blocks of tags exchanges the configurations of the two sheets inside $Y$,
     so its operator is $F_Y$; the corrections act as $D_UF_A$. Since $Y$ is
     the disjoint union of $T$ and $A$, the product is $D_UF_T$, and
     Lemma~\ref{lem:peps_frame_exchange_error} bounds the reference error.
+\end{proof}
+
+\begin{definition}[Bounded changes of a stack of sheets]
+    \label{def:lattice_bounded_change}
+    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.norm_eval_le_norm,
+        TNLean.PEPS.PairEffect.OriginalCircuit.IsBoundedChange,
+        TNLean.Lattice.stackRegs,
+        TNLean.Lattice.stackVec,
+        TNLean.Lattice.norm_stackVec,
+        TNLean.Lattice.norm_stackVec_le,
+        TNLean.Lattice.framesVec,
+        TNLean.Lattice.framesSpace,
+        TNLean.Lattice.pairRef,
+        TNLean.Lattice.HasBoundedChange,
+        TNLean.Lattice.HasSourceBoundedChange}
+    \leanok
+    \uses{def:peps_circuit_source_bound}
+    An original circuit is a bounded change from a vector $x$ to a vector $y$, with
+    participants in a set $S$, bounds $r$ and $K$ and error $\varepsilon$, if it has
+    at most one nonprivate gate, every participant of that gate lies in $S$, every
+    monomial of its expansion has at most $r$ pair effects, its coefficient sum and
+    its number of monomials are at most $K$, and it takes $x$ within $\varepsilon$ of
+    $y$; every original circuit is a contraction. Let each sheet $F$ of some type
+    carry a list of registers and a reference vector $\omega_F$ on them. The memory
+    of a list $F_1,\dots,F_m$ of sheets followed by further registers $\ell$ is the
+    tensor product of their registers, in order, and for a vector $\xi$ of $\ell$
+    its reference vector is $\omega_{F_1}\otimes\cdots\otimes\omega_{F_m}\otimes\xi$,
+    whose norm is the product of the norms of the factors; if every $\omega_F$ has
+    norm at most one, this norm is at most $\lVert\xi\rVert$. Without further
+    registers, the memory of the sheets is the whole private memory of a party
+    holding them, and the reference vector of two sheets is
+    $\omega_{F_1}\otimes\omega_{F_2}$ on their concatenated registers. A bounded
+    change of the sheets $F_1,\dots,F_m$ into $F'_1,\dots,F'_n$ is an original
+    circuit between the two memories, with the same further registers, that is a
+    bounded change from one reference vector to the other; the variant with bounded
+    pair sources also requires at most a given number of pair sources in each
+    monomial.
+\end{definition}
+
+\begin{proof}\leanok
+    The norm of a tensor product of vectors is the product of their norms, and the
+    operator of an original circuit is a composition of contractions.
+\end{proof}
+
+\begin{theorem}[Operations that preserve bounded changes of a stack]
+    \label{thm:lattice_bounded_change_closure}
+    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.IsBoundedChange.mono,
+        TNLean.PEPS.PairEffect.OriginalCircuit.IsBoundedChange.comp_right,
+        TNLean.PEPS.PairEffect.OriginalCircuit.IsBoundedChange.comp_left,
+        TNLean.PEPS.PairEffect.OriginalCircuit.isBoundedChange_id,
+        TNLean.PEPS.PairEffect.Word.isBoundedChange_toOriginalCircuit,
+        TNLean.PEPS.PairEffect.PartyChain.isBoundedChange_toOriginalCircuit,
+        TNLean.Lattice.norm_eval_liftOne_stackVec_sub_le,
+        TNLean.Lattice.nonprivateCount_liftTwo,
+        TNLean.Lattice.participants_liftTwo_subset,
+        TNLean.Lattice.liftOne,
+        TNLean.Lattice.isMonomialBounded_liftTwo,
+        TNLean.Lattice.participants_liftOne_subset,
+        TNLean.Lattice.isExpansionBounded_liftTwo,
+        TNLean.Lattice.liftTwo,
+        TNLean.Lattice.norm_eval_liftTwo_stackVec_sub_le,
+        TNLean.Lattice.isMonomialBounded_liftOne,
+        TNLean.Lattice.isExpansionBounded_liftOne,
+        TNLean.Lattice.nonprivateCount_liftOne,
+        TNLean.Lattice.hasBoundedChange_activate,
+        TNLean.Lattice.hasBoundedChange_liftTwo,
+        TNLean.Lattice.hasBoundedChange_liftOne,
+        TNLean.Lattice.exists_isBoundedChange_of_eq,
+        TNLean.Lattice.HasBoundedChange.perm_left,
+        TNLean.Lattice.HasBoundedChange.perm_right,
+        TNLean.Lattice.hasBoundedChange_refl,
+        TNLean.Lattice.isBoundedChange_liftTwo,
+        TNLean.Lattice.hasBoundedChange_perm_liftOne,
+        TNLean.Lattice.HasBoundedChange.mono,
+        TNLean.Lattice.isBoundedChange_liftOne,
+        TNLean.Lattice.hasBoundedChange_of_perm,
+        TNLean.Lattice.stackVec_append,
+        TNLean.Lattice.exists_reordering_stackVec,
+        TNLean.Lattice.stackRegs_append,
+        TNLean.Lattice.exists_originalCircuit_of_eq,
+        TNLean.Lattice.exists_originalCircuit_stackVec_of_perm,
+        TNLean.Lattice.hasSourceBoundedChange_refl,
+        TNLean.Lattice.HasSourceBoundedChange.perm_right,
+        TNLean.Lattice.hasSourceBoundedChange_activate,
+        TNLean.Lattice.hasSourceBoundedChange_liftTwo,
+        TNLean.Lattice.hasSourceBoundedChange_liftOne,
+        TNLean.Lattice.HasSourceBoundedChange.mono,
+        TNLean.Lattice.hasSourceBoundedChange_of_perm,
+        TNLean.Lattice.isSourceBounded_liftOne,
+        TNLean.Lattice.hasSourceBoundedChange_perm_liftOne,
+        TNLean.Lattice.HasSourceBoundedChange.perm_left,
+        TNLean.Lattice.HasSourceBoundedChange.hasBoundedChange,
+        TNLean.Lattice.isSourceBounded_liftTwo}
+    \leanok
+    \uses{def:lattice_bounded_change,thm:peps_original_produced_resource_bounds}
+    Let every reference vector of a sheet and the vector $\xi$ of the further
+    registers have norm at most one.
+    \begin{enumerate}
+        \item A bounded change remains one after enlarging its participant set, its
+              bounds or its error. Composing it, on either side, with a circuit without
+              nonprivate gate that satisfies the same pair-effect, coefficient-sum and
+              monomial bounds gives a bounded change with the same data, between the
+              transported vectors. The circuit without operations is a bounded change
+              between equal vectors, for every participant set and all bounds, and so is
+              the change of a sheet into an equal sheet.
+        \item The memory and the reference vector of a concatenation of two lists of
+              sheets are the tensor products of those of the two lists. A permutation of
+              the sheets is implemented by a word of exchanges of tensor factors, without
+              nonprivate gate, carrying the reference vector of the first list exactly to
+              that of the second; so it is a bounded change without error and without pair
+              sources, and a permutation before or after a bounded change of the sheets
+              gives a bounded change with the same data.
+        \item A change of one sheet, or of two adjacent sheets, lifted to the whole
+              stack with the other sheets and the further registers as spectators, has the
+              same nonprivate gates, participants, pair-effect, coefficient-sum, monomial
+              and pair-source bounds, and its reference error on the stack is at most its
+              error on the sheets it acts on. Hence a bounded change of these sheets is a
+              bounded change of the stack with the same data, also after a permutation of
+              the stack that brings these sheets into place.
+        \item An allowed word using only the parties of $S$ with at most one pair source
+              is a bounded change with its own error, for every $r$ and every $K\ge1$. An
+              allowed chain using only the parties of $S$, without pair sources and with at
+              most one pair effect, is a bounded change for every $r\ge1$ and $K\ge1$.
+    \end{enumerate}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_original_produced_resource_bounds}
+    The spectator sheets of a lifted change have reference vectors of norm at most
+    one, so the error on the stack is the error on the acting sheets times norms at
+    most one. Composing with a circuit without nonprivate gate adds no gate and
+    keeps the bounds. A permutation of the sheets is a composition of exchanges of
+    adjacent blocks of registers. The resource bounds of the original circuit of a
+    word or a chain follow from its counts of pair sources and pair effects.
+\end{proof}
+
+\begin{theorem}[The initial private maps of a stack of sheets]
+    \label{thm:lattice_stack_initialization}
+    \lean{TNLean.Lattice.splitMap,
+        TNLean.Lattice.splitMap_tmul_one,
+        TNLean.Lattice.norm_splitMap_le,
+        TNLean.Lattice.splitCircuit,
+        TNLean.Lattice.nonprivateCount_splitCircuit,
+        TNLean.Lattice.isExpansionBounded_splitCircuit,
+        TNLean.Lattice.isMonomialBounded_splitCircuit,
+        TNLean.Lattice.participants_splitCircuit_subset,
+        TNLean.Lattice.eval_splitCircuit,
+        TNLean.Lattice.exists_originalCircuit_initial}
+    \leanok
+    \uses{def:lattice_bounded_change,thm:lattice_bounded_change_closure}
+    Let every sheet of a list be held entirely by one party: all its registers belong
+    to that party. Give each party, as its whole initial private memory, the
+    registers of its sheets in the order of the list, and as its initial vector the
+    product of their reference vectors, assumed of norm one. Then one private map per
+    party, followed by a reordering of the sheets, carries the product of the initial
+    vectors of all parties exactly to the reference vector of the list, with no
+    nonprivate gate.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:lattice_bounded_change_closure}
+    Each private map identifies the whole memory of a party with the memory of its
+    sheets. The concatenation, over the parties, of their lists of sheets is a
+    permutation of the list, which a reordering implements.
 \end{proof}
 
 \begin{definition}[Stacks of sheets]
@@ -1674,12 +1986,12 @@ three owners meet and no encoded holes are needed.
         TNLean.Lattice.Sheet.HasBoundedChange,
         TNLean.Lattice.Sheet.HasSourceBoundedChange}
     \leanok
-    \uses{def:lattice_sheet,def:peps_sheet_stack,def:peps_bounded_change}
+    \uses{def:lattice_sheet,def:lattice_bounded_change}
     The memory of a list of sheets and its reference vector are those of
-    Definition~\ref{def:peps_sheet_stack}, with the reference vector $\Omega$ of
+    Definition~\ref{def:lattice_bounded_change}, with the reference vector $\Omega$ of
     each sheet placed in its site registers. A bounded change of a list of
     sheets is a bounded change, in the sense of
-    Definition~\ref{def:peps_bounded_change}, between these reference vectors;
+    Definition~\ref{def:lattice_bounded_change}, between these reference vectors;
     the variant with bounded pair sources also bounds the number of normalized
     pair sources.
 \end{definition}
@@ -1708,19 +2020,19 @@ three owners meet and no encoded holes are needed.
     \label{thm:lattice_sheet_initialization}
     \lean{TNLean.Lattice.Sheet.exists_originalCircuit_initial_of_owner}
     \leanok
-    \uses{lem:lattice_sheet_stack_reference,thm:peps_sheet_initialization}
+    \uses{lem:lattice_sheet_stack_reference,thm:lattice_stack_initialization}
     Let $\lVert\Omega\rVert=1$ and let every sheet of a list be held entirely by
     one party. Then the product of the reference vectors of the sheets of every
     party has norm one, and one private map per party followed by a reordering
     carries the product of these vectors exactly to the reference vector of the
     list, with no nonprivate gate. This is the case without holes of
-    Theorem~\ref{thm:peps_sheet_initialization}.
+    Theorem~\ref{thm:lattice_stack_initialization}.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:lattice_sheet_stack_reference,thm:peps_sheet_initialization}
+    \uses{lem:lattice_sheet_stack_reference,thm:lattice_stack_initialization}
     Every register of a sheet held by one party belongs to that party, and the
     reference vector of every list of sheets has norm one by
     Lemma~\ref{lem:lattice_sheet_stack_reference}. Apply
-    Theorem~\ref{thm:peps_sheet_initialization}.
+    Theorem~\ref{thm:lattice_stack_initialization}.
 \end{proof}

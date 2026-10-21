@@ -248,21 +248,40 @@ formalized in Lean~4 in the TNLean modules \texttt{TNLean/MPS/AreaLaw/}
 approximation''), stated directly on the chain of $L$ sites and, for
 Theorem~\ref{thm:A}, on finite subsets of the integers. The counting
 constants $N_R$, $\ell_R$, $\cB_R$ and the shell width $R$ are those printed
-here. The buffered discount is run at the energy threshold $\Delta/2$ in
-place of $\Delta/4$, the shell count omits the last entry of \eqref{eq:CE},
-and the constant $1+2C_E/\Delta$ of \eqref{eq:discount} is replaced by
-$4096\,\e\,\vartheta\,\cB_R/m+m\log 2$, which changes $C_{\mathrm{int}}$ and
-$C_0$ accordingly; these deviations are recorded in
+here. The printed polynomial energy constant $C_E$, four-entry shell count
+in \eqref{eq:CE}, discount in \eqref{eq:discount}, and interval constant
+in \eqref{eq:final} are formalized directly. A separate refinement of
+Remark~\ref{rem:sharper} replaces $C_E$ by the logarithmic bound
+$32\,\e\,J\,\cB_R$ and retains the corresponding four-entry shell count;
+its discount constant is $1+64\,\e\,\vartheta\,\cB_R$.
+For each choice of energy constant, the proof uses
+$E=C_E/m\le\Delta/4$, the fourth width entry bounds the marginal error
+by one, and the prefix loss is at most $2C_E/\Delta$.
+The history of the earlier estimates and the distinction between the
+polynomial and logarithmic constants are recorded in
 \nolinkurl{docs/paper-gaps/tnlean_one_dimensional_discount_constants.tex}.
 Theorem~\ref{thm:A} is formalized for every finite $\Lam\subset\Z$; the
 component reduction of Section~\ref{sec:setting} is carried out through the
 vanishing entropy of the unions of components rather than the factorization
 of $\Om$
 (\nolinkurl{docs/paper-gaps/tnlean_one_dimensional_connected_domain_scope.tex});
-Theorem~\ref{thm:B} is formalized by the two-line route of
-Section~\ref{sec:shortcut} only, with Proposition~\ref{prop:VC} in its
-threshold form (projection onto the eigenvalues at least a threshold rather
-than onto the $D$ largest;
-\nolinkurl{docs/paper-gaps/tnlean_one_dimensional_threshold_truncation.tex}),
-and the protocol route of Part~\ref{part:mps} is not formalized.
+Theorem~\ref{thm:B} is formalized both by the two-line route of
+Section~\ref{sec:shortcut} and by the physical protocol of Part~\ref{part:mps}.
+Proposition~\ref{prop:VC} is proved for every prescribed bond dimension $D$
+and every orthonormal marginal eigenbasis ordered by nonincreasing
+eigenvalue, including choices within repeated eigenspaces, with its
+discarded-mass error bound before normalization. The threshold form used in
+the two-line argument remains a separate result
+(\nolinkurl{docs/paper-gaps/tnlean_one_dimensional_threshold_truncation.tex}).
+The physical preparation is constructed on sufficiently large contiguous
+chains, with half-open lattice bands and only the main registers as physical
+outputs; auxiliary copies remain private at their corrected owners
+(\nolinkurl{docs/paper-gaps/tnlean_one_dimensional_band_sweep_corrections.tex}).
+Its logarithmic width constant is selected at information exponent $24$,
+before the physical data, and may be enlarged to meet the geometric bounds.
+Preparation and compression, with exact representations
+at the finitely many shorter lengths, give a unit matrix product state of
+polynomial bond dimension and phase error at most $1/L$ for every $L\ge2$.
+The constants precede the length, Hamiltonian and ground vector, and only
+the original full-system gap is assumed.
 

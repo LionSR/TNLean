@@ -22,8 +22,6 @@ cut.
 
 ## Main results
 
-* `QuantumCircuit.isSupportedOn_of_mem_supportedOperators`: supported operators act
-  as the identity outside their support.
 * `TNLean.Lattice.LocalHamiltonian.log_surprisalMoment_reducedState_le`:
   `eq:initial-tail-mgf` for the regional state.
 * `TNLean.Lattice.LocalHamiltonian.surprisalTail_reducedState_le`:
@@ -43,7 +41,6 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 
 open Matrix
 open scoped ComplexOrder Matrix.Norms.L2Operator
-
 
 namespace TNLean.Lattice
 
