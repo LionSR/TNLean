@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
 import TNLean.Lattice.PartyCircuit.EffectCircuitPreparation
+import TNLean.Lattice.PartyCircuit.LayoutEqualityCoordinates
 
 /-!
 # Source-only replacement with retained auxiliary registers
@@ -233,13 +234,6 @@ theorem norm_retainMap_le {a b : Layout P} (rs : Layout P) (A : Mem a →L[ℂ] 
 theorem retainMap_sub {a b : Layout P} (rs : Layout P) (A B : Mem a →L[ℂ] Mem b) :
     retainMap rs (A - B) = retainMap rs A - retainMap rs B := by
   simp only [retainMap, lTensor_sub, comp_sub, sub_comp]
-private theorem cons_tensor_heq (r : Reg P) {a b : Layout P} (h : a = b)
-    (u : r.space) {x : Mem a} {y : Mem b} (hxy : HEq x y) :
-    HEq (u ⊗ₜ[ℂ] x) (u ⊗ₜ[ℂ] y) := by
-  cases h
-  cases hxy
-  rfl
-
 private theorem memory_add_heq {a b : Layout P} (h : a = b)
     {x y : Mem a} {x' y' : Mem b} (hx : HEq x x') (hy : HEq y y') :
     HEq (x + y) (x' + y') := by
@@ -260,7 +254,7 @@ theorem appendIso_assoc_symm_heq (a b c : Layout P)
       rw [← TensorProduct.smul_tmul', map_smul]
   | cons r a ih =>
       induction x using TensorProduct.inductionOn with
-      | tmul u v => exact cons_tensor_heq r (List.append_assoc a b c).symm u (ih v)
+      | tmul u v => exact Layout.cons_tmul_heq r (List.append_assoc a b c).symm u (ih v)
       | add x y hx hy =>
           simp only [TensorProduct.add_tmul, map_add]
           exact memory_add_heq (List.append_assoc (r :: a) b c).symm hx hy
