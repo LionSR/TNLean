@@ -39,8 +39,8 @@ and component reduction at `part1_arealaw.tex:71–80`. -/
 private theorem lt_iff_lt_of_hasse_int_induce_adj {S : Set ℤ} {x y : S} {z : ℤ}
     (hz : z ∉ S) (hxy : ((hasse ℤ).induce S).Adj x y) :
     (x : ℤ) < z ↔ (y : ℤ) < z := by
-  have hxne : (x : ℤ) ≠ z := fun h ↦ hz (h ▸ x.property)
-  have hyne : (y : ℤ) ≠ z := fun h ↦ hz (h ▸ y.property)
+  have hxne : (x : ℤ) ≠ z := ne_of_mem_of_not_mem x.property hz
+  have hyne : (y : ℤ) ≠ z := ne_of_mem_of_not_mem y.property hz
   have hstep : (x : ℤ) + 1 = (y : ℤ) ∨ (y : ℤ) + 1 = (x : ℤ) := by
     simpa only [induce_adj, hasse_adj, Order.covBy_iff_add_one_eq] using hxy
   omega
@@ -59,8 +59,8 @@ private theorem mem_of_hasse_int_induce_reachable {S : Set ℤ} {x y : S}
     z ∈ S := by
   by_contra hz
   have hcut := lt_iff_lt_of_hasse_int_induce_reachable hz hxy
-  have hxne : (x : ℤ) ≠ z := fun h ↦ hz (h ▸ x.property)
-  have hyne : (y : ℤ) ≠ z := fun h ↦ hz (h ▸ y.property)
+  have hxne : (x : ℤ) ≠ z := ne_of_mem_of_not_mem x.property hz
+  have hyne : (y : ℤ) ≠ z := ne_of_mem_of_not_mem y.property hz
   rcases le_total (x : ℤ) (y : ℤ) with h | h
   · rw [min_eq_left h] at hzmin
     rw [max_eq_right h] at hzmax
