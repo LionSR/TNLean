@@ -185,7 +185,7 @@ theorem angular_single_scale_reset_of_sublinearCollarBoundAt
   have hcell : SquareCellInformationBound q (IsSquareGroundState q J Δ) c
       (cellInformationConstant q c Ctpl N Ca Na) (cellInformationExponent c Ctpl N Ca Na) :=
     fun s hs o m₀ A hm₀ L Ω ⟨h, E₀, hΩ⟩ ↦
-      cell_conditionalMutualInformation_le_square_of_sublinearCollarBoundAt hJ hcol hamp hc
+      cell_conditionalMutualInformation_le_square_of_sublinearCollarBoundAt hcol hamp hc
         s hs o m₀ A hm₀ L h E₀ Ω hΩ
   intro L hL h E₀ Ω hΩ
   exact angular_single_scale_reset_of_bounds hcell
