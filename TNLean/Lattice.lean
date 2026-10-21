@@ -8,10 +8,25 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.Lattice
 
+import TNLean.Lattice.Compression
+import TNLean.Lattice.EntropyComparison
 import TNLean.Lattice.EntropyDimension
 import TNLean.Lattice.FiniteDomain
 import TNLean.Lattice.LocalHamiltonian
 import TNLean.Lattice.MarginalTails
+import TNLean.Lattice.PartyCircuit
+import TNLean.Lattice.PhysicalBufferCoordinates
 import TNLean.Lattice.ProductGroundState
+import TNLean.Lattice.RegionEntropyInequalities
+import TNLean.Lattice.RegionSplit
 import TNLean.Lattice.RegionalEntropy
 import TNLean.Lattice.RegionalEntropyBridge
+import TNLean.Lattice.RegionalReset
+import TNLean.Lattice.RegionalSwap
+import TNLean.Lattice.RegionalSwapSupport
+import TNLean.Lattice.ReplicaSwap
+import TNLean.Lattice.Sheet
+import TNLean.Lattice.SiteRelabelEntropy
+import TNLean.Lattice.SupportedPolarUnitary
+import TNLean.Lattice.SupportedUnitaryEntropy
+import TNLean.Lattice.ZeroEntropy

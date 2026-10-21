@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.AreaLaw.Basic
 import TNLean.Algebra.GappedGroundState
 import QICLean.Entropy.LocalLift
+import TNLean.Lattice.RegionEntropyInequalities
 
 /-!
 # Finite-range Hamiltonians on the chain of `L` sites
@@ -71,6 +72,28 @@ theorem IsChainSupport.card_le {X : Finset (Fin L)} (hX : IsChainSupport L R X) 
   rw [Finset.card_image_of_injective _ Fin.val_injective, Nat.card_Icc] at this
   omega
 
+/-- A chain support of maximal cardinality is a full contained window.
+Source: the one-dimensional note, part1_arealaw.tex, rem:sharper, lines 706–748. -/
+theorem IsChainSupport.exists_eq_interval_of_card_eq
+    {L R : ℕ} {X : Finset (Fin L)} (hX : IsChainSupport L R X)
+    (hcard : X.card = R + 1) :
+    ∃ a : ℕ, a + R + 1 ≤ L ∧ X = interval L a (a + R + 1) := by
+  obtain ⟨x₀, hx₀, hmin⟩ := Finset.exists_min_image X (fun x ↦ x.val) hX.1
+  have hsub : X.image (fun x : Fin L ↦ x.val) ⊆ Finset.Icc x₀.val (x₀.val + R) :=
+    fun p hp ↦ let ⟨y, hy, hyp⟩ := Finset.mem_image.mp hp
+      hyp ▸ Finset.mem_Icc.mpr ⟨hmin y hy, hX.2 x₀ hx₀ y hy⟩
+  have himage : X.image (fun x : Fin L ↦ x.val) = Finset.Icc x₀.val (x₀.val + R) :=
+    Finset.eq_of_subset_of_card_le hsub (by
+      simp [Finset.card_image_of_injective _ Fin.val_injective, hcard, Nat.card_Icc,
+        Nat.add_assoc])
+  obtain ⟨y, hy, hyval⟩ := Finset.mem_image.mp
+    (show x₀.val + R ∈ X.image (fun x : Fin L ↦ x.val) from
+      himage.symm ▸ Finset.mem_Icc.mpr ⟨Nat.le_add_right _ _, le_rfl⟩)
+  refine ⟨x₀.val, Nat.succ_le_of_lt (hyval ▸ y.isLt), ?_⟩
+  ext i
+  simpa [interval, Finset.mem_image, Fin.val_inj, Nat.lt_succ_iff] using
+    (Iff.of_eq (congrArg (fun T : Finset ℕ ↦ i.val ∈ T) himage))
+
 /-- A support of range `R` split by the interval `[a, b)`, meeting both it and its
 complement, lies in the window `[a - R, a + R)` or in the window `[b - R, b + R)`. -/
 theorem IsChainSupport.subset_window_of_splits {X : Finset (Fin L)}
@@ -103,9 +126,8 @@ theorem supportDim_le (hq : 1 ≤ q) (X : ChainSupport L R) :
 
 /-- The Hilbert-space dimension of a support is at least one when `q ≥ 1`. -/
 theorem one_le_supportDim (hq : 1 ≤ q) (X : ChainSupport L R) :
-    1 ≤ Entropy.supportDim (fun _ : Fin L ↦ q) X.1 := by
-  rw [Entropy.supportDim, Finset.prod_const]
-  exact Nat.one_le_pow _ _ hq
+    1 ≤ Entropy.supportDim (fun _ : Fin L ↦ q) X.1 :=
+  TNLean.Lattice.one_le_supportDim_const hq X.1
 
 /-- A finite-range Hamiltonian on the chain of `L` sites with local dimension `q`: one
 term per support of range `R`, acting as the identity off its support, Hermitian, and of
@@ -120,6 +142,15 @@ structure ChainHamiltonian (L q R : ℕ) (J : ℝ) where
   hermitian : ∀ X, (term X).IsHermitian
   /-- Each term has operator norm at most `J`. -/
   norm_le : ∀ X, ‖term X‖ ≤ J
+
+/-- The interaction bound is nonnegative whenever the chain contains a site.
+The singleton interaction supplies the inequality.
+Source: TNLean note, Section 1, `eq:ham`. -/
+lemma ChainHamiltonian.norm_bound_nonneg (h : ChainHamiltonian L q R J) (x : Fin L) :
+    0 ≤ J := by
+  classical
+  let X : ChainSupport L R := ⟨{x}, by simp [IsChainSupport]⟩
+  exact (norm_nonneg (h.term X)).trans (h.norm_le X)
 
 /-- The Hamiltonian `H = ∑_X h_X`. TNLean note, Section 1, `eq:ham`. -/
 noncomputable def ChainHamiltonian.operator (h : ChainHamiltonian L q R J) :

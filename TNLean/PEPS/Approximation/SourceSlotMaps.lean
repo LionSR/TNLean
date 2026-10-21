@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.Approximation.SourcePreparationCoordinates
-import TNLean.PEPS.Approximation.WordEvaluationTransport
+import TNLean.Lattice.Compression.SourcePreparationCoordinates
+import TNLean.Lattice.PartyCircuit.WordEvaluationTransport
 
 /-!
 # Local maps on all source slots

@@ -221,7 +221,7 @@ comparison treats the two copies as additional sites.
     \lean{QuantumCircuit.embedOp_val_eq_kronecker_one_submatrix,
         QuantumCircuit.kronecker_one_submatrix_mem_supportedOperators,
         TNLean.PEPS.AreaLaw.exists_supported_unitary_of_good_realization,
-        TNLean.PEPS.AreaLaw.mutualInformation_le_inv_pow_of_supported_unitary}
+        TNLean.Lattice.mutualInformation_le_inv_pow_of_supported_unitary}
     \leanok
     \uses{thm:area_law_amplification_unitary_error,thm:al_amp_entropy_comparison_scale}
     On a finite set of sites with local dimension $q$, let $R_0$ and $L'$ act on
@@ -331,6 +331,27 @@ comparison treats the two copies as additional sites.
     Since $\log\dim e'=|X|\log q\le C_0n^2\log q$, the entropy comparison gives
     $I_\Omega(X':J)\le24(1+C_0\log q)\,n^{-M}$. The cut-clearance clause is
     Theorem~\ref{thm:area_law_amplification_of_radius_output}.
+\end{proof}
+
+\begin{theorem}[Amplification at the constants of its proof]
+    \label{thm:area_law_amplification_explicit}
+    \lean{TNLean.PEPS.AreaLaw.amplificationBound_explicit,
+        TNLean.PEPS.AreaLaw.amplificationBoundAt_explicit}
+    \leanok
+    \uses{def:area_law_amplification_bound}
+    Let $q,R\in\mathbb N$, $J\in\mathbb R$, $\Delta>0$, $C_0>0$ and
+    $M\in\mathbb N$. Let $C_2$ and $N_2$ be the constant and the threshold
+    produced by the proof of Theorem~\ref{thm:area_law_amplification} at
+    $C_0$ and $M$, with the locality constant and rate of the positive
+    constraints at the power $p=10^6$. Then the amplification bound at the
+    input constant $C_0$ and the order $M$ holds with constant $C_2$ and
+    threshold the larger of $N_2$ and the radius threshold of $C_2$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:area_law_amplification}
+    The proof of Theorem~\ref{thm:area_law_amplification} produces these
+    constant and threshold.
 \end{proof}
 
 \begin{theorem}[Uniform area law from the collar and two-family bounds]

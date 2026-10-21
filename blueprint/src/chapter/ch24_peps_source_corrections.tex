@@ -620,7 +620,8 @@ index sets.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:peps_private_product_input,lem:peps_register_reorderings,thm:peps_owner_composition}
+    \uses{def:peps_private_product_input,lem:lattice_register_reorderings,
+        thm:peps_owner_composition}
     Because a composition extended by untouched registers acts as the identity on
     their tensor factor, the recorded preparation after
     relabelling owners evaluates at $1$ to the relabelled vector $\psi$ by (\ref{eq:peps_owner_composition}), and composing with $V_\xi$ gives the second identity.

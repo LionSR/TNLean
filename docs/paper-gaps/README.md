@@ -1217,16 +1217,32 @@ is now formalized for every finite subset of the integers. The reduction to the
 chain uses the zero entropy of the prefixes ending at the gaps of the domain in
 place of the factorization of the ground vector over components.
 
+### One-dimensional matrix product state approximation: band interfaces and physical outputs
+
+[tnlean_one_dimensional_band_sweep_corrections.tex](tnlean_one_dimensional_band_sweep_corrections.tex)
+(local correction, resolved) records the half-open integer-band convention in
+band dissolution and the distinguished physical outputs in the sweep protocol.
+Auxiliary copies remain in their final registers; tracing them from the
+reference vector recovers the original ground state. Both corrections are
+incorporated in the physical preparation and compression proof of Theorem B,
+without additional physical hypotheses.
+
 ### One-dimensional matrix product state approximation: threshold truncation
 
 [tnlean_one_dimensional_threshold_truncation.tex](tnlean_one_dimensional_threshold_truncation.tex)
-(scope restriction, open) records that Proposition 7.1 of the repository's
-one-dimensional note, the sequential truncation onto the `D` largest Schmidt
-weights at every cut for an arbitrary bond dimension `D`, is formalized only
-in the threshold form that Theorem B uses: the projectors onto the eigenvalues
-at least `exp(-(S_k + w))` at a common slack `w`, with cut ranks at most
-`max 1 (exp(S_k + w))` and error the sum of the square roots of the surprisal
-tails; the form with an arbitrary `D` is not formalized.
+(scope restriction, resolved) records the former threshold-only treatment of
+Proposition 7.1 of the repository's one-dimensional note. The actual sequential
+product now has an open-boundary MPS representation of internal bond dimension
+at most any prescribed natural `D`, for every vector and every ordered
+orthonormal basis at each internal cut, by
+`TNLean.MPS.AreaLaw.isOpenMPS_sequentialTruncation_prefixBasisProjection`.
+Choosing marginal eigenbases in nonincreasing eigenvalue order gives the
+printed proposition, including every choice within a repeated eigenspace.
+The error is bounded by the sum of the square roots of the original discarded
+expectations. The separate threshold projection still gives the surprisal-tail
+estimate used for Theorem B; its projectors need not equal those chosen at a
+prescribed dimension. Both estimates concern the projected vector before
+normalization, which is a separate step in the approximation theorem.
 
 ### One-dimensional area law: the constants of the buffered discount
 
@@ -1247,7 +1263,8 @@ absolute constants.
   (resolved) records the attributed positive-filter adaptation on the original
   square, its all-competitor matrix comparison and exact ascending output, and
   the same family's original-energy and full-system fidelity estimates. The
-  vacuous negative-interaction-bound case is included. The result is a
+  canonical physical theorem permits every real interaction bound directly,
+  including the vacuous negative-bound case. The result is a
   standalone adaptation of a lemma of the companion Lean code; the proofs of
   the area law and of the polynomial PEPS approximation theorem do not use it,
   and the further comparison with the companion code's own types is not

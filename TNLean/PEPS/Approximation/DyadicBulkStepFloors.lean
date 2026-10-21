@@ -87,8 +87,8 @@ theorem mem_image_vertexZone_of_mem_outerHoles {κ : Type*} (F : Frame pos q Par
 
 end VertexZone
 
-variable {q : ℕ} [NeZero q] {J Δ a A₀ D L₀ : ℝ} {m₀ : ℕ} {L : ℕ}
-  {h : SquareHamiltonian L q J} {E₀ : ℝ} {Ω : StateSpace L q}
+variable {q : ℕ} [NeZero q] {a A₀ D L₀ : ℝ} {m₀ : ℕ} {L : ℕ}
+  {G : ∀ L : ℕ, StateSpace L q → Prop} {Ω : StateSpace L q}
   {pos : SquareLatticeVertex L L → ℝ × ℝ} {c : ℝ × ℝ} {Party : Type} {κ : Type*}
 
 /-- The marked points of an edge operation, translated, number at most two. -/
@@ -134,8 +134,8 @@ allowed word using only `P∘` and `Q∘`, with at most one pair source and erro
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:102–108`, `357–387` and
 `440–445`. -/
-theorem bandBirth_step (hD : IsAngularScale q J Δ a A₀ m₀ 60 D L₀) (hL : L₀ ≤ L)
-    (hΩ : h.IsGappedGroundState E₀ Ω Δ) (hpos : ∀ v, pos v = sitePosition L v + c)
+theorem bandBirth_step (hD : IsAngularScale q G a A₀ m₀ 60 D L₀) (hL : L₀ ≤ L)
+    (hΩ : G L Ω) (hΩ₁ : ‖Ω‖ = 1) (hpos : ∀ v, pos v = sitePosition L v + c)
     (hm₀ : 2 ≤ m₀) (ha : a ≤ angularConstant / 2) (op : BandOperation κ) (e : SquareEdge)
     (g : ℝ × ℝ → κ) (d : ℝ × ℝ) {n ε₀ : ℝ} (ht : 0 ≤ D * Real.log L)
     (htn : D * Real.log L ≤ n) (hnL : n ≤ A₀ * L) (hε : 2 * ε₀ ≤ angularConstant / 2)
@@ -155,7 +155,7 @@ theorem bandBirth_step (hD : IsAngularScale q J Δ a A₀ m₀ 60 D L₀) (hL : 
       ‖w.eval (F.regIso.symm (F.refVec Ω)) -
         (F.changeOwner T Q).regIso.symm ((F.changeOwner T Q).refVec Ω)‖ ≤
           (L : ℝ) ^ (-30 : ℤ) :=
-  bulkBirth_step hD hL hΩ hpos F hTP hTH ((card_edgeMarks_le n e d).trans hm₀) htn hnL hdiam
+  bulkBirth_step hD hL hΩ hΩ₁ hpos F hTP hTH ((card_edgeMarks_le n e d).trans hm₀) htn hnL hdiam
     (angularSeparation_birthEnv (op.angularSeparation_bandUpdate ht htn hε e g d) ht ha hT hown
       fun _ hx => mem_image_vertexZone_of_mem_outerHoles F hholes hx)
 
@@ -166,8 +166,8 @@ without pair sources, with at most one pair effect and error `L^{-30}`.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:102–108`, `357–387` and
 `440–445`. -/
-theorem bandDeath_step (hD : IsAngularScale q J Δ a A₀ m₀ 60 D L₀) (hL : L₀ ≤ L)
-    (hΩ : h.IsGappedGroundState E₀ Ω Δ) (hpos : ∀ v, pos v = sitePosition L v + c)
+theorem bandDeath_step (hD : IsAngularScale q G a A₀ m₀ 60 D L₀) (hL : L₀ ≤ L)
+    (hΩ : G L Ω) (hΩ₁ : ‖Ω‖ = 1) (hpos : ∀ v, pos v = sitePosition L v + c)
     (hm₀ : 2 ≤ m₀) (ha : a ≤ angularConstant / 2) (op : BandOperation κ) (e : SquareEdge)
     (g : ℝ × ℝ → κ) (d : ℝ × ℝ) {n ε₀ : ℝ} (ht : 0 ≤ D * Real.log L)
     (htn : D * Real.log L ≤ n) (hnL : n ≤ A₀ * L) (hε : 2 * ε₀ ≤ angularConstant / 2)
@@ -186,7 +186,7 @@ theorem bandDeath_step (hD : IsAngularScale q J Δ a A₀ m₀ 60 D L₀) (hL : 
       M.IsAllowed ∧ M.UsesOnly {P, Q} ∧ M.sourceCount = 0 ∧ M.toEffectChain.effectCount ≤ 1 ∧
       ‖M.toEffectChain.eval ((F.changeOwner T Q).regIso.symm ((F.changeOwner T Q).refVec Ω)) -
         F.regIso.symm (F.refVec Ω)‖ ≤ (L : ℝ) ^ (-30 : ℤ) :=
-  bulkDeath_step hD hL hΩ hpos F hTP hTH ((card_edgeMarks_le n e d).trans hm₀) htn hnL hdiam
+  bulkDeath_step hD hL hΩ hΩ₁ hpos F hTP hTH ((card_edgeMarks_le n e d).trans hm₀) htn hnL hdiam
     (angularSeparation_birthEnv (op.angularSeparation_bandUpdate ht htn hε e g d) ht ha hT hown
       fun _ hx => mem_image_vertexZone_of_mem_outerHoles F hholes hx)
 
@@ -201,8 +201,8 @@ centered at a true vertex of `G` with inner radius at most `ε₀ t`, then the b
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:155–160`, `102–108`,
 `357–387` and `440–445`. -/
-theorem centralBirth_step (hD : IsAngularScale q J Δ a A₀ m₀ 60 D L₀) (hL : L₀ ≤ L)
-    (hΩ : h.IsGappedGroundState E₀ Ω Δ) (hpos : ∀ v, pos v = sitePosition L v + c)
+theorem centralBirth_step (hD : IsAngularScale q G a A₀ m₀ 60 D L₀) (hL : L₀ ≤ L)
+    (hΩ : G L Ω) (hΩ₁ : ‖Ω‖ = 1) (hpos : ∀ v, pos v = sitePosition L v + c)
     (hm₀ : 4 ≤ m₀) (ha : a ≤ angularConstant / 2) (R : RepaintingBaseline κ) (d : ℝ × ℝ)
     {ε₀ : ℝ} (ht : 0 ≤ D * Real.log L) (htn : D * Real.log L ≤ R.n) (hnL : R.n ≤ A₀ * L)
     (hε : 2 * ε₀ ≤ angularConstant / 2)
@@ -223,7 +223,7 @@ theorem centralBirth_step (hD : IsAngularScale q J Δ a A₀ m₀ 60 D L₀) (hL
       ‖w.eval (F.regIso.symm (F.refVec Ω)) -
         (F.changeOwner T Q).regIso.symm ((F.changeOwner T Q).refVec Ω)‖ ≤
           (L : ℝ) ^ (-30 : ℤ) :=
-  bulkBirth_step hD hL hΩ hpos F hTP hTH ((card_cornerMarks_le R.n d).trans hm₀) htn hnL hdiam
+  bulkBirth_step hD hL hΩ hΩ₁ hpos F hTP hTH ((card_cornerMarks_le R.n d).trans hm₀) htn hnL hdiam
     (angularSeparation_birthEnv (R.angularSeparation_central ht htn hε d) ht ha hT hown
       fun _ hx => mem_image_vertexZone_of_mem_outerHoles F hholes hx)
 
@@ -240,8 +240,8 @@ with error at most `4 L^{-30}`.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:102–108`, `389–430` and
 `440–445`. -/
-theorem edgeExchange_step (hD : IsAngularScale q J Δ a A₀ m₀ 60 D L₀) (hL : L₀ ≤ L)
-    (hΩ : h.IsGappedGroundState E₀ Ω Δ) (hpos : ∀ v, pos v = sitePosition L v + c)
+theorem edgeExchange_step (hD : IsAngularScale q G a A₀ m₀ 60 D L₀) (hL : L₀ ≤ L)
+    (hΩ : G L Ω) (hΩ₁ : ‖Ω‖ = 1) (hpos : ∀ v, pos v = sitePosition L v + c)
     (hm₀ : 2 ≤ m₀) (ha : a ≤ angularConstant / 2) (R : RepaintingBaseline κ)
     (E : List SquareEdge) (e : SquareEdge) (d : ℝ × ℝ) {ε₀ : ℝ} (ht : 0 < D * Real.log L)
     (htn : D * Real.log L ≤ R.n) (hnL : R.n ≤ A₀ * L)
@@ -285,7 +285,7 @@ theorem edgeExchange_step (hD : IsAngularScale q J Δ a A₀ m₀ 60 D L₀) (hL
             ((TwoSheetExchange.ofFrames F₁ F₂ Y out hout hin).newFrame₂.refVec Ω))‖ ≤
         4 * (L : ℝ) ^ (-30 : ℤ) := by
   have hfl := R.floor_exchange_frontier ht htn hε E e d
-  refine lensExchange_step_of_frontier hD hL hΩ hpos F₁ F₂ Y out hout hin C
+  refine lensExchange_step_of_frontier hD hL hΩ hΩ₁ hpos F₁ F₂ Y out hout hin C
     (K := (· + d) '' edgeLens R.n e) (fun x => (hY x).trans mem_image_add_right_iff.symm)
     ((card_edgeMarks_le R.n e d).trans hm₀) htn hnL hdiam fun x hx z hz => ?_
   refine (mul_le_mul_of_nonneg_right ha (ht.le.trans (le_max_left _ _))).trans

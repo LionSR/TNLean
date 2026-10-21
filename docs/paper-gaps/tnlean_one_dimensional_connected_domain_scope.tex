@@ -76,21 +76,78 @@ yields a region with the entropy of $A$ whose chain boundary edges are the
 edges of $\partial_\Lambda A$. The full factorization of the ground vector
 over the components is therefore not needed.
 
-\section{Independent factorization statements}
+\section{Locality in the matrix product state argument}
 
-The spectral part of the factorization argument in Section~2 of the note is
-also proved for two finite-dimensional Hermitian factors. If a unit vector
-$\Omega$ is a ground vector of $H_1\otimes I+I\otimes H_2$ with projector
-gap $\Delta>0$, then there are unit vectors $\Omega_1,\Omega_2$ and real
-numbers $E_1,E_2$ such that $\Omega=\Omega_1\otimes\Omega_2$,
-$E_0=E_1+E_2$, and each factor satisfies the ground-state inequality with the
-same gap $\Delta$.\footnote{Declaration:
-\leanid{TNLean.Lattice.exists_isGappedGroundState_factors_of_kronecker_sum}.}
-The phase is included in one factor, so the product equality is exact.
-This statement concerns two tensor factors; it does not give the note's
-product of normalized gapped ground vectors over an arbitrary finite family
-of connected components. Such a factorization is not needed for the proof of
-Theorem~A above.
+The note first allows an arbitrary finite $\Lambda\subset\mathbb Z$
+(\texttt{part0\_preamble.tex}, lines~191--215). After reducing Theorem~A to
+connected domains, it states explicitly: ``From now on
+$\Lambda=\{1,\ldots,N\}$'' (\texttt{part1\_arealaw.tex}, lines~91--93).
+Part~II develops Theorem~B, whose statement already specifies
+$\Lambda=\{1,\ldots,L\}$. Its locality lemma is titled ``Lieb--Robinson
+bound on a chain'' (\texttt{part2a\_mps\_information.tex}, lines~260--309).
+Neither that lemma nor the subsequent reset and separation lemmas explicitly
+returns to quantification over arbitrary finite domains.
+
+The proved contiguous-chain estimates therefore have the domain required by
+this argument. Versions for arbitrary finite induced-path domains would be
+additional results. They are not asserted by the present formalization;
+in particular, reading one of the local lemmas in isolation with an
+unrestricted $\Lambda$ is not covered by the chain theorem. This distinction
+does not add a hypothesis to either headline theorem: Theorem~A is proved
+on every finite domain, and Theorem~B is stated on a chain in the source.
+
+For an arbitrary finite $\Lambda\subset\mathbb Z$, the additional geometric
+argument is to identify distances inside each component, bound each distance
+sphere by two vertices, and bound a support of graph diameter at most $R$ by
+$R+1$ sites. Supports of finite graph diameter lie in one component; operators
+at infinite separation commute exactly. These facts allow the general graph
+estimates to be applied with the same uniform constants. This extension of
+the local estimates does not require a product decomposition of ground
+vectors.
+
+\section{Information reset on the contiguous chain}
+
+Part~II, Lemma~\texttt{lem:reset}
+(\texttt{part2a\_mps\_information.tex}, lines~319--435), is proved on the
+contiguous chain with the source hypotheses. For every $p>0$ there are
+$C_p>0$ and a natural $L_0\ge1$, chosen before all system and region data,
+such that the following holds for $L\ge L_0$. If $D,C$ are disjoint,
+$R_0\subseteq D$, $C_0\subseteq C$, $I_\Omega(D:C)\le b$, and both
+cores have distance greater than $w=C_p(1+b+\log L)$ from their respective
+outer-region complements, then $I_\Omega(R_0:C_0)\le L^{-p}$.
+Nonnegativity of $b$ is derived, and only the original full-system gap is
+assumed. The Gaussian filter, supported approximation, polar unitary and
+independence after the regional replica swap are constructed within the
+proof.\footnote{Declaration:
+\leanid{TNLean.MPS.AreaLaw.ChainHamiltonian.information_reset}.}
+
+The blueprint states and marks the contiguous-chain theorem proved here.
+An extension to arbitrary finite induced-path domains would require the
+corresponding locality and support geometry described above. Such an extension
+is not used in Theorem~A or Theorem~B and is not claimed. No additional
+spectral or product-marginal hypothesis is part of the chain theorem.
+
+\section{Information at logarithmic separation}
+
+Part~II, Lemma~\texttt{lem:logsep}
+(\texttt{part2a\_mps\_information.tex}, lines~472--488), is also proved on
+the contiguous chain. For fixed $p>0$ and $k_0\ge1$, positive $D_p$ and a
+natural cutoff are chosen before all system data. If $T$ is a union of at
+most $k_0$ intervals and every pair $x\in T$, $y\in E$ satisfies
+$|x-y|\ge D_p\log L$, then $I_\Omega(T:E)\le L^{-p}$ for sufficiently
+large $L$. The interval family may overlap or contain empty members.
+Neither disjointness nor a sign hypothesis on the original real $J$ is
+added. The sign needed for the interval area law follows from the norm
+bound of an actual singleton interaction.\footnote{Declaration:
+\leanid{TNLean.MPS.AreaLaw.ChainHamiltonian.mutualInformation_le_of_logarithmic_separation}.}
+
+The proof combines the contiguous interval area law, exact real-radius
+neighborhoods of intervals, and the contiguous reset theorem. It establishes
+the logarithmic separation used in the chain preparation argument. It does
+not assert the additional version on arbitrary finite induced-path domains;
+that version would require the corresponding domain geometry and reset
+estimates. This analytic theorem alone does not construct a preparation
+protocol.
 
 \bibliographystyle{alpha}
 \bibliography{references}

@@ -33,3 +33,12 @@ info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashC
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms TNLean.Lattice.vonNeumannEntropy_partialTraceRight_eq_zero_of_gap
+
+/--
+info: 'TNLean.Lattice.exists_isGappedGroundState_factors_of_sum_factorOperator' depends on axioms:
+[propext, Classical.choice, Quot.sound]
+---
+info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms TNLean.Lattice.exists_isGappedGroundState_factors_of_sum_factorOperator

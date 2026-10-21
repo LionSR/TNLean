@@ -139,10 +139,10 @@ filter-locality tail of the positive constraints for the localization constants
 the hypothesis `htail` is the conclusion of
 `SpectralFilter.exists_norm_positiveConstraint_sub_map_le` at these constants. Then every
 conclusion of `exists_positiveQuasilocalConstraints` holds with `C = C₃` and `c = c₃`.
-Once QICLean provides the named filter-locality constants, `htail` is
-`SpectralFilter.norm_positiveConstraint_sub_map_le`, with
-`C₃ = positiveConstraintLocalityConst p Δ J (localizationPrefactor R K_g k_g) (1 / 2)` and
-`c₃ = positiveConstraintLocalityRate p Δ (localizationVelocity R v_R b₀) (1 / 2)`. -/
+At `C₃ = positiveConstraintLocalityConst p Δ J (localizationPrefactor R K_g k_g) (1 / 2)` and
+`c₃ = positiveConstraintLocalityRate p Δ (localizationVelocity R v_R b₀) (1 / 2)`, `htail` is
+`SpectralFilter.norm_positiveConstraint_sub_map_le`; see
+`positiveQuasilocalConstraints_explicit`. -/
 theorem positiveQuasilocalConstraints_of_locality {p : ℕ} (hp : 1 ≤ p) (R vR : ℕ) (b₀ Kg : ℝ)
     (kg : ℕ) {J Δ C₃ c₃ : ℝ} (hΔ : 0 < Δ)
     (htail : ∀ {n : Type u} [Fintype n] [DecidableEq n]
@@ -236,6 +236,46 @@ theorem positiveQuasilocalConstraints_of_locality {p : ℕ} (hp : 1 ≤ p) (R vR
   exact htail hH hΩ (hHerm i) (hJh i) (siteExpectationLM q K) (norm_siteExpectation_le K)
     (siteExpectation_one K) (fun Y hY => isHermitian_siteExpectation K hY) hfix
     (Nat.cast_nonneg l) hloc
+
+/-- **Positive replacement of the Hamiltonian, at the named filter-locality constants**
+(Proposition 4.3, `prop:positive`, `03-quasilocal.tex`, lines 220–334). Every conclusion of
+`exists_positiveQuasilocalConstraints` holds with
+`C = positiveConstraintLocalityConst p Δ J (localizationPrefactor R K_g k_g) (1 / 2)` and
+`c = positiveConstraintLocalityRate p Δ (localizationVelocity R v_R b₀) (1 / 2)`. -/
+theorem positiveQuasilocalConstraints_explicit {p : ℕ} (hp : 1 ≤ p) (R vR : ℕ) (b₀ Kg : ℝ)
+    (kg : ℕ) {J Δ : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < Δ) :
+    ∀ {q : ℕ} [NeZero q] {ι : Type u} [Fintype ι] [DecidableEq ι] {κ : Type*} [Fintype κ]
+      (G : SimpleGraph ι) (X : κ → Finset ι) (a : κ → ι), (∀ k, a k ∈ X k) →
+      ∀ (h : κ → Matrix (ι → Fin q) (ι → Fin q) ℂ), (∀ k, (h k).IsHermitian) →
+      (∀ k, h k ∈ supportedOperators q (X k : Set ι)) →
+      (∀ k, ∀ x ∈ X k, ∀ z ∈ X k, G.edist x z ≤ R) →
+      (∀ k, (X k).card ≤ vR) →
+      (∀ x, ∑ j ∈ Finset.univ.filter (fun j => x ∈ X j), ‖h j‖ ≤ b₀) →
+      (∀ x (d : ℕ),
+        ((Finset.univ.filter fun y => G.edist x y = d).card : ℝ) ≤ Kg * ((d : ℝ) + 1) ^ kg) →
+      (∀ k, ‖h k‖ ≤ J) →
+      ∀ (E₀ : ℝ) (Ω : EuclideanSpace ℂ (ι → Fin q)), ‖Ω‖ = 1 →
+      (∑ k, h k) *ᵥ WithLp.ofLp Ω = (E₀ : ℂ) • WithLp.ofLp Ω →
+      ((∑ k, h k) - (E₀ : ℂ) • 1 -
+        (Δ : ℂ) • (1 - Matrix.vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω)))).PosSemidef →
+      let cs := positiveNormalization p (Δ / 2) J
+      let k := fun i => positiveConstraint cs (centeredFilter p (Δ / 2) (∑ j, h j) Ω (h i))
+      (∀ i, 0 ≤ k i ∧ k i ≤ 1 ∧ k i *ᵥ WithLp.ofLp Ω = 0) ∧
+      cs⁻¹ • ((∑ j, h j) - (E₀ : ℂ) • 1) ≤ ∑ i, k i ∧
+      ((Δ / cs : ℝ) : ℂ) • (1 - Matrix.vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))) ≤
+        cs⁻¹ • ((∑ j, h j) - (E₀ : ℂ) • 1) ∧
+      (∀ i (l : ℕ), 0 ≤ siteExpectation q (graphBall G (a i) l) (k i) ∧
+        siteExpectation q (graphBall G (a i) l) (k i) ≤ 1 ∧
+        ‖k i - siteExpectation q (graphBall G (a i) l) (k i)‖ ≤
+          positiveConstraintLocalityConst p Δ J (localizationPrefactor R Kg kg) (1 / 2) *
+            Real.exp (-(positiveConstraintLocalityRate p Δ (localizationVelocity R vR b₀) (1 / 2) *
+              (l : ℝ) ^ kernelExponent p))) ∧
+      (∀ i, k i ∈ supportedOperators q {x | G.Reachable (a i) x}) :=
+  positiveQuasilocalConstraints_of_locality hp R vR b₀ Kg kg hΔ
+    (fun hH hΩ hh hhJ L hcontr hunit hherm hfix _ hl hτ =>
+      norm_positiveConstraint_sub_map_le hp hΔ hJ (localizationPrefactor_nonneg R Kg kg)
+        (localizationVelocity_pos R vR b₀) one_half_pos hH hΩ hh hhJ L hcontr hunit hherm hfix
+        hl hτ)
 
 /-- **Positive replacement of the Hamiltonian** (Proposition 4.3, `prop:positive`,
 `03-quasilocal.tex`, lines 220–246). Fix `p ≥ 1`, the range `R`, the support size `v_R`, the

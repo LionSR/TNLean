@@ -3,9 +3,9 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.Approximation.ActualPureSourceReplacement
-import TNLean.PEPS.Approximation.ActualSampledExteriorScalar
-import TNLean.PEPS.Approximation.ActualSampledPhysicalFactors
+import TNLean.Lattice.Compression.ActualPureSourceReplacement
+import TNLean.Lattice.Compression.ActualSampledExteriorScalar
+import TNLean.Lattice.Compression.ActualSampledPhysicalFactors
 import TNLean.PEPS.Approximation.DistributedPhysicalPrivateTrace
 import Lean.Elab.Command
 import Lean.Util.CollectAxioms

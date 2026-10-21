@@ -57,6 +57,38 @@ cases recorded before it in Section~2 of that preprint.
     No factor is lost in $\Delta$, since both inclusions are isometries.
 \end{proof}
 
+\begin{theorem}[Gapped ground vectors of a sum over finitely many factors]
+    \label{thm:area_law_product_ground_state_family}
+    \lean{TNLean.Lattice.factorOperator, TNLean.Lattice.exists_isGappedGroundState_factors_of_sum_factorOperator}
+    \leanok
+    \uses{thm:area_law_product_ground_state}
+    Let $k\ge1$, and for $i=1,\dots,k$ let $H_i$ be a Hermitian operator on a
+    finite-dimensional space $\mathcal H_i$. Put $H=\sum_iH_i$ on
+    $\bigotimes_i\mathcal H_i$, each $H_i$ acting on its own factor. If a unit
+    vector $\omega$ satisfies $H\omega=E_0\omega$ and
+    $H-E_0I\ge\Delta(I-|\omega\rangle\langle\omega|)$ with $\Delta>0$, then
+    there are real numbers $a_i$ and unit vectors $\omega_i$ such that
+    \begin{align}
+        \omega      & =\bigotimes_i\omega_i,                               & E_0 & =\sum_ia_i,\notag \\
+        H_i\omega_i & =a_i\omega_i,                                        &
+        H_i-a_iI    & \ge\Delta(I-|\omega_i\rangle\langle\omega_i|).\notag
+    \end{align}
+    Every factor keeps the gap $\Delta$. This is the statement in the
+    reduction to connected domains of \cite[Part~I, Lemma~2.1]{TNLean2026OneDimensional}
+    that each component Hamiltonian inherits the gap inequality with the same
+    gap.
+\end{theorem}
+
+\begin{proof}\leanok
+    Induct on $k$. For $k=1$ there is nothing to prove. For $k\ge2$, write
+    $H=H_1\otimes I+I\otimes H'$ with $H'=\sum_{i\ge2}H_i$, which is
+    Hermitian. Theorem~\ref{thm:area_law_product_ground_state} gives
+    $\omega=\omega_1\otimes\omega'$ and $E_0=a_1+b$, with $\omega_1$ a
+    gapped ground vector of $H_1$ at $a_1$ and $\omega'$ a gapped ground
+    vector of $H'$ at $b$, both with gap $\Delta$. The induction hypothesis
+    applied to $\omega'$ factors it over $i\ge2$ with $b=\sum_{i\ge2}a_i$.
+\end{proof}
+
 \begin{theorem}[Supports and components]
     \label{thm:area_law_support_components}
     \lean{TNLean.Lattice.IsAdmissibleSupport.reachable, TNLean.PEPS.AreaLaw.subset_or_disjoint_of_edgeBoundary_eq_empty, TNLean.PEPS.AreaLaw.edgeBoundary_connectedComponents_eq_empty, TNLean.PEPS.AreaLaw.edgeBoundary_connectedComponent_eq_empty}
@@ -85,12 +117,10 @@ cases recorded before it in Section~2 of that preprint.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:area_law_product_ground_state}
-    Every term of the Hamiltonian acts inside $A$ or inside its complement, so
-    across the cut $H=H_A\otimes I+I\otimes H_{\Lambda\setminus A}$;
-    replacing both factors by their Hermitian parts preserves this decomposition.
-    Hence the ground vector is a
-    product vector across the cut and its reduced state on $A$ has zero entropy.
+    \uses{lem:zero_entropy_cut}
+    Every term of the Hamiltonian acts inside $A$ or inside its complement.
+    This is the hypothesis of Lemma~\ref{lem:zero_entropy_cut} for the finite
+    set of sites $\Lambda$, which gives $S_\Omega(A)=0$.
 \end{proof}
 
 \begin{theorem}[A cut with no crossing edge]
@@ -124,7 +154,7 @@ cases recorded before it in Section~2 of that preprint.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:area_law_unsplit_supports, thm:area_law_zero_boundary, thm:area_law_support_components}
+    \uses{thm:area_law_unsplit_supports, thm:area_law_zero_boundary, thm:area_law_support_components, thm:chain_entropy_dim_one}
     For $R=0$ every support is a single site and so is never split by a cut,
     so Theorem~\ref{thm:area_law_unsplit_supports} applies.
     For $q=1$ or $\Lambda=\varnothing$ the regional Hilbert space is

@@ -16,3 +16,16 @@ open TNLean.PEPS.AreaLaw in
 depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
 #print axioms uniformAreaLaw_of_collar_amplification_twoFamilies
+
+open TNLean.PEPS.AreaLaw in
+/-- info:
+'TNLean.PEPS.AreaLaw.regionalEntropy_le_of_collar_amplification_twoFamilies_constants'
+depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms regionalEntropy_le_of_collar_amplification_twoFamilies_constants
+
+open TNLean.PEPS.AreaLaw in
+/-- info: 'TNLean.PEPS.AreaLaw.uniformAreaLawConstantOf_nonneg' depends on axioms:
+[propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms uniformAreaLawConstantOf_nonneg

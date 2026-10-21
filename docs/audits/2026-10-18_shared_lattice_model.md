@@ -77,3 +77,73 @@ such as `hX.card_le` and `h.positiveTerm` keeps resolving. Each
 - The blueprint `\lean{...}` tags, `docs/glossary.md`, `docs/formalization/`,
   `docs/tactic_patterns.md`, `docs/import_structure.md` and the `CLAUDE.md`
   tables carry the new names.
+
+## Phase 2: entropy lemmas on any finite set of sites
+
+The one-dimensional chain keeps its own model on `Fin L` (`ChainHamiltonian`). The lemmas
+that both area laws prove are stated once, for an arbitrary finite set of sites `V` with
+local dimension `q` and QICLean's `Entropy.regionEntropy`. The chain reads them at
+`V = Fin L`, and the lattice domains read them at `V = Site Λ` through
+`regionalEntropy_eq_regionEntropy` and `reducedState_eq_regionState`. No statement
+changes, apart from the generalization of the site set from `Fin L` to `V`.
+
+### New modules
+
+- `TNLean.Lattice.RegionEntropyInequalities`
+- `TNLean.Lattice.ZeroEntropy`
+
+### Moved declarations
+
+Each `TNLean.MPS.AreaLaw.X` below becomes `TNLean.Lattice.X`, stated for any finite site
+type in place of `Fin L`.
+
+| New module | Declarations | Old module |
+| --- | --- | --- |
+| `RegionEntropyInequalities` | `regionEntropy_union_le`, `regionEntropy_le_union_add`, `regionEntropy_empty`, `regionEntropy_univ`, `regionEntropy_le_card_mul_log` | `TNLean.MPS.AreaLaw.EntropyInequalities` |
+| `RegionEntropyInequalities` | `regionEntropy_union_add_inter_le`, `regionEntropy_sdiff_eq_of_eq_zero`, `regionEntropy_union_eq_of_eq_zero`, `regionEntropy_symmDiff_eq_of_eq_zero` | `TNLean.MPS.AreaLaw.ComponentReduction` |
+| `ZeroEntropy` | `isSupportedOn_sum`, `regionEntropy_eq_zero_of_forall_subset_or_disjoint` | `TNLean.MPS.AreaLaw.ComponentReduction` |
+
+`Entropy.trace_regionState_eq_one` moves from `TNLean.MPS.AreaLaw.SequentialTruncation` to
+`TNLean.Lattice.RegionEntropyInequalities` and keeps its name. The new
+`TNLean.Lattice.one_le_supportDim_const` is the common proof of the two
+`one_le_supportDim` lemmas.
+
+### Lattice copies now proved from the shared lemmas
+
+These keep their names and statements: `TNLean.Lattice.regionalEntropy_le_card_mul_log`,
+`TNLean.PEPS.AreaLaw.regionalEntropy_eq_zero_of_forall_subset_or_disjoint`,
+`TNLean.PEPS.AreaLaw.trace_reducedState`, `TNLean.PEPS.AreaLaw.regionalEntropy_empty`,
+`TNLean.PEPS.AreaLaw.regionalEntropy_univ`,
+`TNLean.PEPS.AreaLaw.abs_regionalEntropy_union_sub_le` and
+`TNLean.PEPS.AreaLaw.one_le_supportDim`.
+
+### Deleted declarations
+
+The own proof of the zero-entropy lemma in `TNLean/PEPS/AreaLaw/ZeroBoundary.lean`
+becomes unused, so these are deleted: `siteSplit`, `rectKronecker_submatrix_siteSplit`,
+`exists_submatrix_siteSplit_eq_kronecker_one`, `exists_submatrix_siteSplit_eq_one_kronecker`,
+`configurationSplit_eq_siteSplit` and `exists_operator_submatrix_eq`, all in namespace
+`TNLean.PEPS.AreaLaw`.
+
+### Local dimension one (21 October 2026)
+
+`TNLean.Lattice.regionEntropy_eq_zero_of_localDimension_one` is now stated
+for every finite site type `V`. It replaces the unused chain-specific
+`TNLean.MPS.AreaLaw.regionEntropy_eq_zero_of_localDimension_one`; no alias is
+retained. Its importing axiom check and blueprint association use the shared
+name. The PEPS theorem `TNLean.PEPS.AreaLaw.regionalEntropy_eq_zero_of_q_eq_one`
+keeps its statement and follows from the same result through
+`regionalEntropy_eq_regionEntropy`. Both assertions express the vanishing
+entropy of every region when each local space is one-dimensional.
+
+### Deferred: one Hamiltonian model for the chain and the lattice domains
+
+The two Hamiltonian structures could become instances of one structure over a finite site
+type. That structure would be parameterized by its family of supports, so the chain
+supports (`IsChainSupport`) and the admissible lattice supports (`IsAdmissibleSupport`) are
+instances by definition. This is left to a third phase, because the two structures state
+the locality of a term differently. The lattice model uses membership in
+`QuantumCircuit.supportedOperators` and the chain uses `Entropy.IsSupportedOn`. Unifying
+them needs the converse of `QuantumCircuit.isSupportedOn_of_mem_supportedOperators`, which
+the open characterization of support by matrix entries supplies. It also needs a migration
+of the `h.supported X` uses in the two-dimensional tree.

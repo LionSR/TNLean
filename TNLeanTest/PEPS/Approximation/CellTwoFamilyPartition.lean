@@ -39,3 +39,9 @@ info: 'TNLean.PEPS.Approximation.CellPartition.exists_cell_twoFamily_partition' 
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms TNLean.PEPS.Approximation.CellPartition.exists_cell_twoFamily_partition
+
+/--
+info: 'TNLean.PEPS.Approximation.CellPartition.cell_twoFamily_partition' depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms TNLean.PEPS.Approximation.CellPartition.cell_twoFamily_partition

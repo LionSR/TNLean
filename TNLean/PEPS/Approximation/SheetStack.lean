@@ -4,11 +4,10 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.FrameRegisters
-import TNLean.PEPS.Approximation.LayoutEqualityCoordinates
-import TNLean.PEPS.Approximation.OriginalCircuitLift
+import TNLean.Lattice.Sheet.Stack
 
 /-!
-# The memory of several sheets
+# The memory of several encoded frames
 
 In the protocol of Proposition 7.1 of the polynomial-PEPS manuscript the memory holds several
 sheets: the main sheet, the active auxiliary sheet of the current repainting, the frozen
@@ -17,6 +16,10 @@ held privately by the party that will initialize it. The reference vector at eac
 tensor product of the reference vectors `Ω_F` of the encoded frames of the sheets and of the
 idle copies, every factor of norm at most one (`06-geometry.tex`, lines 39–41 and 658–667).
 
+The stack calculus is developed for an arbitrary type of sheets in `TNLean.Lattice.Sheet.Stack`.
+This file reads it at the encoded frames, each frame `F` carrying its registers `F.regs` and the
+reference vector `F.regRef Ω` of `Ω_F` on them.
+
 A *sheet stack* (`EncodedFrame.SheetStack`) is a list of encoded frames followed by a layout of
 idle registers. Its registers are the registers of the frames, in order, followed by the idle
 registers (`SheetStack.regs`), and its reference vector is the product of the frame reference
@@ -24,10 +27,11 @@ vectors and of a vector of the idle registers (`SheetStack.refVec`).
 
 A bounded change acts on one sheet (a small-patch rewrite, a birth or a death) or on two
 adjacent sheets (the lens exchange). Lifting the change to the whole stack, with the other
-sheets as spectators (`SheetStack.liftOne`, `SheetStack.liftTwo`), changes neither its gates
-nor its participants, and its reference error on the stack is at most its reference error on
-the frames it acts on, because the spectator factors have norm at most one
-(`SheetStack.norm_eval_liftOne_refVec_sub_le`, `SheetStack.norm_eval_liftTwo_refVec_sub_le`).
+sheets as spectators (`EncodedFrame.liftOne`, `EncodedFrame.liftTwo`), changes neither its gates
+nor its participants, and its reference error on the stack is at most its reference error on the
+frames it acts on, because the spectator factors have norm at most one
+(`EncodedFrame.norm_eval_liftOne_stackVec_sub_le`,
+`EncodedFrame.norm_eval_liftTwo_stackVec_sub_le`).
 
 ## Main definitions
 
@@ -67,9 +71,8 @@ variable {ι : Type} [Fintype ι] [DecidableEq ι] {q : ℕ} {Party : Type} {pos
 /-! ### Registers of several sheets -/
 
 /-- The registers of a list of frames, in order, followed by the layout `ℓ`. -/
-@[reducible] def stackRegs : List (Frame pos q Party) → Layout Party → Layout Party
-  | [], ℓ => ℓ
-  | F :: Fs, ℓ => F.regs ++ stackRegs Fs ℓ
+abbrev stackRegs (Fs : List (Frame pos q Party)) (ℓ : Layout Party) : Layout Party :=
+  Lattice.stackRegs Frame.regs Fs ℓ
 
 /-- **Sheet stacks.** The memory of several sheets: encoded frames, in order, followed by idle
 registers. Polynomial-PEPS manuscript, Proposition 7.1, `06-geometry.tex`, lines 21–23, 39–41
@@ -91,97 +94,73 @@ end SheetStack
 
 /-- A change of the sheet `F` into `F'` on the whole stack `pre ++ F :: post`, with the other
 sheets and the layout `ℓ` as spectators. -/
-def liftOne {F F' : Frame pos q Party} (post : List (Frame pos q Party)) (ℓ : Layout Party)
-    (c : OriginalCircuit F.regs F'.regs) :
-    (pre : List (Frame pos q Party)) →
-      OriginalCircuit (stackRegs (pre ++ F :: post) ℓ) (stackRegs (pre ++ F' :: post) ℓ)
-  | [] => c.appendTail (stackRegs post ℓ)
-  | G :: pre => OriginalCircuit.frameList G.regs (liftOne post ℓ c pre)
+abbrev liftOne {F F' : Frame pos q Party} (post : List (Frame pos q Party)) (ℓ : Layout Party)
+    (c : OriginalCircuit F.regs F'.regs) (pre : List (Frame pos q Party)) :
+    OriginalCircuit (stackRegs (pre ++ F :: post) ℓ) (stackRegs (pre ++ F' :: post) ℓ) :=
+  Lattice.liftOne Frame.regs post ℓ c pre
 
 @[simp] theorem nonprivateCount_liftOne {F F' : Frame pos q Party}
-    (post : List (Frame pos q Party)) (ℓ : Layout Party) (c : OriginalCircuit F.regs F'.regs) :
-    (pre : List (Frame pos q Party)) → (liftOne post ℓ c pre).nonprivateCount = c.nonprivateCount
-  | [] => OriginalCircuit.nonprivateCount_appendTail c _
-  | G :: pre => (OriginalCircuit.nonprivateCount_frameList _ G.regs).trans
-      (nonprivateCount_liftOne post ℓ c pre)
+    (post : List (Frame pos q Party)) (ℓ : Layout Party) (c : OriginalCircuit F.regs F'.regs)
+    (pre : List (Frame pos q Party)) : (liftOne post ℓ c pre).nonprivateCount = c.nonprivateCount :=
+  Lattice.nonprivateCount_liftOne Frame.regs post ℓ c pre
 
 theorem participants_liftOne_subset {S : Set Party} {F F' : Frame pos q Party}
     (post : List (Frame pos q Party)) (ℓ : Layout Party) (c : OriginalCircuit F.regs F'.regs)
-    (hc : ∀ g, (↑(c.participants g) : Set Party) ⊆ S) :
-    (pre : List (Frame pos q Party)) → (g : (liftOne post ℓ c pre).nonprivateLocations) →
-      (↑((liftOne post ℓ c pre).participants g) : Set Party) ⊆ S
-  | [], g => OriginalCircuit.participants_appendTail_subset c _ hc g
-  | G :: pre, g => OriginalCircuit.participants_frameList_subset _
-      (participants_liftOne_subset post ℓ c hc pre) G.regs g
+    (hc : ∀ g, (↑(c.participants g) : Set Party) ⊆ S) (pre : List (Frame pos q Party))
+    (g : (liftOne post ℓ c pre).nonprivateLocations) :
+    (↑((liftOne post ℓ c pre).participants g) : Set Party) ⊆ S :=
+  Lattice.participants_liftOne_subset Frame.regs post ℓ c hc pre g
 
 theorem isExpansionBounded_liftOne {F F' : Frame pos q Party}
     (post : List (Frame pos q Party)) (ℓ : Layout Party) (c : OriginalCircuit F.regs F'.regs)
-    {r : ℕ} {s : ℝ} (hc : c.IsExpansionBounded r s) :
-    (pre : List (Frame pos q Party)) → (liftOne post ℓ c pre).IsExpansionBounded r s
-  | [] => OriginalCircuit.isExpansionBounded_appendTail c _ hc
-  | G :: pre => OriginalCircuit.isExpansionBounded_frameList _
-      (isExpansionBounded_liftOne post ℓ c hc pre) G.regs
+    {r : ℕ} {s : ℝ} (hc : c.IsExpansionBounded r s) (pre : List (Frame pos q Party)) :
+    (liftOne post ℓ c pre).IsExpansionBounded r s :=
+  Lattice.isExpansionBounded_liftOne Frame.regs post ℓ c hc pre
 
 theorem isMonomialBounded_liftOne {F F' : Frame pos q Party}
     (post : List (Frame pos q Party)) (ℓ : Layout Party) (c : OriginalCircuit F.regs F'.regs)
-    {K : ℕ} (hc : c.IsMonomialBounded K) :
-    (pre : List (Frame pos q Party)) → (liftOne post ℓ c pre).IsMonomialBounded K
-  | [] => OriginalCircuit.isMonomialBounded_appendTail c _ hc
-  | G :: pre => OriginalCircuit.isMonomialBounded_frameList _
-      (isMonomialBounded_liftOne post ℓ c hc pre) G.regs
+    {K : ℕ} (hc : c.IsMonomialBounded K) (pre : List (Frame pos q Party)) :
+    (liftOne post ℓ c pre).IsMonomialBounded K :=
+  Lattice.isMonomialBounded_liftOne Frame.regs post ℓ c hc pre
 
 /-! ### A change of two adjacent sheets -/
 
 /-- A change of the adjacent sheets `F₁, F₂` into `F₁', F₂'` on the whole stack
 `pre ++ F₁ :: F₂ :: post`, with the other sheets and the layout `ℓ` as spectators. -/
-def liftTwo {F₁ F₂ F₁' F₂' : Frame pos q Party} (post : List (Frame pos q Party))
-    (ℓ : Layout Party) (c : OriginalCircuit (F₁.regs ++ F₂.regs) (F₁'.regs ++ F₂'.regs)) :
-    (pre : List (Frame pos q Party)) →
-      OriginalCircuit (stackRegs (pre ++ F₁ :: F₂ :: post) ℓ)
-        (stackRegs (pre ++ F₁' :: F₂' :: post) ℓ)
-  | [] => (c.appendTail (stackRegs post ℓ)).castLayouts (List.append_assoc _ _ _)
-      (List.append_assoc _ _ _)
-  | G :: pre => OriginalCircuit.frameList G.regs (liftTwo post ℓ c pre)
+abbrev liftTwo {F₁ F₂ F₁' F₂' : Frame pos q Party} (post : List (Frame pos q Party))
+    (ℓ : Layout Party) (c : OriginalCircuit (F₁.regs ++ F₂.regs) (F₁'.regs ++ F₂'.regs))
+    (pre : List (Frame pos q Party)) :
+    OriginalCircuit (stackRegs (pre ++ F₁ :: F₂ :: post) ℓ)
+      (stackRegs (pre ++ F₁' :: F₂' :: post) ℓ) :=
+  Lattice.liftTwo Frame.regs post ℓ c pre
 
 @[simp] theorem nonprivateCount_liftTwo {F₁ F₂ F₁' F₂' : Frame pos q Party}
     (post : List (Frame pos q Party)) (ℓ : Layout Party)
-    (c : OriginalCircuit (F₁.regs ++ F₂.regs) (F₁'.regs ++ F₂'.regs)) :
-    (pre : List (Frame pos q Party)) → (liftTwo post ℓ c pre).nonprivateCount = c.nonprivateCount
-  | [] => (OriginalCircuit.nonprivateCount_castLayouts _ _ _).trans
-      (OriginalCircuit.nonprivateCount_appendTail c _)
-  | G :: pre => (OriginalCircuit.nonprivateCount_frameList _ G.regs).trans
-      (nonprivateCount_liftTwo post ℓ c pre)
+    (c : OriginalCircuit (F₁.regs ++ F₂.regs) (F₁'.regs ++ F₂'.regs))
+    (pre : List (Frame pos q Party)) : (liftTwo post ℓ c pre).nonprivateCount = c.nonprivateCount :=
+  Lattice.nonprivateCount_liftTwo Frame.regs post ℓ c pre
 
 theorem participants_liftTwo_subset {S : Set Party} {F₁ F₂ F₁' F₂' : Frame pos q Party}
     (post : List (Frame pos q Party)) (ℓ : Layout Party)
     (c : OriginalCircuit (F₁.regs ++ F₂.regs) (F₁'.regs ++ F₂'.regs))
-    (hc : ∀ g, (↑(c.participants g) : Set Party) ⊆ S) :
-    (pre : List (Frame pos q Party)) → (g : (liftTwo post ℓ c pre).nonprivateLocations) →
-      (↑((liftTwo post ℓ c pre).participants g) : Set Party) ⊆ S
-  | [], g => OriginalCircuit.participants_castLayouts_subset _ _ _
-      (OriginalCircuit.participants_appendTail_subset c _ hc) g
-  | G :: pre, g => OriginalCircuit.participants_frameList_subset _
-      (participants_liftTwo_subset post ℓ c hc pre) G.regs g
+    (hc : ∀ g, (↑(c.participants g) : Set Party) ⊆ S) (pre : List (Frame pos q Party))
+    (g : (liftTwo post ℓ c pre).nonprivateLocations) :
+    (↑((liftTwo post ℓ c pre).participants g) : Set Party) ⊆ S :=
+  Lattice.participants_liftTwo_subset Frame.regs post ℓ c hc pre g
 
 theorem isExpansionBounded_liftTwo {F₁ F₂ F₁' F₂' : Frame pos q Party}
     (post : List (Frame pos q Party)) (ℓ : Layout Party)
     (c : OriginalCircuit (F₁.regs ++ F₂.regs) (F₁'.regs ++ F₂'.regs)) {r : ℕ} {s : ℝ}
-    (hc : c.IsExpansionBounded r s) :
-    (pre : List (Frame pos q Party)) → (liftTwo post ℓ c pre).IsExpansionBounded r s
-  | [] => OriginalCircuit.isExpansionBounded_castLayouts _ _ _
-      (OriginalCircuit.isExpansionBounded_appendTail c _ hc)
-  | G :: pre => OriginalCircuit.isExpansionBounded_frameList _
-      (isExpansionBounded_liftTwo post ℓ c hc pre) G.regs
+    (hc : c.IsExpansionBounded r s) (pre : List (Frame pos q Party)) :
+    (liftTwo post ℓ c pre).IsExpansionBounded r s :=
+  Lattice.isExpansionBounded_liftTwo Frame.regs post ℓ c hc pre
 
 theorem isMonomialBounded_liftTwo {F₁ F₂ F₁' F₂' : Frame pos q Party}
     (post : List (Frame pos q Party)) (ℓ : Layout Party)
     (c : OriginalCircuit (F₁.regs ++ F₂.regs) (F₁'.regs ++ F₂'.regs)) {K : ℕ}
-    (hc : c.IsMonomialBounded K) :
-    (pre : List (Frame pos q Party)) → (liftTwo post ℓ c pre).IsMonomialBounded K
-  | [] => OriginalCircuit.isMonomialBounded_castLayouts _ _ _
-      (OriginalCircuit.isMonomialBounded_appendTail c _ hc)
-  | G :: pre => OriginalCircuit.isMonomialBounded_frameList _
-      (isMonomialBounded_liftTwo post ℓ c hc pre) G.regs
+    (hc : c.IsMonomialBounded K) (pre : List (Frame pos q Party)) :
+    (liftTwo post ℓ c pre).IsMonomialBounded K :=
+  Lattice.isMonomialBounded_liftTwo Frame.regs post ℓ c hc pre
 
 /-! ### Reference vectors -/
 
@@ -204,34 +183,22 @@ theorem Frame.norm_regRef_le (F : Frame pos q Party) {Ω : EuclideanSpace ℂ (�
 
 /-- The product of the reference vectors of a list of frames with a vector `ξ` of the layout
 `ℓ`. Polynomial-PEPS manuscript, `06-geometry.tex`, lines 39–41. -/
-def stackVec (Ω : EuclideanSpace ℂ (ι → Fin q)) :
-    (Fs : List (Frame pos q Party)) → {ℓ : Layout Party} → Mem ℓ → Mem (stackRegs Fs ℓ)
-  | [], _, ξ => ξ
-  | F :: Fs, ℓ, ξ => (appendIso F.regs (stackRegs Fs ℓ)).symm (F.regRef Ω ⊗ₜ stackVec Ω Fs ξ)
-
-private theorem norm_appendIso_symm_tmul {a b : Layout Party} (x : Mem a) (y : Mem b) :
-    ‖(appendIso a b).symm (x ⊗ₜ y)‖ = ‖x‖ * ‖y‖ := by
-  rw [LinearIsometryEquiv.norm_map, TensorProduct.norm_tmul]
+abbrev stackVec (Ω : EuclideanSpace ℂ (ι → Fin q)) (Fs : List (Frame pos q Party))
+    {ℓ : Layout Party} (ξ : Mem ℓ) : Mem (stackRegs Fs ℓ) :=
+  Lattice.stackVec (fun F : Frame pos q Party => F.regRef Ω) Fs ξ
 
 /-- The norm of the reference vector of several sheets is the product of the norms of the frame
 reference vectors and of the idle vector. -/
-theorem norm_stackVec (Ω : EuclideanSpace ℂ (ι → Fin q)) :
-    (Fs : List (Frame pos q Party)) → {ℓ : Layout Party} → (ξ : Mem ℓ) →
-      ‖stackVec Ω Fs ξ‖ = (Fs.map fun F => ‖F.refVec Ω‖).prod * ‖ξ‖
-  | [], _, ξ => by rw [List.map_nil, List.prod_nil, one_mul]; rfl
-  | F :: Fs, ℓ, ξ => by
-      rw [stackVec, norm_appendIso_symm_tmul, norm_stackVec Ω Fs ξ, F.norm_regRef,
-        List.map_cons, List.prod_cons, mul_assoc]
+theorem norm_stackVec (Ω : EuclideanSpace ℂ (ι → Fin q)) (Fs : List (Frame pos q Party))
+    {ℓ : Layout Party} (ξ : Mem ℓ) :
+    ‖stackVec Ω Fs ξ‖ = (Fs.map fun F => ‖F.refVec Ω‖).prod * ‖ξ‖ := by
+  rw [stackVec, Lattice.norm_stackVec]
+  simp only [Frame.norm_regRef]
 
 /-- Every factor of the reference vector of several sheets has norm at most one. -/
-theorem norm_stackVec_le {Ω : EuclideanSpace ℂ (ι → Fin q)} (hΩ : ‖Ω‖ ≤ 1) :
-    (Fs : List (Frame pos q Party)) → {ℓ : Layout Party} → (ξ : Mem ℓ) →
-      ‖stackVec Ω Fs ξ‖ ≤ ‖ξ‖
-  | [], _, ξ => le_rfl
-  | F :: Fs, ℓ, ξ => by
-      rw [stackVec, norm_appendIso_symm_tmul]
-      exact (mul_le_of_le_one_left (norm_nonneg _) (F.norm_regRef_le hΩ)).trans
-        (norm_stackVec_le hΩ Fs ξ)
+theorem norm_stackVec_le {Ω : EuclideanSpace ℂ (ι → Fin q)} (hΩ : ‖Ω‖ ≤ 1)
+    (Fs : List (Frame pos q Party)) {ℓ : Layout Party} (ξ : Mem ℓ) : ‖stackVec Ω Fs ξ‖ ≤ ‖ξ‖ :=
+  Lattice.norm_stackVec_le (fun F => F.norm_regRef_le hΩ) Fs ξ
 
 namespace SheetStack
 
@@ -253,39 +220,16 @@ reference vector within the error it makes on its own sheet.
 Polynomial-PEPS manuscript, `06-geometry.tex`, lines 39–41 and 574–583. -/
 theorem norm_eval_liftOne_stackVec_sub_le {F F' : Frame pos q Party}
     (post : List (Frame pos q Party)) {ℓ : Layout Party} (c : OriginalCircuit F.regs F'.regs)
-    {Ω : EuclideanSpace ℂ (ι → Fin q)} (hΩ : ‖Ω‖ ≤ 1) {ξ : Mem ℓ} (hξ : ‖ξ‖ ≤ 1) :
-    (pre : List (Frame pos q Party)) →
-      ‖(liftOne post ℓ c pre).eval (stackVec Ω (pre ++ F :: post) ξ) -
-          stackVec Ω (pre ++ F' :: post) ξ‖ ≤ ‖c.eval (F.regRef Ω) - F'.regRef Ω‖
-  | [] => by
-      change ‖(c.appendTail (stackRegs post ℓ)).eval ((appendIso F.regs (stackRegs post ℓ)).symm
-          (F.regRef Ω ⊗ₜ stackVec Ω post ξ)) -
-        (appendIso F'.regs (stackRegs post ℓ)).symm (F'.regRef Ω ⊗ₜ stackVec Ω post ξ)‖ ≤ _
-      rw [OriginalCircuit.eval_appendTail_appendIso_symm, ← map_sub, ← TensorProduct.sub_tmul,
-        norm_appendIso_symm_tmul]
-      exact mul_le_of_le_one_right (norm_nonneg _) ((norm_stackVec_le hΩ post ξ).trans hξ)
-  | G :: pre => by
-      change ‖(OriginalCircuit.frameList G.regs (liftOne post ℓ c pre)).eval
-          ((appendIso G.regs (stackRegs (pre ++ F :: post) ℓ)).symm
-            (G.regRef Ω ⊗ₜ stackVec Ω (pre ++ F :: post) ξ)) -
-        (appendIso G.regs (stackRegs (pre ++ F' :: post) ℓ)).symm
-          (G.regRef Ω ⊗ₜ stackVec Ω (pre ++ F' :: post) ξ)‖ ≤ _
-      rw [OriginalCircuit.eval_frameList_appendIso_symm, ← map_sub, ← TensorProduct.tmul_sub,
-        norm_appendIso_symm_tmul]
-      exact (mul_le_of_le_one_left (norm_nonneg _) (G.norm_regRef_le hΩ)).trans
-        (norm_eval_liftOne_stackVec_sub_le post c hΩ hξ pre)
+    {Ω : EuclideanSpace ℂ (ι → Fin q)} (hΩ : ‖Ω‖ ≤ 1) {ξ : Mem ℓ} (hξ : ‖ξ‖ ≤ 1)
+    (pre : List (Frame pos q Party)) :
+    ‖(liftOne post ℓ c pre).eval (stackVec Ω (pre ++ F :: post) ξ) -
+        stackVec Ω (pre ++ F' :: post) ξ‖ ≤ ‖c.eval (F.regRef Ω) - F'.regRef Ω‖ :=
+  Lattice.norm_eval_liftOne_stackVec_sub_le post c (fun F => F.norm_regRef_le hΩ) hξ pre
 
 /-- The reference vector of two frames on their concatenated registers. -/
-def pairRef (F₁ F₂ : Frame pos q Party) (Ω : EuclideanSpace ℂ (ι → Fin q)) :
+abbrev pairRef (F₁ F₂ : Frame pos q Party) (Ω : EuclideanSpace ℂ (ι → Fin q)) :
     Mem (F₁.regs ++ F₂.regs) :=
-  (appendIso F₁.regs F₂.regs).symm (F₁.regRef Ω ⊗ₜ F₂.regRef Ω)
-
-private theorem memCongr_appendIso_assoc (a b c : Layout Party) (x : Mem a) (y : Mem b)
-    (z : Mem c) :
-    Layout.memCongr (List.append_assoc a b c)
-        ((appendIso (a ++ b) c).symm ((appendIso a b).symm (x ⊗ₜ y) ⊗ₜ z)) =
-      (appendIso a (b ++ c)).symm (x ⊗ₜ (appendIso b c).symm (y ⊗ₜ z)) :=
-  eq_of_heq ((Layout.memCongr_apply_heq _ _).trans (appendIso_assoc_symm_heq a b c x y z).symm)
+  Lattice.pairRef (fun F : Frame pos q Party => F.regRef Ω) F₁ F₂
 
 /-- **The reference error of a change of two adjacent sheets.** On the whole stack, the change
 takes the reference vector within the error it makes on its two sheets.
@@ -293,35 +237,12 @@ Polynomial-PEPS manuscript, `06-geometry.tex`, lines 39–41 and 574–583. -/
 theorem norm_eval_liftTwo_stackVec_sub_le {F₁ F₂ F₁' F₂' : Frame pos q Party}
     (post : List (Frame pos q Party)) {ℓ : Layout Party}
     (c : OriginalCircuit (F₁.regs ++ F₂.regs) (F₁'.regs ++ F₂'.regs))
-    {Ω : EuclideanSpace ℂ (ι → Fin q)} (hΩ : ‖Ω‖ ≤ 1) {ξ : Mem ℓ} (hξ : ‖ξ‖ ≤ 1) :
-    (pre : List (Frame pos q Party)) →
-      ‖(liftTwo post ℓ c pre).eval (stackVec Ω (pre ++ F₁ :: F₂ :: post) ξ) -
-          stackVec Ω (pre ++ F₁' :: F₂' :: post) ξ‖ ≤
-        ‖c.eval (pairRef F₁ F₂ Ω) - pairRef F₁' F₂' Ω‖
-  | [] => by
-      change ‖((c.appendTail (stackRegs post ℓ)).castLayouts (List.append_assoc _ _ _)
-            (List.append_assoc _ _ _)).eval
-          ((appendIso F₁.regs (F₂.regs ++ stackRegs post ℓ)).symm (F₁.regRef Ω ⊗ₜ
-            (appendIso F₂.regs (stackRegs post ℓ)).symm (F₂.regRef Ω ⊗ₜ stackVec Ω post ξ))) -
-        (appendIso F₁'.regs (F₂'.regs ++ stackRegs post ℓ)).symm (F₁'.regRef Ω ⊗ₜ
-            (appendIso F₂'.regs (stackRegs post ℓ)).symm (F₂'.regRef Ω ⊗ₜ stackVec Ω post ξ))‖ ≤
-        _
-      rw [OriginalCircuit.eval_castLayouts, ← memCongr_appendIso_assoc, ←
-        memCongr_appendIso_assoc]
-      simp only [comp_apply, isoL_apply, LinearIsometryEquiv.symm_apply_apply]
-      rw [OriginalCircuit.eval_appendTail_appendIso_symm, ← map_sub, ← map_sub,
-        ← TensorProduct.sub_tmul, LinearIsometryEquiv.norm_map, norm_appendIso_symm_tmul]
-      exact mul_le_of_le_one_right (norm_nonneg _) ((norm_stackVec_le hΩ post ξ).trans hξ)
-  | G :: pre => by
-      change ‖(OriginalCircuit.frameList G.regs (liftTwo post ℓ c pre)).eval
-          ((appendIso G.regs (stackRegs (pre ++ F₁ :: F₂ :: post) ℓ)).symm
-            (G.regRef Ω ⊗ₜ stackVec Ω (pre ++ F₁ :: F₂ :: post) ξ)) -
-        (appendIso G.regs (stackRegs (pre ++ F₁' :: F₂' :: post) ℓ)).symm
-          (G.regRef Ω ⊗ₜ stackVec Ω (pre ++ F₁' :: F₂' :: post) ξ)‖ ≤ _
-      rw [OriginalCircuit.eval_frameList_appendIso_symm, ← map_sub, ← TensorProduct.tmul_sub,
-        norm_appendIso_symm_tmul]
-      exact (mul_le_of_le_one_left (norm_nonneg _) (G.norm_regRef_le hΩ)).trans
-        (norm_eval_liftTwo_stackVec_sub_le post c hΩ hξ pre)
+    {Ω : EuclideanSpace ℂ (ι → Fin q)} (hΩ : ‖Ω‖ ≤ 1) {ξ : Mem ℓ} (hξ : ‖ξ‖ ≤ 1)
+    (pre : List (Frame pos q Party)) :
+    ‖(liftTwo post ℓ c pre).eval (stackVec Ω (pre ++ F₁ :: F₂ :: post) ξ) -
+        stackVec Ω (pre ++ F₁' :: F₂' :: post) ξ‖ ≤
+      ‖c.eval (pairRef F₁ F₂ Ω) - pairRef F₁' F₂' Ω‖ :=
+  Lattice.norm_eval_liftTwo_stackVec_sub_le post c (fun F => F.norm_regRef_le hΩ) hξ pre
 
 end Reference
 

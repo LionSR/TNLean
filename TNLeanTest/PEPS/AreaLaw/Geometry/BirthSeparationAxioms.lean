@@ -24,6 +24,36 @@ info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashC
 #guard_msgs (whitespace := lax) in
 #print axioms TNLean.PEPS.AreaLaw.Geometry.half_max_le_norm_sub_of_isQuarterSectorial
 
+/-- The explicit birth-separation constant is `1/28`. -/
+example : TNLean.PEPS.AreaLaw.Geometry.birthSeparationConstant = 1 / 28 := rfl
+
+/--
+info: 'TNLean.PEPS.AreaLaw.Geometry.facetPolygon_contact_dichotomy'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+---
+info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms TNLean.PEPS.AreaLaw.Geometry.facetPolygon_contact_dichotomy
+
+/--
+info: 'TNLean.PEPS.AreaLaw.Geometry.repairSameLabel_dichotomy'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+---
+info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms TNLean.PEPS.AreaLaw.Geometry.repairSameLabel_dichotomy
+
+/--
+info: 'TNLean.PEPS.AreaLaw.Geometry.repairBirth_separation'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+---
+info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms TNLean.PEPS.AreaLaw.Geometry.repairBirth_separation
+
 /--
 info: 'TNLean.PEPS.AreaLaw.Geometry.exists_repairSameLabel_dichotomy'
 depends on axioms: [propext, Classical.choice, Quot.sound]
@@ -61,6 +91,15 @@ info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashC
 #print axioms TNLean.PEPS.AreaLaw.Geometry.isRepairBirthSeparated_of_isUniformRepairInduction
 
 /--
+info: 'TNLean.PEPS.AreaLaw.Geometry.exists_threshold_isRepairBirthSeparated_of_uniformRepairInductionStatement'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+---
+info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms TNLean.PEPS.AreaLaw.Geometry.exists_threshold_isRepairBirthSeparated_of_uniformRepairInductionStatement
+
+/--
 info: 'TNLean.PEPS.AreaLaw.Geometry.exists_isRepairBirthSeparated_of_uniformRepairInductionStatement'
 depends on axioms: [propext, Classical.choice, Quot.sound]
 ---
@@ -79,6 +118,15 @@ info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashC
 #print axioms TNLean.PEPS.AreaLaw.Geometry.exists_pos_common_contact_dichotomy
 
 /--
+info: 'TNLean.PEPS.AreaLaw.Geometry.beltAtom_dichotomy'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+---
+info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms TNLean.PEPS.AreaLaw.Geometry.beltAtom_dichotomy
+
+/--
 info: 'TNLean.PEPS.AreaLaw.Geometry.exists_beltAtom_dichotomy'
 depends on axioms: [propext, Classical.choice, Quot.sound]
 ---
@@ -86,6 +134,15 @@ info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashC
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms TNLean.PEPS.AreaLaw.Geometry.exists_beltAtom_dichotomy
+
+/--
+info: 'TNLean.PEPS.AreaLaw.Geometry.initialBeltRun_birth_separation'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+---
+info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms TNLean.PEPS.AreaLaw.Geometry.initialBeltRun_birth_separation
 
 /--
 info: 'TNLean.PEPS.AreaLaw.Geometry.exists_initialBeltRun_birth_separation'
@@ -97,6 +154,15 @@ info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashC
 #print axioms TNLean.PEPS.AreaLaw.Geometry.exists_initialBeltRun_birth_separation
 
 /--
+info: 'TNLean.PEPS.AreaLaw.Geometry.isInitialBirthSeparated_birthTemplateSeparationConstant'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+---
+info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms TNLean.PEPS.AreaLaw.Geometry.isInitialBirthSeparated_birthTemplateSeparationConstant
+
+/--
 info: 'TNLean.PEPS.AreaLaw.Geometry.exists_isInitialBirthSeparated'
 depends on axioms: [propext, Classical.choice, Quot.sound]
 ---
@@ -104,6 +170,15 @@ info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashC
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms TNLean.PEPS.AreaLaw.Geometry.exists_isInitialBirthSeparated
+
+/--
+info: 'TNLean.PEPS.AreaLaw.Geometry.exists_threshold_birthSeparation_of_uniformRepairInductionStatement'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+---
+info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms TNLean.PEPS.AreaLaw.Geometry.exists_threshold_birthSeparation_of_uniformRepairInductionStatement
 
 /--
 info: 'TNLean.PEPS.AreaLaw.Geometry.exists_birthSeparation_of_uniformRepairInductionStatement'
@@ -115,6 +190,15 @@ info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashC
 #print axioms TNLean.PEPS.AreaLaw.Geometry.exists_birthSeparation_of_uniformRepairInductionStatement
 
 /--
+info: 'TNLean.PEPS.AreaLaw.Geometry.exists_threshold_birthSeparation_of_initialIsolatedStars'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+---
+info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms TNLean.PEPS.AreaLaw.Geometry.exists_threshold_birthSeparation_of_initialIsolatedStars
+
+/--
 info: 'TNLean.PEPS.AreaLaw.Geometry.exists_birthSeparation_of_initialIsolatedStars'
 depends on axioms: [propext, Classical.choice, Quot.sound]
 ---
@@ -122,6 +206,20 @@ info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashC
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms TNLean.PEPS.AreaLaw.Geometry.exists_birthSeparation_of_initialIsolatedStars
+
+/-- The explicit birth-template separation constant is `1/112`. -/
+example : TNLean.PEPS.AreaLaw.Geometry.birthTemplateSeparationConstant = 1 / 112 := by
+  norm_num [TNLean.PEPS.AreaLaw.Geometry.birthTemplateSeparationConstant,
+    TNLean.PEPS.AreaLaw.Geometry.birthSeparationConstant]
+
+/--
+info: 'TNLean.PEPS.AreaLaw.Geometry.exists_threshold_birthSeparation'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+---
+info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms TNLean.PEPS.AreaLaw.Geometry.exists_threshold_birthSeparation
 
 /--
 info: 'TNLean.PEPS.AreaLaw.Geometry.exists_birthSeparation'

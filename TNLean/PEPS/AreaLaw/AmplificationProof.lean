@@ -12,7 +12,7 @@ import TNLean.PEPS.AreaLaw.Amplification.LatticeExcitedDecay
 import TNLean.PEPS.AreaLaw.Amplification.LatticeAncillaSites
 import TNLean.PEPS.AreaLaw.Amplification.SupportedPolarCorrection
 import TNLean.PEPS.AreaLaw.Amplification.RadiusBound
-import TNLean.PEPS.AreaLaw.Amplification.EntropyComparison
+import TNLean.Lattice.EntropyComparison
 import TNLean.PEPS.AreaLaw.Geometry.TemplateRows
 
 /-!
@@ -167,11 +167,9 @@ filter-locality tail of the positive constraints, in the form of
 `latticePositiveConstraints_of_locality`. Then the conclusion of `AmplificationBound` holds
 with the constant `C₂ = amplificationConstant q R J Δ C₀ C₃ c₃ M` and the threshold
 `max N₂ (Exponents.collarRadiusThreshold C₂ 1)`, `N₂ = amplificationThreshold q R J Δ C₀ C₃ c₃
-M`. Once QICLean provides the named filter-locality constants, `htail` is
-`SpectralFilter.norm_positiveConstraint_sub_map_le` with
-`C₃ = positiveConstraintLocalityConst p Δ J (localizationPrefactor R 2 2) (1 / 2)` and
-`c₃ = positiveConstraintLocalityRate p Δ (localizationVelocity R v_R (μ_R J)) (1 / 2)`,
-`p = 10⁶`. -/
+M`. At the named constants `C₃ = latticePositiveConstraintConst R J Δ p` and
+`c₃ = latticePositiveConstraintRate R J Δ p`, `p = 10⁶`, this is
+`amplificationBound_explicit`. -/
 theorem amplificationBound_of_locality {q R : ℕ} {J Δ C₀ C₃ c₃ : ℝ} (hΔ : 0 < Δ)
     (hC₀ : 0 < C₀) (hC₃ : 0 ≤ C₃) (hc₃ : 0 < c₃)
     (htail : ∀ {n : Type} [Fintype n] [DecidableEq n]
@@ -589,6 +587,90 @@ theorem amplificationBound_of_locality {q R : ℕ} {J Δ C₀ C₃ c₃ : ℝ} (
     hφ1 hη1 hU₁supp hU₁unit hn1 le_rfl hδ hdim X' hX').trans ?_
   exact mul_le_mul_of_nonneg_right (le_max_right _ _) (by positivity)
 
+/-- The constant `C₂` of Proposition 10.2 at the integer `M`, at the named filter-locality
+constants `C₃ = latticePositiveConstraintConst R J Δ p` and
+`c₃ = latticePositiveConstraintRate R J Δ p` of the positive constraints, `p = 10⁶`
+(`09-amplification.tex`, lines 453–499 and 541–569, with Proposition 4.3, `03-quasilocal.tex`,
+lines 220–334). It depends only on `q, R, J, Δ, C₀, M`. -/
+noncomputable def amplificationConstantExplicit (q R : ℕ) (J Δ C₀ : ℝ) (M : ℕ) : ℝ :=
+  amplificationConstant q R J Δ C₀
+    (latticePositiveConstraintConst R J Δ Exponents.amplificationPower)
+    (latticePositiveConstraintRate R J Δ Exponents.amplificationPower) M
+
+/-- The threshold `N₂` of Proposition 10.2 at the integer `M`, at the named filter-locality
+constants `C₃ = latticePositiveConstraintConst R J Δ p` and
+`c₃ = latticePositiveConstraintRate R J Δ p` of the positive constraints, `p = 10⁶`
+(`09-amplification.tex`, lines 304–322 and 453–499). It depends only on `q, R, J, Δ, C₀, M`. -/
+noncomputable def amplificationThresholdExplicit (q R : ℕ) (J Δ C₀ : ℝ) (M : ℕ) : ℕ :=
+  amplificationThreshold q R J Δ C₀
+    (latticePositiveConstraintConst R J Δ Exponents.amplificationPower)
+    (latticePositiveConstraintRate R J Δ Exponents.amplificationPower) M
+
+/-- **Proposition 10.2 at the named constants** (`prop:amplification`, `09-amplification.tex`
+lines 261–296, proof at lines 298–576), for the Hamiltonian parameters `q, R, J`, a gap
+`Δ > 0`, `C₀ > 0` and an integer `M`. The conclusion of `AmplificationBound` holds with the
+constant `C₂ = amplificationConstantExplicit q R J Δ C₀ M` and the threshold
+`max N₂ (Exponents.collarRadiusThreshold C₂ 1)`, `N₂ = amplificationThresholdExplicit q R J Δ C₀ M`.
+No sign condition on `J` is needed. -/
+theorem amplificationBound_explicit (q R : ℕ) {J Δ C₀ : ℝ} (hΔ : 0 < Δ) (hC₀ : 0 < C₀)
+    (M : ℕ) :
+    ∀ n : ℕ, 2 ≤ n → max (amplificationThresholdExplicit q R J Δ C₀ M)
+        (Exponents.collarRadiusThreshold (amplificationConstantExplicit q R J Δ C₀ M) 1) ≤ n →
+      ∀ Λ : Finset (ℤ × ℤ), ∀ h : LocalHamiltonian Λ q R J, ∀ E₀ : ℝ,
+        ∀ Ω : StateSpace Λ q, IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+          ∀ (A : Finset (Site Λ)) (T : Finset (ℤ × ℤ)),
+            ((A.filter fun x ↦ x.val ∈ ambientDilation T
+                ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊).card : ℝ) ≤
+              C₀ * (n : ℝ) ^ 2 →
+            ((edgeBoundary Λ (A.filter fun x ↦ x.val ∈ T)).card : ℝ) ≤ C₀ * n →
+            ((edgeBoundary Λ ((A.filter fun x ↦ x.val ∈ ambientDilation T
+                ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊) \
+                A.filter fun x ↦ x.val ∈ T)).card : ℝ) ≤ C₀ * n →
+            ((edgeBoundary Λ (A.filter fun x ↦ x.val ∈ ambientDilation T
+                ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)).card : ℝ) ≤
+              C₀ * n →
+            FiniteProduct.mutualInformation (fun _ : Site Λ ↦ Fin q) Ω
+                (A.filter fun x ↦ x.val ∈ T)
+                (A.filter fun x ↦ x.val ∈ ambientDilation T
+                  ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)ᶜ ≤
+              C₀ * (n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ)) →
+            ∃ r : ℕ, (r : ℝ) ≤ amplificationConstantExplicit q R J Δ C₀ M *
+                (n : ℝ) ^ (Exponents.radiusExponent : ℝ) ∧
+              (∀ X ⊆ A.filter (fun x ↦ x.val ∈ T), ∀ Jset : Finset (Site Λ),
+                Disjoint Jset (graphNeighborhood Λ (2 * r)
+                  (A.filter fun x ↦ x.val ∈ ambientDilation T
+                    ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)) →
+                FiniteProduct.mutualInformation (fun _ : Site Λ ↦ Fin q) Ω X Jset ≤
+                  amplificationConstantExplicit q R J Δ C₀ M * ((n : ℝ) ^ M)⁻¹) ∧
+              ((∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ A,
+                  (⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ : ℝ) +
+                      (n : ℝ) ^ (Exponents.beta : ℝ) <
+                    (Scan.ambientSupDistance t z : ℝ)) →
+                graphNeighborhood Λ (2 * r)
+                    (A.filter fun x ↦ x.val ∈ ambientDilation T
+                      ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊) ⊆ A) := by
+  have hpw : 1 ≤ Exponents.amplificationPower := by norm_num [Exponents.amplificationPower]
+  exact amplificationBound_of_locality (q := q) (R := R)
+    (C₃ := latticePositiveConstraintConst R J Δ Exponents.amplificationPower)
+    (c₃ := latticePositiveConstraintRate R J Δ Exponents.amplificationPower) hΔ hC₀
+    (latticePositiveConstraintConst_nonneg R J Δ Exponents.amplificationPower)
+    (latticePositiveConstraintRate_pos hpw R J hΔ)
+    (fun hH hΩ hh hhJ L hcontr hunit hherm hfix _ hl hτ =>
+      norm_latticePositiveConstraint_sub_map_le hpw R hΔ hH hΩ hh hhJ L hcontr hunit hherm hfix
+        hl hτ) M
+
+/-- **Proposition 10.2 at the named constants, as `AmplificationBoundAt`**
+(`prop:amplification`, `09-amplification.tex` lines 261–296). For `Δ > 0`, `C₀ > 0` and an
+integer `M`, the amplification bound holds with the constant
+`C₂ = amplificationConstantExplicit q R J Δ C₀ M` and the threshold
+`max N₂ (Exponents.collarRadiusThreshold C₂ 1)` of `amplificationBound_explicit`. -/
+theorem amplificationBoundAt_explicit (q R : ℕ) {J Δ C₀ : ℝ} (hΔ : 0 < Δ) (hC₀ : 0 < C₀)
+    (M : ℕ) :
+    AmplificationBoundAt q R J Δ C₀ M (amplificationConstantExplicit q R J Δ C₀ M)
+      (max (amplificationThresholdExplicit q R J Δ C₀ M)
+        (Exponents.collarRadiusThreshold (amplificationConstantExplicit q R J Δ C₀ M) 1)) :=
+  amplificationBound_explicit (J := J) q R hΔ hC₀ M
+
 /-- **Proposition 10.2** (`prop:amplification`, `09-amplification.tex` lines 261–296, proof at
 lines 298–576), for the Hamiltonian parameters `q, R, J` and every gap `Δ > 0`. Fix `C₀ > 0`
 and an integer `M ≥ 1`. Beyond a threshold chosen before the domain,
@@ -596,18 +678,10 @@ the Hamiltonian, the cut and the target, the collar hypotheses give an integer r
 `r ≤ C_M n^((1-ε)/α)` such that every part of `X = A ∩ T` has mutual information at most
 `C_M n^(-M)` with every set avoiding `N_{2r}(S₀)`, and `N_{2r}(S₀) ⊆ A` under the cut clearance
 `dist_∞(T, Z) > L + n^β`. The constant and the threshold are those of
-`amplificationBound_of_locality`. -/
+`amplificationBound_explicit`. -/
 theorem amplificationBound {q R : ℕ} {J Δ : ℝ} (hΔ : 0 < Δ) : AmplificationBound q R J Δ := by
   intro C₀ hC₀ M _
-  rcases le_or_gt 0 J with hJ | hJ
-  · obtain ⟨C₃, c₃, hC₃, hc₃, htail⟩ := exists_norm_positiveConstraint_sub_map_le
-      (by norm_num [Exponents.amplificationPower] : 1 ≤ Exponents.amplificationPower) hΔ hJ
-      (localizationPrefactor_nonneg R 2 2) (localizationVelocity_pos R (1 + 2 * R * (R + 1))
-        (((2 ^ ((1 + 2 * R * (R + 1)) - 1) : ℕ) : ℝ) * J)) one_half_pos
-    exact ⟨_, _, amplificationBound_of_locality hΔ hC₀ hC₃ hc₃ htail M⟩
-  · -- With `J < 0` no term satisfies `‖h‖ ≤ J`, so every pair of constants is admissible.
-    exact ⟨_, _, amplificationBound_of_locality (C₃ := 0) (c₃ := 1) hΔ hC₀ le_rfl one_pos
-      (fun _ _ _ hh => absurd ((norm_nonneg _).trans hh) (not_le.mpr hJ)) M⟩
+  exact ⟨_, _, amplificationBound_explicit (J := J) q R hΔ hC₀ M⟩
 
 /-- **Theorem 1.1 from Propositions 9.6 and 11.2.** With Proposition 10.2 proved, the uniform
 area law follows from the sublinear collar bound and the two-family decomposition. This is

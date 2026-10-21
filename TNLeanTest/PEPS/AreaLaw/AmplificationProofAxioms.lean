@@ -118,13 +118,13 @@ info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashC
 #print axioms TNLean.PEPS.AreaLaw.exists_supported_unitary_of_good_realization
 
 /--
-info: 'TNLean.PEPS.AreaLaw.mutualInformation_le_inv_pow_of_supported_unitary'
+info: 'TNLean.Lattice.mutualInformation_le_inv_pow_of_supported_unitary'
 depends on axioms: [propext, Classical.choice, Quot.sound]
 ---
 info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms TNLean.PEPS.AreaLaw.mutualInformation_le_inv_pow_of_supported_unitary
+#print axioms TNLean.Lattice.mutualInformation_le_inv_pow_of_supported_unitary
 
 /--
 info: 'TNLean.PEPS.AreaLaw.exists_amplificationRadius_le'
@@ -170,3 +170,12 @@ info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashC
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms Matrix.conjTranspose_contractionWord_mulVec_self
+
+/--
+info: 'TNLean.PEPS.AreaLaw.amplificationBound_explicit'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+---
+info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms TNLean.PEPS.AreaLaw.amplificationBound_explicit

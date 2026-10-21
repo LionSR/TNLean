@@ -29,27 +29,61 @@ open TNLean.Lattice
 
 namespace TNLean.PEPS.AreaLaw
 
-/-- Localization on an arbitrary region, including an empty region or domain.
-The estimate follows by applying the one-site propagation bound at negative
-time and averaging over sites outside the region's graph neighbourhood.
+/-- The prefactor `C₀(R) = 2 e^R · 2 · 2² 2! e^{1/2} / (1 - e^{-1/2})` of the graph-ball
+localization bound for interactions of range `R`. The factor `2 e^R` comes from the chain
+bound and `2 · 2² 2! e^{1/2} / (1 - e^{-1/2})` from summing it over spheres of size at most
+`2 (d + 1)²` with decay rate `1/2`.
 
-Source: polynomial-PEPS `eq:info-operator-localization`. The displayed domain
-cardinality is sufficient for its square-grid specialization. -/
-theorem exists_quasilocal_region_localization (q : ℕ) (hq : 1 ≤ q)
-    (R : ℕ) (J : ℝ) :
-    ∃ C v c : ℝ, 0 < C ∧ 0 < v ∧ 0 < c ∧
-      ∀ (Λ : Finset (ℤ × ℤ)) (h : LocalHamiltonian Λ q R J)
-        (S : Finset (Site Λ)) (A : Matrix (Configuration Λ q) (Configuration Λ q) ℂ),
-        A ∈ supportedOperators q (S : Set (Site Λ)) → ∀ (l : ℕ) (t : ℝ),
-        ‖heisenbergEvolution h.operator t A -
-            siteExpectation q (graphNeighborhood Λ l S)
-              (heisenbergEvolution h.operator t A)‖ ≤
-          ‖A‖ * min 2 (C * (Λ.card : ℝ) * Real.exp (v * |t| - c * l)) := by
-  obtain ⟨C, v, c, hC, hv, hc, hlocal⟩ :=
-    exists_quasilocal_lieb_robinson q hq R J
-  refine ⟨2 * C, v, c, by positivity, hv, hc, ?_⟩
-  intro Λ h S A hA l t
+Source: OpenAI area law, Lemma 4.1, `eq:quasilocal-lr-ce` (`03-quasilocal.tex`,
+lines 117–128); used for the constant `C` of `eq:info-lr` (polynomial-PEPS,
+`02-information.tex`, lines 486–496). -/
+noncomputable def graphBallLocalizationPrefactor (R : ℕ) : ℝ :=
+  2 * Real.exp R * 2 * (2 ^ 2 * Nat.factorial 2 * Real.exp (1 / 2) / (1 - Real.exp (-(1 / 2))))
+
+/-- The velocity `2 v_R μ_R J e^{2R}` of the graph-ball localization bound for interactions
+of range `R` and term-norm bound `J`, with `v_R = 1 + 2R(R + 1)` sites per support and
+`μ_R = 2^{v_R - 1}` supports through a site.
+
+Source: OpenAI area law, Lemma 4.1 (`03-quasilocal.tex`, lines 70–112), with the budget
+`eq:quasilocal-budget` (lines 31–39); used for the velocity `v` of `eq:info-lr`
+(polynomial-PEPS, `02-information.tex`, lines 486–496). -/
+noncomputable def graphBallLocalizationVelocity (R : ℕ) (J : ℝ) : ℝ :=
+  2 * (1 + 2 * R * (R + 1) : ℕ) * ((2 ^ ((1 + 2 * R * (R + 1)) - 1) : ℕ) * J) *
+    Real.exp (2 * R)
+
+theorem graphBallLocalizationPrefactor_pos (R : ℕ) : 0 < graphBallLocalizationPrefactor R := by
+  have h : Real.exp (-(1 / 2)) < 1 := Real.exp_lt_one_iff.mpr (by norm_num)
+  have : 0 < 1 - Real.exp (-(1 / 2)) := by linarith
+  unfold graphBallLocalizationPrefactor
+  positivity
+
+theorem graphBallLocalizationVelocity_nonneg (R : ℕ) {J : ℝ} (hJ : 0 ≤ J) :
+    0 ≤ graphBallLocalizationVelocity R J := by
+  unfold graphBallLocalizationVelocity
+  positivity
+
+/-- **Localization on an arbitrary region, with explicit constants.** For a finite-range
+Hamiltonian of range `R` and term-norm bound `J` on a finite domain `Λ`, an operator `A`
+supported on `S` satisfies
+`‖τ_t(A) - E_{N_l(S)}(τ_t(A))‖ ≤ ‖A‖ min(2, 2 C₀(R) |Λ| e^{v(R, J)|t| - l/2})`, where
+`C₀(R)` is `graphBallLocalizationPrefactor R` and `v(R, J)` is
+`graphBallLocalizationVelocity R J`. It applies the one-site graph-ball bound at negative
+time and averages over sites outside the graph neighbourhood of `S`; the region may be empty.
+
+Source: polynomial-PEPS `eq:info-operator-localization` (`02-information.tex`,
+lines 498–508), with the constants of OpenAI area law, Lemma 4.1. -/
+theorem quasilocal_region_localization (q : ℕ) (hq : 1 ≤ q) (R : ℕ) (J : ℝ)
+    (Λ : Finset (ℤ × ℤ)) (h : LocalHamiltonian Λ q R J) (S : Finset (Site Λ))
+    (A : Matrix (Configuration Λ q) (Configuration Λ q) ℂ)
+    (hA : A ∈ supportedOperators q (S : Set (Site Λ))) (l : ℕ) (t : ℝ) :
+    ‖heisenbergEvolution h.operator t A -
+        siteExpectation q (graphNeighborhood Λ l S) (heisenbergEvolution h.operator t A)‖ ≤
+      ‖A‖ * min 2 (2 * graphBallLocalizationPrefactor R * (Λ.card : ℝ) *
+        Real.exp (graphBallLocalizationVelocity R J * |t| - 1 / 2 * l)) := by
   classical
+  set C := graphBallLocalizationPrefactor R
+  set v := graphBallLocalizationVelocity R J
+  have hC : 0 < C := graphBallLocalizationPrefactor_pos R
   have hdisj (y : Site Λ) (hy : y ∉ graphNeighborhood Λ l S) :
       Disjoint (S : Set (Site Λ)) (graphBall (domainGraph Λ) y l : Set (Site Λ)) :=
     Set.disjoint_left.mpr fun x hxS hxball =>
@@ -73,11 +107,12 @@ theorem exists_quasilocal_region_localization (q : ℕ) (hq : 1 ≤ q)
       ‖heisenbergEvolution h.operator (-t) U -
         siteExpectation q (graphBall (domainGraph Λ) y l)
           (heisenbergEvolution h.operator (-t) U)‖ ≤
-        C * Real.exp (v * |t| - c * l) := by
-    have hestimate := (hlocal Λ h ⟨{y}, isAdmissibleSupport_singleton Λ R y⟩ y
-      (Finset.mem_singleton_self y) U
-      (by simpa only [Finset.coe_singleton] using hU) (-t)).2 l
-    rw [CStarRing.norm_of_mem_unitary hUu, one_mul, abs_neg] at hestimate
+        C * Real.exp (v * |t| - 1 / 2 * l) := by
+    have hestimate := h.norm_sub_siteExpectation_graphBall_le
+      ⟨{y}, isAdmissibleSupport_singleton Λ R y⟩ (Finset.mem_singleton_self y)
+      (by simpa only [Finset.coe_singleton] using hU) l (-t)
+    rw [CStarRing.norm_of_mem_unitary hUu, one_mul, abs_neg,
+      show (l : ℝ) / 2 = 1 / 2 * l by ring] at hestimate
     exact hestimate.trans (min_le_right _ _)
   have hcommute (y : Site Λ) (hy : y ∉ graphNeighborhood Λ l S)
       (U : Matrix (Configuration Λ q) (Configuration Λ q) ℂ) :
@@ -91,7 +126,7 @@ theorem exists_quasilocal_region_localization (q : ℕ) (hq : 1 ≤ q)
       (hUu : U ∈ unitary (Matrix (Configuration Λ q) (Configuration Λ q) ℂ)) :
       ‖heisenbergEvolution h.operator t A * U -
         U * heisenbergEvolution h.operator t A‖ ≤
-        2 * (C * Real.exp (v * |t| - c * l)) * ‖A‖ := by
+        2 * (C * Real.exp (v * |t| - 1 / 2 * l)) * ‖A‖ := by
     simpa only [Matrix.mul_sub, Matrix.sub_mul, (hcommute y hy U).eq,
       sub_sub_sub_cancel_right, hreverse U] using
       (norm_commutator_le A (heisenbergEvolution h.operator (-t) U -
@@ -101,12 +136,12 @@ theorem exists_quasilocal_region_localization (q : ℕ) (hq : 1 ≤ q)
           (mul_le_mul_of_nonneg_left (hnear y U hU hUu) zero_le_two) (norm_nonneg A))
   have hExp : ‖heisenbergEvolution h.operator t A -
       siteExpectation q (graphNeighborhood Λ l S) (heisenbergEvolution h.operator t A)‖ ≤
-      ‖A‖ * (2 * C * (Λ.card : ℝ) * Real.exp (v * |t| - c * l)) := by
+      ‖A‖ * (2 * C * (Λ.card : ℝ) * Real.exp (v * |t| - 1 / 2 * l)) := by
     simpa only [Finset.sum_const, Finset.card_univ, Fintype.card_coe, nsmul_eq_mul,
       mul_assoc, mul_comm, mul_left_comm] using
       (norm_sub_siteExpectation_le (graphNeighborhood Λ l S)
         (heisenbergEvolution h.operator t A)
-        (fun _ ↦ 2 * (C * Real.exp (v * |t| - c * l)) * ‖A‖) hε).trans
+        (fun _ ↦ 2 * (C * Real.exp (v * |t| - 1 / 2 * l)) * ‖A‖) hε).trans
         (Finset.sum_le_univ_sum_of_nonneg (fun _ ↦ by positivity))
   have hτnorm : ‖heisenbergEvolution h.operator t A‖ = ‖A‖ :=
     letI : NormedAlgebra ℚ (Matrix (Configuration Λ q) (Configuration Λ q) ℂ) :=
@@ -124,5 +159,30 @@ theorem exists_quasilocal_region_localization (q : ℕ) (hq : 1 ≤ q)
     simpa only [hτnorm, mul_two] using (le_refl (‖A‖ + ‖A‖))
   rw [mul_min_of_nonneg _ _ (norm_nonneg A)]
   exact le_min hTwo hExp
+
+/-- Localization on an arbitrary region, including an empty region or domain, with
+positive constants chosen before the domain, Hamiltonian, region and operator. It is the
+explicit `TNLean.PEPS.AreaLaw.quasilocal_region_localization`, with the velocity raised to
+be positive.
+
+Source: polynomial-PEPS `eq:info-operator-localization`. The displayed domain
+cardinality is sufficient for its square-grid specialization. -/
+theorem exists_quasilocal_region_localization (q : ℕ) (hq : 1 ≤ q)
+    (R : ℕ) (J : ℝ) :
+    ∃ C v c : ℝ, 0 < C ∧ 0 < v ∧ 0 < c ∧
+      ∀ (Λ : Finset (ℤ × ℤ)) (h : LocalHamiltonian Λ q R J)
+        (S : Finset (Site Λ)) (A : Matrix (Configuration Λ q) (Configuration Λ q) ℂ),
+        A ∈ supportedOperators q (S : Set (Site Λ)) → ∀ (l : ℕ) (t : ℝ),
+        ‖heisenbergEvolution h.operator t A -
+            siteExpectation q (graphNeighborhood Λ l S)
+              (heisenbergEvolution h.operator t A)‖ ≤
+          ‖A‖ * min 2 (C * (Λ.card : ℝ) * Real.exp (v * |t| - c * l)) := by
+  refine ⟨2 * graphBallLocalizationPrefactor R, max (graphBallLocalizationVelocity R J) 1,
+    1 / 2, mul_pos two_pos (graphBallLocalizationPrefactor_pos R),
+    lt_max_of_lt_right one_pos, one_half_pos, fun Λ h S A hA l t ↦ ?_⟩
+  have hP := graphBallLocalizationPrefactor_pos R
+  refine (quasilocal_region_localization q hq R J Λ h S A hA l t).trans ?_
+  gcongr
+  exact le_max_left _ _
 
 end TNLean.PEPS.AreaLaw

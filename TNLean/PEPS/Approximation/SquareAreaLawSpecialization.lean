@@ -32,7 +32,12 @@ specialization is `TNLean.PEPS.AreaLaw.squareEntropyAreaLaw`.
 * `finiteProductEntropy_relabel`: regional entropy is unchanged by relabeling sites.
 * `card_edgeBoundary_rectangle`: original crossing edges and integer-domain
   crossing edges have the same number.
-* `SquareEntropyAreaLaw`: the range-one square-grid area law, as a proposition.
+* `SquareEntropyAreaLawAt`: the square-grid area law for a family of states at a given
+  constant.
+* `SquareEntropyAreaLaw`: the range-one square-grid area law, as a proposition: some
+  constant works for the ground states at every admissible `q`, `J` and `Δ`.
+* `finiteProductEntropy_le_of_areaLawBound`: a range-one finite-domain area-law constant
+  bounds the square-grid entropies.
 * `AreaLaw.UniformAreaLaw.squareEntropyAreaLaw`: the uniform finite-domain area
   law implies the square-grid specialization.
 
@@ -144,6 +149,21 @@ theorem card_edgeBoundary_rectangle {L : ℕ} (A : Finset (Vertex L)) :
         · rfl
         · exact Sym2.eq_swap
 
+/-- The square-grid entropy area law at fixed local dimension `q` for the family of states `G`,
+with the given constant `C_A ≥ 0`: the entropy of every region of every state of the family `G`
+is at most `C_A` times the number of original edges crossing the cut. Proposition 2.1
+concerns the family `IsSquareGroundState q J Δ` of unit gapped ground vectors.
+`SquareEntropyAreaLaw` asserts that some such constant exists for that family for all
+`q ≥ 2` and `J, Δ > 0`.
+
+Source: polynomial-PEPS Proposition 2.1 (`prop:area-law`),
+`01-preliminaries.tex`, lines 39–52. -/
+def SquareEntropyAreaLawAt (q : ℕ) (G : ∀ L : ℕ, StateSpace L q → Prop) (C_A : ℝ) : Prop :=
+  0 ≤ C_A ∧
+    ∀ L : ℕ, ∀ Ω : StateSpace L q, G L Ω → ∀ A : Finset (Vertex L),
+        FiniteProduct.entropy (fun _ : Vertex L ↦ Fin q) Ω A ≤
+          C_A * Fintype.card {e : Edge (squareLatticeGraph L L) // IsRegionBoundaryEdge A e}
+
 /-- The square-grid entropy area law of the polynomial-PEPS paper: for fixed
 `q ≥ 2` and `J, Δ > 0`, one constant `C_A ≥ 0` bounds the entropy of every
 region of every unit gapped ground vector of every open-square Hamiltonian of
@@ -155,17 +175,36 @@ Source: polynomial-PEPS Proposition 2.1 (`prop:area-law`),
 not a proof of that theorem. -/
 def SquareEntropyAreaLaw : Prop :=
   ∀ q : ℕ, 2 ≤ q → ∀ J Δ : ℝ, 0 < J → 0 < Δ →
-    ∃ C : ℝ, 0 ≤ C ∧
-      ∀ L : ℕ, ∀ h : SquareHamiltonian L q J, ∀ E₀ : ℝ, ∀ Ω : StateSpace L q,
-        h.IsGappedGroundState E₀ Ω Δ → ∀ A : Finset (Vertex L),
-          FiniteProduct.entropy (fun _ : Vertex L ↦ Fin q) Ω A ≤
-            C * Fintype.card {e : Edge (squareLatticeGraph L L) // IsRegionBoundaryEdge A e}
+    ∃ C_A : ℝ, SquareEntropyAreaLawAt q (IsSquareGroundState q J Δ) C_A
+
+/-- The square-grid bound at a given constant: if the constant `C` bounds the entropy of
+every cut of every finite induced domain, for every gapped ground vector of every range-one
+Hamiltonian with term bound `J`, then the same `C` bounds the entropy of every region of
+every gapped ground vector of every open-square Hamiltonian by `C` times the number of
+original edges crossing the cut. The original Hamiltonian is placed on the integer rectangle
+with its Hermitian interaction parts, and the ground vector, gap, entropies, and crossing
+edges are transported along the coordinate bijection.
+Source: polynomial-PEPS Proposition 2.1 (`01-preliminaries.tex`, lines 39–58), derived from
+area-law Theorem 1.1 and Corollary 1.2. -/
+theorem finiteProductEntropy_le_of_areaLawBound {q : ℕ} {J Δ C : ℝ}
+    (hbound : ∀ Λ : Finset (ℤ × ℤ), ∀ h : Lattice.LocalHamiltonian Λ q 1 J, ∀ E₀ : ℝ,
+      ∀ Ω : Lattice.StateSpace Λ q, Lattice.IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+        ∀ A : Finset (Lattice.Site Λ),
+          Lattice.regionalEntropy Λ q Ω A ≤ C * (Lattice.edgeBoundary Λ A).card)
+    {L : ℕ} (h : SquareHamiltonian L q J) {E₀ : ℝ} {Ω : StateSpace L q}
+    (hΩ : h.IsGappedGroundState E₀ Ω Δ) (A : Finset (Vertex L)) :
+    FiniteProduct.entropy (fun _ : Vertex L ↦ Fin q) Ω A ≤
+      C * Fintype.card {e : Edge (squareLatticeGraph L L) // IsRegionBoundaryEdge A e} := by
+  have hgap := h.isGappedGroundState_toAreaLawHamiltonian hΩ
+  have := hbound (AreaLaw.rectangularDomain L L) h.toAreaLawHamiltonian E₀
+    (squareAreaLawState Ω) hgap (A.map (AreaLaw.rectangleSiteEquiv L L).toEmbedding)
+  rw [Lattice.regionalEntropy_eq_finiteProduct, card_edgeBoundary_rectangle] at this
+  exact (finiteProductEntropy_relabel (AreaLaw.rectangleSiteEquiv L L) q Ω A).symm.trans_le
+    this
 
 /-- The uniform finite-domain area law at range one implies the square-grid
-specialization, with the constant `C(q, 1, J, Δ)` of the finite-domain statement.
-The original Hamiltonian is placed on the integer rectangle with its Hermitian
-interaction parts, and the ground vector, gap, entropies, and crossing edges are
-transported along the coordinate bijection.
+specialization, with the constant `C(q, 1, J, Δ)` of the finite-domain statement; see
+`finiteProductEntropy_le_of_areaLawBound`.
 Source: polynomial-PEPS Proposition 2.1 (`01-preliminaries.tex`, lines 39–58),
 derived from area-law Theorem 1.1 and Corollary 1.2. The uniform
 finite-domain area law is an explicit hypothesis. -/
@@ -173,12 +212,6 @@ theorem _root_.TNLean.PEPS.AreaLaw.UniformAreaLaw.squareEntropyAreaLaw
     (harea : AreaLaw.UniformAreaLaw) : SquareEntropyAreaLaw := by
   intro q hq J Δ hJ hΔ
   obtain ⟨C, hC, hbound⟩ := harea q (by omega) 1 J Δ hJ hΔ
-  refine ⟨C, hC, fun L h E₀ Ω hΩ A ↦ ?_⟩
-  have hgap := h.isGappedGroundState_toAreaLawHamiltonian hJ.le hΩ
-  have := hbound (AreaLaw.rectangularDomain L L) (h.toAreaLawHamiltonian hJ.le) E₀
-    (squareAreaLawState Ω) hgap (A.map (AreaLaw.rectangleSiteEquiv L L).toEmbedding)
-  rw [Lattice.regionalEntropy_eq_finiteProduct, card_edgeBoundary_rectangle] at this
-  exact (finiteProductEntropy_relabel (AreaLaw.rectangleSiteEquiv L L) q Ω A).symm.trans_le
-    this
+  exact ⟨C, hC, fun _ _ ⟨h, _, hΩ⟩ A ↦ finiteProductEntropy_le_of_areaLawBound hbound h hΩ A⟩
 
 end TNLean.PEPS.Approximation

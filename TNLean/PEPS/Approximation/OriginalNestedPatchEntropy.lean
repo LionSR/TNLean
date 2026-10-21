@@ -35,50 +35,34 @@ open TNLean.Lattice
 
 namespace TNLean.PEPS.Approximation
 
-/-- The square-grid entropy area law at fixed local dimension `q`, interaction
-bound `J` and gap `Δ`, with the given constant `C_A ≥ 0`: the entropy of every
-region of every unit gapped ground vector of every open-square Hamiltonian is
-at most `C_A` times the number of original edges crossing the cut.
-`SquareEntropyAreaLaw` asserts that some such constant exists for all
-`q ≥ 2` and `J, Δ > 0`.
-
-Source: polynomial-PEPS Proposition 2.1 (`prop:area-law`),
-`01-preliminaries.tex`, lines 39–52. -/
-def SquareEntropyAreaLawAt (q : ℕ) (J Δ C_A : ℝ) : Prop :=
-  0 ≤ C_A ∧
-    ∀ L : ℕ, ∀ h : SquareHamiltonian L q J, ∀ E₀ : ℝ, ∀ Ω : StateSpace L q,
-      h.IsGappedGroundState E₀ Ω Δ → ∀ A : Finset (Vertex L),
-        FiniteProduct.entropy (fun _ : Vertex L ↦ Fin q) Ω A ≤
-          C_A * Fintype.card {e : Edge (squareLatticeGraph L L) // IsRegionBoundaryEdge A e}
-
 /-- The square entropy area law supplies a constant at each admissible `q`, `J`
 and `Δ` (`01-preliminaries.tex`, lines 39–52). -/
 theorem SquareEntropyAreaLaw.exists_squareEntropyAreaLawAt
     (harea : SquareEntropyAreaLaw) {q : ℕ} (hq : 2 ≤ q)
     {J Δ : ℝ} (hJ : 0 < J) (hΔ : 0 < Δ) :
-    ∃ C_A : ℝ, SquareEntropyAreaLawAt q J Δ C_A :=
+    ∃ C_A : ℝ, SquareEntropyAreaLawAt q (IsSquareGroundState q J Δ) C_A :=
   harea q hq J Δ hJ hΔ
 
-/-- The original-state entropy of every selected nested square is at most
-`C_S * (1 + u)` with `C_S = max 1 (16 * C_A)`, for a square entropy area law at
-the constant `C_A`. Empty sampled squares, repeated samples, zero lattice size,
-and `u = 0` are included.
+/-- The original-state entropy of every sampled closed square of radius `0 ≤ r ≤ 2 u` is at
+most `C_S * (1 + u)` with `C_S = max 1 (16 * C_A)`, for every state of a family `G` obeying the
+square entropy area law at the constant `C_A`. This is the common estimate behind the selected
+squares of every nested family whose radii lie in `[u, 2 u]`; empty sampled squares are included.
 
-Source: polynomial-PEPS manuscript, `03-patches.tex`, lines 362–368; the square
-entropy area law at `C_A` is the explicit premise supplied by Proposition 2.1. -/
-theorem SquareEntropyAreaLawAt.nestedPatch_entropy_le
-    {q : ℕ} {J Δ C_A : ℝ} (hA : SquareEntropyAreaLawAt q J Δ C_A) :
-    ∀ (L : ℕ) (h : SquareHamiltonian L q J) (E₀ : ℝ) (Ω : StateSpace L q),
-      h.IsGappedGroundState E₀ Ω Δ →
-      ∀ (z : ℝ × ℝ) (u : ℝ), 0 ≤ u →
-        ∀ j : Fin (AreaLaw.Geometry.nestedPatchCount u),
-          Entropy.regionEntropy
-            (AreaLaw.Geometry.nestedPatch (AreaLaw.rectangularDomain L L) z u j.val)
-            (squareAreaLawState Ω) ≤ max 1 (16 * C_A) * (1 + u) := by
-  intro L h E₀ Ω hgs z u hu j
+Source: polynomial-PEPS manuscript, `03-patches.tex`, lines 362–368 with the boundary count of
+lines 323–326; the square entropy area law at `C_A` is the explicit premise supplied by
+Proposition 2.1. -/
+theorem SquareEntropyAreaLawAt.closedSquareSample_entropy_le
+    {q : ℕ} {G : ∀ L : ℕ, StateSpace L q → Prop} {C_A : ℝ}
+    (hA : SquareEntropyAreaLawAt q G C_A) :
+    ∀ (L : ℕ) (Ω : StateSpace L q), G L Ω →
+      ∀ (z : ℝ × ℝ) (u r : ℝ), 0 ≤ r → r ≤ 2 * u →
+        Entropy.regionEntropy
+          (AreaLaw.Geometry.closedSquareSample (AreaLaw.rectangularDomain L L) z r)
+          (squareAreaLawState Ω) ≤ max 1 (16 * C_A) * (1 + u) := by
+  intro L Ω hΩ z u r hr hru
   obtain ⟨hCA, hA⟩ := hA
-  let D := AreaLaw.Geometry.nestedPatch (AreaLaw.rectangularDomain L L) z u j.val
-  have hcut := hA L h E₀ Ω hgs
+  let D := AreaLaw.Geometry.closedSquareSample (AreaLaw.rectangularDomain L L) z r
+  have hcut := hA L Ω hΩ
     (D.map (AreaLaw.rectangleSiteEquiv L L).symm.toEmbedding)
   rw [← finiteProductEntropy_relabel (AreaLaw.rectangleSiteEquiv L L) q Ω,
     ← card_edgeBoundary_rectangle] at hcut
@@ -88,11 +72,34 @@ theorem SquareEntropyAreaLawAt.nestedPatch_entropy_le
       C_A * (Lattice.edgeBoundary (AreaLaw.rectangularDomain L L) D).card := by
     simpa only [Entropy.regionEntropy_eq_entropy, squareAreaLawState,
       AreaLaw.rectangleConfigurationEquiv] using hcut
-  refine (hbound.trans (mul_le_mul_of_nonneg_left
-    (AreaLaw.Geometry.card_edgeBoundary_nestedPatch_le
-      (AreaLaw.rectangularDomain L L) z hu j.isLt) hCA)).trans ?_
+  have hu : 0 ≤ u := by linarith
+  have hedge : ((Lattice.edgeBoundary (AreaLaw.rectangularDomain L L) D).card : ℝ) ≤
+      16 * u + 4 := by
+    linarith [AreaLaw.Geometry.card_edgeBoundary_closedSquareSample_le
+      (AreaLaw.rectangularDomain L L) z hr]
+  refine (hbound.trans (mul_le_mul_of_nonneg_left hedge hCA)).trans ?_
   nlinarith [mul_le_mul_of_nonneg_right (le_max_right (1 : ℝ) (16 * C_A))
     (show 0 ≤ 1 + u by positivity)]
+
+/-- The original-state entropy of every selected nested square is at most
+`C_S * (1 + u)` with `C_S = max 1 (16 * C_A)`, for every state of a family `G` obeying the
+square entropy area law at the constant `C_A`. Empty sampled squares, repeated samples, zero
+lattice size, and `u = 0` are included.
+
+Source: polynomial-PEPS manuscript, `03-patches.tex`, lines 362–368; the square
+entropy area law at `C_A` is the explicit premise supplied by Proposition 2.1. -/
+theorem SquareEntropyAreaLawAt.nestedPatch_entropy_le
+    {q : ℕ} {G : ∀ L : ℕ, StateSpace L q → Prop} {C_A : ℝ}
+    (hA : SquareEntropyAreaLawAt q G C_A) :
+    ∀ (L : ℕ) (Ω : StateSpace L q), G L Ω →
+      ∀ (z : ℝ × ℝ) (u : ℝ), 0 ≤ u →
+        ∀ j : Fin (AreaLaw.Geometry.nestedPatchCount u),
+          Entropy.regionEntropy
+            (AreaLaw.Geometry.nestedPatch (AreaLaw.rectangularDomain L L) z u j.val)
+            (squareAreaLawState Ω) ≤ max 1 (16 * C_A) * (1 + u) := fun L Ω hΩ z u hu j ↦
+  hA.closedSquareSample_entropy_le L Ω hΩ z u _
+    (hu.trans (AreaLaw.Geometry.le_nestedPatchRadius u j.val))
+    (AreaLaw.Geometry.nestedPatchRadius_le_two_mul hu j.isLt)
 
 /-- The original-state entropy of every selected nested square is at most
 `C_S * (1 + u)`, for one `C_S ≥ 1` independent of the physical instance and the
@@ -105,8 +112,7 @@ theorem SquareEntropyAreaLaw.exists_nestedPatch_entropy_le
     (harea : SquareEntropyAreaLaw) {q : ℕ} (hq : 2 ≤ q)
     {J Δ : ℝ} (hJ : 0 < J) (hΔ : 0 < Δ) :
     ∃ C_S : ℝ, 1 ≤ C_S ∧
-      ∀ (L : ℕ) (h : SquareHamiltonian L q J) (E₀ : ℝ) (Ω : StateSpace L q),
-        h.IsGappedGroundState E₀ Ω Δ →
+      ∀ (L : ℕ) (Ω : StateSpace L q), IsSquareGroundState q J Δ L Ω →
         ∀ (z : ℝ × ℝ) (u : ℝ), 0 ≤ u →
           ∀ j : Fin (AreaLaw.Geometry.nestedPatchCount u),
             Entropy.regionEntropy

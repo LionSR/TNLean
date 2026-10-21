@@ -3,10 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.AreaLaw.BoundaryTheoremFromTwoFamilies
-import TNLean.PEPS.AreaLaw.Geometry.TwoFamilyAssembly
-import TNLean.PEPS.AreaLaw.RectangularSpecialization
-import TNLean.PEPS.AreaLaw.VertexBoundaryCorollaries
+import TNLean.PEPS.AreaLaw.AreaLawExplicitConstant
 
 /-!
 # The two-dimensional area law
@@ -20,7 +17,8 @@ rectangles.
 
 ## Main results
 
-* `uniformAreaLaw`: Theorem 1.1.
+* `uniformAreaLaw`: Theorem 1.1, as a corollary of `uniformAreaLaw_closed`, the bound with
+  the closed-form constant `uniformAreaLawConstantClosed`.
 * `uniformAreaLaw_vertex_boundary_bounds`, `rectangularEntropyAreaLaw`:
   Corollary 1.2.
 * `squareEntropyAreaLaw`: the square-grid specialization used by the
@@ -34,6 +32,9 @@ rectangles.
   lines 803–857. Source revision:
   `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 
+The explicit constant is recorded in `docs/notes/arealaw2d_explicit_constant.tex`
+(Section `sec:top`).
+
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
@@ -43,10 +44,13 @@ namespace TNLean.PEPS.AreaLaw
 
 /-- Theorem 1.1 of the area-law manuscript, `00-introduction.tex`, lines 39–53:
 the uniform boundary law for gapped ground states on finite induced domains of
-the square lattice. -/
-theorem uniformAreaLaw : UniformAreaLaw :=
-  uniformAreaLaw_of_twoFamilies fun R ↦
-    ⟨2 * R + 11, 24, by linarith, le_rfl, twoFamilyDecomposition _ _⟩
+the square lattice. It is a corollary of `uniformAreaLaw_closed`: the constant is the
+closed-form constant `uniformAreaLawConstantClosed q R J Δ`, so no constant of the proof is
+chosen by an existence statement. Source: proof of Theorem 1.1, `10-geometry.tex`,
+lines 803–857. -/
+theorem uniformAreaLaw : UniformAreaLaw := by
+  intro q hq R J Δ hJ hΔ
+  exact ⟨uniformAreaLawConstantClosed q R J Δ, uniformAreaLaw_closed q R hq hJ.le hΔ⟩
 
 /-- Corollary 1.2 of the area-law manuscript, `00-introduction.tex`, lines
 69–86: the uniform bound in terms of the inner and the endpoint vertex

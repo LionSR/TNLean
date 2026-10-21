@@ -773,6 +773,111 @@ Its marginals are those of the same final normalized vector defined in
     bounds this by $36q^2J\kappa^2$.
 \end{proof}
 
+The source treats on-site and nearest-neighbour interactions. The next three
+entries extend the energy bound to interactions of range $R\ge1$, using the
+patches of Definition~\ref{def:peps_range_nested_patches}; they are not in
+the source. Put $s_R=2\lceil R/2\rceil$, $v_R=1+2R(R+1)$ and
+$\mu_R=2^{v_R-1}$.
+
+\begin{definition}[Energy coefficient at range $R$]
+    \label{def:peps_range_patch_energy_constant}
+    \lean{TNLean.PEPS.Approximation.rangePatchEnergyConstant}
+    \leanok
+    \uses{def:peps_range_nested_patches}
+    For integers $q,R\ge0$ and real $J$, put
+    \begin{align}
+        C_E(q,R,J)=18\,s_R\,R\,\mu_R\,q^{2(v_R-1)}J.
+        \label{eq:peps_range_patch_energy_constant}
+    \end{align}
+\end{definition}
+
+\begin{lemma}[Sign of the energy coefficient at range $R$]
+    \label{lem:peps_range_patch_energy_constant_sign}
+    \lean{TNLean.PEPS.Approximation.rangePatchEnergyConstant_nonneg,
+        TNLean.PEPS.Approximation.rangePatchEnergyConstant_pos}
+    \leanok
+    \uses{def:peps_range_patch_energy_constant}
+    If $J\ge0$, then $C_E(q,R,J)\ge0$. If $q,R\ge1$ and $J>0$, then
+    $C_E(q,R,J)>0$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_range_nested_patch_sizes}
+    Every factor is nonnegative, and positive under the second set of
+    hypotheses, because $s_R\ge2$ for $R\ge1$.
+\end{proof}
+
+\begin{lemma}[Crossing sum of one patch at range $R$]
+    \label{lem:peps_range_patch_crossing_sum}
+    \lean{TNLean.PEPS.Approximation.sum_crossingTerms_rangeNestedPatch_le}
+    \leanok
+    \uses{def:area_law_hamiltonian,def:peps_range_nested_patches}
+    Let $J\ge0$, $u\ge0$ and $0\le j<m_R$, and index the terms by the
+    nonempty supports $D$ of graph diameter at most $R$. Then
+    \begin{align}
+        \sum_{D\text{ crossing }K_j}\bigl(q^{|D\cap K_j|}\bigr)^2J
+         & \le R(16u+4)\,\mu_R\,q^{2(v_R-1)}J.
+        \label{eq:peps_range_patch_crossing_sum}
+    \end{align}
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_square_layer,thm:peps_range_nested_patch_split,
+        thm:area_diamond_budget,thm:area_law_crossing_supports}
+    A support $D$ crossing $K_j$ has a site inside and a site outside, so
+    $1\le|D\cap K_j|\le|D|-1\le v_R-1$ and
+    $q^{|D\cap K_j|}\le q^{v_R-1}$, also when $q=0$. Each of its sites
+    inside $K_j$ lies in the inner layer $\mathcal N(c,r_j,R)$, which has at most
+    $R(16u+4)$ sites, and at most $\mu_R$ supports contain a given site.
+\end{proof}
+
+\begin{theorem}[Energy of a minimizing patch output at range $R$]
+    \label{thm:peps_range_nested_patch_minimizer_energy}
+    \lean{TNLean.Lattice.LocalHamiltonian.rangeNestedPatch_minimizer_energy_le}
+    \leanok
+    \uses{def:area_law_hamiltonian,def:area_law_ground_entropy,
+        def:peps_range_nested_patches,def:peps_regularized_patch_objective,
+        def:peps_regularized_patch_minimum,
+        def:peps_range_patch_energy_constant}
+    Let $\Lambda$ be a finite induced lattice domain, $R\ge1$ and $J\ge0$, and
+    let $H$ be a Hamiltonian on $\Lambda$ with one Hermitian term of norm at
+    most $J$ on each nonempty support of graph diameter at most $R$. Let
+    $\Psi$ be a unit vector and $E_0$ a real number with $H\Psi=E_0\Psi$ and
+    $H-E_0I\ge\Delta(I-|\Psi\rangle\langle\Psi|)$. Fix an order on the sites,
+    a centre $c$, and reals $u\ge0$, $0<\kappa\le1$ and $b>0$. Use the
+    patches $X_j=K(c,r_j)$, $0\le j<m_R$, of
+    Definition~\ref{def:peps_range_nested_patches}, with the equal weights
+    $a_j=\kappa/m_R$ and the input vector $\Psi$. If $x\in\mathcal D$
+    minimizes $F$ on $\mathcal D$ and $\phi=\widehat\Psi(x)$, then
+    \begin{align}
+        \operatorname{Re}\langle\phi,H\phi\rangle-E_0
+         & \le C_E(q,R,J)\,\kappa^2.
+        \label{eq:peps_range_nested_patch_minimizer_energy}
+    \end{align}
+    At $R=1$ the patches are those of
+    Theorem~\ref{thm:peps_nested_patch_minimizer_energy}, which keeps the
+    sharper coefficient $36q^2J$ for nearest-neighbour interactions.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_regularized_patch_minimum,
+        thm:peps_range_nested_patch_sizes,
+        thm:peps_patch_minimum_filter_log_ratio,
+        thm:peps_ordered_patch_normalized_coordinates,
+        thm:peps_patch_factor_chain_list,
+        thm:peps_range_nested_patch_split,
+        lem:peps_range_patch_crossing_sum,
+        thm:peps_range_nested_patch_quadratic_sum}
+    The argument of Theorem~\ref{thm:peps_nested_patch_minimizer_energy}
+    applies to the terms of $H$, since each support of graph diameter at most
+    $R$ is split by at most one patch. It gives
+    (\ref{eq:peps_nested_patch_single_crossing_energy}) with
+    $d_{ij}=q^{|D_i\cap X_j|}$. Lemma~\ref{lem:peps_range_patch_crossing_sum}
+    bounds each inner sum by $R(16u+4)\mu_Rq^{2(v_R-1)}J$, and
+    (\ref{eq:peps_range_nested_patch_budget}) bounds
+    $(16u+4)\sum_ja_j^2$ by $18s_R\kappa^2$.
+\end{proof}
+
 \begin{theorem}[Marginal closeness at an admissible filter parameter]
     \label{thm:peps_nested_patch_minimizer_marginal_closeness_explicit}
     \lean{TNLean.PEPS.Approximation.nestedPatch_minimizer_marginal_closeness}
@@ -855,6 +960,47 @@ Its marginals are those of the same final normalized vector defined in
     gives (\ref{eq:peps_nested_patch_marginal_closeness}).
 \end{proof}
 
+\begin{theorem}[Marginal closeness at range $R$]
+    \label{thm:peps_range_nested_patch_minimizer_marginal_closeness}
+    \lean{TNLean.PEPS.Approximation.rangeNestedPatch_minimizer_marginal_closeness,
+        TNLean.PEPS.Approximation.exists_uniform_rangeNestedPatch_minimizer_marginal_closeness}
+    \leanok
+    \uses{def:area_law_hamiltonian,def:peps_range_nested_patches,
+        def:peps_regularized_patch_objective,def:peps_patch_canonical_marginal,
+        def:peps_range_patch_energy_constant}
+    Let $q\ge0$ and $R\ge1$ be integers, $J\ge0$ and $\Delta>0$, and let
+    $0<\kappa\le\tfrac12$ satisfy $C_E(q,R,J)\kappa^2\le\Delta/1024$. For every
+    finite induced lattice domain $\Lambda$, every Hamiltonian $H$ on $\Lambda$
+    with one Hermitian term of norm at most $J$ on each nonempty support of
+    graph diameter at most $R$, every unit vector $\Psi$ and real $E_0$ with
+    $H\Psi=E_0\Psi$ and $H-E_0I\ge\Delta(I-|\Psi\rangle\langle\Psi|)$, every
+    centre $c$, and all reals $u\ge0$ and $b>0$, use the patches of
+    Definition~\ref{def:peps_range_nested_patches} with equal weights
+    $a_j=\kappa/m_R$ and input vector $\Psi$. If $x\in\mathcal D$ minimizes
+    $F$ on $\mathcal D$, then every region $X$ of $\Lambda$ satisfies
+    $\|\rho_X-\rho_X^{\Psi}\|_1\le\tfrac1{16}$, where $\rho_X$ is the marginal
+    of $\widehat\Psi(x)$. Such a $\kappa$ exists and depends only on $q$, $R$,
+    $J$ and $\Delta$; when $C_E(q,R,J)>0$ the filter exponent $\kappa_R$ of
+    Definition~\ref{def:peps_range_patch_filter_exponent} is such a
+    parameter. This extends
+    Theorem~\ref{thm:peps_nested_patch_minimizer_marginal_closeness} to
+    interactions of range $R$ and is not in the source.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_range_nested_patch_minimizer_energy,
+        lem:peps_range_patch_energy_parameter_choice,
+        lem:peps_range_patch_energy_constant_sign,
+        thm:peps_regularized_patch_minimum,
+        thm:peps_regional_basis_relabelling,
+        thm:peps_gap_marginal_one_sixteenth}
+    Theorem~\ref{thm:peps_range_nested_patch_minimizer_energy} and the choice
+    of $\kappa$ give $\operatorname{Re}\langle\phi,H\phi\rangle-E_0\le
+        \Delta/1024$, and the full-system gap converts this into the marginal
+    bound by Theorem~\ref{thm:peps_gap_marginal_one_sixteenth}.
+    If $C_E(q,R,J)=0$, take $\kappa=\tfrac12$.
+\end{proof}
+
 \begin{definition}[The radius exponent at an area-law constant]
     \label{def:peps_nested_patch_radius_exponent}
     \lean{TNLean.PEPS.Approximation.nestedPatchRadiusExponent}
@@ -869,6 +1015,38 @@ Its marginals are those of the same final normalized vector defined in
     \href{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex\#L362-L411}{proof of Proposition 4.1}.
 \end{definition}
 
+\begin{lemma}[Nested cylinders from marginal closeness and entropy]
+    \label{lem:peps_closed_square_cylinder_core}
+    \lean{TNLean.PEPS.Approximation.exists_closedSquare_cylinders_of_marginal_closeness}
+    \leanok
+    \uses{def:peps_closed_square_sample,def:peps_regularized_patch_objective,
+        def:peps_patch_canonical_marginal,def:peps_regional_cylinder,
+        def:peps_patch_radius_exponent}
+    Let $\Lambda$ be a finite induced lattice domain, $L\ge2$, $B_0,p,\kappa,C>0$,
+    $\Psi$ a unit vector, $c$ a centre, $0\le u\le B_0\log L$, and
+    $r_0\le\dots\le r_{m-1}$ with $m\ge1$. Put $X_j=K(c,r_j)$ and
+    $a_j=\kappa/m$. Assume $S_\Psi(X_j)\le C(1+u)$ for every $j$, and that for
+    every $b>0$ every minimizer of $F$ on $\mathcal D$ has all marginals
+    within trace distance $\tfrac1{16}$ of those of $\Psi$. Then there are
+    subspaces $S_j$ of the states on $X_j$ with $\dim S_j\le L^{R_0}$, where
+    $R_0$ is the radius exponent at $C_0=16C+\log8$, and a vector $v$ in the
+    sum of the cylinders $S_j\otimes\mathcal H_{X_j^c}$ with
+    $\|\Psi-v\|\le L^{-p}$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_patch_radius_bounds,
+        thm:peps_patch_minimum_growth_entropy_distance,
+        thm:peps_regularized_patch_minimum,thm:peps_patch_inverse_cylinder}
+    Set $R=R_0\log L$ and $b=e^{-R}$. The entropy bound and the marginal
+    closeness give $\log N(R)\le\frac\kappa2\bigl(C_0(1+u)+R/4\bigr)$. At a
+    minimizer, the first-head expansion of
+    Theorem~\ref{thm:peps_patch_inverse_cylinder} produces subspaces of
+    dimension at most $1/b=L^{R_0}$ and a vector in the sum of their
+    cylinders within $N(R)(2b)^{\kappa/2}$ of $\Psi$, and the radius bounds of
+    Theorem~\ref{thm:peps_patch_radius_bounds} turn this into $L^{-p}$.
+\end{proof}
+
 \begin{theorem}[Nested cylinders at a given area-law constant]
     \label{thm:peps_nested_patch_cylinder_approximation_explicit}
     \lean{TNLean.PEPS.Approximation.nestedPatchRadiusExponent_pos,
@@ -879,7 +1057,8 @@ Its marginals are those of the same final normalized vector defined in
         def:peps_nested_patches,def:peps_regional_cylinder,
         def:peps_nested_patch_radius_exponent}
     Let $q\ge2$ be an integer, $J,\Delta>0$ and $B_0,p>0$, and assume the
-    square-grid entropy area law at $q$, $J$, $\Delta$ with constant $C_A$.
+    square-grid entropy area law for the ground states of the model at $J$ and
+    $\Delta$ with constant $C_A$.
     Put $R_0=R_0(q,J,\Delta,B_0,p,C_A)$; then $R_0>0$. For every $L\ge2$,
     every original square Hamiltonian $H$ with interaction bound $J$, every
     unit vector $\Omega$ and real $E_0$ with $H\Omega=E_0\Omega$ and
@@ -895,28 +1074,19 @@ Its marginals are those of the same final normalized vector defined in
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:peps_nested_patch_minimizer_marginal_closeness_explicit,
+    \uses{lem:peps_closed_square_cylinder_core,
+        thm:peps_nested_patch_minimizer_marginal_closeness_explicit,
         lem:peps_patch_energy_parameter_choice,
         thm:peps_nested_patch_entropy_explicit,
-        thm:peps_patch_radius_bounds,
-        thm:peps_patch_minimum_growth_entropy_distance,
-        thm:peps_regularized_patch_minimum,thm:peps_patch_inverse_cylinder,
         thm:peps_nested_patch_sizes}
     Take $\kappa=\kappa(q,J,\Delta)$, which is admissible in
     Theorem~\ref{thm:peps_nested_patch_minimizer_marginal_closeness_explicit}
     by Lemma~\ref{lem:peps_patch_energy_parameter_choice}, and
     $C_S=\max\{1,16C_A\}$ from
     Theorem~\ref{thm:peps_nested_patch_entropy_explicit}. Positivity of $R_0$
-    follows from $\kappa>0$ and $C_0\ge0$. Set $R=R_0\log L$, $b=e^{-R}$ and
-    $a_j=\kappa/m$. The entropy bound and the marginal closeness at every
-    minimizer give the growth bound
-    $\log N(R)\le\frac\kappa2\bigl(C_0(1+u)+R/4\bigr)$. At a minimizer, the
-    first-head expansion of
-    Theorem~\ref{thm:peps_patch_inverse_cylinder} produces subspaces of
-    dimension at most $1/b=L^{R_0}$ and a vector in the sum of their
-    cylinders within $N(R)(2b)^{\kappa/2}$ of $U\Omega$. Taking logarithms,
-    the radius bounds of Theorem~\ref{thm:peps_patch_radius_bounds} turn this
-    into the error $L^{-p}$.
+    follows from $\kappa>0$ and $C_0\ge0$. The radii are nondecreasing, so
+    Lemma~\ref{lem:peps_closed_square_cylinder_core} applies to the vector
+    $U\Omega$.
 \end{proof}
 
 \begin{theorem}[Uniform approximation in the selected nested cylinders]

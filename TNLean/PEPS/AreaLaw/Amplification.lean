@@ -8,7 +8,6 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.PEPS.AreaLaw.Amplification
 
-import TNLean.PEPS.AreaLaw.Amplification.AncillaSiteEntropy
 import TNLean.PEPS.AreaLaw.Amplification.AncillaTransport
 import TNLean.PEPS.AreaLaw.Amplification.ChannelGroundVectors
 import TNLean.PEPS.AreaLaw.Amplification.ChannelShellOscillation
@@ -18,7 +17,6 @@ import TNLean.PEPS.AreaLaw.Amplification.ChannelWordThinning
 import TNLean.PEPS.AreaLaw.Amplification.ComponentChannelOscillation
 import TNLean.PEPS.AreaLaw.Amplification.ConstraintWordLists
 import TNLean.PEPS.AreaLaw.Amplification.ConstraintWordTruncation
-import TNLean.PEPS.AreaLaw.Amplification.EntropyComparison
 import TNLean.PEPS.AreaLaw.Amplification.ExponentialChannelShells
 import TNLean.PEPS.AreaLaw.Amplification.GoodRealization
 import TNLean.PEPS.AreaLaw.Amplification.GoodRealizationUnitary
