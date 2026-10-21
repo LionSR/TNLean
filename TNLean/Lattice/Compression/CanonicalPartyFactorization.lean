@@ -21,9 +21,11 @@ Source: polynomial-PEPS, `04-compression.tex`, lines 233–267 and 342–381.
 noncomputable section
 open scoped TensorProduct
 open ContinuousLinearMap
-namespace TNLean.PEPS.PairEffect
+namespace TNLean
+open TNLean.Lattice.PartyCircuit TNLean.PEPS.PairEffect
 variable {P : Type}
 
+namespace Lattice.PartyCircuit
 private theorem tensor_factorization {X X' Y Y' Z Z' : HSpace}
     (A : X →L[ℂ] X') (R : Y →L[ℂ] Y') (gi : Y ≃ₗᵢ[ℂ] Z)
     (go : Y' ≃ₗᵢ[ℂ] Z') (T : Z →L[ℂ] Z')
@@ -126,4 +128,5 @@ theorem Word.groupByPartyIso_eval_eq_tensorRestrictions {a b : Layout P}
       exact congrArg (fun M ↦ M ∘L isoL pi)
         (tensor_factorization A v.eval (gi.trans ei) (go.trans eo)
           (tensorPartyMaps a b B ps) htail)
-end TNLean.PEPS.PairEffect
+end Lattice.PartyCircuit
+end TNLean

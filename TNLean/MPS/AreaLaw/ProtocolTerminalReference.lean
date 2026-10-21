@@ -37,7 +37,7 @@ open scoped TensorProduct
 
 namespace TNLean.MPS.AreaLaw.ChainSweep
 
-open TNLean.Lattice TNLean.PEPS.PairEffect TNLean.PEPS.EncodedFrame
+open TNLean.Lattice TNLean.Lattice.PartyCircuit TNLean.Lattice.Sheet
 
 variable {L w q : ℕ}
 

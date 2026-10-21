@@ -22,6 +22,7 @@ Source: polynomial-PEPS manuscript (September 24, 2026), Theorem 5.2,
 noncomputable section
 open scoped TensorProduct
 namespace TNLean.PEPS.PairEffect
+open TNLean.Lattice.PartyCircuit
 
 private theorem partyGroupedBasis_map_memCongr
     {Q : Type} [Fintype Q] [DecidableEq Q]

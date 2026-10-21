@@ -18,7 +18,8 @@ Source: polynomial-PEPS manuscript (September 24, 2026), Theorem 5.2,
 -/
 
 noncomputable section
-namespace TNLean.PEPS.PairEffect.Word
+namespace TNLean.Lattice.PartyCircuit.Word
+open TNLean.PEPS.PairEffect
 variable {P Q : Type}
 
 private theorem parties_castInput {a b c : Layout P} (w : Word a b) (h : a = c) :
@@ -138,4 +139,4 @@ theorem restrict_localPart_mapOwner_eval_heq_id_of_disjoint (f : P → Q) (q : Q
     exact hf p (by simpa only [partySelector, decide_eq_true_eq] using hsel)
   exact (eq_nil_and_eval_eq_id_of_parties_eq_empty _ hp).2.2
 
-end TNLean.PEPS.PairEffect.Word
+end TNLean.Lattice.PartyCircuit.Word

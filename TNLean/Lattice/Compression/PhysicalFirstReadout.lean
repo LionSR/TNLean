@@ -35,10 +35,12 @@ Independently formalized; no upstream Lean proof text reused.
 
 noncomputable section
 open scoped TensorProduct
-namespace TNLean.PEPS.PairEffect
+namespace TNLean
+open TNLean.Lattice.PartyCircuit
 open ContinuousLinearMap
 variable {P X U V : Type} [Fintype X] [Fintype U] [Fintype V]
 
+namespace PEPS.PairEffect
 /-- The actual auxiliary-private garbage basis after exchanging output blocks.
 Source: polynomial-PEPS, `04-compression.tex`, lines 210–227 and 338–355. -/
 def exchangedGarbageBasis (aux priv : Layout P)
@@ -155,7 +157,9 @@ theorem partialTrace_physicalFirstReadout_exchange (aux physical priv : Layout P
   rw [physicalFirstReadout_exchange_outerProduct]
   exact (Matrix.partialTraceRight_submatrix_right (Equiv.prodComm U V) _).symm
 
-namespace SourceCircuit
+end PEPS.PairEffect
+namespace Lattice.PartyCircuit.SourceCircuit
+open TNLean.PEPS.PairEffect
 /-- The physical-first circuit has the physical density of the actual extended readout.
 Source: polynomial-PEPS, `04-compression.tex`, lines 210–227 and 338–355. -/
 theorem physicalDensity_physicalFirstOutput {n : Type} [Fintype n]
@@ -180,8 +184,9 @@ theorem physicalDensity_physicalFirstOutput {n : Type} [Fintype n]
   exact partialTrace_physicalFirstReadout_exchange aux physical priv
     bPhysical bAux bPriv (w.eval ψ)
 
-end SourceCircuit
-namespace EffectCircuit
+end Lattice.PartyCircuit.SourceCircuit
+namespace Lattice.PartyCircuit.EffectCircuit
+open TNLean.PEPS.PairEffect
 /-- The actual replacement circuit followed by the source-free output exchange.
 Source: polynomial-PEPS, `04-compression.tex`, lines 210–227 and 338–355. -/
 def physicalFirstReplacement {r : ℕ} {S δ : ℝ} (hδ : 0 < δ)
@@ -241,8 +246,9 @@ theorem physicalSourceReplacedDensity_physicalFirstReplacement_exact
   rw [SourceCircuit.physicalSourceReplacedDensity_exact]
   exact w.physicalDensity_physicalFirstReplacement hδ physical priv hw hb bIn bPhysical ψ
 
-end EffectCircuit
-namespace OriginalCircuit
+end Lattice.PartyCircuit.EffectCircuit
+namespace Lattice.PartyCircuit.OriginalCircuit
+open TNLean.PEPS.PairEffect
 /-- The original gate-count budget controls the exact-source physical output
 of the constructed physical-first replacement. The input and physical spaces
 retain their actual dimensions.
@@ -280,5 +286,5 @@ theorem rectangularTraceNorm_physicalFirst_density_sub_le_half
   exact w.rectangularTraceNorm_sourceOnly_density_sub_le_half_of_count_le hε hb hcount
     ((appendIso physical priv).trans
       (bPhysical.tensorProduct (stdOrthonormalBasis ℂ (Mem priv).carrier)).repr) ψ hψ
-end OriginalCircuit
-end TNLean.PEPS.PairEffect
+end Lattice.PartyCircuit.OriginalCircuit
+end TNLean

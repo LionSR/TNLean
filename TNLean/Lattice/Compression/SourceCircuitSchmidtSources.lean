@@ -26,7 +26,7 @@ Independently formalized from the manuscript; no upstream Lean proof text reused
 noncomputable section
 open scoped TensorProduct ComplexConjugate Matrix
 open QICLean.ComplexGaussian
-namespace TNLean.PEPS.PairEffect.SourceCircuit
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
 variable {P : Type}
 
 /-- Standard orthonormal coordinates of the source vector at an original occurrence.
@@ -97,4 +97,4 @@ theorem exists_local_schmidt_source_frames {a b : Layout P} (w : SourceCircuit a
       rw [ambientSchmidtSource, hrepr, hrepr]
       rfl
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit

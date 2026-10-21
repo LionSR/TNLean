@@ -28,6 +28,7 @@ Independently formalized; no upstream Lean proof text reused.
 noncomputable section
 open scoped TensorProduct Matrix
 namespace TNLean.PEPS.PairEffect
+open TNLean.Lattice.PartyCircuit
 
 /-- A simultaneous Schmidt expansion of a corrected coordinate and a fixed
 crossing vector, in the two memories determined by the actual register
@@ -51,8 +52,9 @@ def HasSchmidtInputFrames {I : Type} [Fintype I]
 
 end TNLean.PEPS.PairEffect
 
-namespace TNLean.PEPS.PairEffect.SourceCircuit
-open SourceInventory TNLean.PEPS.Approximation
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
+open TNLean.PEPS.PairEffect
+open TNLean.Lattice.PartyCircuit.SourceInventory TNLean.PEPS.Approximation
 variable {P : Type} {a b : Layout P}
 /-- The affected input list consists of the corrected prefix and affected crossing registers. -/
 private theorem affectedInputLayout (C T : Layout Bool)
@@ -163,4 +165,4 @@ theorem exists_correctedInputFrames (ξ : Choices (correctedMask w S) w) :
     (correctedSourceFrame w S E F hE hF ξ) (sourceCrossingVector w S ξ)
     (norm_sourceCrossingVector w S ξ)
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit

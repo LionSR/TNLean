@@ -51,7 +51,7 @@ noncomputable section
 
 namespace TNLean.PEPS.Approximation
 
-open EncodedFrame PairEffect
+open EncodedFrame TNLean.Lattice.Sheet TNLean.Lattice.PartyCircuit
 
 /-- **An admissible ratio for the direct repaintings.** For every generic displacement `v`, every
 level `0 < n ≤ K₀ t` and every reading `g'` after `v` of a guide uniform on the `n`-blocks, `g'`

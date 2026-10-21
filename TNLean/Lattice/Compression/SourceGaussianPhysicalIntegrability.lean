@@ -29,7 +29,7 @@ Independently formalized; no upstream Lean proof text reused.
 noncomputable section
 open MeasureTheory QICLean.ComplexGaussian
 open scoped TensorProduct Matrix ComplexConjugate
-namespace TNLean.PEPS.PairEffect.SourceCircuit
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
 
 open Classical in
 /-- Any fixed matrix-valued linear image of the actual corrected term has
@@ -159,4 +159,4 @@ theorem exists_sampledSourceMatrix_error_le_sum_integral
     physical garbage w k lam E F bIn bPhysical bGarbage ρ ω).trans ?_⟩
   exact hω.trans_eq (integral_finsetSum T (fun S _ ↦ hf S))
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit

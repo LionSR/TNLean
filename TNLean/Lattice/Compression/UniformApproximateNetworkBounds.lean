@@ -77,7 +77,7 @@ theorem sampledNetworkExponent_pos (r b n d u s : ℕ) {p : ℝ} (hp : 0 < p) :
 
 end TNLean.PEPS.Approximation
 
-namespace TNLean.PEPS.PairEffect.EffectCircuit
+namespace TNLean.Lattice.PartyCircuit.EffectCircuit
 open TNLean.PEPS.Approximation
 attribute [local instance] Classical.propDecidable
 
@@ -336,4 +336,4 @@ theorem exists_uniform_sampled_approximate_network_bounds
     uniform_sampled_approximate_network_bounds_of_le r b n d C_N C_D hCN (C_K q) (C_B q)
       (u q) (s q) (hCK q) (hCB q) p le_rfl le_rfl⟩
 
-end TNLean.PEPS.PairEffect.EffectCircuit
+end TNLean.Lattice.PartyCircuit.EffectCircuit

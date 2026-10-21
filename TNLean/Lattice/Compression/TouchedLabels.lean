@@ -24,7 +24,7 @@ Independently formalized; no upstream Lean proof text reused.
 -/
 
 noncomputable section
-namespace TNLean.PEPS.PairEffect.SourceCircuit
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
 variable {P : Type}
 
 /-- Labels at exactly the chronological occurrences touched by the selected
@@ -135,4 +135,4 @@ theorem choiceAt_projectAllChoices (A : P → Bool) {a b : Layout P}
         (by obtain ⟨p, hp, _⟩ := hg; exact ⟨p, hp, rfl⟩) :=
   choiceAt_choicesOfTouchedLabels A w _ g hg
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit

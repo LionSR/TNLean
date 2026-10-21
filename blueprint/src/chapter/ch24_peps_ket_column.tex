@@ -301,8 +301,8 @@ the small-patch rewrite lemma, and the compression theorem.
 
 \begin{lemma}[Telescoping a chain of contractions]
     \label{lem:peps_protocol_telescoping}
-    \lean{TNLean.PEPS.Approximation.norm_trajectory_sub_reference_le}
-    \lean{TNLean.PEPS.Approximation.norm_trajectory_le}
+    \lean{TNLean.Lattice.PartyCircuit.norm_trajectory_sub_reference_le}
+    \lean{TNLean.Lattice.PartyCircuit.norm_trajectory_le}
     \leanok
     Let $E_0,E_1,\dots$ be normed spaces, let
     $S_t\colon E_t\to E_{t+1}$ be linear maps with
@@ -323,9 +323,9 @@ the small-patch rewrite lemma, and the compression theorem.
 
 \begin{theorem}[Error and normalization of the protocol]
     \label{thm:peps_protocol_density}
-    \lean{TNLean.PEPS.Approximation.norm_protocol_sub_reference_le}
-    \lean{TNLean.PEPS.Approximation.rectangularTraceNorm_protocol_density_sub_le}
-    \lean{TNLean.PEPS.Approximation.rectangularTraceNorm_compressed_density_sub_le}
+    \lean{TNLean.Lattice.PartyCircuit.norm_protocol_sub_reference_le}
+    \lean{TNLean.Lattice.PartyCircuit.rectangularTraceNorm_protocol_density_sub_le}
+    \lean{TNLean.Lattice.PartyCircuit.rectangularTraceNorm_compressed_density_sub_le}
     \leanok
     Let $L\geq1$ and $C_{\rm ch},C_{\rm step},C_{\rm hole},C_{\rm comp}$
     be constants with $C_{\rm step},C_{\rm hole}\geq0$. Suppose that, in
@@ -368,7 +368,7 @@ the small-patch rewrite lemma, and the compression theorem.
 
 \begin{theorem}[Retained norm and trace of the protocol]
     \label{thm:peps_protocol_retained_norm}
-    \lean{TNLean.PEPS.Approximation.protocol_norm_and_trace_deficit_le}
+    \lean{TNLean.Lattice.PartyCircuit.protocol_norm_and_trace_deficit_le}
     \leanok
     As a consequence of the error and reference-norm bounds in
     \cite[Section~8.1]{OpenAI2026PolynomialPEPS}, under the hypotheses of

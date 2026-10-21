@@ -26,6 +26,7 @@ Independently formalized; no upstream Lean proof text reused.
 
 noncomputable section
 namespace TNLean.PEPS.PairEffect
+open TNLean.Lattice.PartyCircuit
 variable {P : Type} [Fintype P] [DecidableEq P]
 
 /-- The exterior output memory has the original physical coordinates of the

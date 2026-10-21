@@ -21,7 +21,7 @@ Source: polynomial-PEPS manuscript (September 24, 2026), Theorem 5.2,
 -/
 
 noncomputable section
-namespace TNLean.PEPS.PairEffect.SourceInventory
+namespace TNLean.Lattice.PartyCircuit.SourceInventory
 variable {P : Type}
 
 private theorem restrict_castLayouts_congr (f : P → Bool)
@@ -111,4 +111,4 @@ theorem restrict_endpointWord_eval_eq_of_local_eq
       ((endpointWord R U V A' B').restrict f (sources_endpointWord R U V A' B')).eval :=
   congrArg Word.eval (restrict_endpointWord_eq_of_local_eq f R U V A A' B B' hL hR)
 
-end TNLean.PEPS.PairEffect.SourceInventory
+end TNLean.Lattice.PartyCircuit.SourceInventory

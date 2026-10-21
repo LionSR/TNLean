@@ -21,7 +21,7 @@ Independently formalized from the manuscript; no upstream Lean proof text is
 reused.
 -/
 
-namespace TNLean.PEPS.PairEffect
+namespace TNLean.Lattice.PartyCircuit
 
 variable {P : Type}
 
@@ -103,4 +103,4 @@ theorem mapOwner_affectedOwner_eq_nil_iff (A : P → Bool) (S : SourceInventory 
 
 end SourceInventory
 
-end TNLean.PEPS.PairEffect
+end TNLean.Lattice.PartyCircuit

@@ -17,7 +17,7 @@ and 565–579.
 
 noncomputable section
 
-namespace TNLean.PEPS.PairEffect.SourceCircuit
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
 
 open TNLean.PEPS.Approximation
 
@@ -42,4 +42,4 @@ theorem originalGateLabelsAtOfAllChoices_eq_restrictGates
       ((allChoicesNonemptyLabelsEquiv w).symm η) g.1.1 = η g.1.1
   exact congrFun ((allChoicesNonemptyLabelsEquiv w).apply_symm_apply η) g.1.1
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit

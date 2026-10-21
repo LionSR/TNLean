@@ -23,7 +23,8 @@ Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 253–267,
 
 noncomputable section
 open scoped Matrix ComplexConjugate
-namespace TNLean.PEPS.PairEffect.SourceCircuit
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
+open TNLean.PEPS TNLean.PEPS.PairEffect
 open TNLean.PEPS.Approximation
 attribute [local instance] Classical.propDecidable
 variable {P : Type} [Fintype P] [DecidableEq P] {a : Layout P}
@@ -82,4 +83,4 @@ theorem physicalSourceReplacedDensity_pure_sampled_eq_scalar_smul_incidentPhysic
   simpa only [M, Function.comp_apply,
     sampledPhysicalFactor_eq_incidentSampledPhysicalFactor] using! h
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit

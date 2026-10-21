@@ -26,7 +26,7 @@ reused.
 noncomputable section
 open scoped TensorProduct
 open ContinuousLinearMap
-namespace TNLean.PEPS.PairEffect.SourceCircuit
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
 variable {P : Type}
 
 /-- Recover the actual monomial label at a touched gate occurrence.
@@ -225,4 +225,4 @@ theorem exists_partial_source_preparation_with_original_vectors (A : P → Bool)
   subst η
   exact ⟨hη, hS, v, hv, hvs, he⟩
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit

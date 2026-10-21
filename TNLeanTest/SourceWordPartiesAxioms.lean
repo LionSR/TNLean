@@ -13,7 +13,7 @@ The two party-set identities and their exterior restriction consequence must
 exist and depend only on the standard logical axioms.
 -/
 
-open TNLean.PEPS.PairEffect.Word in
+open TNLean.Lattice.PartyCircuit.Word in
 run_cmd do
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
   let env ← Lean.getEnv

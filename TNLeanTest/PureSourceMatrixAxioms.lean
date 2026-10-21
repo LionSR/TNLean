@@ -18,8 +18,8 @@ production module before its transitive axiom dependencies are collected.
 run_cmd do
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
   let env ← Lean.getEnv
-  for decl in #[``TNLean.PEPS.PairEffect.Word.pureSourceMatrix,
-      ``TNLean.PEPS.PairEffect.Word.preparedDensityCoefficient_pure_eq_vecMulVec] do
+  for decl in #[``TNLean.Lattice.PartyCircuit.Word.pureSourceMatrix,
+      ``TNLean.Lattice.PartyCircuit.Word.preparedDensityCoefficient_pure_eq_vecMulVec] do
     unless env.contains decl do
       throwError "Missing declaration {decl}"
     let axioms ← Lean.collectAxioms decl

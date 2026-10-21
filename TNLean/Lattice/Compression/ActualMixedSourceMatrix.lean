@@ -20,8 +20,10 @@ Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 279–355,
 
 noncomputable section
 open scoped Matrix
-namespace TNLean.PEPS.PairEffect
+namespace TNLean
+open TNLean.PEPS TNLean.Lattice.PartyCircuit TNLean.PEPS.PairEffect
 
+namespace PEPS.PairEffect
 private theorem mixed_toMatrix_basis_independent
     {E F : Type} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
     [NormedAddCommGroup F] [InnerProductSpace ℂ F]
@@ -70,7 +72,8 @@ private theorem mixed_matrix_eq_of_column_eq
   exact hcolumns.trans (hchange.trans h)
 
 
-namespace SourceCircuit
+end PEPS.PairEffect
+namespace Lattice.PartyCircuit.SourceCircuit
 variable {P : Type} [Fintype P] [DecidableEq P] {a b : Layout P}
 variable {I O : Option {_p : P // true = true} → Type}
 variable [∀ q, Fintype (I q)] [∀ q, Fintype (O q)]
@@ -122,5 +125,5 @@ theorem partialSourceGlobalMatrix_mixed_word
   convert hWord using 1
   rfl
 
-end SourceCircuit
-end TNLean.PEPS.PairEffect
+end Lattice.PartyCircuit.SourceCircuit
+end TNLean

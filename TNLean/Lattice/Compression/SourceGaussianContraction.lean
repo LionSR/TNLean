@@ -28,7 +28,7 @@ Independently formalized from the manuscript; no upstream Lean proof text reused
 noncomputable section
 open QICLean.ComplexGaussian
 open scoped TensorProduct Matrix ComplexConjugate
-namespace TNLean.PEPS.PairEffect.SourceCircuit
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
 variable {P : Type} {a b : Layout P}
 
 /-- Independent Schmidt indices at both endpoints of each selected partial slot.
@@ -153,4 +153,4 @@ theorem correctedSourceTerm_gaussian_eq_sum {m n : Type} [Fintype m] [Fintype n]
       (bIn.map (Layout.mapOwnerIso (affectedOwner A) a))
       (bOut.map (Layout.mapOwnerIso (affectedOwner A) b)) ρ
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit

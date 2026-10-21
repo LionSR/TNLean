@@ -26,10 +26,11 @@ Independently formalized; no upstream Lean proof text reused.
 
 
 noncomputable section
-namespace TNLean.PEPS.PairEffect
+namespace TNLean
+open TNLean.Lattice.PartyCircuit
 variable {P Q : Type}
 
-namespace Layout
+namespace Lattice.PartyCircuit.Layout
 /-- Concatenation preserves finite-dimensionality of each actual register.
 Source: polynomial-PEPS, `04-compression.tex:18–28` and `210–227`. -/
 theorem finiteDimensional_registers_append (a b : Layout P)
@@ -47,8 +48,9 @@ theorem finiteDimensional_registers_mapOwner (f : P → Q) (a : Layout P)
   intro t ht
   obtain ⟨s, hs, rfl⟩ := List.mem_map.mp ht
   exact ha s hs
-end Layout
+end Lattice.PartyCircuit.Layout
 
+namespace PEPS.PairEffect
 /-- Composing source preparations concatenates finite-dimensional source registers.
 Source: polynomial-PEPS, `04-compression.tex:103–112` and `210–227`. -/
 theorem finiteDimensional_registers_sources_comp {a b c : Layout P}
@@ -77,7 +79,9 @@ theorem finiteDimensional_registers_sources_prepWord {p q : P} (hpq : p ≠ q)
       · cases List.mem_singleton.mp ht
         infer_instance
 
-namespace PartyChain
+end PEPS.PairEffect
+namespace Lattice.PartyCircuit.PartyChain
+open TNLean.PEPS.PairEffect
 /-- Every actual source register in a monomial's prepared stack is finite-dimensional.
 Source: polynomial-PEPS, `04-compression.tex:103–112` and `210–227`. -/
 theorem finiteDimensional_registers_sources_prepStack {a b : Layout P}
@@ -90,8 +94,9 @@ theorem finiteDimensional_registers_sources_prepStack {a b : Layout P}
       exact finiteDimensional_registers_sources_comp (rest.prepStack m tail)
         (prepWord hpq η m _) (ih tail)
         (finiteDimensional_registers_sources_prepWord hpq η m _)
-end PartyChain
+end Lattice.PartyCircuit.PartyChain
 
+namespace PEPS.PairEffect
 /-- All actual source registers in the preparation of a gate's retained
 auxiliary vector are finite-dimensional. Source: polynomial-PEPS,
 `04-compression.tex:103–112` and `199–217`. -/
@@ -104,7 +109,9 @@ theorem finiteDimensional_registers_sources_prepGate {a b : Layout P}
       exact finiteDimensional_registers_sources_comp (prepGate m L)
         (q.2.prepStack m _) ih (q.2.finiteDimensional_registers_sources_prepStack m _)
 
-namespace EffectCircuit
+end PEPS.PairEffect
+namespace Lattice.PartyCircuit.EffectCircuit
+open TNLean.PEPS.PairEffect
 /-- Every actual retained auxiliary register is finite-dimensional by its
 Euclidean source construction; no assumption on private dimensions is used.
 Source: polynomial-PEPS, `04-compression.tex:199–217`. -/
@@ -141,6 +148,6 @@ theorem finiteDimensional_auxiliary_private_mem {a b : Layout P}
     FiniteDimensional ℂ (Mem (w.auxiliary m ++ priv)).carrier :=
   Layout.finiteDimensional_mem_of_registers _
     (w.finiteDimensional_auxiliary_private_registers m priv hpriv)
-end EffectCircuit
+end Lattice.PartyCircuit.EffectCircuit
 
-end TNLean.PEPS.PairEffect
+end TNLean

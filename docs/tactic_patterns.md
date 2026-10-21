@@ -127,7 +127,7 @@ abstracted — record why, so it is not re-proposed).
 - **Seen:** The former concatenation inductions `rawAppend_siteVec`
   in `MPS/AreaLaw/ProtocolTerminalWord.lean` and `append_siteVec_transport`
   in `MPS/AreaLaw/ProtocolTerminalReference.lean`.
-- **Abstraction:** `TNLean.PEPS.EncodedFrame.siteVec_append` in
+- **Abstraction:** `TNLean.Lattice.Sheet.siteVec_append` in
   `PEPS/Approximation/SiteVectorAppend.lean`.
 - **Refactor:** `packMain_siteVec` and `append_siteVec_heq` apply the shared
   identity directly; their two private aliases have been removed.
@@ -492,7 +492,7 @@ abstracted — record why, so it is not re-proposed).
 - **Seen:** `PartyGateComposition.isAllowed_comp`,
   `PartyGateComposition.effectCount_comp_le`, and
   `MessageMonomial.isAllowed_effectCount_expand` use the same decomposition.
-- **Abstraction:** `TNLean.PEPS.PairEffect.PartyGate.mem_comp`, using Mathlib's
+- **Abstraction:** `TNLean.Lattice.PartyCircuit.PartyGate.mem_comp`, using Mathlib's
   `List.mem_flatMap` and `List.mem_map` once at the defining composition.
 - **Refactor:** All three consumers use this characterization directly;
   no custom tactic or extra membership definition is introduced.
@@ -504,7 +504,7 @@ abstracted — record why, so it is not re-proposed).
   then apply the triangle inequality and operator-norm submultiplicativity.
 - **Seen:** The identical 17-line proof in `EffectCircuitError` and the
   approximate-gate error development; both chronological induction proofs use it.
-- **Abstraction:** The existing `TNLean.PEPS.PairEffect.norm_comp_sub_comp_le_one`
+- **Abstraction:** The existing `TNLean.Lattice.PartyCircuit.norm_comp_sub_comp_le_one`
   is public in `EffectCircuitError`; `ApproximateCircuitError` imports it.
 - **Refactor:** Removed the second proof. The original signature and proof are
   unchanged. The related three-factor estimate in the symmetry development has
@@ -714,7 +714,7 @@ abstracted — record why, so it is not re-proposed).
   `common_pair_cons_expands` in
   `TNLean/Lattice/PartyCircuit/CommonSourcePreparation.lean`.
 - **Abstraction:** the theorem
-  `TNLean.PEPS.PairEffect.SourceInventory.Expands.cons_mapL` in
+  `TNLean.Lattice.PartyCircuit.SourceInventory.Expands.cons_mapL` in
   [SourcePairMaps.lean](../TNLean/Lattice/PartyCircuit/SourcePairMaps.lean) takes the two
   continuous linear maps and their operator-norm bounds. Issue #8973 requests
   the common lemma; the two private copies are removed, rather than retained
@@ -863,7 +863,7 @@ abstracted — record why, so it is not re-proposed).
   of `b` with that of `a` along `a = b` (`04-compression.tex`, lines 246–267).
 - **Seen:** a public copy in `UnitMemoryCoordinates.lean` and private copies in
   `GroupedBlockMap.lean` and `WordOwnerMap.lean`.
-- **Abstraction:** `TNLean.PEPS.PairEffect.Layout.memCongr_symm`, moved next to
+- **Abstraction:** `TNLean.Lattice.PartyCircuit.Layout.memCongr_symm`, moved next to
   `memCongr` in `TNLean/Lattice/PartyCircuit/PartyPartition.lean`; the duplicates
   are deleted.
 - **Notes:** the full name is unchanged, so the existing blueprint reference
@@ -4764,7 +4764,7 @@ three-plaquette output measurement, and the routed reunion measurement.
 - **Pattern:** a word of exchanges of tensor factors, built by recursion or
   composition, gets a lemma that it is allowed, uses any given parties and has
   no pair source, followed by three one-line projections.
-- **Helper:** the predicate `PairEffect.Word.IsReordering` with the simp lemmas
+- **Helper:** the predicate `PartyCircuit.Word.IsReordering` with the simp lemmas
   `isReordering_id`, `isReordering_swap`, `isReordering_comp_iff`,
   `isReordering_frame_iff`, `isReordering_frameList_iff` and the projections
   `IsReordering.isAllowed`, `IsReordering.usesOnly` and
@@ -7487,7 +7487,7 @@ spectral split → block extraction → MPV calculation → strict bounds
   identification argument across two files.
 - **Abstraction:** Canonical conjugation already uses the shared
   `Layout.conj_memCongr_heq`, `Layout.norm_conj_memCongr`, and
-  `Layout.eq_conj_memCongr_of_heq`. The existing `PairEffect.mapL_heq`
+  `Layout.eq_conj_memCongr_of_heq`. The existing `PartyCircuit.mapL_heq`
   is now public in `PartyTensorMaps`, with its original signature and
   equality-elimination proof. `PartyFactorization.mapL_apply_heq` uses
   that shared map equality and ordinary congruence for its application

@@ -28,9 +28,11 @@ noncomputable section
 open MeasureTheory QICLean.ComplexGaussian
 open scoped Matrix ComplexConjugate NNReal
 open TNLean.PEPS.Approximation
-namespace TNLean.PEPS.PairEffect
+namespace TNLean
+open TNLean.Lattice.PartyCircuit TNLean.PEPS.PairEffect
 variable {P : Type}
 
+namespace PEPS.PairEffect
 /-- The triangle inequality through an intermediate physical density.
 Source: polynomial-PEPS, `04-compression.tex`, lines 137–151 and 342–381. -/
 private theorem rectangularTraceNorm_sub_le_sum {ι : Type} [Fintype ι] [DecidableEq ι]
@@ -41,7 +43,8 @@ private theorem rectangularTraceNorm_sub_le_sum {ι : Type} [Fintype ι] [Decida
   (congrArg Matrix.rectangularTraceNorm (sub_add_sub_cancel A C Z)).symm.trans_le
     ((Matrix.rectangularTraceNorm_add_le (A - C) (C - Z)).trans (add_le_add hAC hCZ))
 
-namespace OriginalCircuit
+end PEPS.PairEffect
+namespace Lattice.PartyCircuit.OriginalCircuit
 
 /-- The finite original chronology has some finite monomial-count bound.
 This bound is derived from its original gate lists, without an additional
@@ -169,5 +172,5 @@ theorem exists_physicalFirst_sourceSample_original_error_le
     _ ≤ ε / 4 + ε / 2 := rectangularTraceNorm_sub_le_sum hω hhalf
     _ = 3 * ε / 4 := by ring
 
-end OriginalCircuit
-end TNLean.PEPS.PairEffect
+end Lattice.PartyCircuit.OriginalCircuit
+end TNLean

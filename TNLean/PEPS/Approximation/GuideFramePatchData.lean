@@ -50,9 +50,10 @@ noncomputable section
 
 namespace TNLean.PEPS
 
-open PairEffect
+open TNLean.Lattice.PartyCircuit
 
 namespace EncodedFrame
+open TNLean.Lattice.Sheet
 
 variable {ι : Type*} [Fintype ι] [DecidableEq ι] {q : ℕ} {pos : ι → ℝ × ℝ}
   {Ω : EuclideanSpace ℂ (ι → Fin q)} {B₀ C c p : ℝ} {L : ℕ}
@@ -66,6 +67,7 @@ def IsSuppliedPatch (S : AdaptivePatchSupply pos Ω B₀ C c p L) (P : SquarePat
   ∃ z u, ∃ hu : 0 < u ∧ u ≤ B₀ * Real.log L, patchAt S z hu = P
 
 namespace IsSuppliedPatch
+open TNLean.Lattice.Sheet
 
 variable {S : AdaptivePatchSupply pos Ω B₀ C c p L} {P : SquarePatch pos q}
 
@@ -125,7 +127,7 @@ end EncodedFrame
 
 namespace Approximation
 
-open EncodedFrame
+open EncodedFrame TNLean.Lattice.Sheet
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι] {q : ℕ} {pos : ι → ℝ × ℝ} {κ Party : Type}
 

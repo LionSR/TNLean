@@ -18,7 +18,7 @@ preserving the register spaces and order of operations.
 
 \begin{theorem}[Participating parties after changing owner labels]
     \label{thm:peps_source_free_owner_parties}
-    \lean{TNLean.PEPS.PairEffect.Word.parties_mapOwner_of_sources_nil}
+    \lean{TNLean.Lattice.PartyCircuit.Word.parties_mapOwner_of_sources_nil}
     \leanok
     \uses{def:peps_owner_composition,def:peps_party_registers}
     If $W$ contains no pair-source preparation, then the set of participating
@@ -39,7 +39,7 @@ preserving the register spaces and order of operations.
 
 \begin{theorem}[Restriction to an owner outside the relabelling range]
     \label{thm:peps_owner_disjoint_restriction}
-    \lean{TNLean.PEPS.PairEffect.Word.restrict_mapOwner_eval_eq_id_of_disjoint}
+    \lean{TNLean.Lattice.PartyCircuit.Word.restrict_mapOwner_eval_eq_id_of_disjoint}
     \leanok
     \uses{def:peps_single_party_selector,def:peps_owner_composition,
         def:peps_party_registers,thm:peps_owner_composition,

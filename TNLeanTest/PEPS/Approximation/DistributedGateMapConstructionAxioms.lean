@@ -15,52 +15,55 @@ with the operators of its own expansions, Theorem 5.2 for such families, and Rem
 set_option linter.hashCommand false
 
 /--
-info: 'TNLean.PEPS.PairEffect.EffectCircuit.expansionGateMaps' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: 'TNLean.Lattice.PartyCircuit.EffectCircuit.expansionGateMaps' depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms TNLean.PEPS.PairEffect.EffectCircuit.expansionGateMaps
+#print axioms TNLean.Lattice.PartyCircuit.EffectCircuit.expansionGateMaps
 
 /--
-info: 'TNLean.PEPS.PairEffect.EffectCircuit.expansionGateLists' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: 'TNLean.Lattice.PartyCircuit.EffectCircuit.expansionGateLists' depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms TNLean.PEPS.PairEffect.EffectCircuit.expansionGateLists
+#print axioms TNLean.Lattice.PartyCircuit.EffectCircuit.expansionGateLists
 
 /--
-info: 'TNLean.PEPS.PairEffect.EffectCircuit.evalWithGateMaps_expansionGateMaps' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: 'TNLean.Lattice.PartyCircuit.EffectCircuit.evalWithGateMaps_expansionGateMaps' depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms TNLean.PEPS.PairEffect.EffectCircuit.evalWithGateMaps_expansionGateMaps
+#print axioms TNLean.Lattice.PartyCircuit.EffectCircuit.evalWithGateMaps_expansionGateMaps
 
 /--
-info: 'TNLean.PEPS.PairEffect.OriginalCircuit.IsTermwiseBounded.mono' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: 'TNLean.Lattice.PartyCircuit.OriginalCircuit.IsTermwiseBounded.mono' depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms TNLean.PEPS.PairEffect.OriginalCircuit.IsTermwiseBounded.mono
+#print axioms TNLean.Lattice.PartyCircuit.OriginalCircuit.IsTermwiseBounded.mono
 
 /--
-info: 'TNLean.PEPS.PairEffect.OriginalCircuit.isGateApproximation_reexpand_expansionGateLists' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: 'TNLean.Lattice.PartyCircuit.OriginalCircuit.isGateApproximation_reexpand_expansionGateLists' depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms TNLean.PEPS.PairEffect.OriginalCircuit.isGateApproximation_reexpand_expansionGateLists
+open TNLean.Lattice.PartyCircuit in
+#print axioms OriginalCircuit.isGateApproximation_reexpand_expansionGateLists
 
 /--
-info: 'TNLean.PEPS.PairEffect.OriginalCircuit.isTermwiseBounded_reexpand_expansionGateLists' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: 'TNLean.Lattice.PartyCircuit.OriginalCircuit.isTermwiseBounded_reexpand_expansionGateLists' depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms TNLean.PEPS.PairEffect.OriginalCircuit.isTermwiseBounded_reexpand_expansionGateLists
+open TNLean.Lattice.PartyCircuit in
+#print axioms OriginalCircuit.isTermwiseBounded_reexpand_expansionGateLists
 
 /--
-info: 'TNLean.PEPS.PairEffect.OriginalCircuit.monomialCount_reexpand_expansionGateLists_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: 'TNLean.Lattice.PartyCircuit.OriginalCircuit.monomialCount_reexpand_expansionGateLists_le' depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms TNLean.PEPS.PairEffect.OriginalCircuit.monomialCount_reexpand_expansionGateLists_le
+open TNLean.Lattice.PartyCircuit in
+#print axioms OriginalCircuit.monomialCount_reexpand_expansionGateLists_le
 
 /--
-info: 'TNLean.PEPS.PairEffect.OriginalCircuit.natCard_participation_produce' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: 'TNLean.Lattice.PartyCircuit.OriginalCircuit.natCard_participation_produce' depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms TNLean.PEPS.PairEffect.OriginalCircuit.natCard_participation_produce
+#print axioms TNLean.Lattice.PartyCircuit.OriginalCircuit.natCard_participation_produce
 
 /--
 info: 'TNLean.PEPS.PairEffect.DistributedConstruction.toGateMapConstruction' depends on axioms: [propext, Classical.choice, Quot.sound]

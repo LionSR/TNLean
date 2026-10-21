@@ -17,7 +17,7 @@ Source: polynomial-PEPS manuscript (September 24, 2026), Theorem 5.2,
 noncomputable section
 open ContinuousLinearMap
 open scoped TensorProduct
-namespace TNLean.PEPS.PairEffect.SourceCircuit
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
 variable {P : Type}
 
 private theorem eval_comp_apply_eq {a b c : Layout P}
@@ -40,4 +40,4 @@ theorem eval_partialSourceWord_tmul {a b : Layout P}
   exact eval_comp_apply_eq (w.sourcePrivatePreparation ψ)
     (partialResidual (fun _ => true) w ξ) _ _ (eval_sourcePrivatePreparation_tmul w ψ y)
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit

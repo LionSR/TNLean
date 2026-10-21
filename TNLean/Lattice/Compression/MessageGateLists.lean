@@ -24,7 +24,8 @@ Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 32–43,
 -/
 
 noncomputable section
-namespace TNLean.PEPS.PairEffect.EffectCircuit
+namespace TNLean.Lattice.PartyCircuit.EffectCircuit
+open TNLean.PEPS.PairEffect
 variable {P : Type}
 
 /-- One actual message-containing expansion on the original local input and
@@ -173,7 +174,7 @@ theorem isGateApproximation_expandMessageGateLists {a b : Layout P}
       intro lists G h
       exact ⟨h.1, lists.isAllowed_expand h.2.1, h.2.2.1,
         (by
-          change ‖PairEffect.gate (toGate lists.expand) - G‖ ≤ δ
+          change ‖Lattice.PartyCircuit.gate (toGate lists.expand) - G‖ ≤ δ
           rw [lists.eval_expand]
           exact h.2.2.2)⟩
   | swap => intro lists G h; trivial
@@ -242,4 +243,4 @@ theorem isTermwiseBounded_expandMessageGateLists {a b : Layout P}
   | swap => intro lists G ha hb; trivial
   | frame r w ih => intro lists G ha hb; exact ih lists G ha hb
 
-end TNLean.PEPS.PairEffect.EffectCircuit
+end TNLean.Lattice.PartyCircuit.EffectCircuit

@@ -37,6 +37,7 @@ Independently formalized; no upstream Lean proof text reused.
 noncomputable section
 open scoped ComplexOrder
 namespace TNLean.PEPS.PairEffect
+open TNLean.Lattice.PartyCircuit
 
 /-- The original data of a distributed construction on a finite nonempty party
 set. The fields describe the source's input, circuit and retained outputs;

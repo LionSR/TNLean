@@ -25,7 +25,7 @@ and 568–588.
 -/
 
 noncomputable section
-namespace TNLean.PEPS.PairEffect.SourceCircuit
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
 open TNLean.PEPS.Approximation
 variable {P : Type}
 
@@ -70,4 +70,4 @@ theorem inv_sampleSize_pow_allSourceSlots_eq_prod {a b : Layout P}
     (fun g : w.nonemptyGateLocations ↦ (pairSampleLabels (w.participants g.1)).card)
     (k : ℂ)⁻¹).symm
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit

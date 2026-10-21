@@ -18,22 +18,23 @@ declaration is checked to exist before its transitive axioms are collected, so
 an absent declaration cannot pass silently.
 -/
 
+open TNLean.Lattice.PartyCircuit in
 run_cmd do
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
   let env ← Lean.getEnv
-  for decl in #[``TNLean.PEPS.PairEffect.SourceCircuit.projectAllChoices,
-      ``TNLean.PEPS.PairEffect.SourceCircuit.choiceAt_projectAllChoices,
-      ``TNLean.PEPS.PairEffect.SourceCircuit.choicesTouchedLabelsEquiv,
-      ``TNLean.PEPS.PairEffect.SourceCircuit.choiceAt_choicesOfTouchedLabels,
-      ``TNLean.PEPS.PairEffect.SourceCircuit.choicesOfTouchedLabels_choiceAt,
-      ``TNLean.PEPS.PairEffect.SourceCircuit.isTouched_all_iff,
-      ``TNLean.PEPS.PairEffect.SourceCircuit.allChoicesNonemptyLabelsEquiv,
-      ``TNLean.PEPS.PairEffect.SourceCircuit.allChoicesNonemptyLabelsEquiv_apply,
-      ``TNLean.PEPS.PairEffect.SourceCircuit.partySelector_affectedOwner_all_apply,
-      ``TNLean.PEPS.PairEffect.SourceCircuit.isTouched_groupedParty_iff,
-      ``TNLean.PEPS.PairEffect.SourceCircuit.choicesOfOriginalGateLabelsAt_eq_projectAllChoices,
-      ``TNLean.PEPS.PairEffect.SourceCircuit.coefficient_eq_prod_dite,
-      ``TNLean.PEPS.PairEffect.SourceCircuit.coefficient_all_eq_prod_nonemptyGateLocations,
+  for decl in #[``SourceCircuit.projectAllChoices,
+      ``SourceCircuit.choiceAt_projectAllChoices,
+      ``SourceCircuit.choicesTouchedLabelsEquiv,
+      ``SourceCircuit.choiceAt_choicesOfTouchedLabels,
+      ``SourceCircuit.choicesOfTouchedLabels_choiceAt,
+      ``SourceCircuit.isTouched_all_iff,
+      ``SourceCircuit.allChoicesNonemptyLabelsEquiv,
+      ``SourceCircuit.allChoicesNonemptyLabelsEquiv_apply,
+      ``SourceCircuit.partySelector_affectedOwner_all_apply,
+      ``SourceCircuit.isTouched_groupedParty_iff,
+      ``SourceCircuit.choicesOfOriginalGateLabelsAt_eq_projectAllChoices,
+      ``SourceCircuit.coefficient_eq_prod_dite,
+      ``SourceCircuit.coefficient_all_eq_prod_nonemptyGateLocations,
       ``TNLean.PEPS.DependentBondNetwork.network_mul_at_vertex] do
     unless env.contains decl do
       throwError "Missing declaration {decl}"

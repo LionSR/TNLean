@@ -33,7 +33,7 @@ Independently formalized; no upstream Lean proof text reused.
 noncomputable section
 open scoped InnerProductSpace TensorProduct
 open ContinuousLinearMap
-namespace TNLean.PEPS.PairEffect.Word
+namespace TNLean.Lattice.PartyCircuit.Word
 
 variable {P X : Type} [Fintype X] {a b : Layout P}
     {D : Type} [NormedAddCommGroup D] [InnerProductSpace ℂ D]
@@ -179,9 +179,9 @@ theorem norm_physicalGramMatrix_le_one {a' : Layout P} {n n' : Type}
   rw [h]
   exact norm_physicalGramMap_le_one J x y v w bIn bIn' hv hw
 
-end TNLean.PEPS.PairEffect.Word
+end TNLean.Lattice.PartyCircuit.Word
 
-namespace TNLean.PEPS.PairEffect.Layout
+namespace TNLean.Lattice.PartyCircuit.Layout
 
 /-- The fixed physical and discarded output layouts give a canonical output identification.
 Polynomial-PEPS manuscript, Theorem 5.2, lines 435–455. -/
@@ -201,9 +201,9 @@ theorem physicalDiscardIso_tmul {P X : Type} [Fintype X]
   classical
   simp [physicalDiscardIso]
 
-end TNLean.PEPS.PairEffect.Layout
+end TNLean.Lattice.PartyCircuit.Layout
 
-namespace TNLean.PEPS.PairEffect.Word
+namespace TNLean.Lattice.PartyCircuit.Word
 
 /-- Partial inner product extracts the corresponding tensor coordinate. -/
 theorem repr_effectMap {X d D : Type} [Fintype X] [Fintype d]
@@ -275,4 +275,4 @@ theorem partialTrace_physicalOutputMatrix_mul_conjTranspose {P X d n n' : Type}
   simp_rw [physicalGramMatrix_eq_sum J x y v w bIn bIn' bD]
   rfl
 
-end TNLean.PEPS.PairEffect.Word
+end TNLean.Lattice.PartyCircuit.Word

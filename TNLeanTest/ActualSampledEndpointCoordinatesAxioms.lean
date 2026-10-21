@@ -16,8 +16,8 @@ logical axioms. The finite sampled sum retains the original joint assignment.
 
 set_option linter.hashCommand false
 
-open TNLean.PEPS.PairEffect TNLean.PEPS.PairEffect.SourceCircuit
-  TNLean.PEPS.PairEffect.SourceInventory in
+open TNLean.PEPS.PairEffect TNLean.Lattice.PartyCircuit.SourceCircuit
+  TNLean.Lattice.PartyCircuit.SourceInventory in
 run_cmd do
   let decls := #[
     ``slotVector_eq_sum_slotBasis,

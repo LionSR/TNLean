@@ -27,7 +27,7 @@ reused.
 
 noncomputable section
 
-namespace TNLean.PEPS.PairEffect.SourceInventory
+namespace TNLean.Lattice.PartyCircuit.SourceInventory
 
 variable {P : Type}
 
@@ -71,4 +71,4 @@ theorem length_le_card_sq [Fintype P] (R : SourceInventory P)
   rw [length_eq_choose R hN hK]
   exact Nat.choose_le_pow _ _
 
-end TNLean.PEPS.PairEffect.SourceInventory
+end TNLean.Lattice.PartyCircuit.SourceInventory

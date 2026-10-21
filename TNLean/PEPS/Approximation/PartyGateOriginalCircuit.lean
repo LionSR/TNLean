@@ -29,6 +29,7 @@ open scoped TensorProduct
 open ContinuousLinearMap
 
 namespace TNLean.PEPS.PairEffect
+open TNLean.Lattice.PartyCircuit
 
 variable {P : Type} [DecidableEq P]
 

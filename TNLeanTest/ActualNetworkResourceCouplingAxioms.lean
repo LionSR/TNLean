@@ -11,12 +11,13 @@ import Lean.Util.CollectAxioms
 
 set_option linter.hashCommand false
 
+open TNLean.Lattice.PartyCircuit in
 run_cmd do
   let decls := #[
-    ``TNLean.PEPS.PairEffect.SourceCircuit.card_alphabet_source_density_le_of_power_bounds,
-    ``TNLean.PEPS.PairEffect.OriginalCircuit.card_physicalFirstDensityAlphabet_le_power,
-    ``TNLean.PEPS.PairEffect.OriginalCircuit.card_incidentPhysicalFirstDensityLinks_le,
-    ``TNLean.PEPS.PairEffect.OriginalCircuit.exists_original_gate_of_physicalFirst_density_link]
+    ``SourceCircuit.card_alphabet_source_density_le_of_power_bounds,
+    ``OriginalCircuit.card_physicalFirstDensityAlphabet_le_power,
+    ``OriginalCircuit.card_incidentPhysicalFirstDensityLinks_le,
+    ``OriginalCircuit.exists_original_gate_of_physicalFirst_density_link]
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
   let env ← Lean.getEnv
   for decl in decls do

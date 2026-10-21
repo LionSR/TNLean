@@ -31,7 +31,7 @@ Independently formalized; no upstream Lean proof text reused.
 noncomputable section
 open MeasureTheory QICLean.ComplexGaussian
 open scoped TensorProduct Matrix ComplexConjugate
-namespace TNLean.PEPS.PairEffect.SourceCircuit
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
 
 open Classical in
 /-- The full separated physical operator has integrable trace norm and the
@@ -112,4 +112,4 @@ theorem integrable_gaussianSeparatedPhysicalDensity_and_integral_le
           tau tau' htau htau' htausum htau'sum
     _ = _ := by simp [pow_two, mul_assoc]
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit

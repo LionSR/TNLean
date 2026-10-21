@@ -29,28 +29,28 @@ that move them; the layout of a whole frame is `TNLean.PEPS.Approximation.FrameR
 * The tag registers of the holes of an encoded frame are in
   `TNLean.PEPS.Approximation.TagRegisters`.
 
-Every word built here is a reordering (`PairEffect.Word.IsReordering`): it is allowed, uses no
+Every word built here is a reordering (`PartyCircuit.Word.IsReordering`): it is allowed, uses no
 party and no pair source.
 
 ## Main definitions
 
-* `PairEffect.Word.IsReordering`: allowed, using no party and no pair source, with constructor
+* `PartyCircuit.Word.IsReordering`: allowed, using no party and no pair source, with constructor
   lemmas for identities, exchanges, composition and framing.
-* `PairEffect.Word.appendNil`, `PairEffect.Word.dropNil`: reading `ℓ` as `ℓ ++ []` and back.
-* `EncodedFrame.siteRegs`, `EncodedFrame.siteVec`, `EncodedFrame.siteIsoList`,
-  `EncodedFrame.groupIso`.
-* `EncodedFrame.relabelHead`, `EncodedFrame.relabelSitesApp`, `EncodedFrame.relabelSites`.
-* `EncodedFrame.partSites`, `EncodedFrame.partWordApp`, `EncodedFrame.unpartWordApp`,
-  `EncodedFrame.partWord`, `EncodedFrame.unpartWord`.
+* `PartyCircuit.Word.appendNil`, `PartyCircuit.Word.dropNil`: reading `ℓ` as `ℓ ++ []` and back.
+* `Sheet.siteRegs`, `Sheet.siteVec`, `Sheet.siteIsoList`,
+  `Sheet.groupIso`.
+* `Sheet.relabelHead`, `Sheet.relabelSitesApp`, `Sheet.relabelSites`.
+* `Sheet.partSites`, `Sheet.partWordApp`, `Sheet.unpartWordApp`,
+  `Sheet.partWord`, `Sheet.unpartWord`.
 
 ## Main results
 
-* `EncodedFrame.groupIso_siteVec`: the identification on basis vectors.
-* `EncodedFrame.eval_partWordApp`, `EncodedFrame.eval_unpartWordApp`,
-  `EncodedFrame.eval_relabelSitesApp`, `EncodedFrame.eval_partWord`,
-  `EncodedFrame.eval_unpartWord`, `EncodedFrame.eval_relabelSites`: the operators of the words on
+* `Sheet.groupIso_siteVec`: the identification on basis vectors.
+* `Sheet.eval_partWordApp`, `Sheet.eval_unpartWordApp`,
+  `Sheet.eval_relabelSitesApp`, `Sheet.eval_partWord`,
+  `Sheet.eval_unpartWord`, `Sheet.eval_relabelSites`: the operators of the words on
   basis vectors.
-* `PairEffect.Word.eval_frameList_appendIso_symm`: a word framed by untouched registers.
+* `PartyCircuit.Word.eval_frameList_appendIso_symm`: a word framed by untouched registers.
 
 ## References
 
@@ -65,7 +65,7 @@ open scoped InnerProductSpace TensorProduct
 
 /-! ### Reorderings use no party and no pair source -/
 
-namespace TNLean.PEPS.PairEffect.Word
+namespace TNLean.Lattice.PartyCircuit.Word
 
 variable {P : Type}
 
@@ -187,11 +187,11 @@ theorem eval_dropNil : (ℓ : Layout P) → (x : Mem ℓ) →
   | [] => isReordering_id _
   | _ :: ℓ => isReordering_dropNil ℓ
 
-end TNLean.PEPS.PairEffect.Word
+end TNLean.Lattice.PartyCircuit.Word
 
-namespace TNLean.PEPS.EncodedFrame
+namespace TNLean.Lattice.Sheet
 
-open PairEffect ContinuousLinearMap EuclideanSpace
+open PartyCircuit ContinuousLinearMap EuclideanSpace
 
 variable {ι : Type} {q : ℕ} {Party : Type}
 
@@ -567,4 +567,4 @@ theorem siteVec_congr (own : ι → Party) {c c' : ι → Fin q} :
       rw [h x List.mem_cons_self,
         siteVec_congr own S fun y hy => h y (List.mem_cons_of_mem x hy)]
 
-end TNLean.PEPS.EncodedFrame
+end TNLean.Lattice.Sheet

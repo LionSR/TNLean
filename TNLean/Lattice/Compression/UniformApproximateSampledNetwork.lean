@@ -110,6 +110,7 @@ theorem compressionExponent_eq_sampledNetworkExponent (r b n d u v : â„•) (p : â
 end TNLean.PEPS.Approximation
 
 namespace TNLean.PEPS.PairEffect.GateMapConstruction
+open TNLean.Lattice.PartyCircuit
 open TNLean.PEPS.Approximation
 attribute [local instance] Classical.propDecidable
 

@@ -28,10 +28,12 @@ Independently formalized from the manuscript; no upstream Lean proof text reused
 noncomputable section
 open scoped TensorProduct Matrix ComplexConjugate
 
-namespace TNLean.PEPS.PairEffect
+namespace TNLean
+open TNLean.Lattice.PartyCircuit
 
 open QICLean.ComplexGaussian
 
+namespace Lattice.PartyCircuit
 /-- The selected source matrices may be expressed in arbitrary endpoint frames.
 The resulting coefficients multiply the actual prepared ket and bra words.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 409–434. -/
@@ -129,4 +131,5 @@ theorem Word.sourceContraction_preparedDensityCoefficient_selected_frames {P m n
         ηz ζz ℓ v' bIn bOut ρ
     _ = _ := Fintype.sum_prod_type H
 
-end TNLean.PEPS.PairEffect
+end Lattice.PartyCircuit
+end TNLean

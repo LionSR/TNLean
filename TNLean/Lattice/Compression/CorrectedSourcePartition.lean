@@ -30,9 +30,9 @@ Independently formalized; no upstream Lean proof text reused.
 noncomputable section
 open scoped TensorProduct
 open ContinuousLinearMap
-namespace TNLean.PEPS.PairEffect.SourceCircuit
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
 open TNLean.PEPS.Approximation
-open SourceInventory
+open TNLean.Lattice.PartyCircuit.SourceInventory
 variable {P : Type}
 
 open Classical in
@@ -91,10 +91,10 @@ private theorem correctedFreeSlots_internal {a b : Layout P} (w : SourceCircuit 
     isSome_affectedOwner, isSome_affectedOwner]
   exact not_not.mp he
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit
 
-namespace TNLean.PEPS.PairEffect.Word
-open SourceInventory
+namespace TNLean.Lattice.PartyCircuit.Word
+open TNLean.Lattice.PartyCircuit.SourceInventory
 
 /-- The operator of a word is a tensor product of two actual local
 contractions after grouping the two classes of owners. The factors are allowed
@@ -129,11 +129,11 @@ private theorem isTensorPartitioned_selected {Q : Type} (f : Q → Bool)
     Word.exists_selective_partition f R U V free fixed hfixed hmask a v hv hvs
   exact ⟨c, d, hc, hd, hcs, hds, hcn, hdn, fun x ↦ DFunLike.congr_fun hprod x⟩
 
-end TNLean.PEPS.PairEffect.Word
+end TNLean.Lattice.PartyCircuit.Word
 
-namespace TNLean.PEPS.PairEffect.SourceCircuit
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
 open TNLean.PEPS.Approximation
-open SourceInventory
+open TNLean.Lattice.PartyCircuit.SourceInventory
 variable {P : Type}
 
 /-- The corrected and crossing occurrences form common free input spaces for
@@ -160,4 +160,4 @@ theorem exists_corrected_source_partition {a b : Layout P}
     (correctedFreeSlots_internal w S) _ _ (partialResidual A w ξ)
     (isAllowed_partialResidual A w hw ξ) (sources_partialResidual A w ξ)
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit

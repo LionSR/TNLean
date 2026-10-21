@@ -18,8 +18,8 @@ set_option linter.hashCommand false
 run_cmd do
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
   let env ← Lean.getEnv
-  for decl in #[``TNLean.PEPS.PairEffect.Word.restrict_localPart_comp_scalar,
-      ``TNLean.PEPS.PairEffect.Word.restrict_localPart_frame_scalar] do
+  for decl in #[``TNLean.Lattice.PartyCircuit.Word.restrict_localPart_comp_scalar,
+      ``TNLean.Lattice.PartyCircuit.Word.restrict_localPart_frame_scalar] do
     unless env.contains decl do
       throwError "Missing declaration {decl}"
     let axioms ← Lean.collectAxioms decl

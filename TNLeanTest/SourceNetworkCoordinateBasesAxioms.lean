@@ -13,10 +13,10 @@ set_option linter.hashCommand false
 
 run_cmd do
   let decls := #[
-    ``TNLean.PEPS.PairEffect.SourceInventory.finiteDimensional_registers_slotLayout,
-    ``TNLean.PEPS.PairEffect.SourceCircuit.finiteDimensional_allResidualSource_registers,
-    ``TNLean.PEPS.PairEffect.SourceCircuit.allResidualSourceBasis,
-    ``TNLean.PEPS.PairEffect.SourceCircuit.allPartyDiscardBasis]
+    ``TNLean.Lattice.PartyCircuit.SourceInventory.finiteDimensional_registers_slotLayout,
+    ``TNLean.Lattice.PartyCircuit.SourceCircuit.finiteDimensional_allResidualSource_registers,
+    ``TNLean.Lattice.PartyCircuit.SourceCircuit.allResidualSourceBasis,
+    ``TNLean.Lattice.PartyCircuit.SourceCircuit.allPartyDiscardBasis]
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
   let env ← Lean.getEnv
   for decl in decls do

@@ -22,6 +22,7 @@ original memory.
 
 noncomputable section
 namespace TNLean.PEPS.PairEffect
+open TNLean.Lattice.PartyCircuit
 variable {P : Type} [Fintype P] [DecidableEq P]
 variable {I : P → Type} [∀ p, Fintype (I p)]
 

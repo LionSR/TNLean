@@ -19,6 +19,7 @@ Source: polynomial-PEPS manuscript, proof of Theorem 5.2,
 
 noncomputable section
 namespace TNLean.PEPS.PairEffect
+open TNLean.Lattice.PartyCircuit
 
 open scoped TensorProduct
 

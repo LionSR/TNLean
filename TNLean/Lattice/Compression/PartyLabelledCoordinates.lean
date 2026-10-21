@@ -12,6 +12,7 @@ the original party set. Source: polynomial-PEPS, `04-compression.tex`, lines 565
 -/
 noncomputable section
 namespace TNLean.PEPS.PairEffect
+open TNLean.Lattice.PartyCircuit
 variable {P : Type} [Fintype P] [DecidableEq P]
 variable {I J : P → Type} [∀ p, Fintype (I p)] [∀ p, Fintype (J p)]
 

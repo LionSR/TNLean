@@ -28,7 +28,7 @@ Independently formalized from the manuscript; no upstream Lean proof text reused
 noncomputable section
 open scoped TensorProduct Matrix ComplexConjugate
 open ContinuousLinearMap
-namespace TNLean.PEPS.PairEffect.SourceCircuit
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
 variable {P : Type}
 
 /-- Basis indices at the selected positions, including their original local gate labels.
@@ -173,4 +173,4 @@ theorem correctedSourceTerm_eq_sum_partial {m n : Type} [Fintype m] [Fintype n]
   conv_lhs => arg 2; ext ξ; rw [Finset.sum_comm]
   simp only [mul_comm]
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit

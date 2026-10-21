@@ -24,7 +24,8 @@ Source: polynomial-PEPS manuscript (September 24, 2026), Theorem 5.2,
 
 noncomputable section
 open ContinuousLinearMap
-namespace TNLean.PEPS.PairEffect.SourceCircuit
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
+open TNLean.PEPS.PairEffect
 variable {P : Type} {a b : Layout P}
 
 variable (w : SourceCircuit a b) (k : ℕ)
@@ -95,4 +96,4 @@ theorem sampledEndpointInputMatrix_average (ξ ζ : Choices (fun _ ↦ true) w)
     actualSourceInputBasis_repr_sampledEndpointInputWord] using
       sampledEndpointWord_average w k lam E F ξ ζ ω x y
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit

@@ -22,11 +22,12 @@ part2b_mps_protocol.tex:594–614.
 noncomputable section
 open scoped Matrix NNReal
 
-namespace TNLean.PEPS.PairEffect
+namespace TNLean
+open TNLean.Lattice.PartyCircuit
 open TNLean.PEPS.Approximation
 variable {P : Type} {input output : Layout P}
 
-namespace SourceCircuit
+namespace Lattice.PartyCircuit.SourceCircuit
 
 open Classical in
 /-- The actual source-density network inherits separate participant and
@@ -46,9 +47,9 @@ theorem card_incidentSourceDensityLinks_le_of_arity_lifetime
   rw [card_incidentNonemptyGates_eq_participationCount]
   exact hlifetime p
 
-end SourceCircuit
+end Lattice.PartyCircuit.SourceCircuit
 
-namespace OriginalCircuit
+namespace Lattice.PartyCircuit.OriginalCircuit
 
 open Classical in
 /-- The actual replacement used for the physical density has the original
@@ -89,10 +90,11 @@ theorem card_participants_produce_le_of_arity
   rw [← w.produceLocationsEquiv.apply_symm_apply g, participants_produce]
   exact harity _
 
-end OriginalCircuit
-end TNLean.PEPS.PairEffect
+end Lattice.PartyCircuit.OriginalCircuit
+end TNLean
 
 namespace TNLean.PEPS.PairEffect.DistributedConstruction
+open TNLean.Lattice.PartyCircuit
 open TNLean.PEPS.Approximation
 attribute [local instance] Classical.propDecidable
 

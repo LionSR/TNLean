@@ -30,7 +30,7 @@ Independently formalized; no upstream Lean proof text reused.
 
 
 noncomputable section
-namespace TNLean.PEPS.PairEffect.SourceCircuit
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
 open TNLean.PEPS.Approximation
 variable {P : Type} [DecidableEq P] {a b : Layout P}
 
@@ -73,4 +73,4 @@ theorem card_sourceNetworkAlphabet_le_of_power_bounds (w : SourceCircuit a b)
         _ ≤ (C_M ^ 2 + C_k) * L ^ (max (2 * u) v) :=
           mul_le_mul_of_nonneg_right (le_add_of_nonneg_left (sq_nonneg C_M)) (by positivity)
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit

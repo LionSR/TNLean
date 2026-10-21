@@ -67,6 +67,7 @@ open TNLean.Lattice (siteLift siteLift_conjTranspose)
 noncomputable section
 
 namespace TNLean.PEPS.EncodedFrame
+open TNLean.Lattice.Sheet
 
 open SiteChain WholeGroup
 

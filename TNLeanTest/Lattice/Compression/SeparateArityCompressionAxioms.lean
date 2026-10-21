@@ -9,7 +9,7 @@ import Lean.Util.CollectAxioms
 
 /-! Presence and permitted-axiom checks for the named declarations. -/
 
-open TNLean.PEPS.PairEffect
+open TNLean.PEPS.PairEffect TNLean.Lattice.PartyCircuit
 
 run_cmd do
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]

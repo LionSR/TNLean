@@ -27,6 +27,7 @@ Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 17–30,
 
 noncomputable section
 namespace TNLean.PEPS.PairEffect
+open TNLean.Lattice.PartyCircuit
 
 /-- The original input and output data, on a finite nonempty party set.
 There is no assumption on the size of private spaces beyond finiteness.

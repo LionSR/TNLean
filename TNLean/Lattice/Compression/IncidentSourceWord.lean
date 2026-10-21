@@ -21,7 +21,8 @@ Source: polynomial-PEPS manuscript (September 24, 2026), Theorem 5.2,
 -/
 
 noncomputable section
-namespace TNLean.PEPS.PairEffect.SourceCircuit
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
+open TNLean.PEPS.PairEffect
 variable {P : Type}
 
 /-- Construct the actual singleton source-to-output word from the original
@@ -88,4 +89,4 @@ theorem sources_incidentSourceWord {a b : Layout P} (w : SourceCircuit a b) (p :
   unfold incidentSourceWord
   exact h _ _ _ _ _ _
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit

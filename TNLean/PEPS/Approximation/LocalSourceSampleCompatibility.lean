@@ -16,7 +16,8 @@ and 568–579.
 -/
 
 noncomputable section
-namespace TNLean.PEPS.PairEffect.SourceCircuit
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
+open TNLean.PEPS TNLean.PEPS.PairEffect
 open TNLean.PEPS.Approximation
 variable {P : Type}
 
@@ -40,4 +41,4 @@ theorem restrict_sourceSampleAssignment_eq {a b : Layout P}
     (sourceSampleEquiv w (partialSlotEquiv A w i).1)) = _
   rw [Equiv.symm_apply_apply]
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit
