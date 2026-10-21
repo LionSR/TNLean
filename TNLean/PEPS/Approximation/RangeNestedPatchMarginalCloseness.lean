@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.Approximation.NestedPatchMarginalCloseness
 import TNLean.PEPS.Approximation.RangeNestedPatchEnergy
+import TNLean.PEPS.AreaLaw.GapMarginalCloseness
 
 /-!
 # Uniform marginal closeness at interaction range `R`
@@ -17,7 +17,7 @@ every parameter `0 < κ ≤ 1 / 2` with `C_E κ² ≤ Δ / 1024`, where
 
 **Extension beyond the source:** the source proves the estimate for on-site and
 nearest-neighbour interactions; the range-`R` statements are not in the source. The
-nearest-neighbour statements in `NestedPatchMarginalCloseness` are unchanged.
+nearest-neighbour statements are unchanged.
 
 Source: OpenAI, *Polynomial PEPS approximation of gapped square-grid ground
 states*, Proposition 4.1, `03-patches.tex`, lines 335–365,
