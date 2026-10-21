@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.Hamiltonian
+import TNLean.MPS.AreaLaw.ChainNeighborhood
 import TNLean.Algebra.PathGraphDistance
 import TNLean.Circuit.EntropySupport
 import TNLean.Circuit.LiebRobinson.GraphLocalization
@@ -127,8 +128,7 @@ theorem norm_heisenberg_sub_siteExpectation_chainNeighborhood_le
     (ℓ : ℝ) (hℓ : 0 ≤ ℓ) (t : ℝ) :
     ‖QuantumCircuit.heisenbergEvolution (∑ k, h k) t A -
         QuantumCircuit.siteExpectation q
-          (Finset.univ.filter (fun y : Fin L ↦
-            ∃ x ∈ S, (Nat.dist x.val y.val : ℝ) ≤ ℓ))
+          (chainNeighborhood S ℓ)
           (QuantumCircuit.heisenbergEvolution (∑ k, h k) t A)‖ ≤
       (2 * (2 + 4 * |b₀| * Real.exp (2 * R)) * Real.exp 1 /
         (1 - Real.exp (-(1 / 2)))) * (S.card : ℝ) ^ 2 * ‖A‖ *
@@ -151,8 +151,7 @@ theorem norm_heisenberg_sub_siteExpectation_chainNeighborhood_le
     (QuantumCircuit.mem_supportedOperators_of_isSupportedOn hA) ⌊ℓ⌋₊ t
   have hN : (S.biUnion fun x ↦
       QuantumCircuit.graphBall (SimpleGraph.pathGraph L) x ⌊ℓ⌋₊) =
-      Finset.univ.filter (fun y : Fin L ↦
-        ∃ x ∈ S, (Nat.dist x.val y.val : ℝ) ≤ ℓ) := by
+      chainNeighborhood S ℓ := by
     ext y
     simp only [Finset.mem_biUnion, QuantumCircuit.mem_graphBall,
       SimpleGraph.pathGraph_edist, ENat.natCast_le_natCast, Nat.le_floor_iff hℓ,

@@ -48,8 +48,7 @@ theorem exists_supported_gaussian_integral (R : ℕ) (J : ℝ) :
         let crossing := Entropy.crossingTerms (fun X : ChainSupport L R ↦ X.1) D
         let Z := crossing.biUnion (fun X ↦ X.1)
         let N := fun S : Finset (Fin L) ↦
-          Finset.univ.filter (fun y : Fin L ↦
-            ∃ x ∈ S, (Nat.dist x.val y.val : ℝ) ≤ ℓ)
+          chainNeighborhood S ℓ
         ∃ U : ℝ → Matrix (Fin L → Fin (q * q)) (Fin L → Fin (q * q)) ℂ,
           U 0 = 1 ∧
           (∀ t, HasDerivAt U
