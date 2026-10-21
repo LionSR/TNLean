@@ -160,7 +160,8 @@ statements above are unchanged.
     \lean{TNLean.PEPS.Approximation.SquareCellInformationBound,
         TNLean.PEPS.Approximation.SquareResetBound}
     \leanok
-    \uses{def:peps_angular_grid}
+    \uses{def:peps_angular_grid,thm:peps_cell_conditional_information_from_gap,
+        thm:peps_information_reset_explicit}
     Fix $q\in\mathbb N$, and let $\mathcal G$ assign to each $L$ a set of
     states of the $L\times L$ square with local dimension $q$. It satisfies
     the \emph{cell bound} with clearance coefficient $c$, prefactor $C_1$ and
@@ -177,6 +178,7 @@ statements above are unchanged.
     \label{thm:peps_angular_information_of_bounds}
     \lean{TNLean.PEPS.Approximation.angular_information_reset_of_squareResetBound,
         TNLean.PEPS.Approximation.angular_single_scale_reset_of_bounds,
+        TNLean.PEPS.Approximation.angularInformation_of_bounds,
         TNLean.PEPS.Approximation.isAngularScale_of_bounds}
     \leanok
     \uses{def:peps_family_cell_reset_bounds,def:peps_angular_scale,
@@ -211,14 +213,36 @@ statements above are unchanged.
         thm:peps_angular_reset_width_of_cell_information_explicit,
         lem:peps_angular_scale_of_site_position,
         def:peps_angular_single_scale_constants}
-    Run the proof of
-    Theorem~\ref{thm:peps_angular_information_of_collar_explicit}. At one
-    scale, the cell clearance and the cell bound control the information of
-    the selected cells, and the reset bound with width $C_p$ restores the
-    accuracy $L^{-p}$ on the cores. The dyadic cutoff, the annular separation
-    and the induction over the layers then give the bound at every scale, and
-    translating the marked points with the sites gives the slope and the
-    threshold. The Hamiltonian enters only through the two estimates.
+    With $a'=a'(a)$ and $d=d(a)$ one has $0<a'<a/100$, $0<d<a'/4$ and $d\le1$.
+    Put $M=N_{\rm cell}(a,A_0,m_0)$ and let $L_1$ be at least the displayed
+    threshold. At one scale, the cell clearance and the cell bound at the
+    clearance coefficient $c_{\rm ang}(a,a',d)$ control the information of at
+    most $M$ selected cells, and the reset bound with width $C_p$ restores the
+    accuracy $L^{-p}$ on the cores. This one-scale reset applies at every slope
+    $D\ge D_{\rm cell}(C_p,a',d)\ge1$ and every size $L\ge L_1\ge e$, so
+    $t=D\log L\ge1$. The inequality $t\le n$ yields a dyadic cutoff with
+    $s_j=2^{-j}n$ and $t\le s_m<2t$. Every processed scale $s_j$, with $j\le m$,
+    satisfies $s_j\ge t$, so the same reset applies at each scale. Process the
+    layers from farthest to nearest the marked points, and write $A_j$ for the
+    cumulative processed set.
+
+    At scale $s_j$, the old selected cell group and the enlarged exterior lie
+    inside the two cores controlled at the preceding scale. The first old group
+    is empty. The number of new cells is at most $M$, and cumulative angular
+    separation gives $\operatorname{dist}_\infty(A_j,E)\ge as_j/2$. The
+    one-scale reset therefore restores
+    \begin{align}
+        I_\Omega\bigl(\Lambda_L\cap A_j^{+a's_j}:
+        \Lambda_L\cap E^{+a's_j}\bigr) & \le L^{-p}.
+        \notag
+    \end{align}
+    Here $F^{+r}$ denotes the ambient $\ell_\infty$ enlargement of $F$. The
+    same bound is restored at each step; it is not summed over the scales. The
+    last cumulative set is $A_m=X$. Monotonicity of mutual information on both
+    regions removes the final padding and gives the bound. For an integer
+    accuracy, translating the marked points with the sites gives the slope and
+    threshold for every common translation of $\Lambda_L$. The Hamiltonian
+    enters only through the two estimates.
 \end{proof}
 
 \begin{theorem}[Information of a state of the square on the integer square]

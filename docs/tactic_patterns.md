@@ -6675,7 +6675,7 @@ spectral split → block extraction → MPV calculation → strict bounds
   recorded decision against abstracting finite-sum proof structure. No new
   tactic or global simplification rule is introduced.
 
-### Margin and cell-side bounds of angular information — candidate (2026-10-21)
+### Margin and cell-side bounds of angular information — promoted (2026-10-21)
 
 - **Pattern:** From `0 < a`, derive `0 < angularMargin a`,
   `angularMargin a < a / 100`, `0 < angularCellSide a` and
@@ -6685,9 +6685,9 @@ spectral split → block extraction → MPV calculation → strict bounds
   `PEPS/Approximation/AngularInformationFromCollar.lean`, and
   `isAngularScale_of_bounds` and `isAngularScale_range_closed_le` in
   `PEPS/Approximation/RangeAngularInformation.lean` (2026-10-21).
-- **Status:** Three occurrences across two files; promotion to one lemma
-  bundling the bounds is scheduled with the deduplication of the
-  range-one and family proofs.
+- **Promoted:** `angularMargin_cellSide_bounds` in
+  `PEPS/Approximation/AngularInformationFromCollar.lean` returns the five
+  bounds from `0 < a`; the three proofs destructure it with `obtain`.
 
 ## Rejected
 
@@ -8569,7 +8569,7 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Notes:** No powerset injection or finite-union proof is duplicated. There are two exact symmetric-window comparisons; their remaining arithmetic is a single `omega` call. No further lemma or tactic is needed at present.
 
 
-### Core information after a regional replica swap — candidate (2026-10-18)
+### Core information after a regional replica swap — promoted (2026-10-21)
 
 - **Pattern:** Transport a supported unitary and its vector error from paired
   coordinates to two replicas, derive the vanishing mutual information of the
@@ -8577,14 +8577,15 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Seen:** The local comparison in `MPS/AreaLaw/InformationReset.lean`,
   `mutualInformation_cores_le_of_reset_unitary` in
   `PEPS/Approximation/InformationReset.lean`, and
-  `mutualInformation_cores_le_of_sites_reset_unitary` in
+  `mutualInformation_cores_le_of_sites_reset_unitary`, first written in
   `PEPS/Approximation/RangeInformationReset.lean` (2026-10-21).
 - **Existing reuse:** The coordinate isometry, support transport, replica-swap
   marginal identity and entropy continuity theorem are shared already.
-- **Status:** The third consumer is the finite-site comparison theorem itself,
-  stated for any finite site set. Promotion moves it beside the square version
-  and derives the square version from it through `rectangleSiteEquiv`; this
-  is scheduled with the range-R deduplication (#9792).
+- **Promoted:** `mutualInformation_cores_le_of_sites_reset_unitary` in
+  `PEPS/Approximation/InformationReset.lean` is the comparison on any finite
+  site set; the square version is derived from it by relabelling the sites
+  through `rectangleSiteEquiv`, and the range-R reset applies it directly.
+  The chain comparison in `MPS/AreaLaw/InformationReset.lean` remains inlined.
 
 ### Absorbing a localization coefficient with spare decay — candidate (2026-10-18)
 
