@@ -176,7 +176,9 @@ statements above are unchanged.
     \label{thm:peps_angular_information_of_bounds}
     \lean{TNLean.PEPS.Approximation.angular_information_reset_of_squareResetBound,
         TNLean.PEPS.Approximation.angular_single_scale_reset_of_bounds,
-        TNLean.PEPS.Approximation.isAngularScale_of_bounds}
+        TNLean.PEPS.Approximation.angularInformation_of_bounds,
+        TNLean.PEPS.Approximation.isAngularScale_of_bounds,
+        TNLean.PEPS.Approximation.IsSquareGroundState.squareResetBound}
     \leanok
     \uses{def:peps_family_cell_reset_bounds,def:peps_angular_scale,
         def:peps_angular_information_constants}
@@ -191,10 +193,10 @@ statements above are unchanged.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:peps_angular_information_of_collar_explicit}
-    The proof of Theorem~\ref{thm:peps_angular_information_of_collar_explicit}
-    uses the Hamiltonian only through the cell bound and the reset, so it
-    applies to $\mathcal G$.
+    This is the proof of
+    Theorem~\ref{thm:peps_angular_information_of_collar_explicit}, which uses
+    the Hamiltonian only through the cell bound and the reset, applied to
+    $\mathcal G$.
 \end{proof}
 
 \begin{theorem}[The two estimates at range $R$]
