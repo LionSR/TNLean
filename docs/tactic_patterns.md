@@ -6655,6 +6655,20 @@ spectral split → block extraction → MPV calculation → strict bounds
   recorded decision against abstracting finite-sum proof structure. No new
   tactic or global simplification rule is introduced.
 
+### Margin and cell-side bounds of angular information — candidate (2026-10-21)
+
+- **Pattern:** From `0 < a`, derive `0 < angularMargin a`,
+  `angularMargin a < a / 100`, `0 < angularCellSide a` and
+  `angularCellSide a < angularMargin a / 4` (and sometimes
+  `angularCellSide a ≤ 1`) by unfolding `min a 1 / 200` and `/ 8`.
+- **Seen:** `angularInformationBound_of_sublinearCollarBoundAt_le` in
+  `PEPS/Approximation/AngularInformationFromCollar.lean`, and
+  `isAngularScale_of_bounds` and `isAngularScale_range_closed_le` in
+  `PEPS/Approximation/RangeAngularInformation.lean` (2026-10-21).
+- **Status:** Three occurrences across two files; promotion to one lemma
+  bundling the bounds is scheduled with the deduplication of the
+  range-one and family proofs.
+
 ## Rejected
 
 ### Axiom allow-list fixtures — rejected (2026-10-12)
