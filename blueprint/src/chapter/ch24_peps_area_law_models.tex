@@ -681,14 +681,16 @@ original open square. We state the two models separately, following
         def:square_area_law_state,thm:square_hermitian_term_properties,
         thm:square_hermitian_term_supported_algebra}
     Let $H=\sum_i A_i$ be an original Hermitian square Hamiltonian with
-    interaction bound $J\ge0$. At every designated support set
+    interaction bound $J\in\mathbb R$. At every designated support set
     \begin{align*}
         h_{X_i} & =U A_i^{\mathrm h}U^*,
     \end{align*}
     and put $h_X=0$ at every other admissible range-one support.
     This defines a Hermitian interaction family on $\Lambda$, with the
-    same bound $\|h_X\|\le J$. Neither a nonempty lattice nor a positive
-    local dimension is required.
+    same bound $\|h_X\|\le J$. Indeed, any unused admissible support
+    contains a site $v$, whose original term gives $0\le\|A_v\|\le J$.
+    An empty lattice has no admissible supports. Neither a nonempty lattice
+    nor a positive local dimension is required.
 \end{definition}
 
 \begin{theorem}[Exact Hamiltonian in integer coordinates]
@@ -713,7 +715,7 @@ original open square. We state the two models separately, following
     \leanok
     \uses{def:polynomial_peps_model,def:square_area_law_hamiltonian,
         def:area_law_nearest_neighbor_support}
-    Let $H$ be an original square Hamiltonian with interaction bound $J\ge0$.
+    Let $H$ be an original square Hamiltonian with interaction bound $J\in\mathbb R$.
     Index the sites and unordered nearest-neighbor edges of $\Lambda$ by
     $\mathcal I$, and let $D_j$ be the singleton or endpoint pair of $j$.
     There exist operators $(T_j)_{j\in\mathcal I}$ such that each $T_j$ is
