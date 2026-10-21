@@ -773,6 +773,110 @@ Its marginals are those of the same final normalized vector defined in
     bounds this by $36q^2J\kappa^2$.
 \end{proof}
 
+The source treats on-site and nearest-neighbour interactions. The next three
+entries extend the energy bound to interactions of range $R\ge1$, using the
+patches of Definition~\ref{def:peps_range_nested_patches}; they are not in
+the source. Put $s_R=2\lceil R/2\rceil$, $v_R=1+2R(R+1)$ and
+$\mu_R=2^{v_R-1}$.
+
+\begin{definition}[Energy coefficient at range $R$]
+    \label{def:peps_range_patch_energy_constant}
+    \lean{TNLean.PEPS.Approximation.rangePatchEnergyConstant}
+    \leanok
+    \uses{def:peps_range_nested_patches}
+    For integers $q,R\ge0$ and real $J$, put
+    \begin{align}
+        C_E(q,R,J)=18\,s_R\,R\,\mu_R\,q^{2(v_R-1)}J.
+        \label{eq:peps_range_patch_energy_constant}
+    \end{align}
+\end{definition}
+
+\begin{lemma}[Sign of the energy coefficient at range $R$]
+    \label{lem:peps_range_patch_energy_constant_sign}
+    \lean{TNLean.PEPS.Approximation.rangePatchEnergyConstant_nonneg,
+        TNLean.PEPS.Approximation.rangePatchEnergyConstant_pos}
+    \leanok
+    \uses{def:peps_range_patch_energy_constant}
+    If $J\ge0$, then $C_E(q,R,J)\ge0$. If $q,R\ge1$ and $J>0$, then
+    $C_E(q,R,J)>0$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Every factor is nonnegative, and positive under the second set of
+    hypotheses, because $s_R\ge2$ for $R\ge1$.
+\end{proof}
+
+\begin{lemma}[Crossing sum of one patch at range $R$]
+    \label{lem:peps_range_patch_crossing_sum}
+    \lean{TNLean.PEPS.Approximation.sum_crossingTerms_rangeNestedPatch_le}
+    \leanok
+    \uses{def:area_law_hamiltonian,def:peps_range_nested_patches}
+    Let $J\ge0$, $u\ge0$ and $0\le j<m_R$, and index the terms by the
+    nonempty supports $D$ of graph diameter at most $R$. Then
+    \begin{align}
+        \sum_{D\text{ crossing }K_j}\bigl(q^{|D\cap K_j|}\bigr)^2J
+         & \le R(16u+4)\,\mu_R\,q^{2(v_R-1)}J.
+        \label{eq:peps_range_patch_crossing_sum}
+    \end{align}
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_square_layer,thm:peps_range_nested_patch_split,
+        thm:area_diamond_budget,thm:area_law_crossing_supports}
+    A support $D$ crossing $K_j$ has a site inside and a site outside, so
+    $1\le|D\cap K_j|\le|D|-1\le v_R-1$ and
+    $q^{|D\cap K_j|}\le q^{v_R-1}$, also when $q=0$. Each of its sites
+    inside $K_j$ lies in the inner layer $N(c,r_j,R)$, which has at most
+    $R(16u+4)$ sites, and at most $\mu_R$ supports contain a given site.
+\end{proof}
+
+\begin{theorem}[Energy of a minimizing patch output at range $R$]
+    \label{thm:peps_range_nested_patch_minimizer_energy}
+    \lean{TNLean.PEPS.Approximation.LocalHamiltonian.rangeNestedPatch_minimizer_energy_le}
+    \leanok
+    \uses{def:area_law_hamiltonian,def:area_law_ground_entropy,
+        def:peps_range_nested_patches,def:peps_regularized_patch_objective,
+        def:peps_regularized_patch_minimum,
+        def:peps_range_patch_energy_constant}
+    Let $\Lambda$ be a finite induced lattice domain, $R\ge1$ and $J\ge0$, and
+    let $H$ be a Hamiltonian on $\Lambda$ with one Hermitian term of norm at
+    most $J$ on each nonempty support of graph diameter at most $R$. Let
+    $\Psi$ be a unit vector and $E_0$ a real number with $H\Psi=E_0\Psi$ and
+    $H-E_0I\ge\Delta(I-|\Psi\rangle\langle\Psi|)$. Fix an order on the sites,
+    a centre $c$, and reals $u\ge0$, $0<\kappa\le1$ and $b>0$. Use the
+    patches $X_j=K(c,r_j)$, $0\le j<m_R$, of
+    Definition~\ref{def:peps_range_nested_patches}, with the equal weights
+    $a_j=\kappa/m_R$ and the input vector $\Psi$. If $x\in\mathcal D$
+    minimizes $F$ on $\mathcal D$ and $\phi=\widehat\Psi(x)$, then
+    \begin{align}
+        \operatorname{Re}\langle\phi,H\phi\rangle-E_0
+         & \le C_E(q,R,J)\,\kappa^2.
+        \label{eq:peps_range_nested_patch_minimizer_energy}
+    \end{align}
+    At $R=1$ the patches are those of
+    Theorem~\ref{thm:peps_nested_patch_minimizer_energy}, which keeps the
+    sharper coefficient $36q^2J$ for nearest-neighbour interactions.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_regularized_patch_minimum,
+        thm:peps_range_nested_patch_sizes,
+        thm:peps_patch_minimum_filter_log_ratio,
+        thm:peps_ordered_patch_normalized_coordinates,
+        thm:peps_patch_factor_chain_list,
+        thm:peps_range_nested_patch_split,
+        lem:peps_range_patch_crossing_sum,
+        thm:peps_range_nested_patch_quadratic_sum}
+    The argument of Theorem~\ref{thm:peps_nested_patch_minimizer_energy}
+    applies to the terms of $H$, since each support of graph diameter at most
+    $R$ is split by at most one patch. It gives
+    (\ref{eq:peps_nested_patch_single_crossing_energy}) with
+    $d_{ij}=q^{|D_i\cap X_j|}$. Lemma~\ref{lem:peps_range_patch_crossing_sum}
+    bounds each inner sum by $R(16u+4)\mu_Rq^{2(v_R-1)}J$, and
+    (\ref{eq:peps_range_nested_patch_budget}) bounds
+    $(16u+4)\sum_ja_j^2$ by $18s_R\kappa^2$.
+\end{proof}
+
 \begin{theorem}[Marginal closeness at an admissible filter parameter]
     \label{thm:peps_nested_patch_minimizer_marginal_closeness_explicit}
     \lean{TNLean.PEPS.Approximation.nestedPatch_minimizer_marginal_closeness}
