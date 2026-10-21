@@ -53,7 +53,7 @@ source of that version and opening the named file.
 ## Sources used for the one-dimensional area-law comparison
 
 These sources are not vendored, for the same reason as the preceding section:
-all four are posted under the arXiv non-exclusive distribution license, which grants
+all five are posted under the arXiv non-exclusive distribution license, which grants
 no downstream redistribution right. Issues and docstrings cite them by file and
 line range as `References/<arXiv ID>/...`, a local mirror of the arXiv source
 of the exact version linked below, excluded from the repository by
@@ -79,6 +79,11 @@ source of that version and opening the named file.
   energy eigenstates in 1D*. Mirrored file `References/1602.08828/local_alg_arxiv_v2.tex`,
   with the bibliography `local_alg_arxiv_v2.bbl` and the figures `rg1step.pdf`,
   `rgtree.pdf` and `transmission.pdf`. Link only;
+  [arXiv non-exclusive distribution license 1.0][nonexclusive].
+- [arXiv:cond-mat/0508554v3](https://arxiv.org/abs/cond-mat/0508554v3): M. B. Hastings,
+  *Solving Gapped Hamiltonians Locally*, Phys. Rev. B 73, 085115 (2006). Mirrored file
+  `References/cond-mat_0508554/proj3new.tex`, with the figures `figAct.eps` and
+  `figIt.eps`. Link only;
   [arXiv non-exclusive distribution license 1.0][nonexclusive].
 
 [nonexclusive]: https://arxiv.org/licenses/nonexclusive-distrib/1.0/
