@@ -412,6 +412,24 @@ with every tensor factor at its original site.
     properties follow.
 \end{proof}
 
+\begin{theorem}[Comparison with a supported approximant]
+    \label{thm:qc_site_expectation_supported_approximant}
+    \lean{QuantumCircuit.norm_sub_siteExpectation_le_two_mul_norm_sub_of_mem_supportedOperators}
+    \leanok
+    \uses{lem:qc_site_expectation_properties}
+    For $q\ge1$, let $A$ be any operator on a finite set of sites and let
+    $A_0$ be supported on $B$. Then
+    \begin{align}
+        \|A-E_B(A)\| & \le2\|A-A_0\|.\notag
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{lem:qc_site_expectation_properties}
+    Since $E_B(A_0)=A_0$, linearity gives
+    $A-E_B(A)=(A-A_0)-E_B(A-A_0)$. The triangle inequality and
+    contractivity of $E_B$ give the bound.
+\end{proof}
+
 \begin{lemma}[Localization error through on-site commutators]
     \label{lem:qc_site_expectation_commutator}
     \lean{QuantumCircuit.norm_sub_siteExpectation_le}\leanok
