@@ -8579,12 +8579,17 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Pattern:** Transport a supported unitary and its vector error from paired
   coordinates to two replicas, derive the vanishing mutual information of the
   actual swapped cores, and apply supported-unitary entropy continuity.
-- **Seen:** The local comparison in `MPS/AreaLaw/InformationReset.lean` and
+- **Seen:** The local comparison in `MPS/AreaLaw/InformationReset.lean`,
   `mutualInformation_cores_le_of_reset_unitary` in
-  `PEPS/Approximation/InformationReset.lean`.
+  `PEPS/Approximation/InformationReset.lean`, and
+  `mutualInformation_cores_le_of_sites_reset_unitary` in
+  `PEPS/Approximation/RangeInformationReset.lean` (2026-10-21).
 - **Existing reuse:** The coordinate isometry, support transport, replica-swap
   marginal identity and entropy continuity theorem are shared already.
-  A third consumer would justify a single finite-site comparison theorem.
+- **Status:** The third consumer is the finite-site comparison theorem itself,
+  stated for any finite site set. Promotion moves it beside the square version
+  and derives the square version from it through `rectangleSiteEquiv`; this
+  is scheduled with the range-R deduplication (#9792).
 
 ### Absorbing a localization coefficient with spare decay — candidate (2026-10-18)
 
