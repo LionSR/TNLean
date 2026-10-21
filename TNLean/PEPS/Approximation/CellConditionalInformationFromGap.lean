@@ -112,7 +112,7 @@ theorem cell_conditionalMutualInformation_le_square_closed
           FiniteProduct.conditionalMutualInformation (fun _ : Vertex L ↦ Fin q)
             Ω G E B ≤ cellInformationConstantClosed q 1 J Δ c *
               (1 + Real.log s) ^ cellInformationExponentClosed q 1 J Δ c :=
-  cell_conditionalMutualInformation_le_square_of_sublinearCollarBoundAt_explicit hJ hΔ
+  cell_conditionalMutualInformation_le_square_of_sublinearCollarBoundAt_explicit hΔ
     (sublinearCollarBoundAt_closed (R := 1) (D₀ := 13) hq hJ hΔ (by norm_num)) hc
 
 open Classical in
@@ -143,6 +143,6 @@ theorem exists_cell_conditionalMutualInformation_le_square
   have hcol : AreaLaw.SublinearCollarBound q 1 J Δ 13 24 :=
     AreaLaw.sublinearCollarBound_real q 1 hq hJ hΔ (by norm_num) (by norm_num)
   exact exists_cell_conditionalMutualInformation_le_square_of_sublinearCollarBound
-    hJ hΔ hcol hc
+    hΔ hcol hc
 
 end TNLean.PEPS.Approximation

@@ -88,7 +88,7 @@
     \leanok
     \uses{def:polynomial_peps_model,def:area_law_nearest_neighbor_support,
         def:square_area_law_hamiltonian}
-    Let $L,q,m\ge0$ be integers and $J\ge0$. Let $H$ be an original
+    Let $L,q,m\ge0$ be integers and $J\in\mathbb R$. Let $H$ be an original
     square-grid Hamiltonian with interaction bound $J$, and let $\Omega$
     be a unit vector with $H\Omega=E_0\Omega$ and
     $H-E_0I\ge\Delta(I-|\Omega\rangle\langle\Omega|)$, where
@@ -122,11 +122,10 @@
     companion source of~\cite{OpenAI2026PolynomialPEPS}. The spectral
     feasible families used here and their comparison with the source's
     filter coordinates are discussed in~\cite{gap:oai26_zero_floor_energy_scope};
-    the nonnegative-budget restriction is recorded
+    the scope of the physical specialization is recorded
     in~\cite{gap:polypeps_square_zero_floor_optimizer_scope}.
 \end{theorem}
-\begin{proof}
-    \leanok
+\begin{proof}\leanok
     \uses{thm:square_nearest_neighbor_terms,thm:square_area_law_ground_gap,
         thm:area_law_crossing_support_count,thm:area_law_nearest_neighbor_budget}
     Replace the original terms by their Hermitian parts and transport them
@@ -352,16 +351,10 @@
     \leanok
     \uses{thm:square_zero_floor_maximizer_energy,thm:pinned_filter_output_maximum,
         thm:pinned_filter_crossings,thm:square_area_law_hamiltonian_operator}
-    Replace only the interaction norm bounds by $J_+=\max(J,0)$, retaining
-    exactly the same site terms, edge terms, total operator and gap.
-    If $J<0$ and $L>0$, the site $(0,0)$ would give
-    $0\le\|h_{(0,0)}\|\le J<0$. Thus $J<0$ forces $L=0$, when every
-    crossing count vanishes. Consequently
-    $q^2J_+\sum_jb(X_j)a_j^2=q^2J\sum_jb(X_j)a_j^2$.
-
     Choose a linear order on the canonical sites internally. Apply
-    Theorem~\ref{thm:square_zero_floor_maximizer_energy} once with bound
-    $J_+$. Pull its chosen canonical family $K$ back to $F(K)$.
+    Theorem~\ref{thm:square_zero_floor_maximizer_energy} once to the original
+    Hamiltonian with its original real bound $J$. Pull its chosen canonical
+    family $K$ back to $F(K)$.
     Theorem~\ref{thm:pinned_filter_output_maximum} gives maximality against
     every admissible family and identifies both outputs exactly. The
     configuration isometry satisfies
