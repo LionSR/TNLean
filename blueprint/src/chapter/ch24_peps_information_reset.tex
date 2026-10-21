@@ -96,7 +96,7 @@ the cores to an inverse power of the system size. This is Lemma~3.3 of
     $A,C\subseteq V$ be disjoint, and let $A_0\subseteq A$, $C_0\subseteq C$.
     Let $U$ be a unitary on the paired sites of $V$, supported on a set
     containing no site of $A_0\cup C_0$, with $\|U\Psi-\Phi\|\le\delta$ for
-    $\Psi=\Omega\otimes\Omega$ and $\Phi=F_A\Psi$, both unit vectors. Then
+    $\Psi=\Omega\otimes\Omega$ and $\Phi=F_A\Psi$. Then
     \begin{align*}
         I_\Omega(A_0:C_0) & \le8\sqrt\delta\,\log(e\,q^{|A_0|}).
     \end{align*}
@@ -123,7 +123,7 @@ the cores to an inverse power of the system size. This is Lemma~3.3 of
     disjoint, and let $R_0\subseteq R$, $C_0\subseteq C$. Let $U$ be a unitary
     on the paired sites, supported on a set containing no site of
     $R_0\cup C_0$, with $\|U\Psi-\Phi\|\le\delta$ for $\Psi=\Omega\otimes\Omega$
-    and $\Phi=F_R\Psi$, both unit vectors. Then
+    and $\Phi=F_R\Psi$. Then
     \begin{align*}
         I_\Omega(R_0:C_0) & \le8\sqrt\delta\,\log(e\,q^{|R_0|}).
     \end{align*}
@@ -131,9 +131,22 @@ the cores to an inverse power of the system size. This is Lemma~3.3 of
 \begin{proof}
     \leanok
     \uses{thm:peps_reset_cores_entropy_sites}
-    Relabel the sites of the open square by the points of the square and apply
-    Theorem~\ref{thm:peps_reset_cores_entropy_sites}. The relabelling preserves
-    the support of $U$, the vectors $\Psi$ and $\Phi$, and their norms.
+    Let $e$ be the bijection from the points of the square to the sites of the
+    open square, and write $\Omega_e=\Omega\circ e$ and $U_e$ for $U$ with its
+    sites relabelled by $e$, so that
+    \begin{align*}
+        \Omega_e\otimes\Omega_e                & =(\Omega\otimes\Omega)\circ e, &
+        F_{e^{-1}(R)}(\Omega_e\otimes\Omega_e) & =(F_R\Psi)\circ e,               \\
+        U_e(\Omega_e\otimes\Omega_e)           & =(U\Psi)\circ e.
+    \end{align*}
+    Composition with a bijection of configurations preserves the
+    $\ell^2$-norm, so $\|\Omega_e\|=1$ and
+    $\|U_e(\Omega_e\otimes\Omega_e)-F_{e^{-1}(R)}(\Omega_e\otimes\Omega_e)\|=
+        \|U\Psi-\Phi\|\le\delta$. The unitary $U_e$ is supported on $e^{-1}$ of the
+    support of $U$, which contains no site of $e^{-1}(R_0\cup C_0)$, and
+    $I_{\Omega_e}(e^{-1}(R_0):e^{-1}(C_0))=I_\Omega(R_0:C_0)$ with
+    $|e^{-1}(R_0)|=|R_0|$. Theorem~\ref{thm:peps_reset_cores_entropy_sites}
+    applied to $\Omega_e$ and $U_e$ gives the bound.
 \end{proof}
 
 \begin{theorem}[The entropy cost of the reset]
@@ -287,7 +300,7 @@ range-one statements above are unchanged.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{def:peps_crossing_supports}
+    \uses{lem:peps_crossing_supports_near_and_few}
     A walk of length $\ell$ moves the sup-distance by at most $\ell$. A buffer
     site lies outside both regions, and a site of $Z_R(A)$ is within distance
     $R$ of a site of $A$ and of a site outside $A$, which lies outside $C$
@@ -304,7 +317,7 @@ range-one statements above are unchanged.
     and $p>0$, and put $C_p=C_{p,R}(J,\Delta,p)$ and
     $L_0=L_{0,R}(q,J,\Delta,p)$. Let $L\ge L_0$, let $H$ be a Hamiltonian of
     range $R$ on the $L\times L$ square with Hermitian terms of norm at most
-    $J$, and let $\Omega$ be a normalized eigenvector with the full-system gap
+    $J$, and let $\Omega$ be a normalized ground vector with the full-system gap
     $\Delta$. Let $A,C$ be disjoint with $I_\Omega(A:C)\le b$, $b\ge0$. If the
     cores $A_0\subseteq A$ and $C_0\subseteq C$ are at sup-distance greater
     than $C_p(1+b+\log L)$ from the complements of $A$ and of $C$, then
