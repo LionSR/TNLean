@@ -317,3 +317,77 @@ replicas on a region $R$.
     Take $C=C_U(J,\Delta,r)$ and $K=K(J,\Delta,r)$, which are positive, in
     Theorem~\ref{thm:peps_reset_unitary_explicit}.
 \end{proof}
+
+\subsection{The supported unitary at interaction range $R$}
+
+The source treats only site and nearest-neighbour terms on the open square,
+which is interaction range one. The statements of this subsection extend the
+localized filter and the reset unitary to a Hamiltonian of range $R$ on a
+finite domain with at most $L^2$ sites; the range-one statements above are
+unchanged.
+
+\begin{definition}[The constants of the information reset at range $R$]
+    \label{def:peps_reset_constants_range}
+    \lean{TNLean.PEPS.Approximation.rangeResetRadius,
+        TNLean.PEPS.Approximation.rangeResetFilterPrefactor,
+        TNLean.PEPS.Approximation.rangeResetUnitaryPrefactor,
+        TNLean.PEPS.Approximation.rangeResetRadius_pos,
+        TNLean.PEPS.Approximation.rangeResetFilterPrefactor_pos,
+        TNLean.PEPS.Approximation.rangeResetUnitaryPrefactor_pos}
+    \leanok
+    \uses{def:peps_reset_constants,def:area_graph_ball_localization_constants,
+        def:peps_crossing_supports}
+    For an integer $R\ge0$ and real numbers $J$, $\Delta$ and $r$, with $C_0$
+    and $v$ as in Definition~\ref{def:area_graph_ball_localization_constants},
+    $c_R$ as in Definition~\ref{def:peps_crossing_supports}, $T_0=T_0(\Delta,r)$
+    as in Definition~\ref{def:peps_reset_constants} and $\mu=1/2$, put
+    \begin{align*}
+        K_R(J,\Delta,r)     & =\frac{v(R,2J)T_0+15+r}{\mu}, \\
+        C_{F,R}(J,\Delta,r) & =2C_0(R)(1+c_RJ)(1+T_0)+3,    \\
+        C_{U,R}(J,\Delta,r) & =2C_{F,R}(J,\Delta,r).
+    \end{align*}
+    If $J\ge0$, $\Delta>0$ and $r\ge0$, all three are positive.
+\end{definition}
+
+\begin{theorem}[The localized filter and the unitary at range $R$]
+    \label{thm:peps_reset_unitary_range}
+    \lean{TNLean.Lattice.LocalHamiltonian.reset_localized_filter,
+        TNLean.Lattice.LocalHamiltonian.reset_unitary}
+    \leanok
+    \uses{def:area_law_hamiltonian,def:peps_frame_sheet_swap,
+        def:peps_crossing_supports,def:peps_reset_constants_range}
+    Fix integers $q\ge1$ and $R\ge0$, and real numbers $J\ge0$, $\Delta>0$
+    and $r\ge0$. Let $L\ge1$, let $\Lambda$ be a finite domain with at most
+    $L^2$ sites, let $H$ be a Hamiltonian of range $R$ on $\Lambda$ with
+    Hermitian terms of norm at most $J$, and let $\Omega$ be a normalized
+    eigenvector with the full-system gap $\Delta$. Let $A,C\subseteq\Lambda$ be
+    disjoint with $I_\Omega(A:C)\le b$, $b\ge0$, and let $B$ be the graph
+    neighbourhood of radius $\lceil K_R(J,\Delta,r)(1+b+\log L)\rceil$ of
+    $(A\cup C)^c\cup Z_R(A)$. With $\Psi=\Omega\otimes\Omega$ and
+    $\Phi=F_A\Psi$ on the paired sites, there are a real number $z\ge e^{-2b}$
+    and a contraction $M$ supported on $B$ with
+    \begin{align*}
+        \|M\Psi-z\Phi\|,\ \|M^*\Phi-z\Psi\| & \le C_{F,R}(J,\Delta,r)e^{-10b}L^{-r},
+    \end{align*}
+    and a unitary $U$ supported on $B$ with
+    $\|U\Psi-\Phi\|\le C_{U,R}(J,\Delta,r)L^{-r}$. This extends
+    Theorems~\ref{thm:peps_reset_localized_filter_explicit}
+    and~\ref{thm:peps_reset_unitary_explicit} from range one to range $R$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_reset_regional_filter_explicit,
+        thm:peps_supported_physical_buffer_gaussian_range,
+        thm:peps_reset_polar_step,def:peps_reset_constants_range}
+    The proof of Theorem~\ref{thm:peps_reset_localized_filter_explicit}
+    applies with Theorem~\ref{thm:peps_supported_physical_buffer_gaussian_range}
+    in place of Theorem~\ref{thm:peps_supported_physical_buffer_gaussian}.
+    Since $|\Lambda|\le L^2$, the localization error is at most
+    \begin{align*}
+        2C_0(R)|\Lambda|(1+c_RJ|\Lambda|T_0B_*)e^{vT_0B_*-\mu\ell}
+         & \le2C_0(R)(1+c_RJ)L^4(1+T_0B_*)e^{vT_0B_*-\mu\ell} \\
+         & \le2C_0(R)(1+c_RJ)(1+T_0)e^{-10b}L^{-r},
+    \end{align*}
+    because $\mu K_R=vT_0+15+r$. Theorem~\ref{thm:peps_reset_polar_step} then
+    gives the unitary.
+\end{proof}
