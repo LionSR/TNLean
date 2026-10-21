@@ -190,6 +190,7 @@ import TNLean.PEPS.Approximation.RangeNestedPatchApproximation
 import TNLean.PEPS.Approximation.RangeNestedPatchEnergy
 import TNLean.PEPS.Approximation.RangeNestedPatchMarginalCloseness
 import TNLean.PEPS.Approximation.RangePolynomialPEPS
+import TNLean.PEPS.Approximation.RangePolynomialPEPSClosedConstant
 import TNLean.PEPS.Approximation.RangeResetUnitary
 import TNLean.PEPS.Approximation.RangeSquareGroundState
 import TNLean.PEPS.Approximation.RankOneBlocks
