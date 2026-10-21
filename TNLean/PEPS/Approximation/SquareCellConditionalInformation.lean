@@ -163,7 +163,7 @@ unchanged.
 Source: polynomial-PEPS Lemma 3.2 (`lem:cell-cmi`), `02-information.tex`,
 lines 161–178, and its application in Proposition 3.4, lines 688–737. -/
 theorem cell_conditionalMutualInformation_le_square_of_sublinearCollarBoundAt
-    {q : ℕ} {J Δ D₀ Ctpl C Ca : ℝ} {N Na : ℕ} (hJ : 0 ≤ J)
+    {q : ℕ} {J Δ D₀ Ctpl C Ca : ℝ} {N Na : ℕ}
     (hcol : AreaLaw.SublinearCollarBoundAt q 1 J Δ D₀ Ctpl C N)
     (hamp : AreaLaw.AmplificationBoundAt q 1 J Δ (max C 1) 1 Ca Na) {c : ℝ} (hc : 0 < c) :
     ∀ s : ℝ, 1 ≤ s → ∀ (o : ℝ × ℝ) (m₀ : ℤ × ℤ) (A : Set (ℤ × ℤ)),
@@ -183,8 +183,8 @@ theorem cell_conditionalMutualInformation_le_square_of_sublinearCollarBoundAt
   have hcell := cell_conditionalMutualInformation_le_of_sublinearCollarBoundAt hcol hamp hc
   intro s hs o m₀ A hm₀ L h E₀ Ω hΩ
   exact cell_conditionalMutualInformation_le_square_of_rectangle Ω o m₀ A
-    (hcell s hs (o - (1, 1)) m₀ A hm₀ (rectangularDomain L L) (h.toAreaLawHamiltonian hJ) E₀
-      (squareAreaLawState Ω) (h.isGappedGroundState_toAreaLawHamiltonian hJ hΩ))
+    (hcell s hs (o - (1, 1)) m₀ A hm₀ (rectangularDomain L L) h.toAreaLawHamiltonian E₀
+      (squareAreaLawState Ω) (h.isGappedGroundState_toAreaLawHamiltonian hΩ))
 
 open Classical in
 /-- **Lemma 3.2 on the original open square, at the named amplification constants.** Under
@@ -198,7 +198,7 @@ Source: polynomial-PEPS Lemma 3.2 (`lem:cell-cmi`), `02-information.tex`,
 lines 161–178; area-law Proposition 10.2 (`prop:amplification`), `09-amplification.tex`,
 lines 261–296. -/
 theorem cell_conditionalMutualInformation_le_square_of_sublinearCollarBoundAt_explicit
-    {q : ℕ} {J Δ D₀ Ctpl C : ℝ} {N : ℕ} (hJ : 0 ≤ J) (hΔ : 0 < Δ)
+    {q : ℕ} {J Δ D₀ Ctpl C : ℝ} {N : ℕ} (hΔ : 0 < Δ)
     (hcol : AreaLaw.SublinearCollarBoundAt q 1 J Δ D₀ Ctpl C N) {c : ℝ} (hc : 0 < c) :
     ∀ s : ℝ, 1 ≤ s → ∀ (o : ℝ × ℝ) (m₀ : ℤ × ℤ) (A : Set (ℤ × ℤ)),
       m₀ ∉ A →
@@ -217,7 +217,7 @@ theorem cell_conditionalMutualInformation_le_square_of_sublinearCollarBoundAt_ex
               (1 + Real.log s) ^ cellInformationExponent c Ctpl N
                 (collarAmplificationConstant q 1 J Δ C)
                 (collarAmplificationThreshold q 1 J Δ C) :=
-  cell_conditionalMutualInformation_le_square_of_sublinearCollarBoundAt hJ hcol
+  cell_conditionalMutualInformation_le_square_of_sublinearCollarBoundAt hcol
     (amplificationBoundAt_collarAmplification hΔ C) hc
 
 open Classical in
@@ -233,7 +233,7 @@ constant and threshold and at the amplification constant and threshold
 Source: polynomial-PEPS Lemma 3.2 (`lem:cell-cmi`), `02-information.tex`,
 lines 163–178, and its application in Proposition 3.4, lines 688–737. -/
 theorem exists_cell_conditionalMutualInformation_le_square_of_sublinearCollarBound
-    {q : ℕ} {J Δ D₀ Ctpl : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < Δ)
+    {q : ℕ} {J Δ D₀ Ctpl : ℝ} (hΔ : 0 < Δ)
     (hcol : AreaLaw.SublinearCollarBound q 1 J Δ D₀ Ctpl) {c : ℝ} (hc : 0 < c) :
     ∃ C₁ K : ℝ, 0 < C₁ ∧ 0 ≤ K ∧
       ∀ s : ℝ, 1 ≤ s → ∀ (o : ℝ × ℝ) (m₀ : ℤ × ℤ) (A : Set (ℤ × ℤ)),
@@ -253,6 +253,6 @@ theorem exists_cell_conditionalMutualInformation_le_square_of_sublinearCollarBou
     exists_sublinearCollarBoundAt_amplificationBoundAt hΔ hcol
   exact ⟨_, _, cellInformationConstant_pos q c Ctpl N Ca Na,
     (cellInformationExponent_pos c Ctpl N Ca Na).le,
-    cell_conditionalMutualInformation_le_square_of_sublinearCollarBoundAt hJ hcol hamp hc⟩
+    cell_conditionalMutualInformation_le_square_of_sublinearCollarBoundAt hcol hamp hc⟩
 
 end TNLean.PEPS.Approximation
