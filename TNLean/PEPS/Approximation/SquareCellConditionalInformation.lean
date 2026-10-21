@@ -39,37 +39,57 @@ open TNLean.PEPS.AreaLaw
 open TNLean.PEPS.AreaLaw.Geometry
 
 open Classical in
-/-- **Lemma 3.2 on the original open square, with named constants.** Under the range-one
-sublinear collar bound with constant `C` and threshold `N`, and the range-one amplification
-bound at the input constant `max(C, 1)` and order `1` with constant `C_a` and threshold `N_a`,
-the cell conditional-information bound holds on the original open square, with sites at
-`(i + 1, j + 1)`, with the prefactor `cellInformationConstant q c C_tpl N C_a N_a` and the
-exponent `cellInformationExponent c C_tpl N C_a N_a` of the integer-domain estimate. A common
-translation identifies this placement with the integer-domain placement, so the constants are
-unchanged.
+/-- **The cell bound of Lemma 3.2 on the square for a family of states,** with prefactor `C₁`
+and exponent `K` at the clearance coefficient `c`: for every state `Ω` of the family, every cell
+`G` of the grid of side `s ≥ 1`, every union `B` of other cells and every region `E` outside
+`G ∪ B` at distance at least `c s` from the closed cell, `I_Ω(G : E | B) ≤ C₁ (1 + log s)^K`.
+Source: `02-information.tex`, Lemma 3.2, lines 161–178. -/
+def SquareCellInformationBound (q : ℕ) (G : ∀ L : ℕ, StateSpace L q → Prop) (c C₁ K : ℝ) :
+    Prop :=
+  ∀ s : ℝ, 1 ≤ s → ∀ (o : ℝ × ℝ) (m₀ : ℤ × ℤ) (A : Set (ℤ × ℤ)), m₀ ∉ A →
+    ∀ (L : ℕ) (Ω : StateSpace L q), G L Ω →
+      let Gc : Finset (Vertex L) :=
+        Finset.univ.filter (fun v ↦ sitePosition L v ∈ AngularGrid.cell o s m₀)
+      let B : Finset (Vertex L) := Finset.univ.filter
+        (fun v ↦ AngularGrid.owner o s (sitePosition L v) ∈ A)
+      ∀ E : Finset (Vertex L), E ⊆ (Gc ∪ B)ᶜ →
+        (∀ x ∈ closure (AngularGrid.cell o s m₀),
+          ∀ y ∈ E, c * s ≤ dist x (sitePosition L y)) →
+        FiniteProduct.conditionalMutualInformation (fun _ : Vertex L ↦ Fin q)
+          Ω Gc E B ≤ C₁ * (1 + Real.log s) ^ K
 
-Source: polynomial-PEPS Lemma 3.2 (`lem:cell-cmi`), `02-information.tex`,
-lines 161–178, and its application in Proposition 3.4, lines 688–737. -/
-theorem cell_conditionalMutualInformation_le_square_of_sublinearCollarBoundAt
-    {q : ℕ} {J Δ D₀ Ctpl C Ca : ℝ} {N Na : ℕ} (hJ : 0 ≤ J)
-    (hcol : AreaLaw.SublinearCollarBoundAt q 1 J Δ D₀ Ctpl C N)
-    (hamp : AreaLaw.AmplificationBoundAt q 1 J Δ (max C 1) 1 Ca Na) {c : ℝ} (hc : 0 < c) :
-    ∀ s : ℝ, 1 ≤ s → ∀ (o : ℝ × ℝ) (m₀ : ℤ × ℤ) (A : Set (ℤ × ℤ)),
-      m₀ ∉ A →
-      ∀ (L : ℕ) (h : SquareHamiltonian L q J) (E₀ : ℝ) (Ω : StateSpace L q),
-        h.IsGappedGroundState E₀ Ω Δ →
-        let G : Finset (Vertex L) :=
-          Finset.univ.filter (fun v ↦ sitePosition L v ∈ AngularGrid.cell o s m₀)
-        let B : Finset (Vertex L) := Finset.univ.filter
-          (fun v ↦ AngularGrid.owner o s (sitePosition L v) ∈ A)
-        ∀ E : Finset (Vertex L), E ⊆ (G ∪ B)ᶜ →
-          (∀ x ∈ closure (AngularGrid.cell o s m₀),
-            ∀ y ∈ E, c * s ≤ dist x (sitePosition L y)) →
-          FiniteProduct.conditionalMutualInformation (fun _ : Vertex L ↦ Fin q)
-            Ω G E B ≤ cellInformationConstant q c Ctpl N Ca Na *
-              (1 + Real.log s) ^ cellInformationExponent c Ctpl N Ca Na := by
-  have hcell := cell_conditionalMutualInformation_le_of_sublinearCollarBoundAt hcol hamp hc
-  intro s hs o m₀ A hm₀ L h E₀ Ω hΩ G B E hE hclear
+open Classical in
+/-- **The cell bound on the square from the cell bound on the integer square.** If, for a state
+`Ω` of the square, the cell bound of Lemma 3.2 holds for its placement on the integer square
+with the grid origin `o - (1, 1)`, then it holds on the square with the origin `o`. A common
+translation by `(1, 1)` identifies the two placements of the sites.
+Source: `02-information.tex`, Lemma 3.2, lines 161–178, and its application in
+Proposition 3.4, lines 688–737. -/
+theorem cell_conditionalMutualInformation_le_square_of_rectangle {q L : ℕ}
+    (Ω : StateSpace L q) {s c C₀ : ℝ} (o : ℝ × ℝ) (m₀ : ℤ × ℤ) (A : Set (ℤ × ℤ))
+    (hbound : ∀ E : Finset (Site (rectangularDomain L L)),
+      E ⊆ (Finset.univ.filter (fun x : Site (rectangularDomain L L) ↦
+          x.val ∈ CellPartition.cellSample (o - (1, 1)) s m₀) ∪
+        Finset.univ.filter (fun x : Site (rectangularDomain L L) ↦
+          CellPartition.cellIndex (o - (1, 1)) s (integerPoint x.val) ∈ A))ᶜ →
+      (∀ x ∈ closure (CellPartition.box (CellPartition.cellCorner (o - (1, 1)) s m₀) s),
+        ∀ y ∈ E, c * s ≤ dist x (integerPoint y.val)) →
+      FiniteProduct.conditionalMutualInformation
+        (fun _ : Site (rectangularDomain L L) ↦ Fin q) (squareAreaLawState Ω)
+        (Finset.univ.filter (fun x : Site (rectangularDomain L L) ↦
+          x.val ∈ CellPartition.cellSample (o - (1, 1)) s m₀)) E
+        (Finset.univ.filter (fun x : Site (rectangularDomain L L) ↦
+          CellPartition.cellIndex (o - (1, 1)) s (integerPoint x.val) ∈ A)) ≤ C₀) :
+    let G : Finset (Vertex L) :=
+      Finset.univ.filter (fun v ↦ sitePosition L v ∈ AngularGrid.cell o s m₀)
+    let B : Finset (Vertex L) := Finset.univ.filter
+      (fun v ↦ AngularGrid.owner o s (sitePosition L v) ∈ A)
+    ∀ E : Finset (Vertex L), E ⊆ (G ∪ B)ᶜ →
+      (∀ x ∈ closure (AngularGrid.cell o s m₀),
+        ∀ y ∈ E, c * s ≤ dist x (sitePosition L y)) →
+      FiniteProduct.conditionalMutualInformation (fun _ : Vertex L ↦ Fin q)
+        Ω G E B ≤ C₀ := by
+  intro G B E hE hclear
   let σ := rectangleSiteEquiv L L
   let o' : ℝ × ℝ := o - (1, 1)
   have hpos (v : Vertex L) :
@@ -108,10 +128,7 @@ theorem cell_conditionalMutualInformation_le_square_of_sublinearCollarBoundAt
       (CellPartition.box (CellPartition.cellCorner o' s m₀) s)
       (AngularGrid.cell o s m₀) from fun x hx ↦ (hboxshift x).mp hx).closure
       (continuous_id.add continuous_const)
-  have hbound := hcell s hs o' m₀ A hm₀ (rectangularDomain L L)
-    (h.toAreaLawHamiltonian hJ) E₀ (squareAreaLawState Ω)
-    (h.isGappedGroundState_toAreaLawHamiltonian hJ hΩ)
-  dsimp only at hbound
+  change ∀ E : Finset (Site (rectangularDomain L L)), _ at hbound
   rw [hG, hB] at hbound
   have hE' : E.map σ.toEmbedding ⊆ (G.map σ.toEmbedding ∪ B.map σ.toEmbedding)ᶜ := by
     intro y hy
@@ -132,6 +149,42 @@ theorem cell_conditionalMutualInformation_le_square_of_sublinearCollarBoundAt
     σ.arrowCongr (Equiv.refl (Fin q)) from rfl,
     FiniteProduct.conditionalMutualInformation, ← Finset.map_union,
     finiteProductEntropy_relabel] using hfinal
+
+open Classical in
+/-- **Lemma 3.2 on the original open square, with named constants.** Under the range-one
+sublinear collar bound with constant `C` and threshold `N`, and the range-one amplification
+bound at the input constant `max(C, 1)` and order `1` with constant `C_a` and threshold `N_a`,
+the cell conditional-information bound holds on the original open square, with sites at
+`(i + 1, j + 1)`, with the prefactor `cellInformationConstant q c C_tpl N C_a N_a` and the
+exponent `cellInformationExponent c C_tpl N C_a N_a` of the integer-domain estimate. A common
+translation identifies this placement with the integer-domain placement, so the constants are
+unchanged.
+
+Source: polynomial-PEPS Lemma 3.2 (`lem:cell-cmi`), `02-information.tex`,
+lines 161–178, and its application in Proposition 3.4, lines 688–737. -/
+theorem cell_conditionalMutualInformation_le_square_of_sublinearCollarBoundAt
+    {q : ℕ} {J Δ D₀ Ctpl C Ca : ℝ} {N Na : ℕ} (hJ : 0 ≤ J)
+    (hcol : AreaLaw.SublinearCollarBoundAt q 1 J Δ D₀ Ctpl C N)
+    (hamp : AreaLaw.AmplificationBoundAt q 1 J Δ (max C 1) 1 Ca Na) {c : ℝ} (hc : 0 < c) :
+    ∀ s : ℝ, 1 ≤ s → ∀ (o : ℝ × ℝ) (m₀ : ℤ × ℤ) (A : Set (ℤ × ℤ)),
+      m₀ ∉ A →
+      ∀ (L : ℕ) (h : SquareHamiltonian L q J) (E₀ : ℝ) (Ω : StateSpace L q),
+        h.IsGappedGroundState E₀ Ω Δ →
+        let G : Finset (Vertex L) :=
+          Finset.univ.filter (fun v ↦ sitePosition L v ∈ AngularGrid.cell o s m₀)
+        let B : Finset (Vertex L) := Finset.univ.filter
+          (fun v ↦ AngularGrid.owner o s (sitePosition L v) ∈ A)
+        ∀ E : Finset (Vertex L), E ⊆ (G ∪ B)ᶜ →
+          (∀ x ∈ closure (AngularGrid.cell o s m₀),
+            ∀ y ∈ E, c * s ≤ dist x (sitePosition L y)) →
+          FiniteProduct.conditionalMutualInformation (fun _ : Vertex L ↦ Fin q)
+            Ω G E B ≤ cellInformationConstant q c Ctpl N Ca Na *
+              (1 + Real.log s) ^ cellInformationExponent c Ctpl N Ca Na := by
+  have hcell := cell_conditionalMutualInformation_le_of_sublinearCollarBoundAt hcol hamp hc
+  intro s hs o m₀ A hm₀ L h E₀ Ω hΩ
+  exact cell_conditionalMutualInformation_le_square_of_rectangle Ω o m₀ A
+    (hcell s hs (o - (1, 1)) m₀ A hm₀ (rectangularDomain L L) (h.toAreaLawHamiltonian hJ) E₀
+      (squareAreaLawState Ω) (h.isGappedGroundState_toAreaLawHamiltonian hJ hΩ))
 
 open Classical in
 /-- **Lemma 3.2 on the original open square, at the named amplification constants.** Under
