@@ -239,10 +239,3 @@ import TNLean.PEPS.Approximation.VectorColumn
 import TNLean.PEPS.Approximation.WordSelectedRestriction
 import TNLean.PEPS.Approximation.WordSelectivePartition
 import TNLean.PEPS.Approximation.WordSwapsMeet
-||||||| 2399382eef
-||||||| 9145eb663c
-||||||| dd28f5d117
-||||||| be9dc83d9f
-||||||| 2636e2d18a
-||||||| be9dc83d9f
-||||||| be9dc83d9f
