@@ -1044,11 +1044,11 @@ for an arbitrary finite set of sites and are instantiated here directly.
 
 \begin{theorem}[Entropy at local dimension one]
     \label{thm:chain_entropy_dim_one}
-    \lean{TNLean.MPS.AreaLaw.regionEntropy_eq_zero_of_localDimension_one}
+    \lean{TNLean.Lattice.regionEntropy_eq_zero_of_localDimension_one}
     \leanok
-    \uses{def:chain_model}
-    Let $\Omega$ be a unit vector on a finite chain with one-dimensional
-    local spaces. For every set $A$ of sites, $S_\Omega(A)=0$. This is the
+    Let $V$ be a finite set of sites and let $\Omega$ be a unit vector on
+    $\bigotimes_{x\in V}\mathbb C$, with one-dimensional local spaces.
+    For every set $A$ of sites, $S_\Omega(A)=0$. This is the
     dimension-one case of the entropy dimension bound used in
     \cite[Part~I]{TNLean2026OneDimensional}.
 \end{theorem}

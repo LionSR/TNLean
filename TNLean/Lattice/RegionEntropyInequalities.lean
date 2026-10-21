@@ -63,6 +63,16 @@ theorem one_le_supportDim_const (hq : 1 ≤ q) (D : Finset V) :
   rw [Entropy.supportDim, Finset.prod_const]
   exact Nat.one_le_pow _ _ hq
 
+/-- Every region of a unit vector on one-dimensional local spaces has zero entropy.
+This is the dimension-one case of the TNLean note, `part1_arealaw.tex`,
+`eq:final`, lines 673–675, and the area-law preprint, `01-preliminaries.tex`, line 116. -/
+theorem regionEntropy_eq_zero_of_localDimension_one
+    {Ω : EuclideanSpace ℂ (V → Fin 1)} (hΩ : ‖Ω‖ = 1) (A : Finset V) :
+    Entropy.regionEntropy (n := fun _ : V ↦ 1) A Ω = 0 := by
+  apply vonNeumannEntropy_eq_zero_of_rank_le_one (Entropy.regionState_posSemidef A Ω)
+    (Entropy.trace_regionState_eq_one hΩ)
+  exact (Matrix.rank_le_card_width _).trans_eq (by simp [Entropy.RegionConfig])
+
 variable {Ω : EuclideanSpace ℂ (V → Fin q)}
 
 /-- Subadditivity of the regional entropy of a unit vector over disjoint regions. -/
