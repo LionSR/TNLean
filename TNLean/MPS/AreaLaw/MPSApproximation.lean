@@ -533,7 +533,7 @@ theorem chainBondDimension_le_mul_rpow {L : ℕ} (hL : 1 ≤ L) :
 
 /-- Scalar comparison for the printed MPS bond bound.
 Source: one-dimensional note, part2a_mps_information.tex, thm:Bshort, lines80–92. -/
-private theorem polynomial_floor_exp_le {C s y b : ℝ} (hs : 0 ≤ s)
+theorem polynomial_floor_exp_le {C s y b : ℝ} (hs : 0 ≤ s)
     (hy : 0 < y) (hyb : y ^ 2 ≤ b) :
     (⌊Real.exp (C + 64 * s * Real.log y)⌋₊ : ℝ) ≤
       Real.exp C * b ^ (32 * s) := by
@@ -602,5 +602,47 @@ theorem exists_isOpenMPS_norm_sub_le_polynomial
     simp only [u₀, one_div_one_div]
     nlinarith only [hdim, show 0 ≤ Real.exp C_int *
       (32 * Real.exp (Real.exp 1 / 2) * (L : ℝ) ^ 4) ^ (32 * s) by positivity]
+
+/-- **Matrix product state approximation at accuracy `ε` with a polynomial bond bound.**
+For `L ≥ 1` and `0 < ε ≤ 1`, a gapped ground vector `Ω` of a finite-range Hamiltonian on the
+chain has a normalized open-boundary matrix product state `Φ` within `ε` of `Ω` whose bond
+dimension `D` satisfies `D ≤ e^{C_int} (2 c₀)^{64 s} (L / ε)^{64 s}`, with the printed
+`C_int`, `s = √((1 + J/Δ) B_R)` and `c₀ = √(2 e^{e/2})`. Theorem B is the case `ε = 1/L`.
+Source: one-dimensional note, part2a_mps_information.tex, thm:Bshort and sec:shortcut,
+lines 73–92, at a free accuracy. -/
+theorem exists_isOpenMPS_norm_sub_le_of_error_rpow
+    (hq : 1 ≤ q) (hJ : 0 ≤ J) (hΔ : 0 < Δ) {L : ℕ}
+    (hL : 1 ≤ L) (h : ChainHamiltonian L q R J) {E₀ : ℝ}
+    {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
+    (hgs : Matrix.IsGappedGroundState h.operator E₀ Ω Δ)
+    {ε : ℝ} (hε : 0 < ε) (hε1 : ε ≤ 1) :
+    let C_E : ℝ := 8 * chainCrossConst R * (q : ℝ) ^ (2 * (R + 1)) * J
+    let m : ℕ :=
+      ⌈max (max (max 4 (4 * C_E / Δ))
+        (128 * Real.sqrt ((1 + J / Δ) * chainBudgetConst q R)))
+        (4096 * Real.exp 1 * (1 + J / Δ) * chainBudgetConst q R)⌉₊
+    let C_int := 8 * (m : ℝ) * R * Real.log q + 1 + 2 * C_E / Δ
+    let s := Real.sqrt ((1 + J / Δ) * chainBudgetConst q R)
+    ∃ Φ : EuclideanSpace ℂ (Fin L → Fin q), ‖Φ‖ = 1 ∧ ∃ D : ℕ,
+      IsOpenMPS L q D (fun x ↦ Φ x) ∧ ‖Φ - Ω‖ ≤ ε ∧
+      (D : ℝ) ≤ Real.exp C_int * (2 * tailPrefactorRoot) ^ (64 * s) *
+        ((L : ℝ) / ε) ^ (64 * s) := by
+  intro C_E m C_int s
+  obtain ⟨Φ, hΦ, hMPS, herror⟩ :=
+    exists_isOpenMPS_norm_sub_le_of_error_polynomial hq hJ hΔ hL h hgs hε hε1
+  refine ⟨Φ, hΦ, _, hMPS, herror, ?_⟩
+  have hroot := tailPrefactorRoot_pos
+  have hLpos : (0 : ℝ) < L := by exact_mod_cast hL
+  set y : ℝ := 2 * (L : ℝ) * tailPrefactorRoot / ε with hydef
+  have hy : 0 < y := by rw [hydef]; positivity
+  have hdim := polynomial_floor_exp_le (C := C_int) (s := s) (Real.sqrt_nonneg _) hy le_rfl
+  have hpow : (y ^ 2) ^ (32 * s) =
+      (2 * tailPrefactorRoot) ^ (64 * s) * ((L : ℝ) / ε) ^ (64 * s) := by
+    rw [← Real.rpow_natCast, ← Real.rpow_mul hy.le,
+      show y = (2 * tailPrefactorRoot) * ((L : ℝ) / ε) by rw [hydef]; ring,
+      Real.mul_rpow (by positivity) (by positivity)]
+    congr 2 <;> push_cast <;> ring
+  rw [hpow, ← mul_assoc] at hdim
+  exact hdim
 
 end TNLean.MPS.AreaLaw
