@@ -8,8 +8,8 @@ approximation of gapped square-grid ground states*, both at
 
 The audit ran in two rounds, on 2026-10-13 and 2026-10-21. The first round
 targeted the steps that were then unformalized and judged most likely to hide a
-gap. The second round covered the remaining sections and the six load-bearing
-points listed in the tracker. Each candidate gap was traced to a precise
+gap. The second round covered further sections, listed below, and the six
+load-bearing points listed in the tracker. Each candidate gap was traced to a precise
 location and then subjected to an attempt at refutation. Only candidates that
 survived refutation are reported as findings.
 
@@ -21,8 +21,9 @@ statements, not a precondition for the proofs.
 
 ## Result
 
-No genuine mathematical gap was found in either manuscript. The only findings
-are prose slips and loose constants, listed below; none changes a statement.
+No genuine mathematical gap was found in the audited sections of either
+manuscript. The only findings are prose slips and loose constants, listed
+below; none changes a statement.
 
 ## Coverage
 
@@ -42,6 +43,14 @@ are prose slips and loose constants, listed below; none changes a statement.
 | PEPS, compression | Lemma 5.1, Theorem 5.2 | Sound |
 | PEPS, dyadic protocol | Proposition 7.1, Lemma 7.2 | Sound |
 | PEPS, assembly | Section 8.1 ledger, Lemmas 8.1, 8.2, small sizes, Appendix | Sound |
+
+Not audited at the paper level: PEPS Section 2 (Lemma 2.2) and Section 6
+(Definition 6.1, Lemmas 6.2–6.6). The audit checked only how Section 6 is
+consumed: the term count of Lemma 6.3 against the patch-rank sum, and the
+gates of Lemmas 6.5 and 6.6 against the lifetime count of Theorem 5.2. The Lean
+proofs of these lemmas carry the paper's hypotheses, as recorded in the
+resolved notes `docs/paper-gaps/polypeps_small_rewrite_monomials.tex` and
+`docs/paper-gaps/polypeps_ownership_change_monomials.tex`.
 
 ## Load-bearing points of the tracker
 
@@ -106,8 +115,8 @@ disjoint `P`, `Y`, `F` and all `0 < t < 1/2`) or the narrowing is already
 recorded in `docs/paper-gaps/`.
 
 The patch-stationarity step of Proposition 4.1, flagged in the first round as
-the most delicate open step, was proved in QICLean #818 and resolved
-`oai26_peps_patch_stationarity_gap.tex`.
+the most delicate open step, was proved in QICLean #818, which resolved the QICLean note
+[The remaining stationarity step for the patch regulator](https://sirui-lu.com/QICLean/paper-gaps/oai26_peps_patch_stationarity_gap.pdf).
 
 ## Formalization notes
 
