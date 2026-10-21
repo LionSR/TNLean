@@ -22,6 +22,11 @@ and the reset width `C_p` of Lemma 3.3. The slope equals `2400 C_p / min(a, 1)`
 and the amplification constant and threshold `C_a`, `N_a`
 (`angularInformationBound_of_sublinearCollarBoundAt_le`).
 
+The proof uses the Hamiltonian only through the cell bound and the reset. It is given for any
+family of unit states with these two estimates (`SquareCellInformationBound`,
+`SquareResetBound`) as `angularInformation_of_bounds` and `isAngularScale_of_bounds`, and the
+range-one statements are its instances at the open-square model.
+
 **Scope restriction (sublinear collar bound):** The sublinear collar
 estimate remains an explicit premise. This is the corresponding implication
 in Proposition 3.4, not a derivation of the collar estimate. See
@@ -49,6 +54,20 @@ noncomputable def angularMargin (a : ℝ) : ℝ := min a 1 / 200
 
 Source: polynomial-PEPS manuscript, `02-information.tex`, lines 663–664. -/
 noncomputable def angularCellSide (a : ℝ) : ℝ := angularMargin a / 8
+
+/-- For `a > 0`, the margin `a' = angularMargin a` and the cell side `d = angularCellSide a`
+satisfy `0 < a' < a / 100` and `0 < d < a' / 4`, with `d ≤ 1`.
+
+Source: polynomial-PEPS manuscript, `02-information.tex`, lines 662–664. -/
+theorem angularMargin_cellSide_bounds {a : ℝ} (ha : 0 < a) :
+    0 < angularMargin a ∧ angularMargin a < a / 100 ∧ 0 < angularCellSide a ∧
+      angularCellSide a < angularMargin a / 4 ∧ angularCellSide a ≤ 1 := by
+  have ha' : 0 < angularMargin a := div_pos (lt_min ha zero_lt_one) (by norm_num)
+  have ha'1 : angularMargin a ≤ 1 / 200 :=
+    div_le_div_of_nonneg_right (min_le_right a 1) (by norm_num)
+  exact ⟨ha', show min a 1 / 200 < a / 100 by linarith [min_le_left a 1],
+    div_pos ha' (by norm_num), div_lt_div_of_pos_left ha' (by norm_num) (by norm_num),
+    show angularMargin a / 8 ≤ 1 by linarith⟩
 
 /-- The bound `(m₀ + 1)(2 ⌈(max(A₀, 2) + 3a'/2) / d⌉ + 3)²` on the number of new cells at one
 annular scale, with `a' = angularMargin a` and `d = angularCellSide a`.
@@ -120,6 +139,74 @@ theorem angularScale_eq {J Δ a p : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < Δ) (ha : 0 <
   unfold angularScale angularCellResetSlope
   rw [h1, h2, max_eq_left hY, max_eq_right hX]
 
+/-- **Proposition 3.4 for a family of unit states with the two estimates.** If the states of
+`G` are unit vectors and satisfy the cell bound with constants `C₁ > 0`, `K ≥ 0` at the
+clearance coefficient of `a' = angularMargin a`, `d = angularCellSide a`, and the reset bound
+with width `C_p > 0` and threshold `L₀`, then every slope
+`D ≥ angularCellResetSlope C_p a' d` and every threshold
+`L₁ ≥ max (angularCellResetThreshold a' d C_p C₁ (angularCellCount a A₀ m₀) K) L₀` satisfy the
+conclusion of Proposition 3.4 for `G`.
+Source: `02-information.tex`, Proposition 3.4 (`prop:angular`), lines 635–785. -/
+theorem angularInformation_of_bounds {q : ℕ} {G : ∀ L : ℕ, StateSpace L q → Prop}
+    (hnorm : ∀ L (Ω : StateSpace L q), G L Ω → ‖Ω‖ = 1) {a A₀ Cp L₀ C₁ K : ℝ} (ha : 0 < a)
+    (m₀ : ℕ) {p : ℝ} (hp : 0 < p)
+    (hcell : SquareCellInformationBound q G
+      (angularClearance a (angularMargin a) (angularCellSide a)) C₁ K)
+    (hreset : SquareResetBound q G p Cp L₀) (hC₁ : 0 < C₁) (hK : 0 ≤ K) (hCp : 0 < Cp)
+    {D L₁ : ℝ} (hD : angularCellResetSlope Cp (angularMargin a) (angularCellSide a) ≤ D)
+    (hL₁ : max (angularCellResetThreshold (angularMargin a) (angularCellSide a) Cp C₁
+      (angularCellCount a A₀ m₀) K) L₀ ≤ L₁) :
+    ∀ L : ℕ, L₁ ≤ L → ∀ Ω : StateSpace L q, G L Ω →
+      ∀ V : Finset (ℝ × ℝ), V.card ≤ m₀ →
+      ∀ X E : Finset (SquareLatticeVertex L L), Disjoint X E →
+      ∀ n : ℝ, D * Real.log L ≤ n → n ≤ A₀ * L →
+        (∀ x ∈ X, ∀ y ∈ X, dist (sitePosition L x) (sitePosition L y) ≤ A₀ * n) →
+        AngularSeparation (sitePosition L '' X) (sitePosition L '' E) n (D * Real.log L) a V →
+        FiniteProduct.mutualInformation (fun _ : SquareLatticeVertex L L ↦ Fin q) Ω X E ≤
+          (L : ℝ) ^ (-p) := by
+  classical
+  obtain ⟨ha', ha'a, hd, hda', hd1⟩ := angularMargin_cellSide_bounds ha
+  have hreset' := angular_single_scale_reset_of_bounds hcell hreset hC₁ hK hCp ha' ha'a hd hda'
+    hd1 hp (angularCellCount a A₀ m₀) hD
+  have hD1 : 1 ≤ D := (one_le_angularCellResetSlope _ _ _).trans hD
+  have hLe : Real.exp 1 ≤ L₁ :=
+    ((exp_one_le_angularCellResetThreshold _ _ _ _ _ _).trans (le_max_left _ _)).trans hL₁
+  intro L hL Ω hΩ V hV X E _hXE n hn _hnL hdiam hsep
+  have hlog : 1 ≤ Real.log (L : ℝ) :=
+    (Real.le_log_iff_exp_le ((Real.exp_pos 1).trans_le (hLe.trans hL))).2 (hLe.trans hL)
+  have ht : 0 < D * Real.log (L : ℝ) :=
+    mul_pos (zero_lt_one.trans_le hD1) (zero_lt_one.trans_le hlog)
+  let c := chooseDyadicCutoff ht hn
+  apply mutualInformation_le_of_annular_reset Ω (hnorm L Ω hΩ) (ht.trans_le hn) ha.le ha' ha'a
+    hd hda' (Real.rpow_nonneg (Nat.cast_nonneg L) (-p)) hdiam hV hsep c
+  intro j hj Aold hAold S hS hcard hold
+  refine hreset' L (hL₁.trans hL) Ω hΩ (dyadicScale n j)
+    (c.lower_at (ht.trans_le hn).le hj) (0, 0) Aold
+    (cumulativeLayer (sitePosition L '' X) n V c.last j) (sitePosition L '' E)
+    hAold ?_ S hS hcard hold
+  intro x hx y hy
+  simpa only [div_mul_eq_mul_div] using
+    cumulativeLayer_separation c (ht.trans_le hn).le ha.le hsep hj hx hy
+
+/-- **Proposition 3.4 at an integer accuracy for a family of unit states with the two
+estimates:** the slopes and thresholds of `angularInformation_of_bounds` form an angular scale
+for `G`.
+Source: `02-information.tex`, Proposition 3.4 (`prop:angular`), lines 635–785;
+`06-geometry.tex`, lines 62–63 and 440–445. -/
+theorem isAngularScale_of_bounds {q : ℕ} {G : ∀ L : ℕ, StateSpace L q → Prop}
+    (hnorm : ∀ L (Ω : StateSpace L q), G L Ω → ‖Ω‖ = 1) {a A₀ Cp L₀ C₁ K : ℝ} (ha : 0 < a)
+    (m₀ : ℕ) {p : ℕ} (hp : 0 < p)
+    (hcell : SquareCellInformationBound q G
+      (angularClearance a (angularMargin a) (angularCellSide a)) C₁ K)
+    (hreset : SquareResetBound q G p Cp L₀) (hC₁ : 0 < C₁) (hK : 0 ≤ K) (hCp : 0 < Cp)
+    {D L₁ : ℝ} (hD : angularCellResetSlope Cp (angularMargin a) (angularCellSide a) ≤ D)
+    (hL₁ : max (angularCellResetThreshold (angularMargin a) (angularCellSide a) Cp C₁
+      (angularCellCount a A₀ m₀) K) L₀ ≤ L₁) :
+    IsAngularScale q G a A₀ m₀ p D L₁ :=
+  IsAngularScale.of_sitePosition
+    (angularInformation_of_bounds hnorm ha m₀ (by exact_mod_cast hp) hcell hreset hC₁ hK hCp hD
+      hL₁)
+
 /-- **Proposition 3.4 under the sublinear collar bound, with explicit constants.** Assume the
 range-one sublinear collar bound with constant `C` and threshold `N`, and the range-one
 amplification bound at the input constant `max(C, 1)` and order `1` with constant `C_a` and
@@ -148,36 +235,20 @@ theorem angularInformationBound_of_sublinearCollarBoundAt_le {q : ℕ} (hq : 1 �
           AngularSeparation (sitePosition L '' X) (sitePosition L '' E) n (D * Real.log L) a V →
           FiniteProduct.mutualInformation (fun _ : SquareLatticeVertex L L ↦ Fin q) Ω X E ≤
             (L : ℝ) ^ (-p) := by
-  classical
-  have ha' : 0 < angularMargin a := div_pos (lt_min ha zero_lt_one) (by norm_num)
-  have ha'a : angularMargin a < a / 100 :=
-    show min a 1 / 200 < a / 100 by linarith [min_le_left a 1]
-  have ha'1 : angularMargin a ≤ 1 / 200 :=
-    div_le_div_of_nonneg_right (min_le_right a 1) (by norm_num)
-  have hd : 0 < angularCellSide a := div_pos ha' (by norm_num)
-  have hda' : angularCellSide a < angularMargin a / 4 :=
-    div_lt_div_of_pos_left ha' (by norm_num) (by norm_num)
-  have hd1 : angularCellSide a ≤ 1 := show angularMargin a / 8 ≤ 1 by linarith
-  have hreset := angular_single_scale_reset_of_sublinearCollarBoundAt q hq J hJ hΔ hcol hamp
-    ha' ha'a hd hda' hd1 hp (angularCellCount a A₀ m₀) hD
-  have hD1 : 1 ≤ D := (one_le_angularScale J Δ a p).trans hD
-  have hLe : Real.exp 1 ≤ L₀ := (exp_one_le_angularThreshold q J Δ a A₀ m₀ p Ctpl N Ca Na).trans hL₀
-  intro L hL h E₀ Ω hΩ V hV X E _hXE n hn _hnL hdiam hsep
-  have hlog : 1 ≤ Real.log (L : ℝ) :=
-    (Real.le_log_iff_exp_le ((Real.exp_pos 1).trans_le (hLe.trans hL))).2 (hLe.trans hL)
-  have ht : 0 < D * Real.log (L : ℝ) :=
-    mul_pos (zero_lt_one.trans_le hD1) (zero_lt_one.trans_le hlog)
-  let c := chooseDyadicCutoff ht hn
-  apply mutualInformation_le_of_annular_reset Ω hΩ.1 (ht.trans_le hn) ha.le ha' ha'a hd hda'
-    (Real.rpow_nonneg (Nat.cast_nonneg L) (-p)) hdiam hV hsep c
-  intro j hj Aold hAold S hS hcard hold
-  refine hreset L (hL₀.trans hL) h E₀ Ω hΩ (dyadicScale n j)
-    (c.lower_at (ht.trans_le hn).le hj) (0, 0) Aold
-    (cumulativeLayer (sitePosition L '' X) n V c.last j) (sitePosition L '' E)
-    hAold ?_ S hS hcard hold
-  intro x hx y hy
-  simpa only [div_mul_eq_mul_div] using
-    cumulativeLayer_separation c (ht.trans_le hn).le ha.le hsep hj hx hy
+  obtain ⟨ha', ha'a, hd, hda', -⟩ := angularMargin_cellSide_bounds ha
+  set c := angularClearance a (angularMargin a) (angularCellSide a)
+  have hc : 0 < c := div_pos (AngularGrid.angular_clearance_pos ha' ha'a hda') hd
+  have hcell : SquareCellInformationBound q (IsSquareGroundState q J Δ) c
+      (cellInformationConstant q c Ctpl N Ca Na) (cellInformationExponent c Ctpl N Ca Na) :=
+    fun s hs o m₀ A hm₀ L Ω ⟨h, E₀, hΩ⟩ ↦
+      cell_conditionalMutualInformation_le_square_of_sublinearCollarBoundAt hJ hcol hamp hc
+        s hs o m₀ A hm₀ L h E₀ Ω hΩ
+  intro L hL h E₀ Ω hΩ
+  exact angularInformation_of_bounds (fun _ _ hΩ ↦ hΩ.norm_eq_one) ha m₀ hp hcell
+    (IsSquareGroundState.squareResetBound q hq J hJ hΔ hp)
+    (cellInformationConstant_pos q c Ctpl N Ca Na)
+    (cellInformationExponent_pos c Ctpl N Ca Na).le (resetWidth_pos hJ hΔ hp) hD hL₀
+    L hL Ω ⟨h, E₀, hΩ⟩
 
 /-- **Proposition 3.4 at an integer accuracy under the sublinear collar bound, with explicit
 constants,** for sites placed at any common translation of `Λ_L`: every slope
