@@ -182,7 +182,8 @@ statements above are unchanged.
     \leanok
     \uses{def:peps_family_cell_reset_bounds,def:peps_angular_scale,
         def:peps_angular_information_constants}
-    Let $\mathcal G$ consist of unit vectors and satisfy the cell bound with
+    Let $a>0$ and let $p>0$ be an integer. Let $\mathcal G$ consist of unit
+    vectors and satisfy the cell bound with
     $C_1>0$ and $K\ge0$ at the clearance coefficient of $a'$ and $d$, and the
     reset bound with $C_p>0$ and $L_0$, where $a'$ and $d$ are the margin and
     the cell side of Definition~\ref{def:peps_angular_information_constants}.
@@ -193,10 +194,18 @@ statements above are unchanged.
 \end{theorem}
 \begin{proof}
     \leanok
-    This is the proof of
-    Theorem~\ref{thm:peps_angular_information_of_collar_explicit}, which uses
-    the Hamiltonian only through the cell bound and the reset, applied to
-    $\mathcal G$.
+    \uses{thm:peps_scaled_cell_clearance,thm:peps_annular_information_induction,
+        thm:peps_annular_cutoff,thm:peps_annular_separation,
+        lem:peps_angular_scale_of_site_position,
+        def:peps_angular_single_scale_constants}
+    Run the proof of
+    Theorem~\ref{thm:peps_angular_information_of_collar_explicit}. At one
+    scale, the cell clearance and the cell bound control the information of
+    the selected cells, and the reset bound with width $C_p$ restores the
+    accuracy $L^{-p}$ on the cores. The dyadic cutoff, the annular separation
+    and the induction over the layers then give the bound at every scale, and
+    translating the marked points with the sites gives the slope and the
+    threshold. The Hamiltonian enters only through the two estimates.
 \end{proof}
 
 \begin{theorem}[The two estimates at range $R$]
@@ -207,8 +216,7 @@ statements above are unchanged.
         TNLean.PEPS.Approximation.IsRangeSquareGroundState.squareResetBound}
     \leanok
     \uses{def:peps_family_cell_reset_bounds,def:square_range_ground_states,
-        thm:peps_cell_information_range_closed,
-        thm:peps_information_reset_range}
+        def:peps_closed_information_constants,def:peps_reset_width_range}
     Fix $q\ge1$, $R\ge0$, $J\ge0$ and $\Delta>0$. The unit gapped ground vectors
     of Hamiltonians of range $R$ with term bound $J$ on the square satisfy the
     cell bound at every $c>0$ with $C_1=C_{\rm cell}(q,R,J,\Delta,c)$ and
@@ -217,6 +225,8 @@ statements above are unchanged.
 \end{theorem}
 \begin{proof}
     \leanok
+    \uses{thm:peps_cell_information_range_closed,
+        thm:peps_information_reset_range}
     Place the state on the integer square. A common translation by $(1,1)$
     identifies the two placements of the sites, so
     Theorem~\ref{thm:peps_cell_information_range_closed} gives the cell bound,

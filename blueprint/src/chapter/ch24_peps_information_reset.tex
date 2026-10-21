@@ -248,6 +248,7 @@ range-one statements above are unchanged.
 \end{theorem}
 \begin{proof}
     \leanok
+    \uses{thm:peps_reset_paired_support}
     The proof of Theorem~\ref{thm:peps_reset_cores_entropy} uses no property of
     the square.
 \end{proof}
@@ -255,8 +256,7 @@ range-one statements above are unchanged.
 \begin{theorem}[Information reset at range $R$]
     \label{thm:peps_information_reset_range}
     \lean{TNLean.Lattice.LocalHamiltonian.information_reset_of_card_le,
-        TNLean.Lattice.LocalHamiltonian.information_reset_of_rangeResetThreshold_le,
-        TNLean.Lattice.LocalHamiltonian.information_reset}
+        TNLean.Lattice.LocalHamiltonian.information_reset_of_rangeResetThreshold_le}
     \leanok
     \uses{def:area_law_hamiltonian,def:peps_reset_width_range}
     Fix integers $q\ge1$ and $R\ge0$, and real numbers $J\ge0$, $\Delta>0$
@@ -284,4 +284,21 @@ range-one statements above are unchanged.
     $\lceil K_RB\rceil+R\le C_pB$, so
     Theorem~\ref{thm:peps_reset_support_cores_range} keeps it away from the
     cores. The square has $L^2$ sites.
+\end{proof}
+
+\begin{theorem}[Information reset at range $R$, existence of the constants]
+    \label{thm:peps_information_reset_range_exists}
+    \lean{TNLean.Lattice.LocalHamiltonian.information_reset}
+    \leanok
+    \uses{def:area_law_hamiltonian}
+    Fix integers $q\ge1$ and $R\ge0$, and real numbers $J\ge0$, $\Delta>0$
+    and $p>0$. There are $C_p>0$ and $L_0$ such that the conclusion of
+    Theorem~\ref{thm:peps_information_reset_range} holds for every $L\ge L_0$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_information_reset_range,def:peps_reset_width_range}
+    Take $C_p=C_{p,R}(J,\Delta)$, which is positive, and
+    $L_0=L_{0,R}(q,J,\Delta)$ in
+    Theorem~\ref{thm:peps_information_reset_range}.
 \end{proof}
