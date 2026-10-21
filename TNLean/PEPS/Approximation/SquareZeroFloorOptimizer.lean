@@ -32,9 +32,10 @@ Lean proof text is reused.
 hypothesis to the companion lemma `exists_maximizer_energy`. As there, the nested
 single-crossing regions and the weights are supplied, and every real interaction
 bound is allowed. The filters here are QICLean's zero-floor feasible families in
-canonical integer-domain coordinates. Their identification with the companion
-source's positive filters is proved in `PinnedNestedFilterCoordinates.lean`, and
-`PinnedZeroFloorOptimizer.lean` restates this theorem in those coordinates. Both
+canonical integer-domain coordinates. Their identification with adapted copies
+of the companion source's positive filters is proved in
+`PinnedNestedFilterCoordinates.lean`, and `PinnedZeroFloorOptimizer.lean`
+restates this theorem in those coordinates. Both
 are recorded, including the empty-square case, in
 `docs/paper-gaps/polypeps_square_zero_floor_optimizer_scope.tex`. The comparison
 with the companion code's own filter types is recorded in
