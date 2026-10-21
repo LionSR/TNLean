@@ -56,16 +56,16 @@ theorem IsRangeSquareGroundState.norm_eq_one {q R : ℕ} {J Δ : ℝ} {L : ℕ}
   obtain ⟨_, _, hgap⟩ := hΩ
   exact (norm_squareAreaLawState Ω).symm.trans hgap.1
 
-/-- Every gapped ground vector of a square-grid Hamiltonian with `J ≥ 0` belongs to the
-range-one family: the Hamiltonian is placed on the integer square with its Hermitian
-interaction parts at the range-one supports.
+/-- Every gapped ground vector of a square-grid Hamiltonian belongs to the range-one family:
+the Hamiltonian is placed on the integer square with its Hermitian interaction parts at the
+range-one supports.
 Source: polynomial-PEPS `eq:model` (`00-introduction.tex`, lines 40–45) and area-law
 Corollary 1.2. -/
-theorem IsSquareGroundState.isRangeSquareGroundState {q : ℕ} {J Δ : ℝ} (hJ : 0 ≤ J)
+theorem IsSquareGroundState.isRangeSquareGroundState {q : ℕ} {J Δ : ℝ}
     {L : ℕ} {Ω : StateSpace L q} (hΩ : IsSquareGroundState q J Δ L Ω) :
     IsRangeSquareGroundState q 1 J Δ L Ω := by
   obtain ⟨h, E₀, hgap⟩ := hΩ
-  exact ⟨h.toAreaLawHamiltonian hJ, E₀, h.isGappedGroundState_toAreaLawHamiltonian hJ hgap⟩
+  exact ⟨h.toAreaLawHamiltonian, E₀, h.isGappedGroundState_toAreaLawHamiltonian hgap⟩
 
 /-- The square-grid area law passes to a smaller family of states at the same constant.
 Source: polynomial-PEPS Proposition 2.1 (`01-preliminaries.tex`, lines 39–52). -/

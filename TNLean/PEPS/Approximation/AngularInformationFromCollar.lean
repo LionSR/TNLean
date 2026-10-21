@@ -241,7 +241,7 @@ theorem angularInformationBound_of_sublinearCollarBoundAt_le {q : ℕ} (hq : 1 �
   have hcell : SquareCellInformationBound q (IsSquareGroundState q J Δ) c
       (cellInformationConstant q c Ctpl N Ca Na) (cellInformationExponent c Ctpl N Ca Na) :=
     fun s hs o m₀ A hm₀ L Ω ⟨h, E₀, hΩ⟩ ↦
-      cell_conditionalMutualInformation_le_square_of_sublinearCollarBoundAt hJ hcol hamp hc
+      cell_conditionalMutualInformation_le_square_of_sublinearCollarBoundAt hcol hamp hc
         s hs o m₀ A hm₀ L h E₀ Ω hΩ
   intro L hL h E₀ Ω hΩ
   exact angularInformation_of_bounds (fun _ _ hΩ ↦ hΩ.norm_eq_one) ha m₀ hp hcell

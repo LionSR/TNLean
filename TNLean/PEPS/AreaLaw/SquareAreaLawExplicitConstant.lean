@@ -70,6 +70,6 @@ theorem squareEntropyAreaLawAt_closed {q : ℕ} (hq : 1 ≤ q) {J Δ : ℝ} (hJ 
     SquareEntropyAreaLawAt q (IsSquareGroundState q J Δ)
       (uniformAreaLawConstantClosed q 1 J Δ) :=
   (squareEntropyAreaLawAt_range_closed q 1 hq hJ hΔ).mono
-    fun _ _ hΩ ↦ hΩ.isRangeSquareGroundState hJ
+    fun _ _ hΩ ↦ hΩ.isRangeSquareGroundState
 
 end TNLean.PEPS.AreaLaw
