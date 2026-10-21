@@ -21,10 +21,9 @@ No equality between intrinsic graph distance and distance between labels is
 used. In particular, a ball cannot cross a missing physical edge. Empty domains
 and empty intervals are included.
 
-These are auxiliary geometric results for the additional finite-domain
-logarithmic-separation theorem of issue #9741. They do not establish reset or
-an entropy bound. Source: TNLean one-dimensional note, `part0_preamble.tex`,
-lines 191–199, and `part2a_mps_information.tex`, lines 472–488.
+Source: TNLean one-dimensional note, `part0_preamble.tex`, lines 191–199,
+and the interval-neighborhood argument in `part2a_mps_information.tex`,
+lines 472–488.
 -/
 
 open SimpleGraph QuantumCircuit
