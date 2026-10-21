@@ -442,6 +442,8 @@ theorem exists_isOpenMPS_norm_sub_le_of_error_of_consecutive_terms
     exact surprisalTail_leftBlock_le_of_consecutive_terms hq hJ hΔ h hwindow hgs k _ hw
 
 /-- Accuracy-dependent MPS approximation with the original printed interval constant.
+This extends the printed `1/L` approximation to a free accuracy parameter
+`0 < ε ≤ 1`; the source theorem is recovered at `ε = 1/L`.
 Source: one-dimensional note, part1_arealaw.tex, eq:final, lines674–679, and
 part2a_mps_information.tex, sec:shortcut, thm:Bshort, lines80–92. -/
 theorem exists_isOpenMPS_norm_sub_le_of_error_polynomial

@@ -139,16 +139,7 @@ theorem ChainHamiltonian.cutLogBudget_interval_le_of_consecutive_terms
   have hdim (X : A) :
       Real.log (Real.exp 1 * (Entropy.supportDim (fun _ : Fin L ↦ q) (D X) : ℝ)) ^ 2 ≤
         Real.log (Real.exp 1 * (q : ℝ) ^ (R + 1)) ^ 2 := by
-    have h1 : (1 : ℝ) ≤ Entropy.supportDim (fun _ : Fin L ↦ q) (D X) := by
-      exact_mod_cast one_le_supportDim hq X.val
-    have h2 : (Entropy.supportDim (fun _ : Fin L ↦ q) (D X) : ℝ) ≤
-        (q : ℝ) ^ (R + 1) := supportDim_le_real hq X.val
-    have hlog := Real.log_le_log (by positivity)
-      (mul_le_mul_of_nonneg_left h2 (Real.exp_pos 1).le)
-    have hlog0 : 0 ≤
-        Real.log (Real.exp 1 * (Entropy.supportDim (fun _ : Fin L ↦ q) (D X) : ℝ)) :=
-      Real.log_nonneg (by nlinarith [Real.add_one_le_exp (1 : ℝ)])
-    exact pow_le_pow_left₀ hlog0 hlog 2
+    exact log_sq_supportDim_le hq X.val
   have hbudget : budget ≤ B := by
     have hs := Finset.sum_le_card_nsmul C
       (fun X ↦ Real.log (Real.exp 1 *

@@ -292,22 +292,36 @@ for an arbitrary finite set of sites and are instantiated here directly.
     asserted ground lines.
 \end{proof}
 
+\begin{theorem}[Supports contained in a prescribed set]
+    \label{thm:chain_supports_in_window}
+    \lean{
+        TNLean.MPS.AreaLaw.card_filter_subset_le,
+        TNLean.MPS.AreaLaw.card_filter_subset_le_pow_of_card_le
+    }
+    \leanok
+    \uses{def:chain_model}
+    Let $W$ be a set of chain sites with $|W|\le n$. At most $2^n$
+    admissible interaction supports are contained in $W$.
+\end{theorem}
+\begin{proof}\leanok
+    These supports form a subfamily of the power set of $W$, whose
+    cardinality is $2^{|W|}\le2^n$.
+\end{proof}
+
 \begin{lemma}[Interactions split by an interval]
     \label{lem:chain_crossing_count}
     \lean{
         TNLean.MPS.AreaLaw.IsChainSupport.subset_window_of_splits,
         TNLean.MPS.AreaLaw.chainCrossConst,
-        TNLean.MPS.AreaLaw.card_filter_subset_le,
         TNLean.MPS.AreaLaw.card_crossingTerms_interval_le,
         TNLean.MPS.AreaLaw.chainBudgetConst,
         TNLean.MPS.AreaLaw.one_le_chainBudgetConst,
         TNLean.MPS.AreaLaw.supportDim_le_real,
         TNLean.MPS.AreaLaw.log_sq_supportDim_le,
-        TNLean.MPS.AreaLaw.cutLogBudget_interval_le,
-        TNLean.MPS.AreaLaw.not_splits_two_shells
+        TNLean.MPS.AreaLaw.cutLogBudget_interval_le
     }
     \leanok
-    \uses{def:chain_model}
+    \uses{def:chain_model,thm:chain_supports_in_window,thm:chain_single_splitting}
     Let $X=[a,b)$ be an interval of the chain. A support of range $R$ that
     meets both $X$ and its complement lies in the window $[a-R,a+R)$ or in the
     window $[b-R,b+R)$, each of at most $2R$ sites. Hence at most
@@ -2956,8 +2970,6 @@ for an arbitrary finite set of sites and are instantiated here directly.
 
 \begin{theorem}[Birth and death of a plain sheet]
     \label{thm:chain_plain_birth_death}
-    \lean{TNLean.Lattice.Sheet.birth_bounded,
-        TNLean.Lattice.Sheet.death_bounded}
     \leanok
     \uses{def:chain_model,def:lattice_sheet,def:lattice_bounded_change}
     Let $L,q\ge1$ be integers, let $p\in\mathbb R$, and let $\Omega$ be a
@@ -2996,7 +3008,6 @@ for an arbitrary finite set of sites and are instantiated here directly.
 
 \begin{theorem}[Exchange of two plain sheets]
     \label{thm:chain_plain_exchange}
-    \lean{TNLean.Lattice.Sheet.exchange_bounded}
     \leanok
     \uses{def:chain_model,def:lattice_sheet,def:lattice_bounded_change}
     Let $L,q\ge1$ be integers, let $p\in\mathbb R$, and let $\Omega$ be a

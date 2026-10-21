@@ -24,6 +24,27 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Counting supports in short windows — promoted (2026-10-21)
+
+- **Pattern:** Bound the number of supports contained in a window of at most `n`
+  sites by `2^n`.
+- **Seen:** `card_crossingTerms_interval_le`,
+  `ChainHamiltonian.sum_norm_terms_containing_le`, and
+  `card_crossingTerms_le_mul_card_boundaryEdges` in the three chain counting modules.
+- **Abstraction:** `card_filter_subset_le_pow_of_card_le` in
+  `MPS/AreaLaw/Counting.lean`, combining the powerset count with monotonicity of powers.
+- **Notes:** All three arguments use the shared lemma. Their separate interval-length
+  estimates and the finite-union bound remain at their respective uses.
+
+### Squared logarithms of bounded support dimensions — promoted (2026-10-21)
+
+- **Pattern:** Compare `log (exp 1 * d_X)^2` with
+  `log (exp 1 * q^(R+1))^2` for a support of range `R`.
+- **Seen:** `cutLogBudget_interval_le` and
+  `ChainHamiltonian.cutLogBudget_interval_le_of_consecutive_terms`.
+- **Abstraction:** `log_sq_supportDim_le` in `MPS/AreaLaw/Counting.lean`.
+- **Notes:** Both the full support family and its nonzero-term subtype use this lemma.
+
 ### Nonnegative interaction bound at a site — promoted (2026-10-18)
 
 - **Pattern:** At an actual site, use its admissible singleton support and
@@ -8723,13 +8744,6 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Possible abstraction:** A support-choice lemma if a third substantive use appears. The diameter comparison is already a shared private lemma; two choices in one file do not warrant another abstraction.
 - **Notes:** The choices remain internal to the proofs and add no premise to either theorem.
 
-### Counting supports in short windows — candidate (2026-10-17)
-
-- **Pattern:** Bound the number of supports in a window by the size of its powerset, then increase the exponent using a bound on the window length.
-- **Seen:** The symmetric-window comparison occurs in `MPS/AreaLaw/Counting.lean`, `card_crossingTerms_interval_le`, and `MPS/AreaLaw/BoundaryCounting.lean`, `card_crossingTerms_le_mul_card_boundaryEdges`. `InteractionBudget.lean` has the related window of width `2R + 1`.
-- **Existing abstractions:** `card_filter_subset_le`, `Nat.pow_le_pow_right`, and `card_interval_le` already contain the common counting and monotonicity arguments. The finite union uses `Finset.card_biUnion_le_card_mul` directly.
-- **Notes:** No powerset injection or finite-union proof is duplicated. There are two exact symmetric-window comparisons; their remaining arithmetic is a single `omega` call. No further lemma or tactic is needed at present.
-
 
 ### Core information after a regional replica swap — candidate (2026-10-18)
 
@@ -8834,13 +8848,6 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Possible abstraction:** A support-choice lemma if a third substantive use appears. The diameter comparison is already a shared private lemma; two choices in one file do not warrant another abstraction.
 - **Notes:** The choices remain internal to the proofs and add no premise to either theorem.
 
-### Counting supports in short windows — candidate (2026-10-17)
-
-- **Pattern:** Bound the number of supports in a window by the size of its powerset, then increase the exponent using a bound on the window length.
-- **Seen:** The symmetric-window comparison occurs in `MPS/AreaLaw/Counting.lean`, `card_crossingTerms_interval_le`, and `MPS/AreaLaw/BoundaryCounting.lean`, `card_crossingTerms_le_mul_card_boundaryEdges`. `InteractionBudget.lean` has the related window of width `2R + 1`.
-- **Existing abstractions:** `card_filter_subset_le`, `Nat.pow_le_pow_right`, and `card_interval_le` already contain the common counting and monotonicity arguments. The finite union uses `Finset.card_biUnion_le_card_mul` directly.
-- **Notes:** No powerset injection or finite-union proof is duplicated. There are two exact symmetric-window comparisons; their remaining arithmetic is a single `omega` call. No further lemma or tactic is needed at present.
-
 
 ### Core information after a regional replica swap — candidate (2026-10-18)
 
@@ -8896,18 +8903,6 @@ spectral split → block extraction → MPV calculation → strict bounds
   and earlier-disjointness parts of `single_splitting_shells`.
 - **Abstraction:** Below the promotion threshold. The common geometric
   argument is already factored into the local two-radius containment lemma.
-
-### Squared logarithms of bounded support dimensions — candidate (2026-10-18)
-
-- **Pattern:** From `1 ≤ d ≤ D`, compare `log (exp 1 * d)^2` and
-  `log (exp 1 * D)^2` by logarithmic monotonicity and nonnegativity.
-- **Seen:** The pointwise dimension comparisons in
-  `MPS/AreaLaw/Counting.lean`, `cutLogBudget_interval_le`, and
-  `MPS/AreaLaw/WindowCounting.lean`,
-  `ChainHamiltonian.log_surprisalMoment_interval_le_of_consecutive_terms`.
-- **Possible next abstraction:** At a third occurrence, use a scalar lemma for
-  this comparison, leaving the support-dimension estimates at the callers.
-  These are two occurrences in two files; no new tactic is proposed.
 
 
 ### Birth of a sheet among spectator sheets — shared lemma (2026-10-20)

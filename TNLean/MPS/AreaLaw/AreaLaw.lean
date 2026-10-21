@@ -82,7 +82,12 @@ theorem chainIntervalEntropyBound_nonneg (hq : 1 ≤ q) (hJ : 0 ≤ J) (hΔ : 0 
 ground vector of a finite-range Hamiltonian, is at most `C_int(q, R, J, Δ)`. The proof is
 the buffered discount closed by the Araki--Lieb inequality `S(X) ≤ S(X ∪ T) + S(T)` and
 the site-count bound `S(T) ≤ |T| log q` on the buffer. TNLean note, Theorem A for
-intervals, Section 5. -/
+intervals, Section 5.
+
+This estimate retains the chosen integer shell count and its discount in `C_int`.
+The finite-family estimate below instead bounds both quantities by expressions linear
+in `1 + J/Δ`, giving the coarser bound `C₀ (1 + J/Δ)`. That scalar relaxation does not
+recover the exact intermediate bound stated here. -/
 theorem regionEntropy_interval_le (hq : 1 ≤ q) (hJ : 0 ≤ J) (hΔ : 0 < Δ)
     (h : ChainHamiltonian L q R J) {E₀ : ℝ} {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
     (hgs : Matrix.IsGappedGroundState h.operator E₀ Ω Δ) (a b : ℕ) :

@@ -45,6 +45,13 @@ theorem card_filter_subset_le (W : Finset (Fin L)) :
     (fun X hX ↦ Finset.mem_powerset.mpr (Finset.mem_filter.mp hX).2)
     (fun X _ Y _ h ↦ Subtype.ext h)
 
+/-- At most `2^n` supports lie in a set of at most `n` sites.
+This is the powerset count used in the one-dimensional note, `eq:count`. -/
+theorem card_filter_subset_le_pow_of_card_le {W : Finset (Fin L)} {n : ℕ}
+    (hW : W.card ≤ n) :
+    (Finset.univ.filter fun X : ChainSupport L R ↦ X.1 ⊆ W).card ≤ 2 ^ n :=
+  (card_filter_subset_le W).trans (Nat.pow_le_pow_right (by norm_num) hW)
+
 /-- **Split supports of an interval.** At most `N_R` supports of range `R` are split by any
 interval of the chain. TNLean note, `eq:count`. -/
 theorem card_crossingTerms_interval_le (a b : ℕ) :
@@ -58,13 +65,13 @@ theorem card_crossingTerms_interval_le (a b : ℕ) :
     simp only [Entropy.crossingTerms, Finset.mem_filter, Finset.mem_univ, true_and] at hX
     simp only [Finset.mem_union, Finset.mem_filter, Finset.mem_univ, true_and]
     exact X.2.subset_window_of_splits hX
-  have hW : ∀ c : ℕ, 2 ^ (interval L (c - R) (c + R)).card ≤ 2 ^ (2 * R) := fun c ↦
-    Nat.pow_le_pow_right (by norm_num) ((card_interval_le _ _).trans (by omega))
+  have hW : ∀ c : ℕ, (interval L (c - R) (c + R)).card ≤ 2 * R := fun c ↦
+    (card_interval_le _ _).trans (by omega)
   calc _ ≤ _ := Finset.card_le_card hcover
     _ ≤ _ := Finset.card_union_le _ _
     _ ≤ 2 ^ (2 * R) + 2 ^ (2 * R) :=
-        Nat.add_le_add ((card_filter_subset_le _).trans (hW a))
-          ((card_filter_subset_le _).trans (hW b))
+        Nat.add_le_add (card_filter_subset_le_pow_of_card_le (hW a))
+          (card_filter_subset_le_pow_of_card_le (hW b))
     _ = chainCrossConst R := by rw [chainCrossConst]; ring
 
 /-- The cut budget of an interval: `B_R = 1 + N_R log² (e q^{R + 1})`. TNLean note,

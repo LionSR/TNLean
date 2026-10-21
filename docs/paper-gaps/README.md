@@ -1217,6 +1217,16 @@ is now formalized for every finite subset of the integers. The reduction to the
 chain uses the zero entropy of the prefixes ending at the gaps of the domain in
 place of the factorization of the ground vector over components.
 
+### One-dimensional matrix product state approximation: band interfaces and physical outputs
+
+[tnlean_one_dimensional_band_sweep_corrections.tex](tnlean_one_dimensional_band_sweep_corrections.tex)
+(local correction, resolved) records the half-open integer-band convention in
+band dissolution and the distinguished physical outputs in the sweep protocol.
+Auxiliary copies remain in their final registers; tracing them from the
+reference vector recovers the original ground state. Both corrections are
+incorporated in the physical preparation and compression proof of Theorem B,
+without additional physical hypotheses.
+
 ### One-dimensional matrix product state approximation: threshold truncation
 
 [tnlean_one_dimensional_threshold_truncation.tex](tnlean_one_dimensional_threshold_truncation.tex)
