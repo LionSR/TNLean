@@ -65,25 +65,19 @@ Definition~\ref{def:peps_capped_mark_distance}.
     \leanok
     \uses{def:peps_angular_separation,def:peps_capped_mark_distance,
         def:peps_dyadic_edge_band,lem:peps_dyadic_lens_sides}
-    The angular separation condition is invariant under a common translation
-    of $X$, $E$ and the marked points. It passes to unions and subsets of $E$,
-    to subsets of $X$, and, for $t\ge0$, to smaller constants. If $X$ and $E$
-    lie on opposite sides of a plane set $K$ and every $x\in X$ satisfies
-    $a\max\{t,\delta(x)\}\le\operatorname{dist}_\infty(x,z)$ for every point
-    $z$ of the boundary of $K$, then $X$ and $E$ satisfy the condition. The
-    capped mark distances of an edge operation and of the central birth are
+    The angular separation condition~(\ref{eq:peps_angular_separation}) is invariant under a common translation
+    of $X$, $E$ and $\mathcal V$; it passes to unions and subsets of $E$,
+    to subsets of $X$, and, for $t\ge0$, to smaller constants $a'\le a$. If $X\subseteq K$ and $E\subseteq\R^2\setminus K$ (or vice versa)
+    and every $x\in X$, $z\in\partial K$ satisfy
+    $a\max\{t,\delta(x)\}\le\operatorname{dist}_\infty(x,z)$, then $X$ and $E$ satisfy~(\ref{eq:peps_angular_separation}). The
+    capped mark distances $\delta(x)=\min\{n,d_{\mathcal V}(x)\}$ of an edge operation and of the central birth are
     those of the two endpoints of the edge and of the four corners of the
     square.
 \end{lemma}
 
 \begin{proof}\leanok
-    Translations preserve sup distances. For the boundary, as observed in
-    \texttt{06-geometry.tex} (lines 418--426), the segment from
-    $x\in X$ to $y\in E$ is connected and meets both $K$ and its complement,
-    so it meets the boundary of $K$ at a point $z$ with
-    $\operatorname{dist}_\infty(x,z)\le\operatorname{dist}_\infty(x,y)$. The mark
-    distances agree because both are the least of $n$ and the distances to the
-    marked points.
+    Translations preserve sup distances. For $x\in X$ and $y\in E$ on opposite sides of $K$ (\texttt{06-geometry.tex}, lines 418--426), the segment $[x,y]$ meets $\partial K$ at some $z$ with
+    $\operatorname{dist}_\infty(x,z)\le\operatorname{dist}_\infty(x,y)$. Both definitions of $\delta(x)$ equal $\min\{n,d_{\mathcal V}(x)\}$.
 \end{proof}
 
 \begin{theorem}[Slopes and thresholds from information under angular separation]
@@ -95,13 +89,12 @@ Definition~\ref{def:peps_capped_mark_distance}.
     Assume the statement of
     Definition~\ref{def:peps_angular_information_bound}. For $a>0$,
     $A_0\ge1$, an integer $m_0\ge0$ and an integer $p>0$ there is a slope
-    and a threshold at accuracy $L^{-p}$.
+    and a threshold $(D,L_0)$ at accuracy $L^{-p}$ in the sense of Definition~\ref{def:peps_angular_scale}.
 \end{theorem}
 
 \begin{proof}\leanok
-    With $D$ and $L_0$ taken from the statement with exponent $p$, translating
-    the marked points by $-c$ for sites placed at $\Lambda_L+c$ leaves all
-    distances, the diameter of $X$, and the separation condition unchanged.
+    Taking $(D,L_0)$ from Definition~\ref{def:peps_angular_information_bound} at exponent $p$, translating
+    $\mathcal V$ by $-c$ for sites placed at $\Lambda_L+c$ preserves $\operatorname{diam}_\infty X$ and~(\ref{eq:peps_angular_separation}) by Lemma~\ref{lem:peps_angular_separation_checks}.
 \end{proof}
 
 \begin{theorem}[Uniform slopes above prescribed lower bounds]
@@ -113,20 +106,17 @@ Definition~\ref{def:peps_capped_mark_distance}.
     $m_0\ge0$ and $p>0$, and real lower bounds $D_{\min},L_{\min}$.
     There are $D\ge\max(D_{\min},1)$ and
     $L_0\ge\max(L_{\min},2)$ such that $(D,L_0)$ is a slope and a
-    threshold at accuracy $L^{-p}$. These constants precede every finite
+    threshold at accuracy $L^{-p}$ (Definition~\ref{def:peps_angular_scale}), chosen before every finite
     system, Hamiltonian, ground vector, translated placement, marked set
     and pair of physical regions.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:peps_angular_information_from_gap,thm:peps_angular_scale_exists}
-    From the slope $D_1$ and threshold $L_1$ provided by angular information,
+    From the pair $(D_1,L_1)$ provided by Theorem~\ref{thm:peps_angular_information_from_gap} and Theorem~\ref{thm:peps_angular_scale_exists},
     setting $D=\max(D_1,D_{\min},1)$ and
-    $L_0=\max(L_1,L_{\min},2)$ ensures $\log L\ge0$ and hence
-    $D_1\log L\le D\log L$ for every $L\ge L_0$. The larger logarithmic
-    floor strengthens the separation assumption and the lower scale bound;
-    the estimate for $D_1$ therefore applies while all translations, marked
-    points, and physical regions remain the same.
+    $L_0=\max(L_1,L_{\min},2)$ gives $\log L\ge0$ and
+    $D_1\log L\le D\log L$ for all $L\ge L_0$, which strengthens the floor $t=D\log L$ in~(\ref{eq:peps_angular_separation}) and the lower bound $D\log L\le n$.
 \end{proof}
 
 \begin{theorem}[Bulk births, deaths and lens exchanges, conditionally]
@@ -139,40 +129,30 @@ Definition~\ref{def:peps_capped_mark_distance}.
     \uses{def:peps_angular_scale,thm:peps_frame_birth_bounded,
         thm:peps_frame_exchange_bounded,lem:peps_angular_separation_checks}
     Let $(D,L_0)$ be a slope and a threshold at accuracy $L^{-60}$ for
-    constants $a$, $A_0$, $m_0$, let $L\ge L_0$, and let $\Omega$ be a unit
-    gapped ground vector of a Hamiltonian of the model on the open square of
-    side $L$, with the sites placed at a common translation of $\Lambda_L$.
-    Let $D\log L\le n\le A_0L$ and let $\mathcal V$ be at most $m_0$ marked
-    points.
+    $(a,A_0,m_0)$, let $L\ge L_0$, and let $\Omega$ be a unit
+    gapped ground vector of a Hamiltonian of the model on $\Lambda_L$, with sites placed at a common translation of $\Lambda_L$.
+    Let $D\log L\le n\le A_0L$ and $\lvert\mathcal V\rvert\le m_0$.
     \begin{enumerate}
         \item In an encoded frame, let $T$ be a set of physical sites owned by
-              $P_\circ$ and outside every outer hole, of diameter at most
-              $A_0n$, satisfying the angular separation condition with floor
-              $D\log L$ against the exterior $E$ of the birth partition. Then
+              $P_\circ$ and disjoint from $H^+(\mathcal F)$, with $\operatorname{diam}_\infty T\le A_0n$, satisfying~(\ref{eq:peps_angular_separation}) with floor
+              $t=D\log L$ against the exterior $E$ of the birth partition. Then
               the birth of $T$ at $Q_\circ$ is an allowed word using only
               $P_\circ$ and $Q_\circ$, with at most one pair source and
               reference-vector error at most $L^{-30}$. When these conditions
               hold in the frame after a death, the death is an allowed monomial
-              using only $P_\circ$ and $Q_\circ$, without pair sources, with at
-              most one pair effect and the same error.
+              using only $P_\circ$ and $Q_\circ$, with no pair sources, at
+              most one pair effect, and error at most $L^{-30}$.
         \item For two encoded frames and the physical sample $Y$ of a lens, with
-              every hole outside or inside $Y$, let $T$ and $E$ be the sets of the
-              exchange partition for a party $C$. If $T$ has diameter at most
-              $A_0n$ and satisfies the angular separation condition against $E$,
-              the exchange is an allowed word using only $C$, without pair
-              resources, with reference-vector error at most $4L^{-30}$. The
-              condition holds when $Y$ is the sample of a plane set $K$ and every
-              point of $T$ satisfies the floor against the boundary of $K$.
+              every hole outside or inside $Y$, let $(T,E)$ be the exchange partition for a party $C$. If $\operatorname{diam}_\infty T\le A_0n$ and $(T,E)$ satisfies~(\ref{eq:peps_angular_separation}) with $t=D\log L$ (in particular, if $Y$ is the sample of $K\subseteq\R^2$ and $a\max\{t,\delta(x)\}\le\operatorname{dist}_\infty(x,z)$ for all $x\in T$, $z\in\partial K$),
+              then the exchange is an allowed word using only $C$, without pair
+              resources, with reference-vector error at most $4L^{-30}$.
     \end{enumerate}
 \end{theorem}
 
 \begin{proof}\leanok
-    Following the application of the two lemmas in \texttt{06-geometry.tex}
-    (lines 357--445), the slope and threshold give $I_\Omega(T:E)\le L^{-60}$,
-    from which the birth and exchange lemmas yield the stated bounded changes; in
-    the second item the sites of $T$ lie in $K$ and those of $E$ outside it, so
-    Lemma~\ref{lem:peps_angular_separation_checks} establishes the required
-    angular separation.
+    As in \texttt{06-geometry.tex} (lines 357--445), Definition~\ref{def:peps_angular_scale} gives $I_\Omega(T:E)\le L^{-60}$,
+    from which Theorem~\ref{thm:peps_frame_birth_bounded} and Theorem~\ref{thm:peps_frame_exchange_bounded} yield items~1 and~2; the boundary criterion in item~2 follows from
+    Lemma~\ref{lem:peps_angular_separation_checks}.
 \end{proof}
 
 \begin{lemma}[The separation premise from the logarithmic floors]
@@ -185,30 +165,21 @@ Definition~\ref{def:peps_capped_mark_distance}.
     \leanok
     \uses{lem:peps_angular_separation_checks,lem:peps_dyadic_floor,
         lem:peps_dyadic_birth_enlargement,lem:peps_dyadic_hole_enlargement}
-    Let $0\le t\le n$, let $a_0$ be the clearance constant of the repainting
-    schedule, and let the involved guides be homogenized on the treated squares of
-    radius $t$. For an edge birth or death, with the two endpoints of the edge as
-    marked points, and for the central birth, with the four corners of the block,
-    the closure of the remaining changed region and the union of the positions of
-    other labels in the surrounding guide with the points within $2\epsilon_0t$ of
-    its true vertices satisfy the angular separation condition with constant
-    $a_0/2$ and floor $t$, provided $2\epsilon_0\le a_0/2$. For the lens exchange,
-    with $t>0$ and $2\epsilon_0(a_0+1)\le a_0/2$, every point of the closure of the
-    positions that are not common $C_e$, and every point within $2\epsilon_0t$ of
-    a true vertex of either sheet, satisfies
-    $a_0/2\cdot\max\{t,\min(n,d_{\mathcal V})\}\le\operatorname{dist}_\infty(\cdot,z)$
-    for every point $z$ of the boundary of the lens. As in the plane separation
-    premise of Theorem~\ref{thm:peps_bulk_steps} (\texttt{06-geometry.tex},
-    lines 357--426), all three statements persist under a common translation of
-    the sets, the marked points, and the lens.
+    Let $0\le t\le n$, let $a_0$ be the clearance constant of Theorem~\ref{thm:peps_dyadic_angular_separation}, and homogenize the involved guides on the treated squares of
+    radius $t$. For an edge birth or death ($\mathcal V$ the two edge endpoints) and for the central birth ($\mathcal V$ the four block corners),
+    the closure of the remaining changed region and the union of $\{f_s\ne P_\circ\}$ with the $2\epsilon_0t$-neighbourhood of the true vertices of the surrounding guide $f_s$ satisfy~(\ref{eq:peps_angular_separation}) with constant
+    $a_0/2$ and floor $t$ whenever $2\epsilon_0\le a_0/2$. For the lens exchange with $t>0$ and $2\epsilon_0(a_0+1)\le a_0/2$, every point $x$ in the closure of the remaining non-common-$C_e$ positions or within $2\epsilon_0t$ of
+    a true vertex of either sheet satisfies
+    $(a_0/2)\max\{t,\min(n,d_{\mathcal V}(x))\}\le\operatorname{dist}_\infty(x,z)$
+    for all $z\in\partial Y$. All three statements persist under a common translation of
+    the sets, $\mathcal V$, and $Y$ (\texttt{06-geometry.tex},
+    lines 357--426).
 \end{lemma}
 
 \begin{proof}\leanok
-    Rewriting the capped mark distance of the marked points as
-    $\min(n,d_{\mathcal V})$ and combining the logarithmic floor (weakened from
-    $a_0$ to $a_0/2$) with the outer-hole enlargement on each part of the
-    exterior establishes the bounds before translation, and translation
-    invariance completes the proof.
+    Combining Lemma~\ref{lem:peps_dyadic_floor} (weakened from
+    $a_0$ to $a_0/2$) with Lemmas~\ref{lem:peps_dyadic_birth_enlargement} and~\ref{lem:peps_dyadic_hole_enlargement} on each part of the
+    exterior and applying Lemma~\ref{lem:peps_angular_separation_checks} gives the bounds and their translation invariance.
 \end{proof}
 
 \begin{theorem}[Bulk changes of the repainting from the plane floors, conditionally]
@@ -222,39 +193,36 @@ Definition~\ref{def:peps_capped_mark_distance}.
     \leanok
     \uses{thm:peps_bulk_steps,lem:peps_bulk_separation_from_floors}
     In the setting of Theorem~\ref{thm:peps_bulk_steps}, let $t=D\log L$ with
-    $0\le t\le n$, let $a\le a_0/2$, and let $m_0\ge2$ for the edge operations
-    and $m_0\ge4$ for the central birth. Place the repainted block at a
-    translation $d$, and let the guides be homogenized on the treated squares of
+    $0\le t\le n$, $a\le a_0/2$, and $m_0\ge2$ for edge operations
+    ($m_0\ge4$ for the central birth). Place the repainted block at a
+    translation $d$, and homogenize the guides on the treated squares of
     radius $t$.
     \begin{enumerate}
         \item For an edge birth or death, or the central birth, with
               $2\epsilon_0\le a_0/2$, let $T$ be physical sites owned by $P_\circ$,
-              outside every outer hole, of diameter at most $A_0n$, placed in the
-              remaining closed changed region. If the sites of other owners are
-              placed at positions of other labels of the surrounding guide, and
-              every hole is centered at a true vertex of that guide with inner
-              radius at most $\epsilon_0t$, the birth or death is the bounded
-              change of Theorem~\ref{thm:peps_bulk_steps}.
+              disjoint from $H^+(\mathcal F)$, with $\operatorname{diam}_\infty T\le A_0n$, placed in the
+              translated remaining closed changed region. If sites of other owners lie at positions of labels other than $P_\circ$ in the surrounding guide $f_s$, and
+              every hole is centered at a true vertex of $f_s$ with inner
+              radius at most $\epsilon_0t$, then the birth or death is the bounded
+              change of Theorem~\ref{thm:peps_bulk_steps}(1).
         \item For the lens exchange of an edge, with $t>0$ and
-              $2\epsilon_0(a_0+1)\le a_0/2$, let $Y$ be the sites placed in the
-              lens. If the sites not held by $C$ on either sheet are placed at
+              $2\epsilon_0(a_0+1)\le a_0/2$, let $Y$ be the sites placed in the translated
+              lens. If sites not held by $C$ on either sheet lie at
               labels of that sheet's guide other than $C_e$, every hole of either
               sheet is centered at a true vertex of its guide with inner radius
-              at most $\epsilon_0t$, and $T$ has diameter at most $A_0n$, the
+              at most $\epsilon_0t$, and $\operatorname{diam}_\infty T\le A_0n$, then the
               exchange is the bounded change of
-              Theorem~\ref{thm:peps_bulk_steps}.
+              Theorem~\ref{thm:peps_bulk_steps}(2).
     \end{enumerate}
     As in \texttt{06-geometry.tex} (lines 102--108 and 357--445), no separation
     condition remains among the hypotheses.
 \end{theorem}
 
 \begin{proof}\leanok
-    An outer hole site lies within twice the inner radius of its center, hence
-    within $2\epsilon_0t$ of a true vertex. The target therefore lies in the
-    translated closed changed region, and the exterior in the translated union
-    of other labels and the vertex zone, or on the two sides of the translated
-    lens. Lemma~\ref{lem:peps_bulk_separation_from_floors}, restricted to these
-    sets and weakened from $a_0/2$ to $a$, gives the separation condition of
+    Every site in an outer hole of inner radius at most $\epsilon_0t$ lies within $2\epsilon_0t$ of its true-vertex center. Thus $T$ lies in the
+    translated closed changed region and $E$ lies in the translated union
+    of $\{f_s\ne P_\circ\}$ and the $2\epsilon_0t$-neighbourhood of the true vertices (or on opposite sides of the translated
+    lens $Y$), so Lemma~\ref{lem:peps_bulk_separation_from_floors} with $a\le a_0/2$ verifies the separation premise of
     Theorem~\ref{thm:peps_bulk_steps}.
 \end{proof}
 
@@ -287,46 +255,21 @@ Definition~\ref{def:peps_capped_mark_distance}.
         thm:peps_bulk_steps_from_floors}
     In the setting of Theorem~\ref{thm:peps_bulk_steps_from_floors}, homogenizing
     the guide of the repainted block on the open squares of radius $t$ about the
-    grid corners at the ends of an edge, or at the four corners of the block, is
-    homogenizing it on the treated squares of that operation and moving it to the
-    block. Let each frame be the encoded frame of the sampled guide: the owner of
-    a site is the party of the label read there after a small generic
-    displacement, common to all guides, and the holes sit at true vertices of the
-    sampled guide, centered there with inner radius at most $\epsilon_0t$. Then
-    the three descriptions of the frames hold.
-    \begin{enumerate}
-        \item Every hole is centered, moved back to the origin, at a true vertex
-              of the homogenized guide, with inner radius at most $\epsilon_0t$.
-        \item A site at which the sampled guides before and after a birth or
-              death differ lies, moved back, in the remaining closed changed
-              region; the sites of the lens are those placed in the translated
-              lens.
-        \item A site not owned by the party of a label $l$ lies, moved back, in
-              the closure of the positions of labels other than $l$.
-    \end{enumerate}
-    The third description holds in closure form only: on a boundary of a guide
-    the sampled label may differ from the label the guide assigns there. Since
-    the separation condition passes to the closure of the exterior, the bulk
+    edge endpoints or the four block corners equals
+    homogenizing it on the treated squares of that operation and translating by $d$. Let each frame be the encoded frame of the sampled guide (Definition~\ref{def:peps_guide_frame}), with site owners read after a common generic
+    displacement and holes centered at true vertices of the
+    sampled guide with inner radius at most $\epsilon_0t$. Then, after translating back by $-d$:
+    (1) every hole center is a true vertex of the homogenized guide;
+    (2) every site where the sampled guides before and after a birth or death differ lies in the remaining closed changed region, and the lens sample consists of the sites in $Y+d$; and
+    (3) every site not owned by the party of a label $l$ lies in the closure of the positions of labels other than $l$.
+    Because~(\ref{eq:peps_angular_separation}) passes to the closure of $E$, the bulk
     changes of Theorem~\ref{thm:peps_bulk_steps_from_floors} hold for these
-    frames. For a birth or death the target may be any set of physical sites owned
-    by $P_\circ$, outside every outer hole and of diameter at most $A_0n$, at
-    which the sampled guides before and after the operation differ. For the
-    exchange the target is the one determined by the lens, the owners of the two
-    sheets and the classification of the holes, with $Y$ the sites placed in the
-    translated lens, and it is assumed to have diameter at most $A_0n$. As in
-    \texttt{06-geometry.tex} (lines 69--80, 102--125, and 328--445), no owner
-    map need be injective.
+    frames: for a birth or death on any target $T$ of sites owned
+    by $P_\circ$, disjoint from $H^+(\mathcal F)$, with $\operatorname{diam}_\infty T\le A_0n$, where the sampled guides differ; and for the
+    exchange on its partition $(T,E)$ with $\operatorname{diam}_\infty T\le A_0n$, without requiring the owner map to be injective (\texttt{06-geometry.tex}, lines 69--80, 102--125, and 328--445).
 \end{theorem}
 
 \begin{proof}\leanok
-    The open squares about the moved corners are the moved treated squares, and
-    homogenization commutes with the translation. A true vertex of a sampled
-    guide is a true vertex of the guide, and translation carries true vertices;
-    this gives the first description. Sampled labels differ only in the closure
-    of the region where the guides differ, which gives the second, and a sampled
-    label other than $l$ occurs only in the closure of the positions of other
-    labels, which gives the third. The separation condition of
-    Lemma~\ref{lem:peps_bulk_separation_from_floors} is a closed condition in the
-    exterior point, so it holds against the closure of the translated exterior,
-    and Theorem~\ref{thm:peps_bulk_steps} applies.
+    Translation by $d$ commutes with homogenization on the treated squares and preserves true vertices, giving~(1). By Lemma~\ref{lem:peps_dyadic_sampled_guides}, readings of two guides differ only in the closure of where the guides differ, giving~(2), and a reading takes a value other than $l$ only in the closure of $\{f\ne l\}$, giving~(3). Since the separation inequality in Lemma~\ref{lem:peps_bulk_separation_from_floors} is closed in the exterior variable, it extends to the closure of $E$, and Theorem~\ref{thm:peps_bulk_steps} applies.
 \end{proof}
+

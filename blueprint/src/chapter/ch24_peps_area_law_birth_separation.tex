@@ -22,30 +22,23 @@ midpoints are the points of $\{-1,0,1\}^2$.
         TNLean.PEPS.AreaLaw.Geometry.one_le_norm_sub_of_disjoint_unitBox,
         TNLean.PEPS.AreaLaw.Geometry.norm_eq_one_of_mem_unitBox}
     \leanok
-    Let $d,e$ be unit vectors with $\|d-e\|\ge1$ and let $r,s\ge0$. Then
+    Let $d,e\in\mathbb R^2$ satisfy $\|d\|=\|e\|=1$ and $\|d-e\|\ge1$, and let $r,s\ge0$. Then
     \begin{align}
         \|rd-se\| & \ge\tfrac12\max(r,s).
         \label{eq:area_law_sup_angular_estimate}
     \end{align}
-    For $d\in\mathbb R^2$ let $B(d)$ be the box with opposite corners
-    $(\lfloor d_1\rfloor,\lfloor d_2\rfloor)$ and
-    $(\lceil d_1\rceil,\lceil d_2\rceil)$. If $B(d)\cap B(e)=\emptyset$, then
-    $\|d-e\|\ge1$. If $\|d\|=1$, then $B(d)$ lies on the unit sphere; it is
-    the closed elementary half-side containing $d$, or $d$ itself when $d$
-    is one of the eight points of $\{-1,0,1\}^2\setminus\{0\}$.
+    For $d=(d_1,d_2)\in\mathbb R^2$, set $B(d)=[\lfloor d_1\rfloor,\lceil d_1\rceil]\times[\lfloor d_2\rfloor,\lceil d_2\rceil]$.
+    If $B(d)\cap B(e)=\emptyset$, then $\|d-e\|\ge1$. If $\|d\|=1$, then $B(d)\subseteq\{x:\|x\|=1\}$
+    is the closed elementary half-side containing $d$ (or $\{d\}$ if $d\in\{-1,0,1\}^2\setminus\{0\}$).
 \end{theorem}
 
 \begin{proof}
     \leanok
-    Assume $s\le r$ and put $D=\|rd-se\|$. The reverse triangle inequality
-    gives $D\ge r-s$, and
-    $r\le r\|d-e\|\le D+(r-s)$ gives $D\ge s$. Hence $D\ge\max(r-s,s)\ge
-        r/2$. If $\|d-e\|<1$, then each coordinate satisfies
-    $\lfloor d_i\rfloor\le\lceil e_i\rceil$ and
-    $\lfloor e_i\rfloor\le\lceil d_i\rceil$, so the point with coordinates
-    $\max(\lfloor d_i\rfloor,\lfloor e_i\rfloor)$ lies in both boxes. A unit
-    vector has an integer coordinate of absolute value one, which the box
-    fixes, while the other coordinate stays in $[-1,1]$.
+    Assuming $s\le r$ and putting $D=\|rd-se\|$, the reverse triangle inequality gives
+    $D\ge r-s$ and $r\le r\|d-e\|\le D+r-s$ gives $D\ge s$, so $D\ge\max(r-s,s)\ge r/2$.
+    If $\|d-e\|<1$, then $\lfloor d_i\rfloor\le\lceil e_i\rceil$ and $\lfloor e_i\rfloor\le\lceil d_i\rceil$,
+    so $(\max(\lfloor d_1\rfloor,\lfloor e_1\rfloor),\max(\lfloor d_2\rfloor,\lfloor e_2\rfloor))\in B(d)\cap B(e)$.
+    For $\|d\|=1$, one coordinate is $\pm1$ (which $B(d)$ fixes) and the other lies in $[-1,1]$.
 \end{proof}
 
 % Source: OpenAI2026AreaLaw, Section 11, 10-geometry.tex,
@@ -60,26 +53,21 @@ midpoints are the points of $\{-1,0,1\}^2$.
         TNLean.PEPS.AreaLaw.Geometry.IsQuarterSectorial.iInter}
     \leanok
     \uses{thm:area_law_sup_angular_estimate}
-    Call a set $P\subseteq\mathbb R^2$ quarter-sectorial at $q$ if, for
-    $0<\|x-q\|\le1/4$, membership of $x$ in $P$ agrees with membership of
-    $q+(x-q)/(4\|x-q\|)$, and if, for every unit vector $d$ with
-    $q+d/4\in P$, also $q+e/4\in P$ for every $e\in B(d)$. Arbitrary unions
-    and intersections of sets quarter-sectorial at $q$ are
-    quarter-sectorial at $q$. Every closed half-plane
-    $\{x:ax_1+bx_2\le n\}$ with $a,b,n\in\mathbb Z$ and $|a|+|b|\le2$ is
-    quarter-sectorial at every point of $\mathbb Z^2$.
+    A set $P\subseteq\mathbb R^2$ is \emph{quarter-sectorial at $q$} if:
+    (i) for $0<\|x-q\|\le1/4$, $x\in P\iff q+\frac{x-q}{4\|x-q\|}\in P$; and
+    (ii) for $\|d\|=1$, $q+d/4\in P\implies q+e/4\in P$ for all $e\in B(d)$.
+    Quarter-sectoriality at $q$ is closed under arbitrary unions and intersections, and
+    every closed half-plane $H_{a,b,n}=\{x\in\mathbb R^2:ax_1+bx_2\le n\}$ with
+    $a,b,n\in\mathbb Z$ and $|a|+|b|\le2$ is quarter-sectorial at every $q\in\mathbb Z^2$.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    Put $f(x)=ax_1+bx_2-n$ and $k=f(q)\in\mathbb Z$. On the closed
-    quarter-square about $q$, $|f(x)-k|\le(|a|+|b|)/4\le1/2$. If $k\ne0$,
-    membership is therefore constant there. If $k=0$, then $f(q+w)=aw_1+bw_2$
-    is homogeneous, so membership is unchanged along rays from $q$. On an
-    open elementary half-side, say $d=(\pm1,t)$ with $m<t<m+1$ and
-    $m\in\{-1,0\}$, the integer bound $|a|+|b|\le2$ excludes a sign change of
-    $\pm a+bt$, so a homogeneous inequality at $d$ persists at both endpoints
-    $t=m,m+1$ and hence on $B(d)$.
+    Set $f(x)=ax_1+bx_2-n$ and $k=f(q)\in\mathbb Z$. For $\|x-q\|\le1/4$,
+    $|f(x)-k|\le(|a|+|b|)/4\le1/2$, so membership in $H_{a,b,n}$ is constant when $k\ne0$.
+    When $k=0$, $f(q+w)=aw_1+bw_2$ is homogeneous, giving (i). On an open elementary half-side
+    $d=(\pm1,t)$ with $t\in(m,m+1)$, $m\in\{-1,0\}$, $|a|+|b|\le2$ prevents $\pm a+bt$ from
+    changing sign on $(m,m+1)$, so $\pm a+bt\le0$ extends to $t\in[m,m+1]$, giving (ii).
 \end{proof}
 
 % Source: OpenAI2026AreaLaw, Section 11, 10-geometry.tex,
@@ -89,9 +77,9 @@ midpoints are the points of $\{-1,0,1\}^2$.
     \lean{TNLean.PEPS.AreaLaw.Geometry.half_max_le_norm_sub_of_isQuarterSectorial}
     \leanok
     \uses{thm:area_law_sup_angular_estimate, thm:area_law_quarter_sections}
-    Let $P,P'$ be quarter-sectorial at $q$, and suppose every common point
-    $z\in P\cap P'$ with $\|z-q\|\le1/4$ equals $q$. Then every $x\in P$ and
-    $y\in P'$ with $\|x-q\|,\|y-q\|\le1/4$ satisfy
+    If $P,P'\subseteq\mathbb R^2$ are quarter-sectorial at $q$ and
+    $P\cap P'\cap\{z:\|z-q\|\le1/4\}\subseteq\{q\}$, then every $x\in P$ and $y\in P'$
+    with $\|x-q\|,\|y-q\|\le1/4$ satisfy
     \begin{align}
         \|x-y\| & \ge\tfrac12\max(\|x-q\|,\|y-q\|).
         \label{eq:area_law_contact_angular_estimate}
@@ -100,12 +88,11 @@ midpoints are the points of $\{-1,0,1\}^2$.
 
 \begin{proof}
     \leanok
-    If $x=q$ or $y=q$ the bound is immediate. Otherwise write
-    $x=q+rd$ and $y=q+se$ with unit vectors $d,e$. Radial extension puts
-    $q+d/4\in P$ and $q+e/4\in P'$. A common point of $B(d)$ and $B(e)$
-    would give a common point of $P$ and $P'$ at distance $1/4$ from $q$.
-    Thus the boxes are disjoint, $\|d-e\|\ge1$, and
-    (\ref{eq:area_law_sup_angular_estimate}) applies.
+    If $x=q$ or $y=q$, (\ref{eq:area_law_contact_angular_estimate}) is immediate. Otherwise write
+    $x=q+rd$, $y=q+se$ with $\|d\|=\|e\|=1$ and $r,s\in(0,1/4]$. By Theorem~\ref{thm:area_law_quarter_sections},
+    $q+B(d)/4\subseteq P$ and $q+B(e)/4\subseteq P'$, so $P\cap P'\cap\{z:\|z-q\|=1/4\}=\emptyset$
+    forces $B(d)\cap B(e)=\emptyset$. Theorem~\ref{thm:area_law_sup_angular_estimate} then gives
+    $\|d-e\|\ge1$ and (\ref{eq:area_law_sup_angular_estimate}).
 \end{proof}
 
 % Source: OpenAI2026AreaLaw, Section 11, 10-geometry.tex, lines 393--417
@@ -118,14 +105,11 @@ midpoints are the points of $\{-1,0,1\}^2$.
         TNLean.PEPS.AreaLaw.Geometry.RepairSlotConsecutive}
     \leanok
     \uses{def:area_law_repair_square}
-    For each of the eight elementary wedges $s$ of $Q$, let $o_s$ be the
-    outward unit normal of its side and let $T_s$ be the closed triangle
-    joining the center to its side segment. For $L\in\{1,2\}$, $LT_s$ is cut
-    out by $o_s\cdot x\le L$ and the two homogeneous inequalities of its
-    radial edges. The exterior trapezoid of $s$ is
-    $E_s=\{x\in2T_s:o_s\cdot x\ge1\}$, the part of $2T_s$ outside the open
-    square $\operatorname{int}Q$. Two wedges are consecutive when they share
-    a radial edge.
+    For each of the $8$ elementary wedges $s$ of $Q=[-1,1]^2$, let $o_s$ be the outward unit
+    normal of its side and $T_s$ the closed triangle joining $0$ to its side segment.
+    For $L\in\{1,2\}$, $LT_s$ is defined by $o_s\cdot x\le L$ and the two homogeneous radial-edge
+    inequalities; the exterior trapezoid is $E_s=\{x\in2T_s:o_s\cdot x\ge1\}=2T_s\setminus\operatorname{int}Q$.
+    Two wedges are consecutive when they share a radial edge.
 \end{definition}
 
 % Source: OpenAI2026AreaLaw, Section 11, 10-geometry.tex,
@@ -142,21 +126,18 @@ midpoints are the points of $\{-1,0,1\}^2$.
         TNLean.PEPS.AreaLaw.Geometry.cellFanPolygon_region_subset_repairNormTriangle}
     \leanok
     \uses{def:area_law_normalized_repair_fan, thm:area_law_quarter_sections}
-    The sets $LT_s$ and $E_s$ are compact and quarter-sectorial at every
-    point of $\mathbb Z^2$. For distinct wedges $s\ne t$, every common point
-    of $T_s$ and $E_t$ lies in $\mathbb Z^2$. If $s\ne t$ are not
-    consecutive, then every common point of $T_s$ and $T_t$ is the center $0$. Every actual fan triangle of $Q$ lies in its
-    triangle $T_s$.
+    The sets $LT_s$ ($L\in\{1,2\}$) and $E_s$ (Definition~\ref{def:area_law_normalized_repair_fan})
+    are compact and quarter-sectorial at every $q\in\mathbb Z^2$. For $s\ne t$,
+    $T_s\cap E_t\subseteq\mathbb Z^2$, and if $s,t$ are non-consecutive then $T_s\cap T_t=\{0\}$.
+    Every actual fan triangle of $Q$ lies in $T_s$.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    All facets have integer levels and coefficients with $|a|+|b|\le2$, so
-    Theorem~\ref{thm:area_law_quarter_sections} applies, and the sets are
-    closed and bounded. The contact assertions are finitely many systems of
-    linear inequalities, one for each pair of wedges. The actual triangle is
-    the convex hull of its three vertices, each of which satisfies the three
-    inequalities.
+    Each facet has $a,b,n\in\mathbb Z$ with $|a|+|b|\le2$, so Theorem~\ref{thm:area_law_quarter_sections}
+    gives quarter-sectoriality, and boundedness gives compactness. The intersections $T_s\cap E_t$
+    and $T_s\cap T_t$ reduce to finite linear systems over pairs $(s,t)$, and each actual fan triangle
+    is the convex hull of three vertices in $T_s$.
 \end{proof}
 
 % Source: OpenAI2026AreaLaw, Section 11, 10-geometry.tex,
@@ -168,21 +149,19 @@ midpoints are the points of $\{-1,0,1\}^2$.
         TNLean.PEPS.AreaLaw.Geometry.exists_pos_forall_of_finite}
     \leanok
     \uses{thm:area_law_contact_angular_estimate}
-    Let $X,Y$ be compact, quarter-sectorial at every point of
-    $\mathbb Z^2$, and suppose $X\cap Y\subseteq\mathbb Z^2$. There is
-    $\eta>0$ such that for all $x\in X$ and $y\in Y$, either
-    $\|x-y\|\ge\eta$, or there is $q\in\mathbb Z^2$ with
-    $\|x-q\|,\|y-q\|<1/4$ and $\|x-y\|\ge\|y-q\|/2$.
+    If $X,Y\subseteq\mathbb R^2$ are compact, quarter-sectorial at every $q\in\mathbb Z^2$,
+    and satisfy $X\cap Y\subseteq\mathbb Z^2$, then there exists $\eta>0$ such that for all
+    $x\in X$ and $y\in Y$, either $\|x-y\|\ge\eta$, or there exists $q\in\mathbb Z^2$ with
+    $\|x-q\|,\|y-q\|<1/4$ and $\|x-y\|\ge\frac12\|y-q\|$.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    The pairs $(x,y)\in X\times Y$ that do not lie together in an open
-    quarter-square about a point of $\mathbb Z^2$ form a compact set. If it
-    is nonempty, $\|x-y\|$ attains a minimum there. A zero minimum would give
-    a common point $x=y\in\mathbb Z^2$, which lies in its own open
-    quarter-square. Pairs inside such a square about $q$ meet only at $q$
-    there, and Theorem~\ref{thm:area_law_contact_angular_estimate} applies.
+    The set of $(x,y)\in X\times Y$ not lying together in any open ball $\{z:\|z-q\|<1/4\}$
+    ($q\in\mathbb Z^2$) is compact and disjoint from the diagonal (since $X\cap Y\subseteq\mathbb Z^2$),
+    so $\|x-y\|$ attains a minimum $\eta>0$ on it; on each ball $\{z:\|z-q\|<1/4\}$,
+    $X\cap Y$ meets the ball at most at $q$ and Theorem~\ref{thm:area_law_contact_angular_estimate}
+    gives (\ref{eq:area_law_contact_angular_estimate}).
 \end{proof}
 
 % Source: OpenAI2026AreaLaw, Section 11, 10-geometry.tex,
@@ -198,42 +177,28 @@ midpoints are the points of $\{-1,0,1\}^2$.
     \uses{thm:area_law_normalized_fan_contacts,
         thm:area_law_contact_dichotomy, thm:area_law_repair_margins,
         def:area_law_repair_children}
-    There is $c_1>0$ with the following property. Let the exterior labels of
-    the eight wedges be given, let $C$ be one of their maximal cyclic runs of
-    equal label, and let $B_C=\bigcup_{s\in C}T_s$. Let $W_C$ be the union
-    of the exterior trapezoids $E_t$ of the wedges whose label differs from
-    that of $C$, together with the sets $B_{C'}$ of the other runs $C'$ with
-    the label of $C$. Let $v\in\mathbb R^2$ and $u\ge1$, and let $Y$ be a
-    set such that
-    \begin{enumerate}
-        \item every $y\in Y$ with $\|y-v\|<2u$ satisfies
-              $(y-v)/u\in W_C$;
-        \item $Y$ avoids the nine squares $Q(v+up,u)$, $p\in\{-1,0,1\}^2$.
-    \end{enumerate}
-    Then $\|x-y\|\ge c_1u^{\rho_0}$ for all $x\in v+uB_C$ and $y\in Y$.
+    There exists $c_1>0$ such that for any exterior wedge labels, any maximal cyclic run
+    $C$ of equal label with $B_C=\bigcup_{s\in C}T_s$, and
+    \begin{align}
+        W_C & = \Bigl(\bigcup_{\lambda(t)\ne\lambda(C)}E_t\Bigr)\cup\Bigl(\bigcup_{C'\ne C,\,\lambda(C')=\lambda(C)}B_{C'}\Bigr),
+        \label{eq:area_law_local_comparison_union}
+    \end{align}
+    if $v\in\mathbb R^2$, $u\ge1$, and $Y\subseteq\mathbb R^2$ satisfies
+    (1) $(y-v)/u\in W_C$ whenever $y\in Y$ and $\|y-v\|<2u$, and
+    (2) $Y\cap\bigcup_{p\in\{-1,0,1\}^2}Q(v+up,u)=\emptyset$,
+    then $\|x-y\|\ge c_1u^{\rho_0}$ for all $x\in v+uB_C$ and $y\in Y$.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    Apply Theorem~\ref{thm:area_law_contact_dichotomy} to each pair of a
-    triangle $T_s$, $s\in C$, and a set $E_t$ or $T_t$ in $W_C$. A wedge
-    $t$ of different label is distinct from $s$, and a wedge of another run
-    with the same label is neither $s$ nor consecutive to $s$, so
-    Theorem~\ref{thm:area_law_normalized_fan_contacts} gives the contact
-    hypothesis. The finitely many pairs give one $\eta\in(0,1]$; put
-    $c_1=\min(\eta,1/4)$. If $\|y-v\|\ge2u$, then $\|x-y\|\ge u\ge
-        u^{\rho_0}$. Otherwise rescale: either $\|x-y\|\ge\eta u$, or there
-    is a mark $q=v+up$ with $\|x-y\|\ge\|y-q\|/2$, where $p$ lies in
-    $\{-1,0,1\}^2$ because $\|(x-v)/u\|\le1$. The second hypothesis and
-    Theorem~\ref{thm:area_law_repair_margins} give
-    $\|y-q\|>d(u)\ge u^{\rho_0}/2$.
+    By Theorems~\ref{thm:area_law_normalized_fan_contacts} and \ref{thm:area_law_contact_dichotomy}
+    applied to each pair $(T_s,E_t)$ or $(T_s,T_{t'})$ in $B_C\times W_C$ (where $t'\notin C$ is
+    non-consecutive to $s\in C$), there is a uniform $\eta\in(0,1]$; set $c_1=\min(\eta,1/4)$.
+    For $x\in v+uB_C$ and $y\in Y$: if $\|y-v\|\ge2u$, then $\|x-y\|\ge u\ge u^{\rho_0}$;
+    if $\|y-v\|<2u$, rescaling by $u$ gives either $\|x-y\|\ge\eta u\ge c_1u^{\rho_0}$ or some
+    $p\in\{-1,0,1\}^2$ with $q=v+up$ and $\|x-y\|\ge\frac12\|y-q\|>\frac12 d(u)\ge\frac14 u^{\rho_0}$
+    by hypothesis (2) and Theorem~\ref{thm:area_law_repair_margins}.
 \end{proof}
-
-The two hypotheses on $Y$ are the properties of the final actual region of
-an older or peer identifier of the same label. The first is the local
-description supplied by the isolated star of the parent mark, after its
-removal square has been cut out; the second is the removal of the next
-generation's squares, including terminal ones, from every old region.
 
 % Source: OpenAI2026AreaLaw, Section 11, 10-geometry.tex,
 % geometry:initial-stars, lines 332--349; geometry:repair-induction,
@@ -246,25 +211,19 @@ generation's squares, including terminal ones, from every old region.
         TNLean.PEPS.AreaLaw.Geometry.IsIsolatedStar.exists_mem_repairExteriorTrapezoid}
     \leanok
     \uses{thm:area_law_normalized_fan_contacts}
-    Let the closed square of half-side $\rho$ about $v$ be an isolated star
-    of a labelled region family $(R_i)$, and let $u>0$ with $6u\le\rho$.
-    The identifier chosen by the repair for each working wedge of half-side
-    $6u$ is the identifier assigned to that wedge by the star. If
-    $w\in R_i$ and $u<\|w-v\|<2u$, then $(w-v)/u$ lies in the exterior
-    trapezoid $E_t$ of a wedge $t$ assigned to $i$.
+    If $v+[-\rho,\rho]^2$ is an isolated star of a labelled region family $(R_i)$ and
+    $0<6u\le\rho$, then the working-wedge assignment at half-side $6u$ equals the star's
+    wedge assignment, and every $w\in R_i$ with $u<\|w-v\|<2u$ satisfies $(w-v)/u\in E_t$
+    for some wedge $t$ assigned to $i$.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    The interior of a fan triangle meets no other fan triangle of the same
-    half-side, because it satisfies both radial inequalities strictly. A
-    point of the nonempty interior of the working triangle of $t$ lies in
-    the region chosen for $t$, hence in a star triangle of a wedge assigned
-    to that region; this wedge must be $t$. For the second assertion, the
-    star writes $\overline{R_i}$ near $v$ as the union of the triangles of
-    the wedges assigned to $i$. Clipping to half-side $2u$ and rescaling
-    gives a point of $2T_t$ of norm greater than one; in the cone of $t$
-    the norm is $o_t\cdot x$.
+    Since $\operatorname{int}T_t\cap\operatorname{int}T_s=\emptyset$ for $s\ne t$, a point in the
+    open working triangle of $t$ lies in the chosen region for $t$ and hence in the star triangle
+    of $t$. Near $v$, $\overline{R_i}$ is the union of the star triangles of wedges $t$ assigned to $i$;
+    restricting to $u<\|w-v\|<2u$ and rescaling by $u$ places $(w-v)/u$ in
+    $\{x\in2T_t:\|x\|=o_t\cdot x>1\}\subseteq E_t$.
 \end{proof}
 
 % Source: OpenAI2026AreaLaw, Section 11, 10-geometry.tex,
@@ -283,49 +242,34 @@ generation's squares, including terminal ones, from every old region.
         thm:area_law_star_same_label_bound,
         def:area_law_uniform_repair_conclusion,
         lem:area_law_repair_metric_choice}
-    Assume the conclusion of the uniform repair induction of
-    \cite[Section~11]{OpenAI2026AreaLaw}. There are a fixed $c_1>0$ and a
-    threshold $T$ such that the following holds for every stopping scale
-    $S_*\ge T$, every layer width $C_0\ge2$, and every sufficiently large
-    lower layer index. Define the final actual region of an identifier as
-    the intersection of its current regions over all later generations. Let a
-    replacement be born at a parent mark of scale $S$. Then its closed birth
-    has distance at least $c_1d(S)^{\rho_0}$ from the final actual region of
-    every other identifier of its generation with the same label.
+    Assuming the uniform repair induction (Definition~\ref{def:area_law_uniform_repair_conclusion}),
+    there exist $c_1>0$ and $T$ such that for every $S_*\ge T$, $C_0\ge2$, and sufficiently large $k_0$,
+    every replacement born at a parent mark of scale $S$ has closed birth at distance
+    $\ge c_1d(S)^{\rho_0}$ from the final actual region $R_y^{(\infty,j+1)}$ of every other
+    identifier $y$ of generation $j+1$ with the same label.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    Apply Theorem~\ref{thm:area_law_replacement_birth_separation_local}
-    with $u=d(S)\ge S_*\ge1$ to the final actual region $Y$ of the compared
-    identifier. Near the parent mark, an older region lies in the isolated
-    star of the mark and avoids its removal square, so
-    Theorem~\ref{thm:area_law_star_same_label_bound} places it in the exterior
-    trapezoids of the wedges of its label, which is opposite to the exterior
-    label of the run. A peer at the same parent lies in the birth of another
-    run with the same exterior label. A peer at another parent lies in that
-    parent's removal square, at distance at least $2u$ from the mark by the
-    separation of marks and the removal margins. Finally, the next
-    generation removes the squares $Q(v+up,u)$ from every region.
+    Apply Theorem~\ref{thm:area_law_replacement_birth_separation_local} with $u=d(S)\ge S_*\ge1$
+    to $Y=R_y^{(\infty,j+1)}$. Within $2u$ of the parent mark $v$, an older $y$ avoids $Q(v,S)$
+    and lies in $uE_t$ for wedges $t$ of its label (opposite to the run's exterior label) by
+    Theorem~\ref{thm:area_law_star_same_label_bound}; a peer $y$ at $v$ lies in $uB_{C'}$ for
+    another run $C'$ of the same exterior label; and a peer at another parent $v'$ lies in
+    $Q(v',S')$ at distance $\ge2u$ from $v$ by mark separation and Lemma~\ref{lem:area_law_repair_metric_choice}.
+    Generation $j+1$ removes $\bigcup_{p\in\{-1,0,1\}^2}Q(v+up,u)$ from $Y$.
 \end{proof}
 
-This theorem covers the replacement births of
-Theorem~\ref{thm:area_law_birth_separation}. The births of initial belt tiles
-are treated next, without any assumption beyond the construction.
-
-For an initial belt tile in a belt cell of side $u=t_k$, normalize that cell
-to $[0,4]^2$, so that lengths are measured in units of $u/4$. The cells of
-the same and adjacent layers have sides $2$, $4$ or $8$ and corners in
-$(2\mathbb Z)^2$, and all their sides and fan edges lie on the lines
+For an initial belt tile in a belt cell of side $u=t_k$, normalize the cell to $[0,4]^2$
+(in units of $u/4$). Cells of the same and adjacent layers have sides in $\{2,4,8\}$,
+corners in $(2\mathbb Z)^2$, and sides and fan edges on the arrangement
 \begin{align}
     x_1=m,\qquad x_2=m,\qquad x_1+x_2=2m,\qquad x_1-x_2=2m,
-    \qquad m\in\mathbb Z.
+    \qquad m\in\mathbb Z,
     \label{eq:area_law_belt_arrangement}
 \end{align}
-Two of these lines that are not parallel meet in a point of
-$\mathbb Z^2$. The faces of this arrangement are the translates
-$A_{c,s}=(2c_1+1,2c_2+1)+T_s$, $c\in\mathbb Z^2$, of the eight triangles of
-Definition~\ref{def:area_law_normalized_repair_fan}; we call them atoms.
+whose faces are the \emph{atoms} $A_{c,s}=(2c_1+1,2c_2+1)+T_s$ ($c\in\mathbb Z^2$,
+Definition~\ref{def:area_law_normalized_repair_fan}).
 
 % Source: OpenAI2026AreaLaw, Section 11, 10-geometry.tex,
 % geometry:initial-stars, lines 352--359, and geometry:birth-separation,
@@ -346,39 +290,28 @@ Definition~\ref{def:area_law_normalized_repair_fan}; we call them atoms.
         TNLean.PEPS.AreaLaw.Geometry.beltAtom_axis_segments}
     \leanok
     \uses{def:area_law_normalized_repair_fan, thm:area_law_quarter_sections}
-    Atoms are compact, convex and quarter-sectorial at every point of
-    $\mathbb Z^2$, and the interior of an atom meets none of the lines
-    (\ref{eq:area_law_belt_arrangement}).
+    Every atom $A_{c,s}$ is compact, convex, and quarter-sectorial at every $q\in\mathbb Z^2$,
+    and $\operatorname{int}A_{c,s}$ misses all lines of (\ref{eq:area_law_belt_arrangement}). Moreover:
     \begin{enumerate}
-        \item Let $P$ be closed and convex with nonempty interior, and let its
-              frontier lie on the lines (\ref{eq:area_law_belt_arrangement}).
-              Then every point of $P$ lies in an atom contained in $P$.
-        \item Two atoms with a common point outside $\mathbb Z^2$ share a
-              nondegenerate segment.
-        \item If $q\in\mathbb Z^2$ has $q_1+q_2$ odd, then every atom
-              containing $q$ contains a segment $[q,q+\sigma e_1]$ and a
-              segment $[q,q+\tau e_2]$ with $\sigma,\tau\in\{\pm1\}$.
+        \item if $P\subseteq\mathbb R^2$ is closed and convex with $\operatorname{int}P\ne\emptyset$
+              and $\partial P$ contained in the lines (\ref{eq:area_law_belt_arrangement}), then every
+              $x\in P$ lies in an atom $A_{c,s}\subseteq P$;
+        \item two atoms meeting outside $\mathbb Z^2$ share a nondegenerate segment;
+        \item if $q\in\mathbb Z^2$ has $q_1+q_2$ odd, every atom containing $q$ contains
+              $[q,q+\sigma e_1]$ and $[q,q+\tau e_2]$ for some $\sigma,\tau\in\{\pm1\}$.
     \end{enumerate}
 \end{theorem}
 
 \begin{proof}
     \leanok
-    An atom is cut out by three half-planes of the arrangement, with integer
-    coefficients and $|a|+|b|\le2$, so
-    Theorem~\ref{thm:area_law_quarter_sections} applies. Two nonparallel lines
-    of the arrangement meet in an integer point, by Cramer's rule and the
-    parity of the diagonal levels. In the interior of a normalized triangle
-    $T_s$ the coordinates lie strictly between consecutive integers and
-    $x_1\pm x_2$ strictly between consecutive even integers.
-    For (1), pick $c$ in the interior of $P$ and $q\in P$. A ray from $q$ stays
-    for a short time in one atom, because the atoms of a square of side two
-    are finitely many closed convex sets covering it. This atom meets the
-    interior of $P$ near $q$. Its interior is connected and avoids the
-    frontier of $P$, so it lies in the interior of $P$. For (2), all facets of
-    the two atoms that are tight at a common point outside $\mathbb Z^2$ lie
-    on one line, which therefore carries a segment of both atoms. For (3),
-    such a point is the midpoint of a side of its square of side two, and
-    each of the four atoms at it has both axis edges at it.
+    Each atom is cut out by three half-planes of (\ref{eq:area_law_belt_arrangement}) with
+    $|a|+|b|\le2$, so Theorem~\ref{thm:area_law_quarter_sections} applies, nonparallel lines meet
+    in $\mathbb Z^2$, and $\operatorname{int}A_{c,s}$ avoids (\ref{eq:area_law_belt_arrangement}).
+    For (1), a ray from $x\in P$ to $c\in\operatorname{int}P$ enters an atom whose connected
+    interior meets $\operatorname{int}P$ and misses $\partial P$, hence lies in $P$.
+    For (2), facets tight at a common point outside $\mathbb Z^2$ lie on a single line of
+    (\ref{eq:area_law_belt_arrangement}), giving a shared segment. For (3), $q$ with $q_1+q_2$ odd
+    is a side midpoint of $2\mathbb Z^2$, where each incident atom contains both axis unit segments.
 \end{proof}
 
 % Source: OpenAI2026AreaLaw, Section 11, 10-geometry.tex,
@@ -389,22 +322,18 @@ Definition~\ref{def:area_law_normalized_repair_fan}; we call them atoms.
         TNLean.PEPS.AreaLaw.Geometry.exists_beltAtom_dichotomy}
     \leanok
     \uses{thm:area_law_belt_atoms}
-    There is $\eta\in(0,1]$ such that for any two atoms $A,B$ with
-    $A\cap B\subseteq\mathbb Z^2$, and all $x\in A$, $y\in B$, either
-    $\|x-y\|\ge\eta$, or there is a common point $q\in A\cap B$ with
-    $\|x-q\|,\|y-q\|<1/4$ and $\|x-y\|\ge\|y-q\|/2$.
+    There exists $\eta\in(0,1]$ such that for any atoms $A,B$ with $A\cap B\subseteq\mathbb Z^2$
+    and any $x\in A$, $y\in B$, either $\|x-y\|\ge\eta$, or there exists $q\in A\cap B$ with
+    $\|x-q\|,\|y-q\|<1/4$ and $\|x-y\|\ge\frac12\|y-q\|$.
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{thm:area_law_contact_angular_estimate}
-    For one pair, the pairs of points that do not lie together in an open
-    quarter-square about a common point of $A$ and $B$ form a compact set,
-    on which $\|x-y\|$ has a positive minimum; inside such a square about
-    $q$, Theorem~\ref{thm:area_law_contact_angular_estimate} applies. Up to a
-    translation by an even integer vector, which preserves the arrangement,
-    only finitely many pairs of atoms come within distance one of each
-    other.
+    By Theorems~\ref{thm:area_law_belt_atoms} and \ref{thm:area_law_contact_angular_estimate}, each pair
+    $(A,B)$ with $A\cap B\subseteq\mathbb Z^2$ satisfies the dichotomy for some $\eta_{A,B}>0$;
+    modulo $(2\mathbb Z)^2$-translations preserving (\ref{eq:area_law_belt_arrangement}), only finitely
+    many pairs satisfy $\operatorname{dist}(A,B)<1$.
 \end{proof}
 
 % Source: OpenAI2026AreaLaw, Section 11, 10-geometry.tex,
@@ -419,15 +348,12 @@ Definition~\ref{def:area_law_normalized_repair_fan}; we call them atoms.
         TNLean.PEPS.AreaLaw.Geometry.exists_beltAtom_subset_initialBirthRegion}
     \leanok
     \uses{thm:area_law_belt_atoms, def:area_law_initial_birth_regions}
-    Normalize a belt cell of layer $k$ to $[0,4]^2$. Every fan triangle and
-    every closed fine cell of a layer $h$ with fine scale index at least that
-    of layer $k$ minus one becomes a set as in item (1) of
-    Theorem~\ref{thm:area_law_belt_atoms}. For the initial construction, take
-    a width $C_0\ge2$, a lower layer $k_0\ge50{,}000{,}000$, and
-    $k\ge k_0$. If $p$ lies in the closed cell and $w$ lies in the closed
-    birth region of a primary or of a
-    belt tile, with $\|p-w\|<t_k$, then the normalized point $w$ lies in an
-    atom contained in the normalized birth region.
+    Under normalization of a layer-$k$ belt cell to $[0,4]^2$, every fan triangle and closed
+    fine cell of any layer $h$ with $\ell_h\ge\ell_k-1$ satisfies Theorem~\ref{thm:area_law_belt_atoms}(1).
+    Consequently, for $C_0\ge2$ and $k\ge k_0\ge50{,}000{,}000$, if $p$ lies in the closed belt
+    cell and $w$ lies in an initial birth region $X_y^0$ (Definition~\ref{def:area_law_initial_birth_regions})
+    with $\|p-w\|<t_k$, then the normalized point $\tilde w$ lies in an atom contained in the
+    normalized birth region $\tilde X_y^0$.
 \end{theorem}
 
 \begin{proof}
@@ -436,14 +362,12 @@ Definition~\ref{def:area_law_normalized_repair_fan}; we call them atoms.
         thm:area_law_primary_fine_cell_cover,
         thm:area_law_fan_frontier_primitives, thm:area_law_cell_fan_cover,
         thm:area_law_cell_fan_regularity}
-    The corners of the cells of fine scale index at least that of layer $k$
-    minus one become points of $(2\mathbb Z)^2$, their centers integer
-    points, and their sides and radial edges segments of the lines
-    (\ref{eq:area_law_belt_arrangement}). A fan triangle has frontier on its
-    cell boundary and its radial segments. A point within $t_k$ of the
-    reference cell belongs only to the same or an adjacent layer, whose fine
-    scale index differs by at most one. A primary is the union of the closures
-    of its nonbelt fine cells, and a belt tile the union of its fan triangles.
+    By Theorems~\ref{thm:area_law_adjacent_fine_meshes} and \ref{thm:area_law_fan_frontier_primitives},
+    cells and fan triangles at scale index $\ell_h\ge\ell_k-1$ have frontiers on
+    (\ref{eq:area_law_belt_arrangement}). By Theorem~\ref{thm:area_law_local_layer_indices}, any $w$
+    within $t_k$ of the cell belongs to layer $h\in\{k-1,k,k+1\}$ (so $\ell_h\ge\ell_k-1$), and
+    $X_y^0$ is a union of closed fine cells (Theorem~\ref{thm:area_law_primary_fine_cell_cover}) or
+    fan triangles (Theorems~\ref{thm:area_law_cell_fan_cover} and \ref{thm:area_law_cell_fan_regularity}).
 \end{proof}
 
 % Source: OpenAI2026AreaLaw, Section 11, 10-geometry.tex,
@@ -459,13 +383,11 @@ Definition~\ref{def:area_law_normalized_repair_fan}; we call them atoms.
         TNLean.PEPS.AreaLaw.Geometry.beltNormalize_symm_mem_beltCellMarks}
     \leanok
     \uses{thm:area_law_belt_cell_local_atoms, def:area_law_belt_cell_marks}
-    In the initial construction, fix a width $C_0\ge2$ and a lower layer
-    $k_0\ge50{,}000{,}000$. Let $x$ be an initial belt tile in a belt cell of
-    layer $k\ge k_0$, and let $y\ne x$ be an initial identifier of the same
-    label. If a point of $\mathbb Z^2$, in
-    coordinates normalized at the cell, lies in the birth region of $x$ and in
-    an atom contained in the normalized birth region of $y$, then it is the
-    normalized position of one of the nine marks of the cell.
+    For $C_0\ge2$ and $k\ge k_0\ge50{,}000{,}000$, let $x$ be an initial belt tile in a layer-$k$
+    belt cell and $y\ne x$ an initial identifier with $\lambda(y)=\lambda(x)$. If $q\in\mathbb Z^2$
+    (in cell-normalized coordinates) lies in $\tilde X_x^0$ and in an atom $B\subseteq\tilde X_y^0$,
+    then $q\in\{0,2,4\}^2$ is the normalized position of one of the $9$ marks of the cell
+    (Definition~\ref{def:area_law_belt_cell_marks}).
 \end{theorem}
 
 \begin{proof}
@@ -473,18 +395,15 @@ Definition~\ref{def:area_law_normalized_repair_fan}; we call them atoms.
     \uses{thm:area_law_initial_interface_colors, thm:area_law_initial_open_disjoint,
         thm:area_law_initial_birth_regularity, thm:area_law_fan_run_geometric_contact,
         thm:area_law_square_frontier_side, thm:area_law_fan_own_side_contact}
-    By Theorem~\ref{thm:area_law_initial_interface_colors}, $x$ and $y$ share
-    no nondegenerate segment. If the open region of $y$ meets the open cell,
-    it meets the interior of a fan triangle there, so $y$ is another run of
-    the cell, and two distinct runs of the same label meet only at the
-    center. Otherwise the closed birth region of $y$ avoids the open cell and
-    the contact lies on a side of the cell, hence on the elementary side of a
-    fan triangle of $x$, whose endpoints have even normalized coordinates. If
-    both normalized coordinates of the contact are even, it is a mark. If one
-    is odd, the contact is the midpoint of a unit subsegment of that
-    elementary side, and item (3) of Theorem~\ref{thm:area_law_belt_atoms}
-    gives a unit segment of that subsegment inside the atom of $y$, a shared
-    nondegenerate segment.
+    By Theorem~\ref{thm:area_law_initial_interface_colors}, $\tilde X_x^0$ and $\tilde X_y^0$ share no
+    nondegenerate segment. If $\operatorname{int}X_y^0$ meets the open belt cell,
+    Theorems~\ref{thm:area_law_initial_open_disjoint} and \ref{thm:area_law_fan_run_geometric_contact}
+    make $y$ another same-label run of the cell meeting $\tilde X_x^0$ only at the centre $q=(2,2)$.
+    Otherwise $\tilde X_y^0$ avoids $(0,4)^2$, so $q$ lies on $\partial[0,4]^2$ along a fan-triangle side
+    of $\tilde X_x^0$ with endpoints in $\{0,2,4\}^2$ (Theorems~\ref{thm:area_law_square_frontier_side}
+    and \ref{thm:area_law_fan_own_side_contact}); if $q_1+q_2$ were odd,
+    Theorem~\ref{thm:area_law_belt_atoms}(3) would give a shared unit segment in $\tilde X_x^0\cap B$,
+    contradicting segment-disjointness.
 \end{proof}
 
 % Source: OpenAI2026AreaLaw, Section 11, 10-geometry.tex,
@@ -496,31 +415,24 @@ Definition~\ref{def:area_law_normalized_repair_fan}; we call them atoms.
     \leanok
     \uses{def:area_law_initial_birth_regions, def:area_law_initial_open_regions,
         def:area_law_belt_cell_marks}
-    There is $c_1>0$ with the following property. Fix an origin, a finite
-    endpoint set, a width $C_0\ge2$, a lower layer $k_0\ge50{,}000{,}000$
-    and arbitrary valid residues at every layer. Let $x$ be an initial belt
-    tile in a belt cell of side $u=t_k$ with $k\ge k_0$, and let $y$ be a
-    primary or an initial belt tile, distinct from $x$, of the same label. Let $Y$ be a
-    subset of the open region of $y$ whose points have distance greater than
-    $u^{\rho_0}/4$ from each of the nine marks of the cell. Then every point
-    of the closed birth region of $x$ has distance at least $c_1u^{\rho_0}$
-    from $Y$.
+    There exists $c_1>0$ such that for $C_0\ge2$, $k\ge k_0\ge50{,}000{,}000$, an initial belt tile
+    $x$ in a belt cell of side $u=t_k$, any primary or initial belt tile $y\ne x$ with
+    $\lambda(y)=\lambda(x)$, and any $Y\subseteq\operatorname{int}X_y^0$ at distance $>u^{\rho_0}/4$
+    from each of the $9$ marks of the cell (Definition~\ref{def:area_law_belt_cell_marks}),
+    every $p\in X_x^0$ and $w\in Y$ satisfy $\|p-w\|\ge c_1u^{\rho_0}$.
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{thm:area_law_belt_atom_dichotomy, thm:area_law_belt_cell_local_atoms,
         thm:area_law_initial_belt_contacts, thm:area_law_belt_atoms}
-    Put $c_1=\min(\eta/4,1/8)$ with $\eta$ from
-    Theorem~\ref{thm:area_law_belt_atom_dichotomy}. If $\|p-w\|\ge u$ there is
-    nothing to prove, since $u\ge u^{\rho_0}$. Otherwise the normalized points
-    $p$ and $w$ lie in atoms $A$ and $B$ contained in the normalized birth
-    regions of $x$ and $y$. By item (2) of
-    Theorem~\ref{thm:area_law_belt_atoms} and the absence of shared segments,
-    $A\cap B\subseteq\mathbb Z^2$. Either $\|p-w\|\ge\eta u/4$, or there is a
-    common integer point $q$ with $\|p-w\|\ge\|w-v\|/2$ for the point $v$ of
-    the plane at $q$. By Theorem~\ref{thm:area_law_initial_belt_contacts}, $v$
-    is a mark of the cell, so $\|w-v\|>u^{\rho_0}/4$.
+    Set $c_1=\min(\eta/4,1/8)$ with $\eta$ from Theorem~\ref{thm:area_law_belt_atom_dichotomy}.
+    If $\|p-w\|\ge u$, then $\|p-w\|\ge u^{\rho_0}\ge c_1u^{\rho_0}$. If $\|p-w\|<u$,
+    Theorem~\ref{thm:area_law_belt_cell_local_atoms} places the normalized points $\tilde p,\tilde w$
+    in atoms $A\subseteq\tilde X_x^0$ and $B\subseteq\tilde X_y^0$ with $A\cap B\subseteq\mathbb Z^2$
+    (Theorem~\ref{thm:area_law_belt_atoms}(2)). By Theorem~\ref{thm:area_law_belt_atom_dichotomy},
+    either $\|p-w\|\ge\frac{\eta}{4}u\ge c_1u^{\rho_0}$, or there is a mark $v$ (by
+    Theorem~\ref{thm:area_law_initial_belt_contacts}) with $\|p-w\|\ge\frac12\|w-v\|>\frac18 u^{\rho_0}$.
 \end{proof}
 
 % Source: OpenAI2026AreaLaw, Section 11, 10-geometry.tex,
@@ -533,13 +445,11 @@ Definition~\ref{def:area_law_normalized_repair_fan}; we call them atoms.
         TNLean.PEPS.AreaLaw.Geometry.exists_isInitialBirthSeparated}
     \leanok
     \uses{def:area_law_repair_stage}
-    There is a fixed $c_1>0$ such that the following holds for every finite
-    domain, cut, origin, layer width $C_0\ge2$, lower layer index
-    $k_0\ge50{,}000{,}000$ and stopping scale.
-    Let $\mathcal B$ be the closed birth region of an initial belt tile of
-    side scale $u=t_k$. Then its distance from the final actual region of
-    every primary and of every other initial belt tile with the same label is
-    at least $c_1u^{\rho_0}$.
+    There exists $c_1>0$ such that for every finite domain, cut, origin, $C_0\ge2$,
+    $k_0\ge50{,}000{,}000$, and stopping scale $S_*$, the closed birth region $\mathcal B=X_x^0$
+    of any initial belt tile $x$ of side $u=t_k$ has distance $\ge c_1u^{\rho_0}$ from the
+    final actual region $R_y^{(\infty,0)}$ of every primary or other initial belt tile $y$ with
+    $\lambda(y)=\lambda(x)$.
 \end{theorem}
 
 \begin{proof}
@@ -547,14 +457,12 @@ Definition~\ref{def:area_law_normalized_repair_fan}; we call them atoms.
     \uses{thm:area_law_initial_belt_birth_separation_local,
         thm:area_law_uniform_separated_initial_marks, thm:area_law_repair_margins,
         thm:area_law_local_layer_indices, thm:area_law_adjacent_fine_meshes}
-    The final actual region of $y$ lies in its open initial region and avoids
-    every removal square of the first generation. The nine marks of the cell
-    are initial marks. The scale $S$ assigned to such a mark is the side of an
-    incident selected belt cell, which belongs to the same or an adjacent
-    layer, so $S\ge u/2$ and
-    $d(S)\ge S^{\rho_0}/2\ge u^{\rho_0}/4$ by
-    Theorem~\ref{thm:area_law_repair_margins}. Apply
-    Theorem~\ref{thm:area_law_initial_belt_birth_separation_local}.
+    Every $R_y^{(\infty,0)}\subseteq\operatorname{int}X_y^0$ avoids the generation-$0$ removal squares
+    around the $9$ marks of the belt cell. Each such mark has initial scale $S\ge u/2$
+    (Theorems~\ref{thm:area_law_uniform_separated_initial_marks}, \ref{thm:area_law_local_layer_indices},
+    and \ref{thm:area_law_adjacent_fine_meshes}) and removal half-side $d(S)\ge S^{\rho_0}/2\ge u^{\rho_0}/4$
+    (Theorem~\ref{thm:area_law_repair_margins}), so Theorem~\ref{thm:area_law_initial_belt_birth_separation_local}
+    applies to $Y=R_y^{(\infty,0)}$.
 \end{proof}
 
 % Source: OpenAI2026AreaLaw, Section 11, 10-geometry.tex,
@@ -569,29 +477,24 @@ Definition~\ref{def:area_law_normalized_repair_fan}; we call them atoms.
         TNLean.PEPS.AreaLaw.Geometry.exists_birthSeparation_of_initialIsolatedStars}
     \leanok
     \uses{def:area_law_uniform_repair_conclusion}
-    Assume the conclusion of the uniform repair induction of
-    \cite[Section~11]{OpenAI2026AreaLaw}. One fixed $c_1>0$ and a threshold
-    $T$ serve both theorems above: for every stopping scale $S_*\ge T$,
-    every layer width $C_0\ge2$ and every sufficiently large lower layer
-    index, the
-    conclusions of
-    Theorems~\ref{thm:area_law_replacement_birth_separation_conditional}
-    and~\ref{thm:area_law_initial_belt_birth_separation} hold with $c_1$.
-    The same holds under the conclusion of the initial isolated-star lemma,
-    from which the uniform repair induction follows.
+    Assuming the uniform repair induction (Definition~\ref{def:area_law_uniform_repair_conclusion})
+    or the initial isolated-star lemma, there exist $c_1>0$ and $T$ such that for every
+    $S_*\ge T$, $C_0\ge2$, and sufficiently large $k_0$, both
+    Theorems~\ref{thm:area_law_replacement_birth_separation_conditional} and
+    \ref{thm:area_law_initial_belt_birth_separation} hold with constant $c_1$.
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{thm:area_law_replacement_birth_separation_conditional,
         thm:area_law_initial_belt_birth_separation}
-    Take the smaller of the two constants; both lower bounds remain valid for
-    a smaller constant.
+    Take $c_1$ as the minimum of the constants from
+    Theorems~\ref{thm:area_law_replacement_birth_separation_conditional} and
+    \ref{thm:area_law_initial_belt_birth_separation}.
 \end{proof}
 
-The isolated stars of the initial stage are proved in
-Theorem~\ref{thm:area_law_initial_stars}, so the last theorem applies without
-premise and gives
+Combining Theorem~\ref{thm:area_law_initial_stars} with
+Theorem~\ref{thm:area_law_birth_separation_conditional} yields
 Theorem~\ref{thm:area_law_birth_separation}~\cite{gap:arealaw2d_birth_separation_scope}.
 
 % Source: OpenAI2026AreaLaw, Section 11, 10-geometry.tex,
@@ -601,26 +504,18 @@ Theorem~\ref{thm:area_law_birth_separation}~\cite{gap:arealaw2d_birth_separation
     \lean{TNLean.PEPS.AreaLaw.Geometry.exists_birthSeparation}
     \leanok
     \uses{def:area_law_repair_stage}
-    There is a fixed $c_1>0$ such that the following holds, for every layer
-    width $C_0\ge2$ of the construction, with the stopping scale $S_*$ and
-    the lower layer $k_0$ chosen sufficiently large as in the construction. Let $\mathcal B$ be the closed birth region of an initial
-    belt tile of side scale $u=t_k$, or of a replacement tile whose removal
-    square has half-side $u$. Then its distance from the final actual region
-    of every earlier or peer identifier of the same label is at least
-    $c_1u^{\rho_0}$. A peer means
-    another initial belt tile, or another replacement born at the same
-    generation, respectively.
+    There exists $c_1>0$ such that for every $C_0\ge2$ and sufficiently large $S_*$ and $k_0$,
+    the closed birth region $\mathcal B$ of any initial belt tile (of scale $u=t_k$) or replacement
+    tile (of removal half-side $u$) has distance $\ge c_1u^{\rho_0}$ from the final actual region
+    of every earlier or peer identifier of the same label.
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{thm:area_law_birth_separation_conditional,
         thm:area_law_initial_stars}
-    The isolated stars of the initial stage give the conclusion of the
-    uniform repair induction, and
-    Theorem~\ref{thm:area_law_birth_separation_conditional} then gives one
-    constant for both kinds of birth, for every sufficiently large stopping
-    scale and lower layer index.
+    Immediate from Theorems~\ref{thm:area_law_initial_stars} and
+    \ref{thm:area_law_birth_separation_conditional}.
 \end{proof}
 
 % Auxiliary to OpenAI2026AreaLaw, Section 11, 10-geometry.tex,
@@ -634,31 +529,17 @@ Theorem~\ref{thm:area_law_birth_separation}~\cite{gap:arealaw2d_birth_separation
         def:area_law_repair_birth_rank,def:area_law_repair_characteristic_length,
         thm:area_law_initial_belt_birth_separation,
         thm:area_law_replacement_birth_separation_conditional}
-    Consider the actual repair family $\mathcal D_j$ of
-    Definition~\ref{def:area_law_repair_stage}. Write $I_j$ for its
-    identifier set, $*_j$ for its dummy, $B_i^{(j)}$ for a closed birth,
-    and $R_i^{(\infty,j)}$ for the final region, obtained by intersecting
-    all later retained current regions. Let $\tau_j$ be its characteristic
-    length and $\operatorname{rk}_j$ its birth rank.
-
-    Fix $c_1\in\mathbb R$ and assume the following two pointwise bounds.
-    For every initial belt birth of side $u=t_k$, every pair of points
-    in that birth and in the final region of any other nondummy initial
-    identifier of the same label has distance at least $c_1u^{\rho_0}$.
-    For every fresh replacement with removal half-side $u$, every pair
-    of points in that birth and in the final region of any other
-    identifier of the same label present at its birth generation has
-    distance at least $c_1u^{\rho_0}$.
-
-    Let $N\ge0$ and $x,y\in I_N$. Suppose that $x$ has positive rank,
-    that $y\ne x$ and $y\ne *_N$, and that
-    $\operatorname{rk}_N(y)\le\operatorname{rk}_N(x)$ and
-    $\xi_y^{(N)}=\xi_x^{(N)}$. Then every $p\in B_x^{(N)}$ and
-    $q\in R_y^{(\infty,N)}$ satisfy
+    In the repair family $\mathcal D_j$ (Definition~\ref{def:area_law_repair_stage}), fix
+    $c_1\in\mathbb R$ and assume the separation bounds of
+    Theorems~\ref{thm:area_law_initial_belt_birth_separation} and
+    \ref{thm:area_law_replacement_birth_separation_conditional} with constant $c_1$.
+    For any $N\ge0$ and $x,y\in I_N$ with $\operatorname{rk}_N(x)>0$, $y\notin\{x,*_N\}$,
+    $\operatorname{rk}_N(y)\le\operatorname{rk}_N(x)$, and $\xi_y^{(N)}=\xi_x^{(N)}$, every
+    $p\in B_x^{(N)}$ and $q\in R_y^{(\infty,N)}$ satisfy
     \begin{align}
-        c_1\tau_N(x)^{\rho_0} & \le\|p-q\|_\infty.\notag
+        c_1\tau_N(x)^{\rho_0} & \le\|p-q\|_\infty.
+        \label{eq:area_law_birth_separation_common_stage}
     \end{align}
-    Equal-rank peers are included.
 \end{theorem}
 
 \begin{proof}
@@ -666,28 +547,14 @@ Theorem~\ref{thm:area_law_birth_separation}~\cite{gap:arealaw2d_birth_separation
     \uses{def:area_law_repair_birth_rank,
         def:area_law_repair_characteristic_length,
         thm:area_law_repair_final_retention}
-    The rank definition gives $\operatorname{rk}_j(i)\le j+1$ for every
-    $i\in I_j$, by induction on $j$: initial ranks are zero or one,
-    old ranks are retained, and new ranks at generation $j+1$ are $j+2$.
-
-    By Theorem~\ref{thm:area_law_repair_final_retention},
-    retention preserves the final region:
-    $R_i^{(\infty,j)}=R_{\iota_{j,j+1}(i)}^{(\infty,j+1)}$.
-
-    Induct on $N$. At $N=0$, positive rank makes $x$ an initial belt
-    identifier. Its characteristic length is its fine-cell side, so
-    the assumed initial bound applies. At $N=j+1$, if $x$ is fresh,
-    its characteristic length is the removal half-side, and the
-    assumed replacement bound applies whether $y$ is old or fresh.
-    If both identifiers are old, their births, labels, ranks and
-    characteristic lengths are retained. The final-region identity
-    permits the induction hypothesis at generation $j$.
-    Finally, if $x$ is old and $y$ is fresh, then
-    $\operatorname{rk}_{j+1}(x)\le j+1<j+2
-        =\operatorname{rk}_{j+1}(y)$,
-    contradicting the assumed rank inequality.
+    By Definition~\ref{def:area_law_repair_birth_rank}, $\operatorname{rk}_j(i)\le j+1$ for all
+    $i\in I_j$, and Theorem~\ref{thm:area_law_repair_final_retention} gives
+    $R_i^{(\infty,j)}=R_{\iota_{j,j+1}(i)}^{(\infty,j+1)}$. Induct on $N$: at $N=0$,
+    $\operatorname{rk}_0(x)=1$ makes $x$ an initial belt with $\tau_0(x)=t_k$, so the initial bound
+    applies; at $N=j+1$, if $x$ is fresh then $\tau_{j+1}(x)$ is the removal half-side and the
+    replacement bound applies, if both $x,y$ are old then retention reduces to generation $j$,
+    and $x$ old with $y$ fresh is impossible since $\operatorname{rk}_{j+1}(x)\le j+1<j+2=\operatorname{rk}_{j+1}(y)$.
 \end{proof}
 
-If the marks at generation $N$ are empty,
-Theorem~\ref{thm:area_law_repair_final_current_empty} identifies
-$R_y^{(\infty,N)}$ with the current region $R_y^{(N)}$.
+When $K_N=\varnothing$, Theorem~\ref{thm:area_law_repair_final_current_empty} gives
+$R_y^{(\infty,N)}=R_y^{(N)}$.

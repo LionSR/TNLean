@@ -6,22 +6,18 @@
     \leanok
     \uses{thm:peps_translated_two_plaquette_geometry,
         thm:peps_regular_two_cycle_flux_move}
-    On a finite torus of horizontal period at least four and vertical period
-    at least three, fix any position $v=(x,y)$. Let $u_g^0$ assign the upward
-    bond value $g$ to the vertical bond at $v$, and let $u_g^1$ assign the upward
-    bond value $g$ to both vertical bonds at $v$ and $v+(1,0)$.
-    Every other bond carries the identity. In the ordered-edge convention,
-    both selected bonds receive the same element
+    On a finite torus with periods $L_x\ge 4$ and $L_y\ge 3$, fix $v=(x,y)$.
+    Let $u_g^0$ assign upward directed bond value $g$ to the vertical bond at $v$, let $u_g^1$ assign upward value $g$ to the vertical bonds at $v$ and $v+(1,0)$, and set all other bonds to $1$.
+    In the ordered-edge convention, both selected bonds carry
     \begin{align}
         k_y(g)=
         \begin{cases}
             g,      & \operatorname{val}(y)<\operatorname{val}(y+1), \\
-            g^{-1}, & \text{otherwise}.
+            g^{-1}, & \text{otherwise},
         \end{cases}
+        \label{eq:torus_translated_flux_ky}
     \end{align}
-    These tree-cycle assignments of the translated six-site block specify the
-    insertion in \cite[Theorem~6.16]{Schuch2010PEPS} at either periodic seam
-    as well.
+    realizing the tree-cycle insertions of \cite[Theorem~6.16]{Schuch2010PEPS} on the translated six-site block $R_v$ across either periodic seam.
 \end{definition}
 
 \begin{theorem}[The flux endpoint moves at every position]%
@@ -30,26 +26,17 @@
     \leanok
     \uses{def:peps_torus_translated_flux_assignment,
         def:peps_torus_plaquette_flux_geometry}
-    For the counterclockwise native plaquette walks based at $v$ and $v+(1,0)$,
-    the holonomies satisfy
+    For the counterclockwise plaquette walks at $v$ and $v+(1,0)$ under Definition~\ref{def:peps_torus_translated_flux_assignment}, the holonomies at every position (including both seams) satisfy
     \begin{align}
         (H_L(u_g^0),H_R(u_g^0)) & =(g^{-1},1), &
-        (H_L(u_g^1),H_R(u_g^1)) & =(1,g^{-1}).
+        (H_L(u_g^1),H_R(u_g^1)) & =(1,g^{-1}), \label{eq:translated_flux_holonomies}
     \end{align}
-    These formulas hold at every position, including both periodic seams.
-    Thus the insertion removes the flux at the left plaquette and places the
-    same flux at the right plaquette, as in
-    \cite[Theorem~6.16]{Schuch2010PEPS}.
+    moving the flux $g^{-1}$ from the left to the right plaquette as in \cite[Theorem~6.16]{Schuch2010PEPS}.
 \end{theorem}
 
 \begin{proof}\leanok
-    The directed upward bond values are $g$ on the selected bonds, regardless
-    of their native endpoint sorting. The left plaquette traverses the left
-    insertion downward and the middle insertion upward, so its extended
-    holonomy is $g^{-1}g=1$. The right plaquette traverses the middle insertion
-    downward, giving $g^{-1}$. Its other vertical bond is distinct from both
-    selected bonds under the period bounds. Every horizontal bond value is
-    the identity. Retaining only the left insertion gives the initial values.
+    By (\ref{eq:torus_translated_flux_ky}), the upward directed value is $g$ on each selected vertical bond and $1$ on all horizontal and unselected vertical bonds (which are distinct since $L_x\ge 4,L_y\ge 3$).
+    Under $u_g^1$, the left plaquette traverses the two insertions downward then upward ($g^{-1}g=1$) and the right plaquette traverses the middle bond downward ($g^{-1}$); setting the middle bond to $1$ gives $(H_L(u_g^0),H_R(u_g^0))=(g^{-1},1)$.
 \end{proof}
 
 \begin{theorem}[A six-spin flux operation at every position]%
@@ -59,25 +46,15 @@
     \uses{thm:peps_translated_two_plaquette_geometry,
         def:peps_torus_translated_flux_assignment,
         thm:peps_regular_two_cycle_physical_flux_move}
-    Let the original four-leg tensor be $G$-isometric for the regular virtual
-    action. For every position $v$, there exists a unitary $W_v$ on the six
-    original spins of the cyclic rectangle $R_v$ such that
+    For a regular $G$-isometric four-leg tensor, at every position $v$ there exists a six-spin unitary $W_v$ on $R_v$ (chosen before $g\in G$ and crossing labels $\theta$, without extra tree, Gram, state-equality, or translation-invariance hypotheses) such that on open-region contractions,
     \begin{align}
-        W_v\Psi_{R_v}(u_g^0,\theta)=\Psi_{R_v}(u_g^1,\theta)
+        W_v\Psi_{R_v}(u_g^0,\theta)=\Psi_{R_v}(u_g^1,\theta). \label{eq:translated_open_flux_move}
     \end{align}
-    for every $g\in G$ and every crossing configuration $\theta$.
-    Both vectors are the open-region contractions of the original
-    tensor. The unitary is chosen before $g$ and $\theta$; no extra spanning tree,
-    Gram identity, state equality, or state translation invariance hypothesis is needed.
 \end{theorem}
 
 \begin{proof}\leanok
-    From the spanning path, root, and distinct non-tree chords derived from
-    the translated numbering, native four-leg $G$-isometry gives the required
-    incident-edge isometry at every site. Applying the fixed physical two-cycle
-    operation to these derived data with its common insertion element
-    $k_y(g)$, the tree-cycle assignment identities give the desired
-    open-region columns.
+    By Theorem~\ref{thm:peps_translated_two_plaquette_geometry}, $R_v$ inherits a spanning path, root, and two distinct chords, and four-leg $G$-isometry induces incident-edge site isometries.
+    Applying Theorem~\ref{thm:peps_regular_two_cycle_physical_flux_move} with common chord insertion $k_y(g)$ from (\ref{eq:torus_translated_flux_ky}) yields (\ref{eq:translated_open_flux_move}).
 \end{proof}
 
 \begin{theorem}[A global torus flux movement at every position]%
@@ -88,29 +65,13 @@
         def:peps_torus_translated_flux_assignment,
         thm:peps_torus_translated_flux_holonomy,
         thm:peps_regular_two_cycle_global_flux_move}
-    Under the same period and local $G$-isometry hypotheses, for every
-    position $v$ there is one unitary $W_v$ on the six original spins such
-    that its complementary identity extension $\widehat W_v$ is a global
-    unitary and
+    Under the hypotheses of Theorem~\ref{thm:peps_torus_translated_physical_flux_move}, for every $v$ the global unitary $\widehat W_v=W_v\otimes I$ (chosen before $g\in G$ and exterior/crossing assignments $u$) satisfies
     \begin{align}
-        \widehat W_v\Psi(u_g^0;u)=\Psi(u_g^1;u)
+        \widehat W_v\Psi(u_g^0;u)=\Psi(u_g^1;u) \label{eq:translated_global_flux_move}
     \end{align}
-    for every $g\in G$ and every common assignment $u$ on exterior and
-    crossing bonds. The internal bonds have the specified bond insertions;
-    the other internal bonds carry the identity. Both states are
-    globally contracted torus states. The unitary precedes $g$ and $u$.
-    This is the arbitrary-position regular finite-torus realization of the
-    local flux movement in \cite[Theorem~6.16]{Schuch2010PEPS}, including either
-    periodic seam. The remaining unrestricted lattice scope is recorded in
-    \cite{gap:rmp_peps_quantum_double_g_isometry}.
+    on globally contracted torus states, realizing the local flux move of \cite[Theorem~6.16]{Schuch2010PEPS} across both seams (with unrestricted lattice scope recorded in \cite{gap:rmp_peps_quantum_double_g_isometry}).
 \end{theorem}
 
 \begin{proof}\leanok
-    Applying the global physical two-cycle operation with the derived
-    translated tree, root, and pair of chords, both native ordered insertion
-    operators equal $k_y(g)$, so the bond assignments give its single- and
-    double-bond inputs. The global contraction identity preserves every common
-    exterior and crossing operator, the complementary identity extension
-    preserves unitarity, and the proved plaquette holonomies give the stated
-    flux movement.
+    Applying Theorem~\ref{thm:peps_regular_two_cycle_global_flux_move} to the translated tree-chord data of Theorem~\ref{thm:peps_translated_two_plaquette_geometry} with insertion $k_y(g)$ from (\ref{eq:torus_translated_flux_ky}) gives (\ref{eq:translated_global_flux_move}), while (\ref{eq:translated_flux_holonomies}) gives the flux transport.
 \end{proof}

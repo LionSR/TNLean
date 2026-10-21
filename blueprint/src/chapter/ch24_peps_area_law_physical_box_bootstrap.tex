@@ -11,16 +11,12 @@ changing the physical size.  No sharp marginal-moment estimate is used.
     \label{thm:arealaw-generic-charge-energy}
     \lean{TNLean.PEPS.AreaLaw.Scan.ScannerExponents.exists_actualCharge_energy_coefficients}
     \leanok
-    Fix a local dimension $q\geq1$, a scanner exponent tuple,
-    a positive squared-logarithmic radius
-    coefficient, a positive charge constant, a nonnegative target-volume
-    coefficient, an anchor-multiplicity bound, a polynomial tail exponent,
-    and the two round-energy coefficients.
-    There are $C\geq1$, $C_l\geq0$ and $N$ before every finite physical
-    system, auxiliary dimension, replica vector, round and interpolation.
-    Under the rounded scales and the domain, row, anchor and
-    clearance hypotheses, for $W\geq0$ and a nonzero symmetric
-    replica vector, the energy-error term is bounded by
+    Fix $q\geq1$, a scanner exponent tuple, positive radius and charge constants,
+    a target-volume coefficient $\ge0$, an anchor-multiplicity bound, a tail exponent $P$,
+    and the two round-energy coefficients. There exist $C\geq1$, $C_l\geq0$, and $N$
+    (prior to any finite physical system, auxiliary dimension, replica vector, round, and $p\in(0,1)$)
+    such that under the rounded scales and domain, row, anchor, and clearance hypotheses,
+    for $W\geq0$ and a nonzero symmetric replica vector, the energy-error term is at most
     \begin{align}
         C W^2 n^\ell D^2(\log n)^{C_l}
         \left((1-p)\left(\frac{Q}{KnD}\right)^{1/8}
@@ -28,20 +24,15 @@ changing the physical size.  No sharp marginal-moment estimate is used.
         \qquad 0<p<1.
         \label{eq:arealaw-generic-charge-cap}
     \end{align}
-    The bound uses the absolute value of the given round-energy
-    coefficient.  The existing all-time and old-prefix history estimates
-    give the physical energy bound at these generic exponents.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{lem:al_scanner_scale_facts,
         thm:al_scan_transport_coefficients_log}
-    The physical history estimate bounds the energy error by a sum of
-    a density term and a tail term. The logarithmic dimension estimate
-    bounds both round-energy coefficients by $C_d(\log n)^{C_l}$.
-    The rounded-scale bound $nD^2/(mK)\leq C_s n^\ell D^2$ and
-    $a=W/K$ then give (\ref{eq:arealaw-generic-charge-cap}) with
-    $C=C_sC_d$. All factors used in these comparisons are nonnegative.
+    Theorem~\ref{thm:al_scan_transport_coefficients_log} bounds the two round-energy coefficients by
+    $C_d(\log n)^{C_l}$, and Lemma~\ref{lem:al_scanner_scale_facts} gives $nD^2/(mK)\leq C_s n^\ell D^2$.
+    Substituting $a=W/K$ into the physical history density-plus-tail bound yields
+    (\ref{eq:arealaw-generic-charge-cap}) with $C=C_sC_d$.
 \end{proof}
 
 
@@ -49,22 +40,20 @@ changing the physical size.  No sharp marginal-moment estimate is used.
     \label{thm:arealaw-generic-selected-energy}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualCharge_defect_le_of_density_energy_bound_at_exponent}
     \leanok
-    For positive physical and auxiliary dimensions, $\Delta>0$ and
-    total weight $W\geq0$, at any selected charge point the round-energy conclusion
-    and the preceding coefficient cap imply
-    $E_{\rm def}\leq(e+\mathrm{cap}+r_k)/(g/2)$.
-    The truncated eigenvalue $e$, physical prevector, selected point and
-    mean energy are unchanged.  Nonnegativity of the
-    energy-error integral justifies replacing its signed coefficient by
-    its absolute value.
+    For positive physical and auxiliary dimensions, $\Delta>0$, and $W\geq0$,
+    the round-energy inequality and the coefficient cap $\mathrm{cap}$ of
+    (\ref{eq:arealaw-generic-charge-cap}) at any selected charge point imply
+    \begin{align}
+        E_{\rm def} & \leq \frac{e+\mathrm{cap}+r_k}{g/2},
+        \label{eq:arealaw-generic-selected-energy}
+    \end{align}
+    with the truncated eigenvalue $e$, physical prevector, selected point, and mean energy unchanged.
 \end{theorem}
 \begin{proof}
     \leanok
-    The energy-error integral is nonnegative, so replacing the
-    round-energy coefficient by its absolute value can only increase the
-    numerator. Substituting the given coefficient cap and dividing by
-    the positive normalized gap $g/2$ gives the bound, with the point and
-    its prevector remaining fixed.
+    Since the energy-error integral is nonnegative, replacing the signed round-energy
+    coefficient by its absolute value increases the numerator; substituting $\mathrm{cap}$
+    and dividing by $g/2>0$ gives (\ref{eq:arealaw-generic-selected-energy}).
 \end{proof}
 
 
@@ -72,24 +61,15 @@ changing the physical size.  No sharp marginal-moment estimate is used.
     \label{thm:arealaw-source-rough-comparison}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_sourceTarget_selected_actualCharge_rough_comparison}
     \leanok
-    Fix $q\geq1$, range $R$, $J\geq0$, $\Delta>0$, the nonnegative
-    target-volume coefficient and positive charge constant with its
-    anchor-multiplicity bound, and a real tail exponent.
-    The truncation and round-energy constants are chosen before a scanner
-    exponent tuple; the physical energy coefficients and size threshold
-    are then chosen before every finite instance and current entropy input.
-    Assume a nonempty ambient target and the graph, depth,
-    rounded scales, rows, anchors and
-    weak scanner clearance, and the original-state positive-prefix bound
-    $C_e(nL^\eta+n)$.  The numerical radius and separation conditions are
-    explicit here.  For total weight four, $K\geq8$, and the
-    round-step smallness condition, one truncated vector, typical spectral
-    set and Schmidt--Bell label sequence yield a selected point
-    in every fixed interval $0<p_0<p_1<1$ for all large replica counts.
-    That same point satisfies the endpoint density bound, the
-    normalized-energy cap, and both rough norm comparisons.
-    The upper, lower, endpoint and energy remainders vanish for the fixed
-    physical instance.  No improved entropy or low-energy point is claimed here.
+    Fix $q\geq1$, range $R$, $J\geq0$, $\Delta>0$, target-volume and charge constants,
+    anchor multiplicity, and tail exponent $P$; choose truncation and round-energy constants
+    before the scanner tuple, and physical energy coefficients and size threshold $N$ before
+    any finite instance and entropy input. Under the graph, depth, rounded-scale, row, anchor,
+    weak-clearance, and positive-prefix entropy bound $C_e(nL^\eta+n)$ hypotheses, for
+    $W=4$, $K\geq8$, and small round step, a single truncated vector, typical spectral window,
+    and global Schmidt--Bell label sequence produce in every $[p_0,p_1]\subset(0,1)$ (for all large $k$)
+    a selected point satisfying the endpoint density bound, the energy cap (\ref{eq:arealaw-generic-selected-energy}),
+    and both rough norm comparisons, with remainders vanishing as $k\to\infty$.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -102,16 +82,15 @@ changing the physical size.  No sharp marginal-moment estimate is used.
         thm:actual_scan_supplied_prevector_rough_lower,
         thm:arealaw-generic-charge-energy,
         thm:arealaw-generic-selected-energy}
-    Constructing the truncated ground vector and its typical spectral
-    window once and choosing one global Schmidt--Bell label sequence
-    carries the original positive-prefix entropy bounds to this vector,
-    so its rough upper estimate, endpoint estimate and rough lower estimate
-    hold with remainders tending to zero. The charge
-    selection theorem on $[p_0,p_1]$ together with the endpoint estimate
-    bounds its density, and at this same selected point the generic
-    coefficient bound combines with the round-energy inequality while
-    restricting the two rough comparisons to this point without choosing a
-    second vector, label sequence or interpolation parameter.
+    Constructing one truncated ground vector and typical window
+    (Theorem~\ref{thm:al_scan_target_typical_window}) and one global Schmidt--Bell prevector
+    (Theorem~\ref{thm:al_global_schmidt_bell_prevector}) transfers the prefix entropy bounds via
+    Theorem~\ref{thm:al_positive_prefix_entropy_transfer}, giving the rough upper
+    (Theorem~\ref{thm:al_scan_actual_rough_upper}), endpoint (Theorem~\ref{thm:arealaw-physical-endpoint-loss}),
+    and rough lower (Theorem~\ref{thm:actual_scan_supplied_prevector_rough_lower}) bounds with vanishing
+    replica remainders. Charge selection on $[p_0,p_1]$ (Theorem~\ref{thm:arealaw-actual-selected-energy})
+    combined with Theorems~\ref{thm:arealaw-generic-charge-energy} and \ref{thm:arealaw-generic-selected-energy}
+    then yields all conclusions at the same selected point.
 \end{proof}
 
 
@@ -119,12 +98,10 @@ changing the physical size.  No sharp marginal-moment estimate is used.
     \label{thm:arealaw-rough-selected-density}
     \lean{TNLean.PEPS.AreaLaw.Scan.ScannerExponents.exists_rough_selectedDensity_principal}
     \leanok
-    Fix the scanner tuple, $q\geq1$, $C_e,C_t\geq0$, $C_1>0$ and a
-    logarithmic exponent.  One $C_\delta>0$ and threshold precede every
-    current $e\geq\kappa$ and finite scalar instance.
-    The current target, shell, selected-dimension and mass bounds, together
-    with the rough endpoint numerator and logarithmic round-energy
-    cap, give eventually
+    Fix the scanner tuple, $q\geq1$, $C_e,C_t\geq0$, $C_1>0$, and a logarithmic exponent.
+    There exist $C_\delta>0$ and a threshold prior to every $e\geq\kappa$ and finite instance
+    such that the target, shell, selected-dimension, mass, rough-endpoint, and logarithmic
+    round-energy bounds imply, for all large $k$,
     \begin{align}
         \frac{Q}{KnD} & \leq\delta,
                       & \delta      & =C_\delta\epsilon^{-1}
@@ -132,21 +109,16 @@ changing the physical size.  No sharp marginal-moment estimate is used.
                       & a           & =4/K,                  & \epsilon & =n^{-\nu}.
         \label{eq:arealaw-rough-principal-density}
     \end{align}
-    The replica remainder is absorbed only after the instance is fixed.
-    Every proposition attached to the original selected point survives.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:arealaw-source-rough-budget-power,
         thm:arealaw-selected-density-principal,
         lem:al_scanner_scale_facts}
-    The source rough-estimate bound and $D\leq2n^e$ bound the selected
-    numerator by a constant times $n^{1+e}$ plus its logarithmic term.
-    Since $m\geq n^\mu/2$, the non-remainder contribution is at most
-    $\delta/2$ after choosing $C_\delta$. At the fixed physical
-    instance, the remaining coefficient times the replica error tends
-    to zero and is eventually at most $\delta/2$. Keep the given
-    selected point and all its other conclusions.
+    By Theorem~\ref{thm:arealaw-source-rough-budget-power}, Theorem~\ref{thm:arealaw-selected-density-principal},
+    and $D\leq2n^e$, $m\geq n^\mu/2$ (Lemma~\ref{lem:al_scanner_scale_facts}), the non-remainder
+    density contribution is at most $\delta/2$ for suitable $C_\delta$, while at fixed physical
+    instance the replica remainder tends to $0$ and is eventually $\le\delta/2$.
 \end{proof}
 
 
@@ -154,25 +126,20 @@ changing the physical size.  No sharp marginal-moment estimate is used.
     \label{thm:arealaw-bootstrap-selected-energy}
     \lean{TNLean.PEPS.AreaLaw.Scan.exists_bootstrap_selected_energy_bound}
     \leanok
-    Fix $0<e_0<1$, nonnegative cap and density coefficients, real logarithmic
-    exponents and a positive physical gap $\gamma$.
-    One threshold works for all $e\leq e_0$.
-    At the bootstrap scales, if $0\leq\rho\leq\delta$,
-    $p\in[\epsilon,2\epsilon]$, $p\leq1$, and the truncated eigenvalue
-    is at most $n^{-1000}$, then the normalized selected cap is at most
+    Fix $0<e_0<1$, cap and density coefficients $\ge0$, logarithmic exponents, and $\gamma>0$.
+    There is a uniform threshold for all $e\leq e_0$ above which, at bootstrap scales,
+    $0\leq\rho\leq\delta$, $p\in[\epsilon,2\epsilon]$ with $p\leq1$, and truncated eigenvalue
+    $e_{\rm tr}\le n^{-1000}$ imply that the normalized selected energy cap is at most
     $(1+\gamma^{-1})n^{-\nu/2}$.
-    The physical application uses $\gamma=g/2$ and retains $r_k/\gamma$.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:area_law_bootstrap_principal_energy}
-    From $0\leq\rho\leq\delta$ and $\epsilon\leq p\leq2\epsilon$,
-    the expression in parentheses in the cap is at most
-    $2(\delta^{1/8}+\epsilon+n^{-100})$, so the principal energy
-    estimate applies with coefficient $2C/\gamma$. The eigenvalue term is at
-    most $\gamma^{-1}n^{-\nu/2}$ because
-    $n^{-1000}\leq n^{-\nu/2}$ for $n\geq2$, and adding the two bounds
-    gives the stated coefficient $1+\gamma^{-1}$.
+    Since $0\leq\rho\leq\delta$ and $\epsilon\leq p\leq2\epsilon$, the parenthesized factor in
+    (\ref{eq:arealaw-generic-charge-cap}) is at most $2(\delta^{1/8}+\epsilon+n^{-100})$, so
+    Theorem~\ref{thm:area_law_bootstrap_principal_energy} with coefficient $2C/\gamma$ bounds the
+    cap term by $n^{-\nu/2}$, while $e_{\rm tr}/\gamma\le\gamma^{-1}n^{-1000}\leq\gamma^{-1}n^{-\nu/2}$
+    for $n\geq2$.
 \end{proof}
 
 
@@ -180,24 +147,18 @@ changing the physical size.  No sharp marginal-moment estimate is used.
     \label{thm:arealaw-bootstrap-restored-budget}
     \lean{TNLean.PEPS.AreaLaw.Scan.exists_bootstrap_restored_entropy_budget}
     \leanok
-    For $e_*<e_0<1$, $q\geq1$ and $C_e\geq0$, one positive coefficient
-    and size threshold work for every $e_*<e\leq e_0$.
-    They bound the exact typical-mass, whole-prefix, mismatch,
-    binary-entropy and original-state continuity error by
-    $C n^{1+(1-\ell)e}$.
-    The hypotheses include $z>0$, $z\geq1-n^{-100}$ and
-    $0\leq\tau\leq1$; the displayed sum keeps
-    $7(w-\log z)-\log z$ and the additional $n^{-247}$ continuity error.
+    For $e_*<e_0<1$, $q\geq1$, and $C_e\geq0$, there exist $C>0$ and a threshold uniform in
+    $e\in(e_*,e_0]$ such that for $z\ge1-n^{-100}>0$ and $0\leq\tau\leq1$, the sum of the
+    typical-mass ($7(w-\log z)-\log z$), whole-prefix, mismatch, binary-entropy, and
+    $n^{-247}$ continuity errors is at most $C n^{1+(1-\ell)e}$.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:area_law_bootstrap_comparison_budget}
-    For $n\geq2$, the mass estimate gives $z\geq1/2$,
-    $z^{-1}\leq2$ and $-\log z\leq1$. The continuity errors are at
-    most one. With $C_b=8C_e+12\log q+30$, the complete sum is at
-    most $C_b(nL^e+nD+n^{3/5}+h(\tau)/a+1)$.
-    The bootstrap comparison-sum estimate bounds this sum by
-    $(5+\log2/4)n^{1+(1-\ell)e}$ uniformly over the current exponent.
+    For $n\geq2$, $z\ge1-n^{-100}\ge1/2$ gives $z^{-1}\leq2$ and $-\log z\leq1$, so with
+    $C_b=8C_e+12\log q+30$ the total error is at most $C_b(nL^e+nD+n^{3/5}+h(\tau)/a+1)$,
+    which Theorem~\ref{thm:area_law_bootstrap_comparison_budget} bounds by
+    $C_b(5+\frac{1}{4}\log2)n^{1+(1-\ell)e}$.
 \end{proof}
 
 
@@ -205,14 +166,11 @@ changing the physical size.  No sharp marginal-moment estimate is used.
     \label{thm:arealaw-source-bootstrap-entropy}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_sourceBootstrap_entropy_improvement}
     \leanok
-    Fix $e_*<e_0<1$, $C_e\geq0$ and the physical and geometric constants
-    of the rough source theorem.  There are positive $C_r,C_{\rm out}$
-    and $N\geq2$ before every current $e_*<e\leq e_0$ and finite system.
-    Use the fixed bootstrap exponents, the rounded scales and the
-    graph, target, depth, anchors, rows and clearance.
-    If the original target entropy is at most $C_e n^{1+e}$ and every
-    original positive-depth prefix entropy is at most $C_e(nL^e+n)$,
-    then the same original target satisfies
+    Fix $e_*<e_0<1$, $C_e\geq0$, and the constants of Theorem~\ref{thm:arealaw-source-rough-comparison}.
+    There exist $C_r,C_{\rm out}>0$ and $N\geq2$ uniform in $e\in(e_*,e_0]$ and the finite system
+    such that, at bootstrap exponents and rounded scales under the graph, target, depth, anchor,
+    row, and clearance hypotheses, if $S_\Omega(X)\le C_e n^{1+e}$ and every positive-depth
+    prefix $P$ satisfies $S_\Omega(P)\le C_e(nL^e+n)$, then
     \begin{align}
         S_\Omega(X) & \leq C_{\rm out}n^{1+(1-\ell(e_0))e}.
         \label{eq:arealaw-source-bootstrap-improvement}
@@ -229,41 +187,33 @@ changing the physical size.  No sharp marginal-moment estimate is used.
         thm:arealaw-target-entropy-transfer,
         thm:area_law_selected_schmidt_entropy_bounds,
         thm:area_law_rough_typical_entropy_absorption}
-    With the round-step and rounded admissibility conditions verified, the
-    physical rough source applies once, and the principal-density and energy
-    estimates hold at its unchanged selected points.
-    At fixed $n$, setting $\tau=n^{-\nu/4}$ and applying the two rough
-    comparisons with the coefficient-three lower bound gives a relative loss
-    of $6(\tau+E_{\rm def}/\tau)$ with vanishing replica remainders.
-    Substituting the typical auxiliary entropy after this limit and using
-    continuity in the reverse direction to restore $\Omega$, the restored
-    additive bound gives the stated improved power.
+    By Theorems~\ref{thm:fixed_weight_four_transport_smallness} and \ref{thm:scanner_rounded_admissibility},
+    Theorems~\ref{thm:arealaw-source-rough-comparison}, \ref{thm:arealaw-rough-selected-density},
+    and \ref{thm:arealaw-bootstrap-selected-energy} apply at the selected point. Setting
+    $\tau=n^{-\nu/4}$ in the rough comparisons gives relative loss $6(\tau+E_{\rm def}/\tau)$ with
+    vanishing replica remainders; substituting the Schmidt entropy bound
+    (Theorem~\ref{thm:area_law_selected_schmidt_entropy_bounds}), absorbing typical errors
+    (Theorem~\ref{thm:area_law_rough_typical_entropy_absorption}), restoring $\Omega$ via
+    Theorem~\ref{thm:arealaw-target-entropy-transfer}, and applying
+    Theorem~\ref{thm:arealaw-bootstrap-restored-budget} yields (\ref{eq:arealaw-source-bootstrap-improvement}).
 \end{proof}
 
 \begin{theorem}[Weak-rectangle source entropy]
     \label{thm:arealaw-weak-rectangle-source-entropy}
     \lean{TNLean.PEPS.AreaLaw.Scan.exists_weakRectangle_source_entropy_bounds}
     \leanok
-    Fix $b>0$ and $C_{\rm box}\geq0$.
-    One nonnegative $C_e$ precedes every integer safety parameter $D_0\geq0$,
-    finite state, weakly safe
-    rectangle, row scale $n\geq s$, collar $1\leq L\leq s$, and current
-    exponent $e\geq b$.
-    If $(D_0+1)L\leq D_0s$ and the same unit vector obeys the pointwise
-    safe-box bound at this one exponent, then its target and all
-    positive-depth prefixes obey the source bounds above.
-    One may take $C_e=C_{\rm box}(25+64/(2^b-1))$.
-    This uses the weak-rectangle dyadic shell cover, including
-    thin rectangles; it does not invoke template separation.
+    Fix $b>0$ and $C_{\rm box}\geq0$, and set $C_e=C_{\rm box}(25+64/(2^b-1))$.
+    For every integer $D_0\geq0$, finite state, weakly safe rectangle of size $s$,
+    row scale $n\geq s$, collar $1\leq L\leq s$ with $(D_0+1)L\leq D_0s$, and $e\geq b$,
+    if the state obeys the pointwise safe-box bound with constant $C_{\rm box}$ at exponent $e$,
+    then its target and positive-depth prefixes obey the hypotheses of
+    Theorem~\ref{thm:arealaw-source-bootstrap-entropy} with constant $C_e$.
 \end{theorem}
 \begin{proof}
     \leanok
-    The safe-box estimate bounds the target by $C_{\rm box}s^{1+e}$.
-    The weak-rectangle dyadic shell estimate bounds each positive prefix
-    by $C_{\rm box}(24+64/(2^e-1))sL^e$. Since $e\geq b>0$,
-    its coefficient is at most $C_{\rm box}(24+64/(2^b-1))$.
-    Since $s\leq n$, enlarging this coefficient by $C_{\rm box}$ gives
-    the common target and prefix coefficient.
+    The safe-box bound gives target entropy $\le C_{\rm box}s^{1+e}\le C_{\rm box}n^{1+e}$,
+    while the weak-rectangle dyadic shell cover bounds each positive prefix by
+    $C_{\rm box}(24+64/(2^e-1))sL^e\le C_{\rm box}(24+64/(2^b-1))nL^e$ since $e\ge b$ and $s\le n$.
 \end{proof}
 
 
@@ -271,36 +221,27 @@ changing the physical size.  No sharp marginal-moment estimate is used.
     \label{thm:arealaw-box-supremum-powers}
     \lean{TNLean.PEPS.AreaLaw.regionalEntropy_le_of_boxEntropy_power}
     \leanok
-    For $q\geq1$, a positive-scale uniform box bound at exponent
-    $1+e>0$ gives the
-    corresponding entropy estimate for every original physical safe
-    rectangle, including a possible zero-size case by its cardinal bound.
+    For $q\geq1$, if $F_{\rm box}(r)\le Cr^{1+e}$ for all $r\ge1$ with $1+e>0$, then every
+    safe rectangle $Q$ satisfies $S_\Omega(A\cap Q)\le C\operatorname{size}(Q)^{1+e}$.
 \end{theorem}
 \begin{proof}
     \leanok
-    If the rectangle size is positive, its entropy is one member of
-    the family defining the box supremum at that size, so the
-    assumed power bound applies there. At size zero the rectangle contains
-    no sites, so its entropy is zero, as is its positive power.
+    For $s=\operatorname{size}(Q)\ge1$, $S_\Omega(A\cap Q)\le F_{\rm box}(s)\le Cs^{1+e}$ by definition;
+    for $s=0$, $A\cap Q=\varnothing$ gives $S_\Omega(A\cap Q)=0=Cs^{1+e}$.
 \end{proof}
 
 \begin{theorem}[Bounded rectangle sizes]
     \label{thm:arealaw-box-supremum-small-sizes}
     \lean{TNLean.PEPS.AreaLaw.boxEntropy_power_le_of_large_rectangles}
     \leanok
-    Let $q\geq1$, $C,p\geq0$ and $N\in\mathbb N$.
-    If every safe original physical rectangle of size $s\geq N$ has
-    entropy at most $Cs^p$, then for every $r\geq1$ the box
-    supremum is at most $(C+N^2\log q+1)r^p$.
+    Let $q\geq1$, $C,p\geq0$, and $N\in\mathbb N$. If every safe rectangle $Q$ of size
+    $s\geq N$ satisfies $S_\Omega(A\cap Q)\le Cs^p$, then
+    $F_{\rm box}(r)\le(C+N^2\log q+1)r^p$ for every $r\geq1$.
 \end{theorem}
 \begin{proof}
     \leanok
-    At sizes at least $N$, the assumed estimate and $s^p\leq r^p$ for
-    $s\leq r$ bound the entropy by $Cr^p$, while at smaller sizes the volume
-    bound gives entropy at most $N^2\log q$. Since $r^p\geq1$ for
-    $r\geq1$ and $p\geq0$, both bounds are at most
-    $(C+N^2\log q+1)r^p$, and taking the supremum over the same physical
-    family completes the proof.
+    For $N\le s\le r$, $S_\Omega(A\cap Q)\le Cs^p\le Cr^p$; for $s<N$, the volume bound gives
+    $S_\Omega(A\cap Q)\le N^2\log q\le(N^2\log q)r^p$ since $r^p\ge1$.
 \end{proof}
 
 
@@ -309,52 +250,33 @@ changing the physical size.  No sharp marginal-moment estimate is used.
     \lean{TNLean.PEPS.AreaLaw.boxEntropy_power_le_of_succ_clearance}
     \leanok
     \uses{def:area_law_box_entropy}
-    Fix $q,R\in\mathbb N$ with $q\geq1$ and $J,\Delta\in\mathbb R$.
-    Write $F_{\mathrm{box},D}$ for the safe-box entropy at safety
-    parameter $D$, with the same fixed physical parameters
-    $q,R,J,\Delta$. Let $D\in\mathbb N$ satisfy $D\geq3$, and let
-    $C,p\geq0$. Suppose that
-    $F_{\mathrm{box},D+1}(r)\leq Cr^p$ for every integer $r\geq1$.
-    Then, for every integer $r\geq1$,
+    Fix $q,R\in\mathbb N$ with $q\geq1$ and $J,\Delta\in\mathbb R$, and write $F_{\mathrm{box},D}$
+    for the safe-box entropy (Definition~\ref{def:area_law_box_entropy}) at safety parameter $D\ge3$.
+    If $C,p\geq0$ and $F_{\mathrm{box},D+1}(r)\leq Cr^p$ for all $r\geq1$, then for all $r\geq1$,
     \begin{align}
-        F_{\mathrm{box},D}(r)
-         & \leq (4C+4\log q+1)r^p.
+        F_{\mathrm{box},D}(r) & \leq (4C+4\log q+1)r^p.
+        \label{eq:arealaw-box-clearance-comparison}
     \end{align}
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:area_law_box_children,thm:arealaw-box-supremum-small-sizes}
-    Fix a physical instance and a $D$-safe rectangle $Q$ of size
-    $s\geq2$, and put $r=\lceil s/2\rceil$.
-    Theorem~\ref{thm:area_law_box_children}, with $M=2$, partitions $Q$
-    into at most four disjoint child rectangles $Q_i$ of size at most
-    $r$. Since $D\geq3$ and $s\geq2$, one has $(D+1)r\leq Ds$.
-    Each child lies in $Q$, so its points have distance greater than
-    $Ds\geq(D+1)\operatorname{size}(Q_i)$ from every cut endpoint.
-    Thus each child is $(D+1)$-safe.
-
-    The physical regions $A\cap Q_i$ partition $A\cap Q$.
-    For the same normalized ground vector $\Omega$ on the original
-    domain, subadditivity and the assumed bound give
+    For any $D$-safe rectangle $Q$ of size $s\geq2$, Theorem~\ref{thm:area_law_box_children} ($M=2$)
+    partitions $Q$ into at most $4$ child rectangles $Q_i$ of size $\le r=\lceil s/2\rceil$.
+    Since $D\ge3$ and $s\ge2$ imply $(D+1)r\le Ds$, each $Q_i\subseteq Q$ has distance $>Ds\ge(D+1)\operatorname{size}(Q_i)$
+    from $Z$ and is $(D+1)$-safe. Subadditivity gives
     \begin{align}
-        S_\Omega(A\cap Q)
-         & \leq \sum_i S_\Omega(A\cap Q_i)
-        \leq \sum_i Cs^p
-        \leq 4Cs^p.
+        S_\Omega(A\cap Q) & \leq \sum_i S_\Omega(A\cap Q_i) \leq 4Cr^p \leq 4Cs^p,
+        \notag
     \end{align}
-    Theorem~\ref{thm:arealaw-box-supremum-small-sizes} with
-    coefficient $4C$, exponent $p$, and cutoff $N=2$ incorporates the volume
-    correction $N^2\log q=4\log q$ for smaller sizes, and taking the
-    supremum over the same physical family gives the asserted coefficient
-    $4C+4\log q+1$ at every positive integer scale.
+    and Theorem~\ref{thm:arealaw-box-supremum-small-sizes} with $N=2$ yields (\ref{eq:arealaw-box-clearance-comparison}).
 \end{proof}
 
 \begin{theorem}[Uniform physical one-step improvement]
     \label{thm:arealaw-physical-box-step}
     \lean{TNLean.PEPS.AreaLaw.Scan.exists_uniform_boxEntropy_improvement}
     \leanok
-    Fix $q\geq1$, $R$, $J\geq0$, $\Delta>0$, $e_*<e_0<1$ and
-    $C_{\rm box}\geq0$.  There is $C>0$ before every
-    $e_*<e\leq e_0$ and every integer $D_0\geq1$ such that
+    Fix $q\geq1$, $R$, $J\geq0$, $\Delta>0$, $e_*<e_0<1$, and $C_{\rm box}\geq0$.
+    There exists $C>0$ uniform in $e\in(e_*,e_0]$ and $D_0\geq1$ such that
     \begin{align}
         F_{\rm box}(r) & \leq C_{\rm box}r^{1+e}\quad(r\geq1)
         \quad\Longrightarrow\quad
@@ -370,23 +292,21 @@ changing the physical size.  No sharp marginal-moment estimate is used.
         thm:arealaw-box-supremum-powers,
         thm:arealaw-box-supremum-small-sizes,
         thm:rectangle_bootstrap_scanner_geometry}
-    Applying the source improvement to the rectangle scanner with
-    $n=\lceil24s\rceil=24s$, target-volume coefficient one and the derived
-    anchor multiplicity, rounded sublinear growth gives the weak
-    clearance $2L+10r_0\leq D_0s$ and the shell safety bound,
-    with the preceding shell coefficient fixed using $b=e_*$.
-    Since the improved exponent is between zero and two, conversion from
-    $n$ to $s$ costs at most $24^2$ uniformly in the current exponent,
-    and extending over bounded sizes by the volume entropy estimate before
-    taking the supremum yields the original-state bound.
+    Applying Theorems~\ref{thm:arealaw-box-supremum-powers},
+    \ref{thm:arealaw-weak-rectangle-source-entropy} ($b=e_*$), and
+    \ref{thm:arealaw-source-bootstrap-entropy} to the rectangle scanner of
+    Theorem~\ref{thm:rectangle_bootstrap_scanner_geometry} with $n=24s$ and exponents from
+    Definition~\ref{def:bootstrap_scanner_exponents} bounds $S_\Omega(A\cap Q)$ for large $s$
+    (converting $n$ to $s$ with factor $\le24^2$), and Theorem~\ref{thm:arealaw-box-supremum-small-sizes}
+    extends the bound to all $r\ge1$.
 \end{proof}
 
 \begin{theorem}[Physical safe-box bound at the fixed exponent]
     \label{thm:arealaw-physical-box-fixed-exponent}
     \lean{TNLean.PEPS.AreaLaw.Scan.exists_boxEntropy_le_boxError}
     \leanok
-    For $q\geq1$, $R\in\mathbb N$, $J\geq0$ and $\Delta>0$, there is
-    $C>0$ before every integer $D_0>2R+10$ and every positive integer $r$ such that
+    For $q\geq1$, $R\in\mathbb N$, $J\geq0$, and $\Delta>0$, there exists $C>0$
+    uniform in integers $D_0>2R+10$ and $r\ge1$ such that
     \begin{align}
         F_{\rm box}(r) & \leq Cr^{1+e_*}, & e_* & =2\cdot10^{-6}.
         \label{eq:arealaw-physical-box-fixed-exponent}
@@ -398,23 +318,14 @@ changing the physical size.  No sharp marginal-moment estimate is used.
         thm:area_law_box_entropy_bounds,
         thm:area_law_finite_exponent_improvement,
         thm:arealaw-physical-box-step}
-    Once the genuine initial exponent $0<e_0<1$ is obtained uniformly in the
-    safety parameter, the established finite exponent iteration applies to
-    the family indexed by integers $D_0>2R+10$, using the quadratic volume estimate
-    and the preceding physical one-step theorem.  The latter is invoked
-    only when a current exponent above $e_*$ occurs.  No fixed-exponent
-    box estimate is an input of this argument.
+    Combine the uniform initial exponent $e_0\in(0,1)$ of Theorem~\ref{thm:area_law_initial_box},
+    the quadratic volume bound of Theorem~\ref{thm:area_law_box_entropy_bounds}, and the one-step
+    improvement (\ref{eq:arealaw-physical-box-step}) of Theorem~\ref{thm:arealaw-physical-box-step}
+    in the finite iteration of Theorem~\ref{thm:area_law_finite_exponent_improvement}.
 \end{proof}
 
-For a real safety parameter $D_0>2R+10$, write
-$F_{\mathrm{box},D_0}(r)$ for the supremum in
-\cite[Section~3, before Proposition~3.3]{OpenAI2026AreaLaw}, with this
-fixed safety parameter. The estimate in
-\cite[Proposition~9.5]{OpenAI2026AreaLaw} is
-$F_{\mathrm{box},D_0}(r)\leq Cr^{1+e_*}$ for every integer $r\geq1$,
-where $e_*=2\cdot10^{-6}$ and $C$ depends only on $q,R,J,\Delta$.
-The following gives its pointwise formulation, uniformly over all such
-real safety parameters.
+For real $D_0>2R+10$, write $F_{\mathrm{box},D_0}(r)$ for the safe-box supremum
+(\cite[Section~3, before Proposition~3.3; Proposition~9.5]{OpenAI2026AreaLaw}).
 
 \begin{theorem}[Improved entropy bound for safe rectangles]
     \label{thm:arealaw-physical-safe-rectangle-real}
@@ -422,75 +333,37 @@ real safety parameters.
     \leanok
     \uses{def:area_law_hamiltonian,def:area_law_ground_entropy,
         def:area_law_safe_rectangle}
-    Fix integers $q\geq1$ and $R\geq0$, a term norm bound $J\geq0$,
-    and a gap $\Delta>0$. There is $C>0$, depending only on
-    $q,R,J,\Delta$, such that the following holds simultaneously for
-    every real $D_0>2R+10$.
-
-    Let $\Lambda\subseteq\mathbb Z^2$ be any finite domain, let $H$
-    be an interaction Hamiltonian of range $R$ with term norms at most
-    $J$, and let $\Omega$ be a normalized eigenvector of energy $E_0$
-    satisfying the full-system projector-gap inequality with gap
-    $\Delta$. Let $A\subseteq\Lambda$, and let $Z$ be the endpoints of
-    the edges of the induced lattice graph crossing $A$.
-    If $Q$ is a product of two finite nonempty integer intervals and
-    every $t\in Q$ and $z\in Z$ satisfy
-    $D_0\operatorname{size}(Q)<\|t-z\|_\infty$, then
+    Fix integers $q\geq1$, $R\geq0$ and reals $J\geq0$, $\Delta>0$. There exists $C>0$
+    (depending only on $q,R,J,\Delta$) such that for every real $D_0>2R+10$, finite domain
+    $\Lambda\subseteq\mathbb Z^2$, $(R,J)$-Hamiltonian $H$ with $\Delta$-gapped ground state
+    $\Omega$ (Definition~\ref{def:area_law_hamiltonian}), cut $A\subseteq\Lambda$ with crossing-edge
+    endpoints $Z$, and discrete rectangle $Q$ satisfying $D_0\operatorname{size}(Q)<\|t-z\|_\infty$
+    for all $t\in Q$, $z\in Z$ (Definition~\ref{def:area_law_safe_rectangle}),
     \begin{align}
         S_\Omega(A\cap Q)
          & \leq C\operatorname{size}(Q)^{1+e_*},
-         & e_*                                   & =2\cdot10^{-6}.
+         & e_* & =2\cdot10^{-6}.
         \label{eq:arealaw-physical-real-box}
     \end{align}
-    Here size counts sites along the longer axis, and $A\cap Q$
-    contains only physical sites of $\Lambda$. Empty domains, empty
-    cuts, empty physical intersections, disconnected domains, and
-    domains with holes are permitted. If $Z$ is empty, the safety
-    condition is vacuous, agreeing with distance to the empty set
-    being infinite.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:arealaw-physical-box-fixed-exponent,
         thm:arealaw-box-clearance-comparison,
         thm:arealaw-box-supremum-powers}
-    Put $d=2R+10$. The integer safe-box estimate gives $C_b>0$,
-    depending only on $q,R,J,\Delta$, such that
-    $F_{\mathrm{box},d+1}(r)\leq C_b r^{1+e_*}$ for every integer
-    $r\geq1$. Since $d\geq3$, the safety comparison gives
+    Put $d=2R+10\ge3$. Theorem~\ref{thm:arealaw-physical-box-fixed-exponent} gives $C_b>0$ with
+    $F_{\mathrm{box},d+1}(r)\leq C_b r^{1+e_*}$, and Theorem~\ref{thm:arealaw-box-clearance-comparison}
+    gives
     \begin{align}
         F_{\mathrm{box},d}(r)
          & \leq C r^{1+e_*},
-         & C                 & =4C_b+4\log q+1>0.
+         & C & =4C_b+4\log q+1>0.
         \label{eq:arealaw-physical-real-box-constant}
     \end{align}
-    This constant is chosen before $D_0$ and every finite physical
-    instance. A rectangle safe at real parameter $D_0>d$ is also
-    $d$-safe: for every $t\in Q$ and $z\in Z$,
-    $d\operatorname{size}(Q)\leq D_0\operatorname{size}(Q)
-        <\|t-z\|_\infty$.
-    For $s=\operatorname{size}(Q)\geq1$, the bound by the safe-box
-    supremum for the same $H,\Omega,A,Q$ and
-    (\ref{eq:arealaw-physical-real-box-constant}) give
-    $S_\Omega(A\cap Q)\leq F_{\mathrm{box},d}(s)
-        \leq Cs^{1+e_*}$.
+    Since $D_0>d$, every $D_0$-safe $Q$ is $d$-safe, so Theorem~\ref{thm:arealaw-box-supremum-powers}
+    and (\ref{eq:arealaw-physical-real-box-constant}) yield (\ref{eq:arealaw-physical-real-box}).
 \end{proof}
 
-To recover the supremum formulation, fix a real $D_0>2R+10$ and an
-integer $r\geq1$. Every entropy in its defining family is bounded by
-$Cs^{1+e_*}\leq Cr^{1+e_*}$, where $s=\operatorname{size}(Q)\leq r$;
-here $C>0$ and $1+e_*>0$. Taking the supremum gives
-$F_{\mathrm{box},D_0}(r)\leq Cr^{1+e_*}$, with the same constant
-uniformly in $D_0$. Conversely, the supremum estimate at
-$r=\operatorname{size}(Q)\geq1$ bounds each admissible rectangle
-entropy and gives (\ref{eq:arealaw-physical-real-box}). Thus the two
-formulations have exactly the same uniformity and hypotheses.
-
-Since $e_*=2\cdot10^{-6}\in(0,1)$, the same bound also proves
-\cite[Proposition~3.3]{OpenAI2026AreaLaw} with $e_0=e_*$.
-Its constant is chosen before every real $D_0>2R+10$ and every finite
-physical instance. This recovers the full real-clearance conclusion of
-that proposition, without extending the integer-clearance recurrence.
-
-The immutable source is
-\href{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex#L681-L805}{Proposition 9.5 and its proof, lines 681--805}.
-The collar bound is Theorem~\ref{thm:area_law_sublinear_collar}.
+Taking the supremum of (\ref{eq:arealaw-physical-real-box}) over $\operatorname{size}(Q)\le r$
+equivalently gives $F_{\mathrm{box},D_0}(r)\leq Cr^{1+e_*}$ uniformly in real $D_0>2R+10$, proving
+\cite[Proposition~3.3 and Proposition~9.5]{OpenAI2026AreaLaw} with $e_0=e_*$
+(the collar bound is Theorem~\ref{thm:area_law_sublinear_collar}).

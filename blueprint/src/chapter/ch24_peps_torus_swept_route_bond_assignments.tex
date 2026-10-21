@@ -6,28 +6,16 @@
     \leanok
     \uses{def:peps_torus_swept_physical_endpoint_route,
         def:peps_torus_directed_bond_update,def:peps_torus_swept_string_assignment}
-    Assume that the torus periods are at least eight and seven.
-    Begin with the four-endpoint string assignment and take twelve steps
-    through the following thirteen plaquette bases, translated by an
-    arbitrary vertex:
-    \[
-        \begin{aligned}
-             & (1,1)\to(2,1)\to(2,2)\to(3,2)\to(4,2)\to(4,1)\to(4,0)     \\
-             & \qquad\to(3,0)\to(2,0)\to(1,0)\to(0,0)\to(0,-1)\to(0,-2).
-        \end{aligned}
-    \]
-    At a source plaquette write $B,V,T,L$ for its bottom rightward,
-    right upward, top rightward, and left upward bond values.
-    A right, upward, left, or downward step respectively replaces its
-    shared bond value by
+    On a torus with periods $L_x\ge 8$ and $L_y\ge 7$, starting from the four-endpoint string assignment $u_0$ of Definition~\ref{def:peps_torus_swept_string_assignment}, define $u_n$ ($0\le n\le 12$) recursively along the $12$-step translated plaquette-base route
     \begin{align}
-        TL B^{-1},\qquad VB L^{-1},\qquad T^{-1}VB,\qquad V^{-1}TL.
+        &(1,1)\to(2,1)\to(2,2)\to(3,2)\to(4,2)\to(4,1)\to(4,0) \notag \\
+        &\qquad\to(3,0)\to(2,0)\to(1,0)\to(0,0)\to(0,-1)\to(0,-2) \label{eq:swept_route_path}
     \end{align}
-    All other ordered bonds, including the partner strings, are retained.
-    Let $u_n$ denote the resulting recursively defined assignment after
-    $n$ steps. These are auxiliary coefficient assignments for the flux
-    motion of \cite[\S6.6, local lines 2340--2423]{Schuch2010PEPS}; no
-    complete physical braid is asserted by their definition.
+    by replacing the shared directed bond of the source plaquette (with bottom rightward $B$, right upward $V$, top rightward $T$, and left upward $L$) under a right, up, left, or down step by
+    \begin{align}
+        V\mapsto TL B^{-1},\qquad T\mapsto VB L^{-1},\qquad L\mapsto T^{-1}VB,\qquad B\mapsto V^{-1}TL, \label{eq:swept_route_updates}
+    \end{align}
+    while retaining all other ordered bonds (as auxiliary coefficient assignments for \cite[\S6.6, local lines 2340--2423]{Schuch2010PEPS}, without asserting a complete physical braid).
 \end{definition}
 
 \begin{theorem}[Derived vacancies and moving based fluxes]%
@@ -38,24 +26,22 @@
     \leanok
     \uses{def:peps_torus_swept_route_bond_assignments,
         thm:peps_torus_directed_bond_update,thm:peps_torus_plaquette_holonomy}
-    Each of the four elementary coefficient updates makes its source
-    clockwise plaquette holonomy equal to the identity. For the specified
-    twelve-step assignment, the target plaquette is vacant in the
-    preceding assignment at every step.
-    The moving based flux equals $h$ at stages zero and one,
-    $ghg^{-1}$ at stages two through eight, and
-    $hghg^{-1}h^{-1}$ at stages nine through twelve.
-    Thus the retained partner string affects the based representative.
+    Each update in (\ref{eq:swept_route_updates}) sets the clockwise source plaquette holonomy to $1$.
+    Along (\ref{eq:swept_route_path}), each step's target plaquette is vacant in $u_{n-1}$, and the moving based flux at stage $n$ is
+    \begin{align}
+        H_{\mathrm{mov}}(u_n) =
+        \begin{cases}
+            h, & n\in\{0,1\}, \\
+            ghg^{-1}, & 2\le n\le 8, \\
+            hghg^{-1}h^{-1}, & 9\le n\le 12.
+        \end{cases}
+        \label{eq:swept_route_moving_flux}
+    \end{align}
 \end{theorem}
 
 \begin{proof}\leanok
-    Clockwise plaquette holonomy is $B^{-1}V^{-1}TL$.
-    Substitution of each displayed update gives the first assertion.
-    Starting from the initial string assignment, evaluate the
-    selected bond values recursively at each stage. The target holonomies
-    reduce to the identity, and the source holonomies reduce to the three
-    displayed words. Injectivity of the translated finite coordinate
-    envelope justifies these evaluations even at periodic seams.
+    Substituting (\ref{eq:swept_route_updates}) into the clockwise holonomy $B^{-1}V^{-1}TL$ yields $1$.
+    Evaluating $u_n$ recursively from $u_0$ along (\ref{eq:swept_route_path}) (using injectivity of the translated coordinate envelope across seams) gives $H_{\mathrm{target}}(u_{n-1})=1$ and (\ref{eq:swept_route_moving_flux}).
 \end{proof}
 
 \begin{definition}[Final endpoint and partner-comparison walks]%
@@ -67,17 +53,12 @@
     \leanok
     \uses{def:peps_torus_swept_route_bond_assignments,
         def:peps_torus_swept_patch_endpoint_walks}
-    Relative to the translation vertex, the final endpoint bases in the
-    order $A_2,A_1,B_1,B_2$ are
-    \[
-        (-1,1),\quad(3,1),\quad(0,-2),\quad(1,-2).
-    \]
-    Retain the original connector from $A_2$ to $A_1$.
-    Compare the final neighbouring B partners along the rightward edge
-    from $(0,-2)$ to $(1,-2)$.
-    In each joint loop, traverse the partner loop along the connector
-    first and then the loop at the chosen base. Consequently its
-    holonomy is the first based flux times the conjugated partner flux.
+    Relative to the translation vertex, define the final endpoint bases
+    \begin{align}
+        (A_2,A_1,B'_1,B_2) = \bigl((-1,1),\ (3,1),\ (0,-2),\ (1,-2)\bigr), \label{eq:final_endpoint_bases}
+    \end{align}
+    retaining the $A_2\to A_1$ connector of Definition~\ref{def:peps_torus_swept_patch_endpoint_walks} and connecting $B'_1\to B_2$ by the single rightward edge $(0,-2)\to(1,-2)$.
+    Each joint loop traverses the partner loop conjugated along the connector $p$ followed by the base loop $\ell_0$, giving holonomy $H(\ell_0)\,H(p)^{-1}H(\ell_1)H(p)$.
 \end{definition}
 
 \begin{theorem}[Reunion holonomies of the endpoint route]%
@@ -94,29 +75,18 @@
     \uses{def:peps_torus_swept_route_partner_walks,
         thm:peps_torus_swept_route_vacancies,thm:peps_regular_connector_holonomy,
         thm:peps_conjugacy_class_invariance}
-    The final based endpoint fluxes are
+    Under the final assignment $u_{12}$ of Definition~\ref{def:peps_torus_swept_route_bond_assignments}, the based endpoint fluxes at (\ref{eq:final_endpoint_bases}) are
     \begin{align}
-        (g^{-1},\ g,\ hghg^{-1}h^{-1},\ h^{-1}).
+        \bigl(H_{A_2},H_{A_1},H_{B'_1},H_{B_2}\bigr) = (g^{-1},\ g,\ hghg^{-1}h^{-1},\ h^{-1}). \label{eq:final_endpoint_fluxes}
     \end{align}
-    The A connector has holonomy $h^{-1}g^{-1}$; hence the A1 loop
-    conjugated along the connector to A2 has flux $ghgh^{-1}g^{-1}$, and their joint loop has
-    flux $hgh^{-1}g^{-1}$. The final B reunion connector has identity
-    holonomy and its partner-first joint loop has flux
+    The $A_2\to A_1$ connector has holonomy $H_A=h^{-1}g^{-1}$, so the transported $A_1$ loop has flux $H_A^{-1}gH_A=ghgh^{-1}g^{-1}$ and the $A$-joint loop has flux $g^{-1}(ghgh^{-1}g^{-1})=hgh^{-1}g^{-1}$.
+    The $B'_1\to B_2$ reunion connector has holonomy $1$, and the partner-first $B$-reunion loop has flux
     \begin{align}
-        h(ghg^{-1}h^{-1})h^{-1}.
+        H_{B,\mathrm{joint}} = h(ghg^{-1}h^{-1})h^{-1}, \label{eq:B_reunion_flux}
     \end{align}
-    Its conjugacy class is that of the commutator, and its joint flux is
-    trivial precisely when $g$ and $h$ commute.
-    These assertions concern the recursively derived coefficient
-    assignment and comparison walks. Physical implementation of
-    every step of the route remains a separate assertion.
+    which lies in the conjugacy class of $ghg^{-1}h^{-1}$ and satisfies $H_{B,\mathrm{joint}}=1\iff gh=hg$ (as properties of $u_{12}$, separate from physical step implementation).
 \end{theorem}
 
 \begin{proof}\leanok
-    Evaluate the four plaquette loops and both connectors from
-    the derived final bond values. Along a connector $p$, the conjugated partner-loop
-    holonomy is $H(p)^{-1}H(\ell)H(p)$. Concatenation reverses the
-    multiplication order, giving the stated joint products. Conjugation
-    preserves the conjugacy class, and a group commutator is the identity
-    exactly when its two arguments commute.
+    Evaluating the four plaquette loops and both connectors on $u_{12}$ via Theorem~\ref{thm:peps_torus_swept_route_vacancies} and Theorem~\ref{thm:peps_regular_connector_holonomy} gives (\ref{eq:final_endpoint_fluxes}) and (\ref{eq:B_reunion_flux}); Theorem~\ref{thm:peps_conjugacy_class_invariance} gives the conjugacy-class and commutation equivalences.
 \end{proof}

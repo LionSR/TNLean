@@ -42,28 +42,27 @@ chains, one tensor per site, which is the setting of
     \lean{TNLean.PEPS.isCrossingEdge_cycleEdge_iff}
     \leanok
     \uses{def:peps_normalPEPSBlockingHypotheses, def:peps_regionInjectivityData}
-    A closed chain of $n$ sites is the cycle graph on $n$ vertices, and a
-    block of consecutive sites is an arc: the vertices reached clockwise
-    from a starting site. Suppose $0 < L$, $3L \le n$, every arc
-    of $L$ consecutive sites is injective for a region-injectivity
-    assignment, and injectivity is closed under unions. Then the chain
-    satisfies the normal blocking hypotheses: around every edge it blocks
-    into the $L$ sites on one side, the $L$ sites on the other, and the
-    remaining $n - 2L \ge L$ sites, all injective and covering the chain;
-    and at every site the $L + 1$ sites starting there and the $L$ sites
-    starting at its successor are injective regions with injective
-    complements differing exactly at that site. In addition, the only
-    nearest-neighbour pair joining the two blocks around an edge is the edge
-    itself, since the far ends of the two blocks are separated by the
-    remaining $n - 2L \ge L$ sites.
+    On the cycle graph of $n$ vertices, let $A(v,\ell)=\{v,v+1,\ldots,v+\ell-1\}\pmod n$
+    be the clockwise arc of length $\ell$ from $v$. Suppose $0<L$, $3L\le n$,
+    $\inj\bigl(A(v,L)\bigr)$ holds for all $v$, and $\inj$ satisfies union
+    closure (Definition~\ref{def:peps_regionInjectivityData}). Then the cycle
+    satisfies Definition~\ref{def:peps_normalPEPSBlockingHypotheses}:
+    \begin{enumerate}
+        \item Around each edge $e=(v,v+1)$, the blocks
+              $R=A(v-L+1,L)$, $B=A(v+1,L)$, and $C=A(v+L+1,n-2L)$ form a
+              partition $V=R\sqcup B\sqcup C$ with $\inj(R),\inj(B),\inj(C)$
+              and unique crossing edge $\partial(R,B)=\{e\}$.
+        \item At each site $v$, the regions $S_v=A(v,L+1)$ and
+              $T_v=A(v+1,L)$ satisfy $T_v\subseteq S_v$, $S_v\setminus T_v=\{v\}$,
+              and $\inj(S_v),\inj(T_v),\inj(S_v^c),\inj(T_v^c)$.
+    \end{enumerate}
 \end{theorem}
 \begin{proof}\leanok
-    Membership in an arc is a cyclic-distance inequality, so the
-    disjointness, covering, and unique-crossing claims are modular
-    arithmetic on the distances. Arcs of length between $L$ and $n$ are
-    unions of arcs of length $L$, hence injective by union closure; this
-    covers the two complements at a site and the third block around an
-    edge.
+    Disjointness, covering, and $\partial(R,B)=\{e\}$ follow from cyclic-distance
+    arithmetic since $n-2L\ge L>0$. Every arc $A(v,\ell)$ with $L\le\ell<n$ is a
+    union of length-$L$ arcs, hence satisfies $\inj\bigl(A(v,\ell)\bigr)$ by
+    union closure; this covers $C$, $S_v$, $S_v^c=A(v+L+1,n-L-1)$, and
+    $T_v^c=A(v+L+1,n-L)$.
 \end{proof}
 
 \begin{definition}[Normal MPS on a closed chain]%
@@ -71,15 +70,11 @@ chains, one tensor per site, which is the setting of
     \lean{TNLean.PEPS.IsNormalCycleArcMPS}
     \leanok
     \uses{thm:peps_cycleNormalPEPSBlockingHypotheses, def:peps_regionInjectivityDataOf}
-    A tensor on the closed chain of $n$ sites is a
-    \emph{normal MPS with blocking length $L$} when blocking any $L$
-    consecutive sites gives an injective tensor and every virtual bond space
-    is nonzero. This is the
-    hypothesis on each of the two MPS in the first corollary following the
-    general normal-PEPS theorem in \cite[Section~4]{Molnar2018NormalPEPS}.
-    The nonzero bond spaces are the standing convention of that section;
-    injectivity of the blocks does not imply them, and the convention is
-    recorded in \cite{gap:peps_injective_ft_section3_route}.
+    A tensor $A$ on the $n$-site cycle graph is a \emph{normal MPS with
+    blocking length $L$} when $\inj_A\bigl(A(v,L)\bigr)$ holds for every site
+    $v$ and $D_e>0$ for every bond $e$
+    \cite[Section~4]{Molnar2018NormalPEPS}
+    (\cite{gap:peps_injective_ft_section3_route}).
 \end{definition}
 
 \begin{corollary}[Fundamental Theorem for normal MPS on a closed chain]%
@@ -87,36 +82,27 @@ chains, one tensor per site, which is the setting of
     \lean{TNLean.PEPS.fundamentalTheorem_normalMPS_cycle}
     \leanok
     \uses{def:peps_normalCycleArcMPS, def:GaugeEquivPEPS}
-    Let $A$ and $B$ be tensors on the closed chain of $n$ sites (the cycle
-    graph on $n$ vertices, one tensor per site with two virtual legs), with
-    the same positive physical dimension, and let $0 < L$ with $n \ge 3L$.
-    Suppose $A$ and $B$ are normal MPS with blocking length $L$
-    (Definition~\ref{def:peps_normalCycleArcMPS}) and generate the same
-    state. Then the defining tensors are related by a local gauge:
-    there are invertible matrices, one on each bond, whose endpoint actions
-    transform $A_i$ into $B_i$ at every site with no leftover scalar. This
-    is the source's family $Z_i$ ($i = 1, \ldots, n$, $n + 1 \equiv 1$) with
-    $B_i = Z_i^{-1} A_i Z_{i+1}$, the first corollary following the general
-    normal-PEPS theorem in \cite[Section~4]{Molnar2018NormalPEPS}, the
-    statement for MPS without translation invariance at a fixed system size.
-    The positive physical dimension is carried over from the general
-    theorem, the nonzero bond spaces are part of the definition of a normal
-    MPS, and $0 < L$ is implicit in
-    the source's blocking of $L$ consecutive sites; the equality of the bond
-    dimensions is not assumed but derived, and the connectivity of the cycle
-    is proved, not assumed.
+    Let $A$ and $B$ be normal MPS with blocking length $L>0$
+    (Definition~\ref{def:peps_normalCycleArcMPS}) on the $n$-site cycle with
+    $n\ge 3L$ and common physical dimension $d>0$. If $\Coeff_A=\Coeff_B$, then
+    $A$ and $B$ are related by a scalar-free local gauge
+    (Definition~\ref{def:GaugeEquivPEPS}): there exist invertible bond matrices
+    $(Z_i)_{i=1}^n$ ($Z_{n+1}\equiv Z_1$) such that
+    \begin{align}
+        B_i = Z_i^{-1} A_i Z_{i+1}
+        \qquad (1\le i\le n),
+        \label{eq:peps_normal_mps_cycle_gauge}
+    \end{align}
+    giving the first corollary of \cite[Section~4]{Molnar2018NormalPEPS}.
 \end{corollary}
 \begin{proof}\leanok
     \uses{thm:peps_cycleNormalPEPSBlockingHypotheses, thm:fundamentalTheorem_normalPEPS_connected, lem:peps_injectiveRegion_union_pos}
-    The nonzero bond spaces give union closure of injective regions for
-    each tensor (Lemma~\ref{lem:peps_injectiveRegion_union_pos}), hence for
-    the doubly injective assignment. The arc-injectivity hypothesis then
-    yields the normal blocking hypotheses on the cycle with the unique
-    crossing property
-    (Theorem~\ref{thm:peps_cycleNormalPEPSBlockingHypotheses}), the cycle is
-    connected, and the Fundamental Theorem for normal PEPS on a connected
-    graph (Theorem~\ref{thm:fundamentalTheorem_normalPEPS_connected})
-    gives the scalar-free local gauge.
+    Since $D_e>0$, Lemma~\ref{lem:peps_injectiveRegion_union_pos} gives union
+    closure for $\inj_A\wedge\inj_B$.
+    Theorem~\ref{thm:peps_cycleNormalPEPSBlockingHypotheses} then supplies the
+    normal blocking hypotheses with unique crossings on the connected cycle, and
+    Theorem~\ref{thm:fundamentalTheorem_normalPEPS_connected} yields
+    (\ref{eq:peps_normal_mps_cycle_gauge}).
 \end{proof}
 
 \begin{corollary}[Uniqueness of the closed-chain gauges up to a constant]%
@@ -124,27 +110,17 @@ chains, one tensor per site, which is the setting of
     \lean{TNLean.PEPS.fundamentalTheorem_normalMPS_cycle_gauge_unique}
     \leanok
     \uses{def:peps_normalCycleArcMPS, def:gaugeVertex}
-    In the setting of
-    Corollary~\ref{cor:fundamentalTheorem_normalMPS_cycle}, for normal MPS
-    $A$ and $B$ with blocking length $L$ and equal bond dimensions, any two
-    families of
-    invertible bond matrices realizing the scalar-free gauge relation are
-    proportional at every bond: $Z'_i = c \cdot Z_i$ for a nonzero scalar
-    $c$ depending on the bond. This is the uniqueness clause of the first
-    corollary following the general normal-PEPS theorem of
-    \cite[Section~4]{Molnar2018NormalPEPS}: the gauges $Z_i$ are unique up
-    to a multiplicative constant. Neither equality of the two states nor
-    connectivity is needed, as in the general uniqueness clause.
+    In the setting of Corollary~\ref{cor:fundamentalTheorem_normalMPS_cycle}, if
+    $A$ and $B$ are normal MPS with blocking length $L>0$ ($n\ge 3L$) and equal
+    bond dimensions, any two invertible bond-gauge families $Z,Z'$ satisfying
+    (\ref{eq:peps_normal_mps_cycle_gauge}) satisfy $Z'_i=c_i Z_i$ for nonzero
+    scalars $c_i\in\C^\times$ \cite[Section~4]{Molnar2018NormalPEPS}.
 \end{corollary}
 \begin{proof}\leanok
     \uses{thm:peps_cycleNormalPEPSBlockingHypotheses, thm:fundamentalTheorem_normalPEPS_gauge_unique, lem:peps_injectiveRegion_union_pos}
-    The arc-injectivity hypothesis and union closure from the nonzero bond
-    spaces (Lemma~\ref{lem:peps_injectiveRegion_union_pos}) establish the
-    normal blocking hypotheses on the cycle
-    (Theorem~\ref{thm:peps_cycleNormalPEPSBlockingHypotheses}), and the
-    per-edge uniqueness of the general theorem
-    (Theorem~\ref{thm:fundamentalTheorem_normalPEPS_gauge_unique}) gives the
-    proportionality at every bond.
+    Combine Lemma~\ref{lem:peps_injectiveRegion_union_pos} and
+    Theorem~\ref{thm:peps_cycleNormalPEPSBlockingHypotheses} with the per-edge
+    uniqueness Theorem~\ref{thm:fundamentalTheorem_normalPEPS_gauge_unique}.
 \end{proof}
 
 \begin{definition}[Cycle tensor of a matrix tensor]%
@@ -155,15 +131,11 @@ chains, one tensor per site, which is the setting of
     \lean{TNLean.PEPS.cycleTensorOfMPS}
     \leanok
     \uses{def:peps_tensor, def:mps_tensor}
-    Every edge of the cycle graph on $n \ge 3$ vertices joins a site to its
-    cyclic successor, so sites and bonds are in bijection, and every site has
-    exactly two incident bonds: the bond shared with its cyclic predecessor
-    and the bond shared with its cyclic successor. The \emph{cycle tensor}
-    of a tensor $A = (A^i)_{i=0}^{d-1}$ of $D \times D$ matrices places one
-    copy of $A$ at every site of the closed chain of $n$ sites, every bond of
-    dimension $D$, with the row index of $A^i$ read from the bond shared with
-    the predecessor and the column index from the bond shared with the
-    successor.
+    On the $n$-site cycle ($n\ge 3$), each site $v$ has incident bonds
+    $e_{v-1}=(v-1,v)$ and $e_v=(v,v+1)$. The \emph{cycle tensor} of an MPS
+    tensor $A=(A^i)_{i=0}^{d-1}\in\MN{D}^d$ places $A$ at every site $v$ with
+    bond dimension $D$ on every edge, reading the row index of $A^i$ on
+    $e_{v-1}$ and the column index on $e_v$.
 \end{definition}
 
 \begin{lemma}[State coefficients of the cycle tensor]%
@@ -172,21 +144,19 @@ chains, one tensor per site, which is the setting of
     \lean{TNLean.PEPS.stateCoeff_cycleTensorOfMPS}
     \leanok
     \uses{def:cycleTensorOfMPS, def:peps_stateCoeff, def:mpv}
-    For $n \ge 3$ and every configuration
-    $\sigma = (i_1, \ldots, i_n)$, the state coefficient of the cycle
-    tensor of $A$ at $\sigma$ is the matrix product vector component
-    $V^{(n)}(A)_\sigma = \tr\!(A^{i_1} \cdots A^{i_n})$.
+    For $n \ge 3$ and $\sigma = (i_1, \ldots, i_n)$, the state coefficient of
+    the cycle tensor of $A$ (Definition~\ref{def:cycleTensorOfMPS}) is
+    \begin{align}
+        \Coeff_A(\sigma) = V^{(n)}(A)_\sigma = \tr\!(A^{i_1} \cdots A^{i_n}).
+        \notag
+    \end{align}
 \end{lemma}
 \begin{proof}\leanok
     \uses{thm:trace_eval_word_eq_sum_cyclic}
-    An entry of a word product is a sum over paths of bond indices pinned at
-    the two ends of products of matrix entries read along the path, by
-    induction on the word; closing the two pinned ends into a loop, the trace
-    of a closed word product is the sum over all cyclic bond configurations
-    of the products of entries around the loop. Contracting the cycle tensor
-    sums the per-site entries over all assignments of bond indices, which is
-    that cyclic sum after matching each bond with the site on its
-    predecessor side.
+    By Theorem~\ref{thm:trace_eval_word_eq_sum_cyclic},
+    $\tr(A^{i_1}\cdots A^{i_n})=\sum_{\alpha}\prod_{v=1}^n (A^{i_v})_{\alpha_{v-1},\alpha_v}$,
+    which matches the cycle contraction after identifying $\alpha_v$ with the
+    bond label on $e_v$.
 \end{proof}
 
 \begin{lemma}[Arc injectivity of the cycle tensor from block injectivity]%
@@ -197,40 +167,31 @@ chains, one tensor per site, which is the setting of
     \lean{TNLean.PEPS.regionBlockedTensorInjective_cycleTensorOfMPS}
     \leanok
     \uses{def:cycleTensorOfMPS, def:l_blk_injective, def:peps_regionInjectivityDataOf}
-    Let $0 < L < n$ with $n \ge 3$, let the bond dimension be positive, and
-    suppose $A$ is $L$-block injective. Then for every arc of $L$
-    consecutive sites of the closed chain, the blocked tensor of the arc of
-    the cycle tensor of $A$ is injective.
+    If $0 < L < n$, $n \ge 3$, $D>0$, and $A$ is $L$-block injective
+    (Definition~\ref{def:l_blk_injective}), then the cycle tensor of $A$
+    satisfies $\inj_A\bigl(A(v,L)\bigr)$ for every site $v$.
 \end{lemma}
 \begin{proof}\leanok
-    An arc of $L < n$ consecutive sites has exactly two boundary-crossing
-    bonds, the bond entering its first site and the bond leaving its last
-    site, by cyclic-distance arithmetic. The blocked weight of the arc at a
-    boundary assignment $(a, b)$ and a physical word $x$ is
-    $D^{\,n - (L+1)}\,(A^{x_1} \cdots A^{x_L})_{a b}$: the bonds inside
-    the arc contract to the matrix product, the two boundary bonds stay
-    pinned, and each bond away from the arc contributes a free factor $D$.
-    A linear relation among the blocked components over the boundary pairs
-    is a matrix $C$ with $\tr\!(C^{\mathsf T} A^{x_1} \cdots A^{x_L}) = 0$
-    for every word $x$; the word products span the full matrix algebra by
-    $L$-block injectivity, and the trace pairing is nondegenerate, so
-    $C = 0$.
+    The arc $A(v,L)$ has boundary $\partial A(v,L)=\{e_{v-1},e_{v+L-1}\}$ and
+    $n-(L+1)$ exterior bonds, so its blocked weight at boundary indices $(a,b)$
+    and word $x\in\{0,\ldots,d-1\}^L$ is
+    $T_{A,A(v,L)}^{(a,b)}(x)=D^{\,n-(L+1)}(A^{x_1}\cdots A^{x_L})_{ab}$.
+    If $\sum_{a,b}C_{ab}T_{A,A(v,L)}^{(a,b)}(x)=0$ for all $x$, then
+    $\tr(C^{\mathsf T}A^{x_1}\cdots A^{x_L})=0$; since $\{A^{x_1}\cdots A^{x_L}\}$
+    spans $\MN{D}$, nondegeneracy of the trace gives $C=0$.
 \end{proof}
 
 \subsection{Translation-invariant matrix product states}
 
-When the same tensor sits at every site, the closed chain ties the per-bond
-gauges together. If one gauge $Z$ and one scalar $\lambda$ satisfy
-$B^i = \lambda\,Z^{-1}A^iZ$ for every physical index $i$, then for a
-configuration $\sigma=(i_1,\ldots,i_n)$,
+When the same tensor sits at every site, if $B^i = \lambda\,Z^{-1}A^iZ$ for all
+$i$, then for $\sigma=(i_1,\ldots,i_n)$,
 \begin{align}
     \tr(B^{i_1}\cdots B^{i_n})
      & = \lambda^n\,\tr(Z^{-1}A^{i_1}\cdots A^{i_n}Z)
-    = \lambda^n\,\tr(A^{i_1}\cdots A^{i_n}).
+    = \lambda^n\,\tr(A^{i_1}\cdots A^{i_n}),
     \notag
 \end{align}
-Equality of the matrix product states therefore forces $\lambda^n = 1$.
-Thus $Z$ and $\lambda$ capture precisely the freedom in the
+so $V^{(n)}(A)=V^{(n)}(B)$ forces $\lambda^n = 1$, capturing the freedom in the
 translation-invariant corollary of \cite[Section~4]{Molnar2018NormalPEPS}.
 
 \begin{corollary}[Fundamental Theorem for translation-invariant normal MPS
@@ -239,32 +200,20 @@ translation-invariant corollary of \cite[Section~4]{Molnar2018NormalPEPS}.
     \lean{TNLean.PEPS.fundamentalTheorem_normalMPS}
     \leanok
     \uses{def:l_blk_injective, def:mpv}
-    Let $n$ be positive, let $0 < L$ with $2L + 1 \le n$, and let $A$ and $B$
-    be tensors of $D \times D$ matrices with $D>0$, over physical dimension
-    $d$, each
-    $L$-block injective, whose matrix product vectors agree at system size
-    $n$: $V^{(n)}(A)_\sigma = V^{(n)}(B)_\sigma$ for every configuration
-    $\sigma$. Then there are invertible matrices $Z_v$, one per bond of the
-    closed chain ($v = 1, \ldots, n$, $n + 1 \equiv 1$), with
-    $B^i = Z_v^{-1}\, A^i\, Z_{v+1}$ for every site $v$ and every $i$.
-    This is the first corollary following the general normal-PEPS theorem of
-    \cite[Section~4]{Molnar2018NormalPEPS} specialized to one
-    site-independent tensor: the source states the corollary for
-    site-dependent families, and its conclusion is the per-bond gauge family
-    delivered here. The system size is the optimal $n \ge 2L + 1$ of the
-    source's alternative proof (its Section ``Normal MPS: alternative
-    proof''), rather than the $n \ge 3L$ of the blocking route. The source's
-    translation-invariant corollary (a single gauge $Z$ and a constant
-    $\lambda$ with $\lambda^n = 1$) refines this conclusion and is not part
-    of this statement. A vanishing physical dimension is already excluded
-    by block injectivity.
+    Let $0 < L$, $2L + 1 \le n$, $D>0$, and let $A,B\in\MN{D}^d$ be $L$-block
+    injective with $V^{(n)}(A)=V^{(n)}(B)$. Then there exist invertible matrices
+    $(Z_v)_{v=1}^n$ ($Z_{n+1}\equiv Z_1$) such that
+    \begin{align}
+        B^i = Z_v^{-1}\, A^i\, Z_{v+1}
+        \qquad (1\le v\le n,\ 0\le i<d),
+        \label{eq:peps_normal_mps_per_bond}
+    \end{align}
+    specializing the first corollary of \cite[Section~4]{Molnar2018NormalPEPS}
+    at the optimal bound $n\ge 2L+1$.
 \end{corollary}
 \begin{proof}\leanok
     \uses{cor:fundamentalTheorem_normalMPS_of_overlap}
-    The per-bond form of the strengthened closed-chain corollary
-    (Corollary~\ref{cor:fundamentalTheorem_normalMPS_of_overlap}), proved
-    through the overlapping windows at $n \ge 2L + 1$, gives the per-bond
-    gauge family directly.
+    Immediate from Corollary~\ref{cor:fundamentalTheorem_normalMPS_of_overlap}.
 \end{proof}
 
 \begin{lemma}[Two per-bond gauge families are proportional at every bond]%
@@ -272,28 +221,20 @@ translation-invariant corollary of \cite[Section~4]{Molnar2018NormalPEPS}.
     \lean{TNLean.PEPS.gaugeFamily_bond_proportional}
     \leanok
     \uses{def:l_blk_injective, def:eval_word}
-    Let $n$ be positive, let $A$ and $B$ be tensors of $D \times D$ matrices
-    over physical dimension $d$ with $A$ being $L$-block injective, and let
-    $Z_v$ and $Z'_v$ ($v = 1, \ldots, n$, $n + 1 \equiv 1$) be two families of
-    invertible matrices with $B^i = Z_v^{-1} A^i Z_{v+1}$ and
-    $B^i = Z'^{-1}_v A^i Z'_{v+1}$ at every site $v$ and every $i$. Then for
-    every bond $v$ there is a nonzero scalar $c$ with $Z'_v = c\,Z_v$. No
-    condition on the system size is needed.
+    Let $n\ge 1$, let $A,B\in\MN{D}^d$ with $A$ being $L$-block injective, and
+    let $(Z_v)_{v=1}^n,(Z'_v)_{v=1}^n$ ($Z_{n+1}\equiv Z_1$, $Z'_{n+1}\equiv Z'_1$)
+    be invertible matrices satisfying $B^i = Z_v^{-1} A^i Z_{v+1} = Z'^{-1}_v A^i Z'_{v+1}$
+    for all $v,i$. Then for each $v$ there exists $c_v\in\C^\times$ such that
+    $Z'_v = c_v Z_v$.
 \end{lemma}
 \begin{proof}\leanok
     \uses{def:eval_word}
-    Iterating each relation along a word $x$ of length $L$ from the starting
-    site $v$ gives
-    $B^{x_1} \cdots B^{x_L} = Z_v^{-1} A^{x_1} \cdots A^{x_L} Z_{v+L}$ and
-    the same with $Z'$. Since the word products
-    $A^{x_1} \cdots A^{x_L}$ span the full matrix algebra by $L$-block
-    injectivity, the comparison extends linearly to every matrix $W$:
-    $Z_v^{-1} W Z_{v+L} = Z'^{-1}_v W Z'_{v+L}$. Taking $W$ to be the identity
-    in this extended relation pins the two bond products
-    $Z_v^{-1} Z_{v+L} = Z'^{-1}_v Z'_{v+L}$ to the same invertible matrix;
-    cancelling it leaves $Z_v^{-1} W Z_v = Z'^{-1}_v W Z'_v$ for every $W$,
-    so $Z'_v Z_v^{-1}$ commutes with the full matrix algebra, hence is a
-    scalar, nonzero by invertibility.
+    For any word $x$ of length $L$,
+    $B^x = Z_v^{-1} A^x Z_{v+L} = Z'^{-1}_v A^x Z'_{v+L}$. Since $\{A^x:|x|=L\}$
+    spans $\MN{D}$, $Z_v^{-1} W Z_{v+L} = Z'^{-1}_v W Z'_{v+L}$ for all
+    $W\in\MN{D}$. Setting $W=\Id$ gives $Z_v^{-1} Z_{v+L} = Z'^{-1}_v Z'_{v+L}$,
+    and right-cancelling yields $Z_v^{-1} W Z_v = Z'^{-1}_v W Z'_v$ for all $W$,
+    so $Z'_v Z_v^{-1}\in Z(\MN{D})=\C\Id$.
 \end{proof}
 
 \begin{corollary}[Uniqueness of the per-bond gauges up to one constant,
@@ -302,24 +243,18 @@ translation-invariant corollary of \cite[Section~4]{Molnar2018NormalPEPS}.
     \lean{TNLean.PEPS.fundamentalTheorem_normalMPS_gauge_unique}
     \leanok
     \uses{def:l_blk_injective}
-    Let $n$ be positive, let $0 < L$ with $2L + 1 \le n$, and let $A$ and $B$
-    be tensors of $D \times D$ matrices with $D>0$, each $L$-block injective.
-    If two
-    families $Z$ and $Z'$ of invertible matrices on the bonds of the closed
-    chain both satisfy $B^i = Z_v^{-1} A^i Z_{v+1}$ at every site, then they
-    are proportional by a single constant: there is a nonzero scalar $c$
-    with $Z'_v = c\,Z_v$ at every bond. This is the uniqueness clause of
-    the first corollary following the general normal-PEPS theorem of
-    \cite[Section~4]{Molnar2018NormalPEPS}, for one site-independent
-    tensor. Equality of the two states is not needed.
+    Let $0 < L$, $2L + 1 \le n$, $D>0$, and let $A,B\in\MN{D}^d$ be $L$-block
+    injective. If invertible families $Z,Z'$ both satisfy
+    (\ref{eq:peps_normal_mps_per_bond}), then there is a single scalar
+    $c\in\C^\times$ such that $Z'_v = c\,Z_v$ for all $v$
+    \cite[Section~4]{Molnar2018NormalPEPS}.
 \end{corollary}
 \begin{proof}\leanok
     \uses{lem:gaugeFamily_bond_proportional}
-    At every bond the two gauges differ by a nonzero scalar $\mu_v$
-    (Lemma~\ref{lem:gaugeFamily_bond_proportional}). The relation
-    $B^i = Z_v^{-1} A^i Z_{v+1}$ for both families forces the scalar
-    $\mu_v^{-1}\mu_{v+1}$ to fix the nonzero tensor $B$, so consecutive
-    constants agree, and going around the cycle merges them into one.
+    By Lemma~\ref{lem:gaugeFamily_bond_proportional}, $Z'_v = \mu_v Z_v$ with
+    $\mu_v\in\C^\times$. Substituting into (\ref{eq:peps_normal_mps_per_bond})
+    gives $B^i = \mu_v^{-1}\mu_{v+1} B^i$; since $B\neq 0$ by $L$-block
+    injectivity and $D>0$, $\mu_{v+1}=\mu_v$ for all $v$.
 \end{proof}
 
 \begin{lemma}[Consecutive per-bond gauges are proportional]%
@@ -327,26 +262,19 @@ translation-invariant corollary of \cite[Section~4]{Molnar2018NormalPEPS}.
     \lean{TNLean.PEPS.gaugeFamily_succ_proportional}
     \leanok
     \uses{def:l_blk_injective, def:eval_word}
-    Let $n$ be positive, let $A$ and $B$ be tensors of $D \times D$ matrices
-    over physical dimension $d$ with $A$ being $L$-block injective, and let
-    $Z_v$ ($v = 1, \ldots, n$, $n + 1 \equiv 1$) be invertible matrices with
-    $B^i = Z_v^{-1} A^i Z_{v+1}$ at every site $v$ and every $i$. Then for
-    every site $v$ there is a nonzero scalar $c$ with $Z_{v+1} = c\,Z_v$.
+    Let $n\ge 1$, let $A,B\in\MN{D}^d$ with $A$ being $L$-block injective, and
+    let $(Z_v)_{v=1}^n$ ($Z_{n+1}\equiv Z_1$) be invertible matrices satisfying
+    (\ref{eq:peps_normal_mps_per_bond}). Then for each $v$ there exists
+    $c_v\in\C^\times$ such that $Z_{v+1} = c_v Z_v$.
 \end{lemma}
 \begin{proof}\leanok
     \uses{def:eval_word}
-    Iterating the per-bond relation along a word $x$ of length $L$ from the
-    starting site $v$ gives
-    $B^{x_1} \cdots B^{x_L} = Z_v^{-1} A^{x_1} \cdots A^{x_L} Z_{v+L}$.
-    Comparing the iterations from $v$ and from $v + 1$ over the word
-    products $A^{x_1} \cdots A^{x_L}$, which span the full matrix algebra by
-    $L$-block injectivity, the comparison extends linearly to every matrix
-    $W$: $Z_v^{-1} W Z_{v+L} = Z_{v+1}^{-1} W Z_{v+1+L}$. Taking $W$ to be the
-    identity in this extended relation pins the two bond products
-    $Z_v^{-1} Z_{v+L} = Z_{v+1}^{-1} Z_{v+1+L}$ to the same invertible
-    matrix; cancelling it leaves $Z_v^{-1} W Z_v = Z_{v+1}^{-1} W Z_{v+1}$
-    for every $W$, so $Z_{v+1} Z_v^{-1}$ commutes with the full matrix
-    algebra, hence is a scalar, nonzero by invertibility.
+    For any word $x$ of length $L$,
+    $B^x = Z_v^{-1} A^x Z_{v+L} = Z_{v+1}^{-1} A^x Z_{v+1+L}$. By $L$-block
+    injectivity of $A$, $Z_v^{-1} W Z_{v+L} = Z_{v+1}^{-1} W Z_{v+1+L}$ for all
+    $W\in\MN{D}$. Setting $W=\Id$ gives $Z_v^{-1} Z_{v+L} = Z_{v+1}^{-1} Z_{v+1+L}$,
+    and cancelling yields $Z_v^{-1} W Z_v = Z_{v+1}^{-1} W Z_{v+1}$ for all $W$,
+    so $Z_{v+1} Z_v^{-1}\in\C^\times\Id$.
 \end{proof}
 
 \begin{corollary}[Fundamental Theorem for translation-invariant normal MPS
@@ -355,24 +283,21 @@ translation-invariant corollary of \cite[Section~4]{Molnar2018NormalPEPS}.
     \lean{TNLean.PEPS.fundamentalTheorem_normalMPS_translationInvariant}
     \leanok
     \uses{def:l_blk_injective, def:mpv}
-    In the translation-invariant corollary of
-    \cite[Section~4]{Molnar2018NormalPEPS} (the statement for TI MPS
-    following the first corollary after the general normal-PEPS theorem, at
-    the optimal system size $n \ge 2L + 1$ of the source's alternative
-    proof), let $n$ be positive, let $0 < L$ with $2L + 1 \le n$, and let $A$
-    and $B$ be tensors of $D \times D$ matrices with $D>0$, over physical
-    dimension $d$, each $L$-block injective, whose matrix product vectors
-    agree at system size $n$:
-    $V^{(n)}(A)_\sigma = V^{(n)}(B)_\sigma$ for every configuration
-    $\sigma$. Then there are an invertible matrix $Z$ and a constant
-    $\lambda$ with $\lambda^n = 1$ such that
-    $B^i = \lambda\, Z^{-1} A^i Z$ for every $i$.
+    Let $0 < L$, $2L + 1 \le n$, $D>0$, and let $A,B\in\MN{D}^d$ be $L$-block
+    injective with $V^{(n)}(A) = V^{(n)}(B)$. Then there exist an invertible
+    matrix $Z\in\GL_D(\C)$ and $\lambda\in\C$ with $\lambda^n = 1$ such that
+    \begin{align}
+        B^i = \lambda\, Z^{-1} A^i Z
+        \qquad (0\le i<d),
+        \label{eq:peps_normal_mps_ti_gauge}
+    \end{align}
+    giving the translation-invariant corollary of
+    \cite[Section~4]{Molnar2018NormalPEPS} at $n\ge 2L+1$.
 \end{corollary}
 \begin{proof}\leanok
     \uses{cor:fundamentalTheorem_normalMPS_translationInvariant_of_overlap}
-    This is the single-gauge form of the strengthened closed-chain corollary
-    (Corollary~\ref{cor:fundamentalTheorem_normalMPS_translationInvariant_of_overlap}),
-    proved through the overlapping windows at $n \ge 2L + 1$.
+    Immediate from
+    Corollary~\ref{cor:fundamentalTheorem_normalMPS_translationInvariant_of_overlap}.
 \end{proof}
 
 \begin{corollary}[Uniqueness of the translation-invariant gauge up to a
@@ -381,36 +306,26 @@ translation-invariant corollary of \cite[Section~4]{Molnar2018NormalPEPS}.
     \lean{TNLean.PEPS.fundamentalTheorem_normalMPS_translationInvariant_gauge_unique}
     \leanok
     \uses{def:l_blk_injective}
-    In the uniqueness clause of the translation-invariant corollary of
-    \cite[Section~4]{Molnar2018NormalPEPS} for TI MPS, let $0 < L$ and $0<D$,
-    and let $A$ and $B$ be tensors of $D \times D$ matrices,
-    each $L$-block injective. If invertible matrices $Z$, $Z'$ and
-    constants $\lambda$, $\lambda'$ satisfy
-    $B^i = \lambda\, Z^{-1} A^i Z$ and $B^i = \lambda'\, Z'^{-1} A^i Z'$ for
-    every $i$, then there is a nonzero scalar $c$ with $Z' = c\,Z$; no system
-    size enters the statement, and neither equality of the two states nor the
-    root-of-unity conditions on $\lambda$ and $\lambda'$ are needed.
+    Let $0 < L$, $0<D$, and let $A,B\in\MN{D}^d$ be $L$-block injective. If
+    $Z,Z'\in\GL_D(\C)$ and $\lambda,\lambda'\in\C$ satisfy
+    $B^i = \lambda\, Z^{-1} A^i Z = \lambda'\, Z'^{-1} A^i Z'$ for all $i$, then
+    $Z' = c\,Z$ for some $c\in\C^\times$
+    \cite[Section~4]{Molnar2018NormalPEPS}.
 \end{corollary}
 \begin{proof}\leanok
     \uses{def:eval_word}
-    The scalar $\lambda$ is nonzero because $B$ is $L$-block injective with
-    positive bond dimension, so some $B^{i_0} \neq 0$. Iterating each relation
-    along a word $x$ of length $L$ gives
-    $B^{x_1} \cdots B^{x_L} = \lambda^L\, Z^{-1} A^{x_1} \cdots A^{x_L} Z$
-    and the primed analog; the word products span the full matrix algebra
-    by $L$-block injectivity, so
-    $\lambda^L\, Z^{-1} W Z = \lambda'^L\, Z'^{-1} W Z'$ for every matrix
-    $W$. The identity pins $\lambda^L = \lambda'^L$; cancelling the
-    nonzero factor leaves $Z^{-1} W Z = Z'^{-1} W Z'$ for every $W$, so
-    $Z' Z^{-1}$ commutes with the full matrix algebra, hence is a nonzero
-    scalar.
+    Since $B$ is $L$-block injective and $D>0$, some $B^{i_0}\neq 0$, so
+    $\lambda\neq 0$. For $|x|=L$,
+    $B^x = \lambda^L Z^{-1} A^x Z = \lambda'^L Z'^{-1} A^x Z'$, which extends by
+    $L$-block injectivity of $A$ to $\lambda^L Z^{-1} W Z = \lambda'^L Z'^{-1} W Z'$
+    for all $W\in\MN{D}$. Setting $W=\Id$ gives $\lambda^L=\lambda'^L\neq 0$,
+    so $Z^{-1} W Z = Z'^{-1} W Z'$ for all $W$ and $Z' Z^{-1}\in\C^\times\Id$.
 \end{proof}
 
 \subsection{\texorpdfstring{The optimal system size $n \ge 2L + 1$}{The optimal system size n >= 2L+1}}
 
-The bound $n \ge 3L$ is not optimal. A bond of the closed chain is straddled by
-the $L + 1$ overlapping windows of $L$ sites around it. For consecutive
-windows, the deformed closed-chain coefficients have the form
+A bond of the closed chain is straddled by $L + 1$ overlapping windows of $L$
+sites. For consecutive windows, the deformed closed-chain coefficients satisfy
 \begin{align}
     \tr(B^{p}\, C_j(u_1 \cdots u_L)\, B^{u_{L+1}}\, B^{s})
      & =
@@ -424,34 +339,24 @@ Injectivity on the complementary arc strips these identities to
     B^{u_1}\,C_{j+1}(u_2 \cdots u_{L+1}),
     \notag
 \end{align}
-and chaining the relations across the $L + 1$ windows gives
-$C_0(a)\,B^b = B^a\,C_L(b)$.
-This is the overlap mechanism in \cite[Lemma~5]{Molnar2018NormalPEPS}.
-The lemmas below establish that argument: block injectivity extends to every
-length, word products transfer between equal-state chains, and the bond
-operator is extracted and shown to act by conjugation, lowering the system size
-to $n \ge 2L + 1$.
+and chaining across the $L + 1$ windows gives $C_0(a)\,B^b = B^a\,C_L(b)$, the
+overlap mechanism of \cite[Lemma~5]{Molnar2018NormalPEPS} that lowers the system
+size to $n \ge 2L + 1$.
 
 \begin{lemma}[Block injectivity extends to longer blocks]%
     \label{lem:isNBlkInjective_of_le}
     \leanok
     \uses{def:l_blk_injective}
-    In the chain form of the statement that any region of at least the
-    blocking size is injective, derived in the closing section of
-    \cite{Molnar2018NormalPEPS} (``Normal MPS: alternative proof'') from its
-    union lemma, let $A$ be a tensor of $D \times D$ matrices over physical
-    dimension $d$, $L$-block injective with $0 < L$. Then $A$ is $m$-block
-    injective for every $m \ge L$.
+    If $A\in\MN{D}^d$ is $L$-block injective with $0 < L$, then $A$ is $m$-block
+    injective for every $m \ge L$
+    \cite[Section~``Normal MPS: alternative proof'']{Molnar2018NormalPEPS}.
 \end{lemma}
 \begin{proof}\leanok
     \uses{def:eval_word, thm:wordspan_blk_inj_succ}
-    It suffices to pass from length $m$ to $m + 1$. Writing the identity as
-    a combination of length-$L$ word products and peeling the leading letter
-    of each expresses any matrix $P$ as a combination of terms
-    $A^{i}\,(W P)$ with $W$ a word product of length $L - 1$. Each factor
-    $W P$ is a combination of length-$m$ word products by the induction
-    hypothesis, so each term is a combination of length-$(m+1)$ word
-    products.
+    By induction on $m\ge L$ via Theorem~\ref{thm:wordspan_blk_inj_succ}: writing
+    $\Id=\sum_{|u|=L}\alpha_u A^u$ expresses any $P\in\MN{D}$ as
+    $\sum_{i,|w|=L-1}\alpha_{iw} A^i(A^w P)$, and expanding each $A^w P$ in
+    $\{A^y:|y|=m\}$ yields a combination of length-$(m+1)$ word products.
 \end{proof}
 
 \begin{lemma}[Word transfer between same-state networks]%
@@ -460,33 +365,21 @@ to $n \ge 2L + 1$.
     \lean{MPSTensor.exists_evalWordTransport}
     \leanok
     \uses{def:l_blk_injective, def:mpv, def:eval_word}
-    In the operator-transfer mechanism underlying Lemma~5 of
-    \cite{Molnar2018NormalPEPS}, where an operator expanded over the window
-    products of one network is re-read in the other, let $A$ and $B$ be
-    tensors of $D \times D$ matrices over physical
-    dimension $d$, let $n = k + q$, and suppose the length-$k$ and
-    length-$q$ word products of $A$ each span the full matrix algebra. If
-    the matrix product vectors of $A$ and $B$ agree at system size $n$,
-    then there is a linear map $\Lambda$ of the matrix algebra with
-    $\Lambda(A^{x_1} \cdots A^{x_k}) = B^{x_1} \cdots B^{x_k}$ for every
-    word $x$ of length $k$. The same holds when, instead of the traces,
-    the word products of the two tensors are themselves equal at length
-    $n$.
+    Let $A,B\in\MN{D}^d$, let $n = k + q$, and suppose $\{A^x:|x|=k\}$ and
+    $\{A^y:|y|=q\}$ each span $\MN{D}$. If $V^{(n)}(A)=V^{(n)}(B)$ (or if
+    $A^w=B^w$ for all $|w|=n$), then there exists a linear map
+    $\Lambda:\MN{D}\to\MN{D}$ such that $\Lambda(A^x)=B^x$ for all $|x|=k$.
 \end{lemma}
 \begin{proof}\leanok
     \uses{def:mpv, def:eval_word}
-    Pairing the matrix algebra against the complementary word products, let
-    $\Psi_A(M)$ be the family of traces
-    $\tr(M\,A^{y_1} \cdots A^{y_q})$ over the length-$q$ words $y$, and
-    $\Psi_B$ its $B$-analog. The map $\Psi_A$ is injective because the length-$q$
-    products span and the trace pairing is nondegenerate. On the spanning
-    family of length-$k$ products the two pairings match:
-    $\Psi_A(A^{x}) = \Psi_B(B^{x})$, since both compute closed-chain
-    coefficients of total length $n$, equal by hypothesis. Hence the range
-    of $\Psi_A$ lies in that of $\Psi_B$, forcing $\Psi_B$ to be injective
-    by dimension count, and a left inverse of $\Psi_B$ composed with
-    $\Psi_A$ gives $\Lambda$; for the matrix-product version, replacing the
-    traces by the products themselves gives the same result.
+    Define $\Psi_A,\Psi_B:\MN{D}\to\C^{d^q}$ by
+    $\Psi_A(M)_y=\tr(M A^y)$ and $\Psi_B(M)_y=\tr(M B^y)$ ($|y|=q$). Since
+    $\{A^y:|y|=q\}$ spans $\MN{D}$ and the trace pairing is nondegenerate,
+    $\Psi_A$ is injective. Since $\Psi_A(A^x)_y=V^{(n)}(A)_{xy}=V^{(n)}(B)_{xy}=\Psi_B(B^x)_y$
+    and $\{A^x:|x|=k\}$ spans $\MN{D}$, $\operatorname{im}\Psi_A\subseteq\operatorname{im}\Psi_B$,
+    so $\Psi_B$ is injective by dimension count and $\Lambda=\Psi_B^{-1}\circ\Psi_A$
+    satisfies $\Lambda(A^x)=B^x$. Replacing $\tr(M A^y)$ by $M A^y$ proves the
+    word-product variant.
 \end{proof}
 
 \begin{lemma}[Bond-operator extraction from overlapping windows]%
@@ -495,15 +388,9 @@ to $n \ge 2L + 1$.
     \lean{MPSTensor.bondOperator_unique}
     \leanok
     \uses{def:l_blk_injective, def:eval_word}
-    Let $0 < L$ with $2L + 1 \le n$, let $B$ be a tensor of $D \times D$
-    matrices over physical dimension $d$, $L$-block injective, and let
-    $C_0, \ldots, C_L$ be deformed window tensors: each $C_j$ assigns a
-    matrix to every word of length $L$, read as replacing the blocked
-    tensor of the $L$-site window starting $j$ sites left of a fixed bond
-    of the closed chain on $n$ sites. Suppose the deformed states agree
-    for consecutive window positions: for every $j < L$, every prefix $p$
-    of $j$ sites, every assignment $u$ on the $L + 1$ sites covered by the
-    two windows, and every suffix $s$ on the remaining sites,
+    Let $0 < L$, $2L + 1 \le n$, let $B\in\MN{D}^d$ be $L$-block injective, and
+    let $C_0, \ldots, C_L:\{0,\ldots,d-1\}^L\to\MN{D}$ satisfy, for all
+    $0\le j < L$, $|p|=j$, $|u|=L+1$, and $|s|=n-j-L-1$,
     \begin{align}
         \tr(B^{p}\, C_j(u_1 \cdots u_L)\, B^{u_{L+1}}\, B^{s})
          & =
@@ -511,34 +398,19 @@ to $n \ge 2L + 1$.
         B^{s}\bigr).
         \notag
     \end{align}
-    Then the deformation is a virtual operation on the bond: there is a
-    matrix $X$ such that, for all length-$L$ words $a$ and $b$,
+    Then there exists a unique $X\in\MN{D}$ such that, for all $|a|=|b|=L$,
     \begin{align}
-        C_0(a) & = B^{a_1} \cdots B^{a_L}\, X,
-        \notag                                 \\
-        C_L(b) & = X\, B^{b_1} \cdots B^{b_L},
+        C_0(a) & = B^a X, &
+        C_L(b) & = X B^b,
         \notag
     \end{align}
-    and $X$ is unique. This is Lemma~5
-    of \cite{Molnar2018NormalPEPS} (its closing section, ``Normal MPS:
-    alternative proof''), specialized to one site-independent tensor; the
-    source states it for site-dependent tensors on five sites with $L = 2$,
-    with the deformed window tensors arising as physical operators
-    contracted with the blocked windows they act on; the site-dependent
-    form, in the setting in which the source states the lemma, is
-    Lemma~\ref{lem:chain_overlapWindow_exists_bondOperator}, and this
-    statement is its constant specialization. The
-    algebra-homomorphism clause of the source lemma is established with the
-    insertion correspondence in
-    Lemma~\ref{lem:exists_conjugation_of_mpv_eq}.
+    giving the constant specialization of \cite[Lemma~5]{Molnar2018NormalPEPS}
+    (Lemma~\ref{lem:chain_overlapWindow_exists_bondOperator}).
 \end{lemma}
 \begin{proof}\leanok
     \uses{lem:chain_overlapWindow_exists_bondOperator, def:eval_word}
-    Placing the tensor at every site of the site-dependent form
-    (Lemma~\ref{lem:chain_overlapWindow_exists_bondOperator}) identifies the
-    arc products of the constant chain with the word products of the repeated
-    tensor, and $L$-block injectivity of the tensor with window injectivity
-    of the constant chain.
+    Apply Lemma~\ref{lem:chain_overlapWindow_exists_bondOperator} to the
+    constant chain with tensor $B$ at every site.
 \end{proof}
 
 \begin{lemma}[Conjugate word products at one length from Lemma~5]%
@@ -546,37 +418,22 @@ to $n \ge 2L + 1$.
     \lean{MPSTensor.exists_conjugation_of_mpv_eq}
     \leanok
     \uses{def:l_blk_injective, def:mpv, def:eval_word}
-    Capturing the insertion correspondence of Lemma~5 of
-    \cite{Molnar2018NormalPEPS} and its algebra-homomorphism clause for one
-    site-independent tensor (where the map sending an insertion on one
-    network to the corresponding insertion on the other is an automorphism of
-    the matrix algebra, hence inner), let $0 < L$ with $2L + 1 \le n$ and
-    $0<D$, and let $A$ and $B$ be tensors of
-    $D \times D$ matrices over physical dimension $d$, each $L$-block
-    injective, whose matrix product vectors agree at system size $n$.
-    Then there is an invertible matrix $Z$ such that, for every word $w$ of
-    length $n$,
+    Let $0 < L$, $2L + 1 \le n$, $0<D$, and let $A,B\in\MN{D}^d$ be $L$-block
+    injective with $V^{(n)}(A)=V^{(n)}(B)$. Then there exists $Z\in\GL_D(\C)$
+    such that
     \begin{align}
-        B^{w_1} \cdots B^{w_n}
-         & = Z\, A^{w_1} \cdots A^{w_n}\, Z^{-1}.
-        \notag
+        B^w & = Z\, A^w\, Z^{-1}
+        \qquad (|w|=n).
+        \label{eq:peps_mps_length_n_conj}
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
     \uses{cor:fundamentalTheorem_normalMPSChain_of_overlap, thm:mps_chain_gaugeEquiv_sameState}
-    Regarding $A$ and $B$ as constant site-dependent chains on $n$ sites,
-    window injectivity of a constant chain is block injectivity of the
-    single tensor, and agreement of the matrix product vectors at size $n$
-    is the same-state hypothesis, so the site-dependent overlapping-window
-    capstone
-    (Corollary~\ref{cor:fundamentalTheorem_normalMPSChain_of_overlap})
-    gives a per-bond gauge family relating the two chains. The arc
-    products of a constant chain are the word products of the tensor, and
-    the gauge conjugation of arc products
-    (Theorem~\ref{thm:mps_chain_gaugeEquiv_sameState}), read at the full
-    chain length $n$ where the end bond wraps to the starting bond, is
-    conjugation of the length-$n$ word products by the gauge at the
-    starting bond.
+    Regarding $A$ and $B$ as constant chains on $n$ sites,
+    Corollary~\ref{cor:fundamentalTheorem_normalMPSChain_of_overlap} gives bond
+    gauges $(Z_v)_{v=0}^{n-1}$ with $B^i=Z_v A^i Z_{v+1}^{-1}$, and
+    Theorem~\ref{thm:mps_chain_gaugeEquiv_sameState} at length $n$ yields
+    $B^w = Z_0 A^w Z_0^{-1}$.
 \end{proof}
 
 \begin{lemma}[Rigidity of word products at one length]%
@@ -584,29 +441,20 @@ to $n \ge 2L + 1$.
     \lean{MPSTensor.proportional_of_evalWord_eq}
     \leanok
     \uses{def:l_blk_injective, def:eval_word}
-    Let $0 < L$ with $2L + 1 \le n$ and $0 < D$, and let $A$ and $C$ be
-    tensors of $D \times D$ matrices over physical dimension $d$, each
-    $L$-block injective, with equal word products at length $n$:
-    $C^{w_1} \cdots C^{w_n} = A^{w_1} \cdots A^{w_n}$ for every word $w$ of
-    length $n$. Then there is a constant $\lambda$ with $\lambda^n = 1$
-    and $C^i = \lambda A^i$ for every $i$.
+    Let $0 < L$, $2L + 1 \le n$, $0 < D$, and let $A,C\in\MN{D}^d$ be $L$-block
+    injective with $C^w = A^w$ for all $|w|=n$. Then there exists $\lambda\in\C$
+    with $\lambda^n = 1$ such that $C^i = \lambda A^i$ for all $i$.
 \end{lemma}
 \begin{proof}\leanok
     \uses{lem:exists_mpvTransport, lem:isNBlkInjective_of_le, def:eval_word}
-    Transferring word products of $A$ to those of $C$ at the window length
-    $L$, at $L + 1$, at the complementary length $n - 1 - L$, and at
-    $n - L$ (Lemma~\ref{lem:exists_mpvTransport}, matrix-product version;
-    the lengths lie between $L$ and $n - L$ by $2L + 1 \le n$), for a
-    transfer pair at lengths $k$ and $k + 1$ the image
-    $\Lambda_k(\Id)$ commutes with every letter of $C$ - its two one-letter
-    extensions agree, $C^i\,\Lambda_k(\Id) = \Lambda_{k+1}(A^i) =
-        \Lambda_k(\Id)\,C^i$ - hence with the full matrix algebra by block
-    injectivity, so it is a scalar $c_k \Id$, nonzero because $\Lambda_k$
-    is surjective onto the spanning word products, hence bijective.
-    Peeling one letter off the full-length equality through the spanning
-    windows of lengths $L$ and $n - 1 - L$ then leaves
-    $C^i = (c_L\,c_{n-1-L})^{-1} A^i =: \lambda A^i$; evaluating any
-    nonzero length-$n$ word product gives $\lambda^n = 1$.
+    Since $2L+1\le n$, Lemma~\ref{lem:isNBlkInjective_of_le} and the word-product
+    form of Lemma~\ref{lem:exists_mpvTransport} give linear bijections
+    $\Lambda_k:\MN{D}\to\MN{D}$ with $\Lambda_k(A^x)=C^x$ for $|x|=k\in\{L,L+1,n-1-L,n-L\}$.
+    For $k\in\{L,n-1-L\}$, $C^i\Lambda_k(\Id)=\Lambda_{k+1}(A^i)=\Lambda_k(\Id)C^i$,
+    so $\Lambda_k(\Id)=c_k\Id$ with $c_k\in\C^\times$ by $L$-block injectivity
+    of $C$. Splitting $A^{xiy}=C^{xiy}$ ($|x|=L$, $|y|=n-1-L$) and evaluating on
+    combinations summing to $\Id$ gives $C^i=(c_L c_{n-1-L})^{-1}A^i=:\lambda A^i$,
+    and $C^w=A^w\neq 0$ forces $\lambda^n=1$.
 \end{proof}
 
 \begin{corollary}[Fundamental Theorem for translation-invariant normal MPS
@@ -615,33 +463,19 @@ to $n \ge 2L + 1$.
     \lean{TNLean.PEPS.fundamentalTheorem_normalMPS_translationInvariant_of_overlap}
     \leanok
     \uses{def:l_blk_injective, def:mpv}
-    Let $0 < L$ with $2L + 1 \le n$ and $0<D$, and let $A$ and $B$ be tensors of
-    $D \times D$ matrices over physical dimension $d$, each $L$-block
-    injective, whose matrix product vectors agree at system size $n$:
-    $V^{(n)}(A)_\sigma = V^{(n)}(B)_\sigma$ for every configuration
-    $\sigma$. Then there are an invertible matrix $Z$ and a constant
-    $\lambda$ with $\lambda^n = 1$ such that
-    $B^i = \lambda\, Z^{-1} A^i Z$ for every $i$.
-    This is the strengthened closed-chain corollary of
-    \cite{Molnar2018NormalPEPS} (the corollary after Lemma~5 in its closing
-    section ``Normal MPS: alternative proof''), proved through the
-    overlapping windows at the optimal $n \ge 2L + 1$ rather than the
-    $n \ge 3L$ of the blocking route; the single-gauge corollary
-    \ref{cor:fundamentalTheorem_normalMPS_translationInvariant} delegates to
-    it. The uniqueness clause of the source
-    corollary - the gauge $Z$ is unique up to a multiplicative constant -
-    needs no system size and is
-    Corollary~\ref{cor:fundamentalTheorem_normalMPS_translationInvariant_gauge_unique}.
+    Let $0 < L$, $2L + 1 \le n$, $0<D$, and let $A,B\in\MN{D}^d$ be $L$-block
+    injective with $V^{(n)}(A) = V^{(n)}(B)$. Then there exist $Z\in\GL_D(\C)$
+    and $\lambda\in\C$ with $\lambda^n = 1$ satisfying
+    (\ref{eq:peps_normal_mps_ti_gauge})
+    \cite[Section~``Normal MPS: alternative proof'']{Molnar2018NormalPEPS}.
 \end{corollary}
 \begin{proof}\leanok
     \uses{lem:exists_conjugation_of_mpv_eq, lem:proportional_of_evalWord_eq}
-    By Lemma~\ref{lem:exists_conjugation_of_mpv_eq} the word products of
-    $B$ at length $n$ are those of $A$ conjugated by an invertible matrix.
-    Absorbing the conjugation into $B$ - which preserves $L$-block
-    injectivity - leaves two tensors with equal word products at length
-    $n$, and Lemma~\ref{lem:proportional_of_evalWord_eq} makes them
-    proportional letterwise by an $n$-th root of unity. Undoing the
-    absorption gives $B^i = \lambda\, Z^{-1} A^i Z$.
+    By Lemma~\ref{lem:exists_conjugation_of_mpv_eq}, there exists $Z\in\GL_D(\C)$
+    such that $\widetilde B^i := Z B^i Z^{-1}$ satisfies $\widetilde B^w = A^w$
+    for all $|w|=n$. Applying Lemma~\ref{lem:proportional_of_evalWord_eq} to $A$
+    and $\widetilde B$ gives $\widetilde B^i = \lambda A^i$ with $\lambda^n=1$,
+    so $B^i = \lambda Z^{-1} A^i Z$.
 \end{proof}
 
 \begin{corollary}[Fundamental Theorem for translation-invariant normal MPS
@@ -650,26 +484,17 @@ to $n \ge 2L + 1$.
     \lean{TNLean.PEPS.fundamentalTheorem_normalMPS_of_overlap}
     \leanok
     \uses{def:l_blk_injective, def:mpv}
-    For the per-bond gauge family of the closed-chain corollary, proved
-    at the source's strengthened bound $n \ge 2L + 1$
-    (\cite{Molnar2018NormalPEPS}, the corollary after Lemma~5 in its
-    closing section ``Normal MPS: alternative proof''), to which the named
-    matrix-level Corollary~\ref{cor:fundamentalTheorem_normalMPS} delegates,
-    let $n$ be positive, let $0 < L$ with $2L + 1 \le n$ and $0<D$, and let
-    $A$ and $B$ be tensors of $D \times D$ matrices over physical dimension $d$,
-    each $L$-block injective, whose matrix product vectors agree at system
-    size $n$. Then there are invertible matrices $Z_v$, one per bond of
-    the closed chain ($v = 1, \ldots, n$, $n + 1 \equiv 1$), with
-    $B^i = Z_v^{-1}\, A^i\, Z_{v+1}$ for every site $v$ and every $i$.
+    Let $0 < L$, $2L + 1 \le n$, $0<D$, and let $A,B\in\MN{D}^d$ be $L$-block
+    injective with $V^{(n)}(A)=V^{(n)}(B)$. Then there exist invertible matrices
+    $(Z_v)_{v=1}^n$ ($Z_{n+1}\equiv Z_1$) satisfying
+    (\ref{eq:peps_normal_mps_per_bond})
+    \cite[Section~``Normal MPS: alternative proof'']{Molnar2018NormalPEPS}.
 \end{corollary}
 \begin{proof}\leanok
     \uses{cor:fundamentalTheorem_normalMPS_translationInvariant_of_overlap}
-    The single-gauge form
-    (Corollary~\ref{cor:fundamentalTheorem_normalMPS_translationInvariant_of_overlap})
-    gives $Z$ and $\lambda$ with $\lambda^n = 1$ and
-    $B^i = \lambda\,Z^{-1} A^i Z$. The family $Z_v := \lambda^{v} Z$
-    dresses the gauge with powers of the root of unity: away from the seam
-    the consecutive powers contribute the factor $\lambda$, and across the
-    seam the wraparound contributes $\lambda^{1-n} = \lambda$ because
-    $\lambda^n = 1$, so $B^i = Z_v^{-1} A^i Z_{v+1}$ at every site.
+    Take $Z,\lambda$ from
+    Corollary~\ref{cor:fundamentalTheorem_normalMPS_translationInvariant_of_overlap}
+    with $\lambda^n=1$ and $B^i=\lambda Z^{-1}A^i Z$, and set
+    $Z_v := \lambda^v Z$; since $\lambda^{1-n}=\lambda$,
+    $Z_v^{-1} A^i Z_{v+1} = \lambda Z^{-1} A^i Z = B^i$ for all $1\le v\le n$.
 \end{proof}

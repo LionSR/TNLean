@@ -12,28 +12,31 @@
         TNLean.PEPS.regularWalkHolonomy_eq_one_of_regionParent_annihilates_twistedState}
     \leanok
     \uses{def:peps_region_ground_space, def:peps_region_parent_interaction}
-    Consider a finite graph with site-dependent regular $G$-injective
-    tensors. Let $R$ induce a connected graph, and insert regular
-    bond operators $u_e$ at their ordered heads. If an internal
-    closed walk has nonidentity holonomy, the original regional
-    ground space and the inserted regional ground space have zero
-    intersection. More generally, a nonidentity spanning-tree cycle
-    residual already forces this separation.
+    On a finite graph with site-dependent regular $G$-injective tensors $A_v$,
+    let $R$ induce a connected subgraph, and form $A^u$ by inserting regular
+    bond operators $u_e$ at their ordered heads, with regional ground spaces
+    $\mathcal G_R=\mathcal G_R(A)$ and $\mathcal G_R^u=\mathcal G_R(A^u)$
+    (Definition~\ref{def:peps_region_ground_space}). If an internal closed
+    walk $w$ in $R$ has holonomy $\operatorname{hol}_u(w)\ne 1$---or more
+    generally if a spanning-tree cycle residual satisfies $r_c(u)\ne 1$---then
+    $\mathcal G_R\cap\mathcal G_R^u=\{0\}$.
 
-    Every regional ground vector, exposed by a local $G$-injective
-    inverse, vanishes at half-edge coordinates whose cycle labels
-    are not all the identity. In particular, this holds for every
-    complementary slice of an arbitrary vector satisfying an
-    original regional parent constraint. No inserted-bond
-    representation of that vector is assumed.
+    Let $F_R=\bigotimes_{v\in R}F_v$ be a product of local $G$-injective
+    inverses exposing the regular half-edge coordinates. Every
+    $\phi\in\mathcal G_R$ satisfies $(F_R\phi)(\alpha)=0$ whenever some
+    spanning-tree cycle label of $\alpha$ is not $1$. In particular, for any
+    global vector $\Psi$ annihilated by an original regional parent interaction
+    $h_R^{\mathrm{global}}\Psi=0$ (Definition~\ref{def:peps_region_parent_interaction})
+    and any exterior configuration $\tau$, the slice $\Psi(\cdot,\tau)\in\mathcal G_R$
+    obeys $(F_R\Psi(\cdot,\tau))(\alpha)=0$ at every such $\alpha$, without
+    assuming an inserted-bond representation of $\Psi$.
 
-    Consequently, if a nonzero inserted global PEPS vector is
-    annihilated by an original regional parent term on $R$, every
-    internal closed-walk holonomy in $R$ is the identity.
-    If a vertex gauge removes all internal inserted operators,
-    the original and inserted regional ground spaces coincide:
-    crossing operators only relabel the boundary condition.
-    This last assertion requires only coefficient invariance.
+    Consequently, if $0\ne\Psi(A^u)\in\ker h_R^{\mathrm{global}}$, then
+    $\operatorname{hol}_u(w)=1$ for every internal closed walk $w$ in $R$.
+    If a vertex gauge $g:R\to G$ trivializes all internal insertions
+    ($g_{h(e)}u_eg_{t(e)}^{-1}=1$ for all $e\in E_R$), then
+    $\mathcal G_R^u=\mathcal G_R$: crossing operators only relabel the boundary
+    condition, using only coefficient invariance.
     No $G$-isometry is assumed. This is a necessary local implication
     in the closure argument of \cite[Theorem~5.5]{Schuch2010PEPS};
     it does not assert that every parent-kernel vector admits an
@@ -43,21 +46,21 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    Apply a local $G$-injective inverse at every vertex of $R$.
-    This exposes the canonical regular half-edge coordinates, and
-    applying the original local coefficient maps restores each
-    regional ground vector. In spanning-tree coordinates, the
-    uninserted contraction is supported on identity cycle labels.
-    The inserted contraction is supported on simultaneous
-    conjugates of its cycle residuals. A nonidentity residual makes
-    these supports disjoint. Since the local coordinate map has a
-    left inverse on the regional ground spaces, their physical
-    intersection is also zero.
+    Applying $F_R=\bigotimes_{v\in R}F_v$ exposes the canonical regular
+    half-edge coordinates, and the product of the original local coefficient
+    maps $A_R=\bigotimes_{v\in R}A_v$ satisfies
+    $A_RF_R|_{\mathcal G_R}=\mathrm{id}_{\mathcal G_R}$. In spanning-tree
+    coordinates, $F_R(\mathcal G_R)$ is supported on identity cycle labels
+    $c=1$, whereas $F_R(\mathcal G_R^u)$ is supported on simultaneous
+    conjugates $(gr_c(u)g^{-1})_c$. Thus $r_c(u)\ne 1$ implies
+    $F_R(\mathcal G_R)\cap F_R(\mathcal G_R^u)=\{0\}$, and left invertibility
+    of $F_R$ on $\mathcal G_R$ yields $\mathcal G_R\cap\mathcal G_R^u=\{0\}$.
 
-    A common nonzero regional vector therefore forces all residuals
-    to be the identity. Evaluating the closed-walk word at
-    these residuals gives identity holonomy. Finally choose a
-    nonzero physical slice of the inserted global vector. It belongs
-    to the inserted regional ground space by contraction, and to
-    the original one by the original parent constraint.
+    A nonzero $\phi\in\mathcal G_R\cap\mathcal G_R^u$ therefore forces
+    $r_c(u)=1$ for all $c$, so evaluating the closed-walk word gives
+    $\operatorname{hol}_u(w)=1$. Finally, if $\Psi(A^u)\ne 0$ and
+    $h_R^{\mathrm{global}}\Psi(A^u)=0$, any nonzero slice
+    $\Psi(A^u)(\cdot,\tau)$ lies in $\mathcal G_R^u$ by contraction and in
+    $\mathcal G_R$ by the parent constraint, so
+    $\mathcal G_R\cap\mathcal G_R^u\ne\{0\}$.
 \end{proof}

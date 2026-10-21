@@ -6,22 +6,13 @@
         TNLean.PEPS.torusSweptPatchCoordinate,
         TNLean.PEPS.torusSweptPatchWitness}
     \leanok
-    Let the horizontal and vertical torus periods be at least seven and six,
-    respectively, and fix any translated position $v$. Write
-    $p(i,j)=(v_x+i,v_y+j)$, with coordinates taken modulo the periods.
-    In an auxiliary completion of the swept-string diagram in
-    \cite[fluxon-braiding passage]{Schuch2010PEPS}, the finite set $R_v$ is
-    formed by adjoining to the displayed four-column, three-row patch
-    $\{p(i,j):0\leq i\leq3,\ 0\leq j\leq2\}$ the side sites
-    \[
-        p(-1,1),\ p(-1,2),\ p(4,1),\ p(4,2)
-    \]
-    and the lower sites
-    \[
-        p(1,-1),\ p(2,-1),\ p(1,-2),\ p(2,-2).
-    \]
-    The distant lower partner lies beyond the final string detour; it is not
-    placed at the endpoint of the displayed lower bond.
+    On a torus with periods $L_x\ge 7$ and $L_y\ge 6$, fix $v=(v_x,v_y)$ and write $p(i,j)=(v_x+i,v_y+j)$.
+    In an auxiliary completion of the swept-string diagram of \cite[fluxon-braiding passage]{Schuch2010PEPS}, define the finite region
+    \begin{align}
+        R_v &= \{p(i,j) : 0\le i\le 3,\ 0\le j\le 2\} \cup \{p(-1,1),p(-1,2),p(4,1),p(4,2)\} \notag \\
+        &\quad \cup \{p(1,-1),p(2,-1),p(1,-2),p(2,-2)\}, \label{eq:swept_patch_region}
+    \end{align}
+    placing the lower partner beyond the final string detour rather than at the endpoint of the displayed lower bond.
 \end{definition}
 
 \begin{theorem}[The translated twenty-site geometry]
@@ -32,19 +23,10 @@
         TNLean.PEPS.torusSweptPatchCoordinate_adj_iff}
     \leanok
     \uses{def:peps_torus_swept_patch_endpoint_geometry}
-    The twenty specified vertices are distinct and $|R_v|=20$.
-    On their six-column, five-row coordinate envelope, native torus adjacency
-    holds exactly when one coordinate is equal and the other differs by one.
-    In particular, there are no additional periodic bonds in this envelope.
-    These assertions hold at every translated position, including either seam.
+    For $R_v$ in (\ref{eq:swept_patch_region}) at any position $v$ (including across either seam), the $20$ listed vertices $p(i,j)$ are distinct ($|R_v|=20$), and on their $6\times 5$ coordinate envelope $[-1,4]\times[-2,2]$, native torus adjacency satisfies $p(i,j)\sim p(i',j')\iff |i-i'|+|j-j'|=1$ (with no wrap-around bonds).
 \end{theorem}
 \begin{proof}\leanok
-    All coordinate offsets lie in intervals strictly shorter than their torus
-    periods, so equality of their residue classes implies equality of the
-    offsets. The same argument applies to unit differences, excluding an
-    additional wrap adjacency. Translation preserves both equality and
-    adjacency, and counting the twelve patch sites, the four side sites, and
-    the four lower sites gives $|R_v|=20$.
+    Since the offset spans $4-(-1)=5<L_x-1$ and $2-(-2)=4<L_y-1$, residue-class equality and unit differences on $[-1,4]\times[-2,2]$ agree with integer equality and unit differences, giving injectivity ($|R_v|=12+4+4=20$) and excluding wrap-around adjacency.
 \end{proof}
 
 \begin{definition}[Four endpoint loops and partner connectors]
@@ -55,18 +37,13 @@
         TNLean.PEPS.torusSweptPatchConnectorB}
     \leanok
     \uses{def:peps_torus_swept_patch_endpoint_geometry}
-    The four plaquette bases, in order, are
-    \[
-        A_2=p(-1,1),\quad A_1=p(3,1),\quad
-        B_1=p(1,1),\quad B_2=p(1,-2),
-    \]
-    with the clockwise four-bond plaquette loop at each base.
-    The $A_2$--$A_1$ connector goes up, then right four times, then down.
-    The $B_1$--$B_2$ connector goes down three times.
-    For the eventual bond assignments, a group element $s$ written along a
-    rightward or downward matrix arrow in the source figure corresponds to
-    native directed bond value $s^{-1}$. The value on an ordered bond is this
-    directed value or its inverse, according to its endpoint order.
+    Define the four plaquette bases
+    \begin{align}
+        A_2=p(-1,1),\qquad A_1=p(3,1),\qquad
+        B_1=p(1,1),\qquad B_2=p(1,-2), \label{eq:swept_patch_bases}
+    \end{align}
+    with their clockwise four-bond plaquette loops, the $A_2\to A_1$ connector (up once, right four times, down once), and the $B_1\to B_2$ connector (down three times).
+    A group element $s$ along a rightward or downward matrix arrow in the source figure corresponds to native directed bond value $s^{-1}$ (or its inverse if the ordered bond is reversed).
 \end{definition}
 
 \begin{theorem}[Loop and connector containment]
@@ -80,20 +57,10 @@
     \leanok
     \uses{thm:peps_torus_swept_patch_endpoint_geometry,
         def:peps_torus_swept_patch_endpoint_walks}
-    All four endpoint loops and both partner connectors are native
-    walks contained in $R_v$. The connectors have lengths six and three.
-    No extra adjacency or loop-containment assumption is needed.
-    This establishes only the finite geometry of an explicit four-endpoint
-    completion. It does not identify a physical operation with the prescribed
-    string braid, or assert parent-Hamiltonian membership.
+    All four endpoint loops at (\ref{eq:swept_patch_bases}) and both partner connectors are native walks contained in $R_v$, with connector lengths $6$ and $3$, respectively (establishing the finite four-endpoint geometry without identifying a physical braid operation or parent-Hamiltonian membership).
 \end{theorem}
 \begin{proof}\leanok
-    Listing the four corners of each endpoint plaquette and using the exact
-    unit adjacency relation establishes containment of the four loops.
-    The two connector lists consist respectively of seven
-    and four vertices of the specified coordinate set, where each successive
-    pair differs by one coordinate unit and every listed vertex belongs to
-    $R_v$.
+    By Theorem~\ref{thm:peps_torus_swept_patch_endpoint_geometry}, every vertex of the four plaquette loops and of the $7$- and $4$-vertex connector sequences lies in (\ref{eq:swept_patch_region}) with unit-offset successive steps.
 \end{proof}
 
 \begin{theorem}[Holonomy along the partner connectors]
@@ -102,21 +69,12 @@
         TNLean.PEPS.regularWalkHolonomy_torusSweptPatchConnectorB}
     \leanok
     \uses{def:peps_torus_swept_patch_endpoint_walks}
-    For any bond assignment, write $R(p)$ and $U(p)$ for its rightward and
-    upward directed bond values at $p$. The reverse-ordered connector holonomies
-    are
-    \[
-        H_A=U(p(3,1))^{-1}R(p(2,2))R(p(1,2))R(p(0,2))
-        R(p(-1,2))U(p(-1,1))
-    \]
-    and
-    \[
-        H_B=U(p(1,-2))^{-1}U(p(1,-1))^{-1}U(p(1,0))^{-1}.
-    \]
-    These equalities include the ordered-endpoint inversions at either seam.
+    Writing $R(p)$ and $U(p)$ for the rightward and upward directed bond values at $p$, the reverse-ordered holonomies of the connectors in Definition~\ref{def:peps_torus_swept_patch_endpoint_walks} (including across either seam) are
+    \begin{align}
+        H_A &= U(p(3,1))^{-1}R(p(2,2))R(p(1,2))R(p(0,2))R(p(-1,2))U(p(-1,1)), \label{eq:connector_A_holonomy} \\
+        H_B &= U(p(1,-2))^{-1}U(p(1,-1))^{-1}U(p(1,0))^{-1}. \label{eq:connector_B_holonomy}
+    \end{align}
 \end{theorem}
 \begin{proof}\leanok
-    Expanding the six and three successive traversals, reversing an upward
-    traversal replaces its bond value by its inverse, and concatenation
-    multiplies the successive step factors in reverse order.
+    Expanding the $6$-step and $3$-step walks of Definition~\ref{def:peps_torus_swept_patch_endpoint_walks} in reverse multiplication order, with downward steps contributing $U(\cdot)^{-1}$, gives (\ref{eq:connector_A_holonomy})--(\ref{eq:connector_B_holonomy}).
 \end{proof}

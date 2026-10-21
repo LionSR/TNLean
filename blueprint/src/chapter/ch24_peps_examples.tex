@@ -1380,19 +1380,15 @@ operators.
         TNLean.PEPS.torusLegRep_apply, TNLean.PEPS.torusDress}
     \leanok
     \uses{def:peps_torus_site_tensor}
-    Let every site $v$ of the torus carry a tensor $A_v$ with four virtual
-    indices, ordered top, right, down, left, and let every bond carry a
-    $D\times D$ matrix $O$: $O^{\mathrm h}_v$ on the horizontal bond from $v$
-    to $v+(1,0)$ and $O^{\mathrm v}_v$ on the vertical bond from $v+(0,1)$ to
-    $v$. Split every bond into its two ends, and give a labelling of the ends
-    the weight $O_{ij}$ on each bond whose head reads $i$ and whose tail
-    reads $j$. The network is the sum over all labellings of the ends of the
-    product of these weights and of the entries of the site tensors, each
-    reading the ends of its four legs. For a representation $g\mapsto U_g$ on
-    one bond, $U_g$ acts on the virtual system of a site by $U_g$ on the
-    incoming legs (top and left) and $U_g^{-1}$ on the outgoing legs (right
-    and down), each along the orientation of its edge
-    \cite[Section~``Two dimensions: $G$-injective PEPS'']{Schuch2010PEPS}.
+    Let each torus site $v$ carry a four-leg tensor $A_v=(A_v)_{t_v,r_v,d_v,\ell_v}$ (top, right, down, left), and place $D\times D$ matrices $O^{\mathrm h}_v$ on the horizontal bond $v\to v+(1,0)$ and $O^{\mathrm v}_v$ on the vertical bond $v+(0,1)\to v$. The dressed torus contraction is
+    \begin{align}
+        \mathcal N(A,O)
+         & =\sum_{t,r,d,\ell}\prod_v(A_v)_{t_v,r_v,d_v,\ell_v}
+        (O^{\mathrm h}_v)_{\ell_{v+(1,0)},r_v}
+        (O^{\mathrm v}_v)_{t_v,d_{v+(0,1)}}.
+        \label{eq:peps_torus_bond_network}
+    \end{align}
+    For a representation $g\mapsto U_g$ on $\C^D$, $U_g$ acts on the four legs of $v$ by $U_g\otimes U_g^{-1}\otimes U_g^{-1}\otimes U_g$ (incoming top/left, outgoing right/down) \cite[Section~``Two dimensions: $G$-injective PEPS'']{Schuch2010PEPS}.
 \end{definition}
 
 \begin{lemma}[Diagonal operators on the bonds]%
@@ -1402,17 +1398,11 @@ operators.
         TNLean.PEPS.stateCoeff_torusSiteTensor_eq_torusBondNetwork}
     \leanok
     \uses{def:peps_torus_bond_network, lem:peps_torus_site_tensor_contraction}
-    If every bond carries a diagonal matrix, the network is the sum over one
-    index per bond of the product of the diagonal entries and of the site
-    tensors. In particular, with the identity on every bond it is the
-    contraction of the site tensors, and for $w,h\ge3$ and $A_v=a^{\sigma(v)}$
-    it is the coefficient of the torus PEPS of $a$ at $\sigma$.
+    If every bond operator in (\ref{eq:peps_torus_bond_network}) is diagonal, $O=\operatorname{diag}(\omega)$, then $\mathcal N(A,O)$ sums over one index per bond weighted by $\prod_e\omega_{e,i_e}$. In particular, $\mathcal N(A,I)$ is the bare contraction of $A_v$, and for $w,h\ge3$ and $A_v=a^{\sigma(v)}$ it equals the torus PEPS coefficient of $a$ at $\sigma$ (Lemma~\ref{lem:peps_torus_site_tensor_contraction}).
 \end{lemma}
 
 \begin{proof}\leanok
-    The weight of a labelling vanishes unless the two ends of every bond
-    carry the same index, and the labellings with equal ends correspond to
-    the assignments of one index per bond.
+    Diagonal bond weights $(O_e)_{i,j}=\delta_{i,j}\omega_{e,i}$ vanish unless the two half-edge labels of each bond coincide.
 \end{proof}
 
 \begin{lemma}[Moving bond operators into the site tensors]%
@@ -1420,21 +1410,11 @@ operators.
     \lean{TNLean.PEPS.torusBondNetwork_gauge}
     \leanok
     \uses{def:peps_torus_bond_network}
-    Let $P_v$ and $Q_v$ be matrices at every site. Replacing the matrix $O$
-    of every bond by $P_{\text{head}}\,O\,Q_{\text{tail}}$ gives the same
-    network as keeping $O$ and replacing every site tensor $A_v$ by the
-    tensor that has absorbed $P_v$ into its incoming legs and $Q_v$ into its
-    outgoing legs.
+    For site matrices $P_v,Q_v$, replacing each bond operator $O_e$ ($e:u\to w$) in (\ref{eq:peps_torus_bond_network}) by $P_w O_e Q_u$ equals $\mathcal N(\widetilde A,O)$, where $\widetilde A_v$ absorbs $P_v$ on its incoming legs (top, left) and $Q_v$ on its outgoing legs (right, down).
 \end{lemma}
 
 \begin{proof}\leanok
-    Expanding each product $P\,O\,Q$ into its entries rewrites the network as a sum
-    over the labellings of the bond ends and over new intermediate indices;
-    exchanging the roles of the two families, the intermediate indices
-    become the labelling of the bond ends and the old labels become the
-    summation indices of the absorbed matrices at the sites. The factors
-    $P_{v+(1,0)}$ and $Q_{v+(0,1)}$ are reindexed by a unit shift of the
-    torus.
+    Expand $(P_w O_e Q_u)_{i,j}=\sum_{k,m}(P_w)_{i,k}(O_e)_{k,m}(Q_u)_{m,j}$ in (\ref{eq:peps_torus_bond_network}), exchange the summation order of $(i,j)$ and $(k,m)$, and reindex $P_{v+(1,0)}$ and $Q_{v+(0,1)}$ by unit torus shifts.
 \end{proof}
 
 \begin{theorem}[Deformation of a string of $U_g$'s]%
@@ -1446,35 +1426,16 @@ operators.
         TNLean.PEPS.IsGInjective.torusBondNetwork_westSouthOperatorString_eq}
     \leanok
     \uses{def:peps_g_injective, lem:peps_torus_bond_network_gauge}
-    Let $a$ be a four-leg tensor with $\mathcal{P}(a)U_g=\mathcal{P}(a)$ for
-    every $g$, the invariance clause of $G$-injectivity for the action of
-    Definition~\ref{def:peps_torus_bond_network}. Fix a rectangle of $m<w$
-    columns and $n<h$ rows of sites. A string of $U_g$'s carries $U_g$ on
-    the vertical bonds, which it crosses going right, and $U_g^{-1}$ on the
-    horizontal bonds, which it crosses going down. In the torus network of
-    $a$, the string along the left and bottom sides of the rectangle and the
-    string along its top and right sides give the same network
-    \cite[Section~``Two dimensions: $G$-injective PEPS'', eq.~(2d:move-strings)
-        and Lemma~``Deformations of the string'']{Schuch2010PEPS}. Only the
-    invariance is used: the source assumes that $U_g$ contains every
-    irreducible representation, and its argument, like this one, does not
-    use it.
+    Let $a$ satisfy $\mathcal{P}(a)(U_g\otimes U_g^{-1}\otimes U_g^{-1}\otimes U_g)=\mathcal{P}(a)$ for all $g\in G$ (Definition~\ref{def:peps_torus_bond_network}), and fix an $m\times n$ site rectangle $R$ with $m<w$ and $n<h$. Place $U_g$ on vertical bonds crossed rightward and $U_g^{-1}$ on horizontal bonds crossed downward. Then the operator string $O^{\mathrm{WS}}$ along the west and south boundary of $R$ and the string $O^{\mathrm{NE}}$ along its north and east boundary satisfy
+    \begin{align}
+        \mathcal N(a,O^{\mathrm{WS}}) & =\mathcal N(a,O^{\mathrm{NE}})
+        \label{eq:peps_torus_string_deformation}
+    \end{align}
+    \cite[Section~``Two dimensions: $G$-injective PEPS'', eq.~(2d:move-strings) and Lemma~``Deformations of the string'']{Schuch2010PEPS}. Only $U_g$-invariance is used (not completeness of irreducible sectors).
 \end{theorem}
 
 \begin{proof}\leanok
-    Let $\Phi_v=g^{-1}$ on the sites of the rectangle and $\Phi_v=1$
-    elsewhere, and apply Lemma~\ref{lem:peps_torus_bond_network_gauge} with
-    $P_v=U_{\Phi_v}$ and $Q_v=U_{\Phi_v}^{-1}$ to the second string. A bond
-    with both ends inside or both outside the rectangle carries the identity
-    in both strings and keeps it. A
-    bond entering the rectangle across its top side is multiplied by
-    $U_g^{-1}$ at its head, which cancels the $U_g$ of the second string; a
-    bond leaving it across its right side is multiplied by $U_g$ at its
-    tail, which cancels its $U_g^{-1}$. A bond entering across the left side
-    acquires $U_g^{-1}$ and a bond leaving across the bottom side acquires
-    $U_g$, which is the first string. By the invariance every site tensor
-    absorbs $U_{\Phi_v}$ on its incoming and $U_{\Phi_v}^{-1}$ on its
-    outgoing legs unchanged.
+    Set $\Phi_v=g^{-1}$ for $v\in R$ and $\Phi_v=1$ for $v\notin R$, and apply Lemma~\ref{lem:peps_torus_bond_network_gauge} to $O^{\mathrm{NE}}$ with $P_v=U_{\Phi_v}$ and $Q_v=U_{\Phi_v}^{-1}$. On bonds with both endpoints in $R$ or both outside $R$, $P_w I Q_u=I$. On north/east crossing bonds, $U_g^{-1}U_g=I$ cancels $O^{\mathrm{NE}}$; on west/south crossing bonds, $P_w I Q_u$ produces $U_g^{-1}$ (vertical) and $U_g$ (horizontal), yielding $O^{\mathrm{WS}}$. Finally $\widetilde a_v=a_v$ by $U_{\Phi_v}$-invariance.
 \end{proof}
 
 
@@ -2371,50 +2332,21 @@ operators.
         TNLean.PEPS.exists_integerLift_no_finite_cellHole_of_isSimplyConnected}
     \leanok
     \uses{thm:peps_torus_region_realization, thm:peps_torus_region_planar_lift}
-    For a finite set $A\subset\mathbb Z^2$, put
+    For a finite set $A\subset\mathbb Z^2$, the union
     \begin{align}
-        P_A & =\bigcup_{a\in A}\bigl(a+[-1/2,1/2]^2\bigr).
+        P_A & =\bigcup_{a\in A}\bigl(a+[-1/2,1/2]^2\bigr)
+        \label{eq:peps_integer_cell_union}
     \end{align}
-    This union is locally path connected. If $P_A$ is simply connected,
-    every component of $\mathbb Z^2\setminus A$ under horizontal and
-    vertical unit steps is infinite. More explicitly, no finite set
-    $K\subset\mathbb Z^2$ containing a point outside $A$ can have all
-    four neighbors of each of its points in $K\cup A$.
-
-    The cancellation used here holds for arbitrary horizontal and
-    vertical real edge values $H_a,V_a$: the sum over $K$ of
-    $H_a+V_{a+(1,0)}-H_{a+(0,1)}-V_a$ is the corresponding signed sum
-    over the exposed boundary edges of its cells.
-
-    Consequently, if the torus realization $X_R$ is simply
-    connected and $o\in R$, there exist integer coordinates $L$ which
-    preserve every native internal unit step and for which all missing
-    cell components of the planar realization $P_L$ are infinite.
-    Here $P_L=P_A$ for $A=L(R)$, so the conclusion concerns the
-    image of the torus covering lift. This is an auxiliary no-hole
-    theorem for \cite[Theorem~6.9]{Schuch2010PEPS}. The contour
-    argument below strengthens it to paths in the exterior collar.
+    is locally path connected. For any real edge values $H_a,V_a$ and finite $K\subset\mathbb Z^2$,
+    \begin{align}
+        \sum_{a\in K}\bigl(H_a+V_{a+(1,0)}-H_{a+(0,1)}-V_a\bigr)
+        \label{eq:peps_integer_grid_curl}
+    \end{align}
+    equals the signed sum over the exposed boundary edges of $K$. If $P_A$ is simply connected, no finite $K\subset\mathbb Z^2$ with $K\setminus A\ne\varnothing$ satisfies $a+\{\pm e_1,\pm e_2\}\subset K\cup A$ for all $a\in K$; hence every $\ell^1$-connected component of $\mathbb Z^2\setminus A$ is infinite. Consequently, if $X_R$ is simply connected and $o\in R$, there exists a unit-step integer lift $L:R\to\mathbb Z^2$ (Theorem~\ref{thm:peps_torus_region_planar_lift}) such that every missing-cell component of $P_L=P_{L(R)}$ is infinite (an auxiliary no-hole step for \cite[Theorem~6.9]{Schuch2010PEPS}).
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_finite_compact_cell_images}
-    Local path connectedness follows from the finite compact-cell
-    quotient theorem. Suppose $K$ is such a finite candidate and choose
-    a missing cell center in $K$, translated to the origin. Simple
-    connectedness gives a continuous real lift of the angular map on
-    $P_A$; subtracting this lift from the principal argument and dividing
-    by $2\pi$ defines at cell corners a real potential whose
-    horizontal increments vanish. Its vertical increment is one
-    precisely when the edge crosses the negative real ray from the
-    missing center, and is zero otherwise.
-
-    The potential is defined along every exposed side of $K$, since
-    its neighboring cell belongs to $A$. Summing its square curls
-    cancels all interior edges and gives zero. The same boundary
-    increments, evaluated by the branch-cut indicator, give total
-    curl minus one. This contradiction excludes the finite candidate,
-    and hence excludes every finite missing-cell component. Finally,
-    the covering lift identifies $X_R$ homeomorphically with
-    its integer cell union, so the torus conclusion follows.
+    Local path connectedness follows from Theorem~\ref{thm:peps_finite_compact_cell_images}. Suppose a finite $K\subset\mathbb Z^2$ satisfies $a+\{\pm e_1,\pm e_2\}\subset K\cup A$ for all $a\in K$ and contains $0\notin A$. Simple connectedness of $P_A$ yields a continuous angular lift $\theta:P_A\to\mathbb R$; subtracting $\theta/(2\pi)$ from the principal argument defines a corner potential whose horizontal increments vanish and whose vertical increment equals $\mathbf 1_{\{\text{edge crosses }(-\infty,0)\times\{0\}\}}$. Along $\partial K\subset P_A$, (\ref{eq:peps_integer_grid_curl}) vanishes by interior cancellation yet equals $-1$ from the branch cut, a contradiction. Theorem~\ref{thm:peps_torus_region_planar_lift} transfers this to $X_R\cong P_L$.
 \end{proof}
 
 \begin{definition}[Safe graph of an exterior integer-cell collar]%
@@ -3059,25 +2991,16 @@ operators.
         TNLean.PEPS.regularVertexGaugeOperators}
     \leanok
     \uses{thm:peps_regular_region_gauge_contraction}
-    Suppose the site coefficients are invariant under simultaneous left
-    translation of their incident group labels. For arbitrary vertex
-    gauges $k_v\in G$, replacing the inserted bond operators by
+    Suppose the site coefficients $a_v$ are invariant under simultaneous left translation of their incident group labels. For vertex gauges $k_v\in G$, replacing the bond operators $u_e$ on $e=(s,t)$ by
     \begin{align}
-        u_e' = k_t^{-1}u_e k_s,\qquad e=(s,t),
+        u_e' & = k_t^{-1}u_e k_s
+        \label{eq:peps_regular_closed_gauge}
     \end{align}
-    leaves every coefficient of the closed physical PEPS unchanged.
-    Neither connectedness nor isometry is required. This is the
-    regular-basis gauge identity underlying deformation of closure
-    strings in \cite[\S5.3]{Schuch2010PEPS}.
+    leaves every closed physical PEPS coefficient unchanged (without requiring connectedness or isometry \cite[\S5.3]{Schuch2010PEPS}).
 \end{theorem}
 
 \begin{proof}\leanok
-    In the original finite sum, replacing the reference label of each
-    oriented bond by $k_s^{-1}$ times that label multiplies the
-    resulting half-edge label by $k_s^{-1}$ at its tail and, by
-    cancellation, by $k_t^{-1}$ at its head. Thus every site's
-    incident labels have undergone one common translation, which leaves
-    its coefficient unchanged. The change of summed labels is bijective.
+    Reindexing each bond label $\eta_e\mapsto k_s^{-1}\eta_e$ on $e=(s,t)$ sends the tail half-edge label to $k_s^{-1}\eta_e$ and the head half-edge label to $u_e'k_s^{-1}\eta_e=k_t^{-1}u_e\eta_e$, left-translating all incident labels at each vertex $v$ by $k_v^{-1}$.
 \end{proof}
 
 \begin{theorem}[Nonabelian holonomy along native walks]%
@@ -6006,36 +5929,25 @@ around the two non-contractible cycles must be trivial.
     \leanok
     \uses{def:peps_quantum_double_dual, lem:peps_torus_site_tensor_contraction,
         lem:peps_torus_parallel_section}
-    Let $w,h\ge3$ and place the dual quantum-double tensor at every site of
-    the torus. Write $(s_1,s_2,s_3,s_4)$ for the top left, top right, bottom
-    right and bottom left spins of a site. A spin configuration obeys Gauss'
-    law if at every site $s_2s_1=s_3s_4$, and around the corner shared by
-    the sites $v$, $v+(1,0)$, $v+(1,1)$, $v+(0,1)$ the spins satisfy
-    $s_1(v+(1,0))\,s_2(v)=s_4(v+(1,1))\,s_3(v+(0,1))$, the local and the
-    plaquette terms of \cite[Section~``Examples'', ``The double
-        models'']{Schuch2010PEPS}. It has trivial holonomy if the ordered
-    products of $a_v=s_2(v)s_1(v)$ along the row $y=0$ and of
-    $b_v=s_4(v+(0,1))^{-1}s_1(v)$ along the column $x=0$ are the identity.
-    Then the coefficient of the contracted network is $|G|$ at every
-    configuration obeying Gauss' law with trivial holonomy, and $0$ at every
-    other configuration. So the state is the equal-weight superposition of
-    the Gauss-law configurations of trivial holonomy; those of nontrivial
-    holonomy do not occur on the torus
-    \cite{gap:rmp_peps_quantum_double_g_isometry}.
+    Let $w,h\ge3$ and place the dual quantum-double tensor at every torus site, with plaquette spins $(s_1,s_2,s_3,s_4)$ (top-left, top-right, bottom-right, bottom-left). A spin configuration obeys Gauss's law if
+    \begin{align}
+        s_2(v)s_1(v)          & =s_3(v)s_4(v),                                    &
+        s_1(v+(1,0))\,s_2(v)  & =s_4(v+(1,1))\,s_3(v+(0,1))
+        \label{eq:peps_qd_dual_gauss}
+    \end{align}
+    at every site $v$ \cite[Section~``Examples'', ``The double models'']{Schuch2010PEPS}, and has trivial holonomy if the ordered products of $a_v=s_2(v)s_1(v)$ along row $y=0$ and of $b_v=s_4(v+(0,1))^{-1}s_1(v)$ along column $x=0$ equal $1\in G$. Then the contracted network coefficient equals $|G|$ on configurations satisfying (\ref{eq:peps_qd_dual_gauss}) with trivial holonomy, and $0$ otherwise \cite{gap:rmp_peps_quantum_double_g_isometry}.
 \end{theorem}
 
 \begin{proof}\leanok
-    By Lemma~\ref{lem:peps_torus_site_tensor_contraction} the coefficient
-    counts the colorings of the horizontal and vertical bonds whose
-    differences are the given spins. Writing such a coloring in terms of the left
-    color $f_v$ and the top color $u_v$ of each site, the top left spin gives
-    $u_v=s_1(v)f_v$, the top right spin gives $f_{v+(1,0)}=a_vf_v$, the
-    bottom left spin of the site above gives $f_{v+(0,1)}=b_vf_v$, and the
-    bottom right spin is then equivalent to $s_2s_1=s_3s_4$ at $v$. Thus the
-    colorings are counted by the parallel sections of $a,b$ when the local
-    rule holds, and there are none otherwise. Under the local rule,
-    flatness of $a,b$ is the plaquette rule, and
-    Lemma~\ref{lem:peps_torus_parallel_section} counts the sections.
+    By Lemma~\ref{lem:peps_torus_site_tensor_contraction}, the coefficient counts bond colorings $(f_v,u_v)$ (left and top colors at $v$) matching $(s_1,s_2,s_3,s_4)$:
+    \begin{align}
+        u_v          & =s_1(v)f_v, &
+        f_{v+(1,0)}  & =a_vf_v,    &
+        f_{v+(0,1)}  & =b_vf_v,    &
+        s_2(v)s_1(v) & =s_3(v)s_4(v).
+        \notag
+    \end{align}
+    When the first identity of (\ref{eq:peps_qd_dual_gauss}) holds, colorings biject with parallel sections of $(a,b)$, whose flatness is the second identity of (\ref{eq:peps_qd_dual_gauss}); Lemma~\ref{lem:peps_torus_parallel_section} then gives $|G|$ sections for trivial holonomy and $0$ otherwise.
 \end{proof}
 
 \input{chapter/ch24_peps_quantum_double_source_construction}
@@ -6046,11 +5958,12 @@ around the two non-contractible cycles must be trivial.
     \lean{TNLean.PEPS.quantumDoublePrimalLabels,
         TNLean.PEPS.quantumDoublePrimalTensor}
     \leanok
-    A tensor carries the four edge spins $g_1,g_2,g_3,g_4$ of a plaquette (top
-    left, top right, bottom right, bottom left), and is $1$ when its virtual
-    labels are $g_1g_2$ (top), $g_2^{-1}g_3$ (right), $g_4g_3$ (down) and
-    $g_1g_4^{-1}$ (left), and $0$ otherwise \cite[Appendix~A, ``The Toric Code
-        and quantum double models'']{Cirac2021Matrix}.
+    The primal tensor $A^{g_1,g_2,g_3,g_4}_{t,r,b,l}$ with plaquette spins $(g_1,g_2,g_3,g_4)$ (top-left, top-right, bottom-right, bottom-left) equals $1$ when
+    \begin{align}
+        (t,r,b,l) & =(g_1g_2,\,g_2^{-1}g_3,\,g_4g_3,\,g_1g_4^{-1}),
+        \label{eq:peps_qd_primal_labels}
+    \end{align}
+    and $0$ otherwise \cite[Appendix~A, ``The Toric Code and quantum double models'']{Cirac2021Matrix}.
 \end{definition}
 
 \begin{theorem}[The primal virtual labels fuse to the identity]%
@@ -6061,30 +5974,16 @@ around the two non-contractible cycles must be trivial.
         TNLean.PEPS.character_mul_quantumDoublePrimalTensor}
     \leanok
     \uses{def:peps_quantum_double_primal}
-    On the support of the primal tensor the virtual labels satisfy
-    $t\,r\,b^{-1}l^{-1}=1$. Hence $\pi(t)\pi(r)\pi(b)^{-1}\pi(l)^{-1}=1$ for
-    every representation $\pi$ of $G$, in particular every irreducible one,
-    so that each entry of the tensor times the operator
-    $\pi(t)\pi(r)\pi(b)^{-1}\pi(l)^{-1}$, acting by $\pi$ on the top and
-    right legs and by $\pi^{-1}$ on the down and left legs, equals the same
-    entry times the identity. For a one-dimensional representation $\chi$
-    the tensor is invariant under this virtual action
-    \cite[Appendix~A, ``The Toric Code and quantum double
-        models'']{Cirac2021Matrix}. This is a statement about one tensor; the
-    resulting symmetry of the contracted network is
-    Theorem~\ref{thm:peps_quantum_double_primal_network}.
+    On the support (\ref{eq:peps_qd_primal_labels}), $t\,r\,b^{-1}l^{-1}=1$. Hence for every representation $\pi$ of $G$,
+    \begin{align}
+        \pi(t)\pi(r)\pi(b)^{-1}\pi(l)^{-1} & =I,
+        \label{eq:peps_qd_primal_fusion}
+    \end{align}
+    and for a character $\chi$, $\chi(t)\chi(r)\chi(b)^{-1}\chi(l)^{-1}A^{g_1,g_2,g_3,g_4}_{t,r,b,l}=A^{g_1,g_2,g_3,g_4}_{t,r,b,l}$ \cite[Appendix~A, ``The Toric Code and quantum double models'']{Cirac2021Matrix}. The resulting network string symmetry is Theorem~\ref{thm:peps_quantum_double_primal_network}.
 \end{theorem}
 
 \begin{proof}\leanok
-    $(g_1g_2)(g_2^{-1}g_3)(g_4g_3)^{-1}(g_1g_4^{-1})^{-1}
-        =g_1g_3g_3^{-1}g_4^{-1}g_4g_1^{-1}=1$.
-    Since $\pi$ is multiplicative,
-    \begin{align}
-        \pi(t)\pi(r)\pi(b)^{-1}\pi(l)^{-1}=\pi(t\,r\,b^{-1}l^{-1})=\pi(1)=1
-    \end{align}
-    on the support, which gives the operator identity entrywise. A
-    one-dimensional representation is the case of a character $\chi$, where
-    the identity reads $\chi(t)\chi(r)\chi(b)^{-1}\chi(l)^{-1}=1$.
+    From (\ref{eq:peps_qd_primal_labels}), $t\,r\,b^{-1}l^{-1}=(g_1g_2)(g_2^{-1}g_3)(g_4g_3)^{-1}(g_1g_4^{-1})^{-1}=1$; multiplicativity of $\pi$ gives (\ref{eq:peps_qd_primal_fusion}).
 \end{proof}
 
 \begin{theorem}[Virtual symmetry of the primal quantum-double network]%
@@ -6095,26 +5994,11 @@ around the two non-contractible cycles must be trivial.
         TNLean.PEPS.sum_smul_torusWestSouthString_quantumDoublePrimalPEPS_eq}
     \leanok
     \uses{def:peps_quantum_double_primal, lem:peps_torus_string_pull_through}
-    Place the primal quantum-double tensor at every site of the torus, and
-    let $\pi$ be a representation of $G$, in particular an irreducible one.
-    The virtual string that multiplies $\pi(g)$ for each bond with label $g$
-    it crosses can be pulled through every rectangle of sites of the
-    contracted network: inserted along the left and bottom sides of the
-    rectangle it gives the same network as inserted along its top and right
-    sides \cite[Appendix~A, ``The Toric Code and quantum double
-        models'']{Cirac2021Matrix}. Around one site the two paths give
-    $\pi(l)\pi(b)$ and $\pi(t)\pi(r)$, so the closed string around a site is
-    the operator $\pi(t)\pi(r)\pi(b)^{-1}\pi(l)^{-1}$ of
-    Theorem~\ref{thm:peps_quantum_double_primal_fusion}. The statement holds
-    on every torus of width and height at least two; the source's network,
-    with four distinct bonds at each site, is the case of width and height
-    at least three \cite{gap:rmp_peps_examples_small_torus}.
+    Place the primal tensor of Definition~\ref{def:peps_quantum_double_primal} at every site of a $w\times h$ torus ($w,h\ge2$; four distinct bonds per site for $w,h\ge3$ \cite{gap:rmp_peps_examples_small_torus}). For any representation $\pi$ of $G$, inserting $\pi(g)$ along the west and south boundary of a site rectangle yields the same contracted network as inserting $\pi(g)$ along its north and east boundary \cite[Appendix~A, ``The Toric Code and quantum double models'']{Cirac2021Matrix}; around a single site this reproduces (\ref{eq:peps_qd_primal_fusion}).
 \end{theorem}
 
 \begin{proof}\leanok
-    On the support of the primal tensor $t\,r\,b^{-1}l^{-1}=1$, so
-    $tr=lb$ and $\pi(t)\pi(r)=\pi(l)\pi(b)$. This is the hypothesis of
-    Lemma~\ref{lem:peps_torus_string_pull_through} for $X_g=\pi(g)$.
+    On the support (\ref{eq:peps_qd_primal_labels}), $tr=lb$, so $\pi(t)\pi(r)=\pi(l)\pi(b)$; apply Lemma~\ref{lem:peps_torus_string_pull_through} with $X_g=\pi(g)$.
 \end{proof}
 
 \input{chapter/ch24_peps_toric_code_primal}
@@ -6158,6 +6042,8 @@ around the two non-contractible cycles must be trivial.
 
 \input{chapter/ch24_peps_g_injective_strip_parent_ground_space}
 
+\section{Semi-regular bond states and Fourier coordinates}%
+\label{sec:peps_semiregular_bond_fourier}
 \input{chapter/ch24_peps_zmod_small_difference}
 \input{chapter/ch24_peps_unitary_vector_swap}
 \input{chapter/ch24_peps_permutation_matrix_commutation}
@@ -6207,6 +6093,9 @@ around the two non-contractible cycles must be trivial.
 \input{chapter/ch24_peps_graph_inserted_semiregular_equivalence}
 \input{chapter/ch24_peps_graph_inserted_semiregular_factory}
 \input{chapter/ch24_peps_physical_support}
+
+\section{Flux creation, transport, and swept-string deformation}%
+\label{sec:peps_flux_transport_and_strings}
 \input{chapter/ch24_peps_two_plaquette_geometry}
 \input{chapter/ch24_peps_regular_two_cycle_flux_move}
 \input{chapter/ch24_peps_regular_cycle_permutation}
@@ -6256,6 +6145,9 @@ around the two non-contractible cycles must be trivial.
 \input{chapter/ch24_peps_torus_swept_route_joint_flux_measurement}
 \input{chapter/ch24_peps_torus_swept_physical_route_measurement}
 \input{chapter/ch24_peps_dual_flux_string_deformation}
+
+\section{Charge pairs, string motion, and charge--flux braiding}%
+\label{sec:peps_charge_pairs_and_braiding}
 \input{chapter/ch24_peps_regular_charge_coordinates}
 \input{chapter/ch24_peps_regular_charge_subspace}
 \input{chapter/ch24_peps_regular_charge_detector_matrix}

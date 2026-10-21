@@ -54,15 +54,17 @@ $\mathcal P_{\mathcal R}(A)$ for the common regional parent space.
     \leanok
     Suppose $U$ is semi-regular and
     $U(g)=Q(\bigoplus_iD_i(g)\otimes I_{m_i})Q^\dagger$.
-    Then $\bigoplus_iD_i$ is semi-regular. This implication does not
-    require $Q$ to be isometric, or the $D_i$ to be irreducible.
+    Then $D=\bigoplus_iD_i$ is semi-regular, without requiring $Q$ to be
+    isometric or the $D_i$ to be irreducible.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_semiregular_group_algebra,lem:peps_twirled_representation}
-    Semi-regularity is equivalent to linear independence of the group
-    operators. If $\sum_gc_gD(g)=0$, each diagonal block gives
-    $\sum_gc_gD_i(g)=0$. Tensoring with $I_{m_i}$ and conjugating by $Q$
-    yields $\sum_gc_gU(g)=0$. Hence every $c_g$ is zero.
+    By Theorem~\ref{thm:peps_semiregular_group_algebra}, semi-regularity is
+    equivalent to linear independence of $\{D(g)\}_{g\in G}$. If
+    $\sum_gc_gD(g)=0$, then $\sum_gc_gD_i(g)=0$ for each $i$, so
+    Lemma~\ref{lem:peps_twirled_representation} gives
+    $\sum_gc_gU(g)=Q(\bigoplus_i(\sum_gc_gD_i(g))\otimes I_{m_i})Q^\dagger=0$,
+    hence $c_g=0$ for all $g\in G$.
 \end{proof}
 
 \begin{theorem}[The character after dimension multiplicities]%
@@ -78,8 +80,8 @@ $\mathcal P_{\mathcal R}(A)$ for the common regional parent space.
     Then $\chi_D=\sum_i\chi_{D_i}$ and
     $\chi_{D^{[d]}}=\sum_id_i\chi_{D_i}$.
     If each $D_i$ is irreducible and $D$ is semi-regular, the occurring
-    irreducible characters are exactly $\{\chi_{D_i}:i\in I\}$.
-    If these characters are also pairwise distinct, then
+    irreducible characters are $\{\chi_{D_i}:i\in I\}$; if they are also
+    pairwise distinct, then
     \begin{align}
         \chi_{D^{[d]}}(g) & =\chi_{\mathrm{reg}}(g)
         =\begin{cases}|G|,&g=1,\\0,&g\ne1,\end{cases}
@@ -89,12 +91,12 @@ $\mathcal P_{\mathcal R}(A)$ for the common regional parent space.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_semiregular_trace}
-    Traces add under direct sums and multiply under tensor products.
-    Character orthogonality shows that an irreducible character absent
-    from all the summands has zero multiplicity. Conversely, semi-regularity
-    includes every irreducible character of the regular representation.
-    Its character expansion is therefore $\sum_id_i\chi_{D_i}$, with
-    no repetitions. Evaluating at the identity gives the dimension formula.
+    By Theorem~\ref{thm:peps_semiregular_trace}, traces are additive under
+    $\bigoplus$ and multiplicative under $\otimes$, and character
+    orthogonality with semi-regularity identifies $\{\chi_{D_i}:i\in I\}$ as
+    the complete set of irreducible characters of $G$. Hence
+    $\chi_{D^{[d]}}=\sum_id_i\chi_{D_i}=\chi_{\mathrm{reg}}$, and evaluating
+    at $g=1$ gives $\sum_i d_i^2=\chi_{D^{[d]}}(1)=|G|$.
 \end{proof}
 
 \begin{definition}[Fourier coefficient matrices]%
@@ -105,7 +107,7 @@ $\mathcal P_{\mathcal R}(A)$ for the common regional parent space.
     For $a,b\in\{0,\ldots,d_i-1\}$ and $g\in G$, define
     \begin{align}
         T_{(i,a,b),g} & =D_i(g)_{a,b},
-                      & \widehat T_{(i,a,b),g} & =sqrt{\frac{d_i}{|G|}}D_i(g)_{a,b}.
+                      & \widehat T_{(i,a,b),g} & =\sqrt{\frac{d_i}{|G|}}D_i(g)_{a,b}.
         \label{eq:peps_semiregular_block_fourier}
     \end{align}
 \end{definition}
@@ -119,33 +121,33 @@ $\mathcal P_{\mathcal R}(A)$ for the common regional parent space.
         TNLean.PEPS.exists_isometry_multiplicityRestored_leftRegular}
     \leanok
     \uses{def:peps_semiregular_block_fourier}
-    For arbitrary $D_i$, $TL(g)=D^{[d]}(g)T$, where $L$ is the left
-    regular representation. If $D$ is semi-regular, $T$ is injective.
-    If the $D_i$ are also irreducible with pairwise distinct characters,
-    $T$ is invertible and $D^{[d]}$ and $L$ are equivalent: there are
-    matrices $S,R$ with $RS=SR=I$ and $L(g)=SD^{[d]}(g)R$.
-    If the $D_i$ are unitary, one may take $Q=\widehat T^\dagger$, giving
+    For arbitrary $D_i$, the left regular representation $L$ satisfies
+    $TL(g)=D^{[d]}(g)T$. If $D$ is semi-regular, $T$ is injective; if the
+    $D_i$ are also irreducible with pairwise distinct characters, $T$ is
+    invertible and there exist $S,R$ with $RS=SR=I$ and $L(g)=SD^{[d]}(g)R$.
+    If the $D_i$ are unitary, $Q=\widehat T^\dagger$ satisfies
     \begin{align}
-        Q^\dagger Q=I,\qquad QQ^\dagger=I,\qquad
-        L(g)=QD^{[d]}(g)Q^\dagger.
+        Q^\dagger Q &= I, & QQ^\dagger &= I, & L(g) &= QD^{[d]}(g)Q^\dagger.
         \label{eq:peps_semiregular_unitary_fourier}
     \end{align}
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_semiregular_regular_character,lem:peps_twirled_representation}
-    Multiplicativity of $D_i$ gives $TL(g)=D^{[d]}(g)T$.
-    If $Tc=0$, all matrix coefficients of $\sum_gc_gD(g)$ vanish;
-    semi-regularity forces $c=0$. The dimension identity in
-    (\ref{eq:peps_semiregular_regular_character}) makes $T$ bijective.
-    For unitary blocks, direct multiplication gives
+    Multiplicativity $D_i(gh)=D_i(g)D_i(h)$ gives $TL(g)=D^{[d]}(g)T$
+    (Lemma~\ref{lem:peps_twirled_representation}). If $Tc=0$, then
+    $\sum_gc_gD(g)=0$, so semi-regularity forces $c=0$; $\sum_i d_i^2=|G|$
+    in~(\ref{eq:peps_semiregular_regular_character}) then makes $T$
+    bijective. When each $D_i$ is unitary,
+    (\ref{eq:peps_semiregular_regular_character}) gives
     \begin{align}
         (\widehat T^\dagger\widehat T)_{g,h}
-        =|G|^{-1}\sum_id_i\operatorname{tr}D_i(g^{-1}h)
-        =\delta_{g,h}.
+        =|G|^{-1}\sum_id_i\tr D_i(g^{-1}h)
+        =|G|^{-1}\chi_{D^{[d]}}(g^{-1}h)
+        =\delta_{g,h},
     \end{align}
-    Equal dimensions give the other inverse identity. The row weights
-    commute with $D^{[d]}$, so the intertwining identity also holds for
-    $\widehat T$, proving~(\ref{eq:peps_semiregular_unitary_fourier}).
+    and $\sum_i d_i^2=|G|$ gives $\widehat T\widehat T^\dagger=I$. Since the
+    row weights $\sqrt{d_i/|G|}$ commute with $D^{[d]}(g)$,
+    $\widehat TL(g)=D^{[d]}(g)\widehat T$, yielding~(\ref{eq:peps_semiregular_unitary_fourier}).
 \end{proof}
 
 \subsection{The oriented incident action}
@@ -172,11 +174,11 @@ $\mathcal P_{\mathcal R}(A)$ for the common regional parent space.
         \label{eq:peps_semiregular_incident_action}
     \end{align}
     Thus a head carries $U(g)$ and a tail carries $U(g^{-1})^{\mathsf T}$.
-    A numbering $\{0,\ldots,|X|-1\}\cong X$ gives a coefficient-space
-    isomorphism $J_v$ from numbered virtual labels to $\mathcal V_v$.
-    Define the numbered action by $\rho_v^{\mathrm{num}}=J_v^{-1}\rho_vJ_v$.
-    A physical enumeration $e_v:X^{\operatorname{Inc}(v)}\cong
-        \{0,\ldots,p-1\}$ similarly gives $E_v:\mathcal V_v\cong\C^p$.
+    A numbering $\{0,\ldots,|X|-1\}\cong X$ induces an isomorphism
+    $J_v:\mathcal V_v^{\mathrm{num}}\xrightarrow{\sim}\mathcal V_v$ and the
+    numbered action $\rho_v^{\mathrm{num}}=J_v^{-1}\rho_vJ_v$; a physical
+    enumeration $e_v:X^{\operatorname{Inc}(v)}\cong\{0,\ldots,p-1\}$ induces
+    $E_v:\mathcal V_v\xrightarrow{\sim}\C^p$.
 \end{definition}
 
 \begin{theorem}[The canonical averaging tensor is G-injective]%
@@ -192,23 +194,19 @@ $\mathcal P_{\mathcal R}(A)$ for the common regional parent space.
     \leanok
     \uses{def:peps_semiregular_incident_action,def:peps_g_injective}
     The matrices in~(\ref{eq:peps_semiregular_incident_action}) satisfy
-    $\rho_v(1)=I$ and $\rho_v(gh)=\rho_v(g)\rho_v(h)$, and act on
-    coefficient functions by matrix multiplication.
-    The unweighted averaging site has local map
-    $P_v=|G|^{-1}\sum_g\rho_v(g)$.
-    It is $G$-injective for $\rho_v$.
-    In numbered coordinates its local map is $A_v=E_vP_vJ_v$ and is
-    $G$-injective for $\rho_v^{\mathrm{num}}$.
-    No unitarity or semi-regularity assumption is required here.
+    $\rho_v(1)=I$ and $\rho_v(gh)=\rho_v(g)\rho_v(h)$. The unweighted
+    averaging site has local map $P_v=|G|^{-1}\sum_{g\in G}\rho_v(g)$, which
+    is $G$-injective for $\rho_v$ (Definition~\ref{def:peps_g_injective}), and
+    in numbered coordinates its local map $A_v=E_vP_vJ_v$ is $G$-injective for
+    $\rho_v^{\mathrm{num}}$, without assuming unitarity or semi-regularity of $U$.
 \end{theorem}
 \begin{proof}\leanok
-    Products of independent incident indices separate into products of
-    matrix products. At a tail, inversion and transposition each reverse
-    the order, giving multiplicativity. Expanding the averaging site
-    yields $P_v$. Averaging gives $P_v\rho_v(g)=P_v$ and fixes every
-    invariant vector, hence is injective on the invariant subspace.
-    Conjugation by $J_v$ preserves invariance, and $E_v$ is injective;
-    therefore $E_vP_vJ_v$ has the same two $G$-injectivity properties.
+    Factoring~(\ref{eq:peps_semiregular_incident_action}) over
+    $f\in\operatorname{Inc}(v)$ and using
+    $U((gh)^{-1})^{\mathsf T}=U(g^{-1})^{\mathsf T}U(h^{-1})^{\mathsf T}$ at
+    tails gives $\rho_v(gh)=\rho_v(g)\rho_v(h)$. Group averaging gives
+    $P_v\rho_v(g)=P_v$ and $P_v|_{\mathcal V_v^G}=\mathrm{id}_{\mathcal V_v^G}$,
+    hence $G$-injectivity of $P_v$ and of $A_v=E_vP_vJ_v$.
 \end{proof}
 
 \subsection{Equivalence of the complete parent spaces}
@@ -232,36 +230,34 @@ $\mathcal P_{\mathcal R}(A)$ for the common regional parent space.
     \leanok
     \uses{def:peps_semiregular_incident_enumeration}
     Suppose one unitary semi-regular representation $U$ is used on all
-    edges, $|\operatorname{Inc}(v)|=k$ for every vertex, and every edge
-    has both endpoints in some region $R_i$. For any common physical
-    enumeration $e$ of the incident $X$-labels, there is a linear
-    isomorphism
+    edges, $|\operatorname{Inc}(v)|=k$ for every $v\in V$, and every edge
+    has both endpoints in some $R_i\in\mathcal R$. For any common physical
+    enumeration $e$ of the incident $X$-labels,
     \begin{align}
         \mathcal P_{\mathcal R}(A(U,e))
-        \cong\mathcal P_{\mathcal R}(A_{\mathrm{reg}}).
+        \cong\mathcal P_{\mathcal R}(A_{\mathrm{reg}}),
         \label{eq:peps_semiregular_canonical_parent_equivalence}
     \end{align}
-    The dimensions are equal. For a finite region family, the kernels
-    of any positive local parent Hamiltonians with these exact regional
-    ranges are also linearly isomorphic.
+    with equal dimensions, and for finite $\mathcal R$ the kernels of any
+    positive local parent Hamiltonians with regional kernels
+    $\mathcal G_{R_i}(A(U,e))$ and $\mathcal G_{R_i}(A_{\mathrm{reg}})$ are
+    linearly isomorphic.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_semiregular_matrix_blocks,
         thm:peps_semiregular_block_fourier,
         thm:peps_copy_positive_parent,
         thm:peps_fourier_coordinate_parent,thm:peps_region_parent_common_kernel}
-    With $D_i,d_i,m_i,Q$ obtained from
-    Theorem~\ref{thm:peps_semiregular_matrix_blocks},
-    $Q^\dagger$ maps canonical parents from $U$ to $D^{[m]}$,
-    Theorem~\ref{thm:peps_copy_positive_parent} changes the positive
-    copy family $m_i$ to $d_i$, and the normalized Fourier matrix
-    maps $D^{[d]}$ to $L$ by
-    Theorem~\ref{thm:peps_fourier_coordinate_parent}.
-    Constant incidence provides the intermediate common alphabets, and
-    edge coverage provides the supported inverse for the copy change.
-    Composing these three isomorphisms gives the parent-space isomorphism,
-    while positivity identifies the kernel of each parent Hamiltonian
-    with its common regional parent space.
+    With $D_i,d_i,m_i,Q$ from Theorem~\ref{thm:peps_semiregular_matrix_blocks},
+    $Q^\dagger$ induces $\mathcal P_{\mathcal R}(A(U,e))\cong\mathcal P_{\mathcal R}(A(D^{[m]},e^{X^{[m]}}))$,
+    Theorem~\ref{thm:peps_copy_positive_parent} gives
+    $\mathcal P_{\mathcal R}(A(D^{[m]},e^{X^{[m]}}))\cong\mathcal P_{\mathcal R}(A(D^{[d]},e^{X^{[d]}}))$,
+    and Theorems~\ref{thm:peps_semiregular_block_fourier}
+    and~\ref{thm:peps_fourier_coordinate_parent} give
+    $\mathcal P_{\mathcal R}(A(D^{[d]},e^{X^{[d]}}))\cong\mathcal P_{\mathcal R}(A_{\mathrm{reg}})$.
+    Composing these yields~(\ref{eq:peps_semiregular_canonical_parent_equivalence}),
+    and Theorem~\ref{thm:peps_region_parent_common_kernel} identifies the
+    positive Hamiltonian kernels with the two parent spaces.
 \end{proof}
 
 \begin{theorem}[Physical G-injective tensors and their canonical parents]%
@@ -271,23 +267,20 @@ $\mathcal P_{\mathcal R}(A)$ for the common regional parent space.
     \uses{def:peps_semiregular_incident_action,def:peps_g_injective}
     Let $A_v:\mathcal V_v^{\mathrm{num}}\to\C^p$ be $G$-injective
     for $\rho_v^{\mathrm{num}}$, and let $e$ enumerate the canonical
-    physical incident space, possibly with another dimension $q$.
-    If every vertex belongs to a region $R_i$, then
-    $\mathcal P_{\mathcal R}(A)\cong
-        \mathcal P_{\mathcal R}(A(U,e))$.
-    Neither constant incidence nor semi-regularity is needed for this
-    fixed-representation comparison, for any given enumeration $e$.
+    physical incident space. If $\mathcal R=(R_i)_i$ covers $V$, then
+    $\mathcal P_{\mathcal R}(A)\cong\mathcal P_{\mathcal R}(A(U,e))$, without
+    requiring constant incidence or semi-regularity.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_semiregular_averaging_g_injective,
         thm:peps_range_parent_g_comparison,
         thm:peps_range_parent_equivalence}
-    The canonical averaging tensor is $G$-injective for the same
-    incident action. The fixed-representation comparison provides
-    physical maps $F_v$ that are injective on its site images and
-    satisfy $A_v=F_vA(U,e)_v$. Vertex coverage makes the restriction of
-    $\bigotimes_vF_v$ an isomorphism of the parent spaces, and its inverse
-    gives the stated isomorphism.
+    By Theorem~\ref{thm:peps_semiregular_averaging_g_injective}, $A(U,e)_v$ is
+    $G$-injective for $\rho_v^{\mathrm{num}}$. Theorem~\ref{thm:peps_range_parent_g_comparison}
+    provides maps $F_v$ injective on $\operatorname{im}A(U,e)_v$ with
+    $A_v=F_vA(U,e)_v$, and Theorem~\ref{thm:peps_range_parent_equivalence}
+    shows that $\bigotimes_{v\in V}F_v$ restricts under vertex coverage to an
+    isomorphism $\mathcal P_{\mathcal R}(A(U,e))\xrightarrow{\sim}\mathcal P_{\mathcal R}(A)$.
 \end{proof}
 
 \begin{theorem}[Complete kernels for semi-regular G-injective tensors]%
@@ -298,13 +291,11 @@ $\mathcal P_{\mathcal R}(A)$ for the common regional parent space.
     \leanok
     \uses{def:peps_semiregular_incident_action,
         def:peps_semiregular_incident_enumeration,def:peps_region_parent_interaction}
-    Let $U:G\to\operatorname{Mat}_X(\C)$ be one unitary semi-regular
-    representation used uniformly on the edges of the finite ordered
-    simple graph. Suppose $|\operatorname{Inc}(v)|=k$ at every vertex
-    and $A_v:\mathcal V_v^{\mathrm{num}}\to\C^p$ is $G$-injective
-    for the oriented action $\rho_v^{\mathrm{num}}$.
-    Assume that every vertex is in some $R_i$, and that every edge has
-    both endpoints in some $R_i$. Then
+    Let $U:G\to\operatorname{Mat}_X(\C)$ be a unitary semi-regular
+    representation used uniformly on $E$, with $|\operatorname{Inc}(v)|=k$ and
+    $A_v:\mathcal V_v^{\mathrm{num}}\to\C^p$ $G$-injective for
+    $\rho_v^{\mathrm{num}}$ at every $v\in V$. If $\mathcal R=(R_i)_i$ covers
+    both $V$ and $E$, then
     \begin{align}
         \mathcal P_{\mathcal R}(A) & \cong
         \mathcal P_{\mathcal R}(A_{\mathrm{reg}}),
@@ -312,28 +303,26 @@ $\mathcal P_{\mathcal R}(A)$ for the common regional parent space.
         \dim\mathcal P_{\mathcal R}(A_{\mathrm{reg}}).
         \label{eq:peps_semiregular_physical_parent_equivalence}
     \end{align}
-    If the region family is finite, let $H_i,K_i\ge0$ satisfy
-    $\ker H_i=\mathcal G_{R_i}(A)$ and
-    $\ker K_i=\mathcal G_{R_i}(A_{\mathrm{reg}})$.
-    Their sums over the corresponding region placements obey
-    $\ker H\cong\ker K$.
-    The physical dimension $p$ need not equal $|G|^k$.
+    For finite $\mathcal R$ and interactions $H_i,K_i\ge0$ with
+    $\ker H_i=\mathcal G_{R_i}(A)$ and $\ker K_i=\mathcal G_{R_i}(A_{\mathrm{reg}})$,
+    the global sums $H=\sum_i H_i^{\mathrm{global}}$ and
+    $K=\sum_i K_i^{\mathrm{global}}$ satisfy $\ker H\cong\ker K$, with no
+    requirement that $p=|G|^k$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_semiregular_physical_canonical_parent,
         thm:peps_semiregular_canonical_parent_equivalence,thm:peps_region_parent_common_kernel}
-    In the common incident enumeration $e^X$, the composition
+    In the enumeration $e^X$ of Definition~\ref{def:peps_semiregular_incident_enumeration},
+    Theorems~\ref{thm:peps_semiregular_physical_canonical_parent}
+    and~\ref{thm:peps_semiregular_canonical_parent_equivalence} compose to
     \begin{align}
         \mathcal P_{\mathcal R}(A)
         \cong\mathcal P_{\mathcal R}(A(U,e^X))
-        \cong\mathcal P_{\mathcal R}(A_{\mathrm{reg}})
+        \cong\mathcal P_{\mathcal R}(A_{\mathrm{reg}}),
     \end{align}
-    combines the vertex-coverage comparison with the edge-coverage,
-    constant-incidence, and semi-regularity comparison.
-    Dimensions are preserved by linear isomorphisms.
-    For positive interactions, $\langle\psi,H\psi\rangle=0$ holds
-    exactly when every regional term annihilates $\psi$; hence
-    $\ker H=\mathcal P_{\mathcal R}(A)$ and likewise for $K$.
+    giving~(\ref{eq:peps_semiregular_physical_parent_equivalence}), and
+    Theorem~\ref{thm:peps_region_parent_common_kernel} gives
+    $\ker H=\mathcal P_{\mathcal R}(A)\cong\mathcal P_{\mathcal R}(A_{\mathrm{reg}})=\ker K$.
 \end{proof}
 
 % Scope: these ordered-simple-graph, uniform-U statements do not themselves
