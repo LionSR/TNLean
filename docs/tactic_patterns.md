@@ -8585,3 +8585,17 @@ spectral split → block extraction → MPV calculation → strict bounds
   constants and their inequalities. The constants must remain uniform in
   the clearance and physical data. These are two occurrences across two
   files; no promotion or proof refactor is proposed.
+
+### Commutator decay from the least support distance — candidate (2026-10-21)
+
+- **Pattern:** Choose anchors from nonempty interaction supports, take the
+  infimum of distances from the initial support to the observed site, separate
+  infinite distance from finite distance, and weaken exponential decay from
+  exponent one to one half.
+- **Seen:** `norm_heisenberg_commutator_le_chainDistance` in
+  `MPS/AreaLaw/LiebRobinson.lean` and
+  `norm_heisenberg_commutator_le_domainDistance` in
+  `MPS/AreaLaw/DomainLiebRobinson.lean`.
+- **Notes:** Two occurrences. Their infinite-distance arguments differ:
+  the finite path is connected, whereas an induced domain uses exact
+  commutation across components. No further abstraction is proposed yet.

@@ -36,14 +36,14 @@ The formalization first states the model on the chain of $L$ sites, with sites
 $\{0,\ldots,L-1\}$, supports of range $R$ the nonempty sets of sites of
 diameter at most $R$, and the Hamiltonian, gapped ground vector, regional
 entropies and boundary edges as in the note.\footnote{Declarations:
-\leanid{TNLean.MPS.AreaLaw.IsChainSupport},
-\leanid{TNLean.MPS.AreaLaw.ChainHamiltonian},
-\leanid{TNLean.MPS.AreaLaw.boundaryEdges}.} Theorem~A is proved on this
+    \leanid{TNLean.MPS.AreaLaw.IsChainSupport},
+    \leanid{TNLean.MPS.AreaLaw.ChainHamiltonian},
+    \leanid{TNLean.MPS.AreaLaw.boundaryEdges}.} Theorem~A is proved on this
 chain for every subset $A$, with the explicit constant
 $C_0(q,R)(1+J/\Delta)$.\footnote{Declarations:
-\leanid{TNLean.MPS.AreaLaw.regionEntropy_interval_le},
-\leanid{TNLean.MPS.AreaLaw.regionEntropy_le_mul_card_boundaryEdges},
-\leanid{TNLean.MPS.AreaLaw.chainAreaLaw}.} Theorem~B of the note is stated on
+    \leanid{TNLean.MPS.AreaLaw.regionEntropy_interval_le},
+    \leanid{TNLean.MPS.AreaLaw.regionEntropy_le_mul_card_boundaryEdges},
+    \leanid{TNLean.MPS.AreaLaw.chainAreaLaw}.} Theorem~B of the note is stated on
 the chain of $L$ sites in the note itself, so it carries no restriction.
 
 \section{Resolution: arbitrary finite domains}
@@ -51,10 +51,10 @@ the chain of $L$ sites in the note itself, so it carries no restriction.
 Theorem~A is now formalized for every finite $\Lambda\subset\mathbb Z$, with
 no hypothesis beyond the source's and with the constant
 $C_0(q,R)(1+J/\Delta)$ of the chain case.\footnote{Declarations:
-\leanid{TNLean.MPS.AreaLaw.DomainHamiltonian},
-\leanid{TNLean.MPS.AreaLaw.domainBoundaryEdges},
-\leanid{TNLean.MPS.AreaLaw.regionEntropy_le_mul_card_domainBoundaryEdges},
-\leanid{TNLean.MPS.AreaLaw.domainAreaLaw}.} The sites of $\Lambda$ are
+    \leanid{TNLean.MPS.AreaLaw.DomainHamiltonian},
+    \leanid{TNLean.MPS.AreaLaw.domainBoundaryEdges},
+    \leanid{TNLean.MPS.AreaLaw.regionEntropy_le_mul_card_domainBoundaryEdges},
+    \leanid{TNLean.MPS.AreaLaw.domainAreaLaw}.} The sites of $\Lambda$ are
 labelled $0,\ldots,|\Lambda|-1$ in increasing order, the supports are the
 nonempty sets of graph diameter at most $R$ in the induced path graph, and
 $\partial_\Lambda A$ is the set of edges $\{x,x+1\}\subseteq\Lambda$ with
@@ -86,14 +86,30 @@ reset the standing notation for $\Lambda$, however, so its broader reading
 also includes arbitrary finite induced-path domains. The contiguous
 formulation is not a formalization of that unrestricted reading.
 
-For an arbitrary finite $\Lambda\subset\mathbb Z$, the additional geometric
-argument is to identify distances inside each component, bound each distance
-sphere by two vertices, and bound a support of graph diameter at most $R$ by
-$R+1$ sites. Supports of finite graph diameter lie in one component; operators
-at infinite separation commute exactly. These facts allow the general graph
-estimates to be applied with the same uniform constants. This extension of
-the local estimates does not require the product decomposition of ground
-vectors needed for the entropy argument above.
+\subsection{Resolution of the commutator estimate}
+
+The commutator estimate is proved for arbitrary finite induced integer domains.
+For a finite family of Hermitian terms supported on nonempty sets of graph
+diameter at most $R$, with per-site norm sum at most $b_0$, one may take
+\begin{align}
+    C & = 2+4|b_0|e^{2R},      &
+    v & = 2(R+1)|b_0|e^{2R}+1.
+    \label{eq:tnlean_one_dimensional_connected_domain_scope_domain_constants}
+\end{align}
+The bound is $C|S|\|A\|\|B_y\|e^{v|t|-d_\Lambda(S,y)/2}$ for every
+finite initial support $S$, with the exponential factor interpreted as zero
+at infinite distance. No connectedness, ground-state or spectral-gap
+hypothesis is imposed; $S$ may be empty.\footnote{Declaration:
+    \leanid{TNLean.MPS.AreaLaw.norm_heisenberg_commutator_le_domainDistance}.}
+The support-cardinality bound $R+1$ gives the constants in
+(\ref{eq:tnlean_one_dimensional_connected_domain_scope_domain_constants})
+from the general graph estimate. Infinite separation gives exact commutation.
+
+The finite-domain localization estimate is a separate remaining step in this
+partial resolution. Its geometric input is that each finite-distance sphere
+has at most two vertices. Information reset and logarithmic separation also
+remain separate; no ground-state product decomposition is needed to extend
+the local propagation estimates.
 
 \section{Information reset on the contiguous chain}
 
@@ -109,7 +125,7 @@ Nonnegativity of $b$ is derived, and only the original full-system gap is
 assumed. The Gaussian filter, supported approximation, polar unitary and
 independence after the regional replica swap are constructed within the
 proof.\footnote{Declaration:
-\leanid{TNLean.MPS.AreaLaw.ChainHamiltonian.information_reset}.}
+    \leanid{TNLean.MPS.AreaLaw.ChainHamiltonian.information_reset}.}
 
 As with the local propagation lemma, the broader reading on an arbitrary
 finite induced-path domain remains unformalized. The missing step is the
@@ -130,7 +146,7 @@ large $L$. The interval family may overlap or contain empty members.
 Neither disjointness nor a sign hypothesis on the original real $J$ is
 added. The sign needed for the interval area law follows from the norm
 bound of an actual singleton interaction.\footnote{Declaration:
-\leanid{TNLean.MPS.AreaLaw.ChainHamiltonian.mutualInformation_le_of_logarithmic_separation}.}
+    \leanid{TNLean.MPS.AreaLaw.ChainHamiltonian.mutualInformation_le_of_logarithmic_separation}.}
 
 The proof combines the contiguous interval area law, exact real-radius
 neighborhoods of intervals, and the contiguous reset theorem. It therefore
