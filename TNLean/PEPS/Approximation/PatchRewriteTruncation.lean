@@ -62,6 +62,7 @@ the manuscript; no upstream Lean proof text was reused.
 
 open Matrix QuantumCircuit
 open scoped BigOperators Kronecker Matrix.Norms.L2Operator
+open TNLean.Lattice (siteLift siteLift_conjTranspose)
 
 noncomputable section
 

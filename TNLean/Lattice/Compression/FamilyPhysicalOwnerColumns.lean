@@ -1,0 +1,104 @@
+/-
+Copyright (c) 2026 TNLean contributors. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
+-/
+import TNLean.Lattice.PartyCircuit.FamilyPhysicalReadout
+import TNLean.Lattice.Compression.OwnerMemoryTransport
+
+/-!
+# Physical tensor columns under dimension-preserving owner relabelling
+
+A prescribed physical column depends on the ordered local dimensions and
+labels. Composing these data with an owner map preserves the column, even
+when owners repeat or the ordered list omits other parties.
+
+Source: polynomial-PEPS manuscript, proof of Theorem 5.2,
+`04-compression.tex`, lines 137–151 and 565–588.
+-/
+
+noncomputable section
+namespace TNLean.PEPS.PairEffect
+
+open scoped TensorProduct
+
+/-- Transporting a vector across an equality of the right tensor factor commutes
+with tensoring on the left by a fixed vector. The left factor needs only its
+complex module structure. -/
+private theorem tmul_heq {W : Type} [AddCommGroup W] [Module ℂ W] {A B : HSpace}
+    (hAB : A = B) (v : W) {a : A} {b : B} (h : HEq a b) :
+    HEq (v ⊗ₜ[ℂ] a) (v ⊗ₜ[ℂ] b) := by
+  subst hAB
+  cases h
+  rfl
+
+/-- The physical memory of an ordered register list ignores the owner labels, so
+relabelling owners along `f` leaves the memory space unchanged once the
+dimensions are composed with `f`. -/
+private theorem familyPhysicalListBasis_owner_mem_eq {P Q : Type} (f : P → Q) (δ : Q → ℕ) :
+    (ps : List P) →
+    Mem (familyPhysicalLayout (fun p ↦ δ (f p)) ps) = Mem (familyPhysicalLayout δ (ps.map f))
+  | [] => rfl
+  | p :: ps =>
+      congrArg (fun S : HSpace ↦ HSpace.of (euc (Fin (δ (f p))) ⊗[ℂ] S))
+        (familyPhysicalListBasis_owner_mem_eq f δ ps)
+
+/-- Evaluating the physical tensor basis on a nonempty register list splits off the
+first register as a standard basis vector of its local space. -/
+private theorem familyPhysicalListBasis_cons_apply {P : Type} (d : P → ℕ) (p : P) (ps : List P)
+    (v : (j : Fin (p :: ps).length) → Fin (d ((p :: ps).get j))) :
+    familyPhysicalListBasis d (p :: ps) v =
+      (EuclideanSpace.basisFun (Fin (d p)) ℂ) (v 0) ⊗ₜ[ℂ]
+        familyPhysicalListBasis d ps (fun i ↦ v i.succ) :=
+  (((EuclideanSpace.basisFun (Fin (d p)) ℂ).tensorProduct
+    (familyPhysicalListBasis d ps)).reindex_apply
+      (Fin.consEquiv (fun i ↦ Fin (d ((p :: ps).get i)))) v).trans
+    (OrthonormalBasis.tensorProduct_apply'
+      (EuclideanSpace.basisFun (Fin (d p)) ℂ) (familyPhysicalListBasis d ps)
+      ((Fin.consEquiv (fun i ↦ Fin (d ((p :: ps).get i)))).symm v))
+
+/-- Relabelling the owners of an ordered physical register list preserves
+its prescribed tensor column when the dimensions and labels are composed
+with the same map. No injectivity, distinctness, exhaustiveness or positive
+dimension hypothesis is imposed. The empty list retains its scalar column.
+Source: polynomial-PEPS manuscript, proof of Theorem 5.2,
+`04-compression.tex`, lines 137–151 and 565–588. -/
+private theorem familyPhysicalListBasis_owner_column_heq
+    {P Q : Type} (f : P → Q) (δ : Q → ℕ) (ps : List P)
+    (y : (q : Q) → Fin (δ q)) :
+    HEq
+      (familyPhysicalListBasis (fun p ↦ δ (f p)) ps
+        (fun j ↦ y (f (ps.get j))))
+      (familyPhysicalListBasis δ (ps.map f)
+        (fun j ↦ y ((ps.map f).get j))) := by
+  induction ps with
+  | nil =>
+      change @HEq ℂ _ ℂ _
+      exact (heq_of_eq (familyPhysicalListBasis_nil_apply
+        (fun p ↦ δ (f p)) (fun j ↦ y (f (([] : List P).get j))))).trans
+        (heq_of_eq (familyPhysicalListBasis_nil_apply
+          δ (fun j ↦ y (([] : List Q).get j)))).symm
+  | cons p ps ih =>
+      rw [List.map_cons, familyPhysicalListBasis_cons_apply, familyPhysicalListBasis_cons_apply]
+      exact tmul_heq (familyPhysicalListBasis_owner_mem_eq f δ ps)
+        ((EuclideanSpace.basisFun (Fin (δ (f p))) ℂ) (y (f p))) ih
+
+/-- The canonical owner isometry carries each prescribed physical column to
+its column on the relabelled register list. Repeated owners carry the same
+prescribed label, and the empty list has scalar column one.
+Source: polynomial-PEPS manuscript, proof of Theorem 5.2,
+`04-compression.tex`, lines 137–151 and 565–588. -/
+theorem mapOwnerIso_familyPhysicalListBasis_apply_heq
+    {P Q : Type} (f : P → Q) (δ : Q → ℕ) (ps : List P)
+    (y : (q : Q) → Fin (δ q)) :
+    HEq
+      (Layout.mapOwnerIso f
+        (familyPhysicalLayout (fun p ↦ δ (f p)) ps)
+        (familyPhysicalListBasis (fun p ↦ δ (f p)) ps
+          (fun j ↦ y (f (ps.get j)))))
+      (familyPhysicalListBasis δ (ps.map f)
+        (fun j ↦ y ((ps.map f).get j))) := by
+  exact (Layout.mapOwnerIso_apply_heq f _ _).trans
+    (familyPhysicalListBasis_owner_column_heq f δ ps y)
+
+end TNLean.PEPS.PairEffect

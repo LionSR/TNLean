@@ -13,11 +13,11 @@
 
 \title{Party-Network Bounds in the Dyadic Routing Lemma}
 \author{}
-\date{2026-10-08}
+\date{2026-10-08; resolved 2026-10-17}
 
 \begin{document}
 \maketitle
-\gapnote{scope-restriction}{open}
+\gapnote{scope-restriction}{resolved}
 
 \section{The source lemma}
 
@@ -52,8 +52,7 @@ equal or adjacent, though the congestion bound does not need that property.
 
 \section{What is proved and the extra hypotheses}
 
-Because Proposition~7.1 is not yet formalized, the specific party network of
-the protocol is not yet constructed in Lean. Instead, Lemma~8.2 is proved for
+Lemma~8.2 is proved for
 an arbitrary party network whose parties are assigned to dyadic blocks and satisfy
 properties 1--4 as explicit hypotheses. Under those four hypotheses, the edge
 congestion on the padded grid is at most $2(2c+1)B\Delta$, the edge congestion
@@ -69,15 +68,60 @@ folded congestion bound is
 construction is
 \leanid{TNLean.PEPS.Approximation.exists_squarePEPS_of_dyadicRouting}.}
 
-\section{Effect on the paper and what remains}
+\section{Resolution}
 
 The routing argument itself is complete, and its congestion constants depend
-only on $B$, $\Delta$, and $c$, as in the paper. What remains is to formalize
-Proposition~7.1 and the placement of its parties at the dyadic block anchors.
-Property~1 will then follow from the anchor placement (\path{07-assembly.tex},
-lines~113--114), and properties 2--4 will follow from items 1--3 of
-Proposition~7.1 with constants $B$, $\Delta$, and $c$ independent of $L$ and the
+only on $B$, $\Delta$, and $c$, as in the paper. The four hypotheses are now
+derived inside the assembly of Theorem~1.1 for the party network that the
+protocol actually produces, with constants chosen before $L$ and the
 Hamiltonian.
+
+The protocol is constructed from the adaptive patch constraint of
+Proposition~4.1 and the angular information bound of Proposition~3.4, and it
+satisfies the consequences of Proposition~7.1 that Section~8
+uses.\footnote{\leanid{TNLean.PEPS.Approximation.largeSizeDyadicProtocolConsequences_of_adaptivePatchConstraint}
+in \path{TNLean/PEPS/Approximation/DyadicProtocolConsequences.lean}, through
+\leanid{TNLean.PEPS.Approximation.exists_isDistributionProtocol_of_largeRepaintings}
+in \path{TNLean/PEPS/Approximation/DyadicProtocolFromEvents.lean} and
+\leanid{TNLean.PEPS.Approximation.exists_isDistributionProtocol_of_frames} in
+\path{TNLean/PEPS/Approximation/DyadicProtocolAssembly.lean}.} Its parties are
+attached to the anchors of the dyadic squares of $[0,2^k]^2$ with
+$L\le 2^k<2L$, at most two parties per square, so property~1 holds and
+property~2 holds with $B=b$.\footnote{\leanid{TNLean.PEPS.Approximation.protocolPlacement_inGrid}
+and \leanid{TNLean.PEPS.Approximation.protocolPlacement_blockBounded} in
+\path{TNLean/PEPS/Approximation/DyadicProtocolParties.lean}, recorded as the
+fields \leanid{TNLean.PEPS.Approximation.DyadicProtocol.IsDistributionProtocol.inGrid}
+and \leanid{TNLean.PEPS.Approximation.DyadicProtocol.IsDistributionProtocol.blockBounded}.}
+Distributed density compression (Theorem~5.2) applied to the protocol gives an
+operator network in which each party meets at most $2b(b-1)$ links, which is
+property~3 with $\Delta=2b(b-1)$, and in which every link joins two parties of
+a common gate.\footnote{\leanid{TNLean.PEPS.PairEffect.DistributedConstruction.exists_uniform_sampled_network}
+in \path{TNLean/Lattice/Compression/DistributedGateMapConstruction.lean}.}
+Item~3 of Proposition~7.1 then gives property~4 with
+$c=b$.\footnote{\leanid{TNLean.PEPS.Approximation.DyadicProtocol.IsDistributionProtocol.separationBounded}
+in \path{TNLean/PEPS/Approximation/DyadicProtocol.lean}, applied in
+\leanid{TNLean.PEPS.Approximation.DyadicProtocol.exists_partyNetwork_of_contractedOperator}
+in \path{TNLean/PEPS/Approximation/DyadicProtocolCompression.lean}.}
+Here $b$ is a fixed constant of the protocol, independent of $L$ and the
+Hamiltonian. The resulting network with these four bounds is passed to the
+routing lemma in the proof of Theorem~1.1.\footnote{\leanid{TNLean.PEPS.Approximation.dyadicOperatorNetworkAt_of_dyadicProtocolBoundsAt}
+in \path{TNLean/PEPS/Approximation/DyadicProtocolCompression.lean} supplies the
+bounds;
+\leanid{TNLean.PEPS.Approximation.hasPEPSApproximation_of_dyadicOperatorNetworkAt}
+in \path{TNLean/PEPS/Approximation/GroundStateApproximation.lean} applies
+\leanid{TNLean.PEPS.Approximation.hasPEPSApproximation_of_fixInput_dyadicRouting};
+the composite is
+\leanid{TNLean.PEPS.Approximation.polynomialPEPSApproximation_of_ratios}
+in \path{TNLean/PEPS/Approximation/PolynomialPEPSExplicitConstant.lean}.}
+The restriction recorded in this note is therefore resolved.
+
+The surrounding results on the path to Theorem~1.1 hold without further
+hypotheses. The adaptive patch constraint of Proposition~4.1 is
+proved;\footnote{\leanid{TNLean.PEPS.Approximation.adaptivePatchConstraint}.}
+Theorem~1.1 is proved without
+hypotheses;\footnote{\leanid{TNLean.PEPS.Approximation.polynomialPEPSApproximation}.}
+and every clause of Proposition~7.1 is carried by the formal distribution
+protocol (\path{docs/paper-gaps/polypeps_prop71_consequences_interface.tex}).
 
 \bibliographystyle{alpha}
 \bibliography{references}

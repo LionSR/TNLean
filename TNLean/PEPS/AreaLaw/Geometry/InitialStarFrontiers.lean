@@ -35,6 +35,8 @@ Independently proved from the manuscript; no upstream Lean proof text is reused.
 
 noncomputable section
 
+open TNLean.Lattice
+
 namespace TNLean.PEPS.AreaLaw.Geometry
 
 /-- A sufficiently close allowed mesh segment lies on an allowed line through

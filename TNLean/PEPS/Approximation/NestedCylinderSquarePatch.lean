@@ -20,6 +20,7 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 -/
 
 open scoped BigOperators Matrix
+open TNLean.Lattice (siteLift)
 
 namespace TNLean.PEPS.EncodedFrame
 

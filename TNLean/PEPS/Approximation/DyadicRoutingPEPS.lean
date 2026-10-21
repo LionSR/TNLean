@@ -33,9 +33,9 @@ degree and separation bounds by Proposition 7.1, and its anchors lie on the padd
 because the parties are attached to dyadic-block anchors (`07-assembly.tex:113–114`). Here
 `foldedRouting_card_traversal_le` and `exists_squarePEPS_of_dyadicRouting` take these four
 properties (`InGrid`, `BlockBounded`, `DegreeBounded`, `SeparationBounded`) as hypotheses on
-an arbitrary party network, so they are a conditional form of the lemma. Documented in
-`docs/paper-gaps/polypeps_routing_network_bounds.tex`; the hypotheses are discharged once
-both Proposition 7.1 and the attachment of its parties to the padded anchors are formalized.
+an arbitrary party network; they are verified for the compressed protocol network in
+`dyadicOperatorNetworkAt_of_dyadicProtocolBoundsAt`, as recorded in
+`docs/paper-gaps/polypeps_routing_network_bounds.tex`.
 
 ## Main results
 

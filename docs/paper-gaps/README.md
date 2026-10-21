@@ -1143,33 +1143,48 @@ registers, is now proved: the restriction is resolved.
 ### Polynomial PEPS approximation: dyadic routing
 
 [polypeps_routing_network_bounds.tex](polypeps_routing_network_bounds.tex)
-records that Lemma 8.2 of the September 24, 2026 polynomial PEPS manuscript
+(scope restriction, resolved) records that Lemma 8.2 of the September 24, 2026 polynomial PEPS manuscript
 concerns the party network of Proposition 7.1 and has no hypotheses, and that
 it is formalized for an arbitrary party network on dyadic anchors under four
 hypotheses: boundedly many parties per block, bounded degree, and link
 separation bounded by a fixed multiple of the endpoint scales, which the source
 derives from that proposition, and anchors on the padded grid, which comes from
-attaching each party to the anchor of its dyadic block.
+attaching each party to the anchor of its dyadic block. The four hypotheses are
+now verified for the compressed network of the constructed protocol in the
+proof of Theorem 1.1: the restriction is resolved.
+
+### Polynomial PEPS approximation: the product-reference column
+
+[polypeps_product_reference_column.tex](polypeps_product_reference_column.tex)
+(scope restriction, resolved) records that Section 8.1 and Lemma 8.1 of the
+September 24, 2026 polynomial PEPS manuscript derive the product-reference
+estimates and the compressed operator from the protocol of Proposition 7.1,
+whereas the column extraction and grid routing were formalized taking those
+estimates as hypotheses. The estimates are now verified for the constructed
+protocol and its compressed operator in the proof of Theorem 1.1: the
+restriction is resolved.
 
 ### Polynomial PEPS approximation: the distribution protocol
 
 [polypeps_prop71_consequences_interface.tex](polypeps_prop71_consequences_interface.tex)
-(scope restriction, open) records that Proposition 7.1 of the September 24, 2026
-polynomial PEPS manuscript is formalized only as the consequences that the
-assembly of Section 8 uses, and lists the omitted clauses: a party for every
-hierarchy square, the main and auxiliary copies of `Ω`, the frame factorization
-of the reference vectors with factors of norm at most one, the placement of
-additional parties at their repainting events, the pair-source and message
-counts before expansion, and the family of expansions of every fixed accuracy.
+(scope restriction, resolved) records that Proposition 7.1 of the September 24,
+2026 polynomial PEPS manuscript was first formalized only as the consequences
+that the assembly of Section 8 uses. Every clause is now a field of the formal
+predicate, proved for the constructed protocol: a party for every hierarchy
+square, the additional parties at their repaintings, the private copies of `Ω`,
+the frame factorization of the reference vectors with factors of norm at most
+one, the pair-source and message counts, and the expansions of every fixed
+accuracy. The existence of the protocol is proved without hypotheses.
 
 ### Two-dimensional area law: the scanner estimate
 
-[arealaw2d_scanner_inputs.tex](arealaw2d_scanner_inputs.tex) records that
-Proposition 9.2 of the September 24, 2026 two-dimensional area-law manuscript
-is formalized from the conclusions of Lemma 9.1, Propositions 7.4 and 8.1, and
-Lemmas 2.1 and 2.3 for one scan, taken as the fields of one data package; the
-construction of that package from the scan geometry and the transported states
-remains open.
+[arealaw2d_scanner_inputs.tex](arealaw2d_scanner_inputs.tex) (local correction,
+resolved) records that Proposition 9.2 of the September 24, 2026
+two-dimensional area-law manuscript is proved for the original physical
+system, with the truncated ground vector, the typical set and the transport and
+norm-comparison estimates derived for the same data. The only remaining
+adjustment is the output-coefficient convention: the output constants are
+chosen after the entropy input constant rather than equal to it.
 
 ### Two-dimensional area law: belt and replacement templates
 
@@ -1181,8 +1196,9 @@ point, because Definition 9.3 requires a nonempty template, and the stopping
 scale must satisfy `S_* ≥ 1`. The source uses these templates only for regions
 meeting the cut and chooses `S_*` large. The lattice-point premise is
 discharged for every identifier whose current region meets the cut by
-`repairStage_exists_integerPoint_mem_birth_of_oldInclusion`; the note stays
-open until the stopping-scale premise, handled in #9558, is also discharged on main.
+`repairStage_exists_integerPoint_mem_birth_of_oldInclusion`. The stopping-scale
+premise is discharged by `exists_uniform_repairStage_birth_templates`, whose
+threshold `T₀ ≥ 1` is chosen before `S_*`. The note is resolved.
 
 ### Two-dimensional area law: nondegenerate template pieces
 
@@ -1195,11 +1211,11 @@ orthogonal rectangle sides, as a convention built into the permitted polygons.
 ### One-dimensional area law: connected domains
 
 [tnlean_one_dimensional_connected_domain_scope.tex](tnlean_one_dimensional_connected_domain_scope.tex)
-records that Theorem A of the repository's one-dimensional note is formalized
-on the chain of `L` consecutive sites, the connected case to which the note
-reduces the theorem in a sentence; the component reduction for a disconnected
-finite subset of the integers (the ground vector of a sum over components is a
-product, and entropy and edge boundary add over components) is not formalized.
+(scope restriction, resolved) records that Theorem A of the repository's
+one-dimensional note, first formalized on the chain of `L` consecutive sites,
+is now formalized for every finite subset of the integers. The reduction to the
+chain uses the zero entropy of the prefixes ending at the gaps of the domain in
+place of the factorization of the ground vector over components.
 
 ### One-dimensional matrix product state approximation: threshold truncation
 
@@ -1215,7 +1231,7 @@ tails; the form with an arbitrary `D` is not formalized.
 ### One-dimensional area law: the constants of the buffered discount
 
 [tnlean_one_dimensional_discount_constants.tex](tnlean_one_dimensional_discount_constants.tex)
-(local correction, open) records that the buffered discount of Lemma 4.2 of the
+(local correction, resolved) records that the buffered discount of Lemma 4.2 of the
 repository's one-dimensional note is formalized with the energy threshold
 `Δ/2` in place of the printed `Δ/4` (the formal energy estimate is twice the
 printed one at the same shell threshold), with the overlap losses `m log 2`
@@ -1228,10 +1244,12 @@ absolute constants.
 ## Polynomial PEPS: zero-floor maximizing filters
 
 - [`polypeps_square_zero_floor_optimizer_scope.tex`](polypeps_square_zero_floor_optimizer_scope.tex)
-  records the attributed positive-filter adaptation on the original square,
-  its all-competitor matrix comparison and exact ascending output, and the
-  same family's original-energy and full-system fidelity estimates. The
+  (resolved) records the attributed positive-filter adaptation on the original
+  square, its all-competitor matrix comparison and exact ascending output, and
+  the same family's original-energy and full-system fidelity estimates. The
   canonical physical theorem permits every real interaction bound directly,
-  including the vacuous negative-bound case. Literal imported OAI
-  model types and geometric region/weight construction remain outside the
-  result, so the note stays open.
+  including the vacuous negative-bound case. The result is a
+  standalone adaptation of a lemma of the companion Lean code; the proofs of
+  the area law and of the polynomial PEPS approximation theorem do not use it,
+  and the further comparison with the companion code's own types is not
+  pursued.

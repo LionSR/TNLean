@@ -10,11 +10,24 @@ Authors: TNLean contributors
 
 import TNLean.MPS.AreaLaw.AreaLaw
 import TNLean.MPS.AreaLaw.Basic
+import TNLean.MPS.AreaLaw.BoundaryCounting
 import TNLean.MPS.AreaLaw.BufferDiscount
+import TNLean.MPS.AreaLaw.ComponentReduction
 import TNLean.MPS.AreaLaw.Counting
+import TNLean.MPS.AreaLaw.DoubledHamiltonian
 import TNLean.MPS.AreaLaw.EntropyInequalities
 import TNLean.MPS.AreaLaw.Hamiltonian
+import TNLean.MPS.AreaLaw.InformationReset
+import TNLean.MPS.AreaLaw.InteractionBudget
+import TNLean.MPS.AreaLaw.IntervalNeighborhoodEntropy
+import TNLean.MPS.AreaLaw.LiebRobinson
+import TNLean.MPS.AreaLaw.LogarithmicSeparation
 import TNLean.MPS.AreaLaw.MPSApproximation
 import TNLean.MPS.AreaLaw.OpenMPS
 import TNLean.MPS.AreaLaw.OpenMPSRank
+import TNLean.MPS.AreaLaw.PartialSwap
+import TNLean.MPS.AreaLaw.RelativeGeneratorLocalization
+import TNLean.MPS.AreaLaw.ResetSupportSeparation
 import TNLean.MPS.AreaLaw.SequentialTruncation
+import TNLean.MPS.AreaLaw.SupportedGaussianIntegral
+import TNLean.MPS.AreaLaw.SwappedDoubledHamiltonian

@@ -26,10 +26,16 @@ registers of the frames, one register per site and per tag, each held by its own
 * `TwoSheetExchange.exchange_ofFrames_bounded`: the same for two frames whose holes are listed in
   any order, after the canonical identification of tag orderings, itself a word of exchanges.
 
-## Main definitions
-
-* `PairEffect.PartyChain.precomp`, `PairEffect.PartyChain.postcomp`: a monomial composed with
-  words.
+The words of the birth and the death do not act on the tag registers. They are
+`exists_frontBirthWord` and `exists_frontDeathChain` of `TNLean.Lattice.Sheet.FrontChanges`,
+stated for any block of registers in front of the raw registers and read here with the tag
+registers of the holes in front; read with the empty front block they give the bounds for
+sheets without holes, `Lattice.Sheet.birth_bounded` and `Lattice.Sheet.death_bounded`, which
+are stated for any exponent: `I_Ω(T:E) ≤ L^{-2p}` gives error `L^{-p}`; the frame bounds here are
+the manuscript's case `p = 30`. The
+reference error of the exchange is bounded on the sheets by
+`norm_act_sheetBufferCorrection_mul_sheetSwapOp_sub_le`, shared with
+`Lattice.Sheet.exchange_bounded`.
 
 ## Main results
 
@@ -46,64 +52,12 @@ registers of the frames, one register per site and per tag, each held by its own
   allowed monomials, `04-compression.tex`, lines 32–35.
 -/
 
+open TNLean.Lattice (sheetSwapOp)
+
 noncomputable section
 
 open Matrix ContinuousLinearMap EuclideanSpace
 open scoped InnerProductSpace TensorProduct Kronecker
-
-/-! ### Composing a monomial with words -/
-
-namespace TNLean.PEPS.PairEffect.PartyChain
-
-variable {P : Type}
-
-/-- A monomial preceded by a word. -/
-def precomp {ℓ₀ ℓX ℓY : Layout P} (w : Word ℓ₀ ℓX) : PartyChain ℓX ℓY → PartyChain ℓ₀ ℓY
-  | final w' => final (.comp w w')
-  | effect hpq α β ℓS w' η rest => effect hpq α β ℓS (.comp w w') η rest
-
-/-- A monomial followed by a word. -/
-def postcomp {ℓX ℓY ℓZ : Layout P} : PartyChain ℓX ℓY → Word ℓY ℓZ → PartyChain ℓX ℓZ
-  | final w', w => final (.comp w' w)
-  | effect hpq α β ℓS w' η rest, w => effect hpq α β ℓS w' η (rest.postcomp w)
-
-theorem eval_precomp {ℓ₀ ℓX ℓY : Layout P} (w : Word ℓ₀ ℓX) :
-    (M : PartyChain ℓX ℓY) → (M.precomp w).toEffectChain.eval = M.toEffectChain.eval ∘L w.eval
-  | final _ => rfl
-  | effect .. => rfl
-
-theorem eval_postcomp {ℓX ℓY ℓZ : Layout P} :
-    (M : PartyChain ℓX ℓY) → (w : Word ℓY ℓZ) →
-      (M.postcomp w).toEffectChain.eval = w.eval ∘L M.toEffectChain.eval
-  | final _, _ => rfl
-  | effect _ _ _ _ _ _ rest, w => by
-      change (rest.postcomp w).toEffectChain.eval ∘L _ ∘L _ = _
-      rw [eval_postcomp rest w]
-      rfl
-
-theorem precomp_props {ℓ₀ ℓX ℓY : Layout P} (w : Word ℓ₀ ℓX) (S : Set P) (hw : w.IsAllowed)
-    (hS : w.UsesOnly S) : (M : PartyChain ℓX ℓY) → M.IsAllowed → M.UsesOnly S →
-      (M.precomp w).IsAllowed ∧ (M.precomp w).UsesOnly S ∧
-        (M.precomp w).sourceCount = w.sourceCount + M.sourceCount ∧
-        (M.precomp w).toEffectChain.effectCount = M.toEffectChain.effectCount
-  | final _, hM, hMS => ⟨⟨hw, hM⟩, ⟨hS, hMS⟩, rfl, rfl⟩
-  | effect .. , hM, hMS => ⟨⟨⟨hw, hM.1⟩, hM.2⟩, ⟨hMS.1, hMS.2.1, ⟨hS, hMS.2.2.1⟩, hMS.2.2.2⟩,
-      by simp only [precomp, sourceCount, Word.sourceCount, Nat.add_assoc], rfl⟩
-
-theorem postcomp_props {ℓX ℓY ℓZ : Layout P} (S : Set P) :
-    (M : PartyChain ℓX ℓY) → (w : Word ℓY ℓZ) → w.IsAllowed → w.UsesOnly S → M.IsAllowed →
-      M.UsesOnly S → (M.postcomp w).IsAllowed ∧ (M.postcomp w).UsesOnly S ∧
-        (M.postcomp w).sourceCount = M.sourceCount + w.sourceCount ∧
-        (M.postcomp w).toEffectChain.effectCount = M.toEffectChain.effectCount
-  | final _, _, hw, hS, hM, hMS => ⟨⟨hM, hw⟩, ⟨hMS, hS⟩, rfl, rfl⟩
-  | effect _ _ _ _ _ _ rest, w, hw, hS, hM, hMS => by
-      obtain ⟨h₁, h₂, h₃, h₄⟩ := postcomp_props S rest w hw hS hM.2.2 hMS.2.2.2
-      refine ⟨⟨hM.1, hM.2.1, h₁⟩, ⟨hMS.1, hMS.2.1, hMS.2.2.1, h₂⟩, ?_, ?_⟩
-      · simp only [postcomp, sourceCount, h₃, Nat.add_assoc]
-      · change (rest.postcomp w).toEffectChain.effectCount + 1 = _
-        rw [h₄]
-
-end TNLean.PEPS.PairEffect.PartyChain
 
 namespace TNLean.PEPS.EncodedFrame
 
@@ -156,39 +110,17 @@ theorem birth_bounded [NeZero q] (hTP : ∀ x ∈ T, F.owner x = P)
         ‖w.eval (F.regIso.symm (F.refVec Ω)) -
           (F.changeOwner T Q).regIso.symm ((F.changeOwner T Q).refVec Ω)‖ ≤ L ^ (-30 : ℤ) := by
   obtain ⟨σ, hσ, -, -, hK, herr⟩ := F.birth (Q := Q) hTP hTH hΩ hI
-  set hTE := F.disjoint_birthEnv hTP hTH
-  obtain ⟨wm, hwA, hwU, hwS, hwE⟩ := exists_birthWord P Q σ
-    (tagRegs F.holes ++ siteRegs q F.owner (listE (sites ι) T (F.birthEnv P)))
   obtain ⟨hB, hA', hB', hE'⟩ := F.changeOwner_birth_owners (Q := Q) hTP hTH
-  have hE : ∀ x ∈ F.birthEnv P, F.owner x = (F.changeOwner T Q).owner x :=
-    fun x hx => (hE' x hx).symm
-  obtain ⟨g₁, g₂, g₃⟩ := groupWord_props (q := q) F.owner nodup_sites mem_sites (tagRegs F.holes)
-    hTP hB (V := {P, Q}) (Set.mem_insert P _) (Set.mem_insert P _)
-  have r := isReordering_relabelRest (q := q) F.owner (F.changeOwner T Q).owner mem_sites
-    hTE hE (tagRegs F.holes) ⟨Q, euc (T → Fin q)⟩ ⟨P, euc (↥(T ∪ F.birthEnv P)ᶜ → Fin q)⟩
-  obtain ⟨u₁, u₂, u₃⟩ := ungroupWord_props (q := q) (F.changeOwner T Q).owner nodup_sites
-    mem_sites (tagRegs F.holes) hA' hB' (V := {P, Q}) (Set.mem_insert_of_mem P rfl)
-    (Set.mem_insert P _)
-  let W : Word F.regs (F.changeOwner T Q).regs :=
-    (groupWord F.owner nodup_sites mem_sites (tagRegs F.holes) hTP hB).comp <|
-      wm.comp <| (relabelRest F.owner (F.changeOwner T Q).owner mem_sites hTE hE
-        (tagRegs F.holes) _ _).comp <|
-        ungroupWord (F.changeOwner T Q).owner nodup_sites mem_sites (tagRegs F.holes) hA' hB'
-  have heval : ∀ z, (F.changeOwner T Q).regIso (W.eval z) =
-      act ((1 : Matrix (TagSpace F.holes) (TagSpace F.holes) ℂ) ⊗ₖ sheetBirthOp hTE σ)
-        (F.regIso z) := by
-    intro z
-    rw [sheetBirthOp_eq_submatrix]
-    exact layoutIso_place F.holes F.owner (F.changeOwner T Q).owner hTE hTP hB hA' hB' hE
-      wm.eval _ hwE z
-  refine ⟨σ, hσ, hK, W, ⟨g₁, hwA, r.isAllowed, u₁⟩, ⟨g₂, hwU, r.usesOnly _, u₂⟩, ?_, heval, ?_⟩
-  · change Word.sourceCount _ + (Word.sourceCount _ + (Word.sourceCount _ +
-      Word.sourceCount _)) ≤ 1
-    rw [g₃, r.sourceCount_eq, u₃]
-    omega
-  · rw [← (F.changeOwner T Q).regIso.norm_map, map_sub, LinearIsometryEquiv.apply_symm_apply,
-      heval, LinearIsometryEquiv.apply_symm_apply]
-    exact herr
+  obtain ⟨w, hwA, hwU, hwS, hw⟩ := exists_frontBirthWord (tagRegs F.holes) (tagIso F.holes)
+    F.owner (F.changeOwner T Q).owner (F.disjoint_birthEnv hTP hTH) hTP hB hA' hB'
+    (fun x hx => (hE' x hx).symm) σ
+  have heval : ∀ z, (F.changeOwner T Q).regIso (w.eval z) =
+      act ((1 : Matrix (TagSpace F.holes) (TagSpace F.holes) ℂ) ⊗ₖ
+        sheetBirthOp (F.disjoint_birthEnv hTP hTH) σ) (F.regIso z) := hw
+  refine ⟨σ, hσ, hK, w, hwA, hwU, hwS, heval, ?_⟩
+  rw [← (F.changeOwner T Q).regIso.norm_map, map_sub, LinearIsometryEquiv.apply_symm_apply,
+    heval, LinearIsometryEquiv.apply_symm_apply]
+  exact herr
 
 /-- **Lemma 6.5 (homogeneous death): the death is a bounded change involving only `P∘` and
 `Q∘`.** Let `F` be the frame *after* the death, in which `T` is owned by `P∘` and avoids every
@@ -223,41 +155,17 @@ theorem death_bounded [NeZero q] (hTP : ∀ x ∈ T, F.owner x = P)
         ‖M.toEffectChain.eval ((F.changeOwner T Q).regIso.symm ((F.changeOwner T Q).refVec Ω)) -
           F.regIso.symm (F.refVec Ω)‖ ≤ L ^ (-30 : ℤ) := by
   obtain ⟨σ, hσ, -, -, hK, herr⟩ := F.death (Q := Q) hTP hTH hΩ hI
-  set hTE := F.disjoint_birthEnv hTP hTH
-  obtain ⟨Mm, hMA, hMU, hMS, hMe, hME⟩ := exists_deathChain P Q σ
-    (tagRegs F.holes ++ siteRegs q (F.changeOwner T Q).owner (listE (sites ι) T (F.birthEnv P)))
   obtain ⟨hB', hA, hB, hE⟩ := F.changeOwner_birth_owners (Q := Q) hTP hTH
-  obtain ⟨g₁, g₂, g₃⟩ := groupWord_props (q := q) (F.changeOwner T Q).owner nodup_sites
-    mem_sites (tagRegs F.holes) hA hB (V := {P, Q}) (Set.mem_insert_of_mem P rfl)
-    (Set.mem_insert P _)
-  have r := isReordering_relabelRest (q := q) (F.changeOwner T Q).owner F.owner mem_sites
-    hTE hE (tagRegs F.holes) ⟨P, euc (T → Fin q)⟩ ⟨P, euc (↥(T ∪ F.birthEnv P)ᶜ → Fin q)⟩
-  obtain ⟨u₁, u₂, u₃⟩ := ungroupWord_props (q := q) F.owner nodup_sites mem_sites
-    (tagRegs F.holes) hTP hB' (V := {P, Q}) (Set.mem_insert P _) (Set.mem_insert P _)
-  let tail := (relabelRest (F.changeOwner T Q).owner F.owner mem_sites hTE hE
-    (tagRegs F.holes) ⟨P, euc (T → Fin q)⟩ ⟨P, euc (↥(T ∪ F.birthEnv P)ᶜ → Fin q)⟩).comp
-      (ungroupWord F.owner nodup_sites mem_sites (tagRegs F.holes) hTP hB')
-  obtain ⟨p₁, p₂, p₃, p₄⟩ := PartyChain.postcomp_props {P, Q} Mm tail ⟨r.isAllowed, u₁⟩
-    ⟨r.usesOnly _, u₂⟩ hMA hMU
-  let G := groupWord (q := q) (F.changeOwner T Q).owner nodup_sites mem_sites (tagRegs F.holes)
-    hA hB
-  obtain ⟨q₁, q₂, q₃, q₄⟩ := PartyChain.precomp_props G {P, Q} g₁ g₂ (Mm.postcomp tail) p₁ p₂
-  have heval : ∀ z, F.regIso (((Mm.postcomp tail).precomp G).toEffectChain.eval z) =
-      act ((1 : Matrix (TagSpace F.holes) (TagSpace F.holes) ℂ) ⊗ₖ sheetBirthOp hTE σ)
-        ((F.changeOwner T Q).regIso z) := by
-    intro z
-    rw [PartyChain.eval_precomp, PartyChain.eval_postcomp, sheetBirthOp_eq_submatrix]
-    exact layoutIso_place F.holes (F.changeOwner T Q).owner F.owner hTE hA hB hTP hB' hE
-      Mm.toEffectChain.eval _ hME z
-  refine ⟨σ, hσ, hK, (Mm.postcomp tail).precomp G, q₁, q₂, ?_, ?_, heval, ?_⟩
-  · rw [q₃, p₃, g₃, hMS]
-    change 0 + (0 + (Word.sourceCount _ + Word.sourceCount _)) = 0
-    rw [r.sourceCount_eq, u₃]
-  · rw [q₄, p₄]
-    exact hMe
-  · rw [← F.regIso.norm_map, map_sub, LinearIsometryEquiv.apply_symm_apply, heval,
-      LinearIsometryEquiv.apply_symm_apply]
-    exact herr
+  obtain ⟨M, hMA, hMU, hMS, hMe, hM⟩ := exists_frontDeathChain (tagRegs F.holes)
+    (tagIso F.holes) (F.changeOwner T Q).owner F.owner (F.disjoint_birthEnv hTP hTH) hA hB hTP
+    hB' hE σ
+  have heval : ∀ z, F.regIso (M.toEffectChain.eval z) =
+      act ((1 : Matrix (TagSpace F.holes) (TagSpace F.holes) ℂ) ⊗ₖ
+        sheetBirthOp (F.disjoint_birthEnv hTP hTH) σ) ((F.changeOwner T Q).regIso z) := hM
+  refine ⟨σ, hσ, hK, M, hMA, hMU, hMS, hMe, heval, ?_⟩
+  rw [← F.regIso.norm_map, map_sub, LinearIsometryEquiv.apply_symm_apply, heval,
+    LinearIsometryEquiv.apply_symm_apply]
+  exact herr
 
 end Frame
 

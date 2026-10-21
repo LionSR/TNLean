@@ -55,15 +55,15 @@ no holes, this is the normalization of $\Omega$.
 \begin{theorem}[The initial private maps]
     \label{thm:peps_sheet_initialization}
     \lean{TNLean.PEPS.EncodedFrame.framesSpace,
-        TNLean.PEPS.EncodedFrame.splitMap,
-        TNLean.PEPS.EncodedFrame.splitMap_tmul_one,
-        TNLean.PEPS.EncodedFrame.norm_splitMap_le,
-        TNLean.PEPS.EncodedFrame.splitCircuit,
-        TNLean.PEPS.EncodedFrame.nonprivateCount_splitCircuit,
-        TNLean.PEPS.EncodedFrame.isExpansionBounded_splitCircuit,
-        TNLean.PEPS.EncodedFrame.isMonomialBounded_splitCircuit,
-        TNLean.PEPS.EncodedFrame.participants_splitCircuit_subset,
-        TNLean.PEPS.EncodedFrame.eval_splitCircuit,
+        TNLean.Lattice.splitMap,
+        TNLean.Lattice.splitMap_tmul_one,
+        TNLean.Lattice.norm_splitMap_le,
+        TNLean.Lattice.splitCircuit,
+        TNLean.Lattice.nonprivateCount_splitCircuit,
+        TNLean.Lattice.isExpansionBounded_splitCircuit,
+        TNLean.Lattice.isMonomialBounded_splitCircuit,
+        TNLean.Lattice.participants_splitCircuit_subset,
+        TNLean.Lattice.eval_splitCircuit,
         TNLean.PEPS.EncodedFrame.exists_originalCircuit_initial}
     \leanok
     \uses{def:peps_sheet_stack}
@@ -621,19 +621,19 @@ no holes, this is the normalization of $\Omega$.
         \item Each change of the schedule is a bounded change from the reference
               vector of its stage to that of the next stage, with participants
               used by the event of the change, at most $r$ pair effects and at most
-              $r_s$ pair sources in each monomial, at most $K\le CL^{k'}$ monomials
-              and coefficient sum, and error at most $CL^{-20}$.
+              $r$ pair sources in each monomial, at most $K\le C_KL^{k'}$ monomials
+              and coefficient sum, and error at most $C_EL^{-20}$.
         \item At the end of the schedule the main frame is read by the unit-square
               parties and has trivial holes, every hole of the other sheets
               satisfies the frame constraint at accuracy $L^{-60}$, and the other
-              sheets carry at most $CL^3$ holes.
+              sheets carry at most $C_EL^3$ holes.
     \end{enumerate}
-    If $C\ge5042$, the private initialization, the changes of the schedule and the
+    If $C_N\ge5042$, the private initialization, the changes of the schedule and the
     final regrouping form a protocol with the assembly bounds of
-    Definition~\ref{def:peps_dyadic_protocol} for the constants $C$,
-    $b=64\cdot189$, $k'$ and $r$, all of whose changes have at most $r_s$ pair
-    sources in each monomial (\texttt{06-geometry.tex}, lines 12--53 and
-    572--681). This is not
+    Definition~\ref{def:peps_dyadic_protocol} for the count constant $C_N$, the
+    expansion constant $C_K$, the error constant $C_E$, and the constants
+    $b=64\cdot189$, $k'$ and $r$, including the bound $r$ on the pair sources
+    of each monomial (\texttt{06-geometry.tex}, lines 12--53 and 572--681). This is not
     Proposition~\ref{prop:peps_dyadic_protocol}: the frames along the schedule are
     assumed here.
 \end{theorem}
@@ -738,8 +738,8 @@ no holes, this is the normalization of $\Omega$.
     \lean{TNLean.PEPS.Approximation.IsDisplacedReading.eq_sampleGuide,
         TNLean.PEPS.Approximation.IsRayConstant.isDisplacedReading_sampleGuide,
         TNLean.PEPS.EncodedFrame.hasSourceBoundedChange_main,
-        TNLean.PEPS.EncodedFrame.perm_map_update_cons,
-        TNLean.PEPS.EncodedFrame.perm_map_cons,
+        TNLean.Lattice.perm_map_update_cons,
+        TNLean.Lattice.perm_map_cons,
         TNLean.PEPS.EncodedFrame.hasSourceBoundedChange_aux,
         TNLean.PEPS.EncodedFrame.hasSourceBoundedChange_mainAux,
         TNLean.PEPS.Approximation.isDisplacedReading_levelGuide,
@@ -833,6 +833,7 @@ no holes, this is the normalization of $\Omega$.
         TNLean.PEPS.Approximation.DyadicJunction.inRoot_rootNbr,
         TNLean.PEPS.Approximation.resizeParty,
         TNLean.PEPS.Approximation.eventUses_resizeParty,
+        TNLean.PEPS.Approximation.resize_hasSourceBoundedChange_of_le,
         TNLean.PEPS.Approximation.exists_resize_hasSourceBoundedChange}
     \leanok
     \uses{def:peps_protocol_level_frame, thm:peps_protocol_constants,
@@ -870,8 +871,8 @@ no holes, this is the normalization of $\Omega$.
     monomials and coefficient sum, and error $(2b+1)L^{-20}$, with empty external
     spectator layout and scalar $1$.
 
-    For $0<\epsilon_0\le1/16$ there is $\nu'>0$ such that, for every $0<\nu\le\nu'$,
-    every hierarchy $k$ and every choice of the remaining common data, the following
+    For $0<\epsilon_0\le1/16$, let $\nu'=\min(\epsilon_0,1)/8$. For every
+    $0<\nu\le\nu'$, every hierarchy $k$ and every choice of the remaining common data, the following
     resize has the same bounds. Let $J$ be a junction of the hierarchy of scale
     $1\le j\le k$, put $n=2^{j-1}$, and take any set $A\subseteq\mathbb R^2$. At the
     end of the pass to level $2^j$, give the holes radius $h_n$ at points of $A$ and
@@ -1080,6 +1081,7 @@ no holes, this is the normalization of $\Omega$.
         TNLean.PEPS.Approximation.protocolState,
         TNLean.PEPS.Approximation.IsProtocolConstants.t_pos,
         TNLean.PEPS.Approximation.IsProtocolConstants.hole_le,
+        TNLean.PEPS.Approximation.exists_isDistributionProtocol_of_largeRepaintings_of_le,
         TNLean.PEPS.Approximation.exists_isDistributionProtocol_of_largeRepaintings}
     \leanok
     \uses{def:peps_dyadic_protocol, def:peps_adaptive_patch_constraint,
@@ -1087,8 +1089,8 @@ no holes, this is the normalization of $\Omega$.
         thm:peps_protocol_main_frame_schedule, def:peps_dyadic_protocol_schedule,
         thm:peps_protocol_event_segments, def:peps_circuit_source_bound,
         def:peps_dyadic_protocol_parties, def:peps_frame, thm:peps_protocol_level_events}
-    Fix $0<\epsilon_0\le1/16$. There is a mesh threshold $\nu'>0$ such that for
-    every $0<\nu\le\nu'$, every $k\in\N$, constants of the protocol with an
+    Fix $0<\epsilon_0\le1/16$ and let $\nu'=\min(\epsilon_0,1)/8$. For every
+    $0<\nu\le\nu'$, every $k\in\N$, constants of the protocol with an
     admissible direct-repainting ratio, $q\ge1$, $L\ge2$ with $L\le2^k<2L$,
     $\lVert\Omega\rVert=1$ and patches supplied by the adaptive patch constraint
     with constants $B_0,C,c$ at accuracy $L^{-60}$, the following holds. Put
@@ -1112,11 +1114,12 @@ no holes, this is the normalization of $\Omega$.
     monomials and coefficient sum, error at most $(2b+1)L^{-20}$, and
     participants used by the repainting. Suppose also that the frozen frames
     satisfy the frame constraint at accuracy $L^{-60}$ and together carry at
-    most $C_1L^3$ holes. If $5042\le C_1$, $K\le C_1L^{k'}$ and $2b+1\le C_1$,
+    most $C_EL^3$ holes. If $5042\le C_N$, $K\le C_KL^{k'}$ and $2b+1\le C_E$,
     there is a protocol with the assembly bounds of
-    Definition~\ref{def:peps_dyadic_protocol} for the constants $C_1$,
-    $64\cdot189$, $k'$ and $2b$, all of whose changes have at most $2b$ pair
-    sources in each monomial. This is not
+    Definition~\ref{def:peps_dyadic_protocol} for the count constant $C_N$, the
+    expansion constant $C_K$, the error constant $C_E$, and the constants
+    $64\cdot189$, $k'$ and $2b$, including the bound $2b$ on the pair sources
+    of each monomial. This is not
     Proposition~\ref{prop:peps_dyadic_protocol}: the large-scale repaintings are
     assumed here, together with the frozen-frame bounds
     (\texttt{06-geometry.tex}, lines 82--241, 507--541 and 572--681).
@@ -1305,7 +1308,8 @@ no holes, this is the normalization of $\Omega$.
 
 \begin{theorem}[A point treatment as a change of a treated sheet]
     \label{thm:peps_protocol_point_treatment_change}
-    \lean{TNLean.PEPS.Approximation.exists_pointTreatment_hasSourceBoundedChange}
+    \lean{TNLean.PEPS.Approximation.pointTreatment_hasSourceBoundedChange_of_le,
+        TNLean.PEPS.Approximation.exists_pointTreatment_hasSourceBoundedChange}
     \leanok
     \uses{def:peps_adaptive_patch_constraint,
         def:peps_dyadic_block_guide,
@@ -1323,8 +1327,8 @@ no holes, this is the normalization of $\Omega$.
         thm:peps_protocol_constants,
         thm:peps_protocol_level_events,
         thm:peps_treated_radius_bounds}
-    Fix $0<\epsilon_0\le1/16$. There is a threshold $\nu'>0$, depending only on $\epsilon_0$,
-    such that the following holds for every $0<\nu\le\nu'$. Choose protocol constants, natural
+    Fix $0<\epsilon_0\le1/16$ and let $\nu'=\min(\epsilon_0,1)/20000$. The following holds for
+    every $0<\nu\le\nu'$. Choose protocol constants, natural
     $L\ge2$ and $q\ge1$, a unit vector $\Omega$, an adaptive supplied-patch family $P$ for
     $\Omega$ with parameters $B_0,C,c$, test exponent $60$ and size $L$, and any label rank.
     Let $R$ be a repaintable square of a hierarchy of any natural depth $k$, at level $j<k$,
@@ -1583,9 +1587,9 @@ no holes, this is the normalization of $\Omega$.
         thm:peps_protocol_bounded_changes,
         thm:peps_protocol_constants,
         thm:peps_treated_radius_bounds}
-    Let $q\ge1$ and let $\Omega$ be a $\Delta$-gapped ground state, at energy $E_0$, of the
-    square Hamiltonian with local norm bound $J$. Assume that $D$ is an angular scale as in
-    Definition~\ref{def:peps_angular_scale} with parameters $q,J,\Delta,a,A_0,m_0$, test
+    Let $q\ge1$, fix a family of states, and let $\Omega$ be a unit vector of the family.
+    Assume that $D$ is an angular scale as in Definition~\ref{def:peps_angular_scale} for
+    the family with parameters $q,a,A_0,m_0$, test
     exponent $60$ and threshold $L_0'$, where $m_0\ge2$ and $A_0\ge1$. Choose protocol
     constants and natural $L\ge\max(2,L_0')$ and $k$ with $2^k<2L$. Fix an adaptive
     supplied-patch family $P$ for $\Omega$ with parameters $B_0,C,c$, test exponent $60$ and
@@ -1651,9 +1655,9 @@ no holes, this is the normalization of $\Omega$.
         thm:peps_protocol_bounded_changes,
         thm:peps_protocol_constants,
         thm:peps_treated_radius_bounds}
-    Let $q\ge1$ and let $\Omega$ be a $\Delta$-gapped ground state, at energy $E_0$, of the
-    square Hamiltonian with local norm bound $J$. Assume that $D$ is an angular scale as in
-    Definition~\ref{def:peps_angular_scale} with parameters $q,J,\Delta,a,A_0,m_0$, test
+    Let $q\ge1$, fix a family of states, and let $\Omega$ be a unit vector of the family.
+    Assume that $D$ is an angular scale as in Definition~\ref{def:peps_angular_scale} for
+    the family with parameters $q,a,A_0,m_0$, test
     exponent $60$ and threshold $L_0'$, where $m_0\ge2$ and $A_0\ge1$. Choose protocol
     constants and natural $L\ge\max(2,L_0')$ and $k$ with $2^k<2L$. Fix an adaptive
     supplied-patch family $P$ for $\Omega$ with parameters $B_0,C,c$, test exponent $60$ and
@@ -1743,10 +1747,9 @@ no holes, this is the normalization of $\Omega$.
         thm:peps_protocol_constants,
         thm:peps_treated_radius_bounds}
     For the sampled-guide change, let $k,L,q$ be natural numbers with $q\ge1$,
-    let $h$ be a square Hamiltonian on the $L\times L$ system with interaction
-    bound $J$, and assume that $\Omega$ is a gapped ground state of energy
-    $E_0$ and gap $\Delta$. Assume the exponent-$60$ angular-scale condition
-    with parameters $q,J,\Delta,a,A_0,m_0,D,L'_0$, with natural $m_0$, where
+    fix a family of states, and let $\Omega$ be a unit vector of the family on
+    the $L\times L$ system. Assume the exponent-$60$ angular-scale condition
+    for the family with parameters $q,a,A_0,m_0,D,L'_0$, with natural $m_0$, where
     $L'_0\le L$, $m_0\ge4$, $A_0\ge1$ and $a\le a_0/2$.
     Here $a_0$ is the angular constant. Take any repainting baseline on the
     protocol guide labels, any translation $d$, and real $t,\epsilon_0$ with
@@ -1767,8 +1770,8 @@ no holes, this is the normalization of $\Omega$.
     condition bounds both the number of monomials and the sum of absolute
     coefficients by $K$; at most one pair source is needed.
 
-    For the protocol specialization, assume the same square-Hamiltonian,
-    gapped-state and exponent-$60$ angular-scale data with $q\ge1$,
+    For the protocol specialization, assume the same family, unit state and
+    exponent-$60$ angular-scale data with $q\ge1$,
     $L'_0\le L$, $m_0\ge4$ and $A_0\ge1$. Assume the protocol constants
     $K_0,\epsilon_0,\nu,a,D,B_0$, $L\ge2$ and $2^k<2L$, and take the
     exponent-$60$ adaptive supply and any label rank as above. Let $R$ be
@@ -1994,10 +1997,9 @@ no holes, this is the normalization of $\Omega$.
         thm:peps_protocol_constants,
         thm:peps_treated_radius_bounds}
     For the sampled-guide exchange, let $k,L,q$ be natural with $q\ge1$,
-    let $h$ be a square Hamiltonian on the $L\times L$ system with bound
-    $J$, and suppose $\Omega$ is a gapped ground state of energy $E_0$ and
-    gap $\Delta$. Assume the exponent-$60$ angular-scale condition with
-    parameters $q,J,\Delta,a,A_0,m_0,D,L'_0$, with natural $m_0$, where
+    fix a family of states, and suppose $\Omega$ is a unit vector of the
+    family on the $L\times L$ system. Assume the exponent-$60$ angular-scale
+    condition for the family with parameters $q,a,A_0,m_0,D,L'_0$, with natural $m_0$, where
     $L'_0\le L$, $m_0\ge2$, $A_0\ge1$ and $a\le a_0/2$, with $a_0$ the angular
     constant. Take any repainting baseline on protocol guide labels, any
     edge list $E$, edge $e$ and translation $d$. Require
@@ -2020,8 +2022,8 @@ no holes, this is the normalization of $\Omega$.
     participants in any set containing the owner of $C_e$, for every
     natural $r,K,r_s$, including zero.
 
-    For the protocol specialization, assume the square-Hamiltonian,
-    gapped-state and exponent-$60$ angular-scale data just stated, with
+    For the protocol specialization, assume the family, unit state and
+    exponent-$60$ angular-scale data just stated, with
     $q\ge1$, $L'_0\le L$, $m_0\ge2$ and $A_0\ge1$. Assume the protocol
     constants $K_0,\epsilon_0,\nu,a,D,B_0$, $L\ge2$, $2^k<2L$, the
     exponent-$60$ adaptive supply, and any label rank. Let $R$ be any
@@ -2649,10 +2651,9 @@ no holes, this is the normalization of $\Omega$.
         lem:peps_adaptive_patch_supply,
         thm:peps_protocol_constants}
     Let $k,m_0,L,b,K,q\in\mathbb N$ with $q\ge1$, and let all the scale
-    constants below be real. Assume the angular-scale condition with parameters
-    $q,J,\Delta,a,A_0,m_0,60,D,L_*$ and $L_*\le L$. Let $h$ be a square
-    Hamiltonian with parameters $L,q,J$, and let $\Omega$ be its gapped ground
-    state with energy $E_0$ and gap $\Delta$. Assume $m_0\ge4$,
+    constants below be real. Fix a family of states and assume the angular-scale
+    condition for it with parameters $q,a,A_0,m_0,60,D,L_*$ and $L_*\le L$. Let
+    $\Omega$ be a unit vector of the family on the square of side $L$. Assume $m_0\ge4$,
     $A_0\ge1$, the protocol-constant condition on $K_0,\epsilon_0,\nu,a,D,B_0$,
     $L\ge2$ and $2^k<2L$. Set $t=D\log L$. Fix an adaptive patch supply
     $P$ at the cell-center positions for $\Omega$ with parameters
@@ -2713,10 +2714,9 @@ no holes, this is the normalization of $\Omega$.
         thm:peps_dyadic_no_changed_vertex,
         thm:peps_protocol_constants}
     Let $k,m_0,L,b,K,q\in\mathbb N$ with $q\ge1$, and let all the scale
-    constants below be real. Assume the angular-scale condition with parameters
-    $q,J,\Delta,a,A_0,m_0,60,D,L_*$ and $L_*\le L$. Let $h$ be a square
-    Hamiltonian with parameters $L,q,J$, and let $\Omega$ be its gapped ground
-    state with energy $E_0$ and gap $\Delta$. Assume $m_0\ge2$,
+    constants below be real. Fix a family of states and assume the angular-scale
+    condition for it with parameters $q,a,A_0,m_0,60,D,L_*$ and $L_*\le L$. Let
+    $\Omega$ be a unit vector of the family on the square of side $L$. Assume $m_0\ge2$,
     $A_0\ge1$, the protocol-constant condition on $K_0,\epsilon_0,\nu,a,D,B_0$,
     $L\ge2$ and $2^k<2L$. Set $t=D\log L$. Fix an adaptive patch supply
     $P$ at the cell-center positions for $\Omega$ with parameters
@@ -2785,10 +2785,9 @@ no holes, this is the normalization of $\Omega$.
         lem:peps_adaptive_patch_supply,
         thm:peps_protocol_constants}
     Let $k,m_0,L,b,K,q\in\mathbb N$ with $q\ge1$, and let all the scale
-    constants below be real. Assume the angular-scale condition with parameters
-    $q,J,\Delta,a,A_0,m_0,60,D,L_*$ and $L_*\le L$. Let $h$ be a square
-    Hamiltonian with parameters $L,q,J$, and let $\Omega$ be its gapped ground
-    state with energy $E_0$ and gap $\Delta$. Assume $m_0\ge2$,
+    constants below be real. Fix a family of states and assume the angular-scale
+    condition for it with parameters $q,a,A_0,m_0,60,D,L_*$ and $L_*\le L$. Let
+    $\Omega$ be a unit vector of the family on the square of side $L$. Assume $m_0\ge2$,
     $A_0\ge1$, the protocol-constant condition on $K_0,\epsilon_0,\nu,a,D,B_0$,
     $L\ge2$ and $2^k<2L$. Set $t=D\log L$. Fix an adaptive patch supply
     $P$ at the cell-center positions for $\Omega$ with parameters
@@ -2847,10 +2846,9 @@ no holes, this is the normalization of $\Omega$.
         lem:peps_adaptive_patch_supply,
         thm:peps_protocol_constants}
     Let $k,m_0,L,b,K,q\in\mathbb N$ with $q\ge1$, and let all the scale
-    constants below be real. Assume the angular-scale condition with parameters
-    $q,J,\Delta,a,A_0,m_0,60,D,L_*$ and $L_*\le L$. Let $h$ be a square
-    Hamiltonian with parameters $L,q,J$, and let $\Omega$ be its gapped ground
-    state with energy $E_0$ and gap $\Delta$. Assume $m_0\ge2$,
+    constants below be real. Fix a family of states and assume the angular-scale
+    condition for it with parameters $q,a,A_0,m_0,60,D,L_*$ and $L_*\le L$. Let
+    $\Omega$ be a unit vector of the family on the square of side $L$. Assume $m_0\ge2$,
     $A_0\ge1$, the protocol-constant condition on $K_0,\epsilon_0,\nu,a,D,B_0$,
     $L\ge2$ and $2^k<2L$. Set $t=D\log L$. Fix an adaptive patch supply
     $P$ at the cell-center positions for $\Omega$ with parameters
@@ -2913,10 +2911,9 @@ no holes, this is the normalization of $\Omega$.
         thm:peps_protocol_constants,
         thm:peps_protocol_event_segments}
     Let $k,m_0,L,b,K,q\in\mathbb N$ with $q\ge1$, and let all the scale
-    constants below be real. Assume the angular-scale condition with parameters
-    $q,J,\Delta,a,A_0,m_0,60,D,L_*$ and $L_*\le L$. Let $h$ be a square
-    Hamiltonian with parameters $L,q,J$, and let $\Omega$ be its gapped ground
-    state with energy $E_0$ and gap $\Delta$. Assume $m_0\ge2$,
+    constants below be real. Fix a family of states and assume the angular-scale
+    condition for it with parameters $q,a,A_0,m_0,60,D,L_*$ and $L_*\le L$. Let
+    $\Omega$ be a unit vector of the family on the square of side $L$. Assume $m_0\ge2$,
     $A_0\ge1$, the protocol-constant condition on $K_0,\epsilon_0,\nu,a,D,B_0$,
     $L\ge2$ and $2^k<2L$. Set $t=D\log L$. Fix an adaptive patch supply
     $P$ at the cell-center positions for $\Omega$ with parameters
@@ -3002,10 +2999,9 @@ no holes, this is the normalization of $\Omega$.
         thm:peps_protocol_constants,
         thm:peps_protocol_event_segments}
     Let $k,m_0,L,b,K,q\in\mathbb N$ with $q\ge1$, and let all the scale
-    constants below be real. Assume the angular-scale condition with parameters
-    $q,J,\Delta,a,A_0,m_0,60,D,L_*$ and $L_*\le L$. Let $h$ be a square
-    Hamiltonian with parameters $L,q,J$, and let $\Omega$ be its gapped ground
-    state with energy $E_0$ and gap $\Delta$. Assume $m_0\ge2$,
+    constants below be real. Fix a family of states and assume the angular-scale
+    condition for it with parameters $q,a,A_0,m_0,60,D,L_*$ and $L_*\le L$. Let
+    $\Omega$ be a unit vector of the family on the square of side $L$. Assume $m_0\ge2$,
     $A_0\ge1$, the protocol-constant condition on $K_0,\epsilon_0,\nu,a,D,B_0$,
     $L\ge2$ and $2^k<2L$. Set $t=D\log L$. Fix an adaptive patch supply
     $P$ at the cell-center positions for $\Omega$ with parameters
@@ -3166,12 +3162,11 @@ no holes, this is the normalization of $\Omega$.
         thm:peps_protocol_constants,
         thm:peps_protocol_event_segments}
     Let $k,L,q\in\mathbb N$ with $q\ge1$ and $L\ge2$. Fix real
-    $J,\Delta,a,A_0,D,L'_0,K_0,\epsilon_0,\nu,B_0,C,c$, and $m_0\in\mathbb N$.
-    Assume the angular-scale condition with parameters
-    $(q,J,\Delta,a,A_0,m_0,60,D,L'_0)$, $L'_0\le L$, $m_0\ge4$, $A_0\ge1$,
+    $a,A_0,D,L'_0,K_0,\epsilon_0,\nu,B_0,C,c$, $m_0\in\mathbb N$ and a family
+    of states. Assume the angular-scale condition for the family with parameters
+    $(q,a,A_0,m_0,60,D,L'_0)$, $L'_0\le L$, $m_0\ge4$, $A_0\ge1$,
     and the protocol-constant condition for $(K_0,\epsilon_0,\nu,a,D,B_0)$.
-    Let $\Omega$ be a gapped ground vector with gap $\Delta$ and ground energy
-    $E_0$ of a square Hamiltonian with parameters $(L,q,J)$.
+    Let $\Omega$ be a unit vector of the family on the square of side $L$.
     Assume only the upper padding bound $2^k<2L$.
 
     Fix a patch supply with parameters $B_0,C,c,60,L$ for $\Omega$ at the
@@ -3211,8 +3206,8 @@ no holes, this is the normalization of $\Omega$.
         thm:peps_protocol_central_birth_chain,
         thm:peps_protocol_edge_construction_chain,
         thm:peps_protocol_treated_frame_congruence}
-    The gapped-ground-state hypothesis gives $\|\Omega\|=1$, so the central
-    birth lifts to the memory without an additional norm assumption.
+    Since $\|\Omega\|=1$, the central birth lifts to the memory without an
+    additional norm assumption.
     Concatenate its $9$ changes with the $45$ changes on each edge, in the
     order bottom, right, top, left. The distinct auxiliary indices ensure
     that each previous update leaves the next idle copy unchanged. Thus
@@ -3239,11 +3234,11 @@ no holes, this is the normalization of $\Omega$.
         thm:peps_protocol_event_segments,
         thm:peps_protocol_from_large_repaintings,
         thm:peps_protocol_main_frame_schedule}
-    Fix $k,L,q\in\mathbb N$, with $q\ge1$ and $L\ge2$, and the real
-    angular-scale parameters $(J,\Delta,a,A_0,D,L'_0)$ with $m_0\in\mathbb N$.
-    Assume the angular-scale condition at power $60$, $L'_0\le L$,
-    $m_0\ge4$, $A_0\ge1$, and let $\Omega$ be a gapped ground vector of
-    a square Hamiltonian with parameters $(L,q,J)$ and gap $\Delta$.
+    Fix $k,L,q\in\mathbb N$, with $q\ge1$ and $L\ge2$, a family of states,
+    and the real angular-scale parameters $(a,A_0,D,L'_0)$ with
+    $m_0\in\mathbb N$. Assume the angular-scale condition for the family at
+    power $60$, $L'_0\le L$, $m_0\ge4$, $A_0\ge1$, and let $\Omega$ be a
+    unit vector of the family on the square of side $L$.
     Fix protocol constants $(K_0,\epsilon_0,\nu,a,D,B_0)$, a patch supply
     with parameters $B_0,C,c,60,L$, a rank on guide labels, and a reference
     repaintable square $R_0$. Assume $L\le2^k<2L$, and explicitly supply
@@ -3410,12 +3405,12 @@ no holes, this is the normalization of $\Omega$.
     \lean{TNLean.PEPS.Approximation.IsAngularScale.mono}
     \leanok
     \uses{def:peps_angular_scale}
-    For arbitrary $q,m_0,p\in\mathbb N$ and real $J,\Delta,a,A_0,D,L_0,D'$,
-    assume the angular-scale condition with parameters
-    $(q,J,\Delta,a,A_0,m_0,p,D,L_0)$, $a\ge0$ and $D\le D'$.
+    For arbitrary $q,m_0,p\in\mathbb N$, real $a,A_0,D,L_0,D'$ and a family of
+    states, assume the angular-scale condition for the family with parameters
+    $(q,a,A_0,m_0,p,D,L_0)$, $a\ge0$ and $D\le D'$.
     The angular-scale condition then holds with scale $D'$ and threshold
     $\max(L_0,1)$, with all other parameters unchanged. No positivity of
-    $J$, $\Delta$, $A_0$ or $D$ is an additional premise.
+    $A_0$ or $D$ is an additional premise.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -3442,7 +3437,14 @@ no holes, this is the normalization of $\Omega$.
 \begin{theorem}[The dyadic distribution protocol from the patch bound]
     \label{thm:peps_protocol_from_angular_and_patch_bounds}
     \lean{TNLean.PEPS.Approximation.largeSizeDyadicProtocolConsequences_of_adaptivePatchConstraint,
-        TNLean.PEPS.Approximation.protocolPlacement_squareParty}
+        TNLean.PEPS.Approximation.largeSizeDyadicProtocol_of_le_of_adaptivePatchConstraint,
+        TNLean.PEPS.Approximation.largeSizeDyadicProtocolBounds_of_adaptivePatchConstraint,
+        TNLean.PEPS.Approximation.HierarchySquare.lt_of_eq_pow,
+        TNLean.PEPS.Approximation.protocolSquareParty,
+        TNLean.PEPS.Approximation.protocolSquareParty_injective,
+        TNLean.PEPS.Approximation.exists_eq_inr_of_notMem_range_protocolSquareParty,
+        TNLean.PEPS.Approximation.protocolSchedule_fst_eq_of_le,
+        TNLean.PEPS.Approximation.near_of_eventUses_repaint}
     \leanok
     \uses{def:peps_adaptive_patch_constraint,
         def:peps_dyadic_protocol}
@@ -3454,9 +3456,12 @@ no holes, this is the normalization of $\Omega$.
     energy $E_0$ and gapped ground vector $\Omega$ with gap $\Delta$, there
     exist a finite party type and a dyadic distribution protocol with the
     assembly bounds $(C,b,\kappa,r)$ of
-    Definition~\ref{def:peps_dyadic_protocol}. This is the form in which
-    Proposition~\ref{prop:peps_dyadic_protocol} is used later, weaker than
-    that proposition (\texttt{06-geometry.tex}, lines 12--53 and 559--681).
+    Definition~\ref{def:peps_dyadic_protocol} at $C_N=C_K=C_E=C$; with the patch
+    constraint proved, this gives Proposition~\ref{prop:peps_dyadic_protocol}
+    (\texttt{06-geometry.tex}, lines 12--53 and 559--681). More precisely, the
+    count, expansion and error constants may be taken as in
+    Theorem~\ref{thm:peps_dyadic_protocol_explicit_constants}, and $C$ is the
+    largest of the three.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -3468,6 +3473,7 @@ no holes, this is the normalization of $\Omega$.
         thm:peps_angular_scale_exists,
         thm:peps_angular_scale_monotonicity,
         thm:peps_dyadic_direct_repainting_constants,
+        lem:peps_dyadic_protocol_mesh_ratio,
         thm:peps_dyadic_padding_bounds,
         thm:peps_dyadic_protocol_schedule_counts,
         thm:peps_protocol_constants,
@@ -3478,18 +3484,34 @@ no holes, this is the normalization of $\Omega$.
         thm:peps_protocol_point_treatment_change}
     The angular information bound of Proposition~3.4 holds by
     Theorem~\ref{thm:peps_angular_information_from_gap}. Fix the constants in
-    the order of the source: $K_0=20$, a small $\epsilon_0$, a mesh ratio
-    $\nu$ below the thresholds of the resizes, the point treatments and the
-    direct repaintings, the clearance $a=a_0/2$, the information scale $D$
+    the order of the source: $K_0=20$, a small $\epsilon_0$, the mesh ratio
+    $\nu$ of Lemma~\ref{lem:peps_dyadic_protocol_mesh_ratio}, below the
+    thresholds of the resizes, the point treatments and the direct repaintings, the clearance $a=a_0/2$, the information scale $D$
     of Proposition~3.4 at that clearance, enlarged to at least $1$, and
     $B_0=K_0D$; Proposition~4.1 then supplies the patch constants. Choose
-    the fixed bounds $C,b,\kappa,r,L_0$ from these constants, before $L$
-    and the Hamiltonian. For $L\ge\max(2,L_0)$ take the dyadic depth
+    the count constant $C_N\ge5042$, the expansion constant $C_K\ge G$, the
+    prefactor of the small-patch rewrites, the error constant
+    $C_E\ge\max\{10080,2b_{\rm pat}+1\}$, where $b_{\rm pat}$ bounds the patches
+    of one rewrite, and $\kappa,r,L_0$ from these constants, before $L$ and the
+    Hamiltonian. For $L\ge\max(2,L_0)$ take the dyadic depth
     $d=\lceil\log_2L\rceil$ and padded side $N=2^d$, so that $L\le N<2L$.
     Every aligned square of $[0,N]^2$ of side $2^j$, including the root
     square, then has $j\le d$ and block indices below $2^{d-j}$, so it is a
     square of the hierarchy of depth $d$ and its block party is a different
-    party for each square, at the scale and address of that square. The
+    party for each square, at the scale and address of that square. Every
+    other party is the placeholder of a non-root square $S$, placed at $S$;
+    each change is recorded as belonging to the repainting of $S$ when its
+    scheduled event is that repainting, and the placeholder of $S$ takes part
+    only in gates of that repainting. The initial encoded frames are the raw
+    copies of $\Omega$, each held by its designated party, and every
+    intermediate reference vector is that of the frames of its stage, with
+    factors of norm at most $\lVert\Omega\rVert=1$. Every change of the schedule
+    keeps the main sheet, so every intermediate list of frames is nonempty. The
+    events are listed without repetition
+    and each contributes its changes in one block, so the changes of the
+    repainting of $S$ form one segment; a party used by that repainting has the
+    scale of $S$ or the next one and an address within $6\cdot2^j$ of the
+    address of $S$, for $S$ of side $2^j$. The
     large repaintings pass the memory from one state to the next by
     Theorem~\ref{thm:peps_protocol_large_repainting_segment}, with the
     frozen frames and owners of Definition~\ref{def:peps_protocol_frozen_frames}.

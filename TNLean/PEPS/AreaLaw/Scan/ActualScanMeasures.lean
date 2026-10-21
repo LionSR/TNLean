@@ -31,6 +31,8 @@ open TensorPower TensorPower.ReplicaTransport Entropy
 
 noncomputable section
 
+open TNLean.Lattice
+
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
 
 variable {V I : Type} [Fintype V] [DecidableEq V] [Fintype I] [LinearOrder I]

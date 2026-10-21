@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.Approximation.SheetSwapSiteSupport
+import TNLean.Lattice.RegionalSwapSupport
 
 /-!
 # Axiom guard for the support of the regional sheet swap
@@ -15,8 +15,8 @@ standard logical axioms.
 set_option linter.hashCommand false
 
 /--
-info: 'TNLean.PEPS.EncodedFrame.reindex_sheetSwapOp_mem_supportedOperators'
+info: 'TNLean.Lattice.reindex_sheetSwapOp_mem_supportedOperators'
   depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms TNLean.PEPS.EncodedFrame.reindex_sheetSwapOp_mem_supportedOperators
+#print axioms TNLean.Lattice.reindex_sheetSwapOp_mem_supportedOperators

@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Algebra.MatrixCyclicPathSum
 import TNLean.PEPS.Approximation.EncodedFrame
-import TNLean.PEPS.Approximation.WholeGroupContraction
+import TNLean.Lattice.Compression.WholeGroupContraction
 
 /-!
 # Chains of rank-one site operators as tensor networks
@@ -53,6 +53,7 @@ the manuscript; no upstream Lean proof text was reused.
 
 open Matrix QuantumCircuit
 open scoped BigOperators
+open TNLean.Lattice (siteLift)
 
 noncomputable section
 

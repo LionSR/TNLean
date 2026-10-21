@@ -5,18 +5,18 @@
 \input{command}
 \title{Threshold Truncation in the One-Dimensional Matrix Product State Approximation}
 \author{}
-\date{October 16, 2026}
+\date{October 20, 2026}
 \begin{document}
 \maketitle
-\gapnote{scope-restriction}{open}
+\gapnote{scope-restriction}{resolved}
 
 \section{The source statement}
 
 Proposition~7.1 of the one-dimensional note~\cite{TNLean2026OneDimensional}
 (label \texttt{prop:VC}, file \texttt{part2a\_mps\_information.tex},
-lines~33--44) is the classical sequential truncation of Verstraete and
+lines~39--62) is the classical sequential truncation of Verstraete and
 Cirac. Let $\Omega$ be a unit vector on the chain $\Lambda=\{1,\ldots,L\}$
-and let $D$ be an arbitrary positive integer. For $1\le k\le L-1$ let
+and let $D$ be an arbitrary natural number. For $1\le k\le L-1$ let
 $\Pi_k$ be the projection of $\mathcal H_{[1,k]}$ onto the span of the
 $\min\{D,\dim\mathcal H_{[1,k]}\}$ eigenvectors of $\rho_{[1,k]}$ with the
 largest eigenvalues (the identity when $D\ge\dim\mathcal H_{[1,k]}$), let
@@ -24,8 +24,8 @@ $\epsilon_k=\langle\Omega,(\mathbb 1-\Pi_k\otimes\mathbb 1)\Omega\rangle$ be
 the discarded mass, and put
 \begin{align}
     \Phi
-        &= (\Pi_1\otimes\mathbb 1)(\Pi_2\otimes\mathbb 1)\cdots
-        (\Pi_{L-1}\otimes\mathbb 1)\,\Omega .
+     & = (\Pi_1\otimes\mathbb 1)(\Pi_2\otimes\mathbb 1)\cdots
+    (\Pi_{L-1}\otimes\mathbb 1)\,\Omega .
     \label{eq:tnlean_one_dimensional_threshold_truncation_truncated_vector}
 \end{align}
 Then $\Phi$ is a matrix product state with open boundary conditions and bond
@@ -35,62 +35,88 @@ The proposition quantifies over the bond dimension $D$: the truncation at
 every cut keeps the $D$ largest Schmidt weights, whatever the spectrum, and
 the error is expressed through the masses $\epsilon_k=\epsilon_k(D)$ beyond
 the $D$-th eigenvalue. Theorem~B is then derived (the two-line route,
-label \texttt{thm:Bshort}, lines~65--82) by choosing a slack $w$ from the
+label \texttt{thm:Bshort}, lines~80--92) by choosing a slack $w$ from the
 tail bound and taking $D=\lceil e^{C_{\mathrm{int}}+w}\rceil$, so that the
 eigenvalues at least $e^{-(S(X)+w)}$ are among the $D$ largest and
 $\epsilon_k(D)$ is at most the surprisal tail beyond $w$.
 
-\section{What is proved and the restriction}
+\section{The threshold form}
 
-The formalization proves the \emph{threshold form} of the sequential
+The formalization first established the \emph{threshold form} of the sequential
 truncation.\footnote{Declarations:
-\leanid{TNLean.MPS.AreaLaw.sequentialTruncation},
-\leanid{TNLean.MPS.AreaLaw.norm_sub_sequentialTruncation_le},
-\leanid{TNLean.MPS.AreaLaw.rank_cutMatrix_sequentialTruncation_le},
-\leanid{TNLean.MPS.AreaLaw.exists_sequentialTruncation}.} For a unit vector
+    \leanid{TNLean.MPS.AreaLaw.sequentialTruncation},
+    \leanid{TNLean.MPS.AreaLaw.norm_sub_sequentialTruncation_le},
+    \leanid{TNLean.MPS.AreaLaw.rank_cutMatrix_sequentialTruncation_le},
+    \leanid{TNLean.MPS.AreaLaw.exists_sequentialTruncation}.} For a unit vector
 $\psi$ on $L$ sites and a real slack $w$, the regional projector $\Pi_k$ at
 the cut $k$ is the spectral projector of the reduced state of the first $k$
 sites onto the eigenvalues at least $e^{-(S_k+w)}$, where $S_k$ is the entropy
 of that reduced state; its rank is at most $e^{S_k+w}$, and the mass it
 discards, $\|(\mathbb 1-\Pi_k\otimes\mathbb 1)\psi\|^2$, is at most the
 two-sided surprisal tail of the reduced state beyond $w$.\footnote{Declarations:
-\leanid{Matrix.PosSemidef.rank_spectralProjectionGE_exp_le},
-\leanid{Matrix.PosSemidef.trace_complement_spectralProjectionGE_le_surprisalTail}.}
+    \leanid{Matrix.PosSemidef.rank_spectralProjectionGE_exp_le},
+    \leanid{Matrix.PosSemidef.trace_complement_spectralProjectionGE_le_surprisalTail}.}
 The vector $\Phi=(\Pi_1\otimes\mathbb 1)\cdots(\Pi_{L-1}\otimes\mathbb 1)\psi$
 has cut rank at most $\max\{1,e^{S_k+w}\}$ across every cut and satisfies
 $\|\psi-\Phi\|\le\sum_{k=1}^{L-1}\sqrt{\mathrm{tail}_k(w)}$. Together with the
 passage from bounded cut ranks to an open-boundary matrix product
 state,\footnote{Declaration:
-\leanid{TNLean.MPS.AreaLaw.isOpenMPS_of_cutMatrix_rank_le}.} this is exactly
+    \leanid{TNLean.MPS.AreaLaw.isOpenMPS_of_cutMatrix_rank_le}.} this is exactly
 what the two-line route to Theorem~B uses, and Theorem~B is proved from
 it.\footnote{Declaration:
-\leanid{TNLean.MPS.AreaLaw.exists_isOpenMPS_norm_sub_le}.}
+    \leanid{TNLean.MPS.AreaLaw.exists_isOpenMPS_norm_sub_le}.}
 
-The restriction is in the choice of projectors. The source projects onto a
+The restriction concerns the choice of projectors. The source projects onto a
 prescribed number $D$ of Schmidt vectors at every cut and quantifies over
-$D$; the formal statement projects onto the eigenvalues above a threshold
+$D$; the threshold statement projects onto the eigenvalues above a threshold
 fixed by the entropy of the cut and a common slack $w$, and quantifies over
-$w$. The two families of projectors agree only when $D$ happens to equal the
-number of eigenvalues above the threshold, so the formal lemma is not the
-source proposition for an arbitrary $D$: for a given $D$ the threshold
-projector may keep fewer or more than $D$ eigenvalues, and no formal statement
-bounds the error by $\sum_k\sqrt{\epsilon_k(D)}$. The threshold form is
+$w$. For a prescribed $D$ the two families of projectors need not agree.
+The threshold lemma alone therefore does not give the source proposition
+for an arbitrary $D$, or its error bound $\sum_k\sqrt{\epsilon_k(D)}$.
+The threshold form is
 stronger in one respect, the rank bound $e^{S_k+w}$ is exhibited rather than
 assumed, and weaker in the other, the bond dimension is not a free parameter.
 
-\section{Elimination plan}
+\section{Ordered-span truncation}
 
-Either formalize the source proposition as a separate statement, with the
-projector onto the $D$ largest eigenvalues (for a density matrix with its
-eigenvalues sorted, the spectral projector onto the top $D$ eigenvectors)
-and the error $\sum_k\sqrt{\epsilon_k(D)}$, reusing the sequential product,
-its distance bound and its cut-rank bound, which are stated for an arbitrary
-family of projectors on the left blocks; or restate Proposition~7.1 of the
-note in threshold form, which is the form its proof of Theorem~B uses. Until
-then the restriction is recorded on the module docstring of
-\texttt{TNLean/MPS/AreaLaw/SequentialTruncation.lean}, in the blueprint statement
-of the sequential truncation lemma, and in the status table of
-\path{docs/formalization/one-dimensional-chain.md}.
+The completion treats arbitrary ordered orthonormal bases at the internal
+cuts. For each cut $k$, let $N_k=\dim\mathcal H_{[1,k]}$, choose an ordered
+orthonormal basis $b_{k,0},\ldots,b_{k,N_k-1}$, and let $\Pi_k$ be the
+orthogonal projection onto the span of its first $\min\{D,N_k\}$ vectors.
+The ordered product
+$\Phi=(\Pi_1\otimes\mathbb 1)\cdots(\Pi_{L-1}\otimes\mathbb 1)\psi$
+has an open-boundary matrix product representation with internal bond
+dimensions at most $D$, and
+\begin{align}
+    \|\Phi-\psi\|
+     & \le\sum_{k=1}^{L-1}
+    \sqrt{\operatorname{Re}\langle\psi,(\mathbb 1-\Pi_k\otimes\mathbb 1)\psi\rangle}.
+    \label{eq:tnlean_one_dimensional_threshold_truncation_ordered_span_error}
+\end{align}
+The statement holds for every vector and every such basis family, for all
+natural $L,q,D$.\footnote{Declarations:
+    \leanid{TNLean.MPS.AreaLaw.prefixBasisProjection},
+    \leanid{TNLean.MPS.AreaLaw.isOpenMPS_sequentialTruncation_prefixBasisProjection}.}
+For $L\le1$ the product is empty, so $\Phi=\psi$ and the error sum is zero.
+
+Proposition~7.1 is the instance in which the vector is a unit vector and each
+basis is an orthonormal eigenbasis of the marginal at its cut, ordered by
+nonincreasing eigenvalue, with any permissible choice within a repeated
+eigenspace. For that instance the leading spans are the source spans and the
+displayed expectations are $\epsilon_k(D)$. This instance is formalized
+for the leading eigenvectors of a fixed orthonormal eigenbasis of each
+marginal, with $\epsilon_k(D)=1-S_D(\rho_{[1,k]})$, where $S_D$ is the sum of
+the $D$ largest eigenvalues, so the error is the source's
+$\sum_k\sqrt{\epsilon_k(D)}$.\footnote{Declarations:
+    \leanid{Matrix.IsHermitian.leadingEigenprojection} (QICLean),
+    \leanid{TNLean.MPS.AreaLaw.isOpenMPS_sequentialTruncation_leadingEigenprojection}.}
+Any other choice of eigenvectors within a repeated eigenvalue is covered by
+the general-basis form. Proposition~7.1 is therefore formalized and the
+restriction is resolved.
+The note is retained to distinguish the two truncation statements. The
+threshold theorem continues to supply the argument for Theorem~B; its
+projectors and the prescribed-dimension projectors need not coincide.
+Both estimates concern the projected vector before normalization.
 
 \bibliographystyle{alpha}
 \bibliography{references}

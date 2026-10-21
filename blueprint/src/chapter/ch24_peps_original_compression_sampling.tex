@@ -428,6 +428,163 @@ contraction of local tensors is a separate assertion.
     the input and the retained registers are unchanged.
 \end{proof}
 
+\begin{theorem}[Separate arity and lifetime bounds for link incidence]
+    \label{thm:peps_separate_arity_incidence}
+    \lean{TNLean.PEPS.Approximation.card_incidentDistributedLinks_le_of_arity_lifetime,
+        TNLean.PEPS.PairEffect.SourceCircuit.card_incidentSourceDensityLinks_le_of_arity_lifetime,
+        TNLean.PEPS.PairEffect.OriginalCircuit.card_incidentPhysicalFirstDensityLinks_le_of_arity_lifetime,
+        TNLean.PEPS.PairEffect.OriginalCircuit.card_participants_produce_le_of_arity}
+    \leanok
+    \uses{def:compression_operator_links,def:compression_operator_incidences}
+    Let $G$ be a finite set of gate occurrences, each with a finite
+    participant set $P_g$ and a root $r_g\in P_g$.
+    Let $a,b\in\mathbb N$ and fix a party $p$.
+    If $|P_g|\le a$ for every $g\in G$ and $p$ belongs to at most
+    $b$ of these sets, then its actual tagged star and sample links satisfy
+    \begin{align}
+        |I_p| & \le2b(a-1).
+        \label{eq:peps_separate_arity_incidence}
+    \end{align}
+    Here $a-1$ denotes natural subtraction. The bound includes
+    $a=0,1$ and $b=0$, and counts parallel link tags separately.
+
+    For a source circuit, the same bound holds for the link family
+    of its nonempty participant occurrences, if each such occurrence
+    has at most $a$ participants and every party participates at most $b$ times.
+    Reading an original circuit as its recorded expansions preserves
+    the participant set of each occurrence, and hence its arity bound.
+    More precisely, let $W$ have expansion bound $(r,S)$, arity at
+    most $a$ and lifetime at most $b$ at every party. For each
+    $\delta>0$, let $R$ be its constructed physical-output-first
+    replacement at that precision. Then the link family of this same
+    $R$ has $|I_p(R)|\le2b(a-1)$ at every party.
+    These are incidence estimates for the specified tagged links in
+    \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:compression_incidence_containment,thm:compression_gate_incidence_bound,
+        thm:compression_tagging_cardinality,thm:peps_physical_first_original_locality,
+        thm:peps_source_only_resources,thm:peps_physical_first_occurrences,
+        thm:peps_original_produced_resource_bounds}
+    At a gate containing $p$, at most $|P_g|-1$ star links and
+    $|P_g|-1$ sample links meet $p$. The union over its actual
+    incident gate occurrences therefore gives
+    \begin{align}
+        |I_p| & \le\sum_{g\in G_p}2(|P_g|-1)
+        \le |G_p|\,2(a-1)\le2b(a-1).\notag
+    \end{align}
+    Each link retains its occurrence and kind, so the union does not
+    identify parallel links. Empty participant occurrences contribute
+    to no party's count. The source-circuit count follows by restricting
+    to the nonempty occurrences. For the physical-output-first
+    replacement, the occurrence correspondence preserves the exact
+    participant set, and its lifetime does not exceed the original
+    lifetime. Apply (\ref{eq:peps_separate_arity_incidence}) to that
+    replacement. The recorded expansion correspondence preserves
+    participants without any approximation or precision assumption.
+\end{proof}
+
+\begin{theorem}[Uniform compression with separate arity and lifetime]
+    \label{thm:peps_separate_arity_compression}
+    \lean{TNLean.PEPS.PairEffect.DistributedConstruction.exists_uniform_sampled_network_of_arity_lifetime,
+        TNLean.PEPS.PairEffect.DistributedConstruction.exists_uniform_sampled_network_sub_pure_le_of_arity_lifetime}
+    \leanok
+    \uses{def:peps_distributed_construction,def:peps_distributed_construction_density,
+        def:compression_operator_operator,def:compression_operator_alphabets}
+    Consider the case of \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS}
+    without messages. Let $(\mathcal C_i)_{i\in I}$ be an arbitrary
+    family of distributed constructions with real sizes $L_i\ge2$.
+    Fix natural $a,b,n,d,r,u,v$ with $a\le b$ and real
+    $C_N,C_D,C_K,C_C$, before all members. Suppose every member has
+    at most $C_NL_i^n$ original nonprivate gates and physical
+    dimensions at most $C_DL_i^d$. Each such gate has at most $a$
+    participants, each party participates in at most $b$ gates, and
+    there is a natural monomial bound $K_i\le C_KL_i^u$.
+    Every recorded monomial has at most $r$ pair effects and a
+    coefficient of modulus at most $C_CL_i^v$.
+
+    For every $p>0$, there are $C_p\ge0$ and a natural $\alpha>0$
+    before all members, such that each member admits actual finite
+    gate occurrences, roots, branch alphabets, sample count,
+    coefficients and party matrices $T$, whose contraction $\sigma_i$
+    satisfies
+    \begin{align}
+        \|\sigma_i-\rho_i\|_1 & \le L_i^{-p},      &
+        |D_e|                 & \le C_pL_i^\alpha, & |I_j| & \le2b(a-1).
+        \label{eq:peps_separate_arity_network}
+    \end{align}
+    Here $\rho_i$ is the original unnormalized physical density.
+    Both endpoints of every actual tagged link participate in a
+    common original nonprivate gate of $\mathcal C_i$.
+    All these conclusions concern the same contraction and alphabets.
+
+    If additionally unit vectors $\omega_i$ and real errors $\eta_i$
+    satisfy $\|\rho_i-|\omega_i\rangle\langle\omega_i|\|_1\le\eta_i$,
+    the same conclusion can be chosen with
+    \begin{align}
+        \|\sigma_i-|\omega_i\rangle\langle\omega_i|\|_1
+                 & \le L_i^{-p}+\eta_i,                             &
+        1-\eta_i & \le\operatorname{Re}\operatorname{Tr}\rho_i\le1.
+        \label{eq:peps_separate_arity_pure}
+    \end{align}
+    This is the near-pure-state consequence of
+    \cite[Remark~5.3]{OpenAI2026PolynomialPEPS}. No positivity or
+    normalization of $\sigma_i$ is asserted.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_uniform_approximate_operator_network,
+        thm:peps_distributed_construction_gate_maps_density,
+        thm:peps_separate_arity_incidence,thm:peps_compression_retained_norm}
+    Use each gate's own recorded expansion. It gives its original
+    operator exactly, with the stated monomial and coefficient bounds.
+    Since $a\le b$, apply the original-gate sampling theorem with
+    common sampling bound $b$ at its lower construction level.
+    Keep its selected expansion lists, rescaled circuit, actual
+    replacement $R$, sample count, coefficients and local matrices
+    $T$. Its error and alphabet estimates already concern these data.
+    Reexpansion and rescaling preserve each original participant set
+    and lifetime. Theorem~\ref{thm:peps_separate_arity_incidence}
+    therefore gives $2b(a-1)$ for this very replacement's links,
+    without selecting another network. Transporting its common-gate
+    witness through the recorded occurrence correspondence gives an
+    original gate of $\mathcal C_i$ with the same participants.
+    The absorbed exterior scalar changes one local matrix but no link
+    or alphabet. This proves (\ref{eq:peps_separate_arity_network}).
+    Apply the retained-density trace-norm estimate to this same
+    $\sigma_i$ and $\rho_i$ to obtain
+    (\ref{eq:peps_separate_arity_pure}).
+\end{proof}
+
+\begin{theorem}[Compression of a family of distributed constructions with explicit constants]
+    \label{thm:peps_distributed_construction_compression_of_le}
+    \lean{TNLean.PEPS.PairEffect.DistributedConstruction.uniform_sampled_network_of_le,
+        TNLean.PEPS.PairEffect.DistributedConstruction.uniform_sampled_network_of_sum_le,
+        TNLean.PEPS.PairEffect.OriginalCircuit.isExpansionBounded_reexpand_expansionGateLists}
+    \leanok
+    \uses{def:peps_compression_constants}
+    Under the hypotheses of
+    Theorem~\ref{thm:peps_distributed_construction_compression}, let $p$ be
+    real. For every $C_p\ge C(r,b,C_N,C_D,C_K,C_C)$ and every integer
+    $\alpha_p\ge\alpha(r,b,n,d,u,v,p)$, with the constants of
+    Definition~\ref{def:peps_compression_constants}, every member admits an
+    operator tensor network $\sigma_L$ as in
+    Theorem~\ref{thm:peps_distributed_construction_compression} with
+    $\dim\mathcal V_e\le C_pL^{\alpha_p}$. If instead of the bound on the
+    individual coefficients the recorded expansion of every nonprivate gate has
+    absolute coefficient sum at most $C_SL^s$, the same holds for every
+    $C_p\ge C_\Sigma(r,b,C_N,C_D,C_K,C_S)$ and every integer
+    $\alpha_p\ge\alpha_{\mathrm{net}}(r,b,n,d,u,s,p)$.
+    % Source: 04-compression.tex, lines 137--175, 199--208 and 565--588.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_uniform_approximate_operator_network_of_le,thm:peps_distributed_construction_gate_maps_density}
+    The argument of
+    Theorem~\ref{thm:peps_distributed_construction_compression} applies
+    Theorem~\ref{thm:peps_uniform_approximate_operator_network_of_le} to the
+    exact recorded expansions.
+\end{proof}
+
 \begin{theorem}[Compression of a family of distributed constructions]
     \label{thm:peps_distributed_construction_compression}
     \lean{TNLean.PEPS.PairEffect.DistributedConstruction.exists_uniform_sampled_network}
@@ -457,7 +614,11 @@ contraction of local tensors is a separate assertion.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:peps_uniform_approximate_operator_network,thm:peps_distributed_construction_gate_maps_density}
+    \uses{thm:peps_distributed_construction_compression_of_le,def:peps_compression_constants}
+    Take $C_p=C(r,b,C_N,C_D,C_K,C_C)$ and
+    $\alpha_p=\alpha(r,b,n,d,u,v,p)$, the positive constants of
+    Definition~\ref{def:peps_compression_constants}, in
+    Theorem~\ref{thm:peps_distributed_construction_compression_of_le}.
     Reading every member with the operators of its own expansions, the recorded
     expansions approximate these operators with error zero, hence at every
     inverse-power accuracy, and keep the original monomial counts,

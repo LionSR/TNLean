@@ -19,6 +19,7 @@ set_option autoImplicit false
 
 open TensorPower TensorPower.ReplicaTransport
 open TNLean.PEPS.AreaLaw TNLean.PEPS.AreaLaw.Scan
+open TNLean.Lattice
 
 namespace TNLeanTest.ActualFillTransport
 

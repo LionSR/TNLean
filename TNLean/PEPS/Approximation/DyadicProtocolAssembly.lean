@@ -5,8 +5,8 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.DyadicProtocolFinalReadout
 import TNLean.PEPS.Approximation.DyadicProtocolInitialStep
-import TNLean.PEPS.Approximation.OriginalCircuitChain
-import TNLean.PEPS.Approximation.OriginalCircuitSourceBound
+import TNLean.Lattice.PartyCircuit.OriginalCircuitChain
+import TNLean.Lattice.PartyCircuit.OriginalCircuitSourceBound
 import TNLean.PEPS.Approximation.SheetStackChange
 
 /-!
@@ -34,7 +34,7 @@ The construction of these frames along the schedule is not done here.
 
 * `card_eventUses_le`: an event of the hierarchy uses at most `19` parties.
 * `exists_isDistributionProtocol_of_frames`: the assembled protocol satisfies the bounds of §8,
-  and every change is source bounded when the changes of the schedule are.
+  including the pair-source bound when the changes of the schedule are source bounded.
 
 ## References
 
@@ -162,32 +162,108 @@ theorem memCongr_stackVec {ι : Type} [Fintype ι] [DecidableEq ι] {q : ℕ} [N
   subst h
   rfl
 
-/-- **A party for every square of the hierarchy.** When `L ≤ 2 ^ k < 2 L`, the block parties
-give an injective assignment of a party to every aligned square of the padded square
-`[0, N] ^ 2`, `N = 2 ^ k`, including the root square, at the scale and address of that square.
+/-- A square of the padded hierarchy of `[0, 2 ^ k] ^ 2` is a square of the hierarchy of depth
+`k`: its scale is at most `k` and its block indices are below `2 ^ (k - j)`.
 
-Polynomial-PEPS manuscript, `06-geometry.tex`, lines 18–20 and 64–67. -/
-theorem protocolPlacement_squareParty {L k : ℕ} (hkL : L ≤ 2 ^ k) (hk2 : 2 ^ k < 2 * L) :
-    ∃ f : HierarchySquare (paddedSide L) → ProtocolParty k, Function.Injective f ∧
-      ∀ S, ((protocolPlacement k).scale (f S), (protocolPlacement k).blockX (f S),
-        (protocolPlacement k).blockY (f S)) = S.1 := by
-  have hN : paddedSide L = 2 ^ k :=
-    le_antisymm (paddedSide_le_of_le_pow hkL) (pow_le_paddedSide hk2)
-  have mk : ∀ S : HierarchySquare (paddedSide L), ∃ T : DyadicSquare k, T.toTriple = S.1 := by
-    rintro ⟨⟨j, x, y⟩, hx, hy⟩
-    simp only [hN] at hx hy
-    have hj : j ≤ k := by
-      have : 2 ^ j ≤ 2 ^ k := (Nat.le_mul_of_pos_right _ (by omega)).trans hx
-      exact (Nat.pow_le_pow_iff_right (by norm_num)).1 this
-    have hsplit : (2 : ℕ) ^ k = 2 ^ j * 2 ^ (k - j) := by rw [← pow_add, Nat.add_sub_cancel' hj]
-    rw [hsplit] at hx hy
-    have hx' := Nat.le_of_mul_le_mul_left hx (by positivity)
-    have hy' := Nat.le_of_mul_le_mul_left hy (by positivity)
-    exact ⟨⟨⟨j, by omega⟩, ⟨x, show x < 2 ^ (k - j) by omega⟩,
-      ⟨y, show y < 2 ^ (k - j) by omega⟩⟩, rfl⟩
-  choose g hg using mk
-  exact ⟨fun S => .inl (g S), fun S S' h => Subtype.ext (by
-    rw [← hg S, ← hg S', Sum.inl_injective h]), fun S => hg S⟩
+Polynomial-PEPS manuscript, `06-geometry.tex`, lines 64–65. -/
+theorem HierarchySquare.lt_of_eq_pow {N k : ℕ} (hN : N = 2 ^ k) (S : HierarchySquare N) :
+    S.1.1 < k + 1 ∧ S.1.2.1 < 2 ^ (k - S.1.1) ∧ S.1.2.2 < 2 ^ (k - S.1.1) := by
+  obtain ⟨⟨j, x, y⟩, hx, hy⟩ := S
+  subst hN
+  dsimp only at hx hy ⊢
+  have hj : j ≤ k := by
+    have : 2 ^ j ≤ 2 ^ k := (Nat.le_mul_of_pos_right _ (by omega)).trans hx
+    exact (Nat.pow_le_pow_iff_right (by norm_num)).1 this
+  have hsplit : (2 : ℕ) ^ k = 2 ^ j * 2 ^ (k - j) := by rw [← pow_add, Nat.add_sub_cancel' hj]
+  rw [hsplit] at hx hy
+  have hx' := Nat.le_of_mul_le_mul_left hx (by positivity)
+  have hy' := Nat.le_of_mul_le_mul_left hy (by positivity)
+  omega
+
+/-- **Events occupy segments of the schedule.** The changes of one event form a contiguous
+segment of the protocol schedule: the events are listed without repetition, and each contributes
+its changes in one block.
+
+Polynomial-PEPS manuscript, `06-geometry.tex`, lines 82–87. -/
+theorem protocolSchedule_fst_eq_of_le {k : ℕ} (large : DyadicSquare k → Bool) {i m j : ℕ}
+    (him : i ≤ m) (hmj : m ≤ j) (hj : j < (protocolSchedule k large).length)
+    {e : ProtocolEvent k} (hi : ((protocolSchedule k large)[i]'(by omega)).1 = e)
+    (hj' : ((protocolSchedule k large)[j]).1 = e) :
+    ((protocolSchedule k large)[m]'(by omega)).1 = e := by
+  set l := eventSchedule k
+  have hl : l.Nodup := nodup_eventSchedule k
+  let key : ProtocolEvent k × RepaintOp → ℕ := fun x => l.idxOf x.1
+  have hpos : l.Pairwise fun a b => l.idxOf a < l.idxOf b := by
+    refine List.pairwise_iff_getElem.2 fun a b ha hb hab => ?_
+    rw [hl.idxOf_getElem a ha, hl.idxOf_getElem b hb]
+    exact hab
+  have hsorted : (protocolSchedule k large).Pairwise fun x y => key x ≤ key y := by
+    refine List.pairwise_flatMap.2 ⟨fun a _ => ?_, hpos.imp fun {a b} hab x hx y hy => ?_⟩
+    · refine List.pairwise_map.2 (List.pairwise_of_forall fun _ _ => le_rfl)
+    · obtain ⟨_, -, rfl⟩ := List.mem_map.1 hx
+      obtain ⟨_, -, rfl⟩ := List.mem_map.1 hy
+      exact hab.le
+  have hle : ∀ {a b : ℕ} (hab : a ≤ b) (hb : b < (protocolSchedule k large).length),
+      key ((protocolSchedule k large)[a]'(by omega)) ≤ key ((protocolSchedule k large)[b]) :=
+    fun {a b} hab hb => by
+      rcases hab.lt_or_eq with hab | rfl
+      · exact List.pairwise_iff_getElem.1 hsorted a b _ hb hab
+      · exact le_rfl
+  have hmem : ∀ x ∈ protocolSchedule k large, x.1 ∈ l := fun x hx => by
+    obtain ⟨a, ha, hx⟩ := List.mem_flatMap.1 hx
+    obtain ⟨_, -, rfl⟩ := List.mem_map.1 hx
+    exact ha
+  have h1 := hle him (by omega)
+  have h2 := hle hmj hj
+  simp only [key, hi, hj'] at h1 h2
+  exact (List.idxOf_inj (hmem _ (List.getElem_mem _))).1 (le_antisymm h2 h1)
+
+/-- **The party of each square of the hierarchy.** When the padded side is `2 ^ k`, each aligned
+square of the padded square, including the root square, is assigned its block party.
+
+Polynomial-PEPS manuscript, `06-geometry.tex`, lines 19–20 and 64–67. -/
+def protocolSquareParty {L k : ℕ} (hN : paddedSide L = 2 ^ k)
+    (S : HierarchySquare (paddedSide L)) : ProtocolParty k :=
+  .inl ⟨⟨S.1.1, (S.lt_of_eq_pow hN).1⟩, ⟨S.1.2.1, (S.lt_of_eq_pow hN).2.1⟩,
+    ⟨S.1.2.2, (S.lt_of_eq_pow hN).2.2⟩⟩
+
+/-- The party of a square of the hierarchy is attached to that square.
+
+Polynomial-PEPS manuscript, `06-geometry.tex`, lines 19–20 and 64–67. -/
+theorem toTriple_protocolSquareParty {L k : ℕ} (hN : paddedSide L = 2 ^ k)
+    (S : HierarchySquare (paddedSide L)) :
+    (protocolSquareParty hN S).square.toTriple = S.1 := rfl
+
+/-- Distinct squares of the hierarchy have distinct block parties.
+
+Polynomial-PEPS manuscript, `06-geometry.tex`, line 67: “A different party is assigned to each
+dyadic square.” -/
+theorem protocolSquareParty_injective {L k : ℕ} (hN : paddedSide L = 2 ^ k) :
+    Function.Injective (protocolSquareParty hN) := fun S S' h => Subtype.ext (by
+  rw [← toTriple_protocolSquareParty hN S, ← toTriple_protocolSquareParty hN S', h])
+
+/-- **Additional parties.** When `L ≤ 2 ^ k < 2 L`, every party other than a block party of
+`protocolSquareParty` is the placeholder of a non-root square `S`, placed at `S` and used only by
+the repainting of `S`.
+
+Polynomial-PEPS manuscript, `06-geometry.tex`, lines 19–22, 35–37, and 91–95. -/
+theorem exists_eq_inr_of_notMem_range_protocolSquareParty {L k : ℕ} (hN : paddedSide L = 2 ^ k)
+    (p : ProtocolParty k) (hp : p ∉ Set.range (protocolSquareParty hN)) :
+    ∃ R : RepaintedSquare k, p = .inr R := by
+  rcases p with T | R
+  · refine (hp ⟨⟨T.toTriple, ?_⟩, ?_⟩).elim
+    · rw [hN]; exact (protocolPlacement_inGrid k) (.inl T)
+    · exact congrArg Sum.inl (DyadicSquare.toTriple_injective k
+        (toTriple_protocolSquareParty hN _))
+  · exact ⟨R, rfl⟩
+
+/-- A sum of natural numbers bounded by `C x` with `0 < x` forces `0 ≤ C`; applied to the hole
+counts of the frozen sheets (`06-geometry.tex:653–656`). -/
+theorem nonneg_of_sum_map_natCast_le_mul {α : Type*} {l : List α} {f : α → ℕ} {C x : ℝ}
+    (h : (l.map fun a => (f a : ℝ)).sum ≤ C * x) (hx : 0 < x) : 0 ≤ C :=
+  nonneg_of_mul_nonneg_left ((List.sum_nonneg fun y hy => by
+    obtain ⟨a, -, rfl⟩ := List.mem_map.1 hy
+    positivity).trans h) hx
 
 /-- **A protocol from a bounded trajectory of sheets.** Let `L ≥ 2` and `L ≤ 2 ^ k < 2 L`, let
 `‖Ω‖ = 1`, and let `st t` be lists of encoded frames on the parties of the hierarchy of
@@ -197,16 +273,17 @@ theorem protocolPlacement_squareParty {L k : ℕ} (hkL : L ≤ 2 ^ k) (hk2 : 2 ^
 * for every change `t` of the schedule there is an original circuit `c t` from the registers of
   `st t` to those of `st (t + 1)` that is a bounded change from the reference vector of `st t` to
   that of `st (t + 1)`, with participants used by the event of the change, at most `r` pair
-  effects and at most `rs` pair sources per monomial, at most `K ≤ C L ^ kK` monomials and
-  coefficient sum, and error `ε ≤ C L⁻²⁰`;
+  effects and at most `r` pair sources per monomial, at most `K ≤ C_K L ^ kK` monomials and
+  coefficient sum, and error `ε ≤ C_E L⁻²⁰`;
 * at the end of the schedule the frames are `M :: Fs`, where the raw owner of every site in the
   main frame `M` is its unit-square party and the holes of `M` are trivial, every hole of the
   other sheets satisfies the frame constraint at accuracy `L⁻⁶⁰`, and the other sheets carry at
-  most `C L³` holes.
+  most `C_E L³` holes.
 
-If `C ≥ 5042`, there is a dyadic protocol with the bounds of
-`DyadicProtocol.IsDistributionProtocol` for `Ω`, the constants `C`, `b = 64 · 189`, `kK` and `r`,
-all of whose changes have at most `rs` pair sources per monomial. Its first change is the private
+If `C_N ≥ 5042`, there is a dyadic protocol with the bounds of
+`DyadicProtocol.IsDistributionProtocol` for `Ω`, the count constant `C_N`, the expansion constant
+`C_K`, the error constant `C_E`, and the constants `b = 64 · 189`, `kK` and
+`r`, including the bound `r` on the pair sources of each monomial. Its first change is the private
 initialization, then come the changes of the schedule, and its last change is the final
 regrouping into the physical registers.
 
@@ -216,24 +293,24 @@ theorem exists_isDistributionProtocol_of_frames {L q k : ℕ} [NeZero q] (hL : 2
     (hkL : L ≤ 2 ^ k) (hk2 : 2 ^ k < 2 * L) (large : DyadicSquare k → Bool)
     {Ω : StateSpace L q} (hΩ : ‖Ω‖ = 1)
     (st : ℕ → List (Frame (cellCenterPos L) q (ProtocolParty k)))
+    (hne : ∀ t ≤ (protocolSchedule k large).length, st t ≠ [])
     (holder : Frame (cellCenterPos L) q (ProtocolParty k) → ProtocolParty k)
     (hraw : ∀ F ∈ st 0, F.holes = []) (hown : ∀ F ∈ st 0, ∀ x, F.owner x = holder F)
     (c : ∀ t, OriginalCircuit (stackRegs (st t) []) (stackRegs (st (t + 1)) []))
-    {r rs K kK : ℕ} {C ε : ℝ}
+    {r K kK : ℕ} {C_N C_K C_E ε : ℝ}
     (hc : ∀ t (ht : t < (protocolSchedule k large).length),
       (c t).IsBoundedChange {p | EventUses ((protocolSchedule k large)[t]).1 p} r K ε
         (framesVec Ω (st t)) (framesVec Ω (st (t + 1))))
-    (hsrc : ∀ t < (protocolSchedule k large).length, (c t).IsSourceBounded rs)
+    (hsrc : ∀ t < (protocolSchedule k large).length, (c t).IsSourceBounded r)
     (M : Frame (cellCenterPos L) q (ProtocolParty k))
     (Fs : List (Frame (cellCenterPos L) q (ProtocolParty k)))
     (hfin : st (protocolSchedule k large).length = M :: Fs)
     (hMown : ∀ v, M.owner v = .inl (unitSquare hkL v)) (hM : ∀ h ∈ M.holes, h.patch.outer = ∅)
     (hε : ∀ F ∈ Fs, ∀ h ∈ F.holes, ‖act h.patch.proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹)
-    (hholes : (Fs.map fun F => (F.holes.length : ℝ)).sum ≤ C * (L : ℝ) ^ 3)
-    (hC : 5042 ≤ C) (hK : (K : ℝ) ≤ C * (L : ℝ) ^ kK) (hεC : ε ≤ C / (L : ℝ) ^ 20) :
+    (hholes : (Fs.map fun F => (F.holes.length : ℝ)).sum ≤ C_E * (L : ℝ) ^ 3)
+    (hC : 5042 ≤ C_N) (hK : (K : ℝ) ≤ C_K * (L : ℝ) ^ kK) (hεC : ε ≤ C_E / (L : ℝ) ^ 20) :
     ∃ D : DyadicProtocol L q (ProtocolParty k),
-      D.IsDistributionProtocol Ω C (64 * 189) kK r ∧
-        ∀ t < D.changes, (D.step t).IsSourceBounded rs := by
+      D.IsDistributionProtocol Ω C_N C_K C_E (64 * 189) kK r := by
   classical
   set sch := protocolSchedule k large with hsch
   set n := sch.length with hn
@@ -251,6 +328,8 @@ theorem exists_isDistributionProtocol_of_frames {L q k : ℕ} [NeZero q] (hL : 2
     (congrArg (stackRegs · []) hfin).symm rfl
   have he0 : e.nonprivateCount = 0 := by
     simp only [e, OriginalCircuit.nonprivateCount_castLayouts, nonprivateCount_readoutCircuit]
+  have hN : paddedSide L = 2 ^ k :=
+    le_antisymm (paddedSide_le_of_le_pow hkL) (pow_le_paddedSide hk2)
   let D : DyadicProtocol L q (ProtocolParty k) :=
     { placement := protocolPlacement k
       initialSpace := fun p => framesSpace ((st 0).filter fun F => holder F = p)
@@ -282,7 +361,11 @@ theorem exists_isDistributionProtocol_of_frames {L q k : ℕ} [NeZero q] (hL : 2
         · exact finiteDimensional_of_mem_stackRegs [M] r
             (List.mem_append_left _ (List.mem_append_left _ hr))
         · exact finiteDimensional_of_mem_stackRegs Fs r hr
-      layout_changes := chainLayout_succ_of_lt (Nat.lt_succ_self n) }
+      layout_changes := chainLayout_succ_of_lt (Nat.lt_succ_self n)
+      squareParty := protocolSquareParty hN
+      repaintingSquare := fun t => if h : 0 < t ∧ t - 1 < n then
+        Sum.elim (fun S => some S.toTriple) (fun _ => none) (sch[t - 1]'h.2).1 else none
+      frames := fun t => st (t - 1) }
   -- the event of each change of the protocol
   let ev : ℕ → ProtocolEvent k := fun t =>
     if h : 0 < t ∧ t - 1 < n then (sch[t - 1]'h.2).1 else .inl (rootSquare k)
@@ -293,7 +376,7 @@ theorem exists_isDistributionProtocol_of_frames {L q k : ℕ} [NeZero q] (hL : 2
     (fun t a b (w : OriginalCircuit a b) => w.nonprivateCount ≤ 1 ∧
       (¬(0 < t ∧ t ≤ n) → w.nonprivateCount = 0) ∧
       (∀ g, (↑(w.participants g) : Set (ProtocolParty k)) ⊆ {p | EventUses (ev t) p}) ∧
-      w.IsExpansionBounded r K ∧ w.IsMonomialBounded K ∧ w.IsSourceBounded rs)
+      w.IsExpansionBounded r K ∧ w.IsMonomialBounded K ∧ w.IsSourceBounded r)
     ⟨h0.trans_le zero_le_one, fun _ => h0, participants_subset_of_nonprivateCount_eq_zero _ h0 _,
       isExpansionBounded_of_nonprivateCount_eq_zero _ _ _ h0,
       isMonomialBounded_of_nonprivateCount_eq_zero _ _ h0,
@@ -310,9 +393,113 @@ theorem exists_isDistributionProtocol_of_frames {L q k : ℕ} [NeZero q] (hL : 2
       isExpansionBounded_of_nonprivateCount_eq_zero _ _ _ rfl,
       isMonomialBounded_of_nonprivateCount_eq_zero _ _ rfl,
       isSourceBounded_of_nonprivateCount_eq_zero rfl _⟩)
+  -- an additional party is the placeholder of a non-root square, used only by its repainting
+  have hadd : ∀ p, p ∉ Set.range D.squareParty → ∃ S : HierarchySquare (paddedSide L),
+      2 ^ S.1.1 < paddedSide L ∧
+        (D.placement.scale p, D.placement.blockX p, D.placement.blockY p) = S.1 ∧
+        ∀ t < D.changes, ∀ g, p ∈ (D.step t).participants g → D.repaintingSquare t = some S.1 := by
+    intro p hp
+    obtain ⟨R, rfl⟩ := exists_eq_inr_of_notMem_range_protocolSquareParty hN p hp
+    refine ⟨⟨R.1.toTriple, by rw [hN]; exact (protocolPlacement_inGrid k) (.inr R)⟩, ?_, rfl,
+      fun t _ g hg => ?_⟩
+    · change 2 ^ (R.1.1 : ℕ) < paddedSide L
+      rw [hN]
+      exact Nat.pow_lt_pow_right (by norm_num) R.2
+    · have hu : ev t = .inl R.1 := (hQ t).2.2.1 g (mem_coe.2 hg)
+      have ht : 0 < t ∧ t - 1 < n := by
+        by_contra h
+        have h' : ¬(0 < t ∧ t ≤ n) := fun h' => h ⟨h'.1, by omega⟩
+        exact (isEmpty_nonprivateLocations_of_nonprivateCount_eq_zero _ ((hQ t).2.1 h')).false g
+      simp only [ev, ht, and_self, dite_true] at hu
+      change (if h : 0 < t ∧ t - 1 < n then _ else none) = _
+      simp only [ht, and_self, dite_true, hu, Sum.elim_inl]
+  -- a change recorded as a repainting change of `S` is a change of the repainting event of `S`
+  have hrs : ∀ t S, D.repaintingSquare t = some S → ∃ h : 0 < t ∧ t - 1 < n,
+      ∃ T : DyadicSquare k, (sch[t - 1]'h.2).1 = .inl T ∧ T.toTriple = S := by
+    intro t S hS
+    change (if h : 0 < t ∧ t - 1 < n then _ else none) = _ at hS
+    split_ifs at hS with h
+    refine ⟨h, ?_⟩
+    rcases he : (sch[t - 1]'h.2).1 with T | J
+    · rw [he] at hS
+      exact ⟨T, rfl, Option.some_injective _ hS⟩
+    · rw [he] at hS
+      exact absurd hS (by simp)
+  have hrs_mem : ∀ t S, D.repaintingSquare t = some S →
+      ∃ S' : HierarchySquare (paddedSide L), S'.1 = S ∧ 2 ^ S.1 < paddedSide L := by
+    intro t S hS
+    obtain ⟨h, T, hT, rfl⟩ := hrs t S hS
+    have hsch : (.inl T : ProtocolEvent k) ∈ eventSchedule k := by
+      rw [← hT]
+      obtain ⟨a, ha, hx⟩ := List.mem_flatMap.1 (List.getElem_mem (l := sch) h.2)
+      obtain ⟨_, -, hx⟩ := List.mem_map.1 hx
+      rw [← hx]
+      exact ha
+    have hTk : (T.1 : ℕ) < k := mem_eventSchedule.1 hsch
+    refine ⟨⟨T.toTriple, by rw [hN]; exact (protocolPlacement_inGrid k) (.inl T)⟩, rfl, ?_⟩
+    change 2 ^ (T.1 : ℕ) < paddedSide L
+    rw [hN]
+    exact Nat.pow_lt_pow_right (by norm_num) hTk
+  have hrs_segment : ∀ S t₁ t t₂, t₁ ≤ t → t ≤ t₂ → D.repaintingSquare t₁ = some S →
+      D.repaintingSquare t₂ = some S → D.repaintingSquare t = some S := by
+    intro S t₁ t t₂ h₁ h₂ hS₁ hS₂
+    obtain ⟨g₁, T, hT, rfl⟩ := hrs t₁ S hS₁
+    obtain ⟨g₂, T', hT', hTT⟩ := hrs t₂ _ hS₂
+    obtain rfl := DyadicSquare.toTriple_injective k hTT
+    have ht : 0 < t ∧ t - 1 < n := ⟨by omega, by omega⟩
+    have hm := protocolSchedule_fst_eq_of_le large (i := t₁ - 1) (m := t - 1) (by omega)
+      (by omega) g₂.2 hT hT'
+    change (if h : 0 < t ∧ t - 1 < n then _ else none) = _
+    simp only [ht, and_self, dite_true]
+    rw [hm]
+    rfl
+  have hrs_near : ∀ t < D.changes, ∀ S, D.repaintingSquare t = some S →
+      ∀ g, ∀ p ∈ (D.step t).participants g,
+        S.1 ≤ D.placement.scale p + 1 ∧ D.placement.scale p ≤ S.1 + 1 ∧
+          Nat.dist (D.placement.anchor p).1 (dyadicAnchor S.1 S.2.1) ≤ 64 * 189 * 2 ^ S.1 ∧
+          Nat.dist (D.placement.anchor p).2 (dyadicAnchor S.1 S.2.2) ≤ 64 * 189 * 2 ^ S.1 := by
+    intro t _ S hS g p hp
+    obtain ⟨h, T, hT, rfl⟩ := hrs t S hS
+    have hu : EventUses (ev t) p := (hQ t).2.2.1 g (mem_coe.2 hp)
+    simp only [ev, h, and_self, dite_true, hT] at hu
+    obtain ⟨h1, h2, h3, h4⟩ := near_of_eventUses_repaint hu
+    have hpow : 6 * 2 ^ (T.1 : ℕ) ≤ 64 * 189 * 2 ^ (T.1 : ℕ) :=
+      Nat.mul_le_mul_right _ (by norm_num)
+    exact ⟨Nat.le_succ_of_le h1, h2, h3.le.trans hpow, h4.le.trans hpow⟩
+  -- the initial copies of `Ω`, each held privately by one party
+  have hinit : D.frames 0 ≠ [] ∧ ∃ holder : Frame (cellCenterPos L) q (ProtocolParty k) →
+      ProtocolParty k, (∀ F ∈ D.frames 0, F.holes = [] ∧ ∀ x, F.owner x = holder F) ∧
+        ∀ [DecidableEq (ProtocolParty k)],
+          (D.initialSpace = fun p => framesSpace ((D.frames 0).filter fun F => holder F = p)) ∧
+            ∀ [NeZero q], HEq D.initialVector
+              fun p => framesVec Ω ((D.frames 0).filter fun F => holder F = p) := by
+    refine ⟨hne 0 (Nat.zero_le _), holder, fun F hF => ⟨hraw F hF, hown F hF⟩, fun {inst} => ?_⟩
+    obtain rfl : inst = instDecidableEqSum := Subsingleton.elim _ _
+    exact ⟨rfl, fun {_} => HEq.rfl⟩
+  -- the intermediate reference vectors are the reference vectors of the frames
+  have hframes : ∀ [NeZero q], ∀ t, 0 < t → t < D.changes →
+      (∀ F ∈ D.frames t, ‖F.refVec Ω‖ ≤ 1) ∧
+        ∃ h : D.layout t = stackRegs (D.frames t) [],
+          D.reference t = Layout.memCongr h.symm (framesVec Ω (D.frames t)) := by
+    intro _ t ht0 htn
+    obtain ⟨s, rfl⟩ : ∃ s, t = s + 1 := ⟨t - 1, by omega⟩
+    have hs : s ≤ n := by change s + 1 < n + 2 at htn; omega
+    have hl : D.layout (s + 1) = stackRegs (st s) [] :=
+      chainLayout_succ_of_le (A := ProductInput.wholePartyLayout fun p =>
+        framesSpace ((st 0).filter fun F => holder F = p)) (B := fun t => stackRegs (st t) []) hs
+    exact ⟨fun F _ => (F.norm_refVec_le Ω).trans hΩ.le, hl,
+      chainVec_succ_of_le (x₀ := (ProductInput.ofAllParties _ _ hx).vector)
+        (y := fun t => framesVec Ω (st t)) (z := e.eval (framesVec Ω (st n))) hs⟩
+  -- every intermediate stage has a frame
+  have hnil : ∀ t, 0 < t → t < D.changes → D.frames t ≠ [] := fun t ht0 htn =>
+    hne (t - 1) (by change t < n + 2 at htn; omega)
+  -- before the readout, the main frame is held by the parties of the sites
+  have hmain : ∃ M' Fs', D.frames (D.changes - 1) = M' :: Fs' ∧ ∀ v, M'.owner v = D.site v :=
+    ⟨M, Fs, by change st (n + 2 - 1 - 1) = _; simpa using hfin, hMown⟩
   have hL1 : (1 : ℝ) ≤ L := by exact_mod_cast (by omega : 1 ≤ L)
   have hL0 : (0 : ℝ) < L := by linarith
-  have hC0 : 0 ≤ C := by linarith
+  have hC0 : 0 ≤ C_N := by linarith
+  have hCE : 0 ≤ C_E := nonneg_of_sum_map_natCast_le_mul hholes (by positivity)
   -- the gates of the protocol belong to the changes of the schedule
   have hgate : ∀ γ : D.Gate, 0 < (γ.1 : ℕ) ∧ (γ.1 : ℕ) - 1 < n := fun γ => by
     by_contra h
@@ -333,12 +520,13 @@ theorem exists_isDistributionProtocol_of_frames {L q k : ℕ} [NeZero q] (hL : 2
         ((card_nonprivateLocations _).trans_le (hQ i).1)
     rw [Subsingleton.elim g g']
   refine ⟨D, ⟨?_, ?_, fun j r s => (protocolPlacement_blockBounded k j r s).trans (by norm_num),
-    protocolPlacement_squareParty hkL hk2,
+    protocolSquareParty_injective hN, fun _ => rfl, hadd, hrs_mem, hrs_segment, hrs_near, hinit,
     ?_, fun t _ => (hQ t).1.trans (by norm_num), fun t _ g => ?_,
     fun t _ => isMonomialBounded_mono _ (hQ t).2.2.2.2.1 (Nat.le_floor (by exact_mod_cast hK)),
     fun t _ => isExpansionBounded_mono _ (hQ t).2.2.2.1 le_rfl hK, fun p => ?_,
     fun t _ g p hp p' hp' => EventUses.scale_le ((hQ t).2.2.1 g hp) ((hQ t).2.2.1 g hp'),
-    fun t _ g p hp p' hp' => ?_, fun t _ => ?_, ?_⟩, fun t _ => (hQ t).2.2.2.2.2⟩
+    fun t _ g p hp p' hp' => ?_, hframes, hnil, hmain, fun t _ => ?_, ?_,
+    fun t _ => (hQ t).2.2.2.2.2⟩⟩
   · exact fun p => ⟨((protocolPlacement_inGrid k) p).1.trans (pow_le_paddedSide hk2),
       ((protocolPlacement_inGrid k) p).2.trans (pow_le_paddedSide hk2)⟩
   · have h := three_mul_card_protocolParty_lt hk2
@@ -346,7 +534,7 @@ theorem exists_isDistributionProtocol_of_frames {L q k : ℕ} [NeZero q] (hL : 2
     nlinarith [sq_nonneg (L : ℝ)]
   · have h := length_protocolSchedule_le_cube hk2 large
     have hL3 : (1 : ℝ) ≤ (L : ℝ) ^ 3 := one_le_pow₀ hL1
-    change ((n + 2 : ℕ) : ℝ) ≤ C * (L : ℝ) ^ 3
+    change ((n + 2 : ℕ) : ℝ) ≤ C_N * (L : ℝ) ^ 3
     push_cast
     nlinarith
   · exact (card_le_card fun p hp => by
@@ -372,7 +560,7 @@ theorem exists_isDistributionProtocol_of_frames {L q k : ℕ} [NeZero q] (hL : 2
     · intro t ht
       simp [show ¬t + 1 ≤ n by omega]
     · split_ifs
-      exacts [hεC, by positivity]
+      exacts [hεC, div_nonneg hCE (by positivity)]
   · have key : e.eval (framesVec Ω (st n)) =
         (readoutCircuit d M Fs [] hd hd1).eval (stackVec Ω (M :: Fs) (1 : ℂ)) := by
       have h1 := eval_castLayouts_memCongr (readoutCircuit d M Fs [] hd hd1)

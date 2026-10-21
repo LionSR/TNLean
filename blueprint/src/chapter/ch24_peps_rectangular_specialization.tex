@@ -6,11 +6,13 @@ nearest-neighbor graph and site spaces $\mathbb C^q$.
 Either side length may be zero. The following reduction is the
 rectangular and vertex-boundary implication in
 \cite[Corollary~1.2]{OpenAI2026AreaLaw}.
-% The unconditional corollary remains open: the final theorem below assumes
-% the uniform finite-domain area law. Only the conditional reduction is complete.
 
 \begin{corollary}[Rectangles and vertex boundaries]
     \label{cor:rectangles}
+    \lean{TNLean.PEPS.AreaLaw.rectangularEntropyAreaLaw,
+        TNLean.PEPS.AreaLaw.uniformAreaLaw_vertex_boundary_bounds}
+    \leanok
+    \uses{def:rectangular_entropy_area_law,def:area_law_vertex_boundaries}
     For fixed $q\ge1$ and $J,\Delta>0$, there is a uniform finite constant
     $C$ such that every subset of a finite rectangular square lattice with
     bounded on-site and nearest-neighbor interactions and a unique ground
@@ -22,8 +24,16 @@ rectangular and vertex-boundary implication in
     $S_\Omega(A)\le2C|Z_A|$, with that theorem's constant $C(q,R,J,\Delta)$,
     as stated in \cite[Corollary~1.2]{OpenAI2026AreaLaw}.
 \end{corollary}
-% No Lean ownership/completion marker: the unconditional source corollary
-% awaits the source-faithful proof of the uniform finite-domain area law.
+\begin{proof}
+    \leanok
+    \uses{thm:openai_uniform_area_law,thm:rectangular_entropy_from_uniform,
+        thm:area_law_conditional_vertex_bounds}
+    Theorem~\ref{thm:openai_uniform_area_law} supplies the uniform constant.
+    Theorem~\ref{thm:rectangular_entropy_from_uniform} applies it at range
+    one to the rectangle, and
+    Theorem~\ref{thm:area_law_conditional_vertex_bounds} gives the two vertex
+    bounds on every finite induced domain.
+\end{proof}
 
 \begin{definition}[Native rectangular interaction family]
     \label{def:rectangular_hamiltonian}

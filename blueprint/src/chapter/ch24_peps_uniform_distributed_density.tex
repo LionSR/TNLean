@@ -168,11 +168,65 @@ monomial lists at the gate occurrences to vary independently.
     between the two participation sets.
 \end{proof}
 
+\begin{definition}[Constants of the sampled network]
+    \label{def:peps_sampled_network_constants}
+    \lean{TNLean.PEPS.Approximation.sampledNetworkPrefactor,
+        TNLean.PEPS.Approximation.sampledNetworkExponent}
+    \leanok
+    For integers $r,b,n,d,u,s\ge0$, reals $C_N,C_D,C_K,C_B$ and $p$, put
+    $t=\max\{\lceil p\rceil,0\}$,
+    \begin{align}
+        C_S=\max\{1,C_N\tbinom b2\},\qquad
+        C_X=C_K\bigl(64C_N^2(rC_B)^2+2\bigr)^r,\qquad
+        C_k=64C_S^2\bigl(C_B^{4b}C_D^4\bigr)^2+2,
+    \end{align}
+    and define the prefactor and exponent
+    \begin{align}
+        C_{\mathrm{net}}=C_X^2+C_k,
+        \qquad
+        \alpha_{\mathrm{net}}=\max\{2(u+2r(n+s+t)),\,2(n+4bs+4d+t)\}.
+    \end{align}
+    The first entry of $\alpha_{\mathrm{net}}$ bounds the label links, of
+    dimension $|\Xi|^2$ with $|\Xi|\le Km^r$; the second bounds the sample
+    links, of dimension $k$ with $Q/\sqrt k\le\epsilon/(8N)$ and $Q=B^{4b}D^4$
+    (\cite{OpenAI2026PolynomialPEPS}, \texttt{04-compression.tex}, lines
+    61--67, 343--344, 552--557 and 565--585). The prefactor is always
+    positive, and the exponent is positive when $p>0$.
+\end{definition}
+
+\begin{theorem}[Sampled bounds at one precision with explicit constants]
+    \label{thm:peps_uniform_prescribed_expansion_bounds_of_le}
+    \lean{TNLean.PEPS.Approximation.sampledNetworkPrefactor_pos,
+        TNLean.PEPS.Approximation.sampledNetworkExponent_pos,
+        TNLean.PEPS.PairEffect.EffectCircuit.uniform_sampled_approximate_network_bounds_of_le}
+    \leanok
+    \uses{def:peps_sampled_network_constants}
+    In the setting of
+    Theorem~\ref{thm:peps_uniform_prescribed_expansion_bounds}, let the
+    constants $C_K,C_B\ge0$ and degrees $u,s$ at the precision
+    $q=n+t+\lceil16C_N\rceil$, with $t=\max\{\lceil p\rceil,0\}$, be fixed.
+    For every
+    $C_p\ge C_{\mathrm{net}}$ and every integer
+    $\alpha_p\ge\alpha_{\mathrm{net}}$, with the constants of
+    Definition~\ref{def:peps_sampled_network_constants}, the conclusion of
+    Theorem~\ref{thm:peps_uniform_prescribed_expansion_bounds} holds with
+    $\dim\mathcal V_e\le C_pL^{\alpha_p}$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_fixed_power_gate_budget,thm:peps_approximate_sampled_distributed_error,thm:peps_actual_physicalFirst_density_polynomial,thm:peps_actual_physicalFirst_density_incidence,thm:peps_actual_physicalFirst_density_locality}
+    The branch and sample dimension bounds give
+    $\dim\mathcal V_e\le C_{\mathrm{net}}L^{\alpha_{\mathrm{net}}}$, and
+    $L\ge1$ gives $C_{\mathrm{net}}L^{\alpha_{\mathrm{net}}}\le C_pL^{\alpha_p}$.
+    The error, incidence and locality bounds are as in
+    Theorem~\ref{thm:peps_uniform_prescribed_expansion_bounds}.
+\end{proof}
+
 \begin{theorem}[Uniform sampled bounds at one prescribed precision]
     \label{thm:peps_uniform_prescribed_expansion_bounds}
     \lean{TNLean.PEPS.PairEffect.EffectCircuit.exists_uniform_sampled_approximate_network_bounds}
     \leanok
-    \uses{thm:peps_fixed_power_gate_budget,thm:peps_approximate_sampled_distributed_error,thm:peps_actual_physicalFirst_density_polynomial,thm:peps_actual_physicalFirst_density_incidence,thm:peps_actual_physicalFirst_density_locality}
+    \uses{thm:peps_uniform_prescribed_expansion_bounds_of_le,def:peps_sampled_network_constants}
     Fix the arity and lifetime bound $b$, the monomial effect bound
     $r$, and original resource constants $C_N\ge1$, $C_D$, $n$, and $d$.
     At integer precision $q$, let $C_K(q),C_B(q)\ge0$ and $u(q),s(q)$ be the
@@ -221,8 +275,9 @@ monomial lists at the gate occurrences to vary independently.
     \begin{align}
         \alpha_p=
         \max\{2(u(q)+2r(n+s(q)+t)),\,
-        2(n+4bs(q)+4d+t)\}+t.
+        2(n+4bs(q)+4d+t)\},
     \end{align}
+    the constants of Definition~\ref{def:peps_sampled_network_constants}.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -230,16 +285,82 @@ monomial lists at the gate occurrences to vary independently.
     most $L^{-q}$ meet the threshold for target sampling error
     $\epsilon=L^{-t}\le L^{-p}$. Applying the exact contraction identity on the
     shared source circuit and sample count together with the branch and sample
-    dimension bounds yields $\dim\mathcal V_e\le C_pL^{\alpha_p}$ (where adding
-    $t\ge1$ makes $\alpha_p>0$), while the occurrence bijection preserves link
+    dimension bounds yields $\dim\mathcal V_e\le C_pL^{\alpha_p}$, by
+    Theorem~\ref{thm:peps_uniform_prescribed_expansion_bounds_of_le} with the
+    constants of Definition~\ref{def:peps_sampled_network_constants}, which
+    are positive since $t\ge1$. The occurrence bijection preserves link
     incidence, original-gate locality, and the exterior scalar $|\gamma|^2$.
+\end{proof}
+
+\begin{definition}[Constants of the compression theorem]
+    \label{def:peps_compression_constants}
+    \lean{TNLean.PEPS.Approximation.compressionPrefactor,
+        TNLean.PEPS.Approximation.compressionExponent,
+        TNLean.PEPS.Approximation.sumCompressionPrefactor,
+        TNLean.PEPS.Approximation.compressionPrefactor_eq_sumCompressionPrefactor,
+        TNLean.PEPS.Approximation.compressionExponent_eq_sampledNetworkExponent}
+    \leanok
+    \uses{def:peps_sampled_network_constants}
+    For integers $r,b,n,d,u,v\ge0$ and reals $C_N,C_D,C_K,C_C,p$, write
+    $C_+=\max\{C,0\}$ and let $C(r,b,C_N,C_D,C_K,C_C)$ and
+    $\alpha(r,b,n,d,u,v,p)$ be the constants $C_{\mathrm{net}}$ and
+    $\alpha_{\mathrm{net}}$ of
+    Definition~\ref{def:peps_sampled_network_constants} at gate-count constant
+    $1+(C_N)_+$, physical-dimension constant $1+(C_D)_+$, monomial-count
+    constant $(C_K)_+$, coefficient-sum constant $1+(C_K)_+(C_C)_+$ and
+    coefficient-sum degree $s=u+v$. The prefactor is positive, and the
+    exponent is positive when $p>0$. For a coefficient-sum constant $C_S$ and
+    degree $s$, let $C_\Sigma(r,b,C_N,C_D,C_K,C_S)$ be the constant
+    $C_{\mathrm{net}}$ at gate-count constant $1+(C_N)_+$, physical-dimension
+    constant $1+(C_D)_+$, monomial-count constant $(C_K)_+$ and coefficient-sum
+    constant $1+(C_S)_+$. Then
+    $C(r,b,C_N,C_D,C_K,C_C)=C_\Sigma(r,b,C_N,C_D,C_K,(C_K)_+(C_C)_+)$, and
+    $\alpha(r,b,n,d,u,v,p)$ is $\alpha_{\mathrm{net}}$ at degree $u+v$.
+\end{definition}
+
+\begin{theorem}[Operator networks at one precision with explicit constants]
+    \label{thm:peps_uniform_approximate_operator_network_of_le}
+    \lean{TNLean.PEPS.Approximation.compressionPrefactor_pos,
+        TNLean.PEPS.Approximation.compressionExponent_pos,
+        TNLean.PEPS.PairEffect.GateMapConstruction.uniform_approximate_sampled_network_of_le,
+        TNLean.PEPS.PairEffect.GateMapConstruction.uniform_approximate_sampled_network_of_sum_le,
+        TNLean.PEPS.PairEffect.EffectCircuit.IsExpansionBounded.mono}
+    \leanok
+    \uses{def:peps_compression_constants,def:peps_original_gate_construction}
+    In the setting of
+    Theorem~\ref{thm:peps_uniform_approximate_operator_network}, fix $p$ and
+    put $t=\max\{\lceil p\rceil,0\}$ and $q=n+t+\lceil16(1+(C_N)_+)\rceil$.
+    Suppose that every
+    family member admits allowed monomial lists at its original gate
+    occurrences with at most $C_KL^u$ monomials per list, individual
+    coefficients of norm at most $C_CL^v$, at most $r$ pair effects per
+    monomial, and local operator error at most $L^{-q}$. Then for every
+    $C_p\ge C(r,b,C_N,C_D,C_K,C_C)$ and every integer
+    $\alpha_p\ge\alpha(r,b,n,d,u,v,p)$ the conclusion of
+    Theorem~\ref{thm:peps_uniform_approximate_operator_network} holds with
+    $\dim\mathcal V_e\le C_pL^{\alpha_p}$. The same holds if the bound on the
+    individual coefficients is replaced by a bound $C_SL^s$ on the absolute
+    coefficient sum of every list, for every $C_p\ge C_\Sigma(r,b,C_N,C_D,C_K,C_S)$
+    and every integer $\alpha_p\ge\alpha_{\mathrm{net}}(r,b,n,d,u,s,p)$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_uniform_prescribed_expansion_bounds_of_le,thm:peps_fixed_chronology_evaluation,thm:peps_fixed_chronology_participants,thm:peps_fixed_chronology_gate_count,thm:peps_fixed_chronology_lifetime,thm:peps_effect_coefficient_majorant,thm:peps_distributed_operator_scalar_absorption}
+    The argument of
+    Theorem~\ref{thm:peps_uniform_approximate_operator_network} at the given
+    expansion data applies
+    Theorem~\ref{thm:peps_uniform_prescribed_expansion_bounds_of_le} at the
+    enlarged constants of Definition~\ref{def:peps_compression_constants}, with
+    the coefficient-sum bound $B=(1+(C_S)_+)L^s\ge1$. Individual coefficients
+    of modulus at most $C_CL^v$ in lists of at most $C_KL^u$ monomials have
+    absolute sum at most $(C_K)_+(C_C)_+L^{u+v}$, which gives the termwise form.
 \end{proof}
 
 \begin{theorem}[Uniform operator networks from approximate original gate expansions]
     \label{thm:peps_uniform_approximate_operator_network}
     \lean{TNLean.PEPS.PairEffect.GateMapConstruction.exists_uniform_approximate_sampled_network}
     \leanok
-    \uses{thm:peps_uniform_prescribed_expansion_bounds,thm:peps_fixed_chronology_evaluation,thm:peps_fixed_chronology_participants,thm:peps_fixed_chronology_gate_count,thm:peps_fixed_chronology_lifetime,def:peps_original_gate_construction,thm:peps_effect_coefficient_majorant,thm:peps_distributed_operator_scalar_absorption}
+    \uses{thm:peps_uniform_approximate_operator_network_of_le,def:peps_compression_constants,def:peps_original_gate_construction}
     Let $(\mathcal C_i)_{i\in I}$ be a family of original distributed
     constructions indexed by an arbitrary set $I$, where each index carries a
     size $L=L_i\ge2$ (possibly shared across multiple indices), finite-dimensional
@@ -274,6 +395,9 @@ monomial lists at the gate occurrences to vary independently.
     dimensions. This establishes the message-free case of
     \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS}, from which the next chapter
     derives the full theorem by expanding every message in an orthonormal basis.
+    One may take $r_p=r_q$, $C_p=C(r_q,b,C_N,C_D,C_K(q),C_C(q))$ and
+    $\alpha_p=\alpha(r_q,b,n,d,u(q),v(q),p)$, the constants of
+    Definition~\ref{def:peps_compression_constants}.
     % Source: 04-compression.tex, lines 137--175 and 590--600.
 \end{theorem}
 \begin{proof}

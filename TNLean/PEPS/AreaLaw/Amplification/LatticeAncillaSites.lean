@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Amplification.LatticeAncillaTransport
-import TNLean.PEPS.AreaLaw.Amplification.AncillaSiteEntropy
+import TNLean.Lattice.SiteRelabelEntropy
 import TNLean.Circuit.SiteEmbedding
 
 /-!
@@ -48,6 +48,7 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 
 open Matrix QuantumCircuit
 open scoped Kronecker
+open TNLean.Lattice
 
 namespace TNLean.PEPS.AreaLaw
 

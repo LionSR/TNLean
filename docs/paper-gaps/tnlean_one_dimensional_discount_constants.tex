@@ -8,7 +8,7 @@
 \date{October 16, 2026}
 \begin{document}
 \maketitle
-\gapnote{local-correction}{open}
+\gapnote{local-correction}{resolved}
 
 \section{The source statement}
 
@@ -54,21 +54,35 @@ $C_0(q,R)=8C_1(q,R)R\log q+1+16N_Rq^{2(R+1)}$.
 The formalization proves the discount on the chain for every interval
 $X=[l,r)$ with the buffer $T=X^{+mR}\setminus X$, as an instance of the
 finite-dimensional discount of the companion library,\footnote{Declarations:
+\leanid{TNLean.MPS.AreaLaw.chainQuadraticEnergyThreshold},
+\leanid{TNLean.MPS.AreaLaw.chainLogEnergyThreshold},
 \leanid{TNLean.MPS.AreaLaw.chainEnergyThreshold},
 \leanid{TNLean.MPS.AreaLaw.chainTailThreshold},
 \leanid{TNLean.MPS.AreaLaw.chainShellCount},
 \leanid{TNLean.MPS.AreaLaw.chainDiscountConst},
 \leanid{TNLean.MPS.AreaLaw.two_mul_condEntropy_interval_le}; the
-finite-dimensional lemma is \leanid{Entropy.two_mul_condEntropy_le} of
-QICLean.} in the form
+finite-dimensional lemmas are \leanid{Entropy.two_mul_condEntropy_le}
+and \leanid{Entropy.two_mul_condEntropy_le_logarithmic} of QICLean.} in the form
 \begin{align}
     2\bigl(S(X\cup T)-S(T)\bigr)
         &\le S(X)+\frac{4096\,e\,\vartheta\,\mathcal B_R}{m}+m\log2,
     \label{eq:tnlean_one_dimensional_discount_constants_formal_discount}\\
     m
-        &= \Bigl\lceil\max\Bigl\{4,\ \frac{4C_E}{\Delta},\ 128\sqrt{(1+\vartheta)\mathcal B_R}\Bigr\}\Bigr\rceil .
-    \label{eq:tnlean_one_dimensional_discount_constants_formal_shell_count}
+        &= \Bigl\lceil\max\Bigl\{4,\ E_R\vartheta,\ 128\sqrt{(1+\vartheta)\mathcal B_R}\Bigr\}\Bigr\rceil ,
+    \label{eq:tnlean_one_dimensional_discount_constants_formal_shell_count}\\
+    E_R
+        &= \min\bigl\{32N_Rq^{2(R+1)},\ 64\,e\,N_R\,\ell_R^2\bigr\},
+        \qquad \ell_R=\log(e\,q^{R+1}).
+    \label{eq:tnlean_one_dimensional_discount_constants_formal_energy_constant}
 \end{align}
+The first entry of $E_R$ is $4C_E/J$, the note's second entry of $m$ divided
+by $\vartheta$. The second comes from the logarithmic energy estimate of
+Remark~6.3 of the note (label \texttt{rem:sharper}, \texttt{part1\_arealaw.tex},
+lines~711--734): the three-lines device bounds the energy change of one split
+interaction by $8e\,a_j^2\log^2(e\dim\mathcal H_Y)\,J$, so the energy of the
+filtered vector is at most $32\,e\,N_R\ell_R^2J/m$. Taking the smaller entry
+is never worse than the note's choice, and is smaller once $q^{R+1}$ is
+moderately large.
 The shells, the flanks, the weights, the crossing count $N_R$ and the cut
 budget $\mathcal B_R$ are those of the note. The constants deviate from the
 printed ones in three connected places, each at the level of an absolute
@@ -81,15 +95,18 @@ $\sum_j4a_j^2\sum_{Y\text{ split by }X_j}(\dim\mathcal H_Y)^2J$, that is by
 $16N_Rq^{2(R+1)}J/m=2C_E/m$, twice the printed estimate $C_E/m$. With the
 same second entry $m\ge4C_E/\Delta$ of $m$ this is at most $\Delta/2$, so the
 discount runs at the energy threshold $\Delta/2$, and the overlap defect of
-every prefix is at most $1/2$ rather than $1/4$.
+every prefix is at most $1/2$ rather than $1/4$. When the logarithmic entry
+of $E_R$ is the smaller one, the logarithmic estimate
+$32\,e\,N_R\ell_R^2J/m$ is at most $\Delta/2$ at the same threshold.
 \item \emph{Overlap losses $m\log2$ in place of $2C_E/\Delta$.} The
 finite-dimensional lemma keeps the overlap losses of the $m$ prefixes as
 $-m\log(1-E/\Delta)$ with $E$ the energy threshold; at $E=\Delta/2$ this is
 $m\log2$. The note instead uses $-\frac12\log(1-v)\le v$ at
 $v=C_E/(m\Delta)\le\frac14$ and sums to $C_E/\Delta$ in $\log N$, that is
-$2C_E/\Delta$ in the discount. Since $m\ge4C_E/\Delta$, the formal term
-$m\log2$ dominates the printed $2C_E/\Delta$, and both are at most a
-constant times $1+\vartheta$.
+$2C_E/\Delta$ in the discount. When $E_R$ is the quadratic entry,
+$m\ge4C_E/\Delta$ and the formal term $m\log2$ dominates the printed
+$2C_E/\Delta$; in either case both are at most a constant times
+$1+\vartheta$.
 \item \emph{The tail term stays explicit and the fourth entry of $m$ is
 omitted.} The error terms of the tail bound sum to
 $\sum_j1024\,e\,\vartheta\,\mathcal B_ja_j^2\le4096\,e\,\vartheta\,\mathcal B_R/m$
@@ -109,7 +126,7 @@ is\footnote{Declarations:
 \leanid{TNLean.MPS.AreaLaw.chainIntervalEntropyBound_le}.}
 $C_{\mathrm{int}}=8mR\log q+4096\,e\,\vartheta\,\mathcal B_R/m+m\log2$ in
 place of the printed $8mR\log q+1+2C_E/\Delta$, with the explicit
-$C_1(q,R)=5+32N_Rq^{2(R+1)}+128\mathcal B_R$ in \texttt{eq:mbound} and
+$C_1(q,R)=5+E_R+128\mathcal B_R$ in \texttt{eq:mbound} and
 $C_0(q,R)=(8R\log q+\log2)\,C_1(q,R)+1024\,e\,\mathcal B_R$ in place of the
 printed $C_0$. Every deviation is a change of absolute constants; the
 structure of the argument, its hypotheses, and the linear dependence of the

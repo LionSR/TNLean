@@ -3,12 +3,15 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.Approximation.ApproximateCircuitError
+import TNLean.PEPS.Approximation.AdaptivePatchSupply
+import TNLean.Lattice.PartyCircuit.ApproximateCircuitError
 import TNLean.PEPS.Approximation.Basic
-import TNLean.PEPS.Approximation.DistributedConstruction
+import TNLean.Lattice.Compression.DistributedConstruction
 import TNLean.PEPS.Approximation.DyadicActiveLabelParties
 import TNLean.PEPS.Approximation.DyadicRoutingPEPS
-import TNLean.PEPS.Approximation.ProtocolDensityError
+import TNLean.Lattice.PartyCircuit.OriginalCircuitSourceBound
+import TNLean.Lattice.PartyCircuit.ProtocolDensityError
+import TNLean.PEPS.Approximation.SheetStackEndpoints
 
 /-!
 # The consequences of Proposition 7.1 used in §8
@@ -43,27 +46,17 @@ attachment of its parties and a reference vector at every stage:
 its constants chosen before the size, the Hamiltonian, and the ground vector, is the statement
 `LargeSizeDyadicProtocolConsequences`. This module does not prove that statement.
 
-**Scope restriction (consequences of Proposition 7.1):** `IsDistributionProtocol` and
-`LargeSizeDyadicProtocolConsequences` are weaker than Proposition 7.1. They omit the following
-clauses of the source:
+`IsDistributionProtocol` carries every clause of Proposition 7.1 (`06-geometry.tex:12–53`); the
+former scope restriction to the consequences used in §8 is resolved in
+`docs/paper-gaps/polypeps_prop71_consequences_interface.tex`.
 
-* the main copy of `Ω` held by one party and the auxiliary copies initialized privately at their
-  designated parties (`06-geometry.tex:22–23`);
-* the factorization of each reference vector into the main and auxiliary encoded frames, with
-  every factor of norm at most one (`06-geometry.tex:39–41`); only the initial reference, the
-  per-change error, and the final reference are recorded;
-* the scale and address of each additional party, which are those of its repainting event
-  (`06-geometry.tex:36–37`);
-* the bounds on pair sources and messages in each monomial before their expansion (Theorem 5.2,
-  item 3, `04-compression.tex:143–147`); only pair effects are counted;
-* the family of expansions accurate to every fixed inverse power of `L`; the model fixes one
-  instantiated approximation, with reference error `C L⁻²⁰` per change.
-
-None of these clauses is used by the density estimate of §8.1, the separation hypothesis of
-Lemma 8.2, or the lifetime count. Documented in
-`docs/paper-gaps/polypeps_prop71_consequences_interface.tex`. Elimination: build a richer
-construction certificate carrying the omitted clauses, prove Proposition 7.1 for it, and forget
-it into this interface.
+The bound on pair sources and messages in each monomial (Theorem 5.2, item 3,
+`04-compression.tex:143–147`) is the field `IsDistributionProtocol.sourceBounded`; the gates carry
+no messages, which are expanded before a gate is recorded (`04-compression.tex:42–45`). The
+accuracy of the expansions at every fixed inverse power of `L` (`06-geometry.tex:29–30`) holds
+because each gate of the protocol is the selected contraction: a nonprivate gate `G` is by
+definition its recorded expansion `G = ∑ ξ, c ξ • M ξ`, so `‖G - ∑ ξ, c ξ • M ξ‖ = 0 ≤ L⁻ᵃ` for
+every `a`. Section 8 uses these selected contractions throughout (`07-assembly.tex:29–34`).
 
 Three consequences are proved for every protocol satisfying the bounds:
 
@@ -85,6 +78,10 @@ Three consequences are proved for every protocol satisfying the bounds:
   the final memory, with the physical part indexed by configurations of the square.
 * `TNLean.PEPS.Approximation.DyadicProtocol.IsDistributionProtocol`: the bounds of
   Proposition 7.1 consumed by §8, for given constants.
+* `TNLean.PEPS.Approximation.DyadicProtocolBoundsAt`: a protocol with these bounds for every
+  state of a family on a large square, at given constants and threshold.
+* `TNLean.PEPS.Approximation.LargeSizeDyadicProtocolBounds`: the same existence statement with
+  separate count, expansion and error constants.
 * `TNLean.PEPS.Approximation.LargeSizeDyadicProtocolConsequences`: the existence of a protocol
   with these bounds, the part of Proposition 7.1 used in §8.
 
@@ -112,6 +109,15 @@ namespace TNLean.PEPS.Approximation
 
 open Finset TNLean.PEPS.PairEffect
 
+/-- The aligned squares of the padded dyadic hierarchy of `[0, N] ^ 2`, each given by its scale
+`j` and its block address `(x, y)`: the square
+`[2 ^ j x, 2 ^ j (x + 1)] × [2 ^ j y, 2 ^ j (y + 1)]` lies in `[0, N] ^ 2`. When `N` is a power
+of two, the root square is the one with `2 ^ j = N`.
+
+Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:64–65`. -/
+def HierarchySquare (N : ℕ) : Type :=
+  {S : ℕ × ℕ × ℕ // 2 ^ S.1 * (S.2.1 + 1) ≤ N ∧ 2 ^ S.1 * (S.2.2 + 1) ≤ N}
+
 /-- **The data of a dyadic distribution protocol.** A protocol on the square of side `L` with
 local dimension `q`, on the finite party type `P`, consists of the following.
 
@@ -133,9 +139,8 @@ local dimension `q`, on the finite party type `P`, consists of the following.
   one elsewhere, followed by the private registers to be discarded
   (`06-geometry.tex:48–51, 669–679`).
 
-The quantitative assertions used by §8 are not part of these data; they are
-`DyadicProtocol.IsDistributionProtocol`. The data omit the clauses of Proposition 7.1 listed in
-the scope restriction of the module docstring.
+The quantitative assertions of Proposition 7.1 are not part of these data; they are
+`DyadicProtocol.IsDistributionProtocol`.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), Proposition 7.1 `prop:protocol`,
 `06-geometry.tex:12–53`, with the distributed constructions of Theorem 5.2,
@@ -190,15 +195,29 @@ structure DyadicProtocol (L q : ℕ) (P : Type) [Fintype P] where
   /-- The final layout: the physical registers, then the private registers. -/
   layout_changes :
     layout changes = familyPhysicalOutputLayout physicalDimension physicalOrder privateOutput
+  /-- The party assigned to each square of the padded hierarchy, including the root square.
 
-/-- The aligned squares of the padded dyadic hierarchy of `[0, N] ^ 2`, each given by its scale
-`j` and its block address `(x, y)`: the square
-`[2 ^ j x, 2 ^ j (x + 1)] × [2 ^ j y, 2 ^ j (y + 1)]` lies in `[0, N] ^ 2`. When `N` is a power
-of two, the root square is the one with `2 ^ j = N`.
+  Source: Polynomial-PEPS manuscript (Sept 24 2026), Proposition 7.1, item 1,
+  `06-geometry.tex:19–20`, and the hierarchy, `06-geometry.tex:64–67`. -/
+  squareParty : HierarchySquare (paddedSide L) → P
+  /-- The square whose repainting the change `t` belongs to, as its scale and block address, or
+  `none` when the change belongs to no repainting. A party outside the range of `squareParty` is
+  an additional party, which belongs to the repainting of a square.
 
-Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:64–65`. -/
-def HierarchySquare (N : ℕ) : Type :=
-  {S : ℕ × ℕ × ℕ // 2 ^ S.1 * (S.2.1 + 1) ≤ N ∧ 2 ^ S.1 * (S.2.2 + 1) ≤ N}
+  Source: Polynomial-PEPS manuscript (Sept 24 2026), Proposition 7.1, items 1 and 3,
+  `06-geometry.tex:19–22` (“at most a fixed number of additional parties for each repainting of a
+  square”) and `06-geometry.tex:35–37` (“additional parties have the scale and address of the
+  square to whose repainting they belong”). The construction of the protocol records here the
+  square of the scheduled repainting event of each change. -/
+  repaintingSquare : ℕ → Option (ℕ × ℕ × ℕ)
+  /-- The encoded frames of each stage, the encoded copies of `Ω`. The first frame is designated
+  as the main copy at the initial stage, by `IsDistributionProtocol.initialCopies`, and before the
+  last change, by `IsDistributionProtocol.mainFrame_owner`; at the other stages the list is not
+  labelled.
+
+  Source: Polynomial-PEPS manuscript (Sept 24 2026), Proposition 7.1, items 1 and 4,
+  `06-geometry.tex:21–23` and `06-geometry.tex:38–40`. -/
+  frames : ℕ → List (EncodedFrame.Frame (cellCenterPos L) q P)
 
 namespace DyadicProtocol
 
@@ -274,53 +293,120 @@ item 2, `04-compression.tex:140–142`. -/
 def participation (p : P) : ℕ :=
   ∑ t ∈ range D.changes, (D.step t).participationCount p
 
-/-- **The bounds of Proposition 7.1 consumed by §8.** With constants `C`, `b`, `k`, `r`, and
-the target vector `Ω`, the protocol satisfies:
+/-- **The bounds of Proposition 7.1 consumed by §8.** With a count constant `C_N`, an
+expansion constant `C_K`, an error constant `C_E`, constants `b`, `k`, `r`, and the target
+vector `Ω`, the protocol satisfies:
 
-1. every party is attached to a square of the padded hierarchy, there are at most `C L²`
+1. every party is attached to a square of the padded hierarchy, there are at most `C_N L²`
    parties, and at most `b` of them are attached to any square;
-2. there are at most `C L³` changes; each change has at most `b` nonprivate gates, each with
-   at most `b` parties; every nonprivate gate has at most `C L ^ k` monomials, absolute
-   coefficient sum at most `C L ^ k`, and at most `r` pair effects in each monomial; every party
-   participates in at most `b` nonprivate gates over the whole schedule;
+2. there are at most `C_N L³` changes; each change has at most `b` nonprivate gates, each with
+   at most `b` parties; every nonprivate gate has at most `C_K L ^ k` monomials, absolute
+   coefficient sum at most `C_K L ^ k`, and at most `r` pair effects and at most `r` pair
+   sources in each monomial; every party participates in at most `b` nonprivate gates over the
+   whole schedule;
 3. two parties of a nonprivate gate have equal or adjacent scales, and addresses at distance at
    most `b` times the side of either square in each coordinate;
-4. each change takes its reference vector within `C L⁻²⁰` of the next one, and the final
-   reference vector is `Ω ⊗ Ξ` with `1 - C L⁻⁵⁷ ≤ ‖Ξ‖ ≤ 1`.
+4. each change takes its reference vector within `C_E L⁻²⁰` of the next one, and the final
+   reference vector is `Ω ⊗ Ξ` with `1 - C_E L⁻⁵⁷ ≤ ‖Ξ‖ ≤ 1`.
 
-These are the consequences of the four items that the assembly of §8 uses. The predicate is
-weaker than the conclusion of Proposition 7.1: it omits the clauses listed in the scope
-restriction of the module docstring, among them the registers of the copies of `Ω`, the frame
-factorization of the references, and the counts of pair sources and messages.
+The source states items 2 and 4 with one constant `C` (`06-geometry.tex:25, 42, 46`); that is
+the case `C_N = C_K = C_E = C`. Every clause is monotone in each constant
+(`DyadicProtocol.IsDistributionProtocol.mono`), so the two readings give the same existential
+statement. The three roles are kept apart because the prefactor of the polynomial expansions is
+much larger than the counts and the errors (`06-geometry.tex:572–583`).
+
+These are the consequences of the four items that the assembly of §8 uses, together with the
+pair-source bound of Theorem 5.2, item 3. Each nonprivate gate `G` equals its recorded expansion
+`∑ ξ, c ξ • M ξ`, so `‖G - ∑ ξ, c ξ • M ξ‖ = 0` and the expansions are accurate at every inverse
+power of `L` (`06-geometry.tex:29–30`); the monomials have no messages, since messages are
+expanded before a gate is recorded (`04-compression.tex:42–45`). With the fields on the parties,
+the initial copies and the frames of the references, the predicate carries every clause of the
+conclusion of Proposition 7.1.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), Proposition 7.1 `prop:protocol`,
 `06-geometry.tex:17–52`; the expansions are those of Theorem 5.2, item 3,
 `04-compression.tex:143–147`. -/
-structure IsDistributionProtocol (Ω : StateSpace L q) (C : ℝ) (b k r : ℕ) : Prop where
+structure IsDistributionProtocol (Ω : StateSpace L q) (C_N C_K C_E : ℝ) (b k r : ℕ) :
+    Prop where
   /-- Item 1: every party is attached to a square of the padded hierarchy. -/
   inGrid : D.placement.InGrid (paddedSide L)
   /-- Item 1: there are `O(L²)` parties. -/
-  card_le : (Fintype.card P : ℝ) ≤ C * (L : ℝ) ^ 2
+  card_le : (Fintype.card P : ℝ) ≤ C_N * (L : ℝ) ^ 2
   /-- Item 1: a fixed number of parties for each square. -/
   blockBounded : D.placement.BlockBounded b
   /-- Item 1: a different party is assigned to each square of the padded hierarchy, including
-  the root square, at the scale and address of that square.
+  the root square.
 
   Source: Polynomial-PEPS manuscript (Sept 24 2026), Proposition 7.1, item 1,
   `06-geometry.tex:18–20`, and the hierarchy, `06-geometry.tex:64–67`: “A different party is
   assigned to each dyadic square.” -/
-  squareParty : ∃ f : HierarchySquare (paddedSide L) → P, Function.Injective f ∧
-    ∀ S, (D.placement.scale (f S), D.placement.blockX (f S), D.placement.blockY (f S)) = S.1
-  /-- Item 2: at most `C L³` changes. -/
-  changes_le : (D.changes : ℝ) ≤ C * (L : ℝ) ^ 3
+  squareParty_injective : Function.Injective D.squareParty
+  /-- Item 1: the party of a square of the hierarchy is placed at the scale and address of that
+  square. Source: `06-geometry.tex:19–20, 64–67`. -/
+  placement_squareParty : ∀ S, (D.placement.scale (D.squareParty S),
+    D.placement.blockX (D.squareParty S), D.placement.blockY (D.squareParty S)) = S.1
+  /-- Item 3: every additional party, that is every party outside the range of `squareParty`,
+  belongs to the repainting of a square `S` of the hierarchy other than the root square: it has
+  the scale and address of `S`, and it participates only in changes of the repainting of `S`.
+
+  Source: Polynomial-PEPS manuscript (Sept 24 2026), Proposition 7.1, item 1,
+  `06-geometry.tex:19–22`, and item 3, `06-geometry.tex:35–37`: “additional parties have the
+  scale and address of the square to whose repainting they belong”. -/
+  additionalParty : ∀ p, p ∉ Set.range D.squareParty → ∃ S : HierarchySquare (paddedSide L),
+    2 ^ S.1.1 < paddedSide L ∧
+      (D.placement.scale p, D.placement.blockX p, D.placement.blockY p) = S.1 ∧
+      ∀ t < D.changes, ∀ g, p ∈ (D.step t).participants g → D.repaintingSquare t = some S.1
+  /-- Item 3: a change recorded as belonging to the repainting of `S` belongs to the repainting
+  of a square of the hierarchy other than the root square.
+
+  Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:19–22`, and the repainted
+  squares, `06-geometry.tex:82–84`. -/
+  repaintingSquare_mem : ∀ t, ∀ S, D.repaintingSquare t = some S →
+    ∃ S' : HierarchySquare (paddedSide L), S'.1 = S ∧ 2 ^ S.1 < paddedSide L
+  /-- Item 3: the changes recorded as belonging to the repainting of a square form one
+  contiguous segment of the schedule, the repainting of that square.
+
+  Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:19–22, 35–37`, and the
+  schedule of repaintings, `06-geometry.tex:82–87`. -/
+  repaintingSquare_segment : ∀ S, ∀ t₁ t t₂, t₁ ≤ t → t ≤ t₂ → D.repaintingSquare t₁ = some S →
+    D.repaintingSquare t₂ = some S → D.repaintingSquare t = some S
+  /-- Item 3: every party of a change of the repainting of a square `S` of scale `j` has scale
+  `j` or an adjacent scale, and its address is within `b` times the side of `S` of the address of
+  `S` in each coordinate.
+
+  Source: Polynomial-PEPS manuscript (Sept 24 2026), Proposition 7.1, item 3,
+  `06-geometry.tex:33–37`. -/
+  repaintingSquare_near : ∀ t < D.changes, ∀ S, D.repaintingSquare t = some S →
+    ∀ g, ∀ p ∈ (D.step t).participants g,
+      S.1 ≤ D.placement.scale p + 1 ∧ D.placement.scale p ≤ S.1 + 1 ∧
+        Nat.dist (D.placement.anchor p).1 (dyadicAnchor S.1 S.2.1) ≤ b * 2 ^ S.1 ∧
+        Nat.dist (D.placement.anchor p).2 (dyadicAnchor S.1 S.2.2) ≤ b * 2 ^ S.1
+  /-- Item 1: initialization is a pure product across parties of the copies of `Ω`. The initial
+  encoded frames are the main frame followed by the auxiliary frames; each is a copy of `Ω` with
+  no hole, held entirely by one party, its designated party; and the whole initial memory of each
+  party is the memory of the copies it holds, with initial vector the product of their reference
+  vectors. The party holding the first frame holds the main copy.
+
+  Source: Polynomial-PEPS manuscript (Sept 24 2026), Proposition 7.1, item 1,
+  `06-geometry.tex:21–23`: “Initialization is a pure product across parties. One party initially
+  holds the main copy of `Ω`; all auxiliary copies are initialized privately at their designated
+  parties”; and the initialization in the proof, `06-geometry.tex:658–660`. -/
+  initialCopies : D.frames 0 ≠ [] ∧ ∃ holder : EncodedFrame.Frame (cellCenterPos L) q P → P,
+    (∀ F ∈ D.frames 0, F.holes = [] ∧ ∀ x, F.owner x = holder F) ∧ ∀ [DecidableEq P],
+      (D.initialSpace = fun p =>
+          EncodedFrame.framesSpace ((D.frames 0).filter fun F => holder F = p)) ∧
+        ∀ [NeZero q], HEq D.initialVector
+          fun p => EncodedFrame.framesVec Ω ((D.frames 0).filter fun F => holder F = p)
+  /-- Item 2: at most `C_N L³` changes. -/
+  changes_le : (D.changes : ℝ) ≤ C_N * (L : ℝ) ^ 3
   /-- Item 2: each change has a fixed number of nonprivate gates. -/
   nonprivateCount_le : ∀ t < D.changes, (D.step t).nonprivateCount ≤ b
   /-- Item 2: each nonprivate gate involves a fixed number of parties. -/
   card_participants_le : ∀ t < D.changes, ∀ g, ((D.step t).participants g).card ≤ b
   /-- Item 2: polynomially many monomials in every gate expansion. -/
-  monomialBounded : ∀ t < D.changes, (D.step t).IsMonomialBounded ⌊C * (L : ℝ) ^ k⌋₊
+  monomialBounded : ∀ t < D.changes, (D.step t).IsMonomialBounded ⌊C_K * (L : ℝ) ^ k⌋₊
   /-- Item 2: polynomially bounded coefficients and a fixed number of pair effects. -/
-  expansionBounded : ∀ t < D.changes, (D.step t).IsExpansionBounded r (C * (L : ℝ) ^ k)
+  expansionBounded : ∀ t < D.changes, (D.step t).IsExpansionBounded r (C_K * (L : ℝ) ^ k)
   /-- Item 2: bounded lifetime participation of every party. -/
   participation_le : ∀ p, D.participation p ≤ b
   /-- Item 3: parties of a gate have equal or adjacent scales. -/
@@ -333,28 +419,62 @@ structure IsDistributionProtocol (Ω : StateSpace L q) (C : ℝ) (b k r : ℕ) :
           b * 2 ^ D.placement.scale p ∧
         Nat.dist (D.placement.anchor p).2 (D.placement.anchor p').2 ≤
           b * 2 ^ D.placement.scale p
-  /-- Item 4: each change keeps the reference vector within `C L⁻²⁰`. -/
+  /-- Item 4: the reference vector of every intermediate stage is the product of the reference
+  vectors `K_F Ω` of the encoded frames of that stage, of the protocol's own `Ω`, an unlabelled
+  list of the encoded copies. All its factors have norm at most one. Read per stage, being the
+  main copy carries no content beyond the designations at the endpoints, which are stated by
+  `initialCopies` at the initial stage and by `mainFrame_owner` before the last change. The
+  initial stage is the product initialization of `initialCopies`, and the last stage is described
+  by `reference_changes`. In the constructed protocol the last change is the readout, which
+  rearranges the registers into the physical and discarded ones and has no counterpart in the
+  source; this is why the last stage is excluded here.
+
+  Source: Polynomial-PEPS manuscript (Sept 24 2026), Proposition 7.1, item 4,
+  `06-geometry.tex:38–40`: “There is a designated reference vector at every stage, formed from
+  the main encoded frame and the auxiliary encoded frames. All its factors have norm at most
+  one.” -/
+  reference_frames : ∀ [NeZero q], ∀ t, 0 < t → t < D.changes →
+    (∀ F ∈ D.frames t, ‖F.refVec Ω‖ ≤ 1) ∧
+      ∃ h : D.layout t = EncodedFrame.stackRegs (D.frames t) [],
+        D.reference t = Layout.memCongr h.symm (EncodedFrame.framesVec Ω (D.frames t))
+  /-- Item 4: every intermediate stage has at least one encoded frame.
+
+  Source: Polynomial-PEPS manuscript (Sept 24 2026), Proposition 7.1, item 4,
+  `06-geometry.tex:38–40`: the reference vector of every stage is formed from the main encoded
+  frame and the auxiliary encoded frames. -/
+  frames_ne_nil : ∀ t, 0 < t → t < D.changes → D.frames t ≠ []
+  /-- Item 4: before the readout, the raw registers of the main encoded frame are held by the
+  parties of the genuine sites, so they become the physical outputs.
+
+  Source: Polynomial-PEPS manuscript (Sept 24 2026), Proposition 7.1, item 4,
+  `06-geometry.tex:46–49`, and the end of the proof, `06-geometry.tex:668–681`. -/
+  mainFrame_owner : ∃ M Fs, D.frames (D.changes - 1) = M :: Fs ∧ ∀ v, M.owner v = D.site v
+  /-- Item 4: each change keeps the reference vector within `C_E L⁻²⁰`. -/
   reference_step : ∀ t < D.changes,
-    ‖(D.step t).eval (D.reference t) - D.reference (t + 1)‖ ≤ C / (L : ℝ) ^ 20
+    ‖(D.step t).eval (D.reference t) - D.reference (t + 1)‖ ≤ C_E / (L : ℝ) ^ 20
   /-- Item 4: the final reference vector is `Ω ⊗ Ξ`, with `Ξ` nearly normalized. -/
   reference_changes : ∃ Ξ : EuclideanSpace ℂ (Fin (Module.finrank ℂ (Mem D.privateOutput))),
-    ‖Ξ‖ ≤ 1 ∧ 1 - C / (L : ℝ) ^ 57 ≤ ‖Ξ‖ ∧
+    ‖Ξ‖ ≤ 1 ∧ 1 - C_E / (L : ℝ) ^ 57 ≤ ‖Ξ‖ ∧
       D.readout (D.reference D.changes) = Matrix.euclideanTensorVector Ω Ξ
+  /-- Theorem 5.2, item 3: at most `r` pair sources in each monomial of every gate expansion,
+  with the constant `r` that bounds the pair effects (`04-compression.tex:143–147`). -/
+  sourceBounded : ∀ t < D.changes, (D.step t).IsSourceBounded r
 
 namespace IsDistributionProtocol
 
-variable {D} {Ω : StateSpace L q} {C : ℝ} {b k r : ℕ}
+variable {D} {Ω : StateSpace L q} {C_N C_K C_E : ℝ} {b k r : ℕ}
 
 /-- **The protocol density estimate.** For a protocol with the bounds of §8 on a
 square of side `L ≥ 1`, the physical density of the actual final vector satisfies
-`‖Tr_private |Ψ⟩⟨Ψ| - |Ω⟩⟨Ω|‖₁ ≤ (2 C² + 2 C) L⁻¹⁰`.
+`‖Tr_private |Ψ⟩⟨Ψ| - |Ω⟩⟨Ω|‖₁ ≤ (2 C_N C_E + 2 C_E) L⁻¹⁰`.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), §8.1, `eq:reference-junk` and
 `eq:protocol-density`, `07-assembly.tex:11–49`. -/
-theorem rectangularTraceNorm_physicalDensity_sub_le (h : D.IsDistributionProtocol Ω C b k r)
-    (hL : 1 ≤ L) (hC : 0 ≤ C) (hΩ : ‖Ω‖ = 1) :
+theorem rectangularTraceNorm_physicalDensity_sub_le
+    (h : D.IsDistributionProtocol Ω C_N C_K C_E b k r) (hL : 1 ≤ L) (hC : 0 ≤ C_E)
+    (hΩ : ‖Ω‖ = 1) :
     Matrix.rectangularTraceNorm (D.physicalDensity - Matrix.euclideanOuterProduct Ω Ω) ≤
-      (2 * (C * C) + 2 * C) / (L : ℝ) ^ 10 := by
+      (2 * (C_N * C_E) + 2 * C_E) / (L : ℝ) ^ 10 := by
   obtain ⟨Ξ, hΞ, hlower, href⟩ := h.reference_changes
   exact (rectangularTraceNorm_protocol_density_sub_le
     (fun t ↦ ((D.step t).eval : Mem (D.layout t) →ₗ[ℂ] Mem (D.layout (t + 1))))
@@ -369,7 +489,7 @@ meets the separation hypothesis of Lemma 8.2 with constant `b`.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), Proposition 7.1, item 3,
 `06-geometry.tex:34–37`, and its use in Lemma 8.2, `07-assembly.tex:61–62, 128–132`. -/
-theorem separationBounded (h : D.IsDistributionProtocol Ω C b k r) {Λ : Type*}
+theorem separationBounded (h : D.IsDistributionProtocol Ω C_N C_K C_E b k r) {Λ : Type*}
     (src tgt : Λ → P)
     (hlink : ∀ ℓ, ∃ t < D.changes, ∃ g, src ℓ ∈ (D.step t).participants g ∧
       tgt ℓ ∈ (D.step t).participants g) :
@@ -427,9 +547,8 @@ the energy, and the ground vector, such that every gapped ground vector `Ω` of 
 Hamiltonian of side `L ≥ max 2 L₀` has a dyadic distribution protocol with the bounds of
 `DyadicProtocol.IsDistributionProtocol`.
 
-This is a target statement, not a proof. It is the form in which §8 uses Proposition 7.1, and
-it is weaker than that proposition: it omits the clauses listed in the scope restriction of the
-module docstring, so it is not the source proposition.
+It carries every clause of Proposition 7.1. It is proved, without hypotheses, by
+`largeSizeDyadicProtocolConsequences`.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), Proposition 7.1 `prop:protocol`,
 `06-geometry.tex:12–53`, in the setting of Theorem 1.1, `00-introduction.tex:36–57`, applied
@@ -437,9 +556,54 @@ with patch and information power `60` (`07-assembly.tex:11`). -/
 def LargeSizeDyadicProtocolConsequences : Prop :=
   ∀ q : ℕ, 2 ≤ q → ∀ J Δ : ℝ, 0 < J → 0 < Δ →
     ∃ (C : ℝ) (b k r L₀ : ℕ),
-      ∀ L : ℕ, 2 ≤ L → L₀ ≤ L → ∀ h : SquareHamiltonian L q J,
-        ∀ E₀ : ℝ, ∀ Ω : StateSpace L q, h.IsGappedGroundState E₀ Ω Δ →
-          ∃ (P : Type) (_ : Fintype P) (D : DyadicProtocol L q P),
-            D.IsDistributionProtocol Ω C b k r
+      ∀ L : ℕ, 2 ≤ L → L₀ ≤ L → ∀ Ω : StateSpace L q, IsSquareGroundState q J Δ L Ω →
+        ∃ (P : Type) (_ : Fintype P) (D : DyadicProtocol L q P),
+          D.IsDistributionProtocol Ω C C C b k r
+
+/-- **The consequences of Proposition 7.1 for a family of states, at given constants.** Every
+state `Ω` of the family `G` on the square of side `L ≥ max 2 L₀` has a dyadic distribution
+protocol with the bounds of `DyadicProtocol.IsDistributionProtocol` at the count constant `C_N`,
+the expansion constant `C_K`, the error constant `C_E`, the bound `b`, the exponent `k` and `r`
+pair effects. The statement of Proposition 7.1 is the family `IsSquareGroundState q J Δ` of
+gapped ground vectors of the model.
+
+`LargeSizeDyadicProtocolBounds` asserts that such constants exist for that family for every
+`q ≥ 2` and `J, Δ > 0`.
+
+Source: Polynomial-PEPS manuscript (Sept 24 2026), Proposition 7.1 `prop:protocol`,
+`06-geometry.tex:12–53`, applied with patch and information power `60`
+(`07-assembly.tex:11`). -/
+def DyadicProtocolBoundsAt (q : ℕ) (G : ∀ L : ℕ, StateSpace L q → Prop) (C_N C_K C_E : ℝ)
+    (b k r L₀ : ℕ) : Prop :=
+  ∀ L : ℕ, 2 ≤ L → L₀ ≤ L → ∀ Ω : StateSpace L q, G L Ω →
+    ∃ (P : Type) (_ : Fintype P) (D : DyadicProtocol L q P),
+      D.IsDistributionProtocol Ω C_N C_K C_E b k r
+
+/-- **The consequences of Proposition 7.1, with separate constants.** For every `q ≥ 2` and
+`J, Δ > 0` there are a count constant `C_N`, an expansion constant `C_K`, an error constant
+`C_E`, constants `b`, `k`, `r` and a threshold `L₀`, chosen before the size, the Hamiltonian,
+the energy, and the ground vector, such that every gapped ground vector `Ω` of a square
+Hamiltonian of side `L ≥ max 2 L₀` has a dyadic distribution protocol with the bounds of
+`DyadicProtocol.IsDistributionProtocol` at these constants.
+
+It is equivalent to `LargeSizeDyadicProtocolConsequences`, the reading with the single constant
+`C` of the source: `LargeSizeDyadicProtocolConsequences.largeSizeDyadicProtocolBounds` and
+`LargeSizeDyadicProtocolBounds.largeSizeDyadicProtocolConsequences`.
+
+Source: Polynomial-PEPS manuscript (Sept 24 2026), Proposition 7.1 `prop:protocol`,
+`06-geometry.tex:12–53`, in the setting of Theorem 1.1, `00-introduction.tex:36–57`, applied
+with patch and information power `60` (`07-assembly.tex:11`). -/
+def LargeSizeDyadicProtocolBounds : Prop :=
+  ∀ q : ℕ, 2 ≤ q → ∀ J Δ : ℝ, 0 < J → 0 < Δ →
+    ∃ (C_N C_K C_E : ℝ) (b k r L₀ : ℕ),
+      DyadicProtocolBoundsAt q (IsSquareGroundState q J Δ) C_N C_K C_E b k r L₀
+
+/-- The single-constant consequences of Proposition 7.1 give the consequences with separate
+constants, all equal to the single constant (`06-geometry.tex:12–53`). -/
+theorem LargeSizeDyadicProtocolConsequences.largeSizeDyadicProtocolBounds
+    (h : LargeSizeDyadicProtocolConsequences) : LargeSizeDyadicProtocolBounds := by
+  intro q hq J Δ hJ hΔ
+  obtain ⟨C, b, k, r, L₀, hall⟩ := h q hq J Δ hJ hΔ
+  exact ⟨C, C, C, b, k, r, L₀, hall⟩
 
 end TNLean.PEPS.Approximation

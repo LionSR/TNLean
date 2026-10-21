@@ -23,6 +23,7 @@ noncomputable section
 
 open Matrix Filter
 open scoped BigOperators Matrix.Norms.L2Operator
+open TNLean.Lattice
 
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
 

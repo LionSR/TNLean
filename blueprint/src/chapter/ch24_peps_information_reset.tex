@@ -46,9 +46,9 @@ the cores to an inverse power of the system size. This is Lemma~3.3 of
 
 \begin{theorem}[The exchanged cores are uncorrelated]
     \label{thm:peps_reset_exchanged_cores}
-    \lean{TNLean.PEPS.Approximation.doubledVector_comp_sumArrow,
-        TNLean.PEPS.Approximation.sheetSwapOp_mulVec_comp_sumArrow,
-        TNLean.PEPS.Approximation.mutualInformation_relabelSites_replicaSwap_eq_zero}
+    \lean{TNLean.Lattice.doubledVector_comp_sumArrow,
+        TNLean.Lattice.sheetSwapOp_mulVec_comp_sumArrow,
+        TNLean.Lattice.mutualInformation_relabelSites_replicaSwap_eq_zero}
     \leanok
     Let $\Omega$ be a unit vector, $R_0\subseteq R$, and $C_0$ disjoint from
     $R$. In $\Phi=F_R(\Omega\otimes\Omega)$, the cores $R_0$ and $C_0$ of the
@@ -63,21 +63,18 @@ the cores to an inverse power of the system size. This is Lemma~3.3 of
     has no mutual information with a region of the first.
 \end{proof}
 
-\begin{theorem}[The entropy comparison of the reset]
-    \label{thm:peps_reset_cores_entropy}
-    \lean{TNLean.PEPS.Approximation.reindex_rectangle_sumArrow_unitary,
-        TNLean.PEPS.Approximation.mutualInformation_cores_le_of_reset_unitary,
-        TNLean.PEPS.AreaLaw.mutualInformation_le_of_supported_unitary,
-        TNLean.PEPS.AreaLaw.exists_one_kronecker_unitary_of_mem_supportedOperators}
+\begin{theorem}[The entropy comparison of the reset on any finite set of sites]
+    \label{thm:peps_reset_cores_entropy_sites}
+    \lean{TNLean.PEPS.Approximation.mutualInformation_cores_le_of_sites_reset_unitary}
     \leanok
     \uses{def:peps_frame_sheet_swap}
-    Let $q\ge1$, let $\Omega$ be a unit vector on the open square, let $R,C$ be
-    disjoint, and let $R_0\subseteq R$, $C_0\subseteq C$. Let $U$ be a unitary
-    on the paired sites, supported on a set containing no site of
-    $R_0\cup C_0$, with $\|U\Psi-\Phi\|\le\delta$ for $\Psi=\Omega\otimes\Omega$
-    and $\Phi=F_R\Psi$. Then
+    Let $q\ge1$, let $\Omega$ be a unit vector on a finite set of sites $V$, let
+    $A,C\subseteq V$ be disjoint, and let $A_0\subseteq A$, $C_0\subseteq C$.
+    Let $U$ be a unitary on the paired sites of $V$, supported on a set
+    containing no site of $A_0\cup C_0$, with $\|U\Psi-\Phi\|\le\delta$ for
+    $\Psi=\Omega\otimes\Omega$ and $\Phi=F_A\Psi$, both unit vectors. Then
     \begin{align*}
-        I_\Omega(R_0:C_0) & \le8\sqrt\delta\,\log(e\,q^{|R_0|}).
+        I_\Omega(A_0:C_0) & \le8\sqrt\delta\,\log(e\,q^{|A_0|}).
     \end{align*}
 \end{theorem}
 \begin{proof}
@@ -86,15 +83,39 @@ the cores to an inverse power of the system size. This is Lemma~3.3 of
     By Theorem~\ref{thm:peps_reset_paired_support}, $U$ is a unitary on the two
     replicas acting away from the cores of the first replica, so $U\Psi$ and
     $\Psi$ have the same joint core marginal, with mutual information
-    $I_\Omega(R_0:C_0)$. The cores of $\Phi$ are uncorrelated by
+    $I_\Omega(A_0:C_0)$. The cores of $\Phi$ are uncorrelated by
     Theorem~\ref{thm:peps_reset_exchanged_cores}. Continuity of mutual
-    information, with only the dimension $q^{|R_0|}$ of the first core, gives the
+    information, with only the dimension $q^{|A_0|}$ of the first core, gives the
     bound.
+\end{proof}
+
+\begin{theorem}[The entropy comparison of the reset]
+    \label{thm:peps_reset_cores_entropy}
+    \lean{TNLean.PEPS.Approximation.mutualInformation_cores_le_of_reset_unitary,
+        TNLean.Lattice.mutualInformation_le_of_supported_unitary,
+        TNLean.Lattice.exists_one_kronecker_unitary_of_mem_supportedOperators}
+    \leanok
+    \uses{def:peps_frame_sheet_swap}
+    Let $q\ge1$, let $\Omega$ be a unit vector on the open square, let $R,C$ be
+    disjoint, and let $R_0\subseteq R$, $C_0\subseteq C$. Let $U$ be a unitary
+    on the paired sites, supported on a set containing no site of
+    $R_0\cup C_0$, with $\|U\Psi-\Phi\|\le\delta$ for $\Psi=\Omega\otimes\Omega$
+    and $\Phi=F_R\Psi$, both unit vectors. Then
+    \begin{align*}
+        I_\Omega(R_0:C_0) & \le8\sqrt\delta\,\log(e\,q^{|R_0|}).
+    \end{align*}
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_reset_cores_entropy_sites}
+    Relabel the sites of the open square by the points of the square and apply
+    Theorem~\ref{thm:peps_reset_cores_entropy_sites}. The relabelling preserves
+    the support of $U$, the vectors $\Psi$ and $\Phi$, and their norms.
 \end{proof}
 
 \begin{theorem}[The entropy cost of the reset]
     \label{thm:peps_reset_entropy_scalar}
-    \lean{TNLean.PEPS.Approximation.reset_entropy_scalar}
+    \lean{TNLean.Lattice.reset_entropy_scalar}
     \leanok
     Let $C\ge0$, $p$ real, $L\ge\max(1,8\sqrt C(1+\lambda))$,
     $\delta\le CL^{-(2p+10)}$ and $0\le N\le1+L^2\lambda$. Then
@@ -104,6 +125,71 @@ the cores to an inverse power of the system size. This is Lemma~3.3 of
     \leanok
     We have $\sqrt\delta\le\sqrt CL^{-p-5}$ and $N\le L^2(1+\lambda)$, so
     $8\sqrt\delta\,N\le8\sqrt C(1+\lambda)L^{-p-3}\le L^{-p}$.
+\end{proof}
+
+\begin{definition}[Reset width and size threshold]
+    \label{def:peps_reset_width}
+    \lean{TNLean.PEPS.Approximation.resetWidth,
+        TNLean.PEPS.Approximation.resetThreshold,
+        TNLean.PEPS.Approximation.resetWidth_pos,
+        TNLean.PEPS.Approximation.resetWidth_eq}
+    \leanok
+    \uses{def:peps_reset_constants}
+    For an integer $q$ and real numbers $J,\Delta,p$, with $K$ and $C_U$ as in
+    Definition~\ref{def:peps_reset_constants}, put
+    \begin{align*}
+        C_p(J,\Delta,p)   & =K(J,\Delta,2p+10)+2,                                         \\
+        L_0(q,J,\Delta,p) & =\max\Bigl\{1,8\sqrt{C_U(J,\Delta,2p+10)}\,(1+\log q)\Bigr\}.
+    \end{align*}
+    In closed form,
+    \begin{align*}
+        C_p(J,\Delta,p) & =1280e^2\frac J\Delta(2p+40)+4p+52,
+    \end{align*}
+    and $C_p(J,\Delta,p)>0$ when $J\ge0$, $\Delta>0$ and $p>0$. The exponent
+    $2p+10$ is the error exponent $r_*$ of \cite{OpenAI2026PolynomialPEPS},
+    \texttt{02-information.tex}, lines 426--427. The source asks for
+    $C_p>K_{\mathrm{loc}}+3$ at lines 606--608; the margin $2$ suffices here
+    because the support radius $\lceil KB_*\rceil$ is less than $KB_*+1$ and
+    $B_*\ge1$.
+\end{definition}
+
+\begin{theorem}[Information reset, with explicit constants]
+    \label{thm:peps_information_reset_explicit}
+    \lean{TNLean.PEPS.Approximation.SquareHamiltonian.information_reset_of_resetThreshold_le,
+        TNLean.PEPS.Approximation.IsSquareGroundState.squareResetBound}
+    \leanok
+    \uses{def:polynomial_peps_model,def:peps_reset_width}
+    Fix an integer $q\ge1$ and real numbers $J\ge0$, $\Delta>0$ and $p>0$, and
+    put $C_p=C_p(J,\Delta,p)$ and $L_0=L_0(q,J,\Delta,p)$ as in
+    Definition~\ref{def:peps_reset_width}. Let $L\ge L_0$ and let $\Omega$ be a
+    normalized ground vector of an open $L\times L$ square Hamiltonian with
+    interaction bound $J$ and full-system gap $\Delta$. Let $R,C$ be disjoint,
+    let $R_0\subseteq R$ and $C_0\subseteq C$, and suppose
+    $I_\Omega(R:C)\le b$ with $b\ge0$. If
+    \begin{align*}
+        \operatorname{dist}_\infty(R_0,R^c),\ \operatorname{dist}_\infty(C_0,C^c)
+         & >w=C_p(1+b+\log L),
+    \end{align*}
+    then $I_\Omega(R_0:C_0)\le L^{-p}$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_reset_unitary_explicit,thm:peps_reset_support_cores,
+        thm:peps_reset_cores_entropy,thm:peps_reset_entropy_scalar,
+        def:peps_reset_constants}
+    Take $r=2p+10$, $K=K(J,\Delta,r)$ and $C=C_U(J,\Delta,r)$ in
+    Theorem~\ref{thm:peps_reset_unitary_explicit}, so that $C_p=K+2$. Since
+    $1+b+\log L\ge1$, the radius $\ell=\lceil K(1+b+\log L)\rceil$ satisfies
+    $\ell+1\le w$. By Theorem~\ref{thm:peps_reset_support_cores}, the unitary
+    $U$ of Theorem~\ref{thm:peps_reset_unitary_explicit} is supported away from
+    both cores, so Theorem~\ref{thm:peps_reset_cores_entropy} gives
+    \begin{align*}
+        I_\Omega(R_0:C_0) & \le8\sqrt{\|U\Psi-\Phi\|}\,\log(e\,q^{|R_0|}).
+    \end{align*}
+    Only the physical dimension of the core enters. Since
+    $\|U\Psi-\Phi\|\le CL^{-r}$ and $|R_0|\le L^2$,
+    Theorem~\ref{thm:peps_reset_entropy_scalar} with $\lambda=\log q$ gives the
+    claim for $L\ge L_0=\max(1,8\sqrt C(1+\log q))$.
 \end{proof}
 
 \begin{theorem}[Information reset]
@@ -126,19 +212,113 @@ the cores to an inverse power of the system size. This is Lemma~3.3 of
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:peps_reset_unitary,thm:peps_reset_support_cores,
-        thm:peps_reset_cores_entropy,thm:peps_reset_entropy_scalar}
-    Take $r=2p+10$ and $C,K$ from Theorem~\ref{thm:peps_reset_unitary}, and
-    put $C_p=K+2$. Since $1+b+\log L\ge1$, the radius
-    $\ell=\lceil K(1+b+\log L)\rceil$ satisfies $\ell+1\le w$. By
-    Theorem~\ref{thm:peps_reset_support_cores}, the unitary $U$ of
-    Theorem~\ref{thm:peps_reset_unitary} is supported away from both cores, so
-    Theorem~\ref{thm:peps_reset_cores_entropy} gives
+    \uses{thm:peps_information_reset_explicit,def:peps_reset_width}
+    Take $C_p=C_p(J,\Delta,p)$, which is positive, and $L_0=L_0(q,J,\Delta,p)$
+    in Theorem~\ref{thm:peps_information_reset_explicit}.
+\end{proof}
+
+\subsection{The information reset at interaction range $R$}
+
+The source states the information reset for site and nearest-neighbour terms
+only, which is interaction range one. The statements of this subsection
+extend it to a Hamiltonian of range $R$ on the $L\times L$ square; the
+range-one statements above are unchanged.
+
+\begin{definition}[Reset width and size threshold at range $R$]
+    \label{def:peps_reset_width_range}
+    \lean{TNLean.PEPS.Approximation.rangeResetWidth,
+        TNLean.PEPS.Approximation.rangeResetThreshold,
+        TNLean.PEPS.Approximation.rangeResetWidth_pos}
+    \leanok
+    \uses{def:peps_reset_constants_range}
+    For integers $q,R\ge0$ and real numbers $J$, $\Delta$ and $p$, with $K_R$
+    and $C_{U,R}$ as in Definition~\ref{def:peps_reset_constants_range}, put
     \begin{align*}
-        I_\Omega(R_0:C_0) & \le8\sqrt{\|U\Psi-\Phi\|}\,\log(e\,q^{|R_0|}).
+        C_{p,R}(J,\Delta,p)   & =K_R(J,\Delta,2p+10)+1+R,                                       \\
+        L_{0,R}(q,J,\Delta,p) & =\max\bigl\{1,8\sqrt{C_{U,R}(J,\Delta,2p+10)}(1+\log q)\bigr\}.
     \end{align*}
-    Only the physical dimension of the core enters. Since
-    $\|U\Psi-\Phi\|\le CL^{-r}$ and $|R_0|\le L^2$,
-    Theorem~\ref{thm:peps_reset_entropy_scalar} with $\lambda=\log q$ gives the
-    claim for $L\ge\max(1,8\sqrt C(1+\log q))$.
+    If $J\ge0$, $\Delta>0$ and $p>0$, then $C_{p,R}(J,\Delta,p)>0$. The summand $R$
+    accounts for the reach of the supports crossing a region.
+\end{definition}
+
+\begin{theorem}[The number of sites of the square]
+    \label{thm:peps_square_site_count}
+    \lean{TNLean.PEPS.Approximation.card_rectangularDomain}
+    \leanok
+    The $L\times L$ square has $L^2$ sites.
+\end{theorem}
+\begin{proof}
+    \leanok
+    It is the product of two intervals of $L$ integers.
+\end{proof}
+
+\begin{theorem}[The reset support avoids the cores at range $R$]
+    \label{thm:peps_reset_support_cores_range}
+    \lean{TNLean.PEPS.Approximation.notMem_rangeResetSupport}
+    \leanok
+    \uses{def:peps_crossing_supports}
+    Let $A,C\subseteq\Lambda$ be disjoint, with cores $A_0\subseteq A$ and
+    $C_0\subseteq C$ farther than $w$ in sup-distance from the complements of
+    $A$ and $C$. If $\ell+R\le w$, then the graph neighbourhood of radius
+    $\ell$ of $(A\cup C)^c\cup Z_R(A)$ contains no site of $A_0\cup C_0$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:peps_crossing_supports}
+    A walk of length $\ell$ moves the sup-distance by at most $\ell$. A buffer
+    site lies outside both regions, and a site of $Z_R(A)$ is within distance
+    $R$ of a site of $A$ and of a site outside $A$, which lies outside $C$
+    or outside $A$ as needed.
+\end{proof}
+
+\begin{theorem}[Information reset at range $R$]
+    \label{thm:peps_information_reset_range}
+    \lean{TNLean.Lattice.LocalHamiltonian.information_reset_of_card_le,
+        TNLean.Lattice.LocalHamiltonian.information_reset_of_rangeResetThreshold_le}
+    \leanok
+    \uses{def:area_law_hamiltonian,def:peps_reset_width_range}
+    Fix integers $q\ge1$ and $R\ge0$, and real numbers $J\ge0$, $\Delta>0$
+    and $p>0$, and put $C_p=C_{p,R}(J,\Delta,p)$ and
+    $L_0=L_{0,R}(q,J,\Delta,p)$. Let $L\ge L_0$, let $H$ be a Hamiltonian of
+    range $R$ on the $L\times L$ square with Hermitian terms of norm at most
+    $J$, and let $\Omega$ be a normalized eigenvector with the full-system gap
+    $\Delta$. Let $A,C$ be disjoint with $I_\Omega(A:C)\le b$, $b\ge0$. If the
+    cores $A_0\subseteq A$ and $C_0\subseteq C$ are at sup-distance greater
+    than $C_p(1+b+\log L)$ from the complements of $A$ and of $C$, then
+    \begin{align*}
+        I_\Omega(A_0:C_0) & \le L^{-p}.
+    \end{align*}
+    The same holds on any finite domain with at most $L^2$ sites. This
+    extends Theorem~\ref{thm:peps_information_reset_explicit} from range one
+    to range $R$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_reset_unitary_range,thm:peps_reset_support_cores_range,
+        thm:peps_reset_cores_entropy_sites,thm:peps_reset_entropy_scalar,
+        thm:peps_square_site_count}
+    The proof of Theorem~\ref{thm:peps_information_reset_explicit} applies,
+    with the unitary of Theorem~\ref{thm:peps_reset_unitary_range} at
+    $r=2p+10$. With $B=1+b+\log L\ge1$, its support radius satisfies
+    $\lceil K_RB\rceil+R\le C_pB$, so
+    Theorem~\ref{thm:peps_reset_support_cores_range} keeps it away from the
+    cores. The square has $L^2$ sites.
+\end{proof}
+
+\begin{theorem}[Information reset at range $R$, existence of the constants]
+    \label{thm:peps_information_reset_range_exists}
+    \lean{TNLean.Lattice.LocalHamiltonian.information_reset}
+    \leanok
+    \uses{def:area_law_hamiltonian}
+    Fix integers $q\ge1$ and $R\ge0$, and real numbers $J\ge0$, $\Delta>0$
+    and $p>0$. There are $C_p>0$ and $L_0$ such that, for every $L\ge L_0$, the
+    conclusion of Theorem~\ref{thm:peps_information_reset_range} holds on the
+    $L\times L$ square.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_information_reset_range,def:peps_reset_width_range}
+    Take $C_p=C_{p,R}(J,\Delta,p)$, which is positive, and
+    $L_0=L_{0,R}(q,J,\Delta,p)$ in
+    Theorem~\ref{thm:peps_information_reset_range}.
 \end{proof}

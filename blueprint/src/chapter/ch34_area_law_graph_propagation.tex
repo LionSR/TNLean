@@ -18,10 +18,10 @@ the normalized partial trace of Definition~\ref{def:qc_site_expectation}.
     \label{lem:area_domain_graph_counts}
     \lean{TNLean.PEPS.AreaLaw.latticeL1Distance_le_one_of_domainGraph_adj,
         TNLean.PEPS.AreaLaw.card_domainGraph_sphere_le,
-        TNLean.PEPS.AreaLaw.IsAdmissibleSupport.edist_le,
-        TNLean.PEPS.AreaLaw.IsAdmissibleSupport.card_le,
-        TNLean.PEPS.AreaLaw.LocalHamiltonian.normBound_nonneg,
-        TNLean.PEPS.AreaLaw.LocalHamiltonian.sum_norm_term_containing_le}
+        TNLean.Lattice.IsAdmissibleSupport.edist_le,
+        TNLean.Lattice.IsAdmissibleSupport.card_le,
+        TNLean.Lattice.LocalHamiltonian.normBound_nonneg,
+        TNLean.Lattice.LocalHamiltonian.sum_norm_term_containing_le}
     \leanok
     \uses{def:area_law_hamiltonian,thm:area_diamond_count,
         thm:area_diamond_budget}
@@ -48,9 +48,9 @@ the normalized partial trace of Definition~\ref{def:qc_site_expectation}.
 \begin{lemma}[Graph-distance propagation]
     \label{lem:quasilocal-lr}
     \lean{TNLean.PEPS.AreaLaw.exists_quasilocal_lieb_robinson,
-        TNLean.PEPS.AreaLaw.LocalHamiltonian.norm_commutator_le_graphDistance,
-        TNLean.PEPS.AreaLaw.LocalHamiltonian.commutator_eq_zero_of_edist_eq_top,
-        TNLean.PEPS.AreaLaw.LocalHamiltonian.norm_sub_siteExpectation_graphBall_le}
+        TNLean.Lattice.LocalHamiltonian.norm_commutator_le_graphDistance,
+        TNLean.Lattice.LocalHamiltonian.commutator_eq_zero_of_edist_eq_top,
+        TNLean.Lattice.LocalHamiltonian.norm_sub_siteExpectation_graphBall_le}
     \leanok
     \uses{def:area_law_hamiltonian,lem:area_domain_graph_counts,
         thm:qc_graph_lieb_robinson,thm:qc_graph_lieb_robinson_zero,

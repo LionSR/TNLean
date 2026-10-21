@@ -5,10 +5,10 @@
 \input{command}
 \title{Connected Domains in the One-Dimensional Area Law}
 \author{}
-\date{October 16, 2026}
+\date{October 18, 2026}
 \begin{document}
 \maketitle
-\gapnote{scope-restriction}{open}
+\gapnote{scope-restriction}{resolved}
 
 \section{The source statement}
 
@@ -30,9 +30,9 @@ vector is a product of the component ground vectors, and both the entropy and
 the edge boundary add over components. The theorem is then proved for
 connected $\Lambda$, that is, for a chain of $L$ consecutive sites.
 
-\section{What is proved and the restriction}
+\section{The chain case}
 
-The formalization states the model on the chain of $L$ sites, with sites
+The formalization first states the model on the chain of $L$ sites, with sites
 $\{0,\ldots,L-1\}$, supports of range $R$ the nonempty sets of sites of
 diameter at most $R$, and the Hamiltonian, gapped ground vector, regional
 entropies and boundary edges as in the note.\footnote{Declarations:
@@ -46,26 +46,98 @@ $C_0(q,R)(1+J/\Delta)$.\footnote{Declarations:
 \leanid{TNLean.MPS.AreaLaw.chainAreaLaw}.} Theorem~B of the note is stated on
 the chain of $L$ sites in the note itself, so it carries no restriction.
 
-The restriction is to connected domains. For a disconnected
-$\Lambda\subset\mathbb Z$ the interval bound still holds verbatim on every
-interval of positions, since the proof uses only the crossing count and the
-buffered discount; but the subset bound $S_\Omega(A)\le C|\partial_\Lambda A|$
-needs the product structure of the ground vector over components (a region
-inside one component contributes no boundary edge at a gap of $\Lambda$, so
-its entropy must vanish for the bound to hold), and that product structure is
-not formalized.
+\section{Resolution: arbitrary finite domains}
 
-\section{Elimination plan}
+Theorem~A is now formalized for every finite $\Lambda\subset\mathbb Z$, with
+no hypothesis beyond the source's and with the constant
+$C_0(q,R)(1+J/\Delta)$ of the chain case.\footnote{Declarations:
+\leanid{TNLean.MPS.AreaLaw.DomainHamiltonian},
+\leanid{TNLean.MPS.AreaLaw.domainBoundaryEdges},
+\leanid{TNLean.MPS.AreaLaw.regionEntropy_le_mul_card_domainBoundaryEdges},
+\leanid{TNLean.MPS.AreaLaw.domainAreaLaw}.} The sites of $\Lambda$ are
+labelled $0,\ldots,|\Lambda|-1$ in increasing order, the supports are the
+nonempty sets of graph diameter at most $R$ in the induced path graph, and
+$\partial_\Lambda A$ is the set of edges $\{x,x+1\}\subseteq\Lambda$ with
+exactly one endpoint in $A$, as in the note.
 
-Formalize the component reduction: for a Hamiltonian that is a sum of terms
-supported in disjoint blocks of sites, a unit gapped ground vector of the sum
-is a tensor product of gapped ground vectors of the blocks (the ground energy
-adds, and uniqueness of the global ground vector forces the product form), and
-the regional entropy of a product vector adds over the blocks. Theorem~A for an
-arbitrary finite $\Lambda\subset\mathbb Z$ then follows from the chain version
-applied to each component. Until then the restriction is recorded on the
-module docstring of \texttt{TNLean/MPS/AreaLaw/AreaLaw.lean} and in the blueprint
-statement of Theorem~A.
+The proof takes a shorter route than the factorization sketched in the note.
+A support of range $R$ in $\Lambda$ is a support of range $R$ on the chain of
+$|\Lambda|$ sites, so the Hamiltonian is a chain Hamiltonian and the chain
+theorem bounds $S_\Omega(A)$ by $C_{\mathrm{int}}$ times the number of chain
+boundary edges of $A$. These include the chain edges at the gaps of
+$\Lambda$, which are not edges of $\Lambda$. At a gap no term crosses, so the
+Hamiltonian is $H_1\otimes1+1\otimes H_2$ across the prefix $P$ of the chain
+ending at the gap, the gapped ground vector is a product vector across that
+cut, and $S_\Omega(P)=0$. For $S_\Omega(P)=0$, the Araki--Lieb inequality and
+strong subadditivity give $S_\Omega(A\triangle P)=S_\Omega(A)$ for every
+region $A$, while replacing $A$ by $A\triangle P$ toggles exactly the chain
+edge at the end of $P$. Flipping the prefixes at the gaps where $A$ changes
+yields a region with the entropy of $A$ whose chain boundary edges are the
+edges of $\partial_\Lambda A$. The full factorization of the ground vector
+over the components is therefore not needed.
+
+\section{Locality in the matrix product state argument}
+
+Part~II of the note applies its Lieb--Robinson lemma on the contiguous chain
+of Theorem~B, namely $\Lambda=\{1,\ldots,L\}$. A formulation on this chain
+therefore suffices for that application. The printed local lemma
+(\texttt{part2a\_mps\_information.tex}, lines~260--309) does not separately
+reset the standing notation for $\Lambda$, however, so its broader reading
+also includes arbitrary finite induced-path domains. The contiguous
+formulation is not a formalization of that unrestricted reading.
+
+For an arbitrary finite $\Lambda\subset\mathbb Z$, the additional geometric
+argument is to identify distances inside each component, bound each distance
+sphere by two vertices, and bound a support of graph diameter at most $R$ by
+$R+1$ sites. Supports of finite graph diameter lie in one component; operators
+at infinite separation commute exactly. These facts allow the general graph
+estimates to be applied with the same uniform constants. This extension of
+the local estimates does not require the product decomposition of ground
+vectors needed for the entropy argument above.
+
+\section{Information reset on the contiguous chain}
+
+Part~II, Lemma~\texttt{lem:reset}
+(\texttt{part2a\_mps\_information.tex}, lines~319--435), is proved on the
+contiguous chain with the source hypotheses. For every $p>0$ there are
+$C_p>0$ and a natural $L_0\ge1$, chosen before all system and region data,
+such that the following holds for $L\ge L_0$. If $D,C$ are disjoint,
+$R_0\subseteq D$, $C_0\subseteq C$, $I_\Omega(D:C)\le b$, and both
+cores have distance greater than $w=C_p(1+b+\log L)$ from their respective
+outer-region complements, then $I_\Omega(R_0:C_0)\le L^{-p}$.
+Nonnegativity of $b$ is derived, and only the original full-system gap is
+assumed. The Gaussian filter, supported approximation, polar unitary and
+independence after the regional replica swap are constructed within the
+proof.\footnote{Declaration:
+\leanid{TNLean.MPS.AreaLaw.ChainHamiltonian.information_reset}.}
+
+As with the local propagation lemma, the broader reading on an arbitrary
+finite induced-path domain remains unformalized. The missing step is the
+extension of locality and support geometry to those domains described above;
+no additional spectral or product-marginal hypothesis should be imposed.
+The blueprint marks only the explicitly contiguous-chain statement as
+proved, rather than the unrestricted reading of the source lemma.
+
+\section{Information at logarithmic separation}
+
+Part~II, Lemma~\texttt{lem:logsep}
+(\texttt{part2a\_mps\_information.tex}, lines~472--488), is also proved on
+the contiguous chain. For fixed $p>0$ and $k_0\ge1$, positive $D_p$ and a
+natural cutoff are chosen before all system data. If $T$ is a union of at
+most $k_0$ intervals and every pair $x\in T$, $y\in E$ satisfies
+$|x-y|\ge D_p\log L$, then $I_\Omega(T:E)\le L^{-p}$ for sufficiently
+large $L$. The interval family may overlap or contain empty members.
+Neither disjointness nor a sign hypothesis on the original real $J$ is
+added. The sign needed for the interval area law follows from the norm
+bound of an actual singleton interaction.\footnote{Declaration:
+\leanid{TNLean.MPS.AreaLaw.ChainHamiltonian.mutualInformation_le_of_logarithmic_separation}.}
+
+The proof combines the contiguous interval area law, exact real-radius
+neighborhoods of intervals, and the contiguous reset theorem. It therefore
+does not establish the broader reading on arbitrary finite induced-path
+domains. That extension still requires the component reduction and the
+corresponding locality and support geometry described above. No completion
+of the full preparation protocol is asserted by this result.
 
 \bibliographystyle{alpha}
 \bibliography{references}
