@@ -51,7 +51,7 @@ lemma ChainHamiltonian.sum_norm_terms_containing_le
   have hcard : (Finset.univ.filter fun X : ChainSupport L R ↦ x ∈ X.1).card ≤
       2 ^ (2 * R + 1) :=
     (Finset.card_le_card hcover).trans
-      ((card_filter_subset_le W).trans (Nat.pow_le_pow_right (by norm_num) hW))
+      (card_filter_subset_le_pow_of_card_le hW)
   have hsum := Finset.sum_le_card_nsmul
     (Finset.univ.filter fun X : ChainSupport L R ↦ x ∈ X.1)
     (fun X ↦ ‖h.term X‖) J (fun X _ ↦ h.norm_le X)

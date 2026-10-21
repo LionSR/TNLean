@@ -374,6 +374,37 @@ section TheoremA
 
 variable {Λ : Finset ℤ} {q R : ℕ} {J Δ : ℝ}
 
+/-- Removing boundary cuts across gaps preserves entropy and leaves the actual domain boundary.
+Source: the one-dimensional note, part1_arealaw.tex, lines 64–93. -/
+theorem DomainHamiltonian.exists_regionEntropy_eq_card_boundaryEdges_eq
+    {Λ : Finset ℤ} {q R : ℕ} {J E₀ Δ : ℝ}
+    (h : DomainHamiltonian Λ q R J)
+    {Ω : EuclideanSpace ℂ (Fin Λ.card → Fin q)}
+    (hΔ : 0 < Δ) (hgs : Matrix.IsGappedGroundState h.operator E₀ Ω Δ)
+    (A : Finset ℤ) :
+    ∃ A' : Finset (Fin Λ.card),
+      Entropy.regionEntropy (n := fun _ : Fin Λ.card ↦ q) A' Ω =
+        Entropy.regionEntropy (n := fun _ : Fin Λ.card ↦ q) (domainRegion Λ A) Ω ∧
+      (boundaryEdges Λ.card A').card = (domainBoundaryEdges Λ A).card := by
+  classical
+  set G := (boundaryEdges Λ.card (domainRegion Λ A)).filter fun p ↦ ¬ IsDomainEdge Λ p
+  have hG : ∀ p ∈ G, p + 1 < Λ.card ∧ Entropy.regionEntropy (n := fun _ : Fin Λ.card ↦ q)
+      (interval Λ.card 0 (p + 1)) Ω = 0 := by
+    intro p hp
+    obtain ⟨hpb, hpe⟩ := Finset.mem_filter.mp hp
+    have hp1 := (mem_boundaryEdges.mp hpb).1
+    refine ⟨hp1, regionEntropy_eq_zero_of_forall_subset_or_disjoint (h := h.term)
+      (D := fun X ↦ X.1) h.supported h.hermitian hΔ hgs _ fun X ↦ ?_⟩
+    exact X.2.subset_or_disjoint_of_gap hp1 fun he ↦ hpe ⟨hp1, he⟩
+  obtain ⟨A', hS, hB⟩ :=
+    exists_regionEntropy_eq_boundaryEdges_eq_symmDiff hgs.1 G hG (domainRegion Λ A)
+  have hsymm : boundaryEdges Λ.card (domainRegion Λ A) ∆ G =
+      (boundaryEdges Λ.card (domainRegion Λ A)).filter (IsDomainEdge Λ) := by
+    ext p
+    simp only [G, Finset.mem_symmDiff, Finset.mem_filter]
+    tauto
+  exact ⟨A', hS, by rw [hB, hsymm, card_domainBoundaryEdges]⟩
+
 /-- **Theorem A on a finite set of integers.** For a gapped ground vector `Ω` of an
 admissible Hamiltonian on a finite set `Λ ⊂ ℤ`, the entropy of the sites in every `A ⊆ ℤ` is
 at most `C_int(q, R, J, Δ)` times the number of edges of `∂_Λ A`.
@@ -391,28 +422,11 @@ theorem regionEntropy_le_mul_card_domainBoundaryEdges (hq : 1 ≤ q) (hJ : 0 ≤
     (hgs : Matrix.IsGappedGroundState h.operator E₀ Ω Δ) (A : Finset ℤ) :
     Entropy.regionEntropy (n := fun _ : Fin Λ.card ↦ q) (domainRegion Λ A) Ω ≤
       chainIntervalEntropyBound q R J Δ * (domainBoundaryEdges Λ A).card := by
-  classical
-  set G := (boundaryEdges Λ.card (domainRegion Λ A)).filter fun p ↦ ¬ IsDomainEdge Λ p
-  have hG : ∀ p ∈ G, p + 1 < Λ.card ∧ Entropy.regionEntropy (n := fun _ : Fin Λ.card ↦ q)
-      (interval Λ.card 0 (p + 1)) Ω = 0 := by
-    intro p hp
-    obtain ⟨hpb, hpe⟩ := Finset.mem_filter.mp hp
-    have hp1 := (mem_boundaryEdges.mp hpb).1
-    refine ⟨hp1, regionEntropy_eq_zero_of_forall_subset_or_disjoint (h := h.term)
-      (D := fun X ↦ X.1) h.supported h.hermitian hΔ hgs _ fun X ↦ ?_⟩
-    exact X.2.subset_or_disjoint_of_gap hp1 fun he ↦ hpe ⟨hp1, he⟩
-  obtain ⟨A', hS, hB⟩ :=
-    exists_regionEntropy_eq_boundaryEdges_eq_symmDiff hgs.1 G hG (domainRegion Λ A)
+  obtain ⟨A', hS, hB⟩ := h.exists_regionEntropy_eq_card_boundaryEdges_eq hΔ hgs A
   have hgs' : Matrix.IsGappedGroundState (h.toChain hJ).operator E₀ Ω Δ := by
     rwa [DomainHamiltonian.toChain_operator]
   have hchain := regionEntropy_le_mul_card_boundaryEdges hq hJ hΔ (h.toChain hJ) hgs' A'
-  have hsymm : boundaryEdges Λ.card (domainRegion Λ A) ∆ G =
-      (boundaryEdges Λ.card (domainRegion Λ A)).filter (IsDomainEdge Λ) := by
-    ext p
-    simp only [G, Finset.mem_symmDiff, Finset.mem_filter]
-    tauto
-  rw [hS, hB, hsymm, card_domainBoundaryEdges] at hchain
-  exact hchain
+  simpa only [hS, hB] using hchain
 
 /-- **The one-dimensional area law** (Theorem A). For every local dimension `q ≥ 1`, range
 `R`, term norm `J ≥ 0` and gap `Δ > 0` there is a constant, namely `C₀(q, R) (1 + J/Δ)`, such
