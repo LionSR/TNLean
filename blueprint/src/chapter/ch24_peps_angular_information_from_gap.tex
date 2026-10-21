@@ -160,10 +160,11 @@ statements above are unchanged.
     \lean{TNLean.PEPS.Approximation.SquareCellInformationBound,
         TNLean.PEPS.Approximation.SquareResetBound}
     \leanok
-    \uses{def:peps_angular_scale}
-    Let $\mathcal G$ assign to each $L$ a set of states of the $L\times L$
-    square. It satisfies the \emph{cell bound} with clearance coefficient $c$,
-    prefactor $C_1$ and exponent $K$ if, for every state of $\mathcal G$, the
+    \uses{def:peps_angular_grid}
+    Fix $q\in\mathbb N$, and let $\mathcal G$ assign to each $L$ a set of
+    states of the $L\times L$ square with local dimension $q$. It satisfies
+    the \emph{cell bound} with clearance coefficient $c$, prefactor $C_1$ and
+    exponent $K$ if, for every state of $\mathcal G$, the
     conclusion of Theorem~\ref{thm:peps_cell_conditional_information_from_gap}
     holds with these constants. It satisfies the \emph{reset bound} with width
     $C_p$ and threshold $L_0$ at accuracy $L^{-p}$ if, for every $L\ge L_0$ and
@@ -172,7 +173,7 @@ statements above are unchanged.
     $C_p$.
 \end{definition}
 
-\begin{theorem}[Proposition~3.4 for a family with the two estimates]
+\begin{theorem}[Angular information for a family with the two estimates]
     \label{thm:peps_angular_information_of_bounds}
     \lean{TNLean.PEPS.Approximation.angular_information_reset_of_squareResetBound,
         TNLean.PEPS.Approximation.angular_single_scale_reset_of_bounds,
@@ -180,20 +181,25 @@ statements above are unchanged.
     \leanok
     \uses{def:peps_family_cell_reset_bounds,def:peps_angular_scale,
         def:peps_angular_information_constants}
-    Let $a>0$ and let $p>0$ be an integer. Let $\mathcal G$ consist of unit
-    vectors and satisfy the cell bound with
-    $C_1>0$ and $K\ge0$ at the clearance coefficient of $a'$ and $d$, and the
+    Let $q\in\mathbb N$, $a>0$, $A_0\in\mathbb R$, $m_0\in\mathbb N$, and let
+    $p>0$ be an integer. Let $\mathcal G$ consist of unit vectors and satisfy
+    the cell bound with $C_1>0$ and $K\ge0$ at the clearance coefficient of $a'$ and $d$, and the
     reset bound with $C_p>0$ and $L_0$, where $a'$ and $d$ are the margin and
     the cell side of Definition~\ref{def:peps_angular_information_constants}.
     Then every slope $D\ge\max\{1,12C_p/a',1/d\}$ and every threshold at least
-    the larger of the cell-reset threshold at $(C_p,C_1,K)$ and the cell count,
-    and of $L_0$, form an angular scale for $\mathcal G$ in the sense of
-    Definition~\ref{def:peps_angular_scale}.
+    the larger of the cell-reset threshold at $(C_p,C_1,K)$ and the cell count
+    $N_{\rm cell}(a,A_0,m_0)$, and of $L_0$, form an angular scale for
+    $\mathcal G$ in the sense of Definition~\ref{def:peps_angular_scale}. This
+    is the conclusion of \cite[Proposition~3.4]{OpenAI2026PolynomialPEPS} for
+    any such family.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:peps_scaled_cell_clearance,thm:peps_annular_information_induction,
         thm:peps_annular_cutoff,thm:peps_annular_separation,
+        thm:peps_annular_cell_clearance,
+        thm:peps_selected_region_information_of_cell_bounds,
+        thm:peps_angular_reset_width_of_cell_information_explicit,
         lem:peps_angular_scale_of_site_position,
         def:peps_angular_single_scale_constants}
     Run the proof of
@@ -206,11 +212,32 @@ statements above are unchanged.
     threshold. The Hamiltonian enters only through the two estimates.
 \end{proof}
 
+\begin{theorem}[Information of a state of the square on the integer square]
+    \label{thm:peps_square_state_relabel_information}
+    \lean{TNLean.PEPS.Approximation.cell_conditionalMutualInformation_le_square_of_rectangle,
+        TNLean.PEPS.Approximation.mutualInformation_squareAreaLawState}
+    \leanok
+    \uses{def:square_area_law_state,def:peps_angular_grid}
+    Let $\Omega$ be a state of the $L\times L$ square and $\tilde\Omega$ its
+    placement on the integer square of Definition~\ref{def:square_area_law_state}.
+    The mutual information of $\tilde\Omega$ between two sets of sites equals
+    that of $\Omega$ between the corresponding sets. If, for a cell of the grid
+    with origin $o-(1,1)$ and side $s$, a union of other cells, and every
+    region at distance at least $cs$ from the closed cell, the conditional
+    mutual information of $\tilde\Omega$ is at most $C$, then the same holds
+    for $\Omega$ and the grid with origin $o$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    The placement translates every site by $(1,1)$. This bijection carries the
+    cells, the unions of cells and the distances for the origin $o$ to those
+    for the origin $o-(1,1)$, and entropies are unchanged when the sites are
+    relabelled.
+\end{proof}
+
 \begin{theorem}[The two estimates at range $R$]
     \label{thm:peps_range_cell_reset_bounds}
-    \lean{TNLean.PEPS.Approximation.cell_conditionalMutualInformation_le_square_of_rectangle,
-        TNLean.PEPS.Approximation.IsRangeSquareGroundState.squareCellInformationBound,
-        TNLean.PEPS.Approximation.mutualInformation_squareAreaLawState,
+    \lean{TNLean.PEPS.Approximation.IsRangeSquareGroundState.squareCellInformationBound,
         TNLean.PEPS.Approximation.IsRangeSquareGroundState.squareResetBound}
     \leanok
     \uses{def:peps_family_cell_reset_bounds,def:square_range_ground_states,
@@ -224,12 +251,13 @@ statements above are unchanged.
 \begin{proof}
     \leanok
     \uses{thm:peps_cell_information_range_closed,
-        thm:peps_information_reset_range}
-    Place the state on the integer square. A common translation by $(1,1)$
-    identifies the two placements of the sites, so
-    Theorem~\ref{thm:peps_cell_information_range_closed} gives the cell bound,
-    and Theorem~\ref{thm:peps_information_reset_range} gives the reset; the
-    entropies are unchanged by the relabelling.
+        thm:peps_information_reset_range,
+        thm:peps_square_state_relabel_information}
+    Place the state on the integer square. By
+    Theorem~\ref{thm:peps_square_state_relabel_information}, the relabelling of
+    the sites changes neither the cell estimate nor the mutual information, so
+    Theorem~\ref{thm:peps_cell_information_range_closed} gives the cell bound
+    and Theorem~\ref{thm:peps_information_reset_range} gives the reset.
 \end{proof}
 
 \begin{definition}[The angular constants at range $R$]
@@ -240,7 +268,8 @@ statements above are unchanged.
     \leanok
     \uses{def:peps_reset_width_range,def:peps_closed_information_constants,
         def:peps_angular_information_constants}
-    With $a'$, $d$, the clearance coefficient $c$ and the cell count of
+    For $q,R,m_0\in\mathbb N$ and $J,\Delta,a,A_0,p\in\mathbb R$, with $a'$,
+    $d$, the clearance coefficient $c$ and the cell count of
     Definition~\ref{def:peps_angular_information_constants}, let
     $D_R(J,\Delta,a,p)=\max\{1,12C_{p,R}/a',1/d\}$, and let
     $L_R(q,J,\Delta,a,A_0,m_0,p)$ be the larger of the cell-reset threshold at
@@ -248,29 +277,33 @@ statements above are unchanged.
     the cell count, and of $L_{0,R}(q,J,\Delta,p)$. For $J\ge0$, $\Delta>0$,
     $a>0$ and $p>0$,
     \begin{align*}
-        D_R(J,\Delta,a,p) & =\frac{2400\,C_{p,R}(J,\Delta,p)}{\min\{a,1\}}.
+        D_R(J,\Delta,a,p) & =\frac{2400\,C_{p,R}(J,\Delta,p)}{\min\{a,1\}},
     \end{align*}
+    because $C_{p,R}(J,\Delta,p)\ge1$, so that this term dominates both $1$
+    and $1/d=1600/\min\{a,1\}$.
 \end{definition}
 
-\begin{theorem}[Proposition~3.4 at range $R$, at closed-form constants]
+\begin{theorem}[Angular information at range $R$, at closed-form constants]
     \label{thm:peps_angular_information_range_closed}
     \lean{TNLean.PEPS.Approximation.isAngularScale_range_closed_le}
     \leanok
     \uses{def:peps_angular_constants_range,def:peps_angular_scale,
         def:square_range_ground_states}
-    Fix $q\ge1$, $R\ge0$, $J\ge0$, $\Delta>0$, $a>0$, $m_0\in\mathbb N$ and an
-    integer $p>0$. For the unit gapped ground vectors of Hamiltonians of range
-    $R$ with term bound $J$ on the $L\times L$ square, every slope
+    Fix $q\ge1$, $R\ge0$, $J\ge0$, $\Delta>0$, $a>0$, $A_0\in\mathbb R$,
+    $m_0\in\mathbb N$ and an integer $p>0$. For the unit gapped ground vectors
+    of Hamiltonians of range $R$ with term bound $J$ on the $L\times L$ square, every slope
     $D\ge D_R(J,\Delta,a,p)$ and every threshold
     $L_0\ge L_R(q,J,\Delta,a,A_0,m_0,p)$ form an angular scale at accuracy
-    $L^{-p}$. This extends
+    $L^{-p}$. This is \cite[Proposition~3.4]{OpenAI2026PolynomialPEPS} for
+    Hamiltonians of range $R$, and extends
     Theorem~\ref{thm:peps_information_from_gap_closed} from range one to range
     $R$.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:peps_angular_information_of_bounds,
-        thm:peps_range_cell_reset_bounds}
+        thm:peps_range_cell_reset_bounds,thm:peps_cell_information_range_closed,
+        def:peps_reset_width_range}
     Apply Theorem~\ref{thm:peps_angular_information_of_bounds} with the
     estimates of Theorem~\ref{thm:peps_range_cell_reset_bounds}.
 \end{proof}
