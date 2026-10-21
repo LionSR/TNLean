@@ -188,7 +188,8 @@ theorem _root_.TNLean.Lattice.LocalHamiltonian.rangeNestedPatch_minimizer_energy
     AreaLaw.Geometry.rangeNestedPatch_mono Λ center R u hij
   have hcl := exists_clipped_filter_of_isMinOn_regularizedPatchObjective
     (n := fun _ : Lattice.Site Λ ↦ q) regions hregions a ha hb Ψᵤ hΨᵤ x hx hmin
-  let T : AdmissibleSupport Λ R → Matrix (Lattice.Configuration Λ q) (Lattice.Configuration Λ q) ℂ := H.term
+  let T : AdmissibleSupport Λ R →
+      Matrix (Lattice.Configuration Λ q) (Lattice.Configuration Λ q) ℂ := H.term
   let S : AdmissibleSupport Λ R → Finset (Lattice.Site Λ) := fun X ↦ X.1
   have hsupp : ∀ X, Entropy.IsSupportedOn (n := fun _ : Lattice.Site Λ ↦ q) (T X) (S X) :=
     fun X ↦ QuantumCircuit.isSupportedOn_of_mem_supportedOperators (H.supported X)

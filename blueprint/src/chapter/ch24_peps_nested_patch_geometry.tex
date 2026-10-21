@@ -260,7 +260,7 @@ physical sites; they are not the boundaries of the ambient real squares.
 
 The source treats on-site and nearest-neighbour interactions. The following
 statements extend the patch geometry to interactions whose supports have
-graph diameter at most a positive integer $R$; they are not in
+graph diameter at most a nonnegative integer $R$; they are not in
 \cite{OpenAI2026PolynomialPEPS}. At $R=1$ they select the patches of
 Definition~\ref{def:peps_nested_patches}.
 
@@ -274,9 +274,9 @@ Definition~\ref{def:peps_nested_patches}.
     }
     \leanok
     \uses{def:peps_closed_square_sample}
-    For a nonnegative integer $R$, put $s_R=2\lceil R/2\rceil$. For
-    $u\in\mathbb R$, put $m_R=\lfloor u/s_R\rfloor+1$, and for
-    $0\le j<m_R$ define
+    For a nonnegative integer $R$, put $s_R=2\lceil R/2\rceil$. For $R\ge1$
+    and $u\ge0$, put $m_R=\lfloor u/s_R\rfloor+1$, and for $0\le j<m_R$
+    define
     \begin{align}
         r_j & =u+s_Rj,\qquad K_j=K(c,r_j).
         \label{eq:peps_range_nested_patches}
@@ -351,8 +351,8 @@ Definition~\ref{def:peps_nested_patches}.
     }
     \leanok
     \uses{def:peps_square_radius}
-    For $r\in\mathbb R$ and an integer $R\ge0$, let
-    $N(c,r,R)=\{x\in\Lambda:r-R<\rho(x)\le r\}$.
+    For $r\in\mathbb R$ and a nonnegative integer $R$, let
+    $\mathcal N(c,r,R)=\{x\in\Lambda:r-R<\rho(x)\le r\}$.
 \end{definition}
 
 \begin{theorem}[Size of the inner layer]
@@ -367,15 +367,15 @@ Definition~\ref{def:peps_nested_patches}.
     \uses{def:peps_square_layer,def:peps_range_nested_patches}
     If the values of $\rho$ on
     $X$ differ pairwise by at most $R$, and $X$ has a site $y$ outside
-    $K(c,r)$, then every site of $X$ in $K(c,r)$ lies in $N(c,r,R)$. If
-    $r\ge0$, then $|N(c,r,R)|\le R(8r+4)$, and for the patches of
+    $K(c,r)$, then every site of $X$ in $K(c,r)$ lies in $\mathcal N(c,r,R)$. If
+    $r\ge0$, then $|\mathcal N(c,r,R)|\le R(8r+4)$, and for the patches of
     Definition~\ref{def:peps_range_nested_patches} with $u\ge0$,
-    $|N(c,r_j,R)|\le R(16u+4)$.
+    $|\mathcal N(c,r_j,R)|\le R(16u+4)$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_range_nested_patch_sizes}
     A site $x$ of $X$ in $K(c,r)$ has $\rho(x)\ge\rho(y)-R>r-R$. A site of
-    $N(c,r,R)$ lies in one of four strips, such as
+    $\mathcal N(c,r,R)$ lies in one of four strips, such as
     $c_1+r-R<x_1\le c_1+r$ with $|x_2-c_2|\le r$. A half-open interval of
     length $R$ contains exactly $R$ integers and a closed interval of length
     $2r$ at most $2r+1$, so each strip has at most $R(2r+1)$ sites. For the
@@ -387,7 +387,7 @@ Definition~\ref{def:peps_nested_patches}.
     \lean{TNLean.PEPS.AreaLaw.Geometry.rangeNestedPatch_quadratic_budget}
     \leanok
     \uses{def:peps_range_nested_patches}
-    Let $R\ge1$, $u,\kappa\in\mathbb R$, and assign each patch of
+    Let $R\ge1$, $u\ge0$ and $\kappa\in\mathbb R$, and assign each patch of
     Definition~\ref{def:peps_range_nested_patches} the weight
     $t_j=\kappa/m_R$. Then
     \begin{align}
