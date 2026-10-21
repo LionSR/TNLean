@@ -144,3 +144,207 @@
     threshold $N_a$. Theorem~\ref{thm:peps_cell_conditional_information_of_collar_explicit}
     then gives the bound.
 \end{proof}
+
+\subsection{Angular information at interaction range $R$}
+
+The source states Proposition~3.4 for site and nearest-neighbour terms only,
+which is interaction range one. The proof uses the Hamiltonian only through
+the cell bound of Lemma~3.2 and the information reset of Lemma~3.3 for the
+states concerned. This subsection runs the proof for any family of states
+with these two estimates, supplies them at range $R$, and so extends the
+proposition to Hamiltonians of range $R$ on the square; the range-one
+statements above are unchanged.
+
+\begin{definition}[The cell and reset estimates for a family of states]
+    \label{def:peps_family_cell_reset_bounds}
+    \lean{TNLean.PEPS.Approximation.SquareCellInformationBound,
+        TNLean.PEPS.Approximation.SquareResetBound}
+    \leanok
+    \uses{def:peps_angular_grid,thm:peps_cell_conditional_information_from_gap,
+        thm:peps_information_reset_explicit}
+    Fix $q\in\mathbb N$, and let $\mathcal G$ assign to each $L$ a set of
+    states of the $L\times L$ square with local dimension $q$. It satisfies
+    the \emph{cell bound} with clearance coefficient $c$, prefactor $C_1$ and
+    exponent $K$ if, for every state of $\mathcal G$, the
+    conclusion of Theorem~\ref{thm:peps_cell_conditional_information_from_gap}
+    holds with these constants. It satisfies the \emph{reset bound} with width
+    $C_p$ and threshold $L_0$ at accuracy $L^{-p}$ if, for every $L\ge L_0$ and
+    every state of $\mathcal G$, the conclusion of
+    Theorem~\ref{thm:peps_information_reset_explicit} holds with the width
+    $C_p$.
+\end{definition}
+
+\begin{theorem}[Angular information for a family with the two estimates]
+    \label{thm:peps_angular_information_of_bounds}
+    \lean{TNLean.PEPS.Approximation.angular_information_reset_of_squareResetBound,
+        TNLean.PEPS.Approximation.angular_single_scale_reset_of_bounds,
+        TNLean.PEPS.Approximation.angularInformation_of_bounds,
+        TNLean.PEPS.Approximation.isAngularScale_of_bounds}
+    \leanok
+    \uses{def:peps_family_cell_reset_bounds,def:peps_angular_scale,
+        def:peps_angular_information_constants,
+        def:peps_angular_cell_reset_constants,
+        def:peps_angular_single_scale_constants}
+    Let $q\in\mathbb N$, $a>0$, $A_0\in\mathbb R$, $m_0\in\mathbb N$, and let
+    $p>0$ be an integer. Let $a'=a'(a)$, $d=d(a)$ and $N_{\rm cell}(a,A_0,m_0)$
+    be as in Definition~\ref{def:peps_angular_information_constants}. Let
+    $\mathcal G$ consist of unit vectors and satisfy the cell bound with
+    $C_1>0$ and $K\ge0$ at the clearance coefficient $c_{\rm ang}(a,a',d)$ of
+    Definition~\ref{def:peps_angular_single_scale_constants}, and the reset
+    bound with $C_p>0$ and $L_0$. Then every slope $D\ge D_{\rm cell}(C_p,a',d)$
+    and every threshold at least
+    \begin{align*}
+        \max\bigl\{L_{\rm cell}\bigl(a',d,C_p,C_1,N_{\rm cell}(a,A_0,m_0),K\bigr),
+        L_0\bigr\},
+    \end{align*}
+    with $D_{\rm cell}$ and $L_{\rm cell}$ from
+    Definition~\ref{def:peps_angular_cell_reset_constants}, form an angular
+    scale for $\mathcal G$ in the sense of
+    Definition~\ref{def:peps_angular_scale}. This extends the conclusion of
+    \cite[Proposition~3.4]{OpenAI2026PolynomialPEPS} to any such family, which
+    the source does not treat.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_scaled_cell_clearance,thm:peps_annular_information_induction,
+        thm:peps_annular_cutoff,thm:peps_annular_separation,
+        thm:peps_annular_cell_clearance,
+        thm:peps_selected_region_information_of_cell_bounds,
+        thm:peps_angular_reset_width_of_cell_information_explicit,
+        lem:peps_angular_scale_of_site_position,
+        def:peps_angular_single_scale_constants}
+    With $a'=a'(a)$ and $d=d(a)$ one has $0<a'<a/100$, $0<d<a'/4$ and $d\le1$.
+    Put $M=N_{\rm cell}(a,A_0,m_0)$ and let $L_1$ be at least the displayed
+    threshold. At one scale, the cell clearance and the cell bound at the
+    clearance coefficient $c_{\rm ang}(a,a',d)$ control the information of at
+    most $M$ selected cells, and the reset bound with width $C_p$ restores the
+    accuracy $L^{-p}$ on the cores. This one-scale reset applies at every slope
+    $D\ge D_{\rm cell}(C_p,a',d)\ge1$ and every size $L\ge L_1\ge e$, so
+    $t=D\log L\ge1$. The inequality $t\le n$ yields a dyadic cutoff with
+    $s_j=2^{-j}n$ and $t\le s_m<2t$. Every processed scale $s_j$, with $j\le m$,
+    satisfies $s_j\ge t$, so the same reset applies at each scale. Process the
+    layers from farthest to nearest the marked points, and write $A_j$ for the
+    cumulative processed set.
+
+    At scale $s_j$, the old selected cell group and the enlarged exterior lie
+    inside the two cores controlled at the preceding scale. The first old group
+    is empty. The number of new cells is at most $M$, and cumulative angular
+    separation gives $\operatorname{dist}_\infty(A_j,E)\ge as_j/2$. The
+    one-scale reset therefore restores
+    \begin{align}
+        I_\Omega\bigl(\Lambda_L\cap A_j^{+a's_j}:
+        \Lambda_L\cap E^{+a's_j}\bigr) & \le L^{-p}.
+        \notag
+    \end{align}
+    Here $F^{+r}$ denotes the ambient $\ell_\infty$ enlargement of $F$. The
+    same bound is restored at each step; it is not summed over the scales. The
+    last cumulative set is $A_m=X$. Monotonicity of mutual information on both
+    regions removes the final padding and gives the bound. For an integer
+    accuracy, translating the marked points with the sites gives the slope and
+    threshold for every common translation of $\Lambda_L$. The Hamiltonian
+    enters only through the two estimates.
+\end{proof}
+
+\begin{theorem}[Information of a state of the square on the integer square]
+    \label{thm:peps_square_state_relabel_information}
+    \lean{TNLean.PEPS.Approximation.cell_conditionalMutualInformation_le_square_of_rectangle,
+        TNLean.PEPS.Approximation.mutualInformation_squareAreaLawState}
+    \leanok
+    \uses{def:square_area_law_state,def:peps_angular_grid}
+    Let $\Omega$ be a state of the $L\times L$ square and $\tilde\Omega$ its
+    placement on the integer square of Definition~\ref{def:square_area_law_state}.
+    The mutual information of $\tilde\Omega$ between two sets of sites equals
+    that of $\Omega$ between the corresponding sets. If, for a cell of the grid
+    with origin $o-(1,1)$ and side $s$, a union of other cells, and every
+    region at distance at least $cs$ from the closed cell, the conditional
+    mutual information of $\tilde\Omega$ is at most $C$, then the same holds
+    for $\Omega$ and the grid with origin $o$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:finite_product_entropy_relabel}
+    The placement translates every site by $(1,1)$. This bijection carries the
+    cells, the unions of cells and the distances for the origin $o$ to those
+    for the origin $o-(1,1)$, and entropies are unchanged when the sites are
+    relabelled.
+\end{proof}
+
+\begin{theorem}[The two estimates at range $R$]
+    \label{thm:peps_range_cell_reset_bounds}
+    \lean{TNLean.PEPS.Approximation.IsRangeSquareGroundState.squareCellInformationBound,
+        TNLean.PEPS.Approximation.IsRangeSquareGroundState.squareResetBound}
+    \leanok
+    \uses{def:peps_family_cell_reset_bounds,def:square_range_ground_states,
+        def:peps_closed_information_constants,def:peps_reset_width_range}
+    Fix $q\ge1$, $R\ge0$, $J\ge0$ and $\Delta>0$. The unit gapped ground vectors
+    of Hamiltonians of range $R$ with term bound $J$ on the square satisfy the
+    cell bound at every $c>0$ with $C_1=C_{\rm cell}(q,R,J,\Delta,c)$ and
+    $K=K_{\rm cell}(q,R,J,\Delta,c)$, and for every $p>0$ the reset bound with
+    width $C_{p,R}(J,\Delta,p)$ and threshold $L_{0,R}(q,J,\Delta,p)$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_cell_information_range_closed,
+        thm:peps_information_reset_range,
+        thm:peps_square_state_relabel_information}
+    Place the state on the integer square. By
+    Theorem~\ref{thm:peps_square_state_relabel_information}, the relabelling of
+    the sites changes neither the cell estimate nor the mutual information, so
+    Theorem~\ref{thm:peps_cell_information_range_closed} gives the cell bound
+    and Theorem~\ref{thm:peps_information_reset_range} gives the reset.
+\end{proof}
+
+\begin{definition}[The angular constants at range $R$]
+    \label{def:peps_angular_constants_range}
+    \lean{TNLean.PEPS.Approximation.rangeAngularScale,
+        TNLean.PEPS.Approximation.rangeAngularThreshold,
+        TNLean.PEPS.Approximation.rangeAngularScale_eq}
+    \leanok
+    \uses{def:peps_reset_width_range,def:peps_closed_information_constants,
+        def:peps_angular_information_constants,
+        def:peps_angular_cell_reset_constants,
+        def:peps_angular_single_scale_constants}
+    For $q,R,m_0\in\mathbb N$ and $J,\Delta,a,A_0,p\in\mathbb R$, let
+    $a'=a'(a)$, $d=d(a)$ and $N_{\rm cell}(a,A_0,m_0)$ be as in
+    Definition~\ref{def:peps_angular_information_constants}, let
+    $c=c_{\rm ang}(a,a',d)$ be the clearance coefficient of
+    Definition~\ref{def:peps_angular_single_scale_constants}, and write
+    $C_{p,R}=C_{p,R}(J,\Delta,p)$. With $D_{\rm cell}$ and $L_{\rm cell}$ from
+    Definition~\ref{def:peps_angular_cell_reset_constants}, put
+    \begin{align*}
+        D_R(J,\Delta,a,p)           & =D_{\rm cell}(C_{p,R},a',d),                \\
+        L_R(q,J,\Delta,a,A_0,m_0,p) & =\max\bigl\{L_{\rm cell}\bigl(a',d,C_{p,R},
+        C_{\rm cell}(q,R,J,\Delta,c),N_{\rm cell}(a,A_0,m_0),
+        K_{\rm cell}(q,R,J,\Delta,c)\bigr),L_{0,R}(q,J,\Delta,p)\bigr\}.
+    \end{align*}
+    For $J\ge0$, $\Delta>0$, $a>0$ and $p>0$,
+    \begin{align*}
+        D_R(J,\Delta,a,p) & =\frac{2400\,C_{p,R}(J,\Delta,p)}{\min\{a,1\}},
+    \end{align*}
+    because $C_{p,R}(J,\Delta,p)\ge1$, so that this term dominates both $1$
+    and $1/d=1600/\min\{a,1\}$.
+\end{definition}
+
+\begin{theorem}[Angular information at range $R$, at closed-form constants]
+    \label{thm:peps_angular_information_range_closed}
+    \lean{TNLean.PEPS.Approximation.isAngularScale_range_closed_le}
+    \leanok
+    \uses{def:peps_angular_constants_range,def:peps_angular_scale,
+        def:square_range_ground_states}
+    Fix $q\ge1$, $R\ge0$, $J\ge0$, $\Delta>0$, $a>0$, $A_0\in\mathbb R$,
+    $m_0\in\mathbb N$ and an integer $p>0$. For the unit gapped ground vectors
+    of Hamiltonians of range $R$ with term bound $J$ on the $L\times L$ square, every slope
+    $D\ge D_R(J,\Delta,a,p)$ and every threshold
+    $L_0\ge L_R(q,J,\Delta,a,A_0,m_0,p)$ form an angular scale at accuracy
+    $L^{-p}$. This extends \cite[Proposition~3.4]{OpenAI2026PolynomialPEPS}
+    and Theorem~\ref{thm:peps_information_from_gap_closed} from range one, the
+    only range the source treats, to range $R$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_angular_information_of_bounds,
+        thm:peps_range_cell_reset_bounds,thm:peps_cell_information_range_closed,
+        def:peps_reset_width_range}
+    Apply Theorem~\ref{thm:peps_angular_information_of_bounds} with the
+    estimates of Theorem~\ref{thm:peps_range_cell_reset_bounds}.
+\end{proof}
