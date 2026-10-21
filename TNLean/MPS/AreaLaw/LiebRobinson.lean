@@ -155,7 +155,7 @@ theorem norm_heisenberg_sub_siteExpectation_chainNeighborhood_le
     ext y
     simp only [Finset.mem_biUnion, QuantumCircuit.mem_graphBall,
       SimpleGraph.pathGraph_edist, ENat.natCast_le_natCast, Nat.le_floor_iff hℓ,
-      Finset.mem_filter, Finset.mem_univ, true_and]
+      mem_chainNeighborhood]
   rw [hN] at hGraph
   simp only [pow_zero, Nat.factorial_zero, Nat.cast_one, mul_one, Nat.cast_add] at hGraph
   have hRound :

@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import Mathlib.Data.Fintype.Fin
 import Mathlib.Data.Nat.Dist
-import Mathlib.Data.Real.Basic
+import Mathlib.Basic.Real.Basic
 
 /-!
 # Neighbourhoods of sets of chain sites
@@ -21,7 +21,7 @@ namespace TNLean.MPS.AreaLaw
 
 /-- The closed neighbourhood of radius `ρ` of a set `S` of chain sites: the sites `y` with
 `|x - y| ≤ ρ` for some `x ∈ S`. -/
-def chainNeighborhood {L : ℕ} (S : Finset (Fin L)) (ρ : ℝ) : Finset (Fin L) :=
+noncomputable def chainNeighborhood {L : ℕ} (S : Finset (Fin L)) (ρ : ℝ) : Finset (Fin L) :=
   Finset.univ.filter fun y : Fin L ↦ ∃ x ∈ S, (Nat.dist x.val y.val : ℝ) ≤ ρ
 
 @[simp]
