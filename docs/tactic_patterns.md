@@ -4674,6 +4674,26 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 ## Candidates
 
+### Symmetric two-index uniqueness reduced to `i < j` — candidate (2026-10-21)
+
+- **Pattern:**
+
+  ```lean
+  wlog hij : i < j generalizing i j
+  · rcases lt_trichotomy i j with h | h | h
+    · exact this hi hj h
+    · exact h
+    · exact (this hj hi h).symm
+  ```
+
+- **Seen:** 2 occurrences
+  (`TNLean/PEPS/AreaLaw/Geometry/NestedPatches.lean:141`,
+  `TNLean/PEPS/AreaLaw/Geometry/RangeNestedPatches.lean:179`).
+- **Abstraction:** proposed lemma deriving `i = j` for a symmetric property of
+  two indices in a linear order from the case `i < j` leading to a
+  contradiction.
+- **Notes:** both uses show that at most one selected square splits a support.
+
 ### Coordinate distance from an ordered diameter bound — candidate (2026-10-18)
 
 - **Pattern:** Use the two ordered support inequalities, unfold `Nat.dist`,
