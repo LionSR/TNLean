@@ -19,8 +19,7 @@ Sources: TNLean one-dimensional note, `part2a_mps_information.tex`, lines 419–
 polynomial-PEPS, `02-information.tex`, lines 612–630.
 -/
 
-open Matrix QuantumCircuit MeasureTheory ProbabilityTheory
-open scoped Kronecker Matrix.Norms.L2Operator NNReal
+open Matrix QuantumCircuit
 
 namespace TNLean.Lattice
 
