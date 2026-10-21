@@ -13,7 +13,8 @@ For a Hamiltonian of range `R ≥ 1` on a finite induced lattice domain, a singl
 parameter, depending only on `q`, `R`, `J` and `Δ`, controls every marginal of every
 normalized minimizing output on the range-`R` nested squares. The estimate holds at
 every parameter `0 < κ ≤ 1 / 2` with `C_E κ² ≤ Δ / 1024`, where
-`C_E = rangePatchEnergyConstant q R J`, in particular at `rangePatchFilterExponent q R J Δ`.
+`C_E = rangePatchEnergyConstant q R J`. When `C_E > 0` this includes
+`rangePatchFilterExponent q R J Δ`; when `C_E = 0` the uniform statement uses `1 / 2`.
 
 **Extension beyond the source:** the source proves the estimate for on-site and
 nearest-neighbour interactions; the range-`R` statements are not in the source. The
