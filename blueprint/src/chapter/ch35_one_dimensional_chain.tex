@@ -1273,6 +1273,7 @@ for an arbitrary finite set of sites and are instantiated here directly.
         TNLean.MPS.AreaLaw.sub_le_sitePos_sub,
         TNLean.MPS.AreaLaw.val_eq_add_one_of_sitePos_eq_add_one,
         TNLean.MPS.AreaLaw.domainGraph,
+        TNLean.MPS.AreaLaw.domainGraphIsoHasse,
         TNLean.MPS.AreaLaw.sitePos_sub_val_of_walk,
         TNLean.MPS.AreaLaw.IsDomainSupport,
         TNLean.MPS.AreaLaw.DomainSupport,
@@ -1293,7 +1294,9 @@ for an arbitrary finite set of sites and are instantiated here directly.
     A finite set $\Lambda\subset\mathbb Z$ carries the induced path graph, whose
     edges join consecutive integers that both lie in $\Lambda$, and its graph
     distance $d_\Lambda$. Its sites are labelled $0,\ldots,|\Lambda|-1$ in
-    increasing order, each carrying $\mathbb C^q$. A \emph{support of range $R$}
+    increasing order, each carrying $\mathbb C^q$. The increasing enumeration
+    is a graph isomorphism to the graph induced on $\Lambda$ from the
+    integer Hasse graph. A \emph{support of range $R$}
     in $\Lambda$ is a nonempty set of sites of $d_\Lambda$-diameter at most $R$.
     Along a path of the induced graph the position of a site minus its label is
     constant, so a support lies between two consecutive gaps of $\Lambda$ and
@@ -1308,6 +1311,94 @@ for an arbitrary finite set of sites and are instantiated here directly.
     edges, on the chain, of the sites in $A$ that join sites at consecutive
     integers.
 \end{definition}
+
+% Source: part1_arealaw.tex, lines 71--80; part0_preamble.tex, lines 191--199.
+\begin{theorem}[Connected components of an induced integer graph]
+    \label{thm:chain_integer_domain_components}
+    \lean{
+        SimpleGraph.hasse_int_induce_reachable_iff,
+        SimpleGraph.ConnectedComponent.ordConnected_image_hasse_int_induce,
+        SimpleGraph.ConnectedComponent.nonempty_pathGraph_iso_hasse_int_induce_finset
+    }
+    \leanok
+    Let $S\subseteq\mathbb Z$, and let $G$ be the graph on $S$ in which two
+    vertices are adjacent exactly when their integer coordinates differ by one.
+    For any $x,y\in S$,
+    \begin{align}
+        x\text{ and }y\text{ are joined by a walk in }G
+        \quad\Longleftrightarrow\quad
+        \lbrack\min\{x,y\},\max\{x,y\}\rbrack\cap\mathbb Z\subseteq S.
+    \end{align}
+    Moreover, the coordinate image of each connected component is order-convex:
+    if $x,y$ belong to that image, every integer between $x$ and $y$ belongs to
+    the same image. No finiteness assumption on $S$ is needed.
+
+    If $S$ is finite, the graph induced on each connected component $C$ is
+    isomorphic to the path $P_{|C|}$ on $|C|$ vertices. Here $P_n$ has vertices
+    $0,\ldots,n-1$ and edges between consecutive vertices. This includes
+    singleton components and requires no further hypothesis on a component.
+    This is the induced integer geometry used in the reduction to connected
+    domains in \cite[Part~I]{TNLean2026OneDimensional}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Fix an integer $z\notin S$. If two vertices are adjacent, their integer
+    coordinates are consecutive and neither equals $z$. Thus either both
+    coordinates are less than $z$, or neither is. This property is preserved
+    along a walk. A walk therefore cannot join vertices on opposite sides of
+    a missing integer, which proves the forward implication.
+
+    Conversely, suppose first that $x\le y$ and that every integer in $[x,y]$
+    belongs to $S$. Induction by integer successors joins $x$ to each integer
+    $n$ with $x\le n\le y$: the first vertex is $x$, and the step uses the
+    edge from $n$ to $n+1$ when $n+1\le y$. This reaches $y$. Reversing the
+    walk handles $y\le x$.
+
+    If $x,y$ are in one connected component and $z$ lies between them, the
+    criterion places $z$ in $S$. Every integer between $x$ and $z$ is also
+    between $x$ and $y$, so the reverse implication joins $x$ to $z$. Hence
+    $z$ lies in that same component.
+
+    For finite $S$, give a component $C$ the order inherited from the integers.
+    Its coordinate map is an order embedding with order-convex image, so it
+    preserves and reflects the covering relation. The increasing enumeration
+    of the finite linear order $C$ is an order isomorphism from
+    $\{0,\ldots,|C|-1\}$ to $C$. In either graph, adjacency is the symmetric
+    covering relation. This enumeration is therefore a graph isomorphism
+    from $P_{|C|}$ to the graph induced on $C$.
+\end{proof}
+
+% Source: part1_arealaw.tex, lines 71--80; induced graph, part0_preamble.tex, lines 191--199.
+\begin{theorem}[Distance spheres in a finite integer domain]
+    \label{thm:domain_graph_spheres}
+    \lean{TNLean.MPS.AreaLaw.domainGraph_card_sphere_le_two}
+    \leanok
+    \uses{def:domain_model}
+    Let $\Lambda\subset\mathbb Z$ be finite. Its increasing enumeration
+    identifies its labelled induced path graph with the graph induced on
+    $\Lambda$ from the integer graph joining consecutive integers.
+    For every $x\in\Lambda$ and every natural number $d$,
+    \begin{align}
+        \bigl|\{y\in\Lambda:d_\Lambda(x,y)=d\}\bigr|\le2.\notag
+    \end{align}
+    In particular the sphere-growth coefficient is $2$, with exponent zero,
+    independently of the number and lengths of the components.
+    This uses the induced integer geometry of
+    \cite[Part~I]{TNLean2026OneDimensional}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:chain_integer_domain_components,thm:qc_graph_edist_transport,
+        lem:chain_path_metric_spheres}
+    The enumeration preserves adjacency because it records the original
+    integer coordinates. A vertex at finite distance from $x$ belongs to
+    its connected component. This component is a finite path by
+    Theorem~\ref{thm:chain_integer_domain_components}, and both its inclusion
+    and its path isomorphism preserve extended distance by
+    Theorem~\ref{thm:qc_graph_edist_transport}. Its sphere therefore has at
+    most two vertices. At distance zero there is just $x$; vertices in
+    other components have infinite distance and are not counted.
+\end{proof}
 
 \begin{theorem}[Propagation on a finite integer domain]
     \label{thm:domain_lieb_robinson_commutator}
@@ -1346,6 +1437,55 @@ for an arbitrary finite set of sites and are instantiated here directly.
     components makes the left side zero. All distances are those of the
     induced graph; sites separated by a hole are not identified with
     consecutive sites of a longer chain.
+\end{proof}
+
+% Source: part2a_mps_information.tex, lem:LR, lines 260--309; part0_preamble.tex, lines 191--199.
+\begin{theorem}[Localization on a finite integer domain]
+    \label{thm:domain_lieb_robinson_localization}
+    \lean{TNLean.MPS.AreaLaw.norm_heisenberg_sub_siteExpectation_domainNeighborhood_le}
+    \leanok
+    \uses{def:domain_model,def:qc_site_expectation}
+    Let $\Lambda\subset\mathbb Z$ be finite, let $q,R\in\mathbb N$ with $q\ge1$,
+    and let $H=\sum_kh_k$ be a finite labelled sum of Hermitian operators.
+    Each $h_k$ is supported on a nonempty set $X_k$ of induced-graph diameter
+    at most $R$. Suppose $\sum_{k:x\in X_k}\|h_k\|\le b_0$ for every site $x$.
+    Put
+    \begin{align}
+        C  & =2+4|b_0|e^{2R},\notag         \\
+        v  & =2(R+1)|b_0|e^{2R}+1,\notag    \\
+        C' & =\frac{2Ce}{1-e^{-1/2}}.\notag
+    \end{align}
+    For $m\in\mathbb N$ write
+    $B_m(x)=\{y\in\Lambda:d_\Lambda(x,y)\le m\}$.
+    For a real $\ell\ge0$ and $S\subseteq\Lambda$, define
+    $N_\ell(S)=\bigcup_{x\in S}B_{\lfloor\ell\rfloor}(x)$.
+    Let $E_{N_\ell(S)}$ be the normalized partial-trace expectation onto
+    operators supported on this set. Every operator $A$ supported on $S$
+    satisfies, for every real $t$,
+    \begin{align}
+        \|\tau_t(A)-E_{N_\ell(S)}(\tau_t(A))\|
+        \le C'|S|^2\|A\|e^{v|t|-\ell/2}.\notag
+    \end{align}
+    Empty $S$ is allowed. No connectedness, ground-state or spectral-gap
+    hypothesis is imposed. The neighborhood uses the induced graph and
+    never joins sites across a missing integer. This is the finite-domain
+    extension of the localization conclusion in the Lieb--Robinson lemma
+    of \cite[Part~II]{TNLean2026OneDimensional}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:domain_graph_spheres,thm:qc_graph_neighborhood_localization,
+        thm:area_law_supported_identity}
+    Each interaction support has at most $R+1$ sites. Apply graph
+    localization with this support-size bound, sphere coefficient $2$,
+    sphere exponent zero, and natural radius $m=\lfloor\ell\rfloor$.
+    Its neighborhood is precisely the displayed union of closed balls.
+    Graph distances are integers when finite, and
+    $e^{-m/2}\le e^{1/2}e^{-\ell/2}$.
+    The natural-radius coefficient is $2Ce^{1/2}/(1-e^{-1/2})$;
+    multiplication by this rounding factor gives $C'$.
+    The graph localization theorem includes the empty union and its
+    vanishing factor $|S|^2$.
 \end{proof}
 
 \begin{lemma}[A cut that splits no term]

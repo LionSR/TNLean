@@ -104,8 +104,28 @@ argument. The extension
 commutator estimate on every finite integer domain, using its induced-graph
 distance and treating infinite distance by exact commutation. It imposes no
 diameter bound on the initial support and no connectivity or spectral-gap
-hypothesis. The finite-domain localization estimate remains separate, as does
-the full protocol construction.
+hypothesis. The full physical protocol construction remains separate.
+
+The components of an induced integer graph are order-connected, and each
+component of a finite domain is a path on its own number of vertices
+(`SimpleGraph.hasse_int_induce_reachable_iff`,
+`SimpleGraph.ConnectedComponent.ordConnected_image_hasse_int_induce`, and
+`SimpleGraph.ConnectedComponent.nonempty_pathGraph_iso_hasse_int_induce_finset`).
+The increasing-coordinate graph isomorphism
+`MPS.AreaLaw.domainGraphIsoHasse`, together with extended-distance
+preservation under isomorphism and component inclusion, gives
+`MPS.AreaLaw.domainGraph_card_sphere_le_two`. Thus every finite-distance
+sphere has at most two sites; no distance is measured across a missing integer.
+
+With q ≥ 1, the extension
+`MPS.AreaLaw.norm_heisenberg_sub_siteExpectation_domainNeighborhood_le`
+gives localization on every finite integer domain with the same C′ and v
+as the contiguous chain. At a real radius ℓ ≥ 0 its neighborhood is exactly
+`S.biUnion (fun x ↦ QuantumCircuit.graphBall (domainGraph Λ) x ⌊ℓ⌋₊)`.
+The bound retains |S|², allows empty S, and requires neither a ground state
+nor a spectral gap. This completes the two propagation/localization
+estimates on finite domains. The information-reset and full physical
+protocol statements retain their existing scope.
 
 For an arbitrary region D of the contiguous chain,
 `MPS.AreaLaw.IsChainSupport.exists_boundary_window_of_split` places every
