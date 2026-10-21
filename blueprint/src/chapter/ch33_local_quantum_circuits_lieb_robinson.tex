@@ -264,19 +264,41 @@ contains any given site sum to at most $b_0$.
     (\ref{eq:qc_lr_finset_commutator}).
 \end{proof}
 
-\begin{lemma}[Vanishing between connected components]
+\begin{theorem}[Exact commutation across disconnected components]
+    \label{thm:qc_graph_lieb_robinson_zero_finset}
+    \lean{QuantumCircuit.heisenberg_commutator_eq_zero_of_forall_edist_eq_top}
+    \leanok
+    \uses{aux:restricted-commutator-norm}
+    Let $G$ be a simple graph on a finite site set $I$, with local dimension
+    $q\in\mathbb N$. Let $H=\sum_k h_k$ be a finite sum of operators supported
+    on sets $X_k$ of graph diameter at most $R\in\mathbb N$.
+    Let $A$ be supported on an arbitrary set $S\subseteq I$, and let $B$ be
+    supported at $y$. If $d_G(x,y)=\infty$ for every $x\in S$, then
+    $[\tau_t(A),B]=0$ for every real $t$.
+    This is the exact-vanishing argument of
+    \cite[Lemma~4.1]{OpenAI2026AreaLaw}, with arbitrary initial support.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{lem:qc_lr_closed_region}
+    Let $C$ consist of the sites not connected to $y$. Any two sites of
+    $X_k$ are connected, so $X_k$ lies in $C$ or is disjoint from $C$.
+    Since $S\subseteq C$ and $y\notin C$, exact locality on the closed
+    region $C$ gives the result. This also covers $S=\varnothing$.
+\end{proof}
+
+\begin{theorem}[Vanishing between connected components]
     \label{thm:qc_graph_lieb_robinson_zero}
     \lean{QuantumCircuit.heisenberg_commutator_eq_zero_of_edist_eq_top}\leanok
-    \uses{lem:qc_lr_closed_region}
+    \uses{thm:qc_graph_lieb_robinson,thm:qc_graph_lieb_robinson_zero_finset}
     In the setting of Theorem~\ref{thm:qc_graph_lieb_robinson}, if
     $d_G(a_i,y)=\infty$ then $[\tau_t(A),B]=0$ for every $t$.
-\end{lemma}
+\end{theorem}
 \begin{proof}\leanok
-    Let $C$ be the connected component of $a_i$. Because every interaction
-    support has finite diameter, it lies in a single component and is
-    therefore either contained in $C$ or disjoint from $C$; since
-    $X_i\subseteq C$ and $y\notin C$, Lemma~\ref{lem:qc_lr_closed_region}
-    gives $[\tau_t(A),B]=0$.
+    \uses{thm:qc_graph_lieb_robinson_zero_finset}
+    Every site of $X_i$ is connected to its anchor $a_i$, by the finite
+    diameter bound. As $d_G(a_i,y)=\infty$, every site of $X_i$ has infinite
+    distance to $y$. Apply
+    Theorem~\ref{thm:qc_graph_lieb_robinson_zero_finset} with $S=X_i$.
 \end{proof}
 
 \begin{lemma}[Exponential kernel outside a graph ball]
@@ -414,7 +436,7 @@ with every tensor factor at its original site.
 \begin{proof}
     \leanok
     \uses{thm:qc_graph_lieb_robinson_finset,lem:qc_graph_kernel_tail,
-        lem:qc_lr_closed_region,lem:qc_site_expectation_commutator}
+        thm:qc_graph_lieb_robinson_zero_finset,lem:qc_site_expectation_commutator}
     For each vertex $y$ define
     $w(y)=\sum_{x\in S,\ d_G(x,y)<\infty}e^{-d_G(x,y)}$.
     If some $x\in S$ has finite distance from $y$, let $n$ be the least
@@ -424,10 +446,9 @@ with every tensor factor at its original site.
         \|[\tau_t(A),U_y]\|
          & \leq C|S|\|A\|e^{v|t|}w(y).\notag
     \end{align}
-    If all these distances are infinite, take the complement of the connected
-    component of $y$. It contains $S$, and each interaction support lies
-    entirely inside it or is disjoint from it. Exact locality on such regions
-    makes the commutator zero, so the same inequality holds with $w(y)=0$.
+    If all these distances are infinite,
+    Theorem~\ref{thm:qc_graph_lieb_robinson_zero_finset} makes the commutator
+    zero, so the same inequality holds with $w(y)=0$.
     For $S=\varnothing$, the zero cardinality in the propagation bound gives
     the same conclusion without choosing a vertex of $S$.
 

@@ -99,9 +99,13 @@ C′ = 2C exp(1)/(1 − exp(−1/2)). Localization uses the exact closed neighbo
 at every real radius ℓ ≥ 0. Empty supports are allowed; their distance to a
 site is infinity, with decay factor zero. Only localization requires q ≥ 1.
 These are the contiguous-chain estimates needed in the matrix product state
-argument. The broader finite-domain reading of the source lemma remains
-separate, as recorded in the connected-domain scope note. The full protocol
-construction is also separate.
+argument. The extension
+`MPS.AreaLaw.norm_heisenberg_commutator_le_domainDistance` gives the same
+commutator estimate on every finite integer domain, using its induced-graph
+distance and treating infinite distance by exact commutation. It imposes no
+diameter bound on the initial support and no connectivity or spectral-gap
+hypothesis. The finite-domain localization estimate remains separate, as does
+the full protocol construction.
 
 For an arbitrary region D of the contiguous chain,
 `MPS.AreaLaw.IsChainSupport.exists_boundary_window_of_split` places every
