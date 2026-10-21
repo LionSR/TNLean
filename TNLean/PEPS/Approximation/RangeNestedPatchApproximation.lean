@@ -126,11 +126,7 @@ theorem SquareEntropyAreaLawAt.uniform_rangeNestedPatch_cylinders
     (lt_of_lt_of_le zero_lt_one (le_max_left 1 (16 * C_A))) (squareAreaLawState Ω) hgs.1
     center hu huL (AreaLaw.Geometry.rangeNestedPatchCount_pos R u)
     (fun j ↦ AreaLaw.Geometry.rangeNestedPatchRadius R u j.val)
-    (fun i j hij ↦ by
-      have h : ((i : ℕ) : ℝ) ≤ (j : ℕ) := by exact_mod_cast hij
-      have hs : (0 : ℝ) ≤ AreaLaw.Geometry.rangePatchSpacing R := Nat.cast_nonneg _
-      unfold AreaLaw.Geometry.rangeNestedPatchRadius
-      nlinarith)
+    (fun _ _ hij ↦ AreaLaw.Geometry.rangeNestedPatchRadius_mono R u hij)
     (fun j ↦ hA.rangeNestedPatch_entropy_le R L Ω ⟨H, E₀, hgs⟩ center u hu j)
     (fun b hb ↦ rangeNestedPatch_minimizer_marginal_closeness q R hR hJ.le hΔ hκ
       (rangePatchFilterExponent_le_half q R J Δ)
@@ -156,11 +152,7 @@ theorem SquareEntropyAreaLawAt.rangeAdaptivePatchSupply
     (rangeNestedPatchRadiusExponent_pos C_A hq hR hJ hΔ hB₀.le hp.le).le hL Ω
     (AreaLaw.Geometry.rangeNestedPatchCount R)
     (fun u j ↦ AreaLaw.Geometry.rangeNestedPatchRadius R u j.val)
-    (fun u i j hij ↦ by
-      have h : ((i : ℕ) : ℝ) ≤ (j : ℕ) := by exact_mod_cast hij
-      have hs : (0 : ℝ) ≤ AreaLaw.Geometry.rangePatchSpacing R := Nat.cast_nonneg _
-      unfold AreaLaw.Geometry.rangeNestedPatchRadius
-      nlinarith)
+    (fun u _ _ hij ↦ AreaLaw.Geometry.rangeNestedPatchRadius_mono R u hij)
     (fun u j ↦ AreaLaw.Geometry.le_rangeNestedPatchRadius R u j.val)
     (fun u hu j ↦ AreaLaw.Geometry.rangeNestedPatchRadius_le_two_mul hu j.isLt)
     (fun u hu huL ↦ ?_)

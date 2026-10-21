@@ -136,14 +136,18 @@ theorem rangeNestedPatchRadius_add_spacing_le {R : ℕ} {u : ℝ} {i j : ℕ} (h
   unfold rangeNestedPatchRadius
   nlinarith
 
-/-- Selected patches are nested, even when clipping makes some of them equal. -/
-theorem rangeNestedPatch_mono (Λ : Finset (ℤ × ℤ)) (c : ℝ × ℝ) (R : ℕ) (u : ℝ)
-    {i j : ℕ} (hij : i ≤ j) : rangeNestedPatch Λ c R u i ⊆ rangeNestedPatch Λ c R u j := by
-  apply closedSquareSample_mono
+/-- The selected radii increase with the index. -/
+theorem rangeNestedPatchRadius_mono (R : ℕ) (u : ℝ) : Monotone (rangeNestedPatchRadius R u) := by
+  intro i j hij
   unfold rangeNestedPatchRadius
   have h : (i : ℝ) ≤ j := by exact_mod_cast hij
   have hs : (0 : ℝ) ≤ rangePatchSpacing R := Nat.cast_nonneg _
   nlinarith
+
+/-- Selected patches are nested, even when clipping makes some of them equal. -/
+theorem rangeNestedPatch_mono (Λ : Finset (ℤ × ℤ)) (c : ℝ × ℝ) (R : ℕ) (u : ℝ)
+    {i j : ℕ} (hij : i ≤ j) : rangeNestedPatch Λ c R u i ⊆ rangeNestedPatch Λ c R u j :=
+  closedSquareSample_mono Λ c (rangeNestedPatchRadius_mono R u hij)
 
 /-- Radial distances of the endpoints of a walk differ by at most its length.
 Source: polynomial-PEPS `03-patches.tex`, lines 215–217, iterated along a walk. -/

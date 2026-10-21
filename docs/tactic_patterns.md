@@ -24,6 +24,18 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Monotone range-R patch radii — promoted (2026-10-21)
+
+- **Pattern:** cast `i ≤ j` to `ℝ`, note `0 ≤ s_R`, unfold the radius
+  `u + s_R j` and close with `nlinarith`.
+- **Seen:** 3 occurrences across 2 files (`rangeNestedPatch_mono` in
+  `TNLean/PEPS/AreaLaw/Geometry/RangeNestedPatches.lean`, and
+  `uniform_rangeNestedPatch_cylinders` and `rangeAdaptivePatchSupply` in
+  `TNLean/PEPS/Approximation/RangeNestedPatchApproximation.lean`).
+- **Abstraction:** `TNLean.PEPS.AreaLaw.Geometry.rangeNestedPatchRadius_mono`.
+- **Notes:** each call site is now one line; on `Fin m` indices write
+  `fun _ _ hij ↦ rangeNestedPatchRadius_mono R u hij`.
+
 ### Nonnegative interaction bound at a site — promoted (2026-10-18)
 
 - **Pattern:** At an actual site, use its admissible singleton support and
@@ -4693,25 +4705,6 @@ three-plaquette output measurement, and the routed reunion measurement.
   two indices in a linear order from the case `i < j` leading to a
   contradiction.
 - **Notes:** both uses show that at most one selected square splits a support.
-
-### Monotone range-R patch radii — candidate (2026-10-21)
-
-- **Pattern:**
-
-  ```lean
-  have h : ((i : ℕ) : ℝ) ≤ (j : ℕ) := by exact_mod_cast hij
-  have hs : (0 : ℝ) ≤ AreaLaw.Geometry.rangePatchSpacing R := Nat.cast_nonneg _
-  unfold AreaLaw.Geometry.rangeNestedPatchRadius
-  nlinarith
-  ```
-
-- **Seen:** 2 occurrences
-  (`TNLean/PEPS/Approximation/RangeNestedPatchApproximation.lean`, in
-  `uniform_rangeNestedPatch_cylinders` and `rangeAdaptivePatchSupply`); the
-  proof of `rangeNestedPatch_mono` uses the same argument.
-- **Abstraction:** proposed lemma `Monotone (rangeNestedPatchRadius R u)` in
-  `TNLean/PEPS/AreaLaw/Geometry/RangeNestedPatches.lean`.
-- **Notes:** the radii are `u + s_R j` with `s_R ≥ 0`.
 
 ### Coordinate distance from an ordered diameter bound — candidate (2026-10-18)
 
