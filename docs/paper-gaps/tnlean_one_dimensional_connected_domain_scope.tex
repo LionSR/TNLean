@@ -78,13 +78,23 @@ over the components is therefore not needed.
 
 \section{Locality in the matrix product state argument}
 
-Part~II of the note applies its Lieb--Robinson lemma on the contiguous chain
-of Theorem~B, namely $\Lambda=\{1,\ldots,L\}$. A formulation on this chain
-therefore suffices for that application. The printed local lemma
-(\texttt{part2a\_mps\_information.tex}, lines~260--309) does not separately
-reset the standing notation for $\Lambda$, however, so its broader reading
-also includes arbitrary finite induced-path domains. The contiguous
-formulation is not a formalization of that unrestricted reading.
+The note first allows an arbitrary finite $\Lambda\subset\mathbb Z$
+(\texttt{part0\_preamble.tex}, lines~191--215). After reducing Theorem~A to
+connected domains, it states explicitly: ``From now on
+$\Lambda=\{1,\ldots,N\}$'' (\texttt{part1\_arealaw.tex}, lines~91--93).
+Part~II develops Theorem~B, whose statement already specifies
+$\Lambda=\{1,\ldots,L\}$. Its locality lemma is titled ``Lieb--Robinson
+bound on a chain'' (\texttt{part2a\_mps\_information.tex}, lines~260--309).
+Neither that lemma nor the subsequent reset and separation lemmas explicitly
+returns to quantification over arbitrary finite domains.
+
+The proved contiguous-chain estimates therefore have the domain required by
+this argument. Versions for arbitrary finite induced-path domains would be
+additional results. They are not asserted by the present formalization;
+in particular, reading one of the local lemmas in isolation with an
+unrestricted $\Lambda$ is not covered by the chain theorem. This distinction
+does not add a hypothesis to either headline theorem: Theorem~A is proved
+on every finite domain, and Theorem~B is stated on a chain in the source.
 
 For an arbitrary finite $\Lambda\subset\mathbb Z$, the additional geometric
 argument is to identify distances inside each component, bound each distance
@@ -92,8 +102,8 @@ sphere by two vertices, and bound a support of graph diameter at most $R$ by
 $R+1$ sites. Supports of finite graph diameter lie in one component; operators
 at infinite separation commute exactly. These facts allow the general graph
 estimates to be applied with the same uniform constants. This extension of
-the local estimates does not require the product decomposition of ground
-vectors needed for the entropy argument above.
+the local estimates does not require a product decomposition of ground
+vectors.
 
 \section{Information reset on the contiguous chain}
 
@@ -111,12 +121,11 @@ independence after the regional replica swap are constructed within the
 proof.\footnote{Declaration:
 \leanid{TNLean.MPS.AreaLaw.ChainHamiltonian.information_reset}.}
 
-As with the local propagation lemma, the broader reading on an arbitrary
-finite induced-path domain remains unformalized. The missing step is the
-extension of locality and support geometry to those domains described above;
-no additional spectral or product-marginal hypothesis should be imposed.
-The blueprint marks only the explicitly contiguous-chain statement as
-proved, rather than the unrestricted reading of the source lemma.
+The blueprint states and marks the contiguous-chain theorem proved here.
+An extension to arbitrary finite induced-path domains would require the
+corresponding locality and support geometry described above. Such an extension
+is not used in Theorem~A or Theorem~B and is not claimed. No additional
+spectral or product-marginal hypothesis is part of the chain theorem.
 
 \section{Information at logarithmic separation}
 
@@ -133,11 +142,12 @@ bound of an actual singleton interaction.\footnote{Declaration:
 \leanid{TNLean.MPS.AreaLaw.ChainHamiltonian.mutualInformation_le_of_logarithmic_separation}.}
 
 The proof combines the contiguous interval area law, exact real-radius
-neighborhoods of intervals, and the contiguous reset theorem. It therefore
-does not establish the broader reading on arbitrary finite induced-path
-domains. That extension still requires the component reduction and the
-corresponding locality and support geometry described above. No completion
-of the full preparation protocol is asserted by this result.
+neighborhoods of intervals, and the contiguous reset theorem. It establishes
+the logarithmic separation used in the chain preparation argument. It does
+not assert the additional version on arbitrary finite induced-path domains;
+that version would require the corresponding domain geometry and reset
+estimates. This analytic theorem alone does not construct a preparation
+protocol.
 
 \bibliographystyle{alpha}
 \bibliography{references}

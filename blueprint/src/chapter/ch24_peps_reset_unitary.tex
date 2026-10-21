@@ -54,24 +54,39 @@ replicas on a region $R$.
     which holds without any invertibility assumption.
 \end{proof}
 
-\begin{definition}[The constants of the information reset]
-    \label{def:peps_reset_constants}
+\begin{definition}[The variance and cutoff of the information reset]
+    \label{def:lattice_reset_constants}
     \lean{TNLean.Lattice.resetVariance,
         TNLean.Lattice.resetCutoff,
-        TNLean.PEPS.Approximation.resetRadius,
-        TNLean.PEPS.Approximation.resetFilterPrefactor,
-        TNLean.PEPS.Approximation.resetUnitaryPrefactor,
         TNLean.Lattice.resetVariance_pos,
         TNLean.Lattice.resetCutoff_pos,
         TNLean.Lattice.resetVariance_mul_sq_div_two,
-        TNLean.Lattice.resetCutoff_sq_div,
+        TNLean.Lattice.resetCutoff_sq_div}
+    \leanok
+    For real numbers $\Delta$ and $r$ put
+    \begin{align*}
+        A(\Delta,r) & =\frac{2(30+r)}{\Delta^2}, & T_0(\Delta,r) & =\frac{2(30+r)}{\Delta}.
+    \end{align*}
+    If $\Delta\neq0$, then $A\Delta^2/2=30+r$, and if moreover $r\neq-30$, then
+    $T_0^2/(2A)=30+r$. If $\Delta>0$ and $r\ge0$, both are positive.
+\end{definition}
+
+\begin{proof}\leanok
+    Direct computation.
+\end{proof}
+
+\begin{definition}[The constants of the information reset]
+    \label{def:peps_reset_constants}
+    \lean{TNLean.PEPS.Approximation.resetRadius,
+        TNLean.PEPS.Approximation.resetFilterPrefactor,
+        TNLean.PEPS.Approximation.resetUnitaryPrefactor,
         TNLean.PEPS.Approximation.resetRadius_pos,
         TNLean.PEPS.Approximation.resetFilterPrefactor_pos,
         TNLean.PEPS.Approximation.resetUnitaryPrefactor_pos,
         TNLean.PEPS.Approximation.resetRadius_eq,
         TNLean.PEPS.Approximation.resetUnitaryPrefactor_eq}
     \leanok
-    \uses{def:peps_square_localization_constants}
+    \uses{def:peps_square_localization_constants,def:lattice_reset_constants}
     For real numbers $J$, $\Delta$ and $r$, with $C_\square$ and $v_\square(J)$
     the constants of Definition~\ref{def:peps_square_localization_constants}
     and decay rate $\mu=1/2$, put
@@ -104,9 +119,9 @@ replicas on a region $R$.
     \label{thm:peps_reset_regional_filter_explicit}
     \lean{TNLean.Lattice.regional_physicalBuffer_filter}
     \leanok
-    \uses{def:peps_reset_constants}
+    \uses{def:lattice_reset_constants}
     Fix $\Delta>0$ and $r\geq0$, and put $A=A(\Delta,r)$ and
-    $T_0=T_0(\Delta,r)$ as in Definition~\ref{def:peps_reset_constants}. Let
+    $T_0=T_0(\Delta,r)$ as in Definition~\ref{def:lattice_reset_constants}. Let
     $H$ be a Hamiltonian on a finite set of sites with normalized eigenvector
     $\Omega$ of eigenvalue $E_0$ and
     $H-E_0\geq\Delta(\id-|\Omega\rangle\langle\Omega|)$. Let $R,C$ be disjoint
@@ -128,7 +143,7 @@ replicas on a region $R$.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:peps_reset_regional_coordinates,def:peps_reset_constants}
+    \uses{thm:peps_reset_regional_coordinates,def:lattice_reset_constants}
     By Theorem~\ref{thm:peps_reset_regional_coordinates}, the information bound is
     a relative-entropy bound for the regional splitting of $\Omega$. The
     overlap estimate of the purified relative entropy gives a Hermitian
@@ -174,7 +189,7 @@ replicas on a region $R$.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:peps_reset_regional_filter_explicit,def:peps_reset_constants}
+    \uses{thm:peps_reset_regional_filter_explicit,def:lattice_reset_constants}
     Take $A=A(\Delta,r)$ and $T_0=T_0(\Delta,r)$, which are positive, in
     Theorem~\ref{thm:peps_reset_regional_filter_explicit}.
 \end{proof}
