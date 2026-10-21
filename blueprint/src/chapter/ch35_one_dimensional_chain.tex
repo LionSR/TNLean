@@ -2049,7 +2049,7 @@ for an arbitrary finite set of sites and are instantiated here directly.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:domain_interval_neighborhood,thm:chain_area_law,
-        def:domain_model}
+        lem:chain_entropy_inequalities,def:domain_model}
     Submodularity and nonnegativity of reduced-state entropy give
     $S_\Omega(X\cup Y)\le S_\Omega(X)+S_\Omega(Y)$.
     Since $S_\Omega(\varnothing)=0$, finite subadditivity gives
@@ -2177,7 +2177,8 @@ for an arbitrary finite set of sites and are instantiated here directly.
 
 \begin{theorem}[Distance spheres in a finite integer domain]
     \label{thm:domain_graph_spheres}
-    \lean{TNLean.MPS.AreaLaw.domainGraph_card_sphere_le_two}
+    \lean{TNLean.MPS.AreaLaw.domainGraph_card_sphere_le_two,
+        TNLean.MPS.AreaLaw.domainGraphIsoHasse}
     \leanok
     \uses{def:domain_model}
     Let $\Lambda\subset\mathbb Z$ be finite. Its increasing enumeration
