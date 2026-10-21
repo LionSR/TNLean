@@ -1300,6 +1300,7 @@ for an arbitrary finite set of sites and are instantiated here directly.
     \lean{TNLean.MPS.AreaLaw.IsDomainSupport.singleton,
         TNLean.MPS.AreaLaw.DomainHamiltonian.norm_bound_nonneg,
         TNLean.MPS.AreaLaw.DomainHamiltonian.sum_norm_terms_containing_le}\leanok
+    \uses{def:domain_model}
     In the setting of Definition~\ref{def:domain_model}, every site $x$ satisfies
     $J\ge0$ and
     \begin{align}
@@ -1316,13 +1317,15 @@ for an arbitrary finite set of sites and are instantiated here directly.
     Extend the interactions by zero to the chain of increasing labels.
     The inclusion of domain supports into chain supports is injective and
     preserves both the terms and membership of $x$.
-    Restricting the nonnegative chain sum gives the bound.
+    Restricting the nonnegative chain sum of
+    Lemma~\ref{lem:chain_site_norm_budget} gives the bound.
 \end{proof}
 
 \begin{lemma}[Crossing count on a finite integer domain]
     \label{lem:domain_crossing_count}
     \lean{TNLean.MPS.AreaLaw.card_domain_crossingTerms_le_mul_card_boundaryEdges,
         TNLean.MPS.AreaLaw.card_domain_crossingTerms_mul_two_le}\leanok
+    \uses{def:domain_model}
     In the setting of Definition~\ref{def:domain_model}, let $D$ be any set of
     labelled sites and let $\mathcal C$ be the original admissible supports
     meeting both $D$ and its complement. Write $\partial_{\mathrm{ch}}D$
@@ -1338,7 +1341,7 @@ for an arbitrary finite set of sites and are instantiated here directly.
 \begin{proof}\leanok
     \uses{def:domain_model,lem:chain_boundary_crossing_count}
     The inclusion into chain supports preserves both crossing witnesses and
-    is injective. Apply the chain crossing count, then use
+    is injective. Apply Lemma~\ref{lem:chain_boundary_crossing_count}, then use
     $|\partial_{\mathrm{ch}}D|\le |\Lambda|$ and multiply by two.
 \end{proof}
 
