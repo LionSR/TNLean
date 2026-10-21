@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Circuit.SupportedGaussianIntegral
 
-/-! # Kernel dependencies of supported Gaussian averaging -/
+/-! # Axiom guard for supported Gaussian averaging from projection bounds -/
 
 set_option autoImplicit false
 set_option linter.hashCommand false
