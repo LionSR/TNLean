@@ -79,7 +79,11 @@ choice is a fixed number.
         TNLean.PEPS.Approximation.pepsBondExponentOf,
         TNLean.PEPS.Approximation.pepsLargeSizePrefactorOf,
         TNLean.PEPS.Approximation.pepsLargeSizePrefactorOf_pos,
-        TNLean.PEPS.Approximation.pepsBondExponentOf_pos}
+        TNLean.PEPS.Approximation.pepsBondExponentOf_pos,
+        TNLean.PEPS.Approximation.pepsLinkExponentOfPatch,
+        TNLean.PEPS.Approximation.pepsBondExponentOfPatch,
+        TNLean.PEPS.Approximation.pepsBondExponentOfPatch_pos,
+        TNLean.PEPS.Approximation.pepsBondExponentOf_eq_ofPatch}
     \leanok
     \uses{def:peps_adaptive_patch_constants,def:peps_compression_constants,
         def:peps_sampled_network_constants,
@@ -117,8 +121,55 @@ choice is a fixed number.
         C_{\rm large} & =\max\{C_1,1\}^{\chi}.
     \end{align}
     Both are positive. Only $c_{\rm PEPS}$ depends on $C_A$; $C_{\rm large}$
-    depends on $q$ and $D$, and $L_0$ on $L_{\rm ang}$ alone.
+    depends on $q$ and $D$, and $L_0$ on $L_{\rm ang}$ alone. More generally,
+    for a real $c$ write $k(c)$ and $c_{\rm PEPS}(c)=k(c)\chi+1$ for the link
+    and bond exponents obtained in the same way with $c$ in place of the patch
+    exponent; then $c_{\rm PEPS}=c_{\rm PEPS}(c(q,J,\Delta,20D,60,C_A))$, and
+    $c_{\rm PEPS}(c)>0$.
 \end{definition}
+
+% Source: 07-assembly.tex, lines 9--206.
+% Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+\begin{theorem}[The polynomial PEPS approximation from angular and patch bounds]
+    \label{thm:polynomial_peps_of_patch_supply}
+    \lean{TNLean.PEPS.Approximation.hasPEPSApproximation_of_patchSupply}
+    \leanok
+    \uses{def:polynomial_peps_explicit_constants,def:peps_angular_scale,
+        def:peps_adaptive_patch_constraint,def:peps_adaptive_patch_constants}
+    Fix an integer $q\ge2$ and a family of unit vectors on the $L\times L$
+    grids. Let $D\ge1$ and $L_{\rm ang}$ be a slope and a threshold at accuracy
+    $L^{-60}$ for this family, the clearance $a_0/2$, $a_0=1/5000$, the
+    diameter ratio $1$ and at most $4$ marked points, and let $c$ be a real
+    such that every member of the family on a grid of side $L\ge2$ has
+    adaptive patches on the cell-center sites at $B_0=20D$, power $60$,
+    prefactor $C(q,20D)$ and exponent $c$. Then every member $\Omega$ of the
+    family on a grid of side $L\ge2$ with $L\ge L_0$ has a nonzero PEPS $\Phi$
+    on the $L\times L$ grid with $D_e\le C_{\rm large}L^{c_{\rm PEPS}(c)}$ for
+    every edge $e$ and
+    \begin{align}
+        \min_{\theta\in\mathbb R}
+        \left\|\frac{\Phi}{\|\Phi\|}-e^{i\theta}\Omega\right\| & \le L^{-1}.
+    \end{align}
+    The proof of Theorem~\ref{thm:openai_polynomial_peps} uses the
+    Hamiltonian only through the slope and the patches, so this form applies
+    to any family for which both are available.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:peps_dyadic_protocol_at_given_scale,
+        thm:peps_large_size_network_from_protocol,
+        thm:peps_ground_state_approximation_conditional}
+    Lemma~\ref{lem:peps_dyadic_protocol_at_given_scale} at $C_N=5042$, $C_K=G$
+    and $C_E=\max\{10080,2b+1\}$ gives the protocol for
+    $L\ge\lceil\max\{L_{\rm ang},1\}\rceil$. Compression at accuracy $L^{-5}$,
+    as in Theorem~\ref{thm:peps_large_size_network_from_protocol}, gives an
+    operator network with error $C_{\rm net}L^{-5}$, link dimensions at most
+    $C_1L^{k(c)}$, at most $b_{\rm prot}$ parties per block, at most
+    $2b_{\rm prot}(b_{\rm prot}-1)$ links per party and separations at most
+    $b_{\rm prot}$. For $L\ge\lceil2C_{\rm net}\rceil$ the routing argument of
+    Theorem~\ref{thm:peps_ground_state_approximation_conditional} gives bonds at
+    most $\max\{C_1,1\}^\chi L^{k(c)\chi+1}$ and error at most $L^{-1}$.
+\end{proof}
 
 % Source: 07-assembly.tex, lines 9--206.
 % Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
@@ -151,22 +202,13 @@ choice is a fixed number.
 
 \begin{proof}\leanok
     \uses{thm:peps_adaptive_patch_supply_of_area_law_at,
-        lem:peps_dyadic_protocol_at_given_scale,
-        thm:peps_large_size_network_from_protocol,
-        thm:peps_ground_state_approximation_conditional}
+        thm:polynomial_peps_of_patch_supply}
     By Theorem~\ref{thm:peps_adaptive_patch_supply_of_area_law_at} the area law
     supplies adaptive patches at $B_0=20D$ and power $60$ with the constants
-    $C$ and $c$; moving them to the cell-center sites keeps the constants.
-    Lemma~\ref{lem:peps_dyadic_protocol_at_given_scale} at $C_N=5042$, $C_K=G$
-    and $C_E=\max\{10080,2b+1\}$ gives the protocol for
-    $L\ge\lceil\max\{L_{\rm ang},1\}\rceil$. Compression at accuracy $L^{-5}$,
-    as in Theorem~\ref{thm:peps_large_size_network_from_protocol}, gives an
-    operator network with error $C_{\rm net}L^{-5}$, link dimensions at most
-    $C_1L^k$, at most $b_{\rm prot}$ parties per block, at most
-    $2b_{\rm prot}(b_{\rm prot}-1)$ links per party and separations at most
-    $b_{\rm prot}$. For $L\ge\lceil2C_{\rm net}\rceil$ the routing argument of
-    Theorem~\ref{thm:peps_ground_state_approximation_conditional} gives bonds at
-    most $\max\{C_1,1\}^\chi L^{k\chi+1}$ and error at most $L^{-1}$.
+    $C$ and $c$; moving them to the cell-center sites keeps the constants. The
+    ground states of the model are unit vectors, and
+    Theorem~\ref{thm:polynomial_peps_of_patch_supply} at this $c$ gives the
+    approximation, since $c_{\rm PEPS}=c_{\rm PEPS}(c)$.
 \end{proof}
 
 % Status: auxiliary result. Theorem 1.1 of the source asserts only that the

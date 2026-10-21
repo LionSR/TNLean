@@ -119,8 +119,7 @@ All coordinate bases in this section are finite orthonormal bases.
     \lean{TNLean.PEPS.PairEffect.affectedFamilyPhysicalBasis}
     \lean{TNLean.PEPS.PairEffect.finrank_affectedFamilyPhysicalLayout}
     \leanok
-    \uses{thm:peps_family_regional_dimensions,
-        def:peps_basis_owner_restriction}
+    \uses{def:peps_basis_owner_restriction}
     Let the parties be listed without repetition, with physical space
     $\C^{d_p}$ at party $p$. For an affected subset $A$ of parties, relabel
     the parties in $A$ individually, collapse all parties outside $A$ to a
@@ -132,7 +131,6 @@ All coordinate bases in this section are finite orthonormal bases.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:peps_family_regional_dimensions}
     Filtering registers by side after the composite owner relabelling selects
     precisely the physical registers of parties $p\in A$. Mapping the
     regional tensor-product basis through these isometries gives the basis and

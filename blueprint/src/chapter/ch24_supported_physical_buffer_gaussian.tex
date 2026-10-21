@@ -137,3 +137,95 @@
          & \le\|W\|CL^2(1+8JL^2T)e^{vT-c\ell}.
     \end{align*}
 \end{proof}
+
+\subsection{The partially swapped Hamiltonian at interaction range $R$}
+
+The source treats only site and nearest-neighbour terms, which is
+interaction range one. The statements of this subsection extend the
+boundary estimate and the supported Gaussian approximation to a Hamiltonian
+of range $R$ on a finite domain; the range-one statements on the open square
+above are unchanged.
+
+\begin{definition}[Crossing supports and the swap coefficient]
+    \label{def:peps_crossing_supports}
+    \lean{TNLean.Lattice.crossingSupports,
+        TNLean.Lattice.crossingSites,
+        TNLean.Lattice.swapBoundaryCoefficient,
+        TNLean.Lattice.card_admissibleSupport_le,
+        TNLean.Lattice.exists_walks_of_mem_crossingSites}
+    \leanok
+    \uses{def:area_law_hamiltonian}
+    Let $\Lambda$ be a finite domain, $R\ge0$ an integer and
+    $A\subseteq\Lambda$. A support of range $R$ \emph{crosses} $A$ if it meets
+    $A$ and is not contained in $A$; let $Z_R(A)$ be the union of the
+    crossing supports. Every site of $Z_R(A)$ is joined by walks of length at
+    most $R$ to a site of $A$ and to a site outside $A$. With
+    $v_R=1+2R(R+1)$ and $\mu_R=2^{v_R-1}$, there are at most $\mu_R|\Lambda|$
+    supports of range $R$, and we put $c_R=4\mu_R$.
+\end{definition}
+
+\begin{theorem}[The partially swapped Hamiltonian at range $R$]
+    \label{thm:peps_swapped_local_hamiltonian}
+    \lean{TNLean.Lattice.LocalHamiltonian.swappedDoubled,
+        TNLean.Lattice.LocalHamiltonian.swappedDoubled_operator,
+        TNLean.Lattice.LocalHamiltonian.sheetSwapOp_conj_doubled_operator_sub_eq_sum_crossing,
+        TNLean.Lattice.LocalHamiltonian.swapped_doubled_boundary_bound}
+    \leanok
+    \uses{def:area_law_hamiltonian,def:qc_site_pair_coordinates,
+        def:peps_frame_sheet_swap,def:peps_crossing_supports}
+    Let $H=\sum_Xh_X$ be a Hamiltonian of range $R$ on a finite domain
+    $\Lambda$ with Hermitian terms of norm at most $J\ge0$, let
+    $A\subseteq\Lambda$, and in paired-site coordinates let
+    $K=H\otimes I+I\otimes H$ and $K'=F_AKF_A^*$. Then $K'$ is a Hamiltonian
+    of range $R$ with local dimension $q^2$, the same supports and terms of
+    norm at most $2J$. Moreover $K'-K$ is the sum of the corresponding
+    differences over the supports crossing $A$, so it is supported on
+    $Z_R(A)$ and
+    \begin{align*}
+        \|K'-K\| & \le c_RJ|\Lambda|.
+    \end{align*}
+    This extends the range-one estimate of
+    Theorem~\ref{thm:peps_swapped_doubled_boundary_bound}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Conjugating a doubled term by the swap keeps its support, and changes its
+    norm by a factor at most two. A term supported inside $A$ or disjoint
+    from it commutes with the swap after doubling, so only crossing supports
+    remain. Each remaining difference has norm at most $4J$, and there are at
+    most $\mu_R|\Lambda|$ of them.
+\end{proof}
+
+\begin{theorem}[Supported Gaussian approximation of the physical buffer at range $R$]
+    \label{thm:peps_supported_physical_buffer_gaussian_range}
+    \lean{TNLean.Lattice.LocalHamiltonian.supported_buffer_gaussian_integral}
+    \leanok
+    \uses{thm:peps_swapped_local_hamiltonian,
+        thm:peps_physical_buffer_coordinates,
+        thm:area_supported_gaussian_integral,
+        def:area_graph_ball_localization_constants}
+    Fix $q\ge1$ and $J\ge0$, and let $H$ be a Hamiltonian of range $R$ on a
+    finite domain $\Lambda$ with terms of norm at most $J$. Let
+    $A,C\subseteq\Lambda$ be disjoint with buffer $Q=(A\cup C)^c$, and define
+    $K$, $K'$ and $V$ as in
+    Theorem~\ref{thm:peps_supported_physical_buffer_gaussian}, now directly
+    in the coordinates of $\Lambda$. For each integer $\ell\ge0$ put
+    $B=N_\ell(Q\cup Z_R(A))$. Then the conclusions of
+    Theorem~\ref{thm:peps_supported_physical_buffer_gaussian} hold, with the
+    error bound
+    \begin{align*}
+        \|M_{\eta,T}-\widetilde M_{\eta,T}\|
+         & \le\|W\|\,2C_0(R)|\Lambda|(1+c_RJ|\Lambda|T)e^{v(R,2J)T-\ell/2}.
+    \end{align*}
+    This extends Theorem~\ref{thm:peps_supported_physical_buffer_gaussian},
+    which treats range one on the open square, to range $R$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Theorem~\ref{thm:peps_swapped_local_hamiltonian} writes $K'$ as a
+    Hamiltonian of range $R$ with term bound $2J$, with $K'-K$ supported on
+    $Z_R(A)$ of norm at most $c_RJ|\Lambda|$, and
+    Theorem~\ref{thm:peps_physical_buffer_coordinates} places $V$ on $Q$
+    with $\|V\|\le\|W\|$. Theorem~\ref{thm:area_supported_gaussian_integral}
+    at range $R$ and term bound $2J$ then gives the claim.
+\end{proof}

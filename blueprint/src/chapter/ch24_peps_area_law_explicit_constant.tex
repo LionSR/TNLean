@@ -611,3 +611,142 @@ every upper bound for $C_{\rm box}$.
     the case $R=1$ of Theorem~\ref{thm:square_area_law_range_constant} with
     the constant $C_{\rm AL}(q,1,J,\Delta)$.
 \end{proof}
+
+% Status: auxiliary definition. The polynomial-PEPS source treats only site
+% and nearest-neighbour interactions; this target reads its Theorem 1.1 with
+% interactions of range R.
+% Source: polynomial-PEPS 00-introduction.tex, Theorem 1.1, lines 36--57;
+% area-law Theorem 1.1.
+% Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+\begin{definition}[Polynomial PEPS approximation at range $R$]
+    \label{def:polynomial_peps_range}
+    \lean{TNLean.PEPS.Approximation.RangePolynomialPEPSApproximation}
+    \leanok
+    \uses{def:square_range_ground_states,def:polynomial_peps_model}
+    The polynomial PEPS approximation at range $R$ is the following assertion.
+    For every integer $q\ge2$, every integer $R\ge1$ and all reals
+    $J,\Delta>0$ there are $C,c>0$ such that, for every $L\ge2$, every ground
+    state at range $R$ (Definition~\ref{def:square_range_ground_states}) on
+    the grid of side $L$ has a nonzero PEPS on the original open grid with
+    $D_e\le CL^c$ for every edge $e$ and
+    (\ref{eq:polynomial_peps_vector_error}) for some $\theta\in\mathbb R$.
+    This extends Theorem~1.1 of \cite{OpenAI2026PolynomialPEPS}, which treats
+    only site and nearest-neighbour terms, to terms supported on sets of
+    diameter at most $R$.
+\end{definition}
+
+% Status: auxiliary result. The polynomial-PEPS source treats only site and
+% nearest-neighbour interactions.
+% Source: polynomial-PEPS 00-introduction.tex, Theorem 1.1 and eq:model,
+% lines 36--57.
+% Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+\begin{theorem}[The nearest-neighbour approximation from range one]
+    \label{thm:polynomial_peps_of_range}
+    \lean{TNLean.PEPS.Approximation.polynomialPEPSApproximation_of_range}
+    \leanok
+    \uses{def:polynomial_peps_range,def:polynomial_peps_model}
+    If the polynomial PEPS approximation at range $R$ of
+    Definition~\ref{def:polynomial_peps_range} holds, then for every integer
+    $q\ge2$ and all reals $J,\Delta>0$ there are $C,c>0$ such that, for every
+    $L\ge2$, every unit gapped ground vector, with gap $\Delta$, of a
+    Hamiltonian in the model of Definition~\ref{def:polynomial_peps_model}
+    with term bound $J$ has a PEPS approximation with these constants.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:square_ground_states_range_one}
+    Take the constants of the case $R=1$. Since $J>0$,
+    Theorem~\ref{thm:square_ground_states_range_one} makes every gapped
+    ground vector of the model a ground state at range one.
+\end{proof}
+
+% Status: auxiliary definition. The polynomial-PEPS source treats only site
+% and nearest-neighbour interactions; these are the constants of its proof
+% read with interactions of range R.
+% Source: polynomial-PEPS 07-assembly.tex, lines 9--214.
+% Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+\begin{definition}[The constants of the polynomial PEPS approximation at range $R$]
+    \label{def:polynomial_peps_range_constants}
+    \lean{TNLean.PEPS.Approximation.rangePEPSAreaLawConstant,
+        TNLean.PEPS.Approximation.rangePEPSAngularScale,
+        TNLean.PEPS.Approximation.rangePEPSAngularThreshold,
+        TNLean.PEPS.Approximation.rangePEPSSizeThreshold,
+        TNLean.PEPS.Approximation.rangePEPSPatchExponent,
+        TNLean.PEPS.Approximation.rangePEPSBondExponent,
+        TNLean.PEPS.Approximation.rangePEPSBondPrefactor,
+        TNLean.PEPS.Approximation.one_le_rangePEPSAngularScale,
+        TNLean.PEPS.Approximation.rangePEPSBondExponent_pos,
+        TNLean.PEPS.Approximation.rangePEPSBondPrefactor_pos}
+    \leanok
+    \uses{def:polynomial_peps_explicit_constants,def:area_law_closed_constant,
+        def:peps_angular_constants_range,
+        def:peps_range_adaptive_patch_constants}
+    Fix integers $q$ and $R$ and reals $J,\Delta$, and let $a_0=1/5000$. Let
+    $C_A=C_{\rm AL}(q,R,J,\Delta)$ be the area-law constant of
+    Definition~\ref{def:area_law_closed_constant}. Let
+    $D=D_R(J,\Delta,a_0/2,60)$ and $L_{\rm ang}=L_R(q,J,\Delta,a_0/2,1,4,60)$
+    be the angular slope and the angular size threshold of
+    Definition~\ref{def:peps_angular_constants_range}, and let $c_R$ be the
+    patch exponent of Definition~\ref{def:peps_range_adaptive_patch_constants}
+    at $B_0=20D$, $p=60$ and $C_A$. With $L_0$, $C_{\rm large}$ and the bond
+    exponent $c_{\rm PEPS}(c)$ of
+    Definition~\ref{def:polynomial_peps_explicit_constants} at $q$, $D$ and
+    $L_{\rm ang}$, put
+    \begin{align}
+        c_{{\rm PEPS},R} & =c_{\rm PEPS}(c_R),                           &
+        C_{{\rm PEPS},R} & =\max\bigl\{C_{\rm large},\,q^{L_0^2}\bigr\}.
+    \end{align}
+    Then $D\ge1$, and both constants are positive. At $R=1$ they are not the
+    constants of Definition~\ref{def:polynomial_peps_closed_constants}, since
+    the angular slope, its threshold and the patch exponent at range $R$ are
+    different closed forms.
+\end{definition}
+
+% Status: auxiliary result. The polynomial-PEPS source treats only site and
+% nearest-neighbour interactions; this is its Theorem 1.1, with constants,
+% read with interactions of range R.
+% Source: polynomial-PEPS 00-introduction.tex, Theorem 1.1, and its proof in
+% 07-assembly.tex, lines 9--214; area-law Theorem 1.1.
+% Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+\begin{theorem}[Polynomial PEPS approximation at range $R$ with explicit constants]
+    \label{thm:polynomial_peps_range_explicit_constants}
+    \lean{TNLean.PEPS.Approximation.rangePolynomialPEPSApproximation_explicit,
+        TNLean.PEPS.Approximation.rangePolynomialPEPSApproximation}
+    \leanok
+    \uses{def:polynomial_peps_range_constants,def:square_range_ground_states,
+        def:polynomial_peps_range}
+    Fix integers $q\ge2$ and $R\ge1$ and reals $J,\Delta>0$, and let
+    $C_{{\rm PEPS},R}$ and $c_{{\rm PEPS},R}$ be the constants of
+    Definition~\ref{def:polynomial_peps_range_constants}. For every $L\ge2$,
+    every ground state $\Omega$ at range $R$ on the grid of side $L$ has a
+    nonzero PEPS $\Phi$ on the $L\times L$ grid with
+    $D_e\le C_{{\rm PEPS},R}L^{c_{{\rm PEPS},R}}$ for every edge $e$ and
+    \begin{align}
+        \min_{\theta\in\mathbb R}
+        \left\|\frac{\Phi}{\|\Phi\|}-e^{i\theta}\Omega\right\| & \le L^{-1}.
+    \end{align}
+    In particular the polynomial PEPS approximation at range $R$ of
+    Definition~\ref{def:polynomial_peps_range} holds.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:square_area_law_range_constant,
+        thm:peps_angular_information_range_closed,
+        thm:peps_range_adaptive_patch_supply,
+        thm:polynomial_peps_of_patch_supply,
+        thm:square_ground_states_range_one,
+        lem:peps_remove_small_sizes_named}
+    By Theorem~\ref{thm:square_area_law_range_constant} the square-grid
+    entropy area law holds for the ground states at range $R$ with the
+    constant $C_A$. By Theorem~\ref{thm:peps_angular_information_range_closed}
+    at $a=a_0/2$, $A_0=1$, $m_0=4$ and $p=60$, the numbers $D$ and
+    $L_{\rm ang}$ are a slope and a threshold at accuracy $L^{-60}$. By
+    Theorem~\ref{thm:peps_range_adaptive_patch_supply} at $B_0=20D$ and
+    $p=60$ every such state has adaptive patches with exponent $c_R$, and
+    moving them to the cell-center sites keeps the constants. These states
+    are unit vectors by Theorem~\ref{thm:square_ground_states_range_one}, so
+    Theorem~\ref{thm:polynomial_peps_of_patch_supply} gives the approximation
+    with the prefactor $C_{\rm large}$ for $L\ge L_0$, and
+    Lemma~\ref{lem:peps_remove_small_sizes_named} extends it to every $L\ge2$
+    with the prefactor $C_{{\rm PEPS},R}$.
+\end{proof}
