@@ -1504,6 +1504,26 @@ for an arbitrary finite set of sites and are instantiated here directly.
     the stated expression. The restricted Gaussian measure is not renormalized.
 \end{proof}
 
+\begin{theorem}[Entropy comparison for a unitary away from two regions]
+    \label{thm:lattice_supported_unitary_entropy}
+    \lean{TNLean.Lattice.mutualInformation_le_of_supported_unitary}\leanok
+    Let $V$ be a finite set of sites of local dimension $q$, and let
+    $\varphi,\eta$ be unit vectors. Suppose $X,J\subseteq V$ are disjoint,
+    $I_\eta(X:J)=0$, and $U$ is a unitary supported on $S$ with
+    $S\cap(X\cup J)=\varnothing$. Write $d_X=q^{|X|}$. Then
+    \begin{align}
+        I_\varphi(X:J) & \le8\sqrt{\|U\varphi-\eta\|}\log(e d_X).\notag
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:al_amp_entropy_comparison}
+    A normalized vector ensures that the configuration space is nonempty.
+    In the tensor decomposition into $X\cup J$ and its complement, write
+    $U=\mathbb 1\otimes U_2$. Unitarity of $U$ makes $U_2$ unitary.
+    Apply Theorem~\ref{thm:al_amp_entropy_comparison} to
+    $\varphi,\eta$ and $U_2$, using $I_\eta(X:J)=0$.
+\end{proof}
+
 \begin{theorem}[Entropy comparison after a regional replica swap]
     \label{thm:regional_reset_cores_entropy}
     \lean{TNLean.Lattice.mutualInformation_cores_le_of_reset_unitary}\leanok
@@ -1522,7 +1542,7 @@ for an arbitrary finite set of sites and are instantiated here directly.
     \cite[Part~IIa]{TNLean2026OneDimensional}.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:peps_reset_cores_entropy,thm:peps_reset_exchanged_cores,
+    \uses{thm:lattice_supported_unitary_entropy,thm:peps_reset_exchanged_cores,
         thm:peps_reset_paired_support}
     Both replicas are normalized, and $F_D$ is unitary. The first-replica
     marginal of $\Phi$ on $R_0\cup C_0$ is a product, by
@@ -1530,7 +1550,7 @@ for an arbitrary finite set of sites and are instantiated here directly.
     Relabel the paired coordinates as two disjoint copies of $V$.
     The support assumption means that $U$ acts trivially on both cores.
     The supported-unitary entropy comparison of
-    Theorem~\ref{thm:peps_reset_cores_entropy}, and the first core dimension
+    Theorem~\ref{thm:lattice_supported_unitary_entropy}, and the first core dimension
     $q^{|R_0|}$, give the assertion. Nonnegativity of the norm bound implies
     $\delta\ge0$.
 \end{proof}
@@ -1662,8 +1682,7 @@ for an arbitrary finite set of sites and are instantiated here directly.
     \cite[Part~IIa]{TNLean2026OneDimensional}.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:domain_interval_neighborhood,thm:chain_area_law,
-        lem:zero_entropy_flip,def:domain_model}
+    \uses{thm:domain_interval_neighborhood,thm:chain_area_law,def:domain_model}
     Submodularity and nonnegativity of reduced-state entropy give
     $S_\Omega(X\cup Y)\le S_\Omega(X)+S_\Omega(Y)$.
     Since $S_\Omega(\varnothing)=0$, finite subadditivity gives
