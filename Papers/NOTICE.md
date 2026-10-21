@@ -53,7 +53,7 @@ source of that version and opening the named file.
 ## Sources used for the one-dimensional area-law comparison
 
 These sources are not vendored, for the same reason as the preceding section:
-both are posted under the arXiv non-exclusive distribution license, which grants
+all four are posted under the arXiv non-exclusive distribution license, which grants
 no downstream redistribution right. Issues and docstrings cite them by file and
 line range as `References/<arXiv ID>/...`, a local mirror of the arXiv source
 of the exact version linked below, excluded from the repository by
@@ -68,6 +68,17 @@ source of that version and opening the named file.
   Vazirani, Thomas Vidick, *A polynomial-time algorithm for the ground state of
   1D gapped local Hamiltonians*. Mirrored file `References/1307.5143/algo53.tex`,
   with the bibliography `algo53.bbl`. Link only;
+  [arXiv non-exclusive distribution license 1.0][nonexclusive].
+- [arXiv:1301.1162v1](https://arxiv.org/abs/1301.1162v1): Itai Arad, Alexei Kitaev,
+  Zeph Landau, Umesh Vazirani, *An area law and sub-exponential algorithm for 1D
+  systems*. Mirrored file `References/1301.1162/1dfrustrated34.tex`, with the
+  bibliography `1dfrustrated34.bbl` and the figure `1dline.pdf`. Link only;
+  [arXiv non-exclusive distribution license 1.0][nonexclusive].
+- [arXiv:1602.08828v2](https://arxiv.org/abs/1602.08828v2): Itai Arad, Zeph Landau,
+  Umesh Vazirani, Thomas Vidick, *Rigorous RG algorithms and area laws for low
+  energy eigenstates in 1D*. Mirrored file `References/1602.08828/local_alg_arxiv_v2.tex`,
+  with the bibliography `local_alg_arxiv_v2.bbl` and the figures `rg1step.pdf`,
+  `rgtree.pdf` and `transmission.pdf`. Link only;
   [arXiv non-exclusive distribution license 1.0][nonexclusive].
 
 [nonexclusive]: https://arxiv.org/licenses/nonexclusive-distrib/1.0/
