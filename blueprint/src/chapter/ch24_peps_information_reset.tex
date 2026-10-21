@@ -212,19 +212,19 @@ range-one statements above are unchanged.
     For integers $q,R\ge0$ and real numbers $J$, $\Delta$ and $p$, with $K_R$
     and $C_{U,R}$ as in Definition~\ref{def:peps_reset_constants_range}, put
     \begin{align*}
-        C_{p,R}(J,\Delta)     & =K_R(J,\Delta,2p+10)+1+R,                                       \\
+        C_{p,R}(J,\Delta,p)   & =K_R(J,\Delta,2p+10)+1+R,                                       \\
         L_{0,R}(q,J,\Delta,p) & =\max\bigl\{1,8\sqrt{C_{U,R}(J,\Delta,2p+10)}(1+\log q)\bigr\}.
     \end{align*}
-    If $J\ge0$, $\Delta>0$ and $p>0$, then $C_{p,R}>0$. The summand $R$
+    If $J\ge0$, $\Delta>0$ and $p>0$, then $C_{p,R}(J,\Delta,p)>0$. The summand $R$
     accounts for the reach of the supports crossing a region.
 \end{definition}
 
-\begin{lemma}[The number of sites of the square]
-    \label{lem:peps_square_site_count}
+\begin{theorem}[The number of sites of the square]
+    \label{thm:peps_square_site_count}
     \lean{TNLean.PEPS.Approximation.card_rectangularDomain}
     \leanok
     The $L\times L$ square has $L^2$ sites.
-\end{lemma}
+\end{theorem}
 \begin{proof}
     \leanok
     It is the product of two intervals of $L$ integers.
@@ -253,14 +253,26 @@ range-one statements above are unchanged.
     \label{thm:peps_reset_cores_entropy_sites}
     \lean{TNLean.PEPS.Approximation.mutualInformation_cores_le_of_sites_reset_unitary}
     \leanok
-    The conclusion of Theorem~\ref{thm:peps_reset_cores_entropy} holds on the
-    paired sites of any finite set.
+    \uses{def:peps_frame_sheet_swap}
+    Let $q\ge1$, let $\Omega$ be a unit vector on a finite set of sites $V$, let
+    $A,C\subseteq V$ be disjoint, and let $A_0\subseteq A$, $C_0\subseteq C$.
+    Let $U$ be a unitary on the paired sites of $V$, supported on a set
+    containing no site of $A_0\cup C_0$, with $\|U\Psi-\Phi\|\le\delta$ for
+    $\Psi=\Omega\otimes\Omega$ and $\Phi=F_A\Psi$. Then
+    \begin{align*}
+        I_\Omega(A_0:C_0) & \le8\sqrt\delta\,\log(e\,q^{|A_0|}).
+    \end{align*}
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:peps_reset_paired_support,thm:peps_reset_exchanged_cores}
-    The proof of Theorem~\ref{thm:peps_reset_cores_entropy} uses no property of
-    the square.
+    By Theorem~\ref{thm:peps_reset_paired_support}, $U$ is a unitary on the two
+    replicas acting away from the cores of the first replica, so $U\Psi$ and
+    $\Psi$ have the same joint core marginal, with mutual information
+    $I_\Omega(A_0:C_0)$. The cores of $\Phi$ are uncorrelated by
+    Theorem~\ref{thm:peps_reset_exchanged_cores}. Continuity of mutual
+    information, with only the dimension $q^{|A_0|}$ of the first core, gives the
+    bound.
 \end{proof}
 
 \begin{theorem}[Information reset at range $R$]
@@ -270,7 +282,7 @@ range-one statements above are unchanged.
     \leanok
     \uses{def:area_law_hamiltonian,def:peps_reset_width_range}
     Fix integers $q\ge1$ and $R\ge0$, and real numbers $J\ge0$, $\Delta>0$
-    and $p>0$, and put $C_p=C_{p,R}(J,\Delta)$ and
+    and $p>0$, and put $C_p=C_{p,R}(J,\Delta,p)$ and
     $L_0=L_{0,R}(q,J,\Delta,p)$. Let $L\ge L_0$, let $H$ be a Hamiltonian of
     range $R$ on the $L\times L$ square with Hermitian terms of norm at most
     $J$, and let $\Omega$ be a normalized eigenvector with the full-system gap
@@ -288,7 +300,7 @@ range-one statements above are unchanged.
     \leanok
     \uses{thm:peps_reset_unitary_range,thm:peps_reset_support_cores_range,
         thm:peps_reset_cores_entropy_sites,thm:peps_reset_entropy_scalar,
-        lem:peps_square_site_count}
+        thm:peps_square_site_count}
     The proof of Theorem~\ref{thm:peps_information_reset_explicit} applies,
     with the unitary of Theorem~\ref{thm:peps_reset_unitary_range} at
     $r=2p+10$. With $B=1+b+\log L\ge1$, its support radius satisfies
@@ -303,13 +315,14 @@ range-one statements above are unchanged.
     \leanok
     \uses{def:area_law_hamiltonian}
     Fix integers $q\ge1$ and $R\ge0$, and real numbers $J\ge0$, $\Delta>0$
-    and $p>0$. There are $C_p>0$ and $L_0$ such that the conclusion of
-    Theorem~\ref{thm:peps_information_reset_range} holds for every $L\ge L_0$.
+    and $p>0$. There are $C_p>0$ and $L_0$ such that, for every $L\ge L_0$, the
+    conclusion of Theorem~\ref{thm:peps_information_reset_range} holds on the
+    $L\times L$ square.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:peps_information_reset_range,def:peps_reset_width_range}
-    Take $C_p=C_{p,R}(J,\Delta)$, which is positive, and
+    Take $C_p=C_{p,R}(J,\Delta,p)$, which is positive, and
     $L_0=L_{0,R}(q,J,\Delta,p)$ in
     Theorem~\ref{thm:peps_information_reset_range}.
 \end{proof}
