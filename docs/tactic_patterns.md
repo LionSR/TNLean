@@ -8535,7 +8535,7 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Notes:** No powerset injection or finite-union proof is duplicated. There are two exact symmetric-window comparisons; their remaining arithmetic is a single `omega` call. No further lemma or tactic is needed at present.
 
 
-### Core information after a regional replica swap — candidate (2026-10-18)
+### Core information after a regional replica swap — promoted (2026-10-21)
 
 - **Pattern:** Transport a supported unitary and its vector error from paired
   coordinates to two replicas, derive the vanishing mutual information of the
@@ -8547,10 +8547,11 @@ spectral split → block extraction → MPV calculation → strict bounds
   `PEPS/Approximation/RangeInformationReset.lean` (2026-10-21).
 - **Existing reuse:** The coordinate isometry, support transport, replica-swap
   marginal identity and entropy continuity theorem are shared already.
-- **Status:** The third consumer is the finite-site comparison theorem itself,
-  stated for any finite site set. Promotion moves it beside the square version
-  and derives the square version from it through `rectangleSiteEquiv`; this
-  is scheduled with the range-R deduplication (#9792).
+- **Promoted:** `mutualInformation_cores_le_of_sites_reset_unitary` in
+  `PEPS/Approximation/InformationReset.lean` is the comparison on any finite
+  site set; the square version is derived from it by relabelling the sites
+  through `rectangleSiteEquiv`, and the range-R reset applies it directly.
+  The chain comparison in `MPS/AreaLaw/InformationReset.lean` remains inlined.
 
 ### Absorbing a localization coefficient with spare decay — candidate (2026-10-18)
 
