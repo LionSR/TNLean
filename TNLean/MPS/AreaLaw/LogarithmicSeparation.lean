@@ -17,8 +17,10 @@ then gives polynomially small mutual information at logarithmic separation.
 The constants precede the chain, Hamiltonian, state and regions. Empty and
 overlapping interval components are permitted.
 
-**Scope restriction (contiguous chains):** The sites are `Fin L`; the broader
-finite-domain reading is recorded in
+**Source convention (contiguous chains):** The note fixes a contiguous chain in
+`part1_arealaw.tex`, lines 91–93, before the Part II argument. The sites here
+are `Fin L`, as in that argument. Additional finite-domain extensions are
+discussed in
 `docs/paper-gaps/tnlean_one_dimensional_connected_domain_scope.tex`.
 
 Source: TNLean one-dimensional note, Lemma `lem:logsep`,
