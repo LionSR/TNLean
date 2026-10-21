@@ -1263,7 +1263,8 @@ absolute constants.
   (resolved) records the attributed positive-filter adaptation on the original
   square, its all-competitor matrix comparison and exact ascending output, and
   the same family's original-energy and full-system fidelity estimates. The
-  vacuous negative-interaction-bound case is included. The result is a
+  canonical physical theorem permits every real interaction bound directly,
+  including the vacuous negative-bound case. The result is a
   standalone adaptation of a lemma of the companion Lean code; the proofs of
   the area law and of the polynomial PEPS approximation theorem do not use it,
   and the further comparison with the companion code's own types is not
