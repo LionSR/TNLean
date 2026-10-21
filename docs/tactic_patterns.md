@@ -6701,6 +6701,27 @@ spectral split → block extraction → MPV calculation → strict bounds
   `PEPS/Approximation/AngularInformationFromCollar.lean` returns the five
   bounds from `0 < a`; the three proofs destructure it with `obtain`.
 
+### Localization error of the regional reset filter — candidate (2026-10-21)
+
+- **Pattern:** After the supported Gaussian buffer step, bound
+  `‖W‖ * C * n * (1 + c * J * n * T) * exp (v * T - ⌈K (1 + b + log L)⌉ / 2)` by
+  `C * (1 + c * J) * (1 + T₀) * exp (-10 b) * L ^ (-r)`, with `T = T₀ (1 + b + log L)`
+  and `n ≤ L ^ 2` sites. First prove the polynomial bound
+  `n * (1 + c * J * n * T) ≤ (1 + c * J) * L ^ 4 * (1 + T)` from `n ≤ L ^ 4 (1 + T)` and
+  `c J n² T ≤ c J L ^ 4 (1 + T)`, combined by `add_le_add`. Then rearrange with `gcongr`
+  and close with `GaussianFilter.localization_error_bound_of_parameter_constant`.
+- **Seen:** 2 occurrences, `SquareHamiltonian.reset_localized_filter` in
+  `PEPS/Approximation/ResetUnitary.lean` (lines 167–221) and
+  `LocalHamiltonian.reset_localized_filter` in `PEPS/Approximation/RangeResetUnitary.lean`
+  (lines 144–201). The two blocks differ only in the constants: `L ^ 2` versus `Λ.card`, the
+  crossing coefficient `8` versus `swapBoundaryCoefficient R`, the prefactor
+  `squareLocalizationPrefactor` versus `2 * graphBallLocalizationPrefactor R`, and the
+  velocity `squareLocalizationVelocity J` versus `graphBallLocalizationVelocity R (2 * J)`.
+- **Abstraction:** a lemma over the site bound `n ≤ L ^ 2`, the prefactor `C > 0`, the
+  crossing coefficient `c ≥ 0`, the velocity `v` and the radius `K` with
+  `v T₀ + 15 + r ≤ K / 2`, which concludes the displayed inequality for any `‖W‖ ≤ 1`.
+- **Notes:** promote at a third occurrence, for example a reset filter on another domain.
+
 ## Rejected
 
 ### Axiom allow-list fixtures — rejected (2026-10-12)
