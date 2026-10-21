@@ -144,3 +144,123 @@
     threshold $N_a$. Theorem~\ref{thm:peps_cell_conditional_information_of_collar_explicit}
     then gives the bound.
 \end{proof}
+
+\subsection{Angular information at interaction range $R$}
+
+The source states Proposition~3.4 for site and nearest-neighbour terms only,
+which is interaction range one. The proof uses the Hamiltonian only through
+the cell bound of Lemma~3.2 and the information reset of Lemma~3.3 for the
+states concerned. This subsection runs the proof for any family of states
+with these two estimates, supplies them at range $R$, and so extends the
+proposition to Hamiltonians of range $R$ on the square; the range-one
+statements above are unchanged.
+
+\begin{definition}[The cell and reset estimates for a family of states]
+    \label{def:peps_family_cell_reset_bounds}
+    \lean{TNLean.PEPS.Approximation.SquareCellInformationBound,
+        TNLean.PEPS.Approximation.SquareResetBound}
+    \leanok
+    \uses{def:peps_angular_scale}
+    Let $\mathcal G$ assign to each $L$ a set of states of the $L\times L$
+    square. It satisfies the \emph{cell bound} with clearance coefficient $c$,
+    prefactor $C_1$ and exponent $K$ if, for every state of $\mathcal G$, the
+    conclusion of Theorem~\ref{thm:peps_cell_conditional_information_from_gap}
+    holds with these constants. It satisfies the \emph{reset bound} with width
+    $C_p$ and threshold $L_0$ at accuracy $L^{-p}$ if, for every $L\ge L_0$ and
+    every state of $\mathcal G$, the conclusion of
+    Theorem~\ref{thm:peps_information_reset_explicit} holds with the width
+    $C_p$.
+\end{definition}
+
+\begin{theorem}[Proposition~3.4 for a family with the two estimates]
+    \label{thm:peps_angular_information_of_bounds}
+    \lean{TNLean.PEPS.Approximation.angular_information_reset_of_squareResetBound,
+        TNLean.PEPS.Approximation.angular_single_scale_reset_of_bounds,
+        TNLean.PEPS.Approximation.isAngularScale_of_bounds}
+    \leanok
+    \uses{def:peps_family_cell_reset_bounds,def:peps_angular_scale,
+        def:peps_angular_information_constants}
+    Let $\mathcal G$ consist of unit vectors and satisfy the cell bound with
+    $C_1>0$ and $K\ge0$ at the clearance coefficient of $a'$ and $d$, and the
+    reset bound with $C_p>0$ and $L_0$, where $a'$ and $d$ are the margin and
+    the cell side of Definition~\ref{def:peps_angular_information_constants}.
+    Then every slope $D\ge\max\{1,12C_p/a',1/d\}$ and every threshold at least
+    the larger of the cell-reset threshold at $(C_p,C_1,K)$ and the cell count,
+    and of $L_0$, form an angular scale for $\mathcal G$ in the sense of
+    Definition~\ref{def:peps_angular_scale}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_angular_information_of_collar_explicit}
+    The proof of Theorem~\ref{thm:peps_angular_information_of_collar_explicit}
+    uses the Hamiltonian only through the cell bound and the reset, so it
+    applies to $\mathcal G$.
+\end{proof}
+
+\begin{theorem}[The two estimates at range $R$]
+    \label{thm:peps_range_cell_reset_bounds}
+    \lean{TNLean.PEPS.Approximation.cell_conditionalMutualInformation_le_square_of_rectangle,
+        TNLean.PEPS.Approximation.IsRangeSquareGroundState.squareCellInformationBound,
+        TNLean.PEPS.Approximation.mutualInformation_squareAreaLawState,
+        TNLean.PEPS.Approximation.IsRangeSquareGroundState.squareResetBound}
+    \leanok
+    \uses{def:peps_family_cell_reset_bounds,def:square_range_ground_states,
+        thm:peps_cell_information_range_closed,
+        thm:peps_information_reset_range}
+    Fix $q\ge1$, $R\ge0$, $J\ge0$ and $\Delta>0$. The unit gapped ground vectors
+    of Hamiltonians of range $R$ with term bound $J$ on the square satisfy the
+    cell bound at every $c>0$ with $C_1=C_{\rm cell}(q,R,J,\Delta,c)$ and
+    $K=K_{\rm cell}(q,R,J,\Delta,c)$, and for every $p>0$ the reset bound with
+    width $C_{p,R}(J,\Delta)$ and threshold $L_{0,R}(q,J,\Delta)$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Place the state on the integer square. A common translation by $(1,1)$
+    identifies the two placements of the sites, so
+    Theorem~\ref{thm:peps_cell_information_range_closed} gives the cell bound,
+    and Theorem~\ref{thm:peps_information_reset_range} gives the reset; the
+    entropies are unchanged by the relabelling.
+\end{proof}
+
+\begin{definition}[The angular constants at range $R$]
+    \label{def:peps_angular_constants_range}
+    \lean{TNLean.PEPS.Approximation.rangeAngularScale,
+        TNLean.PEPS.Approximation.rangeAngularThreshold,
+        TNLean.PEPS.Approximation.rangeAngularScale_eq}
+    \leanok
+    \uses{def:peps_reset_width_range,def:peps_closed_information_constants,
+        def:peps_angular_information_constants}
+    With $a'$, $d$, the clearance coefficient $c$ and the cell count of
+    Definition~\ref{def:peps_angular_information_constants}, let
+    $D_R(J,\Delta,a,p)=\max\{1,12C_{p,R}/a',1/d\}$, and let
+    $L_R(q,J,\Delta,a,A_0,m_0,p)$ be the larger of the cell-reset threshold at
+    $C_{p,R}$, $C_{\rm cell}(q,R,J,\Delta,c)$, $K_{\rm cell}(q,R,J,\Delta,c)$ and
+    the cell count, and of $L_{0,R}(q,J,\Delta)$. For $J\ge0$, $\Delta>0$,
+    $a>0$ and $p>0$,
+    \begin{align*}
+        D_R(J,\Delta,a,p) & =\frac{2400\,C_{p,R}(J,\Delta)}{\min\{a,1\}}.
+    \end{align*}
+\end{definition}
+
+\begin{theorem}[Proposition~3.4 at range $R$, at closed-form constants]
+    \label{thm:peps_angular_information_range_closed}
+    \lean{TNLean.PEPS.Approximation.isAngularScale_range_closed_le}
+    \leanok
+    \uses{def:peps_angular_constants_range,def:peps_angular_scale,
+        def:square_range_ground_states}
+    Fix $q\ge1$, $R\ge0$, $J\ge0$, $\Delta>0$, $a>0$, $m_0\in\mathbb N$ and an
+    integer $p>0$. For the unit gapped ground vectors of Hamiltonians of range
+    $R$ with term bound $J$ on the $L\times L$ square, every slope
+    $D\ge D_R(J,\Delta,a,p)$ and every threshold
+    $L_0\ge L_R(q,J,\Delta,a,A_0,m_0,p)$ form an angular scale at accuracy
+    $L^{-p}$. This extends
+    Theorem~\ref{thm:peps_information_from_gap_closed} from range one to range
+    $R$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_angular_information_of_bounds,
+        thm:peps_range_cell_reset_bounds}
+    Apply Theorem~\ref{thm:peps_angular_information_of_bounds} with the
+    estimates of Theorem~\ref{thm:peps_range_cell_reset_bounds}.
+\end{proof}
