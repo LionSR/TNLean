@@ -186,6 +186,7 @@ import TNLean.PEPS.Approximation.ProductReferenceColumn
 import TNLean.PEPS.Approximation.PurePhysicalCoefficient
 import TNLean.PEPS.Approximation.RangeAngularInformation
 import TNLean.PEPS.Approximation.RangeInformationReset
+import TNLean.PEPS.Approximation.RangeNestedPatchEnergy
 import TNLean.PEPS.Approximation.RangePolynomialPEPS
 import TNLean.PEPS.Approximation.RangeResetUnitary
 import TNLean.PEPS.Approximation.RangeSquareGroundState
