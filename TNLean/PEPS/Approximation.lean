@@ -184,9 +184,22 @@ import TNLean.PEPS.Approximation.PolynomialPEPSTheorem
 import TNLean.PEPS.Approximation.PreparedMatrixNorm
 import TNLean.PEPS.Approximation.ProductReferenceColumn
 import TNLean.PEPS.Approximation.PurePhysicalCoefficient
+<<<<<<< HEAD
 import TNLean.PEPS.Approximation.RangeAngularInformation
+||||||| 2399382eef
+=======
+<<<<<<< HEAD
+>>>>>>> t72/range-r-information-reset
 import TNLean.PEPS.Approximation.RangeInformationReset
+||||||| dd28f5d117
+=======
+<<<<<<< HEAD
+>>>>>>> t72/range-r-reset-unitary
 import TNLean.PEPS.Approximation.RangeResetUnitary
+||||||| be9dc83d9f
+=======
+import TNLean.PEPS.Approximation.RangePolynomialPEPS
+>>>>>>> t72/range-r-swap-boundary
 import TNLean.PEPS.Approximation.RangeSquareGroundState
 import TNLean.PEPS.Approximation.RankOneBlocks
 import TNLean.PEPS.Approximation.RegionalStates
