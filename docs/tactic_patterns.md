@@ -8543,7 +8543,7 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Seen:** The local comparison in `MPS/AreaLaw/InformationReset.lean`,
   `mutualInformation_cores_le_of_reset_unitary` in
   `PEPS/Approximation/InformationReset.lean`, and
-  `mutualInformation_cores_le_of_sites_reset_unitary` in
+  `mutualInformation_cores_le_of_sites_reset_unitary`, first written in
   `PEPS/Approximation/RangeInformationReset.lean` (2026-10-21).
 - **Existing reuse:** The coordinate isometry, support transport, replica-swap
   marginal identity and entropy continuity theorem are shared already.
