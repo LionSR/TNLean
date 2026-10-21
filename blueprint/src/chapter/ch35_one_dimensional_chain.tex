@@ -2643,6 +2643,41 @@ for an arbitrary finite set of sites and are instantiated here directly.
     Unit norm implies that the chosen approximant is nonzero.
 \end{proof}
 
+% Source: part2a_mps_information.tex, thm:Bshort and sec:shortcut,
+% lines 73--92, at a free accuracy.
+\begin{theorem}[Prescribed accuracy with a polynomial bond bound]
+    \label{thm:chain_polynomial_mps_accuracy_bound}
+    \lean{TNLean.MPS.AreaLaw.exists_isOpenMPS_norm_sub_le_of_error_rpow,
+        TNLean.MPS.AreaLaw.polynomial_floor_exp_le}
+    \leanok
+    \uses{thm:chain_polynomial_mps_accuracy}
+    Under the hypotheses of Theorem~\ref{thm:chain_polynomial_mps_accuracy},
+    for every $0<\varepsilon\le1$ there is a unit open-boundary matrix
+    product state $\Phi$ with $\|\Phi-\Omega\|\le\varepsilon$ whose bond
+    dimension $D$ satisfies
+    \begin{align}
+        D & \le e^{C_{\mathrm{int}}^{\mathrm{pol}}}(2c_0)^{64s}
+        \left(\frac{L}{\varepsilon}\right)^{64s}.
+        \label{eq:chain_polynomial_mps_accuracy_bound}
+    \end{align}
+    The case $\varepsilon=1/L$ is the bond bound $L^{128s}$ of Theorem~B.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:chain_polynomial_mps_accuracy}
+    Take the state of Theorem~\ref{thm:chain_polynomial_mps_accuracy}, with
+    bond dimension $D_\varepsilon$ of
+    (\ref{eq:chain_polynomial_mps_accuracy}). Put $y=2Lc_0/\varepsilon>0$.
+    For $s\ge0$ and every $b\ge y^2$,
+    $\lfloor e^{C+64s\log y}\rfloor\le e^{C+32s\log b}=e^Cb^{32s}$.
+    With $b=y^2$ this gives
+    \begin{align}
+        D_\varepsilon & \le e^{C_{\mathrm{int}}^{\mathrm{pol}}}y^{64s}
+        =e^{C_{\mathrm{int}}^{\mathrm{pol}}}(2c_0)^{64s}
+        \left(\frac{L}{\varepsilon}\right)^{64s}.\notag
+    \end{align}
+\end{proof}
+
 \section{Physical coordinates of the terminal chain registers}
 
 \begin{definition}[Terminal main and auxiliary registers]
