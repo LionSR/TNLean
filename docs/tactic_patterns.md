@@ -35,6 +35,9 @@ abstracted — record why, so it is not re-proposed).
   `MPS/AreaLaw/LogarithmicSeparation.lean`.
 - **Abstraction:** `ChainHamiltonian.norm_bound_nonneg` in
   `MPS/AreaLaw/Hamiltonian.lean`; all three arguments use this lemma.
+  For finite induced domains, `DomainHamiltonian.norm_bound_nonneg` in
+  `MPS/AreaLaw/DomainInteractionBudget.lean` uses the admissible singleton
+  and is reused by the domain per-site budget.
 - **Notes:** An actual site is essential. The empty-chain branch retains
   the original real interaction bound. No positivity hypothesis on the
   interaction bound is added to the logarithmic-separation theorem.
