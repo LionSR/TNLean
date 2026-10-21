@@ -52,9 +52,9 @@ source of that version and opening the named file.
 
 ## Sources used for the one-dimensional area-law comparison
 
-These sources are not vendored, for the same reason as the preceding section:
-all five are posted under the arXiv non-exclusive distribution license, which grants
-no downstream redistribution right. Issues and docstrings cite them by file and
+These sources are not vendored. As in the preceding section, the arXiv license of each
+grants no downstream redistribution right, and no author permission has been recorded
+for them. Issues and docstrings cite them by file and
 line range as `References/<arXiv ID>/...`, a local mirror of the arXiv source
 of the exact version linked below, excluded from the repository by
 `.gitignore`. A reader reproduces a cited line range by downloading the arXiv
@@ -85,6 +85,11 @@ source of that version and opening the named file.
   `References/cond-mat_0508554/proj3new.tex`, with the figures `figAct.eps` and
   `figIt.eps`. Link only;
   [arXiv non-exclusive distribution license 1.0][nonexclusive].
+- [arXiv:0705.0292v2](https://arxiv.org/abs/0705.0292v2): Norbert Schuch, Michael M. Wolf,
+  Frank Verstraete, J. Ignacio Cirac, *Entropy scaling and simulability by Matrix Product
+  States*, Phys. Rev. Lett. 100, 030504 (2008). Mirrored file
+  `References/0705.0292/paper_v2.tex`, with the figure `map.eps`. Link only; arXiv lists
+  the license as assumed 1991-2003.
 
 [nonexclusive]: https://arxiv.org/licenses/nonexclusive-distrib/1.0/
 
