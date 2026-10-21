@@ -1454,6 +1454,56 @@ for an arbitrary finite set of sites and are instantiated here directly.
     $2|\mathcal C_D|\le N_R|\Lambda|$ finishes the estimate.
 \end{proof}
 
+\begin{theorem}[Supported Gaussian averaging on a finite integer domain]
+    \label{thm:domain_supported_gaussian_integral}
+    \lean{TNLean.MPS.AreaLaw.exists_supported_gaussian_integral_domain}\leanok
+    \uses{def:domain_doubled_swapped_hamiltonian,def:qc_site_expectation}
+    For every range $R$ and real interaction bound $J$ there are constants
+    $C,v>0$ with the following property. Let $q\ge1$, let $H$ be an admissible
+    Hamiltonian on a finite integer domain $\Lambda$, let $D\subseteq V$, and
+    let $m\in\mathbb N$. Put $K=\widehat H$, $K'=\widehat H'$ and
+    $Z=\bigcup_{X\in\mathcal C_D}X$. Write $N_m$ for the intrinsic graph
+    neighborhood of radius $m$.
+
+    There is a unitary path $U:\mathbb R\to\mathcal A_{N_m(Z)}$ satisfying
+    \begin{align}
+        U(0)      & =\mathbb 1,\notag                                          \\
+        \dot U(t) & =iE_{N_m(Z)}\bigl(e^{itK'}(K'-K)e^{-itK'}\bigr)U(t).\notag
+    \end{align}
+    The same path works for every set $Q\subseteq V$, operator $W$ supported
+    on $Q$, variance $\eta\ge0$ and cutoff $T\ge0$. For the centered Gaussian
+    probability measure $\gamma_\eta$, define
+    \begin{align}
+        M   & =\int_{[-T,T]}E_{N_m(Q)}(e^{itK'}We^{-itK'})U(t)\,d\gamma_\eta(t),\notag \\
+        M_0 & =\int_{[-T,T]}e^{itK'}We^{-itK}\,d\gamma_\eta(t).\notag
+    \end{align}
+    Then $M$ is supported on $N_m(Q\cup Z)$, has $\|M\|\le\|W\|$, and
+    \begin{align}
+        \|M-M_0\| & \le\|W\|C|\Lambda|^2(1+T)e^{vT-m/2}.\notag
+    \end{align}
+    This includes empty domains, zero variance and zero cutoff.
+    It is the supported averaging step in
+    \cite[Part~IIa]{TNLean2026OneDimensional}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:qc_supported_gaussian_projection_bounds,
+        thm:domain_relative_generator_localization,thm:domain_lieb_robinson_localization,
+        lem:domain_site_norm_budget}
+    Use the constants $a,v$ from the domain generator estimate and put
+    $d=4|J|a(R+1)^2N_R$, $C=a+d$. The actual doubled and swapped operators
+    are Hermitian because their terms are Hermitian.
+    Theorem~\ref{thm:qc_supported_gaussian_projection_bounds} constructs $U$
+    before the observable and averaging data.
+    On $|t|\le T$, the observable projection error is at most
+    $\|W\|a|\Lambda|^2e^{vT-m/2}$ and the generator projection error is at most
+    $d|\Lambda|e^{vT-m/2}$.
+    Both projection regions lie in $N_m(Q\cup Z)$.
+    The common averaging theorem gives support, contraction and the sum of
+    the observable error and $T$ times the generator error. Since
+    $|\Lambda|\le|\Lambda|^2$ for every finite domain, this is bounded by
+    the stated expression. The restricted Gaussian measure is not renormalized.
+\end{proof}
+
 % Auxiliary geometry for logarithmic separation on finite induced domains.
 \begin{theorem}[Intrinsic neighborhoods of order intervals]
     \label{thm:domain_interval_neighborhood}
