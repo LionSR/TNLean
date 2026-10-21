@@ -150,7 +150,7 @@ the weights are exactly `κ / m`. At `R = 1` the squares are the source squares.
 
 Extension of polynomial-PEPS Proposition 4.1, `03-patches.tex`, lines 213–336,
 `eq:patch-energy-bound`, to interactions of range `R` (area-law `eq:hamiltonian`). -/
-theorem LocalHamiltonian.rangeNestedPatch_minimizer_energy_le
+theorem _root_.TNLean.Lattice.LocalHamiltonian.rangeNestedPatch_minimizer_energy_le
     {Λ : Finset (ℤ × ℤ)} {q R : ℕ} {J E₀ Δ : ℝ} (H : LocalHamiltonian Λ q R J)
     (hR : 1 ≤ R) (hJ : 0 ≤ J) (Ψ : Lattice.StateSpace Λ q)
     (hgs : Lattice.IsGappedGroundState Λ q H.operator E₀ Ψ Δ)
