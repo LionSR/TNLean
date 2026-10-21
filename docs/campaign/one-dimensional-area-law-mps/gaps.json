@@ -26,7 +26,7 @@
   {
    "id": "docs/paper-gaps/tnlean_one_dimensional_threshold_truncation.tex",
    "kind": "narrower",
-   "status": "open",
+   "status": "resolved",
    "paper": "chain",
    "result": "Proposition 7.1, sequential truncation in threshold form",
    "issue": 9533,
@@ -36,12 +36,12 @@
     ]
    },
    "title": "Sequential truncation by an eigenvalue threshold",
-   "summary": "Theorem B is proved as stated; the truncation lemma behind it is formalized in the form its proof uses, which differs from the printed form.",
+   "summary": "The former threshold restriction is resolved: the actual sequential product is formalized for every prescribed natural bond dimension <i>D</i> and every ordered orthonormal basis family at the internal cuts.",
    "context": "Proposition 7.1 builds a matrix product state from a vector on the chain by projecting, at each cut, the left part onto a few eigenvectors of its reduced density matrix. The proof of Theorem B applies it with the eigenvalue bounds of the marginal tail bound.",
    "claims": "For every bond dimension <i>D</i>, keeping the <i>D</i> largest eigenvalues at every cut gives a matrix product state of bond dimension at most <i>D</i> whose distance from the vector is at most the sum over the cuts of the square roots of the discarded weights.",
-   "found": "The formal lemma keeps, at each cut, the eigenvalues at least exp(−(<i>S<sub>k</sub></i> + <i>w</i>)), where <i>S<sub>k</sub></i> is the entropy of the left part and <i>w</i> a common slack. It proves that at most exp(<i>S<sub>k</sub></i> + <i>w</i>) eigenvalues are kept and bounds the error by the tail weights beyond <i>w</i>. The bond dimension is then an output of the lemma instead of a free parameter, so the printed statement for an arbitrary <i>D</i> is not formalized.",
-   "impact": "No. The proof of Theorem B in the note uses exactly the threshold form, and Theorem B is formalized without extra hypotheses.",
-   "plan": "Either formalize the printed proposition with the projection onto the <i>D</i> largest eigenvalues, reusing the existing product of projections and its error and rank bounds, or restate the proposition in threshold form.",
+   "found": "The theorem isOpenMPS_sequentialTruncation_prefixBasisProjection treats every vector, all natural chain lengths, local dimensions and prescribed <i>D</i>, and arbitrary ordered orthonormal bases at the internal cuts. The actual reverse-prefix product has an open-boundary matrix product representation of internal bond dimension at most <i>D</i>, with error bounded by the sum of the square roots of the original discarded expectations. Marginal eigenbases ordered by nonincreasing eigenvalue give Proposition 7.1, including every permissible choice within a repeated eigenspace. The separate threshold theorem remains available with its surprisal-tail error; its projectors need not agree with the prescribed-dimension projectors.",
+   "impact": "No. The former prescribed-dimension restriction is resolved. Both the prescribed-dimension and threshold error bounds concern the projected vector before normalization; the normalized approximation is a separate conclusion.",
+   "plan": "Nothing remains for this restriction. Retain the resolved note to distinguish prescribed-dimension leading-span projections, threshold spectral projections and the separate normalization step.",
    "stage": "mps:1"
   },
   {
