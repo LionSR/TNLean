@@ -184,8 +184,11 @@ import TNLean.PEPS.Approximation.PolynomialPEPSTheorem
 import TNLean.PEPS.Approximation.PreparedMatrixNorm
 import TNLean.PEPS.Approximation.ProductReferenceColumn
 import TNLean.PEPS.Approximation.PurePhysicalCoefficient
+import TNLean.PEPS.Approximation.RangeInformationReset
 import TNLean.PEPS.Approximation.RangeNestedPatchEnergy
 import TNLean.PEPS.Approximation.RangeNestedPatchMarginalCloseness
+import TNLean.PEPS.Approximation.RangePolynomialPEPS
+import TNLean.PEPS.Approximation.RangeResetUnitary
 import TNLean.PEPS.Approximation.RangeSquareGroundState
 import TNLean.PEPS.Approximation.RankOneBlocks
 import TNLean.PEPS.Approximation.RegionalStates
@@ -225,6 +228,7 @@ import TNLean.PEPS.Approximation.SquarePatchIntegerCoordinates
 import TNLean.PEPS.Approximation.SquarePatchRelabel
 import TNLean.PEPS.Approximation.SquareZeroFloorOptimizer
 import TNLean.PEPS.Approximation.SupportedPhysicalBufferGaussian
+import TNLean.PEPS.Approximation.SwappedLocalHamiltonian
 import TNLean.PEPS.Approximation.SwappedSquareHamiltonianBoundary
 import TNLean.PEPS.Approximation.SwappedSquareHamiltonianInteraction
 import TNLean.PEPS.Approximation.TagRegisters

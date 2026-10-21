@@ -991,6 +991,54 @@ original open square. We state the two models separately, following
     prefactor in (\ref{eq:polynomial_peps_routed_bond}).
 \end{proof}
 
+
+% Status: auxiliary definition. The polynomial-PEPS source treats only site
+% and nearest-neighbour interactions; this target reads its Theorem 1.1 with
+% interactions of range R.
+% Source: polynomial-PEPS 00-introduction.tex, Theorem 1.1, lines 36--57;
+% area-law Theorem 1.1.
+% Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+\begin{definition}[Polynomial PEPS approximation at range $R$]
+    \label{def:polynomial_peps_range}
+    \lean{TNLean.PEPS.Approximation.RangePolynomialPEPSApproximation}
+    \leanok
+    \uses{def:square_range_ground_states,def:polynomial_peps_model}
+    The polynomial PEPS approximation at range $R$ is the following assertion.
+    For every integer $q\ge2$, every integer $R\ge1$ and all reals
+    $J,\Delta>0$ there are $C,c>0$ such that, for every $L\ge2$, every ground
+    state at range $R$ (Definition~\ref{def:square_range_ground_states}) on
+    the grid of side $L$ has a nonzero PEPS on the original open grid with
+    $D_e\le CL^c$ for every edge $e$ and
+    (\ref{eq:polynomial_peps_vector_error}) for some $\theta\in\mathbb R$.
+    This extends Theorem~1.1 of \cite{OpenAI2026PolynomialPEPS}, which treats
+    only site and nearest-neighbour terms, to terms supported on sets of
+    diameter at most $R$.
+\end{definition}
+
+% Status: auxiliary result. The polynomial-PEPS source treats only site and
+% nearest-neighbour interactions.
+% Source: polynomial-PEPS 00-introduction.tex, Theorem 1.1 and eq:model,
+% lines 36--57.
+% Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+\begin{theorem}[The nearest-neighbour approximation from range one]
+    \label{thm:polynomial_peps_of_range}
+    \lean{TNLean.PEPS.Approximation.polynomialPEPSApproximation_of_range}
+    \leanok
+    \uses{def:polynomial_peps_range,def:polynomial_peps_model}
+    If the polynomial PEPS approximation at range $R$ of
+    Definition~\ref{def:polynomial_peps_range} holds, then for every integer
+    $q\ge2$ and all reals $J,\Delta>0$ there are $C,c>0$ such that, for every
+    $L\ge2$, every unit gapped ground vector, with gap $\Delta$, of a
+    Hamiltonian in the model of Definition~\ref{def:polynomial_peps_model}
+    with term bound $J$ has a PEPS approximation with these constants.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:square_ground_states_range_one}
+    Take the constants of the case $R=1$. Since $J>0$,
+    Theorem~\ref{thm:square_ground_states_range_one} makes every gapped
+    ground vector of the model a ground state at range one.
+\end{proof}
 \begin{definition}[Polygonal lattice templates]
     \label{def:area_law_template}
     \lean{
