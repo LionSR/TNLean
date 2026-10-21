@@ -959,6 +959,44 @@ $\mu_R=2^{v_R-1}$.
     gives (\ref{eq:peps_nested_patch_marginal_closeness}).
 \end{proof}
 
+\begin{theorem}[Marginal closeness at range $R$]
+    \label{thm:peps_range_nested_patch_minimizer_marginal_closeness}
+    \lean{TNLean.PEPS.Approximation.rangeNestedPatch_minimizer_marginal_closeness,
+        TNLean.PEPS.Approximation.exists_uniform_rangeNestedPatch_minimizer_marginal_closeness}
+    \leanok
+    \uses{def:area_law_hamiltonian,def:peps_range_nested_patches,
+        def:peps_regularized_patch_objective,def:peps_patch_canonical_marginal,
+        def:peps_range_patch_energy_constant}
+    Let $q\ge0$ and $R\ge1$ be integers, $J\ge0$ and $\Delta>0$, and let
+    $0<\kappa\le\tfrac12$ satisfy $C_E(q,R,J)\kappa^2\le\Delta/1024$. For every
+    finite induced lattice domain $\Lambda$, every Hamiltonian $H$ on $\Lambda$
+    with one Hermitian term of norm at most $J$ on each nonempty support of
+    graph diameter at most $R$, every unit vector $\Psi$ and real $E_0$ with
+    $H\Psi=E_0\Psi$ and $H-E_0I\ge\Delta(I-|\Psi\rangle\langle\Psi|)$, every
+    centre $c$, and all reals $u\ge0$ and $b>0$, use the patches of
+    Definition~\ref{def:peps_range_nested_patches} with equal weights
+    $a_j=\kappa/m_R$ and input vector $\Psi$. If $x\in\mathcal D$ minimizes
+    $F$ on $\mathcal D$, then every region $X$ of $\Lambda$ satisfies
+    $\|\rho_X-\rho_X^{\Psi}\|_1\le\tfrac1{16}$, where $\rho_X$ is the marginal
+    of $\widehat\Psi(x)$. Such a $\kappa$ exists and depends only on $q$, $R$,
+    $J$ and $\Delta$; when $C_E(q,R,J)>0$ the filter exponent $\kappa_R$ of
+    Definition~\ref{def:peps_range_patch_filter_exponent} is one. This extends
+    Theorem~\ref{thm:peps_nested_patch_minimizer_marginal_closeness} to
+    interactions of range $R$ and is not in the source.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_range_nested_patch_minimizer_energy,
+        lem:peps_range_patch_energy_parameter_choice,
+        thm:peps_nested_patch_minimizer_marginal_closeness_explicit}
+    Theorem~\ref{thm:peps_range_nested_patch_minimizer_energy} and the choice
+    of $\kappa$ give $\operatorname{Re}\langle\phi,H\phi\rangle-E_0\le
+        \Delta/1024$, and the full-system gap converts this into the marginal
+    bound, as in
+    Theorem~\ref{thm:peps_nested_patch_minimizer_marginal_closeness_explicit}.
+    If $C_E(q,R,J)=0$, take $\kappa=\tfrac12$.
+\end{proof}
+
 \begin{definition}[The radius exponent at an area-law constant]
     \label{def:peps_nested_patch_radius_exponent}
     \lean{TNLean.PEPS.Approximation.nestedPatchRadiusExponent}
