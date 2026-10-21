@@ -63,10 +63,35 @@ the cores to an inverse power of the system size. This is Lemma~3.3 of
     has no mutual information with a region of the first.
 \end{proof}
 
+\begin{theorem}[The entropy comparison of the reset on any finite set of sites]
+    \label{thm:peps_reset_cores_entropy_sites}
+    \lean{TNLean.PEPS.Approximation.mutualInformation_cores_le_of_sites_reset_unitary}
+    \leanok
+    \uses{def:peps_frame_sheet_swap}
+    Let $q\ge1$, let $\Omega$ be a unit vector on a finite set of sites $V$, let
+    $A,C\subseteq V$ be disjoint, and let $A_0\subseteq A$, $C_0\subseteq C$.
+    Let $U$ be a unitary on the paired sites of $V$, supported on a set
+    containing no site of $A_0\cup C_0$, with $\|U\Psi-\Phi\|\le\delta$ for
+    $\Psi=\Omega\otimes\Omega$ and $\Phi=F_A\Psi$. Then
+    \begin{align*}
+        I_\Omega(A_0:C_0) & \le8\sqrt\delta\,\log(e\,q^{|A_0|}).
+    \end{align*}
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_reset_paired_support,thm:peps_reset_exchanged_cores}
+    By Theorem~\ref{thm:peps_reset_paired_support}, $U$ is a unitary on the two
+    replicas acting away from the cores of the first replica, so $U\Psi$ and
+    $\Psi$ have the same joint core marginal, with mutual information
+    $I_\Omega(A_0:C_0)$. The cores of $\Phi$ are uncorrelated by
+    Theorem~\ref{thm:peps_reset_exchanged_cores}. Continuity of mutual
+    information, with only the dimension $q^{|A_0|}$ of the first core, gives the
+    bound.
+\end{proof}
+
 \begin{theorem}[The entropy comparison of the reset]
     \label{thm:peps_reset_cores_entropy}
-    \lean{TNLean.PEPS.Approximation.reindex_rectangle_sumArrow_unitary,
-        TNLean.PEPS.Approximation.mutualInformation_cores_le_of_reset_unitary,
+    \lean{TNLean.PEPS.Approximation.mutualInformation_cores_le_of_reset_unitary,
         TNLean.Lattice.mutualInformation_le_of_supported_unitary,
         TNLean.Lattice.exists_one_kronecker_unitary_of_mem_supportedOperators}
     \leanok
@@ -82,14 +107,10 @@ the cores to an inverse power of the system size. This is Lemma~3.3 of
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:peps_reset_paired_support,thm:peps_reset_exchanged_cores}
-    By Theorem~\ref{thm:peps_reset_paired_support}, $U$ is a unitary on the two
-    replicas acting away from the cores of the first replica, so $U\Psi$ and
-    $\Psi$ have the same joint core marginal, with mutual information
-    $I_\Omega(R_0:C_0)$. The cores of $\Phi$ are uncorrelated by
-    Theorem~\ref{thm:peps_reset_exchanged_cores}. Continuity of mutual
-    information, with only the dimension $q^{|R_0|}$ of the first core, gives the
-    bound.
+    \uses{thm:peps_reset_cores_entropy_sites}
+    Relabel the sites of the open square by the points of the square and apply
+    Theorem~\ref{thm:peps_reset_cores_entropy_sites}. The relabelling preserves
+    the support of $U$, the vectors $\Psi$ and $\Phi$, and their norms.
 \end{proof}
 
 \begin{theorem}[The entropy cost of the reset]
@@ -247,20 +268,6 @@ range-one statements above are unchanged.
     site lies outside both regions, and a site of $Z_R(A)$ is within distance
     $R$ of a site of $A$ and of a site outside $A$, which lies outside $C$
     or outside $A$ as needed.
-\end{proof}
-
-\begin{theorem}[The entropy comparison of the reset on any finite set of sites]
-    \label{thm:peps_reset_cores_entropy_sites}
-    \lean{TNLean.PEPS.Approximation.mutualInformation_cores_le_of_sites_reset_unitary}
-    \leanok
-    The conclusion of Theorem~\ref{thm:peps_reset_cores_entropy} holds on the
-    paired sites of any finite set.
-\end{theorem}
-\begin{proof}
-    \leanok
-    \uses{thm:peps_reset_paired_support,thm:peps_reset_exchanged_cores}
-    The proof of Theorem~\ref{thm:peps_reset_cores_entropy} uses no property of
-    the square.
 \end{proof}
 
 \begin{theorem}[Information reset at range $R$]

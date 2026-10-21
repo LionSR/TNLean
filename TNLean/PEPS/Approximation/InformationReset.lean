@@ -30,8 +30,9 @@ physical dimension `q^(L^2)` of a core.
 
 ## Main statements
 
-* `TNLean.PEPS.Approximation.reindex_rectangle_sumArrow_unitary`: the reset unitary on paired
-  sites of the open square, read on the two replicas.
+* `TNLean.PEPS.Approximation.mutualInformation_cores_le_of_sites_reset_unitary`: the entropy
+  comparison of the reset on the paired sites of any finite set; the square version
+  `TNLean.PEPS.Approximation.mutualInformation_cores_le_of_reset_unitary` follows by relabelling.
 * `TNLean.PEPS.Approximation.resetWidth`, `TNLean.PEPS.Approximation.resetThreshold`: the
   width `C_p` and the size threshold `L₀`, with the closed form
   `C_p = 1280 e² (J/Δ)(2p + 40) + 4p + 52` (`TNLean.PEPS.Approximation.resetWidth_eq`).
@@ -155,42 +156,6 @@ theorem notMem_resetSupport {L : ℕ} {R C R₀ C₀ : Finset (SquareLatticeVert
           (fun _ ↦ Finset.disjoint_left.mp hRC h₂)
 
 end Geometry
-
-section Transport
-
-/-- **The reset unitary on two replicas of the square.** A unitary on the paired sites of the
-open square, supported on `B`, is a unitary on the two replicas, supported on both replicas
-of the sites of `B`. -/
-theorem reindex_rectangle_sumArrow_unitary {L q : ℕ}
-    (B : Finset (Site (rectangularDomain L L)))
-    {U : Matrix (Lattice.Configuration (rectangularDomain L L) (q * q))
-      (Lattice.Configuration (rectangularDomain L L) (q * q)) ℂ}
-    (hUu : U ∈ unitaryGroup _ ℂ) (hUs : U ∈ supportedOperators (q * q) (B : Set _)) :
-    let Pe := (Equiv.sumArrowEquivProdArrow (SquareLatticeVertex L L) (SquareLatticeVertex L L)
-      (Fin q)).trans ((sitePairConfigurationEquiv (SquareLatticeVertex L L) q q).trans
-        (rectangleConfigurationEquiv L L (q * q)))
-    let S := B.image (rectangleSiteEquiv L L).symm
-    reindex Pe.symm Pe.symm U ∈ supportedOperators q ((S.disjSum S : Finset _) : Set _) ∧
-      (reindex Pe.symm Pe.symm U)ᴴ * reindex Pe.symm Pe.symm U = 1 := by
-  intro Pe S
-  set a := rectangleSiteEquiv L L
-  set e := rectangleConfigurationEquiv L L (q * q)
-  have hU'eq : reindex Pe.symm Pe.symm U =
-      reindex (sumArrowSitePair (SquareLatticeVertex L L) q).symm
-        (sumArrowSitePair (SquareLatticeVertex L L) q).symm (reindex e.symm e.symm U) := by
-    ext x y
-    rfl
-  have hU₀ : reindex e.symm e.symm U ∈ supportedOperators (q * q) (S : Set _) := by
-    have h₀ : reindex e.symm e.symm U = embedOp a.symm U := by
-      rw [embedOp_equiv_eq_reindex]
-      rfl
-    rw [h₀, Finset.coe_image]
-    exact embedOp_mem_supportedOperators_image a.symm.injective hUs
-  refine ⟨?_, (Matrix.mem_unitaryGroup_iff').mp (reindex_mem_unitaryGroup Pe.symm U hUu)⟩
-  rw [hU'eq]
-  exact reindex_sumArrow_sitePair_mem_supportedOperators q hU₀
-
-end Transport
 
 /-- **The entropy comparison of the reset on any finite set of sites.** Let `U` be a unitary on
 the paired sites of a finite set `V`, supported on a set `B` containing no site of the cores
