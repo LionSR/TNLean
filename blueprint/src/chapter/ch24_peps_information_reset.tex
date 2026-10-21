@@ -206,19 +206,29 @@ range-one statements above are unchanged.
     \label{def:peps_reset_width_range}
     \lean{TNLean.PEPS.Approximation.rangeResetWidth,
         TNLean.PEPS.Approximation.rangeResetThreshold,
-        TNLean.PEPS.Approximation.rangeResetWidth_pos,
-        TNLean.PEPS.Approximation.card_rectangularDomain}
+        TNLean.PEPS.Approximation.rangeResetWidth_pos}
     \leanok
     \uses{def:peps_reset_constants_range}
     For integers $q,R\ge0$ and real numbers $J$, $\Delta$ and $p$, with $K_R$
     and $C_{U,R}$ as in Definition~\ref{def:peps_reset_constants_range}, put
     \begin{align*}
-        C_{p,R}(J,\Delta)   & =K_R(J,\Delta,2p+10)+1+R,                                       \\
-        L_{0,R}(q,J,\Delta) & =\max\bigl\{1,8\sqrt{C_{U,R}(J,\Delta,2p+10)}(1+\log q)\bigr\}.
+        C_{p,R}(J,\Delta)     & =K_R(J,\Delta,2p+10)+1+R,                                       \\
+        L_{0,R}(q,J,\Delta,p) & =\max\bigl\{1,8\sqrt{C_{U,R}(J,\Delta,2p+10)}(1+\log q)\bigr\}.
     \end{align*}
     If $J\ge0$, $\Delta>0$ and $p>0$, then $C_{p,R}>0$. The summand $R$
     accounts for the reach of the supports crossing a region.
 \end{definition}
+
+\begin{lemma}[The number of sites of the square]
+    \label{lem:peps_square_site_count}
+    \lean{TNLean.PEPS.Approximation.card_rectangularDomain}
+    \leanok
+    The $L\times L$ square has $L^2$ sites.
+\end{lemma}
+\begin{proof}
+    \leanok
+    It is the product of two intervals of $L$ integers.
+\end{proof}
 
 \begin{theorem}[The reset support avoids the cores at range $R$]
     \label{thm:peps_reset_support_cores_range}
@@ -232,6 +242,7 @@ range-one statements above are unchanged.
 \end{theorem}
 \begin{proof}
     \leanok
+    \uses{def:peps_crossing_supports}
     A walk of length $\ell$ moves the sup-distance by at most $\ell$. A buffer
     site lies outside both regions, and a site of $Z_R(A)$ is within distance
     $R$ of a site of $A$ and of a site outside $A$, which lies outside $C$
@@ -242,13 +253,12 @@ range-one statements above are unchanged.
     \label{thm:peps_reset_cores_entropy_sites}
     \lean{TNLean.PEPS.Approximation.mutualInformation_cores_le_of_sites_reset_unitary}
     \leanok
-    \uses{thm:peps_reset_exchanged_cores}
     The conclusion of Theorem~\ref{thm:peps_reset_cores_entropy} holds on the
     paired sites of any finite set.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:peps_reset_paired_support}
+    \uses{thm:peps_reset_paired_support,thm:peps_reset_exchanged_cores}
     The proof of Theorem~\ref{thm:peps_reset_cores_entropy} uses no property of
     the square.
 \end{proof}
@@ -261,7 +271,7 @@ range-one statements above are unchanged.
     \uses{def:area_law_hamiltonian,def:peps_reset_width_range}
     Fix integers $q\ge1$ and $R\ge0$, and real numbers $J\ge0$, $\Delta>0$
     and $p>0$, and put $C_p=C_{p,R}(J,\Delta)$ and
-    $L_0=L_{0,R}(q,J,\Delta)$. Let $L\ge L_0$, let $H$ be a Hamiltonian of
+    $L_0=L_{0,R}(q,J,\Delta,p)$. Let $L\ge L_0$, let $H$ be a Hamiltonian of
     range $R$ on the $L\times L$ square with Hermitian terms of norm at most
     $J$, and let $\Omega$ be a normalized eigenvector with the full-system gap
     $\Delta$. Let $A,C$ be disjoint with $I_\Omega(A:C)\le b$, $b\ge0$. If the
@@ -277,7 +287,8 @@ range-one statements above are unchanged.
 \begin{proof}
     \leanok
     \uses{thm:peps_reset_unitary_range,thm:peps_reset_support_cores_range,
-        thm:peps_reset_cores_entropy_sites,thm:peps_reset_entropy_scalar}
+        thm:peps_reset_cores_entropy_sites,thm:peps_reset_entropy_scalar,
+        lem:peps_square_site_count}
     The proof of Theorem~\ref{thm:peps_information_reset_explicit} applies,
     with the unitary of Theorem~\ref{thm:peps_reset_unitary_range} at
     $r=2p+10$. With $B=1+b+\log L\ge1$, its support radius satisfies
@@ -299,6 +310,6 @@ range-one statements above are unchanged.
     \leanok
     \uses{thm:peps_information_reset_range,def:peps_reset_width_range}
     Take $C_p=C_{p,R}(J,\Delta)$, which is positive, and
-    $L_0=L_{0,R}(q,J,\Delta)$ in
+    $L_0=L_{0,R}(q,J,\Delta,p)$ in
     Theorem~\ref{thm:peps_information_reset_range}.
 \end{proof}
