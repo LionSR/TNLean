@@ -7,41 +7,21 @@
     \uses{thm:peps_regular_weighted_bond_contraction,
         def:peps_regular_weighted_open_contraction,
         def:peps_regular_swept_patch}
-    Let $G$ be finite, and let the original site coefficients be invariant
-    under simultaneous left translation of their incident labels. Orient each
-    edge from its smaller endpoint $t(e)$ to its larger endpoint $h(e)$.
-    For a vertex gauge $\ell$, put
-    \[
+    For finite $G$, left-translation-invariant site coefficients, edges oriented from smaller endpoint $t(e)$ to larger endpoint $h(e)$, and a vertex gauge $\ell$, define
+    \begin{align}
         u'_e=\ell_{h(e)}^{-1}u_e\ell_{t(e)},\qquad
         (L\eta)_e=\ell_{t(e)}\eta_e,\qquad
-        \theta'_e=\ell_{t(e)}^{-1}\theta_e.
-    \]
-    The weighted open coefficient satisfies
-    \[
-        \Psi_R(u,F;\theta)=\Psi_R(u',F\circ L;\theta').
-    \]
-    The weight $F$ may correlate several edges. For independent diagonal
-    edge weights, the same equality holds for the closed contraction
-    with bond matrices $U_{u_e}\operatorname{diag}(f_e)$; the new weight is
-    $f'_e(t)=f_e(\ell_{t(e)}t)$.
-
-    In these auxiliary contraction identities for
-    \cite{Schuch2010PEPS} (lines 2505--2535 and 2560--2581),
-    choosing $\ell=k^{-1}$ on a swept set $S$ and $1$ outside
-    when the first selected edge has its tail in $S$ and the second does not
-    transforms the correlated weight as
-    \[
-        \chi(p\eta_1^{-1}\eta_0)
-        \longmapsto\chi(p\eta_1^{-1}k^{-1}\eta_0),
-    \]
-    without expanding character diagonals into group matrices.
+        \theta'_e=\ell_{t(e)}^{-1}\theta_e. \label{eq:vertex_gauge_transform}
+    \end{align}
+    Then the weighted open contraction satisfies
+    \begin{align}
+        \Psi_R(u,F;\theta)=\Psi_R(u',F\circ L;\theta'), \label{eq:weighted_open_gauge_invariance}
+    \end{align}
+    and for independent diagonal weights $U_{u_e}\operatorname{diag}(f_e)$, the closed contraction is preserved under $u\mapsto u'$ and $f_e(t)\mapsto f'_e(t)=f_e(\ell_{t(e)}t)$.
+    In particular (\cite{Schuch2010PEPS}, lines 2505--2535 and 2560--2581), setting $\ell|_S=k^{-1}$ and $\ell|_{S^c}=1$ for $t(e_0)\in S$ and $t(e_1)\notin S$ transforms $\chi(p\eta_1^{-1}\eta_0)\mapsto\chi(p\eta_1^{-1}k^{-1}\eta_0)$.
 \end{theorem}
 \begin{proof}\leanok
-    Changing each summed tail label to $\ell_{t(e)}^{-1}\eta_e$
-    turns the head label into $\ell_{h(e)}^{-1}u_e\eta_e$.
-    Local translation invariance cancels the vertex factors, and the
-    restriction of this bijection to crossing edges gives $\theta'$.
-    The scalar weight is retained in the same finite sum.
+    Substituting $\eta_e\mapsto\ell_{t(e)}^{-1}\eta_e$ maps the head label $u_e\eta_e\mapsto\ell_{h(e)}^{-1}u_e'\eta_e$ and boundary label $\theta_e\mapsto\theta'_e$, while local left-translation invariance cancels the vertex factors $\ell_v^{-1}$, yielding (\ref{eq:weighted_open_gauge_invariance}).
 \end{proof}
 
 \begin{definition}[The charge edge in the native string-deformation figure]
@@ -49,10 +29,7 @@
     \lean{TNLean.PEPS.torusSweptStringChargeEdge}
     \leanok
     \uses{def:peps_torus_swept_string_patch}
-    At a translated reference vertex $v=(x,y)$, the central charge diagonal of
-    \cite{Schuch2010PEPS} (lines 2569--2581 and the virtual charge--flux
-    deformation figure) is the native
-    horizontal bond $e_c$ joining $(x+1,y+1)$ to $(x+2,y+1)$, equipped with the ordered edge orientation.
+    At $v=(x,y)$, define the central charge bond $e_c$ (\cite{Schuch2010PEPS}, lines 2569--2581) as the ordered native horizontal edge joining $(x+1,y+1)$ to $(x+2,y+1)$.
 \end{definition}
 
 \begin{theorem}[The native charge--flux deformation]
@@ -63,28 +40,8 @@
     \uses{thm:peps_regular_weighted_gauge_transport,
         def:peps_torus_charge_string_edge,
         thm:peps_torus_swept_string_transport}
-    Let the torus periods satisfy $w\geq5$ and $H\geq4$, and let the native
-    four-leg tensor be regular $G$-isometric. Use the initial flux
-    string $u^{(0)}$ with label $k$ and no second flux string. Insert the
-    diagonal $\operatorname{diag}(\chi(pt))$ on $e_c$ and unit weights
-    on the other bonds. Its original-spin contraction equals the
-    contraction with the swept string $u^{(j)}$, for either displayed
-    sweep $j=1,2$, and with diagonal
-    \[
-        \operatorname{diag}\bigl(\chi(pk^{-1}t)\bigr)
-    \]
-    on the same charge edge. This holds at every translated position,
-    including both periodic seams, and for every scalar function $\chi$.
-    When $\chi$ is a character its type is unchanged.
-
-    This is the gauge-presentation identity of the virtual figure
-    in \cite{Schuch2010PEPS}, lines 2560--2581. It does not by itself
-    identify a physical crossing route or a reunion experiment with a braid.
+    On a torus with periods $w\ge 5$ and $H\ge 4$ and a regular $G$-isometric four-leg tensor, at every position $v$ (including across both seams) and for any scalar function $\chi$ and $j\in\{1,2\}$, the closed contraction with initial flux string $u^{(0)}_k$ and diagonal weight $\operatorname{diag}(\chi(pt))$ on $e_c$ equals the closed contraction with swept flux string $u^{(j)}_k$ and diagonal weight $\operatorname{diag}(\chi(pk^{-1}t))$ on $e_c$ (realizing the virtual gauge identity of \cite{Schuch2010PEPS}, lines 2560--2581, without identifying a physical braid or reunion protocol).
 \end{theorem}
 \begin{proof}\leanok
-    Since both endpoints of $e_c$ belong to each displayed swept set,
-    its tail gauge is $k^{-1}$ in either native orientation;
-    native regular $G$-isometry gives local translation invariance,
-    so the weighted gauge identity with unit diagonal weights on all other bonds
-    and the swept bond assignment yields the equality.
+    Since both endpoints of $e_c$ lie in the swept set $S_j$ of Theorem~\ref{thm:peps_torus_swept_string_transport}, $\ell_{t(e_c)}=k^{-1}$ in either seam orientation; applying Theorem~\ref{thm:peps_regular_weighted_gauge_transport} with (\ref{eq:vertex_gauge_transform}) gives the equality.
 \end{proof}

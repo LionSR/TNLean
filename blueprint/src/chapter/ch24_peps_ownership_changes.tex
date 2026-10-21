@@ -33,21 +33,19 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
         TNLean.PEPS.EncodedFrame.exists_threeSplit_eq_kronecker_one,
         TNLean.PEPS.EncodedFrame.exists_threeSplit_eq_one_kronecker_kronecker_one}
     \leanok
-    Identify $\mathcal H_\Lambda$ with $\mathcal H_S\otimes\mathcal
-        H_{\Lambda\setminus S}$, and, for disjoint $T$ and $E$ with
-    $U=\Lambda\setminus(T\cup E)$, with $\mathcal H_T\otimes\mathcal H_E\otimes
-        \mathcal H_U$. The latter identification reads a configuration $c$ as
-    $((c|_T,c|_E),c|_U)$. An operator acting on the sites of $S$ is
-    $A'\otimes\id$, an
-    operator acting on a set disjoint from $S$ is $\id\otimes A'$, an operator
-    acting on $T\cup E$ is $A'\otimes\id_U$, and an operator acting on a subset
-    of $E$ is $\id_T\otimes A'\otimes\id_U$.
+    Under the identifications $\mathcal H_\Lambda\simeq\mathcal H_S\otimes\mathcal H_{\Lambda\setminus S}$
+    and, for disjoint $T,E\subseteq\Lambda$ with $U=\Lambda\setminus(T\cup E)$,
+    $\mathcal H_\Lambda\simeq\mathcal H_T\otimes\mathcal H_E\otimes\mathcal H_U$
+    via $c\mapsto((c|_T,c|_E),c|_U)$, an operator $A$ supported on $S$ has the
+    form $A'\otimes\id_{\Lambda\setminus S}$, on a set disjoint from $S$ has
+    the form $\id_S\otimes A'$, on $T\cup E$ has the form $A'\otimes\id_U$, and
+    on a subset of $E$ has the form $\id_T\otimes A'\otimes\id_U$.
 \end{lemma}
 
 \begin{proof}\leanok
-    A product operator $\bigotimes_xm_x$ is, in these coordinates, the tensor
-    product of its restrictions to the parts, and $m_x=\id$ off the support.
-    Both sides are linear in the operator.
+    Each product operator $\bigotimes_{x\in\Lambda}m_x$ with $m_x=\id$ off the
+    support factors across the tensor decomposition, and the claim extends by
+    linearity.
 \end{proof}
 
 \begin{lemma}[Splitting consequence on a sheet]
@@ -63,14 +61,15 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     \leanok
     \uses{lem:peps_frame_split_forms}
     Let $T,E\subseteq\Lambda$ be disjoint, $U=\Lambda\setminus(T\cup E)$,
-    $\lVert\Omega\rVert=1$ and $b=I_\Omega(T:E)$. There are finite-dimensional
-    spaces $\mathcal B_T,\mathcal B_E$, an isometry
-    $V\colon\mathcal H_U\to\mathcal B_T\otimes\mathcal B_E$ and unit vectors
-    $s\in\mathcal H_T\otimes\mathcal B_T$, $s'\in\mathcal H_E\otimes\mathcal
-        B_E$ with
+    $\lVert\Omega\rVert=1$, and $b=I_\Omega(T:E)$. There exist
+    finite-dimensional spaces $\mathcal B_T,\mathcal B_E$, an isometry
+    $V\colon\mathcal H_U\to\mathcal B_T\otimes\mathcal B_E$, and unit vectors
+    $s\in\mathcal H_T\otimes\mathcal B_T$, $s'\in\mathcal H_E\otimes\mathcal B_E$
+    such that
     \begin{align}
         \lVert(\id_{TE}\otimes V)\Omega-s\otimes s'\rVert
         \le\sqrt{2(1-e^{-b/2})}\le\sqrt b .
+        \label{eq:peps_frame_splitting}
     \end{align}
     In particular, for the sheet splitting of
     \cite[Lemma~6.4]{OpenAI2026PolynomialPEPS} (\texttt{05-frames.tex},
@@ -80,11 +79,10 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 \end{lemma}
 
 \begin{proof}\leanok
-    The relative entropy of $\rho_{TE}$ with respect to $\rho_T\otimes\rho_E$
-    is $b$. The splitting estimate for a unit vector on three systems, with
-    $\mathcal B_T=\mathcal H_T$ and $\mathcal B_E=\mathcal H_E\oplus\mathcal
-        H_U$, applies in the coordinates $\mathcal H_T\otimes\mathcal
-        H_E\otimes\mathcal H_U$.
+    Since $D(\rho_{TE}\,\|\,\rho_T\otimes\rho_E)=I_\Omega(T:E)=b$, applying the
+    tripartite pure-state splitting bound to $\Omega\in\mathcal H_T\otimes\mathcal H_E\otimes\mathcal H_U$
+    (Lemma~\ref{lem:peps_frame_split_forms}) with $\mathcal B_T=\mathcal H_T$
+    and $\mathcal B_E=\mathcal H_E\oplus\mathcal H_U$ yields~(\ref{eq:peps_frame_splitting}).
 \end{proof}
 
 \subsection{Homogeneous birth and death}
@@ -100,19 +98,17 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
         TNLean.PEPS.EncodedFrame.pairSource_mul_conjTranspose_apply}
     \leanok
     \uses{lem:peps_frame_splitting}
-    With the data of the splitting lemma put $\mathcal V=\id_{TE}\otimes V$ and
-    let $S\colon\mathcal H_E\otimes\mathcal B_E\to\mathcal
-        H_{TE}\otimes\mathcal B_T\otimes\mathcal B_E$ insert $s$ on
-    $T\mathcal B_T$. The birth map is
+    With the splitting data $(V,s,s')$ of Lemma~\ref{lem:peps_frame_splitting},
+    set $\mathcal V=\id_{TE}\otimes V$ and let
+    $S\colon\mathcal H_E\otimes\mathcal B_E\to\mathcal H_{TE}\otimes\mathcal B_T\otimes\mathcal B_E$
+    act by $x\mapsto s\otimes x$. The birth map is
     \begin{align}
         B=\mathcal V^\dagger SS^\dagger\mathcal V
         =\mathcal V^\dagger\bigl(\ket s\bra s_{T\mathcal B_T}
         \otimes\id_{E\mathcal B_E}\bigr)\mathcal V
+        \label{eq:peps_frame_birth_map}
     \end{align}
-    (\texttt{05-frames.tex}, equation (birth-map), lines 414--426). It is the
-    effect $S^\dagger\mathcal V$, which applies $V$ on $U$ and contracts
-    $T\mathcal B_T$ with $\bra s$, followed by its adjoint, which inserts
-    $s$ and applies $V^\dagger$.
+    (\texttt{05-frames.tex}, equation (birth-map), lines 414--426).
 \end{definition}
 
 \begin{lemma}[Properties of the birth map]
@@ -131,23 +127,24 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
         TNLean.PEPS.EncodedFrame.commute_sheetBirthOp}
     \leanok
     \uses{def:peps_frame_birth_map}
-    The map $B$ is a Hermitian contraction, it acts as the identity on
-    $\mathcal H_E$, so it commutes with every operator acting on a subset of
-    $E$, and for every vector $\psi$
+    The map $B$ (Definition~\ref{def:peps_frame_birth_map}) satisfies
+    $B^\dagger=B$, $\|B\|\le 1$, $B=\id_E\otimes K^\dagger K$ with
+    $K=\bra s(\id_T\otimes V)$ (so $[B,A]=0$ for any $A$ supported in $E$), and
+    for every $\psi\in\mathcal H_\Lambda$,
     \begin{align}
         \lVert(B-\id)\psi\rVert\le\lVert\mathcal V\psi-s\otimes s'\rVert .
+        \label{eq:peps_frame_birth_map_error}
     \end{align}
 \end{lemma}
 
 \begin{proof}\leanok
-    Since $s$ is a unit vector, $S^\dagger S=\id$, so $\Pi=SS^\dagger$ is an
+    Since $\lVert s\rVert=1$, $S^\dagger S=\id$, so $\Pi=SS^\dagger$ is an
     orthogonal projection with $\Pi(s\otimes s')=s\otimes s'$. As
     $\mathcal V^\dagger\mathcal V=\id$,
-    $(B-\id)\psi=\mathcal V^\dagger(\Pi-\id)(\mathcal V\psi-s\otimes s')$, and
-    $\id-\Pi$ is a projection. In the coordinates
-    $\mathcal H_E\otimes(\mathcal H_T\otimes\mathcal H_U)$ the effect
-    $S^\dagger\mathcal V$ is $\id_E\otimes K$ with $K=\bra s(\id_T\otimes V)$,
-    so $B=\id_E\otimes K^\dagger K$.
+    $(B-\id)\psi=\mathcal V^\dagger(\Pi-\id)(\mathcal V\psi-s\otimes s')$,
+    giving~(\ref{eq:peps_frame_birth_map_error}). On
+    $\mathcal H_E\otimes(\mathcal H_T\otimes\mathcal H_U)$,
+    $S^\dagger\mathcal V=\id_E\otimes K$, so $B=\id_E\otimes K^\dagger K$.
 \end{proof}
 
 \begin{lemma}[Operators passing through an encoding]
@@ -157,16 +154,17 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
         TNLean.PEPS.EncodedFrame.norm_act_one_kronecker_refVec_sub_le}
     \leanok
     \uses{def:peps_frame}
-    If a sheet operator $B$ commutes with the sheet part of the encoding of a
-    frame on every tag configuration, then $(\id_{\rm tags}\otimes
-        B)K_{\mathcal F}=K_{\mathcal F}B$ and
-    $\lVert(\id\otimes B)\Omega_{\mathcal F}-\Omega_{\mathcal F}\rVert
-        \le\lVert B\Omega-\Omega\rVert$.
+    If a sheet operator $B$ commutes with the sheet part of $K_{\mathcal F}$
+    (Definition~\ref{def:peps_frame}) on every tag configuration, then
+    $(\id_{\rm tags}\otimes B)K_{\mathcal F}=K_{\mathcal F}B$ and
+    $\lVert(\id_{\rm tags}\otimes B)\Omega_{\mathcal F}-\Omega_{\mathcal F}\rVert\le\lVert B\Omega-\Omega\rVert$.
 \end{lemma}
 
 \begin{proof}\leanok
-    Comparing the two sides on each tag gives the intertwining identity, and
-    contractivity of the encoding gives the norm bound.
+    Commutation on each tag configuration gives
+    $(\id_{\rm tags}\otimes B)K_{\mathcal F}=K_{\mathcal F}B$, and
+    $\|K_{\mathcal F}\|\le 1$ gives the norm bound on
+    $\Omega_{\mathcal F}=K_{\mathcal F}\Omega$.
 \end{proof}
 
 \begin{definition}[Birth partition]
@@ -177,12 +175,14 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
         TNLean.PEPS.EncodedFrame.Frame.outerHoles_subset_birthEnv}
     \leanok
     \uses{def:peps_frame}
-    For an encoded frame $\mathcal F$, a party $P_\circ$ and a set $T$ of
-    sites, let $\mathcal F'$ be the frame in which the site registers of $T$
-    are owned by $Q_\circ$, with every hole, encoding and tag owner kept, and
+    For an encoded frame $\mathcal F$ (Definition~\ref{def:peps_frame}), a
+    party $P_\circ$, and $T\subseteq\Lambda$, let $\mathcal F'$ reassign the
+    site owners on $T$ to $Q_\circ$ (preserving all other site, hole, and tag
+    data), and set
     \begin{align}
-        E=\{x:\text{the site owner of }x\neq P_\circ\}\cup H^+(\mathcal F),
+        E=\{x\in\Lambda:\text{site owner of }x\text{ in }\mathcal F\neq P_\circ\}\cup H^+(\mathcal F),
         \qquad U=\Lambda\setminus(T\cup E)
+        \label{eq:peps_frame_birth_partition}
     \end{align}
     (\texttt{05-frames.tex}, equation (birth-partition), lines 400--405).
 \end{definition}
@@ -194,17 +194,15 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
         TNLean.PEPS.EncodedFrame.Frame.disjoint_birthEnv}
     \leanok
     \uses{def:peps_frame_birth_partition}
-    Every register outside $E$ is owned by $P_\circ$ in $\mathcal F$, and by
-    $P_\circ$ or $Q_\circ$ in $\mathcal F'$. If $T$ is owned by $P_\circ$ and
-    avoids every outer hole footprint, then $T$ and $E$ are disjoint
-    (\texttt{05-frames.tex}, lines 397--405).
+    In Definition~\ref{def:peps_frame_birth_partition}, every site
+    $x\in\Lambda\setminus E$ has owner $P_\circ$ in $\mathcal F$, owner
+    $Q_\circ$ if $x\in T$, and owner $P_\circ$ if $x\in U$ in $\mathcal F'$. If
+    $T$ is owned by $P_\circ$ in $\mathcal F$ and $T\cap H^+(\mathcal F)=\varnothing$,
+    then $T\cap E=\varnothing$ (\texttt{05-frames.tex}, lines 397--405).
 \end{lemma}
 
 \begin{proof}\leanok
-    A register outside $E$ has old owner $P_\circ$ by the definition of $E$;
-    in $\mathcal F'$ its owner is $Q_\circ$ if it lies in $T$ and its old
-    owner otherwise. A register of $T$ has old owner $P_\circ$ and lies in no
-    outer hole footprint, so it is in neither part of $E$.
+    Follows directly from~(\ref{eq:peps_frame_birth_partition}).
 \end{proof}
 
 \begin{theorem}[Homogeneous birth and death: sheet map]
@@ -214,35 +212,33 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     \leanok
     \uses{lem:peps_frame_birth_map,lem:peps_frame_pass_encoding,
         def:peps_frame_birth_partition,lem:peps_frame_birth_partition_owners}
-    In an encoded frame $\mathcal F$, let $T$ be owned by $P_\circ$ and
-    disjoint from every outer hole footprint, let $E$ be as in the birth
-    partition, and let $\lVert\Omega\rVert=1$. If $I_\Omega(T:E)\le L^{-60}$,
-    the birth map $B$ of splitting data with error at most $L^{-30}$ is a
-    Hermitian contraction, acts as the identity on $E$ and on all tags,
-    satisfies $(\id\otimes B)K_{\mathcal F}=K_{\mathcal F'}B$, and
+    In an encoded frame $\mathcal F$ with $\lVert\Omega\rVert=1$, let $T$ be
+    owned by $P_\circ$ with $T\cap H^+(\mathcal F)=\varnothing$, and let
+    $\mathcal F',E,U$ be as in Definition~\ref{def:peps_frame_birth_partition}.
+    If $I_\Omega(T:E)\le L^{-60}$, the birth map $B$ associated with splitting
+    data of error at most $L^{-30}$ satisfies $B^\dagger=B$, $\|B\|\le 1$, acts
+    as $\id$ on $E$, commutes with $K_{\mathcal F}=K_{\mathcal F'}$ via
+    $(\id_{\rm tags}\otimes B)K_{\mathcal F}=K_{\mathcal F'}B$, and obeys
     \begin{align}
-        \lVert(\id\otimes B)\Omega_{\mathcal F}-\Omega_{\mathcal F'}\rVert
-        \le L^{-30}.
+        \lVert(\id_{\rm tags}\otimes B)\Omega_{\mathcal F}-\Omega_{\mathcal F'}\rVert
+        \le L^{-30}
+        \label{eq:peps_frame_birth_bound}
     \end{align}
-    Since $\mathcal F$ and $\mathcal F'$ differ only in site owners,
-    $K_{\mathcal F'}=K_{\mathcal F}$ and $\Omega_{\mathcal
-            F'}=\Omega_{\mathcal F}$, so the intertwining identity says that $B$
-    commutes with the encoding; the change of owner is the content of the
-    bounded-change assertion below. In the operator statement of
-    \cite[Lemma~6.5]{OpenAI2026PolynomialPEPS}, the death is the same map with the
-    reverse input and output ownership, subject to the conditions of the frame
-    after the death.
+    (\cite[Lemma~6.5]{OpenAI2026PolynomialPEPS}). The death map is the same
+    operator $B$ from $\mathcal F'$ to $\mathcal F$ when the hypotheses hold in
+    the post-death frame $\mathcal F$.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{lem:peps_frame_splitting,lem:peps_frame_birth_map,
         lem:peps_frame_pass_encoding,def:peps_frame_birth_partition,
         lem:peps_frame_birth_partition_owners}
-    Every hole encoder acts on $H^+(\mathcal F)\subseteq E$, so it commutes
-    with $B$. Hence $\lVert(\id\otimes B)\Omega_{\mathcal F}-\Omega_{\mathcal
-            F}\rVert\le\lVert(B-\id)\Omega\rVert\le\lVert\mathcal V\Omega-s\otimes
-        s'\rVert\le L^{-30}$, and $\Omega_{\mathcal F'}=\Omega_{\mathcal F}$ in
-    product coordinates, since only site owners change.
+    By Lemma~\ref{lem:peps_frame_birth_partition_owners}, $T\cap E=\varnothing$,
+    so Lemma~\ref{lem:peps_frame_splitting} provides splitting data with error
+    $\le L^{-30}$. Since $H^+(\mathcal F)\subseteq E$, every hole encoder acts
+    inside $E$ and commutes with $B$ by Lemma~\ref{lem:peps_frame_birth_map}.
+    Applying Lemma~\ref{lem:peps_frame_pass_encoding} and~(\ref{eq:peps_frame_birth_map_error})
+    with $\Omega_{\mathcal F'}=\Omega_{\mathcal F}$ yields~(\ref{eq:peps_frame_birth_bound}).
 \end{proof}
 
 \begin{definition}[Parties used by a monomial]
@@ -253,11 +249,11 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
         TNLean.PEPS.PairEffect.PartyChain.sourceCount}
     \leanok
     \uses{def:peps_party_layout,def:peps_party_monomial}
-    An allowed monomial on parties uses only the parties of a set $S$ when
-    each of its local maps acts at a party of $S$ and each of its pair sources
-    and pair effects joins two parties of $S$; reorderings of tensor factors
-    use no party. Its numbers of pair sources and of pair effects are counted
-    along the composition.
+    An allowed monomial $M$ (Definition~\ref{def:peps_party_monomial}) uses
+    only parties in $S$ when every local map acts at a party in $S$ and every
+    pair source or pair effect joins two parties in $S$ (tensor-factor
+    reorderings use no party). Denote by $s(M)$ and $e(M)$ its numbers of pair
+    sources and pair effects.
 \end{definition}
 
 \begin{theorem}[Composition without additional pair effects]
@@ -270,29 +266,23 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
         TNLean.PEPS.PairEffect.PartyChain.eval_postcomp}
     \leanok
     \uses{def:peps_monomial_parties}
-    Let $M$ be an allowed monomial using only parties in $S$. Let $W_0$ and
-    $W_1$ be allowed compositions containing no pair effects, also using only
-    parties in $S$, whose output and input registers respectively match the
-    input and output registers of $M$. Let $M_0$ be the monomial formed by
-    preceding $M$ by $W_0$, and $M_1$ the monomial formed by following $M$
-    by $W_1$. Both are allowed and use only parties in $S$. If $F_N$ denotes
-    the operator of a monomial $N$, then $F_{M_0}=F_M\circ F_{W_0}$ and
-    $F_{M_1}=F_{W_1}\circ F_M$. Writing $s(N)$ and $e(N)$ for its numbers
-    of pair sources and pair effects, the counts satisfy
+    Let $M$ be an allowed monomial using only parties in $S$, and let $W_0,W_1$
+    be effect-free allowed words using only parties in $S$ with compatible
+    boundary registers. Then $M_0=M\circ W_0$ and $M_1=W_1\circ M$ are allowed
+    monomials using only parties in $S$, with operators
+    $F_{M_0}=F_M\circ F_{W_0}$ and $F_{M_1}=F_{W_1}\circ F_M$ and resource
+    counts
     \begin{align}
         s(M_0) & =s(W_0)+s(M),\notag \\
         s(M_1) & =s(M)+s(W_1),\notag \\
         e(M_0) & =e(M_1)=e(M).
+        \label{eq:peps_monomial_composition_counts}
     \end{align}
 \end{theorem}
 
 \begin{proof}\leanok
-    For the preceding composition, combine $W_0$ with the first segment
-    containing no pair effects. For the following composition, induct along the
-    effects of $M$ and combine its final segment with $W_1$. The local
-    contraction and normalized-source conditions are preserved by
-    composition, the source counts add, and every original effect is kept
-    exactly once. The operators compose in the stated order.
+    Absorb $W_0$ into the initial effect-free segment of $M$ and $W_1$ into its
+    final effect-free segment by induction on the pair effects of $M$.
 \end{proof}
 
 \begin{lemma}[Matrices on registers of one party]
@@ -318,20 +308,15 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
         TNLean.PEPS.PairEffect.pairHeadIso_eval_localMap₂₂}
     \leanok
     \uses{def:peps_party_layout}
-    Identify one register $\C^\alpha$ with $\C^\alpha$, and two registers
-    $\C^\alpha$, $\C^\beta$ with $\C^{\alpha\times\beta}$. A matrix $A$ from
-    $\C^{\alpha\times\beta}$ (or $\C^\alpha$) to $\C^{\gamma\times\delta}$ (or
-    $\C^\gamma$) defines a local map of a party $p$ on registers of $p$ of these
-    dimensions, of norm at most $\lVert A\rVert$. Placed in front of an
-    arbitrary list of further registers, its operator is $A\otimes\id$ in
-    these identifications. For any finite row and column index sets, the
-    action of a matrix and its associated continuous linear operator agree:
-    both send $\psi$ to the vector with coordinate
-    $\sum_i A_{ji}\psi_i$ at $j$.
+    Under the identification of two registers $\C^\alpha,\C^\beta$ of party $p$
+    with $\C^{\alpha\times\beta}$ (Definition~\ref{def:peps_party_layout}), any
+    matrix $A$ between one or two registers of $p$ defines a local operation at
+    $p$ of norm $\|A\|$ whose framed operator before untouched registers is
+    $A\otimes\id$, acting by $(\psi_i)\mapsto(\sum_i A_{ji}\psi_i)_j$.
 \end{lemma}
 
 \begin{proof}\leanok
-    Both sides agree on pure tensors and extend by linearity.
+    Check on standard basis vectors and extend by linearity.
 \end{proof}
 
 \begin{definition}[Birth and death monomials]
@@ -342,24 +327,24 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
         TNLean.PEPS.EncodedFrame.deathPrivateChain}
     \leanok
     \uses{def:peps_frame_birth_map,def:peps_party_monomial,lem:peps_front_registers}
-    Let $K=\bra s(\id_T\otimes V)\colon\mathcal H_T\otimes\mathcal H_U\to\mathcal
-        B_E$, with the data of the splitting lemma. Consider a register
-    $\mathcal H_U$ of $P_\circ$ and further registers left untouched. For
-    $Q_\circ\neq P_\circ$, the birth monomial starts from a register $\mathcal
-        H_T$ of $P_\circ$: it applies the private contraction $K$ at $P_\circ$ from
-    $\mathcal H_T\otimes\mathcal H_U$ to a register $\mathcal B_E$ of $P_\circ$,
-    prepares the normalized pair vector $s$ on a new register $\mathcal H_T$ of
-    $Q_\circ$ and a new register $\mathcal B_T$ of $P_\circ$, and applies the
-    private contraction $V^\dagger$ at $P_\circ$ from $\mathcal
-        B_T\otimes\mathcal B_E$ to $\mathcal H_U$ (\texttt{05-frames.tex}, lines
-    413--419). The death monomial starts from a register $\mathcal H_T$ of
-    $Q_\circ$: it applies the private isometry $V$ at $P_\circ$ from $\mathcal
-        H_U$ to $\mathcal B_T\otimes\mathcal B_E$, contracts $\mathcal H_T$ and
-    $\mathcal B_T$ with the normalized pair effect $\bra s$, and applies the
-    private contraction $K^\dagger$ at $P_\circ$ from $\mathcal B_E$ to new
-    registers $\mathcal H_T$, $\mathcal H_U$ of $P_\circ$ (lines 439--446). For
-    $Q_\circ=P_\circ$ both are the private contraction $K^\dagger K$ at
-    $P_\circ$ (lines 447--449).
+    Let $K=\bra s(\id_T\otimes V)\colon\mathcal H_T\otimes\mathcal H_U\to\mathcal B_E$
+    be as in Lemma~\ref{lem:peps_frame_birth_map}, with $\mathcal H_U$ at
+    $P_\circ$ and untouched spectator registers. For $Q_\circ\neq P_\circ$:
+    \begin{itemize}
+        \item the birth monomial takes $\mathcal H_T$ at $P_\circ$, applies $K$
+              at $P_\circ$ ($\mathcal H_T\otimes\mathcal H_U\to\mathcal B_E$),
+              prepares the pair source $s\in\mathcal H_T\otimes\mathcal B_T$ between
+              $Q_\circ$ and $P_\circ$, and applies $V^\dagger$ at $P_\circ$
+              ($\mathcal B_T\otimes\mathcal B_E\to\mathcal H_U$)
+              (\texttt{05-frames.tex}, lines 413--419);
+        \item the death monomial takes $\mathcal H_T$ at $Q_\circ$, applies $V$
+              at $P_\circ$ ($\mathcal H_U\to\mathcal B_T\otimes\mathcal B_E$),
+              applies the pair effect $\bra s$ on $\mathcal H_T\otimes\mathcal B_T$,
+              and applies $K^\dagger$ at $P_\circ$
+              ($\mathcal B_E\to\mathcal H_T\otimes\mathcal H_U$) (lines 439--446).
+    \end{itemize}
+    For $Q_\circ=P_\circ$, both are the single private contraction
+    $K^\dagger K$ at $P_\circ$ (lines 447--449).
 \end{definition}
 
 \begin{lemma}[Operators of the birth and death monomials]
@@ -390,23 +375,17 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     \leanok
     \uses{def:peps_frame_birth_monomials,def:peps_monomial_parties,
         lem:peps_frame_birth_map}
-    The birth and death monomials are allowed and use only $P_\circ$ and
-    $Q_\circ$; for $Q_\circ\neq P_\circ$ the birth has one pair source and no
-    pair effect, and the death one pair effect and no pair source. With the
-    registers $\mathcal H_T$ and $\mathcal H_U$ identified with $\mathcal
-        H_T\otimes\mathcal H_U$, the operator of each is $K^\dagger K\otimes\id$ on
-    the untouched registers, and on the sheet $B=\id_E\otimes K^\dagger K$.
+    The birth and death monomials of Definition~\ref{def:peps_frame_birth_monomials}
+    are allowed, use only $\{P_\circ,Q_\circ\}$, satisfy $(s,e)\le(1,0)$ for
+    birth and $(s,e)\le(0,1)$ for death, and evaluate on
+    $(\mathcal H_T\otimes\mathcal H_U)\otimes\mathcal H_{\rm rest}$ to
+    $K^\dagger K\otimes\id$ (and to $B=\id_E\otimes K^\dagger K$ on $\mathcal H_\Lambda$).
 \end{lemma}
 
 \begin{proof}\leanok
-    The contraction $K$ is the effect $S^\dagger\mathcal V$ with $E$ trivial, so
-    $\lVert K\rVert\le1$, and $\lVert V\rVert\le1$. For the birth, on $t\otimes
-        u\otimes w$ the first contraction gives $k=K(t\otimes u)$; preparing
-    $s=\sum t'\otimes b$ and applying $V^\dagger$ to $b\otimes k$ gives
-    $\sum t'\otimes V^\dagger(b\otimes k)=K^\dagger k$, by comparing
-    coordinates and using linearity in the prepared vector. For the death,
-    $V u=\sum b\otimes e$ and the effect gives $\sum\langle s,t\otimes
-        b\rangle e=K(t\otimes u)$, after which $K^\dagger$ is applied.
+    Since $\|s\|=1$ and $\|V\|\le 1$, $\|K\|\le 1$. On $t\otimes u$, the birth
+    monomial computes $(\id_T\otimes V^\dagger)(s\otimes K(t\otimes u))=K^\dagger K(t\otimes u)$,
+    and the death monomial computes $K^\dagger(\bra s\otimes\id_{\mathcal B_E})(t\otimes Vu)=K^\dagger K(t\otimes u)$.
 \end{proof}
 
 \begin{theorem}[Homogeneous birth and death on grouped registers]
@@ -418,32 +397,22 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     \leanok
     \uses{thm:peps_frame_birth,lem:peps_frame_birth_partition_owners,
         lem:peps_frame_birth_monomial_operators}
-    In the setting of the birth map, with its hypotheses, there are
-    splitting data with the reference error of Theorem~\ref{thm:peps_frame_birth}
-    such that $B=\id_E\otimes K^\dagger K$ with $K=\bra s(\id_T\otimes V)$, the
-    registers of $U$ are owned by $P_\circ$ before and after the birth, and
-    those of $T$ by $P_\circ$ before and by $Q_\circ$ after it. Group the site
-    registers of $T$ into one register $\mathcal H_T$ and those of $U$ into one
-    register $\mathcal H_U$, followed by an arbitrary list of further registers.
-    On these registers there is an allowed monomial using only $P_\circ$ and
-    $Q_\circ$, with at most one normalized pair source, from $\mathcal H_T$ held
-    by $P_\circ$ to $\mathcal H_T$ held by $Q_\circ$, whose operator is
-    $K^\dagger K\otimes\id$; for $Q_\circ\neq P_\circ$ it is a private
-    contraction at $P_\circ$, one pair source between $Q_\circ$ and $P_\circ$,
-    and a private contraction at $P_\circ$. The death is the same with no pair
-    source and at most one normalized pair effect. These grouped monomials are
-    the middle steps of the bounded changes on the registers of the frame in
-    Theorem~\ref{thm:peps_frame_birth_bounded}.
+    Under the hypotheses of Theorem~\ref{thm:peps_frame_birth}, on grouped
+    registers $\mathcal H_T,\mathcal H_U$ followed by arbitrary untouched
+    registers, the birth and death monomials of
+    Lemma~\ref{lem:peps_frame_birth_monomial_operators} are allowed monomials
+    using only $\{P_\circ,Q_\circ\}$ with operator $K^\dagger K\otimes\id$ (and
+    $B=\id_E\otimes K^\dagger K$ on $\mathcal H_\Lambda$), where $\mathcal H_U$
+    is owned by $P_\circ$ throughout and $\mathcal H_T$ changes between
+    $P_\circ$ and $Q_\circ$.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:peps_frame_birth,lem:peps_frame_birth_monomial_operators,
         lem:peps_frame_birth_partition_owners}
-    With the splitting data of Theorem~\ref{thm:peps_frame_birth}, the
-    registers of $U$ lie outside $E$, so they are owned by $P_\circ$ before
-    and after, while those of $T$ are owned by $P_\circ$ before and by $Q_\circ$
-    after. The birth and death monomials have operator $K^\dagger K$ on
-    $\mathcal H_T\otimes\mathcal H_U$, and $B=\id_E\otimes K^\dagger K$.
+    Combine Theorem~\ref{thm:peps_frame_birth},
+    Lemma~\ref{lem:peps_frame_birth_partition_owners}, and
+    Lemma~\ref{lem:peps_frame_birth_monomial_operators}.
 \end{proof}
 
 \begin{lemma}[Reordering registers]
@@ -523,65 +492,33 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     \leanok
     \uses{def:peps_frame_registers,lem:peps_frame_registers_coordinates,
         def:peps_monomial_parties}
-    For a list of sites $\ell$ and a condition $f$, let $\ell_+$ and
-    $\ell_-$ retain the sites satisfying $f$ and not satisfying $f$,
-    respectively, in their original order. Thus $x\in\ell_+$ exactly when
-    $x\in\ell$ and $f(x)$, and $x\in\ell_-$ exactly when $x\in\ell$ and
-    $\neg f(x)$. If $\ell$ has no repeated site, neither part has one.
-    The following compositions of exchanges of adjacent tensor factors are
-    allowed monomials that use no party and no pair resource, and each sends
-    product basis vectors to the indicated product basis vectors: moving the
-    site registers of the sites satisfying a condition in front of the others,
-    keeping the order within both parts, and back; reassociating and
-    interchanging blocks of registers; splitting the tag registers of a
-    concatenated list of holes into those of the two parts, and merging them.
-    These reorderings may be performed before arbitrary untouched registers.
-    One step of the site partition starts with a register $x$ followed by
-    the already separated lists $A,B$: it leaves $x$ first in $A$ if selected,
-    and otherwise moves it past $A$ to the front of $B$. The inverse step
-    reverses this move.
-    Adjoining or removing an empty trailing list is an identity and uses no
-    party or pair resource. Naming a register with an equal owner label moves
-    nothing. If a second list of holes is a reordering of the first, with
-    pairwise disjoint outer
-    footprints, there are a relabelling of the tags that preserves the sheet
-    part of the encoding and such a composition sending $\ket\tau$ to the
-    relabelled $\ket\tau$ (the identification of tag orderings in
-    \texttt{05-frames.tex}, lines 84--85).
-
-    More generally, adjoining untouched registers before any composition
-    containing no pair effects preserves whether it is allowed, whether it
-    uses only the parties of a given set, and its number of pair sources.
-    Its operator is the identity on the added registers tensored with the
-    original operator, under the prescribed tensor identifications.
+    For a duplicate-free site list $\ell$ and predicate $f$, let $\ell_+=\{x\in\ell:f(x)\}$
+    and $\ell_-=\{x\in\ell:\neg f(x)\}$ in the order of $\ell$. Partitioning
+    $\ell\mapsto(\ell_+,\ell_-)$ and its inverse, reassociating or swapping
+    register blocks, splitting/merging tag registers across concatenated hole
+    lists, and permuting holes with pairwise disjoint outer footprints (preserving
+    the sheet encoding; \texttt{05-frames.tex}, lines 84--85) are realized by
+    compositions of adjacent swaps, which are allowed reorderings using no
+    party and $(s,e)=(0,0)$. Framing any effect-free word by untouched
+    registers preserves allowedness, party set, and source count $s$, acting as
+    $\id\otimes(\cdot)$.
 \end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_register_exchange}
-    Each composition is built by induction on the lists. For the partition
-    step, let $A,B$ be two site lists and $C$ an arbitrary untouched register
-    list. In concatenations below, site lists and sites denote their site
-    register lists and individual site registers. Write $J_{A,C}$ for the
-    isometry separating concatenated
-    lists, and let $(A,C)$ denote their concatenation. For the product basis
-    vectors $u=\ket{c(x)}$, $a=\ket c_A$, $b=\ket c_B$ and any $y$ in the
-    memory of $C$, put $t=J_{B,C}^{-1}(b\otimes y)$ and
-    $z=J_{A,(B,C)}^{-1}(a\otimes t)$. The selected and unselected steps satisfy
+    By induction on the register lists via Theorem~\ref{thm:peps_register_exchange},
+    for site lists $A,B$, spectator list $C$, and $u=\ket{c(x)}$, $a=\ket c_A$,
+    $b=\ket c_B$ with $t=J_{B,C}^{-1}(b\otimes y)$ and
+    $z=J_{A,(B,C)}^{-1}(a\otimes t)$, the single-site partition steps satisfy
     \begin{align}
         \Pi_+(u\otimes z) & =u\otimes z,\notag                         \\
-        \Pi_-(u\otimes z) & =J_{A,(x,B,C)}^{-1}(a\otimes(u\otimes t)).
+        \Pi_-(u\otimes z) & =J_{A,(x,B,C)}^{-1}(a\otimes(u\otimes t)),
         \label{eq:peps_register_partition_step}
     \end{align}
-    The inverse steps read (\ref{eq:peps_register_partition_step}) from right
-    to left. They are the identity and the move of $x$ back past $A$,
-    respectively. This proves the partition identities by induction; the
-    two lists are obtained by retaining sites with the indicated condition,
-    which gives the membership and non-repetition assertions. For a
-    reordering of the holes, induct on the reordering: an exchange of two
-    adjacent holes is an exchange of their tag registers, and the sheet parts of
-    the encodings of the two holes commute by disjointness of supports.
-    Adjoining untouched registers changes none of the original operations,
-    so induction on the added list preserves each of the stated properties.
+    and their inverses reverse~(\ref{eq:peps_register_partition_step}). For a
+    permutation of holes with disjoint outer footprints, adjacent hole
+    transpositions swap adjacent tag registers while their sheet encoders
+    commute.
 \end{proof}
 
 \begin{theorem}[Coordinates of ordered region registers]
@@ -602,40 +539,24 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
         TNLean.PEPS.EncodedFrame.groupIso_listU_siteVec}
     \leanok
     \uses{def:peps_frame_registers,lem:peps_frame_registers_coordinates}
-    Let $\ell$ be any list of sites, $T,E\subseteq\Lambda$, and
-    $U=\Lambda\setminus(T\cup E)$. Retain the sites of $T$ in $\ell_T$ and
-    the remaining sites in $\ell_R$; then retain the sites of $U$ in $\ell_R$
-    to obtain $\ell_U$, with the remaining sites forming $\ell_E$.
-    All these lists keep their original order.
-    If $\ell$ contains every site of $\Lambda$, then
-    \begin{align}
-        x\in\ell_T & \iff x\in T,\notag    \\
-        x\in\ell_R & \iff x\notin T,\notag \\
-        x\in\ell_U & \iff x\in U.
-    \end{align}
-    If also $T\cap E=\varnothing$, then $x\in\ell_E$ if and only if $x\in E$.
-    If $\ell$ has no repetitions, neither $\ell_T$ nor $\ell_U$ has any.
-
-    When $\ell$ contains every site exactly once, taking the site at a
-    position gives bijections from the positions of $\ell_T$ to $T$ and of
-    $\ell_U$ to $U$. For every configuration $c$ and any assignment of
-    owners to the sites, the corresponding grouping isometries $G_T,G_U$
-    satisfy
+    For a site list $\ell$, $T,E\subseteq\Lambda$, and $U=\Lambda\setminus(T\cup E)$,
+    filter $\ell$ into $\ell_T=\{x\in\ell:x\in T\}$ and $\ell_R=\{x\in\ell:x\notin T\}$,
+    and filter $\ell_R$ into $\ell_U=\{x\in\ell_R:x\in U\}$ and
+    $\ell_E=\{x\in\ell_R:x\notin U\}$. If $\ell$ lists $\Lambda$ without
+    repetition and $T\cap E=\varnothing$, then $\ell_T,\ell_R,\ell_U,\ell_E$
+    list $T,\Lambda\setminus T,U,E$ without repetition, and the grouping
+    isometries $G_T,G_U$ satisfy
     \begin{align}
         G_T\ket c_{\ell_T} & =\ket{c|_T},\notag \\
-        G_U\ket c_{\ell_U} & =\ket{c|_U}
+        G_U\ket c_{\ell_U} & =\ket{c|_U}.
         \label{eq:peps_region_grouping_basis}
     \end{align}
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{lem:peps_register_reorderings,lem:peps_frame_registers_coordinates}
-    Filtering gives the membership assertions and preserves the absence of
-    repetitions. Outside $T$, membership in $T\cup E$ is membership in $E$;
-    disjointness ensures that all sites of $E$ remain. Completeness and
-    non-repetition make the position maps bijective. The product-coordinate
-    identification sends a product basis vector to the configuration read
-    along that position map, giving (\ref{eq:peps_region_grouping_basis}).
+    Follows from Lemma~\ref{lem:peps_register_reorderings} and the product-basis
+    coordinate identification of Lemma~\ref{lem:peps_frame_registers_coordinates}.
 \end{proof}
 
 \begin{theorem}[Reconstructing a configuration from its restrictions]
@@ -648,29 +569,23 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
         TNLean.PEPS.EncodedFrame.merge_self_of_mem_union}
     \leanok
     \uses{lem:peps_frame_split_forms}
-    Let $T,E\subseteq\Lambda$ be disjoint and
-    $U=\Lambda\setminus(T\cup E)$. For $a\in[q]^T$, $b\in[q]^U$, and
-    $c\in[q]^\Lambda$, define $m(a,b;c)$ by the inverse of the three-part
-    coordinate identification applied to $((a,c|_E),b)$. Its restrictions are
+    For disjoint $T,E\subseteq\Lambda$, $U=\Lambda\setminus(T\cup E)$,
+    $a\in[q]^T$, $b\in[q]^U$, and $c\in[q]^\Lambda$, the merged configuration
+    $m(a,b;c)\in[q]^\Lambda$ (Lemma~\ref{lem:peps_frame_split_forms}) is
+    uniquely characterized by
     \begin{align}
         m(a,b;c)|_T & =a,\notag    \\
         m(a,b;c)|_E & =c|_E,\notag \\
         m(a,b;c)|_U & =b.
         \label{eq:peps_region_reconstruction}
     \end{align}
-    For every configuration $c'$, these restrictions characterize it:
-    $c'=m(a,b;c)$ if and only if
-    $(c'|_T,c'|_U)=(a,b)$ and $c'|_E=c|_E$.
-    In particular, $c^u=m(c|_T,u;c)$ equals $c$ on $T\cup E$ and equals
-    $u$ on $U$, for any $u\in[q]^U$.
+    In particular, $c^u=m(c|_T,u;c)$ satisfies $c^u|_{T\cup E}=c|_{T\cup E}$
+    and $c^u|_U=u$.
 \end{theorem}
 
 \begin{proof}\leanok
-    The inverse coordinate map assigns the prescribed value on each of the
-    three disjoint regions, proving (\ref{eq:peps_region_reconstruction}).
-    Every site belongs to exactly one region, so equality of the restrictions
-    is equivalent to equality of the configurations. Taking $a=c|_T$ gives
-    the last assertion.
+    Since $\Lambda=T\sqcup E\sqcup U$, a configuration in $[q]^\Lambda$ is
+    uniquely determined by its restrictions to $T$, $E$, and $U$.
 \end{proof}
 
 \begin{lemma}[Grouped monomials on the registers of a frame]
@@ -691,31 +606,22 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     \uses{def:peps_frame_registers,lem:peps_frame_registers_coordinates,
         lem:peps_register_reorderings,lem:peps_front_registers}
     Let $T,E\subseteq\Lambda$ be disjoint and $U=\Lambda\setminus(T\cup E)$,
-    let the site registers of $T$ be held by one party and those of $U$ by
-    one party, before a change of site owners that keeps the owners on $E$,
-    and similarly after it. Moving the site registers of $T$ and of $U$ in
-    front by exchanges of tensor factors and grouping each block into one
-    register by a unitary at its owner is an allowed monomial using only
-    these owners and no pair resource; ungrouping has the same properties.
-    Naming the untouched site registers of $E$ by their equal owner labels
-    also uses no party or pair resource. If a map acts on the two grouped
-    registers, followed by the tag registers and the site registers of $E$,
-    as $M\otimes\id$, then
-    grouping at the owners before, applying it, and ungrouping at the owners
-    after acts on the registers of the frame, in product coordinates, as
-    $\id_{\rm tags}\otimes(\id_E\otimes M)$.
+    with $T$ and $U$ each held by a single party before and after a site-owner
+    change that fixes owners on $E$. Moving the site registers of $T$ and $U$ to
+    the front and grouping them via $G_T,G_U$ at their owners (and the inverse
+    ungrouping) are allowed effect-free words using only those owners and
+    $s=0$; conjugating a grouped operator $M\otimes\id$ by grouping and
+    ungrouping yields $\id_{\rm tags}\otimes(\id_E\otimes M)$ in the product
+    coordinates of Definition~\ref{def:peps_frame_registers}.
 \end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_region_register_coordinates,thm:peps_region_configuration}
-    By (\ref{eq:peps_region_grouping_basis}), on the product basis vector of
-    a configuration $c$, grouping gives
-    $\ket{c|_T}\otimes\ket{c|_U}$ in front of the remaining registers; the map
-    gives $\sum_{a,b}M_{(a,b),(c|_T,c|_U)}\ket a\otimes\ket b$; ungrouping
-    turns each term into the basis vector of the configuration equal to $a$
-    on $T$, to $c$ on $E$ and to $b$ on $U$, namely $m(a,b;c)$ by
-    (\ref{eq:peps_region_reconstruction}). These are the columns of
-    $\id_{\rm tags}\otimes(\id_E\otimes M)$, and both sides are linear.
+    By~(\ref{eq:peps_region_grouping_basis}) and~(\ref{eq:peps_region_reconstruction}),
+    on a basis state $\ket c$, grouping extracts $\ket{c|_T}\otimes\ket{c|_U}$,
+    $M$ maps it to $\sum_{a,b}M_{(a,b),(c|_T,c|_U)}\ket a\otimes\ket b$, and
+    ungrouping reconstructs $\sum_{a,b}M_{(a,b),(c|_T,c|_U)}\ket{m(a,b;c)}
+        =(\id_E\otimes M)\ket c$.
 \end{proof}
 
 \begin{theorem}[Homogeneous birth and death: bounded change]
@@ -727,41 +633,26 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     \leanok
     \uses{thm:peps_frame_birth,def:peps_frame_registers,
         lem:peps_frame_registers_coordinates,def:peps_monomial_parties}
-    In an encoded frame $\mathcal F$, let $T$ be a set of sites owned by
-    $P_\circ$ and disjoint from every outer hole footprint, let $E$ and $U$ be
-    as in the birth partition, let $\lVert\Omega\rVert=1$, and suppose
-    $I_\Omega(T:E)\le L^{-60}$. Then the birth is a bounded change involving
-    only $P_\circ$ and $Q_\circ$, with reference-vector error at most
-    $L^{-30}$: there are splitting data and an allowed monomial from the
-    registers of $\mathcal F$ to those of the frame in which $T$ is owned by
-    $Q_\circ$, using only $P_\circ$ and $Q_\circ$ and at most one normalized
-    pair source, whose operator in product coordinates is
-    $\id_{\rm tags}\otimes B$ for the birth map $B$, and which maps the
-    reference vector of $\mathcal F$ within $L^{-30}$ of the reference vector
-    of the new frame. In \cite[Lemma~6.5]{OpenAI2026PolynomialPEPS} (\texttt{05-frames.tex},
-    lines 396--410), the reversed death obeys the same bound when these
-    conditions hold in the frame after the death, using one normalized pair
-    effect and no pair source.
+    Under the hypotheses of Theorem~\ref{thm:peps_frame_birth}, there exists an
+    allowed monomial between the frame registers of $\mathcal F$ and
+    $\mathcal F'$ (Definition~\ref{def:peps_frame_registers}) using only
+    $\{P_\circ,Q_\circ\}$, with $(s,e)\le(1,0)$ for birth and $(s,e)\le(0,1)$
+    for death, whose operator in product coordinates is $\id_{\rm tags}\otimes B$
+    and satisfies~(\ref{eq:peps_frame_birth_bound})
+    (\cite[Lemma~6.5]{OpenAI2026PolynomialPEPS}, \texttt{05-frames.tex}, lines 396--410).
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:peps_frame_birth,lem:peps_frame_birth_partition_owners,
         thm:peps_frame_birth_bounded_grouped,lem:peps_grouped_monomial_placement,
         thm:peps_monomial_composition_counts}
-    With the splitting data of Theorem~\ref{thm:peps_frame_birth}, the
-    registers of $T$ and $U$ are held by $P_\circ$ before the birth, and those
-    of $T$ by $Q_\circ$ and those of $U$ by $P_\circ$ after it, while the owners on
-    $E$ are unchanged. Composing the grouping at $P_\circ$, the birth or death
-    monomial on grouped registers, and the ungrouping at the owners after the
-    change produces the required monomial. By Lemma~\ref{lem:peps_grouped_monomial_placement} its operator is
-    $\id_{\rm tags}\otimes(\id_E\otimes K^\dagger K)=\id_{\rm
-            tags}\otimes B$, and the reference error is that of
-    Theorem~\ref{thm:peps_frame_birth}, read through the unitary
-    identification of the registers. For $Q_\circ\neq P_\circ$ the monomial
-    so built consists of a private contraction at $P_\circ$, one normalized
-    pair source between $Q_\circ$ and $P_\circ$ (one pair effect for the
-    death), and a private contraction at $P_\circ$, together with reorderings
-    and grouping unitaries.
+    Compose the grouping word of Lemma~\ref{lem:peps_grouped_monomial_placement},
+    the grouped birth/death monomial of
+    Theorem~\ref{thm:peps_frame_birth_bounded_grouped}, and the ungrouping word
+    via Theorem~\ref{thm:peps_monomial_composition_counts}; the resulting
+    operator is $\id_{\rm tags}\otimes(\id_E\otimes K^\dagger K)=\id_{\rm tags}\otimes B$,
+    which satisfies~(\ref{eq:peps_frame_birth_bound}) by
+    Theorem~\ref{thm:peps_frame_birth}.
 \end{proof}
 
 \subsection{Exchanging assignments between two sheets}
@@ -771,20 +662,20 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     \lean{TNLean.Lattice.sheetSwap,
         TNLean.Lattice.sheetSwapOp}
     \leanok
-    For $S\subseteq\Lambda$, $F_S$ is the unitary swapping the two sheets
-    at the positions in $S$ (\texttt{05-frames.tex}, lines 476--477).
+    For $S\subseteq\Lambda$, let $F_S$ be the unitary swapping the two sheets
+    at the sites in $S$ (\texttt{05-frames.tex}, lines 476--477).
 \end{definition}
 
 \begin{theorem}[Permutation matrices are unitary]
     \label{thm:permutation_matrix_unitary}
     \lean{Equiv.Perm.permMatrix_mem_unitaryGroup}
     \leanok
-    For a permutation $\sigma$ of a finite set, its complex permutation
-    matrix $P_\sigma$ satisfies $P_\sigma P_\sigma^\dagger=P_\sigma^\dagger P_\sigma=I$.
+    For a permutation $\sigma$ of a finite set, its complex permutation matrix
+    $P_\sigma$ satisfies $P_\sigma P_\sigma^\dagger=P_\sigma^\dagger P_\sigma=I$.
 \end{theorem}
 
 \begin{proof}\leanok
-    The adjoint of $P_\sigma$ is $P_{\sigma^{-1}}$, and
+    Since $P_\sigma^\dagger=P_{\sigma^{-1}}$,
     $P_\sigma P_{\sigma^{-1}}=P_{\sigma\sigma^{-1}}=I$.
 \end{proof}
 
@@ -797,9 +688,9 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 \end{theorem}
 
 \begin{proof}\leanok
-    $F_S$ is the matrix of a permutation of the two-sheet configurations, so
-    it maps the standard basis bijectively onto itself and preserves the
-    Euclidean norm.
+    By Definition~\ref{def:peps_frame_sheet_swap} and
+    Theorem~\ref{thm:permutation_matrix_unitary}, $F_S$ is unitary, hence
+    $\|F_S\|\le 1$.
 \end{proof}
 
 \begin{lemma}[Composing and commuting sheet swaps]
@@ -808,18 +699,15 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
         TNLean.Lattice.commute_sheetSwapOp_kronecker}
     \leanok
     \uses{def:peps_frame_sheet_swap}
-    If $Y$ is the disjoint union of $T$ and $A$, then $F_AF_Y=F_T$. The swap
-    $F_S$ commutes with $R_1\otimes R_2$ whenever $R_1$ and $R_2$ act on a
-    set disjoint from $S$ (\texttt{05-frames.tex}, lines 512--520).
+    If $Y=T\sqcup A$, then $F_AF_Y=F_T$. Moreover, $[F_S,R_1\otimes R_2]=0$
+    whenever $R_1,R_2$ are supported in $\Lambda\setminus S$
+    (\texttt{05-frames.tex}, lines 512--520).
 \end{lemma}
 
 \begin{proof}\leanok
-    The swaps are permutation matrices of the two-sheet configurations. On a
-    configuration, swapping at $Y$ and then at $A\subseteq Y$ swaps exactly
-    at the sites of $Y$ outside $A$, that is, at $T$. For the second claim,
-    $R_1$ and $R_2$ are the identity on $S$ tensored with operators $R_1'$
-    and $R_2'$ on the complement, so in the coordinates splitting off the two
-    copies of $S$ both $F_S$ and $R_1\otimes R_2$ act on different factors.
+    Swapping at $Y$ and then at $A\subseteq Y$ swaps on $Y\setminus A=T$, so
+    $F_AF_Y=F_T$. When $R_1,R_2$ are supported in $\Lambda\setminus S$,
+    $F_S$ and $R_1\otimes R_2$ act on disjoint tensor factors.
 \end{proof}
 
 \begin{theorem}[Exchanging supported operators]
@@ -827,26 +715,21 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     \lean{TNLean.Lattice.sheetSwapOp_mul_kronecker_of_mem_supportedOperators}
     \leanok
     \uses{def:peps_frame_sheet_swap}
-    Let $R\subseteq\Lambda$, and let $A$ and $B$ be operators on
-    $\mathcal H_\Lambda$ supported on $R$. Then the replica-term exchange identity of
-    \cite{OpenAI2026PolynomialPEPS} (\texttt{02-information.tex},
-    lines 416--424) holds:
-    \begin{align*}
+    For $R\subseteq\Lambda$ and operators $A,B$ on $\mathcal H_\Lambda$
+    supported on $R$, the replica-term exchange identity of
+    \cite{OpenAI2026PolynomialPEPS} (\texttt{02-information.tex}, lines 416--424)
+    is
+    \begin{align}
         F_R(A\otimes B)=(B\otimes A)F_R.
-    \end{align*}
+        \label{eq:peps_sheet_swap_supported_exchange}
+    \end{align}
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{lem:peps_frame_split_forms,lem:peps_frame_exchange_intertwining}
-    Splitting each sheet into $R$ and its complement expresses
-    $A=A_R\otimes I$ and $B=B_R\otimes I$ by the support assumptions. The swap interchanges the two
-    copies of $R$ and fixes the complementary factors. Writing each
-    configuration as $x=(x_R,x_{R^c})$, both sides have the entry
-    \begin{align*}
-        A_R\big((y_2)_R,(x_1)_R\big)\,B_R\big((y_1)_R,(x_2)_R\big)\,
-        \delta_{(y_1)_{R^c},(x_1)_{R^c}}\,\delta_{(y_2)_{R^c},(x_2)_{R^c}}
-    \end{align*}
-    in row $(y_1,y_2)$ and column $(x_1,x_2)$.
+    By Lemma~\ref{lem:peps_frame_split_forms}, $A=A_R\otimes I_{R^c}$ and
+    $B=B_R\otimes I_{R^c}$, while $F_R$ swaps the two copies of $\mathcal H_R$
+    and acts as $I$ on $\mathcal H_{R^c}^{\otimes 2}$, giving~(\ref{eq:peps_sheet_swap_supported_exchange}).
 \end{proof}
 
 \begin{theorem}[Cancellation of a noncrossing doubled interaction]
@@ -854,30 +737,25 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     \lean{TNLean.Lattice.sheetSwapOp_conj_doubledHamiltonian_eq_of_mem_supportedOperators}
     \leanok
     \uses{def:peps_frame_sheet_swap}
-    Let $q\geq0$ be a local dimension and $R,S\subseteq\Lambda$. Let $A$
-    be an operator supported on $S$, and let
-    $F_R$ exchange two copies at the sites in $R$. If $S\subseteq R$ or $S\cap R=\varnothing$, then the noncrossing
-    cancellation of the boundary perturbation argument in
-    \cite{OpenAI2026PolynomialPEPS} gives
-    \begin{align*}
+    For $R,S\subseteq\Lambda$ and an operator $A$ supported on $S$, if
+    $S\subseteq R$ or $S\cap R=\varnothing$, then
+    \begin{align}
         F_R(A\otimes I+I\otimes A)F_R^\dagger
-        =A\otimes I+I\otimes A.
-    \end{align*}
+        =A\otimes I+I\otimes A
+        \label{eq:peps_sheet_swap_doubled_cancellation}
+    \end{align}
+    (\cite{OpenAI2026PolynomialPEPS}).
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:peps_sheet_swap_supported_exchange,lem:peps_frame_sheet_swap_compose,
         thm:permutation_matrix_unitary}
-    If $S\subseteq R$, the exchange identity applied with $B=I$ on both
-    sides gives
-    \begin{align*}
-        F_R(A\otimes I)=(I\otimes A)F_R,\qquad F_R(I\otimes A)=(A\otimes I)F_R.
-    \end{align*}
-    If $S\cap R=\varnothing$, the swap commutes with $A\otimes I$ and with
-    $I\otimes A$. In either case
-    $F_R(A\otimes I+I\otimes A)=(A\otimes I+I\otimes A)F_R$, and
-    multiplying on the right by $F_R^\dagger=F_R^{-1}$ gives the stated
-    identity.
+    If $S\subseteq R$, Theorem~\ref{thm:peps_sheet_swap_supported_exchange}
+    gives $F_R(A\otimes I)=(I\otimes A)F_R$ and $F_R(I\otimes A)=(A\otimes I)F_R$;
+    if $S\cap R=\varnothing$, Lemma~\ref{lem:peps_frame_sheet_swap_compose}
+    gives $[F_R,A\otimes I]=[F_R,I\otimes A]=0$. Multiplying on the right by
+    $F_R^\dagger=F_R^{-1}$ (Theorem~\ref{thm:permutation_matrix_unitary})
+    yields~(\ref{eq:peps_sheet_swap_doubled_cancellation}).
 \end{proof}
 
 \begin{theorem}[Restricting a swap to an interaction support]
@@ -924,29 +802,21 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     \lean{TNLean.PEPS.Approximation.SquareHamiltonian.sheetSwapOp_conj_doubled_operator_sub_eq_sum_crossing}
     \leanok
     \uses{def:polynomial_peps_model,def:peps_frame_sheet_swap}
-    Let $H=\sum_v h_v+\sum_e h_e$ be an open-square Hamiltonian with the
-    original bounded site and edge interactions, and let $R$ be any set of
-    vertices. For an operator $A$, write $T(A)=A\otimes I+I\otimes A$.
-    Let $F_R$ exchange the two copies at the sites of $R$, and let
-    $\partial R$ be the set of edges with exactly one endpoint in $R$.
-    Then the crossing-edge reduction in the boundary perturbation argument of
-    \cite{OpenAI2026PolynomialPEPS} gives
-    \begin{align*}
+    For an open-square Hamiltonian $H=\sum_v h_v+\sum_e h_e$
+    (Definition~\ref{def:polynomial_peps_model}), $T(A)=A\otimes I+I\otimes A$,
+    and $R\subseteq V$ with crossing-edge set $\partial R$,
+    \begin{align}
         F_RT(H)F_R^\dagger-T(H)
-        =\sum_{e\in\partial R}\bigl(F_RT(h_e)F_R^\dagger-T(h_e)\bigr).
-    \end{align*}
+        =\sum_{e\in\partial R}\bigl(F_RT(h_e)F_R^\dagger-T(h_e)\bigr)
+        \label{eq:peps_sheet_swap_boundary_expansion}
+    \end{align}
+    (\cite{OpenAI2026PolynomialPEPS}).
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_sheet_swap_doubled_cancellation}
-    Write $\delta(A)=F_RT(A)F_R^\dagger-T(A)$, which is linear in $A$. By
-    Theorem~\ref{thm:peps_sheet_swap_doubled_cancellation}, $\delta(h_v)=0$
-    for every site $v$, since $\{v\}\subseteq R$ or
-    $\{v\}\cap R=\varnothing$, and $\delta(h_e)=0$ for every edge
-    $e\notin\partial R$, since both endpoints of $e$ lie in $R$ or neither
-    does. Hence
-    \begin{align*}
-        \delta(H)=\sum_v\delta(h_v)+\sum_e\delta(h_e)=\sum_{e\in\partial R}\delta(h_e).
-    \end{align*}
+    By Theorem~\ref{thm:peps_sheet_swap_doubled_cancellation},
+    $F_RT(h_v)F_R^\dagger-T(h_v)=0$ for all $v$ and
+    $F_RT(h_e)F_R^\dagger-T(h_e)=0$ for all $e\notin\partial R$, leaving~(\ref{eq:peps_sheet_swap_boundary_expansion}).
 \end{proof}
 
 \begin{theorem}[Norm of a swapped doubled interaction]
@@ -954,23 +824,21 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     \lean{TNLean.PEPS.EncodedFrame.norm_sheetSwapOp_conj_doubledHamiltonian_sub_le}
     \leanok
     \uses{def:peps_frame_sheet_swap}
-    Let $q\geq0$ be a local dimension and $R\subseteq\Lambda$. For an
-    arbitrary operator $A$ on $\mathcal H_\Lambda$, write $T(A)=A\otimes I+I\otimes A$.
-    Then the single-interaction estimate for the boundary perturbation in
-    \cite{OpenAI2026PolynomialPEPS} gives
-    \begin{align*}
+    For $R\subseteq\Lambda$, any operator $A$ on $\mathcal H_\Lambda$, and
+    $T(A)=A\otimes I+I\otimes A$ (\cite{OpenAI2026PolynomialPEPS}),
+    \begin{align}
         \|F_RT(A)F_R^\dagger-T(A)\|\leq4\|A\|.
-    \end{align*}
+        \label{eq:peps_sheet_swap_doubled_term_norm}
+    \end{align}
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{def:peps_frame_sheet_swap,thm:peps_frame_sheet_swap_norm,
         thm:peps_frame_identity_tensor_norm}
-    The two identity-factor estimates give
-    $\|T(A)\|\leq\|A\otimes I\|+\|I\otimes A\|\leq2\|A\|$.
-    Since $\|F_R\|\leq1$ and $\|F_R^\dagger\|=\|F_R\|$, submultiplicativity
-    gives $\|F_RT(A)F_R^\dagger\|\leq\|T(A)\|$. The triangle inequality
-    proves the assertion.
+    By Theorem~\ref{thm:peps_frame_identity_tensor_norm},
+    $\|T(A)\|\le\|A\otimes I\|+\|I\otimes A\|\le 2\|A\|$; combining this with
+    $\|F_R\|\le 1$ (Theorem~\ref{thm:peps_frame_sheet_swap_norm}) and the
+    triangle inequality gives~(\ref{eq:peps_sheet_swap_doubled_term_norm}).
 \end{proof}
 
 \begin{theorem}[Support of the swap in paired coordinates]
@@ -978,25 +846,16 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     \lean{TNLean.Lattice.reindex_sheetSwapOp_mem_supportedOperators}
     \leanok
     \uses{def:qc_site_pair_coordinates,def:peps_frame_sheet_swap}
-    Let $q\geq0$ be a local dimension and $R\subseteq\Lambda$. Identify two configurations of local dimension $q$
-    with one configuration of local dimension $q^2$ by pairing the two values
-    at each site. In these coordinates for the doubled Hamiltonian in
-    \cite{OpenAI2026PolynomialPEPS}, the sheet swap $F_R$ is supported on $R$.
+    In the paired-site coordinates of Definition~\ref{def:qc_site_pair_coordinates}
+    (local dimension $q^2$), the sheet swap $F_R$
+    (Definition~\ref{def:peps_frame_sheet_swap}) is supported on $R$
+    (\cite{OpenAI2026PolynomialPEPS}).
 \end{theorem}
 \begin{proof}\leanok
     \uses{lem:qc_permutation_layers}
-    In paired coordinates the swap is the permutation $\sigma$ of
-    configurations $x=(x_i)_{i\in\Lambda}$, $x_i=(a_i,b_i)$, given by
-    \begin{align*}
-        \sigma(x)_i=
-        \begin{cases}
-            (b_i,a_i), & i\in R,    \\
-            (a_i,b_i), & i\notin R.
-        \end{cases}
-    \end{align*}
-    Thus $\sigma$ fixes every coordinate outside $R$, and its coordinates in
-    $R$ depend only on the coordinates of $x$ in $R$. The permutation matrix
-    of such a permutation is supported on $R$.
+    In paired coordinates $x_i=(a_i,b_i)$, $F_R$ is the permutation matrix of
+    $\sigma(x)_i=(b_i,a_i)$ for $i\in R$ and $(a_i,b_i)$ for $i\notin R$, which
+    is supported on $R$ by Lemma~\ref{lem:qc_permutation_layers}.
 \end{proof}
 
 \begin{theorem}[Support of a swapped tensor product]
@@ -1034,25 +893,19 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     \lean{TNLean.PEPS.Approximation.SquareHamiltonian.swapped_doubled_boundary_bound}
     \leanok
     \uses{def:polynomial_peps_model,def:qc_site_pair_coordinates,def:peps_frame_sheet_swap}
-    Let $V=\{0,\ldots,L-1\}^2$, where $L\geq0$ is an integer, and let
-    the local dimension be an integer $q\geq0$.
-    Let $H=\sum_{v\in V}h_v+\sum_e h_e$ be a Hermitian open-square
-    Hamiltonian. Each original site interaction is supported on its site,
-    each original edge interaction is supported on its endpoints, and all
-    these interactions have norm at most $J\in\R$.
-    For $R\subseteq V$, let $\partial R$ consist of the edges with exactly
-    one endpoint in $R$, and put
-    \begin{align*}
-        Z=\bigcup_{e\in\partial R}\{\text{endpoints of }e\}.
-    \end{align*}
-    In paired-site coordinates, let $K$ be the matrix of
-    $H\otimes I+I\otimes H$, and let $F$ be the matrix of the operator
-    exchanging the two copies at the sites in $R$.
-    Then the boundary perturbation of \cite{OpenAI2026PolynomialPEPS},
-    $FKF^\dagger-K$, is supported on $Z$ with local dimension $q^2$ and satisfies
-    \begin{align*}
-        \|FKF^\dagger-K\|\leq 8JL^2.
-    \end{align*}
+    Let $H=\sum_{v\in V}h_v+\sum_e h_e$ on $V=\{0,\ldots,L-1\}^2$ be a
+    Hermitian open-square Hamiltonian (Definition~\ref{def:polynomial_peps_model})
+    with interaction norms $\le J$. For $R\subseteq V$ with crossing-edge set
+    $\partial R$, set $Z=\bigcup_{e\in\partial R}\{\text{endpoints of }e\}$,
+    and let $K$ and $F$ be the matrices of $H\otimes I+I\otimes H$ and $F_R$ in
+    paired-site coordinates (Definition~\ref{def:qc_site_pair_coordinates}).
+    Then $FKF^\dagger-K$ is supported on $Z$ (with local dimension $q^2$) and
+    satisfies
+    \begin{align}
+        \|FKF^\dagger-K\|\leq 8JL^2
+        \label{eq:peps_swapped_doubled_boundary_bound}
+    \end{align}
+    (\cite{OpenAI2026PolynomialPEPS}).
 \end{theorem}
 \begin{proof}
     \leanok
@@ -1060,25 +913,11 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
         thm:peps_sheet_swap_conjugate_support,
         thm:peps_sheet_swap_doubled_cancellation,
         thm:peps_sheet_swap_doubled_term_norm,thm:peps_square_edge_count}
-    The crossing-edge expansion expresses the perturbation as a sum over
-    $e\in\partial R$. Each doubled interaction, before and after the
-    regional swap, is supported on the endpoints of $e$. Closure of the
-    supported operators under subtraction and finite sums proves the
-    support assertion.
-
-    If $L=0$, both original interaction sums vanish and the estimate is
-    $0\leq0$. Otherwise, any site $v\in V$ gives
-    $0\leq\|h_v\|\leq J$. Each crossing-edge contribution has norm at most
-    $4\|h_e\|\leq4J$. The triangle inequality and the square-edge count give
-    \begin{align*}
-        \|FKF^\dagger-K\|
-        \leq \sum_{e\in\partial R}4J
-        =4J|\partial R|
-        \leq 4J(2L^2)
-        =8JL^2.
-    \end{align*}
-    Relabelling the two-copy configurations by paired-site configurations
-    preserves the operator norm.
+    By~(\ref{eq:peps_sheet_swap_boundary_expansion}) and
+    Theorem~\ref{thm:peps_sheet_swap_conjugate_support}, $FKF^\dagger-K$ is a
+    sum over $e\in\partial R$ of terms supported on $e\subseteq Z$. By~(\ref{eq:peps_sheet_swap_doubled_term_norm})
+    and $|\partial R|\le 2L^2$ (Theorem~\ref{thm:peps_square_edge_count}),
+    $\|FKF^\dagger-K\|\le\sum_{e\in\partial R}4\|h_e\|\le 4J|\partial R|\le 8JL^2$.
 \end{proof}
 
 \begin{definition}[Exchange data]
@@ -1098,19 +937,15 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
         TNLean.PEPS.EncodedFrame.TwoSheetExchange.mem_ofFrames_exchangeEnv}
     \leanok
     \uses{def:peps_frame,def:peps_frame_sheet_swap}
-    Consider two encoded frames $\mathcal F_1,\mathcal F_2$ and the physical
-    sample of a plane region $Y$, such that every hole's outer square lies on
-    one side of $\partial Y$; that side classifies the hole as outside or
-    inside $Y$. The holes of each frame are listed as those outside $Y$
-    followed by those inside $Y$, each in its original order, which differs
-    from the given listing by the identification of tag orderings
-    (\texttt{05-frames.tex}, lines 84--85). The exchanged
-    frames
-    $\mathcal F_1',\mathcal F_2'$ carry, inside $Y$, the site ownership
-    assignment and the holes, with their tag owners, of the other frame
-    (\texttt{05-frames.tex}, lines 461--464). The renaming $\mathcal R$
-    exchanges the sheet names of the site registers inside $Y$ and of the tags
-    of the holes inside $Y$; every register keeps its party.
+    For encoded frames $\mathcal F_1,\mathcal F_2$ and a region $Y$ such that
+    every hole's outer square lies wholly outside or wholly inside $Y$, list
+    each frame's holes with outside-$Y$ holes before inside-$Y$ holes
+    (\texttt{05-frames.tex}, lines 84--85). Define the exchanged frames
+    $\mathcal F_1',\mathcal F_2'$ by swapping between $\mathcal F_1$ and
+    $\mathcal F_2$ the site owners on $Y\cap\Lambda$ and the holes (with tag
+    owners) inside $Y$ (lines 461--464), and let the renaming unitary
+    $\mathcal R$ swap the sheet labels of site registers in $Y\cap\Lambda$ and
+    tag registers of holes inside $Y$ while preserving party owners.
 \end{definition}
 
 \begin{lemma}[Exact intertwining of the renaming]
@@ -1128,17 +963,17 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     $K_{\rm out}=K_{\mathcal F_1'}\otimes K_{\mathcal F_2'}$,
     \begin{align}
         \mathcal RK_{\rm in}=K_{\rm out}F_{Y\cap\Lambda}
+        \label{eq:peps_frame_exchange_intertwining}
     \end{align}
-    (\texttt{05-frames.tex}, equation (exchange-intertwining), lines
-    490--498).
+    (\texttt{05-frames.tex}, equation (exchange-intertwining), lines 490--498).
 \end{lemma}
 
 \begin{proof}\leanok
-    On every pair of tags the sheet part of each encoding is the product of an
-    operator acting outside $Y$ and an operator acting on $Y$, which is a
-    tensor product in the coordinates $\mathcal H_Y\otimes\mathcal
-        H_{\Lambda\setminus Y}$. Swapping the sheets at $Y$ exchanges the
-    $Y$-parts, and the four factors match.
+    By Lemma~\ref{lem:peps_frame_split_forms} and Lemma~\ref{lem:peps_frame_commute},
+    on each tag pair the sheet encoder factors across
+    $\mathcal H_{Y\cap\Lambda}\otimes\mathcal H_{\Lambda\setminus Y}$ into
+    inside-$Y$ and outside-$Y$ hole products; conjugating by $F_{Y\cap\Lambda}$
+    swaps the inside-$Y$ factors, matching $\mathcal R$ on the tags.
 \end{proof}
 
 \begin{definition}[Buffer correction]
@@ -1152,14 +987,15 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
         TNLean.PEPS.EncodedFrame.sheetBufferCorrection}
     \leanok
     \uses{lem:peps_frame_splitting}
-    With the data of the splitting lemma, the buffer correction on the two
-    copies of $U$ is
+    With the splitting isometry $V\colon\mathcal H_U\to\mathcal B_T\otimes\mathcal B_E$
+    of Lemma~\ref{lem:peps_frame_splitting}, define the buffer correction on
+    $\mathcal H_U^{\otimes 2}$ (extended as $\id$ on $T\cup E$) by
     \begin{align}
         D_U=(V^{\otimes2})^\dagger F_{\mathcal B_T}V^{\otimes2},
+        \label{eq:peps_frame_buffer_correction}
     \end{align}
     where $F_{\mathcal B_T}$ swaps the two copies of $\mathcal B_T$
-    (\texttt{05-frames.tex}, equation (exchange-buffer-correction), lines
-    503--510). It acts as the identity on the two copies of $T\cup E$.
+    (\texttt{05-frames.tex}, equation (exchange-buffer-correction), lines 503--510).
 \end{definition}
 
 \begin{lemma}[Net map of the corrections]
@@ -1178,15 +1014,14 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     \begin{align}
         D_UF_T=(\mathcal V^{\otimes2})^\dagger F_{T\mathcal B_T}
         \mathcal V^{\otimes2}
+        \label{eq:peps_frame_exchange_net_map}
     \end{align}
     (\texttt{05-frames.tex}, equation (exchange-net-map), lines 516--526).
 \end{lemma}
 
 \begin{proof}\leanok
-    In the coordinates in which the two copies of $\mathcal H_T\otimes\mathcal
-        H_E$ come first, $\mathcal V^{\otimes2}=\id\otimes V^{\otimes2}$,
-    $F_{T\mathcal B_T}=F_T\otimes F_{\mathcal B_T}$, $F_T=F_T\otimes\id$ and
-    $D_U=\id\otimes D_U$, so both sides equal $F_T\otimes D_U$.
+    On $(\mathcal H_T\otimes\mathcal H_E)^{\otimes 2}\otimes\mathcal H_U^{\otimes 2}$,
+    both sides equal $F_T\otimes D_U$ by~(\ref{eq:peps_frame_buffer_correction}).
 \end{proof}
 
 \begin{lemma}[Exchange error on the reference]
@@ -1202,21 +1037,20 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
         TNLean.PEPS.EncodedFrame.norm_act_sheetBufferCorrection_mul_sheetSwapOp_sub_le}
     \leanok
     \uses{lem:peps_frame_exchange_net_map}
-    For a unit vector $\omega$ and $\delta=\lVert\mathcal V\omega-s\otimes
-        s'\rVert$,
+    For a unit vector $\omega$ and $\delta=\lVert\mathcal V\omega-s\otimes s'\rVert$,
     \begin{align}
         \lVert D_UF_T\,\omega^{\otimes2}-\omega^{\otimes2}\rVert\le4\delta .
+        \label{eq:peps_frame_exchange_error}
     \end{align}
 \end{lemma}
 
 \begin{proof}\leanok
-    Both $\mathcal V\omega$ and $\zeta=s\otimes s'$ are unit vectors, so
+    Set $\zeta=s\otimes s'$. Since $\|\mathcal V\omega\|=\|\zeta\|=1$,
     $\lVert(\mathcal V\omega)^{\otimes2}-\zeta^{\otimes2}\rVert\le2\delta$.
-    The swap $F_{T\mathcal B_T}$ exchanges the two identical factors $s$ of
-    $\zeta^{\otimes2}$ and fixes it, so by the net map the difference is
-    $(\mathcal V^{\otimes2})^\dagger(F_{T\mathcal
-            B_T}-\id)\bigl((\mathcal V\omega)^{\otimes2}-\zeta^{\otimes2}\bigr)$,
-    of norm at most $2\cdot2\delta$ (\texttt{05-frames.tex}, lines 534--553).
+    Because $F_{T\mathcal B_T}\zeta^{\otimes 2}=\zeta^{\otimes 2}$ and
+    $\mathcal V^\dagger\mathcal V=\id$,~(\ref{eq:peps_frame_exchange_net_map})
+    gives $D_UF_T\omega^{\otimes 2}-\omega^{\otimes 2}=(\mathcal V^{\otimes 2})^\dagger(F_{T\mathcal B_T}-\id)((\mathcal V\omega)^{\otimes 2}-\zeta^{\otimes 2})$,
+    of norm $\le 2\cdot 2\delta=4\delta$ (\texttt{05-frames.tex}, lines 534--553).
 \end{proof}
 
 \begin{definition}[Exchange partition and implemented map]
@@ -1230,16 +1064,16 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
         TNLean.PEPS.EncodedFrame.TwoSheetExchange.exchangeOp}
     \leanok
     \uses{def:peps_frame_exchange_data,def:peps_frame_buffer_correction}
-    For a party $P_\circ$ put
+    For a party $P_\circ$, define
     \begin{align}
-        Z=\{x:\text{the two old site owners of }x\text{ are not both }P_\circ\}
+        Z=\{x\in\Lambda:\text{the old site owners of }x\text{ in }\mathcal F_1,\mathcal F_2\text{ are not both }P_\circ\}
         \cup H^+(\mathcal F_1)\cup H^+(\mathcal F_2),
+        \label{eq:peps_frame_exchange_Z}
     \end{align}
-    $T=Z\cap Y$, $E=Z\setminus Y$, $U=\Lambda\setminus Z$ and $A=Y\cap U$
-    (\texttt{05-frames.tex}, equations (exchange-Z) and (exchange-partition),
-    lines 466--473). The implemented map is
-    $C=D_UF_A\mathcal R$, with $D_U$ and $F_A$ acting on site registers and as
-    the identity on all tags.
+    $T=Z\cap Y$, $E=Z\setminus Y$, $U=\Lambda\setminus Z$, $A=Y\cap U$, and the
+    implemented map $C=D_UF_A\mathcal R$ (with $D_U,F_A$ acting as $\id$ on
+    tags; \texttt{05-frames.tex}, equations (exchange-Z) and
+    (exchange-partition), lines 466--473).
 \end{definition}
 
 \begin{lemma}[Owners outside the exchange environment]
@@ -1248,15 +1082,14 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
         TNLean.PEPS.EncodedFrame.TwoSheetExchange.newOwner_eq_of_notMem_exchangeEnv}
     \leanok
     \uses{def:peps_frame_exchange_map}
-    Every register of $U$ is a site register held by $P_\circ$ on both sheets,
-    before and after the exchange (\texttt{05-frames.tex}, lines 500--501).
+    Every site $x\in U$ is owned by $P_\circ$ in $\mathcal F_1,\mathcal F_2,\mathcal F_1',\mathcal F_2'$
+    and lies outside $H^+(\mathcal F_1)\cup H^+(\mathcal F_2)$
+    (\texttt{05-frames.tex}, lines 500--501).
 \end{lemma}
 
 \begin{proof}\leanok
-    A register of $U$ is outside $Z$, so both its old site owners are
-    $P_\circ$ and it lies in no outer hole footprint. The exchanged frames
-    take their site owners at each site from one of the two old frames, so
-    both new site owners are $P_\circ$ as well.
+    Follows from $U=\Lambda\setminus Z$ in~(\ref{eq:peps_frame_exchange_Z}) and
+    Definition~\ref{def:peps_frame_exchange_data}.
 \end{proof}
 
 \begin{theorem}[Two-sheet exchange: implemented map]
@@ -1271,17 +1104,17 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     \uses{lem:peps_frame_exchange_intertwining,lem:peps_frame_exchange_net_map,
         lem:peps_frame_exchange_error,def:peps_frame_exchange_map,
         lem:peps_frame_sheet_swap_compose,lem:peps_frame_exchange_owners}
-    In the setting of the exchange partition, let $\lVert\Omega\rVert=1$. If
-    $I_\Omega(T:E)\le L^{-60}$, then for splitting data with error at most
-    $L^{-30}$ the map $C$ is a contraction satisfying
-    $CK_{\rm in}=K_{\rm out}D_UF_T$ and the operator bound of
-    \cite[Lemma~6.6]{OpenAI2026PolynomialPEPS} (when the holes of each frame are
-    listed as those outside $Y$ followed by those inside $Y$):
+    In the setting of Definition~\ref{def:peps_frame_exchange_map} with
+    $\lVert\Omega\rVert=1$ and $I_\Omega(T:E)\le L^{-60}$, for splitting data
+    with error $\le L^{-30}$ the map $C=D_UF_A\mathcal R$ satisfies
+    $\|C\|\le 1$, $CK_{\rm in}=K_{\rm out}D_UF_T$, and
     \begin{align}
         \lVert C(\Omega_{\mathcal F_1}\otimes\Omega_{\mathcal F_2})
         -\Omega_{\mathcal F_1'}\otimes\Omega_{\mathcal F_2'}\rVert
-        \le4L^{-30}.
+        \le4L^{-30}
+        \label{eq:peps_frame_exchange_bound}
     \end{align}
+    (\cite[Lemma~6.6]{OpenAI2026PolynomialPEPS}).
 \end{theorem}
 
 \begin{proof}\leanok
@@ -1290,11 +1123,13 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
         lem:peps_frame_exchange_net_map,lem:peps_frame_exchange_error,
         def:peps_frame_exchange_map,lem:peps_frame_exchange_owners,
         lem:peps_frame_encoder_contraction}
-    The corrections act on $U$, away from every hole of both sheets, so they
-    commute with $K_{\rm out}$; with $F_AF_Y=F_T$ and the intertwining of the
-    renaming, $CK_{\rm in}=K_{\rm out}D_UF_T$. The encoding $K_{\rm out}$ is a
-    contraction, and the exchange error on the reference with
-    $\delta\le L^{-30}$ gives the bound.
+    By Lemma~\ref{lem:peps_frame_exchange_owners}, $D_U$ and $F_A$ act on $U$,
+    disjoint from $H^+(\mathcal F_1')\cup H^+(\mathcal F_2')$, so they commute
+    with $K_{\rm out}$. Combining~(\ref{eq:peps_frame_exchange_intertwining})
+    with $F_AF_{Y\cap\Lambda}=F_T$ (Lemma~\ref{lem:peps_frame_sheet_swap_compose})
+    gives $CK_{\rm in}=K_{\rm out}D_UF_T$; then $\|K_{\rm out}\|\le 1$
+    (Lemma~\ref{lem:peps_frame_encoder_contraction}) and~(\ref{eq:peps_frame_exchange_error})
+    with $\delta\le L^{-30}$ (Lemma~\ref{lem:peps_frame_splitting}) yield~(\ref{eq:peps_frame_exchange_bound}).
 \end{proof}
 
 \begin{theorem}[Two-sheet exchange: holes listed in any order]
@@ -1305,28 +1140,28 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
         TNLean.PEPS.EncodedFrame.TwoSheetExchange.norm_tagReorder_le_one}
     \leanok
     \uses{thm:peps_frame_exchange}
-    Let $\mathcal F_1,\mathcal F_2$ be encoded frames whose holes are listed in
-    any order, each hole classified as outside or inside $Y$ as in the
-    exchange data, and let $\lVert\Omega\rVert=1$ and $I_\Omega(T:E)\le
-        L^{-60}$. There are a relabelling $G$ of the tags of both frames with
-    $G(K_{\mathcal F_1}\otimes K_{\mathcal F_2})=K_{\rm in}$, the encodings
-    of the regrouped listings, and splitting data with error at most
-    $L^{-30}$, such that $CG$ is a contraction,
+    For encoded frames $\mathcal F_1,\mathcal F_2$ with holes listed in
+    arbitrary order, $\lVert\Omega\rVert=1$, and $I_\Omega(T:E)\le L^{-60}$,
+    there exist a tag-reordering unitary $G$ with
+    $G(K_{\mathcal F_1}\otimes K_{\mathcal F_2})=K_{\rm in}$ and splitting data
+    with error $\le L^{-30}$ such that $\|CG\|\le 1$,
     $CG(K_{\mathcal F_1}\otimes K_{\mathcal F_2})=K_{\rm out}D_UF_T$, and
     \begin{align}
         \lVert CG(\Omega_{\mathcal F_1}\otimes\Omega_{\mathcal F_2})
         -\Omega_{\mathcal F_1'}\otimes\Omega_{\mathcal F_2'}\rVert
         \le4L^{-30}.
+        \label{eq:peps_frame_exchange_any_order}
     \end{align}
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:peps_frame_exchange,thm:peps_frame_small_rewrite,
         lem:peps_frame_exchange_error}
-    Encodings of distinct holes commute after the identification of
-    tag orderings (\texttt{05-frames.tex}, lines 84--85), which gives the
-    contraction $G$. Applying the exchange to the regrouped listings and
-    composing with $G$ completes the proof.
+    By Theorem~\ref{thm:peps_frame_small_rewrite} (\texttt{05-frames.tex},
+    lines 84--85), reordering holes with disjoint outer footprints yields a tag
+    relabelling unitary $G$ satisfying
+    $G(K_{\mathcal F_1}\otimes K_{\mathcal F_2})=K_{\rm in}$; composing with
+    $C$ from Theorem~\ref{thm:peps_frame_exchange} gives~(\ref{eq:peps_frame_exchange_any_order}).
 \end{proof}
 
 \begin{lemma}[Exchange corrections as one private contraction]
@@ -1341,23 +1176,19 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     \leanok
     \uses{def:peps_frame_exchange_map,lem:peps_frame_exchange_owners,
         lem:peps_front_registers,def:peps_monomial_parties}
-    In the setting of the exchange partition, the corrections are
-    $D_UF_A=\id\otimes W$ in the coordinates in which the two copies of
-    $\mathcal H_T\otimes\mathcal H_E$ come first, where
-    $W=(V^{\otimes2})^\dagger F_{\mathcal B_T}V^{\otimes2}F_A$ acts on the two
-    copies of $\mathcal H_U$ and $\lVert W\rVert\le1$. The registers of $U$ are
-    held by $P_\circ$ on both sheets before and after the exchange. On two
-    registers of $P_\circ$, each grouping the site registers of $U$ on one sheet,
-    followed by an arbitrary list of further registers, $W\otimes\id$ is the
-    operator of one allowed private contraction at $P_\circ$
-    (\texttt{05-frames.tex}, lines 503--515).
+    In Definition~\ref{def:peps_frame_exchange_map},
+    $D_UF_A=\id_{(T\cup E)^{\otimes 2}}\otimes W$, where
+    $W=(V^{\otimes2})^\dagger F_{\mathcal B_T}V^{\otimes2}F_A$ acts on
+    $\mathcal H_U^{\otimes 2}$ with $\lVert W\rVert\le 1$. On two grouped
+    $\mathcal H_U$ registers held by $P_\circ$ followed by untouched registers,
+    $W\otimes\id$ is realized by a single allowed private contraction at
+    $P_\circ$ (\texttt{05-frames.tex}, lines 503--515).
 \end{lemma}
 
 \begin{proof}\leanok
-    Since $A\subseteq U$, the swap $F_A$ exchanges only the $A$-parts of the
-    two copies of $\mathcal H_U$, so $F_A=\id\otimes F'_A$, and
-    $D_U=\id\otimes(V^{\otimes2})^\dagger F_{\mathcal B_T}V^{\otimes2}$. Each
-    factor of $W$ is a contraction.
+    Since $A\subseteq U$, both $F_A$ and $D_U$ act on $\mathcal H_U^{\otimes 2}$
+    with norm $\le 1$, and Lemma~\ref{lem:peps_front_registers} realizes $W$ as
+    a local contraction at $P_\circ$ (Lemma~\ref{lem:peps_frame_exchange_owners}).
 \end{proof}
 
 \begin{lemma}[Registers of two frames]
@@ -1369,16 +1200,15 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
         TNLean.PEPS.EncodedFrame.act_toMatrix_symm_single}
     \leanok
     \uses{lem:peps_frame_registers_coordinates}
-    The registers of two frames, those of the first followed by those of the
-    second, are identified with the product of the coordinates of
-    the two frames, product basis vectors going to standard basis vectors. Two
-    operators on these registers agree as soon as they agree on product basis
+    The concatenated register list of two frames is canonically identified via
+    Lemma~\ref{lem:peps_frame_registers_coordinates} with the tensor product of
+    their coordinate spaces, mapping product basis vectors to standard basis
     vectors.
 \end{lemma}
 
 \begin{proof}\leanok
-    Combining the identifications of the two frames and expanding a vector in the
-    standard basis yields both claims.
+    Combine the two single-frame coordinate isometries of
+    Lemma~\ref{lem:peps_frame_registers_coordinates}.
 \end{proof}
 
 \begin{lemma}[The renaming as reorderings]
@@ -1395,20 +1225,18 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     \leanok
     \uses{def:peps_frame_exchange_data,lem:peps_register_reorderings,
         lem:peps_two_frame_registers}
-    The renaming $\mathcal R$ is the operator of a composition of exchanges
-    of tensor factors from the registers of the two frames to the registers
-    of the two exchanged frames, using no party and no pair resource. It
-    splits the tags of each frame into those of the holes outside and inside
-    $Y$, moves the site registers of the sites of $Y$ next to the inside tags,
-    exchanges these blocks between the sheets, and merges back; every
-    register keeps its party (\texttt{05-frames.tex}, lines 485--490).
+    The renaming $\mathcal R$ of Definition~\ref{def:peps_frame_exchange_data}
+    is realized by an allowed register reordering (Lemma~\ref{lem:peps_register_reorderings})
+    between the registers of $(\mathcal F_1,\mathcal F_2)$ and
+    $(\mathcal F_1',\mathcal F_2')$, using no party and $(s,e)=(0,0)$
+    (\texttt{05-frames.tex}, lines 485--490).
 \end{lemma}
 
 \begin{proof}\leanok
-    Under these reorderings, the configurations inside $Y$ and the inside
-    tags of the two sheets change places on each product basis vector, and
-    the owners of the moved site registers become the new owners at those sites,
-    producing the basis vector of the renamed configuration.
+    Partition the site registers into $Y\cap\Lambda$ and $\Lambda\setminus Y$
+    and split the tag registers into outside-$Y$ and inside-$Y$ blocks by
+    Lemma~\ref{lem:peps_register_reorderings}, swap the inside-$Y$ site and tag
+    blocks between the two sheets, and merge back.
 \end{proof}
 
 \begin{theorem}[Coordinates on two copies of a region]
@@ -1422,20 +1250,18 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     \leanok
     \uses{def:peps_frame_registers,lem:peps_frame_registers_coordinates,
         thm:peps_region_configuration}
-    Let $T,E\subseteq\Lambda$ and $U=\Lambda\setminus(T\cup E)$, with two
-    arbitrary assignments of site owners. Retain the sites of $U$ in the
-    fixed site order; every site in the complementary list belongs to
-    $T\cup E$. Let $\ket c_{U,j}$ be the product basis vector on these site
-    registers on sheet $j$, and let $\iota_U$ be the inverse of the concatenation
-    isometry separating their two consecutive lists. Grouping both lists
-    gives an isometry $Q_U$ to $\C^{[q]^U\times[q]^U}$ satisfying
+    For $T,E\subseteq\Lambda$ and $U=\Lambda\setminus(T\cup E)$, let
+    $\ket c_{U,j}$ be the product basis vector on the $U$-site registers of
+    sheet $j\in\{1,2\}$, and let $\iota_U$ be the inverse concatenation
+    isometry on the two consecutive $U$-lists. Grouping both lists gives an
+    isometry $Q_U$ onto $\C^{[q]^U\times[q]^U}$ satisfying
     \begin{align}
         Q_U\iota_U(\ket{c_1}_{U,1}\otimes\ket{c_2}_{U,2})
-         & =\ket{c_1|_U,c_2|_U}.
+         & =\ket{c_1|_U,c_2|_U},
         \label{eq:peps_two_region_basis}
     \end{align}
-    If $T\cap E=\varnothing$, take any configurations $c_1,c_2$ and
-    $u_1,u_2\in[q]^U$, and set $c_j^{u_j}=m(c_j|_T,u_j;c_j)$. Then
+    and if $T\cap E=\varnothing$, then for $c_j^{u_j}=m(c_j|_T,u_j;c_j)$
+    (Theorem~\ref{thm:peps_region_configuration}),
     \begin{align}
         Q_U^{-1}\ket{u_1,u_2}
          & =\iota_U(\ket{c_1^{u_1}}_{U,1}\otimes\ket{c_2^{u_2}}_{U,2}).
@@ -1446,13 +1272,10 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 \begin{proof}\leanok
     \uses{thm:peps_region_register_coordinates,thm:peps_region_configuration,
         lem:peps_frame_registers_coordinates}
-    Grouping the two lists by their position bijections and identifying the tensor
-    product of their coordinate spaces with the space indexed by pairs of
-    configurations proves (\ref{eq:peps_two_region_basis}), while the
-    complementary list contains only sites outside $U$. For the inverse,
-    $c_j^{u_j}|_U=u_j$ by (\ref{eq:peps_region_reconstruction}), so substituting
-    into (\ref{eq:peps_two_region_basis}) and applying $Q_U^{-1}$ gives the
-    inverse formula.
+    Apply~(\ref{eq:peps_region_grouping_basis}) of
+    Theorem~\ref{thm:peps_region_register_coordinates} on each copy of $U$ to
+    obtain~(\ref{eq:peps_two_region_basis}), and use $c_j^{u_j}|_U=u_j$
+    from~(\ref{eq:peps_region_reconstruction}) for~(\ref{eq:peps_two_region_inverse}).
 \end{proof}
 
 \begin{lemma}[The corrections on the registers of two frames]
@@ -1470,25 +1293,21 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     \leanok
     \uses{lem:peps_register_reorderings,lem:peps_two_frame_registers,
         lem:peps_frame_exchange_correction_monomial}
-    Let $T,E\subseteq\Lambda$ be disjoint and let the site registers of
-    $U=\Lambda\setminus(T\cup E)$ be held by $P_\circ$ on both frames. Moving
-    the site registers of $U$ of both sheets to the front, applying a
-    contraction $W$ of the two copies of $\mathcal H_U$ as one private
-    contraction at $P_\circ$, and moving them back is an allowed monomial
-    using only $P_\circ$ and no pair resource, whose operator in product
-    coordinates is the identity on the tags and on the two copies of
-    $T\cup E$, tensored with $W$.
+    For disjoint $T,E\subseteq\Lambda$ with $U=\Lambda\setminus(T\cup E)$ held
+    by $P_\circ$ on both frames, moving the $U$-registers of both sheets to the
+    front, applying the private contraction $W$ of
+    Lemma~\ref{lem:peps_frame_exchange_correction_monomial} at $P_\circ$, and
+    moving them back is an allowed effect-free word using only $\{P_\circ\}$
+    with $s=0$ and product-coordinate operator
+    $\id_{\rm tags}\otimes\id_{(T\cup E)^{\otimes 2}}\otimes W=\id_{\rm tags}\otimes D_UF_A$.
 \end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_two_region_coordinates,thm:peps_region_configuration}
-    By (\ref{eq:peps_two_region_basis}) and
-    (\ref{eq:peps_two_region_inverse}), on a product basis vector the
-    moved registers carry the two configurations on $U$, the contraction
-    gives the column of $W$, and moving back gives the basis vectors with
-    these configurations replaced. The reconstructed configurations agree
-    with the originals on $T\cup E$, so the remaining site registers and
-    all tags are unchanged.
+    Combine Lemma~\ref{lem:peps_register_reorderings},
+    Lemma~\ref{lem:peps_frame_exchange_correction_monomial}, and
+    Theorem~\ref{thm:peps_two_region_coordinates}
+    via~(\ref{eq:peps_two_region_basis})--(\ref{eq:peps_two_region_inverse}).
 \end{proof}
 
 \begin{theorem}[Two-sheet exchange: bounded change]
@@ -1499,23 +1318,14 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     \leanok
     \uses{thm:peps_frame_exchange,thm:peps_frame_exchange_any_order,
         def:peps_frame_registers,def:peps_monomial_parties}
-    Consider two encoded frames and a region $Y$ such that every hole's
-    outer square lies on one side of $\partial Y$, a party $P_\circ$ with
-    $Z$, $T$, $E$, $U$ as in the exchange partition, and
-    $\lVert\Omega\rVert=1$ with $I_\Omega(T:E)\le L^{-60}$. The exchange is
-    implemented by private contractions and register renaming, with
-    reference-vector error at most $4L^{-30}$: there are splitting data and
-    an allowed monomial from the registers of the two frames to those of the
-    two exchanged frames, consisting of exchanges of tensor factors and
-    private contractions at $P_\circ$, so using only $P_\circ$ and no pair
-    resource, whose operator in product coordinates is the implemented map
-    $C=D_UF_A\mathcal R$ (composed with the relabelling $G$ of the tags when
-    the holes are listed in any order), and which maps the product of the two
-    reference vectors within $4L^{-30}$ of the product of the new ones. In particular, the exchange of
-    \cite[Lemma~6.6]{OpenAI2026PolynomialPEPS} (\texttt{05-frames.tex},
-    lines 460--479) is a bounded change in the sense of
-    \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS}, without using the additional
-    owners of the renamed registers and tags allowed by the source.
+    Under the hypotheses of Theorem~\ref{thm:peps_frame_exchange} (or
+    Theorem~\ref{thm:peps_frame_exchange_any_order} for arbitrary hole
+    orderings), the two-sheet exchange is realized by an allowed monomial
+    between the registers of $(\mathcal F_1,\mathcal F_2)$ and
+    $(\mathcal F_1',\mathcal F_2')$ using only $\{P_\circ\}$ and $(s,e)=(0,0)$,
+    with operator $C=D_UF_A\mathcal R$ (or $CG$) and reference-vector error
+    $\le 4L^{-30}$ (\cite[Lemma~6.6 and Theorem~5.2]{OpenAI2026PolynomialPEPS},
+    \texttt{05-frames.tex}, lines 460--479).
 \end{theorem}
 
 \begin{proof}\leanok
@@ -1523,19 +1333,11 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
         lem:peps_exchange_renaming_word,lem:peps_exchange_correction_word,
         lem:peps_frame_exchange_correction_monomial,
         lem:peps_frame_exchange_owners,lem:peps_register_reorderings}
-    We compose the renaming as reorderings with the corrections on the
-    registers of the exchanged frames, whose site registers of $U$ are held by
-    $P_\circ$ on both sheets. The operators compose to
-    $D_UF_A\mathcal R$, since $D_UF_A$ is the identity on the tags and on the
-    two copies of $T\cup E$ tensored with one contraction of the two copies
-    of $\mathcal H_U$. For holes in any order, precede by the
-    identification of tag orderings via reorderings, whose operator is $G$;
-    these exchanges of tag registers move the tag of each hole to the
-    position of that hole in the new list, and $G$ is the corresponding
-    relabelling of the tags, which preserves the sheet part of each encoding.
-    The reference error is that of Theorems~\ref{thm:peps_frame_exchange}
-    and~\ref{thm:peps_frame_exchange_any_order}, read through the unitary
-    identification of the registers.
+    Compose the tag-reordering word of Lemma~\ref{lem:peps_register_reorderings}
+    (if needed), the renaming word of Lemma~\ref{lem:peps_exchange_renaming_word},
+    and the correction word of Lemma~\ref{lem:peps_exchange_correction_word};
+    the operator and error bound follow from Theorem~\ref{thm:peps_frame_exchange}
+    and Theorem~\ref{thm:peps_frame_exchange_any_order}.
 \end{proof}
 
 \subsection{Sheets without holes}

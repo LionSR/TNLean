@@ -3,19 +3,18 @@
     \lean{TNLean.PEPS.regionGroundSpace_regularTwistedSite_eq_of_trivial_on_incident}
     \leanok
     \uses{def:peps_region_ground_space, def:peps_open_region_contraction}
-    Consider a finite graph tensor with regular group labels and bond
-    insertions equal to the identity on every edge incident to $R$.
-    The inserted tensor has the same regional ground space
-    $\mathcal G_R$ as the original tensor.
+    For a finite graph tensor $A$ with regular group labels and bond insertions
+    $u_e\in G$ satisfying $u_e=1$ for every $e\in\operatorname{Inc}(R)$, the
+    inserted tensor $A^u$ has $\mathcal G_R(A^u)=\mathcal G_R(A)$.
     The strict interior restriction and the remaining global closure problem are recorded in
     \cite{gap:rmp_peps_quantum_double_g_isometry}.
 \end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_regular_region_range}
-    All tensor coefficients in the open contraction of $R$ are
-    unchanged. Thus the open-region matrices, and hence their
-    physical ranges, agree.
+    Since $u_e=1$ on $\operatorname{Inc}(R)$, $A_v^u=A_v$ for all $v\in R$; by
+    Theorem~\ref{thm:peps_regular_region_range}, their open-region contraction
+    matrices and physical ranges $\mathcal G_R(A^u)=\mathcal G_R(A)$ coincide.
 \end{proof}
 
 \begin{theorem}[Torus closures satisfy interior regional parent constraints]%
@@ -25,19 +24,16 @@
         TNLean.PEPS.regionLocalTerm_torusGClosure_sum_eq_zero_interior_rectangle}
     \leanok
     \uses{def:peps_region_ground_space, def:peps_region_parent_interaction}
-    Let a four-leg tensor with regular group labels be placed on a
-    native square torus with both periods at least three. Let $R$ be
-    a coordinate rectangle whose starting coordinates are positive
-    and whose ending coordinates are strictly below the torus
-    periods. For every pair of closure elements $g,h$, every physical
-    slice of the native closure vector $\Psi_{g,h}$ across $R$ lies
-    in the original regional ground space $\mathcal G_R$.
-    Consequently this holds for every coherent sum
-    $\Psi=\sum_i\mu_i\Psi_{g_i,h_i}$, and every regional parent
-    interaction $h_R$ for the original tensor satisfies
-    \[
-        h_R^{\mathrm{global}}\Psi=0.
-    \]
+    Place a four-leg tensor $A$ with regular group labels on a native square
+    torus $\Z_{L_x}\times\Z_{L_y}$ with $L_x,L_y\ge 3$, and let
+    $R=[x_0,x_1]\times[y_0,y_1]$ be a strict interior rectangle
+    ($0<x_0\le x_1<L_x-1$, $0<y_0\le y_1<L_y-1$). For any $g,h\in G$ and
+    exterior configuration $\tau$, the slice $\Psi_{g,h}(\cdot,\tau)$ of the
+    native closure vector lies in $\mathcal G_R(A)$. Consequently, every
+    linear combination $\Psi=\sum_i\mu_i\Psi_{g_i,h_i}$ satisfies
+    $\Psi(\cdot,\tau)\in\mathcal G_R(A)$ and
+    $h_R^{\mathrm{global}}\Psi=0$ for every regional parent interaction $h_R$
+    (Definition~\ref{def:peps_region_parent_interaction}).
     No isometry, $G$-injectivity, or commutativity of $g_i,h_i$ is
     assumed. This is an interior local constraint; it does not assert
     the full torus ground-space classification of
@@ -47,12 +43,12 @@
 \begin{proof}\leanok
     \uses{lem:peps_regular_complementary_twists_region_space,
         thm:peps_region_ground_space_slice}
-    The native closure is the graph contraction with its holonomy
-    operators inserted at ordered seam endpoints. No seam bond is
-    incident to the strict interior rectangle. Its open contraction
-    therefore has the original regional ground space. Every slice
-    of the closed inserted tensor belongs to that space. A subspace
-    contains coherent sums of its vectors, so the assertion extends
-    to $\Psi$. The globally extended interaction vanishes precisely
-    when its regional kernel contains every such slice.
+    The closure $\Psi_{g,h}=\Psi(A^{u_{g,h}})$ inserts $g,h$ only on seam
+    bonds, none of which is incident to the strict interior rectangle $R$.
+    Lemma~\ref{lem:peps_regular_complementary_twists_region_space} gives
+    $\mathcal G_R(A^{u_{g,h}})=\mathcal G_R(A)$, so
+    Theorem~\ref{thm:peps_region_ground_space_slice} places every slice
+    $\Psi_{g,h}(\cdot,\tau)$ in $\mathcal G_R(A)$. By linearity,
+    $\Psi(\cdot,\tau)\in\mathcal G_R(A)\subseteq\ker h_R$ for all $\tau$,
+    whence $h_R^{\mathrm{global}}\Psi=0$.
 \end{proof}

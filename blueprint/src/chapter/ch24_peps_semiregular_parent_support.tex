@@ -84,15 +84,13 @@ $E_{R^c}$ for its exterior edges. An edge $f=(t,h)$ has $t<h$.
     The assertions allow empty sets and impose no rank condition on $F$.
 \end{theorem}
 \begin{proof}\leanok
-    A slice of $F^{\otimes S}\chi$ is a linear combination of columns
-    of $F$, with coefficients obtained by contracting all other factors.
-    For the converse choose a linear right inverse of $F$ on its image
-    and extend it to $L:\C^Y\to\C^X$. Thus $FL$ fixes every slice.
-    Applying $FL$ at one coordinate fixes $\psi$. Induction over finite
-    subsets of $S$ shows that applying it at all coordinates also fixes
-    $\psi$. Consequently
-    $F^{\otimes S}(L^{\otimes S}\psi)=(FL)^{\otimes S}\psi=\psi$.
-    The same induction proves the assertion about an arbitrary $P$.
+    Each slice $(F^{\otimes S}\chi)_{v,\tau}=F(\sum_{\sigma_{S\setminus\{v\}}}\chi(\sigma)\prod_{w\ne v}F_{\tau_w,\sigma_w})$
+    lies in $\operatorname{im}F$. Conversely, choose $L:\C^Y\to\C^X$ with
+    $FL|_{\operatorname{im}F}=\mathrm{id}$; then $(FL)\psi_{v,\tau}=\psi_{v,\tau}$
+    for all $v,\tau$, so induction over finite subsets of $S$ gives
+    $F^{\otimes S}(L^{\otimes S}\psi)=(FL)^{\otimes S}\psi=\psi$. The same
+    coordinate induction proves $P^{\otimes S}\psi=\psi$ from
+    $P\psi_{v,\tau}=\psi_{v,\tau}$.
 \end{proof}
 
 \begin{definition}[Endpoint labels and equal-copy amplitudes]%
@@ -113,7 +111,7 @@ $E_{R^c}$ for its exterior edges. An edge $f=(t,h)$ has $t<h$.
         \end{cases}
         \label{eq:peps_parent_support_copy_amplitude}
     \end{align}
-    Whenever the first case occurs, $M_i$ contains $u$, so $m_i>0$.
+    Whenever the first case occurs, $u\in M_i$, so $m_i>0$.
 \end{definition}
 
 \begin{theorem}[Sparse action of multiplicity restoration]%
@@ -127,7 +125,7 @@ $E_{R^c}$ for its exterior edges. An edge $f=(t,h)$ has $t<h$.
     \uses{def:peps_parent_support_copy_amplitude,
         thm:peps_full_multiplicity_bond_map}
     Let $F=E_YJE_X^\dagger:\C^{X\times X}\to\C^{Y\times Y}$
-    be the full endpoint multiplicity map, where
+    be the full endpoint multiplicity map (Theorem~\ref{thm:peps_full_multiplicity_bond_map}), where
     $J\ket{i,a,b}=m_i^{-1/2}\sum_{u\in M_i}\ket{i,(a,u),(b,u)}$
     and an empty sum is zero. Its coefficient and action formulas are
     \begin{align}
@@ -139,22 +137,18 @@ $E_{R^c}$ for its exterior edges. An edge $f=(t,h)$ has $t<h$.
         \psi\bigl((b(\beta_{h,f}),b(\beta_{t,f}))_{f\in E}\bigr).
         \label{eq:peps_parent_support_sparse_product}
     \end{align}
-    Also $a(y,z)=a(z,y)$. These formulas require neither nonempty
-    multiplicity sets nor support conditions on the input vectors.
-    More generally, for a coordinate inclusion $j:B\hookrightarrow A$
-    with $A$ finite, its inclusion matrix satisfies
-    $(E_j^\dagger\phi)(i)=\phi(j(i))$.
+    Moreover $a(y,z)=a(z,y)$, without assuming $M_i\ne\varnothing$ or input
+    support conditions. More generally, for any coordinate inclusion
+    $j:B\hookrightarrow A$ with $A$ finite, $(E_j^\dagger\phi)(i)=\phi(j(i))$.
 \end{theorem}
 \begin{proof}\leanok
-    The adjoint of a coordinate inclusion selects its included
-    coordinates. For equal sectors, the multiplicity map retains equal
-    copy labels and multiplies by $m_i^{-1/2}$; for unequal sectors its
-    coefficient is zero. This proves the formula for $F\phi$.
-    Evaluating it on coordinate vectors gives
-    (\ref{eq:peps_parent_support_sparse_coefficient}); the product of
-    its coordinate indicators selects the single input configuration
-    in~(\ref{eq:peps_parent_support_sparse_product}). Equal copy labels
-    have equal sectors and hence equal normalizations, proving symmetry.
+    Since $(E_j^\dagger\phi)(i)=\phi(j(i))$, $E_YJE_X^\dagger$ retains equal
+    copy labels $c(y)=c(z)=(i,u)$ with weight $m_i^{-1/2}$ and vanishes when
+    $c(y)\ne c(z)$, giving $(F\phi)(y,z)=a(y,z)\phi(b(y),b(z))$. Evaluating on
+    basis vectors yields~(\ref{eq:peps_parent_support_sparse_coefficient}),
+    whose $E$-fold product gives~(\ref{eq:peps_parent_support_sparse_product});
+    $c(y)=c(z)\iff c(z)=c(y)$ in~(\ref{eq:peps_parent_support_copy_amplitude})
+    gives $a(y,z)=a(z,y)$.
 \end{proof}
 
 \begin{theorem}[Supported inverses of the multiplicity product]%
@@ -165,8 +159,8 @@ $E_{R^c}$ for its exterior edges. An edge $f=(t,h)$ has $t<h$.
     \leanok
     \uses{thm:peps_full_multiplicity_bond_map}
     Assume every $M_i$ is nonempty. Let $E_X$ be the matching-sector
-    inclusion and let $\mathcal F=F^{\otimes E}$ for a finite set $E$.
-    Then $FF^\dagger F=F$. For $\psi\in\operatorname{im}E_X^{\otimes E}$
+    inclusion and $\mathcal F=F^{\otimes E}$ for a finite set $E$.
+    Then $FF^\dagger F=F$, and for $\psi\in\operatorname{im}E_X^{\otimes E}$
     and $\phi\in\operatorname{im}\mathcal F$,
     \begin{align}
         \mathcal F^\dagger\mathcal F\psi & =\psi, \\
@@ -177,11 +171,11 @@ $E_{R^c}$ for its exterior edges. An edge $f=(t,h)$ has $t<h$.
 \begin{proof}\leanok
     \uses{thm:peps_full_multiplicity_bond_map,
         thm:peps_physical_product_supported_isometry}
-    Since $F^\dagger F=E_XE_X^\dagger$ and $E_X^\dagger E_X=I$,
-    the factorization $F=E_YJE_X^\dagger$ gives $FF^\dagger F=F$.
-    Products respect multiplication. Write
-    $\psi=E_X^{\otimes E}\chi$ and $\phi=\mathcal F\eta$, respectively,
-    and cancel the corresponding local factors.
+    By Theorem~\ref{thm:peps_full_multiplicity_bond_map},
+    $F^\dagger F=E_XE_X^\dagger$ and $E_X^\dagger E_X=I$, so $F=E_YJE_X^\dagger$
+    satisfies $FF^\dagger F=F(E_XE_X^\dagger)=F$. Writing
+    $\psi=E_X^{\otimes E}\chi$ and $\phi=\mathcal F\eta$,
+    Theorem~\ref{thm:peps_physical_product_supported_isometry} gives~(\ref{eq:peps_parent_support_retractions}).
 \end{proof}
 
 \subsection{One-ended boundary transformations}
@@ -224,20 +218,18 @@ $E_{R^c}$ for its exterior edges. An edge $f=(t,h)$ has $t<h$.
         (B_z^\lambda\phi)(y)
          & =\lambda_{i(y)}a(y,z)\phi(b(y)).
     \end{align}
-    The entries of $B_z$ are real, hence $B_z^\dagger=B_z^{\mathsf T}$.
-    A block scalar may be read from either index:
-    $(M_\lambda)_{x,r}=\lambda_{i(x)}M_{x,r}
-        =\lambda_{i(r)}M_{x,r}$.
+    Moreover $B_z^\dagger=B_z^{\mathsf T}$, and
+    $(M_\lambda)_{x,r}=\lambda_{i(x)}M_{x,r}=\lambda_{i(r)}M_{x,r}$.
 \end{theorem}
 \begin{proof}\leanok
-    The block-diagonal and identity factors force the sector and copy
-    coordinates in the sum. The remaining matrix entry is that of
-    $T_i$, multiplied by $\lambda_i m_i^{-1/2}$. Transposing the
-    block matrices exchanges the two contraction formulas.
-    The action formula follows by summing the single surviving input
-    coordinate in~(\ref{eq:peps_parent_support_boundary_filter}).
-    Its unit-weight coefficient is real. Off-block entries vanish;
-    on a block, the row and column sector labels agree.
+    In $\sum_r(B_z^\lambda)_{r,x}M^{[m]}_{r,y}$, the Kronecker deltas in
+    (\ref{eq:peps_parent_support_boundary_filter}) and $I_{M_i}$ force
+    $b(r)=x$ and $c(r)=c(y)$, leaving $\lambda_{i(y)}a(y,z)(T_i)_{a(x),a(y)}=a(y,z)(M_\lambda)_{x,b(y)}$;
+    transposing $T_i$ gives the second line of~(\ref{eq:peps_parent_support_boundary_contraction}).
+    Summing $\delta_{b(y),x}$ in~(\ref{eq:peps_parent_support_boundary_filter})
+    gives $(B_z^\lambda\phi)(y)$, real entries of $B_z$ give
+    $B_z^\dagger=B_z^{\mathsf T}$, and block diagonality $i(x)=i(r)$ gives the
+    weight identity.
 \end{proof}
 
 \begin{theorem}[Adjoint boundary and internal factors]%
@@ -249,7 +241,8 @@ $E_{R^c}$ for its exterior edges. An edge $f=(t,h)$ has $t<h$.
         TNLean.PEPS.blockMatrixRepresentation_mul_blockFourthRootWeight}
     \leanok
     \uses{thm:peps_parent_support_boundary_factors}
-    Suppose $\lambda_i\ne0$ for every $i$. With the preceding notation,
+    Suppose $\lambda_i\ne0$ for every $i$. With the notation of
+    Theorem~\ref{thm:peps_parent_support_boundary_factors},
     \begin{align}
         \left[B_z^\dagger(M^{[m]}_{\cdot,y})\right](x)
          & =\lambda_{i(y)}^{-1}a(y,z)(M_\lambda)_{x,b(y)}, \\
@@ -257,7 +250,7 @@ $E_{R^c}$ for its exterior edges. An edge $f=(t,h)$ has $t<h$.
          & =\lambda_{i(y)}^{-1}a(y,z)(M_\lambda)_{b(y),x}.
         \label{eq:peps_parent_support_boundary_adjoint}
     \end{align}
-    Independently of these weights, if every $M_i$ is nonempty then
+    Independently of $\lambda_i$, if every $M_i$ is nonempty then
     \begin{align}
         F^\dagger\operatorname{vec}\left(\bigoplus_i T_i\otimes I_{M_i}\right)
         =\operatorname{vec}\left(\bigoplus_i\sqrt{m_i}\,T_i\right)
@@ -273,16 +266,15 @@ $E_{R^c}$ for its exterior edges. An edge $f=(t,h)$ has $t<h$.
     \uses{thm:peps_parent_support_boundary_factors,
         thm:peps_full_multiplicity_bond_map,
         lem:peps_matching_sector_bond_inclusion}
-    Applying~(\ref{eq:peps_parent_support_boundary_contraction}) with
-    unit weights and using $B_z^\dagger=B_z^{\mathsf T}$ gives the adjoint boundary formulas, since reading the
-    block weight from the fixed $y$ index permits cancellation of
-    $\lambda_{i(y)}$. Because the repeated matrix-entry vector in
-    (\ref{eq:peps_parent_support_internal_adjoint}) is $F$ applied
-    to the square-root-weighted block vector and
-    the block-diagonal input lies in the matching-sector range,
-    $F^\dagger F=E_XE_X^\dagger$ yields the internal adjoint identity.
-    The fourth-root identities follow by multiplying block-scalar
-    matrices on the left and on the right.
+    Evaluating~(\ref{eq:peps_parent_support_boundary_contraction}) at $\lambda=1$
+    with $B_z^\dagger=B_z^{\mathsf T}$ and
+    $M_{x,b(y)}=\lambda_{i(y)}^{-1}(M_\lambda)_{x,b(y)}$ gives~(\ref{eq:peps_parent_support_boundary_adjoint}).
+    Since $\operatorname{vec}(\bigoplus_i T_i\otimes I_{M_i})=F\operatorname{vec}(\bigoplus_i\sqrt{m_i}\,T_i)$
+    and $\operatorname{vec}(\bigoplus_i\sqrt{m_i}\,T_i)\in\operatorname{im}E_X$
+    (Lemma~\ref{lem:peps_matching_sector_bond_inclusion}),
+    $F^\dagger F=E_XE_X^\dagger$ (Theorem~\ref{thm:peps_full_multiplicity_bond_map})
+    yields~(\ref{eq:peps_parent_support_internal_adjoint}). Block diagonality
+    gives $WD(g)=D(g)W$.
 \end{proof}
 
 \subsection{Physical coordinates and regional operator blocks}
@@ -298,25 +290,22 @@ $E_{R^c}$ for its exterior edges. An edge $f=(t,h)$ has $t<h$.
         TNLean.PEPS.regionOutsideBoundaryEndpoint}
     \leanok
     \uses{def:peps_region_half_edge_label_equiv}
-    Choose bijections $e_v:X^{\operatorname{Inc}(v)}\to\{0,\ldots,p-1\}$.
-    Decoding a numbered configuration and grouping its endpoint labels
-    gives a bijection $j_e:\{0,\ldots,p-1\}^V\to(X\times X)^E$.
-    The pair on $f=(t,h)$ is $(x_{h,f},x_{t,f})$.
-    Its coefficient-space isomorphism is
-    $J_e\psi(\beta)=\psi(j_e^{-1}\beta)$.
-    Regionally the same regrouping gives
+    Given bijections $e_v:X^{\operatorname{Inc}(v)}\to\{0,\ldots,p-1\}$,
+    regrouping endpoint labels (Definition~\ref{def:peps_region_half_edge_label_equiv})
+    defines $j_e:\{0,\ldots,p-1\}^V\to(X\times X)^E$ with
+    $(j_e\sigma)_f=(x_{h,f},x_{t,f})$ on $f=(t,h)$, and
+    $(J_e\psi)(\beta)=\psi(j_e^{-1}\beta)$. On a region $R$,
     \begin{align}
         j_{e,R}:\{0,\ldots,p-1\}^R
          & \longrightarrow X^{\partial E_R}\times(X\times X)^{E_R},
          & J_{e,R}\phi                                              & =\phi\circ j_{e,R}^{-1}.
         \label{eq:peps_parent_support_bond_coordinates}
     \end{align}
-    The inverse assigns each crossing label to its inside incidence,
-    and each internal pair to its head and tail incidences, before
-    applying the corresponding $e_v$.
-    If $\sigma$ is a numbered exterior configuration, let
-    $\gamma^e_R(\sigma)_f$ be its endpoint label outside $R$:
-    the head label when $t\in R$, and the tail label when $h\in R$.
+    Here $j_{e,R}^{-1}$ places each crossing label at its inside incidence and
+    each internal pair at $(h(f),t(f))$ before applying $e_v$. For an exterior
+    configuration $\sigma$ and $f\in\partial E_R$, write $\gamma^e_R(\sigma)_f$
+    for its outside endpoint label ($x_{h,f}$ if $t(f)\in R$, $x_{t,f}$ if
+    $h(f)\in R$).
 \end{definition}
 
 \begin{definition}[The global bond operator in physical coordinates]%
@@ -341,17 +330,15 @@ $E_{R^c}$ for its exterior edges. An edge $f=(t,h)$ has $t<h$.
         TNLean.PEPS.graphNumberedBondMatrix_conjTranspose}
     \leanok
     \uses{def:peps_parent_support_numbered_operator}
-    The matrix $N_F$ is the matrix of $F^{\otimes E}$ with rows
-    relabelled by $j_{e^Y}$ and columns by $j_{e^X}$. Thus
-    $J_{e^Y}N_F=F^{\otimes E}J_{e^X}$ and $N_F^\dagger=N_{F^\dagger}$,
-    where the latter operator exchanges the two enumerations.
+    The matrix $N_F$ satisfies
+    $(N_F)_{\tau,\sigma}=(F^{\otimes E})_{j_{e^Y}\tau,j_{e^X}\sigma}$,
+    $J_{e^Y}N_F=F^{\otimes E}J_{e^X}$, and $N_F^\dagger=N_{F^\dagger}$ (with
+    $e^X,e^Y$ exchanged).
 \end{theorem}
 \begin{proof}\leanok
-    The product coefficients agree by definition, and
-    reindexing the matrix-vector sum by the bijection $j_{e^X}$
-    gives the intertwining identity. Conjugating each factor in
-    (\ref{eq:peps_parent_support_numbered_operator}) proves the
-    adjoint identity.
+    Immediate from~(\ref{eq:peps_parent_support_numbered_operator}) by
+    reindexing the matrix-vector sum along the bijection $j_{e^X}$ and
+    taking conjugate transposes factor by factor.
 \end{proof}
 
 \begin{definition}[Blocks with fixed exterior configurations]%
@@ -381,24 +368,18 @@ $E_{R^c}$ for its exterior edges. An edge $f=(t,h)$ has $t<h$.
         \label{eq:peps_parent_support_block_slice}                                  \\
         (M^\dagger)_R[\sigma,\tau] & =M_R[\tau,\sigma]^\dagger.
     \end{align}
-    Let $A,B$ be tensors on the same graph, possibly with different
-    physical dimensions, and let $\mathcal R=(R_i)_{i\in\iota}$ be
-    any region family. If
-    $M_{R_i}[\tau,\sigma]\mathcal G_{R_i}(A)
-        \subseteq\mathcal G_{R_i}(B)$ for every $i,\tau,\sigma$, then
-    $M\mathcal P_{\mathcal R}(A)\subseteq\mathcal P_{\mathcal R}(B)$.
-    Here $\mathcal P_{\mathcal R}(A)$ consists of vectors whose every
-    exterior slice on $R_i$ belongs to $\mathcal G_{R_i}(A)$.
+    For tensors $A,B$ on $\Gamma$ and any region family $\mathcal R=(R_i)_{i\in\iota}$,
+    if $M_{R_i}[\tau,\sigma]\mathcal G_{R_i}(A)\subseteq\mathcal G_{R_i}(B)$
+    for all $i,\tau,\sigma$, then
+    $M\mathcal P_{\mathcal R}(A)\subseteq\mathcal P_{\mathcal R}(B)$, where
+    $\mathcal P_{\mathcal R}(A)=\{\psi:\forall i,\sigma,\ S_{R_i,\sigma}\psi\in\mathcal G_{R_i}(A)\}$.
 \end{theorem}
 \begin{proof}\leanok
-    Splitting the global input-coordinate sum into its regional and
-    exterior coordinates gives
-    (\ref{eq:peps_parent_support_block_slice}). Taking the adjoint
-    exchanges input and output configurations.
-    If $\psi\in\mathcal P_{\mathcal R}(A)$, every summand in
-    (\ref{eq:peps_parent_support_block_slice}) lies in
-    $\mathcal G_{R_i}(B)$ by the assumed block inclusion. This space
-    is closed under sums, proving all target parent constraints.
+    Splitting the global sum over $(x,\sigma)$ yields~(\ref{eq:peps_parent_support_block_slice}),
+    and conjugate transposition exchanges $(y,\tau)$ with $(x,\sigma)$. If
+    $\psi\in\mathcal P_{\mathcal R}(A)$, then $S_{R_i,\sigma}\psi\in\mathcal G_{R_i}(A)$
+    for every $\sigma$, so each summand in~(\ref{eq:peps_parent_support_block_slice})
+    lies in the subspace $\mathcal G_{R_i}(B)$.
 \end{proof}
 
 \begin{definition}[Crossing and exterior factors of a bond operator]%
@@ -440,10 +421,9 @@ $E_{R^c}$ for its exterior edges. An edge $f=(t,h)$ has $t<h$.
     \uses{def:peps_parent_support_exterior_factors,
         def:peps_parent_support_mixed_product,
         def:peps_parent_support_operator_block}
-    For any weights $w_f$, the edge partition gives
-    $\prod_{f\in E}w_f=(\prod_{f\in E_{R^c}}w_f)
-        (\prod_{f\in\partial E_R}w_f)(\prod_{f\in E_R}w_f)$.
-    Accordingly, the blocks of the global bond operator satisfy
+    For any weights $w_f$, the partition $E=E_{R^c}\sqcup\partial E_R\sqcup E_R$
+    gives $\prod_{f\in E}w_f=(\prod_{f\in E_{R^c}}w_f)(\prod_{f\in\partial E_R}w_f)(\prod_{f\in E_R}w_f)$,
+    and the regional blocks of $N_F$ satisfy
     \begin{align}
         (N_F)_R[\tau,\sigma]_{y,x}
         =c_{R,F}(\tau,\sigma)\cdot
@@ -453,12 +433,11 @@ $E_{R^c}$ for its exterior edges. An edge $f=(t,h)$ has $t<h$.
     \end{align}
 \end{theorem}
 \begin{proof}\leanok
-    Since every edge has zero, one, or two endpoints in $R$, the
-    product in~(\ref{eq:peps_parent_support_numbered_operator}) separates into
-    these three cases. The first contributes $c_{R,F}$, the second
-    gives~(\ref{eq:peps_parent_support_crossing_matrix}), and the third
-    retains $F$ on its head--tail pair. Regional regrouping places
-    these factors in the two coordinate families of $\mathcal M$.
+    Partitioning the product in~(\ref{eq:peps_parent_support_numbered_operator})
+    across $E=E_{R^c}\sqcup\partial E_R\sqcup E_R$ yields $c_{R,F}(\tau,\sigma)$ on
+    $E_{R^c}$, $C_f$ from~(\ref{eq:peps_parent_support_crossing_matrix}) on
+    $\partial E_R$, and $F$ on $E_R$, which matches~(\ref{eq:peps_parent_support_mixed_product})
+    under the coordinate bijections~(\ref{eq:peps_parent_support_bond_coordinates}).
 \end{proof}
 
 \begin{theorem}[Regional blocks of the multiplicity map]%
@@ -489,11 +468,11 @@ $E_{R^c}$ for its exterior edges. An edge $f=(t,h)$ has $t<h$.
 \begin{proof}\leanok
     \uses{thm:peps_parent_support_sparse_action,
         thm:peps_parent_support_bond_blocks}
-    Separating the indicator for the fixed endpoint from the inside endpoint in~(\ref{eq:peps_parent_support_sparse_coefficient})
-    and using symmetry of $a(y,z)$ gives both fixed-endpoint identities;
-    substituting~(\ref{eq:peps_parent_support_fixed_endpoint}) into
-    (\ref{eq:peps_parent_support_bond_blocks}) and collecting the
-    crossing indicators into $\widehat c_R$ yields the regional block formula.
+    Factoring $\delta_{(b(y),b(z)),(x,r)}=\delta_{b(y),x}\delta_{b(z),r}$
+    in~(\ref{eq:peps_parent_support_sparse_coefficient}) and using
+    $a(y,z)=a(z,y)$ with~(\ref{eq:peps_parent_support_boundary_filter}) gives~(\ref{eq:peps_parent_support_fixed_endpoint});
+    substituting~(\ref{eq:peps_parent_support_fixed_endpoint}) into~(\ref{eq:peps_parent_support_bond_blocks})
+    yields~(\ref{eq:peps_parent_support_copy_blocks}).
 \end{proof}
 
 \subsection{Open contractions and their product support}
@@ -538,11 +517,9 @@ $E_{R^c}$ for its exterior edges. An edge $f=(t,h)$ has $t<h$.
     Let $a_v^{U,W}(\eta,\xi)$ be the dressed averaging site. In a
     chosen incident enumeration $e$, the numbered tensor is
     $A(U,W,e)_v(\eta,s)=a_v^{U,W}(\eta,e_v^{-1}(s))$, with virtual
-    labels numbered by a bijection $X\cong\{0,\ldots,|X|-1\}$.
-    Dressing by $W=I$ gives the unweighted averaging site.
-    Define the open bond space by
-    $\mathcal H_R(U,W)=\operatorname{span}_{\C}
-        \{H_R^{U,W}(\theta):\theta\in X^{\partial E_R}\}$.
+    labels numbered by a bijection $X\cong\{0,\ldots,|X|-1\}$ ($W=I$ gives
+    the unweighted averaging site). Define the open bond space by
+    $\mathcal H_R(U,W)=\spn_{\C}\{H_R^{U,W}(\theta):\theta\in X^{\partial E_R}\}$.
 \end{definition}
 
 \begin{theorem}[Numbered regional ranges in open bond coordinates]%
@@ -554,34 +531,27 @@ $E_{R^c}$ for its exterior edges. An edge $f=(t,h)$ has $t<h$.
     \leanok
     \uses{def:peps_parent_support_canonical_tensor,
         def:peps_region_ground_space,def:peps_open_sector_slice}
-    Suppose $WU(g)=U(g)W$ for every $g$. Then
+    Suppose $WU(g)=U(g)W$ for every $g\in G$. Then
     \begin{align}
         J_{e,R}\mathcal C_R(A(U,W,e))\ket{\theta}
                                       & =H_R^{U,W}(\theta), \\
-        J_{e,R}\mathcal G_R(A(U,W,e)) & =\mathcal H_R(U,W).
+        J_{e,R}\mathcal G_R(A(U,W,e)) & =\mathcal H_R(U,W),
         \label{eq:peps_parent_support_open_coordinates}
     \end{align}
-    In particular, $J_{e,R}\phi\in\mathcal H_R(U,W)$ if and only if
-    $\phi\in\mathcal G_R(A(U,W,e))$.
-    More generally, for any site family $a_v(\eta,\xi)$, numbering
-    its virtual and physical labels leaves every internal slice of
-    each open column unchanged: with the same $\theta$ and fixed
-    crossing physical labels $\sigma$, the numbered and incidence
-    contractions give the same function of internal head--tail pairs.
+    so $J_{e,R}\phi\in\mathcal H_R(U,W)\iff\phi\in\mathcal G_R(A(U,W,e))$.
+    More generally, for any site family $a_v(\eta,\xi)$, numbering virtual and
+    physical labels preserves every internal slice
+    $\mathcal S_{R,\sigma}(\mathcal C_R\ket{\theta})$
+    (Definition~\ref{def:peps_open_sector_slice}).
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_graph_open_averaging_bond_state}
-    Decoding the numbered labels and applying the open contraction
-    formula shows that the inverse regional coordinate map puts each crossing,
-    head, and tail label back at its original incidence, proving the
-    column equality in~(\ref{eq:peps_parent_support_open_coordinates}).
-    Open columns span $\mathcal G_R$, and their boundary numberings
-    are bijective, so their images span $\mathcal H_R$.
-    Injectivity of $J_{e,R}$ gives the membership equivalence.
-    The final assertion follows directly by decoding the virtual
-    boundary labels in the finite contraction sum and then fixing
-    the crossing physical coordinates; it needs no representation
-    or commutation hypothesis.
+    Decoding the numbered labels via $j_{e,R}^{-1}$ in~(\ref{eq:peps_parent_support_bond_coordinates})
+    and applying Theorem~\ref{thm:peps_graph_open_averaging_bond_state} yields
+    the first equality in~(\ref{eq:peps_parent_support_open_coordinates});
+    spanning over $\theta$ gives the second, and bijectivity of $J_{e,R}$ gives
+    the membership equivalence. The general slice invariance follows directly
+    by reindexing the virtual boundary sum and fixing $\sigma$.
 \end{proof}
 
 \begin{theorem}[Edge coverage promotes internal support to global support]%
@@ -593,20 +563,17 @@ $E_{R^c}$ for its exterior edges. An edge $f=(t,h)$ has $t<h$.
         def:peps_open_sector_slice}
     Let $A$ be any tensor with incident enumeration $e$ by a finite
     endpoint set $X$, and let $F:\C^Z\to\C^{X\times X}$ with $Z$
-    finite. Suppose every edge is internal to some region $R_i$.
-    Assume that, for every $i$, every crossing physical configuration
-    $\sigma$, and every $\phi\in\mathcal G_{R_i}(A)$,
+    finite. Suppose every edge $f\in E$ lies in $E_{R_i}$ for some $R_i\in\mathcal R$, and
+    for every $i$, crossing configuration $\sigma$, and $\phi\in\mathcal G_{R_i}(A)$,
     \begin{align}
         \mathcal S_{R_i,\sigma}\phi
         \in\operatorname{im}F^{\otimes E_{R_i}}.
         \label{eq:peps_parent_support_internal_hypothesis}
     \end{align}
     Then $J_e\psi\in\operatorname{im}F^{\otimes E}$ for every
-    $\psi\in\mathcal P_{\mathcal R}(A)$.
-    The coordinate identity used here is the following. Fix global
-    bond labels $\beta$ and an internal edge $f\in E_R$. Let
-    $\sigma$ be their crossing labels inside $R$, and let $\tau$
-    be their numbered exterior configuration. For every endpoint pair $s$,
+    $\psi\in\mathcal P_{\mathcal R}(A)$. Specifically, for global bond labels
+    $\beta$, $f\in E_R$, crossing labels $\sigma$ of $\beta$ on $\partial E_R$,
+    exterior configuration $\tau$ of $\beta$ on $R^c$, and $s\in X\times X$,
     \begin{align}
         (\mathcal S_{R,\sigma}S_{R,\tau}\psi)
         (\beta|_{E_R}[f\mapsto s])
@@ -616,17 +583,15 @@ $E_{R^c}$ for its exterior edges. An edge $f=(t,h)$ has $t<h$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_parent_support_product_range}
-    Updating an internal edge changes only its two inside incidences;
-    it leaves all crossing and exterior incidences fixed. This proves
-    (\ref{eq:peps_parent_support_slice_update}). For each edge $f$,
-    choose a covering region $R_i$. The parent condition places
-    $S_{R_i,\tau}\psi$ in $\mathcal G_{R_i}(A)$, so
-    (\ref{eq:peps_parent_support_internal_hypothesis}) and the forward
-    implication of~(\ref{eq:peps_parent_support_product_range}) put its
-    $f$-slice in $\operatorname{im}F$. By
-    (\ref{eq:peps_parent_support_slice_update}) this is the global
-    $f$-slice, so the reverse implication of
-    (\ref{eq:peps_parent_support_product_range}) across all edges places $J_e\psi$ in $\operatorname{im}F^{\otimes E}$.
+    Updating $f\in E_R$ modifies only its two inside incidences in $R$,
+    leaving $\sigma$ and $\tau$ fixed and proving~(\ref{eq:peps_parent_support_slice_update}).
+    For each $f\in E$, pick $R_i$ with $f\in E_{R_i}$. For
+    $\psi\in\mathcal P_{\mathcal R}(A)$, $S_{R_i,\tau}\psi\in\mathcal G_{R_i}(A)$,
+    so~(\ref{eq:peps_parent_support_internal_hypothesis}),~(\ref{eq:peps_parent_support_slice_update}),
+    and the forward direction of~(\ref{eq:peps_parent_support_product_range})
+    place every $f$-slice of $J_e\psi$ in $\operatorname{im}F$; the converse
+    of~(\ref{eq:peps_parent_support_product_range}) then gives
+    $J_e\psi\in\operatorname{im}F^{\otimes E}$.
 \end{proof}
 
 \begin{theorem}[Bond-factor support of canonical parent vectors]%
@@ -638,13 +603,12 @@ $E_{R^c}$ for its exterior edges. An edge $f=(t,h)$ has $t<h$.
     \uses{def:peps_parent_support_canonical_tensor,
         def:peps_open_sector_slice}
     Let $U:G\to\operatorname{Mat}_X(\C)$ be a representation of a
-    finite group, let $W$ commute with every $U(g)$, and let
-    $F:\C^Z\to\C^{X\times X}$, with $X,Z$ finite. Suppose
-    $\operatorname{vec}(W^2U(g))\in\operatorname{im}F$ for every $g$.
-    Every internal slice of every open column, with arbitrary virtual
-    boundary labels, belongs to $\operatorname{im}F^{\otimes E_R}$.
-    The same holds for every $\phi\in\mathcal G_R(A(U,W,e))$.
-    If every edge is internal to a member of $\mathcal R$, then
+    finite group, $WU(g)=U(g)W$ for all $g\in G$, and
+    $F:\C^Z\to\C^{X\times X}$ ($X,Z$ finite) satisfy
+    $\operatorname{vec}(W^2U(g))\in\operatorname{im}F$ for every $g\in G$.
+    Then $\mathcal S_{R,\sigma}\phi\in\operatorname{im}F^{\otimes E_R}$ for
+    every open column and every $\phi\in\mathcal G_R(A(U,W,e))$.
+    If every $f\in E$ lies in $E_{R_i}$ for some $R_i\in\mathcal R$, then
     \begin{align}
         J_e\mathcal P_{\mathcal R}(A(U,W,e))
         \subseteq\operatorname{im}F^{\otimes E}.
@@ -655,18 +619,16 @@ $E_{R^c}$ for its exterior edges. An edge $f=(t,h)$ has $t<h$.
     \uses{thm:peps_open_sector_weighted_slice,
         thm:peps_parent_support_internal_slices,
         thm:peps_parent_support_open_coordinates}
-    Choose $x_g$ with $Fx_g=\operatorname{vec}(W^2U(g))$.
-    For each internal slice use the preimage
+    Choose $x_g\in\C^Z$ with $Fx_g=\operatorname{vec}(W^2U(g))$ and set
     \begin{align}
         \chi(\alpha)=\sum_{q:R\to G}c_R(\theta,\sigma;q)
-        \prod_{f=(t,h)\in E_R}x_{q_hq_t^{-1}}(\alpha_f),
+        \prod_{f=(t,h)\in E_R}x_{q_hq_t^{-1}}(\alpha_f).
     \end{align}
-    where $c_R$ retains all boundary factors and the averaging
-    normalization. Applying $F^{\otimes E_R}$ term by term gives
-    the weighted slice formula. Numbered and incidence slices agree,
-    and the regional range is spanned by open columns, so the
-    inclusion extends by linearity. Theorem~\ref{thm:peps_parent_support_internal_slices}
-    then proves~(\ref{eq:peps_parent_support_factor_ranges}).
+    By Theorem~\ref{thm:peps_open_sector_weighted_slice} and
+    Theorem~\ref{thm:peps_parent_support_open_coordinates},
+    $F^{\otimes E_R}\chi=\mathcal S_{R,\sigma}(\mathcal C_R(A(U,W,e))\ket{\theta})$,
+    and linearity extends this to $\mathcal G_R(A(U,W,e))$.
+    Theorem~\ref{thm:peps_parent_support_internal_slices} then gives~(\ref{eq:peps_parent_support_factor_ranges}).
 \end{proof}
 
 \begin{theorem}[Product multiplicity support of the repeated parent]%
@@ -679,13 +641,12 @@ $E_{R^c}$ for its exterior edges. An edge $f=(t,h)$ has $t<h$.
         thm:peps_full_multiplicity_bond_map}
     Let $d_i>0$ and let $D_i:G\to\operatorname{Mat}_{d_i}(\C)$ be
     representations of a finite group. Put
-    $U'(g)=\bigoplus_i(D_i(g)\otimes I_{d_i})$, and let $F$ restore
-    multiplicity $d_i$ on the full endpoint pairs. Every internal
-    slice of each open column for the unweighted averaging
-    tensor of $U'$ lies in $\operatorname{im}F^{\otimes E_R}$.
-    This also holds for each vector in the numbered regional range
-    $\mathcal G_R(A(U',I,e))$.
-    For any edge-covering family $\mathcal R$,
+    $U'(g)=\bigoplus_i(D_i(g)\otimes I_{d_i})$, and let $F$ be the full
+    endpoint multiplicity map with multiplicity $d_i$
+    (Theorem~\ref{thm:peps_full_multiplicity_bond_map}). Then
+    $\mathcal S_{R,\sigma}\phi\in\operatorname{im}F^{\otimes E_R}$ for every
+    open column and every $\phi\in\mathcal G_R(A(U',I,e))$. For any
+    edge-covering family $\mathcal R$,
     \begin{align}
         J_e\mathcal P_{\mathcal R}(A(U',I,e))
         \subseteq\operatorname{im}F^{\otimes E}.
@@ -698,14 +659,12 @@ $E_{R^c}$ for its exterior edges. An edge $f=(t,h)$ has $t<h$.
         thm:peps_coherent_multiplicity_transport,
         thm:peps_parent_support_open_coordinates,
         thm:peps_parent_support_internal_slices}
-    When each target slice is expanded with its own boundary coefficients
-    $c_R^{U',I}(\theta,\sigma;q)$, coherent multiplicity restoration
-    sends the internal factors
-    $\operatorname{vec}(\bigoplus_i\sqrt{d_i}\,D_i(q_hq_t^{-1}))$
-    to $\operatorname{vec}(U'(q_hq_t^{-1}))$, while retaining these
-    same coefficients. This provides a preimage for each target
-    open slice. Linear combinations give all regional vectors;
-    edge coverage and
-    Theorem~\ref{thm:peps_parent_support_internal_slices} give
-    (\ref{eq:peps_parent_support_repeated_ranges}).
+    By Theorems~\ref{thm:peps_open_sector_weighted_slice}
+    and~\ref{thm:peps_coherent_multiplicity_transport}, $F^{\otimes E_R}$ maps
+    the coherent sum with internal factors
+    $\operatorname{vec}(\bigoplus_i\sqrt{d_i}\,D_i(q_hq_t^{-1}))$ and boundary
+    coefficients $c_R^{U',I}(\theta,\sigma;q)$ to the open slice of $A(U',I,e)$.
+    Theorem~\ref{thm:peps_parent_support_open_coordinates} and linearity extend
+    this to $\mathcal G_R(A(U',I,e))$, and
+    Theorem~\ref{thm:peps_parent_support_internal_slices} yields~(\ref{eq:peps_parent_support_repeated_ranges}).
 \end{proof}
