@@ -55,6 +55,6 @@ theorem polynomialPEPSApproximation_of_range (h : RangePolynomialPEPSApproximati
   intro q hq J Δ hJ hΔ
   obtain ⟨C, c, hC, hc, happrox⟩ := h q hq 1 le_rfl J Δ hJ hΔ
   exact ⟨C, c, hC, hc, fun L hL H E₀ Ω hgap ↦
-    happrox L hL Ω (IsSquareGroundState.isRangeSquareGroundState hJ.le ⟨H, E₀, hgap⟩)⟩
+    happrox L hL Ω (IsSquareGroundState.isRangeSquareGroundState ⟨H, E₀, hgap⟩)⟩
 
 end TNLean.PEPS.Approximation
