@@ -184,6 +184,7 @@ import TNLean.PEPS.Approximation.PolynomialPEPSTheorem
 import TNLean.PEPS.Approximation.PreparedMatrixNorm
 import TNLean.PEPS.Approximation.ProductReferenceColumn
 import TNLean.PEPS.Approximation.PurePhysicalCoefficient
+import TNLean.PEPS.Approximation.RangeInformationReset
 import TNLean.PEPS.Approximation.RangeResetUnitary
 import TNLean.PEPS.Approximation.RangeSquareGroundState
 import TNLean.PEPS.Approximation.RankOneBlocks
