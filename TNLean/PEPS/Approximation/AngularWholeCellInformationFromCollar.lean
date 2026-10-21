@@ -45,7 +45,7 @@ Source: polynomial-PEPS manuscript, Lemma 3.2 and Proposition 3.4,
 `02-information.tex`, lines 161–178 and 713–734. The sublinear collar bound is
 an explicit premise of this intermediate implication. -/
 theorem mutualInformation_selectedRegion_le_square_of_sublinearCollarBoundAt
-    {q : ℕ} {J Δ D₀ Ctpl C Ca : ℝ} {N Na : ℕ} (hJ : 0 ≤ J)
+    {q : ℕ} {J Δ D₀ Ctpl C Ca : ℝ} {N Na : ℕ}
     (hcol : AreaLaw.SublinearCollarBoundAt q 1 J Δ D₀ Ctpl C N)
     (hamp : AreaLaw.AmplificationBoundAt q 1 J Δ (max C 1) 1 Ca Na)
     {c : ℝ} (hc : 0 < c) :
@@ -66,7 +66,7 @@ theorem mutualInformation_selectedRegion_le_square_of_sublinearCollarBoundAt
               b₀ + (S.card : ℝ) * (cellInformationConstant q c Ctpl N Ca Na *
                 (1 + Real.log s) ^ cellInformationExponent c Ctpl N Ca Na) := by
   have hcell :=
-    cell_conditionalMutualInformation_le_square_of_sublinearCollarBoundAt hJ hcol hamp hc
+    cell_conditionalMutualInformation_le_square_of_sublinearCollarBoundAt hcol hamp hc
   intro s hs o r Aold A hA S hS L h E₀ Ω hΩ E b₀ hclear hold
   exact mutualInformation_selectedRegion_le_of_cell_bound Ω E
     (zero_lt_one.trans_le hs) hc hA S hS hclear
@@ -110,6 +110,6 @@ theorem exists_mutualInformation_selectedRegion_le_square_of_sublinearCollarBoun
     exists_sublinearCollarBoundAt_amplificationBoundAt hΔ hcol
   exact ⟨_, _, cellInformationConstant_pos q c Ctpl N Ca Na,
     (cellInformationExponent_pos c Ctpl N Ca Na).le,
-    mutualInformation_selectedRegion_le_square_of_sublinearCollarBoundAt hJ hcol hamp hc⟩
+    mutualInformation_selectedRegion_le_square_of_sublinearCollarBoundAt hcol hamp hc⟩
 
 end TNLean.PEPS.Approximation
