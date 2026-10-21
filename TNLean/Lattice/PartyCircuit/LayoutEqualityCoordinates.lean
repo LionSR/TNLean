@@ -35,4 +35,13 @@ theorem memCongr_tmul_heq {a b c d : Layout P} (ha : a = b) (hc : c = d)
   cases hc
   rfl
 
+/-- Prepending one register vector to memory vectors of equal register lists preserves
+their equality. -/
+theorem cons_tmul_heq (r : Reg P) {a b : Layout P} (h : a = b) (u : r.space)
+    {x : Mem a} {y : Mem b} (hxy : HEq x y) :
+    HEq (u ⊗ₜ[ℂ] x : Mem (r :: a)) (u ⊗ₜ[ℂ] y : Mem (r :: b)) := by
+  cases h
+  cases hxy
+  rfl
+
 end TNLean.PEPS.PairEffect.Layout
