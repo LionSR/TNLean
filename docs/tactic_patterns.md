@@ -24,6 +24,18 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Monotone range-R patch radii — promoted (2026-10-21)
+
+- **Pattern:** cast `i ≤ j` to `ℝ`, note `0 ≤ s_R`, unfold the radius
+  `u + s_R j` and close with `nlinarith`.
+- **Seen:** 3 occurrences across 2 files (`rangeNestedPatch_mono` in
+  `TNLean/PEPS/AreaLaw/Geometry/RangeNestedPatches.lean`, and
+  `uniform_rangeNestedPatch_cylinders` and `rangeAdaptivePatchSupply` in
+  `TNLean/PEPS/Approximation/RangeNestedPatchApproximation.lean`).
+- **Abstraction:** `TNLean.PEPS.AreaLaw.Geometry.rangeNestedPatchRadius_mono`.
+- **Notes:** each call site is now one line; on `Fin m` indices write
+  `fun _ _ hij ↦ rangeNestedPatchRadius_mono R u hij`.
+
 ### Nonnegative interaction bound at a site — promoted (2026-10-18)
 
 - **Pattern:** At an actual site, use its admissible singleton support and
@@ -4674,6 +4686,26 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 ## Candidates
 
+### Symmetric two-index uniqueness reduced to `i < j` — candidate (2026-10-21)
+
+- **Pattern:**
+
+  ```lean
+  wlog hij : i < j generalizing i j
+  · rcases lt_trichotomy i j with h | h | h
+    · exact this hi hj h
+    · exact h
+    · exact (this hj hi h).symm
+  ```
+
+- **Seen:** 2 occurrences
+  (`TNLean/PEPS/AreaLaw/Geometry/NestedPatches.lean:141`,
+  `TNLean/PEPS/AreaLaw/Geometry/RangeNestedPatches.lean:179`).
+- **Abstraction:** proposed lemma deriving `i = j` for a symmetric property of
+  two indices in a linear order from the case `i < j` leading to a
+  contradiction.
+- **Notes:** both uses show that at most one selected square splits a support.
+
 ### Coordinate distance from an ordered diameter bound — candidate (2026-10-18)
 
 - **Pattern:** Use the two ordered support inequalities, unfold `Nat.dist`,
@@ -6655,6 +6687,20 @@ spectral split → block extraction → MPV calculation → strict bounds
   recorded decision against abstracting finite-sum proof structure. No new
   tactic or global simplification rule is introduced.
 
+### Margin and cell-side bounds of angular information — promoted (2026-10-21)
+
+- **Pattern:** From `0 < a`, derive `0 < angularMargin a`,
+  `angularMargin a < a / 100`, `0 < angularCellSide a` and
+  `angularCellSide a < angularMargin a / 4` (and sometimes
+  `angularCellSide a ≤ 1`) by unfolding `min a 1 / 200` and `/ 8`.
+- **Seen:** `angularInformationBound_of_sublinearCollarBoundAt_le` in
+  `PEPS/Approximation/AngularInformationFromCollar.lean`, and
+  `isAngularScale_of_bounds` and `isAngularScale_range_closed_le` in
+  `PEPS/Approximation/RangeAngularInformation.lean` (2026-10-21).
+- **Promoted:** `angularMargin_cellSide_bounds` in
+  `PEPS/Approximation/AngularInformationFromCollar.lean` returns the five
+  bounds from `0 < a`; the three proofs destructure it with `obtain`.
+
 ## Rejected
 
 ### Axiom allow-list fixtures — rejected (2026-10-12)
@@ -8535,17 +8581,23 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Notes:** No powerset injection or finite-union proof is duplicated. There are two exact symmetric-window comparisons; their remaining arithmetic is a single `omega` call. No further lemma or tactic is needed at present.
 
 
-### Core information after a regional replica swap — candidate (2026-10-18)
+### Core information after a regional replica swap — promoted (2026-10-21)
 
 - **Pattern:** Transport a supported unitary and its vector error from paired
   coordinates to two replicas, derive the vanishing mutual information of the
   actual swapped cores, and apply supported-unitary entropy continuity.
-- **Seen:** The local comparison in `MPS/AreaLaw/InformationReset.lean` and
+- **Seen:** The local comparison in `MPS/AreaLaw/InformationReset.lean`,
   `mutualInformation_cores_le_of_reset_unitary` in
-  `PEPS/Approximation/InformationReset.lean`.
+  `PEPS/Approximation/InformationReset.lean`, and
+  `mutualInformation_cores_le_of_sites_reset_unitary`, first written in
+  `PEPS/Approximation/RangeInformationReset.lean` (2026-10-21).
 - **Existing reuse:** The coordinate isometry, support transport, replica-swap
   marginal identity and entropy continuity theorem are shared already.
-  A third consumer would justify a single finite-site comparison theorem.
+- **Promoted:** `mutualInformation_cores_le_of_sites_reset_unitary` in
+  `PEPS/Approximation/InformationReset.lean` is the comparison on any finite
+  site set; the square version is derived from it by relabelling the sites
+  through `rectangleSiteEquiv`, and the range-R reset applies it directly.
+  The chain comparison in `MPS/AreaLaw/InformationReset.lean` remains inlined.
 
 ### Absorbing a localization coefficient with spare decay — candidate (2026-10-18)
 

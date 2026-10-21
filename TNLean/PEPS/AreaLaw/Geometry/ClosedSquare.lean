@@ -107,7 +107,8 @@ private theorem card_rectangleBoundaryEdges_le (a b : ℤ × ℤ) :
         (f := fun z ↦ s((z, b.2), (z, b.2 + 1)))
       omega
 
-private theorem card_integerInterval_le (c r : ℝ) (hr : 0 ≤ r) :
+/-- A closed real interval of radius `r ≥ 0` contains at most `2 r + 1` integers. -/
+theorem card_integerInterval_le (c r : ℝ) (hr : 0 ≤ r) :
     ((Finset.Icc ⌈c - r⌉ ⌊c + r⌋).card : ℝ) ≤ 2 * r + 1 := by
   rw [Int.card_Icc, ← Int.cast_natCast, Int.toNat_eq_max, Int.cast_max]
   push_cast
