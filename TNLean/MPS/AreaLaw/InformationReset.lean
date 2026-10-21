@@ -24,8 +24,10 @@ localization and polar correction from the original ground-state data.
   information of the cores, with uniform constants chosen before the system,
   state, regions and original mutual-information upper bound.
 
-**Scope restriction (contiguous chains):** The physical sites are `Fin L`.
-The broader source domain may have gaps; see
+**Source convention (contiguous chains):** The note fixes a contiguous chain in
+`part1_arealaw.tex`, lines 91–93, before the Part II argument. The sites here
+are `Fin L`, as in that argument. Additional finite-domain extensions are
+discussed in
 `docs/paper-gaps/tnlean_one_dimensional_connected_domain_scope.tex`.
 
 Source: TNLean one-dimensional note, Lemma `lem:reset`,
