@@ -4694,6 +4694,25 @@ three-plaquette output measurement, and the routed reunion measurement.
   contradiction.
 - **Notes:** both uses show that at most one selected square splits a support.
 
+### Monotone range-R patch radii — candidate (2026-10-21)
+
+- **Pattern:**
+
+  ```lean
+  have h : ((i : ℕ) : ℝ) ≤ (j : ℕ) := by exact_mod_cast hij
+  have hs : (0 : ℝ) ≤ AreaLaw.Geometry.rangePatchSpacing R := Nat.cast_nonneg _
+  unfold AreaLaw.Geometry.rangeNestedPatchRadius
+  nlinarith
+  ```
+
+- **Seen:** 2 occurrences
+  (`TNLean/PEPS/Approximation/RangeNestedPatchApproximation.lean`, in
+  `uniform_rangeNestedPatch_cylinders` and `rangeAdaptivePatchSupply`); the
+  proof of `rangeNestedPatch_mono` uses the same argument.
+- **Abstraction:** proposed lemma `Monotone (rangeNestedPatchRadius R u)` in
+  `TNLean/PEPS/AreaLaw/Geometry/RangeNestedPatches.lean`.
+- **Notes:** the radii are `u + s_R j` with `s_R ≥ 0`.
+
 ### Coordinate distance from an ordered diameter bound — candidate (2026-10-18)
 
 - **Pattern:** Use the two ordered support inequalities, unfold `Nat.dist`,
