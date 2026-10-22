@@ -9,7 +9,7 @@
 \date{October 22, 2026}
 \begin{document}
 \maketitle
-\gapnote{scope-restriction}{open}
+\gapnote{clarification}{resolved}
 
 \section{The source statement}
 
@@ -22,41 +22,38 @@ length $N$ is of order
 \end{align}
 It does not name the error measure.\footnote{\path{References/0705.2024/law16.tex},
     lines~553--557.}
+
+\section{The reading}
+
 Let $\Phi$ be the vector obtained by truncating every cut onto its $k'$
 leading Schmidt vectors, and let $\tau_j(k')$ be the tail of the Schmidt
-coefficients beyond the $k'$ largest at the cut $(j,j+1)$. The bound of
-Verstraete and Cirac~\cite{VerstraeteCirac2006Faithfully},
+coefficients beyond the $k'$ largest at the cut $(j,j+1)$. The squared error
+of this sequential truncation satisfies
 \begin{align}
     \lVert\Phi-\Psi_0\rVert^2
-     & \le2\sum_{j=1}^{N-1}\tau_j(k'),
-    \label{eq:hastings07_mps_error_vc}
+     & \le\sum_{j=1}^{N-1}\tau_j(k'),
+    \label{eq:hastings07_mps_error_sq}
 \end{align}
-together with the polynomial decay
-$\tau_j(k')\le c\,e^{2/\xi'}(k'/k_0)^{-1/(\xi'\ln D)}$ of the tail, gives
-(\ref{eq:hastings07_mps_error_source}) for the squared norm.
-
-\section{What is formalized}
-
-The formalized bound on sequential truncation is
-$\lVert\Phi-\Psi_0\rVert\le\sum_j\sqrt{\tau_j(k')}$, so the theorem
-proved\footnote{\leanid{TNLean.MPS.AreaLaw.Hastings.isOpenMPS_norm_sub_le_of_schmidtTail_geometric}
-    in \doclink{TNLean/MPS/AreaLaw/Hastings/SchmidtTailMPS}.} is
+since at each step $\Psi_0-\Pi\Phi'=\Pi(\Psi_0-\Phi')+(1-\Pi)\Psi_0$ is an
+orthogonal decomposition. Verstraete and
+Cirac~\cite{VerstraeteCirac2006Faithfully} state
+(\ref{eq:hastings07_mps_error_sq}) with a factor $2$ on the right. Together
+with the polynomial decay
+$\tau_j(k')\le c\,e^{2/\xi'}(k'/k_0)^{-1/(\xi'\ln D)}$ of the tail, it gives
+(\ref{eq:hastings07_mps_error_source}) for the squared norm:
 \begin{align}
-    \lVert\Phi-\Psi_0\rVert
-     & \le(N-1)\sqrt{c\,e^{2/\xi'}}\,(k'/k_0)^{-1/(2\xi'\ln D)}.
-    \label{eq:hastings07_mps_error_norm}
+    \lVert\Phi-\Psi_0\rVert^2
+     & \le(N-1)\,c\,e^{2/\xi'}\,(k'/k_0)^{-1/(\xi'\ln D)}.
+    \notag
 \end{align}
-Squaring (\ref{eq:hastings07_mps_error_norm}) gives
-(\ref{eq:hastings07_mps_error_source}) with $N^2$ in place of $N$. The bound
-is weaker than the source's by a factor $N$ in the squared norm. The bond
-dimension needed for a given accuracy is still polynomial in $N$ and in the
-inverse accuracy, with a larger exponent.
-
-\section{Elimination}
-
-Formalize the squared-norm bound (\ref{eq:hastings07_mps_error_vc}) for
-sequential truncation and specialize the theorem to it. This is tracked in
-TNLean issue~9941.
+The error in (\ref{eq:hastings07_mps_error_source}) is therefore read as the
+squared norm, which is the measure for which the stated rate
+holds.\footnote{\leanid{TNLean.MPS.AreaLaw.Hastings.isOpenMPS_norm_sub_sq_le_of_schmidtTail_geometric}
+    in \doclink{TNLean/MPS/AreaLaw/Hastings/SchmidtTailMPS};
+    \leanid{TNLean.MPS.AreaLaw.norm_sub_sequentialTruncation_sq_le} in
+    \doclink{TNLean/MPS/AreaLaw/SequentialTruncation}.}
+The norm itself is then of order
+$\sqrt N\,(k'/k_0)^{-1/(2\xi'\ln D)}$.
 
 \bibliographystyle{alpha}
 \bibliography{references}

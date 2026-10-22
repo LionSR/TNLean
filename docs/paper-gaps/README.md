@@ -1277,11 +1277,10 @@ the distance from `M_L` to the filtered `H_L`, with `M_L − H_L` supported near
 ### One-dimensional area law after Hastings: the error of the matrix product state
 
 [hastings07_mps_error_measure.tex](hastings07_mps_error_measure.tex)
-(scope restriction, open) records that the matrix product state approximation
-is formalized for the norm distance through the bound `∑_j √τ_j(k')`, which is
-weaker by a factor `N` in the squared norm than Hastings' error
-`N (k'/k₀)^{-1/(ξ' ln D)}` (arXiv:0705.2024v4, lines 553–557). The source's
-rate follows from the Verstraete–Cirac squared-norm bound, tracked in #9941.
+(clarification, resolved) records that Hastings' error
+`N (k'/k₀)^{-1/(ξ' ln D)}` for the matrix product state (arXiv:0705.2024v4,
+lines 553–557), stated without an error measure, holds for the squared norm,
+through the squared error `‖Φ − ψ‖² ≤ ∑_j τ_j(k')` of sequential truncation.
 
 ## Polynomial PEPS: zero-floor maximizing filters
 

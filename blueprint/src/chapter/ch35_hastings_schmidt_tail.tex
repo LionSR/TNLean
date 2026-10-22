@@ -48,7 +48,7 @@
 
 \begin{theorem}[Matrix product state from the decay of the Schmidt tail]
     \label{thm:hastings_schmidt_tail_mps}
-    \lean{TNLean.MPS.AreaLaw.Hastings.isOpenMPS_norm_sub_le_of_schmidtTail_geometric}
+    \lean{TNLean.MPS.AreaLaw.Hastings.isOpenMPS_norm_sub_sq_le_of_schmidtTail_geometric}
     \leanok
     \uses{thm:hastings_schmidt_tail_rpow}
     Let $\psi$ be a unit vector on a chain of $L$ sites, and let $d>1$,
@@ -59,28 +59,24 @@
     eigenvectors of its left marginal gives an open-boundary matrix product
     state $\Phi$ of bond dimension $k'$ with
     \begin{align}
-        \lVert\Phi-\psi\rVert
-         & \le(L-1)\sqrt{c\,e^{2/\xi}\Bigl(\frac{k'}{k_0}\Bigr)^{-1/(\xi\log d)}}.
+        \lVert\Phi-\psi\rVert^2
+         & \le(L-1)\,c\,e^{2/\xi}\Bigl(\frac{k'}{k_0}\Bigr)^{-1/(\xi\log d)}.
         \notag
     \end{align}
     Here the mass beyond the $n$ largest eigenvalues is the sum over the
     eigenvalues of index at least $n+1$ in nonincreasing order, so the
-    source's sum from index $k'$ is this mass at $k'-1$. The bound is weaker
-    than the conclusion of the section on matrix product states of
-    \cite{Hastings2007AreaLaw}. That conclusion, an error of order
-    $L(k'/k_0)^{-1/(\xi\log d)}$, holds for the squared norm and follows from
-    a bound on the squared norm of a sequential truncation by twice the sum of
-    the tails. The bound here is on the norm, so its exponent in $k'$ is
-    halved and the factor $L-1$ stands outside the square
-    root~\cite{gap:hastings07_mps_error_measure}. The constant is that of
+    source's sum from index $k'$ is this mass at $k'-1$. This is the
+    conclusion of the section on matrix product states of
+    \cite{Hastings2007AreaLaw}, whose error, stated without a measure, is the
+    squared norm~\cite{gap:hastings07_mps_error_measure}, with the constant of
     Theorem~\ref{thm:hastings_schmidt_tail_rpow}
     \cite{gap:hastings07_schmidt_tail_constant}.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:chain_sequential_truncation_eigen}
+    \uses{thm:chain_sequential_truncation_eigen, thm:chain_sequential_truncation_sq}
     Sequential truncation onto the leading eigenvectors gives an
-    open-boundary matrix product state of bond dimension $k'$ within
-    distance $\sum_k\sqrt{\varepsilon_k(k')}$ of $\psi$, where
+    open-boundary matrix product state of bond dimension $k'$ with
+    $\lVert\Phi-\psi\rVert^2\le\sum_k\varepsilon_k(k')$, where
     $\varepsilon_k(k')$ is the mass beyond the $k'$ largest eigenvalues at
     the cut $k$. Theorem~\ref{thm:hastings_schmidt_tail_rpow} bounds each
     $\varepsilon_k(k')$, and there are $L-1$ internal cuts.
