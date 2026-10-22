@@ -13,10 +13,11 @@ approximate factorization of the ground-state projector in Hastings' area-law pr
 run_cmd do
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
   for decl in #[
-    ``TNLean.MPS.AreaLaw.Hastings.sq_one_sub_le_re_inner_boundary,
-    ``TNLean.MPS.AreaLaw.Hastings.sq_one_sub_le_re_inner_left,
-    ``TNLean.MPS.AreaLaw.Hastings.sq_one_sub_le_re_inner_right,
-    ``TNLean.MPS.AreaLaw.Hastings.one_sub_four_mul_le_re_trace_kronecker_marginals_mul] do
+    ``TNLean.MPS.AreaLaw.Hastings.norm_toEuclideanCLM_one_sub_le,
+    ``TNLean.MPS.AreaLaw.Hastings.sq_one_sub_two_mul_le_re_inner_conjTranspose_mul,
+    ``TNLean.MPS.AreaLaw.Hastings.one_sub_sq_le_re_inner_left,
+    ``TNLean.MPS.AreaLaw.Hastings.one_sub_sq_le_re_inner_right,
+    ``TNLean.MPS.AreaLaw.Hastings.one_sub_two_mul_sq_le_re_trace_kronecker_marginals_mul] do
     unless (← Lean.getEnv).contains decl do
       throwError "Missing declaration {decl}"
     let axioms ← Lean.collectAxioms decl
