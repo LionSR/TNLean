@@ -21,10 +21,10 @@ the square is in `TNLean.PEPS.Approximation.PartyColumnRouting`.
 
 ## Main results
 
-* `TNLean.PEPS.Approximation.PartyNetwork.operatorCoeff`,
-  `TNLean.PEPS.Approximation.PartyNetwork.fixInput`: the operator of an operator party
+* `TNLean.Lattice.Compression.PartyNetwork.operatorCoeff`,
+  `TNLean.Lattice.Compression.PartyNetwork.fixInput`: the operator of an operator party
   network and its input-fixed ket network.
-* `TNLean.PEPS.Approximation.PartyNetwork.exists_fixInput_of_rectangularTraceNorm_sub_pure_le`:
+* `TNLean.Lattice.Compression.PartyNetwork.exists_fixInput_of_rectangularTraceNorm_sub_pure_le`:
   Lemma 8.1 on the party network.
 
 ## References
@@ -38,7 +38,7 @@ noncomputable section
 
 open scoped BigOperators Matrix
 
-namespace TNLean.PEPS.Approximation
+namespace TNLean.Lattice.Compression
 
 namespace PartyNetwork
 
@@ -112,4 +112,4 @@ theorem exists_fixInput_of_rectangularTraceNorm_sub_pure_le [Fintype V] [Decidab
 
 end PartyNetwork
 
-end TNLean.PEPS.Approximation
+end TNLean.Lattice.Compression

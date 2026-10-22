@@ -26,7 +26,7 @@ and 565–588.
 
 noncomputable section
 namespace TNLean.Lattice.PartyCircuit.Word
-open TNLean.PEPS.PairEffect
+open TNLean.Lattice.PartyCircuit
 open ContinuousLinearMap
 variable {P Q : Type}
 

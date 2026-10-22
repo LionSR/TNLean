@@ -24,7 +24,7 @@ Source revision: `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 Independently formalized; no upstream Lean proof text reused.
 -/
 
-namespace TNLean.PEPS.PairEffect.MessageGate
+namespace TNLean.Lattice.PartyCircuit.MessageGate
 open TNLean.Lattice.PartyCircuit
 
 variable {P : Type} {a b : Layout P}
@@ -39,4 +39,4 @@ theorem expand_map_segment (A : PartyGate a b) :
     expand (A.map fun q ↦ (q.1, MessageMonomial.segment q.2)) = A := by
   simp [expand, MessageMonomial.expand, List.flatMap_map]
 
-end TNLean.PEPS.PairEffect.MessageGate
+end TNLean.Lattice.PartyCircuit.MessageGate
