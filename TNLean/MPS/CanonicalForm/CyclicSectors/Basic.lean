@@ -17,7 +17,6 @@ cyclic-sector normalization argument.
 
 * `leftSectorTensor`
 * `left_mul_evalWord_leftSectorTensor_of_commutes`
-* `leftSectorTensor_supported`
 
 ## References
 
@@ -58,20 +57,6 @@ lemma left_mul_evalWord_leftSectorTensor_of_commutes
         _ = A i * (P * Kraus.evalWord A w) := by rw [ih]
         _ = P * (A i * Kraus.evalWord A w) := by
             rw [← Matrix.mul_assoc, ← hComm i, Matrix.mul_assoc]
-
-/-- A left-sector tensor is supported on the sector projection. -/
-lemma leftSectorTensor_supported
-    (P : MatrixAlg D) (A : MPSTensor d D)
-    (hPidem : P * P = P)
-    (hComm : ∀ i : Fin d, P * A i = A i * P) :
-    ∀ i : Fin d, P * leftSectorTensor P A i * P = leftSectorTensor P A i := by
-  intro i
-  simp only [leftSectorTensor]
-  calc
-    P * (P * A i) * P = P * P * A i * P := by
-      simp only [Matrix.mul_assoc]
-    _ = P * A i * P := by rw [hPidem]
-    _ = P * A i := by rw [hComm i, Matrix.mul_assoc, hPidem]
 
 end BasicProjectionWordLemmas
 
