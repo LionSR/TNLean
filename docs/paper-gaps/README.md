@@ -1293,6 +1293,14 @@ appendix of Hastings (arXiv:0705.2024v4, line 794) fails already for nearest-nei
 terms (`‖[Z, X]‖ = 2` with `J = 1`), and that the bound proved for terms of range `R` is an
 explicit constant depending only on `R`, times `J²`.
 
+### One-dimensional area law after Hastings: the entropy gain constants
+
+[hastings07_relent_constants.tex](hastings07_relent_constants.tex)
+(clarification, resolved) records the explicit constant `C₂ = 7` in the
+entropy gain across a cut, and how route 1 of Hastings' note added (the
+effect `O_B† O_B`) supplies the Lindblad–Uhlmann data with `C₁` replaced by
+`2 C₁`, keeping the rate `e^{-l/ξ'}`.
+
 ## Polynomial PEPS: zero-floor maximizing filters
 
 - [`polypeps_square_zero_floor_optimizer_scope.tex`](polypeps_square_zero_floor_optimizer_scope.tex)
