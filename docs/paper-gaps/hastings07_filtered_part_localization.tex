@@ -21,9 +21,10 @@ $\tilde H_L^0=(\Delta E/\sqrt{2\pi q})\int H_L(t)e^{-(t\Delta E)^2/2q}\,dt$, and
 the source states that, by the Lieb--Robinson bound, the filtered parts can be
 approximated by operators $M_L,M_B,M_R$ with $M_L-H_L$ supported on
 $X_{j-2l/3,j}$ and
-\[
-  \Vert M_L-H_L\Vert\le\mathcal O(\Delta E^{-1}J^2e^{-l/3\xi}),
-\]
+\begin{align}
+    \Vert M_L-H_L\Vert\le\mathcal O(\Delta E^{-1}J^2e^{-l/3\xi}),
+    \label{eq:hastings07_localized_parts_source}
+\end{align}
 and similarly for $M_B$ and $M_R$. It then concludes $|M_L\Psi_0|\le
 \mathcal O(\Delta E^{-1}J^2e^{-l/3\xi})$ from eq.~\texttt{tighter}, which bounds
 $|\tilde H_L^0\Psi_0|$.
@@ -35,9 +36,10 @@ H_L^0-H_L$ is the Gaussian average of $H_L(t)-H_L$, which is not small, and
 $M_L-H_L$ is supported near the cut while $\tilde H_L^0-H_L$ need not be small
 there. The next step, $|M_L\Psi_0|\le|\tilde H_L^0\Psi_0|+\Vert M_L-\tilde
 H_L^0\Vert$, uses the distance to the filtered part. The intended statement is
-\[
-  \Vert M_L-\tilde H_L^0\Vert\le\mathcal O(\Delta E^{-1}J^2e^{-l/3\xi}),
-\]
+\begin{align}
+    \Vert M_L-\tilde H_L^0\Vert\le\mathcal O(\Delta E^{-1}J^2e^{-l/3\xi}),
+    \label{eq:hastings07_localized_parts_intended}
+\end{align}
 with $M_L-H_L$ supported near the cut.
 
 \section{The statement proved}
@@ -46,10 +48,11 @@ For any operator $W$, set $M=W+E_K(\tilde W-W)$, where $E_K$ is the normalized
 partial trace onto a set of sites $K$. Then $M-W$ acts on $K$, and if the evolved
 commutator $\tau_s(i[H,W])$ is within $\varepsilon$ of its partial trace onto
 $K$ for $|s|\le T$,
-\[
-  \Vert\tilde W-M\Vert\le T\varepsilon
-  +2\Vert[H,W]\Vert\sqrt{2h/\pi}\,e^{-T^2/(2h)},\qquad h=q/\Delta E^2.
-\]
+\begin{align}
+    \Vert\tilde W-M\Vert\le T\varepsilon
+      +2\Vert[H,W]\Vert\sqrt{2h/\pi}\,e^{-T^2/(2h)},\qquad h=q/\Delta E^2.
+    \label{eq:hastings07_localized_parts_proved}
+\end{align}
 The bound involves $[H,W]$ and not $W$: by the Duhamel formula,
 $\Vert\tau_t(W)-W\Vert\le|t|\,\Vert[H,W]\Vert$. For $W=H_L$ the commutator is
 supported near the cut, and the chain Lieb--Robinson bound supplies an

@@ -115,6 +115,18 @@ theorem norm_commutator_gaussianFilteredTerm_le_mass (q ΔE : ℝ) {H : Matrix n
         _ = 2 * ‖W‖ * ‖O‖ := by rw [norm_intertwinerIntegrand hH hH W t]; ring
   simpa using this
 
+/-- The map `M ↦ M - E_K(M)`, the deviation of a matrix from its normalized partial trace onto
+`K`, as a continuous linear map. -/
+noncomputable def subSiteExpectationCLM {ι : Type*} [Fintype ι] [DecidableEq ι] (d : ℕ)
+    [NeZero d] (K : Finset ι) :
+    Matrix (ι → Fin d) (ι → Fin d) ℂ →L[ℂ] Matrix (ι → Fin d) (ι → Fin d) ℂ :=
+  LinearMap.toContinuousLinearMap (LinearMap.id - QuantumCircuit.siteExpectationLM d K)
+
+@[simp] theorem subSiteExpectationCLM_apply {ι : Type*} [Fintype ι] [DecidableEq ι] (d : ℕ)
+    [NeZero d] (K : Finset ι) (M : Matrix (ι → Fin d) (ι → Fin d) ℂ) :
+    subSiteExpectationCLM d K M = M - QuantumCircuit.siteExpectation d K M :=
+  rfl
+
 /-- **Localization of a filtered term by partial trace.** If the normalized partial trace onto
 `K` approximates `W(t)` within `ε` for all `|t| ≤ T`, then it approximates `W_tilde` within `ε` plus
 `2 ‖W‖` times the Gaussian mass of the complement of `[-T, T]`. The approximant
@@ -134,8 +146,7 @@ theorem norm_sub_siteExpectation_gaussianFilteredTerm_le_mass {ι : Type*} [Fint
     ‖gaussianFilteredTerm q ΔE H W -
         QuantumCircuit.siteExpectation d K (gaussianFilteredTerm q ΔE H W)‖ ≤
       ε + 2 * ‖W‖ * (gaussianReal 0 (q / ΔE ^ 2).toNNReal).real (Set.Icc (-T) T)ᶜ := by
-  set L : Matrix (ι → Fin d) (ι → Fin d) ℂ →L[ℂ] Matrix (ι → Fin d) (ι → Fin d) ℂ :=
-    LinearMap.toContinuousLinearMap (LinearMap.id - QuantumCircuit.siteExpectationLM d K)
+  set L := subSiteExpectationCLM (ι := ι) d K
   have hL : ∀ M, L M = M - QuantumCircuit.siteExpectation d K M := fun _ => rfl
   have := norm_map_gaussianFilteredTerm_le_mass q ΔE hH W L hε (C := 2 * ‖W‖)
     (by simpa only [hL] using hloc) fun t => by
