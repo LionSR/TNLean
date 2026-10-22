@@ -16,8 +16,10 @@ run_cmd do
     ``TNLean.MPS.AreaLaw.ChainHamiltonian.commutator_leftPart_eq,
     ``TNLean.MPS.AreaLaw.ChainHamiltonian.norm_commutator_leftPart_le,
     ``TNLean.MPS.AreaLaw.ChainHamiltonian.isSupportedOn_commutator_leftPart,
+    ``TNLean.MPS.AreaLaw.ChainHamiltonian.commutator_rightPart_eq,
     ``TNLean.MPS.AreaLaw.ChainHamiltonian.norm_commutator_rightPart_le,
     ``TNLean.MPS.AreaLaw.ChainHamiltonian.isSupportedOn_commutator_rightPart,
+    ``TNLean.MPS.AreaLaw.ChainHamiltonian.commutator_bufferPart_eq,
     ``TNLean.MPS.AreaLaw.ChainHamiltonian.norm_commutator_bufferPart_le,
     ``TNLean.MPS.AreaLaw.ChainHamiltonian.isSupportedOn_commutator_bufferPart] do
     unless (← Lean.getEnv).contains decl do
