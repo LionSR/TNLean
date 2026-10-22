@@ -445,7 +445,7 @@ private lemma katoCFBlocks_normal (k : Fin 2) : MPSTensor.IsNormalTensor (katoCF
   · exact MPSTensor.isNormalTensor_of_bondDim_one_of_transferMap_eq_id
       katoCFBlock1 katoCFBlock1_transferMap_eq_id
 
-private lemma eq_zero_or_eq_three_of_divNat_eq_modNat {p : Fin (2*2)}
+private lemma eq_zero_or_eq_three_of_divNat_eq_modNat {p : Fin (2 * 2)}
     (hp_diag : p.divNat = p.modNat) : p = 0 ∨ p = 3 := by
   fin_cases p
   · left; rfl
