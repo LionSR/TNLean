@@ -22,7 +22,8 @@ constant $C_2$ is $7$, as recorded in~\cite{gap:hastings07_relent_constants}.
     Let $\Omega$ be a unit vector on the chain of $L$ sites with local
     dimension $q$, let $c$ be a cut, let $l$ be a natural number, and let
     $\xi'>0$ and $C_1\ge1$. Write $A$ for the $l$ sites before the cut and
-    $B$ for the $l$ sites after it, $P_0=|\Omega\rangle\langle\Omega|$, and
+    $B$ for the $l$ sites after it, cut short at the ends of the chain when
+    fewer than $l$ sites remain there, $P_0=|\Omega\rangle\langle\Omega|$, and
     $\epsilon=C_1e^{-l/\xi'}$. Suppose there are commuting orthogonal
     projections $O_L$ supported on the first $c$ sites and $O_R$ supported on
     the sites after them, and an operator $O_B$ of norm at most one supported
@@ -45,6 +46,7 @@ constant $C_2$ is $7$, as recorded in~\cite{gap:hastings07_relent_constants}.
     and the bound on the overlap are hypotheses.
 \end{theorem}
 \begin{proof}\leanok
+    \uses{lem:chain_entropy_inequalities}
     The mutual information $S(A)+S(B)-S(A\cup B)$ is nonnegative by
     subadditivity. If $\epsilon'>1/68$, the right side
     of~(\ref{eq:hastings_relent}) is negative and there is nothing to prove.
