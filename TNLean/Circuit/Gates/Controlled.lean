@@ -315,12 +315,4 @@ theorem ctrlOp_insert_commutator {S : Finset ι} {s t : ι} (ht : t ∉ S)
   · rw [siteOp_mul, Unitary.mul_star_self_of_mem hv, siteOp_one]
   · rw [siteOp_mul, Unitary.mul_star_self_of_mem hw, siteOp_one]
 
-/-- A controlled diagonal operator is diagonal. -/
-theorem ctrlOp_diagonal (S : Finset ι) (c : ι → Fin d) (t : ι) (f : Fin d → ℂ) :
-    ctrlOp S c t (diagonal f) =
-      diagonal fun x : (ι → Fin d) => if ∀ i ∈ S, x i = c i then f (x t) else 1 := by
-  rw [ctrlOp, ctrlElem, siteOp_diagonal, ctrlProj, diagonal_mul_diagonal, ← diagonal_one,
-    diagonal_sub, diagonal_add]
-  congr 1; funext x; split_ifs <;> simp
-
 end QuantumCircuit
