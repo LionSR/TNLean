@@ -27,9 +27,9 @@ crossing count `N_R` and budget `B_R` replaced by `2R` and `B_win`. Recorded in
 
 ## Main results
 
-* `windowBudgetConst`, `windowShellConst`, `windowAreaLawConst`: the constants `B_win`,
-  `C₁,win` and `C₀,win`, which are `B_R`, `C₁(q, R)` and `C₀(q, R)` with `N_R` replaced
-  by `2R` and `B_R` by `B_win`.
+* `windowBudgetConst`, `windowAreaLawConst`: the constants `B_win` and `C₀,win`, which are
+  `cutBudgetConst` and `cutAreaLawConst` at the crossing count `2R`, so `B_R` and
+  `C₀(q, R)` with `N_R` replaced by `2R`.
 
 * `ChainHamiltonian.card_crossingTerms_interval_le_of_consecutive_terms`: the crossing
   count for the nonzero interactions.
@@ -54,24 +54,17 @@ variable {L q R : ℕ} {J : ℝ}
 /-- The cut budget `B_win = 1 + 2R log² (e q^{R + 1})` of full consecutive windows.
 Source: the one-dimensional note, `rem:sharper`, lines 706–709. -/
 noncomputable def windowBudgetConst (q R : ℕ) : ℝ :=
-  1 + (2 * R : ℕ) * Real.log (Real.exp 1 * (q : ℝ) ^ (R + 1)) ^ 2
+  cutBudgetConst (2 * R) q R
 
 /-- The window budget is at least one. -/
 theorem one_le_windowBudgetConst (q R : ℕ) : 1 ≤ windowBudgetConst q R :=
-  le_add_of_nonneg_right (by positivity)
-
-/-- The shell constant `C₁,win`: `C₁(q, R)` with `N_R` replaced by `2R` and `B_R` by `B_win`.
-Source: the one-dimensional note, `rem:sharper`, lines 706–745. -/
-noncomputable def windowShellConst (q R : ℕ) : ℝ :=
-  5 + min (32 * (2 * R : ℕ) * (q : ℝ) ^ (2 * (R + 1)))
-    (64 * Real.exp 1 * (2 * R : ℕ) * Real.log (Real.exp 1 * (q : ℝ) ^ (R + 1)) ^ 2) +
-      128 * windowBudgetConst q R
+  one_le_cutBudgetConst _ q R
 
 /-- The area-law constant `C₀,win`: `C₀(q, R)` with `N_R` replaced by `2R` and `B_R` by
-`B_win`. Source: the one-dimensional note, `rem:sharper`, lines 706–745. -/
+`B_win`; its shell constant `C₁,win` is `cutShellConst (2 * R) q R`.
+Source: the one-dimensional note, `rem:sharper`, lines 706–745. -/
 noncomputable def windowAreaLawConst (q R : ℕ) : ℝ :=
-  (8 * R * Real.log (q : ℝ) + Real.log 2) * windowShellConst q R +
-    1024 * Real.exp 1 * windowBudgetConst q R
+  cutAreaLawConst (2 * R) q R
 
 /-- The starting positions of windows crossing a cut lie among its preceding `R` sites.
 Source: the one-dimensional note, `rem:sharper`, lines 706–709. -/
@@ -162,7 +155,7 @@ theorem ChainHamiltonian.cutLogBudget_interval_le_of_consecutive_terms
         (fun X : {X : ChainSupport L R // h.term X ≠ 0} ↦ X.val.1)) ≤
       windowBudgetConst q R := by
   classical
-  unfold windowBudgetConst
+  unfold windowBudgetConst cutBudgetConst
   let A := {X : ChainSupport L R // h.term X ≠ 0}
   let D : A → Finset (Fin L) := fun X ↦ X.val.1
   let C := Entropy.crossingTerms D (interval L l r)

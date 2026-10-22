@@ -100,16 +100,9 @@ theorem chainAreaLawConst_le_mul_log_cube (hq : 2 ≤ q) :
   set C₁' : ℝ := 5 + 64 * Real.exp 1 * chainCrossConst R * ℓ₂ ^ 2 +
     128 * chainBudgetConst 2 R
   have hC : chainShellConst q R ≤ C₁' * t ^ 2 := by
-    unfold chainShellConst
+    rw [chainShellConst, cutShellConst, ← chainBudgetConst]
     nlinarith only [hE, hB, ht2]
-  have hC0 : 0 ≤ chainShellConst q R := by
-    have hmin : 0 ≤ min (32 * chainCrossConst R * (q : ℝ) ^ (2 * (R + 1)))
-        (64 * Real.exp 1 * chainCrossConst R *
-          Real.log (Real.exp 1 * (q : ℝ) ^ (R + 1)) ^ 2) :=
-      le_min (by positivity) (by positivity)
-    have := one_le_chainBudgetConst q R
-    unfold chainShellConst
-    linarith
+  have hC0 : 0 ≤ chainShellConst q R := cutShellConst_nonneg _ q R
   have hpre : 8 * R * Real.log (q : ℝ) + Real.log 2 ≤ (8 * R * Real.log 2 + Real.log 2) * t := by
     rw [hlog]
     have hR : (0 : ℝ) ≤ R := Nat.cast_nonneg R
@@ -221,8 +214,9 @@ private theorem consecutive_window_coefficient_le_range_log_cube :
   have hc : 0 < Real.log 2 := Real.log_pos (by norm_num)
   refine ⟨by positivity, by positivity, ?_⟩
   intro q R hq hR
-  unfold windowAreaLawConst windowShellConst windowBudgetConst
-  push_cast
+  have hB := one_le_windowBudgetConst q R
+  unfold windowAreaLawConst windowBudgetConst cutAreaLawConst cutShellConst cutBudgetConst at *
+  push_cast at hB ⊢
   have hq0 : 0 < (q : ℝ) := by exact_mod_cast (show 0 < q by omega)
   have hy : Real.log 2 ≤ Real.log (q : ℝ) :=
     Real.log_le_log (by norm_num) (by exact_mod_cast hq)
@@ -239,9 +233,7 @@ private theorem consecutive_window_coefficient_le_range_log_cube :
     dsimp only [B, K]
     rw [hlog]
     exact consecutive_window_budget_le_range_log_sq (Real.log 2) (Real.log (q : ℝ)) (R : ℝ) hc hy hr
-  have hB : 1 ≤ B := by
-    dsimp only [B]
-    exact le_add_of_nonneg_right (by positivity)
+  replace hB : 1 ≤ B := hB
   have hx : Real.log 2 ≤ (R : ℝ) * Real.log (q : ℝ) :=
     hy.trans (le_mul_of_one_le_left (hc.le.trans hy) hr)
   have hE : min (32 * (2 * (R : ℝ)) * (q : ℝ) ^ (2 * (R + 1)))

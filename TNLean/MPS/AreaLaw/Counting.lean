@@ -18,6 +18,8 @@ interval that are `R` apart are split by disjoint sets of supports.
 ## Main results
 
 * `chainCrossConst`, `card_crossingTerms_interval_le`: the crossing count `N_R`.
+* `cutBudgetConst`, `cutShellConst`, `cutAreaLawConst`: the constants `B`, `C₁` and `C₀` of
+  Theorem A for at most `N` split supports.
 * `chainBudgetConst`, `cutLogBudget_interval_le`: the cut budget `B_R`.
 * `single_splitting_shells`: later containment, earlier disjointness, and unique splitting.
 * `not_splits_two_shells`: no support of range `R` is split by two shells `R` apart.
@@ -74,17 +76,49 @@ theorem card_crossingTerms_interval_le (a b : ℕ) :
           (card_filter_subset_le_pow_of_card_le (hW b))
     _ = chainCrossConst R := by rw [chainCrossConst]; ring
 
+/-- The cut budget `1 + N log² (e q^{R + 1})` of an interval split by at most `N` supports
+of range `R`. TNLean note, `eq:BR`, with `N_R` replaced by `N`. -/
+noncomputable def cutBudgetConst (N q R : ℕ) : ℝ :=
+  1 + N * Real.log (Real.exp 1 * (q : ℝ) ^ (R + 1)) ^ 2
+
+/-- The cut budget is at least one. -/
+theorem one_le_cutBudgetConst (N q R : ℕ) : 1 ≤ cutBudgetConst N q R :=
+  le_add_of_nonneg_right (by positivity)
+
+/-- The shell constant `5 + min {32 N q^{2(R + 1)}, 64 e N log² (e q^{R + 1})} + 128 B` for
+at most `N` split supports, where `B = cutBudgetConst N q R`. TNLean note, Theorem A, with
+`N_R` replaced by `N`. -/
+noncomputable def cutShellConst (N q R : ℕ) : ℝ :=
+  5 + min (32 * N * (q : ℝ) ^ (2 * (R + 1)))
+      (64 * Real.exp 1 * N * Real.log (Real.exp 1 * (q : ℝ) ^ (R + 1)) ^ 2) +
+    128 * cutBudgetConst N q R
+
+/-- The shell constant is nonnegative. -/
+theorem cutShellConst_nonneg (N q R : ℕ) : 0 ≤ cutShellConst N q R := by
+  unfold cutShellConst cutBudgetConst
+  positivity
+
+/-- The area-law constant `(8 R log q + log 2) C₁ + 1024 e B` for at most `N` split
+supports, where `C₁ = cutShellConst N q R` and `B = cutBudgetConst N q R`. TNLean note,
+Theorem A, with `N_R` replaced by `N`. -/
+noncomputable def cutAreaLawConst (N q R : ℕ) : ℝ :=
+  (8 * R * Real.log q + Real.log 2) * cutShellConst N q R +
+    1024 * Real.exp 1 * cutBudgetConst N q R
+
+/-- The area-law constant is nonnegative. -/
+theorem cutAreaLawConst_nonneg (N q R : ℕ) : 0 ≤ cutAreaLawConst N q R := by
+  have := cutShellConst_nonneg N q R
+  unfold cutAreaLawConst cutBudgetConst
+  positivity
+
 /-- The cut budget of an interval: `B_R = 1 + N_R log² (e q^{R + 1})`. TNLean note,
 `eq:BR`. -/
 noncomputable def chainBudgetConst (q R : ℕ) : ℝ :=
-  1 + chainCrossConst R * Real.log (Real.exp 1 * (q : ℝ) ^ (R + 1)) ^ 2
+  cutBudgetConst (chainCrossConst R) q R
 
 /-- The cut budget constant is at least one. -/
-theorem one_le_chainBudgetConst (q R : ℕ) : 1 ≤ chainBudgetConst q R := by
-  unfold chainBudgetConst
-  have := mul_nonneg (Nat.cast_nonneg (chainCrossConst R))
-    (sq_nonneg (Real.log (Real.exp 1 * (q : ℝ) ^ (R + 1))))
-  linarith
+theorem one_le_chainBudgetConst (q R : ℕ) : 1 ≤ chainBudgetConst q R :=
+  one_le_cutBudgetConst _ q R
 
 /-- For local dimension at least two, the interval cut budget is at most an
 explicit range-dependent coefficient times the square of its logarithm.
@@ -100,7 +134,7 @@ theorem chainBudgetConst_le_mul_log_sq (hq : 2 ≤ q) :
       Real.log (Real.exp 1 * d ^ (R + 1)) = 1 + (R + 1 : ℕ) * Real.log d := by
     rw [Real.log_mul (Real.exp_ne_zero 1) (pow_ne_zero _ hd.ne'),
       Real.log_exp, Real.log_pow]
-  simp only [chainBudgetConst, Nat.cast_ofNat,
+  simp only [chainBudgetConst, cutBudgetConst, Nat.cast_ofNat,
     hlog (q : ℝ) (by exact_mod_cast (by omega : 0 < q)), hlog 2 (by norm_num)]
   rw [div_mul_eq_mul_div, le_div_iff₀ (sq_pos_of_pos (Real.log_pos (by norm_num)))]
   have hcross : Real.log 2 * (1 + (R + 1 : ℕ) * Real.log (q : ℝ)) ≤
@@ -157,7 +191,7 @@ theorem cutLogBudget_interval_le (hq : 1 ≤ q) (a b : ℕ) :
   have hcard : (Cr.card : ℝ) ≤ chainCrossConst R := by
     exact_mod_cast card_crossingTerms_interval_le (L := L) (R := R) a b
   have := mul_le_mul_of_nonneg_right hcard (sq_nonneg (Real.log (Real.exp 1 * (q : ℝ) ^ (R + 1))))
-  unfold cutLogBudget Entropy.cutLogBudget chainBudgetConst
+  unfold cutLogBudget Entropy.cutLogBudget chainBudgetConst cutBudgetConst
   linarith
 
 /-- **Single splitting, including the initial interval.** If a set of diameter at most
