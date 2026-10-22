@@ -42,6 +42,7 @@ holds for every `l`.
 
 ## Main results
 
+* `regionEntropy_nonneg`: regional entropies of a unit vector are nonnegative.
 * `cutEntropy_sub_le`: the cut entropy moves by at most `ln q` per site.
 * `two_mul_div_three_le_cutEntropy`: the cut entropy bound of eq. `sbnd` on the window.
 * `regionEntropy_le_windowEntropy`, `exists_windowEntropy_eq`: the window entropy is the
@@ -56,20 +57,7 @@ holds for every `l`.
 
 open TNLean.Lattice
 
-namespace TNLean.Lattice
-
-variable {V : Type*} [Fintype V] [DecidableEq V] {q : ℕ} {Ω : EuclideanSpace ℂ (V → Fin q)}
-
-/-- The regional entropy of a unit vector is nonnegative: the regional state is a density
-matrix. -/
-theorem regionEntropy_nonneg (hΩ : ‖Ω‖ = 1) (A : Finset V) :
-    0 ≤ Entropy.regionEntropy (n := fun _ : V ↦ q) A Ω :=
-  vonNeumannEntropy_nonneg_of_posSemidef_trace_one (Entropy.regionState_posSemidef A Ω)
-    (Entropy.trace_regionState_eq_one hΩ)
-
-end TNLean.Lattice
-
-namespace TNLean.MPS.AreaLaw
+namespace TNLean.MPS.AreaLaw.Hastings
 
 variable {L : ℕ}
 
@@ -88,11 +76,15 @@ theorem interval_union_interval {a b c : ℕ} (hab : a ≤ b) (hbc : b ≤ c) :
   simp only [Finset.mem_union, mem_interval]
   omega
 
-end TNLean.MPS.AreaLaw
+/-- The regional entropy of a unit vector is nonnegative: the regional state is a density
+matrix. This is the general fact for any finite type `V` of sites. -/
+theorem regionEntropy_nonneg {V : Type*} [Fintype V] [DecidableEq V] {q : ℕ}
+    {Ω : EuclideanSpace ℂ (V → Fin q)} (hΩ : ‖Ω‖ = 1) (A : Finset V) :
+    0 ≤ Entropy.regionEntropy (n := fun _ : V ↦ q) A Ω :=
+  vonNeumannEntropy_nonneg_of_posSemidef_trace_one (Entropy.regionState_posSemidef A Ω)
+    (Entropy.trace_regionState_eq_one hΩ)
 
-namespace TNLean.MPS.AreaLaw.Hastings
-
-variable {L q : ℕ} {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
+variable {q : ℕ} {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
 
 /-- **Stage lemma: the cut entropy moves slowly.** For `i ≤ k`,
 `S([0, k)) ≥ S([0, i)) - (k - i) ln q`, by the Araki–Lieb inequality and the dimension bound
