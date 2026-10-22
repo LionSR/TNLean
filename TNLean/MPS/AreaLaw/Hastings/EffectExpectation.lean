@@ -80,7 +80,7 @@ contraction, `Z` an orthogonal projection, and `P` a matrix with `‖Z E Z − P
 `x ≤ p + δ + √(1 − y) (√x + √(p + δ))`. The proof writes `E = Z E Z + (1 − Z) E + Z E (1 − Z)`
 and bounds the two cross terms by the Cauchy–Schwarz inequality for the expectation in `σ`.
 
-Source: Hastings, arXiv:0705.2024v4, `law16.tex` lines 440–461 and 916–925. -/
+Source: Hastings, arXiv:0705.2024v4, `law16.tex` lines 440–461 and 911–925. -/
 theorem re_trace_mul_le_of_projection_sandwich {σ E Z P : Matrix n n ℂ} {δ : ℝ}
     (hσ : σ.PosSemidef) (hσ1 : σ.trace = 1) (hE : E.PosSemidef) (hE1 : ‖E‖ ≤ 1)
     (hZ : IsStarProjection Z) (hZEZ : ‖Z * E * Z - P‖ ≤ δ) :

@@ -29,7 +29,7 @@ factorizes as `⟨O_L⟩ ⟨O_R⟩`.
 -/
 
 open Matrix
-open scoped ComplexOrder InnerProductSpace Kronecker
+open scoped InnerProductSpace Kronecker
 
 namespace TNLean.MPS.AreaLaw.Hastings
 
