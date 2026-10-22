@@ -1775,6 +1775,39 @@ for an arbitrary finite set of sites and are instantiated here directly.
     $|\partial_{\mathrm{ch}}D|\le |\Lambda|$ and multiply by two.
 \end{proof}
 
+\begin{theorem}[Intrinsic neighborhoods of order intervals]
+    \label{thm:domain_interval_neighborhood}
+    \lean{TNLean.MPS.AreaLaw.domainNeighborhood_eq_interval_of_ordConnected,
+        TNLean.MPS.AreaLaw.domainNeighborhood_interval_eq}\leanok
+    \uses{def:domain_model,def:chain_model}
+    In the setting of Definition~\ref{def:domain_model}, identify the domain
+    with its increasing labels $V=\{0,\ldots,|\Lambda|-1\}$.
+    For $m\in\N$ and $I\subseteq V$, put
+    \begin{align}
+        N_m(I) & =\bigcup_{x\in I}\{y\in V:d_\Lambda(x,y)\le m\}.\notag
+    \end{align}
+    If $I$ is order-convex in $V$, there exist natural numbers $a,b$ such that
+    $N_m(I)=[a,b)$, with the interval taken in $V$.
+    In particular, the intrinsic neighborhood of a relative interval is
+    again a relative interval. Empty domains and empty intervals are allowed.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:domain_model,def:chain_model}
+    Every edge of the induced graph joins consecutive labels. Induction on
+    a walk therefore shows that it visits every label between its endpoints.
+    If $d_\Lambda(x,y)\le m$ and $z$ lies between $x$ and $y$, the initial
+    segment of a shortest walk ending at $z$ gives $d_\Lambda(x,z)\le m$.
+
+    Let $u\le z\le v$ with $u,v\in N_m(I)$, and choose $x,y\in I$ with
+    $d_\Lambda(x,u)\le m$ and $d_\Lambda(y,v)\le m$.
+    If $z<x$, use the walk from $x$ to $u$.
+    Otherwise, if $z\le y$, order convexity gives $z\in I$.
+    In the remaining case $y<z$, use the walk from $y$ to $v$.
+    Thus $N_m(I)$ is order-convex. If it is nonempty, take $a$ to be its
+    least label and $b$ one plus its greatest label; if it is empty, take
+    $a=b=0$.
+\end{proof}
+
 \begin{theorem}[Connected components of an induced integer graph]
     \label{thm:chain_integer_domain_components}
     \lean{
