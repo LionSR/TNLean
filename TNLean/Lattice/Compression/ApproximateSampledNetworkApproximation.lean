@@ -35,11 +35,6 @@ open TNLean.PEPS.Approximation
 attribute [local instance] Classical.propDecidable
 variable {P : Type} [Fintype P]
 
-/-- The coordinates of an arbitrary selected memory are indexed by its dimension.
-Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 17–19 and 409–434. -/
-private abbrev partyMemoryCoordinateIndex {Q : Type} (q : Q) (ℓ : Layout Q) : Type :=
-  Fin (Module.finrank ℂ (Mem (Layout.atParty q ℓ)))
-
 /-- The incident physical factor in the canonical coordinates of an arbitrary
 source circuit and its original finite discarded registers.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 409–434 and 565–579. -/
@@ -61,12 +56,8 @@ private def canonicalIncidentSampledPhysicalFactor {a : Layout P}
       (fun g ↦ R.participants g.1) p → Fin k) :
     Matrix (Fin (d p)) (Fin (d p)) ℂ :=
   SourceCircuit.incidentSampledPhysicalFactor
-    (I := fun q ↦ partyMemoryCoordinateIndex q (R.allResidualSourceLayout ++ []))
-    (E := fun q ↦ partyMemoryCoordinateIndex q
-      (Layout.mapOwner (affectedOwner (fun _ : P ↦ true)) garbage))
     d ps hn hc garbage R ψ k lam E F p η θ ω
-    (fun q ↦ R.allResidualSourceBasis q)
-    (fun q ↦ SourceCircuit.allPartyDiscardBasis garbage hfinite q)
+    R.allResidualSourceBasis (SourceCircuit.allPartyDiscardBasis garbage hfinite)
     (j ∘ (SourceCircuit.partialSlotSampleEquiv R p).toFun)
 
 /-- The exact sampled contraction preserves any trace-norm error bound for
@@ -115,12 +106,8 @@ private theorem contractedOperator_error_le_of_source_error {a : Layout P}
   intro T
   have hNetwork :=
     SourceCircuit.physicalSourceReplacedDensity_pure_sampled_eq_exterior_smul_contractedOperator
-      (I := fun q ↦ partyMemoryCoordinateIndex q (R.allResidualSourceLayout ++ []))
-      (E := fun q ↦ partyMemoryCoordinateIndex q
-        (Layout.mapOwner (affectedOwner (fun _ : P ↦ true)) garbage))
       d ps hn hc garbage R ψ k lam E F ω
-      (fun q ↦ R.allResidualSourceBasis q)
-      (fun q ↦ SourceCircuit.allPartyDiscardBasis garbage hfinite q) bIn bDiscard
+      R.allResidualSourceBasis (SourceCircuit.allPartyDiscardBasis garbage hfinite) bIn bDiscard
   dsimp only at hNetwork
   change SourceCircuit.physicalSourceReplacedDensity (familyPhysicalLayout d ps)
     garbage R (fun s ξ ζ ↦ SourceCircuit.sampledSourceMatrix R k lam E F s ξ ζ ω)
