@@ -18,6 +18,7 @@ any further flatness consequence is a property of the chosen cut geometry.
 noncomputable section
 open scoped BigOperators Matrix
 namespace TNLean.PEPS.DependentBondNetwork
+open TNLean.Lattice.DependentBondNetwork
 
 variable {Vertex Edge G : Type*} [Group G] [Fintype G]
 variable [Fintype Vertex] [Fintype Edge] [DecidableEq Vertex] [DecidableEq Edge]

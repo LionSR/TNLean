@@ -12,8 +12,9 @@ import TNLean.Algebra.GappedGroundState
 # The Gaussian time average of a gapped Hamiltonian
 
 For a Hermitian matrix `H` and real numbers `q` and `ΔE`, the Gaussian time average is
-`P_q(H) = (ΔE / √(2πq)) ∫ e^{iHt} e^{-(tΔE)² / 2q} dt`, the integral of `e^{iHt}` against
-the centred Gaussian of variance `q / ΔE²`. It is the operator `P_q` of step 5 of the
+the integral of `e^{iHt}` against the centred Gaussian of variance `max(q / ΔE², 0)`, the
+point mass at zero when this vanishes. For `q > 0` and `ΔE > 0` it equals
+`P_q(H) = (ΔE / √(2πq)) ∫ e^{iHt} e^{-(tΔE)² / 2q} dt`, the operator `P_q` of step 5 of the
 proof of Lemma 1 of Hastings's one-dimensional area law (arXiv:0705.2024v4,
 `References/0705.2024/law16.tex`, lines 843–847). The average is expressed through the
 two-generator Gaussian filter `GaussianFilter.gaussianIntertwiner`, with left generator `H`,
@@ -38,10 +39,12 @@ The source states the gap bound as `O(exp[-l/3ξ])` after fixing `q = (l/3)ΔE/(
 (`law16.tex`, line 792); the theorems here keep `q` free and give explicit constants.
 
 **Local fix (exponent at line 848):** the bound `‖P_q - P_0‖ ≤ exp(-q/2)` is sharp when the
-gap is attained. With the source's `q = (l/3)ΔE/(2v)`, `e^{-q/2}` gives only `e^{-l/6ξ}`.
-The same factor enters eqs. `tighter`/`tighter2` and the margin of eq. `obd`. The Lemma 1
-assembly takes `q = (l/3)ΔE/v`, which recovers the printed rate `e^{-l/3ξ}` and
-`ξ' = 6ξ`. Every theorem here keeps `q` free. Documented in
+gap is attained. With the source's `q = (l/3)ΔE/(2v)`, `e^{-q/2}` gives only `e^{-l/6ξ}`, and
+the same factor enters eqs. `tighter`/`tighter2` and the margin of eq. `obd`. With
+`q = (l/3)ΔE/v` the rate `e^{-l/3ξ}` of line 848 is recovered; the final bound
+`O(√(l/ξ) ξ² e^{-l/6ξ})` of lines 903–907 then gives `‖O_BO_LO_R - P₀‖ ≤ C₁e^{-l/ξ'}` for
+every `ξ' > 6ξ`, with `C₁` depending on `ξ' - 6ξ`, but not at the printed `ξ' = 6ξ`
+(line 142). Every theorem here keeps `q` free. Documented in
 `docs/paper-gaps/hastings07_gaussian_average_exponent.tex`.
 For `q ≤ 0` the variance is zero, `P_q(H) = 1`, and every bound remains true.
 All norms are Euclidean operator norms.
@@ -59,9 +62,9 @@ variable {n : Type*} [Fintype n] [DecidableEq n]
 noncomputable def timeAverageVariance (q ΔE : ℝ) : ℝ≥0 := (q / ΔE ^ 2).toNNReal
 
 /-- The Gaussian time average `P_q(H) = (ΔE/√(2πq)) ∫ e^{iHt} e^{-(tΔE)²/2q} dt` of
-Hastings, arXiv:0705.2024v4, `law16.tex`, lines 843–847 (for `ΔE > 0`), written as the two-generator
-Gaussian filter with left generator `H`, right generator `0` and input `1`. (With `H` on
-both sides the filter of `1` would be `1` itself.) -/
+Hastings, arXiv:0705.2024v4, `law16.tex`, lines 843–847 (for `q > 0` and `ΔE > 0`), written
+as the two-generator Gaussian filter with left generator `H`, right generator `0` and input
+`1`. (With `H` on both sides the filter of `1` would be `1` itself.) -/
 noncomputable def gaussianTimeAverage (q ΔE : ℝ) (H : Matrix n n ℂ) : Matrix n n ℂ :=
   GaussianFilter.gaussianIntertwiner (timeAverageVariance q ΔE) H 0 1
 

@@ -15,7 +15,8 @@ the parameter $q$. Norms are operator norms.
     \lean{TNLean.MPS.AreaLaw.Hastings.timeAverageVariance,
         TNLean.MPS.AreaLaw.Hastings.gaussianTimeAverage}
     \leanok
-    Let $q$ and $\Delta E$ be real numbers and put $h=\max(q/\Delta E^2,0)$.
+    Let $q$ and $\Delta E$ be real numbers and put $h=\max(q/\Delta E^2,0)$ if
+    $\Delta E\ne0$, and $h=0$ if $\Delta E=0$.
     For a complex square matrix $H$ let
     \begin{align*}
         P_q(H)=\int e^{iHt}\,d\gamma_h(t),
@@ -48,6 +49,7 @@ the parameter $q$. Norms are operator norms.
     see~\cite{gap:hastings07_gaussian_average_exponent}.
 \end{theorem}
 \begin{proof}\leanok
+    \uses{def:hastings_gaussian_time_average}
     Let $(e_k)$ be an orthonormal eigenbasis of $H$ with eigenvalues
     $\lambda_k$. The Gaussian characteristic function gives
     $\langle e_k,P_q(H)x\rangle=e^{-h\lambda_k^2/2}\langle e_k,x\rangle$.
@@ -58,15 +60,15 @@ the parameter $q$. Norms are operator norms.
     the bound $e^{-h\Delta E^2/2}\|x\|$. Finally $h\Delta E^2\ge q$.
 \end{proof}
 
-\begin{lemma}[Comparison of two unitary evolutions]
-    \label{lem:hastings_unitary_path_difference}
+\begin{theorem}[Comparison of two unitary evolutions]
+    \label{thm:hastings_unitary_path_difference}
     \lean{TNLean.MPS.AreaLaw.Hastings.norm_hermitianUnitaryPath_sub_le}
     \leanok
     For Hermitian matrices $M$ and $H$ and every real $t$,
     \begin{align*}
         \|e^{iMt}-e^{iHt}\|\le\|M-H\|\,|t|.
     \end{align*}
-\end{lemma}
+\end{theorem}
 \begin{proof}\leanok
     By the Duhamel formula,
     $e^{-iMt}e^{iHt}-1=\int_0^te^{-iMs}\,i(H-M)\,e^{iHs}\,ds$. The integrand
@@ -74,12 +76,12 @@ the parameter $q$. Norms are operator norms.
     the norm.
 \end{proof}
 
-\begin{lemma}[First absolute moment of a Gaussian]
-    \label{lem:hastings_gaussian_absolute_moment}
+\begin{theorem}[First absolute moment of a Gaussian]
+    \label{thm:hastings_gaussian_absolute_moment}
     \lean{TNLean.MPS.AreaLaw.Hastings.integral_abs_gaussianReal_le}
     \leanok
     For every $h\ge0$, $\int|t|\,d\gamma_h(t)\le\sqrt h$.
-\end{lemma}
+\end{theorem}
 \begin{proof}\leanok
     The variance of $|t|$ is nonnegative, so
     $\bigl(\int|t|\,d\gamma_h\bigr)^2\le\int t^2\,d\gamma_h=h$.
@@ -92,7 +94,8 @@ the parameter $q$. Norms are operator norms.
     \leanok
     \uses{def:hastings_gaussian_time_average,
         thm:hastings_gaussian_time_average_gap}
-    Let $M$ and $H$ be Hermitian, let $\Delta E>0$ and let $q\ge0$. Then
+    Let $M$ and $H$ be Hermitian, let $\Delta E>0$, let $q$ be real and write
+    $\sqrt q$ for $\sqrt{\max(q,0)}$. Then
     \begin{align*}
         \|P_q(M)-P_q(H)\|\le\frac{\sqrt q}{\Delta E}\,\|M-H\|.
     \end{align*}
@@ -107,12 +110,13 @@ the parameter $q$. Norms are operator norms.
     is written in the interaction picture.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{lem:hastings_unitary_path_difference,
-        lem:hastings_gaussian_absolute_moment}
-    Integrating Lemma~\ref{lem:hastings_unitary_path_difference} against
+    \uses{thm:hastings_unitary_path_difference,
+        thm:hastings_gaussian_absolute_moment,
+        thm:hastings_gaussian_time_average_gap}
+    Integrating Theorem~\ref{thm:hastings_unitary_path_difference} against
     $\gamma_h$ gives
     $\|P_q(M)-P_q(H)\|\le\|M-H\|\int|t|\,d\gamma_h$, and
-    Lemma~\ref{lem:hastings_gaussian_absolute_moment} bounds the integral
+    Theorem~\ref{thm:hastings_gaussian_absolute_moment} bounds the integral
     by $\sqrt h=\sqrt q/\Delta E$. The second bound follows from the triangle
     inequality and Theorem~\ref{thm:hastings_gaussian_time_average_gap}.
 \end{proof}

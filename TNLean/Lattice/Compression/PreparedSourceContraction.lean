@@ -29,7 +29,7 @@ open scoped ComplexConjugate Matrix TensorProduct
 namespace TNLean
 open TNLean.Lattice.PartyCircuit
 
-namespace PEPS.PairEffect
+namespace Lattice.PartyCircuit
 /-- Pair the ket and bra coordinate assignments at each fixed source position.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 279–317. -/
 private theorem sourceContraction_vecMulVec {I m n : Type} [Fintype I] [DecidableEq I]
@@ -48,9 +48,9 @@ private theorem sourceContraction_vecMulVec {I m n : Type} [Fintype I] [Decidabl
       Fintype.sum_equiv (Equiv.arrowProdEquivProdArrow I A B) _ F (fun _ ↦ rfl)
     _ = _ := Fintype.sum_prod_type F
 
-end PEPS.PairEffect
+end Lattice.PartyCircuit
 namespace Lattice.PartyCircuit
-open TNLean.PEPS.PairEffect
+open TNLean.Lattice.PartyCircuit
 /-- Finite endpoint expansions in the actual ket and bra sources are evaluated by
 source contraction with their rank-one coordinate matrices. No spanning,
 normalization, allowedness, or positivity hypothesis is needed.

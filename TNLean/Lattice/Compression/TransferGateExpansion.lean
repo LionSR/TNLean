@@ -30,7 +30,7 @@ namespace TNLean
 open TNLean.Lattice.PartyCircuit
 variable {P : Type}
 
-namespace PEPS.PairEffect
+namespace Lattice.PartyCircuit
 /-- The operator of a party expansion is the sum of its actual weighted monomials. -/
 theorem gate_toGate_eq_sum {a b : Layout P} (L : PartyGate a b) :
     gate (toGate L) = (L.map fun t ↦ t.1 • t.2.toEffectChain.eval).sum := by
@@ -38,9 +38,9 @@ theorem gate_toGate_eq_sum {a b : Layout P} (L : PartyGate a b) :
   | nil => rfl
   | cons t L ih => simp only [gate, List.map_cons, List.sum_cons, ih]
 
-end PEPS.PairEffect
+end Lattice.PartyCircuit
 namespace Lattice.PartyCircuit.PartyGate
-open TNLean.PEPS.PairEffect
+open TNLean.Lattice.PartyCircuit
 
 open Classical in
 /-- The actual message expansion, with one local basis monomial per message coordinate. -/
