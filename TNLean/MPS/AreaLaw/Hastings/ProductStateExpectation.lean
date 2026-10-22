@@ -254,7 +254,7 @@ theorem one_sub_two_mul_sq_le_re_trace_cutProductState_mul {L q c : ℕ}
     1 - 2 * ε ^ 2 ≤ (cutProductState L q c Ω * (OL * OR)).trace.re := by
   have hcomm : Commute OL OR :=
     QuantumCircuit.commute_of_mem_supportedOperators
-      (Finset.disjoint_coe.mpr Finset.disjoint_compl_right)
+      (Finset.disjoint_coe.mpr disjoint_compl_right)
       (QuantumCircuit.mem_supportedOperators_of_isSupportedOn hL)
       (QuantumCircuit.mem_supportedOperators_of_isSupportedOn hR)
   rw [trace_cutProductState_mul_mul c Ω hL hR]
