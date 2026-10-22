@@ -63,7 +63,7 @@ No other constant differs from the source.
 
 ## Main results
 
-* `windowLength`, `maxEntropyBound`: the window length `l₀` and the bound `S_max`.
+* `doublingWindowLength`, `maxEntropyBound`: the window length `l₀` and the bound `S_max`.
 * `maxEntropyBound_le`: `S_max ≤ 6 ln q (ξ₀ + 1) 2^{2 (ξ' ln q + (2 + C₂) ξ'/ξ₀) + 1}`.
 * `regionEntropy_prefix_le_of_windowClaim`: the stage theorem, eq. `entbd`.
 
@@ -82,14 +82,14 @@ variable {L q R : ℕ} {J : ℝ}
 /-- The window length `l₀ = ⌈ξ₀⌉ 2^M` of the contradiction argument, with
 `ξ₀ = doublingStartLength ξ' C₁` and `M = doublingExponent ξ' C₁ C₂ D`; arXiv:0705.2024v4,
 eq. `l0def` (line 155), with `S_max` chosen so that `S_max/(3 ln D)` is this integer. -/
-noncomputable def windowLength (ξ' C₁ C₂ D : ℝ) : ℕ :=
+noncomputable def doublingWindowLength (ξ' C₁ C₂ D : ℝ) : ℕ :=
   ⌈doublingStartLength ξ' C₁⌉₊ * 2 ^ doublingExponent ξ' C₁ C₂ D
 
 /-- The entropy bound `S_max = 3 ln D · l₀` of Hastings' main theorem; arXiv:0705.2024v4,
 eq. `smd` (line 136), with the constants of the corrected doubling iteration (see the local
 fix in the module docstring). -/
 noncomputable def maxEntropyBound (ξ' C₁ C₂ D : ℝ) : ℝ :=
-  3 * Real.log D * windowLength ξ' C₁ C₂ D
+  3 * Real.log D * doublingWindowLength ξ' C₁ C₂ D
 
 /-- The bound `S_max` is nonnegative for `D ≥ 1`. -/
 theorem maxEntropyBound_nonneg {ξ' C₁ C₂ D : ℝ} (hD : 1 ≤ D) :
@@ -123,7 +123,7 @@ theorem maxEntropyBound_le {ξ' C₁ C₂ D : ℝ} (hξ' : 0 < ξ') (hC₁ : 1 <
       2 * (2 : ℝ) ^ (2 * (ξ' * Real.log D + (2 + C₂) * ξ' / ξ₀) + 1) := by
     rw [show a + 1 = 1 + (2 * (ξ' * Real.log D + (2 + C₂) * ξ' / ξ₀) + 1) by simp only [a]; ring,
       Real.rpow_add (by norm_num), Real.rpow_one]
-  unfold maxEntropyBound windowLength
+  unfold maxEntropyBound doublingWindowLength
   push_cast
   calc 3 * Real.log D * ((⌈ξ₀⌉₊ : ℝ) * 2 ^ doublingExponent ξ' C₁ C₂ D)
       ≤ 3 * Real.log D * ((ξ₀ + 1) * (2 : ℝ) ^ (a + 1)) := by gcongr
@@ -151,7 +151,7 @@ theorem regionEntropy_interval_zero_le {Ω : EuclideanSpace ℂ (Fin L → Fin q
 /-- **Hastings' area law on the chain, stage theorem.** Let `Ω` be a gapped ground vector of
 a finite-range Hamiltonian `h` on the chain of `L` sites with local dimension `q ≥ 1`. Let
 `ξ' > 0`, `C₁` with `2 C₁ > 1`, and `C₂` with `ln C₁ + C₂ ≥ 0`, write
-`l₀ = windowLength ξ' C₁ C₂ q` and `S_max = maxEntropyBound ξ' C₁ C₂ q = 3 l₀ ln q`, and let
+`l₀ = doublingWindowLength ξ' C₁ C₂ q` and `S_max = maxEntropyBound ξ' C₁ C₂ q = 3 l₀ ln q`, and let
 `W i l` stand for the largest entropy of an interval of `l` sites in the window
 `[i, i + l₀]`. Assume
 
@@ -176,21 +176,21 @@ theorem regionEntropy_prefix_le_of_windowClaim (hq : 1 ≤ q) (h : ChainHamilton
       Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L 0 i) Ω -
           ((k - i : ℕ) : ℝ) * Real.log q ≤
         Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L 0 k) Ω)
-    (hpos : ∀ i l : ℕ, i + windowLength ξ' C₁ C₂ q ≤ L → l ≤ windowLength ξ' C₁ C₂ q →
-      0 ≤ W i l)
-    (hinit : ∀ i l : ℕ, i + windowLength ξ' C₁ C₂ q ≤ L → l ≤ windowLength ξ' C₁ C₂ q →
-      W i l ≤ l * Real.log q)
-    (hclaim : ∀ i : ℕ, i + windowLength ξ' C₁ C₂ q ≤ L →
-      (∀ k : ℕ, i ≤ k → k ≤ i + windowLength ξ' C₁ C₂ q →
+    (hpos : ∀ i l : ℕ, i + doublingWindowLength ξ' C₁ C₂ q ≤ L →
+      l ≤ doublingWindowLength ξ' C₁ C₂ q → 0 ≤ W i l)
+    (hinit : ∀ i l : ℕ, i + doublingWindowLength ξ' C₁ C₂ q ≤ L →
+      l ≤ doublingWindowLength ξ' C₁ C₂ q → W i l ≤ l * Real.log q)
+    (hclaim : ∀ i : ℕ, i + doublingWindowLength ξ' C₁ C₂ q ≤ L →
+      (∀ k : ℕ, i ≤ k → k ≤ i + doublingWindowLength ξ' C₁ C₂ q →
         2 * maxEntropyBound ξ' C₁ C₂ q / 3 ≤
           Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L 0 k) Ω) →
-      ∀ l : ℕ, 2 * (l : ℝ) ≤ windowLength ξ' C₁ C₂ q →
+      ∀ l : ℕ, 2 * (l : ℝ) ≤ doublingWindowLength ξ' C₁ C₂ q →
         W i (2 * l) ≤ 2 * W i l - (1 - 2 * C₁ * Real.exp (-(l / ξ'))) * (l / ξ') +
           Real.log C₁ + C₂)
     (i : ℕ) :
     Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L 0 i) Ω ≤
       maxEntropyBound ξ' C₁ C₂ q := by
-  set l₀ := windowLength ξ' C₁ C₂ q with hl₀def
+  set l₀ := doublingWindowLength ξ' C₁ C₂ q with hl₀def
   set Smax := maxEntropyBound ξ' C₁ C₂ q with hSmax
   have hlog : 0 ≤ Real.log q := Real.log_nonneg (by exact_mod_cast hq)
   have hSl₀ : Smax = 3 * Real.log q * l₀ := rfl
@@ -218,7 +218,7 @@ theorem regionEntropy_prefix_le_of_windowClaim (hq : 1 ≤ q) (h : ChainHamilton
       (fun l hl ↦ hpos i l hfit (by exact_mod_cast hl))
       (fun l hl ↦ hinit i l hfit (by exact_mod_cast hl))
       (hclaim i hfit hcut)
-    simp only [hl₀def, windowLength, Nat.cast_mul, Nat.cast_pow, Nat.cast_ofNat] at hlt
+    simp only [hl₀def, doublingWindowLength, Nat.cast_mul, Nat.cast_pow, Nat.cast_ofNat] at hlt
     exact lt_irrefl _ hlt
 
 end TNLean.MPS.AreaLaw.Hastings
