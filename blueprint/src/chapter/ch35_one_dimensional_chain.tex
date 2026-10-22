@@ -1737,7 +1737,7 @@ for an arbitrary finite set of sites and are instantiated here directly.
     \label{thm:domain_interval_neighborhood}
     \lean{TNLean.MPS.AreaLaw.domainNeighborhood_eq_interval_of_ordConnected,
         TNLean.MPS.AreaLaw.domainNeighborhood_interval_eq}\leanok
-    \uses{def:domain_model}
+    \uses{def:domain_model,def:chain_model}
     In the setting of Definition~\ref{def:domain_model}, identify the domain
     with its increasing labels $V=\{0,\ldots,|\Lambda|-1\}$.
     For $m\in\N$ and $I\subseteq V$, put
@@ -1745,7 +1745,7 @@ for an arbitrary finite set of sites and are instantiated here directly.
         N_m(I) & =\bigcup_{x\in I}\{y\in V:d_\Lambda(x,y)\le m\}.\notag
     \end{align}
     If $I$ is order-convex in $V$, there exist natural numbers $a,b$ such that
-    $N_m(I)=\{i\in V:a\le i<b\}$.
+    $N_m(I)=[a,b)$, with the interval taken in $V$.
     In particular, the intrinsic neighborhood of a relative interval is
     again a relative interval. Empty domains and empty intervals are allowed.
 \end{theorem}
