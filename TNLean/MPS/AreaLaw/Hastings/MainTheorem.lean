@@ -46,6 +46,21 @@ iteration, `S_max = 3 ln q ⌈ξ₀⌉ 2^M` with `ξ₀ = 2 ξ' ln (2 C₁)` and
 printed `2^{ξ' ln q}` of eq. `smd` (line 136). Documented in
 `docs/paper-gaps/hastings07_doubling_constants.tex`.
 
+**Comparison with eq. `smd`.** The source prints `S_max = c₀ ξ' ln ξ' ln D 2^{ξ' ln D}`.
+Apart from the base `4` in place of `2`, the bound here has the same shape:
+
+* `ln q = ln D` is the same factor.
+* `⌈ξ₀⌉ ≤ 2 ξ' ln (2 C₁) + 1` is the source's prefactor `ξ' ln (2 C₁)` of line 230,
+  with the factor `2` recorded in the same note. Lemma 1 bounds `C₁` by a polynomial in `ξ`,
+  so `ln (2 C₁) = O(ln ξ')`; the source writes this as `ln ξ'`, and here it is kept as
+  `ln (2 C₁)`.
+* `2^{(2 + C₂) ξ'/ξ₀ + 1/2}` (the factor `4` once doubled) is the term that line 230 carries
+  inside the ceiling and that eq. `smd` absorbs into `c₀`. Since
+  `(2 + C₂) ξ'/ξ₀ = (2 + C₂)/(2 ln (2 C₁))`, it is a constant once `ln (2 C₁)` is bounded
+  below. It is kept explicit here.
+
+No other constant differs from the source.
+
 ## Main results
 
 * `windowLength`, `maxEntropyBound`: the window length `l₀` and the bound `S_max`.
