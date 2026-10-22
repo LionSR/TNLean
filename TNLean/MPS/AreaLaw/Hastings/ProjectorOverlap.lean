@@ -89,12 +89,13 @@ theorem overlap_ge_of_norm_sub_vecMulVec_le {Ψ : EuclideanSpace ℂ N} (hΨ : �
     rw [norm_sq_sub_normSq_inner_eq hΨ]; positivity
   set T := ∑ i, w i * ‖toEuclideanLin O (ψ i)‖ ^ 2 with hT
   set A := ∑ i, w i * ‖⟪Ψ, toEuclideanLin O (ψ i)⟫_ℂ‖ ^ 2 with hA
+  -- The weight orthogonal to `Ψ`, term by term.
+  have hTsubA : T - A = ∑ i, w i * (‖toEuclideanLin O (ψ i)‖ ^ 2 -
+      ‖⟪Ψ, toEuclideanLin O (ψ i)⟫_ℂ‖ ^ 2) := by
+    rw [hT, hA, ← Finset.sum_sub_distrib]
+    exact Finset.sum_congr rfl fun i _ ↦ by ring
   have hTA : T - A ≤ ε ^ 2 := by
-    have : T - A = ∑ i, w i * (‖toEuclideanLin O (ψ i)‖ ^ 2 -
-        ‖⟪Ψ, toEuclideanLin O (ψ i)⟫_ℂ‖ ^ 2) := by
-      rw [hT, hA, ← Finset.sum_sub_distrib]
-      exact Finset.sum_congr rfl fun i _ ↦ by ring
-    rw [this]
+    rw [hTsubA]
     calc _ ≤ ∑ i, w i * (ε ^ 2 * ‖ψ i‖ ^ 2) :=
           Finset.sum_le_sum fun i _ ↦ mul_le_mul_of_nonneg_left (hexc _) (hw i)
       _ = ε ^ 2 * ∑ i, w i * ‖ψ i‖ ^ 2 := by
@@ -103,11 +104,7 @@ theorem overlap_ge_of_norm_sub_vecMulVec_le {Ψ : EuclideanSpace ℂ N} (hΨ : �
       _ = ε ^ 2 := by rw [hnorm, mul_one]
   have hAT : A ≤ T := by
     have : 0 ≤ T - A := by
-      have : T - A = ∑ i, w i * (‖toEuclideanLin O (ψ i)‖ ^ 2 -
-          ‖⟪Ψ, toEuclideanLin O (ψ i)⟫_ℂ‖ ^ 2) := by
-        rw [hT, hA, ← Finset.sum_sub_distrib]
-        exact Finset.sum_congr rfl fun i _ ↦ by ring
-      rw [this]
+      rw [hTsubA]
       exact Finset.sum_nonneg fun i _ ↦ mul_nonneg (hw i) (hexc0 _)
     linarith
   -- The overlap: `A ≥ (√P - ε)²` by Minkowski's inequality in the weighted `ℓ²` norm.
