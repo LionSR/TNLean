@@ -46,8 +46,8 @@ of a gapped chain combines them with the factorization of
         H(p)\le\ln K-\ln(1-x)+x\bigl(\ln(D^2-1)-\ln x\bigr)
         +\frac{x^2\,(2\ln D-\ln x)}{1-x}.
     \end{align*}
-    In particular, with $x=e^{-2/\xi'}$ and $K=kD^{2m+2}$ for $k\ge1$ and
-    $\xi'>0$,
+    In particular, with $x=e^{-2/\xi'}$ and $K=kD^{2m+2}$ for $k\ge1$, a
+    natural number $m$ and $\xi'>0$,
     \begin{align*}
         H(p)\le\ln k+(2m+2+\xi')\ln D+1+\ln(D^2-1)+\ln(\xi'/2+1).
     \end{align*}
@@ -188,9 +188,10 @@ of a gapped chain combines them with the factorization of
     \end{align*}
     Here $D\ge2$ is the local dimension, $\xi=\max(2v/\Delta E,\xi_C)$ and
     $\xi'=6\xi$ as in \cite[lines 126--142]{Hastings2007AreaLaw}, and
-    $C_1(\xi)$ is the constant of the approximate factorization
+    $C_1(\xi)\ge1$ is the constant of the approximate factorization
     $\|O_B(j,m)O_L(j,m)O_R(j,m)-P_0\|\le C_1(\xi)e^{-m/\xi'}$ of
-    \cite[Lemma~1]{Hastings2007AreaLaw}. This is
+    \cite[Lemma~1]{Hastings2007AreaLaw}; enlarging $C_1(\xi)$ keeps that
+    estimate true, so $C_1(\xi)\ge1$ costs nothing. This is
     \cite[Lemma~2]{Hastings2007AreaLaw}, lines 280--311.
 \end{lemma}
 \begin{proof}
@@ -201,5 +202,5 @@ of a gapped chain combines them with the factorization of
     the cut by at most $D^{2m}$. Theorem~\ref{thm:hastings_bootstrap_overlap}
     gives the overlap of the resulting mixtures at each scale, and
     Theorem~\ref{thm:hastings_bootstrap_stage} with $c=2C_1(\xi)^2/P$ gives
-    the bound.
+    the bound; here $c\ge1$ because $P\le1$ and $C_1(\xi)\ge1$.
 \end{proof}
