@@ -22,6 +22,7 @@ noncomputable section
 open scoped BigOperators
 
 namespace TNLean.PEPS.DependentBondNetwork
+open TNLean.Lattice.DependentBondNetwork
 
 variable {Vertex Edge V : Type*} [Fintype Vertex] [Fintype Edge]
 variable [DecidableEq Vertex] [DecidableEq Edge] [Fintype V] [DecidableEq V]

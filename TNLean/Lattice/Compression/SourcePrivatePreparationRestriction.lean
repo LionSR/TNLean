@@ -26,7 +26,7 @@ depend on a choice of monomial.
 
 noncomputable section
 namespace TNLean.Lattice.PartyCircuit.SourceCircuit
-open TNLean.PEPS.PairEffect
+open TNLean.Lattice.PartyCircuit
 variable {P : Type}
 
 /-- Excluded spectator registers do not change the exterior identity of an

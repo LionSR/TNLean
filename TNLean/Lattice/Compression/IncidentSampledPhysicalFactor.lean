@@ -27,7 +27,7 @@ Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 253–267,
 noncomputable section
 open scoped Matrix
 namespace TNLean.Lattice.PartyCircuit.SourceCircuit
-open TNLean.PEPS.PairEffect
+open TNLean.Lattice.PartyCircuit
 
 variable {P : Type} {a : Layout P}
 variable {I E : Option {_p : P // true = true} → Type}

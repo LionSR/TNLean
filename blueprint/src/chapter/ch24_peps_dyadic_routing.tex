@@ -90,7 +90,7 @@ not assumed.
 
 \begin{definition}[Party network and routing]
     \label{def:peps_party_network_routing}
-    \lean{TNLean.PEPS.Approximation.PartyNetwork, TNLean.PEPS.Approximation.PartyNetwork.coeff, TNLean.PEPS.Approximation.Routing}
+    \lean{TNLean.Lattice.Compression.PartyNetwork, TNLean.Lattice.Compression.PartyNetwork.coeff, TNLean.PEPS.Approximation.Routing}
     \leanok
     A party network with physical dimension $d$ consists of finite sets of
     parties and links, a dimension $D_\ell$ for each link $\ell$, two endpoint
@@ -231,7 +231,7 @@ in~\cite{gap:polypeps_product_reference_column}.
 
 \begin{definition}[Operator party network and a fixed input]
     \label{def:peps_party_operator_fix_input}
-    \lean{TNLean.PEPS.Approximation.PartyNetwork.operatorCoeff, TNLean.PEPS.Approximation.PartyNetwork.fixInput}
+    \lean{TNLean.Lattice.Compression.PartyNetwork.operatorCoeff, TNLean.Lattice.Compression.PartyNetwork.fixInput}
     \leanok
     \uses{def:peps_party_network_routing}
     An operator party network is a party network whose physical index at each
@@ -246,7 +246,7 @@ in~\cite{gap:polypeps_product_reference_column}.
 
 \begin{theorem}[A column of the party network]
     \label{thm:peps_party_column}
-    \lean{TNLean.PEPS.Approximation.PartyNetwork.dim_fixInput, TNLean.PEPS.Approximation.PartyNetwork.coeff_fixInput, TNLean.PEPS.Approximation.PartyNetwork.exists_fixInput_of_rectangularTraceNorm_sub_pure_le}
+    \lean{TNLean.Lattice.Compression.PartyNetwork.dim_fixInput, TNLean.Lattice.Compression.PartyNetwork.coeff_fixInput, TNLean.Lattice.Compression.PartyNetwork.exists_fixInput_of_rectangularTraceNorm_sub_pure_le}
     \leanok
     \uses{def:peps_party_operator_fix_input}
     In the party-graph setting of \cite[Lemma~8.1]{OpenAI2026PolynomialPEPS},
