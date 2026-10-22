@@ -550,18 +550,17 @@ space with the graph interaction hypotheses.
 \begin{theorem}[Crossing supports avoid interior cores]
     \label{thm:qc_graph_support_separation}
     \lean{QuantumCircuit.reset_graphNeighborhood_disjoint_cores}\leanok
-    Let $G$ be a finite graph, with extended graph distance $d_G$, and let
-    $(X_i)_{i\in I}$ be a finite family of subsets of its vertices, each of
-    diameter at most $R$, where $R,\ell\in\mathbb N$. Write
-    $N_s(A)=\bigcup_{a\in A}\{y:d_G(a,y)\le s\}$.
+    Let $G$ be a finite graph on $I$, with extended graph distance $d_G$, and let
+    $(X_j)_{j\in J}$ be a finite family of vertex subsets, each of diameter
+    at most $R$, where $R,\ell\in\mathbb N$.
     Let $D,C$ be disjoint vertex sets and let $R_0,C_0$ be two further sets.
     Suppose $N_{\ell+R}(\{r\})\subseteq D$ for every $r\in R_0$ and
     $N_{\ell+R}(\{c\})\subseteq C$ for every $c\in C_0$. Put
     \begin{align}
         Q          & =(D\cup C)^c,\notag                 \\
-        \mathcal C & =\{i\in I:X_i\cap D\ne\varnothing,
-        \ X_i\setminus D\ne\varnothing\},\notag          \\
-        Z          & =\bigcup_{i\in\mathcal C}X_i.\notag
+        \mathcal C & =\{j\in J:X_j\cap D\ne\varnothing,
+        \ X_j\setminus D\ne\varnothing\},\notag          \\
+        Z          & =\bigcup_{j\in\mathcal C}X_j.\notag
     \end{align}
     Then $N_\ell(Q\cup Z)\cap(R_0\cup C_0)=\varnothing$.
     This is the support argument in the proof of the information-reset lemma
@@ -571,8 +570,8 @@ space with the graph interaction hypotheses.
     Suppose $a\in R_0\cup C_0$ and $d_G(a,z)\le\ell$ for some
     $z\in Q\cup Z$. If $z\in Q$, then $z\in N_{\ell+R}(\{a\})$,
     contradicting the relevant containment in $D$ or $C$.
-    Otherwise $z\in X_i$ for a crossing support. Choose
-    $x\in X_i\cap D$ and $y\in X_i\setminus D$.
+    Otherwise $z\in X_j$ for a crossing support. Choose
+    $x\in X_j\cap D$ and $y\in X_j\setminus D$.
     If $a\in R_0$, then
     $d_G(a,y)\le d_G(a,z)+d_G(z,y)\le\ell+R$, so $y\in D$, a contradiction.
     If $a\in C_0$, the same inequality with $x$ gives $x\in C$,
