@@ -445,6 +445,18 @@ private lemma katoCFBlocks_normal (k : Fin 2) : MPSTensor.IsNormalTensor (katoCF
   · exact MPSTensor.isNormalTensor_of_bondDim_one_of_transferMap_eq_id
       katoCFBlock1 katoCFBlock1_transferMap_eq_id
 
+private lemma eq_zero_or_eq_three_of_divNat_eq_modNat {p : Fin (2*2)}
+    (hp_diag : p.divNat = p.modNat) : p = 0 ∨ p = 3 := by
+  fin_cases p
+  · left; rfl
+  · exfalso
+    apply (by decide : ¬ ((1 : Fin (2*2)).divNat = (1 : Fin (2*2)).modNat))
+    exact hp_diag
+  · exfalso
+    apply (by decide : ¬ ((2 : Fin (2*2)).divNat = (2 : Fin (2*2)).modNat))
+    exact hp_diag
+  · right; rfl
+
 private theorem toMPSTensor_eq_toTensorFromBlocks :
     MPOTensor.toMPSTensor tensor = MPSTensor.toTensorFromBlocks katoCFWeights katoCFBlocks := by
   let e : (Σ _k : Fin 2, Fin 1) ≃ Fin 2 := finSigmaFinEquiv
@@ -463,16 +475,7 @@ private theorem toMPSTensor_eq_toTensorFromBlocks :
     simp only [Fin.isValue, Matrix.blockDiagonal'_apply_eq, Matrix.smul_apply, smul_eq_mul,
       katoCFWeights, katoCFBlocks]
     by_cases hp_diag : p.divNat = p.modNat
-    · have hp_val : p = 0 ∨ p = 3 := by
-        fin_cases p
-        · left; rfl
-        · exfalso
-          apply (by decide : ¬ ((1 : Fin (2*2)).divNat = (1 : Fin (2*2)).modNat))
-          exact hp_diag
-        · exfalso
-          apply (by decide : ¬ ((2 : Fin (2*2)).divNat = (2 : Fin (2*2)).modNat))
-          exact hp_diag
-        · right; rfl
+    · have hp_val : p = 0 ∨ p = 3 := eq_zero_or_eq_three_of_divNat_eq_modNat hp_diag
       rcases hp_val with rfl | rfl
       · fin_cases x
         · simp [tensor, siteSign, Fin.divNat, Fin.modNat,
@@ -503,16 +506,7 @@ private theorem toMPSTensor_eq_toTensorFromBlocks :
   · rw [Matrix.blockDiagonal'_apply_ne (fun k : Fin 2 => (katoCFWeights k) • (katoCFBlocks k p))
       (0 : Fin 1) (0 : Fin 1) h]
     by_cases hp_diag : p.divNat = p.modNat
-    · have hp_val : p = 0 ∨ p = 3 := by
-        fin_cases p
-        · left; rfl
-        · exfalso
-          apply (by decide : ¬ ((1 : Fin (2*2)).divNat = (1 : Fin (2*2)).modNat))
-          exact hp_diag
-        · exfalso
-          apply (by decide : ¬ ((2 : Fin (2*2)).divNat = (2 : Fin (2*2)).modNat))
-          exact hp_diag
-        · right; rfl
+    · have hp_val : p = 0 ∨ p = 3 := eq_zero_or_eq_three_of_divNat_eq_modNat hp_diag
       rcases hp_val with rfl | rfl
       · simp [tensor, siteSign, Fin.divNat, Fin.modNat, h]
       · simp [tensor, siteSign, Fin.divNat, Fin.modNat, h]

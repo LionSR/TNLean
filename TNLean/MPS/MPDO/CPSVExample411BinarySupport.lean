@@ -294,8 +294,7 @@ private theorem cycleWeight_append_eq_internal_mul_complement {L R : ℕ}
             (1 : Fin (L + R)).val < L + R := by
           rw [hvalbase]
           have hsize : 2 ≤ L + R := by omega
-          have hone : (1 : Fin (L + R)).val = 1 := by
-            exact Nat.mod_eq_of_lt hsize
+          have hone : (1 : Fin (L + R)).val = 1 := Nat.mod_eq_of_lt hsize
           rw [hone]
           omega
         have hstep : Fin.castAdd R (Fin.castLE (Nat.sub_le L 1) i) + 1 =
@@ -303,8 +302,7 @@ private theorem cycleWeight_append_eq_internal_mul_complement {L R : ℕ}
           apply Fin.ext
           rw [Fin.val_add_eq_of_add_lt hadd_lt, hvalbase]
           have hsize : 2 ≤ L + R := by omega
-          have hone : (1 : Fin (L + R)).val = 1 := by
-            exact Nat.mod_eq_of_lt hsize
+          have hone : (1 : Fin (L + R)).val = 1 := Nat.mod_eq_of_lt hsize
           rw [hone]
           rfl
         have hindex : Fin.cast hsplit.symm (Fin.castAdd (R + 1) i) + 1 =
