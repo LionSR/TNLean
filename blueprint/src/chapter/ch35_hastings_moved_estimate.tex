@@ -1,0 +1,64 @@
+\section{The cut-offs in front of the Gaussian time average}
+\label{sec:hastings_moved_estimate}
+
+% Hastings, arXiv:0705.2024v4, law16.tex, lines 865--876 (eq. moved), using
+% eq. obd (lines 836--840). Finite complex matrices; no lattice content.
+
+After the Gaussian time average has been moved from the Hamiltonian to the
+nearby operator $M=M_L+M_B+M_R$, the proof of Lemma~1 of
+\cite{Hastings2007AreaLaw} multiplies it on the right by the spectral cut-offs
+$O_L$ and $O_R$. Since the cut-offs nearly fix the ground state, this changes
+the distance to the ground-state projector only slightly. This section states
+the estimate for finite complex matrices with explicit constants. Norms are
+operator norms.
+
+\begin{lemma}[A nearly invariant projection next to the ground-state projector]
+    \label{lem:hastings_ground_projector_mul}
+    \lean{TNLean.MPS.AreaLaw.Hastings.norm_groundProjector_mul_sub_le}
+    \leanok
+    Let $O$ be a self-adjoint matrix and $\Omega$ a unit vector. Then
+    \begin{align*}
+        \bigl\||\Omega\rangle\langle\Omega|\,O-|\Omega\rangle\langle\Omega|\bigr\|
+        \le\|\Omega-O\Omega\|.
+    \end{align*}
+\end{lemma}
+\begin{proof}\leanok
+    Taking adjoints, the norm equals that of
+    $(O-1)|\Omega\rangle\langle\Omega|$, which maps $x$ to
+    $\langle\Omega,x\rangle(O\Omega-\Omega)$. The Cauchy--Schwarz inequality
+    bounds its norm by $\|x\|\,\|O\Omega-\Omega\|$.
+\end{proof}
+
+\begin{theorem}[The cut-offs next to the Gaussian time average]
+    \label{thm:hastings_moved_estimate}
+    \lean{TNLean.MPS.AreaLaw.Hastings.norm_gaussianTimeAverage_mul_sub_groundProjector_le,
+        TNLean.MPS.AreaLaw.Hastings.norm_gaussianTimeAverage_mul_mul_sub_groundProjector_le}
+    \leanok
+    \uses{def:hastings_gaussian_time_average,
+        thm:hastings_gaussian_time_average_stability,
+        lem:hastings_ground_projector_mul}
+    Let $H$, $\Omega$ and $\Delta E>0$ satisfy the hypotheses of
+    Theorem~\ref{thm:hastings_gaussian_time_average_gap}, and let $M$ be
+    Hermitian with $\|M-H\|\le\delta$. Let $O_L$ and $O_R$ be commuting
+    orthogonal projections with $\|\Omega-O_LO_R\Omega\|\le\eta$. Then for
+    every real $q$,
+    \begin{align*}
+        \bigl\|P_q(M)\,O_LO_R-|\Omega\rangle\langle\Omega|\bigr\|
+        \le e^{-q/2}+\frac{\sqrt q}{\Delta E}\,\delta+\eta.
+    \end{align*}
+    The same bound holds with $O_LO_R$ replaced by a single orthogonal
+    projection. With $M=M_L+M_B+M_R$, $\delta$ of order
+    $\Delta E^{-1}J^2e^{-l/3\xi}$, and $\eta$ of order $e^{-l/6\xi}$ by the
+    estimate on the spectral cut-offs, this is the estimate on
+    \cite[lines 865--876]{Hastings2007AreaLaw}; the term $e^{-q/2}$ is the gap
+    bound of \cite[line 848]{Hastings2007AreaLaw}.
+\end{theorem}
+\begin{proof}\leanok
+    Write $P_0=|\Omega\rangle\langle\Omega|$ and $O=O_LO_R$, an orthogonal
+    projection since the factors commute. Then
+    $P_q(M)O-P_0=(P_q(M)-P_0)O+(P_0O-P_0)$. Since $\|O\|\le1$,
+    Theorem~\ref{thm:hastings_gaussian_time_average_stability} bounds the
+    first term by $e^{-q/2}+\sqrt q\,\delta/\Delta E$, and
+    Lemma~\ref{lem:hastings_ground_projector_mul} bounds the second by
+    $\eta$.
+\end{proof}
