@@ -1,0 +1,114 @@
+\section{The doubling argument in Hastings' area law}
+\label{sec:hastings_doubling}
+
+% Hastings, arXiv:0705.2024v4, law16.tex, lines 197--231.
+
+The proof of the area law in~\cite{Hastings2007AreaLaw} bounds the length of
+a window on which every interval adjacent to a fixed cut carries large
+entropy. Let $S_l$ be the largest entropy of an interval of $l$ sites in a
+window of length $l_0$. The argument uses only $0\le S_l\le l\ln D$ and the
+strengthened doubling inequality, and iterates it from a starting length.
+The printed iteration loses two factors of two, recorded
+in~\cite{gap:hastings07_doubling_constants}; the statements below carry the
+corrected constants.
+
+\begin{definition}[Starting length and number of doublings]
+    \label{def:hastings_doubling_constants}
+    \lean{TNLean.MPS.AreaLaw.Hastings.doublingStartLength,
+        TNLean.MPS.AreaLaw.Hastings.doublingStartLength_pos,
+        TNLean.MPS.AreaLaw.Hastings.doublingExponent}
+    \leanok
+    For real $\xi'$, $C_1$, $C_2$ and $D$ put
+    \[
+        \xi_0=2\xi'\ln(2C_1),
+        \qquad
+        M=\Bigl\lceil2\Bigl(\xi'\ln D+\frac{(2+C_2)\xi'}{\xi_0}
+        +\frac12\Bigr)\Bigr\rceil .
+    \]
+    If $\xi'>0$ and $2C_1>1$, then $\xi_0>0$.
+\end{definition}
+
+\begin{lemma}[Error sums of the iteration]
+    \label{lem:hastings_doubling_error_sums}
+    \lean{TNLean.MPS.AreaLaw.Hastings.sum_exp_le,
+        TNLean.MPS.AreaLaw.Hastings.sum_const_le}
+    \leanok
+    \uses{def:hastings_doubling_constants}
+    Let $\xi'>0$, $2C_1>1$ and $l_1\ge\xi_0$. For every natural $N$,
+    \[
+        \sum_{n<N}\frac{C_1}{\xi'}e^{-2^nl_1/\xi'}\le\frac1{\xi_0},
+    \]
+    and if moreover $\ln C_1+C_2\ge0$, then
+    \[
+        \sum_{n<N}\frac{\ln C_1+C_2}{2\cdot2^nl_1}
+        \le\frac{\ln C_1+C_2}{\xi_0}.
+    \]
+\end{lemma}
+\begin{proof}\leanok
+    Put $x=2C_1$ and $r=e^{-l_1/\xi'}$. Since $l_1/\xi'\ge2\ln x$, we have
+    $rx^2\le1$, so $r<1$. From $n+1\le2^n$ we get
+    $e^{-2^nl_1/\xi'}\le r^{n+1}$, and the geometric series gives the sum
+    bound $r/(1-r)$. The first inequality reduces to
+    $r(1+x\ln x)\le1$, which follows from $rx^2\le1$ and
+    $x\ln x\le x(x-1)\le x^2-1$. The second inequality is the geometric
+    sum $\sum_{n}2^{-n}\le2$ together with $l_1\ge\xi_0$.
+\end{proof}
+
+\begin{theorem}[Iterated doubling bound]
+    \label{thm:hastings_doubling_iteration}
+    \lean{TNLean.MPS.AreaLaw.Hastings.le_of_doubling}
+    \leanok
+    \uses{lem:hastings_doubling_error_sums}
+    Let $S$ be a real sequence indexed by the natural numbers, let $l_0$,
+    $\xi'>0$, $C_1$, $C_2$ and $D$ be real with $2C_1>1$ and
+    $\ln C_1+C_2\ge0$. Assume $S_l\le l\ln D$ whenever $l\le l_0$, and
+    \begin{equation}
+        S_{2l}\le2S_l-\bigl(1-2C_1e^{-l/\xi'}\bigr)\frac{l}{\xi'}
+        +\ln C_1+C_2
+        \label{eq:hastings_doubling_claim}
+    \end{equation}
+    whenever $2l\le l_0$. Let $l_1$ be a natural number with $l_1\ge\xi_0$
+    and let $l=2^Nl_1\le l_0$. Then
+    \[
+        S_l\le l\ln D-\frac{lN}{2\xi'}
+        +\bigl(2+\ln C_1+C_2\bigr)\frac{l}{\xi_0}.
+    \]
+    This is the bound of~\cite[lines 221--224]{Hastings2007AreaLaw} with
+    the decrease per doubling corrected, as recorded
+    in~\cite{gap:hastings07_doubling_constants}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{lem:hastings_doubling_error_sums}
+    Dividing~(\ref{eq:hastings_doubling_claim}) by $2l$ shows that one
+    doubling lowers $S_l/l$ by $1/(2\xi')$, up to the errors
+    $C_1e^{-l/\xi'}/\xi'$ and $(\ln C_1+C_2)/(2l)$. By induction on $N$,
+    starting from $S_{l_1}\le l_1\ln D$, the quotient $S_l/l$ is at most
+    $\ln D-N/(2\xi')$ plus the two error sums along $2^nl_1$ for $n<N$.
+    Lemma~\ref{lem:hastings_doubling_error_sums} bounds these sums by
+    $1/\xi_0$ and $(\ln C_1+C_2)/\xi_0$.
+\end{proof}
+
+\begin{theorem}[Length of the window]
+    \label{thm:hastings_doubling_window}
+    \lean{TNLean.MPS.AreaLaw.Hastings.lt_of_doubling}
+    \leanok
+    \uses{def:hastings_doubling_constants,thm:hastings_doubling_iteration}
+    Under the hypotheses of Theorem~\ref{thm:hastings_doubling_iteration},
+    assume moreover $S_l\ge0$ whenever $l\le l_0$. Then
+    \[
+        l_0<\lceil\xi_0\rceil\,2^M .
+    \]
+    This replaces the bound $\xi'\ln(2C_1)\,2^{\lceil\xi'\ln D
+                +(2+C_2)\xi'/\xi_0+1/2\rceil}$
+    of~\cite[line 229]{Hastings2007AreaLaw}; the exponent is doubled and the
+    prefactor is the starting length, as recorded
+    in~\cite{gap:hastings07_doubling_constants}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:hastings_doubling_iteration}
+    Suppose $l_0\ge l_12^M$ with $l_1=\lceil\xi_0\rceil$. Since
+    $\ln C_1<\ln(2C_1)$, we have $\ln C_1/\xi_0<1/(2\xi')$, and the choice
+    of $M$ makes $\ln D-M/(2\xi')+(2+\ln C_1+C_2)/\xi_0$ negative.
+    Theorem~\ref{thm:hastings_doubling_iteration} at $N=M$ then gives
+    $S_{l_12^M}<0$, contradicting positivity of entropy.
+\end{proof}
