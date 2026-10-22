@@ -351,6 +351,31 @@ theorem restrict_partialWord_all_gate_localPart_eval_heq_singleton_projection
   · exact selectedRemainingComparison_of_incident_gate owner G tail p ξ hincident
   · exact selectedRemainingComparison_of_nonincident_gate owner G tail p ξ hincident
 
+/-- The gate comparison is retained as a comparison of arbitrary word
+arguments before changing the singleton owners.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 351–434
+and 565–588. -/
+private theorem selectedRemainingComparison_of_gate_projection
+    (owner : C ↪ P) {a b : Layout C} {c : ι → ℂ}
+    (G : PreparedSourceGate c a b) (tail : Layout P) (p : P)
+    (ξ : Choices (fun _ : P ↦ true) (.gate owner G tail)) :
+    let A : P → Bool := fun t ↦ partySelector (some ⟨p, rfl⟩)
+      (affectedOwner (fun _ : P ↦ true) t)
+    let hp : A p = true := (partySelector_affectedOwner_all_apply p p).trans
+      (by classical exact decide_eq_true rfl)
+    let q : Option {t : P // A t = true} := some ⟨p, hp⟩
+    let lift : Option {t : P // A t = true} → Option {_t : P // true = true} :=
+      fun o ↦ o.map (fun t ↦ ⟨t.1, rfl⟩)
+    let χ := projectAllChoices A (.gate owner G tail) ξ
+    let W := partialWord (fun _ : P ↦ true) (.gate owner G tail) ξ
+    let V := partialWord A (.gate owner G tail) χ
+    selectedRemainingComparison W V
+      (some (⟨p, rfl⟩ : {_p : P // true = true})) q lift := by
+  classical
+  by_cases hincident : ∃ t : C, owner t = p
+  · exact selectedRemainingComparison_of_incident_gate owner G tail p ξ hincident
+  · exact selectedRemainingComparison_of_nonincident_gate owner G tail p ξ hincident
+
 /-- The selected remaining evaluation of the all-party branch equals
 that of the lifted singleton branch, retaining every original gate occurrence,
 source dimension and spectator register.
@@ -381,7 +406,7 @@ theorem isSelectedLocalPartComparison_partialWord_all_gate
     | some z => simp [lift, q, Subtype.ext_iff]
   exact isSelectedLocalPartComparison_of_selectedRemainingComparison lift q
     (some (⟨p, rfl⟩ : {_p : P // true = true})) hlift W V
-    (restrict_partialWord_all_gate_localPart_eval_heq_singleton_projection owner G tail p ξ)
+    (selectedRemainingComparison_of_gate_projection owner G tail p ξ)
 
 end Lattice.PartyCircuit.SourceCircuit
 end TNLean
