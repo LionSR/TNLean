@@ -9,7 +9,7 @@ import Lean.Util.CollectAxioms
 /-! # Logical dependencies of expansion of message-free weighted segments -/
 
 run_cmd do
-  let decl := `TNLean.PEPS.PairEffect.MessageGate.expand_map_segment
+  let decl := `TNLean.Lattice.PartyCircuit.MessageGate.expand_map_segment
   unless (← Lean.getEnv).contains decl do
     throwError "The intended segment expansion theorem is absent: {decl}"
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]

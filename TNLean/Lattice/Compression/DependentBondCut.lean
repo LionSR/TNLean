@@ -21,7 +21,7 @@ arXiv:1001.3807, Theorem 5.5, equation `eq:2d:closure-intersection`.
 
 noncomputable section
 open scoped BigOperators
-namespace TNLean.PEPS.DependentBondNetwork
+namespace TNLean.Lattice.DependentBondNetwork
 
 variable {Vertex Edge : Type*} (tail head : Edge → Vertex)
 variable (D : Edge → Type*)
@@ -180,4 +180,4 @@ theorem cutMap_single_eq_network
   funext e
   by_cases he : e ∈ C <;> simp [cutBondUnits, he]
 
-end TNLean.PEPS.DependentBondNetwork
+end TNLean.Lattice.DependentBondNetwork

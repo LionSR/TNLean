@@ -14,8 +14,8 @@ The two coefficient factorizations and their two rank consequences are audited w
 assuming any normalization, injectivity or nonempty virtual alphabet.
 -/
 
-open TNLean.PEPS.DependentBondNetwork
-open TNLean.PEPS.Approximation.DistributedOperatorContraction
+open TNLean.Lattice.DependentBondNetwork
+open TNLean.Lattice.Compression.DistributedOperatorContraction
 
 run_cmd do
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]

@@ -22,7 +22,7 @@ Source: polynomial-PEPS manuscript (September 24, 2026), Theorem 5.2,
 
 noncomputable section
 namespace TNLean.Lattice.PartyCircuit.SourceCircuit
-open TNLean.PEPS.PairEffect
+open TNLean.Lattice.PartyCircuit
 variable {P C ι : Type} [Fintype C] [Fintype ι]
 
 private theorem restrict_localPart_eval_heq_of_word_heq {Q : Type} (f : Q → Bool)

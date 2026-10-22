@@ -25,9 +25,9 @@ The compression theorem itself (Theorem 5.2) is not proved here: its error concl
 
 ## Main results
 
-* `TNLean.PEPS.Approximation.rectangularTraceNorm_sub_pure_le_of_retained_density`: the
+* `TNLean.Lattice.Compression.rectangularTraceNorm_sub_pure_le_of_retained_density`: the
   remark for arbitrary square matrices.
-* `TNLean.PEPS.PairEffect.DistributedConstruction.rectangularTraceNorm_compression_sub_pure_le`:
+* `PartyCircuit.DistributedConstruction.rectangularTraceNorm_compression_sub_pure_le`:
   the remark for the physical density of a distributed construction, together with
   `1 - η ≤ Re Tr ρ ≤ 1`.
 
@@ -48,7 +48,7 @@ open scoped Matrix.Norms.L2Operator
 
 noncomputable section
 
-namespace TNLean.PEPS.Approximation
+namespace TNLean.Lattice.Compression
 
 variable {a : Type*} [Fintype a] [DecidableEq a]
 
@@ -90,9 +90,9 @@ theorem rectangularTraceNorm_sub_pure_le_of_retained_density
         rw [Matrix.trace_sub, htrace]
       _ ≤ _ := (norm_trace_le_rectangularTraceNorm _).trans hpure
 
-end TNLean.PEPS.Approximation
+end TNLean.Lattice.Compression
 
-namespace TNLean.PEPS.PairEffect.DistributedConstruction
+namespace TNLean.Lattice.PartyCircuit.DistributedConstruction
 
 variable {P : Type} [Fintype P] [DecidableEq P]
 
@@ -115,7 +115,7 @@ theorem rectangularTraceNorm_compression_sub_pure_le (C : DistributedConstructio
       (C.physicalDensity - Matrix.euclideanOuterProduct Ω Ω) ≤ η) :
     Matrix.rectangularTraceNorm (σ - Matrix.euclideanOuterProduct Ω Ω) ≤ κ + η ∧
       1 - η ≤ C.physicalDensity.trace.re ∧ C.physicalDensity.trace.re ≤ 1 := by
-  obtain ⟨hσ, htrace⟩ := Approximation.rectangularTraceNorm_sub_pure_le_of_retained_density
+  obtain ⟨hσ, htrace⟩ := Compression.rectangularTraceNorm_sub_pure_le_of_retained_density
     σ C.physicalDensity Ω hΩ hcompression hpure
   refine ⟨hσ, ?_, ?_⟩
   · have hre := (Complex.abs_re_le_norm (C.physicalDensity.trace - 1)).trans htrace
@@ -125,4 +125,4 @@ theorem rectangularTraceNorm_compression_sub_pure_le (C : DistributedConstructio
     rw [Complex.one_re] at h
     convert h using 3
 
-end TNLean.PEPS.PairEffect.DistributedConstruction
+end TNLean.Lattice.PartyCircuit.DistributedConstruction

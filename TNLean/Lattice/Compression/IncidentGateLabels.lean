@@ -27,9 +27,9 @@ Independently formalized; no upstream Lean proof text reused.
 
 noncomputable section
 namespace TNLean.Lattice.PartyCircuit.SourceCircuit
-open TNLean.PEPS.PairEffect
+open TNLean.Lattice.PartyCircuit
 variable {P : Type}
-open TNLean.PEPS.Approximation
+open TNLean.Lattice.Compression
 
 /-- The all-party grouping retains every original party with its actual label.
 Source: polynomial-PEPS 04-compression.tex, lines 409–417. -/
