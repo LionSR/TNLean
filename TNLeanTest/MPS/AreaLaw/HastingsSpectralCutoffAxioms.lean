@@ -20,7 +20,10 @@ run_cmd do
     ``TNLean.MPS.AreaLaw.Hastings.norm_add_mul_mul_spectralCutoff_le,
     ``TNLean.MPS.AreaLaw.Hastings.norm_sub_mul_le_of_isStarProjection,
     ``TNLean.MPS.AreaLaw.Hastings.spectralCutoff_localLift,
-    ``TNLean.MPS.AreaLaw.Hastings.commute_spectralCutoff_localLift_of_disjoint] do
+    ``TNLean.MPS.AreaLaw.Hastings.commute_spectralCutoff_localLift_of_disjoint,
+    ``Entropy.IsSupportedOn.exists_localLift_isHermitian,
+    ``TNLean.MPS.AreaLaw.Hastings.isSupportedOn_spectralCutoff,
+    ``TNLean.MPS.AreaLaw.Hastings.commute_spectralCutoff_of_isSupportedOn] do
     unless (← Lean.getEnv).contains decl do
       throwError "Missing declaration {decl}"
     let axioms ← Lean.collectAxioms decl
