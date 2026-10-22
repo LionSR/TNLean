@@ -17,6 +17,7 @@ import TNLean.Lattice.GaussianFilteredIncrement
 import TNLean.Lattice.GaussianFilteredLocality
 import TNLean.Lattice.GaussianFilteredTerm
 import TNLean.Lattice.GaussianTail
+import TNLean.Lattice.GaussianTailMoment
 import TNLean.Lattice.HeisenbergDuhamel
 import TNLean.Lattice.LocalHamiltonian
 import TNLean.Lattice.MarginalTails

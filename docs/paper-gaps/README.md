@@ -1257,6 +1257,14 @@ fourth entry of the shell count, which is omitted; the interval constant and
 the area-law constant of Theorem A change accordingly, all at the level of
 absolute constants.
 
+### One-dimensional area law after Hastings: the error of the localized filtered parts
+
+[hastings07_filtered_part_localization.tex](hastings07_filtered_part_localization.tex)
+(local correction, resolved) records that the bound on the localized filtered parts in
+the appendix of Hastings (arXiv:0705.2024v4, lines 816–828) is printed as
+`‖M_L − H_L‖ ≤ O(ΔE⁻¹J²e^{−l/3ξ})`, while the argument needs and proves
+the distance from `M_L` to the filtered `H_L`, with `M_L − H_L` supported near the cut.
+
 ## Polynomial PEPS: zero-floor maximizing filters
 
 - [`polypeps_square_zero_floor_optimizer_scope.tex`](polypeps_square_zero_floor_optimizer_scope.tex)
