@@ -16,3 +16,4 @@ import TNLean.MPS.AreaLaw.Hastings.SchmidtDiagonalCorrelation
 import TNLean.MPS.AreaLaw.Hastings.SchmidtDiagonalOperators
 import TNLean.MPS.AreaLaw.Hastings.SchmidtRankBootstrap
 import TNLean.MPS.AreaLaw.Hastings.TailEntropy
+import TNLean.MPS.AreaLaw.Hastings.ThreeWaySplitting
