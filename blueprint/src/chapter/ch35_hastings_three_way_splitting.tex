@@ -37,8 +37,8 @@ operator norms.
     Let $H=\sum_Xh_X$ be a finite-range Hamiltonian of range $R$ on the chain
     of $L$ sites, let $j$ be a cut, so that the sites $i<j$ lie on its left,
     and let $m$ be a natural number. The \emph{left part} $H_L$ is the sum of
-    the terms $h_X$ with $X\subseteq[0,j-m)$, the \emph{right part} $H_R$ is the
-    sum of the terms with $X\subseteq[j+m,L)$, and the \emph{buffer part}
+    the terms $h_X$ with $X\subseteq\{0,\dots,j-m-1\}$, the \emph{right part} $H_R$ is the
+    sum of the terms with $X\subseteq\{j+m,\dots,L-1\}$, and the \emph{buffer part}
     $H_B$ is the sum of all other terms. Each part is Hermitian. For a vector
     $\Psi_0$ and a matrix $M$, the \emph{centering} of $M$ in $\Psi_0$ is
     $\widetilde M=M-\operatorname{Re}\langle\Psi_0,M\Psi_0\rangle\,1$; it is
@@ -97,8 +97,8 @@ operator norms.
     }
     \leanok
     \uses{def:hastings_three_way_splitting}
-    The left part acts as the identity off $[0,j-m)$, the right part off
-    $[j+m,L)$, and the buffer part off the window $[j-m-R,j+m+R)$. Centering
+    The left part acts as the identity off $\{0,\dots,j-m-1\}$, the right part off
+    $\{j+m,\dots,L-1\}$, and the buffer part off the window $\{j-m-R,\dots,j+m+R-1\}$. Centering
     preserves each of these supports. In particular the left and right parts
     lie at distance at least $m$ from the cut, for every $m$, as the parts
     $H_L$ and $H_R$ of \cite[lines 774--778]{Hastings2007AreaLaw} lie at
@@ -138,7 +138,7 @@ operator norms.
     The first bound is the triangle inequality. A support containing a site
     $x$ lies in the $2R+1$ sites within distance $R$ of $x$, which have at most
     $2^{2R+1}$ subsets. Every buffer support contains a site of the window
-    $[j-m-R,j+m+R)$, which has at most $2(m+R)$ sites. Finally
+    $\{j-m-R,\dots,j+m+R-1\}$, which has at most $2(m+R)$ sites. Finally
     $|\operatorname{Re}\langle\Psi_0,M\Psi_0\rangle|\le\|M\|$ for a unit
     vector $\Psi_0$, and the identity has norm at most one.
 \end{proof}
