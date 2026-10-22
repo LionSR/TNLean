@@ -325,6 +325,34 @@ private theorem elementary_midpoint_not_mem_interior (o : ℝ × ℝ) (ℓ : ℕ
     rw [hm] at hx
     rcases hbound with h | h <;> simp [h] at hx
 
+/-- An open elementary-side contact with the actual dummy closure extends to
+the whole segment. Arbitrary optional midpoint subdivisions are permitted.
+Source: area-law Section 11, `prop:two-families`, lines 154–177 and 299–310. -/
+theorem fineLayer_elementarySide_subset_dummy_of_mem_openSegment
+    (o : ℝ × ℝ) (k₀ k : ℕ) (Z : Finset (ℤ × ℤ)) (C : ℕ)
+    (z : ℤ × ℤ) (split : Fin 4 → Bool) (i : CellFanSlot split)
+    (x : ℝ × ℝ) (hC : 2 ≤ C) (hk₀ : k₀ ≤ k)
+    (hz : z ∈ fineLayerIndices o k (fineScaleIndex k) Z C)
+    (hx : x ∈ openSegment ℝ
+      (cellFanStart o (fineScaleIndex k) z split i)
+      (cellFanEnd o (fineScaleIndex k) z split i))
+    (hxN : x ∈ closure (dyadicNeighborhood o k₀ Z C)) :
+    segment ℝ (cellFanStart o (fineScaleIndex k) z split i)
+      (cellFanEnd o (fineScaleIndex k) z split i) ⊆
+        closure (dyadicNeighborhood o k₀ Z C) := by
+  rw [dyadicNeighborhood, Finset.closure_biUnion] at hxN
+  obtain ⟨w, hw, hxw⟩ := Set.mem_iUnion₂.mp hxN
+  have hsub : dyadicCell o k₀ w ⊆ dyadicNeighborhood o k₀ Z C :=
+    fun y hy ↦ Set.mem_iUnion₂.mpr ⟨w, hw, hy⟩
+  have href := dyadicCell_subset_dyadicLayer_of_mem_fineLayerIndices o k
+    (fineScaleIndex k) Z C z (fineScaleIndex_le k) hz
+  have hd := (dyadicNeighborhood_disjoint_later_layer o Z C k₀ k hk₀).symm.mono
+    href hsub
+  have hseg := cell_contains_elementary_segment o (fineScaleIndex k) k₀ z w
+    split i x hd hx hxw (fun ε hε ↦ dyadicNeighborhood_corner_on_elementarySide
+      o k₀ k Z C z w split i ε hC hk₀ hz hw hε)
+  exact hseg.trans (closure_mono hsub)
+
 /-- Every actual elementary side has an opposing closed region containing its
 whole segment: either the initial dummy neighborhood or an actual distinct fine
 cell at or above the lower layer index. The actual plane cover supplies the
@@ -393,17 +421,8 @@ theorem exists_elementarySide_opponent (o : ℝ × ℝ) (k₀ k : ℕ)
   have hxcover := closure_mono hU hxU
   rw [closure_union, Finset.closure_biUnion] at hxcover
   rcases hxcover with hxN | hxF
-  · rw [dyadicNeighborhood, Finset.closure_biUnion] at hxN
-    obtain ⟨w, hw, hxw⟩ := Set.mem_iUnion₂.mp hxN
-    have hsub : dyadicCell o k₀ w ⊆ dyadicNeighborhood o k₀ Z C :=
-      fun y hy ↦ Set.mem_iUnion₂.mpr ⟨w, hw, hy⟩
-    have hd := (dyadicNeighborhood_disjoint_later_layer o Z C k₀ k hk₀).symm.mono
-      href hsub
-    have hseg := cell_contains_elementary_segment o (fineScaleIndex k) k₀ z w
-      split i x hd (midpoint_mem_openSegment (𝕜 := ℝ) _ _) hxw
-      (fun ε hε ↦ dyadicNeighborhood_corner_on_elementarySide
-        o k₀ k Z C z w split i ε hC hk₀ hz hw hε)
-    exact Or.inl (hseg.trans (closure_mono hsub))
+  · exact Or.inl (fineLayer_elementarySide_subset_dummy_of_mem_openSegment o k₀ k Z C z
+      split i x hC hk₀ hz (midpoint_mem_openSegment (𝕜 := ℝ) _ _) hxN)
   · obtain ⟨p, hp, hxp⟩ := Set.mem_iUnion₂.mp hxF
     obtain ⟨hne, hpF⟩ := Finset.mem_erase.mp hp
     obtain ⟨h, hh, hpw⟩ := Finset.mem_biUnion.mp hpF
@@ -416,33 +435,5 @@ theorem exists_elementarySide_opponent (o : ℝ × ℝ) (k₀ k : ℕ)
       z w split i x hd (midpoint_mem_openSegment (𝕜 := ℝ) _ _) hxp
       (fun ε hε ↦ fineLayer_corner_on_elementarySide
         o k₀ k h Z C z w i ε hC hk hz hh₀ hw hε)
-
-/-- An open elementary-side contact with the actual dummy closure extends to
-the whole segment. Arbitrary optional midpoint subdivisions are permitted.
-Source: area-law Section 11, `prop:two-families`, lines 154–177 and 299–310. -/
-theorem fineLayer_elementarySide_subset_dummy_of_mem_openSegment
-    (o : ℝ × ℝ) (k₀ k : ℕ) (Z : Finset (ℤ × ℤ)) (C : ℕ)
-    (z : ℤ × ℤ) (split : Fin 4 → Bool) (i : CellFanSlot split)
-    (x : ℝ × ℝ) (hC : 2 ≤ C) (hk₀ : k₀ ≤ k)
-    (hz : z ∈ fineLayerIndices o k (fineScaleIndex k) Z C)
-    (hx : x ∈ openSegment ℝ
-      (cellFanStart o (fineScaleIndex k) z split i)
-      (cellFanEnd o (fineScaleIndex k) z split i))
-    (hxN : x ∈ closure (dyadicNeighborhood o k₀ Z C)) :
-    segment ℝ (cellFanStart o (fineScaleIndex k) z split i)
-      (cellFanEnd o (fineScaleIndex k) z split i) ⊆
-        closure (dyadicNeighborhood o k₀ Z C) := by
-  rw [dyadicNeighborhood, Finset.closure_biUnion] at hxN
-  obtain ⟨w, hw, hxw⟩ := Set.mem_iUnion₂.mp hxN
-  have hsub : dyadicCell o k₀ w ⊆ dyadicNeighborhood o k₀ Z C :=
-    fun y hy ↦ Set.mem_iUnion₂.mpr ⟨w, hw, hy⟩
-  have href := dyadicCell_subset_dyadicLayer_of_mem_fineLayerIndices o k
-    (fineScaleIndex k) Z C z (fineScaleIndex_le k) hz
-  have hd := (dyadicNeighborhood_disjoint_later_layer o Z C k₀ k hk₀).symm.mono
-    href hsub
-  have hseg := cell_contains_elementary_segment o (fineScaleIndex k) k₀ z w
-    split i x hd hx hxw (fun ε hε ↦ dyadicNeighborhood_corner_on_elementarySide
-      o k₀ k Z C z w split i ε hC hk₀ hz hw hε)
-  exact hseg.trans (closure_mono hsub)
 
 end TNLean.PEPS.AreaLaw.Geometry
