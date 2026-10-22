@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.CutMatrixGrowth
+import TNLean.Algebra.ToEuclideanLinApply
 import QICLean.Entropy.GapSurprisal
 import QICLean.Channel.UhlmannIsometry
 
@@ -22,10 +23,12 @@ In the proof of Hastings' bootstrap lemma, arXiv:0705.2024v4, Lemma 2, lines 315
 one side of the cut, and `O_B`, supported on the `2m` sites around it, multiplies the rank by at
 most `D^{2m}`.
 
+The companion `Matrix.schmidtCoeffMatrix_kronecker_one_mulVec` (the coefficient matrix after
+`A ⊗ 1`, matching QICLean's `Matrix.schmidtCoeffMatrix_one_kronecker_mulVec` for the right
+factor) is supplied by `TNLean.Algebra.ToEuclideanLinApply`.
+
 ## Main results
 
-* `Matrix.schmidtCoeffMatrix_kronecker_one_mulVec`: the coefficient matrix after `A ⊗ 1`, the
-  companion of QICLean's `Matrix.schmidtCoeffMatrix_one_kronecker_mulVec`.
 * `TNLean.MPS.AreaLaw.rank_schmidtCoeffMatrix_mulVec_le_of_isOneSided`: the bipartite statement.
 * `TNLean.MPS.AreaLaw.rank_cutMatrix_toEuclideanLin_le_of_subset_leftBlock`,
   `TNLean.MPS.AreaLaw.rank_cutMatrix_toEuclideanLin_le_of_disjoint_leftBlock`: one-sided
@@ -35,18 +38,6 @@ most `D^{2m}`.
 
 open Matrix
 open scoped Kronecker
-
-namespace Matrix
-
-/-- The coefficient matrix after `A ⊗ 1` is `A` times the coefficient matrix. -/
-theorem schmidtCoeffMatrix_kronecker_one_mulVec {α β : Type*} [Fintype α] [Fintype β]
-    [DecidableEq β] (A : Matrix α α ℂ) (v : α × β → ℂ) :
-    schmidtCoeffMatrix ((A ⊗ₖ (1 : Matrix β β ℂ)) *ᵥ v) = A * schmidtCoeffMatrix v := by
-  ext a b
-  simp [schmidtCoeffMatrix_apply, mulVec, dotProduct, Fintype.sum_prod_type,
-    kroneckerMap_apply, one_apply, mul_apply]
-
-end Matrix
 
 namespace TNLean.MPS.AreaLaw
 
