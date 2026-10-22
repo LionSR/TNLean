@@ -70,29 +70,6 @@ private theorem selectedLocalPartComparison_mapOwner {Q R : Type}
           ((u.mapOwner g).localPart.restrict (partySelector r)
             (u.mapOwner g).sources_localPart)).symm.trans hLift.symm))))
 
-/-- The single-gate comparison is lifted before its application to the
-chronological circuit induction. All branch choices and source dimensions
-are those of the original gate.
-Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 351–434
-and 565–588. -/
-private theorem selectedLocalPartComparison_gate {C ι : Type} [Fintype C] [Fintype ι]
-    (owner : C ↪ P) {a b : Layout C} {c : ι → ℂ}
-    (G : PreparedSourceGate c a b) (tail : Layout P) (p : P)
-    (ξ : Choices (fun _ : P ↦ true) (.gate owner G tail)) :
-    let A : P → Bool := fun t ↦ partySelector (some ⟨p, rfl⟩)
-      (affectedOwner (fun _ : P ↦ true) t)
-    let hp : A p = true := (partySelector_affectedOwner_all_apply p p).trans
-      (by classical exact decide_eq_true rfl)
-    let _q : Option {t : P // A t = true} := some ⟨p, hp⟩
-    let lift : Option {t : P // A t = true} → Option {_t : P // true = true} :=
-      fun o ↦ o.map (fun t ↦ ⟨t.1, rfl⟩)
-    let χ := projectAllChoices A (.gate owner G tail) ξ
-    let W := partialWord (fun _ : P ↦ true) (.gate owner G tail) ξ
-    let V := partialWord A (.gate owner G tail) χ
-    selectedLocalPartComparison (partySelector (some (⟨p, rfl⟩ : {_p : P // true = true})))
-      W (V.mapOwner lift) := by
-  exact isSelectedLocalPartComparison_partialWord_all_gate owner G tail p ξ
-
 /-- Equal framing registers preserve the comparison of selected remaining
 operations when the selected boundary and source lists agree.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 246–267,
@@ -218,7 +195,7 @@ private theorem selectedLocalPartComparison_circuit
           selectedLocalPartComparison_mapOwner (affectedOwner (fun _ : P ↦ true))
             (affectedOwner A) lift p qp q hfAll hfA hfLift (Word.swap r s tail)
     | @gate C ι _ _ owner a b c G tail =>
-        exact selectedLocalPartComparison_gate owner G tail p η
+        exact isSelectedLocalPartComparison_partialWord_all_gate owner G tail p η
     | @comp a b c v z ihv ihz =>
         rw [projectAllChoices_comp]
         exact Word.restrict_localPart_comp_eval_heq sq

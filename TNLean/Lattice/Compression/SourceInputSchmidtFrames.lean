@@ -89,14 +89,6 @@ private def exteriorInputFrame {J : Type} [Fintype J]
     EuclideanSpace ℂ J →ₗᵢ[ℂ] Mem (Layout.restrict (fun p : Bool ↦ !p) (C ++ T)) :=
   (Layout.memCongr (exteriorInputLayout C T hC).symm).toLinearIsometry.comp h
 
-/-- Tensoring register-list identifications preserves the underlying pure tensor. -/
-private theorem memCongr_tmul_heq {Q : Type} {a a' b b' : Layout Q}
-    (ha : a = a') (hb : b = b') (x : Mem a) (y : Mem b) :
-    HEq (Layout.memCongr ha x ⊗ₜ[ℂ] Layout.memCongr hb y) (x ⊗ₜ[ℂ] y) := by
-  cases ha
-  cases hb
-  rfl
-
 /-- The two frame columns give the actual register partition of their three factors. -/
 private theorem inputFrames_basis_tensor {I J : Type} [Fintype I] [Fintype J]
     (C T : Layout Bool) (hC : ∀ r ∈ C, r.owner = true)
@@ -124,7 +116,7 @@ private theorem inputFrames_basis_tensor {I J : Type} [Fintype I] [Fintype J]
   simp only [TensorProduct.mapIsometry_apply, TensorProduct.map_tmul,
     LinearIsometry.coe_toLinearMap]
   apply eq_of_heq
-  exact (memCongr_tmul_heq _ _ _ _).trans
+  exact (Layout.memCongr_tmul_heq _ _ _ _).trans
     (Layout.partitionIso_append_true_tmul (fun p : Bool ↦ p) C T hC rfl _ _ _).symm
 
 /-- A normalized crossing vector gives probability weights and the two proper frames. -/

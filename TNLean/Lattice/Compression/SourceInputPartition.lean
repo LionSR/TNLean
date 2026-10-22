@@ -30,19 +30,6 @@ Independently formalized; no upstream Lean proof text reused.
 
 noncomputable section
 open scoped TensorProduct
-namespace TNLean.Lattice.PartyCircuit.Layout
-variable {P : Type}
-
-/-- The append identification commutes with equality of its source-register list. -/
-theorem memCongr_append_tmul {a b : Layout P} (h : a = b)
-    (ℓ : Layout P) (x : Mem a) (y : Mem ℓ) :
-    Layout.memCongr (congrArg (· ++ ℓ) h) ((appendIso a ℓ).symm (x ⊗ₜ[ℂ] y)) =
-      (appendIso b ℓ).symm (Layout.memCongr h x ⊗ₜ[ℂ] y) := by
-  cases h
-  rfl
-
-end TNLean.Lattice.PartyCircuit.Layout
-
 namespace TNLean.Lattice.PartyCircuit.SourceInventory
 variable {P : Type}
 
@@ -258,8 +245,8 @@ theorem exists_sourceCrossing_schmidt {a b : Layout P} (w : SourceCircuit a b)
       (∀ j, 0 ≤ lam j) ∧ ∑ j, lam j = 1 ∧
         sourceCrossingVector w S ξ = ∑ j, (Real.sqrt (lam j) : ℂ) •
           (F (EuclideanSpace.basisFun (Fin r) ℂ j) ⊗ₜ[ℂ]
-            G (EuclideanSpace.basisFun (Fin r) ℂ j)) := by
-  exact PairSource.exists_probability_schmidt_isometries
+            G (EuclideanSpace.basisFun (Fin r) ℂ j)) :=
+  PairSource.exists_probability_schmidt_isometries
     (Mem (Layout.restrict (fun p : Bool ↦ p) (crossingSourceLayout w S)))
     (Mem (Layout.restrict (fun p : Bool ↦ !p) (crossingSourceLayout w S)))
     (sourceCrossingVector w S ξ) (norm_sourceCrossingVector w S ξ)

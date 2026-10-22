@@ -54,8 +54,8 @@ theorem partyListBasis_cons_apply (a : Layout P)
     (b : (p : P) → OrthonormalBasis (I p) ℂ (Mem (Layout.atParty p a)))
     (p : P) (ps : List P) (y : (i : Fin (p :: ps).length) → I ((p :: ps).get i)) :
     partyListBasis a b (p :: ps) y = b p (y 0) ⊗ₜ
-      partyListBasis a b ps (fun i => y i.succ) := by
-  exact (((b p).tensorProduct (partyListBasis a b ps)).reindex_apply
+      partyListBasis a b ps (fun i => y i.succ) :=
+  (((b p).tensorProduct (partyListBasis a b ps)).reindex_apply
     (Fin.consEquiv (fun i => I ((p :: ps).get i))) y).trans
       (OrthonormalBasis.tensorProduct_apply _ _ _ _)
 

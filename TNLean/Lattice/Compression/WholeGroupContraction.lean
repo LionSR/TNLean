@@ -74,11 +74,6 @@ theorem piSubtypeSplit_symm_apply_left (y : ((i : {i // q i}) → F i) × ((i : 
     (piSubtypeSplit F p q r hp hqr).symm y ⟨i, hpi⟩ = y.1 ⟨i, hq⟩ := by
   simp [piSubtypeSplit, hq]
 
-theorem piSubtypeSplit_symm_apply_right (y : ((i : {i // q i}) → F i) × ((i : {i // r i}) → F i))
-    {i : ι} (hpi : p i) (hr : r i) :
-    (piSubtypeSplit F p q r hp hqr).symm y ⟨i, hpi⟩ = y.2 ⟨i, hr⟩ := by
-  simp [piSubtypeSplit, hqr i |>.mt (not_not.mpr hr)]
-
 variable (F)
 
 /-- Configurations on two predicates with the same extension are the same. -/
@@ -214,10 +209,6 @@ boundary edges. -/
 def partialNormSq (S : Finset V) : ℝ :=
   ∑ σ : (v : {v // v ∈ S}) → P v, ∑ b : (e : {e // IsCut tail head S e}) → D e,
     ‖partialContraction A S σ b‖ ^ 2
-
-omit [Fintype V] in
-theorem partialNormSq_nonneg (S : Finset V) : 0 ≤ partialNormSq A S :=
-  Finset.sum_nonneg fun _ _ ↦ Finset.sum_nonneg fun _ _ ↦ sq_nonneg _
 
 /-! ### Merging two disjoint vertex sets -/
 

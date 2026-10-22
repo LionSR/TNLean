@@ -527,8 +527,8 @@ theorem groupByPartyIso_familyPhysicalListBasis_eq_partyListBasis
         (fun _ hr => (familyPhysicalLayout_owners d ps) ▸
           (List.mem_map_of_mem (f := Reg.owner) hr))
         (familyPhysicalListBasis d ps (fun i => x (ps.get i))) =
-      partyListBasis (familyPhysicalLayout d ps) b ps (fun i => y (ps.get i)) := by
-  exact (groupByPartyIso_familyPhysicalListBasis_eq_orderedPartyVector d ps hn x
+      partyListBasis (familyPhysicalLayout d ps) b ps (fun i => y (ps.get i)) :=
+  (groupByPartyIso_familyPhysicalListBasis_eq_orderedPartyVector d ps hn x
     (fun p => b p (y p)) hv).trans
       (partyListBasis_eq_orderedPartyVector (familyPhysicalLayout d ps) b ps y).symm
 
