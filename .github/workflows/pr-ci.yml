@@ -896,6 +896,10 @@ jobs:
           cache-suffix: web-v3
           extra-packages: texlive-fonts-extra texlive-publishers
 
+      - name: Recover an interrupted package install
+        if: (env.TEX_CHANGED == 'true' || env.PAPER_GAPS_CHANGED == 'true') && steps.blueprint-system-deps-1.outcome == 'failure'
+        run: sudo dpkg --configure -a || true
+
       - name: Install blueprint system dependencies (retry)
         if: (env.TEX_CHANGED == 'true' || env.PAPER_GAPS_CHANGED == 'true') && steps.blueprint-system-deps-1.outcome == 'failure'
         timeout-minutes: 10
@@ -1170,6 +1174,10 @@ jobs:
         with:
           cache-suffix: web-v3
           extra-packages: texlive-fonts-extra texlive-publishers
+
+      - name: Recover an interrupted package install
+        if: steps.blueprint-system-deps-2.outcome == 'failure'
+        run: sudo dpkg --configure -a || true
 
       - name: Install blueprint system dependencies (retry)
         if: steps.blueprint-system-deps-2.outcome == 'failure'
