@@ -164,47 +164,49 @@ $r=2p+10$. Before choosing the domain or regions, set
     P &= C_{\mathrm{int}}(1+T_0), \notag\\
     K_{\mathrm{loc}} &= 4(vT_0+15+r+P), \notag\\
     C_p &= K_{\mathrm{loc}}+R+4.
-    \label{eq:tnlean_one_dimensional_connected_domain_scope_reset_constants}
+    \label{eq:domain_reset_constants}
 \end{align}
-For a domain of size $L\ge L_0\ge1$, nonnegativity of mutual information gives
-$b\ge0$. Define
+With the constants in~\eqref{eq:domain_reset_constants}, let the domain have
+size $L\ge L_0\ge1$. Nonnegativity of mutual information gives $b\ge0$. Define
 \begin{align}
     B &= 1+b+\log L\ge1, & w &= C_p B, \notag\\
     \ell &= \lceil K_{\mathrm{loc}}B\rceil,
     & \varepsilon &= e^{-10b}L^{-r}.
-    \label{eq:tnlean_one_dimensional_connected_domain_scope_reset_parameters}
+    \label{eq:domain_reset_parameters}
 \end{align}
-The rounding estimate and $B\ge1$ give the strict radius margin
+For the parameters in~\eqref{eq:domain_reset_parameters}, the rounding
+estimate and $B\ge1$ give the strict radius margin
 \begin{align}
     K_{\mathrm{loc}}B &\le\ell<K_{\mathrm{loc}}B+1, \notag\\
     \ell+R &<K_{\mathrm{loc}}B+R+1<C_p B=w.
-    \label{eq:tnlean_one_dimensional_connected_domain_scope_reset_radius}
+    \label{eq:domain_reset_radius}
 \end{align}
 These choices make the supported Gaussian approximation error at most
 $\varepsilon$.
 
 Distances in the margins are intrinsic extended graph distances, denoted by
-$d_\Lambda$. For either pair $(F_0,F)=(R_0,D)$ or $(C_0,C)$, the hypothesis is
+$d_\Lambda$. For either pair $(F_0,F)=(R_0,D)$ or $(C_0,C)$, let $x\in F_0$
+and $y\notin F$ have finite distance. The margin hypothesis is
 \begin{align}
-    w &<d_\Lambda(x,y)
-    \quad\text{whenever }x\in F_0,\ y\notin F,
-    \ d_\Lambda(x,y)<\infty.
-    \label{eq:tnlean_one_dimensional_connected_domain_scope_reset_margin}
+    w &<d_\Lambda(x,y).
+    \label{eq:domain_reset_margin}
 \end{align}
 Infinite distances impose no condition. To see why the localization cannot
 reach a core, let $X$ be an interaction support crossing $D$, choose $z\in X$
 and suppose $d_\Lambda(x,z)\le\ell$ for a core site $x$. If $x\in R_0$, take
 $y\in X\setminus D$; if $x\in C_0$, take $y\in X\cap D$, which lies outside
-$C$ by disjointness. Since $X$ has diameter at most $R$,
+$C$ by disjointness. Since $X$ has diameter at most $R$, the radius estimate
+\eqref{eq:domain_reset_radius} gives
 \begin{align}
     d_\Lambda(x,y)
     &\le d_\Lambda(x,z)+d_\Lambda(z,y)
     \le\ell+R<w.
-    \label{eq:tnlean_one_dimensional_connected_domain_scope_reset_crossing}
+    \label{eq:domain_reset_crossing}
 \end{align}
-This finite distance contradicts the corresponding margin. The same argument
-excludes the localization of $\Lambda\setminus(D\cup C)$ from both cores. Thus the supported
-unitary acts away from the cores. The regional swap itself yields the required
+The finite-distance bound~\eqref{eq:domain_reset_crossing} contradicts
+\eqref{eq:domain_reset_margin}. The same argument excludes the localization
+of $\Lambda\setminus(D\cup C)$ from both cores. Thus the supported unitary
+acts away from the cores. The regional swap itself yields the required
 product marginal, and entropy continuity completes the proof.\footnote{
     Declaration: \leanid{TNLean.Lattice.mutualInformation_cores_le_of_reset_unitary}.}
 
@@ -237,25 +239,28 @@ $C_p,L_{\mathrm{reset}}$ for the exponent $p$. Before choosing the domain, set
 \begin{align}
     b &=4k_0c, & D_p&=3C_p(2+b)+4, \notag\\
     L_0&=\max\bigl(L_{\mathrm{reset}},\lceil e\rceil\bigr).
-    \label{eq:tnlean_one_dimensional_connected_domain_scope_logsep_constants}
+    \label{eq:domain_logsep_constants}
 \end{align}
-For $L\ge L_0$ one has $\log L\ge1$. Define
+For the cutoff in~\eqref{eq:domain_logsep_constants}, $L\ge L_0$ implies
+$\log L\ge1$. Define
 \begin{align}
     w &=C_p(1+b+\log L), & n&=\lceil w+1\rceil, \notag\\
     D&=N_n(T), & C&=\Lambda\setminus N_{2n}(T),
-    \label{eq:tnlean_one_dimensional_connected_domain_scope_logsep_regions}
+    \label{eq:domain_logsep_regions}
 \end{align}
-where $N_j$ is the intrinsic graph neighborhood of radius $j$. The two estimates
-needed for the strict margins follow separately:
+where $N_j$ is the intrinsic graph neighborhood of radius $j$. For the
+regions in~\eqref{eq:domain_logsep_regions}, the two estimates needed for
+the strict margins follow separately:
 \begin{align}
     D_p\log L-(3w+4)
     &=\bigl(3C_p(1+b)+4\bigr)(\log L-1)\ge0, \notag\\
     w+1&\le n<w+2, \notag\\
     2n+w&<3w+4\le D_p\log L.
-    \label{eq:tnlean_one_dimensional_connected_domain_scope_logsep_radius}
+    \label{eq:domain_logsep_radius}
 \end{align}
 For a finite intrinsic distance, a shortest walk bounds the physical coordinate
-difference by that distance. This gives $T\subseteq D$ and $E\subseteq C$.
+difference by that distance. Together with~\eqref{eq:domain_logsep_radius},
+this gives $T\subseteq D$ and $E\subseteq C$.
 Indeed, a point $y\in E\cap N_{2n}(T)$ would have a point $x\in T$ with
 $|x-y|\le2n<D_p\log L$, contrary to the assumed physical separation.
 For $x\in T$ and $y\notin D$, any finite distance satisfies
@@ -266,19 +271,20 @@ $d_\Lambda(x,y)\le2n$. If $d=d_\Lambda(e,y)$ were finite and at most $w$, then
     D_p\log L&\le |x-e|
     \le d_\Lambda(x,y)+d_\Lambda(y,e)
     \le2n+d\le2n+w<D_p\log L,
-    \label{eq:tnlean_one_dimensional_connected_domain_scope_logsep_margin}
+    \label{eq:domain_logsep_margin}
 \end{align}
-which is impossible. Hence $w<d$ whenever that distance is finite; infinite
-distances require no additional argument.
+The contradiction in~\eqref{eq:domain_logsep_margin} proves $w<d$ whenever
+that distance is finite; infinite distances require no additional argument.
 
 Each intrinsic neighborhood of a relative interval is again a relative
 interval. Finite subadditivity and the interval area law therefore give
 \begin{align}
     S_\Omega(D)&\le k_0c, \notag\\
     I_\Omega(D:C)&\le2S_\Omega(D)\le2k_0c\le b.
-    \label{eq:tnlean_one_dimensional_connected_domain_scope_logsep_entropy}
+    \label{eq:domain_logsep_entropy}
 \end{align}
-The finite-domain reset theorem now applies to the two cores $T,E$ and gives
+Using~\eqref{eq:domain_logsep_entropy}, the finite-domain reset theorem now
+applies to the two cores $T,E$ and gives
 $I_\Omega(T:E)\le L^{-p}$.
 
 These results extend the two chain information lemmas to arbitrary finite
