@@ -9,3 +9,4 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.MPS.AreaLaw.Hastings
 
 import TNLean.MPS.AreaLaw.Hastings.SchmidtTail
+import TNLean.MPS.AreaLaw.Hastings.TailEntropy
