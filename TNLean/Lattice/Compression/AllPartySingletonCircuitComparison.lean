@@ -24,7 +24,7 @@ and 565–588.
 
 noncomputable section
 namespace TNLean.Lattice.PartyCircuit.SourceCircuit
-open TNLean.PEPS.PairEffect
+open TNLean.Lattice.PartyCircuit
 variable {P : Type}
 
 private theorem projectAllChoices_comp (A : P → Bool) {a b c : Layout P}

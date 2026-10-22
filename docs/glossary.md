@@ -3378,7 +3378,7 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 
 ### Corrected source positions and whole-lifetime gate participation
 
-- **Declarations:** `TNLean.PEPS.Approximation.sourceEndpoints`, `correctedParties`,
+- **Declarations:** `TNLean.Lattice.Compression.sourceEndpoints`, `correctedParties`,
   `incidentGates` and `gatesTouching` in the same namespace.
 - **Defined in:** `TNLean/Lattice/Compression/DistributedLifetime.lean`.
 - **Meaning:** A source position has two party endpoints. For a finite set `S`
@@ -3405,7 +3405,7 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 
 ### Star and pair-sample virtual links
 
-- **Declarations:** `TNLean.PEPS.Approximation.pairSampleLabels`, `gateLinkLabels`,
+- **Declarations:** `TNLean.Lattice.Compression.pairSampleLabels`, `gateLinkLabels`,
   `gateLinkParties`, `linksAtGate`, `distributedLinks`, `distributedLinkParties`,
   `incidentDistributedLinks`, `incidentGateLinkLabels` and `incidentLinksAtGate`.
 - **Defined in:** `TNLean/Lattice/Compression/DistributedLinks.lean`.
@@ -3433,7 +3433,7 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 
 ### Weighted cost of affected coefficient and physical-entry choices
 
-- **Declarations:** `TNLean.PEPS.Approximation.ketBraCoefficientCost` and
+- **Declarations:** `TNLean.Lattice.Compression.ketBraCoefficientCost` and
   `correctedPositionChoiceCost`.
 - **Defined in:** `TNLean/Lattice/Compression/CorrectedPositionCost.lean`.
 - **Meaning:** `ketBraCoefficientCost` is the square of the sum of nonnegative

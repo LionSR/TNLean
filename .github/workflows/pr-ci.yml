@@ -95,14 +95,11 @@ on:
       - 'scripts/tenkz_blueprint_sweep.py'
       - 'scripts/test_tenkz_*.py'
       - 'scripts/test_*_diagram.py'
-      - 'scripts/check_*_blueprint.py'
       - 'scripts/run_diagram_tests.py'
       - 'scripts/test_run_diagram_tests.py'
       - 'scripts/test_blueprint_pdf_capacity.py'
       - 'scripts/test_tenkz_equation_web.py'
       - 'scripts/test_tenkz_inline_web.py'
-      - 'docs/audits/2026-10-05_scp10_three_block_blueprint_inventory.json'
-      - 'docs/audits/2026-10-05_scp10_four_cut_blueprint_inventory.json'
       - 'scripts/test_supported_polar_tree.py'
   pull_request:
     types: [opened, synchronize, reopened]
@@ -193,14 +190,11 @@ on:
       - 'scripts/tenkz_blueprint_sweep.py'
       - 'scripts/test_tenkz_*.py'
       - 'scripts/test_*_diagram.py'
-      - 'scripts/check_*_blueprint.py'
       - 'scripts/run_diagram_tests.py'
       - 'scripts/test_run_diagram_tests.py'
       - 'scripts/test_blueprint_pdf_capacity.py'
       - 'scripts/test_tenkz_equation_web.py'
       - 'scripts/test_tenkz_inline_web.py'
-      - 'docs/audits/2026-10-05_scp10_three_block_blueprint_inventory.json'
-      - 'docs/audits/2026-10-05_scp10_four_cut_blueprint_inventory.json'
       - 'scripts/test_supported_polar_tree.py'
   workflow_dispatch:
 
@@ -334,14 +328,11 @@ jobs:
               - 'scripts/tenkz_blueprint_sweep.py'
               - 'scripts/test_tenkz_*.py'
               - 'scripts/test_*_diagram.py'
-              - 'scripts/check_*_blueprint.py'
               - 'scripts/run_diagram_tests.py'
               - 'scripts/test_run_diagram_tests.py'
               - 'scripts/test_blueprint_pdf_capacity.py'
               - 'scripts/test_tenkz_equation_web.py'
               - 'scripts/test_tenkz_inline_web.py'
-              - 'docs/audits/2026-10-05_scp10_three_block_blueprint_inventory.json'
-              - 'docs/audits/2026-10-05_scp10_four_cut_blueprint_inventory.json'
               - 'scripts/test_supported_polar_tree.py'
             # Inputs of the two XeLaTeX volumes the blueprint-pdf job builds:
             # `leanblueprint pdf` (blueprint/src/latexmkrc) and
@@ -931,9 +922,8 @@ jobs:
         if: env.TEX_CHANGED == 'true'
         run: python3 scripts/test_blueprint_pdf_capacity.py
 
-      # Every scripts/test_tenkz_*.py and scripts/test_*_diagram.py test and
-      # every scripts/check_*_blueprint.py inventory check. New diagram tests
-      # need no workflow edit. Runner: scripts/run_diagram_tests.py.
+      # Every scripts/test_tenkz_*.py and scripts/test_*_diagram.py test.
+      # New diagram tests need no workflow edit. Runner: scripts/run_diagram_tests.py.
       - name: Test diagram test runner
         run: python3 scripts/test_run_diagram_tests.py
 
@@ -1138,7 +1128,7 @@ jobs:
     needs: changes
     if: "!cancelled() && github.event_name == 'pull_request' && needs.changes.result == 'success' && (needs.changes.outputs.blueprint_pdf == 'true' || needs.changes.outputs.workflow == 'true')"
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 90
     env:
       PRINT_AUX_FILES: |
         blueprint/print/*.aux

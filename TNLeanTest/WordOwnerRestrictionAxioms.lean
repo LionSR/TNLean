@@ -22,6 +22,6 @@ set_option linter.hashCommand false
 #guard_msgs (whitespace := lax) in
 #print axioms TNLean.Lattice.PartyCircuit.Word.restrict_mapOwner_eval_eq_id_of_disjoint
 
-/-- info: 'TNLean.PEPS.PairEffect.partySelector' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+/-- info: 'TNLean.Lattice.PartyCircuit.partySelector' depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
-#print axioms TNLean.PEPS.PairEffect.partySelector
+#print axioms TNLean.Lattice.PartyCircuit.partySelector

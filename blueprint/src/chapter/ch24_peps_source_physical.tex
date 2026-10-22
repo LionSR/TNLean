@@ -615,9 +615,9 @@ inner-product discard spaces.
 
 \begin{definition}[An explicit positive sample count]
     \label{def:peps_source_sample_count}
-    \lean{TNLean.PEPS.Approximation.sourceSamplingCount}
-    \lean{TNLean.PEPS.Approximation.sourceSamplingCount_pos}
-    \lean{TNLean.PEPS.Approximation.sourceSamplingCount_lt}
+    \lean{TNLean.Lattice.Compression.sourceSamplingCount}
+    \lean{TNLean.Lattice.Compression.sourceSamplingCount_pos}
+    \lean{TNLean.Lattice.Compression.sourceSamplingCount_lt}
     \leanok
     For $N\geq0$, real $Q$, and $\epsilon>0$, put
     \begin{align}
@@ -631,10 +631,10 @@ inner-product discard spaces.
 
 \begin{theorem}[Finite subset summation and the sample-count estimate]
     \label{thm:peps_source_sample_count_bound}
-    \lean{TNLean.PEPS.Approximation.sum_nonemptyFinsets_pow_card}
-    \lean{TNLean.PEPS.Approximation.sum_sourceErrorWeights}
-    \lean{TNLean.PEPS.Approximation.div_sqrt_sourceSamplingCount_le}
-    \lean{TNLean.PEPS.Approximation.sum_sourceErrorWeights_sourceSamplingCount_le}
+    \lean{TNLean.Lattice.Compression.sum_nonemptyFinsets_pow_card}
+    \lean{TNLean.Lattice.Compression.sum_sourceErrorWeights}
+    \lean{TNLean.Lattice.Compression.div_sqrt_sourceSamplingCount_le}
+    \lean{TNLean.Lattice.Compression.sum_sourceErrorWeights_sourceSamplingCount_le}
     \leanok
     \uses{def:peps_source_sample_count}
     For a finite set $\mathcal E$ of cardinality $N$,

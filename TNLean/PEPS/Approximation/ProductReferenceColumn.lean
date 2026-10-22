@@ -44,6 +44,7 @@ open scoped Matrix
 noncomputable section
 
 namespace TNLean.PEPS.Approximation.Pinned
+open TNLean.Lattice.Compression
 
 variable {L q : ℕ} {b : Type*} [Fintype b]
 

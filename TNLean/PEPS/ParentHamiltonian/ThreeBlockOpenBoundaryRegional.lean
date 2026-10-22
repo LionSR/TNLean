@@ -20,7 +20,7 @@ six-virtual-leg boundary and one unrestricted complementary physical factor.
 noncomputable section
 open scoped BigOperators
 namespace TNLean.PEPS.ThreeBlockDependent
-open DependentBondNetwork
+open TNLean.Lattice.DependentBondNetwork
 
 /-- Virtual incidences at the tensors belonging to a region. -/
 abbrev RegionEndpoint (R : Finset Vertex) :=

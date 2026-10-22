@@ -68,10 +68,10 @@ example :
 example : Fintype.card DependentTorus.Vertex = 4 := by decide
 example : Fintype.card DependentTorus.Bond = 8 := card_torusLabelledBond_two
 example (v : DependentTorus.Vertex) :
-    Fintype.card (DependentBondNetwork.IncidentEndpoint
+    Fintype.card (TNLean.Lattice.DependentBondNetwork.IncidentEndpoint
       torusLabelledBondTail torusLabelledBondHead v) = 4 := card_torusIncidentEndpoint v
 example (c r : ZMod 2) :
-    Fintype.card (DependentBondNetwork.CutEndpoint (torusSeamCutBonds c r)) = 8 :=
+    Fintype.card (TNLean.Lattice.DependentBondNetwork.CutEndpoint (torusSeamCutBonds c r)) = 8 :=
   card_torusCutEndpoint_two c r
 
 end DependentTorusClosureTest

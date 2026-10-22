@@ -16,7 +16,7 @@ Auxiliary regional contraction for SCP10, Theorem 5.7, lines 1527–1558.
 noncomputable section
 open scoped BigOperators Matrix
 namespace TNLean.PEPS
-open DependentBondNetwork
+open TNLean.Lattice.DependentBondNetwork
 
 variable {V : Type*} [Fintype V] [LinearOrder V]
 variable {Γ : SimpleGraph V} [DecidableRel Γ.Adj] {d : ℕ}
