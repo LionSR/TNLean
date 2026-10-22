@@ -1257,6 +1257,17 @@ fourth entry of the shell count, which is omitted; the interval constant and
 the area-law constant of Theorem A change accordingly, all at the level of
 absolute constants.
 
+### One-dimensional area law: the constants of Hastings' expectation bound
+
+[hastings07_relent_constants.tex](hastings07_relent_constants.tex)
+(local correction, resolved) records that the small-expectation bound labelled
+`xbd` in Hastings' one-dimensional area law (arXiv:0705.2024v4, lines 440--461)
+is formalized with two explicit constants: the hypothesis on the expectation of
+`O_L O_R` is `y ≥ 1 − 4ε`, the bound derivable for the product of the marginals,
+where line 446 asserts `y ≥ 1 − 2ε` without derivation; and `ε ≤ 1/68` makes the
+source's implicit small constant explicit as `x ≤ 36 ε`. Neither constant
+changes a hypothesis or a conclusion of the Cauchy--Schwarz argument.
+
 ## Polynomial PEPS: zero-floor maximizing filters
 
 - [`polypeps_square_zero_floor_optimizer_scope.tex`](polypeps_square_zero_floor_optimizer_scope.tex)
