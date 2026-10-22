@@ -1,0 +1,56 @@
+\section{The boundary operator of Hastings' approximate factorization}
+\label{sec:hastings_boundary_factorization}
+
+% Hastings, arXiv:0705.2024v4, law16.tex, lines 881--901 (the last two steps
+% of the proof of Lemma 1).
+
+The last two steps of the proof of Lemma~1 of \cite{Hastings2007AreaLaw} turn
+the Gaussian time average of the Hamiltonian, which is close to the
+ground-state projector on the range of the cut-offs $O_L$ and $O_R$, into an
+operator $O_B$ supported near the cut. Write $P_\eta(H)=\int e^{iHt}\,d\gamma_\eta(t)$
+for the Gaussian time average of variance $\eta$, and let $a$ and $v$ be the
+constants of the chain Lieb--Robinson bound for terms of range $R$ and norm at
+most $J$.
+
+\begin{theorem}[The boundary operator of Lemma~1]
+    \label{thm:hastings_boundary_factorization}
+    \lean{TNLean.MPS.AreaLaw.Hastings.ChainHamiltonian.exists_boundaryOperator_factorization}
+    \leanok
+    \uses{def:chain_model}
+    Let $H$ be a chain Hamiltonian of range $R$ and term norm $J$, let $H_0$ be
+    Hermitian with $H-H_0$ supported on a set $Z$ of sites, and let $O_L$ and
+    $O_R$ be orthogonal projections. Suppose
+    \begin{align}
+        \|H_0O_LO_R\|         & \le\theta,        &
+        \|P_\eta(H)O_LO_R-P\| & \le\varepsilon_0.
+        \label{eq:hastings_boundary_factorization_hyp}
+    \end{align}
+    Then for every $\ell'\ge0$ there is an operator $O_B$ supported on the
+    sites within distance $\ell'$ of $Z$, with $\|O_B\|\le1$ and
+    \begin{align}
+        \|O_BO_LO_R-P\|
+         & \le\varepsilon_0+\sqrt\eta\,\theta
+        +\sqrt\eta\,a\,|Z|^2\,\|H-H_0\|\,e^{-\ell'/4}
+        +4e^{-\ell'^2/(32v^2\eta)}.
+        \label{eq:hastings_boundary_factorization}
+    \end{align}
+    With $H_0=M_L+M_R$ and the cut-offs of the localized parts, this is the
+    operator $O_B$ of Lemma~1 of \cite{Hastings2007AreaLaw}, constructed at
+    lines 881--901.
+\end{theorem}
+\begin{proof}\leanok
+    Put $A=H_0$ and $B=H-H_0$, so that $A+B=H$, and let
+    $P_B=\int e^{iHt}e^{-iH_0t}\,d\gamma_\eta(t)$ be the Gaussian average of
+    the interaction-picture propagator. Replacing $P_\eta(H)$ by $P_B$ in front
+    of $O_LO_R$ costs at most $\sqrt\eta\,\|H_0O_LO_R\|$, so
+    $\|P_BO_LO_R-P\|\le\varepsilon_0+\sqrt\eta\,\theta$. The Lieb--Robinson
+    bound localizes the generator $e^{iHs}(H-H_0)e^{-iHs}$ of the propagator
+    onto the $\ell'$-neighbourhood of $Z$, which gives $O_B$ with $\|O_B\|\le1$
+    and $\|P_B-O_B\|$ at most the last two terms
+    of~\eqref{eq:hastings_boundary_factorization}. Since
+    $\|O_LO_R\|\le1$,
+    \begin{align}
+        \|O_BO_LO_R-P\| & \le\|O_B-P_B\|+\|P_BO_LO_R-P\|.
+        \notag
+    \end{align}
+\end{proof}
