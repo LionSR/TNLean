@@ -228,12 +228,16 @@ of a gapped chain combines them with the factorization of
     \end{align*}
     Here $\rho^0_{1,j}$ is the reduced density matrix of
     $|\Psi_0\rangle\langle\Psi_0|$ on sites $1,\dots,j$, $D\ge2$ is the local
-    dimension, $\xi=\max(2v/\Delta E,\xi_C)$ and
-    $\xi'=6\xi$ as in \cite[lines 126--142]{Hastings2007AreaLaw}, and
-    $C_1(\xi)\ge1$ is the constant of the approximate factorization
+    dimension, $\xi=\max(2v/\Delta E,\xi_C)$ as in
+    \cite[lines 126--142]{Hastings2007AreaLaw}, and $\xi'>0$ and
+    $C_1(\xi)\ge1$ are a decay length and a constant for which the
+    approximate factorization
     $\|O_B(j,m)O_L(j,m)O_R(j,m)-P_0\|\le C_1(\xi)e^{-m/\xi'}$ of
-    \cite[Lemma~1]{Hastings2007AreaLaw}; enlarging $C_1(\xi)$ keeps that
-    estimate true, so $C_1(\xi)\ge1$ costs nothing. This is
+    \cite[Lemma~1]{Hastings2007AreaLaw} holds. The source prints $\xi'=6\xi$;
+    the final estimate of its proof of Lemma~1 keeps a factor $\sqrt{m/\xi}$,
+    so the factorization holds for every $\xi'>6\xi$, with $C_1(\xi)$
+    depending on $\xi'$. Enlarging $C_1(\xi)$ keeps the estimate true, so
+    $C_1(\xi)\ge1$ costs nothing. This is
     \cite[Lemma~2]{Hastings2007AreaLaw}, lines 280--311.
 \end{lemma}
 \begin{proof}
