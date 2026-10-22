@@ -188,41 +188,30 @@ theorem cyclicCfg_join_cyclicActiveBlock {N W R : ℕ}
         (cyclicCfg (Fin.pos q) R q ω σ, τ) (cyclicForwardSite s r.val)
     rw [cyclicActiveBlockConfigEquiv_symm_apply_window]
     simp only [cyclicCfg]
+    have hglobalOffset (hqr : q.val ≤ r.val) :
+        ((cyclicForwardSite s r.val).val + N -
+          (cyclicForwardSite s q.val).val) % N = r.val - q.val := by
+      rw [show cyclicForwardSite s r.val =
+          cyclicForwardSite (cyclicForwardSite s q.val) (r.val - q.val) by
+        rw [cyclicForwardSite_forwardSite]
+        congr 1
+        omega]
+      simpa [cyclicForwardSite] using
+        offset_mod_eq (cyclicForwardSite s q.val).isLt (by omega : r.val - q.val < N)
     by_cases hr : q.val ≤ r.val ∧ r.val < q.val + R
-    · have hglobalOffset :
-          ((cyclicForwardSite s r.val).val + N -
-            (cyclicForwardSite s q.val).val) % N = r.val - q.val := by
-          rw [show cyclicForwardSite s r.val =
-              cyclicForwardSite (cyclicForwardSite s q.val) (r.val - q.val) by
-            rw [cyclicForwardSite_forwardSite]
-            congr 1
-            omega]
-          simpa [cyclicForwardSite] using
-            offset_mod_eq (cyclicForwardSite s q.val).isLt (by omega : r.val - q.val < N)
-      have hactiveOffset : (r.val + W - q.val) % W = r.val - q.val := by
+    · have hactiveOffset : (r.val + W - q.val) % W = r.val - q.val := by
         have hsum : r.val + W - q.val = r.val - q.val + W := by omega
         rw [hsum, Nat.add_mod_right, Nat.mod_eq_of_lt (by omega : r.val - q.val < W)]
-      rw [dite_eq_left (by rw [hglobalOffset]; omega),
+      rw [dite_eq_left (by rw [hglobalOffset hr.1]; omega),
         dite_eq_left (by rw [hactiveOffset]; omega)]
       congr 1
       apply Fin.ext
-      exact hglobalOffset.trans hactiveOffset.symm
+      exact (hglobalOffset hr.1).trans hactiveOffset.symm
     · have hglobalNot : ¬((cyclicForwardSite s r.val).val + N -
           (cyclicForwardSite s q.val).val) % N < R := by
         intro hoff
         by_cases hqr : q.val ≤ r.val
-        · have hglobalOffset :
-              ((cyclicForwardSite s r.val).val + N -
-                (cyclicForwardSite s q.val).val) % N = r.val - q.val := by
-              rw [show cyclicForwardSite s r.val =
-                  cyclicForwardSite (cyclicForwardSite s q.val) (r.val - q.val) by
-                rw [cyclicForwardSite_forwardSite]
-                congr 1
-                omega]
-              simpa [cyclicForwardSite] using
-                offset_mod_eq (cyclicForwardSite s q.val).isLt
-                  (by omega : r.val - q.val < N)
-          rw [hglobalOffset] at hoff
+        · rw [hglobalOffset hqr] at hoff
           exact hr ⟨hqr, by omega⟩
         · have hback : N - (q.val - r.val) < R := by
             have hEq : cyclicForwardSite s r.val =

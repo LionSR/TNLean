@@ -213,17 +213,12 @@ private theorem sum_tracePairing_evalWord_source
   simp only [Matrix.conjTranspose_mul, Matrix.conjTranspose_conjTranspose]
   exact Matrix.trace_mul_comm (Kraus.evalWord K (List.ofFn σ))ᴴ C
 
-private theorem boundary_scalarProduct_formula
-    (A : MPSTensor d D) (N : ℕ) (B C : Mat) :
-    ∑ σ : Cfg d N,
-        star (fnwBoundaryMap (fun μ => (A μ)ᴴ) N B σ) *
-          fnwBoundaryMap (fun μ => (A μ)ᴴ) N C σ =
-      ∑ i : Fin D, ∑ k : Fin D,
-        (Bᴴ * (fnwTransferMap A ^ N) (Matrix.single i k 1) * C) i k := by
-  rw [show fnwTransferMap A = Kraus.mapLM (fun μ => (A μ)ᴴ) by rfl]
-  rw [← sum_tracePairing_evalWord (fun μ => (A μ)ᴴ) N B C]
-  congr 1
-  ext σ
+private theorem boundary_term_eq
+    (A : MPSTensor d D) (N : ℕ) (B C : Mat) (σ : Cfg d N) :
+    star (fnwBoundaryMap (fun μ => (A μ)ᴴ) N B σ) *
+        fnwBoundaryMap (fun μ => (A μ)ᴴ) N C σ =
+      Matrix.trace (Bᴴ * Kraus.evalWord (fun μ => (A μ)ᴴ) (List.ofFn σ)) *
+        star (Matrix.trace (Cᴴ * Kraus.evalWord (fun μ => (A μ)ᴴ) (List.ofFn σ))) := by
   rw [fnwBoundaryMap_apply, fnwBoundaryMap_apply]
   let V := Kraus.evalWord (fun μ => (A μ)ᴴ) (List.ofFn σ)
   have hB : star (Matrix.trace (B * Vᴴ)) = Matrix.trace (Bᴴ * V) := by
@@ -235,6 +230,19 @@ private theorem boundary_scalarProduct_formula
     simp only [Matrix.conjTranspose_mul, Matrix.conjTranspose_conjTranspose]
     exact Matrix.trace_mul_comm C Vᴴ
   exact congrArg₂ (· * ·) hB hC
+
+private theorem boundary_scalarProduct_formula
+    (A : MPSTensor d D) (N : ℕ) (B C : Mat) :
+    ∑ σ : Cfg d N,
+        star (fnwBoundaryMap (fun μ => (A μ)ᴴ) N B σ) *
+          fnwBoundaryMap (fun μ => (A μ)ᴴ) N C σ =
+      ∑ i : Fin D, ∑ k : Fin D,
+        (Bᴴ * (fnwTransferMap A ^ N) (Matrix.single i k 1) * C) i k := by
+  rw [show fnwTransferMap A = Kraus.mapLM (fun μ => (A μ)ᴴ) by rfl]
+  rw [← sum_tracePairing_evalWord (fun μ => (A μ)ᴴ) N B C]
+  congr 1
+  ext σ
+  exact boundary_term_eq A N B C σ
 
 private theorem boundary_scalarProduct_formula_source
     (A : MPSTensor d D) (N : ℕ) (B C : Mat) :
@@ -248,17 +256,7 @@ private theorem boundary_scalarProduct_formula_source
   rw [← sum_tracePairing_evalWord_source (fun μ => (A μ)ᴴ) N B C]
   congr 1
   ext σ
-  rw [fnwBoundaryMap_apply, fnwBoundaryMap_apply]
-  let V := Kraus.evalWord (fun μ => (A μ)ᴴ) (List.ofFn σ)
-  have hB : star (Matrix.trace (B * Vᴴ)) = Matrix.trace (Bᴴ * V) := by
-    rw [← Matrix.trace_conjTranspose]
-    simp only [Matrix.conjTranspose_mul, Matrix.conjTranspose_conjTranspose]
-    exact Matrix.trace_mul_comm V Bᴴ
-  have hC : Matrix.trace (C * Vᴴ) = star (Matrix.trace (Cᴴ * V)) := by
-    rw [← Matrix.trace_conjTranspose]
-    simp only [Matrix.conjTranspose_mul, Matrix.conjTranspose_conjTranspose]
-    exact Matrix.trace_mul_comm C Vᴴ
-  exact congrArg₂ (· * ·) hB hC
+  exact boundary_term_eq A N B C σ
 
 /-- Exact scalar-product formula from FNW 1992, equation (5.8), in TNLean
 coordinates \(A^\mu=v(\mu)^\dagger\), in Choi-reshuffled form. -/

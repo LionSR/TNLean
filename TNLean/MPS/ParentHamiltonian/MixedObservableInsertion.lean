@@ -63,8 +63,8 @@ theorem mixedPhysicalObservableTransfer_apply
 Source: Nachtergaele, arXiv:cond-mat/9410110, equations (3.1)--(3.2b). -/
 theorem mixedPhysicalObservableTransfer_self {D : ℕ}
     (A : MPSTensor d D) (k : ℕ) (X : Matrix (Cfg d k) (Cfg d k) ℂ) :
-    mixedPhysicalObservableTransfer A A k X = physicalObservableTransfer A k X := by
-  exact LinearMap.ext fun Y ↦ by
+    mixedPhysicalObservableTransfer A A k X = physicalObservableTransfer A k X :=
+  LinearMap.ext fun Y ↦ by
     simp only [mixedPhysicalObservableTransfer_apply, physicalObservableTransfer_apply]
 
 /-- Matrix-unit entries of a mixed physical observable pullback. Source:
