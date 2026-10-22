@@ -8,13 +8,13 @@ import Lean.Elab.Command
 import Lean.Util.CollectAxioms
 
 /-! Presence and permitted-axiom checks for the bound on the expectation of `O_B` in the product
-of the marginals, eq. `xbd` of Hastings' area-law proof. -/
+of the marginals, eq. `xbd` of Hastings' area-law proof by route 1 of the note added. -/
 
 run_cmd do
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
   for decl in #[
-    ``Matrix.PosSemidef.sub_sqrt_mul_sqrt_le_re_trace_mul_mul,
-    ``TNLean.MPS.AreaLaw.Hastings.re_trace_mul_le_of_projector_factorization] do
+    ``Matrix.PosSemidef.norm_trace_mul_mul_le,
+    ``TNLean.MPS.AreaLaw.Hastings.re_trace_mul_le_of_projection_sandwich] do
     unless (← Lean.getEnv).contains decl do
       throwError "Missing declaration {decl}"
     let axioms ← Lean.collectAxioms decl
