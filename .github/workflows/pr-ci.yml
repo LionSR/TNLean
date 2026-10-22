@@ -913,7 +913,9 @@ jobs:
 
       - name: Install blueprint system dependencies (retry)
         if: (env.TEX_CHANGED == 'true' || env.PAPER_GAPS_CHANGED == 'true') && steps.blueprint-system-deps-1.outcome == 'failure'
-        timeout-minutes: 10
+        # A slow mirror can need more than one attempt; the packages fetched by the
+        # first attempt stay in the archive directory, so the retry resumes.
+        timeout-minutes: 20
         uses: texra-ai/lean-env-action/blueprint-system-deps@v1
         with:
           cache-suffix: web-v3
@@ -1203,7 +1205,9 @@ jobs:
 
       - name: Install blueprint system dependencies (retry)
         if: steps.blueprint-system-deps-2.outcome == 'failure'
-        timeout-minutes: 10
+        # A slow mirror can need more than one attempt; the packages fetched by the
+        # first attempt stay in the archive directory, so the retry resumes.
+        timeout-minutes: 20
         uses: texra-ai/lean-env-action/blueprint-system-deps@v1
         with:
           cache-suffix: web-v3
