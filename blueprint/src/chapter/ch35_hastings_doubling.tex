@@ -19,12 +19,14 @@ corrected constants.
         TNLean.MPS.AreaLaw.Hastings.doublingExponent}
     \leanok
     For real $\xi'$, $C_1$, $C_2$ and $D$ put
-    \[
+    \begin{align*}
         \xi_0=2\xi'\ln(2C_1),
         \qquad
         M=\Bigl\lceil2\Bigl(\xi'\ln D+\frac{(2+C_2)\xi'}{\xi_0}
-        +\frac12\Bigr)\Bigr\rceil .
-    \]
+        +\frac12\Bigr)\Bigr\rceil_+ ,
+    \end{align*}
+    where $\lceil u\rceil_+=\max\{0,\lceil u\rceil\}$ is the least natural
+    number at least $u$.
     If $\xi'>0$ and $2C_1>1$, then $\xi_0>0$.
 \end{definition}
 
@@ -35,14 +37,14 @@ corrected constants.
     \leanok
     \uses{def:hastings_doubling_constants}
     Let $\xi'>0$, $2C_1>1$ and $l_1\ge\xi_0$. For every natural $N$,
-    \[
+    \begin{align*}
         \sum_{n<N}\frac{C_1}{\xi'}e^{-2^nl_1/\xi'}\le\frac1{\xi_0},
-    \]
+    \end{align*}
     and if moreover $\ln C_1+C_2\ge0$, then
-    \[
+    \begin{align*}
         \sum_{n<N}\frac{\ln C_1+C_2}{2\cdot2^nl_1}
         \le\frac{\ln C_1+C_2}{\xi_0}.
-    \]
+    \end{align*}
 \end{lemma}
 \begin{proof}\leanok
     Put $x=2C_1$ and $r=e^{-l_1/\xi'}$. Since $l_1/\xi'\ge2\ln x$, we have
@@ -62,17 +64,17 @@ corrected constants.
     Let $S$ be a real sequence indexed by the natural numbers, let $l_0$,
     $\xi'>0$, $C_1$, $C_2$ and $D$ be real with $2C_1>1$ and
     $\ln C_1+C_2\ge0$. Assume $S_l\le l\ln D$ whenever $l\le l_0$, and
-    \begin{equation}
+    \begin{align}
         S_{2l}\le2S_l-\bigl(1-2C_1e^{-l/\xi'}\bigr)\frac{l}{\xi'}
         +\ln C_1+C_2
         \label{eq:hastings_doubling_claim}
-    \end{equation}
+    \end{align}
     whenever $2l\le l_0$. Let $l_1$ be a natural number with $l_1\ge\xi_0$
     and let $l=2^Nl_1\le l_0$. Then
-    \[
+    \begin{align*}
         S_l\le l\ln D-\frac{lN}{2\xi'}
         +\bigl(2+\ln C_1+C_2\bigr)\frac{l}{\xi_0}.
-    \]
+    \end{align*}
     This is the bound of~\cite[lines 221--224]{Hastings2007AreaLaw} with
     the decrease per doubling corrected, as recorded
     in~\cite{gap:hastings07_doubling_constants}.
@@ -95,9 +97,9 @@ corrected constants.
     \uses{def:hastings_doubling_constants,thm:hastings_doubling_iteration}
     Under the hypotheses of Theorem~\ref{thm:hastings_doubling_iteration},
     assume moreover $S_l\ge0$ whenever $l\le l_0$. Then
-    \[
+    \begin{align*}
         l_0<\lceil\xi_0\rceil\,2^M .
-    \]
+    \end{align*}
     This replaces the bound $\xi'\ln(2C_1)\,2^{\lceil\xi'\ln D
                 +(2+C_2)\xi'/\xi_0+1/2\rceil}$
     of~\cite[line 229]{Hastings2007AreaLaw}; the exponent is doubled and the

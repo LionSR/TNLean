@@ -54,7 +54,7 @@ theorem doublingStartLength_pos {ξ' C₁ : ℝ} (hξ' : 0 < ξ') (hC₁ : 1 < 2
   mul_pos (by positivity) (Real.log_pos hC₁)
 
 /-- The number of doublings after which the entropy bound of lines 221–224 is negative,
-`M = ⌈2 (ξ' ln D + (2 + C₂) ξ'/ξ₀ + 1/2)⌉`. This is twice the printed exponent of
+`M = ⌈2 (ξ' ln D + (2 + C₂) ξ'/ξ₀ + 1/2)⌉₊`. This is twice the printed exponent of
 arXiv:0705.2024v4, line 229; see the local fix in the module docstring. -/
 noncomputable def doublingExponent (ξ' C₁ C₂ D : ℝ) : ℕ :=
   ⌈2 * (ξ' * Real.log D + (2 + C₂) * ξ' / doublingStartLength ξ' C₁ + 1 / 2)⌉₊
