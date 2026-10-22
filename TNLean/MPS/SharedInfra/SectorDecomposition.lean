@@ -261,8 +261,8 @@ noncomputable def flatBasis (P : SectorDecomposition d) :
 /-- Flattening and then recovering a sector-copy index preserves its weight. -/
 @[simp] theorem flatWeight_flatIndexEquiv (P : SectorDecomposition d)
     (jq : (j : Fin P.basisCount) × Fin (P.copies j)) :
-    P.flatWeight (P.flatIndexEquiv jq) = P.weight jq.1 jq.2 :=
-  congrArg (fun x => P.weight x.1 x.2)
+    P.flatWeight (P.flatIndexEquiv jq) = P.weight jq.1 jq.2 := by
+  exact congrArg (fun x => P.weight x.1 x.2)
     (P.flatIndexEquiv.symm_apply_apply jq)
 
 /-- Flattening and then recovering a sector-copy index preserves its basis tensor,

@@ -78,6 +78,7 @@ theorem exists_localLift_eq_localLift_of_subset {D D' : Finset V} (hDD : D ⊆ D
   · exact ⟨0, Subsingleton.elim _ _⟩
   · exact ((isSupportedOn_localLift K).mono hDD).exists_localLift σ₀
 
+omit [Fintype V] in
 private theorem conjTranspose_mul_self_of_isStarProjection {D : Finset V}
     {P : Matrix (RegionConfig n D) (RegionConfig n D) ℂ} (hP : IsStarProjection P) :
     Pᴴ * P = P := by
