@@ -95,7 +95,6 @@ on:
       - 'scripts/tenkz_blueprint_sweep.py'
       - 'scripts/test_tenkz_*.py'
       - 'scripts/test_*_diagram.py'
-      - 'scripts/check_*_blueprint.py'
       - 'scripts/run_diagram_tests.py'
       - 'scripts/test_run_diagram_tests.py'
       - 'scripts/test_blueprint_pdf_capacity.py'
@@ -191,7 +190,6 @@ on:
       - 'scripts/tenkz_blueprint_sweep.py'
       - 'scripts/test_tenkz_*.py'
       - 'scripts/test_*_diagram.py'
-      - 'scripts/check_*_blueprint.py'
       - 'scripts/run_diagram_tests.py'
       - 'scripts/test_run_diagram_tests.py'
       - 'scripts/test_blueprint_pdf_capacity.py'
@@ -330,7 +328,6 @@ jobs:
               - 'scripts/tenkz_blueprint_sweep.py'
               - 'scripts/test_tenkz_*.py'
               - 'scripts/test_*_diagram.py'
-              - 'scripts/check_*_blueprint.py'
               - 'scripts/run_diagram_tests.py'
               - 'scripts/test_run_diagram_tests.py'
               - 'scripts/test_blueprint_pdf_capacity.py'
@@ -925,9 +922,8 @@ jobs:
         if: env.TEX_CHANGED == 'true'
         run: python3 scripts/test_blueprint_pdf_capacity.py
 
-      # Every scripts/test_tenkz_*.py and scripts/test_*_diagram.py test and
-      # every scripts/check_*_blueprint.py inventory check. New diagram tests
-      # need no workflow edit. Runner: scripts/run_diagram_tests.py.
+      # Every scripts/test_tenkz_*.py and scripts/test_*_diagram.py test.
+      # New diagram tests need no workflow edit. Runner: scripts/run_diagram_tests.py.
       - name: Test diagram test runner
         run: python3 scripts/test_run_diagram_tests.py
 
