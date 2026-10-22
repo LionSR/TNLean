@@ -17,11 +17,11 @@ The guard imports its production module and checks the declaration itself.
 set_option linter.hashCommand false
 
 /--
-info: 'TNLean.PEPS.PairEffect.groupByPartyIso_familyPhysicalListBasis_eq_partyListBasis'
+info: 'TNLean.Lattice.PartyCircuit.groupByPartyIso_familyPhysicalListBasis_eq_partyListBasis'
 depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms TNLean.PEPS.PairEffect.groupByPartyIso_familyPhysicalListBasis_eq_partyListBasis
+#print axioms TNLean.Lattice.PartyCircuit.groupByPartyIso_familyPhysicalListBasis_eq_partyListBasis
 
 /-! The shared memory-identification helpers may use any subset of the standard
 logical axioms. Check each imported public declaration before collecting its

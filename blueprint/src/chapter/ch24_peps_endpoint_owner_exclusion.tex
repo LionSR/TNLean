@@ -111,8 +111,8 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
 
 \begin{definition}[The operator with specified orthonormal coordinates]
     \label{def:peps_operator_from_basis_matrix}
-    \lean{TNLean.PEPS.PairEffect.basisMatrixOperator}
-    \lean{TNLean.PEPS.PairEffect.basisMatrixOperator_repr}
+    \lean{TNLean.Lattice.PartyCircuit.basisMatrixOperator}
+    \lean{TNLean.Lattice.PartyCircuit.basisMatrixOperator_repr}
     \leanok
     Let $b=(b_j)_{j\in I}$ be an orthonormal basis of a finite-dimensional
     complex inner product space. For a matrix $M$, define $T_b(M)$ by
@@ -176,7 +176,7 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
 
 \begin{theorem}[Matrices in orthonormal coordinates]
     \label{thm:peps_matrix_orthonormal_coordinates}
-    \lean{TNLean.PEPS.PairEffect.matrix_repr_eval_eq_toMatrix}
+    \lean{TNLean.Lattice.PartyCircuit.matrix_repr_eval_eq_toMatrix}
     \leanok
     Let $b,c$ be finite orthonormal bases and let $A$ be a continuous linear
     map between their spaces. Its linear-map matrix is the coordinate-entry
@@ -302,7 +302,7 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
 
 \begin{theorem}[The physical mixed trace in the original coordinates]
     \label{thm:peps_selected_physical_private_trace}
-    \lean{TNLean.PEPS.PairEffect.selectedPhysicalPrivateBasis_partialTrace_mixed}
+    \lean{TNLean.Lattice.PartyCircuit.selectedPhysicalPrivateBasis_partialTrace_mixed}
     \leanok
     \uses{thm:peps_selected_physical_private_basis_grouped,
         thm:peps_selected_physical_basis_grouped,def:peps_selected_physical_configurations}
@@ -347,7 +347,7 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
 
 \begin{theorem}[The original physical density in grouped coordinates]
     \label{thm:peps_distributed_grouped_physical_trace}
-    \lean{TNLean.PEPS.PairEffect.DistributedConstruction.physicalDensity_eq_grouped_partialTrace}
+    \lean{TNLean.Lattice.PartyCircuit.DistributedConstruction.physicalDensity_eq_grouped_partialTrace}
     \leanok
     \uses{def:peps_distributed_construction_density,
         thm:peps_selected_physical_private_trace}

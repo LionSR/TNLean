@@ -24,8 +24,8 @@ Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 253–267,
 noncomputable section
 open scoped Matrix ComplexConjugate
 namespace TNLean.Lattice.PartyCircuit.SourceCircuit
-open TNLean.PEPS TNLean.PEPS.PairEffect
-open TNLean.PEPS.Approximation
+open TNLean.Lattice TNLean.Lattice.PartyCircuit
+open TNLean.Lattice.Compression
 attribute [local instance] Classical.propDecidable
 variable {P : Type} [Fintype P] [DecidableEq P] {a : Layout P}
 variable {I E : Option {_p : P // true = true} → Type}

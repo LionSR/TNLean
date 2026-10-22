@@ -262,7 +262,7 @@ abstracted — record why, so it is not re-proposed).
 - **Seen:** the compression theorems and the dyadic protocol, in
   `UniformApproximateSampledNetwork.lean`, `UniformMessageGateCompression.lean` and
   `DyadicProtocolCompression.lean` under `TNLean/PEPS/Approximation/`.
-- **Abstraction:** `TNLean.PEPS.Approximation.mul_pow_le_max_zero_mul_pow` in
+- **Abstraction:** `TNLean.Lattice.Compression.mul_pow_le_max_zero_mul_pow` in
   `UniformApproximateSampledNetwork.lean`.
 - **Notes:** The sign of `max C 0` is `le_max_right`. Net Lean line delta: +9 (20 added, 11
   removed) across the three changed modules, since the new lemma and its docstring outweigh the
@@ -8425,7 +8425,7 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Seen:** The local sampled factors in `ActualSampledPhysicalFactors`, the
   empty-party scalar in `ActualSampledExteriorScalar`, and their comparison
   in `ActualSampledPhysicalScalar` use this same trace.
-- **Abstraction:** `PairEffect.restrictedMixedPhysicalTrace` in
+- **Abstraction:** `PartyCircuit.restrictedMixedPhysicalTrace` in
   `RestrictedMixedPhysicalTrace.lean` owns the exact matrix expression.
   The sampled factors and exterior scalar use the same definition; their
   comparison retains that expression instead of expanding the circuit words.
