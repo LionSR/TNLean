@@ -93,7 +93,17 @@ jobs:
 
       - name: Recover an interrupted package install
         if: steps.blueprint-system-deps-1.outcome == 'failure'
-        run: sudo dpkg --configure -a || true
+        # The timed-out install can leave its apt-get running and holding the
+        # package locks, so stop the lock holders before repairing the database.
+        run: |
+          locks=(/var/lib/dpkg/lock-frontend /var/lib/dpkg/lock
+            /var/lib/apt/lists/lock /var/cache/apt/archives/lock
+            "$RUNNER_TEMP"/blueprint-apt-archives/*/lock)
+          for signal in TERM KILL; do
+            sudo fuser -k -"$signal" "${locks[@]}" 2>/dev/null || true
+            sleep 5
+          done
+          sudo dpkg --configure -a || true
 
       - name: Install system dependencies (retry)
         if: steps.blueprint-system-deps-1.outcome == 'failure'
@@ -208,7 +218,17 @@ jobs:
 
       - name: Recover an interrupted package install
         if: steps.blueprint-system-deps-2.outcome == 'failure'
-        run: sudo dpkg --configure -a || true
+        # The timed-out install can leave its apt-get running and holding the
+        # package locks, so stop the lock holders before repairing the database.
+        run: |
+          locks=(/var/lib/dpkg/lock-frontend /var/lib/dpkg/lock
+            /var/lib/apt/lists/lock /var/cache/apt/archives/lock
+            "$RUNNER_TEMP"/blueprint-apt-archives/*/lock)
+          for signal in TERM KILL; do
+            sudo fuser -k -"$signal" "${locks[@]}" 2>/dev/null || true
+            sleep 5
+          done
+          sudo dpkg --configure -a || true
 
       - name: Install system dependencies (retry)
         if: steps.blueprint-system-deps-2.outcome == 'failure'
