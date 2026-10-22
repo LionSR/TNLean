@@ -15,7 +15,6 @@ $A$.
 \begin{lemma}[The cut entropy moves slowly]
     \label{lem:hastings_cut_entropy_slow}
     \lean{
-        TNLean.MPS.AreaLaw.Hastings.regionEntropy_nonneg,
         TNLean.MPS.AreaLaw.Hastings.disjoint_interval_interval,
         TNLean.MPS.AreaLaw.Hastings.interval_union_interval,
         TNLean.MPS.AreaLaw.Hastings.cutEntropy_sub_le
@@ -45,7 +44,6 @@ $A$.
         TNLean.MPS.AreaLaw.Hastings.two_mul_div_three_le_cutEntropy
     }
     \leanok
-    \uses{lem:hastings_cut_entropy_slow}
     Let $S_{\max}\ge 0$ and let $l_0$ be a natural number with
     $l_0\log q\le S_{\max}/3$, for instance
     $l_0=\lfloor S_{\max}/(3\log q)\rfloor$ when $q\ge 2$. If $S(\lbrack 0,i))>S_{\max}$, then every
@@ -57,6 +55,7 @@ $A$.
 
 \begin{proof}
     \leanok
+    \uses{lem:hastings_cut_entropy_slow}
     By Lemma~\ref{lem:hastings_cut_entropy_slow},
     $S(\lbrack 0,k))\ge S(\lbrack 0,i))-(k-i)\log q>S_{\max}-l_0\log q\ge 2S_{\max}/3$.
     The source takes $l_0=S_{\max}/(3\log q)$; the window length is a number of
@@ -93,6 +92,7 @@ $A$.
 \begin{lemma}[Bounds on the window entropy]
     \label{lem:hastings_window_entropy_bounds}
     \lean{
+        TNLean.MPS.AreaLaw.Hastings.regionEntropy_nonneg,
         TNLean.MPS.AreaLaw.Hastings.windowEntropy_nonneg,
         TNLean.MPS.AreaLaw.Hastings.windowEntropy_le,
         TNLean.MPS.AreaLaw.Hastings.windowEntropy_two_mul_le
