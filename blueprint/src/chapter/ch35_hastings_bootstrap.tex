@@ -15,8 +15,8 @@ states the three steps with explicit constants. The lemma for the ground state
 of a gapped chain combines them with the factorization of
 \cite[Lemma~1]{Hastings2007AreaLaw}.
 
-\begin{lemma}[Gibbs' inequality]
-    \label{lem:hastings_gibbs_inequality}
+\begin{theorem}[Gibbs' inequality]
+    \label{thm:hastings_gibbs_inequality}
     \lean{TNLean.MPS.AreaLaw.Hastings.probabilityEntropy_le_sum_mul_neg_log}
     \leanok
     Let $p$ be a probability vector on a finite set and let $w$ be positive
@@ -24,21 +24,20 @@ of a gapped chain combines them with the factorization of
     \begin{align*}
         H(p)\le-\sum_zp_z\ln w_z.
     \end{align*}
-\end{lemma}
+\end{theorem}
 \begin{proof}\leanok
     For $p_z>0$, $p_z\ln(w_z/p_z)\le w_z-p_z$ since $\ln t\le t-1$; for
     $p_z=0$ the term is $0\le w_z$. Summing gives
     $-H(p)+\sum_zp_z\ln w_z\le\sum_zw_z-1\le0$.
 \end{proof}
 
-\begin{lemma}[Entropy under geometric tail constraints]
-    \label{lem:hastings_geometric_tail_entropy}
+\begin{theorem}[Entropy under geometric tail constraints]
+    \label{thm:hastings_geometric_tail_entropy}
     \lean{
         TNLean.MPS.AreaLaw.Hastings.probabilityEntropy_le_of_geometric_tails,
         TNLean.MPS.AreaLaw.Hastings.probabilityEntropy_le_of_scale_tails
     }
     \leanok
-    \uses{lem:hastings_gibbs_inequality}
     Let $p_0,\dots,p_{N-1}$ be a probability vector and let $K\ge1$, $D\ge2$
     and $0<x<1$. If
     for every $n\ge0$ the mass of the entries of index at least $KD^{2n}$ is at
@@ -55,10 +54,11 @@ of a gapped chain combines them with the factorization of
     This is the maximization in the proof of
     \cite[Lemma~2]{Hastings2007AreaLaw}, lines 357--390, where it is applied
     to the squared Schmidt coefficients in decreasing order.
-\end{lemma}
+\end{theorem}
 \begin{proof}\leanok
+    \uses{thm:hastings_gibbs_inequality}
     The source finds the maximum by saturating every constraint; here the same
-    value comes from Lemma~\ref{lem:hastings_gibbs_inequality} against the
+    value comes from Theorem~\ref{thm:hastings_gibbs_inequality} against the
     saturating weights. On the block of indices in $[KD^{2(n-1)},KD^{2n})$, of
     size $KD^{2(n-1)}(D^2-1)$, and on $[0,K)$ for $n=0$, put the weight
     $(1-x)x^n$ divided by the size of the block. The weights of the indices
@@ -70,8 +70,8 @@ of a gapped chain combines them with the factorization of
     gives the three estimates of the source, lines 386--389.
 \end{proof}
 
-\begin{lemma}[Overlap with the ground state after an approximate projector]
-    \label{lem:hastings_bootstrap_overlap}
+\begin{theorem}[Overlap with the ground state after an approximate projector]
+    \label{thm:hastings_bootstrap_overlap}
     \lean{
         TNLean.MPS.AreaLaw.Hastings.norm_sq_sub_normSq_inner_eq,
         TNLean.MPS.AreaLaw.Hastings.overlap_ge_of_norm_sub_vecMulVec_le
@@ -87,7 +87,7 @@ of a gapped chain combines them with the factorization of
     and $\operatorname{tr}(O\rho O^\dagger)>0$ when $\epsilon<\sqrt P$. This is
     equation \texttt{hg} of \cite[Lemma~2]{Hastings2007AreaLaw}, lines
     317--331, with $\epsilon=C_1(\xi)e^{-m/\xi'}$.
-\end{lemma}
+\end{theorem}
 \begin{proof}\leanok
     Write $a=\langle\Psi_0,O\rho O^\dagger\Psi_0\rangle$ and
     $b=\operatorname{tr}((1-P_0)O\rho O^\dagger)$, where
@@ -99,8 +99,8 @@ of a gapped chain combines them with the factorization of
     $\epsilon\ge\sqrt P$ the bound is trivial.
 \end{proof}
 
-\begin{lemma}[Overlaps and the tail of the Schmidt coefficients]
-    \label{lem:hastings_schmidt_overlap_tail}
+\begin{theorem}[Overlaps and the tail of the Schmidt coefficients]
+    \label{thm:hastings_schmidt_overlap_tail}
     \lean{
         TNLean.MPS.AreaLaw.Hastings.normSq_dotProduct_le_kyFanNorm,
         TNLean.MPS.AreaLaw.Hastings.vonNeumannEntropy_eq_probabilityEntropy_eigenvalues₀,
@@ -115,7 +115,7 @@ of a gapped chain combines them with the factorization of
     $\rho_\varphi$ is the entropy of its eigenvalues in decreasing order, and
     the mass of the eigenvalues beyond the first $K$ is
     $\operatorname{tr}\rho_\varphi-\|\rho_\varphi\|_{(K)}$.
-\end{lemma}
+\end{theorem}
 \begin{proof}\leanok
     Normalizing $\psi$ reduces the first statement to the variational
     characterization of the maximal overlap with states of Schmidt rank at most
@@ -138,8 +138,7 @@ of a gapped chain combines them with the factorization of
     \label{thm:hastings_bootstrap_stage}
     \lean{TNLean.MPS.AreaLaw.Hastings.vonNeumannEntropy_le_of_schmidtRank_mixtures}
     \leanok
-    \uses{lem:hastings_geometric_tail_entropy, lem:hastings_schmidt_overlap_tail,
-        def:hastings_bootstrap_remainder}
+    \uses{def:hastings_bootstrap_remainder}
     Let $\Psi$ be a unit bipartite vector with reduced density matrix
     $\rho_\Psi$, and let $k\ge1$, $D\ge2$, $\xi'>0$ and $c\ge1$. Suppose that at
     every scale $s$ with $ce^{-2s/\xi'}<1$ some mixture of states of Schmidt
@@ -153,17 +152,20 @@ of a gapped chain combines them with the factorization of
     is equation \texttt{bootstrap}.
 \end{theorem}
 \begin{proof}\leanok
-    By Lemma~\ref{lem:hastings_schmidt_overlap_tail}, the overlap hypothesis
-    bounds the mass of the Schmidt coefficients beyond the first $kD^{2s}$ by
-    $ce^{-2s/\xi'}$, which is equation \texttt{constraint}. Let $m'$ be the least
+    \uses{thm:hastings_geometric_tail_entropy, thm:hastings_schmidt_overlap_tail}
+    At a scale where $kD^{2s}$ is at least the dimension of the first factor
+    there are no Schmidt coefficients beyond the first $kD^{2s}$. Otherwise
+    Theorem~\ref{thm:hastings_schmidt_overlap_tail}, applied to each state of
+    the mixture, bounds the mass of the Schmidt coefficients beyond the first
+    $kD^{2s}$ by $ce^{-2s/\xi'}$, which is equation \texttt{constraint}. Let $m'$ be the least
     natural number with $ce^{-2m'/\xi'}\le1$, so that $2m'+2\le\xi'\ln c+4$. The
     constraints at the scales $m'+1+n$ are the hypotheses of the second form of
-    Lemma~\ref{lem:hastings_geometric_tail_entropy}.
+    Theorem~\ref{thm:hastings_geometric_tail_entropy}.
 \end{proof}
 
 \begin{lemma}[The bootstrap lemma]
     \label{lem:hastings_bootstrap}
-    \uses{thm:hastings_bootstrap_stage, lem:hastings_bootstrap_overlap}
+    \uses{def:hastings_bootstrap_remainder}
     Let $\rho$ be a mixture of pure states of Schmidt rank at most $k$ across the
     cut between sites $j$ and $j+1$, with $\langle\Psi_0,\rho\Psi_0\rangle=P>0$,
     where $\Psi_0$ is the ground state of a Hamiltonian satisfying the finite
@@ -176,11 +178,15 @@ of a gapped chain combines them with the factorization of
     $C_1(\xi)$ is the constant of the approximate factorization
     $\|O_B(j,m)O_L(j,m)O_R(j,m)-P_0\|\le C_1(\xi)e^{-m/\xi'}$ of
     \cite[Lemma~1]{Hastings2007AreaLaw}. This is
-    \cite[Lemma~2]{Hastings2007AreaLaw}, lines 280--311. It follows from
-    Theorem~\ref{thm:hastings_bootstrap_stage} and
-    Lemma~\ref{lem:hastings_bootstrap_overlap}, once the approximate
-    factorization of the ground-state projector of
+    \cite[Lemma~2]{Hastings2007AreaLaw}, lines 280--311.
+\end{lemma}
+\begin{proof}
+    \uses{thm:hastings_bootstrap_stage, thm:hastings_bootstrap_overlap}
+    The approximate factorization of the ground-state projector of
     \cite[Lemma~1]{Hastings2007AreaLaw} supplies the operators
     $O_B(j,m)O_L(j,m)O_R(j,m)$, whose action multiplies the Schmidt rank across
-    the cut by at most $D^{2m}$.
-\end{lemma}
+    the cut by at most $D^{2m}$. Theorem~\ref{thm:hastings_bootstrap_overlap}
+    gives the overlap of the resulting mixtures at each scale, and
+    Theorem~\ref{thm:hastings_bootstrap_stage} with $c=2C_1(\xi)^2/P$ gives
+    the bound.
+\end{proof}
