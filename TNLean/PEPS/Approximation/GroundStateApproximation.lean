@@ -49,6 +49,7 @@ the routing step. The small sizes and the final constants are handled in
 noncomputable section
 
 namespace TNLean.PEPS.Approximation
+open TNLean.Lattice.Compression
 
 /-- Increasing the exponent preserves the same PEPS, phase, and error bound on a square of
 side at least one, where `L ^ c ≤ L ^ c'` for `c ≤ c'`.

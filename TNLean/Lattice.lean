@@ -14,7 +14,12 @@ import TNLean.Lattice.EntropyComparison
 import TNLean.Lattice.EntropyDimension
 import TNLean.Lattice.FiniteDomain
 import TNLean.Lattice.GaussianFilteredGround
+import TNLean.Lattice.GaussianFilteredIncrement
+import TNLean.Lattice.GaussianFilteredLocality
 import TNLean.Lattice.GaussianFilteredTerm
+import TNLean.Lattice.GaussianTail
+import TNLean.Lattice.GaussianTailMoment
+import TNLean.Lattice.HeisenbergDuhamel
 import TNLean.Lattice.LocalHamiltonian
 import TNLean.Lattice.MarginalTails
 import TNLean.Lattice.PartyCircuit

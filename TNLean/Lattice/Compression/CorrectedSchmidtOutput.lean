@@ -28,8 +28,8 @@ Independently formalized; no upstream Lean proof text reused.
 noncomputable section
 open scoped TensorProduct Matrix
 namespace TNLean.Lattice.PartyCircuit.SourceCircuit
-open TNLean.PEPS.PairEffect
-open TNLean.Lattice.PartyCircuit.SourceInventory TNLean.PEPS.Approximation
+open TNLean.Lattice.PartyCircuit
+open TNLean.Lattice.PartyCircuit.SourceInventory TNLean.Lattice.Compression
 variable {P : Type} {a b : Layout P}
 variable (w : SourceCircuit a b) (S : Finset (sourceLocations w))
     (E : ∀ e : sourceLocations w, branchLabels w e.1 →

@@ -21,8 +21,8 @@ run_cmd do
     ``partialSourceWord_sampled_none_partialTrace_eq_scalar,
     ``sampledPhysicalFactor,
     ``partialSourceGlobalMatrix_sampled_partialTrace_eq_sum_physicalFactors,
-    ``TNLean.PEPS.PairEffect.selectedPhysicalPrivateBasis_partialTrace_mixed,
-    ``TNLean.PEPS.PairEffect.DistributedConstruction.physicalDensity_eq_grouped_partialTrace]
+    ``TNLean.Lattice.PartyCircuit.selectedPhysicalPrivateBasis_partialTrace_mixed,
+    ``TNLean.Lattice.PartyCircuit.DistributedConstruction.physicalDensity_eq_grouped_partialTrace]
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
   let env ← Lean.getEnv
   for decl in decls do
