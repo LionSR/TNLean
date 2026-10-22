@@ -40,17 +40,20 @@ family of additional bonds. Source: SCP10, lines 1830–1848. -/
 def regularBundleMatrix : G →* Matrix (G × (K → G)) (G × (K → G)) ℂ :=
   Matrix.permMatrixHom.comp (MulAction.toPermHom G (G × (K → G)))
 
+/-- The bundled representation is simultaneous translation in the physical
+coordinate basis. Source: SCP10, lines 1830–1848. -/
+theorem regularBundleMatrix_apply (g : G) (x y : G × (K → G)) :
+    regularBundleMatrix K g x y = if x = g • y then 1 else 0 := by
+  simp [regularBundleMatrix, Matrix.permMatrixHom_apply, Equiv.Perm.permMatrix,
+    PEquiv.toMatrix_apply, MulAction.toPerm_symm_apply, eq_inv_smul_iff, eq_comm]
+
 /-- The explicit physical relative coordinates separate the matrix element
 into one regular factor and an identity factor. Source: SCP10, lines 1840–1873. -/
 theorem regularBundleMatrix_blocking (g : G) (x y : G × (K → G)) :
     regularBundleMatrix K g (RegularRepresentation.blockingFamilyEquiv K x)
         (RegularRepresentation.blockingFamilyEquiv K y) =
       leftRegularMatrix G g x.1 y.1 * (if x.2 = y.2 then 1 else 0) := by
-  have h (u v : G × (K → G)) : regularBundleMatrix K g u v =
-      if u = g • v then 1 else 0 := by
-    simp [regularBundleMatrix, Matrix.permMatrixHom_apply, Equiv.Perm.permMatrix,
-      PEquiv.toMatrix_apply, MulAction.toPerm_symm_apply, eq_inv_smul_iff, eq_comm]
-  rw [h, leftRegularMatrix_apply]
+  rw [regularBundleMatrix_apply, leftRegularMatrix_apply]
   have he : RegularRepresentation.blockingFamilyEquiv K x =
       g • RegularRepresentation.blockingFamilyEquiv K y ↔ x.1 = g * y.1 ∧ x.2 = y.2 := by
     rw [← RegularRepresentation.blockingFamilyEquiv_smul,
