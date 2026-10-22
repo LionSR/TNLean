@@ -29,7 +29,7 @@
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:hastings_bootstrap_scale, thm:hastings_mixture_tail,
-        thm:hastings_cut_entropy}
+        thm:hastings_cut_coordinates, lem:chain_sequential_truncation}
     Let $E$ project the first $j$ sites onto the eigenvectors of $p_1,\dots,p_k$
     and put $\psi=E\Omega$. Then $\psi$ has Schmidt rank at most $k$ across the
     cut, and $\langle\psi,\Omega\rangle=\|\psi\|^2=p_1+\cdots+p_k=P\ge1/2$.

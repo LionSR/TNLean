@@ -143,7 +143,6 @@ of a gapped chain combines them with the factorization of
     \label{thm:hastings_mixture_tail}
     \lean{TNLean.MPS.AreaLaw.Hastings.one_sub_kyFanNorm_le_of_schmidtRank_mixture}
     \leanok
-    \uses{thm:hastings_schmidt_overlap_tail}
     Let $\Psi$ be a unit bipartite vector with reduced density matrix
     $\rho_\Psi$, let $K$ be a natural number and $\eta\ge0$, and let
     $w_1,\dots,w_r\ge0$ and $\psi_1,\dots,\psi_r$ be vectors of Schmidt rank at
@@ -152,6 +151,7 @@ of a gapped chain combines them with the factorization of
     $1-\|\rho_\Psi\|_{(K)}\le\eta$.
 \end{theorem}
 \begin{proof}\leanok
+    \uses{thm:hastings_schmidt_overlap_tail}
     If $K$ is at least the dimension of the first factor, then
     $\|\rho_\Psi\|_{(K)}=\operatorname{tr}\rho_\Psi=1$. Otherwise
     Theorem~\ref{thm:hastings_schmidt_overlap_tail} gives
@@ -188,6 +188,7 @@ of a gapped chain combines them with the factorization of
     \cite[Lemma~2]{Hastings2007AreaLaw}, lines 321--322.
 \end{theorem}
 \begin{proof}\leanok
+    \uses{thm:chain_cut_rank_growth}
     Write $C_\psi$ for the coefficient matrix of $\psi$ in
     $\mathcal H_1\otimes\mathcal H_2$. Then
     \begin{align}
@@ -233,8 +234,7 @@ of a gapped chain combines them with the factorization of
     is equation \texttt{bootstrap}.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:hastings_geometric_tail_entropy, thm:hastings_schmidt_overlap_tail,
-        thm:hastings_mixture_tail}
+    \uses{thm:hastings_geometric_tail_entropy, thm:hastings_mixture_tail}
     At each such scale Theorem~\ref{thm:hastings_mixture_tail} bounds the mass of the Schmidt coefficients beyond the first
     $kD^{2s}$ by $ce^{-2s/\xi'}$, which is equation \texttt{constraint}. Let $m'$ be the least
     natural number with $ce^{-2m'/\xi'}\le1$, so that $2m'+2\le\xi'\ln c+4$. The
@@ -262,8 +262,9 @@ of a gapped chain combines them with the factorization of
     \lean{TNLean.MPS.AreaLaw.Hastings.regionEntropy_interval_eq}
     \leanok
     \uses{def:chain_model}
-    For a vector $\Omega$ on the chain of $L$ sites and a cut $j$, the reduced
-    density matrix of $|\Omega\rangle\langle\Omega|$ on the first $j$ sites is
+    For a vector $\Omega$ on the chain of $L$ sites and a cut $j$, the partial
+    trace of $|\Omega\rangle\langle\Omega|$ over the sites after the first $j$,
+    an unnormalized reduced operator of trace $\|\Omega\|^2$, is
     $C_\Omega C_\Omega^\dagger$ for the coefficient matrix $C_\Omega$ across
     the cut, so its entropy is the entropy of $C_\Omega C_\Omega^\dagger$.
 \end{theorem}
@@ -295,9 +296,11 @@ of a gapped chain combines them with the factorization of
     \leanok
     \uses{def:chain_model}
     Let $\Omega$ be a unit vector on the chain of $L$ sites with local
-    dimension $q\ge1$, let $j$ be a cut, and assume the approximate
-    factorization of Theorem~\ref{thm:hastings_bootstrap_chain_stage} with
-    constant $C_1$ and decay length $\xi'$. Let $w_1,\dots,w_r\ge0$ and
+    dimension $q\ge1$, let $j$ be a cut, and let $\xi'$ and $C_1$ be real.
+    Suppose that for every natural number $m$ with $j+m\le L$ there are
+    operators $O_B$ supported on the first $j+m$ sites, $O_L$ supported on the
+    first $j$ sites and $O_R$ supported on the sites after them, with
+    $\|O_BO_LO_R-|\Omega\rangle\langle\Omega|\|\le C_1e^{-m/\xi'}$. Let $w_1,\dots,w_r\ge0$ and
     $\psi_1,\dots,\psi_r$ be vectors of Schmidt rank at most $k\ge1$ across the
     cut, with $\sum_iw_i\|\psi_i\|^2=1$ and
     $P=\sum_iw_i|\langle\psi_i,\Omega\rangle|^2>0$. If $s$ is a natural number
@@ -361,8 +364,9 @@ of a gapped chain combines them with the factorization of
     Let $\rho$ be a density matrix of unit trace that is a mixture of pure
     states of Schmidt rank at most $k$ across the cut between sites $j$ and
     $j+1$, with $\langle\Psi_0,\rho\Psi_0\rangle=P>0$,
-    where $\Psi_0$ is the ground state of a Hamiltonian satisfying the finite
-    range, finite interaction strength and gap conditions. Then
+    where $\Psi_0$ is the unique ground state of a Hamiltonian with
+    finite-range interactions of bounded strength and a spectral gap
+    $\Delta E>0$ above the ground energy. Then
     \begin{align}
         S(\rho^0_{1,j})\le\ln k+\xi'\ln\bigl(2C_1(\xi)^2/P\bigr)\ln D+F(\xi',D).
     \end{align}
