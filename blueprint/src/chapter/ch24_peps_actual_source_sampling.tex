@@ -39,7 +39,7 @@ positive; its tensor-network representation is proved separately.
 \begin{definition}[Exterior physical coordinates]
     \label{def:peps_exterior_family_physical_basis}
     \uses{def:peps_family_physical_output,thm:peps_affected_original_dimensions}
-    \lean{TNLean.PEPS.PairEffect.exteriorFamilyPhysicalBasis}
+    \lean{TNLean.Lattice.PartyCircuit.exteriorFamilyPhysicalBasis}
     \leanok
     Let $P$ be the finite set of parties, listed without repetition, and
     let party $p$ have physical dimension $d_p$. For $A\subseteq P$, the
@@ -51,7 +51,7 @@ positive; its tensor-network representation is proved separately.
 
 \begin{theorem}[Exterior physical dimension]
     \label{thm:peps_exterior_family_physical_dimension}
-    \lean{TNLean.PEPS.PairEffect.finrank_exteriorFamilyPhysicalLayout}
+    \lean{TNLean.Lattice.PartyCircuit.finrank_exteriorFamilyPhysicalLayout}
     \leanok
     The dimension of the exterior physical space after the two
     party identifications is $\prod_{p\notin A}d_p$.
@@ -278,7 +278,7 @@ positive; its tensor-network representation is proved separately.
 
 \begin{theorem}[Power bounds for the sample count]
     \label{thm:peps_source_sampling_polynomial}
-    \lean{TNLean.PEPS.Approximation.sourceSamplingCount_lt_of_power_bounds,TNLean.PEPS.Approximation.sourceSamplingCount_lt_inv_pow,TNLean.PEPS.Approximation.sourceSamplingCount_lt_of_gate_power_bounds}
+    \lean{TNLean.Lattice.Compression.sourceSamplingCount_lt_of_power_bounds,TNLean.Lattice.Compression.sourceSamplingCount_lt_inv_pow,TNLean.Lattice.Compression.sourceSamplingCount_lt_of_gate_power_bounds}
     \leanok
     Let $L\geq1$, $Q\geq0$, and $\varepsilon>0$, and suppose
     \[
@@ -342,8 +342,8 @@ positive; its tensor-network representation is proved separately.
 \end{proof}
 \begin{theorem}[Polynomial stack length at the per-gate error]
     \label{thm:peps_effect_stack_polynomial}
-    \lean{TNLean.PEPS.PairEffect.stackLength_sourceGateBudget_eq}
-    \lean{TNLean.PEPS.PairEffect.stackLength_sourceGateBudget_lt_of_power_bounds}
+    \lean{TNLean.Lattice.PartyCircuit.stackLength_sourceGateBudget_eq}
+    \lean{TNLean.Lattice.PartyCircuit.stackLength_sourceGateBudget_lt_of_power_bounds}
     \leanok
     Let $r,N$ be nonnegative integers, let $S\in\mathbb R$, and let $\varepsilon>0$.
     For the per-gate error $\delta=\varepsilon/(8\max(1,N))$, the stack length is
@@ -369,7 +369,7 @@ positive; its tensor-network representation is proved separately.
 
 \begin{theorem}[Polynomial number of replacement monomials]
     \label{thm:peps_effect_replacement_polynomial}
-    \lean{TNLean.PEPS.PairEffect.replacementMonomialBound_le_of_power_bounds}
+    \lean{TNLean.Lattice.PartyCircuit.replacementMonomialBound_le_of_power_bounds}
     \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.card_branchLabels_replacement_le_power}
     \leanok
     Under the preceding power bounds, let $K$ be a nonnegative integer satisfying

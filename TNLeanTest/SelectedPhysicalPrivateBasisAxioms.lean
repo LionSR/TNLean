@@ -16,15 +16,15 @@ set_option linter.hashCommand false
 
 run_cmd do
   let decls := #[
-    ``TNLean.PEPS.PairEffect.selectedPhysicalPrivateBasis,
-    ``TNLean.PEPS.PairEffect.selectedPhysicalPrivateBasis_apply_heq,
-    ``TNLean.PEPS.PairEffect.selectedFamilyPhysicalConfigEquiv,
-    ``TNLean.PEPS.PairEffect.partyProductMatrix_selectedFamilyPhysicalConfig,
-    ``TNLean.PEPS.PairEffect.selectedPartyOrder,
-    ``TNLean.PEPS.PairEffect.selectedPartyOrder_nodup,
-    ``TNLean.PEPS.PairEffect.mem_selectedPartyOrder,
-    ``TNLean.PEPS.PairEffect.selectedFamilyPhysicalPartyBasis_grouped,
-    ``TNLean.PEPS.PairEffect.selectedPhysicalPrivateBasis_grouped]
+    ``TNLean.Lattice.PartyCircuit.selectedPhysicalPrivateBasis,
+    ``TNLean.Lattice.PartyCircuit.selectedPhysicalPrivateBasis_apply_heq,
+    ``TNLean.Lattice.PartyCircuit.selectedFamilyPhysicalConfigEquiv,
+    ``TNLean.Lattice.PartyCircuit.partyProductMatrix_selectedFamilyPhysicalConfig,
+    ``TNLean.Lattice.PartyCircuit.selectedPartyOrder,
+    ``TNLean.Lattice.PartyCircuit.selectedPartyOrder_nodup,
+    ``TNLean.Lattice.PartyCircuit.mem_selectedPartyOrder,
+    ``TNLean.Lattice.PartyCircuit.selectedFamilyPhysicalPartyBasis_grouped,
+    ``TNLean.Lattice.PartyCircuit.selectedPhysicalPrivateBasis_grouped]
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
   let env ← Lean.getEnv
   for decl in decls do

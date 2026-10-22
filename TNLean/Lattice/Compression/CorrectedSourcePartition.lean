@@ -31,7 +31,7 @@ noncomputable section
 open scoped TensorProduct
 open ContinuousLinearMap
 namespace TNLean.Lattice.PartyCircuit.SourceCircuit
-open TNLean.PEPS.Approximation
+open TNLean.Lattice.Compression
 open TNLean.Lattice.PartyCircuit.SourceInventory
 variable {P : Type}
 
@@ -132,7 +132,7 @@ private theorem isTensorPartitioned_selected {Q : Type} (f : Q → Bool)
 end TNLean.Lattice.PartyCircuit.Word
 
 namespace TNLean.Lattice.PartyCircuit.SourceCircuit
-open TNLean.PEPS.Approximation
+open TNLean.Lattice.Compression
 open TNLean.Lattice.PartyCircuit.SourceInventory
 variable {P : Type}
 

@@ -1257,6 +1257,15 @@ fourth entry of the shell count, which is omitted; the interval constant and
 the area-law constant of Theorem A change accordingly, all at the level of
 absolute constants.
 
+### One-dimensional area law after Hastings: the Schmidt tail constant
+
+[hastings07_schmidt_tail_constant.tex](hastings07_schmidt_tail_constant.tex)
+(local correction, resolved) records that the polynomial decay of the Schmidt
+tail in Hastings' section on matrix product states (arXiv:0705.2024v4,
+eq. `est`) holds with the constant `e^{2/ξ'}` rather than the printed `e^{1/ξ'}`,
+because the geometric bound of eq. `constraint` is available only at even
+exponents `2m`, and that the printed exponent lacks its minus sign.
+
 ## Polynomial PEPS: zero-floor maximizing filters
 
 - [`polypeps_square_zero_floor_optimizer_scope.tex`](polypeps_square_zero_floor_optimizer_scope.tex)

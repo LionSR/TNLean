@@ -21,7 +21,7 @@ Source: polynomial-PEPS manuscript (September 24, 2026), Theorem 5.2,
 
 noncomputable section
 namespace TNLean
-open TNLean.Lattice.PartyCircuit TNLean.PEPS.PairEffect
+open TNLean.Lattice.PartyCircuit
 variable {P : Type}
 
 namespace Lattice.PartyCircuit.Layout
@@ -52,7 +52,7 @@ theorem atParty_some_mapOwner_all (a : Layout P) (p : {_p : P // true = true}) :
 
 end Lattice.PartyCircuit.Layout
 
-namespace PEPS.PairEffect
+namespace Lattice.PartyCircuit
 /-- The original physical coordinate at a selected party, with a singleton
 coordinate for the empty exterior memory. No dimension is padded.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 137–151 and 565–588. -/
@@ -111,5 +111,5 @@ theorem selectedFamilyPhysicalPartyBasis_some_apply_heq
     (familyPhysicalPartyBasis d ps hn p.val (hc p.val) x)
   exact (Layout.memCongr_apply_heq _ _).trans (Layout.mapOwnerIso_apply_heq _ _ _)
 
-end PEPS.PairEffect
+end Lattice.PartyCircuit
 end TNLean
