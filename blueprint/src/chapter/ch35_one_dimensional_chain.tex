@@ -1912,9 +1912,10 @@ for an arbitrary finite set of sites and are instantiated here directly.
     \label{thm:domain_interval_neighborhood}
     \lean{TNLean.MPS.AreaLaw.domainNeighborhood_eq_interval_of_ordConnected,
         TNLean.MPS.AreaLaw.domainNeighborhood_interval_eq}\leanok
+    \uses{def:domain_model}
     In the setting of Definition~\ref{def:domain_model}, identify the domain
     with its increasing labels $V=\{0,\ldots,|\Lambda|-1\}$.
-    For $m\in\mathbb N$ and $I\subseteq V$, put
+    For $m\in\N$ and $I\subseteq V$, put
     \begin{align}
         N_m(I) & =\bigcup_{x\in I}\{y\in V:d_\Lambda(x,y)\le m\}.\notag
     \end{align}
