@@ -24,16 +24,16 @@ namespace TNLean
 open TNLean.Lattice.PartyCircuit
 variable {P : Type}
 
-namespace PEPS.PairEffect
+namespace Lattice.PartyCircuit
 private theorem eval_localEndpoint_tmul (r : Reg P)
     (A : r.space →L[ℂ] r.space) (tail : Layout P) (x : r.space) (y : Mem tail) :
     (Word.localEndpoint r A tail).eval (x ⊗ₜ[ℂ] y) = A x ⊗ₜ[ℂ] y := by
   simp [Word.localEndpoint, Word.eval, appendIso, isoL_apply,
     LinearIsometryEquiv.symm_lTensor]
 
-end PEPS.PairEffect
+end Lattice.PartyCircuit
 namespace Lattice.PartyCircuit.SourceInventory
-open TNLean.PEPS.PairEffect
+open TNLean.Lattice.PartyCircuit
 private theorem slotVector_cons_eq (r : PairSource P) (R : SourceInventory P)
     (U V : Fin (r :: R).length → HSpace) (η : ∀ i, U i ⊗[ℂ] V i) :
     slotVector (r :: R) U V η =

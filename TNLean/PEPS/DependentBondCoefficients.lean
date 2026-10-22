@@ -22,6 +22,7 @@ Source: SCP10, arXiv:1001.3807, Lemma 4.6 and Theorem 5.5, lines 1488–1513.
 noncomputable section
 open scoped BigOperators Matrix
 namespace TNLean.PEPS.DependentBondNetwork
+open TNLean.Lattice.DependentBondNetwork
 
 variable {Vertex Edge : Type*} (tail head : Edge → Vertex) (D : Edge → Type*)
 

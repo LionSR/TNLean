@@ -52,8 +52,8 @@ def HasSchmidtOutput {I : Type} [Fintype I] (a b : Layout Bool)
 end TNLean.Lattice.PartyCircuit.Word
 
 namespace TNLean.Lattice.PartyCircuit.Word
-open TNLean.PEPS.PairEffect
-open TNLean.Lattice.PartyCircuit.SourceInventory TNLean.PEPS.Approximation
+open TNLean.Lattice.PartyCircuit
+open TNLean.Lattice.PartyCircuit.SourceInventory TNLean.Lattice.Compression
 variable {P : Type} {a b : Layout P}
 /-- Partitioning commutes with the canonical identification of equal register lists. -/
 private theorem partitionIso_memCongr_symm {Q : Type} (f : Q → Bool)

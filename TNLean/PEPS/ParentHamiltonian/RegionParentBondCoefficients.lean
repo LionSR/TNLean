@@ -26,7 +26,8 @@ Source: SCP10, arXiv:1001.3807, Theorems 5.4 and 5.5.
 noncomputable section
 open scoped BigOperators
 namespace TNLean.PEPS
-open DependentBondNetwork
+open TNLean.Lattice
+open DependentBondNetwork TNLean.Lattice.DependentBondNetwork
 
 variable {V : Type*} [Fintype V] [LinearOrder V]
 variable {Γ : SimpleGraph V} [DecidableRel Γ.Adj] {d : ℕ}

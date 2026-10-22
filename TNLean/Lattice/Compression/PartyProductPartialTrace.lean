@@ -14,7 +14,7 @@ Source: polynomial-PEPS, `04-compression.tex`, lines 574–579.
 -/
 
 noncomputable section
-namespace TNLean.PEPS.PairEffect
+namespace TNLean.Lattice.PartyCircuit
 variable {P : Type} [Fintype P] {X E : P → Type}
 variable [∀ p, Fintype (E p)]
 
@@ -31,4 +31,4 @@ theorem partialTraceRight_partyProductMatrix
   change (∑ i : (p : P) → E p, ∏ p, M p (x p, i p) (y p, i p)) =
     ∏ p, ∑ i : E p, M p (x p, i) (y p, i)
   rw [Fintype.prod_sum]
-end TNLean.PEPS.PairEffect
+end TNLean.Lattice.PartyCircuit

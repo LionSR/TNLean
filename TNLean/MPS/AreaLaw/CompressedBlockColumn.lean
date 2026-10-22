@@ -41,9 +41,9 @@ Remark 5.3, `04-compression.tex`, lines 137–175 and 602–611; Lemma 8.1,
 noncomputable section
 open scoped BigOperators Matrix
 
-namespace TNLean.PEPS.Approximation.DistributedOperatorContraction
+namespace TNLean.Lattice.Compression.DistributedOperatorContraction
 
-open TNLean.PEPS.DependentBondNetwork
+open TNLean.Lattice.DependentBondNetwork
 
 private theorem rank_flattening_normalize_eq
     {V : Type*} [Fintype V] [DecidableEq V]
@@ -126,13 +126,13 @@ theorem exists_useful_column_of_sub_pure_le
     rw [hcoords]
     exact rank_flattening_contractedOperator_column_le gates participants root hroot Label k c T z S
 
-end TNLean.PEPS.Approximation.DistributedOperatorContraction
+end TNLean.Lattice.Compression.DistributedOperatorContraction
 
 namespace TNLean.MPS.AreaLaw.ChainSweep
 
-open TNLean.PEPS TNLean.PEPS.DependentBondNetwork
-open TNLean.PEPS.PairEffect TNLean.PEPS.Approximation
-open TNLean.PEPS.Approximation.DistributedOperatorContraction
+open TNLean.Lattice TNLean.Lattice.DependentBondNetwork
+open TNLean.Lattice.PartyCircuit TNLean.Lattice.Compression
+open TNLean.Lattice.Compression.DistributedOperatorContraction
 
 private theorem card_crossing_subtype_eq_prefixCrossingLinks
     {L w : ℕ} {Gate : Type} [DecidableEq Gate]
