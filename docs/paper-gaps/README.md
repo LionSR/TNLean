@@ -1274,6 +1274,14 @@ the appendix of Hastings (arXiv:0705.2024v4, lines 816–828) is printed as
 `‖M_L − H_L‖ ≤ O(ΔE⁻¹J²e^{−l/3ξ})`, while the argument needs and proves
 the distance from `M_L` to the filtered `H_L`, with `M_L − H_L` supported near the cut.
 
+### One-dimensional area law after Hastings: the constant of the boundary commutator
+
+[hastings07_commutator_constant.tex](hastings07_commutator_constant.tex)
+(false as printed, resolved) records that the printed bound `‖[H, H_L]‖ ≤ J²` in the
+appendix of Hastings (arXiv:0705.2024v4, line 794) fails already for nearest-neighbour
+terms (`‖[Z, X]‖ = 2` with `J = 1`), and that the bound proved for terms of range `R` is an
+explicit constant depending only on `R`, times `J²`.
+
 ## Polynomial PEPS: zero-floor maximizing filters
 
 - [`polypeps_square_zero_floor_optimizer_scope.tex`](polypeps_square_zero_floor_optimizer_scope.tex)
