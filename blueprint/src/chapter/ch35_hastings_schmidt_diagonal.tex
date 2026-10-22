@@ -1,0 +1,74 @@
+\section{Correlations of Schmidt-diagonal operators in Hastings' area law}
+\label{sec:hastings_schmidt_diagonal}
+
+% Hastings, arXiv:0705.2024v4, law16.tex, lines 627--692 (Lemma 3,
+% equation fwdback).
+
+Lemma~3 of \cite{Hastings2007AreaLaw} bounds the correlation between an
+operator that is diagonal in the Schmidt basis across a cut and an operator
+supported away from a buffer around the cut. Its proof uses only the
+approximate factorization of the ground-state projector supplied by Lemma~1.
+The two statements below take that factorization as a hypothesis, with an
+error $\varepsilon$ that is left free.
+
+\begin{theorem}[The operator estimate behind Lemma~3]
+    \label{thm:hastings_schmidt_diagonal_operator}
+    \lean{TNLean.MPS.AreaLaw.Hastings.norm_inner_sub_le_of_projector_factorization}
+    \leanok
+    Let $\Omega$ be a unit vector and $P=|\Omega\rangle\langle\Omega|$. Let
+    $O_B,O_L,O_R$ be positive semidefinite operators of norm at most one with
+    $\|O_BO_LO_R-P\|\le\varepsilon$, and let $A,B_L,B_R$ be operators of norm
+    at most one. Suppose that $O_B$ commutes with $A$, $O_R$ with $B_L$, $B_R$
+    with $O_L$ and $O_L$ with $O_R$, and that $B_L\Omega=B_R\Omega$. Then
+    \begin{align}
+        \bigl|\langle\Omega,AB_L\Omega\rangle-\langle\Omega,A\Omega\rangle
+        \langle\Omega,B_L\Omega\rangle\bigr|
+         & \le3\sqrt{2\varepsilon}+\varepsilon.
+        \notag
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    Since $\|O_BO_LO_R\Omega-\Omega\|\le\varepsilon$ and the factors are
+    positive contractions, $\|(O_B-1)\Omega\|$ and $\|(O_R-1)\Omega\|$ are at
+    most $\sqrt{2\varepsilon}$. The chain of triangle inequalities of the
+    source then moves $O_B$ past $A$, replaces $B_L\Omega$ by $B_R\Omega$,
+    moves $B_R$ past $O_L$ and $O_R$ past $B_L$, and replaces
+    $O_BO_LO_R$ by $P$, at a total cost of $3\sqrt{2\varepsilon}+\varepsilon$.
+\end{proof}
+
+\begin{theorem}[Lemma~3 on the chain, with the factorization as hypothesis]
+    \label{thm:hastings_schmidt_diagonal_chain}
+    \lean{TNLean.MPS.AreaLaw.Hastings.norm_inner_mul_sub_le_of_factorization}
+    \leanok
+    \uses{thm:hastings_schmidt_diagonal_operator}
+    Let $\Omega$ be a unit vector on a chain of $L$ sites, with Schmidt
+    decomposition
+    $\Omega=\sum_\alpha a_\alpha\,\psi_L(\alpha)\otimes\psi_R(\alpha)$ across
+    the cut after $j$ sites. Let
+    $B_L=\sum_\alpha O(\alpha)\,|\psi_L(\alpha)\rangle\langle\psi_L(\alpha)|
+        \otimes1$ with $|O(\alpha)|\le1$, and let $A$ be an operator of norm
+    at most one supported away from the sites $j-l+1,\dots,j+l$. Suppose there
+    are positive semidefinite operators $O_B,O_L,O_R$ of norm at most one,
+    supported on those $2l$ sites, on the first $j$ sites and on the remaining
+    sites respectively, with
+    $\|O_BO_LO_R-|\Omega\rangle\langle\Omega|\|\le\varepsilon$. Then
+    \begin{align}
+        \bigl|\langle\Omega,AB_L\Omega\rangle-\langle\Omega,A\Omega\rangle
+        \langle\Omega,B_L\Omega\rangle\bigr|
+         & \le3\sqrt{2\varepsilon}+\varepsilon.
+        \notag
+    \end{align}
+    This is a stage of the argument: the factorization is a hypothesis. With
+    the factorization of Lemma~1 for a gapped chain it is Lemma~3 of
+    \cite{Hastings2007AreaLaw}, equation (fwdback), with the error of that
+    factorization in place of $\varepsilon$.
+\end{theorem}
+\begin{proof}\leanok
+    The operator $B_R=1\otimes\sum_\alpha O(\alpha)\,
+        |\psi_R(\alpha)\rangle\langle\psi_R(\alpha)|$ satisfies
+    $B_L\Omega=B_R\Omega$ by the Schmidt decomposition, and both $B_L$ and
+    $B_R$ have norm at most one because the Schmidt vectors are orthonormal.
+    Operators supported on disjoint sets of sites commute, so the supports
+    give the four commutations of
+    Theorem~\ref{thm:hastings_schmidt_diagonal_operator}, which then applies.
+\end{proof}
