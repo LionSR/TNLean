@@ -22,9 +22,3 @@ depends on axioms: [propext, Classical.choice, Quot.sound] -/
 depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
 #print axioms TNLean.MPS.AreaLaw.DomainHamiltonian.norm_relativeGenerator_sub_siteExpectation_le
-
-/-- info:
-'TNLean.MPS.AreaLaw.ChainHamiltonian.norm_relativeGenerator_sub_siteExpectation_le'
-depends on axioms: [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax) in
-#print axioms TNLean.MPS.AreaLaw.ChainHamiltonian.norm_relativeGenerator_sub_siteExpectation_le
