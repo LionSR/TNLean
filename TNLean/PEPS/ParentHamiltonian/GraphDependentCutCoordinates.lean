@@ -23,7 +23,7 @@ exterior multiplicity.
 noncomputable section
 open scoped BigOperators
 namespace TNLean.PEPS
-open DependentBondNetwork
+open TNLean.Lattice.DependentBondNetwork
 
 variable {V : Type*} [Fintype V] [LinearOrder V]
 variable {Γ : SimpleGraph V} [DecidableRel Γ.Adj] {d : ℕ}

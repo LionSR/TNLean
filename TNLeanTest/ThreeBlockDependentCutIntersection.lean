@@ -14,7 +14,7 @@ and noncanonical, non-surjective physical maps. Its exterior coordinates are
 not restricted to group-labelled bond matrices.
 -/
 
-open TNLean.PEPS TNLean.PEPS.DependentBondNetwork
+open TNLean.PEPS TNLean.PEPS.DependentBondNetwork TNLean.Lattice.DependentBondNetwork
 open TNLean.PEPS.ThreeBlockDependent
 
 example {G : Type*} [Group G] [Finite G]

@@ -41,7 +41,7 @@ These proofs are newly written from the paper's mathematical argument. No OpenAI
 Lean code is copied or adapted.
 -/
 
-namespace TNLean.PEPS.Approximation
+namespace TNLean.Lattice.Compression
 
 variable {Party Gate : Type*} [DecidableEq Party] [DecidableEq Gate]
 
@@ -342,4 +342,4 @@ theorem card_incidentDistributedLinks_le (gates : Finset Gate)
   card_incidentDistributedLinks_le_of_arity_lifetime gates participants root b b
     hroot harity p hlifetime
 
-end TNLean.PEPS.Approximation
+end TNLean.Lattice.Compression

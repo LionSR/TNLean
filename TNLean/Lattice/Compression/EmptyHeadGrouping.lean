@@ -16,7 +16,7 @@ Theorem 5.2, `04-compression.tex`, lines 565–588.
 
 noncomputable section
 open scoped TensorProduct
-namespace TNLean.PEPS.PairEffect
+namespace TNLean.Lattice.PartyCircuit
 open TNLean.Lattice.PartyCircuit
 
 /-- If the head owns no register, its grouping factor is the scalar unit.
@@ -62,4 +62,4 @@ theorem groupByPartyIso_cons_of_owners_mem_tail_heq {Q : Type} (q : Q)
   exact (heq_of_eq hfull).trans (Layout.memCongr_tmul_heq hhead.symm rfl (1 : ℂ)
     (groupByPartyIso qs a (List.nodup_cons.mp hn).2 ha x))
 
-end TNLean.PEPS.PairEffect
+end TNLean.Lattice.PartyCircuit

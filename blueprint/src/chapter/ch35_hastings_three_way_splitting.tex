@@ -1,0 +1,144 @@
+\section{The three-way splitting in Hastings' approximate ground-state projector}
+\label{sec:hastings_three_way_splitting}
+
+% Hastings, arXiv:0705.2024v4, law16.tex, lines 763--790 (step one of the
+% proof of Lemma 1); setting at lines 82--91, statement at lines 246--267.
+
+The proof of Lemma~1 of \cite{Hastings2007AreaLaw} begins by splitting the
+Hamiltonian at a cut into a left part, a buffer part and a right part, and by
+centering each part in the ground vector. This section carries out that step
+for a finite-range Hamiltonian of range $R$ on the chain of $L$ sites. The
+source works with nearest-neighbour terms and a buffer at distance $l/3$ from
+the cut; here the buffer width is an arbitrary natural number $m$. Norms are
+operator norms.
+
+\begin{definition}[Three-way splitting at a cut]
+    \label{def:hastings_three_way_splitting}
+    \lean{
+        TNLean.MPS.AreaLaw.Hastings.leftSupports,
+        TNLean.MPS.AreaLaw.Hastings.bufferSupports,
+        TNLean.MPS.AreaLaw.Hastings.rightSupports,
+        TNLean.MPS.AreaLaw.Hastings.sum_supports_eq_left_add_buffer_add_right,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.termSum,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.termSum_isHermitian,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.leftPart,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.bufferPart,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.rightPart,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.leftPart_isHermitian,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.bufferPart_isHermitian,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.rightPart_isHermitian,
+        TNLean.MPS.AreaLaw.Hastings.groundCentered,
+        TNLean.MPS.AreaLaw.Hastings.groundCentered_add,
+        Matrix.IsHermitian.groundCentered,
+        Matrix.IsHermitian.ofReal_re_inner
+    }
+    \leanok
+    \uses{def:chain_model}
+    Let $H=\sum_Xh_X$ be a finite-range Hamiltonian of range $R$ on the chain
+    of $L$ sites, let $j$ be a cut, so that the sites $i<j$ lie on its left,
+    and let $m$ be a natural number. The \emph{left part} $H_L$ is the sum of
+    the terms $h_X$ with $X\subseteq\{0,\dots,j-m-1\}$, the \emph{right part} $H_R$ is the
+    sum of the terms with $X\subseteq\{j+m,\dots,L-1\}$, and the \emph{buffer part}
+    $H_B$ is the sum of all other terms. Each part is Hermitian. For a vector
+    $\Psi_0$ and a matrix $M$, the \emph{centering} of $M$ in $\Psi_0$ is
+    $\widetilde M=M-\operatorname{Re}\langle\Psi_0,M\Psi_0\rangle\,1$; it is
+    additive in $M$, and Hermitian when $M$ is. For a Hermitian $M$ the
+    expectation $\langle\Psi_0,M\Psi_0\rangle$ is real. These are the operators
+    of \cite[lines 774--782]{Hastings2007AreaLaw}, with $l/3$ replaced by $m$.
+\end{definition}
+
+\begin{theorem}[The splitting is exact]
+    \label{thm:hastings_three_way_splitting_sum}
+    \lean{
+        TNLean.MPS.AreaLaw.ChainHamiltonian.operator_eq_leftPart_add_bufferPart_add_rightPart,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.groundCentered_parts_sum,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.groundCentered_parts_sum_of_eigen,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.isGappedGroundState_groundCentered_parts_sum,
+        TNLean.MPS.AreaLaw.Hastings.inner_groundCentered,
+        TNLean.MPS.AreaLaw.Hastings.groundCentered_of_eigen
+    }
+    \leanok
+    \uses{def:hastings_three_way_splitting}
+    For every cut $j$ and every $m$, $H=H_L+H_B+H_R$. Let $\Psi_0$ be a unit
+    vector with $H\Psi_0=E_0\Psi_0$. Then each centered part has expectation
+    zero in $\Psi_0$, and
+    \begin{align*}
+        \widetilde H_L+\widetilde H_B+\widetilde H_R=H-E_0.
+    \end{align*}
+    If moreover $H-E_0\ge\Delta(1-|\Psi_0\rangle\langle\Psi_0|)$, then
+    $\Psi_0$ is a gapped ground vector of
+    $\widetilde H_L+\widetilde H_B+\widetilde H_R$ with energy zero and the
+    same gap $\Delta$. With the convention of
+    \cite[lines 766--767]{Hastings2007AreaLaw} that the ground energy is zero,
+    this is the identity $H=H_L+H_B+H_R$ for the centered parts of
+    \cite[lines 779--782]{Hastings2007AreaLaw}.
+\end{theorem}
+\begin{proof}\leanok
+    Every support is left, right or buffer, and no support is both left and
+    right, since a support is nonempty and $j-m\le j+m$. Summing the terms
+    over the three classes gives $H=H_L+H_B+H_R$. Centering is additive, so
+    the centered parts sum to $H-\operatorname{Re}\langle\Psi_0,H\Psi_0\rangle$,
+    and $\langle\Psi_0,H\Psi_0\rangle=E_0$. The expectation of
+    $\widetilde M$ is $\langle\Psi_0,M\Psi_0\rangle-
+        \operatorname{Re}\langle\Psi_0,M\Psi_0\rangle=0$ for a Hermitian $M$.
+    The gap condition is unchanged, since the shifted operator differs from
+    $H$ by the scalar $E_0$.
+\end{proof}
+
+\begin{theorem}[Supports of the three parts]
+    \label{thm:hastings_three_way_splitting_supports}
+    \lean{
+        TNLean.MPS.AreaLaw.ChainHamiltonian.isSupportedOn_termSum,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.isSupportedOn_leftPart,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.isSupportedOn_rightPart,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.isSupportedOn_bufferPart,
+        TNLean.MPS.AreaLaw.Hastings.subset_window_of_mem_bufferSupports,
+        Entropy.IsSupportedOn.groundCentered
+    }
+    \leanok
+    \uses{def:hastings_three_way_splitting}
+    The left part acts as the identity off $\{0,\dots,j-m-1\}$, the right part off
+    $\{j+m,\dots,L-1\}$, and the buffer part off the window $\{j-m-R,\dots,j+m+R-1\}$. Centering
+    preserves each of these supports. In particular the left and right parts
+    lie at distance at least $m$ from the cut, for every $m$, as the parts
+    $H_L$ and $H_R$ of \cite[lines 774--778]{Hastings2007AreaLaw} lie at
+    distance $l/3$.
+\end{theorem}
+\begin{proof}\leanok
+    A sum of terms supported in a set is supported in that set, and the
+    identity is supported everywhere. A buffer support $X$ contains a site
+    $x\ge j-m$ and a site $y<j+m$; since $X$ has diameter at most $R$, every
+    site $z\in X$ satisfies $j-m-R\le z<j+m+R$.
+\end{proof}
+
+\begin{theorem}[Norm of the buffer part]
+    \label{thm:hastings_three_way_splitting_norm}
+    \lean{
+        TNLean.MPS.AreaLaw.ChainHamiltonian.norm_termSum_le,
+        TNLean.MPS.AreaLaw.card_supports_containing_le,
+        TNLean.MPS.AreaLaw.Hastings.card_bufferSupports_le,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.norm_bufferPart_le,
+        TNLean.MPS.AreaLaw.Hastings.norm_groundCentered_le,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.norm_groundCentered_bufferPart_le
+    }
+    \leanok
+    \uses{def:hastings_three_way_splitting,
+        thm:hastings_three_way_splitting_supports}
+    A sum of $k$ terms has norm at most $kJ$. At most $2^{2R+1}$ supports of
+    range $R$ contain a given site, and there are at most
+    $2(m+R)\,2^{2R+1}$ buffer supports. Hence, for $J\ge0$,
+    \begin{align*}
+        \|H_B\|\le2(m+R)\,2^{2R+1}J,
+    \end{align*}
+    linearly in the buffer width. For a unit vector $\Psi_0$, centering at
+    most doubles the norm, so
+    $\|\widetilde H_B\|\le4(m+R)\,2^{2R+1}J$.
+\end{theorem}
+\begin{proof}\leanok
+    The first bound is the triangle inequality. A support containing a site
+    $x$ lies in the $2R+1$ sites within distance $R$ of $x$, which have at most
+    $2^{2R+1}$ subsets. Every buffer support contains a site of the window
+    $\{j-m-R,\dots,j+m+R-1\}$, which has at most $2(m+R)$ sites. Finally
+    $|\operatorname{Re}\langle\Psi_0,M\Psi_0\rangle|\le\|M\|$ for a unit
+    vector $\Psi_0$, and the identity has norm at most one.
+\end{proof}

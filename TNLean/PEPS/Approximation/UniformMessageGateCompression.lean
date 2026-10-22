@@ -32,9 +32,9 @@ Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 32–43,
 
 noncomputable section
 open scoped Matrix ComplexConjugate NNReal
-namespace TNLean.PEPS.PairEffect.GateMapConstruction
+namespace TNLean.Lattice.PartyCircuit.GateMapConstruction
 open TNLean.Lattice.PartyCircuit
-open TNLean.PEPS.Approximation
+open TNLean.Lattice.Compression
 attribute [local instance] Classical.propDecidable
 
 /-- Original message-containing expansions available at every fixed
@@ -207,4 +207,4 @@ theorem exists_uniform_message_sampled_network
   exact exists_uniform_approximate_sampled_network size hsize P C₀ b n d C_N C_D
     hN₀ hphysical₀ harity₀ hlifetime₀ hExpandedAvailability p hp
 
-end TNLean.PEPS.PairEffect.GateMapConstruction
+end TNLean.Lattice.PartyCircuit.GateMapConstruction

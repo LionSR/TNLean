@@ -32,9 +32,9 @@ Independently formalized; no upstream Lean proof text reused.
 noncomputable section
 open MeasureTheory QICLean.ComplexGaussian
 open scoped Matrix ComplexConjugate NNReal
-open TNLean.PEPS.Approximation
+open TNLean.Lattice.Compression
 namespace TNLean.Lattice.PartyCircuit.EffectCircuit
-open TNLean.PEPS.PairEffect
+open TNLean.Lattice.PartyCircuit
 variable {P : Type} [Fintype P]
 
 open Classical in

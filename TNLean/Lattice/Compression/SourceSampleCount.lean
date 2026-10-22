@@ -26,7 +26,7 @@ and 568–588.
 
 noncomputable section
 namespace TNLean.Lattice.PartyCircuit.SourceCircuit
-open TNLean.PEPS.Approximation
+open TNLean.Lattice.Compression
 variable {P : Type}
 
 open Classical in

@@ -10,7 +10,7 @@ import Lean.Util.CollectAxioms
 /-! # Axiom check for uniform operator networks with original message-containing expansions -/
 
 set_option linter.hashCommand false
-open TNLean.PEPS.PairEffect.GateMapConstruction
+open TNLean.Lattice.PartyCircuit.GateMapConstruction
 
 run_cmd do
   let decl := ``exists_uniform_message_sampled_network

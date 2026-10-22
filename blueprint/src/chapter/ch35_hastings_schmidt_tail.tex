@@ -1,0 +1,83 @@
+\section{Decay of the Schmidt tail in Hastings' area law}
+\label{sec:hastings_schmidt_tail}
+
+% Hastings, arXiv:0705.2024v4, law16.tex, lines 540--552 (section on matrix
+% product states, equations constraint and est).
+
+\begin{theorem}[The Schmidt-tail constraint]
+    \label{thm:hastings_schmidt_tail_constraint}
+    \lean{TNLean.MPS.AreaLaw.Hastings.one_sub_kyFanNorm_le_of_factorization}
+    \leanok
+    Let $\Omega$ be a unit vector on a chain of $L$ sites of local dimension
+    $q\ge1$, let $j$ be a cut and $\rho$ the marginal of $\Omega$ on the first
+    $j$ sites, with eigenvalues $p_1\ge p_2\ge\dots$. Suppose that for every
+    $m$ with $j+m\le L$ there are operators $O_B$ supported on the first
+    $j+m$ sites, $O_L$ supported on the first $j$ sites and $O_R$ supported
+    on the remaining sites with
+    $\|O_BO_LO_R-|\Omega\rangle\langle\Omega|\|\le C_1e^{-m/\xi'}$. If
+    $k\ge1$ and $p_1+\cdots+p_k\ge1/2$, then for every $m$ and every
+    $n\ge kq^{2m}$,
+    \begin{align}
+        \sum_{a>n}p_a & \le 4C_1^2e^{-2m/\xi'}.
+        \notag
+    \end{align}
+    This is a stage of the argument: the weight of the $k$ leading
+    eigenvalues is a hypothesis. With $k\ge\exp(2S(\rho))/2$ it is the bound
+    that opens the section on matrix product states of
+    \cite{Hastings2007AreaLaw}, and the conclusion is its constraint on the
+    Schmidt tail with $P=1/2$.
+\end{theorem}
+\begin{proof}\leanok
+    Let $E$ project the first $j$ sites onto the eigenvectors of $p_1,\dots,p_k$
+    and put $\psi=E\Omega$. Then $\psi$ has Schmidt rank at most $k$ across the
+    cut, and $\langle\psi,\Omega\rangle=\|\psi\|^2=p_1+\cdots+p_k=P\ge1/2$.
+    The bootstrap step applied to the state $\psi/\|\psi\|$ gives, at every
+    scale $m$ with $(2C_1^2/P)e^{-2m/\xi'}<1$, a mixture of vectors of Schmidt
+    rank at most $kq^{2m}$ whose normalized overlap with $\Omega$ is at least
+    $1-(2C_1^2/P)e^{-2m/\xi'}$. That overlap is at most
+    $p_1+\cdots+p_{kq^{2m}}$, so
+    $\sum_{a>kq^{2m}}p_a\le(2C_1^2/P)e^{-2m/\xi'}\le4C_1^2e^{-2m/\xi'}$. At the
+    remaining scales the right-hand side is at least one. The tail decreases
+    as $n$ grows.
+\end{proof}
+
+\begin{theorem}[Polynomial decay of the Schmidt tail from geometric bounds]
+    \label{thm:hastings_schmidt_tail_rpow}
+    \lean{TNLean.MPS.AreaLaw.Hastings.schmidtTail_le_rpow_of_geometric}
+    \leanok
+    Let $D>1$, $\xi>0$, $c\ge0$ and $k_0>0$, and let $\tau$ be a real
+    function on the natural numbers. Suppose that for all natural numbers
+    $m$ and $k$ with $k_0D^{2m}\le k$,
+    \begin{align}
+        \tau(k) & \le c\,e^{-2m/\xi}.
+        \label{eq:hastings_schmidt_tail_geometric}
+    \end{align}
+    Then for every natural number $k\ge k_0$,
+    \begin{align}
+        \tau(k) & \le c\,e^{2/\xi}\Bigl(\frac{k}{k_0}\Bigr)^{-1/(\xi\log D)}.
+        \label{eq:hastings_schmidt_tail_rpow}
+    \end{align}
+    Take $\tau(k)$ to be the mass beyond the $k$ largest squared Schmidt
+    coefficients of the ground state across a cut, $k_0=\exp(2S)/2$ for the
+    entropy $S$ of the cut, $\xi$ the decay length written $\xi'$ in the
+    section on matrix product states of \cite{Hastings2007AreaLaw}, and
+    $c=4C_1^2$ for the constant $C_1$ of the approximate factorization there.
+    Then the hypothesis (\ref{eq:hastings_schmidt_tail_geometric}) is the
+    consequence of the bootstrap lemma in that section, and
+    (\ref{eq:hastings_schmidt_tail_rpow}) is the estimate that follows it,
+    with three corrections: the constant $e^{2/\xi}$ replaces the printed
+    $e^{1/\xi}$, the sign of the exponent is restored, and the tail starts
+    after the $k$-th coefficient rather than at
+    it~\cite{gap:hastings07_schmidt_tail_constant}.
+\end{theorem}
+\begin{proof}\leanok
+    Put $x=\log(k/k_0)/\log D\ge0$, let $n$ be the integer part of $x$ and
+    $m$ the integer part of $n/2$. Then $D^{2m}\le D^x=k/k_0$, so
+    (\ref{eq:hastings_schmidt_tail_geometric}) applies at $m$. Since
+    $2m\ge n-1>x-2$,
+    \begin{align}
+        \tau(k) & \le c\,e^{-2m/\xi}\le c\,e^{2/\xi}e^{-x/\xi},
+        \notag
+    \end{align}
+    and $e^{-x/\xi}=(k/k_0)^{-1/(\xi\log D)}$.
+\end{proof}
