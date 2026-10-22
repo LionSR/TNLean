@@ -10,3 +10,4 @@ Authors: TNLean contributors
 
 import TNLean.MPS.AreaLaw.Hastings.SchmidtTail
 import TNLean.MPS.AreaLaw.Hastings.SchmidtTailMPS
+import TNLean.MPS.AreaLaw.Hastings.TailEntropy
