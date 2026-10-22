@@ -13,6 +13,7 @@ across a cut. -/
 run_cmd do
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
   for decl in #[
+    ``TNLean.MPS.AreaLaw.Hastings.trace_cutPureState_mul_cutOperator,
     ``TNLean.MPS.AreaLaw.Hastings.trace_cutProductState_mul_mul,
     ``TNLean.MPS.AreaLaw.Hastings.trace_cutProductState_mul_of_isSupportedOn_left,
     ``TNLean.MPS.AreaLaw.Hastings.trace_cutProductState_mul_of_isSupportedOn_right] do
