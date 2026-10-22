@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.Hastings.ChainBootstrap
 import TNLean.MPS.AreaLaw.SequentialTruncation
+import QICLean.Entropy.LeadingWeights
 
 /-!
 # Hastings' Schmidt-tail constraint on the chain
@@ -18,12 +19,17 @@ The mixture of the bootstrap is the single state `E Ω`, where `E` projects the 
 onto the `k` leading eigenvectors of `ρ`. Its overlap with `Ω` is the weight of those
 eigenvalues.
 
-**Stage:** the theorem takes the weight bound of the `k` leading eigenvalues as a hypothesis.
-For `k ≥ exp(2 S(ρ))/2` it is Hastings' bound of lines 526–535 (eq. `k0Ent`).
+The weight bound holds for `k ≥ exp(2 S(ρ))/2`, which is Hastings' bound of lines 526–535
+(eq. `k0Ent`); this gives the constraint with `k₀ = exp(2 S(ρ))/2` as in the source.
 
 ## Main results
 
-* `TNLean.MPS.AreaLaw.Hastings.one_sub_kyFanNorm_le_of_factorization`: eq. `constraint`.
+* `TNLean.MPS.AreaLaw.Hastings.one_sub_kyFanNorm_le_of_factorization`: eq. `constraint` under
+  the weight bound.
+* `TNLean.MPS.AreaLaw.Hastings.one_half_le_kyFanNorm_of_exp_two_mul_vonNeumannEntropy_le`: the
+  weight bound from the entropy, eq. `k0Ent`.
+* `TNLean.MPS.AreaLaw.Hastings.one_sub_kyFanNorm_le_of_factorization_of_entropy`: eq.
+  `constraint` with `k ≥ exp(2 S(ρ))/2`.
 
 ## References
 
@@ -48,8 +54,8 @@ the eigenvalues of `ρ` beyond the `n` largest add up to at most `4 C₁² e^{-2
 
 Hastings, arXiv:0705.2024v4, lines 536–544, eq. `constraint` with `P = 1/2`.
 
-**Stage:** the weight bound `hlead` on the `k` leading eigenvalues is a hypothesis. For
-`k ≥ exp(2 S(ρ))/2` it is Hastings' bound of lines 526–535 (eq. `k0Ent`). -/
+The form with `k ≥ exp(2 S(ρ))/2` in place of `hlead` is
+`one_sub_kyFanNorm_le_of_factorization_of_entropy`. -/
 theorem one_sub_kyFanNorm_le_of_factorization (hq : 1 ≤ q)
     {Ω : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Ω‖ = 1) (j : ℕ) {ξ' C₁ : ℝ}
     (hfact : ∀ m : ℕ, j + m ≤ L → ∃ (OB OL OR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
@@ -142,5 +148,65 @@ theorem one_sub_kyFanNorm_le_of_factorization (hq : 1 ≤ q)
     rw [div_le_iff₀ hP]; nlinarith [sq_nonneg C₁]
   rw [he'] at htail
   nlinarith [Real.exp_pos (-(2 * m) / ξ')]
+
+/-- **Leading weight from the entropy, in Ky Fan form.** If `k ≥ exp(2 S(ρ))/2` for a density
+matrix `ρ`, the `k` largest eigenvalues of `ρ` add up to at least `1/2`.
+Hastings, arXiv:0705.2024v4, lines 526–535 (eq. `k0Ent`). -/
+theorem one_half_le_kyFanNorm_of_exp_two_mul_vonNeumannEntropy_le {m : Type*} [Fintype m]
+    [DecidableEq m] {ρ : Matrix m m ℂ} (hρ : ρ.PosSemidef) (htr : ρ.trace = 1) {k : ℕ}
+    (hk : Real.exp (2 * vonNeumannEntropy ρ hρ.isHermitian) / 2 ≤ k) :
+    1 / 2 ≤ hρ.isHermitian.kyFanNorm k := by
+  classical
+  set hA := hρ.isHermitian with hAdef
+  set p : Fin (Fintype.card m) → ℝ := fun a ↦ hA.eigenvalues₀ a with hp
+  have hp0 : ∀ a, 0 ≤ p a := by
+    intro a
+    have h := hρ.eigenvalues_nonneg ((Fintype.equivOfCardEq (Fintype.card_fin _)) a)
+    unfold Matrix.IsHermitian.eigenvalues at h
+    simpa [hp] using h
+  have hpsum : ∑ a, p a = 1 := by
+    have h := sum_eigenvalues₀_filter_le hA 0
+    simp only [zero_le, Finset.filter_true, Matrix.IsHermitian.kyFanNorm_zero, sub_zero, htr,
+      Complex.one_re] at h
+    exact h
+  by_cases hkc : k ≤ Fintype.card m
+  · set T := Finset.univ.filter (fun a : Fin (Fintype.card m) ↦ (a : ℕ) < k) with hT
+    have hTcard : T.card = k := by
+      rw [hT, Fin.card_filter_val_lt, min_eq_right hkc]
+    have hTanti : ∀ a ∈ T, ∀ b ∉ T, p b ≤ p a := by
+      intro a ha b hb
+      simp only [hT, Finset.mem_filter, Finset.mem_univ, true_and, not_lt] at ha hb
+      exact hA.eigenvalues₀_antitone (Fin.le_iff_val_le_val.mpr (by omega))
+    have hhalf := Entropy.one_half_le_sum_of_exp_two_mul_probabilityEntropy_le p hp0 hpsum T
+      hTanti (by rw [hTcard, ← vonNeumannEntropy_eq_probabilityEntropy_eigenvalues₀]; exact hk)
+    rw [hA.kyFanNorm_eq_sum_fin, ← Finset.sum_filter]
+    exact hhalf
+  · push Not at hkc
+    have h := hρ.kyFanNorm_mono hkc.le
+    rw [hA.kyFanNorm_card_eq_trace_re, htr, Complex.one_re] at h
+    linarith
+
+/-- **Hastings' Schmidt-tail constraint from the entropy.** Under the approximate factorization
+of Lemma 1, if `k ≥ exp(2 S)/2` for the entropy `S` of the first `j` sites, then the mass of
+the marginal beyond the `n` largest eigenvalues is at most `4 C₁² e^{-2m/ξ'}` whenever
+`n ≥ k q^{2m}`. Hastings, arXiv:0705.2024v4, lines 526–544 (eqs. `k0Ent`, `constraint`). -/
+theorem one_sub_kyFanNorm_le_of_factorization_of_entropy (hq : 1 ≤ q)
+    {Ω : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Ω‖ = 1) (j : ℕ) {ξ' C₁ : ℝ}
+    (hfact : ∀ m : ℕ, j + m ≤ L → ∃ (OB OL OR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
+      (SB SL SR : Finset (Fin L)),
+      Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) OB SB ∧ SB ⊆ leftBlock L (j + m) ∧
+      Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) OL SL ∧ SL ⊆ leftBlock L j ∧
+      Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) OR SR ∧ Disjoint SR (leftBlock L j) ∧
+      ‖OB * OL * OR - vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))‖ ≤
+        C₁ * Real.exp (-(m / ξ')))
+    {k : ℕ} (hk1 : 1 ≤ k)
+    (hk : Real.exp (2 * Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (leftBlock L j) Ω) / 2 ≤
+      k)
+    (m n : ℕ) (hn : k * q ^ (2 * m) ≤ n) :
+    1 - (Entropy.regionState_isHermitian (n := fun _ : Fin L ↦ q) (leftBlock L j) Ω).kyFanNorm n
+      ≤ 4 * C₁ ^ 2 * Real.exp (-(2 * m) / ξ') :=
+  one_sub_kyFanNorm_le_of_factorization hq hΩ j hfact hk1
+    (one_half_le_kyFanNorm_of_exp_two_mul_vonNeumannEntropy_le
+      (Entropy.regionState_posSemidef _ _ Ω) (Entropy.trace_regionState_eq_one hΩ) hk) m n hn
 
 end TNLean.MPS.AreaLaw.Hastings

@@ -21,11 +21,11 @@
         \sum_{a>n}p_a & \le 4C_1^2e^{-2m/\xi'}.
         \notag
     \end{align}
-    This is a stage of the argument: the weight of the $k$ leading
-    eigenvalues is a hypothesis. With $k\ge\exp(2S(\rho))/2$ it is the bound
-    that opens the section on matrix product states of
-    \cite{Hastings2007AreaLaw}, and the conclusion is its constraint on the
-    Schmidt tail with $P=1/2$.
+    The weight hypothesis holds for $k\ge\exp(2S(\rho))/2$ by
+    Theorem~\ref{thm:hastings_leading_weight}; with that choice the
+    conclusion is the constraint on the Schmidt tail with $P=1/2$ in the
+    section on matrix product states of \cite{Hastings2007AreaLaw}
+    (Theorem~\ref{thm:hastings_schmidt_tail_constraint_entropy}).
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:hastings_bootstrap_scale, thm:hastings_mixture_tail,
@@ -42,6 +42,41 @@
     $\sum_{a>kq^{2m}}p_a\le(2C_1^2/P)e^{-2m/\xi'}\le4C_1^2e^{-2m/\xi'}$. At the
     remaining scales the right-hand side is at least one. The tail decreases
     as $n$ grows.
+\end{proof}
+
+\begin{theorem}[Leading weight from the entropy]
+    \label{thm:hastings_leading_weight}
+    \lean{TNLean.MPS.AreaLaw.Hastings.one_half_le_kyFanNorm_of_exp_two_mul_vonNeumannEntropy_le}
+    \leanok
+    Let $\rho$ be a density matrix with eigenvalues $p_1\ge p_2\ge\cdots$ and
+    entropy $S(\rho)$. If $k\ge\exp(2S(\rho))/2$, then
+    $p_1+\cdots+p_k\ge1/2$. This is the bound that opens the section on matrix
+    product states of \cite{Hastings2007AreaLaw}.
+\end{theorem}
+\begin{proof}\leanok
+    If $k$ exceeds the dimension, the sum is the trace. Otherwise suppose
+    $p_1+\cdots+p_k<1/2$. Then $p_k<1/(2k)$, so every $p_a$ with $a>k$ is
+    below $1/(2k)$, and the tail of weight more than $1/2$ alone contributes
+    more than $\frac12\log(2k)$ to the entropy. Hence
+    $S(\rho)>\frac12\log(2k)$, that is $k<\exp(2S(\rho))/2$.
+\end{proof}
+
+\begin{theorem}[The Schmidt-tail constraint from the entropy]
+    \label{thm:hastings_schmidt_tail_constraint_entropy}
+    \lean{TNLean.MPS.AreaLaw.Hastings.one_sub_kyFanNorm_le_of_factorization_of_entropy}
+    \leanok
+    \uses{thm:hastings_schmidt_tail_constraint}
+    In the setting of Theorem~\ref{thm:hastings_schmidt_tail_constraint}, if
+    $k\ge1$ and $k\ge\exp(2S(\rho))/2$, then for every $m$ and every
+    $n\ge kq^{2m}$ the eigenvalues of $\rho$ beyond the $n$ largest add up to
+    at most $4C_1^2e^{-2m/\xi'}$. This is the constraint on the Schmidt tail in
+    the section on matrix product states of \cite{Hastings2007AreaLaw}, with
+    $k_0=\exp(2S(\rho))/2$ and $P=1/2$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:hastings_leading_weight}
+    Theorem~\ref{thm:hastings_leading_weight} gives the weight hypothesis of
+    Theorem~\ref{thm:hastings_schmidt_tail_constraint}.
 \end{proof}
 
 \begin{theorem}[Polynomial decay of the Schmidt tail from geometric bounds]
