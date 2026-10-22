@@ -48,7 +48,7 @@ slower rate $e^{-l/\xi'}$ with $\xi'>6\xi$.
     by~\eqref{eq:hastings_sqrt_exp}.
 \end{proof}
 
-\begin{theorem}[Lemma~1 at every decay length beyond $6\xi$]
+\begin{theorem}[From the square-root bound to a decay length beyond $6\xi$]
     \label{thm:hastings_factorization_rate}
     \lean{TNLean.MPS.AreaLaw.Hastings.exists_isFactorizationAt_of_sqrt_decay}
     \leanok
@@ -61,9 +61,12 @@ slower rate $e^{-l/\xi'}$ with $\xi'>6\xi$.
         \Bigl(a+\frac{b}{\sqrt{2e\delta}}\Bigr)e^{-l/\xi'}.
         \label{eq:hastings_factorization_rate}
     \end{align}
-    This is the conclusion of Lemma~1 of \cite{Hastings2007AreaLaw} for every
-    decay length $\xi'>6\xi$, the form its proof gives at lines 903--907, in
-    place of the printed $\xi'=6\xi$~\cite{gap:hastings07_gaussian_average_exponent}.
+    This is a stage of Lemma~1 of \cite{Hastings2007AreaLaw}: the
+    factorizations with the square-root error, the form the proof of Lemma~1
+    reaches at lines 903--907, are a hypothesis, and the theorem only converts
+    their error to the form $C_1e^{-l/\xi'}$ of the conclusion of Lemma~1, for
+    a decay length $\xi'>6\xi$ in place of the printed
+    $\xi'=6\xi$~\cite{gap:hastings07_gaussian_average_exponent}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:hastings_decay_slack, thm:hastings_factorization_mono}
@@ -72,7 +75,7 @@ slower rate $e^{-l/\xi'}$ with $\xi'>6\xi$.
     and a factorization with a smaller error is one with a larger error.
 \end{proof}
 
-\begin{theorem}[The positive version at every decay length beyond $6\xi$]
+\begin{theorem}[The positive form at a decay length beyond $6\xi$]
     \label{thm:hastings_positive_factorization_rate}
     \lean{TNLean.MPS.AreaLaw.Hastings.exists_posSemidef_isFactorizationAt_of_sqrt_decay}
     \leanok
