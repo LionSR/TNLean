@@ -20,7 +20,8 @@ relative entropy, eq. `LU`, and then picks `C₂`. This file proves that last st
 order unity" (lines 207 and 502); here `C₂ = 7`. The hypotheses of `le_of_lindbladUhlmann` are
 met through route 1 of Hastings' note added (lines 911–925). With the effect `O_Bᴴ O_B`, the
 ground-state expectation is at least `(1 − 2ε)² ≥ 1 − 4ε` and the product-state expectation
-satisfies `x ≤ 20 ε ≤ 36 · (2ε)` for Lemma 1's `ε ≤ 1/136`
+satisfies `x ≤ 20 ε ≤ 36 · (2ε)` for Lemma 1's `ε ≤ 1/136`, given the overlap bound
+`tr(σ P₀) ≤ 2ε` of lines 482–489
 (`sq_one_sub_two_mul_le_re_inner_conjTranspose_mul`, `re_trace_mul_le_of_projection_sandwich`),
 so the lemma applies with `C₁` replaced by `2 C₁`. Only the values of the constants move; the
 rate `e^{-l/ξ'}` and the coefficient `l/ξ'` of eq. `claim` do not.
