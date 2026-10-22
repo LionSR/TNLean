@@ -2076,7 +2076,7 @@ for an arbitrary finite set of sites and are instantiated here directly.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:domain_interval_neighborhood,thm:chain_area_law,
-        lem:chain_entropy_inequalities,def:domain_model}
+        lem:chain_entropy_inequalities,lem:zero_entropy_flip,def:domain_model}
     Submodularity and nonnegativity of reduced-state entropy give
     $S_\Omega(X\cup Y)\le S_\Omega(X)+S_\Omega(Y)$.
     Since $S_\Omega(\varnothing)=0$, finite subadditivity gives
@@ -2096,7 +2096,7 @@ for an arbitrary finite set of sites and are instantiated here directly.
     \label{thm:domain_logarithmic_separation}
     \lean{TNLean.MPS.AreaLaw.DomainHamiltonian.mutualInformation_le_of_logarithmic_separation}
     \leanok
-    \uses{def:domain_model}
+    \uses{def:domain_model,def:chain_model}
     Fix $q\ge1$, a natural range $R$, a real interaction bound $J$, a gap
     $\Delta>0$, an exponent $p>0$ and a natural $k_0\ge1$.
     There exist $D_p>0$ and a natural $L_0\ge1$, depending only on these

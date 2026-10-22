@@ -24,12 +24,6 @@ depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #print axioms TNLean.MPS.AreaLaw.DomainHamiltonian.information_reset
 
 /-- info:
-'TNLean.MPS.AreaLaw.ChainHamiltonian.information_reset'
-depends on axioms: [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax) in
-#print axioms TNLean.MPS.AreaLaw.ChainHamiltonian.information_reset
-
-/-- info:
 'TNLean.MPS.AreaLaw.DomainHamiltonian.mutualInformation_le_of_logarithmic_separation'
 depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
