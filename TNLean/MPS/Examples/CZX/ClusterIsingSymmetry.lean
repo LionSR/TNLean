@@ -31,8 +31,8 @@ symmetry of the CZX state, as `O_Z = ∏ CZ_{i,i+1} ∏ X_i`, without the factor
   than the review's `D_N X^{⊗N}`; the two differ by the global sign `(−1)^N`
   (`docs/paper-gaps/mpu_czx_tensor_normalization.tex`), which cancels in every conjugation.
 * The decorated operator `U` exchanges them with a sign, `U X_j U† = −Z_{j−1} X_j Z_{j+1}`, so
-  `U H(λ) U† = −λ H(λ⁻¹)` for `λ ≠ 0`: `U` commutes with `H(−1)` and sends `H(1)` to `−H(1)`. The factors
-  `Z_i` of `U` flip the sign of the transverse field at the symmetric point.
+  `U H(λ) U† = −λ H(λ⁻¹)` for `λ ≠ 0`: `U` commutes with `H(−1)` and sends `H(1)` to `−H(1)`.
+  The factors `Z_i` of `U` flip the sign of the transverse field at the symmetric point.
 
 All operators are monomial matrices on the configurations `Fin N → Fin 2`, and every identity
 reduces to one parity computation: flipping bit `j` changes `∑_i s_i s_{i+1}` by

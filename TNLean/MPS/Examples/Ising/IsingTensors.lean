@@ -111,7 +111,8 @@ multiplied by `√2` so that its entries lie in `ℤ[√2]`. The operator statem
 these `v`-free tensors; omitting the factors `v` does not change the periodic operators, since
 the source's tensors are bond-similar to `A_1`, `A_ψ` and the unscaled `A_σ = (√2)⁻¹ • isingSigma`
 (`IsingTwist.mpo_isingStringNetTensor` in `IsingGSymbol`); the source's `σ` operator is
-therefore `(√2)⁻ᴸ` times the periodic operator of `isingSigma`. Documented in `docs/paper-gaps/bmwshv17_ising_boundary_tensor_normalization.tex`.
+therefore `(√2)⁻ᴸ` times the periodic operator of `isingSigma`. Documented in
+`docs/paper-gaps/bmwshv17_ising_boundary_tensor_normalization.tex`.
 -/
 noncomputable def isingSigma : MPOTensor 10 4 :=
   fun h h' => complexOfZsqrt2 (isingSigmaZ h h')
