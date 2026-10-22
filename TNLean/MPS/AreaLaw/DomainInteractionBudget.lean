@@ -88,7 +88,7 @@ lemma card_domain_crossingTerms_le_mul_card_boundaryEdges (Λ : Finset ℤ) (R :
 
 /-- Counting both replicas of the actual crossing supports gives a bound linear
 in the number of domain sites, with the same range constant as on a chain.
-Source: TNLean note, part2a_mps_information.tex, lines 355–363 and 380–400. -/
+Source: TNLean note, part2a_mps_information.tex, lines 355–363. -/
 lemma card_domain_crossingTerms_mul_two_le (Λ : Finset ℤ) (R : ℕ)
     (D : Finset (Fin Λ.card)) :
     (Entropy.crossingTerms (fun X : DomainSupport Λ R ↦ X.1) D).card * 2 ≤

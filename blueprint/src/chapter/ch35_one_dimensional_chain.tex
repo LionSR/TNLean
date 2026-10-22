@@ -1707,6 +1707,8 @@ for an arbitrary finite set of sites and are instantiated here directly.
 \begin{lemma}[Interaction norm budget on a finite integer domain]
     \label{lem:domain_site_norm_budget}
     \lean{TNLean.MPS.AreaLaw.IsDomainSupport.singleton,
+        TNLean.MPS.AreaLaw.DomainSupport.toChainSupport_injective,
+        TNLean.MPS.AreaLaw.DomainHamiltonian.toChain_term,
         TNLean.MPS.AreaLaw.DomainHamiltonian.norm_bound_nonneg,
         TNLean.MPS.AreaLaw.DomainHamiltonian.sum_norm_terms_containing_le}\leanok
     \uses{def:domain_model}
@@ -1732,7 +1734,8 @@ for an arbitrary finite set of sites and are instantiated here directly.
 
 \begin{lemma}[Crossing count on a finite integer domain]
     \label{lem:domain_crossing_count}
-    \lean{TNLean.MPS.AreaLaw.card_domain_crossingTerms_le_mul_card_boundaryEdges,
+    \lean{TNLean.MPS.AreaLaw.DomainSupport.toChainSupport_injective,
+        TNLean.MPS.AreaLaw.card_domain_crossingTerms_le_mul_card_boundaryEdges,
         TNLean.MPS.AreaLaw.card_domain_crossingTerms_mul_two_le}\leanok
     \uses{def:domain_model}
     In the setting of Definition~\ref{def:domain_model}, let $D$ be any set of
