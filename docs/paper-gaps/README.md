@@ -1260,12 +1260,13 @@ absolute constants.
 ### One-dimensional area law after Hastings: the exponent of the Gaussian time average
 
 [hastings07_gaussian_average_exponent.tex](hastings07_gaussian_average_exponent.tex)
-(local correction, resolved) records that the Gaussian time average `P_q` in the
+(local correction, open) records that the Gaussian time average `P_q` in the
 appendix of Hastings (arXiv:0705.2024v4, line 848) satisfies
 `‖P_q - P_0‖ ≤ e^{-q/2}`, which with the source's choice of `q` is
 `O(e^{-l/6ξ})` rather than the printed `O(e^{-l/3ξ})`. The same factor enters
-eqs. `tighter`/`tighter2` and the margin of eq. `obd`; the Lemma 1 assembly takes
-`q = (l/3)ΔE/v`, which recovers the printed rate `e^{-l/3ξ}` and `ξ' = 6ξ`.
+eqs. `tighter`/`tighter2` and the margin of eq. `obd`. With `q = (l/3)ΔE/v` the
+printed rate `e^{-l/3ξ}` is recovered, but the final bound keeps the prefactor
+`√(l/ξ)`, so Lemma 1 holds with every `ξ' > 6ξ`, not at the printed `ξ' = 6ξ`.
 
 ## Polynomial PEPS: zero-floor maximizing filters
 
