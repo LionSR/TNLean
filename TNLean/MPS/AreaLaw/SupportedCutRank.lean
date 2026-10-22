@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.CutMatrixGrowth
 import QICLean.Entropy.GapSurprisal
+import QICLean.Channel.UhlmannIsometry
 
 /-!
 # Cut rank under supported operators
@@ -23,6 +24,8 @@ most `D^{2m}`.
 
 ## Main results
 
+* `Matrix.schmidtCoeffMatrix_kronecker_one_mulVec`: the coefficient matrix after `A ⊗ 1`, the
+  companion of QICLean's `Matrix.schmidtCoeffMatrix_one_kronecker_mulVec`.
 * `TNLean.MPS.AreaLaw.rank_schmidtCoeffMatrix_mulVec_le_of_isOneSided`: the bipartite statement.
 * `TNLean.MPS.AreaLaw.rank_cutMatrix_toEuclideanLin_le_of_subset_leftBlock`,
   `TNLean.MPS.AreaLaw.rank_cutMatrix_toEuclideanLin_le_of_disjoint_leftBlock`: one-sided
@@ -33,9 +36,7 @@ most `D^{2m}`.
 open Matrix
 open scoped Kronecker
 
-namespace TNLean.MPS.AreaLaw
-
-variable {L q : ℕ}
+namespace Matrix
 
 /-- The coefficient matrix after `A ⊗ 1` is `A` times the coefficient matrix. -/
 theorem schmidtCoeffMatrix_kronecker_one_mulVec {α β : Type*} [Fintype α] [Fintype β]
@@ -45,13 +46,11 @@ theorem schmidtCoeffMatrix_kronecker_one_mulVec {α β : Type*} [Fintype α] [Fi
   simp [schmidtCoeffMatrix_apply, mulVec, dotProduct, Fintype.sum_prod_type,
     kroneckerMap_apply, one_apply, mul_apply]
 
-/-- The coefficient matrix after `1 ⊗ A` is the coefficient matrix times `Aᵀ`. -/
-theorem schmidtCoeffMatrix_one_kronecker_mulVec {α β : Type*} [Fintype α] [Fintype β]
-    [DecidableEq α] (A : Matrix β β ℂ) (v : α × β → ℂ) :
-    schmidtCoeffMatrix (((1 : Matrix α α ℂ) ⊗ₖ A) *ᵥ v) = schmidtCoeffMatrix v * Aᵀ := by
-  ext a b
-  simp [schmidtCoeffMatrix_apply, mulVec, dotProduct, Fintype.sum_prod_type,
-    kroneckerMap_apply, one_apply, mul_apply, transpose_apply, mul_comm]
+end Matrix
+
+namespace TNLean.MPS.AreaLaw
+
+variable {L q : ℕ}
 
 /-- A one-sided operator does not increase the rank of the coefficient matrix. -/
 theorem rank_schmidtCoeffMatrix_mulVec_le_of_isOneSided {α β : Type*} [Fintype α] [Fintype β]
@@ -59,8 +58,8 @@ theorem rank_schmidtCoeffMatrix_mulVec_le_of_isOneSided {α β : Type*} [Fintype
     (v : α × β → ℂ) :
     (schmidtCoeffMatrix (X *ᵥ v)).rank ≤ (schmidtCoeffMatrix v).rank := by
   rcases hX with ⟨A, rfl⟩ | ⟨A, rfl⟩
-  · rw [schmidtCoeffMatrix_kronecker_one_mulVec]; exact rank_mul_le_right _ _
-  · rw [schmidtCoeffMatrix_one_kronecker_mulVec]; exact rank_mul_le_left _ _
+  · rw [Matrix.schmidtCoeffMatrix_kronecker_one_mulVec]; exact rank_mul_le_right _ _
+  · rw [Matrix.schmidtCoeffMatrix_one_kronecker_mulVec]; exact rank_mul_le_left _ _
 
 /-- In cut coordinates, applying an operator is applying its cut form. -/
 theorem cutMatrix_toEuclideanLin (X : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
