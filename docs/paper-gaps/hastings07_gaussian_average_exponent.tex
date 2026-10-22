@@ -1,0 +1,77 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+\input{command}
+\setlength{\emergencystretch}{2em}
+\title{The Exponent of Hastings' Gaussian Time Average}
+\author{}
+\date{October 22, 2026}
+\begin{document}
+\maketitle
+\gapnote{local-correction}{resolved}
+
+\section{The source statement}
+
+In the appendix of~\cite{Hastings2007AreaLaw} the Hamiltonian $H$ has a unique
+ground state $\Psi_0$, ground energy zero and gap $\Delta E$, and
+$\xi=\max(2v/\Delta E,\xi_C)$.\footnote{\path{References/0705.2024/law16.tex},
+    lines~126--142 and~766--767.}
+With $q=(l/3)\Delta E/(2v)$, the operator
+\begin{align}
+    P_q=\frac{\Delta E}{\sqrt{2\pi q}}\int e^{iHt}e^{-(t\Delta E)^2/2q}\,dt
+    \label{eq:hastings07_gaussian_average}
+\end{align}
+is said to satisfy
+\begin{align}
+    \|P_q-P_0\| & \le O\bigl(e^{-l/3\xi}\bigr),
+    \label{eq:hastings07_gaussian_average_source}
+\end{align}
+where $P_0$ is the ground-state projector.\footnote{\path{References/0705.2024/law16.tex},
+    lines~792 and~843--848.}
+
+\section{The point at issue}
+
+The operator (\ref{eq:hastings07_gaussian_average}) is diagonal in an eigenbasis
+of $H$, with eigenvalue $e^{-qE^2/2\Delta E^2}$ at energy $E$. It is $1$ on the
+ground state, and on the excited states, where $E\ge\Delta E$, it is at most
+$e^{-q/2}$, with equality on an eigenvector of energy exactly $\Delta E$.
+Hence
+\begin{align}
+    \|P_q-P_0\| & \le e^{-q/2},
+    \label{eq:hastings07_gaussian_average_corrected}
+\end{align}
+and this is sharp when $\Delta E$ is attained. Since $\xi\ge2v/\Delta E$, the
+choice of $q$ gives $q=l\Delta E/(6v)\ge l/(3\xi)$, so
+(\ref{eq:hastings07_gaussian_average_corrected}) yields
+$\|P_q-P_0\|\le e^{-l/6\xi}$. The exponent $l/3\xi$ printed in
+(\ref{eq:hastings07_gaussian_average_source}) is twice the one that follows,
+and with $\xi=2v/\Delta E$ and $\Delta E$ attained it is false.
+
+\section{The corrected statement}
+
+For every real $q$, the bound (\ref{eq:hastings07_gaussian_average_corrected})
+holds, with the Gaussian of variance $\max(q/\Delta E^2,0)$ in place of the
+normalized density.\footnote{\leanid{TNLean.MPS.AreaLaw.Hastings.norm_gaussianTimeAverage_sub_groundProjector_le}
+    in \doclink{TNLean/MPS/AreaLaw/Hastings/GaussianTimeAverage}.}
+With the source's choice of $q$ it gives $O(e^{-l/6\xi})$.
+
+\section{Why the conclusion is unaffected}
+
+The rest of the appendix already carries the weaker exponent. The spectral
+cut-offs $O_L,O_R$ cost $O(e^{-l/6\xi})$, and this term is added in the
+estimate that follows, so its error is
+$O(\Delta E^{-2}J^2\sqrt q\,e^{-l/3\xi}+e^{-l/6\xi})$. The next estimate is
+$O(\Delta E^{-2}J^2\sqrt q\,e^{-l/6\xi})$, and the final bound on
+$\|O_BO_LO_R-P_0\|$ is
+$O(\sqrt{l/\xi}\,\xi^2e^{-l/6\xi})$.\footnote{\path{References/0705.2024/law16.tex},
+    lines~838--839, 875, 889 and~904--906.}
+With the corrected exponent, the display that follows
+(\ref{eq:hastings07_gaussian_average_source}) gains the additive term
+$e^{-l/6\xi}$, which the estimate at line~875 already contains. No later
+exponent changes, and Lemma~1 holds with the same $\xi'=6\xi$.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}

@@ -1257,6 +1257,15 @@ fourth entry of the shell count, which is omitted; the interval constant and
 the area-law constant of Theorem A change accordingly, all at the level of
 absolute constants.
 
+### One-dimensional area law after Hastings: the exponent of the Gaussian time average
+
+[hastings07_gaussian_average_exponent.tex](hastings07_gaussian_average_exponent.tex)
+(local correction, resolved) records that the Gaussian time average `P_q` in the
+appendix of Hastings (arXiv:0705.2024v4, line 848) satisfies
+`‖P_q - P_0‖ ≤ e^{-q/2}`, which with the source's choice of `q` is
+`O(e^{-l/6ξ})` rather than the printed `O(e^{-l/3ξ})`. The final error of
+Lemma 1 already decays as `e^{-l/6ξ}`, so no later exponent changes.
+
 ## Polynomial PEPS: zero-floor maximizing filters
 
 - [`polypeps_square_zero_floor_optimizer_scope.tex`](polypeps_square_zero_floor_optimizer_scope.tex)

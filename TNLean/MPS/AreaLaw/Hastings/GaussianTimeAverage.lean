@@ -36,6 +36,12 @@ right generator `0` and input `1`.
 
 The source states the gap bound as `O(exp[-l/3ξ])` after fixing `q = (l/3)ΔE/(2v)`
 (`law16.tex`, line 792); the theorems here keep `q` free and give explicit constants.
+
+**Local fix (exponent at line 848):** the bound `‖P_q - P_0‖ ≤ exp(-q/2)` is sharp when
+the gap is attained, and with `q = (l/3)ΔE/(2v) ≥ l/(3ξ)` it gives `O(exp[-l/6ξ])`, not the
+printed `O(exp[-l/3ξ])`. The final error of Lemma 1 already decays as `exp[-l/6ξ]`
+(`law16.tex`, lines 875, 889 and 904–906), so no later exponent changes. Documented in
+`docs/paper-gaps/hastings07_gaussian_average_exponent.tex`.
 For `q ≤ 0` the variance is zero, `P_q(H) = 1`, and every bound remains true.
 All norms are Euclidean operator norms.
 -/
