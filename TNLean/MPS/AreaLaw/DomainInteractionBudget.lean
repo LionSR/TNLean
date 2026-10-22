@@ -25,17 +25,6 @@ namespace TNLean.MPS.AreaLaw
 
 variable {Λ : Finset ℤ} {q R : ℕ} {J : ℝ}
 
-/-- Regard an admissible domain support as a chain support on the same labelled
-sites. Source: TNLean note, part0_preamble.tex, eq:ham, lines 191–201. -/
-def DomainSupport.toChainSupport (X : DomainSupport Λ R) : ChainSupport Λ.card R :=
-  ⟨X.1, X.2.isChainSupport⟩
-
-/-- Increasing labels do not identify distinct interaction supports.
-Source: TNLean note, part0_preamble.tex, eq:ham, lines 191–201. -/
-theorem DomainSupport.toChainSupport_injective :
-    Function.Injective (DomainSupport.toChainSupport (Λ := Λ) (R := R)) := by
-  exact fun X Y h ↦ Subtype.ext (congrArg (fun Z : ChainSupport Λ.card R ↦ Z.1) h)
-
 /-- Zero extension preserves the interaction at each original domain support.
 Source: TNLean note, `part0_preamble.tex`, eq:ham, lines 191–201. -/
 @[simp] lemma DomainHamiltonian.toChain_term (h : DomainHamiltonian Λ q R J)

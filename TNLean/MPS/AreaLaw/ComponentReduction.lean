@@ -243,6 +243,17 @@ theorem IsDomainSupport.isChainSupport {X : Finset (Fin Λ.card)} (hX : IsDomain
   have : (w.length : ℤ) ≤ R := by exact_mod_cast hw
   omega
 
+/-- Regard an admissible domain support as a chain support on the same labelled
+sites. Source: TNLean note, part0_preamble.tex, eq:ham, lines 191–201. -/
+def DomainSupport.toChainSupport (X : DomainSupport Λ R) : ChainSupport Λ.card R :=
+  ⟨X.1, X.2.isChainSupport⟩
+
+/-- Increasing labels do not identify distinct interaction supports.
+Source: TNLean note, part0_preamble.tex, eq:ham, lines 191–201. -/
+theorem DomainSupport.toChainSupport_injective :
+    Function.Injective (DomainSupport.toChainSupport (Λ := Λ) (R := R)) := by
+  exact fun X Y h ↦ Subtype.ext (congrArg (fun Z : ChainSupport Λ.card R ↦ Z.1) h)
+
 /-- A support of range `R` does not straddle a gap of `Λ`: if the sites `p` and `p + 1` are
 not at consecutive integers, every support lies in the prefix `[0, p + 1)` or avoids it. -/
 theorem IsDomainSupport.subset_or_disjoint_of_gap {X : Finset (Fin Λ.card)}
@@ -311,9 +322,9 @@ noncomputable def DomainHamiltonian.toChain (h : DomainHamiltonian Λ q R J) (hJ
 theorem DomainHamiltonian.toChain_operator (h : DomainHamiltonian Λ q R J) (hJ : 0 ≤ J) :
     (h.toChain hJ).operator = h.operator := by
   classical
-  refine (Fintype.sum_of_injective (fun X : DomainSupport Λ R ↦
-    (⟨X.1, X.2.isChainSupport⟩ : ChainSupport Λ.card R)) (fun X Y hXY ↦ ?_) _ _ ?_ ?_).symm
-  · exact Subtype.ext (congrArg (fun Y : ChainSupport Λ.card R ↦ Y.1) hXY)
+  refine (Fintype.sum_of_injective
+    (DomainSupport.toChainSupport (Λ := Λ) (R := R))
+    DomainSupport.toChainSupport_injective _ _ ?_ ?_).symm
   · intro Y hY
     change (if hY : IsDomainSupport Λ R Y.1 then h.term ⟨Y.1, hY⟩ else 0) = 0
     split_ifs with hY'
