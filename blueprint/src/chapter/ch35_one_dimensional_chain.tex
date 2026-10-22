@@ -1734,8 +1734,7 @@ for an arbitrary finite set of sites and are instantiated here directly.
 
 \begin{lemma}[Crossing count on a finite integer domain]
     \label{lem:domain_crossing_count}
-    \lean{TNLean.MPS.AreaLaw.DomainSupport.toChainSupport_injective,
-        TNLean.MPS.AreaLaw.card_domain_crossingTerms_le_mul_card_boundaryEdges,
+    \lean{TNLean.MPS.AreaLaw.card_domain_crossingTerms_le_mul_card_boundaryEdges,
         TNLean.MPS.AreaLaw.card_domain_crossingTerms_mul_two_le}\leanok
     \uses{def:domain_model}
     In the setting of Definition~\ref{def:domain_model}, let $D$ be any set of
@@ -1751,9 +1750,9 @@ for an arbitrary finite set of sites and are instantiated here directly.
     the physical edge boundary in $\Lambda$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:domain_model,lem:chain_boundary_crossing_count}
-    The inclusion into chain supports preserves both crossing witnesses and
-    is injective. Apply Lemma~\ref{lem:chain_boundary_crossing_count}, then use
+    \uses{def:domain_model,lem:domain_site_norm_budget,lem:chain_boundary_crossing_count}
+    As in the proof of Lemma~\ref{lem:domain_site_norm_budget}, the inclusion
+    into chain supports is injective and preserves both crossing witnesses. Apply Lemma~\ref{lem:chain_boundary_crossing_count}, then use
     $|\partial_{\mathrm{ch}}D|\le |\Lambda|$ and multiply by two.
 \end{proof}
 
