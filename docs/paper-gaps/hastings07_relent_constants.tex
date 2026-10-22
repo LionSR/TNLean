@@ -43,32 +43,37 @@ relative entropy
 (eq.~\texttt{LU}). It ends with ``$C_2$ is a numeric constant of order unity''
 (line~500).
 
-\section{The expectation $y$}
+\section{Route 1 and the bound on $x$}
 
-Line~446 states $y\ge1-2\epsilon$ ``as before'', but the earlier bound
-$\langle\Psi_0,O_LO_R\Psi_0\rangle\ge1-2\epsilon$ is an expectation in the
-ground state, while $y$ is an expectation in the product state $\sigma$. Since
-$O_L$ and $O_R$ act on the two halves, $y=\langle O_L\rangle\langle O_R\rangle$
-with expectations in $\Psi_0$. The bound that follows directly is weaker:
-$\lVert O_BO_LO_R\Psi_0\rVert\ge1-\epsilon$ gives
-$\lVert O_LO_R\Psi_0\rVert\ge1-\epsilon$, and for commuting positive
-contractions $\langle O_L\rangle\ge\lVert O_L\Psi_0\rVert^2
-\ge\lVert O_LO_R\Psi_0\rVert^2\ge(1-\epsilon)^2$, likewise for $O_R$, so
-$y\ge(1-\epsilon)^4\ge1-4\epsilon$. We found no example in which the printed
-bound fails. In a numerical search over two-qubit examples, with $O_B$ acting
-on both qubits, the largest value of $(1-y)/\epsilon$ was about $0.98$. The
-formalization uses the derived bound $1-4\epsilon$. It only moves the
-threshold on $x$ below and the value of $C_2$, and leaves the coefficient
-$l/\xi'$ of the strengthened doubling inequality unchanged.
-
-With $\operatorname{tr}(O_BO_LO_R\sigma)\ge xy-\sqrt{x-x^2}\sqrt{y-y^2}$ and
-the assumption of lines~484--490, which bounds the overlap term by $2\epsilon$,
-this gives
+Hastings' note added (lines~911--925) observes that the operator $O_B$ of
+Lemma~1 need not be positive, and runs the Lindblad--Uhlmann step with the
+effect $E=O_B^\dagger O_B$ (route~1). With $Z=O_LO_R$, the product of the two
+commuting projections of Lemma~1, the bound
+$\lVert O_BZ-P_0\rVert\le\epsilon$ gives:
+\begin{itemize}
+  \item $\lVert(1-Z)\Psi_0\rVert\le\epsilon$, since $ZO_B^\dagger\Psi_0$ is
+    within $\epsilon$ of $\Psi_0$;
+  \item $\langle\Psi_0,E\Psi_0\rangle=\lVert O_B\Psi_0\rVert^2\ge(1-2\epsilon)^2
+    \ge1-4\epsilon$;
+  \item $y=\langle O_L\rangle\langle O_R\rangle\ge1-2\epsilon^2$ for the product
+    state, since each factor is at least
+    $\lVert Z\Psi_0\rVert^2\ge1-\epsilon^2$. This is stronger than the
+    $1-2\epsilon$ of line~446.
+\end{itemize}
+Route~1 also gives $\lVert ZEZ-P_0\rVert\le2\epsilon+\epsilon^2$. Writing
+$E=ZEZ+(1-Z)E+ZE(1-Z)$ and bounding the cross terms by the Cauchy--Schwarz
+inequality for the expectation in $\sigma$ gives
 \[
-  x(1-4\epsilon)\le3\epsilon+2\sqrt{\epsilon x}.
+  x\le p+\delta+\sqrt{1-y}\,\bigl(\sqrt x+\sqrt{p+\delta}\bigr),
+  \qquad\delta=2\epsilon+\epsilon^2,\quad p=\operatorname{tr}(\sigma P_0).
 \]
-For $\epsilon\le1/68$, solving for $\sqrt x$ gives
-$x\le(2+\sqrt{10})^2\epsilon\le36\,\epsilon$.
+With $p\le2\epsilon$ (lines~484--490) and $1-y\le2\epsilon^2$, this gives
+$x\le20\,\epsilon$ for $\epsilon\le1/136$. The case analysis below is
+therefore run with $\epsilon'=2\epsilon=2C_1e^{-l/\xi'}$ in place of
+$\epsilon$. Then $1-2\epsilon'$ bounds the ground-state expectation from below
+and $x\le36\,\epsilon'$. Replacing $C_1$ by $2C_1$ keeps the rate
+$e^{-l/\xi'}$ and the coefficient $l/\xi'$ of the strengthened doubling
+inequality.
 
 \section{The value of $C_2$}
 
@@ -98,7 +103,7 @@ $\ln C_1>-1$.
 \section{Formalization}
 
 \leanid{TNLean.MPS.AreaLaw.Hastings.le_of_lindbladUhlmann} proves the case
-analysis above for real numbers. Its hypotheses are $\Delta\ge0$ and, for
+analysis below for real numbers. Its hypotheses are $\Delta\ge0$ and, for
 $\epsilon\le1/68$, a point $x\in(0,36\epsilon]$ at which~\eqref{eq:LU} is at
 most $\Delta$. \leanid{TNLean.MPS.AreaLaw.Hastings.relentConst} is $C_2=7$.
 

@@ -1274,7 +1274,6 @@ absolute constants.
 
 - [`hastings07_relent_constants.tex`](hastings07_relent_constants.tex)
   (resolved, clarification) records the explicit constant `C₂ = 7` in the
-  entropy gain across a cut. It also records that the proof uses the derivable
-  bound `1 − 4ε` on the product-state expectation of `O_L O_R`, where line 446
-  states `1 − 2ε` without derivation; this gives `x ≤ 36 ε` in eq. `xbd` for
-  `ε ≤ 1/68`.
+  entropy gain across a cut, and how route 1 of Hastings' note added (the
+  effect `O_B† O_B`) supplies the Lindblad–Uhlmann data with `C₁` replaced by
+  `2 C₁`, keeping the rate `e^{-l/ξ'}`.

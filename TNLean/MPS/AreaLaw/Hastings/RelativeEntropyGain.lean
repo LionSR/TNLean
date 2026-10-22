@@ -17,10 +17,12 @@ relative entropy, eq. `LU`, and then picks `C₂`. This file proves that last st
 `C₂`, as a statement about real numbers.
 
 **Local fix (explicit constants):** the source leaves `C₂` unspecified, "a numeric constant of
-order unity" (lines 207 and 502); here `C₂ = 7`. Line 446 asserts `y ≥ 1 - 2ε` for the
-product-state expectation of `O_L O_R` without derivation; the hypothesis `x ≤ 36 ε` comes from
-the derivable `y ≥ (1 - ε)⁴ ≥ 1 - 4ε` instead. Only the value of `C₂` moves; the coefficient
-`l/ξ'` of eq. `claim` does not. Documented in `docs/paper-gaps/hastings07_relent_constants.tex`.
+order unity" (lines 207 and 502); here `C₂ = 7`. The hypotheses of `le_of_lindbladUhlmann` are
+met through route 1 of Hastings' note added (lines 911–925): with the effect `O_Bᴴ O_B`, the
+ground-state expectation is at least `1 − 4ε` and the product-state expectation `x` is `O(ε)` for
+Lemma 1's `ε`, so the lemma applies with `C₁` replaced by `2 C₁`. Only the values of the
+constants move; the rate `e^{-l/ξ'}` and the coefficient `l/ξ'` of eq. `claim` do not.
+Documented in `docs/paper-gaps/hastings07_relent_constants.tex`.
 
 ## Main results
 
