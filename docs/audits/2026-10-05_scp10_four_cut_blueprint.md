@@ -9,8 +9,10 @@ abbreviations, theorems, and inline `@[simp] theorem` declarations. Regression
 examples remain tests; no test-only declaration is assigned a mathematical
 blueprint owner.
 
-The complete machine-readable inventory is
-[`2026-10-05_scp10_four_cut_blueprint_inventory.json`](2026-10-05_scp10_four_cut_blueprint_inventory.json).
+The complete machine-readable inventory was
+`docs/audits/2026-10-05_scp10_four_cut_blueprint_inventory.json`; it and its
+checker were removed from the repository by #9883 and remain available at
+commit `5364d4523946f2fe9fd7e335a98cb1859559c314`.
 It records every fully qualified declaration, its source file and line, its
 unique blueprint label, its owning fragment, the source commit, and the SHA-256
 of every source module. The focused checker independently enumerates source
@@ -114,7 +116,9 @@ not only the number of external legs.
 
 ## Validation
 
-Run the declaration/source audit from the repository root:
+The focused checker was removed by #9883; `checkdecls` and
+`scripts/blueprint_lean_sync.py` cover the blueprint declarations. To rerun
+the original audit, check out commit `5364d4523946f2fe9fd7e335a98cb1859559c314` and run from the repository root:
 
 ```sh
 python3 scripts/check_peps_four_cut_blueprint.py

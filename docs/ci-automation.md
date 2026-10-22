@@ -521,7 +521,7 @@ provider or mention handler.
 
 | Variable | Disabled workflows |
 |----------|--------------------|
-| `CLAUDE_AUTO_FIX_ENABLED=false` | `auto-fix.yml`; write-mode linter auto-fix skips before Lean setup/build |
+| `CLAUDE_AUTO_FIX_ENABLED=false` | `auto-fix.yml` |
 | `CLAUDE_REVIEW_ENABLED=false` | `pr-review.yml` and the model-backed jobs of `issue-automation.yml` |
 | `DEEPSEEK_MENTION_ENABLED=false` | the `@deepseek` handle of `agent-mention.yml` |
 
