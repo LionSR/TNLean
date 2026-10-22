@@ -125,8 +125,8 @@ of a gapped chain combines them with the factorization of
     of Schmidt rank at most $K$, with $K$ less than the dimension of the first
     factor,
     $|\langle\varphi,\psi\rangle|^2\le\|\psi\|^2\,\|\rho_\varphi\|_{(K)}$, where
-    $\|\cdot\|_{(K)}$ is the sum of the $K$ largest eigenvalues. Moreover, for
-    every Hermitian matrix $A$, the entropy of $A$ is the entropy of its
+    $\|\cdot\|_{(K)}$ is the sum of the $K$ largest eigenvalues. For every
+    Hermitian matrix $A$, the entropy of $A$ is the entropy of its
     eigenvalues in decreasing order, and the sum of the eigenvalues beyond the
     first $K$ is $\operatorname{tr}A-\|A\|_{(K)}$; we apply this to
     $A=\rho_\varphi$.
@@ -168,11 +168,20 @@ of a gapped chain combines them with the factorization of
     \cite[Lemma~2]{Hastings2007AreaLaw}, lines 321--322.
 \end{theorem}
 \begin{proof}\leanok
-    An operator acting on one side of the cut multiplies the coefficient matrix
-    on one side, which does not increase its rank. For the second statement,
-    moving the cut $m$ sites to the right multiplies the Schmidt rank by at
-    most $q^m$; across the moved cut the operator acts on one side; and moving
-    the cut back costs another factor $q^m$.
+    Write $C_\psi$ for the coefficient matrix of $\psi$ in
+    $\mathcal H_1\otimes\mathcal H_2$. Then
+    \begin{align*}
+        C_{(X\otimes1)\psi}=XC_\psi,\qquad C_{(1\otimes X)\psi}=C_\psi X^{\mathsf T},
+    \end{align*}
+    and multiplying a matrix on one side does not increase its rank. For the
+    second statement write $r_k(\psi)$ for the Schmidt rank of $\psi$ across
+    the cut after $k$ sites. Moving a cut by $m$ sites changes the Schmidt
+    rank by a factor of at most $q^m$, and across the cut after $k+m$ sites
+    the operator $X$ acts on one side, so
+    \begin{align*}
+        r_k(X\psi)\le q^m\,r_{k+m}(X\psi)\le q^m\,r_{k+m}(\psi)
+        \le q^{2m}\,r_k(\psi).
+    \end{align*}
 \end{proof}
 
 \begin{definition}[The remainder of the bootstrap bound]
@@ -215,6 +224,52 @@ of a gapped chain combines them with the factorization of
     Theorem~\ref{thm:hastings_geometric_tail_entropy}.
 \end{proof}
 
+\begin{theorem}[The bootstrap bound on the chain, stage form]
+    \label{thm:hastings_bootstrap_chain_stage}
+    \lean{
+        TNLean.MPS.AreaLaw.Hastings.entropy_le_of_overlap_schmidtRank_mixture_of_factorization,
+        TNLean.MPS.AreaLaw.Hastings.regionEntropy_interval_eq,
+        TNLean.MPS.AreaLaw.Hastings.star_cutVector_dotProduct,
+        TNLean.MPS.AreaLaw.Hastings.rank_cutMatrix_le_pow_of_lt
+    }
+    \leanok
+    \uses{def:chain_model, def:hastings_bootstrap_remainder}
+    Let $\Omega$ be a unit vector on the chain of $L$ sites with local
+    dimension $q\ge2$, let $j$ be a cut, and let $\xi'>0$ and $C_1\ge1$.
+    Suppose that for every natural number $m$ with $j+m\le L$ there are
+    operators $O_B$ supported on the first $j+m$ sites, $O_L$ supported on the
+    first $j$ sites and $O_R$ supported on the sites after them, with
+    \begin{align*}
+        \|O_BO_LO_R-|\Omega\rangle\langle\Omega|\|\le C_1e^{-m/\xi'}.
+    \end{align*}
+    Let $w_1,\dots,w_r\ge0$ and let $\psi_1,\dots,\psi_r$ be vectors of Schmidt
+    rank at most $k\ge1$ across the cut after $j$ sites, with
+    $\sum_iw_i\|\psi_i\|^2=1$ and
+    $P=\sum_iw_i|\langle\psi_i,\Omega\rangle|^2>0$. Then the entropy $S_j$ of
+    the reduced density matrix of $\Omega$ on the first $j$ sites satisfies
+    \begin{align*}
+        S_j\le\ln k+\xi'\ln\bigl(2C_1^2/P\bigr)\ln q+F(\xi',q).
+    \end{align*}
+    The cut coordinates preserve inner products, $S_j$ is the entropy of
+    $C_\Omega C_\Omega^\dagger$ for the coefficient matrix $C_\Omega$ across the
+    cut, and past the end of the chain, when $j+s>L$, every vector has
+    Schmidt rank at most $q^{2s}$ across the cut. This is a stage of
+    \cite[Lemma~2]{Hastings2007AreaLaw}: the factorization of Lemma~1 is a
+    hypothesis, and the Hamiltonian does not enter.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:hastings_bootstrap_stage, thm:hastings_bootstrap_overlap,
+        thm:hastings_supported_cut_rank}
+    At a scale $s$ with $j+s\le L$, the operator $O=O_BO_LO_R$ maps each
+    $\psi_i$ to a vector of Schmidt rank at most $kq^{2s}$ by
+    Theorem~\ref{thm:hastings_supported_cut_rank}, and
+    Theorem~\ref{thm:hastings_bootstrap_overlap} with
+    $\epsilon=C_1e^{-s/\xi'}$ gives the mixture $\sum_iw_i|O\psi_i\rangle\langle
+        O\psi_i|$ normalized overlap at least $1-(2C_1^2/P)e^{-2s/\xi'}$ with
+    $\Omega$. When $j+s>L$, $\Omega$ itself serves. Theorem~\ref{thm:hastings_bootstrap_stage}
+    with $c=2C_1^2/P\ge1$ gives the bound.
+\end{proof}
+
 \begin{lemma}[The bootstrap lemma]
     \label{lem:hastings_bootstrap}
     \uses{def:hastings_bootstrap_remainder}
@@ -233,22 +288,17 @@ of a gapped chain combines them with the factorization of
     $C_1(\xi)\ge1$ are a decay length and a constant for which the
     approximate factorization
     $\|O_B(j,m)O_L(j,m)O_R(j,m)-P_0\|\le C_1(\xi)e^{-m/\xi'}$ of
-    \cite[Lemma~1]{Hastings2007AreaLaw} holds. The source prints $\xi'=6\xi$;
-    the final estimate of its proof of Lemma~1 keeps a factor $\sqrt{m/\xi}$,
-    so the factorization holds for every $\xi'>6\xi$, with $C_1(\xi)$
-    depending on $\xi'$. Enlarging $C_1(\xi)$ keeps the estimate true, so
-    $C_1(\xi)\ge1$ costs nothing. This is
+    \cite[Lemma~1]{Hastings2007AreaLaw} holds; the source takes $\xi'=6\xi$,
+    and the lemma uses $\xi'$ only through this estimate. Enlarging
+    $C_1(\xi)$ keeps the estimate true, so $C_1(\xi)\ge1$ costs nothing. This is
     \cite[Lemma~2]{Hastings2007AreaLaw}, lines 280--311.
 \end{lemma}
 \begin{proof}
-    \uses{thm:hastings_bootstrap_stage, thm:hastings_bootstrap_overlap,
-        thm:hastings_supported_cut_rank}
+    \uses{thm:hastings_bootstrap_chain_stage}
     The approximate factorization of the ground-state projector of
     \cite[Lemma~1]{Hastings2007AreaLaw} supplies the operators
-    $O_B(j,m)O_L(j,m)O_R(j,m)$, whose action multiplies the Schmidt rank across
-    the cut by at most $D^{2m}$ by
-    Theorem~\ref{thm:hastings_supported_cut_rank}. Theorem~\ref{thm:hastings_bootstrap_overlap}
-    gives the overlap of the resulting mixtures at each scale, and
-    Theorem~\ref{thm:hastings_bootstrap_stage} with $c=2C_1(\xi)^2/P$ gives
-    the bound; here $c\ge1$ because $P\le1$ and $C_1(\xi)\ge1$.
+    $O_B(j,m)$, $O_L(j,m)$, $O_R(j,m)$ with the supports and the estimate
+    required by Theorem~\ref{thm:hastings_bootstrap_chain_stage}, applied with
+    $\Omega=\Psi_0$, $q=D$, $C_1=C_1(\xi)$ and the pure states of the mixture
+    $\rho$. That theorem gives the bound.
 \end{proof}
