@@ -1,0 +1,64 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+\input{command}
+\setlength{\emergencystretch}{2em}
+\title{The Error of the Matrix Product State in Hastings' Area Law}
+\author{}
+\date{October 22, 2026}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+\section{The source statement}
+
+The section on matrix product states of~\cite{Hastings2007AreaLaw} concludes
+that the error of a matrix product state of bond dimension $k'$ on a chain of
+length $N$ is of order
+\begin{align}
+    N\,(k'/k_0)^{-1/(\xi'\ln D)}.
+    \label{eq:hastings07_mps_error_source}
+\end{align}
+It does not name the error measure.\footnote{\path{References/0705.2024/law16.tex},
+    lines~553--557.}
+Let $\Phi$ be the vector obtained by truncating every cut onto its $k'$
+leading Schmidt vectors, and let $\tau_j(k')$ be the tail of the Schmidt
+coefficients beyond the $k'$ largest at the cut $(j,j+1)$. The bound of
+Verstraete and Cirac~\cite{VerstraeteCirac2006Faithfully},
+\begin{align}
+    \lVert\Phi-\Psi_0\rVert^2
+     & \le2\sum_{j=1}^{N-1}\tau_j(k'),
+    \label{eq:hastings07_mps_error_vc}
+\end{align}
+together with the polynomial decay
+$\tau_j(k')\le c\,e^{2/\xi'}(k'/k_0)^{-1/(\xi'\ln D)}$ of the tail, gives
+(\ref{eq:hastings07_mps_error_source}) for the squared norm.
+
+\section{What is formalized}
+
+The formalized bound on sequential truncation is
+$\lVert\Phi-\Psi_0\rVert\le\sum_j\sqrt{\tau_j(k')}$, so the theorem
+proved\footnote{\leanid{TNLean.MPS.AreaLaw.Hastings.isOpenMPS_norm_sub_le_of_schmidtTail_geometric}
+    in \doclink{TNLean/MPS/AreaLaw/Hastings/SchmidtTailMPS}.} is
+\begin{align}
+    \lVert\Phi-\Psi_0\rVert
+     & \le(N-1)\sqrt{c\,e^{2/\xi'}}\,(k'/k_0)^{-1/(2\xi'\ln D)}.
+    \label{eq:hastings07_mps_error_norm}
+\end{align}
+Squaring (\ref{eq:hastings07_mps_error_norm}) gives
+(\ref{eq:hastings07_mps_error_source}) with $N^2$ in place of $N$. The bound
+is weaker than the source's by a factor $N$ in the squared norm. The bond
+dimension needed for a given accuracy is still polynomial in $N$ and in the
+inverse accuracy, with a larger exponent.
+
+\section{Elimination}
+
+Formalize the squared-norm bound (\ref{eq:hastings07_mps_error_vc}) for
+sequential truncation and specialize the theorem to it. This is tracked in
+TNLean issue~9941.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}

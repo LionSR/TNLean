@@ -65,10 +65,15 @@
     \end{align}
     Here the mass beyond the $n$ largest eigenvalues is the sum over the
     eigenvalues of index at least $n+1$ in nonincreasing order, so the
-    source's sum from index $k'$ is this mass at $k'-1$. This is the
-    conclusion of the section on matrix product states of
-    \cite{Hastings2007AreaLaw}, stated for the norm distance and with the
-    constant of Theorem~\ref{thm:hastings_schmidt_tail_rpow}
+    source's sum from index $k'$ is this mass at $k'-1$. The bound is weaker
+    than the conclusion of the section on matrix product states of
+    \cite{Hastings2007AreaLaw}. That conclusion, an error of order
+    $L(k'/k_0)^{-1/(\xi\log d)}$, holds for the squared norm and follows from
+    a bound on the squared norm of a sequential truncation by twice the sum of
+    the tails. The bound here is on the norm, so its exponent in $k'$ is
+    halved and the factor $L-1$ stands outside the square
+    root~\cite{gap:hastings07_mps_error_measure}. The constant is that of
+    Theorem~\ref{thm:hastings_schmidt_tail_rpow}
     \cite{gap:hastings07_schmidt_tail_constant}.
 \end{theorem}
 \begin{proof}\leanok

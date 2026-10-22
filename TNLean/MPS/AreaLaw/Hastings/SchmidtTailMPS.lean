@@ -18,11 +18,16 @@ then gives an open-boundary matrix product state of bond dimension `k'` within d
 Source: Hastings, *An area law for one-dimensional quantum systems*, arXiv:0705.2024v4,
 section "Matrix Product States", lines 553–557.
 
-**Local fix (error measure):** the source says that the error of the approximation scales
-as `N (k'/k₀)^{-1/(ξ' ln D)}` without naming the error measure. The bound proved here is
-on the norm distance, through the sequential truncation estimate `∑_k √ε_k`, so the tail
-enters through a square root. The constant of the tail is that of
-`TNLean.MPS.AreaLaw.Hastings.schmidtTail_le_rpow_of_geometric`. Documented in
+**Scope restriction (error measure):** the source's error `N (k'/k₀)^{-1/(ξ' ln D)}` is
+the squared-norm error given by the Verstraete–Cirac bound `‖ψ - Φ‖² ≤ 2 ∑_k ε_k`. The
+bound proved here is weaker. It is on the norm, through the sequential truncation estimate
+`‖ψ - Φ‖ ≤ ∑_k √ε_k`, so its exponent in `k'` is half the source's and the factor `L - 1`
+stands outside the square root. Documented in
+`docs/paper-gaps/hastings07_mps_error_measure.tex`. Elimination: formalize the
+Verstraete–Cirac squared-norm bound (#9941) and specialize this theorem to it.
+
+**Local fix (constant):** the constant `e^{2/ξ}` replaces the printed `e^{1/ξ'}`, because
+the geometric tail bound is available only at even exponents. Documented in
 `docs/paper-gaps/hastings07_schmidt_tail_constant.tex`.
 -/
 
@@ -38,8 +43,8 @@ vector `ψ` is at most `c e^{-2m/ξ}` whenever `k₀ d^{2m} ≤ n`, then for eve
 dimension `k' ≥ k₀` the truncation onto the `k'` leading eigenvectors at every cut is an
 open-boundary matrix product state of bond dimension `k'` within distance
 `(L - 1) √(c e^{2/ξ} (k'/k₀)^{-1/(ξ log d)})` of `ψ`.
-Hastings, arXiv:0705.2024v4, lines 540–557. The constant and the error measure differ from
-the source as described in the module docstring. -/
+Hastings, arXiv:0705.2024v4, lines 540–557. The bound is weaker than the source's, as
+described in the module docstring. -/
 theorem isOpenMPS_norm_sub_le_of_schmidtTail_geometric
     (ψ : EuclideanSpace ℂ (Fin L → Fin q)) (hψ : ‖ψ‖ = 1)
     {d ξ c k₀ : ℝ} (hd : 1 < d) (hξ : 0 < ξ) (hc : 0 ≤ c) (hk₀ : 0 < k₀)
