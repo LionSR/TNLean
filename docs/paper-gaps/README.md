@@ -1266,7 +1266,10 @@ appendix of Hastings (arXiv:0705.2024v4, line 848) satisfies
 `O(e^{-l/6ξ})` rather than the printed `O(e^{-l/3ξ})`. The same factor enters
 eqs. `tighter`/`tighter2` and the margin of eq. `obd`. With `q = (l/3)ΔE/v` the
 printed rate `e^{-l/3ξ}` is recovered, but the final bound keeps the prefactor
-`√(l/ξ)`, so Lemma 1 holds with every `ξ' > 6ξ`, not at the printed `ξ' = 6ξ`.
+`√(l/ξ)`, so the product `O_B O_L O_R` as constructed, with `O_B` not necessarily
+positive, satisfies the bound of Lemma 1 for every `ξ' > 6ξ`, not at the printed
+`ξ' = 6ξ`. The positivity repair of the note added replaces the error `ε` by
+`O(√ε)`, so the positive version of Lemma 1 holds for every `ξ' > 12ξ`.
 
 ### One-dimensional area law after Hastings: the Schmidt tail constant
 
