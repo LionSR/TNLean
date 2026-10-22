@@ -12,16 +12,16 @@ import QICLean.Analysis.SpectralFilter.MatrixFilter
 For a Hermitian matrix `H` with a gap `ΔE > 0` and a parameter `q ≥ 0`, the
 Gaussian-filtered version of an operator `W` is the Heisenberg evolution of `W`
 under `H`, averaged against a centered Gaussian of variance `q / ΔE²`:
-`W̃ = (ΔE / √(2πq)) ∫ e^{iHt} W e^{-iHt} e^{-(tΔE)²/(2q)} dt`.
+`W_tilde = (ΔE / √(2πq)) ∫ e^{iHt} W e^{-iHt} e^{-(tΔE)²/(2q)} dt`.
 
-This file proves the spectral facts about `W̃` that do not involve locality:
+This file proves the spectral facts about `W_tilde` that do not involve locality:
 * the matrix elements between eigenvectors of energies `E` and `E'` are those of
   `W` multiplied by `exp (-q ((E - E') / ΔE)² / 2)`;
 * if every eigenvalue of `H` equals the ground energy `E₀` or is at least
-  `E₀ + ΔE`, then the component of `W̃ ψ` orthogonal to the ground eigenspace has
+  `E₀ + ΔE`, then the component of `W_tilde ψ` orthogonal to the ground eigenspace has
   norm at most `‖W‖ e^{-q/2} ‖ψ‖` for each ground vector `ψ`;
 * filtering is additive in `W`, filtering `H` returns `H`, filtering does not
-  increase the operator norm, and `W̃` and `W` have the same matrix elements
+  increase the operator norm, and `W_tilde` and `W` have the same matrix elements
   between ground vectors.
 
 The ground space may be degenerate. The statements hold for an arbitrary
@@ -30,10 +30,10 @@ or a sum of such terms.
 
 ## Main declarations
 
-* `TNLean.Lattice.gaussianFilteredTerm`: the filtered operator `W̃`.
+* `TNLean.Lattice.gaussianFilteredTerm`: the filtered operator `W_tilde`.
 * `TNLean.Lattice.inner_gaussianFilteredTerm`: the matrix elements.
 * `TNLean.Lattice.norm_sub_starProjection_gaussianFilteredTerm_le`: the bound
-  on the excited component of `W̃ ψ`.
+  on the excited component of `W_tilde ψ`.
 * `TNLean.Lattice.gaussianFilteredTerm_self`, `gaussianFilteredTerm_sum`,
   `inner_gaussianFilteredTerm_ground`, `norm_gaussianFilteredTerm_le`.
 
@@ -46,7 +46,7 @@ eq. `gs` (lines 237–243), and the sum, ground-space and norm statements are
 eq. `hsum` and lines 250–257. The source places the ground energy at `0`; here
 it is an arbitrary `E₀`. The source sums the low-energy projector over
 `0 ≤ a ≤ n` (line 229) and writes `‖H_i⁰‖` (line 256); `0 ≤ a ≤ n - 1` and
-`‖H̃_i⁰‖` are meant.
+`‖H_tilde_i⁰‖` are meant.
 
 The filter is QICLean's `GaussianFilter.gaussianIntertwiner` with both
 Hamiltonians equal to `H`, and the matrix elements are
@@ -60,9 +60,10 @@ namespace TNLean.Lattice
 
 variable {n : Type*} [Fintype n] [DecidableEq n]
 
-/-- The Gaussian-filtered operator `W̃ = (ΔE / √(2πq)) ∫ e^{iHt} W e^{-iHt} e^{-(tΔE)²/(2q)} dt`
-of Hastings, arXiv:cond-mat/0508554v3, eqs. `tnd`, `thd` (lines 194–207): the Heisenberg
-evolution of `W` under `H` averaged against the centered Gaussian of variance `q / ΔE²`. -/
+/-- The Gaussian-filtered operator
+`W_tilde = (ΔE / √(2πq)) ∫ e^{iHt} W e^{-iHt} e^{-(tΔE)²/(2q)} dt` of Hastings,
+arXiv:cond-mat/0508554v3, eqs. `tnd`, `thd` (lines 194–207): the Heisenberg evolution
+of `W` under `H` averaged against the centered Gaussian of variance `q / ΔE²`. -/
 noncomputable def gaussianFilteredTerm (q ΔE : ℝ) (H W : Matrix n n ℂ) : Matrix n n ℂ :=
   gaussianIntertwiner (q / ΔE ^ 2).toNNReal H H W
 
@@ -156,7 +157,7 @@ theorem inner_eq_zero_of_mem_groundEigenspace {H : Matrix n n ℂ} (hH : H.IsHer
 
 /-- The excited component of a filtered ground vector is exponentially small: if every
 eigenvalue of `H` equals `E₀` or is at least `E₀ + ΔE`, then for each ground vector `ψ`
-the component of `W̃ ψ` orthogonal to the ground eigenspace has norm at most
+the component of `W_tilde ψ` orthogonal to the ground eigenspace has norm at most
 `‖W‖ e^{-q/2} ‖ψ‖`. Hastings, arXiv:cond-mat/0508554v3, eq. `gs` (lines 237–243), with
 `P_high = 1 - P_low` the projection onto the orthogonal complement of the ground space. -/
 theorem norm_sub_starProjection_gaussianFilteredTerm_le {q ΔE : ℝ} (hq : 0 ≤ q)
