@@ -87,17 +87,16 @@
     \label{thm:hastings_schmidt_tail_mps}
     \lean{TNLean.MPS.AreaLaw.Hastings.isOpenMPS_norm_sub_sq_le_of_schmidtTail_geometric}
     \leanok
-    \uses{thm:hastings_schmidt_tail_rpow}
-    Let $\psi$ be a unit vector on a chain of $L$ sites, and let $d>1$,
+    Let $\psi$ be a unit vector on a chain of $L$ sites, and let $D>1$,
     $\xi>0$, $c\ge0$ and $k_0>0$. Suppose that at every internal cut the
     mass beyond the $n$ largest eigenvalues of the left marginal is at most
-    $c\,e^{-2m/\xi}$ whenever $k_0d^{2m}\le n$. Then for every natural
+    $c\,e^{-2m/\xi}$ whenever $k_0D^{2m}\le n$. Then for every natural
     number $k'\ge k_0$, truncating every cut onto the $k'$ leading
     eigenvectors of its left marginal gives an open-boundary matrix product
-    state $\Phi$ of bond dimension $k'$ with
+    state $\Phi$ of bond dimension at most $k'$ with
     \begin{align}
         \lVert\Phi-\psi\rVert^2
-         & \le(L-1)\,c\,e^{2/\xi}\Bigl(\frac{k'}{k_0}\Bigr)^{-1/(\xi\log d)}.
+         & \le(L-1)\,c\,e^{2/\xi}\Bigl(\frac{k'}{k_0}\Bigr)^{-1/(\xi\log D)}.
         \notag
     \end{align}
     Here the mass beyond the $n$ largest eigenvalues is the sum over the
@@ -110,9 +109,10 @@
     \cite{gap:hastings07_schmidt_tail_constant}.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:chain_sequential_truncation_eigen, thm:chain_sequential_truncation_sq}
+    \uses{thm:chain_sequential_truncation_eigen, thm:chain_sequential_truncation_sq,
+        thm:hastings_schmidt_tail_rpow}
     Sequential truncation onto the leading eigenvectors gives an
-    open-boundary matrix product state of bond dimension $k'$ with
+    open-boundary matrix product state of bond dimension at most $k'$ with
     $\lVert\Phi-\psi\rVert^2\le\sum_k\varepsilon_k(k')$, where
     $\varepsilon_k(k')$ is the mass beyond the $k'$ largest eigenvalues at
     the cut $k$. Theorem~\ref{thm:hastings_schmidt_tail_rpow} bounds each

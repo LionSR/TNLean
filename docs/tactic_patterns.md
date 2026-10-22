@@ -4782,6 +4782,21 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 ## Candidates
 
+### Mass of a cut beyond its leading eigenvalues — candidate
+- **Pattern:**
+  ```lean
+  1 - (Entropy.regionState_isHermitian (n := fun _ : Fin L ↦ q) (leftBlock L k)
+    ψ).kyFanNorm n
+  ```
+- **Seen:** 5 occurrences (2026-10-22), in statements and proofs of
+  `TNLean/MPS/AreaLaw/SequentialTruncation.lean` and
+  `TNLean/MPS/AreaLaw/Hastings/SchmidtTailMPS.lean`.
+- **Abstraction:** proposed definition of the mass of the left marginal at the
+  cut `k` beyond its `n` largest eigenvalues, with a lemma rewriting it as the
+  sum of the trailing eigenvalues.
+- **Notes:** a term pattern rather than a tactic; promote together with the next
+  statement that uses it, so the definition lands with its rewriting lemma.
+
 ### Reflected sum over the internal cuts of a sequential truncation — candidate
 - **Pattern:**
   ```lean
