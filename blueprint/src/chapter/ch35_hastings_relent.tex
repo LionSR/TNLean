@@ -45,7 +45,10 @@ constant $C_2$ is $7$, as recorded in~\cite{gap:hastings07_relent_constants}.
     and the bound on the overlap are hypotheses.
 \end{theorem}
 \begin{proof}\leanok
-    Let $E=O_B^\dagger O_B$. Its expectation in $\Omega$ is
+    The mutual information $S(A)+S(B)-S(A\cup B)$ is nonnegative by
+    subadditivity. If $\epsilon'>1/68$, the right side
+    of~(\ref{eq:hastings_relent}) is negative and there is nothing to prove.
+    Let $\epsilon'\le1/68$ and $E=O_B^\dagger O_B$. Its expectation in $\Omega$ is
     $\|O_B\Omega\|^2\ge(1-2\epsilon)^2\ge1-2\epsilon'$. The product
     $Z=O_LO_R$ is a projection with $\|ZEZ-P_0\|\le2\epsilon+\epsilon^2$ and
     $\operatorname{tr}(\sigma Z)\ge1-2\epsilon^2$, and the Cauchy--Schwarz
@@ -57,11 +60,13 @@ constant $C_2$ is $7$, as recorded in~\cite{gap:hastings07_relent_constants}.
     the relative entropy under the two-outcome measurement $\{E,1-E\}$ bounds
     $S(A)+S(B)-S(A\cup B)$ below by the binary relative entropy of the two
     expectations, which is decreasing in $x$ and increasing in the
-    ground-state expectation on the relevant range. Evaluating it at
-    $1-2\epsilon'$ and $36\epsilon'$ gives~(\ref{eq:hastings_relent}).
+    ground-state expectation on the relevant range. Evaluated at
+    $1-2\epsilon'$ and $36\epsilon'\le36/68$, its two terms are at least
+    $(1-2\epsilon')\ln(1/\epsilon')-5$ and $-1$, which
+    gives~(\ref{eq:hastings_relent}).
 \end{proof}
 
-\begin{theorem}[The entropy gain across a cut of large entropy]
+\begin{theorem}[The entropy gain across a cut of large entropy, stage form]
     \label{thm:hastings_relent_window}
     \lean{TNLean.MPS.AreaLaw.Hastings.relent_of_projectorFactorization_of_le_entropy}
     \leanok
@@ -76,11 +81,12 @@ constant $C_2$ is $7$, as recorded in~\cite{gap:hastings07_relent_constants}.
     \begin{align}
         S_c\ge\bigl(l+\xi'\ln C_1\bigr)\ln q+F(\xi',q).
     \end{align}
-    Then~(\ref{eq:hastings_relent}) holds. This is eq.~(relent)
+    Then~(\ref{eq:hastings_relent}) holds. This is a stage of eq.~(relent)
     of~\cite{Hastings2007AreaLaw} for one pair of intervals, proved at
     lines 427--503 under the assumption of line 483, with the constants
-    of~\cite{gap:hastings07_relent_constants}; the factorization of Lemma~1
-    remains a hypothesis.
+    of~\cite{gap:hastings07_relent_constants}. The factorization of Lemma~1
+    at every scale is a hypothesis, and the Hamiltonian does not enter; the
+    source equation remains to be derived from Lemma~1.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:hastings_relent_projector, thm:hastings_bootstrap_chain_stage}
