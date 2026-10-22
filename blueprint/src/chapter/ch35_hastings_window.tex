@@ -1,0 +1,122 @@
+\chapter{The entropy window of Hastings' area-law proof}
+\label{ch:hastings_window}
+
+Hastings' proof of the one-dimensional area law \cite{Hastings2007AreaLaw}
+argues by contradiction from a cut of large entropy. This chapter records the
+setup of that argument, which uses no Hamiltonian: for an arbitrary unit vector
+on the chain of $L$ sites of local dimension $q$, the entropy of a cut changes
+by at most $\log q$ per site, so a cut of entropy above $S_{\max}$ is followed
+by a window of cuts of entropy at least $2S_{\max}/3$; on that window the
+largest entropy $S_l$ of an interval of $l$ sites obeys $0\le S_l\le l\log q$
+and $S_{2l}\le 2S_l$. Sites are numbered $0,\ldots,L-1$, the cut at $k$ is the
+interval $\lbrack 0,k)$, and $S(A)$ is the entropy of the reduced state of a region
+$A$.
+
+\begin{theorem}[The cut entropy moves slowly]
+    \label{thm:hastings_cut_entropy_slow}
+    \lean{
+        TNLean.MPS.AreaLaw.Hastings.disjoint_interval_interval,
+        TNLean.MPS.AreaLaw.Hastings.interval_union_interval,
+        TNLean.MPS.AreaLaw.Hastings.cutEntropy_sub_le
+    }
+    \leanok
+    Let $\Omega$ be a unit vector on the chain of $L$ sites. For $i\le k$,
+    \begin{align*}
+        S(\lbrack 0,k))\ \ge\ S(\lbrack 0,i))-(k-i)\log q .
+    \end{align*}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:chain_entropy_inequalities}
+    The cut $\lbrack 0,k)$ is the disjoint union of $\lbrack 0,i)$ and $\lbrack i,k)$. The
+    Araki--Lieb inequality gives $S(\lbrack 0,i))\le S(\lbrack 0,k))+S(\lbrack i,k))$, and the
+    interval $\lbrack i,k)$ has at most $k-i$ sites, so $S(\lbrack i,k))\le (k-i)\log q$.
+    This is the first step of the proof of the main theorem in
+    \cite{Hastings2007AreaLaw}.
+\end{proof}
+
+\begin{theorem}[The window of large cut entropy]
+    \label{thm:hastings_window_cut_entropy}
+    \lean{
+        TNLean.MPS.AreaLaw.Hastings.windowLength,
+        TNLean.MPS.AreaLaw.Hastings.windowLength_mul_log_le,
+        TNLean.MPS.AreaLaw.Hastings.lt_windowLength_add_one,
+        TNLean.MPS.AreaLaw.Hastings.two_mul_div_three_le_cutEntropy
+    }
+    \leanok
+    Let $S_{\max}\ge 0$ and let $l_0$ be a natural number with
+    $l_0\log q\le S_{\max}/3$, for instance
+    $l_0=\lfloor S_{\max}/(3\log q)\rfloor$ when $q\ge 2$. If $S(\lbrack 0,i))>S_{\max}$, then every
+    $k$ with $i\le k\le i+l_0$ satisfies
+    \begin{align*}
+        S(\lbrack 0,k))\ \ge\ \tfrac23\, S_{\max}.
+    \end{align*}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:hastings_cut_entropy_slow}
+    By Theorem~\ref{thm:hastings_cut_entropy_slow},
+    $S(\lbrack 0,k))\ge S(\lbrack 0,i))-(k-i)\log q>S_{\max}-l_0\log q\ge 2S_{\max}/3$.
+    The source takes $l_0=S_{\max}/(3\log q)$; the window length is a number of
+    sites, so here it is any natural number at most this value. No condition at
+    the right end of the chain is needed: a cut $\lbrack 0,k)$ with $k\ge L$ is the
+    whole chain and has entropy zero, so for $S_{\max}>0$ the conclusion itself
+    forces $i+l_0<L$.
+\end{proof}
+
+\begin{definition}[The window entropy]
+    \label{def:hastings_window_entropy}
+    \lean{
+        TNLean.MPS.AreaLaw.Hastings.windowStarts,
+        TNLean.MPS.AreaLaw.Hastings.mem_windowStarts,
+        TNLean.MPS.AreaLaw.Hastings.windowStarts_nonempty,
+        TNLean.MPS.AreaLaw.Hastings.windowEntropy,
+        TNLean.MPS.AreaLaw.Hastings.regionEntropy_le_windowEntropy,
+        TNLean.MPS.AreaLaw.Hastings.exists_windowEntropy_eq
+    }
+    \leanok
+    For the window $\lbrack i,i+l_0)$ and a length $l$, the \emph{window entropy}
+    $S_l$ is the largest entropy $S(\lbrack a,a+l))$ of an interval of $l$ sites
+    inside the window, that is over $a$ with $i\le a$ and $a+l\le i+l_0$. When
+    no such interval exists, that is when $l>l_0$, we set $S_l=0$. When
+    $l\le l_0$ the maximum is attained by some interval inside the window.
+    The window of~\cite{Hastings2007AreaLaw} consists of the sites numbered
+    $i-1,\ldots,i+l_0-1$ here. The window $\lbrack i,i+l_0)$ leaves out its leftmost site
+    and consists of the $l_0$ sites between the cuts at $i$ and $i+l_0$; every cut from $i$
+    to $i+l_0$ carries the bound of Theorem~\ref{thm:hastings_window_cut_entropy}. The
+    argument uses only intervals of at most $l_0$ sites whose cuts carry this bound, so the
+    omitted site plays no role.
+\end{definition}
+
+\begin{theorem}[Bounds on the window entropy]
+    \label{thm:hastings_window_entropy_bounds}
+    \lean{
+        TNLean.MPS.AreaLaw.Hastings.regionEntropy_nonneg,
+        TNLean.MPS.AreaLaw.Hastings.windowEntropy_nonneg,
+        TNLean.MPS.AreaLaw.Hastings.windowEntropy_le,
+        TNLean.MPS.AreaLaw.Hastings.windowEntropy_two_mul_le
+    }
+    \leanok
+    \uses{def:hastings_window_entropy}
+    For a unit vector and every length $l$,
+    \begin{align*}
+        0\ \le\ S_l\ \le\ l\log q,
+        \qquad
+        S_{2l}\ \le\ 2S_l .
+    \end{align*}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:chain_entropy_inequalities}
+    The first two bounds hold for the entropy of every region of at most $l$
+    sites. For the third, when $2l\le l_0$, take an interval $\lbrack a,a+2l)$ inside
+    the window of largest entropy; it is the disjoint union of the intervals
+    $\lbrack a,a+l)$ and $\lbrack a+l,a+2l)$, both inside the window, and subadditivity gives
+    $S_{2l}\le S(\lbrack a,a+l))+S(\lbrack a+l,a+2l))\le 2S_l$. When $2l>l_0$ the left side
+    is zero. The source defines $S_l$ only for $l\le l_0$; setting $S_l=0$
+    for $l>l_0$ is a convention adopted here, under which $S_{2l}\le 2S_l$
+    holds for every $l$.
+\end{proof}
