@@ -70,7 +70,7 @@ def IsFactorizationAt (Ω : EuclideanSpace ℂ (Fin L → Fin q)) (c l : ℕ) (�
     ‖OB * OL * OR - vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))‖ ≤ ε
 
 /-- The rank-one projection onto a unit vector. -/
-theorem isStarProjection_vecMulVec_of_norm_eq_one {n : Type*} [Fintype n] [DecidableEq n]
+theorem isStarProjection_vecMulVec_of_norm_eq_one {n : Type*} [Fintype n]
     {Ω : EuclideanSpace ℂ n} (hΩ : ‖Ω‖ = 1) :
     IsStarProjection (vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))) := by
   have hdot : WithLp.ofLp Ω ⬝ᵥ star (WithLp.ofLp Ω) = 1 := by
