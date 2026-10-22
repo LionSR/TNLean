@@ -878,7 +878,7 @@ for an arbitrary finite set of sites and are instantiated here directly.
     \leanok
     \uses{def:chain_swapped_doubled_hamiltonian,thm:chain_partial_swap_boundary,
         lem:chain_site_norm_budget,thm:chain_lieb_robinson,
-        thm:qc_site_expectation_supported_approximant}
+        lem:qc_site_expectation_properties,thm:qc_site_expectation_supported_approximant}
     The swapped doubled interactions have range $R$ and bound $2J$.
     Their per-site norm sum is at most $b_0$. The chain localization
     estimate therefore has constants $a,v$ as displayed.
@@ -1834,7 +1834,7 @@ for an arbitrary finite set of sites and are instantiated here directly.
 \begin{proof}\leanok
     \uses{thm:domain_partial_swap_crossing,lem:domain_site_norm_budget,
         thm:domain_lieb_robinson_localization,
-        thm:qc_site_expectation_supported_approximant}
+        lem:qc_site_expectation_properties,thm:qc_site_expectation_supported_approximant}
     The swapped domain family has interaction bound $2J$, so its per-site
     norm budget is $b_0$. Domain localization gives an error
     $a|X|^2\|A_{X,b}\|e^{v|t|-m/2}$ for each evolved replica perturbation
@@ -1925,7 +1925,7 @@ for an arbitrary finite set of sites and are instantiated here directly.
     again a relative interval. Empty domains and empty intervals are allowed.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{def:domain_model}
+    \uses{def:domain_model,def:chain_model}
     Every edge of the induced graph joins consecutive labels. Induction on
     a walk therefore shows that it visits every label between its endpoints.
     If $d_\Lambda(x,y)\le m$ and $z$ lies between $x$ and $y$, the initial
