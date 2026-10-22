@@ -9,7 +9,7 @@ by at most $\log q$ per site, so a cut of entropy above $S_{\max}$ is followed
 by a window of cuts of entropy at least $2S_{\max}/3$; on that window the
 largest entropy $S_l$ of an interval of $l$ sites obeys $0\le S_l\le l\log q$
 and $S_{2l}\le 2S_l$. Sites are numbered $0,\ldots,L-1$, the cut at $k$ is the
-interval $[0,k)$, and $S(A)$ is the entropy of the reduced state of a region
+interval $\lbrack 0,k)$, and $S(A)$ is the entropy of the reduced state of a region
 $A$.
 
 \begin{lemma}[The cut entropy moves slowly]
@@ -23,15 +23,15 @@ $A$.
     \leanok
     Let $\Omega$ be a unit vector on the chain of $L$ sites. For $i\le k$,
     \[
-        S([0,k))\ \ge\ S([0,i))-(k-i)\log q .
+        S(\lbrack 0,k))\ \ge\ S(\lbrack 0,i))-(k-i)\log q .
     \]
 \end{lemma}
 
 \begin{proof}
     \leanok
-    The cut $[0,k)$ is the disjoint union of $[0,i)$ and $[i,k)$. The
-    Araki--Lieb inequality gives $S([0,i))\le S([0,k))+S([i,k))$, and the
-    interval $[i,k)$ has at most $k-i$ sites, so $S([i,k))\le (k-i)\log q$.
+    The cut $\lbrack 0,k)$ is the disjoint union of $\lbrack 0,i)$ and $\lbrack i,k)$. The
+    Araki--Lieb inequality gives $S(\lbrack 0,i))\le S(\lbrack 0,k))+S(\lbrack i,k))$, and the
+    interval $\lbrack i,k)$ has at most $k-i$ sites, so $S(\lbrack i,k))\le (k-i)\log q$.
     This is the first step of the proof of the main theorem in
     \cite{Hastings2007AreaLaw}.
 \end{proof}
@@ -48,20 +48,20 @@ $A$.
     \uses{lem:hastings_cut_entropy_slow}
     Let $S_{\max}\ge 0$ and let $l_0$ be a natural number with
     $l_0\log q\le S_{\max}/3$, for instance
-    $l_0=\lfloor S_{\max}/(3\log q)\rfloor$. If $S([0,i))>S_{\max}$, then every
+    $l_0=\lfloor S_{\max}/(3\log q)\rfloor$. If $S(\lbrack 0,i))>S_{\max}$, then every
     $k$ with $i\le k\le i+l_0$ satisfies
     \[
-        S([0,k))\ \ge\ \tfrac23\, S_{\max}.
+        S(\lbrack 0,k))\ \ge\ \tfrac23\, S_{\max}.
     \]
 \end{lemma}
 
 \begin{proof}
     \leanok
     By Lemma~\ref{lem:hastings_cut_entropy_slow},
-    $S([0,k))\ge S([0,i))-(k-i)\log q>S_{\max}-l_0\log q\ge 2S_{\max}/3$.
+    $S(\lbrack 0,k))\ge S(\lbrack 0,i))-(k-i)\log q>S_{\max}-l_0\log q\ge 2S_{\max}/3$.
     The source takes $l_0=S_{\max}/(3\log q)$; the window length is a number of
     sites, so here it is any natural number below this value. No condition at
-    the right end of the chain is needed: a cut $[0,k)$ with $k\ge L$ is the
+    the right end of the chain is needed: a cut $\lbrack 0,k)$ with $k\ge L$ is the
     whole chain and has entropy zero, so for $S_{\max}>0$ the conclusion itself
     forces $i+l_0<L$.
 \end{proof}
@@ -77,8 +77,8 @@ $A$.
         TNLean.MPS.AreaLaw.Hastings.exists_windowEntropy_eq
     }
     \leanok
-    For the window $[i,i+l_0)$ and a length $l$, the \emph{window entropy}
-    $S_l$ is the largest entropy $S([a,a+l))$ of an interval of $l$ sites
+    For the window $\lbrack i,i+l_0)$ and a length $l$, the \emph{window entropy}
+    $S_l$ is the largest entropy $S(\lbrack a,a+l))$ of an interval of $l$ sites
     inside the window, that is over $a$ with $i\le a$ and $a+l\le i+l_0$. When
     no such interval exists, that is when $l>l_0$, we set $S_l=0$. When
     $l\le l_0$ the maximum is attained by some interval inside the window.
@@ -104,10 +104,10 @@ $A$.
 \begin{proof}
     \leanok
     The first two bounds hold for the entropy of every region of at most $l$
-    sites. For the third, when $2l\le l_0$, take an interval $[a,a+2l)$ inside
+    sites. For the third, when $2l\le l_0$, take an interval $\lbrack a,a+2l)$ inside
     the window of largest entropy; it is the disjoint union of the intervals
-    $[a,a+l)$ and $[a+l,a+2l)$, both inside the window, and subadditivity gives
-    $S_{2l}\le S([a,a+l))+S([a+l,a+2l))\le 2S_l$. When $2l>l_0$ the left side
+    $\lbrack a,a+l)$ and $\lbrack a+l,a+2l)$, both inside the window, and subadditivity gives
+    $S_{2l}\le S(\lbrack a,a+l))+S(\lbrack a+l,a+2l))\le 2S_l$. When $2l>l_0$ the left side
     is zero. With the convention $S_l=0$ for $l>l_0$ the bound holds for every
     $l$, as stated in \cite{Hastings2007AreaLaw}.
 \end{proof}
