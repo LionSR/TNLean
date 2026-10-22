@@ -5003,3 +5003,35 @@ The prescribed placement is $\ell(R_i)=i$ and $\ell(P_{j+1})=j$.
     \end{align}
     and $e^{-x/\xi}=(k/k_0)^{-1/(\xi\log D)}$.
 \end{proof}
+
+\begin{theorem}[Matrix product state from the decay of the Schmidt tail]
+    \label{thm:hastings_schmidt_tail_mps}
+    \lean{TNLean.MPS.AreaLaw.Hastings.isOpenMPS_norm_sub_le_of_schmidtTail_geometric}
+    \leanok
+    \uses{lem:hastings_schmidt_tail_rpow}
+    Let $\psi$ be a unit vector on a chain of $L$ sites, and let $d>1$,
+    $\xi>0$, $c\ge0$ and $k_0>0$. Suppose that at every internal cut the
+    mass beyond the $n$ largest eigenvalues of the left marginal is at most
+    $c\,e^{-2m/\xi}$ whenever $k_0d^{2m}\le n$. Then for every natural
+    number $k'\ge k_0$, truncating every cut onto the $k'$ leading
+    eigenvectors of its left marginal gives an open-boundary matrix product
+    state $\Phi$ of bond dimension $k'$ with
+    \begin{align}
+        \lVert\Phi-\psi\rVert
+         & \le(L-1)\sqrt{c\,e^{2/\xi}\Bigl(\frac{k'}{k_0}\Bigr)^{-1/(\xi\log d)}}.
+        \notag
+    \end{align}
+    This is the conclusion of the section on matrix product states of
+    \cite{Hastings2007AreaLaw}, stated for the norm distance and with the
+    constant of Lemma~\ref{lem:hastings_schmidt_tail_rpow}
+    \cite{gap:hastings07_schmidt_tail_constant}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:chain_sequential_truncation_eigen}
+    Sequential truncation onto the leading eigenvectors gives an
+    open-boundary matrix product state of bond dimension $k'$ within
+    distance $\sum_k\sqrt{\varepsilon_k(k')}$ of $\psi$, where
+    $\varepsilon_k(k')$ is the mass beyond the $k'$ largest eigenvalues at
+    the cut $k$. Lemma~\ref{lem:hastings_schmidt_tail_rpow} bounds each
+    $\varepsilon_k(k')$, and there are $L-1$ internal cuts.
+\end{proof}
