@@ -15,13 +15,16 @@
 
 The section on matrix product states of~\cite{Hastings2007AreaLaw} concludes
 that the error of a matrix product state of bond dimension $k'$ on a chain of
-length $N$ is of order
+length $N$ scales as
 \begin{align}
-    N\,(k'/k_0)^{-1/(\xi'\ln D)}.
+    N\,(k'/k_0)^{1/\xi'\ln(D)}.
     \label{eq:hastings07_mps_error_source}
 \end{align}
 It does not name the error measure.\footnote{\path{References/0705.2024/law16.tex},
-    lines~553--557.}
+    lines~553--557.} The exponent is printed without its minus sign; the bound
+is meant to decay in $k'$, and the corrected exponent $-1/(\xi'\ln D)$ is
+recorded in the separate note \path{hastings07_schmidt_tail_constant.tex}. The
+rest of this note uses the corrected exponent.
 
 \section{The reading}
 
