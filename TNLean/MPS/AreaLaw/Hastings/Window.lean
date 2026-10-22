@@ -16,8 +16,13 @@ Hamiltonian enters. These are stage lemmas: the proof by contradiction supplies 
 entropy, and the doubling iteration consumes the window entropies defined here.
 
 Sites are numbered from `0`, and the interval `[a, b)` is `interval L a b`. The source's
-`ρ_{1,k}`, the state of the first `k` sites, is the state on `interval L 0 k`, and its
-interval `X_{j+1,j+l}` of `l` sites is `interval L j (j + l)`.
+`ρ_{1,k}`, the state of the first `k` sites, is the state on `interval L 0 k`, so the source's
+cut `k` is the cut at `k` here, and its interval `X_{j+1,j+l}` of `l` sites is
+`interval L j (j + l)`. The source's window `X_{i,i+l₀}` has `l₀ + 1` sites and corresponds to
+`[i - 1, i + l₀)`. The window here is `[i, i + l₀)`: the `l₀` sites between the cuts `i` and
+`i + l₀`, every one of which carries the bound `S_cut` of eq. `sbnd`. The site left out, just
+left of the cut `i`, plays no role in the argument, which uses only intervals of at most `l₀`
+sites whose cuts carry `S_cut`; the cut on the far side of that site carries no such bound.
 
 * The entropy of the cut moves slowly: `S([0, k)) ≥ S([0, i)) - (k - i) ln q` for `i ≤ k`
   (lines 150–151).
@@ -27,12 +32,13 @@ interval `X_{j+1,j+l}` of `l` sites is `interval L j (j + l)`.
   `[i, i + l₀)`, with `0 ≤ S_l ≤ l ln q` and `S_{2l} ≤ 2 S_l` (eq. `naibd`, lines 166–177).
 
 The window length is a natural number. The source sets `l₀ = S_max / (3 ln D)` (eq. `l0def`);
-here any natural `l₀` with `l₀ ln q ≤ S_max / 3` is allowed, and `windowLength` is the
-largest one. The window may reach past the end of the chain: the chain end needs no separate
-hypothesis, because every cut `k ≥ L` is the whole chain and has entropy zero, so the window
-bound itself forces `i + l₀ < L` when `S_max > 0`. When no interval of `l` sites fits in the
-window, that is `l₀ < l`, the window entropy is `0`; with this convention `S_{2l} ≤ 2 S_l`
-holds for every `l`.
+here any natural `l₀` with `l₀ ln q ≤ S_max / 3` is allowed, and `windowLength` is
+`⌊S_max / (3 ln q)⌋`, the largest such `l₀` when `q ≥ 2` and `S_max ≥ 0`. For `q = 1` the
+logarithm vanishes and the division convention gives `windowLength = 0`. The window may reach
+past the end of the chain: the chain end needs no separate hypothesis, because every cut
+`k ≥ L` is the whole chain and has entropy zero, so the window bound itself forces
+`i + l₀ < L` when `S_max > 0`. When no interval of `l` sites fits in the window, that is
+`l₀ < l`, the window entropy is `0`; with this convention `S_{2l} ≤ 2 S_l` holds for every `l`.
 
 ## Main definitions
 
@@ -103,7 +109,8 @@ theorem cutEntropy_sub_le (hΩ : ‖Ω‖ = 1) {i k : ℕ} (hik : i ≤ k) :
   nlinarith
 
 /-- The window length `l₀ = ⌊S_max / (3 ln q)⌋`, the natural-number reading of eq. `l0def`
-of Hastings, arXiv:0705.2024v4, lines 155–159. -/
+of Hastings, arXiv:0705.2024v4, lines 155–159. It is meaningful for `q ≥ 2`; for `q = 1` the
+logarithm vanishes and the division convention gives `0`. -/
 noncomputable def windowLength (Smax : ℝ) (q : ℕ) : ℕ := ⌊Smax / (3 * Real.log q)⌋₊
 
 /-- The window length satisfies `l₀ ln q ≤ S_max / 3` for `S_max ≥ 0`. Hastings,
@@ -119,8 +126,9 @@ theorem windowLength_mul_log_le {Smax : ℝ} (hS : 0 ≤ Smax) (q : ℕ) :
         ≤ Smax / (3 * Real.log q) * Real.log q := by gcongr
       _ = Smax / 3 := by field_simp
 
-/-- The window length is the largest natural number below `S_max / (3 ln q)`. Hastings,
-arXiv:0705.2024v4, eq. `l0def`, lines 155–159. -/
+/-- The window length is the floor of `S_max / (3 ln q)`: the next natural number exceeds this
+quotient. For `q ≥ 2` and `S_max ≥ 0` it is the largest natural number at most the quotient.
+Hastings, arXiv:0705.2024v4, eq. `l0def`, lines 155–159. -/
 theorem lt_windowLength_add_one (Smax : ℝ) (q : ℕ) :
     Smax / (3 * Real.log q) < windowLength Smax q + 1 :=
   Nat.lt_floor_add_one _
