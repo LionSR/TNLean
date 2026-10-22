@@ -82,8 +82,8 @@ operator norms.
     $H$ by the scalar $E_0$.
 \end{proof}
 
-\begin{lemma}[Supports of the three parts]
-    \label{lem:hastings_three_way_splitting_supports}
+\begin{theorem}[Supports of the three parts]
+    \label{thm:hastings_three_way_splitting_supports}
     \lean{
         TNLean.MPS.AreaLaw.ChainHamiltonian.isSupportedOn_termSum,
         TNLean.MPS.AreaLaw.ChainHamiltonian.isSupportedOn_leftPart,
@@ -100,7 +100,7 @@ operator norms.
     lie at distance at least $m$ from the cut, for every $m$, as the parts
     $H_L$ and $H_R$ of \cite[lines 774--778]{Hastings2007AreaLaw} lie at
     distance $l/3$.
-\end{lemma}
+\end{theorem}
 \begin{proof}\leanok
     A sum of terms supported in a set is supported in that set, and the
     identity is supported everywhere. A buffer support $X$ contains a site
@@ -108,8 +108,8 @@ operator norms.
     site $z\in X$ satisfies $j-m-R\le z<j+m+R$.
 \end{proof}
 
-\begin{lemma}[Norm of the buffer part]
-    \label{lem:hastings_three_way_splitting_norm}
+\begin{theorem}[Norm of the buffer part]
+    \label{thm:hastings_three_way_splitting_norm}
     \lean{
         TNLean.MPS.AreaLaw.ChainHamiltonian.norm_termSum_le,
         TNLean.MPS.AreaLaw.Hastings.card_supports_containing_le,
@@ -120,7 +120,7 @@ operator norms.
     }
     \leanok
     \uses{def:hastings_three_way_splitting,
-        lem:hastings_three_way_splitting_supports}
+        thm:hastings_three_way_splitting_supports}
     A sum of $k$ terms has norm at most $kJ$. At most $2^{2R+1}$ supports of
     range $R$ contain a given site, and there are at most
     $2(m+R)\,2^{2R+1}$ buffer supports. Hence, for $J\ge0$,
@@ -130,7 +130,7 @@ operator norms.
     linearly in the buffer width. For a unit vector $\Psi_0$, centering at
     most doubles the norm, so
     $\|\widetilde H_B\|\le4(m+R)\,2^{2R+1}J$.
-\end{lemma}
+\end{theorem}
 \begin{proof}\leanok
     The first bound is the triangle inequality. A support containing a site
     $x$ lies in the $2R+1$ sites within distance $R$ of $x$, which have at most
