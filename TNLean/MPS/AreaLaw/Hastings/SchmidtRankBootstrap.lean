@@ -88,7 +88,8 @@ theorem normSq_dotProduct_le_kyFanNorm [DecidableEq m] (φ ψ : m × n → ℂ) 
     field_simp
     linarith [Real.sq_sqrt hpos.le]
   have hBrank : B.rank ≤ k := by
-    rw [hB, show t • schmidtCoeffMatrix ψ = (t • (1 : Matrix m m ℂ)) * schmidtCoeffMatrix ψ by
+    rw [hB, show t • schmidtCoeffMatrix ψ =
+        (t • (1 : Matrix m m ℂ)) * schmidtCoeffMatrix ψ by
       rw [Matrix.smul_mul, Matrix.one_mul]]
     exact (rank_mul_le_right _ _).trans hψ
   have hmain := normSq_trace_conjTranspose_mul_le_kyFanNorm (schmidtCoeffMatrix φ) B hk
@@ -103,7 +104,8 @@ theorem normSq_dotProduct_le_kyFanNorm [DecidableEq m] (φ ψ : m × n → ℂ) 
 descending order. -/
 theorem vonNeumannEntropy_eq_probabilityEntropy_eigenvalues₀ {ρ : Matrix m m ℂ}
     (hρ : ρ.IsHermitian) :
-    vonNeumannEntropy ρ hρ = probabilityEntropy (fun a : Fin (Fintype.card m) ↦ hρ.eigenvalues₀ a) := by
+    vonNeumannEntropy ρ hρ =
+      probabilityEntropy (fun a : Fin (Fintype.card m) ↦ hρ.eigenvalues₀ a) := by
   rw [vonNeumannEntropy, probabilityEntropy]
   unfold Matrix.IsHermitian.eigenvalues
   exact Equiv.sum_comp (Fintype.equivOfCardEq (Fintype.card_fin _)).symm
@@ -139,7 +141,8 @@ Hastings, arXiv:0705.2024v4, proof of Lemma 2, lines 333–390: the overlap boun
 with `c = 2 C₁(ξ)² / P`, the Schmidt-tail constraint is eq. `constraint`, and the scale `m'` is
 the least integer with `c exp(-2m'/ξ') ≤ 1`. This stage lemma takes the mixtures as a
 hypothesis; Lemma 1 produces them for the ground state of a gapped chain. -/
-theorem vonNeumannEntropy_le_of_schmidtRank_mixtures (Ψ : m × n → ℂ) (hΨ : star Ψ ⬝ᵥ Ψ = 1)
+theorem vonNeumannEntropy_le_of_schmidtRank_mixtures (Ψ : m × n → ℂ)
+    (hΨ : star Ψ ⬝ᵥ Ψ = 1)
     {k D : ℕ} (hk : 1 ≤ k) (hD : 2 ≤ D) {ξ' c : ℝ} (hξ : 0 < ξ') (hc : 1 ≤ c)
     (hmix : ∀ s : ℕ, c * Real.exp (-(2 * s / ξ')) < 1 →
       ∃ (r : ℕ) (w : Fin r → ℝ) (ψ : Fin r → m × n → ℂ), (∀ i, 0 ≤ w i) ∧
@@ -176,7 +179,8 @@ theorem vonNeumannEntropy_le_of_schmidtRank_mixtures (Ψ : m × n → ℂ) (hΨ 
   have hcm : c * Real.exp (-(2 * m' / ξ')) ≤ 1 := by
     have : Real.log c ≤ 2 * m' / ξ' := by
       rw [le_div_iff₀ hξ]; nlinarith
-    calc c * Real.exp (-(2 * m' / ξ')) ≤ Real.exp (2 * m' / ξ') * Real.exp (-(2 * m' / ξ')) := by
+    calc c * Real.exp (-(2 * m' / ξ'))
+        ≤ Real.exp (2 * m' / ξ') * Real.exp (-(2 * m' / ξ')) := by
           gcongr
           calc c = Real.exp (Real.log c) := (Real.exp_log hcpos).symm
             _ ≤ _ := Real.exp_le_exp.mpr this
