@@ -14,7 +14,9 @@ run_cmd do
   for decl in #[
     ``TNLean.MPS.AreaLaw.Hastings.one_sub_kyFanNorm_le_of_schmidtRank_mixture,
     ``TNLean.MPS.AreaLaw.Hastings.exists_mixture_rank_cutMatrix_le_overlap_of_factorization,
-    ``TNLean.MPS.AreaLaw.Hastings.one_sub_kyFanNorm_le_of_factorization] do
+    ``TNLean.MPS.AreaLaw.Hastings.one_sub_kyFanNorm_le_of_factorization,
+    ``TNLean.MPS.AreaLaw.Hastings.one_half_le_kyFanNorm_of_exp_two_mul_vonNeumannEntropy_le,
+    ``TNLean.MPS.AreaLaw.Hastings.one_sub_kyFanNorm_le_of_factorization_of_entropy] do
     unless (← Lean.getEnv).contains decl do
       throwError "Missing declaration {decl}"
     let axioms ← Lean.collectAxioms decl
