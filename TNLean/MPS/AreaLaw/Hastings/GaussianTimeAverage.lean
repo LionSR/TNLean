@@ -62,9 +62,9 @@ variable {n : Type*} [Fintype n] [DecidableEq n]
 noncomputable def timeAverageVariance (q ΔE : ℝ) : ℝ≥0 := (q / ΔE ^ 2).toNNReal
 
 /-- The Gaussian time average `P_q(H) = (ΔE/√(2πq)) ∫ e^{iHt} e^{-(tΔE)²/2q} dt` of
-Hastings, arXiv:0705.2024v4, `law16.tex`, lines 843–847 (for `ΔE > 0`), written as the two-generator
-Gaussian filter with left generator `H`, right generator `0` and input `1`. (With `H` on
-both sides the filter of `1` would be `1` itself.) -/
+Hastings, arXiv:0705.2024v4, `law16.tex`, lines 843–847 (for `q > 0` and `ΔE > 0`), written
+as the two-generator Gaussian filter with left generator `H`, right generator `0` and input
+`1`. (With `H` on both sides the filter of `1` would be `1` itself.) -/
 noncomputable def gaussianTimeAverage (q ΔE : ℝ) (H : Matrix n n ℂ) : Matrix n n ℂ :=
   GaussianFilter.gaussianIntertwiner (timeAverageVariance q ΔE) H 0 1
 

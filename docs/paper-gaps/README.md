@@ -1260,7 +1260,7 @@ absolute constants.
 ### One-dimensional area law after Hastings: the exponent of the Gaussian time average
 
 [hastings07_gaussian_average_exponent.tex](hastings07_gaussian_average_exponent.tex)
-(local correction, open) records that the Gaussian time average `P_q` in the
+(false as printed, open) records that the Gaussian time average `P_q` in the
 appendix of Hastings (arXiv:0705.2024v4, line 848) satisfies
 `‖P_q - P_0‖ ≤ e^{-q/2}`, which with the source's choice of `q` is
 `O(e^{-l/6ξ})` rather than the printed `O(e^{-l/3ξ})`. The same factor enters
