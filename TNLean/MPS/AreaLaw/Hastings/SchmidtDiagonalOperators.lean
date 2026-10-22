@@ -42,24 +42,26 @@ theorem sum_smul_vecMulVec_mulVec_of_orthonormal [DecidableEq κ] {n : Type*} [F
   simp [sum_mulVec, smul_mulVec, vecMulVec_mulVec, hψ]
 
 /-- Acting by `M ⊗ 1` on a sum of product vectors acts by `M` on each left factor. -/
-theorem kronecker_one_mulVec_sum [DecidableEq r] {n : Type*} [Fintype n]
+theorem kronecker_one_mulVec_sum [DecidableEq r] {n : Type*}
     (M : Matrix n l ℂ) (a : κ → ℂ) (ψL : κ → l → ℂ) (ψR : κ → r → ℂ) :
     (M ⊗ₖ (1 : Matrix r r ℂ)) *ᵥ (fun p => ∑ α, a α * (ψL α p.1 * ψR α p.2)) =
       fun p => ∑ α, a α * ((M *ᵥ ψL α) p.1 * ψR α p.2) := by
   ext ⟨i, j⟩
   simp only [mulVec, dotProduct, Fintype.sum_prod_type, Finset.mul_sum, Finset.sum_mul]
-  simp [one_apply]
+  simp only [kroneckerMap_apply, one_apply, mul_ite, mul_one, mul_zero, ite_mul, zero_mul,
+    Finset.sum_ite_irrel, Finset.sum_const_zero, Finset.sum_ite_eq, Finset.mem_univ, ↓reduceIte]
   rw [Finset.sum_comm]
   exact Finset.sum_congr rfl fun _ _ => Finset.sum_congr rfl fun _ _ => by ring
 
 /-- Acting by `1 ⊗ M` on a sum of product vectors acts by `M` on each right factor. -/
-theorem one_kronecker_mulVec_sum [DecidableEq l] {n : Type*} [Fintype n]
+theorem one_kronecker_mulVec_sum [DecidableEq l] {n : Type*}
     (M : Matrix n r ℂ) (a : κ → ℂ) (ψL : κ → l → ℂ) (ψR : κ → r → ℂ) :
     ((1 : Matrix l l ℂ) ⊗ₖ M) *ᵥ (fun p => ∑ α, a α * (ψL α p.1 * ψR α p.2)) =
       fun p => ∑ α, a α * (ψL α p.1 * (M *ᵥ ψR α) p.2) := by
   ext ⟨i, j⟩
   simp only [mulVec, dotProduct, Fintype.sum_prod_type, Finset.mul_sum]
-  simp [one_apply]
+  simp only [kroneckerMap_apply, one_apply, ite_mul, one_mul, zero_mul, Finset.sum_ite_irrel,
+    Finset.sum_const_zero, Finset.sum_ite_eq, Finset.mem_univ, ↓reduceIte]
   rw [Finset.sum_comm]
   exact Finset.sum_congr rfl fun _ _ => Finset.sum_congr rfl fun _ _ => by ring
 
