@@ -827,7 +827,7 @@ common positive direct blocking at which both are simple. This combines the
 bounded simple blocking of arXiv:1703.09188, Proposition III.3(ii), with its
 all-later-blockings corollary (lines 442--446). -/
 theorem IsMPU.exists_common_blockTensor_isMPUSimple
-    [NeZero d] [NeZero D] [NeZero e] [NeZero E]
+    {e E : ℕ} [NeZero d] [NeZero D] [NeZero e] [NeZero E]
     {U : MPOTensor d D} {V : MPOTensor e E} (hU : IsMPU U) (hV : IsMPU V) :
     ∃ k : ℕ, 0 < k ∧
       IsMPUSimple (MPOTensor.blockTensor U k) ∧
