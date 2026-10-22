@@ -9,3 +9,4 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.MPS.AreaLaw.Hastings
 
 import TNLean.MPS.AreaLaw.Hastings.GaussianTimeAverage
+import TNLean.MPS.AreaLaw.Hastings.TailEntropy
