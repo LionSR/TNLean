@@ -47,3 +47,42 @@ slower rate $e^{-l/\xi'}$ with $\xi'>6\xi$.
     and $b\sqrt l\,e^{-\delta l}\le b/\sqrt{2e\delta}$
     by~\eqref{eq:hastings_sqrt_exp}.
 \end{proof}
+
+\begin{theorem}[Lemma~1 at every decay length beyond $6\xi$]
+    \label{thm:hastings_factorization_rate}
+    \lean{TNLean.MPS.AreaLaw.Hastings.exists_isFactorizationAt_of_sqrt_decay}
+    \leanok
+    \uses{def:hastings_factorization_at}
+    Let $\xi>0$, $\xi'>6\xi$, $\delta=1/(6\xi)-1/\xi'$ and $a,b\ge0$. Suppose
+    that at every cut $c$ and length $l$ with $c+l\le L$ there is an
+    approximate factorization with error $(a+b\sqrt l)\,e^{-l/6\xi}$. Then at
+    every such $(c,l)$ there is one with error
+    \begin{align}
+        \Bigl(a+\frac{b}{\sqrt{2e\delta}}\Bigr)e^{-l/\xi'}.
+        \label{eq:hastings_factorization_rate}
+    \end{align}
+    This is the conclusion of Lemma~1 of \cite{Hastings2007AreaLaw} for every
+    decay length $\xi'>6\xi$, the form its proof gives at lines 903--907.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:hastings_decay_slack, thm:hastings_factorization_mono}
+    By Theorem~\ref{thm:hastings_decay_slack} the error
+    $(a+b\sqrt l)\,e^{-l/6\xi}$ is at most~\eqref{eq:hastings_factorization_rate},
+    and a factorization with a smaller error is one with a larger error.
+\end{proof}
+
+\begin{theorem}[The positive version at every decay length beyond $6\xi$]
+    \label{thm:hastings_positive_factorization_rate}
+    \lean{TNLean.MPS.AreaLaw.Hastings.exists_posSemidef_isFactorizationAt_of_sqrt_decay}
+    \leanok
+    \uses{def:hastings_factorization_at}
+    Under the hypotheses of Theorem~\ref{thm:hastings_factorization_rate},
+    with $\Omega$ a unit vector and $C_1=a+b/\sqrt{2e\delta}$, there is at every
+    $(c,l)$ with $c+l\le L$ an approximate factorization with $O_B$ positive
+    semidefinite and error $(\sqrt2+4)\sqrt{C_1}\,e^{-l/(2\xi')}$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:hastings_factorization_rate, thm:hastings_positive_factorization}
+    Apply Theorem~\ref{thm:hastings_positive_factorization} to the
+    factorizations of Theorem~\ref{thm:hastings_factorization_rate}.
+\end{proof}

@@ -26,6 +26,18 @@ unit vector $\Omega$ and operator norms throughout.
     \end{align}
 \end{definition}
 
+\begin{theorem}[Enlarging the error]
+    \label{thm:hastings_factorization_mono}
+    \lean{TNLean.MPS.AreaLaw.Hastings.IsFactorizationAt.mono}
+    \leanok
+    \uses{def:hastings_factorization_at}
+    An approximate factorization at $(c,l)$ with error $\epsilon$ is one with
+    every error $\epsilon'\ge\epsilon$.
+\end{theorem}
+\begin{proof}\leanok
+    Only the bound~\eqref{eq:hastings_factorization_at} involves the error.
+\end{proof}
+
 \begin{theorem}[Supports are closed under adjoints]
     \label{thm:hastings_supported_conj_transpose}
     \lean{Entropy.IsSupportedOn.conjTranspose}

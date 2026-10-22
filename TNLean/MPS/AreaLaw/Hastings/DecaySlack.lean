@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import Mathlib.Analysis.SpecialFunctions.Exp
 import Mathlib.Analysis.SpecialFunctions.Pow.Real
 import Mathlib.Analysis.SpecialFunctions.Sqrt
+import TNLean.MPS.AreaLaw.Hastings.PositiveFactorization
 
 /-!
 # Absorbing a square-root prefactor into a slower exponential decay
@@ -24,6 +25,9 @@ and not at the printed `ξ' = 6ξ` (line 142). This is recorded in
 
 * `sqrt_mul_exp_neg_le`: `√l e^{-δl} ≤ 1/√(2eδ)` for `δ > 0` and `l ≥ 0`.
 * `add_mul_sqrt_mul_exp_le_of_lt`: `(a + b√l) e^{-l/(6ξ)} ≤ (a + b/√(2eδ)) e^{-l/ξ'}`.
+* `exists_isFactorizationAt_of_sqrt_decay`, `exists_posSemidef_isFactorizationAt_of_sqrt_decay`:
+  Lemma 1 at the rate `C₁ e^{-l/ξ'}` for every `ξ' > 6ξ`, and its positive version, from a
+  factorization with error `(a + b√l) e^{-l/(6ξ)}`.
 -/
 
 open Real
@@ -90,5 +94,43 @@ theorem add_mul_sqrt_mul_exp_le_of_lt {ξ ξ' a b l : ℝ} (hξ : 0 < ξ) (hξ' 
     _ ≤ (a + b * (1 / √(2 * exp 1 * δ))) * exp (-(l / ξ')) := by
         gcongr
         · exact mul_le_of_le_one_right ha hd1
+
+variable {L q : ℕ}
+
+/-- **Lemma 1 at every decay length `ξ' > 6ξ`.** If at every cut `c` and length `l` with
+`c + l ≤ L` there is an approximate factorization with error `(a + b√l) e^{-l/(6ξ)}`, the form of
+the final bound of the proof of Lemma 1 (Hastings, arXiv:0705.2024v4, lines 903–907), then for
+every `ξ' > 6ξ` there is one with error `C₁ e^{-l/ξ'}`, where `C₁ = a + b/√(2eδ)` and
+`δ = 1/(6ξ) − 1/ξ'`. This is the conclusion of Lemma 1 (lines 246–267) with the decay length
+`ξ' > 6ξ` in place of the printed `ξ' = 6ξ`; see
+`docs/paper-gaps/hastings07_gaussian_average_exponent.tex`. -/
+theorem exists_isFactorizationAt_of_sqrt_decay {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
+    {ξ ξ' a b : ℝ} (hξ : 0 < ξ) (hξ' : 6 * ξ < ξ') (ha : 0 ≤ a) (hb : 0 ≤ b)
+    (hfact : ∀ c l : ℕ, c + l ≤ L → ∃ OB OL OR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ,
+      IsFactorizationAt Ω c l ((a + b * √l) * exp (-(l / (6 * ξ)))) OB OL OR)
+    (c l : ℕ) (hcl : c + l ≤ L) :
+    ∃ OB OL OR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ,
+      IsFactorizationAt Ω c l
+        ((a + b * (1 / √(2 * exp 1 * (1 / (6 * ξ) - 1 / ξ')))) * exp (-(l / ξ'))) OB OL OR := by
+  obtain ⟨OB, OL, OR, hF⟩ := hfact c l hcl
+  exact ⟨OB, OL, OR, hF.mono (add_mul_sqrt_mul_exp_le_of_lt hξ hξ' ha hb (Nat.cast_nonneg l))⟩
+
+/-- **The positive version of Lemma 1 at every decay length `ξ' > 6ξ`.** Under the hypothesis of
+`exists_isFactorizationAt_of_sqrt_decay`, for a unit vector `Ω`, there is at every `(c, l)` a
+factorization with `O_B` positive semidefinite and error `(√2 + 4) √C₁ e^{-l/(2ξ')}`, with
+`C₁ = a + b/√(2eδ)`. The positive repair halves the rate; see
+`docs/paper-gaps/hastings07_lemma1_positivity_rate.tex`. -/
+theorem exists_posSemidef_isFactorizationAt_of_sqrt_decay
+    {Ω : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Ω‖ = 1)
+    {ξ ξ' a b : ℝ} (hξ : 0 < ξ) (hξ' : 6 * ξ < ξ') (ha : 0 ≤ a) (hb : 0 ≤ b)
+    (hfact : ∀ c l : ℕ, c + l ≤ L → ∃ OB OL OR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ,
+      IsFactorizationAt Ω c l ((a + b * √l) * exp (-(l / (6 * ξ)))) OB OL OR)
+    (c l : ℕ) (hcl : c + l ≤ L) :
+    ∃ OB OL OR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ, OB.PosSemidef ∧
+      IsFactorizationAt Ω c l ((√2 + 4) *
+        √(a + b * (1 / √(2 * exp 1 * (1 / (6 * ξ) - 1 / ξ')))) * exp (-(l / (2 * ξ'))))
+        OB OL OR :=
+  exists_posSemidef_factorization hΩ (by positivity)
+    (exists_isFactorizationAt_of_sqrt_decay hξ hξ' ha hb hfact) c l hcl
 
 end TNLean.MPS.AreaLaw.Hastings

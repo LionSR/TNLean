@@ -16,6 +16,7 @@ run_cmd do
     ``Entropy.IsSupportedOn.conjTranspose,
     ``TNLean.MPS.AreaLaw.Hastings.isStarProjection_vecMulVec_of_norm_eq_one,
     ``TNLean.MPS.AreaLaw.Hastings.sqrt_one_sub_sq_add_le,
+    ``TNLean.MPS.AreaLaw.Hastings.IsFactorizationAt.mono,
     ``TNLean.MPS.AreaLaw.Hastings.IsFactorizationAt.conjTranspose_mul_self,
     ``TNLean.MPS.AreaLaw.Hastings.exists_posSemidef_factorization,
     ``TNLean.MPS.AreaLaw.Hastings.exists_factorization_of_isFactorizationAt] do

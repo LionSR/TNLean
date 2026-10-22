@@ -31,6 +31,7 @@ unchanged. Documented in `docs/paper-gaps/hastings07_lemma1_positivity_rate.tex`
 
 ## Main results
 
+* `IsFactorizationAt.mono`: a factorization with error `ε` has every larger error.
 * `IsFactorizationAt.conjTranspose_mul_self`: the positive repair at one cut and length.
 * `exists_posSemidef_factorization`: the positive version at every cut and length, at half
   the rate.
@@ -68,6 +69,14 @@ def IsFactorizationAt (Ω : EuclideanSpace ℂ (Fin L → Fin q)) (c l : ℕ) (�
     Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) OL (leftBlock L c) ∧
     Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) OR (leftBlock L c)ᶜ ∧
     ‖OB * OL * OR - vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))‖ ≤ ε
+
+/-- A factorization with error `ε` is one with every larger error. -/
+theorem IsFactorizationAt.mono {Ω : EuclideanSpace ℂ (Fin L → Fin q)} {c l : ℕ} {ε ε' : ℝ}
+    {OB OL OR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
+    (hF : IsFactorizationAt Ω c l ε OB OL OR) (h : ε ≤ ε') :
+    IsFactorizationAt Ω c l ε' OB OL OR :=
+  ⟨hF.1, hF.2.1, hF.2.2.1, hF.2.2.2.1, hF.2.2.2.2.1, hF.2.2.2.2.2.1, hF.2.2.2.2.2.2.1,
+    hF.2.2.2.2.2.2.2.trans h⟩
 
 /-- The rank-one projection onto a unit vector. -/
 theorem isStarProjection_vecMulVec_of_norm_eq_one {n : Type*} [Fintype n]

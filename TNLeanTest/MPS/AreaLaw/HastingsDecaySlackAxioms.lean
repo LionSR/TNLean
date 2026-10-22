@@ -14,7 +14,9 @@ run_cmd do
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
   for decl in #[
     ``TNLean.MPS.AreaLaw.Hastings.sqrt_mul_exp_neg_le,
-    ``TNLean.MPS.AreaLaw.Hastings.add_mul_sqrt_mul_exp_le_of_lt] do
+    ``TNLean.MPS.AreaLaw.Hastings.add_mul_sqrt_mul_exp_le_of_lt,
+    ``TNLean.MPS.AreaLaw.Hastings.exists_isFactorizationAt_of_sqrt_decay,
+    ``TNLean.MPS.AreaLaw.Hastings.exists_posSemidef_isFactorizationAt_of_sqrt_decay] do
     unless (← Lean.getEnv).contains decl do
       throwError "Missing declaration {decl}"
     let axioms ← Lean.collectAxioms decl
