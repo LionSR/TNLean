@@ -77,6 +77,23 @@ are operator norms.
     $\lvert g(t)\rvert\le\theta$ for every real $t$.
 \end{proof}
 
+\begin{lemma}[The cut-off estimate]
+    \label{lem:hastings_spectral_cutoff_pair_norm}
+    \lean{TNLean.MPS.AreaLaw.Hastings.norm_add_mul_mul_le_of_isStarProjection,
+        TNLean.MPS.AreaLaw.Hastings.norm_add_mul_mul_spectralCutoff_le}
+    \leanok
+    \uses{lem:hastings_spectral_cutoff_projection,lem:hastings_spectral_cutoff_norm}
+    Let $O$ and $O'$ be commuting orthogonal projections with
+    $\lVert AO\rVert\le a$ and $\lVert BO'\rVert\le b$. Then
+    $\lVert(A+B)OO'\rVert\le a+b$. In particular, if $M_L$ and $M_R$ are
+    Hermitian, $\theta\ge0$, and their cut-offs $O_L$ and $O_R$ at $\theta$
+    commute, then $\lVert(M_L+M_R)O_LO_R\rVert\le2\theta$.
+\end{lemma}
+\begin{proof}\leanok
+    Since $OO'=O'O$, $(A+B)OO'=(AO)O'+(BO')O$, and projections have norm at
+    most one.
+\end{proof}
+
 \begin{lemma}[Two cut-offs move a vector by at most the sum]
     \label{lem:hastings_spectral_cutoff_two}
     \lean{TNLean.MPS.AreaLaw.Hastings.norm_sub_mul_le_of_isStarProjection}

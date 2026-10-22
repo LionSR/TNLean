@@ -16,6 +16,8 @@ run_cmd do
     ``TNLean.MPS.AreaLaw.Hastings.isStarProjection_spectralCutoff,
     ``TNLean.MPS.AreaLaw.Hastings.norm_sub_spectralCutoff_le,
     ``TNLean.MPS.AreaLaw.Hastings.norm_mul_spectralCutoff_le,
+    ``TNLean.MPS.AreaLaw.Hastings.norm_add_mul_mul_le_of_isStarProjection,
+    ``TNLean.MPS.AreaLaw.Hastings.norm_add_mul_mul_spectralCutoff_le,
     ``TNLean.MPS.AreaLaw.Hastings.norm_sub_mul_le_of_isStarProjection,
     ``TNLean.MPS.AreaLaw.Hastings.spectralCutoff_localLift,
     ``TNLean.MPS.AreaLaw.Hastings.commute_spectralCutoff_localLift_of_disjoint] do

@@ -18,9 +18,10 @@ constant one.
 
 **Local fix (absolute threshold):** the source projects onto the eigenvalues at most `θ`
 (line 830). The terms `M_L`, `M_R` are centered at the ground state and need not be
-positive, and the later step (line 893) uses `‖M_L O_L‖ ≤ θ`, which fails for the printed
+positive, and the cut-off estimate (lines 878–880) uses `‖M_L O_L‖ ≤ θ`, which fails for the printed
 projection when `M_L` has an eigenvalue below `-θ`. Projecting onto the eigenvalues of
-absolute value at most `θ` keeps eq. `obd` and gives `‖M O‖ ≤ θ`. Documented in
+absolute value at most `θ` keeps eq. `obd` and gives `‖M O‖ ≤ θ`. The later steps use only
+these two facts, so nothing downstream changes. Documented in
 `docs/paper-gaps/hastings07_spectral_cutoff_threshold.tex`.
 
 The cut-off of an operator lifted from a region is the lift of the regional cut-off, so it is
@@ -38,6 +39,8 @@ appendix, lines 829–841, eq. `obd`.
 * `TNLean.MPS.AreaLaw.Hastings.norm_sub_spectralCutoff_le`: eq. `obd`,
   `‖Ψ - O Ψ‖ ≤ ‖M Ψ‖ / θ`.
 * `TNLean.MPS.AreaLaw.Hastings.norm_mul_spectralCutoff_le`: `‖M O‖ ≤ θ`.
+* `TNLean.MPS.AreaLaw.Hastings.norm_add_mul_mul_spectralCutoff_le`:
+  `‖(M_L + M_R) (O_L O_R)‖ ≤ 2 θ` for commuting cut-offs.
 * `TNLean.MPS.AreaLaw.Hastings.norm_sub_mul_le_of_isStarProjection`: two projections move a
   vector by at most the sum of what each moves it.
 * `TNLean.MPS.AreaLaw.Hastings.spectralCutoff_localLift`: the cut-off of a lift is the lift of
@@ -113,7 +116,7 @@ theorem norm_sub_spectralCutoff_le {M : Matrix ι ι ℂ} (hM : M.IsHermitian) {
     _ ≤ θ⁻¹ * ‖toEuclideanLin M Ψ‖ := by gcongr
 
 /-- **The cut-off kills the large part of `M`.** For a Hermitian `M` and `θ ≥ 0`,
-`‖M O‖ ≤ θ`. Hastings, arXiv:0705.2024v4, line 893. -/
+`‖M O‖ ≤ θ`. Hastings, arXiv:0705.2024v4, lines 878–880. -/
 theorem norm_mul_spectralCutoff_le {M : Matrix ι ι ℂ} (hM : M.IsHermitian) {θ : ℝ}
     (hθ : 0 ≤ θ) : ‖M * spectralCutoff M θ‖ ≤ θ := by
   rw [spectralCutoff, hM.mul_cfc]
@@ -121,6 +124,31 @@ theorem norm_mul_spectralCutoff_le {M : Matrix ι ι ℂ} (hM : M.IsHermitian) {
   split_ifs with hi
   · simpa using hi
   · simpa using hθ
+
+/-- **Two commuting projections.** If `O`, `O'` are commuting orthogonal projections with
+`‖A O‖ ≤ a` and `‖B O'‖ ≤ b`, then `‖(A + B) (O O')‖ ≤ a + b`. -/
+theorem norm_add_mul_mul_le_of_isStarProjection {A B O O' : Matrix ι ι ℂ}
+    (hO : IsStarProjection O) (hO' : IsStarProjection O') (hc : Commute O O') {a b : ℝ}
+    (ha : ‖A * O‖ ≤ a) (hb : ‖B * O'‖ ≤ b) : ‖(A + B) * (O * O')‖ ≤ a + b := by
+  have hsplit : (A + B) * (O * O') = A * O * O' + B * O' * O := by
+    rw [add_mul, ← mul_assoc, hc.eq, ← mul_assoc]
+  rw [hsplit]
+  refine (norm_add_le _ _).trans (add_le_add ?_ ?_)
+  · exact (norm_mul_le _ _).trans
+      ((mul_le_of_le_one_right (norm_nonneg _) (IsStarProjection.norm_le O' hO')).trans ha)
+  · exact (norm_mul_le _ _).trans
+      ((mul_le_of_le_one_right (norm_nonneg _) (IsStarProjection.norm_le O hO)).trans hb)
+
+/-- **The cut-off estimate.** For Hermitian `M_L`, `M_R` whose cut-offs at `θ ≥ 0` commute,
+`‖(M_L + M_R) (O_L O_R)‖ ≤ 2 θ`. Hastings, arXiv:0705.2024v4, lines 878–880. -/
+theorem norm_add_mul_mul_spectralCutoff_le {M M' : Matrix ι ι ℂ} (hM : M.IsHermitian)
+    (hM' : M'.IsHermitian) {θ : ℝ} (hθ : 0 ≤ θ)
+    (hc : Commute (spectralCutoff M θ) (spectralCutoff M' θ)) :
+    ‖(M + M') * (spectralCutoff M θ * spectralCutoff M' θ)‖ ≤ 2 * θ := by
+  rw [two_mul]
+  exact norm_add_mul_mul_le_of_isStarProjection (isStarProjection_spectralCutoff hM θ)
+    (isStarProjection_spectralCutoff hM' θ) hc (norm_mul_spectralCutoff_le hM hθ)
+    (norm_mul_spectralCutoff_le hM' hθ)
 
 /-- **Two cut-offs.** If `O` is an orthogonal projection, the product `O O'` moves `Ψ` by at
 most the sum of what `O` and `O'` move it. Applied to `O_L` and `O_R`, this bounds
