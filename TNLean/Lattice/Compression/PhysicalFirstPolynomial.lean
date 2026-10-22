@@ -30,8 +30,8 @@ Independently formalized; no upstream Lean proof text reused.
 
 noncomputable section
 namespace TNLean.Lattice.PartyCircuit.OriginalCircuit
-open TNLean.PEPS.PairEffect
-open TNLean.PEPS.Approximation
+open TNLean.Lattice.PartyCircuit
+open TNLean.Lattice.Compression
 variable {P : Type} {a : Layout P}
 
 /-- Exchanging the output blocks preserves the source-position bound obtained

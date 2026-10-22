@@ -56,6 +56,7 @@ noncomputable section
 open scoped BigOperators Matrix
 
 namespace TNLean.PEPS.Approximation
+open TNLean.Lattice.Compression
 
 variable {L q : ℕ}
 

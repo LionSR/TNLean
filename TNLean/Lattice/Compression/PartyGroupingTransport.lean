@@ -18,7 +18,7 @@ coordinate arguments.
   September 24, 2026; `04-compression.tex`, lines 409–417 and 565–588.
 -/
 
-namespace TNLean.PEPS.PairEffect
+namespace TNLean.Lattice.PartyCircuit
 open TNLean.Lattice.PartyCircuit
 variable {P : Type}
 
@@ -31,4 +31,4 @@ theorem groupByPartyIso_apply_heq (ps : List P) {a b : Layout P}
   cases hxy
   rfl
 
-end TNLean.PEPS.PairEffect
+end TNLean.Lattice.PartyCircuit

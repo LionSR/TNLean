@@ -22,7 +22,7 @@ Source: polynomial-PEPS manuscript (September 24, 2026), Theorem 5.2,
 
 noncomputable section
 open scoped TensorProduct Matrix Kronecker ComplexConjugate
-namespace TNLean.PEPS.PairEffect
+namespace TNLean.Lattice.PartyCircuit
 open TNLean.Lattice.PartyCircuit
 
 private theorem partialTrace_mixed_private_basis_eq
@@ -160,4 +160,4 @@ theorem selectedPhysicalPrivateBasis_partialTrace_mixed
   exact partialTrace_mixed_private_basis_eq bPhysical bOriginalPrivate bRef
     (appendIso physical garbage v) (appendIso physical garbage t)
 
-end TNLean.PEPS.PairEffect
+end TNLean.Lattice.PartyCircuit

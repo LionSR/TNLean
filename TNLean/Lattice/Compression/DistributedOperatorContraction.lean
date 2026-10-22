@@ -32,7 +32,7 @@ written; no upstream Lean proof text is reused.
 noncomputable section
 open scoped BigOperators
 
-namespace TNLean.PEPS.Approximation.DistributedOperatorContraction
+namespace TNLean.Lattice.Compression.DistributedOperatorContraction
 
 open DependentBondNetwork
 
@@ -532,4 +532,4 @@ theorem contractedOperator_densityPair_eq (a : (g : Gate) → Ket g → ℂ)
 
 end DensityPair
 
-end TNLean.PEPS.Approximation.DistributedOperatorContraction
+end TNLean.Lattice.Compression.DistributedOperatorContraction

@@ -27,7 +27,8 @@ setting, with explicit faithful physical-coordinate padding.
 
 noncomputable section
 namespace TNLean.PEPS
-open DependentBondNetwork
+open TNLean.Lattice
+open DependentBondNetwork TNLean.Lattice.DependentBondNetwork
 
 variable {width height : ℕ} [NeZero width] [NeZero height]
 variable [Fact (2 < width)] [Fact (2 < height)]

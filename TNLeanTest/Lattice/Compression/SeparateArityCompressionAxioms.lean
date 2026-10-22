@@ -9,13 +9,13 @@ import Lean.Util.CollectAxioms
 
 /-! Presence and permitted-axiom checks for the named declarations. -/
 
-open TNLean.PEPS.PairEffect TNLean.Lattice.PartyCircuit
+open TNLean.Lattice.PartyCircuit
 
 run_cmd do
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
   let declarations := #[
-    ``TNLean.PEPS.Approximation.card_incidentDistributedLinks_le,
-    ``TNLean.PEPS.Approximation.card_incidentDistributedLinks_le_of_arity_lifetime,
+    ``TNLean.Lattice.Compression.card_incidentDistributedLinks_le,
+    ``TNLean.Lattice.Compression.card_incidentDistributedLinks_le_of_arity_lifetime,
     ``SourceCircuit.card_incidentSourceDensityLinks_le_of_arity_lifetime,
     ``OriginalCircuit.card_incidentPhysicalFirstDensityLinks_le_of_arity_lifetime,
     ``OriginalCircuit.card_participants_produce_le_of_arity,

@@ -22,7 +22,7 @@ universe u
 noncomputable section
 open scoped BigOperators
 namespace TNLean.PEPS.ThreeBlockDependent
-open DependentBondNetwork
+open DependentBondNetwork TNLean.Lattice.DependentBondNetwork
 
 /-- The three actual physical sites, with no exterior endpoint among them. -/
 abbrev Core := {v : Vertex // v ∈ coreVertices}
