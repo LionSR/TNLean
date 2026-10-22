@@ -16,6 +16,9 @@ consecutive-window area law and normalized matrix product state approximation. -
 run_cmd do
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
   for decl in #[
+    ``TNLean.MPS.AreaLaw.one_le_cutBudgetConst,
+    ``TNLean.MPS.AreaLaw.cutShellConst_nonneg,
+    ``TNLean.MPS.AreaLaw.cutAreaLawConst_nonneg,
     ``TNLean.MPS.AreaLaw.four_le_chainShellCount,
     ``TNLean.MPS.AreaLaw.chainEnergyThreshold_le_chainShellCount,
     ``TNLean.MPS.AreaLaw.chainTailThreshold_le_chainShellCount,
