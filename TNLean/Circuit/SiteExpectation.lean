@@ -426,7 +426,7 @@ operator supported on that region. This is the common-region comparison used
 in the localization argument of the one-dimensional note, part2a_mps_information.tex,
 lines 381–393. -/
 theorem norm_sub_siteExpectation_le_two_mul_norm_sub_of_mem_supportedOperators
-    {ι : Type*} [Fintype ι] [DecidableEq ι] {q : ℕ} [NeZero q]
+    [NeZero q]
     (B : Finset ι)
     (A A₀ : Matrix (ι → Fin q) (ι → Fin q) ℂ)
     (hA₀ : A₀ ∈ supportedOperators q (B : Set ι)) :
