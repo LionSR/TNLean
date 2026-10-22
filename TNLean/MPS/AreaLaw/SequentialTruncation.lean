@@ -288,6 +288,46 @@ theorem norm_sub_sequentialTruncation_le (hP : ∀ k, IsStarProjection (P k))
     gcongr
     exact (Entropy.norm_toEuclideanLin_localLift_le (hP _) _).trans ih
 
+/-- **Squared error of sequential truncation.** The squared distance from a vector to its
+`j`-step sequential truncation is at most the sum of the squared norms of the complementary
+truncations applied to the vector itself. At each step `ψ - Π Φ` splits orthogonally into
+`Π (ψ - Φ)` and `(1 - Π) ψ`. Verstraete and Cirac, Phys. Rev. B 73, 094423 (2006), state
+the bound with a factor `2` on the right; the form here, without it, implies theirs. -/
+theorem norm_sub_sequentialTruncation_sq_le (hP : ∀ k, IsStarProjection (P k))
+    (ψ : EuclideanSpace ℂ (Fin L → Fin q)) (j : ℕ) :
+    ‖ψ - sequentialTruncation P j ψ‖ ^ 2 ≤ ∑ i ∈ Finset.range j,
+      ‖toEuclideanLin (Entropy.localLift (leftBlock L (L - 1 - i))
+        (1 - P (L - 1 - i))) ψ‖ ^ 2 := by
+  induction j with
+  | zero => simp [sequentialTruncation]
+  | succ j ih =>
+    rw [Finset.sum_range_succ, sequentialTruncation]
+    set D := leftBlock L (L - 1 - j) with hD
+    set Pj := P (L - 1 - j) with hPj
+    set x := ψ - sequentialTruncation P j ψ with hx
+    have hH : Pjᴴ = Pj := by
+      have h := (hP (L - 1 - j)).isSelfAdjoint.star_eq
+      rwa [star_eq_conjTranspose] at h
+    have hPP : Pjᴴ * (1 - Pj) = 0 := by
+      rw [Matrix.mul_sub, Matrix.mul_one, hH, (hP (L - 1 - j)).isIdempotentElem.eq, sub_self]
+    have hsplit : ψ - cutTruncation P (L - 1 - j) (sequentialTruncation P j ψ) =
+        toEuclideanLin (Entropy.localLift D Pj) x +
+          toEuclideanLin (Entropy.localLift D (1 - Pj)) ψ := by
+      simp only [hx, cutTruncation, Entropy.localLift_sub, Entropy.localLift_one, map_sub,
+        LinearMap.sub_apply, toEuclideanLin_one_apply]
+      abel
+    have horth : ⟪toEuclideanLin (Entropy.localLift D Pj) x,
+        toEuclideanLin (Entropy.localLift D (1 - Pj)) ψ⟫_ℂ = 0 := by
+      rw [← LinearMap.adjoint_inner_right, ← toEuclideanLin_conjTranspose_eq_adjoint,
+        ← toEuclideanLin_mul_apply, ← Entropy.localLift_conjTranspose, ← Entropy.localLift_mul,
+        hPP]
+      simp [Entropy.localLift]
+    have hcontr : ‖toEuclideanLin (Entropy.localLift D Pj) x‖ ≤ ‖x‖ :=
+      Entropy.norm_toEuclideanLin_localLift_le (hP _) x
+    have hpy := norm_add_sq_eq_norm_sq_add_norm_sq_of_inner_eq_zero _ _ horth
+    rw [hsplit, sq, hpy]
+    nlinarith [ih, hcontr, norm_nonneg (toEuclideanLin (Entropy.localLift D Pj) x)]
+
 /-- Left blocks grow with the cut. -/
 theorem leftBlock_mono {k k' : ℕ} (h : k ≤ k') : leftBlock L k ⊆ leftBlock L k' :=
   fun _ hi ↦ mem_leftBlock.mpr (lt_of_lt_of_le (mem_leftBlock.mp hi) h)
@@ -425,6 +465,39 @@ theorem isOpenMPS_sequentialTruncation_leadingEigenprojection
   refine herror.trans_eq (Finset.sum_congr rfl fun k _ ↦ congrArg Real.sqrt ?_)
   refine (hspec k).2.2.2.2.2.trans ?_
   rw [Entropy.trace_regionState_eq_one hψ, Complex.one_re]
+
+/-- **Squared error of truncation onto the leading eigenvectors.** For a unit vector `ψ`,
+truncating every internal cut onto the `D` leading eigenvectors of its left marginal gives a
+vector `Φ` with `‖Φ - ψ‖² ≤ ∑_k ε_k(D)`, where `ε_k(D)` is the weight beyond the `D`
+largest eigenvalues at the cut `k`. Verstraete and Cirac, Phys. Rev. B 73, 094423 (2006),
+state `‖Φ - ψ‖² ≤ 2 ∑_k ε_k(D)`; the bound here, without the factor `2`, implies theirs. -/
+theorem norm_sequentialTruncation_leadingEigenprojection_sub_sq_le
+    (ψ : EuclideanSpace ℂ (Fin L → Fin q)) (hψ : ‖ψ‖ = 1) (D : ℕ) :
+    let P : ∀ k : ℕ, LeftBlockMatrix L q k := fun k ↦
+      (Entropy.regionState_isHermitian (n := fun _ : Fin L ↦ q) (leftBlock L k)
+        ψ).leadingEigenprojection D
+    ‖sequentialTruncation P (L - 1) ψ - ψ‖ ^ 2 ≤ ∑ k ∈ Finset.Ico 1 L, (1 -
+      (Entropy.regionState_isHermitian (n := fun _ : Fin L ↦ q) (leftBlock L k)
+        ψ).kyFanNorm D) := by
+  intro P
+  have hspec (k : ℕ) := (Entropy.regionState_isHermitian (n := fun _ : Fin L ↦ q)
+    (leftBlock L k) ψ).leadingEigenprojection_spec D
+  have hP (k : ℕ) : IsStarProjection (P k) :=
+    ⟨(hspec k).2.1, Matrix.isHermitian_iff_isSelfAdjoint.mp (hspec k).1⟩
+  have hmass (k : ℕ) :
+      ‖toEuclideanLin (Entropy.localLift (leftBlock L k) (1 - P k)) ψ‖ ^ 2 =
+        1 - (Entropy.regionState_isHermitian (n := fun _ : Fin L ↦ q) (leftBlock L k)
+          ψ).kyFanNorm D := by
+    rw [Entropy.norm_sq_toEuclideanLin_localLift_eq_trace (hP k).one_sub]
+    refine (hspec k).2.2.2.2.2.trans ?_
+    rw [Entropy.trace_regionState_eq_one hψ, Complex.one_re]
+  rw [norm_sub_rev]
+  refine (norm_sub_sequentialTruncation_sq_le P hP ψ (L - 1)).trans_eq ?_
+  rw [Finset.sum_Ico_eq_sum_range]
+  conv_lhs => rw [← Finset.sum_range_reflect]
+  refine Finset.sum_congr rfl fun i hi ↦ ?_
+  have hi' : i < L - 1 := Finset.mem_range.mp hi
+  rw [show L - 1 - (L - 1 - 1 - i) = 1 + i by omega, hmass]
 
 /-- **Sequential truncation.** Cutting every left block of a unit vector to the spectral
 projector of its regional state above the threshold `exp (-(S_k + w))`, from the largest
