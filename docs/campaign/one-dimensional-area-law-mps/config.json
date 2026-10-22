@@ -12,6 +12,10 @@
     {
       "slug": "one-dimensional-area-law-mps",
       "label": "One-dimensional area law and MPS"
+    },
+    {
+      "slug": "hastings-area-law",
+      "label": "One-dimensional area law after Hastings"
     }
   ],
   "label": "openai-math",

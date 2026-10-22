@@ -1,0 +1,69 @@
+{
+ "reviewedAt": "2026-10-22T08:00:00Z",
+ "checked": [],
+ "entries": [
+  {
+   "id": "docs/paper-gaps/hastings07_doubling_constants.tex",
+   "kind": "local-correction",
+   "status": "resolved-pending",
+   "paper": "hastings",
+   "result": "Main theorem, the doubling iteration",
+   "issue": 9814,
+   "prs": {
+    "TNLean": [
+     9904
+    ]
+   },
+   "title": "Two factors of two in the doubling iteration",
+   "summary": "The argument stands; the iteration needs twice as many doublings as printed, which changes the constant of the area law but not its form.",
+   "context": "The main theorem is proved by contradiction: the largest entropy <i>S<sub>l</sub></i> of an interval of length <i>l</i> in a long window satisfies a strict doubling inequality, and iterating it from a starting length ξ<sub>0</sub> = 2ξ′ ln(2<i>C</i><sub>1</sub>) forces the entropy per site below zero after finitely many doublings.",
+   "claims": "Each doubling lowers the entropy per site <i>S<sub>l</sub></i>/<i>l</i> by 1/ξ′, and the contradiction bounds the window length <i>l</i><sub>0</sub> by ξ′ ln(2<i>C</i><sub>1</sub>) times a power of two, giving the factor 2<sup>ξ′ ln <i>D</i></sup> in <i>S</i><sub>max</sub>.",
+   "found": "Dividing the doubling inequality by 2<i>l</i> lowers <i>S<sub>l</sub></i>/<i>l</i> by 1/(2ξ′) per doubling, so twice as many doublings are needed; and the printed prefactor ξ′ ln(2<i>C</i><sub>1</sub>) is ξ<sub>0</sub>/2, while the contradiction only gives <i>l</i><sub>0</sub> &lt; ξ<sub>0</sub> times the power of two. Three facts used implicitly (2<i>C</i><sub>1</sub> &gt; 1, ln <i>C</i><sub>1</sub> + <i>C</i><sub>2</sub> ≥ 0, and the inequality only where both intervals fit in the window) are stated as hypotheses; none restricts the theorem.",
+   "impact": "No. The area law holds with 4<sup>ξ′ ln <i>D</i></sup> in place of 2<sup>ξ′ ln <i>D</i></sup>, still a constant independent of the chain length.",
+   "plan": "Merge the doubling iteration with the corrected constants, then state the main theorem with them.",
+   "stage": "area:4"
+  },
+  {
+   "id": "docs/paper-gaps/hastings07_relent_constants.tex",
+   "kind": "local-correction",
+   "status": "resolved-pending",
+   "paper": "hastings",
+   "result": "Main theorem, the mutual-information bound",
+   "issue": 9814,
+   "prs": {
+    "TNLean": [
+     9909
+    ]
+   },
+   "title": "Constants of the mutual-information bound",
+   "summary": "The argument stands; one intermediate estimate on the product state is weaker than printed, and the unnamed constant <i>C</i><sub>2</sub> is made explicit.",
+   "context": "The doubling inequality rests on a lower bound on the mutual information between the two halves of a window, obtained by comparing the ground state with the product of its two marginals through a two-outcome measurement built from the factors <i>O<sub>L</sub></i> and <i>O<sub>R</sub></i> of the approximate factorization.",
+   "claims": "The expectation <i>y</i> of <i>O<sub>L</sub>O<sub>R</sub></i> in the product state is at least 1 − 2ε, and the resulting bound holds with a numerical constant <i>C</i><sub>2</sub> of order unity.",
+   "found": "The bound <i>y</i> ≥ 1 − 2ε holds for the ground state but not for the product state, where <i>y</i> is the product of the two expectations and only <i>y</i> ≥ (1 − ε)<sup>4</sup> ≥ 1 − 4ε follows. With this the small outcome probability satisfies <i>x</i> ≤ 36ε for ε ≤ 1/68, and a case analysis gives <i>C</i><sub>2</sub> = 7.",
+   "impact": "No. The mutual-information bound keeps its form, with an explicit constant.",
+   "plan": "Merge the bound with <i>C</i><sub>2</sub> = 7, then derive the two-outcome estimates from the operators of Lemma 1.",
+   "stage": "area:3"
+  },
+  {
+   "id": "docs/paper-gaps/hastings07_schmidt_tail_constant.tex",
+   "kind": "local-correction",
+   "status": "resolved-pending",
+   "paper": "hastings",
+   "result": "Matrix product states, decay of the Schmidt tail",
+   "issue": 9815,
+   "prs": {
+    "TNLean": [
+     9897
+    ]
+   },
+   "title": "Constant and sign in the decay of the Schmidt tail",
+   "summary": "The argument stands; the constant in the power-law decay of the Schmidt weight is e<sup>2/ξ′</sup> instead of e<sup>1/ξ′</sup>, and a missing minus sign in the exponent is restored.",
+   "context": "The matrix product state approximation needs the weight of the ground state beyond its first <i>k</i>′ Schmidt coefficients across a cut. The bootstrap gives it at the numbers <i>k</i><sub>0</sub><i>D</i><sup>2<i>m</i></sup>; interpolating between them gives a power law in <i>k</i>′.",
+   "claims": "The weight beyond <i>k</i>′ is at most 4<i>C</i><sub>1</sub><sup>2</sup> e<sup>1/ξ′</sup> (<i>k</i>′/<i>k</i><sub>0</sub>)<sup>1/(ξ′ ln <i>D</i>)</sup>.",
+   "found": "The constraint holds only at even powers <i>D</i><sup>2<i>m</i></sup>, so when the integer part of log<sub><i>D</i></sub>(<i>k</i>′/<i>k</i><sub>0</sub>) is odd one more factor e<sup>1/ξ′</sup> is lost; and the exponent must be negative for the bound to decay.",
+   "impact": "No. The decay is the same power law with a slightly larger constant.",
+   "plan": "Merge the tail bound, then derive its hypothesis from the bootstrap lemma.",
+   "stage": "mps:1"
+  }
+ ]
+}

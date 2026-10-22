@@ -4,7 +4,8 @@ name: Campaign Board
 # docs/campaign/ (see docs/campaign/README.md): the two-dimensional area law and
 # polynomial PEPS approximation (tracker #8733) and the one-dimensional area law
 # and matrix product state approximation (tracker #9547), both under the label
-# `openai-math`. The job reads issues and pull requests of TNLean and QICLean,
+# `openai-math`, and Hastings' proof of the one-dimensional area law (tracker
+# #9829, label `0705.2024`). The job reads issues and pull requests of TNLean and QICLean,
 # both public, so the default token suffices. It renders one self-contained page
 # per campaign into campaign-output/<slug>/, uploads them together as the
 # `site-campaign` component and redeploys Pages, which serves each at /<slug>/.

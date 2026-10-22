@@ -28,20 +28,21 @@ directory here.
 | `figures.js` | Optional stage figures: sets `window.campaignFigures` to an object of drawing functions, each filling an empty `<svg>`; only the drawing functions may use browser APIs, since the render evaluates the file outside a page |
 | `diagrams/` | Optional tensor-network diagrams: tenkz picture bodies `NAME.tex` and the committed `NAME.svg` compiled from them; `diagrams/inline/` holds the equations displayed inside sentences |
 
-Two campaigns share the label `openai-math` and are shown as two tabs of one
-site:
+Three campaigns are shown as tabs of one site. The first two share the label
+`openai-math`; the third carries the source label `0705.2024`:
 
 | Directory | Campaign | Tracker |
 |-----------|----------|---------|
 | `openai-area-law-peps-proof/` | Two-dimensional area law and polynomial PEPS approximation | #8733 |
 | `one-dimensional-area-law-mps/` | One-dimensional area law and matrix product state approximation, proved on the chain from the repository note `docs/notes/one_dimensional_note` | #9547 |
+| `hastings-area-law/` | Hastings' proof of the one-dimensional area law, arXiv:0705.2024 | #9829 |
 
 Each is served at `https://sirui-lu.com/TNLean/<slug>/`. The hourly workflow
 `.github/workflows/campaign-board.yml` collects and renders every directory here
 that has a `config.json`, so a new campaign needs no workflow change. The
 two-dimensional campaign excludes the tracker #9547 and everything below it
-(`excludeTrackers`), and the one-dimensional campaign is restricted to that
-tracker (`scope: "tracker"`).
+(`excludeTrackers`), and the one-dimensional campaigns are each restricted to
+their tracker (`scope: "tracker"`).
 
 ## Building a board locally
 
