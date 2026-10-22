@@ -40,7 +40,7 @@ open TNLean.Lattice.PartyCircuit
 open ContinuousLinearMap
 variable {P X U V : Type} [Fintype X] [Fintype U] [Fintype V]
 
-namespace PEPS.PairEffect
+namespace Lattice.PartyCircuit
 /-- The actual auxiliary-private garbage basis after exchanging output blocks.
 Source: polynomial-PEPS, `04-compression.tex`, lines 210–227 and 338–355. -/
 def exchangedGarbageBasis (aux priv : Layout P)
@@ -157,9 +157,9 @@ theorem partialTrace_physicalFirstReadout_exchange (aux physical priv : Layout P
   rw [physicalFirstReadout_exchange_outerProduct]
   exact (Matrix.partialTraceRight_submatrix_right (Equiv.prodComm U V) _).symm
 
-end PEPS.PairEffect
+end Lattice.PartyCircuit
 namespace Lattice.PartyCircuit.SourceCircuit
-open TNLean.PEPS.PairEffect
+open TNLean.Lattice.PartyCircuit
 /-- The physical-first circuit has the physical density of the actual extended readout.
 Source: polynomial-PEPS, `04-compression.tex`, lines 210–227 and 338–355. -/
 theorem physicalDensity_physicalFirstOutput {n : Type} [Fintype n]
@@ -186,7 +186,7 @@ theorem physicalDensity_physicalFirstOutput {n : Type} [Fintype n]
 
 end Lattice.PartyCircuit.SourceCircuit
 namespace Lattice.PartyCircuit.EffectCircuit
-open TNLean.PEPS.PairEffect
+open TNLean.Lattice.PartyCircuit
 /-- The actual replacement circuit followed by the source-free output exchange.
 Source: polynomial-PEPS, `04-compression.tex`, lines 210–227 and 338–355. -/
 def physicalFirstReplacement {r : ℕ} {S δ : ℝ} (hδ : 0 < δ)
@@ -248,7 +248,7 @@ theorem physicalSourceReplacedDensity_physicalFirstReplacement_exact
 
 end Lattice.PartyCircuit.EffectCircuit
 namespace Lattice.PartyCircuit.OriginalCircuit
-open TNLean.PEPS.PairEffect
+open TNLean.Lattice.PartyCircuit
 /-- The original gate-count budget controls the exact-source physical output
 of the constructed physical-first replacement. The input and physical spaces
 retain their actual dimensions.

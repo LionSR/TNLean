@@ -24,7 +24,7 @@ Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 17–43,
 -/
 
 noncomputable section
-namespace TNLean.PEPS.PairEffect
+namespace TNLean.Lattice.PartyCircuit
 open TNLean.Lattice.PartyCircuit
 
 /-- Original distributed data with a fixed chronology and prescribed original
@@ -63,4 +63,4 @@ def physicalDensity (C : GateMapConstruction P) :
   exact C.circuit.physicalDensityWithGateMaps C.gateMaps J C.input.vector
 
 end GateMapConstruction
-end TNLean.PEPS.PairEffect
+end TNLean.Lattice.PartyCircuit

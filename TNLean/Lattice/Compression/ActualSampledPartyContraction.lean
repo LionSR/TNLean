@@ -21,9 +21,9 @@ Source: polynomial-PEPS manuscript (September 24, 2026), Theorem 5.2,
 noncomputable section
 open scoped Matrix
 namespace TNLean
-open TNLean.PEPS TNLean.Lattice.PartyCircuit TNLean.PEPS.PairEffect
+open TNLean.Lattice TNLean.Lattice.PartyCircuit
 
-namespace PEPS.PairEffect
+namespace Lattice.PartyCircuit
 private theorem sandwich_average_of_summands
     {S T J : Type} [Fintype S] [Fintype J]
     (A B : Matrix T S ℂ) (X : Matrix S S ℂ) (c : ℂ)
@@ -33,7 +33,7 @@ private theorem sandwich_average_of_summands
   rw [hX]
   simp only [Matrix.mul_smul, Matrix.smul_mul, Matrix.mul_sum, Matrix.sum_mul, hH]
 
-end PEPS.PairEffect
+end Lattice.PartyCircuit
 namespace Lattice.PartyCircuit.SourceCircuit
 variable {P : Type} [Fintype P] [DecidableEq P] {a b : Layout P}
 variable {I O : Option {_p : P // true = true} → Type}

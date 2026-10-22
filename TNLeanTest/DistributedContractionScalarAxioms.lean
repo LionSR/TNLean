@@ -10,7 +10,7 @@ import Lean.Util.CollectAxioms
 /-! # Axiom check for scalar absorption in a distributed contraction -/
 
 set_option linter.hashCommand false
-open TNLean.PEPS.Approximation.DistributedOperatorContraction
+open TNLean.Lattice.Compression.DistributedOperatorContraction
 
 run_cmd do
   let decl := ``contractedOperator_smul_at_party

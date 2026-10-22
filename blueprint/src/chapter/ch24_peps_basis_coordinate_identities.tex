@@ -187,7 +187,7 @@ tensor product of their identity maps.
 
 \begin{theorem}[Grouping equal register lists]
     \label{thm:peps_basis_grouping_equality}
-    \lean{TNLean.PEPS.PairEffect.groupByPartyIso_apply_heq}
+    \lean{TNLean.Lattice.PartyCircuit.groupByPartyIso_apply_heq}
     \leanok
     Let $\mathbf p$ be an ordered list without repetitions containing
     every owner of registers in $a$ and $b$. Suppose $a=b$ and that
@@ -206,7 +206,7 @@ tensor product of their identity maps.
 
 \begin{theorem}[The first party of a grouped tensor]
     \label{thm:peps_basis_first_party_grouping}
-    \lean{TNLean.PEPS.PairEffect.groupByPartyIso_cons_partition_tmul}
+    \lean{TNLean.Lattice.PartyCircuit.groupByPartyIso_cons_partition_tmul}
     \leanok
     \uses{def:peps_party_partition}
     Let $P$ be any party set and let $(p,\mathbf p)$ be an ordered
@@ -239,7 +239,7 @@ tensor product of their identity maps.
 % Source: polynomial-PEPS, 04-compression.tex, lines 565--588.
 \begin{theorem}[Grouping a party with no registers]
     \label{thm:peps_basis_empty_first_party}
-    \lean{TNLean.PEPS.PairEffect.groupByPartyIso_cons_of_owners_mem_tail_heq}
+    \lean{TNLean.Lattice.PartyCircuit.groupByPartyIso_cons_of_owners_mem_tail_heq}
     \leanok
     \uses{def:peps_party_partition}
     Let $(q,\mathbf q)$ be an ordered list of distinct parties, and let
@@ -557,10 +557,10 @@ $M(a_{p_0})\otimes\cdots\otimes M(a_{p_{m-1}})\otimes\C$.
 
 \begin{theorem}[Recursion for party tensor coordinates]
     \label{thm:peps_basis_party_recursion}
-    \lean{TNLean.PEPS.PairEffect.partyListBasis_nil_apply,
-        TNLean.PEPS.PairEffect.partyListBasis_repr_nil,
-        TNLean.PEPS.PairEffect.partyListBasis_cons_apply,
-        TNLean.PEPS.PairEffect.partyListBasis_repr_cons_tmul}
+    \lean{TNLean.Lattice.PartyCircuit.partyListBasis_nil_apply,
+        TNLean.Lattice.PartyCircuit.partyListBasis_repr_nil,
+        TNLean.Lattice.PartyCircuit.partyListBasis_cons_apply,
+        TNLean.Lattice.PartyCircuit.partyListBasis_repr_cons_tmul}
     \leanok
     The empty list has one basis index, with column $1$, and the
     coordinate of $z\in\C$ at this index is $z$. If a party $p$
@@ -584,9 +584,9 @@ $M(a_{p_0})\otimes\cdots\otimes M(a_{p_{m-1}})\otimes\C$.
 
 \begin{theorem}[Matrix entries of ordered local tensor maps]
     \label{thm:peps_basis_party_map_entries}
-    \lean{TNLean.PEPS.PairEffect.partyListBasis_repr_tensorPartyMaps,
-        TNLean.PEPS.PairEffect.partyLabelledBasis_apply,
-        TNLean.PEPS.PairEffect.partyLabelledBasis_repr_tensorPartyMaps}
+    \lean{TNLean.Lattice.PartyCircuit.partyListBasis_repr_tensorPartyMaps,
+        TNLean.Lattice.PartyCircuit.partyLabelledBasis_apply,
+        TNLean.Lattice.PartyCircuit.partyLabelledBasis_repr_tensorPartyMaps}
     \leanok
     Let $a,c$ be register lists, and for every $p$ choose finite
     orthonormal bases $b_p,c_p$ of $M(a_p),M(c_p)$ and a continuous
