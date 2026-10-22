@@ -842,7 +842,7 @@ common positive direct blocking at which all three are simple. This is the
 finite three-tensor consequence of arXiv:1703.09188, Proposition III.3(ii)
 and its all-later-blockings corollary (lines 442--446). -/
 theorem IsMPU.exists_common_blockTensor_isMPUSimple_three
-    [NeZero d] [NeZero D] [NeZero e] [NeZero E] [NeZero f] [NeZero F]
+    {e E f F : ℕ} [NeZero d] [NeZero D] [NeZero e] [NeZero E] [NeZero f] [NeZero F]
     {U : MPOTensor d D} {V : MPOTensor e E} {W : MPOTensor f F}
     (hU : IsMPU U) (hV : IsMPU V) (hW : IsMPU W) :
     ∃ k : ℕ, 0 < k ∧
