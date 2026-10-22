@@ -93,6 +93,7 @@ jobs:
 
       - name: Recover an interrupted package install
         if: steps.blueprint-system-deps-1.outcome == 'failure'
+        timeout-minutes: 5
         # The timed-out install can leave its apt-get running and holding the
         # package locks, so stop the lock holders before repairing the database.
         run: |
@@ -218,6 +219,7 @@ jobs:
 
       - name: Recover an interrupted package install
         if: steps.blueprint-system-deps-2.outcome == 'failure'
+        timeout-minutes: 5
         # The timed-out install can leave its apt-get running and holding the
         # package locks, so stop the lock holders before repairing the database.
         run: |
