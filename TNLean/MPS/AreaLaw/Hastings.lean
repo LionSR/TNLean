@@ -8,4 +8,5 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.MPS.AreaLaw.Hastings
 
+import TNLean.MPS.AreaLaw.Hastings.TailEntropy
 import TNLean.MPS.AreaLaw.Hastings.ThreeWaySplitting
