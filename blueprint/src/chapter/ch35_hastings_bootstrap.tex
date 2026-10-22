@@ -1,0 +1,179 @@
+\section{The bootstrap lemma in Hastings' area law}
+\label{sec:hastings_bootstrap}
+
+% Hastings, arXiv:0705.2024v4, law16.tex, lines 280--411 (Lemma 2, label ble,
+% and its proof).
+
+The bootstrap lemma of \cite{Hastings2007AreaLaw} turns an overlap of the ground
+state with a mixture of states of bounded Schmidt rank into a bound on the
+entanglement entropy across a cut. Its proof has three steps: the approximate
+factorization of the ground-state projector maps the mixture to mixtures of
+slightly larger Schmidt rank with large overlap, the overlap at each scale bounds
+the Schmidt coefficients beyond that rank, and the entropy of Schmidt
+coefficients obeying these geometric tail bounds is maximized. This section
+states the three steps with explicit constants. The lemma for the ground state
+of a gapped chain combines them with the factorization of
+\cite[Lemma~1]{Hastings2007AreaLaw}.
+
+\begin{lemma}[Gibbs' inequality]
+    \label{lem:hastings_gibbs_inequality}
+    \lean{TNLean.MPS.AreaLaw.Hastings.probabilityEntropy_le_sum_mul_neg_log}
+    \leanok
+    Let $p$ be a probability vector on a finite set and let $w$ be positive
+    weights with $\sum_zw_z\le1$. Then
+    \begin{align*}
+        H(p)\le-\sum_zp_z\ln w_z.
+    \end{align*}
+\end{lemma}
+\begin{proof}\leanok
+    For $p_z>0$, $p_z\ln(w_z/p_z)\le w_z-p_z$ since $\ln t\le t-1$; for
+    $p_z=0$ the term is $0\le w_z$. Summing gives
+    $-H(p)+\sum_zp_z\ln w_z\le\sum_zw_z-1\le0$.
+\end{proof}
+
+\begin{lemma}[Entropy under geometric tail constraints]
+    \label{lem:hastings_geometric_tail_entropy}
+    \lean{
+        TNLean.MPS.AreaLaw.Hastings.probabilityEntropy_le_of_geometric_tails,
+        TNLean.MPS.AreaLaw.Hastings.probabilityEntropy_le_of_scale_tails
+    }
+    \leanok
+    \uses{lem:hastings_gibbs_inequality}
+    Let $p_0,\dots,p_{N-1}$ be a probability vector, read in decreasing order of
+    the squared Schmidt coefficients, and let $K\ge1$, $D\ge2$ and $0<x<1$. If
+    for every $n\ge0$ the mass of the entries of index at least $KD^{2n}$ is at
+    most $x^{n+1}$, then
+    \begin{align*}
+        H(p)\le\ln K-\ln(1-x)+x\bigl(\ln(D^2-1)-\ln x\bigr)
+        +\frac{x^2\,(2\ln D-\ln x)}{1-x}.
+    \end{align*}
+    In particular, with $x=e^{-2/\xi'}$ and $K=kD^{2m+2}$ for $k\ge1$ and
+    $\xi'>0$,
+    \begin{align*}
+        H(p)\le\ln k+(2m+2+\xi')\ln D+1+\ln(D^2-1)+\ln(\xi'/2+1).
+    \end{align*}
+    This is the maximization in the proof of
+    \cite[Lemma~2]{Hastings2007AreaLaw}, lines 357--390.
+\end{lemma}
+\begin{proof}\leanok
+    The source finds the maximum by saturating every constraint; here the same
+    value comes from Lemma~\ref{lem:hastings_gibbs_inequality} against the
+    saturating weights. On the block of indices in $[KD^{2(n-1)},KD^{2n})$, of
+    size $KD^{2(n-1)}(D^2-1)$, and on $[0,K)$ for $n=0$, put the weight
+    $(1-x)x^n$ divided by the size of the block. These weights add up to
+    $1-x^{N+1}\le1$, and $-\ln$ of a weight is $\ln K-\ln(1-x)$ plus one
+    increment for each threshold $KD^{2i}\le a$ below the index $a$. Averaging
+    against $p$ and bounding the mass beyond each threshold by $x^{i+1}$ gives
+    the first bound. With $x=e^{-2/\xi'}$ one has $x/(1-x)\le\xi'/2$, which
+    gives the three estimates of the source, lines 386--389.
+\end{proof}
+
+\begin{lemma}[Overlap with the ground state after an approximate projector]
+    \label{lem:hastings_bootstrap_overlap}
+    \lean{
+        TNLean.MPS.AreaLaw.Hastings.norm_sq_sub_normSq_inner_eq,
+        TNLean.MPS.AreaLaw.Hastings.overlap_ge_of_norm_sub_vecMulVec_le
+    }
+    \leanok
+    Let $\Psi_0$ be a unit vector and $\rho=\sum_iw_i|\psi_i\rangle\langle\psi_i|$
+    a mixture of unit trace with $\langle\Psi_0,\rho\Psi_0\rangle=P>0$. If an
+    operator $O$ satisfies $\|O-|\Psi_0\rangle\langle\Psi_0|\|\le\epsilon$, then
+    \begin{align*}
+        \langle\Psi_0,O\rho O^\dagger\Psi_0\rangle
+        \ge\Bigl(1-\frac{2\epsilon^2}{P}\Bigr)\operatorname{tr}(O\rho O^\dagger),
+    \end{align*}
+    and $\operatorname{tr}(O\rho O^\dagger)>0$ when $\epsilon<\sqrt P$. This is
+    equation \texttt{hg} of \cite[Lemma~2]{Hastings2007AreaLaw}, lines
+    317--331, with $\epsilon=C_1(\xi)e^{-m/\xi'}$.
+\end{lemma}
+\begin{proof}\leanok
+    Write $a=\langle\Psi_0,O\rho O^\dagger\Psi_0\rangle$ and
+    $b=\operatorname{tr}((1-P_0)O\rho O^\dagger)$, where
+    $P_0=|\Psi_0\rangle\langle\Psi_0|$. The weighted Minkowski inequality gives
+    $a\ge(\sqrt P-\epsilon)^2$ for $\epsilon\le\sqrt P$, and
+    $(1-P_0)O=(1-P_0)(O-P_0)$ gives $b\le\epsilon^2$. Hence
+    $b/(a+b)\le\epsilon^2/((\sqrt P-\epsilon)^2+\epsilon^2)\le2\epsilon^2/P$,
+    since $(\sqrt P-\epsilon)^2+\epsilon^2=2(\epsilon-\sqrt P/2)^2+P/2$. For
+    $\epsilon\ge\sqrt P$ the bound is trivial.
+\end{proof}
+
+\begin{lemma}[Overlaps and the tail of the Schmidt coefficients]
+    \label{lem:hastings_schmidt_overlap_tail}
+    \lean{
+        TNLean.MPS.AreaLaw.Hastings.normSq_dotProduct_le_kyFanNorm,
+        TNLean.MPS.AreaLaw.Hastings.vonNeumannEntropy_eq_probabilityEntropy_eigenvalues₀,
+        TNLean.MPS.AreaLaw.Hastings.sum_eigenvalues₀_filter_le
+    }
+    \leanok
+    Let $\varphi$ be a bipartite vector with reduced density matrix $\rho_\varphi$
+    on the first factor. For a vector $\psi$ of Schmidt rank at most $K$, with
+    $K$ less than the dimension of the first factor,
+    $|\langle\varphi,\psi\rangle|^2\le\|\psi\|^2\,\|\rho_\varphi\|_{(K)}$, where
+    $\|\cdot\|_{(K)}$ is the sum of the $K$ largest eigenvalues. The entropy of
+    $\rho_\varphi$ is the entropy of its eigenvalues in decreasing order, and
+    the mass of the eigenvalues beyond the first $K$ is
+    $\operatorname{tr}\rho_\varphi-\|\rho_\varphi\|_{(K)}$.
+\end{lemma}
+\begin{proof}\leanok
+    Normalizing $\psi$ reduces the first statement to the variational
+    characterization of the maximal overlap with states of Schmidt rank at most
+    $K$ by the Ky Fan norm. The other two statements read the entropy and the
+    Ky Fan norm off the eigenvalues in decreasing order.
+\end{proof}
+
+\begin{definition}[The remainder of the bootstrap bound]
+    \label{def:hastings_bootstrap_remainder}
+    \lean{TNLean.MPS.AreaLaw.Hastings.bootstrapRemainder}
+    \leanok
+    For $\xi'>0$ and a natural number $D$, put
+    \begin{align*}
+        F(\xi',D)=(\xi'+4)\ln D+1+\ln(D^2-1)+\ln(\xi'/2+1),
+    \end{align*}
+    as in \cite[Lemma~2]{Hastings2007AreaLaw}, lines 304--309.
+\end{definition}
+
+\begin{theorem}[Entropy from overlaps with mixtures of bounded Schmidt rank]
+    \label{thm:hastings_bootstrap_stage}
+    \lean{TNLean.MPS.AreaLaw.Hastings.vonNeumannEntropy_le_of_schmidtRank_mixtures}
+    \leanok
+    \uses{lem:hastings_geometric_tail_entropy, lem:hastings_schmidt_overlap_tail,
+        def:hastings_bootstrap_remainder}
+    Let $\Psi$ be a unit bipartite vector with reduced density matrix
+    $\rho_\Psi$, and let $k\ge1$, $D\ge2$, $\xi'>0$ and $c\ge1$. Suppose that at
+    every scale $s$ with $ce^{-2s/\xi'}<1$ some mixture of states of Schmidt
+    rank at most $kD^{2s}$, of positive total weight, has normalized overlap with
+    $\Psi$ at least $1-ce^{-2s/\xi'}$. Then
+    \begin{align*}
+        S(\rho_\Psi)\le\ln k+\xi'\ln(c)\ln D+F(\xi',D).
+    \end{align*}
+    This is a stage of \cite[Lemma~2]{Hastings2007AreaLaw}: it takes the mixtures
+    at every scale as a hypothesis, and with $c=2C_1(\xi)^2/P$ its conclusion
+    is equation \texttt{bootstrap}.
+\end{theorem}
+\begin{proof}\leanok
+    By Lemma~\ref{lem:hastings_schmidt_overlap_tail}, the overlap hypothesis
+    bounds the mass of the Schmidt coefficients beyond the first $kD^{2s}$ by
+    $ce^{-2s/\xi'}$, which is equation \texttt{constraint}. Let $m'$ be the least
+    natural number with $ce^{-2m'/\xi'}\le1$, so that $2m'+2\le\xi'\ln c+4$. The
+    constraints at the scales $m'+1+n$ are the hypotheses of the second form of
+    Lemma~\ref{lem:hastings_geometric_tail_entropy}.
+\end{proof}
+
+\begin{lemma}[The bootstrap lemma]
+    \label{lem:hastings_bootstrap}
+    \uses{thm:hastings_bootstrap_stage, lem:hastings_bootstrap_overlap}
+    Let $\rho$ be a mixture of pure states of Schmidt rank at most $k$ across the
+    cut between sites $j$ and $j+1$, with $\langle\Psi_0,\rho\Psi_0\rangle=P>0$,
+    where $\Psi_0$ is the ground state of a Hamiltonian satisfying the finite
+    range, finite interaction strength and gap conditions. Then
+    \begin{align*}
+        S(\rho^0_{1,j})\le\ln k+\xi'\ln\bigl(2C_1(\xi)^2/P\bigr)\ln D+F(\xi',D).
+    \end{align*}
+    This is \cite[Lemma~2]{Hastings2007AreaLaw}, lines 280--311. It follows from
+    Theorem~\ref{thm:hastings_bootstrap_stage} and
+    Lemma~\ref{lem:hastings_bootstrap_overlap}, once the approximate
+    factorization of the ground-state projector of
+    \cite[Lemma~1]{Hastings2007AreaLaw} supplies the operators
+    $O_B(j,m)O_L(j,m)O_R(j,m)$, whose action multiplies the Schmidt rank across
+    the cut by at most $D^{2m}$.
+\end{lemma}
