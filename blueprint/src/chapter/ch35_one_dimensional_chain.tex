@@ -1685,6 +1685,7 @@ for an arbitrary finite set of sites and are instantiated here directly.
 \begin{lemma}[Interaction norm budget on a finite integer domain]
     \label{lem:domain_site_norm_budget}
     \lean{TNLean.MPS.AreaLaw.IsDomainSupport.singleton,
+        TNLean.MPS.AreaLaw.DomainSupport.toChainSupport,
         TNLean.MPS.AreaLaw.DomainSupport.toChainSupport_injective,
         TNLean.MPS.AreaLaw.DomainHamiltonian.toChain_term,
         TNLean.MPS.AreaLaw.DomainHamiltonian.norm_bound_nonneg,
@@ -1880,7 +1881,8 @@ for an arbitrary finite set of sites and are instantiated here directly.
     \cite[Part~IIa]{TNLean2026OneDimensional}.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:qc_supported_gaussian_projection_bounds,
+    \uses{def:domain_doubled_swapped_hamiltonian,
+        thm:qc_supported_gaussian_projection_bounds,
         thm:domain_relative_generator_localization,thm:domain_lieb_robinson_localization,
         lem:domain_site_norm_budget}
     Use the constants $a,v$ from the domain generator estimate and put
@@ -2051,13 +2053,13 @@ for an arbitrary finite set of sites and are instantiated here directly.
     \uses{def:domain_model}
     Let $\Omega$ be a normalized vector on the finite domain of
     Definition~\ref{def:domain_model}. Suppose that every relative interval has
-    entropy at most $c$. For any finite index set $A$, relative intervals
+    entropy at most $c$. For any finite index set $s$, relative intervals
     $I_\alpha$ and $m\in\mathbb N$,
     \begin{align}
-        S_\Omega\left(N_m\left(\bigcup_{\alpha\in A}I_\alpha\right)\right)
-         & \le |A|c.\notag
+        S_\Omega\left(N_m\left(\bigcup_{\alpha\in s}I_\alpha\right)\right)
+         & \le |s|c.\notag
     \end{align}
-    The intervals may overlap or be empty, and $A$ may be empty.
+    The intervals may overlap or be empty, and $s$ may be empty.
     If $\Omega$ is the original gapped ground vector of an admissible domain
     Hamiltonian, with $q\ge1$, $J\ge0$ and $\Delta>0$, one may take
     $c=C_{\mathrm{int}}(q,R,J,\Delta)$.
@@ -2071,8 +2073,8 @@ for an arbitrary finite set of sites and are instantiated here directly.
     $S_\Omega(X\cup Y)\le S_\Omega(X)+S_\Omega(Y)$.
     Since $S_\Omega(\varnothing)=0$, finite subadditivity gives
     \begin{align}
-        S_\Omega\left(\bigcup_{\alpha\in A}N_m(I_\alpha)\right)
-         & \le\sum_{\alpha\in A}S_\Omega(N_m(I_\alpha))\le |A|c.\notag
+        S_\Omega\left(\bigcup_{\alpha\in s}N_m(I_\alpha)\right)
+         & \le\sum_{\alpha\in s}S_\Omega(N_m(I_\alpha))\le |s|c.\notag
     \end{align}
     Each $N_m(I_\alpha)$ is itself a relative interval by
     Theorem~\ref{thm:domain_interval_neighborhood}, and neighborhoods commute
