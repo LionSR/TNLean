@@ -57,7 +57,9 @@ Apart from the base `4` in place of `2`, the bound here has the same shape:
 * `2^{(2 + C₂) ξ'/ξ₀ + 1/2}` (the factor `4` once doubled) is the term that line 230 carries
   inside the ceiling and that eq. `smd` absorbs into `c₀`. Since
   `(2 + C₂) ξ'/ξ₀ = (2 + C₂)/(2 ln (2 C₁))`, it is a constant once `ln (2 C₁)` is bounded
-  below. It is kept explicit here.
+  below. It is kept explicit here; with `C₁ ≥ 1`, which loses nothing because enlarging
+  `C₁` only weakens Lemma 1, `maxEntropyBound_le_of_one_le` bounds it by the numerical
+  factor `2^{(2 + C₂)/ln 2 + 1}`.
 
 No other constant differs from the source.
 
@@ -65,6 +67,7 @@ No other constant differs from the source.
 
 * `doublingWindowLength`, `maxEntropyBound`: the window length `l₀` and the bound `S_max`.
 * `maxEntropyBound_le`: `S_max ≤ 6 ln q (ξ₀ + 1) 2^{2 (ξ' ln q + (2 + C₂) ξ'/ξ₀) + 1}`.
+* `maxEntropyBound_le_of_one_le`: the same with a numerical factor when `C₁ ≥ 1`.
 * `regionEntropy_prefix_le_of_windowClaim`: the stage theorem, eq. `entbd`.
 
 ## References
@@ -128,6 +131,30 @@ theorem maxEntropyBound_le {ξ' C₁ C₂ D : ℝ} (hξ' : 0 < ξ') (hC₁ : 1 <
   calc 3 * Real.log D * ((⌈ξ₀⌉₊ : ℝ) * 2 ^ doublingExponent ξ' C₁ C₂ D)
       ≤ 3 * Real.log D * ((ξ₀ + 1) * (2 : ℝ) ^ (a + 1)) := by gcongr
     _ = _ := by rw [hsplit]; ring
+
+/-- With `C₁ ≥ 1` the factor absorbed into `c₀` in eq. `smd` is numerical:
+`S_max ≤ 6 ln D (ξ₀ + 1) 4^{ξ' ln D} 2^{(2 + C₂)/ln 2 + 1}`. Requiring `C₁ ≥ 1` loses nothing,
+since enlarging `C₁` only weakens Lemma 1 (arXiv:0705.2024v4, eq. `prodapprox`, line 257). -/
+theorem maxEntropyBound_le_of_one_le {ξ' C₁ C₂ D : ℝ} (hξ' : 0 < ξ') (hC₁ : 1 ≤ C₁)
+    (hD : 1 ≤ D) (hC₂ : -2 ≤ C₂) :
+    maxEntropyBound ξ' C₁ C₂ D ≤ 6 * Real.log D * (doublingStartLength ξ' C₁ + 1) *
+      (2 : ℝ) ^ (2 * (ξ' * Real.log D) + ((2 + C₂) / Real.log 2 + 1)) := by
+  have hC₁' : 1 < 2 * C₁ := by linarith
+  refine (maxEntropyBound_le hξ' hC₁' hD hC₂).trans ?_
+  have hlog2 : 0 < Real.log 2 := Real.log_pos (by norm_num)
+  have hlogC : Real.log 2 ≤ Real.log (2 * C₁) := Real.log_le_log (by norm_num) (by linarith)
+  have hkey : 2 * ((2 + C₂) * ξ' / doublingStartLength ξ' C₁) ≤ (2 + C₂) / Real.log 2 := by
+    unfold doublingStartLength
+    rw [show 2 * ((2 + C₂) * ξ' / (2 * ξ' * Real.log (2 * C₁))) =
+        (2 + C₂) / Real.log (2 * C₁) by field_simp]
+    exact div_le_div_of_nonneg_left (by linarith) hlog2 hlogC
+  have hlogD : 0 ≤ Real.log D := Real.log_nonneg hD
+  have hξ₀ : 0 ≤ doublingStartLength ξ' C₁ := (doublingStartLength_pos hξ' hC₁').le
+  have hexp : 2 * (ξ' * Real.log D + (2 + C₂) * ξ' / doublingStartLength ξ' C₁) + 1 ≤
+      2 * (ξ' * Real.log D) + ((2 + C₂) / Real.log 2 + 1) := by linarith
+  have hpow := Real.rpow_le_rpow_of_exponent_le (x := (2 : ℝ)) (by norm_num) hexp
+  have hc : 0 ≤ 6 * Real.log D * (doublingStartLength ξ' C₁ + 1) := by positivity
+  exact mul_le_mul_of_nonneg_left hpow hc
 
 /-- The complement of the initial segment `[0, i)` is the final segment `[i, L)`. -/
 theorem compl_interval_zero (L i : ℕ) : (interval L 0 i)ᶜ = interval L i L := by

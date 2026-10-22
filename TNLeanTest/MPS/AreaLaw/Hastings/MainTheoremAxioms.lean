@@ -13,7 +13,8 @@ open TNLean.MPS.AreaLaw.Hastings
 
 run_cmd do
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
-  for decl in #[``maxEntropyBound_nonneg, ``maxEntropyBound_le, ``compl_interval_zero,
+  for decl in #[``maxEntropyBound_nonneg, ``maxEntropyBound_le, ``maxEntropyBound_le_of_one_le,
+      ``compl_interval_zero,
       ``regionEntropy_interval_zero_le, ``regionEntropy_prefix_le_of_windowClaim] do
     unless (← Lean.getEnv).contains decl do
       throwError "Missing declaration {decl}"
