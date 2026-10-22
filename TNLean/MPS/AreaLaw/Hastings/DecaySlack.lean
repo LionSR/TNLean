@@ -90,3 +90,5 @@ theorem add_mul_sqrt_mul_exp_le_of_lt {ξ ξ' a b l : ℝ} (hξ : 0 < ξ) (hξ' 
     _ ≤ (a + b * (1 / √(2 * exp 1 * δ))) * exp (-(l / ξ')) := by
         gcongr
         · exact mul_le_of_le_one_right ha hd1
+
+end TNLean.MPS.AreaLaw.Hastings
