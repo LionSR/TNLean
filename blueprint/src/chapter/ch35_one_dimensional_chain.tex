@@ -1752,6 +1752,75 @@ for an arbitrary finite set of sites and are instantiated here directly.
     $|\partial_{\mathrm{ch}}D|\le |\Lambda|$ and multiply by two.
 \end{proof}
 
+\begin{definition}[Doubled domain interactions and regional swaps]
+    \label{def:domain_doubled_swapped_hamiltonian}
+    \lean{TNLean.MPS.AreaLaw.DomainHamiltonian.doubled,
+        TNLean.MPS.AreaLaw.DomainHamiltonian.doubled_operator,
+        TNLean.MPS.AreaLaw.DomainHamiltonian.swappedDoubled,
+        TNLean.MPS.AreaLaw.DomainHamiltonian.swappedDoubled_operator}\leanok
+    \uses{def:domain_model,def:qc_site_pair_coordinates,def:peps_frame_sheet_swap}
+    Let $H=\sum_Xh_X$ be an admissible domain Hamiltonian and let
+    $D\subseteq V=\{0,\ldots,|\Lambda|-1\}$. Let $p$ pair the two replica
+    coordinates at each site and put $F=p_*F_D$. Define
+    \begin{align}
+        \widehat h_X  & =p_*(h_X\otimes\mathbb 1+\mathbb 1\otimes h_X),\notag                \\
+        \widehat h'_X & =F\widehat h_XF^\dagger,\notag                                       \\
+        \widehat H    & =\sum_X\widehat h_X=p_*(H\otimes\mathbb 1+\mathbb 1\otimes H),\notag \\
+        \widehat H'   & =\sum_X\widehat h'_X=F\widehat H F^\dagger.
+        \label{eq:domain_doubled_swapped}
+    \end{align}
+    Both families are indexed by the original admissible domain supports.
+    Their terms are Hermitian, supported on $X$, and have norm at most $2J$.
+    Thus they have local dimension $q^2$, range $R$ and interaction bound $2J$.
+    Empty domains and $q=0$ are allowed. These are the two-replica operators
+    in \cite[Part~IIa]{TNLean2026OneDimensional}.
+\end{definition}
+\begin{proof}\leanok
+    \uses{def:domain_model,def:chain_doubled_hamiltonian,
+        def:chain_swapped_doubled_hamiltonian,lem:domain_site_norm_budget,
+        thm:peps_sheet_swap_conjugate_support}
+    At each original nonempty support $X$, choose a site of $X$ to obtain
+    $J\ge0$. Extending the original interactions by zero to the chain of
+    increasing labels preserves the term at $X$ and its support. The
+    doubled and swapped chain estimates therefore apply at that same $X$.
+    Conjugation preserves Hermiticity and the regional swap preserves support.
+    Distributing the finite sums proves (\ref{eq:domain_doubled_swapped}).
+\end{proof}
+
+\begin{theorem}[Crossing decomposition for a domain regional swap]
+    \label{thm:domain_partial_swap_crossing}
+    \lean{TNLean.MPS.AreaLaw.DomainHamiltonian.partialSwap_term_difference_spec,
+        TNLean.MPS.AreaLaw.DomainHamiltonian.partialSwap_difference_eq_sum_crossing}\leanok
+    \uses{def:domain_doubled_swapped_hamiltonian,lem:domain_crossing_count}
+    With the notation of Definition~\ref{def:domain_doubled_swapped_hamiltonian},
+    put $T_{X,0}=p_*(h_X\otimes\mathbb 1)$,
+    $T_{X,1}=p_*(\mathbb 1\otimes h_X)$, and
+    $K_{X,b}=FT_{X,b}F^\dagger-T_{X,b}$.
+    Every $K_{X,b}$ is Hermitian, supported on $X$, and satisfies
+    $\|K_{X,b}\|\le2J$. Let $\mathcal C$ be the original admissible supports
+    meeting both $D$ and $V\setminus D$, and put $N_R=2\cdot2^{2R}$. Then
+    \begin{align}
+        \widehat H'-\widehat H
+                      & =\sum_{X\in\mathcal C}\sum_{b\in\{0,1\}}K_{X,b},\notag \\
+        2|\mathcal C| & \le N_R|\Lambda|.\notag
+    \end{align}
+    The count here is a bound by the total number of domain sites.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:domain_doubled_swapped_hamiltonian,thm:chain_partial_swap_boundary,
+        thm:peps_sheet_swap_doubled_cancellation,lem:domain_crossing_count}
+    The per-replica support, Hermiticity and norm estimates follow from
+    the corresponding chain estimates at the same original support.
+    If $X\subseteq D$ or $X\cap D=\varnothing$, then
+    \begin{align*}
+        F(T_{X,0}+T_{X,1})F^\dagger=T_{X,0}+T_{X,1}.
+    \end{align*}
+    Thus $K_{X,0}+K_{X,1}=0$ for every noncrossing support.
+    Restrict the finite sum to crossing supports, then distribute conjugation
+    over the two replica terms. Lemma~\ref{lem:domain_crossing_count} gives
+    the displayed count.
+\end{proof}
+
 \begin{theorem}[Intrinsic neighborhoods of order intervals]
     \label{thm:domain_interval_neighborhood}
     \lean{TNLean.MPS.AreaLaw.domainNeighborhood_eq_interval_of_ordConnected,
