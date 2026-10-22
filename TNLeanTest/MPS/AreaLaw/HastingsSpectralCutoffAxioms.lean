@@ -15,6 +15,8 @@ run_cmd do
   for decl in #[
     ``TNLean.MPS.AreaLaw.Hastings.isStarProjection_spectralCutoff,
     ``TNLean.MPS.AreaLaw.Hastings.norm_sub_spectralCutoff_le,
+    ``TNLean.MPS.AreaLaw.Hastings.norm_mul_spectralCutoff_le,
+    ``TNLean.MPS.AreaLaw.Hastings.norm_sub_mul_le_of_isStarProjection,
     ``TNLean.MPS.AreaLaw.Hastings.spectralCutoff_localLift,
     ``TNLean.MPS.AreaLaw.Hastings.commute_spectralCutoff_localLift_of_disjoint] do
     unless (← Lean.getEnv).contains decl do

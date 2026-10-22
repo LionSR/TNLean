@@ -6,11 +6,16 @@
 
 In the proof of Lemma~1 of \cite{Hastings2007AreaLaw}, the localized filtered
 terms $M_L$ and $M_R$ nearly annihilate the ground vector, and the operators
-$O_L$ and $O_R$ are their spectral projections onto the eigenvalues at most a
-threshold $\theta>0$. This section proves that such a cut-off moves a vector by
-at most the norm of the vector's image under $M$ divided by $\theta$, and that
-the cut-offs of operators supported on disjoint regions are supported there and
-commute. Norms of operators are operator norms.
+$O_L$ and $O_R$ are their spectral projections onto the small eigenvalues.
+This section proves that such a cut-off moves a vector by at most the norm of
+the vector's image under $M$ divided by the threshold, that it reduces $M$ to
+norm at most the threshold, and that the cut-offs of operators supported on
+disjoint regions are supported there and commute. The source cuts off at the
+eigenvalues at most the threshold; here the cut-off keeps the eigenvalues of
+absolute value at most the threshold, because the terms need not be positive
+and the source later uses the norm bound on
+$M_LO_L$~\cite{gap:hastings07_spectral_cutoff_threshold}. Norms of operators
+are operator norms.
 
 \begin{definition}[Spectral cut-off]
     \label{def:hastings_spectral_cutoff}
@@ -18,8 +23,8 @@ commute. Norms of operators are operator norms.
     \leanok
     For a Hermitian matrix $M$ and a real number $\theta$, the spectral
     cut-off $O_\theta(M)$ is the spectral projection of $M$ onto its
-    eigenvalues at most $\theta$, that is $f(M)$ for the function $f$ equal to
-    $1$ on $(-\infty,\theta]$ and to $0$ elsewhere.
+    eigenvalues of absolute value at most $\theta$, that is $f(M)$ for the
+    function $f$ equal to $1$ on $[-\theta,\theta]$ and to $0$ elsewhere.
 \end{definition}
 
 \begin{lemma}[The cut-off is an orthogonal projection]
@@ -51,12 +56,38 @@ commute. Norms of operators are operator norms.
     one, and likewise for $O_R$.
 \end{lemma}
 \begin{proof}\leanok
-    Let $h(t)=1/t$ for $t>\theta$ and $h(t)=0$ otherwise. Then
+    Let $h(t)=1/t$ for $\lvert t\rvert>\theta$ and $h(t)=0$ otherwise. Then
     $1-O_\theta(M)=h(M)M$, since $t\,h(t)=1-f(t)$ for every real $t$. The
-    eigenvalues of $h(M)$ lie in $[0,1/\theta]$, so $\lVert h(M)\rVert\le
+    eigenvalues of $h(M)$ lie in $[-1/\theta,1/\theta]$, so $\lVert h(M)\rVert\le
         1/\theta$ and
     $\lVert\Psi-O_\theta(M)\Psi\rVert=\lVert h(M)M\Psi\rVert\le
         \lVert M\Psi\rVert/\theta$.
+\end{proof}
+
+\begin{lemma}[The cut-off reduces the operator]
+    \label{lem:hastings_spectral_cutoff_norm}
+    \lean{TNLean.MPS.AreaLaw.Hastings.norm_mul_spectralCutoff_le}
+    \leanok
+    \uses{def:hastings_spectral_cutoff}
+    Let $M$ be Hermitian and $\theta\ge0$. Then
+    $\lVert M\,O_\theta(M)\rVert\le\theta$.
+\end{lemma}
+\begin{proof}\leanok
+    The operator $M\,O_\theta(M)$ is $g(M)$ for $g(t)=t\,f(t)$, and
+    $\lvert g(t)\rvert\le\theta$ for every real $t$.
+\end{proof}
+
+\begin{lemma}[Two cut-offs move a vector by at most the sum]
+    \label{lem:hastings_spectral_cutoff_two}
+    \lean{TNLean.MPS.AreaLaw.Hastings.norm_sub_mul_le_of_isStarProjection}
+    \leanok
+    If $O$ is an orthogonal projection and $O'$ any operator, then for every
+    vector $\Psi$,
+    $\lVert\Psi-OO'\Psi\rVert\le\lVert\Psi-O\Psi\rVert+\lVert\Psi-O'\Psi\rVert$.
+\end{lemma}
+\begin{proof}\leanok
+    Write $\Psi-OO'\Psi=(\Psi-O\Psi)+O(\Psi-O'\Psi)$ and use
+    $\lVert O\rVert\le1$.
 \end{proof}
 
 \begin{lemma}[Support of the cut-off]
