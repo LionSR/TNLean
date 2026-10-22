@@ -101,7 +101,7 @@ theorem _root_.Matrix.IsHermitian.ofReal_re_inner {M : Matrix ι ι ℂ} (hM : M
   (isSymmetric_toEuclideanLin_iff.mpr hM).coe_re_inner_self_apply Ψ
 
 /-- A centered Hermitian operator has expectation zero in the unit vector of centering:
-`⟨Ψ₀, H̃_• Ψ₀⟩ = 0`. Hastings, arXiv:0705.2024v4, `law16.tex`, lines 781–782. -/
+`⟨Ψ₀, (H_• - ⟨Ψ₀, H_• Ψ₀⟩ 1) Ψ₀⟩ = 0`. Hastings, arXiv:0705.2024v4, `law16.tex`, lines 781–782. -/
 theorem inner_groundCentered {M : Matrix ι ι ℂ} (hM : M.IsHermitian)
     {Ψ : EuclideanSpace ℂ ι} (hΨ : ‖Ψ‖ = 1) :
     ⟪Ψ, toEuclideanLin (groundCentered Ψ M) Ψ⟫_ℂ = 0 := by
