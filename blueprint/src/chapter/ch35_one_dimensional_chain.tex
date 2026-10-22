@@ -1933,7 +1933,14 @@ for an arbitrary finite set of sites and are instantiated here directly.
     Both replicas are normalized, and $F_D$ is unitary. The first-replica
     marginal of $\Phi$ on $R_0\cup C_0$ is a product, by
     Theorem~\ref{thm:peps_reset_exchanged_cores}.
-    Relabel the paired coordinates as two disjoint copies of $V$.
+    Put $E=\{0,\ldots,q-1\}$. Let
+    $P:E^V\times E^V\to(E\times E)^V$ be the pairing bijection
+    $P(c_1,c_2)(v)=(c_1(v),c_2(v))$. Write $\psi$ and $F$ for the
+    paired-coordinate forms of $\Psi$ and $F_D$, respectively. Then
+    \begin{align}
+        \Psi(c_1,c_2) & =\psi(P(c_1,c_2))=\Omega(c_1)\Omega(c_2),\notag \\
+        \Phi(c_1,c_2) & =(F\psi)(P(c_1,c_2)).\notag
+    \end{align}
     The support assumption means that $U$ acts trivially on both cores.
     The supported-unitary entropy comparison of
     Lemma~\ref{lem:lattice_supported_unitary_entropy}, and the first core dimension
