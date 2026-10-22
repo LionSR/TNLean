@@ -24,7 +24,7 @@ unrestricted, as required in SCP10, Theorem 5.4.
 noncomputable section
 open scoped BigOperators
 namespace TNLean.PEPS.ThreeBlockDependent
-open DependentBondNetwork
+open DependentBondNetwork TNLean.Lattice.DependentBondNetwork
 
 /-- Three core vertices followed by eight distinct exterior endpoints. -/
 abbrev Vertex := Fin 11
@@ -81,7 +81,7 @@ variable (D : Bond → Type*) [∀ e, Fintype (D e)] [∀ e, DecidableEq (D e)]
 variable {Phys : Vertex → Type*}
 
 /-- Every local virtual alphabet keeps the four incident edge dimensions independent. -/
-abbrev LocalConfig (v : Vertex) := DependentBondNetwork.LocalConfig tail head D v
+abbrev LocalConfig (v : Vertex) := Lattice.DependentBondNetwork.LocalConfig tail head D v
 
 /-- The actual local group action, trivial only at exterior endpoints. -/
 abbrev localRepresentation

@@ -20,7 +20,7 @@ Source: polynomial-PEPS manuscript (September 24, 2026), Theorem 5.2,
 -/
 
 noncomputable section
-namespace TNLean.PEPS.PairEffect
+namespace TNLean.Lattice.PartyCircuit
 variable {P : Type}
 
 /-- Removing the canonical exterior singleton coordinate leaves precisely the
@@ -62,4 +62,4 @@ theorem partyProductMatrix_selectedFamilyPhysicalConfig [Fintype P]
   exact Fintype.prod_equiv (Equiv.subtypeUnivEquiv (fun _ : P ↦ (rfl : true = true)))
     _ _ (fun _ ↦ rfl)
 
-end TNLean.PEPS.PairEffect
+end TNLean.Lattice.PartyCircuit

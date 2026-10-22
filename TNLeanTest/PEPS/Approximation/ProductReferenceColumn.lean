@@ -13,6 +13,7 @@ open scoped Matrix
 noncomputable section
 
 namespace TNLean.PEPS.Approximation.Pinned
+open TNLean.Lattice.Compression
 
 -- Concrete independent error budgets give a 1/10 phase-error bound on a
 -- nonzero, literally equal column of the supplied operator network.
