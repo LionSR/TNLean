@@ -9,4 +9,5 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.MPS.AreaLaw.Hastings
 
 import TNLean.MPS.AreaLaw.Hastings.Doubling
+import TNLean.MPS.AreaLaw.Hastings.MainTheorem
 import TNLean.MPS.AreaLaw.Hastings.TailEntropy
