@@ -4782,6 +4782,22 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 ## Candidates
 
+### Reflected sum over the internal cuts of a sequential truncation — candidate
+- **Pattern:**
+  ```lean
+  rw [Finset.sum_Ico_eq_sum_range]
+  conv_lhs => rw [← Finset.sum_range_reflect]
+  refine Finset.sum_congr rfl fun i hi ↦ ?_   -- or `Finset.sum_le_sum`
+  have hi' : i < L - 1 := Finset.mem_range.mp hi
+  rw [show L - 1 - (L - 1 - 1 - i) = 1 + i by omega, hmass]
+  ```
+- **Seen:** 2 occurrences (2026-10-22): `TNLean/MPS/AreaLaw/SequentialTruncation.lean`,
+  in `sequentialTruncation_prefix_rank_error` and
+  `norm_sequentialTruncation_leadingEigenprojection_sub_sq_le`.
+- **Abstraction:** proposed lemma rewriting `∑ i ∈ range (L - 1), f (L - 1 - i)` as
+  `∑ k ∈ Ico 1 L, f k`, which matches the step order of `sequentialTruncation`.
+- **Notes:** promote at the third occurrence.
+
 ### A maximal finite support fills its coordinate interval — candidate
 
 The minimum-coordinate image argument occurs twice in `Hamiltonian.lean`, in
