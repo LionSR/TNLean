@@ -33,8 +33,8 @@ corrected doubling iteration of~\cite{gap:hastings07_doubling_constants}.
     If $D\ge1$, then $S_{\max}\ge0$.
 \end{definition}
 
-\begin{lemma}[Size of the entropy bound]
-    \label{lem:hastings_max_entropy_bound_le}
+\begin{theorem}[Size of the entropy bound]
+    \label{thm:hastings_max_entropy_bound_le}
     \lean{TNLean.MPS.AreaLaw.Hastings.maxEntropyBound_le,
         TNLean.MPS.AreaLaw.Hastings.maxEntropyBound_le_of_one_le}
     \leanok
@@ -54,7 +54,7 @@ corrected doubling iteration of~\cite{gap:hastings07_doubling_constants}.
     $4$. The larger base is the correction recorded
     in~\cite{gap:hastings07_doubling_constants}. Requiring $C_1\ge1$ loses
     nothing, since enlarging $C_1$ only weakens Lemma~1 of the source.
-\end{lemma}
+\end{theorem}
 \begin{proof}\leanok
     Since $M\le2(\xi'\ln D+(2+C_2)\xi'/\xi_0+1/2)+1$ and
     $\lceil\xi_0\rceil_+\le\xi_0+1$, the first bound follows from the
@@ -62,15 +62,15 @@ corrected doubling iteration of~\cite{gap:hastings07_doubling_constants}.
     $(2+C_2)\xi'/\xi_0=(2+C_2)/(2\ln(2C_1))\le(2+C_2)/(2\ln2)$.
 \end{proof}
 
-\begin{lemma}[Entropy of an initial segment]
-    \label{lem:hastings_prefix_entropy_le}
+\begin{theorem}[Entropy of an initial segment]
+    \label{thm:hastings_prefix_entropy_le}
     \lean{TNLean.MPS.AreaLaw.Hastings.compl_interval_zero,
         TNLean.MPS.AreaLaw.Hastings.regionEntropy_interval_zero_le}
     \leanok
     \uses{def:chain_model}
     For a unit vector on a chain of $L$ sites with local dimension $q\ge1$,
     the entropy of the first $i$ sites is at most $(L-i)\ln q$.
-\end{lemma}
+\end{theorem}
 \begin{proof}\leanok
     The complement of the first $i$ sites is the set of the remaining $L-i$
     sites. A pure state has equal entropies on complementary regions, and
@@ -109,9 +109,9 @@ corrected doubling iteration of~\cite{gap:hastings07_doubling_constants}.
     corrected as in~\cite{gap:hastings07_doubling_constants}.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:hastings_doubling_window,lem:hastings_prefix_entropy_le}
+    \uses{thm:hastings_doubling_window,thm:hastings_prefix_entropy_le}
     Suppose $S_i>S_{\max}$. If $i+l_0>L$, then
-    Lemma~\ref{lem:hastings_prefix_entropy_le} gives
+    Theorem~\ref{thm:hastings_prefix_entropy_le} gives
     $S_i\le(L-i)\ln q\le l_0\ln q\le S_{\max}$, a contradiction. Otherwise
     the first item gives $S_k\ge S_{\max}-l_0\ln q=2S_{\max}/3$ for every
     $k$ with $i\le k\le i+l_0$. The second and third items then are the
