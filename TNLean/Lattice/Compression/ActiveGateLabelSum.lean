@@ -16,7 +16,7 @@ at its original occurrence and chooses no additional label values.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 565–579.
 -/
 
-namespace TNLean.PEPS.Approximation.DistributedOperatorContraction
+namespace TNLean.Lattice.Compression.DistributedOperatorContraction
 
 variable {G : Type} [Fintype G] {Label : G → Type}
 variable [∀ g, Fintype (Label g)] {m n : Type}
@@ -36,4 +36,4 @@ theorem sum_eq_sum_gateLabels_univ
     (Equiv.subtypeUnivEquiv (fun g : G ↦ Finset.mem_univ g)).symm
   exact (e.symm.sum_comp K).symm
 
-end TNLean.PEPS.Approximation.DistributedOperatorContraction
+end TNLean.Lattice.Compression.DistributedOperatorContraction

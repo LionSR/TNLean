@@ -17,7 +17,7 @@ Source: polynomial-PEPS, `04-compression.tex`, lines 233–267 and 351–381.
 
 noncomputable section
 namespace TNLean
-open TNLean.Lattice.PartyCircuit TNLean.PEPS.PairEffect
+open TNLean.Lattice.PartyCircuit
 variable {P Q : Type}
 
 namespace Lattice.PartyCircuit

@@ -29,7 +29,7 @@ microscopic-parent to four-seam intersection theorem.
 noncomputable section
 open scoped BigOperators
 namespace TNLean.PEPS
-open DependentBondNetwork
+open DependentBondNetwork TNLean.Lattice.DependentBondNetwork
 
 variable {V : Type*} [Fintype V] [LinearOrder V]
 variable {Γ : SimpleGraph V} [DecidableRel Γ.Adj] {d : ℕ}

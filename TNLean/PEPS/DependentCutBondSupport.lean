@@ -26,6 +26,7 @@ Source: SCP10, arXiv:1001.3807, Theorem 5.5 and Lemma 4.6.
 noncomputable section
 open scoped BigOperators Matrix
 namespace TNLean.PEPS.DependentBondNetwork
+open TNLean.Lattice.DependentBondNetwork TNLean.Lattice
 
 section CoordinateSlices
 variable {Site : Type*} [Fintype Site] [DecidableEq Site] {Out : Site → Type*}

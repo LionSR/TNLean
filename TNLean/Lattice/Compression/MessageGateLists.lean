@@ -25,7 +25,7 @@ Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 32–43,
 
 noncomputable section
 namespace TNLean.Lattice.PartyCircuit.EffectCircuit
-open TNLean.PEPS.PairEffect
+open TNLean.Lattice.PartyCircuit
 variable {P : Type}
 
 /-- One actual message-containing expansion on the original local input and

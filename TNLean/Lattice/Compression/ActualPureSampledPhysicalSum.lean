@@ -26,9 +26,9 @@ Source: polynomial-PEPS manuscript (September 24, 2026), Theorem 5.2,
 noncomputable section
 open scoped Matrix ComplexConjugate
 namespace TNLean
-open TNLean.PEPS TNLean.Lattice.PartyCircuit TNLean.PEPS.PairEffect
+open TNLean.Lattice TNLean.Lattice.PartyCircuit
 
-namespace PEPS.PairEffect
+namespace Lattice.PartyCircuit
 private theorem partialTraceRight_reindex_comp
     {S X X' E : Type} [Fintype E] (e : S ≃ X × E) (f : X ≃ X')
     (Z : Matrix S S ℂ) :
@@ -41,7 +41,7 @@ private theorem partialTraceRight_reindex_comp
       (f.prodCongr (Equiv.refl E)).symm) = _
   exact Matrix.partialTraceRight_submatrix_prod_equiv f (Equiv.refl E) _
 
-end PEPS.PairEffect
+end Lattice.PartyCircuit
 namespace Lattice.PartyCircuit.SourceCircuit
 attribute [local instance] Classical.propDecidable
 variable {P : Type} [Fintype P] [DecidableEq P] {a : Layout P}
