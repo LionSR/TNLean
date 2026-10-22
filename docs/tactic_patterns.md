@@ -38,7 +38,7 @@ abstracted — record why, so it is not re-proposed).
 - **Pattern:** Factor the two-Hamiltonian integrand into an evolved observable and relative evolution, localize the two factors on possibly different regions, and integrate against the restricted Gaussian measure.
 - **Defined in:** `TNLean/Circuit/SupportedGaussianIntegral.lean`, `QuantumCircuit.exists_supported_gaussian_integral_of_projection_bounds`.
 - **Use when:** Actual observable and generator projection estimates give scalar errors on a symmetric time interval. The theorem constructs one supported path before the observable and averaging data, retains the two projection regions and a common containing output region, and supplies support, norm and error bounds for the average.
-- **Refactored occurrences:** `MPS/AreaLaw/SupportedGaussianIntegral.lean` and `PEPS/AreaLaw/SupportedGaussianIntegral.lean`. Their physical localization estimates and constants remain at the callers; their repeated integration arguments are removed.
+- **Refactored occurrences:** `MPS/AreaLaw/SupportedGaussianIntegral.lean` and `PEPS/AreaLaw/SupportedGaussianIntegral.lean`. Their physical localization estimates and constants remain at the callers; their repeated integration arguments are removed. The finite-domain caller in `MPS/AreaLaw/DomainSupportedGaussianIntegral.lean` uses the same theorem with intrinsic graph neighborhoods.
 - **Notes:** The restricted measure is not renormalized. Zero variance, zero cutoff and the empty site set are retained. The bound is `‖W‖ (εobs + T εgen)`, without an additional factor of two. The two caller files lose 146 lines in total.
 
 ### Counting supports in short windows — promoted (2026-10-21)
