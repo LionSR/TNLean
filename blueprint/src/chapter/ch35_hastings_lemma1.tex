@@ -1,0 +1,358 @@
+\section{Hastings' approximate factorization of the ground-state projector}
+\label{sec:hastings_lemma1}
+
+% Hastings, arXiv:0705.2024v4, law16.tex: statement of Lemma 1 at lines 246--267,
+% proof in the appendix at lines 763--910, note added on positivity at lines 912--995.
+
+Lemma~1 of \cite{Hastings2007AreaLaw} writes the projector $P_0$ onto the
+ground state of a gapped finite-range chain approximately as a product
+$O_BO_LO_R$ of three operators of norm at most one: $O_L$ acts on the sites
+left of a cut, $O_R$ on the sites right of it, and $O_B$ on the $2l$ sites
+around it. This section records the steps of the proof in the order of the
+appendix of \cite{Hastings2007AreaLaw}. The first step, the splitting of the
+Hamiltonian at the cut into a left, a buffer and a right part, is
+Section~\ref{sec:hastings_three_way_splitting}. Throughout, $H$ is Hermitian
+with ground energy $E_0$, every other eigenvalue is at least $E_0+\Delta E$
+with $\Delta E>0$, and norms are operator norms.
+
+\subsection*{Gaussian-filtered operators}
+
+\begin{definition}[Gaussian-filtered operator]
+    \label{def:hastings_gaussian_filtered_term}
+    \lean{TNLean.Lattice.gaussianFilteredTerm}
+    \leanok
+    For $q\ge0$ and a matrix $W$, the \emph{Gaussian-filtered operator} is
+    \begin{align*}
+        \widetilde W=\frac{\Delta E}{\sqrt{2\pi q}}\int_{-\infty}^{\infty}
+        e^{iHt}We^{-iHt}\,e^{-(t\Delta E)^2/(2q)}\,dt,
+    \end{align*}
+    the Heisenberg evolution of $W$ averaged against the centered Gaussian of
+    variance $q/\Delta E^2$. These are the operators $\tilde H_L^0$,
+    $\tilde H_B^0$, $\tilde H_R^0$ of \cite[lines 783--793]{Hastings2007AreaLaw}
+    for $W$ one of the three parts of the Hamiltonian.
+\end{definition}
+
+\begin{theorem}[Spectral properties of filtered operators]
+    \label{thm:hastings_gaussian_filtered_spectral}
+    \lean{
+        TNLean.Lattice.inner_gaussianFilteredTerm,
+        TNLean.Lattice.inner_gaussianFilteredTerm_ground,
+        TNLean.Lattice.norm_gaussianFilteredTerm_le,
+        TNLean.Lattice.gaussianFilteredTerm_sum,
+        TNLean.Lattice.gaussianFilteredTerm_self,
+        TNLean.Lattice.sum_gaussianFilteredTerm,
+        TNLean.Lattice.mem_groundEigenspace_iff,
+        TNLean.Lattice.inner_eq_zero_of_mem_groundEigenspace,
+        TNLean.Lattice.norm_sub_starProjection_gaussianFilteredTerm_le
+    }
+    \leanok
+    \uses{def:hastings_gaussian_filtered_term}
+    Let $v$ and $w$ be eigenvectors of $H$ with eigenvalues $E$ and $E'$. Then
+    \begin{align*}
+        \langle v,\widetilde Ww\rangle
+        =e^{-q((E-E')/\Delta E)^2/2}\,\langle v,Ww\rangle,
+    \end{align*}
+    so $\widetilde W$ and $W$ have the same matrix elements between ground
+    vectors. Filtering is linear in $W$, does not increase the norm, and
+    returns $H$ when $W=H$; in particular, if $H=\sum_iH_i$ then
+    $\sum_i\widetilde H_i=H$, as in
+    \cite[line 793]{Hastings2007AreaLaw}. For a ground vector $\psi$, the
+    component of $\widetilde W\psi$ orthogonal to the ground space has norm at
+    most $\|W\|e^{-q/2}\|\psi\|$.
+\end{theorem}
+\begin{proof}\leanok
+    In the eigenbasis of $H$ the evolution multiplies the matrix element
+    between energies $E$ and $E'$ by $e^{i(E-E')t}$, and the Gaussian average
+    of this phase is $e^{-q((E-E')/\Delta E)^2/2}$. Each conjugate of $W$ has
+    the norm of $W$, and $H$ commutes with its own evolution. An excited
+    eigenvector has energy at least $\Delta E$ above a ground vector, so its
+    coefficient in $\widetilde W\psi$ carries a factor at most $e^{-q/2}$.
+\end{proof}
+
+\begin{theorem}[Filtered operators without ground components]
+    \label{thm:hastings_filtered_no_ground_component}
+    \lean{
+        TNLean.Lattice.norm_gaussianFilteredTerm_apply_le_commutator,
+        TNLean.Lattice.eigenvalues_eq_or_le_of_isGappedGroundState,
+        TNLean.Lattice.norm_gaussianFilteredTerm_apply_le_commutator_of_isGappedGroundState
+    }
+    \leanok
+    \uses{thm:hastings_gaussian_filtered_spectral}
+    Let $\psi$ be a ground vector of $H$ such that $W\psi$ is orthogonal to the
+    ground space. Then
+    \begin{align*}
+        \|\widetilde W\psi\|\le\Delta E^{-1}e^{-q/2}\,\|[H,W]\psi\|.
+    \end{align*}
+    In particular this holds when $\Psi_0$ is a unique gapped ground vector
+    and $\langle\Psi_0,W\Psi_0\rangle=0$. For $W$ a centered part of the
+    Hamiltonian this is \cite[lines 794--815]{Hastings2007AreaLaw}: the bound
+    depends on $W$ only through its commutator with $H$,
+    which lives near the boundary of its support.
+\end{theorem}
+\begin{proof}\leanok
+    Expand in the eigenbasis of $H$. The coefficient of $[H,W]\psi$ on an
+    eigenvector of energy $E$ is $(E-E_0)$ times that of $W\psi$. Ground
+    coefficients of $W\psi$ vanish, and for an excited eigenvector
+    $E-E_0\ge\Delta E$ while the filter contributes at most $e^{-q/2}$.
+    Summing the squared coefficients gives the bound.
+\end{proof}
+
+\begin{theorem}[Locality of filtered operators]
+    \label{thm:hastings_filtered_locality}
+    \lean{
+        TNLean.Lattice.norm_map_gaussianFilteredTerm_le_mass,
+        TNLean.Lattice.commutatorCLM,
+        TNLean.Lattice.norm_commutator_gaussianFilteredTerm_le_mass,
+        TNLean.Lattice.gaussianReal_real_compl_Icc_le_exp,
+        TNLean.Lattice.gaussianFilter_tail_le,
+        TNLean.Lattice.norm_commutator_gaussianFilteredTerm_le
+    }
+    \leanok
+    \uses{def:hastings_gaussian_filtered_term, thm:chain_lieb_robinson}
+    Let $T\ge0$ and $\varepsilon\ge0$, and suppose that
+    $\|[e^{iHt}We^{-iHt},O]\|\le\varepsilon$ for all $|t|\le T$. Then
+    \begin{align*}
+        \|[\widetilde W,O]\|\le\varepsilon
+        +2\|W\|\,\|O\|\,e^{-(T\Delta E)^2/(2q)}.
+    \end{align*}
+    With the Lieb--Robinson bound for $\varepsilon$ and $T$ proportional to
+    $l$, this is the locality of the filtered parts used at
+    \cite[lines 816--828]{Hastings2007AreaLaw}.
+\end{theorem}
+\begin{proof}\leanok
+    Split the time integral at $|t|=T$. On $[-T,T]$ the commutator is at most
+    $\varepsilon$ and the Gaussian has mass at most one. Outside, the
+    commutator is at most $2\|W\|\,\|O\|$, and the Gaussian of variance $h$
+    gives the complement of $[-T,T]$ mass at most $e^{-T^2/(2h)}$, by the shift
+    $t=T+s$ and $(T+s)^2\ge T^2+s^2$.
+\end{proof}
+
+\begin{theorem}[Localization of filtered operators by partial trace]
+    \label{thm:hastings_filtered_partial_trace}
+    \lean{
+        TNLean.Lattice.norm_sub_siteExpectation_gaussianFilteredTerm_le_mass,
+        TNLean.Lattice.norm_sub_siteExpectation_gaussianFilteredTerm_le
+    }
+    \leanok
+    \uses{thm:hastings_filtered_locality}
+    For a set $K$ of sites, let $\mathbb E_K$ be the normalized partial trace
+    over the sites outside $K$, tensored with the identity there. If
+    $\|e^{iHt}We^{-iHt}-\mathbb E_K(e^{iHt}We^{-iHt})\|\le\varepsilon$ for all
+    $|t|\le T$, then
+    \begin{align*}
+        \|\widetilde W-\mathbb E_K(\widetilde W)\|\le\varepsilon
+        +2\|W\|\,e^{-(T\Delta E)^2/(2q)}.
+    \end{align*}
+    The operator $\mathbb E_K(\widetilde W)$ acts on $K$ and has norm at most
+    $\|W\|$. It replaces the truncated evolution by which
+    \cite[lines 816--828]{Hastings2007AreaLaw} approximates the filtered parts.
+\end{theorem}
+\begin{proof}\leanok
+    The map $M\mapsto M-\mathbb E_K(M)$ is linear and continuous, so it
+    commutes with the time integral. Split the integral at $|t|=T$ as in
+    Theorem~\ref{thm:hastings_filtered_locality}; outside $[-T,T]$ the
+    integrand is at most $2\|W\|$, since the partial trace does not increase
+    the norm.
+\end{proof}
+
+\subsection*{The localized parts and the cut-offs}
+
+% Lean statement pending.
+\begin{theorem}[Commutators of the parts with the Hamiltonian]
+    \label{thm:hastings_part_commutators}
+    \uses{def:hastings_three_way_splitting}
+    The commutators $[H,H_L]$ and $[H,H_R]$ act on windows of width of order
+    $R$ at the inner ends of the left and right parts, and each has norm at
+    most a constant depending only on $R$ times $J^2$. Since $[H,H]=0$, also
+    $[H,H_B]=-([H,H_L]+[H,H_R])$. For nearest-neighbour terms this is the
+    bound $\|[H,H_L]\|\le J^2$ of \cite[line 794]{Hastings2007AreaLaw}.
+\end{theorem}
+
+% Lean statement pending.
+\begin{theorem}[Localized filtered parts]
+    \label{thm:hastings_localized_parts}
+    \uses{thm:hastings_filtered_partial_trace, thm:hastings_part_commutators,
+        thm:chain_lieb_robinson}
+    There are Hermitian operators $M_L$, $M_B$, $M_R$ such that $M_L-H_L$ acts
+    on $X_{j-2l/3,j}$, $M_B-H_B$ on $X_{j-2l/3,j+1+2l/3}$ and $M_R-H_R$ on
+    $X_{j+1,j+1+2l/3}$, and each of $M_L$, $M_B$, $M_R$ is within
+    $\mathcal O(\Delta E^{-1}J^2e^{-l/(3\xi)})$ of the corresponding filtered
+    part $\tilde H_L^0$, $\tilde H_B^0$, $\tilde H_R^0$
+    \cite[lines 816--828]{Hastings2007AreaLaw}. The source prints the distance
+    to $H_L$, $H_B$, $H_R$; the next line of the source uses the distance to
+    the filtered parts, which is the reading adopted here.
+\end{theorem}
+
+% Lean statement pending.
+\begin{theorem}[The cut-offs $O_L$ and $O_R$]
+    \label{thm:hastings_cutoffs}
+    \uses{thm:hastings_localized_parts, thm:hastings_filtered_no_ground_component}
+    Let $O_L$ and $O_R$ be the spectral projectors of $M_L$ and $M_R$ onto
+    eigenvalues at most $\Delta E^{-1}J^2e^{-l/(6\xi)}$. They are commuting
+    orthogonal projections, $O_L$ acts on $X_{1,j}$ and $O_R$ on $X_{j+1,N}$,
+    and
+    \begin{align*}
+        |(O_L-1)\Psi_0|\le\mathcal O(e^{-l/(6\xi)}),\qquad
+        |(O_R-1)\Psi_0|\le\mathcal O(e^{-l/(6\xi)}),
+    \end{align*}
+    which is \cite[lines 829--841]{Hastings2007AreaLaw}.
+\end{theorem}
+
+\subsection*{The Gaussian time average and the boundary operator}
+
+% Lean statement pending.
+\begin{theorem}[Gaussian time average across the gap and under perturbation]
+    \label{thm:hastings_gaussian_time_average}
+    Let the ground energy be zero and let
+    \begin{align*}
+        P_q(H)=\frac{\Delta E}{\sqrt{2\pi q}}\int e^{iHt}e^{-(t\Delta E)^2/(2q)}\,dt.
+    \end{align*}
+    If $\Psi_0$ is a unique gapped ground vector, then
+    $\|P_q(H)-P_0\|\le e^{-q/2}$. For Hermitian $M$,
+    $\|P_q(M)-P_q(H)\|\le\sqrt q\,\Delta E^{-1}\|M-H\|$. These are the gap
+    bound and the first inequality of the display in
+    \cite[lines 843--864]{Hastings2007AreaLaw}, with $M=M_L+M_B+M_R$.
+\end{theorem}
+
+% Lean statement pending.
+\begin{theorem}[The cut-offs next to the time average]
+    \label{thm:hastings_moved_estimate}
+    \uses{thm:hastings_gaussian_time_average, thm:hastings_cutoffs}
+    Let $M$ be Hermitian with $\|M-H\|\le\delta$, and let $O_L$, $O_R$ be
+    commuting orthogonal projections with $|\Psi_0-O_LO_R\Psi_0|\le\eta$. Then
+    \begin{align*}
+        \|P_q(M)\,O_LO_R-P_0\|\le e^{-q/2}+\sqrt q\,\Delta E^{-1}\delta+\eta,
+    \end{align*}
+    which is \cite[lines 865--876]{Hastings2007AreaLaw}.
+\end{theorem}
+
+% Lean statement pending.
+\begin{theorem}[Interaction picture and the boundary average]
+    \label{thm:hastings_interaction_picture}
+    \uses{thm:hastings_moved_estimate}
+    For Hermitian $A$ and $B$, let $U(t)=e^{i(A+B)t}e^{-iAt}$, the
+    time-ordered exponential of $i\int_0^te^{iAt'}Be^{-iAt'}\,dt'$, so that
+    $e^{i(A+B)t}=U(t)e^{iAt}$, and let $P_B$ be the Gaussian average of $U(t)$
+    with variance $q/\Delta E^2$. Then $\|P_B\|\le1$ and, for every $X$,
+    \begin{align*}
+        \|P_BX-P_0\|\le\|P_q(A+B)X-P_0\|+\sqrt q\,\Delta E^{-1}\|AX\|.
+    \end{align*}
+    With $A=M_L+M_R$, $B=M_B$ and $X=O_LO_R$ this is
+    \cite[lines 877--905]{Hastings2007AreaLaw}.
+\end{theorem}
+
+% Lean statement pending.
+\begin{theorem}[Localization of the boundary average]
+    \label{thm:hastings_boundary_localization}
+    \uses{thm:hastings_interaction_picture, thm:hastings_localized_parts,
+        thm:chain_lieb_robinson}
+    There is an operator $O_B$ acting on $X_{j-l+1,j+l}$ with $\|O_B\|\le1$
+    and $\|P_B-O_B\|\le\mathcal O(\Delta E^{-1}J\sqrt q\,e^{-l/(6\xi)})$
+    \cite[lines 896--905]{Hastings2007AreaLaw}. No positivity of $O_B$ is
+    claimed, as in the note added to \cite{Hastings2007AreaLaw}.
+\end{theorem}
+
+\subsection*{The factorization and its positive version}
+
+% Lean statement pending.
+\begin{theorem}[Approximate factorization without positivity]
+    \label{thm:hastings_projector_factorization}
+    \uses{thm:hastings_three_way_splitting_sum,
+        thm:hastings_three_way_splitting_supports,
+        thm:hastings_filtered_no_ground_component,
+        thm:hastings_part_commutators, thm:hastings_localized_parts,
+        thm:hastings_cutoffs, thm:hastings_gaussian_time_average,
+        thm:hastings_moved_estimate, thm:hastings_interaction_picture,
+        thm:hastings_boundary_localization}
+    Under the hypotheses of Lemma~\ref{lem:hastings_lemma1}, for every cut $j$
+    and every $l$ there are operators $O_B$, $O_L$, $O_R$ of norm at most one,
+    with $O_L$ and $O_R$ Hermitian projections acting on $X_{1,j}$ and
+    $X_{j+1,N}$ and $O_B$ acting on $X_{j-l+1,j+l}$, such that
+    \begin{align*}
+        \|O_BO_LO_R-P_0\|\le C_1e^{-l/\xi'}.
+    \end{align*}
+    This is Lemma~\ref{lem:hastings_lemma1} without the positivity of $O_B$,
+    at the full rate; the note added to \cite{Hastings2007AreaLaw} (lines
+    912--913) records that the construction gives exactly this.
+\end{theorem}
+
+\begin{theorem}[An effect operator from an approximate factorization]
+    \label{thm:hastings_effect_from_factorization}
+    \lean{Matrix.norm_mul_conjTranspose_mul_self_mul_sub_le}
+    \leanok
+    Let $B$ be a matrix and $P$, $Q$ orthogonal projections with
+    $\|BQ-P\|\le\varepsilon$. Then
+    \begin{align*}
+        \|QB^\dagger BQ-P\|\le2\varepsilon+\varepsilon^2.
+    \end{align*}
+    No bound on $\|B\|$ is needed. This is the bound of
+    \cite[lines 916--925]{Hastings2007AreaLaw} with $B=O_B$, $P=P_0$ and
+    $Q=O_LO_R$.
+\end{theorem}
+\begin{proof}\leanok
+    Write $BQ=P+E$ with $\|E\|\le\varepsilon$. Since $Q$ is self-adjoint,
+    $QB^\dagger BQ=(BQ)^\dagger(BQ)=(P+E^\dagger)(P+E)$, and $P^2=P$ gives
+    $QB^\dagger BQ-P=E^\dagger P+PE+E^\dagger E$. The triangle inequality and
+    $\|P\|\le1$ finish the proof.
+\end{proof}
+
+% Lean statement pending.
+\begin{lemma}[Positive repair of the boundary operator]
+    \label{lem:hastings_positive_repair}
+    \uses{thm:hastings_effect_from_factorization}
+    Let $B$ be a matrix with $\|B\|\le1$ and $P$, $Q$ orthogonal projections
+    with $\|BQ-P\|\le\varepsilon$. Then
+    \begin{align*}
+        \|B^\dagger BQ-P\|\le\sqrt{1-(1-\varepsilon)^2}+3\varepsilon
+        +\varepsilon^2,
+    \end{align*}
+    which is of order $\sqrt\varepsilon$. This is the lemma of the note added
+    to \cite[lines 944--995]{Hastings2007AreaLaw}.
+\end{lemma}
+
+The note added to \cite{Hastings2007AreaLaw} observes that the operator $O_B$
+constructed in the appendix need not be Hermitian or positive, and offers two
+ways around this. The area-law proof uses Lemma~\ref{lem:hastings_lemma1} only
+through the expectation of $O_B$, or of the positive operator $O_B^\dagger O_B$,
+in the ground state and in a product of marginals, and by
+Theorem~\ref{thm:hastings_effect_from_factorization} this expectation
+corollary holds at the full rate $e^{-l/\xi'}$, with $\varepsilon$ replaced by
+$2\varepsilon+\varepsilon^2$; this is the first of the two routes of the note,
+and it is all that the area law needs. The positive operator
+$O_B^+=O_B^\dagger O_B$ of the note satisfies the factorization only with the
+error of Lemma~\ref{lem:hastings_positive_repair}, of order $\sqrt{\varepsilon}$,
+so Lemma~\ref{lem:hastings_lemma1} with Hermitian positive $O_B$ holds with the
+rate $e^{-l/(2\xi')}$ in place of $e^{-l/\xi'}$. This change of rate is a local
+fix of the printed statement.
+% The citation of the paper-gap note on the positivity rate will be added together
+% with that note.
+
+% Lean statement pending.
+\begin{lemma}[Hastings, Lemma 1]
+    \label{lem:hastings_lemma1}
+    \uses{thm:hastings_projector_factorization,
+        thm:hastings_effect_from_factorization,
+        lem:hastings_positive_repair}
+    Let $H$ be a Hamiltonian that satisfies the finite range, finite
+    interaction strength, and gap conditions. Then for any $j$ and any $l$
+    there exist Hermitian, positive definite operators $O_B(j,l)$, $O_L(j,l)$,
+    $O_R(j,l)$ with the following properties. First, $\|O_B(j,l)\|\le1$,
+    $\|O_L(j,l)\|\le1$ and $\|O_R(j,l)\|\le1$. Second,
+    \begin{align*}
+        \|O_B(j,l)O_L(j,l)O_R(j,l)-P_0\|\le C_1(\xi)e^{-l/\xi'}
+        \equiv\varepsilon(l),
+    \end{align*}
+    where $P_0=|\Psi_0\rangle\langle\Psi_0|$ is the projector onto the ground
+    state and $C_1(\xi)$ is bounded by a polynomial in $\xi$. Finally,
+    $O_L(j,l)$ is supported on $X_{1,j}$, $O_R(j,l)$ on $X_{j+1,N}$, and
+    $O_B(j,l)$ on $X_{j-l+1,j+l}$
+    \cite[lines 246--267]{Hastings2007AreaLaw}.
+\end{lemma}
+\begin{proof}
+    Theorem~\ref{thm:hastings_projector_factorization} gives the
+    factorization with an operator $O_B$ that need not be positive. Replacing
+    $O_B$ by $O_B^\dagger O_B$, which has norm at most one, keeps the supports,
+    and Lemma~\ref{lem:hastings_positive_repair} bounds the new error by a
+    multiple of $\sqrt{\varepsilon(l)}$, which decays at the rate
+    $e^{-l/(2\xi')}$.
+\end{proof}
