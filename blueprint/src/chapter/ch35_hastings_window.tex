@@ -12,8 +12,8 @@ and $S_{2l}\le 2S_l$. Sites are numbered $0,\ldots,L-1$, the cut at $k$ is the
 interval $\lbrack 0,k)$, and $S(A)$ is the entropy of the reduced state of a region
 $A$.
 
-\begin{lemma}[The cut entropy moves slowly]
-    \label{lem:hastings_cut_entropy_slow}
+\begin{theorem}[The cut entropy moves slowly]
+    \label{thm:hastings_cut_entropy_slow}
     \lean{
         TNLean.MPS.AreaLaw.Hastings.disjoint_interval_interval,
         TNLean.MPS.AreaLaw.Hastings.interval_union_interval,
@@ -24,7 +24,7 @@ $A$.
     \begin{align*}
         S(\lbrack 0,k))\ \ge\ S(\lbrack 0,i))-(k-i)\log q .
     \end{align*}
-\end{lemma}
+\end{theorem}
 
 \begin{proof}
     \leanok
@@ -35,8 +35,8 @@ $A$.
     \cite{Hastings2007AreaLaw}.
 \end{proof}
 
-\begin{lemma}[The window of large cut entropy]
-    \label{lem:hastings_window_cut_entropy}
+\begin{theorem}[The window of large cut entropy]
+    \label{thm:hastings_window_cut_entropy}
     \lean{
         TNLean.MPS.AreaLaw.Hastings.windowLength,
         TNLean.MPS.AreaLaw.Hastings.windowLength_mul_log_le,
@@ -51,12 +51,12 @@ $A$.
     \begin{align*}
         S(\lbrack 0,k))\ \ge\ \tfrac23\, S_{\max}.
     \end{align*}
-\end{lemma}
+\end{theorem}
 
 \begin{proof}
     \leanok
-    \uses{lem:hastings_cut_entropy_slow}
-    By Lemma~\ref{lem:hastings_cut_entropy_slow},
+    \uses{thm:hastings_cut_entropy_slow}
+    By Theorem~\ref{thm:hastings_cut_entropy_slow},
     $S(\lbrack 0,k))\ge S(\lbrack 0,i))-(k-i)\log q>S_{\max}-l_0\log q\ge 2S_{\max}/3$.
     The source takes $l_0=S_{\max}/(3\log q)$; the window length is a number of
     sites, so here it is any natural number at most this value. No condition at
@@ -84,13 +84,13 @@ $A$.
     The window of~\cite{Hastings2007AreaLaw} consists of the sites numbered
     $i-1,\ldots,i+l_0-1$ here. The window $\lbrack i,i+l_0)$ leaves out its leftmost site
     and consists of the $l_0$ sites between the cuts at $i$ and $i+l_0$; every cut from $i$
-    to $i+l_0$ carries the bound of Lemma~\ref{lem:hastings_window_cut_entropy}. The
+    to $i+l_0$ carries the bound of Theorem~\ref{thm:hastings_window_cut_entropy}. The
     argument uses only intervals of at most $l_0$ sites whose cuts carry this bound, so the
     omitted site plays no role.
 \end{definition}
 
-\begin{lemma}[Bounds on the window entropy]
-    \label{lem:hastings_window_entropy_bounds}
+\begin{theorem}[Bounds on the window entropy]
+    \label{thm:hastings_window_entropy_bounds}
     \lean{
         TNLean.MPS.AreaLaw.Hastings.regionEntropy_nonneg,
         TNLean.MPS.AreaLaw.Hastings.windowEntropy_nonneg,
@@ -105,7 +105,7 @@ $A$.
         \qquad
         S_{2l}\ \le\ 2S_l .
     \end{align*}
-\end{lemma}
+\end{theorem}
 
 \begin{proof}
     \leanok
@@ -114,6 +114,7 @@ $A$.
     the window of largest entropy; it is the disjoint union of the intervals
     $\lbrack a,a+l)$ and $\lbrack a+l,a+2l)$, both inside the window, and subadditivity gives
     $S_{2l}\le S(\lbrack a,a+l))+S(\lbrack a+l,a+2l))\le 2S_l$. When $2l>l_0$ the left side
-    is zero. With the convention $S_l=0$ for $l>l_0$ the bound holds for every
-    $l$, as stated in \cite{Hastings2007AreaLaw}.
+    is zero. The source defines $S_l$ only for $l\le l_0$; setting $S_l=0$
+    for $l>l_0$ is a convention adopted here, under which $S_{2l}\le 2S_l$
+    holds for every $l$.
 \end{proof}
