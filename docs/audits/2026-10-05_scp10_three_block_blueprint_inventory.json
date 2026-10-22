@@ -17,51 +17,51 @@
   "sources": [
     {
       "module": "TNLean.PEPS.DependentPartialAverageSupport",
-      "sha256": "0b29b17e87e4fbeff37b2ab2073550922e9d92a93506c8c0f958e84367967058"
+      "sha256": "b8604dae2af4a02fc32fe733ae9be983e5c94c14f72bd21f13b98fd40a4e086a"
     },
     {
       "module": "TNLean.PEPS.DependentOpenBondSupport",
-      "sha256": "0dbbe7ac147892246d60e6f4432c2df44c01f60a1508677c7e5093ac34f15615"
+      "sha256": "f032d1f9894bfd09b479500e205e7461c505581f5a91f15aa2b09e9f6c9d8914"
     },
     {
       "module": "TNLean.PEPS.DependentOpenCutIntersection",
-      "sha256": "49350d4fbe6681b1b01c227c14381f27a3f79b8a529dacc795a33ec9098cbd81"
+      "sha256": "ae4e17e4a39fe6fbf0d5b754c011aec1aae7b9dacca33a4dfc54d4ac2462df4f"
     },
     {
       "module": "TNLean.PEPS.DependentLiftedCut",
-      "sha256": "17a386117e6e65ef533ba74e3da225ce2977011f5e94d2dab67ca2188314ad7a"
+      "sha256": "86e9a814e71f48e71d01b8b983e67ee1b8cbb8aae67c9b4604ef0cc1ce2cdf70"
     },
     {
       "module": "TNLean.PEPS.DependentLiftedCutReconstruction",
-      "sha256": "cc0d081ecb1b6ff620f613240ed32602a5986e2eebd5b8d224bf6d4a2e5c9b29"
+      "sha256": "6306101efec4ea35b9fea0acf5753178d9ed99b587cf84c39f44a6d6822d0cce"
     },
     {
       "module": "TNLean.PEPS.DependentLiftedCutIntersection",
-      "sha256": "a735ef119e0ecfb9c5de9f2684a326ce7f677cc743798e2b7474db87817664f4"
+      "sha256": "b0eda7eeaffad13dac8552724b05f62646973f8fb69ad2886a410fb458389305"
     },
     {
       "module": "TNLean.PEPS.ParentHamiltonian.ThreeBlockDependentCutIntersection",
-      "sha256": "ad6b4a8ee476252c05e3c6c785aeb980f12f01de21cef76ae7c6e97a50a0344a"
+      "sha256": "2960b86d90f229e9728c7b003688f89315da600a6a9fafb6f299a9eb0ed34cb9"
     },
     {
       "module": "TNLean.PEPS.ParentHamiltonian.ThreeBlockPhysicalExtension",
-      "sha256": "4f985341a560fbad0f39d650b5f150199f7ce83ca41a70ba87bcaca65aa4dd2e"
+      "sha256": "ef5a8c04eaa6961a4533f6d2acc6ebb4fec5f36537f74f6c070a4053a3eded74"
     },
     {
       "module": "TNLean.PEPS.ParentHamiltonian.ThreeBlockOpenBoundaryLocalization",
-      "sha256": "4cf80aecc32df887d34126987a65c9fd024dacf16c422991a3be473dbf95f28f"
+      "sha256": "88566ad703d28324393ee3e81dabf93ba85592626f42c733e011d88faa190ef9"
     },
     {
       "module": "TNLean.PEPS.ParentHamiltonian.ThreeBlockOpenBoundaryContraction",
-      "sha256": "110bb8e5f8853b4d1ab13e68b455033397b6fd7736401bf8653ac30f6ec56362"
+      "sha256": "7d42d07f713dbe287ea6846fec0f51139d3a67a43a0e314f3ed5ca8c44f1553a"
     },
     {
       "module": "TNLean.PEPS.ParentHamiltonian.ThreeBlockOpenBoundaryRegional",
-      "sha256": "ba996f8b0ce8b251a06d00d6b5d0deb310d15519da19af57b5e3f9df6ca10cc5"
+      "sha256": "b034cc7a1c422bd6eaf65cc6f2345dd1355b3559087df3c96786a33cb70a7660"
     },
     {
       "module": "TNLean.PEPS.ParentHamiltonian.ThreeBlockGInjectiveIntersection",
-      "sha256": "ddfcb56cde82769d3543cdbc6ca5992b341e34d46d5ccd199d017aca06d0d20f"
+      "sha256": "ac666f753e8efce0b92ba9d8ca899309462fe7e3847222d2f5739ec458b32900"
     }
   ],
   "declarations": [
@@ -69,7 +69,7 @@
       "declaration": "TNLean.PEPS.DependentBondNetwork.partialIncidentRepresentation",
       "kind": "def",
       "source": "TNLean/PEPS/DependentPartialAverageSupport.lean",
-      "line": 35,
+      "line": 36,
       "owner": "def:peps_partial_incident_representation",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
     },
@@ -77,7 +77,7 @@
       "declaration": "TNLean.PEPS.DependentBondNetwork.partialIncidentRepresentation_apply",
       "kind": "theorem",
       "source": "TNLean/PEPS/DependentPartialAverageSupport.lean",
-      "line": 43,
+      "line": 44,
       "owner": "def:peps_partial_incident_representation",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
     },
@@ -85,7 +85,7 @@
       "declaration": "TNLean.PEPS.DependentBondNetwork.partialIncidentRepresentation_of_eq_id",
       "kind": "theorem",
       "source": "TNLean/PEPS/DependentPartialAverageSupport.lean",
-      "line": 51,
+      "line": 52,
       "owner": "def:peps_partial_incident_representation",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
     },
@@ -93,7 +93,7 @@
       "declaration": "TNLean.PEPS.DependentBondNetwork.partialIncidentRepresentation_of_eq_one",
       "kind": "theorem",
       "source": "TNLean/PEPS/DependentPartialAverageSupport.lean",
-      "line": 59,
+      "line": 60,
       "owner": "def:peps_partial_incident_representation",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
     },
@@ -101,7 +101,7 @@
       "declaration": "TNLean.PEPS.DependentBondNetwork.partialAveragingSite",
       "kind": "def",
       "source": "TNLean/PEPS/DependentPartialAverageSupport.lean",
-      "line": 70,
+      "line": 71,
       "owner": "def:peps_partial_averaging_site",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
     },
@@ -109,7 +109,7 @@
       "declaration": "TNLean.PEPS.DependentBondNetwork.localSiteMap_partialAveragingSite",
       "kind": "theorem",
       "source": "TNLean/PEPS/DependentPartialAverageSupport.lean",
-      "line": 78,
+      "line": 79,
       "owner": "def:peps_partial_averaging_site",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
     },
@@ -117,7 +117,7 @@
       "declaration": "TNLean.PEPS.DependentBondNetwork.isGInjective_partialAveragingSite",
       "kind": "theorem",
       "source": "TNLean/PEPS/DependentPartialAverageSupport.lean",
-      "line": 86,
+      "line": 87,
       "owner": "thm:peps_partial_averaging_injective",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
     },
@@ -125,7 +125,7 @@
       "declaration": "TNLean.PEPS.DependentBondNetwork.partialAveragingSite_of_eq_id",
       "kind": "theorem",
       "source": "TNLean/PEPS/DependentPartialAverageSupport.lean",
-      "line": 94,
+      "line": 95,
       "owner": "def:peps_partial_averaging_site",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
     },
@@ -133,7 +133,7 @@
       "declaration": "TNLean.PEPS.DependentBondNetwork.localSiteMap_partialAveragingSite_of_eq_one",
       "kind": "theorem",
       "source": "TNLean/PEPS/DependentPartialAverageSupport.lean",
-      "line": 103,
+      "line": 104,
       "owner": "def:peps_partial_averaging_site",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
     },
@@ -141,7 +141,7 @@
       "declaration": "TNLean.PEPS.DependentBondNetwork.partialAveragingSite_of_eq_one",
       "kind": "theorem",
       "source": "TNLean/PEPS/DependentPartialAverageSupport.lean",
-      "line": 117,
+      "line": 118,
       "owner": "def:peps_partial_averaging_site",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
     },
@@ -149,7 +149,7 @@
       "declaration": "TNLean.PEPS.DependentBondNetwork.partialAveragingSite_apply",
       "kind": "theorem",
       "source": "TNLean/PEPS/DependentPartialAverageSupport.lean",
-      "line": 130,
+      "line": 131,
       "owner": "def:peps_partial_averaging_site",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
     },
@@ -157,7 +157,7 @@
       "declaration": "TNLean.PEPS.DependentBondNetwork.network_partialAveragingSite",
       "kind": "theorem",
       "source": "TNLean/PEPS/DependentPartialAverageSupport.lean",
-      "line": 144,
+      "line": 145,
       "owner": "thm:peps_partial_network_expansion",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
     },
@@ -165,7 +165,7 @@
       "declaration": "TNLean.PEPS.DependentBondNetwork.network_partialAveragingSite_bondGauge",
       "kind": "theorem",
       "source": "TNLean/PEPS/DependentPartialAverageSupport.lean",
-      "line": 169,
+      "line": 170,
       "owner": "thm:peps_partial_vertex_gauge",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
     },
@@ -173,7 +173,7 @@
       "declaration": "TNLean.PEPS.DependentBondNetwork.network_partialAveragingSite_vertexGauge",
       "kind": "theorem",
       "source": "TNLean/PEPS/DependentPartialAverageSupport.lean",
-      "line": 186,
+      "line": 187,
       "owner": "thm:peps_partial_vertex_gauge",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
     },
@@ -181,7 +181,7 @@
       "declaration": "TNLean.PEPS.DependentBondNetwork.bondRegrouping_network_partialAveragingSite",
       "kind": "theorem",
       "source": "TNLean/PEPS/DependentPartialAverageSupport.lean",
-      "line": 197,
+      "line": 198,
       "owner": "thm:peps_partial_network_expansion",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
     },
@@ -189,7 +189,7 @@
       "declaration": "TNLean.PEPS.DependentBondNetwork.network_partialAveragingSite_eq_sum_matrixBondProduct",
       "kind": "theorem",
       "source": "TNLean/PEPS/DependentPartialAverageSupport.lean",
-      "line": 211,
+      "line": 212,
       "owner": "thm:peps_partial_network_expansion",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
     },
@@ -197,7 +197,7 @@
       "declaration": "TNLean.PEPS.DependentBondNetwork.physicalBondSlice_network_partialAveragingSite_mem_range",
       "kind": "theorem",
       "source": "TNLean/PEPS/DependentPartialAverageSupport.lean",
-      "line": 225,
+      "line": 226,
       "owner": "thm:peps_partial_uncut_support",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
     },
@@ -205,7 +205,7 @@
       "declaration": "TNLean.PEPS.DependentBondNetwork.physicalBondSlice_mem_range_of_mem_partialCutSpace",
       "kind": "theorem",
       "source": "TNLean/PEPS/DependentPartialAverageSupport.lean",
-      "line": 261,
+      "line": 262,
       "owner": "thm:peps_partial_uncut_support",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
     },
@@ -213,7 +213,7 @@
       "declaration": "TNLean.PEPS.DependentBondNetwork.OpenBondLabel",
       "kind": "abbrev",
       "source": "TNLean/PEPS/DependentOpenBondSupport.lean",
-      "line": 27,
+      "line": 28,
       "owner": "def:peps_open_bond_generators",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
     },
@@ -221,7 +221,7 @@
       "declaration": "TNLean.PEPS.DependentBondNetwork.openBondGenerator",
       "kind": "def",
       "source": "TNLean/PEPS/DependentOpenBondSupport.lean",
-      "line": 30,
+      "line": 31,
       "owner": "def:peps_open_bond_generators",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
     },
@@ -229,7 +229,7 @@
       "declaration": "TNLean.PEPS.DependentBondNetwork.openBondMatrix",
       "kind": "def",
       "source": "TNLean/PEPS/DependentOpenBondSupport.lean",
-      "line": 37,
+      "line": 38,
       "owner": "def:peps_open_bond_generators",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
     },
@@ -237,7 +237,7 @@
       "declaration": "TNLean.PEPS.DependentBondNetwork.bondMatrix_range_le_openBondMatrix_range",
       "kind": "theorem",
       "source": "TNLean/PEPS/DependentOpenBondSupport.lean",
-      "line": 43,
+      "line": 44,
       "owner": "thm:peps_open_bond_ranges",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
     },
@@ -245,7 +245,7 @@
       "declaration": "TNLean.PEPS.DependentBondNetwork.openBondMatrix_range_eq_top",
       "kind": "theorem",
       "source": "TNLean/PEPS/DependentOpenBondSupport.lean",
-      "line": 56,
+      "line": 57,
       "owner": "thm:peps_open_bond_ranges",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
     },
@@ -253,7 +253,7 @@
       "declaration": "TNLean.PEPS.DependentBondNetwork.exists_openBondCoefficients_of_slices",
       "kind": "theorem",
       "source": "TNLean/PEPS/DependentOpenBondSupport.lean",
-      "line": 70,
+      "line": 71,
       "owner": "thm:peps_open_bond_expansion",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
     },
@@ -261,7 +261,7 @@
       "declaration": "TNLean.PEPS.DependentBondNetwork.network_mem_cutSpace_of_eq_one",
       "kind": "theorem",
       "source": "TNLean/PEPS/DependentOpenCutIntersection.lean",
-      "line": 34,
+      "line": 35,
       "owner": "thm:peps_network_in_open_cut",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
     },
@@ -269,7 +269,7 @@
       "declaration": "TNLean.PEPS.DependentBondNetwork.cutSpace_mono",
       "kind": "theorem",
       "source": "TNLean/PEPS/DependentOpenCutIntersection.lean",
-      "line": 48,
+      "line": 49,
       "owner": "thm:peps_cut_space_mono",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
     },
@@ -277,7 +277,7 @@
       "declaration": "TNLean.PEPS.DependentBondNetwork.map_cutSpace",
       "kind": "theorem",
       "source": "TNLean/PEPS/DependentOpenCutIntersection.lean",
-      "line": 64,
+      "line": 65,
       "owner": "thm:peps_cut_space_physical_image",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
     },
@@ -285,7 +285,7 @@
       "declaration": "TNLean.PEPS.DependentBondNetwork.averagingProjector_matrixBondProduct",
       "kind": "theorem",
       "source": "TNLean/PEPS/DependentOpenCutIntersection.lean",
-      "line": 78,
+      "line": 79,
       "owner": "thm:peps_average_bond_product",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
     },
@@ -293,7 +293,7 @@
       "declaration": "TNLean.PEPS.DependentBondNetwork.averagingProjector_openBondProduct_mem_cutSpace",
       "kind": "theorem",
       "source": "TNLean/PEPS/DependentOpenCutIntersection.lean",
-      "line": 92,
+      "line": 93,
       "owner": "thm:peps_open_product_in_cut",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
     },
@@ -301,7 +301,7 @@
       "declaration": "TNLean.PEPS.DependentBondNetwork.iInf_partialCutSpace_eq_of_remove_labels",
       "kind": "theorem",
       "source": "TNLean/PEPS/DependentOpenCutIntersection.lean",
-      "line": 112,
+      "line": 113,
       "owner": "thm:peps_partial_open_cut_intersection",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
     },
@@ -309,7 +309,7 @@
       "declaration": "TNLean.PEPS.DependentBondNetwork.iInf_cutSpace_eq_of_remove_labels",
       "kind": "theorem",
       "source": "TNLean/PEPS/DependentOpenCutIntersection.lean",
-      "line": 143,
+      "line": 144,
       "owner": "thm:peps_open_cut_intersection",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
     },
@@ -317,7 +317,7 @@
       "declaration": "TNLean.PEPS.DependentBondNetwork.OutsidePhysicalConfig",
       "kind": "abbrev",
       "source": "TNLean/PEPS/DependentLiftedCut.lean",
-      "line": 30,
+      "line": 31,
       "owner": "def:peps_outside_physical_config",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
     },
@@ -325,7 +325,7 @@
       "declaration": "TNLean.PEPS.DependentBondNetwork.outsidePhysicalRestriction",
       "kind": "def",
       "source": "TNLean/PEPS/DependentLiftedCut.lean",
-      "line": 34,
+      "line": 35,
       "owner": "def:peps_outside_physical_config",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
     },
@@ -333,7 +333,7 @@
       "declaration": "TNLean.PEPS.DependentBondNetwork.liftedCutCoeff",
       "kind": "def",
       "source": "TNLean/PEPS/DependentLiftedCut.lean",
-      "line": 44,
+      "line": 45,
       "owner": "def:peps_lifted_cut",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
     },
@@ -341,7 +341,7 @@
       "declaration": "TNLean.PEPS.DependentBondNetwork.liftedCutMap",
       "kind": "def",
       "source": "TNLean/PEPS/DependentLiftedCut.lean",
-      "line": 55,
+      "line": 56,
       "owner": "def:peps_lifted_cut",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
     },
@@ -349,7 +349,7 @@
       "declaration": "TNLean.PEPS.DependentBondNetwork.liftedCutMap_apply",
       "kind": "theorem",
       "source": "TNLean/PEPS/DependentLiftedCut.lean",
-      "line": 70,
+      "line": 71,
       "owner": "def:peps_lifted_cut",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
     },
@@ -357,7 +357,7 @@
       "declaration": "TNLean.PEPS.DependentBondNetwork.liftedCutSpace",
       "kind": "def",
       "source": "TNLean/PEPS/DependentLiftedCut.lean",
-      "line": 78,
+      "line": 79,
       "owner": "def:peps_lifted_cut",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
     },
@@ -365,7 +365,7 @@
       "declaration": "TNLean.PEPS.DependentBondNetwork.outsidePhysicalRestriction_update",
       "kind": "theorem",
       "source": "TNLean/PEPS/DependentLiftedCut.lean",
-      "line": 88,
+      "line": 89,
       "owner": "def:peps_outside_physical_config",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
     },
@@ -373,7 +373,7 @@
       "declaration": "TNLean.PEPS.DependentBondNetwork.liftedCutMap_slice_mem_range",
       "kind": "theorem",
       "source": "TNLean/PEPS/DependentLiftedCut.lean",
-      "line": 102,
+      "line": 103,
       "owner": "thm:peps_lifted_cut_local_slice",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
     },
@@ -381,7 +381,7 @@
       "declaration": "TNLean.PEPS.DependentBondNetwork.slice_mem_range_of_mem_liftedCutSpace",
       "kind": "theorem",
       "source": "TNLean/PEPS/DependentLiftedCut.lean",
-      "line": 139,
+      "line": 140,
       "owner": "thm:peps_lifted_cut_local_slice",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
     },
@@ -389,7 +389,7 @@
       "declaration": "TNLean.PEPS.DependentBondNetwork.iInf_liftedCutSpace_le_range_product",
       "kind": "theorem",
       "source": "TNLean/PEPS/DependentLiftedCut.lean",
-      "line": 151,
+      "line": 152,
       "owner": "thm:peps_lifted_cover_support",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
     },
@@ -397,7 +397,7 @@
       "declaration": "TNLean.PEPS.DependentBondNetwork.outsideCutLocalConfig",
       "kind": "def",
       "source": "TNLean/PEPS/DependentLiftedCut.lean",
-      "line": 173,
+      "line": 174,
       "owner": "def:peps_outside_cut_config",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
     },
@@ -405,7 +405,7 @@
       "declaration": "TNLean.PEPS.DependentBondNetwork.outsideCutLocalConfig_restriction",
       "kind": "theorem",
       "source": "TNLean/PEPS/DependentLiftedCut.lean",
-      "line": 182,
+      "line": 183,
       "owner": "def:peps_outside_cut_config",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
     },
@@ -413,7 +413,7 @@
       "declaration": "TNLean.PEPS.DependentBondNetwork.cutSpace_le_liftedCutSpace",
       "kind": "theorem",
       "source": "TNLean/PEPS/DependentLiftedCut.lean",
-      "line": 191,
+      "line": 192,
       "owner": "thm:peps_full_cut_in_lifted_support",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
     },
@@ -421,7 +421,7 @@
       "declaration": "TNLean.PEPS.DependentBondNetwork.cutSpace_le_range_product",
       "kind": "theorem",
       "source": "TNLean/PEPS/DependentLiftedCut.lean",
-      "line": 213,
+      "line": 214,
       "owner": "thm:peps_full_cut_in_lifted_support",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
     },
@@ -429,7 +429,7 @@
       "declaration": "TNLean.PEPS.DependentBondNetwork.cutReplaceOutside",
       "kind": "def",
       "source": "TNLean/PEPS/DependentLiftedCutReconstruction.lean",
-      "line": 31,
+      "line": 32,
       "owner": "def:peps_cut_replace_outside",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
     },
@@ -437,7 +437,7 @@
       "declaration": "TNLean.PEPS.DependentBondNetwork.replaceOutsidePhysical",
       "kind": "def",
       "source": "TNLean/PEPS/DependentLiftedCutReconstruction.lean",
-      "line": 100,
+      "line": 101,
       "owner": "def:peps_replace_outside_physical",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
     },
@@ -445,7 +445,7 @@
       "declaration": "TNLean.PEPS.DependentBondNetwork.outsidePhysicalRestriction_replaceOutsidePhysical",
       "kind": "theorem",
       "source": "TNLean/PEPS/DependentLiftedCutReconstruction.lean",
-      "line": 107,
+      "line": 108,
       "owner": "def:peps_replace_outside_physical",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
     },
@@ -453,7 +453,7 @@
       "declaration": "TNLean.PEPS.DependentBondNetwork.replaceOutsidePhysical_restriction",
       "kind": "theorem",
       "source": "TNLean/PEPS/DependentLiftedCutReconstruction.lean",
-      "line": 115,
+      "line": 116,
       "owner": "def:peps_replace_outside_physical",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
     },
@@ -461,7 +461,7 @@
       "declaration": "TNLean.PEPS.DependentBondNetwork.reconstructedCutBoundary",
       "kind": "def",
       "source": "TNLean/PEPS/DependentLiftedCutReconstruction.lean",
-      "line": 161,
+      "line": 162,
       "owner": "def:peps_reconstructed_cut_boundary",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
     },
@@ -469,7 +469,7 @@
       "declaration": "TNLean.PEPS.DependentBondNetwork.cutMap_reconstructedCutBoundary",
       "kind": "theorem",
       "source": "TNLean/PEPS/DependentLiftedCutReconstruction.lean",
-      "line": 173,
+      "line": 174,
       "owner": "thm:peps_reconstructed_boundary_contraction",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
     },
@@ -477,7 +477,7 @@
       "declaration": "TNLean.PEPS.DependentBondNetwork.liftedCutSpace_inf_range_product_le_cutSpace",
       "kind": "theorem",
       "source": "TNLean/PEPS/DependentLiftedCutReconstruction.lean",
-      "line": 248,
+      "line": 249,
       "owner": "thm:peps_lifted_cut_reconstruction",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
     },
@@ -485,7 +485,7 @@
       "declaration": "TNLean.PEPS.DependentBondNetwork.cutSpace_eq_liftedCutSpace_inf_range_product",
       "kind": "theorem",
       "source": "TNLean/PEPS/DependentLiftedCutReconstruction.lean",
-      "line": 297,
+      "line": 298,
       "owner": "thm:peps_lifted_cut_reconstruction",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
     },
@@ -493,7 +493,7 @@
       "declaration": "TNLean.PEPS.DependentBondNetwork.iInf_liftedCutSpace_eq_iInf_cutSpace",
       "kind": "theorem",
       "source": "TNLean/PEPS/DependentLiftedCutIntersection.lean",
-      "line": 32,
+      "line": 33,
       "owner": "thm:peps_lifted_cut_intersection",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
     },
@@ -501,7 +501,7 @@
       "declaration": "TNLean.PEPS.DependentBondNetwork.liftedCutSpace_eq_cutSpace_of_cover_or_surjective",
       "kind": "theorem",
       "source": "TNLean/PEPS/DependentLiftedCutIntersection.lean",
-      "line": 50,
+      "line": 51,
       "owner": "thm:peps_lifted_cut_intersection",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
     },
@@ -509,7 +509,7 @@
       "declaration": "TNLean.PEPS.DependentBondNetwork.liftedCutSpace_inf_eq_cutSpace_inf",
       "kind": "theorem",
       "source": "TNLean/PEPS/DependentLiftedCutIntersection.lean",
-      "line": 67,
+      "line": 68,
       "owner": "thm:peps_lifted_cut_intersection",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
     },
@@ -517,7 +517,7 @@
       "declaration": "TNLean.PEPS.DependentBondNetwork.iInf_liftedCutSpace_eq_map_representationAveragingSite",
       "kind": "theorem",
       "source": "TNLean/PEPS/DependentLiftedCutIntersection.lean",
-      "line": 97,
+      "line": 98,
       "owner": "thm:peps_lifted_canonical_intersection",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
     },
@@ -525,7 +525,7 @@
       "declaration": "TNLean.PEPS.DependentBondNetwork.exists_liftedCutSpace_common_localInverse",
       "kind": "theorem",
       "source": "TNLean/PEPS/DependentLiftedCutIntersection.lean",
-      "line": 114,
+      "line": 115,
       "owner": "thm:peps_lifted_common_inverse",
       "blueprint": "blueprint/src/chapter/ch24_peps_dependent_open_intersection.tex"
     },
