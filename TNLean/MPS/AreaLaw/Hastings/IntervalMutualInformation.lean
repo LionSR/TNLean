@@ -20,7 +20,7 @@ one effect `E`, supported on `A ∪ B`, in the ground state and in the product
 bound on the chain, from the bipartite form of the Lindblad–Uhlmann bound.
 
 The bipartite form is taken as the hypothesis `hMI`. It is QICLean's
-`binaryRelativeEntropy_le_mutualInformation` (QICLean#886, with `binaryRelativeEntropy`
+`binaryRelativeEntropy_le_mutualInformation` (with `binaryRelativeEntropy`
 written out), which is not yet in the pinned QICLean; the hypothesis is removed after the pin
 bump.
 
