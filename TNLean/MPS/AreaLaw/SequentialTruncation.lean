@@ -291,9 +291,8 @@ theorem norm_sub_sequentialTruncation_le (hP : ∀ k, IsStarProjection (P k))
 /-- **Squared error of sequential truncation.** The squared distance from a vector to its
 `j`-step sequential truncation is at most the sum of the squared norms of the complementary
 truncations applied to the vector itself. At each step `ψ - Π Φ` splits orthogonally into
-`Π (ψ - Φ)` and `(1 - Π) ψ`. Verstraete and Cirac, Phys. Rev. B 73, 094423 (2006), as quoted
-in eq. `eps-upper` of Schuch, Wolf, Verstraete and Cirac, arXiv:0705.0292, state the bound
-with a factor `2` on the right; the form here, without it, implies theirs. -/
+`Π (ψ - Φ)` and `(1 - Π) ψ`. Verstraete and Cirac, Phys. Rev. B 73, 094423 (2006), state
+the bound with a factor `2` on the right; the form here, without it, implies theirs. -/
 theorem norm_sub_sequentialTruncation_sq_le (hP : ∀ k, IsStarProjection (P k))
     (ψ : EuclideanSpace ℂ (Fin L → Fin q)) (j : ℕ) :
     ‖ψ - sequentialTruncation P j ψ‖ ^ 2 ≤ ∑ i ∈ Finset.range j,
@@ -471,8 +470,7 @@ theorem isOpenMPS_sequentialTruncation_leadingEigenprojection
 truncating every internal cut onto the `D` leading eigenvectors of its left marginal gives a
 vector `Φ` with `‖Φ - ψ‖² ≤ ∑_k ε_k(D)`, where `ε_k(D)` is the weight beyond the `D`
 largest eigenvalues at the cut `k`. Verstraete and Cirac, Phys. Rev. B 73, 094423 (2006),
-and eq. `eps-upper` of arXiv:0705.0292 state `‖Φ - ψ‖² ≤ 2 ∑_k ε_k(D)`; the bound here,
-without the factor `2`, implies theirs. -/
+state `‖Φ - ψ‖² ≤ 2 ∑_k ε_k(D)`; the bound here, without the factor `2`, implies theirs. -/
 theorem norm_sequentialTruncation_leadingEigenprojection_sub_sq_le
     (ψ : EuclideanSpace ℂ (Fin L → Fin q)) (hψ : ‖ψ‖ = 1) (D : ℕ) :
     let P : ∀ k : ℕ, LeftBlockMatrix L q k := fun k ↦
