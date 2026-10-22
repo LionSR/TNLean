@@ -37,10 +37,11 @@ right generator `0` and input `1`.
 The source states the gap bound as `O(exp[-l/3ξ])` after fixing `q = (l/3)ΔE/(2v)`
 (`law16.tex`, line 792); the theorems here keep `q` free and give explicit constants.
 
-**Local fix (exponent at line 848):** the bound `‖P_q - P_0‖ ≤ exp(-q/2)` is sharp when
-the gap is attained, and with `q = (l/3)ΔE/(2v) ≥ l/(3ξ)` it gives `O(exp[-l/6ξ])`, not the
-printed `O(exp[-l/3ξ])`. The final error of Lemma 1 already decays as `exp[-l/6ξ]`
-(`law16.tex`, lines 875, 889 and 904–906), so no later exponent changes. Documented in
+**Local fix (exponent at line 848):** the bound `‖P_q - P_0‖ ≤ exp(-q/2)` is sharp when the
+gap is attained. With the source's `q = (l/3)ΔE/(2v)`, `e^{-q/2}` gives only `e^{-l/6ξ}`.
+The same factor enters eqs. `tighter`/`tighter2` and the margin of eq. `obd`. The Lemma 1
+assembly (#9811) takes `q = (l/3)ΔE/v`, which recovers the printed rate `e^{-l/3ξ}` and
+`ξ' = 6ξ`. Every theorem here keeps `q` free. Documented in
 `docs/paper-gaps/hastings07_gaussian_average_exponent.tex`.
 For `q ≤ 0` the variance is zero, `P_q(H) = 1`, and every bound remains true.
 All norms are Euclidean operator norms.
@@ -58,7 +59,7 @@ variable {n : Type*} [Fintype n] [DecidableEq n]
 noncomputable def timeAverageVariance (q ΔE : ℝ) : ℝ≥0 := (q / ΔE ^ 2).toNNReal
 
 /-- The Gaussian time average `P_q(H) = (ΔE/√(2πq)) ∫ e^{iHt} e^{-(tΔE)²/2q} dt` of
-Hastings, arXiv:0705.2024v4, `law16.tex`, lines 843–847, written as the two-generator
+Hastings, arXiv:0705.2024v4, `law16.tex`, lines 843–847 (for `ΔE > 0`), written as the two-generator
 Gaussian filter with left generator `H`, right generator `0` and input `1`. (With `H` on
 both sides the filter of `1` would be `1` itself.) -/
 noncomputable def gaussianTimeAverage (q ΔE : ℝ) (H : Matrix n n ℂ) : Matrix n n ℂ :=

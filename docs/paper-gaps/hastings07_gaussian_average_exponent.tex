@@ -56,20 +56,30 @@ normalized density.\footnote{\leanid{TNLean.MPS.AreaLaw.Hastings.norm_gaussianTi
     in \doclink{TNLean/MPS/AreaLaw/Hastings/GaussianTimeAverage}.}
 With the source's choice of $q$ it gives $O(e^{-l/6\xi})$.
 
-\section{Why the conclusion is unaffected}
+\section{Propagation and repair}
 
-The rest of the appendix already carries the weaker exponent. The spectral
-cut-offs $O_L,O_R$ cost $O(e^{-l/6\xi})$, and this term is added in the
-estimate that follows, so its error is
-$O(\Delta E^{-2}J^2\sqrt q\,e^{-l/3\xi}+e^{-l/6\xi})$. The next estimate is
-$O(\Delta E^{-2}J^2\sqrt q\,e^{-l/6\xi})$, and the final bound on
-$\|O_BO_LO_R-P_0\|$ is
-$O(\sqrt{l/\xi}\,\xi^2e^{-l/6\xi})$.\footnote{\path{References/0705.2024/law16.tex},
-    lines~838--839, 875, 889 and~904--906.}
-With the corrected exponent, the display that follows
-(\ref{eq:hastings07_gaussian_average_source}) gains the additive term
-$e^{-l/6\xi}$, which the estimate at line~875 already contains. No later
-exponent changes, and Lemma~1 holds with the same $\xi'=6\xi$.
+The same factor enters elsewhere. The estimates \texttt{tighter} and
+\texttt{tighter2} on $|\tilde H^0_L\Psi_0|$, $|\tilde H^0_B\Psi_0|$ and
+$|\tilde H^0_R\Psi_0|$ get their factor $e^{-l/3\xi}$ from the same Gaussian
+multiplier $e^{-q/2}$ on the excited states, so with the printed $q$ they also
+give only $e^{-l/6\xi}$.\footnote{\path{References/0705.2024/law16.tex},
+    lines~796--814.}
+The spectral cut-off $O_L$ projects onto eigenvalues of $M_L$ at most
+$\theta=\Delta E^{-1}J^2e^{-l/6\xi}$, and the estimate \texttt{obd} rests on
+$|(1-O_L)\Psi_0|\le|M_L\Psi_0|/\theta$.\footnote{\path{References/0705.2024/law16.tex},
+    lines~829--840.}
+With $|M_L\Psi_0|$ of order $e^{-l/6\xi}$ this ratio is only $O(1)$, so the
+margin of \texttt{obd}, and the estimates after it, are affected in the same
+way.
+
+With the source's $q=(l/3)\Delta E/(2v)$, $e^{-q/2}$ gives only $e^{-l/6\xi}$.
+The same factor enters \texttt{tighter}, \texttt{tighter2} and the margin of
+\texttt{obd}. The assembly of Lemma~1 takes $q=(l/3)\Delta E/v$, which gives
+$e^{-q/2}\le e^{-l/3\xi}$, recovers every printed rate $e^{-l/3\xi}$, and keeps
+$\xi'=6\xi$. The Gaussian truncation exponent $(T\Delta E)^2/2q$ halves and
+the factor $\sqrt q$ grows by $\sqrt2$, which changes only constants.
+The Lean statements of the Gaussian time average keep $q$ free and are
+unaffected.
 
 \bibliographystyle{alpha}
 \bibliography{references}

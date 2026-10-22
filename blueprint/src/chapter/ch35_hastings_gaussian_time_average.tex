@@ -21,7 +21,7 @@ the parameter $q$. Norms are operator norms.
         P_q(H)=\int e^{iHt}\,d\gamma_h(t),
     \end{align*}
     where $\gamma_h$ is the centred Gaussian measure of variance $h$, and
-    $\gamma_0$ is the point mass at zero. For $q>0$ and $\Delta E\ne0$ this is
+    $\gamma_0$ is the point mass at zero. For $q>0$ and $\Delta E>0$ this is
     the operator
     $P_q=\frac{\Delta E}{\sqrt{2\pi q}}\int e^{iHt}e^{-(t\Delta E)^2/2q}\,dt$
     of \cite[lines 843--847]{Hastings2007AreaLaw}.
@@ -40,9 +40,11 @@ the parameter $q$. Norms are operator norms.
     \end{align*}
     This is the estimate of $\|P_q-P_0\|$ at
     \cite[line 848]{Hastings2007AreaLaw}, for the unique gapped ground state
-    with energy zero. With the source's choice $q=(l/3)\Delta E/(2v)\ge
-        l/(3\xi)$ it gives $O(e^{-l/6\xi})$, not the printed $O(e^{-l/3\xi})$;
-    the final error of the appendix already decays as $e^{-l/6\xi}$,
+    with energy zero. With the source's choice $q=(l/3)\Delta E/(2v)$ it
+    gives only $O(e^{-l/6\xi})$, not the printed $O(e^{-l/3\xi})$; the same
+    factor enters the two preceding estimates on the filtered pieces of the
+    Hamiltonian and the margin of the spectral cut-offs. Taking
+    $q=(l/3)\Delta E/v$ recovers the printed rate,
     see~\cite{gap:hastings07_gaussian_average_exponent}.
 \end{theorem}
 \begin{proof}\leanok

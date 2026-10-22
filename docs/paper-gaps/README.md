@@ -1263,8 +1263,9 @@ absolute constants.
 (local correction, resolved) records that the Gaussian time average `P_q` in the
 appendix of Hastings (arXiv:0705.2024v4, line 848) satisfies
 `‖P_q - P_0‖ ≤ e^{-q/2}`, which with the source's choice of `q` is
-`O(e^{-l/6ξ})` rather than the printed `O(e^{-l/3ξ})`. The final error of
-Lemma 1 already decays as `e^{-l/6ξ}`, so no later exponent changes.
+`O(e^{-l/6ξ})` rather than the printed `O(e^{-l/3ξ})`. The same factor enters
+eqs. `tighter`/`tighter2` and the margin of eq. `obd`; the Lemma 1 assembly takes
+`q = (l/3)ΔE/v`, which recovers the printed rate `e^{-l/3ξ}` and `ξ' = 6ξ`.
 
 ## Polynomial PEPS: zero-floor maximizing filters
 
