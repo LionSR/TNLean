@@ -123,12 +123,14 @@ bound \cite[lines 96--112]{Hastings2007AreaLaw}.
     }
     \leanok
     \uses{def:hastings_gaussian_filtered_term}
-    Let $T\ge0$ and $\varepsilon\ge0$, and suppose that
+    Let $q>0$, $T\ge0$ and $\varepsilon\ge0$, and suppose that
     $\|[e^{iHt}We^{-iHt},O]\|\le\varepsilon$ for all $|t|\le T$. Then
     \begin{align*}
         \|[\widetilde W,O]\|\le\varepsilon
         +2\|W\|\,\|O\|\,e^{-(T\Delta E)^2/(2q)}.
     \end{align*}
+    For $q=0$ the filtered operator is $W$, and the hypothesis at $t=0$ gives
+    $\|[W,O]\|\le\varepsilon$.
     With the Lieb--Robinson bound for $\varepsilon$ and $T$ proportional to
     $l$, this is the locality of the filtered parts used at
     \cite[lines 816--828]{Hastings2007AreaLaw}.
@@ -150,8 +152,8 @@ bound \cite[lines 96--112]{Hastings2007AreaLaw}.
     \leanok
     \uses{thm:hastings_filtered_locality}
     For a set $K$ of sites, let $\mathbb E_K$ be the normalized partial trace
-    over the sites outside $K$, tensored with the identity there. Let $T\ge0$
-    and $\varepsilon\ge0$. If
+    over the sites outside $K$, tensored with the identity there. Let $q>0$,
+    $T\ge0$ and $\varepsilon\ge0$. If
     $\|e^{iHt}We^{-iHt}-\mathbb E_K(e^{iHt}We^{-iHt})\|\le\varepsilon$ for all
     $|t|\le T$, then
     \begin{align*}
@@ -159,7 +161,8 @@ bound \cite[lines 96--112]{Hastings2007AreaLaw}.
         +2\|W\|\,e^{-(T\Delta E)^2/(2q)}.
     \end{align*}
     The operator $\mathbb E_K(\widetilde W)$ acts on $K$ and has norm at most
-    $\|W\|$. It replaces the truncated evolution by which
+    $\|W\|$. For $q=0$ the filtered operator is $W$, and the hypothesis at
+    $t=0$ gives the bound $\varepsilon$. It replaces the truncated evolution by which
     \cite[lines 816--828]{Hastings2007AreaLaw} approximates the filtered parts.
 \end{theorem}
 \begin{proof}\leanok
@@ -172,15 +175,34 @@ bound \cite[lines 96--112]{Hastings2007AreaLaw}.
 
 \subsection*{The localized parts and the cut-offs}
 
-% Lean statement pending.
+% The source prints the bound J^2 (line 794), which fails already for
+% nearest-neighbour terms; the entry states the corrected constant.
 \begin{theorem}[Commutators of the parts with the Hamiltonian]
     \label{thm:hastings_part_commutators}
+    \lean{
+        TNLean.MPS.AreaLaw.ChainHamiltonian.norm_commutator_leftPart_le,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.norm_commutator_rightPart_le,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.commutator_bufferPart_eq,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.norm_commutator_bufferPart_le,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.isSupportedOn_commutator_leftPart,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.isSupportedOn_commutator_rightPart
+    }
+    \leanok
     \uses{def:hastings_three_way_splitting}
-    The commutators $[H,H_L]$ and $[H,H_R]$ act on windows of width of order
-    $R$ at the inner ends of the left and right parts, and each has norm at
-    most a constant depending only on $R$ times $J^2$. Since $[H,H]=0$, also
-    $[H,H_B]=-([H,H_L]+[H,H_R])$. For nearest-neighbour terms this is the
-    bound $\|[H,H_L]\|\le J^2$ of \cite[line 794]{Hastings2007AreaLaw}.
+    Let $H$ be a finite-range Hamiltonian of range $R$ on the chain of $L$
+    sites with terms of norm at most $J$, and let $H_L$, $H_B$, $H_R$ be its
+    parts at the cut $j$ with buffer width $m$. Then
+    \begin{align*}
+        \|[H,H_L]\|\le c_RJ^2,\qquad\|[H,H_R]\|\le c_RJ^2, \\
+        [H,H_B]=-([H,H_L]+[H,H_R]),\qquad\|[H,H_B]\|\le2c_RJ^2,
+    \end{align*}
+    with $c_R=2N_R(R+1)2^{2R+1}$, where $N_R$ bounds the number of terms
+    that cross a cut. The commutator $[H,H_L]$ acts on the sites
+    $\{j-m-2R,\dots,j-m+R-1\}$ and $[H,H_R]$ on $\{j+m-R,\dots,j+m+2R-1\}$,
+    intersected with the chain. The source states $\|[H,H_L]\|\le J^2$
+    \cite[line 794]{Hastings2007AreaLaw}; this fails already for
+    nearest-neighbour terms, and the constant $c_R$ is the correction
+    recorded in~\cite{gap:hastings07_commutator_constant}.
 \end{theorem}
 
 % Lean statement pending. Stated as printed. The Lean statement will bound the
@@ -201,10 +223,9 @@ bound \cite[lines 96--112]{Hastings2007AreaLaw}.
     \cite[lines 816--828]{Hastings2007AreaLaw}.
 \end{theorem}
 
-% Lean statement pending. Stated as printed: the cut-off compares the eigenvalue,
-% not its absolute value. The bound on the evolution of O_L O_R at lines 879--880
-% needs the cut-off on the absolute value; the entry will be restated with its
-% paper-gap note when its Lean statement lands.
+% Lean statement pending. Stated as printed; it will be restated with the
+% cut-off on the absolute value and its paper-gap note when its Lean statement
+% lands.
 \begin{theorem}[The cut-offs $O_L$ and $O_R$]
     \label{thm:hastings_cutoffs}
     \uses{thm:hastings_localized_parts, thm:hastings_filtered_no_ground_component}
@@ -219,7 +240,12 @@ bound \cite[lines 96--112]{Hastings2007AreaLaw}.
         |(O_L-1)\Psi_0|\le\mathcal O(e^{-l/(6\xi)}),\qquad
         |(O_R-1)\Psi_0|\le\mathcal O(e^{-l/(6\xi)}),
     \end{align*}
-    which is \cite[lines 829--841]{Hastings2007AreaLaw}.
+    which is \cite[lines 829--841]{Hastings2007AreaLaw}. The later bound
+    $\|e^{i(M_L+M_R)t}O_LO_R-O_LO_R\|\le2|t|\Delta E^{-1}J^2
+        \mathcal O(e^{-l/(6\xi)})$ of \cite[lines 879--880]{Hastings2007AreaLaw}
+    needs the cut-off on the absolute value of the eigenvalue: with the
+    printed cut-off, $M_L$ may have eigenvalues far below
+    $-\Delta E^{-1}J^2e^{-l/(6\xi)}$ on the range of $O_L$.
 \end{theorem}
 
 \subsection*{The Gaussian time average and the boundary operator}
@@ -292,8 +318,14 @@ bound \cite[lines 96--112]{Hastings2007AreaLaw}.
         thm:hastings_cutoffs, thm:hastings_gaussian_time_average,
         thm:hastings_moved_estimate, thm:hastings_interaction_picture,
         thm:hastings_boundary_localization}
-    Under the hypotheses of Lemma~\ref{lem:hastings_lemma1}, for every cut $j$
-    and every $l$ there are operators $O_B$, $O_L$, $O_R$ of norm at most one,
+    Let $H=\sum_iH_{i,i+1}$ be a nearest-neighbour Hamiltonian on $N$ sites with
+    $\|H_{i,i+1}\|\le J$, with a unique ground state $\Psi_0$ and a gap
+    $\Delta E>0$ to the first excited state, and let
+    $P_0=|\Psi_0\rangle\langle\Psi_0|$. Take the variance parameter
+    $q=(l/3)\Delta E/(2v)$ in the filtered parts and in the time averages
+    \cite[line 792]{Hastings2007AreaLaw}; since $\xi\ge2v/\Delta E$, this
+    gives $e^{-q/2}\le e^{-l/(6\xi)}$. Then for every cut $j$ and every $l$
+    there are operators $O_B$, $O_L$, $O_R$ of norm at most one,
     with $O_L$ and $O_R$ Hermitian projections acting on $X_{1,j}$ and
     $X_{j+1,N}$ and $O_B$ acting on $X_{j-l+1,j+l}$, such that
     \begin{align*}
@@ -381,19 +413,18 @@ printed in the body of the paper.
     $O_B(j,l)$ on $X_{j-l+1,j+l}$
     \cite[lines 246--267]{Hastings2007AreaLaw}.
 \end{lemma}
-\begin{proof}
-    The argument does not prove the lemma as printed; it gives two weaker
-    statements. Theorem~\ref{thm:hastings_projector_factorization} gives the
-    factorization with the bound $\varepsilon(l)=C_1(\xi)e^{-l/\xi'}$, the
-    supports and the norms as stated, and $O_L$, $O_R$ orthogonal
-    projections, but with an operator $O_B$ that need not be Hermitian or
-    positive. If $O_B$ is replaced by $O_B^\dagger O_B$, which is positive
-    semidefinite, has norm at most one and keeps the support, then
-    Lemma~\ref{lem:hastings_positive_repair} bounds the new error by
-    $\mathcal O(\sqrt{\varepsilon(l)})$, which decays only at the rate
-    $e^{-l/(2\xi')}$; this is the version of the note added
-    \cite[lines 932--940]{Hastings2007AreaLaw}. Neither statement gives
-    positive definite operators, and neither gives a positive $O_B$ at the
-    rate $e^{-l/\xi'}$: the printed version does not follow from this
-    argument.
-\end{proof}
+
+The argument of the appendix does not prove the lemma as printed; it gives
+two weaker statements. Theorem~\ref{thm:hastings_projector_factorization} gives the
+factorization with the bound $\varepsilon(l)=C_1(\xi)e^{-l/\xi'}$, the
+supports and the norms as stated, and $O_L$, $O_R$ orthogonal
+projections, but with an operator $O_B$ that need not be Hermitian or
+positive. If $O_B$ is replaced by $O_B^\dagger O_B$, which is positive
+semidefinite, has norm at most one and keeps the support, then
+Lemma~\ref{lem:hastings_positive_repair} bounds the new error by
+$\mathcal O(\sqrt{\varepsilon(l)})$, which decays only at the rate
+$e^{-l/(2\xi')}$; this is the version of the note added
+\cite[lines 932--940]{Hastings2007AreaLaw}. Neither statement gives
+positive definite operators, and neither gives a positive $O_B$ at the
+rate $e^{-l/\xi'}$: the printed version does not follow from this
+argument.
