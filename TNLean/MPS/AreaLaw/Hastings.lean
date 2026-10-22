@@ -17,6 +17,7 @@ import TNLean.MPS.AreaLaw.Hastings.EffectExpectation
 import TNLean.MPS.AreaLaw.Hastings.EffectFromFactorization
 import TNLean.MPS.AreaLaw.Hastings.IntervalMutualInformation
 import TNLean.MPS.AreaLaw.Hastings.PartCommutators
+import TNLean.MPS.AreaLaw.Hastings.PositiveFactorization
 import TNLean.MPS.AreaLaw.Hastings.ProductStateExpectation
 import TNLean.MPS.AreaLaw.Hastings.ProjectorOverlap
 import TNLean.MPS.AreaLaw.Hastings.RelativeEntropyGain

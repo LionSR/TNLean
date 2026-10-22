@@ -1282,6 +1282,14 @@ appendix of Hastings (arXiv:0705.2024v4, line 794) fails already for nearest-nei
 terms (`‖[Z, X]‖ = 2` with `J = 1`), and that the bound proved for terms of range `R` is an
 explicit constant depending only on `R`, times `J²`.
 
+### One-dimensional area law after Hastings: the rate of the positive version of Lemma 1
+
+[hastings07_lemma1_positivity_rate.tex](hastings07_lemma1_positivity_rate.tex)
+(local correction, resolved) records that Lemma 1 of Hastings (arXiv:0705.2024v4,
+lines 246–267) states positive operators at the rate `e^{-l/ξ'}`, while the note added
+(lines 912–943) obtains a positive `O_B⁺ = O_Bᴴ O_B` only at error `O(√ε)`. The bound
+proved is `(√2 + 4) √C₁ e^{-l/(2ξ')}`.
+
 ### One-dimensional area law after Hastings: the entropy gain constants
 
 [hastings07_relent_constants.tex](hastings07_relent_constants.tex)
