@@ -17,6 +17,10 @@ so the bootstrap lemma (Lemma 2) with Schmidt rank one gives
 `S_cut ≤ ξ' ln(2 C₁² / P) ln q + F(ξ', q)`. When the window condition of line 488 holds, this
 forces `P ≤ 2 C₁ e^{-l/ξ'}`, and eq. `relent` follows from `relent_of_projectorFactorization`.
 
+**Local fix (explicit constants):** the conclusion holds with `C₁` replaced by `2 C₁` and with
+`C₂ = relentConst`; only the values of the constants move. Documented in
+`docs/paper-gaps/hastings07_relent_constants.tex`.
+
 ## Main results
 
 * `relent_of_projectorFactorization_of_le_entropy`: eq. `relent` for one pair of adjacent
