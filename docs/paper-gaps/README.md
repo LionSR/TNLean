@@ -1257,6 +1257,14 @@ fourth entry of the shell count, which is omitted; the interval constant and
 the area-law constant of Theorem A change accordingly, all at the level of
 absolute constants.
 
+### One-dimensional area law after Hastings: the constant of the boundary commutator
+
+[hastings07_commutator_constant.tex](hastings07_commutator_constant.tex)
+(local correction, resolved) records that the printed bound `‖[H, H_L]‖ ≤ J²` in the
+appendix of Hastings (arXiv:0705.2024v4, line 794) fails already for nearest-neighbour
+terms (`‖[Z, X]‖ = 2` with `J = 1`), and that the bound proved for terms of range `R` is an
+explicit constant depending only on `R`, times `J²`.
+
 ## Polynomial PEPS: zero-floor maximizing filters
 
 - [`polypeps_square_zero_floor_optimizer_scope.tex`](polypeps_square_zero_floor_optimizer_scope.tex)

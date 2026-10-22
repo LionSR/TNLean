@@ -1,0 +1,55 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+\input{command}
+\providecommand{\leanid}[1]{\textsf{\detokenize{#1}}}
+\providecommand{\gapnote}[2]{\par\noindent\textbf{Verdict:} #1 (#2).\par}
+\title{The Constant of $[H,H_L]$ in Hastings' Lemma~1}
+\author{}
+\date{October 22, 2026}
+\begin{document}
+\maketitle
+\gapnote{local-correction}{resolved}
+
+\section{The source statement}
+
+In the appendix of~\cite{Hastings2007AreaLaw} (arXiv:0705.2024v4,
+\path{law16.tex}, line~794), the Hamiltonian $H=\sum_iH_{i,i+1}$, with
+$\Vert H_{i,i+1}\Vert\le J$, is split at a cut as $H=H_L+H_B+H_R$, and the
+source states: ``Let $b_L=[H,H_L]$. Note that $\Vert b_L\Vert\le J^2$.''
+
+\section{A counterexample}
+
+Take three qubits, $H_{12}=X_2$ and $H_{23}=Z_2$ (Pauli matrices on the second
+qubit), so $J=1$, and let $H_L=H_{12}$. Then
+\[
+  b_L=[H,H_L]=[Z_2,X_2]=2iY_2,\qquad \Vert b_L\Vert=2>J^2 .
+\]
+In general $[H,H_L]$ is a sum of commutators $[H_{i,i+1},H_{k,k+1}]$ of terms
+on either side of the edge of the left part, each of norm up to $2J^2$.
+
+\section{The statement proved}
+
+For terms of range $R$, only the terms split by the region of $H_L$ contribute
+to $[H,H_L]$. There are at most $N_R=2\cdot2^{2R}$ of them, each meets at most
+$(R+1)2^{2R+1}$ terms of $H_L$, and each commutator has norm at most $2J^2$.
+Hence
+\[
+  \Vert[H,H_L]\Vert\le2N_R(R+1)2^{2R+1}J^2,
+\]
+and the same for $H_R$; for the buffer, $[H,H_B]=-([H,H_L]+[H,H_R])$. The
+commutators are supported within distance $2R$ of the edges of the buffer.%
+\footnote{\leanid{TNLean.MPS.AreaLaw.ChainHamiltonian.norm_commutator_leftPart_le}
+in \path{TNLean/MPS/AreaLaw/Hastings/PartCommutators.lean}.}
+
+\section{Conclusion}
+
+The correction replaces $J^2$ by a constant depending only on the range. It
+enters the later estimates of the proof of Lemma~1 only through this constant,
+so the exponential decay of the error and the form of the area law are
+unchanged.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}

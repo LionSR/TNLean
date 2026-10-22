@@ -20,9 +20,15 @@ commutes with `H_L`. Hence only the terms split by `A` contribute:
 `[H, H_L] = [C, H_L]`, with `C` the sum of the terms meeting both `A` and its complement.
 Each split term `h_X` commutes with every term of `H_L` whose support misses `X`, so
 `[h_X, H_L]` is a sum of at most `(R + 1) 2^{2R+1}` commutators `[h_X, h_Y]`, each of norm
-at most `2 J²`. At most `N_R = chainCrossConst R` terms are split by `A`. The printed bound
-`J²` of the source, for nearest-neighbour terms, becomes the explicit constant
-`partCommutatorConst R * J²` for terms of range `R`.
+at most `2 J²`. At most `N_R = chainCrossConst R` terms are split by `A`. This gives the
+explicit constant `partCommutatorConst R * J²` for terms of range `R`.
+
+**Local fix (constant at line 794):** the printed `‖b_L‖ ≤ J²` fails already for
+nearest-neighbour terms: on three qubits with `H_{12} = X₂` and `H_{23} = Z₂`, so `J = 1`, the
+cut between the first and second terms gives `‖[H, H_L]‖ = ‖[Z₂, X₂]‖ = 2`. The bound proved
+here is `partCommutatorConst R * J²`, a constant depending only on the range; only the constant
+of the later estimates changes. Documented in
+`docs/paper-gaps/hastings07_commutator_constant.tex`.
 
 The same argument applies to the right part. For the buffer part,
 `[H, H_B] = -([H, H_L] + [H, H_R])` because `[H, H] = 0`.
