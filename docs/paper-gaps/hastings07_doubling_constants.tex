@@ -58,11 +58,12 @@ $f(2l)=2f(l)-l/\xi'$ exactly, so the printed decrease
 $l\lfloor\log_2(l/\xi_0)\rfloor/\xi'$ cannot follow
 from~\eqref{eq:claim}; the same factor is missing from the heuristic
 $S_l\approx l\ln D-\log_2(l/\xi_0)\,l/\xi'$ at lines~212--213.
-The function $f$ also satisfies $f(l)\le l\ln D$ and $f(l)\ge0$ for
-$l\le l_1 4^{\xi'\ln D}$, so it meets every hypothesis of the iteration on
-a window of that length. The printed claim therefore yields
-$4^{\xi'\ln D}$; the printed $2^{\xi'\ln D}$ would need the decrease
-$2l/\xi'$ in~\eqref{eq:claim}.
+On the lengths $l=2^nl_1$ that the iteration visits, $f$ also satisfies
+$f(l)\le l\ln D$, and $f(l)\ge0$ for $l\le l_1 4^{\xi'\ln D}$; there it
+meets the claim with every error term dropped. The iteration, which uses the
+claim only at these lengths, therefore yields $4^{\xi'\ln D}$ and no better;
+the printed $2^{\xi'\ln D}$ would need the decrease $2l/\xi'$
+in~\eqref{eq:claim}, or an argument that uses the claim at other lengths.
 
 The bound becomes negative at $N=M$ with
 \[
