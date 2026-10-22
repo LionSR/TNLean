@@ -108,8 +108,8 @@ def IsTrivialHolonomy (φ : Fin r → X × (Fin r → ZMod 2) → ℂ) (x : X) :
     φ j (x, γ) * φ k (x, γ + Pi.single j 1) = φ k (x, γ) * φ j (x, γ + Pi.single k 1)
 
 /-- Adding a vector of $\mathbb F_2^r$ to itself gives zero. -/
-theorem add_self_eq_zero_pi_zmod_two (γ : Fin r → ZMod 2) : γ + γ = 0 := by
-  exact funext fun _ ↦ CharTwo.add_self_eq_zero _
+theorem add_self_eq_zero_pi_zmod_two (γ : Fin r → ZMod 2) : γ + γ = 0 :=
+  funext fun _ ↦ CharTwo.add_self_eq_zero _
 
 variable [Fintype X] [DecidableEq X]
 
