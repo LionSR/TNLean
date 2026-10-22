@@ -27,6 +27,8 @@ constraints is `probabilityEntropy_le_of_scale_tails`.
   bounded Schmidt rank.
 * `TNLean.MPS.AreaLaw.Hastings.sum_eigenvalues₀_filter_le`: the eigenvalue tail is the trace
   minus the Ky Fan norm.
+* `TNLean.MPS.AreaLaw.Hastings.one_sub_kyFanNorm_le_of_schmidtRank_mixture`: the Schmidt tail
+  from one mixture of bounded Schmidt rank.
 * `TNLean.MPS.AreaLaw.Hastings.bootstrapRemainder`: Hastings' `F(ξ', D)`.
 * `TNLean.MPS.AreaLaw.Hastings.vonNeumannEntropy_le_of_schmidtRank_mixtures`: the stage lemma.
 
@@ -125,6 +127,36 @@ theorem sum_eigenvalues₀_filter_le {ρ : Matrix m m ℂ} (hρ : ρ.IsHermitian
   · simp [h, show ¬ a.val < K by omega]
   · simp [h, show a.val < K by omega]
 
+/-- **The Schmidt tail from one mixture.** If a mixture of pure states of Schmidt rank at most
+`K` has normalized overlap at least `1 - η` with the unit vector `Ψ`, then the eigenvalues of
+`C Cᴴ` beyond the `K` largest add up to at most `η`, where `C` is the coefficient matrix of
+`Ψ`. Hastings, arXiv:0705.2024v4, proof of Lemma 2, lines 333–345 (eq. `constraint`). -/
+theorem one_sub_kyFanNorm_le_of_schmidtRank_mixture (Ψ : m × n → ℂ)
+    (hΨ : star Ψ ⬝ᵥ Ψ = 1) {K r : ℕ} {η : ℝ} (hη : 0 ≤ η) (w : Fin r → ℝ)
+    (ψ : Fin r → m × n → ℂ) (hw : ∀ i, 0 ≤ w i) (hψ : ∀ i, HasSchmidtRankLE K (ψ i))
+    (htot : 0 < ∑ i, w i * (star (ψ i) ⬝ᵥ ψ i).re)
+    (hov : (1 - η) * ∑ i, w i * (star (ψ i) ⬝ᵥ ψ i).re ≤ ∑ i, w i * ‖star Ψ ⬝ᵥ ψ i‖ ^ 2) :
+    1 - (posSemidef_self_mul_conjTranspose (schmidtCoeffMatrix Ψ)).isHermitian.kyFanNorm K ≤
+      η := by
+  have hA := posSemidef_self_mul_conjTranspose (schmidtCoeffMatrix Ψ)
+  by_cases hK : K < Fintype.card m
+  · have hbound : ∑ i, w i * ‖star Ψ ⬝ᵥ ψ i‖ ^ 2 ≤
+        (∑ i, w i * (star (ψ i) ⬝ᵥ ψ i).re) * hA.isHermitian.kyFanNorm K := by
+      rw [Finset.sum_mul]
+      refine Finset.sum_le_sum fun i _ ↦ ?_
+      rw [mul_assoc]
+      exact mul_le_mul_of_nonneg_left (normSq_dotProduct_le_kyFanNorm Ψ (ψ i) hK (hψ i)) (hw i)
+    have h := hov.trans hbound
+    rw [mul_comm (∑ i, _) _] at h
+    linarith [le_of_mul_le_mul_right h htot]
+  · push Not at hK
+    have htrace : ((schmidtCoeffMatrix Ψ * (schmidtCoeffMatrix Ψ)ᴴ).trace).re = 1 := by
+      rw [Matrix.trace_mul_comm, ← star_dotProduct_self_eq_trace_conjTranspose_mul, hΨ,
+        Complex.one_re]
+    have h := hA.kyFanNorm_mono hK
+    rw [hA.isHermitian.kyFanNorm_card_eq_trace_re, htrace] at h
+    linarith
+
 /-- Hastings' remainder `F(ξ', D) = (ξ' + 4) ln D + 1 + ln(D² − 1) + ln(ξ'/2 + 1)` in the
 bootstrap lemma. Hastings, arXiv:0705.2024v4, Lemma 2, lines 304–309. -/
 noncomputable def bootstrapRemainder (ξ' : ℝ) (D : ℕ) : ℝ :=
@@ -200,22 +232,10 @@ theorem vonNeumannEntropy_le_of_schmidtRank_mixtures (Ψ : m × n → ℂ)
     have hlt : η < 1 := lt_of_le_of_lt hηle (Real.exp_lt_one_iff.mpr (by
       have : 0 < 2 * ((n : ℝ) + 1) / ξ' := by positivity
       linarith))
-    by_cases hK : Fintype.card m ≤ k * D ^ (2 * s)
-    · rw [Finset.sum_eq_zero fun a ha ↦ by
-        exact absurd (lt_of_lt_of_le a.isLt hK) (not_lt.mpr (Finset.mem_filter.mp ha).2)]
-      exact (Real.exp_pos _).le
-    push Not at hK
     obtain ⟨r, w, ψ, hw, hψ, htot, hov⟩ := hmix s hlt
-    have hbound : ∑ i, w i * ‖star Ψ ⬝ᵥ ψ i‖ ^ 2 ≤
-        (∑ i, w i * (star (ψ i) ⬝ᵥ ψ i).re) * hρ.kyFanNorm (k * D ^ (2 * s)) := by
-      rw [Finset.sum_mul]
-      refine Finset.sum_le_sum fun i _ ↦ ?_
-      rw [mul_assoc]
-      exact mul_le_mul_of_nonneg_left (normSq_dotProduct_le_kyFanNorm Ψ (ψ i) hK (hψ i)) (hw i)
     have hky : 1 - η ≤ hρ.kyFanNorm (k * D ^ (2 * s)) := by
-      have := hov.trans hbound
-      rw [mul_comm (∑ i, _ ) _] at this
-      exact le_of_mul_le_mul_right this htot
+      have := one_sub_kyFanNorm_le_of_schmidtRank_mixture Ψ hΨ (by positivity) w ψ hw hψ htot hov
+      linarith
     have hfilter := sum_eigenvalues₀_filter_le hρ (k * D ^ (2 * s))
     rw [htrace] at hfilter
     simp only [hp]
