@@ -27,20 +27,20 @@ are operator norms.
     function $f$ equal to $1$ on $[-\theta,\theta]$ and to $0$ elsewhere.
 \end{definition}
 
-\begin{lemma}[The cut-off is an orthogonal projection]
-    \label{lem:hastings_spectral_cutoff_projection}
+\begin{theorem}[The cut-off is an orthogonal projection]
+    \label{thm:hastings_spectral_cutoff_projection}
     \lean{TNLean.MPS.AreaLaw.Hastings.isStarProjection_spectralCutoff}
     \leanok
     \uses{def:hastings_spectral_cutoff}
     For a Hermitian matrix $M$ and every $\theta$, the cut-off $O_\theta(M)$
     is an orthogonal projection.
-\end{lemma}
+\end{theorem}
 \begin{proof}\leanok
     The function $f$ is real and satisfies $f^2=f$.
 \end{proof}
 
-\begin{lemma}[A cut-off moves a nearly annihilated vector little]
-    \label{lem:hastings_spectral_cutoff_obd}
+\begin{theorem}[A cut-off moves a nearly annihilated vector little]
+    \label{thm:hastings_spectral_cutoff_obd}
     \lean{TNLean.MPS.AreaLaw.Hastings.norm_sub_spectralCutoff_le}
     \leanok
     \uses{def:hastings_spectral_cutoff}
@@ -56,7 +56,7 @@ are operator norms.
     $\lVert(O_L-1)\Psi_0\rVert\le e^{-l/6\xi}$ of the source, with constant
     one, and likewise for $O_R$; the residual and the threshold are fixed where
     Lemma~1 is assembled.
-\end{lemma}
+\end{theorem}
 \begin{proof}\leanok
     Let $h(t)=1/t$ for $\lvert t\rvert>\theta$ and $h(t)=0$ otherwise. Then
     $1-O_\theta(M)=h(M)M$, since $t\,h(t)=1-f(t)$ for every real $t$. The
@@ -66,51 +66,51 @@ are operator norms.
         \lVert M\Psi\rVert/\theta$.
 \end{proof}
 
-\begin{lemma}[The cut-off reduces the operator]
-    \label{lem:hastings_spectral_cutoff_norm}
+\begin{theorem}[The cut-off reduces the operator]
+    \label{thm:hastings_spectral_cutoff_norm}
     \lean{TNLean.MPS.AreaLaw.Hastings.norm_mul_spectralCutoff_le}
     \leanok
     \uses{def:hastings_spectral_cutoff}
     Let $M$ be Hermitian and $\theta\ge0$. Then
     $\lVert M\,O_\theta(M)\rVert\le\theta$.
-\end{lemma}
+\end{theorem}
 \begin{proof}\leanok
     The operator $M\,O_\theta(M)$ is $g(M)$ for $g(t)=t\,f(t)$, and
     $\lvert g(t)\rvert\le\theta$ for every real $t$.
 \end{proof}
 
-\begin{lemma}[The cut-off estimate]
-    \label{lem:hastings_spectral_cutoff_pair_norm}
+\begin{theorem}[The cut-off estimate]
+    \label{thm:hastings_spectral_cutoff_pair_norm}
     \lean{TNLean.MPS.AreaLaw.Hastings.norm_add_mul_mul_le_of_isStarProjection,
         TNLean.MPS.AreaLaw.Hastings.norm_add_mul_mul_spectralCutoff_le}
     \leanok
-    \uses{lem:hastings_spectral_cutoff_projection,lem:hastings_spectral_cutoff_norm}
+    \uses{thm:hastings_spectral_cutoff_projection,thm:hastings_spectral_cutoff_norm}
     Let $O$ and $O'$ be commuting orthogonal projections with
     $\lVert AO\rVert\le a$ and $\lVert BO'\rVert\le b$. Then
     $\lVert(A+B)OO'\rVert\le a+b$. In particular, if $M_L$ and $M_R$ are
     Hermitian, $\theta\ge0$, and their cut-offs $O_L$ and $O_R$ at $\theta$
     commute, then $\lVert(M_L+M_R)O_LO_R\rVert\le2\theta$.
-\end{lemma}
+\end{theorem}
 \begin{proof}\leanok
     Since $OO'=O'O$, $(A+B)OO'=(AO)O'+(BO')O$, and projections have norm at
     most one.
 \end{proof}
 
-\begin{lemma}[Two cut-offs move a vector by at most the sum]
-    \label{lem:hastings_spectral_cutoff_two}
+\begin{theorem}[Two cut-offs move a vector by at most the sum]
+    \label{thm:hastings_spectral_cutoff_two}
     \lean{TNLean.MPS.AreaLaw.Hastings.norm_sub_mul_le_of_isStarProjection}
     \leanok
     If $O$ is an orthogonal projection and $O'$ any operator, then for every
     vector $\Psi$,
     $\lVert\Psi-OO'\Psi\rVert\le\lVert\Psi-O\Psi\rVert+\lVert\Psi-O'\Psi\rVert$.
-\end{lemma}
+\end{theorem}
 \begin{proof}\leanok
     Write $\Psi-OO'\Psi=(\Psi-O\Psi)+O(\Psi-O'\Psi)$ and use
     $\lVert O\rVert\le1$.
 \end{proof}
 
-\begin{lemma}[Support of the cut-off]
-    \label{lem:hastings_spectral_cutoff_support}
+\begin{theorem}[Support of the cut-off]
+    \label{thm:hastings_spectral_cutoff_support}
     \lean{TNLean.MPS.AreaLaw.Hastings.spectralCutoff_localLift}
     \leanok
     \uses{def:hastings_spectral_cutoff}
@@ -118,26 +118,26 @@ are operator norms.
     $K\otimes1$ be its extension by the identity outside $D$. Then
     $O_\theta(K\otimes1)=O_\theta(K)\otimes1$. In particular, the cut-off of
     an operator supported on $D$ is supported on $D$.
-\end{lemma}
+\end{theorem}
 \begin{proof}\leanok
     The map $K\mapsto K\otimes1$ is a unital homomorphism of star algebras,
     and such homomorphisms commute with the continuous functional calculus.
     The spectrum is finite, so $f$ is continuous on it.
 \end{proof}
 
-\begin{lemma}[Cut-offs on disjoint regions commute]
-    \label{lem:hastings_spectral_cutoff_commute}
+\begin{theorem}[Cut-offs on disjoint regions commute]
+    \label{thm:hastings_spectral_cutoff_commute}
     \lean{TNLean.MPS.AreaLaw.Hastings.commute_spectralCutoff_localLift_of_disjoint}
     \leanok
-    \uses{lem:hastings_spectral_cutoff_support}
+    \uses{thm:hastings_spectral_cutoff_support}
     Let $K$ and $K'$ be Hermitian operators on disjoint regions $X$ and $Y$.
     For all thresholds $\theta$ and $\theta'$, the cut-offs
     $O_\theta(K\otimes1)$ and $O_{\theta'}(K'\otimes1)$ commute. Applied to
     $M_L$, supported left of the cut, and $M_R$, supported right of it, this
     shows that $O_L$ and $O_R$ are commuting orthogonal projections.
-\end{lemma}
+\end{theorem}
 \begin{proof}\leanok
-    By Lemma~\ref{lem:hastings_spectral_cutoff_support} the two cut-offs are
+    By Theorem~\ref{thm:hastings_spectral_cutoff_support} the two cut-offs are
     extensions by the identity of operators on $X$ and on $Y$, and such
     extensions commute when $X$ and $Y$ are disjoint.
 \end{proof}
