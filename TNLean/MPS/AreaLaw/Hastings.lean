@@ -10,6 +10,7 @@ Authors: TNLean contributors
 
 import TNLean.MPS.AreaLaw.Hastings.ChainBootstrap
 import TNLean.MPS.AreaLaw.Hastings.CutProductState
+import TNLean.MPS.AreaLaw.Hastings.EffectFromFactorization
 import TNLean.MPS.AreaLaw.Hastings.ProjectorOverlap
 import TNLean.MPS.AreaLaw.Hastings.SchmidtDiagonalCorrelation
 import TNLean.MPS.AreaLaw.Hastings.SchmidtDiagonalOperators
