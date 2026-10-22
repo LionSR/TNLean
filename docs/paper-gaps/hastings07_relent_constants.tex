@@ -17,7 +17,7 @@
 
 \begin{document}
 \maketitle
-\gapnote{local-correction}{resolved}
+\gapnote{clarification}{resolved}
 
 \section{The source passage}
 
@@ -45,16 +45,21 @@ relative entropy
 
 \section{The expectation $y$}
 
-Line~446 states $y\ge1-2\epsilon$. This holds for the ground state, but $y$
-is an expectation in the product state $\sigma$. Since $O_L$ and $O_R$ act on
-the two halves, $y=\langle O_L\rangle\langle O_R\rangle$, with expectations in
-the ground state $\Psi_0$. From
-$\lVert O_BO_LO_R\Psi_0-\Psi_0\rVert\le\epsilon$ one gets
-$\lVert O_LO_R\Psi_0\rVert\ge1-\epsilon$. For commuting positive contractions,
-$\langle O_L\rangle\ge\lVert O_L\Psi_0\rVert^2
-\ge\lVert O_LO_R\Psi_0\rVert^2\ge(1-\epsilon)^2$, and likewise for $O_R$.
-Hence $y\ge(1-\epsilon)^4\ge1-4\epsilon$, and the factor $1-2\epsilon$ in
-eq.~\texttt{xbd} becomes $1-4\epsilon$.
+Line~446 states $y\ge1-2\epsilon$ ``as before'', but the earlier bound
+$\langle\Psi_0,O_LO_R\Psi_0\rangle\ge1-2\epsilon$ is an expectation in the
+ground state, while $y$ is an expectation in the product state $\sigma$. Since
+$O_L$ and $O_R$ act on the two halves, $y=\langle O_L\rangle\langle O_R\rangle$
+with expectations in $\Psi_0$. The bound that follows directly is weaker:
+$\lVert O_BO_LO_R\Psi_0\rVert\ge1-\epsilon$ gives
+$\lVert O_LO_R\Psi_0\rVert\ge1-\epsilon$, and for commuting positive
+contractions $\langle O_L\rangle\ge\lVert O_L\Psi_0\rVert^2
+\ge\lVert O_LO_R\Psi_0\rVert^2\ge(1-\epsilon)^2$, likewise for $O_R$, so
+$y\ge(1-\epsilon)^4\ge1-4\epsilon$. We found no example in which the printed
+bound fails. In a numerical search over two-qubit examples, with $O_B$ acting
+on both qubits, the largest value of $(1-y)/\epsilon$ was about $0.98$. The
+formalization uses the derived bound $1-4\epsilon$. It only moves the
+threshold on $x$ below and the value of $C_2$, and leaves the coefficient
+$l/\xi'$ of the strengthened doubling inequality unchanged.
 
 With $\operatorname{tr}(O_BO_LO_R\sigma)\ge xy-\sqrt{x-x^2}\sqrt{y-y^2}$ and
 the assumption of lines~484--490, which bounds the overlap term by $2\epsilon$,

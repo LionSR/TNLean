@@ -16,11 +16,11 @@ information between two adjacent intervals of `l` sites satisfies
 relative entropy, eq. `LU`, and then picks `C₂`. This file proves that last step, the choice of
 `C₂`, as a statement about real numbers.
 
-**Local fix (explicit constants):** the source gives `C₂` only as a constant of order unity
-(line 500). Here `C₂ = 7`. The hypothesis `x ≤ 36 ε` is what eq. `xbd` gives once its factor
-`1 - 2ε` from `y ≥ 1 - 2ε` (line 446) is replaced by `1 - 4ε`. The product-state expectation
-`y` of `O_L O_R` is only at least `(1 - ε)⁴ ≥ 1 - 4ε`. Documented in
-`docs/paper-gaps/hastings07_relent_constants.tex`.
+The source gives `C₂` only as a constant of order unity (line 500); here `C₂ = 7`. The
+hypothesis `x ≤ 36 ε` is what eq. `xbd` gives with the derivable bound `y ≥ (1 - ε)⁴ ≥ 1 - 4ε`
+on the product-state expectation of `O_L O_R`, in place of the bound `y ≥ 1 - 2ε` that line 446
+states without derivation. Neither choice changes the coefficient `l/ξ'` of eq. `claim`. The
+constants are recorded in `docs/paper-gaps/hastings07_relent_constants.tex`.
 
 ## Main results
 
