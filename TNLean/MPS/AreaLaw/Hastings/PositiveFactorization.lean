@@ -135,11 +135,8 @@ theorem IsFactorizationAt.conjTranspose_mul_self {Ω : EuclideanSpace ℂ (Fin L
 /-- **The positive version of Lemma 1, at half the rate.** If Lemma 1 holds around the unit
 vector `Ω` with error `C₁ e^{-l/ξ'}` at every cut `c` and length `l` with `c + l ≤ L`, then it
 holds with a positive semidefinite `O_B` and error `(√2 + 4) √C₁ e^{-l/(2ξ')}`.
-Hastings, arXiv:0705.2024v4, note added, lines 912–943.
-
-**Local fix (rate of the positive version):** the source states the positive version at the
-rate `e^{-l/ξ'}`; see the module docstring and
-`docs/paper-gaps/hastings07_lemma1_positivity_rate.tex`. -/
+Hastings, arXiv:0705.2024v4, note added, lines 912–943. The rate is half that printed in
+Lemma 1, as recorded in the module docstring. -/
 theorem exists_posSemidef_factorization {Ω : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Ω‖ = 1)
     {C₁ ξ' : ℝ} (hC₁ : 0 ≤ C₁)
     (hfact : ∀ c l : ℕ, c + l ≤ L → ∃ OB OL OR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ,
