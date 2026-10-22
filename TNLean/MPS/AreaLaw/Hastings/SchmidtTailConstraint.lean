@@ -199,13 +199,14 @@ theorem one_sub_kyFanNorm_le_of_factorization_of_entropy (hq : 1 ≤ q)
       Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) OR SR ∧ Disjoint SR (leftBlock L j) ∧
       ‖OB * OL * OR - vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))‖ ≤
         C₁ * Real.exp (-(m / ξ')))
-    {k : ℕ} (hk1 : 1 ≤ k)
+    {k : ℕ}
     (hk : Real.exp (2 * Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (leftBlock L j) Ω) / 2 ≤
       k)
     (m n : ℕ) (hn : k * q ^ (2 * m) ≤ n) :
     1 - (Entropy.regionState_isHermitian (n := fun _ : Fin L ↦ q) (leftBlock L j) Ω).kyFanNorm n
-      ≤ 4 * C₁ ^ 2 * Real.exp (-(2 * m) / ξ') :=
-  one_sub_kyFanNorm_le_of_factorization hq hΩ j hfact hk1
+      ≤ 4 * C₁ ^ 2 * Real.exp (-(2 * m) / ξ') := by
+  have hk1 : 1 ≤ k := Nat.cast_pos.mp (lt_of_lt_of_le (by positivity) hk)
+  exact one_sub_kyFanNorm_le_of_factorization hq hΩ j hfact hk1
     (one_half_le_kyFanNorm_of_exp_two_mul_vonNeumannEntropy_le
       (Entropy.regionState_posSemidef (n := fun _ : Fin L ↦ q) (leftBlock L j) Ω)
       (Entropy.trace_regionState_eq_one hΩ) hk) m n hn
