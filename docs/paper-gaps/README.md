@@ -1302,3 +1302,12 @@ effect `O_B† O_B`) supplies the Lindblad–Uhlmann data with `C₁` replaced b
   the area law and of the polynomial PEPS approximation theorem do not use it,
   and the further comparison with the companion code's own types is not
   pursued.
+
+## Hastings' one-dimensional area law, arXiv:0705.2024
+
+- [`hastings07_doubling_constants.tex`](hastings07_doubling_constants.tex)
+  (resolved) records that the doubling iteration lowers the entropy per site by
+  `1/(2ξ')` at each step rather than `1/ξ'`, so the exponent in the bound on
+  the window length doubles, that the prefactor of that bound is the starting
+  length `ξ₀` rather than `ξ₀/2`, and the implicit hypotheses `2 C₁ > 1` and
+  `ln C₁ + C₂ ≥ 0`.
