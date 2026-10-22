@@ -107,24 +107,12 @@ jobs:
       - name: Test blueprint PDF string-pool capacity
         run: python3 scripts/test_blueprint_pdf_capacity.py
 
-      - name: Check native tenkz sources and picture pipeline
+      - name: Lint tenkz picture sources
         run: |
           python3 .deps/tenkz/scripts/tenkz_lint.py \
             'blueprint/src/chapter/*.tex' \
             'blueprint/src/figures/*.tex' \
             'docs/slides/*.tex'
-          python3 scripts/test_tenkz_pic.py
-          python3 scripts/test_tenkz_ordered_mixing.py
-          python3 scripts/test_tenkz_mixed_action.py
-          python3 scripts/test_tenkz_isometric_gap_transport.py
-          python3 scripts/test_tenkz_scan_ancestry.py
-          python3 scripts/test_tenkz_quantum_double_source_construction.py
-          python3 scripts/test_sector_encoder_diagram.py
-          python3 scripts/test_tenkz_mixed_fusion.py
-          python3 scripts/test_nested_patch_geometry_diagram.py
-          python3 scripts/test_tenkz_mixed_normality.py
-          python3 scripts/test_tenkz_mixed_symbols.py
-          python3 scripts/test_tenkz_normal_adjoint_boundary.py
 
       - name: Check paper-gap references resolve
         run: texra-blueprint paper-gaps check

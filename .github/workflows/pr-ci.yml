@@ -101,8 +101,6 @@ on:
       - 'scripts/test_blueprint_pdf_capacity.py'
       - 'scripts/test_tenkz_equation_web.py'
       - 'scripts/test_tenkz_inline_web.py'
-      - 'docs/audits/2026-10-05_scp10_three_block_blueprint_inventory.json'
-      - 'docs/audits/2026-10-05_scp10_four_cut_blueprint_inventory.json'
       - 'scripts/test_supported_polar_tree.py'
   pull_request:
     types: [opened, synchronize, reopened]
@@ -199,8 +197,6 @@ on:
       - 'scripts/test_blueprint_pdf_capacity.py'
       - 'scripts/test_tenkz_equation_web.py'
       - 'scripts/test_tenkz_inline_web.py'
-      - 'docs/audits/2026-10-05_scp10_three_block_blueprint_inventory.json'
-      - 'docs/audits/2026-10-05_scp10_four_cut_blueprint_inventory.json'
       - 'scripts/test_supported_polar_tree.py'
   workflow_dispatch:
 
@@ -340,8 +336,6 @@ jobs:
               - 'scripts/test_blueprint_pdf_capacity.py'
               - 'scripts/test_tenkz_equation_web.py'
               - 'scripts/test_tenkz_inline_web.py'
-              - 'docs/audits/2026-10-05_scp10_three_block_blueprint_inventory.json'
-              - 'docs/audits/2026-10-05_scp10_four_cut_blueprint_inventory.json'
               - 'scripts/test_supported_polar_tree.py'
             # Inputs of the two XeLaTeX volumes the blueprint-pdf job builds:
             # `leanblueprint pdf` (blueprint/src/latexmkrc) and
