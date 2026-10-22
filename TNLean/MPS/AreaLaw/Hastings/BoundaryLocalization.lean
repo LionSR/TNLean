@@ -22,10 +22,13 @@ exponentially small in the distance from the buffer to the complement of that su
 ## Route
 
 Let `H` be the finite-range chain Hamiltonian and `H₀` a Hermitian operator such that
-`H - H₀` is supported on a set `Z` of sites. In the source `H₀ = H_L + H_R` and
-`H - H₀ = H_B` is the buffer part, supported on the buffer window (lines 774–780);
-the operators `M_L`, `M_B`, `M_R` are close to `H_L`, `H_B`, `H_R` (lines 816–826), so
-`‖(A + B) - H‖` and `‖A - H₀‖` are small. The proof has three steps.
+`H - H₀` is supported on a set `Z` of sites. In the application `H₀ = A = M_L + M_R`.
+The operators `M_L` and `M_R` are not close to `H_L` and `H_R` in norm, but the
+difference `M_L + M_R - H_L - H_R` is supported on the window `X_{j-2l/3,j+1+2l/3}`
+(line 899) and `H - H_L - H_R = H_B` on the buffer (lines 774–780), so `H - A` is
+supported on that window. The term `‖A - H₀‖` below then vanishes, and the remaining
+term `‖(A + B) - H‖ = ‖M_L + M_B + M_R - H‖` is exponentially small in `l`
+(lines 849–850). The proof has three steps.
 
 1. `U(t)` is within `|t| (‖(A + B) - H‖ + ‖A - H₀‖)` of `V(t) = e^{iHt} e^{-iH₀t}`
    (`norm_interactionPropagator_sub_le`).
@@ -36,13 +39,12 @@ the operators `M_L`, `M_B`, `M_R` are close to `H_L`, `H_B`, `H_R` (lines 816–
 3. `O_B = ∫ U_N(t) dγ` is supported on `N` and has norm at most one, since every
    `U_N(t)` is unitary. Times beyond a cutoff `T` are paid for by the Gaussian tail.
 
-The source instead invokes a Lieb–Robinson bound for `M_L` and `M_R` directly
-(line 898). Those operators are not of finite range, so the bound is applied here to
-`H`, and the replacement of `M_L + M_R` and `M_L + M_B + M_R` by `H₀` and `H` is
-charged through the norm differences, which the source bounds by
-`O(ΔE⁻¹ J² exp[-l/3ξ])` (lines 816–826). The resulting estimate is explicit; the
-radius `ℓ` and the time cutoff remain free, and the source's choice `q = (l/3)ΔE/(2v)`
-of line 792 enters only through the variance `η = q/ΔE²`.
+The source invokes a Lieb–Robinson bound for `M_L` and `M_R` directly (line 898).
+Those operators are not of finite range, so the bound is applied here to `H`; the
+dynamics of `A = H₀` enter only through the support of `H - H₀`, and the replacement
+of `M_L + M_B + M_R` by `H` is charged through `‖(A + B) - H‖`. The estimate is
+explicit; the radius `ℓ` and the time cutoff remain free, and the source's choice
+`q = (l/3)ΔE/(2v)` of line 792 enters only through the variance `η = q/ΔE²`.
 
 ## Main results
 
@@ -79,9 +81,8 @@ theorem norm_le_one_of_mem_unitaryGroup {U : Matrix n n ℂ} (hU : U ∈ unitary
   simpa only [mul_one] using (CStarRing.norm_mem_unitary_mul (1 : Matrix n n ℂ) hU).trans_le h1
 
 /-- Unitary groups of nearby Hermitian matrices stay close:
-`‖e^{iXt} - e^{iYt}‖ ≤ |t| ‖X - Y‖`. Used to replace `M_L + M_B + M_R` and
-`M_L + M_R` by `H` and `H_L + H_R` in Hastings, arXiv:0705.2024v4, `law16.tex`,
-lines 898–901. -/
+`‖e^{iXt} - e^{iYt}‖ ≤ |t| ‖X - Y‖`. Used to replace `M_L + M_B + M_R` by `H` in
+Hastings, arXiv:0705.2024v4, `law16.tex`, lines 898–901. -/
 theorem norm_hermitianUnitaryPath_sub_le {X Y : Matrix n n ℂ} (hX : X.IsHermitian)
     (hY : Y.IsHermitian) (t : ℝ) :
     ‖hermitianUnitaryPath X t - hermitianUnitaryPath Y t‖ ≤ |t| * ‖X - Y‖ := by
@@ -109,7 +110,7 @@ theorem norm_hermitianUnitaryPath_sub_le {X Y : Matrix n n ℂ} (hX : X.IsHermit
 
 /-- Step 1 of the localization of `P_B`: the interaction-picture propagator
 `U(t) = e^{i(A+B)t} e^{-iAt}` is within `|t| (‖(A + B) - H‖ + ‖A - H₀‖)` of
-`e^{iHt} e^{-iH₀t}`. With `A = M_L + M_R`, `B = M_B`, `H₀ = H_L + H_R`, this compares
+`e^{iHt} e^{-iH₀t}`. With `A = H₀ = M_L + M_R` and `B = M_B`, this compares
 the propagator of Hastings, arXiv:0705.2024v4, `law16.tex`, lines 891–897, with the
 relative evolution of the finite-range Hamiltonian. -/
 theorem norm_interactionPropagator_sub_le {A B H H₀ : Matrix n n ℂ} (hA : A.IsHermitian)
@@ -147,7 +148,8 @@ where `P_B = interactionAverage η A B`, `b₀ = 2^{2R+1} J`,
 `a = 2 (2 + 4 |b₀| e^{2R}) e / (1 - e^{-1/2})` and `v = 2 (R+1) |b₀| e^{2R} + 1` are the
 Lieb–Robinson constants of `norm_heisenberg_sub_siteExpectation_chainNeighborhood_le`.
 
-In the source `A = M_L + M_R`, `B = M_B`, `H₀ = H_L + H_R`, `Z` is the buffer window and
+In the application `A = H₀ = M_L + M_R` and `B = M_B`, so `‖A - H₀‖ = 0`; `Z` is
+the window `X_{j-2l/3,j+1+2l/3}` carrying `H - (M_L + M_R)` (line 899), and
 `η = q/ΔE²`. The source's `O(ΔE⁻¹ J √q e^{-l/6ξ})` follows by taking `ℓ` of order `l/3`
 and `T` of order `ℓ/v`. -/
 theorem exists_supported_interactionAverage_approx {L q R : ℕ} {J : ℝ} (hq : 1 ≤ q)
