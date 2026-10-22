@@ -13,6 +13,7 @@ import TNLean.Lattice.CrossingSupports
 import TNLean.Lattice.EntropyComparison
 import TNLean.Lattice.EntropyDimension
 import TNLean.Lattice.FiniteDomain
+import TNLean.Lattice.GaussianFilteredTerm
 import TNLean.Lattice.LocalHamiltonian
 import TNLean.Lattice.MarginalTails
 import TNLean.Lattice.PartyCircuit
