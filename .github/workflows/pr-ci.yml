@@ -942,6 +942,12 @@ jobs:
         if: env.TEX_CHANGED == 'true'
         run: python3 scripts/run_diagram_tests.py --output-dir "$RUNNER_TEMP/diagram-tests"
 
+      # The declaration inventories pin Lean sources by hash, so a Lean-only
+      # change can break them; run them (about 10 s) when the suite is skipped.
+      - name: Check declaration inventories
+        if: env.TEX_CHANGED != 'true'
+        run: for check in scripts/check_*_blueprint.py; do python3 "$check"; done
+
       - name: Preserve rendered diagrams and diagnostics for review
         if: >-
           !cancelled() && env.TEX_CHANGED == 'true' &&
