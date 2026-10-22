@@ -1244,15 +1244,6 @@ estimate used for Theorem B; its projectors need not equal those chosen at a
 prescribed dimension. Both estimates concern the projected vector before
 normalization, which is a separate step in the approximation theorem.
 
-### One-dimensional area law after Hastings: the overlap step of the bootstrap lemma
-
-[hastings07_bootstrap_overlap_constant.tex](hastings07_bootstrap_overlap_constant.tex)
-(local correction, resolved) records that the normalized overlap bound of eq. `hg`
-in Hastings' bootstrap lemma (arXiv:0705.2024v4, Lemma 2) follows from the two
-estimates the source records only for errors `ε ≤ (1 - 1/√2)√P`. With `4C₁²/P` in
-place of `2C₁²/P` it holds for every scale, and the bootstrap bound carries
-`ln(4C₁²/P)`.
-
 ### One-dimensional area law: the constants of the buffered discount
 
 [tnlean_one_dimensional_discount_constants.tex](tnlean_one_dimensional_discount_constants.tex)
