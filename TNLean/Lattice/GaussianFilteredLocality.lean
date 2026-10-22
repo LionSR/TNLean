@@ -134,8 +134,7 @@ theorem norm_sub_siteExpectation_gaussianFilteredTerm_le_mass {ι : Type*} [Fint
     ‖gaussianFilteredTerm q ΔE H W -
         QuantumCircuit.siteExpectation d K (gaussianFilteredTerm q ΔE H W)‖ ≤
       ε + 2 * ‖W‖ * (gaussianReal 0 (q / ΔE ^ 2).toNNReal).real (Set.Icc (-T) T)ᶜ := by
-  set L : Matrix (ι → Fin d) (ι → Fin d) ℂ →L[ℂ] Matrix (ι → Fin d) (ι → Fin d) ℂ :=
-    LinearMap.toContinuousLinearMap (LinearMap.id - QuantumCircuit.siteExpectationLM d K)
+  set L := QuantumCircuit.subSiteExpectationCLM (ι := ι) d K
   have hL : ∀ M, L M = M - QuantumCircuit.siteExpectation d K M := fun _ => rfl
   have := norm_map_gaussianFilteredTerm_le_mass q ΔE hH W L hε (C := 2 * ‖W‖)
     (by simpa only [hL] using hloc) fun t => by

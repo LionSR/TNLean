@@ -1282,6 +1282,14 @@ appendix of Hastings (arXiv:0705.2024v4, line 794) fails already for nearest-nei
 terms (`‖[Z, X]‖ = 2` with `J = 1`), and that the bound proved for terms of range `R` is an
 explicit constant depending only on `R`, times `J²`.
 
+### One-dimensional area law after Hastings: the rate of the positive version of Lemma 1
+
+[hastings07_lemma1_positivity_rate.tex](hastings07_lemma1_positivity_rate.tex)
+(local correction, resolved) records that Lemma 1 of Hastings (arXiv:0705.2024v4,
+lines 246–267) states positive operators at the rate `e^{-l/ξ'}`, while the note added
+(lines 912–943) obtains a positive `O_B⁺ = O_Bᴴ O_B` only at error `O(√ε)`. The bound
+proved is `(√2 + 4) √C₁ e^{-l/(2ξ')}`.
+
 ### One-dimensional area law after Hastings: the entropy gain constants
 
 [hastings07_relent_constants.tex](hastings07_relent_constants.tex)
@@ -1289,6 +1297,15 @@ explicit constant depending only on `R`, times `J²`.
 entropy gain across a cut, and how route 1 of Hastings' note added (the
 effect `O_B† O_B`) supplies the Lindblad–Uhlmann data with `C₁` replaced by
 `2 C₁`, keeping the rate `e^{-l/ξ'}`.
+
+### One-dimensional area law after Hastings: the threshold of the spectral cut-offs
+
+[hastings07_spectral_cutoff_threshold.tex](hastings07_spectral_cutoff_threshold.tex)
+(local correction, resolved) records that the spectral cut-offs `O_L`, `O_R` in
+the appendix of Hastings (arXiv:0705.2024v4, lines 829–841) are taken onto the
+eigenvalues of absolute value at most the threshold, rather than the printed
+eigenvalues at most the threshold, because the centered terms need not be
+positive and the later estimate uses `‖M_L O_L‖` at most the threshold.
 
 ## Polynomial PEPS: zero-floor maximizing filters
 
