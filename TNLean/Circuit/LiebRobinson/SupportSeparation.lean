@@ -19,6 +19,10 @@ This is the geometric argument of the TNLean one-dimensional note,
 It is an auxiliary support statement, without a quantum-state assumption.
 -/
 
+set_option relaxedAutoImplicit false
+set_option maxSynthPendingDepth 3
+set_option linter.mathlibStandardSet true
+
 namespace QuantumCircuit
 
 /-- A strict real distance margin contains every closed ball whose natural radius
