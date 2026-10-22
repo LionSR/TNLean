@@ -28,14 +28,17 @@
     Schmidt tail with $P=1/2$.
 \end{theorem}
 \begin{proof}\leanok
+    \uses{thm:hastings_bootstrap_scale, thm:hastings_mixture_tail,
+        thm:hastings_cut_entropy}
     Let $E$ project the first $j$ sites onto the eigenvectors of $p_1,\dots,p_k$
     and put $\psi=E\Omega$. Then $\psi$ has Schmidt rank at most $k$ across the
     cut, and $\langle\psi,\Omega\rangle=\|\psi\|^2=p_1+\cdots+p_k=P\ge1/2$.
-    The bootstrap step applied to the state $\psi/\|\psi\|$ gives, at every
+    Theorem~\ref{thm:hastings_bootstrap_scale} applied to the state
+    $\psi/\|\psi\|$ gives, at every
     scale $m$ with $(2C_1^2/P)e^{-2m/\xi'}<1$, a mixture of vectors of Schmidt
     rank at most $kq^{2m}$ whose normalized overlap with $\Omega$ is at least
-    $1-(2C_1^2/P)e^{-2m/\xi'}$. That overlap is at most
-    $p_1+\cdots+p_{kq^{2m}}$, so
+    $1-(2C_1^2/P)e^{-2m/\xi'}$, and Theorem~\ref{thm:hastings_mixture_tail}
+    turns this into
     $\sum_{a>kq^{2m}}p_a\le(2C_1^2/P)e^{-2m/\xi'}\le4C_1^2e^{-2m/\xi'}$. At the
     remaining scales the right-hand side is at least one. The tail decreases
     as $n$ grows.
