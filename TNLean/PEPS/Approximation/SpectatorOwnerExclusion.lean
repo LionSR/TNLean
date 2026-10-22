@@ -23,7 +23,7 @@ Source: polynomial-PEPS manuscript (September 24, 2026), Theorem 5.2,
 noncomputable section
 open scoped TensorProduct
 namespace TNLean.Lattice.PartyCircuit.Word
-open TNLean.PEPS.PairEffect
+open TNLean.Lattice.PartyCircuit
 open ContinuousLinearMap
 
 private theorem appendTail_eval_heq_id_of_empty_layouts {P : Type}
