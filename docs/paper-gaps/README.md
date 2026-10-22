@@ -1269,3 +1269,11 @@ absolute constants.
   the area law and of the polynomial PEPS approximation theorem do not use it,
   and the further comparison with the companion code's own types is not
   pursued.
+
+## Hastings' one-dimensional area law, arXiv:0705.2024
+
+- [`hastings07_relent_constants.tex`](hastings07_relent_constants.tex)
+  (resolved) records the explicit constant `C₂ = 7` in the entropy gain across
+  a cut, and that the product-state expectation of `O_L O_R` is at least
+  `1 − 4ε` rather than `1 − 2ε`, which gives `x ≤ 36 ε` in eq. `xbd` for
+  `ε ≤ 1/68`.
