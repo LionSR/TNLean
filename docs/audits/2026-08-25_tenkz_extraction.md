@@ -27,7 +27,9 @@ through `scripts/fetch_tenkz.py`, which clones into gitignored
 - `scripts/test_tenkz_equation_web.py`
 - `scripts/test_tenkz_peps_torus.py`
 - `scripts/test_tenkz_index_routing.py`
-- `scripts/check_tenkz_demolition.py` (retired tensor-network catalogue)
+
+The guard `scripts/check_tenkz_demolition.py`, which kept the retired
+tensor-network catalogue absent, was removed by #9883.
 
 Package-owned GitHub issues were transferred to LionSR/tenkz. TNLean #5693
 remains here because it concerns adoption in the blueprint. New package work

@@ -273,13 +273,15 @@ them:
 | Name | Value |
 |---|---|
 | `chainCrossConst R` | `N_R = 2 · 2^{2R}` |
-| `chainBudgetConst q R` | `B_R = 1 + N_R log²(e q^{R+1})` |
+| `cutBudgetConst N q R` | `1 + N log²(e q^{R+1})`, the cut budget for at most `N` split supports |
+| `chainBudgetConst q R` | `B_R = 1 + N_R log²(e q^{R+1})`, that is `cutBudgetConst N_R q R` |
 | `chainEnergyThreshold q R J Δ` | `E_R J/Δ` with `E_R = min {32 N_R q^{2(R+1)}, 64 e N_R log²(e q^{R+1})}` |
 | `chainShellCount q R J Δ` | `m = ⌈max {4, E_R J/Δ, 128 √((1 + J/Δ) B_R)}⌉` |
 | `chainDiscountConst q R J Δ` | `4096 e (J/Δ) B_R / m + m log 2` |
 | `chainIntervalEntropyBound q R J Δ` | `C_int = 8 m R log q + chainDiscountConst` |
-| `chainShellConst q R` | `C₁ = 5 + E_R + 128 B_R`, with `m ≤ C₁ (1 + J/Δ)` |
-| `chainAreaLawConst q R` | `C₀ = (8 R log q + log 2)(5 + E_R + 128 B_R) + 1024 e B_R`, with `C_int ≤ C₀ (1 + J/Δ)` |
+| `cutShellConst N q R`, `cutAreaLawConst N q R` | `C₁` and `C₀` below with `N_R` replaced by `N`; the full-window constants are their values at `N = 2R` |
+| `chainShellConst q R` | `C₁ = 5 + E_R + 128 B_R`, with `m ≤ C₁ (1 + J/Δ)`; that is `cutShellConst N_R q R` |
+| `chainAreaLawConst q R` | `C₀ = (8 R log q + log 2)(5 + E_R + 128 B_R) + 1024 e B_R`, with `C_int ≤ C₀ (1 + J/Δ)`; that is `cutAreaLawConst N_R q R` |
 | `chainTruncationWidth q R J Δ L` | `w = 64 √((1 + J/Δ) B_R) log(2 L² √(2 e^{e/2}))` |
 | `chainBondDimension q R J Δ L` | `⌊exp(C_int + w)⌋` |
 

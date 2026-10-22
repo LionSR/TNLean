@@ -5,7 +5,6 @@ on:
     workflows:
       - Auto Fix (Lean)
       - PR Review
-      - Lean linter-warning auto-fix
       - Issue Automation
     types: [completed]
   schedule:
@@ -36,7 +35,7 @@ jobs:
         run: |
           set -euo pipefail
           case "$WORKFLOW_NAME" in
-            "Auto Fix (Lean)"|"Lean linter-warning auto-fix")
+            "Auto Fix (Lean)")
               switch_name="CLAUDE_AUTO_FIX_ENABLED"
               until_name="CLAUDE_AUTO_FIX_DISABLED_UNTIL"
               reason_name="CLAUDE_AUTO_FIX_DISABLE_REASON"

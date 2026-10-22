@@ -111,9 +111,7 @@ theorem regionEntropy_interval_le (hq : 1 ≤ q) (hJ : 0 ≤ J) (hΔ : 0 < Δ)
 `C₁(q, R) = 5 + min {32 N_R q^{2(R + 1)}, 64 e N_R log² (e q^{R + 1})} + 128 B_R`
 bounding `m / (1 + J/Δ)`. -/
 noncomputable def chainShellConst (q R : ℕ) : ℝ :=
-  5 + min (32 * chainCrossConst R * (q : ℝ) ^ (2 * (R + 1)))
-      (64 * Real.exp 1 * chainCrossConst R * Real.log (Real.exp 1 * (q : ℝ) ^ (R + 1)) ^ 2) +
-    128 * chainBudgetConst q R
+  cutShellConst (chainCrossConst R) q R
 
 /-- The number of shells is at most `C₁(q, R) (1 + J/Δ)`. -/
 theorem chainShellCount_le (hJ : 0 ≤ J) (hΔ : 0 < Δ) :
@@ -156,14 +154,13 @@ theorem chainShellCount_le (hJ : 0 ≤ J) (hΔ : 0 < Δ) :
       positivity
     have hT0 : 0 ≤ Tt := by simp only [Tt, chainTailThreshold]; positivity
     exact max_le (max_le (by linarith) (by linarith)) (by linarith)
-  unfold chainShellConst
+  rw [chainShellConst, cutShellConst, ← chainBudgetConst]
   nlinarith
 
 /-- The constant `C₀(q, R) = (8 R log q + log 2) C₁(q, R) + 1024 e B_R` of the
 one-dimensional area law. -/
 noncomputable def chainAreaLawConst (q R : ℕ) : ℝ :=
-  (8 * R * Real.log q + Real.log 2) * chainShellConst q R +
-    1024 * Real.exp 1 * chainBudgetConst q R
+  cutAreaLawConst (chainCrossConst R) q R
 
 /-- **The constant is linear in the inverse gap.** The interval entropy bound is at most
 `C₀(q, R) (1 + J/Δ)`. -/
@@ -181,11 +178,9 @@ theorem chainIntervalEntropyBound_le (hq : 1 ≤ q) (hJ : 0 ≤ J) (hΔ : 0 < Δ
     rw [div_le_iff₀ (by linarith)]
     have h0 : 0 ≤ 1024 * Real.exp 1 * chainBudgetConst q R := by positivity
     nlinarith [mul_nonneg h0 hϑ]
-  have hC1 : 0 ≤ chainShellConst q R := by
-    unfold chainShellConst
-    have : (0 : ℝ) ≤ chainCrossConst R := Nat.cast_nonneg _
-    positivity
-  unfold chainIntervalEntropyBound chainDiscountConst chainAreaLawConst
+  have hC1 : 0 ≤ chainShellConst q R := cutShellConst_nonneg _ q R
+  unfold chainIntervalEntropyBound chainDiscountConst
+  rw [chainAreaLawConst, cutAreaLawConst, ← chainShellConst, ← chainBudgetConst]
   have hR : (0 : ℝ) ≤ R := Nat.cast_nonneg _
   have h1 : 8 * (chainShellCount q R J Δ : ℝ) * R * Real.log q ≤
       8 * R * Real.log q * (chainShellConst q R * (1 + J / Δ)) := by
@@ -233,8 +228,8 @@ open scoped Matrix.Norms.L2Operator in
 interval is split by at most `N` supports with cut budget at most `B ≥ 1`, the entropy of
 every interval is at most `C₀(N, B) (1 + J/Δ)`, where
 `C₀(N, B) = (8 R log q + log 2) (5 + min {32 N q^{2(R+1)}, 64 e N log² (e q^{R+1})} + 128 B)
-  + 1024 e B`. These are the constants `C₁` and `C₀` of `chainShellConst` and
-`chainAreaLawConst` with `N_R` and `B_R` replaced by `N` and `B`.
+  + 1024 e B`. These are the constants `cutShellConst N q R` and `cutAreaLawConst N q R`
+with the budget `cutBudgetConst N q R` replaced by `B`.
 Source: the note, Theorem A for intervals, Section 5, with the energy estimate of Remark 6.3
 (`rem:sharper`). -/
 private theorem regionEntropy_interval_le_of_family_budget (hq : 1 ≤ q) (hJ : 0 ≤ J)
@@ -352,12 +347,9 @@ theorem chainAreaLaw_of_consecutive_terms
             Entropy.regionEntropy (n := fun _ : Fin L ↦ q) A Ω ≤
               C * (boundaryEdges L A).card := by
   classical
-  unfold windowAreaLawConst windowShellConst windowBudgetConst
-  have hB : 1 ≤ 1 + (2 * R : ℕ) * Real.log (Real.exp 1 * (q : ℝ) ^ (R + 1)) ^ 2 :=
-    le_add_of_nonneg_right (by positivity)
-  have hlog : 0 ≤ Real.log (q : ℝ) := Real.log_nonneg (by exact_mod_cast hq)
-  have hlog2 : 0 ≤ Real.log 2 := Real.log_nonneg (by norm_num)
-  refine ⟨_, by positivity, rfl, ?_⟩
+  have hC : 0 ≤ windowAreaLawConst q R * (1 + J / Δ) :=
+    mul_nonneg (cutAreaLawConst_nonneg _ q R) (by have := div_nonneg hJ hΔ.le; linarith)
+  refine ⟨_, hC, rfl, ?_⟩
   intro L h hwindow E₀ Ω hgs A
   let I := {X : ChainSupport L R // h.term X ≠ 0}
   let g : I → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := fun X ↦ h.term X.val
@@ -366,11 +358,12 @@ theorem chainAreaLaw_of_consecutive_terms
   have hgs' : Matrix.IsGappedGroundState (∑ X : I, g X) E₀ Ω Δ := by
     rw [hsum]
     exact hgs
-  refine regionEntropy_le_mul_card_boundaryEdges_of_intervals hgs.1 (by positivity)
+  refine regionEntropy_le_mul_card_boundaryEdges_of_intervals hgs.1 hC
     (fun a b ↦ ?_) A
   exact regionEntropy_interval_le_of_family_budget hq hJ hΔ g (fun X ↦ X.val)
     (fun X ↦ h.supported X.val) (fun X ↦ h.hermitian X.val) (fun X ↦ h.norm_le X.val)
-    (2 * R) hB (h.card_crossingTerms_interval_le_of_consecutive_terms hwindow)
+    (2 * R) (one_le_windowBudgetConst q R)
+    (h.card_crossingTerms_interval_le_of_consecutive_terms hwindow)
     (h.cutLogBudget_interval_le_of_consecutive_terms hq hwindow) hgs' a b
 
 /-- The interval entropy estimate with the original polynomial source constants.
