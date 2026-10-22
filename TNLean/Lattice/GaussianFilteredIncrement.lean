@@ -72,7 +72,7 @@ theorem norm_gaussianFilteredTerm_sub_localized_le_mass (q ΔE : ℝ)
   set c := ‖H * W - W * H‖
   set f : ℝ → Matrix (ι → Fin d) (ι → Fin d) ℂ := fun t =>
     hermitianUnitaryPath H t * W * hermitianUnitaryPath H (-t) - W
-  set L := subSiteExpectationCLM (ι := ι) d K
+  set L := QuantumCircuit.subSiteExpectationCLM (ι := ι) d K
   have hL : ∀ M, L M = M - QuantumCircuit.siteExpectation d K M := fun _ => rfl
   have hint0 := integrable_intertwinerIntegrand (q / ΔE ^ 2).toNNReal hH hH W
   have hint : Integrable f μ := hint0.sub (integrable_const W)
