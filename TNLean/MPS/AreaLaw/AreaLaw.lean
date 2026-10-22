@@ -334,16 +334,15 @@ contained in the chain. Then at most `2R` nonzero terms cross an interval, with 
 `C₀,win (1 + J/Δ) |∂A|`, where `C₁,win` and `C₀,win` are `C₁(q, R)` and `C₀(q, R)` with
 `N_R` replaced by `2R` and `B_R` by `B_win`. The constant is fixed before the chain length
 and all Hamiltonian and ground-state data.
+
+**Scope restriction (full windows):** the window hypothesis is narrower than the general
+finite-range model of Theorem A; recorded in
+`docs/paper-gaps/tnlean_one_dimensional_discount_constants.tex`, section
+"Full consecutive windows".
 Source: the one-dimensional note, Remark `rem:sharper`, lines 706–745. -/
 theorem chainAreaLaw_of_consecutive_terms
     (q R : ℕ) (J Δ : ℝ) (hq : 1 ≤ q) (hJ : 0 ≤ J) (hΔ : 0 < Δ) :
-    let B : ℝ :=
-      1 + (2 * R : ℕ) * Real.log (Real.exp 1 * (q : ℝ) ^ (R + 1)) ^ 2
-    let C₁ : ℝ := 5 + min (32 * (2 * R : ℕ) * (q : ℝ) ^ (2 * (R + 1)))
-      (64 * Real.exp 1 * (2 * R : ℕ) * Real.log (Real.exp 1 * (q : ℝ) ^ (R + 1)) ^ 2) +
-        128 * B
-    let C₀ : ℝ := (8 * R * Real.log (q : ℝ) + Real.log 2) * C₁ + 1024 * Real.exp 1 * B
-    ∃ C : ℝ, 0 ≤ C ∧ C = C₀ * (1 + J / Δ) ∧
+    ∃ C : ℝ, 0 ≤ C ∧ C = windowAreaLawConst q R * (1 + J / Δ) ∧
       ∀ L : ℕ, ∀ h : ChainHamiltonian L q R J,
         (∀ X : ChainSupport L R, h.term X ≠ 0 →
           ∃ a : ℕ, a + R + 1 ≤ L ∧ X.1 = interval L a (a + R + 1)) →
@@ -353,7 +352,7 @@ theorem chainAreaLaw_of_consecutive_terms
             Entropy.regionEntropy (n := fun _ : Fin L ↦ q) A Ω ≤
               C * (boundaryEdges L A).card := by
   classical
-  dsimp only
+  unfold windowAreaLawConst windowShellConst windowBudgetConst
   have hB : 1 ≤ 1 + (2 * R : ℕ) * Real.log (Real.exp 1 * (q : ℝ) ^ (R + 1)) ^ 2 :=
     le_add_of_nonneg_right (by positivity)
   have hlog : 0 ≤ Real.log (q : ℝ) := Real.log_nonneg (by exact_mod_cast hq)

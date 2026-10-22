@@ -1486,7 +1486,8 @@ for an arbitrary finite set of sites and are instantiated here directly.
     \label{thm:chain_area_log_cube}
     \lean{
         TNLean.MPS.AreaLaw.chainAreaLawConst_le_mul_log_cube,
-        TNLean.MPS.AreaLaw.regionEntropy_le_log_cube_mul_card_boundaryEdges
+        TNLean.MPS.AreaLaw.regionEntropy_le_log_cube_mul_card_boundaryEdges,
+        TNLean.MPS.AreaLaw.chainLogCubeConst
     }
     \leanok
     \uses{thm:chain_area_law}
@@ -1536,7 +1537,12 @@ for an arbitrary finite set of sites and are instantiated here directly.
 % Source: part1_arealaw.tex:706--745, combining the count and energy refinements.
 \begin{theorem}[Area law for consecutive-window interactions]
     \label{thm:chain_window_area_law}
-    \lean{TNLean.MPS.AreaLaw.chainAreaLaw_of_consecutive_terms}
+    \lean{
+        TNLean.MPS.AreaLaw.chainAreaLaw_of_consecutive_terms,
+        TNLean.MPS.AreaLaw.windowBudgetConst,
+        TNLean.MPS.AreaLaw.windowShellConst,
+        TNLean.MPS.AreaLaw.windowAreaLawConst
+    }
     \leanok
     \uses{def:chain_model}
     Fix natural numbers $q\ge1$ and $R$, and real numbers $J\ge0$ and
