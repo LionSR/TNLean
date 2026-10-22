@@ -1268,6 +1268,15 @@ eqs. `tighter`/`tighter2` and the margin of eq. `obd`. With `q = (l/3)ΔE/v` the
 printed rate `e^{-l/3ξ}` is recovered, but the final bound keeps the prefactor
 `√(l/ξ)`, so Lemma 1 holds with every `ξ' > 6ξ`, not at the printed `ξ' = 6ξ`.
 
+### One-dimensional area law after Hastings: the Schmidt tail constant
+
+[hastings07_schmidt_tail_constant.tex](hastings07_schmidt_tail_constant.tex)
+(local correction, resolved) records that the polynomial decay of the Schmidt
+tail in Hastings' section on matrix product states (arXiv:0705.2024v4,
+eq. `est`) holds with the constant `e^{2/ξ'}` rather than the printed `e^{1/ξ'}`,
+because the geometric bound of eq. `constraint` is available only at even
+exponents `2m`, and that the printed exponent lacks its minus sign.
+
 ## Polynomial PEPS: zero-floor maximizing filters
 
 - [`polypeps_square_zero_floor_optimizer_scope.tex`](polypeps_square_zero_floor_optimizer_scope.tex)
