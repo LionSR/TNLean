@@ -44,6 +44,11 @@ TNLean, the remaining source follows these conceptual layers:
 | 5c | `MPS.AreaLaw` | The one-dimensional area law and polynomial matrix product state approximation for gapped finite-range chains, stated natively on the chain of `L` sites and on finite sets of integers, and proved from the QICLean tail bound and buffered discount; it imports the site-generic entropy lemmas `Lattice.RegionEntropyInequalities` and `Lattice.ZeroEntropy`. The regional-swap, paired-site, entropy-comparison and Gaussian-filter lemmas of the information reset come from the lattice layer, and no module of the chain layer imports `PEPS`. |
 | 6 | `Wielandt` | Tensor-typed span-growth, primitivity, and quantum Wielandt consequences built on QICLean's channel-generic theory. |
 
+The finite-domain commutator estimate in `MPS.AreaLaw.DomainLiebRobinson` uses
+the induced path graph and the shared propagation theory in
+`Circuit.LiebRobinson`. Its initial support may meet several connected
+components; infinite distance gives exact commutation.
+
 `PiAlgebra` provides related algebraic formulations. `PEPS` contains the
 two-dimensional injective and normal-tensor developments. `QCA` contains the
 quasi-local and cellular-automaton layer. `Spectral` contains MPS-specific

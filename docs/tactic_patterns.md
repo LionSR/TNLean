@@ -3768,6 +3768,26 @@ three-plaquette output measurement, and the routed reunion measurement.
   same mathematical objects after the stated rewrites. This command does not
   repair incompatible index data or prove an additional hypothesis.
 
+### Exact commutation across an infinite graph distance — promoted (2026-10-21)
+
+- **Pattern:** Finite interaction-support diameter makes the sites not reachable
+  from the final site interaction-closed. This set contains the entire initial
+  support and is disjoint from the final site. Exact locality then gives zero
+  commutator for every time.
+- **Abstraction:**
+  `QuantumCircuit.heisenberg_commutator_eq_zero_of_forall_edist_eq_top` in
+  `Circuit/LiebRobinson/GraphPropagation.lean` states the arbitrary-support result.
+  It needs neither anchors nor Hermiticity, a norm budget, a support-cardinality
+  bound, positive local dimension, or nonempty initial support.
+- **Seen:** The anchored theorem
+  `heisenberg_commutator_eq_zero_of_edist_eq_top`, the infinite-distance branch of
+  `norm_heisenberg_commutator_le_graph_kernel_sum` in `GraphLocalization.lean`,
+  and `MPS/AreaLaw/DomainLiebRobinson.lean`,
+  `norm_heisenberg_commutator_le_domainDistance`.
+- **Notes:** Both existing closed-region arguments and the finite-domain
+  specialization use the shared theorem. The existing public statements are
+  retained. No tactic or global attribute is introduced.
+
 ## Completed refactors
 
 ### Chain neighborhood of a region — completed (2026-10-21)
@@ -4992,37 +5012,6 @@ no additional helper is proposed.
   support and distance hypotheses. Keep their short arguments explicit until
   the pattern occurs in a second file and meets the promotion threshold.
 
-
-### Exact commutation across an infinite graph distance — candidate (2026-10-19)
-
-- **Pattern:** Derive reachability inside each interaction support from the
-  diameter bound, take a reachability-closed set `C` on one side of the
-  separation, show that every support lies in `C` or is disjoint from it,
-  and close with `commute_heisenbergEvolution_of_closed`:
-
-  ```lean
-  have hReach : ∀ k, ∀ x ∈ X k, ∀ z ∈ X k, G.Reachable x z :=
-    fun k x hx z hz => SimpleGraph.reachable_of_edist_ne_top
-      (ne_top_of_le_ne_top (ENat.natCast_ne_top R) (hDiam k x hx z hz))
-  have hClosed (k : κ) : (X k : Set ι) ⊆ C ∨ Disjoint (X k : Set ι) C := ...
-  have hCy : Disjoint C ({y} : Set ι) := Set.disjoint_singleton_right.mpr ...
-  exact commute_heisenbergEvolution_of_closed h (fun k => (X k : Set ι))
-    hSupport C {y} hClosed hCy ...
-  ```
-
-- **Seen:** Two occurrences in two files:
-  `Circuit/LiebRobinson/GraphPropagation.lean`,
-  `heisenberg_commutator_eq_zero_of_edist_eq_top`, with
-  `C = {x | G.Reachable (a i) x}`; and
-  `Circuit/LiebRobinson/GraphLocalization.lean`, the infinite-distance branch
-  of `norm_heisenberg_commutator_le_graph_kernel_sum`, with
-  `C = {x | ¬G.Reachable x y}`.
-- **Possible abstraction:** A lemma stating that a reachability-closed set
-  separates finite-diameter supports, parameterized by which side of the
-  separation defines `C`, so that both proofs reduce to one call before
-  `commute_heisenbergEvolution_of_closed`.
-- **Notes:** Below the rule of three; the two closed sets are dual. Promote at
-  a third use.
 
 
 ### Dyadic padding bounds — candidate (2026-10-16)
@@ -8872,6 +8861,20 @@ spectral split → block extraction → MPV calculation → strict bounds
   constants and their inequalities. The constants must remain uniform in
   the clearance and physical data. These are two occurrences across two
   files; no promotion or proof refactor is proposed.
+
+### Commutator decay from the least support distance — candidate (2026-10-21)
+
+- **Pattern:** Choose anchors from nonempty interaction supports, take the
+  infimum of distances from the initial support to the observed site, separate
+  infinite distance from finite distance, and weaken exponential decay from
+  exponent one to one half.
+- **Seen:** `norm_heisenberg_commutator_le_chainDistance` in
+  `MPS/AreaLaw/LiebRobinson.lean` and
+  `norm_heisenberg_commutator_le_domainDistance` in
+  `MPS/AreaLaw/DomainLiebRobinson.lean`.
+- **Notes:** Two occurrences. Their infinite-distance arguments differ:
+  the finite path is connected, whereas an induced domain uses exact
+  commutation across components. No further abstraction is proposed yet.
 
 ### Transport of a tensor factor through a layout equality — candidate (2026-10-18)
 

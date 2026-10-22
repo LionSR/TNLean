@@ -168,9 +168,15 @@ site is infinity, with decay factor zero. Only localization requires q ≥ 1.
 These are the chain estimates used in Part II. After the reduction to
 connected domains, the note explicitly sets `Λ = {1, …, N}`
 (`part1_arealaw.tex`, lines 91–93); Theorem B itself is stated on a chain.
-Additional versions on arbitrary finite induced-path domains are not asserted;
-see the connected-domain scope note. These chain estimates supply the physical
-protocol above.
+These chain estimates supply the physical protocol above.
+The additional theorem
+`MPS.AreaLaw.norm_heisenberg_commutator_le_domainDistance` gives the same
+commutator estimate on every finite integer domain, using its induced-graph
+distance and treating infinite distance by exact commutation. It imposes no
+diameter bound on the initial support and no connectivity or spectral-gap
+hypothesis. The finite-domain localization, information-reset and
+logarithmic-separation extensions are separate results; see the
+connected-domain scope note.
 
 For an arbitrary region D of the contiguous chain,
 `MPS.AreaLaw.IsChainSupport.exists_boundary_window_of_split` places every
