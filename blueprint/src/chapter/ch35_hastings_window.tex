@@ -28,6 +28,7 @@ $A$.
 
 \begin{proof}
     \leanok
+    \uses{lem:chain_entropy_inequalities}
     The cut $\lbrack 0,k)$ is the disjoint union of $\lbrack 0,i)$ and $\lbrack i,k)$. The
     Araki--Lieb inequality gives $S(\lbrack 0,i))\le S(\lbrack 0,k))+S(\lbrack i,k))$, and the
     interval $\lbrack i,k)$ has at most $k-i$ sites, so $S(\lbrack i,k))\le (k-i)\log q$.
@@ -109,6 +110,7 @@ $A$.
 
 \begin{proof}
     \leanok
+    \uses{lem:chain_entropy_inequalities}
     The first two bounds hold for the entropy of every region of at most $l$
     sites. For the third, when $2l\le l_0$, take an interval $\lbrack a,a+2l)$ inside
     the window of largest entropy; it is the disjoint union of the intervals
