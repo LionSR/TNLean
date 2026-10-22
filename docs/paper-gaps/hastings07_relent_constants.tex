@@ -30,7 +30,9 @@ Hastings' proof of the one-dimensional area law~\cite{Hastings2007AreaLaw}
   \qquad\epsilon=C_1e^{-l/\xi'},
 \end{equation}
 for adjacent intervals of $l$ sites (lines~238--242). Lines~413--503 prove it.
-The operators $O_B,O_L,O_R$ of Lemma~1 satisfy
+Here $\Psi_0$ is the unique ground state of the chain, $P_0=|\Psi_0\rangle
+\langle\Psi_0|$ its projector, and $\rho_{a,b}$ the marginal of $P_0$ on the
+sites $a,\dots,b$. The operators $O_B,O_L,O_R$ of Lemma~1 satisfy
 $\lVert O_BO_LO_R-P_0\rVert\le\epsilon$. Let $\rho$ be the ground-state
 marginal on the $2l$ sites, $\sigma=\rho_{1,j}\otimes\rho_{j+1,N}$,
 $x=\operatorname{tr}(O_B\sigma)$ and $y=\operatorname{tr}(O_LO_R\sigma)$.
@@ -103,9 +105,15 @@ $\ln C_1>-1$.
 \section{Formalization}
 
 \leanid{TNLean.MPS.AreaLaw.Hastings.le_of_lindbladUhlmann} proves the case
-analysis below for real numbers. Its hypotheses are $\Delta\ge0$ and, for
+analysis above for real numbers. Its hypotheses are $\Delta\ge0$ and, for
 $\epsilon\le1/68$, a point $x\in(0,36\epsilon]$ at which~\eqref{eq:LU} is at
 most $\Delta$. \leanid{TNLean.MPS.AreaLaw.Hastings.relentConst} is $C_2=7$.
+To reach that form from the effect bound, note that the binary relative
+entropy of $a$ with respect to $b$ is increasing in $a$ and decreasing in $b$
+for $b\le a$. So $a=\operatorname{tr}(\rho E)\ge1-2\epsilon'$ may be lowered
+to $1-2\epsilon'$, and $\operatorname{tr}(\sigma E)$ may be raised to
+$x=36\,\epsilon'\le1-2\epsilon'$. That choice of $x$ also avoids proving
+$x>0$.
 
 \bibliographystyle{plain}
 \bibliography{references}
