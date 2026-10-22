@@ -351,8 +351,7 @@ theorem exists_braVertexBlock (l : List (Hole pos q Party)) (own : ι → Party)
     · rw [← hf]
       exact PiLp.norm_apply_le f _
     · simpa [emptyBlock] using fun h => hne ⟨x, h⟩
-    · rw [emptyBlock_ketAt]
-      rw [ite_eq_left fun x h => absurd ⟨x, h⟩ hne]
+    · rw [emptyBlock_ketAt, ite_eq_left fun x h => absurd ⟨x, h⟩ hne]
     · rw [emptyBlock_braAt, star_one, mul_one]
       exact congrArg (fun d => f d) (funext fun (x : {x // O x}) => absurd ⟨x.1, x.2⟩ hne)
     · rw [emptyBlock_op, one_kronecker_one, act_one]
@@ -388,8 +387,7 @@ theorem exists_ketVertexBlock (l : List (Hole pos q Party)) (own : ι → Party)
     · rw [← hf]
       exact PiLp.norm_apply_le f _
     · simpa [emptyBlock] using fun h => hne ⟨x, h⟩
-    · rw [emptyBlock_braAt]
-      rw [ite_eq_left fun x h => absurd ⟨x, h⟩ hne]
+    · rw [emptyBlock_braAt, ite_eq_left fun x h => absurd ⟨x, h⟩ hne]
     · rw [emptyBlock_ketAt, mul_one]
       exact congrArg (fun d => f d) (funext fun (x : {x // O x}) => absurd ⟨x.1, x.2⟩ hne)
     · rw [emptyBlock_op, one_kronecker_one, act_one]

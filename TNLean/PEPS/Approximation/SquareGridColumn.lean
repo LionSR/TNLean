@@ -125,8 +125,8 @@ theorem exists_fixInput_contractPEPS_of_traceNorm_sub_pure_le (D : ForwardEdge L
         Matrix.toEuclideanLin (operatorMatrix D A) (EuclideanSpace.single z 1) ∧
       contractPEPS D (fixInput D A z) ≠ 0 ∧
       ∃ θ : ℝ, ‖((‖contractPEPS D (fixInput D A z)‖ : ℂ)⁻¹) •
-        contractPEPS D (fixInput D A z) - Complex.exp (θ * Complex.I) • Ω‖ ≤ 2 * η := by
-  exact exists_eq_column_ne_zero_of_traceNorm_sub_pure_le e Ω hΩ hσ hη (contractPEPS_fixInput D A)
+        contractPEPS D (fixInput D A z) - Complex.exp (θ * Complex.I) • Ω‖ ≤ 2 * η :=
+  exists_eq_column_ne_zero_of_traceNorm_sub_pure_le e Ω hΩ hσ hη (contractPEPS_fixInput D A)
 
 /-- A nonzero contraction on the open square forces every edge dimension to be
 positive: if some `D e` were zero, the sum over virtual configurations would be
