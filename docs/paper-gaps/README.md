@@ -1266,6 +1266,14 @@ eq. `est`) holds with the constant `e^{2/ξ'}` rather than the printed `e^{1/ξ'
 because the geometric bound of eq. `constraint` is available only at even
 exponents `2m`, and that the printed exponent lacks its minus sign.
 
+### One-dimensional area law after Hastings: the error of the localized filtered parts
+
+[hastings07_filtered_part_localization.tex](hastings07_filtered_part_localization.tex)
+(local correction, resolved) records that the bound on the localized filtered parts in
+the appendix of Hastings (arXiv:0705.2024v4, lines 816–828) is printed as
+`‖M_L − H_L‖ ≤ O(ΔE⁻¹J²e^{−l/3ξ})`, while the argument needs and proves
+the distance from `M_L` to the filtered `H_L`, with `M_L − H_L` supported near the cut.
+
 ### One-dimensional area law after Hastings: the threshold of the spectral cut-offs
 
 [hastings07_spectral_cutoff_threshold.tex](hastings07_spectral_cutoff_threshold.tex)
