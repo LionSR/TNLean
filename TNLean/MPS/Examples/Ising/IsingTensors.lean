@@ -116,15 +116,6 @@ therefore `(√2)⁻ᴸ` times the periodic operator of `isingSigma`. Documented
 noncomputable def isingSigma : MPOTensor 10 4 :=
   fun h h' => complexOfZsqrt2 (isingSigmaZ h h')
 
-/-- The letter `((1,1,1), (σ,1,σ))` of `√2 A_σ` is `√2` times the matrix unit at
-`((σ,1), (σ,1))` (data file §1.1). -/
-theorem isingSigma_apply_zero_six :
-    isingSigma 0 6 = (Real.sqrt 2 : ℂ) • Matrix.single 2 2 1 := by
-  ext p q
-  simp only [isingSigma, isingSigmaZ, complexOfZsqrt2_apply, Matrix.smul_apply,
-    Matrix.single_apply, smul_eq_mul, mul_ite, mul_one, mul_zero]
-  split_ifs <;> simp
-
 theorem isingOneZ_eq_zero_of_rho_ne :
     ∀ h h' : Fin 10, isingRho h ≠ isingRho h' → isingOneZ h h' = 0 := by
   decide +kernel
