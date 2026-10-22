@@ -13,7 +13,20 @@ appendix of \cite{Hastings2007AreaLaw}. The first step, the splitting of the
 Hamiltonian at the cut into a left, a buffer and a right part, is
 Section~\ref{sec:hastings_three_way_splitting}. Throughout, $H$ is Hermitian
 with ground energy $E_0$, every other eigenvalue is at least $E_0+\Delta E$
-with $\Delta E>0$, and norms are operator norms.
+with $\Delta E>0$, and norms are operator norms. As in the source, the
+sites are numbered $1,\dots,N$, $X_{a,b}$ is the set of sites $i$ with
+$a\le i\le b$, and the cut $j$ separates $X_{1,j}$ from $X_{j+1,N}$; on the
+chain of $L$ sites numbered $0,\dots,L-1$ of
+Section~\ref{sec:hastings_three_way_splitting}, where the cut $j$ has the
+sites $i<j$ on its left, this is the shift of every site down by one, with
+$N=L$, so $X_{1,j}$ becomes $\{0,\dots,j-1\}$ and $X_{j+1,N}$ becomes
+$\{j,\dots,L-1\}$. The decay lengths are those of the main theorem of
+\cite[lines 124--144]{Hastings2007AreaLaw},
+\begin{align*}
+    \xi=\max(2v/\Delta E,\xi_C),\qquad\xi'=6\xi,
+\end{align*}
+where $v$ and $\xi_C$ are the velocity and length scale of the Lieb--Robinson
+bound \cite[lines 96--112]{Hastings2007AreaLaw}.
 
 \subsection*{Gaussian-filtered operators}
 
@@ -21,13 +34,14 @@ with $\Delta E>0$, and norms are operator norms.
     \label{def:hastings_gaussian_filtered_term}
     \lean{TNLean.Lattice.gaussianFilteredTerm}
     \leanok
-    For $q\ge0$ and a matrix $W$, the \emph{Gaussian-filtered operator} is
+    For $q>0$ and a matrix $W$, the \emph{Gaussian-filtered operator} is
     \begin{align*}
         \widetilde W=\frac{\Delta E}{\sqrt{2\pi q}}\int_{-\infty}^{\infty}
         e^{iHt}We^{-iHt}\,e^{-(t\Delta E)^2/(2q)}\,dt,
     \end{align*}
     the Heisenberg evolution of $W$ averaged against the centered Gaussian of
-    variance $q/\Delta E^2$. These are the operators $\tilde H_L^0$,
+    variance $q/\Delta E^2$. For $q=0$ the Gaussian is the point mass at
+    $t=0$ and $\widetilde W=W$. These are the operators $\tilde H_L^0$,
     $\tilde H_B^0$, $\tilde H_R^0$ of \cite[lines 783--793]{Hastings2007AreaLaw}
     for $W$ one of the three parts of the Hamiltonian.
 \end{definition}
@@ -108,7 +122,7 @@ with $\Delta E>0$, and norms are operator norms.
         TNLean.Lattice.norm_commutator_gaussianFilteredTerm_le
     }
     \leanok
-    \uses{def:hastings_gaussian_filtered_term, thm:chain_lieb_robinson}
+    \uses{def:hastings_gaussian_filtered_term}
     Let $T\ge0$ and $\varepsilon\ge0$, and suppose that
     $\|[e^{iHt}We^{-iHt},O]\|\le\varepsilon$ for all $|t|\le T$. Then
     \begin{align*}
@@ -136,7 +150,8 @@ with $\Delta E>0$, and norms are operator norms.
     \leanok
     \uses{thm:hastings_filtered_locality}
     For a set $K$ of sites, let $\mathbb E_K$ be the normalized partial trace
-    over the sites outside $K$, tensored with the identity there. If
+    over the sites outside $K$, tensored with the identity there. Let $T\ge0$
+    and $\varepsilon\ge0$. If
     $\|e^{iHt}We^{-iHt}-\mathbb E_K(e^{iHt}We^{-iHt})\|\le\varepsilon$ for all
     $|t|\le T$, then
     \begin{align*}
@@ -168,27 +183,36 @@ with $\Delta E>0$, and norms are operator norms.
     bound $\|[H,H_L]\|\le J^2$ of \cite[line 794]{Hastings2007AreaLaw}.
 \end{theorem}
 
-% Lean statement pending.
+% Lean statement pending. Stated as printed. The Lean statement will bound the
+% distance of M_L, M_B, M_R to the filtered parts, as the next line of the proof
+% uses; the entry will be restated with its paper-gap note when it lands.
 \begin{theorem}[Localized filtered parts]
     \label{thm:hastings_localized_parts}
     \uses{thm:hastings_filtered_partial_trace, thm:hastings_part_commutators,
         thm:chain_lieb_robinson}
     There are Hermitian operators $M_L$, $M_B$, $M_R$ such that $M_L-H_L$ acts
     on $X_{j-2l/3,j}$, $M_B-H_B$ on $X_{j-2l/3,j+1+2l/3}$ and $M_R-H_R$ on
-    $X_{j+1,j+1+2l/3}$, and each of $M_L$, $M_B$, $M_R$ is within
-    $\mathcal O(\Delta E^{-1}J^2e^{-l/(3\xi)})$ of the corresponding filtered
-    part $\tilde H_L^0$, $\tilde H_B^0$, $\tilde H_R^0$
-    \cite[lines 816--828]{Hastings2007AreaLaw}. The source prints the distance
-    to $H_L$, $H_B$, $H_R$; the next line of the source uses the distance to
-    the filtered parts, which is the reading adopted here.
+    $X_{j+1,j+1+2l/3}$, they approximate $\tilde H_L^0$, $\tilde H_B^0$,
+    $\tilde H_R^0$ respectively, and
+    \begin{align*}
+        \|M_L-H_L\|,\ \|M_B-H_B\|,\ \|M_R-H_R\|
+        \le\mathcal O(\Delta E^{-1}J^2e^{-l/(3\xi)})
+    \end{align*}
+    \cite[lines 816--828]{Hastings2007AreaLaw}.
 \end{theorem}
 
-% Lean statement pending.
+% Lean statement pending. Stated as printed: the cut-off compares the eigenvalue,
+% not its absolute value. The bound on the evolution of O_L O_R at lines 879--880
+% needs the cut-off on the absolute value; the entry will be restated with its
+% paper-gap note when its Lean statement lands.
 \begin{theorem}[The cut-offs $O_L$ and $O_R$]
     \label{thm:hastings_cutoffs}
     \uses{thm:hastings_localized_parts, thm:hastings_filtered_no_ground_component}
     Let $O_L$ and $O_R$ be the spectral projectors of $M_L$ and $M_R$ onto
-    eigenvalues at most $\Delta E^{-1}J^2e^{-l/(6\xi)}$. They are commuting
+    the eigenvectors with eigenvalue less than or equal to
+    $\Delta E^{-1}J^2e^{-l/(6\xi)}$, the eigenvalue itself and not its
+    absolute value being compared, as in
+    \cite[lines 830--834]{Hastings2007AreaLaw}. They are commuting
     orthogonal projections, $O_L$ acts on $X_{1,j}$ and $O_R$ on $X_{j+1,N}$,
     and
     \begin{align*}
@@ -230,10 +254,14 @@ with $\Delta E>0$, and norms are operator norms.
 \begin{theorem}[Interaction picture and the boundary average]
     \label{thm:hastings_interaction_picture}
     \uses{thm:hastings_moved_estimate}
-    For Hermitian $A$ and $B$, let $U(t)=e^{i(A+B)t}e^{-iAt}$, the
-    time-ordered exponential of $i\int_0^te^{iAt'}Be^{-iAt'}\,dt'$, so that
-    $e^{i(A+B)t}=U(t)e^{iAt}$, and let $P_B$ be the Gaussian average of $U(t)$
-    with variance $q/\Delta E^2$. Then $\|P_B\|\le1$ and, for every $X$,
+    For Hermitian $A$ and $B$, let $U(t)=e^{i(A+B)t}e^{-iAt}$, so that
+    $e^{i(A+B)t}=U(t)e^{iAt}$. It is the solution of
+    $U'(t)=U(t)\,ie^{iAt}Be^{-iAt}$ with $U(0)=1$, the generator multiplying
+    on the right; that is, $U(t)$ is the ordered exponential of
+    $i\int_0^te^{iAt'}Be^{-iAt'}\,dt'$ with later times to the right, which
+    is the $t'$-ordered exponential of
+    \cite[lines 852--864]{Hastings2007AreaLaw}. Let $P_B$ be the Gaussian
+    average of $U(t)$ with variance $q/\Delta E^2$. Then $\|P_B\|\le1$ and, for every $X$,
     \begin{align*}
         \|P_BX-P_0\|\le\|P_q(A+B)X-P_0\|+\sqrt q\,\Delta E^{-1}\|AX\|.
     \end{align*}
@@ -300,14 +328,18 @@ with $\Delta E>0$, and norms are operator norms.
 \begin{lemma}[Positive repair of the boundary operator]
     \label{lem:hastings_positive_repair}
     \uses{thm:hastings_effect_from_factorization}
-    Let $B$ be a matrix with $\|B\|\le1$ and $P$, $Q$ orthogonal projections
-    with $\|BQ-P\|\le\varepsilon$. Then
+    Let $0\le\varepsilon\le1$, let $B$ be a matrix with $\|B\|\le1$, and let
+    $P$, $Q$ be orthogonal projections with $\|BQ-P\|\le\varepsilon$. Then
     \begin{align*}
         \|B^\dagger BQ-P\|\le\sqrt{1-(1-\varepsilon)^2}+3\varepsilon
         +\varepsilon^2,
     \end{align*}
     which is of order $\sqrt\varepsilon$. This is the lemma of the note added
-    to \cite[lines 944--995]{Hastings2007AreaLaw}.
+    to \cite[lines 944--995]{Hastings2007AreaLaw}. The source places no upper
+    bound on $\varepsilon$, but its proof uses $1-\varepsilon\ge0$, and the
+    square root is real only for $\varepsilon\le2$. For $1<\varepsilon\le2$
+    the right side exceeds $3$, while $\|B^\dagger BQ-P\|\le2$, so the bound
+    then holds trivially.
 \end{lemma}
 
 The note added to \cite{Hastings2007AreaLaw} observes that the operator $O_B$
@@ -350,10 +382,18 @@ printed in the body of the paper.
     \cite[lines 246--267]{Hastings2007AreaLaw}.
 \end{lemma}
 \begin{proof}
-    Theorem~\ref{thm:hastings_projector_factorization} gives the
-    factorization with an operator $O_B$ that need not be positive. Replacing
-    $O_B$ by $O_B^\dagger O_B$, which has norm at most one, keeps the supports,
-    and Lemma~\ref{lem:hastings_positive_repair} bounds the new error by a
-    multiple of $\sqrt{\varepsilon(l)}$, which decays at the rate
-    $e^{-l/(2\xi')}$.
+    The argument does not prove the lemma as printed; it gives two weaker
+    statements. Theorem~\ref{thm:hastings_projector_factorization} gives the
+    factorization with the bound $\varepsilon(l)=C_1(\xi)e^{-l/\xi'}$, the
+    supports and the norms as stated, and $O_L$, $O_R$ orthogonal
+    projections, but with an operator $O_B$ that need not be Hermitian or
+    positive. If $O_B$ is replaced by $O_B^\dagger O_B$, which is positive
+    semidefinite, has norm at most one and keeps the support, then
+    Lemma~\ref{lem:hastings_positive_repair} bounds the new error by
+    $\mathcal O(\sqrt{\varepsilon(l)})$, which decays only at the rate
+    $e^{-l/(2\xi')}$; this is the version of the note added
+    \cite[lines 932--940]{Hastings2007AreaLaw}. Neither statement gives
+    positive definite operators, and neither gives a positive $O_B$ at the
+    rate $e^{-l/\xi'}$: the printed version does not follow from this
+    argument.
 \end{proof}
