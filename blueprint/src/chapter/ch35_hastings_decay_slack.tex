@@ -26,6 +26,24 @@ slower rate $e^{-l/\xi'}$ with $\xi'>6\xi$.
     of~\eqref{eq:hastings_sqrt_exp}. The bound is attained at $l=1/(2\delta)$.
 \end{proof}
 
+\begin{theorem}[A power against an exponential]
+    \label{thm:hastings_pow_exp}
+    \lean{TNLean.MPS.AreaLaw.Hastings.pow_mul_exp_neg_le,
+        TNLean.MPS.AreaLaw.Hastings.pow_mul_exp_neg_add_le}
+    \leanok
+    For $\delta>0$, a natural number $p$, a real number $r$ and $l\ge0$,
+    \begin{align}
+        l^pe^{-\delta l}    & \le\Bigl(\frac{p}{e\delta}\Bigr)^p,        &
+        l^pe^{-(r+\delta)l} & \le\Bigl(\frac{p}{e\delta}\Bigr)^pe^{-rl}.
+        \label{eq:hastings_pow_exp}
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    With $x=\delta l/p$ for $p\ge1$, $l^pe^{-\delta l}=(p/\delta)^p(xe^{-x})^p$ and
+    $xe^{-x}\le e^{-1}$. The second bound follows from the first after
+    splitting off $e^{-rl}$.
+\end{proof}
+
 \begin{theorem}[Slack in the decay length]
     \label{thm:hastings_decay_slack}
     \lean{TNLean.MPS.AreaLaw.Hastings.add_mul_sqrt_mul_exp_le_of_lt}
