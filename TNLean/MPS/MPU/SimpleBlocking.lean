@@ -342,11 +342,12 @@ private theorem IsMPU.normalized_fixed_points_simple1_of_stabilization
           (fun i ↦ data.left (finProdFinEquiv.symm i) *
             data.right (finProdFinEquiv.symm i))
       _ = 1 := by simpa [dotProduct, mul_comm] using data.pairing_eq_one
-  have hErho : E *ᵥ ρ = ρ := by
-    rw [show E = (transferMatrix
+  have hEsub : E = (transferMatrix
       (Kraus.transferMap U.normalizedFlattening)).submatrix
-        finProdFinEquiv.symm finProdFinEquiv.symm by
-      exact normalizedDiagonal_doubleLayerTensor U]
+        finProdFinEquiv.symm finProdFinEquiv.symm := by
+    exact normalizedDiagonal_doubleLayerTensor U
+  have hErho : E *ᵥ ρ = ρ := by
+    rw [hEsub]
     rw [Matrix.submatrix_mulVec_equiv]
     simp only [Equiv.symm_symm]
     have hρ : ρ ∘ finProdFinEquiv = data.right := by
@@ -356,10 +357,7 @@ private theorem IsMPU.normalized_fixed_points_simple1_of_stabilization
     rw [hρ, data.right_fixed]
     rfl
   have hEΦ : Matrix.vecMul Φ E = Φ := by
-    rw [show E = (transferMatrix
-      (Kraus.transferMap U.normalizedFlattening)).submatrix
-        finProdFinEquiv.symm finProdFinEquiv.symm by
-      exact normalizedDiagonal_doubleLayerTensor U]
+    rw [hEsub]
     rw [Matrix.submatrix_vecMul_equiv]
     simp only [Equiv.symm_symm]
     have hΦ : Φ ∘ finProdFinEquiv = data.left := by

@@ -280,8 +280,8 @@ theorem physicalGlobalConfigEmbedding_apply {d D N : ℕ} [NeZero d] (x : Cfg d 
 
 private theorem initializedBasisMatrix_trans {α β γ : Type*}
     [Fintype β] [DecidableEq β] [DecidableEq γ] (e : α ↪ β) (f : β ↪ γ) :
-    initializedBasisMatrix (e.trans f) = initializedBasisMatrix f * initializedBasisMatrix e := by
-  exact (Matrix.mul_submatrix_one (Equiv.refl β) e (initializedBasisMatrix f)).symm
+    initializedBasisMatrix (e.trans f) = initializedBasisMatrix f * initializedBasisMatrix e :=
+  (Matrix.mul_submatrix_one (Equiv.refl β) e (initializedBasisMatrix f)).symm
 
 /-- The physical basis inclusion factors through the logical register and its initialized
 scratch pool.
