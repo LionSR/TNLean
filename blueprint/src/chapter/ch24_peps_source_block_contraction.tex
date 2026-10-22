@@ -229,8 +229,8 @@ This gives the contractions used in
 
 \begin{theorem}[Mixed products of party matrices]
     \label{thm:peps_party_product_conjugation}
-    \lean{TNLean.PEPS.PairEffect.partyProductMatrix_conjTranspose,
-        TNLean.PEPS.PairEffect.partyProductMatrix_conjugate}
+    \lean{TNLean.Lattice.PartyCircuit.partyProductMatrix_conjTranspose,
+        TNLean.Lattice.PartyCircuit.partyProductMatrix_conjugate}
     \leanok
     \uses{def:peps_dependent_physical_product}
     Let $P$ be finite, let $I_p$ be finite input alphabets, and let
@@ -267,8 +267,8 @@ This gives the contractions used in
 
 \begin{theorem}[Tracing the private coordinates at each party]
     \label{thm:peps_party_product_partial_trace}
-    \lean{TNLean.PEPS.PairEffect.partialTraceRight_partyProductMatrix,
-        TNLean.PEPS.PairEffect.partialTraceRight_partyProduct_conjugate}
+    \lean{TNLean.Lattice.PartyCircuit.partialTraceRight_partyProductMatrix,
+        TNLean.Lattice.PartyCircuit.partialTraceRight_partyProduct_conjugate}
     \leanok
     \uses{def:peps_dependent_physical_product,
         thm:peps_party_product_conjugation}
@@ -302,7 +302,7 @@ This gives the contractions used in
 
 \begin{theorem}[Absorbing a common scalar at one party]
     \label{thm:peps_party_product_scalar}
-    \lean{TNLean.PEPS.PairEffect.partyProductMatrix_smul_at_party}
+    \lean{TNLean.Lattice.PartyCircuit.partyProductMatrix_smul_at_party}
     \leanok
     \uses{def:peps_dependent_physical_product}
     Let $P$ be finite and choose $p_0\in P$. For any family of

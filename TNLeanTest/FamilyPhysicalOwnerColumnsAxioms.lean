@@ -16,7 +16,7 @@ on the standard logical axioms.
 set_option linter.hashCommand false
 
 run_cmd do
-  let decl := ``TNLean.PEPS.PairEffect.mapOwnerIso_familyPhysicalListBasis_apply_heq
+  let decl := ``TNLean.Lattice.PartyCircuit.mapOwnerIso_familyPhysicalListBasis_apply_heq
   let env ← Lean.getEnv
   unless env.contains decl do
     throwError "Missing declaration {decl}"

@@ -23,7 +23,7 @@ Source: polynomial-PEPS, `04-compression.tex`, lines 279–309 and 565–588.
 
 noncomputable section
 namespace TNLean.Lattice.PartyCircuit.SourceInventory
-open TNLean.PEPS.PairEffect
+open TNLean.Lattice.PartyCircuit
 variable {P : Type}
 
 /-- The literal endpoint word constructed from specified endpoint matrices in

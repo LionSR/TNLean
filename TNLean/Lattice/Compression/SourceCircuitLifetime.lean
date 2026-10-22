@@ -19,7 +19,7 @@ Independently formalized; no upstream Lean proof text reused.
 noncomputable section
 open scoped NNReal
 namespace TNLean.Lattice.PartyCircuit.SourceCircuit
-open TNLean.PEPS.Approximation
+open TNLean.Lattice.Compression
 variable {P : Type}
 
 open Classical in

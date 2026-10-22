@@ -25,7 +25,7 @@ Source: polynomial-PEPS manuscript (September 24, 2026), Theorem 5.2,
 noncomputable section
 open scoped Matrix ComplexConjugate
 namespace TNLean.Lattice.PartyCircuit.SourceCircuit
-open TNLean.PEPS TNLean.PEPS.PairEffect
+open TNLean.Lattice TNLean.Lattice.PartyCircuit
 attribute [local instance] Classical.propDecidable
 variable {P : Type} [Fintype P] [DecidableEq P] {a : Layout P}
 variable {I E : Option {_p : P // true = true} → Type}
