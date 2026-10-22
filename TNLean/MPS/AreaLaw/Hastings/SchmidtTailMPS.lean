@@ -24,7 +24,7 @@ bound proved here is weaker. It is on the norm, through the sequential truncatio
 `‖ψ - Φ‖ ≤ ∑_k √ε_k`, so its exponent in `k'` is half the source's and the factor `L - 1`
 stands outside the square root. Documented in
 `docs/paper-gaps/hastings07_mps_error_measure.tex`. Elimination: formalize the
-Verstraete–Cirac squared-norm bound (#9941) and specialize this theorem to it.
+Verstraete–Cirac squared-norm bound and specialize this theorem to it.
 
 **Local fix (constant):** the constant `e^{2/ξ}` replaces the printed `e^{1/ξ'}`, because
 the geometric tail bound is available only at even exponents. Documented in
