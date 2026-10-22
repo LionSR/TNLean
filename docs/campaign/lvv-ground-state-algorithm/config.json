@@ -1,0 +1,160 @@
+{
+  "slug": "lvv-ground-state-algorithm",
+  "pageTitle": "Gapped Chain Ground States · TNLean",
+  "heading": "Ground states of gapped chains in polynomial time, after Landau, Vazirani and Vidick",
+  "lede": "In 2013 Landau, Vazirani and Vidick gave the first algorithm that provably finds the ground state of any gapped one-dimensional quantum chain in time polynomial in its length, as a matrix product state. The area law and its sharpening by Arad, Kitaev, Landau and Vazirani guarantee that a good matrix product state exists; the difficulty is to find it, since a cut-by-cut search could lose the ground state at any step. Their algorithm keeps, at each cut, a polynomial-size set of candidate left halves that is guaranteed to contain a good one, and restores the quality of the set at every step with an approximate ground-state projector. This page tracks the Lean 4 formalization of that argument as a sequence of existence statements; running times are outside its scope.",
+  "description": "Progress of the Lean 4 formalization of the polynomial-time ground-state algorithm for gapped chains of Landau, Vazirani and Vidick, arXiv:1307.5143.",
+  "tabs": [
+    {
+      "slug": "openai-area-law-peps-proof",
+      "label": "Two-dimensional area law and PEPS"
+    },
+    {
+      "slug": "one-dimensional-area-law-mps",
+      "label": "One-dimensional area law and MPS"
+    },
+    {
+      "slug": "hastings-area-law",
+      "label": "One-dimensional area law after Hastings"
+    },
+    {
+      "slug": "lvv-ground-state-algorithm",
+      "label": "Ground states in polynomial time"
+    }
+  ],
+  "label": "1307.5143",
+  "since": "2026-10-21",
+  "scope": "tracker",
+  "repos": [
+    {
+      "name": "TNLean",
+      "slug": "LionSR/TNLean",
+      "checkout": ".",
+      "primary": true,
+      "homepage": "https://sirui-lu.com/TNLean/",
+      "description": "Tensor-network theory in Lean 4: the fundamental theorem of matrix product states, canonical forms, parent Hamiltonians, matrix-product density operators, projected entangled pair states and local circuits."
+    },
+    {
+      "name": "QICLean",
+      "slug": "LionSR/QICLean",
+      "checkout": "../QICLean",
+      "checkoutEnv": "QICLEAN_DIR",
+      "prefix": "Q",
+      "homepage": "https://sirui-lu.com/QICLean/",
+      "description": "Quantum information and channels in Lean 4, following Wolf's Quantum Channels & Operations: channel representations, Kadison–Schwarz theory, quantum Perron–Frobenius and spectral theory, GKSL semigroups and entropy."
+    }
+  ],
+  "tracker": 9832,
+  "streams": [
+    9832
+  ],
+  "streamNames": {
+    "9832": "Polynomial-time ground states"
+  },
+  "papers": {
+    "lvv": {
+      "name": "Landau, Vazirani and Vidick 2013",
+      "stream": 9832
+    }
+  },
+  "sources": "https://arxiv.org/abs/1307.5143v1",
+  "citationPattern": "lvv13|LandauVaziraniVidick|1307\\.5143",
+  "excludePathPattern": "ch35_one_dimensional_chain\\.tex$",
+  "leanDirs": [
+    "TNLean/MPS/AreaLaw/ViableSet"
+  ],
+  "routes": [
+    {
+      "id": "alg",
+      "paper": "lvv",
+      "eyebrow": "Theorem 1",
+      "heading": "How the algorithm finds the ground state",
+      "intro": "The chain has <i>n</i> sites of dimension <i>d</i>, nearest-neighbour terms 0 ≤ <i>H<sub>i</sub></i> ≤ 1, and a unique ground state Γ with energy ε<sub>0</sub> and gap ε. A set <i>S</i> of vectors on the first <i>i</i> sites is <i>viable</i> if some state with overlap at least 1 − δ with Γ has its reduced state on those sites supported on the span of <i>S</i>. The algorithm sweeps from left to right and keeps a viable set of polynomial size whose members are matrix product states of polynomial bond dimension. Each step extends the set by one site, which keeps it viable but makes it larger; the stages below are the tools that bring it back to polynomial size without losing viability.",
+      "stages": [
+        {
+          "title": "Overlaps and Schmidt trimming",
+          "issues": [
+            9817,
+            9818
+          ],
+          "physics": "Two facts about the ground state are used throughout. A state of energy at most ε<sub>0</sub> + δ has overlap at least 1 − δ/ε with Γ, and two states that both overlap well with a third overlap well with each other. Trimming a vector at a cut keeps its largest Schmidt terms there. By the Eckart–Young theorem the trimmed vector is the best approximation of its Schmidt rank; trimming a vector near a state of low Schmidt rank loses little overlap with that state; and trimming at one cut does not raise the Schmidt rank at any other cut.",
+          "delivers": "The elementary estimates on overlaps and Schmidt trimming that every later stage combines."
+        },
+        {
+          "title": "Constant Schmidt rank at one cut",
+          "issues": [
+            9819
+          ],
+          "physics": "The improved area law of Arad, Kitaev, Landau and Vazirani gives, at any single cut, a state of Schmidt rank <i>B</i><sub>δ</sub> = exp(<i>O</i>(log<sup>3</sup> <i>d</i> · log(1/δ)/ε)), independent of <i>n</i>, with overlap at least 1 − δ with Γ. Trimming a low-energy state to this rank keeps its energy low, so a good state of constant rank at one cut always exists. Across all cuts at once, the same work gives a matrix product state of sub-polynomial bond dimension; a polynomial one, which TNLean already proves, suffices here. The printed energy bound ε<sub>0</sub> + 6√δ for the trimmed state drops a term that depends on 1/ε, and the constant chosen downstream has to be rechecked against the corrected bound.",
+          "delivers": "For every cut, a state of Schmidt rank <i>B</i><sub>δ</sub> there with energy close to ε<sub>0</sub> and overlap at least 1 − δ with Γ."
+        },
+        {
+          "title": "Boundary contractions and gluing",
+          "issues": [
+            9820
+          ],
+          "physics": "A state of Schmidt rank <i>B</i> at a cut is determined, as far as the energy of the left half is concerned, by a small density matrix on the site next to the cut and a <i>B</i>-dimensional bond, its boundary contraction. These contractions form a compact set of fixed dimension, so a finite net of them, of size polynomial in <i>n</i>, contains one within any polynomially small distance of each. For each net point the algorithm solves a convex problem over left halves built from the current viable set; the gluing lemma bounds the energy of the result glued to the right half of a good state.",
+          "delivers": "Polynomially many left halves, one per net point, at least one of which glues to a low-energy state with good overlap with Γ: a viable set of polynomial size, at the price of a constant overlap 1 − 1/12 instead of 1 − δ."
+        },
+        {
+          "title": "An approximate ground-state projector",
+          "issues": [
+            9821
+          ],
+          "physics": "The operator <i>A</i> = ((1 − <i>H</i>/<i>n</i>)/(1 − ε<sub>0</sub>/<i>n</i>))<sup><i>m</i></sup> fixes Γ and shrinks every vector orthogonal to it by a factor ((1 − ε<sub>1</sub>/<i>n</i>)/(1 − ε<sub>0</sub>/<i>n</i>))<sup><i>m</i></sup>, which is polynomially small for <i>m</i> of order (<i>n</i>/ε) log <i>n</i>. Expanding the power writes <i>A</i> as an average over words in the local projectors 1 − <i>H<sub>i</sub></i>. A word in which the term at a cut occurs at most <i>k</i> times has operator Schmidt rank at most <i>d</i><sup>2<i>k</i></sup> across that cut.",
+          "delivers": "An operator that drives any state with constant overlap back to overlap 1 − 1/poly(<i>n</i>) with Γ, and a decomposition of it into words of controlled Schmidt rank at each cut."
+        },
+        {
+          "title": "Sampling the projector",
+          "issues": [
+            9822
+          ],
+          "physics": "The full average over words has exponentially many terms. Replacing it by an average of polynomially many words drawn at random gives an operator <i>K</i> close to <i>A</i> in operator norm with high probability, by the matrix Bernstein inequality, a bound of Tropp on the deviation of a sum of independent random matrices from its mean. With high probability each local term also occurs only <i>O</i>(log <i>n</i>/ε) times in every sampled word, so <i>K</i> has polynomial Schmidt rank at every cut. Neither Mathlib nor QICLean has a matrix-valued tail bound yet, which makes this the largest new piece of the formalization.",
+          "delivers": "A sampled projector <i>K</i> with ‖<i>K</i> − <i>A</i>‖ ≤ 1/poly(<i>n</i>) whose left factors at each cut map matrix product states of polynomial bond dimension to matrix product states of polynomial bond dimension."
+        },
+        {
+          "title": "The viable-set induction",
+          "issues": [
+            9823
+          ],
+          "physics": "One step of the sweep takes a viable set at cut <i>i</i> − 1 to one at cut <i>i</i>: tensor every member with the <i>d</i> basis states of the next site; shrink the set to polynomial size with the net of boundary contractions; trim every member back to polynomial bond dimension; then apply the left factors of the sampled projector, which restores the overlap from 1/2 to 1 − 1/poly(<i>n</i>) at a polynomial cost in size and bond dimension. The polynomials do not grow from step to step, so the induction reaches the last site, where any state supported on the final set has overlap close to one with Γ.",
+          "delivers": "For every <i>i</i>, a viable set at cut <i>i</i> of polynomial size whose members have polynomial bond dimension: the mathematical core of Theorem 1, which then finds a matrix product state with overlap at least 1 − η with Γ in time <i>n</i><sup><i>c</i>(<i>d</i>, ε)</sup> poly(<i>n</i>/η)."
+        }
+      ]
+    }
+  ],
+  "glossary": [
+    [
+      "Spectral gap",
+      "The ground state Γ is unique and every other eigenvalue of H exceeds the ground energy ε<sub>0</sub> by at least ε."
+    ],
+    [
+      "Viable set",
+      "A set S of vectors on the first i sites such that some state with overlap at least 1 − δ with the ground state has its reduced state on those sites supported on the span of S."
+    ],
+    [
+      "Schmidt rank",
+      "The number of nonzero terms in the Schmidt decomposition of a vector across a cut."
+    ],
+    [
+      "Trimming",
+      "Keeping only the largest Schmidt terms of a vector across a cut, the best approximation of that Schmidt rank by the Eckart–Young theorem."
+    ],
+    [
+      "Boundary contraction",
+      "The reduced density matrix of a left half on the site next to the cut together with the bond, which determines the energy contribution of the left half."
+    ],
+    [
+      "Approximate ground-state projector",
+      "An operator that fixes the ground state and shrinks every orthogonal vector, while increasing the Schmidt rank across a cut only by a controlled factor."
+    ],
+    [
+      "Matrix Bernstein inequality",
+      "A tail bound for the operator-norm deviation of an average of independent random matrices from its mean."
+    ],
+    [
+      "Matrix product state",
+      "A vector on a chain written as a contraction of one tensor per site along the chain. Its bond dimension equals the largest Schmidt rank across a cut."
+    ]
+  ]
+}

@@ -16,6 +16,10 @@
     {
       "slug": "hastings-area-law",
       "label": "One-dimensional area law after Hastings"
+    },
+    {
+      "slug": "lvv-ground-state-algorithm",
+      "label": "Ground states in polynomial time"
     }
   ],
   "label": "openai-math",
