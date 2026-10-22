@@ -12,7 +12,6 @@ import Lean.Util.CollectAxioms
 run_cmd do
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
   for decl in #[
-    ``Matrix.schmidtCoeffMatrix_kronecker_one_mulVec,
     ``TNLean.MPS.AreaLaw.rank_schmidtCoeffMatrix_mulVec_le_of_isOneSided,
     ``TNLean.MPS.AreaLaw.cutMatrix_toEuclideanLin,
     ``TNLean.MPS.AreaLaw.rank_cutMatrix_toEuclideanLin_le_of_isOneSided,

@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.AreaLaw.CutMatrixGrowth
 import QICLean.Entropy.GapSurprisal
 import QICLean.Channel.UhlmannIsometry
+import TNLean.Algebra.ToEuclideanLinApply
 
 /-!
 # Cut rank under supported operators
@@ -24,8 +25,6 @@ most `D^{2m}`.
 
 ## Main results
 
-* `Matrix.schmidtCoeffMatrix_kronecker_one_mulVec`: the coefficient matrix after `A ⊗ 1`, the
-  companion of QICLean's `Matrix.schmidtCoeffMatrix_one_kronecker_mulVec`.
 * `TNLean.MPS.AreaLaw.rank_schmidtCoeffMatrix_mulVec_le_of_isOneSided`: the bipartite statement.
 * `TNLean.MPS.AreaLaw.rank_cutMatrix_toEuclideanLin_le_of_subset_leftBlock`,
   `TNLean.MPS.AreaLaw.rank_cutMatrix_toEuclideanLin_le_of_disjoint_leftBlock`: one-sided
@@ -35,18 +34,6 @@ most `D^{2m}`.
 
 open Matrix
 open scoped Kronecker
-
-namespace Matrix
-
-/-- The coefficient matrix after `A ⊗ 1` is `A` times the coefficient matrix. -/
-theorem schmidtCoeffMatrix_kronecker_one_mulVec {α β : Type*} [Fintype α] [Fintype β]
-    [DecidableEq β] (A : Matrix α α ℂ) (v : α × β → ℂ) :
-    schmidtCoeffMatrix ((A ⊗ₖ (1 : Matrix β β ℂ)) *ᵥ v) = A * schmidtCoeffMatrix v := by
-  ext a b
-  simp [schmidtCoeffMatrix_apply, mulVec, dotProduct, Fintype.sum_prod_type,
-    kroneckerMap_apply, one_apply, mul_apply]
-
-end Matrix
 
 namespace TNLean.MPS.AreaLaw
 
