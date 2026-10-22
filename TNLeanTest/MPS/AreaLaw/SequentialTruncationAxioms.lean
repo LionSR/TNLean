@@ -14,6 +14,8 @@ run_cmd do
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
   for decl in #[``Entropy.norm_sq_toEuclideanLin_localLift_eq_trace,
       ``TNLean.MPS.AreaLaw.norm_sub_sequentialTruncation_le,
+      ``TNLean.MPS.AreaLaw.norm_sub_sequentialTruncation_sq_le,
+      ``TNLean.MPS.AreaLaw.norm_sequentialTruncation_leadingEigenprojection_sub_sq_le,
       ``TNLean.MPS.AreaLaw.rank_cutMatrix_sequentialTruncation_le,
       ``TNLean.MPS.AreaLaw.exists_sequentialTruncation,
       ``TNLean.MPS.AreaLaw.prefixBasisProjection,
