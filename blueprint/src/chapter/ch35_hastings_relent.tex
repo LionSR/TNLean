@@ -1,0 +1,95 @@
+\section{The entropy gain across a cut in Hastings' area law}
+\label{sec:hastings_relent}
+
+% Hastings, arXiv:0705.2024v4, law16.tex, lines 234--242 (eq. relent),
+% 413--503 (its proof), and 911--925 (note added, route 1).
+
+The doubling step of \cite{Hastings2007AreaLaw} rests on a lower bound for the
+mutual information of the two intervals of $l$ sites beside a cut. The
+approximate factorization of the ground-state projector of
+\cite[Lemma~1]{Hastings2007AreaLaw} yields an effect with a large expectation in
+the ground state and a small expectation in the product of the two marginals,
+and the monotonicity of the relative entropy turns this into the bound. The
+effect is $E=O_B^\dagger O_B$, as in the note added to the source
+(route~1). The constants are explicit: $C_1$ is replaced by $2C_1$ and the
+constant $C_2$ is $7$, as recorded in~\cite{gap:hastings07_relent_constants}.
+
+\begin{theorem}[The entropy gain from the factorization, stage form]
+    \label{thm:hastings_relent_projector}
+    \lean{TNLean.MPS.AreaLaw.Hastings.relent_of_projectorFactorization}
+    \leanok
+    \uses{def:chain_model}
+    Let $\Omega$ be a unit vector on the chain of $L$ sites with local
+    dimension $q$, let $c$ be a cut, let $l$ be a natural number, and let
+    $\xi'>0$ and $C_1\ge1$. Write $A=[c-l,c)$ and $B=[c,c+l)$ for the
+    intervals beside the cut, $P_0=|\Omega\rangle\langle\Omega|$, and
+    $\epsilon=C_1e^{-l/\xi'}$. Suppose there are commuting orthogonal
+    projections $O_L$ supported on the first $c$ sites and $O_R$ supported on
+    the sites after them, and an operator $O_B$ of norm at most one supported
+    on $A\cup B$, with
+    \begin{align}
+        \|O_BO_LO_R-P_0\|\le\epsilon.
+    \end{align}
+    Let $\sigma=\rho_{<c}\otimes\rho_{\ge c}$ be the product of the two
+    marginals of $P_0$ across the cut, and suppose
+    $\operatorname{tr}(\sigma P_0)\le2\epsilon$. Then, with
+    $\epsilon'=2C_1e^{-l/\xi'}$,
+    \begin{align}
+        S(A)+S(B)-S(A\cup B)\ge\bigl(1-2\epsilon'\bigr)\frac{l}{\xi'}
+        -\ln(2C_1)-7.
+        \label{eq:hastings_relent}
+    \end{align}
+    This is a stage of eq.~(relent) of~\cite{Hastings2007AreaLaw},
+    lines 234--242, with the constants
+    of~\cite{gap:hastings07_relent_constants}: the factorization of Lemma~1
+    and the bound on the overlap are hypotheses.
+\end{theorem}
+\begin{proof}\leanok
+    Let $E=O_B^\dagger O_B$. Its expectation in $\Omega$ is
+    $\|O_B\Omega\|^2\ge(1-2\epsilon)^2\ge1-2\epsilon'$. The product
+    $Z=O_LO_R$ is a projection with $\|ZEZ-P_0\|\le2\epsilon+\epsilon^2$ and
+    $\operatorname{tr}(\sigma Z)\ge1-2\epsilon^2$, and the Cauchy--Schwarz
+    inequality for the expectation in $\sigma$ bounds
+    $x=\operatorname{tr}(\sigma E)$ by $36\epsilon'$; $x$ is positive because
+    the kernel of $\sigma$ lies in that of $P_0$. Since $E$ is supported on
+    $A\cup B$, its expectations in $\rho$ and $\sigma$ are those in the
+    marginal $\rho_{A\cup B}$ and in $\rho_A\otimes\rho_B$. The monotonicity of
+    the relative entropy under the two-outcome measurement $\{E,1-E\}$ bounds
+    $S(A)+S(B)-S(A\cup B)$ below by the binary relative entropy of the two
+    expectations, which is decreasing in $x$ and increasing in the
+    ground-state expectation on the relevant range. Evaluating it at
+    $1-2\epsilon'$ and $36\epsilon'$ gives~(\ref{eq:hastings_relent}).
+\end{proof}
+
+\begin{theorem}[The entropy gain across a cut of large entropy]
+    \label{thm:hastings_relent_window}
+    \lean{TNLean.MPS.AreaLaw.Hastings.relent_of_projectorFactorization_of_le_entropy}
+    \leanok
+    \uses{def:chain_model, def:hastings_bootstrap_remainder}
+    Let $\Omega$, $c$, $l$, $\xi'$, $C_1$, $A$ and $B$ be as in
+    Theorem~\ref{thm:hastings_relent_projector}, with $q\ge2$ and
+    $c+l\le L$. Suppose that for every natural number $m$ with $c+m\le L$
+    there are operators $O_B$, $O_L$, $O_R$ as in
+    Theorem~\ref{thm:hastings_relent_projector}, with $O_B$ supported on
+    $[c-m,c+m)$ and $\|O_BO_LO_R-P_0\|\le C_1e^{-m/\xi'}$. Suppose further
+    that the entropy $S_c$ of the first $c$ sites satisfies
+    \begin{align}
+        S_c\ge\bigl(l+\xi'\ln C_1\bigr)\ln q+F(\xi',q).
+    \end{align}
+    Then~(\ref{eq:hastings_relent}) holds. This is eq.~(relent)
+    of~\cite{Hastings2007AreaLaw} for one pair of intervals, proved at
+    lines 427--503 under the assumption of line 483, with the constants
+    of~\cite{gap:hastings07_relent_constants}; the factorization of Lemma~1
+    remains a hypothesis.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:hastings_relent_projector, thm:hastings_bootstrap_chain_stage}
+    The product $\sigma$ of the two marginals is a mixture of pure states of
+    product vectors, each of Schmidt rank one across the cut, so
+    $P=\operatorname{tr}(\sigma P_0)=\sum_iw_i|\langle\psi_i,\Omega\rangle|^2$.
+    If $P>2C_1e^{-l/\xi'}$, then $2C_1^2/P<C_1e^{l/\xi'}$, and
+    Theorem~\ref{thm:hastings_bootstrap_chain_stage} with $k=1$ gives
+    $S_c\le\xi'\ln(2C_1^2/P)\ln q+F(\xi',q)<(l+\xi'\ln C_1)\ln q+F(\xi',q)$,
+    against the hypothesis. Hence $P\le2C_1e^{-l/\xi'}$, and
+    Theorem~\ref{thm:hastings_relent_projector} applies.
+\end{proof}
