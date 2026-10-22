@@ -24,6 +24,13 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Replica-swap entropy comparison — promoted (2026-10-21)
+
+- **Pattern:** Two identical normalized replicas, a regional swap, and a unitary supported away from two cores imply a mutual-information bound from the vector approximation error.
+- **Defined in:** `Lattice/RegionalResetEntropy.lean`, `TNLean.Lattice.mutualInformation_cores_le_of_reset_unitary`.
+- **Refactored occurrences:** Both the contiguous-chain and arbitrary finite-domain information-reset proofs use the shared finite-site theorem. The former loses its repeated 80-line local entropy argument.
+- **Notes:** Replica normalization and the product marginal after the swap are proved internally. No product-marginal hypothesis is supplied by either caller. The theorem is independent of a Hamiltonian, gap, dimension of the underlying lattice, and connectedness.
+
 ### Regional expectation compared with a supported approximant — promoted (2026-10-21)
 
 - **Pattern:** For a contractive regional expectation fixing a supported approximant, rewrite the projection error as the difference between the approximation error and its expectation.
@@ -9048,6 +9055,43 @@ spectral split → block extraction → MPV calculation → strict bounds
   built on `Lattice.Sheet.birth_bounded`, `Real.rpow_neg_ofNat` and
   `Lattice.hasSourceBoundedChange_liftOne`. The stage births call it with an
   empty prefix and the scalar idle vector; the former private copy is removed.
+
+### Gaussian approximation and polar correction for a regional reset — candidate (2026-10-22)
+
+- **Pattern:** Choose the Gaussian variance, time cutoff and spatial radius;
+  compare the actual truncated Gaussian operator with its supported approximation;
+  obtain a supported unitary from the two-sided vector estimates; apply the
+  common finite-site entropy comparison to that same unitary.
+- **Seen:** `ChainHamiltonian.information_reset` in
+  `MPS/AreaLaw/InformationReset.lean` and `DomainHamiltonian.information_reset`
+  in `MPS/AreaLaw/DomainInformationReset.lean`.
+- **Existing reuse:** The Gaussian estimates,
+  `exists_supported_unitary_of_two_sided`, and
+  `mutualInformation_cores_le_of_reset_unitary` are shared already. The narrower
+  scalar estimate is recorded under “Absorbing a localization coefficient with
+  spare decay”.
+- **Possible abstraction:** A common finite-site theorem whose inputs are the
+  original doubled Hamiltonians, the actual supported Gaussian approximation
+  and the required geometric disjointness. Two complete applications are
+  recorded; no new theorem or tactic is introduced here.
+
+### Mutual information at logarithmic separation — candidate (2026-10-22)
+
+- **Pattern:** Bound the entropy of an interval neighborhood, choose a radius
+  proportional to the logarithm of the number of sites, prove the two core
+  complements are disjoint, and apply the regional information-reset estimate.
+- **Seen:** `ChainHamiltonian.mutualInformation_le_of_logarithmic_separation`
+  in `MPS/AreaLaw/LogarithmicSeparation.lean` and
+  `DomainHamiltonian.mutualInformation_le_of_logarithmic_separation` in
+  `MPS/AreaLaw/DomainLogarithmicSeparation.lean`.
+- **Existing reuse:** Both proofs use the same interval entropy constant,
+  numerical separation estimate and ceiling bounds. The narrower neighborhood
+  membership arguments are recorded under “Real-radius chain neighborhood
+  comparisons”.
+- **Possible abstraction:** Share the numerical choice and the final reset
+  application while leaving the chain and intrinsic-domain distance comparisons
+  in their respective modules. There are two applications, below the promotion
+  threshold; the public geometric hypotheses remain unchanged.
 
 ### Cancellation outside crossing supports — candidate (2026-10-22)
 
