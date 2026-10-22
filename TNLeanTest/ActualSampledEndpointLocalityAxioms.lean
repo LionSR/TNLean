@@ -11,7 +11,7 @@ import Lean.Util.CollectAxioms
 
 set_option linter.hashCommand false
 
-open TNLean.PEPS.PairEffect.SourceCircuit in
+open TNLean.Lattice.PartyCircuit.SourceCircuit in
 run_cmd do
   let decl := ``restrict_sampledEndpointInputWord_eval_eq_of_incident_samples
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]

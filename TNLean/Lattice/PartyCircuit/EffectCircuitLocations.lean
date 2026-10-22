@@ -24,7 +24,7 @@ Independently formalized; no upstream Lean proof text reused.
 -/
 
 noncomputable section
-namespace TNLean.PEPS.PairEffect
+namespace TNLean.Lattice.PartyCircuit
 
 variable {P : Type}
 
@@ -93,9 +93,9 @@ def exchangeBlocksLocationsEquivEmpty (a b tail : Layout P) :
     (exchangeBlocks a b tail).gateLocations ≃ Empty :=
   ofLocalWordLocationsEquivEmpty (Word.exchangeBlocks a b tail) (by simp)
 end SourceCircuit
-end TNLean.PEPS.PairEffect
+end TNLean.Lattice.PartyCircuit
 
-namespace TNLean.PEPS.PairEffect
+namespace TNLean.Lattice.PartyCircuit
 
 variable {P : Type}
 
@@ -198,4 +198,4 @@ theorem participants_replacementLocationsEquiv {r : ℕ} {S δ : ℝ} {a b : Lay
     ((w.isExpansionBounded_produce_iff r S).mpr hb) (w.produceLocationsEquiv g)).trans
       (w.participants_produce g)
 end OriginalCircuit
-end TNLean.PEPS.PairEffect
+end TNLean.Lattice.PartyCircuit

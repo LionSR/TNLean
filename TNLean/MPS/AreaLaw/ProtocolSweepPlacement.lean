@@ -38,7 +38,7 @@ open scoped BigOperators
 
 namespace TNLean.MPS.AreaLaw.ChainSweep
 
-open TNLean.Lattice TNLean.PEPS.PairEffect TNLean.PEPS.EncodedFrame
+open TNLean.Lattice TNLean.Lattice.PartyCircuit TNLean.Lattice.Sheet
 open TNLean.PEPS.Approximation
 
 variable {L w q : ℕ}

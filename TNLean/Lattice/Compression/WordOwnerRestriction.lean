@@ -16,9 +16,11 @@ Source: polynomial-PEPS, `04-compression.tex`, lines 233–267 and 351–381.
 -/
 
 noncomputable section
-namespace TNLean.PEPS.PairEffect
+namespace TNLean
+open TNLean.Lattice.PartyCircuit TNLean.PEPS.PairEffect
 variable {P Q : Type}
 
+namespace Lattice.PartyCircuit
 open Classical in
 /-- Relabelling the owners of a source-free word relabels precisely its
 participating parties, including named scalar local maps.
@@ -63,4 +65,5 @@ theorem Word.restrict_mapOwner_eval_eq_id_of_disjoint (f : P → Q) (q : Q)
     exact hf p (by simpa only [partySelector, decide_eq_true_eq] using hsel)
   exact ⟨hp, (Word.eq_nil_and_eval_eq_id_of_parties_eq_empty _ hp).2.2⟩
 
-end TNLean.PEPS.PairEffect
+end Lattice.PartyCircuit
+end TNLean

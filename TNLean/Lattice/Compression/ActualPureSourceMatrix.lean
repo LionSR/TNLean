@@ -23,7 +23,7 @@ between the actual ket and bra column matrices.
 -/
 noncomputable section
 open scoped TensorProduct Matrix ComplexConjugate
-namespace TNLean.PEPS.PairEffect.SourceCircuit
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
 variable {P : Type}
 
 /-- The actual pure-input prepared source contraction is the literal source
@@ -87,4 +87,4 @@ theorem sourceContraction_preparedDensityCoefficient_pure_eq_mul
     (w.partialSourceGlobalMatrix ψ ξ bOut)
     (w.partialSourceGlobalMatrix ψ ζ bOut) X
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit

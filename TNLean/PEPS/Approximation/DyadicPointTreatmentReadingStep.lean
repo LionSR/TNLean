@@ -41,7 +41,7 @@ noncomputable section
 
 namespace TNLean.PEPS.Approximation
 
-open EncodedFrame PairEffect
+open EncodedFrame TNLean.Lattice.Sheet TNLean.Lattice.PartyCircuit
 
 /-- Near a grid corner that is not a mark, homogenizing about the marks changes nothing, when the
 marks are at distance at least `n > 8 t` apart. -/

@@ -23,7 +23,7 @@ noncomputable section
 open scoped InnerProductSpace TensorProduct
 open ContinuousLinearMap
 
-namespace TNLean.PEPS.PairEffect
+namespace TNLean.Lattice.PartyCircuit
 
 variable {P : Type}
 
@@ -94,4 +94,4 @@ theorem SourceInventory.Expands.unit_cons (p q : P) (hpq : p ≠ q)
       (PairSource.unit p q hpq).vector (S.layout ++ ℓ)).eval ∘L (S.prepare ℓ).eval) = _
   rw [← comp_assoc, he, id_comp]
 
-end TNLean.PEPS.PairEffect
+end TNLean.Lattice.PartyCircuit

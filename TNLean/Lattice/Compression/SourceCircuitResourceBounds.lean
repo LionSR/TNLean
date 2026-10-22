@@ -28,7 +28,7 @@ Independently formalized; no upstream Lean proof text reused.
 
 
 noncomputable section
-namespace TNLean.PEPS.PairEffect.SourceCircuit
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
 open TNLean.PEPS.Approximation
 variable {P : Type} {a b : Layout P}
 
@@ -59,4 +59,4 @@ theorem participationCount_eq_card_incidentGates (w : SourceCircuit a b) (p : P)
   rw [participationCount, Nat.card_eq_fintype_card, Fintype.card_subtype]
   rfl
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit

@@ -15,6 +15,7 @@ Source: polynomial-PEPS, `04-compression.tex`, lines 565–579.
 noncomputable section
 open scoped TensorProduct
 namespace TNLean.PEPS.PairEffect
+open TNLean.Lattice.PartyCircuit
 variable {P : Type} {I J : P → Type} [∀ p, Fintype (I p)] [∀ p, Fintype (J p)]
 
 /-- The tensor basis in the prescribed order of party memories.

@@ -23,14 +23,18 @@ and 565–588.
 -/
 
 noncomputable section
-namespace TNLean.PEPS.PairEffect
+namespace TNLean
+open TNLean.Lattice.PartyCircuit TNLean.PEPS.PairEffect
 open ContinuousLinearMap
 
+namespace PEPS.PairEffect
 private theorem id_heq_of_memory_eq {E F : HSpace} (h : E = F) :
     HEq (ContinuousLinearMap.id ℂ E) (ContinuousLinearMap.id ℂ F) := by
   cases h
   rfl
 
+end PEPS.PairEffect
+namespace Lattice.PartyCircuit
 /-- Two words have the same selected remaining evaluation, with the source
 proof supplied by each word. Source: polynomial-PEPS Theorem 5.2,
 `04-compression.tex`, lines 351–434 and 565–588. -/
@@ -198,7 +202,8 @@ private theorem selectedSpectatorIdentity_of_groupedBlockMap_eq {P Q : Type}
     (Layout.mapOwner f tail)) hv)
     (selectedSpectatorIdentity_groupedBlockMap f r q hrq a b ha hb A tail)
 
-namespace SourceCircuit
+end Lattice.PartyCircuit
+namespace Lattice.PartyCircuit.SourceCircuit
 variable {P C ι : Type} [Fintype C] [Fintype ι]
 
 /-- At an incident party, the all-party and singleton expansions use the
@@ -403,5 +408,5 @@ theorem isSelectedLocalPartComparison_partialWord_all_gate
     (some (⟨p, rfl⟩ : {_p : P // true = true})) hlift W V
     (selectedRemainingComparison_of_gate_projection owner G tail p ξ)
 
-end SourceCircuit
-end TNLean.PEPS.PairEffect
+end Lattice.PartyCircuit.SourceCircuit
+end TNLean

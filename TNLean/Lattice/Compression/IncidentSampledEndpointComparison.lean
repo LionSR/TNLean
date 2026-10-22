@@ -27,8 +27,9 @@ Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 253–267,
 
 noncomputable section
 open ContinuousLinearMap
-namespace TNLean.PEPS.PairEffect
-namespace SourceCircuit
+namespace TNLean
+open TNLean.Lattice.PartyCircuit TNLean.PEPS.PairEffect
+namespace Lattice.PartyCircuit.SourceCircuit
 variable {P : Type} {a b : Layout P}
 
 /-- Evaluation comparison of two arbitrary words, retaining their own input
@@ -115,5 +116,5 @@ theorem restrict_sampledEndpointInputWord_eval_eq_incidentSampledEndpointWord
     restrict_sampledEndpointWord_eval_heq_incidentSampledEndpointWord w k lam E F p ξ ζ j ω
   exact eval_eq_of_two_word_comparisons u t v hinput hincident
 
-end SourceCircuit
-end TNLean.PEPS.PairEffect
+end Lattice.PartyCircuit.SourceCircuit
+end TNLean

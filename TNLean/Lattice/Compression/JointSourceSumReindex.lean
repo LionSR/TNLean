@@ -19,7 +19,8 @@ and 565–579.
 
 noncomputable section
 open scoped ComplexConjugate
-namespace TNLean.PEPS.PairEffect.SourceCircuit
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
+open TNLean.PEPS
 variable {P : Type}
 
 open Classical in
@@ -48,4 +49,4 @@ theorem sum_choiceSamples_eq_sum_originalGateSamples {a b : Layout P}
     w (fun ξ ζ ↦ ∑ j, K ξ ζ j)]
   simp_rw [sum_sourceSampleAssignments_eq]
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit

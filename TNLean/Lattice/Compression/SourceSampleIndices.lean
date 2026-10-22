@@ -23,7 +23,8 @@ Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 233–245,
 
 noncomputable section
 
-namespace TNLean.PEPS.PairEffect.SourceCircuit
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
+open TNLean.PEPS
 
 open Classical in
 private def participantPairEquiv {C P : Type} [Fintype C] (owner : C ↪ P) :
@@ -131,4 +132,4 @@ def sourceSampleEquiv {a b : Layout P} (w : SourceCircuit a b) :
     rcases s with ⟨⟨⟨g, hg⟩, hactive⟩, z⟩
     exact Sigma.ext rfl (heq_of_eq (Equiv.apply_symm_apply (sourcePairEquiv w g) z))
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit

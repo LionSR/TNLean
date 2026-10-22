@@ -25,7 +25,7 @@ Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 565–588.
 
 noncomputable section
 open scoped Matrix ComplexConjugate
-namespace TNLean.PEPS.PairEffect.SourceCircuit
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
 open TNLean.PEPS.Approximation
 attribute [local instance] Classical.propDecidable
 variable {P : Type} [Fintype P] {a : Layout P}
@@ -92,4 +92,4 @@ theorem physicalSourceReplacedDensity_pure_sampled_eq_exterior_smul_contractedOp
   rw [← inv_sampleSize_pow_allSourceSlots_eq_prod w k] at hNetwork
   exact hActual.trans hNetwork.symm
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit

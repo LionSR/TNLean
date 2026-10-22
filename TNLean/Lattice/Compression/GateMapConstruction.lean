@@ -25,6 +25,7 @@ Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 17–43,
 
 noncomputable section
 namespace TNLean.PEPS.PairEffect
+open TNLean.Lattice.PartyCircuit
 
 /-- Original distributed data with a fixed chronology and prescribed original
 gate operators. No exact or allowed reference expansion is required.

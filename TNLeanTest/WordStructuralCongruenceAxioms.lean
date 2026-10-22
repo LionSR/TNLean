@@ -11,7 +11,7 @@ import Lean.Util.CollectAxioms
 
 set_option linter.hashCommand false
 
-open TNLean.PEPS.PairEffect.Word
+open TNLean.Lattice.PartyCircuit.Word
 
 run_cmd do
   let decls := #[``comp_heq, ``frame_heq, ``id_heq, ``swap_heq, ``castLayouts_heq,

@@ -35,7 +35,7 @@ These are original proofs; no OpenAI Lean code is copied or adapted.
 
 noncomputable section
 
-open TNLean.PEPS.EncodedFrame TNLean.PEPS.PairEffect
+open TNLean.PEPS.EncodedFrame TNLean.Lattice.PartyCircuit
 
 namespace TNLean.Lattice.Sheet
 

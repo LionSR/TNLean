@@ -22,7 +22,8 @@ Source: polynomial-PEPS manuscript (September 24, 2026), Theorem 5.2,
 
 noncomputable section
 open scoped TensorProduct
-namespace TNLean.PEPS.PairEffect.Word
+namespace TNLean.Lattice.PartyCircuit.Word
+open TNLean.PEPS.PairEffect
 open ContinuousLinearMap
 
 private theorem appendTail_eval_heq_id_of_empty_layouts {P : Type}
@@ -72,4 +73,4 @@ theorem restrict_mapOwner_appendTail_eval_heq_id_of_disjoint {C P : Type}
     (Layout.restrict (partySelector p) tail)
   exact hrestriction.trans hspectator
 
-end TNLean.PEPS.PairEffect.Word
+end TNLean.Lattice.PartyCircuit.Word

@@ -24,7 +24,8 @@ Source: polynomial-PEPS manuscript (September 24, 2026), Theorem 5.2,
 
 noncomputable section
 open scoped Matrix ComplexConjugate
-namespace TNLean.PEPS.PairEffect.SourceCircuit
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
+open TNLean.PEPS TNLean.PEPS.PairEffect
 attribute [local instance] Classical.propDecidable
 variable {P : Type} [Fintype P] [DecidableEq P] {a : Layout P}
 variable {I E : Option {_p : P // true = true} → Type}
@@ -100,4 +101,4 @@ theorem partialSourceGlobalMatrix_sampled_partialTrace_eq_scalar_smul_physicalSu
       simp_rw [hEntry]
       rw [← Finset.smul_sum, smul_smul]
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit

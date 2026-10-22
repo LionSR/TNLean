@@ -34,7 +34,7 @@ Independently formalized; no upstream Lean proof text reused.
 noncomputable section
 open scoped InnerProductSpace TensorProduct Matrix ComplexConjugate Matrix.Norms.L2Operator
 open ContinuousLinearMap
-namespace TNLean.PEPS.PairEffect.Word
+namespace TNLean.Lattice.PartyCircuit.Word
 
 variable {P X d n : Type} [Fintype X] [Fintype d] [Fintype n]
     {a b : Layout P} {D : Type} [NormedAddCommGroup D] [InnerProductSpace ℂ D]
@@ -295,4 +295,4 @@ theorem integral_rectangularTraceNorm_weightedPhysicalSource_le
       p p' tau tau' O z kappa hp hp' htau htau' hpsum hp'sum htausum htau'sum
       (norm_physicalFrameGramMatrix_le_one J x y v w F F' bD hv hw) hkappa hz hcov)
 
-end TNLean.PEPS.PairEffect.Word
+end TNLean.Lattice.PartyCircuit.Word

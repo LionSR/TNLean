@@ -20,6 +20,7 @@ Source: polynomial-PEPS manuscript (September 24, 2026), Theorem 5.2,
 noncomputable section
 open scoped Matrix
 namespace TNLean.PEPS.PairEffect.DistributedConstruction
+open TNLean.Lattice.PartyCircuit
 variable {P : Type} [Fintype P] [DecidableEq P]
 variable {E : Option {_p : P // true = true} → Type} [∀ q, Fintype (E q)]
 

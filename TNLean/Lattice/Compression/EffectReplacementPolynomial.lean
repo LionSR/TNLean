@@ -27,9 +27,11 @@ Independently formalized; no upstream Lean proof text reused.
 
 
 noncomputable section
-namespace TNLean.PEPS.PairEffect
+namespace TNLean
+open TNLean.Lattice.PartyCircuit
 open TNLean.PEPS.Approximation
 
+namespace PEPS.PairEffect
 /-- The stack count at the actual per-gate error budget has the same explicit
 ceiling formula as the source sample count, with cost equal to `r * S`. -/
 theorem stackLength_sourceGateBudget_eq (r N : ℕ) (S ε : ℝ) :
@@ -75,7 +77,9 @@ theorem replacementMonomialBound_le_of_power_bounds (K r N : ℕ)
       rw [he]
       ring
 
-namespace OriginalCircuit
+end PEPS.PairEffect
+namespace Lattice.PartyCircuit.OriginalCircuit
+open TNLean.PEPS.PairEffect
 
 /-- Every chronological gate of the actual replacement has a uniform polynomial
 branch count, obtained from the original circuit's monomial and effect bounds. -/
@@ -101,6 +105,6 @@ theorem card_branchLabels_replacement_le_power
   exact hc.trans (replacementMonomialBound_le_of_power_bounds K r N S L C_K C_N C_S
     u n s p hL hCK hCN hCS hS hK hN hSbound)
 
-end OriginalCircuit
+end Lattice.PartyCircuit.OriginalCircuit
 
-end TNLean.PEPS.PairEffect
+end TNLean

@@ -25,8 +25,10 @@ Independently formalized from the manuscript; no upstream Lean proof text reused
 
 noncomputable section
 open scoped ComplexConjugate TensorProduct Matrix
-namespace TNLean.PEPS.PairEffect
+namespace TNLean
+open TNLean.Lattice.PartyCircuit
 
+namespace PEPS.PairEffect
 /-- Expand only the selected matrix arguments of a multilinear map in matrix units. -/
 private theorem selected_matrix_expansion {I : Type} [DecidableEq I]
     {A B : I → Type} [∀ i, Fintype (A i)] [∀ i, Fintype (B i)]
@@ -66,6 +68,9 @@ private theorem rankOne_basis_coordinates {A B A' B' : Type}
   by_cases ha : a = i <;> by_cases hb : b = j <;>
     simp [Matrix.vecMulVec, Matrix.single, ha, hb, eq_comm]
 
+end PEPS.PairEffect
+namespace Lattice.PartyCircuit
+open TNLean.PEPS.PairEffect
 /-- Expanding only selected endpoint coordinates is exactly the full source contraction
 with arbitrary matrices on those slots and the original rank-one sources elsewhere.
 No normalization, allowedness, or positivity assumption is imposed.
@@ -143,4 +148,5 @@ theorem Word.sourceContraction_preparedDensityCoefficient_selected {P m n : Type
         ηz ζz ℓ v' bIn bOut ρ
     _ = _ := Fintype.sum_prod_type H
 
-end TNLean.PEPS.PairEffect
+end Lattice.PartyCircuit
+end TNLean

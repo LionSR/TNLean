@@ -11,7 +11,7 @@ import Lean.Util.CollectAxioms
 
 set_option linter.hashCommand false
 
-open TNLean.PEPS.PairEffect
+open TNLean.Lattice.PartyCircuit
 
 run_cmd do
   let decls := #[``Word.IsSelectedLocalPartComparison,

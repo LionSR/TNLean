@@ -42,7 +42,7 @@ namespace TNLean.PEPS
 
 namespace Approximation
 
-open EncodedFrame PairEffect
+open EncodedFrame TNLean.Lattice.PartyCircuit
 
 /-! ### The initial step of a protocol -/
 

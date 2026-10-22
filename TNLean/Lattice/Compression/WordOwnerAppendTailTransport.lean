@@ -20,7 +20,7 @@ Source: polynomial-PEPS manuscript (September 24, 2026), Theorem 5.2,
 -/
 
 noncomputable section
-namespace TNLean.PEPS.PairEffect.Word
+namespace TNLean.Lattice.PartyCircuit.Word
 variable {P Q : Type}
 
 private theorem mapOwner_castLayouts_word_heq (g : P → Q) {a b a' b' : Layout P}
@@ -109,4 +109,4 @@ theorem mapOwner_appendTail_heq (g : P → Q) {a b : Layout P}
           (exchangeTwo (Layout.mapOwner g tail) (Layout.mapOwner g b))))
   exact houter
 
-end TNLean.PEPS.PairEffect.Word
+end TNLean.Lattice.PartyCircuit.Word

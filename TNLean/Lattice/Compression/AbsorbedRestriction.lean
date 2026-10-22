@@ -17,9 +17,11 @@ Source: polynomial-PEPS, `04-compression.tex`, lines 233–267 and 351–381.
 
 
 noncomputable section
-namespace TNLean.PEPS.PairEffect
+namespace TNLean
+open TNLean.Lattice.PartyCircuit TNLean.PEPS.PairEffect
 variable {P : Type}
 
+namespace PEPS.PairEffect
 private theorem restrict_restrict_eq_of_implies (f g : P → Bool)
     (h : ∀ p, g p = true → f p = true) (a : Layout P) :
     Layout.restrict g (Layout.restrict f a) = Layout.restrict g a := by
@@ -45,6 +47,8 @@ private theorem localMap_word_heq {p : P} {a b : Layout P}
   cases h
   rfl
 
+end PEPS.PairEffect
+namespace Lattice.PartyCircuit
 /-- A second restriction to a subset of the first selection is the actual
 single restriction. This is an identity of words, including zero local maps.
 Source: polynomial-PEPS 04-compression.tex, lines 233–267 and 351–381. -/
@@ -191,4 +195,5 @@ theorem Word.restrict_withoutParty_atParty_eval_heq {a b : Layout P}
   have he : r = q := by simpa only [partySelector, decide_eq_true_eq] using hr
   subst r
   simp only [partySelector, hqp, decide_false, Bool.not_false]
-end TNLean.PEPS.PairEffect
+end Lattice.PartyCircuit
+end TNLean

@@ -51,7 +51,7 @@ transfer-operator gap and overlap-decay results built on QICLean's spectral
 theory. Public chapter-index modules are part of the production tree and
 therefore enter the generated import surface automatically.
 
-In `PEPS.Approximation`, `TNLean.PEPS.PairEffect.SourceCircuit.partySelector`
+In `PEPS.Approximation`, `TNLean.Lattice.PartyCircuit.SourceCircuit.partySelector`
 is replaced by `TNLean.PEPS.PairEffect.partySelector`, since selecting a party
 depends only on equality of owner labels. The predicate remains $q=p$ on an
 arbitrary type of labels. `WordOwnerRestriction` imports `PartySelector` and
@@ -100,8 +100,9 @@ statements are removed after their mathematical consumer in
 `SourceOnlyReduction` uses that constant family. The original party ordering,
 its coverage, the normalized product input, the error budget and the actual
 regional partial trace are preserved. Empty party sets, zero dimensions and
-the terminal scalar factor are still included. All declaration names in the
-table are in `TNLean.PEPS.PairEffect`.
+the terminal scalar factor are still included. The removed declarations were
+in `TNLean.PEPS.PairEffect`; the retained ones are in
+`TNLean.Lattice.PartyCircuit`.
 
 | Removed declaration | Retained family construction or dimension argument |
 | --- | --- |

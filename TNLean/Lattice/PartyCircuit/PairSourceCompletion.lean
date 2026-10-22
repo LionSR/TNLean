@@ -20,7 +20,7 @@ the one-dimensional sources for unused pairs at lines 243–245.
 
 noncomputable section
 
-namespace TNLean.PEPS.PairEffect.SourceInventory
+namespace TNLean.Lattice.PartyCircuit.SourceInventory
 
 variable {P : Type}
 
@@ -103,4 +103,4 @@ theorem exists_complete [Finite P] (S : SourceInventory P)
   obtain ⟨U, _, hUS, hUN, hUK, hUE⟩ := exists_complete_extension S hS hN
   exact ⟨U ++ S, hUS, hUN, hUK, hUE⟩
 
-end TNLean.PEPS.PairEffect.SourceInventory
+end TNLean.Lattice.PartyCircuit.SourceInventory

@@ -26,7 +26,8 @@ Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 253–267,
 
 noncomputable section
 open scoped Matrix
-namespace TNLean.PEPS.PairEffect.SourceCircuit
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
+open TNLean.PEPS.PairEffect
 
 variable {P : Type} {a : Layout P}
 variable {I E : Option {_p : P // true = true} → Type}
@@ -259,4 +260,4 @@ theorem sampledPhysicalFactor_eq_incidentSampledPhysicalFactor
   simpa only [sampledPhysicalFactor, incidentSampledPhysicalFactor,
     Classical.typeDecidableEq, q, bIn, bOut, selectedFamilyPhysicalIndex] using! h
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit

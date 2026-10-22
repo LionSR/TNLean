@@ -8,7 +8,7 @@ monomial expansion, as in Proposition~7.1 of \cite{OpenAI2026PolynomialPEPS}.
 \begin{definition}[Chronological composite]
     \label{def:peps_original_chronology_composite}
     \leanok
-    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.sequence}
+    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.sequence}
     For original distributed circuits
     $W_t:\mathcal H_{A_t}\to\mathcal H_{A_{t+1}}$, define
     $W^{[0]}=1$ and $W^{[t+1]}=W_tW^{[t]}$.
@@ -18,14 +18,14 @@ monomial expansion, as in Proposition~7.1 of \cite{OpenAI2026PolynomialPEPS}.
     \label{thm:peps_original_chronology_composition}
     \leanok
     \uses{def:peps_original_chronology_composite}
-    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.eval_sequence_zero}
-    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.eval_sequence_succ}
-    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.isExpansionBounded_sequence}
-    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.nonprivateCount_sequence}
-    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.forall_participants_sequence}
-    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.isMonomialBounded_sequence}
-    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.participationCount_comp}
-    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.participationCount_sequence}
+    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.eval_sequence_zero}
+    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.eval_sequence_succ}
+    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.isExpansionBounded_sequence}
+    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.nonprivateCount_sequence}
+    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.forall_participants_sequence}
+    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.isMonomialBounded_sequence}
+    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.participationCount_comp}
+    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.participationCount_sequence}
     Let $W_t:\mathcal H_{A_t}\to\mathcal H_{A_{t+1}}$, $0\le t<T$,
     be original distributed circuits.
     The composite acts by the ordered product: for
@@ -55,7 +55,7 @@ monomial expansion, as in Proposition~7.1 of \cite{OpenAI2026PolynomialPEPS}.
 \begin{definition}[Recorded local operators]
     \label{def:peps_original_recorded_gate_maps}
     \leanok
-    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.canonicalGateMaps}
+    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.canonicalGateMaps}
     At every nonprivate occurrence of an original distributed circuit $W$,
     prescribe its recorded monomial sum as the local operator. Write
     $\widehat W$ for the operator obtained by evaluating the chronology of $W$
@@ -66,8 +66,8 @@ monomial expansion, as in Proposition~7.1 of \cite{OpenAI2026PolynomialPEPS}.
     \label{thm:peps_original_exact_gate_maps}
     \leanok
     \uses{def:peps_original_recorded_gate_maps}
-    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.evalWithGateMaps_canonicalGateMaps}
-    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.isGateApproximation_zero_canonicalGateMaps}
+    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.evalWithGateMaps_canonicalGateMaps}
+    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.isGateApproximation_zero_canonicalGateMaps}
     For every original distributed circuit $W$, $\widehat W=W$, including the
     private operations. Every local approximation error is zero; the
     original contraction and pair-effect conditions are retained.
@@ -86,8 +86,8 @@ monomial expansion, as in Proposition~7.1 of \cite{OpenAI2026PolynomialPEPS}.
 \begin{theorem}[Original monomial and expansion bounds]
     \label{thm:peps_original_produced_resource_bounds}
     \leanok
-    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.monomialCount_produce_le_of_isMonomialBounded}
-    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.isExpansionBounded_mono}
+    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.monomialCount_produce_le_of_isMonomialBounded}
+    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.isExpansionBounded_mono}
     If every original monomial list has at most $K$ terms, then every
     corresponding produced occurrence has at most $K$ terms. If an original
     circuit has pair-effect bound $r$ and coefficient-sum bound $S$, then

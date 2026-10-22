@@ -33,7 +33,8 @@ noncomputable section
 open MeasureTheory QICLean.ComplexGaussian
 open scoped Matrix ComplexConjugate NNReal
 open TNLean.PEPS.Approximation
-namespace TNLean.PEPS.PairEffect.EffectCircuit
+namespace TNLean.Lattice.PartyCircuit.EffectCircuit
+open TNLean.PEPS.PairEffect
 variable {P : Type} [Fintype P]
 
 open Classical in
@@ -121,4 +122,4 @@ theorem exists_sourceSample_approximate_error_le
     _ ≤ 3 * ε / 4 + ε / 2 / 2 := add_le_add hω hquarter
     _ = ε := by ring
 
-end TNLean.PEPS.PairEffect.EffectCircuit
+end TNLean.Lattice.PartyCircuit.EffectCircuit

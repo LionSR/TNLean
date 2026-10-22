@@ -92,8 +92,8 @@ contraction of local tensors is a separate assertion.
 
 \begin{theorem}[Monotonicity in the local approximation tolerance]
     \label{thm:peps_original_approximation_budget}
-    \lean{TNLean.PEPS.PairEffect.EffectCircuit.IsGateApproximation.mono}
-    \lean{TNLean.PEPS.PairEffect.EffectCircuit.isGateApproximation_budget_of_power_bound}
+    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.IsGateApproximation.mono}
+    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.isGateApproximation_budget_of_power_bound}
     \leanok
     Increasing the permitted local approximation error preserves the original
     operators, approximate monomial lists and all contraction and allowedness
@@ -112,7 +112,7 @@ contraction of local tensors is a separate assertion.
 
 \begin{theorem}[A positive polynomial coefficient bound]
     \label{thm:peps_original_coefficient_majorant}
-    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.exists_one_le_isExpansionBounded_of_termwise_power_bounds}
+    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.exists_one_le_isExpansionBounded_of_termwise_power_bounds}
     \leanok
     Let $L\geq1$. Suppose every nonprivate gate of the original circuit
     has at most $K\leq C_KL^u$ monomials, each with at most $r$ pair
@@ -136,9 +136,9 @@ contraction of local tensors is a separate assertion.
 
 \begin{theorem}[Finite expansion bounds and replacement coefficients]
     \label{thm:peps_original_finite_expansion_bound}
-    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.isMonomialBounded_mono}
-    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.exists_isMonomialBounded}
-    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.sum_norm_branchCoefficient_physicalFirstReplacement_le}
+    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.isMonomialBounded_mono}
+    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.exists_isMonomialBounded}
+    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.sum_norm_branchCoefficient_physicalFirstReplacement_le}
     \leanok
     Every finite original circuit has an integer $K$ bounding the lengths
     of all its gate expansions. Any larger integer is also such a bound.
@@ -159,7 +159,7 @@ contraction of local tensors is a separate assertion.
 
 \begin{theorem}[Physical approximation after replacement and sampling]
     \label{thm:peps_sampled_original_density}
-    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.exists_physicalFirst_sourceSample_original_error_le}
+    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.exists_physicalFirst_sourceSample_original_error_le}
     \leanok
     In the density-approximation steps of
     \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
@@ -225,7 +225,7 @@ contraction of local tensors is a separate assertion.
 
 \begin{theorem}[Sampling from approximate original gates]
     \label{thm:peps_approximate_source_sample}
-    \lean{TNLean.PEPS.PairEffect.EffectCircuit.exists_sourceSample_approximate_error_le}
+    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.exists_sourceSample_approximate_error_le}
     \leanok
     Let a finite distributed construction begin in a product of normalized
     party vectors. Suppose its original gates are contractions, its number of
@@ -275,7 +275,7 @@ contraction of local tensors is a separate assertion.
 
 \begin{theorem}[Explicit polynomial dimensions of the replacement links]
     \label{thm:peps_physical_first_link_polynomial}
-    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.card_physicalFirstNetworkAlphabet_le_power}
+    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.card_physicalFirstNetworkAlphabet_le_power}
     \leanok
     Let an original circuit have at most $N$ nonprivate gate occurrences,
     each with at most $b$ participants. Suppose each gate has at most $K$
@@ -431,9 +431,9 @@ contraction of local tensors is a separate assertion.
 \begin{theorem}[Separate arity and lifetime bounds for link incidence]
     \label{thm:peps_separate_arity_incidence}
     \lean{TNLean.PEPS.Approximation.card_incidentDistributedLinks_le_of_arity_lifetime,
-        TNLean.PEPS.PairEffect.SourceCircuit.card_incidentSourceDensityLinks_le_of_arity_lifetime,
-        TNLean.PEPS.PairEffect.OriginalCircuit.card_incidentPhysicalFirstDensityLinks_le_of_arity_lifetime,
-        TNLean.PEPS.PairEffect.OriginalCircuit.card_participants_produce_le_of_arity}
+        TNLean.Lattice.PartyCircuit.SourceCircuit.card_incidentSourceDensityLinks_le_of_arity_lifetime,
+        TNLean.Lattice.PartyCircuit.OriginalCircuit.card_incidentPhysicalFirstDensityLinks_le_of_arity_lifetime,
+        TNLean.Lattice.PartyCircuit.OriginalCircuit.card_participants_produce_le_of_arity}
     \leanok
     \uses{def:compression_operator_links,def:compression_operator_incidences}
     Let $G$ be a finite set of gate occurrences, each with a finite
@@ -560,7 +560,7 @@ contraction of local tensors is a separate assertion.
     \label{thm:peps_distributed_construction_compression_of_le}
     \lean{TNLean.PEPS.PairEffect.DistributedConstruction.uniform_sampled_network_of_le,
         TNLean.PEPS.PairEffect.DistributedConstruction.uniform_sampled_network_of_sum_le,
-        TNLean.PEPS.PairEffect.OriginalCircuit.isExpansionBounded_reexpand_expansionGateLists}
+        TNLean.Lattice.PartyCircuit.OriginalCircuit.isExpansionBounded_reexpand_expansionGateLists}
     \leanok
     \uses{def:peps_compression_constants}
     Under the hypotheses of

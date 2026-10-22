@@ -33,18 +33,18 @@ its resolution are recorded in `docs/paper-gaps/polypeps_pair_effects_party_layo
 
 ## Main definitions
 
-* `PairEffect.wordList` : the expansion of the replaced gate into source-only words.
-* `PairEffect.gateOut`, `PairEffect.gateIso` : the output layout of the replaced gate and its
-  identification with the output space of `PairEffect.replaceGate`.
+* `PartyCircuit.wordList` : the expansion of the replaced gate into source-only words.
+* `PartyCircuit.gateOut`, `PartyCircuit.gateIso` : the output layout of the replaced gate and its
+  identification with the output space of `PartyCircuit.replaceGate`.
 
 ## Main results
 
-* `PairEffect.termList_toGate` : the expansion of the replaced gate, term by term.
-* `PairEffect.gateIso_prepGate` : the common garbage vector `Γ_m` is prepared by pair
+* `PartyCircuit.termList_toGate` : the expansion of the replaced gate, term by term.
+* `PartyCircuit.gateIso_prepGate` : the common garbage vector `Γ_m` is prepared by pair
   sources.
-* `PairEffect.gateOut_eq` : the additional registers are the stacks of all effect
+* `PartyCircuit.gateOut_eq` : the additional registers are the stacks of all effect
   occurrences.
-* `PairEffect.partyPairEffectElimination` : Lemma 5.1 `lem:effects`, except the clause on
+* `PartyCircuit.partyPairEffectElimination` : Lemma 5.1 `lem:effects`, except the clause on
   combining sources.
 
 ## References
@@ -57,7 +57,7 @@ noncomputable section
 
 open scoped InnerProductSpace TensorProduct
 
-namespace TNLean.PEPS.PairEffect
+namespace TNLean.Lattice.PartyCircuit
 
 open EuclideanSpace CyclicInsertion ContinuousLinearMap
 
@@ -298,7 +298,7 @@ The source's participating parties are read as the parties named by the monomial
 additional register is owned by an endpoint party of an effect of some monomial.  The clause
 that all sources on one pair of parties may be combined into one is not stated here: the
 two-source identity is `eval_combineSources`, and the combination of all sources on one pair,
-in any order, is `PairEffect.partyPairEffectElimination_with_grouped_sources`.  The hypothesis
+in any order, is `PartyCircuit.partyPairEffectElimination_with_grouped_sources`.  The hypothesis
 that `G` is a contraction is not needed.
 
 Polynomial-PEPS manuscript (September 24, 2026), Lemma 5.1 `lem:effects`,
@@ -337,4 +337,4 @@ theorem partyPairEffectElimination {m r : ℕ} (hm : m ≠ 0) (L : PartyGate ℓ
   · rw [← h5]
     rfl
 
-end TNLean.PEPS.PairEffect
+end TNLean.Lattice.PartyCircuit

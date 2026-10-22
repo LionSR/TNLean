@@ -21,7 +21,7 @@ Source: polynomial-PEPS, `04-compression.tex`, lines 253–267 and 279–355.
 
 noncomputable section
 open scoped TensorProduct
-namespace TNLean.PEPS.PairEffect.SourceInventory
+namespace TNLean.Lattice.PartyCircuit.SourceInventory
 variable {P : Type}
 
 /-- The fixed source vector expands in its actual endpoint basis with the
@@ -58,4 +58,4 @@ theorem slotBasis_repr_slotVector (R : SourceInventory P) (U V : Fin R.length �
   rw [slotVector_eq_sum_slotBasis R U V bU bV η]
   simp [map_sum, OrthonormalBasis.repr_self, Pi.single_apply]
 
-end TNLean.PEPS.PairEffect.SourceInventory
+end TNLean.Lattice.PartyCircuit.SourceInventory

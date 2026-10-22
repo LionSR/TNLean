@@ -32,7 +32,7 @@ Independently formalized; no upstream Lean proof text reused.
 noncomputable section
 open MeasureTheory QICLean.ComplexGaussian
 open scoped Matrix
-namespace TNLean.PEPS.PairEffect.SourceCircuit
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
 open TNLean.PEPS.Approximation
 
 open Classical in
@@ -80,4 +80,4 @@ theorem exists_sampledSourceMatrix_error_le_of_integral_bound
       exact hbound S (Finset.mem_erase.mp hS).1
     _ ≤ ε / 4 := sum_sourceErrorWeights_sourceSamplingCount_le Q ε hQ hε hεone
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit

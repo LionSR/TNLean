@@ -26,8 +26,10 @@ Independently formalized; no upstream Lean proof text reused.
 
 
 noncomputable section
-namespace TNLean.PEPS.PairEffect
+namespace TNLean
+open TNLean.Lattice.PartyCircuit
 
+namespace PEPS.PairEffect
 /-- A polynomial gate count is absorbed at every size at least two by a
 fixed higher accuracy exponent, for an arbitrary real target exponent. -/
 theorem gateApproximation_error_real_pow_le (L C p : ℝ) (N n : ℕ)
@@ -58,7 +60,9 @@ theorem gateApproximation_error_real_pow_le (L C p : ℝ) (N n : ℕ)
       rw [one_mul]
       exact div_le_div_of_nonneg_right hsmall (by norm_num)
 
-namespace EffectCircuit
+end PEPS.PairEffect
+namespace Lattice.PartyCircuit.EffectCircuit
+open TNLean.PEPS.PairEffect
 variable {P Phys Env : Type} [Fintype Phys] [Fintype Env] [DecidableEq Phys]
 
 /-- Actual gate approximations at one fixed integer accuracy exponent give
@@ -81,5 +85,5 @@ theorem rectangularTraceNorm_rescaledOriginal_density_sub_le_real_pow
   exact (w.rectangularTraceNorm_rescaledOriginal_density_sub_le hδ G h K x hx).trans
     (gateApproximation_error_real_pow_le L C p _ n hL hN)
 
-end EffectCircuit
-end TNLean.PEPS.PairEffect
+end Lattice.PartyCircuit.EffectCircuit
+end TNLean

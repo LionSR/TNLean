@@ -17,7 +17,8 @@ and 568–579.
 -/
 
 noncomputable section
-namespace TNLean.PEPS.PairEffect.SourceCircuit
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
+open TNLean.PEPS TNLean.PEPS.PairEffect
 variable {P : Type}
 
 open Classical in
@@ -42,4 +43,4 @@ theorem restrict_reindexedSourceSampleAssignment_eq {a b : Layout P}
   rw [allSourceSampleAssignmentEquiv_symm_apply]
   rfl
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit

@@ -14,10 +14,10 @@ import Lean.Util.CollectAxioms
 
 set_option linter.hashCommand false
 
-open TNLean.PEPS.PairEffect.SourceCircuit in
+open TNLean.Lattice.PartyCircuit.SourceCircuit in
 run_cmd do
   let decls := #[
-    ``TNLean.PEPS.PairEffect.SourceCircuit.sourceReplacedDensity_pure_eq_sum_actualColumns,
+    ``TNLean.Lattice.PartyCircuit.SourceCircuit.sourceReplacedDensity_pure_eq_sum_actualColumns,
     ``partialSourceWord_sampled_none_partialTrace_eq_scalar,
     ``sampledPhysicalFactor,
     ``partialSourceGlobalMatrix_sampled_partialTrace_eq_sum_physicalFactors,

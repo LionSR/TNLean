@@ -20,7 +20,8 @@ Source: polynomial-PEPS manuscript (September 24, 2026), Theorem 5.2,
 
 noncomputable section
 open scoped TensorProduct
-namespace TNLean.PEPS.PairEffect.SourceCircuit
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
+open TNLean.PEPS.PairEffect
 variable {P : Type}
 
 /-- The prescribed endpoint spaces recover the fixed partial-slot layout,
@@ -141,4 +142,4 @@ theorem mapOwner_selected_originalLayout_eq (p : P) (L : Layout P) :
           hOne, hAll, decide_false, Bool.false_eq_true, ↓reduceIte]
         exact ih
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit

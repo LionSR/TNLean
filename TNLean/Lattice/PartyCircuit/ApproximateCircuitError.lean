@@ -26,7 +26,7 @@ Independently formalized; no upstream Lean proof text reused.
 
 noncomputable section
 open ContinuousLinearMap
-namespace TNLean.PEPS.PairEffect
+namespace TNLean.Lattice.PartyCircuit
 variable {P : Type}
 
 /-- Every original circuit is a contraction by its actual gate hypotheses. -/
@@ -57,7 +57,7 @@ theorem norm_rescaledOriginal_sub_evalWithGateMaps_le {δ : ℝ} (hδ : 0 ≤ δ
   | @gate C _ owner a b L tail =>
       dsimp only [rescaledOriginal, OriginalCircuit.eval, evalWithGateMaps, expandedGateCount]
       have he : ‖gateMemoryMap owner a b tail
-          (PairEffect.gate (toGate (rescalePartyGate δ L))) -
+          (PartyCircuit.gate (toGate (rescalePartyGate δ L))) -
           gateMemoryMap owner a b tail G‖ ≤ 2 * δ := by
         rw [← gateMemoryMap_sub, gate_rescalePartyGate]
         exact (norm_gateMemoryMap_le _ _ _ _ _).trans
@@ -71,4 +71,4 @@ theorem norm_rescaledOriginal_sub_evalWithGateMaps_le {δ : ℝ} (hδ : 0 ≤ δ
       rw [← lTensor_sub]
       exact (norm_lTensor_le _ _).trans (ih G h)
 end EffectCircuit
-end TNLean.PEPS.PairEffect
+end TNLean.Lattice.PartyCircuit

@@ -314,6 +314,8 @@ for an arbitrary finite set of sites and are instantiated here directly.
         TNLean.MPS.AreaLaw.IsChainSupport.subset_window_of_splits,
         TNLean.MPS.AreaLaw.chainCrossConst,
         TNLean.MPS.AreaLaw.card_crossingTerms_interval_le,
+        TNLean.MPS.AreaLaw.cutBudgetConst,
+        TNLean.MPS.AreaLaw.one_le_cutBudgetConst,
         TNLean.MPS.AreaLaw.chainBudgetConst,
         TNLean.MPS.AreaLaw.one_le_chainBudgetConst,
         TNLean.MPS.AreaLaw.supportDim_le_real,
@@ -334,7 +336,9 @@ for an arbitrary finite set of sites and are instantiated here directly.
     \end{align}
     Both bounds are independent of the interval, and no support of range $R$
     is split by two of the shells $[l-(j+1)R,\,r+(j+1)R)$, $j\ge0$, of an
-    interval $[l,r)$.
+    interval $[l,r)$. For a natural number $N$ put
+    $B(N)=1+N\log^2\bigl(e\,q^{R+1}\bigr)$, so that $B(N)\ge1$ and
+    $B_R=B(N_R)$.
 \end{lemma}
 \begin{proof}
     \leanok
@@ -1442,6 +1446,10 @@ for an arbitrary finite set of sites and are instantiated here directly.
         TNLean.MPS.AreaLaw.chainDiscountConst_nonneg,
         TNLean.MPS.AreaLaw.chainIntervalEntropyBound_nonneg,
         TNLean.MPS.AreaLaw.regionEntropy_interval_le,
+        TNLean.MPS.AreaLaw.cutShellConst,
+        TNLean.MPS.AreaLaw.cutShellConst_nonneg,
+        TNLean.MPS.AreaLaw.cutAreaLawConst,
+        TNLean.MPS.AreaLaw.cutAreaLawConst_nonneg,
         TNLean.MPS.AreaLaw.chainShellConst,
         TNLean.MPS.AreaLaw.chainShellCount_le,
         TNLean.MPS.AreaLaw.chainAreaLawConst,
@@ -1450,7 +1458,7 @@ for an arbitrary finite set of sites and are instantiated here directly.
         TNLean.MPS.AreaLaw.chainAreaLaw
     }
     \leanok
-    \uses{def:chain_model}
+    \uses{def:chain_model, lem:chain_crossing_count}
     Let $\Omega$ be a gapped ground vector, with gap $\Delta>0$, of a
     finite-range Hamiltonian with term norms at most $J\ge0$ on the chain of
     $L$ sites with local dimension $q\ge1$. Every interval $X$ satisfies
@@ -1466,6 +1474,11 @@ for an arbitrary finite set of sites and are instantiated here directly.
     $S(A)\le C_{\mathrm{int}}\,|\partial A|$. Hence the constant
     $C_0(q,R)(1+J/\Delta)$, chosen before $L$, the Hamiltonian, the ground
     vector and the region, bounds $S(A)/|\partial A|$ for every gapped chain.
+    For a natural number $N$, let $E(N)$, $C_1(N)=5+E(N)+128B(N)$ and
+    $C_0(N)=\bigl(8R\log q+\log2\bigr)C_1(N)+1024\,e\,B(N)$ be the same
+    nonnegative constants with $N_R$ replaced by $N$, where $B(N)$ is the
+    budget of Lemma~\ref{lem:chain_crossing_count}; thus
+    $C_0(q,R)=C_0(N_R)$.
     This is the connected case of Theorem~A; the general case is
     Theorem~\ref{thm:domain_area_law}.
 \end{theorem}
@@ -1486,7 +1499,8 @@ for an arbitrary finite set of sites and are instantiated here directly.
     \label{thm:chain_area_log_cube}
     \lean{
         TNLean.MPS.AreaLaw.chainAreaLawConst_le_mul_log_cube,
-        TNLean.MPS.AreaLaw.regionEntropy_le_log_cube_mul_card_boundaryEdges
+        TNLean.MPS.AreaLaw.regionEntropy_le_log_cube_mul_card_boundaryEdges,
+        TNLean.MPS.AreaLaw.chainLogCubeConst
     }
     \leanok
     \uses{thm:chain_area_law}
@@ -1536,7 +1550,11 @@ for an arbitrary finite set of sites and are instantiated here directly.
 % Source: part1_arealaw.tex:706--745, combining the count and energy refinements.
 \begin{theorem}[Area law for consecutive-window interactions]
     \label{thm:chain_window_area_law}
-    \lean{TNLean.MPS.AreaLaw.chainAreaLaw_of_consecutive_terms}
+    \lean{
+        TNLean.MPS.AreaLaw.chainAreaLaw_of_consecutive_terms,
+        TNLean.MPS.AreaLaw.windowBudgetConst,
+        TNLean.MPS.AreaLaw.windowAreaLawConst
+    }
     \leanok
     \uses{def:chain_model}
     Fix natural numbers $q\ge1$ and $R$, and real numbers $J\ge0$ and

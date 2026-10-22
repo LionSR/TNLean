@@ -28,6 +28,7 @@ Independently formalized; no upstream Lean proof text reused.
 
 noncomputable section
 namespace TNLean.PEPS.PairEffect.MessageGate
+open TNLean.Lattice.PartyCircuit
 variable {P C : Type} [Fintype C] {a b : Layout C}
 
 /-- Construct the existing original gate from the actual message expansion.

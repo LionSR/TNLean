@@ -23,11 +23,12 @@ Source: polynomial-PEPS manuscript (September 24, 2026), Theorem 5.2,
 
 noncomputable section
 
-namespace TNLean.PEPS.PairEffect
+namespace TNLean
+open TNLean.Lattice.PartyCircuit
 
 variable {P : Type}
 
-namespace SourceInventory
+namespace Lattice.PartyCircuit.SourceInventory
 
 /-- Fixed source slots retain finite-dimensional endpoint registers.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 253–267. -/
@@ -51,8 +52,9 @@ theorem finiteDimensional_registers_slotLayout (R : SourceInventory P)
         · exact ih (fun i ↦ U i.succ) (fun i ↦ V i.succ)
             (fun i ↦ hU i.succ) (fun i ↦ hV i.succ) t ht
 
-end SourceInventory
+end Lattice.PartyCircuit.SourceInventory
 
+namespace PEPS.PairEffect
 private theorem finiteDimensional_mem_atParty_of_registers {Q : Type}
     (q : Q) (ℓ : Layout Q)
     (h : ∀ r ∈ ℓ, FiniteDimensional ℂ r.space) :
@@ -63,7 +65,9 @@ private theorem finiteDimensional_mem_atParty_of_registers {Q : Type}
   change r ∈ ℓ.filter (fun s ↦ decide (s.owner = q)) at hr
   exact h r (List.mem_filter.mp hr).1
 
-namespace SourceCircuit
+end PEPS.PairEffect
+namespace Lattice.PartyCircuit.SourceCircuit
+open TNLean.PEPS.PairEffect
 
 /-- Every retained source register has its original finite Euclidean endpoint space.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 253–267 and 409–434. -/
@@ -101,6 +105,6 @@ def allPartyDiscardBasis (garbage : Layout P)
     (Layout.finiteDimensional_registers_mapOwner _ garbage hfinite)
   exact stdOrthonormalBasis ℂ _
 
-end SourceCircuit
+end Lattice.PartyCircuit.SourceCircuit
 
-end TNLean.PEPS.PairEffect
+end TNLean

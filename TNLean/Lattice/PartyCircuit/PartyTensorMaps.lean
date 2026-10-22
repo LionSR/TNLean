@@ -22,7 +22,7 @@ open scoped InnerProductSpace TensorProduct
 
 open ContinuousLinearMap
 
-namespace TNLean.PEPS.PairEffect
+namespace TNLean.Lattice.PartyCircuit
 
 variable {P : Type}
 
@@ -143,4 +143,4 @@ theorem norm_tensorPartyMaps_le_one (ℓ ℓ' : Layout P)
         _ ≤ 1 * 1 := mul_le_mul hp hps (norm_nonneg _) zero_le_one
         _ = 1 := one_mul 1
 
-end TNLean.PEPS.PairEffect
+end TNLean.Lattice.PartyCircuit

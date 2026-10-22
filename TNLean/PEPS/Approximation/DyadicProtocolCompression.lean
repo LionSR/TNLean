@@ -65,7 +65,7 @@ open scoped Matrix
 
 namespace TNLean.PEPS.Approximation.DyadicProtocol
 
-open Finset TNLean.PEPS.PairEffect
+open Finset TNLean.PEPS.PairEffect TNLean.Lattice.PartyCircuit
 
 variable {L q : ℕ} {P : Type} [Fintype P] (D : DyadicProtocol L q P)
 
@@ -376,7 +376,7 @@ end TNLean.PEPS.Approximation.DyadicProtocol
 
 namespace TNLean.PEPS.Approximation
 
-open Finset TNLean.PEPS.PairEffect
+open Finset TNLean.PEPS.PairEffect TNLean.Lattice.PartyCircuit
 
 /-- A protocol with the bounds of §8 for fixed constants, on a square of some side `L ≥ 2`,
 together with its unit target vector. These instances form the family of constructions to which

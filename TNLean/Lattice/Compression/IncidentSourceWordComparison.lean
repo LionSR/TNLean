@@ -22,7 +22,8 @@ Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 137–139,
 -/
 
 noncomputable section
-namespace TNLean.PEPS.PairEffect.SourceCircuit
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
+open TNLean.PEPS.PairEffect
 variable {P : Type}
 
 private theorem restrict_partialResidual_eval_heq (A : P → Bool) {a b : Layout P}
@@ -564,4 +565,4 @@ theorem restrict_partialSourceWord_eval_eq_incidentSourceWord {a b : Layout P}
       (incidentSourceWord w p ψ (originalGateLabelsAtOfAllChoices w p ξ)).eval := by
   exact selectedPreparedWordComparison_of_original_labels w p ψ ξ
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit

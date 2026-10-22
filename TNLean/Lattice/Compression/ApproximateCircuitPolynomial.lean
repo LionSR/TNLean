@@ -26,8 +26,10 @@ Independently formalized; no upstream Lean proof text reused.
 
 
 noncomputable section
-namespace TNLean.PEPS.PairEffect
+namespace TNLean
+open TNLean.Lattice.PartyCircuit
 
+namespace PEPS.PairEffect
 /-- One additional inverse power absorbs the fixed coefficient of a polynomial
 gate-count bound, with an explicit threshold independent of private dimensions. -/
 theorem gateApproximation_error_inv_pow_le (L C : ℝ) (N n p : ℕ)
@@ -45,7 +47,9 @@ theorem gateApproximation_error_inv_pow_le (L C : ℝ) (N n p : ℕ)
       ((div_le_one hLp).mpr hC) (by positivity)
     _ = (L ^ p)⁻¹ / 4 := one_mul _
 
-namespace EffectCircuit
+end PEPS.PairEffect
+namespace Lattice.PartyCircuit.EffectCircuit
+open TNLean.PEPS.PairEffect
 variable {P Phys Env : Type} [Fintype Phys] [Fintype Env] [DecidableEq Phys]
 
 /-- Actual gate approximations at a fixed higher inverse-polynomial accuracy
@@ -68,5 +72,5 @@ theorem rectangularTraceNorm_rescaledOriginal_density_sub_le_inv_pow
   exact (w.rectangularTraceNorm_rescaledOriginal_density_sub_le hδ G h K x hx).trans
     (gateApproximation_error_inv_pow_le L C _ n p hL hC hN)
 
-end EffectCircuit
-end TNLean.PEPS.PairEffect
+end Lattice.PartyCircuit.EffectCircuit
+end TNLean

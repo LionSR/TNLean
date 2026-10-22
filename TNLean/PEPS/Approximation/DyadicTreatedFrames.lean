@@ -35,7 +35,7 @@ open Set Metric
 
 namespace TNLean.PEPS.Approximation
 
-open EncodedFrame PairEffect
+open EncodedFrame TNLean.Lattice.PartyCircuit
 
 variable {k : ℕ}
 

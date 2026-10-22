@@ -27,8 +27,9 @@ Independently formalized; no upstream Lean proof text reused.
 
 noncomputable section
 open scoped TensorProduct Matrix
-namespace TNLean.PEPS.PairEffect.SourceCircuit
-open SourceInventory TNLean.PEPS.Approximation
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
+open TNLean.PEPS.PairEffect
+open TNLean.Lattice.PartyCircuit.SourceInventory TNLean.PEPS.Approximation
 variable {P : Type} {a b : Layout P}
 variable (w : SourceCircuit a b) (S : Finset (sourceLocations w))
     (E : ∀ e : sourceLocations w, branchLabels w e.1 →
@@ -88,4 +89,4 @@ theorem exists_correctedSchmidtOutput (hw : w.IsAllowed)
   exact (congrArg (Word.HasSchmidtOutput (Layout.mapOwner side (C ++ T))
     (Layout.mapOwner side out)) hfun).mpr ho
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit

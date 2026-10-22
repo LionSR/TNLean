@@ -19,6 +19,7 @@ coordinate arguments.
 -/
 
 namespace TNLean.PEPS.PairEffect
+open TNLean.Lattice.PartyCircuit
 variable {P : Type}
 
 /-- Identifying equal register lists preserves the canonical grouped vector. -/

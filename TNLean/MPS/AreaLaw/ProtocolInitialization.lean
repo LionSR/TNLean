@@ -25,7 +25,7 @@ noncomputable section
 
 namespace TNLean.MPS.AreaLaw.ChainSweep
 
-open TNLean.Lattice TNLean.PEPS.PairEffect
+open TNLean.Lattice TNLean.Lattice.PartyCircuit
 
 /-- All auxiliary copy labels, each occurring once, in a fixed order.
 Source: Part II, `con:band`, lines 265–272, and `con:sweep`, lines 336–340. -/

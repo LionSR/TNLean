@@ -18,7 +18,7 @@ lines 409–450.
 
 noncomputable section
 open scoped TensorProduct
-namespace TNLean.PEPS.PairEffect.Layout
+namespace TNLean.Lattice.PartyCircuit.Layout
 variable {P : Type}
 
 /-- Equality of register lists preserves the underlying memory vector. -/
@@ -35,13 +35,15 @@ theorem memCongr_tmul_heq {a b c d : Layout P} (ha : a = b) (hc : c = d)
   cases hc
   rfl
 
-/-- Prepending one register vector to memory vectors of equal register lists preserves
-their equality. -/
-theorem cons_tmul_heq (r : Reg P) {a b : Layout P} (h : a = b) (u : r.space)
-    {x : Mem a} {y : Mem b} (hxy : HEq x y) :
-    HEq (u ⊗ₜ[ℂ] x : Mem (r :: a)) (u ⊗ₜ[ℂ] y : Mem (r :: b)) := by
+/-- Prepending equal register vectors to equal memory vectors, along equalities of the
+registers and of the register lists, preserves their equality. -/
+theorem cons_tmul_heq {r s : Reg P} {a b : Layout P} (hr : r = s) (h : a = b)
+    {u : r.space} {v : s.space} (huv : HEq u v) {x : Mem a} {y : Mem b} (hxy : HEq x y) :
+    HEq (u ⊗ₜ[ℂ] x : Mem (r :: a)) (v ⊗ₜ[ℂ] y : Mem (s :: b)) := by
+  cases hr
   cases h
+  cases huv
   cases hxy
   rfl
 
-end TNLean.PEPS.PairEffect.Layout
+end TNLean.Lattice.PartyCircuit.Layout

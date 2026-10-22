@@ -24,7 +24,7 @@ part2b_mps_protocol.tex:587–614 and order of constants:626–632.
 
 noncomputable section
 namespace TNLean.MPS.AreaLaw.ChainSweep
-open QuantumCircuit TNLean.Lattice TNLean.PEPS TNLean.PEPS.PairEffect TNLean.PEPS.EncodedFrame
+open QuantumCircuit TNLean.Lattice TNLean.PEPS TNLean.Lattice.PartyCircuit TNLean.Lattice.Sheet
 open TNLean.PEPS.Approximation
 
 /-- The physical hypotheses alone give uniformly polynomial sampled networks

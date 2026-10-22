@@ -22,7 +22,8 @@ Source: polynomial-PEPS, `04-compression.tex`, lines 279–309 and 565–588.
 -/
 
 noncomputable section
-namespace TNLean.PEPS.PairEffect.SourceInventory
+namespace TNLean.Lattice.PartyCircuit.SourceInventory
+open TNLean.PEPS.PairEffect
 variable {P : Type}
 
 /-- The literal endpoint word constructed from specified endpoint matrices in
@@ -51,4 +52,4 @@ theorem slotBasis_repr_endpointMatrixWord (R : SourceInventory P)
       ∏ i, A i (x i).1 (y i).1 * B i (x i).2 (y i).2 := by
   simp only [endpointMatrixWord, slotBasis_repr_endpointWord, basisMatrixOperator_repr]
 
-end TNLean.PEPS.PairEffect.SourceInventory
+end TNLean.Lattice.PartyCircuit.SourceInventory

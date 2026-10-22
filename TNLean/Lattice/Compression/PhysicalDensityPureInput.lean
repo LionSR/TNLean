@@ -25,7 +25,7 @@ Independently formalized; no upstream Lean proof text reused.
 
 noncomputable section
 open scoped Matrix ComplexConjugate
-namespace TNLean.PEPS.PairEffect.SourceCircuit
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
 
 /-- The physical density of an arbitrary pure input is the partial trace of
 the literal output vector in the physical and garbage product coordinates.
@@ -61,4 +61,4 @@ theorem physicalDensity_pure_input {P n x d : Type}
   rw [hrepr]
   rfl
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit
