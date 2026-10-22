@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.Hamiltonian
-import TNLean.MPS.AreaLaw.Counting
+import TNLean.MPS.AreaLaw.InteractionBudget
 import TNLean.Lattice.ZeroEntropy
 import QICLean.Entropy.FilterStationarity
 import QICLean.Analysis.ContractionChain
@@ -39,7 +39,7 @@ through the Lieb–Robinson localization.
 * `ChainHamiltonian.termSum`: the sum of the terms over a set of supports.
 * `leftSupports`, `bufferSupports`, `rightSupports`: the three classes of supports.
 * `ChainHamiltonian.leftPart`, `bufferPart`, `rightPart`: the parts `H_L`, `H_B`, `H_R`.
-* `groundCentered Ψ M`: the operator `M - ⟨Ψ, M Ψ⟩ 1`.
+* `groundCentered Ψ M`: the operator `M - Re ⟨Ψ, M Ψ⟩ 1`.
 
 ## Main results
 
@@ -93,7 +93,7 @@ theorem _root_.Matrix.IsHermitian.groundCentered {M : Matrix ι ι ℂ} (hM : M.
     (Ψ : EuclideanSpace ℂ ι) : (groundCentered Ψ M).IsHermitian :=
   hM.sub (isHermitian_one.smul (by simp [IsSelfAdjoint, Complex.conj_ofReal]))
 
-/-- The expectation of a Hermitian operator in a unit vector is real.
+/-- The expectation of a Hermitian operator in any vector is real.
 Hastings, arXiv:0705.2024v4, `law16.tex`, lines 781–782. -/
 theorem _root_.Matrix.IsHermitian.ofReal_re_inner {M : Matrix ι ι ℂ} (hM : M.IsHermitian)
     (Ψ : EuclideanSpace ℂ ι) :
@@ -225,24 +225,6 @@ theorem subset_window_of_mem_bufferSupports {j m : ℕ} {X : ChainSupport L R}
   have := y.isLt
   omega
 
-/-- At most `2^{2R+1}` supports of range `R` contain a given site.
-Hastings, arXiv:0705.2024v4, `law16.tex`, lines 88–91 (finite range). -/
-theorem card_supports_containing_le (x : Fin L) :
-    (Finset.univ.filter fun X : ChainSupport L R ↦ x ∈ X.1).card ≤ 2 ^ (2 * R + 1) := by
-  classical
-  let W := interval L (x.val - R) (x.val + R + 1)
-  have hcover : (Finset.univ.filter fun X : ChainSupport L R ↦ x ∈ X.1) ⊆
-      Finset.univ.filter (fun X : ChainSupport L R ↦ X.1 ⊆ W) := by
-    intro X hX
-    refine Finset.mem_filter.mpr ⟨Finset.mem_univ _, fun y hy ↦ ?_⟩
-    have hx := (Finset.mem_filter.mp hX).2
-    have hxy := X.2.2 x hx y hy
-    have hyx := X.2.2 y hy x hx
-    rw [mem_interval]
-    omega
-  exact (Finset.card_le_card hcover).trans
-    (card_filter_subset_le_pow_of_card_le ((card_interval_le _ _).trans (by omega)))
-
 /-- There are at most `2 (m + R) 2^{2R+1}` buffer supports, linearly many in the buffer
 width. Hastings, arXiv:0705.2024v4, `law16.tex`, line 777. -/
 theorem card_bufferSupports_le (j m : ℕ) :
@@ -323,6 +305,21 @@ Hastings, arXiv:0705.2024v4, `law16.tex`, line 778. -/
 noncomputable def ChainHamiltonian.rightPart (h : ChainHamiltonian L q R J) (j m : ℕ) :
     Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
   h.termSum (rightSupports L R j m)
+
+/-- The left part is Hermitian. Hastings, arXiv:0705.2024v4, `law16.tex`, line 776. -/
+theorem ChainHamiltonian.leftPart_isHermitian (h : ChainHamiltonian L q R J) (j m : ℕ) :
+    (h.leftPart j m).IsHermitian :=
+  h.termSum_isHermitian _
+
+/-- The buffer part is Hermitian. Hastings, arXiv:0705.2024v4, `law16.tex`, line 777. -/
+theorem ChainHamiltonian.bufferPart_isHermitian (h : ChainHamiltonian L q R J) (j m : ℕ) :
+    (h.bufferPart j m).IsHermitian :=
+  h.termSum_isHermitian _
+
+/-- The right part is Hermitian. Hastings, arXiv:0705.2024v4, `law16.tex`, line 778. -/
+theorem ChainHamiltonian.rightPart_isHermitian (h : ChainHamiltonian L q R J) (j m : ℕ) :
+    (h.rightPart j m).IsHermitian :=
+  h.termSum_isHermitian _
 
 /-- **The three-way splitting.** `H = H_L + H_B + H_R`.
 Hastings, arXiv:0705.2024v4, `law16.tex`, lines 775–779. -/
