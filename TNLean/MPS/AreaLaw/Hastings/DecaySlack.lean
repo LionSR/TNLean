@@ -31,7 +31,7 @@ open Real
 namespace TNLean.MPS.AreaLaw.Hastings
 
 /-- **The square-root prefactor against an exponential.** For `δ > 0` and `l ≥ 0`,
-`√l e^{-δl} ≤ 1/√(2eδ)`, with equality at `l = 1/(2δ)`: this is `x e^{-x} ≤ e^{-1}` at
+`√l e^{-δl} ≤ 1/√(2eδ)`, attained at `l = 1/(2δ)`; this is `x e^{-x} ≤ e^{-1}` at
 `x = 2δl`. Hastings, arXiv:0705.2024v4, lines 903–907. -/
 theorem sqrt_mul_exp_neg_le {δ l : ℝ} (hδ : 0 < δ) (hl : 0 ≤ l) :
     √l * exp (-(δ * l)) ≤ 1 / √(2 * exp 1 * δ) := by
