@@ -46,7 +46,7 @@ private theorem edist_le_of_between {Λ : Finset ℤ} {i j k : Fin Λ.card}
     (m : ℕ) (hij : (domainGraph Λ).edist i j ≤ (m : ℕ∞))
     (hk₁ : min i j ≤ k) (hk₂ : k ≤ max i j) :
     (domainGraph Λ).edist i k ≤ (m : ℕ∞) := by
-  obtain ⟨p, hp⟩ := SimpleGraph.exists_walk_of_edist_ne_top
+  obtain ⟨p, hp⟩ := exists_walk_of_edist_ne_top
     (ne_top_of_le_ne_top (ENat.natCast_ne_top m) hij)
   exact (p.takeUntil k (mem_support_of_between p k hk₁ hk₂)).edist_le.trans
     ((ENat.natCast_le_natCast.mpr (p.length_takeUntil_le_length _)).trans
