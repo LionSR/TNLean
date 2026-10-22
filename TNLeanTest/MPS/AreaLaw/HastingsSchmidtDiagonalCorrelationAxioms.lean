@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.Hastings.SchmidtDiagonalCorrelation
+import TNLean.MPS.AreaLaw.Hastings.SchmidtDiagonalOperators
 import Lean.Elab.Command
 import Lean.Util.CollectAxioms
 
@@ -14,7 +15,8 @@ run_cmd do
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
   for decl in #[
     ``Matrix.norm_toEuclideanCLM_sub_self_le_of_posSemidef,
-    ``TNLean.MPS.AreaLaw.Hastings.norm_inner_sub_le_of_projector_factorization] do
+    ``TNLean.MPS.AreaLaw.Hastings.norm_inner_sub_le_of_projector_factorization,
+    ``TNLean.MPS.AreaLaw.Hastings.kronecker_one_mulVec_schmidt_eq_one_kronecker_mulVec] do
     unless (← Lean.getEnv).contains decl do
       throwError "Missing declaration {decl}"
     let axioms ← Lean.collectAxioms decl
