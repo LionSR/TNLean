@@ -1,0 +1,93 @@
+\section{Spectral cut-offs in Hastings' approximate ground-state projector}
+\label{sec:hastings_spectral_cutoff}
+
+% Hastings, arXiv:0705.2024v4, law16.tex, lines 829--841 (step four of the
+% proof of Lemma 1, equation obd).
+
+In the proof of Lemma~1 of \cite{Hastings2007AreaLaw}, the localized filtered
+terms $M_L$ and $M_R$ nearly annihilate the ground vector, and the operators
+$O_L$ and $O_R$ are their spectral projections onto the eigenvalues at most a
+threshold $\theta>0$. This section proves that such a cut-off moves a vector by
+at most the norm of the vector's image under $M$ divided by $\theta$, and that
+the cut-offs of operators supported on disjoint regions are supported there and
+commute. Norms of operators are operator norms.
+
+\begin{definition}[Spectral cut-off]
+    \label{def:hastings_spectral_cutoff}
+    \lean{TNLean.MPS.AreaLaw.Hastings.spectralCutoff}
+    \leanok
+    For a Hermitian matrix $M$ and a real number $\theta$, the spectral
+    cut-off $O_\theta(M)$ is the spectral projection of $M$ onto its
+    eigenvalues at most $\theta$, that is $f(M)$ for the function $f$ equal to
+    $1$ on $(-\infty,\theta]$ and to $0$ elsewhere.
+\end{definition}
+
+\begin{lemma}[The cut-off is an orthogonal projection]
+    \label{lem:hastings_spectral_cutoff_projection}
+    \lean{TNLean.MPS.AreaLaw.Hastings.isStarProjection_spectralCutoff}
+    \leanok
+    \uses{def:hastings_spectral_cutoff}
+    For a Hermitian matrix $M$ and every $\theta$, the cut-off $O_\theta(M)$
+    is an orthogonal projection.
+\end{lemma}
+\begin{proof}\leanok
+    The function $f$ is real and satisfies $f^2=f$.
+\end{proof}
+
+\begin{lemma}[A cut-off moves a nearly annihilated vector little]
+    \label{lem:hastings_spectral_cutoff_obd}
+    \lean{TNLean.MPS.AreaLaw.Hastings.norm_sub_spectralCutoff_le}
+    \leanok
+    \uses{def:hastings_spectral_cutoff}
+    Let $M$ be Hermitian and $\theta>0$. For every vector $\Psi$,
+    \begin{align}
+        \lVert\Psi-O_\theta(M)\Psi\rVert
+         & \le\frac{\lVert M\Psi\rVert}{\theta}.
+        \label{eq:hastings_spectral_cutoff_obd}
+    \end{align}
+    With $\lVert M_L\Psi_0\rVert\le\Delta E^{-1}J^2e^{-l/3\xi}$ and
+    $\theta=\Delta E^{-1}J^2e^{-l/6\xi}$, this gives the bound
+    $\lVert(O_L-1)\Psi_0\rVert\le e^{-l/6\xi}$ of the source, with constant
+    one, and likewise for $O_R$.
+\end{lemma}
+\begin{proof}\leanok
+    Let $h(t)=1/t$ for $t>\theta$ and $h(t)=0$ otherwise. Then
+    $1-O_\theta(M)=h(M)M$, since $t\,h(t)=1-f(t)$ for every real $t$. The
+    eigenvalues of $h(M)$ lie in $[0,1/\theta]$, so $\lVert h(M)\rVert\le
+        1/\theta$ and
+    $\lVert\Psi-O_\theta(M)\Psi\rVert=\lVert h(M)M\Psi\rVert\le
+        \lVert M\Psi\rVert/\theta$.
+\end{proof}
+
+\begin{lemma}[Support of the cut-off]
+    \label{lem:hastings_spectral_cutoff_support}
+    \lean{TNLean.MPS.AreaLaw.Hastings.spectralCutoff_localLift}
+    \leanok
+    \uses{def:hastings_spectral_cutoff}
+    Let $K$ be a Hermitian operator on the sites of a region $D$, and let
+    $K\otimes1$ be its extension by the identity outside $D$. Then
+    $O_\theta(K\otimes1)=O_\theta(K)\otimes1$. In particular, the cut-off of
+    an operator supported on $D$ is supported on $D$.
+\end{lemma}
+\begin{proof}\leanok
+    The map $K\mapsto K\otimes1$ is a unital homomorphism of star algebras,
+    and such homomorphisms commute with the continuous functional calculus.
+    The spectrum is finite, so $f$ is continuous on it.
+\end{proof}
+
+\begin{lemma}[Cut-offs on disjoint regions commute]
+    \label{lem:hastings_spectral_cutoff_commute}
+    \lean{TNLean.MPS.AreaLaw.Hastings.commute_spectralCutoff_localLift_of_disjoint}
+    \leanok
+    \uses{lem:hastings_spectral_cutoff_support}
+    Let $K$ and $K'$ be Hermitian operators on disjoint regions $X$ and $Y$.
+    For all thresholds $\theta$ and $\theta'$, the cut-offs
+    $O_\theta(K\otimes1)$ and $O_{\theta'}(K'\otimes1)$ commute. Applied to
+    $M_L$, supported left of the cut, and $M_R$, supported right of it, this
+    shows that $O_L$ and $O_R$ are commuting orthogonal projections.
+\end{lemma}
+\begin{proof}\leanok
+    By Lemma~\ref{lem:hastings_spectral_cutoff_support} the two cut-offs are
+    extensions by the identity of operators on $X$ and on $Y$, and such
+    extensions commute when $X$ and $Y$ are disjoint.
+\end{proof}
