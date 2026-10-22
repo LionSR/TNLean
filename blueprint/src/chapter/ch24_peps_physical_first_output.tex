@@ -86,9 +86,9 @@ from this memory to $\mathcal H\otimes(\mathcal A\otimes\mathcal E)$.
     \lean{TNLean.Lattice.PartyCircuit.Layout.finiteDimensional_registers_append}
     \lean{TNLean.Lattice.PartyCircuit.Layout.finiteDimensional_registers_mapOwner}
     \lean{TNLean.Lattice.PartyCircuit.PartyChain.finiteDimensional_registers_sources_prepStack}
-    \lean{TNLean.PEPS.PairEffect.finiteDimensional_registers_sources_comp}
-    \lean{TNLean.PEPS.PairEffect.finiteDimensional_registers_sources_prepGate}
-    \lean{TNLean.PEPS.PairEffect.finiteDimensional_registers_sources_prepWord}
+    \lean{TNLean.Lattice.PartyCircuit.finiteDimensional_registers_sources_comp}
+    \lean{TNLean.Lattice.PartyCircuit.finiteDimensional_registers_sources_prepGate}
+    \lean{TNLean.Lattice.PartyCircuit.finiteDimensional_registers_sources_prepWord}
     \leanok
     A prepared pair stack consists of finitely many finite-dimensional
     Euclidean registers. Induction on the stack length, on the monomial,
@@ -101,9 +101,9 @@ from this memory to $\mathcal H\otimes(\mathcal A\otimes\mathcal E)$.
 
 \begin{theorem}[Physical partial trace after the exchange]
     \label{thm:peps_physical_first_trace}
-    \lean{TNLean.PEPS.PairEffect.physicalFirstReadout_exchange_apply}
-    \lean{TNLean.PEPS.PairEffect.physicalFirstReadout_exchange_outerProduct}
-    \lean{TNLean.PEPS.PairEffect.partialTrace_physicalFirstReadout_exchange}
+    \lean{TNLean.Lattice.PartyCircuit.physicalFirstReadout_exchange_apply}
+    \lean{TNLean.Lattice.PartyCircuit.physicalFirstReadout_exchange_outerProduct}
+    \lean{TNLean.Lattice.PartyCircuit.partialTrace_physicalFirstReadout_exchange}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.physicalDensity_physicalFirstOutput}
     \leanok
     \uses{def:peps_physical_first_replacement}
@@ -124,10 +124,10 @@ from this memory to $\mathcal H\otimes(\mathcal A\otimes\mathcal E)$.
 
 \begin{proof}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.physicalDensity_pure_input}
-    \lean{TNLean.PEPS.PairEffect.exchangedGarbageBasis}
-    \lean{TNLean.PEPS.PairEffect.extendedPhysicalReadout_triple_tmul}
-    \lean{TNLean.PEPS.PairEffect.physicalFirstReadout}
-    \lean{TNLean.PEPS.PairEffect.physicalFirstReadout_tmul}
+    \lean{TNLean.Lattice.PartyCircuit.exchangedGarbageBasis}
+    \lean{TNLean.Lattice.PartyCircuit.extendedPhysicalReadout_triple_tmul}
+    \lean{TNLean.Lattice.PartyCircuit.physicalFirstReadout}
+    \lean{TNLean.Lattice.PartyCircuit.physicalFirstReadout_tmul}
     \leanok
     Formula~(\ref{eq:peps_physical_first_exchange}) gives the coordinate
     identity on pure tensors. Tensor-product induction extends it to

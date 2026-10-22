@@ -129,6 +129,7 @@ noncomputable abbrev groundEigenspace (H : Matrix n n ℂ) (E₀ : ℝ) :
     Submodule ℂ (EuclideanSpace ℂ n) :=
   Module.End.eigenspace (toEuclideanLin H) (E₀ : ℂ)
 
+/-- A vector lies in the ground eigenspace exactly when `H` acts on its coordinates as `E₀`. -/
 theorem mem_groundEigenspace_iff {H : Matrix n n ℂ} {E₀ : ℝ} {v : EuclideanSpace ℂ n} :
     v ∈ groundEigenspace H E₀ ↔ H *ᵥ WithLp.ofLp v = (E₀ : ℂ) • WithLp.ofLp v := by
   rw [groundEigenspace, Module.End.mem_eigenspace_iff]

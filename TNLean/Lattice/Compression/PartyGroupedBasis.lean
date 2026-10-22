@@ -21,7 +21,7 @@ original memory.
 -/
 
 noncomputable section
-namespace TNLean.PEPS.PairEffect
+namespace TNLean.Lattice.PartyCircuit
 open TNLean.Lattice.PartyCircuit
 variable {P : Type} [Fintype P] [DecidableEq P]
 variable {I : P → Type} [∀ p, Fintype (I p)]
@@ -36,4 +36,4 @@ def partyGroupedBasis (a : Layout P)
   (partyLabelledBasis a b ps hn hc).map
     (groupByPartyIso ps a hn (fun r _ => hc r.owner)).symm
 
-end TNLean.PEPS.PairEffect
+end TNLean.Lattice.PartyCircuit

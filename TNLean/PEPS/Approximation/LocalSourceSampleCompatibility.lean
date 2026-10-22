@@ -17,8 +17,8 @@ and 568–579.
 
 noncomputable section
 namespace TNLean.Lattice.PartyCircuit.SourceCircuit
-open TNLean.PEPS TNLean.PEPS.PairEffect
-open TNLean.PEPS.Approximation
+open TNLean.Lattice TNLean.Lattice.PartyCircuit
+open TNLean.Lattice.Compression
 variable {P : Type}
 
 open Classical in
@@ -30,7 +30,7 @@ theorem restrict_sourceSampleAssignment_eq {a b : Layout P}
     (w : SourceCircuit a b) (p : P) (k : ℕ) (j : w.sourceLocations → Fin k) :
     let A : P → Bool := fun t ↦ partySelector (some ⟨p, rfl⟩)
       (affectedOwner (fun _ : P ↦ true) t)
-    (fun s : Approximation.DistributedOperatorContraction.SampleAt
+    (fun s : Lattice.Compression.DistributedOperatorContraction.SampleAt
         (Finset.univ : Finset w.nonemptyGateLocations) (fun g ↦ w.participants g.1) p ↦
       j ((sourceSampleEquiv w).symm s.1)) ∘ partialSlotSampleEquiv w p =
       fun i : Fin (partialSlots A w).length ↦ j (partialSlotEquiv A w i).1 := by

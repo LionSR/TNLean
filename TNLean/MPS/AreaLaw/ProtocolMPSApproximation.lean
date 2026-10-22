@@ -37,7 +37,7 @@ noncomputable section
 
 namespace TNLean.MPS.AreaLaw.ChainSweep
 
-open TNLean.PEPS.PairEffect TNLean.Lattice.Sheet
+open TNLean.Lattice.PartyCircuit TNLean.Lattice.Sheet
 
 /-- The protocol's density error permits column extraction and the source's
 final phase error for every L≥2. Source: Part II, `thm:B`, lines 587–593. -/
@@ -200,7 +200,7 @@ theorem exists_protocol_isOpenMPS_norm_sub_phase_le
       change 3 * (20 * w) ≤ L at hm
       omega
     have hprefix (r : ℕ) (_hr : 0 < r) (_hrm : r ≤ stageCount L w) :
-        (TNLean.PEPS.WholeGroup.flattening (fun y ↦ u y)
+        (TNLean.Lattice.WholeGroup.flattening (fun y ↦ u y)
           (Finset.univ.filter fun p : Party L w ↦ partyLevel p < r)).rank ≤
             (max 1 ⌈Cp * (L : ℝ) ^ α⌉₊) ^ 1600 := by
       simpa only [u, C₀, preparationConstruction, length, width, i] using! (hranks r).2.2.2

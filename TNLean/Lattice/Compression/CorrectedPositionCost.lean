@@ -38,7 +38,7 @@ These proofs are newly written from the paper's mathematical argument. No OpenAI
 Lean code is copied or adapted.
 -/
 
-namespace TNLean.PEPS.Approximation
+namespace TNLean.Lattice.Compression
 
 open scoped BigOperators NNReal
 
@@ -127,4 +127,4 @@ theorem compressionChoiceBase_le_of_monomial_bounds (L B d C D : ℝ≥0) (a c b
         Nat.mul_comm a (4 * b), Nat.mul_comm c 4]
       exact mul_mul_mul_comm _ _ _ _
 
-end TNLean.PEPS.Approximation
+end TNLean.Lattice.Compression
