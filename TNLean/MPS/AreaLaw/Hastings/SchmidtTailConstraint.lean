@@ -46,7 +46,10 @@ factorization of Lemma 1 with constant `C₁` and length `ξ'`, and that the `k`
 eigenvalues of `ρ` add up to at least `1/2`. Then for every scale `m` and every `n ≥ k q^{2m}`
 the eigenvalues of `ρ` beyond the `n` largest add up to at most `4 C₁² e^{-2m/ξ'}`.
 
-Hastings, arXiv:0705.2024v4, lines 536–544, eq. `constraint` with `P = 1/2`. -/
+Hastings, arXiv:0705.2024v4, lines 536–544, eq. `constraint` with `P = 1/2`.
+
+**Stage:** the weight bound `hlead` on the `k` leading eigenvalues is a hypothesis. For
+`k ≥ exp(2 S(ρ))/2` it is Hastings' bound of lines 526–535 (eq. `k0Ent`). -/
 theorem one_sub_kyFanNorm_le_of_factorization (hq : 1 ≤ q)
     {Ω : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Ω‖ = 1) (j : ℕ) {ξ' C₁ : ℝ}
     (hfact : ∀ m : ℕ, j + m ≤ L → ∃ (OB OL OR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
