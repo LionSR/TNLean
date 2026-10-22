@@ -27,9 +27,9 @@ Independently formalized; no upstream Lean proof text reused.
 
 noncomputable section
 namespace TNLean
-open TNLean.Lattice.PartyCircuit TNLean.PEPS.PairEffect
+open TNLean.Lattice.PartyCircuit
 
-namespace PEPS.PairEffect
+namespace Lattice.PartyCircuit
 /-- A fixed inverse-power local error is smaller than the actual budget that
 reserves one quarter of the target physical error for approximate gates. -/
 theorem inversePower_le_sourceGateBudget_half (L C p : ℝ) (M n : ℕ)
@@ -44,7 +44,7 @@ theorem inversePower_le_sourceGateBudget_half (L C p : ℝ) (M n : ℕ)
   apply (le_div_iff₀ (by positivity)).mpr
   nlinarith
 
-end PEPS.PairEffect
+end Lattice.PartyCircuit
 namespace Lattice.PartyCircuit.EffectCircuit
 variable {P : Type}
 

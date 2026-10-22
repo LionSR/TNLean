@@ -25,7 +25,7 @@ Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 137–175,
 noncomputable section
 namespace TNLean
 open TNLean.Lattice.PartyCircuit
-open TNLean.PEPS.Approximation
+open TNLean.Lattice.Compression
 variable {P : Type} {a b : Layout P}
 
 namespace Lattice.PartyCircuit.SourceCircuit

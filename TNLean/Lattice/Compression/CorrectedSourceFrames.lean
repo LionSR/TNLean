@@ -28,7 +28,7 @@ Independently formalized; no upstream Lean proof text reused.
 noncomputable section
 open scoped TensorProduct Matrix
 namespace TNLean.Lattice.PartyCircuit.SourceCircuit
-open TNLean.Lattice.PartyCircuit.SourceInventory TNLean.PEPS.Approximation
+open TNLean.Lattice.PartyCircuit.SourceInventory TNLean.Lattice.Compression
 variable {P : Type} {a b : Layout P}
 
 -- Keeping the retained-slot list opaque stops elaboration from unfolding the

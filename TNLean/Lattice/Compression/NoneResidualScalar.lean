@@ -24,9 +24,9 @@ Source: polynomial-PEPS, `04-compression.tex`, lines 24–28, 233–251 and 351�
 noncomputable section
 open ContinuousLinearMap
 namespace TNLean
-open TNLean.Lattice.PartyCircuit TNLean.PEPS.PairEffect
+open TNLean.Lattice.PartyCircuit
 variable {P : Type}
-namespace PEPS.PairEffect
+namespace Lattice.PartyCircuit
 private theorem restrict_affectedOwner_all (a : Layout P) :
     Layout.restrict Option.isNone (Layout.mapOwner (affectedOwner (fun _ : P ↦ true)) a) =
       [] :=
@@ -41,7 +41,7 @@ private theorem restrict_allMapped_localPart {a b : Layout P} (w : Word a b) :
   rw [partySelector_none] at h
   exact h
 
-end PEPS.PairEffect
+end Lattice.PartyCircuit
 namespace Lattice.PartyCircuit.SourceCircuit
 private theorem restrict_sources_partialWord_all_eq_nil {a b : Layout P}
     (w : SourceCircuit a b) (ξ : Choices (fun _ : P ↦ true) w) :

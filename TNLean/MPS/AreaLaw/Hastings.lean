@@ -18,3 +18,4 @@ import TNLean.MPS.AreaLaw.Hastings.SchmidtRankBootstrap
 import TNLean.MPS.AreaLaw.Hastings.SchmidtTail
 import TNLean.MPS.AreaLaw.Hastings.SchmidtTailMPS
 import TNLean.MPS.AreaLaw.Hastings.TailEntropy
+import TNLean.MPS.AreaLaw.Hastings.ThreeWaySplitting

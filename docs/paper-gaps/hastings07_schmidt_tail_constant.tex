@@ -61,10 +61,23 @@ $k\ge k_0$,
     \label{eq:hastings07_schmidt_tail_corrected}
 \end{align}
 Indeed, with $x=\log_D(k/k_0)$ and $m=\lfloor\lfloor x\rfloor/2\rfloor$, one
-has $k_0D^{2m}\le k$ and $2m>x-2$. The bound
-(\ref{eq:hastings07_schmidt_tail_corrected}) is
-(\ref{eq:hastings07_schmidt_tail_source_est}) with the constant $e^{2/\xi'}$
-in place of $e^{1/\xi'}$, and it gives the same conclusion: the error of a
+has $k_0D^{2m}\le k$ and $2m>x-2$.
+
+The tail $\tau(k')=\sum_{\alpha\ge k'+1}|A_0(\alpha)|^2$ starts one index
+later than the sum in (\ref{eq:hastings07_schmidt_tail_source_est}). When
+$k'=k_0D^{2m}$, the constraint (\ref{eq:hastings07_schmidt_tail_constraint})
+says nothing about $|A_0(k')|^2$, so the sum from $\alpha=k'$ is not
+controlled at that scale. It is controlled at the scale $m-1$, at the cost of
+one more factor $e^{2/\xi'}$, so the sum from $\alpha=k'$ also decays as in
+the source. The later start is therefore a choice rather than a gap in the
+source. It is the tail the approximation needs: a matrix product state of bond
+dimension $k'$ keeps the first $k'$ Schmidt coefficients and discards the
+rest.
+
+The bound (\ref{eq:hastings07_schmidt_tail_corrected}) is therefore
+(\ref{eq:hastings07_schmidt_tail_source_est}) with the sum started one index
+later and with the constant $e^{2/\xi'}$ in place of $e^{1/\xi'}$. It gives
+the same conclusion: the error of a
 matrix product state of bond dimension $k'$ on a chain of length $N$ is of
 order $N(k'/k_0)^{-1/(\xi'\ln D)}$.\footnote{\leanid{TNLean.MPS.AreaLaw.Hastings.schmidtTail_le_rpow_of_geometric}
     in \doclink{TNLean/MPS/AreaLaw/Hastings/SchmidtTail}.}
@@ -91,9 +104,9 @@ $N$ and in the inverse accuracy.\footnote{\leanid{TNLean.MPS.AreaLaw.Hastings.is
 
 \section{Conclusion}
 
-The correction changes one numerical constant and a sign, and the
-approximation is stated for the norm distance. The decay exponent of the tail
-and the polynomial dependence of the bond dimension on the accuracy are as in
+The correction changes one numerical constant and a sign. The tail is taken
+from the index after $k'$, and the approximation is stated for the norm
+distance. The decay exponent of the tail and the polynomial dependence of the bond dimension on the accuracy are as in
 the source.
 
 \bibliographystyle{alpha}

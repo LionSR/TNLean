@@ -10,7 +10,7 @@ import Lean.Util.CollectAxioms
 /-! # Axiom check for label sums on the universal active-gate set -/
 
 set_option linter.hashCommand false
-open TNLean.PEPS.Approximation.DistributedOperatorContraction
+open TNLean.Lattice.Compression.DistributedOperatorContraction
 
 run_cmd do
   let decl := ``sum_eq_sum_gateLabels_univ
