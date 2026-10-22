@@ -1,0 +1,78 @@
+\section{Decay of the Schmidt tail in Hastings' area law}
+\label{sec:hastings_schmidt_tail}
+
+% Hastings, arXiv:0705.2024v4, law16.tex, lines 540--552 (section on matrix
+% product states, equations constraint and est).
+
+\begin{lemma}[Polynomial decay of the Schmidt tail from geometric bounds]
+    \label{lem:hastings_schmidt_tail_rpow}
+    \lean{TNLean.MPS.AreaLaw.Hastings.schmidtTail_le_rpow_of_geometric}
+    \leanok
+    Let $D>1$, $\xi>0$, $c\ge0$ and $k_0>0$, and let $\tau$ be a real
+    function on the natural numbers. Suppose that for all natural numbers
+    $m$ and $k$ with $k_0D^{2m}\le k$,
+    \begin{align}
+        \tau(k) & \le c\,e^{-2m/\xi}.
+        \label{eq:hastings_schmidt_tail_geometric}
+    \end{align}
+    Then for every natural number $k\ge k_0$,
+    \begin{align}
+        \tau(k) & \le c\,e^{2/\xi}\Bigl(\frac{k}{k_0}\Bigr)^{-1/(\xi\log D)}.
+        \label{eq:hastings_schmidt_tail_rpow}
+    \end{align}
+    With $\tau(k)$ the mass beyond the $k$ largest squared Schmidt
+    coefficients of the ground state across a cut, $k_0=\exp(2S)/2$ for the
+    entropy $S$ of the cut, and $c=4C_1(\xi)^2$, the hypothesis
+    (\ref{eq:hastings_schmidt_tail_geometric}) is the consequence of the
+    bootstrap lemma in the section on matrix product states of
+    \cite{Hastings2007AreaLaw}, and (\ref{eq:hastings_schmidt_tail_rpow}) is
+    the estimate that follows it there, with the constant $e^{2/\xi}$ in
+    place of the printed $e^{1/\xi}$ and with the sign of the exponent
+    corrected~\cite{gap:hastings07_schmidt_tail_constant}.
+\end{lemma}
+\begin{proof}\leanok
+    Put $x=\log(k/k_0)/\log D\ge0$, let $n$ be the integer part of $x$ and
+    $m$ the integer part of $n/2$. Then $D^{2m}\le D^x=k/k_0$, so
+    (\ref{eq:hastings_schmidt_tail_geometric}) applies at $m$. Since
+    $2m\ge n-1>x-2$,
+    \begin{align}
+        \tau(k) & \le c\,e^{-2m/\xi}\le c\,e^{2/\xi}e^{-x/\xi},
+        \notag
+    \end{align}
+    and $e^{-x/\xi}=(k/k_0)^{-1/(\xi\log D)}$.
+\end{proof}
+
+\begin{theorem}[Matrix product state from the decay of the Schmidt tail]
+    \label{thm:hastings_schmidt_tail_mps}
+    \lean{TNLean.MPS.AreaLaw.Hastings.isOpenMPS_norm_sub_le_of_schmidtTail_geometric}
+    \leanok
+    \uses{lem:hastings_schmidt_tail_rpow}
+    Let $\psi$ be a unit vector on a chain of $L$ sites, and let $d>1$,
+    $\xi>0$, $c\ge0$ and $k_0>0$. Suppose that at every internal cut the
+    mass beyond the $n$ largest eigenvalues of the left marginal is at most
+    $c\,e^{-2m/\xi}$ whenever $k_0d^{2m}\le n$. Then for every natural
+    number $k'\ge k_0$, truncating every cut onto the $k'$ leading
+    eigenvectors of its left marginal gives an open-boundary matrix product
+    state $\Phi$ of bond dimension $k'$ with
+    \begin{align}
+        \lVert\Phi-\psi\rVert
+         & \le(L-1)\sqrt{c\,e^{2/\xi}\Bigl(\frac{k'}{k_0}\Bigr)^{-1/(\xi\log d)}}.
+        \notag
+    \end{align}
+    Here the mass beyond the $n$ largest eigenvalues is the sum over the
+    eigenvalues of index at least $n+1$ in nonincreasing order, so the
+    source's sum from index $k'$ is this mass at $k'-1$. This is the
+    conclusion of the section on matrix product states of
+    \cite{Hastings2007AreaLaw}, stated for the norm distance and with the
+    constant of Lemma~\ref{lem:hastings_schmidt_tail_rpow}
+    \cite{gap:hastings07_schmidt_tail_constant}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:chain_sequential_truncation_eigen}
+    Sequential truncation onto the leading eigenvectors gives an
+    open-boundary matrix product state of bond dimension $k'$ within
+    distance $\sum_k\sqrt{\varepsilon_k(k')}$ of $\psi$, where
+    $\varepsilon_k(k')$ is the mass beyond the $k'$ largest eigenvalues at
+    the cut $k$. Lemma~\ref{lem:hastings_schmidt_tail_rpow} bounds each
+    $\varepsilon_k(k')$, and there are $L-1$ internal cuts.
+\end{proof}
