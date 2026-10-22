@@ -35,7 +35,7 @@ noncomputable section
 
 namespace TNLean.PEPS.Approximation
 
-open EncodedFrame
+open EncodedFrame TNLean.Lattice.Sheet
 
 variable {k : ℕ}
 

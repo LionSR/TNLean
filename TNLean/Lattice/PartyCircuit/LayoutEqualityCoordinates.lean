@@ -18,7 +18,7 @@ lines 409–450.
 
 noncomputable section
 open scoped TensorProduct
-namespace TNLean.PEPS.PairEffect.Layout
+namespace TNLean.Lattice.PartyCircuit.Layout
 variable {P : Type}
 
 /-- Equality of register lists preserves the underlying memory vector. -/
@@ -44,4 +44,4 @@ theorem cons_tmul_heq (r : Reg P) {a b : Layout P} (h : a = b) (u : r.space)
   cases hxy
   rfl
 
-end TNLean.PEPS.PairEffect.Layout
+end TNLean.Lattice.PartyCircuit.Layout

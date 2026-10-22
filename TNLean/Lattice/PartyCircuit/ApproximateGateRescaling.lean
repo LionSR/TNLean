@@ -25,7 +25,7 @@ Independently formalized; no upstream Lean proof text reused.
 
 
 noncomputable section
-namespace TNLean.PEPS.PairEffect
+namespace TNLean.Lattice.PartyCircuit
 variable {P : Type}
 
 /-- Common coefficient rescaling of an actual monomial list. -/
@@ -92,4 +92,4 @@ def rescaledOriginal {δ : ℝ} (hδ : 0 ≤ δ) :
   | _, _, .swap r s tail, _, _ => .swap r s tail
   | _, _, .frame r w, G, h => .frame r (w.rescaledOriginal hδ G h)
 end EffectCircuit
-end TNLean.PEPS.PairEffect
+end TNLean.Lattice.PartyCircuit

@@ -19,11 +19,11 @@ the gate has at most as many pair sources as the corresponding `M_ξ`
 
 ## Main results
 
-* `PairEffect.Word.sourceCount_selectedPart`, `PairEffect.PartyChain.sourceCount_selectedPart`.
-* `PairEffect.Word.sourceCount_mapOwner_le`, `PairEffect.PartyChain.sourceCount_mapOwner_le`.
+* `PartyCircuit.Word.sourceCount_selectedPart`, `PartyCircuit.PartyChain.sourceCount_selectedPart`.
+* `PartyCircuit.Word.sourceCount_mapOwner_le`, `PartyCircuit.PartyChain.sourceCount_mapOwner_le`.
 * `PairEffect.isSourceBounded_gateCircuit`.
-* `PairEffect.PartyGate.exists_originalCircuit_isSourceBounded`,
-  `PairEffect.PartyGate.exists_originalCircuit`.
+* `PartyCircuit.PartyGate.exists_originalCircuit_isSourceBounded`,
+  `PartyCircuit.PartyGate.exists_originalCircuit`.
 
 ## References
 
@@ -37,13 +37,14 @@ noncomputable section
 
 open ContinuousLinearMap
 
-namespace TNLean.PEPS.PairEffect
+namespace TNLean
+open TNLean.Lattice.PartyCircuit TNLean.PEPS.PairEffect
 
 variable {P : Type}
 
 /-! ### Pair sources under restriction and relabelling -/
 
-namespace Word
+namespace Lattice.PartyCircuit.Word
 
 /-- The number of pair sources of a word is the length of its source inventory. -/
 theorem sourceCount_eq_length_sources {ℓ ℓ' : Layout P} (w : Word ℓ ℓ') :
@@ -76,9 +77,9 @@ theorem sourceCount_mapOwner_le {Q : Type} (g : P → Q) {ℓ ℓ' : Layout P} (
   rw [sourceCount_eq_length_sources, sourceCount_eq_length_sources, sources_mapOwner]
   exact List.length_filterMap_le _ _
 
-end Word
+end Lattice.PartyCircuit.Word
 
-namespace PartyChain
+namespace Lattice.PartyCircuit.PartyChain
 
 /-- The selected part of a monomial using only selected parties keeps all of its pair
 sources. -/
@@ -100,12 +101,13 @@ theorem sourceCount_mapOwner_le {Q : Type} (g : P → Q) {ℓX ℓY : Layout P}
   | effect hpq α β ℓS w η rest ih =>
       exact Nat.add_le_add (w.sourceCount_mapOwner_le g) (ih _)
 
-end PartyChain
+end Lattice.PartyCircuit.PartyChain
 
 /-! ### The gate of a sum of monomials -/
 
 variable [DecidableEq P]
 
+namespace PEPS.PairEffect
 theorem sourceCount_retractedGate_le (S : Finset P) (d : S) {ℓ ℓ' : Layout P}
     (G : PartyGate ℓ ℓ') (hU : ∀ m ∈ G, m.2.UsesOnly {p | decide (p ∈ S) = true}) {r : ℕ}
     (hr : ∀ m ∈ G, m.2.sourceCount ≤ r) :
@@ -146,6 +148,8 @@ theorem isSourceBounded_gateCircuit (S : Finset P) (hS₀ : S.Nonempty) {ℓ ℓ
       (Word.nonprivateCount_toOriginalCircuit_of_isReordering
         (Layout.isReordering_unpartitionWord _ ℓ')) r⟩
 
+end PEPS.PairEffect
+namespace Lattice.PartyCircuit
 /-- **A sum of monomials on a list of parties as one gate, with its pair sources.** The
 conclusion of `PartyGate.exists_originalCircuit`, together with the pair-source bound: every
 monomial of the gate has at most `r` pair sources when every monomial of the sum does.
@@ -221,4 +225,5 @@ theorem PartyGate.exists_originalCircuit (S : Finset P) (hS₀ : S.Nonempty) {�
     PartyGate.exists_originalCircuit_isSourceBounded S hS₀ h G hA hF hN hne
   exact ⟨c, h₁, h₂, h₃, h₄, h₅⟩
 
-end TNLean.PEPS.PairEffect
+end Lattice.PartyCircuit
+end TNLean

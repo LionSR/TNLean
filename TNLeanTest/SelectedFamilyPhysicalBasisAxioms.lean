@@ -13,8 +13,8 @@ set_option linter.hashCommand false
 
 run_cmd do
   let decls := #[
-    ``TNLean.PEPS.PairEffect.Layout.atParty_none_mapOwner_all,
-    ``TNLean.PEPS.PairEffect.Layout.atParty_some_mapOwner_all,
+    ``TNLean.Lattice.PartyCircuit.Layout.atParty_none_mapOwner_all,
+    ``TNLean.Lattice.PartyCircuit.Layout.atParty_some_mapOwner_all,
     ``TNLean.PEPS.PairEffect.selectedFamilyPhysicalIndex,
     ``TNLean.PEPS.PairEffect.selectedFamilyPhysicalPartyBasis,
     ``TNLean.PEPS.PairEffect.selectedFamilyPhysicalPartyBasis_none_apply_heq,

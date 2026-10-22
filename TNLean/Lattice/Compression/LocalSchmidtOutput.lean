@@ -25,7 +25,7 @@ Independently formalized; no upstream Lean proof text reused.
 
 noncomputable section
 open scoped TensorProduct Matrix
-namespace TNLean.PEPS.PairEffect.Word
+namespace TNLean.Lattice.PartyCircuit.Word
 
 /-- An exact Schmidt expansion through two allowed local words. The input
 isometries, local words, and probability weights are chosen before the corrected
@@ -49,10 +49,11 @@ def HasSchmidtOutput {I : Type} [Fintype I] (a b : Layout Bool)
               (c.eval (F (EuclideanSpace.basisFun _ ℂ (i, j))) ⊗ₜ[ℂ]
                 d.eval (G (EuclideanSpace.basisFun _ ℂ j)))
 
-end TNLean.PEPS.PairEffect.Word
+end TNLean.Lattice.PartyCircuit.Word
 
-namespace TNLean.PEPS.PairEffect.Word
-open SourceInventory TNLean.PEPS.Approximation
+namespace TNLean.Lattice.PartyCircuit.Word
+open TNLean.PEPS.PairEffect
+open TNLean.Lattice.PartyCircuit.SourceInventory TNLean.PEPS.Approximation
 variable {P : Type} {a b : Layout P}
 /-- Partitioning commutes with the canonical identification of equal register lists. -/
 private theorem partitionIso_memCongr_symm {Q : Type} (f : Q → Bool)
@@ -132,4 +133,4 @@ theorem hasSchmidtOutput_of_isTensorPartitioned {Q I : Type} [Fintype I]
   simp only [map_sum, map_smul, TensorProduct.mapL_tmul]
 
 
-end TNLean.PEPS.PairEffect.Word
+end TNLean.Lattice.PartyCircuit.Word

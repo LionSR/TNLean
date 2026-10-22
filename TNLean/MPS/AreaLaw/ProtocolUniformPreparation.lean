@@ -34,7 +34,7 @@ noncomputable section
 
 namespace TNLean.MPS.AreaLaw.ChainSweep
 
-open TNLean.Lattice TNLean.PEPS.PairEffect TNLean.PEPS.EncodedFrame
+open TNLean.Lattice TNLean.PEPS.PairEffect TNLean.Lattice.PartyCircuit TNLean.Lattice.Sheet
 
 /-- The constructed chain sweep, with its original normalized product input,
 actual main physical dimensions and retained auxiliary registers.

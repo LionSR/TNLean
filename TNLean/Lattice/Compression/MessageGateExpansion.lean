@@ -27,6 +27,7 @@ Independently formalized; no upstream Lean proof text reused.
 
 noncomputable section
 namespace TNLean.PEPS.PairEffect
+open TNLean.Lattice.PartyCircuit
 variable {P : Type}
 
 /-- The original finite weighted list of monomials, before expanding messages. -/

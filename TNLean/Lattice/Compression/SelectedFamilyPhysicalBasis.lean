@@ -20,10 +20,11 @@ Source: polynomial-PEPS manuscript (September 24, 2026), Theorem 5.2,
 -/
 
 noncomputable section
-namespace TNLean.PEPS.PairEffect
+namespace TNLean
+open TNLean.Lattice.PartyCircuit TNLean.PEPS.PairEffect
 variable {P : Type}
 
-namespace Layout
+namespace Lattice.PartyCircuit.Layout
 
 /-- Selecting all original parties leaves no register at the exterior owner.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 409–417. -/
@@ -49,8 +50,9 @@ theorem atParty_some_mapOwner_all (a : Layout P) (p : {_p : P // true = true}) :
   rw [Bool.eq_iff_iff]
   simp [affectedOwner, Subtype.ext_iff]
 
-end Layout
+end Lattice.PartyCircuit.Layout
 
+namespace PEPS.PairEffect
 /-- The original physical coordinate at a selected party, with a singleton
 coordinate for the empty exterior memory. No dimension is padded.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 137–151 and 565–588. -/
@@ -109,4 +111,5 @@ theorem selectedFamilyPhysicalPartyBasis_some_apply_heq
     (familyPhysicalPartyBasis d ps hn p.val (hc p.val) x)
   exact (Layout.memCongr_apply_heq _ _).trans (Layout.mapOwnerIso_apply_heq _ _ _)
 
-end TNLean.PEPS.PairEffect
+end PEPS.PairEffect
+end TNLean

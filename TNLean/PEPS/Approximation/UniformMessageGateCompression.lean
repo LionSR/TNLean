@@ -33,6 +33,7 @@ Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 32–43,
 noncomputable section
 open scoped Matrix ComplexConjugate NNReal
 namespace TNLean.PEPS.PairEffect.GateMapConstruction
+open TNLean.Lattice.PartyCircuit
 open TNLean.PEPS.Approximation
 attribute [local instance] Classical.propDecidable
 

@@ -24,7 +24,7 @@ Independently formalized; no upstream Lean proof text reused.
 noncomputable section
 open scoped TensorProduct
 open ContinuousLinearMap
-namespace TNLean.PEPS.PairEffect
+namespace TNLean.Lattice.PartyCircuit
 variable {P : Type}
 
 namespace EffectCircuit
@@ -319,4 +319,4 @@ theorem gate_auxiliary_layout {C : Type} (owner : C ↪ P)
   exact (congrArg (fun d => Layout.mapOwner owner d ++ tail)
     ((prepGate m L).output_of_isPreparation (isPreparation_prepGate m L))).trans
       (by rw [Layout.mapOwner_append, List.append_assoc])
-end TNLean.PEPS.PairEffect
+end TNLean.Lattice.PartyCircuit

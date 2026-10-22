@@ -25,7 +25,8 @@ words may otherwise be arbitrary, and their local maps may vanish.
 
 noncomputable section
 open scoped Matrix
-namespace TNLean.PEPS.PairEffect.Word
+namespace TNLean.Lattice.PartyCircuit.Word
+open TNLean.PEPS TNLean.PEPS.PairEffect
 variable {P : Type} [Fintype P] [DecidableEq P]
 variable {I J : P → Type} [∀ p, Fintype (I p)] [∀ p, Fintype (J p)]
 
@@ -74,4 +75,4 @@ theorem partyGroupedBasis_mixed_matrix {a z : Layout P}
     partyGroupedBasis_matrix_eval u hu b b ps hn hc,
     partyGroupedBasis_matrix_eval v hv b c ps hn hc, partyProductMatrix_conjugate]
 
-end TNLean.PEPS.PairEffect.Word
+end TNLean.Lattice.PartyCircuit.Word

@@ -29,7 +29,8 @@ Independently formalized; no upstream Lean proof text reused.
 
 
 noncomputable section
-namespace TNLean.PEPS.PairEffect.OriginalCircuit
+namespace TNLean.Lattice.PartyCircuit.OriginalCircuit
+open TNLean.PEPS.PairEffect
 open TNLean.PEPS.Approximation
 variable {P : Type} {a : Layout P}
 
@@ -106,4 +107,4 @@ theorem card_branchLabels_physicalFirstReplacement_le_power
   exact hc.trans (replacementMonomialBound_le_of_power_bounds K r N S L C_K C_N C_S
     u n s p hL hCK hCN hCS hS hK hN hSbound)
 
-end TNLean.PEPS.PairEffect.OriginalCircuit
+end TNLean.Lattice.PartyCircuit.OriginalCircuit

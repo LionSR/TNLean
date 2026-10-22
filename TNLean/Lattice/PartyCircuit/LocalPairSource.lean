@@ -24,7 +24,7 @@ noncomputable section
 open scoped TensorProduct
 open ContinuousLinearMap
 
-namespace TNLean.PEPS.PairEffect.Word
+namespace TNLean.Lattice.PartyCircuit.Word
 
 variable {P : Type}
 
@@ -58,4 +58,4 @@ theorem eval_localPairSource (p : P) (U V : HSpace) (η : U ⊗[ℂ] V) (ℓ : L
     simp [localPairSource, eval, appendIso, appendLeft_apply, assocL_tmul,
       LinearIsometryEquiv.symm_lTensor]
 
-end TNLean.PEPS.PairEffect.Word
+end TNLean.Lattice.PartyCircuit.Word

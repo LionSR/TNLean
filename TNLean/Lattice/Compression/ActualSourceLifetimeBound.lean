@@ -32,7 +32,8 @@ Independently formalized; no upstream Lean proof text reused.
 noncomputable section
 open MeasureTheory QICLean.ComplexGaussian
 open scoped Matrix ComplexConjugate NNReal
-namespace TNLean.PEPS.PairEffect.SourceCircuit
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
+open TNLean.PEPS.PairEffect
 open TNLean.PEPS.Approximation
 
 open Classical in
@@ -99,4 +100,4 @@ theorem integral_actualCorrectedSourceTerm_le_lifetime
   · intro p _
     exact hphysical p
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit

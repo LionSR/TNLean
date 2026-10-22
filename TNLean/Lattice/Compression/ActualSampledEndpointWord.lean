@@ -22,7 +22,7 @@ polynomial-PEPS, `04-compression.tex`, lines 565–588.
 -/
 
 noncomputable section
-namespace TNLean.PEPS.PairEffect.SourceCircuit
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
 variable {P : Type} {a b : Layout P}
 
 variable (w : SourceCircuit a b) (k : ℕ)
@@ -83,4 +83,4 @@ theorem sampledEndpointWord_average (ξ ζ : Choices (fun _ => true) w)
         (partialSlotChoice (fun _ => true) w ξ i,
           partialSlotChoice (fun _ => true) w ζ i) j ω) x y
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit

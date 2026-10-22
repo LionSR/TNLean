@@ -40,10 +40,10 @@ $M(a_{p_1})\otimes\cdots\otimes M(a_{p_m})\otimes\C$.
 
 \begin{definition}[Original local physical dimensions]
     \label{def:peps_family_physical_output}
-    \lean{TNLean.PEPS.PairEffect.familyPhysicalLayout,
-        TNLean.PEPS.PairEffect.familyPhysicalOutputLayout,
-        TNLean.PEPS.PairEffect.familyPhysicalListBasis,
-        TNLean.PEPS.PairEffect.familyLabelledPhysicalBasis}
+    \lean{TNLean.Lattice.PartyCircuit.familyPhysicalLayout,
+        TNLean.Lattice.PartyCircuit.familyPhysicalOutputLayout,
+        TNLean.Lattice.PartyCircuit.familyPhysicalListBasis,
+        TNLean.Lattice.PartyCircuit.familyLabelledPhysicalBasis}
     \leanok
     \uses{def:peps_party_layout}
     Let the physical space at $p$ be $H_p=\C^{d_p}$, where $d_p$
@@ -125,7 +125,7 @@ $M(a_{p_1})\otimes\cdots\otimes M(a_{p_m})\otimes\C$.
 
 \begin{theorem}[Partitioning a single selected register]
     \label{thm:peps_selected_head_partition}
-    \lean{TNLean.PEPS.PairEffect.Layout.partitionIso_selectedHead_of_tail_excluded_heq}
+    \lean{TNLean.Lattice.PartyCircuit.Layout.partitionIso_selectedHead_of_tail_excluded_heq}
     \leanok
     Let the first register have owner $p$ and Hilbert space $H$, and
     let every remaining register have an owner different from $p$.
@@ -269,9 +269,9 @@ These coordinate identities apply to the local contractions in
 
 \begin{theorem}[Party memories after selecting all original parties]
     \label{thm:peps_selected_physical_party_layouts}
-    \lean{TNLean.PEPS.PairEffect.Layout.atParty_none_mapOwner_all}
+    \lean{TNLean.Lattice.PartyCircuit.Layout.atParty_none_mapOwner_all}
     \leanok
-    \lean{TNLean.PEPS.PairEffect.Layout.atParty_some_mapOwner_all}
+    \lean{TNLean.Lattice.PartyCircuit.Layout.atParty_some_mapOwner_all}
     \uses{def:peps_affected_owner,def:peps_party_registers,def:peps_owner_layout}
     Let $P$ be any party set, let
     $Q=P\sqcup\{*\}$, and let $\iota:P\to Q$

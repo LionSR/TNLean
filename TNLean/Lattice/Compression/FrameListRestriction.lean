@@ -21,7 +21,7 @@ selector do not change its operator. The retained memories may be arbitrary.
 -/
 
 noncomputable section
-namespace TNLean.PEPS.PairEffect.Word
+namespace TNLean.Lattice.PartyCircuit.Word
 
 variable {P : Type}
 
@@ -72,4 +72,4 @@ theorem restrict_frameList_eval_heq_of_eq_nil {Q : Type} (f : Q → Bool)
         exact (Word.restrict_frame_false_eval_heq f r _ _ hr').trans
           (ih (by simpa only [Layout.restrict_cons, hr', Bool.false_eq_true, ↓reduceIte] using hrs))
 
-end TNLean.PEPS.PairEffect.Word
+end TNLean.Lattice.PartyCircuit.Word

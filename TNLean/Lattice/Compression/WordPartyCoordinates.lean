@@ -20,11 +20,12 @@ its actual singleton restrictions.
 
 noncomputable section
 open ContinuousLinearMap
-namespace TNLean.PEPS.PairEffect
+namespace TNLean
+open TNLean.Lattice.PartyCircuit TNLean.PEPS.PairEffect
 variable {P : Type} [Fintype P] [DecidableEq P]
 variable {I J : P → Type} [∀ p, Fintype (I p)] [∀ p, Fintype (J p)]
 
-namespace Word
+namespace Lattice.PartyCircuit.Word
 /-- The actual matrix of a source-free chronological word in the party product
 bases is the product of its literal singleton-restriction matrix entries.
 No tensor factorization or nonvanishing hypothesis is assumed.
@@ -49,5 +50,5 @@ theorem partyGroupedBasis_repr_eval {a z : Layout P} (w : Word a z) (hs : w.sour
   rw [h]
   exact partyLabelledBasis_repr_tensorPartyMaps a z b c _ ps hn hc x y
 
-end Word
-end TNLean.PEPS.PairEffect
+end Lattice.PartyCircuit.Word
+end TNLean

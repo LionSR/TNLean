@@ -13,10 +13,10 @@ inner-product discard spaces.
 
 \begin{definition}[Physical components of a word]
     \label{def:peps_physical_component}
-    \lean{TNLean.PEPS.PairEffect.Word.physicalComponent}
-    \lean{TNLean.PEPS.PairEffect.Word.physicalComponentCoordinates}
-    \lean{TNLean.PEPS.PairEffect.Layout.physicalDiscardIso}
-    \lean{TNLean.PEPS.PairEffect.Layout.physicalDiscardIso_tmul}
+    \lean{TNLean.Lattice.PartyCircuit.Word.physicalComponent}
+    \lean{TNLean.Lattice.PartyCircuit.Word.physicalComponentCoordinates}
+    \lean{TNLean.Lattice.PartyCircuit.Layout.physicalDiscardIso}
+    \lean{TNLean.Lattice.PartyCircuit.Layout.physicalDiscardIso_tmul}
     \leanok
     Let $V:H\to K$ be the evaluation of a word and let
     $J:K\simeq\C^X\otimes D$ be a linear isometric equivalence. For $x\in X$, put
@@ -33,8 +33,8 @@ inner-product discard spaces.
 
 \begin{theorem}[Component contraction]
     \label{thm:peps_physical_component_contraction}
-    \lean{TNLean.PEPS.PairEffect.Word.norm_physicalComponent_le_one}
-    \lean{TNLean.PEPS.PairEffect.Word.norm_physicalComponentCoordinates_le_one}
+    \lean{TNLean.Lattice.PartyCircuit.Word.norm_physicalComponent_le_one}
+    \lean{TNLean.Lattice.PartyCircuit.Word.norm_physicalComponentCoordinates_le_one}
     \leanok
     \uses{def:peps_physical_component}
     If $V$ is allowed, then $\|C_{x,V}\|\leq1$ and $\|A_{x,V}\|\leq1$.
@@ -51,10 +51,10 @@ inner-product discard spaces.
 
 \begin{definition}[Mixed physical Gram operator]
     \label{def:peps_physical_gram}
-    \lean{TNLean.PEPS.PairEffect.Word.physicalGramMap}
-    \lean{TNLean.PEPS.PairEffect.Word.physicalGramMap_inner}
-    \lean{TNLean.PEPS.PairEffect.Word.physicalGramMatrix}
-    \lean{TNLean.PEPS.PairEffect.Word.physicalGramMatrix_apply}
+    \lean{TNLean.Lattice.PartyCircuit.Word.physicalGramMap}
+    \lean{TNLean.Lattice.PartyCircuit.Word.physicalGramMap_inner}
+    \lean{TNLean.Lattice.PartyCircuit.Word.physicalGramMatrix}
+    \lean{TNLean.Lattice.PartyCircuit.Word.physicalGramMatrix_apply}
     \leanok
     Let $W:H'\to K$ be another word with the same output identification $J$.
     Assume that $H,H'$ have finite orthonormal bases. Define $O:H\to H'$ by
@@ -71,8 +71,8 @@ inner-product discard spaces.
 
 \begin{theorem}[Gram contraction]
     \label{thm:peps_physical_gram_contraction}
-    \lean{TNLean.PEPS.PairEffect.Word.norm_physicalGramMap_le_one}
-    \lean{TNLean.PEPS.PairEffect.Word.norm_physicalGramMatrix_le_one}
+    \lean{TNLean.Lattice.PartyCircuit.Word.norm_physicalGramMap_le_one}
+    \lean{TNLean.Lattice.PartyCircuit.Word.norm_physicalGramMatrix_le_one}
     \leanok
     \uses{def:peps_physical_gram,thm:peps_physical_component_contraction}
     For allowed $V,W$, both the mixed Gram operator and its matrix satisfy
@@ -92,7 +92,7 @@ inner-product discard spaces.
 
 \begin{definition}[Joint physical and discarded output coordinates]
     \label{def:peps_physical_output_matrix}
-    \lean{TNLean.PEPS.PairEffect.Word.physicalOutputMatrix}
+    \lean{TNLean.Lattice.PartyCircuit.Word.physicalOutputMatrix}
     \leanok
     \uses{def:peps_physical_component}
     Choose a finite orthonormal basis of $D$. Write $K_V$ for the matrix of $JV$
@@ -102,9 +102,9 @@ inner-product discard spaces.
 
 \begin{theorem}[Partial trace and exterior contraction]
     \label{thm:peps_exterior_contraction}
-    \lean{TNLean.PEPS.PairEffect.Word.partialTrace_physicalOutputMatrix_mul_conjTranspose}
-    \lean{TNLean.PEPS.PairEffect.Word.norm_physicalOutputMatrix_le_one}
-    \lean{TNLean.PEPS.PairEffect.Word.rectangularTraceNorm_partialTrace_physicalOutputMatrix_le}
+    \lean{TNLean.Lattice.PartyCircuit.Word.partialTrace_physicalOutputMatrix_mul_conjTranspose}
+    \lean{TNLean.Lattice.PartyCircuit.Word.norm_physicalOutputMatrix_le_one}
+    \lean{TNLean.Lattice.PartyCircuit.Word.rectangularTraceNorm_partialTrace_physicalOutputMatrix_le}
     \leanok
     \uses{def:peps_physical_output_matrix,def:peps_physical_gram}
     For an arbitrary rectangular matrix $\rho:H'\to H$,
@@ -128,11 +128,11 @@ inner-product discard spaces.
 
 \begin{definition}[Proper input frames]
     \label{def:peps_physical_frames}
-    \lean{TNLean.PEPS.PairEffect.Word.physicalComponentFrameMatrix}
-    \lean{TNLean.PEPS.PairEffect.Word.physicalComponentFrameMatrix_apply}
-    \lean{TNLean.PEPS.PairEffect.Word.physicalFrameGramMatrix}
-    \lean{TNLean.PEPS.PairEffect.Word.physicalFrameGramMatrix_apply}
-    \lean{TNLean.PEPS.PairEffect.Word.physicalOutputFrameMatrix}
+    \lean{TNLean.Lattice.PartyCircuit.Word.physicalComponentFrameMatrix}
+    \lean{TNLean.Lattice.PartyCircuit.Word.physicalComponentFrameMatrix_apply}
+    \lean{TNLean.Lattice.PartyCircuit.Word.physicalFrameGramMatrix}
+    \lean{TNLean.Lattice.PartyCircuit.Word.physicalFrameGramMatrix_apply}
+    \lean{TNLean.Lattice.PartyCircuit.Word.physicalOutputFrameMatrix}
     \leanok
     \uses{def:peps_physical_component,def:peps_physical_gram}
     Let $F:\C^n\to H$ and $F':\C^{n'}\to H'$ be linear isometries.
@@ -149,10 +149,10 @@ inner-product discard spaces.
 
 \begin{theorem}[Contraction in proper frames]
     \label{thm:peps_physical_frame_contraction}
-    \lean{TNLean.PEPS.PairEffect.Word.norm_physicalComponentFrameMatrix_le_one}
-    \lean{TNLean.PEPS.PairEffect.Word.norm_physicalFrameGramMatrix_le_one}
-    \lean{TNLean.PEPS.PairEffect.Word.norm_physicalOutputFrameMatrix_le_one}
-    \lean{TNLean.PEPS.PairEffect.Word.rectangularTraceNorm_partialTrace_physicalOutputFrameMatrix_le}
+    \lean{TNLean.Lattice.PartyCircuit.Word.norm_physicalComponentFrameMatrix_le_one}
+    \lean{TNLean.Lattice.PartyCircuit.Word.norm_physicalFrameGramMatrix_le_one}
+    \lean{TNLean.Lattice.PartyCircuit.Word.norm_physicalOutputFrameMatrix_le_one}
+    \lean{TNLean.Lattice.PartyCircuit.Word.rectangularTraceNorm_partialTrace_physicalOutputFrameMatrix_le}
     \leanok
     \uses{def:peps_physical_frames,thm:peps_physical_component_contraction}
     For allowed words, the three matrices in
@@ -171,8 +171,8 @@ inner-product discard spaces.
 
 \begin{definition}[Schmidt-weighted physical vectors]
     \label{def:peps_schmidt_physical_vector}
-    \lean{TNLean.PEPS.PairEffect.Word.schmidtPhysicalVector}
-    \lean{TNLean.PEPS.PairEffect.Word.schmidtPhysicalVector_repr}
+    \lean{TNLean.Lattice.PartyCircuit.Word.schmidtPhysicalVector}
+    \lean{TNLean.Lattice.PartyCircuit.Word.schmidtPhysicalVector_repr}
     \leanok
     \uses{def:peps_physical_frames}
     Let $F:\C^{I\times T}\to H$ be an isometry and let $\tau_t\in\R$.
@@ -188,7 +188,7 @@ inner-product discard spaces.
 
 \begin{theorem}[Weighted source matrix from Schmidt-weighted vectors]
     \label{thm:peps_weighted_physical_source_identity}
-    \lean{TNLean.PEPS.PairEffect.Word.sum_schmidtPhysicalVector_outer_eq_weightedSourceError}
+    \lean{TNLean.Lattice.PartyCircuit.Word.sum_schmidtPhysicalVector_outer_eq_weightedSourceError}
     \leanok
     \uses{def:peps_schmidt_physical_vector}
     For arbitrary complex coefficients $z_{il}$, tracing the common discard
@@ -211,10 +211,10 @@ inner-product discard spaces.
 
 \begin{definition}[Separated output and its physical operator]
     \label{def:peps_separated_physical_density}
-    \lean{TNLean.PEPS.PairEffect.Word.separatedSchmidtOutput}
-    \lean{TNLean.PEPS.PairEffect.Word.separatedSchmidtOutput_repr}
-    \lean{TNLean.PEPS.PairEffect.Word.separatedPhysicalCoordinates}
-    \lean{TNLean.PEPS.PairEffect.Word.separatedPhysicalDensity}
+    \lean{TNLean.Lattice.PartyCircuit.Word.separatedSchmidtOutput}
+    \lean{TNLean.Lattice.PartyCircuit.Word.separatedSchmidtOutput_repr}
+    \lean{TNLean.Lattice.PartyCircuit.Word.separatedPhysicalCoordinates}
+    \lean{TNLean.Lattice.PartyCircuit.Word.separatedPhysicalDensity}
     \leanok
     \uses{def:peps_schmidt_physical_vector}
     Let $V':H_E\to K_E$ be an exterior word, let
@@ -238,8 +238,8 @@ inner-product discard spaces.
 
 \begin{theorem}[Tracing both discarded factors]
     \label{thm:peps_separated_physical_density_blocks}
-    \lean{TNLean.PEPS.PairEffect.Word.partialTrace_separatedSchmidtOutput_eq_weightedSourceError}
-    \lean{TNLean.PEPS.PairEffect.Word.separatedPhysicalDensity_submatrix}
+    \lean{TNLean.Lattice.PartyCircuit.Word.partialTrace_separatedSchmidtOutput_eq_weightedSourceError}
+    \lean{TNLean.Lattice.PartyCircuit.Word.separatedPhysicalDensity_submatrix}
     \leanok
     \uses{def:peps_separated_physical_density,thm:peps_weighted_physical_source_identity}
     For each pair $x,y$ of affected physical coordinates, the corresponding
@@ -261,7 +261,7 @@ inner-product discard spaces.
 
 \begin{theorem}[Expected exterior trace norm under diagonal covariance]
     \label{thm:peps_weighted_physical_source_bound}
-    \lean{TNLean.PEPS.PairEffect.Word.integral_rectangularTraceNorm_weightedPhysicalSource_le}
+    \lean{TNLean.Lattice.PartyCircuit.Word.integral_rectangularTraceNorm_weightedPhysicalSource_le}
     \leanok
     \uses{thm:peps_physical_frame_contraction,def:peps_separated_physical_density}
     Assume all four words are allowed. Let $p_i,p'_l,\tau_t,\tau'_u$ be
@@ -288,7 +288,7 @@ inner-product discard spaces.
 
 \begin{definition}[Original corrected Schmidt coordinates]
     \label{def:peps_original_schmidt_coordinates}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.CorrectedSchmidtCoordinates}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.CorrectedSchmidtCoordinates}
     \leanok
     \uses{def:peps_source_coordinates}
     For $S\subseteq\mathcal E$, write
@@ -299,8 +299,8 @@ inner-product discard spaces.
 
 \begin{theorem}[Gaussian estimates for separated words]
     \label{thm:peps_gaussian_separated_physical_bound}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.integral_rectangularTraceNorm_gaussianPhysicalSource_le}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.integrable_gaussianSeparatedPhysicalDensity_and_integral_le}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.integral_rectangularTraceNorm_gaussianPhysicalSource_le}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.integrable_gaussianSeparatedPhysicalDensity_and_integral_le}
     \leanok
     \uses{def:peps_original_schmidt_coordinates,thm:peps_actual_gaussian_covariance,thm:peps_weighted_physical_source_bound}
     Use the Gaussian coefficient product $Z_{u,v}$ at original positions
@@ -327,10 +327,10 @@ inner-product discard spaces.
 
 \begin{theorem}[Prepared matrices on mixed pure inputs]
     \label{thm:peps_prepared_vector_density}
-    \lean{TNLean.PEPS.PairEffect.Word.preparedMatrix_mulVec_repr}
-    \lean{TNLean.PEPS.PairEffect.Word.preparedMatrix_mul_vecMulVec}
-    \lean{TNLean.PEPS.PairEffect.Word.preparedMatrix_mul_vecMulVec_preparedInput}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourceBasisMatrix_mul_vecMulVec}
+    \lean{TNLean.Lattice.PartyCircuit.Word.preparedMatrix_mulVec_repr}
+    \lean{TNLean.Lattice.PartyCircuit.Word.preparedMatrix_mul_vecMulVec}
+    \lean{TNLean.Lattice.PartyCircuit.Word.preparedMatrix_mul_vecMulVec_preparedInput}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sourceBasisMatrix_mul_vecMulVec}
     \leanok
     For preparation followed by a word, let $T$ denote its linear
     map and $K_T$ its matrix in finite orthonormal bases. Then
@@ -353,7 +353,7 @@ inner-product discard spaces.
 
 \begin{theorem}[Independence of physical output coordinates]
     \label{thm:peps_physical_corrected_basis_invariance}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.rectangularTraceNorm_physicalCorrectedSourceTerm_basis_eq}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.rectangularTraceNorm_physicalCorrectedSourceTerm_basis_eq}
     \leanok
     \uses{thm:peps_prepared_vector_density}
     For a mixed pure input $|\psi\rangle\langle\phi|$, the trace norm of the
@@ -372,7 +372,7 @@ inner-product discard spaces.
 
 \begin{definition}[Partial Schmidt output]
     \label{def:peps_partial_schmidt_output}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.partialSchmidtOutput}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.partialSchmidtOutput}
     \leanok
     \uses{def:peps_partial_schmidt_assignments}
     For a partial branch $\xi$ and selected endpoint assignment $u$, let
@@ -385,7 +385,7 @@ inner-product discard spaces.
 
 \begin{theorem}[Corrected operator on mixed pure inputs]
     \label{thm:peps_gaussian_vector_density}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.correctedSourceTerm_gaussian_vecMulVec_eq_sum}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.correctedSourceTerm_gaussian_vecMulVec_eq_sum}
     \leanok
     \uses{def:peps_partial_schmidt_output,thm:peps_corrected_gaussian_sum,thm:peps_prepared_vector_density}
     Suppose the affected set meets every corrected source and the weights and
@@ -407,9 +407,9 @@ inner-product discard spaces.
 
 \begin{theorem}[Square integrability of the coefficient products]
     \label{thm:peps_gaussian_products_integrable}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourceCorrection_product_memLp_two}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.partialSourceCorrection_product_memLp_two}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.integrable_rectangularTraceNorm_sourceCorrectionSum}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sourceCorrection_product_memLp_two}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.partialSourceCorrection_product_memLp_two}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.integrable_rectangularTraceNorm_sourceCorrectionSum}
     \leanok
     \uses{thm:peps_actual_gaussian_covariance}
     For $k>0$ and nonnegative local weights, every original-position Gaussian
@@ -429,8 +429,8 @@ inner-product discard spaces.
 
 \begin{theorem}[Integrability of corrected physical operators]
     \label{thm:peps_actual_physical_integrability}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.integrable_rectangularTraceNorm_map_correctedSourceTerm_gaussian}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.integrable_rectangularTraceNorm_physicalCorrectedSourceTerm_gaussian}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.integrable_rectangularTraceNorm_map_correctedSourceTerm_gaussian}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.integrable_rectangularTraceNorm_physicalCorrectedSourceTerm_gaussian}
     \leanok
     \uses{thm:peps_gaussian_products_integrable,thm:peps_corrected_gaussian_sum}
     Let $k>0$, let the weights be nonnegative, and suppose the fixed weights
@@ -453,7 +453,7 @@ inner-product discard spaces.
 
 \begin{definition}[A single Gaussian branch pair]
     \label{def:peps_gaussian_branch_density}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.gaussianSchmidtBranchDensity}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.gaussianSchmidtBranchDensity}
     \leanok
     \uses{def:peps_partial_schmidt_output}
     Before multiplying by the outer gate coefficients, define
@@ -467,9 +467,9 @@ inner-product discard spaces.
 
 \begin{theorem}[Original-position expression and branch expectation bound]
     \label{thm:peps_gaussian_branch_density_bound}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.gaussianSchmidtBranchDensity_eq_sum_original}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.integrable_rectangularTraceNorm_map_gaussianSchmidtBranchDensity}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.integral_rectangularTraceNorm_map_correctedSourceTerm_gaussian_le_sum}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.gaussianSchmidtBranchDensity_eq_sum_original}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.integrable_rectangularTraceNorm_map_gaussianSchmidtBranchDensity}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.integral_rectangularTraceNorm_map_correctedSourceTerm_gaussian_le_sum}
     \leanok
     \uses{def:peps_gaussian_branch_density,thm:peps_gaussian_products_integrable,thm:peps_gaussian_vector_density,thm:peps_actual_physical_integrability}
     If the affected set meets $S$, the two sums defining $B_{\xi\zeta}$ may
@@ -496,7 +496,7 @@ inner-product discard spaces.
 
 \begin{theorem}[A sample bounded by the average error sum]
     \label{thm:peps_sampled_error_integral_bound}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.exists_sampledSourceMatrix_error_le_sum_integral}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.exists_sampledSourceMatrix_error_le_sum_integral}
     \leanok
     \uses{thm:peps_actual_physical_integrability,thm:peps_sampled_physical_error}
     Fix $k>0$, nonnegative representing source weights and matrices, finite
@@ -519,10 +519,10 @@ inner-product discard spaces.
 
 \begin{definition}[Affected parties and retained free sources]
     \label{def:peps_corrected_free_sources}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.correctedMask}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.correctedFreeSlots}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.correctedFreeSlots_eq_true_iff}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.exists_correctedFreeSlot}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.correctedMask}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.correctedFreeSlots}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.correctedFreeSlots_eq_true_iff}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.exists_correctedFreeSlot}
     \leanok
     For $S\subseteq\mathcal E$, let $\mathcal A_S$ be the set of all endpoints
     of sources in $S$. A retained source is free precisely when its original
@@ -533,12 +533,12 @@ inner-product discard spaces.
 
 \begin{theorem}[Lifetime and coefficient costs]
     \label{thm:peps_actual_source_lifetime_cost}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.isTouched_correctedMask_iff}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.corrected_slot_isTouched}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.card_touched_correctedMask_le}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.coefficient_physical_cost_eq}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.coefficient_physical_cost_le}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sum_norm_coefficient_mul_conj_le_lifetime}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.isTouched_correctedMask_iff}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.corrected_slot_isTouched}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.card_touched_correctedMask_le}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.coefficient_physical_cost_eq}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.coefficient_physical_cost_le}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sum_norm_coefficient_mul_conj_le_lifetime}
     \leanok
     \uses{def:peps_corrected_free_sources}
     A gate occurrence is touched when one of its participating parties
@@ -574,7 +574,7 @@ inner-product discard spaces.
 
 \begin{definition}[Two contraction factors]
     \label{def:peps_actual_tensor_partition}
-    \lean{TNLean.PEPS.PairEffect.Word.IsTensorPartitioned}
+    \lean{TNLean.Lattice.PartyCircuit.Word.IsTensorPartitioned}
     \leanok
     A word admits a tensor partition for a Boolean owner map when there are
     two allowed source-free words $C,D$, on the respective restricted input
@@ -588,7 +588,7 @@ inner-product discard spaces.
 
 \begin{theorem}[Selective preparation gives two-side factors]
     \label{thm:peps_corrected_source_partition}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.exists_corrected_source_partition}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.exists_corrected_source_partition}
     \leanok
     \uses{def:peps_corrected_free_sources,def:peps_actual_tensor_partition}
     For every allowed chronological composition, every corrected set $S$,

@@ -13,8 +13,8 @@ from this memory to $\mathcal H\otimes(\mathcal A\otimes\mathcal E)$.
 \begin{definition}[Physical-first replacement]
     \label{def:peps_physical_first_replacement}
     \uses{thm:peps_circuit_effect_error}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.physicalFirstOutput}
-    \lean{TNLean.PEPS.PairEffect.EffectCircuit.physicalFirstReplacement}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.physicalFirstOutput}
+    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.physicalFirstReplacement}
     \leanok
     If $R$ is the constructed source-only replacement, define
     $R_{\rm phys}=\tau R$. The exchange acts on pure tensors by
@@ -27,15 +27,15 @@ from this memory to $\mathcal H\otimes(\mathcal A\otimes\mathcal E)$.
 
 \begin{theorem}[Preservation of gate and source occurrences]
     \label{thm:peps_physical_first_occurrences}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourceOrder_physicalFirstOutput}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.physicalFirstLocationsEquiv}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.physicalFirstSourcesEquiv}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.participants_physicalFirstLocationsEquiv}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.branchCoefficient_physicalFirstLocationsEquiv}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.endpoints_physicalFirstSourcesEquiv}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourceVectorAt_physicalFirstSourcesEquiv}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.participationCount_physicalFirstOutput}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.isExpansionBounded_physicalFirstOutput}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sourceOrder_physicalFirstOutput}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.physicalFirstLocationsEquiv}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.physicalFirstSourcesEquiv}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.participants_physicalFirstLocationsEquiv}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.branchCoefficient_physicalFirstLocationsEquiv}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.endpoints_physicalFirstSourcesEquiv}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sourceVectorAt_physicalFirstSourcesEquiv}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.participationCount_physicalFirstOutput}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.isExpansionBounded_physicalFirstOutput}
     \leanok
     \uses{def:peps_physical_first_replacement}
     Appending $\tau$ preserves the gate occurrences, source occurrences,
@@ -46,17 +46,17 @@ from this memory to $\mathcal H\otimes(\mathcal A\otimes\mathcal E)$.
 \end{theorem}
 
 \begin{proof}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.branchLabels_physicalFirstLocationsEquiv}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.card_gateLocations_physicalFirstOutput}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.card_sourceLocations_physicalFirstOutput}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.eval_exchangeBlocks_operator}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.eval_exchangeBlocks_threeFactors}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.eval_exchangeBlocks_triple_tmul}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.isAllowed_physicalFirstOutput}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.physicalFirstParticipationEquiv}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.slotCount_physicalFirstLocationsEquiv}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourceDims_physicalFirstSourcesEquiv}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourceOrder_exchangeBlocks}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.branchLabels_physicalFirstLocationsEquiv}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.card_gateLocations_physicalFirstOutput}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.card_sourceLocations_physicalFirstOutput}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.eval_exchangeBlocks_operator}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.eval_exchangeBlocks_threeFactors}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.eval_exchangeBlocks_triple_tmul}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.isAllowed_physicalFirstOutput}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.physicalFirstParticipationEquiv}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.slotCount_physicalFirstLocationsEquiv}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sourceDims_physicalFirstSourcesEquiv}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sourceOrder_exchangeBlocks}
     \leanok
     The exchange consists only of permutations of register order and
     introduces no gate or source occurrence. Including each occurrence of
@@ -71,9 +71,9 @@ from this memory to $\mathcal H\otimes(\mathcal A\otimes\mathcal E)$.
 \begin{theorem}[Finite-dimensional discarded registers]
     \label{thm:peps_auxiliary_register_finiteness}
     \uses{thm:peps_circuit_effect_error}
-    \lean{TNLean.PEPS.PairEffect.EffectCircuit.finiteDimensional_auxiliary_registers}
-    \lean{TNLean.PEPS.PairEffect.EffectCircuit.finiteDimensional_auxiliary_private_registers}
-    \lean{TNLean.PEPS.PairEffect.EffectCircuit.finiteDimensional_auxiliary_private_mem}
+    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.finiteDimensional_auxiliary_registers}
+    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.finiteDimensional_auxiliary_private_registers}
+    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.finiteDimensional_auxiliary_private_mem}
     \leanok
     Every auxiliary register constructed by the source replacement is
     finite-dimensional. If every original discarded private register is
@@ -83,9 +83,9 @@ from this memory to $\mathcal H\otimes(\mathcal A\otimes\mathcal E)$.
 
 \begin{proof}
     \uses{thm:peps_finite_register_memories}
-    \lean{TNLean.PEPS.PairEffect.Layout.finiteDimensional_registers_append}
-    \lean{TNLean.PEPS.PairEffect.Layout.finiteDimensional_registers_mapOwner}
-    \lean{TNLean.PEPS.PairEffect.PartyChain.finiteDimensional_registers_sources_prepStack}
+    \lean{TNLean.Lattice.PartyCircuit.Layout.finiteDimensional_registers_append}
+    \lean{TNLean.Lattice.PartyCircuit.Layout.finiteDimensional_registers_mapOwner}
+    \lean{TNLean.Lattice.PartyCircuit.PartyChain.finiteDimensional_registers_sources_prepStack}
     \lean{TNLean.PEPS.PairEffect.finiteDimensional_registers_sources_comp}
     \lean{TNLean.PEPS.PairEffect.finiteDimensional_registers_sources_prepGate}
     \lean{TNLean.PEPS.PairEffect.finiteDimensional_registers_sources_prepWord}
@@ -104,7 +104,7 @@ from this memory to $\mathcal H\otimes(\mathcal A\otimes\mathcal E)$.
     \lean{TNLean.PEPS.PairEffect.physicalFirstReadout_exchange_apply}
     \lean{TNLean.PEPS.PairEffect.physicalFirstReadout_exchange_outerProduct}
     \lean{TNLean.PEPS.PairEffect.partialTrace_physicalFirstReadout_exchange}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.physicalDensity_physicalFirstOutput}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.physicalDensity_physicalFirstOutput}
     \leanok
     \uses{def:peps_physical_first_replacement}
     Choose orthonormal coordinates indexed by $U$, $X$ and $V$ on
@@ -123,7 +123,7 @@ from this memory to $\mathcal H\otimes(\mathcal A\otimes\mathcal E)$.
 \end{theorem}
 
 \begin{proof}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.physicalDensity_pure_input}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.physicalDensity_pure_input}
     \lean{TNLean.PEPS.PairEffect.exchangedGarbageBasis}
     \lean{TNLean.PEPS.PairEffect.extendedPhysicalReadout_triple_tmul}
     \lean{TNLean.PEPS.PairEffect.physicalFirstReadout}
@@ -143,9 +143,9 @@ from this memory to $\mathcal H\otimes(\mathcal A\otimes\mathcal E)$.
 
 \begin{theorem}[Exact sources recover the replacement physical state]
     \label{thm:peps_physical_first_exact_sources}
-    \lean{TNLean.PEPS.PairEffect.EffectCircuit.physicalDensity_physicalFirstReplacement}
-    \lean{TNLean.PEPS.PairEffect.EffectCircuit.physicalSourceReplacedDensity_physicalFirstReplacement_exact}
-    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.rectangularTraceNorm_physicalFirst_density_sub_le_half}
+    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.physicalDensity_physicalFirstReplacement}
+    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.physicalSourceReplacedDensity_physicalFirstReplacement_exact}
+    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.rectangularTraceNorm_physicalFirst_density_sub_le_half}
     \leanok
     \uses{thm:peps_physical_first_trace,thm:peps_source_only_density_error}
     Let $W$ be an original circuit with at most $M$ nonprivate gates,

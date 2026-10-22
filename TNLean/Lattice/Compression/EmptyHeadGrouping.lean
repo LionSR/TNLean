@@ -17,6 +17,7 @@ Theorem 5.2, `04-compression.tex`, lines 565–588.
 noncomputable section
 open scoped TensorProduct
 namespace TNLean.PEPS.PairEffect
+open TNLean.Lattice.PartyCircuit
 
 /-- If the head owns no register, its grouping factor is the scalar unit.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 565–588. -/

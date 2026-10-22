@@ -37,7 +37,7 @@ noncomputable section
 
 namespace TNLean.MPS.AreaLaw.ChainSweep
 
-open TNLean.PEPS.PairEffect TNLean.PEPS.EncodedFrame
+open TNLean.PEPS.PairEffect TNLean.Lattice.Sheet
 
 /-- The protocol's density error permits column extraction and the source's
 final phase error for every L≥2. Source: Part II, `thm:B`, lines 587–593. -/

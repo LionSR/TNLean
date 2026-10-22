@@ -23,7 +23,7 @@ required.
 -/
 
 noncomputable section
-namespace TNLean.PEPS.PairEffect.SourceCircuit
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
 variable {P : Type}
 
 /-- The product of the original coefficient sums at gates with no participants.
@@ -67,4 +67,4 @@ theorem norm_emptyGateScalar_le_one {a b : Layout P} (w : SourceCircuit a b) :
   | swap => exact le_of_eq norm_one
   | frame r w ih => exact ih
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit

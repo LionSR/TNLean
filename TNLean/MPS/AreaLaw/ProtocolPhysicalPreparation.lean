@@ -39,7 +39,7 @@ noncomputable section
 
 namespace TNLean.MPS.AreaLaw.ChainSweep
 
-open TNLean.Lattice TNLean.PEPS.PairEffect TNLean.PEPS.EncodedFrame ContinuousLinearMap
+open TNLean.Lattice TNLean.Lattice.PartyCircuit TNLean.Lattice.Sheet ContinuousLinearMap
 
 /-- An explicit uniform length cutoff controls the rounded logarithmic width
 and its physical dimensions. The prefactor retains the ceiling's additive one.

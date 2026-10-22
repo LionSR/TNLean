@@ -8,7 +8,7 @@ import TNLean.Lattice.PartyCircuit.PartyWord
 /-!
 # Allowed monomials on a party layout
 
-This file places the monomials of `TNLean.PEPS.PairEffect` on parties.  An allowed monomial
+This file places the monomials of `TNLean.Lattice.PartyCircuit` on parties.  An allowed monomial
 (`PartyChain`) consists of source-only words separated by pair effects: an effect contracts a
 register `ℂ^α` of a party `p` and a register `ℂ^β` of another party `q` with a normalized bra.
 Its operator is the `EffectChain` of `TNLean.PEPS.Approximation.PairEffectElimination`
@@ -25,16 +25,16 @@ expansion of a whole gate is assembled in `TNLean.PEPS.Approximation.PartyLayout
 
 ## Main definitions
 
-* `PairEffect.PartyChain` : allowed monomials with pair effects on named parties.
-* `PairEffect.PartyChain.replaceWord` : the terms of a replaced monomial as source-only words.
-* `PairEffect.PartyChain.stackAppIso` : the identification of the stack layout with the stack
+* `PartyCircuit.PartyChain` : allowed monomials with pair effects on named parties.
+* `PartyCircuit.PartyChain.replaceWord` : the terms of a replaced monomial as source-only words.
+* `PartyCircuit.PartyChain.stackAppIso` : the identification of the stack layout with the stack
   space of the effect chain.
 
 ## Main results
 
-* `PairEffect.PartyChain.replaceTerm_toEffectChain` : each term of a replaced monomial is the
+* `PartyCircuit.PartyChain.replaceTerm_toEffectChain` : each term of a replaced monomial is the
   operator of a source-only word.
-* `PairEffect.PartyChain.owner_stackRegs` : the stack registers are owned by the endpoint
+* `PartyCircuit.PartyChain.owner_stackRegs` : the stack registers are owned by the endpoint
   parties of the effects.
 
 ## References
@@ -47,7 +47,7 @@ noncomputable section
 
 open scoped InnerProductSpace TensorProduct
 
-namespace TNLean.PEPS.PairEffect
+namespace TNLean.Lattice.PartyCircuit
 
 open EuclideanSpace CyclicInsertion ContinuousLinearMap
 
@@ -265,4 +265,4 @@ theorem stackAppIso_frameStack {ℓ ℓ' : Layout P} (W : Word ℓ ℓ') :
 
 end PartyChain
 
-end TNLean.PEPS.PairEffect
+end TNLean.Lattice.PartyCircuit

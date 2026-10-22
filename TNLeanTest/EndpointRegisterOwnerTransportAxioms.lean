@@ -10,7 +10,7 @@ import Lean.Util.CollectAxioms
 /-! # Axiom check for owner and layout transport of endpoint registers -/
 
 set_option linter.hashCommand false
-open TNLean.PEPS.PairEffect.SourceInventory
+open TNLean.Lattice.PartyCircuit.SourceInventory
 
 run_cmd do
   let decl := ``endpointRegisterWord_eval_heq_mapOwner_castLayouts

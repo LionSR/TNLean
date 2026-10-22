@@ -26,7 +26,8 @@ Independently formalized; no upstream Lean proof text reused.
 -/
 
 noncomputable section
-namespace TNLean.PEPS.PairEffect.SourceCircuit
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
+open TNLean.PEPS.PairEffect
 variable {P : Type}
 open TNLean.PEPS.Approximation
 
@@ -98,4 +99,4 @@ theorem choicesOfOriginalGateLabelsAt_eq_projectAllChoices {a b : Layout P}
   exact (choiceAt_choicesOfTouchedLabels _ w _ g hg).trans
     (choiceAt_projectAllChoices _ w ξ g hg).symm
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit

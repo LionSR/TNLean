@@ -17,15 +17,15 @@ are partitioned into three regions `T`, `E` and `U = Λ ∖ (T ∪ E)`. This fil
 coordinates of such a partition and the splitting consequence of Lemma 6.4 in them. Nothing here
 depends on a geometry of the sites.
 
-* `EncodedFrame.threeSplit T E` identifies the raw configurations of the sheet with triples
+* `Sheet.threeSplit T E` identifies the raw configurations of the sheet with triples
   `((t, e), u)` of configurations on `T`, `E` and `(T ∪ E)ᶜ`. It refines the two-region
   coordinates `TNLean.Lattice.sheetSplit`, in which an operator on `S` is `A' ⊗ 1` and an
   operator on a set disjoint from `S` is `1 ⊗ A'`.
 * An operator acting on `T ∪ E` is `A' ⊗ 1_U` in these coordinates, and an operator on a subset
   of `E` is `(1_T ⊗ A') ⊗ 1_U`.
-* `EncodedFrame.one_kronecker_mul_stack`: the operator `1 ⊗ B` passes through a tagged stack
+* `Sheet.one_kronecker_mul_stack`: the operator `1 ⊗ B` passes through a tagged stack
   `∑_t |t⟩ ⊗ S_t` whenever `B` commutes with every `S_t`.
-* `EncodedFrame.exists_sheetSplitting`: Lemma 6.4 `lem:splitting` for the regional mutual
+* `Sheet.exists_sheetSplitting`: Lemma 6.4 `lem:splitting` for the regional mutual
   information `I_Ω(T:E)` of a unit vector `Ω` on the sheet: if `I_Ω(T:E) ≤ L^{-60}` there are an
   isometry `V` on the configurations of `U` and unit vectors `s`, `s'` with
   `‖(1_{TE} ⊗ V) Ω - s ⊗ s'‖ ≤ L^{-30}`. It is QICLean's
@@ -50,7 +50,7 @@ open TNLean.Lattice (sheetSplit)
 
 noncomputable section
 
-namespace TNLean.PEPS.EncodedFrame
+namespace TNLean.Lattice.Sheet
 
 variable {ι : Type*} [Fintype ι] [DecidableEq ι] {q : ℕ}
 
@@ -356,4 +356,4 @@ theorem exists_sheetSplitting_rpow {Ω : EuclideanSpace ℂ (ι → Fin q)} (hΩ
 
 end Splitting
 
-end TNLean.PEPS.EncodedFrame
+end TNLean.Lattice.Sheet

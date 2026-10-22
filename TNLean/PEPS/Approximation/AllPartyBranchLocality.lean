@@ -22,7 +22,8 @@ Source: polynomial-PEPS manuscript (September 24, 2026), Theorem 5.2,
 -/
 
 noncomputable section
-namespace TNLean.PEPS.PairEffect.SourceCircuit
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
+open TNLean.PEPS.PairEffect
 variable {P : Type}
 
 /-- Equality of the already selected remaining operators, formed before
@@ -168,4 +169,4 @@ theorem restrict_partialWord_all_localPart_eval_heq_of_projectAllChoices_eq
         (partialWord (fun _ : P => true) w ξ) (partialWord (fun _ : P => true) w ζ)
         rfl rfl (selected_sources_partialWord_all_eq w f ξ ζ) (ih ξ ζ h)
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit

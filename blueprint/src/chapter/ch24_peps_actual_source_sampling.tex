@@ -10,7 +10,7 @@ positive; its tensor-network representation is proved separately.
 
 \begin{theorem}[Finite-dimensional spaces of discarded registers]
     \label{thm:peps_finite_register_memories}
-    \lean{TNLean.PEPS.PairEffect.Layout.finiteDimensional_mem_of_registers,TNLean.PEPS.PairEffect.Layout.finiteDimensional_mem_restrict_mapOwner_mapOwner}
+    \lean{TNLean.Lattice.PartyCircuit.Layout.finiteDimensional_mem_of_registers,TNLean.Lattice.PartyCircuit.Layout.finiteDimensional_mem_restrict_mapOwner_mapOwner}
     \leanok
     Let $R$ be a finite ordered list of registers, each with a finite-dimensional
     complex Hilbert space. Their tensor product is finite-dimensional, and
@@ -28,7 +28,7 @@ positive; its tensor-network representation is proved separately.
 \begin{definition}[Orthonormal coordinates of selected discarded registers]
     \label{def:peps_restricted_discard_basis}
     \uses{thm:peps_finite_register_memories}
-    \lean{TNLean.PEPS.PairEffect.Layout.restrictedDiscardBasis}
+    \lean{TNLean.Lattice.PartyCircuit.Layout.restrictedDiscardBasis}
     \leanok
     Under the assumptions of Theorem~\ref{thm:peps_finite_register_memories},
     choose an orthonormal basis of the restricted register space indexed by
@@ -65,7 +65,7 @@ positive; its tensor-network representation is proved separately.
 
 \begin{theorem}[Expected norm of a partial branch]
     \label{thm:peps_actual_gaussian_branch}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.integrable_actualGaussianBranch_and_integral_le}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.integrable_actualGaussianBranch_and_integral_le}
     \leanok
     Let $W$ be an allowed circuit whose output registers consist of physical
     registers followed by discarded registers. Fix a set $S$ of
@@ -130,7 +130,7 @@ positive; its tensor-network representation is proved separately.
 
 \begin{theorem}[Expected norm of the corrected term]
     \label{thm:peps_actual_corrected_source_bound}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.integral_actualCorrectedSourceTerm_le}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.integral_actualCorrectedSourceTerm_le}
     \leanok
     Let $W$ be an allowed circuit whose output registers consist of
     physical registers followed by discarded registers. Let $p_0$ be an
@@ -170,7 +170,7 @@ positive; its tensor-network representation is proved separately.
 
 \begin{theorem}[Corrected-term bound from circuit participation]
     \label{thm:peps_actual_source_lifetime_bound}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.integral_actualCorrectedSourceTerm_le_lifetime}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.integral_actualCorrectedSourceTerm_le_lifetime}
     \leanok
     Let the finite set of parties be listed without repetition, with one
     physical register of dimension $d_p$ at each party $p$, and assume every
@@ -205,7 +205,7 @@ positive; its tensor-network representation is proved separately.
 
 \begin{theorem}[Choosing one sample from corrected-term bounds]
     \label{thm:peps_source_sample_choice_conditional}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.exists_sampledSourceMatrix_error_le_of_integral_bound}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.exists_sampledSourceMatrix_error_le_of_integral_bound}
     \leanok
     Fix a source-only circuit with finite orthonormal bases on the input,
     physical output, and discarded output spaces, and an input matrix.
@@ -235,7 +235,7 @@ positive; its tensor-network representation is proved separately.
 
 \begin{theorem}[A single sample for the source circuit]
     \label{thm:peps_actual_source_sampling}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.exists_sourceSample_lifetime_error_le}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.exists_sourceSample_lifetime_error_le}
     \leanok
     Let $W$ be an allowed circuit on a finite set of parties, listed without
     repetition, with physical output $\bigotimes_p\mathbb C^{d_p}$ followed
@@ -310,7 +310,7 @@ positive; its tensor-network representation is proved separately.
 
 \begin{theorem}[Polynomial sampling for real accuracy exponents]
     \label{thm:peps_actual_source_polynomial}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.exists_sourceSample_polynomial_error_le}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.exists_sourceSample_polynomial_error_le}
     \leanok
     Under the assumptions of
     Theorem~\ref{thm:peps_actual_source_sampling}, let $L\geq1$ and suppose
@@ -370,7 +370,7 @@ positive; its tensor-network representation is proved separately.
 \begin{theorem}[Polynomial number of replacement monomials]
     \label{thm:peps_effect_replacement_polynomial}
     \lean{TNLean.PEPS.PairEffect.replacementMonomialBound_le_of_power_bounds}
-    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.card_branchLabels_replacement_le_power}
+    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.card_branchLabels_replacement_le_power}
     \leanok
     Under the preceding power bounds, let $K$ be a nonnegative integer satisfying
     $K\leq C_KL^a$ with $C_K\geq0$ and a nonnegative integer $a$. Then
@@ -394,7 +394,7 @@ positive; its tensor-network representation is proved separately.
 
 \begin{theorem}[Sampled physical operator as a sum of party tensor products]
     \label{thm:peps_actual_pure_sampled_physical_sum}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.physicalSourceReplacedDensity_pure_sampled_eq_scalar_smul_physicalSum}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.physicalSourceReplacedDensity_pure_sampled_eq_scalar_smul_physicalSum}
     \leanok
     \uses{thm:peps_actual_pure_physical_source_replacement,
         thm:peps_actual_source_column_physical_trace,thm:peps_actual_sampled_physical_scalar,

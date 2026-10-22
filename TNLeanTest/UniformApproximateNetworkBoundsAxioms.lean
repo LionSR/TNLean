@@ -10,7 +10,7 @@ import Lean.Util.CollectAxioms
 /-! # Axiom check for uniform bounds at a fixed local approximation precision -/
 
 set_option linter.hashCommand false
-open TNLean.PEPS.PairEffect.EffectCircuit
+open TNLean.Lattice.PartyCircuit.EffectCircuit
 
 run_cmd do
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]

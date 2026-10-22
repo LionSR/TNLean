@@ -21,7 +21,8 @@ Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 253–267,
 -/
 
 noncomputable section
-namespace TNLean.PEPS.PairEffect.SourceCircuit
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
+open TNLean.PEPS TNLean.PEPS.PairEffect
 open TNLean.PEPS.Approximation
 variable {P : Type}
 
@@ -56,4 +57,4 @@ def partialSlotSampleEquiv {a b : Layout P} (w : SourceCircuit a b) (p : P) :
   simp_rw [partySelector_affectedOwner_all_apply]
   simp only [partySelector, decide_eq_true_eq]
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit

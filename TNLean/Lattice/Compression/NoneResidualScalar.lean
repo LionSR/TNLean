@@ -23,8 +23,10 @@ Source: polynomial-PEPS, `04-compression.tex`, lines 24–28, 233–251 and 351�
 
 noncomputable section
 open ContinuousLinearMap
-namespace TNLean.PEPS.PairEffect
+namespace TNLean
+open TNLean.Lattice.PartyCircuit TNLean.PEPS.PairEffect
 variable {P : Type}
+namespace PEPS.PairEffect
 private theorem restrict_affectedOwner_all (a : Layout P) :
     Layout.restrict Option.isNone (Layout.mapOwner (affectedOwner (fun _ : P ↦ true)) a) =
       [] :=
@@ -39,7 +41,8 @@ private theorem restrict_allMapped_localPart {a b : Layout P} (w : Word a b) :
   rw [partySelector_none] at h
   exact h
 
-namespace SourceCircuit
+end PEPS.PairEffect
+namespace Lattice.PartyCircuit.SourceCircuit
 private theorem restrict_sources_partialWord_all_eq_nil {a b : Layout P}
     (w : SourceCircuit a b) (ξ : Choices (fun _ : P ↦ true) w) :
     Layout.restrict Option.isNone (partialWord (fun _ : P ↦ true) w ξ).sources.layout = [] :=
@@ -99,5 +102,5 @@ theorem restrict_partialResidual_all_eval_heq_emptyGateScalar
     (partialWord (fun _ : P ↦ true) w ξ).sources_localPart).trans
       (restrict_partialWord_all_localPart_eval_heq_emptyGateScalar w ξ)
 
-end SourceCircuit
-end TNLean.PEPS.PairEffect
+end Lattice.PartyCircuit.SourceCircuit
+end TNLean

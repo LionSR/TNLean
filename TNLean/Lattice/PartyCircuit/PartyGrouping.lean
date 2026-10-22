@@ -19,7 +19,7 @@ noncomputable section
 
 open scoped InnerProductSpace TensorProduct
 
-namespace TNLean.PEPS.PairEffect
+namespace TNLean.Lattice.PartyCircuit
 
 variable {P : Type}
 
@@ -88,4 +88,4 @@ theorem groupByPartyIso_cons (p : P) (ps : List P) (ℓ : Layout P)
             (Layout.memCongr (partyLayout_withoutParty ps p ℓ (List.nodup_cons.mp hn).1))).lTensor
               (Mem (Layout.atParty p ℓ))) := rfl
 
-end TNLean.PEPS.PairEffect
+end TNLean.Lattice.PartyCircuit

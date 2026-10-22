@@ -28,7 +28,8 @@ noncomputable section
 open QICLean.ComplexGaussian
 open scoped Matrix ComplexConjugate NNReal
 
-namespace TNLean.PEPS.PairEffect.EffectCircuit
+namespace TNLean.Lattice.PartyCircuit.EffectCircuit
+open TNLean.PEPS.PairEffect
 
 open TNLean.PEPS.Approximation
 attribute [local instance] Classical.propDecidable
@@ -215,4 +216,4 @@ theorem exists_sampled_contractedOperator_approximate_error_le
     (w.physicalDensityWithGateMaps G
       (familyLabelledPhysicalReadout physicalDim ps hps hcover priv) ψ.vector) ε hω
 
-end TNLean.PEPS.PairEffect.EffectCircuit
+end TNLean.Lattice.PartyCircuit.EffectCircuit

@@ -23,7 +23,9 @@ The scalars may vanish.
 
 noncomputable section
 open ContinuousLinearMap
-namespace TNLean.PEPS.PairEffect
+namespace TNLean
+open TNLean.Lattice.PartyCircuit
+namespace PEPS.PairEffect
 private theorem scalar_comp_heq {Q : Type} {a b d : Layout Q}
     (A : Mem a →L[ℂ] Mem b) (B : Mem b →L[ℂ] Mem d)
     (ha : a = []) (hb : b = []) (hd : d = []) (α β : ℂ)
@@ -39,6 +41,9 @@ private theorem scalar_comp_heq {Q : Type} {a b d : Layout Q}
   simp only [ContinuousLinearMap.comp_apply, smul_apply,
     ContinuousLinearMap.id_apply, smul_smul, mul_comm]
 
+end PEPS.PairEffect
+namespace Lattice.PartyCircuit
+open TNLean.PEPS.PairEffect
 /-- Scalar restrictions compose in chronological order when all retained input,
 intermediate, output and source registers are empty. Source: polynomial-PEPS,
 `04-compression.tex`, lines 246–251 and 351–381. -/
@@ -124,4 +129,5 @@ theorem Word.restrict_localPart_frame_scalar {Q : Type} (f : Q → Bool)
     (by simpa only [one_smul] using restrict_moveHead_eval_heq_id_of_eq_nil f r _ _ hm)
     ((Word.restrict_frame_false_eval_heq f r _ _ hr).trans he)
 
-end TNLean.PEPS.PairEffect
+end Lattice.PartyCircuit
+end TNLean

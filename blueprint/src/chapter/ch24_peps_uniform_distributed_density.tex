@@ -62,7 +62,7 @@ monomial lists at the gate occurrences to vary independently.
 
 \begin{definition}[Monomial lists on a fixed chronology]
     \label{def:peps_fixed_chronology_lists}
-    \lean{TNLean.PEPS.PairEffect.EffectCircuit.GateLists}
+    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.GateLists}
     \leanok
     \uses{def:peps_approximate_original_operators}
     An expansion family assigns a finite monomial list $\mathcal L_g$ on the
@@ -73,7 +73,7 @@ monomial lists at the gate occurrences to vary independently.
 
 \begin{definition}[Reexpansion of a fixed chronology]
     \label{def:peps_fixed_chronology_reexpansion}
-    \lean{TNLean.PEPS.PairEffect.EffectCircuit.reexpand}
+    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.reexpand}
     \leanok
     \uses{def:peps_fixed_chronology_lists}
     Given an expansion family $\mathcal L$, the reexpanded circuit
@@ -85,7 +85,7 @@ monomial lists at the gate occurrences to vary independently.
 
 \begin{definition}[Original operators after reexpansion]
     \label{def:peps_fixed_chronology_original_operators}
-    \lean{TNLean.PEPS.PairEffect.EffectCircuit.reexpandGateMaps}
+    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.reexpandGateMaps}
     \leanok
     \uses{def:peps_fixed_chronology_reexpansion,def:peps_approximate_original_operators}
     Reexpansion assigns to each occurrence in $\mathcal C[\mathcal L]$ the
@@ -95,7 +95,7 @@ monomial lists at the gate occurrences to vary independently.
 
 \begin{theorem}[Original-operator evaluation is unchanged]
     \label{thm:peps_fixed_chronology_evaluation}
-    \lean{TNLean.PEPS.PairEffect.EffectCircuit.evalWithGateMaps_reexpand}
+    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.evalWithGateMaps_reexpand}
     \leanok
     \uses{def:peps_fixed_chronology_original_operators}
     Let $U_{\mathcal C,G}$ denote circuit evaluation using the assigned
@@ -113,7 +113,7 @@ monomial lists at the gate occurrences to vary independently.
 
 \begin{definition}[Correspondence of original occurrences]
     \label{def:peps_fixed_chronology_occurrences}
-    \lean{TNLean.PEPS.PairEffect.EffectCircuit.reexpandLocationsEquiv}
+    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.reexpandLocationsEquiv}
     \leanok
     \uses{def:peps_fixed_chronology_reexpansion}
     The occurrence bijection $E_{\mathcal L}$ from the nonprivate gate
@@ -124,7 +124,7 @@ monomial lists at the gate occurrences to vary independently.
 
 \begin{theorem}[The prescribed participant sets are unchanged]
     \label{thm:peps_fixed_chronology_participants}
-    \lean{TNLean.PEPS.PairEffect.EffectCircuit.participants_reexpand}
+    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.participants_reexpand}
     \leanok
     \uses{def:peps_fixed_chronology_occurrences}
     If $\mathcal P_g$ is the prescribed participating set of an original gate
@@ -140,7 +140,7 @@ monomial lists at the gate occurrences to vary independently.
 
 \begin{theorem}[The original gate count is unchanged]
     \label{thm:peps_fixed_chronology_gate_count}
-    \lean{TNLean.PEPS.PairEffect.EffectCircuit.expandedGateCount_reexpand}
+    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.expandedGateCount_reexpand}
     \leanok
     \uses{def:peps_fixed_chronology_occurrences}
     Reexpansion preserves the number of nonprivate gate occurrences, including
@@ -155,7 +155,7 @@ monomial lists at the gate occurrences to vary independently.
 
 \begin{theorem}[Whole-lifetime participation is unchanged]
     \label{thm:peps_fixed_chronology_lifetime}
-    \lean{TNLean.PEPS.PairEffect.EffectCircuit.participationCount_reexpand}
+    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.participationCount_reexpand}
     \leanok
     \uses{thm:peps_fixed_chronology_participants,def:compression_lifetime_gates}
     For every party $p$, the number of nonprivate gates in which $p$
@@ -198,7 +198,7 @@ monomial lists at the gate occurrences to vary independently.
     \label{thm:peps_uniform_prescribed_expansion_bounds_of_le}
     \lean{TNLean.PEPS.Approximation.sampledNetworkPrefactor_pos,
         TNLean.PEPS.Approximation.sampledNetworkExponent_pos,
-        TNLean.PEPS.PairEffect.EffectCircuit.uniform_sampled_approximate_network_bounds_of_le}
+        TNLean.Lattice.PartyCircuit.EffectCircuit.uniform_sampled_approximate_network_bounds_of_le}
     \leanok
     \uses{def:peps_sampled_network_constants}
     In the setting of
@@ -224,7 +224,7 @@ monomial lists at the gate occurrences to vary independently.
 
 \begin{theorem}[Uniform sampled bounds at one prescribed precision]
     \label{thm:peps_uniform_prescribed_expansion_bounds}
-    \lean{TNLean.PEPS.PairEffect.EffectCircuit.exists_uniform_sampled_approximate_network_bounds}
+    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.exists_uniform_sampled_approximate_network_bounds}
     \leanok
     \uses{thm:peps_uniform_prescribed_expansion_bounds_of_le,def:peps_sampled_network_constants}
     Fix the arity and lifetime bound $b$, the monomial effect bound
@@ -324,7 +324,7 @@ monomial lists at the gate occurrences to vary independently.
         TNLean.PEPS.Approximation.compressionExponent_pos,
         TNLean.PEPS.PairEffect.GateMapConstruction.uniform_approximate_sampled_network_of_le,
         TNLean.PEPS.PairEffect.GateMapConstruction.uniform_approximate_sampled_network_of_sum_le,
-        TNLean.PEPS.PairEffect.EffectCircuit.IsExpansionBounded.mono}
+        TNLean.Lattice.PartyCircuit.EffectCircuit.IsExpansionBounded.mono}
     \leanok
     \uses{def:peps_compression_constants,def:peps_original_gate_construction}
     In the setting of

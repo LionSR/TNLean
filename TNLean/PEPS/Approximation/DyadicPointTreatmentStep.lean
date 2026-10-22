@@ -218,7 +218,7 @@ theorem card_blockParties_le (own : κ → Party) (lab : ℤ × ℤ → κ) (S :
 
 /-! ### The point treatment as one gate -/
 
-open EncodedFrame PairEffect
+open EncodedFrame TNLean.Lattice.Sheet TNLean.Lattice.PartyCircuit
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι] {q : ℕ} {pos : ι → ℝ × ℝ}
 

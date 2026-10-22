@@ -19,9 +19,10 @@ Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 279–355,
 noncomputable section
 open ContinuousLinearMap
 open scoped TensorProduct
-namespace TNLean.PEPS.PairEffect
+namespace TNLean
+open TNLean.Lattice.PartyCircuit TNLean.PEPS.PairEffect
 
-namespace SourceInventory
+namespace Lattice.PartyCircuit.SourceInventory
 variable {P Q : Type}
 
 private def mapEndpointData (f : P → Q)
@@ -87,9 +88,9 @@ theorem endpointRegisterWord_eval_heq_of_eq
   cases h
   rfl
 
-end SourceInventory
+end Lattice.PartyCircuit.SourceInventory
 
-namespace SourceCircuit
+namespace Lattice.PartyCircuit.SourceCircuit
 variable {P : Type} {a b : Layout P}
 
 /-- The ordered endpoint register data at one original source occurrence.
@@ -240,5 +241,5 @@ theorem restrict_endpointWord_eval_heq_selectedRegisterWord
   exact ha.trans hnorm.symm
 
 
-end SourceCircuit
-end TNLean.PEPS.PairEffect
+end Lattice.PartyCircuit.SourceCircuit
+end TNLean

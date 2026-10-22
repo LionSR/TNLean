@@ -21,6 +21,7 @@ Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 574–579.
 noncomputable section
 open scoped Matrix
 namespace TNLean.PEPS.PairEffect
+open TNLean.Lattice.PartyCircuit
 
 /-- The mixed coordinate trace for arbitrary source-free words is formed before
 the actual sampled words are substituted. Source: polynomial-PEPS Theorem 5.2,

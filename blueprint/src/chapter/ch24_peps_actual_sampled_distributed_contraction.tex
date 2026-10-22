@@ -19,7 +19,7 @@ $\tau:[N]\to\mathcal S$ and $\kappa_p:[n_p]\to\mathcal S_p$.
 
 \begin{definition}[A participant root at each original gate]
     \label{def:peps_source_gate_root}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourceGateRoot}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sourceGateRoot}
     \leanok
     \uses{def:peps_touched_labels}
     In \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}, choose
@@ -33,7 +33,7 @@ $\tau:[N]\to\mathcal S$ and $\kappa_p:[n_p]\to\mathcal S_p$.
 
 \begin{theorem}[The root is an original participant]
     \label{thm:peps_source_gate_root_mem}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourceGateRoot_mem}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sourceGateRoot_mem}
     \leanok
     \uses{def:peps_source_gate_root}
     For the star roots in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
@@ -50,7 +50,7 @@ $\tau:[N]\to\mathcal S$ and $\kappa_p:[n_p]\to\mathcal S_p$.
 
 \begin{theorem}[Incident labels after reindexing a full choice]
     \label{thm:peps_reindexed_incident_gate_labels}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.originalGateLabelsAtOfAllChoices_eq_restrictGates}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.originalGateLabelsAtOfAllChoices_eq_restrictGates}
     \leanok
     \uses{thm:peps_incident_gate_labels,def:peps_touched_labels}
     For the gate-label identification in
@@ -74,7 +74,7 @@ $\tau:[N]\to\mathcal S$ and $\kappa_p:[n_p]\to\mathcal S_p$.
 
 \begin{theorem}[Incident samples after reindexing a full assignment]
     \label{thm:peps_reindexed_incident_samples}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.restrict_reindexedSourceSampleAssignment_eq}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.restrict_reindexedSourceSampleAssignment_eq}
     \leanok
     \uses{def:peps_source_sample_assignment_indices,def:peps_local_source_sample_indices}
     For the local sample values in
@@ -99,7 +99,7 @@ $\tau:[N]\to\mathcal S$ and $\kappa_p:[n_p]\to\mathcal S_p$.
 
 \begin{theorem}[Reindexing choices and common samples together]
     \label{thm:peps_joint_gate_sample_sum}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sum_choiceSamples_eq_sum_originalGateSamples}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sum_choiceSamples_eq_sum_originalGateSamples}
     \leanok
     \uses{def:peps_touched_labels,def:peps_source_sample_assignment_indices}
     In \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}, let $P$ be
@@ -332,7 +332,7 @@ its sample argument is read at the original ordered incident slots.
 
 \begin{theorem}[The sampled physical sum in original gate and sample positions]
     \label{thm:peps_original_gate_sample_physical_sum}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.physicalSourceReplacedDensity_pure_sampled_eq_scalar_smul_originalGateSampleSum}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.physicalSourceReplacedDensity_pure_sampled_eq_scalar_smul_originalGateSampleSum}
     \leanok
     \uses{def:peps_incident_sampled_physical_factor,def:peps_source_sample_assignment_indices}
     In \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}, the data just
@@ -370,7 +370,7 @@ its sample argument is read at the original ordered incident slots.
 
 \begin{theorem}[The exact distributed contraction of the sampled physical density]
     \label{thm:peps_actual_sampled_distributed_contraction}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.physicalSourceReplacedDensity_pure_sampled_eq_exterior_smul_contractedOperator}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.physicalSourceReplacedDensity_pure_sampled_eq_exterior_smul_contractedOperator}
     \leanok
     \uses{def:compression_operator_operator,def:compression_operator_density_coefficient,
         def:peps_incident_sampled_physical_factor,def:peps_source_gate_root}

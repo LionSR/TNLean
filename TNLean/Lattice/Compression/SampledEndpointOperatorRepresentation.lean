@@ -15,8 +15,9 @@ Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 279–355,
 
 noncomputable section
 open ContinuousLinearMap
-namespace TNLean.PEPS.PairEffect
-namespace SourceCircuit
+namespace TNLean
+open TNLean.Lattice.PartyCircuit TNLean.PEPS.PairEffect
+namespace Lattice.PartyCircuit.SourceCircuit
 variable {P : Type} {a b : Layout P}
 
 /-- Read the original branch label at an original source occurrence.
@@ -94,5 +95,5 @@ theorem sampledEndpointWord_eq_endpointWord
     sampledEndpointOperatorLeft, sampledEndpointOperatorRight, allSourceU, allSourceV]
 
 
-end SourceCircuit
-end TNLean.PEPS.PairEffect
+end Lattice.PartyCircuit.SourceCircuit
+end TNLean

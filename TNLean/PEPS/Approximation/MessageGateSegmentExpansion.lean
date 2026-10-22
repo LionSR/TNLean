@@ -25,6 +25,7 @@ Independently formalized; no upstream Lean proof text reused.
 -/
 
 namespace TNLean.PEPS.PairEffect.MessageGate
+open TNLean.Lattice.PartyCircuit
 
 variable {P : Type} {a b : Layout P}
 

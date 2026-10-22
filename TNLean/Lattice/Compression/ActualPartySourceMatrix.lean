@@ -22,7 +22,8 @@ Source: polynomial-PEPS manuscript (September 24, 2026), Theorem 5.2,
 -/
 
 noncomputable section
-namespace TNLean.PEPS.PairEffect.SourceCircuit
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
+open TNLean.PEPS TNLean.PEPS.PairEffect
 variable {P : Type} [Fintype P] [DecidableEq P] {a b : Layout P}
 variable {I O : Option {_p : P // true = true} → Type}
 variable [∀ q, Fintype (I q)] [∀ q, Fintype (O q)]
@@ -106,4 +107,4 @@ theorem partialSourceGlobalMatrix_eq_partyProduct_mul_basisChange
       bIn.toBasis bOut.toBasis (w.partialSourceWord ψ ξ).eval.toLinearMap
       (dependentPhysicalProductFamilyMatrix (fun q ↦ w.partialSourcePartyMatrix ψ ξ B C q)) hm)
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit

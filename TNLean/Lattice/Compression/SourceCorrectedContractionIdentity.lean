@@ -27,7 +27,7 @@ Independently formalized from the manuscript; no upstream Lean proof text reused
 
 noncomputable section
 open scoped TensorProduct Matrix ComplexConjugate
-namespace TNLean.PEPS.PairEffect.SourceCircuit
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
 
 /-- The original corrected circuit term is the partial-branch sum of actual
 prepared source contractions. Source occurrences, local gate labels, branch
@@ -80,4 +80,4 @@ theorem correctedSourceTerm_eq_sourceContraction {P m n : Type}
   rw [selectedSourceCoordinateEquiv_apply, selectedSourceCoordinateEquiv_apply]
   rfl
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit

@@ -10,7 +10,7 @@ import Lean.Util.CollectAxioms
 /-! # Axiom check for the joint original gate and sample sum -/
 
 set_option linter.hashCommand false
-open TNLean.PEPS.PairEffect.SourceCircuit
+open TNLean.Lattice.PartyCircuit.SourceCircuit
 
 run_cmd do
   let decl := ``sum_choiceSamples_eq_sum_originalGateSamples

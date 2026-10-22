@@ -15,18 +15,18 @@ selected by `f`. This file defines it and checks it for the reordering words tha
 monomial on the registers of an encoded frame: moving registers to the front past others
 (`Word.moveHead`, `Word.exchangeBlocks`), partitioning the raw registers of a list of sites
 (`partWord`, `unpartWord`), renaming owners (`relabelSites`), and grouping the raw registers of
-two regions at their owners (`EncodedFrame.groupWord`, `EncodedFrame.ungroupWord`). Every
+two regions at their owners (`Sheet.groupWord`, `Sheet.ungroupWord`). Every
 exchange in these words moves a register of a party whose registers are being moved, so the
 condition holds as soon as the selection contains the owners of the moved registers.
 
 ## Main definitions
 
-* `PairEffect.Word.SwapsMeet`, `PairEffect.PartyChain.SwapsMeet`,
-  `PairEffect.PartyChain.SwapsMeetSet`.
+* `PartyCircuit.Word.SwapsMeet`, `PartyCircuit.PartyChain.SwapsMeet`,
+  `PartyCircuit.PartyChain.SwapsMeetSet`.
 
 ## Main results
 
-* `PairEffect.Word.SwapsMeet.mono`: enlarging the selection keeps the condition.
+* `PartyCircuit.Word.SwapsMeet.mono`: enlarging the selection keeps the condition.
 * `EncodedFrame.swapsMeet_groupWord`, `EncodedFrame.swapsMeet_ungroupWord`,
   `EncodedFrame.swapsMeet_relabelRest`.
 
@@ -38,11 +38,12 @@ condition holds as soon as the selection contains the owners of the moved regist
 
 noncomputable section
 
-namespace TNLean.PEPS.PairEffect
+namespace TNLean
+open TNLean.Lattice.PartyCircuit
 
 variable {P : Type}
 
-namespace Word
+namespace Lattice.PartyCircuit.Word
 
 /-- Every exchange of tensor factors in the word moves a register of a selected party. -/
 def SwapsMeet (f : P → Bool) : {ℓ ℓ' : Layout P} → Word ℓ ℓ' → Prop
@@ -106,9 +107,9 @@ theorem swapsMeet_dropNil (f : P → Bool) : (ℓ : Layout P) → (dropNil ℓ).
   | [] => trivial
   | _ :: ℓ => swapsMeet_dropNil f ℓ
 
-end Word
+end Lattice.PartyCircuit.Word
 
-namespace PartyChain
+namespace Lattice.PartyCircuit.PartyChain
 
 /-- Every exchange of tensor factors in the monomial moves a register of a selected party. -/
 def SwapsMeet (f : P → Bool) : {ℓX ℓY : Layout P} → PartyChain ℓX ℓY → Prop
@@ -130,13 +131,14 @@ theorem swapsMeet_postcomp (f : P → Bool) {ℓX ℓY ℓZ : Layout P} {w : Wor
   | final _, hM => ⟨hM, hw⟩
   | effect _ _ _ _ _ _ rest, hM => ⟨hM.1, swapsMeet_postcomp f hw (M := rest) hM.2⟩
 
-end PartyChain
+end Lattice.PartyCircuit.PartyChain
 
-end TNLean.PEPS.PairEffect
+end TNLean
 
 namespace TNLean.PEPS.EncodedFrame
+open TNLean.Lattice.Sheet
 
-open PairEffect
+open TNLean.Lattice.PartyCircuit
 
 variable {ι : Type} {q : ℕ} {Party : Type}
 

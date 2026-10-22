@@ -27,8 +27,8 @@ Independently formalized; no upstream Lean proof text reused.
 
 noncomputable section
 open scoped TensorProduct Matrix
-namespace TNLean.PEPS.PairEffect.SourceCircuit
-open SourceInventory TNLean.PEPS.Approximation
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
+open TNLean.Lattice.PartyCircuit.SourceInventory TNLean.PEPS.Approximation
 variable {P : Type} {a b : Layout P}
 
 -- Keeping the retained-slot list opaque stops elaboration from unfolding the
@@ -195,4 +195,4 @@ theorem correctedSourceFrame_basis (ξ : Choices (correctedMask w S) w)
       rw [matrixFrame_basis, matrixFrame_basis]
       simp only [partialSchmidtSourceVectors, dite_eq_left his]))
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit

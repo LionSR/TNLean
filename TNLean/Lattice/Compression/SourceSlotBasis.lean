@@ -25,7 +25,7 @@ noncomputable section
 
 open scoped TensorProduct
 
-namespace TNLean.PEPS.PairEffect.SourceInventory
+namespace TNLean.Lattice.PartyCircuit.SourceInventory
 
 variable {P : Type}
 
@@ -88,4 +88,4 @@ theorem preparedInputBasis_apply (R : SourceInventory P) (U V : Fin R.length →
     OrthonormalBasis.tensorProduct_apply, slotBasis_apply,
     eval_prepareSlots_eq_appendIso_symm]
 
-end TNLean.PEPS.PairEffect.SourceInventory
+end TNLean.Lattice.PartyCircuit.SourceInventory

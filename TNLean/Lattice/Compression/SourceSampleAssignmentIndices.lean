@@ -20,7 +20,8 @@ and 568–579.
 -/
 
 noncomputable section
-namespace TNLean.PEPS.PairEffect.SourceCircuit
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
+open TNLean.PEPS
 variable {P : Type}
 
 open Classical in
@@ -62,4 +63,4 @@ theorem sum_sourceSampleAssignments_eq {a b : Layout P}
         F ((allSourceSampleAssignmentEquiv w k).symm j) := by
   exact ((allSourceSampleAssignmentEquiv w k).symm.sum_comp F).symm
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit

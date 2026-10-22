@@ -29,7 +29,7 @@ Independently formalized; no upstream Lean proof text reused.
 noncomputable section
 open MeasureTheory QICLean.ComplexGaussian
 open scoped TensorProduct Matrix ComplexConjugate
-namespace TNLean.PEPS.PairEffect.SourceCircuit
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
 variable {P m n r s : Type} [Fintype m] [Fintype n] [Fintype r] [Fintype s]
     {a b : Layout P}
 
@@ -150,4 +150,4 @@ theorem integral_rectangularTraceNorm_map_correctedSourceTerm_gaussian_le_sum
       rw [integral_finsetSum _ (fun q _ ↦ (hN q).const_mul ‖c q‖)]
       simp only [integral_const_mul, Fintype.sum_prod_type, c, N]
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit

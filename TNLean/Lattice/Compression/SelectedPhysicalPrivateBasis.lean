@@ -22,6 +22,7 @@ Source: polynomial-PEPS manuscript (September 24, 2026), Theorem 5.2,
 noncomputable section
 open scoped TensorProduct
 namespace TNLean.PEPS.PairEffect
+open TNLean.Lattice.PartyCircuit
 variable {P : Type}
 variable {E : Option {_p : P // true = true} → Type} [∀ q, Fintype (E q)]
 

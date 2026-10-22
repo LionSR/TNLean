@@ -23,22 +23,22 @@ the change (`06-geometry.tex`, lines 574–583).
 
 ## Main definitions
 
-* `PairEffect.pairOwner` : the two endpoint parties of a pair source or effect.
-* `PairEffect.Word.toOriginalCircuit` : a source-only word as an original circuit.
-* `PairEffect.PartyChain.toOriginalCircuit` : an allowed monomial as an original circuit.
+* `PartyCircuit.pairOwner` : the two endpoint parties of a pair source or effect.
+* `PartyCircuit.Word.toOriginalCircuit` : a source-only word as an original circuit.
+* `PartyCircuit.PartyChain.toOriginalCircuit` : an allowed monomial as an original circuit.
 
 ## Main results
 
-* `PairEffect.Word.eval_toOriginalCircuit`, `PairEffect.PartyChain.eval_toOriginalCircuit` :
+* `PartyCircuit.Word.eval_toOriginalCircuit`, `PartyCircuit.PartyChain.eval_toOriginalCircuit` :
   the original circuit has the operator of the monomial.
-* `PairEffect.Word.nonprivateCount_toOriginalCircuit`,
-  `PairEffect.PartyChain.nonprivateCount_toOriginalCircuit` : one nonprivate gate per pair
+* `PartyCircuit.Word.nonprivateCount_toOriginalCircuit`,
+  `PartyCircuit.PartyChain.nonprivateCount_toOriginalCircuit` : one nonprivate gate per pair
   source and per pair effect.
-* `PairEffect.Word.participants_toOriginalCircuit_subset`,
-  `PairEffect.PartyChain.participants_toOriginalCircuit_subset` : the participants are parties
+* `PartyCircuit.Word.participants_toOriginalCircuit_subset`,
+  `PartyCircuit.PartyChain.participants_toOriginalCircuit_subset` : the participants are parties
   used by the monomial.
-* `PairEffect.Word.isExpansionBounded_toOriginalCircuit`,
-  `PairEffect.PartyChain.isExpansionBounded_toOriginalCircuit` : each gate is a single monomial
+* `PartyCircuit.Word.isExpansionBounded_toOriginalCircuit`,
+  `PartyCircuit.PartyChain.isExpansionBounded_toOriginalCircuit` : each gate is a single monomial
   with coefficient one and at most one pair effect.
 
 ## References
@@ -53,7 +53,7 @@ noncomputable section
 open scoped InnerProductSpace TensorProduct
 open ContinuousLinearMap
 
-namespace TNLean.PEPS.PairEffect
+namespace TNLean.Lattice.PartyCircuit
 
 variable {P : Type}
 
@@ -364,4 +364,4 @@ theorem isMonomialBounded_toOriginalCircuit {a b : Layout P} (M : PartyChain a b
 
 end PartyChain
 
-end TNLean.PEPS.PairEffect
+end TNLean.Lattice.PartyCircuit

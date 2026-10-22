@@ -25,7 +25,8 @@ depend on a choice of monomial.
 -/
 
 noncomputable section
-namespace TNLean.PEPS.PairEffect.SourceCircuit
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
+open TNLean.PEPS.PairEffect
 variable {P : Type}
 
 /-- Excluded spectator registers do not change the exterior identity of an
@@ -60,4 +61,4 @@ theorem restrict_sourcePrivatePreparation_none_eval_heq_id {a b : Layout P}
   exact restrict_framed_privatePreparation_none_eval_heq_id
     w.allResidualSourceLayout (restrict_allResidualSourceLayout_isNone w) ψ
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit

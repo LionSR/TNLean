@@ -8,9 +8,9 @@ occurrences before any branch labels are chosen.
 
 \begin{definition}[The retained source positions]
     \label{def:peps_partial_fixed_positions}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.partialPositions}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.partialSlots}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.partialSlotEquiv}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.partialPositions}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.partialSlots}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.partialSlotEquiv}
     \leanok
     \uses{thm:peps_partial_source_order}
     Let $\mathcal E$ be the original ordered source positions and let
@@ -31,11 +31,11 @@ occurrences before any branch labels are chosen.
 
 \begin{theorem}[The common ordered register spaces]
     \label{thm:peps_partial_fixed_layout}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.mem_partialPositions_iff}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.partialSlotEquiv_apply}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.layout_partialSlots}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.partialSlot_spec}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.layout_partialSlots_eq}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.mem_partialPositions_iff}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.partialSlotEquiv_apply}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.layout_partialSlots}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.partialSlot_spec}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.layout_partialSlots_eq}
     \leanok
     \uses{def:peps_partial_fixed_positions,thm:peps_partial_source_order}
     The source at reference index $i$ has the grouped original
@@ -61,7 +61,7 @@ occurrences before any branch labels are chosen.
 
 \begin{theorem}[Preparation in the fixed chronological sources]
     \label{thm:peps_partial_fixed_preparation}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.exists_partial_source_preparation}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.exists_partial_source_preparation}
     \leanok
     \uses{thm:peps_partial_fixed_layout,thm:peps_source_preparation}
     Let the chronological composition be allowed. For every partial
@@ -101,10 +101,10 @@ occurrences before any branch labels are chosen.
 
 \begin{definition}[The original label and vector at a position]
     \label{def:peps_partial_original_source_vector}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.choiceAt}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourceVectorAt}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.partialSlotChoice}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.partialSlotVector}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.choiceAt}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sourceVectorAt}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.partialSlotChoice}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.partialSlotVector}
     \leanok
     \uses{def:peps_partial_source_choices,def:peps_partial_fixed_positions}
     For a touched gate occurrence $g$, a partial choice $\xi$ determines
@@ -122,11 +122,11 @@ occurrences before any branch labels are chosen.
 
 \begin{theorem}[Recovery of the locally selected source vectors]
     \label{thm:peps_partial_original_source_vector}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourceVectorAt_norm}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.isTouched_of_source_endpoint}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourceAt_eq_mapOwner_sourceVectorAt}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.eq_partialSlotVector_of_inventory_eq}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.exists_partial_source_preparation_with_original_vectors}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sourceVectorAt_norm}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.isTouched_of_source_endpoint}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sourceAt_eq_mapOwner_sourceVectorAt}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.eq_partialSlotVector_of_inventory_eq}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.exists_partial_source_preparation_with_original_vectors}
     \leanok
     \uses{def:peps_partial_original_source_vector,thm:peps_partial_fixed_preparation}
     Every retained source belongs to a touched gate. All vectors
@@ -159,7 +159,7 @@ occurrences before any branch labels are chosen.
 
 \begin{theorem}[Two contractions for the prepared sources]
     \label{thm:peps_actual_source_selective_partition}
-    \lean{TNLean.PEPS.PairEffect.Word.exists_selective_partition_of_word}
+    \lean{TNLean.Lattice.PartyCircuit.Word.exists_selective_partition_of_word}
     \leanok
     \uses{thm:peps_source_preparation,thm:peps_selective_partition}
     Let $W$ be an allowed composition and divide its parties into two
@@ -208,12 +208,12 @@ occurrences before any branch labels are chosen.
 
 \begin{definition}[Choices as labels at touched occurrences]
     \label{def:peps_touched_labels}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.projectAllChoices}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.TouchedLabels}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.choicesOfTouchedLabels}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.choicesTouchedLabelsEquiv}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.nonemptyGateLocations}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.allChoicesNonemptyLabelsEquiv}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.projectAllChoices}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.TouchedLabels}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.choicesOfTouchedLabels}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.choicesTouchedLabelsEquiv}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.nonemptyGateLocations}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.allChoicesNonemptyLabelsEquiv}
     \leanok
     \uses{def:peps_partial_original_source_vector}
     For affected parties $\mathcal A$, the map
@@ -229,11 +229,11 @@ occurrences before any branch labels are chosen.
 
 \begin{theorem}[Projected choices keep the original labels]
     \label{thm:peps_touched_labels}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.choiceAt_projectAllChoices}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.choiceAt_choicesOfTouchedLabels}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.choicesOfTouchedLabels_choiceAt}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.isTouched_all_iff}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.allChoicesNonemptyLabelsEquiv_apply}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.choiceAt_projectAllChoices}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.choiceAt_choicesOfTouchedLabels}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.choicesOfTouchedLabels_choiceAt}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.isTouched_all_iff}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.allChoicesNonemptyLabelsEquiv_apply}
     \leanok
     \uses{def:peps_touched_labels}
     For $\xi\in\Xi_P$ and an occurrence $g$ touched by $\mathcal A$,
@@ -250,12 +250,12 @@ occurrences before any branch labels are chosen.
 
 \begin{theorem}[Labels visible at one party]
     \label{thm:peps_incident_gate_labels}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.partySelector_affectedOwner_all_apply}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.isTouched_groupedParty_iff}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.OriginalGateLabelsAt}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.choicesOfOriginalGateLabelsAt}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.originalGateLabelsAtOfAllChoices}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.choicesOfOriginalGateLabelsAt_eq_projectAllChoices}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.partySelector_affectedOwner_all_apply}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.isTouched_groupedParty_iff}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.OriginalGateLabelsAt}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.choicesOfOriginalGateLabelsAt}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.originalGateLabelsAtOfAllChoices}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.choicesOfOriginalGateLabelsAt_eq_projectAllChoices}
     \leanok
     \uses{thm:peps_touched_labels,def:compression_operator_gate_labels}
     Let $p\in P$ and take $\mathcal A=\{p\}$ after grouping owners
@@ -276,8 +276,8 @@ occurrences before any branch labels are chosen.
 
 \begin{theorem}[Coefficients factor over participating occurrences]
     \label{thm:peps_chronological_coefficients}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.coefficient_eq_prod_dite}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.coefficient_all_eq_prod_nonemptyGateLocations}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.coefficient_eq_prod_dite}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.coefficient_all_eq_prod_nonemptyGateLocations}
     \leanok
     \uses{def:peps_touched_labels}
     For $\xi\in\Xi_{\mathcal A}$,
@@ -299,7 +299,7 @@ occurrences before any branch labels are chosen.
 
 \begin{theorem}[Mixed coefficients at the original gate occurrences]
     \label{thm:peps_mixed_chronological_coefficients}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.coefficient_all_mul_conj_eq_prod_nonemptyGateLocations}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.coefficient_all_mul_conj_eq_prod_nonemptyGateLocations}
     \leanok
     \uses{def:peps_touched_labels}
     Let $w$ be a chronological source composition on an arbitrary party set
@@ -327,7 +327,7 @@ occurrences before any branch labels are chosen.
 
 \begin{theorem}[Reindexing the mixed expansion by gate labels]
     \label{thm:peps_mixed_gate_label_sum}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sum_coefficient_all_mul_conj_smul_eq_sum_nonemptyGateLabels}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sum_coefficient_all_mul_conj_smul_eq_sum_nonemptyGateLabels}
     \leanok
     \uses{def:peps_touched_labels}
     With the same chronological composition, let

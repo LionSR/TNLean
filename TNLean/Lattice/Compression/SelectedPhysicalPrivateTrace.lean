@@ -23,6 +23,7 @@ Source: polynomial-PEPS manuscript (September 24, 2026), Theorem 5.2,
 noncomputable section
 open scoped TensorProduct Matrix Kronecker ComplexConjugate
 namespace TNLean.PEPS.PairEffect
+open TNLean.Lattice.PartyCircuit
 
 private theorem partialTrace_mixed_private_basis_eq
     {H K : HSpace} {X J G : Type} [Fintype X] [Fintype J] [Fintype G]

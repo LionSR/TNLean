@@ -23,11 +23,12 @@ Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 137–175,
 -/
 
 noncomputable section
-namespace TNLean.PEPS.PairEffect
+namespace TNLean
+open TNLean.Lattice.PartyCircuit
 open TNLean.PEPS.Approximation
 variable {P : Type} {a b : Layout P}
 
-namespace SourceCircuit
+namespace Lattice.PartyCircuit.SourceCircuit
 
 open Classical in
 /-- Real power bounds on branch counts and sample size bound the alphabets
@@ -73,9 +74,9 @@ theorem card_alphabet_source_density_le_of_power_bounds (w : SourceCircuit a b)
         _ ≤ (C_M ^ 2 + C_k) * L ^ (max (2 * u) v) :=
           mul_le_mul_of_nonneg_right (le_add_of_nonneg_left (sq_nonneg C_M)) (by positivity)
 
-end SourceCircuit
+end Lattice.PartyCircuit.SourceCircuit
 
-namespace OriginalCircuit
+namespace Lattice.PartyCircuit.OriginalCircuit
 
 open Classical in
 /-- The same polynomial constants from the original resource bounds control
@@ -189,6 +190,6 @@ theorem exists_original_gate_of_physicalFirst_density_link
   refine ⟨(w.physicalFirstReplacementLocationsEquiv physical priv hδ hb).symm e.1.1.1, ?_⟩
   exact ⟨hpart ▸ hsub hp, hpart ▸ hsub hq⟩
 
-end OriginalCircuit
+end Lattice.PartyCircuit.OriginalCircuit
 
-end TNLean.PEPS.PairEffect
+end TNLean
