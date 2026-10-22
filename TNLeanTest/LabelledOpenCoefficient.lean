@@ -4,7 +4,7 @@ import TNLean.PEPS.TorusDualOpenDeformation
 
 set_option linter.hashCommand false
 
-open TNLean.PEPS.DependentBondNetwork
+open TNLean.PEPS.DependentBondNetwork TNLean.Lattice.DependentBondNetwork
 
 /-- info: 'TNLean.PEPS.DependentBondNetwork.network_deltaCompletedTensor' depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in

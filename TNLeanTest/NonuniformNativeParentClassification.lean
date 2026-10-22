@@ -21,7 +21,7 @@ positive plaquette parent and its full ambient kernel.
 
 noncomputable section
 open scoped BigOperators
-open TNLean.PEPS TNLean.PEPS.DependentBondNetwork
+open TNLean.PEPS TNLean.Lattice TNLean.PEPS.DependentBondNetwork TNLean.Lattice.DependentBondNetwork
 
 namespace NonuniformNativeClassificationTest
 

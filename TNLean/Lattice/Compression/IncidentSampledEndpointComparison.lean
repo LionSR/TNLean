@@ -28,7 +28,7 @@ Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 253–267,
 noncomputable section
 open ContinuousLinearMap
 namespace TNLean
-open TNLean.Lattice.PartyCircuit TNLean.PEPS.PairEffect
+open TNLean.Lattice.PartyCircuit
 namespace Lattice.PartyCircuit.SourceCircuit
 variable {P : Type} {a b : Layout P}
 

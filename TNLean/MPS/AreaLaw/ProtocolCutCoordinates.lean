@@ -106,7 +106,7 @@ private theorem cutMatrix_eq_flattening_submatrix
     (k : ℕ) (T : Finset (Party L w))
     (h : ∀ x, x ∈ leftBlock L k ↔ mainOwner L w x ∈ T) :
     cutMatrix (WithLp.toLp 2 (fun x ↦ ψ (mainConfigurationEquiv L w q x))) k =
-      (TNLean.PEPS.WholeGroup.flattening (fun y ↦ ψ y) T).submatrix
+      (TNLean.Lattice.WholeGroup.flattening (fun y ↦ ψ y) T).submatrix
         (blockCutEquiv h) (blockCutEquiv (fun x ↦ not_congr (h x))) := by
   classical
   ext a b
@@ -139,7 +139,7 @@ theorem rank_partyPrefix_eq_cutMatrix
     (r : ℕ) (hr : r ≤ stageCount L w) :
     let T := Finset.univ.filter fun p : Party L w ↦ partyLevel p < r
     let Φ := WithLp.toLp 2 (fun x ↦ ψ (mainConfigurationEquiv L w q x))
-    (TNLean.PEPS.WholeGroup.flattening (fun y ↦ ψ y) T).rank =
+    (TNLean.Lattice.WholeGroup.flattening (fun y ↦ ψ y) T).rank =
       (cutMatrix Φ (r * (20 * w))).rank := by
   classical
   dsimp only
@@ -157,7 +157,7 @@ theorem rank_partyPrefix_last_eq_cutMatrix
     (ψ : EuclideanSpace ℂ ((p : Party L w) → Fin (physicalDimension L w q p))) :
     let T := Finset.univ.filter fun p : Party L w ↦ partyLevel p < stageCount L w + 1
     let Φ := WithLp.toLp 2 (fun x ↦ ψ (mainConfigurationEquiv L w q x))
-    (TNLean.PEPS.WholeGroup.flattening (fun y ↦ ψ y) T).rank = (cutMatrix Φ L).rank := by
+    (TNLean.Lattice.WholeGroup.flattening (fun y ↦ ψ y) T).rank = (cutMatrix Φ L).rank := by
   classical
   dsimp only
   let T := Finset.univ.filter fun p : Party L w ↦ partyLevel p < stageCount L w + 1
@@ -179,7 +179,7 @@ theorem rank_cutMatrix_le_of_partyPrefix_bounds
     (ψ : EuclideanSpace ℂ ((p : Party L w) → Fin (physicalDimension L w q p)))
     {R : ℕ} (hq : 1 ≤ q) (hw : 1 ≤ w) (hL : 60 * w ≤ L) (hR : 1 ≤ R)
     (hprefix : ∀ r : ℕ, 0 < r → r ≤ stageCount L w →
-      (TNLean.PEPS.WholeGroup.flattening (fun y ↦ ψ y)
+      (TNLean.Lattice.WholeGroup.flattening (fun y ↦ ψ y)
         (Finset.univ.filter fun p : Party L w ↦ partyLevel p < r)).rank ≤ R)
     (k : ℕ) (hk : k ≤ L) :
     let Φ := WithLp.toLp 2 (fun x ↦ ψ (mainConfigurationEquiv L w q x))

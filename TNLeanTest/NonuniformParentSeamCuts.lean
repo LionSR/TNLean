@@ -17,7 +17,7 @@ unused coordinate. No local-image condition is added to its ambient kernel.
 
 noncomputable section
 open scoped BigOperators
-open TNLean.PEPS TNLean.PEPS.DependentBondNetwork
+open TNLean.PEPS TNLean.Lattice TNLean.PEPS.DependentBondNetwork TNLean.Lattice.DependentBondNetwork
 
 namespace NonuniformNativeParent
 local instance : Fact (2 < 3) := ⟨by decide⟩

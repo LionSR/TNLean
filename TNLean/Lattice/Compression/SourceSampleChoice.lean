@@ -33,7 +33,7 @@ noncomputable section
 open MeasureTheory QICLean.ComplexGaussian
 open scoped Matrix
 namespace TNLean.Lattice.PartyCircuit.SourceCircuit
-open TNLean.PEPS.Approximation
+open TNLean.Lattice.Compression
 
 open Classical in
 /-- If each actual corrected term obeys the stated integral bound, the explicit

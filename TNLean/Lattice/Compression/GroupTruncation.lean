@@ -38,7 +38,7 @@ open scoped BigOperators Matrix InnerProductSpace Matrix.Norms.Frobenius
 
 noncomputable section
 
-namespace TNLean.PEPS.WholeGroup
+namespace TNLean.Lattice.WholeGroup
 
 open Matrix
 
@@ -502,4 +502,4 @@ theorem exists_simultaneous_openLeg_truncation {V E O : Type*} [Fintype V] [Deci
   exists_simultaneous_group_truncation A hloop hA _
     (fun _ hv ↦ card_openLegGroup_le_one (owner := owner) (d := d) hv) k hk
 
-end TNLean.PEPS.WholeGroup
+end TNLean.Lattice.WholeGroup
