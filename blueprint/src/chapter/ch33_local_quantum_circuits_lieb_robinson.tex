@@ -13,6 +13,31 @@
 \section{Lieb--Robinson propagation on finite graphs}
 \label{sec:qc_lieb_robinson}
 
+\begin{theorem}[Extended distance under graph maps]
+    \label{thm:qc_graph_edist_transport}
+    \lean{SimpleGraph.Hom.edist_le, SimpleGraph.Iso.edist_eq,
+        SimpleGraph.ConnectedComponent.edist_eq}
+    \leanok
+    Let $G$ and $H$ be simple graphs on arbitrary vertex sets. A graph
+    homomorphism $f:G\to H$ satisfies
+    $d_H(f(x),f(y))\le d_G(x,y)$ for all vertices $x,y$.
+    Equality holds when $f$ is a graph isomorphism. If $C$ is a connected
+    component of $G$, the distance in the graph induced on $C$ is the
+    ambient distance: $d_{G[C]}(x,y)=d_G(x,y)$ for $x,y\in C$.
+    All distances take values in $\mathbb N\cup\{\infty\}$; no finiteness
+    hypothesis on either vertex set is imposed.
+\end{theorem}
+\begin{proof}
+    \leanok
+    A homomorphism maps each walk to a walk of the same length. Taking
+    infima over walk lengths proves the inequality, with the infimum of
+    the empty set equal to infinity. Applying this twice, to an isomorphism
+    and its inverse, gives equality. Every vertex on an ambient walk from
+    $x\in C$ is connected to $x$, so a walk with endpoints in $C$ stays in
+    $C$. It therefore gives a walk of the same length in the induced graph.
+    The two infimum comparisons give the component assertion.
+\end{proof}
+
 Let $I$ be a finite set of sites of local dimension $q$, and write
 $\mathcal A_X$ for the operators on $(\C^q)^{\otimes I}$ acting on
 $X\subseteq I$. All norms are Hilbert-space operator norms. For an operator
