@@ -1,0 +1,50 @@
+\section{The decay length of Hastings' approximate factorization}
+\label{sec:hastings_decay_slack}
+
+% Hastings, arXiv:0705.2024v4, law16.tex, lines 903--907 (the final bound of
+% the proof of Lemma 1) and lines 141--142 (the printed decay length).
+
+The final estimate of the proof of Lemma~1 of \cite{Hastings2007AreaLaw},
+lines 903--907, bounds the error of the approximate factorization by a
+multiple of $\sqrt{l/\xi}\,e^{-l/6\xi}$. The prefactor $\sqrt l$ cannot be
+absorbed into a constant at the rate $e^{-l/6\xi}$, but it can at every
+slower rate $e^{-l/\xi'}$ with $\xi'>6\xi$.
+
+\begin{theorem}[A square root against an exponential]
+    \label{thm:hastings_sqrt_exp}
+    \lean{TNLean.MPS.AreaLaw.Hastings.sqrt_mul_exp_neg_le}
+    \leanok
+    For $\delta>0$ and $l\ge0$,
+    \begin{align}
+        \sqrt l\,e^{-\delta l} & \le\frac1{\sqrt{2e\delta}},
+        \label{eq:hastings_sqrt_exp}
+    \end{align}
+    with equality at $l=1/(2\delta)$.
+\end{theorem}
+\begin{proof}\leanok
+    With $x=2\delta l$, the inequality $x\le e^{x-1}$ gives $xe^{-x}\le e^{-1}$,
+    that is $2e\delta\,l\,e^{-2\delta l}\le1$, which is the square
+    of~\eqref{eq:hastings_sqrt_exp}.
+\end{proof}
+
+\begin{theorem}[Slack in the decay length]
+    \label{thm:hastings_decay_slack}
+    \lean{TNLean.MPS.AreaLaw.Hastings.add_mul_sqrt_mul_exp_le_of_lt}
+    \leanok
+    Let $\xi>0$, $\xi'>6\xi$ and $\delta=1/(6\xi)-1/\xi'$. For $a,b\ge0$ and
+    $l\ge0$,
+    \begin{align}
+        (a+b\sqrt l)\,e^{-l/6\xi} & \le\Bigl(a+\frac{b}{\sqrt{2e\delta}}\Bigr)e^{-l/\xi'}.
+        \label{eq:hastings_decay_slack}
+    \end{align}
+    Applied to the final estimate of the proof of Lemma~1, this gives the
+    approximate factorization with error $C_1e^{-l/\xi'}$ for every
+    $\xi'>6\xi$, with $C_1$ depending on $\xi'-6\xi$, rather than at the
+    printed $\xi'=6\xi$ of \cite[lines 141--142]{Hastings2007AreaLaw}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:hastings_sqrt_exp}
+    Write $e^{-l/6\xi}=e^{-l/\xi'}e^{-\delta l}$. Then $a\,e^{-\delta l}\le a$,
+    and $b\sqrt l\,e^{-\delta l}\le b/\sqrt{2e\delta}$
+    by~\eqref{eq:hastings_sqrt_exp}.
+\end{proof}
