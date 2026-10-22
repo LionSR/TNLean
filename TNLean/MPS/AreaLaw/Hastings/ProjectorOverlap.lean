@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import Mathlib.Analysis.CStarAlgebra.Matrix
-import Mathlib.Analysis.InnerProductSpace.PiL2
+import QICLean.Analysis.GlobalGap
 
 /-!
 # Overlap with the ground state after an approximate projector
@@ -24,13 +24,13 @@ of `O ρ Oᴴ` orthogonal to `Ψ₀` is at most `ε²`, since `(1 - P₀) O = (1
 `1 - 2 C₁(ξ)² e^{-2m/ξ'} / P` from these two estimates. They give it only when
 `(√P - ε)² ≥ P / 2`, that is `ε ≤ (1 - 1/√2) √P`; for larger `ε` below `√(P/2)` the printed
 bound does not follow. With the constant `4` in place of `2` it follows whenever `ε ≤ √P / 2`,
-and for larger `ε` the bound is vacuous. The bootstrap lemma then carries `ln(4 C₁(ξ)² / P)` in place of
-`ln(2 C₁(ξ)² / P)`. Documented in `docs/paper-gaps/hastings07_bootstrap_overlap_constant.tex`.
+and for larger `ε` the bound is vacuous. The bootstrap lemma then carries
+`ln(4 C₁(ξ)² / P)` in place of `ln(2 C₁(ξ)² / P)`. Documented in
+`docs/paper-gaps/hastings07_bootstrap_overlap_constant.tex`.
 
 ## Main results
 
-* `TNLean.MPS.AreaLaw.Hastings.rankOneProjection`: the projector `|Ψ⟩⟨Ψ|` as a matrix.
-* `TNLean.MPS.AreaLaw.Hastings.overlap_ge_of_norm_sub_rankOneProjection_le`: the overlap
+* `TNLean.MPS.AreaLaw.Hastings.overlap_ge_of_norm_sub_vecMulVec_le`: the overlap
   bound.
 -/
 
@@ -40,19 +40,6 @@ open Matrix
 namespace TNLean.MPS.AreaLaw.Hastings
 
 variable {N : Type*} [Fintype N] [DecidableEq N]
-
-/-- The rank-one projection `|Ψ⟩⟨Ψ|` onto a vector, as a matrix. -/
-noncomputable def rankOneProjection (Ψ : EuclideanSpace ℂ N) : Matrix N N ℂ :=
-  vecMulVec (WithLp.ofLp Ψ) (star (WithLp.ofLp Ψ))
-
-/-- The projector `|Ψ⟩⟨Ψ|` maps `v` to `⟨Ψ, v⟩ Ψ`. -/
-theorem toEuclideanLin_rankOneProjection (Ψ v : EuclideanSpace ℂ N) :
-    toEuclideanLin (rankOneProjection Ψ) v = ⟪Ψ, v⟫_ℂ • Ψ := by
-  ext i
-  simp only [toLpLin_apply, rankOneProjection, PiLp.smul_apply, smul_eq_mul,
-    EuclideanSpace.inner_eq_star_dotProduct, mulVec, vecMulVec, dotProduct, of_apply,
-    Pi.star_apply, PiLp.toLp_apply, Finset.sum_mul]
-  exact Finset.sum_congr rfl fun j _ ↦ by ring
 
 omit [DecidableEq N] in
 /-- For a unit vector `Ψ`, `‖v‖² - |⟨Ψ, v⟩|² = ‖v - ⟨Ψ, v⟩ Ψ‖²`. -/
@@ -64,13 +51,6 @@ theorem norm_sq_sub_normSq_inner_eq {Ψ : EuclideanSpace ℂ N} (hΨ : ‖Ψ‖ 
     rw [← inner_conj_symm v Ψ, RCLike.mul_conj, ← RCLike.ofReal_pow, RCLike.ofReal_re]
   rw [this]; ring
 
-/-- The operator norm bounds the image of a vector. -/
-theorem norm_toEuclideanLin_le (A : Matrix N N ℂ) (v : EuclideanSpace ℂ N) :
-    ‖toEuclideanLin A v‖ ≤ ‖A‖ * ‖v‖ := by
-  rw [l2_opNorm_def]
-  exact ((toEuclideanLin (𝕜 := ℂ) (m := N) (n := N)).trans
-    LinearMap.toContinuousLinearMap A).le_opNorm v
-
 /-- **Overlap after an approximate projector.** Let `Ψ` be a unit vector and let
 `ρ = ∑ wᵢ |ψᵢ⟩⟨ψᵢ|` be a mixture of unit trace with `⟨Ψ, ρ Ψ⟩ = P > 0`. If an operator `O`
 satisfies `‖O - |Ψ⟩⟨Ψ|‖ ≤ ε ≤ √P / 2`, then `O ρ Oᴴ` has positive trace and normalized overlap
@@ -78,26 +58,27 @@ with `Ψ` at least `1 - 4 ε² / P`.
 
 Hastings, arXiv:0705.2024v4, proof of Lemma 2, lines 317–331, eq. `hg`, with the constant
 `4` in place of `2` (see the module docstring). -/
-theorem overlap_ge_of_norm_sub_rankOneProjection_le {Ψ : EuclideanSpace ℂ N} (hΨ : ‖Ψ‖ = 1)
+theorem overlap_ge_of_norm_sub_vecMulVec_le {Ψ : EuclideanSpace ℂ N} (hΨ : ‖Ψ‖ = 1)
     {r : ℕ} (w : Fin r → ℝ) (ψ : Fin r → EuclideanSpace ℂ N) (hw : ∀ i, 0 ≤ w i)
     (hnorm : ∑ i, w i * ‖ψ i‖ ^ 2 = 1) {P ε : ℝ}
     (hPdef : ∑ i, w i * ‖⟪Ψ, ψ i⟫_ℂ‖ ^ 2 = P) (hP : 0 < P)
-    {O : Matrix N N ℂ} (hO : ‖O - rankOneProjection Ψ‖ ≤ ε) (hεP : ε ≤ Real.sqrt P / 2) :
+    {O : Matrix N N ℂ}
+    (hO : ‖O - vecMulVec (WithLp.ofLp Ψ) (star (WithLp.ofLp Ψ))‖ ≤ ε) (hεP : ε ≤ Real.sqrt P / 2) :
     0 < ∑ i, w i * ‖toEuclideanLin O (ψ i)‖ ^ 2 ∧
       (1 - 4 * ε ^ 2 / P) * ∑ i, w i * ‖toEuclideanLin O (ψ i)‖ ^ 2 ≤
         ∑ i, w i * ‖⟪Ψ, toEuclideanLin O (ψ i)⟫_ℂ‖ ^ 2 := by
-  set E := O - rankOneProjection Ψ with hE
+  set E := O - vecMulVec (WithLp.ofLp Ψ) (star (WithLp.ofLp Ψ)) with hE
   have hε : 0 ≤ ε := (norm_nonneg _).trans hO
   have hOv : ∀ v, toEuclideanLin O v = ⟪Ψ, v⟫_ℂ • Ψ + toEuclideanLin E v := by
     intro v
-    rw [hE, map_sub, LinearMap.sub_apply, toEuclideanLin_rankOneProjection]; abel
+    rw [hE, map_sub, LinearMap.sub_apply, toEuclideanLin_vecMulVec_star_self_apply]; abel
   have hΨΨ : ⟪Ψ, Ψ⟫_ℂ = 1 := by
     rw [inner_self_eq_norm_sq_to_K, hΨ]; norm_num
   have ha : ∀ v, ⟪Ψ, toEuclideanLin O v⟫_ℂ = ⟪Ψ, v⟫_ℂ + ⟪Ψ, toEuclideanLin E v⟫_ℂ := by
     intro v
     rw [hOv, inner_add_right, inner_smul_right, hΨΨ, mul_one]
   have hEv : ∀ v, ‖toEuclideanLin E v‖ ≤ ε * ‖v‖ := fun v ↦
-    (norm_toEuclideanLin_le E v).trans (mul_le_mul_of_nonneg_right hO (norm_nonneg v))
+    (l2_opNorm_mulVec E v).trans (mul_le_mul_of_nonneg_right hO (norm_nonneg v))
   -- The excited part: `‖O v‖² - |⟨Ψ, O v⟩|² = ‖E v‖² - |⟨Ψ, E v⟩|² ≤ ε² ‖v‖²`.
   have hexc : ∀ v, ‖toEuclideanLin O v‖ ^ 2 - ‖⟪Ψ, toEuclideanLin O v⟫_ℂ‖ ^ 2 ≤
       ε ^ 2 * ‖v‖ ^ 2 := by

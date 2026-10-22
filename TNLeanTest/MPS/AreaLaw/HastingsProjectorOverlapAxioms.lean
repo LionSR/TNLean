@@ -12,10 +12,8 @@ import Lean.Util.CollectAxioms
 run_cmd do
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
   for decl in #[
-    ``TNLean.MPS.AreaLaw.Hastings.toEuclideanLin_rankOneProjection,
     ``TNLean.MPS.AreaLaw.Hastings.norm_sq_sub_normSq_inner_eq,
-    ``TNLean.MPS.AreaLaw.Hastings.norm_toEuclideanLin_le,
-    ``TNLean.MPS.AreaLaw.Hastings.overlap_ge_of_norm_sub_rankOneProjection_le] do
+    ``TNLean.MPS.AreaLaw.Hastings.overlap_ge_of_norm_sub_vecMulVec_le] do
     unless (← Lean.getEnv).contains decl do
       throwError "Missing declaration {decl}"
     let axioms ← Lean.collectAxioms decl
