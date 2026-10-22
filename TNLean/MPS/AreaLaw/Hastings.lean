@@ -8,6 +8,7 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.MPS.AreaLaw.Hastings
 
+import TNLean.MPS.AreaLaw.Hastings.CutProductState
 import TNLean.MPS.AreaLaw.Hastings.ProjectorOverlap
 import TNLean.MPS.AreaLaw.Hastings.SchmidtDiagonalCorrelation
 import TNLean.MPS.AreaLaw.Hastings.SchmidtDiagonalOperators
