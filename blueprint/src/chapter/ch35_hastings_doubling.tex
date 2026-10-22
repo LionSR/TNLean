@@ -29,6 +29,9 @@ corrected constants.
     number at least $u$.
     If $\xi'>0$ and $2C_1>1$, then $\xi_0>0$.
 \end{definition}
+\begin{proof}\leanok
+    Since $2C_1>1$, $\ln(2C_1)>0$, so $\xi_0=2\xi'\ln(2C_1)>0$.
+\end{proof}
 
 \begin{lemma}[Error sums of the iteration]
     \label{lem:hastings_doubling_error_sums}
@@ -60,6 +63,7 @@ corrected constants.
     \label{thm:hastings_doubling_iteration}
     \lean{TNLean.MPS.AreaLaw.Hastings.le_of_doubling}
     \leanok
+    \uses{def:hastings_doubling_constants}
     Let $S$ be a real sequence indexed by the natural numbers, let $l_0$,
     $\xi'>0$, $C_1$, $C_2$ and $D$ be real with $2C_1>1$ and
     $\ln C_1+C_2\ge0$. Assume $S_l\le l\ln D$ whenever $l\le l_0$, and

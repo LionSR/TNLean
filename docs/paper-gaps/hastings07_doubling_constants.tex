@@ -25,29 +25,34 @@ In the proof of the one-dimensional area law~\cite{Hastings2007AreaLaw}
 (arXiv:0705.2024v4, lines~197--231), $S_l$ is the largest entropy of an
 interval of $l$ sites inside a window of $l_0$ sites. The proof uses
 $0\le S_l\le l\ln D$ and the strengthened doubling inequality
-\begin{equation}\label{eq:claim}
-  S_{2l}\le 2S_l-\bigl(1-2C_1e^{-l/\xi'}\bigr)\frac{l}{\xi'}+\ln C_1+C_2 ,
-\end{equation}
+\begin{align}
+    S_{2l}\le 2S_l-\bigl(1-2C_1e^{-l/\xi'}\bigr)\frac{l}{\xi'}+\ln C_1+C_2 ,
+    \label{eq:hastings07_doubling_constants_claim}
+\end{align}
 sets $\xi_0=2\xi'\ln(2C_1)$, and iterates from $l=\xi_0$ to
 $l=2\xi_0,4\xi_0,\dots$. Lines~221--224 assert that for $l>\xi_0$
-\[
-  S_l\le l\ln D-\frac{l\lfloor\log_2(l/\xi_0)\rfloor}{\xi'}
-  +\bigl(2+\ln C_1+C_2\bigr)\frac{l}{\xi_0},
-\]
+\begin{align}
+    S_l\le l\ln D-\frac{l\lfloor\log_2(l/\xi_0)\rfloor}{\xi'}
+    +\bigl(2+\ln C_1+C_2\bigr)\frac{l}{\xi_0},
+    \label{eq:hastings07_doubling_constants_source_bound}
+\end{align}
 and lines~225--231 conclude
-\[
-  l_0\le\xi'\ln(2C_1)\,
-  2^{\lceil\xi'\ln D+(2+C_2)\xi'/\xi_0+1/2\rceil}.
-\]
+\begin{align}
+    l_0\le\xi'\ln(2C_1)\,
+    2^{\lceil\xi'\ln D+(2+C_2)\xi'/\xi_0+1/2\rceil}.
+    \label{eq:hastings07_doubling_constants_source_window}
+\end{align}
 
 \section{The two corrections}
 
-Dividing~\eqref{eq:claim} by $2l$ shows that one doubling lowers $S_l/l$ by
+Dividing~\eqref{eq:hastings07_doubling_constants_claim} by $2l$ shows that one
+doubling lowers $S_l/l$ by
 $1/(2\xi')$ up to the error terms, not by $1/\xi'$. After $N$ doublings
 from a length $l_1\ge\xi_0$ the correct bound at $l=2^Nl_1$ is
-\[
-  S_l\le l\ln D-\frac{lN}{2\xi'}+\bigl(2+\ln C_1+C_2\bigr)\frac{l}{\xi_0}.
-\]
+\begin{align}
+    S_l\le l\ln D-\frac{lN}{2\xi'}+\bigl(2+\ln C_1+C_2\bigr)\frac{l}{\xi_0}.
+    \label{eq:hastings07_doubling_constants_corrected_bound}
+\end{align}
 The error constant $2$ survives: the exponential errors contribute at most
 $l/\xi_0$, since $\sum_{n\ge0}e^{-2^nt}\le e^{-t}/(1-e^{-t})$ for
 $t=l_1/\xi'\ge2\ln(2C_1)$ and $x\ln x\le x^2-1$ for $x=2C_1\ge1$, and the
@@ -56,20 +61,23 @@ sum $\sum_n2^{-n}\le2$. The function
 $f(l)=l\bigl(\ln D-\log_2(l/l_1)/(2\xi')\bigr)$ satisfies
 $f(2l)=2f(l)-l/\xi'$ exactly, so the printed decrease
 $l\lfloor\log_2(l/\xi_0)\rfloor/\xi'$ cannot follow
-from~\eqref{eq:claim}; the same factor is missing from the heuristic
+from~\eqref{eq:hastings07_doubling_constants_claim}; the same factor is missing
+from the heuristic
 $S_l\approx l\ln D-\log_2(l/\xi_0)\,l/\xi'$ at lines~212--213.
 On the lengths $l=2^nl_1$ that the iteration visits, $f$ also satisfies
 $f(l)\le l\ln D$, and $f(l)\ge0$ for $l\le l_1 4^{\xi'\ln D}$; there it
 meets the claim with every error term dropped. The iteration, which uses the
 claim only at these lengths, therefore yields $4^{\xi'\ln D}$ and no better;
 the printed $2^{\xi'\ln D}$ would need the decrease $2l/\xi'$
-in~\eqref{eq:claim}, or an argument that uses the claim at other lengths.
+in~\eqref{eq:hastings07_doubling_constants_claim}, or an argument that uses the
+claim at other lengths.
 
 The bound becomes negative at $N=M$ with
-\[
-  M=\max\Bigl\{0,\Bigl\lceil2\Bigl(\xi'\ln D+\frac{(2+C_2)\xi'}{\xi_0}
-  +\frac12\Bigr)\Bigr\rceil\Bigr\},
-\]
+\begin{align}
+    M=\max\Bigl\{0,\Bigl\lceil2\Bigl(\xi'\ln D+\frac{(2+C_2)\xi'}{\xi_0}
+    +\frac12\Bigr)\Bigr\rceil\Bigr\},
+    \label{eq:hastings07_doubling_constants_exponent}
+\end{align}
 twice the printed exponent, because $\ln C_1\,\xi'/\xi_0<1/2$. The
 contradiction at length $l_12^M$ gives $l_0<l_12^M$. The printed prefactor
 $\xi'\ln(2C_1)=\xi_0/2$ is half the starting length; the correct prefactor
@@ -77,9 +85,10 @@ is the starting length itself.
 
 Lengths are natural numbers, so the formalization starts at
 $l_1=\lceil\xi_0\rceil$ and proves
-\[
-  l_0<\lceil\xi_0\rceil\,2^M .
-\]
+\begin{align}
+    l_0<\lceil\xi_0\rceil\,2^M .
+    \label{eq:hastings07_doubling_constants_corrected_window}
+\end{align}
 In the main theorem these corrections replace $2^{\xi'\ln D}$ in $S_{\max}$
 by $4^{\xi'\ln D}$; the form of the area law is unchanged.
 
@@ -87,14 +96,15 @@ by $4^{\xi'\ln D}$; the form of the area law is unchanged.
 
 The source uses three facts left implicit, all recorded as hypotheses.
 \begin{itemize}
-  \item $2C_1>1$, so that $\xi_0>0$ is a length.
-  \item $\ln C_1+C_2\ge0$, used when the constant errors
-        $(\ln C_1+C_2)/(2\cdot2^nl_1)$ are bounded by
-        $(\ln C_1+C_2)/\xi_0$. Increasing $C_2$ keeps~\eqref{eq:claim} true,
-        so this costs nothing.
-  \item Inequality~\eqref{eq:claim} is stated ``for all $l\le l_0$''; it is
-        used only when both intervals fit in the window, $2l\le l_0$, and is
-        assumed only there.
+    \item $2C_1>1$, so that $\xi_0>0$ is a length.
+    \item $\ln C_1+C_2\ge0$, used when the constant errors
+          $(\ln C_1+C_2)/(2\cdot2^nl_1)$ are bounded by
+          $(\ln C_1+C_2)/\xi_0$. Increasing $C_2$
+          keeps~\eqref{eq:hastings07_doubling_constants_claim} true, so this
+          costs nothing.
+    \item Inequality~\eqref{eq:hastings07_doubling_constants_claim} is stated
+          ``for all $l\le l_0$''; it is used only when both intervals fit in
+          the window, $2l\le l_0$, and is assumed only there.
 \end{itemize}
 No hypothesis on $D$ is needed.
 
