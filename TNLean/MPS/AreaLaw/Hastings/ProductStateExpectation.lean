@@ -3,9 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Analysis.TraceMulBound
-import QICLean.Analysis.TraceDistance
-import QICLean.Channel.PartialTrace
+import TNLean.MPS.AreaLaw.Hastings.CutProductExpectation
 import TNLean.MPS.AreaLaw.Hastings.SchmidtDiagonalCorrelation
 
 /-!
@@ -24,8 +22,8 @@ run with the effect `O_Bᴴ O_B`. This file proves the expectation bounds that s
 * `norm_toEuclideanCLM_one_sub_le`: `‖(1 − O_L O_R) Ψ‖ ≤ ε`.
 * `sq_one_sub_two_mul_le_re_inner_conjTranspose_mul`: `⟨Ψ, O_Bᴴ O_B Ψ⟩ ≥ (1 − 2ε)²`.
 * `one_sub_sq_le_re_inner_left`, `one_sub_sq_le_re_inner_right`: `⟨Ψ, O_L Ψ⟩, ⟨Ψ, O_R Ψ⟩ ≥ 1 − ε²`.
-* `one_sub_two_mul_sq_le_re_trace_kronecker_marginals_mul`: `y ≥ 1 − 2ε²` for `O_L = M_L ⊗ 1`,
-  `O_R = 1 ⊗ M_R` and the product `ρ_L ⊗ ρ_R` of the two marginals.
+* `one_sub_two_mul_sq_le_re_trace_cutProductState_mul`: `y ≥ 1 − 2ε²` for `O_L`, `O_R`
+  supported on the two sides of a cut and the product `ρ_{<c} ⊗ ρ_{≥c}` of the two marginals.
 
 ## References
 
@@ -33,7 +31,7 @@ run with the effect `O_Bᴴ O_B`. This file proves the expectation bounds that s
   P08024, arXiv:0705.2024v4, `References/0705.2024/law16.tex`, lines 413–446 and 911–925.
 -/
 
-open scoped ComplexOrder InnerProductSpace Matrix.Norms.L2Operator MatrixOrder Kronecker
+open scoped ComplexOrder InnerProductSpace Matrix.Norms.L2Operator MatrixOrder
 
 namespace Matrix
 
@@ -49,17 +47,6 @@ theorem norm_toEuclideanCLM_le_of_norm_le_one {A : Matrix n n ℂ} (hA1 : ‖A�
     (x : EuclideanSpace ℂ n) : ‖toEuclideanCLM (n := n) (𝕜 := ℂ) A x‖ ≤ ‖x‖ :=
   ((toEuclideanCLM (n := n) (𝕜 := ℂ) A).le_opNorm x).trans
     (mul_le_of_le_one_left (norm_nonneg x) hA1)
-
-/-- The rank-one projection `|Ψ⟩⟨Ψ|` fixes the unit vector `Ψ`. -/
-theorem toEuclideanCLM_vecMulVec_star_self_of_norm_eq_one {Ψ : EuclideanSpace ℂ n}
-    (hΨ : ‖Ψ‖ = 1) :
-    toEuclideanCLM (n := n) (𝕜 := ℂ) (vecMulVec Ψ.ofLp (star Ψ.ofLp)) Ψ = Ψ := by
-  apply WithLp.ofLp_injective
-  have h : star Ψ.ofLp ⬝ᵥ Ψ.ofLp = 1 := by
-    rw [dotProduct_comm, ← EuclideanSpace.inner_eq_star_dotProduct, inner_self_eq_norm_sq_to_K,
-      hΨ]
-    norm_num
-  rw [ofLp_toEuclideanCLM, vecMulVec_mulVec, h, MulOpposite.op_one, one_smul]
 
 end Matrix
 
@@ -78,7 +65,8 @@ theorem norm_toEuclideanCLM_mul_sub_le {Ψ : EuclideanSpace ℂ n} (hΨ : ‖Ψ�
   have e : toEuclideanCLM (n := n) (𝕜 := ℂ) X Ψ =
       toEuclideanCLM (n := n) (𝕜 := ℂ) OB (toEuclideanCLM (n := n) (𝕜 := ℂ) Z Ψ) - Ψ := by
     rw [map_sub, map_mul, _root_.sub_apply, mul_apply_eq_comp,
-      toEuclideanCLM_vecMulVec_star_self_of_norm_eq_one hΨ]
+      toEuclideanCLM_vecMulVec_star_self_apply, inner_self_eq_norm_sq_to_K, hΨ]
+    simp
   rw [← e]
   calc ‖toEuclideanCLM (n := n) (𝕜 := ℂ) X Ψ‖ ≤ ‖toEuclideanCLM (n := n) (𝕜 := ℂ) X‖ * ‖Ψ‖ :=
         (toEuclideanCLM (n := n) (𝕜 := ℂ) X).le_opNorm Ψ
@@ -248,87 +236,39 @@ theorem one_sub_sq_le_re_inner_right {Ψ : EuclideanSpace ℂ n} (hΨ : ‖Ψ‖
   have h1 := norm_toEuclideanCLM_one_sub_le hΨ hZ hprod
   exact (one_sub_sq_le_norm_sq hΨ hZ h1).trans (norm_sq_le_re_inner_right hOL hOR Ψ)
 
-variable {l r : Type*} [Fintype l] [DecidableEq l] [Fintype r] [DecidableEq r]
-
-/-- The expectation in a pure state is the trace against its projection:
-`tr (|Ψ⟩⟨Ψ| A) = ⟪Ψ, A Ψ⟫`. -/
-theorem trace_vecMulVec_star_mul (Ψ : EuclideanSpace ℂ n) (A : Matrix n n ℂ) :
-    (vecMulVec Ψ.ofLp (star Ψ.ofLp) * A).trace =
-      ⟪Ψ, toEuclideanCLM (n := n) (𝕜 := ℂ) A Ψ⟫_ℂ := by
-  rw [vecMulVec_mul, trace_vecMulVec, inner_toEuclideanCLM_eq_dotProduct, dotProduct_comm,
-    dotProduct_mulVec]
-
-/-- The product of the two marginals of `|Ψ⟩⟨Ψ|` gives the product of the two one-sided
-expectations: `tr ((ρ_L ⊗ ρ_R)(O_L O_R)) = tr (ρ_L M_L) tr (ρ_R M_R) = ⟨O_L⟩ ⟨O_R⟩`,
-where `O_L = M_L ⊗ 1` and `O_R = 1 ⊗ M_R`.
-Hastings, arXiv:0705.2024v4, `law16.tex` lines 413–446. -/
-theorem trace_kronecker_marginals_mul (Ψ : EuclideanSpace ℂ (l × r)) (ML : Matrix l l ℂ)
-    (MR : Matrix r r ℂ) :
-    ((partialTraceRight (vecMulVec Ψ.ofLp (star Ψ.ofLp)) ⊗ₖ
-        partialTraceLeft (vecMulVec Ψ.ofLp (star Ψ.ofLp))) *
-        ((ML ⊗ₖ (1 : Matrix r r ℂ)) * ((1 : Matrix l l ℂ) ⊗ₖ MR))).trace =
-      (partialTraceRight (vecMulVec Ψ.ofLp (star Ψ.ofLp)) * ML).trace *
-        (partialTraceLeft (vecMulVec Ψ.ofLp (star Ψ.ofLp)) * MR).trace ∧
-    (partialTraceRight (vecMulVec Ψ.ofLp (star Ψ.ofLp)) * ML).trace *
-        (partialTraceLeft (vecMulVec Ψ.ofLp (star Ψ.ofLp)) * MR).trace =
-      ⟪Ψ, toEuclideanCLM (n := l × r) (𝕜 := ℂ) (ML ⊗ₖ (1 : Matrix r r ℂ)) Ψ⟫_ℂ *
-        ⟪Ψ, toEuclideanCLM (n := l × r) (𝕜 := ℂ)
-          ((1 : Matrix l l ℂ) ⊗ₖ MR) Ψ⟫_ℂ := by
-  refine ⟨?_, ?_⟩
-  · rw [← mul_kronecker_mul, mul_one, one_mul, ← mul_kronecker_mul, trace_kronecker]
-  · rw [trace_partialTraceRight_mul, trace_partialTraceLeft_mul, trace_vecMulVec_star_mul,
-      trace_vecMulVec_star_mul]
-
-/-- **The product-of-marginals bound.** Let `M_L`, `M_R` be orthogonal projections,
-`O_L = M_L ⊗ 1`, `O_R = 1 ⊗ M_R`, and `‖O_B O_L O_R - |Ψ⟩⟨Ψ|‖ ≤ ε`. Then the expectation `y` of
-`O_L O_R` in the product `σ = ρ_L ⊗ ρ_R` of the two marginals of `Ψ` satisfies
-`1 - 2ε² ≤ y`: `y = ⟨Ψ, O_L Ψ⟩ ⟨Ψ, O_R Ψ⟩` and both factors are at least `1 - ε²`.
+/-- **The expectation in the product of the marginals.** Let `O_L` and `O_R` be commuting
+orthogonal projections, `O_L` supported on the sites to the left of the cut after `c` sites and
+`O_R` on the remaining sites, with `‖O_B O_L O_R - |Ω⟩⟨Ω|‖ ≤ ε`. Then the expectation `y` of
+`O_L O_R` in the product `σ = ρ_{<c} ⊗ ρ_{≥c}` of the two marginals of `Ω` satisfies
+`1 - 2ε² ≤ y`: `y = ⟨Ω, O_L Ω⟩ ⟨Ω, O_R Ω⟩` and both factors are at least `1 - ε²`.
 Hastings, arXiv:0705.2024v4, `law16.tex` lines 440–446. -/
-theorem one_sub_two_mul_sq_le_re_trace_kronecker_marginals_mul
-    {Ψ : EuclideanSpace ℂ (l × r)} (hΨ : ‖Ψ‖ = 1) {ML : Matrix l l ℂ} {MR : Matrix r r ℂ}
-    {OB : Matrix (l × r) (l × r) ℂ} (hML : IsStarProjection ML) (hMR : IsStarProjection MR)
-    {ε : ℝ}
-    (hprod : ‖OB * (ML ⊗ₖ (1 : Matrix r r ℂ)) * ((1 : Matrix l l ℂ) ⊗ₖ MR) -
-      vecMulVec Ψ.ofLp (star Ψ.ofLp)‖ ≤ ε) :
-    1 - 2 * ε ^ 2 ≤ ((partialTraceRight (vecMulVec Ψ.ofLp (star Ψ.ofLp)) ⊗ₖ
-        partialTraceLeft (vecMulVec Ψ.ofLp (star Ψ.ofLp))) *
-        ((ML ⊗ₖ (1 : Matrix r r ℂ)) * ((1 : Matrix l l ℂ) ⊗ₖ MR))).trace.re := by
-  obtain ⟨h1, h2⟩ := trace_kronecker_marginals_mul Ψ ML MR
-  rw [h1, h2]
-  set OL := ML ⊗ₖ (1 : Matrix r r ℂ)
-  set OR := (1 : Matrix l l ℂ) ⊗ₖ MR
-  have hOL : IsStarProjection OL := by
-    refine ⟨?_, ?_⟩
-    · change OL * OL = OL
-      simp only [OL, ← mul_kronecker_mul, hML.isIdempotentElem.eq, mul_one]
-    · change OLᴴ = OL
-      simp only [OL, conjTranspose_kronecker, conjTranspose_one]
-      rw [show MLᴴ = ML from hML.isSelfAdjoint]
-  have hOR : IsStarProjection OR := by
-    refine ⟨?_, ?_⟩
-    · change OR * OR = OR
-      simp only [OR, ← mul_kronecker_mul, hMR.isIdempotentElem.eq, mul_one]
-    · change ORᴴ = OR
-      simp only [OR, conjTranspose_kronecker, conjTranspose_one]
-      rw [show MRᴴ = MR from hMR.isSelfAdjoint]
-  have hcomm : Commute OL OR := by
-    simp only [Commute, SemiconjBy, OL, OR, ← mul_kronecker_mul, mul_one, one_mul]
-  have hreal : ∀ {A : Matrix (l × r) (l × r) ℂ}, IsStarProjection A →
-      0 ≤ ⟪Ψ, toEuclideanCLM (n := l × r) (𝕜 := ℂ) A Ψ⟫_ℂ := fun hA ↦ by
+theorem one_sub_two_mul_sq_le_re_trace_cutProductState_mul {L q c : ℕ}
+    {Ω : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Ω‖ = 1)
+    {OB OL OR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
+    (hOL : IsStarProjection OL) (hOR : IsStarProjection OR) (hcomm : Commute OL OR)
+    (hL : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) OL (leftBlock L c))
+    (hR : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) OR (leftBlock L c)ᶜ) {ε : ℝ}
+    (hprod : ‖OB * OL * OR - vecMulVec Ω.ofLp (star Ω.ofLp)‖ ≤ ε) :
+    1 - 2 * ε ^ 2 ≤ (cutProductState L q c Ω * (OL * OR)).trace.re := by
+  rw [trace_cutProductState_mul_mul c Ω hL hR]
+  change 1 - 2 * ε ^ 2 ≤ (⟪Ω, toEuclideanCLM (n := Fin L → Fin q) (𝕜 := ℂ) OL Ω⟫_ℂ *
+    ⟪Ω, toEuclideanCLM (n := Fin L → Fin q) (𝕜 := ℂ) OR Ω⟫_ℂ).re
+  have hreal : ∀ {A : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}, IsStarProjection A →
+      0 ≤ ⟪Ω, toEuclideanCLM (n := Fin L → Fin q) (𝕜 := ℂ) A Ω⟫_ℂ := fun hA ↦ by
     rw [inner_toEuclideanCLM_eq_dotProduct]
     exact (Matrix.nonneg_iff_posSemidef.mp hA.nonneg).dotProduct_mulVec_nonneg _
-  have hL := hreal hOL
-  have hR := hreal hOR
-  set a := ⟪Ψ, toEuclideanCLM (n := l × r) (𝕜 := ℂ) OL Ψ⟫_ℂ
-  set b := ⟪Ψ, toEuclideanCLM (n := l × r) (𝕜 := ℂ) OR Ψ⟫_ℂ
+  have hLp := hreal hOL
+  have hRp := hreal hOR
+  set a := ⟪Ω, toEuclideanCLM (n := Fin L → Fin q) (𝕜 := ℂ) OL Ω⟫_ℂ
+  set b := ⟪Ω, toEuclideanCLM (n := Fin L → Fin q) (𝕜 := ℂ) OR Ω⟫_ℂ
   have hre : (a * b).re = a.re * b.re := by
-    rw [Complex.mul_re, ← (Complex.nonneg_iff.mp hL).2, ← (Complex.nonneg_iff.mp hR).2,
+    rw [Complex.mul_re, ← (Complex.nonneg_iff.mp hLp).2, ← (Complex.nonneg_iff.mp hRp).2,
       mul_zero, sub_zero]
-  have ha0 : 0 ≤ a.re := (Complex.nonneg_iff.mp hL).1
-  have hb0 : 0 ≤ b.re := (Complex.nonneg_iff.mp hR).1
+  have ha0 : 0 ≤ a.re := (Complex.nonneg_iff.mp hLp).1
+  have hb0 : 0 ≤ b.re := (Complex.nonneg_iff.mp hRp).1
   rw [hre]
-  have ha := one_sub_sq_le_re_inner_left hΨ hOL hOR hcomm hprod
-  have hb := one_sub_sq_le_re_inner_right hΨ hOL hOR hcomm hprod
+  have ha := one_sub_sq_le_re_inner_left hΩ hOL hOR hcomm hprod
+  have hb := one_sub_sq_le_re_inner_right hΩ hOL hOR hcomm hprod
   rcases le_or_gt (ε ^ 2) 1 with hε | hε
   · nlinarith [mul_le_mul ha hb (by linarith) ha0, sq_nonneg (ε ^ 2)]
   · nlinarith [mul_nonneg ha0 hb0]
