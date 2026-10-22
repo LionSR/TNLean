@@ -17,12 +17,12 @@ most $J$.
     \lean{TNLean.MPS.AreaLaw.Hastings.ChainHamiltonian.exists_boundaryOperator_factorization}
     \leanok
     \uses{def:chain_model}
-    Let $H$ be a chain Hamiltonian of range $R$ and term norm $J$, let $H_0$ be
-    Hermitian with $H-H_0$ supported on a set $Z$ of sites, and let $O_L$ and
-    $O_R$ be orthogonal projections. Suppose
+    Let $H$ be a chain Hamiltonian of range $R$ and term norm $J$, let $E_0$ be
+    real and $H'=H-E_0$, let $H_0$ be Hermitian with $H'-H_0$ supported on a set
+    $Z$ of sites, and let $O_L$ and $O_R$ be orthogonal projections. Suppose
     \begin{align}
-        \|H_0O_LO_R\|         & \le\theta,        &
-        \|P_\eta(H)O_LO_R-P\| & \le\varepsilon_0.
+        \|H_0O_LO_R\|          & \le\theta,        &
+        \|P_\eta(H')O_LO_R-P\| & \le\varepsilon_0.
         \label{eq:hastings_boundary_factorization_hyp}
     \end{align}
     Then for every $\ell'\ge0$ there is an operator $O_B$ supported on the
@@ -30,21 +30,24 @@ most $J$.
     \begin{align}
         \|O_BO_LO_R-P\|
          & \le\varepsilon_0+\sqrt\eta\,\theta
-        +\sqrt\eta\,a\,|Z|^2\,\|H-H_0\|\,e^{-\ell'/4}
+        +\sqrt\eta\,a\,|Z|^2\,\|H'-H_0\|\,e^{-\ell'/4}
         +4e^{-\ell'^2/(32v^2\eta)}.
         \label{eq:hastings_boundary_factorization}
     \end{align}
-    With $H_0=M_L+M_R$ and the cut-offs of the localized parts, this is the
+    With $E_0$ the ground energy, which the source sets to zero (line 767),
+    $H_0=M_L+M_R$ and the cut-offs of the localized parts, this is the
     operator $O_B$ of Lemma~1 of \cite{Hastings2007AreaLaw}, constructed at
     lines 881--901.
 \end{theorem}
 \begin{proof}\leanok
-    Put $A=H_0$ and $B=H-H_0$, so that $A+B=H$, and let
-    $P_B=\int e^{iHt}e^{-iH_0t}\,d\gamma_\eta(t)$ be the Gaussian average of
-    the interaction-picture propagator. Replacing $P_\eta(H)$ by $P_B$ in front
+    Put $A=H_0$ and $B=H'-H_0$, so that $A+B=H'$, and let
+    $P_B=\int e^{iH't}e^{-iH_0t}\,d\gamma_\eta(t)$ be the Gaussian average of
+    the interaction-picture propagator. Shifting $H_0$ by $E_0$ changes neither
+    $P_B$, since the two phases cancel, nor $H'-H_0$, and with the shifted
+    operator $A+B=H$. Replacing $P_\eta(H)$ by $P_B$ in front
     of $O_LO_R$ costs at most $\sqrt\eta\,\|H_0O_LO_R\|$, so
     $\|P_BO_LO_R-P\|\le\varepsilon_0+\sqrt\eta\,\theta$. The Lieb--Robinson
-    bound localizes the generator $e^{iHs}(H-H_0)e^{-iHs}$ of the propagator
+    bound for $H$ localizes the generator $e^{iHs}(H'-H_0)e^{-iHs}$ of the propagator
     onto the $\ell'$-neighbourhood of $Z$, which gives $O_B$ with $\|O_B\|\le1$
     and $\|P_B-O_B\|$ at most the last two terms
     of~\eqref{eq:hastings_boundary_factorization}. Since

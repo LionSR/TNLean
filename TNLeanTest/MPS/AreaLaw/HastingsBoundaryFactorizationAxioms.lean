@@ -13,6 +13,10 @@ factorization. -/
 run_cmd do
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
   for decl in #[
+    ``TNLean.MPS.AreaLaw.Hastings.hermitianUnitaryPath_smul_one,
+    ``TNLean.MPS.AreaLaw.Hastings.hermitianUnitaryPath_add_smul_one,
+    ``TNLean.MPS.AreaLaw.Hastings.gaussianIntertwiner_add_smul_one,
+    ``TNLean.MPS.AreaLaw.Hastings.interactionAverage_add_smul_one,
     ``TNLean.MPS.AreaLaw.Hastings.ChainHamiltonian.exists_boundaryOperator_factorization] do
     unless (← Lean.getEnv).contains decl do
       throwError "Missing declaration {decl}"
