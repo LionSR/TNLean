@@ -9,6 +9,8 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.MPS.AreaLaw.Hastings
 
 import TNLean.MPS.AreaLaw.Hastings.GaussianTimeAverage
+import TNLean.MPS.AreaLaw.Hastings.ProjectorOverlap
 import TNLean.MPS.AreaLaw.Hastings.SchmidtDiagonalCorrelation
 import TNLean.MPS.AreaLaw.Hastings.SchmidtDiagonalOperators
+import TNLean.MPS.AreaLaw.Hastings.SchmidtRankBootstrap
 import TNLean.MPS.AreaLaw.Hastings.TailEntropy
