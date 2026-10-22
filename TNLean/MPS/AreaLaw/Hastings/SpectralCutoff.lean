@@ -12,16 +12,17 @@ import TNLean.Algebra.ToEuclideanLinApply
 Step 4 of the proof of Hastings' Lemma 1. The localized filtered terms `M_L` and `M_R` nearly
 annihilate the ground state, and `O_L`, `O_R` are spectral projections of `M_L`, `M_R` onto
 their small eigenvalues, those of absolute value at most a threshold `θ > 0`. If `‖M Ψ‖ ≤ δ`,
-the cut-off moves `Ψ` by at most `δ / θ`, and `‖M O‖ ≤ θ`. At the source's values
-`δ = ΔE⁻¹ J² e^{-l/3ξ}` and `θ = ΔE⁻¹ J² e^{-l/6ξ}`, the first bound is eq. `obd` with
-constant one.
+the cut-off moves `Ψ` by at most `δ / θ`, and `‖M O‖ ≤ θ`. The threshold `θ` is a free
+parameter here. At the printed values `δ = ΔE⁻¹ J² e^{-l/3ξ}` and `θ = ΔE⁻¹ J² e^{-l/6ξ}` the
+first bound is eq. `obd` with constant one; the residual `δ` and the choice of `θ` relative
+to the filter width are fixed where Lemma 1 is assembled.
 
 **Local fix (absolute threshold):** the source projects onto the eigenvalues at most `θ`
 (line 830). The terms `M_L`, `M_R` are centered at the ground state and need not be
 positive, and the cut-off estimate (lines 878–880) uses `‖M_L O_L‖ ≤ θ`, which fails for the printed
 projection when `M_L` has an eigenvalue below `-θ`. Projecting onto the eigenvalues of
 absolute value at most `θ` keeps eq. `obd` and gives `‖M O‖ ≤ θ`. The later steps use only
-these two facts, so nothing downstream changes. Documented in
+these two facts, so this change alters nothing downstream. Documented in
 `docs/paper-gaps/hastings07_spectral_cutoff_threshold.tex`.
 
 The cut-off of an operator lifted from a region is the lift of the regional cut-off, so it is
