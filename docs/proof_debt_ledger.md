@@ -200,7 +200,7 @@ live mathematics. Tracked under [#4529](https://github.com/LionSR/TNLean/issues/
   `docs/audits/2026-10-07_peps_union_injectivity_blue_dead_blocks.md`.
 
 ### S2. Delete ~185 zero-reference declarations across ~103 files — net 2,950 lines, risk 3/10
-- **Status**: open (#4564)
+- **Status**: open (#9881; supersedes #4564)
 - **What**: top-level declarations whose name appears exactly once
   repo-wide (their own definition), including attribute-carrying
   declarations and instances cleared by a root build. Largest
@@ -273,6 +273,21 @@ live mathematics. Tracked under [#4529](https://github.com/LionSR/TNLean/issues/
   was not used implicitly within the module. The three batches therefore
   remove 63 net Lean lines. See
   `docs/audits/2026-08-30_thirty_area_simplification_survey.md`.
+
+- **PEPS area-law helper removal (2026-10-22, #9881)**: nine unused
+  helpers in five modules are removed (58 Lean lines). In
+  `Geometry/BirthSeparationAngular`, `mem_unitBox_self` is the floor/ceiling
+  inequality, and `isQuarterSectorial_univ` and `isQuarterSectorial_empty`
+  follow from the defining conditions. In `Geometry/BirthSeparationAtoms`,
+  `mem_beltAtom_add_iff` is translation of the defining displacement; in
+  `Geometry/BirthSeparationStar`, the private `scaleHomeomorph_apply` is
+  definitional equality. In `Geometry/RepairFanCones`,
+  `smul_mem_repairFanCone_iff` follows by applying the retained cone closure
+  to a positive scalar and its inverse. In `Scan/EnergyBalance`,
+  `integral_etaOld_rpow_nonneg`, `integral_etaNew_rpow_nonneg`, and their
+  sole consumer `termEnergy_nonneg` form an unused cluster of integral,
+  sum, and product nonnegativity arguments. No definitions or source-labelled
+  conclusions are removed, and no replacement declarations are introduced.
 
 ### S5. Preserve the ch23 algebraic-FT chapter — retirement cancelled
 - **Status**: cancelled (#4565; owner decision on #7220)
