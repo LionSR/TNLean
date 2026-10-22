@@ -39,8 +39,8 @@ of a gapped chain combines them with the factorization of
     }
     \leanok
     \uses{lem:hastings_gibbs_inequality}
-    Let $p_0,\dots,p_{N-1}$ be a probability vector, read in decreasing order of
-    the squared Schmidt coefficients, and let $K\ge1$, $D\ge2$ and $0<x<1$. If
+    Let $p_0,\dots,p_{N-1}$ be a probability vector and let $K\ge1$, $D\ge2$
+    and $0<x<1$. If
     for every $n\ge0$ the mass of the entries of index at least $KD^{2n}$ is at
     most $x^{n+1}$, then
     \begin{align*}
@@ -53,15 +53,17 @@ of a gapped chain combines them with the factorization of
         H(p)\le\ln k+(2m+2+\xi')\ln D+1+\ln(D^2-1)+\ln(\xi'/2+1).
     \end{align*}
     This is the maximization in the proof of
-    \cite[Lemma~2]{Hastings2007AreaLaw}, lines 357--390.
+    \cite[Lemma~2]{Hastings2007AreaLaw}, lines 357--390, where it is applied
+    to the squared Schmidt coefficients in decreasing order.
 \end{lemma}
 \begin{proof}\leanok
     The source finds the maximum by saturating every constraint; here the same
     value comes from Lemma~\ref{lem:hastings_gibbs_inequality} against the
     saturating weights. On the block of indices in $[KD^{2(n-1)},KD^{2n})$, of
     size $KD^{2(n-1)}(D^2-1)$, and on $[0,K)$ for $n=0$, put the weight
-    $(1-x)x^n$ divided by the size of the block. These weights add up to
-    $1-x^{N+1}\le1$, and $-\ln$ of a weight is $\ln K-\ln(1-x)$ plus one
+    $(1-x)x^n$ divided by the size of the block. The weights of the indices
+    below $KD^{2N}$ add up to $1-x^{N+1}$, so the weights of the indices below
+    $N\le KD^{2N}$ add up to at most $1$, and $-\ln$ of a weight is $\ln K-\ln(1-x)$ plus one
     increment for each threshold $KD^{2i}\le a$ below the index $a$. Averaging
     against $p$ and bounding the mass beyond each threshold by $x^{i+1}$ gives
     the first bound. With $x=e^{-2/\xi'}$ one has $x/(1-x)\le\xi'/2$, which
@@ -125,7 +127,7 @@ of a gapped chain combines them with the factorization of
     \label{def:hastings_bootstrap_remainder}
     \lean{TNLean.MPS.AreaLaw.Hastings.bootstrapRemainder}
     \leanok
-    For $\xi'>0$ and a natural number $D$, put
+    For $\xi'>0$ and a natural number $D\ge2$, put
     \begin{align*}
         F(\xi',D)=(\xi'+4)\ln D+1+\ln(D^2-1)+\ln(\xi'/2+1),
     \end{align*}
@@ -169,7 +171,12 @@ of a gapped chain combines them with the factorization of
     \begin{align*}
         S(\rho^0_{1,j})\le\ln k+\xi'\ln\bigl(2C_1(\xi)^2/P\bigr)\ln D+F(\xi',D).
     \end{align*}
-    This is \cite[Lemma~2]{Hastings2007AreaLaw}, lines 280--311. It follows from
+    Here $D\ge2$ is the local dimension, $\xi=\max(2v/\Delta E,\xi_C)$ and
+    $\xi'=6\xi$ as in \cite[lines 126--142]{Hastings2007AreaLaw}, and
+    $C_1(\xi)$ is the constant of the approximate factorization
+    $\|O_B(j,m)O_L(j,m)O_R(j,m)-P_0\|\le C_1(\xi)e^{-m/\xi'}$ of
+    \cite[Lemma~1]{Hastings2007AreaLaw}. This is
+    \cite[Lemma~2]{Hastings2007AreaLaw}, lines 280--311. It follows from
     Theorem~\ref{thm:hastings_bootstrap_stage} and
     Lemma~\ref{lem:hastings_bootstrap_overlap}, once the approximate
     factorization of the ground-state projector of
