@@ -1,0 +1,68 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+\input{command}
+\providecommand{\leanid}[1]{\textsf{\detokenize{#1}}}
+\providecommand{\gapnote}[2]{\par\noindent\textbf{Verdict:} #1 (#2).\par}
+\title{The Error of the Localized Filtered Parts in Hastings' Lemma~1}
+\author{}
+\date{October 22, 2026}
+\begin{document}
+\maketitle
+\gapnote{local-correction}{resolved}
+
+\section{The source statement}
+
+In the appendix of~\cite{Hastings2007AreaLaw} (arXiv:0705.2024v4,
+\path{law16.tex}, lines~816--828), the Hamiltonian is split at a cut as
+$H=H_L+H_B+H_R$, each part is filtered with a Gaussian in time,
+$\tilde H_L^0=(\Delta E/\sqrt{2\pi q})\int H_L(t)e^{-(t\Delta E)^2/2q}\,dt$, and
+the source states that, by the Lieb--Robinson bound, the filtered parts can be
+approximated by operators $M_L,M_B,M_R$ with $M_L-H_L$ supported on
+$X_{j-2l/3,j}$ and
+\[
+  \Vert M_L-H_L\Vert\le\mathcal O(\Delta E^{-1}J^2e^{-l/3\xi}),
+\]
+and similarly for $M_B$ and $M_R$. It then concludes $|M_L\Psi_0|\le
+\mathcal O(\Delta E^{-1}J^2e^{-l/3\xi})$ from eq.~\texttt{tighter}, which bounds
+$|\tilde H_L^0\Psi_0|$.
+
+\section{The point at issue}
+
+The printed bound on $\Vert M_L-H_L\Vert$ cannot hold in general: $\tilde
+H_L^0-H_L$ is the Gaussian average of $H_L(t)-H_L$, which is not small, and
+$M_L-H_L$ is supported near the cut while $\tilde H_L^0-H_L$ need not be small
+there. The next step, $|M_L\Psi_0|\le|\tilde H_L^0\Psi_0|+\Vert M_L-\tilde
+H_L^0\Vert$, uses the distance to the filtered part. The intended statement is
+\[
+  \Vert M_L-\tilde H_L^0\Vert\le\mathcal O(\Delta E^{-1}J^2e^{-l/3\xi}),
+\]
+with $M_L-H_L$ supported near the cut.
+
+\section{The statement proved}
+
+For any operator $W$, set $M=W+E_K(\tilde W-W)$, where $E_K$ is the normalized
+partial trace onto a set of sites $K$. Then $M-W$ acts on $K$, and if the evolved
+commutator $\tau_s(i[H,W])$ is within $\varepsilon$ of its partial trace onto
+$K$ for $|s|\le T$,
+\[
+  \Vert\tilde W-M\Vert\le T\varepsilon
+  +2\Vert[H,W]\Vert\sqrt{2h/\pi}\,e^{-T^2/(2h)},\qquad h=q/\Delta E^2.
+\]
+The bound involves $[H,W]$ and not $W$: by the Duhamel formula,
+$\Vert\tau_t(W)-W\Vert\le|t|\,\Vert[H,W]\Vert$. For $W=H_L$ the commutator is
+supported near the cut, and the chain Lieb--Robinson bound supplies an
+$\varepsilon$ independent of the length of the chain.\footnote{%
+\leanid{TNLean.Lattice.norm_gaussianFilteredTerm_sub_localized_le} in
+\path{TNLean/Lattice/GaussianFilteredIncrement.lean}.}
+
+\section{Conclusion}
+
+The correction replaces $H_L$ by $\tilde H_L^0$ in one norm. The bound used by
+the rest of the proof, $|M_L\Psi_0|\le\mathcal O(\Delta E^{-1}J^2e^{-l/3\xi})$,
+follows as in the source.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}
