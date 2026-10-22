@@ -23,7 +23,7 @@ part2b_mps_protocol.tex:594–614 and order of constants:626–632.
 
 noncomputable section
 namespace TNLean.MPS.AreaLaw.ChainSweep
-open TNLean.PEPS TNLean.PEPS.PairEffect TNLean.PEPS.Approximation
+open TNLean.Lattice TNLean.Lattice.PartyCircuit TNLean.Lattice.Compression
 attribute [local instance] Classical.propDecidable
 
 /-- Uniform sampling of the actual three-party preparation has at most

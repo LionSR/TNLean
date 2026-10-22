@@ -24,7 +24,7 @@ lines 1373–1420 and `figs3/grow-N`, `figs3/grow-M`, `figs3/grow-intersect`.
 universe u
 noncomputable section
 namespace TNLean.PEPS.ThreeBlockDependent
-open DependentBondNetwork
+open DependentBondNetwork TNLean.Lattice.DependentBondNetwork
 
 /-- The two physical tensors on the left of the source intersection. -/
 def leftVertices : Finset Vertex := {0, 1}

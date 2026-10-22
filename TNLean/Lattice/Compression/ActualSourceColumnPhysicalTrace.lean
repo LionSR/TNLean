@@ -26,9 +26,9 @@ Source: polynomial-PEPS manuscript (September 24, 2026), Theorem 5.2,
 noncomputable section
 open scoped Matrix ComplexConjugate
 namespace TNLean
-open TNLean.Lattice.PartyCircuit TNLean.PEPS.PairEffect
+open TNLean.Lattice.PartyCircuit
 
-namespace PEPS.PairEffect
+namespace Lattice.PartyCircuit
 private theorem mixed_single_eq_columns {S T : Type} [Fintype S] [DecidableEq S]
     (A B : Matrix T S ℂ) (s t : S) (γ : ℂ) :
     A * Matrix.single s t γ * Bᴴ =
@@ -50,7 +50,7 @@ private theorem mixed_sandwich_eq_sum_columns {S T : Type} [Fintype S]
         X s t • Matrix.vecMulVec (fun r ↦ A r s) (fun r ↦ conj (B r t)) := by
       simp only [Matrix.mul_sum, Matrix.sum_mul, mixed_single_eq_columns]
 
-end PEPS.PairEffect
+end Lattice.PartyCircuit
 namespace Lattice.PartyCircuit.SourceCircuit
 variable {P : Type} [Fintype P] [DecidableEq P] {a : Layout P}
 variable {E : Option {_p : P // true = true} → Type} [∀ q, Fintype (E q)]

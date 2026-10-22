@@ -136,7 +136,7 @@ theorem mem_freeSlotLayout (R : SourceInventory P) (U V : Fin R.length → HSpac
 end TNLean.Lattice.PartyCircuit.SourceInventory
 
 namespace TNLean.Lattice.PartyCircuit.SourceCircuit
-open TNLean.PEPS.Approximation TNLean.Lattice.PartyCircuit.SourceInventory
+open TNLean.Lattice.Compression TNLean.Lattice.PartyCircuit.SourceInventory
 variable {P : Type}
 
 open Classical in

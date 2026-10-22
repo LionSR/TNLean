@@ -29,7 +29,7 @@ Independently formalized; no upstream Lean proof text reused.
 
 noncomputable section
 namespace TNLean.Lattice.PartyCircuit.OriginalCircuit
-open TNLean.PEPS.Approximation
+open TNLean.Lattice.Compression
 variable {P : Type} [DecidableEq P] {a : Layout P}
 
 open Classical in

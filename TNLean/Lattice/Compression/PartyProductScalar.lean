@@ -19,7 +19,7 @@ Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 565–588.
 
 noncomputable section
 open scoped BigOperators
-namespace TNLean.PEPS.PairEffect
+namespace TNLean.Lattice.PartyCircuit
 variable {P : Type} [Fintype P] [DecidableEq P] {I O : P → Type}
 
 /-- Scaling one specified party matrix scales the product matrix once.
@@ -37,4 +37,4 @@ theorem partyProductMatrix_smul_at_party
       (congrArg (fun c ↦ c * ∏ p, M p (x p) (y p))
         (Fintype.prod_ite_eq' p₀ (fun _ ↦ μ)))
 
-end TNLean.PEPS.PairEffect
+end TNLean.Lattice.PartyCircuit
