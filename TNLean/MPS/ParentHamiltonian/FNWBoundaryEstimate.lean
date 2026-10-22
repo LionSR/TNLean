@@ -43,7 +43,7 @@ noncomputable def physicalSiteReverseES (d N : ℕ) :
 
 /-- Physical-site reversal evaluates a Euclidean vector on the reversed configuration. -/
 @[simp]
-theorem physicalSiteReverseES_apply
+theorem physicalSiteReverseES_apply {N : ℕ}
     (ψ : EuclideanSpace ℂ (Cfg d N)) (σ : Cfg d N) :
     physicalSiteReverseES d N ψ σ = ψ (σ ∘ Fin.rev) := by
   rfl

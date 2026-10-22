@@ -33,8 +33,10 @@ variable {d D₁ D₂ : ℕ}
 /- Local shortcuts for the scalar-action continuity of Euclidean spaces and
 rectangular matrices; without them these instances are re-synthesized through
 the normed-space hierarchy at every continuous-linear-map coercion. -/
-private local instance instContinuousSMulEuclidean {ι : Type*} [Fintype ι] :
-    ContinuousSMul ℂ (EuclideanSpace ℂ ι) := inferInstance
+private local instance instContinuousSMulEuclidean {ι : Type*} [Finite ι] :
+    ContinuousSMul ℂ (EuclideanSpace ℂ ι) :=
+  letI := Fintype.ofFinite ι
+  inferInstance
 
 private local instance instContinuousSMulRectMatrix {m n : ℕ} :
     ContinuousSMul ℂ (Matrix (Fin m) (Fin n) ℂ) := inferInstance
