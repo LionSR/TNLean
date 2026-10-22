@@ -99,11 +99,11 @@ theorem add_mul_sqrt_mul_exp_le_of_lt {ξ ξ' a b l : ℝ} (hξ : 0 < ξ) (hξ' 
 
 variable {L q : ℕ}
 
-/-- **From the square-root bound to a decay length `ξ' > 6ξ`.** If at every cut `c` and length `l` with
-`c + l ≤ L` there is an approximate factorization with error `(a + b√l) e^{-l/(6ξ)}`, the form of
-the final bound of the proof of Lemma 1 (Hastings, arXiv:0705.2024v4, lines 903–907), then for
-every `ξ' > 6ξ` there is one with error `C₁ e^{-l/ξ'}`, where `C₁ = a + b/√(2eδ)` and
-`δ = 1/(6ξ) − 1/ξ'`.
+/-- **From the square-root bound to a decay length `ξ' > 6ξ`.** If at every cut `c` and
+length `l` with `c + l ≤ L` there is an approximate factorization with error
+`(a + b√l) e^{-l/(6ξ)}`, the form of the final bound of the proof of Lemma 1 (Hastings,
+arXiv:0705.2024v4, lines 903–907), then for every `ξ' > 6ξ` there is one with error
+`C₁ e^{-l/ξ'}`, where `C₁ = a + b/√(2eδ)` and `δ = 1/(6ξ) − 1/ξ'`.
 
 **Stage:** the factorizations with the square-root error are a hypothesis; this converts their
 error to the form of the conclusion of Lemma 1 (lines 246–267), with the decay length `ξ' > 6ξ`
