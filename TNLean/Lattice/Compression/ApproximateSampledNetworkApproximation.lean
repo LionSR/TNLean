@@ -29,9 +29,9 @@ open QICLean.ComplexGaussian
 open scoped Matrix ComplexConjugate NNReal
 
 namespace TNLean.Lattice.PartyCircuit.EffectCircuit
-open TNLean.PEPS.PairEffect
+open TNLean.Lattice.PartyCircuit
 
-open TNLean.PEPS.Approximation
+open TNLean.Lattice.Compression
 attribute [local instance] Classical.propDecidable
 variable {P : Type} [Fintype P]
 

@@ -137,7 +137,7 @@ $\tau:[N]\to\mathcal S$ and $\kappa_p:[n_p]\to\mathcal S_p$.
 
 \begin{theorem}[Labels on the full selected gate set]
     \label{thm:peps_full_selected_gate_label_sum}
-    \lean{TNLean.PEPS.Approximation.DistributedOperatorContraction.sum_eq_sum_gateLabels_univ}
+    \lean{TNLean.Lattice.Compression.DistributedOperatorContraction.sum_eq_sum_gateLabels_univ}
     \leanok
     \uses{def:compression_operator_gate_labels}
     For the occurrence identification in
@@ -170,7 +170,7 @@ $z^K_g=(z_g)_1$ and $z^B_g=(z_g)_2$. The matrix indices $I,J$ are arbitrary.
 
 \begin{theorem}[Pairing the ket and bra label sums]
     \label{thm:peps_ordered_gate_label_pair_sum}
-    \lean{TNLean.PEPS.Approximation.sum_gateLabels_eq_sum_orderedGateLabelPairs}
+    \lean{TNLean.Lattice.Compression.sum_gateLabels_eq_sum_orderedGateLabelPairs}
     \leanok
     For the shared ket and bra label in
     \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}, any matrix family
@@ -194,7 +194,7 @@ $z^K_g=(z_g)_1$ and $z^B_g=(z_g)_2$. The matrix indices $I,J$ are arbitrary.
 
 \begin{theorem}[Pairing the weighted ket and bra sums]
     \label{thm:peps_ordered_gate_label_pair_weighted_sum}
-    \lean{TNLean.PEPS.Approximation.sum_weighted_gateLabels_eq_sum_orderedGateLabelPairs}
+    \lean{TNLean.Lattice.Compression.sum_weighted_gateLabels_eq_sum_orderedGateLabelPairs}
     \leanok
     For the ordered coefficient sum in
     \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}, arbitrary
@@ -220,7 +220,7 @@ $z^K_g=(z_g)_1$ and $z^B_g=(z_g)_2$. The matrix indices $I,J$ are arbitrary.
 
 \begin{theorem}[Placing gate weights inside the ordered coefficient product]
     \label{thm:peps_ordered_gate_label_averaging}
-    \lean{TNLean.PEPS.Approximation.weighted_sum_gateLabels_eq_exterior_smul_orderedGateLabelPairs}
+    \lean{TNLean.Lattice.Compression.weighted_sum_gateLabels_eq_exterior_smul_orderedGateLabelPairs}
     \leanok
     To place the averaging factors in the gate coefficients as in
     \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}, let $w_g\in\C$ be
@@ -248,7 +248,7 @@ $z^K_g=(z_g)_1$ and $z^B_g=(z_g)_2$. The matrix indices $I,J$ are arbitrary.
 
 \begin{theorem}[The distributed density contraction in original gate labels]
     \label{thm:peps_density_pair_univ_double_sum}
-    \lean{TNLean.PEPS.Approximation.DistributedOperatorContraction.contractedOperator_densityPair_univ_eq_double_sum}
+    \lean{TNLean.Lattice.Compression.DistributedOperatorContraction.contractedOperator_densityPair_univ_eq_double_sum}
     \leanok
     \uses{def:compression_operator_operator,def:compression_operator_density_coefficient}
     In \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}, let $P,G$ be

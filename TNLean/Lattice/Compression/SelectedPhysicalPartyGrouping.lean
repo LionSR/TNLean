@@ -21,7 +21,7 @@ Source: polynomial-PEPS manuscript (September 24, 2026), Theorem 5.2,
 
 noncomputable section
 open scoped TensorProduct
-namespace TNLean.PEPS.PairEffect
+namespace TNLean.Lattice.PartyCircuit
 open TNLean.Lattice.PartyCircuit
 variable {P : Type}
 
@@ -186,4 +186,4 @@ theorem selectedFamilyPhysicalPartyBasis_grouped [Fintype P] [DecidableEq P]
   rw [LinearIsometryEquiv.apply_symm_apply]
   exact (selected_physical_grouped_column d ps hn hc x).symm
 
-end TNLean.PEPS.PairEffect
+end TNLean.Lattice.PartyCircuit
