@@ -19,7 +19,7 @@ Source: polynomial-PEPS manuscript (September 24, 2026), Theorem 5.2,
 
 noncomputable section
 namespace TNLean.Lattice.PartyCircuit.Word
-open TNLean.PEPS.PairEffect
+open TNLean.Lattice.PartyCircuit
 variable {P Q : Type}
 
 private theorem parties_castInput {a b c : Layout P} (w : Word a b) (h : a = c) :

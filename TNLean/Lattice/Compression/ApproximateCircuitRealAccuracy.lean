@@ -29,7 +29,7 @@ noncomputable section
 namespace TNLean
 open TNLean.Lattice.PartyCircuit
 
-namespace PEPS.PairEffect
+namespace Lattice.PartyCircuit
 /-- A polynomial gate count is absorbed at every size at least two by a
 fixed higher accuracy exponent, for an arbitrary real target exponent. -/
 theorem gateApproximation_error_real_pow_le (L C p : ℝ) (N n : ℕ)
@@ -60,9 +60,9 @@ theorem gateApproximation_error_real_pow_le (L C p : ℝ) (N n : ℕ)
       rw [one_mul]
       exact div_le_div_of_nonneg_right hsmall (by norm_num)
 
-end PEPS.PairEffect
+end Lattice.PartyCircuit
 namespace Lattice.PartyCircuit.EffectCircuit
-open TNLean.PEPS.PairEffect
+open TNLean.Lattice.PartyCircuit
 variable {P Phys Env : Type} [Fintype Phys] [Fintype Env] [DecidableEq Phys]
 
 /-- Actual gate approximations at one fixed integer accuracy exponent give

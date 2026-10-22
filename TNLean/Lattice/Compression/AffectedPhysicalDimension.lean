@@ -56,7 +56,7 @@ def affectedOutputIso (A : P → Bool) (f : Bool → Bool) (a : Layout P) :
 
 end TNLean.Lattice.PartyCircuit.Layout
 
-namespace TNLean.PEPS.PairEffect
+namespace TNLean.Lattice.PartyCircuit
 open TNLean.Lattice.PartyCircuit
 variable {P : Type} [DecidableEq P]
 
@@ -87,4 +87,4 @@ theorem finrank_affectedFamilyPhysicalLayout (d : P → ℕ) (ps : List P)
   simpa only [Fintype.card_pi, Fintype.card_fin, Finset.prod_coe_sort] using
     Module.finrank_eq_card_basis (affectedFamilyPhysicalBasis d ps hps hcover A).toBasis
 
-end TNLean.PEPS.PairEffect
+end TNLean.Lattice.PartyCircuit

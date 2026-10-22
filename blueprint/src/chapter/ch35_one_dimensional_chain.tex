@@ -2320,6 +2320,33 @@ for an arbitrary finite set of sites and are instantiated here directly.
     eigenprojections directly.
 \end{proof}
 
+\begin{theorem}[Squared error of sequential truncation]
+    \label{thm:chain_sequential_truncation_sq}
+    \lean{
+        TNLean.MPS.AreaLaw.norm_sequentialTruncation_leadingEigenprojection_sub_sq_le,
+        TNLean.MPS.AreaLaw.norm_sub_sequentialTruncation_sq_le}
+    \leanok
+    \uses{thm:chain_sequential_truncation_eigen}
+    In the setting of Theorem~\ref{thm:chain_sequential_truncation_eigen},
+    \begin{align}
+        \|\Phi-\psi\|^2\le\sum_{k=1}^{L-1}\epsilon_k(D). \notag
+    \end{align}
+    Verstraete and Cirac~\cite{VerstraeteCirac2006Faithfully} state this
+    bound with a factor $2$ on the right; the form here implies theirs.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Write $\Phi_0=\psi$ and $\Phi_j=P_{L-j}\Phi_{j-1}$, so that
+    $\Phi=\Phi_{L-1}$. For an orthogonal projection $P$,
+    \begin{align}
+        \psi-P\Phi_{j-1} & =P(\psi-\Phi_{j-1})+(1-P)\psi, \notag
+    \end{align}
+    and the two terms are orthogonal. Hence
+    $\|\psi-\Phi_j\|^2\le\|\psi-\Phi_{j-1}\|^2+\|(1-P_{L-j})\psi\|^2$,
+    and $\|(1-P_k)\psi\|^2=\operatorname{tr}((1-\Pi_k)\rho_k)=\epsilon_k(D)$.
+    Summing over the steps gives the bound.
+\end{proof}
+
 \begin{lemma}[Sequential truncation at an entropy threshold]
     \label{lem:chain_sequential_truncation}
     \lean{
@@ -4129,7 +4156,7 @@ Definition~\ref{def:chain_open_mps}.
 
 \begin{theorem}[One useful column and all its cut ranks]
     \label{thm:compression_useful_column_all_cuts}
-    \lean{TNLean.PEPS.Approximation.DistributedOperatorContraction.exists_useful_column_of_sub_pure_le}
+    \lean{TNLean.Lattice.Compression.DistributedOperatorContraction.exists_useful_column_of_sub_pure_le}
     \leanok
     \uses{def:compression_operator_operator,def:compression_operator_alphabets,
         def:compression_operator_endpoint_tensor,def:peps_dependent_network,

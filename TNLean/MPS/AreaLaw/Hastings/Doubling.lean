@@ -49,12 +49,14 @@ open Finset Real
 line 214. -/
 noncomputable def doublingStartLength (ξ' C₁ : ℝ) : ℝ := 2 * ξ' * Real.log (2 * C₁)
 
+/-- The starting length is positive when `ξ' > 0` and `2 C₁ > 1`, the condition under which
+the source's `ξ₀` (arXiv:0705.2024v4, line 214) is a length. -/
 theorem doublingStartLength_pos {ξ' C₁ : ℝ} (hξ' : 0 < ξ') (hC₁ : 1 < 2 * C₁) :
     0 < doublingStartLength ξ' C₁ :=
   mul_pos (by positivity) (Real.log_pos hC₁)
 
 /-- The number of doublings after which the entropy bound of lines 221–224 is negative,
-`M = ⌈2 (ξ' ln D + (2 + C₂) ξ'/ξ₀ + 1/2)⌉`. This is twice the printed exponent of
+`M = ⌈2 (ξ' ln D + (2 + C₂) ξ'/ξ₀ + 1/2)⌉₊`. This is twice the printed exponent of
 arXiv:0705.2024v4, line 229; see the local fix in the module docstring. -/
 noncomputable def doublingExponent (ξ' C₁ C₂ D : ℝ) : ℕ :=
   ⌈2 * (ξ' * Real.log D + (2 + C₂) * ξ' / doublingStartLength ξ' C₁ + 1 / 2)⌉₊
