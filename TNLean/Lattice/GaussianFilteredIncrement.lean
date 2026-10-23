@@ -25,6 +25,7 @@ with the length of the chain.
 
 * `TNLean.Lattice.norm_gaussianFilteredTerm_sub_localized_le_mass`: the bound with the
   Gaussian mass of the complement of `[-T, T]`.
+* `TNLean.Lattice.norm_gaussianFilteredTerm_sub_self_le`: `‖W_tilde - W‖ ≤ √(2h/π) ‖[H, W]‖`.
 * `TNLean.Lattice.norm_gaussianFilteredTerm_sub_localized_le`: the same with the Gaussian
   first-moment tail `√(2h/π) e^{-T²/(2h)}`.
 
@@ -72,8 +73,7 @@ theorem norm_gaussianFilteredTerm_sub_localized_le_mass (q ΔE : ℝ)
   set c := ‖H * W - W * H‖
   set f : ℝ → Matrix (ι → Fin d) (ι → Fin d) ℂ := fun t =>
     hermitianUnitaryPath H t * W * hermitianUnitaryPath H (-t) - W
-  set L : Matrix (ι → Fin d) (ι → Fin d) ℂ →L[ℂ] Matrix (ι → Fin d) (ι → Fin d) ℂ :=
-    LinearMap.toContinuousLinearMap (LinearMap.id - QuantumCircuit.siteExpectationLM d K)
+  set L := QuantumCircuit.subSiteExpectationCLM (ι := ι) d K
   have hL : ∀ M, L M = M - QuantumCircuit.siteExpectation d K M := fun _ => rfl
   have hint0 := integrable_intertwinerIntegrand (q / ΔE ^ 2).toNNReal hH hH W
   have hint : Integrable f μ := hint0.sub (integrable_const W)
@@ -150,5 +150,54 @@ theorem norm_gaussianFilteredTerm_sub_localized_le (q ΔE : ℝ)
   refine (norm_gaussianFilteredTerm_sub_localized_le_mass q ΔE hH W K hT hε hloc).trans ?_
   gcongr
   exact integral_compl_Icc_abs_gaussianReal_le _ hT
+
+section Increment
+
+variable {n : Type*} [Fintype n] [DecidableEq n]
+
+/-- **The change made by the filter.** `‖W_tilde - W‖ ≤ √(2h/π) ‖[H, W]‖`, where `h = q / ΔE²` is
+the variance of the filter: by the Duhamel formula `‖τ_t(W) - W‖ ≤ |t| ‖[H, W]‖`, and the
+Gaussian has first absolute moment `√(2h/π)`. Hastings, arXiv:0705.2024v4, appendix,
+lines 816–828. -/
+theorem norm_gaussianFilteredTerm_sub_self_le (q ΔE : ℝ) {H : Matrix n n ℂ}
+    (hH : H.IsHermitian) (W : Matrix n n ℂ) :
+    ‖gaussianFilteredTerm q ΔE H W - W‖ ≤
+      Real.sqrt (2 * (q / ΔE ^ 2).toNNReal / Real.pi) * ‖H * W - W * H‖ := by
+  set μ := gaussianReal 0 (q / ΔE ^ 2).toNNReal
+  set c := ‖H * W - W * H‖
+  set f : ℝ → Matrix n n ℂ := fun t =>
+    hermitianUnitaryPath H t * W * hermitianUnitaryPath H (-t) - W
+  have hint0 := integrable_intertwinerIntegrand (q / ΔE ^ 2).toNNReal hH hH W
+  have hdiff : gaussianFilteredTerm q ΔE H W - W = ∫ t, f t ∂μ := by
+    rw [integral_sub hint0 (integrable_const W), integral_const, probReal_univ, one_smul]
+    rfl
+  have hf : ∀ t, ‖f t‖ ≤ c * |t| := by
+    intro t
+    simp only [f]
+    rw [hermitianUnitaryPath_conj_sub_eq_integral]
+    have := intervalIntegral.norm_integral_le_of_norm_le_const (a := 0) (b := t) (C := c)
+      (f := fun s : ℝ => hermitianUnitaryPath H s * (Complex.I • (H * W - W * H)) *
+        hermitianUnitaryPath H (-s)) fun s _ => by
+      rw [norm_intertwinerIntegrand hH hH, norm_smul, Complex.norm_I, one_mul]
+    simpa using this
+  have habs : Integrable (fun t : ℝ => |t|) μ :=
+    ((memLp_id_gaussianReal (μ := 0) (v := (q / ΔE ^ 2).toNNReal) 1).integrable
+      le_rfl).abs
+  have hmoment : ∫ t, |t| ∂μ ≤ Real.sqrt (2 * (q / ΔE ^ 2).toNNReal / Real.pi) := by
+    have h0 := integral_compl_Icc_abs_gaussianReal_le (q / ΔE ^ 2).toNNReal le_rfl
+    simp only [neg_zero, ne_eq, OfNat.ofNat_ne_zero, not_false_eq_true, zero_pow, zero_div,
+      Real.exp_zero, mul_one] at h0
+    rwa [setIntegral_eq_integral_of_forall_compl_eq_zero fun t ht => by
+      simp only [Set.mem_compl_iff, not_not, Set.Icc_self, Set.mem_singleton_iff] at ht
+      simp [ht]] at h0
+  rw [hdiff]
+  calc ‖∫ t, f t ∂μ‖ ≤ ∫ t, c * |t| ∂μ :=
+        norm_integral_le_of_norm_le (habs.const_mul c) (Filter.Eventually.of_forall hf)
+    _ = c * ∫ t, |t| ∂μ := integral_const_mul c _
+    _ ≤ c * Real.sqrt (2 * (q / ΔE ^ 2).toNNReal / Real.pi) :=
+        mul_le_mul_of_nonneg_left hmoment (norm_nonneg _)
+    _ = _ := mul_comm _ _
+
+end Increment
 
 end TNLean.Lattice
