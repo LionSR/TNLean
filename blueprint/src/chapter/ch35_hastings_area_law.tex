@@ -31,7 +31,8 @@ window.
     $l_0\ge\lceil\xi_0\rceil_+2^M$, with $S_{\max}=3l_0\ln q$.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:hastings_doubling_window,thm:hastings_main_stage}
+    \uses{thm:hastings_doubling_window,thm:hastings_main_stage,
+        thm:hastings_prefix_entropy_le}
     The proof of Theorem~\ref{thm:hastings_main_stage} goes through
     unchanged. At its end, Theorem~\ref{thm:hastings_doubling_window} gives
     $l_0<\lceil\xi_0\rceil_+2^M$, which contradicts the choice of $l_0$.
