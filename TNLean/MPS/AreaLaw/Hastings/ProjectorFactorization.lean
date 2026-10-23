@@ -36,12 +36,13 @@ and its second operator acts on one site, so `(v, 2)` is not shown to be a Lieb�
 in the source's sense. The length `ξ` and the constants are not homogeneous in the energy
 scale. The exponential conclusions require `ξ' > 6ξ`; the endpoint `ξ' = 6ξ` is not
 established, rather than disproved. The constants are uniform in chain length and local
-dimension, but the polynomial bound in `ξ` required at lines 258–262 is not established.
-Documented in `docs/paper-gaps/hastings07_lemma1_decay_length.tex` and
-`docs/paper-gaps/hastings07_gaussian_average_exponent.tex`. Elimination: rescale to unit gap,
-make the constant explicit and bound it by a polynomial in the rescaled length, establish a
+dimension. For these unscaled statements the polynomial bound in `ξ` required at lines 258–262
+is not established; in units of the gap it is `exists_projectorFactorization_pow`
+(`C₁ ≤ K ξ̂³` at rate `κ ξ̂`, `κ > 6`). Documented in
+`docs/paper-gaps/hastings07_lemma1_decay_length.tex` and
+`docs/paper-gaps/hastings07_gaussian_average_exponent.tex`. Elimination: establish a
 Lieb–Robinson bound with a numerical prefactor for arbitrary supports, and settle the endpoint
-rate; these steps remain open.
+rate; these remain open.
 
 ## Main declarations
 
