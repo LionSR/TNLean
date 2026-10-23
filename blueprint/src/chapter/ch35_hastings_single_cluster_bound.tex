@@ -26,8 +26,7 @@
     The triangle inequality gives $\|V\|\le a$. Hermiticity and monotonicity of the
     trace exponential then give
     \begin{align}
-        V & \le aI,
-        \label{eq:hastings_single_cluster_order}                    \\
+        V & \le aI,                                                 \\
         \operatorname{tr}e^{-\beta H+\beta V}
           & \le\operatorname{tr}e^{-\beta H+\beta aI}=e^{\beta a}Z.
         \label{eq:hastings_single_cluster_trace_bound}
@@ -44,4 +43,63 @@
     (\ref{eq:hastings_single_cluster_trace_pairing}) by $Z$ gives
     (\ref{eq:hastings_single_cluster_application}). In dimension zero the estimate
     uses $0^{-1}=0$.
+\end{proof}
+
+\begin{definition}[The cluster part]
+    \label{def:hastings_cluster_part}
+    \lean{TNLean.Lattice.ClusterExpansion.clusterPart,
+        TNLean.Lattice.ClusterExpansion.clusterPart_eq_sum_powerset}
+    \leanok
+    For a Hamiltonian $H$ containing the terms $H_k$, a cluster $C$, its boundary
+    $B(C)$ and $\beta\in\mathbb R$, put
+    \begin{align}
+        \rho(\beta,C)=\sum_{D\subseteq C}(-1)^{|D|}e^{-\beta(H-H_{B(C)}-H_D)}.
+        \label{eq:hastings_cluster_part}
+    \end{align}
+    By inclusion and exclusion this is the sum of the terms of the power series
+    of $e^{-\beta H}$ that contain every $H_i$ with $i\in C$ and no $H_j$ with
+    $j\in B(C)$, the operator $\rho(\beta,C)$
+    of~\cite[lines 1174--1177]{Hastings2006Solving}. With $E=C\setminus D$ it is
+    $\sum_{E\subseteq C}(-1)^{|C|-|E|}e^{-(Y+\sum_{i\in E}\beta H_i)}$ for
+    $Y=\beta(H-H_C-H_{B(C)})$.
+\end{definition}
+
+\begin{theorem}[The bound on the cluster part]
+    \label{thm:hastings_cluster_part_bound}
+    \lean{TNLean.Lattice.ClusterExpansion.norm_trace_mul_clusterPart_le}
+    \leanok
+    \uses{def:hastings_cluster_part}
+    Let $H$ be Hermitian, let the terms $H_k$ with $k\in C\cup B(C)$ be Hermitian
+    with $\|H_k\|\le J$, and let $\beta\ge0$. Then for every operator $O$,
+    with $Z=\operatorname{tr}e^{-\beta H}$,
+    \begin{align}
+        \left|\operatorname{tr}\bigl(O\rho(\beta,C)\bigr)\right|
+        \le\|O\|\bigl(e^{\beta J}-1\bigr)^{n_C}e^{(n_C+n_{B(C)})J\beta}Z.
+        \label{eq:hastings_cluster_part_bound}
+    \end{align}
+    This is the bound stated before equation (percb2)
+    in~\cite[lines 1174--1195]{Hastings2006Solving}, with $\|O\|Z$ in place of the
+    printed $\operatorname{tr}(Oe^{-\beta H})$, which is the form used in (percb2),
+    and with $\|H_C+H_{B(C)}\|\le(n_C+n_{B(C)})J$. The last step of (percb2),
+    $n_C+n_{B(C)}\le Sn_C$, is a property of clusters on a lattice and is not
+    made here.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:hastings_cluster_part}
+    By~(\ref{eq:hastings_cluster_part}) with $E=C\setminus D$, the alternating-sum
+    bound of the companion quantum-channel
+    volume~\cite[``Alternating sums of shifted exponentials'']{QICLean2026Blueprint},
+    applied with $Y=\beta(H-H_C-H_{B(C)})$ and the terms $\beta H_i$, $i\in C$, of
+    norm at most $\beta J$, gives
+    \begin{align*}
+        \left|\operatorname{tr}\bigl(O\rho(\beta,C)\bigr)\right|
+        \le\|O\|\bigl(e^{\beta J}-1\bigr)^{n_C}\operatorname{tr}e^{-Y}.
+    \end{align*}
+    Since $-Y=-\beta H+\beta(H_C+H_{B(C)})$ and
+    $\|\beta(H_C+H_{B(C)})\|\le(n_C+n_{B(C)})J\beta$, the bound for a Hermitian
+    perturbation in the exponent in the same
+    volume~\cite[``A Hermitian perturbation in the exponent'']{QICLean2026Blueprint}
+    gives $\operatorname{tr}e^{-Y}\le e^{(n_C+n_{B(C)})J\beta}Z$.
 \end{proof}
