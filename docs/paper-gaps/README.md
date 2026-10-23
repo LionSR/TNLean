@@ -1362,17 +1362,33 @@ positive and the later estimate uses `‖M_L O_L‖` at most the threshold.
   length `ξ₀` rather than `ξ₀/2`, and the implicit hypotheses `2 C₁ > 1` and
   `ln C₁ + C₂ ≥ 0`.
 
+### Local solution of gapped Hamiltonians: Gaussian commutator coefficients
+
+[hastings05_gaussian_series_coefficients.tex](hastings05_gaussian_series_coefficients.tex)
+(local correction, resolved) records the variance-power correction in Hastings,
+*Solving gapped Hamiltonians locally* (arXiv:cond-mat/0508554v3, source lines
+1005–1009). The even Gaussian moment of order `k` contains `(q/ΔE²)^(k/2)`,
+not the printed power `k`. When commutators are written as `i^k ad_H^k`, this
+factor already supplies the alternating sign. The finite-polynomial
+variational bound is unaffected; the infinite expansion remains unformalized.
+
 ### One-dimensional area law after Hastings: the decay length of Lemma 1
 
 [hastings07_lemma1_decay_length.tex](hastings07_lemma1_decay_length.tex)
-(scope restriction, open) distinguishes the chain localization estimate with
-quadratic support dependence from Hastings's linear-support Lieb–Robinson
-bound (arXiv:0705.2024v4, lines 96–112). The exponential comparison motivates
-`ξ = 8 max(2v₀/ΔE, 1)` but does not establish the source's full bound for the
-pair `(8v₀, 8)`. The factorization constant is uniform in chain length and
-local dimension; the source's polynomial bound in `ξ` (lines 258–262) remains
-unproved, as does the endpoint rate `ξ' = 6ξ`. The note records the required
-estimates and energy-rescaling analysis under the still-open issue #9811.
+(scope restriction, open) compares the chain Lieb–Robinson estimate with
+Hastings's bound (arXiv:0705.2024v4, lines 96–112). The chain commutator bound is
+linear in the support, as in the source. Its quadratic localization factor enters
+with supports of at most `6R` sites for the parts and of `O(R + l)` sites for the
+boundary operator, where the faster decay of that term absorbs the polynomial in
+`l`; it changes the constant, not the length or the rate. It differs in having a prefactor that
+grows with `J` and a single-site second operator, so `(v₀, 2)` is not shown to be
+a source pair. The length `ξ = 8 max(2v₀/ΔE, 1)` is not homogeneous in `(J, ΔE)`;
+applied to `H/ΔE`, Lemma 1 holds with the homogeneous length
+`16(1 + c_R J/ΔE)`. The factorization constant is uniform in chain length and
+local dimension, and at the rate `ξ' = κ ξ̂` with `κ > 6` it is at most `K ξ̂³`
+with `K` depending only on `R` and `κ`, the source's polynomial bound in `ξ`
+(lines 258–262). The endpoint rate `ξ' = 6ξ` and a Lieb–Robinson pair in the
+source's form remain open under issue #9811.
 
 ## Hastings' high-temperature matrix product form, arXiv:cond-mat/0508554
 
