@@ -9,3 +9,4 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.MPS.AreaLaw.EntropyScaling
 
 import TNLean.MPS.AreaLaw.EntropyScaling.QutritFamily
+import TNLean.MPS.AreaLaw.EntropyScaling.QutritMiddleTail
