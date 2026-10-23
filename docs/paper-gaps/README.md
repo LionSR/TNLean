@@ -1323,13 +1323,17 @@ Hilbert-space norm of the unnormalized truncation, through the squared error `�
 ### One-dimensional area law after Hastings: the entropy hypothesis of the matrix product state
 
 [hastings07_mps_entropy_stage.tex](hastings07_mps_entropy_stage.tex)
-(scope restriction, open) distinguishes the conditional approximation
+(scope restriction, resolved) distinguishes the conditional approximation
 construction (arXiv:0705.2024v4, lines 505–557), which explicitly assumes an
 entropy bound at lines 516–518, from its application under only the Hamiltonian
-assumptions. That application still requires deriving uniform factorization
-and entropy bounds and applying them to the approximation theorem. For chains
+assumptions. That application requires deriving uniform factorization and
+entropy bounds and applying them to the approximation theorem. For chains
 with at least two sites, the entropy bound gives a common positive integer
 `k₀ ≥ exp(2 S_j)/2`; shorter chains need no truncation.
+Both bounds are now derived: the area law gives the entropy bound, and Lemma 1
+with a constant independent of the chain gives the factorization, so the estimate
+holds under the Hamiltonian assumptions alone, with the quantitative restrictions of
+the formalized Lemma 1.
 
 ### One-dimensional area law after Hastings: the threshold of the spectral cut-offs
 
