@@ -8,9 +8,9 @@ The main theorem of~\cite{Hastings2007AreaLaw} bounds the entropy of every
 initial segment of the chain by a constant $S_{\max}$ that does not depend on
 the length of the chain. Its proof runs by contradiction. If an initial
 segment had entropy above $S_{\max}$, then removing sites one at a time would
-keep the entropy of every cut in a window of length $l_0=S_{\max}/(3\ln D)$
-above $2S_{\max}/3$. On that window the strengthened doubling inequality
-holds, and the doubling argument of Section~\ref{sec:hastings_doubling} bounds
+keep the entropy of every cut in a window of length $l_0$, where
+$S_{\max}=3l_0\ln D$, above $2S_{\max}/3$. On that window the strengthened
+doubling inequality holds, and the doubling argument of Section~\ref{sec:hastings_doubling} bounds
 $l_0$ above, which contradicts the choice of $S_{\max}$. The statements
 below carry out this argument with the window facts and the doubling
 inequality as hypotheses. The value of $S_{\max}$ is the one forced by the
@@ -26,12 +26,14 @@ corrected doubling iteration of~\cite{gap:hastings07_doubling_constants}.
     With $\xi_0$ and $M$ as in
     Definition~\ref{def:hastings_doubling_constants}, put
     \begin{align*}
-        l_0=\lceil\xi_0\rceil_+\,2^M,
-        \qquad
-        S_{\max}=3l_0\ln D .
+        l_0      & =\lceil\xi_0\rceil_+\,2^M, \\
+        S_{\max} & =3l_0\ln D .
     \end{align*}
     If $D\ge1$, then $S_{\max}\ge0$.
 \end{definition}
+\begin{proof}\leanok
+    Both $l_0$ and $\ln D$ are nonnegative when $D\ge1$.
+\end{proof}
 
 \begin{theorem}[Size of the entropy bound]
     \label{thm:hastings_max_entropy_bound_le}
@@ -56,6 +58,7 @@ corrected doubling iteration of~\cite{gap:hastings07_doubling_constants}.
     nothing, since enlarging $C_1$ only weakens Lemma~1 of the source.
 \end{theorem}
 \begin{proof}\leanok
+    \uses{def:hastings_doubling_constants}
     Since $M\le2(\xi'\ln D+(2+C_2)\xi'/\xi_0+1/2)+1$ and
     $\lceil\xi_0\rceil_+\le\xi_0+1$, the first bound follows from the
     definition. For $C_1\ge1$ we have $\ln(2C_1)\ge\ln2$, so
@@ -72,6 +75,7 @@ corrected doubling iteration of~\cite{gap:hastings07_doubling_constants}.
     the entropy of the first $i$ sites is at most $(L-i)\ln q$.
 \end{theorem}
 \begin{proof}\leanok
+    \uses{lem:chain_entropy_inequalities}
     The complement of the first $i$ sites is the set of the remaining $L-i$
     sites. A pure state has equal entropies on complementary regions, and
     the entropy of a region of $L-i$ sites is at most $(L-i)\ln q$.
