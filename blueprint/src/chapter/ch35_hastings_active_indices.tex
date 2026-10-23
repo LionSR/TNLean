@@ -1,0 +1,125 @@
+\section{Counting the indices of a finite Trotter product}
+\label{sec:hastings_active_indices}
+
+Let $V$ be a finite set of sites, with local dimensions $d_j$ and coefficient
+neighbourhoods $U_i\subseteq V$. Assume $i\in U_i$. The construction below
+assigns indices only to sites in the support of each factor, as in
+\cite[lines 1069--1077]{Hastings2006Solving}.
+
+\begin{definition}[Active factor occurrences]
+    \label{def:hastings_active_occurrences}
+    \lean{TNLean.Lattice.trotterActiveOccurrences}
+    \leanok
+    Let $X_i\subseteq V$ be the support assigned to the factor centred at $i$.
+    In $n$ sweeps, each containing one factor per centre, the active occurrences
+    at $j$ form
+    \begin{align}
+        \mathcal A_j=\{(s,i):0\le s<n,\ j\in X_i\}.
+        \label{eq:hastings_active_occurrences}
+    \end{align}
+\end{definition}
+
+\begin{theorem}[Local index cardinalities]
+    \label{thm:hastings_active_cardinality}
+    \lean{
+        TNLean.Lattice.card_trotterActiveOccurrences,
+        TNLean.Lattice.card_trotterActiveIndices,
+        TNLean.Lattice.card_trotterActiveOccurrences_le
+    }
+    \leanok
+    \uses{def:hastings_active_occurrences}
+    Put $c_j=\#\{i:j\in X_i\}$. Then $|\mathcal A_j|=nc_j$, and assigning
+    one pair of physical indices at $j$ to each occurrence gives an index set
+    of cardinality $(d_j^2)^{nc_j}$. A zero exponent gives cardinality one,
+    including when $d_j=0$.
+    On a finite planar domain with walk distance, if $X_i$ lies in the
+    radius-$R$ ball about $i$, then $|\mathcal A_j|$ is at most $n$ times
+    the cardinality of the radius-$R$ ball about $j$.
+\end{theorem}
+\begin{proof}\leanok
+    The set in (\ref{eq:hastings_active_occurrences}) is the product of the
+    $n$ sweeps and the $c_j$ contributing centres. Each component has $d_j^2$
+    choices. Reversing a walk from $i$ to $j$ places every contributing
+    centre in the ball about $j$.
+\end{proof}
+
+\begin{theorem}[Supported factors with a prescribed index bound]
+    \label{thm:hastings_active_expansion}
+    \lean{TNLean.Lattice.Locality.exists_productForm_list_pow_of_isSupportedOn}
+    \leanok
+    Let $A_i$ be supported on $X_i\subseteq U_i$, and let
+    $L=(i_1,\ldots,i_m)$ be any finite ordered list of centres, with repetitions
+    allowed. Set $c_j(L)=\#\{t:j\in X_{i_t}\}$.
+    If the natural number $K$ satisfies $(d_j^2)^{nc_j(L)}\le K$ for every
+    $j$, then $(A_{i_1}\cdots A_{i_m})^n$ has a product form with coefficient
+    neighbourhoods $U_i$ and a common index set of cardinality $K$.
+\end{theorem}
+\begin{proof}\leanok
+    At a site in $X_i$, expand $A_i$ in matrix units; outside $X_i$, retain
+    the identity with a unique trivial index. Attach the matrix-element
+    coefficient to $i$. The support condition makes this coefficient depend
+    only on indices in $X_i$. Multiplying the expansions in their given
+    order pairs the indices at each site, so the cardinalities multiply.
+    Iterating the product $n$ times gives $(d_j^2)^{nc_j(L)}$.
+    Embed each resulting index set into a set of $K$ elements and multiply
+    the coefficient at $j$ by the indicator of its image. This indicator
+    is local because $j\in U_j$. If the global configuration space is empty,
+    all matrices on it coincide and any common index set gives a representation.
+    If there are no sites, the unique empty assignment gives the scalar identity,
+    even when the common index set is empty.
+\end{proof}
+
+\begin{theorem}[Uniform bound for repeated sweeps]
+    \label{thm:hastings_active_uniform_bound}
+    \lean{TNLean.Lattice.Locality.exists_productForm_trotter_card_bound}
+    \leanok
+    Let $L$ contain each centre exactly once, and let $A_i$ be supported on
+    $X_i\subseteq U_i$. Define
+    \begin{align}
+        D & =\max\bigl(1,\max_{j\in V}d_j\bigr),\notag \\
+        S & =\max_{j\in V}\#\{i:j\in U_i\},
+        \label{eq:hastings_active_uniform_bound}
+    \end{align}
+    where a maximum over the empty site set is zero.
+    Then $(\prod_{i\in L}A_i)^n$ has a product form with coefficient
+    neighbourhoods $U_i$ and a common index set of cardinality $(D^2)^{nS}$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:hastings_active_expansion}
+    Each site belongs to at most $S$ of the supports. Since $d_j\le D$ and
+    $D\ge1$, the local cardinality is at most $(D^2)^{nS}$. Apply the preceding
+    theorem with this bound.
+\end{proof}
+
+\begin{theorem}[Index bound for finite metric Trotter products]
+    \label{thm:hastings_metric_trotter_index_bound}
+    \lean{TNLean.Lattice.Locality.exists_productForm_metric_trotter_card_bound}
+    \leanok
+    Let $V$ be a finite metric site set and $R\ge0$. Let $H_i$ be supported on
+    $X_i\subseteq\{j:d(i,j)\le R\}$, and choose an order containing each centre
+    once. With $D$ as in (\ref{eq:hastings_active_uniform_bound}), put
+    $S=\max_{j\in V}\#\{i:d(j,i)\le R\}$. For $\beta\in\mathbb R$ and
+    $n\ge1$, the operator
+    \begin{align}
+        \rho_n=\left[\prod_i\exp(-\beta H_i/n)\right]^n
+        \label{eq:hastings_metric_trotter}
+    \end{align}
+    has a product form of coefficient range $R$ whose common index set has
+    cardinality $(D^2)^{nS}$. Thus each grouped index $\alpha_j$ can be taken
+    to have $nS$ components with $D^2$ values each. At $n=0$, the empty
+    iteration is the identity and needs one index value per site.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:hastings_active_uniform_bound}
+    Exponentiation preserves the support $X_i$. The component
+    $\alpha_{i,j}^{m}$ occurs only when $j\in X_i$ in sweep $m$.
+    Symmetry of the metric puts every such centre $i$ in the radius-$R$
+    ball about $j$. Hence at most $nS$ components enter the grouped index
+    $\alpha_j$, and the preceding theorem applies with
+    $U_i=\{j:d(i,j)\le R\}$.
+\end{proof}
+
+This is the finite-product assertion at lines 1069--1077 of
+\cite{Hastings2006Solving}. It does not establish convergence to the Gibbs
+operator or the separate approximation and percolation estimates for
+$\rho(\beta,l_{\mathrm{proj}})$.

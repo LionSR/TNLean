@@ -9365,3 +9365,17 @@ and use a little-o estimate to compare the logarithmic remainder with positive
 entropy growth. There are two independent occurrences. A third consumer should
 share the logarithmic integer-budget lemma and the elementary eventual comparison;
 there is no need for a new tactic.
+
+### Identity and multiplication in finite product expansions — candidate (2026-10-23)
+
+- **Pattern:** Prove the identity entrywise by separating equal configurations from a
+  differing coordinate. For multiplication, distribute the two finite sums and regroup
+  pairs of site indices with `Equiv.arrowProdEquivProdArrow`.
+- **Seen:** `Lattice/ProductForm/Basic.lean` and the private counted expansions in
+  `Lattice/ProductFormActiveIndices.lean`. The latter retains a different index type
+  and an exact cardinality at each site before uniform padding.
+- **Existing reuse:** `Locality.productEntries_mul` supplies the common matrix identity;
+  `Locality.productFormOfSiteIndices` is the sole uniform-padding construction.
+  The remaining identity and sum-reindexing arguments each occur twice. Keep them
+  below the promotion threshold rather than introducing a second public product-form
+  predicate merely to share the private cardinality data.

@@ -37,6 +37,9 @@ import TNLean.Lattice.MarginalTails
 import TNLean.Lattice.PartyCircuit
 import TNLean.Lattice.PhysicalBufferCoordinates
 import TNLean.Lattice.ProductForm
+import TNLean.Lattice.ProductForm.Basic
+import TNLean.Lattice.ProductForm.Supported
+import TNLean.Lattice.ProductFormActiveIndices
 import TNLean.Lattice.ProductGroundState
 import TNLean.Lattice.RegionEntropyInequalities
 import TNLean.Lattice.RegionSplit
@@ -56,5 +59,6 @@ import TNLean.Lattice.TranslationMomentum
 import TNLean.Lattice.TranslationSupercell
 import TNLean.Lattice.TranslationSupercellDecay
 import TNLean.Lattice.TranslationSupercellSpacing
+import TNLean.Lattice.TrotterActiveIndices
 import TNLean.Lattice.VariationalLowerBound
 import TNLean.Lattice.ZeroEntropy
