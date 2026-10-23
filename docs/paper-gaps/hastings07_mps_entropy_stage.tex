@@ -13,9 +13,11 @@
 
 \section{The source statement}
 
+All logarithms and entropies below use the natural base.
 The section on matrix product states of~\cite{Hastings2007AreaLaw} works
 with the ground state $\Psi_0$ of a gapped chain of $N$ sites with local
-dimension $D$. At a cut $(j,j+1)$ it writes
+dimension $D>1$. Its conditional construction explicitly assumes a uniform
+entropy bound in lines 516--518. At a cut $(j,j+1)$ it writes
 $\Psi_0=\sum_\alpha A_0(\alpha)\Psi_{L,0}(\alpha)\otimes\Psi_{R,0}(\alpha)$
 with $\lvert A_0(\alpha)\rvert$ nonincreasing, and sets
 \begin{align}
@@ -32,16 +34,19 @@ $N(k'/k_0)^{-1/(\xi'\ln D)}$.\footnote{\path{References/0705.2024/law16.tex},
 
 \section{The formalized statement}
 
-The formalized theorem takes the approximate factorization of Lemma~1 at
-every internal cut, and a natural number $k_0$ with
+Let $\Psi_0$ be a unit vector, $\xi'>0$, and $C_1$ the factorization
+constant. Assume the approximate factorization of Lemma~1 at every internal
+cut, and choose a natural number $k_0$ such that, at every internal cut $j$,
 \begin{align}
-    k_0 & \ge\exp\bigl(2S(\rho^0_{1,j})\bigr)/2
-    \quad\text{for every internal cut } j,
+    k_0 & \ge\exp\bigl(2S(\rho^0_{1,j})\bigr)/2.
     \label{eq:hastings07_mps_entropy_stage_hyp}
 \end{align}
-as hypotheses. Under them it proves that truncating every cut onto its $k'$
+Under these hypotheses, the formalized theorem proves that truncating every
+cut onto its $k'$
 leading Schmidt vectors, for $k'\ge k_0$, gives a matrix product state $\Phi$
-of bond dimension at most $k'$ with
+of bond dimension at most $k'$. This vector need not be normalized. For
+$N<2$ there is no truncation and $\Phi=\Psi_0$. For $N\ge2$, the entropy
+hypothesis implies $k_0>0$, and the squared Hilbert-space error satisfies
 \begin{align}
     \lVert\Phi-\Psi_0\rVert^2
      & \le(N-1)\,4C_1^2e^{2/\xi'}(k'/k_0)^{-1/(\xi'\ln D)}.
@@ -54,16 +59,17 @@ The error measure and the constant $e^{2/\xi'}$ are recorded in the notes
 
 \section{The restriction}
 
-Hypothesis (\ref{eq:hastings07_mps_entropy_stage_hyp}) is not part of the
-source's statement. There the entropy at every cut is bounded by the area
-law for the ground state, so a uniform $k_0$ exists. The formalized theorem
-is therefore a stage of the source's conclusion: it holds for every state
-satisfying the factorization and the entropy hypothesis, and it gives the
-source's conclusion for the ground state once
-(\ref{eq:hastings07_mps_entropy_stage_hyp}) is supplied.
+The entropy premise is already present in the source's conditional
+construction; (\ref{eq:hastings07_mps_entropy_stage_hyp}) specifies the
+common integer threshold used in that construction. The remaining
+restriction concerns the application under only the Hamiltonian assumptions.
+The theorem takes both factorization and entropy bounds as hypotheses,
+rather than deriving them from finite interaction range, bounded interaction
+strength and a spectral gap. In a family of chains, their constants must be
+uniform in the chain length to obtain the source's approximation conclusion.
 
 The source's $k_0$ in (\ref{eq:hastings07_mps_entropy_stage_k0}) is a real
-number that depends on the cut. The formalized $k_0$ is one natural number
+number that depends on the cut. For $N\ge2$, the formalized $k_0$ is one natural number
 that is at least as large at every cut, such as the ceiling of the largest of
 these values. Since the bound (\ref{eq:hastings07_mps_entropy_stage_bound})
 increases with $k_0$, this choice only weakens it.
@@ -73,8 +79,11 @@ increases with $k_0$, this choice only weakens it.
 The hypothesis (\ref{eq:hastings07_mps_entropy_stage_hyp}) is discharged by
 the area law on the chain, which bounds $S(\rho^0_{1,j})$ by a constant
 $S_{\max}$ for every cut. Taking $k_0=\lceil\exp(2S_{\max})/2\rceil$ then
-gives the source's conclusion for the ground state, with $k_0$ independent of
-$j$ and $N$. The note is resolved when that corollary is formalized.
+supplies the entropy threshold for the ground state, with $k_0$ independent of
+$j$ and $N$. The application also requires deriving Lemma~1 with uniform
+constants from the Hamiltonian assumptions. The full Hamiltonian theorem
+remains open until both deductions and their application to the matrix
+product state estimate are formalized.
 
 \bibliographystyle{alpha}
 \bibliography{references}

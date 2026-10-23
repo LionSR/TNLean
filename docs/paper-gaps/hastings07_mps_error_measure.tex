@@ -13,7 +13,7 @@
 
 \section{The source statement}
 
-Write $D$ for the local dimension, $\xi'$ for the decay length of the
+Write $D>1$ for the local dimension, $\xi'>0$ for the decay length of the
 approximate factorization, $k_0=\exp(2S)/2$ for the bond dimension set by the
 entropy $S$ of a cut, and $c=4C_1^2$ for the constant of the Schmidt-tail
 constraint, as in the note \path{hastings07_schmidt_tail_constant.tex}.
@@ -32,10 +32,12 @@ rest of this note uses the corrected exponent.
 
 \section{The reading}
 
-Let $\Phi$ be the vector obtained by truncating every cut onto its $k'$
-leading Schmidt vectors, and let $\tau_j(k')$ be the tail of the Schmidt
-coefficients beyond the $k'$ largest at the cut $(j,j+1)$. The squared error
-of this sequential truncation satisfies
+Let $\Psi_0$ be a unit vector on an open chain of $N$ sites, and let
+$\Phi$ be the vector obtained by truncating every internal cut onto its $k'$
+leading Schmidt vectors. No normalization is performed. Let $\tau_j(k')$
+be the sum of the squared Schmidt coefficients beyond the $k'$ largest at the cut
+$(j,j+1)$. For $N<2$, the truncation is the identity and $\Phi=\Psi_0$.
+For $N\ge2$, the squared Hilbert-space error of sequential truncation satisfies
 \begin{align}
     \lVert\Phi-\Psi_0\rVert^2
      & \le\sum_{j=1}^{N-1}\tau_j(k'),
@@ -59,7 +61,16 @@ holds.\footnote{\leanid{TNLean.MPS.AreaLaw.Hastings.isOpenMPS_norm_sub_sq_le_of_
     in \doclink{TNLean/MPS/AreaLaw/Hastings/SchmidtTailMPS};
     \leanid{TNLean.MPS.AreaLaw.norm_sub_sequentialTruncation_sq_le} in
     \doclink{TNLean/MPS/AreaLaw/SequentialTruncation}.}
-The norm itself is then of order
+This is a vector-norm estimate, not the trace norm of a difference of
+density operators. It does not assert the same constant for a normalized
+approximant. If $\eta=\lVert\Phi-\Psi_0\rVert<1$, then
+$\lVert\Phi\rVert\ge1-\eta>0$, and the normalized vector
+$\widehat\Phi=\Phi/\lVert\Phi\rVert$ has the same bond bound and satisfies
+$\lVert\widehat\Phi-\Psi_0\rVert\le2\eta$ by the triangle and reverse
+triangle inequalities. Its squared error is consequently at most four times
+that of the unnormalized vector.
+
+The norm of the unnormalized error itself is of order
 $\sqrt N\,(k'/k_0)^{-1/(2\xi'\ln D)}$.
 
 \bibliographystyle{alpha}

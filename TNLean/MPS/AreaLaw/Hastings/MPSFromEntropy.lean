@@ -15,18 +15,21 @@ the approximate factorization of Hastings' Lemma 1 at every internal cut, and th
 number `k₀` satisfies `k₀ ≥ exp(2 S_j)/2` for the entropy `S_j` of the first `j` sites at every
 internal cut `j`. Truncating every cut onto the `k'` leading eigenvectors of its left marginal,
 for `k' ≥ k₀`, gives an open-boundary matrix product state `Φ` of bond dimension at most `k'`
-with `‖Φ - Ω‖² ≤ (L - 1) 4 C₁² e^{2/ξ'} (k'/k₀)^{-1/(ξ' log q)}`.
+with `‖Φ - Ω‖² ≤ (L - 1) 4 C₁² e^{2/ξ'} (k'/k₀)^{-1/(ξ' log q)}` when `L ≥ 2`.
+For `L < 2`, there is no internal cut and `Φ = Ω`. The vector `Φ` is not required to be
+normalized; the error is the squared Hilbert-space norm. Entropies use natural logarithms.
 
 Source: Hastings, *An area law for one-dimensional quantum systems*, arXiv:0705.2024v4,
 section "Matrix Product States", lines 505–557. The constraint at each cut is eq. `constraint`
 with `P = 1/2` and `k₀ = exp(2S)/2` (eq. `k0Ent`); the tail bound and the error of the matrix
 product state follow from it as in the source.
 
-**Stage theorem.** The hypothesis that `k₀ ≥ exp(2 S_j)/2` at every internal cut is not part
-of Hastings' statement, where the entropy is bounded by the area law proved earlier in the
-paper. `isOpenMPS_norm_sub_sq_le_of_factorization_of_entropy` becomes the source's matrix product
-state approximation once that hypothesis is discharged from the area law for the ground
-state. Documented in `docs/paper-gaps/hastings07_mps_entropy_stage.tex`.
+**Scope restriction (conditional construction):** Hastings explicitly assumes a uniform entropy
+bound in the conditional construction (lines 516–518). This theorem takes the factorization
+and a common entropy threshold as hypotheses. The application under only the Hamiltonian
+assumptions still requires deriving the factorization and a uniform entropy bound, with
+constants independent of chain length, from those assumptions. Documented in
+`docs/paper-gaps/hastings07_mps_entropy_stage.tex`.
 
 The source's `k₀ = exp(2S)/2` is a real number. Here `k₀` is any natural number at least
 `exp(2 S_j)/2` at every cut, such as the ceiling of the largest of these; the constraint at a
@@ -50,8 +53,10 @@ approximate factorization of Lemma 1 at every internal cut, if the natural numbe
 satisfies `k₀ ≥ exp(2 S_j)/2` for the entropy `S_j` of the first `j` sites at every internal
 cut `j`, then for every `k' ≥ k₀` the
 truncation `Φ` onto the `k'` leading eigenvectors at every cut is an open-boundary matrix product
-state of bond dimension at most `k'` with
+state of bond dimension at most `k'`. For `L ≥ 2`,
 `‖Φ - Ω‖² ≤ (L - 1) 4 C₁² e^{2/ξ'} (k'/k₀)^{-1/(ξ' log q)}`.
+For `L < 2`, `Φ = Ω`. The approximant need not be normalized, and the error is the squared
+Hilbert-space norm, not a trace norm.
 Hastings, arXiv:0705.2024v4, lines 505–557, with the constant described in the module
 docstring. -/
 theorem isOpenMPS_norm_sub_sq_le_of_factorization_of_entropy (hq : 1 < q)
