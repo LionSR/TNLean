@@ -5223,3 +5223,53 @@ approximation error. A tail bound $\varepsilon\le\delta/2$ yields the
 half-error coefficient. The rank budget is separate from an MPS bond
 bound: an interior block has two boundaries and generally uses the square
 of that bound.
+
+\begin{theorem}[Single-boundary entropy bound at small approximation error]
+  \label{thm:chain_von_neumann_prefix_error}
+  \lean{TNLean.MPS.AreaLaw.IsOpenMPS.regionEntropy_leftBlock_le_log_add_half_error}
+  \leanok
+  Let $\psi$ be a unit vector on a chain of local dimension $q$ and let
+  $\phi$ be an open-boundary MPS of bond dimension at most $D$. Suppose
+  that the full trace error between their rank-one matrices is at most
+  $\delta<1$. For every prefix $R$,
+  \begin{align}
+    \label{eq:chain_von_neumann_prefix_error}
+    S_\psi(R)&\le\log D+\frac{\delta}{2}|R|\log q+\log2.
+  \end{align}
+  The approximant $\phi$ need not be normalized. Empty and full prefixes,
+  and chains of length zero or one, are included, with $\log0=0$.
+\end{theorem}
+\begin{proof}\leanok
+  \uses{thm:chain_reduced_state_rank_error,thm:chain_von_neumann_spectral_tail}
+  The approximant's prefix reduction has rank at most $\max(1,D)$.
+  Apply the half-error marginal-tail theorem of
+  \cite[``Discarded marginal spectrum at small pure-state error'']{QICLean2026Blueprint}
+  and the regional spectral-concentration estimate. Finally,
+  $\log\max(1,D)=\log D$ for an integer $D\ge0$ under the stated convention.
+\end{proof}
+
+\begin{theorem}[Two-boundary entropy bound at small approximation error]
+  \label{thm:chain_von_neumann_block_error}
+  \lean{TNLean.MPS.AreaLaw.IsOpenMPS.regionEntropy_sdiff_leftBlock_le_two_log_add_half_error}
+  \leanok
+  Under the same hypotheses, every contiguous block $R$ satisfies
+  \begin{align}
+    \label{eq:chain_von_neumann_block_error}
+    S_\psi(R)&\le2\log D+\frac{\delta}{2}|R|\log q+\log2.
+  \end{align}
+  Empty blocks, boundary blocks, whole chains, and chains of length zero
+  or one are included.
+\end{theorem}
+\begin{proof}\leanok
+  \uses{thm:chain_von_neumann_spectral_tail,thm:chain_block_renyi_approximation_lower_bound}
+  The approximant's block reduction has rank at most $\max(1,D)^2$.
+  The same half-error spectral-tail estimate applies. Its logarithmic
+  rank contribution is $\log(\max(1,D)^2)=2\log D$.
+\end{proof}
+
+These are the corrected small-error forms of the entropy estimate in
+\cite{Schuch2008EntropyScaling}, lines 269--305 of the source.
+The range correction is documented in
+\cite{gap:swvc08_von_neumann_error_range}; the two-boundary rank correction
+is documented in \cite{gap:swvc08_interior_block_bond_rank}.
+The unrestricted printed entropy statement is not asserted here.
