@@ -15,7 +15,26 @@ applied to $T=C\cup B(C)$, gives
 \end{align}
 This is the single-cluster estimate of~\cite[Section IV]{Hastings2006Solving},
 with an absolute value on the trace, and holds for every operator $O$.
-The source proves it by an imaginary-time Dyson expansion. The proof in the
-companion volume instead uses positivity of the matrix exponential and
-monotonicity of its trace under the order on Hermitian matrices.
-For positive dimension, $Z>0$; in dimension zero the estimate uses $0^{-1}=0$.
+The source proves it by an imaginary-time Dyson expansion. For the companion
+proof, put $V=H_C+H_{B(C)}$ and $a=(n_C+n_{B(C)})J$, and let $I$ be the identity.
+The triangle inequality gives $\|V\|\le a$. Hermiticity and monotonicity of the
+trace exponential then give
+\begin{align}
+    V & \le aI,
+    \label{eq:hastings_single_cluster_order}                    \\
+    \operatorname{tr}e^{-\beta H+\beta V}
+      & \le\operatorname{tr}e^{-\beta H+\beta aI}=e^{\beta a}Z.
+    \label{eq:hastings_single_cluster_trace_bound}
+\end{align}
+The matrix $A=e^{-\beta(H-V)}$ satisfies $A\ge0$, so
+\begin{align}
+    |\operatorname{tr}(OA)|
+     & \le\|O\|\operatorname{tr}A
+    \le\|O\|e^{\beta a}Z,
+    \label{eq:hastings_single_cluster_trace_pairing}
+\end{align}
+where the second inequality is~(\ref{eq:hastings_single_cluster_trace_bound}).
+For positive dimension, $Z>0$, and dividing
+(\ref{eq:hastings_single_cluster_trace_pairing}) by $Z$ gives
+(\ref{eq:hastings_single_cluster_application}). In dimension zero the estimate
+uses $0^{-1}=0$.
