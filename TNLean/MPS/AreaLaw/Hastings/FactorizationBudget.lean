@@ -7,6 +7,7 @@ import Mathlib.Analysis.SpecialFunctions.Pow.Real
 import Mathlib.Analysis.SpecialFunctions.Sqrt
 import Mathlib.Analysis.SpecialFunctions.Exponential
 import Mathlib.Analysis.Real.Pi.Bounds
+import TNLean.MPS.AreaLaw.Hastings.DecaySlack
 
 /-!
 # The error budget of Lemma 1 of Hastings' area law
@@ -26,28 +27,6 @@ open Real
 
 namespace TNLean.MPS.AreaLaw.Hastings
 
-
-/-- Polynomial times a decaying exponential: `x ^ n e^{-x/16} ≤ 48 ^ n n! e^{-x/48}`. -/
-lemma pow_mul_exp_neg_div_sixteen_le (n : ℕ) {x : ℝ} (hx : 0 ≤ x) :
-    x ^ n * Real.exp (-(x / 16)) ≤
-      48 ^ n * (Nat.factorial n : ℝ) * Real.exp (-(x / 48)) := by
-  have h := Real.pow_div_factorial_le_exp (x := x / 48) (by positivity) n
-  have hf : (0 : ℝ) < Nat.factorial n := by exact_mod_cast Nat.factorial_pos n
-  have h1 : x ^ n ≤ 48 ^ n * (Nat.factorial n : ℝ) * Real.exp (x / 48) := by
-    rw [div_le_iff₀ hf, div_pow] at h
-    have hx' : x ^ n = 48 ^ n * (x ^ n / 48 ^ n) := by field_simp
-    rw [hx']
-    calc 48 ^ n * (x ^ n / 48 ^ n) ≤
-          48 ^ n * (Real.exp (x / 48) * (Nat.factorial n : ℝ)) := by gcongr
-      _ = _ := by ring
-  calc x ^ n * Real.exp (-(x / 16))
-        ≤ 48 ^ n * (Nat.factorial n : ℝ) * Real.exp (x / 48) * Real.exp (-(x / 16)) := by
-          gcongr
-    _ = 48 ^ n * (Nat.factorial n : ℝ) * Real.exp (-(x / 24)) := by
-          rw [mul_assoc _ (Real.exp _), ← Real.exp_add,
-            show x / 48 + -(x / 16) = -(x / 24) by ring]
-    _ ≤ _ :=
-          mul_le_mul_of_nonneg_left (Real.exp_le_exp.mpr (by linarith)) (by positivity)
 
 /-- The term `2 μ / θ` of the error budget: the Lieb–Robinson part decays like `e^{-l/16}`
 and the Gaussian part carries a factor `√l`. -/
@@ -74,9 +53,15 @@ lemma errorBudget_twoMu_div_le {ΔE a cR Rr v T K s η L E μ θ δ : ℝ} (hΔ 
   have e3 : T * (a * Rr ^ 2 * cR) * (exp (v * T - K / 2) * exp (s / 4)) ≤
       L / ΔE * (a * Rr ^ 2 * cR) * exp (-(L / 16)) := by gcongr
   have e4 : L * exp (-(L / 16)) ≤ 48 * E := by
-    have h := pow_mul_exp_neg_div_sixteen_le 1 hL0.le
-    rw [pow_one, pow_one, Nat.factorial_one, Nat.cast_one, mul_one] at h
-    linarith
+    have h := pow_mul_exp_neg_add_le (r := 1 / 48) (δ := 1 / 24) (by norm_num) hL0.le 1
+    have hc : 1 / (exp 1 * (1 / 24)) ≤ (48 : ℝ) := by
+      rw [div_le_iff₀ (by positivity)]; linarith [add_one_le_exp (1 : ℝ)]
+    simp only [pow_one, Nat.cast_one] at h
+    rw [show (1 / 48 + 1 / 24 : ℝ) * L = L / 16 by ring,
+      show (1 / 48 : ℝ) * L = L / 48 by ring] at h
+    calc L * exp (-(L / 16)) ≤ _ := h
+      _ ≤ 48 * exp (-(L / 48)) := mul_le_mul_of_nonneg_right hc (exp_pos _).le
+      _ ≤ 48 * E := by gcongr
   have e6 : L / ΔE * (a * Rr ^ 2 * cR) * exp (-(L / 16)) ≤
       96 * (a * Rr ^ 2 * cR) / ΔE * E / 2 := by
     calc L / ΔE * (a * Rr ^ 2 * cR) * exp (-(L / 16)) =
@@ -96,8 +81,16 @@ lemma errorBudget_boundary_le {ΔE a C L ℓ' η Zc ν E : ℝ} (hΔ : 0 < ΔE) 
     (hZcL : Zc ≤ 3 * L) (hν0 : 0 ≤ ν) (hνL : ν ≤ C * L) (hℓ'L : L / 4 ≤ ℓ')
     (hE48 : exp (-(L / 48)) ≤ E) :
     sqrt η * (a * Zc ^ 2 * ν * exp (-(ℓ' / 4))) ≤ 9 * a * C / ΔE * (48 ^ 4 * 24) * E := by
-  have h4 := pow_mul_exp_neg_div_sixteen_le 4 hL0.le
-  rw [show ((Nat.factorial 4 : ℕ) : ℝ) = 24 by norm_num [Nat.factorial]] at h4
+  have h4 : L ^ 4 * exp (-(L / 16)) ≤ 48 ^ 4 * 24 * exp (-(L / 48)) := by
+    have h := pow_mul_exp_neg_add_le (r := 1 / 48) (δ := 1 / 24) (by norm_num) hL0.le 4
+    have hc : ((4 : ℕ) : ℝ) / (exp 1 * (1 / 24)) ≤ 48 := by
+      rw [div_le_iff₀ (by positivity)]; push_cast; linarith [add_one_le_exp (1 : ℝ)]
+    rw [show (1 / 48 + 1 / 24 : ℝ) * L = L / 16 by ring,
+      show (1 / 48 : ℝ) * L = L / 48 by ring] at h
+    have he := exp_pos (-(L / 48))
+    calc L ^ 4 * exp (-(L / 16)) ≤ _ := h
+      _ ≤ 48 ^ 4 * exp (-(L / 48)) := by gcongr
+      _ ≤ 48 ^ 4 * 24 * exp (-(L / 48)) := by linarith
   calc sqrt η * (a * Zc ^ 2 * ν * exp (-(ℓ' / 4))) ≤
         L / ΔE * (a * (3 * L) ^ 2 * (C * L) * exp (-(L / 16))) := by
         gcongr ?_ * (a * ?_ ^ 2 * ?_ * ?_)
