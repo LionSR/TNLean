@@ -1,0 +1,103 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+% Fallbacks keep this note compilable when a different command.tex is found first.
+\providecommand{\leanid}[1]{\textsf{\detokenize{#1}}}
+\providecommand{\gapnote}[2]{\par\noindent\textbf{Verdict:} #1 (#2).\par}
+
+\title{The Finite-Range Approximation of a Filtered Term in Hastings' Local
+  Solution of Gapped Hamiltonians}
+\author{}
+\date{2026-10-23}
+
+\begin{document}
+\maketitle
+\gapnote{local correction}{resolved}
+
+\section{The source passage}
+
+In~\cite{Hastings2006Solving} (arXiv:cond-mat/0508554v3, \texttt{proj3new.tex})
+the Hamiltonian is $H=\sum_iH_i$ on a lattice with a metric, with
+$\lVert H_i\rVert\le J$ and $H_i$ acting within distance $R$ of the site $i$
+(lines~169--190). For $q>0$ and a gap $\Delta E$, the filtered term is
+\begin{align}
+  \tilde H_i^0=\frac{\Delta E}{\sqrt{2\pi q}}\int dt\,
+  e^{iHt}H_ie^{-iHt}\,e^{-(t\Delta E)^2/(2q)}
+  \label{eq:thd}
+\end{align}
+(eqs.~\texttt{tnd}, \texttt{thd}, lines~194--207). The source then defines
+(eqs.~\texttt{mid}, \texttt{odef}, \texttt{hpdef}, lines~285--307)
+\begin{align}
+  M_i=\frac{\Delta E}{\sqrt{2\pi q}}\int dt\,
+  e^{-(t\Delta E)^2/2}\,e^{iH_{\mathrm{loc}}t}H_ie^{-iH_{\mathrm{loc}}t},
+  \qquad
+  H_{\mathrm{loc}}=\sum_{j:\,d(i,j)\le l_{\mathrm{proj}}-R}H_j,
+  \label{eq:mid}
+\end{align}
+and states that $M_i$ acts within distance $l_{\mathrm{proj}}$ of $i$, that
+$\lVert M_i\rVert\le J$ (line~320), and that
+\begin{align}
+  \lVert\tilde H_i^0-M_i\rVert\le
+  J\bigl(N(l_{\mathrm{proj}})\,g(c_1l_{\mathrm{proj}},l_{\mathrm{proj}})
+  +2e^{-(c_1l_{\mathrm{proj}}\Delta E)^2/(2q)}\bigr)
+  \label{eq:apb}
+\end{align}
+(eq.~\texttt{apb}, lines~309--320, proved at lines~1458--1533). The later
+argument (eq.~\texttt{facld} and lines~359--387) uses only these three
+properties of $M_i$.
+
+\section{Two local corrections}
+
+\paragraph{The exponent in~\eqref{eq:mid}.} The Gaussian weight in~\eqref{eq:mid}
+is printed as $e^{-(t\Delta E)^2/2}$. With the prefactor
+$\Delta E/\sqrt{2\pi q}$ it is a probability density only when $q=1$, and the
+comparison~\eqref{eq:apb} with~\eqref{eq:thd} splits the two integrals at the
+same time with the same weight. The weight of~\eqref{eq:thd},
+$e^{-(t\Delta E)^2/(2q)}$, is meant.
+
+\paragraph{The construction of $M_i$.} The formalization does not evolve $H_i$
+under $H_{\mathrm{loc}}$. It takes for $M_i$ the normalized partial trace
+$\mathbb E_K(\tilde H_i^0)$ of the filtered term onto the set $K$ of sites
+within graph distance $l$ of the support of $H_i$: the trace over the sites
+outside $K$, divided by their dimension, tensored with the identity there.
+This operator has the three properties the source uses.
+\begin{itemize}
+  \item It acts on $K$.
+  \item $\lVert\mathbb E_K(\tilde H_i^0)\rVert\le\lVert\tilde H_i^0\rVert
+    \le\lVert H_i\rVert\le J$, since the partial trace and the filter do not
+    increase the norm. It is Hermitian when $H_i$ is.
+  \item Splitting~\eqref{eq:thd} at $|t|=T$ and applying the Lieb--Robinson
+    localization of $e^{iHt}H_ie^{-iHt}$ onto $K$ for $|t|\le T$ gives
+    \begin{align}
+      \lVert\tilde H_i^0-\mathbb E_K(\tilde H_i^0)\rVert
+      \le C'|S|^2\lVert H_i\rVert e^{vT-l/2}
+      +2\lVert H_i\rVert e^{-(T\Delta E)^2/(2q)},
+      \label{eq:apb-pt}
+    \end{align}
+    with $S$ the support of $H_i$ and $C'$, $v$ the constants of the graph
+    localization estimate. At $T=c_1l$ this is~\eqref{eq:apb}, with the
+    localization term in place of $N(l)g(c_1l,l)$.
+\end{itemize}
+
+\section{Formalization}
+
+\leanid{TNLean.Lattice.exists_local_approx_gaussianFilteredTerm} gives an
+operator with the three properties, and
+\leanid{TNLean.Lattice.norm_gaussianFilteredTerm_sub_siteExpectation_le_graphNeighborhood}
+proves~\eqref{eq:apb-pt} for the partial trace. The theorems that take $M_i$
+as input,
+\leanid{TNLean.Lattice.norm_sub_starProjection_apply_le_of_gaussianFilteredTerm},
+\leanid{TNLean.Lattice.norm_apply_sub_inner_smul_le_of_gaussianFilteredTerm}
+and \leanid{TNLean.Lattice.norm_sum_sub_le_of_sum_eq}, hold for every operator
+$M$, so they apply to the source's truncated evolution as well.
+
+\bibliographystyle{plain}
+\bibliography{references}
+
+\end{document}

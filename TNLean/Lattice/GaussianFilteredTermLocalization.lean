@@ -31,10 +31,14 @@ acting on a set `S`, let `W_tilde` be its Gaussian-filtered version
 * `norm_sum_sub_le_of_sum_eq`: if the terms `Wᵢ` sum to `H`, then any operators `Mᵢ` satisfy
   `‖∑ᵢ Mᵢ - H‖ ≤ ∑ᵢ ‖W_tildeᵢ - Mᵢ‖`.
 
-The approximation `M` is the normalized partial trace of `W_tilde` onto the `l`-neighbourhood
-of `S`. The source builds its `M_i` instead by evolving `H_i` under the terms within distance
-`l_proj - R` of `i` (eqs. `mid`, `odef`, `hpdef`). What the later argument uses is the
-support of `M_i`, the bound `‖M_i‖ ≤ J`, and eq. `apb`, and the partial trace has all three.
+**Local fix (the approximation `M_i`, eq. `mid`):** the approximation `M` is the normalized
+partial trace of `W_tilde` onto the `l`-neighbourhood of `S`, not the source's evolution of
+`H_i` under the terms within distance `l_proj - R` of `i` (eqs. `mid`, `odef`, `hpdef`). It has
+the three properties the later argument uses: its support, `‖M_i‖ ≤ J`, and eq. `apb`, which
+is proved here for it. The Gaussian weight printed in eq. `mid` as `exp[-(tΔE)²/2]` is read as
+the weight `exp[-(tΔE)²/(2q)]` of eq. `thd`. Documented in
+`docs/paper-gaps/hastings05_filtered_term_approximation.tex`.
+
 The constants of the Lieb–Robinson bound are those of
 `QuantumCircuit.norm_heisenberg_commutator_le_graphDistance_finset` and
 `QuantumCircuit.norm_heisenberg_sub_siteExpectation_graphNeighborhood_le`. The source's
@@ -50,8 +54,6 @@ approximation `M_i` with eqs. `mid`, `odef`, `hpdef` and `apb` (lines 285–320,
 lines 1458–1533), eq. `facld` (lines 322–348), the sum `M = ∑ᵢ M_i` at lines 359–374, and
 the unique ground state at lines 375–387. The overlap of the ground states of `M` and `H`
 (lines 362–367) is stated there only to order of magnitude and is not formalized here.
-The source writes `exp[-(tΔE)²/2]` in eq. `mid`; the exponent of eq. `thd`, `-(tΔE)²/(2q)`,
-is meant.
 -/
 
 open GaussianFilter Matrix QuantumCircuit

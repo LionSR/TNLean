@@ -18,7 +18,9 @@ to at most $b_0$. The source's $M_i$ evolves $H_i$ under the terms near $i$
 only~\cite[lines 285--307]{Hastings2006Solving}. Here $M_i$ is the normalized
 partial trace of $\widetilde H_i$ onto a neighbourhood of the support of
 $H_i$, which has the three properties the source uses: its support, the bound
-$\|M_i\|\le J$, and the estimate (apb).
+$\|M_i\|\le J$, and the estimate (apb). The Gaussian weight printed in
+eq.~(mid) as $e^{-(t\Delta E)^2/2}$ is read as $e^{-(t\Delta E)^2/(2q)}$. Both
+changes are recorded in~\cite{gap:hastings05_filtered_term_approximation}.
 
 \begin{theorem}[Locality of a filtered term on a graph]
     \label{thm:hastings05_filtered_locality_graph}
@@ -65,7 +67,10 @@ $\|M_i\|\le J$, and the estimate (apb).
     With $W=H_i$ these are the properties of $M_i$
     in~\cite[lines 285--320]{Hastings2006Solving}: $M_i$ acts within distance
     $l_{\mathrm{proj}}$ of $i$, $\|M_i\|\le J$, and eq.~(apb) holds with
-    $T=c_1l_{\mathrm{proj}}$.
+    $T=c_1l_{\mathrm{proj}}$, for the partial trace in place of the
+    truncated evolution~\cite{gap:hastings05_filtered_term_approximation}.
+    Every finite graph satisfies the growth assumption with $K_g$ the number
+    of vertices and $k=0$; the assumption only enters the constant.
 \end{theorem}
 \begin{proof}\leanok
     Take $M=\mathbb E_{N_l(S)}(\widetilde W)$. It acts on $N_l(S)$, the partial
