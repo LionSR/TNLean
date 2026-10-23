@@ -18,7 +18,8 @@ this section are natural. The norm $\|\cdot\|_1$ is the full trace norm.
     \begin{align}
         D_N                                    & \le C_\delta(N+1)^{m_\delta}, &
         \bigl\||\psi_N\rangle\langle\psi_N|
-        -|\phi_N\rangle\langle\phi_N|\bigr\|_1 & \le\delta.\notag
+        -|\phi_N\rangle\langle\phi_N|\bigr\|_1 & \le\delta.
+        \label{eq:efficient_mps_approximation}
     \end{align}
     The approximants need not be normalized. No relation between vectors at
     different lengths is required.
@@ -33,7 +34,8 @@ this section are natural. The norm $\|\cdot\|_1$ is the full trace norm.
     largest, counting multiplicity. If
     \begin{align}
         S_\alpha(\rho)\le
-        \log\frac{D}{1-\alpha}+\frac{\alpha}{1-\alpha}\log T,\notag
+        \log\frac{D}{1-\alpha}+\frac{\alpha}{1-\alpha}\log T,
+        \label{eq:renyi_tail_threshold}
     \end{align}
     then $\tau_D(\rho)\le T$.
 \end{theorem}
@@ -45,9 +47,10 @@ this section are natural. The norm $\|\cdot\|_1$ is the full trace norm.
         \log\tau_D(\rho)
         \le\frac{1-\alpha}{\alpha}
         \left(S_\alpha(\rho)-\log\frac{D}{1-\alpha}\right)
-        \le\log T.\notag
+        \le\log T.
+        \label{eq:renyi_tail_log_bound}
     \end{align}
-    Exponentiating proves the claim.
+    Exponentiating~(\ref{eq:renyi_tail_log_bound}) proves the claim.
 \end{proof}
 
 \begin{theorem}[Normalized approximation on a finite chain]
@@ -60,7 +63,8 @@ this section are natural. The norm $\|\cdot\|_1$ is the full trace norm.
     \begin{align}
         S_\alpha(\rho_{N,k})\le
         \log\frac{D}{1-\alpha}
-        +\frac{\alpha}{1-\alpha}\log\frac{\delta^2}{16(N+1)}.\notag
+        +\frac{\alpha}{1-\alpha}\log\frac{\delta^2}{16(N+1)}.
+        \label{eq:renyi_finite_entropy_threshold}
     \end{align}
     There is a unit matrix product vector $\phi_N$ of bond dimension at
     most $D$ whose pure density matrix differs from that of $\psi_N$
@@ -69,17 +73,20 @@ this section are natural. The norm $\|\cdot\|_1$ is the full trace norm.
 \begin{proof}
     \leanok
     \uses{thm:renyi_entropy_tail_threshold,thm:chain_sequential_truncation_sq}
-    Each discarded weight is at most $\delta^2/[16(N+1)]$.
+    By~(\ref{eq:renyi_finite_entropy_threshold}), each discarded weight is
+    at most $\delta^2/[16(N+1)]$.
     Squared-error sequential truncation gives a matrix product vector $\Phi$
     with $\|\Phi-\psi_N\|^2\le\delta^2/16$. In particular $\Phi\ne0$.
     Set $\phi_N=\Phi/\|\Phi\|$. Scaling preserves the bond bound, and
     \begin{align}
         \|\phi_N-\psi_N\|
          & \le |1-\|\Phi\||+\|\Phi-\psi_N\|
-        \le2\|\Phi-\psi_N\|\le\delta/2.\notag
+        \le2\|\Phi-\psi_N\|\le\delta/2.
+        \label{eq:renyi_normalized_vector_error}
     \end{align}
     The full trace norm of the difference of two unit pure densities is
-    at most twice the distance between their vectors.
+    at most twice the distance between their vectors,
+    so~(\ref{eq:renyi_normalized_vector_error}) gives the claim.
 \end{proof}
 
 \begin{theorem}[Exact representation from marginal ranks]
@@ -123,17 +130,20 @@ this section are natural. The norm $\|\cdot\|_1$ is the full trace norm.
         K                                   & =1+\left\lceil
         \exp\left(c'+t\log\frac{16}{\varepsilon^2}
         +\log(1-\alpha)\right)\right\rceil, &
-        D_N                                 & =K(N+1)^m.\notag
+        D_N                                 & =K(N+1)^m.
+        \label{eq:renyi_family_parameters}
     \end{align}
-    The choices of $K$ and $m$ imply
+    The choices in~(\ref{eq:renyi_family_parameters}) imply
     \begin{align}
         c\log(N+1)+c'\le
         \log\frac{D_N}{1-\alpha}
-        +t\log\frac{\varepsilon^2}{16(N+1)}.\notag
+        +t\log\frac{\varepsilon^2}{16(N+1)}.
+        \label{eq:renyi_family_entropy_threshold}
     \end{align}
     If an internal cut exists, then $N>0$ and
     $c\log N\le c\log(N+1)$. For $0<\alpha<1$, the finite-chain theorem
-    now gives the required normalized approximant with error at most
+    together with~(\ref{eq:renyi_family_entropy_threshold}) gives the required
+    normalized approximant with error at most
     $\varepsilon\le\delta$. For $\alpha=0$, the entropy is the logarithm
     of the rank. The same threshold yields rank at most $D_N$ at every
     internal cut, and the exact-representation theorem applies.
