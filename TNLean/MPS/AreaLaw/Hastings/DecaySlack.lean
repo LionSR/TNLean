@@ -31,6 +31,7 @@ and not at the printed `ξ' = 6ξ` (line 142). This is recorded in
 -/
 
 open Real
+open scoped ComplexOrder
 
 namespace TNLean.MPS.AreaLaw.Hastings
 

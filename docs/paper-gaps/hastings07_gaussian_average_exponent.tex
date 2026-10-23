@@ -1,0 +1,81 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+\input{command}
+\providecommand{\leanid}[1]{\textsf{\detokenize{#1}}}
+\providecommand{\gapnote}[2]{\par\noindent\textbf{Verdict:} #1 (#2).\par}
+\title{The Decay Length of Hastings' Lemma~1 and Its Square-Root Prefactor}
+\author{}
+\date{October 23, 2026}
+\begin{document}
+\maketitle
+\gapnote{local-correction}{resolved}
+
+\section{The source statement}
+
+Lemma~1 of~\cite{Hastings2007AreaLaw} (arXiv:0705.2024v4, \path{law16.tex},
+lines~246--267) asserts, for a Hamiltonian with a unique gapped ground state,
+operators $O_B,O_L,O_R$ of norm at most one and the appropriate supports with
+\begin{align}
+    \Vert O_BO_LO_R-P_0\Vert & \le C_1(\xi)e^{-l/\xi'},
+    \label{eq:hastings07_gaussian_average_exponent_source}
+\end{align}
+and the lemma is stated with the decay length $\xi'=6\xi$.
+
+\section{The point at issue}
+
+The final estimate of the proof (lines~903--907) bounds the error by a quantity
+of the form
+\begin{align}
+    \mathcal O\!\left(\sqrt{l/\xi}\,\xi^2\,e^{-l/6\xi}\right),
+    \label{eq:hastings07_gaussian_average_exponent_final}
+\end{align}
+a square-root prefactor $\sqrt{l}$ times the exponential $e^{-l/6\xi}$. The
+prefactor $\sqrt{l}$ is \emph{not} bounded by a constant at the rate
+$e^{-l/6\xi}$: the function $l\mapsto\sqrt{l}\,e^{-l/6\xi}$ grows away from the
+origin before it decays, so no constant $C_1(\xi)$ makes
+\eqref{eq:hastings07_gaussian_average_exponent_source} hold with $\xi'=6\xi$ for
+all $l$. The printed decay length $\xi'=6\xi$ is therefore not attained by the
+bound the proof produces.
+
+\section{The statement proved}
+
+The prefactor \emph{can} be absorbed into any strictly slower exponential. For
+$\xi'>6\xi$ set
+\begin{align}
+    \delta & = \frac1{6\xi}-\frac1{\xi'}>0.
+\end{align}
+Then $e^{-l/6\xi}=e^{-l/\xi'}e^{-\delta l}$, and the elementary inequality
+$x\,e^{-x}\le e^{-1}$ at $x=2\delta l$ gives, for every $l\ge0$,
+\begin{align}
+    \sqrt{l}\,e^{-\delta l} & \le \frac1{\sqrt{2e\delta}},
+    \label{eq:hastings07_gaussian_average_exponent_sup}
+\end{align}
+the supremum being attained at $l=1/(2\delta)$. Consequently, from a
+factorization with error $(a+b\sqrt{l})e^{-l/6\xi}$ (the shape
+of~\eqref{eq:hastings07_gaussian_average_exponent_final}) one obtains, for every
+$\xi'>6\xi$,
+\begin{align}
+    \Vert O_BO_LO_R-P_0\Vert & \le C_1\,e^{-l/\xi'},
+    \qquad
+    C_1 = a+\frac{b}{\sqrt{2e\delta}},
+    \label{eq:hastings07_gaussian_average_exponent_proved}
+\end{align}
+with $C_1$ depending on $\xi'-6\xi$ and diverging as $\xi'\downarrow6\xi$.%
+\footnote{\leanid{TNLean.MPS.AreaLaw.Hastings.sqrt_mul_exp_neg_le} and
+    \leanid{TNLean.MPS.AreaLaw.Hastings.exists_isFactorizationAt_of_sqrt_decay}
+    in \path{TNLean/MPS/AreaLaw/Hastings/DecaySlack.lean}.}
+
+\section{Conclusion}
+
+Lemma~1 holds in the form~\eqref{eq:hastings07_gaussian_average_exponent_source}
+for every decay length $\xi'>6\xi$, with a constant $C_1$ that grows as $\xi'$
+approaches $6\xi$. It does \emph{not} hold at the printed boundary value
+$\xi'=6\xi$, because of the $\sqrt{l}$ prefactor of the final estimate. The
+correction loses only an arbitrarily small amount of decay length and does not
+affect the area law, whose bound keeps its form with adjusted constants.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}
