@@ -91,7 +91,9 @@ obeys
   b_m=\Bigl(\epsilon+2\sum_{j<m}b_j\Bigr)^{1-1/h}
 \end{align*}
 rather than the printed $b_m=(\epsilon+2b_{m-1})^{1-1/h}$, and the constant in
-front of the final bound grows to order $2^hh!$ instead of $2^h$. The
+front of the final bound grows like $3^h=N^{\log_23}$ instead of $2^h=N$: the
+coefficients obey $c_1=1$ and $c_m=1+2\sum_{j<m}c_j$, so $c_m=3^{m-1}$. This is
+still polynomial in $N$, so the source's conclusion survives. The
 formalization proves the bound for the printed recursion as a statement about
 real numbers, and does not identify it with the deficiency of the levels
 beyond the second.

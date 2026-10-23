@@ -54,8 +54,10 @@ printed `⟨Ψ, P Ψ⟩ ≥ 1 - b`, and with it the normalization bound `2 b` an
 hold as printed. From the third level on, the window stays centred at the expectation in `Ψ_a`,
 so the residual must be compared with `Ψ_a`, at distance up to `2 ∑_{j<m} b_j`. The chain of
 levels then obeys `b_m = (ε + 2 ∑_{j<m} b_j)^s` rather than the printed `(ε + 2 b_{m-1})^s`, and
-the constant of the final bound is of order `2^h h!` instead of `2^h`. The recursion theorems
-below are inequalities for the printed recursion between real numbers. Documented in
+the constant of the final bound grows like `3^h = N^{log₂ 3}` instead of `2^h = N`, since the
+coefficients obey `c_m = 1 + 2 ∑_{j<m} c_j = 3^{m-1}`; this is still polynomial in `N`, so the
+source's conclusion survives. The recursion theorems below are inequalities for the printed
+recursion between real numbers. Documented in
 `docs/paper-gaps/hastings05_hierarchical_projection.tex`.
 
 Not formalized here: the supersite grouping of lines 609–628, the energy bound eq. `hchy` and
