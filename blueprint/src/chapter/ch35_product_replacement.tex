@@ -4,8 +4,8 @@ The product replacement argument of~\cite{Schuch2008EntropyScaling}
 (arXiv:0705.0292v2, lines 436--470) can be expressed directly in terms of
 coefficient spaces and cut ranks.
 
-\begin{lemma}[Product replacement does not increase cut ranks]
-    \label{lem:chain_product_replacement_ranks}
+\begin{theorem}[Product replacement does not increase cut ranks]
+    \label{thm:chain_product_replacement_ranks}
     \lean{TNLean.MPS.AreaLaw.rank_cutMatrix_le_of_product_mem_ranges}
     \leanok
     \uses{def:chain_open_mps}
@@ -15,14 +15,14 @@ coefficient spaces and cut ranks.
     and $M_k(\chi)=uv^{\mathsf T}$. Then
     $\operatorname{rank}M_j(\chi)\le\operatorname{rank}M_j(\psi)$ at every cut $j$.
     No nonvanishing or normalization is required.
-\end{lemma}
+\end{theorem}
 \begin{proof}\leanok
     \uses{thm:hastings_supported_cut_rank}
     Choose $w,z$ with $Cw=u$ and $C^{\mathsf T}z=v$. The identities
     \begin{align}
         \label{eq:chain_product_replacement_local_maps}
         (uz^{\mathsf T})C=uv^{\mathsf T}
-        =C(vw^{\mathsf T})^{\mathsf T}
+        =C{(vw^{\mathsf T})}^{\mathsf T}
     \end{align}
     express $\chi$ both as a left-local and as a right-local linear image of
     $\psi$. For $j\le k$, use the right-local image; for $j>k$, use the
@@ -31,17 +31,17 @@ coefficient spaces and cut ranks.
     both vectors vanish and the assertion is immediate.
 \end{proof}
 
-\begin{corollary}[Preservation of the bond bound]
-    \label{cor:chain_product_replacement_mps}
+\begin{theorem}[Preservation of the bond bound]
+    \label{thm:chain_product_replacement_mps}
     \lean{TNLean.MPS.AreaLaw.IsOpenMPS.of_product_mem_cut_ranges}
     \leanok
-    \uses{lem:chain_product_replacement_ranks,def:chain_open_mps}
-    Under the hypotheses of Lemma~\ref{lem:chain_product_replacement_ranks},
+    \uses{thm:chain_product_replacement_ranks,def:chain_open_mps}
+    Under the hypotheses of Theorem~\ref{thm:chain_product_replacement_ranks},
     if $\psi$ is an open-boundary MPS of bond dimension at most $D$, then
     so is $\chi$. This includes $D=0$ and empty or one-site chains.
-\end{corollary}
+\end{theorem}
 \begin{proof}\leanok
-    \uses{lem:chain_product_replacement_ranks,thm:chain_cut_rank_of_mps}
+    \uses{thm:chain_product_replacement_ranks,thm:chain_cut_rank_of_mps}
     Each internal cut rank of $\chi$ is at most the corresponding rank of
     $\psi$, hence at most $D$. Apply the cut-rank characterization.
 \end{proof}
@@ -61,13 +61,13 @@ coefficient spaces and cut ranks.
     The inner product on the left is taken in cut coordinates.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{cor:chain_product_replacement_mps}
+    \uses{thm:chain_product_replacement_mps}
     The product-overlap theorem in~\cite{QICLean2026Blueprint} gives unit
     $u\in\operatorname{range}M_k(\psi)$ and
-    $v\in\operatorname{range}M_k(\psi)^{\mathsf T}$ with the stated overlap
+    $v\in\operatorname{range}{M_k(\psi)}^{\mathsf T}$ with the stated overlap
     bound. Transport $u\otimes v$ back to the chain coordinates to define
     $\chi$. This transport preserves norms, so $\|\chi\|=\|u\|\,\|v\|=1$.
-    Corollary~\ref{cor:chain_product_replacement_mps} preserves the bond bound.
+    Theorem~\ref{thm:chain_product_replacement_mps} preserves the bond bound.
 \end{proof}
 
 \begin{theorem}[Replacement at finitely many product cuts]
@@ -84,7 +84,7 @@ coefficient spaces and cut ranks.
     and every cut in $S$ has rank at most one for $\chi$.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:chain_normalized_product_replacement,lem:chain_product_replacement_ranks}
+    \uses{thm:chain_normalized_product_replacement,thm:chain_product_replacement_ranks}
     Induct on $|S|$. At a newly selected cut, apply normalized product
     replacement to the current approximant and the two factors of the target.
     The overlap does not decrease. The new cut has rank at most one, and
@@ -106,43 +106,43 @@ coefficient spaces and cut ranks.
     \end{align}
 \end{definition}
 
-\begin{lemma}[Norms and inner products of block products]
-    \label{lem:chain_copy_product_inner}
+\begin{theorem}[Norms and inner products of block products]
+    \label{thm:chain_copy_product_inner}
     \lean{TNLean.MPS.AreaLaw.norm_copyProduct,TNLean.MPS.AreaLaw.inner_copyProduct,TNLean.MPS.AreaLaw.sq_norm_inner_copyProduct}
     \leanok
     \uses{def:chain_copy_product}
     Norms and inner products of block products are the products of the
     corresponding block norms and inner products. In particular, their
     squared fidelities multiply.
-\end{lemma}
+\end{theorem}
 \begin{proof}\leanok
     Expand the inner product as a finite sum over configurations and factor
     this sum over the blocks. Take norms and squares for the remaining identities.
 \end{proof}
 
-\begin{lemma}[Factorization at copy boundaries]
-    \label{lem:chain_copy_boundary_factorization}
+\begin{theorem}[Factorization at copy boundaries]
+    \label{thm:chain_copy_boundary_factorization}
     \lean{TNLean.MPS.AreaLaw.copyProduct_factors_at_boundary}
     \leanok
     \uses{def:chain_copy_product}
     A block product factors across every boundary $tL$, for $t\ge0$.
-\end{lemma}
+\end{theorem}
 \begin{proof}\leanok
     A site $Li+j$ lies before $tL$ exactly when $i<t$.
     Split the coefficient product into those blocks and the remaining blocks.
 \end{proof}
 
-\begin{corollary}[Replacement at all copy boundaries]
-    \label{cor:chain_copy_boundary_replacement}
+\begin{theorem}[Replacement at all copy boundaries]
+    \label{thm:chain_copy_boundary_replacement}
     \lean{TNLean.MPS.AreaLaw.IsOpenMPS.exists_rank_one_at_copy_boundaries}
     \leanok
     \uses{def:chain_copy_product,def:chain_open_mps}
     Given a unit MPS $\psi$ of bond dimension at most $D$ and a block-product
     target, there is a unit MPS $\chi$ of the same bond bound with no smaller
     overlap, no larger cut ranks, and rank at most one at every copy boundary.
-\end{corollary}
+\end{theorem}
 \begin{proof}\leanok
-    \uses{lem:chain_copy_boundary_factorization,thm:chain_product_cut_iteration}
+    \uses{thm:chain_copy_boundary_factorization,thm:chain_product_cut_iteration}
     Apply finite-cut replacement to the boundaries $tL$, $0\le t\le K$.
 \end{proof}
 
@@ -155,8 +155,8 @@ coefficient spaces and cut ranks.
     the configuration on that interval and keeping the exterior fixed.
 \end{definition}
 
-\begin{lemma}[Bond bounds for interval slices]
-    \label{lem:chain_interval_slice_mps}
+\begin{theorem}[Bond bounds for interval slices]
+    \label{thm:chain_interval_slice_mps}
     \lean{TNLean.MPS.AreaLaw.rank_cutMatrix_intervalSlice_le,TNLean.MPS.AreaLaw.IsOpenMPS.intervalSlice,TNLean.MPS.AreaLaw.IsOpenMPS.of_intervalSlice_eq_mul}
     \leanok
     \uses{def:chain_interval_slice,def:chain_open_mps}
@@ -165,7 +165,7 @@ coefficient spaces and cut ranks.
     If the interval lies within the chain, every slice of an MPS of bond
     dimension at most $D$ is an MPS of that same bond bound.
     A vector differing from such a slice by a nonzero scalar also has this bound.
-\end{lemma}
+\end{theorem}
 \begin{proof}\leanok
     \uses{thm:chain_cut_rank_of_mps}
     The sliced coefficient matrix is a submatrix of the full coefficient matrix:
@@ -174,16 +174,16 @@ coefficient spaces and cut ranks.
     and absorb any nonzero scalar into the overall MPS coefficient.
 \end{proof}
 
-\begin{corollary}[Bond bounds for normalized block factors]
-    \label{cor:chain_copy_product_factor_mps}
+\begin{theorem}[Bond bounds for normalized block factors]
+    \label{thm:chain_copy_product_factor_mps}
     \lean{TNLean.MPS.AreaLaw.IsOpenMPS.copyProduct_factor}
     \leanok
     \uses{def:chain_copy_product,def:chain_open_mps}
     If a product of unit block vectors is an MPS of bond dimension at most $D$,
     then each block factor is an MPS of bond dimension at most $D$.
-\end{corollary}
+\end{theorem}
 \begin{proof}\leanok
-    \uses{lem:chain_interval_slice_mps}
+    \uses{thm:chain_interval_slice_mps}
     Each unit factor has a nonzero coefficient. Fix such a coefficient in
     every other block. The resulting interval slice is the selected factor
     multiplied by a nonzero product of coefficients.
@@ -205,7 +205,7 @@ coefficient spaces and cut ranks.
     \end{align}
 \end{theorem}
 \begin{proof}\leanok
-    \uses{lem:chain_copy_product_inner}
+    \uses{thm:chain_copy_product_inner}
     Choose a factor with maximal squared fidelity, so $f_i^K\ge F$.
     The scalar function $T$ is decreasing. Thus $T(f_i^K)\le T(F)<1$,
     and the scalar amplification theorem in~\cite{QICLean2026Blueprint}
@@ -223,7 +223,7 @@ coefficient spaces and cut ranks.
     This includes blocks of length zero.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{lem:chain_copy_product_inner}
+    \uses{thm:chain_copy_product_inner}
     Choose a configuration with nonzero coefficient. Rank at most one makes
     every two-by-two minor at a copy boundary vanish. Successively replacing
     the blocks of the chosen configuration therefore expresses every
@@ -245,7 +245,7 @@ coefficient spaces and cut ranks.
     at least as large as that of $\psi$.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{cor:chain_copy_boundary_replacement,thm:chain_unit_copy_factors,cor:chain_copy_product_factor_mps}
+    \uses{thm:chain_copy_boundary_replacement,thm:chain_unit_copy_factors,thm:chain_copy_product_factor_mps}
     First replace $\psi$ so that every copy boundary has rank at most one.
     Extract unit block factors, and then apply the bond bound for factors
     of a product MPS.
