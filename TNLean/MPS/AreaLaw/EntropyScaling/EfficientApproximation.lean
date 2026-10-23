@@ -11,8 +11,10 @@ import QICLean.Analysis.SubnormalizedPureStateError
 
 The accuracy is fixed before the polynomial bond bound is chosen. Its constants
 are uniform over the set of chain lengths. No consistency between different
-chain lengths is required. Both states in the approximation are interpreted as
-pure density matrices, and the error uses the full trace norm.
+chain lengths is required. The error is the full trace norm of the difference
+of the rank-one operators.
+The approximating vector need not be normalized, as explicitly permitted in
+the source at lines 160–173.
 
 Source: Schuch–Wolf–Verstraete–Cirac, arXiv:0705.0292v2,
 `paper_v2.tex`, lines 198–210.
@@ -21,7 +23,7 @@ Source: Schuch–Wolf–Verstraete–Cirac, arXiv:0705.0292v2,
 namespace TNLean.MPS.AreaLaw
 
 /-- Efficient MPS approximation in the sense of Schuch–Wolf–Verstraete–Cirac,
-arXiv:0705.0292v2, lines 198–210. For each fixed positive accuracy, normalized
+arXiv:0705.0292v2, lines 198–210. For each fixed positive accuracy,
 approximants have a polynomial bond bound uniform in the chain length. Writing
 the polynomial as `C * (N + 1) ^ m` allows finite exceptional lengths to be
 absorbed into its constant. The error is the full trace norm, without a factor
@@ -30,7 +32,7 @@ def IsEfficientlyApproximableByMPS {q : ℕ} {lengths : Set ℕ}
     (ψ : ∀ N : lengths, EuclideanSpace ℂ (Fin N.val → Fin q)) : Prop :=
   ∀ δ : ℝ, 0 < δ → ∃ C : ℝ, 0 < C ∧ ∃ m : ℕ,
     ∀ N : lengths, ∃ D : ℕ, ∃ φ : EuclideanSpace ℂ (Fin N.val → Fin q),
-      (D : ℝ) ≤ C * ((N.val : ℝ) + 1) ^ m ∧ ‖φ‖ = 1 ∧
+      (D : ℝ) ≤ C * ((N.val : ℝ) + 1) ^ m ∧
       IsOpenMPS N.val q D (fun x ↦ φ x) ∧
       Matrix.rectangularTraceNorm
         (Matrix.euclideanOuterProduct (ψ N) (ψ N) - Matrix.euclideanOuterProduct φ φ) ≤ δ
