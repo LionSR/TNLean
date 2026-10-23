@@ -101,9 +101,32 @@ proportional to $J$, as in the source.\footnote{\leanid{TNLean.MPS.AreaLaw.lemma
 
 For either length, the construction gives a contraction $O_B$ without a
 positivity assertion and error $C_1e^{-l/\xi'}$ for every $\xi'>6\xi$.
-The endpoint $\xi'=6\xi$ is not established by this argument; no
-counterexample to the endpoint factorization is asserted. The remaining
-rate question is recorded in \path{hastings07_gaussian_average_exponent.tex}.
+At a fixed length the endpoint $\xi'=6\xi$ is not established by this
+argument, because of the factor $\sqrt{l/\xi}$ recorded in
+\path{hastings07_gaussian_average_exponent.tex}; no counterexample to the
+endpoint factorization is asserted.
+
+The endpoint is nevertheless reached by re-choosing the length. The source
+fixes $\xi=\max(2v/\Delta E,\xi_C)$ only through some pair $(v,\xi_C)$
+satisfying (\ref{eq:hastings07_lemma1_decay_length_lrb}).\footnote{\path{References/0705.2024/law16.tex},
+    lines~96--112 and~139--142.}
+That bound holds for $|t|\le l/v$, so it also holds for $|t|\le l/v'$ with
+$v'\ge v$, and raising the velocity gives another admissible length. The
+same is true of the chain estimate
+(\ref{eq:hastings07_lemma1_decay_length_chain}), whose bound only grows
+with the velocity. In units of the gap the chain velocity is
+$v_0=1+c_RJ/\Delta E$, and replacing it by $v'=\tfrac54v_0$ in
+(\ref{eq:hastings07_lemma1_decay_length_value}) gives
+$\tilde\xi=8\max(2v',1)=\tfrac54\hat\xi$. Since $6\tilde\xi=\tfrac{15}2\hat\xi$, the
+polynomial bound below at $\kappa=15/2$ gives
+\begin{align}
+    \|O_BO_LO_R-P_0\|\le K\tilde\xi^3e^{-l/(6\tilde\xi)},
+    \label{eq:hastings07_lemma1_decay_length_endpoint}
+\end{align}
+the printed rate $\xi'=6\xi$ for $\xi=\tilde\xi$, with $K$ depending only
+on $R$.\footnote{\leanid{TNLean.MPS.AreaLaw.exists_projectorFactorization_endpoint}
+    in \doclink{TNLean/MPS/AreaLaw/Hastings/LemmaOneConstant}.}
+It is reached at $\tilde\xi$, not at $\hat\xi$ itself.
 Replacing $O_B$ by $O_B^\dagger O_B$ gives a positive semidefinite contraction
 with error of order $e^{-l/(2\xi')}$, as in the source's note added and
 \path{hastings07_lemma1_positivity_rate.tex}.
@@ -131,7 +154,8 @@ with $K$ depending only on $R$ and $\kappa$.\footnote{\leanid{TNLean.MPS.AreaLaw
     \doclink{TNLean/MPS/AreaLaw/Hastings/LemmaOneConstant}.}
 For the source's nearest-neighbour terms ($R=1$) the constant $K$ depends
 only on $\kappa$. The bound holds at the rate $\xi'=\kappa\hat\xi$ for
-every $\kappa>6$, not at $\kappa=6$.
+every $\kappa>6$, not at $\kappa=6$; the printed rate is reached at the
+inflated length $\tilde\xi$ of (\ref{eq:hastings07_lemma1_decay_length_endpoint}).
 
 \section{Remaining work}
 
@@ -140,7 +164,6 @@ every $\kappa>6$, not at $\kappa=6$.
           (\ref{eq:hastings07_lemma1_decay_length_lrb}): a numerical
           prefactor, the factor $|X|$, and $B$ on an arbitrary set. Only then
           is $(v,\xi_C)$ identified as a source pair.
-    \item The endpoint $\xi'=6\xi$ remains open.
 \end{itemize}
 These tasks remain part of \ghissue{9811}. The separate blueprint entry for
 the printed Lemma~1 remains unmarked as proved. The established
