@@ -1351,6 +1351,8 @@ positive and the later estimate uses `‖M_L O_L‖` at most the threshold.
   length `ξ₀` rather than `ξ₀/2`, and the implicit hypotheses `2 C₁ > 1` and
   `ln C₁ + C₂ ≥ 0`.
 
+## Rényi entropy and matrix product state approximation
+
 ### Matrix product state truncation: the squared norm
 
 [swv07_truncation_squared_norm.tex](swv07_truncation_squared_norm.tex)
