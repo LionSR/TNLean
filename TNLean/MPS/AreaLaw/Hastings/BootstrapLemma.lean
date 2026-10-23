@@ -30,9 +30,10 @@ finite range by grouping sites; here the range `R` is arbitrary.
 
 **Scope restriction (quantitative bounds):** `exists_entropy_le_of_overlap_schmidtRank_mixture`
 inherits the quantitative restrictions of the formalized Lemma 1. Its length is
-`ξ = 8 max(2v₀/ΔE, 1)`, with `v₀` the velocity of the chain localization estimate, which is
-not shown to be the source's `max(2v/ΔE, ξ_C)` for a Lieb–Robinson bound with linear support
-dependence (lines 96–112). The bound is proved for every `ξ' > 6ξ`; the printed endpoint
+`ξ = 8 max(2v₀/ΔE, 1)`, with `v₀` the velocity of the chain Lieb–Robinson estimate. That
+estimate is linear in the size of the support, as in the source (lines 96–112), but its
+prefactor grows with `J` and its second operator acts on one site, so `ξ` is not shown to be
+the source's `max(2v/ΔE, ξ_C)`. The bound is proved for every `ξ' > 6ξ`; the printed endpoint
 `ξ' = 6ξ` (lines 139–142) is not established, and no counterexample to that endpoint is asserted.
 Its constant `C₁` is not shown to be bounded by a polynomial in `ξ` (lines 258–262). Documented in
 `docs/paper-gaps/hastings07_lemma1_decay_length.tex` and
