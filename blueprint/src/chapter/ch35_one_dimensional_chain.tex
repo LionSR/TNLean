@@ -5193,3 +5193,31 @@ The prescribed placement is $\ell(R_i)=i$ and $\ell(P_{j+1})=j$.
   An infinite set of natural lengths is unbounded, so the logarithmic bound
   from efficient approximation gives a contradiction.
 \end{proof}
+
+\begin{theorem}[Regional entropy from a spectral tail]
+  \label{thm:chain_von_neumann_spectral_tail}
+  \lean{TNLean.MPS.AreaLaw.regionEntropy_le_log_rank_add_spectral_tail}
+  \leanok
+  Let $\psi$ be a unit vector on a chain of local dimension $q$, and let
+  $R$ be any region. Suppose that the mass outside the first $D$ ordered
+  eigenvalues of $\rho_R$ is at most $\varepsilon$. Then
+  \begin{align}
+    \label{eq:chain_von_neumann_spectral_tail}
+    S_\psi(R)&\le\log D+\varepsilon |R|\log q+\log2.
+  \end{align}
+  The budget $D$ may be zero or exceed the regional dimension, with
+  $\log0=0$ and empty tails equal to zero.
+\end{theorem}
+\begin{proof}\leanok
+  The regional configuration space has dimension $q^{|R|}$. Apply the
+  finite spectral-concentration entropy estimate and use
+  $\log(q^{|R|})=|R|\log q$.
+\end{proof}
+
+This is an auxiliary implication for the entropy obstruction in
+\cite{Schuch2008EntropyScaling}, lines 278--305 of the source.
+It assumes the spectral-tail estimate rather than deducing it from an
+approximation error. A tail bound $\varepsilon\le\delta/2$ yields the
+half-error coefficient. The rank budget is separate from an MPS bond
+bound: an interior block has two boundaries and generally uses the square
+of that bound.
