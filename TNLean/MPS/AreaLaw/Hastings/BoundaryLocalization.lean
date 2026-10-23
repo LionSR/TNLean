@@ -8,6 +8,7 @@ import TNLean.MPS.AreaLaw.Hastings.InteractionPicture
 import TNLean.MPS.AreaLaw.LiebRobinson
 import TNLean.MPS.AreaLaw.InteractionBudget
 import TNLean.Circuit.ProjectedRelativeEvolution
+import QICLean.Analysis.RectangularTraceNorm
 
 /-!
 # Localizing the boundary operator `P_B` in Hastings' Lemma 1
@@ -53,7 +54,7 @@ explicit; the radius `ℓ` and the time cutoff remain free, and the source's cho
 * `exists_supported_interactionAverage_approx`: the operator `O_B` with
   `‖O_B‖ ≤ 1` and an explicit bound on `‖P_B - O_B‖`, for every time cutoff `T`.
 * `exists_supported_interactionAverage_approx_exp`: the same with `T = ℓ/(4v)`, so that
-  both error terms decay exponentially in the radius `ℓ`.
+  the two error terms depending on the radius `ℓ` decay exponentially in `ℓ`.
 
 The positivity of `O_B` claimed in Lemma 1 is not asserted: the note added to the
 source (lines 912–913) records that the construction need not give it.
@@ -71,14 +72,6 @@ namespace TNLean.MPS.AreaLaw.Hastings
 section Abstract
 
 variable {n : Type*} [Fintype n] [DecidableEq n]
-
-/-- A unitary matrix has operator norm at most one (also for the empty index type). -/
-theorem norm_le_one_of_mem_unitaryGroup {U : Matrix n n ℂ} (hU : U ∈ unitaryGroup n ℂ) :
-    ‖U‖ ≤ 1 := by
-  have h1 : ‖(1 : Matrix n n ℂ)‖ ≤ 1 := by
-    rw [← l2_opNorm_toEuclideanCLM, map_one]
-    exact ContinuousLinearMap.norm_id_le
-  simpa only [mul_one] using (CStarRing.norm_mem_unitary_mul (1 : Matrix n n ℂ) hU).trans_le h1
 
 /-- Step 1 of the localization of `P_B`: the interaction-picture propagator
 `U(t) = e^{i(A+B)t} e^{-iAt}` is within `|t| (‖(A + B) - H‖ + ‖A - H₀‖)` of
@@ -181,10 +174,10 @@ theorem exists_supported_interactionAverage_approx {L q R : ℕ} {J : ℝ} (hq :
       · rw [Set.indicator_of_notMem (Set.notMem_compl_iff.mpr htT), add_zero, mul_comm]
         exact hrel t (abs_le.mpr htT)
       · rw [Set.indicator_of_mem (Set.mem_compl htT)]
-        have hV := norm_le_one_of_mem_unitaryGroup (Submonoid.mul_mem _
+        have hV := Matrix.l2_opNorm_unitary_le_one (Submonoid.mul_mem _
           (SpectralFilter.hermitianUnitaryPath_mem_unitary hH t)
           (SpectralFilter.hermitianUnitaryPath_mem_unitary hH₀ (-t)))
-        have hUt := norm_le_one_of_mem_unitaryGroup (hunit t)
+        have hUt := Matrix.l2_opNorm_unitary_le_one (hunit t)
         have := norm_sub_le (hermitianUnitaryPath H t * hermitianUnitaryPath H₀ (-t)) (U t)
         nlinarith [abs_nonneg t]
     calc ‖interactionPropagator A B t - U t‖
@@ -198,7 +191,7 @@ theorem exists_supported_interactionAverage_approx {L q R : ℕ} {J : ℝ} (hq :
     (show Differentiable ℝ U from fun t ↦ (hU t).differentiableAt).continuous
   have hUint : Integrable U (gaussianReal 0 η) :=
     (integrable_const (1 : ℝ)).mono' hUcont.aestronglyMeasurable
-      (Filter.Eventually.of_forall fun t ↦ norm_le_one_of_mem_unitaryGroup (hunit t))
+      (Filter.Eventually.of_forall fun t ↦ Matrix.l2_opNorm_unitary_le_one (hunit t))
   have hPint : Integrable (interactionPropagator A B) (gaussianReal 0 η) := by
     have := GaussianFilter.integrable_intertwinerIntegrand η (hA.add hB) hA 1
     unfold interactionPropagator
@@ -219,7 +212,7 @@ theorem exists_supported_interactionAverage_approx {L q R : ℕ} {J : ℝ} (hq :
         (integral_congr_ae (Filter.Eventually.of_forall hfix))
     exact hMint ▸ siteExpectation_mem_supportedOperators N _
   · simpa using norm_integral_le_of_norm_le_const (μ := gaussianReal 0 η)
-      (Filter.Eventually.of_forall fun t ↦ norm_le_one_of_mem_unitaryGroup (hunit t))
+      (Filter.Eventually.of_forall fun t ↦ Matrix.l2_opNorm_unitary_le_one (hunit t))
   · rw [interactionAverage_eq_integral, ← integral_sub hPint hUint]
     refine (norm_integral_le_of_norm_le hgint (Filter.Eventually.of_forall hpoint)).trans ?_
     rw [integral_add (habs.mul_const ε) hind, integral_mul_const,
@@ -232,8 +225,12 @@ theorem exists_supported_interactionAverage_approx {L q R : ℕ} {J : ℝ} (hq :
 lines 898–901, with the norm and support requirements of Lemma 1 (lines 252 and 264).
 This is `exists_supported_interactionAverage_approx` with the time cutoff `T = ℓ/(4v)`:
 `‖P_B - O‖ ≤ √η (‖(A + B) - H‖ + ‖A - H₀‖ + a |Z|² ‖H - H₀‖ e^{-ℓ/4}) + 4 e^{-ℓ²/(32 v² η)}`.
-With `η = q/ΔE²`, `q` proportional to `l` (line 792) and `ℓ` proportional to `l`, both
-terms decay exponentially in `l`, which is the source's `O(ΔE⁻¹ J √q e^{-l/6ξ})`. -/
+With `η = q/ΔE²`, `q` proportional to `l` (line 792) and `ℓ` proportional to `l`, the two
+terms depending on `ℓ` decay exponentially in `l`. The remaining term
+`√η (‖(A + B) - H‖ + ‖A - H₀‖)` does not depend on `ℓ`: it vanishes when `A = H₀` and
+`A + B = H`, as in `ChainHamiltonian.exists_boundaryOperator_factorization`, and in the
+source's application `A = M_L + M_R`, `B = M_B` it is exponentially small in `l`
+(lines 849–850). Together these give the source's `O(ΔE⁻¹ J √q e^{-l/6ξ})`. -/
 theorem exists_supported_interactionAverage_approx_exp {L q R : ℕ} {J : ℝ} (hq : 1 ≤ q)
     (h : ChainHamiltonian L q R J) {H₀ A B : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
     (hH₀ : H₀.IsHermitian) (hA : A.IsHermitian) (hB : B.IsHermitian) (Z : Finset (Fin L))
