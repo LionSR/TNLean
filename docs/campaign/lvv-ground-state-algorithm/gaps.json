@@ -1,5 +1,23 @@
 {
- "reviewedAt": "2026-10-22T09:00:00Z",
+ "reviewedAt": "2026-10-23T09:10:00Z",
  "checked": [],
- "entries": []
+ "entries": [
+  {
+   "id": "docs/paper-gaps/lvv13_trimmed_energy_constant.tex",
+   "kind": "missing-step",
+   "status": "open",
+   "paper": "lvv",
+   "result": "Lemma l:2, energy of a trimmed low-energy state",
+   "issue": 9819,
+   "stage": "alg:2",
+   "prs": {},
+   "title": "Energy bound after trimming at one cut",
+   "summary": "The printed proof drops two terms, one of which depends on 1/ε; the bound ε<sub>0</sub> + 6√δ and the constant chosen from it downstream have not yet been rechecked.",
+   "context": "Lemma l:2 trims a low-energy state to the constant Schmidt rank <i>B</i><sub>δ</sub> at one cut and bounds the energy of the result. The algorithm uses it to show that a good state of constant rank at a cut always exists, and chooses its accuracy constant <i>c</i><sub>ε</sub> = (ε/169)<sup>2</sup> from this bound.",
+   "claims": "If δ(1 + 1/ε) ≤ 1/2 and <i>w</i> has energy at most ε<sub>0</sub> + δ, the normalized trimmed state has energy at most ε<sub>0</sub> + 6√δ.",
+   "found": "The proof first bounds the change in one local term by 2√δ′ with δ′ = δ(1 + 1/ε) ≥ δ, then continues with 2√δ; and of a term (1 − ε<sub>0</sub>)δ′ it keeps only −ε<sub>0</sub>δ′. Keeping both gives a bound of the form ε<sub>0</sub> + 2(δ + δ′ + 2√δ′), which depends on 1/ε. This reading comes from the tracking issue and has not yet been written up as a note.",
+   "impact": "Probably not. A smaller choice of <i>c</i><sub>ε</sub>, polynomial in ε, appears to restore the later inequality 14√<i>c</i><sub>ε</sub> &lt; ε/12, which would change constants but not the polynomial running time.",
+   "plan": "Write the paper-gap note with the corrected bound, recheck the choice of <i>c</i><sub>ε</sub> and the inequality used in the proof of Lemma l:leading, and record whether only constants change."
+  }
+ ]
 }
