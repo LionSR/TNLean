@@ -74,7 +74,8 @@ theorem exists_relent_of_isGappedGroundState (R : ℕ) {J ΔE : ℝ} (hJ : 0 ≤
           relentConst := by
   obtain ⟨C, -, hF⟩ := exists_projectorFactorization R hJ hΔ hξ'
   have hξ : 0 < ξ' := (mul_pos (by norm_num) (lemmaOneLength_pos R J ΔE)).trans hξ'
-  refine ⟨max C 1, le_max_right _ _, fun h E₀ Ω hgs c l hcl hS ↦ ?_⟩
+  refine ⟨max C 1, le_max_right _ _, ?_⟩
+  intro L q _ h E₀ Ω hgs c l hcl hS
   rcases lt_or_ge q 2 with hq | hq
   · -- For `q = 1` the window condition fails: the entropy vanishes and `F(ξ', 1) > 0`.
     have hq1 : q = 1 := by have := NeZero.one_le (n := q); omega
