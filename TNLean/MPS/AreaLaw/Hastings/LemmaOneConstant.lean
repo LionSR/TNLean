@@ -29,6 +29,10 @@ site, so `ξ̂` is not shown to be the source's `max(2v/ΔE, ξ_C)` for a pair s
 (lines 96–112). Documented in `docs/paper-gaps/hastings07_lemma1_decay_length.tex` and
 `docs/paper-gaps/hastings07_gaussian_average_exponent.tex`.
 
+**Local fix (positivity rate):** `exists_projectorFactorization_posSemidef_pow` takes `O_B`
+positive semidefinite, and the positive form of Lemma 1 decays at half the rate, here
+`e^{-l/(2κ ξ̂)}`. Documented in `docs/paper-gaps/hastings07_lemma1_positivity_rate.tex`.
+
 ## Main results
 
 * `lemmaOneConst_le_pow`: `lemmaOneConst R x 1 (κ ξ̂) ≤ K ξ̂³` for every `x ≥ 0`, with
