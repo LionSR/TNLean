@@ -12,7 +12,9 @@ import QICLean.Analysis.SpectralTailTraceNorm
 Source: Schuch–Wolf–Verstraete–Cirac, arXiv:0705.0292v2, lines 539–559.
 Each cut may use a different nearby density matrix. The smoothing radius is
 measured in the full trace norm; it contributes half its value to the bound
-on discarded spectral mass.
+on discarded spectral mass. This supplies the finite-chain estimate for the
+smooth entropy family criterion. Only the individual marginal tails enter
+this estimate; no common smoothing state is assumed.
 -/
 
 open scoped BigOperators ComplexOrder

@@ -10,29 +10,124 @@ Throughout this section the smoothing radius is measured in the full trace norm.
     Let $\psi$ be a unit vector on a chain of $N$ sites, let $D\in\mathbb N$, and
     let $\rho_k$ be its marginal on the first $k$ sites. Suppose that for each
     internal cut $1\le k<N$ there is a density matrix $\sigma_k$ such that
-    \[
-        \|\rho_k-\sigma_k\|_1\le\eta_k,
-        \qquad \tau_D(\sigma_k)\le T_k,
-    \]
+    \begin{align}
+        \|\rho_k-\sigma_k\|_1 & \le\eta_k,\label{eq:smoothed_marginal_distance} \\
+        \tau_D(\sigma_k)      & \le T_k.\label{eq:smoothed_marginal_tail}
+    \end{align}
     where $\tau_D$ is the sum of the eigenvalues after the first $D$ in
     decreasing order. Let $\Phi_D$ be the sequential truncation of $\psi$
     using the leading $D$ eigenvectors of each $\rho_k$. Then
-    \[
-        \|\Phi_D-\psi\|_2^2
-        \le \sum_{k=1}^{N-1}\left(T_k+\frac{\eta_k}{2}\right).
-    \]
+    \begin{align}
+        \|\Phi_D-\psi\|_2^2 & \le
+        \sum_{k=1}^{N-1}\left(T_k+\frac{\eta_k}{2}\right).
+        \label{eq:smoothed_truncation_error}
+    \end{align}
     This gives the finite-chain estimate for the smoothing argument
     of~\cite{SchuchWolfVerstraeteCirac2007}.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:chain_sequential_truncation_sq}
-    Since both marginal states have trace one, the variational characterization
+    Since $\rho_k$ and $\sigma_k$ have trace one, the variational characterization
     of the leading spectral sum gives
-    \[
-        \tau_D(\rho_k)\le\tau_D(\sigma_k)
+    \begin{align}
+        \tau_D(\rho_k) & \le\tau_D(\sigma_k)
         +\frac12\|\rho_k-\sigma_k\|_1.
-    \]
-    Sum this inequality over the internal cuts and apply the squared-error
+        \label{eq:smoothed_tail_comparison}
+    \end{align}
+    Sum~(\ref{eq:smoothed_tail_comparison}) over the internal cuts and apply the squared-error
     truncation bound. No common smoothing state is required.
+\end{proof}
+
+For a density matrix $\rho$, set
+\begin{align}
+    S_\alpha^\eta(\rho) & =
+    \inf\{S_\alpha(\sigma):\sigma\succeq0,\,
+    \operatorname{tr}\sigma=1,\ \|\rho-\sigma\|_1\le\eta\}.
+    \label{eq:smooth_renyi_definition}
+\end{align}
+The source writes a minimum. The following sufficient criteria use only the
+infimum and do not require a minimizer. At order zero, $S_0(\sigma)$ is the
+logarithm of the rank.
+
+\begin{theorem}[A finite smooth entropy criterion]
+    \label{thm:smooth_renyi_finite_criterion}
+    \lean{TNLean.MPS.AreaLaw.exists_normalized_isOpenMPS_of_smoothRenyiEntropy_lt}
+    \leanok
+    Let $\psi$ be a unit vector on a chain of $N$ sites, with prefix marginals
+    $\rho_k$. Let $0\le\alpha<1$, $D\in\mathbb N$ with $D>0$, and
+    $0<\delta\le1$. Suppose that $T_k>0$ and $\eta_k\ge0$ satisfy
+    \begin{align}
+        \sum_{k=1}^{N-1}\left(T_k+\frac{\eta_k}{2}\right) & \le
+        \frac{\delta^2}{16}.
+        \label{eq:smooth_renyi_error_budget}
+    \end{align}
+    and that at every internal cut,
+    \begin{align}
+        S_\alpha^{\eta_k}(\rho_k) & <\log\frac{D}{1-\alpha}
+        +\frac{\alpha}{1-\alpha}\log T_k.
+        \label{eq:smooth_renyi_finite_threshold}
+    \end{align}
+    Then there is a unit matrix product vector $\phi$ of bond dimension at
+    most $D$ such that
+    \begin{align}
+        \bigl\||\psi\rangle\langle\psi|
+        -|\phi\rangle\langle\phi|\bigr\|_1 & \le\delta.
+        \label{eq:smooth_renyi_trace_error}
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:smoothed_marginal_truncation,thm:renyi_entropy_tail_threshold}
+    The strict inequality~(\ref{eq:smooth_renyi_finite_threshold}) permits a density matrix $\sigma_k$ in each
+    smoothing ball whose entropy is below the same threshold. For
+    $0<\alpha<1$, its discarded spectral mass is at most $T_k$. For
+    $\alpha=0$, its rank is at most $D$, so the discarded mass vanishes.
+    By~(\ref{eq:smoothed_truncation_error}) and~(\ref{eq:smooth_renyi_error_budget}), the squared vector error is at most
+    $\delta^2/16$. Normalizing the truncated vector preserves its bond bound
+    and gives vector error at most $\delta/2$. The full trace-norm error
+    between the two unit pure states is therefore at most $\delta$.
+\end{proof}
+
+\begin{theorem}[Efficient approximation from smooth entropy bounds]
+    \label{thm:smooth_renyi_family_approximation}
+    \lean{TNLean.MPS.AreaLaw.isEfficientlyApproximableByMPS_of_smoothRenyiEntropy_le}
+    \leanok
+    Let $\mathcal N\subseteq\mathbb N$, and let $\psi_N$ be a unit vector on
+    $N$ sites of fixed local dimension $q$, for each $N\in\mathcal N$.
+    Suppose that there are constants $0\le\alpha<1$, $\varepsilon>0$,
+    $c\ge0$ and $c'\in\mathbb R$, independent of $N$, such that every
+    internal prefix marginal satisfies
+    \begin{align}
+        S_\alpha^{N^{-1-\varepsilon}}(\rho_{N,k}) & \le c\log N+c'.
+        \label{eq:smooth_renyi_family_bound}
+    \end{align}
+    Then the family is efficiently approximable by matrix product states.
+    This proves the smooth entropy sufficient criterion
+    of~\cite{SchuchWolfVerstraeteCirac2007}; bounds on all blocks in
+    particular imply the prefix bounds used here.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:smooth_renyi_finite_criterion,def:efficient_mps_approximation}
+    Fix $\delta>0$ and put $\gamma=\min(\delta,1)$. Choose natural numbers
+    $K>0$ and $m$ so that the strict entropy thresholds hold with
+    \begin{align}
+        D_N & =K(N+1)^m,\label{eq:smooth_renyi_bond_cutoff}                 \\
+        T_N & =\frac{\gamma^2}{64(N+1)}.\label{eq:smooth_renyi_tail_budget}
+    \end{align}
+    The polynomial cutoff argument applies with the additive entropy
+    constant $c'+1$; its unit slack supplies the strict inequality needed
+    to choose approximate minimizers. For all sufficiently large $N$,
+    \begin{align}
+        \frac{N N^{-1-\varepsilon}}2 & \le\frac{\gamma^2}{32}.
+        \label{eq:smooth_renyi_radius_decay}
+    \end{align}
+    Combining~(\ref{eq:smooth_renyi_tail_budget}) and~(\ref{eq:smooth_renyi_radius_decay}), the sum of the discarded masses and smoothing contributions is
+    at most $3\gamma^2/64\le\gamma^2/16$, and the finite criterion gives
+    full trace-norm error at most $\gamma\le\delta$.
+    The finitely many remaining lengths admit exact MPS representations
+    with bond dimension at most $(q+1)^N$. Increasing the polynomial
+    coefficient absorbs these lengths. The resulting bound is uniform
+    over $\mathcal N$.
 \end{proof}

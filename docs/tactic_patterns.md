@@ -9014,3 +9014,14 @@ spectral split → block extraction → MPV calculation → strict bounds
   built on `Lattice.Sheet.birth_bounded`, `Real.rpow_neg_ofNat` and
   `Lattice.hasSourceBoundedChange_liftOne`. The stage births call it with an
   empty prefix and the scalar idle vector; the former private copy is removed.
+
+### Logarithmic bounds on a natural rank — candidate (2026-10-23)
+
+- **Pattern:** Split a natural rank into zero and positive cases, then apply
+  `Real.log_le_log_iff` and `exact_mod_cast` to obtain a rank bound from a
+  logarithmic bound with positive cutoff.
+- **Seen:** Twice in `MPS/AreaLaw/EntropyScaling/RenyiApproximation.lean`, in
+  the ordinary family theorem and the finite smoothed-entropy criterion.
+- **Abstraction:** Below the promotion threshold. A further occurrence in
+  another file would justify a scalar lemma in the appropriate shared library;
+  the present proofs use the existing logarithm monotonicity lemma directly.
