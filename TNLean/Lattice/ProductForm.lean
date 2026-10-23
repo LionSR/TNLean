@@ -47,9 +47,9 @@ indices of a smaller site can be padded with values on which the coefficient van
   local Hamiltonian of range `R` has a product form of range `R`.
 
 The error between `ρₙ` and `exp(-β H)` is not estimated here, and neither is the source's
-count of at most `n S` indices per site (lines 1069–1075): every factor is expanded in
-single-site matrix units at every site, so a product of `m` factors carries `(q²)^m` index
-values at each site.
+count of at most `n S` index components per site, one for each nearby factor (lines
+1069–1075): every factor is expanded in single-site matrix units at every site, so a product of
+`m` factors carries `m` components of `q²` values at each site.
 
 **Scope restriction (planar domains):** the source works on an arbitrary lattice with a metric;
 this file states the product form for finite domains `Λ ⊆ ℤ²` with the walk distance of

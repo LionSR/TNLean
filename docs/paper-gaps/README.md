@@ -1368,5 +1368,6 @@ products in Section IV of Hastings (arXiv:cond-mat/0508554v3, lines
 1017–1079), stated there for an arbitrary lattice and metric, is formalized for
 finite domains of `ℤ²` with the walk distance of the local Hamiltonians of the
 two-dimensional area law. It also records that the source's count of at most
-`nS` indices per site is not established: the construction carries `(q²)^m`
-index values at every site for a product of `m` factors.
+`nS` index components per site is not established: for a product of `m`
+factors the construction carries `m` components of `q²` values at every site,
+one for every factor wherever it acts.
