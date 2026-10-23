@@ -221,11 +221,16 @@ hold for the centered and the uncentered parts alike.
     recorded in~\cite{gap:hastings07_commutator_constant}.
 \end{theorem}
 
-% Lean: TNLean.MPS.AreaLaw.ChainHamiltonian.
-%   norm_gaussianFilteredTerm_{left,right,buffer}Part_sub_localized_le
-% (tagged with the cut-off assembly).
 \begin{theorem}[Localized filtered parts]
     \label{thm:hastings_localized_parts}
+    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.norm_gaussianFilteredTerm_leftPart_sub_localized_le,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.norm_gaussianFilteredTerm_rightPart_sub_localized_le,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.norm_gaussianFilteredTerm_bufferPart_sub_localized_le,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.isHermitian_leftPart_localized,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.isHermitian_rightPart_localized,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.isHermitian_bufferPart_localized,
+        TNLean.MPS.AreaLaw.isSupportedOn_localized_sub_self}
+    \leanok
     \uses{thm:hastings_filtered_partial_trace, thm:hastings_part_commutators,
         thm:chain_lieb_robinson, thm:hastings_gaussian_filtered_spectral,
         thm:hastings_three_way_splitting_sum}
@@ -267,15 +272,20 @@ hold for the centered and the uncentered parts alike.
     the estimate of \cite[lines 849--850]{Hastings2007AreaLaw}.
 \end{theorem}
 
-% Lean statement pending.
 \begin{theorem}[The cut-offs $O_L$ and $O_R$]
     \label{thm:hastings_cutoffs}
+    \lean{TNLean.MPS.AreaLaw.Hastings.isStarProjection_spectralCutoff,
+        TNLean.MPS.AreaLaw.Hastings.isSupportedOn_spectralCutoff,
+        TNLean.MPS.AreaLaw.Hastings.commute_spectralCutoff_of_isSupportedOn,
+        TNLean.MPS.AreaLaw.Hastings.norm_sub_spectralCutoff_le,
+        TNLean.MPS.AreaLaw.Hastings.norm_mul_spectralCutoff_le}
+    \leanok
     \uses{thm:hastings_localized_parts, thm:hastings_filtered_no_ground_component,
         def:hastings_spectral_cutoff, thm:hastings_spectral_cutoff_obd,
         thm:hastings_spectral_cutoff_norm, thm:hastings_spectral_cutoff_support,
         thm:hastings_spectral_cutoff_commute}
     Let $\theta>0$, and let $O_L$ and $O_R$ be the spectral projections of
-    $M_L$ and $M_R$ onto the eigenvectors whose eigenvalues have absolute value
+    the Hermitian operators $M_L$ and $M_R$ onto the eigenvectors whose eigenvalues have absolute value
     at most $\theta$. Suppose that $M_L$ acts on $X_{1,j}$ and $M_R$ on
     $X_{j+1,N}$. Then $O_L$ and $O_R$ are commuting orthogonal projections,
     $O_L$ acts on $X_{1,j}$ and $O_R$ on $X_{j+1,N}$, and
@@ -300,6 +310,67 @@ hold for the centered and the uncentered parts alike.
     below $-\theta$ on the range of $O_L$
     \cite{gap:hastings07_spectral_cutoff_threshold}.
 \end{theorem}
+\begin{proof}\leanok
+    The spectral projection of a Hermitian operator is an orthogonal
+    projection, and it is supported where the operator is. Projections of
+    operators on disjoint sets of sites commute.
+    Theorems~\ref{thm:hastings_spectral_cutoff_obd}
+    and~\ref{thm:hastings_spectral_cutoff_norm} give the two bounds.
+\end{proof}
+
+\begin{theorem}[The cut-offs on the chain]
+    \label{thm:hastings_cutoff_pair}
+    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.exists_cutoffPair,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.localizedPart,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.isSupportedOn_localizedPart_leftPart,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.isSupportedOn_localizedPart_rightPart,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.norm_localizedPart_apply_le,
+        TNLean.MPS.AreaLaw.partLocalizationError,
+        TNLean.MPS.AreaLaw.leftWindow, TNLean.MPS.AreaLaw.rightWindow,
+        TNLean.MPS.AreaLaw.chainNeighborhood_interval_subset,
+        TNLean.Lattice.norm_gaussianFilteredTerm_sub_self_le}
+    \leanok
+    \uses{thm:hastings_localized_parts, thm:hastings_cutoffs,
+        thm:hastings_filtered_no_ground_component, thm:hastings_part_commutators}
+    Let $\Psi_0$ be a gapped ground vector of a finite-range Hamiltonian $H$ of
+    range $R$ with terms of norm at most $J\ge0$, with ground energy $E_0$ and
+    gap $\Delta E>0$. Split $H$ at the cut $j$ with buffer width $m$, center
+    the left and right parts at their ground-state expectations, and localize
+    them as in Theorem~\ref{thm:hastings_localized_parts}, with filter
+    parameter $q\ge0$ and radius $k$, where $R+k\le m$. Let $O_L$, $O_R$ be
+    their cut-offs at $\theta>0$ and $H_0=M_L+M_R$. Then $M_L$ acts on
+    $X_{1,j}$ and $M_R$ on $X_{j+1,N}$, so Theorem~\ref{thm:hastings_cutoffs}
+    applies, and for every $T\ge0$
+    \begin{align*}
+        \|\Psi_0-O_LO_R\Psi_0\|
+         & \le\frac2\theta\bigl(\Delta E^{-1}e^{-q/2}c_RJ^2+\delta\bigr),
+        \qquad
+        \|H_0O_LO_R\|\le2\theta,
+    \end{align*}
+    where $\delta$ is the bound of Theorem~\ref{thm:hastings_localized_parts}
+    for $M_L$ and $M_R$ with $\ell=k$. Moreover $H-E_0-H_0$ acts on the
+    sites within $m+2R+k$ of the cut, with
+    \begin{align*}
+        \|H-E_0-H_0\|\le4(m+R)2^{2R+1}J+2\sqrt{2h/\pi}\,c_RJ^2,
+        \qquad h=q/\Delta E^2,
+    \end{align*}
+    a bound that does not depend on the length of the chain. This assembles
+    \cite[lines 766--842]{Hastings2007AreaLaw}.
+\end{theorem}
+\begin{proof}\leanok
+    Centering subtracts a multiple of the identity, which changes neither
+    $[H,H_\bullet]$ nor $\widetilde H_\bullet-H_\bullet$. Hence
+    $\|M_\bullet\Psi_0\|\le\|\widetilde H_\bullet\Psi_0\|
+        +\|\widetilde H_\bullet-M_\bullet\|\le\Delta E^{-1}e^{-q/2}c_RJ^2+\delta$
+    by Theorems~\ref{thm:hastings_filtered_no_ground_component}
+    and~\ref{thm:hastings_localized_parts}, and
+    Theorem~\ref{thm:hastings_cutoffs} gives the first two bounds. The
+    centered parts sum to $H-E_0$, so $H-E_0-H_0$ is the centered buffer part
+    minus the two partial-trace corrections. The centered buffer part has norm
+    at most twice $\|H_B\|$, and each correction is at most
+    $\|\widetilde H_\bullet-H_\bullet\|\le\sqrt{2h/\pi}\,\|[H,H_\bullet]\|$,
+    by the Duhamel formula and the first absolute moment of the Gaussian.
+\end{proof}
 
 \subsection*{The Gaussian time average and the boundary operator}
 
