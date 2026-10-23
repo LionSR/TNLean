@@ -454,6 +454,13 @@ $X_{j-l+1,j+l}$.
         TNLean.MPS.AreaLaw.exists_isFactorizationAt_sqrt_decay,
         TNLean.MPS.AreaLaw.lemmaOneLength,
         TNLean.MPS.AreaLaw.Hastings.lemmaOne_errorBudget,
+        TNLean.MPS.AreaLaw.Hastings.lemmaOneBudgetA,
+        TNLean.MPS.AreaLaw.Hastings.lemmaOneBudgetB,
+        TNLean.MPS.AreaLaw.lemmaOneSqrtA,
+        TNLean.MPS.AreaLaw.lemmaOneSqrtB,
+        TNLean.MPS.AreaLaw.lemmaOneConst,
+        TNLean.MPS.AreaLaw.lemmaOneConst_nonneg,
+        TNLean.MPS.AreaLaw.exists_isFactorizationAt_lemmaOneConst,
         TNLean.MPS.AreaLaw.isFactorizationAt_zero_one_one,
         Matrix.IsGappedGroundState.sub_smul_one}
     \leanok
@@ -503,11 +510,15 @@ $X_{j-l+1,j+l}$.
     properties hold.
 
     Here the length is $\xi=8\max(2v_0/\Delta E,1)$, with $v_0$ the
-    velocity in the chain localization estimate. That estimate has quadratic
-    support dependence. For $|t|\le k/(8v_0)$ its exponential factor obeys
-    $e^{v_0|t|-k/2}\le e^{-3k/8}\le e^{-k/8}$, but this comparison does not
-    establish the source's linear-support Lieb--Robinson bound for
-    $(8v_0,8)$~\cite{gap:hastings07_lemma1_decay_length}. The constant $C_1$
+    velocity in the chain localization estimate. The commutator bound behind
+    that estimate is linear in the size of the support, as in the source. The
+    quadratic factor of the localization enters with supports of at most $6R$
+    sites for the parts and of $O(R+l)$ sites for the boundary operator, where
+    the faster decay of that term absorbs the resulting polynomial in $l$; it
+    changes the constant, not the length or the rate. It differs from the source's Lieb--Robinson bound in that its
+    prefactor grows with $J$ and the second operator acts on one site, so
+    $(v_0,2)$ is not shown to be a Lieb--Robinson pair in the source's
+    sense~\cite{gap:hastings07_lemma1_decay_length}. The constant $C_1$
     depends only on $R$, $J$, $\Delta E$ and $\xi'$: it is the same for every
     length of the chain, every local dimension and every gapped ground state.
     No polynomial bound on $C_1$ in $\xi$ alone is asserted here, unlike
@@ -532,6 +543,89 @@ $X_{j-l+1,j+l}$.
     $l<12R+8$ the factorization $O_B=0$, $O_L=O_R=1$ has error $1$, which the
     constant absorbs. Theorem~\ref{thm:hastings_decay_slack} converts the
     square-root bound into $C_1e^{-l/\xi'}$ for every $\xi'>6\xi$.
+\end{proof}
+
+\begin{theorem}[Approximate factorization in units of the gap]
+    \label{thm:hastings_projector_factorization_scaled}
+    \lean{TNLean.MPS.AreaLaw.exists_projectorFactorization_div,
+        TNLean.MPS.AreaLaw.lemmaOneLength_div,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.smul,
+        Matrix.IsGappedGroundState.smul,
+        Entropy.IsSupportedOn.smul}
+    \leanok
+    \uses{thm:hastings_projector_factorization}
+    Under the assumptions of
+    Theorem~\ref{thm:hastings_projector_factorization}, let
+    $c_R=2(R+1)2^{2R+1}e^{2R}$, so that $v_0=1+c_RJ$, and set
+    \begin{align*}
+        \hat\xi=16\Bigl(1+\frac{c_RJ}{\Delta E}\Bigr)
+        \le2\max\Bigl(\frac{2v}{\Delta E},16\Bigr),\qquad v=8c_RJ.
+    \end{align*}
+    For every $\xi'>6\hat\xi$ there is a constant $C_1$, depending only on
+    $R$, $J/\Delta E$ and $\xi'$, such that for every cut $j$ and every $l$
+    there are operators $O_B$, $O_L$, $O_R$ with the properties of
+    Theorem~\ref{thm:hastings_projector_factorization} and
+    $\|O_BO_LO_R-P_0\|\le C_1e^{-l/\xi'}$. The length $\hat\xi$, unlike the
+    length of Theorem~\ref{thm:hastings_projector_factorization}, depends on
+    $J$ and $\Delta E$ only through $J/\Delta E$, as the source's
+    $\max(2v/\Delta E,\xi_C)$ with $v$ proportional to $J$ does
+    \cite[lines 96--112, 139--142]{Hastings2007AreaLaw}. The other
+    restrictions of Theorem~\ref{thm:hastings_projector_factorization}
+    remain~\cite{gap:hastings07_lemma1_decay_length}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:hastings_projector_factorization}
+    The operators $O_B$, $O_L$, $O_R$ and the error do not involve the
+    Hamiltonian. The Hamiltonian $H/\Delta E$ has range $R$, terms of norm at
+    most $J/\Delta E$, the same ground state and gap $1$, so
+    Theorem~\ref{thm:hastings_projector_factorization} applies to it with the
+    length $8\max(2(1+c_RJ/\Delta E),1)=\hat\xi$.
+\end{proof}
+
+\begin{theorem}[A polynomial bound on the constant of the factorization]
+    \label{thm:hastings_lemma1_polynomial_constant}
+    \lean{TNLean.MPS.AreaLaw.exists_projectorFactorization_pow,
+        TNLean.MPS.AreaLaw.exists_projectorFactorization_posSemidef_pow,
+        TNLean.MPS.AreaLaw.lemmaOneConst_le_pow,
+        TNLean.MPS.AreaLaw.sixteen_le_lemmaOneLength_and_le}
+    \leanok
+    \uses{thm:hastings_projector_factorization_scaled,
+        thm:hastings_positive_factorization}
+    Let $\kappa>6$. There is a constant $K\ge0$, depending only on $R$ and
+    $\kappa$, with the following property. Under the assumptions of
+    Theorem~\ref{thm:hastings_projector_factorization}, with $\hat\xi$ the
+    length of Theorem~\ref{thm:hastings_projector_factorization_scaled}, for
+    every cut $j$ and every $l$ there are operators $O_B$, $O_L$, $O_R$ with
+    the properties of Theorem~\ref{thm:hastings_projector_factorization} and
+    \begin{align*}
+        \|O_BO_LO_R-P_0\|\le K\hat\xi^3e^{-l/(\kappa\hat\xi)}.
+    \end{align*}
+    The same holds with $O_B$ positive semidefinite, with another such constant
+    and the rate $e^{-l/(2\kappa\hat\xi)}$, as in
+    Theorem~\ref{thm:hastings_positive_factorization}.
+    So the constant of the factorization at the rate $\xi'=\kappa\hat\xi$ is
+    bounded by a polynomial in $\hat\xi$, as Lemma~\ref{lem:hastings_lemma1}
+    requires~\cite[lines 258--262]{Hastings2007AreaLaw}. For the source's
+    nearest-neighbour terms ($R=1$) the constant $K$ depends only on
+    $\kappa$. The rate $\xi'=6\hat\xi$ is not reached, and $\hat\xi$ is not
+    shown to come from a Lieb--Robinson pair in the source's
+    sense~\cite{gap:hastings07_lemma1_decay_length,
+        gap:hastings07_gaussian_average_exponent}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:hastings_projector_factorization_scaled}
+    Apply Theorem~\ref{thm:hastings_projector_factorization} to $H/\Delta E$
+    at the rate $\kappa\hat\xi$, and write $x=J/\Delta E$. The constant is
+    $a+b/\sqrt{2e(1/(6\hat\xi)-1/(\kappa\hat\xi))}$, where $a$ is the larger
+    of the constant term of the error budget and $e^{(12R+8)/(6\hat\xi)}$,
+    and $b$ is the coefficient of $\sqrt l$. Since $\hat\xi\ge16$ and
+    $x\le\hat\xi$, the Lieb--Robinson prefactor is at most a multiple of
+    $\hat\xi$ and the commutator constant at most a multiple of $\hat\xi^2$.
+    So the constant term of the budget is at most a multiple of $\hat\xi^3$,
+    $e^{(12R+8)/(6\hat\xi)}\le e^{(12R+8)/6}$, and $b$ is at most a multiple of
+    $\hat\xi^2$. Finally,
+    $1/\sqrt{2e(1/(6\hat\xi)-1/(\kappa\hat\xi))}=\sqrt{\hat\xi/\beta}\le\hat\xi/\sqrt\beta$
+    with $\beta=2e(\kappa-6)/(6\kappa)$.
 \end{proof}
 
 \begin{theorem}[An effect operator from an approximate factorization]

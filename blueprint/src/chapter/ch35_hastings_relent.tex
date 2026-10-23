@@ -111,3 +111,55 @@ constant $C_2$ is $7$, as recorded in~\cite{gap:hastings07_relent_constants}.
     against the hypothesis. Hence $P\le2C_1e^{-l/\xi'}$, and
     Theorem~\ref{thm:hastings_relent_projector} applies.
 \end{proof}
+
+\begin{theorem}[The entropy gain across a cut of a gapped chain, with the
+        constant of Lemma~1 as formalized]
+    \label{thm:hastings_relent}
+    \lean{TNLean.MPS.AreaLaw.Hastings.exists_relent_of_isGappedGroundState}
+    \leanok
+    \uses{def:chain_model, def:hastings_bootstrap_remainder}
+    Let $R$ be a natural number, $J\ge0$ and $\Delta E>0$, let $\xi$ be the
+    decay length of Theorem~\ref{thm:hastings_projector_factorization}, and
+    let $\xi'>6\xi$. There is a constant $C_1\ge1$ with the following
+    property. Let $\Omega$ be a gapped ground vector, with gap $\Delta E$, of a
+    Hamiltonian on the chain of $L$ sites with local dimension $q$,
+    interaction range $R$ and term norms at most $J$. Let $c$ be a cut and
+    $l$ a natural number with $c+l\le L$, and let $A$ and $B$ be the $l$
+    sites before and after the cut, cut short at the left end of the chain
+    when $l>c$. If the entropy $S_c$ of the first $c$ sites satisfies
+    \begin{align}
+        S_c\ge\bigl(l+\xi'\ln C_1\bigr)\ln q+F(\xi',q),
+    \end{align}
+    then, with $\epsilon'=2C_1e^{-l/\xi'}$,
+    \begin{align}
+        S(A)+S(B)-S(A\cup B)\ge\bigl(1-2\epsilon'\bigr)\frac{l}{\xi'}
+        -\ln(2C_1)-7.
+    \end{align}
+    This is eq.~(relent) of~\cite{Hastings2007AreaLaw}, lines 234--242,
+    under the window assumption of line 483, with the constants
+    of~\cite{gap:hastings07_relent_constants}, restricted to the constant
+    that Lemma~1 is shown to supply. The constant $C_1$ depends on $R$, $J$,
+    $\Delta E$ and $\xi'$ only, not on $L$, $q$ or the cut, but it is not
+    shown to be bounded by a polynomial in $\xi$ as the source states at
+    lines 258--262. The length $\xi$ has the form of the source's
+    $\max(2v/\Delta E,\xi_C)$, but it comes from a Lieb--Robinson estimate on
+    the chain whose prefactor grows with $J$ and whose second operator acts on
+    one site, and it is not proved equal to it for a pair satisfying the bound
+    of lines 96--112. These points are
+    recorded in~\cite{gap:hastings07_lemma1_decay_length}. Lemma~1 is used at
+    every rate $\xi'>6\xi$ rather than at $\xi'=6\xi$, as recorded
+    in~\cite{gap:hastings07_lemma1_decay_length,
+        gap:hastings07_gaussian_average_exponent}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:hastings_relent_window, thm:hastings_projector_factorization,
+        lem:chain_entropy_inequalities}
+    Theorem~\ref{thm:hastings_projector_factorization} gives a constant
+    $C\ge0$ such that at every cut and every length $m$ there are operators
+    $O_B$, $O_L$, $O_R$ as in Theorem~\ref{thm:hastings_relent_window} with
+    $\|O_BO_LO_R-P_0\|\le Ce^{-m/\xi'}$. With $C_1=\max(C,1)$ the same
+    operators satisfy the bound with $C_1$ in place of $C$, and for $q\ge2$
+    Theorem~\ref{thm:hastings_relent_window} gives the claim. For $q=1$ the
+    entropy $S_c$ vanishes while $F(\xi',1)=1+\ln(\xi'/2+1)>0$, so the window
+    assumption cannot hold.
+\end{proof}
