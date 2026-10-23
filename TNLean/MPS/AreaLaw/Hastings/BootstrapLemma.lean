@@ -20,8 +20,10 @@ This file first states the bound with Lemma 1 in the form `IsFactorizationAt` in
 produced, at the cut `j` and every length `m`, and then discharges Lemma 1 by
 `exists_projectorFactorization`. The result is a quantitatively restricted Lemma 2 on Hastings' own
 hypotheses: a chain Hamiltonian of finite range and finite interaction strength with a unique gapped
-ground state. As in the source, the constant `C₁` is that of Lemma 1: it depends on the range, the
-interaction strength, the gap and `ξ'`, and not on the length of the chain, the cut or the mixture.
+ground state. The constant `C₁` comes from the restricted factorization of Lemma 1: it depends on
+the range, the interaction strength, the gap and `ξ'`, and is uniform in the chain length,
+local dimension, Hamiltonian, ground state, cut and mixture. This uniformity does not establish
+the source's polynomial bound in `ξ`.
 
 The source's sites carry nearest-neighbour terms (lines 85–93), which it obtains from any
 finite range by grouping sites; here the range `R` is arbitrary.
@@ -30,9 +32,10 @@ finite range by grouping sites; here the range `R` is arbitrary.
 inherits the quantitative restrictions of the formalized Lemma 1. Its length is
 `ξ = 8 max(2v₀/ΔE, 1)`, with `v₀` the velocity of the chain localization estimate, which is
 not shown to be the source's `max(2v/ΔE, ξ_C)` for a Lieb–Robinson bound with linear support
-dependence (lines 96–112). It holds for every `ξ' > 6ξ` rather than at the printed `ξ' = 6ξ`
-(lines 139–142), and its constant `C₁` is not shown to be bounded by a polynomial in `ξ`
-(lines 258–262). Documented in `docs/paper-gaps/hastings07_lemma1_decay_length.tex` and
+dependence (lines 96–112). The bound is proved for every `ξ' > 6ξ`; the printed endpoint
+`ξ' = 6ξ` (lines 139–142) is not established, and no counterexample to that endpoint is asserted.
+Its constant `C₁` is not shown to be bounded by a polynomial in `ξ` (lines 258–262). Documented in
+`docs/paper-gaps/hastings07_lemma1_decay_length.tex` and
 `docs/paper-gaps/hastings07_gaussian_average_exponent.tex`.
 
 ## Main results
