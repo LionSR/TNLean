@@ -1312,8 +1312,10 @@ a Gaussian-filtered term in Hastings, *Solving Gapped Hamiltonians Locally*
 (arXiv:cond-mat/0508554v3, lines 285–320). First, the printed Gaussian weight
 `e^{-(tΔE)²/2}` of eq. `mid` stands for `e^{-(tΔE)²/(2q)}`. Second, `M_i` is taken to be the
 normalized partial trace of the filtered term onto a neighbourhood of the support of `H_i`,
-not the source's truncated evolution. It has the three properties the source uses: its
-support, `‖M_i‖ ≤ J`, and eq. `apb`.
+rather than the source's truncated evolution. Its support lies within radius `l + R`
+of the anchor when the neighbourhood radius is `l`. The source radius therefore requires
+`l = l_proj - R` and `R ≤ l_proj`; the norm bound is unchanged, and the localization
+estimate is analogous to the source's, with different constants.
 
 ### One-dimensional area law after Hastings: the entropy gain constants
 

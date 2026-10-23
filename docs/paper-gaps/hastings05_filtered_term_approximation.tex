@@ -8,7 +8,7 @@
 \input{command}
 
 % Fallbacks keep this note compilable when a different command.tex is found first.
-\providecommand{\leanid}[1]{\textsf{\detokenize{#1}}}
+\providecommand{\leanid}[1]{\nolinkurl{#1}}
 \providecommand{\gapnote}[2]{\par\noindent\textbf{Verdict:} #1 (#2).\par}
 
 \title{The Finite-Range Approximation of a Filtered Term in Hastings' Local
@@ -25,7 +25,7 @@
 In~\cite{Hastings2006Solving} (arXiv:cond-mat/0508554v3, \texttt{proj3new.tex})
 the Hamiltonian is $H=\sum_iH_i$ on a lattice with a metric, with
 $\lVert H_i\rVert\le J$ and $H_i$ acting within distance $R$ of the site $i$
-(lines~169--190). For $q>0$ and a gap $\Delta E$, the filtered term is
+(lines~169--190). For $q>0$ and a gap $\Delta E>0$, the filtered term is
 \begin{align}
   \tilde H_i^0=\frac{\Delta E}{\sqrt{2\pi q}}\int dt\,
   e^{iHt}H_ie^{-iHt}\,e^{-(t\Delta E)^2/(2q)}
@@ -66,7 +66,7 @@ under $H_{\mathrm{loc}}$. It takes for $M_i$ the normalized partial trace
 $\mathbb E_K(\tilde H_i^0)$ of the filtered term onto the set $K$ of sites
 within graph distance $l$ of the support of $H_i$: the trace over the sites
 outside $K$, divided by their dimension, tensored with the identity there.
-This operator has the three properties the source uses.
+This operator has analogous support, norm and approximation bounds.
 \begin{itemize}
   \item It acts on $K$.
   \item $\lVert\mathbb E_K(\tilde H_i^0)\rVert\le\lVert\tilde H_i^0\rVert
@@ -81,14 +81,27 @@ This operator has the three properties the source uses.
       \label{eq:apb-pt}
     \end{align}
     with $S$ the support of $H_i$ and $C'$, $v$ the constants of the graph
-    localization estimate. At $T=c_1l$ this is~\eqref{eq:apb}, with the
-    localization term in place of $N(l)g(c_1l,l)$.
+    localization estimate. This is an analogue of~\eqref{eq:apb}, with a
+    different construction and localization term.
 \end{itemize}
+
+Since $S$ lies within distance $R$ of $i$, the set $K$ lies within distance
+$l+R$ of $i$. For integer radii $l_{\mathrm{proj}}\ge R$, take
+$l=l_{\mathrm{proj}}-R$ to recover the source's support radius. The
+localization term in~\eqref{eq:apb-pt} then becomes
+\begin{align*}
+ C'|S|^2\lVert H_i\rVert e^{vT-(l_{\mathrm{proj}}-R)/2}.
+\end{align*}
+In particular, at $T=c_1l_{\mathrm{proj}}$ it carries an extra factor
+$e^{R/2}$ compared with substituting $l=l_{\mathrm{proj}}$. The source's
+quantitative estimate is not asserted for this different construction.
+At $q=0$ the filter is defined to be $H_i$ itself; the bounds remain valid
+with the Gaussian tail factor replaced by $1$, without division by zero.
 
 \section{Formalization}
 
 \leanid{TNLean.Lattice.exists_local_approx_gaussianFilteredTerm} gives an
-operator with the three properties, and
+operator with these support, norm and approximation bounds, and
 \leanid{TNLean.Lattice.norm_gaussianFilteredTerm_sub_siteExpectation_le_graphNeighborhood}
 proves~\eqref{eq:apb-pt} for the partial trace. The theorems that take $M_i$
 as input,
