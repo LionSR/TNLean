@@ -179,7 +179,8 @@
     This is a stage of the conclusion of the section on matrix product states
     of \cite{Hastings2007AreaLaw}. The bound on the entropy of every cut is a
     hypothesis here, and the source's conclusion follows once it is supplied
-    by the area law for the ground state. Here $k_0=\exp(2S)/2$ is rounded up
+    by the area law for the ground state~\cite{gap:hastings07_mps_entropy_stage}.
+    Here $k_0=\exp(2S)/2$ is rounded up
     to a natural number and taken at least as large as at every cut, the error
     is measured in the squared norm~\cite{gap:hastings07_mps_error_measure},
     and the constant is that of
@@ -187,12 +188,16 @@
     \cite{gap:hastings07_schmidt_tail_constant}.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:hastings_schmidt_tail_constraint_entropy, thm:hastings_schmidt_tail_mps}
+    \uses{thm:hastings_schmidt_tail_constraint_entropy, thm:hastings_schmidt_tail_mps,
+        thm:chain_sequential_truncation_eigen, thm:chain_sequential_truncation_sq}
     At every internal cut, Theorem~\ref{thm:hastings_schmidt_tail_constraint_entropy}
     with $k=k_0$ bounds the mass beyond the $n$ largest eigenvalues by
     $4C_1^2e^{-2m/\xi'}$ whenever $k_0D^{2m}\le n$, since $k_0$ is at least
     $\exp(2S_j)/2$. Theorem~\ref{thm:hastings_schmidt_tail_mps} with
-    $c=4C_1^2$ then gives the bound. Without an internal cut, $\Phi=\Omega$.
+    $c=4C_1^2$ then gives the bound. Without an internal cut,
+    Theorems~\ref{thm:chain_sequential_truncation_eigen}
+    and~\ref{thm:chain_sequential_truncation_sq} give directly that $\Phi$ is a
+    matrix product state with $\Phi=\Omega$.
 \end{proof}
 
 \begin{theorem}[Matrix product state from Lemma~1 and the entropy of the cuts]

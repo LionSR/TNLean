@@ -1,0 +1,82 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+\input{command}
+\setlength{\emergencystretch}{2em}
+\title{The Entropy Hypothesis of the Matrix Product State in Hastings' Area Law}
+\author{}
+\date{October 23, 2026}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+\section{The source statement}
+
+The section on matrix product states of~\cite{Hastings2007AreaLaw} works
+with the ground state $\Psi_0$ of a gapped chain of $N$ sites with local
+dimension $D$. At a cut $(j,j+1)$ it writes
+$\Psi_0=\sum_\alpha A_0(\alpha)\Psi_{L,0}(\alpha)\otimes\Psi_{R,0}(\alpha)$
+with $\lvert A_0(\alpha)\rvert$ nonincreasing, and sets
+\begin{align}
+    k_0 & =\exp\bigl(2S(\rho^0_{1,j})\bigr)/2,
+    \label{eq:hastings07_mps_entropy_stage_k0}
+\end{align}
+where $S(\rho^0_{1,j})$ is the entropy of the first $j$ sites. The area law
+proved earlier in the paper bounds this entropy uniformly in $j$ and $N$, so
+$k_0$ is bounded by a constant independent of the cut and of the chain
+length. The section concludes that a matrix product state of bond dimension
+$k'$ approximates $\Psi_0$ with an error of order
+$N(k'/k_0)^{-1/(\xi'\ln D)}$.\footnote{\path{References/0705.2024/law16.tex},
+    lines~505--557.}
+
+\section{The formalized statement}
+
+The formalized theorem takes the approximate factorization of Lemma~1 at
+every internal cut, and a natural number $k_0$ with
+\begin{align}
+    k_0 & \ge\exp\bigl(2S(\rho^0_{1,j})\bigr)/2
+    \quad\text{for every internal cut } j,
+    \label{eq:hastings07_mps_entropy_stage_hyp}
+\end{align}
+as hypotheses. Under them it proves that truncating every cut onto its $k'$
+leading Schmidt vectors, for $k'\ge k_0$, gives a matrix product state $\Phi$
+of bond dimension at most $k'$ with
+\begin{align}
+    \lVert\Phi-\Psi_0\rVert^2
+     & \le(N-1)\,4C_1^2e^{2/\xi'}(k'/k_0)^{-1/(\xi'\ln D)}.
+    \label{eq:hastings07_mps_entropy_stage_bound}
+\end{align}
+The error measure and the constant $e^{2/\xi'}$ are recorded in the notes
+\path{hastings07_mps_error_measure.tex} and
+\path{hastings07_schmidt_tail_constant.tex}.\footnote{\leanid{TNLean.MPS.AreaLaw.Hastings.isOpenMPS_norm_sub_sq_le_of_factorization_of_entropy}
+    in \doclink{TNLean/MPS/AreaLaw/Hastings/MPSFromEntropy}.}
+
+\section{The restriction}
+
+Hypothesis (\ref{eq:hastings07_mps_entropy_stage_hyp}) is not part of the
+source's statement. There the entropy at every cut is bounded by the area
+law for the ground state, so a uniform $k_0$ exists. The formalized theorem
+is therefore a stage of the source's conclusion: it holds for every state
+satisfying the factorization and the entropy hypothesis, and it gives the
+source's conclusion for the ground state once
+(\ref{eq:hastings07_mps_entropy_stage_hyp}) is supplied.
+
+The source's $k_0$ in (\ref{eq:hastings07_mps_entropy_stage_k0}) is a real
+number that depends on the cut. The formalized $k_0$ is one natural number
+that is at least as large at every cut, such as the ceiling of the largest of
+these values. Since the bound (\ref{eq:hastings07_mps_entropy_stage_bound})
+increases with $k_0$, this choice only weakens it.
+
+\section{Elimination plan}
+
+The hypothesis (\ref{eq:hastings07_mps_entropy_stage_hyp}) is discharged by
+the area law on the chain, which bounds $S(\rho^0_{1,j})$ by a constant
+$S_{\max}$ for every cut. Taking $k_0=\lceil\exp(2S_{\max})/2\rceil$ then
+gives the source's conclusion for the ground state, with $k_0$ independent of
+$j$ and $N$. The note is resolved when that corollary is formalized.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
