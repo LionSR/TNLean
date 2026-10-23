@@ -1,7 +1,7 @@
 \section{The interaction picture in Hastings' approximate ground-state projector}
 \label{sec:hastings_interaction_picture}
 
-% Hastings, arXiv:0705.2024v4, law16.tex, lines 851--905 (step five of the
+% Hastings, arXiv:0705.2024v4, law16.tex, lines 843--901 (step five of the
 % proof of Lemma 1). Finite complex matrices; no lattice content.
 
 The last step of the proof of Lemma~1 of \cite{Hastings2007AreaLaw} writes the
@@ -17,9 +17,10 @@ Norms are operator norms.
         TNLean.MPS.AreaLaw.Hastings.interactionPropagator}
     \leanok
     For complex square matrices $A$ and $B$ and a real number $t$, put
-    \begin{align*}
+    \begin{align}
         B(t) & =e^{iAt}Be^{-iAt}, & U(t) & =e^{i(A+B)t}e^{-iAt}.
-    \end{align*}
+        \label{eq:hastings_interaction_propagator}
+    \end{align}
 \end{definition}
 
 \begin{theorem}[Interaction-picture factorization]
@@ -32,17 +33,19 @@ Norms are operator norms.
     \uses{def:hastings_interaction_propagator}
     Let $A$ and $B$ be complex square matrices. The path $U$ is differentiable,
     $U(0)=1$ and
-    \begin{align*}
+    \begin{align}
         U'(t)=U(t)\,iB(t)
-    \end{align*}
+        \label{eq:hastings_interaction_equation}
+    \end{align}
     for every real $t$, and every differentiable path $W$ with $W(0)=1$ and
-    $W'(t)=W(t)\,iB(t)$ for all $t$ equals $U$. Moreover
-    \begin{align*}
+    $W'(t)=W(t)\,iB(t)$ for all $t$ equals $U$. Further,
+    \begin{align}
         e^{i(A+B)t}=U(t)e^{iAt},
-    \end{align*}
+        \label{eq:hastings_interaction_factorization}
+    \end{align}
     and if $A$ and $B$ are Hermitian then $U(t)$ is unitary. Thus $U(t)$ is the
     time-ordered exponential of $i\int_0^tB(t')\,dt'$ of
-    \cite[lines 860--868]{Hastings2007AreaLaw}, with later times to the right.
+    \cite[lines 853--864]{Hastings2007AreaLaw}, with later times to the right.
 \end{theorem}
 \begin{proof}\leanok
     Differentiating the product gives
@@ -55,18 +58,19 @@ Norms are operator norms.
     $A+B$ are Hermitian.
 \end{proof}
 
-\begin{lemma}[Cut-off commutation estimate]
-    \label{lem:hastings_cutoff_commutation}
+\begin{theorem}[Cut-off commutation estimate]
+    \label{thm:hastings_cutoff_commutation}
     \lean{TNLean.MPS.AreaLaw.Hastings.norm_hermitianUnitaryPath_mul_sub_le}
     \leanok
     Let $K$ be a Hermitian matrix and $X$ a matrix of the same size. For every
     real $t$,
-    \begin{align*}
+    \begin{align}
         \|e^{iKt}X-X\|\leq|t|\,\|KX\|.
-    \end{align*}
-    In \cite[line 893]{Hastings2007AreaLaw} this is applied with $K=M_L+M_R$
+        \label{eq:hastings_cutoff_commutation}
+    \end{align}
+    In \cite[lines 878--880]{Hastings2007AreaLaw} this is applied with $K=M_L+M_R$
     and $X=O_LO_R$.
-\end{lemma}
+\end{theorem}
 \begin{proof}\leanok
     The derivative of $s\mapsto e^{iKs}X$ is $e^{iKs}\,iKX$, whose norm is
     $\|KX\|$ because $e^{iKs}$ is unitary. The mean value inequality on the
@@ -81,35 +85,25 @@ Norms are operator norms.
     \uses{def:hastings_interaction_propagator}
     For a variance $h\geq0$, let $\gamma_h$ be the centered Gaussian measure
     of variance $h$ on the real line, and put
-    \begin{align*}
+    \begin{align}
         P_B=\int U(t)\,d\gamma_h(t).
-    \end{align*}
-    With $h=q/\Delta E^2$, the density of $\gamma_h$ is
+        \label{eq:hastings_interaction_average}
+    \end{align}
+    For $q>0$ and $\Delta E>0$, with $h=q/\Delta E^2$, the density of $\gamma_h$ is
     $(\Delta E/\sqrt{2\pi q})e^{-(t\Delta E)^2/2q}$, and $P_B$ is the operator
-    of \cite[lines 903--905]{Hastings2007AreaLaw}.
+    of \cite[lines 891--897]{Hastings2007AreaLaw}.
 \end{definition}
 
-\begin{lemma}[The Gaussian average is a contraction]
-    \label{lem:hastings_interaction_average_norm}
+\begin{theorem}[The Gaussian average is a contraction]
+    \label{thm:hastings_interaction_average_norm}
     \lean{TNLean.MPS.AreaLaw.Hastings.norm_interactionAverage_le}
     \leanok
-    \uses{def:hastings_interaction_average,thm:hastings_interaction_picture}
+    \uses{def:hastings_interaction_average}
     If $A$ and $B$ are Hermitian, then $\|P_B\|\leq1$ for every variance.
-\end{lemma}
+\end{theorem}
 \begin{proof}\leanok
+    \uses{thm:hastings_interaction_picture}
     Each $U(t)$ is unitary, and $\gamma_h$ is a probability measure.
-\end{proof}
-
-\begin{lemma}[First absolute moment of a centered Gaussian]
-    \label{lem:hastings_gaussian_abs_moment}
-    \lean{TNLean.MPS.AreaLaw.Hastings.integral_abs_gaussianReal_le_sqrt}
-    \leanok
-    For every variance $h\geq0$, $\int|t|\,d\gamma_h(t)\leq\sqrt h$.
-\end{lemma}
-\begin{proof}\leanok
-    For $h=0$ the measure is the point mass at $0$. For $h>0$ put $c=\sqrt h$;
-    then $|t|\leq(t^2/c+c)/2$, and integrating gives $(h/c+c)/2=c$, because
-    the second moment of $\gamma_h$ is $h$.
 \end{proof}
 
 \begin{theorem}[Moving the cut-off past the boundary evolution]
@@ -117,23 +111,25 @@ Norms are operator norms.
     \lean{TNLean.MPS.AreaLaw.Hastings.norm_interactionAverage_mul_sub_le,
         TNLean.MPS.AreaLaw.Hastings.norm_interactionAverage_mul_mul_sub_le}
     \leanok
-    \uses{def:hastings_interaction_average,thm:hastings_interaction_picture,
-        lem:hastings_cutoff_commutation,lem:hastings_gaussian_abs_moment}
+    \uses{def:hastings_interaction_average}
     Let $A$ and $B$ be Hermitian, let $X$ and $P_0$ be matrices of the same
     size, and let $h\geq0$. Then
-    \begin{align*}
+    \begin{align}
         \Bigl\|P_BX-P_0\Bigr\|
         \leq\Bigl\|\int e^{i(A+B)t}\,d\gamma_h(t)\,X-P_0\Bigr\|
         +\sqrt h\,\|AX\|.
-    \end{align*}
+        \label{eq:hastings_interaction_average_last}
+    \end{align}
     With $A=M_L+M_R$, $B=M_B$, $X=O_LO_R$ and $h=q/\Delta E^2$, this is the
     step from the estimate with $e^{i(M_L+M_B+M_R)t}$ to eq.~(last) of
-    \cite[lines 893--901]{Hastings2007AreaLaw}: if
+    \cite[lines 881--890]{Hastings2007AreaLaw}: if
     $\|(M_L+M_R)O_LO_R\|\leq\delta$ and
     $\|\int e^{i(M_L+M_B+M_R)t}\,d\gamma_h(t)\,O_LO_R-P_0\|\leq\varepsilon$,
     then $\|P_BO_LO_R-P_0\|\leq\varepsilon+\sqrt h\,\delta$.
 \end{theorem}
 \begin{proof}\leanok
+    \uses{thm:hastings_interaction_picture,thm:hastings_cutoff_commutation,
+        thm:hastings_gaussian_absolute_moment}
     By the factorization,
     $e^{i(A+B)t}X-U(t)X=U(t)\bigl(e^{iAt}X-X\bigr)$, whose norm is at most
     $|t|\,\|AX\|$ by the cut-off commutation estimate, since $U(t)$ is

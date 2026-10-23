@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.MPS.AreaLaw.Hastings.GaussianTimeAverage
 import TNLean.MPS.AreaLaw.Hastings.InteractionPicture
 import TNLean.MPS.AreaLaw.LiebRobinson
 import TNLean.MPS.AreaLaw.InteractionBudget
@@ -48,7 +49,6 @@ explicit; the radius `ℓ` and the time cutoff remain free, and the source's cho
 
 ## Main results
 
-* `norm_hermitianUnitaryPath_sub_le`: `‖e^{iXt} - e^{iYt}‖ ≤ |t| ‖X - Y‖`.
 * `norm_interactionPropagator_sub_le`: step 1.
 * `exists_supported_interactionAverage_approx`: the operator `O_B` with
   `‖O_B‖ ≤ 1` and an explicit bound on `‖P_B - O_B‖`, for every time cutoff `T`.
@@ -80,34 +80,6 @@ theorem norm_le_one_of_mem_unitaryGroup {U : Matrix n n ℂ} (hU : U ∈ unitary
     exact ContinuousLinearMap.norm_id_le
   simpa only [mul_one] using (CStarRing.norm_mem_unitary_mul (1 : Matrix n n ℂ) hU).trans_le h1
 
-/-- Unitary groups of nearby Hermitian matrices stay close:
-`‖e^{iXt} - e^{iYt}‖ ≤ |t| ‖X - Y‖`. Used to replace `M_L + M_B + M_R` by `H` in
-Hastings, arXiv:0705.2024v4, `law16.tex`, lines 898–901. -/
-theorem norm_hermitianUnitaryPath_sub_le {X Y : Matrix n n ℂ} (hX : X.IsHermitian)
-    (hY : Y.IsHermitian) (t : ℝ) :
-    ‖hermitianUnitaryPath X t - hermitianUnitaryPath Y t‖ ≤ |t| * ‖X - Y‖ := by
-  let f : ℝ → Matrix n n ℂ := fun s ↦ hermitianUnitaryPath X s * hermitianUnitaryPath Y (-s)
-  have hf (s : ℝ) := MatrixEvolution.hasDerivAt_hermitianUnitaryPath_mul_neg X Y s
-  have hbound (s : ℝ) :
-      ‖(Complex.I • (hermitianUnitaryPath X s * (X - Y) * hermitianUnitaryPath X (-s))) *
-        (hermitianUnitaryPath X s * hermitianUnitaryPath Y (-s))‖ ≤ ‖X - Y‖ := by
-    rw [CStarRing.norm_mul_mem_unitary _ (Submonoid.mul_mem _
-      (SpectralFilter.hermitianUnitaryPath_mem_unitary hX s)
-      (SpectralFilter.hermitianUnitaryPath_mem_unitary hY (-s))), norm_smul, Complex.norm_I,
-      one_mul, SpectralFilter.norm_hermitianUnitaryPath_conj hX]
-  have h := convex_univ.norm_image_sub_le_of_norm_hasDerivWithin_le
-    (f := f) (fun s _ ↦ (hf s).hasDerivWithinAt) (fun s _ ↦ hbound s)
-    (Set.mem_univ 0) (Set.mem_univ t)
-  have hf0 : f 0 = 1 := by simp [f]
-  have hYY : hermitianUnitaryPath Y (-t) * hermitianUnitaryPath Y t = 1 := by
-    simpa only [neg_neg] using SpectralFilter.hermitianUnitaryPath_mul_neg Y (-t)
-  have hfac : hermitianUnitaryPath X t - hermitianUnitaryPath Y t =
-      (f t - 1) * hermitianUnitaryPath Y t := by
-    simp only [f, sub_mul, one_mul, mul_assoc, hYY, mul_one]
-  rw [hfac, CStarRing.norm_mul_mem_unitary _
-    (SpectralFilter.hermitianUnitaryPath_mem_unitary hY t), ← hf0]
-  simpa [Real.norm_eq_abs, mul_comm] using h
-
 /-- Step 1 of the localization of `P_B`: the interaction-picture propagator
 `U(t) = e^{i(A+B)t} e^{-iAt}` is within `|t| (‖(A + B) - H‖ + ‖A - H₀‖)` of
 `e^{iHt} e^{-iH₀t}`. With `A = H₀ = M_L + M_R` and `B = M_B`, this compares
@@ -132,7 +104,8 @@ theorem norm_interactionPropagator_sub_le {A B H H₀ : Matrix n n ℂ} (hA : A.
   have h1 := norm_hermitianUnitaryPath_sub_le (hA.add hB) hH t
   have h2 := norm_hermitianUnitaryPath_sub_le hA hH₀ (-t)
   rw [abs_neg] at h2
-  linarith
+  rw [mul_add]
+  linarith [mul_comm ‖A + B - H‖ |t|, mul_comm ‖A - H₀‖ |t|]
 
 end Abstract
 
@@ -251,7 +224,7 @@ theorem exists_supported_interactionAverage_approx {L q R : ℕ} {J : ℝ} (hq :
     refine (norm_integral_le_of_norm_le hgint (Filter.Eventually.of_forall hpoint)).trans ?_
     rw [integral_add (habs.mul_const ε) hind, integral_mul_const,
       integral_indicator_const _ measurableSet_Icc.compl, smul_eq_mul]
-    have hm := integral_abs_gaussianReal_le_sqrt η
+    have hm := integral_abs_gaussianReal_le η
     have ht := GaussianFilter.measure_compl_Icc_le η hT
     nlinarith
 
