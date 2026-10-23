@@ -216,8 +216,8 @@ length. Source: GLM23, arXiv:2203.12563v3, `eq:compatible` and Appendix A. -/
 theorem mpvWithBoundary (X : Matrix (Fin D) (Fin D) ℂ) {L : ℕ} (hL : 0 < L)
     (σ : Fin L → Fin d) :
     MPSTensor.mpvWithBoundary B X σ =
-      ∑ c : ι, MPSTensor.mpvWithBoundary (A c) (V c * X * W c) σ := by
-  exact h.trace_mul_evalWord X (List.ofFn σ)
+      ∑ c : ι, MPSTensor.mpvWithBoundary (A c) (V c * X * W c) σ :=
+  h.trace_mul_evalWord X (List.ofFn σ)
     (by rw [Ne, List.ofFn_eq_nil_iff]; omega)
 
 end IsBiorthogonalDecomposition

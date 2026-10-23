@@ -249,17 +249,6 @@ theorem exists_mem_beltAtom_of_norm_le {c : ℤ × ℤ} {p : ℝ × ℝ}
   obtain ⟨s, hs⟩ := Set.mem_iUnion.mp hmem
   exact ⟨s, cellFanPolygon_region_subset_repairNormTriangle s hs⟩
 
-/-- Membership in a translated square: translating by an even vector moves an
-atom to the atom of the translated square. -/
-theorem mem_beltAtom_add_iff (c e : ℤ × ℤ) (s : RepairFanSlot) (p : ℝ × ℝ) :
-    p ∈ beltAtom (c + e) s ↔
-      p - (((2 * e.1 : ℤ) : ℝ), ((2 * e.2 : ℤ) : ℝ)) ∈ beltAtom c s := by
-  simp only [beltAtom, Set.mem_ofPred_eq]
-  have : p - beltAtomCenter (c + e) =
-      p - (((2 * e.1 : ℤ) : ℝ), ((2 * e.2 : ℤ) : ℝ)) - beltAtomCenter c := by
-    ext <;> simp [beltAtomCenter] <;> ring
-  rw [this]
-
 /-! ### Atoms along a ray -/
 
 /-- A ray issuing from a point of a finite union of closed convex sets that
