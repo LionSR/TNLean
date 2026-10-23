@@ -111,7 +111,8 @@ window.
 \begin{proof}\leanok
     \uses{thm:hastings_main_stage_long_window,
         thm:hastings_cut_entropy_slow,thm:hastings_window_entropy_bounds,
-        thm:hastings_relent_window,thm:hastings_window_claim_of_relent}
+        thm:hastings_relent_window,thm:hastings_window_claim_of_relent,
+        lem:chain_entropy_inequalities}
     For $q\le1$ every entropy vanishes. For $q\ge2$, apply
     Theorem~\ref{thm:hastings_main_stage_long_window} with the window length
     $l_0$ of Definition~\ref{def:hastings_area_law_bound} and the window
@@ -135,7 +136,8 @@ window.
     \label{thm:hastings_area_law}
     \lean{TNLean.MPS.AreaLaw.Hastings.exists_regionEntropy_prefix_le}
     \leanok
-    \uses{def:chain_model,def:hastings_area_law_bound}
+    \uses{def:chain_model,def:hastings_area_law_bound,
+        thm:hastings_projector_factorization_scaled}
     Let $R$ be a range and $\kappa>6$. There is a constant $K\ge0$, depending
     only on $R$ and $\kappa$, with the following property. Let $J\ge0$ bound
     the norms of the interaction terms, let $\Delta E>0$, and let $\hat\xi$ be
