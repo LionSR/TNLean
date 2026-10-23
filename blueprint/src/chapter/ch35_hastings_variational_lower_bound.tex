@@ -28,6 +28,7 @@ of a Hermitian $K$, the largest $\lambda$ with $K-\lambda\ge0$.
 \begin{theorem}[The variational lower bound for unitary conjugates]
     \label{thm:hastings_variational_lower_bound}
     \lean{Matrix.card_mul_le_of_mulVec_eq_smul_of_conj,
+        Matrix.card_mul_sInf_spectrum_le_of_conj,
         Matrix.posSemidef_sub_card_smul_of_conj, Matrix.commutatorIter_conj,
         Matrix.commutatorIter_sum, Matrix.commutatorIter_self_succ}
     \leanok
@@ -56,7 +57,8 @@ of a Hermitian $K$, the largest $\lambda$ with $K-\lambda\ge0$.
 
 \begin{theorem}[The variational lower bound]
     \label{thm:hastings_variational_lower_bound_sites}
-    \lean{Matrix.card_mul_le_of_mulVec_eq_smul_of_sitePerm, Matrix.sitePermMatrix,
+    \lean{Matrix.card_mul_le_of_mulVec_eq_smul_of_sitePerm,
+        Matrix.card_mul_sInf_spectrum_le_of_sitePerm, Matrix.sitePermMatrix,
         Matrix.sitePermMatrix_mul, Matrix.sitePermMatrix_mem_unitaryGroup,
         Matrix.commute_sitePermMatrix_sum}
     \leanok
@@ -83,10 +85,16 @@ of a Hermitian $K$, the largest $\lambda$ with $K-\lambda\ge0$.
 \begin{proof}\leanok
     The map $g\mapsto P_g$ is multiplicative, so conjugation by $P_h$ permutes
     the translates and fixes $H$, and each $P_h$ is a unitary commuting with $H$.
-    Theorem~\ref{thm:hastings_variational_lower_bound} applies.
+    Theorem~\ref{thm:hastings_variational_lower_bound} applies. For Hermitian
+    $K$, its real spectrum is finite, and every spectral value is at least
+    its infimum. The spectral theorem therefore gives
+    $K-\lambda_{\min}(K)\ge0$, yielding the stated specialization.
 \end{proof}
 
-Lines 1005--1009 of \cite{Hastings2006Solving} note that the filtered terms of
-that paper are the choice $a_k=0$ for odd $k$ and
-$a_k=(-1)^{k/2}[(k-1)!!/k!](q/\Delta E^2)^k$ for even $k$; that instance is not
-formalized here.
+The Gaussian expansion discussed at lines 1005--1009 of
+\cite{Hastings2006Solving} corresponds, in the convention used here, to
+$a_k=0$ for odd $k$ and
+$a_k=[(k-1)!!/k!](q/\Delta E^2)^{k/2}$ for even $k$. The printed variance
+power requires correction, and $i^k$ already supplies the alternating sign
+\cite{gap:hastings05_gaussian_series_coefficients}. This infinite-series
+identity is separate from the finite-polynomial theorem above.

@@ -16,7 +16,9 @@ run_cmd do
     ``Matrix.posSemidef_sub_card_smul_of_conj, ``Matrix.card_mul_le_of_mulVec_eq_smul_of_conj,
     ``Matrix.sitePermMatrix_mul, ``Matrix.sitePermMatrix_mem_unitaryGroup,
     ``Matrix.commute_sitePermMatrix_sum,
-    ``Matrix.card_mul_le_of_mulVec_eq_smul_of_sitePerm] do
+    ``Matrix.card_mul_le_of_mulVec_eq_smul_of_sitePerm,
+    ``Matrix.card_mul_sInf_spectrum_le_of_conj,
+    ``Matrix.card_mul_sInf_spectrum_le_of_sitePerm] do
     unless (← Lean.getEnv).contains decl do
       throwError "Missing declaration {decl}"
     let axioms ← Lean.collectAxioms decl

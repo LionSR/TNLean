@@ -1350,3 +1350,13 @@ positive and the later estimate uses `‖M_L O_L‖` at most the threshold.
   the window length doubles, that the prefactor of that bound is the starting
   length `ξ₀` rather than `ξ₀/2`, and the implicit hypotheses `2 C₁ > 1` and
   `ln C₁ + C₂ ≥ 0`.
+
+### Local solution of gapped Hamiltonians: Gaussian commutator coefficients
+
+[hastings05_gaussian_series_coefficients.tex](hastings05_gaussian_series_coefficients.tex)
+(local correction, resolved) records the variance-power correction in Hastings,
+*Solving gapped Hamiltonians locally* (arXiv:cond-mat/0508554v3, source lines
+1005–1009). The even Gaussian moment of order `k` contains `(q/ΔE²)^(k/2)`,
+not the printed power `k`. When commutators are written as `i^k ad_H^k`, this
+factor already supplies the alternating sign. The finite-polynomial
+variational bound is unaffected; the infinite expansion remains unformalized.

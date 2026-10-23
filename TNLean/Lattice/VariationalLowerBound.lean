@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import Mathlib.Analysis.Matrix.PosDef
+import Mathlib.Analysis.Matrix.Order
 import Mathlib.LinearAlgebra.Matrix.Permutation
 import TNLean.Algebra.PermutationMatrixUnitary
 
@@ -46,7 +46,7 @@ constants `a_k`; that instance is not part of this file.
 -/
 
 open Matrix Finset
-open scoped ComplexOrder
+open scoped ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 
 namespace Matrix
 
@@ -182,6 +182,31 @@ theorem card_mul_le_of_mulVec_eq_smul_of_conj {ι : Type*} [Fintype ι] (U : ι 
     exact le_of_mul_le_mul_right (by simpa using h) hpos
   exact sub_nonneg.mp (Complex.zero_le_real.mp h')
 
+/-- The least spectral value gives the variational lower bound, without a supplied
+positive-semidefinite lower-bound certificate. For a nonzero finite-dimensional Hilbert
+space, the infimum of the real spectrum is its least eigenvalue.
+Hastings, arXiv:cond-mat/0508554v3, eq. `varnum`, lines 856–877. -/
+theorem card_mul_sInf_spectrum_le_of_conj {ι : Type*} [Fintype ι]
+    (U : ι → Matrix n n ℂ) (hU : ∀ i, U i ∈ unitaryGroup n ℂ)
+    (H₀ : Matrix n n ℂ) (hH₀ : H₀.IsHermitian)
+    (hcomm : ∀ i, Commute (U i) (∑ j, U j * H₀ * (U j)ᴴ))
+    (a : ℕ → ℝ) (m : ℕ) {E : ℝ} {Ω : n → ℂ} (hΩ : Ω ≠ 0)
+    (hE : (∑ j, U j * H₀ * (U j)ᴴ) *ᵥ Ω = (E : ℂ) • Ω) :
+    Fintype.card ι * sInf (spectrum ℝ
+      (H₀ + ∑ k ∈ range m, ((a (k + 1) : ℂ) * Complex.I ^ (k + 1)) •
+        commutatorIter (∑ j, U j * H₀ * (U j)ᴴ) H₀ (k + 1))) ≤ E := by
+  have hH : (∑ j, U j * H₀ * (U j)ᴴ).IsHermitian := by
+    exact isSelfAdjoint_sum _ fun j _ ↦ isHermitian_mul_mul_conjTranspose (U j) hH₀
+  have hK : (H₀ + ∑ k ∈ range m, ((a (k + 1) : ℂ) * Complex.I ^ (k + 1)) •
+      commutatorIter (∑ j, U j * H₀ * (U j)ᴴ) H₀ (k + 1)).IsHermitian := by
+    exact hH₀.add (isSelfAdjoint_sum _ fun k _ ↦
+      isHermitian_smul_commutatorIter hH hH₀ (a (k + 1)) (k + 1))
+  apply card_mul_le_of_mulVec_eq_smul_of_conj U hU H₀ hcomm a m _ hΩ hE
+  have h := (algebraMap_le_iff_le_spectrum (R := ℝ) hK.isSelfAdjoint).mpr
+    (fun x hx ↦ csInf_le Matrix.finite_real_spectrum.bddBelow hx)
+  rw [Matrix.le_iff] at h
+  simpa [Algebra.algebraMap_eq_smul_one] using h
+
 section SitePermutation
 
 variable {V : Type*} [Fintype V] [DecidableEq V] {G : Type*} [Group G] [MulAction G V]
@@ -240,6 +265,19 @@ theorem card_mul_le_of_mulVec_eq_smul_of_sitePerm [Fintype G] (q : ℕ)
     Fintype.card G * c ≤ E :=
   card_mul_le_of_mulVec_eq_smul_of_conj (fun g ↦ sitePermMatrix q g)
     (sitePermMatrix_mem_unitaryGroup q) H₀ (commute_sitePermMatrix_sum q H₀) a m hK hΩ hE
+
+/-- The least-eigenvalue specialization for translates on finitely many sites.
+Hastings, arXiv:cond-mat/0508554v3, eq. `varnum`, lines 856–877. -/
+theorem card_mul_sInf_spectrum_le_of_sitePerm [Fintype G] (q : ℕ)
+    (H₀ : Matrix (V → Fin q) (V → Fin q) ℂ) (hH₀ : H₀.IsHermitian)
+    (a : ℕ → ℝ) (m : ℕ) {E : ℝ} {Ω : (V → Fin q) → ℂ} (hΩ : Ω ≠ 0)
+    (hE : (∑ g : G, sitePermMatrix q g * H₀ * (sitePermMatrix q g)ᴴ) *ᵥ Ω = (E : ℂ) • Ω) :
+    Fintype.card G * sInf (spectrum ℝ
+      (H₀ + ∑ k ∈ range m, ((a (k + 1) : ℂ) * Complex.I ^ (k + 1)) •
+        commutatorIter (∑ g : G, sitePermMatrix q g * H₀ * (sitePermMatrix q g)ᴴ)
+          H₀ (k + 1))) ≤ E :=
+  card_mul_sInf_spectrum_le_of_conj (fun g ↦ sitePermMatrix q g)
+    (sitePermMatrix_mem_unitaryGroup q) H₀ hH₀ (commute_sitePermMatrix_sum q H₀) a m hΩ hE
 
 end SitePermutation
 
