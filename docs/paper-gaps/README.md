@@ -1257,6 +1257,20 @@ fourth entry of the shell count, which is omitted; the interval constant and
 the area-law constant of Theorem A change accordingly, all at the level of
 absolute constants.
 
+### One-dimensional area law after Hastings: the exponent of the Gaussian time average
+
+[hastings07_gaussian_average_exponent.tex](hastings07_gaussian_average_exponent.tex)
+(false as printed, open) records that the Gaussian time average `P_q` in the
+appendix of Hastings (arXiv:0705.2024v4, line 848) satisfies
+`‖P_q - P_0‖ ≤ e^{-q/2}`, which with the source's choice of `q` is
+`O(e^{-l/6ξ})` rather than the printed `O(e^{-l/3ξ})`. The same factor enters
+eqs. `tighter`/`tighter2` and the margin of eq. `obd`. With `q = (l/3)ΔE/v` the
+printed rate `e^{-l/3ξ}` is recovered, but the final bound keeps the prefactor
+`√(l/ξ)`, so the product `O_B O_L O_R` as constructed, with `O_B` not necessarily
+positive, satisfies the bound of Lemma 1 for every `ξ' > 6ξ`, not at the printed
+`ξ' = 6ξ`. The positivity repair of the note added replaces the error `ε` by
+`O(√ε)`, so the positive version of Lemma 1 holds for every `ξ' > 12ξ`.
+
 ### One-dimensional area law after Hastings: the Schmidt tail constant
 
 [hastings07_schmidt_tail_constant.tex](hastings07_schmidt_tail_constant.tex)
@@ -1297,6 +1311,14 @@ proved is `(√2 + 4) √C₁ e^{-l/(2ξ')}`.
 entropy gain across a cut, and how route 1 of Hastings' note added (the
 effect `O_B† O_B`) supplies the Lindblad–Uhlmann data with `C₁` replaced by
 `2 C₁`, keeping the rate `e^{-l/ξ'}`.
+
+### One-dimensional area law after Hastings: the error of the matrix product state
+
+[hastings07_mps_error_measure.tex](hastings07_mps_error_measure.tex)
+(clarification, resolved) records that Hastings' error
+`N (k'/k₀)^{-1/(ξ' ln D)}` for the matrix product state (arXiv:0705.2024v4,
+lines 553–557), stated without an error measure, holds for the squared norm,
+through the squared error `‖Φ − ψ‖² ≤ ∑_j τ_j(k')` of sequential truncation.
 
 ### One-dimensional area law after Hastings: the threshold of the spectral cut-offs
 

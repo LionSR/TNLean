@@ -17,7 +17,7 @@ run_cmd do
       ``regionEntropy_nonneg, ``cutEntropy_sub_le,
       ``windowLength_mul_log_le, ``lt_windowLength_add_one, ``two_mul_div_three_le_cutEntropy,
       ``regionEntropy_le_windowEntropy, ``exists_windowEntropy_eq, ``windowEntropy_nonneg,
-      ``windowEntropy_le, ``windowEntropy_two_mul_le] do
+      ``windowEntropy_le, ``windowEntropy_two_mul_le, ``windowEntropy_two_mul_le_of_relent] do
     unless (← Lean.getEnv).contains decl do
       throwError "Missing declaration {decl}"
     let axioms ← Lean.collectAxioms decl
