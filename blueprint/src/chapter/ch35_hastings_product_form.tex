@@ -110,14 +110,15 @@ indices at a site is not established~\cite{gap:hastings05_planar_domain_scope}.
     }
     Let $H=\sum_Xh_X$ be a Hamiltonian of range $R$ on $\Lambda$, let
     $X_1,\dots,X_m$ be any finite sequence of supports, let $\beta$ be real
-    and let $n\ge0$. The Trotter product
+    and let $n\ge1$. The Trotter product
     \begin{align}
         \rho_n=\Bigl[\prod_{k=1}^{m}\exp\bigl(-\tfrac{\beta}{n}h_{X_k}\bigr)
             \Bigr]^n
     \end{align}
-    has a matrix product form of range $R$. This is the claim
+    has a matrix product form of range $R$. With the separate convention
+    $\rho_0=1$, the same conclusion holds at $n=0$. This is the claim
     of~\cite[lines 1048--1077]{Hastings2006Solving} that each $\rho_n$ can
-    be written exactly in the form~(mpf).
+    be written exactly in the form of Definition~\ref{def:hastings_product_form}.
 \end{theorem}
 \begin{proof}\leanok
     The operators supported on a set of sites form a finite-dimensional, hence
