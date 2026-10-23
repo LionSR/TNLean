@@ -192,10 +192,8 @@ theorem insertedTensor_basis_eq_of_firstSiteActionAgree
     change (∑ q : Fin (P.copies j), (P.weight j q) ^ N) ≠ 0
     simpa only [N, pow_mul] using hsum
   let L := N - 1
-  have hLadd : L + 1 = N := by
-    exact Nat.sub_add_cancel hNpos
-  have hMleN : M ≤ N := by
-    exact Nat.le_mul_of_pos_right M hrpos
+  have hLadd : L + 1 = N := Nat.sub_add_cancel hNpos
+  have hMleN : M ≤ N := Nat.le_mul_of_pos_right M hrpos
   have hL₀leL : L₀ ≤ L := by
     dsimp [L, M] at hMleN ⊢
     omega

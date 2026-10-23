@@ -13,7 +13,10 @@ the parameter $q$. Norms are operator norms.
 \begin{definition}[Gaussian time average]
     \label{def:hastings_gaussian_time_average}
     \lean{TNLean.MPS.AreaLaw.Hastings.timeAverageVariance,
-        TNLean.MPS.AreaLaw.Hastings.gaussianTimeAverage}
+        TNLean.MPS.AreaLaw.Hastings.gaussianTimeAverage,
+        TNLean.MPS.AreaLaw.Hastings.gaussianTimeAverage_eq_integral,
+        TNLean.MPS.AreaLaw.Hastings.le_timeAverageVariance_mul_sq,
+        TNLean.MPS.AreaLaw.Hastings.sqrt_timeAverageVariance}
     \leanok
     Let $q$ and $\Delta E$ be real numbers and put $h=\max(q/\Delta E^2,0)$ if
     $\Delta E\ne0$, and $h=0$ if $\Delta E=0$.
@@ -26,6 +29,8 @@ the parameter $q$. Norms are operator norms.
     the operator
     $P_q=\frac{\Delta E}{\sqrt{2\pi q}}\int e^{iHt}e^{-(t\Delta E)^2/2q}\,dt$
     of \cite[lines 843--847]{Hastings2007AreaLaw}.
+    The variance satisfies $q\le h\,\Delta E^2$ whenever $\Delta E\ne0$, and
+    $\sqrt h=\sqrt{\max(q,0)}/\Delta E$ whenever $\Delta E>0$.
 \end{definition}
 
 \begin{theorem}[Gaussian time average across the gap]
