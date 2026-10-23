@@ -29,9 +29,10 @@ discharged here.
 replaced by `2 C₁` and with `C₂ = relentConst`; only the values of the constants move.
 Documented in `docs/paper-gaps/hastings07_relent_constants.tex`.
 
-**The window condition.** Eq. `relent` is proved under the condition of line 488,
+**The window condition.** Eq. `relent` is proved under the assumption of line 483,
 `(l + ξ' ln C₁) ln q + F(ξ', q) ≤ S_cut`, with `F` the remainder `bootstrapRemainder` of the
-bootstrap lemma. The source treats it at lines 480–484. If the condition fails, `S_cut` is
+bootstrap lemma, with `l` in place of `l₀`; line 488 is where it is used. The source treats
+its failure at lines 484–486. If the condition fails, `S_cut` is
 small compared with `F(ξ', q) + ξ' ln C₁ ln q`, and the constant `c₀` of eq. `smd` is chosen
 large enough. Here the window length is
 `l₀ = max(⌈ξ₀⌉ 2^M, ⌈(2/3)(ξ' ln C₁ + F(ξ', q)/ln q)⌉)`, with `ξ₀` and `M` the doubling
@@ -65,7 +66,7 @@ variable {L q R : ℕ} {J : ℝ}
 /-- The window length `l₀` of the area law from Lemma 1 with constants `ξ'` and `C₁`:
 the larger of the doubling window `⌈ξ₀⌉ 2^M` for the constants `2 C₁` and `relentConst` of
 eq. `relent`, and `⌈(2/3)(ξ' ln C₁ + F(ξ', q)/ln q)⌉`, which makes the window condition of
-arXiv:0705.2024v4, line 488, hold (lines 480–484). -/
+arXiv:0705.2024v4, line 483, hold (lines 483–486). -/
 noncomputable def areaLawWindowLength (ξ' C₁ : ℝ) (q : ℕ) : ℕ :=
   max (doublingWindowLength ξ' (2 * C₁) relentConst q)
     ⌈2 / 3 * (ξ' * Real.log C₁ + bootstrapRemainder ξ' q / Real.log q)⌉₊
@@ -77,7 +78,7 @@ noncomputable def areaLawBound (ξ' C₁ : ℝ) (q : ℕ) : ℝ :=
 
 /-- The bound `S_max` is at most the doubling value `maxEntropyBound ξ' (2 C₁) relentConst q`
 plus `2 (ξ' ln C₁ ln q + F(ξ', q)) + 3 ln q`, for `ξ' > 0`, `C₁ ≥ 1` and `q ≥ 2`. The second
-term is the part of `S_max` that arXiv:0705.2024v4, lines 480–484, absorbs into the constant
+term is the part of `S_max` that arXiv:0705.2024v4, lines 483–486, absorbs into the constant
 `c₀` of eq. `smd`. -/
 theorem areaLawBound_le {ξ' C₁ : ℝ} (hξ' : 0 < ξ') (hC₁ : 1 ≤ C₁) (hq : 2 ≤ q) :
     areaLawBound ξ' C₁ q ≤ maxEntropyBound ξ' (2 * C₁) relentConst q +
@@ -146,7 +147,7 @@ theorem regionEntropy_prefix_le_of_factorization (h : ChainHamiltonian L q R J)
   have hC : 0 ≤ Real.log (2 * C₁) + relentConst := by
     have := Real.log_nonneg (by linarith : (1 : ℝ) ≤ 2 * C₁)
     simp only [relentConst]; linarith
-  -- The window condition of line 488 at every length `l ≤ l₀/2`.
+  -- The window assumption of line 483 at every length `l ≤ l₀/2`.
   have hwin : ∀ l : ℕ, 2 * l ≤ l₀ →
       (l + ξ' * Real.log C₁) * Real.log q + bootstrapRemainder ξ' q ≤
         2 * (3 * Real.log q * l₀) / 3 := by
