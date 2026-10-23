@@ -1,0 +1,124 @@
+\section{Locality of Gaussian-filtered terms on a finite graph}
+\label{sec:hastings_local_projective_form}
+
+% Hastings, arXiv:cond-mat/0508554v3, proj3new.tex, lines 169--190 (setting),
+% 266--387 (eqs. lbnd, mid, odef, hpdef, apb, facld and the unique ground
+% state), proofs in the appendix at lines 1419--1533.
+
+The approximate local projective form of~\cite{Hastings2006Solving} replaces
+each term $H_i$ of a gapped Hamiltonian by its Gaussian-filtered version
+$\widetilde H_i$ (Definition~\ref{def:hastings_gaussian_filtered_term}), and
+then by an operator $M_i$ of finite range. This section proves the locality
+of the filtered terms on a finite graph and the properties of $M_i$ that the
+source uses. The Hamiltonian is $H=\sum_kh_k$, with the finite-range
+interaction assumptions of Theorem~\ref{thm:qc_graph_lieb_robinson_finset}:
+each $h_k$ is Hermitian and acts on a set $X_k$ of diameter at most $R$ and
+at most $v_R$ sites, and the norms of the terms containing any one site sum
+to at most $b_0$. The source's $M_i$ evolves $H_i$ under the terms near $i$
+only~\cite[lines 285--307]{Hastings2006Solving}. Here $M_i$ is the normalized
+partial trace of $\widetilde H_i$ onto a neighbourhood of the support of
+$H_i$, which has the three properties the source uses: its support, the bound
+$\|M_i\|\le J$, and the estimate (apb).
+
+\begin{theorem}[Locality of a filtered term on a graph]
+    \label{thm:hastings05_filtered_locality_graph}
+    \lean{TNLean.Lattice.norm_commutator_gaussianFilteredTerm_le_graphDistance}
+    \leanok
+    \uses{thm:hastings_filtered_locality,thm:qc_graph_lieb_robinson_finset}
+    Let $W$ act on a set $S$ of sites and $B$ on one site $y$ with
+    $d_G(x,y)\ge l$ for every $x\in S$. Let $q\ge0$, $\mu\ge0$ and $T\ge0$, and
+    let $C$ and $v$ be the constants of
+    Theorem~\ref{thm:qc_graph_lieb_robinson_finset}. Then
+    \begin{align*}
+        \|[\widetilde W,B]\|\le C|S|\,\|W\|\,\|B\|\,e^{vT-\mu l}
+        +2\|W\|\,\|B\|\,e^{-(T\Delta E)^2/(2q)}.
+    \end{align*}
+    This is eq.~(lbnd) of~\cite{Hastings2006Solving}, lines 266--283, with
+    $T=c_1l$ and the Lieb--Robinson term in place of $g(c_1l,l)$.
+\end{theorem}
+\begin{proof}\leanok
+    By Theorem~\ref{thm:qc_graph_lieb_robinson_finset},
+    $\|[e^{iHt}We^{-iHt},B]\|\le C|S|\,\|W\|\,\|B\|\,e^{vT-\mu l}$ for
+    $|t|\le T$. Theorem~\ref{thm:hastings_filtered_locality} adds the
+    Gaussian tail.
+\end{proof}
+
+\begin{theorem}[The finite-range approximation of a filtered term]
+    \label{thm:hastings05_filtered_approximation_graph}
+    \lean{TNLean.Lattice.norm_gaussianFilteredTerm_sub_siteExpectation_le_graphNeighborhood,
+        TNLean.Lattice.exists_local_approx_gaussianFilteredTerm,
+        TNLean.Lattice.isHermitian_gaussianFilteredTerm}
+    \leanok
+    \uses{thm:hastings_filtered_partial_trace,thm:qc_graph_neighborhood_localization}
+    Assume that for every vertex $x$ and integer $r\ge0$ at most $K_g(r+1)^k$
+    vertices have graph distance exactly $r$ from $x$, and let $C$, $v$ and
+    $T_k$ be the constants of
+    Theorem~\ref{thm:qc_graph_neighborhood_localization}. Let $W$ act on a set
+    $S$ of sites, let $l\in\mathbb N$, and let $N_l(S)$ be the set of sites
+    within graph distance $l$ of $S$. For $q\ge0$ and $T\ge0$ there is an
+    operator $M$ acting on $N_l(S)$ with $\|M\|\le\|W\|$, Hermitian when $W$
+    is, and
+    \begin{align*}
+        \|\widetilde W-M\|\le C|S|^2\,\|W\|\,K_gT_k\,e^{vT-l/2}
+        +2\|W\|\,e^{-(T\Delta E)^2/(2q)}.
+    \end{align*}
+    With $W=H_i$ these are the properties of $M_i$
+    in~\cite[lines 285--320]{Hastings2006Solving}: $M_i$ acts within distance
+    $l_{\mathrm{proj}}$ of $i$, $\|M_i\|\le J$, and eq.~(apb) holds with
+    $T=c_1l_{\mathrm{proj}}$.
+\end{theorem}
+\begin{proof}\leanok
+    Take $M=\mathbb E_{N_l(S)}(\widetilde W)$. It acts on $N_l(S)$, the partial
+    trace and the filter do not increase the norm, and both preserve
+    Hermitian operators. Theorem~\ref{thm:qc_graph_neighborhood_localization}
+    bounds the localization error of $e^{iHt}We^{-iHt}$ for $|t|\le T$, and
+    Theorem~\ref{thm:hastings_filtered_partial_trace} adds the Gaussian tail.
+\end{proof}
+
+\begin{theorem}[Ground vectors are nearly invariant under the approximation]
+    \label{thm:hastings05_facld}
+    \lean{TNLean.Lattice.norm_sub_starProjection_apply_le_of_gaussianFilteredTerm,
+        TNLean.Lattice.norm_apply_sub_inner_smul_le_of_gaussianFilteredTerm}
+    \leanok
+    \uses{thm:hastings_gaussian_filtered_spectral}
+    Let every eigenvalue of $H$ equal $E_0$ or be at least $E_0+\Delta E$, let
+    $\psi$ be a ground vector, and let $M$ be any operator. Then the component
+    of $M\psi$ orthogonal to the ground space has norm at most
+    $(\|W\|e^{-q/2}+\|\widetilde W-M\|)\|\psi\|$. If $\Omega$ is a unique
+    ground state with gap $\Delta E>0$, then
+    \begin{align*}
+        \|M\Omega-\langle\Omega,M\Omega\rangle\Omega\|
+        \le\|W\|e^{-q/2}+\|\widetilde W-M\|.
+    \end{align*}
+    With $M=M_i$ as in
+    Theorem~\ref{thm:hastings05_filtered_approximation_graph} and
+    $q=c_1l_{\mathrm{proj}}\Delta E$, these are eq.~(facld)
+    of~\cite[lines 322--348]{Hastings2006Solving} and the bound for a unique
+    ground state at lines 375--387.
+\end{theorem}
+\begin{proof}\leanok
+    Write $M\psi=\widetilde W\psi+(M-\widetilde W)\psi$. The excited component
+    of $\widetilde W\psi$ has norm at most $\|W\|e^{-q/2}\|\psi\|$ by
+    Theorem~\ref{thm:hastings_gaussian_filtered_spectral}, and that of
+    $(M-\widetilde W)\psi$ at most $\|\widetilde W-M\|\,\|\psi\|$. For a unique
+    ground state the projection onto the ground space is
+    $\phi\mapsto\langle\Omega,\phi\rangle\Omega$.
+\end{proof}
+
+\begin{theorem}[The sum of the approximations]
+    \label{thm:hastings05_sum_approximation}
+    \lean{TNLean.Lattice.norm_sum_sub_le_of_sum_eq}
+    \leanok
+    \uses{thm:hastings_gaussian_filtered_spectral}
+    If $\sum_iW_i=H$, then any operators $M_i$ satisfy
+    $\|\sum_iM_i-H\|\le\sum_i\|\widetilde W_i-M_i\|$. This is the comparison of
+    $H$ with $M=\sum_iM_i$ in~\cite[lines 359--374]{Hastings2006Solving}. The
+    consequence drawn there, that the ground state of $M$ overlaps that of $H$
+    once $N\|\widetilde H_i-M_i\|$ is small compared with $\Delta E$, is stated
+    only to order of magnitude.
+\end{theorem}
+\begin{proof}\leanok
+    The filtered terms sum to $H$ by
+    Theorem~\ref{thm:hastings_gaussian_filtered_spectral}, so
+    $\sum_iM_i-H=\sum_i(M_i-\widetilde W_i)$.
+\end{proof}
