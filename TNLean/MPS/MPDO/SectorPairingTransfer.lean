@@ -27,8 +27,6 @@ normalization.
   gives quasi-idempotence of the closed-sector pairing operator.
 * `closedSector_operator_normalized_idempotent`: after the source
   normalization, the pairing operator is idempotent.
-* `closedSectorTraceMatrix_normalized_trace_pow_eq_trace`: source zero
-  correlation length gives the positive-power trace identity of Lemma C.5.
 * `closedSectorTraceMatrix_normalized_relations`: the square--cube and
   trace-power identities hold for one common source normalization.
 * `closedSector_operator_idempotent_of_physTraceTransfer_sq`: for a
@@ -236,26 +234,6 @@ theorem closedSectorTraceMatrix_normalized_relations
   · have htrace := Matrix.trace_pow_eq_trace_of_rectangular_idempotent
       ((lam : ℂ)⁻¹ • L) Q hrect
     simpa only [Matrix.mul_smul, ← hT] using htrace
-
-/-- Source zero correlation length implies the positive-power trace identity
-for the normalized concrete closed-sector trace matrix:
-\[
-  \operatorname{tr}(\widehat T^N)=\operatorname{tr}(\widehat T),
-  \qquad \widehat T=\lambda^{-1}T,\quad N\geq 1.
-\]
-The conclusion is the valid display in arXiv:1606.00608, Appendix C.2,
-Lemma `SALZCL`, lines 1490--1497. It does not assert that the trace matrix is
-idempotent or has rank one. -/
-theorem closedSectorTraceMatrix_normalized_trace_pow_eq_trace
-    (hZCL : IsSourceZCL K) :
-    ∃ lam : ℝ, 0 < lam ∧
-      let T := closedSectorTraceMatrix K hK hη R α₁ β₃
-      ∀ N : ℕ, 0 < N →
-        Matrix.trace (((lam : ℂ)⁻¹ • T) ^ N) =
-          Matrix.trace ((lam : ℂ)⁻¹ • T) := by
-  obtain ⟨lam, hlam, _, htrace⟩ :=
-    closedSectorTraceMatrix_normalized_relations K hK hη R hρ α₁ β₃ hm hZCL
-  exact ⟨lam, hlam, htrace⟩
 
 /-- For a canonically normalized representative whose physical-trace transfer
 is literally idempotent, the raw closed-sector pairing operator satisfies
