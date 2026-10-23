@@ -45,9 +45,11 @@ the same factor enters eqs. `tighter`/`tighter2` and the margin of eq. `obd`. Wi
 `O(√(l/ξ) ξ² e^{-l/6ξ})` of lines 903–907 then gives `‖O_BO_LO_R - P₀‖ ≤ C₁e^{-l/ξ'}` for
 every `ξ' > 6ξ`, with `C₁` depending on `ξ' - 6ξ`, but not at the printed `ξ' = 6ξ`
 (line 142) at the same length. The printed rate is reached for the length `(5/4) ξ̂` of the
-chain estimate with raised velocity, by `exists_projectorFactorization_endpoint`. Every
-theorem here keeps `q` free. Documented in
-`docs/paper-gaps/hastings07_gaussian_average_exponent.tex`.
+chain estimate with raised velocity, by `exists_projectorFactorization_endpoint`; that length,
+like `ξ̂`, is not shown to come from a Lieb–Robinson pair in the source's sense (lines 96–112).
+Every theorem here keeps `q` free. Documented in
+`docs/paper-gaps/hastings07_gaussian_average_exponent.tex` and
+`docs/paper-gaps/hastings07_lemma1_decay_length.tex`.
 For `q ≤ 0` the variance is zero, `P_q(H) = 1`, and every bound remains true.
 All norms are Euclidean operator norms.
 -/
