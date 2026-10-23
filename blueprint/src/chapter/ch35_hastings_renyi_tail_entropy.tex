@@ -70,3 +70,30 @@ which the relevant geometric series converges.
     $x=e^{-2/\xi'}$ one has $x^\alpha=e^{-2\alpha/\xi'}$ and
     $\ln K=\ln k+(2m+2)\ln D$.
 \end{proof}
+
+\begin{theorem}[Rényi entropy from mixtures of bounded Schmidt rank]
+    \label{thm:hastings_renyi_schmidt_rank_stage}
+    \lean{TNLean.MPS.AreaLaw.Hastings.renyiEntropy_le_of_schmidtRank_mixtures,
+        TNLean.MPS.AreaLaw.Hastings.renyiEntropy_eq_log_sum_eigenvalues₀_rpow}
+    \leanok
+    Let $\Psi$ be a unit vector of a bipartite space with reduced density
+    matrix $\rho$ on the first factor, and let $k\ge1$, $D\ge2$, $\xi'>0$ and
+    $c\ge1$. Suppose that at every scale $s$ with $ce^{-2s/\xi'}<1$ some
+    mixture of pure states of Schmidt rank at most $kD^{2s}$ has normalized
+    overlap with $\Psi$ at least $1-ce^{-2s/\xi'}$. Then for $0<\alpha<1$ with
+    $r=(D^2)^{1-\alpha}e^{-2\alpha/\xi'}<1$,
+    \begin{align*}
+        S_\alpha(\rho)\le\ln k+\xi'\ln(c)\ln D+4\ln D-\frac{\ln(1-r)}{1-\alpha}.
+    \end{align*}
+    This is the Rényi version of the stage of \cite[Lemma~2]{Hastings2007AreaLaw}
+    for one cut, lines 333--356 and 392--410.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:hastings_renyi_tail_entropy, thm:hastings_bootstrap_stage}
+    The overlaps bound the mass of the eigenvalues of $\rho$ beyond the first
+    $kD^{2s}$ by $ce^{-2s/\xi'}$, as in the von Neumann case. With $m'$ the least
+    integer such that $ce^{-2m'/\xi'}\le1$, the eigenvalues in decreasing order
+    satisfy the tail constraints of Theorem~\ref{thm:hastings_renyi_tail_entropy}
+    at the scales $m'+1+n$. That theorem gives the bound with $(2m'+2)\ln D$, and
+    $2m'<\xi'\ln c+2$.
+\end{proof}

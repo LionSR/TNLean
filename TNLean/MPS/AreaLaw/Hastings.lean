@@ -19,6 +19,7 @@ import TNLean.MPS.AreaLaw.Hastings.DecaySlack
 import TNLean.MPS.AreaLaw.Hastings.Doubling
 import TNLean.MPS.AreaLaw.Hastings.EffectExpectation
 import TNLean.MPS.AreaLaw.Hastings.EffectFromFactorization
+import TNLean.MPS.AreaLaw.Hastings.FactorizationBudget
 import TNLean.MPS.AreaLaw.Hastings.GaussianTimeAverage
 import TNLean.MPS.AreaLaw.Hastings.InteractionPicture
 import TNLean.MPS.AreaLaw.Hastings.IntervalMutualInformation
@@ -27,6 +28,7 @@ import TNLean.MPS.AreaLaw.Hastings.MovedEstimate
 import TNLean.MPS.AreaLaw.Hastings.PartCommutators
 import TNLean.MPS.AreaLaw.Hastings.PositiveFactorization
 import TNLean.MPS.AreaLaw.Hastings.ProductStateExpectation
+import TNLean.MPS.AreaLaw.Hastings.ProjectorFactorization
 import TNLean.MPS.AreaLaw.Hastings.ProjectorOverlap
 import TNLean.MPS.AreaLaw.Hastings.RelativeEntropyGain
 import TNLean.MPS.AreaLaw.Hastings.RelentAssembly
@@ -35,6 +37,7 @@ import TNLean.MPS.AreaLaw.Hastings.SchmidtDiagonalChain
 import TNLean.MPS.AreaLaw.Hastings.SchmidtDiagonalCorrelation
 import TNLean.MPS.AreaLaw.Hastings.SchmidtDiagonalOperators
 import TNLean.MPS.AreaLaw.Hastings.SchmidtRankBootstrap
+import TNLean.MPS.AreaLaw.Hastings.SchmidtRankRenyiBootstrap
 import TNLean.MPS.AreaLaw.Hastings.SchmidtTail
 import TNLean.MPS.AreaLaw.Hastings.SchmidtTailConstraint
 import TNLean.MPS.AreaLaw.Hastings.SchmidtTailMPS
