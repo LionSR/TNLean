@@ -23,14 +23,17 @@ weakens Lemma 1.
 **Scope restriction (quantitative bounds):** the theorem inherits the restriction of Lemma 1
 (`exists_projectorFactorization`). It holds for every `ξ' > 6ξ` with
 `ξ = lemmaOneLength R J ΔE = 8 max(2v/ΔE, 1)` from the chain localization estimate, whose
-support factor is quadratic, so `ξ` is not shown to be the source's `max(2v/ΔE, ξ_C)`
-(lines 139–142), and the endpoint `ξ' = 6ξ` is not established. The constant `C₁` is uniform in
+prefactor `a |X|²` is quadratic in the support where the Lieb–Robinson bound of lines 96–112 is
+linear in `|X|`, so `ξ` is not shown to be the source's `max(2v/ΔE, ξ_C)` (lines 139–142), and
+the endpoint `ξ' = 6ξ` is not established. The constant `C₁` is uniform in
 the chain length, the local dimension, the Hamiltonian and the ground state, but it is only
-shown to exist: the polynomial bound in `ξ` of lines 258–262 is not established. Hence the
-bound `S_max = areaLawBound ξ' C₁ q` is explicit in `ξ'`, `C₁` and `q`, but this file does not
+shown to exist, as `C₁ = C₁(R, J, ΔE, ξ')`: the polynomial bound in `ξ` of lines 258–262 is not
+established. Hence `S_max = areaLawBound ξ' C₁ q` involves `ln(2 C₁)` for this unquantified
+`C₁`, and this file does not
 prove the printed form `S_max = c₀ ξ' ln ξ' ln D 2^{ξ' ln D}` of eq. `smd`. Documented in
-`docs/paper-gaps/hastings07_lemma1_decay_length.tex`. Elimination: the quantitative form of
-Lemma 1, as planned in that note.
+`docs/paper-gaps/hastings07_lemma1_decay_length.tex` and
+`docs/paper-gaps/hastings07_gaussian_average_exponent.tex`. Elimination: the quantitative form of
+Lemma 1, as planned in those notes.
 
 **Local fix (eq. relent and doubling constants):** the bound is `S_max = areaLawBound ξ' C₁ q`,
 which carries the constants of eq. `relent` and of the doubling iteration. Its growth in `ξ'`

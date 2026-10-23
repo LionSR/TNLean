@@ -145,11 +145,16 @@ window.
     $\xi=\max(2v/\Delta E,\xi_C)$ and a constant $C_1$ bounded by a
     polynomial in $\xi$ (lines 258--262), which gives the printed value
     $S_{\max}=c_0\xi'\ln(\xi')\ln(D)2^{\xi'\ln D}$. Here, as in
-    Theorem~\ref{thm:hastings_projector_factorization}, $\xi$ comes from the
-    chain localization estimate, $\xi'>6\xi$ is required, and $C_1$ is only
-    shown to exist, so the printed value of $S_{\max}$ is not claimed; see
-    \cite{gap:hastings07_lemma1_decay_length}. In addition $S_{\max}$ grows
-    as $4^{\xi'\ln q}$, not $2^{\xi'\ln q}$, as recorded
+    Theorem~\ref{thm:hastings_projector_factorization}, $\xi$ comes from a
+    chain localization estimate whose prefactor is quadratic in the size of
+    the support, where the Lieb--Robinson bound of the source
+    (lines 96--112) is linear in it; $\xi'>6\xi$ is required; and
+    $C_1=C_1(R,J,\Delta E,\xi')$ is only shown to exist. The bound $S_{\max}$
+    therefore involves $\ln(2C_1)$ for an unquantified $C_1$, and the
+    printed value is not claimed; see
+    \cite{gap:hastings07_lemma1_decay_length,
+        gap:hastings07_gaussian_average_exponent}. In addition $S_{\max}$
+    grows as $4^{\xi'\ln q}$, not $2^{\xi'\ln q}$, as recorded
     in~\cite{gap:hastings07_doubling_constants}, and the entropy gain enters
     with the constants of~\cite{gap:hastings07_relent_constants}.
 \end{theorem}
