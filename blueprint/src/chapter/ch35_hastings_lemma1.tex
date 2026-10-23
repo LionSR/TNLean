@@ -531,7 +531,8 @@ $X_{j-l+1,j+l}$.
 \begin{proof}\leanok
     \uses{thm:hastings_cutoff_pair, thm:hastings_moved_estimate,
         thm:hastings_boundary_factorization, thm:hastings_decay_slack,
-        thm:hastings_positive_factorization}
+        thm:hastings_positive_factorization, thm:hastings_factorization_rate,
+        thm:hastings_positive_factorization_rate}
     Shift $H$ by its ground energy. For $l\ge12R+8$ take $s=2l/(3\xi)$,
     $\theta=e^{-s/4}$, $T=s/\Delta E$, $k=\lceil l/4\rceil$, $m=R+k$ and
     $\ell'=l-3R-2k$. Theorem~\ref{thm:hastings_cutoff_pair} gives $O_L$,
@@ -604,7 +605,8 @@ $X_{j-l+1,j+l}$.
     \end{align*}
     The same holds with $O_B$ positive semidefinite, with another such constant
     and the rate $e^{-l/(2\kappa\hat\xi)}$, as in
-    Theorem~\ref{thm:hastings_positive_factorization}.
+    Theorem~\ref{thm:hastings_positive_factorization}
+    and~\cite{gap:hastings07_lemma1_positivity_rate}.
     So the constant of the factorization at the rate $\xi'=\kappa\hat\xi$ is
     bounded by a polynomial in $\hat\xi$, as Lemma~\ref{lem:hastings_lemma1}
     requires~\cite[lines 258--262]{Hastings2007AreaLaw}. For the source's
@@ -615,7 +617,10 @@ $X_{j-l+1,j+l}$.
         gap:hastings07_gaussian_average_exponent}.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:hastings_projector_factorization_scaled}
+    \uses{thm:hastings_projector_factorization_scaled,
+        thm:hastings_projector_factorization,
+        thm:hastings_positive_factorization_rate,
+        thm:hastings_factorization_mono}
     Apply Theorem~\ref{thm:hastings_projector_factorization} to $H/\Delta E$
     at the rate $\kappa\hat\xi$, and write $x=J/\Delta E$. The constant is
     $a+b/\sqrt{2e(1/(6\hat\xi)-1/(\kappa\hat\xi))}$, where $a$ is the larger
@@ -710,7 +715,9 @@ printed in the body of the paper.
     \label{lem:hastings_lemma1}
     \uses{thm:hastings_projector_factorization,
         thm:hastings_effect_from_factorization,
-        thm:hastings_positive_factorization}
+        thm:hastings_positive_factorization,
+        thm:hastings_lemma1_polynomial_constant,
+        thm:hastings_lemma1_endpoint}
     This is Lemma~1 of \cite{Hastings2007AreaLaw}. Let $H$ be a Hamiltonian
     that satisfies the finite range, finite interaction strength, and gap
     conditions. Then for any $j$ and any $l$
@@ -743,5 +750,8 @@ $e^{-l/(2\xi')}$; this is the version of the note added
 positive definite operators or a positive $O_B$ at the rate $e^{-l/\xi'}$.
 At a fixed length neither reaches the rate $\xi'=6\xi$; that rate is reached
 only after the length is raised, as in
-Theorem~\ref{thm:hastings_lemma1_endpoint}. The printed version does not
+Theorem~\ref{thm:hastings_lemma1_endpoint}. In units of the gap the constant
+is bounded by a polynomial in the length, as the lemma requires, at every rate
+$\xi'=\kappa\hat\xi$ with $\kappa>6$
+(Theorem~\ref{thm:hastings_lemma1_polynomial_constant}). The printed version does not
 follow from this argument.

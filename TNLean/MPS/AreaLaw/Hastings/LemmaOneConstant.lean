@@ -23,10 +23,10 @@ Lieb–Robinson prefactor is affine in `J/ΔE`, the commutator constant is quadr
 `√ξ̂`, and the short-length constant `e^{(12R+8)/(6ξ̂)}` is bounded.
 
 The printed rate `ξ' = 6ξ` (lines 141–142) is reached for the length
-`ξ̃ = lemmaOneEndpointLength R J ΔE = (5/4) ξ̂`, the length `8 max(2v', 1)` for the inflated
+`ζ = lemmaOneEndpointLength R J ΔE = (5/4) ξ̂`, the length `8 max(2v', 1)` for the inflated
 velocity `v' = (5/4) v₀`. This is legitimate because the source fixes `ξ = max(2v/ΔE, ξ_C)` only
 through some Lieb–Robinson pair `(v, ξ_C)` (lines 96–112), and raising `v` keeps a valid pair.
-At `ξ̃` the rate `6ξ̃ = (15/2) ξ̂` is the case `κ = 15/2` of the bound above. The endpoint is
+At `ζ` the rate `6ζ = (15/2) ξ̂` is the case `κ = 15/2` of the bound above. The endpoint is
 reached by re-choosing the length, not at `ξ̂` itself: at a fixed length the argument needs
 `ξ' > 6ξ`, because the appendix's final bound carries a factor `√(l/ξ)` (lines 903–907).
 
@@ -47,10 +47,10 @@ positive semidefinite, and the positive form of Lemma 1 decays at half the rate,
   `ξ̂ = lemmaOneLength R x 1`.
 * `exists_projectorFactorization_pow`: Lemma 1 with `C₁ = K ξ̂³` at the rate `κ ξ̂`.
 * `exists_projectorFactorization_posSemidef_pow`: its positive form, at half the rate.
-* `lemmaOneEndpointLength`, `lemmaOneEndpointLength_eq`: the length `ξ̃ = (5/4) ξ̂` for the
+* `lemmaOneEndpointLength`, `lemmaOneEndpointLength_eq`: the length `ζ = (5/4) ξ̂` for the
   inflated velocity.
 * `exists_projectorFactorization_endpoint`, `exists_projectorFactorization_posSemidef_endpoint`:
-  Lemma 1 at the printed rate `ξ' = 6ξ̃`, with `C₁ = K ξ̃³`, and its positive form.
+  Lemma 1 at the printed rate `ξ' = 6ζ`, with `C₁ = K ζ³`, and its positive form.
 -/
 
 open Matrix Real
@@ -284,13 +284,13 @@ theorem lemmaOneEndpointLength_eq (R : ℕ) (J ΔE : ℝ) :
 /-- **Lemma 1 of Hastings' area law at the printed rate `ξ' = 6ξ`, for the inflated length.**
 There is a constant `K ≥ 0`, depending only on `R`, with the following property. Let `h` be a
 chain Hamiltonian of range `R` and term norm at most `J ≥ 0` with a gapped ground state `Ω` and
-gap `ΔE > 0`, and let `ξ̃ = lemmaOneEndpointLength R J ΔE = (5/4) ξ̂`. Then at every cut `c` and
+gap `ΔE > 0`, and let `ζ = lemmaOneEndpointLength R J ΔE = (5/4) ξ̂`. Then at every cut `c` and
 length `l` there are `O_B`, `O_L`, `O_R` as in Lemma 1 with
-`‖O_B O_L O_R − P₀‖ ≤ K ξ̃³ e^{-l/(6ξ̃)}`.
+`‖O_B O_L O_R − P₀‖ ≤ K ζ³ e^{-l/(6ζ)}`.
 
-The endpoint is reached by re-choosing the length, not at `ξ̂`: `6ξ̃ = (15/2) ξ̂`, so this is
+The endpoint is reached by re-choosing the length, not at `ξ̂`: `6ζ = (15/2) ξ̂`, so this is
 `exists_projectorFactorization_pow` at `κ = 15/2`. Hastings, arXiv:0705.2024v4, Lemma 1,
-lines 246–267, with `ξ' = 6ξ` (lines 141–142) for `ξ = ξ̃` and `C₁(ξ̃) = K ξ̃³` (lines 258–262),
+lines 246–267, with `ξ' = 6ξ` (lines 141–142) for `ξ = ζ` and `C₁(ζ) = K ζ³` (lines 258–262),
 and the remaining restrictions of the module docstring. -/
 theorem exists_projectorFactorization_endpoint (R : ℕ) :
     ∃ K : ℝ, 0 ≤ K ∧ ∀ {J ΔE : ℝ}, 0 ≤ J → 0 < ΔE →
@@ -311,9 +311,9 @@ theorem exists_projectorFactorization_endpoint (R : ℕ) :
     (pow_le_pow_left₀ hξ0.le (by linarith) 3) hK0) (exp_pos _).le
 
 /-- **The positive form of Lemma 1 at the printed rate, for the inflated length.** Under the
-hypotheses of `exists_projectorFactorization_endpoint`, with `ξ̃ = lemmaOneEndpointLength R J ΔE`,
-`O_B` can be taken positive semidefinite with `‖O_B O_L O_R − P₀‖ ≤ K ξ̃³ e^{-l/(2 · 6ξ̃)}`, at
-half the rate `ξ' = 6ξ̃`. Hastings, arXiv:0705.2024v4, `law16.tex`, Lemma 1 (lines 246–267)
+hypotheses of `exists_projectorFactorization_endpoint`, with `ζ = lemmaOneEndpointLength R J ΔE`,
+`O_B` can be taken positive semidefinite with `‖O_B O_L O_R − P₀‖ ≤ K ζ³ e^{-l/(2 · 6ζ)}`, at
+half the rate `ξ' = 6ζ`. Hastings, arXiv:0705.2024v4, `law16.tex`, Lemma 1 (lines 246–267)
 and the note added (lines 912–1003), as recorded in
 `docs/paper-gaps/hastings07_lemma1_positivity_rate.tex`, with the restrictions of the module
 docstring. -/
