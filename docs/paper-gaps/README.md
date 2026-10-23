@@ -1353,7 +1353,7 @@ positive and the later estimate uses `‖M_L O_L‖` at most the threshold.
 
 ## Rényi entropy and matrix product state approximation
 
-- [`swv07_renyi_bond_dimension_sign.tex`](swv07_renyi_bond_dimension_sign.tex)
+- [`swvc08_renyi_bond_dimension_sign.tex`](swvc08_renyi_bond_dimension_sign.tex)
   (false source, resolved) corrects the sign of the error term in the
   bond-dimension lower bound of Schuch, Wolf, Verstraete and Cirac
   (arXiv:0705.0292v2). A flat Schmidt spectrum disproves the printed plus

@@ -26,7 +26,7 @@ print the lower bound
 \begin{align}
     \log D &\ge S_\alpha(\rho)
       +\frac{\alpha}{\alpha-1}|\log(1-\delta)|.
-    \label{eq:swv07_renyi_printed}
+    \label{eq:swvc08_renyi_printed}
 \end{align}
 The sign before the absolute value is incorrect.\footnote{arXiv:0705.0292v2,
     source file \path{paper_v2.tex}, lines 333--345; the final displayed
@@ -35,10 +35,10 @@ The sign before the absolute value is incorrect.\footnote{arXiv:0705.0292v2,
 \section{The correction}
 
 Write $p_1\ge p_2\ge\cdots\ge0$ for the eigenvalues of $\rho$, padded by
-zeros, and put $\varepsilon=\sum_{i>D}p_i$. The source proves
+zeros, and put $\varepsilon=\sum_{i>D}p_i$. The source~\cite{Schuch2008EntropyScaling} proves
 $\varepsilon\le\delta$ and
 $S_\alpha(\rho)\le\log D-\frac{\alpha}{\alpha-1}\log(1-\varepsilon)$
-before stating (\ref{eq:swv07_renyi_printed}). Independently, convexity gives
+before stating (\ref{eq:swvc08_renyi_printed}). Independently, convexity gives
 $\sum_i p_i^\alpha\ge D^{1-\alpha}(1-\varepsilon)^\alpha$, which yields
 the same entropy inequality because $1-\alpha<0$. Rearranging it and using
 $\varepsilon\le\delta<1$ gives
@@ -49,10 +49,10 @@ $\varepsilon\le\delta<1$ gives
       &\ge S_\alpha(\rho)+\frac{\alpha}{\alpha-1}\log(1-\delta)
         \notag\\
       &= S_\alpha(\rho)-\frac{\alpha}{\alpha-1}|\log(1-\delta)|.
-    \label{eq:swv07_renyi_corrected}
+    \label{eq:swvc08_renyi_corrected}
 \end{align}
 
-For a counterexample to (\ref{eq:swv07_renyi_printed}), take the two-qubit
+For a counterexample to (\ref{eq:swvc08_renyi_printed}), take the two-qubit
 state $(|00\rangle+|11\rangle)/\sqrt2$. It has an exact matrix product state
 representation of bond dimension $D=2$, and $S_\alpha(\rho)=1$ for every
 $\alpha>1$. Its error is zero, hence at most any $0<\delta<1$.
@@ -62,7 +62,7 @@ $1\ge1+\frac{\alpha}{\alpha-1}|\log(1-\delta)|>1$.
 \section{Conclusion}
 
 The printed inequality is false on nondegenerate data. Replacing its plus
-sign by a minus sign gives (\ref{eq:swv07_renyi_corrected}). For fixed
+sign by a minus sign gives (\ref{eq:swvc08_renyi_corrected}). For fixed
 $\alpha>1$ and $\delta<1$, the subtracted term is independent of chain
 length, so super-logarithmic entropy growth still rules out polynomial bond
 dimension. This note resolves the sign discrepancy, not the formalization
