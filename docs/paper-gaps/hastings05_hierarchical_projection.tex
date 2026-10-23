@@ -24,7 +24,12 @@
 Section~II of Hastings' \emph{Solving gapped Hamiltonians
     locally}~\cite{Hastings2006Solving} (arXiv:cond-mat/0508554v3,
 \texttt{proj3new.tex}) builds a state close to a ground state $\Psi_a$ from
-local spectral projections. For a pair operator $M=M_{k,k+1}$ the ground state
+local spectral projections. There $J$ bounds the norms of the local terms,
+$\lVert H_i\rVert\le J$ (line 180), each approximate term $M_i$ acts within
+distance $l_{\mathrm{proj}}$ of site $i$ (lines 284--307), and
+$l_{\mathrm{fac}}$ is the factorization length, the error of the
+approximation being of order $e^{-l_{\mathrm{proj}}/l_{\mathrm{fac}}}$
+(lines 344--349). For a pair operator $M=M_{k,k+1}$ the ground state
 is an approximate eigenvector,
 \begin{align}\label{eq:hastings05_hierarchical_projection_ground_state_residual}
     \bigl\lVert(M-c)\Psi_a\bigr\rVert\le\epsilon,
