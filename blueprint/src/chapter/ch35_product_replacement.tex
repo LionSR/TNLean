@@ -211,3 +211,67 @@ coefficient spaces and cut ranks.
     and the scalar amplification theorem in~\cite{QICLean2026Blueprint}
     gives $\sqrt{K/4}\,T(f_i)\le T(f_i^K)$.
 \end{proof}
+
+\begin{theorem}[Normalized factors from rank-one copy boundaries]
+    \label{thm:chain_unit_copy_factors}
+    \lean{TNLean.MPS.AreaLaw.exists_unit_block_factors}
+    \leanok
+    \uses{def:chain_copy_product}
+    Let $K\ge1$ and let $\psi$ be a unit vector on $KL$ sites.
+    If its coefficient matrix has rank at most one at every internal copy
+    boundary $tL$, $0<t<K$, then $\psi$ is a product of $K$ unit block vectors.
+    This includes blocks of length zero.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{lem:chain_copy_product_inner}
+    Choose a configuration with nonzero coefficient. Rank at most one makes
+    every two-by-two minor at a copy boundary vanish. Successively replacing
+    the blocks of the chosen configuration therefore expresses every
+    coefficient as a product of one-block coefficient ratios times the
+    original nonzero coefficient. Absorb that scalar into the first factor.
+    The product of the factor norms is one. Dividing each factor by its norm
+    thus normalizes all factors without changing their product.
+\end{proof}
+
+\begin{theorem}[Product replacement by normalized MPS factors]
+    \label{thm:chain_unit_mps_copy_replacement}
+    \lean{TNLean.MPS.AreaLaw.IsOpenMPS.exists_unit_copy_product_overlap_ge}
+    \leanok
+    \uses{def:chain_copy_product,def:chain_open_mps}
+    Let $K\ge1$, let $\psi$ be a unit MPS on $KL$ sites of bond dimension
+    at most $D$, and let $\xi$ be a block-product target.
+    There are unit block vectors $\theta_0,\ldots,\theta_{K-1}$, each an MPS
+    of bond dimension at most $D$, whose product has overlap with $\xi$
+    at least as large as that of $\psi$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{cor:chain_copy_boundary_replacement,thm:chain_unit_copy_factors,cor:chain_copy_product_factor_mps}
+    First replace $\psi$ so that every copy boundary has rank at most one.
+    Extract unit block factors, and then apply the bond bound for factors
+    of a product MPS.
+\end{proof}
+
+\begin{theorem}[Scalar amplification from an arbitrary MPS approximant]
+    \label{thm:chain_mps_copy_error_amplification}
+    \lean{TNLean.MPS.AreaLaw.IsOpenMPS.exists_copy_error_amplification}
+    \leanok
+    \uses{def:chain_copy_product,def:chain_open_mps,thm:chain_copy_error_amplification}
+    Let $K\ge1$, let $\eta$ be a unit block vector, and let $\psi$ be any unit
+    MPS on $KL$ sites of bond dimension at most $D$. Put
+    $F=|\langle\eta^{\otimes K},\psi\rangle|^2$ and suppose $T(F)<1$,
+    with $T$ as in Theorem~\ref{thm:chain_copy_error_amplification}.
+    There is a unit block MPS $\theta$ of bond dimension at most $D$ such that,
+    writing $f=|\langle\eta,\theta\rangle|^2$,
+    \begin{align}
+        \label{eq:chain_mps_copy_error_amplification}
+        T(f^K)\le T(F),\qquad \sqrt{K/4}\,T(f)\le T(F).
+    \end{align}
+    These are estimates for the scalar function of squared fidelity.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:chain_unit_mps_copy_replacement,thm:chain_copy_error_amplification}
+    Replace the approximant by a product of unit MPS block factors with
+    no smaller overlap. Its squared fidelity is no smaller, and hence its
+    scalar error is no larger than $T(F)$. Apply the block-product
+    amplification theorem and select the factor it supplies.
+\end{proof}

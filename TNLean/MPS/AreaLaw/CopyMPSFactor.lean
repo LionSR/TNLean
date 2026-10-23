@@ -97,4 +97,19 @@ theorem IsOpenMPS.copyProduct_factor {D : ℕ}
     (Finset.prod_ne_zero_iff.mpr fun j _ ↦ hσ j)
     (intervalSlice_copyProduct η σ i)
 
+/-- A normalized MPS approximating a block product can be replaced by a product
+of normalized MPS block factors of the same bond bound, with no smaller overlap.
+Source: arXiv:0705.0292v2, lines 421–470. No optimal approximant is assumed. -/
+theorem IsOpenMPS.exists_unit_copy_product_overlap_ge {D : ℕ}
+    {ψ : EuclideanSpace ℂ (Fin (K * L) → Fin q)}
+    (hψ : IsOpenMPS (K * L) q D (fun x ↦ ψ x)) (hnorm : ‖ψ‖ = 1) (hK : 0 < K)
+    (η : Fin K → EuclideanSpace ℂ (Fin L → Fin q)) :
+    ∃ θ : Fin K → EuclideanSpace ℂ (Fin L → Fin q),
+      (∀ i, ‖θ i‖ = 1) ∧ (∀ i, IsOpenMPS L q D (fun x ↦ θ i x)) ∧
+      ‖inner ℂ (copyProduct η) ψ‖ ≤ ‖inner ℂ (copyProduct η) (copyProduct θ)‖ := by
+  obtain ⟨χ, hm, hn, ho, _, hb⟩ := hψ.exists_rank_one_at_copy_boundaries hnorm η
+  obtain ⟨θ, hθ, heq⟩ := exists_unit_block_factors hK χ hn (fun n _ hnK ↦ hb n hnK.le)
+  rw [heq] at hm ho
+  exact ⟨θ, hθ, fun i ↦ hm.copyProduct_factor hθ i, ho⟩
+
 end TNLean.MPS.AreaLaw

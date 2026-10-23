@@ -51,6 +51,28 @@ example {K L q : ℕ} {η : EuclideanSpace ℂ (Fin L → Fin q)}
     (herror.trans_lt (by linarith))
   exact ⟨i, hi.trans herror⟩
 
+-- Empty blocks retain a possible global phase; no local-dimension premise is needed.
+example (ψ : EuclideanSpace ℂ (Fin (2 * 0) → Fin 0)) (hn : ‖ψ‖ = 1) :
+    ∃ u : Fin 2 → EuclideanSpace ℂ (Fin 0 → Fin 0),
+      (∀ i, ‖u i‖ = 1) ∧ ψ = copyProduct u := by
+  apply exists_unit_block_factors (by decide) ψ hn
+  intro n _ _
+  simpa using rank_cutMatrix_zero_le ψ
+
+-- The final estimate starts with an actual MPS, without a product-structure premise.
+example {K L q D : ℕ} {ψ : EuclideanSpace ℂ (Fin (K * L) → Fin q)}
+    (hm : IsOpenMPS (K * L) q D (fun x ↦ ψ x)) (hn : ‖ψ‖ = 1)
+    {η : EuclideanSpace ℂ (Fin L → Fin q)} (hη : ‖η‖ = 1) (hK : 1 ≤ K)
+    {δ : ℝ} (hδ : δ < 1 / 8)
+    (herror : Real.optimizedPureTraceError
+      (‖inner ℂ (copyProduct (fun _ : Fin K ↦ η)) ψ‖ ^ 2) ≤ δ) :
+    ∃ θ : EuclideanSpace ℂ (Fin L → Fin q),
+      IsOpenMPS L q D (fun x ↦ θ x) ∧ ‖θ‖ = 1 ∧
+      Real.sqrt ((K : ℝ) / 4) * Real.optimizedPureTraceError (‖inner ℂ η θ‖ ^ 2) ≤ δ := by
+  obtain ⟨θ, hθ, hnθ, _, ha⟩ := hm.exists_copy_error_amplification hn hη hK
+    (herror.trans_lt (by linarith))
+  exact ⟨θ, hθ, hnθ, ha.trans herror⟩
+
 run_cmd do
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
   let names := #[``TNLean.MPS.AreaLaw.rank_cutMatrix_le_of_product_mem_ranges,
@@ -66,7 +88,10 @@ run_cmd do
     ``TNLean.MPS.AreaLaw.rank_cutMatrix_intervalSlice_le,
     ``TNLean.MPS.AreaLaw.IsOpenMPS.intervalSlice,
     ``TNLean.MPS.AreaLaw.IsOpenMPS.of_intervalSlice_eq_mul,
-    ``TNLean.MPS.AreaLaw.IsOpenMPS.copyProduct_factor]
+    ``TNLean.MPS.AreaLaw.IsOpenMPS.copyProduct_factor,
+    ``TNLean.MPS.AreaLaw.exists_unit_block_factors,
+    ``TNLean.MPS.AreaLaw.IsOpenMPS.exists_unit_copy_product_overlap_ge,
+    ``TNLean.MPS.AreaLaw.IsOpenMPS.exists_copy_error_amplification]
   for decl in names do
     unless (← Lean.getEnv).contains decl do
       throwError "Missing declaration {decl}"
