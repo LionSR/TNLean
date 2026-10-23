@@ -13,6 +13,10 @@
 
 \section{The source statement}
 
+Write $D$ for the local dimension, $\xi'$ for the decay length of the
+approximate factorization, $k_0=\exp(2S)/2$ for the bond dimension set by the
+entropy $S$ of a cut, and $c=4C_1^2$ for the constant of the Schmidt-tail
+constraint, as in the note \path{hastings07_schmidt_tail_constant.tex}.
 The section on matrix product states of~\cite{Hastings2007AreaLaw} concludes
 that the error of a matrix product state of bond dimension $k'$ on a chain of
 length $N$ scales as
@@ -47,7 +51,7 @@ $\tau_j(k')\le c\,e^{2/\xi'}(k'/k_0)^{-1/(\xi'\ln D)}$ of the tail, it gives
 \begin{align}
     \lVert\Phi-\Psi_0\rVert^2
      & \le(N-1)\,c\,e^{2/\xi'}\,(k'/k_0)^{-1/(\xi'\ln D)}.
-    \notag
+    \label{eq:hastings07_mps_error_sq_final}
 \end{align}
 The error in (\ref{eq:hastings07_mps_error_source}) is therefore read as the
 squared norm, which is the measure for which the stated rate
