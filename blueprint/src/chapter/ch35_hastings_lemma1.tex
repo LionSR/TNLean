@@ -325,29 +325,16 @@ bound and the first inequality of the display in
     which is \cite[lines 865--876]{Hastings2007AreaLaw}.
 \end{theorem}
 
-% Lean statement pending.
-\begin{theorem}[Interaction picture and the boundary average]
-    \label{thm:hastings_interaction_picture}
-    \uses{thm:hastings_moved_estimate}
-    For Hermitian $A$ and $B$, let $U(t)=e^{i(A+B)t}e^{-iAt}$, so that
-    $e^{i(A+B)t}=U(t)e^{iAt}$. It is the solution of
-    $U'(t)=U(t)\,ie^{iAt}Be^{-iAt}$ with $U(0)=1$, the generator multiplying
-    on the right; that is, $U(t)$ is the ordered exponential of
-    $i\int_0^te^{iAt'}Be^{-iAt'}\,dt'$ with later times to the right, which
-    is the $t'$-ordered exponential of
-    \cite[lines 852--864]{Hastings2007AreaLaw}. Let $P_B$ be the Gaussian
-    average of $U(t)$ with variance $q/\Delta E^2$. Then $\|P_B\|\le1$ and, for every $X$,
-    \begin{align*}
-        \|P_BX-P_0\|\le\|P_q(A+B)X-P_0\|+\sqrt q\,\Delta E^{-1}\|AX\|.
-    \end{align*}
-    With $A=M_L+M_R$, $B=M_B$ and $X=O_LO_R$ this is
-    \cite[lines 877--905]{Hastings2007AreaLaw}.
-\end{theorem}
+The interaction picture $e^{i(A+B)t}=U(t)e^{iAt}$ and the Gaussian average
+$P_B$ of $U(t)$ are Definitions~\ref{def:hastings_interaction_propagator}
+and~\ref{def:hastings_interaction_average}. With $A=M_L+M_R$, $B=M_B$ and
+$X=O_LO_R$, Theorem~\ref{thm:hastings_interaction_average_last} is the bound of
+\cite[lines 877--905]{Hastings2007AreaLaw} on $\|P_BX-P_0\|$.
 
 % Lean statement pending.
 \begin{theorem}[Localization of the boundary average]
     \label{thm:hastings_boundary_localization}
-    \uses{thm:hastings_interaction_picture, thm:hastings_localized_parts,
+    \uses{def:hastings_interaction_average, thm:hastings_localized_parts,
         thm:chain_lieb_robinson}
     There is an operator $O_B$ acting on $X_{j-l+1,j+l}$ with $\|O_B\|\le1$
     and $\|P_B-O_B\|\le\mathcal O(\Delta E^{-1}J\sqrt q\,e^{-l/(6\xi)})$
@@ -367,7 +354,7 @@ bound and the first inequality of the display in
         thm:hastings_filtered_no_ground_component,
         thm:hastings_part_commutators, thm:hastings_localized_parts,
         thm:hastings_cutoffs, thm:hastings_gaussian_time_average_stability,
-        thm:hastings_moved_estimate, thm:hastings_interaction_picture,
+        thm:hastings_moved_estimate, thm:hastings_interaction_average_last,
         thm:hastings_boundary_localization}
     Let $H$ be a finite-range Hamiltonian of range $R$ with terms of norm at
     most $J$, with a unique ground state $\Psi_0$ and a gap $\Delta E>0$ to
