@@ -1,0 +1,156 @@
+\section{The percolation sum in Hastings' cluster expansion}
+\label{sec:hastings_percolation}
+
+% Hastings, arXiv:cond-mat/0508554v3, proj3new.tex, lines 1196--1254 (the
+% inclusion--exclusion sum over large clusters and eq. perc2).
+
+At high temperature \cite{Hastings2006Solving} compares the thermal operator
+$\rho(\beta)$ with its truncation $\rho(\beta,l_{\rm proj})$, which keeps the
+terms of the power series of $e^{-\beta H}$ whose clusters of active bonds all
+have diameter at most $l_{\rm proj}$. The difference is an inclusion--exclusion
+sum over families of clusters of diameter larger than $l_{\rm proj}$
+\cite[lines 1196--1225]{Hastings2006Solving}. A family of $m$ such clusters
+$C_1,\dots,C_m$ contributes at most $\prod_iy^{n_{C_i}}$ times $\|O\|$, where
+$n_C$ is the number of sites of $C$ and $y=(e^{J\beta}-1)e^{SJ\beta}$. This
+section bounds the resulting sum over families of clusters. The weights are
+kept abstract: a weight $a_C$ with $0\le a_C\le y^{n_C}$ stands for the
+contribution of the cluster $C$, and a family $U$ of clusters contributes
+$\prod_{C\in U}a_C$. A cluster of diameter larger than $l_{\rm proj}$ has at
+least $l_{\rm proj}+1$ sites, which is how the sum over cluster sizes starts
+in \cite[line 1240]{Hastings2006Solving}.
+
+\begin{theorem}[Families of a given number of clusters]
+    \label{thm:hastings_percolation_families}
+    \lean{TNLean.Lattice.sum_powersetCard_prod_le}
+    \leanok
+    Let $T$ be a finite set with nonnegative weights $a_C$, $C\in T$, and let
+    $m$ be a natural number. Then
+    \begin{align}
+        \sum_{U\subseteq T,\ |U|=m}\ \prod_{C\in U}a_C
+        \le\frac1{m!}\Bigl(\sum_{C\in T}a_C\Bigr)^m.
+    \end{align}
+    This is the bound on $\rho_m$ in \cite[line 1210]{Hastings2006Solving}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Induction on $T$. Write $s=\sum_{C\in T}a_C$ and add an element $b\notin T$
+    with weight $a_b$. The $(m+1)$-element subsets of $T\cup\{b\}$ are the
+    $(m+1)$-element subsets of $T$ and the sets $U\cup\{b\}$ with $U$ an
+    $m$-element subset of $T$. By the inductive hypothesis their sum is at most
+    $s^{m+1}/(m+1)!+a_bs^m/m!$, which is at most $(s+a_b)^{m+1}/(m+1)!$ since
+    $s^{m+1}+(m+1)a_bs^m\le(s+a_b)^{m+1}$ for $s,a_b\ge0$.
+\end{proof}
+
+\begin{theorem}[All nonempty families of clusters]
+    \label{thm:hastings_percolation_exp}
+    \lean{TNLean.Lattice.sum_nonempty_powerset_prod_le_exp}
+    \leanok
+    Let $T$ be a finite set with nonnegative weights $a_C$, $C\in T$. Then
+    \begin{align}
+        \sum_{\emptyset\ne U\subseteq T}\ \prod_{C\in U}a_C
+        =\prod_{C\in T}(1+a_C)-1
+        \le\exp\Bigl(\sum_{C\in T}a_C\Bigr)-1.
+    \end{align}
+    Grouped by the number $m$ of clusters, the left side is the sum over
+    $m\ge1$ of the left sides of Theorem~\ref{thm:hastings_percolation_families},
+    and the right side is $\sum_{m\ge1}(1/m!)(\sum_Ca_C)^m$, as in
+    \cite[lines 1238--1241]{Hastings2006Solving}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Expanding the product gives the sum over all subsets, the empty one
+    contributing $1$. Then $1+a_C\le e^{a_C}$ for each $C$.
+\end{proof}
+
+\begin{theorem}[The sum over large clusters]
+    \label{thm:hastings_percolation_cluster_sum}
+    \lean{TNLean.Lattice.sum_pow_le_of_forall_lt,
+        TNLean.Lattice.sum_pow_le_of_card_le}
+    \leanok
+    Let $T$ be a finite family of clusters, where the cluster $C$ has
+    $n_C\ge l+1$ sites, and suppose that at most $Nx^k$ clusters of $T$ have
+    $k$ sites, for every $k$. Let $x,y\ge0$ with $xy<1$. Then
+    \begin{align}
+        \sum_{C\in T}y^{n_C}
+        \le N\sum_{k\ge l+1}(xy)^k
+        =N\frac{(xy)^{l+1}}{1-xy}.
+    \end{align}
+    This is the inner sum of \cite[lines 1238--1241]{Hastings2006Solving}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Group the clusters by their number of sites $k\ge l+1$: the clusters with
+    $k$ sites contribute at most $Nx^ky^k$. A finite sum of $(xy)^k$ over
+    exponents $k\ge l+1$ is bounded by the geometric series.
+\end{proof}
+
+\begin{theorem}[The percolation bound]
+    \label{thm:hastings_percolation}
+    \lean{TNLean.Lattice.sum_nonempty_powerset_prod_le_percolation,
+        TNLean.Lattice.pow_succ_div_one_sub_le,
+        TNLean.Lattice.pow_eq_exp_neg_div}
+    \leanok
+    \uses{thm:hastings_percolation_exp, thm:hastings_percolation_cluster_sum}
+    In the setting of Theorem~\ref{thm:hastings_percolation_cluster_sum}, let
+    the weights satisfy $0\le a_C\le y^{n_C}$, let $N\ge0$, and let
+    $0<xy\le1/2$. Put $\xi_{\rm perc}=1/\ln(1/(xy))$. Then
+    \begin{align}
+        \sum_{\emptyset\ne U\subseteq T}\ \prod_{C\in U}a_C
+        \le\exp\bigl(Ne^{-l/\xi_{\rm perc}}\bigr)-1.
+        \label{eq:hastings_percolation}
+    \end{align}
+    With the weights $a_C$ bounding the contributions of the clusters, this
+    is eq.~(perc2) of \cite[lines 1227--1254]{Hastings2006Solving}, with
+    $l=l_{\rm proj}$. There $\xi_{\rm perc}$ is said to be of order the
+    interaction range; here it is explicit.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:hastings_percolation_exp, thm:hastings_percolation_cluster_sum}
+    By Theorem~\ref{thm:hastings_percolation_exp} the left side is at most
+    $\exp(\sum_Ca_C)-1$, and $\sum_Ca_C\le\sum_Cy^{n_C}\le
+        N(xy)^{l+1}/(1-xy)$ by
+    Theorem~\ref{thm:hastings_percolation_cluster_sum}. For $xy\le1/2$,
+    $(xy)^{l+1}/(1-xy)\le2(xy)^{l+1}\le(xy)^l$, and
+    $(xy)^l=e^{-l\ln(1/(xy))}=e^{-l/\xi_{\rm perc}}$.
+\end{proof}
+
+\begin{theorem}[The percolation bound for connected clusters]
+    \label{thm:hastings_percolation_connected}
+    \lean{TNLean.Lattice.sum_nonempty_powerset_prod_le_percolation_connected}
+    \leanok
+    \uses{thm:hastings_percolation, thm:hastings_connected_set_count}
+    Let $G$ be a simple graph on $N$ vertices in which every vertex has degree
+    at most $\Delta$, and put $x=\max(1,\Delta^2)$. Let $T$ be a finite family
+    of sets of at least $l+1$ vertices, each inducing a connected subgraph,
+    with weights $0\le a_C\le y^{|C|}$, and let $0<xy\le1/2$. Then
+    (\ref{eq:hastings_percolation}) holds with
+    $\xi_{\rm perc}=1/\ln(1/(xy))$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:hastings_percolation, thm:hastings_connected_set_count}
+    The clusters of $T$ with $k$ vertices are among the connected sets of $k$
+    vertices, of which there are at most $Nx^k$ by
+    Theorem~\ref{thm:hastings_connected_set_count}. Apply
+    Theorem~\ref{thm:hastings_percolation}.
+\end{proof}
+
+\begin{theorem}[A percolation temperature]
+    \label{thm:hastings_percolation_temperature}
+    \lean{TNLean.Lattice.exists_percolation_temperature}
+    \leanok
+    For real $J$, $S$ and $x$ there is $\beta_0>0$ such that
+    $x(e^{J\beta}-1)e^{SJ\beta}\le1/2$ for every $0\le\beta\le\beta_0$. This
+    is the choice of $\beta_0$ in \cite[lines 1242--1245]{Hastings2006Solving}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The left side is continuous in $\beta$ and vanishes at $\beta=0$.
+\end{proof}
