@@ -176,16 +176,17 @@
    "issue": 9811,
    "prs": {
     "TNLean": [
-     9995
+     9995,
+     10052
     ]
    },
    "title": "The length used by the restricted factorization",
    "summary": "The chain construction uses an explicit localization length, without yet identifying a Lieb–Robinson pair with all the source’s properties.",
-   "context": "The source sets ξ = max(2v/ΔE, ξ<sub>C</sub>) from a Lieb–Robinson bound with a linear support factor |X|. The available chain estimate instead has a factor a|X|²e<sup>v<sub>0</sub>|t|−k/2</sup> at distance k.",
+   "context": "The source sets ξ = max(2<i>v</i>/Δ<i>E</i>, ξ<sub><i>C</i></sub>) from a Lieb–Robinson bound ‖[<i>A</i>(<i>t</i>), <i>B</i>]‖ ≤ <i>c</i>|<i>X</i>| ‖<i>A</i>‖ ‖<i>B</i>‖ e<sup>−dist(<i>X</i>, <i>Y</i>)/ξ<sub><i>C</i></sub></sup>, with a numerical constant <i>c</i>, <i>v</i> of order <i>J</i> and ξ<sub><i>C</i></sub> of order one. The chain estimate used here, <i>C</i>|<i>X</i>| ‖<i>A</i>‖ ‖<i>B</i>‖ e<sup><i>v</i><sub>0</sub>|<i>t</i>| − dist(<i>X</i>, <i>y</i>)/2</sup>, is also linear in |<i>X</i>|.",
    "claims": "The source requires a controlled prefactor, velocity v of order J, length ξ<sub>C</sub> of order one, and a factorization constant polynomial in ξ.",
-   "found": "The restricted construction uses ξ<sub>ch</sub> = 8 max(2v<sub>0</sub>/ΔE, 1) and any ξ′ > 6ξ<sub>ch</sub>. Comparing exponential factors does not remove the quadratic support factor or justify (8v<sub>0</sub>, 8) as a pair satisfying the source’s full bound. Its factorization constant can depend separately on the interaction range, J, ΔE and ξ′.",
+   "found": "The factorization uses the chain estimate through a partial-trace localization whose error carries |<i>X</i>|<sup>2</sup>, but there <i>X</i> is the support of a commutator [<i>H</i>, <i>W</i>] with at most 6<i>R</i> sites, so the square costs only a constant depending on <i>R</i>. The estimate still differs from the source's in two ways: its prefactor <i>C</i> grows with <i>J</i>, whereas the source's is numerical, and the second operator acts on a single site rather than on an arbitrary set. The construction uses ξ<sub>ch</sub> = 8 max(2<i>v</i><sub>0</sub>/Δ<i>E</i>, 1) and any ξ′ &gt; 6ξ<sub>ch</sub>. Because of the constant term in <i>v</i><sub>0</sub>, its constants are not homogeneous in the energy scale; applied to <i>H</i>/Δ<i>E</i>, Lemma 1 holds with a length 16(1 + <i>c<sub>R</sub>J</i>/Δ<i>E</i>) that depends only on <i>J</i>/Δ<i>E</i>, with <i>v</i> = 8<i>c<sub>R</sub>J</i> proportional to <i>J</i>, as in the source.",
    "impact": "The constants are uniform in chain length, but this is not the printed quantitative Lemma 1. No counterexample to the endpoint factorization itself is claimed.",
-   "plan": "Prove the source’s support dependence and controlled constants, then the polynomial prefactor and endpoint rate.",
+   "plan": "Make the factorization constant <i>C</i><sub>1</sub> explicit for <i>H</i>/Δ<i>E</i>, where every coefficient is a polynomial in <i>J</i>/Δ<i>E</i>, and bound it by a polynomial in the scaled length at ξ′ = κ times that length for a fixed κ &gt; 6; then address the endpoint rate.",
    "stage": "area:1"
   },
   {
