@@ -17,20 +17,24 @@ that is diagonal in the left Schmidt vectors of the ground state `Ψ₀`:
 Its proof uses the Hamiltonian only through the positive operators `O_B`, `O_L`, `O_R` of
 Lemma 1.
 
-This file discharges the factorization hypothesis of `norm_inner_mul_sub_le_of_factorization`
-with the positive form of Lemma 1, `exists_projectorFactorization_posSemidef`. The result is
-Lemma 3 on Hastings' own hypotheses: a chain Hamiltonian of finite range and finite interaction
-strength with a unique gapped ground state. The constant `C₁` depends on the range, the
-interaction strength, the gap and `ξ'`, and not on the length of the chain, the cut, the Schmidt
-data or `A`. The bound is on the modulus of the difference, which is stronger than the printed
-one-sided bound.
+This file discharges the factorization hypothesis of `norm_inner_mul_sub_le_of_factorization` with
+the positive form of Lemma 1, `exists_projectorFactorization_posSemidef`. The result is a
+quantitatively restricted Lemma 3 on Hastings' own hypotheses: a chain Hamiltonian of finite range
+and finite interaction strength with a unique gapped ground state. The constant `C₁` depends on the
+range, the interaction strength, the gap and `ξ'`, and not on the length of the chain, the cut, the
+Schmidt data or `A`. The bound is on the modulus of the difference, which is stronger than the
+printed one-sided bound.
 
 **Local fix (positivity rate):** the proof of Lemma 3 needs `O_B` positive, and the positive
-form of Lemma 1 decays at half the rate of the printed Lemma 1. With Lemma 1 at every rate
-`ξ'' > 6ξ`, eq. `fwdback` therefore holds with `ε(l) = C₁ e^{-l/ξ'}` for every `ξ' > 12ξ`, with
-`ξ = 8 max(2v/ΔE, 1)` for the chain Lieb–Robinson velocity `v`, rather than at the printed
-`ξ' = 6ξ` with `ξ = max(2v/ΔE, ξ_C)` (lines 139–142). Documented in
-`docs/paper-gaps/hastings07_lemma1_positivity_rate.tex`,
+form of Lemma 1 decays at half its rate, so eq. `fwdback` holds with `ε(l) = C₁ e^{-l/ξ'}` for
+every `ξ' > 12ξ` rather than `ξ' > 6ξ`. Documented in
+`docs/paper-gaps/hastings07_lemma1_positivity_rate.tex`.
+
+**Scope restriction (quantitative bounds):** `exists_norm_inner_mul_sub_le` inherits the
+quantitative restrictions of the formalized Lemma 1. Its length is `ξ = 8 max(2v₀/ΔE, 1)`,
+with `v₀` the velocity of the chain localization estimate, which is not shown to be the
+source's `max(2v/ΔE, ξ_C)` (lines 96–112, 139–142); the printed `ξ' = 6ξ` is not reached; and
+`C₁` is not shown to be bounded by a polynomial in `ξ` (lines 258–262). Documented in
 `docs/paper-gaps/hastings07_lemma1_decay_length.tex` and
 `docs/paper-gaps/hastings07_gaussian_average_exponent.tex`.
 
