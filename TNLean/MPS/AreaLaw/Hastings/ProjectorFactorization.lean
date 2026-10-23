@@ -40,7 +40,7 @@ lines 258–262 is not established. Documented in
 `docs/paper-gaps/hastings07_gaussian_average_exponent.tex`. Elimination: establish the source's
 support dependence and controlled Lieb–Robinson constants, track energy rescaling and all
 factorization constants to prove the polynomial bound, and settle the endpoint rate; these
-remain part of https://github.com/LionSR/TNLean/issues/9811.
+steps remain open.
 
 ## Main declarations
 
