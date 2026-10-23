@@ -24,6 +24,20 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Gaussian absolute first moment — promoted (2026-10-23)
+
+- **Pattern:** Bound the integral of `|t|` against a centred Gaussian, either
+  by `√(2h/π)` or by the simpler `√h`.
+- **Seen:** The tail specialization in `Lattice/GaussianFilteredIncrement.lean`
+  and the independent variance argument in `MPS/AreaLaw/Hastings/GaussianTimeAverage.lean`.
+  The additional proof reported in #9945 is already absent from main.
+- **Abstraction:** `TNLean.Lattice.integral_abs_gaussianReal_le_sqrt_two_mul_div_pi`
+  specializes the existing tail bound to zero; `integral_abs_gaussianReal_le`
+  follows by `2 ≤ π`. Both live in `Lattice/GaussianTailMoment.lean`.
+- **Notes:** The filtered increment, time average, interaction picture and
+  boundary localization use these shared facts. Zero variance needs no extra
+  assumption. No new tactic or independent moment proof is introduced.
+
 ### Counting supports in short windows — promoted (2026-10-21)
 
 - **Pattern:** Bound the number of supports contained in a window of at most `n`

@@ -76,15 +76,40 @@ the parameter $q$. Norms are operator norms.
     the norm.
 \end{proof}
 
-\begin{theorem}[First absolute moment of a Gaussian]
-    \label{thm:hastings_gaussian_absolute_moment}
-    \lean{TNLean.MPS.AreaLaw.Hastings.integral_abs_gaussianReal_le}
+\begin{theorem}[First absolute moment of a Gaussian tail]
+    \label{thm:hastings_gaussian_absolute_moment_tail}
+    \lean{TNLean.Lattice.integral_compl_Icc_abs_gaussianReal_le}
     \leanok
-    For every $h\ge0$, $\int|t|\,d\gamma_h(t)\le\sqrt h$.
+    For $h,T\ge0$,
+    \begin{align*}
+        \int_{|t|>T}|t|\,d\gamma_h(t)
+        \le \sqrt{2h/\pi}\,e^{-T^2/(2h)},
+    \end{align*}
+    where the right-hand side is interpreted as zero when $h=0$.
 \end{theorem}
 \begin{proof}\leanok
-    The variance of $|t|$ is nonnegative, so
-    $\bigl(\int|t|\,d\gamma_h\bigr)^2\le\int t^2\,d\gamma_h=h$.
+    If $h=0$, the measure is concentrated at zero and the integral vanishes.
+    For $h>0$, write $\varphi_h(t)=(2\pi h)^{-1/2}e^{-t^2/(2h)}$.
+    Since $(-h\varphi_h)'(t)=t\varphi_h(t)$ and $\varphi_h(t)\to0$ as
+    $t\to\infty$, one has $\int_T^\infty t\varphi_h(t)\,dt=h\varphi_h(T)$.
+    Reflection gives the same contribution on $(-\infty,-T)$, hence the
+    asserted bound, with equality for $h>0$.
+\end{proof}
+
+\begin{theorem}[First absolute moment of a Gaussian]
+    \label{thm:hastings_gaussian_absolute_moment}
+    \lean{TNLean.Lattice.integral_abs_gaussianReal_le_sqrt_two_mul_div_pi,
+        TNLean.Lattice.integral_abs_gaussianReal_le}
+    \leanok
+    For every $h\ge0$,
+    $\int|t|\,d\gamma_h(t)\le\sqrt{2h/\pi}\le\sqrt h$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:hastings_gaussian_absolute_moment_tail}
+    Specialize Theorem~\ref{thm:hastings_gaussian_absolute_moment_tail} to $T=0$.
+    Since $|t|$ vanishes at zero, removing that point does not change the
+    integral, even when $h=0$. Finally, $2\le\pi$ gives
+    $\sqrt{2h/\pi}\le\sqrt h$.
 \end{proof}
 
 \begin{theorem}[Stability of the Gaussian time average]
