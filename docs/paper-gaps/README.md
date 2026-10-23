@@ -1367,8 +1367,10 @@ positive and the later estimate uses `‖M_L O_L‖` at most the threshold.
 [hastings07_lemma1_decay_length.tex](hastings07_lemma1_decay_length.tex)
 (scope restriction, open) compares the chain Lieb–Robinson estimate with
 Hastings's bound (arXiv:0705.2024v4, lines 96–112). The chain commutator bound is
-linear in the support, as in the source; its quadratic localization factor only
-affects supports of at most `6R` sites. It differs in having a prefactor that
+linear in the support, as in the source. Its quadratic localization factor enters
+with supports of at most `6R` sites for the parts and of `O(R + l)` sites for the
+boundary operator, where the faster decay of that term absorbs the polynomial in
+`l`; it changes the constant, not the length or the rate. It differs in having a prefactor that
 grows with `J` and a single-site second operator, so `(v₀, 2)` is not shown to be
 a source pair. The length `ξ = 8 max(2v₀/ΔE, 1)` is not homogeneous in `(J, ΔE)`;
 applied to `H/ΔE`, Lemma 1 holds with the homogeneous length

@@ -29,8 +29,8 @@ restrictions of `exists_projectorFactorization` are unchanged. Documented in
 ## Main results
 
 * `Entropy.IsSupportedOn.smul`, `Matrix.IsGappedGroundState.smul`,
-  `ChainHamiltonian.smul`: rescaling a supported operator, a gapped ground state and a chain
-  Hamiltonian by a positive real number.
+  `ChainHamiltonian.smul`: rescaling a supported operator by any scalar, and a gapped ground
+  state and a chain Hamiltonian by a nonnegative real number.
 * `lemmaOneLength_div`: `lemmaOneLength R (J/ΔE) 1 = 16 (1 + (v₀ − 1)/ΔE)`.
 * `exists_projectorFactorization_div`: Lemma 1 with the length `lemmaOneLength R (J/ΔE) 1`.
 -/
@@ -51,7 +51,7 @@ theorem _root_.Entropy.IsSupportedOn.smul {V : Type*} {n : V → ℕ} {D : Finse
   · simp [hX.2 σ τ σ' τ' h1 h2 h3 h4]
 
 /-- **Rescaling a gapped ground state.** If `Ω` is a gapped ground state of `H` with energy
-`E₀` and gap `Δ`, then for `c > 0` it is one of `c H` with energy `c E₀` and gap `c Δ`. -/
+`E₀` and gap `Δ`, then for `c ≥ 0` it is one of `c H` with energy `c E₀` and gap `c Δ`. -/
 theorem _root_.Matrix.IsGappedGroundState.smul {n : Type*} [Fintype n] [DecidableEq n]
     {H : Matrix n n ℂ} {E₀ Δ : ℝ} {Ω : EuclideanSpace ℂ n}
     (hgs : IsGappedGroundState H E₀ Ω Δ) {c : ℝ} (hc : 0 ≤ c) :
