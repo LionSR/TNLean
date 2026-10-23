@@ -109,7 +109,7 @@
           "issues": [
             9822
           ],
-          "physics": "The full average over words has exponentially many terms. Replacing it by an average of polynomially many words drawn at random gives an operator <i>K</i> close to <i>A</i> in operator norm with high probability, by the matrix Bernstein inequality, a bound of Tropp on the deviation of a sum of independent random matrices from its mean. With high probability each local term also occurs only <i>O</i>(log <i>n</i>/ε) times in every sampled word, so <i>K</i> has polynomial Schmidt rank at every cut. Neither Mathlib nor QICLean has a matrix-valued tail bound yet, which makes this the largest new piece of the formalization.",
+          "physics": "The full average over words has exponentially many terms. Replacing it by an average of polynomially many words drawn at random, multiplied by the same normalization <i>C</i><sup><i>m</i></sup> with <i>C</i> = (1 − ε<sub>0</sub>/<i>n</i>)<sup>−1</sup>, gives an operator <i>K</i> close to <i>A</i> in operator norm with high probability, by the matrix Bernstein inequality, a bound of Tropp on the deviation of a sum of independent random matrices from its mean. With high probability each local term also occurs only <i>O</i>(log <i>n</i>/ε) times in every sampled word, so <i>K</i> has polynomial Schmidt rank at every cut. Neither Mathlib nor QICLean has a matrix-valued tail bound yet, which makes this the largest new piece of the formalization.",
           "delivers": "A sampled projector <i>K</i> with ‖<i>K</i> − <i>A</i>‖ ≤ 1/poly(<i>n</i>) whose left factors at each cut map matrix product states of polynomial bond dimension to matrix product states of polynomial bond dimension."
         },
         {
@@ -118,7 +118,7 @@
             9823
           ],
           "physics": "One step of the sweep takes a viable set at cut <i>i</i> − 1 to one at cut <i>i</i>: tensor every member with the <i>d</i> basis states of the next site; shrink the set to polynomial size with the net of boundary contractions; trim every member back to polynomial bond dimension; then apply the left factors of the sampled projector, which restores the overlap from 1/2 to 1 − 1/poly(<i>n</i>) at a polynomial cost in size and bond dimension. The polynomials do not grow from step to step, so the induction reaches the last site, where some state in the span of the final set has overlap close to one with Γ; a final convex optimization over that span selects it.",
-          "delivers": "For every <i>i</i>, a viable set at cut <i>i</i> of polynomial size whose members have polynomial bond dimension: the mathematical core of Theorem 1, which then finds a matrix product state with overlap at least 1 − η with Γ in time <i>n</i><sup><i>c</i>(<i>d</i>, ε)</sup> poly(<i>n</i>/η)."
+          "delivers": "For every <i>i</i>, a viable set at cut <i>i</i> of polynomial size whose members have polynomial bond dimension: the mathematical core of Theorem 1, which then finds a matrix product state with overlap at least 1 − η with Γ in time <i>n</i><sup><i>c</i>(<i>d</i>, ε<sub>0</sub>, ε)</sup> poly(<i>n</i>/η), with <i>c</i>(<i>d</i>, ε<sub>0</sub>, ε) = 2<sup><i>O</i>(log<sup>3</sup> <i>d</i>/ε) + <i>O</i>(ε<sub>0</sub>/ε)</sup>."
         }
       ]
     }
