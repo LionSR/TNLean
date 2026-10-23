@@ -8,6 +8,7 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.MPS.AreaLaw.Hastings
 
+import TNLean.MPS.AreaLaw.Hastings.BoundaryLocalization
 import TNLean.MPS.AreaLaw.Hastings.ChainBootstrap
 import TNLean.MPS.AreaLaw.Hastings.ChainLocalizedParts
 import TNLean.MPS.AreaLaw.Hastings.CutProductExpectation
@@ -17,6 +18,7 @@ import TNLean.MPS.AreaLaw.Hastings.Doubling
 import TNLean.MPS.AreaLaw.Hastings.EffectExpectation
 import TNLean.MPS.AreaLaw.Hastings.EffectFromFactorization
 import TNLean.MPS.AreaLaw.Hastings.GaussianTimeAverage
+import TNLean.MPS.AreaLaw.Hastings.InteractionPicture
 import TNLean.MPS.AreaLaw.Hastings.IntervalMutualInformation
 import TNLean.MPS.AreaLaw.Hastings.MPSFromEntropy
 import TNLean.MPS.AreaLaw.Hastings.MainTheorem
