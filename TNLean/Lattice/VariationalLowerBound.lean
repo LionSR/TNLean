@@ -52,7 +52,9 @@ namespace Matrix
 
 variable {n : Type*} [Fintype n]
 
-/-- The iterated commutator `ad_Hᵏ(A)`, with `ad_H(X) = H X − X H`. -/
+/-- The iterated commutator `ad_Hᵏ(A)`, with `ad_H(X) = H X − X H`. This is
+`(LieAlgebra.ad ℂ _ H ^ k) A` for the commutator Lie bracket; it is defined by recursion here
+because `Matrix n n ℂ` carries no `LieRing` instance. -/
 def commutatorIter (H A : Matrix n n ℂ) : ℕ → Matrix n n ℂ
   | 0 => A
   | k + 1 => H * commutatorIter H A k - commutatorIter H A k * H
@@ -225,7 +227,9 @@ graph, act on the sites `V`, and let `H = ∑_{g ∈ G} P_g H₀ P_g†` be the 
 one term `H₀`. For real constants `a_k` and
 `K = H₀ + ∑_{k=1}^{m} a_k iᵏ ad_Hᵏ(H₀)`, if `K − λ ≥ 0` then every eigenvalue `E` of `H`, in
 particular the ground energy `E₀`, satisfies `E ≥ |G| λ`: with `λ = λ_min(K)` and `N = |G|` the
-number of translates, `E₀/N ≥ λ_min(K)`.
+number of translates, `E₀/N ≥ λ_min(K)`. When `G` acts freely on the sites, as the
+translations of a periodic lattice do, the translates are distinct and `N` is the number of
+sites; otherwise each translate is counted `|stabilizer|` times.
 Hastings, arXiv:cond-mat/0508554v3, eq. `varnum`, lines 856–877. -/
 theorem card_mul_le_of_mulVec_eq_smul_of_sitePerm [Fintype G] (q : ℕ)
     (H₀ : Matrix (V → Fin q) (V → Fin q) ℂ) (a : ℕ → ℝ) (m : ℕ) {c : ℝ}

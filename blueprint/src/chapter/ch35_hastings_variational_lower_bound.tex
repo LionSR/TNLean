@@ -25,7 +25,7 @@ of a Hermitian $K$, the largest $\lambda$ with $K-\lambda\ge0$.
     and $\overline{i^k}(-1)^k=i^k$.
 \end{proof}
 
-\begin{theorem}[The variational lower bound]
+\begin{theorem}[The variational lower bound for unitary conjugates]
     \label{thm:hastings_variational_lower_bound}
     \lean{Matrix.card_mul_le_of_mulVec_eq_smul_of_conj,
         Matrix.posSemidef_sub_card_smul_of_conj, Matrix.commutatorIter_conj,
@@ -39,15 +39,10 @@ of a Hermitian $K$, the largest $\lambda$ with $K-\lambda\ge0$.
         K=H_0+\sum_{k=1}^ma_k\,i^k\operatorname{ad}_H^k(H_0).
     \end{align*}
     If $K-\lambda\ge0$, then $H-N\lambda\ge0$; in particular every eigenvalue
-    of $H$, and so its ground energy $E_0$, is at least $N\lambda$. For
-    Hermitian $H_0$ and $\lambda=\lambda_{\min}(K)$ this is
-    \begin{align*}
-        E_0/N\ge\lambda_{\min}\Bigl(H_0+\sum_{k=1}^ma_k\,i^k
-        \operatorname{ad}_H^k(H_0)\Bigr),
-    \end{align*}
-    equation (varnum) of \cite{Hastings2006Solving}, lines 856--877. There the
-    terms are written with $[H_i,H]=-\operatorname{ad}_H(H_i)$, which only
-    changes the signs of the arbitrary constants.
+    of $H$, and so its ground energy $E_0$, is at least $N\lambda$. This
+    generalizes equation (varnum) of \cite{Hastings2006Solving}, whose terms are
+    the translates of one term; the source's form is
+    Theorem~\ref{thm:hastings_variational_lower_bound_sites}.
 \end{theorem}
 \begin{proof}\leanok
     Conjugation by a unitary $U$ that commutes with $H$ commutes with
@@ -59,7 +54,7 @@ of a Hermitian $K$, the largest $\lambda$ with $K-\lambda\ge0$.
     $0\le\langle\Omega,(H-N\lambda)\Omega\rangle=(E-N\lambda)\|\Omega\|^2$.
 \end{proof}
 
-\begin{theorem}[The bound for translates on finitely many sites]
+\begin{theorem}[The variational lower bound]
     \label{thm:hastings_variational_lower_bound_sites}
     \lean{Matrix.card_mul_le_of_mulVec_eq_smul_of_sitePerm, Matrix.sitePermMatrix,
         Matrix.sitePermMatrix_mul, Matrix.sitePermMatrix_mem_unitaryGroup,
@@ -72,8 +67,19 @@ of a Hermitian $K$, the largest $\lambda$ with $K-\lambda\ge0$.
     configurations of the sites along $g$. For the sum
     $H=\sum_{g\in G}P_gH_0P_g^\dagger$ of the translates of one term $H_0$, and
     $K$ as in Theorem~\ref{thm:hastings_variational_lower_bound}, every
-    eigenvalue of $H$ is at least $|G|\lambda$ whenever $K-\lambda\ge0$. With
-    $N=|G|$ the number of translates, $E_0/N\ge\lambda_{\min}(K)$.
+    eigenvalue of $H$ is at least $|G|\lambda$ whenever $K-\lambda\ge0$. For
+    Hermitian $H_0$, with $\lambda=\lambda_{\min}(K)$ and $N=|G|$,
+    \begin{align*}
+        E_0/N\ge\lambda_{\min}\Bigl(H_0+\sum_{k=1}^ma_k\,i^k
+        \operatorname{ad}_H^k(H_0)\Bigr).
+    \end{align*}
+    When $G$ acts freely on the sites, as the translations of a periodic
+    lattice act simply transitively, the translates are distinct and $N$ is the
+    number of sites; otherwise each translate is counted with the size of its
+    stabilizer. This is equation (varnum) of \cite{Hastings2006Solving}, lines
+    856--877, for translation-invariant $H=\sum_iH_i$; there the terms are
+    written with $[H_i,H]=-\operatorname{ad}_H(H_i)$, which only changes the
+    signs of the arbitrary constants.
 \end{theorem}
 \begin{proof}\leanok
     The map $g\mapsto P_g$ is multiplicative, so conjugation by $P_h$ permutes
