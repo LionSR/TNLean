@@ -1351,6 +1351,32 @@ positive and the later estimate uses `‖M_L O_L‖` at most the threshold.
   length `ξ₀` rather than `ξ₀/2`, and the implicit hypotheses `2 C₁ > 1` and
   `ln C₁ + C₂ ≥ 0`.
 
+### One-dimensional area law after Hastings: the decay length of Lemma 1
+
+[hastings07_lemma1_decay_length.tex](hastings07_lemma1_decay_length.tex)
+(scope restriction, open) distinguishes the chain localization estimate with
+quadratic support dependence from Hastings's linear-support Lieb–Robinson
+bound (arXiv:0705.2024v4, lines 96–112). The exponential comparison motivates
+`ξ = 8 max(2v₀/ΔE, 1)` but does not establish the source's full bound for the
+pair `(8v₀, 8)`. The factorization constant is uniform in chain length and
+local dimension; the source's polynomial bound in `ξ` (lines 258–262) remains
+unproved, as does the endpoint rate `ξ' = 6ξ`. The note records the required
+estimates and energy-rescaling analysis under the still-open issue #9811.
+
+## Hastings' high-temperature matrix product form, arXiv:cond-mat/0508554
+
+- [`hastings05_planar_domain_scope.tex`](hastings05_planar_domain_scope.tex)
+  (scope restriction, open) records that the matrix product form of Trotter
+  products in Section IV of Hastings (arXiv:cond-mat/0508554v3, lines
+  1017–1079), stated there for an arbitrary lattice and metric, is formalized for
+  finite domains of `ℤ²` with the walk distance of the local Hamiltonians of the
+  two-dimensional area law. The centre-indexed theorem preserves the source's
+  radius bound, including centres outside their supports; the original
+  diameter-bounded statement is a corollary. The source's count of at most
+  `nS` index components per site remains unproved: for a product of `m`
+  factors the construction carries `m` components of `q²` values at every site,
+  one for every factor wherever it acts.
+
 ## Rényi entropy and matrix product state approximation
 
 - [`swvc08_renyi_bond_dimension_sign.tex`](swvc08_renyi_bond_dimension_sign.tex)
@@ -1360,16 +1386,9 @@ positive and the later estimate uses `‖M_L O_L‖` at most the threshold.
   sign; the corrected minus sign preserves the obstruction from
   super-logarithmic entropy growth. The Lean development remains open in #9857.
 
-### High-temperature product form after Hastings: planar domains
-
-[hastings05_planar_domain_scope.tex](hastings05_planar_domain_scope.tex)
-(scope restriction, open) records that the matrix product form of Trotter
-products in Section IV of Hastings (arXiv:cond-mat/0508554v3, lines
-1017–1079), stated there for an arbitrary lattice and metric, is formalized for
-finite domains of `ℤ²` with the walk distance of the local Hamiltonians of the
-two-dimensional area law. The centre-indexed theorem preserves the source's
-radius bound, including centres outside their supports; the original
-diameter-bounded statement is a corollary. It also records that the source's count of at most
-`nS` index components per site is not established: for a product of `m`
-factors the construction carries `m` components of `q²` values at every site,
-one for every factor wherever it acts.
+- [`swvc08_truncation_squared_norm.tex`](swvc08_truncation_squared_norm.tex)
+  (false source, resolved) records the missing square in the displayed truncation
+  bound of Schuch–Wolf–Verstraete–Cirac, arXiv:0705.0292v2, lines 239–245. A two-qubit
+  state disproves the printed norm estimate. The note compares the corrected
+  squared-norm bound with the stronger proved sequential-truncation estimate;
+  the Rényi family theorem remains open in #9855.

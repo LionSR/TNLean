@@ -200,6 +200,7 @@ import TNLean.Algebra.TailRadiusWeights
 import TNLean.Algebra.TensorProductContraction
 import TNLean.Algebra.TensorProductRegrouping
 import TNLean.Algebra.ThreeOperatorPerturbation
+import TNLean.Algebra.ToEuclideanCLM
 import TNLean.Algebra.ToEuclideanLinApply
 import TNLean.Algebra.TraceInvariantSubmodule
 import TNLean.Algebra.TranslatedCharacterOrthogonality

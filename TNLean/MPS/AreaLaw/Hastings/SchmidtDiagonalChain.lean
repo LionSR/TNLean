@@ -193,11 +193,8 @@ theorem norm_inner_mul_sub_le_of_factorization {j l : ℕ}
   obtain ⟨OB, OL, OR, SB, SL, SR, hOB, hOL, hOR, hOB1, hOL1, hOR1, hsB, hSB, hsL, hSL, hsR, hSR,
     hprod⟩ := hfact
   classical
-  obtain ⟨σ₀⟩ : Nonempty (Fin L → Fin q) := by
-    by_contra h
-    rw [not_nonempty_iff] at h
-    rw [Subsingleton.elim Ω 0, norm_zero] at hΩ
-    exact zero_ne_one hΩ
+  obtain ⟨σ₀, _⟩ := Function.ne_iff.mp
+    ((WithLp.ofLp_eq_zero (x := Ω)).not.mpr (norm_ne_zero_iff.mp (by simp [hΩ])))
   have hBL1 : ‖Entropy.localLift (n := fun _ : Fin L ↦ q) (leftBlock L j)
       (schmidtDiagonal O ψL)‖ ≤ 1 :=
     (l2_opNorm_reindex_le _ _ _).trans
