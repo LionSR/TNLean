@@ -668,8 +668,8 @@ theorem eq_zero_of_mul_evalWord_eq_zero_of_isNBlkInjective_of_le_mul
     {A : MPSTensor d D} {L₀ k q : ℕ} (hInj : Kraus.IsNBlkInjective A L₀)
     (hq : 1 ≤ q) (hkq : k ≤ q * L₀) {Z : Matrix (Fin D) (Fin D) ℂ}
     (hzero : ∀ σ : Fin k → Fin d, Z * Kraus.evalWord A (List.ofFn σ) = 0) :
-    Z = 0 := by
-  exact eq_zero_of_mul_evalWord_eq_zero_of_wordSpan_eq_top
+    Z = 0 :=
+  eq_zero_of_mul_evalWord_eq_zero_of_wordSpan_eq_top
     (A := A) (k := k) (n := q * L₀)
     (Kraus.wordSpan_top_of_mul A ((wordSpan_eq_top_iff_isNBlkInjective A L₀).mpr hInj) q hq)
     hkq hzero
@@ -734,7 +734,7 @@ theorem left_witness_unique_of_isNBlkInjective
   have hmul : LinearMap.mulRight ℂ Y₁ = LinearMap.mulRight ℂ Y₂ := by
     apply LinearMap.ext_on_range
       (v := fun σ : Fin L₀ → Fin d => Kraus.evalWord A (List.ofFn σ))
-    · simpa [Kraus.wordSpan, Kraus.wordSpan] using
+    · simpa [Kraus.wordSpan] using
         (wordSpan_eq_top_iff_isNBlkInjective A L₀).mpr hInj
     · intro σ
       simpa [LinearMap.mulRight_apply] using hword σ
@@ -790,7 +790,7 @@ theorem boundary_matrix_commutes {A : MPSTensor d D} [NeZero D]
         LinearMap.mulRight ℂ (Y τ) := by
       apply LinearMap.ext_on_range
         (v := fun σ : Fin (L - 1) → Fin d => Kraus.evalWord A (List.ofFn σ))
-      · simpa [Kraus.wordSpan, Kraus.wordSpan] using
+      · simpa [Kraus.wordSpan] using
           wordSpan_eq_top_of_isInjective hA (by omega : 0 < L - 1)
       · intro σ_tail
         simp only [LinearMap.comp_apply, LinearMap.mulLeft_apply,
@@ -827,7 +827,7 @@ theorem boundary_matrix_commutes {A : MPSTensor d D} [NeZero D]
       have hφ : LinearMap.mulLeft ℂ (X * M₁ - M₁ * X) = 0 := by
         apply LinearMap.ext_on_range
           (v := fun f : Fin (M + 1 - L) → Fin d => Kraus.evalWord A (List.ofFn f))
-        · simpa [Kraus.wordSpan, Kraus.wordSpan] using wordSpan_eq_top_of_isInjective hA hML'
+        · simpa [Kraus.wordSpan] using wordSpan_eq_top_of_isInjective hA hML'
         · intro f
           simp only [LinearMap.mulLeft_apply, LinearMap.zero_apply]
           let τ₀ : Fin (M + 1) → Fin d := fun k =>
