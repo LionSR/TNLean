@@ -22,8 +22,10 @@ diameter larger than $l_{\rm proj}$ by
  \le\exp\Bigl[N\sum_{n=l_{\rm proj}+1}^{\infty}(xy)^n\Bigr]-1,
  \label{eq:hastings05_percolation_printed}
 \end{align}
-where $n_C$ is the number of sites of the cluster $C$ and at most $Nx^n$
-clusters have $n$ sites (line 1240). The sum starts at $n=l_{\rm proj}+1$,
+where $n_C$ is the number of sites of the cluster $C$,
+$y=(e^{J\beta}-1)e^{SJ\beta}$ bounds the weight contributed by each site of a
+cluster (lines 1206--1213), and at most $Nx^n$ clusters have $n$ sites
+(line 1240). The sum starts at $n=l_{\rm proj}+1$,
 which presumes that a cluster of diameter larger than $l_{\rm proj}$ has more
 than $l_{\rm proj}$ sites.
 
@@ -53,10 +55,13 @@ Start the sum at $n=l+1$ with $l=\lfloor l_{\rm proj}/(2R)\rfloor$, as
  \le N(xy)^{-1}e^{-l_{\rm proj}/\xi_{\rm perc}},
  \qquad
  \xi_{\rm perc}=\frac{2R}{\ln(1/(xy))},
+ \label{eq:hastings05_percolation_correction}
 \end{align}
-since $l\ge l_{\rm proj}/(2R)-1$. The decay length is of order the interaction
+since $l\ge l_{\rm proj}/(2R)-1$. The decay length $\xi_{\rm perc}$ of
+(\ref{eq:hastings05_percolation_correction}) is of order the interaction
 range, as the source states at line 1250; the factor $R$ there is what
-compensates the printed start of the sum. Only the constant $N$ changes, to
+compensates the printed start of the sum. Compared with
+(\ref{eq:hastings05_percolation_printed}), only the constant $N$ changes, to
 $N(xy)^{-1}$.
 
 \section{Scope}
