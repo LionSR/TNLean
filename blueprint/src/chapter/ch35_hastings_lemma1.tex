@@ -338,7 +338,7 @@ $X=O_LO_R$, Theorem~\ref{thm:hastings_interaction_average_last} is the bound of
     \leanok
     \uses{def:hastings_interaction_average, thm:chain_lieb_robinson}
     Let $H$ be a finite-range Hamiltonian of range $R$ on the chain of $L$
-    sites with local dimension $q\ge1$ and terms of norm at most $J$. Let $H_0$,
+    sites with local dimension $d\ge1$ and terms of norm at most $J$. Let $H_0$,
     $A$ and $B$ be Hermitian, with $H-H_0$ supported on a set of sites $Z$, and
     let $P_B$ be the Gaussian average of
     Definition~\ref{def:hastings_interaction_average} for $A$, $B$ and a
@@ -357,6 +357,7 @@ $X=O_LO_R$, Theorem~\ref{thm:hastings_interaction_average_last} is the bound of
     to~\cite{Hastings2007AreaLaw}.
 \end{theorem}
 \begin{proof}\leanok
+    \uses{thm:qc_supported_projected_relative_evolution}
     Write $V(t)=e^{iHt}e^{-iH_0t}$. Its generator is the Heisenberg evolution
     of $H-H_0$, which Theorem~\ref{thm:chain_lieb_robinson} approximates by
     an operator supported within distance $\ell$ of $Z$ up to
@@ -370,8 +371,14 @@ $X=O_LO_R$, Theorem~\ref{thm:hastings_interaction_average_last} is the bound of
     $2e^{-T^2/(2h)}$, gives~(\ref{eq:hastings_boundary_localization}).
 \end{proof}
 
-In the application $A=H_0=M_L+M_R$ and $A+B=H$ up to a multiple of the
-identity, which leaves $P_B$ unchanged, so the first two norms vanish. $Z$ is
+In the source's application $A=H_0=M_L+M_R$ and $B=M_B$, so $\|A-H_0\|=0$,
+while $\|A+B-H\|$, with the ground energy set to zero, is the error of the
+localized parts of Theorem~\ref{thm:hastings_localized_parts}, exponentially
+small in $l$ \cite[lines 849--850]{Hastings2007AreaLaw}. Alternatively, take
+$B=H-E_0-H_0$. Adding $E_0$ to $A$ does not change $P_B$, since the two
+phases $e^{\pm iE_0t}$ cancel, so the theorem may be applied with $A$ and the
+comparison operator both equal to $H_0+E_0$; then $A+B=H$ and both norms
+vanish. $Z$ is
 the window of width proportional to $l$ that carries $H-H_0$. With $h=q/\Delta E^2$,
 $q$ proportional to $l$, and $\ell$ proportional to $l$, the bound becomes
 the $\mathcal O(\Delta E^{-1}J\sqrt q\,e^{-l/(6\xi)})$
