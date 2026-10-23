@@ -26,7 +26,7 @@ source's bound. On a finite graph, or any finite set of sites, a finite group `G
 sites gives such unitaries by permuting the sites; `E₀/|G| ≥ λ_min(K)` then holds with `N = |G|`
 the number of translates.
 
-Lines 1005–1009 of the source record that the filtered terms `H̃ᵢ⁰` are one choice of the
+Lines 1005–1009 of the source record that its filtered local terms are one choice of the
 constants `a_k`; that instance is not part of this file.
 
 ## Main definitions
