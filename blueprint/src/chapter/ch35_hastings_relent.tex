@@ -55,10 +55,14 @@ constant $C_2$ is $7$, as recorded in~\cite{gap:hastings07_relent_constants}.
     $Z=O_LO_R$ is a projection with $\|ZEZ-P_0\|\le2\epsilon+\epsilon^2$ and
     $\operatorname{tr}(\sigma Z)\ge1-2\epsilon^2$, and the Cauchy--Schwarz
     inequality for the expectation in $\sigma$ bounds
-    $x=\operatorname{tr}(\sigma E)$ by $36\epsilon'$; $x$ is positive because
-    the kernel of $\sigma$ lies in that of $P_0$. Since $E$ is supported on
-    $A\cup B$, its expectations in $\rho$ and $\sigma$ are those in the
-    marginal $\rho_{A\cup B}$ and in $\rho_A\otimes\rho_B$. The monotonicity of
+    $x=\operatorname{tr}(\sigma E)$ by $36\epsilon'$. Write $\rho=P_0$ for the
+    ground state, with marginals $\rho_{A\cup B}$, $\rho_A$ and $\rho_B$. Since
+    $E$ is supported on $A\cup B$, its expectations in $\rho$ and $\sigma$ are
+    those in the marginal $\rho_{A\cup B}$ and in $\rho_A\otimes\rho_B$. The
+    support of $\rho_{A\cup B}$ lies in the tensor product of the supports of
+    $\rho_A$ and $\rho_B$, so the positive expectation of $E$ in
+    $\rho_{A\cup B}$ makes its expectation $x$ in $\rho_A\otimes\rho_B$
+    positive as well. The monotonicity of
     the relative entropy under the two-outcome measurement $\{E,1-E\}$ bounds
     $S(A)+S(B)-S(A\cup B)$ below by the binary relative entropy of the two
     expectations, which is decreasing in $x$ and increasing in the
@@ -78,15 +82,18 @@ constant $C_2$ is $7$, as recorded in~\cite{gap:hastings07_relent_constants}.
     $c+l\le L$. Suppose that for every natural number $m$ with $c+m\le L$
     there are operators $O_B$, $O_L$, $O_R$ as in
     Theorem~\ref{thm:hastings_relent_projector}, with $O_B$ supported on
-    the $m$ sites on either side of the cut and
-    $\|O_BO_LO_R-P_0\|\le C_1e^{-m/\xi'}$. Suppose further that the
-    entropy $S_c$ of the first $c$ sites satisfies
+    the $m$ sites on either side of the cut, cut short at the left end of
+    the chain when $m>c$, and $\|O_BO_LO_R-P_0\|\le C_1e^{-m/\xi'}$.
+    Suppose further that the entropy $S_c$ of the first $c$ sites satisfies
     \begin{align}
-        S_c\ge\bigl(l+\xi'\ln C_1\bigr)\ln q+F(\xi',q).
+        S_c\ge\bigl(l+\xi'\ln C_1\bigr)\ln q+F(\xi',q),
     \end{align}
+    that is, $l\le(S_c-F(\xi',q))/\ln q-\xi'\ln C_1$. This is the window
+    assumption of~\cite{Hastings2007AreaLaw}, line 483, with $l$ in place of
+    $l_0\ge l$ and the local dimension $D$ written $q$.
     Then~(\ref{eq:hastings_relent}) holds. This is a stage of eq.~(relent)
     of~\cite{Hastings2007AreaLaw} for one pair of intervals, proved at
-    lines 427--503 under the assumption of line 483, with the constants
+    lines 427--503 under that window assumption, with the constants
     of~\cite{gap:hastings07_relent_constants}. The factorization of Lemma~1
     at every scale is a hypothesis, and the Hamiltonian does not enter; the
     source equation remains to be derived from Lemma~1.
