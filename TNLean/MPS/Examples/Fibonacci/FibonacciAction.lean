@@ -235,13 +235,6 @@ def fibUnitAllTau_compression :
     (fun i => MultiBlockCompression.triangular_of_offDiag (fibUnitAllTau_offDiagonal i))
     (fun i s _ p q => by cases s; exact fibUnitAllTau_matched i p q) fibUnitAllTau_unmatched
 
-/-- **The remainder of the compression of `fibOne · fibAllTau` vanishes**: the extension splits
-(data file §4.2). -/
-theorem fibUnitAllTau_remainder_eq_zero (i : Fin 2) :
-    fibUnitAllTau_compression.remainder i = 0 := by
-  unfold fibUnitAllTau_compression
-  exact MultiBlockCompression.remainder_ofRing fibUnitAllTau_offDiagonal i
-
 /-- **The unit fixes the all-`τ` state**, `O_1 ψ_A = ψ_A`, at every positive system size (data
 file §4.2). -/
 theorem mpo_fibOne_mulVec_allTau (L : ℕ) (hL : 0 < L) :
@@ -346,12 +339,6 @@ def fibActAllTau_compression :
     fibActAllTauGaugeInv_mul fibActAllTauConjGolden fibActAllTau_mul_gaugeInv
     (fun i => MultiBlockCompression.triangular_of_offDiag (fibActAllTau_offDiagonal i))
     (fun i s _ p q => by cases s; exact fibActAllTau_matched i p q) fibActAllTau_unmatched
-
-/-- **The remainder of the compression of `fibTau · fibAllTau` vanishes**: the extension splits
-(data file §4.3). -/
-theorem fibActAllTau_remainder_eq_zero (i : Fin 2) : fibActAllTau_compression.remainder i = 0 := by
-  unfold fibActAllTau_compression
-  exact MultiBlockCompression.remainder_ofRing fibActAllTau_offDiagonal i
 
 /-- **The `τ` family carries the all-`τ` state to the state of `C`**, `O_τ ψ_A = ψ_C`, at every
 positive system size (data file §4.3). -/
@@ -533,12 +520,6 @@ def fibActChain_compression : MultiBlockCompression fibActChain fibNimSlots fibN
     fibActChain_mul_gaugeInv
     (fun i => MultiBlockCompression.triangular_of_offDiag (fibActChain_offDiagonal i))
     (fun i s _ p q => fibActChain_matched i s p q) fibActChain_unmatched
-
-/-- **The remainder of the compression of `τ · C` vanishes**: the extension splits (data file
-§4.4). -/
-theorem fibActChain_remainder_eq_zero (i : Fin 2) : fibActChain_compression.remainder i = 0 := by
-  unfold fibActChain_compression
-  exact MultiBlockCompression.remainder_ofRing fibActChain_offDiagonal i
 
 /-- **The `τ` family carries the state of `C` to the sum of the two states**,
 `O_τ ψ_C = ψ_A + ψ_C`, at every positive system size (data file §4.4). -/

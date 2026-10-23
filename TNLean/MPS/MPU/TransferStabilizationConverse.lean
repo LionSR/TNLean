@@ -371,9 +371,7 @@ theorem IsMPU.exists_canonicalFormII_of_supplied_transfer_power [NeZero d]
     (hpower : transferMatrix (Kraus.transferMap U.normalizedFlattening) ^ K =
       Matrix.vecMulVec ρ.vec (1 : Matrix (Fin D) (Fin D) ℂ).vec) :
     ∃ hcfii : IsMPUCanonicalFormII U, hcfii.ρ = ρ := by
-  exact ⟨(hU.canonicalFormIIOfSuppliedTransferPowerWithRho
-    ρ hρpd hρdiag K hpower).1,
-    (hU.canonicalFormIIOfSuppliedTransferPowerWithRho
-      ρ hρpd hρdiag K hpower).2⟩
+  let h := hU.canonicalFormIIOfSuppliedTransferPowerWithRho ρ hρpd hρdiag K hpower
+  exact ⟨h.1, h.2⟩
 
 end MPOTensor

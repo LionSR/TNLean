@@ -1353,6 +1353,13 @@ positive and the later estimate uses `‖M_L O_L‖` at most the threshold.
 
 ## Rényi entropy and matrix product state approximation
 
+- [`swvc08_renyi_bond_dimension_sign.tex`](swvc08_renyi_bond_dimension_sign.tex)
+  (false source, resolved) corrects the sign of the error term in the
+  bond-dimension lower bound of Schuch, Wolf, Verstraete and Cirac
+  (arXiv:0705.0292v2). A flat Schmidt spectrum disproves the printed plus
+  sign; the corrected minus sign preserves the obstruction from
+  super-logarithmic entropy growth. The Lean development remains open in #9857.
+
 ### Matrix product state truncation: the squared norm
 
 [swvc08_truncation_squared_norm.tex](swvc08_truncation_squared_norm.tex)
