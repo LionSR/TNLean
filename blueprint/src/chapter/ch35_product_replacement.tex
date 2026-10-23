@@ -41,7 +41,7 @@ coefficient spaces and cut ranks.
     so is $\chi$. This includes $D=0$ and empty or one-site chains.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:chain_product_replacement_ranks,thm:chain_cut_rank_of_mps}
+    \uses{thm:chain_product_replacement_ranks,thm:chain_mps_of_cut_rank}
     Each internal cut rank of $\chi$ is at most the corresponding rank of
     $\psi$, hence at most $D$. Apply the cut-rank characterization.
 \end{proof}
@@ -167,7 +167,7 @@ coefficient spaces and cut ranks.
     A vector differing from such a slice by a nonzero scalar also has this bound.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:chain_cut_rank_of_mps}
+    \uses{thm:chain_mps_of_cut_rank}
     The sliced coefficient matrix is a submatrix of the full coefficient matrix:
     extend each row and column configuration by the fixed exterior values.
     Taking a submatrix cannot increase rank. Apply the cut-rank characterization,
