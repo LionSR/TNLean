@@ -302,8 +302,8 @@ theorem norm_sub_sequentialTruncation_sq_le (hP : ∀ k, IsStarProjection (P k))
   | zero => simp [sequentialTruncation]
   | succ j ih =>
     rw [Finset.sum_range_succ, sequentialTruncation]
-    set D := leftBlock L (L - 1 - j) with hD
-    set Pj := P (L - 1 - j) with hPj
+    set D := leftBlock L (L - 1 - j)
+    set Pj := P (L - 1 - j)
     set x := ψ - sequentialTruncation P j ψ with hx
     have hH : Pjᴴ = Pj := by
       have h := (hP (L - 1 - j)).isSelfAdjoint.star_eq
@@ -470,7 +470,11 @@ theorem isOpenMPS_sequentialTruncation_leadingEigenprojection
 truncating every internal cut onto the `D` leading eigenvectors of its left marginal gives a
 vector `Φ` with `‖Φ - ψ‖² ≤ ∑_k ε_k(D)`, where `ε_k(D)` is the weight beyond the `D`
 largest eigenvalues at the cut `k`. Verstraete and Cirac, Phys. Rev. B 73, 094423 (2006),
-state `‖Φ - ψ‖² ≤ 2 ∑_k ε_k(D)`; the bound here, without the factor `2`, implies theirs. -/
+state `‖Φ - ψ‖² ≤ 2 ∑_k ε_k(D)`; the bound here, without the factor `2`, implies theirs.
+Within a repeated eigenvalue the eigenvectors are those of the chosen eigenbasis, as in
+`isOpenMPS_sequentialTruncation_leadingEigenprojection` (**Scope restriction (fixed
+eigenbasis)**, `docs/paper-gaps/tnlean_one_dimensional_threshold_truncation.tex`);
+`norm_sub_sequentialTruncation_sq_le` covers every family of projections. -/
 theorem norm_sequentialTruncation_leadingEigenprojection_sub_sq_le
     (ψ : EuclideanSpace ℂ (Fin L → Fin q)) (hψ : ‖ψ‖ = 1) (D : ℕ) :
     let P : ∀ k : ℕ, LeftBlockMatrix L q k := fun k ↦

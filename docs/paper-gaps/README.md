@@ -1312,6 +1312,14 @@ entropy gain across a cut, and how route 1 of Hastings' note added (the
 effect `O_B† O_B`) supplies the Lindblad–Uhlmann data with `C₁` replaced by
 `2 C₁`, keeping the rate `e^{-l/ξ'}`.
 
+### One-dimensional area law after Hastings: the error of the matrix product state
+
+[hastings07_mps_error_measure.tex](hastings07_mps_error_measure.tex)
+(clarification, resolved) records that Hastings' error
+`N (k'/k₀)^{-1/(ξ' ln D)}` for the matrix product state (arXiv:0705.2024v4,
+lines 553–557), stated without an error measure, holds for the squared norm,
+through the squared error `‖Φ − ψ‖² ≤ ∑_j τ_j(k')` of sequential truncation.
+
 ### One-dimensional area law after Hastings: the threshold of the spectral cut-offs
 
 [hastings07_spectral_cutoff_threshold.tex](hastings07_spectral_cutoff_threshold.tex)
