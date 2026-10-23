@@ -18,10 +18,10 @@ prefactor `√l` cannot be absorbed into a constant at the rate `e^{-l/6ξ}`, bu
 slower rate `e^{-l/ξ'}` with `ξ' > 6ξ`: with `δ = 1/(6ξ) − 1/ξ' > 0`,
 `sup_{l ≥ 0} √l e^{-δl} = (2eδ)^{-1/2}`, attained at `l = 1/(2δ)`.
 
-**Local fix (decay length):** Lemma 1 holds with `C₁ e^{-l/ξ'}` for every `ξ' > 6ξ`, with `C₁`
-depending on `ξ' − 6ξ`, and not at the printed `ξ' = 6ξ` (line 142), because the final bound
-keeps the prefactor `√l`. Documented in
-`docs/paper-gaps/hastings07_gaussian_average_exponent.tex`.
+**Scope restriction (decay length):** the conversions give Lemma 1 with `C₁ e^{-l/ξ'}` for every
+`ξ' > 6ξ`, with `C₁` depending on `ξ' − 6ξ`. The printed endpoint `ξ' = 6ξ` (line 142) is not
+established, because the final bound keeps the prefactor `√l`; it is not shown to be false.
+Documented in `docs/paper-gaps/hastings07_gaussian_average_exponent.tex`.
 
 ## Main results
 
@@ -108,7 +108,7 @@ arXiv:0705.2024v4, lines 903–907), then for every `ξ' > 6ξ` there is one the
 
 **Stage:** the factorizations with the square-root error are a hypothesis; this converts their
 error to the form of the conclusion of Lemma 1 (lines 246–267), with the decay length `ξ' > 6ξ`
-recorded in the module docstring's Local fix. -/
+recorded in the module docstring's scope restriction. -/
 theorem exists_isFactorizationAt_of_sqrt_decay {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
     {ξ ξ' a b : ℝ} (hξ : 0 < ξ) (hξ' : 6 * ξ < ξ') (ha : 0 ≤ a) (hb : 0 ≤ b)
     {c l : ℕ} (hfact : ∃ OB OL OR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ,

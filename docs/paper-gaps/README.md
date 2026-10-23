@@ -1375,6 +1375,16 @@ That estimate neither proves nor refutes the source's smaller recurrence.
   length `ξ₀` rather than `ξ₀/2`, and the implicit hypotheses `2 C₁ > 1` and
   `ln C₁ + C₂ ≥ 0`.
 
+### Local solution of gapped Hamiltonians: Gaussian commutator coefficients
+
+[hastings05_gaussian_series_coefficients.tex](hastings05_gaussian_series_coefficients.tex)
+(local correction, resolved) records the variance-power correction in Hastings,
+*Solving gapped Hamiltonians locally* (arXiv:cond-mat/0508554v3, source lines
+1005–1009). The even Gaussian moment of order `k` contains `(q/ΔE²)^(k/2)`,
+not the printed power `k`. When commutators are written as `i^k ad_H^k`, this
+factor already supplies the alternating sign. The finite-polynomial
+variational bound is unaffected; the infinite expansion remains unformalized.
+
 ### One-dimensional area law after Hastings: the decay length of Lemma 1
 
 [hastings07_lemma1_decay_length.tex](hastings07_lemma1_decay_length.tex)
@@ -1388,9 +1398,10 @@ grows with `J` and a single-site second operator, so `(v₀, 2)` is not shown to
 a source pair. The length `ξ = 8 max(2v₀/ΔE, 1)` is not homogeneous in `(J, ΔE)`;
 applied to `H/ΔE`, Lemma 1 holds with the homogeneous length
 `16(1 + c_R J/ΔE)`. The factorization constant is uniform in chain length and
-local dimension; the source's polynomial bound in `ξ` (lines 258–262) remains
-unproved, as does the endpoint rate `ξ' = 6ξ`. The note records the remaining
-estimates under the still-open issue #9811.
+local dimension, and at the rate `ξ' = κ ξ̂` with `κ > 6` it is at most `K ξ̂³`
+with `K` depending only on `R` and `κ`, the source's polynomial bound in `ξ`
+(lines 258–262). The endpoint rate `ξ' = 6ξ` and a Lieb–Robinson pair in the
+source's form remain open under issue #9811.
 
 ## Rényi entropy and matrix product state approximation
 
