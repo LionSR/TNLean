@@ -69,3 +69,25 @@ coefficient spaces and cut ranks.
     $\chi$. This transport preserves norms, so $\|\chi\|=\|u\|\,\|v\|=1$.
     Corollary~\ref{cor:chain_product_replacement_mps} preserves the bond bound.
 \end{proof}
+
+\begin{theorem}[Replacement at finitely many product cuts]
+    \label{thm:chain_product_cut_iteration}
+    \lean{TNLean.MPS.AreaLaw.IsOpenMPS.exists_rank_one_at_product_cuts}
+    \leanok
+    \uses{def:chain_open_mps}
+    Let $\psi$ be a unit open-boundary MPS of bond dimension at most $D$,
+    let $\xi$ be a target vector, and let $S$ be a finite set of cuts.
+    Suppose that $\xi$ factors across each cut in $S$.
+    Then there is a unit open-boundary MPS $\chi$ of bond dimension at most
+    $D$ such that $|\langle\xi,\psi\rangle|\le|\langle\xi,\chi\rangle|$,
+    no cut rank of $\chi$ exceeds the corresponding cut rank of $\psi$,
+    and every cut in $S$ has rank at most one for $\chi$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:chain_normalized_product_replacement,lem:chain_product_replacement_ranks}
+    Induct on $|S|$. At a newly selected cut, apply normalized product
+    replacement to the current approximant and the two factors of the target.
+    The overlap does not decrease. The new cut has rank at most one, and
+    all earlier rank bounds persist because no cut rank increases.
+    Normalization and the bond bound persist at each step.
+\end{proof}
