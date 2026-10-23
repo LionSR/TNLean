@@ -104,10 +104,9 @@ unit vector $\Omega$ and operator norms throughout.
     \lean{TNLean.MPS.AreaLaw.Hastings.exists_posSemidef_factorization}
     \leanok
     \uses{def:hastings_factorization_at}
-    Let $\Omega$ be a unit vector, $C_1\ge0$ and $\xi'$ real. Suppose that at
-    every cut $c$ and length $l$ with $c+l\le L$ there is an approximate
-    factorization with error $C_1e^{-l/\xi'}$. Then at every such $(c,l)$ there
-    is one with $O_B$ positive semidefinite and error
+    Let $\Omega$ be a unit vector, $C_1\ge0$ and $\xi'$ real. Suppose that at a
+    cut $c$ and length $l$ there is an approximate factorization with error
+    $C_1e^{-l/\xi'}$. Then at the same $(c,l)$ there is one with $O_B$ positive semidefinite and error
     \begin{align}
         (\sqrt2+4)\sqrt{C_1}\,e^{-l/(2\xi')}.
         \label{eq:hastings_positive_factorization}

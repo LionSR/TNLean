@@ -33,8 +33,8 @@ unchanged. Documented in `docs/paper-gaps/hastings07_lemma1_positivity_rate.tex`
 
 * `IsFactorizationAt.mono`: a factorization with error `ε` has every larger error.
 * `IsFactorizationAt.conjTranspose_mul_self`: the positive repair at one cut and length.
-* `exists_posSemidef_factorization`: the positive version at every cut and length, at half
-  the rate.
+* `exists_posSemidef_factorization`: the positive version at a cut and length, at half the
+  rate.
 * `exists_factorization_of_isFactorizationAt`: the shape of the factorization hypothesis
   consumed by `entropy_le_of_overlap_schmidtRank_mixture_of_factorization`.
 -/
@@ -142,18 +142,17 @@ theorem IsFactorizationAt.conjTranspose_mul_self {Ω : EuclideanSpace ℂ (Fin L
     nlinarith [sqrt_nonneg (2 : ℝ)]
 
 /-- **The positive version of Lemma 1, at half the rate.** If Lemma 1 holds around the unit
-vector `Ω` with error `C₁ e^{-l/ξ'}` at every cut `c` and length `l` with `c + l ≤ L`, then it
-holds with a positive semidefinite `O_B` and error `(√2 + 4) √C₁ e^{-l/(2ξ')}`.
+vector `Ω` with error `C₁ e^{-l/ξ'}` at the cut `c` and length `l`, then it holds there
+with a positive semidefinite `O_B` and error `(√2 + 4) √C₁ e^{-l/(2ξ')}`.
 Hastings, arXiv:0705.2024v4, note added, lines 912–943. The rate is half that printed in
 Lemma 1, as recorded in the module docstring. -/
 theorem exists_posSemidef_factorization {Ω : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Ω‖ = 1)
     {C₁ ξ' : ℝ} (hC₁ : 0 ≤ C₁)
-    (hfact : ∀ c l : ℕ, c + l ≤ L → ∃ OB OL OR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ,
-      IsFactorizationAt Ω c l (C₁ * exp (-(l / ξ'))) OB OL OR)
-    (c l : ℕ) (hcl : c + l ≤ L) :
+    {c l : ℕ} (hfact : ∃ OB OL OR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ,
+      IsFactorizationAt Ω c l (C₁ * exp (-(l / ξ'))) OB OL OR) :
     ∃ OB OL OR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ, OB.PosSemidef ∧
       IsFactorizationAt Ω c l ((√2 + 4) * √C₁ * exp (-(l / (2 * ξ')))) OB OL OR := by
-  obtain ⟨OB, OL, OR, hF⟩ := hfact c l hcl
+  obtain ⟨OB, OL, OR, hF⟩ := hfact
   obtain ⟨hpos, hF'⟩ := hF.conjTranspose_mul_self hΩ
   refine ⟨OBᴴ * OB, OL, OR, hpos, ?_⟩
   have he : √(C₁ * exp (-(l / ξ'))) = √C₁ * exp (-(l / (2 * ξ'))) := by
