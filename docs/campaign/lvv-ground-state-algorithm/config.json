@@ -101,7 +101,7 @@
           "issues": [
             9821
           ],
-          "physics": "The operator <i>A</i> = ((1 − <i>H</i>/<i>n</i>)/(1 − ε<sub>0</sub>/<i>n</i>))<sup><i>m</i></sup> fixes Γ and shrinks every vector orthogonal to it by a factor ((1 − ε<sub>1</sub>/<i>n</i>)/(1 − ε<sub>0</sub>/<i>n</i>))<sup><i>m</i></sup>, which is polynomially small for <i>m</i> of order (<i>n</i>/ε) log <i>n</i>. Expanding the power writes <i>A</i> as an average over words in the local factors 1 − <i>H<sub>i</sub></i>, each a positive contraction since 0 ≤ <i>H<sub>i</sub></i> ≤ 1. A word in which the term at a cut occurs at most <i>k</i> times has operator Schmidt rank at most <i>d</i><sup>2<i>k</i></sup> across that cut.",
+          "physics": "The operator <i>A</i> = ((1 − <i>H</i>/<i>n</i>)/(1 − ε<sub>0</sub>/<i>n</i>))<sup><i>m</i></sup> fixes Γ and shrinks every vector orthogonal to it by a factor ((1 − ε<sub>1</sub>/<i>n</i>)/(1 − ε<sub>0</sub>/<i>n</i>))<sup><i>m</i></sup>, which is polynomially small for <i>m</i> of order (<i>n</i>/ε) log <i>n</i>. Adding the identity as an <i>n</i>-th factor, so that 1 − <i>H</i>/<i>n</i> is the average of the <i>n</i> factors 1 − <i>H</i><sub>1</sub>, …, 1 − <i>H</i><sub><i>n</i>−1</sub> and 1, and expanding the power writes <i>A</i> as an average over words in these factors, each a positive contraction since 0 ≤ <i>H<sub>i</sub></i> ≤ 1. A word in which the term at a cut occurs at most <i>k</i> times has operator Schmidt rank at most <i>d</i><sup>2<i>k</i></sup> across that cut.",
           "delivers": "An operator that drives any state with constant overlap back to overlap 1 − 1/poly(<i>n</i>) with Γ, and a decomposition of it into words of controlled Schmidt rank at each cut."
         },
         {
@@ -117,7 +117,7 @@
           "issues": [
             9823
           ],
-          "physics": "One step of the sweep takes a viable set at cut <i>i</i> − 1 to one at cut <i>i</i>: tensor every member with the <i>d</i> basis states of the next site; shrink the set to polynomial size with the net of boundary contractions; trim every member back to polynomial bond dimension; then apply the left factors of the sampled projector, which restores the overlap from 1/2 to 1 − 1/poly(<i>n</i>) at a polynomial cost in size and bond dimension. The polynomials do not grow from step to step, so the induction reaches the last site, where any state supported on the final set has overlap close to one with Γ.",
+          "physics": "One step of the sweep takes a viable set at cut <i>i</i> − 1 to one at cut <i>i</i>: tensor every member with the <i>d</i> basis states of the next site; shrink the set to polynomial size with the net of boundary contractions; trim every member back to polynomial bond dimension; then apply the left factors of the sampled projector, which restores the overlap from 1/2 to 1 − 1/poly(<i>n</i>) at a polynomial cost in size and bond dimension. The polynomials do not grow from step to step, so the induction reaches the last site, where some state in the span of the final set has overlap close to one with Γ; a final convex optimization over that span selects it.",
           "delivers": "For every <i>i</i>, a viable set at cut <i>i</i> of polynomial size whose members have polynomial bond dimension: the mathematical core of Theorem 1, which then finds a matrix product state with overlap at least 1 − η with Γ in time <i>n</i><sup><i>c</i>(<i>d</i>, ε)</sup> poly(<i>n</i>/η)."
         }
       ]
