@@ -361,36 +361,62 @@ of a gapped chain combines them with the factorization of
     Theorem~\ref{thm:hastings_bootstrap_scale}.
 \end{proof}
 
+\begin{theorem}[The bootstrap bound from the factorization at one cut]
+    \label{thm:hastings_bootstrap_factorization_at}
+    \lean{TNLean.MPS.AreaLaw.Hastings.entropy_le_of_overlap_schmidtRank_mixture_of_isFactorizationAt}
+    \leanok
+    \uses{def:hastings_factorization_at, def:hastings_bootstrap_remainder}
+    Let $\Omega$ be a unit vector on the chain of $L$ sites with local
+    dimension $q\ge2$, let $j$ be a cut, and let $\xi'>0$ and $C_1\ge1$.
+    Suppose that at the cut $j$ and every length $m$ there is an approximate
+    factorization of $|\Omega\rangle\langle\Omega|$ with error
+    $C_1e^{-m/\xi'}$. Then the conclusion of
+    Theorem~\ref{thm:hastings_bootstrap_chain_stage} holds for every mixture
+    as there.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:hastings_bootstrap_chain_stage, thm:hastings_factorization_bootstrap_form}
+    An approximate factorization at the cut $j$ and length $m$ has $O_B$
+    supported on the sites $j-m,\dots,j+m-1$, hence on the first $j+m$
+    sites, so it supplies the hypothesis of
+    Theorem~\ref{thm:hastings_bootstrap_chain_stage}.
+\end{proof}
+
 \begin{lemma}[The bootstrap lemma]
     \label{lem:hastings_bootstrap}
+    \lean{TNLean.MPS.AreaLaw.exists_entropy_le_of_overlap_schmidtRank_mixture}
+    \leanok
     \uses{def:chain_model, def:hastings_bootstrap_remainder}
-    Let $\rho$ be a density matrix of unit trace that is a mixture of pure
-    states of Schmidt rank at most $k$ across the cut between sites $j$ and
-    $j+1$, with $\langle\Psi_0,\rho\Psi_0\rangle=P>0$,
-    where $\Psi_0$ is the unique ground state of a Hamiltonian with
-    finite-range interactions of bounded strength and a spectral gap
-    $\Delta E>0$ above the ground energy. Then
+    Let $R$ be a range, $J\ge0$ an interaction strength and $\Delta E>0$ a
+    gap, let $\xi$ be the length of Lemma~1 for these data, and let
+    $\xi'>6\xi$. There is a constant $C_1\ge1$, depending only on $R$, $J$,
+    $\Delta E$ and $\xi'$, with the following property. Let $H$ be a
+    Hamiltonian on a chain of $L$ sites with local dimension $D$, with
+    interactions of range $R$ and strength at most $J$, whose ground state
+    $\Psi_0$ is unique with gap $\Delta E$ above the ground energy. Let $\rho$
+    be a density matrix of unit trace that is a mixture of pure states of
+    Schmidt rank at most $k$ across the cut between sites $j$ and $j+1$, with
+    $\langle\Psi_0,\rho\Psi_0\rangle=P>0$. Then
     \begin{align}
-        S(\rho^0_{1,j})\le\ln k+\xi'\ln\bigl(2C_1(\xi)^2/P\bigr)\ln D+F(\xi',D).
+        S(\rho^0_{1,j})\le\ln k+\xi'\ln\bigl(2C_1^2/P\bigr)\ln D+F(\xi',D),
     \end{align}
-    Here $\rho^0_{1,j}$ is the reduced density matrix of
-    $|\Psi_0\rangle\langle\Psi_0|$ on sites $1,\dots,j$, $D\ge2$ is the local
-    dimension, $\xi=\max(2v/\Delta E,\xi_C)$ as in
-    \cite[lines 126--142]{Hastings2007AreaLaw}, and $\xi'>0$ and
-    $C_1(\xi)\ge1$ are a decay length and a constant for which the
-    approximate factorization
-    $\|O_B(j,m)O_L(j,m)O_R(j,m)-P_0\|\le C_1(\xi)e^{-m/\xi'}$ of
-    \cite[Lemma~1]{Hastings2007AreaLaw} holds; the source takes $\xi'=6\xi$,
-    and the lemma uses $\xi'$ only through this estimate. Enlarging
-    $C_1(\xi)$ keeps the estimate true, so $C_1(\xi)\ge1$ costs nothing. This is
-    \cite[Lemma~2]{Hastings2007AreaLaw}, lines 280--311.
+    where $\rho^0_{1,j}$ is the reduced density matrix of
+    $|\Psi_0\rangle\langle\Psi_0|$ on sites $1,\dots,j$. This is
+    \cite[Lemma~2]{Hastings2007AreaLaw}, lines 280--311, with $C_1=C_1(\xi)$
+    the constant of Lemma~1. The source takes $\xi'=6\xi$ with
+    $\xi=\max(2v/\Delta E,\xi_C)$; here, as for Lemma~1, $\xi$ is
+    $8\max(2v/\Delta E,1)$ for the chain Lieb--Robinson velocity $v$, and the
+    bound holds for every $\xi'>6\xi$
+    \cite{gap:hastings07_gaussian_average_exponent}.
 \end{lemma}
-\begin{proof}
-    \uses{thm:hastings_bootstrap_chain_stage}
-    The approximate factorization of the ground-state projector of
-    \cite[Lemma~1]{Hastings2007AreaLaw} supplies the operators
-    $O_B(j,m)$, $O_L(j,m)$, $O_R(j,m)$ with the supports and the estimate
-    required by Theorem~\ref{thm:hastings_bootstrap_chain_stage}, applied with
-    $\Omega=\Psi_0$, $q=D$, $C_1=C_1(\xi)$ and the pure states of the mixture
-    $\rho$. That theorem gives the bound.
+\begin{proof}\leanok
+    \uses{thm:hastings_projector_factorization,
+        thm:hastings_bootstrap_factorization_at}
+    Theorem~\ref{thm:hastings_projector_factorization} gives, for every
+    $\xi'>6\xi$, a constant $C$ depending only on $R$, $J$, $\Delta E$ and
+    $\xi'$ and an approximate factorization of the ground-state projector
+    with error $Ce^{-m/\xi'}$ at every cut and length; it also holds with
+    $C_1=\max(C,1)$. For $D\ge2$,
+    Theorem~\ref{thm:hastings_bootstrap_factorization_at} gives the bound.
+    For $D=1$ the entropy vanishes, while the right side is nonnegative.
 \end{proof}
