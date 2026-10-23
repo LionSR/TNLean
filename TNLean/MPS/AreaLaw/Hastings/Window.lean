@@ -54,6 +54,8 @@ past the end of the chain: the chain end needs no separate hypothesis, because e
 * `regionEntropy_le_windowEntropy`, `exists_windowEntropy_eq`: the window entropy is the
   largest entropy of an interval of `l` sites inside the window, and it is attained.
 * `windowEntropy_nonneg`, `windowEntropy_le`, `windowEntropy_two_mul_le`: the three bounds.
+* `windowEntropy_two_mul_le_of_relent`: eq. `relent` on the adjacent intervals inside the
+  window gives eq. `claim` for the window entropies.
 
 ## References
 
@@ -244,5 +246,30 @@ theorem windowEntropy_two_mul_le (hΩ : ‖Ω‖ = 1) (i l₀ l : ℕ) :
     linarith
   · rw [windowEntropy, dite_eq_right hl]
     linarith [windowEntropy_nonneg hΩ i l₀ l]
+
+/-- **Stage lemma: eq. `relent` gives eq. `claim`.** If the entropy gain bound, eq. `relent`,
+holds for every pair of adjacent intervals of `l` sites inside the window `[i, i + l₀)`, then the
+window entropies satisfy the strengthened doubling inequality, eq. `claim`, in the form taken by
+`le_of_doubling` and `lt_of_doubling`: the interval of `2l` sites of largest entropy splits into
+two adjacent intervals of `l` sites, each of entropy at most `S_l`. Hastings,
+arXiv:0705.2024v4, lines 201–204 and 234–242. -/
+theorem windowEntropy_two_mul_le_of_relent {i l₀ : ℕ} {ξ' C₁ C₂ : ℝ}
+    (hrelent : ∀ a l : ℕ, i ≤ a → a + 2 * l ≤ i + l₀ →
+      Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L a (a + 2 * l)) Ω ≤
+        Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L a (a + l)) Ω +
+          Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L (a + l) (a + 2 * l)) Ω -
+          (1 - 2 * C₁ * Real.exp (-(l / ξ'))) * (l / ξ') + Real.log C₁ + C₂) :
+    ∀ l : ℕ, 2 * (l : ℝ) ≤ l₀ →
+      windowEntropy Ω i l₀ (2 * l) ≤ 2 * windowEntropy Ω i l₀ l -
+        (1 - 2 * C₁ * Real.exp (-(l / ξ'))) * (l / ξ') + Real.log C₁ + C₂ := by
+  intro l hl
+  have hl' : 2 * l ≤ l₀ := by exact_mod_cast hl
+  obtain ⟨a, hia, hal, heq⟩ := exists_windowEntropy_eq (Ω := Ω) (i := i) hl'
+  rw [heq]
+  have h1 := regionEntropy_le_windowEntropy (Ω := Ω) (i := i) (l₀ := l₀) (l := l) hia (by omega)
+  have h2 := regionEntropy_le_windowEntropy (Ω := Ω) (i := i) (l₀ := l₀) (a := a + l) (l := l)
+    (by omega) (by omega)
+  rw [show a + l + l = a + 2 * l by ring] at h2
+  linarith [hrelent a l hia hal]
 
 end TNLean.MPS.AreaLaw.Hastings
