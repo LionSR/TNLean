@@ -880,8 +880,41 @@ jobs:
           fi
           echo "has_changed_lean=$has_changed_lean" >> "$GITHUB_OUTPUT"
 
-      - name: Install blueprint system dependencies
+      - name: Configure apt retries
         if: env.TEX_CHANGED == 'true' || env.PAPER_GAPS_CHANGED == 'true'
+        run: |
+          printf '%s\n' 'Acquire::Retries "3";' 'Acquire::http::Timeout "60";' \
+            'Acquire::https::Timeout "60";' | sudo tee /etc/apt/apt.conf.d/80-ci-retries
+
+      - name: Install blueprint system dependencies
+        id: blueprint-system-deps-1
+        if: env.TEX_CHANGED == 'true' || env.PAPER_GAPS_CHANGED == 'true'
+        timeout-minutes: 10
+        continue-on-error: true
+        uses: texra-ai/lean-env-action/blueprint-system-deps@v1
+        with:
+          cache-suffix: web-v3
+          extra-packages: texlive-fonts-extra texlive-publishers
+
+      - name: Recover an interrupted package install
+        if: (env.TEX_CHANGED == 'true' || env.PAPER_GAPS_CHANGED == 'true') && steps.blueprint-system-deps-1.outcome == 'failure'
+        timeout-minutes: 5
+        # The timed-out install can leave its apt-get running and holding the
+        # package locks, so stop the lock holders before repairing the database.
+        run: |
+          locks=(/var/lib/dpkg/lock-frontend /var/lib/dpkg/lock
+            /var/lib/apt/lists/lock /var/cache/apt/archives/lock
+            "$RUNNER_TEMP"/blueprint-apt-archives/*/lock)
+          for signal in TERM KILL; do
+            sudo fuser -k -"$signal" "${locks[@]}" 2>/dev/null || true
+            sleep 5
+          done
+          sudo dpkg --configure -a || true
+
+      - name: Install blueprint system dependencies (retry)
+        if: (env.TEX_CHANGED == 'true' || env.PAPER_GAPS_CHANGED == 'true') && steps.blueprint-system-deps-1.outcome == 'failure'
+        # A slow mirror can need more than one attempt; the packages fetched by the
+        # first attempt stay in the archive directory, so the retry resumes.
         timeout-minutes: 20
         uses: texra-ai/lean-env-action/blueprint-system-deps@v1
         with:
@@ -1128,7 +1161,7 @@ jobs:
     needs: changes
     if: "!cancelled() && github.event_name == 'pull_request' && needs.changes.result == 'success' && (needs.changes.outputs.blueprint_pdf == 'true' || needs.changes.outputs.workflow == 'true')"
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 90
     env:
       PRINT_AUX_FILES: |
         blueprint/print/*.aux
@@ -1141,7 +1174,39 @@ jobs:
       - name: Checkout project
         uses: actions/checkout@v7
 
+      - name: Configure apt retries
+        run: |
+          printf '%s\n' 'Acquire::Retries "3";' 'Acquire::http::Timeout "60";' \
+            'Acquire::https::Timeout "60";' | sudo tee /etc/apt/apt.conf.d/80-ci-retries
+
       - name: Install blueprint system dependencies
+        id: blueprint-system-deps-2
+        timeout-minutes: 10
+        continue-on-error: true
+        uses: texra-ai/lean-env-action/blueprint-system-deps@v1
+        with:
+          cache-suffix: web-v3
+          extra-packages: texlive-fonts-extra texlive-publishers
+
+      - name: Recover an interrupted package install
+        if: steps.blueprint-system-deps-2.outcome == 'failure'
+        timeout-minutes: 5
+        # The timed-out install can leave its apt-get running and holding the
+        # package locks, so stop the lock holders before repairing the database.
+        run: |
+          locks=(/var/lib/dpkg/lock-frontend /var/lib/dpkg/lock
+            /var/lib/apt/lists/lock /var/cache/apt/archives/lock
+            "$RUNNER_TEMP"/blueprint-apt-archives/*/lock)
+          for signal in TERM KILL; do
+            sudo fuser -k -"$signal" "${locks[@]}" 2>/dev/null || true
+            sleep 5
+          done
+          sudo dpkg --configure -a || true
+
+      - name: Install blueprint system dependencies (retry)
+        if: steps.blueprint-system-deps-2.outcome == 'failure'
+        # A slow mirror can need more than one attempt; the packages fetched by the
+        # first attempt stay in the archive directory, so the retry resumes.
         timeout-minutes: 20
         uses: texra-ai/lean-env-action/blueprint-system-deps@v1
         with:
