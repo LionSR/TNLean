@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.Hastings.AreaLaw
 import TNLean.MPS.AreaLaw.Hastings.MPSFromEntropy
+import TNLean.MPS.AreaLaw.Hastings.ProjectorFactorization
 import TNLean.MPS.AreaLaw.MPSApproximation
 
 /-!
@@ -23,10 +24,12 @@ This discharges the per-cut entropy hypothesis of
 `isOpenMPS_norm_sub_sq_le_of_factorization_of_entropy`, recorded in
 `docs/paper-gaps/hastings07_mps_entropy_stage.tex`.
 
-**Stage theorem.** Lemma 1 enters as a hypothesis, as in
-`regionEntropy_prefix_le_of_factorization`. The theorem becomes the source's matrix product
-state approximation, with only the hypotheses of Hastings' theorem, once Lemma 1 is supplied
-for the gapped ground state with a constant `C₁` uniform in the chain.
+`isOpenMPS_norm_sub_sq_le_of_gappedGroundState` takes Lemma 1 as a hypothesis, as
+`regionEntropy_prefix_le_of_factorization` does.
+`exists_isOpenMPS_norm_sub_sq_le_of_isGappedGroundState` supplies it from
+`exists_projectorFactorization`, with a constant `C₁` independent of the chain, so it takes
+only the hypotheses of Hastings' theorem: finite range, bounded interaction strength and a
+spectral gap.
 
 **Scope restriction (quantitative bounds of Lemma 1):** when `ξ'` and `C₁` are supplied by
 the formalized Lemma 1, they carry its quantitative restrictions. Its length is
@@ -86,5 +89,38 @@ theorem isOpenMPS_norm_sub_sq_le_of_gappedGroundState (h : ChainHamiltonian L q 
   calc Real.exp (2 * Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (leftBlock L j) Ω) / 2
       ≤ Real.exp (2 * areaLawBound ξ' C₁ q) / 2 := by gcongr
     _ ≤ k₀ := Nat.le_ceil _
+
+/-- **Hastings' matrix product state approximation of the gapped ground state.** For a chain
+Hamiltonian of range `R` and term norm `J ≥ 0` with gap `ΔE > 0`, and every
+`ξ' > 6ξ`, `ξ = lemmaOneLength R J ΔE`, there is a constant `C₁ ≥ 1`, independent of the chain,
+such that for every chain of `L` sites with local dimension `q > 1` and every gapped ground
+vector `Ω`, with `k₀ = ⌈exp(2 S_max)/2⌉` for `S_max = areaLawBound ξ' C₁ q`, the truncation `Φ`
+onto the `k'` leading eigenvectors at every cut, for every `k' ≥ k₀`, is an open-boundary
+matrix product state of bond dimension at most `k'` with
+`‖Φ - Ω‖² ≤ (L - 1) 4 C₁² e^{2/ξ'} (k'/k₀)^{-1/(ξ' log q)}`. Both `C₁` and `k₀` are independent
+of `L`. Hastings, arXiv:0705.2024v4, lines 505–557, with Lemma 1 from
+`exists_projectorFactorization` and the restrictions of the module docstring. -/
+theorem exists_isOpenMPS_norm_sub_sq_le_of_isGappedGroundState (R : ℕ) {J ΔE : ℝ}
+    (hJ : 0 ≤ J) (hΔ : 0 < ΔE) {ξ' : ℝ} (hξ' : 6 * lemmaOneLength R J ΔE < ξ') :
+    ∃ C₁ : ℝ, 1 ≤ C₁ ∧ ∀ {L q : ℕ}, 1 < q → ∀ (h : ChainHamiltonian L q R J) {E₀ : ℝ}
+      {Ω : EuclideanSpace ℂ (Fin L → Fin q)}, Matrix.IsGappedGroundState h.operator E₀ Ω ΔE →
+      ∀ {k' : ℕ}, ⌈Real.exp (2 * areaLawBound ξ' C₁ q) / 2⌉₊ ≤ k' →
+        let k₀ := ⌈Real.exp (2 * areaLawBound ξ' C₁ q) / 2⌉₊
+        let P : ∀ k : ℕ, LeftBlockMatrix L q k := fun k ↦
+          (Entropy.regionState_isHermitian (n := fun _ : Fin L ↦ q) (leftBlock L k)
+            Ω).leadingEigenprojection k'
+        let Φ := sequentialTruncation P (L - 1) Ω
+        IsOpenMPS L q k' (fun x ↦ Φ x) ∧
+          ‖Φ - Ω‖ ^ 2 ≤ ((L - 1 : ℕ) : ℝ) *
+            (4 * C₁ ^ 2 * exp (2 / ξ') * ((k' : ℝ) / k₀) ^ (-1 / (ξ' * log q))) := by
+  obtain ⟨C, -, hF⟩ := exists_projectorFactorization R hJ hΔ hξ'
+  refine ⟨max C 1, le_max_right _ _, fun {L q} hq h {E₀} {Ω} hgs {k'} hk' ↦ ?_⟩
+  haveI : NeZero q := ⟨by omega⟩
+  have hξ'0 : 0 < ξ' := by linarith [lemmaOneLength_pos R J ΔE]
+  refine isOpenMPS_norm_sub_sq_le_of_gappedGroundState h hgs hq hξ'0 (le_max_right _ _)
+    (fun c l _ ↦ ?_) hk'
+  obtain ⟨OB, OL, OR, hFa⟩ := hF h hgs c l
+  exact ⟨OB, OL, OR,
+    hFa.mono (mul_le_mul_of_nonneg_right (le_max_left _ _) (Real.exp_pos _).le)⟩
 
 end TNLean.MPS.AreaLaw.Hastings

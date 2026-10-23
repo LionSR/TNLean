@@ -273,3 +273,44 @@
     of Theorem~\ref{thm:hastings_mps_from_entropy_lemma1}, which gives the
     bound~\cite{gap:hastings07_mps_entropy_stage}.
 \end{proof}
+
+\begin{theorem}[Matrix product state approximation of the gapped ground state]
+    \label{thm:hastings_mps_gapped_chain}
+    \lean{TNLean.MPS.AreaLaw.Hastings.exists_isOpenMPS_norm_sub_sq_le_of_isGappedGroundState}
+    \leanok
+    \uses{thm:hastings_projector_factorization}
+    Let the interaction range $R$, the bound $J\ge0$ on the interaction
+    strength, the gap $\Delta E>0$ and $\xi'>6\xi$ be given, with $\xi$ the
+    decay length of Lemma~1. Then there is a constant $C_1\ge1$, independent
+    of the length of the chain, with the following property. For every chain
+    of $L$ sites with local dimension $D>1$ and every gapped ground vector
+    $\Omega$ of a Hamiltonian of range $R$, strength $J$ and gap $\Delta E$,
+    with $k_0=\lceil\exp(2S_{\max})/2\rceil$ for the bound $S_{\max}$ of the
+    area law, truncating every cut onto the $k'$ leading eigenvectors of its
+    left marginal, for every natural number $k'\ge k_0$, gives an
+    open-boundary matrix product state $\Phi$ of bond dimension at most $k'$
+    with
+    \begin{align}
+        \lVert\Phi-\Omega\rVert^2
+         & \le(L-1)\,4C_1^2e^{2/\xi'}\Bigl(\frac{k'}{k_0}\Bigr)^{-1/(\xi'\log D)}.
+        \notag
+    \end{align}
+    Both $C_1$ and $k_0$ are independent of $L$. This is the conclusion of the
+    section on matrix product states of \cite{Hastings2007AreaLaw} under its
+    Hamiltonian assumptions alone, with the quantitative restrictions of the
+    formalized Lemma~1
+    \cite{gap:hastings07_lemma1_decay_length,gap:hastings07_gaussian_average_exponent},
+    the error measured in the squared
+    norm~\cite{gap:hastings07_mps_error_measure} and the constant of
+    Theorem~\ref{thm:hastings_schmidt_tail_rpow}
+    \cite{gap:hastings07_schmidt_tail_constant}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:hastings_projector_factorization, thm:hastings_mps_ground_state,
+        def:hastings_factorization_at}
+    Lemma~1 gives a constant $C\ge0$, independent of the chain, with the
+    factorization at error $Ce^{-l/\xi'}$ at every cut and length. Taking
+    $C_1=\max(C,1)$ only enlarges the error, and
+    Theorem~\ref{thm:hastings_mps_ground_state} gives the
+    bound~\cite{gap:hastings07_mps_entropy_stage}.
+\end{proof}
