@@ -315,22 +315,33 @@ $h$ levels.
     \label{def:hastings05_level_deficiency}
     \lean{TNLean.MPS.AreaLaw.LocalSolution.levelDeficiency,
         TNLean.MPS.AreaLaw.LocalSolution.levelDeficiency_zero,
-        TNLean.MPS.AreaLaw.LocalSolution.levelDeficiency_succ,
-        TNLean.MPS.AreaLaw.LocalSolution.levelDeficiency_nonneg}
+        TNLean.MPS.AreaLaw.LocalSolution.levelDeficiency_succ}
     \leanok
     For real numbers $\epsilon$, $a$ and $s$, let $b_0=0$ and
     $b_{m+1}=(\epsilon+ab_m)^s$. The source takes $a=2$ and $s=1-1/h$, so
     that $b_1=\epsilon^{1-1/h}$~\cite[lines 696--704]{Hastings2006Solving}.
-    For $\epsilon\ge0$ and $a\ge0$ every $b_m$ is nonnegative. This scalar
-    sequence is considered independently of the projection hierarchy.
+    This scalar sequence is considered independently of the projection
+    hierarchy.
 \end{definition}
+
+\begin{theorem}[Nonnegativity of the recurrence]
+    \label{thm:hastings05_level_deficiency_nonneg}
+    \lean{TNLean.MPS.AreaLaw.LocalSolution.levelDeficiency_nonneg}
+    \leanok
+    \uses{def:hastings05_level_deficiency}
+    For $\epsilon\ge0$, $a\ge0$ and real $s$, every $b_m$ is nonnegative.
+\end{theorem}
+\begin{proof}\leanok
+    By induction on $m$: $b_0=0$, and if $b_m\ge0$ then $\epsilon+ab_m\ge0$,
+    so its real power $b_{m+1}$ is nonnegative.
+\end{proof}
 
 \begin{theorem}[The recursion]
     \label{thm:hastings05_recursion}
     \lean{TNLean.MPS.AreaLaw.LocalSolution.levelDeficiency_le,
         TNLean.MPS.AreaLaw.LocalSolution.levelDeficiency_two_le}
     \leanok
-    \uses{def:hastings05_level_deficiency}
+    \uses{def:hastings05_level_deficiency,thm:hastings05_level_deficiency_nonneg}
     Let $0<\epsilon\le1$, $a\ge0$ and $0\le s\le1$. Then for every $m$,
     \begin{align}
         b_m & \le\Bigl(\sum_{j<m}a^j\Bigr)\epsilon^{s^m},
