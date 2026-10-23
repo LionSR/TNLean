@@ -1385,9 +1385,10 @@ grows with `J` and a single-site second operator, so `(v₀, 2)` is not shown to
 a source pair. The length `ξ = 8 max(2v₀/ΔE, 1)` is not homogeneous in `(J, ΔE)`;
 applied to `H/ΔE`, Lemma 1 holds with the homogeneous length
 `16(1 + c_R J/ΔE)`. The factorization constant is uniform in chain length and
-local dimension; the source's polynomial bound in `ξ` (lines 258–262) remains
-unproved, as does the endpoint rate `ξ' = 6ξ`. The note records the remaining
-estimates under the still-open issue #9811.
+local dimension, and at the rate `ξ' = κ ξ̂` with `κ > 6` it is at most `K ξ̂³`
+with `K` depending only on `R` and `κ`, the source's polynomial bound in `ξ`
+(lines 258–262). The endpoint rate `ξ' = 6ξ` and a Lieb–Robinson pair in the
+source's form remain open under issue #9811.
 
 ## Rényi entropy and matrix product state approximation
 
