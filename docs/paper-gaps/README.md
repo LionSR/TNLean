@@ -1329,6 +1329,17 @@ eigenvalues of absolute value at most the threshold, rather than the printed
 eigenvalues at most the threshold, because the centered terms need not be
 positive and the later estimate uses `‖M_L O_L‖` at most the threshold.
 
+### Local solution of gapped Hamiltonians after Hastings: the hierarchical projection
+
+[hastings05_hierarchical_projection.tex](hastings05_hierarchical_projection.tex)
+(local correction, resolved) records that the deficiency of a level in the hierarchical
+projection of Hastings, *Solving Gapped Hamiltonians Locally* (arXiv:cond-mat/0508554v3,
+lines 640–704), is measured in norm, `‖Ψ − P Ψ‖ ≤ ε/x`, rather than by the printed expectation
+`⟨Ψ, (1 − P) Ψ⟩ ≤ ε/x`, which alone gives only `√(ε/x)` and would not support the
+normalization bound `|Ψ¹ − Ψ| ≤ 2 b₁` of line 689. With the norm, the recursion
+`b_m = (ε + 2 b_{m−1})^{1−1/h}` gives `b_h ≤ (2ʰ − 1) ε^{(1−1/h)^h}` and, for `h ≥ 2`,
+`b_h ≤ (2ʰ − 1) ε^{1/4}`.
+
 ## Polynomial PEPS: zero-floor maximizing filters
 
 - [`polypeps_square_zero_floor_optimizer_scope.tex`](polypeps_square_zero_floor_optimizer_scope.tex)
