@@ -1330,6 +1330,8 @@ assumptions. That application still requires deriving uniform factorization
 and entropy bounds and applying them to the approximation theorem. For chains
 with at least two sites, the entropy bound gives a common positive integer
 `k₀ ≥ exp(2 S_j)/2`; shorter chains need no truncation.
+The entropy bound is derived from the area law for the gapped ground state around
+which Lemma 1 holds; Lemma 1 with uniform constants remains.
 
 ### One-dimensional area law after Hastings: the threshold of the spectral cut-offs
 
