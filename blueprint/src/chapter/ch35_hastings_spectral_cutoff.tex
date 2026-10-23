@@ -111,7 +111,8 @@ are operator norms.
 
 \begin{theorem}[Support of the cut-off]
     \label{thm:hastings_spectral_cutoff_support}
-    \lean{TNLean.MPS.AreaLaw.Hastings.spectralCutoff_localLift}
+    \lean{TNLean.MPS.AreaLaw.Hastings.spectralCutoff_localLift,
+        TNLean.MPS.AreaLaw.Hastings.isSupportedOn_spectralCutoff}
     \leanok
     \uses{def:hastings_spectral_cutoff}
     Let $K$ be a Hermitian operator on the sites of a region $D$, and let
@@ -127,7 +128,8 @@ are operator norms.
 
 \begin{theorem}[Cut-offs on disjoint regions commute]
     \label{thm:hastings_spectral_cutoff_commute}
-    \lean{TNLean.MPS.AreaLaw.Hastings.commute_spectralCutoff_localLift_of_disjoint}
+    \lean{TNLean.MPS.AreaLaw.Hastings.commute_spectralCutoff_localLift_of_disjoint,
+        TNLean.MPS.AreaLaw.Hastings.commute_spectralCutoff_of_isSupportedOn}
     \leanok
     \uses{thm:hastings_spectral_cutoff_support}
     Let $K$ and $K'$ be Hermitian operators on disjoint regions $X$ and $Y$.
@@ -139,5 +141,8 @@ are operator norms.
 \begin{proof}\leanok
     By Theorem~\ref{thm:hastings_spectral_cutoff_support} the two cut-offs are
     extensions by the identity of operators on $X$ and on $Y$, and such
-    extensions commute when $X$ and $Y$ are disjoint.
+    extensions commute when $X$ and $Y$ are disjoint. A Hermitian operator
+    supported on a region is such an extension of a Hermitian operator on
+    that region, so the same holds for Hermitian operators supported on $X$
+    and on $Y$.
 \end{proof}

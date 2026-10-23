@@ -1,0 +1,119 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+\input{command}
+\setlength{\emergencystretch}{2em}
+\title{The Exponent of Hastings' Gaussian Time Average}
+\author{}
+\date{October 22, 2026}
+\begin{document}
+\maketitle
+\gapnote{false-source}{open}
+
+\section{The source statement}
+
+In the appendix of~\cite{Hastings2007AreaLaw} the Hamiltonian $H$ of a chain
+with nearest-neighbour interactions has a unique ground state $\Psi_0$, ground
+energy zero and gap $\Delta E$. Let $v$ be its Lieb--Robinson velocity,
+$\xi_C$ the decay length of ground-state correlations, and
+$\xi=\max(2v/\Delta E,\xi_C)$. The integer $l$ is the half-width of the
+window about the cut on which the approximate projector is built.\footnote{\path{References/0705.2024/law16.tex},
+    lines~126--142 and~766--767.}
+With $q=(l/3)\Delta E/(2v)$, the operator
+\begin{align}
+    P_q=\frac{\Delta E}{\sqrt{2\pi q}}\int e^{iHt}e^{-(t\Delta E)^2/2q}\,dt
+    \label{eq:hastings07_gaussian_average}
+\end{align}
+is said to satisfy
+\begin{align}
+    \|P_q-P_0\| & \le O\bigl(e^{-l/3\xi}\bigr),
+    \label{eq:hastings07_gaussian_average_source}
+\end{align}
+where $P_0$ is the ground-state projector.\footnote{\path{References/0705.2024/law16.tex},
+    lines~792 and~843--848.}
+
+\section{The point at issue}
+
+The operator (\ref{eq:hastings07_gaussian_average}) is diagonal in an eigenbasis
+of $H$, with eigenvalue $e^{-qE^2/2\Delta E^2}$ at energy $E$. It is $1$ on the
+ground state, and on the excited states, where $E\ge\Delta E$, it is at most
+$e^{-q/2}$, with equality on an eigenvector of energy exactly $\Delta E$.
+Hence
+\begin{align}
+    \|P_q-P_0\| & \le e^{-q/2},
+    \label{eq:hastings07_gaussian_average_corrected}
+\end{align}
+and this is sharp when $\Delta E$ is attained. Since $\xi\ge2v/\Delta E$, the
+choice of $q$ gives $q=l\Delta E/(6v)\ge l/(3\xi)$, so
+(\ref{eq:hastings07_gaussian_average_corrected}) yields
+$\|P_q-P_0\|\le e^{-l/6\xi}$. The exponent $l/3\xi$ printed in
+(\ref{eq:hastings07_gaussian_average_source}) is twice the one that follows,
+and with $\xi=2v/\Delta E$ and $\Delta E$ attained it is false.
+
+\section{The corrected statement}
+
+For every real $q$, the bound (\ref{eq:hastings07_gaussian_average_corrected})
+holds, with the Gaussian of variance $\max(q/\Delta E^2,0)$ in place of the
+normalized density.\footnote{\leanid{TNLean.MPS.AreaLaw.Hastings.norm_gaussianTimeAverage_sub_groundProjector_le}
+    in \doclink{TNLean/MPS/AreaLaw/Hastings/GaussianTimeAverage}.}
+With the source's choice of $q$ it gives $O(e^{-l/6\xi})$.
+
+\section{Propagation and repair}
+
+The same factor enters elsewhere. The estimates \texttt{tighter} and
+\texttt{tighter2} on $|\tilde H^0_L\Psi_0|$, $|\tilde H^0_B\Psi_0|$ and
+$|\tilde H^0_R\Psi_0|$ get their factor $e^{-l/3\xi}$ from the same Gaussian
+multiplier $e^{-q/2}$ on the excited states, so with the printed $q$ they also
+give only $e^{-l/6\xi}$.\footnote{\path{References/0705.2024/law16.tex},
+    lines~796--814.}
+The spectral cut-off $O_L$ projects onto eigenvalues of $M_L$ at most
+$\theta=\Delta E^{-1}J^2e^{-l/6\xi}$, and the estimate \texttt{obd} rests on
+$|(1-O_L)\Psi_0|\le|M_L\Psi_0|/\theta$.\footnote{\path{References/0705.2024/law16.tex},
+    lines~829--840.}
+With $|M_L\Psi_0|$ of order $e^{-l/6\xi}$ this ratio is only $O(1)$, so the
+margin of \texttt{obd}, and the estimates after it, are affected in the same
+way.
+
+With $q=(l/3)\Delta E/v$ the rate $e^{-l/3\xi}$ of line~848 is recovered,
+since then $e^{-q/2}\le e^{-l/3\xi}$, and so are the rates of \texttt{tighter},
+\texttt{tighter2} and the margin of \texttt{obd}. The Gaussian truncation
+exponent $(T\Delta E)^2/2q$ halves and the factor $\sqrt q$ grows by $\sqrt2$,
+which changes only constants. The final bound of the appendix,
+\begin{align}
+    \|O_BO_LO_R-P_0\| & \le O\bigl(\sqrt{l/\xi}\,\xi^2e^{-l/6\xi}\bigr),
+    \label{eq:hastings07_gaussian_average_final}
+\end{align}
+keeps the polynomial prefactor $\sqrt{l/\xi}$, which comes from the factor
+$\sqrt q$.\footnote{\path{References/0705.2024/law16.tex}, lines~903--907.}
+It therefore gives $\|O_BO_LO_R-P_0\|\le C_1e^{-l/\xi'}$ for every
+$\xi'>6\xi$, with $C_1$ depending on $\xi'-6\xi$, but not at the printed
+$\xi'=6\xi$ of line~142.\footnote{\path{References/0705.2024/law16.tex},
+    lines~141--142.}
+Indeed, with $\delta=1/(6\xi)-1/\xi'>0$,
+\begin{align}
+    \sup_{l>0}\sqrt l\,e^{-\delta l} & =(2e\delta)^{-1/2}
+    =O\bigl((1/6\xi-1/\xi')^{-1/2}\bigr),
+    \label{eq:hastings07_gaussian_average_prefactor}
+\end{align}
+the supremum being attained at $l=1/(2\delta)$, while no constant independent of
+$l$ absorbs $\sqrt l$ at $\delta=0$. Lemma~1 is therefore stated with
+$6\xi<\xi'$. The printed claim (\ref{eq:hastings07_gaussian_average_source})
+is false for the printed $q$, while the corrected statement follows from the
+source's own estimates, with the larger $q$ and any decay length $\xi'>6\xi$.
+
+This is the rate of the product $O_BO_LO_R$ as constructed in the appendix.
+The note added after it observes that $O_B$ need not be positive, that the
+argument of the paper goes through without positivity, and that $O_B$ may be
+replaced by a positive operator at the cost $\epsilon\mapsto O(\sqrt\epsilon)$,
+which halves the decay rate again.\footnote{\path{References/0705.2024/law16.tex},
+    lines~912--943.}
+That positive version is treated where Lemma~1 is assembled.
+
+The Lean statements of the Gaussian time average keep $q$ free and are
+unaffected.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
