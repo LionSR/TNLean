@@ -15,6 +15,7 @@ import TNLean.MPS.AreaLaw.Hastings.CutProductState
 import TNLean.MPS.AreaLaw.Hastings.Doubling
 import TNLean.MPS.AreaLaw.Hastings.EffectExpectation
 import TNLean.MPS.AreaLaw.Hastings.EffectFromFactorization
+import TNLean.MPS.AreaLaw.Hastings.GaussianTimeAverage
 import TNLean.MPS.AreaLaw.Hastings.IntervalMutualInformation
 import TNLean.MPS.AreaLaw.Hastings.MainTheorem
 import TNLean.MPS.AreaLaw.Hastings.PartCommutators
