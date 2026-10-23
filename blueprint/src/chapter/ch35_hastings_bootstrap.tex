@@ -389,13 +389,13 @@ of a gapped chain combines them with the factorization of
     \lean{TNLean.MPS.AreaLaw.exists_entropy_le_of_overlap_schmidtRank_mixture}
     \leanok
     \uses{def:chain_model, def:hastings_bootstrap_remainder}
-    Let $R$ be a range, $J\ge0$ an interaction strength and $\Delta E>0$ a
-    gap, let $\xi$ be the length of Lemma~1 for these data, and let
-    $\xi'>6\xi$. There is a constant $C_1\ge1$, depending only on $R$, $J$,
-    $\Delta E$ and $\xi'$, with the following property. Let $H$ be a
+    Let $R$ be a range and $\kappa>6$. There is a constant $K\ge1$, depending
+    only on $R$ and $\kappa$, with the following property. Let $H$ be a
     Hamiltonian on a chain of $L$ sites with local dimension $D$, a sum of
-    terms of range $R$ and norm at most $J$, whose ground state
-    $\Psi_0$ is unique with gap $\Delta E$ above the ground energy. Let $\rho$
+    terms of range $R$ and norm at most $J\ge0$, whose ground state
+    $\Psi_0$ is unique with gap $\Delta E>0$ above the ground energy. Let
+    $\hat\xi$ be the length of Lemma~1 in units of the gap, and set
+    $\xi'=\kappa\hat\xi$ and $C_1=K\hat\xi^3$. Let $\rho$
     be a density matrix of unit trace that is a mixture of pure states of
     Schmidt rank at most $k\ge1$ across the cut between sites $j$ and $j+1$, with
     $\langle\Psi_0,\rho\Psi_0\rangle=P>0$. (The case $k=0$ is vacuous: a vector
@@ -405,28 +405,30 @@ of a gapped chain combines them with the factorization of
     \end{align}
     where $\rho^0_{1,j}$ is the reduced density matrix of
     $|\Psi_0\rangle\langle\Psi_0|$ on sites $1,\dots,j$. This is a quantitatively restricted form of
-    \cite[Lemma~2]{Hastings2007AreaLaw}, lines 280--311, with $C_1$ the
-    constant of the formalized Lemma~1. It inherits that lemma's restrictions:
-    the length $\xi=8\max(2v_0/\Delta E,1)$ uses the velocity $v_0$ of the
-    chain Lieb--Robinson estimate. That estimate is linear in the size of the
-    support, as in the source, but its prefactor grows with $J$ and its second
-    operator acts on one site, so $\xi$ is not shown to be the source's
-    $\max(2v/\Delta E,\xi_C)$. The bound is proved for every $\xi'>6\xi$; the printed
-    endpoint $\xi'=6\xi$ is not established, and no counterexample to that
-    endpoint is asserted. The constant $C_1$ is uniform in the chain length,
-    local dimension, Hamiltonian, ground state, cut and mixture, but no
-    polynomial bound in $\xi$ alone is established
+    \cite[Lemma~2]{Hastings2007AreaLaw}, lines 280--311. The constant $C_1$
+    is bounded by a polynomial in the length, as the source requires, and is
+    uniform in the chain length, local dimension, Hamiltonian, ground state,
+    cut and mixture. The result inherits the remaining restrictions of the
+    formalized Lemma~1: the length $\hat\xi$ comes from the chain
+    Lieb--Robinson estimate, which is linear in the size of the support, as in
+    the source, but whose prefactor grows with $J$ and whose second operator
+    acts on one site, so $\hat\xi$ is not shown to be the source's
+    $\max(2v/\Delta E,\xi_C)$. The bound is proved at the rate
+    $\xi'=\kappa\hat\xi$ for every $\kappa>6$, with $K$ depending on $\kappa$;
+    the printed endpoint $\xi'=6\xi$ is not established, and no
+    counterexample to that endpoint is asserted
     \cite{gap:hastings07_lemma1_decay_length,
         gap:hastings07_gaussian_average_exponent}.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:hastings_projector_factorization,
+    \uses{thm:hastings_lemma1_polynomial_constant,
         thm:hastings_bootstrap_factorization_at}
-    Theorem~\ref{thm:hastings_projector_factorization} gives, for every
-    $\xi'>6\xi$, a constant $C$ depending only on $R$, $J$, $\Delta E$ and
-    $\xi'$ and an approximate factorization of the ground-state projector
-    with error $Ce^{-m/\xi'}$ at every cut and length; it also holds with
-    $C_1=\max(C,1)$. For $D\ge2$,
+    Theorem~\ref{thm:hastings_lemma1_polynomial_constant} gives a constant
+    $K_0\ge0$ depending only on $R$ and $\kappa$ and an approximate
+    factorization of the ground-state projector with error
+    $K_0\hat\xi^3e^{-m/(\kappa\hat\xi)}$ at every cut and length; it also holds
+    with $K=\max(K_0,1)$, and then $C_1=K\hat\xi^3\ge1$ since $\hat\xi\ge16$.
+    For $D\ge2$,
     Theorem~\ref{thm:hastings_bootstrap_factorization_at} gives the bound.
     For $D=1$ the entropy vanishes, while the right side is nonnegative,
     with the convention $\ln0=0$ in the term $\ln(D^2-1)$ of $F(\xi',D)$.
