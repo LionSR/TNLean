@@ -154,7 +154,7 @@
     ],
     [
       "Matrix product state",
-      "A vector on a chain written as a contraction of one tensor per site along the chain. Its bond dimension equals the largest Schmidt rank across a cut."
+      "A vector on a chain written as a contraction of one tensor per site along the chain. Every Schmidt rank across a cut is at most the bond dimension there; a minimal representation has bond dimension equal to the largest Schmidt rank, while an arbitrary one may have larger bonds."
     ]
   ]
 }
