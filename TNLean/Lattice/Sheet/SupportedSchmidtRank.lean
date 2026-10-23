@@ -122,7 +122,7 @@ theorem exists_threeSplit_eq_reindex_one_kronecker_rank_le
       M ≤ Fintype.card (Entropy.InnerConfig (fun _ : ι ↦ q) E D) ^ 2 := hM
       _ = q ^ (2 * (D ∩ E).card) := by
         rw [hcard, ← pow_mul, Nat.mul_comm (D ∩ E).card 2]
-  · letI : IsEmpty (ι → Fin q) := ⟨fun σ ↦ hconfig ⟨σ⟩⟩
+  · let : IsEmpty (ι → Fin q) := ⟨fun σ ↦ hconfig ⟨σ⟩⟩
     have hzero : A = 0 := Subsingleton.elim _ _
     refine ⟨0, ?_, ?_⟩
     · simp [hzero]
