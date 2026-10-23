@@ -130,3 +130,52 @@ window.
     $\lbrack a+l,a+2l)$, each at most the window entropy at length $l$, minus
     the gain, which is the doubling inequality.
 \end{proof}
+
+\begin{theorem}[Hastings' area law for gapped chains, with an unquantified
+        constant]
+    \label{thm:hastings_area_law}
+    \lean{TNLean.MPS.AreaLaw.Hastings.exists_regionEntropy_prefix_le}
+    \leanok
+    \uses{def:chain_model,def:hastings_area_law_bound}
+    Let $R$ be a range, $J\ge0$ a bound on the norms of the interaction
+    terms, and $\Delta E>0$. Let $\xi$ be the length of
+    Theorem~\ref{thm:hastings_projector_factorization} and $\xi'>6\xi$. Then
+    there is a constant $C_1\ge1$ with the following property. For every
+    chain of $L$ sites with local dimension $q$, every finite-range
+    Hamiltonian on it of range $R$ with terms of norm at most $J$, and every
+    ground vector $\Omega$ separated by a gap $\Delta E$ from the rest of the
+    spectrum, the entropy of the first $i$ sites is at most $S_{\max}$ for
+    every $i$, with $S_{\max}$ as in
+    Definition~\ref{def:hastings_area_law_bound}. In particular $S_{\max}$
+    depends on $R$, $J$, $\Delta E$, $\xi'$ and $q$, but not on $L$, on the
+    Hamiltonian, or on $\Omega$.
+
+    This is the main theorem of~\cite{Hastings2007AreaLaw}, equation (entbd),
+    in a quantitatively weaker form. The source takes $\xi'=6\xi$ with
+    $\xi=\max(2v/\Delta E,\xi_C)$ and a constant $C_1$ bounded by a
+    polynomial in $\xi$ (lines 258--262), which gives the printed value
+    $S_{\max}=c_0\xi'\ln(\xi')\ln(D)2^{\xi'\ln D}$. Here, as in
+    Theorem~\ref{thm:hastings_projector_factorization}, $\xi$ comes from a
+    chain Lieb--Robinson estimate whose prefactor grows with $J$ and whose
+    second operator acts on a single site, so it is not shown to be the
+    source's Lieb--Robinson bound (lines 96--112); $\xi'>6\xi$ is required; and
+    $C_1=C_1(R,J,\Delta E,\xi')$ is only shown to exist. The bound $S_{\max}$
+    therefore involves $\ln(2C_1)$ for an unquantified $C_1$, and the
+    printed value is not claimed; see
+    \cite{gap:hastings07_lemma1_decay_length,
+        gap:hastings07_gaussian_average_exponent}. In addition $S_{\max}$
+    grows as $4^{\xi'\ln q}$, not $2^{\xi'\ln q}$, as recorded
+    in~\cite{gap:hastings07_doubling_constants}, and the entropy gain enters
+    with the constants of~\cite{gap:hastings07_relent_constants}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:hastings_projector_factorization,
+        thm:hastings_area_law_from_factorization,
+        thm:hastings_factorization_mono}
+    Theorem~\ref{thm:hastings_projector_factorization} gives a constant
+    $C_1\ge0$, independent of the chain, such that the operators of
+    Theorem~\ref{thm:hastings_area_law_from_factorization} exist at every cut
+    and length with error $C_1e^{-l/\xi'}$. Replace $C_1$ by $\max\{C_1,1\}$,
+    which only enlarges the error (Theorem~\ref{thm:hastings_factorization_mono}),
+    and apply Theorem~\ref{thm:hastings_area_law_from_factorization}.
+\end{proof}
