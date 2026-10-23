@@ -274,12 +274,6 @@ hold for the centered and the uncentered parts alike.
 
 \begin{theorem}[The cut-offs $O_L$ and $O_R$]
     \label{thm:hastings_cutoffs}
-    \lean{TNLean.MPS.AreaLaw.Hastings.isStarProjection_spectralCutoff,
-        TNLean.MPS.AreaLaw.Hastings.isSupportedOn_spectralCutoff,
-        TNLean.MPS.AreaLaw.Hastings.commute_spectralCutoff_of_isSupportedOn,
-        TNLean.MPS.AreaLaw.Hastings.norm_sub_spectralCutoff_le,
-        TNLean.MPS.AreaLaw.Hastings.norm_mul_spectralCutoff_le}
-    \leanok
     \uses{thm:hastings_localized_parts, thm:hastings_filtered_no_ground_component,
         def:hastings_spectral_cutoff, thm:hastings_spectral_cutoff_obd,
         thm:hastings_spectral_cutoff_norm, thm:hastings_spectral_cutoff_support,
@@ -311,7 +305,7 @@ hold for the centered and the uncentered parts alike.
     below $-\theta$ on the range of $O_L$
     \cite{gap:hastings07_spectral_cutoff_threshold}.
 \end{theorem}
-\begin{proof}\leanok
+\begin{proof}
     The spectral projection of a Hermitian operator is an orthogonal
     projection, and it is supported where the operator is. Projections of
     operators on disjoint sets of sites commute.
