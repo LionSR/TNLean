@@ -8,6 +8,7 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.MPS.AreaLaw.Hastings
 
+import TNLean.MPS.AreaLaw.Hastings.AreaLaw
 import TNLean.MPS.AreaLaw.Hastings.BoundaryFactorization
 import TNLean.MPS.AreaLaw.Hastings.BoundaryLocalization
 import TNLean.MPS.AreaLaw.Hastings.ChainBootstrap
@@ -28,6 +29,7 @@ import TNLean.MPS.AreaLaw.Hastings.MainTheorem
 import TNLean.MPS.AreaLaw.Hastings.MovedEstimate
 import TNLean.MPS.AreaLaw.Hastings.PartCommutators
 import TNLean.MPS.AreaLaw.Hastings.PositiveFactorization
+import TNLean.MPS.AreaLaw.Hastings.PowerExponential
 import TNLean.MPS.AreaLaw.Hastings.ProductStateExpectation
 import TNLean.MPS.AreaLaw.Hastings.ProjectorFactorization
 import TNLean.MPS.AreaLaw.Hastings.ProjectorOverlap
