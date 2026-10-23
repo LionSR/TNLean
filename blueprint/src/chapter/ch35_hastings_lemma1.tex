@@ -274,12 +274,6 @@ hold for the centered and the uncentered parts alike.
 
 \begin{theorem}[The cut-offs $O_L$ and $O_R$]
     \label{thm:hastings_cutoffs}
-    \lean{TNLean.MPS.AreaLaw.Hastings.isStarProjection_spectralCutoff,
-        TNLean.MPS.AreaLaw.Hastings.isSupportedOn_spectralCutoff,
-        TNLean.MPS.AreaLaw.Hastings.commute_spectralCutoff_of_isSupportedOn,
-        TNLean.MPS.AreaLaw.Hastings.norm_sub_spectralCutoff_le,
-        TNLean.MPS.AreaLaw.Hastings.norm_mul_spectralCutoff_le}
-    \leanok
     \uses{thm:hastings_localized_parts, thm:hastings_filtered_no_ground_component,
         def:hastings_spectral_cutoff, thm:hastings_spectral_cutoff_obd,
         thm:hastings_spectral_cutoff_norm, thm:hastings_spectral_cutoff_support,
@@ -311,7 +305,7 @@ hold for the centered and the uncentered parts alike.
     below $-\theta$ on the range of $O_L$
     \cite{gap:hastings07_spectral_cutoff_threshold}.
 \end{theorem}
-\begin{proof}\leanok
+\begin{proof}
     The spectral projection of a Hermitian operator is an orthogonal
     projection, and it is supported where the operator is. Projections of
     operators on disjoint sets of sites commute.
@@ -384,9 +378,10 @@ $\|P_q(M)-P_q(H)\|\le\sqrt q\,\Delta E^{-1}\|M-H\|$ for Hermitian $M$, the gap
 bound and the first inequality of the display in
 \cite[lines 843--864]{Hastings2007AreaLaw}, with $M=M_L+M_B+M_R$.
 
-% Lean statement pending.
 \begin{theorem}[The cut-offs next to the time average]
     \label{thm:hastings_moved_estimate}
+    \lean{TNLean.MPS.AreaLaw.Hastings.norm_gaussianTimeAverage_mul_mul_sub_groundProjector_le}
+    \leanok
     \uses{thm:hastings_gaussian_time_average_gap,
         thm:hastings_gaussian_time_average_stability, thm:hastings_cutoffs}
     Let $M$ be Hermitian with $\|M-H\|\le\delta$, and let $O_L$, $O_R$ be
@@ -396,6 +391,16 @@ bound and the first inequality of the display in
     \end{align*}
     which is \cite[lines 865--876]{Hastings2007AreaLaw}.
 \end{theorem}
+\begin{proof}\leanok
+    Split $P_q(M)O_LO_R-P_0=(P_q(M)-P_0)O_LO_R+(P_0O_LO_R-P_0)$. The first term
+    is at most $\|P_q(M)-P_0\|$, since $O_LO_R$ is a contraction, and
+    Theorems~\ref{thm:hastings_gaussian_time_average_gap}
+    and~\ref{thm:hastings_gaussian_time_average_stability} bound it by
+    $e^{-q/2}+\sqrt q\,\Delta E^{-1}\delta$. Taking adjoints, the second term
+    equals $\|O_LO_RP_0-P_0\|$; as $O_LO_RP_0-P_0$ acts by
+    $x\mapsto\langle\Psi_0,x\rangle(O_LO_R\Psi_0-\Psi_0)$, its norm is at most
+    $\|\Psi_0-O_LO_R\Psi_0\|\le\eta$.
+\end{proof}
 
 The interaction picture $e^{i(A+B)t}=U(t)e^{iAt}$ and the Gaussian average
 $P_B$ of $U(t)$ are Definitions~\ref{def:hastings_interaction_propagator}
