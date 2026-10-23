@@ -454,6 +454,13 @@ $X_{j-l+1,j+l}$.
         TNLean.MPS.AreaLaw.exists_isFactorizationAt_sqrt_decay,
         TNLean.MPS.AreaLaw.lemmaOneLength,
         TNLean.MPS.AreaLaw.Hastings.lemmaOne_errorBudget,
+        TNLean.MPS.AreaLaw.Hastings.lemmaOneBudgetA,
+        TNLean.MPS.AreaLaw.Hastings.lemmaOneBudgetB,
+        TNLean.MPS.AreaLaw.lemmaOneSqrtA,
+        TNLean.MPS.AreaLaw.lemmaOneSqrtB,
+        TNLean.MPS.AreaLaw.lemmaOneConst,
+        TNLean.MPS.AreaLaw.lemmaOneConst_nonneg,
+        TNLean.MPS.AreaLaw.exists_isFactorizationAt_lemmaOneConst,
         TNLean.MPS.AreaLaw.isFactorizationAt_zero_one_one,
         Matrix.IsGappedGroundState.sub_smul_one}
     \leanok
@@ -573,6 +580,52 @@ $X_{j-l+1,j+l}$.
     most $J/\Delta E$, the same ground state and gap $1$, so
     Theorem~\ref{thm:hastings_projector_factorization} applies to it with the
     length $8\max(2(1+c_RJ/\Delta E),1)=\hat\xi$.
+\end{proof}
+
+\begin{theorem}[A polynomial bound on the constant of the factorization]
+    \label{thm:hastings_lemma1_polynomial_constant}
+    \lean{TNLean.MPS.AreaLaw.exists_projectorFactorization_pow,
+        TNLean.MPS.AreaLaw.exists_projectorFactorization_posSemidef_pow,
+        TNLean.MPS.AreaLaw.lemmaOneConst_le_pow,
+        TNLean.MPS.AreaLaw.sixteen_le_lemmaOneLength_and_le}
+    \leanok
+    \uses{thm:hastings_projector_factorization_scaled,
+        thm:hastings_positive_factorization}
+    Let $\kappa>6$. There is a constant $K\ge0$, depending only on $R$ and
+    $\kappa$, with the following property. Under the assumptions of
+    Theorem~\ref{thm:hastings_projector_factorization}, with $\hat\xi$ the
+    length of Theorem~\ref{thm:hastings_projector_factorization_scaled}, for
+    every cut $j$ and every $l$ there are operators $O_B$, $O_L$, $O_R$ with
+    the properties of Theorem~\ref{thm:hastings_projector_factorization} and
+    \begin{align*}
+        \|O_BO_LO_R-P_0\|\le K\hat\xi^3e^{-l/(\kappa\hat\xi)}.
+    \end{align*}
+    The same holds with $O_B$ positive semidefinite, with another such constant
+    and the rate $e^{-l/(2\kappa\hat\xi)}$, as in
+    Theorem~\ref{thm:hastings_positive_factorization}.
+    So the constant of the factorization at the rate $\xi'=\kappa\hat\xi$ is
+    bounded by a polynomial in $\hat\xi$, as Lemma~\ref{lem:hastings_lemma1}
+    requires~\cite[lines 258--262]{Hastings2007AreaLaw}. For the source's
+    nearest-neighbour terms ($R=1$) the constant $K$ depends only on
+    $\kappa$. The rate $\xi'=6\hat\xi$ is not reached, and $\hat\xi$ is not
+    shown to come from a Lieb--Robinson pair in the source's
+    sense~\cite{gap:hastings07_lemma1_decay_length,
+        gap:hastings07_gaussian_average_exponent}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:hastings_projector_factorization_scaled}
+    Apply Theorem~\ref{thm:hastings_projector_factorization} to $H/\Delta E$
+    at the rate $\kappa\hat\xi$, and write $x=J/\Delta E$. The constant is
+    $a+b/\sqrt{2e(1/(6\hat\xi)-1/(\kappa\hat\xi))}$, where $a$ is the larger
+    of the constant term of the error budget and $e^{(12R+8)/(6\hat\xi)}$,
+    and $b$ is the coefficient of $\sqrt l$. Since $\hat\xi\ge16$ and
+    $x\le\hat\xi$, the Lieb--Robinson prefactor is at most a multiple of
+    $\hat\xi$ and the commutator constant at most a multiple of $\hat\xi^2$.
+    So the constant term of the budget is at most a multiple of $\hat\xi^3$,
+    $e^{(12R+8)/(6\hat\xi)}\le e^{(12R+8)/6}$, and $b$ is at most a multiple of
+    $\hat\xi^2$. Finally,
+    $1/\sqrt{2e(1/(6\hat\xi)-1/(\kappa\hat\xi))}=\sqrt{\hat\xi/\beta}\le\hat\xi/\sqrt\beta$
+    with $\beta=2e(\kappa-6)/(6\kappa)$.
 \end{proof}
 
 \begin{theorem}[An effect operator from an approximate factorization]

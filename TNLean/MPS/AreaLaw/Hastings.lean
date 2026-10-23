@@ -9,6 +9,7 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.MPS.AreaLaw.Hastings
 
 import TNLean.MPS.AreaLaw.Hastings.AreaLaw
+import TNLean.MPS.AreaLaw.Hastings.BootstrapLemma
 import TNLean.MPS.AreaLaw.Hastings.BoundaryFactorization
 import TNLean.MPS.AreaLaw.Hastings.BoundaryLocalization
 import TNLean.MPS.AreaLaw.Hastings.ChainBootstrap
@@ -22,9 +23,11 @@ import TNLean.MPS.AreaLaw.Hastings.Doubling
 import TNLean.MPS.AreaLaw.Hastings.EffectExpectation
 import TNLean.MPS.AreaLaw.Hastings.EffectFromFactorization
 import TNLean.MPS.AreaLaw.Hastings.FactorizationBudget
+import TNLean.MPS.AreaLaw.Hastings.GappedAreaLaw
 import TNLean.MPS.AreaLaw.Hastings.GaussianTimeAverage
 import TNLean.MPS.AreaLaw.Hastings.InteractionPicture
 import TNLean.MPS.AreaLaw.Hastings.IntervalMutualInformation
+import TNLean.MPS.AreaLaw.Hastings.LemmaOneConstant
 import TNLean.MPS.AreaLaw.Hastings.MPSFromEntropy
 import TNLean.MPS.AreaLaw.Hastings.MPSGroundState
 import TNLean.MPS.AreaLaw.Hastings.MainTheorem
