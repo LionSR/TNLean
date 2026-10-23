@@ -4801,6 +4801,21 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 ## Candidates
 
+### Restricting an operator Schmidt decomposition at a fixed configuration — candidate (2026-10-23)
+
+- **Pattern:** Choose an actual configuration in the region carrying an identity
+  factor, restrict each outside matrix to that configuration, and retain the
+  same number of summands in the operator Schmidt decomposition.
+- **Seen:** The left-factor argument in
+  `TNLean/Lattice/Sheet/LeftSupportedSchmidtRank.lean` and the right-factor
+  argument in `TNLean/Lattice/Sheet/SupportedSchmidtRank.lean` (PR #10029).
+- **Abstraction (proposed):** If another use appears, first seek a lemma saying
+  that restriction by separate coordinate maps preserves a product
+  decomposition with the same number of summands.
+- **Notes:** The left and right arguments use different cuts. Both treat empty
+  global configuration spaces separately; no identity factor is cancelled.
+
+
 ### Mass of a cut beyond its leading eigenvalues — candidate
 - **Pattern:**
   ```lean
