@@ -1383,6 +1383,14 @@ estimates and energy-rescaling analysis under the still-open issue #9811.
   sign; the corrected minus sign preserves the obstruction from
   super-logarithmic entropy growth. The Lean development remains open in #9857.
 
+- [`swvc08_interior_block_bond_rank.tex`](swvc08_interior_block_bond_rank.tex)
+  (false source, resolved) distinguishes a boundary block, of rank at most
+  `D`, from an interior contiguous block, of rank at most `D²`. Two Bell
+  pairs on four sites attain the latter bound and disprove the printed
+  `log D` entropy bound even at zero approximation error. Replacing it by
+  `2 log D` preserves the asymptotic obstruction; the full Lean result
+  remains open in #9857.
+
 - [`swvc08_truncation_squared_norm.tex`](swvc08_truncation_squared_norm.tex)
   (false source, resolved) records the missing square in the displayed truncation
   bound of Schuch–Wolf–Verstraete–Cirac, arXiv:0705.0292v2, lines 239–245. A two-qubit
