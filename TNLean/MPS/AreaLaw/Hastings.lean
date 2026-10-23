@@ -13,6 +13,7 @@ import TNLean.MPS.AreaLaw.Hastings.BoundaryFactorization
 import TNLean.MPS.AreaLaw.Hastings.BoundaryLocalization
 import TNLean.MPS.AreaLaw.Hastings.ChainBootstrap
 import TNLean.MPS.AreaLaw.Hastings.ChainLocalizedParts
+import TNLean.MPS.AreaLaw.Hastings.CorrelationLemma
 import TNLean.MPS.AreaLaw.Hastings.CutProductExpectation
 import TNLean.MPS.AreaLaw.Hastings.CutProductState
 import TNLean.MPS.AreaLaw.Hastings.CutoffPair
