@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.AreaLaw.Hastings.TailEntropy
 import QICLean.Channel.MaximalOverlap
 import QICLean.Analysis.Entropy
+import QICLean.Analysis.KyFanNorm
 
 /-!
 # Entropy from overlaps with mixtures of bounded Schmidt rank
@@ -25,8 +26,6 @@ constraints is `probabilityEntropy_le_of_scale_tails`.
 
 * `TNLean.MPS.AreaLaw.Hastings.normSq_dotProduct_le_kyFanNorm`: overlap with a vector of
   bounded Schmidt rank.
-* `TNLean.MPS.AreaLaw.Hastings.sum_eigenvalues₀_filter_le`: the eigenvalue tail is the trace
-  minus the Ky Fan norm.
 * `TNLean.MPS.AreaLaw.Hastings.one_sub_kyFanNorm_le_of_schmidtRank_mixture`: the Schmidt tail
   from one mixture of bounded Schmidt rank.
 * `TNLean.MPS.AreaLaw.Hastings.bootstrapRemainder`: Hastings' `F(ξ', D)`.
@@ -102,31 +101,6 @@ theorem normSq_dotProduct_le_kyFanNorm [DecidableEq m] (φ ψ : m × n → ℂ) 
   rw [inv_mul_le_iff₀ hpos] at hmain
   exact hmain
 
-/-- The von Neumann entropy of a Hermitian matrix is the entropy of its eigenvalues in
-descending order. -/
-theorem vonNeumannEntropy_eq_probabilityEntropy_eigenvalues₀ {ρ : Matrix m m ℂ}
-    (hρ : ρ.IsHermitian) :
-    vonNeumannEntropy ρ hρ =
-      probabilityEntropy (fun a : Fin (Fintype.card m) ↦ hρ.eigenvalues₀ a) := by
-  rw [vonNeumannEntropy, probabilityEntropy]
-  unfold Matrix.IsHermitian.eigenvalues
-  exact Equiv.sum_comp (Fintype.equivOfCardEq (Fintype.card_fin _)).symm
-    (fun a ↦ Real.negMulLog (hρ.eigenvalues₀ a))
-
-/-- The eigenvalues beyond the first `K`, in descending order, add up to the trace minus the
-Ky Fan `K`-norm. -/
-theorem sum_eigenvalues₀_filter_le {ρ : Matrix m m ℂ} (hρ : ρ.IsHermitian) (K : ℕ) :
-    ∑ a ∈ univ.filter (fun a : Fin (Fintype.card m) ↦ K ≤ a.val), hρ.eigenvalues₀ a =
-      (ρ.trace).re - hρ.kyFanNorm K := by
-  have htot : ∑ a : Fin (Fintype.card m), hρ.eigenvalues₀ a = (ρ.trace).re := by
-    rw [← hρ.kyFanNorm_card_eq_trace_re, hρ.kyFanNorm_eq_sum_fin]
-    exact Finset.sum_congr rfl fun a _ ↦ by simp only [a.isLt, ↓reduceIte]
-  rw [Finset.sum_filter, hρ.kyFanNorm_eq_sum_fin, ← htot, ← Finset.sum_sub_distrib]
-  refine Finset.sum_congr rfl fun a _ ↦ ?_
-  by_cases h : K ≤ a.val
-  · simp [h, show ¬ a.val < K by omega]
-  · simp [h, show a.val < K by omega]
-
 /-- **The Schmidt tail from one mixture.** If a mixture of pure states of Schmidt rank at most
 `K` has normalized overlap at least `1 - η` with the unit vector `Ψ`, then the eigenvalues of
 `C Cᴴ` beyond the `K` largest add up to at most `η`, where `C` is the coefficient matrix of
@@ -198,7 +172,7 @@ theorem vonNeumannEntropy_le_of_schmidtRank_mixtures (Ψ : m × n → ℂ)
     unfold Matrix.IsHermitian.eigenvalues at h
     simpa [hp] using h
   have hpsum : ∑ a, p a = 1 := by
-    have h := sum_eigenvalues₀_filter_le hρ 0
+    have h := hρ.sum_eigenvalues₀_filter_le 0
     simp only [zero_le, Finset.filter_true, Matrix.IsHermitian.kyFanNorm_zero, sub_zero,
       htrace] at h
     exact h
@@ -236,7 +210,7 @@ theorem vonNeumannEntropy_le_of_schmidtRank_mixtures (Ψ : m × n → ℂ)
     have hky : 1 - η ≤ hρ.kyFanNorm (k * D ^ (2 * s)) := by
       have := one_sub_kyFanNorm_le_of_schmidtRank_mixture Ψ hΨ (by positivity) w ψ hw hψ htot hov
       linarith
-    have hfilter := sum_eigenvalues₀_filter_le hρ (k * D ^ (2 * s))
+    have hfilter := hρ.sum_eigenvalues₀_filter_le (k * D ^ (2 * s))
     rw [htrace] at hfilter
     simp only [hp]
     rw [hfilter]
