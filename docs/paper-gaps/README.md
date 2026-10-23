@@ -1351,6 +1351,18 @@ positive and the later estimate uses `‖M_L O_L‖` at most the threshold.
   length `ξ₀` rather than `ξ₀/2`, and the implicit hypotheses `2 C₁ > 1` and
   `ln C₁ + C₂ ≥ 0`.
 
+### One-dimensional area law after Hastings: the decay length of Lemma 1
+
+[hastings07_lemma1_decay_length.tex](hastings07_lemma1_decay_length.tex)
+(scope restriction, open) distinguishes the chain localization estimate with
+quadratic support dependence from Hastings's linear-support Lieb–Robinson
+bound (arXiv:0705.2024v4, lines 96–112). The exponential comparison motivates
+`ξ = 8 max(2v₀/ΔE, 1)` but does not establish the source's full bound for the
+pair `(8v₀, 8)`. The factorization constant is uniform in chain length and
+local dimension; the source's polynomial bound in `ξ` (lines 258–262) remains
+unproved, as does the endpoint rate `ξ' = 6ξ`. The note records the required
+estimates and energy-rescaling analysis under the still-open issue #9811.
+
 ## Rényi entropy and matrix product state approximation
 
 - [`swvc08_renyi_bond_dimension_sign.tex`](swvc08_renyi_bond_dimension_sign.tex)
