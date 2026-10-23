@@ -9,6 +9,7 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.MPS.AreaLaw.Hastings
 
 import TNLean.MPS.AreaLaw.Hastings.AreaLaw
+import TNLean.MPS.AreaLaw.Hastings.BootstrapLemma
 import TNLean.MPS.AreaLaw.Hastings.BoundaryFactorization
 import TNLean.MPS.AreaLaw.Hastings.BoundaryLocalization
 import TNLean.MPS.AreaLaw.Hastings.ChainBootstrap
