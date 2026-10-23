@@ -256,9 +256,8 @@
     supplied for the gapped ground state, this is the conclusion of the section
     on matrix product states of \cite{Hastings2007AreaLaw}, restricted in its
     quantitative bounds as Lemma~1 is: its length is not shown to be the
-    source's $\max(2v/\Delta E,\xi_C)$, the printed $\xi'=6\xi$ is not
-    reached, and $C_1$ is not shown polynomial in $\xi$; $k_0$ inherits
-    these through $S_{\max}$
+    source's $\max(2v/\Delta E,\xi_C)$, and the printed $\xi'=6\xi$ is not
+    reached; $k_0$ inherits these through $S_{\max}$
     \cite{gap:hastings07_lemma1_decay_length,gap:hastings07_gaussian_average_exponent}.
     The error is measured in
     the squared norm~\cite{gap:hastings07_mps_error_measure}, and the constant
@@ -278,39 +277,42 @@
     \label{thm:hastings_mps_gapped_chain}
     \lean{TNLean.MPS.AreaLaw.Hastings.exists_isOpenMPS_norm_sub_sq_le_of_isGappedGroundState}
     \leanok
-    \uses{thm:hastings_projector_factorization}
-    Let the interaction range $R$, the bound $J\ge0$ on the interaction
-    strength, the gap $\Delta E>0$ and $\xi'>6\xi$ be given, with $\xi$ the
-    decay length of Lemma~1. Then there is a constant $C_1\ge1$, independent
-    of the length of the chain, with the following property. For every chain
-    of $L$ sites with local dimension $D>1$ and every gapped ground vector
-    $\Omega$ of a Hamiltonian of range $R$, strength $J$ and gap $\Delta E$,
-    with $k_0=\lceil\exp(2S_{\max})/2\rceil$ for the bound $S_{\max}$ of the
-    area law, truncating every cut onto the $k'$ leading eigenvectors of its
-    left marginal, for every natural number $k'\ge k_0$, gives an
-    open-boundary matrix product state $\Phi$ of bond dimension at most $k'$
-    with
+    \uses{thm:hastings_lemma1_polynomial_constant}
+    Let $R$ be a range and $\kappa>6$. There is a constant $K\ge0$, depending
+    only on $R$ and $\kappa$, with the following property. Let $J\ge0$ bound
+    the interaction terms, let $\Delta E>0$ be a gap, let $\hat\xi$ be the
+    decay length of Lemma~1 in units of the gap, and put $\xi'=\kappa\hat\xi$
+    and $C_1=\max(K\hat\xi^3,1)$. For every chain of $L$ sites with local
+    dimension $D>1$ and every gapped ground vector $\Omega$ of a Hamiltonian
+    of range $R$, strength $J$ and gap $\Delta E$, with
+    $k_0=\lceil\exp(2S_{\max})/2\rceil$ for the bound $S_{\max}$ of the area
+    law, truncating every cut onto the $k'$ leading eigenvectors of its left
+    marginal, for every natural number $k'\ge k_0$, gives an open-boundary
+    matrix product state $\Phi$ of bond dimension at most $k'$ with
     \begin{align}
         \lVert\Phi-\Omega\rVert^2
          & \le(L-1)\,4C_1^2e^{2/\xi'}\Bigl(\frac{k'}{k_0}\Bigr)^{-1/(\xi'\log D)}.
         \notag
     \end{align}
-    Both $C_1$ and $k_0$ are independent of $L$. This is the conclusion of the
-    section on matrix product states of \cite{Hastings2007AreaLaw} under its
-    Hamiltonian assumptions alone, with the quantitative restrictions of the
-    formalized Lemma~1
-    \cite{gap:hastings07_lemma1_decay_length,gap:hastings07_gaussian_average_exponent},
-    the error measured in the squared
-    norm~\cite{gap:hastings07_mps_error_measure} and the constant of
+    The constants depend only on $R$, $\kappa$, $J/\Delta E$ and $D$, not on
+    $L$. This is the conclusion of the section on matrix product states of
+    \cite{Hastings2007AreaLaw} under its Hamiltonian assumptions alone, with
+    $C_1$ polynomial in $\hat\xi$ as in that paper. It holds at the rate
+    $\xi'=\kappa\hat\xi$ for every fixed $\kappa>6$ rather than at the
+    printed endpoint, and $\hat\xi$ is not shown to be the length of the
+    source's Lieb--Robinson pair
+    \cite{gap:hastings07_lemma1_decay_length,gap:hastings07_gaussian_average_exponent}.
+    The error is measured in the squared
+    norm~\cite{gap:hastings07_mps_error_measure}, and the constant is that of
     Theorem~\ref{thm:hastings_schmidt_tail_rpow}
     \cite{gap:hastings07_schmidt_tail_constant}.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:hastings_projector_factorization, thm:hastings_mps_ground_state,
-        def:hastings_factorization_at}
-    Lemma~1 gives a constant $C\ge0$, independent of the chain, with the
-    factorization at error $Ce^{-l/\xi'}$ at every cut and length. Taking
-    $C_1=\max(C,1)$ only enlarges the error, and
+    \uses{thm:hastings_lemma1_polynomial_constant, thm:hastings_mps_ground_state,
+        thm:hastings_factorization_mono}
+    Lemma~1 with a polynomial constant gives the factorization at error
+    $K\hat\xi^3e^{-l/\xi'}$ at every cut and length. Taking
+    $C_1=\max(K\hat\xi^3,1)$ only enlarges the error, and
     Theorem~\ref{thm:hastings_mps_ground_state} gives the
     bound~\cite{gap:hastings07_mps_entropy_stage}.
 \end{proof}

@@ -19,9 +19,14 @@ slower rate `e^{-l/ξ'}` with `ξ' > 6ξ`: with `δ = 1/(6ξ) − 1/ξ' > 0`,
 `sup_{l ≥ 0} √l e^{-δl} = (2eδ)^{-1/2}`, attained at `l = 1/(2δ)`.
 
 **Scope restriction (decay length):** the conversions give Lemma 1 with `C₁ e^{-l/ξ'}` for every
-`ξ' > 6ξ`, with `C₁` depending on `ξ' − 6ξ`. The printed endpoint `ξ' = 6ξ` (line 142) is not
-established, because the final bound keeps the prefactor `√l`; it is not shown to be false.
-Documented in `docs/paper-gaps/hastings07_gaussian_average_exponent.tex`.
+`ξ' > 6ξ`, with `C₁` depending on `ξ' − 6ξ`. At a fixed length `ξ` the printed endpoint
+`ξ' = 6ξ` (line 142) is not established, because the final bound keeps the prefactor `√l`; it
+is not shown to be false. It is reached by choosing the length anew: in units of the gap,
+`exists_projectorFactorization_endpoint` gives the rate `6ζ` for the length `ζ = (5/4) ξ̂` of
+the chain estimate with raised velocity, which carries the same restriction on the
+Lieb–Robinson pair as `ξ̂`. Documented in
+`docs/paper-gaps/hastings07_gaussian_average_exponent.tex` and
+`docs/paper-gaps/hastings07_lemma1_decay_length.tex`.
 
 ## Main results
 
