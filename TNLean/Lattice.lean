@@ -24,6 +24,7 @@ import TNLean.Lattice.LocalHamiltonian
 import TNLean.Lattice.MarginalTails
 import TNLean.Lattice.PartyCircuit
 import TNLean.Lattice.PhysicalBufferCoordinates
+import TNLean.Lattice.ProductForm
 import TNLean.Lattice.ProductGroundState
 import TNLean.Lattice.RegionEntropyInequalities
 import TNLean.Lattice.RegionSplit
