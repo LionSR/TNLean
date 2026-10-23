@@ -264,29 +264,30 @@ hold for the centered and the uncentered parts alike.
     the estimate of \cite[lines 849--850]{Hastings2007AreaLaw}.
 \end{theorem}
 
-% Lean statement pending. Stated as printed; it will be restated with the
-% cut-off on the absolute value and its paper-gap note when its Lean statement
-% lands.
+% Lean statement pending.
 \begin{theorem}[The cut-offs $O_L$ and $O_R$]
     \label{thm:hastings_cutoffs}
-    \uses{thm:hastings_localized_parts, thm:hastings_filtered_no_ground_component}
-    Let $O_L$ and $O_R$ be the spectral projectors of $M_L$ and $M_R$ onto
-    the eigenvectors with eigenvalue less than or equal to
-    $\Delta E^{-1}J^2e^{-l/(6\xi)}$, the eigenvalue itself and not its
-    absolute value being compared, as in
-    \cite[lines 830--834]{Hastings2007AreaLaw}. They are commuting
+    \uses{thm:hastings_localized_parts, thm:hastings_filtered_no_ground_component,
+        def:hastings_spectral_cutoff, thm:hastings_spectral_cutoff_obd,
+        thm:hastings_spectral_cutoff_norm, thm:hastings_spectral_cutoff_support,
+        thm:hastings_spectral_cutoff_commute}
+    Let $\theta=\Delta E^{-1}J^2e^{-l/(6\xi)}$, and let $O_L$ and $O_R$ be the
+    spectral projections of $M_L$ and $M_R$ onto the eigenvectors whose
+    eigenvalues have absolute value at most $\theta$. They are commuting
     orthogonal projections, $O_L$ acts on $X_{1,j}$ and $O_R$ on $X_{j+1,N}$,
     and
     \begin{align*}
         \|(O_L-1)\Psi_0\|\le\mathcal O(e^{-l/(6\xi)}),\qquad
-        \|(O_R-1)\Psi_0\|\le\mathcal O(e^{-l/(6\xi)}),
+        \|(O_R-1)\Psi_0\|\le\mathcal O(e^{-l/(6\xi)}),\qquad
+        \|M_LO_L\|,\ \|M_RO_R\|\le\theta,
     \end{align*}
-    which is \cite[lines 829--841]{Hastings2007AreaLaw}. The later bound
-    $\|e^{i(M_L+M_R)t}O_LO_R-O_LO_R\|\le2|t|\Delta E^{-1}J^2
-        \mathcal O(e^{-l/(6\xi)})$ of \cite[lines 879--880]{Hastings2007AreaLaw}
-    needs the cut-off on the absolute value of the eigenvalue: with the
-    printed cut-off, $M_L$ may have eigenvalues far below
-    $-\Delta E^{-1}J^2e^{-l/(6\xi)}$ on the range of $O_L$.
+    which is \cite[lines 829--841]{Hastings2007AreaLaw}. The source cuts off
+    at the eigenvalues at most $\theta$, not at their absolute values. The
+    bound $\|e^{i(M_L+M_R)t}O_LO_R-O_LO_R\|\le2|t|\theta$ used at
+    \cite[lines 879--880]{Hastings2007AreaLaw} needs the cut-off on the
+    absolute value: with the printed cut-off, $M_L$ may have eigenvalues far
+    below $-\theta$ on the range of $O_L$
+    \cite{gap:hastings07_spectral_cutoff_threshold}.
 \end{theorem}
 
 \subsection*{The Gaussian time average and the boundary operator}
@@ -418,24 +419,6 @@ hold for the centered and the uncentered parts alike.
     $\|P\|\le1$ finish the proof.
 \end{proof}
 
-% Lean statement pending.
-\begin{lemma}[Positive repair of the boundary operator]
-    \label{lem:hastings_positive_repair}
-    \uses{thm:hastings_effect_from_factorization}
-    Let $0\le\varepsilon\le1$, let $B$ be a matrix with $\|B\|\le1$, and let
-    $P$, $Q$ be orthogonal projections with $\|BQ-P\|\le\varepsilon$. Then
-    \begin{align*}
-        \|B^\dagger BQ-P\|\le\sqrt{1-(1-\varepsilon)^2}+3\varepsilon
-        +\varepsilon^2,
-    \end{align*}
-    which is of order $\sqrt\varepsilon$. This is the lemma of the note added
-    to \cite[lines 944--995]{Hastings2007AreaLaw}. The source places no upper
-    bound on $\varepsilon$, but its proof uses $1-\varepsilon\ge0$, and the
-    square root is real only for $\varepsilon\le2$. For $1<\varepsilon\le2$
-    the right side exceeds $3$, while $\|B^\dagger BQ-P\|\le2$, so the bound
-    then holds trivially.
-\end{lemma}
-
 The note added to \cite{Hastings2007AreaLaw} observes that the operator $O_B$
 constructed in the appendix need not be Hermitian or positive, and offers two
 ways around this. The area-law proof uses Lemma~\ref{lem:hastings_lemma1} only
@@ -447,7 +430,7 @@ Theorem~\ref{thm:hastings_projector_factorization}, for every $\xi'>6\xi$,
 with $\varepsilon$ replaced by $2\varepsilon+\varepsilon^2$; this is the
 first of the two routes of the note, and it is all that the area law needs. The positive operator
 $O_B^+=O_B^\dagger O_B$ of the note satisfies the factorization only with the
-error of Lemma~\ref{lem:hastings_positive_repair}, of order $\sqrt{\varepsilon}$,
+error of Theorem~\ref{thm:hastings_positive_repair}, of order $\sqrt{\varepsilon}$,
 so the positive version of Lemma~\ref{lem:hastings_lemma1} holds with a positive
 semidefinite $O_B^+$ and the rate $e^{-l/(2\xi')}$ in place of $e^{-l/\xi'}$.
 The note itself states both changes: it calls $O_B^+$ positive semidefinite and
@@ -460,7 +443,7 @@ printed in the body of the paper.
     \label{lem:hastings_lemma1}
     \uses{thm:hastings_projector_factorization,
         thm:hastings_effect_from_factorization,
-        lem:hastings_positive_repair}
+        thm:hastings_positive_factorization}
     This is Lemma~1 of \cite{Hastings2007AreaLaw}. Let $H$ be a Hamiltonian
     that satisfies the finite range, finite interaction strength, and gap
     conditions. Then for any $j$ and any $l$
@@ -486,7 +469,7 @@ $\xi'=6\xi$; it gives the supports and the norms as stated, and $O_L$, $O_R$
 commuting orthogonal projections, but with an operator $O_B$ that need not
 be Hermitian or positive. If $O_B$ is replaced by $O_B^\dagger O_B$, which is positive
 semidefinite, has norm at most one and keeps the support, then
-Lemma~\ref{lem:hastings_positive_repair} bounds the new error by
+Theorem~\ref{thm:hastings_positive_repair} bounds the new error by
 $\mathcal O(\sqrt{\varepsilon(l)})$, which decays only at the rate
 $e^{-l/(2\xi')}$; this is the version of the note added
 \cite[lines 932--940]{Hastings2007AreaLaw}. Neither statement gives

@@ -76,8 +76,7 @@ theorem norm_conj_sub_sub_siteExpectation_le {ι : Type*} [Fintype ι] [Decidabl
     ‖(hermitianUnitaryPath H t * A * hermitianUnitaryPath H (-t) - A) -
         QuantumCircuit.siteExpectation d K
           (hermitianUnitaryPath H t * A * hermitianUnitaryPath H (-t) - A)‖ ≤ ε * |t| := by
-  let L : Matrix (ι → Fin d) (ι → Fin d) ℂ →L[ℂ] Matrix (ι → Fin d) (ι → Fin d) ℂ :=
-    LinearMap.toContinuousLinearMap (LinearMap.id - QuantumCircuit.siteExpectationLM d K)
+  let L := QuantumCircuit.subSiteExpectationCLM (ι := ι) d K
   have hL (B : Matrix (ι → Fin d) (ι → Fin d) ℂ) :
       L B = B - QuantumCircuit.siteExpectation d K B := rfl
   have hcont : Continuous (fun s : ℝ => hermitianUnitaryPath H s *

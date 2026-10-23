@@ -14,6 +14,7 @@ run_cmd do
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
   for decl in #[
     ``Matrix.PosSemidef.norm_trace_mul_mul_le,
+    ``Matrix.PosSemidef.re_trace_mul_mul_self_le,
     ``TNLean.MPS.AreaLaw.Hastings.re_trace_mul_le_of_projection_sandwich] do
     unless (← Lean.getEnv).contains decl do
       throwError "Missing declaration {decl}"
