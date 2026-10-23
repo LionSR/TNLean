@@ -24,6 +24,10 @@ with `H_D = ∑_{k ∈ D} h k`, which is the definition used here. If `‖h k‖
 
 * `TNLean.Lattice.ClusterExpansion.clusterPart`: the operator `ρ(β, C)`.
 * `TNLean.Lattice.ClusterExpansion.norm_trace_mul_clusterPart_le`: the bound above.
+* `TNLean.Lattice.ClusterExpansion.norm_trace_mul_clusterPart_le_pow`: equation `percb2`, the
+  bound `‖O‖ y^{n_C} Tr e^{-βH}` when `n_C + n_B ≤ S n_C`.
+* `TNLean.Lattice.ClusterExpansion.norm_trace_mul_clusterPart_biUnion_le`: the same bound for
+  several disjoint clusters, `‖O‖ ∏_i y^{n_{C_i}} Tr e^{-βH}`.
 
 ## References
 
@@ -31,7 +35,7 @@ Hastings, *Solving gapped Hamiltonians locally*, arXiv:cond-mat/0508554v3, `proj
 lines 1174–1195. The source states the bound before equation `percb2` with `Tr(O e^{-βH})` on
 the right; the form proved here, with `‖O‖ Tr e^{-βH}` and `‖H_C + H_B‖ ≤ (n_C + n_B) J`, is the
 one equation `percb2` uses. The final step of `percb2`, `n_C + n_B ≤ S n_C`, is a property of
-clusters on a lattice and is not made here.
+clusters on a lattice; here it is a hypothesis.
 -/
 
 open scoped Matrix.Norms.L2Operator
@@ -150,5 +154,78 @@ theorem norm_trace_mul_clusterPart_le {H : Matrix ι ι ℂ} (hH : H.IsHermitian
         (Real.exp ((C.card + B.card) * J * β) * (NormedSpace.exp (-(β • H))).trace.re) :=
       mul_le_mul_of_nonneg_left h2 hP
     _ = _ := by ring
+
+/-- **Equation `percb2`.** If the cluster and its boundary satisfy `n_C + n_B ≤ S n_C`, then
+`|Tr (O ρ(β, C))| ≤ ‖O‖ y^{n_C} Tr e^{-βH}` with `y = (e^{βJ} - 1) e^{SJβ}`.
+
+Hastings, arXiv:cond-mat/0508554v3, `proj3new.tex`, lines 1186–1195, with `‖O‖ Tr e^{-βH}` on
+the right as in `norm_trace_mul_clusterPart_le`. The source derives `n_C + n_B ≤ S n_C` from the
+lattice; here it is the hypothesis `hS`. -/
+theorem norm_trace_mul_clusterPart_le_pow {H : Matrix ι ι ℂ} (hH : H.IsHermitian)
+    {h : κ → Matrix ι ι ℂ} {B C : Finset κ}
+    (hh : ∀ k ∈ B ∪ C, (h k).IsHermitian) {J : ℝ} (hJ : ∀ k ∈ B ∪ C, ‖h k‖ ≤ J)
+    (O : Matrix ι ι ℂ) {β : ℝ} (hβ : 0 ≤ β) {S : ℝ}
+    (hS : (C.card + B.card : ℝ) ≤ S * C.card) :
+    ‖(O * clusterPart H h B C β).trace‖ ≤
+      ‖O‖ * ((Real.exp (β * J) - 1) * Real.exp (S * J * β)) ^ C.card *
+        (NormedSpace.exp (-(β • H))).trace.re := by
+  have hZ : 0 ≤ (NormedSpace.exp (-(β • H))).trace.re := by
+    rw [(hH.smul (IsSelfAdjoint.all β)).neg.re_trace_exp_eq_sum]
+    exact Finset.sum_nonneg fun i _ ↦ (Real.exp_pos _).le
+  -- `(n_C + n_B) J β ≤ S n_C J β`, using `J ≥ 0` when `B ∪ C` is nonempty.
+  have hexp : Real.exp ((C.card + B.card) * J * β) ≤ Real.exp (S * J * β) ^ C.card := by
+    rw [← Real.exp_nat_mul, Real.exp_le_exp]
+    rcases (B ∪ C).eq_empty_or_nonempty with hBC | ⟨k, hk⟩
+    · obtain ⟨hB, hC⟩ := Finset.union_eq_empty.mp hBC
+      simp [hB, hC]
+    · have hJβ : 0 ≤ J * β := mul_nonneg ((norm_nonneg _).trans (hJ k hk)) hβ
+      calc (C.card + B.card : ℝ) * J * β = (C.card + B.card) * (J * β) := by ring
+        _ ≤ S * C.card * (J * β) := mul_le_mul_of_nonneg_right hS hJβ
+        _ = C.card * (S * J * β) := by ring
+  have hP : 0 ≤ ‖O‖ * (Real.exp (β * J) - 1) ^ C.card := by
+    refine mul_nonneg (norm_nonneg _) ?_
+    rcases C.eq_empty_or_nonempty with hC | ⟨k, hk⟩
+    · simp [hC]
+    · have hJ0 : 0 ≤ J := (norm_nonneg _).trans (hJ k (Finset.mem_union_right _ hk))
+      exact pow_nonneg (sub_nonneg.mpr (Real.one_le_exp (mul_nonneg hβ hJ0))) _
+  calc ‖(O * clusterPart H h B C β).trace‖
+      ≤ ‖O‖ * (Real.exp (β * J) - 1) ^ C.card * Real.exp ((C.card + B.card) * J * β) *
+          (NormedSpace.exp (-(β • H))).trace.re :=
+        norm_trace_mul_clusterPart_le hH hh hJ O hβ
+    _ ≤ ‖O‖ * (Real.exp (β * J) - 1) ^ C.card * Real.exp (S * J * β) ^ C.card *
+          (NormedSpace.exp (-(β • H))).trace.re :=
+        mul_le_mul_of_nonneg_right (mul_le_mul_of_nonneg_left hexp hP) hZ
+    _ = _ := by ring
+
+/-- **Several clusters.** For pairwise disjoint clusters `C i`, `i ∈ T`, with boundaries `B i`
+satisfying `n_{C_i} + n_{B_i} ≤ S n_{C_i}`, the operator `ρ(β, C_1, …, C_m)` of the terms containing
+every cluster and no boundary term satisfies
+`|Tr (O ρ(β, C_1, …, C_m))| ≤ ‖O‖ (∏_i y^{n_{C_i}}) Tr e^{-βH}` with `y = (e^{βJ} - 1) e^{SJβ}`.
+
+Hastings, arXiv:cond-mat/0508554v3, `proj3new.tex`, line 1216 (the remark after the bound on
+`ρ_m`): the bound on `ρ(β, C_1, C_2, …)` derived in the same way as equation `percb2`. -/
+theorem norm_trace_mul_clusterPart_biUnion_le {ν : Type*} {T : Finset ν}
+    {H : Matrix ι ι ℂ} (hH : H.IsHermitian) {h : κ → Matrix ι ι ℂ} {B C : ν → Finset κ}
+    (hdisj : (T : Set ν).PairwiseDisjoint C)
+    (hh : ∀ k ∈ T.biUnion B ∪ T.biUnion C, (h k).IsHermitian) {J : ℝ}
+    (hJ : ∀ k ∈ T.biUnion B ∪ T.biUnion C, ‖h k‖ ≤ J)
+    (O : Matrix ι ι ℂ) {β : ℝ} (hβ : 0 ≤ β) {S : ℝ}
+    (hS : ∀ i ∈ T, ((C i).card + (B i).card : ℝ) ≤ S * (C i).card) :
+    ‖(O * clusterPart H h (T.biUnion B) (T.biUnion C) β).trace‖ ≤
+      ‖O‖ * (∏ i ∈ T, ((Real.exp (β * J) - 1) * Real.exp (S * J * β)) ^ (C i).card) *
+        (NormedSpace.exp (-(β • H))).trace.re := by
+  have hCcard : (T.biUnion C).card = ∑ i ∈ T, (C i).card := Finset.card_biUnion hdisj
+  have hS' : ((T.biUnion C).card + (T.biUnion B).card : ℝ) ≤ S * (T.biUnion C).card := by
+    have hB : ((T.biUnion B).card : ℝ) ≤ ∑ i ∈ T, ((B i).card : ℝ) := by
+      exact_mod_cast Finset.card_biUnion_le
+    rw [hCcard]
+    push_cast
+    calc (∑ i ∈ T, ((C i).card : ℝ)) + ((T.biUnion B).card : ℝ)
+        ≤ ∑ i ∈ T, (((C i).card : ℝ) + (B i).card) := by
+          rw [Finset.sum_add_distrib]; linarith
+      _ ≤ ∑ i ∈ T, S * (C i).card := Finset.sum_le_sum hS
+      _ = S * ∑ i ∈ T, ((C i).card : ℝ) := (Finset.mul_sum _ _ _).symm
+  rw [Finset.prod_pow_eq_pow_sum, ← hCcard]
+  exact norm_trace_mul_clusterPart_le_pow hH hh hJ O hβ hS'
 
 end TNLean.Lattice.ClusterExpansion

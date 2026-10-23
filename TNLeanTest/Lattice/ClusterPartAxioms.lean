@@ -15,7 +15,9 @@ run_cmd do
   for decl in #[
     ``TNLean.Lattice.ClusterExpansion.clusterPart,
     ``TNLean.Lattice.ClusterExpansion.clusterPart_eq_sum_powerset,
-    ``TNLean.Lattice.ClusterExpansion.norm_trace_mul_clusterPart_le] do
+    ``TNLean.Lattice.ClusterExpansion.norm_trace_mul_clusterPart_le,
+    ``TNLean.Lattice.ClusterExpansion.norm_trace_mul_clusterPart_le_pow,
+    ``TNLean.Lattice.ClusterExpansion.norm_trace_mul_clusterPart_biUnion_le] do
     unless (← Lean.getEnv).contains decl do
       throwError "Missing declaration {decl}"
     let axioms ← Lean.collectAxioms decl

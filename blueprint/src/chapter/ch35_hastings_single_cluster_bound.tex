@@ -80,9 +80,7 @@
     This is the bound stated before equation (percb2)
     in~\cite[lines 1174--1195]{Hastings2006Solving}, with $\|O\|Z$ in place of the
     printed $\operatorname{tr}(Oe^{-\beta H})$, which is the form used in (percb2),
-    and with $\|H_C+H_{B(C)}\|\le(n_C+n_{B(C)})J$. The last step of (percb2),
-    $n_C+n_{B(C)}\le Sn_C$, is a property of clusters on a lattice and is not
-    made here.
+    and with $\|H_C+H_{B(C)}\|\le(n_C+n_{B(C)})J$.
 \end{theorem}
 
 \begin{proof}
@@ -102,4 +100,59 @@
     perturbation in the exponent in the same
     volume~\cite[``A Hermitian perturbation in the exponent'']{QICLean2026Blueprint}
     gives $\operatorname{tr}e^{-Y}\le e^{(n_C+n_{B(C)})J\beta}Z$.
+\end{proof}
+
+\begin{theorem}[Equation (percb2)]
+    \label{thm:hastings_cluster_part_percb2}
+    \lean{TNLean.Lattice.ClusterExpansion.norm_trace_mul_clusterPart_le_pow}
+    \leanok
+    \uses{thm:hastings_cluster_part_bound}
+    In the setting of Theorem~\ref{thm:hastings_cluster_part_bound}, suppose that
+    $n_C+n_{B(C)}\le Sn_C$. Then, with $y=(e^{J\beta}-1)e^{SJ\beta}$,
+    \begin{align}
+        \left|\operatorname{tr}\bigl(O\rho(\beta,C)\bigr)\right|
+        \le\|O\|y^{n_C}Z.
+        \label{eq:hastings_cluster_part_percb2}
+    \end{align}
+    This is equation (percb2) of~\cite[lines 1186--1195]{Hastings2006Solving}
+    with $\|O\|Z$ on the right. The source obtains $n_C+n_{B(C)}\le Sn_C$ from
+    the lattice, where $S$ bounds the number of terms acting on a site; here it
+    is a hypothesis.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:hastings_cluster_part_bound}
+    If $C\cup B(C)$ is empty, both sides of~(\ref{eq:hastings_cluster_part_percb2})
+    agree with those of~(\ref{eq:hastings_cluster_part_bound}). Otherwise
+    $J\ge0$, so $(n_C+n_{B(C)})J\beta\le Sn_CJ\beta$, and
+    (\ref{eq:hastings_cluster_part_bound}) gives the claim.
+\end{proof}
+
+\begin{theorem}[Several clusters]
+    \label{thm:hastings_cluster_part_several}
+    \lean{TNLean.Lattice.ClusterExpansion.norm_trace_mul_clusterPart_biUnion_le}
+    \leanok
+    \uses{thm:hastings_cluster_part_percb2}
+    Let $C_1,\dots,C_m$ be pairwise disjoint clusters with boundaries
+    $B(C_1),\dots,B(C_m)$, each with $n_{C_i}+n_{B(C_i)}\le Sn_{C_i}$, and let
+    $\rho(\beta,C_1,\dots,C_m)$ be the operator~(\ref{eq:hastings_cluster_part})
+    for the cluster $C_1\cup\dots\cup C_m$ and the boundary
+    $B(C_1)\cup\dots\cup B(C_m)$. Under the hypotheses of
+    Theorem~\ref{thm:hastings_cluster_part_bound} on these terms,
+    \begin{align*}
+        \left|\operatorname{tr}\bigl(O\rho(\beta,C_1,\dots,C_m)\bigr)\right|
+        \le\|O\|\prod_{i=1}^m y^{n_{C_i}}Z.
+    \end{align*}
+    This is the bound on $\rho(\beta,C_1,C_2,\dots)$ that the remark
+    of~\cite[line 1216]{Hastings2006Solving} derives in the same way as (percb2).
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:hastings_cluster_part_percb2}
+    The union of the clusters has $\sum_in_{C_i}$ sites, and the union of the
+    boundaries has at most $\sum_in_{B(C_i)}$ terms, so the union satisfies
+    $n_C+n_{B(C)}\le Sn_C$. Theorem~\ref{thm:hastings_cluster_part_percb2} gives
+    $\|O\|y^{\sum_in_{C_i}}Z=\|O\|\prod_iy^{n_{C_i}}Z$.
 \end{proof}
