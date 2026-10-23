@@ -47,6 +47,18 @@ variable {d : ℕ}
 
 /-! ### One step of the staircase -/
 
+/-- Appending one site to an injective encoding of the bond levels is injective. -/
+private theorem snoc_enc_injective {r D' : ℕ} {enc : Fin D' → Cfg d r}
+    (henc : Function.Injective enc) :
+    Function.Injective fun p : Fin D' × Fin d => (Fin.snoc (enc p.1) p.2 : Cfg d (r + 1)) := by
+  rintro ⟨α, i⟩ ⟨α', i'⟩ h
+  have h1 := congrFun h (Fin.last r)
+  simp only [Fin.snoc_last] at h1
+  have h2 : enc α = enc α' := funext fun j => by
+    have := congrFun h j.castSucc
+    simpa [Fin.snoc_castSucc] using this
+  rw [henc h2, h1]
+
 /-- The unitary extending one site of an isometric chain: on the `r + 1` sites of a window it
 sends `|0, enc(x)⟩` to `∑_{α,i} Q(i)_{α x} |enc(α), i⟩` for every `x < b`. -/
 theorem exists_step_unitary (hd : 0 < d) {r D' : ℕ} {enc : Fin D' → Cfg d r}
@@ -57,15 +69,8 @@ theorem exists_step_unitary (hd : 0 < d) {r D' : ℕ} {enc : Fin D' → Cfg d r}
         Function.extend (fun p : Fin D' × Fin d => (Fin.snoc (enc p.1) p.2 : Cfg d (r + 1)))
           (fun p => Q p.2 p.1 x) 0 u := by
   classical
-  set s : Fin D' × Fin d → Cfg d (r + 1) := fun p => Fin.snoc (enc p.1) p.2 with hs
-  have hsi : Function.Injective s := by
-    rintro ⟨α, i⟩ ⟨α', i'⟩ h
-    have h1 := congrFun h (Fin.last r)
-    simp only [hs, Fin.snoc_last] at h1
-    have h2 : enc α = enc α' := funext fun j => by
-      have := congrFun h j.castSucc
-      simpa [hs, Fin.snoc_castSucc] using this
-    rw [henc h2, h1]
+  set s : Fin D' × Fin d → Cfg d (r + 1) := fun p => Fin.snoc (enc p.1) p.2
+  have hsi : Function.Injective s := snoc_enc_injective henc
   let κ := {x : Fin D' // x.val < b}
   let V : Matrix (Cfg d (r + 1)) κ ℂ :=
     Matrix.of fun u x => Function.extend s (fun p => Q p.2 p.1 x.1) 0 u
@@ -211,14 +216,7 @@ theorem exists_staircase_isWindowProduct (hd : 0 < d) {r D' : ℕ} (hD' : 0 < D'
           · exfalso; simp [hwin] at h; omega
       rw [mul_embedOp_apply hwini, hyw]
       simp_rw [hW x hx]
-      rw [sum_extend_zero (fun p q h => by
-          obtain ⟨α, i⟩ := p; obtain ⟨α', i'⟩ := q
-          have h1 := congrFun h (Fin.last r)
-          simp only [Fin.snoc_last] at h1
-          have h2 : enc α = enc α' := funext fun j => by
-            have := congrFun h j.castSucc
-            simpa [Fin.snoc_castSucc] using this
-          rw [henc h2, h1]) _ _ (fun u => mul_zero _)]
+      rw [sum_extend_zero (snoc_enc_injective henc) _ _ (fun u => mul_zero _)]
       -- evaluate the first factor on the extended configurations
       have hlast : Fin.last n = win (Fin.last r) := by ext; simp [hwin]; omega
       have hext : ∀ (α : Fin D') (i : Fin d),
