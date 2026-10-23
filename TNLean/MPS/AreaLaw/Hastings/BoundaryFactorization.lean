@@ -24,6 +24,10 @@ Combining the two gives the boundary operator of Lemma 1. In the application
 `H₀ = M_L + M_R`, the cut-offs `O_L`, `O_R` are those of the localized parts, and `Z` is the
 window carrying `H − H₀`.
 
+**Scope restriction (contiguous chains):** The physical sites are `Fin L`, as in the
+Lieb–Robinson estimates of `BoundaryLocalization.lean`; see
+`docs/paper-gaps/tnlean_one_dimensional_connected_domain_scope.tex`.
+
 ## Main results
 
 * `interactionAverage_add_smul_one`: the interaction-picture average is unchanged when its

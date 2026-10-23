@@ -17,9 +17,11 @@ most $J$.
     \lean{TNLean.MPS.AreaLaw.Hastings.ChainHamiltonian.exists_boundaryOperator_factorization}
     \leanok
     \uses{def:chain_model}
-    Let $H$ be a chain Hamiltonian of range $R$ and term norm $J$, let $E_0$ be
-    real and $H'=H-E_0$, let $H_0$ be Hermitian with $H'-H_0$ supported on a set
-    $Z$ of sites, and let $O_L$ and $O_R$ be orthogonal projections. Suppose
+    Let $H$ be a chain Hamiltonian of range $R$ and term norm $J$ on $L$ sites
+    with local dimension $q\ge1$, let $E_0$ be real and $H'=H-E_0$, let $H_0$
+    be Hermitian with $H'-H_0$ supported on a set $Z$ of sites, let $O_L$ and
+    $O_R$ be orthogonal projections, and let $P$ be an operator on the chain.
+    Suppose
     \begin{align}
         \|H_0O_LO_R\|          & \le\theta,        &
         \|P_\eta(H')O_LO_R-P\| & \le\varepsilon_0.
@@ -40,17 +42,18 @@ most $J$.
     lines 881--901.
 \end{theorem}
 \begin{proof}\leanok
+    \uses{def:hastings_interaction_average, thm:hastings_interaction_average_last}
     Put $A=H_0$ and $B=H'-H_0$, so that $A+B=H'$, and let
     $P_B=\int e^{iH't}e^{-iH_0t}\,d\gamma_\eta(t)$ be the Gaussian average of
     the interaction-picture propagator. Shifting $H_0$ by $E_0$ changes neither
     $P_B$, since the two phases cancel, nor $H'-H_0$, and with the shifted
-    operator $A+B=H$. Replacing $P_\eta(H)$ by $P_B$ in front
+    operator $A+B=H$. Replacing $P_\eta(H')$ by $P_B$ in front
     of $O_LO_R$ costs at most $\sqrt\eta\,\|H_0O_LO_R\|$, so
     $\|P_BO_LO_R-P\|\le\varepsilon_0+\sqrt\eta\,\theta$. The Lieb--Robinson
     bound for $H$ localizes the generator $e^{iHs}(H'-H_0)e^{-iHs}$ of the propagator
     onto the $\ell'$-neighbourhood of $Z$, which gives $O_B$ with $\|O_B\|\le1$
     and $\|P_B-O_B\|$ at most the last two terms
-    of~\eqref{eq:hastings_boundary_factorization}. Since
+    of~(\ref{eq:hastings_boundary_factorization}). Since
     $\|O_LO_R\|\le1$,
     \begin{align}
         \|O_BO_LO_R-P\| & \le\|O_B-P_B\|+\|P_BO_LO_R-P\|.
