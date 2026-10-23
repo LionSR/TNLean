@@ -29,6 +29,7 @@ import TNLean.MPS.AreaLaw.Hastings.InteractionPicture
 import TNLean.MPS.AreaLaw.Hastings.IntervalMutualInformation
 import TNLean.MPS.AreaLaw.Hastings.LemmaOneConstant
 import TNLean.MPS.AreaLaw.Hastings.MPSFromEntropy
+import TNLean.MPS.AreaLaw.Hastings.MPSGroundState
 import TNLean.MPS.AreaLaw.Hastings.MainTheorem
 import TNLean.MPS.AreaLaw.Hastings.MovedEstimate
 import TNLean.MPS.AreaLaw.Hastings.PartCommutators
