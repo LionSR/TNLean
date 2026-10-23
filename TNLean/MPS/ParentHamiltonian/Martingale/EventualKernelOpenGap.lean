@@ -95,8 +95,8 @@ theorem exists_openInteractionMatrix_gap_of_eventual_kernel
     ∃ γ : ℝ, 0 < γ ∧ ∀ N : ℕ,
       ∀ v ∈ (LinearMap.ker
         (openInteractionHamiltonianES (Matrix.toEuclideanLin h) N))ᗮ,
-        γ * ‖v‖ ≤ ‖openInteractionHamiltonianES (Matrix.toEuclideanLin h) N v‖ := by
-  exact exists_openInteractionHamiltonianES_gap_of_eventual_kernel
+        γ * ‖v‖ ≤ ‖openInteractionHamiltonianES (Matrix.toEuclideanLin h) N v‖ :=
+  exists_openInteractionHamiltonianES_gap_of_eventual_kernel
     μ A hμ ρ hP hρ hDistinct hR (Matrix.toEuclideanLin h)
     (Matrix.isPositive_toEuclideanLin_iff.mpr hh) hker
 end MPSTensor
