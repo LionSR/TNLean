@@ -198,6 +198,11 @@ private theorem bondPenaltyAtLin_commute (η : Fin q → ℂ)
     Commute (bondPenaltyAtLin η hN i) (bondPenaltyAtLin η hN j) :=
   (bondPenaltyAt_commute η hN i j).map (bondMatrixEquiv q N).symm
 
+private theorem bondProductParentHamiltonianLin_eq_sum (η : Fin q → ℂ) (hN : 1 ≤ N) :
+    bondProductParentHamiltonianLin η hN = ∑ i : Fin N, bondPenaltyAtLin η hN i := by
+  simp [bondProductParentHamiltonianLin, bondProductParentHamiltonian,
+    bondPenaltyAtLin, map_sum]
+
 private theorem listProd_ofFn_eq_noncommProd
     {M : Type*} [Monoid M] {N : ℕ} (f : Fin N → M)
     (hcomm : ∀ i j, Commute (f i) (f j)) :
@@ -223,11 +228,7 @@ theorem bondProductParentHamiltonian_gap_one
     (⟪bondProductParentHamiltonianLin η hN v, v⟫_ℂ).re ≤
       (⟪bondProductParentHamiltonianLin η hN v,
         bondProductParentHamiltonianLin η hN v⟫_ℂ).re := by
-  have hsum : bondProductParentHamiltonianLin η hN =
-      ∑ i : Fin N, bondPenaltyAtLin η hN i := by
-    simp [bondProductParentHamiltonianLin, bondProductParentHamiltonian,
-      bondPenaltyAtLin, map_sum]
-  rw [hsum]
+  rw [bondProductParentHamiltonianLin_eq_sum η hN]
   have h := ProjectionGeometry.quadraticForm_sum_projections_of_ordered_rowSum
     (γ := 1) (by norm_num)
     (fun i : Fin N => bondPenaltyAtLin η hN i)
@@ -256,11 +257,7 @@ theorem bondProductParentHamiltonian_groundSpace
         (1 : EuclideanSpace ℂ (Fin N → Fin q) →ₗ[ℂ]
           EuclideanSpace ℂ (Fin N → Fin q)) - bondPenaltyAtLin η hN i).prod) =
       LinearMap.ker (bondProductParentHamiltonianLin η hN) := by
-  have hsum : bondProductParentHamiltonianLin η hN =
-      ∑ i : Fin N, bondPenaltyAtLin η hN i := by
-    simp [bondProductParentHamiltonianLin, bondProductParentHamiltonian,
-      bondPenaltyAtLin, map_sum]
-  rw [hsum]
+  rw [bondProductParentHamiltonianLin_eq_sum η hN]
   exact LinearMap.range_listProd_one_sub_eq_ker_sum
     (fun i : Fin N => bondPenaltyAtLin η hN i)
     (bondPenaltyAtLin_isSymmetricProjection η hη hN)

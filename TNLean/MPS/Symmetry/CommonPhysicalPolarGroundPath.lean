@@ -214,8 +214,8 @@ private theorem commonLeftPolarEndpoint_bond_intertwiner
           Matrix.coordinateInclusion (Fin.castAddEmb D₁) =
       Matrix.coordinateInclusion (Fin.castAddEmb D₁) *
         (sptScale D₀ • rotatePhysical (commonPhysicalEmbeddingLeft d₁ D₁ A)
-          (polarIsometricTensor A)) i := by
-  rw [sptScale_smul_commonPhysicalEmbeddingLeft_polar_endpoint d₁ D₁ hA]
+          (polarDeformation A 0)) i := by
+  rw [polarDeformation_zero, sptScale_smul_commonPhysicalEmbeddingLeft_polar_endpoint d₁ D₁ hA]
   exact rotatePhysical_bond_intertwiner _ _ _ _
     (weightedMatrixUnitInterpolation_zero_intertwine D₀ D₁) i
 
@@ -227,8 +227,8 @@ private theorem commonRightPolarEndpoint_bond_intertwiner
           Matrix.coordinateInclusion (Fin.natAddEmb D₀) =
       Matrix.coordinateInclusion (Fin.natAddEmb D₀) *
         (sptScale D₁ • rotatePhysical (commonPhysicalEmbeddingRight d₀ D₀ A)
-          (polarIsometricTensor A)) i := by
-  rw [sptScale_smul_commonPhysicalEmbeddingRight_polar_endpoint d₀ D₀ hA]
+          (polarDeformation A 0)) i := by
+  rw [polarDeformation_zero, sptScale_smul_commonPhysicalEmbeddingRight_polar_endpoint d₀ D₀ hA]
   exact rotatePhysical_bond_intertwiner _ _ _ _
     (weightedMatrixUnitInterpolation_one_intertwine D₀ D₁) i
 
@@ -274,10 +274,7 @@ private noncomputable def leftSupportedPolarGroundPath
     (rotatePhysical (commonFixedPointInclusion ((D₀ + D₁) * (D₀ + D₁)) d₀ d₁)
       (weightedMatrixUnitInterpolation D₀ D₁ 0)) ?_
     (commonWeightedEndpointLeft_bond_rowSupport d₀ d₁ D₀ D₁) ?_
-  · exact fun i => (commonLeftPolarEndpoint_bond_intertwiner d₁ D₁ A hA i).trans
-      (congrArg (fun B : MPSTensor d₀ D₀ => Matrix.coordinateInclusion (Fin.castAddEmb D₁) *
-        (sptScale D₀ • rotatePhysical (commonPhysicalEmbeddingLeft d₁ D₁ A) B) i)
-        (polarDeformation_zero A)).symm
+  · exact commonLeftPolarEndpoint_bond_intertwiner d₁ D₁ A hA
   · omega
 
 private noncomputable def rightSupportedPolarGroundPath
@@ -297,10 +294,7 @@ private noncomputable def rightSupportedPolarGroundPath
     (Matrix.coordinateInclusion_isometry (Fin.natAddEmb D₀))
     (rotatePhysical (commonFixedPointInclusion ((D₀ + D₁) * (D₀ + D₁)) d₀ d₁)
       (weightedMatrixUnitInterpolation D₀ D₁ 1))
-    (fun i => (commonRightPolarEndpoint_bond_intertwiner d₀ D₀ A hA i).trans
-      (congrArg (fun B : MPSTensor d₁ D₁ => Matrix.coordinateInclusion (Fin.natAddEmb D₀) *
-        (sptScale D₁ • rotatePhysical (commonPhysicalEmbeddingRight d₀ D₀ A) B) i)
-        (polarDeformation_zero A)).symm)
+    (commonRightPolarEndpoint_bond_intertwiner d₀ D₀ A hA)
     (commonWeightedEndpointRight_bond_rowSupport d₀ d₁ D₀ D₁) (Nat.le_add_left _ _)
 
 /-- The left polar deformation admits a continuous exact ground-state
@@ -409,10 +403,7 @@ theorem commonPhysicalLeftPolarExactMPSGroundPath_samePositiveMpvRay_one
       Matrix.coordinateInclusion (Fin.castAddEmb D₁) *
         (sptScale D₀ •
           rotatePhysical (commonPhysicalEmbeddingLeft d₁ D₁ A) (polarDeformation A 0)) i :=
-    fun i => (commonLeftPolarEndpoint_bond_intertwiner d₁ D₁ A hA i).trans
-      (congrArg (fun B : MPSTensor d₀ D₀ => Matrix.coordinateInclusion (Fin.castAddEmb D₁) *
-        (sptScale D₀ • rotatePhysical (commonPhysicalEmbeddingLeft d₁ D₁ A) B) i)
-        (polarDeformation_zero A)).symm
+    commonLeftPolarEndpoint_bond_intertwiner d₁ D₁ A hA
   simpa only [polarDeformation_one] using
     supportedBondLift_samePositiveMpvRay (Matrix.coordinateInclusion (Fin.castAddEmb D₁))
       (Matrix.coordinateInclusion_isometry (Fin.castAddEmb D₁))
@@ -482,10 +473,7 @@ theorem commonPhysicalRightPolarExactMPSGroundPath_samePositiveMpvRay_one
       Matrix.coordinateInclusion (Fin.natAddEmb D₀) *
         (sptScale D₁ •
           rotatePhysical (commonPhysicalEmbeddingRight d₀ D₀ A) (polarDeformation A 0)) i :=
-    fun i => (commonRightPolarEndpoint_bond_intertwiner d₀ D₀ A hA i).trans
-      (congrArg (fun B : MPSTensor d₁ D₁ => Matrix.coordinateInclusion (Fin.natAddEmb D₀) *
-        (sptScale D₁ • rotatePhysical (commonPhysicalEmbeddingRight d₀ D₀ A) B) i)
-        (polarDeformation_zero A)).symm
+    commonRightPolarEndpoint_bond_intertwiner d₀ D₀ A hA
   simpa only [polarDeformation_one] using
     supportedBondLift_samePositiveMpvRay (Matrix.coordinateInclusion (Fin.natAddEmb D₀))
       (Matrix.coordinateInclusion_isometry (Fin.natAddEmb D₀))
