@@ -27,9 +27,11 @@ used in its form without positivity, at the full rate.
 `docs/paper-gaps/hastings07_relent_constants.tex`.
 
 **Scope restriction (the length of Lemma 1):** the length `ζ = (5/4) ξ̂` comes from the chain
-Lieb–Robinson estimate with its velocity raised by `5/4`. That estimate's prefactor grows with
-`J` and its second operator acts on one site, so `ζ` has the form of the source's
-`max(2v/ΔE, ξ_C)` but is not shown to arise from a pair satisfying eq. `lrb` (lines 96–112).
+Lieb–Robinson estimate with its velocity raised by `5/4`. It may stand in for the source's `ξ`
+because the source fixes `ξ = max(2v/ΔE, ξ_C)` only through some Lieb–Robinson pair `(v, ξ_C)`
+(lines 96–112), and raising `v` keeps a pair valid. The chain estimate's prefactor grows with
+`J` and its second operator acts on one site, so `ζ` has the form of `max(2v/ΔE, ξ_C)` but is
+not shown to arise from a pair satisfying eq. `lrb`.
 Documented in `docs/paper-gaps/hastings07_lemma1_decay_length.tex` and
 `docs/paper-gaps/hastings07_gaussian_average_exponent.tex`.
 
