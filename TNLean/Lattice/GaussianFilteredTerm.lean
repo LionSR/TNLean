@@ -35,6 +35,7 @@ or a sum of such terms.
 * `TNLean.Lattice.norm_sub_starProjection_gaussianFilteredTerm_le`: the bound
   on the excited component of `W_tilde ψ`.
 * `TNLean.Lattice.gaussianFilteredTerm_self`, `gaussianFilteredTerm_sum`,
+  `gaussianFilteredTerm_sub_smul_one`, `gaussianFilteredTerm_sub_smul_one_sub`,
   `inner_gaussianFilteredTerm_ground`, `norm_gaussianFilteredTerm_le`.
 
 ## References
@@ -116,6 +117,28 @@ theorem gaussianFilteredTerm_self (q ΔE : ℝ) (H : Matrix n n ℂ) :
       exact Commute.exp_right ((Commute.refl H).smul_right _ |>.smul_right _)
     rw [← hc.eq, mul_assoc, SpectralFilter.hermitianUnitaryPath_mul_neg, mul_one]
   simp [gaussianFilteredTerm, gaussianIntertwiner, hconst]
+
+/-- Filtering fixes scalars: the filter of `W - c • 1` is the filter of `W` minus `c • 1`.
+This is what lets Hastings center `H_L` at its ground-state expectation without changing
+`W_tilde - W`, arXiv:0705.2024v4, `law16.tex`, lines 779–782. -/
+theorem gaussianFilteredTerm_sub_smul_one (q ΔE : ℝ) {H : Matrix n n ℂ} (hH : H.IsHermitian)
+    (W : Matrix n n ℂ) (c : ℂ) :
+    gaussianFilteredTerm q ΔE H (W - c • 1) = gaussianFilteredTerm q ΔE H W - c • 1 := by
+  have hU (t : ℝ) : hermitianUnitaryPath H t * (W - c • 1) * hermitianUnitaryPath H (-t) =
+      hermitianUnitaryPath H t * W * hermitianUnitaryPath H (-t) - c • 1 := by
+    rw [mul_sub, sub_mul, mul_smul_comm, mul_one, smul_mul_assoc, ← hermitianUnitaryPath_add,
+      add_neg_cancel, hermitianUnitaryPath_zero]
+  simp only [gaussianFilteredTerm, gaussianIntertwiner, hU]
+  rw [MeasureTheory.integral_sub (integrable_intertwinerIntegrand _ hH hH W)
+    (MeasureTheory.integrable_const _), MeasureTheory.integral_const,
+    MeasureTheory.probReal_univ, one_smul]
+
+/-- Shifting `W` by a scalar does not change `W_tilde - W`. -/
+theorem gaussianFilteredTerm_sub_smul_one_sub (q ΔE : ℝ) {H : Matrix n n ℂ}
+    (hH : H.IsHermitian) (W : Matrix n n ℂ) (c : ℂ) :
+    gaussianFilteredTerm q ΔE H (W - c • 1) - (W - c • 1) =
+      gaussianFilteredTerm q ΔE H W - W := by
+  rw [gaussianFilteredTerm_sub_smul_one q ΔE hH, sub_sub_sub_cancel_right]
 
 /-- If `∑ i ∈ s, H i = H`, then the filtered terms also sum to `H`. Hastings,
 arXiv:cond-mat/0508554v3, eq. `hsum` (lines 247–249). -/

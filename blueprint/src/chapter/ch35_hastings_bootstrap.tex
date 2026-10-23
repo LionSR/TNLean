@@ -234,7 +234,8 @@ of a gapped chain combines them with the factorization of
     is equation \texttt{bootstrap}.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:hastings_geometric_tail_entropy, thm:hastings_mixture_tail}
+    \uses{thm:hastings_geometric_tail_entropy, thm:hastings_mixture_tail,
+        thm:hastings_schmidt_overlap_tail}
     At each such scale Theorem~\ref{thm:hastings_mixture_tail} bounds the mass of the Schmidt coefficients beyond the first
     $kD^{2s}$ by $ce^{-2s/\xi'}$, which is equation \texttt{constraint}. Let $m'$ be the least
     natural number with $ce^{-2m'/\xi'}\le1$, so that $2m'+2\le\xi'\ln c+4$. The
@@ -308,7 +309,9 @@ of a gapped chain combines them with the factorization of
     Schmidt rank at most $kq^{2s}$ across the cut, of positive total weight,
     has normalized overlap at least $1-c\,e^{-2s/\xi'}$ with $\Omega$. This is
     equation \texttt{hg} in the proof of \cite[Lemma~2]{Hastings2007AreaLaw},
-    lines 315--331.
+    lines 315--331. No sign is required of $\xi'$: for $\xi'=0$ the exponents
+    $-m/\xi'$ and $-2s/\xi'$ are read as $0$. The lemma is applied with
+    $\xi'>0$ in Theorem~\ref{thm:hastings_bootstrap_chain_stage}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:hastings_bootstrap_overlap, thm:hastings_supported_cut_rank,

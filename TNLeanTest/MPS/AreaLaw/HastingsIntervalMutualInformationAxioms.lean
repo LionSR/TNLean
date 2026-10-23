@@ -8,14 +8,15 @@ import Lean.Elab.Command
 import Lean.Util.CollectAxioms
 
 /-! Presence and permitted-axiom checks for the bound on the mutual information of two
-adjacent intervals by one effect, eq. `LU` of Hastings' area-law proof on the chain. -/
+adjacent intervals by one effect, eq. `LU` of Hastings' area-law proof on the chain, and for the
+positivity of the effect's expectation in the product of the two marginals. -/
 
 run_cmd do
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
   for decl in #[
-    ``TNLean.MPS.AreaLaw.Hastings.partialTraceLeft_regionState_union,
     ``TNLean.MPS.AreaLaw.Hastings.trace_cutProductState_mul_localLift_union,
-    ``TNLean.MPS.AreaLaw.Hastings.binaryRelativeEntropy_le_intervalMutualInformation] do
+    ``TNLean.MPS.AreaLaw.Hastings.binaryRelativeEntropy_le_intervalMutualInformation,
+    ``TNLean.MPS.AreaLaw.Hastings.re_trace_cutProductState_mul_pos] do
     unless (← Lean.getEnv).contains decl do
       throwError "Missing declaration {decl}"
     let axioms ← Lean.collectAxioms decl
