@@ -397,8 +397,9 @@ of a gapped chain combines them with the factorization of
     terms of range $R$ and norm at most $J$, whose ground state
     $\Psi_0$ is unique with gap $\Delta E$ above the ground energy. Let $\rho$
     be a density matrix of unit trace that is a mixture of pure states of
-    Schmidt rank at most $k$ across the cut between sites $j$ and $j+1$, with
-    $\langle\Psi_0,\rho\Psi_0\rangle=P>0$. Then
+    Schmidt rank at most $k\ge1$ across the cut between sites $j$ and $j+1$, with
+    $\langle\Psi_0,\rho\Psi_0\rangle=P>0$. (The case $k=0$ is vacuous: a vector
+    of Schmidt rank zero vanishes, and then $P=0$.) Then
     \begin{align}
         S(\rho^0_{1,j})\le\ln k+\xi'\ln\bigl(2C_1^2/P\bigr)\ln D+F(\xi',D),
     \end{align}
