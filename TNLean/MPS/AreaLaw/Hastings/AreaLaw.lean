@@ -22,9 +22,12 @@ discharged here.
 * The bounds `0 ≤ S_l ≤ l ln q` for the window entropy come from `windowEntropy_nonneg` and
   `windowEntropy_le`.
 * Eq. `claim` comes from eq. `relent` (`relent_of_projectorFactorization_of_le_entropy`, which
-  contains the bootstrap lemma, Lemma 2) through `windowEntropy_two_mul_le_of_relent`. Its
-  constants are `2 C₁` and `C₂ = relentConst`, as recorded in
-  `docs/paper-gaps/hastings07_relent_constants.tex`.
+  contains the bootstrap lemma, Lemma 2) through `windowEntropy_two_mul_le_of_relent`, with
+  the constants of the local fix below.
+
+**Local fix (eq. relent constants):** eq. `relent`, and hence eq. `claim`, holds with `C₁`
+replaced by `2 C₁` and with `C₂ = relentConst`; only the values of the constants move.
+Documented in `docs/paper-gaps/hastings07_relent_constants.tex`.
 
 **The window condition.** Eq. `relent` is proved under the condition of line 488,
 `(l + ξ' ln C₁) ln q + F(ξ', q) ≤ S_cut`, with `F` the remainder `bootstrapRemainder` of the
