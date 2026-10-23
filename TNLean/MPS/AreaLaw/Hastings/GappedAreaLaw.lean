@@ -22,10 +22,10 @@ weakens Lemma 1.
 
 **Scope restriction (quantitative bounds):** the theorem inherits the restriction of Lemma 1
 (`exists_projectorFactorization`). It holds for every `ξ' > 6ξ` with
-`ξ = lemmaOneLength R J ΔE = 8 max(2v/ΔE, 1)` from the chain localization estimate, whose
-prefactor `a |X|²` is quadratic in the support where the Lieb–Robinson bound of lines 96–112 is
-linear in `|X|`, so `ξ` is not shown to be the source's `max(2v/ΔE, ξ_C)` (lines 139–142), and
-the endpoint `ξ' = 6ξ` is not established. The constant `C₁` is uniform in
+`ξ = lemmaOneLength R J ΔE = 8 max(2v/ΔE, 1)` from the chain Lieb–Robinson estimate, whose
+prefactor grows with `J` and whose second operator acts on one site, so `ξ` is not shown to be
+the source's `max(2v/ΔE, ξ_C)` for a pair satisfying eq. `lrb` (lines 96–112, 139–142), and the
+endpoint `ξ' = 6ξ` is not established. The constant `C₁` is uniform in
 the chain length, the local dimension, the Hamiltonian and the ground state, but it is only
 shown to exist, as `C₁ = C₁(R, J, ΔE, ξ')`: the polynomial bound in `ξ` of lines 258–262 is not
 established. Hence `S_max = areaLawBound ξ' C₁ q` involves `ln(2 C₁)` for this unquantified
