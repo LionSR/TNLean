@@ -333,19 +333,19 @@ def akltZ2Z2Action :
     akltPhysP1_sq akltPhysP2_sq akltPhysP1P2_comm
 
 @[simp] private lemma akltZ2Z2Action_10 :
-    akltZ2Z2Action (Multiplicative.ofAdd ((1, 0) : ZMod 2 × ZMod 2)) = akltPhysP1 := by
-  exact ofCommutingInvolutions_ofAdd_10 akltPhysP1 akltPhysP2
+    akltZ2Z2Action (Multiplicative.ofAdd ((1, 0) : ZMod 2 × ZMod 2)) = akltPhysP1 :=
+  ofCommutingInvolutions_ofAdd_10 akltPhysP1 akltPhysP2
     akltPhysP1_sq akltPhysP2_sq akltPhysP1P2_comm
 
 @[simp] private lemma akltZ2Z2Action_01 :
-    akltZ2Z2Action (Multiplicative.ofAdd ((0, 1) : ZMod 2 × ZMod 2)) = akltPhysP2 := by
-  exact ofCommutingInvolutions_ofAdd_01 akltPhysP1 akltPhysP2
+    akltZ2Z2Action (Multiplicative.ofAdd ((0, 1) : ZMod 2 × ZMod 2)) = akltPhysP2 :=
+  ofCommutingInvolutions_ofAdd_01 akltPhysP1 akltPhysP2
     akltPhysP1_sq akltPhysP2_sq akltPhysP1P2_comm
 
 @[simp] private lemma akltZ2Z2Action_11 :
     akltZ2Z2Action (Multiplicative.ofAdd ((1, 1) : ZMod 2 × ZMod 2)) =
-      akltPhysP1 * akltPhysP2 := by
-  exact ofCommutingInvolutions_ofAdd_11 akltPhysP1 akltPhysP2
+      akltPhysP1 * akltPhysP2 :=
+  ofCommutingInvolutions_ofAdd_11 akltPhysP1 akltPhysP2
     akltPhysP1_sq akltPhysP2_sq akltPhysP1P2_comm
 
 /-! #### Virtual gauges `σz` and `iσy σz` -/

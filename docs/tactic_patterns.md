@@ -38,6 +38,25 @@ abstracted — record why, so it is not re-proposed).
   boundary localization use these shared facts. Zero variance needs no extra
   assumption. No new tactic or independent moment proof is introduced.
 
+### A configuration from a unit vector — promoted (2026-10-23)
+
+- **Pattern:** Prove the configuration type nonempty by contradiction: an empty index
+  type makes the vector space a subsingleton, so a unit vector would have norm zero.
+- **Seen:** Three occurrences in `MPS/AreaLaw/Hastings/IntervalMutualInformation.lean`,
+  `RelentAssembly.lean`, and `SchmidtDiagonalChain.lean`.
+- **Abstraction:** Use the existing Mathlib results `Function.ne_iff`,
+  `WithLp.ofLp_eq_zero`, and `norm_ne_zero_iff` directly:
+
+  ```lean
+  obtain ⟨σ₀, _⟩ := Function.ne_iff.mp
+    ((WithLp.ofLp_eq_zero (x := Ω)).not.mpr (norm_ne_zero_iff.mp (by simp [hΩ])))
+  ```
+
+- **Notes:** All three five-line contradiction arguments are replaced by this
+  two-line idiom. No new generic or chain-specific declaration is needed; the
+  unit-norm hypothesis supplies the nonzero coefficient function.
+
+
 ### Counting supports in short windows — promoted (2026-10-21)
 
 - **Pattern:** Bound the number of supports contained in a window of at most `n`

@@ -11,7 +11,7 @@ import TNLean.Lattice.PartyCircuit.WordPermutation
 
 The source has one raw register `ℂ^q` at every site of a sheet, held by a specified party
 (`05-frames.tex`, lines 13–20 and Definition 6.1). This file lists such registers on a party layout
-(`TNLean.PEPS.Approximation.PartyWord`) and provides the words of exchanges of tensor factors
+(`TNLean.Lattice.PartyCircuit.PartyWord`) and provides the words of exchanges of tensor factors
 that move them; the layout of a whole frame is `TNLean.PEPS.Approximation.FrameRegisters`.
 
 * `siteRegs q own S` lists one register `ℂ^q` for each site of the list `S`, the register of `x`
