@@ -37,7 +37,8 @@ when the ground space is degenerate.
 the `N_M` sites of `B`. The term `N_M g(c₁ l, l)` of eq. `lc` is therefore replaced by the
 partial-trace localization term, and the bound does not depend on the size of the
 support of `B`. Its closed `l`-neighbourhood must be disjoint from that support: for
-integer support separation `s ≥ 1`, take `l = s - 1`. Documented in `docs/paper-gaps/hastings05_filtered_term_approximation.tex`.
+integer support separation `s ≥ 1`, take `l = s - 1`. Documented in
+`docs/paper-gaps/hastings05_filtered_term_approximation.tex`.
 
 The operators `W` and `B` are arbitrary operators acting on the given sets; in the source they
 are the approximations `M_i` and `M_j`, and the filter on `M_i` uses a parameter `q` chosen
