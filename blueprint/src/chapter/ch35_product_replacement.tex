@@ -91,3 +91,123 @@ coefficient spaces and cut ranks.
     all earlier rank bounds persist because no cut rank increases.
     Normalization and the bond bound persist at each step.
 \end{proof}
+
+\begin{definition}[Consecutive block products]
+    \label{def:chain_copy_product}
+    \lean{TNLean.MPS.AreaLaw.copyConfigurationEquiv,TNLean.MPS.AreaLaw.copyProduct}
+    \leanok
+    Group the sites of a chain of length $KL$ into $K$ consecutive blocks
+    of length $L$, identifying block $i$, site $j$ with site $Li+j$.
+    For block vectors $\eta_0,\ldots,\eta_{K-1}$, define their product by
+    \begin{align}
+        \label{eq:chain_copy_product_coefficients}
+        \left(\bigotimes_{i=0}^{K-1}\eta_i\right)(\sigma)
+        =\prod_{i=0}^{K-1}\eta_i\bigl(j\mapsto\sigma(Li+j)\bigr).
+    \end{align}
+\end{definition}
+
+\begin{lemma}[Norms and inner products of block products]
+    \label{lem:chain_copy_product_inner}
+    \lean{TNLean.MPS.AreaLaw.norm_copyProduct,TNLean.MPS.AreaLaw.inner_copyProduct,TNLean.MPS.AreaLaw.sq_norm_inner_copyProduct}
+    \leanok
+    \uses{def:chain_copy_product}
+    Norms and inner products of block products are the products of the
+    corresponding block norms and inner products. In particular, their
+    squared fidelities multiply.
+\end{lemma}
+\begin{proof}\leanok
+    Expand the inner product as a finite sum over configurations and factor
+    this sum over the blocks. Take norms and squares for the remaining identities.
+\end{proof}
+
+\begin{lemma}[Factorization at copy boundaries]
+    \label{lem:chain_copy_boundary_factorization}
+    \lean{TNLean.MPS.AreaLaw.copyProduct_factors_at_boundary}
+    \leanok
+    \uses{def:chain_copy_product}
+    A block product factors across every boundary $tL$, for $t\ge0$.
+\end{lemma}
+\begin{proof}\leanok
+    A site $Li+j$ lies before $tL$ exactly when $i<t$.
+    Split the coefficient product into those blocks and the remaining blocks.
+\end{proof}
+
+\begin{corollary}[Replacement at all copy boundaries]
+    \label{cor:chain_copy_boundary_replacement}
+    \lean{TNLean.MPS.AreaLaw.IsOpenMPS.exists_rank_one_at_copy_boundaries}
+    \leanok
+    \uses{def:chain_copy_product,def:chain_open_mps}
+    Given a unit MPS $\psi$ of bond dimension at most $D$ and a block-product
+    target, there is a unit MPS $\chi$ of the same bond bound with no smaller
+    overlap, no larger cut ranks, and rank at most one at every copy boundary.
+\end{corollary}
+\begin{proof}\leanok
+    \uses{lem:chain_copy_boundary_factorization,thm:chain_product_cut_iteration}
+    Apply finite-cut replacement to the boundaries $tL$, $0\le t\le K$.
+\end{proof}
+
+\begin{definition}[An interval slice]
+    \label{def:chain_interval_slice}
+    \lean{TNLean.MPS.AreaLaw.insertInterval,TNLean.MPS.AreaLaw.intervalSlice}
+    \leanok
+    Fix a configuration outside an interval of $L$ sites starting at $a$.
+    The corresponding interval slice of a chain vector is obtained by varying
+    the configuration on that interval and keeping the exterior fixed.
+\end{definition}
+
+\begin{lemma}[Bond bounds for interval slices]
+    \label{lem:chain_interval_slice_mps}
+    \lean{TNLean.MPS.AreaLaw.rank_cutMatrix_intervalSlice_le,TNLean.MPS.AreaLaw.IsOpenMPS.intervalSlice,TNLean.MPS.AreaLaw.IsOpenMPS.of_intervalSlice_eq_mul}
+    \leanok
+    \uses{def:chain_interval_slice,def:chain_open_mps}
+    At a local cut $0\le j\le L$, the coefficient matrix of an interval slice
+    has rank at most that of the original vector at cut $a+j$.
+    If the interval lies within the chain, every slice of an MPS of bond
+    dimension at most $D$ is an MPS of that same bond bound.
+    A vector differing from such a slice by a nonzero scalar also has this bound.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:chain_cut_rank_of_mps}
+    The sliced coefficient matrix is a submatrix of the full coefficient matrix:
+    extend each row and column configuration by the fixed exterior values.
+    Taking a submatrix cannot increase rank. Apply the cut-rank characterization,
+    and absorb any nonzero scalar into the overall MPS coefficient.
+\end{proof}
+
+\begin{corollary}[Bond bounds for normalized block factors]
+    \label{cor:chain_copy_product_factor_mps}
+    \lean{TNLean.MPS.AreaLaw.IsOpenMPS.copyProduct_factor}
+    \leanok
+    \uses{def:chain_copy_product,def:chain_open_mps}
+    If a product of unit block vectors is an MPS of bond dimension at most $D$,
+    then each block factor is an MPS of bond dimension at most $D$.
+\end{corollary}
+\begin{proof}\leanok
+    \uses{lem:chain_interval_slice_mps}
+    Each unit factor has a nonzero coefficient. Fix such a coefficient in
+    every other block. The resulting interval slice is the selected factor
+    multiplied by a nonzero product of coefficients.
+\end{proof}
+
+\begin{theorem}[Scalar error amplification for a block product]
+    \label{thm:chain_copy_error_amplification}
+    \lean{TNLean.MPS.AreaLaw.exists_copy_optimizedPureTraceError_le}
+    \leanok
+    \uses{def:chain_copy_product}
+    Let $K\ge1$, and let $\eta,\theta_0,\ldots,\theta_{K-1}$ be unit block vectors.
+    Write $f_i=|\langle\eta,\theta_i\rangle|^2$, $F=\prod_i f_i$, and
+    $T(f)=2\sqrt{f(1-f)}$ for $f\ge1/2$, with $T(f)=1$ otherwise.
+    If $T(F)<1$, then some $i$ satisfies
+    \begin{align}
+        \label{eq:chain_copy_error_amplification}
+        T(f_i^K)\le T(F),\qquad
+        \sqrt{K/4}\,T(f_i)\le T(F).
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{lem:chain_copy_product_inner}
+    Choose a factor with maximal squared fidelity, so $f_i^K\ge F$.
+    The scalar function $T$ is decreasing. Thus $T(f_i^K)\le T(F)<1$,
+    and the scalar amplification theorem in~\cite{QICLean2026Blueprint}
+    gives $\sqrt{K/4}\,T(f_i)\le T(f_i^K)$.
+\end{proof}

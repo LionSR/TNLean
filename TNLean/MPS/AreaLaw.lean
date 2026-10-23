@@ -18,6 +18,9 @@ import TNLean.MPS.AreaLaw.ChainNeighborhood
 import TNLean.MPS.AreaLaw.ChainStageIncidence
 import TNLean.MPS.AreaLaw.ComponentReduction
 import TNLean.MPS.AreaLaw.CompressedBlockColumn
+import TNLean.MPS.AreaLaw.CopyErrorAmplification
+import TNLean.MPS.AreaLaw.CopyMPSFactor
+import TNLean.MPS.AreaLaw.CopyProduct
 import TNLean.MPS.AreaLaw.Counting
 import TNLean.MPS.AreaLaw.CutMatrixGrowth
 import TNLean.MPS.AreaLaw.DoubledHamiltonian
@@ -27,6 +30,7 @@ import TNLean.MPS.AreaLaw.Hastings
 import TNLean.MPS.AreaLaw.InformationReset
 import TNLean.MPS.AreaLaw.InteractionBudget
 import TNLean.MPS.AreaLaw.IntervalNeighborhoodEntropy
+import TNLean.MPS.AreaLaw.IntervalSlice
 import TNLean.MPS.AreaLaw.LiebRobinson
 import TNLean.MPS.AreaLaw.LogarithmicAreaLaw
 import TNLean.MPS.AreaLaw.LogarithmicSeparation
