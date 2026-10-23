@@ -78,7 +78,7 @@ end TNLean.MPS.AreaLaw.Hastings
 
 namespace TNLean.MPS.AreaLaw
 
-open Hastings
+open Hastings Matrix TNLean.Lattice
 open scoped InnerProductSpace
 
 /-- **Hastings' bootstrap lemma (Lemma 2).** Let `H` be a chain Hamiltonian of range `R` and
