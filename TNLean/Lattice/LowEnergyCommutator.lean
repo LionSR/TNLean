@@ -35,13 +35,15 @@ when the ground space is degenerate.
 `[W_tilde, B]` is bounded through the partial trace of `W_tilde` onto the `l`-neighbourhood of
 `S`, which commutes with `B`, rather than by applying the Lieb–Robinson bound site by site to
 the `N_M` sites of `B`. The term `N_M g(c₁ l, l)` of eq. `lc` is therefore replaced by the
-localization term of eq. `apb` as formalized, and the bound does not depend on the size of the
-support of `B`. Documented in `docs/paper-gaps/hastings05_filtered_term_approximation.tex`.
+partial-trace localization term, and the bound does not depend on the size of the
+support of `B`. Its closed `l`-neighbourhood must be disjoint from that support: for
+integer support separation `s ≥ 1`, take `l = s - 1`. Documented in `docs/paper-gaps/hastings05_filtered_term_approximation.tex`.
 
 The operators `W` and `B` are arbitrary operators acting on the given sets; in the source they
 are the approximations `M_i` and `M_j`, and the filter on `M_i` uses a parameter `q` chosen
-afresh (line 1551). The statements keep `q` and the splitting time `T` free; the source's
-eq. `blecm` is the case `T = c₁ l`, `q = c₁ l ΔE`.
+afresh (line 1551). The statements keep `q` and the splitting time `T` free. For `l > 0`,
+`T = c₁ l` and `q = c₁ l ΔE` give an analogue of the exponential decay in eq. `blecm`
+provided `c₁ > 0` and `v c₁ < 1/2`, with the localization constants used here.
 
 Not formalized here: the translation-invariant case (lines 1603–1642), the example of
 lines 1655–1676, and the summed bound `∑ᵢ o(i) ≤ O(J² / (c₁ l ΔE δλ_j))` of eq. `oibu`, which

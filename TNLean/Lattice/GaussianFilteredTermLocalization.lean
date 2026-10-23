@@ -17,6 +17,8 @@ the terms containing any one site have norms summing to at most `b₀`. For an o
 acting on a set `S`, let `W_tilde` be its Gaussian-filtered version
 `(ΔE / √(2πq)) ∫ e^{iHt} W e^{-iHt} e^{-(tΔE)²/(2q)} dt`. This file proves the locality of
 `W_tilde` that Hastings derives from the Lieb–Robinson bound, and its consequences.
+The integral formula assumes `q > 0` and `ΔE > 0`. At `q = 0` the filter is `W` itself,
+and the Gaussian tail factor in the bounds below is read as `1`.
 
 * `norm_commutator_gaussianFilteredTerm_le_graphDistance`: for `B` acting on one site `y` at
   graph distance at least `l` from `S`, `‖[W_tilde, B]‖` is at most the Lieb–Robinson term
@@ -33,18 +35,19 @@ acting on a set `S`, let `W_tilde` be its Gaussian-filtered version
 
 **Local fix (the approximation `M_i`, eq. `mid`):** the approximation `M` is the normalized
 partial trace of `W_tilde` onto the `l`-neighbourhood of `S`, not the source's evolution of
-`H_i` under the terms within distance `l_proj - R` of `i` (eqs. `mid`, `odef`, `hpdef`). It has
-the three properties the later argument uses: its support, `‖M_i‖ ≤ J`, and eq. `apb`, which
-is proved here for it. The Gaussian weight printed in eq. `mid` as `exp[-(tΔE)²/2]` is read as
+`H_i` under the terms within distance `l_proj - R` of `i` (eqs. `mid`, `odef`, `hpdef`). It gives
+a support bound, `‖M_i‖ ≤ J`, and an analogue of eq. `apb`. If `S` is within radius `R`
+of `i`, its `l`-neighbourhood is within radius `l + R`. Thus the source radius requires
+`l = l_proj - R` with `R ≤ l_proj`, and the localization exponential becomes
+`exp(vT - (l_proj - R)/2)`. The quantitative estimates are not identified. The Gaussian weight printed in eq. `mid` as `exp[-(tΔE)²/2]` is read as
 the weight `exp[-(tΔE)²/(2q)]` of eq. `thd`. Documented in
 `docs/paper-gaps/hastings05_filtered_term_approximation.tex`.
 
 The constants of the Lieb–Robinson bound are those of
 `QuantumCircuit.norm_heisenberg_commutator_le_graphDistance_finset` and
-`QuantumCircuit.norm_heisenberg_sub_siteExpectation_graphNeighborhood_le`. The source's
-`g(c₁ l, l)` and `N(l_proj) g(c₁ l_proj, l_proj)` are these terms at `T = c₁ l`, and its
-`O(e^{-l_proj/l_fac})` in eq. `facld` is the sum of the three terms at `q = c₁ l_proj ΔE`;
-the statements here keep `q` and `T` free.
+`QuantumCircuit.norm_heisenberg_sub_siteExpectation_graphNeighborhood_le`. These provide analogues of the source's
+localization terms; the support-radius conversion above must be made before comparing
+them. The statements here keep `q` and `T` free.
 
 ## References
 
@@ -112,8 +115,9 @@ set of sites within graph distance `l` of `S`. The normalized partial trace of `
 `C' |S|² ‖W‖ e^{vT - l/2} + 2 ‖W‖ e^{-(TΔE)²/(2q)}` for every `T ≥ 0`, where
 `C' = (2 + 4 |b₀| e^{2R}) K_g 2^{k_g} k_g! e^{1/2} / (1 - e^{-1/2})` and
 `v = 2 v_R |b₀| e^{2R} + 1`, when every sphere of radius `r` has at most `K_g (r + 1)^{k_g}`
-sites. Hastings, arXiv:cond-mat/0508554v3, eq. `apb` (lines 300–320), proved at
-lines 1458–1533, with the partial trace in place of the truncated dynamics of eq. `mid`. -/
+sites. This is an analogue of Hastings, arXiv:cond-mat/0508554v3, eq. `apb`
+(lines 300–320, proved at lines 1458–1533), with the partial trace in place of truncated
+dynamics and the radius conversion described in the module docstring. -/
 theorem norm_gaussianFilteredTerm_sub_siteExpectation_le_graphNeighborhood [NeZero d]
     (Kg : ℝ) (kg : ℕ)
     (hGrowth : ∀ x (r : ℕ),
@@ -155,8 +159,10 @@ theorem norm_gaussianFilteredTerm_sub_siteExpectation_le_graphNeighborhood [NeZe
 `K` be the set of sites within graph distance `l` of `S`. There is an operator `M` acting on
 `K` with `‖M‖ ≤ ‖W‖`, Hermitian when `W` is, and with `‖W_tilde - M‖` at most the bound of
 `norm_gaussianFilteredTerm_sub_siteExpectation_le_graphNeighborhood`. With `W = H_i` and
-`‖H_i‖ ≤ J`, these are the properties of `M_i` in Hastings, arXiv:cond-mat/0508554v3,
-lines 285–320: `M_i` acts within distance `l_proj` of `i`, `‖M_i‖ ≤ J`, and eq. `apb`. -/
+`‖H_i‖ ≤ J`, this gives an analogue of the approximation in Hastings,
+arXiv:cond-mat/0508554v3, lines 285–320. If `H_i` is supported within radius `R` of `i`,
+the support radius here is `l + R`; obtaining radius `l_proj` requires
+`l = l_proj - R` with `R ≤ l_proj`. -/
 theorem exists_local_approx_gaussianFilteredTerm [NeZero d] (Kg : ℝ) (kg : ℕ)
     (hGrowth : ∀ x (r : ℕ),
       ((Finset.univ.filter fun y => G.edist x y = r).card : ℝ) ≤ Kg * ((r : ℝ) + 1) ^ kg)
