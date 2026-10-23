@@ -159,7 +159,7 @@ theorem relent_of_projectorFactorization
     have h := Matrix.norm_mul_conjTranspose_mul_self_mul_sub_le hP₀ hZ hprodZ
     rwa [Matrix.mul_assoc (OL * OR) OBᴴ OB] at h
   have hx := re_trace_mul_le_of_projection_sandwich hσ hσ1 hE hEn hZ hZEZ
-  have hy := one_sub_two_mul_sq_le_re_trace_cutProductState_mul hΩ hOL hOR hcomm
+  have hy := one_sub_two_mul_sq_le_re_trace_cutProductState_mul hΩ hOL hOR
     (hSL.mono hSLc)
     (hSR.mono fun v hv ↦ Finset.mem_compl.mpr (Finset.disjoint_left.mp hSRc hv)) hprod
   have hx1 : (cutProductState L q c Ω * (OBᴴ * OB)).trace.re ≤ 1 := by
