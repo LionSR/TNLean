@@ -7,7 +7,7 @@ import Mathlib.Analysis.SpecialFunctions.Pow.Real
 import Mathlib.Analysis.SpecialFunctions.Sqrt
 import Mathlib.Analysis.SpecialFunctions.Exponential
 import Mathlib.Analysis.Real.Pi.Bounds
-import TNLean.MPS.AreaLaw.Hastings.DecaySlack
+import TNLean.MPS.AreaLaw.Hastings.PowerExponential
 
 /-!
 # The error budget of Lemma 1 of Hastings' area law
