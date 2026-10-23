@@ -104,10 +104,11 @@
     Then the hypothesis (\ref{eq:hastings_schmidt_tail_geometric}) is the
     consequence of the bootstrap lemma in that section, and
     (\ref{eq:hastings_schmidt_tail_rpow}) is the estimate that follows it,
-    with three corrections: the constant $e^{2/\xi}$ replaces the printed
-    $e^{1/\xi}$, the sign of the exponent is restored, and the tail starts
-    after the $k$-th coefficient rather than at
-    it~\cite{gap:hastings07_schmidt_tail_constant}.
+    with two corrections: the constant $e^{2/\xi}$ replaces the printed
+    $e^{1/\xi}$, and the sign of the exponent is
+    restored~\cite{gap:hastings07_schmidt_tail_constant}. The tail here
+    starts after the $k$-th coefficient rather than at it, which is the tail
+    that a matrix product state of bond dimension $k$ discards.
 \end{theorem}
 \begin{proof}\leanok
     Put $x=\log(k/k_0)/\log D\ge0$, let $n$ be the integer part of $x$ and
@@ -119,4 +120,40 @@
         \notag
     \end{align}
     and $e^{-x/\xi}=(k/k_0)^{-1/(\xi\log D)}$.
+\end{proof}
+
+\begin{theorem}[Matrix product state from the decay of the Schmidt tail]
+    \label{thm:hastings_schmidt_tail_mps}
+    \lean{TNLean.MPS.AreaLaw.Hastings.isOpenMPS_norm_sub_sq_le_of_schmidtTail_geometric}
+    \leanok
+    Let $\psi$ be a unit vector on a chain of $L$ sites, and let $D>1$,
+    $\xi>0$, $c\ge0$ and $k_0>0$. Suppose that at every internal cut the
+    mass beyond the $n$ largest eigenvalues of the left marginal is at most
+    $c\,e^{-2m/\xi}$ whenever $k_0D^{2m}\le n$. Then for every natural
+    number $k'\ge k_0$, truncating every cut onto the $k'$ leading
+    eigenvectors of its left marginal gives an open-boundary matrix product
+    state $\Phi$ of bond dimension at most $k'$ with
+    \begin{align}
+        \lVert\Phi-\psi\rVert^2
+         & \le(L-1)\,c\,e^{2/\xi}\Bigl(\frac{k'}{k_0}\Bigr)^{-1/(\xi\log D)}.
+        \notag
+    \end{align}
+    Here the mass beyond the $n$ largest eigenvalues is the sum over the
+    eigenvalues of index at least $n+1$ in nonincreasing order, so the
+    source's sum from index $k'$ is this mass at $k'-1$. This is the
+    conclusion of the section on matrix product states of
+    \cite{Hastings2007AreaLaw}, whose error, stated without a measure, is the
+    squared norm~\cite{gap:hastings07_mps_error_measure}, with the constant of
+    Theorem~\ref{thm:hastings_schmidt_tail_rpow}
+    \cite{gap:hastings07_schmidt_tail_constant}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:chain_sequential_truncation_eigen, thm:chain_sequential_truncation_sq,
+        thm:hastings_schmidt_tail_rpow}
+    Sequential truncation onto the leading eigenvectors gives an
+    open-boundary matrix product state of bond dimension at most $k'$ with
+    $\lVert\Phi-\psi\rVert^2\le\sum_k\varepsilon_k(k')$, where
+    $\varepsilon_k(k')$ is the mass beyond the $k'$ largest eigenvalues at
+    the cut $k$. Theorem~\ref{thm:hastings_schmidt_tail_rpow} bounds each
+    $\varepsilon_k(k')$, and there are $L-1$ internal cuts.
 \end{proof}
