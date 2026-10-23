@@ -77,8 +77,8 @@ private theorem norm_gap_of_fiberwise_conj
     (hConj : U.toLinearEquiv.conj G =
       (ContinuousLinearMap.rightFiberwiseMap (S := S) H.toContinuousLinearMap).toLinearMap)
     (hGap : ∀ v ∈ (LinearMap.ker H)ᗮ, κ * ‖v‖ ≤ ‖H v‖) :
-    ∀ v ∈ (LinearMap.ker G)ᗮ, κ * ‖v‖ ≤ ‖G v‖ := by
-  exact norm_gap_of_kernel_complement_bound G hκ
+    ∀ v ∈ (LinearMap.ker G)ᗮ, κ * ‖v‖ ≤ ‖G v‖ :=
+  norm_gap_of_kernel_complement_bound G hκ
     (kernel_complement_bound_of_fiberwise_conj U G H hConj
       (hPos.smul_orthogonal_ker_projection_le_of_norm_gap hκ.le hGap))
 
