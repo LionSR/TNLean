@@ -1,0 +1,54 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+\input{command}
+\providecommand{\gapnote}[2]{\par\noindent\textbf{Verdict:} #1 (#2).\par}
+\title{Hastings' High-Temperature Product Form on Planar Domains}
+\author{}
+\date{October 23, 2026}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{resolved}
+
+\section{The source setting}
+
+Section~IV of Hastings' \emph{Solving gapped Hamiltonians
+locally}~\cite{Hastings2006Solving} (arXiv:cond-mat/0508554v3,
+\texttt{proj3new.tex}, lines 1017--1079) works on an arbitrary lattice with a
+metric $d$, interaction terms $H_i$ supported within distance $R$ of a site $i$,
+and at most $S$ sites within distance $R$ of any site. The matrix product
+form, eq.~(mpf), asks for coefficient functions $F_i$ that depend only on the
+indices $\alpha_j$ with $d(i,j)\le l_{\mathrm{proj}}$. The source claims that
+every Trotter product $\rho_n=[\prod_i e^{-\beta H_i/n}]^n$ has this form
+exactly, with range $R$, and that after grouping the indices of all factors at
+a site each site carries at most $nS$ indices (lines 1069--1075).
+
+\section{The formalized setting}
+
+The formalization states the product form for the local Hamiltonians already
+used for the two-dimensional area law: the sites form a finite domain
+$\Lambda\subseteq\mathbb Z^2$, the distance between two sites is the length of
+a shortest walk joining them in the nearest-neighbour graph of $\Lambda$, and a
+term of range $R$ is supported on a set of sites any two of which are joined by
+a walk of length at most $R$. This is a special case of the source's setting.
+The algebraic argument uses only that the supports have range $R$ in the chosen
+metric, so the same proof applies to any finite graph with its walk distance;
+the formalization does not state it in that generality.
+
+\section{What is not claimed}
+
+The formalization proves the existence of the product form with range $R$ for
+every Trotter product. It does not establish the source's count of the indices
+at a site. Each factor $e^{-\beta H_i/n}$ is expanded in single-site matrix
+units at every site, so a Trotter product of $m$ factors on local dimension $q$
+carries an index set of size $(q^2)^{m}$ at each site, not one of size $nS$
+depending only on the factors acting near that site. Any later use of the
+product form that needs the index count must establish it separately.
+
+\begin{thebibliography}{1}
+\bibitem{Hastings2006Solving}
+M.~B. Hastings, \emph{Solving gapped Hamiltonians locally}, Phys. Rev. B
+\textbf{73}, 085115 (2006), arXiv:cond-mat/0508554.
+\end{thebibliography}
+\end{document}

@@ -1359,3 +1359,14 @@ positive and the later estimate uses `‖M_L O_L‖` at most the threshold.
   (arXiv:0705.0292v2). A flat Schmidt spectrum disproves the printed plus
   sign; the corrected minus sign preserves the obstruction from
   super-logarithmic entropy growth. The Lean development remains open in #9857.
+
+### High-temperature product form after Hastings: planar domains
+
+[hastings05_planar_domain_scope.tex](hastings05_planar_domain_scope.tex)
+(scope restriction, resolved) records that the matrix product form of Trotter
+products in Section IV of Hastings (arXiv:cond-mat/0508554v3, lines
+1017–1079), stated there for an arbitrary lattice and metric, is formalized for
+finite domains of `ℤ²` with the walk distance of the local Hamiltonians of the
+two-dimensional area law. It also records that the source's count of at most
+`nS` indices per site is not established: the construction carries `(q²)^m`
+index values at every site for a product of `m` factors.
