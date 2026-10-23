@@ -17,10 +17,10 @@ prefactor `√l` cannot be absorbed into a constant at the rate `e^{-l/6ξ}`, bu
 slower rate `e^{-l/ξ'}` with `ξ' > 6ξ`: with `δ = 1/(6ξ) − 1/ξ' > 0`,
 `sup_{l ≥ 0} √l e^{-δl} = (2eδ)^{-1/2}`, attained at `l = 1/(2δ)`.
 
-**Local fix (decay length):** Lemma 1 holds with `C₁ e^{-l/ξ'}` for every `ξ' > 6ξ`, with `C₁`
-depending on `ξ' − 6ξ`, and not at the printed `ξ' = 6ξ` (line 142), because the final bound
-keeps the prefactor `√l`. Documented in
-`docs/paper-gaps/hastings07_gaussian_average_exponent.tex`.
+**Scope restriction (decay length):** the conversions give Lemma 1 with `C₁ e^{-l/ξ'}` for every
+`ξ' > 6ξ`, with `C₁` depending on `ξ' − 6ξ`. The printed endpoint `ξ' = 6ξ` (line 142) is not
+established, because the final bound keeps the prefactor `√l`; it is not shown to be false.
+Documented in `docs/paper-gaps/hastings07_gaussian_average_exponent.tex`.
 
 ## Main results
 
