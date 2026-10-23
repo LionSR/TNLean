@@ -35,19 +35,20 @@ and the Gaussian tail factor in the bounds below is read as `1`.
 
 **Local fix (the approximation `M_i`, eq. `mid`):** the approximation `M` is the normalized
 partial trace of `W_tilde` onto the `l`-neighbourhood of `S`, not the source's evolution of
-`H_i` under the terms within distance `l_proj - R` of `i` (eqs. `mid`, `odef`, `hpdef`). It gives
-a support bound, `‖M_i‖ ≤ J`, and an analogue of eq. `apb`. If `S` is within radius `R`
+`H_i` under the terms within distance `l_proj - R` of `i` (eqs. `mid`, `odef`, `hpdef`). It
+gives a support bound, `‖M_i‖ ≤ J`, and an analogue of eq. `apb`. If `S` is within radius `R`
 of `i`, its `l`-neighbourhood is within radius `l + R`. Thus the source radius requires
 `l = l_proj - R` with `R ≤ l_proj`, and the localization exponential becomes
-`exp(vT - (l_proj - R)/2)`. The quantitative estimates are not identified. The Gaussian weight printed in eq. `mid` as `exp[-(tΔE)²/2]` is read as
-the weight `exp[-(tΔE)²/(2q)]` of eq. `thd`. Documented in
+`exp(vT - (l_proj - R)/2)`. The constants are not identified with the source's. The Gaussian
+weight printed in eq. `mid` as `exp[-(tΔE)²/2]` is read as the weight `exp[-(tΔE)²/(2q)]` of
+eq. `thd`. Documented in
 `docs/paper-gaps/hastings05_filtered_term_approximation.tex`.
 
 The constants of the Lieb–Robinson bound are those of
 `QuantumCircuit.norm_heisenberg_commutator_le_graphDistance_finset` and
-`QuantumCircuit.norm_heisenberg_sub_siteExpectation_graphNeighborhood_le`. These provide analogues of the source's
-localization terms; the support-radius conversion above must be made before comparing
-them. The statements here keep `q` and `T` free.
+`QuantumCircuit.norm_heisenberg_sub_siteExpectation_graphNeighborhood_le`. These provide
+analogues of the source's localization terms; the support-radius conversion above must be made
+before comparing them. The statements here keep `q` and `T` free.
 
 ## References
 
