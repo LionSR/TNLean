@@ -24,6 +24,21 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Hermitian sum of pointwise-Hermitian terms — promoted (2026-10-23)
+- **Pattern:**
+  ```lean
+  isSelfAdjoint_sum Finset.univ fun j _ => (hHerm j).isSelfAdjoint
+  ```
+- **Seen:** 5 occurrences across 3 files: three in
+  `TNLean/Lattice/GaussianFilteredTermLocalization.lean`, one each in
+  `TNLean/Circuit/LiebRobinson/GraphLocalization.lean` and
+  `TNLean/Circuit/LiebRobinson/CommutatorRecursion.lean`.
+- **Abstraction:** `Matrix.isHermitian_sum` in
+  `TNLean/Algebra/MatrixHermitianSum.lean`; all five call sites refactored.
+- **Notes:** where the goal is `IsSelfAdjoint`, append `.isSelfAdjoint`. The
+  sums with a case split in each term (`CommutatorRecursion.lean`, the second
+  skew-adjoint goal) keep `isSelfAdjoint_sum` with an `intro`.
+
 ### A configuration from a unit vector — promoted (2026-10-23)
 
 - **Pattern:** Prove the configuration type nonempty by contradiction: an empty index
@@ -4800,22 +4815,6 @@ three-plaquette output measurement, and the routed reunion measurement.
   `isReordering_comp_iff`; apply `IsReordering.comp` as a term instead.
 
 ## Candidates
-
-### Hermitian sum of pointwise-Hermitian terms — candidate
-- **Pattern:**
-  ```lean
-  isSelfAdjoint_sum Finset.univ fun j _ => (hHerm j).isSelfAdjoint
-  ```
-- **Seen:** 5 occurrences across 3 files (2026-10-23):
-  `TNLean/Lattice/GaussianFilteredTermLocalization.lean` (three, now one
-  private helper `isHermitian_sum_univ`),
-  `TNLean/Circuit/LiebRobinson/GraphLocalization.lean:312`,
-  `TNLean/Circuit/LiebRobinson/CommutatorRecursion.lean:450`.
-- **Abstraction:** proposed public `Matrix.isHermitian_sum` in an algebra file
-  upstream of `TNLean/Circuit/LiebRobinson/`, replacing the private helper.
-- **Notes:** a one-term wrapper around Mathlib's `isSelfAdjoint_sum`; the gain
-  is the readable statement, not line count. Promote with the next change to
-  the Lieb--Robinson files, so their callers are refactored in the same PR.
 
 ### Mass of a cut beyond its leading eigenvalues — candidate
 - **Pattern:**
