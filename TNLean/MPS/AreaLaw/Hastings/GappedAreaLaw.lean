@@ -25,9 +25,12 @@ constant is replaced by `C₁ = max (K ζ³) 1`, which only weakens Lemma 1. Thu
 **Scope restriction (Lieb–Robinson length):** the theorem inherits the restriction of
 `exists_projectorFactorization_endpoint`. The length `ζ = (5/4) ξ̂` is that of the chain
 Lieb–Robinson estimate with the velocity raised by `5/4`, where `ξ̂ = lemmaOneLength R (J/ΔE) 1`.
-The printed rate `ξ' = 6ξ` is reached for `ξ = ζ`, not for `ξ = ξ̂`. The chain estimate has a
-prefactor that grows with `J` and a second operator acting on one site, so `ζ` is not shown to be
-the source's `max(2v/ΔE, ξ_C)` for a pair satisfying eq. `lrb` (lines 96–112, 139–142).
+The printed rate `ξ' = 6ξ` is reached for `ξ = ζ`, not for `ξ = ξ̂`. The length `ζ` may stand
+in for the source's `ξ` because the source fixes `ξ = max(2v/ΔE, ξ_C)` only through some
+Lieb–Robinson pair `(v, ξ_C)` (lines 96–112), and raising `v` keeps a pair valid. The chain
+estimate has a prefactor that grows with `J` and a second operator acting on one site, so `ζ` is
+not shown to be the source's `max(2v/ΔE, ξ_C)` for a pair satisfying eq. `lrb` (lines 96–112,
+139–142).
 Documented in `docs/paper-gaps/hastings07_lemma1_decay_length.tex` and
 `docs/paper-gaps/hastings07_gaussian_average_exponent.tex`.
 
