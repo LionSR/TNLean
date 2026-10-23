@@ -221,11 +221,16 @@ hold for the centered and the uncentered parts alike.
     recorded in~\cite{gap:hastings07_commutator_constant}.
 \end{theorem}
 
-% Lean: TNLean.MPS.AreaLaw.ChainHamiltonian.
-%   norm_gaussianFilteredTerm_{left,right,buffer}Part_sub_localized_le
-% (tagged with the cut-off assembly).
 \begin{theorem}[Localized filtered parts]
     \label{thm:hastings_localized_parts}
+    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.norm_gaussianFilteredTerm_leftPart_sub_localized_le,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.norm_gaussianFilteredTerm_rightPart_sub_localized_le,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.norm_gaussianFilteredTerm_bufferPart_sub_localized_le,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.isHermitian_leftPart_localized,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.isHermitian_rightPart_localized,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.isHermitian_bufferPart_localized,
+        TNLean.MPS.AreaLaw.isSupportedOn_localized_sub_self}
+    \leanok
     \uses{thm:hastings_filtered_partial_trace, thm:hastings_part_commutators,
         thm:chain_lieb_robinson, thm:hastings_gaussian_filtered_spectral,
         thm:hastings_three_way_splitting_sum}
@@ -267,7 +272,6 @@ hold for the centered and the uncentered parts alike.
     the estimate of \cite[lines 849--850]{Hastings2007AreaLaw}.
 \end{theorem}
 
-% Lean statement pending.
 \begin{theorem}[The cut-offs $O_L$ and $O_R$]
     \label{thm:hastings_cutoffs}
     \uses{thm:hastings_localized_parts, thm:hastings_filtered_no_ground_component,
@@ -275,8 +279,9 @@ hold for the centered and the uncentered parts alike.
         thm:hastings_spectral_cutoff_norm, thm:hastings_spectral_cutoff_support,
         thm:hastings_spectral_cutoff_commute}
     Let $\theta>0$, and let $O_L$ and $O_R$ be the spectral projections of
-    $M_L$ and $M_R$ onto the eigenvectors whose eigenvalues have absolute value
-    at most $\theta$. Suppose that $M_L$ acts on $X_{1,j}$ and $M_R$ on
+    the Hermitian operators $M_L$ and $M_R$ onto the eigenvectors whose
+    eigenvalues have absolute value at most $\theta$. Suppose that $M_L$ acts
+    on $X_{1,j}$ and $M_R$ on
     $X_{j+1,N}$. Then $O_L$ and $O_R$ are commuting orthogonal projections,
     $O_L$ acts on $X_{1,j}$ and $O_R$ on $X_{j+1,N}$, and
     \begin{align*}
@@ -300,6 +305,67 @@ hold for the centered and the uncentered parts alike.
     below $-\theta$ on the range of $O_L$
     \cite{gap:hastings07_spectral_cutoff_threshold}.
 \end{theorem}
+\begin{proof}
+    The spectral projection of a Hermitian operator is an orthogonal
+    projection, and it is supported where the operator is. Projections of
+    operators on disjoint sets of sites commute.
+    Theorems~\ref{thm:hastings_spectral_cutoff_obd}
+    and~\ref{thm:hastings_spectral_cutoff_norm} give the two bounds.
+\end{proof}
+
+\begin{theorem}[The cut-offs on the chain]
+    \label{thm:hastings_cutoff_pair}
+    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.exists_cutoffPair,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.localizedPart,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.isSupportedOn_localizedPart_leftPart,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.isSupportedOn_localizedPart_rightPart,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.norm_localizedPart_apply_le,
+        TNLean.MPS.AreaLaw.partLocalizationError,
+        TNLean.MPS.AreaLaw.leftWindow, TNLean.MPS.AreaLaw.rightWindow,
+        TNLean.MPS.AreaLaw.chainNeighborhood_interval_subset,
+        TNLean.Lattice.norm_gaussianFilteredTerm_sub_self_le}
+    \leanok
+    \uses{thm:hastings_localized_parts, thm:hastings_cutoffs,
+        thm:hastings_filtered_no_ground_component, thm:hastings_part_commutators}
+    Let $\Psi_0$ be a gapped ground vector of a finite-range Hamiltonian $H$ of
+    range $R$ with terms of norm at most $J\ge0$, with ground energy $E_0$ and
+    gap $\Delta E>0$. Split $H$ at the cut $j$ with buffer width $m$, center
+    the left and right parts at their ground-state expectations, and localize
+    them as in Theorem~\ref{thm:hastings_localized_parts}, with filter
+    parameter $q\ge0$ and radius $k$, where $R+k\le m$. Let $O_L$, $O_R$ be
+    their cut-offs at $\theta>0$ and $H_0=M_L+M_R$. Then $M_L$ acts on
+    $X_{1,j}$ and $M_R$ on $X_{j+1,N}$, so Theorem~\ref{thm:hastings_cutoffs}
+    applies, and for every $T\ge0$
+    \begin{align*}
+        \|\Psi_0-O_LO_R\Psi_0\|
+         & \le\frac2\theta\bigl(\Delta E^{-1}e^{-q/2}c_RJ^2+\delta\bigr), \\
+        \|H_0O_LO_R\|
+         & \le2\theta,
+    \end{align*}
+    where $\delta$ is the bound of Theorem~\ref{thm:hastings_localized_parts}
+    for $M_L$ and $M_R$ with $\ell=k$. Moreover $H-E_0-H_0$ acts on the
+    sites within $m+2R+k$ of the cut, with
+    \begin{align*}
+        \|H-E_0-H_0\|\le4(m+R)2^{2R+1}J+2\sqrt{2h/\pi}\,c_RJ^2,
+        \qquad h=q/\Delta E^2,
+    \end{align*}
+    a bound that does not depend on the length of the chain. This assembles
+    \cite[lines 766--842]{Hastings2007AreaLaw}.
+\end{theorem}
+\begin{proof}\leanok
+    Centering subtracts a multiple of the identity, which changes neither
+    $[H,H_\bullet]$ nor $\widetilde H_\bullet-H_\bullet$. Hence
+    $\|M_\bullet\Psi_0\|\le\|\widetilde H_\bullet\Psi_0\|
+        +\|\widetilde H_\bullet-M_\bullet\|\le\Delta E^{-1}e^{-q/2}c_RJ^2+\delta$
+    by Theorems~\ref{thm:hastings_filtered_no_ground_component}
+    and~\ref{thm:hastings_localized_parts}, and
+    Theorem~\ref{thm:hastings_cutoffs} gives the first two bounds. The
+    centered parts sum to $H-E_0$, so $H-E_0-H_0$ is the centered buffer part
+    minus the two partial-trace corrections. The centered buffer part has norm
+    at most twice $\|H_B\|$, and each correction is at most
+    $\|\widetilde H_\bullet-H_\bullet\|\le\sqrt{2h/\pi}\,\|[H,H_\bullet]\|$,
+    by the Duhamel formula and the first absolute moment of the Gaussian.
+\end{proof}
 
 \subsection*{The Gaussian time average and the boundary operator}
 
@@ -331,16 +397,59 @@ and~\ref{def:hastings_interaction_average}. With $A=M_L+M_R$, $B=M_B$ and
 $X=O_LO_R$, Theorem~\ref{thm:hastings_interaction_average_last} is the bound of
 \cite[lines 877--905]{Hastings2007AreaLaw} on $\|P_BX-P_0\|$.
 
-% Lean statement pending.
 \begin{theorem}[Localization of the boundary average]
     \label{thm:hastings_boundary_localization}
-    \uses{def:hastings_interaction_average, thm:hastings_localized_parts,
-        thm:chain_lieb_robinson}
-    There is an operator $O_B$ acting on $X_{j-l+1,j+l}$ with $\|O_B\|\le1$
-    and $\|P_B-O_B\|\le\mathcal O(\Delta E^{-1}J\sqrt q\,e^{-l/(6\xi)})$
-    \cite[lines 896--905]{Hastings2007AreaLaw}. No positivity of $O_B$ is
-    claimed, as in the note added to \cite{Hastings2007AreaLaw}.
+    \lean{TNLean.MPS.AreaLaw.Hastings.exists_supported_interactionAverage_approx,
+        TNLean.MPS.AreaLaw.Hastings.exists_supported_interactionAverage_approx_exp}
+    \leanok
+    \uses{def:hastings_interaction_average, thm:chain_lieb_robinson}
+    Let $H$ be a finite-range Hamiltonian of range $R$ on the chain of $L$
+    sites with local dimension $d\ge1$ and terms of norm at most $J$. Let $H_0$,
+    $A$ and $B$ be Hermitian, with $H-H_0$ supported on a set of sites $Z$, and
+    let $P_B$ be the Gaussian average of
+    Definition~\ref{def:hastings_interaction_average} for $A$, $B$ and a
+    variance $h>0$. Let $C'$ and $v$ be the constants of
+    Theorem~\ref{thm:chain_lieb_robinson} for $b_0=2^{2R+1}J$. Then for every
+    $\ell\ge0$ and $T\ge0$ there is an operator $O_B$ supported on the sites
+    within distance $\ell$ of $Z$, with $\|O_B\|\le1$ and
+    \begin{align}
+        \|P_B-O_B\| & \le\sqrt h\,\bigl(\|A+B-H\|+\|A-H_0\|
+        +C'|Z|^2\|H-H_0\|e^{vT-\ell/2}\bigr)+4e^{-T^2/(2h)}.
+        \label{eq:hastings_boundary_localization}
+    \end{align}
+    For $T=\ell/(4v)$ the last two terms are
+    $\sqrt h\,C'|Z|^2\|H-H_0\|e^{-\ell/4}$ and $4e^{-\ell^2/(32v^2h)}$.
+    No positivity of $O_B$ is claimed, as in the note added
+    to~\cite{Hastings2007AreaLaw}.
 \end{theorem}
+\begin{proof}\leanok
+    \uses{thm:qc_supported_projected_relative_evolution}
+    Write $V(t)=e^{iHt}e^{-iH_0t}$. Its generator is the Heisenberg evolution
+    of $H-H_0$, which Theorem~\ref{thm:chain_lieb_robinson} approximates by
+    an operator supported within distance $\ell$ of $Z$ up to
+    $C'|Z|^2\|H-H_0\|e^{v|s|-\ell/2}$ at time $s$. The evolution generated by
+    the projected generator is a unitary $\widetilde V(t)$ supported there,
+    within $|t|\,C'|Z|^2\|H-H_0\|e^{vT-\ell/2}$ of $V(t)$ for $|t|\le T$. The
+    propagator $U(t)$ is within $|t|(\|A+B-H\|+\|A-H_0\|)$ of $V(t)$. Put
+    $O_B=\int\widetilde V(t)\,d\gamma_h(t)$. Integrating against $\gamma_h$
+    with $\int|t|\,d\gamma_h\le\sqrt h$, and using the bound $2$ on
+    $\|U(t)-\widetilde V(t)\|$ where $|t|>T$, whose Gaussian mass is at most
+    $2e^{-T^2/(2h)}$, gives~(\ref{eq:hastings_boundary_localization}).
+\end{proof}
+
+In the source's application $A=H_0=M_L+M_R$ and $B=M_B$, so $\|A-H_0\|=0$,
+while $\|A+B-H\|$, with the ground energy set to zero, is the error of the
+localized parts of Theorem~\ref{thm:hastings_localized_parts}, exponentially
+small in $l$ \cite[lines 849--850]{Hastings2007AreaLaw}. Alternatively, take
+$B=H-E_0-H_0$. Adding $E_0$ to $A$ does not change $P_B$, since the two
+phases $e^{\pm iE_0t}$ cancel, so the theorem may be applied with $A$ and the
+comparison operator both equal to $H_0+E_0$; then $A+B=H$ and both norms
+vanish. $Z$ is
+the window of width proportional to $l$ that carries $H-H_0$. With $h=q/\Delta E^2$,
+$q$ proportional to $l$, and $\ell$ proportional to $l$, the bound becomes
+the $\mathcal O(\Delta E^{-1}J\sqrt q\,e^{-l/(6\xi)})$
+of~\cite[lines 896--905]{Hastings2007AreaLaw}, and $O_B$ acts on
+$X_{j-l+1,j+l}$.
 
 \subsection*{The factorization and its positive version}
 
