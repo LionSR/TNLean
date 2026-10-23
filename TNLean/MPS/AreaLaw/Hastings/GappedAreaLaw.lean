@@ -20,9 +20,17 @@ over chains, with the area law from Lemma 1 (`regionEntropy_prefix_le_of_factori
 Since that theorem assumes `C₁ ≥ 1`, the constant is replaced by `max C₁ 1`, which only
 weakens Lemma 1.
 
-**Local fix (decay length of Lemma 1):** Lemma 1 is proved for every `ξ' > 6ξ`, with
-`ξ = lemmaOneLength R J ΔE`, rather than at the printed `ξ' = 6ξ`. Documented in
-`docs/paper-gaps/hastings07_lemma1_decay_length.tex`.
+**Scope restriction (quantitative bounds):** the theorem inherits the restriction of Lemma 1
+(`exists_projectorFactorization`). It holds for every `ξ' > 6ξ` with
+`ξ = lemmaOneLength R J ΔE = 8 max(2v/ΔE, 1)` from the chain localization estimate, whose
+support factor is quadratic, so `ξ` is not shown to be the source's `max(2v/ΔE, ξ_C)`
+(lines 139–142), and the endpoint `ξ' = 6ξ` is not established. The constant `C₁` is uniform in
+the chain length, the local dimension, the Hamiltonian and the ground state, but it is only
+shown to exist: the polynomial bound in `ξ` of lines 258–262 is not established. Hence the
+bound `S_max = areaLawBound ξ' C₁ q` is explicit in `ξ'`, `C₁` and `q`, but this file does not
+prove the printed form `S_max = c₀ ξ' ln ξ' ln D 2^{ξ' ln D}` of eq. `smd`. Documented in
+`docs/paper-gaps/hastings07_lemma1_decay_length.tex`. Elimination: the quantitative form of
+Lemma 1, as planned in that note.
 
 **Local fix (eq. relent and doubling constants):** the bound is `S_max = areaLawBound ξ' C₁ q`,
 which carries the constants of eq. `relent` and of the doubling iteration. Its growth in `ξ'`
@@ -32,7 +40,8 @@ and `ln q` is `4^{ξ' ln q}`, not the printed `2^{ξ' ln D}` of eq. `smd`. Docum
 
 ## Main results
 
-* `exists_regionEntropy_prefix_le`: eq. `entbd`, with a constant `C₁ ≥ 1` uniform in the chain.
+* `exists_regionEntropy_prefix_le`: eq. `entbd`, with a constant `C₁ ≥ 1` uniform in the chain,
+  under the scope restriction above.
 
 ## References
 
@@ -49,8 +58,8 @@ interaction terms, `ΔE > 0` a gap, and `ξ' > 6ξ` with `ξ = lemmaOneLength R 
 constant `C₁ ≥ 1` such that for every chain of `L` sites with local dimension `q`, every chain
 Hamiltonian `h` of range `R` and term norm `J`, and every ground vector `Ω` of `h` with gap
 `ΔE`, the entropy of every prefix `[0, i)` is at most `S_max = areaLawBound ξ' C₁ q`.
-This is eq. `entbd` of arXiv:0705.2024v4 (lines 124–144), with the local fixes of the module
-docstring. -/
+This is eq. `entbd` of arXiv:0705.2024v4 (lines 124–144), under the scope restriction and with
+the local fixes of the module docstring; the printed value of `S_max` is not claimed. -/
 theorem exists_regionEntropy_prefix_le (R : ℕ) {J ΔE : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < ΔE)
     {ξ' : ℝ} (hξ' : 6 * lemmaOneLength R J ΔE < ξ') :
     ∃ C₁ : ℝ, 1 ≤ C₁ ∧ ∀ {L q : ℕ} [NeZero q] (h : ChainHamiltonian L q R J) {E₀ : ℝ}
