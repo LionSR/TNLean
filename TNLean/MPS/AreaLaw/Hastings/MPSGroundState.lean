@@ -115,7 +115,7 @@ theorem exists_isOpenMPS_norm_sub_sq_le_of_isGappedGroundState (R : ℕ) {J ΔE 
             (4 * C₁ ^ 2 * exp (2 / ξ') * ((k' : ℝ) / k₀) ^ (-1 / (ξ' * log q))) := by
   obtain ⟨C, -, hF⟩ := exists_projectorFactorization R hJ hΔ hξ'
   refine ⟨max C 1, le_max_right _ _, fun {L q} hq h {E₀} {Ω} hgs {k'} hk' ↦ ?_⟩
-  haveI : NeZero q := ⟨by omega⟩
+  have : NeZero q := ⟨by omega⟩
   have hξ'0 : 0 < ξ' := by linarith [lemmaOneLength_pos R J ΔE]
   refine isOpenMPS_norm_sub_sq_le_of_gappedGroundState h hgs hq hξ'0 (le_max_right _ _)
     (fun c l _ ↦ ?_) hk'
