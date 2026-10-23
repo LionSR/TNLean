@@ -188,7 +188,7 @@ theorem isEfficientlyApproximableByMPS_of_renyiEntropy_le
     · linarith
   have hD : 0 < K * (N.val + 1) ^ m := Nat.mul_pos hK (pow_pos (Nat.succ_pos _) _)
   by_cases ha0 : a = 0
-  · refine ⟨K * (N.val + 1) ^ m, ψ N, by simp, hψ N, ?_, by simpa using hδ.le⟩
+  · refine ⟨K * (N.val + 1) ^ m, ψ N, by simp, ?_, by simpa using hδ.le⟩
     apply isOpenMPS_of_regionState_rank_le (ψ N) (hψ N)
     intro k hk
     have hl : Real.log ((Entropy.regionState (leftBlock N.val k) (ψ N)).rank : ℝ) ≤
@@ -197,8 +197,8 @@ theorem isEfficientlyApproximableByMPS_of_renyiEntropy_le
     rcases Nat.eq_zero_or_pos (Entropy.regionState (leftBlock N.val k) (ψ N)).rank with hr | hr
     · simp [hr]
     · exact_mod_cast (Real.log_le_log_iff (by exact_mod_cast hr) (by exact_mod_cast hD)).mp hl
-  · obtain ⟨φ, hφ, hmps, herr⟩ := exists_normalized_isOpenMPS_of_renyiEntropy_le
+  · obtain ⟨φ, _hφ, hmps, herr⟩ := exists_normalized_isOpenMPS_of_renyiEntropy_le
       (ψ N) (hψ N) (lt_of_le_of_ne ha (Ne.symm ha0)) ha1 hD hε (min_le_right _ _) hcut
-    exact ⟨_, φ, by simp, hφ, hmps, herr.trans (min_le_left _ _)⟩
+    exact ⟨_, φ, by simp, hmps, herr.trans (min_le_left _ _)⟩
 
 end TNLean.MPS.AreaLaw
