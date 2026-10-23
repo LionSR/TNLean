@@ -30,8 +30,8 @@ that square. This is the Cauchy--Schwarz step in the finite zero-energy
 argument of Nachtergaele, arXiv:cond-mat/9410110, Section 6. -/
 theorem apply_mul_star_mul_self_eq_zero
     (f : E →ₚ[ℂ] ℂ) (Y C : E) (hzero : f (star C * C) = 0) :
-    f (Y * (star C * C)) = 0 := by
-  exact norm_eq_zero.mp (le_antisymm
+    f (Y * (star C * C)) = 0 :=
+  norm_eq_zero.mp (le_antisymm
     (by simpa only [star_star, mul_assoc, hzero, norm_zero, Real.sqrt_zero, mul_zero] using
       PositiveLinearMap.norm_map_star_mul_le f (star (Y * star C)) C) (norm_nonneg _))
 variable {n : Type*} [Fintype n]

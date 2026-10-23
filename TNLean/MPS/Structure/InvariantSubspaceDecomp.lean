@@ -106,7 +106,6 @@ lemma mpv_twoBlockTensor_eq {n m N : ℕ}
           rfl
         simp only [h0, h1]
 
-
 /-! ## Invariant projection ⇒ two-block block diagonal tensor
 
 ### Spectral splitting and block extraction
@@ -336,7 +335,6 @@ theorem exists_twoBlock_decomp_of_lowerZero
   rcases exists_twoBlock_decomp_of_lowerZero_aux A P hP hLower with
     ⟨n, m, hnm, A₁, A₂, hSame, -⟩
   exact ⟨n, m, hnm, A₁, A₂, hSame⟩
-
 
 /-! ### Strict dimension decrease variant
 

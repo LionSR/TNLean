@@ -210,6 +210,27 @@ lemma hasStringOrder_of_localSymmetry
     _ = ‖μ ^ L‖ := by rw [hnorm_pow]
     _ = ‖stringOrderBoundaryParam A u Λ Vᴴ V L‖ := by rw [hparam]
 
+/-- Gauge-phase equivalence with the twisted companion yields a local-symmetry
+virtual intertwiner, provided the stationary boundary state is a fixed point of
+the adjoint transfer channel. -/
+private theorem localSymmetry_of_gaugePhaseEquiv_twisted
+    (A : MPSTensor d D)
+    (hA : Kraus.IsInjective A)
+    (u : Matrix (Fin d) (Fin d) ℂ)
+    (hu : u * uᴴ = 1)
+    (Λ : Matrix (Fin D) (Fin D) ℂ)
+    (hΛpos : Λ.PosDef) (hΛtr : Matrix.trace Λ = 1)
+    (hΛfix : Kraus.transferMap (fun i => (A i)ᴴ) Λ = Λ)
+    (hNorm : Kraus.transferMap A 1 = 1)
+    (hGauge : GaugePhaseEquiv A (twistedMixedCompanion A u)) :
+    IsLocalSymmetry A u Λ := by
+  obtain ⟨V, μ, hV, hV', hμ, hC1μ⟩ :=
+    virtualUnitary_of_gaugePhaseEquiv_twisted A hA u hu hNorm hGauge
+  have hΛinv : Vᴴ * Λ * V = Λ :=
+    boundaryState_invariant_of_virtualUnitary A hA u hu Λ hΛpos hΛtr hΛfix
+      V μ hV hV' hμ hC1μ
+  exact ⟨V, μ, hV, hV', hμ, hΛinv, hC1μ⟩
+
 /-- A modulus-one twisted-transfer eigenpair yields a local-symmetry virtual
 intertwiner, provided the stationary boundary state is a fixed point of the
 adjoint transfer channel. -/
@@ -226,15 +247,9 @@ private theorem localSymmetry_of_twistedTransfer_eigen
     (hX : X ≠ 0)
     (hEig : twistedTransferMap A u X = ev • X)
     (hev : ‖ev‖ = 1) :
-    IsLocalSymmetry A u Λ := by
-  have hGauge : GaugePhaseEquiv A (twistedMixedCompanion A u) :=
-    twistedTransfer_modulus_one_implies_gaugePhase A hA u hu hNorm ev X hX hEig hev
-  obtain ⟨V, μ, hV, hV', hμ, hC1μ⟩ :=
-    virtualUnitary_of_gaugePhaseEquiv_twisted A hA u hu hNorm hGauge
-  have hΛinv : Vᴴ * Λ * V = Λ :=
-    boundaryState_invariant_of_virtualUnitary A hA u hu Λ hΛpos hΛtr hΛfix
-      V μ hV hV' hμ hC1μ
-  exact ⟨V, μ, hV, hV', hμ, hΛinv, hC1μ⟩
+    IsLocalSymmetry A u Λ :=
+  localSymmetry_of_gaugePhaseEquiv_twisted A hA u hu Λ hΛpos hΛtr hΛfix hNorm
+    (twistedTransfer_modulus_one_implies_gaugePhase A hA u hu hNorm ev X hX hEig hev)
 
 /-- **Theorem 2** (arXiv:0802.0447): For a pure finitely correlated
 state, `u` is a local symmetry if and only if the twisted transfer
@@ -298,14 +313,8 @@ theorem stringOrder_iff_localSymmetry
     HasStringOrder A u Λ ↔ IsLocalSymmetry A u Λ := by
   constructor
   · intro hSO
-    have hGauge : GaugePhaseEquiv A (twistedMixedCompanion A u) :=
-      gaugePhaseEquiv_twisted_of_hasStringOrder A hA u hu Λ hNorm hSO
-    obtain ⟨V, μ, hV, hV', hμ, hC1μ⟩ :=
-      virtualUnitary_of_gaugePhaseEquiv_twisted A hA u hu hNorm hGauge
-    have hΛinv : Vᴴ * Λ * V = Λ :=
-      boundaryState_invariant_of_virtualUnitary A hA u hu Λ hΛpos hΛtr hΛfix
-        V μ hV hV' hμ hC1μ
-    exact ⟨V, μ, hV, hV', hμ, hΛinv, hC1μ⟩
+    exact localSymmetry_of_gaugePhaseEquiv_twisted A hA u hu Λ hΛpos hΛtr hΛfix hNorm
+      (gaugePhaseEquiv_twisted_of_hasStringOrder A hA u hu Λ hNorm hSO)
   · intro hLocal
     exact hasStringOrder_of_localSymmetry A u Λ hΛtr hNorm hLocal
 
@@ -478,20 +487,10 @@ theorem hasStringOrder_of_symmetric_injective
       simp [V]
     rw [hV0, zero_mul] at h1
     exact one_ne_zero h1.symm
-  -- Step 4: Modulus-one eigenvalue → GaugePhaseEquiv
-  have hGauge : GaugePhaseEquiv A (twistedMixedCompanion A (U g)) :=
-    twistedTransfer_modulus_one_implies_gaugePhase A hA (U g) (hUnitary g)
-      hNorm 1 V hV_ne hEig (by simp)
-  -- Step 5: GaugePhaseEquiv → virtual unitary with phase
-  obtain ⟨W, μ, hW, hW', hμ, hC1μ⟩ :=
-    virtualUnitary_of_gaugePhaseEquiv_twisted A hA (U g) (hUnitary g) hNorm hGauge
-  -- Step 6: Virtual unitary preserves boundary state
-  have hΛinv : Wᴴ * Λ * W = Λ :=
-    boundaryState_invariant_of_virtualUnitary A hA (U g) (hUnitary g)
-      Λ hΛpos hΛtr hΛfix W μ hW hW' hμ hC1μ
-  -- Step 7: Assemble IsLocalSymmetry and derive HasStringOrder
+  -- Step 4: Modulus-one eigenvalue → local symmetry → string order
   exact hasStringOrder_of_localSymmetry A (U g) Λ hΛtr hNorm
-    ⟨W, μ, hW, hW', hμ, hΛinv, hC1μ⟩
+    (localSymmetry_of_twistedTransfer_eigen A hA (U g) (hUnitary g) Λ hΛpos hΛtr hΛfix
+      hNorm 1 V hV_ne hEig (by simp))
 
 /-- **String order existence agrees for any two injective symmetric tensors.**
 If two injective MPS tensors are both on-site symmetric under the same

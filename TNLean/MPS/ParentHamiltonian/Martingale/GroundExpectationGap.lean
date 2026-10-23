@@ -155,5 +155,4 @@ theorem commutator_gap_of_tendsto_mean_zero_of_ker_eq_span
       commutator_ground_gap_of_ker_eq_span (H n) (X n) hnPos hγ hnGap (ψ n) hnUnit hnKernel
   simpa only [sub_zero] using le_of_tendsto_of_tendsto hLeft hEnergy hBound
 
-
 end FrustrationFree
