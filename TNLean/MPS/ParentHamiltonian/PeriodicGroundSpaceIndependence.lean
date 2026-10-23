@@ -181,8 +181,8 @@ private theorem exists_eventually_boundary_lift_of_residual_resolution
       exact (rectangularRowProjection_isStarProjection (E := dim j) (hQ j r)).isSelfAdjoint.star_eq
     · exact (hI j r).2.2.1
     · exact (hI j r).2.2.2.1
-  have hBound (j : ι) : ‖residualBoundaryEmbeddingES (V j)‖ * ‖H j‖ * ‖S j‖ ≤ c j := by
-    exact mul_le_mul (mul_le_mul_of_nonneg_left (hI j r).2.2.2.2.1 (norm_nonneg _))
+  have hBound (j : ι) : ‖residualBoundaryEmbeddingES (V j)‖ * ‖H j‖ * ‖S j‖ ≤ c j :=
+    mul_le_mul (mul_le_mul_of_nonneg_left (hI j r).2.2.2.2.1 (norm_nonneg _))
       (hI j r).2.2.2.2.2 (norm_nonneg _) (mul_nonneg (norm_nonneg _) (by positivity))
   have hx' : x ∈ ⨆ j, (S j).range := by
     simpa only [S,

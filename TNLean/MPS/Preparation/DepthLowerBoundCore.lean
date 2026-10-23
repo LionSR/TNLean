@@ -125,10 +125,6 @@ theorem mpvExpectation_sub (A : MPSTensor d D) (N : ℕ) (O O' : Matrix (Cfg d N
     mpvExpectation A N (O - O') = mpvExpectation A N O - mpvExpectation A N O' := by
   simp only [mpvExpectation, map_sub, LinearMap.sub_apply, inner_sub_right]
 
-theorem mpvExpectation_add (A : MPSTensor d D) (N : ℕ) (O O' : Matrix (Cfg d N) (Cfg d N) ℂ) :
-    mpvExpectation A N (O + O') = mpvExpectation A N O + mpvExpectation A N O' := by
-  simp only [mpvExpectation, map_add, LinearMap.add_apply, inner_add_right]
-
 theorem mpvExpectation_smul (A : MPSTensor d D) (N : ℕ) (c : ℂ)
     (O : Matrix (Cfg d N) (Cfg d N) ℂ) :
     mpvExpectation A N (c • O) = c * mpvExpectation A N O := by

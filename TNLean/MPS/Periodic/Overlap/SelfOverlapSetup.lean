@@ -688,22 +688,17 @@ private lemma exists_offDiag_eigenvector_of_gaugePhase_same_dim
   obtain ⟨ρ, _hρ_psd, hρ_ne, hρ_fix⟩ :=
     Kraus.exists_posSemidef_fixedPoint Au hAu_left (NeZero.pos D₀)
   let Y : Matrix (Fin D₀) (Fin D₀) ℂ := ρ * X.valᴴ
-  have hY_ne : Y ≠ 0 := by
-    intro hY_zero
-    apply hρ_ne
-    have hcancel :=
-      congr_arg (fun Z : Matrix (Fin D₀) (Fin D₀) ℂ => Z * X⁻¹.valᴴ) hY_zero
-    have hright_unit : X.valᴴ * X⁻¹.valᴴ = 1 := by
-      rw [← Matrix.conjTranspose_mul, Units.inv_mul]
-      simp
-    have hright : X.valᴴ * (X.val)⁻¹ᴴ = 1 := by
-      simpa [Units.val_inv_eq_inv_val] using hright_unit
-    simpa [Y, Matrix.mul_assoc, hright] using hcancel
   have hright_unit : X.valᴴ * X⁻¹.valᴴ = 1 := by
     rw [← Matrix.conjTranspose_mul, Units.inv_mul]
     simp
   have hright : X.valᴴ * (X.val)⁻¹ᴴ = 1 := by
     simpa [Units.val_inv_eq_inv_val] using hright_unit
+  have hY_ne : Y ≠ 0 := by
+    intro hY_zero
+    apply hρ_ne
+    have hcancel :=
+      congr_arg (fun Z : Matrix (Fin D₀) (Fin D₀) ℂ => Z * X⁻¹.valᴴ) hY_zero
+    simpa [Y, Matrix.mul_assoc, hright] using hcancel
   have hρ_sum : (∑ i : Fin d₀, Au i * ρ * (Au i)ᴴ) = ρ := by
     simpa [Kraus.transferMap_apply] using hρ_fix
   have hMixed : Kraus.mixedMapLM Au Av Y = (star η) • Y := by

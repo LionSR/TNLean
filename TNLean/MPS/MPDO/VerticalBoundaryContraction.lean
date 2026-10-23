@@ -124,8 +124,8 @@ theorem contractBondMatrix_verticalAssembledTensor {g : ℕ}
       Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv
         (Matrix.blockDiagonal' fun q ↦
           verticalCopyWeights mult weight q •
-            MPSTensor.contractBondMatrix (verticalCopyBlocks dim mult A q) X) := by
-  exact MPSTensor.contractBondMatrix_toTensorFromBlocks
+            MPSTensor.contractBondMatrix (verticalCopyBlocks dim mult A q) X) :=
+  MPSTensor.contractBondMatrix_toTensorFromBlocks
     (verticalCopyWeights mult weight) (verticalCopyBlocks dim mult A) X
 
 /-- A letterwise identity between two vertical tensors remains valid after

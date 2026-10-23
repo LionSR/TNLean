@@ -416,19 +416,9 @@ lemma transformedCoordinateProjection_eq_blockDiagonal_left
   funext k
   exact cubicProjection_kronecker_one _ _ _ _ _
 
-/-- Pairwise simplicity of the left observable forces every right factor in
-an arbitrary physical-sector factorization to be one-dimensional. -/
-lemma rightDim_eq_one (F : PhysicalSectorFactorization tensor)
-    (k : Fin F.sectorCount) : F.rightDim k = 1 := by
-  by_contra hne
-  have hpos := F.rightDim_pos k
-  have hdim : 1 < F.rightDim k := by omega
-  let x₀ : Fin (F.leftDim k) := ⟨0, F.leftDim_pos k⟩
-  let y₀ : Fin (F.rightDim k) := ⟨0, F.rightDim_pos k⟩
-  let y₁ : Fin (F.rightDim k) := ⟨1, hdim⟩
-  let q₀ : Σ h, F.SectorIndex h := ⟨k, (x₀, y₀)⟩
-  let q₁ : Σ h, F.SectorIndex h := ⟨k, (x₀, y₁)⟩
-  let i := F.sectorEquiv.symm q₀
+/-- Every row of the physical isometry has a nonzero entry. -/
+private lemma exists_physicalIsometry_ne_zero (F : PhysicalSectorFactorization tensor)
+    (i : Fin 4) : ∃ p, F.physicalIsometry i p ≠ 0 := by
   have hsum :
       ∑ p, F.physicalIsometry i p * star (F.physicalIsometry i p) = 1 := by
     simpa using Matrix.sum_mul_star_eq_ite_of_mul_conjTranspose_eq_one
@@ -442,6 +432,22 @@ lemma rightDim_eq_one (F : PhysicalSectorFactorization tensor)
     intro hzero
     apply hp
     simp [hzero]
+  exact ⟨p, hpU⟩
+
+/-- Pairwise simplicity of the left observable forces every right factor in
+an arbitrary physical-sector factorization to be one-dimensional. -/
+lemma rightDim_eq_one (F : PhysicalSectorFactorization tensor)
+    (k : Fin F.sectorCount) : F.rightDim k = 1 := by
+  by_contra hne
+  have hpos := F.rightDim_pos k
+  have hdim : 1 < F.rightDim k := by omega
+  let x₀ : Fin (F.leftDim k) := ⟨0, F.leftDim_pos k⟩
+  let y₀ : Fin (F.rightDim k) := ⟨0, F.rightDim_pos k⟩
+  let y₁ : Fin (F.rightDim k) := ⟨1, hdim⟩
+  let q₀ : Σ h, F.SectorIndex h := ⟨k, (x₀, y₀)⟩
+  let q₁ : Σ h, F.SectorIndex h := ⟨k, (x₀, y₁)⟩
+  let i := F.sectorEquiv.symm q₀
+  obtain ⟨p, hpU⟩ := exists_physicalIsometry_ne_zero F i
   let P := transformedCoordinateProjection F p
   let Y := leftSpectralProjection (leftBlockFactor F k) p
   have hP := transformedCoordinateProjection_eq_blockDiagonal_left F p
@@ -632,19 +638,7 @@ lemma leftDim_eq_one (F : PhysicalSectorFactorization tensor)
   let q₀ : Σ h, F.SectorIndex h := ⟨k, (x₀, y₀)⟩
   let q₁ : Σ h, F.SectorIndex h := ⟨k, (x₁, y₀)⟩
   let i := F.sectorEquiv.symm q₀
-  have hsum :
-      ∑ p, F.physicalIsometry i p * star (F.physicalIsometry i p) = 1 := by
-    simpa using Matrix.sum_mul_star_eq_ite_of_mul_conjTranspose_eq_one
-      F.physicalIsometry F.physicalIsometry_mul_conjTranspose i i
-  have hsum_ne :
-      (∑ p, F.physicalIsometry i p * star (F.physicalIsometry i p)) ≠ 0 := by
-    rw [hsum]
-    norm_num
-  obtain ⟨p, hp_mem, hp⟩ := Finset.exists_ne_zero_of_sum_ne_zero hsum_ne
-  have hpU : F.physicalIsometry i p ≠ 0 := by
-    intro hzero
-    apply hp
-    simp [hzero]
+  obtain ⟨p, hpU⟩ := exists_physicalIsometry_ne_zero F i
   let P := transformedCoordinateProjection F p
   let Y := rightSpectralProjection (rightBlockFactor F k) p
   have hP := transformedCoordinateProjection_eq_blockDiagonal_right F p

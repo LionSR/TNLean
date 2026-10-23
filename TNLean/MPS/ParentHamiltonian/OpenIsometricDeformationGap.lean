@@ -105,8 +105,8 @@ theorem exists_uniform_isometricDeformation_open_parent_gap
       ∀ v ∈ (LinearMap.ker (openParentHamiltonianES
         (toTensorFromBlocks (fun _ => 1) (isometricDeformationBlocks A γ)) 2 N))ᗮ,
         δ * ‖v‖ ≤ ‖openParentHamiltonianES
-          (toTensorFromBlocks (fun _ => 1) (isometricDeformationBlocks A γ)) 2 N v‖ := by
-  exact exists_uniform_openParentHamiltonianES_gap_positivePhysicalDeformation
+          (toTensorFromBlocks (fun _ => 1) (isometricDeformationBlocks A γ)) 2 N v‖ :=
+  exists_uniform_openParentHamiltonianES_gap_positivePhysicalDeformation
     (leftPolarBlocks A) ((wordTupleSpanTop_leftPolarBlocks_iff A 1).2 hSpan)
     (fun _ => 1) (by simp) (leftPolarPhysicalFactor A) (leftPolarPhysicalFactor_posDef A)
 
@@ -120,8 +120,8 @@ theorem exists_uniform_isometricDeformation_open_interaction_gap
       ∀ v ∈ (LinearMap.ker (openInteractionHamiltonianES
         (isometricDeformationInteractionES A γ).toLinearMap N))ᗮ,
         δ * ‖v‖ ≤ ‖openInteractionHamiltonianES
-          (isometricDeformationInteractionES A γ).toLinearMap N v‖ := by
-  exact exists_uniform_positiveDeformedParentInteractionES_open_gap
+          (isometricDeformationInteractionES A γ).toLinearMap N v‖ :=
+  exists_uniform_positiveDeformedParentInteractionES_open_gap
     (leftPolarBlocks A) ((wordTupleSpanTop_leftPolarBlocks_iff A 1).2 hSpan)
     (fun _ => 1) (by simp) (leftPolarPhysicalFactor A) (leftPolarPhysicalFactor_posDef A)
 

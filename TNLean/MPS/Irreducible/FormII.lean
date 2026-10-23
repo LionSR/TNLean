@@ -60,10 +60,6 @@ private theorem transferMap_unitaryConj_of_decidable [DecidableEq (Fin D)]
   set V : Matrix (Fin D) (Fin D) ℂ := ↑U with hV_def
   change Kraus.transferMap (d := d) (D := D) (fun i => Vᴴ * A i * V) X =
     Vᴴ * (Kraus.transferMap (d := d) (D := D) A (V * X * Vᴴ)) * V
-  have hVV : Vᴴ * V = 1 := by
-    rw [← Matrix.star_eq_conjTranspose]; exact Matrix.UnitaryGroup.star_mul_self U
-  have hVV' : V * Vᴴ = 1 := by
-    rw [← Matrix.star_eq_conjTranspose]; exact Unitary.mul_star_self_of_mem U.prop
   simp only [Kraus.transferMap_apply, Finset.mul_sum, Finset.sum_mul]
   congr 1; ext1 i
   rw [Matrix.conjTranspose_mul, Matrix.conjTranspose_mul,

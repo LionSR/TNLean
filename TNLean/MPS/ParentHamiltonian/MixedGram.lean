@@ -170,10 +170,6 @@ theorem inner_tailBoundaryMapES_adjoint_leftBoundaryMapES_q
     rw [hLeftTrace]
     rw [hTailTrace]
 
--- A formulation that first reassociates the tail map into the left-associated
--- ambient space should derive from this theorem by adjoint composition with the
--- same unitary coordinate reassociation, rather than repeat the coordinate proof.
-
 /-- Exact mixed-Gram identity for the overlapping windows in Nachtergaele's C3
 geometry (arXiv:cond-mat/9410110, equation (2.4)).
 

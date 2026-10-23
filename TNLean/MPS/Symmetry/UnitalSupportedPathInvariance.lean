@@ -72,8 +72,8 @@ theorem cohomologousTo_of_continuous_unital_supported_family
     (hdim : ∀ t, Module.finrank ℂ
       (LinearMap.ker (LinearMap.id - Kraus.adjointMapLM (B t))) = 1)
     (hInj : ∀ t, Kraus.IsInjective (A t)) :
-    (ω 1).CohomologousTo (ω 0) := by
-  exact ScalarCocycle.cohomologousTo_of_eventually_at_all_points ω
+    (ω 1).CohomologousTo (ω 0) :=
+  ScalarCocycle.cohomologousTo_of_eventually_at_all_points ω
     (fun t₀ ↦ eventually_cohomologousTo_of_continuous_unital_supported_family
       D ω ρ B hB hUnital σ hσ htrace hfix K hK hsupport A hA hUnitary U hCov
         t₀ (hdim t₀) (hInj t₀)) 1 0
