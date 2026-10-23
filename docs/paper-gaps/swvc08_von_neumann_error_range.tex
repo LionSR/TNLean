@@ -1,0 +1,128 @@
+\documentclass{article}
+\usepackage[a4paper,margin=25mm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+\input{./command}
+\setlength{\emergencystretch}{2em}
+\title{Normalization and the Error Range in the\newline
+Von Neumann Bond-Dimension Bound}
+\author{}
+\date{October 23, 2026}
+\begin{document}
+\maketitle
+\gapnote{false-source}{resolved}
+
+\section{The finite-error assertion}
+
+Let $\psi$ be a unit vector on a chain of $N$ sites of local dimension
+$d\ge2$, and let $\phi$ be an open-boundary matrix product state of bond
+dimension $D\ge1$, with no normalization condition. Write
+$E=\lVert|\psi\rangle\langle\psi|-|\phi\rangle\langle\phi|\rVert_1$ for
+the full trace-norm error. Let $\rho$ and $\sigma$ be their reductions to a
+prefix of $L<N$ sites. All logarithms and entropies in this note have base two.
+The von Neumann argument of Schuch, Wolf, Verstraete and
+Cirac~\cite{Schuch2008EntropyScaling} uses $E\le\delta$ to assert
+\begin{align}
+    \log D & \ge S(\rho)-\frac{\delta}{2}L\log d-1.
+    \label{eq:swvc08_vn_printed_bound}
+\end{align}
+For $S(\rho)\ge cL$ and $L\ge\eta N$, it concludes exponential growth
+whenever $\delta<2c/\log d$.\footnote{arXiv:0705.0292v2,
+    \path{paper_v2.tex}, lines 278--305. The conventions allowing unnormalized
+    approximants and optimizing their scalar multiple occur at lines 160--173.}
+The prefix crosses only one bond, so its rank bound is $D$.
+
+The proof applies Audenaert's continuity inequality to density matrices,
+but $\operatorname{tr}\sigma=\lVert\phi\rVert^2$ need not equal one.
+Even $S(\sigma)\le\log D$ fails for an unnormalized rank-one matrix:
+$S(t|u\rangle\langle u|)=-t\log t>0$ for a unit $u$ and $0<t<1$.
+Normalizing $\phi$ preserves its bond dimension but can increase the
+trace-norm error. The argument therefore needs a further justification.
+
+\section{Failure at error greater than one}
+
+Set $N=2L$ and $K=d^L$. In the computational bases of the two halves, take
+\begin{align}
+    \psi & =K^{-1/2}\sum_{j=0}^{K-1}|j\rangle\otimes|j\rangle,
+         & \rho                                                & =K^{-1}I_K,
+         & S(\rho)                                             & =L\log d.
+    \label{eq:swvc08_vn_maximal_prefix}
+\end{align}
+The zero vector has a bond-one matrix product representation and error
+$E=1$. For every $1<\delta<2$, the right side of
+(\ref{eq:swvc08_vn_printed_bound}) is
+$(1-\delta/2)L\log d-1$, which is positive for sufficiently large $L$,
+whereas $\log D=0$.
+
+The failure also occurs for nonzero approximants. For $0<t<\delta-1$,
+the product vector $\phi=\sqrt t\,|0\rangle^{\otimes 2L}$ has bond dimension
+one, and the triangle inequality gives
+$E\le1+t<\delta$. For example, $d=2$, $L=5$, $\delta=3/2$, and $t=1/4$
+give $E\le5/4<3/2$, while (\ref{eq:swvc08_vn_printed_bound}) would require
+$0\ge1/4$. Thus the stated range genuinely fails under the source's
+unnormalized-approximant convention.
+
+\newpage
+\section{A repair for error below one}
+
+Suppose now that $E\le\delta<1$. Then $\phi\ne0$. Put
+$t=\lVert\phi\rVert^2$, $u=\phi/\lVert\phi\rVert$, and
+$f=|\langle\psi,u\rangle|^2$. Diagonalizing the difference of the two
+rank-one matrices on their joint span gives
+\begin{align}
+    E^2 & =(1+t)^2-4tf=(t-(2f-1))^2+4f(1-f).
+    \label{eq:swvc08_vn_pure_error}
+\end{align}
+If $f\le1/2$, the first expression in
+(\ref{eq:swvc08_vn_pure_error}) is at least one. Hence $f>1/2$, and
+\begin{align}
+    1-f & \le\sqrt{f(1-f)}\le\delta/2.
+    \label{eq:swvc08_vn_lost_overlap}
+\end{align}
+This is the small-error branch of the optimized pure-state geometry
+used in~\cite{Schuch2008EntropyScaling}.
+
+Let $r$ be the Schmidt rank of $u$ across the prefix cut; $1\le r\le D$.
+If $r\ge K$, the bound follows from $S(\rho)\le\log K\le\log D$.
+Otherwise let $p$ be the sum of the eigenvalues of $\rho$ outside its
+$r$ largest eigenvalues. The Schmidt overlap bound gives $f\le1-p$,
+so (\ref{eq:swvc08_vn_lost_overlap}) implies $p\le\delta/2$.
+For $0<p<1$, splitting the eigenvalue distribution into these two parts
+gives
+\begin{align}
+    S(\rho)
+     & \le H_2(p)+(1-p)\log r+p\log(K-r)\notag \\
+     & \le\log r+p\log K+1
+    \le\log D+\frac{\delta}{2}L\log d+1.
+    \label{eq:swvc08_vn_entropy_split}
+\end{align}
+Here $H_2(p)=-p\log p-(1-p)\log(1-p)\le1$ is binary entropy.
+If $p=0$, use $S(\rho)\le\log r$ directly. Thus
+(\ref{eq:swvc08_vn_printed_bound}) is valid for $0\le\delta<1$, even
+for unnormalized approximants. This proof uses spectral mass rather than
+applying a density-matrix continuity theorem to $\sigma$.
+
+\section{The qualitative obstruction}
+
+For prefix entropy $S(\rho)\ge cL$ with $L\ge\eta N$, choose
+$0<\delta<\min\{1,2c/\log d\}$. The repaired bound gives
+\begin{align}
+    \log D & \ge\eta\bigl(c-\tfrac12\delta\log d\bigr)N-1.
+    \label{eq:swvc08_vn_growth}
+\end{align}
+Its coefficient of $N$ is positive. Efficient approximation in the
+source requires polynomial bond dimension for every fixed positive
+accuracy~\cite{Schuch2008EntropyScaling}; choosing this small accuracy
+therefore suffices for the von Neumann growth obstruction.
+The qualitative conclusion survives the correction of the finite-error range.
+
+This note gives a mathematical counterexample and repair. It does not
+claim a Lean proof of the pure-state error identity, its combination with
+the entropy split, or the full growth obstruction.\footnote{The remaining
+    formalization is tracked in
+    \href{https://github.com/LionSR/TNLean/issues/9857}{issue 9857}.}
+
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}
