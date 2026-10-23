@@ -5,6 +5,8 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.EntropyScaling.RenyiApproximation
 
+set_option linter.hashCommand false
+
 open TNLean.MPS.AreaLaw
 
 -- Empty and one-site chains need no internal rank hypothesis, even at bond zero.
