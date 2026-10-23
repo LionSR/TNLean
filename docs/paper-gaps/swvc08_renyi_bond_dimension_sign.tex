@@ -1,0 +1,80 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{./command}
+
+\title{The sign of the logarithmic error term in the SWVC08 R\'enyi
+approximation bound}
+\author{}
+\date{2026-10-23}
+
+\begin{document}
+\maketitle
+\gapnote{local-correction}{resolved}
+
+\section{The source passage}
+
+Schuch--Wolf--Verstraete--Cirac bound the R\'enyi entropy of a target state in
+terms of the bond dimension of an approximating matrix product state
+\cite{Schuch2008EntropyScaling}. Let $\psi$ be a unit vector on a chain and let
+$\phi$ be an open-boundary matrix product state of bond dimension at most $D$,
+with
+\begin{align}
+    \bigl\lVert\ketbra{\psi}{\psi}-\ketbra{\phi}{\phi}\bigr\rVert_1
+        &\le\delta,
+    \qquad \delta<1.
+    \label{eq:swvc08_renyi_bond_dimension_sign_error}
+\end{align}
+For a prefix cut after $0<k<L$ sites, let $\rho_k$ be the reduced density matrix
+of $\psi$ on the first $k$ sites. For $\alpha>1$ the source derives a
+logarithmic R\'enyi lower bound.\footnote{Source:
+\cite{Schuch2008EntropyScaling}, Eq.~(eps-lower), lines~269--270 and~333--345.}
+
+\section{The deviation}
+
+The reduced matrix $\rho_{\phi,k}$ of the approximant has rank at most $D$, and
+the partial trace contracts the full trace-norm error, so
+\begin{align}
+    \bigl\lVert\rho_k-\rho_{\phi,k}\bigr\rVert_1
+        &\le\delta.
+    \label{eq:swvc08_renyi_bond_dimension_sign_reduced_error}
+\end{align}
+The finite-dimensional R\'enyi approximation inequality then gives
+\begin{align}
+    S_\alpha(\rho_k)+\frac{\alpha}{\alpha-1}\log(1-\delta)
+        &\le\log D.
+    \label{eq:swvc08_renyi_bond_dimension_sign_corrected}
+\end{align}
+Because $\delta<1$, the term $\log(1-\delta)$ is nonpositive, so moving it to the
+right side weakens the bound: the correction can only raise the admissible
+R\'enyi entropy. The source prints the logarithmic error term with the opposite
+sign relative to~\eqref{eq:swvc08_renyi_bond_dimension_sign_corrected}, which
+would instead tighten the bound and make it false for approximants of positive
+error. The correction is purely in the sign of this additive term; the bond
+dimension $\log D$ and the entropy order $\alpha$ are unchanged.
+
+\section{Affected declarations}
+
+The corrected prefix bound is
+\leanid{TNLean.MPS.AreaLaw.IsOpenMPS.renyiEntropy_leftBlock_add_log_error_le_log},
+in \doclink{TNLean/MPS/AreaLaw/EntropyScaling/RenyiApproximationLowerBound}. The
+finite-chain obstruction in
+\doclink{TNLean/MPS/AreaLaw/EntropyScaling/RenyiObstruction} inherits the
+corrected sign. The blueprint records the correction at
+\path{thm:chain_cut_renyi_approximation_lower_bound}.
+
+\section{Conclusion}
+
+The verdict is a local correction. The source's qualitative claim --- a
+logarithmic R\'enyi lower bound controlled by the bond dimension --- is
+unchanged; only the sign of the additive logarithmic error term is corrected so
+that the inequality holds for approximants of positive trace-norm error.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
