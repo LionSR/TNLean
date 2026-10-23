@@ -20,11 +20,14 @@ This file first states the bound with Lemma 1 in the form `IsFactorizationAt` in
 produced, at the cut `j` and every length `m`, and then discharges Lemma 1 by
 `exists_projectorFactorization_endpoint`. The result is a quantitatively restricted Lemma 2 on
 Hastings' own hypotheses: a chain Hamiltonian of finite range and finite interaction strength with
-a unique gapped ground state. With `ζ = lemmaOneEndpointLength R J ΔE` the length of Lemma 1, the
-bound holds at the printed rate `ξ' = 6ζ` (lines 139–142) with the constant `C₁ = K ζ³`, where
-`K` depends only on the range. So `C₁` is bounded by a polynomial in the length, as the source
-requires (lines 258–262), and is uniform in the chain length, local dimension, Hamiltonian,
-ground state, cut and mixture.
+a unique gapped ground state. With `ζ = lemmaOneEndpointLength R J ΔE = (5/4) ξ̂` the length of
+Lemma 1 at the printed rate, the bound holds at `ξ' = 6ζ` (lines 139–142) with the constant
+`C₁ = K ζ³`, where `K` depends only on the range. The length `ζ` may stand in for the source's
+`ξ`: the source fixes `ξ = max(2v/ΔE, ξ_C)` only through some Lieb–Robinson pair, and a bound
+valid for `|t| ≤ l/v` stays valid for a larger velocity (lines 96–112), so raising the chain
+velocity by `5/4` is a legitimate choice. The constant `C₁` is bounded by a polynomial in the
+length, as the source requires (lines 258–262), and is uniform in the chain length, local
+dimension, Hamiltonian, ground state, cut and mixture.
 
 The source's sites carry nearest-neighbour terms (lines 85–93), which it obtains from any
 finite range by grouping sites; here the range `R` is arbitrary.

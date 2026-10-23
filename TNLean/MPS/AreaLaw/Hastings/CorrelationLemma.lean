@@ -21,11 +21,15 @@ This file discharges the factorization hypothesis of `norm_inner_mul_sub_le_of_f
 the positive form of Lemma 1 at the printed rate,
 `exists_projectorFactorization_posSemidef_endpoint`. The result is a quantitatively restricted
 Lemma 3 on Hastings' own hypotheses: a chain Hamiltonian of finite range and finite interaction
-strength with a unique gapped ground state. With `ζ = lemmaOneEndpointLength R J ΔE` the length
-of Lemma 1 and `ξ' = 6ζ` the printed rate (lines 139–142), the constant is `C₁ = K ζ³` with `K`
-depending only on the range, so it is bounded by a polynomial in the length (lines 258–262) and
-does not depend on the length of the chain, the cut, the Schmidt data or `A`. The bound is on
-the modulus of the difference, which is stronger than the printed one-sided bound.
+strength with a unique gapped ground state. With `ζ = lemmaOneEndpointLength R J ΔE = (5/4) ξ̂`
+the length of Lemma 1 at the printed rate and `ξ' = 6ζ` (lines 139–142), the constant is
+`C₁ = K ζ³` with `K` depending only on the range. The length `ζ` may stand in for the source's
+`ξ`: the source fixes `ξ = max(2v/ΔE, ξ_C)` only through some Lieb–Robinson pair, and a bound
+valid for `|t| ≤ l/v` stays valid for a larger velocity (lines 96–112), so raising the chain
+velocity by `5/4` is a legitimate choice. The constant `C₁` is bounded by a polynomial in the
+length (lines 258–262) and does not depend on the length of the chain, the cut, the Schmidt data
+or `A`. The bound is on the modulus of the difference, which is stronger than the printed
+one-sided bound.
 
 **Local fix (positivity rate):** the proof of Lemma 3 needs `O_B` positive, and the positive
 form of Lemma 1 decays at half its rate, so eq. `fwdback` holds with
