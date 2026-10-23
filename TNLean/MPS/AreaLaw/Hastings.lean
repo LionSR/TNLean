@@ -8,6 +8,7 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.MPS.AreaLaw.Hastings
 
+import TNLean.MPS.AreaLaw.Hastings.AreaLaw
 import TNLean.MPS.AreaLaw.Hastings.BoundaryFactorization
 import TNLean.MPS.AreaLaw.Hastings.BoundaryLocalization
 import TNLean.MPS.AreaLaw.Hastings.ChainBootstrap
@@ -19,13 +20,18 @@ import TNLean.MPS.AreaLaw.Hastings.DecaySlack
 import TNLean.MPS.AreaLaw.Hastings.Doubling
 import TNLean.MPS.AreaLaw.Hastings.EffectExpectation
 import TNLean.MPS.AreaLaw.Hastings.EffectFromFactorization
+import TNLean.MPS.AreaLaw.Hastings.FactorizationBudget
 import TNLean.MPS.AreaLaw.Hastings.GaussianTimeAverage
 import TNLean.MPS.AreaLaw.Hastings.InteractionPicture
 import TNLean.MPS.AreaLaw.Hastings.IntervalMutualInformation
+import TNLean.MPS.AreaLaw.Hastings.MPSFromEntropy
 import TNLean.MPS.AreaLaw.Hastings.MainTheorem
+import TNLean.MPS.AreaLaw.Hastings.MovedEstimate
 import TNLean.MPS.AreaLaw.Hastings.PartCommutators
 import TNLean.MPS.AreaLaw.Hastings.PositiveFactorization
+import TNLean.MPS.AreaLaw.Hastings.PowerExponential
 import TNLean.MPS.AreaLaw.Hastings.ProductStateExpectation
+import TNLean.MPS.AreaLaw.Hastings.ProjectorFactorization
 import TNLean.MPS.AreaLaw.Hastings.ProjectorOverlap
 import TNLean.MPS.AreaLaw.Hastings.RelativeEntropyGain
 import TNLean.MPS.AreaLaw.Hastings.RelentAssembly
@@ -34,10 +40,12 @@ import TNLean.MPS.AreaLaw.Hastings.SchmidtDiagonalChain
 import TNLean.MPS.AreaLaw.Hastings.SchmidtDiagonalCorrelation
 import TNLean.MPS.AreaLaw.Hastings.SchmidtDiagonalOperators
 import TNLean.MPS.AreaLaw.Hastings.SchmidtRankBootstrap
+import TNLean.MPS.AreaLaw.Hastings.SchmidtRankRenyiBootstrap
 import TNLean.MPS.AreaLaw.Hastings.SchmidtTail
 import TNLean.MPS.AreaLaw.Hastings.SchmidtTailConstraint
 import TNLean.MPS.AreaLaw.Hastings.SchmidtTailMPS
 import TNLean.MPS.AreaLaw.Hastings.SpectralCutoff
 import TNLean.MPS.AreaLaw.Hastings.TailEntropy
+import TNLean.MPS.AreaLaw.Hastings.TailRenyiEntropy
 import TNLean.MPS.AreaLaw.Hastings.ThreeWaySplitting
 import TNLean.MPS.AreaLaw.Hastings.Window
