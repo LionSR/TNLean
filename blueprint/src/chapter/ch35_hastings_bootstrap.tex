@@ -382,8 +382,8 @@ of a gapped chain combines them with the factorization of
     Theorem~\ref{thm:hastings_bootstrap_chain_stage}.
 \end{proof}
 
-\begin{lemma}[The bootstrap lemma]
-    \label{lem:hastings_bootstrap}
+\begin{theorem}[The bootstrap lemma]
+    \label{thm:hastings_bootstrap}
     \lean{TNLean.MPS.AreaLaw.exists_entropy_le_of_overlap_schmidtRank_mixture}
     \leanok
     \uses{def:chain_model, def:hastings_bootstrap_remainder}
@@ -409,7 +409,7 @@ of a gapped chain combines them with the factorization of
     bound holds for every $\xi'>6\xi$
     \cite{gap:hastings07_lemma1_decay_length,
         gap:hastings07_gaussian_average_exponent}.
-\end{lemma}
+\end{theorem}
 \begin{proof}\leanok
     \uses{thm:hastings_projector_factorization,
         thm:hastings_bootstrap_factorization_at}
