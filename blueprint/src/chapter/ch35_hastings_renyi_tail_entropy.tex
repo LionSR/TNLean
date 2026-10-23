@@ -11,15 +11,15 @@ order $\alpha$. For $\alpha\ge1$ the Rényi entropy is at most the von Neumann
 entropy, so the content of the extension lies in the orders $0<\alpha<1$ for
 which the relevant geometric series converges.
 
-\begin{lemma}[Power sums on a finite set]
-    \label{lem:hastings_power_sum_card}
+\begin{theorem}[Power sums on a finite set]
+    \label{thm:hastings_power_sum_card}
     \lean{TNLean.MPS.AreaLaw.Hastings.sum_rpow_le_card_rpow_mul_sum_rpow}
     \leanok
     Let $p_1,\dots,p_c\ge0$ and $0\le\alpha\le1$. Then
     \begin{align*}
         \sum_{i=1}^cp_i^\alpha\le c^{1-\alpha}\Bigl(\sum_{i=1}^cp_i\Bigr)^\alpha.
     \end{align*}
-\end{lemma}
+\end{theorem}
 \begin{proof}\leanok
     The map $t\mapsto t^\alpha$ is concave on $[0,\infty)$, so by Jensen's
     inequality the mean of the $p_i^\alpha$ is at most the $\alpha$-th power of
@@ -58,11 +58,11 @@ which the relevant geometric series converges.
     drops that factor, so the bound here is slightly weaker but of the same form.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{lem:hastings_power_sum_card}
+    \uses{thm:hastings_power_sum_card}
     Group the indices into the block $[0,K)$ and the blocks
     $[KD^{2(n-1)},KD^{2n})$ for $n\ge1$. The $n$-th block has at most $KD^{2n}$
     entries and mass at most $x^n$: for $n\ge1$ by the tail constraint at
-    $n-1$, and for $n=0$ because the total mass is $1$. Lemma~\ref{lem:hastings_power_sum_card} bounds
+    $n-1$, and for $n=0$ because the total mass is $1$. Theorem~\ref{thm:hastings_power_sum_card} bounds
     its contribution to $\sum_ap_a^\alpha$ by
     $(KD^{2n})^{1-\alpha}x^{n\alpha}=K^{1-\alpha}r^n$, so
     $\sum_ap_a^\alpha\le K^{1-\alpha}/(1-r)$. Taking logarithms and dividing by

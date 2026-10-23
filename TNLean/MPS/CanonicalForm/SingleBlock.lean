@@ -71,7 +71,7 @@ noncomputable def CPSVCanonicalFormIIData.ofNormalLeftCanonical {A : MPSTensor d
             (fun _ : Fin 1 => (1 : ℂ)) (fun _ : Fin 1 => A) i * V) := by
               rw [hmul', Matrix.mul_assoc]
       _ = (Vᴴ * MPSTensor.toTensorFromBlocks (fun _ : Fin 1 => (1 : ℂ))
-            (fun _ : Fin 1 => A) i) * V := by
-              exact (Matrix.mul_assoc Vᴴ _ V).symm
+            (fun _ : Fin 1 => A) i) * V :=
+              (Matrix.mul_assoc Vᴴ _ V).symm
 
 end MPSTensor

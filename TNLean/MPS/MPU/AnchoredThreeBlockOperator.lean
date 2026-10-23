@@ -55,11 +55,6 @@ private def threeTupleEquiv (B : Type*) :
     ((Equiv.refl B).prodCongr (finTwoArrowEquiv B).symm)).trans
     (Fin.consEquiv fun _ : Fin 3 => B)
 
-private theorem threeTupleEquiv_apply (B : Type*) (b₀ b₁ b₂ : B) :
-    threeTupleEquiv B ((b₀, b₁), b₂) = ![b₀, b₁, b₂] := by
-  funext t
-  fin_cases t <;> rfl
-
 /-- The three direct physical blocks on the output side, parametrized by the
 four neighboring half-blocks and the two exposed exterior half-blocks.
 Source context: arXiv:1703.09188, `StandardForm`, lines 603--622. -/
