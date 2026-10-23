@@ -1,0 +1,85 @@
+\section{The single-cluster bound in Hastings' cluster expansion}
+\label{sec:hastings_single_cluster_bound}
+
+% Hastings, arXiv:cond-mat/0508554v3, proj3new.tex, lines 1141--1175 (eq. ddb).
+
+The cluster expansion of \cite{Hastings2006Solving} bounds the contribution of a
+cluster of interaction terms to a thermal expectation value by removing those
+terms from the Hamiltonian. The source estimates the resulting trace by a Dyson
+expansion in imaginary-time evolved operators. The same inequality follows from
+the monotonicity of the trace of the exponential in the order of Hermitian
+matrices, and this is the proof given here. Throughout, $\|\cdot\|$ is the
+operator norm.
+
+\begin{theorem}[Monotonicity of the trace of the exponential]
+    \label{thm:trace_exp_monotone}
+    \lean{Matrix.IsHermitian.re_trace_exp_eq_sum, Matrix.IsHermitian.re_trace_exp_le}
+    \leanok
+    Let $A\le B$ be Hermitian matrices. Then
+    $\operatorname{tr}e^{A}\le\operatorname{tr}e^{B}$.
+\end{theorem}
+\begin{proof}\leanok
+    The trace of $e^{A}$ is $\sum_j e^{\lambda_j(A)}$, where
+    $\lambda_1(A)\ge\lambda_2(A)\ge\cdots$ are the eigenvalues of $A$ in
+    decreasing order. By Weyl's monotonicity theorem $\lambda_j(A)\le\lambda_j(B)$
+    for every $j$, and the exponential is increasing.
+\end{proof}
+
+\begin{theorem}[A Hermitian perturbation in the exponent]
+    \label{thm:trace_exp_add_le}
+    \lean{Matrix.exp_add_smul_one, Matrix.IsHermitian.re_trace_exp_add_le}
+    \leanok
+    \uses{thm:trace_exp_monotone}
+    Let $X$ and $V$ be Hermitian matrices. Then
+    $\operatorname{tr}e^{X+V}\le e^{\|V\|}\operatorname{tr}e^{X}$.
+\end{theorem}
+\begin{proof}\leanok
+    Since $V\le\|V\|\,\mathbb{1}$, we have $X+V\le X+\|V\|\,\mathbb{1}$, and
+    Theorem~\ref{thm:trace_exp_monotone} gives
+    $\operatorname{tr}e^{X+V}\le\operatorname{tr}e^{X+\|V\|\mathbb{1}}
+        =e^{\|V\|}\operatorname{tr}e^{X}$, because the identity commutes with $X$.
+\end{proof}
+
+\begin{theorem}[The bound for one perturbation]
+    \label{thm:hastings_single_perturbation}
+    \lean{TNLean.Lattice.ClusterExpansion.norm_trace_mul_exp_sub_le}
+    \leanok
+    \uses{thm:trace_exp_add_le}
+    Let $H$ and $V$ be Hermitian matrices, let $O$ be any matrix of the same size,
+    and let $\beta\ge0$. Then
+    \begin{align}
+        \bigl|\operatorname{tr}\bigl(Oe^{-\beta(H-V)}\bigr)\bigr|
+        \le\|O\|\,e^{\beta\|V\|}\operatorname{tr}e^{-\beta H}.
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    The matrix $e^{-\beta(H-V)}$ is positive semidefinite, so
+    $|\operatorname{tr}(Oe^{-\beta(H-V)})|\le\|O\|\operatorname{tr}e^{-\beta(H-V)}$.
+    Theorem~\ref{thm:trace_exp_add_le} with $X=-\beta H$ and the perturbation
+    $\beta V$, of norm $\beta\|V\|$, bounds the last trace by
+    $e^{\beta\|V\|}\operatorname{tr}e^{-\beta H}$.
+\end{proof}
+
+\begin{theorem}[The single-cluster bound]
+    \label{thm:hastings_single_cluster_bound}
+    \lean{TNLean.Lattice.ClusterExpansion.inv_mul_norm_trace_mul_exp_sub_sum_le}
+    \leanok
+    \uses{thm:hastings_single_perturbation}
+    Let $H$ be a Hermitian matrix, let $\beta\ge0$, and let
+    $Z=\operatorname{tr}e^{-\beta H}$. Let $T$ be a finite set and, for each
+    $k\in T$, let $H_k$ be a Hermitian matrix with $\|H_k\|\le J$. Then for every
+    matrix $O$,
+    \begin{align}
+        Z^{-1}\Bigl|\operatorname{tr}\Bigl(O\exp\Bigl[-\beta\Bigl(H-\sum_{k\in T}H_k
+            \Bigr)\Bigr]\Bigr)\Bigr|\le\|O\|\,e^{|T|J\beta}.
+    \end{align}
+    With $T$ the union of a cluster $C$ of $n_C$ sites and its boundary $B(C)$ of
+    $n_{B(C)}$ sites, so that $\sum_{k\in T}H_k=H_C+H_{B(C)}$, this is
+    eq.~(ddb) of~\cite[lines 1141--1175]{Hastings2006Solving}.
+\end{theorem}
+\begin{proof}\leanok
+    By the triangle inequality $\|\sum_{k\in T}H_k\|\le|T|J$, and
+    Theorem~\ref{thm:hastings_single_perturbation} applies with
+    $V=\sum_{k\in T}H_k$; dividing by $Z$, which is positive for matrices of
+    positive size, gives the claim.
+\end{proof}
