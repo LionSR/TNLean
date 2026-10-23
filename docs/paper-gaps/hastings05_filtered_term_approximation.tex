@@ -85,6 +85,35 @@ This operator has the three properties the source uses.
     localization term in place of $N(l)g(c_1l,l)$.
 \end{itemize}
 
+\section{The commutator with a separated operator}
+
+In the degenerate case (Appendix~B, lines~1535--1708) the source bounds the
+commutator of a filtered term $\tilde M_i^0$ with an operator $M_j$ whose
+support lies at distance $l$ from that of $M_i$ (eq.~\texttt{lc},
+lines~1548--1561):
+\begin{align}
+  \lVert[\tilde M_i^0,M_j]\rVert\le
+  J^2\bigl(N_Mg(c_1l,l)+2e^{-(c_1l\Delta E)^2/(2q)}\bigr),
+  \label{eq:lc}
+\end{align}
+with $N_M$ the number of sites acted on by $M_j$; this is the Lieb--Robinson
+bound applied site by site. The formalization instead uses the partial trace of
+the previous section: $\mathbb E_K(\tilde M_i^0)$, with $K$ the set of sites
+within graph distance $l$ of the support of $M_i$, acts on $K$ and therefore
+commutes with $M_j$, so
+\begin{align}
+  \lVert[\tilde M_i^0,M_j]\rVert
+  =\lVert[\tilde M_i^0-\mathbb E_K(\tilde M_i^0),M_j]\rVert
+  \le2\lVert M_j\rVert\,\lVert\tilde M_i^0-\mathbb E_K(\tilde M_i^0)\rVert,
+  \label{eq:lc-pt}
+\end{align}
+and~\eqref{eq:apb-pt} bounds the right side. The term $N_Mg(c_1l,l)$
+of~\eqref{eq:lc} is replaced by the localization term
+of~\eqref{eq:apb-pt}, which does not depend on the size of the support of
+$M_j$. The rest of the argument for eq.~\texttt{blecm} (lines~1562--1601) is
+unchanged: it uses~\eqref{eq:lc} only through an upper bound on
+$\lVert[\tilde M_i^0,M_j]\rVert$ that decays exponentially in $l$.
+
 \section{Formalization}
 
 \leanid{TNLean.Lattice.exists_local_approx_gaussianFilteredTerm} gives an
@@ -96,6 +125,10 @@ as input,
 \leanid{TNLean.Lattice.norm_apply_sub_inner_smul_le_of_gaussianFilteredTerm}
 and \leanid{TNLean.Lattice.norm_sum_sub_le_of_sum_eq}, hold for every operator
 $M$, so they apply to the source's truncated evolution as well.
+\leanid{TNLean.Lattice.norm_commutator_gaussianFilteredTerm_le_of_disjoint}
+proves~\eqref{eq:lc-pt} with the bound~\eqref{eq:apb-pt}, and
+\leanid{TNLean.Lattice.norm_groundCompression_commutator_le_graphNeighborhood}
+combines it with the triangle inequality of lines~1562--1593.
 
 \bibliographystyle{plain}
 \bibliography{references}
