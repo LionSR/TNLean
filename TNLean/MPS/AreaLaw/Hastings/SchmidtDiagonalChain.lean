@@ -20,7 +20,8 @@ chain of `L` sites with `q` states per site, with the operators of Lemma 1 taken
 hypothesis. Let `Ω = ∑ α, a α ψ_L(α) ⊗ ψ_R(α)` be a Schmidt decomposition across the cut after
 `j` sites, let `B_L = ∑ α, O α |ψ_L(α)⟩⟨ψ_L(α)| ⊗ 1` with `|O α| ≤ 1`, and let `A` be a
 contraction supported in the first `j - l` sites or the last `L - j - l` sites, that is, away
-from the buffer `[j - l, j + l)`. Then `|⟨Ω, A B_L Ω⟩ − ⟨Ω, A Ω⟩⟨Ω, B_L Ω⟩| ≤ 3 √(2ε) + ε`, eq. `fwdback`.
+from the buffer `[j - l, j + l)`. Then `|⟨Ω, A B_L Ω⟩ − ⟨Ω, A Ω⟩⟨Ω, B_L Ω⟩| ≤ 3 √(2ε) + ε`,
+eq. `fwdback`.
 
 The operator estimate is
 `TNLean.MPS.AreaLaw.Hastings.norm_inner_sub_le_of_projector_factorization`. This file supplies
