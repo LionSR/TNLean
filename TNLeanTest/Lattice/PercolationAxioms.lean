@@ -12,6 +12,7 @@ import Lean.Util.CollectAxioms
 run_cmd do
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
   for decl in #[``TNLean.Lattice.sum_powersetCard_prod_le,
+    ``TNLean.Lattice.sum_nonempty_powerset_prod_eq,
     ``TNLean.Lattice.sum_nonempty_powerset_prod_le_exp,
     ``TNLean.Lattice.sum_pow_le_of_forall_lt, ``TNLean.Lattice.sum_pow_le_of_card_le,
     ``TNLean.Lattice.pow_succ_div_one_sub_le, ``TNLean.Lattice.pow_eq_exp_neg_div,

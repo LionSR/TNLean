@@ -35,8 +35,9 @@ the interaction range" (line 1250).
 
 * `TNLean.Lattice.sum_powersetCard_prod_le`: the families of `m` clusters contribute at most
   `(∑_C a_C)^m / m!` (the bound on `ρ_m`, line 1210).
-* `TNLean.Lattice.sum_nonempty_powerset_prod_le_exp`: all nonempty families together contribute
-  at most `exp(∑_C a_C) − 1`.
+* `TNLean.Lattice.sum_nonempty_powerset_prod_eq`,
+  `TNLean.Lattice.sum_nonempty_powerset_prod_le_exp`: all nonempty families together contribute
+  `∏_C (1 + a_C) − 1 ≤ exp(∑_C a_C) − 1`.
 * `TNLean.Lattice.sum_pow_le_of_card_le`: `∑_C y^{n_C} ≤ N (xy)^{l+1} / (1 − xy)` from the count
   of clusters by size.
 * `TNLean.Lattice.sum_nonempty_powerset_prod_le_percolation`: the percolation bound
@@ -123,13 +124,18 @@ theorem sum_powersetCard_prod_le {T : Finset ι} {a : ι → ℝ} (ha : ∀ i �
 
 variable [DecidableEq ι]
 
+/-- The sum over the nonempty subsets `U ⊆ T` of `∏_{i ∈ U} a_i` is `∏_{i ∈ T} (1 + a_i) − 1`. -/
+theorem sum_nonempty_powerset_prod_eq (T : Finset ι) (a : ι → ℝ) :
+    ∑ U ∈ T.powerset.erase ∅, ∏ i ∈ U, a i = ∏ i ∈ T, (1 + a i) - 1 := by
+  rw [sum_erase_eq_sub (empty_mem_powerset T), ← prod_one_add, prod_empty]
+
 /-- **All nonempty families of clusters.** For nonnegative weights `a` on a finite set `T`, the sum
 over the nonempty subsets `U ⊆ T` of `∏_{i ∈ U} a_i` equals `∏_{i ∈ T} (1 + a_i) − 1`, and is at
 most `exp(∑_{i ∈ T} a_i) − 1`. This is the inclusion–exclusion sum `∑_{m ≥ 1} ρ_m` of Hastings,
 arXiv:cond-mat/0508554v3, `proj3new.tex`, lines 1196–1225, estimated as at lines 1238–1241. -/
 theorem sum_nonempty_powerset_prod_le_exp {T : Finset ι} {a : ι → ℝ} (ha : ∀ i ∈ T, 0 ≤ a i) :
     ∑ U ∈ T.powerset.erase ∅, ∏ i ∈ U, a i ≤ exp (∑ i ∈ T, a i) - 1 := by
-  rw [sum_erase_eq_sub (empty_mem_powerset T), ← prod_one_add, prod_empty, exp_sum]
+  rw [sum_nonempty_powerset_prod_eq, exp_sum]
   have := prod_le_prod₀ (s := T) (f := fun i ↦ 1 + a i) (g := fun i ↦ exp (a i))
     (fun i hi ↦ by linarith [ha i hi]) fun i _ ↦ by linarith [add_one_le_exp (a i)]
   linarith
