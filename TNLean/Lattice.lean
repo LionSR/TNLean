@@ -8,7 +8,6 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.Lattice
 
-import TNLean.Lattice.ClusterExpansion
 import TNLean.Lattice.Compression
 import TNLean.Lattice.CrossingSupports
 import TNLean.Lattice.EntropyComparison
