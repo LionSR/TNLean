@@ -178,9 +178,10 @@ only to order of magnitude, are not formalized.
     $P\widetilde WP=PWP$,
     $\|(1-P)\widetilde WP\|\le\|W\|e^{-q/2}$,
     $\|P\widetilde W(1-P)\|\le\|W\|e^{-q/2}$, and
-    \begin{align*}
+    \begin{align}
         \|[PWP,PBP]\|\le\|[\widetilde W,B]\|+2\|W\|\,\|B\|\,e^{-q/2}.
-    \end{align*}
+        \label{eq:hastings05_low_energy_bound}
+    \end{align}
     With $W=M_i$ and $B=M_j$ this is the triangle inequality
     of~\cite[lines 1562--1593]{Hastings2006Solving}.
 \end{theorem}
@@ -190,10 +191,11 @@ only to order of magnitude, are not formalized.
     the excited component of $\widetilde W\psi$ applied to $\psi=Px$, and the
     third follows by taking adjoints, since the adjoint of $\widetilde W$ is
     the filtered operator of $W^\dagger$. Writing $Q=1-P$,
-    \begin{align*}
+    \begin{align}
         [P\widetilde WP,PBP]=P[\widetilde W,B]P-P\widetilde WQBP
         +PBQ\widetilde WP,
-    \end{align*}
+        \label{eq:hastings05_compressed_commutator_split}
+    \end{align}
     and $\|P\|\le1$.
 \end{proof}
 
@@ -205,10 +207,11 @@ only to order of magnitude, are not formalized.
     Under the assumptions of
     Theorem~\ref{thm:hastings05_filtered_approximation_graph}, let $W$ act on
     $S$ and $B$ on a set disjoint from $N_l(S)$. Assume $q>0$. Then
-    \begin{align*}
+    \begin{align}
         \|[\widetilde W,B]\|\le2\|B\|\Bigl(C|S|^2\,\|W\|\,K_gT_k\,e^{vT-l/2}
         +2\|W\|\,e^{-(T\Delta E)^2/(2q)}\Bigr)
-    \end{align*}
+        \label{eq:hastings05_separated_commutator}
+    \end{align}
     for every $T\ge0$. At $q=0$, the bound holds with $\widetilde W=W$
     and the Gaussian tail factor replaced by $1$.
     This is an analogue of the separated-operator bound
@@ -231,17 +234,19 @@ only to order of magnitude, are not formalized.
     \uses{thm:hastings05_low_energy_commutator,thm:hastings05_lc}
     Under the assumptions of Theorem~\ref{thm:hastings05_lc}, with
     $H=\sum_kh_k$ gapped as above,
-    \begin{align*}
+    \begin{align}
         \|[PWP,PBP]\|\le2\|B\|\Bigl(C|S|^2\,\|W\|\,K_gT_k\,e^{vT-l/2}
         +2\|W\|\,e^{-(T\Delta E)^2/(2q)}\Bigr)+2\|W\|\,\|B\|\,e^{-q/2}.
-    \end{align*}
+        \label{eq:hastings05_separated_compression}
+    \end{align}
     At $q=0$, replace the Gaussian tail factor by $1$ and set
     $\widetilde W=W$. For $l>0$, choose $c_1>0$ with $vc_1<1/2$, and set
-    $T=c_1l$ and $q=c_1l\Delta E$. The displayed upper bound becomes
-    \begin{align*}
+    $T=c_1l$ and $q=c_1l\Delta E$. The right-hand side of~(\ref{eq:hastings05_separated_compression}) becomes
+    \begin{align}
         2C|S|^2\|W\|\,\|B\|K_gT_k e^{-(1/2-vc_1)l}
         +6\|W\|\,\|B\|e^{-c_1l\Delta E/2}.
-    \end{align*}
+        \label{eq:hastings05_exponential_commutator_decay}
+    \end{align}
     For fixed prefactors this decays exponentially in $l$. With $W=M_i$
     and $B=M_j$, it is an analogue of the low-energy estimate
     in~\cite[lines 1562--1601]{Hastings2006Solving}, with the different
@@ -259,9 +264,10 @@ only to order of magnitude, are not formalized.
     \leanok
     Let $A$ be self-adjoint with $Av=rv$ and $Aw=sw$ for real $r\ne s$. Then
     for every operator $B$,
-    \begin{align*}
+    \begin{align}
         |\langle v,Bw\rangle|\le\frac{\|[A,B]\|\,\|v\|\,\|w\|}{|r-s|}.
-    \end{align*}
+        \label{eq:hastings05_offdiagonal_bound}
+    \end{align}
     With $A=PM_jP$, $B=PM_iP$ and $v$, $w$ unit ground vectors, this is the
     bound $o(i)\le\|[PM_iP,PM_jP]\|/\delta\lambda_j$
     of~\cite[lines 1678--1690]{Hastings2006Solving} on the off-diagonal
