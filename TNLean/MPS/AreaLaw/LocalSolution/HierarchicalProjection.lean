@@ -192,8 +192,9 @@ theorem norm_inv_norm_smul_sub_le {E : Type*} [NormedAddCommGroup E] [NormedSpac
     _ ≤ 2 * ‖v - ψ‖ := by rw [h1]; linarith
 
 /-- **Normalizing the image under an orthogonal projection.** For an orthogonal projection `Q`
-and a unit vector `ψ`, `‖Q ψ / ‖Q ψ‖ - ψ‖² ≤ 2 ‖ψ - Q ψ‖²`: the left side is `2 - 2 ‖Q ψ‖` and
-the right side `2 - 2 ‖Q ψ‖²`. -/
+and a unit vector `ψ`, `‖Q ψ / ‖Q ψ‖ - ψ‖² ≤ 2 ‖ψ - Q ψ‖²`. If `Q ψ ≠ 0`,
+the left side is `2 - 2 ‖Q ψ‖` and the right side `2 - 2 ‖Q ψ‖²`. If `Q ψ = 0`,
+the normalized image is interpreted as zero, and the inequality is `1 ≤ 2`. -/
 theorem norm_inv_norm_smul_toEuclideanLin_sub_sq_le {Q : Matrix ι ι ℂ}
     (hQ : IsStarProjection Q) {ψ : EuclideanSpace ℂ ι} (hψ : ‖ψ‖ = 1) :
     ‖((‖toEuclideanLin Q ψ‖⁻¹ : ℝ) : ℂ) • toEuclideanLin Q ψ - ψ‖ ^ 2 ≤
@@ -432,9 +433,10 @@ end Perturbation
 
 section Recursion
 
-/-- The deficiencies of the levels of the hierarchy, arXiv:cond-mat/0508554v3, `proj3new.tex`,
+/-- The scalar recurrence stated for the deficiencies in arXiv:cond-mat/0508554v3, `proj3new.tex`,
 lines 696–704: `b₀ = 0` and `b_{m+1} = (ε + a b_m)^s`. The source takes `a = 2` and
-`s = 1 - 1/h`, so that `b₁ = ε^{1 - 1/h}`. -/
+`s = 1 - 1/h`, so that `b₁ = ε^{1 - 1/h}`. Identifying this sequence with the
+deficiencies of the complete hierarchy remains open; see the module docstring. -/
 noncomputable def levelDeficiency (ε a s : ℝ) : ℕ → ℝ
   | 0 => 0
   | m + 1 => (ε + a * levelDeficiency ε a s m) ^ s

@@ -108,6 +108,16 @@ they do not identify it with deficiencies beyond the second level.
 
 \section{The residual and the recursion}
 
+The centres in the source's second-level calculation differ: the spectral
+window is centred at $c=\langle\Psi_a,M\Psi_a\rangle$ (line 681), whereas
+the displayed residual uses $c'=\langle\Psi^1_a,M\Psi^1_a\rangle$
+(lines 692--694). A residual bound about $c'$ alone does not give the same
+bound about $c$: the triangle inequality adds $|c'-c|$ for a unit vector.
+The formalized perturbation estimate instead keeps $c$ fixed throughout,
+as required by that spectral window. Its coefficient is $\lVert M-c\rVert$;
+identifying it with the printed $J l_{\mathrm{proj}}$ requires the
+corresponding operator-norm bound.
+
 For any vectors $\phi,\psi$,
 $\lVert N\phi\rVert\le\lVert N\psi\rVert+\lVert N\rVert\,\lVert\phi-\psi\rVert$,
 and $\lVert N\rVert\le\lVert M\rVert+|c|\le2\lVert M\rVert$ since
