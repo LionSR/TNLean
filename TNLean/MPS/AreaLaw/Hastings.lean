@@ -38,10 +38,12 @@ import TNLean.MPS.AreaLaw.Hastings.SchmidtDiagonalChain
 import TNLean.MPS.AreaLaw.Hastings.SchmidtDiagonalCorrelation
 import TNLean.MPS.AreaLaw.Hastings.SchmidtDiagonalOperators
 import TNLean.MPS.AreaLaw.Hastings.SchmidtRankBootstrap
+import TNLean.MPS.AreaLaw.Hastings.SchmidtRankRenyiBootstrap
 import TNLean.MPS.AreaLaw.Hastings.SchmidtTail
 import TNLean.MPS.AreaLaw.Hastings.SchmidtTailConstraint
 import TNLean.MPS.AreaLaw.Hastings.SchmidtTailMPS
 import TNLean.MPS.AreaLaw.Hastings.SpectralCutoff
 import TNLean.MPS.AreaLaw.Hastings.TailEntropy
+import TNLean.MPS.AreaLaw.Hastings.TailRenyiEntropy
 import TNLean.MPS.AreaLaw.Hastings.ThreeWaySplitting
 import TNLean.MPS.AreaLaw.Hastings.Window

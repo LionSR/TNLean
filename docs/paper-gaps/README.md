@@ -1362,3 +1362,12 @@ pair `(8v₀, 8)`. The factorization constant is uniform in chain length and
 local dimension; the source's polynomial bound in `ξ` (lines 258–262) remains
 unproved, as does the endpoint rate `ξ' = 6ξ`. The note records the required
 estimates and energy-rescaling analysis under the still-open issue #9811.
+
+## Rényi entropy and matrix product state approximation
+
+- [`swvc08_renyi_bond_dimension_sign.tex`](swvc08_renyi_bond_dimension_sign.tex)
+  (false source, resolved) corrects the sign of the error term in the
+  bond-dimension lower bound of Schuch, Wolf, Verstraete and Cirac
+  (arXiv:0705.0292v2). A flat Schmidt spectrum disproves the printed plus
+  sign; the corrected minus sign preserves the obstruction from
+  super-logarithmic entropy growth. The Lean development remains open in #9857.

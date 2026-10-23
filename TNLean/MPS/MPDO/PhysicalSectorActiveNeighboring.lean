@@ -427,14 +427,6 @@ noncomputable abbrev activeRestrictedPhysicalSectorFactorization
     rw [Matrix.one_mul, Matrix.conjTranspose_one, Matrix.mul_one]
     exact F.reindex_physicalSlice_activeRestriction_activeSectors A β α
 
-/-- The active restricted factorization retains exactly the enumerated
-ambient active sector. -/
-@[simp] theorem activeRestrictedPhysicalSectorFactorization_sector
-    (F : PhysicalSectorFactorization K) (_A : ActiveFactorSupportData F)
-    (j : Fin F.activeSectorCount) :
-    F.IsActiveSector (F.activeSectorFinEquiv j).1 :=
-  (F.activeSectorFinEquiv j).2
-
 /-- The neighboring operator of the restricted factorization is the
 compressed neighboring operator of the corresponding ambient active
 sectors. -/

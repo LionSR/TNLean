@@ -94,8 +94,8 @@ theorem exists_distinguished_grouped_reference_corner
     (congrArg (fun k ↦ Matrix (Fin d) (Fin k) ℂ) h0q)
     (V ((C).enum j q0))
   let c0 := μ ((C).repr j) * ζ j q0
-  have hEnum0 : (C).enum j q0 = (C).repr j := by
-    exact MPSTensor.mpvPhaseClassData_enum_zero_eq_repr blocks j
+  have hEnum0 : (C).enum j q0 = (C).repr j :=
+    MPSTensor.mpvPhaseClassData_enum_zero_eq_repr blocks j
   have hc0 : (0 : ℂ) < c0 := by
     simpa [c0, q0, hEnum0] using hCoeffPos j q0
   have hcoeff0 : μ ((C).enum j q0) * ζ j q0 = c0 := by
@@ -112,8 +112,8 @@ theorem exists_distinguished_grouped_reference_corner
     rw [hcoeff0] at h
     simpa [A0, q0] using h
   have hAtransport :
-      cast (congrArg (MPSTensor (D * D)) h0q) A0 = A := by
-    exact cast_cast _ _ _
+      cast (congrArg (MPSTensor (D * D)) h0q) A0 = A :=
+    cast_cast _ _ _
   refine ⟨W, c0, hc0, ?_⟩
   intro w
   have h := vertical_corner_cast M A0 (V ((C).enum j q0))
