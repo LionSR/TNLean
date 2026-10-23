@@ -73,7 +73,8 @@ which the relevant geometric series converges.
 
 \begin{theorem}[Rényi entropy from mixtures of bounded Schmidt rank]
     \label{thm:hastings_renyi_schmidt_rank_stage}
-    \lean{TNLean.MPS.AreaLaw.Hastings.renyiEntropy_le_of_schmidtRank_mixtures}
+    \lean{TNLean.MPS.AreaLaw.Hastings.renyiEntropy_le_of_schmidtRank_mixtures,
+        TNLean.MPS.AreaLaw.Hastings.renyiEntropy_eq_log_sum_eigenvalues₀_rpow}
     \leanok
     Let $\Psi$ be a unit vector of a bipartite space with reduced density
     matrix $\rho$ on the first factor, and let $k\ge1$, $D\ge2$, $\xi'>0$ and
@@ -88,7 +89,7 @@ which the relevant geometric series converges.
     for one cut, lines 333--356 and 392--410.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:hastings_renyi_tail_entropy}
+    \uses{thm:hastings_renyi_tail_entropy, thm:hastings_bootstrap_stage}
     The overlaps bound the mass of the eigenvalues of $\rho$ beyond the first
     $kD^{2s}$ by $ce^{-2s/\xi'}$, as in the von Neumann case. With $m'$ the least
     integer such that $ce^{-2m'/\xi'}\le1$, the eigenvalues in decreasing order
