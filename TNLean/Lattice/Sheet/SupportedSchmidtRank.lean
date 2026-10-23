@@ -19,7 +19,7 @@ actual first-region configuration. No tensor factor is cancelled.
 
 Supporting locality algebra for AKLV, arXiv:1301.1162v1, `l:agsp`,
 lines 646–654, and ALVV, arXiv:1602.08828v2,
-`eq:H-mid-cut`, lines 806–821, and Proposition 5.7
+`eq:H-mid-cut`, lines 810–821, and Proposition 5.7
 (`prop:Cheby-AGSP-eff`), lines 1324–1332. Physical variable counts,
 frequency selection, cut displacement and matrix product operator
 constructions are separate assertions.
@@ -54,9 +54,7 @@ theorem exists_threeSplit_eq_reindex_one_kronecker_rank_le
   · let σ₀ : ι → Fin q := Classical.choice hconfig
     let t₀ : T → Fin q := fun v ↦ σ₀ v
     let e₀ : E → Fin q := fun v ↦ σ₀ v
-    have hDTset : Disjoint (D : Set ι) (T : Set ι) := by
-      rw [Set.disjoint_left]
-      exact fun _ hvD hvT ↦ Finset.disjoint_left.mp hDT hvD hvT
+    have hDTset : Disjoint (D : Set ι) (T : Set ι) := Finset.disjoint_coe.mpr hDT
     obtain ⟨V, hV⟩ :=
       exists_threeSplit_eq_reindex_one_kronecker hTE hDTset hA
     let γ : (↥(T ∪ E)ᶜ → Fin q) → ((v : {v // v ∉ E}) → Fin q) :=
