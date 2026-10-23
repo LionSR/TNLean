@@ -232,16 +232,4 @@ theorem conjTranspose_physicalMatrix_approximatingTensor_mul {n D₁ D₂ : ℕ}
     conjTranspose_polarIso_mul_polarIso_eq_zero h]
   simp
 
-/-- The approximating tensor `V_j P_{j,∞}` of one block and the blocked tensor of another block
-with orthogonal blocked tensors have orthogonal physical columns. -/
-theorem conjTranspose_physicalMatrix_approximatingTensor_mul_blocked {n D₁ D₂ : ℕ}
-    {B₁ : MPSTensor n D₁} {B₂ : MPSTensor n D₂}
-    (h : (physicalMatrix B₁)ᴴ * physicalMatrix B₂ = 0) (σ₁ : Matrix (Fin D₁) (Fin D₁) ℂ) :
-    (physicalMatrix (approximatingTensor B₁ σ₁))ᴴ * physicalMatrix B₂ = 0 := by
-  simp only [approximatingTensor, physicalMatrix_rotatePhysical, polarIsoMatrix,
-    conjTranspose_mul, conjTranspose_submatrix]
-  rw [Matrix.mul_assoc, ← submatrix_id_id (physicalMatrix B₂),
-    ← Matrix.submatrix_mul _ _ _ _ _ Function.bijective_id, conjTranspose_polarIso_mul_eq_zero h]
-  simp
-
 end MPSTensor

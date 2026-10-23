@@ -43,5 +43,6 @@ import TNLean.MPS.AreaLaw.Hastings.SchmidtTailConstraint
 import TNLean.MPS.AreaLaw.Hastings.SchmidtTailMPS
 import TNLean.MPS.AreaLaw.Hastings.SpectralCutoff
 import TNLean.MPS.AreaLaw.Hastings.TailEntropy
+import TNLean.MPS.AreaLaw.Hastings.TailRenyiEntropy
 import TNLean.MPS.AreaLaw.Hastings.ThreeWaySplitting
 import TNLean.MPS.AreaLaw.Hastings.Window
