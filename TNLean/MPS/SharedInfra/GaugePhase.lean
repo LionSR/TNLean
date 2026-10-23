@@ -411,14 +411,6 @@ theorem gaugePhaseEquiv_symm_same_dim {d D : ℕ} {A B : MPSTensor d D}
       congrArg Units.val hU
     simp only [Units.val_mul, Units.val_one] at hUval
     exact hUval
-  have hXX' : XM * XinvM = (1 : Matrix (Fin D) (Fin D) ℂ) := by
-    have hU : (X * X⁻¹ : GL (Fin D) ℂ) = 1 := by simp
-    have hUval :
-        ((X * X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)
-          = ((1 : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) :=
-      congrArg Units.val hU
-    simp only [Units.val_mul, Units.val_one] at hUval
-    exact hUval
   -- Inverse-of-inverse: `(X⁻¹)⁻¹ = X` for units.
   have hInvInv : ((X⁻¹)⁻¹ : GL (Fin D) ℂ) = X := inv_inv X
   -- The desired identity: `A i = ζ⁻¹ • (X⁻¹ * B i * X)`.
@@ -489,9 +481,6 @@ theorem gaugePhaseEquiv_trans_same_dim {d D : ℕ} {A B C : MPSTensor d D}
   -- Coercion of the inverse of the product is the reversed product of inverses.
   have hMulInv_val :
       (((X₂ * X₁)⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) = X₁invM * X₂invM := by
-    have hRev : ((X₂ * X₁)⁻¹ : GL (Fin D) ℂ) = X₁⁻¹ * X₂⁻¹ := mul_inv_rev X₂ X₁
-    have := congrArg (fun U : GL (Fin D) ℂ =>
-        (U : Matrix (Fin D) (Fin D) ℂ)) hRev
     simp [X₁invM, X₂invM]
   -- Compute `C i` by chaining the two equivalences.
   calc C i

@@ -110,8 +110,8 @@ theorem sum_aligned_chainWindowOperator_le_openInteractionMatrix {K : ℕ}
     exact Finset.mem_range.mpr (by omega)
   have hsum : (∑ j ∈ (Finset.range (N + 1 - K)).image (fun i => i * L),
       chainWindowOperator (N * L) j h) =
-      ∑ i ∈ Finset.range (N + 1 - K), chainWindowOperator (N * L) (i * L) h := by
-    exact Finset.sum_image (fun i _ j _ hij => mul_left_injective₀ (NeZero.ne L) hij)
+      ∑ i ∈ Finset.range (N + 1 - K), chainWindowOperator (N * L) (i * L) h :=
+    Finset.sum_image (fun i _ j _ hij => mul_left_injective₀ (NeZero.ne L) hij)
   rw [← hsum, openInteractionMatrix]
   refine Finset.sum_le_sum_of_subset_of_nonneg hsub ?_
   intro j hj _hj

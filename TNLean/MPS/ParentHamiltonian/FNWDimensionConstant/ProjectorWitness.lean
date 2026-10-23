@@ -48,7 +48,6 @@ theorem pathVector_last_mark_mem_leftBoundaryRange
   rw [pathVector_last_mark_apply, pathVector_one_eq_groundSpaceMap]
   rfl
 
-
 /-- Squared path amplitudes are classical path probabilities. -/
 private theorem markovAmplitude_path_sq (a b c e f : Fin 4) :
     (markovAmplitude a b * markovAmplitude b c *

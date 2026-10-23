@@ -218,7 +218,9 @@ of a gapped chain combines them with the factorization of
 
 \begin{theorem}[Entropy from overlaps with mixtures of bounded Schmidt rank]
     \label{thm:hastings_bootstrap_stage}
-    \lean{TNLean.MPS.AreaLaw.Hastings.vonNeumannEntropy_le_of_schmidtRank_mixtures}
+    \lean{TNLean.MPS.AreaLaw.Hastings.vonNeumannEntropy_le_of_schmidtRank_mixtures,
+        TNLean.MPS.AreaLaw.Hastings.eigenvalues₀_nonneg_and_sum_eq_one,
+        TNLean.MPS.AreaLaw.Hastings.exists_eigenvalues₀_tail_le_of_schmidtRank_mixtures}
     \leanok
     \uses{def:hastings_bootstrap_remainder}
     Let $\Psi$ be a unit bipartite vector with reduced density matrix

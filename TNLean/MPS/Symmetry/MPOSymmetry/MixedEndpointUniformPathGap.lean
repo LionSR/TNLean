@@ -34,6 +34,15 @@ namespace MPOSymmetry
 
 variable {D₀ D₁ : ℕ}
 
+/-- A point of the unit interval other than its two endpoints lies in the
+open interval. -/
+private theorem mem_Ioo_of_not_endpoint {γ : unitInterval}
+    (hend : ¬((γ : ℝ) = 0 ∨ (γ : ℝ) = 1)) : (γ : ℝ) ∈ Set.Ioo (0 : ℝ) 1 := by
+  have hzero : (γ : ℝ) ≠ 0 := fun h => hend (Or.inl h)
+  have hone : (γ : ℝ) ≠ 1 := fun h => hend (Or.inr h)
+  exact ⟨lt_of_le_of_ne γ.property.1 (Ne.symm hzero),
+    lt_of_le_of_ne γ.property.2 hone⟩
+
 /-- Every parameter of the closed mixed path admits a strict finite open
 window for its actual extended interaction. At an endpoint this is derived
 from its eventual open gap; in the interior it follows from injectivity
@@ -62,11 +71,7 @@ private theorem exists_strict_mixedEndpoint_open_window [NeZero D₀] [NeZero D�
         _ = (n : ℝ) * η := by simp only [nsmul_eq_mul]
         _ ≤ (m : ℝ) * η := mul_le_mul_of_nonneg_right hnm hη.le
     exact ⟨m, hm, η, hnum, hgap γ hend (m + 1) (by dsimp only [m]; omega)⟩
-  have hzero : (γ : ℝ) ≠ 0 := fun h => hend (Or.inl h)
-  have hone : (γ : ℝ) ≠ 1 := fun h => hend (Or.inr h)
-  have hγ : (γ : ℝ) ∈ Set.Ioo (0 : ℝ) 1 :=
-    ⟨lt_of_le_of_ne γ.property.1 (Ne.symm hzero),
-      lt_of_le_of_ne γ.property.2 hone⟩
+  have hγ := mem_Ioo_of_not_endpoint hend
   let : NeZero (D₀ + D₁) := ⟨by have := NeZero.ne D₀; omega⟩
   have hInj := isInjective_mixedEndpointInterpolation A₀ A₁ h₀ h₁ hγ
   obtain ⟨m, hm, η, hnum, hgap⟩ :=
@@ -119,11 +124,7 @@ private theorem eventually_mixedEndpoint_periodic_long_gap [NeZero D₀] [NeZero
   by_cases hend : (γ : ℝ) = 0 ∨ (γ : ℝ) = 1
   · exact (mul_le_mul_of_nonneg_right (min_le_right δK δE) (norm_nonneg v)).trans
       (hEndpoint γ hend N (by omega) v hv)
-  have hzero : (γ : ℝ) ≠ 0 := fun h => hend (Or.inl h)
-  have hone : (γ : ℝ) ≠ 1 := fun h => hend (Or.inr h)
-  have hγ : (γ : ℝ) ∈ Set.Ioo (0 : ℝ) 1 :=
-    ⟨lt_of_le_of_ne γ.property.1 (Ne.symm hzero),
-      lt_of_le_of_ne γ.property.2 hone⟩
+  have hγ := mem_Ioo_of_not_endpoint hend
   have hOpenCanonical :
       ∀ u ∈ (LinearMap.ker (openParentHamiltonianES
         (mixedEndpointInterpolation A₀ A₁ γ) 2 (m + 2 - 1)))ᗮ,

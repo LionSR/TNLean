@@ -80,7 +80,6 @@ private theorem exists_local_continuous_unit
 
 end LinearMap
 
-
 namespace Matrix
 
 private theorem exists_local_continuous_unit_of_matrixAlgebra
@@ -120,11 +119,6 @@ private theorem exists_local_continuous_unit_of_matrixAlgebra
   intro t ht x
   exact ⟨(toLinearMap₂'_apply_mulVec_prod _ _ _).symm.trans ((hUnit t ht).1 x),
     (toLinearMap₂'_apply_mulVec_prod _ _ _).symm.trans ((hUnit t ht).2 x)⟩
-
-end Matrix
-
-
-namespace Matrix
 
 /-- Continuous raw trace data with injective pointwise realizations of constant
 minimal dimension admit local continuous quotient multiplication and a local

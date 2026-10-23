@@ -78,16 +78,21 @@ theorem exists_localLift_eq_localLift_of_subset {D D' : Finset V} (hDD : D ⊆ D
   · exact ⟨0, Subsingleton.elim _ _⟩
   · exact ((isSupportedOn_localLift K).mono hDD).exists_localLift σ₀
 
+omit [Fintype V] in
+private theorem conjTranspose_mul_self_of_isStarProjection {D : Finset V}
+    {P : Matrix (RegionConfig n D) (RegionConfig n D) ℂ} (hP : IsStarProjection P) :
+    Pᴴ * P = P := by
+  have h := hP.isSelfAdjoint.star_eq
+  rw [star_eq_conjTranspose] at h
+  rw [h, hP.isIdempotentElem.eq]
+
 /-- The squared norm of a lifted star projection applied to a vector is the trace of the
 projection against the regional state. -/
 theorem norm_sq_toEuclideanLin_localLift_eq_trace {D : Finset V}
     {P : Matrix (RegionConfig n D) (RegionConfig n D) ℂ} (hP : IsStarProjection P)
     (ψ : EuclideanSpace ℂ (SiteConfig n)) :
     ‖toEuclideanLin (localLift D P) ψ‖ ^ 2 = (P * regionState D ψ).trace.re := by
-  have hPP : Pᴴ * P = P := by
-    have h := hP.isSelfAdjoint.star_eq
-    rw [star_eq_conjTranspose] at h
-    rw [h, hP.isIdempotentElem.eq]
+  have hPP := conjTranspose_mul_self_of_isStarProjection hP
   have hinner : ⟪toEuclideanLin (localLift D P) ψ, toEuclideanLin (localLift D P) ψ⟫_ℂ =
       ⟪ψ, toEuclideanLin (localLift D P) ψ⟫_ℂ := by
     rw [← LinearMap.adjoint_inner_right, ← toEuclideanLin_conjTranspose_eq_adjoint,
@@ -101,10 +106,7 @@ theorem norm_toEuclideanLin_localLift_le {D : Finset V}
     {P : Matrix (RegionConfig n D) (RegionConfig n D) ℂ} (hP : IsStarProjection P)
     (ψ : EuclideanSpace ℂ (SiteConfig n)) :
     ‖toEuclideanLin (localLift D P) ψ‖ ≤ ‖ψ‖ := by
-  have hPP : Pᴴ * P = P := by
-    have h := hP.isSelfAdjoint.star_eq
-    rw [star_eq_conjTranspose] at h
-    rw [h, hP.isIdempotentElem.eq]
+  have hPP := conjTranspose_mul_self_of_isStarProjection hP
   set v := toEuclideanLin (localLift D P) ψ
   have hinner : ⟪v, v⟫_ℂ = ⟪ψ, v⟫_ℂ := by
     simp only [v]

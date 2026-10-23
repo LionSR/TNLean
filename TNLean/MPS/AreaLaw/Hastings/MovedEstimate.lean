@@ -22,7 +22,7 @@ constants: if `‖M - H‖ ≤ δ` and the cut-offs move the ground vector by at
 The parameters `q`, `δ` and `η` are free. At the printed values
 `δ = O(ΔE⁻¹ J² e^{-l/3ξ})` (lines 849–851) and `η = O(e^{-l/6ξ})` (eq. `obd`, lines
 836–840) the last two terms are the two terms of eq. `moved`; the term `exp(-q/2)` is the
-gap bound of line 848, which the assembly of Lemma 1 makes small by its choice of `q`.
+gap bound of line 848, which the proof of Lemma 1 makes small by its choice of `q`.
 The cut-offs enter only through being commuting orthogonal projections that nearly fix
 the ground vector; no support or threshold property is used.
 
