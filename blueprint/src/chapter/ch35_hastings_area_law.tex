@@ -16,7 +16,7 @@ contains the bootstrap lemma.
 The entropy gain is proved when the entropy of the cut is large compared
 with the remainder $F(\xi',q)$ of the bootstrap lemma
 (Definition~\ref{def:hastings_bootstrap_remainder}). The source meets this
-condition at~\cite[lines 480--484]{Hastings2007AreaLaw}: when it fails, the
+condition at~\cite[lines 483--486]{Hastings2007AreaLaw}: when it fails, the
 bound $S_{\max}$ is small, and the constant $c_0$ in $S_{\max}$ is chosen
 large enough. Here the window is lengthened instead, which needs the
 contradiction argument for every window at least as long as the doubling
@@ -31,10 +31,17 @@ window.
     $l_0\ge\lceil\xi_0\rceil_+2^M$, with $S_{\max}=3l_0\ln q$.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:hastings_doubling_window,thm:hastings_main_stage}
-    The proof of Theorem~\ref{thm:hastings_main_stage} goes through
-    unchanged. At its end, Theorem~\ref{thm:hastings_doubling_window} gives
-    $l_0<\lceil\xi_0\rceil_+2^M$, which contradicts the choice of $l_0$.
+    \uses{thm:hastings_doubling_window,thm:hastings_prefix_entropy_le}
+    If $i+l_0>L$, Theorem~\ref{thm:hastings_prefix_entropy_le} bounds the
+    entropy by $(L-i)_+\ln q\le l_0\ln q\le S_{\max}$.
+    Otherwise, suppose that $S([0,i))>S_{\max}$. The assumed site-removal
+    inequality gives, for $i\le k\le i+l_0$,
+    \begin{align*}
+        S([0,k))\ge S([0,i))-(k-i)\ln q>2l_0\ln q.
+    \end{align*}
+    Thus the strengthened doubling inequality applies throughout this
+    window. Theorem~\ref{thm:hastings_doubling_window} gives
+    $l_0<\lceil\xi_0\rceil_+2^M\le l_0$, a contradiction.
 \end{proof}
 
 \begin{definition}[The entropy bound of the area law]
@@ -47,9 +54,9 @@ window.
     doubling window of Definition~\ref{def:hastings_max_entropy_bound} for
     the constants $2C_1$ and $C_2=7$ of the entropy gain, and put
     \begin{align*}
-        l_0      & =\max\Bigl\{\lceil\xi_0\rceil_+2^M,\
+        l_0      & =\max\Bigl\{\lceil\xi_0\rceil_+2^M,
         \Bigl\lceil\frac23\Bigl(\xi'\ln C_1+\frac{F(\xi',q)}{\ln q}\Bigr)
-        \Bigr\rceil_+\Bigr\},                           \\
+        \Bigr\rceil_+\Bigr\},                          \\
         S_{\max} & =3l_0\ln q .
     \end{align*}
 \end{definition}
@@ -63,7 +70,7 @@ window.
     Definition~\ref{def:hastings_area_law_bound} is at most the bound of
     Definition~\ref{def:hastings_max_entropy_bound} for the constants $2C_1$
     and $7$, plus $2(\xi'\ln C_1\ln q+F(\xi',q))+3\ln q$. The added term is the
-    part that~\cite[lines 480--484]{Hastings2007AreaLaw} absorbs into the
+    part that~\cite[lines 483--486]{Hastings2007AreaLaw} absorbs into the
     constant $c_0$.
 \end{theorem}
 \begin{proof}\leanok
@@ -85,18 +92,19 @@ window.
         \item $O_L$ and $O_R$ are commuting orthogonal projections acting on
               the first $c$ sites and on the remaining sites;
         \item $\|O_B\|\le1$, and $O_B$ acts on the sites of
-              $\lbrack c-l,c+l)$ in the chain;
+              $\lbrack c-l,c+l)$ that lie in the chain;
         \item $\|O_BO_LO_R-|\Omega\rangle\langle\Omega|\|\le C_1e^{-l/\xi'}$.
     \end{itemize}
     Then the entropy of the first $i$ sites is at most $S_{\max}$ for every
     $i$, with $S_{\max}$ as in Definition~\ref{def:hastings_area_law_bound}.
-    This is the main theorem of~\cite{Hastings2007AreaLaw}, equation (entbd),
-    once the first lemma of the source supplies the operators. Requiring
+    Supplying the factorization gives an area law by the argument of
+    \cite{Hastings2007AreaLaw}, equation (entbd), with the quantitative
+    changes below. Requiring
     $C_1\ge1$ loses nothing, since enlarging $C_1$ only weakens that lemma.
     The bound $S_{\max}$ grows as $4^{\xi'\ln q}$, not $2^{\xi'\ln q}$, as
-    recorded in~\cite{gap:hastings07_doubling_constants}, and the entropy gain
-    enters with the constants $2C_1$ and $7$
-    of~\cite{gap:hastings07_relent_constants}.
+    recorded in~\cite{gap:hastings07_doubling_constants}. The entropy gain
+    uses the constants $2C_1$ and $7$ from
+    \cite{gap:hastings07_relent_constants}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:hastings_main_stage_long_window,

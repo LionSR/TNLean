@@ -13,7 +13,7 @@ followed by merging the two registers of each party into one, are a single pair 
 regrouped vector `η ⊗ η'`, whose norm is `‖η‖ ‖η'‖` (`eval_combineSources`).  This is the
 tensor-product identity that the proof of Lemma 5.1 `lem:effects` gives for its last clause.
 The use of this identity in Lemma 5.1, and what of that clause is formalized, are described in
-`TNLean.PEPS.Approximation.PartyLayout`.
+`TNLean.Lattice.PartyCircuit.PartyLayout`.
 
 ## Main definitions
 

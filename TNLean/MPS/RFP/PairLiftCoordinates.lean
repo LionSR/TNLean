@@ -72,6 +72,14 @@ theorem leftPairLift_toMatrix_reindex
         (finTwoArrowEquiv (Fin d)) (LinearMap.toMatrix' Q)) := by
   classical
   ext σ τ
+  change Q (fun α ↦
+      (Pi.single ((finThreeArrowEquiv (Fin d)).symm τ) (1 : ℂ) :
+        NSiteSpace d 3)
+        (replaceAXCfg ((finThreeArrowEquiv (Fin d)).symm σ) α))
+      (axPairCfg ((finThreeArrowEquiv (Fin d)).symm σ)) =
+    Q (Pi.single ((finTwoArrowEquiv (Fin d)).symm (τ.1, τ.2.1)) (1 : ℂ))
+      ((finTwoArrowEquiv (Fin d)).symm (σ.1, σ.2.1)) *
+        (if σ.2.2 = τ.2.2 then 1 else 0)
   by_cases h : σ.2.2 = τ.2.2
   · have hslice : (fun α ↦
         (Pi.single ((finThreeArrowEquiv (Fin d)).symm τ) (1 : ℂ) :
@@ -83,14 +91,6 @@ theorem leftPairLift_toMatrix_reindex
       simp only [Pi.single_apply]
       simp only [replaceAXCfg_eq_iff]
       simp [finTwoArrowEquiv, h]
-    change Q (fun α ↦
-        (Pi.single ((finThreeArrowEquiv (Fin d)).symm τ) (1 : ℂ) :
-          NSiteSpace d 3)
-          (replaceAXCfg ((finThreeArrowEquiv (Fin d)).symm σ) α))
-        (axPairCfg ((finThreeArrowEquiv (Fin d)).symm σ)) =
-      Q (Pi.single ((finTwoArrowEquiv (Fin d)).symm (τ.1, τ.2.1)) (1 : ℂ))
-        ((finTwoArrowEquiv (Fin d)).symm (σ.1, σ.2.1)) *
-          (if σ.2.2 = τ.2.2 then 1 else 0)
     rw [hslice]
     simp [finTwoArrowEquiv, h]
   · have hslice : (fun α ↦
@@ -101,14 +101,6 @@ theorem leftPairLift_toMatrix_reindex
       simp only [Pi.single_apply, Pi.zero_apply]
       simp only [replaceAXCfg_eq_iff]
       simp [h]
-    change Q (fun α ↦
-        (Pi.single ((finThreeArrowEquiv (Fin d)).symm τ) (1 : ℂ) :
-          NSiteSpace d 3)
-          (replaceAXCfg ((finThreeArrowEquiv (Fin d)).symm σ) α))
-        (axPairCfg ((finThreeArrowEquiv (Fin d)).symm σ)) =
-      Q (Pi.single ((finTwoArrowEquiv (Fin d)).symm (τ.1, τ.2.1)) (1 : ℂ))
-        ((finTwoArrowEquiv (Fin d)).symm (σ.1, σ.2.1)) *
-          (if σ.2.2 = τ.2.2 then 1 else 0)
     rw [hslice]
     simp [h]
 
@@ -127,6 +119,14 @@ theorem rightPairLift_toMatrix_reindex
         (finTwoArrowEquiv (Fin d)) (LinearMap.toMatrix' Q)) := by
   classical
   ext σ τ
+  change Q (fun β ↦
+      (Pi.single ((finThreeArrowEquiv (Fin d)).symm τ) (1 : ℂ) :
+        NSiteSpace d 3)
+        (replaceXBCfg ((finThreeArrowEquiv (Fin d)).symm σ) β))
+      (xbPairCfg ((finThreeArrowEquiv (Fin d)).symm σ)) =
+    (if σ.1 = τ.1 then 1 else 0) *
+      Q (Pi.single ((finTwoArrowEquiv (Fin d)).symm (τ.2.1, τ.2.2)) (1 : ℂ))
+        ((finTwoArrowEquiv (Fin d)).symm (σ.2.1, σ.2.2))
   by_cases h : σ.1 = τ.1
   · have hslice : (fun β ↦
         (Pi.single ((finThreeArrowEquiv (Fin d)).symm τ) (1 : ℂ) :
@@ -138,14 +138,6 @@ theorem rightPairLift_toMatrix_reindex
       simp only [Pi.single_apply]
       simp only [replaceXBCfg_eq_iff]
       simp [finTwoArrowEquiv, h]
-    change Q (fun β ↦
-        (Pi.single ((finThreeArrowEquiv (Fin d)).symm τ) (1 : ℂ) :
-          NSiteSpace d 3)
-          (replaceXBCfg ((finThreeArrowEquiv (Fin d)).symm σ) β))
-        (xbPairCfg ((finThreeArrowEquiv (Fin d)).symm σ)) =
-      (if σ.1 = τ.1 then 1 else 0) *
-        Q (Pi.single ((finTwoArrowEquiv (Fin d)).symm (τ.2.1, τ.2.2)) (1 : ℂ))
-          ((finTwoArrowEquiv (Fin d)).symm (σ.2.1, σ.2.2))
     rw [hslice]
     simp [finTwoArrowEquiv, h]
   · have hslice : (fun β ↦
@@ -156,14 +148,6 @@ theorem rightPairLift_toMatrix_reindex
       simp only [Pi.single_apply, Pi.zero_apply]
       simp only [replaceXBCfg_eq_iff]
       simp [h]
-    change Q (fun β ↦
-        (Pi.single ((finThreeArrowEquiv (Fin d)).symm τ) (1 : ℂ) :
-          NSiteSpace d 3)
-          (replaceXBCfg ((finThreeArrowEquiv (Fin d)).symm σ) β))
-        (xbPairCfg ((finThreeArrowEquiv (Fin d)).symm σ)) =
-      (if σ.1 = τ.1 then 1 else 0) *
-        Q (Pi.single ((finTwoArrowEquiv (Fin d)).symm (τ.2.1, τ.2.2)) (1 : ℂ))
-          ((finTwoArrowEquiv (Fin d)).symm (σ.2.1, σ.2.2))
     rw [hslice]
     simp [h]
 
