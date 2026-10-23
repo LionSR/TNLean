@@ -25,7 +25,7 @@ product state follow from it as in the source.
 of Hastings' statement, where the entropy is bounded by the area law proved earlier in the
 paper. `isOpenMPS_norm_sub_sq_le_of_factorization_of_entropy` becomes the source's matrix product
 state approximation once that hypothesis is discharged from the area law for the ground
-state.
+state. Documented in `docs/paper-gaps/hastings07_mps_entropy_stage.tex`.
 
 The source's `k₀ = exp(2S)/2` is a real number. Here `k₀` is any natural number at least
 `exp(2 S_j)/2` at every cut, such as the ceiling of the largest of these; the constraint at a
