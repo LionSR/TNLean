@@ -28,7 +28,8 @@ dimension or the cut, but it is not shown to be bounded by a polynomial in `ξ` 
 states (lines 258–262). The length `ξ = lemmaOneLength R J ΔE` comes from a chain
 Lieb–Robinson estimate whose prefactor grows with `J` and whose second operator acts on one
 site; it has the form of the source's `max(2v/ΔE, ξ_C)` but is not proved equal to it for a
-pair satisfying eq. `lrb` (lines 96–112). Lemma 1 also holds here at every rate `ξ' > 6ξ` rather than at `ξ' = 6ξ`.
+pair satisfying eq. `lrb` (lines 96–112). Lemma 1 also holds here at every rate `ξ' > 6ξ`
+rather than at `ξ' = 6ξ`.
 Documented in `docs/paper-gaps/hastings07_lemma1_decay_length.tex` and, for the rate,
 `docs/paper-gaps/hastings07_gaussian_average_exponent.tex`.
 
