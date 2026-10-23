@@ -211,17 +211,19 @@
     \label{thm:hastings_mps_from_entropy_lemma1}
     \lean{TNLean.MPS.AreaLaw.Hastings.isOpenMPS_norm_sub_sq_le_of_isFactorizationAt_of_entropy}
     \leanok
-    \uses{thm:hastings_mps_from_entropy}
+    \uses{thm:hastings_mps_from_entropy, def:hastings_factorization_at}
     The bound of Theorem~\ref{thm:hastings_mps_from_entropy} holds when, at
     every internal cut $j$ and every length $m$ with $j+m\le L$, the
     approximate factorization is given in the form of the conclusion of
     Lemma~1 of \cite{Hastings2007AreaLaw}: commuting orthogonal projections
     $O_L$ and $O_R$ supported before and after the cut, and an operator $O_B$
-    of norm at most one supported on the $2m$ sites around the cut, with
+    of norm at most one supported on the $2m$ sites around the cut, cut short
+    at the ends of the chain, with
     $\lVert O_BO_LO_R-|\Omega\rangle\langle\Omega|\rVert\le C_1e^{-m/\xi'}$.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:hastings_mps_from_entropy}
+    \uses{thm:hastings_mps_from_entropy, def:hastings_factorization_at,
+        thm:hastings_factorization_bootstrap_form}
     The operator $O_B$ is supported on the first $j+m$ sites, $O_L$ on the
     first $j$ sites and $O_R$ on the remaining sites, which is the
     factorization of Theorem~\ref{thm:hastings_mps_from_entropy}.
