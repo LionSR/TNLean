@@ -1330,8 +1330,19 @@ effect `O_B† O_B`) supplies the Lindblad–Uhlmann data with `C₁` replaced b
 [hastings07_mps_error_measure.tex](hastings07_mps_error_measure.tex)
 (clarification, resolved) records that Hastings' error
 `N (k'/k₀)^{-1/(ξ' ln D)}` for the matrix product state (arXiv:0705.2024v4,
-lines 553–557), stated without an error measure, holds for the squared norm,
-through the squared error `‖Φ − ψ‖² ≤ ∑_j τ_j(k')` of sequential truncation.
+lines 553–557), stated without an error measure, holds for the squared
+Hilbert-space norm of the unnormalized truncation, through the squared error `‖Φ − ψ‖² ≤ ∑_j τ_j(k')` of sequential truncation.
+
+### One-dimensional area law after Hastings: the entropy hypothesis of the matrix product state
+
+[hastings07_mps_entropy_stage.tex](hastings07_mps_entropy_stage.tex)
+(scope restriction, open) distinguishes the conditional approximation
+construction (arXiv:0705.2024v4, lines 505–557), which explicitly assumes an
+entropy bound at lines 516–518, from its application under only the Hamiltonian
+assumptions. That application still requires deriving uniform factorization
+and entropy bounds and applying them to the approximation theorem. For chains
+with at least two sites, the entropy bound gives a common positive integer
+`k₀ ≥ exp(2 S_j)/2`; shorter chains need no truncation.
 
 ### One-dimensional area law after Hastings: the threshold of the spectral cut-offs
 
@@ -1363,3 +1374,31 @@ positive and the later estimate uses `‖M_L O_L‖` at most the threshold.
   the window length doubles, that the prefactor of that bound is the starting
   length `ξ₀` rather than `ξ₀/2`, and the implicit hypotheses `2 C₁ > 1` and
   `ln C₁ + C₂ ≥ 0`.
+
+### One-dimensional area law after Hastings: the decay length of Lemma 1
+
+[hastings07_lemma1_decay_length.tex](hastings07_lemma1_decay_length.tex)
+(scope restriction, open) distinguishes the chain localization estimate with
+quadratic support dependence from Hastings's linear-support Lieb–Robinson
+bound (arXiv:0705.2024v4, lines 96–112). The exponential comparison motivates
+`ξ = 8 max(2v₀/ΔE, 1)` but does not establish the source's full bound for the
+pair `(8v₀, 8)`. The factorization constant is uniform in chain length and
+local dimension; the source's polynomial bound in `ξ` (lines 258–262) remains
+unproved, as does the endpoint rate `ξ' = 6ξ`. The note records the required
+estimates and energy-rescaling analysis under the still-open issue #9811.
+
+## Rényi entropy and matrix product state approximation
+
+- [`swvc08_renyi_bond_dimension_sign.tex`](swvc08_renyi_bond_dimension_sign.tex)
+  (false source, resolved) corrects the sign of the error term in the
+  bond-dimension lower bound of Schuch, Wolf, Verstraete and Cirac
+  (arXiv:0705.0292v2). A flat Schmidt spectrum disproves the printed plus
+  sign; the corrected minus sign preserves the obstruction from
+  super-logarithmic entropy growth. The Lean development remains open in #9857.
+
+- [`swvc08_truncation_squared_norm.tex`](swvc08_truncation_squared_norm.tex)
+  (false source, resolved) records the missing square in the displayed truncation
+  bound of Schuch–Wolf–Verstraete–Cirac, arXiv:0705.0292v2, lines 239–245. A two-qubit
+  state disproves the printed norm estimate. The note compares the corrected
+  squared-norm bound with the stronger proved sequential-truncation estimate;
+  the Rényi family theorem remains open in #9855.

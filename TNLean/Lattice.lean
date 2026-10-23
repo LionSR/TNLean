@@ -9,6 +9,7 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.Lattice
 
 import TNLean.Lattice.Compression
+import TNLean.Lattice.ConnectedSetCount
 import TNLean.Lattice.CrossingSupports
 import TNLean.Lattice.EntropyComparison
 import TNLean.Lattice.EntropyDimension

@@ -109,11 +109,8 @@ theorem relent_of_projectorFactorization
   have hεeq : 2 * C₁ * Real.exp (-(l / ξ')) = 2 * ε := by rw [hεdef]; ring
   rw [hεeq] at hsmall ⊢
   have hε0 : 0 < ε := mul_pos hC₀ (Real.exp_pos _)
-  obtain ⟨σ₀⟩ : Nonempty (Fin L → Fin q) := by
-    by_contra h
-    rw [not_nonempty_iff] at h
-    rw [Subsingleton.elim Ω 0, norm_zero] at hΩ
-    exact zero_ne_one hΩ
+  obtain ⟨σ₀, _⟩ := Function.ne_iff.mp
+    ((WithLp.ofLp_eq_zero (x := Ω)).not.mpr (norm_ne_zero_iff.mp (by simp [hΩ])))
   -- the projection `Z = O_L O_R` and the effect `E = O_Bᴴ O_B`
   have hZ : IsStarProjection (OL * OR) :=
     ⟨hOL.isIdempotentElem.mul_of_commute hcomm hOR.isIdempotentElem, by

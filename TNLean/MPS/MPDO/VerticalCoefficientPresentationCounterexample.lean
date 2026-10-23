@@ -636,8 +636,8 @@ This project-derived formula evaluates the explicit clause above, whose
 algebraic form is the one in CPSV16, Theorem 4.14(ii), lines 972--985. -/
 @[simp]
 theorem rightClause_coeff (L : ℕ) (α β γ : Fin 1) :
-    rightClause.coeffs.coeff L α β γ = (4 / 5 : ℂ) ^ L := by
-  exact oneLabelCoeffs_coeff (4 / 5 : ℂ) L α β γ
+    rightClause.coeffs.coeff L α β γ = (4 / 5 : ℂ) ^ L :=
+  oneLabelCoeffs_coeff (4 / 5 : ℂ) L α β γ
 
 /-- The projection presentation has length-independent BNT structure
 coefficients.

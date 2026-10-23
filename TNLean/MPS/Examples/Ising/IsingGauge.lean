@@ -98,17 +98,6 @@ def thetaTwoZ (h h' : Fin 10) : Matrix (Fin 6) (Fin 6) (ℤ√2) :=
 weights are ten times the generic P6 point `(λ_1, λ_ψ) = (1/2, 3/10)` (data file §1.2). -/
 noncomputable def thetaTwo : MPOTensor 10 6 := fun h h' => complexOfZsqrt2 (thetaTwoZ h h')
 
-/-- The weighted bond object is the direct sum of the two weighted tensors. -/
-theorem thetaTwo_eq_fromBlocks (h h' : Fin 10) :
-    thetaTwo h h' =
-      (Matrix.fromBlocks ((5 : ℂ) • isingOne h h') 0 0 ((3 : ℂ) • isingPsi h h')).submatrix
-        (finSumFinEquiv (m := 3) (n := 3)).symm (finSumFinEquiv (m := 3) (n := 3)).symm := by
-  ext i j
-  simp only [thetaTwo, thetaTwoZ, complexOfZsqrt2_apply, Matrix.submatrix_apply]
-  rcases (finSumFinEquiv (m := 3) (n := 3)).symm i with a | a <;>
-    rcases (finSumFinEquiv (m := 3) (n := 3)).symm j with b | b <;>
-    simp [isingOne, isingPsi, map_ofNat]
-
 /-- The stacked product `Θ_2 ⋆ (√2 A_σ)` on the hundred-letter pair alphabet, of bond dimension
 `24` in the bond order `4 (Θ_2 index) + (P_σ index)` (data file §1.2). -/
 noncomputable def isingBondObject : MPSTensor 100 24 :=
