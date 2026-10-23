@@ -401,13 +401,14 @@ of a gapped chain combines them with the factorization of
         S(\rho^0_{1,j})\le\ln k+\xi'\ln\bigl(2C_1^2/P\bigr)\ln D+F(\xi',D),
     \end{align}
     where $\rho^0_{1,j}$ is the reduced density matrix of
-    $|\Psi_0\rangle\langle\Psi_0|$ on sites $1,\dots,j$. This is
-    \cite[Lemma~2]{Hastings2007AreaLaw}, lines 280--311, with $C_1=C_1(\xi)$
-    the constant of Lemma~1. The source takes $\xi'=6\xi$ with
-    $\xi=\max(2v/\Delta E,\xi_C)$; here, as for Lemma~1, $\xi$ is
-    $8\max(2v/\Delta E,1)$ for the chain Lieb--Robinson velocity $v$, and the
-    bound holds for every $\xi'>6\xi$
-    \cite{gap:hastings07_lemma1_decay_length,
+    $|\Psi_0\rangle\langle\Psi_0|$ on sites $1,\dots,j$. This is a quantitatively restricted form of
+    \cite[Lemma~2]{Hastings2007AreaLaw}, lines 280--311, with $C_1$ the
+    constant of the formalized Lemma~1. It inherits that lemma's restrictions:
+    the length $\xi=8\max(2v_0/\Delta E,1)$, with $v_0$ the velocity of the
+    chain localization estimate, is not shown to be the source's
+    $\max(2v/\Delta E,\xi_C)$; the bound holds for every $\xi'>6\xi$ rather
+    than at the printed $\xi'=6\xi$; and $C_1$ is not shown to be bounded by a
+    polynomial in $\xi$ \cite{gap:hastings07_lemma1_decay_length,
         gap:hastings07_gaussian_average_exponent}.
 \end{theorem}
 \begin{proof}\leanok

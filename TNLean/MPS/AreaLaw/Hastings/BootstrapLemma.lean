@@ -18,19 +18,21 @@ factorization `‖O_B O_L O_R − P₀‖ ≤ C₁ e^{-m/ξ'}` (eq. `prodapprox`
 
 This file first states the bound with Lemma 1 in the form `IsFactorizationAt` in which it is
 produced, at the cut `j` and every length `m`, and then discharges Lemma 1 by
-`exists_projectorFactorization`. The result is Lemma 2 on Hastings' own hypotheses: a chain
-Hamiltonian of finite range and finite interaction strength with a unique gapped ground state.
-As in the source, the constant `C₁` is that of Lemma 1: it depends on the range, the
-interaction strength, the gap and `ξ'`, and not on the length of the chain, the cut or the
-mixture.
+`exists_projectorFactorization`. The result is a quantitatively restricted Lemma 2 on Hastings' own
+hypotheses: a chain Hamiltonian of finite range and finite interaction strength with a unique gapped
+ground state. As in the source, the constant `C₁` is that of Lemma 1: it depends on the range, the
+interaction strength, the gap and `ξ'`, and not on the length of the chain, the cut or the mixture.
 
 The source's sites carry nearest-neighbour terms (lines 85–93), which it obtains from any
 finite range by grouping sites; here the range `R` is arbitrary.
 
-**Local fix (decay length):** Lemma 1, and with it this bound, holds at every
-`ξ' > 6ξ` with `ξ = 8 max(2v/ΔE, 1)` for the chain Lieb–Robinson velocity `v`, not at the
-printed `ξ' = 6ξ` with `ξ = max(2v/ΔE, ξ_C)` (lines 139–142). Documented in
-`docs/paper-gaps/hastings07_lemma1_decay_length.tex` and
+**Scope restriction (quantitative bounds):** `exists_entropy_le_of_overlap_schmidtRank_mixture`
+inherits the quantitative restrictions of the formalized Lemma 1. Its length is
+`ξ = 8 max(2v₀/ΔE, 1)`, with `v₀` the velocity of the chain localization estimate, which is
+not shown to be the source's `max(2v/ΔE, ξ_C)` for a Lieb–Robinson bound with linear support
+dependence (lines 96–112). It holds for every `ξ' > 6ξ` rather than at the printed `ξ' = 6ξ`
+(lines 139–142), and its constant `C₁` is not shown to be bounded by a polynomial in `ξ`
+(lines 258–262). Documented in `docs/paper-gaps/hastings07_lemma1_decay_length.tex` and
 `docs/paper-gaps/hastings07_gaussian_average_exponent.tex`.
 
 ## Main results
