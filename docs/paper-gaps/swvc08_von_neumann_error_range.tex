@@ -86,8 +86,24 @@ used in~\cite{Schuch2008EntropyScaling}.
 Let $r$ be the Schmidt rank of $u$ across the prefix cut; $1\le r\le D$.
 If $r\ge K$, the bound follows from $S(\rho)\le\log K\le\log D$.
 Otherwise let $p$ be the sum of the eigenvalues of $\rho$ outside its
-$r$ largest eigenvalues. The Schmidt overlap bound gives $f\le1-p$,
-so (\ref{eq:swvc08_vn_lost_overlap}) implies $p\le\delta/2$.
+$r$ largest eigenvalues. Let $P$ be the orthogonal projection onto the
+left Schmidt space of $u$, so that $(P\otimes I)u=u$ and
+$\operatorname{rank}P=r$. Cauchy--Schwarz gives
+\begin{align}
+    f & =|\langle(P\otimes I)\psi,u\rangle|^2
+    \le\lVert(P\otimes I)\psi\rVert^2
+    =\operatorname{tr}(P\rho)\notag                   \\
+      & =\sum_{i=1}^K\lambda_i\langle e_i,Pe_i\rangle
+    \le\sum_{i=1}^r\lambda_i=1-p,
+    \label{eq:swvc08_vn_schmidt_overlap}
+\end{align}
+where $\lambda_1\ge\cdots\ge\lambda_K$ are the eigenvalues of $\rho$
+and $e_i$ are corresponding orthonormal eigenvectors. For completeness,
+the last inequality follows from $a_i=\langle e_i,Pe_i\rangle\in[0,1]$
+and $\sum_i a_i=r$: subtracting $\lambda_r\sum_i a_i$ from the weighted
+sum bounds it by $\sum_{i\le r}(\lambda_i-\lambda_r)$, since the
+remaining coefficients are nonpositive. Thus
+(\ref{eq:swvc08_vn_lost_overlap}) implies $p\le\delta/2$.
 For $0<p<1$, splitting the eigenvalue distribution into these two parts
 gives
 \begin{align}
