@@ -292,24 +292,20 @@ hold for the centered and the uncentered parts alike.
 
 \subsection*{The Gaussian time average and the boundary operator}
 
-% Lean statement pending.
-\begin{theorem}[Gaussian time average across the gap and under perturbation]
-    \label{thm:hastings_gaussian_time_average}
-    Let $q>0$, let the ground energy be zero, and let
-    \begin{align*}
-        P_q(H)=\frac{\Delta E}{\sqrt{2\pi q}}\int e^{iHt}e^{-(t\Delta E)^2/(2q)}\,dt.
-    \end{align*}
-    If $\Psi_0$ is a unique gapped ground vector, then
-    $\|P_q(H)-P_0\|\le e^{-q/2}$. For Hermitian $M$,
-    $\|P_q(M)-P_q(H)\|\le\sqrt q\,\Delta E^{-1}\|M-H\|$. These are the gap
-    bound and the first inequality of the display in
-    \cite[lines 843--864]{Hastings2007AreaLaw}, with $M=M_L+M_B+M_R$.
-\end{theorem}
+For $q>0$, $P_q$ is the Gaussian time average of
+Definition~\ref{def:hastings_gaussian_time_average}. With ground energy zero,
+Theorems~\ref{thm:hastings_gaussian_time_average_gap}
+and~\ref{thm:hastings_gaussian_time_average_stability} give
+$\|P_q(H)-P_0\|\le e^{-q/2}$ and
+$\|P_q(M)-P_q(H)\|\le\sqrt q\,\Delta E^{-1}\|M-H\|$ for Hermitian $M$, the gap
+bound and the first inequality of the display in
+\cite[lines 843--864]{Hastings2007AreaLaw}, with $M=M_L+M_B+M_R$.
 
 % Lean statement pending.
 \begin{theorem}[The cut-offs next to the time average]
     \label{thm:hastings_moved_estimate}
-    \uses{thm:hastings_gaussian_time_average, thm:hastings_cutoffs}
+    \uses{thm:hastings_gaussian_time_average_gap,
+        thm:hastings_gaussian_time_average_stability, thm:hastings_cutoffs}
     Let $M$ be Hermitian with $\|M-H\|\le\delta$, and let $O_L$, $O_R$ be
     commuting orthogonal projections with $\|\Psi_0-O_LO_R\Psi_0\|\le\eta$. Then
     \begin{align*}
@@ -359,7 +355,7 @@ hold for the centered and the uncentered parts alike.
         thm:hastings_three_way_splitting_supports,
         thm:hastings_filtered_no_ground_component,
         thm:hastings_part_commutators, thm:hastings_localized_parts,
-        thm:hastings_cutoffs, thm:hastings_gaussian_time_average,
+        thm:hastings_cutoffs, thm:hastings_gaussian_time_average_stability,
         thm:hastings_moved_estimate, thm:hastings_interaction_picture,
         thm:hastings_boundary_localization}
     Let $H$ be a finite-range Hamiltonian of range $R$ with terms of norm at
