@@ -13,7 +13,8 @@ This file proves the main theorem of Hastings' one-dimensional area law (arXiv:0
 theorem at lines 124–144) on the chain of `L` sites with local dimension `q`: for a chain
 Hamiltonian of range `R` and term norm `J ≥ 0` with a unique ground state `Ω` and gap
 `ΔE > 0`, the entropy of every prefix `[0, i)` in `Ω` is at most a bound `S_max` that depends
-only on `R`, `J/ΔE` and `q`, not on the length `L`, the Hamiltonian, or the ground state.
+only on `R`, `κ`, `J/ΔE` and `q`, not on the length `L`, the Hamiltonian, or the ground
+state. Here `κ > 6` is the rate parameter of Lemma 1 below.
 
 The proof combines Lemma 1 with a polynomial constant (`exists_projectorFactorization_pow`)
 with the area law from Lemma 1 (`regionEntropy_prefix_le_of_factorization`). In units of the
