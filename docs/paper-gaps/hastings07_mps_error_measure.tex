@@ -1,0 +1,64 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+\input{command}
+\setlength{\emergencystretch}{2em}
+\title{The Error of the Matrix Product State in Hastings' Area Law}
+\author{}
+\date{October 22, 2026}
+\begin{document}
+\maketitle
+\gapnote{clarification}{resolved}
+
+\section{The source statement}
+
+The section on matrix product states of~\cite{Hastings2007AreaLaw} concludes
+that the error of a matrix product state of bond dimension $k'$ on a chain of
+length $N$ scales as
+\begin{align}
+    N\,(k'/k_0)^{1/\xi'\ln(D)}.
+    \label{eq:hastings07_mps_error_source}
+\end{align}
+It does not name the error measure.\footnote{\path{References/0705.2024/law16.tex},
+    lines~553--557.} The exponent is printed without its minus sign; the bound
+is meant to decay in $k'$, and the corrected exponent $-1/(\xi'\ln D)$ is
+recorded in the separate note \path{hastings07_schmidt_tail_constant.tex}. The
+rest of this note uses the corrected exponent.
+
+\section{The reading}
+
+Let $\Phi$ be the vector obtained by truncating every cut onto its $k'$
+leading Schmidt vectors, and let $\tau_j(k')$ be the tail of the Schmidt
+coefficients beyond the $k'$ largest at the cut $(j,j+1)$. The squared error
+of this sequential truncation satisfies
+\begin{align}
+    \lVert\Phi-\Psi_0\rVert^2
+     & \le\sum_{j=1}^{N-1}\tau_j(k'),
+    \label{eq:hastings07_mps_error_sq}
+\end{align}
+since at each step $\Psi_0-\Pi\Phi'=\Pi(\Psi_0-\Phi')+(1-\Pi)\Psi_0$ is an
+orthogonal decomposition. Verstraete and
+Cirac~\cite{VerstraeteCirac2006Faithfully} state
+(\ref{eq:hastings07_mps_error_sq}) with a factor $2$ on the right. Together
+with the polynomial decay
+$\tau_j(k')\le c\,e^{2/\xi'}(k'/k_0)^{-1/(\xi'\ln D)}$ of the tail, it gives
+(\ref{eq:hastings07_mps_error_source}) for the squared norm:
+\begin{align}
+    \lVert\Phi-\Psi_0\rVert^2
+     & \le(N-1)\,c\,e^{2/\xi'}\,(k'/k_0)^{-1/(\xi'\ln D)}.
+    \notag
+\end{align}
+The error in (\ref{eq:hastings07_mps_error_source}) is therefore read as the
+squared norm, which is the measure for which the stated rate
+holds.\footnote{\leanid{TNLean.MPS.AreaLaw.Hastings.isOpenMPS_norm_sub_sq_le_of_schmidtTail_geometric}
+    in \doclink{TNLean/MPS/AreaLaw/Hastings/SchmidtTailMPS};
+    \leanid{TNLean.MPS.AreaLaw.norm_sub_sequentialTruncation_sq_le} in
+    \doclink{TNLean/MPS/AreaLaw/SequentialTruncation}.}
+The norm itself is then of order
+$\sqrt N\,(k'/k_0)^{-1/(2\xi'\ln D)}$.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}

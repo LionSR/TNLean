@@ -2341,7 +2341,12 @@ for an arbitrary finite set of sites and are instantiated here directly.
     \begin{align}
         \psi-P\Phi_{j-1} & =P(\psi-\Phi_{j-1})+(1-P)\psi, \notag
     \end{align}
-    and the two terms are orthogonal. Hence
+    and the two terms are orthogonal, since $P^*=P=P^2$ gives
+    \begin{align}
+        \langle P(\psi-\Phi_{j-1}),(1-P)\psi\rangle
+         & =\langle\psi-\Phi_{j-1},(P-P^2)\psi\rangle=0. \notag
+    \end{align}
+    Hence
     $\|\psi-\Phi_j\|^2\le\|\psi-\Phi_{j-1}\|^2+\|(1-P_{L-j})\psi\|^2$,
     and $\|(1-P_k)\psi\|^2=\operatorname{tr}((1-\Pi_k)\rho_k)=\epsilon_k(D)$.
     Summing over the steps gives the bound.
