@@ -23,7 +23,11 @@ run_cmd do
     ``TNLean.MPS.AreaLaw.sixteen_le_lemmaOneLength_and_le,
     ``TNLean.MPS.AreaLaw.lemmaOneConst_le_pow,
     ``TNLean.MPS.AreaLaw.exists_projectorFactorization_pow,
-    ``TNLean.MPS.AreaLaw.exists_projectorFactorization_posSemidef_pow] do
+    ``TNLean.MPS.AreaLaw.exists_projectorFactorization_posSemidef_pow,
+    ``TNLean.MPS.AreaLaw.lemmaOneEndpointLength,
+    ``TNLean.MPS.AreaLaw.lemmaOneEndpointLength_eq,
+    ``TNLean.MPS.AreaLaw.exists_projectorFactorization_endpoint,
+    ``TNLean.MPS.AreaLaw.exists_projectorFactorization_posSemidef_endpoint] do
     unless (← Lean.getEnv).contains decl do
       throwError "Missing declaration {decl}"
     let axioms ← Lean.collectAxioms decl
