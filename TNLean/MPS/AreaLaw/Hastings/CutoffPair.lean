@@ -29,9 +29,15 @@ each onto the `k`-neighbourhood `K` of the window supporting `[H, W]`. When `R +
   `2 (2 (m + R) 2^{2R+1}) J + 2 √(2h/π) C(R) J²`, with `h = s / ΔE²`, independent of the
   length of the chain.
 
-Here `C(R) = partCommutatorConst R` replaces the printed `J²` bound on `[H, H_L]`, as recorded
-in `docs/paper-gaps/hastings07_commutator_constant.tex`, and the localization bound is on
-`‖W_tilde - M‖`, as recorded in `docs/paper-gaps/hastings07_filtered_part_localization.tex`.
+The variance parameter `s` of the filters is the source's `q`.
+
+**Local fix (commutator constant, line 794):** `C(R) = partCommutatorConst R` replaces the
+printed `J²` bound on `[H, H_L]`, which fails for range-one terms. Documented in
+`docs/paper-gaps/hastings07_commutator_constant.tex`.
+
+**Local fix (error of the localized parts, lines 816–828):** the localization bound is on
+`‖W_tilde - M‖`, which the next step of the source uses, not on the printed `‖M - H_L‖`.
+Documented in `docs/paper-gaps/hastings07_filtered_part_localization.tex`.
 
 ## Main declarations
 
