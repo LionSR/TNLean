@@ -29,12 +29,13 @@ state approximation, with only the hypotheses of Hastings' theorem, once Lemma 1
 for the gapped ground state with a constant `C₁` uniform in the chain.
 
 **Scope restriction (quantitative bounds of Lemma 1):** when `ξ'` and `C₁` are supplied by
-the formalized Lemma 1, they carry its restrictions. The Lieb–Robinson factor there is
-`a |X|²` rather than linear in `|X|` (arXiv:0705.2024v4, lines 96–112), and `C₁` is not shown
-to be polynomial in `ξ` (lines 258–262). The bond dimension `k₀ = ⌈exp(2 S_max)/2⌉` inherits
-both through the area-law bound `S_max`. Documented in
-`docs/paper-gaps/hastings07_lemma1_decay_length.tex` and
-`docs/paper-gaps/hastings07_gaussian_average_exponent.tex`.
+the formalized Lemma 1, they carry its quantitative restrictions. Its length is
+`ξ = 8 max(2v₀/ΔE, 1)`, with `v₀` the velocity of the chain localization estimate, which is
+not shown to be the source's `max(2v/ΔE, ξ_C)` (arXiv:0705.2024v4, lines 96–112, 139–142); the
+printed `ξ' = 6ξ` is not reached; and `C₁` is not shown to be bounded by a polynomial in `ξ`
+(lines 258–262). The bond dimension `k₀ = ⌈exp(2 S_max)/2⌉` inherits these through the
+area-law bound `S_max`. Documented in `docs/paper-gaps/hastings07_lemma1_decay_length.tex`
+and `docs/paper-gaps/hastings07_gaussian_average_exponent.tex`.
 
 The error is the squared norm, documented in
 `docs/paper-gaps/hastings07_mps_error_measure.tex`. The value of `S_max` carries the local fix
