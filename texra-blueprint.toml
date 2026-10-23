@@ -51,6 +51,7 @@ ssvcw05 = "quant-ph/0501096 (sequential generation of entangled multiqubit state
 spwc10  = "arXiv:0909.5347 (quantum Wielandt inequality)"
 sun25   = "arXiv:2504.16985 (anomalous symmetries of matrix product density operators)"
 sw04    = "Schumacher and Werner, quant-ph/0405174 (quantum cellular automata)"
+swv07   = "Schuch, Wolf, Verstraete and Cirac, Entropy scaling and simulability by Matrix Product States, arXiv:0705.0292v2"
 tnlean  = "internal theorem-surface audit, no single external source"
 
 [blueprint.graphs]

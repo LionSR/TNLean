@@ -1350,3 +1350,12 @@ positive and the later estimate uses `‖M_L O_L‖` at most the threshold.
   the window length doubles, that the prefactor of that bound is the starting
   length `ξ₀` rather than `ξ₀/2`, and the implicit hypotheses `2 C₁ > 1` and
   `ln C₁ + C₂ ≥ 0`.
+
+### Matrix product state truncation: the squared norm
+
+[swv07_truncation_squared_norm.tex](swv07_truncation_squared_norm.tex)
+(false-source, resolved) records the missing square in `eq:eps-upper` of
+Schuch–Wolf–Verstraete–Cirac, arXiv:0705.0292v2, lines 239–245. A two-qubit
+state disproves the printed norm estimate. The note compares the corrected
+squared-norm bound with the stronger proved sequential-truncation estimate;
+the Rényi family theorem remains open in #9855.
