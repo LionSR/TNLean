@@ -13,6 +13,7 @@ import TNLean.MPS.AreaLaw.Hastings.ChainBootstrap
 import TNLean.MPS.AreaLaw.Hastings.ChainLocalizedParts
 import TNLean.MPS.AreaLaw.Hastings.CutProductExpectation
 import TNLean.MPS.AreaLaw.Hastings.CutProductState
+import TNLean.MPS.AreaLaw.Hastings.DecaySlack
 import TNLean.MPS.AreaLaw.Hastings.Doubling
 import TNLean.MPS.AreaLaw.Hastings.EffectExpectation
 import TNLean.MPS.AreaLaw.Hastings.EffectFromFactorization
@@ -32,6 +33,7 @@ import TNLean.MPS.AreaLaw.Hastings.SchmidtDiagonalOperators
 import TNLean.MPS.AreaLaw.Hastings.SchmidtRankBootstrap
 import TNLean.MPS.AreaLaw.Hastings.SchmidtTail
 import TNLean.MPS.AreaLaw.Hastings.SchmidtTailConstraint
+import TNLean.MPS.AreaLaw.Hastings.SchmidtTailMPS
 import TNLean.MPS.AreaLaw.Hastings.SpectralCutoff
 import TNLean.MPS.AreaLaw.Hastings.TailEntropy
 import TNLean.MPS.AreaLaw.Hastings.ThreeWaySplitting
