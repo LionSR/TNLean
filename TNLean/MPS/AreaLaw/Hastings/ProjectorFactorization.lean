@@ -46,9 +46,12 @@ rate; these steps remain open.
 ## Main declarations
 
 * `lemmaOneLength R J ΔE`: the length `ξ`.
+* `lemmaOneSqrtA`, `lemmaOneSqrtB`, `lemmaOneConst`: the explicit constants.
 * `exists_isFactorizationAt_sqrt_decay`: the factorization with error
-  `(a + b √l) e^{-l/(6ξ)}` at every cut and length.
-* `exists_projectorFactorization`: the restricted factorization at every rate `ξ' > 6ξ`.
+  `(a + b √l) e^{-l/(6ξ)}` at every cut and length, `a = lemmaOneSqrtA R J ΔE`,
+  `b = lemmaOneSqrtB R J ΔE`.
+* `exists_isFactorizationAt_lemmaOneConst`, `exists_projectorFactorization`: the restricted
+  factorization at every rate `ξ' > 6ξ`, with the constant `lemmaOneConst R J ΔE ξ'`.
 * `exists_projectorFactorization_posSemidef`: its positive version, at half
   the rate.
 
@@ -92,7 +95,7 @@ noncomputable def lemmaOneConst (R : ℕ) (J ΔE ξ' : ℝ) : ℝ :=
   lemmaOneSqrtA R J ΔE +
     lemmaOneSqrtB R J ΔE * (1 / √(2 * exp 1 * (1 / (6 * lemmaOneLength R J ΔE) - 1 / ξ')))
 
-theorem lemmaOneConst_nonneg (R : ℕ) {J ΔE : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < ΔE) (ξ' : ℝ) :
+theorem lemmaOneConst_nonneg (R : ℕ) {J ΔE : ℝ} (hΔ : 0 < ΔE) (ξ' : ℝ) :
     0 ≤ lemmaOneConst R J ΔE ξ' := by
   have hB : 0 ≤ lemmaOneSqrtB R J ΔE := Hastings.lemmaOneBudgetB_nonneg hΔ (by positivity)
   have hA : 0 ≤ lemmaOneSqrtA R J ΔE := le_max_of_le_right (exp_pos _).le
@@ -123,9 +126,10 @@ theorem isFactorizationAt_zero_one_one {Ω : EuclideanSpace ℂ (Fin L → Fin q
   simpa using (isStarProjection_vecMulVec_of_norm_eq_one hΩ).norm_le
 
 /-- **Lemma 1 with the square-root error.** For a gapped ground state `Ω` of a chain
-Hamiltonian of range `R` and term norm `J ≥ 0`, there are constants `a, b ≥ 0`, independent of
-the length of the chain, such that at every cut `c` and length `l` there is an approximate
-factorization of `|Ω⟩⟨Ω|` with error `(a + b √l) e^{-l/(6ξ)}`, `ξ = lemmaOneLength R J ΔE`.
+Hamiltonian of range `R` and term norm `J ≥ 0`, at every cut `c` and length `l` there is an
+approximate factorization of `|Ω⟩⟨Ω|` with error `(a + b √l) e^{-l/(6ξ)}`, where
+`ξ = lemmaOneLength R J ΔE`, `a = lemmaOneSqrtA R J ΔE` and `b = lemmaOneSqrtB R J ΔE` do not
+depend on the length of the chain.
 Hastings, arXiv:0705.2024v4, `law16.tex`, lines 766–907; the final bound is lines 903–907. -/
 theorem exists_isFactorizationAt_sqrt_decay (R : ℕ) {J ΔE : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < ΔE)
     {L q : ℕ} [NeZero q] (h : ChainHamiltonian L q R J) {E₀ : ℝ}
@@ -205,7 +209,7 @@ theorem exists_isFactorizationAt_sqrt_decay (R : ℕ) {J ΔE : ℝ} (hJ : 0 ≤ 
         | exact chainLRPrefactor_nonneg R J
         | positivity
         | exact mul_nonneg (chainLRPrefactor_nonneg R J) (by positivity)
-    · exact mul_le_mul_of_nonneg_right (add_le_add_right (le_max_left _ _) _) (exp_pos _).le
+    · exact mul_le_mul_of_nonneg_right (add_le_add (le_max_left _ _) le_rfl) (exp_pos _).le
 
 
 /-- **Lemma 1 with the explicit constant.** Under the hypotheses of
@@ -237,7 +241,7 @@ theorem exists_projectorFactorization (R : ℕ) {J ΔE : ℝ} (hJ : 0 ≤ J) (h�
       {Ω : EuclideanSpace ℂ (Fin L → Fin q)}, IsGappedGroundState h.operator E₀ Ω ΔE →
       ∀ c l : ℕ, ∃ OB OL OR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ,
         IsFactorizationAt Ω c l (C₁ * exp (-(l / ξ'))) OB OL OR :=
-  ⟨lemmaOneConst R J ΔE ξ', lemmaOneConst_nonneg R hJ hΔ ξ', fun h _ _ hgs c l ↦
+  ⟨lemmaOneConst R J ΔE ξ', lemmaOneConst_nonneg R hΔ ξ', fun h _ _ hgs c l ↦
     exists_isFactorizationAt_lemmaOneConst R hJ hΔ hξ' h hgs c l⟩
 
 /-- **The positive version of Lemma 1.** Under the hypotheses of
