@@ -30,10 +30,25 @@ error $\varepsilon$ that is left free.
 \begin{proof}\leanok
     Since $\|O_BO_LO_R\Omega-\Omega\|\le\varepsilon$ and the factors are
     positive contractions, $\|(O_B-1)\Omega\|$, $\|(O_L-1)\Omega\|$ and
-    $\|(O_R-1)\Omega\|$ are at most $\sqrt{2\varepsilon}$. The chain of triangle inequalities of the
-    source then moves $O_B$ past $A$, replaces $B_L\Omega$ by $B_R\Omega$,
-    moves $B_R$ past $O_L$ and $O_R$ past $B_L$, and replaces
-    $O_BO_LO_R$ by $P$, at a total cost of $3\sqrt{2\varepsilon}+\varepsilon$.
+    $\|(O_R-1)\Omega\|$ are at most $\delta=\sqrt{2\varepsilon}$. Writing
+    $x\approx_\eta y$ for $|x-y|\le\eta$,
+    \begin{align*}
+        \langle\Omega,AB_L\Omega\rangle
+         & \approx_\delta\langle\Omega,AB_LO_R\Omega\rangle
+        \approx_\delta\langle\Omega,O_BAB_LO_R\Omega\rangle
+        =\langle\Omega,AO_BO_RB_R\Omega\rangle                    \\
+         & \approx_\delta\langle\Omega,AO_BO_RB_RO_L\Omega\rangle
+        =\langle\Omega,A(O_BO_LO_R)B_R\Omega\rangle
+        \approx_\varepsilon\langle\Omega,APB_R\Omega\rangle .
+    \end{align*}
+    The first three steps use $\|(O_R-1)\Omega\|$, $\|(O_B-1)\Omega\|$ and
+    $\|(O_L-1)\Omega\|$ with norms at most one, the two equalities use the
+    commutations and $B_L\Omega=B_R\Omega$, and the last uses
+    $\|O_BO_LO_R-P\|\le\varepsilon$. Finally
+    $\langle\Omega,APB_R\Omega\rangle=\langle\Omega,A\Omega\rangle
+        \langle\Omega,B_R\Omega\rangle=\langle\Omega,A\Omega\rangle
+        \langle\Omega,B_L\Omega\rangle$, and the total cost is
+    $3\sqrt{2\varepsilon}+\varepsilon$.
 \end{proof}
 
 \begin{theorem}[Schmidt-diagonal operators are contractions]
@@ -87,7 +102,11 @@ error $\varepsilon$ that is left free.
         thm:hastings_schmidt_diagonal_norm}
     The operator $B_R=1\otimes\sum_\alpha O(\alpha)\,
         |\psi_R(\alpha)\rangle\langle\psi_R(\alpha)|$ satisfies
-    $B_L\Omega=B_R\Omega$ by the Schmidt decomposition, and both $B_L$ and
+    \begin{align*}
+        B_L\Omega=\sum_\alpha a_\alpha O(\alpha)\,
+        \psi_L(\alpha)\otimes\psi_R(\alpha)=B_R\Omega
+    \end{align*}
+    by the Schmidt decomposition and orthonormality, and both $B_L$ and
     $B_R$ have norm at most one by
     Theorem~\ref{thm:hastings_schmidt_diagonal_norm}.
     Operators supported on disjoint sets of sites commute, so the supports

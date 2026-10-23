@@ -19,8 +19,8 @@ Hastings' Lemma 3 (arXiv:0705.2024v4, `References/0705.2024/law16.tex`, lines 62
 chain of `L` sites with `q` states per site, with the operators of Lemma 1 taken as a
 hypothesis. Let `Ω = ∑ α, a α ψ_L(α) ⊗ ψ_R(α)` be a Schmidt decomposition across the cut after
 `j` sites, let `B_L = ∑ α, O α |ψ_L(α)⟩⟨ψ_L(α)| ⊗ 1` with `|O α| ≤ 1`, and let `A` be a
-contraction supported away from the buffer of the first `j - l` and the last `L - j - l`
-sites. Then `|⟨Ω, A B_L Ω⟩ − ⟨Ω, A Ω⟩⟨Ω, B_L Ω⟩| ≤ 3 √(2ε) + ε`, eq. `fwdback`.
+contraction supported in the first `j - l` sites or the last `L - j - l` sites, that is, away
+from the buffer `[j - l, j + l)`. Then `|⟨Ω, A B_L Ω⟩ − ⟨Ω, A Ω⟩⟨Ω, B_L Ω⟩| ≤ 3 √(2ε) + ε`, eq. `fwdback`.
 
 The operator estimate is
 `TNLean.MPS.AreaLaw.Hastings.norm_inner_sub_le_of_projector_factorization`. This file supplies
@@ -116,10 +116,8 @@ theorem commute_reindex_one_kronecker_of_isSupportedOn
     simp [Entropy.cutOperator, e]
   rw [hXe, hX.cutOperator_eq_kronecker_one hDB (e σ₀).2]
   have hc (M : Matrix ((v : {v // v ∈ B}) → Fin (n v)) ((v : {v // v ∈ B}) → Fin (n v)) ℂ) :
-      Commute (M ⊗ₖ (1 : Matrix _ _ ℂ)) ((1 : Matrix _ _ ℂ) ⊗ₖ K) := by
-    change _ * _ = _ * _
-    rw [← mul_kronecker_mul, ← mul_kronecker_mul, Matrix.mul_one, Matrix.one_mul,
-      Matrix.mul_one, Matrix.one_mul]
+      Commute (M ⊗ₖ (1 : Matrix _ _ ℂ)) ((1 : Matrix _ _ ℂ) ⊗ₖ K) :=
+    Entropy.kronecker_one_mul_one_kronecker_comm M K
   exact (hc _).map (reindexAlgEquiv ℂ ℂ e.symm)
 
 /-- In cut coordinates, an operator `reindex M` acts on `Ω` as `M` acts on the cut vector. -/
@@ -197,8 +195,8 @@ theorem norm_inner_mul_sub_le_of_factorization {j l : ℕ}
   obtain ⟨σ₀⟩ : Nonempty (Fin L → Fin q) := by
     by_contra h
     rw [not_nonempty_iff] at h
-    have h0 : Ω = 0 := PiLp.ext fun σ ↦ isEmptyElim σ
-    simp [h0] at hΩ
+    rw [Subsingleton.elim Ω 0, norm_zero] at hΩ
+    exact zero_ne_one hΩ
   have hBL1 : ‖Entropy.localLift (n := fun _ : Fin L ↦ q) (leftBlock L j)
       (schmidtDiagonal O ψL)‖ ≤ 1 :=
     (l2_opNorm_reindex_le _ _ _).trans
