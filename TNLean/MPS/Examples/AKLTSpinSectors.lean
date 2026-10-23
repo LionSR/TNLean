@@ -225,6 +225,11 @@ theorem aklt_finrank_groundSpace_inf_eigenspace_totalSpinSq_two {N : ℕ} (hN : 
   norm_num [Module.finrank_matrix] at hdim
   omega
 
+private lemma groundSpaceES_map_withLp (N : ℕ) :
+    (groundSpaceES akltTensor N).map
+      (WithLp.linearEquiv 2 ℂ (NSiteSpace 3 N)).toLinearMap = groundSpace akltTensor N :=
+  (Submodule.map_symm_eq_iff (WithLp.linearEquiv 2 ℂ (NSiteSpace 3 N))).mp rfl
+
 /-- The actual open two-site AKLT parent Hamiltonian has a one-dimensional
 spin-zero ground sector, using the standard coefficient realization of the
 physical Hilbert space. Source: arXiv:2011.12127, lines 1171--1174. -/
@@ -233,10 +238,7 @@ theorem aklt_finrank_openParent_ground_spinZero {N : ℕ} (hN : 2 ≤ N) :
       ((LinearMap.ker (openParentHamiltonianES akltTensor 2 N)).map
         (WithLp.linearEquiv 2 ℂ (NSiteSpace 3 N)).toLinearMap ⊓
           LinearMap.ker (totalSpinSq spinOneOperator) : Submodule ℂ (NSiteSpace 3 N)) = 1 := by
-  have hmap : (groundSpaceES akltTensor N).map
-      (WithLp.linearEquiv 2 ℂ (NSiteSpace 3 N)).toLinearMap = groundSpace akltTensor N :=
-    (Submodule.map_symm_eq_iff (WithLp.linearEquiv 2 ℂ (NSiteSpace 3 N))).mp rfl
-  rw [aklt_ker_openParentHamiltonianES_two_eq_groundSpaceES hN, hmap]
+  rw [aklt_ker_openParentHamiltonianES_two_eq_groundSpaceES hN, groundSpaceES_map_withLp N]
   exact aklt_finrank_groundSpace_inf_ker_totalSpinSq hN
 
 /-- The three other ground states of the actual open AKLT parent Hamiltonian
@@ -247,10 +249,7 @@ theorem aklt_finrank_openParent_ground_spinOne {N : ℕ} (hN : 2 ≤ N) :
         (WithLp.linearEquiv 2 ℂ (NSiteSpace 3 N)).toLinearMap ⊓
           Module.End.eigenspace (totalSpinSq spinOneOperator) 2 :
             Submodule ℂ (NSiteSpace 3 N)) = 3 := by
-  have hmap : (groundSpaceES akltTensor N).map
-      (WithLp.linearEquiv 2 ℂ (NSiteSpace 3 N)).toLinearMap = groundSpace akltTensor N :=
-    (Submodule.map_symm_eq_iff (WithLp.linearEquiv 2 ℂ (NSiteSpace 3 N))).mp rfl
-  rw [aklt_ker_openParentHamiltonianES_two_eq_groundSpaceES hN, hmap]
+  rw [aklt_ker_openParentHamiltonianES_two_eq_groundSpaceES hN, groundSpaceES_map_withLp N]
   exact aklt_finrank_groundSpace_inf_eigenspace_totalSpinSq_two hN
 
 /-- The physical open bilinear-biquadratic AKLT Hamiltonian has exactly one

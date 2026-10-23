@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Circuit.EntropySupport
 import TNLean.MPS.AreaLaw.Hastings.CutProductExpectation
 import TNLean.MPS.AreaLaw.Hastings.SchmidtDiagonalCorrelation
 
@@ -236,20 +237,26 @@ theorem one_sub_sq_le_re_inner_right {Ψ : EuclideanSpace ℂ n} (hΨ : ‖Ψ‖
   have h1 := norm_toEuclideanCLM_one_sub_le hΨ hZ hprod
   exact (one_sub_sq_le_norm_sq hΨ hZ h1).trans (norm_sq_le_re_inner_right hOL hOR Ψ)
 
-/-- **The expectation in the product of the marginals.** Let `O_L` and `O_R` be commuting
+/-- **The expectation in the product of the marginals.** Let `O_L` and `O_R` be
 orthogonal projections, `O_L` supported on the sites to the left of the cut after `c` sites and
 `O_R` on the remaining sites, with `‖O_B O_L O_R - |Ω⟩⟨Ω|‖ ≤ ε`. Then the expectation `y` of
 `O_L O_R` in the product `σ = ρ_{<c} ⊗ ρ_{≥c}` of the two marginals of `Ω` satisfies
 `1 - 2ε² ≤ y`: `y = ⟨Ω, O_L Ω⟩ ⟨Ω, O_R Ω⟩` and both factors are at least `1 - ε²`.
+The support conditions imply that the projections commute.
 Hastings, arXiv:0705.2024v4, `law16.tex` lines 440–446. -/
 theorem one_sub_two_mul_sq_le_re_trace_cutProductState_mul {L q c : ℕ}
     {Ω : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Ω‖ = 1)
     {OB OL OR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
-    (hOL : IsStarProjection OL) (hOR : IsStarProjection OR) (hcomm : Commute OL OR)
+    (hOL : IsStarProjection OL) (hOR : IsStarProjection OR)
     (hL : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) OL (leftBlock L c))
     (hR : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) OR (leftBlock L c)ᶜ) {ε : ℝ}
     (hprod : ‖OB * OL * OR - vecMulVec Ω.ofLp (star Ω.ofLp)‖ ≤ ε) :
     1 - 2 * ε ^ 2 ≤ (cutProductState L q c Ω * (OL * OR)).trace.re := by
+  have hcomm : Commute OL OR :=
+    QuantumCircuit.commute_of_mem_supportedOperators
+      (Finset.disjoint_coe.mpr disjoint_compl_right)
+      (QuantumCircuit.mem_supportedOperators_of_isSupportedOn hL)
+      (QuantumCircuit.mem_supportedOperators_of_isSupportedOn hR)
   rw [trace_cutProductState_mul_mul c Ω hL hR]
   change 1 - 2 * ε ^ 2 ≤ (⟪Ω, toEuclideanCLM (n := Fin L → Fin q) (𝕜 := ℂ) OL Ω⟫_ℂ *
     ⟪Ω, toEuclideanCLM (n := Fin L → Fin q) (𝕜 := ℂ) OR Ω⟫_ℂ).re

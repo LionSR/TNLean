@@ -347,28 +347,6 @@ theorem siteZZ_eq_diagonal [NeZero N] (j : Fin N) :
     siteZZ j = Matrix.diagonal fun b => (-1 : ℂ) ^ (b j).val * (-1 : ℂ) ^ (b (j + 1)).val := by
   rw [siteZZ, siteZ, siteZ, Matrix.diagonal_mul_diagonal]
 
-theorem siteX_mul_self (j : Fin N) : siteX j * siteX j = 1 := by
-  ext c b
-  rw [siteX_mul_apply, siteX, Matrix.one_apply]
-  simp
-
-theorem siteZ_mul_self (j : Fin N) : siteZ j * siteZ j = 1 := by
-  rw [siteZ, Matrix.diagonal_mul_diagonal]
-  simp [neg_one_pow_mul_neg_one_pow_self, Matrix.diagonal_one]
-
-theorem siteX_mul_siteX_comm (j k : Fin N) : siteX j * siteX k = siteX k * siteX j := by
-  ext c b
-  rw [siteX_mul_apply, siteX_mul_apply, siteX, siteX]
-  refine if_congr ?_ rfl rfl
-  simp only [funext_iff, Pi.add_apply]
-  refine forall_congr' fun i => ?_
-  generalize_decide c i, b i, (Pi.single j 1 : Fin N → Fin 2) i,
-    (Pi.single k 1 : Fin N → Fin 2) i
-
-theorem siteZ_mul_siteZ_comm (j k : Fin N) : siteZ j * siteZ k = siteZ k * siteZ j := by
-  rw [siteZ, siteZ, Matrix.diagonal_mul_diagonal, Matrix.diagonal_mul_diagonal]
-  simp only [mul_comm]
-
 /-- The product of bit signs picks up one extra factor when a single input bit is flipped. -/
 theorem prod_bitSign_add_single (u y : Fin N → Fin 2) (j : Fin N) :
     ∏ i, bitSign ((u + Pi.single j 1 : Fin N → Fin 2) i) (y i) =
