@@ -1386,7 +1386,7 @@ estimates and energy-rescaling analysis under the still-open issue #9811.
   diameter-bounded statement is a corollary. The source's count of at most
   `nS` index components per site remains unproved: for a product of `m`
   factors the construction carries `m` components of `q²` values at every site,
-  one for every factor wherever it acts.
+  one for every factor wherever it acts, so the `n`-th power `ρₙ` carries `n m`.
 
 ## Rényi entropy and matrix product state approximation
 

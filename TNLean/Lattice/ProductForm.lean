@@ -52,7 +52,8 @@ indices of a smaller site can be padded with values on which the coefficient van
 The error between `ρₙ` and `exp(-β H)` is not estimated here, and neither is the source's
 count of at most `n S` index components per site, one for each nearby factor (lines
 1069–1075): every factor is expanded in single-site matrix units at every site, so a product of
-`m` factors carries `m` components of `q²` values at each site.
+`m` factors carries `m` components of `q²` values at each site, and its `n`-th power `ρₙ`
+carries `n m`.
 
 **Scope restriction (geometry and index count):** the source uses an arbitrary metric
 lattice; this file uses finite planar domains with walk distance. The supported-operator
