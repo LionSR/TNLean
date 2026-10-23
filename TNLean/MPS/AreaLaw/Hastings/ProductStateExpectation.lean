@@ -12,11 +12,11 @@ import TNLean.MPS.AreaLaw.Hastings.SchmidtDiagonalCorrelation
 
 Lemma 1 of Hastings' proof of the area law gives orthogonal projections `O_L`, `O_R`, commuting,
 and a contraction `O_B` with `‖O_B O_L O_R − |Ψ⟩⟨Ψ|‖ ≤ ε`. As Hastings' note added explains
-(arXiv:0705.2024v4, lines 911–925), `O_B` need not be positive, and the Lindblad–Uhlmann step is
-run with the effect `O_Bᴴ O_B`. This file proves the expectation bounds that step needs:
-`Ψ` lies within `ε` of the range of `O_L O_R`, the effect has ground-state expectation at least
-`(1 − 2ε)²`, and the expectation `y` of `O_L O_R` in the product of the two marginals of `Ψ`
-(line 446) is at least `1 − 2ε²`.
+(arXiv:0705.2024v4, lines 916–925, route 1 of the note added), `O_B` need not be positive, and
+the Lindblad–Uhlmann step is run with the effect `O_Bᴴ O_B`. This file proves the expectation
+bounds that step needs: `Ψ` lies within `ε` of the range of `O_L O_R`, the effect has
+ground-state expectation at least `(1 − 2ε)²`, and the expectation `y` of `O_L O_R` in the
+product of the two marginals of `Ψ` (line 446) is at least `1 − 2ε²`.
 
 The last bound works at a cut of the chain and takes the factorization
 `tr(σ O_L O_R) = ⟨Ψ, O_L Ψ⟩ ⟨Ψ, O_R Ψ⟩` from `trace_cutProductState_mul_mul`, and the pure-state
@@ -34,7 +34,8 @@ separate statement in the Kronecker coordinates of an abstract bipartition is ke
 ## References
 
 * M. B. Hastings, *An area law for one-dimensional quantum systems*, J. Stat. Mech. (2007)
-  P08024, arXiv:0705.2024v4, `References/0705.2024/law16.tex`, lines 413–446 and 911–925.
+  P08024, arXiv:0705.2024v4, `References/0705.2024/law16.tex`, lines 413–446 and 916–925
+  (route 1 of the note added).
 -/
 
 open scoped ComplexOrder InnerProductSpace Matrix.Norms.L2Operator MatrixOrder
