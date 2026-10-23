@@ -106,11 +106,8 @@ private theorem exists_bipartite_effect {c : ℕ} {A B : Finset (Fin L)} (hAB : 
         (Entropy.regionUnionEquiv hAB).symm) * M).trace = ⟪Ω, toEuclideanLin E Ω⟫_ℂ ∧
       ((Entropy.regionState A Ω ⊗ₖ Entropy.regionState B Ω) * M).trace =
         (cutProductState L q c Ω * E).trace := by
-  obtain ⟨σ₀⟩ : Nonempty (Fin L → Fin q) := by
-    by_contra h
-    rw [not_nonempty_iff] at h
-    rw [Subsingleton.elim Ω 0, norm_zero] at hΩ
-    exact zero_ne_one hΩ
+  obtain ⟨σ₀, _⟩ := Function.ne_iff.mp
+    ((WithLp.ofLp_eq_zero (x := Ω)).not.mpr (norm_ne_zero_iff.mp (by simp [hΩ])))
   obtain ⟨M₀, rfl⟩ := hsupp.exists_localLift σ₀
   set u := Entropy.regionUnionEquiv (n := fun _ : Fin L ↦ q) hAB
   set e := Entropy.cutEquiv (fun _ : Fin L ↦ q) (A ∪ B)
