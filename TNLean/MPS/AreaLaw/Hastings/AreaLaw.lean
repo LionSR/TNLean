@@ -10,9 +10,9 @@ import TNLean.MPS.AreaLaw.Hastings.Window
 /-!
 # Hastings' area law on the chain from Lemma 1
 
-This file proves the main theorem of Hastings' one-dimensional area law (arXiv:0705.2024v4,
-theorem at lines 124–144) on the chain of `L` sites with local dimension `q`, with Lemma 1
-(lines 246–267) as the only hypothesis. Lemma 1 enters in the form used throughout the proof:
+This file proves a quantitative variant of Hastings' one-dimensional area law
+(arXiv:0705.2024v4, theorem at lines 124–144) on the chain of `L` sites with local dimension
+`q`, conditional on the approximate factorization of Lemma 1 (lines 246–267). It enters as follows:
 at every cut `c` and length `l` with `c + l ≤ L`, a factorization `IsFactorizationAt` of the
 ground-state projector with error `C₁ e^{-l/ξ'}`.
 
@@ -22,12 +22,12 @@ discharged here.
 * The bounds `0 ≤ S_l ≤ l ln q` for the window entropy come from `windowEntropy_nonneg` and
   `windowEntropy_le`.
 * Eq. `claim` comes from eq. `relent` (`relent_of_projectorFactorization_of_le_entropy`, which
-  contains the bootstrap lemma, Lemma 2) through `windowEntropy_two_mul_le_of_relent`, with
-  the constants of the local fix below.
+  contains the bootstrap lemma, Lemma 2) through `windowEntropy_two_mul_le_of_relent`. Its
+  constants are `2 C₁` and `C₂ = relentConst`.
 
-**Local fix (eq. relent constants):** eq. `relent`, and hence eq. `claim`, holds with `C₁`
-replaced by `2 C₁` and with `C₂ = relentConst`; only the values of the constants move.
-Documented in `docs/paper-gaps/hastings07_relent_constants.tex`.
+**Local fix (entropy-gain constants):** The entropy gain uses `2 C₁` and
+`C₂ = relentConst = 7` in place of the printed constants of eq. `relent`. Documented in
+`docs/paper-gaps/hastings07_relent_constants.tex`.
 
 **The window condition.** Eq. `relent` is proved under the assumption of line 483,
 `(l + ξ' ln C₁) ln q + F(ξ', q) ≤ S_cut`, with `F` the remainder `bootstrapRemainder` of the
@@ -66,7 +66,7 @@ variable {L q R : ℕ} {J : ℝ}
 /-- The window length `l₀` of the area law from Lemma 1 with constants `ξ'` and `C₁`:
 the larger of the doubling window `⌈ξ₀⌉ 2^M` for the constants `2 C₁` and `relentConst` of
 eq. `relent`, and `⌈(2/3)(ξ' ln C₁ + F(ξ', q)/ln q)⌉`, which makes the window condition of
-arXiv:0705.2024v4, line 483, hold (lines 483–486). -/
+arXiv:0705.2024v4, line 483, hold as used at line 488 (lines 483–486). -/
 noncomputable def areaLawWindowLength (ξ' C₁ : ℝ) (q : ℕ) : ℕ :=
   max (doublingWindowLength ξ' (2 * C₁) relentConst q)
     ⌈2 / 3 * (ξ' * Real.log C₁ + bootstrapRemainder ξ' q / Real.log q)⌉₊
@@ -121,8 +121,8 @@ Lemma 1 holds around `Ω` with constants `ξ' > 0` and `C₁ ≥ 1`: at every cu
 `l` with `c + l ≤ L` there are commuting orthogonal projections `O_L`, `O_R` supported before
 and after the cut and an operator `O_B` of norm at most one supported on `[c − l, c + l)`, with
 `‖O_B O_L O_R − |Ω⟩⟨Ω|‖ ≤ C₁ e^{-l/ξ'}`. Then `S([0, i)) ≤ S_max = areaLawBound ξ' C₁ q` for
-every `i`, which is eq. `entbd` of arXiv:0705.2024v4 (lines 130–137), proved as in
-lines 148–232 and 478–503.
+every `i`. This follows the proof of eq. `entbd` of arXiv:0705.2024v4 (lines 130–137),
+lines 148–232 and 478–503, with the quantitative changes recorded in the module docstring.
 
 The assumption `C₁ ≥ 1` loses nothing, since enlarging `C₁` only weakens Lemma 1. The value
 of `S_max` carries the local fix of the module docstring. -/
