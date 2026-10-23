@@ -50,14 +50,13 @@ namespace TNLean.MPS.AreaLaw.Hastings
 /-- **Eq. `relent` of Hastings' area law.** Let `h` be a chain Hamiltonian of range `R` and term
 norm `J ≥ 0` with a gapped ground state `Ω`, gap `ΔE > 0`, and let `ξ' > 6ξ` with
 `ξ = lemmaOneLength R J ΔE`. There is a constant `C₁ ≥ 1`, independent of the length of the
-chain, such that for local dimension `q ≥ 2`, every cut `c` and every length `l` with
-`c + l ≤ L`: if the entropy of the first `c` sites is at least
-`(l + ξ' ln C₁) ln q + F(ξ', q)`, the window condition of line 483, then the mutual information
-of `A = [c - l, c)` and `B = [c, c + l)` is at least `(1 − 2ε') l/ξ' − ln (2 C₁) − C₂` with
-`ε' = 2 C₁ e^{-l/ξ'}` and `C₂ = relentConst`.
+chain, such that for every cut `c` and every length `l` with `c + l ≤ L`: if the entropy of
+the first `c` sites is at least `(l + ξ' ln C₁) ln q + F(ξ', q)`, the window condition of
+line 483, then the mutual information of `A = [c - l, c)` and `B = [c, c + l)` is at least
+`(1 − 2ε') l/ξ' − ln (2 C₁) − C₂` with `ε' = 2 C₁ e^{-l/ξ'}` and `C₂ = relentConst`.
 
-The hypothesis `2 ≤ q` restricts nothing: for `q = 1` the entropy of the first `c` sites is
-`0` while `F(ξ', 1) = 1 + ln(ξ'/2 + 1) > 0`, so the window condition never holds.
+For local dimension `q = 1` the window condition never holds, since the entropy of the first
+`c` sites is `0` while `F(ξ', 1) = 1 + ln(ξ'/2 + 1) > 0`; the proof treats that case directly.
 
 Hastings, arXiv:0705.2024v4, `law16.tex`, eq. `relent` (lines 234–242), proved at
 lines 413–503, with the constants of the module docstring. -/
@@ -65,7 +64,7 @@ theorem exists_relent_of_isGappedGroundState (R : ℕ) {J ΔE : ℝ} (hJ : 0 ≤
     {ξ' : ℝ} (hξ' : 6 * lemmaOneLength R J ΔE < ξ') :
     ∃ C₁ : ℝ, 1 ≤ C₁ ∧ ∀ {L q : ℕ} [NeZero q] (h : ChainHamiltonian L q R J) {E₀ : ℝ}
       {Ω : EuclideanSpace ℂ (Fin L → Fin q)}, IsGappedGroundState h.operator E₀ Ω ΔE →
-      2 ≤ q → ∀ c l : ℕ, c + l ≤ L →
+      ∀ c l : ℕ, c + l ≤ L →
       (l + ξ' * Real.log C₁) * Real.log q + bootstrapRemainder ξ' q ≤
         Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L 0 c) Ω →
       Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L (c - l) (c + l)) Ω ≤
@@ -75,7 +74,17 @@ theorem exists_relent_of_isGappedGroundState (R : ℕ) {J ΔE : ℝ} (hJ : 0 ≤
           relentConst := by
   obtain ⟨C, -, hF⟩ := exists_projectorFactorization R hJ hΔ hξ'
   have hξ : 0 < ξ' := (mul_pos (by norm_num) (lemmaOneLength_pos R J ΔE)).trans hξ'
-  refine ⟨max C 1, le_max_right _ _, fun h E₀ Ω hgs hq c l hcl hS ↦ ?_⟩
+  refine ⟨max C 1, le_max_right _ _, fun h E₀ Ω hgs c l hcl hS ↦ ?_⟩
+  rcases lt_or_ge q 2 with hq | hq
+  · -- For `q = 1` the window condition fails: the entropy vanishes and `F(ξ', 1) > 0`.
+    have hq1 : q = 1 := by have := NeZero.one_le (n := q); omega
+    subst hq1
+    have hS0 := TNLean.Lattice.regionEntropy_le_card_mul_log hgs.1 (interval L 0 c)
+    have hξ0 : 0 ≤ Real.log (ξ' / 2 + 1) := Real.log_nonneg (by linarith)
+    simp only [Nat.cast_one, Real.log_one, mul_zero, zero_add, bootstrapRemainder, one_pow,
+      sub_self, Real.log_zero, add_zero] at hS hS0
+    exfalso
+    linarith
   refine relent_of_projectorFactorization_of_le_entropy hq hgs.1 hcl hξ (le_max_right _ _)
     (fun m _ ↦ ?_) hS
   obtain ⟨OB, OL, OR, hF'⟩ := hF h hgs c m
