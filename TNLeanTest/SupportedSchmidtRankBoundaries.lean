@@ -17,8 +17,10 @@ open TNLean.Lattice.Sheet
 -- The rank bound is 0^0=1, not zero.
 private noncomputable abbrev emptySitesScalarIdentity :=
   exists_threeSplit_eq_reindex_one_kronecker_rank_le
-    (q := 0) (T := (∅ : Finset (Fin 0))) (E := ∅) (D := ∅)
-    (by simp) (by simp) (one_mem_supportedOperators (d := 0) (∅ : Set (Fin 0)))
+    (q := 0) (T := (∅ : Finset (Fin 0))) (E := ∅) (D := ∅) (A := 1)
+    (by simp) (by simp)
+    (by simpa only [Finset.coe_empty] using
+      one_mem_supportedOperators (d := 0) (∅ : Set (Fin 0)))
 
 -- One site and q=0 have no configurations. The middle support has cardinality one,
 -- so the bound is 0^2=0. The actual global operator and chosen right factor are zero.
@@ -31,8 +33,10 @@ private noncomputable abbrev emptyConfiguration :=
 -- The intersection D∩E is empty, giving the rank bound 2^0=1.
 private noncomputable abbrev emptyMiddleIdentity :=
   exists_threeSplit_eq_reindex_one_kronecker_rank_le
-    (q := 2) (T := ({0} : Finset (Fin 2))) (E := ∅) (D := {1})
-    (by simp) (by decide) (one_mem_supportedOperators (d := 2) ({1} : Set (Fin 2)))
+    (q := 2) (T := ({0} : Finset (Fin 2))) (E := ∅) (D := {1}) (A := 1)
+    (by simp) (by decide)
+    (by simpa only [Finset.coe_singleton] using
+      one_mem_supportedOperators (d := 2) ({1} : Set (Fin 2)))
 
 -- The genuine two-qubit SWAP crosses E={0} and U={1}; there is no left region.
 -- Its support is the entire two-site set, hence D∩E={0} and the bound is four.
