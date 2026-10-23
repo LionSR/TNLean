@@ -10,3 +10,4 @@ Authors: TNLean contributors
 
 import TNLean.MPS.AreaLaw.EntropyScaling.QutritApproximation
 import TNLean.MPS.AreaLaw.EntropyScaling.QutritCopies
+import TNLean.MPS.AreaLaw.EntropyScaling.QutritPolynomialObstruction

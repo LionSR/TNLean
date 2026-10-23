@@ -98,3 +98,56 @@
     Combining this with (\ref{eq:qutrit_entropy_scaling_scalar_tail}) gives
     $(2^N-(D-1))/(2\cdot2^N)\le t$, which rearranges to the claimed bound.
 \end{proof}
+
+\begin{theorem}[Exponential bond dimension from full trace error]
+    \label{thm:qutrit_entropy_scaling_trace_dimension}
+    \lean{TNLean.MPS.AreaLaw.EntropyScaling.bondDimension_qutritCopies_ge}
+    \leanok
+    \uses{def:qutrit_entropy_scaling_copies}
+    Let $N\ge2$ and let $\Phi$ be any MPS on $M=2N^3$ sites with bond
+    dimension at most $D$. Write
+    $\delta=\|\lvert\chi_M\rangle\langle\chi_M\rvert-
+        \lvert\Phi\rangle\langle\Phi\rvert\|_1$ for the full trace-norm error.
+    Then $D\ge2^N(1-2\delta)+1$, and hence
+    $D\ge2^N(1-8\delta)+1$ as in~\cite{Schuch2008EntropyScaling},
+    lines 475--479. The approximating vector need not have norm one.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:qutrit_entropy_scaling_scalar_dimension,thm:qutrit_entropy_scaling_copies_norm}
+    If $\delta\ge1$, the asserted lower bound is nonpositive. Otherwise
+    $\Phi\ne0$, since the zero vector has error one. Set
+    $\widehat\Phi=\Phi/\|\Phi\|$. Scaling the scalar endpoint coefficient
+    preserves the MPS bond dimension. The optimized pure-state trace formula,
+    applied with density coefficient one, gives
+    \begin{align}
+        \label{eq:qutrit_entropy_scaling_actual_error}
+        T\bigl(|\langle\chi_M,\widehat\Phi\rangle|^2\bigr)
+        \le\bigl\|\lvert\chi_M\rangle\langle\chi_M\rvert-
+        \lvert\Phi\rangle\langle\Phi\rvert\bigr\|_1=\delta<1.
+    \end{align}
+    Apply the scalar bond-dimension bound and then
+    (\ref{eq:qutrit_entropy_scaling_actual_error}).
+\end{proof}
+
+\begin{theorem}[No polynomial bond bound at fixed accuracy]
+    \label{thm:qutrit_entropy_scaling_no_polynomial}
+    \lean{TNLean.MPS.AreaLaw.EntropyScaling.eventually_no_polynomial_mps_approximation_qutritCopies}
+    \leanok
+    \uses{def:qutrit_entropy_scaling_copies}
+    Fix $\delta<1/8$, a real number $C$, and a nonnegative integer $k$.
+    For every sufficiently large $N$, no MPS $\Phi$ on $M=2N^3$ sites has
+    both bond dimension $D\le CM^k$ and full trace-norm error at most
+    $\delta$ from $\chi_M$. No normalization of $\Phi$ is required.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:qutrit_entropy_scaling_trace_dimension}
+    Since $1-2\delta>0$ and every fixed power of $N$ is of smaller order
+    than $2^N$, for every sufficiently large $N$ one has
+    \begin{align}
+        \label{eq:qutrit_entropy_scaling_polynomial_contradiction}
+        C(2N^3)^k<2^N(1-2\delta)+1\le D.
+    \end{align}
+    This contradicts the assumed polynomial bond bound. Together with the
+    four-bit interval entropy estimate, this proves that a uniform
+    von Neumann area law does not imply polynomial MPS approximation.
+\end{proof}
