@@ -1,0 +1,70 @@
+\documentclass{article}
+\usepackage[margin=28mm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\providecommand{\gapnote}[2]{\par\noindent\textbf{Verdict:} #1 (#2).\par}
+\title{Cluster Size and Diameter in Hastings' Percolation Bound}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+\gapnote{local-correction}{resolved}
+
+\section{The printed step}
+Hastings, \emph{Solving gapped Hamiltonians locally}~\cite{Hastings2006Solving},
+\href{https://arxiv.org/abs/cond-mat/0508554v3}{arXiv:cond-mat/0508554v3},
+source \path{proj3new.tex}, lines 1227--1254, bounds the sum over clusters of
+diameter larger than $l_{\rm proj}$ by
+\begin{align}
+ \sum_{m\ge1}\frac1{m!}\Bigl(\sum_{\rm clusters}y^{n_C}\Bigr)^m
+ \le\exp\Bigl[N\sum_{n=l_{\rm proj}+1}^{\infty}(xy)^n\Bigr]-1,
+ \label{eq:hastings05_percolation_printed}
+\end{align}
+where $n_C$ is the number of sites of the cluster $C$ and at most $Nx^n$
+clusters have $n$ sites (line 1240). The sum starts at $n=l_{\rm proj}+1$,
+which presumes that a cluster of diameter larger than $l_{\rm proj}$ has more
+than $l_{\rm proj}$ sites.
+
+\section{The relation between size and diameter}
+A cluster is a set $C$ of sites $i$ whose terms $H_i$ are joined by
+overlapping supports, and $H_i$ acts on sites within distance $R$ of $i$
+(lines 1131--1139). Consecutive members of a cluster can therefore be $2R$
+apart. If the cluster has $n$ sites, the sites acted on by its terms span a
+distance of at most $2Rn$, since each support has diameter at most $2R$ and
+the supports form a connected chain. Hence a cluster of diameter larger than
+$l_{\rm proj}$ satisfies
+\begin{align}
+ n_C\ge\Bigl\lfloor\frac{l_{\rm proj}}{2R}\Bigr\rfloor+1,
+ \label{eq:hastings05_percolation_size}
+\end{align}
+and no more holds in general: on a chain with $R\ge1$ the cluster $\{0,2R\}$
+has $n_C=2$, since $H_0$ and $H_{2R}$ share the site $R$, yet it spans the
+distance $4R$, which exceeds $l_{\rm proj}=4R-1\ge3$. The printed start
+$n=l_{\rm proj}+1$ is right for nearest-neighbour bonds, as in the figure at
+lines 1120--1129, and not for $R>1$.
+
+\section{The correction}
+Start the sum at $n=l+1$ with $l=\lfloor l_{\rm proj}/(2R)\rfloor$, as
+(\ref{eq:hastings05_percolation_size}) allows. For $0<xy\le1/2$,
+\begin{align}
+ N\sum_{n\ge l+1}(xy)^n\le N(xy)^l
+ \le N(xy)^{-1}e^{-l_{\rm proj}/\xi_{\rm perc}},
+ \qquad
+ \xi_{\rm perc}=\frac{2R}{\ln(1/(xy))},
+\end{align}
+since $l\ge l_{\rm proj}/(2R)-1$. The decay length is of order the interaction
+range, as the source states at line 1250; the factor $R$ there is what
+compensates the printed start of the sum. Only the constant $N$ changes, to
+$N(xy)^{-1}$.
+
+\section{Scope}
+The formalized percolation sum takes the size threshold $l$ as a hypothesis
+on every cluster and states its bound as $\exp(Ne^{-l/\xi})-1$ with
+$\xi=1/\ln(1/(xy))$, a decay length in units of cluster size. The
+conversion to distance is the inequality
+(\ref{eq:hastings05_percolation_size}).
+\bibliographystyle{unsrt}
+\bibliography{references}
+\end{document}

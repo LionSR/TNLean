@@ -15,9 +15,18 @@ $n_C$ is the number of sites of $C$ and $y=(e^{J\beta}-1)e^{SJ\beta}$. This
 section bounds the resulting sum over families of clusters. The weights are
 kept abstract: a weight $a_C$ with $0\le a_C\le y^{n_C}$ stands for the
 contribution of the cluster $C$, and a family $U$ of clusters contributes
-$\prod_{C\in U}a_C$. A cluster of diameter larger than $l_{\rm proj}$ has at
-least $l_{\rm proj}+1$ sites, which is how the sum over cluster sizes starts
-in \cite[line 1240]{Hastings2006Solving}.
+$\prod_{C\in U}a_C$. Every cluster is assumed to have at least $l+1$ sites,
+for a size threshold $l$.
+
+The source starts the sum over cluster sizes at $n=l_{\rm proj}+1$
+\cite[line 1240]{Hastings2006Solving}, which is right for nearest-neighbour
+bonds only. With terms of range $R$, a cluster of $n$ sites spans a distance
+of at most $2Rn$, so a cluster of diameter larger than $l_{\rm proj}$ has
+at least $\lfloor l_{\rm proj}/(2R)\rfloor+1$ sites, and no more is true in
+general: on a chain the cluster $\{0,2R\}$ has two sites and spans $4R$.
+The size threshold for the application is therefore
+$l=\lfloor l_{\rm proj}/(2R)\rfloor$
+\cite{gap:hastings05_percolation_cluster_size}.
 
 \begin{theorem}[Families of a given number of clusters]
     \label{thm:hastings_percolation_families}
@@ -97,16 +106,20 @@ in \cite[line 1240]{Hastings2006Solving}.
     \uses{thm:hastings_percolation_exp, thm:hastings_percolation_cluster_sum}
     In the setting of Theorem~\ref{thm:hastings_percolation_cluster_sum}, let
     the weights satisfy $0\le a_C\le y^{n_C}$, let $N\ge0$, and let
-    $0<xy\le1/2$. Put $\xi_{\rm perc}=1/\ln(1/(xy))$. Then
+    $0<xy\le1/2$. Put $\xi=1/\ln(1/(xy))$, a decay length in units of
+    cluster size. Then
     \begin{align}
         \sum_{\emptyset\ne U\subseteq T}\ \prod_{C\in U}a_C
-        \le\exp\bigl(Ne^{-l/\xi_{\rm perc}}\bigr)-1.
+        \le\exp\bigl(Ne^{-l/\xi}\bigr)-1.
         \label{eq:hastings_percolation}
     \end{align}
     With the weights $a_C$ bounding the contributions of the clusters, this
-    is eq.~(perc2) of \cite[lines 1227--1254]{Hastings2006Solving}, with
-    $l=l_{\rm proj}$. There $\xi_{\rm perc}$ is said to be of order the
-    interaction range; here it is explicit.
+    is eq.~(perc2) of \cite[lines 1227--1254]{Hastings2006Solving} for the
+    size threshold $l$. With $l=\lfloor l_{\rm proj}/(2R)\rfloor$,
+    $e^{-l/\xi}\le(xy)^{-1}e^{-l_{\rm proj}/\xi_{\rm perc}}$ with
+    $\xi_{\rm perc}=2R/\ln(1/(xy))$ in units of distance; this is the
+    source's decay length of order the interaction range
+    \cite{gap:hastings05_percolation_cluster_size}.
 \end{theorem}
 
 \begin{proof}
@@ -117,7 +130,7 @@ in \cite[line 1240]{Hastings2006Solving}.
         N(xy)^{l+1}/(1-xy)$ by
     Theorem~\ref{thm:hastings_percolation_cluster_sum}. For $xy\le1/2$,
     $(xy)^{l+1}/(1-xy)\le2(xy)^{l+1}\le(xy)^l$, and
-    $(xy)^l=e^{-l\ln(1/(xy))}=e^{-l/\xi_{\rm perc}}$.
+    $(xy)^l=e^{-l\ln(1/(xy))}=e^{-l/\xi}$.
 \end{proof}
 
 \begin{theorem}[The percolation bound for connected clusters]
@@ -129,8 +142,7 @@ in \cite[line 1240]{Hastings2006Solving}.
     at most $\Delta$, and put $x=\max(1,\Delta^2)$. Let $T$ be a finite family
     of sets of at least $l+1$ vertices, each inducing a connected subgraph,
     with weights $0\le a_C\le y^{|C|}$, and let $0<xy\le1/2$. Then
-    (\ref{eq:hastings_percolation}) holds with
-    $\xi_{\rm perc}=1/\ln(1/(xy))$.
+    (\ref{eq:hastings_percolation}) holds with $\xi=1/\ln(1/(xy))$.
 \end{theorem}
 
 \begin{proof}

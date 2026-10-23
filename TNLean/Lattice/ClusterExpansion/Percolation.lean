@@ -24,12 +24,21 @@ when there are at most `N xⁿ` clusters of `n` sites (lines 1227–1250).
 
 This file proves that estimate with abstract weights. A weight `a_C` with `0 ≤ a_C ≤ y^{n_C}` stands
 for the contribution of the cluster `C`. Families of clusters are finite subsets `U` of the
-family `T` of large clusters, and contribute `∏_{C ∈ U} a_C`. A cluster with diameter larger than
-`l_proj` is assumed to have at least `l_proj + 1` sites, as in the sum over `n` at line 1240.
+family `T` of large clusters, and contribute `∏_{C ∈ U} a_C`. Every cluster of `T` is assumed to
+have at least `l + 1` sites, for a size threshold `l` that is a parameter of the statements.
 
-The decay length is explicit. For `0 < xy ≤ 1/2`, the tail `∑_{n > l} (xy)^n` is at most `(xy)^l`,
-which is `e^{−l/ξ_perc}` with `ξ_perc = 1 / ln(1/(xy))`. The source leaves `ξ_perc` as "of order
-the interaction range" (line 1250).
+**Local fix (size threshold):** the source starts the sum over cluster sizes at
+`n = l_proj + 1` (line 1240), which holds for nearest-neighbour bonds only. With terms of range
+`R`, a cluster of `n` sites spans a distance of at most `2Rn`, so diameter larger than `l_proj`
+gives only `n ≥ ⌊l_proj/(2R)⌋ + 1`; the cluster `{0, 2R}` of a chain has two sites and spans
+`4R`. The statements here take the size threshold `l` as a hypothesis, and the application takes
+`l = ⌊l_proj/(2R)⌋`. Documented in `docs/paper-gaps/hastings05_percolation_cluster_size.tex`.
+
+The decay is explicit in the size threshold. For `0 < xy ≤ 1/2`, the tail `∑_{n > l} (xy)^n` is
+at most `(xy)^l = e^{−l/ξ}` with `ξ = 1 / ln(1/(xy))`, a decay length in units of cluster size.
+With `l = ⌊l_proj/(2R)⌋` this is at most `(xy)^{−1} e^{−l_proj/ξ_perc}` with
+`ξ_perc = 2R / ln(1/(xy))` in units of distance, which is the source's "`ξ_perc` of order the
+interaction range" (line 1250).
 
 ## Main results
 
@@ -41,7 +50,8 @@ the interaction range" (line 1250).
 * `TNLean.Lattice.sum_pow_le_of_card_le`: `∑_C y^{n_C} ≤ N (xy)^{l+1} / (1 − xy)` from the count
   of clusters by size.
 * `TNLean.Lattice.sum_nonempty_powerset_prod_le_percolation`: the percolation bound
-  `exp(N e^{−l/ξ_perc}) − 1`, eq. `perc2` (lines 1227–1254) without the trace.
+  `exp(N e^{−l/ξ}) − 1`, eq. `perc2` (lines 1227–1254) without the trace, in terms of the size
+  threshold `l`.
 * `TNLean.Lattice.sum_nonempty_powerset_prod_le_percolation_connected`: the same for families of
   connected vertex sets of a graph of maximum degree `Δ`, with `N` the number of vertices and
   `x = max(1, Δ²)`.
@@ -200,10 +210,10 @@ variable [DecidableEq ι]
 /-- **The percolation bound (eq. `perc2` without the trace).** Let `T` be a finite family of
 clusters, where the cluster `i` has `n i ≥ l + 1` sites and there are at most `N x^k` clusters
 of `k` sites, and let the weights satisfy `0 ≤ a i ≤ y^{n i}` with `0 < x y ≤ 1/2`. Then the sum
-over nonempty subfamilies `U ⊆ T` of `∏_{i ∈ U} a i` is at most `exp(N e^{−l/ξ_perc}) − 1`, with
-the explicit decay length `ξ_perc = 1 / ln(1/(xy))`. Hastings, arXiv:cond-mat/0508554v3,
-`proj3new.tex`, lines 1227–1254, with the families of clusters of lines 1196–1225 and
-`ξ_perc` made explicit. -/
+over nonempty subfamilies `U ⊆ T` of `∏_{i ∈ U} a i` is at most `exp(N e^{−l/ξ}) − 1`, with
+the decay length `ξ = 1 / ln(1/(xy))` in units of cluster size. Hastings,
+arXiv:cond-mat/0508554v3, `proj3new.tex`, lines 1227–1254, with the families of clusters of
+lines 1196–1225 and the size threshold of the module docstring. -/
 theorem sum_nonempty_powerset_prod_le_percolation {T : Finset ι} {n : ι → ℕ} {l : ℕ}
     (hn : ∀ i ∈ T, l + 1 ≤ n i) {N x y : ℝ}
     (hcount : ∀ k, (#{i ∈ T | n i = k} : ℝ) ≤ N * x ^ k) (hN : 0 ≤ N) (hx : 0 ≤ x)
@@ -225,7 +235,7 @@ theorem sum_nonempty_powerset_prod_le_percolation {T : Finset ι} {n : ι → �
 maximum degree at most `Δ`, and put `x = max(1, Δ²)`. Let `T` be a finite family of connected
 vertex sets of `G`, each with at least `l + 1` vertices, with weights `0 ≤ a C ≤ y^{#C}`, and let
 `0 < x y ≤ 1/2`. Then the sum over nonempty subfamilies `U ⊆ T` of `∏_{C ∈ U} a C` is at most
-`exp(N e^{−l/ξ_perc}) − 1` with `ξ_perc = 1 / ln(1/(xy))`. The count of clusters by size is
+`exp(N e^{−l/ξ}) − 1` with `ξ = 1 / ln(1/(xy))`. The count of clusters by size is
 `card_connected_induce_le_exponential`, the lattice-animal bound cited by Hastings,
 arXiv:cond-mat/0508554v3, `proj3new.tex`, lines 1234–1236. -/
 theorem sum_nonempty_powerset_prod_le_percolation_connected {V : Type*} [Fintype V]
@@ -246,7 +256,7 @@ theorem sum_nonempty_powerset_prod_le_percolation_connected {V : Type*} [Fintype
     exact mem_filter.2 ⟨mem_univ _, hCk, hT C hCT⟩
   exact_mod_cast (card_le_card hsub).trans (card_connected_induce_le_exponential G hΔ k)
 
-/-- **A percolation temperature.** For `J, S, x ≥ 0` there is `β₀ > 0` such that
+/-- **A percolation temperature.** For real `J`, `S` and `x` there is `β₀ > 0` such that
 `x (e^{Jβ} − 1) e^{SJβ} ≤ 1/2` for every `0 ≤ β ≤ β₀`. Hastings, arXiv:cond-mat/0508554v3,
 `proj3new.tex`, lines 1242–1245 ("for sufficiently small `β`"). -/
 theorem exists_percolation_temperature (J S x : ℝ) :
