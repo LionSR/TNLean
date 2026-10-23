@@ -1,0 +1,99 @@
+\section{Rényi entropy under geometric tail constraints}
+\label{sec:hastings_renyi_tail_entropy}
+
+% Hastings, arXiv:0705.2024v4, law16.tex, lines 392--410 (end of the proof of
+% Lemma 2).
+
+The proof of \cite[Lemma~2]{Hastings2007AreaLaw} ends by extending the entropy
+bound of Theorem~\ref{thm:hastings_geometric_tail_entropy} to the Rényi
+entropies $S_\alpha=(1-\alpha)^{-1}\ln\sum_ap_a^\alpha$ of sufficiently large
+order $\alpha$. For $\alpha\ge1$ the Rényi entropy is at most the von Neumann
+entropy, so the content of the extension lies in the orders $0<\alpha<1$ for
+which the relevant geometric series converges.
+
+\begin{theorem}[Power sums on a finite set]
+    \label{thm:hastings_power_sum_card}
+    \lean{TNLean.MPS.AreaLaw.Hastings.sum_rpow_le_card_rpow_mul_sum_rpow}
+    \leanok
+    Let $p_1,\dots,p_c\ge0$ and $0\le\alpha\le1$. Then
+    \begin{align*}
+        \sum_{i=1}^cp_i^\alpha\le c^{1-\alpha}\Bigl(\sum_{i=1}^cp_i\Bigr)^\alpha.
+    \end{align*}
+\end{theorem}
+\begin{proof}\leanok
+    The map $t\mapsto t^\alpha$ is concave on $[0,\infty)$, so by Jensen's
+    inequality the mean of the $p_i^\alpha$ is at most the $\alpha$-th power of
+    the mean of the $p_i$. Multiplying by $c$ gives the claim.
+\end{proof}
+
+\begin{theorem}[Rényi entropy under geometric tail constraints]
+    \label{thm:hastings_renyi_tail_entropy}
+    \lean{
+        TNLean.MPS.AreaLaw.Hastings.sum_rpow_le_of_geometric_tails,
+        TNLean.MPS.AreaLaw.Hastings.renyiEntropy_le_of_geometric_tails,
+        TNLean.MPS.AreaLaw.Hastings.renyiEntropy_le_of_scale_tails
+    }
+    \leanok
+    Let $p_0,\dots,p_{N-1}$ be a probability vector and let $K\ge1$, $D\ge2$
+    and $x\ge0$. Suppose that for every $n\ge0$ the mass of the entries of
+    index at least $KD^{2n}$ is at most $x^{n+1}$. Let $0<\alpha<1$ with
+    $r=(D^2)^{1-\alpha}x^\alpha<1$. Then
+    \begin{align}
+        \frac1{1-\alpha}\ln\sum_ap_a^\alpha\le\ln K-\frac{\ln(1-r)}{1-\alpha}.
+        \label{eq:hastings_renyi_tail_entropy}
+    \end{align}
+    In particular, with $x=e^{-2/\xi'}$ and $K=kD^{2m+2}$ for $k\ge1$ and a
+    natural number $m$, the bound holds whenever
+    $e^{-2\alpha/\xi'}(D^2)^{1-\alpha}<1$, and reads
+    \begin{align*}
+        \frac1{1-\alpha}\ln\sum_ap_a^\alpha\le\ln k+(2m+2)\ln D
+        -\frac{\ln\bigl(1-(D^2)^{1-\alpha}e^{-2\alpha/\xi'}\bigr)}{1-\alpha}.
+    \end{align*}
+    This is the extension to Rényi entropies in the proof of
+    \cite[Lemma~2]{Hastings2007AreaLaw}, lines 392--410, with the convergence
+    condition of line 406; it differs from the von Neumann bound only in the
+    term replacing $F(\xi',D)$. The source's maximization at lines 400--402
+    keeps a factor $(1-e^{-2/\xi'})^\alpha$ inside the logarithm, from the
+    exact masses of the saturating blocks; bounding each block mass by its tail
+    drops that factor, so the bound here is slightly weaker but of the same form.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:hastings_power_sum_card}
+    Group the indices into the block $[0,K)$ and the blocks
+    $[KD^{2(n-1)},KD^{2n})$ for $n\ge1$. The $n$-th block has at most $KD^{2n}$
+    entries and mass at most $x^n$: for $n\ge1$ by the tail constraint at
+    $n-1$, and for $n=0$ because the total mass is $1$. Theorem~\ref{thm:hastings_power_sum_card} bounds
+    its contribution to $\sum_ap_a^\alpha$ by
+    $(KD^{2n})^{1-\alpha}x^{n\alpha}=K^{1-\alpha}r^n$, so
+    $\sum_ap_a^\alpha\le K^{1-\alpha}/(1-r)$. Taking logarithms and dividing by
+    $1-\alpha>0$ gives (\ref{eq:hastings_renyi_tail_entropy}). With
+    $x=e^{-2/\xi'}$ one has $x^\alpha=e^{-2\alpha/\xi'}$ and
+    $\ln K=\ln k+(2m+2)\ln D$.
+\end{proof}
+
+\begin{theorem}[Rényi entropy from mixtures of bounded Schmidt rank]
+    \label{thm:hastings_renyi_schmidt_rank_stage}
+    \lean{TNLean.MPS.AreaLaw.Hastings.renyiEntropy_le_of_schmidtRank_mixtures,
+        TNLean.MPS.AreaLaw.Hastings.renyiEntropy_eq_log_sum_eigenvalues₀_rpow}
+    \leanok
+    Let $\Psi$ be a unit vector of a bipartite space with reduced density
+    matrix $\rho$ on the first factor, and let $k\ge1$, $D\ge2$, $\xi'>0$ and
+    $c\ge1$. Suppose that at every scale $s$ with $ce^{-2s/\xi'}<1$ some
+    mixture of pure states of Schmidt rank at most $kD^{2s}$ has normalized
+    overlap with $\Psi$ at least $1-ce^{-2s/\xi'}$. Then for $0<\alpha<1$ with
+    $r=(D^2)^{1-\alpha}e^{-2\alpha/\xi'}<1$,
+    \begin{align*}
+        S_\alpha(\rho)\le\ln k+\xi'\ln(c)\ln D+4\ln D-\frac{\ln(1-r)}{1-\alpha}.
+    \end{align*}
+    This is the Rényi version of the stage of \cite[Lemma~2]{Hastings2007AreaLaw}
+    for one cut, lines 333--356 and 392--410.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:hastings_renyi_tail_entropy, thm:hastings_bootstrap_stage}
+    The overlaps bound the mass of the eigenvalues of $\rho$ beyond the first
+    $kD^{2s}$ by $ce^{-2s/\xi'}$, as in the von Neumann case. With $m'$ the least
+    integer such that $ce^{-2m'/\xi'}\le1$, the eigenvalues in decreasing order
+    satisfy the tail constraints of Theorem~\ref{thm:hastings_renyi_tail_entropy}
+    at the scales $m'+1+n$. That theorem gives the bound with $(2m'+2)\ln D$, and
+    $2m'<\xi'\ln c+2$.
+\end{proof}

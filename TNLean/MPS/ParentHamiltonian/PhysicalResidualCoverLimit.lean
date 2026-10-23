@@ -106,8 +106,8 @@ theorem exists_pos_openParentHamiltonianES_gap_of_aligned_gap_of_primitive_resol
       γ * ‖v‖ ≤ ‖openParentHamiltonianES A R (n * L) v‖) :
     ∃ δ : ℝ, 0 < δ ∧ ∀ N,
       ∀ v ∈ (LinearMap.ker (openParentHamiltonianES A R N))ᗮ,
-        δ * ‖v‖ ≤ ‖openParentHamiltonianES A R N v‖ := by
-  exact exists_pos_openParentHamiltonianES_gap_of_aligned_gap_of_residue_cover_limit
+        δ * ‖v‖ ≤ ‖openParentHamiltonianES A R N v‖ :=
+  exists_pos_openParentHamiltonianES_gap_of_aligned_gap_of_residue_cover_limit
     A hR hL hKernel hγ hAligned (fun K r =>
       residual_cover_projection_defect_tendsto_zero_of_primitive_resolution
         A B V ρ hP hρ hDistinct hV hSum hInt hCoInt Q hQ hGram

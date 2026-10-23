@@ -403,6 +403,32 @@ private theorem
     exact Submodule.subset_span ⟨j, rfl⟩
   exact F.mpvState_mem_span_normalizedMinimalLoopTensor hparent hTwo hGround
 
+/-- Each normalized minimal loop tensor is a spectrally normalized normal tensor. -/
+private theorem BeigiSectorGraphData.normalizedMinimalLoopTensor_isNormalTensor
+    {A : MPSTensor d D} (F : BeigiSectorGraphData A) (l : Loop F.edgeWeight) :
+    IsNormalTensor (F.normalizedMinimalLoopTensor l) := by
+  have : NeZero (F.loopSchmidtRank l) := ⟨(F.loopSchmidtRank_pos l).ne'⟩
+  exact isNormalTensor_of_isNormal_isTransferIdempotent
+    (F.normalizedMinimalLoopTensor l)
+    (F.normalizedMinimalLoopTensor_isNormal l)
+    (F.normalizedMinimalLoopTensor_isTransferIdempotent l)
+
+/-- A block-phase match of a normal tensor with a transfer-idempotent normal tensor transports
+transfer idempotence. -/
+private theorem isTransferIdempotent_of_mpvBlockPhaseEquiv
+    {D' : ℕ} {B : MPSTensor d D} {C : MPSTensor d D'}
+    (hB : IsNormalTensor B) (hC : IsNormalTensor C)
+    (hCRFP : IsTransferIdempotent C) (h : MPVBlockPhaseEquiv B C) :
+    IsTransferIdempotent B := by
+  obtain ⟨hdim, hGauge⟩ := h.dim_eq_and_gaugePhaseEquiv_of_isNormalTensor hB hC
+  have hCastNormal :
+      IsNormalTensor (cast (congr_arg (MPSTensor d) hdim) B) :=
+    (isNormalTensor_cast_iff hdim B).2 hB
+  have hCastRFP :
+      IsTransferIdempotent (cast (congr_arg (MPSTensor d) hdim) B) :=
+    (gaugePhaseEquiv_symm_same_dim hGauge).isTransferIdempotent hC hCastNormal hCRFP
+  exact (isTransferIdempotent_cast_iff hdim B).1 hCastRFP
+
 /-- All-chain nearest-neighbor commuting parent-Hamiltonian ground spaces imply transfer
 idempotence for a normal left-canonical representative.
 
@@ -442,12 +468,8 @@ theorem nncph_implies_rfp
   have hBNormal : IsNormalTensor B :=
     isNormalTensor_of_isNormal_leftCanonical B hNT hLeft
   have hLoopNormal : ∀ l : Loop F.edgeWeight,
-      IsNormalTensor (F.normalizedMinimalLoopTensor l) := by
-    intro l
-    exact isNormalTensor_of_isNormal_isTransferIdempotent
-      (F.normalizedMinimalLoopTensor l)
-      (F.normalizedMinimalLoopTensor_isNormal l)
-      (F.normalizedMinimalLoopTensor_isTransferIdempotent l)
+      IsNormalTensor (F.normalizedMinimalLoopTensor l) :=
+    F.normalizedMinimalLoopTensor_isNormalTensor
   have hparent :=
     eventually_parentHamiltonianGroundSpaceES_finrank_eq_of_isBNT hBNT hNNCPH
   have hMem := F.eventually_mpvState_mem_span_normalizedMinimalLoopTensor hparent hNNCPH
@@ -461,17 +483,8 @@ theorem nncph_implies_rfp
   obtain ⟨l, hPhase⟩ :=
     exists_mpvBlockPhaseEquiv_of_mem_span_eventually hBNormal
       F.normalizedMinimalLoopTensor hLoopNormal hCross hMem
-  obtain ⟨hdim, hGaugePhase⟩ :=
-    hPhase.dim_eq_and_gaugePhaseEquiv_of_isNormalTensor hBNormal (hLoopNormal l)
-  have hBCastNormal :
-      IsNormalTensor (cast (congr_arg (MPSTensor d) hdim) B) :=
-    (isNormalTensor_cast_iff hdim B).2 hBNormal
-  have hBCastRFP :
-      IsTransferIdempotent (cast (congr_arg (MPSTensor d) hdim) B) :=
-    (gaugePhaseEquiv_symm_same_dim hGaugePhase).isTransferIdempotent
-      (hLoopNormal l) hBCastNormal
-      (F.normalizedMinimalLoopTensor_isTransferIdempotent l)
-  exact (isTransferIdempotent_cast_iff hdim B).1 hBCastRFP
+  exact isTransferIdempotent_of_mpvBlockPhaseEquiv hBNormal (hLoopNormal l)
+    (F.normalizedMinimalLoopTensor_isTransferIdempotent l) hPhase
 
 namespace IsBNTCanonicalForm
 
@@ -512,12 +525,8 @@ theorem isTransferIdempotent_basisDirectSum_of_hasNNCPHGroundSpaces
     exact isNormalTensor_of_isNormal_leftCanonical
       (P.basis j) (hCF.basis_isNormal j) (hCF.basis_left_canonical j)
   have hLoopNormal : ∀ l : Loop F.edgeWeight,
-      IsNormalTensor (F.normalizedMinimalLoopTensor l) := by
-    intro l
-    exact isNormalTensor_of_isNormal_isTransferIdempotent
-      (F.normalizedMinimalLoopTensor l)
-      (F.normalizedMinimalLoopTensor_isNormal l)
-      (F.normalizedMinimalLoopTensor_isTransferIdempotent l)
+      IsNormalTensor (F.normalizedMinimalLoopTensor l) :=
+    F.normalizedMinimalLoopTensor_isNormalTensor
   have hparent :=
     eventually_parentHamiltonianGroundSpaceES_finrank_eq_of_isBNT
       hCF.isBNT_basisDirectSum hNNCPH
@@ -550,20 +559,9 @@ theorem isTransferIdempotent_basisDirectSum_of_hasNNCPHGroundSpaces
       hPhaseJK.dim_eq_and_gaugePhaseEquiv_of_isNormalTensor
         (hBasisNormal j) (hBasisNormal k)
     exact hCF.basis_distinct j k hjk hdim hGauge
-  have hBlockRFP : ∀ j : Fin P.basisCount, IsTransferIdempotent (P.basis j) := by
-    intro j
-    obtain ⟨hdim, hGauge⟩ :=
-      (hPhase j).dim_eq_and_gaugePhaseEquiv_of_isNormalTensor
-        (hBasisNormal j) (hLoopNormal (loopOf j))
-    have hCastNormal :
-        IsNormalTensor (cast (congr_arg (MPSTensor d) hdim) (P.basis j)) :=
-      (isNormalTensor_cast_iff hdim (P.basis j)).2 (hBasisNormal j)
-    have hCastRFP :
-        IsTransferIdempotent (cast (congr_arg (MPSTensor d) hdim) (P.basis j)) :=
-      (gaugePhaseEquiv_symm_same_dim hGauge).isTransferIdempotent
-        (hLoopNormal (loopOf j)) hCastNormal
-        (F.normalizedMinimalLoopTensor_isTransferIdempotent (loopOf j))
-    exact (isTransferIdempotent_cast_iff hdim (P.basis j)).1 hCastRFP
+  have hBlockRFP : ∀ j : Fin P.basisCount, IsTransferIdempotent (P.basis j) := fun j ↦
+    isTransferIdempotent_of_mpvBlockPhaseEquiv (hBasisNormal j) (hLoopNormal (loopOf j))
+      (F.normalizedMinimalLoopTensor_isTransferIdempotent (loopOf j)) (hPhase j)
   apply
     (isTransferIdempotent_directSumTensor_iff_pairwise_mixedMapLM_isIdempotentElem
       P.basis).2

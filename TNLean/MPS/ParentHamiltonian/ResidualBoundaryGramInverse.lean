@@ -283,6 +283,19 @@ theorem residualBoundaryGramExtension_sub_rightMetric
   simp only [← ContinuousLinearMap.mul_def]
   noncomm_ring
 
+private theorem norm_residualBoundaryGramExtension_sub_rightMetric_le
+    (A : MPSTensor d D) (B : MPSTensor (blockPhysDim d L) E)
+    (V : Matrix (Fin D) (Fin E) ℂ) (ρ : Matrix (Fin E) (Fin E) ℂ)
+    (htr : Matrix.trace ρ ≠ 0) (Q : Matrix (Fin D) (Fin D) ℂ)
+    (hQ : IsOrthogonalProjection Q) (N r : ℕ)
+    (hGram : ∑ τ : Cfg d r, (Kraus.evalWord A (List.ofFn τ))ᴴ * (V * Vᴴ) *
+      Kraus.evalWord A (List.ofFn τ) = Q) :
+    ‖residualBoundaryGramExtension A B V ρ Q N r - rectangularRightGramMetric D ρ‖ ≤
+      ‖groundSpaceGram B N - Matrix.gramReshuffle (fixedPointProj ρ htr)‖ := by
+  rw [residualBoundaryGramExtension_sub_rightMetric A B V ρ htr Q N r hGram]
+  exact norm_blockedResidualBoundaryMapES_gram_sub_limit_le A B V ρ htr N r
+    (norm_correlatedTailMapES_le_one_of_wordGram_eq_projection A V r Q hQ hGram)
+
 local instance : HasSummableGeomSeries
     (EuclideanSpace ℂ (Fin E × Fin D) →L[ℂ] EuclideanSpace ℂ (Fin E × Fin D)) :=
   have : CompleteSpace
@@ -314,14 +327,8 @@ theorem residualBoundaryGramInverse_properties_of_small_error [NeZero D] [NeZero
         (residualBoundaryGramInverse A B V ρ Q N r) = rectangularRowProjection E Q ∧
       ‖residualBoundaryGramInverse A B V ρ Q N r‖ ≤
         (1 - a)⁻¹ * ‖Ring.inverse (rectangularRightGramMetric D ρ)‖ := by
-  have hC := norm_correlatedTailMapES_le_one_of_wordGram_eq_projection A V r Q hQ hGram
-  have hError : ‖residualBoundaryGramExtension A B V ρ Q N r -
-      rectangularRightGramMetric D ρ‖ ≤ ‖groundSpaceGram B N - Matrix.gramReshuffle
-        (fixedPointProj ρ (ne_of_gt hρ.trace_pos))‖ := by
-    rw [residualBoundaryGramExtension_sub_rightMetric A B V ρ
-      (ne_of_gt hρ.trace_pos) Q N r hGram]
-    exact norm_blockedResidualBoundaryMapES_gram_sub_limit_le A B V ρ
-      (ne_of_gt hρ.trace_pos) N r hC
+  have hError := norm_residualBoundaryGramExtension_sub_rightMetric_le A B V ρ
+    (ne_of_gt hρ.trace_pos) Q hQ N r hGram
   have hUnit := NormedRing.isUnit_and_norm_inverse_le_of_norm_mul_norm_sub_le
     (rectangularRightGramMetric D ρ) (residualBoundaryGramExtension A B V ρ Q N r)
     (rectangularRightGramMetric_isUnit hρ)
@@ -462,14 +469,8 @@ theorem norm_residualBoundaryGramInverse_sub_limit_le [NeZero D] [NeZero E]
       2 * ‖Ring.inverse (rectangularRightGramMetric D ρ)‖ ^ 2 *
         ‖groundSpaceGram B N - Matrix.gramReshuffle
           (fixedPointProj ρ (ne_of_gt hρ.trace_pos))‖ := by
-  have hC := norm_correlatedTailMapES_le_one_of_wordGram_eq_projection A V r Q hQ hGram
-  have hError : ‖residualBoundaryGramExtension A B V ρ Q N r -
-      rectangularRightGramMetric D ρ‖ ≤ ‖groundSpaceGram B N - Matrix.gramReshuffle
-        (fixedPointProj ρ (ne_of_gt hρ.trace_pos))‖ := by
-    rw [residualBoundaryGramExtension_sub_rightMetric A B V ρ
-      (ne_of_gt hρ.trace_pos) Q N r hGram]
-    exact norm_blockedResidualBoundaryMapES_gram_sub_limit_le A B V ρ
-      (ne_of_gt hρ.trace_pos) N r hC
+  have hError := norm_residualBoundaryGramExtension_sub_rightMetric_le A B V ρ
+    (ne_of_gt hρ.trace_pos) Q hQ N r hGram
   have hUnit := NormedRing.isUnit_and_norm_inverse_le_of_norm_mul_norm_sub_le
     (rectangularRightGramMetric D ρ) (residualBoundaryGramExtension A B V ρ Q N r)
     (rectangularRightGramMetric_isUnit hρ)

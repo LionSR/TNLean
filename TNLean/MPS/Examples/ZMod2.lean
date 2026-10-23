@@ -165,9 +165,6 @@ lemma mul_of_anticommuting_involutions (P₁ P₂ : Matrix n n ℂ)
     | rw [← mul_assoc, hc, neg_mul, mul_assoc, h₂, mul_one]
     | rw [mul_assoc, hc, mul_neg, ← mul_assoc, h₁, one_mul]
     | rw [mul_neg, h₁]
-    | rw [← mul_assoc, hc, neg_mul, mul_assoc, h₂, mul_one]
-    | rw [mul_assoc, hc, mul_neg, ← mul_assoc, h₁, one_mul]
-    | rw [mul_assoc, hc, mul_neg, ← mul_assoc, h₁, one_mul]
     | rw [mul_assoc, ← mul_assoc P₂ P₁ P₂, hc, neg_mul, mul_assoc P₁ P₂ P₂,
         h₂, mul_one, mul_neg, h₁]
 
@@ -205,9 +202,6 @@ lemma mul_of_anticommuting_neg_involution (P₁ P₂ : Matrix n n ℂ)
     | rw [← mul_assoc, hc, neg_mul, mul_assoc, h₂, mul_one]
     | rw [mul_assoc, hc, mul_neg, ← mul_assoc, h₁, one_mul]
     | rw [mul_neg, h₁, neg_neg]
-    | rw [← mul_assoc, hc, neg_mul, mul_assoc, h₂, mul_one]
-    | rw [mul_assoc, hc, mul_neg, ← mul_assoc, h₁, one_mul]
-    | rw [mul_assoc, hc, mul_neg, ← mul_assoc, h₁, one_mul]
     | rw [← mul_assoc, h₁, neg_mul, one_mul]
     | rw [hc, mul_neg, ← mul_assoc, h₁, neg_mul, one_mul, neg_neg]
     | rw [mul_assoc, hc, mul_neg, ← mul_assoc, h₁, neg_mul, one_mul, neg_neg]
