@@ -1378,14 +1378,19 @@ That estimate neither proves nor refutes the source's smaller recurrence.
 ### One-dimensional area law after Hastings: the decay length of Lemma 1
 
 [hastings07_lemma1_decay_length.tex](hastings07_lemma1_decay_length.tex)
-(scope restriction, open) distinguishes the chain localization estimate with
-quadratic support dependence from Hastings's linear-support Lieb–Robinson
-bound (arXiv:0705.2024v4, lines 96–112). The exponential comparison motivates
-`ξ = 8 max(2v₀/ΔE, 1)` but does not establish the source's full bound for the
-pair `(8v₀, 8)`. The factorization constant is uniform in chain length and
+(scope restriction, open) compares the chain Lieb–Robinson estimate with
+Hastings's bound (arXiv:0705.2024v4, lines 96–112). The chain commutator bound is
+linear in the support, as in the source. Its quadratic localization factor enters
+with supports of at most `6R` sites for the parts and of `O(R + l)` sites for the
+boundary operator, where the faster decay of that term absorbs the polynomial in
+`l`; it changes the constant, not the length or the rate. It differs in having a prefactor that
+grows with `J` and a single-site second operator, so `(v₀, 2)` is not shown to be
+a source pair. The length `ξ = 8 max(2v₀/ΔE, 1)` is not homogeneous in `(J, ΔE)`;
+applied to `H/ΔE`, Lemma 1 holds with the homogeneous length
+`16(1 + c_R J/ΔE)`. The factorization constant is uniform in chain length and
 local dimension; the source's polynomial bound in `ξ` (lines 258–262) remains
-unproved, as does the endpoint rate `ξ' = 6ξ`. The note records the required
-estimates and energy-rescaling analysis under the still-open issue #9811.
+unproved, as does the endpoint rate `ξ' = 6ξ`. The note records the remaining
+estimates under the still-open issue #9811.
 
 ## Rényi entropy and matrix product state approximation
 
