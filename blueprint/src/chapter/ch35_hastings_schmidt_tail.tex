@@ -194,3 +194,22 @@
     $\exp(2S_j)/2$. Theorem~\ref{thm:hastings_schmidt_tail_mps} with
     $c=4C_1^2$ then gives the bound. Without an internal cut, $\Phi=\Omega$.
 \end{proof}
+
+\begin{theorem}[Matrix product state from Lemma~1 and the entropy of the cuts]
+    \label{thm:hastings_mps_from_entropy_lemma1}
+    \lean{TNLean.MPS.AreaLaw.Hastings.isOpenMPS_norm_sub_sq_le_of_isFactorizationAt_of_entropy}
+    \leanok
+    The bound of Theorem~\ref{thm:hastings_mps_from_entropy} holds when, at
+    every internal cut $j$ and every length $m$ with $j+m\le L$, the
+    approximate factorization is given in the form of the conclusion of
+    Lemma~1 of \cite{Hastings2007AreaLaw}: commuting orthogonal projections
+    $O_L$ and $O_R$ supported before and after the cut, and an operator $O_B$
+    of norm at most one supported on the $2m$ sites around the cut, with
+    $\lVert O_BO_LO_R-|\Omega\rangle\langle\Omega|\rVert\le C_1e^{-m/\xi'}$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:hastings_mps_from_entropy}
+    The operator $O_B$ is supported on the first $j+m$ sites, $O_L$ on the
+    first $j$ sites and $O_R$ on the remaining sites, which is the
+    factorization of Theorem~\ref{thm:hastings_mps_from_entropy}.
+\end{proof}
