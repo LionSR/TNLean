@@ -66,7 +66,7 @@ window.
     \lean{TNLean.MPS.AreaLaw.Hastings.areaLawBound_le}
     \leanok
     \uses{def:hastings_area_law_bound}
-    For $q\ge2$, the bound $S_{\max}$ of
+    For $\xi'>0$, $C_1\ge1$ and $q\ge2$, the bound $S_{\max}$ of
     Definition~\ref{def:hastings_area_law_bound} is at most the bound of
     Definition~\ref{def:hastings_max_entropy_bound} for the constants $2C_1$
     and $7$, plus $2(\xi'\ln C_1\ln q+F(\xi',q))+3\ln q$. The added term is the
@@ -74,6 +74,7 @@ window.
     constant $c_0$.
 \end{theorem}
 \begin{proof}\leanok
+    \uses{def:hastings_bootstrap_remainder,def:hastings_max_entropy_bound}
     The maximum of two nonnegative numbers is at most their sum, and
     $3\ln q\,\lceil x\rceil_+\le 3x\ln q+3\ln q$ for $x\ge0$.
 \end{proof}
@@ -109,7 +110,7 @@ window.
 \begin{proof}\leanok
     \uses{thm:hastings_main_stage_long_window,
         thm:hastings_cut_entropy_slow,thm:hastings_window_entropy_bounds,
-        thm:hastings_relent_window}
+        thm:hastings_relent_window,thm:hastings_window_claim_of_relent}
     For $q\le1$ every entropy vanishes. For $q\ge2$, apply
     Theorem~\ref{thm:hastings_main_stage_long_window} with the window length
     $l_0$ of Definition~\ref{def:hastings_area_law_bound} and the window
