@@ -1336,13 +1336,17 @@ Hilbert-space norm of the unnormalized truncation, through the squared error `�
 ### One-dimensional area law after Hastings: the entropy hypothesis of the matrix product state
 
 [hastings07_mps_entropy_stage.tex](hastings07_mps_entropy_stage.tex)
-(scope restriction, open) distinguishes the conditional approximation
+(scope restriction, resolved) distinguishes the conditional approximation
 construction (arXiv:0705.2024v4, lines 505–557), which explicitly assumes an
 entropy bound at lines 516–518, from its application under only the Hamiltonian
-assumptions. That application still requires deriving uniform factorization
-and entropy bounds and applying them to the approximation theorem. For chains
+assumptions. That application requires deriving uniform factorization and
+entropy bounds and applying them to the approximation theorem. For chains
 with at least two sites, the entropy bound gives a common positive integer
 `k₀ ≥ exp(2 S_j)/2`; shorter chains need no truncation.
+Both bounds are now derived: the area law gives the entropy bound, and Lemma 1
+with a constant independent of the chain gives the factorization, so the estimate
+holds under the Hamiltonian assumptions alone, with the quantitative restrictions of
+the formalized Lemma 1.
 
 ### One-dimensional area law after Hastings: the threshold of the spectral cut-offs
 
@@ -1402,6 +1406,20 @@ local dimension, and at the rate `ξ' = κ ξ̂` with `κ > 6` it is at most `K 
 with `K` depending only on `R` and `κ`, the source's polynomial bound in `ξ`
 (lines 258–262). The endpoint rate `ξ' = 6ξ` and a Lieb–Robinson pair in the
 source's form remain open under issue #9811.
+
+## Hastings' high-temperature matrix product form, arXiv:cond-mat/0508554
+
+- [`hastings05_planar_domain_scope.tex`](hastings05_planar_domain_scope.tex)
+  (scope restriction, open) records that the matrix product form of Trotter
+  products in Section IV of Hastings (arXiv:cond-mat/0508554v3, lines
+  1017–1079), stated there for an arbitrary lattice and metric, is formalized for
+  finite domains of `ℤ²` with the walk distance of the local Hamiltonians of the
+  two-dimensional area law. The centre-indexed theorem preserves the source's
+  radius bound, including centres outside their supports; the original
+  diameter-bounded statement is a corollary. The source's count of at most
+  `nS` index components per site remains unproved: for a product of `m`
+  factors the construction carries `m` components of `q²` values at every site,
+  one for every factor wherever it acts, so the `n`-th power `ρₙ` carries `n m`.
 
 ## Rényi entropy and matrix product state approximation
 
