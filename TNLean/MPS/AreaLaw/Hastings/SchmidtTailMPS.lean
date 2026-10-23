@@ -13,7 +13,9 @@ Suppose that at every internal cut of a chain of `L` sites the mass beyond the `
 eigenvalues of the left marginal satisfies Hastings' geometric bound
 `c e^{-2m/ξ}` once `n ≥ k₀ d^{2m}`. Truncating every cut onto the `k'` leading eigenvectors
 then gives an open-boundary matrix product state `Φ` of bond dimension at most `k'` with
-`‖Φ - ψ‖² ≤ (L - 1) c e^{2/ξ} (k'/k₀)^{-1/(ξ log d)}`.
+`‖Φ - ψ‖² ≤ (L - 1) c e^{2/ξ} (k'/k₀)^{-1/(ξ log d)}` for `L ≥ 2`.
+For `L < 2`, no truncation is made and `Φ = ψ`. The approximant need not be normalized;
+the error is the squared Hilbert-space norm.
 
 Source: Hastings, *An area law for one-dimensional quantum systems*, arXiv:0705.2024v4,
 section "Matrix Product States", lines 553–557. The source does not name the error measure;
@@ -37,7 +39,9 @@ variable {L q : ℕ}
 vector `ψ` is at most `c e^{-2m/ξ}` whenever `k₀ d^{2m} ≤ n`, then for every bond
 dimension `k' ≥ k₀` the truncation `Φ` onto the `k'` leading eigenvectors at every cut is an
 open-boundary matrix product state of bond dimension at most `k'` with
-`‖Φ - ψ‖² ≤ (L - 1) c e^{2/ξ} (k'/k₀)^{-1/(ξ log d)}`.
+`‖Φ - ψ‖² ≤ (L - 1) c e^{2/ξ} (k'/k₀)^{-1/(ξ log d)}` for `L ≥ 2`.
+For `L < 2`, no truncation is made and `Φ = ψ`. The approximant need not be normalized;
+the error is the squared Hilbert-space norm.
 Hastings, arXiv:0705.2024v4, lines 540–557, with the constant described in the module
 docstring. -/
 theorem isOpenMPS_norm_sub_sq_le_of_schmidtTail_geometric

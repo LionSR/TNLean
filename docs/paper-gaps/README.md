@@ -1317,17 +1317,19 @@ effect `O_B† O_B`) supplies the Lindblad–Uhlmann data with `C₁` replaced b
 [hastings07_mps_error_measure.tex](hastings07_mps_error_measure.tex)
 (clarification, resolved) records that Hastings' error
 `N (k'/k₀)^{-1/(ξ' ln D)}` for the matrix product state (arXiv:0705.2024v4,
-lines 553–557), stated without an error measure, holds for the squared norm,
-through the squared error `‖Φ − ψ‖² ≤ ∑_j τ_j(k')` of sequential truncation.
+lines 553–557), stated without an error measure, holds for the squared
+Hilbert-space norm of the unnormalized truncation, through the squared error `‖Φ − ψ‖² ≤ ∑_j τ_j(k')` of sequential truncation.
 
 ### One-dimensional area law after Hastings: the entropy hypothesis of the matrix product state
 
 [hastings07_mps_entropy_stage.tex](hastings07_mps_entropy_stage.tex)
-(scope restriction, open) records that the matrix product state approximation
-(arXiv:0705.2024v4, lines 505–557) is formalized as a stage theorem whose
-hypothesis `k₀ ≥ exp(2 S_j)/2` at every cut is not in the source, where the area
-law bounds the entropy. It is eliminated by the area law on the chain, which
-gives a uniform `k₀`.
+(scope restriction, open) distinguishes the conditional approximation
+construction (arXiv:0705.2024v4, lines 505–557), which explicitly assumes an
+entropy bound at lines 516–518, from its application under only the Hamiltonian
+assumptions. That application still requires deriving uniform factorization
+and entropy bounds and applying them to the approximation theorem. For chains
+with at least two sites, the entropy bound gives a common positive integer
+`k₀ ≥ exp(2 S_j)/2`; shorter chains need no truncation.
 
 ### One-dimensional area law after Hastings: the threshold of the spectral cut-offs
 
