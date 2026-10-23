@@ -51,12 +51,15 @@ count of at most `n S` index components per site, one for each nearby factor (li
 1069–1075): every factor is expanded in single-site matrix units at every site, so a product of
 `m` factors carries `m` components of `q²` values at each site.
 
-**Scope restriction (planar domains):** the source works on an arbitrary lattice with a metric;
-this file states the product form for finite domains `Λ ⊆ ℤ²` with the walk distance of
-`TNLean.Lattice.LocalHamiltonian`, and does not establish the index count. Documented in
-`docs/paper-gaps/hastings05_planar_domain_scope.tex`. Elimination: restate on a general finite
-graph with its walk distance once the lattice layer has local Hamiltonians there; the proofs use
-only the range of the supports.
+**Scope restriction (geometry and support diameter):** the source uses an arbitrary metric
+lattice and terms supported within radius `R` of specified centres. This file uses finite
+planar domains with walk distance and supports of diameter at most `R`, a stricter condition.
+A source radius-`R` support may have diameter `2 * R`; the present theorem is not the source
+statement with the same range parameter. The index-component count is also not established.
+Documented in `docs/paper-gaps/hastings05_planar_domain_scope.tex`. Elimination: define the
+product form on arbitrary finite metric site sets, prove the supported expansion with a
+specified centre and a radius bound, and derive these diameter-bounded results as special
+cases. The note specifies the proof changes and the separate index-count construction.
 
 ## References
 
