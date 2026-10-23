@@ -36,11 +36,11 @@ and its second operator acts on one site, so `(v, 2)` is not shown to be a Lieb�
 in the source's sense. The length `ξ` and the constants are not homogeneous in the energy
 scale. The exponential conclusions require `ξ' > 6ξ`; at this fixed length the endpoint
 `ξ' = 6ξ` is not established, rather than disproved. In units of the gap it is reached for the
-length `ζ = (5/4) ξ̂` of a Lieb–Robinson pair with inflated velocity, by
-`exists_projectorFactorization_endpoint`. The constants are uniform in chain length and local
-dimension. For these unscaled statements the polynomial bound in `ξ` required at lines 258–262
-is not established; in units of the gap it is `exists_projectorFactorization_pow`
-(`C₁ ≤ K ξ̂³` at rate `κ ξ̂`, `κ > 6`). Documented in
+length `ζ = (5/4) ξ̂` of the chain Lieb–Robinson estimate with inflated velocity, by
+`exists_projectorFactorization_endpoint`, with the same restriction on the pair. The constants
+are uniform in chain length and local dimension. For these unscaled statements the polynomial
+bound in `ξ` required at lines 258–262 is not established; in units of the gap it is
+`exists_projectorFactorization_pow` (`C₁ ≤ K ξ̂³` at rate `κ ξ̂`, `κ > 6`). Documented in
 `docs/paper-gaps/hastings07_lemma1_decay_length.tex` and
 `docs/paper-gaps/hastings07_gaussian_average_exponent.tex`. Elimination: establish a
 Lieb–Robinson bound with a numerical prefactor for arbitrary supports; this remains open.

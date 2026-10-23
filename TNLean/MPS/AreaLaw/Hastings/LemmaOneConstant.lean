@@ -23,12 +23,14 @@ Lieb–Robinson prefactor is affine in `J/ΔE`, the commutator constant is quadr
 `√ξ̂`, and the short-length constant `e^{(12R+8)/(6ξ̂)}` is bounded.
 
 The printed rate `ξ' = 6ξ` (lines 141–142) is reached for the length
-`ζ = lemmaOneEndpointLength R J ΔE = (5/4) ξ̂`, the length `8 max(2v', 1)` for the inflated
-velocity `v' = (5/4) v₀`. This is legitimate because the source fixes `ξ = max(2v/ΔE, ξ_C)` only
-through some Lieb–Robinson pair `(v, ξ_C)` (lines 96–112), and raising `v` keeps a valid pair.
-At `ζ` the rate `6ζ = (15/2) ξ̂` is the case `κ = 15/2` of the bound above. The endpoint is
-reached by re-choosing the length, not at `ξ̂` itself: at a fixed length the argument needs
-`ξ' > 6ξ`, because the appendix's final bound carries a factor `√(l/ξ)` (lines 903–907).
+`ζ = lemmaOneEndpointLength R J ΔE = (5/4) ξ̂`, the length `8 max(2v', 1)` for the inflated velocity
+`v' = (5/4) v₀`. This is legitimate because the source fixes `ξ = max(2v/ΔE, ξ_C)` only through some
+Lieb–Robinson pair `(v, ξ_C)` (lines 96–112), and raising `v` keeps a valid pair. The chain estimate
+stays valid under the same raise, so `ζ` carries the restriction on `ξ̂` below and no other: it is a
+length of the source's form only once the chain estimate is shown to give a Lieb–Robinson pair in
+the source's sense. At `ζ` the rate `6ζ = (15/2) ξ̂` is the case `κ = 15/2` of the bound above. The
+endpoint is reached by re-choosing the length, not at `ξ̂` itself: at a fixed length the argument
+needs `ξ' > 6ξ`, because the appendix's final bound carries a factor `√(l/ξ)` (lines 903–907).
 
 **Scope restriction (quantitative bounds):** the bound at `ξ̂` needs `ξ' = κ ξ̂` with `κ > 6`, and
 `K` depends on `κ`. The length `ξ̂` comes from the chain
@@ -268,7 +270,9 @@ replaced by `v' = (5/4) v₀`. The source fixes its length `ξ = max(2v/ΔE, ξ_
 Lieb–Robinson pair `(v, ξ_C)` (Hastings, arXiv:0705.2024v4, `law16.tex`, lines 96–112 and
 139–142), and a bound valid for `|t| ≤ l/v` is also valid for `|t| ≤ l/v'` when `v' ≥ v`.
 Raising the velocity is therefore a legitimate choice of the length; by
-`lemmaOneEndpointLength_eq` it is `(5/4) ξ̂` with `ξ̂ = lemmaOneLength R (J/ΔE) 1`. -/
+`lemmaOneEndpointLength_eq` it is `(5/4) ξ̂` with `ξ̂ = lemmaOneLength R (J/ΔE) 1`. Here the
+velocity is that of the chain estimate, so this length has the scope restriction of `ξ̂` stated
+in the module docstring. -/
 noncomputable def lemmaOneEndpointLength (R : ℕ) (J ΔE : ℝ) : ℝ :=
   8 * max (2 * (5 / 4 * chainLRVelocity R (J / ΔE))) 1
 
