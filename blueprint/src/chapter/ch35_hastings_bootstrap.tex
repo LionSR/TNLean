@@ -391,8 +391,8 @@ of a gapped chain combines them with the factorization of
     gap, let $\xi$ be the length of Lemma~1 for these data, and let
     $\xi'>6\xi$. There is a constant $C_1\ge1$, depending only on $R$, $J$,
     $\Delta E$ and $\xi'$, with the following property. Let $H$ be a
-    Hamiltonian on a chain of $L$ sites with local dimension $D$, with
-    interactions of range $R$ and strength at most $J$, whose ground state
+    Hamiltonian on a chain of $L$ sites with local dimension $D$, a sum of
+    terms of range $R$ and norm at most $J$, whose ground state
     $\Psi_0$ is unique with gap $\Delta E$ above the ground energy. Let $\rho$
     be a density matrix of unit trace that is a mixture of pure states of
     Schmidt rank at most $k$ across the cut between sites $j$ and $j+1$, with
@@ -407,7 +407,8 @@ of a gapped chain combines them with the factorization of
     $\xi=\max(2v/\Delta E,\xi_C)$; here, as for Lemma~1, $\xi$ is
     $8\max(2v/\Delta E,1)$ for the chain Lieb--Robinson velocity $v$, and the
     bound holds for every $\xi'>6\xi$
-    \cite{gap:hastings07_gaussian_average_exponent}.
+    \cite{gap:hastings07_lemma1_decay_length,
+        gap:hastings07_gaussian_average_exponent}.
 \end{lemma}
 \begin{proof}\leanok
     \uses{thm:hastings_projector_factorization,
@@ -418,5 +419,6 @@ of a gapped chain combines them with the factorization of
     with error $Ce^{-m/\xi'}$ at every cut and length; it also holds with
     $C_1=\max(C,1)$. For $D\ge2$,
     Theorem~\ref{thm:hastings_bootstrap_factorization_at} gives the bound.
-    For $D=1$ the entropy vanishes, while the right side is nonnegative.
+    For $D=1$ the entropy vanishes, while the right side is nonnegative,
+    with the convention $\ln0=0$ in the term $\ln(D^2-1)$ of $F(\xi',D)$.
 \end{proof}
