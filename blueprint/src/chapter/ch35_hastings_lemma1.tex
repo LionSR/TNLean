@@ -20,8 +20,8 @@ chain of $L$ sites numbered $0,\dots,L-1$ of
 Section~\ref{sec:hastings_three_way_splitting}, where the cut $j$ has the
 sites $i<j$ on its left, this is the shift of every site down by one, with
 $N=L$, so $X_{1,j}$ becomes $\{0,\dots,j-1\}$ and $X_{j+1,N}$ becomes
-$\{j,\dots,L-1\}$. The decay length is that of the main theorem of
-\cite[lines 124--144]{Hastings2007AreaLaw},
+$\{j,\dots,L-1\}$. The main theorem of
+\cite[lines 124--144]{Hastings2007AreaLaw} uses the decay length
 \begin{align*}
     \xi=\max(2v/\Delta E,\xi_C),
 \end{align*}
@@ -467,18 +467,19 @@ $X_{j-l+1,j+l}$.
     Let $H$ be a finite-range Hamiltonian of range $R$ with terms of norm at
     most $J$, with a unique ground state $\Psi_0$ and a gap $\Delta E>0$ to
     the first excited state, and let $P_0=|\Psi_0\rangle\langle\Psi_0|$.
-    Take the variance parameter
+    Set $\xi=8\max(2v_0/\Delta E,1)$, where $v_0$ is the velocity in the
+    chain localization estimate. Take the variance parameter
     \begin{align*}
-        q=\frac l3\,\frac{\Delta E}{v}
+        q=\frac{2l}{3\xi}
     \end{align*}
-    in the filtered parts and in the time averages, twice the value printed
-    in \cite[line 792]{Hastings2007AreaLaw}. Since $\xi\ge2v/\Delta E$, this
-    gives $q/2=l\Delta E/(6v)\ge l/(3\xi)$, so $e^{-q/2}\le e^{-l/(3\xi)}$,
-    the bound used for $\|P_q-P_0\|$ in
+    in the filtered parts and in the time averages. When $\xi=2v/\Delta E$
+    this is $(l/3)\Delta E/v$, twice the value printed in
+    \cite[line 792]{Hastings2007AreaLaw}. It gives $q/2=l/(3\xi)$, so
+    $e^{-q/2}=e^{-l/(3\xi)}$, the bound used for $\|P_q-P_0\|$ in
     \cite[line 848]{Hastings2007AreaLaw}; the printed value gives only
     $e^{-q/2}\le e^{-l/(6\xi)}$. Let $\xi'>6\xi$. Then there is a constant
-    $C_1$, depending on $\xi'-6\xi$, on $R$, $J$ and $\Delta E$, and on the
-    local dimension, such that for every cut $j$ and every $l$ there are
+    $C_1$, depending only on $\xi'-6\xi$ and on $R$, $J$ and $\Delta E$, such
+    that for every cut $j$ and every $l$ there are
     operators $O_B$, $O_L$, $O_R$ with the following properties:
     \begin{enumerate}
         \item $O_L$ and $O_R$ are commuting orthogonal projections, $O_L$
@@ -494,19 +495,23 @@ $X_{j-l+1,j+l}$.
     absorbs the polynomial, but the rate $\xi'=6\xi$ of
     \cite[lines 124--144]{Hastings2007AreaLaw} does not follow; both the
     doubled $q$ and the condition $\xi'>6\xi$ are recorded in
-    \cite{gap:hastings07_gaussian_average_exponent}. This is
-    Lemma~\ref{lem:hastings_lemma1} without the positivity of $O_B$; the note
+    \cite{gap:hastings07_gaussian_average_exponent}. This is a quantitatively
+    weaker version of Lemma~\ref{lem:hastings_lemma1}, also without the
+    positivity of $O_B$; the note
     added to \cite{Hastings2007AreaLaw} (lines 912--913) records that the
     construction need not give a Hermitian positive $O_B$, while its other
     properties hold.
 
-    In the formalization, $v$ and $\xi_C$ are the Lieb--Robinson pair
-    $(8v_0,8)$, where $v_0$ is the velocity of
-    Theorem~\ref{thm:chain_lieb_robinson}, so that
-    $\xi=8\max(2v_0/\Delta E,1)$, an admissible choice of the source's
-    length~\cite{gap:hastings07_lemma1_decay_length}. The constant $C_1$ then
+    Here the length is $\xi=8\max(2v_0/\Delta E,1)$, with $v_0$ the
+    velocity in the chain localization estimate. That estimate has quadratic
+    support dependence. For $|t|\le k/(8v_0)$ its exponential factor obeys
+    $e^{v_0|t|-k/2}\le e^{-3k/8}\le e^{-k/8}$, but this comparison does not
+    establish the source's linear-support Lieb--Robinson bound for
+    $(8v_0,8)$~\cite{gap:hastings07_lemma1_decay_length}. The constant $C_1$
     depends only on $R$, $J$, $\Delta E$ and $\xi'$: it is the same for every
     length of the chain, every local dimension and every gapped ground state.
+    No polynomial bound on $C_1$ in $\xi$ alone is asserted here, unlike
+    Lemma~\ref{lem:hastings_lemma1}.
     Replacing $O_B$ by $O_B^\dagger O_B$ gives the positive version at the rate
     $e^{-l/(2\xi')}$, as in Theorem~\ref{thm:hastings_positive_factorization}.
 \end{theorem}

@@ -9,7 +9,7 @@
 \date{October 23, 2026}
 \begin{document}
 \maketitle
-\gapnote{clarification}{resolved}
+\gapnote{scope-restriction}{open}
 
 \section{The source statement}
 
@@ -40,40 +40,70 @@ the use of $2v/\Delta E$ as a competing length is that the commutator decays
 as $e^{-\operatorname{dist}(X,Y)/\xi_C}$ for $|t|\le\operatorname{dist}(X,Y)/v$.
 Any pair $(v,\xi_C)$ for which this holds may be used.
 
-The chain Lieb--Robinson bound proved for range-$R$ Hamiltonians with terms of
-norm at most $J$ has the form $a\,|X|^2e^{v_0|t|-k/2}$ at distance $k$, with explicit constants
-$a$ and $v_0$ depending only on $R$ and $J$. Its prefactor is quadratic rather
-than linear in $|X|$; in the argument this only adds a polynomial factor, which
-the exponential absorbs. For
-$|t|\le k/v$ this is at most $e^{-k(1/2-v_0/v)}$, so a pair $(v,\xi_C)$ is
-admissible whenever
+\section{The estimate used on the chain}
+
+The chain localization estimate used for range-$R$ Hamiltonians with terms
+of norm at most $J$ has the factor $a|X|^2e^{v_0|t|-k/2}$ at distance $k$,
+with $a$ and $v_0$ depending on $R$ and $J$. For $|t|\le k/(8v_0)$,
 \begin{align}
-    \frac1{\xi_C}\le\frac12-\frac{v_0}{v}.
+    a|X|^2e^{v_0|t|-k/2}
+    \le a|X|^2e^{-3k/8}\le a|X|^2e^{-k/8}.
     \label{eq:hastings07_lemma1_decay_length_pair}
 \end{align}
-The pair $(v,\xi_C)=(8v_0,8)$ satisfies
-(\ref{eq:hastings07_lemma1_decay_length_pair}), since
-$1/8\le1/2-1/8$, and for it
-(\ref{eq:hastings07_lemma1_decay_length_source}) gives
+This comparison concerns the exponential factor. It retains the quadratic
+support factor and the dependence of $a$ on the interaction parameters;
+it does not establish the source's bound with a linear factor $|X|$ and a
+numerical prefactor for arbitrary supports. Absorbing polynomial factors
+for the particular windows used in the factorization is not such a bound.
+Thus this argument does not identify $(8v_0,8)$ as a Lieb--Robinson pair
+satisfying the source's full estimate.
+
+The factorization uses the length
 \begin{align}
     \xi=\max(16v_0/\Delta E,8)=8\max(2v_0/\Delta E,1).
     \label{eq:hastings07_lemma1_decay_length_value}
 \end{align}
-This is the length used in the formalization of Lemma~1. The larger pair
-leaves the slack needed to absorb the polynomial prefactors of the
-construction into the exponential.\footnote{\leanid{TNLean.MPS.AreaLaw.lemmaOneLength}
+It has the algebraic form of
+(\ref{eq:hastings07_lemma1_decay_length_source}), but its justification here
+is the chain localization estimate and the explicit error bounds of the
+construction.\footnote{\leanid{TNLean.MPS.AreaLaw.lemmaOneLength}
     and \leanid{TNLean.MPS.AreaLaw.exists_projectorFactorization} in
     \doclink{TNLean/MPS/AreaLaw/Hastings/ProjectorFactorization}.}
-With this $\xi$, Lemma~1 holds at every rate $\xi'>6\xi$ but not at
-$\xi'=6\xi$, which is recorded in
-\path{hastings07_gaussian_average_exponent.tex}.
+For this $\xi$, the construction gives a contraction $O_B$ without a
+positivity assertion and error $C_1e^{-l/\xi'}$ for every $\xi'>6\xi$.
+The endpoint $\xi'=6\xi$ is not established by this argument; no
+counterexample to the endpoint factorization is asserted. The remaining
+rate question is recorded in \path{hastings07_gaussian_average_exponent.tex}.
+Replacing $O_B$ by $O_B^\dagger O_B$ gives a positive semidefinite contraction
+with error of order $e^{-l/(2\xi')}$, as in the source's note added and
+\path{hastings07_lemma1_positivity_rate.tex}.
 
-\section{Conclusion}
+\section{The missing polynomial bound}
 
-The value (\ref{eq:hastings07_lemma1_decay_length_value}) is the source's
-(\ref{eq:hastings07_lemma1_decay_length_source}) for an admissible
-Lieb--Robinson pair. The constant of Lemma~1 then depends only on $R$, $J$,
-$\Delta E$ and $\xi'$, and not on the length of the chain or the ground state.
+Lemma~1 requires $C_1(\xi)$ to be bounded by a polynomial in $\xi$.
+\footnote{\path{References/0705.2024/law16.tex}, lines~258--262.}
+The theorem presently proves only the existence of a constant depending
+on $R$, $J$, $\Delta E$ and $\xi'$, uniform in the chain length, local
+dimension, ground state, cut and window length. No polynomial bound in
+$\xi$ alone has been established. In particular, the explicit coefficients
+retain separate factors involving $J^2/\Delta E$ and $1/\Delta E$;
+uniformity in the chain length does not remove that dependence.
+
+\section{Remaining work}
+
+To recover the source's quantitative statement, establish a
+Lieb--Robinson estimate with its stated support dependence and controlled
+prefactor, and justify the corresponding velocity and length scale.
+Then bound the factorization constant by a polynomial in that length,
+with the source's parameter dependence. This requires accounting for
+energy rescaling, the localization and cutoff constants, and the
+short-length estimate. A bound allowing $\xi'>6\xi$ must also state its
+dependence on the positive difference of reciprocal lengths
+$1/(6\xi)-1/\xi'$; it does not settle the endpoint.
+These tasks, together with the endpoint rate, remain part of
+\ghissue{9811}. The separate blueprint entry for the printed Lemma~1
+remains unmarked as proved. The established factorization with the stated
+restrictions does not complete the source's full quantitative result.
 
 \bibliographystyle{alpha}
 \bibliography{references}
