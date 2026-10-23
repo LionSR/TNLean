@@ -912,8 +912,10 @@ jobs:
           sudo dpkg --configure -a || true
           # A crawling Azure mirror is the usual cause; fetch the retry from the
           # main archive instead.
-          for f in /etc/apt/sources.list /etc/apt/sources.list.d/*.list \
-              /etc/apt/sources.list.d/*.sources; do
+          # Ubuntu runners list the mirror in apt-mirrors.txt and point the
+          # sources at it with mirror+file:, so rewrite both.
+          for f in /etc/apt/apt-mirrors.txt /etc/apt/sources.list \
+              /etc/apt/sources.list.d/*.list /etc/apt/sources.list.d/*.sources; do
             if [ -f "$f" ]; then
               sudo sed -i \
                 's#http://azure\.archive\.ubuntu\.com/ubuntu#http://archive.ubuntu.com/ubuntu#g' "$f"
@@ -1213,8 +1215,10 @@ jobs:
           sudo dpkg --configure -a || true
           # A crawling Azure mirror is the usual cause; fetch the retry from the
           # main archive instead.
-          for f in /etc/apt/sources.list /etc/apt/sources.list.d/*.list \
-              /etc/apt/sources.list.d/*.sources; do
+          # Ubuntu runners list the mirror in apt-mirrors.txt and point the
+          # sources at it with mirror+file:, so rewrite both.
+          for f in /etc/apt/apt-mirrors.txt /etc/apt/sources.list \
+              /etc/apt/sources.list.d/*.list /etc/apt/sources.list.d/*.sources; do
             if [ -f "$f" ]; then
               sudo sed -i \
                 's#http://azure\.archive\.ubuntu\.com/ubuntu#http://archive.ubuntu.com/ubuntu#g' "$f"
