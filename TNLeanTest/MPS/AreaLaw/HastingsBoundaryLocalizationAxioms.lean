@@ -13,7 +13,6 @@ in Hastings' Lemma 1. -/
 run_cmd do
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
   for decl in #[
-    ``TNLean.MPS.AreaLaw.Hastings.norm_le_one_of_mem_unitaryGroup,
     ``TNLean.MPS.AreaLaw.Hastings.norm_interactionPropagator_sub_le,
     ``TNLean.MPS.AreaLaw.Hastings.exists_supported_interactionAverage_approx,
     ``TNLean.MPS.AreaLaw.Hastings.exists_supported_interactionAverage_approx_exp] do
