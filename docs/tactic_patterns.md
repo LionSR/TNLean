@@ -9014,3 +9014,23 @@ spectral split → block extraction → MPV calculation → strict bounds
   built on `Lattice.Sheet.birth_bounded`, `Real.rpow_neg_ofNat` and
   `Lattice.hasSourceBoundedChange_liftOne`. The stage births call it with an
   empty prefix and the scalar idle vector; the former private copy is removed.
+
+### Candidate: logarithms of zero-padded integer rank budgets (2026-10-23)
+
+`EntropyScaling.RenyiApproximationLowerBound` and
+`EntropyScaling.VonNeumannApproximationLowerBound` both use
+`log (max 1 D) = log D` for a natural rank budget, including zero.
+The latter shares one private lemma between its prefix and block bounds,
+using Mathlib's `Real.posLog_eq_log_max_one` and
+`Real.log_natCast_nonneg`; it does not repeat the earlier case split.
+A further independent use should place this elementary identity in a shared
+mathematical module and replace the existing local proofs.
+
+### Candidate: polynomial bond bounds and logarithmic entropy remainders (2026-10-23)
+
+`EntropyScaling.RenyiObstruction` and `EntropyScaling.VonNeumannObstruction`
+both convert `D ≤ C * (N + 1)^m` to a logarithmic bound, including `D = 0`,
+and use a little-o estimate to compare the logarithmic remainder with positive
+entropy growth. There are two independent occurrences. A third consumer should
+share the logarithmic integer-budget lemma and the elementary eventual comparison;
+there is no need for a new tactic.
