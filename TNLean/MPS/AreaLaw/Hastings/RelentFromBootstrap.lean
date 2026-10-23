@@ -16,7 +16,8 @@ overlap `P = tr(P₀ ρ_{<c} ⊗ ρ_{≥c})` of the product of the two marginals
 the ground-state projector `P₀`: the product of the marginals is a mixture of product vectors,
 so the bootstrap lemma (Lemma 2) with Schmidt rank one gives
 `S_cut ≤ ξ' ln(2 C₁² / P) ln q + F(ξ', q)`. When the window assumption stated at line 483
-holds with `l` in place of `l₀ ≥ l`, this forces `P ≤ 2 C₁ e^{-l/ξ'}`, as used at line 488, and
+holds with `l` in place of `l₀ ≥ l` and the entropy `S_c ≥ S_cut` of the first `c` sites in
+place of `S_cut`, this forces `P ≤ 2 C₁ e^{-l/ξ'}`, as used at line 488, and
 eq. `relent` follows from `relent_of_projectorFactorization`.
 
 **Local fix (explicit constants):** the conclusion holds with `C₁` replaced by `2 C₁` and with
@@ -49,7 +50,8 @@ and `O_B` of norm at most one supported on `[c - m, c + m)` with `‖O_B O_L O_R
 the error.
 Suppose further that the entropy of the first `c` sites is at least
 `(l + ξ' ln C₁) ln q + F(ξ', q)`, the window assumption stated at line 483 with `l` in place of
-`l₀ ≥ l`. Then the mutual information of `A = [c - l, c)` and `B = [c, c + l)` is at least
+`l₀ ≥ l` and `S_c ≥ S_cut` in place of `S_cut`. Then the mutual information of
+`A = [c - l, c)` and `B = [c, c + l)` is at least
 `(1 − 2ε') l/ξ' − ln (2 C₁) − C₂` with `ε' = 2 C₁ e^{-l/ξ'}` and `C₂ = relentConst`.
 
 The overlap `P` of the product of the two marginals with `P₀` is a mixture of overlaps with
