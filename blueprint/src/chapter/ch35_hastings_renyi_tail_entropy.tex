@@ -52,7 +52,10 @@ which the relevant geometric series converges.
     This is the extension to Rényi entropies in the proof of
     \cite[Lemma~2]{Hastings2007AreaLaw}, lines 392--410, with the convergence
     condition of line 406; it differs from the von Neumann bound only in the
-    term replacing $F(\xi',D)$.
+    term replacing $F(\xi',D)$. The source's maximization at lines 400--402
+    keeps a factor $(1-e^{-2/\xi'})^\alpha$ inside the logarithm, from the
+    exact masses of the saturating blocks; bounding each block mass by its tail
+    drops that factor, so the bound here is slightly weaker but of the same form.
 \end{theorem}
 \begin{proof}\leanok
     \uses{lem:hastings_power_sum_card}
@@ -63,7 +66,7 @@ which the relevant geometric series converges.
     its contribution to $\sum_ap_a^\alpha$ by
     $(KD^{2n})^{1-\alpha}x^{n\alpha}=K^{1-\alpha}r^n$, so
     $\sum_ap_a^\alpha\le K^{1-\alpha}/(1-r)$. Taking logarithms and dividing by
-    $1-\alpha>0$ gives \eqref{eq:hastings_renyi_tail_entropy}. With
+    $1-\alpha>0$ gives (\ref{eq:hastings_renyi_tail_entropy}). With
     $x=e^{-2/\xi'}$ one has $x^\alpha=e^{-2\alpha/\xi'}$ and
     $\ln K=\ln k+(2m+2)\ln D$.
 \end{proof}
