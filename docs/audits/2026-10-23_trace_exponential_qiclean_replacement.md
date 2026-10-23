@@ -67,7 +67,7 @@ The six statement/proof comparisons were checked directly against the recorded
 revisions. Generated imports, absence of residual declaration and blueprint
 references, blueprint source synchronization, prose, formatting, and LaTeX
 checks passed for this deletion and documentation change. No new Lean proof is
-introduced, no cache is copied or mutated, and no fresh Lake build is claimed. The author's `worktrees/ef-cluster1` is untouched.
+introduced, no cache is copied or mutated, and no fresh Lake build is claimed.
 
 The merged QICLean revision was checked against the compared statements, and
 the TNLean PR head remained at `68f1c1a8ebe9ffcb0bec078125db931a4dbb005f` before
