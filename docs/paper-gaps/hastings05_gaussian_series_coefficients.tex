@@ -13,7 +13,7 @@
 \gapnote{local-correction}{resolved}
 
 \section{The printed coefficients}
-Hastings, \emph{Solving gapped Hamiltonians locally},
+Hastings, \emph{Solving gapped Hamiltonians locally}~\cite{Hastings2006Solving},
 \href{https://arxiv.org/abs/cond-mat/0508554v3}{arXiv:cond-mat/0508554v3},
 source \path{proj3new.tex}, lines 1005--1009, expands a Gaussian-filtered
 local term in iterated commutators. For even $k$ the printed coefficient
@@ -25,25 +25,31 @@ power is $k/2$.
 Let $q>0$, $\Delta E>0$, and $H$ be a finite-dimensional Hermitian operator.
 Put $\sigma^2=q/\Delta E^2$ and $\operatorname{ad}_H(A)=HA-AH$. If $t$ has
 mean-zero Gaussian distribution of variance $\sigma^2$, then
-\begin{align*}
+\begin{align}
  \mathbb E(t^{2r})&=(2r-1)!!\,\sigma^{2r}, &
  \mathbb E(t^{2r+1})&=0.
-\end{align*}
-Expanding $e^{itH}Ae^{-itH}$ and integrating gives
-\begin{align*}
+ \label{eq:hastings05_gaussian_moments}
+\end{align}
+Expanding $e^{itH}Ae^{-itH}$ and using
+(\ref{eq:hastings05_gaussian_moments}) gives
+\begin{align}
  \widetilde A
  &=\sum_{r=0}^{\infty}\frac{(-1)^r}{2^r r!}
        \left(\frac q{\Delta E^2}\right)^r
        \operatorname{ad}_H^{2r}(A).
-\end{align*}
-Termwise integration is justified by the integrable majorant
+ \label{eq:hastings05_gaussian_commutator_expansion}
+\end{align}
+Termwise integration in
+(\ref{eq:hastings05_gaussian_commutator_expansion}) is justified by the integrable majorant
 $\|A\|e^{2\|H\||t|}$ against the Gaussian measure. Thus, in the convention
 $\widetilde A=A+\sum_{k\ge1}a_k i^k\operatorname{ad}_H^k(A)$, the coefficients
 are $a_k=0$ for odd $k$. For even $k\ge2$, they are
-\begin{align*}
+\begin{align}
  a_k&=\frac{(k-1)!!}{k!}\left(\frac q{\Delta E^2}\right)^{k/2}.
-\end{align*}
-The sign $(-1)^{k/2}$ is already supplied by $i^k$. In a convention without
+ \label{eq:hastings05_gaussian_series_coefficients}
+\end{align}
+In (\ref{eq:hastings05_gaussian_series_coefficients}), the sign
+$(-1)^{k/2}$ is already supplied by $i^k$. In a convention without
 this factor it belongs in the coefficient instead.
 
 \section{Scope}
@@ -51,4 +57,6 @@ The variational lower bound holds for every finite real choice of the
 commutator coefficients and is unaffected by this correction. The
 infinite Gaussian expansion is not asserted to be formalized by that
 finite-polynomial theorem.
+\bibliographystyle{unsrt}
+\bibliography{references}
 \end{document}
