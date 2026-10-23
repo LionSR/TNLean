@@ -1404,8 +1404,11 @@ applied to `H/ΔE`, Lemma 1 holds with the homogeneous length
 `16(1 + c_R J/ΔE)`. The factorization constant is uniform in chain length and
 local dimension, and at the rate `ξ' = κ ξ̂` with `κ > 6` it is at most `K ξ̂³`
 with `K` depending only on `R` and `κ`, the source's polynomial bound in `ξ`
-(lines 258–262). The endpoint rate `ξ' = 6ξ` and a Lieb–Robinson pair in the
-source's form remain open under issue #9811.
+(lines 258–262). The endpoint rate `ξ' = 6ξ` is reached at the length
+`(5/4) ξ̂` of a Lieb–Robinson pair with inflated velocity, which the source
+allows because it fixes `ξ` only through some pair (lines 96–112); at a fixed
+length the argument needs `ξ' > 6ξ`. A Lieb–Robinson pair in the source's
+form remains open under issue #9811.
 
 ## Hastings' high-temperature matrix product form, arXiv:cond-mat/0508554
 

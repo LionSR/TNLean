@@ -18,25 +18,27 @@ factorization `‖O_B O_L O_R − P₀‖ ≤ C₁ e^{-m/ξ'}` (eq. `prodapprox`
 
 This file first states the bound with Lemma 1 in the form `IsFactorizationAt` in which it is
 produced, at the cut `j` and every length `m`, and then discharges Lemma 1 by
-`exists_projectorFactorization_pow`. The result is a quantitatively restricted Lemma 2 on Hastings'
-own hypotheses: a chain Hamiltonian of finite range and finite interaction strength with a unique
-gapped ground state. With `ξ̂ = lemmaOneLength R (J/ΔE) 1` the length of Lemma 1 in units of the
-gap and `ξ' = κ ξ̂` for a fixed `κ > 6`, the constant is `C₁ = K ξ̂³`, with `K` depending only
-on the range and `κ`. So `C₁` is bounded by a polynomial in the length, as the source requires
-(lines 258–262), and is uniform in the chain length, local dimension, Hamiltonian, ground state,
-cut and mixture.
+`exists_projectorFactorization_endpoint`. The result is a quantitatively restricted Lemma 2 on
+Hastings' own hypotheses: a chain Hamiltonian of finite range and finite interaction strength with
+a unique gapped ground state. With `ζ = lemmaOneEndpointLength R J ΔE = (5/4) ξ̂` the length of
+Lemma 1 at the printed rate, the bound holds at `ξ' = 6ζ` (lines 139–142) with the constant
+`C₁ = K ζ³`, where `K` depends only on the range. The length `ζ` may stand in for the source's
+`ξ`: the source fixes `ξ = max(2v/ΔE, ξ_C)` only through some Lieb–Robinson pair, and a bound
+valid for `|t| ≤ l/v` stays valid for a larger velocity (lines 96–112), so raising the chain
+velocity by `5/4` is a legitimate choice. The constant `C₁` is bounded by a polynomial in the
+length, as the source requires (lines 258–262), and is uniform in the chain length, local
+dimension, Hamiltonian, ground state, cut and mixture.
 
 The source's sites carry nearest-neighbour terms (lines 85–93), which it obtains from any
 finite range by grouping sites; here the range `R` is arbitrary.
 
 **Scope restriction (quantitative bounds):** `exists_entropy_le_of_overlap_schmidtRank_mixture`
-inherits the quantitative restrictions of the formalized Lemma 1. Its length `ξ̂` comes from the
-chain Lieb–Robinson estimate. That estimate is linear in the size of the support, as in the
-source (lines 96–112), but its prefactor grows with `J` and its second operator acts on one site,
-so `ξ̂` is not shown to be the source's `max(2v/ΔE, ξ_C)`. The bound is proved at the rate
-`ξ' = κ ξ̂` for every `κ > 6`, with `K` depending on `κ`; the printed endpoint `ξ' = 6ξ`
-(lines 139–142) is not established, and no counterexample to that endpoint is asserted.
-Documented in `docs/paper-gaps/hastings07_lemma1_decay_length.tex` and
+inherits the quantitative restriction of the formalized Lemma 1. Its length
+`ζ = (5/4) lemmaOneLength R (J/ΔE) 1` comes from the chain Lieb–Robinson estimate with the
+velocity raised by `5/4`. That estimate is linear in the size of the support, as in the source
+(lines 96–112), but its prefactor grows with `J` and its second operator acts on one site, so
+`ζ` is not shown to be the source's `max(2v/ΔE, ξ_C)` for a Lieb–Robinson pair in the source's
+sense. Documented in `docs/paper-gaps/hastings07_lemma1_decay_length.tex` and
 `docs/paper-gaps/hastings07_gaussian_average_exponent.tex`.
 
 ## Main results
@@ -87,16 +89,17 @@ namespace TNLean.MPS.AreaLaw
 open Hastings Matrix TNLean.Lattice
 open scoped InnerProductSpace
 
-/-- **Hastings' bootstrap lemma (Lemma 2).** Let `κ > 6`. There is a constant `K ≥ 1`,
-depending only on the range `R` and `κ`, with the following property. Let `H` be a chain
-Hamiltonian of range `R` and term norm at most `J ≥ 0` with a unique ground state `Ω` and gap
-`ΔE > 0`, on `L` sites with local dimension `q`, and let `ξ̂ = lemmaOneLength R (J/ΔE) 1`,
-`ξ' = κ ξ̂` and `C₁ = K ξ̂³`. For every cut `j` and every mixture `ρ = ∑ wᵢ |ψᵢ⟩⟨ψᵢ|` of unit
-trace of vectors of Schmidt rank at most `k ≥ 1` across the cut with `⟨Ω, ρ Ω⟩ = P > 0`,
+/-- **Hastings' bootstrap lemma (Lemma 2).** There is a constant `K ≥ 1`, depending only on the
+range `R`, with the following property. Let `H` be a chain Hamiltonian of range `R` and term norm
+at most `J ≥ 0` with a unique ground state `Ω` and gap `ΔE > 0`, on `L` sites with local
+dimension `q`, and let `ζ = lemmaOneEndpointLength R J ΔE`, `ξ' = 6ζ` and `C₁ = K ζ³`. For every
+cut `j` and every mixture `ρ = ∑ wᵢ |ψᵢ⟩⟨ψᵢ|` of unit trace of vectors of Schmidt rank at most
+`k ≥ 1` across the cut with `⟨Ω, ρ Ω⟩ = P > 0`,
 `S(ρ⁰_{1,j}) ≤ ln k + ξ' ln(2 C₁²/P) ln q + F(ξ', q)`.
-Hastings, arXiv:0705.2024v4, Lemma 2 (`ble`), lines 280–311, with `C₁` polynomial in the length
-(lines 258–262) and the restrictions of the module docstring. -/
-theorem exists_entropy_le_of_overlap_schmidtRank_mixture (R : ℕ) {κ : ℝ} (hκ : 6 < κ) :
+Hastings, arXiv:0705.2024v4, Lemma 2 (`ble`), lines 280–311, at the printed rate `ξ' = 6ξ`
+(lines 139–142) for `ξ = ζ`, with `C₁` polynomial in the length (lines 258–262) and the
+restriction of the module docstring. -/
+theorem exists_entropy_le_of_overlap_schmidtRank_mixture (R : ℕ) :
     ∃ K : ℝ, 1 ≤ K ∧ ∀ {J ΔE : ℝ}, 0 ≤ J → 0 < ΔE →
       ∀ {L q : ℕ} [NeZero q] (h : ChainHamiltonian L q R J) {E₀ : ℝ}
       {Ω : EuclideanSpace ℂ (Fin L → Fin q)}, IsGappedGroundState h.operator E₀ Ω ΔE →
@@ -105,16 +108,18 @@ theorem exists_entropy_le_of_overlap_schmidtRank_mixture (R : ℕ) {κ : ℝ} (h
         (∀ i, (cutMatrix (ψ i) j).rank ≤ k) → ∑ i, w i * ‖ψ i‖ ^ 2 = 1 →
         ∀ {P : ℝ}, 0 < P → ∑ i, w i * ‖⟪ψ i, Ω⟫_ℂ‖ ^ 2 = P →
         Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L 0 j) Ω ≤
-          Real.log k + κ * lemmaOneLength R (J / ΔE) 1 *
-            Real.log (2 * (K * lemmaOneLength R (J / ΔE) 1 ^ 3) ^ 2 / P) * Real.log q +
-            bootstrapRemainder (κ * lemmaOneLength R (J / ΔE) 1) q := by
-  obtain ⟨K, -, hF⟩ := exists_projectorFactorization_pow R hκ
+          Real.log k + 6 * lemmaOneEndpointLength R J ΔE *
+            Real.log (2 * (K * lemmaOneEndpointLength R J ΔE ^ 3) ^ 2 / P) * Real.log q +
+            bootstrapRemainder (6 * lemmaOneEndpointLength R J ΔE) q := by
+  obtain ⟨K, -, hF⟩ := exists_projectorFactorization_endpoint R
   refine ⟨max K 1, le_max_right _ _, ?_⟩
   intro J ΔE hJ hΔ L q _ h E₀ Ω hgs j k r hk w ψ hw hrank hnorm P hP hPdef
   have hΩ : ‖Ω‖ = 1 := hgs.1
   have h16 := (sixteen_le_lemmaOneLength_and_le R (div_nonneg hJ hΔ.le)).1
-  have hξ : 0 < κ * lemmaOneLength R (J / ΔE) 1 := mul_pos (by linarith) (by linarith)
-  have hC₁ : 1 ≤ max K 1 * lemmaOneLength R (J / ΔE) 1 ^ 3 :=
+  have hζ : 20 ≤ lemmaOneEndpointLength R J ΔE := by
+    rw [lemmaOneEndpointLength_eq]; linarith
+  have hξ : 0 < 6 * lemmaOneEndpointLength R J ΔE := by linarith
+  have hC₁ : 1 ≤ max K 1 * lemmaOneEndpointLength R J ΔE ^ 3 :=
     one_le_mul_of_one_le_of_one_le (le_max_right _ _) (one_le_pow₀ (by linarith))
   rcases lt_or_ge q 2 with hq | hq
   · -- For `q ≤ 1` the entropy vanishes and the right side is nonnegative.
@@ -122,7 +127,7 @@ theorem exists_entropy_le_of_overlap_schmidtRank_mixture (R : ℕ) {κ : ℝ} (h
     subst hq1
     refine (regionEntropy_le_card_mul_log hΩ _).trans ?_
     have hk0 : 0 ≤ Real.log k := Real.log_nonneg (by exact_mod_cast hk)
-    have hξ0 : 0 ≤ Real.log (κ * lemmaOneLength R (J / ΔE) 1 / 2 + 1) :=
+    have hξ0 : 0 ≤ Real.log (6 * lemmaOneEndpointLength R J ΔE / 2 + 1) :=
       Real.log_nonneg (by linarith)
     simp only [Nat.cast_one, Real.log_one, mul_zero, add_zero, bootstrapRemainder, one_pow,
       sub_self, Real.log_zero, zero_add]

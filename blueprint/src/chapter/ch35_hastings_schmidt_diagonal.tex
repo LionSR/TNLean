@@ -118,13 +118,13 @@ error $\varepsilon$ that is left free.
     \label{thm:hastings_fwdback}
     \lean{TNLean.MPS.AreaLaw.exists_norm_inner_mul_sub_le}
     \leanok
-    \uses{def:chain_model, thm:hastings_lemma1_polynomial_constant}
-    Let $R$ be a range and $\kappa>6$. There is a constant $K\ge0$, depending
-    only on $R$ and $\kappa$, with the following property. Let $H$ be a
-    Hamiltonian on a chain of $L$ sites, a sum of terms of range $R$ and norm
-    at most $J\ge0$, whose ground state $\Psi_0$ is unique with gap
-    $\Delta E>0$ above the ground energy, let $\hat\xi$ be the length of
-    Lemma~1 in units of the gap, and let
+    \uses{def:chain_model, thm:hastings_lemma1_endpoint}
+    Let $R$ be a range. There is a constant $K\ge0$, depending only on $R$,
+    with the following property. Let $H$ be a Hamiltonian on a chain of $L$
+    sites, a sum of terms of range $R$ and norm at most $J\ge0$, whose ground
+    state $\Psi_0$ is unique with gap $\Delta E>0$ above the ground energy, let
+    $\tilde\xi$ be the length of Theorem~\ref{thm:hastings_lemma1_endpoint},
+    and let
     $\Psi_0=\sum_\alpha a_\alpha\,\psi_L(\alpha)\otimes\psi_R(\alpha)$ with
     orthonormal $\psi_L(\alpha)$ on the first $j$ sites and orthonormal
     $\psi_R(\alpha)$ on the rest. Let
@@ -135,25 +135,34 @@ error $\varepsilon$ that is left free.
         \bigl|\langle\Psi_0,AB_L\Psi_0\rangle-\langle\Psi_0,A\Psi_0\rangle
         \langle\Psi_0,B_L\Psi_0\rangle\bigr|
          & \le3\sqrt{2\epsilon(l)}+\epsilon(l),
-         & \epsilon(l)                          & =K\hat\xi^3e^{-l/(2\kappa\hat\xi)}.
+         & \epsilon(l)                          & =K\tilde\xi^3e^{-l/(12\tilde\xi)}.
         \notag
     \end{align}
     This is a quantitatively restricted form of
     \cite[Lemma~3]{Hastings2007AreaLaw}, equation (fwdback), lines 627--646,
-    with the constant $C_1=K\hat\xi^3$ bounded by a polynomial in the length.
+    with Lemma~1 at the printed rate $\xi'=6\tilde\xi$ and the constant
+    $C_1=K\tilde\xi^3$ bounded by a polynomial in the length. The length
+    $\tilde\xi$ may stand in for the source's $\xi$: the source fixes
+    $\xi=\max(2v/\Delta E,\xi_C)$ only through some Lieb--Robinson pair, and a
+    bound valid for $|t|\le l/v$ stays valid for a larger velocity
+    \cite[lines 96--112]{Hastings2007AreaLaw}, so raising the velocity of the
+    chain estimate is a legitimate choice
+    \cite{gap:hastings07_lemma1_decay_length}.
     The proof needs $O_B$ positive, and the positive form of Lemma~1 decays at
-    half the rate, so $\epsilon(l)$ decays at the rate $2\kappa\hat\xi$
+    half the rate, so $\epsilon(l)$ decays at the rate $12\tilde\xi$
     \cite{gap:hastings07_lemma1_positivity_rate}. It also inherits the
-    remaining restrictions of the formalized Lemma~1: the length $\hat\xi$ is
-    not shown to be the source's $\max(2v/\Delta E,\xi_C)$, and the rate needs
-    $\kappa>6$ \cite{gap:hastings07_lemma1_decay_length,
+    remaining restriction of the formalized Lemma~1: the length $\tilde\xi$
+    comes from the chain Lieb--Robinson estimate with raised velocity, and is
+    not shown to be the source's $\max(2v/\Delta E,\xi_C)$ for a
+    Lieb--Robinson pair in the source's sense
+    \cite{gap:hastings07_lemma1_decay_length,
         gap:hastings07_gaussian_average_exponent}. The bound is on the modulus
     of the difference, which is stronger than the printed one-sided bound.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:hastings_lemma1_polynomial_constant,
+    \uses{thm:hastings_lemma1_endpoint,
         thm:hastings_schmidt_diagonal_chain}
-    The positive form in Theorem~\ref{thm:hastings_lemma1_polynomial_constant}
+    The positive form in Theorem~\ref{thm:hastings_lemma1_endpoint}
     gives, at the cut $j$ and length $l$, a positive semidefinite $O_B$ of
     norm at most one on the sites $j-l,\dots,j+l-1$ and commuting orthogonal
     projections $O_L$, $O_R$ on the two sides of the cut with
