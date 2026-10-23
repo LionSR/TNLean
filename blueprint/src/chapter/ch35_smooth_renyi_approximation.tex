@@ -1,0 +1,38 @@
+\section{Approximation from smoothed marginal states}
+
+The marginal states at different cuts may be smoothed independently.
+Throughout this section the smoothing radius is measured in the full trace norm.
+
+\begin{theorem}[Truncation after independent smoothing]
+    \label{thm:smoothed_marginal_truncation}
+    \lean{TNLean.MPS.AreaLaw.norm_sequentialTruncation_leadingEigenprojection_sub_sq_le_of_smoothing}
+    \leanok
+    Let $\psi$ be a unit vector on a chain of $N$ sites, let $D\in\mathbb N$, and
+    let $\rho_k$ be its marginal on the first $k$ sites. Suppose that for each
+    internal cut $1\le k<N$ there is a density matrix $\sigma_k$ such that
+    \[
+        \|\rho_k-\sigma_k\|_1\le\eta_k,
+        \qquad \tau_D(\sigma_k)\le T_k,
+    \]
+    where $\tau_D$ is the sum of the eigenvalues after the first $D$ in
+    decreasing order. Let $\Phi_D$ be the sequential truncation of $\psi$
+    using the leading $D$ eigenvectors of each $\rho_k$. Then
+    \[
+        \|\Phi_D-\psi\|_2^2
+        \le \sum_{k=1}^{N-1}\left(T_k+\frac{\eta_k}{2}\right).
+    \]
+    This gives the finite-chain estimate for the smoothing argument
+    of~\cite{SchuchWolfVerstraeteCirac2007}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:chain_sequential_truncation_sq}
+    Since both marginal states have trace one, the variational characterization
+    of the leading spectral sum gives
+    \[
+        \tau_D(\rho_k)\le\tau_D(\sigma_k)
+        +\frac12\|\rho_k-\sigma_k\|_1.
+    \]
+    Sum this inequality over the internal cuts and apply the squared-error
+    truncation bound. No common smoothing state is required.
+\end{proof}
