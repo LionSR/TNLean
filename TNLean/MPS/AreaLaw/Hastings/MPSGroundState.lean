@@ -34,12 +34,14 @@ the gap, with `ξ̂ = lemmaOneLength R (J/ΔE) 1` and a fixed `κ > 6`, Lemma 1 
 replaced by `C₁ = max (K ξ̂³) 1`, which only weakens Lemma 1.
 
 **Scope restriction (quantitative bounds of Lemma 1):** the theorems inherit the restriction of
-`exists_projectorFactorization_pow`. They hold at the rate `ξ' = κ ξ̂` for every fixed `κ > 6`,
-with `K` depending on `κ`; the printed endpoint `ξ' = 6ξ` is not established. The length `ξ̂`
-comes from the chain Lieb–Robinson estimate, whose prefactor grows with `J` and whose second
-operator acts on one site, so `ξ̂` is not shown to be the source's `max(2v/ΔE, ξ_C)` for a pair
-satisfying eq. `lrb` (lines 96–112, 139–142). The bond dimension `k₀ = ⌈exp(2 S_max)/2⌉`
-inherits this through the area-law bound `S_max`. Documented in
+Lemma 1 with a polynomial constant. At the length `ξ̂`, the bound holds at the rate `ξ' = κ ξ̂`
+for every fixed `κ > 6`, with `K` depending on `κ`, and the printed endpoint `ξ' = 6ξ` is not
+reached there. It is reached for the inflated length `ζ = lemmaOneEndpointLength R J ΔE =
+(5/4) ξ̂`, at `ξ' = 6ζ` (`exists_isOpenMPS_norm_sub_sq_le_of_isGappedGroundState_endpoint`).
+Both lengths come from the chain Lieb–Robinson estimate, whose prefactor grows with `J` and
+whose second operator acts on one site, so neither is shown to be the source's
+`max(2v/ΔE, ξ_C)` for a pair satisfying eq. `lrb` (lines 96–112, 139–142). The bond dimension
+`k₀ = ⌈exp(2 S_max)/2⌉` inherits this through the area-law bound `S_max`. Documented in
 `docs/paper-gaps/hastings07_lemma1_decay_length.tex` and
 `docs/paper-gaps/hastings07_gaussian_average_exponent.tex`.
 
@@ -127,6 +129,41 @@ theorem exists_isOpenMPS_norm_sub_sq_le_of_isGappedGroundState (R : ℕ) {κ : �
   have hξ'0 : 0 < κ * lemmaOneLength R (J / ΔE) 1 :=
     mul_pos (by linarith) (lemmaOneLength_pos R _ 1)
   refine isOpenMPS_norm_sub_sq_le_of_gappedGroundState h hgs hq hξ'0 (le_max_right _ _)
+    (fun c l _ ↦ ?_) hk'
+  obtain ⟨OB, OL, OR, hf⟩ := hF hJ hΔ h hgs c l
+  exact ⟨OB, OL, OR, hf.mono
+    (mul_le_mul_of_nonneg_right (le_max_left _ _) (Real.exp_pos _).le)⟩
+
+/-- **Hastings' matrix product state approximation at the printed rate `ξ' = 6ξ`.** There is a
+constant `K ≥ 0`, depending only on `R`, with the following property. Let `J ≥ 0` bound the
+interaction terms, let `ΔE > 0` be a gap, and put `ζ = lemmaOneEndpointLength R J ΔE =
+(5/4) ξ̂`, `ξ' = 6ζ` and `C₁ = max (K ζ³) 1`. Then the conclusion of
+`exists_isOpenMPS_norm_sub_sq_le_of_isGappedGroundState` holds with these `ξ'` and `C₁`.
+Hastings, arXiv:0705.2024v4, lines 505–557, with `ξ' = 6ξ` (lines 141–142) for `ξ = ζ`, `C₁`
+polynomial in `ζ` (lines 258–262), and the restriction on `ζ` of the module docstring. -/
+theorem exists_isOpenMPS_norm_sub_sq_le_of_isGappedGroundState_endpoint (R : ℕ) :
+    ∃ K : ℝ, 0 ≤ K ∧ ∀ {J ΔE : ℝ}, 0 ≤ J → 0 < ΔE →
+      ∀ {L q : ℕ}, 1 < q → ∀ (h : ChainHamiltonian L q R J) {E₀ : ℝ}
+      {Ω : EuclideanSpace ℂ (Fin L → Fin q)}, Matrix.IsGappedGroundState h.operator E₀ Ω ΔE →
+      ∀ {k' : ℕ}, ⌈Real.exp (2 * areaLawBound (6 * lemmaOneEndpointLength R J ΔE)
+          (max (K * lemmaOneEndpointLength R J ΔE ^ 3) 1) q) / 2⌉₊ ≤ k' →
+        let k₀ := ⌈Real.exp (2 * areaLawBound (6 * lemmaOneEndpointLength R J ΔE)
+          (max (K * lemmaOneEndpointLength R J ΔE ^ 3) 1) q) / 2⌉₊
+        let P : ∀ k : ℕ, LeftBlockMatrix L q k := fun k ↦
+          (Entropy.regionState_isHermitian (n := fun _ : Fin L ↦ q) (leftBlock L k)
+            Ω).leadingEigenprojection k'
+        let Φ := sequentialTruncation P (L - 1) Ω
+        IsOpenMPS L q k' (fun x ↦ Φ x) ∧
+          ‖Φ - Ω‖ ^ 2 ≤ ((L - 1 : ℕ) : ℝ) *
+            (4 * (max (K * lemmaOneEndpointLength R J ΔE ^ 3) 1) ^ 2 *
+              exp (2 / (6 * lemmaOneEndpointLength R J ΔE)) *
+              ((k' : ℝ) / k₀) ^ (-1 / ((6 * lemmaOneEndpointLength R J ΔE) * log q))) := by
+  obtain ⟨K, hK0, hF⟩ := exists_projectorFactorization_endpoint R
+  refine ⟨K, hK0, fun {J ΔE} hJ hΔ {L q} hq h {E₀} {Ω} hgs {k'} hk' ↦ ?_⟩
+  have : NeZero q := ⟨by omega⟩
+  have hζ0 : 0 < 6 * lemmaOneEndpointLength R J ΔE := by
+    rw [lemmaOneEndpointLength_eq]; linarith [lemmaOneLength_pos R (J / ΔE) 1]
+  refine isOpenMPS_norm_sub_sq_le_of_gappedGroundState h hgs hq hζ0 (le_max_right _ _)
     (fun c l _ ↦ ?_) hk'
   obtain ⟨OB, OL, OR, hf⟩ := hF hJ hΔ h hgs c l
   exact ⟨OB, OL, OR, hf.mono
