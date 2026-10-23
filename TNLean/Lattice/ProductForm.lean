@@ -39,10 +39,13 @@ indices of a smaller site can be padded with values on which the coefficient van
 
 ## Main results
 
-* `TNLean.Lattice.hasProductForm_of_mem_supportedOperators`: an operator supported on an
-  admissible support of range `R` has a product form of range `R`.
+* `TNLean.Lattice.hasProductForm_of_mem_supportedOperators_radius`: an operator supported
+  within radius `R` of a specified centre has a product form of range `R`.
+* `TNLean.Lattice.hasProductForm_of_mem_supportedOperators`: the diameter-bounded corollary.
 * `TNLean.Lattice.HasProductForm.mul`: product forms of a common range are closed under
   multiplication.
+* `TNLean.Lattice.hasProductForm_trotterProduct_of_radius`: centre-indexed Trotter products
+  preserve the radius bound.
 * `TNLean.Lattice.LocalHamiltonian.hasProductForm_trotterProduct`: every Trotter product of a
   local Hamiltonian of range `R` has a product form of range `R`.
 
@@ -51,15 +54,14 @@ count of at most `n S` index components per site, one for each nearby factor (li
 1069–1075): every factor is expanded in single-site matrix units at every site, so a product of
 `m` factors carries `m` components of `q²` values at each site.
 
-**Scope restriction (geometry and support diameter):** the source uses an arbitrary metric
-lattice and terms supported within radius `R` of specified centres. This file uses finite
-planar domains with walk distance and supports of diameter at most `R`, a stricter condition.
-A source radius-`R` support may have diameter `2 * R`; the present theorem is not the source
-statement with the same range parameter. The index-component count is also not established.
-Documented in `docs/paper-gaps/hastings05_planar_domain_scope.tex`. Elimination: define the
-product form on arbitrary finite metric site sets, prove the supported expansion with a
-specified centre and a radius bound, and derive these diameter-bounded results as special
-cases. The note specifies the proof changes and the separate index-count construction.
+**Scope restriction (geometry and index count):** the source uses an arbitrary metric
+lattice; this file uses finite planar domains with walk distance. The supported-operator
+and centre-indexed Trotter theorems use the source's radius bound about a specified centre.
+The local-Hamiltonian theorem retains the stronger diameter bound as a corollary.
+The source's index-component count is not established. Documented in
+`docs/paper-gaps/hastings05_planar_domain_scope.tex`. Elimination: define the product form on
+arbitrary finite metric site sets and repeat the supported expansion and product closure
+with metric locality. The index count requires the separate construction described in the note.
 
 ## References
 
@@ -202,16 +204,16 @@ theorem HasProductForm.pow {l : ℕ} {ρ : Matrix (Configuration Λ q) (Configur
   | zero => simpa using hasProductForm_one l
   | succ n ih => simpa [pow_succ] using ih.mul hρ
 
-/-- **Supported operators.** An operator supported on an admissible support of range `R` has a
-product form of range `R`. It is expanded in single-site matrix units; the coefficient of a
-configuration pair is attached to one site of the support, and every site off the support
-carries the coefficient forcing equal row and column labels.
+/-- An operator supported within walk distance `R` of a specified centre has a product
+form of range `R`. The centre need not belong to the support, which may be empty.
+The matrix-element coefficient is attached to the centre; diagonal identity factors
+are retained at every site off the support, including the centre when necessary.
 Source: Hastings, arXiv:cond-mat/0508554v3, lines 1053–1061. -/
-theorem hasProductForm_of_mem_supportedOperators {R : ℕ} {X : Finset (Site Λ)}
-    (hX : IsAdmissibleSupport Λ R X) {ρ : Matrix (Configuration Λ q) (Configuration Λ q) ℂ}
+theorem hasProductForm_of_mem_supportedOperators_radius {R : ℕ} {X : Finset (Site Λ)}
+    (i₀ : Site Λ) (hX : ∀ j ∈ X, ∃ p : (domainGraph Λ).Walk i₀ j, p.length ≤ R)
+    {ρ : Matrix (Configuration Λ q) (Configuration Λ q) ℂ}
     (hρ : ρ ∈ supportedOperators q (X : Set (Site Λ))) : HasProductForm Λ q R ρ := by
   classical
-  obtain ⟨i₀, hi₀⟩ := hX.1
   /- The configurations read off the indices: their labels on `X`, and one common label
   (the row label at `i₀`) off `X`. -/
   let row : (Site Λ → Fin q × Fin q) → Configuration Λ q :=
@@ -230,12 +232,12 @@ theorem hasProductForm_of_mem_supportedOperators {R : ℕ} {X : Finset (Site Λ)
       have hrow : row α = row β := funext fun j ↦ by
         simp only [row]
         split_ifs with hj
-        · rw [h j (hX.2 i hi₀ j hj)]
+        · rw [h j (hX j hj)]
         · rw [hnil]
       have hcol : col α = col β := funext fun j ↦ by
         simp only [col]
         split_ifs with hj
-        · rw [h j (hX.2 i hi₀ j hj)]
+        · rw [h j (hX j hj)]
         · rw [hnil]
       simp only [hrow, hcol, hnil]
     · simp [hi, hnil]
@@ -267,6 +269,32 @@ theorem hasProductForm_of_mem_supportedOperators {R : ℕ} {X : Finset (Site Λ)
       · exact absurd (Prod.ext h.1 h.2) hj
       · rfl
     · simp
+
+/-- An operator on a nonempty support of diameter at most `R` has a product form of
+range `R`, by choosing any site of the support as its centre.
+Source: Hastings, arXiv:cond-mat/0508554v3, lines 1053–1061, specialized to such supports. -/
+theorem hasProductForm_of_mem_supportedOperators {R : ℕ} {X : Finset (Site Λ)}
+    (hX : IsAdmissibleSupport Λ R X) {ρ : Matrix (Configuration Λ q) (Configuration Λ q) ℂ}
+    (hρ : ρ ∈ supportedOperators q (X : Set (Site Λ))) : HasProductForm Λ q R ρ := by
+  obtain ⟨i₀, hi₀⟩ := hX.1
+  exact hasProductForm_of_mem_supportedOperators_radius i₀ (hX.2 i₀ hi₀) hρ
+
+/-- Trotter products of centre-indexed operators supported within radius `R` have a
+product form of range `R`. No diameter bound, nonempty support, or Hermiticity is needed.
+At zero steps the product is the identity. This is the finite planar-domain case of
+Hastings, arXiv:cond-mat/0508554v3, lines 1053–1077; no index-component count is asserted. -/
+theorem hasProductForm_trotterProduct_of_radius {R : ℕ}
+    (H : Site Λ → Matrix (Configuration Λ q) (Configuration Λ q) ℂ)
+    (X : Site Λ → Finset (Site Λ))
+    (hX : ∀ i j, j ∈ X i → ∃ p : (domainGraph Λ).Walk i j, p.length ≤ R)
+    (hH : ∀ i, H i ∈ supportedOperators q (X i : Set (Site Λ)))
+    (seq : List (Site Λ)) (β : ℝ) (n : ℕ) :
+    HasProductForm Λ q R
+      (((seq.map fun i ↦ NormedSpace.exp ((-((β : ℂ) / n)) • H i)).prod) ^ n) := by
+  refine HasProductForm.pow (hasProductForm_list_prod _ fun ρ hρ ↦ ?_) n
+  obtain ⟨i, _, rfl⟩ := List.mem_map.mp hρ
+  exact hasProductForm_of_mem_supportedOperators_radius i (hX i)
+    (exp_mem_supportedOperators (Submodule.smul_mem _ _ (hH i)))
 
 /-- The Trotter product `ρₙ = [∏_X exp(-(β / n) H_X)]ⁿ` of a local Hamiltonian, for an ordered
 sequence of supports `seq`.

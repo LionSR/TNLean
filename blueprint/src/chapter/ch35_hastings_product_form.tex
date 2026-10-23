@@ -11,9 +11,9 @@ alone, and the coefficients are products of functions of finite range. Every
 Trotter product of a finite-range Hamiltonian has this form exactly. The error
 between a Trotter product and the Gibbs operator is not estimated here. The
 source works on an arbitrary lattice; here the sites form a finite domain of
-the square lattice with the walk distance. The formalized term supports
-have diameter at most $R$, a stricter condition than the source's containment
-in a ball of radius $R$ about a specified centre. The source's count of the
+the square lattice with the walk distance. The term supports lie in balls of
+radius $R$ about specified centres, as in the source. The original
+diameter-bounded statement follows as a corollary. The source's count of the
 indices at a site is not established~\cite{gap:hastings05_planar_domain_scope}.
 
 \begin{definition}[Matrix product form]
@@ -47,29 +47,42 @@ indices at a site is not established~\cite{gap:hastings05_planar_domain_scope}.
     larger range.
 \end{definition}
 
+\begin{theorem}[Operators supported near a specified centre]
+    \label{thm:hastings_product_form_supported_radius}
+    \lean{TNLean.Lattice.hasProductForm_of_mem_supportedOperators_radius}
+    \leanok
+    \uses{def:hastings_product_form}
+    Fix $i_0\in\Lambda$ and $X\subseteq\Lambda$ such that
+    $d_\Lambda(i_0,j)\le R$ for every $j\in X$.
+    Every operator supported on $X$ has a matrix product form of range $R$.
+    The centre need not belong to $X$, and $X$ may be empty.
+    This is the finite planar-domain case of the supported-factor expansion
+    in~\cite[lines 1053--1061]{Hastings2006Solving}.
+\end{theorem}
+\begin{proof}\leanok
+    Take $\mathcal A=\{1,\dots,q\}^2$ and let the single-site operators be
+    the matrix units $|a_j\rangle\langle b_j|$. Attach to $i_0$ the matrix
+    element between the configurations equal to $a$ and $b$ on $X$ and
+    equal to $a_{i_0}$ off $X$. At every site outside $X$, multiply the
+    coefficient by the indicator of $a_j=b_j$, including at $i_0$ if
+    $i_0\notin X$. The matrix element reads only indices on $X$ and at
+    $i_0$, all within radius $R$; each diagonal indicator reads only its
+    own index. Supported operators vanish between configurations differing
+    off $X$, and their other entries depend only on the labels on $X$.
+    Thus~(\ref{eq:hastings_mpf}) holds entry by entry.
+\end{proof}
+
 \begin{theorem}[Operators supported on a small set]
     \label{thm:hastings_product_form_supported}
     \lean{TNLean.Lattice.hasProductForm_of_mem_supportedOperators}
     \leanok
-    \uses{def:hastings_product_form}
+    \uses{thm:hastings_product_form_supported_radius}
     Let $X\subseteq\Lambda$ be nonempty with $d_\Lambda(x,y)\le R$ for all
     $x,y\in X$. Every operator supported on $X$ has a matrix product form of
-    range $R$. This is a diameter-restricted version of the supported-factor
-    expansion in~\cite[lines 1053--1061]{Hastings2006Solving}.
+    range $R$.
 \end{theorem}
 \begin{proof}\leanok
-    Take $\mathcal A=\{1,\dots,q\}^2$ and let $\rho_j(a,b)$ be the matrix
-    unit $|a\rangle\langle b|$ on the site $j$. Fix $x_0\in X$. For a
-    configuration of indices $\alpha_j=(a_j,b_j)$, let $F_{x_0}(\alpha)$ be the
-    matrix element of the operator between the configurations equal to $a$
-    and $b$ on $X$ and equal to $a_{x_0}$ off $X$. Let $F_j(\alpha)$ be $1$ if
-    $a_j=b_j$ and $0$ otherwise for $j\notin X$, and $F_i=1$ for the other
-    sites of $X$. The function $F_{x_0}$ reads only indices on $X$, at
-    distance at most $R$ from $x_0$, and every other $F_j$ reads only
-    $\alpha_j$. An operator supported on $X$ has vanishing matrix elements
-    between configurations that differ off $X$, and its other matrix elements
-    depend only on the labels on $X$, so~\eqref{eq:hastings_mpf} holds entry by
-    entry.
+    Choose any $i_0\in X$ and apply the preceding theorem.
 \end{proof}
 
 \begin{theorem}[Products of matrix product forms]
@@ -94,6 +107,30 @@ indices at a site is not established~\cite{gap:hastings05_planar_domain_scope}.
     products of the two functions at each site as the new functions, as
     in~\cite[lines 1068--1077]{Hastings2006Solving}. The operators on distinct
     sites multiply factor by factor.
+\end{proof}
+
+\begin{theorem}[Trotter products with prescribed centres]
+    \label{thm:hastings_trotter_product_form_radius}
+    \lean{TNLean.Lattice.hasProductForm_trotterProduct_of_radius}
+    \leanok
+    \uses{thm:hastings_product_form_supported_radius,thm:hastings_product_form_mul}
+    For each $i\in\Lambda$, let $H_i$ be an operator supported on
+    $X_i\subseteq\{j:d_\Lambda(i,j)\le R\}$. For any ordered list
+    $i_1,\ldots,i_m$, real $\beta$, and integer $n\ge1$,
+    \begin{align}
+        \label{eq:hastings_trotter_product_radius}
+        \Bigl[\prod_{k=1}^m\exp\bigl(-\tfrac\beta n H_{i_k}\bigr)\Bigr]^n
+    \end{align}
+    has a matrix product form of range $R$. Neither Hermiticity nor
+    nonempty supports are required. With the separate convention that the
+    zero-step product is the identity, the conclusion also holds for $n=0$.
+    This proves the radius-based construction of~\cite[lines
+        1053--1077]{Hastings2006Solving} on the stated planar domains.
+\end{theorem}
+\begin{proof}\leanok
+    The supported operators form a finite-dimensional closed algebra, so
+    each exponential is supported on $X_i$. Apply the supported-operator
+    theorem with centre $i$, then closure under finite products and powers.
 \end{proof}
 
 \begin{theorem}[Trotter products have a matrix product form]
@@ -122,8 +159,7 @@ indices at a site is not established~\cite{gap:hastings05_planar_domain_scope}.
     has a matrix product form of range $R$. With the separate convention
     $\rho_0=1$, the same conclusion holds at $n=0$. This is the
     diameter-restricted specialization of the construction
-    in~\cite[lines 1048--1077]{Hastings2006Solving}; the source's radius-based
-    statement remains to be formalized.
+    in~\cite[lines 1048--1077]{Hastings2006Solving}.
 \end{theorem}
 \begin{proof}\leanok
     The operators supported on a set of sites form a finite-dimensional, hence

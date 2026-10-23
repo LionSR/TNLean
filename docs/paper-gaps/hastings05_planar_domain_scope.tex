@@ -2,7 +2,7 @@
 \usepackage{amsmath,amssymb}
 \usepackage{xurl}
 \usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
-\input{command}
+\input{./command}
 \providecommand{\gapnote}[2]{\par\noindent\textbf{Verdict:} #1 (#2).\par}
 \title{Hastings' High-Temperature Product Form on Planar Domains}
 \author{}
@@ -26,39 +26,44 @@ a site each site carries at most $nS$ indices (lines 1069--1075).
 
 \section{The formalized setting}
 
-The formalization states the product form for the local Hamiltonians already
-used for the two-dimensional area law: the sites form a finite domain
-$\Lambda\subseteq\mathbb Z^2$, the distance between two sites is the length of
-a shortest walk joining them in the nearest-neighbour graph of $\Lambda$, and a
-term of range $R$ is supported on a set of sites any two of which are joined by
-a walk of length at most $R$. This is a diameter bound, whereas the source
-assumes a radius bound about the specified centre of each term. A support
-contained in a ball of radius $R$ can have diameter $2R$. Thus the current
-statement is a specialization with a stricter support condition; it does not
-formalize the source theorem with the same range parameter. Replacing the
-support diameter by $2R$ would yield range $2R$ by the current argument,
-not the source's range $R$.
+The sites form a finite domain $\Lambda\subseteq\mathbb Z^2$, with locality
+measured by walks in its nearest-neighbour graph. For a specified centre
+$i\in\Lambda$, every operator supported on a set $X$ whose sites are joined
+to $i$ by walks of length at most $R$ has a product form of range $R$.
+The support may be empty and need not contain its centre. The expansion
+attaches the matrix-element coefficient to $i$ and retains the diagonal
+identity factor at every site off $X$, including $i$ when $i\notin X$.
+Thus the radius condition in the source is now preserved without increasing
+$R$ to $2R$. The earlier diameter-bounded theorem follows by choosing any
+site of a nonempty support as its centre.
 
-\paragraph{Elimination plan.} First define the product form on an arbitrary
-finite metric site set, with coefficient locality measured by its given
-metric, independently of a graph or a planar embedding. Next prove the
-supported-operator expansion with a specified centre $i$ and the sole
-support condition $X\subseteq\{j:d(i,j)\le R\}$. Attach the nonconstant
-matrix-unit coefficient to $i$, retaining the diagonal identity factors off
-$X$ even when $i\notin X$. This removes the diameter assumption while
-preserving the source's radius $R$. Finally prove product closure and the
-Trotter theorem for terms indexed by their centres under these radius
-hypotheses. Derive the present diameter-bounded statement by choosing any
-site of each nonempty support as its centre and specializing the geometry.
-The source's index-component count requires a separate construction that
-assigns components only to sites touched by a factor and uses the bound $S$
-on each radius-$R$ ball. These extensions are part of
+For a family of operators $H_i$ with these centred supports, every finite
+ordered Trotter product has a product form of the same range $R$, by closure
+under exponentials, products and powers. The centre-indexed statement does
+not require a Hamiltonian with diameter-bounded supports.\footnote{Declarations:
+    \leanid{TNLean.Lattice.hasProductForm_of_mem_supportedOperators_radius},
+    \leanid{TNLean.Lattice.hasProductForm_trotterProduct_of_radius}, and the
+    corollary \leanid{TNLean.Lattice.hasProductForm_of_mem_supportedOperators},
+    in \doclink{TNLean/Lattice/ProductForm}.}
+The remaining geometric restriction is the use of finite planar domains
+with walk locality in place of arbitrary metric site sets.
+
+\paragraph{Elimination plan.} Define the product form on an arbitrary finite
+metric site set, with coefficient locality measured by its given metric.
+Repeat the supported-operator expansion with a specified centre and support
+inside its radius-$R$ ball, then prove product closure and the centre-indexed
+Trotter theorem in this setting. These proofs require no planar embedding;
+the present walk-local statements remain specializations. The source's
+index-component count requires a separate construction that assigns
+components only to sites touched by a factor and uses the bound $S$ on each
+radius-$R$ ball. These extensions are part of
 \href{https://github.com/LionSR/TNLean/issues/9854}{issue 9854}.
 
 \section{What is not claimed}
 
 The formalization proves the existence of the product form with range $R$ for
-every Trotter product whose term supports have diameter at most $R$. It does not establish the source's count of the indices
+every centre-indexed Trotter product whose term supports lie within radius
+$R$ of their centres. It does not establish the source's count of the indices
 at a site. The source groups at each site one index component for every
 occurrence of a factor acting near that site, at most $nS$ components. Here
 each factor $e^{-\beta H_i/n}$ is expanded in single-site matrix units at every

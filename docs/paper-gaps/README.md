@@ -1367,7 +1367,9 @@ positive and the later estimate uses `‖M_L O_L‖` at most the threshold.
 products in Section IV of Hastings (arXiv:cond-mat/0508554v3, lines
 1017–1079), stated there for an arbitrary lattice and metric, is formalized for
 finite domains of `ℤ²` with the walk distance of the local Hamiltonians of the
-two-dimensional area law. It also records that the source's count of at most
+two-dimensional area law. The centre-indexed theorem preserves the source's
+radius bound, including centres outside their supports; the original
+diameter-bounded statement is a corollary. It also records that the source's count of at most
 `nS` index components per site is not established: for a product of `m`
 factors the construction carries `m` components of `q²` values at every site,
 one for every factor wherever it acts.
