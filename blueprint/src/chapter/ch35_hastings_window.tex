@@ -120,3 +120,31 @@ $A$.
     for $l>l_0$ is a convention adopted here, under which $S_{2l}\le 2S_l$
     holds for every $l$.
 \end{proof}
+
+\begin{theorem}[The entropy gain on the window gives the strengthened doubling, stage form]
+    \label{thm:hastings_window_claim_of_relent}
+    \lean{TNLean.MPS.AreaLaw.Hastings.windowEntropy_two_mul_le_of_relent}
+    \leanok
+    \uses{def:hastings_window_entropy}
+    Let $\xi'$, $C_1$ and $C_2$ be real numbers. Suppose that for every
+    interval $\lbrack a,a+2l)$ inside the window,
+    \begin{align*}
+        S(\lbrack a,a+2l))\ \le\ S(\lbrack a,a+l))+S(\lbrack a+l,a+2l))
+        -\bigl(1-2C_1e^{-l/\xi'}\bigr)\frac{l}{\xi'}+\ln C_1+C_2 .
+    \end{align*}
+    Then for every $l$ with $2l\le l_0$,
+    \begin{align*}
+        S_{2l}\ \le\ 2S_l-\bigl(1-2C_1e^{-l/\xi'}\bigr)\frac{l}{\xi'}+\ln C_1+C_2 .
+    \end{align*}
+    This is the step from eq.~(relent) to eq.~(claim)
+    of~\cite{Hastings2007AreaLaw}, lines 201--204 and 234--242; the bound
+    on each pair of adjacent intervals is a hypothesis.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Take an interval $\lbrack a,a+2l)$ inside the window of largest entropy.
+    The two intervals $\lbrack a,a+l)$ and $\lbrack a+l,a+2l)$ lie inside the
+    window, so each has entropy at most $S_l$, and the hypothesis for this
+    pair gives the bound.
+\end{proof}
