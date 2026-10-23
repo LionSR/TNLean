@@ -64,19 +64,18 @@ Indeed, with $x=\log_D(k/k_0)$ and $m=\lfloor\lfloor x\rfloor/2\rfloor$, one
 has $k_0D^{2m}\le k$ and $2m>x-2$.
 
 The tail $\tau(k')=\sum_{\alpha\ge k'+1}|A_0(\alpha)|^2$ starts one index
-later than the sum in (\ref{eq:hastings07_schmidt_tail_source_est}). When
-$k'=k_0D^{2m}$, the constraint (\ref{eq:hastings07_schmidt_tail_constraint})
-says nothing about $|A_0(k')|^2$, so the sum from $\alpha=k'$ is not
-controlled at that scale. When $m\ge1$ and $k'\ge2$, it is controlled at the
-scale $m-1$: since $D\ge2$, one has $k_0D^{2(m-1)}\le k'/4\le k'-1$, so the
-constraint at the scale $m-1$ bounds the sum from $\alpha=k'$ at the cost of
-one more factor $e^{2/\xi'}$, and that sum also decays as in the source. At
-the initial scale $m=0$, where $k'=k_0$, the constraint gives no control of
-$|A_0(k_0)|^2$, and the sum from $\alpha=k_0$ is bounded only by $1$. Away
-from that initial scale, the later start is a choice rather than a gap in the
-source. It is the tail the approximation needs: a matrix product state of bond
-dimension $k'$ keeps the first $k'$ Schmidt coefficients and discards the
-rest.
+later than the sum in (\ref{eq:hastings07_schmidt_tail_source_est}). This is a
+convention, not a gap in the source: the sum from $\alpha=k'$ is also
+controlled by (\ref{eq:hastings07_schmidt_tail_constraint}). When
+$k'=k_0D^{2m}$ with $m\ge1$ and $k'\ge2$, the constraint at the scale $m$ says
+nothing about $|A_0(k')|^2$, but since $D\ge2$ one has
+$k_0D^{2(m-1)}\le k'/4\le k'-1$, so the constraint at the scale $m-1$ bounds
+the sum from $\alpha=k'$ at the cost of one more factor $e^{2/\xi'}$, and that
+sum decays as in the source. The later start is adopted because it is the tail
+the approximation needs: a matrix product state of bond dimension $k'$ keeps
+the first $k'$ Schmidt coefficients and discards the rest. Only at the initial
+scale $m=0$, where $k'=k_0$, is there no smaller scale to fall back on, and
+there the sum from $\alpha=k_0$ is bounded only by $1$.
 
 The bound (\ref{eq:hastings07_schmidt_tail_corrected}) is therefore
 (\ref{eq:hastings07_schmidt_tail_source_est}) with the sum started one index
@@ -88,8 +87,9 @@ the separate note \path{hastings07_mps_error_measure.tex}.
 
 \section{Conclusion}
 
-The correction changes one numerical constant and a sign, and the tail is taken
-from the index after $k'$. The decay exponent of the tail is as in the source.
+The correction changes one numerical constant and a sign. Taking the tail from
+the index after $k'$ is a convention matched to the cut of a matrix product
+state, not a correction. The decay exponent of the tail is as in the source.
 
 \bibliographystyle{alpha}
 \bibliography{references}
