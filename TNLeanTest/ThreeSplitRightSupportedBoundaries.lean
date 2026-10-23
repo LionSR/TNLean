@@ -29,6 +29,6 @@ private noncomputable def rightSiteFactors (i : Fin 3) : Matrix (Fin 2) (Fin 2) 
 private noncomputable abbrev middleAndRightSites :=
   exists_threeSplit_eq_reindex_one_kronecker
     (q := 2) (T := ({0} : Finset (Fin 3))) (E := {1}) (D := {i | i ≠ 0})
-    (by decide) (by decide)
+    (by decide) (by simp [Set.disjoint_left])
     (rectKronecker_mem_supportedOperators (m := rightSiteFactors)
       (by intro i hi; simp_all [rightSiteFactors]))
