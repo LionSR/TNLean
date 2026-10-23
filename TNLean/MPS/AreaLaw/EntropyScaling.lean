@@ -10,3 +10,4 @@ Authors: TNLean contributors
 
 import TNLean.MPS.AreaLaw.EntropyScaling.EfficientApproximation
 import TNLean.MPS.AreaLaw.EntropyScaling.RenyiApproximation
+import TNLean.MPS.AreaLaw.EntropyScaling.SmoothApproximation
