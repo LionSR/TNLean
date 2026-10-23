@@ -1363,7 +1363,7 @@ positive and the later estimate uses `‖M_L O_L‖` at most the threshold.
 ### High-temperature product form after Hastings: planar domains
 
 [hastings05_planar_domain_scope.tex](hastings05_planar_domain_scope.tex)
-(scope restriction, resolved) records that the matrix product form of Trotter
+(scope restriction, open) records that the matrix product form of Trotter
 products in Section IV of Hastings (arXiv:cond-mat/0508554v3, lines
 1017–1079), stated there for an arbitrary lattice and metric, is formalized for
 finite domains of `ℤ²` with the walk distance of the local Hamiltonians of the
