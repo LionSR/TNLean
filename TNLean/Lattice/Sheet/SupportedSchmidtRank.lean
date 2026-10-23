@@ -17,8 +17,8 @@ configuration dimension of the support inside the middle region. The same
 product decomposition at the global middle-region cut is restricted at one
 actual first-region configuration. No tensor factor is cancelled.
 
-Supporting locality algebra for AKLV, arXiv:1301.1162v1, Lemma 4.2
-(`l:agsp`), lines 646–654, and ALVV, arXiv:1602.08828v2,
+Supporting locality algebra for AKLV, arXiv:1301.1162v1, `l:agsp`,
+lines 646–654, and ALVV, arXiv:1602.08828v2,
 `eq:H-mid-cut`, lines 806–821, and Proposition 5.7
 (`prop:Cheby-AGSP-eff`), lines 1324–1332. Physical variable counts,
 frequency selection, cut displacement and matrix product operator
