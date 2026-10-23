@@ -26,7 +26,7 @@ window.
     \label{thm:hastings_main_stage_long_window}
     \lean{TNLean.MPS.AreaLaw.Hastings.regionEntropy_prefix_le_of_windowClaim_of_le}
     \leanok
-    \uses{def:chain_model,def:hastings_max_entropy_bound}
+    \uses{def:chain_model,def:hastings_max_entropy_bound,thm:hastings_main_stage}
     Theorem~\ref{thm:hastings_main_stage} holds for every window length
     $l_0\ge\lceil\xi_0\rceil_+2^M$, with $S_{\max}=3l_0\ln q$.
 \end{theorem}
@@ -65,7 +65,7 @@ window.
     \label{thm:hastings_area_law_bound_le}
     \lean{TNLean.MPS.AreaLaw.Hastings.areaLawBound_le}
     \leanok
-    \uses{def:hastings_area_law_bound}
+    \uses{def:hastings_area_law_bound,def:hastings_max_entropy_bound}
     For $\xi'>0$, $C_1\ge1$ and $q\ge2$, the bound $S_{\max}$ of
     Definition~\ref{def:hastings_area_law_bound} is at most the bound of
     Definition~\ref{def:hastings_max_entropy_bound} for the constants $2C_1$
