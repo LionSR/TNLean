@@ -12,7 +12,8 @@ import TNLean.MPS.AreaLaw.Hastings.FactorizationBudget
 /-!
 # Lemma 1 of Hastings' area law on the chain
 
-This file assembles the approximate factorization of the ground-state projector, Lemma 1 of
+This file assembles a quantitatively restricted approximate factorization of the ground-state
+projector following Lemma 1 of
 Hastings, *An area law for one-dimensional quantum systems* (arXiv:0705.2024v4, `law16.tex`,
 lines 246–267, proof in the appendix, lines 766–907), for a gapped chain Hamiltonian of range
 `R` and term norm `J`.
@@ -28,18 +29,25 @@ with the parameters of `lemmaOne_errorBudget`. That gives the error
 For short lengths `l < 12R + 8` the trivial factorization `O_B = 0`, `O_L = O_R = 1` has
 error `1`, which the constant `a` absorbs.
 
-**Local fix (decay length):** `ξ = 8 max(2v/ΔE, 1)` is the source's `max(2v'/ΔE, ξ_C)`
-(line 141) for the Lieb–Robinson pair `(v', ξ_C) = (8v, 8)`, which the chain bound
-`e^{vT - k/2}` implies, and the factorization holds at every rate `ξ' > 6ξ`, not at
-`ξ' = 6ξ`. Documented in `docs/paper-gaps/hastings07_lemma1_decay_length.tex` and
-`docs/paper-gaps/hastings07_gaussian_average_exponent.tex`.
+**Scope restriction (quantitative bounds):** The three factorization existence theorems
+below use `ξ = 8 max(2v/ΔE, 1)` from the chain localization estimate, whose support factor is
+quadratic. Comparing its exponential factor does not establish the source's linear-support
+Lieb–Robinson bound (lines 96–112) for the pair `(8v, 8)`. The exponential conclusions require
+`ξ' > 6ξ`; the endpoint `ξ' = 6ξ` is not established, rather than disproved. The constants are
+uniform in chain length and local dimension, but the polynomial bound in `ξ` required at
+lines 258–262 is not established. Documented in
+`docs/paper-gaps/hastings07_lemma1_decay_length.tex` and
+`docs/paper-gaps/hastings07_gaussian_average_exponent.tex`. Elimination: establish the source's
+support dependence and controlled Lieb–Robinson constants, track energy rescaling and all
+factorization constants to prove the polynomial bound, and settle the endpoint rate; these
+steps remain open.
 
 ## Main declarations
 
 * `lemmaOneLength R J ΔE`: the length `ξ`.
 * `exists_isFactorizationAt_sqrt_decay`: the factorization with error
   `(a + b √l) e^{-l/(6ξ)}` at every cut and length.
-* `exists_projectorFactorization`: Lemma 1 at every rate `ξ' > 6ξ`.
+* `exists_projectorFactorization`: the restricted factorization at every rate `ξ' > 6ξ`.
 * `exists_projectorFactorization_posSemidef`: its positive version, at half
   the rate.
 
