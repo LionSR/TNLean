@@ -1,0 +1,100 @@
+\section{The repeated qutrit family}
+
+\begin{definition}[A qutrit family on cubic-length chains]
+    \label{def:qutrit_entropy_scaling_copies}
+    \lean{TNLean.MPS.AreaLaw.EntropyScaling.qutritCopies,TNLean.MPS.AreaLaw.EntropyScaling.qutritCopies_length}
+    \leanok
+    \uses{def:qutrit_entropy_scaling_state,def:chain_copy_product}
+    For a positive integer $N$, let $\psi_{2N}$ be the qutrit state with
+    parameter $p_N=1/N$. Following~\cite{Schuch2008EntropyScaling},
+    lines 421--425, define
+    \begin{align}
+        \label{eq:qutrit_entropy_scaling_copies}
+        \chi_M=\psi_{2N}^{\otimes N^2},\qquad M=N^2(2N)=2N^3.
+    \end{align}
+    The copies occupy consecutive blocks in their natural order.
+\end{definition}
+
+\begin{theorem}[Normalization of the repeated family]
+    \label{thm:qutrit_entropy_scaling_copies_norm}
+    \lean{TNLean.MPS.AreaLaw.EntropyScaling.norm_qutritCopies}
+    \leanok
+    \uses{def:qutrit_entropy_scaling_copies}
+    For every positive integer $N$, the vector $\chi_M$ has norm one.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:qutrit_entropy_scaling_normalization}
+    The norm of a tensor product is the product of the norms of its factors.
+\end{proof}
+
+\begin{theorem}[A uniform four-bit entropy bound]
+    \label{thm:qutrit_entropy_scaling_copies_entropy}
+    \lean{TNLean.MPS.AreaLaw.EntropyScaling.regionEntropy_interval_qutritCopies_le}
+    \leanok
+    \uses{def:qutrit_entropy_scaling_copies}
+    For every positive integer $N$ and every contiguous region $I$ of the
+    chain of $M=2N^3$ sites, $S_{\chi_M}(I)\le4\log2$.
+    Entropy is measured using natural logarithms.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:qutrit_entropy_scaling_family_entropy,thm:chain_copy_interval_entropy}
+    Every region in one copy has entropy at most $2\log2$.
+    At most two copies are partially intersected by $I$, so the interval
+    entropy estimate gives $S_{\chi_M}(I)\le2(2\log2)=4\log2$.
+\end{proof}
+
+\begin{theorem}[The single-copy overlap obstruction]
+    \label{thm:qutrit_entropy_scaling_copy_overlap}
+    \lean{TNLean.MPS.AreaLaw.EntropyScaling.normSq_overlap_qutritFamily_le_kyFan}
+    \leanok
+    \uses{def:qutrit_entropy_scaling_state}
+    Let $N>0$ and let $\phi$ be a unit MPS on $2N$ qutrits with bond dimension
+    at most $D$. If $\rho_N$ is the middle-cut marginal of $\psi_{2N}$ and
+    $\|\rho_N\|_{(D)}$ is the sum of its $D$ largest eigenvalues, then
+    $|\langle\psi_{2N},\phi\rangle|^2\le\|\rho_N\|_{(D)}$.
+    Eigenvalues beyond the dimension are interpreted as zero.
+\end{theorem}
+\begin{proof}\leanok
+    The coefficient matrix of $\phi$ at the middle cut has rank at most $D$.
+    The variational characterization of the largest Schmidt coefficients
+    gives the claim when $D<3^N$. For $D\ge3^N$, the right-hand side is one,
+    and the claim follows from Cauchy--Schwarz.
+\end{proof}
+
+\begin{theorem}[The single-copy scalar error obstruction]
+    \label{thm:qutrit_entropy_scaling_copy_scalar_error}
+    \lean{TNLean.MPS.AreaLaw.EntropyScaling.qutritFamily_scalar_error_lower_bound}
+    \leanok
+    \uses{def:qutrit_entropy_scaling_state}
+    Let $N\ge2$ and let $\phi$ be a unit MPS of bond dimension at most $D$.
+    Set $f=|\langle\psi_{2N},\phi\rangle|^2$ and
+    $T(f)=2\sqrt{f(1-f)}$ for $f\ge1/2$, and $T(f)=1$ otherwise. Then
+    \begin{align}
+        \label{eq:qutrit_entropy_scaling_scalar_tail}
+        \frac{2^N-(D-1)}{N2^N}\le T(f).
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:qutrit_entropy_scaling_copy_overlap,thm:qutrit_middle_discarded_mass}
+    The middle-cut tail is at least the left-hand side of
+    (\ref{eq:qutrit_entropy_scaling_scalar_tail}). The overlap bound gives
+    $1-\|\rho_N\|_{(D)}\le1-f$, and $1-f\le T(f)$ for $0\le f\le1$.
+\end{proof}
+
+\begin{theorem}[Exponential bond dimension from scalar error]
+    \label{thm:qutrit_entropy_scaling_scalar_dimension}
+    \lean{TNLean.MPS.AreaLaw.EntropyScaling.bondDimension_qutritCopies_ge_of_scalar_error_lt_one}
+    \leanok
+    \uses{def:qutrit_entropy_scaling_copies}
+    Let $N\ge2$ and let $\Phi$ be a unit MPS on $2N^3$ sites with bond
+    dimension at most $D$. If $t=T(|\langle\chi_M,\Phi\rangle|^2)<1$, then
+    $D\ge2^N(1-2t)+1$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:chain_mps_copy_error_amplification,thm:qutrit_entropy_scaling_copy_scalar_error}
+    Product replacement and amplification give a unit single-copy MPS
+    $\phi$ of bond dimension at most $D$ with
+    $(N/2)T(|\langle\psi_{2N},\phi\rangle|^2)\le t$.
+    Combining this with (\ref{eq:qutrit_entropy_scaling_scalar_tail}) gives
+    $(2^N-(D-1))/(2\cdot2^N)\le t$, which rearranges to the claimed bound.
+\end{proof}
