@@ -1,0 +1,87 @@
+\section{A variational lower bound on the ground energy}
+\label{sec:hastings_variational_lower_bound}
+
+% Hastings, arXiv:cond-mat/0508554v3, proj3new.tex, lines 856--877 (eq. varnum)
+% and 1005--1009.
+
+For a translation-invariant Hamiltonian $H=\sum_iH_i$ on $N$ sites, whose terms
+$H_i$ are translates of one another, \cite{Hastings2006Solving} observes that the
+ground energy per site is at least the lowest eigenvalue of $H_i$, and that the
+same holds after adding to $H_i$ any combination of its iterated commutators
+with $H$, because these commutators add up to zero over the translates. Write
+$\operatorname{ad}_H(X)=HX-XH$, and $\lambda_{\min}(K)$ for the lowest eigenvalue
+of a Hermitian $K$, the largest $\lambda$ with $K-\lambda\ge0$.
+
+\begin{theorem}[Iterated commutators of Hermitian operators]
+    \label{thm:hastings_commutator_iter_hermitian}
+    \lean{Matrix.isHermitian_smul_commutatorIter,
+        Matrix.conjTranspose_commutatorIter, Matrix.commutatorIter}
+    \leanok
+    For Hermitian $H$ and $A$, a real number $a$ and $k\ge0$, the operator
+    $a\,i^k\operatorname{ad}_H^k(A)$ is Hermitian.
+\end{theorem}
+\begin{proof}\leanok
+    By induction, $(\operatorname{ad}_H^kA)^\dagger=(-1)^k\operatorname{ad}_H^k(A)$,
+    and $\overline{i^k}(-1)^k=i^k$.
+\end{proof}
+
+\begin{theorem}[The variational lower bound]
+    \label{thm:hastings_variational_lower_bound}
+    \lean{Matrix.card_mul_le_of_mulVec_eq_smul_of_conj,
+        Matrix.posSemidef_sub_card_smul_of_conj, Matrix.commutatorIter_conj,
+        Matrix.commutatorIter_sum, Matrix.commutatorIter_self_succ}
+    \leanok
+    \uses{thm:hastings_commutator_iter_hermitian}
+    Let $H_0$ be an operator, let $U_1,\dots,U_N$ be unitaries, and let
+    $H=\sum_iU_iH_0U_i^\dagger$ with every $U_i$ commuting with $H$. For real
+    constants $a_1,\dots,a_m$ let
+    \begin{align*}
+        K=H_0+\sum_{k=1}^ma_k\,i^k\operatorname{ad}_H^k(H_0).
+    \end{align*}
+    If $K-\lambda\ge0$, then $H-N\lambda\ge0$; in particular every eigenvalue
+    of $H$, and so its ground energy $E_0$, is at least $N\lambda$. For
+    Hermitian $H_0$ and $\lambda=\lambda_{\min}(K)$ this is
+    \begin{align*}
+        E_0/N\ge\lambda_{\min}\Bigl(H_0+\sum_{k=1}^ma_k\,i^k
+        \operatorname{ad}_H^k(H_0)\Bigr),
+    \end{align*}
+    equation (varnum) of \cite{Hastings2006Solving}, lines 856--877. There the
+    terms are written with $[H_i,H]=-\operatorname{ad}_H(H_i)$, which only
+    changes the signs of the arbitrary constants.
+\end{theorem}
+\begin{proof}\leanok
+    Conjugation by a unitary $U$ that commutes with $H$ commutes with
+    $\operatorname{ad}_H$, so
+    $\sum_iU_i\operatorname{ad}_H^k(H_0)U_i^\dagger=\operatorname{ad}_H^k(H)=0$
+    for $k\ge1$, and $\sum_iU_iKU_i^\dagger=H$. Since $U_i(K-\lambda)U_i^\dagger\ge0$
+    and $U_iU_i^\dagger=1$, summing gives $H-N\lambda\ge0$. For an eigenvector
+    $\Omega$ of $H$ with eigenvalue $E$,
+    $0\le\langle\Omega,(H-N\lambda)\Omega\rangle=(E-N\lambda)\|\Omega\|^2$.
+\end{proof}
+
+\begin{theorem}[The bound for translates on finitely many sites]
+    \label{thm:hastings_variational_lower_bound_sites}
+    \lean{Matrix.card_mul_le_of_mulVec_eq_smul_of_sitePerm, Matrix.sitePermMatrix,
+        Matrix.sitePermMatrix_mul, Matrix.sitePermMatrix_mem_unitaryGroup,
+        Matrix.commute_sitePermMatrix_sum}
+    \leanok
+    \uses{thm:hastings_variational_lower_bound}
+    Let a finite group $G$ act on a finite set of sites, such as the
+    translations of a periodic lattice of any dimension or a group of
+    automorphisms of a finite graph, and let $P_g$ be the unitary that moves the
+    configurations of the sites along $g$. For the sum
+    $H=\sum_{g\in G}P_gH_0P_g^\dagger$ of the translates of one term $H_0$, and
+    $K$ as in Theorem~\ref{thm:hastings_variational_lower_bound}, every
+    eigenvalue of $H$ is at least $|G|\lambda$ whenever $K-\lambda\ge0$. With
+    $N=|G|$ the number of translates, $E_0/N\ge\lambda_{\min}(K)$.
+\end{theorem}
+\begin{proof}\leanok
+    The map $g\mapsto P_g$ is multiplicative, so conjugation by $P_h$ permutes
+    the translates and fixes $H$, and each $P_h$ is a unitary commuting with $H$.
+    Theorem~\ref{thm:hastings_variational_lower_bound} applies.
+\end{proof}
+
+Lines 1005--1009 of \cite{Hastings2006Solving} note that the filtered terms of
+that paper are the choice $a_k=0$ for odd $k$ and
+$a_k=(-1)^{k/2}[(k-1)!!/k!](q/\Delta E^2)^k$ for even $k$; that instance is not
+formalized here.
