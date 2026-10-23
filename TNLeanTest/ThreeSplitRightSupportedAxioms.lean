@@ -11,4 +11,5 @@ import TNLean.Lattice.Sheet.Splitting
 'TNLean.Lattice.Sheet.exists_threeSplit_eq_reindex_one_kronecker'
 depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
+set_option linter.hashCommand false in
 #print axioms TNLean.Lattice.Sheet.exists_threeSplit_eq_reindex_one_kronecker
