@@ -89,8 +89,8 @@ theorem fullActionComparison_spec (a b : Fin r) (x : Fin s)
           MPSTensor.decompositionSynthesis (fusionThenActionSynthesis WF WA a b x) ∧
       MPSTensor.decompositionSynthesis (fusionThenActionSynthesis WF WA a b x) *
         sequentialToFusionComparison VF VA WA a b x =
-          MPSTensor.decompositionSynthesis (sequentialActionSynthesis WA a b x) := by
-  exact MPSTensor.IsBiorthogonalDecomposition.fullComparison
+          MPSTensor.decompositionSynthesis (sequentialActionSynthesis WA a b x) :=
+  MPSTensor.IsBiorthogonalDecomposition.fullComparison
     (A := A)
     (f := fun q : FusionActionPath N M a b x ↦ q.2.1)
     (g := fun q : SequentialActionPath M a b x ↦ q.2.1)
