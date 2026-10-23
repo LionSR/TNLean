@@ -108,29 +108,34 @@ Replacing $O_B$ by $O_B^\dagger O_B$ gives a positive semidefinite contraction
 with error of order $e^{-l/(2\xi')}$, as in the source's note added and
 \path{hastings07_lemma1_positivity_rate.tex}.
 
-\section{The missing polynomial bound}
+\section{The polynomial bound}
 
 Lemma~1 requires $C_1(\xi)$ to be bounded by a polynomial in $\xi$.
 \footnote{\path{References/0705.2024/law16.tex}, lines~258--262.}
-The theorem presently proves only the existence of a constant depending
-on $R$, $J$, $\Delta E$ and $\xi'$, uniform in the chain length, local
-dimension, ground state, cut and window length. In the unscaled statement
-the explicit coefficients are not homogeneous in the energy scale: they
-contain terms such as $2/\Delta E$ and $J^2/\Delta E$, so no bound in $\xi$
-alone is possible there. In the statement for $H/\Delta E$ every coefficient
-is a polynomial in $J/\Delta E$, and $J/\Delta E\le\hat\xi/(16c_R)$; the
-absorption of $\sqrt l$ costs $1/\sqrt{1/(6\hat\xi)-1/\xi'}$, which is
-$O(\sqrt{\hat\xi})$ for $\xi'=\kappa\hat\xi$ with a fixed $\kappa>6$. A
-polynomial bound on $C_1$ in $\hat\xi$, with coefficients depending on $R$
-and $\kappa$, therefore follows once the constant is made explicit. This
-has not yet been done.
+In the unscaled statement the explicit coefficients are not homogeneous in
+the energy scale: they contain terms such as $2/\Delta E$ and
+$J^2/\Delta E$, so no bound in $\xi$ alone is possible there. In the
+statement for $H/\Delta E$ every coefficient is a polynomial in
+$x=J/\Delta E$, and $x\le\hat\xi$ with $\hat\xi\ge16$. The absorption of
+$\sqrt l$ costs
+$1/\sqrt{2e(1/(6\hat\xi)-1/(\kappa\hat\xi))}\le\hat\xi/\sqrt\beta$ with
+$\beta=2e(\kappa-6)/(6\kappa)$, for $\xi'=\kappa\hat\xi$ and a fixed
+$\kappa>6$. The short-length constant $e^{(12R+8)/(6\hat\xi)}$ is bounded.
+Together these give
+\begin{align}
+    C_1\le K\hat\xi^3,
+    \label{eq:hastings07_lemma1_decay_length_polynomial}
+\end{align}
+with $K$ depending only on $R$ and $\kappa$.\footnote{\leanid{TNLean.MPS.AreaLaw.lemmaOneConst_le_pow}
+    and \leanid{TNLean.MPS.AreaLaw.exists_projectorFactorization_pow} in
+    \doclink{TNLean/MPS/AreaLaw/Hastings/LemmaOneConstant}.}
+For the source's nearest-neighbour terms ($R=1$) the constant $K$ depends
+only on $\kappa$. The bound holds at the rate $\xi'=\kappa\hat\xi$ for
+every $\kappa>6$, not at $\kappa=6$.
 
 \section{Remaining work}
 
 \begin{itemize}
-    \item Make $C_1$ explicit and bound it by a polynomial in $\hat\xi$ at
-          $\xi'=\kappa\hat\xi$, as outlined above. For the source's
-          nearest-neighbour terms ($R=1$) the coefficients are then numerical.
     \item Establish a Lieb--Robinson estimate in the form
           (\ref{eq:hastings07_lemma1_decay_length_lrb}): a numerical
           prefactor, the factor $|X|$, and $B$ on an arbitrary set. Only then

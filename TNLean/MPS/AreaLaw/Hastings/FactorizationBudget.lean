@@ -20,6 +20,7 @@ at most `(A + B√l) e^{-l/(6ξ)}` for `l ≥ 12R + 8`, with `A`, `B` independen
 
 ## Main declarations
 
+* `lemmaOneBudgetA`, `lemmaOneBudgetB`: the constants of the bound.
 * `lemmaOne_errorBudget`: the bound.
 -/
 
@@ -199,11 +200,29 @@ lemma errorBudget_core (R : ℕ) {ΔE v a cR J ξ s θ T η ℓ' δ μ ν Zc K L
   have b5 := errorBudget_lightCone_le hΔ hv0 hξ0 hL0 hs hη hq hℓ'L
   linarith
 
+/-- The constant term `A` of the error budget of Lemma 1, for the gap `ΔE`, the Lieb–Robinson
+prefactor `a`, the commutator constant `cR` and the term norm `J`. -/
+noncomputable def lemmaOneBudgetA (R : ℕ) (ΔE a cR J : ℝ) : ℝ :=
+  1 + 2 * cR / ΔE + 96 * (a * (3 * (R : ℝ)) ^ 2 * cR) / ΔE +
+    9 * a * (4 * 2 ^ (2 * R + 1) * J + 2 * cR / ΔE) / ΔE * (48 ^ 4 * 24) + 4
+
+/-- The coefficient `B` of `√l` in the error budget of Lemma 1. -/
+noncomputable def lemmaOneBudgetB (ΔE cR : ℝ) : ℝ := 4 * cR / ΔE + 2 / ΔE
+
+theorem lemmaOneBudgetA_nonneg (R : ℕ) {ΔE a cR J : ℝ} (hΔ : 0 < ΔE) (ha : 0 ≤ a)
+    (hcR : 0 ≤ cR) (hJ : 0 ≤ J) : 0 ≤ lemmaOneBudgetA R ΔE a cR J := by
+  unfold lemmaOneBudgetA; positivity
+
+theorem lemmaOneBudgetB_nonneg {ΔE cR : ℝ} (hΔ : 0 < ΔE) (hcR : 0 ≤ cR) :
+    0 ≤ lemmaOneBudgetB ΔE cR := by
+  unfold lemmaOneBudgetB; positivity
+
 /-- Error budget for the parameter choice in Hastings' area law: the five error terms decay
-like `e^{-l/(6ξ)}`, up to a prefactor `A + B √l` that does not depend on `l`. -/
+like `e^{-l/(6ξ)}`, up to the prefactor `A + B √l` with `A = lemmaOneBudgetA R ΔE a cR J` and
+`B = lemmaOneBudgetB ΔE cR`, which do not depend on `l`. -/
 theorem lemmaOne_errorBudget (R : ℕ) {ΔE v a cR J : ℝ} (hΔ : 0 < ΔE) (hv : 1 ≤ v)
     (ha : 0 ≤ a) (hcR : 0 ≤ cR) (hJ : 0 ≤ J) :
-    ∃ A B : ℝ, 0 ≤ A ∧ 0 ≤ B ∧ ∀ l : ℕ, 12 * R + 8 ≤ l →
+    ∀ l : ℕ, 12 * R + 8 ≤ l →
       let ξ : ℝ := 8 * max (2 * v / ΔE) 1
       let k : ℕ := (l + 3) / 4
       let m : ℕ := R + k
@@ -220,11 +239,10 @@ theorem lemmaOne_errorBudget (R : ℕ) {ΔE v a cR J : ℝ} (hΔ : 0 < ΔE) (hv 
       exp (-s / 2) + 2 * μ / θ + sqrt η * (2 * θ) +
           (sqrt η * (a * Zc ^ 2 * ν * exp (-(ℓ' / 4))) +
             4 * exp (-ℓ' ^ 2 / (32 * v ^ 2 * η))) ≤
-        (A + B * sqrt l) * exp (-(l / (6 * ξ))) := by
-  refine ⟨1 + 2 * cR / ΔE + 96 * (a * (3 * (R : ℝ)) ^ 2 * cR) / ΔE +
-      9 * a * (4 * 2 ^ (2 * R + 1) * J + 2 * cR / ΔE) / ΔE * (48 ^ 4 * 24) + 4,
-    4 * cR / ΔE + 2 / ΔE, by positivity, by positivity, ?_⟩
+        (lemmaOneBudgetA R ΔE a cR J + lemmaOneBudgetB ΔE cR * sqrt l) *
+          exp (-(l / (6 * ξ))) := by
   intro l hl ξ k m s θ T η ℓ' δ μ ν Zc
+  unfold lemmaOneBudgetA lemmaOneBudgetB
   have hξ : ξ = 8 * max (2 * v / ΔE) 1 := rfl
   have hk : k = (l + 3) / 4 := rfl
   have hm : m = R + k := rfl
