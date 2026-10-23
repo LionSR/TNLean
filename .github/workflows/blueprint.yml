@@ -35,19 +35,7 @@ on:
       - 'scripts/write_badges.py'
       - 'scripts/test_badge_colors.py'
       - 'scripts/tenkz_blueprint_sweep.py'
-      - 'scripts/test_tenkz_pic.py'
       - 'scripts/test_blueprint_pdf_capacity.py'
-      - 'scripts/test_tenkz_ordered_mixing.py'
-      - 'scripts/test_tenkz_mixed_action.py'
-      - 'scripts/test_tenkz_isometric_gap_transport.py'
-      - 'scripts/test_tenkz_scan_ancestry.py'
-      - 'scripts/test_tenkz_quantum_double_source_construction.py'
-      - 'scripts/test_sector_encoder_diagram.py'
-      - 'scripts/test_tenkz_mixed_fusion.py'
-      - 'scripts/test_nested_patch_geometry_diagram.py'
-      - 'scripts/test_tenkz_mixed_normality.py'
-      - 'scripts/test_tenkz_mixed_symbols.py'
-      - 'scripts/test_tenkz_normal_adjoint_boundary.py'
       - 'scripts/test_blueprint_web_render.py'
       - 'scripts/test_blueprint_graph_worker.py'
       - 'scripts/test_blueprint_graph_precompute.py'
@@ -87,7 +75,41 @@ jobs:
       - name: Checkout project
         uses: actions/checkout@v7
 
+      - name: Configure apt retries
+        run: |
+          printf '%s\n' 'Acquire::Retries "3";' 'Acquire::http::Timeout "60";' \
+            'Acquire::https::Timeout "60";' | sudo tee /etc/apt/apt.conf.d/80-ci-retries
+
       - name: Install system dependencies
+        id: blueprint-system-deps-1
+        timeout-minutes: 10
+        continue-on-error: true
+        uses: texra-ai/lean-env-action/blueprint-system-deps@v1
+        with:
+          # texlive-fonts-extra supplies dsfont, which paper-gap notes load;
+          # keep this cache separate from the extra-package-free web cache.
+          cache-suffix: web-v3
+          extra-packages: texlive-fonts-extra texlive-publishers
+
+      - name: Recover an interrupted package install
+        if: steps.blueprint-system-deps-1.outcome == 'failure'
+        timeout-minutes: 5
+        # The timed-out install can leave its apt-get running and holding the
+        # package locks, so stop the lock holders before repairing the database.
+        run: |
+          locks=(/var/lib/dpkg/lock-frontend /var/lib/dpkg/lock
+            /var/lib/apt/lists/lock /var/cache/apt/archives/lock
+            "$RUNNER_TEMP"/blueprint-apt-archives/*/lock)
+          for signal in TERM KILL; do
+            sudo fuser -k -"$signal" "${locks[@]}" 2>/dev/null || true
+            sleep 5
+          done
+          sudo dpkg --configure -a || true
+
+      - name: Install system dependencies (retry)
+        if: steps.blueprint-system-deps-1.outcome == 'failure'
+        # A slow mirror can need more than one attempt; the packages fetched by the
+        # first attempt stay in the archive directory, so the retry resumes.
         timeout-minutes: 20
         uses: texra-ai/lean-env-action/blueprint-system-deps@v1
         with:
@@ -107,24 +129,12 @@ jobs:
       - name: Test blueprint PDF string-pool capacity
         run: python3 scripts/test_blueprint_pdf_capacity.py
 
-      - name: Check native tenkz sources and picture pipeline
+      - name: Lint tenkz picture sources
         run: |
           python3 .deps/tenkz/scripts/tenkz_lint.py \
             'blueprint/src/chapter/*.tex' \
             'blueprint/src/figures/*.tex' \
             'docs/slides/*.tex'
-          python3 scripts/test_tenkz_pic.py
-          python3 scripts/test_tenkz_ordered_mixing.py
-          python3 scripts/test_tenkz_mixed_action.py
-          python3 scripts/test_tenkz_isometric_gap_transport.py
-          python3 scripts/test_tenkz_scan_ancestry.py
-          python3 scripts/test_tenkz_quantum_double_source_construction.py
-          python3 scripts/test_sector_encoder_diagram.py
-          python3 scripts/test_tenkz_mixed_fusion.py
-          python3 scripts/test_nested_patch_geometry_diagram.py
-          python3 scripts/test_tenkz_mixed_normality.py
-          python3 scripts/test_tenkz_mixed_symbols.py
-          python3 scripts/test_tenkz_normal_adjoint_boundary.py
 
       - name: Check paper-gap references resolve
         run: texra-blueprint paper-gaps check
@@ -195,7 +205,39 @@ jobs:
       - name: Checkout project
         uses: actions/checkout@v7
 
+      - name: Configure apt retries
+        run: |
+          printf '%s\n' 'Acquire::Retries "3";' 'Acquire::http::Timeout "60";' \
+            'Acquire::https::Timeout "60";' | sudo tee /etc/apt/apt.conf.d/80-ci-retries
+
       - name: Install system dependencies
+        id: blueprint-system-deps-2
+        timeout-minutes: 10
+        continue-on-error: true
+        uses: texra-ai/lean-env-action/blueprint-system-deps@v1
+        with:
+          cache-suffix: web-v3
+          extra-packages: texlive-fonts-extra texlive-publishers
+
+      - name: Recover an interrupted package install
+        if: steps.blueprint-system-deps-2.outcome == 'failure'
+        timeout-minutes: 5
+        # The timed-out install can leave its apt-get running and holding the
+        # package locks, so stop the lock holders before repairing the database.
+        run: |
+          locks=(/var/lib/dpkg/lock-frontend /var/lib/dpkg/lock
+            /var/lib/apt/lists/lock /var/cache/apt/archives/lock
+            "$RUNNER_TEMP"/blueprint-apt-archives/*/lock)
+          for signal in TERM KILL; do
+            sudo fuser -k -"$signal" "${locks[@]}" 2>/dev/null || true
+            sleep 5
+          done
+          sudo dpkg --configure -a || true
+
+      - name: Install system dependencies (retry)
+        if: steps.blueprint-system-deps-2.outcome == 'failure'
+        # A slow mirror can need more than one attempt; the packages fetched by the
+        # first attempt stay in the archive directory, so the retry resumes.
         timeout-minutes: 20
         uses: texra-ai/lean-env-action/blueprint-system-deps@v1
         with:

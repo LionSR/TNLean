@@ -36,7 +36,7 @@ Independently formalized; no upstream Lean proof text reused.
 
 noncomputable section
 open scoped ComplexOrder
-namespace TNLean.PEPS.PairEffect
+namespace TNLean.Lattice.PartyCircuit
 open TNLean.Lattice.PartyCircuit
 
 /-- The original data of a distributed construction on a finite nonempty party
@@ -109,4 +109,4 @@ theorem trace_physicalDensity_le_one (C : DistributedConstruction P) :
     (by simpa only [mul_one] using hC)
 
 end DistributedConstruction
-end TNLean.PEPS.PairEffect
+end TNLean.Lattice.PartyCircuit

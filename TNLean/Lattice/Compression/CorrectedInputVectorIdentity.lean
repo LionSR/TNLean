@@ -27,7 +27,7 @@ noncomputable section
 open scoped TensorProduct
 open ContinuousLinearMap
 namespace TNLean.Lattice.PartyCircuit.SourceCircuit
-open TNLean.PEPS.Approximation TNLean.Lattice.PartyCircuit.SourceInventory
+open TNLean.Lattice.Compression TNLean.Lattice.PartyCircuit.SourceInventory
 variable {P : Type}
 
 /-- The actual corrected and crossing input representation. A single allowed,

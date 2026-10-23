@@ -1257,6 +1257,78 @@ fourth entry of the shell count, which is omitted; the interval constant and
 the area-law constant of Theorem A change accordingly, all at the level of
 absolute constants.
 
+### One-dimensional area law after Hastings: the exponent of the Gaussian time average
+
+[hastings07_gaussian_average_exponent.tex](hastings07_gaussian_average_exponent.tex)
+(false as printed, open) records that the Gaussian time average `P_q` in the
+appendix of Hastings (arXiv:0705.2024v4, line 848) satisfies
+`‖P_q - P_0‖ ≤ e^{-q/2}`, which with the source's choice of `q` is
+`O(e^{-l/6ξ})` rather than the printed `O(e^{-l/3ξ})`. The same factor enters
+eqs. `tighter`/`tighter2` and the margin of eq. `obd`. With `q = (l/3)ΔE/v` the
+printed rate `e^{-l/3ξ}` is recovered, but the final bound keeps the prefactor
+`√(l/ξ)`, so the product `O_B O_L O_R` as constructed, with `O_B` not necessarily
+positive, satisfies the bound of Lemma 1 for every `ξ' > 6ξ`, not at the printed
+`ξ' = 6ξ`. The positivity repair of the note added replaces the error `ε` by
+`O(√ε)`, so the positive version of Lemma 1 holds for every `ξ' > 12ξ`.
+
+### One-dimensional area law after Hastings: the Schmidt tail constant
+
+[hastings07_schmidt_tail_constant.tex](hastings07_schmidt_tail_constant.tex)
+(local correction, resolved) records that the polynomial decay of the Schmidt
+tail in Hastings' section on matrix product states (arXiv:0705.2024v4,
+eq. `est`) holds with the constant `e^{2/ξ'}` rather than the printed `e^{1/ξ'}`,
+because the geometric bound of eq. `constraint` is available only at even
+exponents `2m`, and that the printed exponent lacks its minus sign.
+
+### One-dimensional area law after Hastings: the error of the localized filtered parts
+
+[hastings07_filtered_part_localization.tex](hastings07_filtered_part_localization.tex)
+(local correction, resolved) records that the bound on the localized filtered parts in
+the appendix of Hastings (arXiv:0705.2024v4, lines 816–828) is printed as
+`‖M_L − H_L‖ ≤ O(ΔE⁻¹J²e^{−l/3ξ})`, while the argument needs and proves
+the distance from `M_L` to the filtered `H_L`, with `M_L − H_L` supported near the cut.
+
+### One-dimensional area law after Hastings: the constant of the boundary commutator
+
+[hastings07_commutator_constant.tex](hastings07_commutator_constant.tex)
+(false as printed, resolved) records that the printed bound `‖[H, H_L]‖ ≤ J²` in the
+appendix of Hastings (arXiv:0705.2024v4, line 794) fails already for nearest-neighbour
+terms (`‖[Z, X]‖ = 2` with `J = 1`), and that the bound proved for terms of range `R` is an
+explicit constant depending only on `R`, times `J²`.
+
+### One-dimensional area law after Hastings: the rate of the positive version of Lemma 1
+
+[hastings07_lemma1_positivity_rate.tex](hastings07_lemma1_positivity_rate.tex)
+(local correction, resolved) records that Lemma 1 of Hastings (arXiv:0705.2024v4,
+lines 246–267) states positive operators at the rate `e^{-l/ξ'}`, while the note added
+(lines 912–943) obtains a positive `O_B⁺ = O_Bᴴ O_B` only at error `O(√ε)`. The bound
+proved is `(√2 + 4) √C₁ e^{-l/(2ξ')}`.
+
+### One-dimensional area law after Hastings: the entropy gain constants
+
+[hastings07_relent_constants.tex](hastings07_relent_constants.tex)
+(clarification, resolved) records the explicit constant `C₂ = 7` in the
+entropy gain across a cut, and how route 1 of Hastings' note added (the
+effect `O_B† O_B`) supplies the Lindblad–Uhlmann data with `C₁` replaced by
+`2 C₁`, keeping the rate `e^{-l/ξ'}`.
+
+### One-dimensional area law after Hastings: the error of the matrix product state
+
+[hastings07_mps_error_measure.tex](hastings07_mps_error_measure.tex)
+(clarification, resolved) records that Hastings' error
+`N (k'/k₀)^{-1/(ξ' ln D)}` for the matrix product state (arXiv:0705.2024v4,
+lines 553–557), stated without an error measure, holds for the squared norm,
+through the squared error `‖Φ − ψ‖² ≤ ∑_j τ_j(k')` of sequential truncation.
+
+### One-dimensional area law after Hastings: the threshold of the spectral cut-offs
+
+[hastings07_spectral_cutoff_threshold.tex](hastings07_spectral_cutoff_threshold.tex)
+(local correction, resolved) records that the spectral cut-offs `O_L`, `O_R` in
+the appendix of Hastings (arXiv:0705.2024v4, lines 829–841) are taken onto the
+eigenvalues of absolute value at most the threshold, rather than the printed
+eigenvalues at most the threshold, because the centered terms need not be
+positive and the later estimate uses `‖M_L O_L‖` at most the threshold.
+
 ## Polynomial PEPS: zero-floor maximizing filters
 
 - [`polypeps_square_zero_floor_optimizer_scope.tex`](polypeps_square_zero_floor_optimizer_scope.tex)
@@ -1269,3 +1341,12 @@ absolute constants.
   the area law and of the polynomial PEPS approximation theorem do not use it,
   and the further comparison with the companion code's own types is not
   pursued.
+
+## Hastings' one-dimensional area law, arXiv:0705.2024
+
+- [`hastings07_doubling_constants.tex`](hastings07_doubling_constants.tex)
+  (resolved) records that the doubling iteration lowers the entropy per site by
+  `1/(2ξ')` at each step rather than `1/ξ'`, so the exponent in the bound on
+  the window length doubles, that the prefactor of that bound is the starting
+  length `ξ₀` rather than `ξ₀/2`, and the implicit hypotheses `2 C₁ > 1` and
+  `ln C₁ + C₂ ≥ 0`.

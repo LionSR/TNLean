@@ -53,16 +53,6 @@ theorem mapOwner_val_finsetRetraction {S : Finset P} (d : S) :
         val_finsetRetraction d (ha r List.mem_cons_self)]
       rw [mapOwner_val_finsetRetraction d a fun t ht => ha t (List.mem_cons_of_mem _ ht)]
 
-omit [DecidableEq P] in
-private theorem cons_tmul_heq {r r' : Reg P} {a a' : Layout P} (hr : r' = r) (ha : a' = a)
-    (u : r.space) (u' : r'.space) (hu : HEq u' u) (v : Mem a) (v' : Mem a') (hv : HEq v' v) :
-    HEq (u' ⊗ₜ[ℂ] v' : Mem (r' :: a')) (u ⊗ₜ[ℂ] v : Mem (r :: a)) := by
-  subst hr
-  subst ha
-  cases hu
-  cases hv
-  rfl
-
 theorem mapOwnerIso_val_finsetRetraction_heq {S : Finset P} (d : S) :
     (a : Layout P) → (ha : ∀ r ∈ a, r.owner ∈ S) → (x : Mem a) →
       HEq (Layout.mapOwnerIso (Function.Embedding.subtype (· ∈ S))
@@ -80,7 +70,7 @@ theorem mapOwnerIso_val_finsetRetraction_heq {S : Finset P} (d : S) :
           exact Layout.add_heq (congrArg Mem (mapOwner_val_finsetRetraction d (r :: a) ha))
             hx hy
       | tmul u v =>
-          exact cons_tmul_heq hr (mapOwner_val_finsetRetraction d a ha') u u HEq.rfl v _
+          exact Layout.cons_tmul_heq hr (mapOwner_val_finsetRetraction d a ha') HEq.rfl
             (mapOwnerIso_val_finsetRetraction_heq d a ha' v)
 
 theorem memCongr_mapOwnerIso_val_finsetRetraction {S : Finset P} (d : S) (a : Layout P)

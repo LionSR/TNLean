@@ -262,7 +262,7 @@ abstracted — record why, so it is not re-proposed).
 - **Seen:** the compression theorems and the dyadic protocol, in
   `UniformApproximateSampledNetwork.lean`, `UniformMessageGateCompression.lean` and
   `DyadicProtocolCompression.lean` under `TNLean/PEPS/Approximation/`.
-- **Abstraction:** `TNLean.PEPS.Approximation.mul_pow_le_max_zero_mul_pow` in
+- **Abstraction:** `TNLean.Lattice.Compression.mul_pow_le_max_zero_mul_pow` in
   `UniformApproximateSampledNetwork.lean`.
 - **Notes:** The sign of `max C 0` is `le_max_right`. Net Lean line delta: +9 (20 added, 11
   removed) across the three changed modules, since the new lemma and its docstring outweigh the
@@ -4782,6 +4782,37 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 ## Candidates
 
+### Mass of a cut beyond its leading eigenvalues — candidate
+- **Pattern:**
+  ```lean
+  1 - (Entropy.regionState_isHermitian (n := fun _ : Fin L ↦ q) (leftBlock L k)
+    ψ).kyFanNorm n
+  ```
+- **Seen:** 5 occurrences (2026-10-22), in statements and proofs of
+  `TNLean/MPS/AreaLaw/SequentialTruncation.lean` and
+  `TNLean/MPS/AreaLaw/Hastings/SchmidtTailMPS.lean`.
+- **Abstraction:** proposed definition of the mass of the left marginal at the
+  cut `k` beyond its `n` largest eigenvalues, with a lemma rewriting it as the
+  sum of the trailing eigenvalues.
+- **Notes:** a term pattern rather than a tactic; promote together with the next
+  statement that uses it, so the definition lands with its rewriting lemma.
+
+### Reflected sum over the internal cuts of a sequential truncation — candidate
+- **Pattern:**
+  ```lean
+  rw [Finset.sum_Ico_eq_sum_range]
+  conv_lhs => rw [← Finset.sum_range_reflect]
+  refine Finset.sum_congr rfl fun i hi ↦ ?_   -- or `Finset.sum_le_sum`
+  have hi' : i < L - 1 := Finset.mem_range.mp hi
+  rw [show L - 1 - (L - 1 - 1 - i) = 1 + i by omega, hmass]
+  ```
+- **Seen:** 2 occurrences (2026-10-22): `TNLean/MPS/AreaLaw/SequentialTruncation.lean`,
+  in `sequentialTruncation_prefix_rank_error` and
+  `norm_sequentialTruncation_leadingEigenprojection_sub_sq_le`.
+- **Abstraction:** proposed lemma rewriting `∑ i ∈ range (L - 1), f (L - 1 - i)` as
+  `∑ k ∈ Ico 1 L, f k`, which matches the step order of `sequentialTruncation`.
+- **Notes:** promote at the third occurrence.
+
 ### A maximal finite support fills its coordinate interval — candidate
 
 The minimum-coordinate image argument occurs twice in `Hamiltonian.lean`, in
@@ -8425,7 +8456,7 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Seen:** The local sampled factors in `ActualSampledPhysicalFactors`, the
   empty-party scalar in `ActualSampledExteriorScalar`, and their comparison
   in `ActualSampledPhysicalScalar` use this same trace.
-- **Abstraction:** `PairEffect.restrictedMixedPhysicalTrace` in
+- **Abstraction:** `PartyCircuit.restrictedMixedPhysicalTrace` in
   `RestrictedMixedPhysicalTrace.lean` owns the exact matrix expression.
   The sampled factors and exterior scalar use the same definition; their
   comparison retains that expression instead of expanding the circuit words.

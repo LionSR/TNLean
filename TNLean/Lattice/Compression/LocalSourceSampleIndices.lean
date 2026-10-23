@@ -22,8 +22,8 @@ Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 253–267,
 
 noncomputable section
 namespace TNLean.Lattice.PartyCircuit.SourceCircuit
-open TNLean.PEPS TNLean.PEPS.PairEffect
-open TNLean.PEPS.Approximation
+open TNLean.Lattice TNLean.Lattice.PartyCircuit
+open TNLean.Lattice.Compression
 variable {P : Type}
 
 open Classical in
@@ -47,7 +47,7 @@ lines 253–267, 383–417 and 568–579. -/
 def partialSlotSampleEquiv {a b : Layout P} (w : SourceCircuit a b) (p : P) :
     let A : P → Bool := fun t ↦ partySelector (some ⟨p, rfl⟩)
       (affectedOwner (fun _ : P ↦ true) t)
-    Fin (partialSlots A w).length ≃ Approximation.DistributedOperatorContraction.SampleAt
+    Fin (partialSlots A w).length ≃ Compression.DistributedOperatorContraction.SampleAt
       (Finset.univ : Finset w.nonemptyGateLocations) (fun g ↦ w.participants g.1) p := by
   intro A
   refine (partialSlotEquiv A w).trans ((sourceSampleEquiv w).subtypeEquiv ?_)

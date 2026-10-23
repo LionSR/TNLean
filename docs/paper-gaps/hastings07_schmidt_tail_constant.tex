@@ -1,0 +1,97 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+\input{command}
+\setlength{\emergencystretch}{2em}
+\title{The Constant in Hastings' Polynomial Decay of the Schmidt Tail}
+\author{}
+\date{October 22, 2026}
+\begin{document}
+\maketitle
+\gapnote{local-correction}{resolved}
+
+\section{The source statement}
+
+In the section on matrix product states of~\cite{Hastings2007AreaLaw}, the
+squared Schmidt coefficients $|A_0(\alpha)|^2$ of the ground state across a cut
+are ordered nonincreasingly, and
+$k_0=\exp(2S(\rho^0_{1,j}))/2$.\footnote{\path{References/0705.2024/law16.tex},
+    lines~505--557; equations \texttt{k0Ent}, \texttt{constraint} and
+    \texttt{est}.}
+With $P=1/2$, the bootstrap estimate gives, for every integer $m\ge0$,
+\begin{align}
+    \sum_{\alpha\ge k_0D^{2m}+1}|A_0(\alpha)|^2
+     & \le 4C_1(\xi)^2e^{-2m/\xi'}.
+    \label{eq:hastings07_schmidt_tail_constraint}
+\end{align}
+The source then states
+\begin{align}
+    \sum_{\alpha\ge k'}|A_0(\alpha)|^2
+     & \le 4C_1(\xi)^2\exp\bigl(-\lfloor\log_D(k'/k_0)\rfloor/\xi'\bigr)
+    \le 4C_1(\xi)^2e^{1/\xi'}(k'/k_0)^{1/(\xi'\ln D)}.
+    \label{eq:hastings07_schmidt_tail_source_est}
+\end{align}
+
+\section{The point at issue}
+
+The exponent on the right of (\ref{eq:hastings07_schmidt_tail_source_est})
+lacks its minus sign; the bound is meant to decay in $k'$.
+
+The first inequality of (\ref{eq:hastings07_schmidt_tail_source_est}) needs
+(\ref{eq:hastings07_schmidt_tail_constraint}) at an exponent $2m$ equal to
+$n=\lfloor\log_D(k'/k_0)\rfloor$. When $n$ is odd, the largest admissible
+choice is $2m=n-1$, which gives only
+\begin{align}
+    4C_1(\xi)^2e^{-(n-1)/\xi'}
+     & = 4C_1(\xi)^2e^{1/\xi'}e^{-n/\xi'}.
+    \label{eq:hastings07_schmidt_tail_odd}
+\end{align}
+The second inequality of (\ref{eq:hastings07_schmidt_tail_source_est}) uses
+$n>\log_D(k'/k_0)-1$ and loses a further factor $e^{1/\xi'}$.
+
+\section{The corrected statement}
+
+Let $\tau(k)$ be the mass beyond the $k$ largest squared Schmidt coefficients.
+If $\tau(k)\le ce^{-2m/\xi'}$ whenever $k\ge k_0D^{2m}$, then for every
+$k\ge k_0$,
+\begin{align}
+    \tau(k)
+     & \le c\,e^{2/\xi'}\,(k/k_0)^{-1/(\xi'\ln D)}.
+    \label{eq:hastings07_schmidt_tail_corrected}
+\end{align}
+Indeed, with $x=\log_D(k/k_0)$ and $m=\lfloor\lfloor x\rfloor/2\rfloor$, one
+has $k_0D^{2m}\le k$ and $2m>x-2$.
+
+The tail $\tau(k')=\sum_{\alpha\ge k'+1}|A_0(\alpha)|^2$ starts one index
+later than the sum in (\ref{eq:hastings07_schmidt_tail_source_est}). When
+$k'=k_0D^{2m}$, the constraint (\ref{eq:hastings07_schmidt_tail_constraint})
+says nothing about $|A_0(k')|^2$, so the sum from $\alpha=k'$ is not
+controlled at that scale. When $m\ge1$ and $k'\ge2$, it is controlled at the
+scale $m-1$: since $D\ge2$, one has $k_0D^{2(m-1)}\le k'/4\le k'-1$, so the
+constraint at the scale $m-1$ bounds the sum from $\alpha=k'$ at the cost of
+one more factor $e^{2/\xi'}$, and that sum also decays as in the source. At
+the initial scale $m=0$, where $k'=k_0$, the constraint gives no control of
+$|A_0(k_0)|^2$, and the sum from $\alpha=k_0$ is bounded only by $1$. Away
+from that initial scale, the later start is a choice rather than a gap in the
+source. It is the tail the approximation needs: a matrix product state of bond
+dimension $k'$ keeps the first $k'$ Schmidt coefficients and discards the
+rest.
+
+The bound (\ref{eq:hastings07_schmidt_tail_corrected}) is therefore
+(\ref{eq:hastings07_schmidt_tail_source_est}) with the sum started one index
+later and with the constant $e^{2/\xi'}$ in place of
+$e^{1/\xi'}$.\footnote{\leanid{TNLean.MPS.AreaLaw.Hastings.schmidtTail_le_rpow_of_geometric}
+    in \doclink{TNLean/MPS/AreaLaw/Hastings/SchmidtTail}.}
+The error of the matrix product state built from this tail is the subject of
+the separate note \path{hastings07_mps_error_measure.tex}.
+
+\section{Conclusion}
+
+The correction changes one numerical constant and a sign, and the tail is taken
+from the index after $k'$. The decay exponent of the tail is as in the source.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}

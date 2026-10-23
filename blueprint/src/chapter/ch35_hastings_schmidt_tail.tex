@@ -1,0 +1,159 @@
+\section{Decay of the Schmidt tail in Hastings' area law}
+\label{sec:hastings_schmidt_tail}
+
+% Hastings, arXiv:0705.2024v4, law16.tex, lines 540--552 (section on matrix
+% product states, equations constraint and est).
+
+\begin{theorem}[The Schmidt-tail constraint]
+    \label{thm:hastings_schmidt_tail_constraint}
+    \lean{TNLean.MPS.AreaLaw.Hastings.one_sub_kyFanNorm_le_of_factorization}
+    \leanok
+    Let $\Omega$ be a unit vector on a chain of $L$ sites of local dimension
+    $q\ge1$, let $j$ be a cut and $\rho$ the marginal of $\Omega$ on the first
+    $j$ sites, with eigenvalues $p_1\ge p_2\ge\dots$. Suppose that for every
+    $m$ with $j+m\le L$ there are operators $O_B$ supported on the first
+    $j+m$ sites, $O_L$ supported on the first $j$ sites and $O_R$ supported
+    on the remaining sites with
+    $\|O_BO_LO_R-|\Omega\rangle\langle\Omega|\|\le C_1e^{-m/\xi'}$. If
+    $k\ge1$ and $p_1+\cdots+p_k\ge1/2$, then for every $m$ and every
+    $n\ge kq^{2m}$,
+    \begin{align}
+        \sum_{a>n}p_a & \le 4C_1^2e^{-2m/\xi'}.
+        \notag
+    \end{align}
+    The weight hypothesis holds for $k\ge\exp(2S(\rho))/2$ by
+    Theorem~\ref{thm:hastings_leading_weight}; with that choice the
+    conclusion is the constraint on the Schmidt tail with $P=1/2$ in the
+    section on matrix product states of \cite{Hastings2007AreaLaw}
+    (Theorem~\ref{thm:hastings_schmidt_tail_constraint_entropy}).
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:hastings_bootstrap_scale, thm:hastings_mixture_tail,
+        thm:hastings_cut_coordinates, lem:chain_sequential_truncation}
+    Let $E$ project the first $j$ sites onto the eigenvectors of $p_1,\dots,p_k$
+    and put $\psi=E\Omega$. Then $\psi$ has Schmidt rank at most $k$ across the
+    cut, and $\langle\psi,\Omega\rangle=\|\psi\|^2=p_1+\cdots+p_k=P\ge1/2$.
+    Theorem~\ref{thm:hastings_bootstrap_scale} applied to the state
+    $\psi/\|\psi\|$ gives, at every
+    scale $m$ with $(2C_1^2/P)e^{-2m/\xi'}<1$, a mixture of vectors of Schmidt
+    rank at most $kq^{2m}$ whose normalized overlap with $\Omega$ is at least
+    $1-(2C_1^2/P)e^{-2m/\xi'}$, and Theorem~\ref{thm:hastings_mixture_tail}
+    turns this into
+    $\sum_{a>kq^{2m}}p_a\le(2C_1^2/P)e^{-2m/\xi'}\le4C_1^2e^{-2m/\xi'}$. At the
+    remaining scales the right-hand side is at least one. The tail decreases
+    as $n$ grows.
+\end{proof}
+
+\begin{theorem}[Leading weight from the entropy]
+    \label{thm:hastings_leading_weight}
+    \lean{TNLean.MPS.AreaLaw.Hastings.one_half_le_kyFanNorm_of_exp_two_mul_vonNeumannEntropy_le}
+    \leanok
+    Let $\rho$ be a density matrix with eigenvalues $p_1\ge p_2\ge\cdots$ and
+    entropy $S(\rho)$. If $k\ge\exp(2S(\rho))/2$, then
+    $p_1+\cdots+p_k\ge1/2$. This is the bound that opens the section on matrix
+    product states of \cite{Hastings2007AreaLaw}.
+\end{theorem}
+\begin{proof}\leanok
+    If $k$ exceeds the dimension, the sum is the trace. Otherwise suppose
+    $p_1+\cdots+p_k<1/2$. Then $p_k<1/(2k)$, so every $p_a$ with $a>k$ is
+    below $1/(2k)$, and the tail of weight more than $1/2$ alone contributes
+    more than $\frac12\log(2k)$ to the entropy. Hence
+    $S(\rho)>\frac12\log(2k)$, that is $k<\exp(2S(\rho))/2$.
+\end{proof}
+
+\begin{theorem}[The Schmidt-tail constraint from the entropy]
+    \label{thm:hastings_schmidt_tail_constraint_entropy}
+    \lean{TNLean.MPS.AreaLaw.Hastings.one_sub_kyFanNorm_le_of_factorization_of_entropy}
+    \leanok
+    \uses{thm:hastings_schmidt_tail_constraint}
+    In the setting of Theorem~\ref{thm:hastings_schmidt_tail_constraint}, if
+    $k\ge\exp(2S(\rho))/2$, then for every $m$ and every
+    $n\ge kq^{2m}$ the eigenvalues of $\rho$ beyond the $n$ largest add up to
+    at most $4C_1^2e^{-2m/\xi'}$. This is the constraint on the Schmidt tail in
+    the section on matrix product states of \cite{Hastings2007AreaLaw}, with
+    $k_0=\exp(2S(\rho))/2$ and $P=1/2$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:hastings_leading_weight}
+    Since $\exp(2S(\rho))/2>0$, the integer $k$ is at least $1$.
+    Theorem~\ref{thm:hastings_leading_weight} gives the weight hypothesis of
+    Theorem~\ref{thm:hastings_schmidt_tail_constraint}.
+\end{proof}
+
+\begin{theorem}[Polynomial decay of the Schmidt tail from geometric bounds]
+    \label{thm:hastings_schmidt_tail_rpow}
+    \lean{TNLean.MPS.AreaLaw.Hastings.schmidtTail_le_rpow_of_geometric}
+    \leanok
+    Let $D>1$, $\xi>0$, $c\ge0$ and $k_0>0$, and let $\tau$ be a real
+    function on the natural numbers. Suppose that for all natural numbers
+    $m$ and $k$ with $k_0D^{2m}\le k$,
+    \begin{align}
+        \tau(k) & \le c\,e^{-2m/\xi}.
+        \label{eq:hastings_schmidt_tail_geometric}
+    \end{align}
+    Then for every natural number $k\ge k_0$,
+    \begin{align}
+        \tau(k) & \le c\,e^{2/\xi}\Bigl(\frac{k}{k_0}\Bigr)^{-1/(\xi\log D)}.
+        \label{eq:hastings_schmidt_tail_rpow}
+    \end{align}
+    Take $\tau(k)$ to be the mass beyond the $k$ largest squared Schmidt
+    coefficients of the ground state across a cut, $k_0=\exp(2S)/2$ for the
+    entropy $S$ of the cut, $\xi$ the decay length written $\xi'$ in the
+    section on matrix product states of \cite{Hastings2007AreaLaw}, and
+    $c=4C_1^2$ for the constant $C_1$ of the approximate factorization there.
+    Then the hypothesis (\ref{eq:hastings_schmidt_tail_geometric}) is the
+    consequence of the bootstrap lemma in that section, and
+    (\ref{eq:hastings_schmidt_tail_rpow}) is the estimate that follows it,
+    with two corrections: the constant $e^{2/\xi}$ replaces the printed
+    $e^{1/\xi}$, and the sign of the exponent is
+    restored~\cite{gap:hastings07_schmidt_tail_constant}. The tail here
+    starts after the $k$-th coefficient rather than at it, which is the tail
+    that a matrix product state of bond dimension $k$ discards.
+\end{theorem}
+\begin{proof}\leanok
+    Put $x=\log(k/k_0)/\log D\ge0$, let $n$ be the integer part of $x$ and
+    $m$ the integer part of $n/2$. Then $D^{2m}\le D^x=k/k_0$, so
+    (\ref{eq:hastings_schmidt_tail_geometric}) applies at $m$. Since
+    $2m\ge n-1>x-2$,
+    \begin{align}
+        \tau(k) & \le c\,e^{-2m/\xi}\le c\,e^{2/\xi}e^{-x/\xi},
+        \notag
+    \end{align}
+    and $e^{-x/\xi}=(k/k_0)^{-1/(\xi\log D)}$.
+\end{proof}
+
+\begin{theorem}[Matrix product state from the decay of the Schmidt tail]
+    \label{thm:hastings_schmidt_tail_mps}
+    \lean{TNLean.MPS.AreaLaw.Hastings.isOpenMPS_norm_sub_sq_le_of_schmidtTail_geometric}
+    \leanok
+    Let $\psi$ be a unit vector on a chain of $L$ sites, and let $D>1$,
+    $\xi>0$, $c\ge0$ and $k_0>0$. Suppose that at every internal cut the
+    mass beyond the $n$ largest eigenvalues of the left marginal is at most
+    $c\,e^{-2m/\xi}$ whenever $k_0D^{2m}\le n$. Then for every natural
+    number $k'\ge k_0$, truncating every cut onto the $k'$ leading
+    eigenvectors of its left marginal gives an open-boundary matrix product
+    state $\Phi$ of bond dimension at most $k'$ with
+    \begin{align}
+        \lVert\Phi-\psi\rVert^2
+         & \le(L-1)\,c\,e^{2/\xi}\Bigl(\frac{k'}{k_0}\Bigr)^{-1/(\xi\log D)}.
+        \notag
+    \end{align}
+    Here the mass beyond the $n$ largest eigenvalues is the sum over the
+    eigenvalues of index at least $n+1$ in nonincreasing order, so the
+    source's sum from index $k'$ is this mass at $k'-1$. This is the
+    conclusion of the section on matrix product states of
+    \cite{Hastings2007AreaLaw}, whose error, stated without a measure, is the
+    squared norm~\cite{gap:hastings07_mps_error_measure}, with the constant of
+    Theorem~\ref{thm:hastings_schmidt_tail_rpow}
+    \cite{gap:hastings07_schmidt_tail_constant}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:chain_sequential_truncation_eigen, thm:chain_sequential_truncation_sq,
+        thm:hastings_schmidt_tail_rpow}
+    Sequential truncation onto the leading eigenvectors gives an
+    open-boundary matrix product state of bond dimension at most $k'$ with
+    $\lVert\Phi-\psi\rVert^2\le\sum_k\varepsilon_k(k')$, where
+    $\varepsilon_k(k')$ is the mass beyond the $k'$ largest eigenvalues at
+    the cut $k$. Theorem~\ref{thm:hastings_schmidt_tail_rpow} bounds each
+    $\varepsilon_k(k')$, and there are $L-1$ internal cuts.
+\end{proof}

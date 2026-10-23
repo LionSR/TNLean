@@ -26,7 +26,7 @@ Source: polynomial-PEPS manuscript (September 24, 2026), Theorem 5.2,
 noncomputable section
 open scoped Matrix
 namespace TNLean.Lattice.PartyCircuit.SourceCircuit
-open TNLean.PEPS TNLean.PEPS.PairEffect
+open TNLean.Lattice TNLean.Lattice.PartyCircuit
 
 private theorem partialTraceRight_fintype_eq {α β : Type} (F G : Fintype β)
     (M : Matrix (α × β) (α × β) ℂ) :

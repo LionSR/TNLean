@@ -62,7 +62,7 @@ singular values and $\lVert M\rVert_2$ for its Hilbert--Schmidt norm.
 
 \begin{definition}[Coordinate contraction of a tensor graph]
     \label{def:peps_group_contraction}
-    \lean{TNLean.PEPS.WholeGroup.contraction, TNLean.PEPS.WholeGroup.vertexNormSq}
+    \lean{TNLean.Lattice.WholeGroup.contraction, TNLean.Lattice.WholeGroup.vertexNormSq}
     \leanok
     Let $(V,E)$ be a finite graph whose edges $e\in E$ have endpoints
     $t(e),h(e)\in V$ and finite index sets $D_e$. At each vertex $v\in V$, let
@@ -79,8 +79,8 @@ singular values and $\lVert M\rVert_2$ for its Hilbert--Schmidt norm.
 
 \begin{theorem}[Whole-group tensor bound, norm part]
     \label{thm:peps_group_contraction_norm}
-    \lean{TNLean.PEPS.WholeGroup.contraction_norm_le_one,
-        TNLean.PEPS.WholeGroup.partialNormSq_le_one}
+    \lean{TNLean.Lattice.WholeGroup.contraction_norm_le_one,
+        TNLean.Lattice.WholeGroup.partialNormSq_le_one}
     \leanok
     \uses{def:peps_group_contraction}
     Suppose that no edge joins a vertex to itself and every vertex tensor
@@ -102,9 +102,9 @@ singular values and $\lVert M\rVert_2$ for its Hilbert--Schmidt norm.
 
 \begin{theorem}[Whole-group tensor bound, nuclear part]
     \label{thm:peps_group_contraction_nuclear}
-    \lean{TNLean.PEPS.WholeGroup.rectangularTraceNorm_flattening_le_one,
-        TNLean.PEPS.WholeGroup.flattening,
-        TNLean.PEPS.WholeGroup.flattening_contraction}
+    \lean{TNLean.Lattice.WholeGroup.rectangularTraceNorm_flattening_le_one,
+        TNLean.Lattice.WholeGroup.flattening,
+        TNLean.Lattice.WholeGroup.flattening_contraction}
     \leanok
     \uses{def:peps_group_contraction, def:peps_group_nuclear_norm}
     Under the hypotheses of Theorem~\ref{thm:peps_group_contraction_norm},
@@ -125,10 +125,10 @@ singular values and $\lVert M\rVert_2$ for its Hilbert--Schmidt norm.
 
 \begin{lemma}[Simultaneous truncation of open-leg groups]
     \label{lem:peps_group_truncation_abstract}
-    \lean{TNLean.PEPS.WholeGroup.exists_group_truncation,
-        TNLean.PEPS.WholeGroup.norm_sub_factorMatrix_le,
-        TNLean.PEPS.WholeGroup.factorMatrix,
-        TNLean.PEPS.WholeGroup.productVector}
+    \lean{TNLean.Lattice.WholeGroup.exists_group_truncation,
+        TNLean.Lattice.WholeGroup.norm_sub_factorMatrix_le,
+        TNLean.Lattice.WholeGroup.factorMatrix,
+        TNLean.Lattice.WholeGroup.productVector}
     \leanok
     \uses{def:peps_group_nuclear_norm}
     Let $Z\in\bigotimes_{v\in V}\mathbb C^{P_v}$ be a tensor with
@@ -157,8 +157,8 @@ singular values and $\lVert M\rVert_2$ for its Hilbert--Schmidt norm.
 
 \begin{theorem}[Whole-group tensor bound]
     \label{thm:peps_group_tensor}
-    \lean{TNLean.PEPS.WholeGroup.exists_simultaneous_openLeg_truncation,
-        TNLean.PEPS.WholeGroup.exists_simultaneous_group_truncation}
+    \lean{TNLean.Lattice.WholeGroup.exists_simultaneous_openLeg_truncation,
+        TNLean.Lattice.WholeGroup.exists_simultaneous_group_truncation}
     \leanok
     \uses{def:peps_group_contraction}
     Let a finite loopless graph carry at each vertex $v$ a tensor $A_v$ of norm
@@ -186,10 +186,10 @@ singular values and $\lVert M\rVert_2$ for its Hilbert--Schmidt norm.
 
 \begin{corollary}[Whole-group tensor bound for networks with edge matrices]
     \label{cor:peps_group_tensor_network}
-    \lean{TNLean.PEPS.WholeGroup.network_norm_le_one,
-        TNLean.PEPS.WholeGroup.rectangularTraceNorm_flattening_network_le_one,
-        TNLean.PEPS.WholeGroup.exists_simultaneous_network_truncation,
-        TNLean.PEPS.WholeGroup.network_one_eq_contraction}
+    \lean{TNLean.Lattice.WholeGroup.network_norm_le_one,
+        TNLean.Lattice.WholeGroup.rectangularTraceNorm_flattening_network_le_one,
+        TNLean.Lattice.WholeGroup.exists_simultaneous_network_truncation,
+        TNLean.Lattice.WholeGroup.network_one_eq_contraction}
     \leanok
     \uses{thm:peps_group_tensor}
     Consider a loopless tensor network in which each vertex carries one leg per
