@@ -21,6 +21,7 @@ import TNLean.MPS.AreaLaw.CompressedBlockColumn
 import TNLean.MPS.AreaLaw.CopyErrorAmplification
 import TNLean.MPS.AreaLaw.CopyMPSFactor
 import TNLean.MPS.AreaLaw.CopyProduct
+import TNLean.MPS.AreaLaw.CopyRegionEntropy
 import TNLean.MPS.AreaLaw.Counting
 import TNLean.MPS.AreaLaw.CutMatrixGrowth
 import TNLean.MPS.AreaLaw.DoubledHamiltonian
