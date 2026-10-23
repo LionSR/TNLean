@@ -1371,3 +1371,10 @@ estimates and energy-rescaling analysis under the still-open issue #9811.
   (arXiv:0705.0292v2). A flat Schmidt spectrum disproves the printed plus
   sign; the corrected minus sign preserves the obstruction from
   super-logarithmic entropy growth. The Lean development remains open in #9857.
+
+- [`swvc08_truncation_squared_norm.tex`](swvc08_truncation_squared_norm.tex)
+  (false source, resolved) records the missing square in the displayed truncation
+  bound of Schuch–Wolf–Verstraete–Cirac, arXiv:0705.0292v2, lines 239–245. A two-qubit
+  state disproves the printed norm estimate. The note compares the corrected
+  squared-norm bound with the stronger proved sequential-truncation estimate;
+  the Rényi family theorem remains open in #9855.
