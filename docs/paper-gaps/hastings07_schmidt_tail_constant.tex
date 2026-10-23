@@ -65,9 +65,10 @@ Indeed, with $x=\log_D(k/k_0)$ and $m=\lfloor\lfloor x\rfloor/2\rfloor$, one
 has $k_0D^{2m}\le k$ and $2m>x-2$.
 
 The tail $\tau(k')=\sum_{\alpha\ge k'+1}|A_0(\alpha)|^2$ starts one index
-later than the sum in (\ref{eq:hastings07_schmidt_tail_source_est}). This is a
-convention, not a gap in the source: the sum from $\alpha=k'$ is also
-controlled by (\ref{eq:hastings07_schmidt_tail_constraint}). When
+later than the sum in (\ref{eq:hastings07_schmidt_tail_source_est}). This
+convention matches the discarded mass of a bond-$k'$ approximation; the
+source also uses this tail at line 526. It does not identify the two sums
+with the same bound at every scale. When
 $k'=k_0D^{2m}$ with $m\ge1$ and $k'\ge2$, the constraint at the scale $m$ says
 nothing about $|A_0(k')|^2$, but since $D\ge2$ one has
 $k_0D^{2(m-1)}\le k'/4\le k'-1$, so the constraint at the scale $m-1$ bounds
@@ -76,7 +77,11 @@ sum decays as in the source. The later start is adopted because it is the tail
 the approximation needs: a matrix product state of bond dimension $k'$ keeps
 the first $k'$ Schmidt coefficients and discards the rest. Only at the initial
 scale $m=0$, where $k'=k_0$, is there no smaller scale to fall back on, and
-there the sum from $\alpha=k_0$ is bounded only by $1$.
+there the sum from $\alpha=k_0$ is bounded only by $1$. To absorb this case
+in a bound of the form (\ref{eq:hastings07_schmidt_tail_corrected}) for the
+sum starting at $k_0$, one must separately require $ce^{2/\xi'}\ge1$ or
+enlarge the constant. No such requirement is needed for the stated bound
+on $\tau(k')$.
 
 The bound (\ref{eq:hastings07_schmidt_tail_corrected}) is therefore
 (\ref{eq:hastings07_schmidt_tail_source_est}) with the sum started one index
@@ -89,8 +94,10 @@ the separate note \path{hastings07_mps_error_measure.tex}.
 \section{Conclusion}
 
 The correction changes one numerical constant and a sign. Taking the tail from
-the index after $k'$ is a convention matched to the cut of a matrix product
-state, not a correction. The decay exponent of the tail is as in the source.
+the index after $k'$ is the convention matched to the discarded mass of a
+matrix product state. For the source's sum starting at $k'$, the
+initial-scale exception and the possible enlargement of the constant above
+must also be retained. The decay exponent of the tail is as in the source.
 
 \bibliographystyle{alpha}
 \bibliography{references}
