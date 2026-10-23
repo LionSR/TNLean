@@ -38,6 +38,9 @@ Lemma 1 with a polynomial constant. At the length `ξ̂`, the bound holds at the
 for every fixed `κ > 6`, with `K` depending on `κ`, and the printed endpoint `ξ' = 6ξ` is not
 reached there. It is reached for the inflated length `ζ = lemmaOneEndpointLength R J ΔE =
 (5/4) ξ̂`, at `ξ' = 6ζ` (`exists_isOpenMPS_norm_sub_sq_le_of_isGappedGroundState_endpoint`).
+The length `ζ` may stand in for the source's `ξ`: the source fixes `ξ = max(2v/ΔE, ξ_C)` only
+through some Lieb–Robinson pair, and a bound valid for `|t| ≤ l/v` stays valid for a larger
+velocity (lines 96–112), so raising the chain velocity by `5/4` is a legitimate choice.
 Both lengths come from the chain Lieb–Robinson estimate, whose prefactor grows with `J` and
 whose second operator acts on one site, so neither is shown to be the source's
 `max(2v/ΔE, ξ_C)` for a pair satisfying eq. `lrb` (lines 96–112, 139–142). The bond dimension
