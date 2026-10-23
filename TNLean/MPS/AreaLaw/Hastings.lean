@@ -19,6 +19,7 @@ import TNLean.MPS.AreaLaw.Hastings.EffectExpectation
 import TNLean.MPS.AreaLaw.Hastings.EffectFromFactorization
 import TNLean.MPS.AreaLaw.Hastings.InteractionPicture
 import TNLean.MPS.AreaLaw.Hastings.IntervalMutualInformation
+import TNLean.MPS.AreaLaw.Hastings.MainTheorem
 import TNLean.MPS.AreaLaw.Hastings.PartCommutators
 import TNLean.MPS.AreaLaw.Hastings.PositiveFactorization
 import TNLean.MPS.AreaLaw.Hastings.ProductStateExpectation
@@ -34,3 +35,4 @@ import TNLean.MPS.AreaLaw.Hastings.SchmidtTailConstraint
 import TNLean.MPS.AreaLaw.Hastings.SpectralCutoff
 import TNLean.MPS.AreaLaw.Hastings.TailEntropy
 import TNLean.MPS.AreaLaw.Hastings.ThreeWaySplitting
+import TNLean.MPS.AreaLaw.Hastings.Window

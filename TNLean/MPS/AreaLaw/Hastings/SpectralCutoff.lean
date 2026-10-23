@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Representation.RegionPowerSymbol
 import TNLean.Algebra.ToEuclideanLinApply
+import QICLean.Entropy.FilterPower
 
 /-!
 # Spectral cut-offs of the localized boundary terms after Hastings
@@ -48,6 +49,9 @@ appendix, lines 829–841, eq. `obd`.
   the cut-off.
 * `TNLean.MPS.AreaLaw.Hastings.commute_spectralCutoff_localLift_of_disjoint`: cut-offs of
   operators lifted from disjoint regions commute.
+* `TNLean.MPS.AreaLaw.Hastings.isSupportedOn_spectralCutoff`,
+  `TNLean.MPS.AreaLaw.Hastings.commute_spectralCutoff_of_isSupportedOn`: the same for operators
+  given by their supports, through `Entropy.IsSupportedOn.exists_localLift_isHermitian`.
 -/
 
 open Matrix
@@ -212,6 +216,36 @@ theorem commute_spectralCutoff_localLift_of_disjoint {X Y : Finset V} (hXY : Dis
     Commute (spectralCutoff (localLift X K) θ) (spectralCutoff (localLift Y K') θ') := by
   rw [spectralCutoff_localLift hK, spectralCutoff_localLift hK']
   exact commute_localLift_of_disjoint hXY _ _
+
+/-- A Hermitian operator supported on `D` is the local lift of a Hermitian operator on `D`. -/
+theorem _root_.Entropy.IsSupportedOn.exists_localLift_isHermitian {D : Finset V}
+    {M : Matrix (SiteConfig n) (SiteConfig n) ℂ} (hM : IsSupportedOn M D) (hMh : M.IsHermitian)
+    (σ₀ : SiteConfig n) :
+    ∃ K : Matrix (RegionConfig n D) (RegionConfig n D) ℂ, K.IsHermitian ∧ M = localLift D K := by
+  obtain ⟨K, rfl⟩ := hM.exists_localLift σ₀
+  refine ⟨K, localLift_injective D σ₀ ?_, rfl⟩
+  rw [localLift_conjTranspose, hMh.eq]
+
+/-- The spectral cut-off of a Hermitian operator supported on `D` is supported on `D`. With
+`M_L` supported left of the cut, this places `O_L` there, as Hastings' Lemma 1 requires
+(arXiv:0705.2024v4, `law16.tex`, lines 829–842). -/
+theorem isSupportedOn_spectralCutoff {D : Finset V}
+    {M : Matrix (SiteConfig n) (SiteConfig n) ℂ} (hM : M.IsHermitian) (hMD : IsSupportedOn M D)
+    (σ₀ : SiteConfig n) (θ : ℝ) : IsSupportedOn (spectralCutoff M θ) D := by
+  obtain ⟨K, hK, rfl⟩ := hMD.exists_localLift_isHermitian hM σ₀
+  rw [spectralCutoff_localLift hK]
+  exact isSupportedOn_localLift _
+
+/-- The spectral cut-offs of Hermitian operators supported on disjoint regions commute: the
+commutation of `O_L` and `O_R` in Hastings' Lemma 1 (arXiv:0705.2024v4, `law16.tex`,
+lines 829–842), stated for supports. -/
+theorem commute_spectralCutoff_of_isSupportedOn {X Y : Finset V} (hXY : Disjoint X Y)
+    {M M' : Matrix (SiteConfig n) (SiteConfig n) ℂ} (hM : M.IsHermitian) (hM' : M'.IsHermitian)
+    (hMX : IsSupportedOn M X) (hM'Y : IsSupportedOn M' Y) (σ₀ : SiteConfig n) (θ θ' : ℝ) :
+    Commute (spectralCutoff M θ) (spectralCutoff M' θ') := by
+  obtain ⟨K, hK, rfl⟩ := hMX.exists_localLift_isHermitian hM σ₀
+  obtain ⟨K', hK', rfl⟩ := hM'Y.exists_localLift_isHermitian hM' σ₀
+  exact commute_spectralCutoff_localLift_of_disjoint hXY hK hK' θ θ'
 
 end Lift
 
