@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.ToEuclideanCLM
 import TNLean.MPS.AreaLaw.Hastings.CutProductExpectation
 import TNLean.MPS.AreaLaw.Hastings.SchmidtDiagonalCorrelation
 
@@ -16,6 +17,11 @@ run with the effect `O_Bᴴ O_B`. This file proves the expectation bounds that s
 `Ψ` lies within `ε` of the range of `O_L O_R`, the effect has ground-state expectation at least
 `(1 − 2ε)²`, and the expectation `y` of `O_L O_R` in the product of the two marginals of `Ψ`
 (line 446) is at least `1 − 2ε²`.
+
+The last bound works at a cut of the chain and takes the factorization
+`tr(σ O_L O_R) = ⟨Ψ, O_L Ψ⟩ ⟨Ψ, O_R Ψ⟩` from `trace_cutProductState_mul_mul`, and the pure-state
+identity `tr(|Ψ⟩⟨Ψ| A) = ⟨Ψ, A Ψ⟩` from QICLean's `Entropy.inner_toEuclideanLin_eq_trace`; no
+separate statement in the Kronecker coordinates of an abstract bipartition is kept.
 
 ## Main results
 
@@ -32,23 +38,6 @@ run with the effect `O_Bᴴ O_B`. This file proves the expectation bounds that s
 -/
 
 open scoped ComplexOrder InnerProductSpace Matrix.Norms.L2Operator MatrixOrder
-
-namespace Matrix
-
-variable {n : Type*} [Fintype n] [DecidableEq n]
-
-/-- The expectation `⟪x, A y⟫` as a dot product of coordinate vectors. -/
-theorem inner_toEuclideanCLM_eq_dotProduct (A : Matrix n n ℂ) (x y : EuclideanSpace ℂ n) :
-    ⟪x, toEuclideanCLM (n := n) (𝕜 := ℂ) A y⟫_ℂ = star x.ofLp ⬝ᵥ (A *ᵥ y.ofLp) := by
-  rw [EuclideanSpace.inner_eq_star_dotProduct, ofLp_toEuclideanCLM, dotProduct_comm]
-
-/-- A contraction does not increase the norm of a vector. -/
-theorem norm_toEuclideanCLM_le_of_norm_le_one {A : Matrix n n ℂ} (hA1 : ‖A‖ ≤ 1)
-    (x : EuclideanSpace ℂ n) : ‖toEuclideanCLM (n := n) (𝕜 := ℂ) A x‖ ≤ ‖x‖ :=
-  ((toEuclideanCLM (n := n) (𝕜 := ℂ) A).le_opNorm x).trans
-    (mul_le_of_le_one_left (norm_nonneg x) hA1)
-
-end Matrix
 
 namespace TNLean.MPS.AreaLaw.Hastings
 
