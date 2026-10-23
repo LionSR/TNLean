@@ -237,7 +237,10 @@ of a gapped chain combines them with the factorization of
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:hastings_mixture_tail, thm:hastings_schmidt_overlap_tail}
-    At each such scale Theorem~\ref{thm:hastings_mixture_tail} bounds the mass of the Schmidt coefficients beyond the first
+    Since $\rho_\Psi=C_\Psi C_\Psi^\dagger$ is positive semidefinite with
+    $\operatorname{tr}\rho_\Psi=\lVert\Psi\rVert^2=1$, its eigenvalues are
+    nonnegative and, by Theorem~\ref{thm:hastings_schmidt_overlap_tail} with no
+    eigenvalue removed, sum to $1$. At each such scale Theorem~\ref{thm:hastings_mixture_tail} bounds the mass of the Schmidt coefficients beyond the first
     $kD^{2s}$ by $ce^{-2s/\xi'}$, which is equation \texttt{constraint}. Let $m'$ be the least
     natural number with $ce^{-2m'/\xi'}\le1$; then $2m'<\xi'\ln c+2$, and the
     scale $m'+1+n$ satisfies $ce^{-2(m'+1+n)/\xi'}\le e^{-2(n+1)/\xi'}<1$.
@@ -261,7 +264,10 @@ of a gapped chain combines them with the factorization of
     is equation \texttt{bootstrap}.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:hastings_geometric_tail_entropy, thm:hastings_bootstrap_schmidt_tail}
+    \uses{thm:hastings_geometric_tail_entropy, thm:hastings_schmidt_overlap_tail,
+        thm:hastings_bootstrap_schmidt_tail}
+    By Theorem~\ref{thm:hastings_schmidt_overlap_tail} the entropy of
+    $\rho_\Psi$ is the entropy of its eigenvalues.
     Theorem~\ref{thm:hastings_bootstrap_schmidt_tail} gives the scale $m'$, with
     $2m'+2\le\xi'\ln c+4$, and the constraints at the scales $m'+1+n$. These are
     the hypotheses of the second form of
