@@ -30,17 +30,18 @@ For short lengths `l < 12R + 8` the trivial factorization `O_B = 0`, `O_L = O_R 
 error `1`, which the constant `a` absorbs.
 
 **Scope restriction (quantitative bounds):** The three factorization existence theorems
-below use `ξ = 8 max(2v/ΔE, 1)` from the chain localization estimate, whose support factor is
-quadratic. Comparing its exponential factor does not establish the source's linear-support
-Lieb–Robinson bound (lines 96–112) for the pair `(8v, 8)`. The exponential conclusions require
-`ξ' > 6ξ`; the endpoint `ξ' = 6ξ` is not established, rather than disproved. The constants are
-uniform in chain length and local dimension, but the polynomial bound in `ξ` required at
-lines 258–262 is not established. Documented in
-`docs/paper-gaps/hastings07_lemma1_decay_length.tex` and
-`docs/paper-gaps/hastings07_gaussian_average_exponent.tex`. Elimination: establish the source's
-support dependence and controlled Lieb–Robinson constants, track energy rescaling and all
-factorization constants to prove the polynomial bound, and settle the endpoint rate; these
-steps remain open.
+below use `ξ = 8 max(2v/ΔE, 1)` from the chain Lieb–Robinson estimate. That estimate is linear
+in the size of the support, as in the source (lines 96–112), but its prefactor grows with `J`
+and its second operator acts on one site, so `(v, 2)` is not shown to be a Lieb–Robinson pair
+in the source's sense. The length `ξ` and the constants are not homogeneous in the energy
+scale. The exponential conclusions require `ξ' > 6ξ`; the endpoint `ξ' = 6ξ` is not
+established, rather than disproved. The constants are uniform in chain length and local
+dimension, but the polynomial bound in `ξ` required at lines 258–262 is not established.
+Documented in `docs/paper-gaps/hastings07_lemma1_decay_length.tex` and
+`docs/paper-gaps/hastings07_gaussian_average_exponent.tex`. Elimination: rescale to unit gap,
+make the constant explicit and bound it by a polynomial in the rescaled length, establish a
+Lieb–Robinson bound with a numerical prefactor for arbitrary supports, and settle the endpoint
+rate; these steps remain open.
 
 ## Main declarations
 
