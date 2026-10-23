@@ -54,7 +54,9 @@ count of at most `n S` index components per site, one for each nearby factor (li
 **Scope restriction (planar domains):** the source works on an arbitrary lattice with a metric;
 this file states the product form for finite domains `Λ ⊆ ℤ²` with the walk distance of
 `TNLean.Lattice.LocalHamiltonian`, and does not establish the index count. Documented in
-`docs/paper-gaps/hastings05_planar_domain_scope.tex`.
+`docs/paper-gaps/hastings05_planar_domain_scope.tex`. Elimination: restate on a general finite
+graph with its walk distance once the lattice layer has local Hamiltonians there; the proofs use
+only the range of the supports.
 
 ## References
 
