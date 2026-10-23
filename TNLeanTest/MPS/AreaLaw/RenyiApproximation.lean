@@ -5,6 +5,8 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.EntropyScaling.RenyiApproximation
 
+/-! # Boundary chains and axioms for Rényi family approximation -/
+
 set_option linter.hashCommand false
 
 open TNLean.MPS.AreaLaw
