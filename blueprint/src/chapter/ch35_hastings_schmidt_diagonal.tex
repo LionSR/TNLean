@@ -29,16 +29,33 @@ error $\varepsilon$ that is left free.
 \end{theorem}
 \begin{proof}\leanok
     Since $\|O_BO_LO_R\Omega-\Omega\|\le\varepsilon$ and the factors are
-    positive contractions, $\|(O_B-1)\Omega\|$ and $\|(O_R-1)\Omega\|$ are at
-    most $\sqrt{2\varepsilon}$. The chain of triangle inequalities of the
+    positive contractions, $\|(O_B-1)\Omega\|$, $\|(O_L-1)\Omega\|$ and
+    $\|(O_R-1)\Omega\|$ are at most $\sqrt{2\varepsilon}$. The chain of triangle inequalities of the
     source then moves $O_B$ past $A$, replaces $B_L\Omega$ by $B_R\Omega$,
     moves $B_R$ past $O_L$ and $O_R$ past $B_L$, and replaces
     $O_BO_LO_R$ by $P$, at a total cost of $3\sqrt{2\varepsilon}+\varepsilon$.
 \end{proof}
 
-\begin{theorem}[Lemma~3 on the chain, with the factorization as hypothesis]
+\begin{theorem}[Schmidt-diagonal operators are contractions]
+    \label{thm:hastings_schmidt_diagonal_norm}
+    \lean{TNLean.MPS.AreaLaw.Hastings.l2_opNorm_schmidtDiagonal_le_one}
+    \leanok
+    Let $(\psi(\alpha))_\alpha$ be an orthonormal family and $|O(\alpha)|\le1$.
+    Then $\sum_\alpha O(\alpha)\,|\psi(\alpha)\rangle\langle\psi(\alpha)|$ has
+    norm at most one.
+\end{theorem}
+\begin{proof}\leanok
+    By Bessel's inequality,
+    $\|\sum_\alpha O(\alpha)\langle\psi(\alpha),v\rangle\psi(\alpha)\|^2
+        =\sum_\alpha|O(\alpha)|^2|\langle\psi(\alpha),v\rangle|^2\le\|v\|^2$.
+\end{proof}
+
+\begin{theorem}[Correlations of a Schmidt-diagonal operator under an
+        approximate factorization]
     \label{thm:hastings_schmidt_diagonal_chain}
-    \lean{TNLean.MPS.AreaLaw.Hastings.norm_inner_mul_sub_le_of_factorization}
+    \lean{TNLean.MPS.AreaLaw.Hastings.norm_inner_mul_sub_le_of_factorization,
+        TNLean.MPS.AreaLaw.Hastings.commute_reindex_one_kronecker_of_isSupportedOn,
+        TNLean.MPS.AreaLaw.Hastings.toEuclideanCLM_reindex_cutEquiv_symm}
     \leanok
     \uses{def:chain_model}
     Let $\Omega$ be a unit vector on a chain of $L$ sites, with Schmidt
@@ -47,9 +64,11 @@ error $\varepsilon$ that is left free.
     the cut after $j$ sites. Let
     $B_L=\sum_\alpha O(\alpha)\,|\psi_L(\alpha)\rangle\langle\psi_L(\alpha)|
         \otimes1$ with $|O(\alpha)|\le1$, and let $A$ be an operator of norm
-    at most one supported away from the sites $j-l,\dots,j+l-1$. Suppose there
-    are positive semidefinite operators $O_B,O_L,O_R$ of norm at most one,
-    supported on those $2l$ sites, on the first $j$ sites and on the remaining
+    at most one supported away from the buffer, the sites among
+    $j-l,\dots,j+l-1$ that lie in the chain (fewer than $2l$ of them when the
+    cut is within $l$ sites of an end of the chain). Suppose there are
+    positive semidefinite operators $O_B,O_L,O_R$ of norm at most one,
+    supported on the buffer, on the first $j$ sites and on the remaining
     sites respectively, with
     $\|O_BO_LO_R-|\Omega\rangle\langle\Omega|\|\le\varepsilon$. Then
     \begin{align}
@@ -64,11 +83,13 @@ error $\varepsilon$ that is left free.
     factorization in place of $\varepsilon$.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:hastings_schmidt_diagonal_operator}
+    \uses{thm:hastings_schmidt_diagonal_operator,
+        thm:hastings_schmidt_diagonal_norm}
     The operator $B_R=1\otimes\sum_\alpha O(\alpha)\,
         |\psi_R(\alpha)\rangle\langle\psi_R(\alpha)|$ satisfies
     $B_L\Omega=B_R\Omega$ by the Schmidt decomposition, and both $B_L$ and
-    $B_R$ have norm at most one because the Schmidt vectors are orthonormal.
+    $B_R$ have norm at most one by
+    Theorem~\ref{thm:hastings_schmidt_diagonal_norm}.
     Operators supported on disjoint sets of sites commute, so the supports
     give the four commutations of
     Theorem~\ref{thm:hastings_schmidt_diagonal_operator}, which then applies.
