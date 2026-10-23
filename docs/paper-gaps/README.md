@@ -1403,6 +1403,20 @@ with `K` depending only on `R` and `κ`, the source's polynomial bound in `ξ`
 (lines 258–262). The endpoint rate `ξ' = 6ξ` and a Lieb–Robinson pair in the
 source's form remain open under issue #9811.
 
+## Hastings' high-temperature matrix product form, arXiv:cond-mat/0508554
+
+- [`hastings05_planar_domain_scope.tex`](hastings05_planar_domain_scope.tex)
+  (scope restriction, open) records that the matrix product form of Trotter
+  products in Section IV of Hastings (arXiv:cond-mat/0508554v3, lines
+  1017–1079), stated there for an arbitrary lattice and metric, is formalized for
+  finite domains of `ℤ²` with the walk distance of the local Hamiltonians of the
+  two-dimensional area law. The centre-indexed theorem preserves the source's
+  radius bound, including centres outside their supports; the original
+  diameter-bounded statement is a corollary. The source's count of at most
+  `nS` index components per site remains unproved: for a product of `m`
+  factors the construction carries `m` components of `q²` values at every site,
+  one for every factor wherever it acts, so the `n`-th power `ρₙ` carries `n m`.
+
 ## Rényi entropy and matrix product state approximation
 
 - [`swvc08_renyi_bond_dimension_sign.tex`](swvc08_renyi_bond_dimension_sign.tex)

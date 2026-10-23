@@ -17,7 +17,7 @@ Hastings' proof of the one-dimensional area law (arXiv:0705.2024v4) rests on eq.
 (lines 234–242): the mutual information of the two intervals of `l` sites beside a cut is at
 least `(1 − 2ε) l/ξ' − ln C₁ − C₂`, with `ε = C₁ e^{-l/ξ'}`. This file proves eq. `relent` for
 one pair of adjacent intervals on the chain, following lines 413–503 with route 1 of the note
-added (lines 911–925).
+added (lines 916–925).
 
 The inputs are Lemma 1's projector factorization `‖O_B O_L O_R − P₀‖ ≤ ε` in its
 corollary-(a) form, taken as the hypothesis `hfact` until Lemma 1 is formalized, and the
@@ -41,7 +41,7 @@ eq. `LU` on the chain, the monotonicity of the binary relative entropy, and
 
 * M. B. Hastings, *An area law for one-dimensional quantum systems*, J. Stat. Mech. (2007)
   P08024, arXiv:0705.2024v4, `References/0705.2024/law16.tex`, lines 234–242, 413–503, and
-  911–925.
+  916–925.
 -/
 
 open Matrix
@@ -65,7 +65,7 @@ in `Ω` below by `1 − 2ε'` and its expectation in `σ` above by `36 ε'`, and
 on the chain with the monotonicity of the binary relative entropy and `le_of_lindbladUhlmann`.
 
 Hastings, arXiv:0705.2024v4, `law16.tex` lines 234–242 and 413–503, with route 1 of the note
-added, lines 911–925. -/
+added, lines 916–925. -/
 theorem relent_of_projectorFactorization
     {Ω : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Ω‖ = 1) {c l : ℕ}
     {ξ' C₁ : ℝ} (hξ : 0 < ξ') (hC₁ : 1 ≤ C₁)
