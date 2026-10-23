@@ -1354,10 +1354,11 @@ positive and the later estimate uses `‖M_L O_L‖` at most the threshold.
 ### One-dimensional area law after Hastings: the decay length of Lemma 1
 
 [hastings07_lemma1_decay_length.tex](hastings07_lemma1_decay_length.tex)
-(clarification, resolved) records how the length `ξ = max(2v/ΔE, ξ_C)` of
-Hastings (arXiv:0705.2024v4, lines 96–112 and 139–142) is fixed on the chain.
-The printed Lieb–Robinson bound is read as decay `e^{-dist/ξ_C}` for
-`|t| ≤ dist/v`. The chain bound `a |X|² e^{v₀|t| - k/2}` admits every pair with
-`1/ξ_C ≤ 1/2 - v₀/v`. The pair `(8v₀, 8)` gives `ξ = 8 max(2v₀/ΔE, 1)`, the
-length used for Lemma 1, whose constant then depends only on `R`, `J`, `ΔE` and
-`ξ'`, not on the length of the chain.
+(scope restriction, open) distinguishes the chain localization estimate with
+quadratic support dependence from Hastings's linear-support Lieb–Robinson
+bound (arXiv:0705.2024v4, lines 96–112). The exponential comparison motivates
+`ξ = 8 max(2v₀/ΔE, 1)` but does not establish the source's full bound for the
+pair `(8v₀, 8)`. The factorization constant is uniform in chain length and
+local dimension; the source's polynomial bound in `ξ` (lines 258–262) remains
+unproved, as does the endpoint rate `ξ' = 6ξ`. The note records the required
+estimates and energy-rescaling analysis under the still-open issue #9811.
