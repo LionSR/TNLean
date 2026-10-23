@@ -9025,3 +9025,12 @@ using Mathlib's `Real.posLog_eq_log_max_one` and
 `Real.log_natCast_nonneg`; it does not repeat the earlier case split.
 A further independent use should place this elementary identity in a shared
 mathematical module and replace the existing local proofs.
+
+### Candidate: polynomial bond bounds and logarithmic entropy remainders (2026-10-23)
+
+`EntropyScaling.RenyiObstruction` and `EntropyScaling.VonNeumannObstruction`
+both convert `D ≤ C * (N + 1)^m` to a logarithmic bound, including `D = 0`,
+and use a little-o estimate to compare the logarithmic remainder with positive
+entropy growth. There are two independent occurrences. A third consumer should
+share the logarithmic integer-budget lemma and the elementary eventual comparison;
+there is no need for a new tactic.

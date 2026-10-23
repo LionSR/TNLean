@@ -5273,3 +5273,56 @@ The range correction is documented in
 \cite{gap:swvc08_von_neumann_error_range}; the two-boundary rank correction
 is documented in \cite{gap:swvc08_interior_block_bond_rank}.
 The unrestricted printed entropy statement is not asserted here.
+
+\begin{theorem}[Arbitrarily small linear entropy bounds]
+  \label{thm:efficient_mps_von_neumann_bound}
+  \lean{TNLean.MPS.AreaLaw.IsEfficientlyApproximableByMPS.exists_vonNeumann_bound}
+  \leanok
+  Let $(\psi_N)$ be a family of unit chain vectors of fixed local dimension,
+  indexed by any set of lengths, and let $R_N$ be chosen contiguous blocks.
+  If the family is efficiently approximable by MPS, then for every
+  $\varepsilon>0$ there are $K\in\mathbb R$ and $m\in\mathbb N$ such that
+  \begin{align}
+    \label{eq:efficient_mps_von_neumann_bound}
+    S_{\psi_N}(R_N)&\le K+m\log(N+1)+\varepsilon N
+  \end{align}
+  for every permitted length $N$.
+\end{theorem}
+\begin{proof}\leanok
+  \uses{thm:chain_von_neumann_block_error}
+  Choose the approximation accuracy
+  $\delta=\min(1/2,\varepsilon/(\log q+1))$.
+  Then $0<\delta<1$ and $(\delta/2)\log q\le\varepsilon$.
+  The polynomial bond bound gives
+  $\log D_N\le|\log C|+m_0\log(N+1)$, including $D_N=0$ under
+  $\log0=0$. Apply the block entropy bound and $|R_N|\le N$.
+\end{proof}
+
+\begin{theorem}[Linear von Neumann entropy obstructs efficient approximation]
+  \label{thm:mps_linear_von_neumann_obstruction}
+  \lean{TNLean.MPS.AreaLaw.not_isEfficientlyApproximableByMPS_of_linear_vonNeumann_growth}
+  \leanok
+  Let $(\psi_N)$ be a family of unit vectors indexed by an infinite set of
+  chain lengths. Suppose that there are constants $c,\eta>0$ and contiguous
+  blocks $R_N$ such that, for all sufficiently large permitted lengths,
+  \begin{align}
+    \label{eq:mps_linear_von_neumann_obstruction_hypotheses}
+    |R_N|&\ge\eta N,
+      &S_{\psi_N}(R_N)&\ge c|R_N|.
+  \end{align}
+  Then the family is not efficiently approximable by MPS.
+  No consistency between different lengths is assumed.
+\end{theorem}
+\begin{proof}\leanok
+  \uses{thm:efficient_mps_von_neumann_bound}
+  Efficient approximation, with $\varepsilon=c\eta/2$, would give
+  $c\eta N\le K+m\log(N+1)+(c\eta/2)N$.
+  Since $\log x=o(x)$, this is impossible for sufficiently large $N$.
+  An infinite set of natural lengths is unbounded.
+\end{proof}
+
+This proves the qualitative obstruction discussed in
+\cite{Schuch2008EntropyScaling}, lines 278--305 of the source, using the
+corrected finite estimates. The range and boundary corrections described in
+\cite{gap:swvc08_von_neumann_error_range,gap:swvc08_interior_block_bond_rank}
+do not change the qualitative conclusion.

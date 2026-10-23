@@ -13,4 +13,5 @@ import TNLean.MPS.AreaLaw.EntropyScaling.EfficientApproximation
 import TNLean.MPS.AreaLaw.EntropyScaling.RenyiApproximationLowerBound
 import TNLean.MPS.AreaLaw.EntropyScaling.RenyiObstruction
 import TNLean.MPS.AreaLaw.EntropyScaling.VonNeumannApproximationLowerBound
+import TNLean.MPS.AreaLaw.EntropyScaling.VonNeumannObstruction
 import TNLean.MPS.AreaLaw.EntropyScaling.VonNeumannSpectralTail
