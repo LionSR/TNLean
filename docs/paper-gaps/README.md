@@ -1350,3 +1350,14 @@ positive and the later estimate uses `‖M_L O_L‖` at most the threshold.
   the window length doubles, that the prefactor of that bound is the starting
   length `ξ₀` rather than `ξ₀/2`, and the implicit hypotheses `2 C₁ > 1` and
   `ln C₁ + C₂ ≥ 0`.
+
+### One-dimensional area law after Hastings: the decay length of Lemma 1
+
+[hastings07_lemma1_decay_length.tex](hastings07_lemma1_decay_length.tex)
+(clarification, resolved) records how the length `ξ = max(2v/ΔE, ξ_C)` of
+Hastings (arXiv:0705.2024v4, lines 96–112 and 139–142) is fixed on the chain.
+The printed Lieb–Robinson bound is read as decay `e^{-dist/ξ_C}` for
+`|t| ≤ dist/v`. The chain bound `a |X|² e^{v₀|t| - k/2}` admits every pair with
+`1/ξ_C ≤ 1/2 - v₀/v`. The pair `(8v₀, 8)` gives `ξ = 8 max(2v₀/ΔE, 1)`, the
+length used for Lemma 1, whose constant then depends only on `R`, `J`, `ΔE` and
+`ξ'`, not on the length of the chain.

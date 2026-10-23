@@ -378,18 +378,12 @@ $\|P_q(M)-P_q(H)\|\le\sqrt q\,\Delta E^{-1}\|M-H\|$ for Hermitian $M$, the gap
 bound and the first inequality of the display in
 \cite[lines 843--864]{Hastings2007AreaLaw}, with $M=M_L+M_B+M_R$.
 
-% Lean statement pending.
-\begin{theorem}[The cut-offs next to the time average]
-    \label{thm:hastings_moved_estimate}
-    \uses{thm:hastings_gaussian_time_average_gap,
-        thm:hastings_gaussian_time_average_stability, thm:hastings_cutoffs}
-    Let $M$ be Hermitian with $\|M-H\|\le\delta$, and let $O_L$, $O_R$ be
-    commuting orthogonal projections with $\|\Psi_0-O_LO_R\Psi_0\|\le\eta$. Then
-    \begin{align*}
-        \|P_q(M)\,O_LO_R-P_0\|\le e^{-q/2}+\sqrt q\,\Delta E^{-1}\delta+\eta,
-    \end{align*}
-    which is \cite[lines 865--876]{Hastings2007AreaLaw}.
-\end{theorem}
+For $M$ Hermitian with $\|M-H\|\le\delta$ and commuting orthogonal projections
+$O_L$, $O_R$ with $\|\Psi_0-O_LO_R\Psi_0\|\le\eta$,
+Theorem~\ref{thm:hastings_moved_estimate} gives
+$\|P_q(M)\,O_LO_R-P_0\|\le e^{-q/2}+\sqrt q\,\Delta E^{-1}\delta+\eta$, which is
+\cite[lines 865--876]{Hastings2007AreaLaw}; the cut-offs of
+Theorem~\ref{thm:hastings_cutoffs} supply $\eta$.
 
 The interaction picture $e^{i(A+B)t}=U(t)e^{iAt}$ and the Gaussian average
 $P_B$ of $U(t)$ are Definitions~\ref{def:hastings_interaction_propagator}
@@ -453,11 +447,16 @@ $X_{j-l+1,j+l}$.
 
 \subsection*{The factorization and its positive version}
 
-% Lean statement pending.
-% Planned: TNLean.MPS.AreaLaw.Hastings.ChainHamiltonian.exists_projectorFactorization and
-% ..._posSemidef.
 \begin{theorem}[Approximate factorization without positivity]
     \label{thm:hastings_projector_factorization}
+    \lean{TNLean.MPS.AreaLaw.exists_projectorFactorization,
+        TNLean.MPS.AreaLaw.exists_projectorFactorization_posSemidef,
+        TNLean.MPS.AreaLaw.exists_isFactorizationAt_sqrt_decay,
+        TNLean.MPS.AreaLaw.lemmaOneLength,
+        TNLean.MPS.AreaLaw.Hastings.lemmaOne_errorBudget,
+        TNLean.MPS.AreaLaw.isFactorizationAt_zero_one_one,
+        Matrix.IsGappedGroundState.sub_smul_one}
+    \leanok
     \uses{thm:hastings_three_way_splitting_sum,
         thm:hastings_three_way_splitting_supports,
         thm:hastings_filtered_no_ground_component,
@@ -500,7 +499,35 @@ $X_{j-l+1,j+l}$.
     added to \cite{Hastings2007AreaLaw} (lines 912--913) records that the
     construction need not give a Hermitian positive $O_B$, while its other
     properties hold.
+
+    In the formalization, $v$ and $\xi_C$ are the Lieb--Robinson pair
+    $(8v_0,8)$, where $v_0$ is the velocity of
+    Theorem~\ref{thm:chain_lieb_robinson}, so that
+    $\xi=8\max(2v_0/\Delta E,1)$, an admissible choice of the source's
+    length~\cite{gap:hastings07_lemma1_decay_length}. The constant $C_1$ then
+    depends only on $R$, $J$, $\Delta E$ and $\xi'$: it is the same for every
+    length of the chain, every local dimension and every gapped ground state.
+    Replacing $O_B$ by $O_B^\dagger O_B$ gives the positive version at the rate
+    $e^{-l/(2\xi')}$, as in Theorem~\ref{thm:hastings_positive_factorization}.
 \end{theorem}
+\begin{proof}\leanok
+    \uses{thm:hastings_cutoff_pair, thm:hastings_moved_estimate,
+        thm:hastings_boundary_factorization, thm:hastings_decay_slack,
+        thm:hastings_positive_factorization}
+    Shift $H$ by its ground energy. For $l\ge12R+8$ take $s=2l/(3\xi)$,
+    $\theta=e^{-s/4}$, $T=s/\Delta E$, $k=\lceil l/4\rceil$, $m=R+k$ and
+    $\ell'=l-3R-2k$. Theorem~\ref{thm:hastings_cutoff_pair} gives $O_L$,
+    $O_R$ and $H_0=M_L+M_R$. Theorem~\ref{thm:hastings_moved_estimate}, with
+    the shifted Hamiltonian in both places, bounds the time average next to
+    $O_LO_R$, and Theorem~\ref{thm:hastings_boundary_factorization} produces
+    $O_B$ on the sites within $m+2R+k+\ell'=l$ of the cut. Each of the
+    resulting error terms is at most $(a+b\sqrt l)e^{-l/(6\xi)}$ with $a$,
+    $b$ depending only on $R$, $J$ and $\Delta E$; the polynomial factors are
+    absorbed by the slack between the rates $l/8$ and $l/(6\xi)\le l/48$. For
+    $l<12R+8$ the factorization $O_B=0$, $O_L=O_R=1$ has error $1$, which the
+    constant absorbs. Theorem~\ref{thm:hastings_decay_slack} converts the
+    square-root bound into $C_1e^{-l/\xi'}$ for every $\xi'>6\xi$.
+\end{proof}
 
 \begin{theorem}[An effect operator from an approximate factorization]
     \label{thm:hastings_effect_from_factorization}
