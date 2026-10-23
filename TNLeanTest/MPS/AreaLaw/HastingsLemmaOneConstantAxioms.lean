@@ -22,7 +22,8 @@ run_cmd do
     ``TNLean.MPS.AreaLaw.exists_isFactorizationAt_lemmaOneConst,
     ``TNLean.MPS.AreaLaw.sixteen_le_lemmaOneLength_and_le,
     ``TNLean.MPS.AreaLaw.lemmaOneConst_le_pow,
-    ``TNLean.MPS.AreaLaw.exists_projectorFactorization_pow] do
+    ``TNLean.MPS.AreaLaw.exists_projectorFactorization_pow,
+    ``TNLean.MPS.AreaLaw.exists_projectorFactorization_posSemidef_pow] do
     unless (← Lean.getEnv).contains decl do
       throwError "Missing declaration {decl}"
     let axioms ← Lean.collectAxioms decl

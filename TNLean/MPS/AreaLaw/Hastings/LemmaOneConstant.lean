@@ -34,9 +34,11 @@ site, so `ξ̂` is not shown to be the source's `max(2v/ΔE, ξ_C)` for a pair s
 * `lemmaOneConst_le_pow`: `lemmaOneConst R x 1 (κ ξ̂) ≤ K ξ̂³` for every `x ≥ 0`, with
   `ξ̂ = lemmaOneLength R x 1`.
 * `exists_projectorFactorization_pow`: Lemma 1 with `C₁ = K ξ̂³` at the rate `κ ξ̂`.
+* `exists_projectorFactorization_posSemidef_pow`: its positive form, at half the rate.
 -/
 
 open Matrix Real
+open scoped ComplexOrder
 
 namespace TNLean.MPS.AreaLaw
 
@@ -204,5 +206,44 @@ theorem exists_projectorFactorization_pow (R : ℕ) {κ : ℝ} (hκ : 6 < κ) :
     (h.smul ΔE⁻¹ (inv_nonneg.mpr hΔ.le)) hgs' c l
   rw [div_eq_inv_mul]
   exact ⟨OB, OL, OR, hF.mono (mul_le_mul_of_nonneg_right (hK hx) (exp_pos _).le)⟩
+
+/-- **The positive form of Lemma 1, with a polynomial constant.** For `κ > 6` there is a
+constant `K ≥ 0`, depending only on `R` and `κ`, such that under the hypotheses of
+`exists_projectorFactorization_pow`, at every cut `c` and length `l`, `O_B` can be taken
+positive semidefinite with `‖O_B O_L O_R − P₀‖ ≤ K ξ̂³ e^{-l/(2κ ξ̂)}`, at half the rate.
+Hastings, arXiv:0705.2024v4, `law16.tex`, Lemma 1 (lines 246–267) and the note added
+(lines 912–1003), as recorded in `docs/paper-gaps/hastings07_lemma1_positivity_rate.tex`, with
+the restrictions of the module docstring. -/
+theorem exists_projectorFactorization_posSemidef_pow (R : ℕ) {κ : ℝ} (hκ : 6 < κ) :
+    ∃ K : ℝ, 0 ≤ K ∧ ∀ {J ΔE : ℝ}, 0 ≤ J → 0 < ΔE →
+      ∀ {L q : ℕ} [NeZero q] (h : ChainHamiltonian L q R J) {E₀ : ℝ}
+      {Ω : EuclideanSpace ℂ (Fin L → Fin q)}, IsGappedGroundState h.operator E₀ Ω ΔE →
+      ∀ c l : ℕ, ∃ OB OL OR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ, OB.PosSemidef ∧
+        IsFactorizationAt Ω c l (K * lemmaOneLength R (J / ΔE) 1 ^ 3 *
+          exp (-(l / (2 * (κ * lemmaOneLength R (J / ΔE) 1))))) OB OL OR := by
+  obtain ⟨K, hK0, hK⟩ := lemmaOneConst_le_pow R hκ
+  refine ⟨(√2 + 4) * (K + 1), by positivity, fun {J ΔE} hJ hΔ {L q} _ h E₀ Ω hgs c l ↦ ?_⟩
+  have hx : 0 ≤ ΔE⁻¹ * J := mul_nonneg (inv_nonneg.mpr hΔ.le) hJ
+  have hξ0 := lemmaOneLength_pos R (ΔE⁻¹ * J) 1
+  have hgs' := hgs.smul (inv_nonneg.mpr hΔ.le)
+  rw [inv_mul_cancel₀ hΔ.ne', ← h.smul_operator _ (inv_nonneg.mpr hΔ.le)] at hgs'
+  obtain ⟨OB, OL, OR, hOB, hF⟩ := exists_posSemidef_isFactorizationAt_of_sqrt_decay hgs.1 hξ0
+    (ξ' := κ * lemmaOneLength R (ΔE⁻¹ * J) 1) (by nlinarith)
+    (le_max_of_le_right (exp_pos _).le) (lemmaOneBudgetB_nonneg one_pos (by positivity))
+    (exists_isFactorizationAt_sqrt_decay R hx one_pos
+      (h.smul ΔE⁻¹ (inv_nonneg.mpr hΔ.le)) hgs' c l)
+  rw [div_eq_inv_mul]
+  refine ⟨OB, OL, OR, hOB, hF.mono (mul_le_mul_of_nonneg_right ?_ (exp_pos _).le)⟩
+  -- `√C₁ ≤ C₁ + 1 ≤ (K + 1) ξ̂³`
+  set ξ := lemmaOneLength R (ΔE⁻¹ * J) 1
+  have hC := hK hx
+  have h3 : 1 ≤ ξ ^ 3 := one_le_pow₀ (by linarith [(sixteen_le_lemmaOneLength_and_le R hx).1])
+  have hC0 := lemmaOneConst_nonneg R (one_pos : (0 : ℝ) < 1) (κ * ξ) (J := ΔE⁻¹ * J)
+  have hs : √(lemmaOneConst R (ΔE⁻¹ * J) 1 (κ * ξ)) ≤ (K + 1) * ξ ^ 3 := by
+    refine (sqrt_le_left (by positivity)).mpr ?_
+    nlinarith
+  calc (√2 + 4) * √(lemmaOneConst R (ΔE⁻¹ * J) 1 (κ * ξ))
+      ≤ (√2 + 4) * ((K + 1) * ξ ^ 3) := by gcongr
+    _ = (√2 + 4) * (K + 1) * ξ ^ 3 := by ring
 
 end TNLean.MPS.AreaLaw
