@@ -105,12 +105,21 @@ jobs:
             sleep 5
           done
           sudo dpkg --configure -a || true
+          # A crawling Azure mirror is the usual cause; fetch the retry from the
+          # main archive instead.
+          for f in /etc/apt/sources.list /etc/apt/sources.list.d/*.list \
+              /etc/apt/sources.list.d/*.sources; do
+            if [ -f "$f" ]; then
+              sudo sed -i \
+                's#http://azure\.archive\.ubuntu\.com/ubuntu#http://archive.ubuntu.com/ubuntu#g' "$f"
+            fi
+          done
 
       - name: Install system dependencies (retry)
         if: steps.blueprint-system-deps-1.outcome == 'failure'
         # A slow mirror can need more than one attempt; the packages fetched by the
         # first attempt stay in the archive directory, so the retry resumes.
-        timeout-minutes: 20
+        timeout-minutes: 45
         uses: texra-ai/lean-env-action/blueprint-system-deps@v1
         with:
           # texlive-fonts-extra supplies dsfont, which paper-gap notes load;
@@ -233,12 +242,21 @@ jobs:
             sleep 5
           done
           sudo dpkg --configure -a || true
+          # A crawling Azure mirror is the usual cause; fetch the retry from the
+          # main archive instead.
+          for f in /etc/apt/sources.list /etc/apt/sources.list.d/*.list \
+              /etc/apt/sources.list.d/*.sources; do
+            if [ -f "$f" ]; then
+              sudo sed -i \
+                's#http://azure\.archive\.ubuntu\.com/ubuntu#http://archive.ubuntu.com/ubuntu#g' "$f"
+            fi
+          done
 
       - name: Install system dependencies (retry)
         if: steps.blueprint-system-deps-2.outcome == 'failure'
         # A slow mirror can need more than one attempt; the packages fetched by the
         # first attempt stay in the archive directory, so the retry resumes.
-        timeout-minutes: 20
+        timeout-minutes: 45
         uses: texra-ai/lean-env-action/blueprint-system-deps@v1
         with:
           cache-suffix: web-v3
