@@ -101,7 +101,7 @@
           "issues": [
             9821
           ],
-          "physics": "The operator <i>A</i> = ((1 − <i>H</i>/<i>n</i>)/(1 − ε<sub>0</sub>/<i>n</i>))<sup><i>m</i></sup> fixes Γ and shrinks every vector orthogonal to it by a factor ((1 − ε<sub>1</sub>/<i>n</i>)/(1 − ε<sub>0</sub>/<i>n</i>))<sup><i>m</i></sup>, which is polynomially small for <i>m</i> of order (<i>n</i>/ε) log <i>n</i>. Expanding the power writes <i>A</i> as an average over words in the local projectors 1 − <i>H<sub>i</sub></i>. A word in which the term at a cut occurs at most <i>k</i> times has operator Schmidt rank at most <i>d</i><sup>2<i>k</i></sup> across that cut.",
+          "physics": "The operator <i>A</i> = ((1 − <i>H</i>/<i>n</i>)/(1 − ε<sub>0</sub>/<i>n</i>))<sup><i>m</i></sup> fixes Γ and shrinks every vector orthogonal to it by a factor ((1 − ε<sub>1</sub>/<i>n</i>)/(1 − ε<sub>0</sub>/<i>n</i>))<sup><i>m</i></sup>, which is polynomially small for <i>m</i> of order (<i>n</i>/ε) log <i>n</i>. Expanding the power writes <i>A</i> as an average over words in the local factors 1 − <i>H<sub>i</sub></i>, each a positive contraction since 0 ≤ <i>H<sub>i</sub></i> ≤ 1. A word in which the term at a cut occurs at most <i>k</i> times has operator Schmidt rank at most <i>d</i><sup>2<i>k</i></sup> across that cut.",
           "delivers": "An operator that drives any state with constant overlap back to overlap 1 − 1/poly(<i>n</i>) with Γ, and a decomposition of it into words of controlled Schmidt rank at each cut."
         },
         {
