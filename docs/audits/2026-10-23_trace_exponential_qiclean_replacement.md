@@ -2,10 +2,12 @@
 
 Date: 2026-10-23.
 
-This audit compares TNLean #10026 at
-`68f1c1a8ebe9ffcb0bec078125db931a4dbb005f` with QICLean #908 at
-`50f568444d5bb7f693691ad6652d7274c0810086`. The migration is prepared locally;
-publication is deferred until QICLean #908 merges. No dependency pin is changed.
+This audit records the removal of the generic trace-exponential results from
+TNLean #10026 at `68f1c1a8ebe9ffcb0bec078125db931a4dbb005f` after their extraction
+in QICLean #908, merged as `65a8ec814dbac7063859ac13b2c406b85ad2b8e6`. The merged
+proof module, tests, and blueprint section are identical to the reviewed source
+at `50f568444d5bb7f693691ad6652d7274c0810086`. No dependency pin is changed: no
+Lean consumer of these results remains in this TNLean change.
 
 ## Ownership and replacements
 
@@ -59,16 +61,16 @@ theorem entries, their six declaration tags, and their internal dependencies
 are removed. The Hastings bibliography entry remains in use. No new source
 claim or proof-completion tag is introduced.
 
-## Validation and release condition
+## Validation
 
 The six statement/proof comparisons were checked directly against the recorded
 revisions. Generated imports, absence of residual declaration and blueprint
 references, blueprint source synchronization, prose, formatting, and LaTeX
-checks are the relevant local validations for this deletion and documentation
-change. No new Lean proof is introduced, no cache is copied or mutated, and no
-fresh Lake build is claimed. The author's `worktrees/ef-cluster1` is untouched.
+checks passed for this deletion and documentation change. No new Lean proof is
+introduced, no cache is copied or mutated, and no fresh Lake build is claimed. The author's `worktrees/ef-cluster1` is untouched.
 
-Before publication, verify the merged QICLean revision contains the compared
-statements, reconcile any later #10026 edits, and update the PR description to
-identify QICLean as the owner of the generic results. Keep the TNLean dependency
-pin unchanged until a deliberate post-merge dependency update is needed.
+The merged QICLean revision was checked against the compared statements, and
+the TNLean PR head remained at `68f1c1a8ebe9ffcb0bec078125db931a4dbb005f` before
+publication. The PR description identifies QICLean as the owner of the generic
+results. A future Lean consumer must select a QICLean revision containing the
+extraction; the present prose-only reference requires no dependency update.
