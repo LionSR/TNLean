@@ -111,7 +111,7 @@ of a gapped chain combines them with the factorization of
     $\epsilon\ge\sqrt P$ the bound is trivial.
 \end{proof}
 
-\begin{theorem}[Overlaps and the tail of the Schmidt coefficients]
+\begin{theorem}[Overlap with a vector of bounded Schmidt rank]
     \label{thm:hastings_schmidt_overlap_tail}
     \lean{TNLean.MPS.AreaLaw.Hastings.normSq_dotProduct_le_kyFanNorm}
     \leanok
@@ -124,7 +124,7 @@ of a gapped chain combines them with the factorization of
     $\|\cdot\|_{(K)}$ is the sum of the $K$ largest eigenvalues.
 \end{theorem}
 \begin{proof}\leanok
-    For $\psi=0$ both sides of the first statement vanish. Otherwise,
+    For $\psi=0$ both sides vanish. Otherwise,
     normalizing $\psi$ reduces it to the variational
     characterization of the maximal overlap with states of Schmidt rank at most
     $K$ by the Ky Fan norm.
