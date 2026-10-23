@@ -204,8 +204,8 @@ theorem norm_sub_starProjection_apply_le_of_gaussianFilteredTerm {q ΔE : ℝ} (
     rw [hMxz, map_add]; abel
   have hz : ‖z - K.starProjection z‖ ≤ ‖z‖ := by
     have := K.starProjection_add_starProjection_orthogonal z
-    rw [show z - K.starProjection z = Kᗮ.starProjection z by
-      rw [← this, add_sub_cancel_left]]
+    rw [show z - K.starProjection z = Kᗮ.starProjection z from
+      sub_eq_iff_eq_add'.mpr this.symm]
     exact Kᗮ.norm_starProjection_apply_le z
   have hzψ : ‖z‖ ≤ ‖gaussianFilteredTerm q ΔE H W - M‖ * ‖ψ‖ := by
     rw [norm_sub_rev, ← l2_opNorm_toEuclideanCLM]
