@@ -114,8 +114,8 @@ error $\varepsilon$ that is left free.
     Theorem~\ref{thm:hastings_schmidt_diagonal_operator}, which then applies.
 \end{proof}
 
-\begin{lemma}[The correlation lemma]
-    \label{lem:hastings_fwdback}
+\begin{theorem}[The correlation lemma]
+    \label{thm:hastings_fwdback}
     \lean{TNLean.MPS.AreaLaw.exists_norm_inner_mul_sub_le,
         IsStarProjection.posSemidef}
     \leanok
@@ -149,7 +149,7 @@ error $\varepsilon$ that is left free.
         gap:hastings07_gaussian_average_exponent}. The bound is on the
     modulus of the difference, which is stronger than the printed one-sided
     bound.
-\end{lemma}
+\end{theorem}
 \begin{proof}\leanok
     \uses{thm:hastings_projector_factorization,
         thm:hastings_schmidt_diagonal_chain}
