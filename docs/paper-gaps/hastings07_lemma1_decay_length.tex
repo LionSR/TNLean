@@ -42,21 +42,32 @@ Any pair $(v,\xi_C)$ for which this holds may be used.
 
 \section{The estimate used on the chain}
 
-The chain localization estimate used for range-$R$ Hamiltonians with terms
-of norm at most $J$ has the factor $a|X|^2e^{v_0|t|-k/2}$ at distance $k$,
-with $a$ and $v_0$ depending on $R$ and $J$. For $|t|\le k/(8v_0)$,
+For range-$R$ Hamiltonians with terms of norm at most $J$, the chain
+commutator bound for $A$ supported on $X$ and $B$ supported on a single
+site $y$ is
 \begin{align}
-    a|X|^2e^{v_0|t|-k/2}
-    \le a|X|^2e^{-3k/8}\le a|X|^2e^{-k/8}.
-    \label{eq:hastings07_lemma1_decay_length_pair}
+    \|[A(t),B]\|\le C|X|\,\|A\|\,\|B\|\,e^{v_0|t|-\operatorname{dist}(X,y)/2},
+    \label{eq:hastings07_lemma1_decay_length_chain}
 \end{align}
-This comparison concerns the exponential factor. It retains the quadratic
-support factor and the dependence of $a$ on the interaction parameters;
-it does not establish the source's bound with a linear factor $|X|$ and a
-numerical prefactor for arbitrary supports. Absorbing polynomial factors
-for the particular windows used in the factorization is not such a bound.
-Thus this argument does not identify $(8v_0,8)$ as a Lieb--Robinson pair
-satisfying the source's full estimate.
+with $C=2+4|b_0|e^{2R}$, $v_0=2(R+1)|b_0|e^{2R}+1$ and $b_0=2^{2R+1}J$.%
+\footnote{\leanid{TNLean.MPS.AreaLaw.norm_heisenberg_commutator_le_chainDistance}
+    in \doclink{TNLean/MPS/AreaLaw/LiebRobinson}.}
+Its support factor is linear in $|X|$, as in
+(\ref{eq:hastings07_lemma1_decay_length_lrb}). The factorization uses it
+through a partial-trace localization onto the $k$-neighbourhood of $X$,
+whose error carries $|X|^2$. There $X$ is the support of a commutator
+$[H,W]$ with at most $6R$ sites, so the square changes only a constant
+depending on $R$, not the length or the rate. The estimate
+(\ref{eq:hastings07_lemma1_decay_length_chain}) still differs from
+(\ref{eq:hastings07_lemma1_decay_length_lrb}) in two ways:
+\begin{itemize}
+    \item its prefactor $C$ grows with $J$, whereas the source's $c$ is a
+          numerical constant;
+    \item $B$ acts on a single site rather than on an arbitrary set $Y$.
+\end{itemize}
+For these reasons $(v_0,2)$, or any pair derived from it, is not shown to
+be a Lieb--Robinson pair in the sense of
+(\ref{eq:hastings07_lemma1_decay_length_lrb}).
 
 The factorization uses the length
 \begin{align}
@@ -65,11 +76,27 @@ The factorization uses the length
 \end{align}
 It has the algebraic form of
 (\ref{eq:hastings07_lemma1_decay_length_source}), but its justification here
-is the chain localization estimate and the explicit error bounds of the
+is the chain estimate and the explicit error bounds of the
 construction.\footnote{\leanid{TNLean.MPS.AreaLaw.lemmaOneLength}
     and \leanid{TNLean.MPS.AreaLaw.exists_projectorFactorization} in
     \doclink{TNLean/MPS/AreaLaw/Hastings/ProjectorFactorization}.}
-For this $\xi$, the construction gives a contraction $O_B$ without a
+Because of the constant term of $v_0$, the length
+(\ref{eq:hastings07_lemma1_decay_length_value}) is not homogeneous in
+$(J,\Delta E)$. Lemma~1 concerns only the ground state, so it may be
+applied to $H/\Delta E$, whose gap is $1$ and whose terms have norm at most
+$J/\Delta E$. With $v_0=1+c_RJ$ and $c_R=2(R+1)2^{2R+1}e^{2R}$, this gives
+Lemma~1 with the length
+\begin{align}
+    \hat\xi=16\bigl(1+c_RJ/\Delta E\bigr)\le2\max(2v/\Delta E,16),
+    \qquad v=8c_RJ,
+    \label{eq:hastings07_lemma1_decay_length_scaled}
+\end{align}
+which depends on $J$ and $\Delta E$ only through $J/\Delta E$, with $v$
+proportional to $J$, as in the source.\footnote{\leanid{TNLean.MPS.AreaLaw.lemmaOneLength_div}
+    and \leanid{TNLean.MPS.AreaLaw.exists_projectorFactorization_div} in
+    \doclink{TNLean/MPS/AreaLaw/Hastings/ProjectorFactorizationScaling}.}
+
+For either length, the construction gives a contraction $O_B$ without a
 positivity assertion and error $C_1e^{-l/\xi'}$ for every $\xi'>6\xi$.
 The endpoint $\xi'=6\xi$ is not established by this argument; no
 counterexample to the endpoint factorization is asserted. The remaining
@@ -84,26 +111,33 @@ Lemma~1 requires $C_1(\xi)$ to be bounded by a polynomial in $\xi$.
 \footnote{\path{References/0705.2024/law16.tex}, lines~258--262.}
 The theorem presently proves only the existence of a constant depending
 on $R$, $J$, $\Delta E$ and $\xi'$, uniform in the chain length, local
-dimension, ground state, cut and window length. No polynomial bound in
-$\xi$ alone has been established. In particular, the explicit coefficients
-retain separate factors involving $J^2/\Delta E$ and $1/\Delta E$;
-uniformity in the chain length does not remove that dependence.
+dimension, ground state, cut and window length. In the unscaled statement
+the explicit coefficients are not homogeneous in the energy scale: they
+contain terms such as $2/\Delta E$ and $J^2/\Delta E$, so no bound in $\xi$
+alone is possible there. In the statement for $H/\Delta E$ every coefficient
+is a polynomial in $J/\Delta E$, and $J/\Delta E\le\hat\xi/(16c_R)$; the
+absorption of $\sqrt l$ costs $1/\sqrt{1/(6\hat\xi)-1/\xi'}$, which is
+$O(\sqrt{\hat\xi})$ for $\xi'=\kappa\hat\xi$ with a fixed $\kappa>6$. A
+polynomial bound on $C_1$ in $\hat\xi$, with coefficients depending on $R$
+and $\kappa$, therefore follows once the constant is made explicit. This
+has not yet been done.
 
 \section{Remaining work}
 
-To recover the source's quantitative statement, establish a
-Lieb--Robinson estimate with its stated support dependence and controlled
-prefactor, and justify the corresponding velocity and length scale.
-Then bound the factorization constant by a polynomial in that length,
-with the source's parameter dependence. This requires accounting for
-energy rescaling, the localization and cutoff constants, and the
-short-length estimate. A bound allowing $\xi'>6\xi$ must also state its
-dependence on the positive difference of reciprocal lengths
-$1/(6\xi)-1/\xi'$; it does not settle the endpoint.
-These tasks, together with the endpoint rate, remain part of
-\ghissue{9811}. The separate blueprint entry for the printed Lemma~1
-remains unmarked as proved. The established factorization with the stated
-restrictions does not complete the source's full quantitative result.
+\begin{itemize}
+    \item Make $C_1$ explicit and bound it by a polynomial in $\hat\xi$ at
+          $\xi'=\kappa\hat\xi$, as outlined above. For the source's
+          nearest-neighbour terms ($R=1$) the coefficients are then numerical.
+    \item Establish a Lieb--Robinson estimate in the form
+          (\ref{eq:hastings07_lemma1_decay_length_lrb}): a numerical
+          prefactor, the factor $|X|$, and $B$ on an arbitrary set. Only then
+          is $(v,\xi_C)$ identified as a source pair.
+    \item The endpoint $\xi'=6\xi$ remains open.
+\end{itemize}
+These tasks remain part of \ghissue{9811}. The separate blueprint entry for
+the printed Lemma~1 remains unmarked as proved. The established
+factorization with the stated restrictions does not complete the source's
+full quantitative result.
 
 \bibliographystyle{alpha}
 \bibliography{references}
