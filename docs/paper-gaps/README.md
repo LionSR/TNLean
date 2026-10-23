@@ -1360,7 +1360,7 @@ positive and the later estimate uses `‖M_L O_L‖` at most the threshold.
   sign; the corrected minus sign preserves the obstruction from
   super-logarithmic entropy growth. The Lean development remains open in #9857.
 
-- [swvc08_truncation_squared_norm.tex](swvc08_truncation_squared_norm.tex)
+- [`swvc08_truncation_squared_norm.tex`](swvc08_truncation_squared_norm.tex)
   (false source, resolved) records the missing square in the displayed truncation
   bound of Schuch–Wolf–Verstraete–Cirac, arXiv:0705.0292v2, lines 239–245. A two-qubit
   state disproves the printed norm estimate. The note compares the corrected
