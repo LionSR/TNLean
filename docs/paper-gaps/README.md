@@ -1359,3 +1359,11 @@ positive and the later estimate uses `‖M_L O_L‖` at most the threshold.
   (arXiv:0705.0292v2). A flat Schmidt spectrum disproves the printed plus
   sign; the corrected minus sign preserves the obstruction from
   super-logarithmic entropy growth. The Lean development remains open in #9857.
+
+- [`swvc08_interior_block_bond_rank.tex`](swvc08_interior_block_bond_rank.tex)
+  (false source, resolved) distinguishes a boundary block, of rank at most
+  `D`, from an interior contiguous block, of rank at most `D²`. Two Bell
+  pairs on four sites attain the latter bound and disprove the printed
+  `log D` entropy bound even at zero approximation error. Replacing it by
+  `2 log D` preserves the asymptotic obstruction; the full Lean result
+  remains open in #9857.
