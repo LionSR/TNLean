@@ -9014,3 +9014,14 @@ spectral split → block extraction → MPV calculation → strict bounds
   built on `Lattice.Sheet.birth_bounded`, `Real.rpow_neg_ofNat` and
   `Lattice.hasSourceBoundedChange_liftOne`. The stage births call it with an
   empty prefix and the scalar idle vector; the former private copy is removed.
+
+### Intersecting a nearest-neighbour support with a cut interval — candidate (2026-10-23)
+
+- **Pattern:** Apply finite-set extensionality, simplify interval membership and
+  equality of finite indices with `Fin.ext_iff`, then close the endpoint arithmetic
+  with `omega`.
+- **Seen:** Two three-line arguments in
+  `MPS/AreaLaw/TwoCutEdgeSupports.lean`, proving the two singleton intersections.
+- **Existing simplification:** `mem_interval` and `Fin.ext_iff` already express the
+  required normal form. The occurrences are in one file; no additional helper or
+  tactic is proposed at this stage.
