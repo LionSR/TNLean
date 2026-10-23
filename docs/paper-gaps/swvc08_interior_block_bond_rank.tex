@@ -1,0 +1,69 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+\input{command}
+\setlength{\emergencystretch}{2em}
+\title{The Two-Boundary Rank of an Interior Block in SWVC08}
+\author{}
+\date{October 23, 2026}
+\begin{document}
+\maketitle
+\gapnote{local-correction}{resolved}
+
+\section{The source statement}
+
+The entropy estimates of~\cite{Schuch2008EntropyScaling} bound the entropy of
+a block of a state approximated by a matrix product state $\phi$ of bond
+dimension $D$ through the rank of the block's reduced matrix, and use the
+single-bond expression $\log D$ for that rank.\footnote{\path{paper_v2.tex},
+    lines~269--305.}
+
+\section{The point at issue}
+
+The single-bond expression counts one cut. A prefix (or suffix) of an
+open-boundary matrix product state is separated from its complement by a
+single cut, and its reduced matrix has rank at most $D$. An interior block,
+written as a difference of nested prefixes $B=T\setminus R$, is separated by
+two cuts. Its reduced-matrix rank is bounded by the product of the two
+complementary cut ranks,
+\begin{align}
+    \operatorname{rank}\rho_{\phi,B}
+      &\le\operatorname{rank}\rho_{\phi,R}\,
+        \operatorname{rank}\rho_{\phi,T}
+      \le D\cdot D=D^2.
+    \label{eq:swvc08_interior_rank_product}
+\end{align}
+Using $\log D$ in place of $\log(D^2)$ therefore understates the rank budget
+of an interior block by a factor of two in the logarithm.
+
+\section{The corrected statement}
+
+For an interior block the rank budget is $\max(1,D)^2$, and its logarithmic
+contribution is
+\begin{align}
+    \log\bigl(\max(1,D)^2\bigr)&=2\log D,
+    \label{eq:swvc08_interior_two_log}
+\end{align}
+with the convention $\log0=0$, so chains of length zero or one and bond
+dimension zero are included. At an endpoint one of the two cut ranks is at
+most one, and (\ref{eq:swvc08_interior_rank_product}) recovers the single-bond
+value $\log D$ for a prefix or suffix. The corrected factor two enters both
+the R\'enyi and the von Neumann block
+bounds.\footnote{\leanid{TNLean.MPS.AreaLaw.IsOpenMPS.rank_regionState_sdiff_leftBlock_le_sq}
+    and \leanid{TNLean.MPS.AreaLaw.IsOpenMPS.renyiEntropy_sdiff_leftBlock_add_log_error_le_two_log}
+    in \doclink{TNLean/MPS/AreaLaw/EntropyScaling/RenyiApproximationLowerBound};
+    \leanid{TNLean.MPS.AreaLaw.IsOpenMPS.regionEntropy_sdiff_leftBlock_le_two_log_add_half_error}
+    in \doclink{TNLean/MPS/AreaLaw/EntropyScaling/VonNeumannApproximationLowerBound}.}
+
+\section{Conclusion}
+
+The verdict is a resolved local correction: the single-bond expression is
+correct for a boundary block but understates an interior block, whose two cuts
+give the rank bound (\ref{eq:swvc08_interior_rank_product}) and hence the
+logarithmic contribution (\ref{eq:swvc08_interior_two_log}).
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}

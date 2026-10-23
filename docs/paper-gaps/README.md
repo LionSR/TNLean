@@ -1350,3 +1350,22 @@ positive and the later estimate uses `‖M_L O_L‖` at most the threshold.
   the window length doubles, that the prefactor of that bound is the starting
   length `ξ₀` rather than `ξ₀/2`, and the implicit hypotheses `2 C₁ > 1` and
   `ln C₁ + C₂ ≥ 0`.
+
+## Entropy scaling and simulability by MPS, arXiv:0705.0292 (SWVC08)
+
+- [`swvc08_renyi_bond_dimension_sign.tex`](swvc08_renyi_bond_dimension_sign.tex)
+  (local correction, resolved) records that the printed Rényi approximation
+  bound carries the error logarithm `(α/(α-1)) log(1-ε)` on the wrong side, so
+  that it would sharpen the entropy bound below `log D` instead of weakening it,
+  and states the corrected inequality that keeps the error term on the entropy
+  side.
+- [`swvc08_interior_block_bond_rank.tex`](swvc08_interior_block_bond_rank.tex)
+  (local correction, resolved) records that the single-bond expression `log D`
+  is the prefix (one-cut) rank budget, that an interior block has two cuts and
+  rank at most `D²`, and that its logarithmic contribution is therefore
+  `2 log D`, recovering `log D` at an endpoint.
+- [`swvc08_von_neumann_error_range.tex`](swvc08_von_neumann_error_range.tex)
+  (local correction, resolved) records that the von Neumann entropy estimate
+  with the half-error continuity term holds in the small-error range `δ < 1`,
+  that this range is the hypothesis carried by the formalized statement, and
+  that the qualitative linear-entropy obstruction is unaffected.

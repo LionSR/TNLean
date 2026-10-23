@@ -1,0 +1,71 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+\input{command}
+\setlength{\emergencystretch}{2em}
+\title{The Small-Error Range of the von Neumann Entropy Bound of SWVC08}
+\author{}
+\date{October 23, 2026}
+\begin{document}
+\maketitle
+\gapnote{local-correction}{resolved}
+
+\section{The source statement}
+
+The entropy obstruction of~\cite{Schuch2008EntropyScaling} bounds the von
+Neumann entropy of a block $R$ of a unit vector $\psi$ on a chain of local
+dimension $q$, approximated by a matrix product state $\phi$ of bond dimension
+$D$ with trace error $\delta=\lVert\ketbra{\psi}{\psi}-\ketbra{\phi}{\phi}\rVert_1$,
+by a rank term together with a continuity term controlled by the error. For a
+prefix $R$ the estimate is
+\begin{align}
+    S_\psi(R)&\le\log D+\frac{\delta}{2}\lvert R\rvert\log q+\log2.
+    \label{eq:swvc08_von_neumann_prefix}
+\end{align}
+The source presents this estimate without restricting the error $\delta$ to
+which it applies.\footnote{\path{paper_v2.tex}, lines~269--305, and the
+    obstruction, lines~278--305.}
+
+\section{The point at issue}
+
+The continuity term in (\ref{eq:swvc08_von_neumann_prefix}) comes from a
+Fannes-type estimate of the entropy difference between the exact reduced state
+and the approximant's reduced state, controlled by their trace distance. That
+estimate is informative only when the error is strictly below one: at
+$\delta\ge1$ the two rank-one matrices may be orthogonal, the reduced states
+need share no support, and the entropy difference is no longer controlled by
+$\delta$. The half-error coefficient $\delta/2$ and the additive $\log2$ are
+features of the small-error regime, so the estimate must carry the hypothesis
+$\delta<1$.
+
+\section{The corrected statement}
+
+Under $\delta<1$, every prefix $R$ satisfies
+(\ref{eq:swvc08_von_neumann_prefix}), and every interior block satisfies the
+two-boundary form
+\begin{align}
+    S_\psi(R)&\le2\log D+\frac{\delta}{2}\lvert R\rvert\log q+\log2,
+    \label{eq:swvc08_von_neumann_block}
+\end{align}
+with the factor two recorded in the companion note
+\path{swvc08_interior_block_bond_rank.tex}. The approximant $\phi$ need not be
+normalized. Empty and full prefixes, boundary blocks, whole chains, and chains
+of length zero or one are included, with
+$\log0=0$.\footnote{\leanid{TNLean.MPS.AreaLaw.IsOpenMPS.regionEntropy_leftBlock_le_log_add_half_error}
+    and \leanid{TNLean.MPS.AreaLaw.IsOpenMPS.regionEntropy_sdiff_leftBlock_le_two_log_add_half_error}
+    in \doclink{TNLean/MPS/AreaLaw/EntropyScaling/VonNeumannApproximationLowerBound}.}
+These corrected finite estimates feed the linear-entropy obstruction, which is
+qualitative and so unaffected by the restriction of the range.
+
+\section{Conclusion}
+
+The verdict is a resolved local correction: the entropy estimate
+(\ref{eq:swvc08_von_neumann_prefix}) holds in the small-error range
+$\delta<1$, and the formalized statement carries that hypothesis. The
+unrestricted printed statement is not asserted.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}

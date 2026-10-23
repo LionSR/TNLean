@@ -1,0 +1,71 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+\input{command}
+\setlength{\emergencystretch}{2em}
+\title{The Error-Term Sign in the R\'enyi Approximation Bound of SWVC08}
+\author{}
+\date{October 23, 2026}
+\begin{document}
+\maketitle
+\gapnote{local-correction}{resolved}
+
+\section{The source statement}
+
+The simulability argument of~\cite{Schuch2008EntropyScaling} bounds the
+$\alpha$-R\'enyi entropy of a block of a state $\psi$ that is approximated, in
+the trace norm of the rank-one matrices, by a matrix product state $\phi$ of
+bond dimension $D$. With $\varepsilon=\lVert\ketbra{\psi}{\psi}-\ketbra{\phi}{\phi}\rVert_1$,
+order $\alpha>1$, and $\rho_k$ the reduced matrix of $\psi$ on a prefix of $k$
+sites, the printed bound reads
+\begin{align}
+    S_\alpha(\rho_k)
+      &\le\log D+\frac{\alpha}{\alpha-1}\log(1-\varepsilon).
+    \label{eq:swvc08_renyi_source}
+\end{align}
+The approximant's prefix reduction has rank at most
+$D$.\footnote{\path{paper_v2.tex}, lines~333--345, and Eq.~(eps-lower),
+    lines~269--270.}
+
+\section{The point at issue}
+
+For $\alpha>1$ the prefactor $\alpha/(\alpha-1)$ is positive, and for
+$0\le\varepsilon<1$ the logarithm $\log(1-\varepsilon)$ is nonpositive.
+Read literally, (\ref{eq:swvc08_renyi_source}) subtracts a nonnegative
+quantity from $\log D$, so it asserts an entropy bound strictly below the
+exact-rank value $\log D$. This is the wrong direction: a nonzero
+approximation error can only weaken the bound, never sharpen it. The error
+logarithm must sit on the entropy side of the inequality, equivalently with
+the opposite sign on the right.
+
+\section{The corrected statement}
+
+The finite-dimensional R\'enyi approximation inequality keeps the error
+logarithm on the left:
+\begin{align}
+    S_\alpha(\rho_k)+\frac{\alpha}{\alpha-1}\log(1-\varepsilon)
+      &\le\log D.
+    \label{eq:swvc08_renyi_corrected}
+\end{align}
+Since $\log(1-\varepsilon)\le0$, (\ref{eq:swvc08_renyi_corrected}) reads
+$S_\alpha(\rho_k)\le\log D-\frac{\alpha}{\alpha-1}\log(1-\varepsilon)$, an
+upward correction that grows as $\varepsilon\to1$. Only the target vector is
+normalized; the approximant $\phi$ need not be. Partial trace contracts the
+full trace norm, so the inequality follows from the two reduced matrices and
+the rank bound.\footnote{\leanid{TNLean.MPS.AreaLaw.IsOpenMPS.renyiEntropy_leftBlock_add_log_error_le_log}
+    in \doclink{TNLean/MPS/AreaLaw/EntropyScaling/RenyiApproximationLowerBound}.}
+The interior-block form, with $2\log D$ in place of $\log D$, is recorded in
+the companion note \path{swvc08_interior_block_bond_rank.tex}.
+
+\section{Conclusion}
+
+The verdict is a resolved local correction: the printed
+(\ref{eq:swvc08_renyi_source}) carries the error logarithm with the wrong
+sign, and the formalized (\ref{eq:swvc08_renyi_corrected}) places it so that
+the bound weakens with the approximation error.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
