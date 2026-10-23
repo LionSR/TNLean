@@ -49,39 +49,41 @@ $b_m=(\epsilon+2b_{m-1})^{1-1/h}$ with $h=\log_2N$ levels (lines 696--704).
 
 \section{The deficiency in norm}
 
-An expectation bound does not give~\eqref{eq:normalization}. If
+An expectation bound does not give~(\ref{eq:normalization}). If
 $\langle\Psi,(1-P)\Psi\rangle\le b$ for an orthogonal projection $P$ and a unit
 vector $\Psi$, then only
-\begin{align*}
+\begin{align}\label{eq:hastings_hierarchy_sqrt_deficiency}
   \lVert(1-P)\Psi\rVert=\langle\Psi,(1-P)\Psi\rangle^{1/2}\le\sqrt b ,
-\end{align*}
+\end{align}
 and a normalized image can lie at distance of order $\sqrt b$, not $b$. Read
-with~\eqref{eq:expectation} alone, the recursion would have $\sqrt{b_{m-1}}$ in
+with~(\ref{eq:expectation}) alone, the recursion would have $\sqrt{b_{m-1}}$ in
 place of $b_{m-1}$.
 
-The spectral step proves more than~\eqref{eq:expectation}. Write
+The spectral step proves more than~(\ref{eq:expectation}). Write
 $N=M-c$. On the range of $1-P^1$ every eigenvalue of $N$ has absolute value
 greater than $x$, so
 \begin{align}\label{eq:norm}
   \lVert\Psi-P^1\Psi\rVert\le\lVert N\Psi\rVert/x\le\epsilon/x .
 \end{align}
 The formalization measures the deficiency of a level in norm,
-$b=\lVert\Psi-P\Psi\rVert$. This implies~\eqref{eq:expectation}: with
+$b=\lVert\Psi-P\Psi\rVert$. This implies~(\ref{eq:expectation}): with
 $d=\lVert\Psi-P\Psi\rVert\le1$,
-\begin{align*}
+\begin{align}\label{eq:hastings_hierarchy_expectation_norm}
   \langle\Psi,P\Psi\rangle=1-d^2\ge1-d .
-\end{align*}
-With $b$ in norm,~\eqref{eq:normalization} holds as printed. For commuting
+\end{align}
+With $b$ in norm,~(\ref{eq:normalization}) holds as printed. For commuting
 orthogonal projections $P,P'$ the vectors $\Psi-P\Psi$ and $P(\Psi-P'\Psi)$
 are orthogonal, so
 $\lVert\Psi-PP'\Psi\rVert^2\le\lVert\Psi-P\Psi\rVert^2+\lVert\Psi-P'\Psi\rVert^2\le2b^2$.
 For an orthogonal projection $Q$ and a unit vector $\Psi$ with
 $t=\lVert Q\Psi\rVert>0$,
-\begin{align*}
+\begin{align}\label{eq:hastings_hierarchy_normalization_sq}
   \Bigl\lVert\frac{Q\Psi}{t}-\Psi\Bigr\rVert^2=2-2t\le2(1-t^2)
   =2\lVert\Psi-Q\Psi\rVert^2 .
-\end{align*}
-With $Q=PP'$ the two bounds give $\lVert\Psi^1_a-\Psi_a\rVert\le2b$, so
+\end{align}
+With $Q=PP'$, (\ref{eq:hastings_hierarchy_normalization_sq}) and
+$\lVert\Psi-PP'\Psi\rVert^2\le2b^2$ give
+$\lVert\Psi^1_a-\Psi_a\rVert\le2b$, so
 the residual at the second level and the printed $b_2$ follow as in the
 source. If the projected vector vanishes, normalization is interpreted as
 zero and the corresponding inequality follows directly.
@@ -92,10 +94,10 @@ with $\Psi_a$. If consecutive normalized vectors differ by at most $2b_j$,
 the triangle inequality gives
 $\lVert\Psi^{m-1}_a-\Psi_a\rVert\le2\sum_{j<m}b_j$. Under this assumption,
 an accumulated scalar majorant has the recurrence
-\begin{align*}
+\begin{align}\label{eq:hastings_hierarchy_accumulated_recurrence}
  \beta_0=0,\qquad
  \beta_m=\Bigl(\epsilon+2\sum_{1\le j<m}\beta_j\Bigr)^{1-1/h}.
-\end{align*}
+\end{align}
 For $0<\epsilon\le1$ and $h\ge1$, the coefficient estimate
 $\beta_m\le c_m\epsilon^{(1-1/h)^m}$ has
 $c_1=1$ and $c_m=1+2\sum_{1\le j<m}c_j=3^{m-1}$.
@@ -105,6 +107,32 @@ argument giving that recurrence. The identification of an appropriate
 majorant with the complete hierarchy remains to be proved. The Lean
 recurrence theorems establish inequalities for the printed scalar sequence;
 they do not identify it with deficiencies beyond the second level.
+
+\newpage
+\section{The restricted spectral window}
+
+At the second level the source takes eigenvectors of $QMQ$ inside
+$\operatorname{ran}Q$, where $Q=P^1_kP^1_{k+2}$
+\cite[lines 673--685]{Hastings2006Solving}.
+Let $W=P_x(QMQ,c)$ denote the spectral window on the whole ambient space.
+Since $QMQ$ vanishes on $\ker Q$, the projection $W$ includes $\ker Q$
+whenever $|c|\le x$. Thus the later-level projection is $P=QW$, not $W$.
+For example, with $Q=\operatorname{diag}(1,0)$, $M=0$, $c=0$ and $x=1$,
+one has $W=1$ whereas $P=Q$.
+
+The matrices $Q$ and $QMQ$ commute, so functional calculus gives $QW=WQ$.
+Consequently $P$ is an orthogonal projection with $PQ=P$ and annihilates
+$\ker Q$. On a vector $\phi$ with $Q\phi=\phi$, it agrees with $W$, and
+\begin{align}\label{eq:hastings_hierarchy_restricted_error}
+ \lVert\phi-P\phi\rVert
+ &\le\frac{\lVert(QMQ-c)\phi\rVert}{x}
+ \le\frac{\lVert(M-c)\phi\rVert}{x}.
+\end{align}
+Here $x>0$, and the second inequality in
+(\ref{eq:hastings_hierarchy_restricted_error}) follows from
+$(QMQ-c)\phi=Q(M-c)\phi$. This implements the subspace specified by the
+source without imposing $|c|>x$. It establishes the required nesting of a
+single level, but does not establish the full hierarchy or its recurrence.
 
 \section{The residual and the recursion}
 
@@ -153,10 +181,10 @@ vector through all $h$ levels. The source projects at level $m$ inside the
 range of the two projections of level $m-1$ (lines 671--676). For orthogonal
 projections $P\le Q$ and a unit vector $\Psi$ with
 $\Psi'=Q\Psi/\lVert Q\Psi\rVert$, the formalization proves
-\begin{align*}
+\begin{align}\label{eq:hastings_hierarchy_nested_deficiency}
   \lVert\Psi-P\Psi\rVert^2\le\lVert\Psi-Q\Psi\rVert^2
   +\lVert\Psi'-P\Psi'\rVert^2,
-\end{align*}
+\end{align}
 which combines the deficiencies of consecutive levels. Along such a chain the
 deficiency of $\Psi_a$ under a projection of level $m$ collects the squared
 deficiencies of the earlier levels in addition to $b_m^2$, a term whose control is needed to justify the printed
@@ -164,16 +192,25 @@ recursion for the complete hierarchy. Tracking it is left to the assembly of all
 
 \section{Formalization}
 
-\leanid{TNLean.MPS.AreaLaw.LocalSolution.norm_sub_windowProjection_le}
-is~\eqref{eq:norm}, and
-\leanid{TNLean.MPS.AreaLaw.LocalSolution.one_sub_div_le_re_inner_windowProjection}
-is~\eqref{eq:expectation}.
-\leanid{TNLean.MPS.AreaLaw.LocalSolution.norm_inv_norm_smul_sub_le_two_mul}
-is~\eqref{eq:normalization} with the deficiency in norm.
-\leanid{TNLean.MPS.AreaLaw.LocalSolution.levelDeficiency_le} is the bound
-in~\eqref{eq:recursion}, and
-\leanid{TNLean.MPS.AreaLaw.LocalSolution.levelDeficiency_self_le}
-is~\eqref{eq:final}.
+The spectral residual bound (\ref{eq:norm}) and its expectation consequence
+(\ref{eq:expectation}) are formalized, as is the normalization bound
+(\ref{eq:normalization}) with deficiency measured in norm.\footnote{Declarations:
+\leanid{TNLean.MPS.AreaLaw.LocalSolution.norm_sub_windowProjection_le},
+\leanid{TNLean.MPS.AreaLaw.LocalSolution.one_sub_div_le_re_inner_windowProjection}, and
+\leanid{TNLean.MPS.AreaLaw.LocalSolution.norm_inv_norm_smul_sub_le_two_mul}.}
+
+The restricted spectral window $P=QP_x(QMQ,c)$ satisfies $PQ=P$.
+Its residual estimate combines with the distance to a reference vector
+to give the second-level bound.\footnote{Declarations:
+\leanid{TNLean.MPS.AreaLaw.LocalSolution.compressedWindowProjection},
+\leanid{TNLean.MPS.AreaLaw.LocalSolution.compressedWindowProjection_mul}, and
+\leanid{TNLean.MPS.AreaLaw.LocalSolution.norm_sub_compressedWindowProjection_le_of_norm_sub_le}.}
+
+The bounds for the scalar recurrence in (\ref{eq:recursion}) and
+(\ref{eq:final}) are formalized independently of the complete
+hierarchy.\footnote{Declarations:
+\leanid{TNLean.MPS.AreaLaw.LocalSolution.levelDeficiency_le} and
+\leanid{TNLean.MPS.AreaLaw.LocalSolution.levelDeficiency_self_le}.}
 
 \bibliographystyle{plain}
 \bibliography{references}

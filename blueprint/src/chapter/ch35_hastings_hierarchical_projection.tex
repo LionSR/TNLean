@@ -125,7 +125,7 @@ $h$ levels.
     state survives the projection.
 \end{theorem}
 \begin{proof}\leanok
-    Otherwise $P_x(M,c)=0$, and~\eqref{eq:hastings05_one_level} gives
+    Otherwise $P_x(M,c)=0$, and~(\ref{eq:hastings05_one_level}) gives
     $\lVert\Psi\rVert\le\lVert(M-c)\Psi\rVert/x<\lVert\Psi\rVert$.
 \end{proof}
 
@@ -156,7 +156,7 @@ $h$ levels.
     $\lvert1-\lVert v\rVert\rvert\le\lVert v-\Psi\rVert$. For the second, with
     $0<t=\lVert Q\Psi\rVert\le1$, the left side is $2-2t$ and the right
     side is $2-2t^2$. If $Q\Psi=0$, the two sides are $1$ and $2$. For the third, $PP'$ is an orthogonal projection,
-    and~\eqref{eq:hastings05_two_projections_sq} gives
+    and~(\ref{eq:hastings05_two_projections_sq}) gives
     $\lVert\Psi-PP'\Psi\rVert^2\le2b^2$.
 \end{proof}
 
@@ -167,10 +167,10 @@ $h$ levels.
     \uses{thm:hastings05_projection_deficiency}
     Let $P$ and $Q$ be orthogonal projections with $PQ=P$, let $\Psi$ be a
     unit vector and $\Psi'=Q\Psi/\lVert Q\Psi\rVert$. Then
-    \begin{align*}
+    \begin{align}
         \lVert\Psi-P\Psi\rVert^2
          & \le\lVert\Psi-Q\Psi\rVert^2+\lVert\Psi'-P\Psi'\rVert^2.
-    \end{align*}
+    \end{align}
     The projection of level $m$ lies below the product of the two
     projections of level $m-1$~\cite[lines 671--676]{Hastings2006Solving},
     and this bound combines the deficiencies of consecutive levels.
@@ -214,18 +214,18 @@ $h$ levels.
         thm:hastings05_compression}
     Let $M$ be Hermitian, $c$ real and $x>0$. If
     $\lVert(M-c)\psi\rVert\le\epsilon$ and $\lVert\phi-\psi\rVert\le\eta$, then
-    \begin{align*}
+    \begin{align}
         \lVert\phi-P_x(M,c)\phi\rVert
          & \le\frac{\epsilon+\lVert M-c\rVert\,\eta}{x}.
-    \end{align*}
+    \end{align}
     With $\psi=\Psi_a$, $\phi=\Psi^1_a$ and $\eta=2b_1$ this is the estimate
     behind the deficiency $b_2$ of~\cite[lines 690--699]{Hastings2006Solving}.
-    The source's second-level projection is the window projection of the
-    compressed operator $QMQ$ with $Q=P^1_kP^1_{k+2}$ (lines 673--685); by
-    Theorem~\ref{thm:hastings05_compression} the estimate applies to it.
+    The source's second-level projection restricts the spectral window of
+    $QMQ$ to the range of $Q=P^1_kP^1_{k+2}$ (lines 673--685).
+    Its corresponding estimate is Theorem~\ref{thm:hastings05_compressed_window_bound}.
 \end{theorem}
 \begin{proof}\leanok
-    Combine~\eqref{eq:hastings05_one_level} for $\phi$ with
+    Combine~(\ref{eq:hastings05_one_level}) for $\phi$ with
     Theorem~\ref{thm:hastings05_residual}.
 \end{proof}
 
@@ -243,6 +243,73 @@ $h$ levels.
 \begin{proof}\leanok
     Since $Q\phi=\phi$, $(QMQ-c)\phi=Q(M-c)\phi$, and $Q$ does not increase
     norms.
+\end{proof}
+
+\begin{definition}[Window projection in the preceding subspace]
+    \label{def:hastings05_compressed_window}
+    \lean{TNLean.MPS.AreaLaw.LocalSolution.compressedWindowProjection}
+    \leanok
+    \uses{def:hastings05_window_projection}
+    Let $Q$ be an orthogonal projection, $M$ Hermitian and $c,x$ real.
+    Set $P=QP_x(QMQ,c)$. This is the spectral window of the restriction of
+    $QMQ$ to $\operatorname{ran}Q$, extended by zero on $\ker Q$.
+    It is the projection used at later levels
+    in~\cite[lines 673--685]{Hastings2006Solving}.
+\end{definition}
+
+\begin{theorem}[Restriction to the preceding subspace]
+    \label{thm:hastings05_compressed_window_projection}
+    \lean{TNLean.MPS.AreaLaw.LocalSolution.commute_windowProjection_compress,
+        TNLean.MPS.AreaLaw.LocalSolution.isStarProjection_compressedWindowProjection,
+        TNLean.MPS.AreaLaw.LocalSolution.compressedWindowProjection_mul,
+        TNLean.MPS.AreaLaw.LocalSolution.toEuclideanLin_compressedWindowProjection_of_mem,
+        TNLean.MPS.AreaLaw.LocalSolution.toEuclideanLin_compressedWindowProjection_eq_zero}
+    \leanok
+    \uses{def:hastings05_compressed_window,thm:hastings05_shifted_hermitian}
+    With the hypotheses of Definition~\ref{def:hastings05_compressed_window},
+    $W=P_x(QMQ,c)$ commutes with $Q$. The matrix $P=QW$ is an orthogonal
+    projection with $PQ=P$. If $Q\phi=\phi$, then $P\phi=W\phi$;
+    if $Q\phi=0$, then $P\phi=0$. These statements hold even when
+    $|c|\le x$, in which case the ambient projection $W$ includes $\ker Q$.
+\end{theorem}
+\begin{proof}\leanok
+    The identity $Q^2=Q$ gives $(QMQ)Q=Q(QMQ)$. Functional calculus
+    preserves this commutation, so $WQ=QW$. The product of commuting
+    orthogonal projections is an orthogonal projection, and
+    $PQ=QWQ=Q^2W=P$. Also $P\phi=WQ\phi$, giving both action identities.
+\end{proof}
+
+\begin{theorem}[One level inside the preceding subspace]
+    \label{thm:hastings05_compressed_window_bound}
+    \lean{TNLean.MPS.AreaLaw.LocalSolution.norm_sub_compressedWindowProjection_le,
+        TNLean.MPS.AreaLaw.LocalSolution.norm_sub_compressedWindowProjection_le_of_norm_sub_le}
+    \leanok
+    \uses{thm:hastings05_compressed_window_projection,thm:hastings05_one_level,
+        thm:hastings05_compression,thm:hastings05_residual}
+    Let $Q$ be an orthogonal projection, $M$ Hermitian, $c$ real and $x>0$.
+    Put $P=QP_x(QMQ,c)$. For every $\phi$ with $Q\phi=\phi$,
+    \begin{align}
+        \lVert\phi-P\phi\rVert
+        &\le \frac{\lVert(M-c)\phi\rVert}{x}.
+    \end{align}
+    If also $\lVert(M-c)\psi\rVert\le\epsilon$ and
+    $\lVert\phi-\psi\rVert\le\eta$, then
+    \begin{align}
+        \lVert\phi-P\phi\rVert
+        &\le\frac{\epsilon+\lVert M-c\rVert\,\eta}{x}.
+    \end{align}
+    No membership condition is imposed on $\psi$. Taking $\psi=\Psi_a$,
+    $\phi=\Psi^1_a$ and $\eta=2b_1$ gives the second-level estimate with
+    the window centred at $c=\langle\Psi_a,M\Psi_a\rangle$
+    as in~\cite[lines 673--699]{Hastings2006Solving}.
+\end{theorem}
+\begin{proof}\leanok
+    Since $Q\phi=\phi$, $P\phi=P_x(QMQ,c)\phi$. Apply the one-level
+    estimate to $QMQ$ and use
+    $\lVert(QMQ-c)\phi\rVert\le\lVert(M-c)\phi\rVert$.
+    The second bound follows from
+    $\lVert(M-c)\phi\rVert\le\lVert(M-c)\psi\rVert+
+    \lVert M-c\rVert\,\lVert\phi-\psi\rVert$.
 \end{proof}
 
 \begin{definition}[The scalar recurrence]
@@ -266,9 +333,9 @@ $h$ levels.
     \leanok
     \uses{def:hastings05_level_deficiency}
     Let $0<\epsilon\le1$, $a\ge0$ and $0\le s\le1$. Then for every $m$,
-    \begin{align*}
+    \begin{align}
         b_m & \le\Bigl(\sum_{j<m}a^j\Bigr)\epsilon^{s^m},
-    \end{align*}
+    \end{align}
     and for $a=2$, $b_m\le(2^m-1)\epsilon^{s^m}$.
 \end{theorem}
 \begin{proof}\leanok
@@ -302,9 +369,9 @@ $h$ levels.
     \uses{thm:hastings05_recursion,thm:hastings05_exponent}
     Let $0<\epsilon\le1$, $h$ a natural number, $a=2$ and $s=1-1/h$. Then
     $b_h\le(2^h-1)\epsilon^{(1-1/h)^h}$. For $\epsilon=e^{-t}$ with $t\ge0$,
-    \begin{align*}
+    \begin{align}
         b_h & \le2^h\exp\bigl(-t(1-1/h)^h\bigr),
-    \end{align*}
+    \end{align}
     which for $N=2^h$ and $t=l_{\mathrm{proj}}/l_{\mathrm{fac}}$ is the bound
     $N\exp[-(l_{\mathrm{proj}}/l_{\mathrm{fac}})(1-1/h)^h]$
     of~\cite[lines 705--707]{Hastings2006Solving}. For $h\ge2$,

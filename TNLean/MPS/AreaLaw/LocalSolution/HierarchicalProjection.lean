@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.Hastings.SpectralCutoff
+import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Commute
 
 /-!
 # One level of Hastings' hierarchical projection
@@ -30,9 +31,11 @@ numbers.
 * **Perturbation.** `‖(M - c) φ‖ ≤ ‖(M - c) ψ‖ + ‖M - c‖ ‖φ - ψ‖` (lines 690–695), and
   `‖M - c‖ ≤ 2 ‖M‖` for `|c| ≤ ‖M‖`. The source writes the perturbation term as
   `2 b₁ J l_proj`, that is, with `‖M - c‖ ≤ J l_proj`; the bound here keeps `‖M - c‖`.
-* **Compression.** The source's later levels project with the compressed operator
-  `Q M Q`, `Q` the product of the two projections of the level below (lines 673–685). For
-  `Q φ = φ`, `‖(Q M Q - c) φ‖ ≤ ‖(M - c) φ‖`, so the one-level estimates apply to `Q M Q`.
+* **Compression.** The source's later levels project inside the range of `Q`, the product
+  of the two projections of the level below (lines 673–685). Their projection is
+  `P = Q * windowProjection (Q * M * Q) c x`, so `P Q = P` and `P` annihilates `ker Q`,
+  even when the window contains zero. For `Q φ = φ`, it agrees with the ambient window,
+  and `‖(Q M Q - c) φ‖ ≤ ‖(M - c) φ‖` gives the one-level bound in terms of `M`.
 * **Nested projections.** If `P ≤ Q`, the deficiency of `ψ` under `P` is controlled by its
   deficiency under `Q` and that of the normalized image `Q ψ / ‖Q ψ‖` under `P`. This is how
   the deficiencies of consecutive levels combine, since the source projects at level `m` inside
@@ -77,6 +80,9 @@ levels, and the extensions to higher dimensions (lines 745–756).
   vector.
 * `norm_sub_windowProjection_le_of_norm_sub_le`: one level combined.
 * `norm_toEuclideanLin_compress_sub_le`: the residual under a compression.
+* `compressedWindowProjection`, `compressedWindowProjection_mul`: the spectral window
+  inside the preceding subspace.
+* `norm_sub_compressedWindowProjection_le_of_norm_sub_le`: the combined bound there.
 * `norm_sub_sq_le_of_mul_eq`: nested projections.
 * `levelDeficiency`, `levelDeficiency_le`, `levelDeficiency_two_le`,
   `levelDeficiency_exp_le`, `levelDeficiency_le_rpow_quarter`: the recursion.
@@ -307,6 +313,63 @@ theorem isStarProjection_windowProjection {M : Matrix ι ι ℂ} (hM : M.IsHermi
     IsStarProjection (windowProjection M c x) :=
   isStarProjection_spectralCutoff (isHermitian_sub_ofReal_smul_one hM c) x
 
+/-- The later-level window projection inside the range of `Q`, rather than on the whole
+ambient space. Hastings, arXiv:cond-mat/0508554v3, `proj3new.tex`, lines 673–685. -/
+noncomputable def compressedWindowProjection (Q M : Matrix ι ι ℂ) (c x : ℝ) :
+    Matrix ι ι ℂ :=
+  Q * windowProjection (Q * M * Q) c x
+
+/-- The spectral window of a compressed operator commutes with the projection onto the
+compressing subspace. Hastings, arXiv:cond-mat/0508554v3, `proj3new.tex`, lines 673–685. -/
+theorem commute_windowProjection_compress {Q : Matrix ι ι ℂ} (hQ : IsStarProjection Q)
+    (M : Matrix ι ι ℂ) (c x : ℝ) : Commute (windowProjection (Q * M * Q) c x) Q := by
+  have hcomm : Commute (Q * M * Q) Q := by
+    change (Q * M * Q) * Q = Q * (Q * M * Q)
+    simp only [mul_assoc]
+    rw [hQ.isIdempotentElem.eq, ← mul_assoc Q Q (M * Q), hQ.isIdempotentElem.eq]
+  unfold windowProjection spectralCutoff
+  apply Commute.cfc_real
+  rw [ofReal_smul_one_eq_algebraMap]
+  exact hcomm.sub_left (Algebra.commute_algebraMap_left c Q)
+
+/-- The window projection restricted to the compressing subspace is an orthogonal
+projection. Hastings, arXiv:cond-mat/0508554v3, `proj3new.tex`, lines 673–685. -/
+theorem isStarProjection_compressedWindowProjection {Q M : Matrix ι ι ℂ}
+    (hQ : IsStarProjection Q) (hM : M.IsHermitian) (c x : ℝ) :
+    IsStarProjection (compressedWindowProjection Q M c x) := by
+  have hQM : (Q * M * Q).IsHermitian := by
+    simpa only [hQ.isSelfAdjoint.isHermitian.eq] using
+      isHermitian_mul_mul_conjTranspose Q hM
+  exact hQ.mul (isStarProjection_windowProjection hQM c x)
+    (commute_windowProjection_compress hQ M c x).symm
+
+/-- The later-level projection lies inside the preceding subspace, as required in
+Hastings, arXiv:cond-mat/0508554v3, `proj3new.tex`, lines 673–685. -/
+theorem compressedWindowProjection_mul {Q : Matrix ι ι ℂ} (hQ : IsStarProjection Q)
+    (M : Matrix ι ι ℂ) (c x : ℝ) :
+    compressedWindowProjection Q M c x * Q = compressedWindowProjection Q M c x := by
+  rw [compressedWindowProjection, mul_assoc,
+    (commute_windowProjection_compress hQ M c x).eq, ← mul_assoc, hQ.isIdempotentElem.eq]
+
+/-- On the preceding subspace the restricted projection agrees with the ambient spectral
+window. Hastings, arXiv:cond-mat/0508554v3, `proj3new.tex`, lines 673–685. -/
+theorem toEuclideanLin_compressedWindowProjection_of_mem {Q : Matrix ι ι ℂ}
+    (hQ : IsStarProjection Q) (M : Matrix ι ι ℂ) (c x : ℝ)
+    {φ : EuclideanSpace ℂ ι} (hφ : toEuclideanLin Q φ = φ) :
+    toEuclideanLin (compressedWindowProjection Q M c x) φ =
+      toEuclideanLin (windowProjection (Q * M * Q) c x) φ := by
+  rw [compressedWindowProjection, ← (commute_windowProjection_compress hQ M c x).eq,
+    toEuclideanLin_mul_apply, hφ]
+
+/-- The later-level projection annihilates the orthogonal complement of the preceding
+subspace, including when the spectral window contains zero. Hastings,
+arXiv:cond-mat/0508554v3, `proj3new.tex`, lines 673–685. -/
+theorem toEuclideanLin_compressedWindowProjection_eq_zero {Q : Matrix ι ι ℂ}
+    (hQ : IsStarProjection Q) (M : Matrix ι ι ℂ) (c x : ℝ)
+    {φ : EuclideanSpace ℂ ι} (hφ : toEuclideanLin Q φ = 0) :
+    toEuclideanLin (compressedWindowProjection Q M c x) φ = 0 := by
+  rw [← compressedWindowProjection_mul hQ M c x, toEuclideanLin_mul_apply, hφ, map_zero]
+
 /-- **One level.** For a Hermitian `M`, a real `c` and `x > 0`, the window projection moves a
 vector `ψ` by at most `‖(M - c) ψ‖ / x`. This is the spectral step of
 arXiv:cond-mat/0508554v3, `proj3new.tex`, lines 645–650, measured in norm. -/
@@ -403,9 +466,9 @@ theorem abs_re_inner_toEuclideanLin_le (M : Matrix ι ι ℂ) {ψ : EuclideanSpa
 projection of `M` at `c` and `x` moves `φ` by at most `(ε + ‖M - c‖ η) / x`. With `ψ = Ψ_a`,
 `φ = Ψ¹_a`, `η = 2 b₁` and `x` the window of the second level, this is the estimate behind the
 deficiency `b₂` of arXiv:cond-mat/0508554v3, `proj3new.tex`, lines 690–699, with the window
-kept centred at `c = ⟨Ψ_a, M Ψ_a⟩` as at line 681. The source's `P^2_k` is the window
-projection of the compressed operator `Q M Q`, `Q = P^1_k P^1_{k+2}` (lines 673–685); apply
-this theorem to `Q M Q` and use `norm_toEuclideanLin_compress_sub_le`. -/
+kept centred at `c = ⟨Ψ_a, M Ψ_a⟩` as at line 681. For the source's second-level
+projection inside the range of `Q = P^1_k P^1_{k+2}` (lines 673–685), use
+`norm_sub_compressedWindowProjection_le_of_norm_sub_le`. -/
 theorem norm_sub_windowProjection_le_of_norm_sub_le {M : Matrix ι ι ℂ} (hM : M.IsHermitian)
     (c : ℝ) {x : ℝ} (hx : 0 < x) {φ ψ : EuclideanSpace ℂ ι} {ε η : ℝ}
     (hres : ‖toEuclideanLin (M - (c : ℂ) • 1) ψ‖ ≤ ε) (hdist : ‖φ - ψ‖ ≤ η) :
@@ -428,6 +491,35 @@ theorem norm_toEuclideanLin_compress_sub_le {Q : Matrix ι ι ℂ} (hQ : IsStarP
   rw [h]
   exact (Entropy.norm_toEuclideanLin_le Q _).trans
     (mul_le_of_le_one_left (norm_nonneg _) (IsStarProjection.norm_le Q hQ))
+
+/-- The spectral window inside the preceding subspace moves a vector in that subspace by
+at most its uncompressed residual divided by the window radius. Hastings,
+arXiv:cond-mat/0508554v3, `proj3new.tex`, lines 673–695. -/
+theorem norm_sub_compressedWindowProjection_le {Q M : Matrix ι ι ℂ}
+    (hQ : IsStarProjection Q) (hM : M.IsHermitian) (c : ℝ) {x : ℝ} (hx : 0 < x)
+    {φ : EuclideanSpace ℂ ι} (hφ : toEuclideanLin Q φ = φ) :
+    ‖φ - toEuclideanLin (compressedWindowProjection Q M c x) φ‖ ≤
+      ‖toEuclideanLin (M - (c : ℂ) • 1) φ‖ / x := by
+  rw [toEuclideanLin_compressedWindowProjection_of_mem hQ M c x hφ]
+  have hQM : (Q * M * Q).IsHermitian := by
+    simpa only [hQ.isSelfAdjoint.isHermitian.eq] using
+      isHermitian_mul_mul_conjTranspose Q hM
+  exact (norm_sub_windowProjection_le hQM c hx φ).trans
+    (div_le_div_of_nonneg_right (norm_toEuclideanLin_compress_sub_le hQ M c hφ) hx.le)
+
+/-- The combined residual estimate for the source's later-level projection, with the
+window centred at the original expectation. Hastings, arXiv:cond-mat/0508554v3,
+`proj3new.tex`, lines 673–699. Only the intermediate vector must lie in the preceding
+subspace; the reference vector need not lie there. -/
+theorem norm_sub_compressedWindowProjection_le_of_norm_sub_le {Q M : Matrix ι ι ℂ}
+    (hQ : IsStarProjection Q) (hM : M.IsHermitian) (c : ℝ) {x : ℝ} (hx : 0 < x)
+    {φ ψ : EuclideanSpace ℂ ι} {ε η : ℝ} (hφ : toEuclideanLin Q φ = φ)
+    (hres : ‖toEuclideanLin (M - (c : ℂ) • 1) ψ‖ ≤ ε) (hdist : ‖φ - ψ‖ ≤ η) :
+    ‖φ - toEuclideanLin (compressedWindowProjection Q M c x) φ‖ ≤
+      (ε + ‖M - (c : ℂ) • 1‖ * η) / x :=
+  (norm_sub_compressedWindowProjection_le hQ hM c hx hφ).trans <|
+    div_le_div_of_nonneg_right ((norm_toEuclideanLin_le_add _ φ ψ).trans
+      (add_le_add hres (mul_le_mul_of_nonneg_left hdist (norm_nonneg _)))) hx.le
 
 end Perturbation
 
